@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC928C433E4
-	for <bpf@archiver.kernel.org>; Fri, 24 Jul 2020 17:41:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C99F9C433F7
+	for <bpf@archiver.kernel.org>; Fri, 24 Jul 2020 17:41:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 928AE2067D
-	for <bpf@archiver.kernel.org>; Fri, 24 Jul 2020 17:41:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B5DB52067D
+	for <bpf@archiver.kernel.org>; Fri, 24 Jul 2020 17:41:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727071AbgGXRlI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 Jul 2020 13:41:08 -0400
-Received: from mga01.intel.com ([192.55.52.88]:38164 "EHLO mga01.intel.com"
+        id S1727098AbgGXRlP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Jul 2020 13:41:15 -0400
+Received: from mga01.intel.com ([192.55.52.88]:38188 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726995AbgGXRlA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 24 Jul 2020 13:41:00 -0400
-IronPort-SDR: t7Buh1V0Uldu4odRSElS64LDUl7EvIZIsqjo/uCLgXXP2FGmzVTVi0QH9ivksO+QPgmAl2FBzM
- Up3DIEogsarw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9692"; a="168883124"
+        id S1726995AbgGXRlO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 Jul 2020 13:41:14 -0400
+IronPort-SDR: ZrbXH8ijgcqSsxfxm8UOmIu3mvkSWyXTg4tBAtt1QQRSPxzuxeaSB8Zhsw7wCr1IMy/azgvlgi
+ A2MiMy0WUhNA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9692"; a="168883196"
 X-IronPort-AV: E=Sophos;i="5.75,391,1589266800"; 
-   d="scan'208";a="168883124"
+   d="scan'208";a="168883196"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2020 10:40:59 -0700
-IronPort-SDR: 9DzeIU3oJr3og8PbrlG5vwwjSDILyd8K+tw71jv1uIUl0PFxy+omzUj73kXspIzKjy2POFk2be
- QJIXSWjqXV5w==
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2020 10:41:11 -0700
+IronPort-SDR: 6e/sdXsSL/1qTo780V27SINW3MAdhlHuIiXymTQAeY7Xx7dazBx/MI+JAyQpuvJ4lfc4JzYM5M
+ dPlNOjN+DkzQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,391,1589266800"; 
-   d="scan'208";a="463299970"
+   d="scan'208";a="463300050"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga005.jf.intel.com with ESMTP; 24 Jul 2020 10:40:57 -0700
+  by orsmga005.jf.intel.com with ESMTP; 24 Jul 2020 10:41:09 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     ast@kernel.org, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn.topel@intel.com,
         magnus.karlsson@intel.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v5 bpf-next 2/6] bpf: propagate poke descriptors to subprograms
-Date:   Fri, 24 Jul 2020 19:35:53 +0200
-Message-Id: <20200724173557.5764-3-maciej.fijalkowski@intel.com>
+Subject: [PATCH v5 bpf-next 6/6] selftests: bpf: add dummy prog for bpf2bpf with tailcall
+Date:   Fri, 24 Jul 2020 19:35:57 +0200
+Message-Id: <20200724173557.5764-7-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200724173557.5764-1-maciej.fijalkowski@intel.com>
 References: <20200724173557.5764-1-maciej.fijalkowski@intel.com>
@@ -53,79 +53,167 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Previously, there was no need for poke descriptors being present in
-subprogram's bpf_prog_aux struct since tailcalls were simply not allowed
-in them. Each subprog is JITed independently so in order to enable
-JITing such subprograms, simply copy poke descriptors from main program
-to subprogram's poke tab.
-
-Add also subprog's aux struct to the BPF map poke_progs list by calling
-on it map_poke_track().
-
-In case of any error, call the map_poke_untrack() on subprog's aux
-structs that have already been registered to prog array map.
+Introduce 6th test to taicalls kselftest that checks if tailcall can be
+correctly executed from the BPF subprogram.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- kernel/bpf/verifier.c | 31 ++++++++++++++++++++++++++++---
- 1 file changed, 28 insertions(+), 3 deletions(-)
+ .../selftests/bpf/prog_tests/tailcalls.c      | 85 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/tailcall6.c | 38 +++++++++
+ 2 files changed, 123 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall6.c
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9a6703bc3f36..f4955b4bf8a6 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9900,6 +9900,7 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- {
- 	struct bpf_prog *prog = env->prog, **func, *tmp;
- 	int i, j, subprog_start, subprog_end = 0, len, subprog;
-+	struct bpf_map *map_ptr;
- 	struct bpf_insn *insn;
- 	void *old_bpf_func;
- 	int err, num_exentries;
-@@ -9967,6 +9968,23 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 		func[i]->aux->btf = prog->aux->btf;
- 		func[i]->aux->func_info = prog->aux->func_info;
+diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+index bb8fe646dd9f..192c94896809 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
++++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
++#include <network_helpers.h>
  
-+		for (j = 0; j < prog->aux->size_poke_tab; j++) {
-+			int ret;
+ /* test_tailcall_1 checks basic functionality by patching multiple locations
+  * in a single program for a single tail call slot with nop->jmp, jmp->nop
+@@ -472,6 +473,88 @@ static void test_tailcall_5(void)
+ 	bpf_object__close(obj);
+ }
+ 
++/* test_tailcall_6 purpose is to make sure that tailcalls are working
++ * correctly in correlation with BPF subprograms
++ */
++static void test_tailcall_6(void)
++{
++	int err, map_fd, prog_fd, main_fd, i;
++	struct bpf_map *prog_array;
++	struct bpf_program *prog;
++	struct bpf_object *obj;
++	__u32 retval, duration;
++	char prog_name[32];
 +
-+			ret = bpf_jit_add_poke_descriptor(func[i],
-+							  &prog->aux->poke_tab[j]);
-+			if (ret < 0) {
-+				verbose(env, "adding tail call poke descriptor failed\n");
-+				goto out_free;
-+			}
-+			map_ptr = func[i]->aux->poke_tab[j].tail_call.map;
-+			ret = map_ptr->ops->map_poke_track(map_ptr, func[i]->aux);
-+			if (ret < 0) {
-+				verbose(env, "tracking tail call prog failed\n");
-+				goto out_free;
-+			}
-+		}
++	err = bpf_prog_load("tailcall6.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
++			    &prog_fd);
++	if (CHECK_FAIL(err))
++		return;
 +
- 		/* Use bpf_prog_F_tag to indicate functions in stack traces.
- 		 * Long term would need debug info to populate names
- 		 */
-@@ -10060,9 +10078,16 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 	bpf_prog_free_unused_jited_linfo(prog);
- 	return 0;
- out_free:
--	for (i = 0; i < env->subprog_cnt; i++)
--		if (func[i])
--			bpf_jit_free(func[i]);
-+	for (i = 0; i < env->subprog_cnt; i++) {
-+		if (!func[i])
-+			continue;
++	prog = bpf_object__find_program_by_title(obj, "classifier");
++	if (CHECK_FAIL(!prog))
++		goto out;
 +
-+		for (j = 0; j < func[i]->aux->size_poke_tab; j++) {
-+			map_ptr = func[i]->aux->poke_tab[j].tail_call.map;
-+			map_ptr->ops->map_poke_untrack(map_ptr, func[i]->aux);
-+		}
-+		bpf_jit_free(func[i]);
++	main_fd = bpf_program__fd(prog);
++	if (CHECK_FAIL(main_fd < 0))
++		goto out;
++
++	prog_array = bpf_object__find_map_by_name(obj, "jmp_table");
++	if (CHECK_FAIL(!prog_array))
++		goto out;
++
++	map_fd = bpf_map__fd(prog_array);
++	if (CHECK_FAIL(map_fd < 0))
++		goto out;
++
++	/* nop -> jmp */
++	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
++		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
++
++		prog = bpf_object__find_program_by_title(obj, prog_name);
++		if (CHECK_FAIL(!prog))
++			goto out;
++
++		prog_fd = bpf_program__fd(prog);
++		if (CHECK_FAIL(prog_fd < 0))
++			goto out;
++
++		err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
++		if (CHECK_FAIL(err))
++			goto out;
 +	}
- 	kfree(func);
- out_undo_insn:
- 	/* cleanup main prog to be interpreted */
++
++	err = bpf_prog_test_run(main_fd, 1, &pkt_v4, sizeof(pkt_v4), 0,
++				0, &retval, &duration);
++	CHECK(err || retval != 1, "tailcall",
++	      "err %d errno %d retval %d\n", err, errno, retval);
++
++	/* jmp -> nop, call subprog that will do tailcall */
++	i = 1;
++	err = bpf_map_delete_elem(map_fd, &i);
++	if (CHECK_FAIL(err))
++		goto out;
++
++	err = bpf_prog_test_run(main_fd, 1, &pkt_v4, sizeof(pkt_v4), 0,
++				0, &retval, &duration);
++	CHECK(err || retval != 0, "tailcall", "err %d errno %d retval %d\n",
++	      err, errno, retval);
++
++	/* make sure that subprog can access ctx and entry prog that
++	 * called this subprog can properly return
++	 */
++	i = 0;
++	err = bpf_map_delete_elem(map_fd, &i);
++	if (CHECK_FAIL(err))
++		goto out;
++
++	err = bpf_prog_test_run(main_fd, 1, &pkt_v4, sizeof(pkt_v4), 0,
++				0, &retval, &duration);
++	CHECK(err || retval != 108, "tailcall", "err %d errno %d retval %d\n",
++	      err, errno, retval);
++out:
++	bpf_object__close(obj);
++}
++
+ void test_tailcalls(void)
+ {
+ 	if (test__start_subtest("tailcall_1"))
+@@ -484,4 +567,6 @@ void test_tailcalls(void)
+ 		test_tailcall_4();
+ 	if (test__start_subtest("tailcall_5"))
+ 		test_tailcall_5();
++	if (test__start_subtest("tailcall_6"))
++		test_tailcall_6();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/tailcall6.c b/tools/testing/selftests/bpf/progs/tailcall6.c
+new file mode 100644
+index 000000000000..e72ca5869b58
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tailcall6.c
+@@ -0,0 +1,38 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 2);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++} jmp_table SEC(".maps");
++
++#define TAIL_FUNC(x) 				\
++	SEC("classifier/" #x)			\
++	int bpf_func_##x(struct __sk_buff *skb)	\
++	{					\
++		return x;			\
++	}
++TAIL_FUNC(0)
++TAIL_FUNC(1)
++
++static __attribute__ ((noinline))
++int subprog_tail(struct __sk_buff *skb)
++{
++	bpf_tail_call(skb, &jmp_table, 0);
++
++	return skb->len * 2;
++}
++
++SEC("classifier")
++int entry(struct __sk_buff *skb)
++{
++	bpf_tail_call(skb, &jmp_table, 1);
++
++	return subprog_tail(skb);
++}
++
++char __license[] SEC("license") = "GPL";
++int _version SEC("version") = 1;
 -- 
 2.20.1
 
