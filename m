@@ -2,100 +2,127 @@ Return-Path: <SRS0=UdEV=BD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C21BC433DF
-	for <bpf@archiver.kernel.org>; Fri, 24 Jul 2020 07:53:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AFA2C433E0
+	for <bpf@archiver.kernel.org>; Fri, 24 Jul 2020 09:06:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0B00B2074A
-	for <bpf@archiver.kernel.org>; Fri, 24 Jul 2020 07:53:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D82062074F
+	for <bpf@archiver.kernel.org>; Fri, 24 Jul 2020 09:06:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZwEOn9Wj"
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="jZYU8ziU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726554AbgGXHxO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 Jul 2020 03:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
+        id S1726801AbgGXJGl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Jul 2020 05:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726543AbgGXHxO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 24 Jul 2020 03:53:14 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEA9C0619D3;
-        Fri, 24 Jul 2020 00:53:14 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id p1so4015403pls.4;
-        Fri, 24 Jul 2020 00:53:14 -0700 (PDT)
+        with ESMTP id S1726783AbgGXJGk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 24 Jul 2020 05:06:40 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92818C0619E5
+        for <bpf@vger.kernel.org>; Fri, 24 Jul 2020 02:06:40 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id z18so4048031wrm.12
+        for <bpf@vger.kernel.org>; Fri, 24 Jul 2020 02:06:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DhllsmlJrqJtt+vF1CFjnjE0j+UxQXAPuoVAk1ibCA0=;
-        b=ZwEOn9Wj+1G65yRb2z4iDiijAvn79VTpRxihCXOV+bKISbfQn4SS/ZdBYy/uwIGzl2
-         K7MdwR27vjN280CftvYwLzkRSweeDSJbWozD41bsCZI8n/DDqGfRqfK37GJkVyL3UAXH
-         XQo0ixzpNeGOzmHoGcI34hwDQJ1asasQXnr8SVuZKvNWjKL9wYVnPP9PC/urUK/5QhTU
-         cKcCl/y2faYNi1PCYhFA6mX51dbGFlmOjY60gV1pFOZHK7zX84Zo+dfe48BrtMLLJ5VQ
-         XHmzkLUprTzdZWedeIvaNaGTT7GviZ1yDlBswBGcmVMoKWm9EvOoTCByJwPvnLWRByNg
-         uy/g==
+        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=GxnENee526BbPSGY0XIg65zijlPPPf1JtIkirCUkaeM=;
+        b=jZYU8ziUDsm6BLSBzqtCVam8YZrRh70sG8YF1AnDFCuQORNHbvnOSD8Gj5IkMI3KWu
+         9rM1IfyqlbJ5Ae3dztZpC0SmHcn2vPrRIhJ3IzrBMt7qMAiZ+HPdKDqY/AP4odMKbV2o
+         rnnqLmlGY7p3jsSaw8JtS9Wy6IYB3E7I3bkqCEOr0Owxrwa2SKg3GFzWjjsK3GCy7kdu
+         QMZSRjseaHK3idSPGrSZLP7qI8/11vlMW2CH+CoA9Hu3XplpyZHIegqJ8Es0uEIV2NXO
+         L+3xUDG8SnxmpIC44G/ujkacS8evrpLHo9Bkuo4eLxJzJPp0/5ac/65e9IqBrZi6HUC/
+         LaEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DhllsmlJrqJtt+vF1CFjnjE0j+UxQXAPuoVAk1ibCA0=;
-        b=eHmawD9JOQSx7DOZCW/o8NGyZ4T6BsSLXh0ptZ5f8iFht/TflfYCfLJNEZh1BsU6/6
-         OdR0W0tZpsB1q3iGvOE7RKQ3kmpk2TspjMxzwVEla3KRHrh67pY2XmhIoSyYy2bdgMrx
-         bqDW3OKD0ul93u382CaMakoOfy+grxtQLKqngq7wWG5jkLlO2Zir8yQzaIRyBeMWkDMU
-         es9lFOjsNyi4nuFEX8vJ7Tktr/ly4+nfynDGklixySuVw1lsKrv7tl8+jlSZyHE3bEBc
-         hcVrzbSkcGRCBBGVhzeaovkAkfThWw50+Q3KLDN4ZeE1f+M5jcdm6eK7UU//IzqEP5bJ
-         mJPg==
-X-Gm-Message-State: AOAM530VAoAeaqgIXy9GwtMauL4d1dR878PATgf9r8GksOBdOx7uTSRP
-        6WHw5SJNCm88xdgihUWvRpXusPYX8D2U2A==
-X-Google-Smtp-Source: ABdhPJyJYneM6UM0rcnDkUPAq+ZkqYs1vLUKDTXcdAMK4CGYjopUvOAFqg6dKiG9sV9bchd25O5H8Q==
-X-Received: by 2002:a17:902:7591:: with SMTP id j17mr7065172pll.286.1595577193965;
-        Fri, 24 Jul 2020 00:53:13 -0700 (PDT)
-Received: from dhcp-12-153.nay.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id e8sm5273745pfl.125.2020.07.24.00.53.11
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=GxnENee526BbPSGY0XIg65zijlPPPf1JtIkirCUkaeM=;
+        b=HZTuPsbnondFA3ldtLr1tVdeCW8IS9lcA3jviXse3skhmOqsNiu+vKN1u3QDi+bC/c
+         Y6+3mH6PLfMkJr7ge2IysuH3g5FEoOyiP8P+s6BSj48TkhbFfakoPgC21uFmb7b0FFf3
+         nuWmFv0eg1cfWsb41SQPimOz1s/z7gowR1g9YxuQlyd1D7E2t1vRWbEavAqTPByV6dt3
+         E0UksVdhkMR6nRKQr3zLPjIeinFBROY/W+i5477DxBXZxSiEfQWGbxEKY1w1AGwKKzMD
+         iIR66lynhI8LfbBAdet4VwaKkqhJUcFvDHuhY3H573bjEMikFnm9Mxm+sE8jsMI5cPvz
+         lgQw==
+X-Gm-Message-State: AOAM5321iFTj8M7RvEAYRgBMz6+fShgpfaltuHyaUeETs3O0pYHcD0We
+        ZrK5+OD3ly64G4J/JiAXY08bAA==
+X-Google-Smtp-Source: ABdhPJykogI7r1ZL819tuTUD/yZ5fQo9cg9lTQkKWDytZ/lmue7R90FEXnSRtTQ2d50zVZ9zSlPF8w==
+X-Received: by 2002:adf:f248:: with SMTP id b8mr8132157wrp.247.1595581598896;
+        Fri, 24 Jul 2020 02:06:38 -0700 (PDT)
+Received: from localhost.localdomain ([194.35.117.75])
+        by smtp.gmail.com with ESMTPSA id t11sm527915wrs.66.2020.07.24.02.06.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2020 00:53:13 -0700 (PDT)
-Date:   Fri, 24 Jul 2020 15:53:03 +0800
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
+        Fri, 24 Jul 2020 02:06:38 -0700 (PDT)
+From:   Quentin Monnet <quentin@isovalent.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>, ast@kernel.org
-Subject: Re: [PATCH bpf-next] bpf: add a new bpf argument type
- ARG_CONST_MAP_PTR_OR_NULL
-Message-ID: <20200724075303.GK2531@dhcp-12-153.nay.redhat.com>
-References: <20200715070001.2048207-1-liuhangbin@gmail.com>
- <67a68a77-f287-1bb1-3221-24e8b3351958@iogearbox.net>
- <20200717091111.GJ2531@dhcp-12-153.nay.redhat.com>
+        Paul Chaignon <paul@cilium.io>,
+        Quentin Monnet <quentin@isovalent.com>
+Subject: [PATCH bpf-next 1/2] tools: bpftool: skip type probe if name is not found
+Date:   Fri, 24 Jul 2020 10:06:17 +0100
+Message-Id: <20200724090618.16378-2-quentin@isovalent.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200724090618.16378-1-quentin@isovalent.com>
+References: <20200724090618.16378-1-quentin@isovalent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200717091111.GJ2531@dhcp-12-153.nay.redhat.com>
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jul 17, 2020 at 05:11:22PM +0800, Hangbin Liu wrote:
-> On Thu, Jul 16, 2020 at 12:28:16AM +0200, Daniel Borkmann wrote:
-> > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > > index c67c88ad35f8..9d4dbef3c943 100644
-> > > --- a/include/linux/bpf.h
-> > > +++ b/include/linux/bpf.h
-> > > @@ -253,6 +253,7 @@ enum bpf_arg_type {
-> > >   	ARG_PTR_TO_ALLOC_MEM,	/* pointer to dynamically allocated memory */
-> > >   	ARG_PTR_TO_ALLOC_MEM_OR_NULL,	/* pointer to dynamically allocated memory or NULL */
-> > >   	ARG_CONST_ALLOC_SIZE_OR_ZERO,	/* number of allocated bytes requested */
-> > > +	ARG_CONST_MAP_PTR_OR_NULL,	/* const argument used as pointer to bpf_map or NULL */
-> > >   };
-> > In combination with the set, this also needs test_verifier selftests in order to
-> > exercise BPF insn snippets for the good & [expected] bad case.
-> 
-> Hi Daniel,
-> 
-> I just come up with a question, how should I test it without no bpf
-> helper using it? Should I wait until the XDP multicast patch set merged?
+For probing program and map types, bpftool loops on type values and uses
+the relevant type name in prog_type_name[] or map_type_name[]. To ensure
+the name exists, we exit from the loop if we go over the size of the
+array.
 
-ping?
+However, this is not enough in the case where the arrays have "holes" in
+them, program or map types for which they have no name, but not at the
+end of the list. This is currently the case for BPF_PROG_TYPE_LSM, not
+known to bpftool and which name is a null string. When probing for
+features, bpftool attempts to strlen() that name and segfaults.
+
+Let's fix it by skipping probes for "unknown" program and map types,
+with an informational message giving the numeral value in that case.
+
+Fixes: 93a3545d812a ("tools/bpftool: Add name mappings for SK_LOOKUP prog and attach type")
+Reported-by: Paul Chaignon <paul@cilium.io>
+Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+---
+ tools/bpf/bpftool/feature.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
+index 1cd75807673e..a43a6f10b564 100644
+--- a/tools/bpf/bpftool/feature.c
++++ b/tools/bpf/bpftool/feature.c
+@@ -504,6 +504,10 @@ probe_prog_type(enum bpf_prog_type prog_type, bool *supported_types,
+ 
+ 	supported_types[prog_type] |= res;
+ 
++	if (!prog_type_name[prog_type]) {
++		p_info("program type name not found (type %d)", prog_type);
++		return;
++	}
+ 	maxlen = sizeof(plain_desc) - strlen(plain_comment) - 1;
+ 	if (strlen(prog_type_name[prog_type]) > maxlen) {
+ 		p_info("program type name too long");
+@@ -533,6 +537,10 @@ probe_map_type(enum bpf_map_type map_type, const char *define_prefix,
+ 	 * check required for unprivileged users
+ 	 */
+ 
++	if (!map_type_name[map_type]) {
++		p_info("map type name not found (type %d)", map_type);
++		return;
++	}
+ 	maxlen = sizeof(plain_desc) - strlen(plain_comment) - 1;
+ 	if (strlen(map_type_name[map_type]) > maxlen) {
+ 		p_info("map type name too long");
+-- 
+2.20.1
+
