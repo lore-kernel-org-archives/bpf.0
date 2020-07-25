@@ -8,40 +8,40 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56D6AC4345A
-	for <bpf@archiver.kernel.org>; Sat, 25 Jul 2020 00:05:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A377C4345D
+	for <bpf@archiver.kernel.org>; Sat, 25 Jul 2020 00:05:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 340342064B
-	for <bpf@archiver.kernel.org>; Sat, 25 Jul 2020 00:05:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5231F2065E
+	for <bpf@archiver.kernel.org>; Sat, 25 Jul 2020 00:05:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="I+Af238N"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="SNCHn63E"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727898AbgGYAEp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 Jul 2020 20:04:45 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:23992 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727883AbgGYAEp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 24 Jul 2020 20:04:45 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06ONklNN031673
-        for <bpf@vger.kernel.org>; Fri, 24 Jul 2020 17:04:44 -0700
+        id S1727882AbgGYAFd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Jul 2020 20:05:33 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:3300 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727856AbgGYAEo (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 24 Jul 2020 20:04:44 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06ONmceZ012909
+        for <bpf@vger.kernel.org>; Fri, 24 Jul 2020 17:04:43 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=pVPR7Cu3xYhrx38YFyxPm1H8m1+ErWwPVI25d5Vz8oY=;
- b=I+Af238NfBVhqzHLNWrjxtCMctDQst4/SfN2LzEi8cQNFVZScqmfxsS4jDWsI9piuTr6
- FAtyPrMJdaaFZDZtDhvEIhs7PYoGR3xy5JrcORHfGSir7WeQxDaQVoEzI92LY407alXF
- eRYZvUdTgKf5TNcV5dPhrpE830Xixs2ATzc= 
+ bh=VJIpv4KJ99emqMyK/KN1Btfdwg++KpRP9LTaPMgfZ1Q=;
+ b=SNCHn63Ek4NaltMrgebIR/SgI+7ZNF2OFppjpUSaXjB5szVB05LRHIIckcAu4Nz7aNK0
+ PcBDAQQc0iVUGyxNWGHpAXAY3V3T+3nqTXy4CI+s2+OCbCWFCy/XLHyA1XNSZa1QLvnj
+ yRAx+90UAioNQEBfgomLWQuZ2IkwKru8Lhw= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 32etmwm9f0-1
+        by mx0a-00082601.pphosted.com with ESMTP id 32embcegmr-11
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 24 Jul 2020 17:04:44 -0700
-Received: from intmgw002.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 24 Jul 2020 17:04:42 -0700
+Received: from intmgw004.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 24 Jul 2020 17:04:43 -0700
+ 15.1.1979.3; Fri, 24 Jul 2020 17:04:36 -0700
 Received: by devvm1096.prn0.facebook.com (Postfix, from userid 111017)
-        id 4949B1B35AA8; Fri, 24 Jul 2020 17:04:27 -0700 (PDT)
+        id 3E9E71B35AA4; Fri, 24 Jul 2020 17:04:27 -0700 (PDT)
 Smtp-Origin-Hostprefix: devvm
 From:   Roman Gushchin <guro@fb.com>
 Smtp-Origin-Hostname: devvm1096.prn0.facebook.com
@@ -50,9 +50,9 @@ CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <linux-kernel@vger.kernel.org>, Roman Gushchin <guro@fb.com>
 Smtp-Origin-Cluster: prn0c01
-Subject: [PATCH bpf-next 30/35] bpf: bpftool: do not touch RLIMIT_MEMLOCK
-Date:   Fri, 24 Jul 2020 17:04:05 -0700
-Message-ID: <20200725000410.3566700-31-guro@fb.com>
+Subject: [PATCH bpf-next 28/35] bpf: eliminate rlimit-based memory accounting for bpf progs
+Date:   Fri, 24 Jul 2020 17:04:03 -0700
+Message-ID: <20200725000410.3566700-29-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200725000410.3566700-1-guro@fb.com>
 References: <20200725000410.3566700-1-guro@fb.com>
@@ -62,137 +62,254 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-24_10:2020-07-24,2020-07-24 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- suspectscore=13 bulkscore=0 spamscore=0 clxscore=1015 phishscore=0
- mlxscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
- impostorscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2007240164
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
+ mlxlogscore=999 impostorscore=0 clxscore=1015 priorityscore=1501
+ lowpriorityscore=0 adultscore=0 phishscore=0 mlxscore=0 suspectscore=38
+ spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007240164
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Since bpf stopped using memlock rlimit to limit the memory usage,
-there is no more reason for bpftool to alter its own limits.
+Do not use rlimit-based memory accounting for bpf progs. It has been
+replaced with memcg-based memory accounting.
 
 Signed-off-by: Roman Gushchin <guro@fb.com>
 ---
- tools/bpf/bpftool/common.c     | 7 -------
- tools/bpf/bpftool/feature.c    | 2 --
- tools/bpf/bpftool/main.h       | 2 --
- tools/bpf/bpftool/map.c        | 2 --
- tools/bpf/bpftool/pids.c       | 1 -
- tools/bpf/bpftool/prog.c       | 3 ---
- tools/bpf/bpftool/struct_ops.c | 2 --
- 7 files changed, 19 deletions(-)
+ include/linux/bpf.h  | 11 ------
+ kernel/bpf/core.c    | 12 ++-----
+ kernel/bpf/syscall.c | 86 ++++++--------------------------------------
+ 3 files changed, 12 insertions(+), 97 deletions(-)
 
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index 65303664417e..01b87e8c3040 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -109,13 +109,6 @@ static bool is_bpffs(char *path)
- 	return (unsigned long)st_fs.f_type =3D=3D BPF_FS_MAGIC;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 055c693d9928..0c443468200e 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1095,8 +1095,6 @@ void bpf_prog_sub(struct bpf_prog *prog, int i);
+ void bpf_prog_inc(struct bpf_prog *prog);
+ struct bpf_prog * __must_check bpf_prog_inc_not_zero(struct bpf_prog *pr=
+og);
+ void bpf_prog_put(struct bpf_prog *prog);
+-int __bpf_prog_charge(struct user_struct *user, u32 pages);
+-void __bpf_prog_uncharge(struct user_struct *user, u32 pages);
+ void __bpf_free_used_maps(struct bpf_prog_aux *aux,
+ 			  struct bpf_map **used_maps, u32 len);
+=20
+@@ -1380,15 +1378,6 @@ bpf_prog_inc_not_zero(struct bpf_prog *prog)
+ 	return ERR_PTR(-EOPNOTSUPP);
  }
 =20
--void set_max_rlimit(void)
+-static inline int __bpf_prog_charge(struct user_struct *user, u32 pages)
 -{
--	struct rlimit rinf =3D { RLIM_INFINITY, RLIM_INFINITY };
--
--	setrlimit(RLIMIT_MEMLOCK, &rinf);
+-	return 0;
 -}
 -
- static int
- mnt_fs(const char *target, const char *type, char *buff, size_t bufflen)
+-static inline void __bpf_prog_uncharge(struct user_struct *user, u32 pag=
+es)
+-{
+-}
+-
+ static inline int bpf_obj_get_user(const char __user *pathname, int flag=
+s)
  {
-diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
-index 1cd75807673e..2d6c6bff934e 100644
---- a/tools/bpf/bpftool/feature.c
-+++ b/tools/bpf/bpftool/feature.c
-@@ -885,8 +885,6 @@ static int do_probe(int argc, char **argv)
- 	__u32 ifindex =3D 0;
- 	char *ifname;
+ 	return -EOPNOTSUPP;
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index daab8dcafbd4..23b8ff109ac8 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -219,23 +219,15 @@ struct bpf_prog *bpf_prog_realloc(struct bpf_prog *=
+fp_old, unsigned int size,
+ {
+ 	gfp_t gfp_flags =3D GFP_KERNEL_ACCOUNT | __GFP_ZERO | gfp_extra_flags;
+ 	struct bpf_prog *fp;
+-	u32 pages, delta;
+-	int ret;
++	u32 pages;
 =20
--	set_max_rlimit();
+ 	size =3D round_up(size, PAGE_SIZE);
+ 	pages =3D size / PAGE_SIZE;
+ 	if (pages <=3D fp_old->pages)
+ 		return fp_old;
+=20
+-	delta =3D pages - fp_old->pages;
+-	ret =3D __bpf_prog_charge(fp_old->aux->user, delta);
+-	if (ret)
+-		return NULL;
 -
- 	while (argc) {
- 		if (is_prefix(*argv, "kernel")) {
- 			if (target !=3D COMPONENT_UNSPEC) {
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index e3a79b5a9960..0a3bd1ff14da 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -95,8 +95,6 @@ int detect_common_prefix(const char *arg, ...);
- void fprint_hex(FILE *f, void *arg, unsigned int n, const char *sep);
- void usage(void) __noreturn;
+ 	fp =3D __vmalloc(size, gfp_flags);
+-	if (fp =3D=3D NULL) {
+-		__bpf_prog_uncharge(fp_old->aux->user, delta);
+-	} else {
++	if (fp) {
+ 		memcpy(fp, fp_old, fp_old->pages * PAGE_SIZE);
+ 		fp->pages =3D pages;
+ 		fp->aux->prog =3D fp;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index ae51e2363cc1..7f0bf60f5218 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -337,23 +337,6 @@ void bpf_map_init_from_attr(struct bpf_map *map, uni=
+on bpf_attr *attr)
+ 	map->numa_node =3D bpf_map_attr_numa_node(attr);
+ }
 =20
--void set_max_rlimit(void);
+-static int bpf_charge_memlock(struct user_struct *user, u32 pages)
+-{
+-	unsigned long memlock_limit =3D rlimit(RLIMIT_MEMLOCK) >> PAGE_SHIFT;
 -
- int mount_tracefs(const char *target);
-=20
- struct pinned_obj_table {
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 3a27d31a1856..f08b9e707511 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -1315,8 +1315,6 @@ static int do_create(int argc, char **argv)
- 		return -1;
- 	}
-=20
--	set_max_rlimit();
+-	if (atomic_long_add_return(pages, &user->locked_vm) > memlock_limit) {
+-		atomic_long_sub(pages, &user->locked_vm);
+-		return -EPERM;
+-	}
+-	return 0;
+-}
 -
- 	fd =3D bpf_create_map_xattr(&attr);
- 	if (fd < 0) {
- 		p_err("map create failed: %s", strerror(errno));
-diff --git a/tools/bpf/bpftool/pids.c b/tools/bpf/bpftool/pids.c
-index e3b116325403..4c559a8ae4e8 100644
---- a/tools/bpf/bpftool/pids.c
-+++ b/tools/bpf/bpftool/pids.c
-@@ -96,7 +96,6 @@ int build_obj_refs_table(struct obj_refs_table *table, =
-enum bpf_obj_type type)
- 	libbpf_print_fn_t default_print;
+-static void bpf_uncharge_memlock(struct user_struct *user, u32 pages)
+-{
+-	if (user)
+-		atomic_long_sub(pages, &user->locked_vm);
+-}
+-
+ static int bpf_map_alloc_id(struct bpf_map *map)
+ {
+ 	int id;
+@@ -1563,51 +1546,6 @@ static void bpf_audit_prog(const struct bpf_prog *=
+prog, unsigned int op)
+ 	audit_log_end(ab);
+ }
 =20
- 	hash_init(table->table);
--	set_max_rlimit();
+-int __bpf_prog_charge(struct user_struct *user, u32 pages)
+-{
+-	unsigned long memlock_limit =3D rlimit(RLIMIT_MEMLOCK) >> PAGE_SHIFT;
+-	unsigned long user_bufs;
+-
+-	if (user) {
+-		user_bufs =3D atomic_long_add_return(pages, &user->locked_vm);
+-		if (user_bufs > memlock_limit) {
+-			atomic_long_sub(pages, &user->locked_vm);
+-			return -EPERM;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-void __bpf_prog_uncharge(struct user_struct *user, u32 pages)
+-{
+-	if (user)
+-		atomic_long_sub(pages, &user->locked_vm);
+-}
+-
+-static int bpf_prog_charge_memlock(struct bpf_prog *prog)
+-{
+-	struct user_struct *user =3D get_current_user();
+-	int ret;
+-
+-	ret =3D __bpf_prog_charge(user, prog->pages);
+-	if (ret) {
+-		free_uid(user);
+-		return ret;
+-	}
+-
+-	prog->aux->user =3D user;
+-	return 0;
+-}
+-
+-static void bpf_prog_uncharge_memlock(struct bpf_prog *prog)
+-{
+-	struct user_struct *user =3D prog->aux->user;
+-
+-	__bpf_prog_uncharge(user, prog->pages);
+-	free_uid(user);
+-}
+-
+ static int bpf_prog_alloc_id(struct bpf_prog *prog)
+ {
+ 	int id;
+@@ -1657,7 +1595,7 @@ static void __bpf_prog_put_rcu(struct rcu_head *rcu=
+)
 =20
- 	skel =3D pid_iter_bpf__open();
- 	if (!skel) {
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 3e6ecc6332e2..40e50db60332 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -1291,8 +1291,6 @@ static int load_with_options(int argc, char **argv,=
- bool first_prog_only)
+ 	kvfree(aux->func_info);
+ 	kfree(aux->func_info_aux);
+-	bpf_prog_uncharge_memlock(aux->prog);
++	free_uid(aux->user);
+ 	security_bpf_prog_free(aux);
+ 	bpf_prog_free(aux->prog);
+ }
+@@ -2090,7 +2028,7 @@ static int bpf_prog_load(union bpf_attr *attr, unio=
+n bpf_attr __user *uattr)
+ 		tgt_prog =3D bpf_prog_get(attr->attach_prog_fd);
+ 		if (IS_ERR(tgt_prog)) {
+ 			err =3D PTR_ERR(tgt_prog);
+-			goto free_prog_nouncharge;
++			goto free_prog;
  		}
+ 		prog->aux->linked_prog =3D tgt_prog;
+ 	}
+@@ -2099,18 +2037,15 @@ static int bpf_prog_load(union bpf_attr *attr, un=
+ion bpf_attr __user *uattr)
+=20
+ 	err =3D security_bpf_prog_alloc(prog->aux);
+ 	if (err)
+-		goto free_prog_nouncharge;
+-
+-	err =3D bpf_prog_charge_memlock(prog);
+-	if (err)
+-		goto free_prog_sec;
++		goto free_prog;
+=20
++	prog->aux->user =3D get_current_user();
+ 	prog->len =3D attr->insn_cnt;
+=20
+ 	err =3D -EFAULT;
+ 	if (copy_from_user(prog->insns, u64_to_user_ptr(attr->insns),
+ 			   bpf_prog_insn_size(prog)) !=3D 0)
+-		goto free_prog;
++		goto free_prog_sec;
+=20
+ 	prog->orig_prog =3D NULL;
+ 	prog->jited =3D 0;
+@@ -2121,19 +2056,19 @@ static int bpf_prog_load(union bpf_attr *attr, un=
+ion bpf_attr __user *uattr)
+ 	if (bpf_prog_is_dev_bound(prog->aux)) {
+ 		err =3D bpf_prog_offload_init(prog, attr);
+ 		if (err)
+-			goto free_prog;
++			goto free_prog_sec;
  	}
 =20
--	set_max_rlimit();
--
- 	obj =3D bpf_object__open_file(file, &open_opts);
- 	if (IS_ERR_OR_NULL(obj)) {
- 		p_err("failed to open object file");
-@@ -1833,7 +1831,6 @@ static int do_profile(int argc, char **argv)
- 		}
- 	}
+ 	/* find program type: socket_filter vs tracing_filter */
+ 	err =3D find_prog_type(type, prog);
+ 	if (err < 0)
+-		goto free_prog;
++		goto free_prog_sec;
 =20
--	set_max_rlimit();
- 	err =3D profiler_bpf__load(profile_obj);
- 	if (err) {
- 		p_err("failed to load profile_obj");
-diff --git a/tools/bpf/bpftool/struct_ops.c b/tools/bpf/bpftool/struct_op=
-s.c
-index b58b91f62ffb..0915e1e9b7c0 100644
---- a/tools/bpf/bpftool/struct_ops.c
-+++ b/tools/bpf/bpftool/struct_ops.c
-@@ -498,8 +498,6 @@ static int do_register(int argc, char **argv)
- 	if (IS_ERR_OR_NULL(obj))
- 		return -1;
+ 	prog->aux->load_time =3D ktime_get_boottime_ns();
+ 	err =3D bpf_obj_name_cpy(prog->aux->name, attr->prog_name,
+ 			       sizeof(attr->prog_name));
+ 	if (err < 0)
+-		goto free_prog;
++		goto free_prog_sec;
 =20
--	set_max_rlimit();
--
- 	load_attr.obj =3D obj;
- 	if (verifier_logs)
- 		/* log_level1 + log_level2 + stats, but not stable UAPI */
+ 	/* run eBPF verifier */
+ 	err =3D bpf_check(&prog, attr, uattr);
+@@ -2178,11 +2113,10 @@ static int bpf_prog_load(union bpf_attr *attr, un=
+ion bpf_attr __user *uattr)
+ 	 */
+ 	__bpf_prog_put_noref(prog, prog->aux->func_cnt);
+ 	return err;
+-free_prog:
+-	bpf_prog_uncharge_memlock(prog);
+ free_prog_sec:
++	free_uid(prog->aux->user);
+ 	security_bpf_prog_free(prog->aux);
+-free_prog_nouncharge:
++free_prog:
+ 	bpf_prog_free(prog);
+ 	return err;
+ }
 --=20
 2.26.2
 
