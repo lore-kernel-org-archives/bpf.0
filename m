@@ -8,40 +8,40 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7DE1C43446
-	for <bpf@archiver.kernel.org>; Sat, 25 Jul 2020 00:07:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F775C433ED
+	for <bpf@archiver.kernel.org>; Sat, 25 Jul 2020 00:07:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B30F02065F
-	for <bpf@archiver.kernel.org>; Sat, 25 Jul 2020 00:07:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D99C206D7
+	for <bpf@archiver.kernel.org>; Sat, 25 Jul 2020 00:07:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="erQsQ+hJ"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="GJtRpz5W"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726990AbgGYAEd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 24 Jul 2020 20:04:33 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:14204 "EHLO
+        id S1727900AbgGYAHk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 24 Jul 2020 20:07:40 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:30594 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726726AbgGYAEc (ORCPT
+        by vger.kernel.org with ESMTP id S1726984AbgGYAEc (ORCPT
         <rfc822;bpf@vger.kernel.org>); Fri, 24 Jul 2020 20:04:32 -0400
 Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06ONmed5013832
-        for <bpf@vger.kernel.org>; Fri, 24 Jul 2020 17:04:31 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06ONmpTW014008
+        for <bpf@vger.kernel.org>; Fri, 24 Jul 2020 17:04:32 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=6grKGngZ2EGO1ZEUu9sZ929yloT2DLe+IOdXXOL70cE=;
- b=erQsQ+hJqEz66XvtnhurtLqKmWpRolZRmNmWdQJv1kZwRQheR+iIZMcWQNVu5eZHFna9
- bDU9vzkDarHAh+7mtwnOBxoHfvz0lWsdf77a7bGzXbxUa+KJ/lRpx0wOYi/UWEe5vChn
- 4sG0EYF+qRrgSC/W1VsTrJz5LftpfkGehLc= 
+ bh=VdNVeo/r7n5BeWPKriNc/78VSdoV1W6Zt7B5MFzVu6Y=;
+ b=GJtRpz5WhWUxcNxby7A75VtbUMrwRYnocJHNtbWWFb0R5hKyS8fO+NT6CXl+bbbZrm9F
+ pMpYGUz/S6QdEH0Fn40uF47KSUDwsIdhb4sOgh8KBRK7+8kQui0r7VAXt4YAh2gUrsr0
+ ivDQypVThNqLPYebrtVL29+86+kBtS/FbYA= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 32fh7kpdm6-1
+        by mx0a-00082601.pphosted.com with ESMTP id 32fh7kpdm7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 24 Jul 2020 17:04:31 -0700
+        for <bpf@vger.kernel.org>; Fri, 24 Jul 2020 17:04:32 -0700
 Received: from intmgw004.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1979.3; Fri, 24 Jul 2020 17:04:30 -0700
 Received: by devvm1096.prn0.facebook.com (Postfix, from userid 111017)
-        id CE7E41B35A7A; Fri, 24 Jul 2020 17:04:26 -0700 (PDT)
+        id E4C431B35A84; Fri, 24 Jul 2020 17:04:26 -0700 (PDT)
 Smtp-Origin-Hostprefix: devvm
 From:   Roman Gushchin <guro@fb.com>
 Smtp-Origin-Hostname: devvm1096.prn0.facebook.com
@@ -50,9 +50,9 @@ CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <linux-kernel@vger.kernel.org>, Roman Gushchin <guro@fb.com>
 Smtp-Origin-Cluster: prn0c01
-Subject: [PATCH bpf-next 07/35] bpf: refine memcg-based memory accounting for hashtab maps
-Date:   Fri, 24 Jul 2020 17:03:42 -0700
-Message-ID: <20200725000410.3566700-8-guro@fb.com>
+Subject: [PATCH bpf-next 12/35] bpf: refine memcg-based memory accounting for xskmap maps
+Date:   Fri, 24 Jul 2020 17:03:47 -0700
+Message-ID: <20200725000410.3566700-13-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200725000410.3566700-1-guro@fb.com>
 References: <20200725000410.3566700-1-guro@fb.com>
@@ -63,8 +63,8 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-24_10:2020-07-24,2020-07-24 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- priorityscore=1501 bulkscore=0 spamscore=0 mlxlogscore=856 adultscore=0
- lowpriorityscore=0 mlxscore=0 suspectscore=38 malwarescore=0
+ priorityscore=1501 bulkscore=0 spamscore=0 mlxlogscore=799 adultscore=0
+ lowpriorityscore=0 mlxscore=0 suspectscore=13 malwarescore=0
  impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2006250000 definitions=main-2007240164
 X-FB-Internal: deliver
@@ -73,81 +73,29 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Include percpu objects and the size of map metadata into the
-accounting.
+Extend xskmap memory accounting to include the memory taken by
+the xsk_map_node structure.
 
 Signed-off-by: Roman Gushchin <guro@fb.com>
 ---
- kernel/bpf/hashtab.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ net/xdp/xskmap.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 024276787055..9d0432170812 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -263,10 +263,11 @@ static int prealloc_init(struct bpf_htab *htab)
- 		goto skip_percpu_elems;
-=20
- 	for (i =3D 0; i < num_entries; i++) {
-+		const gfp_t gfp =3D GFP_USER | __GFP_NOWARN | __GFP_ACCOUNT;
- 		u32 size =3D round_up(htab->map.value_size, 8);
- 		void __percpu *pptr;
-=20
--		pptr =3D __alloc_percpu_gfp(size, 8, GFP_USER | __GFP_NOWARN);
-+		pptr =3D __alloc_percpu_gfp(size, 8, gfp);
- 		if (!pptr)
- 			goto free_elems;
- 		htab_elem_set_ptr(get_htab_elem(htab, i), htab->map.key_size,
-@@ -321,7 +322,7 @@ static int alloc_extra_elems(struct bpf_htab *htab)
- 	int cpu;
-=20
- 	pptr =3D __alloc_percpu_gfp(sizeof(struct htab_elem *), 8,
--				  GFP_USER | __GFP_NOWARN);
-+				  GFP_USER | __GFP_NOWARN | __GFP_ACCOUNT);
- 	if (!pptr)
- 		return -ENOMEM;
-=20
-@@ -424,7 +425,7 @@ static struct bpf_map *htab_map_alloc(union bpf_attr =
-*attr)
- 	u64 cost;
+diff --git a/net/xdp/xskmap.c b/net/xdp/xskmap.c
+index 8367adbbe9df..e574b22defe5 100644
+--- a/net/xdp/xskmap.c
++++ b/net/xdp/xskmap.c
+@@ -28,7 +28,8 @@ static struct xsk_map_node *xsk_map_node_alloc(struct x=
+sk_map *map,
+ 	struct xsk_map_node *node;
  	int err;
 =20
--	htab =3D kzalloc(sizeof(*htab), GFP_USER);
-+	htab =3D kzalloc(sizeof(*htab), GFP_USER | __GFP_ACCOUNT);
- 	if (!htab)
+-	node =3D kzalloc(sizeof(*node), GFP_ATOMIC | __GFP_NOWARN);
++	node =3D kzalloc(sizeof(*node),
++		       GFP_ATOMIC | __GFP_NOWARN | __GFP_ACCOUNT);
+ 	if (!node)
  		return ERR_PTR(-ENOMEM);
 =20
-@@ -827,6 +828,7 @@ static struct htab_elem *alloc_htab_elem(struct bpf_h=
-tab *htab, void *key,
- 					 bool percpu, bool onallcpus,
- 					 struct htab_elem *old_elem)
- {
-+	const gfp_t gfp =3D GFP_ATOMIC | __GFP_NOWARN | __GFP_ACCOUNT;
- 	u32 size =3D htab->map.value_size;
- 	bool prealloc =3D htab_is_prealloc(htab);
- 	struct htab_elem *l_new, **pl_new;
-@@ -859,8 +861,7 @@ static struct htab_elem *alloc_htab_elem(struct bpf_h=
-tab *htab, void *key,
- 				l_new =3D ERR_PTR(-E2BIG);
- 				goto dec_count;
- 			}
--		l_new =3D kmalloc_node(htab->elem_size, GFP_ATOMIC | __GFP_NOWARN,
--				     htab->map.numa_node);
-+		l_new =3D kmalloc_node(htab->elem_size, gfp, htab->map.numa_node);
- 		if (!l_new) {
- 			l_new =3D ERR_PTR(-ENOMEM);
- 			goto dec_count;
-@@ -876,8 +877,7 @@ static struct htab_elem *alloc_htab_elem(struct bpf_h=
-tab *htab, void *key,
- 			pptr =3D htab_elem_get_ptr(l_new, key_size);
- 		} else {
- 			/* alloc_percpu zero-fills */
--			pptr =3D __alloc_percpu_gfp(size, 8,
--						  GFP_ATOMIC | __GFP_NOWARN);
-+			pptr =3D __alloc_percpu_gfp(size, 8, gfp);
- 			if (!pptr) {
- 				kfree(l_new);
- 				l_new =3D ERR_PTR(-ENOMEM);
 --=20
 2.26.2
 
