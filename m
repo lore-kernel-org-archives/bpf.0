@@ -1,103 +1,111 @@
-Return-Path: <SRS0=TUqo=BE=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=39mH=BF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9E76C433E0
-	for <bpf@archiver.kernel.org>; Sat, 25 Jul 2020 10:58:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1849BC433E1
+	for <bpf@archiver.kernel.org>; Sun, 26 Jul 2020 01:01:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D47C206D7
-	for <bpf@archiver.kernel.org>; Sat, 25 Jul 2020 10:58:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E5FD9206D7
+	for <bpf@archiver.kernel.org>; Sun, 26 Jul 2020 01:01:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.co.jp header.i=@amazon.co.jp header.b="OW0ef4y+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VjrhvCM8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726618AbgGYK6y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 25 Jul 2020 06:58:54 -0400
-Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:5637 "EHLO
-        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726572AbgGYK6x (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 25 Jul 2020 06:58:53 -0400
+        id S1726969AbgGZBBQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 25 Jul 2020 21:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57096 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726931AbgGZBBQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 25 Jul 2020 21:01:16 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF59CC08C5C0;
+        Sat, 25 Jul 2020 18:01:15 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id b25so13623557ljp.6;
+        Sat, 25 Jul 2020 18:01:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
-  s=amazon201209; t=1595674733; x=1627210733;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=8yCuQp1jTum4mRZYjvOuHgeSPvfethR7PN2wJdJXAZk=;
-  b=OW0ef4y+6sprVMnbpkwaw4CpVz2qhrTv0mi19rK6bW9nB5uNUSf8jDws
-   sFpuaUvELflN8c0BGVvcQI1BskhQxO574K12zQEmi4IBbC4DJW9PKlVVL
-   gistspJ9QaPpzi8GFzrntsI1o9bLjo4Sfy8DSD78hxDjCs1J6LJ+mdgCi
-   A=;
-IronPort-SDR: uAxbuuyURjQ6k6z1cAtU4ogVYIh2Jf46Y2MFwTGvFlwmo+7hEz6HCilG/A9TfWU3OCLyaipd7l
- ryAcnwGlbcZQ==
-X-IronPort-AV: E=Sophos;i="5.75,394,1589241600"; 
-   d="scan'208";a="61470209"
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1a-e34f1ddc.us-east-1.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 25 Jul 2020 10:58:52 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
-        by email-inbound-relay-1a-e34f1ddc.us-east-1.amazon.com (Postfix) with ESMTPS id 49F06A1D5E;
-        Sat, 25 Jul 2020 10:58:51 +0000 (UTC)
-Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
- EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Sat, 25 Jul 2020 10:58:49 +0000
-Received: from 38f9d3582de7.ant.amazon.com (10.43.161.203) by
- EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Sat, 25 Jul 2020 10:58:45 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-To:     <willemdebruijn.kernel@gmail.com>
-CC:     <ast@kernel.org>, <bpf@vger.kernel.org>, <daniel@iogearbox.net>,
-        <davem@davemloft.net>, <jakub@cloudflare.com>, <kuba@kernel.org>,
-        <kuniyu@amazon.co.jp>, <netdev@vger.kernel.org>,
-        <willemb@google.com>
-Subject: Re: [PATCH bpf-next] udp: reduce merge conflict on udp[46]_lib_lookup2
-Date:   Sat, 25 Jul 2020 19:58:41 +0900
-Message-ID: <20200725105841.19507-1-kuniyu@amazon.co.jp>
-X-Mailer: git-send-email 2.17.2 (Apple Git-113)
-In-Reply-To: <20200725025457.1004164-1-willemdebruijn.kernel@gmail.com>
-References: <20200725025457.1004164-1-willemdebruijn.kernel@gmail.com>
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iRZ6k+2EudeHcZ1b0jIuHOrby+BxTb2SO0kPldgSHGM=;
+        b=VjrhvCM8b3FWo+/TIjekn4QFnPxqkpMJCmtYhSeNOjB5ric/d+Z8hkrquF9ISxcupt
+         qMzNsVZXAenccTbWWgh7rr7Dt9B5SlQLj/sv/AwB+ELvX6nMcAguBcy9iTfOfXP9xq7P
+         cOKAI3nz/hzJGBzEMeW5o6iDzEkMbDAjzP20z0Sa23EMKDPlxC8MSac4uljKj5cx2v4c
+         NTqklFJqxC341WhihVYbDSJEUPQdT1JeAvpWoF2Rpa70crpKLftobre8zlx7M//kGiT+
+         Bdjs3eMgBpZDJc6NCTrAE2h3N+iD0Kuuf37SV3l6Ab/yQ8E3nUj17KYorAzr4rFnWHA1
+         EQNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iRZ6k+2EudeHcZ1b0jIuHOrby+BxTb2SO0kPldgSHGM=;
+        b=aYEOm4XM3rQzzvbph+xIHxrvb10KQSpKyvt5NKQMyZ4aIboOExVQqEoh//a/WLe6B4
+         GGaI24K1znX13o4jHEtV+/vykRW8xuvhftxPdgjvz8qwBO2hGICzGWguQpFlOFZwjelH
+         jU8ZeGwiab47waFMixMHL/AaqjNfBJg2IO3vTR9js/oUHj9nOAbObRfkZhwKVgX9LwT8
+         O6yih6OSp9v4ccdZIuXY8wvg+zPNtwZCVrgUYJs7dQVRIH8Ytk0SL2rReSwp80fuSG22
+         LtkIZeMtd4figfidQkSpsRpJDOygNEutGg8sLtL/z7uqSVIkYkvhtfoai08PEEs53OYw
+         eIDA==
+X-Gm-Message-State: AOAM533xHNg7eUwAEvNYfdHhxxibs6bJZ+79w2frln330U4If3C7Ho0e
+        KWqCjj8Qf3NKiU21Jg6Y3eTxS1Y1f4UB+kNkTmI=
+X-Google-Smtp-Source: ABdhPJxztEx9LxUx2VCXP8Lb3AxeJujIxpEjuQTtRRKuD9r2U+RvhSUBRP/iHQR9IaqoqIm8Tblx05kje6uVTpnZRVs=
+X-Received: by 2002:a2e:8357:: with SMTP id l23mr6688105ljh.290.1595725274305;
+ Sat, 25 Jul 2020 18:01:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.43.161.203]
-X-ClientProxiedBy: EX13D17UWC004.ant.amazon.com (10.43.162.195) To
- EX13D04ANC001.ant.amazon.com (10.43.157.89)
+References: <20200725025457.1004164-1-willemdebruijn.kernel@gmail.com> <20200725105841.19507-1-kuniyu@amazon.co.jp>
+In-Reply-To: <20200725105841.19507-1-kuniyu@amazon.co.jp>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sat, 25 Jul 2020 18:01:03 -0700
+Message-ID: <CAADnVQLbQuWGOUO-hN56WzRrVHoNaOhKOeuxZih9K-4b2C97Zw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] udp: reduce merge conflict on udp[46]_lib_lookup2
+To:     Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Willem de Bruijn <willemb@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Fri, 24 Jul 2020 22:54:57 -0400
-> From: Willem de Bruijn <willemb@google.com>
-> 
-> Commit efc6b6f6c311 ("udp: Improve load balancing for SO_REUSEPORT.")
-> 
-> in net conflicts with
-> 
-> Commit 72f7e9440e9b ("udp: Run SK_LOOKUP BPF program on socket lookup")
-> 
-> in bpf-next.
-> 
-> Commit 4a0e87bb1836 ("udp: Don't discard reuseport selection when group
-> has connections")
-> 
-> also in bpf-next reduces the conflict.
-> 
-> Further simplify by applying the main change of the first commit to
-> bpf-next. After this a conflict remains, but the bpf-next side can be
-> taken as is.
-> 
-> Now unused variable reuseport_result added in net must also be
-> removed. That applies without a conflict, so is harder to spot.
-> 
-> Link: http://patchwork.ozlabs.org/project/netdev/patch/20200722165227.51046-1-kuniyu@amazon.co.jp/
-> Signed-off-by: Willem de Bruijn <willemb@google.com>
+On Sat, Jul 25, 2020 at 3:58 AM Kuniyuki Iwashima <kuniyu@amazon.co.jp> wrote:
+>
+> From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+> Date:   Fri, 24 Jul 2020 22:54:57 -0400
+> > From: Willem de Bruijn <willemb@google.com>
+> >
+> > Commit efc6b6f6c311 ("udp: Improve load balancing for SO_REUSEPORT.")
+> >
+> > in net conflicts with
+> >
+> > Commit 72f7e9440e9b ("udp: Run SK_LOOKUP BPF program on socket lookup")
+> >
+> > in bpf-next.
+> >
+> > Commit 4a0e87bb1836 ("udp: Don't discard reuseport selection when group
+> > has connections")
+> >
+> > also in bpf-next reduces the conflict.
+> >
+> > Further simplify by applying the main change of the first commit to
+> > bpf-next. After this a conflict remains, but the bpf-next side can be
+> > taken as is.
+> >
+> > Now unused variable reuseport_result added in net must also be
+> > removed. That applies without a conflict, so is harder to spot.
+> >
+> > Link: http://patchwork.ozlabs.org/project/netdev/patch/20200722165227.51046-1-kuniyu@amazon.co.jp/
+> > Signed-off-by: Willem de Bruijn <willemb@google.com>
+>
+> Thank you for the follow up patch!
+>
+> Acked-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
 
-Thank you for the follow up patch!
-
-Acked-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-
-Best Regards,
-Kuniyuki
+net is being merged into net-next. I think this one is no longer necessary.
