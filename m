@@ -2,117 +2,175 @@ Return-Path: <SRS0=Ijne=BG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AB56C433FE
-	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 18:45:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 84854C433E0
+	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 18:51:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D8BB52075A
-	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 18:45:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5DC2B2074F
+	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 18:51:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="BLcwRGJA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eqMFMVdK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731937AbgG0Spq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Jul 2020 14:45:46 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:40264 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729238AbgG0Spp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 27 Jul 2020 14:45:45 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06RIjfbw027106
-        for <bpf@vger.kernel.org>; Mon, 27 Jul 2020 11:45:44 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=+B2E7moQ5wccXm5Qug0MMytIJWZXqnF6CSHLPrEB7X4=;
- b=BLcwRGJABvx4KG+ACU/kHGGbfxhlQ5L62AjW7DZD+FPioUhNbFglclVRiHr2HyM3ql7P
- Iz37Wwm8C2DvkVQ63VTi2M9UO6ug5wngpMA5QAWvXTcOWYY5ESx+Pny7gdb6qNt4yqQ7
- BoFPnnaBD78s/DIofP5K0CMrpmwlCTRtIAk= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 32h50vnsx6-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 27 Jul 2020 11:45:44 -0700
-Received: from intmgw002.06.prn3.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 27 Jul 2020 11:45:20 -0700
-Received: by devvm1096.prn0.facebook.com (Postfix, from userid 111017)
-        id 1644D1DAFEA5; Mon, 27 Jul 2020 11:45:11 -0700 (PDT)
-Smtp-Origin-Hostprefix: devvm
-From:   Roman Gushchin <guro@fb.com>
-Smtp-Origin-Hostname: devvm1096.prn0.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <linux-kernel@vger.kernel.org>, Roman Gushchin <guro@fb.com>
-Smtp-Origin-Cluster: prn0c01
-Subject: [PATCH bpf-next v2 26/35] bpf: eliminate rlimit-based memory accounting for xskmap maps
-Date:   Mon, 27 Jul 2020 11:44:57 -0700
-Message-ID: <20200727184506.2279656-27-guro@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200727184506.2279656-1-guro@fb.com>
-References: <20200727184506.2279656-1-guro@fb.com>
+        id S1726298AbgG0Svs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Jul 2020 14:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726196AbgG0Svr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Jul 2020 14:51:47 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758E5C061794;
+        Mon, 27 Jul 2020 11:51:47 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id l64so9458493qkb.8;
+        Mon, 27 Jul 2020 11:51:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=D3EJnxWQkYohSZ2rAj4ItXzUJ9TVbm4aLrUteT72d3A=;
+        b=eqMFMVdK1n86ImsYfmZKF+aGeu8cwtbedni27lfMUocYxa859h4Yeqsn5BRYaHo1e1
+         DwP5thbf5F2OT15ZK1cDWU76YcVUsnZqS/vDD1/I/GbY1NfOR0tc6pKXSqtVy5B7/Kaj
+         G7XtfW5XDFYo3gg0ZRdJGHlGeymGO2Hb8pqp/9Raiz4/4V+7HnvKH4WK8MhGPHUsyHsZ
+         iFWVrqpmsV44FCSO7UFAh+1y71RgcUw/s2LQroDOCij8mG+ik26gmn2EHf6blcV6D8Ms
+         99upSvAMiEkg2TKlCYb6uwfzarV3ibEbVcmpDatvpzI5jchuVyW6y2b+H8rng6Ew+nUR
+         rbAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=D3EJnxWQkYohSZ2rAj4ItXzUJ9TVbm4aLrUteT72d3A=;
+        b=EgvQteZlMELJimVdOFDoZo21SttOlbSrFn/AkT63uHD4GIGL1CqoXhmnTxcV/d57pI
+         1zBGnpPlxncX0PMYcmpsYhgyspasGQhCXcHEK3Co8g3IuVYMDbWMzLNOQyp5zRZ2DWxn
+         xs1CP+zJ2PagAmLtGM7QhgT+7bIlDZ1UPYRpAUSrsjuLi5mzfL/X0wUFsBu/9isGHvGe
+         NQEoTRa0o3GChXSIuVToiPSIiDmAizJEApcWLtPWGN9TQzTx6adoknqksURAmQ3uicUq
+         L0zvLZef1ZJAJ+UQTjW/GKxbSd8mEqYA72QD2bhpzgNoWtPMDLr17sCjR604d6LvJUhQ
+         xJpQ==
+X-Gm-Message-State: AOAM530n0TEdhlSefcpac2xriSQ49ELAs2hdxGBaDMZ6FN/y38+ryI7h
+        guu1IJcV3t3a0aKzRKljbb/46xjF8a8DW3lHciw=
+X-Google-Smtp-Source: ABdhPJx9rE+ks+Ak9GzAAif7Jx9Y/4tgo8mmlirrX7LgYuzfpe8T95R1tDEktzABOWa4HQ1vg2GEtKXPOIVyUv6JqKc=
+X-Received: by 2002:a37:a655:: with SMTP id p82mr23863195qke.92.1595875906536;
+ Mon, 27 Jul 2020 11:51:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-27_13:2020-07-27,2020-07-27 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=13
- phishscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=869 priorityscore=1501 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007270127
-X-FB-Internal: deliver
+References: <20200722064603.3350758-1-andriin@fb.com> <20200722064603.3350758-4-andriin@fb.com>
+ <pj41zla6zl88le.fsf@ua97a68a4e7db56.ant.amazon.com>
+In-Reply-To: <pj41zla6zl88le.fsf@ua97a68a4e7db56.ant.amazon.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 27 Jul 2020 11:51:35 -0700
+Message-ID: <CAEf4Bzb1_mQVxjmLEK0OFBdfnFi8To4fH-=kJTs8nz6xq7zUMw@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 3/9] bpf, xdp: extract common XDP program
+ attachment logic
+To:     Shay Agroskin <shayagr@amazon.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Ahern <dsahern@gmail.com>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Do not use rlimit-based memory accounting for xskmap maps.
-It has been replaced with the memcg-based memory accounting.
+On Mon, Jul 27, 2020 at 5:08 AM Shay Agroskin <shayagr@amazon.com> wrote:
+>
+>
+> Andrii Nakryiko <andriin@fb.com> writes:
+>
+> > Further refactor XDP attachment code. dev_change_xdp_fd() is
+> > split into two
+> > parts: getting bpf_progs from FDs and attachment logic, working
+> > with
+> > bpf_progs. This makes attachment  logic a bit more
+> > straightforward and
+> > prepares code for bpf_xdp_link inclusion, which will share the
+> > common logic.
+> >
+> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> > ---
+> >  net/core/dev.c | 165
+> >  +++++++++++++++++++++++++++----------------------
+> >  1 file changed, 91 insertions(+), 74 deletions(-)
+> >
+> > diff --git a/net/core/dev.c b/net/core/dev.c
+> > index 7e753e248cef..abf573b2dcf4 100644
+> > --- a/net/core/dev.c
+> > +++ b/net/core/dev.c
+> > @@ -8815,111 +8815,128 @@ static void dev_xdp_uninstall(struct
+> > net_device *dev)
+> >       }
+> >  }
+> >
+> > -/**
+> > - *   dev_change_xdp_fd - set or clear a bpf program for a
+> > device rx path
+> > - *   @dev: device
+> > - *   @extack: netlink extended ack
+> > - *   @fd: new program fd or negative value to clear
+> > - *   @expected_fd: old program fd that userspace expects to
+> > replace or clear
+> > - *   @flags: xdp-related flags
+> > - *
+> > - *   Set or clear a bpf program for a device
+> > - */
+> > -int dev_change_xdp_fd(struct net_device *dev, struct
+> > netlink_ext_ack *extack,
+> > -                   int fd, int expected_fd, u32 flags)
+> > +static int dev_xdp_attach(struct net_device *dev, struct
+> > netlink_ext_ack *extack,
+> > +                       struct bpf_prog *new_prog, struct
+> > bpf_prog *old_prog,
+> > +                       u32 flags)
+> >  {
+> > -     const struct net_device_ops *ops = dev->netdev_ops;
+> > -     enum bpf_xdp_mode mode = dev_xdp_mode(flags);
+> > -     bool offload = mode == XDP_MODE_HW;
+> > -     u32 prog_id, expected_id = 0;
+> > -     struct bpf_prog *prog;
+> > +     struct bpf_prog *cur_prog;
+> > +     enum bpf_xdp_mode mode;
+> >       bpf_op_t bpf_op;
+> >       int err;
+> >
+> >       ASSERT_RTNL();
+> >
+> > -     bpf_op = dev_xdp_bpf_op(dev, mode);
+> > -     if (!bpf_op) {
+> > -             NL_SET_ERR_MSG(extack, "underlying driver does not
+> > support XDP in native mode");
+> > -             return -EOPNOTSUPP;
+> > +     /* just one XDP mode bit should be set, zero defaults to
+> > SKB mode */
+> > +     if (hweight32(flags & XDP_FLAGS_MODES) > 1) {
+>
+> Not sure if it's more efficient but running
+>     if ((flags & XDP) & ((flags & XDP) - 1) != 0)
+>
+> returns whether a number is a multiple of 2.
+> Should be equivalent to what you checked with hweight32. It is
+> less readable though. Just thought I'd throw that in.
 
-Signed-off-by: Roman Gushchin <guro@fb.com>
----
- net/xdp/xskmap.c | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+so I just preserved what is there in netlink-handling code. It also is
+not a performance-critical part. What you propose might work, but
+using hweight32 is more explicit about allowing zero or one bits set.
 
-diff --git a/net/xdp/xskmap.c b/net/xdp/xskmap.c
-index e574b22defe5..0366013f13c6 100644
---- a/net/xdp/xskmap.c
-+++ b/net/xdp/xskmap.c
-@@ -74,7 +74,6 @@ static void xsk_map_sock_delete(struct xdp_sock *xs,
-=20
- static struct bpf_map *xsk_map_alloc(union bpf_attr *attr)
- {
--	struct bpf_map_memory mem;
- 	int err, numa_node;
- 	struct xsk_map *m;
- 	u64 size;
-@@ -90,18 +89,11 @@ static struct bpf_map *xsk_map_alloc(union bpf_attr *=
-attr)
- 	numa_node =3D bpf_map_attr_numa_node(attr);
- 	size =3D struct_size(m, xsk_map, attr->max_entries);
-=20
--	err =3D bpf_map_charge_init(&mem, size);
--	if (err < 0)
--		return ERR_PTR(err);
--
- 	m =3D bpf_map_area_alloc(size, numa_node);
--	if (!m) {
--		bpf_map_charge_finish(&mem);
-+	if (!m)
- 		return ERR_PTR(-ENOMEM);
--	}
-=20
- 	bpf_map_init_from_attr(&m->map, attr);
--	bpf_map_charge_move(&m->map.memory, &mem);
- 	spin_lock_init(&m->lock);
-=20
- 	return &m->map;
---=20
-2.26.2
 
+> Taken from
+> https://graphics.stanford.edu/~seander/bithacks.html#DetermineIfPowerOf2
+>
+> > +             NL_SET_ERR_MSG(extack, "Only one XDP mode flag can
+> > be set");
+> > +             return -EINVAL;
+> > +     }
+> > +     /* old_prog != NULL implies XDP_FLAGS_REPLACE is set */
+> > +     if (old_prog && !(flags & XDP_FLAGS_REPLACE)) {
+> > +             NL_SET_ERR_MSG(extack, "XDP_FLAGS_REPLACE is not
+> > specified");
+> > +             return -EINVAL;
+> >       }
+> >
+
+[...]
