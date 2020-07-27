@@ -2,45 +2,46 @@ Return-Path: <SRS0=Ijne=BG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BF6EC433FC
-	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 18:47:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CFF1C43459
+	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 18:47:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 112972075A
-	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 18:47:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1A81F2075A
+	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 18:47:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="VHz399uz"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="XTaZ69O9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731841AbgG0Spb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Jul 2020 14:45:31 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:36028 "EHLO
+        id S1731813AbgG0Sp3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Jul 2020 14:45:29 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37314 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731730AbgG0Spa (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 27 Jul 2020 14:45:30 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06RIf4Nh020170
-        for <bpf@vger.kernel.org>; Mon, 27 Jul 2020 11:45:30 -0700
+        by vger.kernel.org with ESMTP id S1731796AbgG0Sp3 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 27 Jul 2020 14:45:29 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06RIcwGs016691
+        for <bpf@vger.kernel.org>; Mon, 27 Jul 2020 11:45:28 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=5A7xQ8yUotOKRnfcZBEJdE63ptjXDxYZrHs9LNGABV8=;
- b=VHz399uzvaBVTQ6ul97MJYCN/ANduu3k4+eFX3jHd/rUkt08oF1eBA6aK1kAOLD9JlDn
- MRmYBc8GGC8kH1b0+3zZPOOG6lX8krWu+OqWp96/EOOYST2+iHPAkvkGJK363d509l4p
- LyLR6624uGMbKFzHdVl25F1SFYIaz/g1d6g= 
+ bh=k5up57518CbpP2QOO6zKbZ5m59nic2rEjlF2Mue+fsI=;
+ b=XTaZ69O9f31NhE++OBNCoVEqItqEmQrA39bj6PHnaoHN5FsHpeecez6oygDKBtmhrdql
+ c2lP0dZvljf0L6X6UbwKmr1hkaWzb49jDmBc1z2T7fSbOT2fZuT0PU8oG4S6qOUv1it3
+ uBYrsa5wI4C0aHXYwJ/HNmCw6MYEpTaY7ko= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 32h4k25uym-15
+        by mx0a-00082601.pphosted.com with ESMTP id 32h4q9dvks-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 27 Jul 2020 11:45:30 -0700
+        for <bpf@vger.kernel.org>; Mon, 27 Jul 2020 11:45:28 -0700
 Received: from intmgw002.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1979.3; Mon, 27 Jul 2020 11:45:27 -0700
 Received: by devvm1096.prn0.facebook.com (Postfix, from userid 111017)
-        id 938651DAFE75; Mon, 27 Jul 2020 11:45:10 -0700 (PDT)
+        id 399671DAFEB3; Mon, 27 Jul 2020 11:45:11 -0700 (PDT)
 Smtp-Origin-Hostprefix: devvm
 From:   Roman Gushchin <guro@fb.com>
 Smtp-Origin-Hostname: devvm1096.prn0.facebook.com
@@ -49,9 +50,9 @@ CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <linux-kernel@vger.kernel.org>, Roman Gushchin <guro@fb.com>
 Smtp-Origin-Cluster: prn0c01
-Subject: [PATCH bpf-next v2 02/35] bpf: memcg-based memory accounting for bpf maps
-Date:   Mon, 27 Jul 2020 11:44:33 -0700
-Message-ID: <20200727184506.2279656-3-guro@fb.com>
+Subject: [PATCH bpf-next v2 33/35] bpf: selftests: don't touch RLIMIT_MEMLOCK
+Date:   Mon, 27 Jul 2020 11:45:04 -0700
+Message-ID: <20200727184506.2279656-34-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200727184506.2279656-1-guro@fb.com>
 References: <20200727184506.2279656-1-guro@fb.com>
@@ -61,43 +62,137 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-27_13:2020-07-27,2020-07-27 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- clxscore=1015 adultscore=0 malwarescore=0 bulkscore=0 phishscore=0
- priorityscore=1501 mlxlogscore=712 mlxscore=0 spamscore=0 suspectscore=13
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007270126
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
+ impostorscore=0 clxscore=1015 lowpriorityscore=0 mlxlogscore=999
+ malwarescore=0 adultscore=0 phishscore=0 mlxscore=0 priorityscore=1501
+ bulkscore=0 suspectscore=13 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2007270126
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch enables memcg-based memory accounting for memory allocated
-by __bpf_map_area_alloc(), which is used by most map types for
-large allocations.
-
-Following patches in the series will refine the accounting for
-some map types.
+Since bpf is not using memlock rlimit for memory accounting,
+there are no more reasons to bump the limit.
 
 Signed-off-by: Roman Gushchin <guro@fb.com>
 ---
- kernel/bpf/syscall.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/bench.c           | 16 ---------------
+ .../selftests/bpf/progs/bpf_iter_bpf_map.c    |  5 ++---
+ tools/testing/selftests/bpf/xdping.c          |  6 ------
+ tools/testing/selftests/net/reuseport_bpf.c   | 20 -------------------
+ 4 files changed, 2 insertions(+), 45 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index ee290b1f2d9e..501b2c071d7b 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -275,7 +275,7 @@ static void *__bpf_map_area_alloc(u64 size, int numa_=
-node, bool mmapable)
- 	 * __GFP_RETRY_MAYFAIL to avoid such situations.
- 	 */
+diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftest=
+s/bpf/bench.c
+index 944ad4721c83..f66610541c8a 100644
+--- a/tools/testing/selftests/bpf/bench.c
++++ b/tools/testing/selftests/bpf/bench.c
+@@ -29,25 +29,9 @@ static int libbpf_print_fn(enum libbpf_print_level lev=
+el,
+ 	return vfprintf(stderr, format, args);
+ }
 =20
--	const gfp_t gfp =3D __GFP_NOWARN | __GFP_ZERO;
-+	const gfp_t gfp =3D __GFP_NOWARN | __GFP_ZERO | __GFP_ACCOUNT;
- 	unsigned int flags =3D 0;
- 	unsigned long align =3D 1;
- 	void *area;
+-static int bump_memlock_rlimit(void)
+-{
+-	struct rlimit rlim_new =3D {
+-		.rlim_cur	=3D RLIM_INFINITY,
+-		.rlim_max	=3D RLIM_INFINITY,
+-	};
+-
+-	return setrlimit(RLIMIT_MEMLOCK, &rlim_new);
+-}
+-
+ void setup_libbpf()
+ {
+-	int err;
+-
+ 	libbpf_set_print(libbpf_print_fn);
+-
+-	err =3D bump_memlock_rlimit();
+-	if (err)
+-		fprintf(stderr, "failed to increase RLIMIT_MEMLOCK: %d", err);
+ }
+=20
+ void hits_drops_report_progress(int iter, struct bench_res *res, long de=
+lta_ns)
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c b/tools=
+/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
+index 08651b23edba..5fe76df58dd4 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
+@@ -19,10 +19,9 @@ int dump_bpf_map(struct bpf_iter__bpf_map *ctx)
+ 	}
+=20
+ 	if (seq_num =3D=3D 0)
+-		BPF_SEQ_PRINTF(seq, "      id   refcnt  usercnt  locked_vm\n");
++		BPF_SEQ_PRINTF(seq, "      id   refcnt  usercnt\n");
+=20
+ 	BPF_SEQ_PRINTF(seq, "%8u %8ld %8ld %10lu\n", map->id, map->refcnt.count=
+er,
+-		       map->usercnt.counter,
+-		       map->memory.user->locked_vm.counter);
++		       map->usercnt.counter);
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/xdping.c b/tools/testing/selftes=
+ts/bpf/xdping.c
+index 842d9155d36c..488021169171 100644
+--- a/tools/testing/selftests/bpf/xdping.c
++++ b/tools/testing/selftests/bpf/xdping.c
+@@ -88,7 +88,6 @@ int main(int argc, char **argv)
+ {
+ 	__u32 mode_flags =3D XDP_FLAGS_DRV_MODE | XDP_FLAGS_SKB_MODE;
+ 	struct addrinfo *a, hints =3D { .ai_family =3D AF_INET };
+-	struct rlimit r =3D {RLIM_INFINITY, RLIM_INFINITY};
+ 	__u16 count =3D XDPING_DEFAULT_COUNT;
+ 	struct pinginfo pinginfo =3D { 0 };
+ 	const char *optstr =3D "c:I:NsS";
+@@ -166,11 +165,6 @@ int main(int argc, char **argv)
+ 		freeaddrinfo(a);
+ 	}
+=20
+-	if (setrlimit(RLIMIT_MEMLOCK, &r)) {
+-		perror("setrlimit(RLIMIT_MEMLOCK)");
+-		return 1;
+-	}
+-
+ 	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
+=20
+ 	if (bpf_prog_load(filename, BPF_PROG_TYPE_XDP, &obj, &prog_fd)) {
+diff --git a/tools/testing/selftests/net/reuseport_bpf.c b/tools/testing/=
+selftests/net/reuseport_bpf.c
+index b5277106df1f..88709898bae5 100644
+--- a/tools/testing/selftests/net/reuseport_bpf.c
++++ b/tools/testing/selftests/net/reuseport_bpf.c
+@@ -437,26 +437,6 @@ void enable_fastopen(void)
+ 	}
+ }
+=20
+-static struct rlimit rlim_old;
+-
+-static  __attribute__((constructor)) void main_ctor(void)
+-{
+-	getrlimit(RLIMIT_MEMLOCK, &rlim_old);
+-
+-	if (rlim_old.rlim_cur !=3D RLIM_INFINITY) {
+-		struct rlimit rlim_new;
+-
+-		rlim_new.rlim_cur =3D rlim_old.rlim_cur + (1UL << 20);
+-		rlim_new.rlim_max =3D rlim_old.rlim_max + (1UL << 20);
+-		setrlimit(RLIMIT_MEMLOCK, &rlim_new);
+-	}
+-}
+-
+-static __attribute__((destructor)) void main_dtor(void)
+-{
+-	setrlimit(RLIMIT_MEMLOCK, &rlim_old);
+-}
+-
+ int main(void)
+ {
+ 	fprintf(stderr, "---- IPv4 UDP ----\n");
 --=20
 2.26.2
 
