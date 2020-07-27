@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C81CCC4345C
-	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 18:47:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E750EC4345D
+	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 18:47:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD078207BB
-	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 18:47:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C65742075A
+	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 18:47:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="n2cUFF0S"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hqwio7CD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732364AbgG0SrP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Jul 2020 14:47:15 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:26646 "EHLO
+        id S1732164AbgG0SrO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Jul 2020 14:47:14 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:63328 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732003AbgG0Sps (ORCPT
+        by vger.kernel.org with ESMTP id S1731999AbgG0Sps (ORCPT
         <rfc822;bpf@vger.kernel.org>); Mon, 27 Jul 2020 14:45:48 -0400
 Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06RIjgDv027163
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06RIjhJK027318
         for <bpf@vger.kernel.org>; Mon, 27 Jul 2020 11:45:47 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=MfBRLRLGsy/1tMM++wlzJ5s7yWgWU4zl3ei5tqNLqCg=;
- b=n2cUFF0S5gIHneq7Beg2k2JVJoWOTUazSxUzmdxga9yo81qlaZhbvZewEvLd89+hZIyQ
- Y5z0tOf2Rtnmu8knvK90bbNJKLmWkMYYYQGIzEvuHvkcl2PQ9UEUAPDzq0L5dgBdS9Ob
- k9VjcYA0FXU086XCUd9gyhwNhN/Lfit/LK4= 
+ bh=1iftgx7N4hovl25oCFGN0SNpDQe3eCttfNkL/T08aeE=;
+ b=hqwio7CDsr7sysjmzlwRDJw1TdUz4YDDMQlRAWFZU+GyFYNTvLacYLe8Q9KLItsVaPzh
+ yVep+Usz4IWsa3G6nZdu6OSf2S+o/wiSu7HYOYJ+D2YehVgewWDoI+lYBSgp4P38jXhb
+ PODwj6k+HjH81tus/jJ1FMLFVA20sSV3PxM= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 32h50vnsxj-3
+        by mx0a-00082601.pphosted.com with ESMTP id 32h50vnt0k-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Mon, 27 Jul 2020 11:45:47 -0700
-Received: from intmgw003.06.prn3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+Received: from intmgw003.06.prn3.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 27 Jul 2020 11:45:16 -0700
+ 15.1.1979.3; Mon, 27 Jul 2020 11:45:21 -0700
 Received: by devvm1096.prn0.facebook.com (Postfix, from userid 111017)
-        id EDFAF1DAFE99; Mon, 27 Jul 2020 11:45:10 -0700 (PDT)
+        id 2F2091DAFEAF; Mon, 27 Jul 2020 11:45:11 -0700 (PDT)
 Smtp-Origin-Hostprefix: devvm
 From:   Roman Gushchin <guro@fb.com>
 Smtp-Origin-Hostname: devvm1096.prn0.facebook.com
@@ -49,9 +49,9 @@ CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <linux-kernel@vger.kernel.org>, Roman Gushchin <guro@fb.com>
 Smtp-Origin-Cluster: prn0c01
-Subject: [PATCH bpf-next v2 20/35] bpf: eliminate rlimit-based memory accounting for queue_stack_maps maps
-Date:   Mon, 27 Jul 2020 11:44:51 -0700
-Message-ID: <20200727184506.2279656-21-guro@fb.com>
+Subject: [PATCH bpf-next v2 31/35] bpf: runqslower: don't touch RLIMIT_MEMLOCK
+Date:   Mon, 27 Jul 2020 11:45:02 -0700
+Message-ID: <20200727184506.2279656-32-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200727184506.2279656-1-guro@fb.com>
 References: <20200727184506.2279656-1-guro@fb.com>
@@ -63,7 +63,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-27_13:2020-07-27,2020-07-27 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=13
  phishscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0
- malwarescore=0 bulkscore=0 mlxlogscore=999 priorityscore=1501 adultscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=916 priorityscore=1501 adultscore=0
  clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2007270127
 X-FB-Internal: deliver
@@ -72,54 +72,49 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Do not use rlimit-based memory accounting for queue_stack maps.
-It has been replaced with the memcg-based memory accounting.
+Since bpf is not using memlock rlimit for memory accounting,
+there are no more reasons to bump the limit.
 
 Signed-off-by: Roman Gushchin <guro@fb.com>
 ---
- kernel/bpf/queue_stack_maps.c | 16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
+ tools/bpf/runqslower/runqslower.c | 16 ----------------
+ 1 file changed, 16 deletions(-)
 
-diff --git a/kernel/bpf/queue_stack_maps.c b/kernel/bpf/queue_stack_maps.=
-c
-index 44184f82916a..92e73c35a34a 100644
---- a/kernel/bpf/queue_stack_maps.c
-+++ b/kernel/bpf/queue_stack_maps.c
-@@ -66,29 +66,21 @@ static int queue_stack_map_alloc_check(union bpf_attr=
- *attr)
+diff --git a/tools/bpf/runqslower/runqslower.c b/tools/bpf/runqslower/run=
+qslower.c
+index d89715844952..a3380b53ce0c 100644
+--- a/tools/bpf/runqslower/runqslower.c
++++ b/tools/bpf/runqslower/runqslower.c
+@@ -88,16 +88,6 @@ int libbpf_print_fn(enum libbpf_print_level level,
+ 	return vfprintf(stderr, format, args);
+ }
 =20
- static struct bpf_map *queue_stack_map_alloc(union bpf_attr *attr)
- {
--	int ret, numa_node =3D bpf_map_attr_numa_node(attr);
--	struct bpf_map_memory mem =3D {0};
-+	int numa_node =3D bpf_map_attr_numa_node(attr);
- 	struct bpf_queue_stack *qs;
--	u64 size, queue_size, cost;
-+	u64 size, queue_size;
-=20
- 	size =3D (u64) attr->max_entries + 1;
--	cost =3D queue_size =3D sizeof(*qs) + size * attr->value_size;
+-static int bump_memlock_rlimit(void)
+-{
+-	struct rlimit rlim_new =3D {
+-		.rlim_cur	=3D RLIM_INFINITY,
+-		.rlim_max	=3D RLIM_INFINITY,
+-	};
 -
--	ret =3D bpf_map_charge_init(&mem, cost);
--	if (ret < 0)
--		return ERR_PTR(ret);
-+	queue_size =3D sizeof(*qs) + size * attr->value_size;
+-	return setrlimit(RLIMIT_MEMLOCK, &rlim_new);
+-}
+-
+ void handle_event(void *ctx, int cpu, void *data, __u32 data_sz)
+ {
+ 	const struct event *e =3D data;
+@@ -134,12 +124,6 @@ int main(int argc, char **argv)
 =20
- 	qs =3D bpf_map_area_alloc(queue_size, numa_node);
--	if (!qs) {
--		bpf_map_charge_finish(&mem);
-+	if (!qs)
- 		return ERR_PTR(-ENOMEM);
+ 	libbpf_set_print(libbpf_print_fn);
+=20
+-	err =3D bump_memlock_rlimit();
+-	if (err) {
+-		fprintf(stderr, "failed to increase rlimit: %d", err);
+-		return 1;
 -	}
-=20
- 	memset(qs, 0, sizeof(*qs));
-=20
- 	bpf_map_init_from_attr(&qs->map, attr);
-=20
--	bpf_map_charge_move(&qs->map.memory, &mem);
- 	qs->size =3D size;
-=20
- 	raw_spin_lock_init(&qs->lock);
+-
+ 	obj =3D runqslower_bpf__open();
+ 	if (!obj) {
+ 		fprintf(stderr, "failed to open and/or load BPF object\n");
 --=20
 2.26.2
 
