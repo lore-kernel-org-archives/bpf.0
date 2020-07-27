@@ -2,60 +2,60 @@ Return-Path: <SRS0=Ijne=BG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBAD1C433F2
-	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 22:45:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F06EC433DF
+	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 22:48:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B5DB920809
-	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 22:45:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 17B0820829
+	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 22:48:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595889907;
-	bh=JNgiYfTrbNl40HuPXfOPGzQd+Pz6KgPmslq9zg8TKcE=;
+	s=default; t=1595890119;
+	bh=TOhQZKza90iwMIAs1uYyFDZuUVL2WSyMrGnwMcLOZ68=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=sSDltaZJHlaj3xleWIqRRfpONu/087PL4ATmQ0CBm0nHEDWGFTDAq+6XOm6BzsgpB
-	 QCyyQxqUDrDnoTfqoOr3Hd1yow4Ye7ahdWprx2YxSLZ3XyukCzybY14NxH/ltxj9ZX
-	 QnmymuCJiFprqNjIB8nrMj8o3t3KAk63cz7Hgs68=
+	b=HScY3nu7HZIMpef2GiDxNgHrQFMuV+iTohdonCzSS5yjyXqpNfGHMD+mNmNCjUfL1
+	 JkYCMEovP+eygcM3I/UA/ajc2oILAORSbdoaQ345ZQJU//HLJJMGLIjri1UkBYs85s
+	 m5nUKd/ZujVFbCzC3h/cmtuuMAzCtRWFRuy2cDB0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727893AbgG0WpC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Jul 2020 18:45:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46880 "EHLO mail.kernel.org"
+        id S1726719AbgG0Wsi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Jul 2020 18:48:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47500 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727846AbgG0WpA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Jul 2020 18:45:00 -0400
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+        id S1726193AbgG0Wsi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Jul 2020 18:48:38 -0400
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CF06D20A8B;
-        Mon, 27 Jul 2020 22:44:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3E45B20829;
+        Mon, 27 Jul 2020 22:48:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595889900;
-        bh=JNgiYfTrbNl40HuPXfOPGzQd+Pz6KgPmslq9zg8TKcE=;
+        s=default; t=1595890117;
+        bh=TOhQZKza90iwMIAs1uYyFDZuUVL2WSyMrGnwMcLOZ68=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CHxTzexH7pcmV+xLnwhlzXdnWhlC2KVdjv9tVZSVIseQc79RvgYGPDwW/CGoodjC0
-         QAXPyQiubGTWgzI1g/7ZApb65wUK3g7Avr2+JhUatm7XaVCYQbq7r0RZbukk66V3Zq
-         xRyC43IeUbaQwyZbDcCNCIPGAsMnWQfdIYbulU5A=
-Received: by mail-lf1-f48.google.com with SMTP id m15so9235396lfp.7;
-        Mon, 27 Jul 2020 15:44:59 -0700 (PDT)
-X-Gm-Message-State: AOAM530/s2K6RE1Hpv5GBfsCuPN1VCIaX0kmBgtsOng3LPjpdzVdwo3A
-        AdyJ0Eajvayqw1Sx8UNbnBd+bFeJqumnw8B9PWw=
-X-Google-Smtp-Source: ABdhPJzn6/szMBVbE/sS/47cJfytwIL6LNRxd4cXwyyxJUCcc1x2a+4Rj0suCq/Kg+8MpsKsuE8jnTVpoXYLg5I+wWI=
-X-Received: by 2002:ac2:5683:: with SMTP id 3mr12529185lfr.69.1595889898210;
- Mon, 27 Jul 2020 15:44:58 -0700 (PDT)
+        b=xzCYleq179jMpqUj+riUZvWtokCxNkLGyi9QUytLv1xmdPD/hOdWJ+5dp6WDB9IX5
+         F0jnkjsbo4xfmVuhILvt8logioUQ3m5wRQMs13xvXZkG1A1phJTads/zOkLkZKQ75g
+         PO8oFuvRJkWgxZuw5oVGkdI8JpKsUY/Pg8jNKfYs=
+Received: by mail-lj1-f179.google.com with SMTP id q6so19031826ljp.4;
+        Mon, 27 Jul 2020 15:48:37 -0700 (PDT)
+X-Gm-Message-State: AOAM531oUZjFBmZvfAEwbgtJeG6tt+DbydJfkczr6Ydgyc3tiaDO4pmu
+        2I97ogRtGPXpdZWJa0Gnh/t1SvMgiSXFAs6IwSA=
+X-Google-Smtp-Source: ABdhPJw1tm9z/uKaNtSzGme1cn0f8J3ABRl2w1A8eu3JzfJ4qeg0L+Neo9FfePMBPYm42hbGDW6d+L1YxrMoGW+Izt4=
+X-Received: by 2002:a2e:81c2:: with SMTP id s2mr2693713ljg.10.1595890115575;
+ Mon, 27 Jul 2020 15:48:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200727184506.2279656-1-guro@fb.com> <20200727184506.2279656-30-guro@fb.com>
- <CAEf4BzZjbK4W1fmW07tMOJsRGCYNeBd6eqyFE_fSXAK6+0uHhw@mail.gmail.com>
-In-Reply-To: <CAEf4BzZjbK4W1fmW07tMOJsRGCYNeBd6eqyFE_fSXAK6+0uHhw@mail.gmail.com>
+References: <20200727184506.2279656-1-guro@fb.com> <20200727184506.2279656-5-guro@fb.com>
+In-Reply-To: <20200727184506.2279656-5-guro@fb.com>
 From:   Song Liu <song@kernel.org>
-Date:   Mon, 27 Jul 2020 15:44:47 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4D0TYtvdexBnn5icg3EdTaBRu7ON8Q0REJ_hPRKx4aeA@mail.gmail.com>
-Message-ID: <CAPhsuW4D0TYtvdexBnn5icg3EdTaBRu7ON8Q0REJ_hPRKx4aeA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 29/35] bpf: libbpf: cleanup RLIMIT_MEMLOCK usage
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Roman Gushchin <guro@fb.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+Date:   Mon, 27 Jul 2020 15:48:24 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4gJ_3xJxmMuj+2yiPff1a1GiosjcNdaLG_VS6F=E+O1g@mail.gmail.com>
+Message-ID: <CAPhsuW4gJ_3xJxmMuj+2yiPff1a1GiosjcNdaLG_VS6F=E+O1g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 04/35] bpf: refine memcg-based memory
+ accounting for cpumap maps
+To:     Roman Gushchin <guro@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Kernel Team <kernel-team@fb.com>,
@@ -66,27 +66,40 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 3:07 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Mon, Jul 27, 2020 at 12:23 PM Roman Gushchin <guro@fb.com> wrote:
 >
-> On Mon, Jul 27, 2020 at 12:21 PM Roman Gushchin <guro@fb.com> wrote:
-> >
-> > As bpf is not using memlock rlimit for memory accounting anymore,
-> > let's remove the related code from libbpf.
-> >
-> > Bpf operations can't fail because of exceeding the limit anymore.
-> >
+> Include metadata and percpu data into the memcg-based memory accounting.
 >
-> They can't in the newest kernel, but libbpf will keep working and
-> supporting old kernels for a very long time now. So please don't
-> remove any of this.
->
-> But it would be nice to add a detection of whether kernel needs a
-> RLIMIT_MEMLOCK bump or not. Is there some simple and reliable way to
-> detect this from user-space?
->
+> Signed-off-by: Roman Gushchin <guro@fb.com>
 
-Agreed. We will need compatibility or similar detection for perf as well.
+Acked-by: Song Liu <songliubraving@fb.com>
 
-Thanks,
-Song
+> ---
+>  kernel/bpf/cpumap.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+> index f1c46529929b..74ae9fcbe82e 100644
+> --- a/kernel/bpf/cpumap.c
+> +++ b/kernel/bpf/cpumap.c
+> @@ -99,7 +99,7 @@ static struct bpf_map *cpu_map_alloc(union bpf_attr *attr)
+>             attr->map_flags & ~BPF_F_NUMA_NODE)
+>                 return ERR_PTR(-EINVAL);
+>
+> -       cmap = kzalloc(sizeof(*cmap), GFP_USER);
+> +       cmap = kzalloc(sizeof(*cmap), GFP_USER | __GFP_ACCOUNT);
+>         if (!cmap)
+>                 return ERR_PTR(-ENOMEM);
+>
+> @@ -418,7 +418,7 @@ static struct bpf_cpu_map_entry *
+>  __cpu_map_entry_alloc(struct bpf_cpumap_val *value, u32 cpu, int map_id)
+>  {
+>         int numa, err, i, fd = value->bpf_prog.fd;
+> -       gfp_t gfp = GFP_KERNEL | __GFP_NOWARN;
+> +       gfp_t gfp = GFP_KERNEL_ACCOUNT | __GFP_NOWARN;
+>         struct bpf_cpu_map_entry *rcpu;
+>         struct xdp_bulk_queue *bq;
+>
+> --
+> 2.26.2
+>
