@@ -2,58 +2,57 @@ Return-Path: <SRS0=Ijne=BG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F771C433E0
-	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 22:11:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C461C433E0
+	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 22:12:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 27A8F2075D
-	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 22:11:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7BB5F20809
+	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 22:12:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595887917;
-	bh=YW8G5VIksYVlmPs2UYgjtPkt8iVM6SF5lgGo16m/L+s=;
+	s=default; t=1595887951;
+	bh=0yrOceQ4ThJg8bvXzYV7sUock5Bm6u65FacsCAg9Sto=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=BCdshGIFBz13p08Wo9s7DAgOPj5PBsCWJACbqwDViHmAvGl+ZEpUXAO1ZBVIrk3a3
-	 ra9USxRBq1X37rtQJM0wsscaLm2dIiX/YvcAm0v56PZiduRk4SaIiVVb6heNgaEhZn
-	 lHdU3dBWATpjmgLB6A0YF0a8ChA+FODCJj48YuXo=
+	b=x78g5K9Rwerg+S63YME5Mv1Dl6Ndhm35d6jeZRZhMSEOLidlpZab3bCT7OBU9jFJ6
+	 A232ZK2aeYZV0b9ew3iQstBwQTxFim5OkBYAUxFHIbfnAvdyYuF2ENKhq38l8Vjg1n
+	 7u8D1x07EjTFDnGucu78jKA9ka80qcUfb9BLmJUk=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726283AbgG0WL4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Jul 2020 18:11:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35092 "EHLO mail.kernel.org"
+        id S1726953AbgG0WMb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Jul 2020 18:12:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35274 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726140AbgG0WL4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 27 Jul 2020 18:11:56 -0400
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+        id S1726140AbgG0WMa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Jul 2020 18:12:30 -0400
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 61CC62075D;
-        Mon, 27 Jul 2020 22:11:55 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1AEC22083E;
+        Mon, 27 Jul 2020 22:12:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595887915;
-        bh=YW8G5VIksYVlmPs2UYgjtPkt8iVM6SF5lgGo16m/L+s=;
+        s=default; t=1595887950;
+        bh=0yrOceQ4ThJg8bvXzYV7sUock5Bm6u65FacsCAg9Sto=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VEg/hiXbEvSHn7tT7/JVBAirYrXZkHYmk4kdcPNa/scCSdEmq7h+lM4JGHAH9d+zw
-         myLFxqOizViKGdWaCDv7NE2V+mRVuFha62/JUGkXl3qDEvwOLMqlZv7vSmZ3tN28/1
-         u2l0pzq8mz4u4nTf90pIJxGzq8WgUS3lr2j2ZlDM=
-Received: by mail-lj1-f176.google.com with SMTP id d17so18969873ljl.3;
-        Mon, 27 Jul 2020 15:11:55 -0700 (PDT)
-X-Gm-Message-State: AOAM532Ps1eGbC+nJDrGtIBsymc1JQe2vBDMjwEC+JjY5LGVXnTYknuw
-        p5fVCKfE5U3Zn9Z+oCUKbpUlKGuI7lJiPND1Eno=
-X-Google-Smtp-Source: ABdhPJyZ6t063En8urXrZJrupJ8Ja4mHFNI8fGTOXCFR2l6OXfdWbkzRLIN2bX2+ImzTYbrrLG7ml3lTI3tqrwiy9JY=
-X-Received: by 2002:a2e:9996:: with SMTP id w22mr12043567lji.446.1595887913748;
- Mon, 27 Jul 2020 15:11:53 -0700 (PDT)
+        b=EYVaR9hjuc3lX6dAyBEoFmST/hApD6sOnGavFziizdPggYn88O578HLq5Tl+i0VxF
+         wcNkZlmjkgHf9n0Sg48UdPM9LsnSYJYH51ogOqvXM237UqeDxQBAkkOtH82INZHajR
+         UMntsU7dNIfTTk+G7XlmV9qkRFEyd4182URWz2oU=
+Received: by mail-lj1-f179.google.com with SMTP id f5so18949735ljj.10;
+        Mon, 27 Jul 2020 15:12:30 -0700 (PDT)
+X-Gm-Message-State: AOAM533rpdO2l1+t2dZxpnj/Gevol1C1Anfq+eyLb3EjveKpwzJby3v5
+        wS7EIvebjbJNoLQJQ8Se31TpcyR+7DzIZKv73zw=
+X-Google-Smtp-Source: ABdhPJyD8OEPzS+nHFNLJuhfUifHEzJvxGfY5o1OtZDdVVTYydgko05HFP8M++HOJsk7/OrNBLV1/TfyjmPfRyqTSAU=
+X-Received: by 2002:a2e:7c14:: with SMTP id x20mr11171357ljc.41.1595887948418;
+ Mon, 27 Jul 2020 15:12:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200727184506.2279656-1-guro@fb.com> <20200727184506.2279656-2-guro@fb.com>
-In-Reply-To: <20200727184506.2279656-2-guro@fb.com>
+References: <20200727184506.2279656-1-guro@fb.com> <20200727184506.2279656-3-guro@fb.com>
+In-Reply-To: <20200727184506.2279656-3-guro@fb.com>
 From:   Song Liu <song@kernel.org>
-Date:   Mon, 27 Jul 2020 15:11:42 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW49mOQYCx77jucJ_NkeYhoSxOZ_cCujBUjgMdJBy3keeg@mail.gmail.com>
-Message-ID: <CAPhsuW49mOQYCx77jucJ_NkeYhoSxOZ_cCujBUjgMdJBy3keeg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 01/35] bpf: memcg-based memory accounting for
- bpf progs
+Date:   Mon, 27 Jul 2020 15:12:17 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7OAhRMvS0wcDFCPqGO=UiN2k3vRCvPr3gH6QyJgY-MgQ@mail.gmail.com>
+Message-ID: <CAPhsuW7OAhRMvS0wcDFCPqGO=UiN2k3vRCvPr3gH6QyJgY-MgQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 02/35] bpf: memcg-based memory accounting for
+ bpf maps
 To:     Roman Gushchin <guro@fb.com>
 Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -66,66 +65,15 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 12:20 PM Roman Gushchin <guro@fb.com> wrote:
+On Mon, Jul 27, 2020 at 12:23 PM Roman Gushchin <guro@fb.com> wrote:
 >
-> Include memory used by bpf programs into the memcg-based accounting.
-> This includes the memory used by programs itself, auxiliary data
-> and statistics.
+> This patch enables memcg-based memory accounting for memory allocated
+> by __bpf_map_area_alloc(), which is used by most map types for
+> large allocations.
+>
+> Following patches in the series will refine the accounting for
+> some map types.
 >
 > Signed-off-by: Roman Gushchin <guro@fb.com>
-> ---
->  kernel/bpf/core.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index bde93344164d..daab8dcafbd4 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -77,7 +77,7 @@ void *bpf_internal_load_pointer_neg_helper(const struct sk_buff *skb, int k, uns
->
->  struct bpf_prog *bpf_prog_alloc_no_stats(unsigned int size, gfp_t gfp_extra_flags)
->  {
-> -       gfp_t gfp_flags = GFP_KERNEL | __GFP_ZERO | gfp_extra_flags;
-> +       gfp_t gfp_flags = GFP_KERNEL_ACCOUNT | __GFP_ZERO | gfp_extra_flags;
->         struct bpf_prog_aux *aux;
->         struct bpf_prog *fp;
->
-> @@ -86,7 +86,7 @@ struct bpf_prog *bpf_prog_alloc_no_stats(unsigned int size, gfp_t gfp_extra_flag
->         if (fp == NULL)
->                 return NULL;
->
-> -       aux = kzalloc(sizeof(*aux), GFP_KERNEL | gfp_extra_flags);
-> +       aux = kzalloc(sizeof(*aux), GFP_KERNEL_ACCOUNT | gfp_extra_flags);
->         if (aux == NULL) {
->                 vfree(fp);
->                 return NULL;
-> @@ -104,7 +104,7 @@ struct bpf_prog *bpf_prog_alloc_no_stats(unsigned int size, gfp_t gfp_extra_flag
->
->  struct bpf_prog *bpf_prog_alloc(unsigned int size, gfp_t gfp_extra_flags)
->  {
-> -       gfp_t gfp_flags = GFP_KERNEL | __GFP_ZERO | gfp_extra_flags;
-> +       gfp_t gfp_flags = GFP_KERNEL_ACCOUNT | __GFP_ZERO | gfp_extra_flags;
->         struct bpf_prog *prog;
->         int cpu;
->
-> @@ -217,7 +217,7 @@ void bpf_prog_free_linfo(struct bpf_prog *prog)
->  struct bpf_prog *bpf_prog_realloc(struct bpf_prog *fp_old, unsigned int size,
->                                   gfp_t gfp_extra_flags)
->  {
-> -       gfp_t gfp_flags = GFP_KERNEL | __GFP_ZERO | gfp_extra_flags;
-> +       gfp_t gfp_flags = GFP_KERNEL_ACCOUNT | __GFP_ZERO | gfp_extra_flags;
->         struct bpf_prog *fp;
->         u32 pages, delta;
->         int ret;
-> --
 
-Do we need similar changes in
-
-bpf_prog_array_copy()
-bpf_prog_alloc_jited_linfo()
-bpf_prog_clone_create()
-
-and maybe a few more?
-
-Thanks,
-Song
+Acked-by: Song Liu <songliubraving@fb.com>
