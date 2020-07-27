@@ -2,118 +2,74 @@ Return-Path: <SRS0=Ijne=BG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7D38C433DF
-	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 22:58:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2122DC433E5
+	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 23:06:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 97A3220809
-	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 22:58:00 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="AUxBgi0B"
+	by mail.kernel.org (Postfix) with ESMTP id E8E5520729
+	for <bpf@archiver.kernel.org>; Mon, 27 Jul 2020 23:06:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1595891177;
+	bh=FPWD3onrUxK2GT6ifmwjjpII4umFRyEUsAB/YSKdseA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=MwxJqx35D2V4/vVPRoQ0LCLz43gqZOwL40hy9ESXvn9ALvlw1YPN5YiVYi0nqXhFw
+	 DzLKGdqc5vCEHvZdZXdy6uW0aW6nmoBQzwFqQi2qxMWjkoquVGBe/XMjyuKpUkCJFa
+	 1T8owjklOG2F6StX6DBD/bn5KN3DUoAUzMrIg/Ts=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726782AbgG0W6A (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 27 Jul 2020 18:58:00 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36708 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726171AbgG0W57 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 27 Jul 2020 18:57:59 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 06RMvEuY032140
-        for <bpf@vger.kernel.org>; Mon, 27 Jul 2020 15:57:59 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=dxJ4+WitJF1AyWmc4hiQmpu517phDyAASL/xE5vblOk=;
- b=AUxBgi0B/oUDyjVw2doTCQZ1HKKiKq9N6ZPQvqaKFRAzwsHbYEfmd6U7uXd///Nkhdxb
- mPJFZc864AZLy4VNCYeYssYHr3Y2IHVzJ49IaGflBYHq+/ueQLV4VpMvxhdxSV3Upbos
- l98/6Ufzb1Aq/FDFvf6v5ksQjuh503SnkmM= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 32ggdmhmvc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 27 Jul 2020 15:57:58 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 27 Jul 2020 15:57:58 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 3C05D2EC4B93; Mon, 27 Jul 2020 15:57:53 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next] bpf: fix bpf_ringbuf_output() signature to return long
-Date:   Mon, 27 Jul 2020 15:47:15 -0700
-Message-ID: <20200727224715.652037-1-andriin@fb.com>
-X-Mailer: git-send-email 2.24.1
+        id S1726237AbgG0XGM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 27 Jul 2020 19:06:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57670 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726171AbgG0XGL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 27 Jul 2020 19:06:11 -0400
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B9B9120829;
+        Mon, 27 Jul 2020 23:06:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595891171;
+        bh=FPWD3onrUxK2GT6ifmwjjpII4umFRyEUsAB/YSKdseA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=P3weFuDuEzGmr/OU7w+ZFbuIvgkqldkuZvyqhBr09Nv2VGwKP3S3LFTB6b63RLxSE
+         AoQXU6775AVoPX2kTFDL0dtBmPMuZytpHkqMwFv4l03RURnzaMnfdx/ZFfvoSBNap4
+         4Qq28PlC32XziEgOW47hcnxJrWua8CTvBrtsu28s=
+Received: by mail-lj1-f169.google.com with SMTP id s16so3852307ljc.8;
+        Mon, 27 Jul 2020 16:06:10 -0700 (PDT)
+X-Gm-Message-State: AOAM5339oW65IQLnF05UOVoHkJuJkeDxc5DnQNaWIHzLdotkm7pbLkus
+        jNSRy3gVRJLQOXuPFp++SlJ9QDMGincLTp6y7l8=
+X-Google-Smtp-Source: ABdhPJzr5WBxLO6UgqcVNxi16m6YVNRnhk5yV8AISnFiiIYzfd8fzmYFWapbtq1On1DJdZMmO1OL8DaxNZf7h3HtMZU=
+X-Received: by 2002:a05:651c:1349:: with SMTP id j9mr4063441ljb.392.1595891169081;
+ Mon, 27 Jul 2020 16:06:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-27_15:2020-07-27,2020-07-27 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- malwarescore=0 adultscore=0 spamscore=0 impostorscore=0 mlxscore=0
- clxscore=1015 bulkscore=0 lowpriorityscore=0 suspectscore=8
- priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2007270155
-X-FB-Internal: deliver
+References: <20200727184506.2279656-1-guro@fb.com> <20200727184506.2279656-6-guro@fb.com>
+In-Reply-To: <20200727184506.2279656-6-guro@fb.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 27 Jul 2020 16:05:57 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4wSZ2G6h8naYoCi_MgVTi7PMyTnRJZ6PeFFivZD9mTNg@mail.gmail.com>
+Message-ID: <CAPhsuW4wSZ2G6h8naYoCi_MgVTi7PMyTnRJZ6PeFFivZD9mTNg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 05/35] bpf: memcg-based memory accounting for
+ cgroup storage maps
+To:     Roman Gushchin <guro@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Due to bpf tree fix merge, bpf_ringbuf_output() signature ended up with i=
-nt as
-a return type, while all other helpers got converted to returning long. S=
-o fix
-it in bpf-next now.
+On Mon, Jul 27, 2020 at 12:26 PM Roman Gushchin <guro@fb.com> wrote:
+>
+> Account memory used by cgroup storage maps including the percpu memory
+> for the percpu flavor of cgroup storage and map metadata.
+>
+> Signed-off-by: Roman Gushchin <guro@fb.com>
 
-Fixes: b0659d8a950d ("bpf: Fix definition of bpf_ringbuf_output() helper =
-in UAPI comments")
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- include/uapi/linux/bpf.h       | 2 +-
- tools/include/uapi/linux/bpf.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index e1ba4ae6a916..eb5e0c38eb2c 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3241,7 +3241,7 @@ union bpf_attr {
-  *	Return
-  *		The id is returned or 0 in case the id could not be retrieved.
-  *
-- * int bpf_ringbuf_output(void *ringbuf, void *data, u64 size, u64 flags=
-)
-+ * long bpf_ringbuf_output(void *ringbuf, void *data, u64 size, u64 flag=
-s)
-  * 	Description
-  * 		Copy *size* bytes from *data* into a ring buffer *ringbuf*.
-  * 		If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notification
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index e1ba4ae6a916..eb5e0c38eb2c 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3241,7 +3241,7 @@ union bpf_attr {
-  *	Return
-  *		The id is returned or 0 in case the id could not be retrieved.
-  *
-- * int bpf_ringbuf_output(void *ringbuf, void *data, u64 size, u64 flags=
-)
-+ * long bpf_ringbuf_output(void *ringbuf, void *data, u64 size, u64 flag=
-s)
-  * 	Description
-  * 		Copy *size* bytes from *data* into a ring buffer *ringbuf*.
-  * 		If **BPF_RB_NO_WAKEUP** is specified in *flags*, no notification
---=20
-2.24.1
-
+Acked-by: Song Liu <songliubraving@fb.com>
