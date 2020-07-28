@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D6C9C433E4
-	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 05:38:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF28DC433DF
+	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 05:35:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 05FAC20792
-	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 05:38:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A7A3621744
+	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 05:35:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595914714;
-	bh=kudBUbPYRIeiM4+47AqFUj+ZhdDE0WK7VWzk+AsvqF8=;
+	s=default; t=1595914533;
+	bh=zx7VWFCJ2PMJ/+Cqt+H06tQgYu2lqiv9yLovQHJzjWc=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=yUb4FV79RstxwJQdGyRQ8Cnf1hP2QpF6f4p6CWeJyV9jOgmDe/8C5cd+Oc3asnGVO
-	 2cq9+m3nBOEB3ALa7kIxxtfC++BNci+t8GcreI6+SymjaO/MnLeOd3IlQ0r4m0ytQS
-	 bKZmhq5EavHDXT9YMCaTy3P7DyDyMz59g7pyg9yk=
+	b=A6Tvrhyz260jxQLE680fQR0uG2WvAINDiUGuZBtOECON46R61kY+A/jtS2RYTDoaB
+	 BhEOKt99rNIYtU9J2z2oskQHUd3fRNzCNzEpguDlVO11/5d5heZPfDY4v98Dcr0ZCC
+	 I1U7ZBhxrC0uQCAi2aIMz3wVDY4zONyfzXyQKvyg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726631AbgG1Fid (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jul 2020 01:38:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44704 "EHLO mail.kernel.org"
+        id S1726308AbgG1Ffd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jul 2020 01:35:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43472 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726251AbgG1Fid (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jul 2020 01:38:33 -0400
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+        id S1726245AbgG1Ffd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jul 2020 01:35:33 -0400
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 44A4321D95;
-        Tue, 28 Jul 2020 05:38:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6EF0621744;
+        Tue, 28 Jul 2020 05:35:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595914712;
-        bh=kudBUbPYRIeiM4+47AqFUj+ZhdDE0WK7VWzk+AsvqF8=;
+        s=default; t=1595914532;
+        bh=zx7VWFCJ2PMJ/+Cqt+H06tQgYu2lqiv9yLovQHJzjWc=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hInOE7+y5Fpi5W4zXMbOEdFfW83PX6I01vR1lHuhWtV+CXX7D9Kjff3zVl3NPo4Ow
-         pO4FKUHUNTaE1+cMw7meKcSf8mlB2lmRP9ZS26X3ji69SxraAAwyfWIDOai5Luwni6
-         FzuXKI2WJo7px1mwHCIMXYyJ7PCYW77eJHDvCHWg=
-Received: by mail-lf1-f47.google.com with SMTP id y18so10286247lfh.11;
-        Mon, 27 Jul 2020 22:38:32 -0700 (PDT)
-X-Gm-Message-State: AOAM532A3U+nYJRL9ZgmB5jxUWVGk8Y9U9YN1d25ANRsbj1ELTqFv4uc
-        UiCMm1MOmjOUYmpYMGyCo+Yj23edkdbTReLzIsE=
-X-Google-Smtp-Source: ABdhPJyrFPzlDFJYgCalqg8Zv+yEzwKXrT9R4Ak9o5L/7YzejJFWLaYAllzlVJsHgsJ72RpZyKcn+mc+OPrltZ28u3E=
-X-Received: by 2002:a19:7710:: with SMTP id s16mr13555854lfc.162.1595914710550;
- Mon, 27 Jul 2020 22:38:30 -0700 (PDT)
+        b=EcNitXg0qAG43LHfC4hLtq2qjsXiNcwJ37LNAH2i28lHZQiKtccWWISbiFDTy05B0
+         DxpHe/EqHY4Fh9nQHhfrEQ6BftNnz550fn9s29BLdA7dX48j+F+uwrssFK3Cwu2tZE
+         xfzsVTFU7XC+ANnbiZK1S45s3hacJhEUCZtAV0Ac=
+Received: by mail-lj1-f177.google.com with SMTP id d17so19754172ljl.3;
+        Mon, 27 Jul 2020 22:35:32 -0700 (PDT)
+X-Gm-Message-State: AOAM532Wf0Iwv2Pq8t2aqy6VvObMWZrrY5skadQDuyOZCu5H52ZSIGWE
+        I3IyIabtUJdln29C+gyWR+mUmBXqpSKsjLm4Nwo=
+X-Google-Smtp-Source: ABdhPJzNdIVe4pMmZ2SNpqATz5OzkbzGqNa6+7VuTuASEOw5Ysa7o+rKpcNz69Vw4cj6ppOHaukqWELMwLlCQCzV6U4=
+X-Received: by 2002:a2e:81c2:: with SMTP id s2mr3272036ljg.10.1595914530748;
+ Mon, 27 Jul 2020 22:35:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200727184506.2279656-1-guro@fb.com> <20200727184506.2279656-25-guro@fb.com>
-In-Reply-To: <20200727184506.2279656-25-guro@fb.com>
+References: <20200727184506.2279656-1-guro@fb.com> <20200727184506.2279656-21-guro@fb.com>
+In-Reply-To: <20200727184506.2279656-21-guro@fb.com>
 From:   Song Liu <song@kernel.org>
-Date:   Mon, 27 Jul 2020 22:38:19 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW46PNAfmBThianVpWD-w+it107Zn7OtW6SA0sMW4J+cfQ@mail.gmail.com>
-Message-ID: <CAPhsuW46PNAfmBThianVpWD-w+it107Zn7OtW6SA0sMW4J+cfQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 24/35] bpf: eliminate rlimit-based memory
- accounting for stackmap maps
+Date:   Mon, 27 Jul 2020 22:35:19 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW51GXsn=d8=OmOz3OR9ziK+UG+GBJvFOMtHH2HnN9QBCg@mail.gmail.com>
+Message-ID: <CAPhsuW51GXsn=d8=OmOz3OR9ziK+UG+GBJvFOMtHH2HnN9QBCg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 20/35] bpf: eliminate rlimit-based memory
+ accounting for queue_stack_maps maps
 To:     Roman Gushchin <guro@fb.com>
 Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -66,9 +66,9 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jul 27, 2020 at 12:22 PM Roman Gushchin <guro@fb.com> wrote:
+On Mon, Jul 27, 2020 at 12:25 PM Roman Gushchin <guro@fb.com> wrote:
 >
-> Do not use rlimit-based memory accounting for stackmap maps.
+> Do not use rlimit-based memory accounting for queue_stack maps.
 > It has been replaced with the memcg-based memory accounting.
 >
 > Signed-off-by: Roman Gushchin <guro@fb.com>
@@ -76,61 +76,47 @@ On Mon, Jul 27, 2020 at 12:22 PM Roman Gushchin <guro@fb.com> wrote:
 Acked-by: Song Liu <songliubraving@fb.com>
 
 > ---
->  kernel/bpf/stackmap.c | 16 +++-------------
->  1 file changed, 3 insertions(+), 13 deletions(-)
+>  kernel/bpf/queue_stack_maps.c | 16 ++++------------
+>  1 file changed, 4 insertions(+), 12 deletions(-)
 >
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index 5beb2f8c23da..9ac0f405beef 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-> @@ -90,7 +90,6 @@ static struct bpf_map *stack_map_alloc(union bpf_attr *attr)
+> diff --git a/kernel/bpf/queue_stack_maps.c b/kernel/bpf/queue_stack_maps.c
+> index 44184f82916a..92e73c35a34a 100644
+> --- a/kernel/bpf/queue_stack_maps.c
+> +++ b/kernel/bpf/queue_stack_maps.c
+> @@ -66,29 +66,21 @@ static int queue_stack_map_alloc_check(union bpf_attr *attr)
+>
+>  static struct bpf_map *queue_stack_map_alloc(union bpf_attr *attr)
 >  {
->         u32 value_size = attr->value_size;
->         struct bpf_stack_map *smap;
-> -       struct bpf_map_memory mem;
->         u64 cost, n_buckets;
->         int err;
+> -       int ret, numa_node = bpf_map_attr_numa_node(attr);
+> -       struct bpf_map_memory mem = {0};
+> +       int numa_node = bpf_map_attr_numa_node(attr);
+>         struct bpf_queue_stack *qs;
+> -       u64 size, queue_size, cost;
+> +       u64 size, queue_size;
 >
-> @@ -119,15 +118,9 @@ static struct bpf_map *stack_map_alloc(union bpf_attr *attr)
->
->         cost = n_buckets * sizeof(struct stack_map_bucket *) + sizeof(*smap);
->         cost += n_buckets * (value_size + sizeof(struct stack_map_bucket));
-> -       err = bpf_map_charge_init(&mem, cost);
-> -       if (err)
-> -               return ERR_PTR(err);
+>         size = (u64) attr->max_entries + 1;
+> -       cost = queue_size = sizeof(*qs) + size * attr->value_size;
 > -
->         smap = bpf_map_area_alloc(cost, bpf_map_attr_numa_node(attr));
-> -       if (!smap) {
+> -       ret = bpf_map_charge_init(&mem, cost);
+> -       if (ret < 0)
+> -               return ERR_PTR(ret);
+> +       queue_size = sizeof(*qs) + size * attr->value_size;
+>
+>         qs = bpf_map_area_alloc(queue_size, numa_node);
+> -       if (!qs) {
 > -               bpf_map_charge_finish(&mem);
-> +       if (!smap)
+> +       if (!qs)
 >                 return ERR_PTR(-ENOMEM);
 > -       }
 >
->         bpf_map_init_from_attr(&smap->map, attr);
->         smap->map.value_size = value_size;
-> @@ -135,20 +128,17 @@ static struct bpf_map *stack_map_alloc(union bpf_attr *attr)
+>         memset(qs, 0, sizeof(*qs));
 >
->         err = get_callchain_buffers(sysctl_perf_event_max_stack);
->         if (err)
-> -               goto free_charge;
-> +               goto free_smap;
+>         bpf_map_init_from_attr(&qs->map, attr);
 >
->         err = prealloc_elems_and_freelist(smap);
->         if (err)
->                 goto put_buffers;
+> -       bpf_map_charge_move(&qs->map.memory, &mem);
+>         qs->size = size;
 >
-> -       bpf_map_charge_move(&smap->map.memory, &mem);
-> -
->         return &smap->map;
->
->  put_buffers:
->         put_callchain_buffers();
-> -free_charge:
-> -       bpf_map_charge_finish(&mem);
-> +free_smap:
->         bpf_map_area_free(smap);
->         return ERR_PTR(err);
->  }
+>         raw_spin_lock_init(&qs->lock);
 > --
 > 2.26.2
 >
