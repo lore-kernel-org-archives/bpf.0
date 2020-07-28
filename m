@@ -2,140 +2,155 @@ Return-Path: <SRS0=s4C/=BH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37615C433E5
-	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 05:37:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AA2EC433E0
+	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 05:38:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1464420792
-	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 05:37:25 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="t+NKvYab"
+	by mail.kernel.org (Postfix) with ESMTP id EBB4C20792
+	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 05:38:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1595914698;
+	bh=zQfvL6mXPDvArmEZLKk1wPWEFI4+SrGpgZSDfVmZNFs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=TPtWMHD0F4yMHK9iVvnUVJT2bLfiOOIZNw+8c+dmvihG5Lq6HNl1tqlECZx4YxCko
+	 CLjSzhJCEfhik2SyGaPvqlcZeyIYMjw8wIcmOFEVS/n49QjYCCMaxl/+lYD2r+js3g
+	 JErWEgleTYVyq6AaHZO5OooTEZ1ciNlMKOddlxLI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbgG1FhY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jul 2020 01:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726251AbgG1FhW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jul 2020 01:37:22 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31EBC061794;
-        Mon, 27 Jul 2020 22:37:22 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id s23so14036660qtq.12;
-        Mon, 27 Jul 2020 22:37:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Z7EWQYD7wy6xCJAzFJ7nXjY1PCd7b/cbV/q3G3Duy1U=;
-        b=t+NKvYabQIvU/bHs2WsL/A56+4mEPwZyGuCuo2EDSpO7Cn1xgAdMW091HIp4X0cdeW
-         VIEiRb/BQ0nAhKJWIXHOgMgBTfOL8Zicv+XDvRfD/8C51MHVvRk7q+aGL64IwS9GACQI
-         jc7rFwTNzHcpyifukhI3hDWXpXauBuu86JnCdLxEtAOnyWJA7o7wfomtIQ10EM8Fs3xM
-         RUUmBSHz0Ula/jnvdWOo9zuYXWfiPdfuOgmok3hEfzfKUlDSG1FGt9QPeuEcwNPE+9YU
-         AX1ZbamMYUepk0RXfjSV8iocfUKnvwl3HWPIF4eAWN8L7q9jT3jtBC9HNOOYVWTJfdIP
-         abcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Z7EWQYD7wy6xCJAzFJ7nXjY1PCd7b/cbV/q3G3Duy1U=;
-        b=jh0uSwbtiJTKLgs/OkfKARjcvQrjdbjQ1ktgi2yE/7K1j1v35wvATILid5omw2aaXx
-         5jOVM1QzED5O6FZ7osLY9bve6aw07s+AzkMksZKE1i0HZqxgpsYc5E86UavyMx6kJVIN
-         11xVrifSLxB4LnPR4I6h3fiVtuxlIJd5W+ClAHcHvkTPZ0k3eiz2s+2btn60N/r8spl4
-         SbNNRf847UpeneI+c54mn1ibQkkJc/axfDORL4Ai0/9NThyEJ9AdQ+aQSyV90JLprU1g
-         oXmmp1nE7mw2apP8JpQk+BEOfMc4+PrZdWKe1DekoiJthuia3htpI8BaZyWedZJChs34
-         I+Tw==
-X-Gm-Message-State: AOAM531IrO2W1fueBuKSJqNpgxtogfgnc9l3aNELM45oZNa0IHeG0IFq
-        H5Z6KNJGdylBNh2Cd/tiQA==
-X-Google-Smtp-Source: ABdhPJweN6bn9NhBF9KiMYU9STaREohK2QHtDH4joic0d2gYLwLSMzbMZq23Ys2LH0vazmtYJv5tNw==
-X-Received: by 2002:aed:3387:: with SMTP id v7mr24245834qtd.318.1595914641882;
-        Mon, 27 Jul 2020 22:37:21 -0700 (PDT)
-Received: from localhost.localdomain (c-76-119-149-155.hsd1.ma.comcast.net. [76.119.149.155])
-        by smtp.gmail.com with ESMTPSA id u42sm20985975qtu.48.2020.07.27.22.37.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2020 22:37:21 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Song Liu <songliubraving@fb.com>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Cc:     Peilin Ye <yepeilin.cs@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        id S1726581AbgG1FiM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jul 2020 01:38:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44498 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726251AbgG1FiM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jul 2020 01:38:12 -0400
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6D07C21883;
+        Tue, 28 Jul 2020 05:38:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595914691;
+        bh=zQfvL6mXPDvArmEZLKk1wPWEFI4+SrGpgZSDfVmZNFs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Tcuyzm+2cHo8cqzgn5IkjaRedCAa+xOOR37u2+WM4RzbRDE15DgjXIFXKTcAMSwbk
+         0qT5pZkgRi6oftYCYDhCjzLK9BlDa3lZnHMDgLDaWE3w9+7qBgQM7M5DYXsdMOu24y
+         3GadVfWBSnrowvG6sBN+LbnUvEB3ivgJJveMv1t8=
+Received: by mail-lj1-f179.google.com with SMTP id g6so7140451ljn.11;
+        Mon, 27 Jul 2020 22:38:11 -0700 (PDT)
+X-Gm-Message-State: AOAM5329Bnz9KAXPT1LS4BWXV2P9tOQIW4dhm10FozQSDE+AVsAMHzH5
+        6hDFUgwi3gKdLhKlYKiRE0kK9MQV1nKtGNEaYWA=
+X-Google-Smtp-Source: ABdhPJw07JDlW+o4d8dnIhWF8L0WADQia7KOFXNcY2Knuvb+TUQbme9FYRDibTMNoCm7dHODimUOFP9/hEjsjBuC30M=
+X-Received: by 2002:a05:651c:1349:: with SMTP id j9mr4580894ljb.392.1595914689684;
+ Mon, 27 Jul 2020 22:38:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200727184506.2279656-1-guro@fb.com> <20200727184506.2279656-24-guro@fb.com>
+In-Reply-To: <20200727184506.2279656-24-guro@fb.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 27 Jul 2020 22:37:58 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW502g1M9oJ2PSMUSwKHrD7UJmbwdBXZxt7KjU0UtAXSrw@mail.gmail.com>
+Message-ID: <CAPhsuW502g1M9oJ2PSMUSwKHrD7UJmbwdBXZxt7KjU0UtAXSrw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 23/35] bpf: eliminate rlimit-based memory
+ accounting for sockmap and sockhash maps
+To:     Roman Gushchin <guro@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        KP Singh <kpsingh@chromium.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [Linux-kernel-mentees] [PATCH net v2] xdp: Prevent kernel-infoleak in xsk_getsockopt()
-Date:   Tue, 28 Jul 2020 01:36:04 -0400
-Message-Id: <20200728053604.404631-1-yepeilin.cs@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200728022859.381819-1-yepeilin.cs@gmail.com>
-References: <20200728022859.381819-1-yepeilin.cs@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Kernel Team <kernel-team@fb.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-xsk_getsockopt() is copying uninitialized stack memory to userspace when
-`extra_stats` is `false`. Fix it.
+On Mon, Jul 27, 2020 at 12:21 PM Roman Gushchin <guro@fb.com> wrote:
+>
+> Do not use rlimit-based memory accounting for sockmap and sockhash maps.
+> It has been replaced with the memcg-based memory accounting.
+>
+> Signed-off-by: Roman Gushchin <guro@fb.com>
 
-Fixes: 8aa5a33578e9 ("xsk: Add new statistics")
-Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Peilin Ye <yepeilin.cs@gmail.com>
----
-Doing `= {};` is sufficient since currently `struct xdp_statistics` is
-defined as follows:
+Acked-by: Song Liu <songliubraving@fb.com>
 
-struct xdp_statistics {
-	__u64 rx_dropped;
-	__u64 rx_invalid_descs;
-	__u64 tx_invalid_descs;
-	__u64 rx_ring_full;
-	__u64 rx_fill_ring_empty_descs;
-	__u64 tx_ring_empty_descs;
-};
-
-When being copied to the userspace, `stats` will not contain any
-uninitialized "holes" between struct fields.
-
-Changes in v2:
-    - Remove the "Cc: stable@vger.kernel.org" tag. (Suggested by Song Liu
-      <songliubraving@fb.com>)
-    - Initialize `stats` by assignment instead of using memset().
-      (Suggested by Song Liu <songliubraving@fb.com>)
-
- net/xdp/xsk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 26e3bba8c204..b2b533eddebf 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -840,7 +840,7 @@ static int xsk_getsockopt(struct socket *sock, int level, int optname,
- 	switch (optname) {
- 	case XDP_STATISTICS:
- 	{
--		struct xdp_statistics stats;
-+		struct xdp_statistics stats = {};
- 		bool extra_stats = true;
- 		size_t stats_size;
- 
--- 
-2.25.1
-
+> ---
+>  net/core/sock_map.c | 33 ++++++---------------------------
+>  1 file changed, 6 insertions(+), 27 deletions(-)
+>
+> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> index bc797adca44c..07c90baf8db1 100644
+> --- a/net/core/sock_map.c
+> +++ b/net/core/sock_map.c
+> @@ -26,8 +26,6 @@ struct bpf_stab {
+>  static struct bpf_map *sock_map_alloc(union bpf_attr *attr)
+>  {
+>         struct bpf_stab *stab;
+> -       u64 cost;
+> -       int err;
+>
+>         if (!capable(CAP_NET_ADMIN))
+>                 return ERR_PTR(-EPERM);
+> @@ -45,22 +43,15 @@ static struct bpf_map *sock_map_alloc(union bpf_attr *attr)
+>         bpf_map_init_from_attr(&stab->map, attr);
+>         raw_spin_lock_init(&stab->lock);
+>
+> -       /* Make sure page count doesn't overflow. */
+> -       cost = (u64) stab->map.max_entries * sizeof(struct sock *);
+> -       err = bpf_map_charge_init(&stab->map.memory, cost);
+> -       if (err)
+> -               goto free_stab;
+> -
+>         stab->sks = bpf_map_area_alloc(stab->map.max_entries *
+>                                        sizeof(struct sock *),
+>                                        stab->map.numa_node);
+> -       if (stab->sks)
+> -               return &stab->map;
+> -       err = -ENOMEM;
+> -       bpf_map_charge_finish(&stab->map.memory);
+> -free_stab:
+> -       kfree(stab);
+> -       return ERR_PTR(err);
+> +       if (!stab->sks) {
+> +               kfree(stab);
+> +               return ERR_PTR(-ENOMEM);
+> +       }
+> +
+> +       return &stab->map;
+>  }
+>
+>  int sock_map_get_from_fd(const union bpf_attr *attr, struct bpf_prog *prog)
+> @@ -999,7 +990,6 @@ static struct bpf_map *sock_hash_alloc(union bpf_attr *attr)
+>  {
+>         struct bpf_shtab *htab;
+>         int i, err;
+> -       u64 cost;
+>
+>         if (!capable(CAP_NET_ADMIN))
+>                 return ERR_PTR(-EPERM);
+> @@ -1027,21 +1017,10 @@ static struct bpf_map *sock_hash_alloc(union bpf_attr *attr)
+>                 goto free_htab;
+>         }
+>
+> -       cost = (u64) htab->buckets_num * sizeof(struct bpf_shtab_bucket) +
+> -              (u64) htab->elem_size * htab->map.max_entries;
+> -       if (cost >= U32_MAX - PAGE_SIZE) {
+> -               err = -EINVAL;
+> -               goto free_htab;
+> -       }
+> -       err = bpf_map_charge_init(&htab->map.memory, cost);
+> -       if (err)
+> -               goto free_htab;
+> -
+>         htab->buckets = bpf_map_area_alloc(htab->buckets_num *
+>                                            sizeof(struct bpf_shtab_bucket),
+>                                            htab->map.numa_node);
+>         if (!htab->buckets) {
+> -               bpf_map_charge_finish(&htab->map.memory);
+>                 err = -ENOMEM;
+>                 goto free_htab;
+>         }
+> --
+> 2.26.2
+>
