@@ -2,186 +2,166 @@ Return-Path: <SRS0=s4C/=BH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 996F2C4345C
-	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 23:35:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86870C433E3
+	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 23:42:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 782E32075D
-	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 23:35:34 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LXsV9Sef"
+	by mail.kernel.org (Postfix) with ESMTP id 68CE42075D
+	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 23:42:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1595979742;
+	bh=yqG2GsmNKP/IW1idMDNUyImoWeBa2E6r9yYiRXGcNXE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=UK83jaW/uExJv3z/bZ3fNvxZB34YMVqtvxCMfvM84I6jwQFL0thTWwHrazrvkFysV
+	 Iz37VX/cXgHNp8n04onxXMWwahjBSErrQ8zv3Vr/Yi92lph3uKQOh3zMGIzKN0pkcs
+	 Yck2wDnXaMriFbGhlGdc2A500TcQu8/p1g2ZtQac=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730381AbgG1Xfb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jul 2020 19:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730346AbgG1Xf3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jul 2020 19:35:29 -0400
-Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E60DC061794;
-        Tue, 28 Jul 2020 16:35:29 -0700 (PDT)
-Received: by mail-qv1-xf44.google.com with SMTP id m9so10016845qvx.5;
-        Tue, 28 Jul 2020 16:35:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aKtYUNKZ4EAbUdHPrlHd5OqyFQEGTzRyJpzUiSU45kE=;
-        b=LXsV9SefhI0h6Vx3hprMRrvj6Co4GEPSleoEnC0gNSmyVkOWmoWjEYwLeTlJv9K2fo
-         UBU12mcGRXNN8Nmn/WLnC39QWzuobqYWnP1GmdaCsA7UTT00dIlzMFzzn5Z2E0hZCBQW
-         afBLzRB3StBK+5IIlO1615bk+4LI+Kbbb4ukc75g6V/eRb/ei5oUSdrZn4tvITK80e6W
-         qyFoFqVC2gr4FfeERIP6+Sj6LFqMSO67/l9Phbtai5cNEUYICjLZ2pjeF/f9ocniK6Kd
-         WRovsZvjD46Lm3ZaXirl9v71QT72SZVayLDs04CgzeNLHRn2Zpu2pE9432CrSOzWWj0n
-         mZIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aKtYUNKZ4EAbUdHPrlHd5OqyFQEGTzRyJpzUiSU45kE=;
-        b=T2VwUGqgbXRX9BjlMzehjwtimoawkkvvNDaVVKIZTkqygoigkMBG6TciWMy+6mXMpI
-         tDCaxs/i+vPAr8JxATd6lKeuXc1uL9ZAkNq+Ru9lRmC/KTPgnlgYNXD9zqTEJBjcQfS2
-         SnnFQWI04ZKCjV/ulBIw4xM5U5kngz+xByubLjtzUS7WQsumIiO9bTMlFfSoBre6Opdy
-         38rvaYErFAKJYFe1P9jUE5oZlzt4gtz97J85FByLLCMwCwWEky+Vs9p6VoVFARA2u4zF
-         99JHRxVeVu3ZqGHrHxc5RHp+e1ApEN5LevmbNhza7VXli1CJWAUuk8eRS7v5adfu7WCW
-         MsJw==
-X-Gm-Message-State: AOAM532RkP8pa+K97NZ1mxfqP7X+qm2BhQUgnOuS2W1p3WBKw/tIHmiL
-        daGNT7m18Lj/dgsQ/HMnc8DqF/fS0P+6QAdRgGs48gXfeFE=
-X-Google-Smtp-Source: ABdhPJwcHoPkzXYWh/CPkoJKXwNGxEZsPtT62qS2kpoWg+Zx8Tg5l2ZnxxzsmOA2+y7JpXNhmTKMny+AwUW0zZ4OvKo=
-X-Received: by 2002:a05:6214:8f4:: with SMTP id dr20mr28450394qvb.228.1595979327410;
- Tue, 28 Jul 2020 16:35:27 -0700 (PDT)
+        id S1729918AbgG1XmW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jul 2020 19:42:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60404 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728236AbgG1XmV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jul 2020 19:42:21 -0400
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C23192075D
+        for <bpf@vger.kernel.org>; Tue, 28 Jul 2020 23:42:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595979741;
+        bh=yqG2GsmNKP/IW1idMDNUyImoWeBa2E6r9yYiRXGcNXE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=e69V6/uWRbe1KebjGkvNRvhvrKdYIyverJ7COCzf5ocn5H0sfEEtovx0luyzUX8lA
+         ssiRIUjEVPvsDzBiM1+4oyFqRF0q0op4PvYHHORvjVFQ49Duq1a79bN/cZUaowL0nl
+         N4+LndNhS+XaCJwoWGAiuCymaLRYeVRc7Zv+ju9Y=
+Received: by mail-lj1-f173.google.com with SMTP id 185so12838539ljj.7
+        for <bpf@vger.kernel.org>; Tue, 28 Jul 2020 16:42:20 -0700 (PDT)
+X-Gm-Message-State: AOAM531h9L7QsmHkAyR6vIWevfsuF+MrsHUR7i2shbzTWUQ3l+/JNpUJ
+        EI6XXuZTrTB1ifJH/i8aUVOxbfdDRtLK7Cyc4bU=
+X-Google-Smtp-Source: ABdhPJxLbFHs9G7w0tC9PLOkAVtHK7fXKreUsVW4mO0+xiszWiy9qEqSqTSYe4dW0U8wQaY/Fs8VkkpEmju/T+enTog=
+X-Received: by 2002:a2e:3003:: with SMTP id w3mr13792228ljw.273.1595979739061;
+ Tue, 28 Jul 2020 16:42:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200722211223.1055107-1-jolsa@kernel.org> <20200722211223.1055107-8-jolsa@kernel.org>
-In-Reply-To: <20200722211223.1055107-8-jolsa@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 28 Jul 2020 16:35:16 -0700
-Message-ID: <CAEf4BzacqauEc8=o29EBUsmvTMs3FZ+-Kcc4cSJ9Te4yh5-7qg@mail.gmail.com>
-Subject: Re: [PATCH v8 bpf-next 07/13] bpf: Add btf_struct_ids_match function
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+References: <20200728221801.1090349-1-yhs@fb.com> <20200728221801.1090406-1-yhs@fb.com>
+In-Reply-To: <20200728221801.1090406-1-yhs@fb.com>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 28 Jul 2020 16:42:07 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5aLvdjYphgBLJeJUkg82EZr852dj7G126PLDc5EJdq=w@mail.gmail.com>
+Message-ID: <CAPhsuW5aLvdjYphgBLJeJUkg82EZr852dj7G126PLDc5EJdq=w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: test bpf_iter buffer access
+ with negative offset
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        David Miller <davem@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Wenbo Zhang <ethercflow@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Brendan Gregg <bgregg@netflix.com>,
-        Florent Revest <revest@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
+        Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jul 22, 2020 at 2:13 PM Jiri Olsa <jolsa@kernel.org> wrote:
+On Tue, Jul 28, 2020 at 3:18 PM Yonghong Song <yhs@fb.com> wrote:
 >
-> Adding btf_struct_ids_match function to check if given address provided
-> by BTF object + offset is also address of another nested BTF object.
+> Commit afbf21dce668 ("bpf: Support readonly/readwrite buffers
+> in verifier") added readonly/readwrite buffer support which
+> is currently used by bpf_iter tracing programs. It has
+> a bug with incorrect parameter ordering which later fixed
+> by Commit f6dfbe31e8fa ("bpf: Fix swapped arguments in calls
+> to check_buffer_access").
 >
-> This allows to pass an argument to helper, which is defined via parent
-> BTF object + offset, like for bpf_d_path (added in following changes):
+> This patch added a test case with a negative offset access
+> which will trigger the error path.
 >
->   SEC("fentry/filp_close")
->   int BPF_PROG(prog_close, struct file *file, void *id)
->   {
->     ...
->     ret = bpf_d_path(&file->f_path, ...
+> Without Commit f6dfbe31e8fa, running the test case in the patch,
+> the error message looks like:
+>    R1_w=rdwr_buf(id=0,off=0,imm=0) R10=fp0
+>   ; value_sum += *(__u32 *)(value - 4);
+>   2: (61) r1 = *(u32 *)(r1 -4)
+>   R1 invalid (null) buffer access: off=-4, size=4
 >
-> The first bpf_d_path argument is hold by verifier as BTF file object
-> plus offset of f_path member.
+> With the above commit, the error message looks like:
+>    R1_w=rdwr_buf(id=0,off=0,imm=0) R10=fp0
+>   ; value_sum += *(__u32 *)(value - 4);
+>   2: (61) r1 = *(u32 *)(r1 -4)
+>   R1 invalid rdwr buffer access: off=-4, size=4
 >
-> The btf_struct_ids_match function will walk the struct file object and
-> check if there's nested struct path object on the given offset.
->
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> Signed-off-by: Yonghong Song <yhs@fb.com>
+
+Acked-by: Song Liu <songliubraving@fb.com>
+
 > ---
->  include/linux/bpf.h   |  2 ++
->  kernel/bpf/btf.c      | 29 +++++++++++++++++++++++++++++
->  kernel/bpf/verifier.c | 18 ++++++++++++------
->  3 files changed, 43 insertions(+), 6 deletions(-)
+>  .../selftests/bpf/prog_tests/bpf_iter.c       | 13 ++++++++++++
+>  .../selftests/bpf/progs/bpf_iter_test_kern6.c | 21 +++++++++++++++++++
+>  2 files changed, 34 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_test_kern6.c
 >
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index bae557ff2da8..c981e258fed3 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1306,6 +1306,8 @@ int btf_struct_access(struct bpf_verifier_log *log,
->                       const struct btf_type *t, int off, int size,
->                       enum bpf_access_type atype,
->                       u32 *next_btf_id);
-> +bool btf_struct_ids_match(struct bpf_verifier_log *log,
-> +                         int off, u32 id, u32 mid);
->  int btf_resolve_helper_id(struct bpf_verifier_log *log,
->                           const struct bpf_func_proto *fn, int);
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+> index d95de80b1851..4ffefdc1130f 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+> @@ -21,6 +21,7 @@
+>  #include "bpf_iter_bpf_percpu_array_map.skel.h"
+>  #include "bpf_iter_bpf_sk_storage_map.skel.h"
+>  #include "bpf_iter_test_kern5.skel.h"
+> +#include "bpf_iter_test_kern6.skel.h"
 >
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 1ab5fd5bf992..562d4453fad3 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -4140,6 +4140,35 @@ int btf_struct_access(struct bpf_verifier_log *log,
->         return -EINVAL;
+>  static int duration;
+>
+> @@ -885,6 +886,16 @@ static void test_rdonly_buf_out_of_bound(void)
+>         bpf_iter_test_kern5__destroy(skel);
 >  }
 >
-> +bool btf_struct_ids_match(struct bpf_verifier_log *log,
-> +                         int off, u32 id, u32 mid)
+> +static void test_buf_neg_offset(void)
 > +{
-> +       const struct btf_type *type;
-> +       u32 nid;
-> +       int err;
+> +       struct bpf_iter_test_kern6 *skel;
 > +
-
-mid and nid are terrible names, especially as an input argument name.
-mid == need_type_id? nid == cur_type_id or something along those
-lines?
-
-> +       do {
-> +               type = btf_type_by_id(btf_vmlinux, id);
-> +               if (!type)
-> +                       return false;
-> +               err = btf_struct_walk(log, type, off, 1, &nid);
-> +               if (err < 0)
-> +                       return false;
-> +
-> +               /* We found nested struct object. If it matches
-> +                * the requested ID, we're done. Otherwise let's
-> +                * continue the search with offset 0 in the new
-> +                * type.
-> +                */
-> +               if (err == walk_struct && mid == nid)
-> +                       return true;
-> +               off = 0;
-> +               id = nid;
-> +       } while (err == walk_struct);
-
-This seems like a slightly more obvious control flow:
-
-again:
-
-   ...
-
-   if (err != walk_struct)
-      return false;
-
-   if (mid != nid) {
-      off = 0;
-      id = nid;
-      goto again;
-   }
-
-   return true;
-
-> +
-> +       return false;
+> +       skel = bpf_iter_test_kern6__open_and_load();
+> +       if (CHECK(skel, "bpf_iter_test_kern6__open_and_load",
+> +                 "skeleton open_and_load unexpected success\n"))
+> +               bpf_iter_test_kern6__destroy(skel);
 > +}
 > +
->  int btf_resolve_helper_id(struct bpf_verifier_log *log,
->                           const struct bpf_func_proto *fn, int arg)
+>  void test_bpf_iter(void)
 >  {
-
-[...]
+>         if (test__start_subtest("btf_id_or_null"))
+> @@ -933,4 +944,6 @@ void test_bpf_iter(void)
+>                 test_bpf_sk_storage_map();
+>         if (test__start_subtest("rdonly-buf-out-of-bound"))
+>                 test_rdonly_buf_out_of_bound();
+> +       if (test__start_subtest("buf-neg-offset"))
+> +               test_buf_neg_offset();
+>  }
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_test_kern6.c b/tools/testing/selftests/bpf/progs/bpf_iter_test_kern6.c
+> new file mode 100644
+> index 000000000000..1c7304f56b1e
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_test_kern6.c
+> @@ -0,0 +1,21 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2020 Facebook */
+> +#include "bpf_iter.h"
+> +#include <bpf/bpf_helpers.h>
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +__u32 value_sum = 0;
+> +
+> +SEC("iter/bpf_map_elem")
+> +int dump_bpf_hash_map(struct bpf_iter__bpf_map_elem *ctx)
+> +{
+> +       void *value = ctx->value;
+> +
+> +       if (value == (void *)0)
+> +               return 0;
+> +
+> +       /* negative offset, verifier failure. */
+> +       value_sum += *(__u32 *)(value - 4);
+> +       return 0;
+> +}
+> --
+> 2.24.1
+>
