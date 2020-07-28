@@ -2,100 +2,98 @@ Return-Path: <SRS0=s4C/=BH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEE87C433E5
-	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 12:03:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A50CC433EC
+	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 12:13:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C885D206F5
-	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 12:03:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 36C3F20714
+	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 12:13:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1595938426;
+	bh=elgb9VJwDQUV7e8qJKF8s3/erPhoLE4ugpQnXtwPLEk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=qSzLFF+bRy9O0pPoMuUleqW8+Ikp4zyZQhzujUmgEF6Pf7e91XG8dCg1Qw94iZMhZ
+	 Ucbp3o4Sb4NqT84sS5oNqQDfG3/1HNySykA9ANixNwi5U6b/SF8iUeMru7hPddYbKN
+	 GWagUrdLQZy0DRQiRaqRrilZzHUrUabIEF1Yahyc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728589AbgG1MDF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jul 2020 08:03:05 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44470 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728737AbgG1MDE (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 28 Jul 2020 08:03:04 -0400
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06SC2dkF009538;
-        Tue, 28 Jul 2020 08:02:50 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 32j0a5rp35-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jul 2020 08:02:49 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 06SC1Bl6030131;
-        Tue, 28 Jul 2020 12:01:42 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04ams.nl.ibm.com with ESMTP id 32gcy4kgcf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 28 Jul 2020 12:01:42 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 06SC1d4K27459932
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 Jul 2020 12:01:39 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A949211C058;
-        Tue, 28 Jul 2020 12:01:39 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1B01111C05B;
-        Tue, 28 Jul 2020 12:01:39 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.145.173.62])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 28 Jul 2020 12:01:39 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next 1/3] samples/bpf: Fix building out of srctree
-Date:   Tue, 28 Jul 2020 14:00:57 +0200
-Message-Id: <20200728120059.132256-2-iii@linux.ibm.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20200728120059.132256-1-iii@linux.ibm.com>
-References: <20200728120059.132256-1-iii@linux.ibm.com>
+        id S1729238AbgG1MNp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jul 2020 08:13:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35582 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728500AbgG1MNp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jul 2020 08:13:45 -0400
+Received: from quaco.ghostprotocols.net (179.176.1.55.dynamic.adsl.gvt.net.br [179.176.1.55])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A0880206D8;
+        Tue, 28 Jul 2020 12:13:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1595938424;
+        bh=elgb9VJwDQUV7e8qJKF8s3/erPhoLE4ugpQnXtwPLEk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=He3sp8UikoQ+i7onRo9OVHoDVJacJ//GewEeSnQj/cBZcalKDpHJtL9O2v4CRqSpZ
+         +SPCLFcF8EdaFF81A78dct95GXnDW7AStzDIBIxDDYNhjWGSYA6Ea+RMh5yxTuCOHT
+         lEHHteNEf+CWM83dmq0SQdtDPzAEHobXV5lRROYY=
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 85F9E404B1; Tue, 28 Jul 2020 09:13:42 -0300 (-03)
+Date:   Tue, 28 Jul 2020 09:13:42 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Roman Gushchin <guro@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 35/35] perf: don't touch RLIMIT_MEMLOCK
+Message-ID: <20200728121342.GD40195@kernel.org>
+References: <20200727184506.2279656-1-guro@fb.com>
+ <20200727184506.2279656-36-guro@fb.com>
+ <CAEf4BzYUhybiSz2S-jtuv5+KcaHSxCLoY=nq1g597bvwpUemZw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-28_07:2020-07-28,2020-07-28 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- phishscore=0 lowpriorityscore=0 impostorscore=0 spamscore=0 adultscore=0
- mlxscore=0 mlxlogscore=999 malwarescore=0 clxscore=1015 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2007280088
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzYUhybiSz2S-jtuv5+KcaHSxCLoY=nq1g597bvwpUemZw@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Building BPF samples out of srctree fails, because the output directory
-for progs shared with selftests (CGROUP_HELPERS, TRACE_HELPERS) is
-missing and the compiler cannot create output files.
+Em Mon, Jul 27, 2020 at 11:09:43PM -0700, Andrii Nakryiko escreveu:
+> On Mon, Jul 27, 2020 at 12:21 PM Roman Gushchin <guro@fb.com> wrote:
+> >
+> > Since bpf stopped using memlock rlimit to limit the memory usage,
+> > there is no more reason for perf to alter its own limit.
+> >
+> > Signed-off-by: Roman Gushchin <guro@fb.com>
+> > ---
+> 
+> Cc'd Armaldo, but I'm guessing it's a similar situation that latest
+> perf might be running on older kernel and should keep working.
 
-Fix by creating the output directory in Makefile.
+Yes, please leave it as is, the latest perf should continue working with
+older kernels, so if there is a way to figure out if the kernel running
+is one where BPF doesn't use memlock rlimit for that purpose, then in
+those cases we shouldn't use it.
 
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
- samples/bpf/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+- Arnaldo
+ 
+> >  tools/perf/builtin-trace.c      | 10 ----------
+> >  tools/perf/tests/builtin-test.c |  6 ------
+> >  tools/perf/util/Build           |  1 -
+> >  tools/perf/util/rlimit.c        | 29 -----------------------------
+> >  tools/perf/util/rlimit.h        |  6 ------
+> >  5 files changed, 52 deletions(-)
+> >  delete mode 100644 tools/perf/util/rlimit.c
+> >  delete mode 100644 tools/perf/util/rlimit.h
+> >
+> 
+> [...]
 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index f87ee02073ba..81ba0beca0a3 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -301,6 +301,7 @@ $(obj)/hbm_edt_kern.o: $(src)/hbm.h $(src)/hbm_kern.h
- # But, there is no easy way to fix it, so just exclude it since it is
- # useless for BPF samples.
- $(obj)/%.o: $(src)/%.c
-+	$(Q)mkdir -p $(@D)
- 	@echo "  CLANG-bpf " $@
- 	$(Q)$(CLANG) $(NOSTDINC_FLAGS) $(LINUXINCLUDE) $(BPF_EXTRA_CFLAGS) \
- 		-I$(obj) -I$(srctree)/tools/testing/selftests/bpf/ \
 -- 
-2.25.4
 
+- Arnaldo
