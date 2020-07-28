@@ -2,60 +2,65 @@ Return-Path: <SRS0=s4C/=BH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-20.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA24AC433E0
-	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 08:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0E7CC433F8
+	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 08:58:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CB07120838
-	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 08:58:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8B2D620775
+	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 08:58:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nVjd2v2r"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qXtWjiaX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728381AbgG1I6L (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jul 2020 04:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
+        id S1728413AbgG1I6A (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jul 2020 04:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728307AbgG1I5g (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jul 2020 04:57:36 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE120C0619D2
-        for <bpf@vger.kernel.org>; Tue, 28 Jul 2020 01:57:36 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id s28so14357229pfd.19
-        for <bpf@vger.kernel.org>; Tue, 28 Jul 2020 01:57:36 -0700 (PDT)
+        with ESMTP id S1728362AbgG1I5n (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jul 2020 04:57:43 -0400
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11375C0619D4
+        for <bpf@vger.kernel.org>; Tue, 28 Jul 2020 01:57:43 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id 1so13529009qkm.19
+        for <bpf@vger.kernel.org>; Tue, 28 Jul 2020 01:57:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=gVIM4kdH9NokKpwghbO519hac6rQk+0+42h/FkNtOmc=;
-        b=nVjd2v2r9Q1oUMii1yR5ZajFAwiIRcWUQZazQMb/M7UontU6LQuWm5iwdtO3/n33O3
-         Lb/zwJgQ/trsVmsWM8ohNipHPaIrC/bcGltE6QrazEYolwkY9LueMxvJCL7eDHlUuYco
-         ZucijjlK3XDHN5p4OFutR+qjpMiOuLpYOafkxRVNDwV1htvZ9XHd+T1m148q4q2dN5rt
-         hAISvDZdZavoiVStR4KiWdFYODjwthY7LtG1+Qv/6wchJSBTZ0Mjb7czpWg2y9EcA87g
-         qPVL8qlTgMK3qmH1S94tx62jzon1UhmDo3yuxY7QDeINXqv43TYLPZivOivq2SQIflsY
-         JBsQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=q3XkGvkSp73lf1KyQuDb99nbGEDl/ReSCh9uyduGkdU=;
+        b=qXtWjiaX/X6jEvENfZzMiQ6bR2rwgKrF5oawDZFJvh7JYW6DBI6Q5Leoj87XZUrx1Z
+         6+tP83e7P1y1/U/iBST/jiMqIfqw94WXHOB/tDJL9XsjwP1M7e9L+rPIBNm4/5DFh4H7
+         Q96VMUzyaKqGnMQT+urC/PqUrZg0qEs9KXJ3ZHKQfk375qNKjDrVJNSgQ9F+P+i79MWQ
+         REGmPxyqHZ+W1PgAVmEsDjrwoi/V8XFNH2ZEh9Bh8li641FJxE3mr7VM6sNv4caeqH+D
+         kmIj/EtUe0XInSOR+HaRxRHQj6vvDZvKXIcirg4Qhr/NU9RYMumF5lG20sdyQEgmsYjt
+         Vw4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=gVIM4kdH9NokKpwghbO519hac6rQk+0+42h/FkNtOmc=;
-        b=OkNqzr61tg/vl/Dws595Y+dZlDSNvpbsQr0n41ITVax+MDpBKj+YyWkaOfuU3zrLJZ
-         3VjVQbIhj5GuxEPWmuhZ9KLuJ5APNkIfzgLCdXSgzpC1X1P187FtCU7Lq+6PUXqEoC0P
-         wBOuIoxXLPY6E9CC9Km3zdnSoTHX+kAVQFpwaeJ9RJ7bRE/XY5IO1wI5l4aZ7U5NQJxk
-         0pTXj+NkzBL3ymk4t4HpuOkLCbiQKKKRqbJFJNyrbGMjPUuh7Vm9W0OLb9scDGff2Hf+
-         cW6x42+5HyzEoJRtIZ4+cJt+ACfPyKLl2DURjTYCqAbDps2rFKL8wuh5ZUo0Zv79rpN4
-         6ybg==
-X-Gm-Message-State: AOAM532GMSOe9xNWYY7gRfIA9x9+k0FcM28AqV7Vo5xSB5jeDRhuhveV
-        l79cY+wTpY+SJwWfEuGZj894sgu14mdJ
-X-Google-Smtp-Source: ABdhPJwp2u/D21xwmzwq6NAD7G2DvtD23wewLcS0WtXYTfXCdBdhEV3/tkm4JQwe+UMNfMzo/RXIQNFXG/57
-X-Received: by 2002:a17:90b:94c:: with SMTP id dw12mr3465095pjb.214.1595926656213;
- Tue, 28 Jul 2020 01:57:36 -0700 (PDT)
-Date:   Tue, 28 Jul 2020 01:57:29 -0700
-Message-Id: <20200728085734.609930-1-irogers@google.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=q3XkGvkSp73lf1KyQuDb99nbGEDl/ReSCh9uyduGkdU=;
+        b=B3rA37nbxuGqQHONI6ZjDqcE/xJfQQ3z3hBV3TbNPnGr52G1buMmQEtchaO+pMV4y2
+         rMM36EN2aSS7QgWdRUDeGjCh7ZdW+99Fkfr8rC9iWr2s3wWwi9HHXKxOrYqBbMnCjxm2
+         XbSVOVyHak7nk0zWnb6q/UvgJ/Pf2csN81v42LfjSwGflNYchEZpcNxXL60VtoCKS8tu
+         u+oxuzkRpPO0M6inQoUOvl/W32ngvSJywNecKOQSOwJjAZfq7Jc9FRVDnZ0cHukpDUwV
+         yCLoe9oTRulC1pvNiLvkZJyoO2ZPxZD8gR3vgZWbhY3fjbKjfbE8J0WmfhsXl2IpKNdg
+         RS0Q==
+X-Gm-Message-State: AOAM531IQBmg1SxFAzsDmiDMXt1A4tvu0L0ou79y5rnergktj2KxVdz7
+        tbG8TPRkp9G0HZxBdb5RWsX2b/AR2I9q
+X-Google-Smtp-Source: ABdhPJx+iEtRDw+ObO5QJWeLCfNTNad7nt4l5nFw31VuVCSw5kTb0RhobnC7LyOnVY3dXLgBgQ+3uho2FoTI
+X-Received: by 2002:a0c:c60b:: with SMTP id v11mr1006575qvi.122.1595926662092;
+ Tue, 28 Jul 2020 01:57:42 -0700 (PDT)
+Date:   Tue, 28 Jul 2020 01:57:32 -0700
+In-Reply-To: <20200728085734.609930-1-irogers@google.com>
+Message-Id: <20200728085734.609930-4-irogers@google.com>
 Mime-Version: 1.0
+References: <20200728085734.609930-1-irogers@google.com>
 X-Mailer: git-send-email 2.28.0.163.g6104cc2f0b6-goog
-Subject: [PATCH v2 0/5] Fixes for setting event freq/periods
+Subject: [PATCH v2 3/5] perf test: Ensure sample_period is set libpfm4 events
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -84,33 +89,44 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Some fixes that address issues for regular and pfm4 events with 2
-additional perf_event_attr tests. Various authors, David Sharp isn't
-currently at Google.
+Test that a command line option doesn't override the period set on a
+libpfm4 event.
+Without libpfm4 test passes as unsupported.
 
-v2. corrects the commit message following Athira Rajeev's suggestion.
-
-David Sharp (1):
-  perf record: Set PERF_RECORD_PERIOD if attr->freq is set.
-
-Ian Rogers (3):
-  perf test: Ensure sample_period is set libpfm4 events
-  perf record: Don't clear event's period if set by a term
-  perf test: Leader sampling shouldn't clear sample period
-
-Stephane Eranian (1):
-  perf record: Prevent override of attr->sample_period for libpfm4
-    events
-
- tools/perf/tests/attr/README                 |  2 ++
- tools/perf/tests/attr/test-record-group2     | 29 ++++++++++++++++++++
- tools/perf/tests/attr/test-record-pfm-period |  9 ++++++
- tools/perf/util/evsel.c                      | 10 +++++--
- tools/perf/util/record.c                     | 28 +++++++++++++------
- 5 files changed, 67 insertions(+), 11 deletions(-)
- create mode 100644 tools/perf/tests/attr/test-record-group2
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/tests/attr/README                 | 1 +
+ tools/perf/tests/attr/test-record-pfm-period | 9 +++++++++
+ 2 files changed, 10 insertions(+)
  create mode 100644 tools/perf/tests/attr/test-record-pfm-period
 
+diff --git a/tools/perf/tests/attr/README b/tools/perf/tests/attr/README
+index 430024f618f1..6cd408108595 100644
+--- a/tools/perf/tests/attr/README
++++ b/tools/perf/tests/attr/README
+@@ -53,6 +53,7 @@ Following tests are defined (with perf commands):
+   perf record -i kill                           (test-record-no-inherit)
+   perf record -n kill                           (test-record-no-samples)
+   perf record -c 100 -P kill                    (test-record-period)
++  perf record -c 1 --pfm-events=cycles:period=2 (test-record-pfm-period)
+   perf record -R kill                           (test-record-raw)
+   perf stat -e cycles kill                      (test-stat-basic)
+   perf stat kill                                (test-stat-default)
+diff --git a/tools/perf/tests/attr/test-record-pfm-period b/tools/perf/tests/attr/test-record-pfm-period
+new file mode 100644
+index 000000000000..368f5b814094
+--- /dev/null
++++ b/tools/perf/tests/attr/test-record-pfm-period
+@@ -0,0 +1,9 @@
++[config]
++command = record
++args    = --no-bpf-event -c 10000 --pfm-events=cycles:period=77777 kill >/dev/null 2>&1
++ret     = 1
++
++[event:base-record]
++sample_period=77777
++sample_type=7
++freq=0
 -- 
 2.28.0.163.g6104cc2f0b6-goog
 
