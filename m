@@ -2,107 +2,64 @@ Return-Path: <SRS0=s4C/=BH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 593D9C433E0
-	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 22:18:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0818DC433E1
+	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 22:28:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 37A65206D7
-	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 22:18:06 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="b0mTCvb4"
+	by mail.kernel.org (Postfix) with ESMTP id DB9362070B
+	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 22:28:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729491AbgG1WSF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jul 2020 18:18:05 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:42186 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729567AbgG1WSF (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 28 Jul 2020 18:18:05 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06SMACnc005085
-        for <bpf@vger.kernel.org>; Tue, 28 Jul 2020 15:18:04 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=khEKn/HofYFeWRLfeujerfad+E4YU6oJE9H+cDFsv5I=;
- b=b0mTCvb4UG1QN9fkenwAvOgs55ra0boerm3XWNvRfxMj5uwQfnR6W2ot6ixCAE/hTC5f
- G6pTyDFzzuO+rHZNnduAEpW6Q3xIVsOomN4DE6RTPfdXvB9XHz7b9ilmXC1ghRkFRLDH
- yuLuwa9gvZ+q9fQvTJV1CQAbleiLe1hVOU8= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 32j13yq5w9-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 28 Jul 2020 15:18:03 -0700
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 28 Jul 2020 15:18:02 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 74F2C3704BE1; Tue, 28 Jul 2020 15:18:01 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 1/2] bpf: add missing newline characters in verifier error messages
-Date:   Tue, 28 Jul 2020 15:18:01 -0700
-Message-ID: <20200728221801.1090349-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
+        id S1729463AbgG1W2X (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jul 2020 18:28:23 -0400
+Received: from www62.your-server.de ([213.133.104.62]:44934 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729417AbgG1W2X (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jul 2020 18:28:23 -0400
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1k0Y55-0002v1-Oe; Wed, 29 Jul 2020 00:28:19 +0200
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1k0Y55-0005Z3-0I; Wed, 29 Jul 2020 00:28:19 +0200
+Subject: Re: [bpf-next PATCH] bpf, selftests: use ::1 for localhost in
+ tcp_server.py
+To:     John Fastabend <john.fastabend@gmail.com>, guro@fb.com,
+        ast@kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
+References: <159594714197.21431.10113693935099326445.stgit@john-Precision-5820-Tower>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <fbbbe3df-23fc-5cc7-5761-f891bda6777d@iogearbox.net>
+Date:   Wed, 29 Jul 2020 00:28:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-28_17:2020-07-28,2020-07-28 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- malwarescore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
- mlxlogscore=999 adultscore=0 bulkscore=0 mlxscore=0 clxscore=1015
- impostorscore=0 suspectscore=13 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2007280157
-X-FB-Internal: deliver
+In-Reply-To: <159594714197.21431.10113693935099326445.stgit@john-Precision-5820-Tower>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.3/25887/Tue Jul 28 17:44:20 2020)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Newline characters are added in two verifier error messages,
-refactored in Commit afbf21dce668 ("bpf: Support readonly/readwrite
-buffers in verifier"). This way, they do not mix with
-messages afterwards.
+On 7/28/20 4:39 PM, John Fastabend wrote:
+> Using localhost requires the host to have a /etc/hosts file with that
+> specific line in it. By default my dev box did not, they used
+> ip6-localhost, so the test was failing. To fix remove the need for any
+> /etc/hosts and use ::1.
+> 
+> I could just add the line, but this seems easier.
+> 
+> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- kernel/bpf/verifier.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 88bb25d08bf8..b6ccfce3bf4c 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3069,7 +3069,7 @@ static int __check_buffer_access(struct bpf_verifie=
-r_env *env,
- {
- 	if (off < 0) {
- 		verbose(env,
--			"R%d invalid %s buffer access: off=3D%d, size=3D%d",
-+			"R%d invalid %s buffer access: off=3D%d, size=3D%d\n",
- 			regno, buf_info, off, size);
- 		return -EACCES;
- 	}
-@@ -3078,7 +3078,7 @@ static int __check_buffer_access(struct bpf_verifie=
-r_env *env,
-=20
- 		tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
- 		verbose(env,
--			"R%d invalid variable buffer offset: off=3D%d, var_off=3D%s",
-+			"R%d invalid variable buffer offset: off=3D%d, var_off=3D%s\n",
- 			regno, off, tn_buf);
- 		return -EACCES;
- 	}
---=20
-2.24.1
-
+Applied, thanks!
