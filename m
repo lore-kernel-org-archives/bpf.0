@@ -2,77 +2,141 @@ Return-Path: <SRS0=s4C/=BH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E75C3C433E3
-	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 17:44:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7DB1C433E4
+	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 18:30:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CE4F22070B
-	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 17:44:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1595958280;
-	bh=sEmZiUgz/iXoEnUd+OL8Zyq392/Uwqkmz/LeFx/nF0E=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=Mkw9l3A5aNm5agbDi801j7pFiyJtt0x8Oh9ZPaftqgLoCsNU9fQuhJIFgwRsgR33Q
-	 ATfRXPqHRazwJy9MUZVVDzj6rNjLz1cbVrQmvg2koW8aifCSfW31hPCmxL6/ESkCTI
-	 2xR8lrnvqGrXHPFMLH3o5TzfRh8x3p+nx3tVpzJk=
+	by mail.kernel.org (Postfix) with ESMTP id AB36F207F5
+	for <bpf@archiver.kernel.org>; Tue, 28 Jul 2020 18:30:21 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kcNywvwo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732070AbgG1Rok (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 28 Jul 2020 13:44:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52186 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728163AbgG1Roj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 28 Jul 2020 13:44:39 -0400
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3CC3D21D95;
-        Tue, 28 Jul 2020 17:44:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1595958279;
-        bh=sEmZiUgz/iXoEnUd+OL8Zyq392/Uwqkmz/LeFx/nF0E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ragbW06wdO0H0YeYjmG61axhlSPOYdhsgaS0ckbJg9Q+53Ijvb4MYB80L3v0PkijA
-         GkAheJNfHCT/klAA8PNHg9D559372mBd7TiaVh4JooqVXxi/2i/ddZvPRnF7WKSXVK
-         C5ka185UXBgiK3Y40XOn2r1NdU5FU5kmvxx6ton8=
-Received: by mail-lj1-f174.google.com with SMTP id g6so9466163ljn.11;
-        Tue, 28 Jul 2020 10:44:39 -0700 (PDT)
-X-Gm-Message-State: AOAM531tzWw96qyo6ExtOL6XXqfXhGfjPGjvzOoIACPAMqvEbH9awQZd
-        akpQs6LQDUYtZwZi+od40Hx1MIkvkHxz9s9oR/Y=
-X-Google-Smtp-Source: ABdhPJxQ0qMoKzoL82JrsSyDjP/n2jChYdu2Z01ygtw6diN2oWroKRybrSKO8JuPwEU3ckOLBrugersjiwD0G08+IAs=
-X-Received: by 2002:a05:651c:1349:: with SMTP id j9mr5882341ljb.392.1595958277527;
- Tue, 28 Jul 2020 10:44:37 -0700 (PDT)
+        id S1732357AbgG1SaQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 28 Jul 2020 14:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729310AbgG1SaQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 28 Jul 2020 14:30:16 -0400
+Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDEFC061794;
+        Tue, 28 Jul 2020 11:30:16 -0700 (PDT)
+Received: by mail-qk1-x743.google.com with SMTP id b79so19619313qkg.9;
+        Tue, 28 Jul 2020 11:30:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7bECQ5mdJV9juPwLlMc+XOTBw4TPn5avVxK6LBxKok4=;
+        b=kcNywvwojc3NoFO2SgOzoHAllB1MTBbfYdhAMh5lJNKh4Bk2YpCzRmK8UDqHmGp1ST
+         tsu9/yAJl50OODjnIHDdymdTaK3b1NpSIBg93JYkSTL5x5c0LrDNPDJH5iN6sJE1SWHw
+         ETgmMMaHeqTAJCU79vCxIa7tWfRz9czHJEILMRcSjW1MsuprWPCdDZuFrpjRGrScFJwB
+         KJ0LYwH4Hry29AOdEJPST9Zo6ZXIosi8OaqOFY9f6xTswrHYNyk9GnChtS1cle1L45BD
+         hLEQA9lEPZM4ND6M+45id3MCB4R5unEpL3iIu9UjMuHsc8VxL1bz2PWQdWPgOe6Ttf0Y
+         iOuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7bECQ5mdJV9juPwLlMc+XOTBw4TPn5avVxK6LBxKok4=;
+        b=dm+ojlMWZK/llLIGxFa+rXpOS7sug3tnBYqikK5VKJ+t7o5kP1HHEzSFVyHMMIoHQU
+         AIb5vWSpQSBbYpJU5UDywIps/stqCl/gXWaUheIkGfwB+3ZILVLNFTM60+MNyBnqXruP
+         +QLnzJz9bnr2mwZ2SO7I3U3MebHctEdwY6i+xrB+xio8iLf9GyqlVtceW3eEWrh95JD8
+         KQuhGPwqLk/5Mqp306kQnYsShRDoqhG8xe2HWyqzvlhYy6Fwg0lHHI26ewYhmhKZOIvB
+         Ilw1eAbb7AidZ2O2WqRGRbPWt1ev5oFZGe/Y4JWHk+uhJVe0H+VhwF7oicQEX+1pcD7i
+         if1w==
+X-Gm-Message-State: AOAM530Oe9VVB8GH7tFB4bJ5xF9qT3HI6JAT3/s8x9MViC8F+NcMt90w
+        8L3Wbij1/M6rWEQZ6yjmPYdEdYW/LvnvuG4NLac=
+X-Google-Smtp-Source: ABdhPJyJZITUBGPqppMcW0XhAR41Q00ZO+emE5RAHkhnRoTntX2fDp1VBhQTwfBqjxBZMhTB8hioVnmJPJb0IbSIphI=
+X-Received: by 2002:a37:a655:: with SMTP id p82mr28886863qke.92.1595961015352;
+ Tue, 28 Jul 2020 11:30:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <159594714197.21431.10113693935099326445.stgit@john-Precision-5820-Tower>
-In-Reply-To: <159594714197.21431.10113693935099326445.stgit@john-Precision-5820-Tower>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 28 Jul 2020 10:44:26 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5nXGDLRg0AV7_YpMHxp9DAFfT6trP1fobuc6ZjdQcXng@mail.gmail.com>
-Message-ID: <CAPhsuW5nXGDLRg0AV7_YpMHxp9DAFfT6trP1fobuc6ZjdQcXng@mail.gmail.com>
-Subject: Re: [bpf-next PATCH] bpf, selftests: use ::1 for localhost in tcp_server.py
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     Roman Gushchin <guro@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+References: <20200727184506.2279656-1-guro@fb.com> <20200727184506.2279656-33-guro@fb.com>
+ <CAEf4BzbCzEOKx2GMOcp6CTxBBN+BRAY-Z_mCJ26hoSto956KBQ@mail.gmail.com> <C739D492-23E2-4823-8A9A-81BF00FD450E@fb.com>
+In-Reply-To: <C739D492-23E2-4823-8A9A-81BF00FD450E@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 28 Jul 2020 11:30:04 -0700
+Message-ID: <CAEf4BzaNEnK6UpfvPpEPpU+fLi=Zsrr5YUc0+t20a_TK_oj22A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 32/35] bpf: selftests: delete bpf_rlimit.h
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Roman Gushchin <guro@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jul 28, 2020 at 7:40 AM John Fastabend <john.fastabend@gmail.com> wrote:
+On Mon, Jul 27, 2020 at 11:11 PM Song Liu <songliubraving@fb.com> wrote:
 >
-> Using localhost requires the host to have a /etc/hosts file with that
-> specific line in it. By default my dev box did not, they used
-> ip6-localhost, so the test was failing. To fix remove the need for any
-> /etc/hosts and use ::1.
 >
-> I could just add the line, but this seems easier.
 >
-> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
+> > On Jul 27, 2020, at 11:06 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Mon, Jul 27, 2020 at 12:25 PM Roman Gushchin <guro@fb.com> wrote:
+> >>
+> >> As rlimit-based memory accounting is not used by bpf anymore,
+> >> there are no more reasons to play with memlock rlimit.
+> >>
+> >> Delete bpf_rlimit.h which contained a code to bump the limit.
+> >>
+> >> Signed-off-by: Roman Gushchin <guro@fb.com>
+> >> ---
+> >
+> > We run test_progs on old kernels as part of libbpf Github CI. We'll
+> > need to either leave setrlimit() or do it conditionally, depending on
+> > detected kernel feature support.
+>
+> Hmm... I am surprised that running test_progs on old kernels is not
+> too noisy. Have we got any issue with that?
+>
 
-Acked-by: Song Liu <songliubraving@fb.com>
+For libbpf CI we maintain a list of enabled/disabled tests that are
+not supposed to succeed on a given kernel. So it works OK in practice,
+just needs an occasional update to those lists.
+
+
+> Thanks,
+> Song
+>
+> >
+> >> samples/bpf/hbm.c                             |  1 -
+> >> tools/testing/selftests/bpf/bpf_rlimit.h      | 28 -------------------
+> >> .../selftests/bpf/flow_dissector_load.c       |  1 -
+> >> .../selftests/bpf/get_cgroup_id_user.c        |  1 -
+> >> .../bpf/prog_tests/select_reuseport.c         |  1 -
+> >> .../selftests/bpf/prog_tests/sk_lookup.c      |  1 -
+> >> tools/testing/selftests/bpf/test_btf.c        |  1 -
+> >> .../selftests/bpf/test_cgroup_storage.c       |  1 -
+> >> tools/testing/selftests/bpf/test_dev_cgroup.c |  1 -
+> >> tools/testing/selftests/bpf/test_lpm_map.c    |  1 -
+> >> tools/testing/selftests/bpf/test_lru_map.c    |  1 -
+> >> tools/testing/selftests/bpf/test_maps.c       |  1 -
+> >> tools/testing/selftests/bpf/test_netcnt.c     |  1 -
+> >> tools/testing/selftests/bpf/test_progs.c      |  1 -
+> >> .../selftests/bpf/test_skb_cgroup_id_user.c   |  1 -
+> >> tools/testing/selftests/bpf/test_sock.c       |  1 -
+> >> tools/testing/selftests/bpf/test_sock_addr.c  |  1 -
+> >> .../testing/selftests/bpf/test_sock_fields.c  |  1 -
+> >> .../selftests/bpf/test_socket_cookie.c        |  1 -
+> >> tools/testing/selftests/bpf/test_sockmap.c    |  1 -
+> >> tools/testing/selftests/bpf/test_sysctl.c     |  1 -
+> >> tools/testing/selftests/bpf/test_tag.c        |  1 -
+> >> .../bpf/test_tcp_check_syncookie_user.c       |  1 -
+> >> .../testing/selftests/bpf/test_tcpbpf_user.c  |  1 -
+> >> .../selftests/bpf/test_tcpnotify_user.c       |  1 -
+> >> tools/testing/selftests/bpf/test_verifier.c   |  1 -
+> >> .../testing/selftests/bpf/test_verifier_log.c |  2 --
+> >> 27 files changed, 55 deletions(-)
+> >> delete mode 100644 tools/testing/selftests/bpf/bpf_rlimit.h
+> >>
+> >
+> > [...]
+>
