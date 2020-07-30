@@ -8,40 +8,40 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1389C433E1
-	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 20:58:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DDAAC433E0
+	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 20:58:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9987320809
+	by mail.kernel.org (Postfix) with ESMTP id EEFB020809
 	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 20:58:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="O3KLyecK"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Uilg/x6j"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730573AbgG3U6G (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Jul 2020 16:58:06 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:20212 "EHLO
+        id S1728073AbgG3U6J (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Jul 2020 16:58:09 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:45368 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730551AbgG3U6F (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 30 Jul 2020 16:58:05 -0400
+        by vger.kernel.org with ESMTP id S1730590AbgG3U6H (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 30 Jul 2020 16:58:07 -0400
 Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 06UKvuMh024610
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2020 13:58:02 -0700
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 06UKvuMt024610
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2020 13:58:06 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=HYsb4P4MjGuYj+mkHp/3CnVkBG0HrlF35oWt1RHU0iU=;
- b=O3KLyecKS30mM1KUfs2HB/1oxGIyFpNhdSiKiN0n+BbHLci2qiwiC6xXHdEI7cTXxnZD
- kZk1lMg/Vfzwu/9f4VSuTG+ww4mLU2VRiiaRZIJSgWLU6MqvK0HLZ48cbi7rZOpg8Nj0
- yGnOEaJfrGWQcZnq8yIpVdkxyEORFl0Wiug= 
+ bh=Z7Ovrr9+B9Gghgm1i4MLXLvu/1OEbG1szZX1RenZBB8=;
+ b=Uilg/x6jqgyqBOY/1/oTUK9ZtLs0HyuBdEowyeSzmBqk6TQcWMVhAWV9Z/hRoEk/8KwH
+ 5MdF22NQOMVuJny3zS8WrKQGD/4I5wobxkhXiDi6sy2vG5lIs/77QT2fwebNGgikeHhm
+ HvxG62xw8xqmrj/X43r3OgNlR8VcxIUuYqM= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 32m0b1hy7t-12
+        by m0001303.ppops.net with ESMTP id 32m0b1hy7t-19
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2020 13:58:02 -0700
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:208::11) by
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2020 13:58:06 -0700
+Received: from intmgw005.03.ash8.facebook.com (2620:10d:c085:208::11) by
  mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 30 Jul 2020 13:57:24 -0700
+ 15.1.1979.3; Thu, 30 Jul 2020 13:57:58 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id C0AD12943DF6; Thu, 30 Jul 2020 13:57:23 -0700 (PDT)
+        id 0D53C2943DF6; Thu, 30 Jul 2020 13:57:55 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -53,9 +53,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Neal Cardwell <ncardwell@google.com>, <netdev@vger.kernel.org>,
         Yuchung Cheng <ycheng@google.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v3 bpf-next 4/9] tcp: Add unknown_opt arg to tcp_parse_options
-Date:   Thu, 30 Jul 2020 13:57:23 -0700
-Message-ID: <20200730205723.3353838-1-kafai@fb.com>
+Subject: [PATCH v3 bpf-next 9/9] tcp: bpf: Optionally store mac header in TCP_SAVE_SYN
+Date:   Thu, 30 Jul 2020 13:57:54 -0700
+Message-ID: <20200730205754.3355160-1-kafai@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200730205657.3351905-1-kafai@fb.com>
 References: <20200730205657.3351905-1-kafai@fb.com>
@@ -66,8 +66,8 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-30_15:2020-07-30,2020-07-30 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- suspectscore=13 adultscore=0 clxscore=1015 priorityscore=1501
- mlxlogscore=999 malwarescore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
+ suspectscore=3 adultscore=0 clxscore=1015 priorityscore=1501
+ mlxlogscore=930 malwarescore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
  bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2007300148
 X-FB-Internal: deliver
@@ -76,247 +76,229 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In the latter patch, the bpf prog only wants to be called to handle
-a header option if that particular header option cannot be handled by
-the kernel.  This unknown option could be written by the peer's bpf-prog.
-It could also be a new standard option that the running kernel does not
-support it while a bpf-prog can handle it.
+This patch is adapted from Eric's patch in an earlier discussion [1].
 
-In a latter patch, the bpf prog will be called from tcp_validate_incoming=
-()
-if there is unknown option and a flag is set in tp->bpf_sock_ops_cb_flags=
-.
+The TCP_SAVE_SYN currently only stores the network header and
+tcp header.  This patch allows it to optionally store
+the mac header also if the setsockopt's optval is 2.
 
-Instead of using skb->cb[] in an earlier attempt, this patch
-adds an optional arg "bool *unknown_opt" to tcp_parse_options().
-The bool will be set to true if it has encountered an option
-that the kernel does not recognize.
+It requires one more bit for the "save_syn" bit field in tcp_sock.
+This patch achieves this by moving the syn_smc bit next to the is_mptcp.
+The syn_smc is currently used with the TCP experimental option.  Since
+syn_smc is only used when CONFIG_SMC is enabled, this patch also puts
+the "IS_ENABLED(CONFIG_SMC)" around it like the is_mptcp did
+with "IS_ENABLED(CONFIG_MPTCP)".
 
+The mac_hdrlen is also stored in the "struct saved_syn"
+to allow a quick offset from the bpf prog if it chooses to start
+getting from the network header or the tcp header.
+
+[1]: https://lore.kernel.org/netdev/CANn89iLJNWh6bkH7DNhy_kmcAexuUCccqERq=
+e7z2QsvPhGrYPQ@mail.gmail.com/
+
+Suggested-by: Eric Dumazet <edumazet@google.com>
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- drivers/infiniband/hw/cxgb4/cm.c |  2 +-
- include/net/tcp.h                |  3 ++-
- net/ipv4/syncookies.c            |  2 +-
- net/ipv4/tcp_input.c             | 40 +++++++++++++++++++++-----------
- net/ipv4/tcp_minisocks.c         |  4 ++--
- net/ipv6/syncookies.c            |  2 +-
- 6 files changed, 34 insertions(+), 19 deletions(-)
+ include/linux/tcp.h            | 13 ++++++++-----
+ include/net/request_sock.h     |  1 +
+ include/uapi/linux/bpf.h       |  1 +
+ net/core/filter.c              | 27 ++++++++++++++++++++++-----
+ net/ipv4/tcp.c                 |  3 ++-
+ net/ipv4/tcp_input.c           | 14 +++++++++++++-
+ tools/include/uapi/linux/bpf.h |  1 +
+ 7 files changed, 48 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/infiniband/hw/cxgb4/cm.c b/drivers/infiniband/hw/cxg=
-b4/cm.c
-index 30e08bcc9afb..dedca6576bb9 100644
---- a/drivers/infiniband/hw/cxgb4/cm.c
-+++ b/drivers/infiniband/hw/cxgb4/cm.c
-@@ -3949,7 +3949,7 @@ static void build_cpl_pass_accept_req(struct sk_buf=
-f *skb, int stid , u8 tos)
- 	 */
- 	memset(&tmp_opt, 0, sizeof(tmp_opt));
- 	tcp_clear_options(&tmp_opt);
--	tcp_parse_options(&init_net, skb, &tmp_opt, 0, NULL);
-+	tcp_parse_options(&init_net, skb, &tmp_opt, 0, NULL, NULL);
+diff --git a/include/linux/tcp.h b/include/linux/tcp.h
+index 5528912dc468..7d448800c9f4 100644
+--- a/include/linux/tcp.h
++++ b/include/linux/tcp.h
+@@ -237,14 +237,13 @@ struct tcp_sock {
+ 		repair      : 1,
+ 		frto        : 1;/* F-RTO (RFC5682) activated in CA_Loss */
+ 	u8	repair_queue;
+-	u8	syn_data:1,	/* SYN includes data */
++	u8	save_syn:2,	/* Save headers of SYN packet */
++		syn_data:1,	/* SYN includes data */
+ 		syn_fastopen:1,	/* SYN includes Fast Open option */
+ 		syn_fastopen_exp:1,/* SYN includes Fast Open exp. option */
+ 		syn_fastopen_ch:1, /* Active TFO re-enabling probe */
+ 		syn_data_acked:1,/* data in SYN is acked by SYN-ACK */
+-		save_syn:1,	/* Save headers of SYN packet */
+-		is_cwnd_limited:1,/* forward progress limited by snd_cwnd? */
+-		syn_smc:1;	/* SYN includes SMC */
++		is_cwnd_limited:1;/* forward progress limited by snd_cwnd? */
+ 	u32	tlp_high_seq;	/* snd_nxt at the time of TLP */
 =20
- 	req =3D __skb_push(skb, sizeof(*req));
- 	memset(req, 0, sizeof(*req));
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 895e7aabf136..d49d8f1c961a 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -413,7 +413,8 @@ int tcp_mmap(struct file *file, struct socket *sock,
+ 	u32	tcp_tx_delay;	/* delay (in usec) added to TX packets */
+@@ -391,6 +390,9 @@ struct tcp_sock {
+ #if IS_ENABLED(CONFIG_MPTCP)
+ 	bool	is_mptcp;
  #endif
- void tcp_parse_options(const struct net *net, const struct sk_buff *skb,
- 		       struct tcp_options_received *opt_rx,
--		       int estab, struct tcp_fastopen_cookie *foc);
-+		       int estab, struct tcp_fastopen_cookie *foc,
-+		       bool *unknown_opt);
- const u8 *tcp_parse_md5sig_option(const struct tcphdr *th);
++#if IS_ENABLED(CONFIG_SMC)
++	bool	syn_smc;	/* SYN includes SMC */
++#endif
 =20
- /*
-diff --git a/net/ipv4/syncookies.c b/net/ipv4/syncookies.c
-index 9a4f6b16c9bc..fd39aed4fcd3 100644
---- a/net/ipv4/syncookies.c
-+++ b/net/ipv4/syncookies.c
-@@ -313,7 +313,7 @@ struct sock *cookie_v4_check(struct sock *sk, struct =
-sk_buff *skb)
+ #ifdef CONFIG_TCP_MD5SIG
+ /* TCP AF-Specific parts; only used by MD5 Signature support so far */
+@@ -486,7 +488,8 @@ static inline void tcp_saved_syn_free(struct tcp_sock=
+ *tp)
 =20
- 	/* check for timestamp cookie support */
- 	memset(&tcp_opt, 0, sizeof(tcp_opt));
--	tcp_parse_options(sock_net(sk), skb, &tcp_opt, 0, NULL);
-+	tcp_parse_options(sock_net(sk), skb, &tcp_opt, 0, NULL, NULL);
+ static inline u32 tcp_saved_syn_len(const struct saved_syn *saved_syn)
+ {
+-	return saved_syn->network_hdrlen + saved_syn->tcp_hdrlen;
++	return saved_syn->mac_hdrlen + saved_syn->network_hdrlen +
++		saved_syn->tcp_hdrlen;
+ }
 =20
- 	if (tcp_opt.saw_tstamp && tcp_opt.rcv_tsecr) {
- 		tsoff =3D secure_tcp_ts_off(sock_net(sk),
+ struct sk_buff *tcp_get_timestamping_opt_stats(const struct sock *sk);
+diff --git a/include/net/request_sock.h b/include/net/request_sock.h
+index b1b101814ecb..8c99af5ea891 100644
+--- a/include/net/request_sock.h
++++ b/include/net/request_sock.h
+@@ -42,6 +42,7 @@ struct request_sock_ops {
+ int inet_rtx_syn_ack(const struct sock *parent, struct request_sock *req=
+);
+=20
+ struct saved_syn {
++	u32 mac_hdrlen;
+ 	u32 network_hdrlen;
+ 	u32 tcp_hdrlen;
+ 	u8 data[];
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index c6162ee573e9..68e71c948dc3 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4455,6 +4455,7 @@ enum {
+ 	 */
+ 	TCP_BPF_SYN		=3D 1005, /* Copy the TCP header */
+ 	TCP_BPF_SYN_IP		=3D 1006, /* Copy the IP[46] and TCP header */
++	TCP_BPF_SYN_MAC         =3D 1007, /* Copy the MAC, IP[46], and TCP head=
+er */
+ };
+=20
+ enum {
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 607f87901122..477192550838 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4682,11 +4682,16 @@ static int bpf_sock_ops_get_syn(struct bpf_sock_o=
+ps_kern *bpf_sock,
+ 		if (optname =3D=3D TCP_BPF_SYN) {
+ 			hdr_start =3D syn_skb->data;
+ 			ret =3D tcp_hdrlen(syn_skb);
+-		} else {
+-			/* optname =3D=3D TCP_BPF_SYN_IP */
++		} else if (optname =3D=3D TCP_BPF_SYN_IP) {
+ 			hdr_start =3D skb_network_header(syn_skb);
+ 			ret =3D skb_network_header_len(syn_skb) +
+ 				tcp_hdrlen(syn_skb);
++		} else {
++			/* optname =3D=3D TCP_BPF_SYN_MAC */
++			hdr_start =3D skb_mac_header(syn_skb);
++			ret =3D skb_mac_header_len(syn_skb) +
++				skb_network_header_len(syn_skb) +
++				tcp_hdrlen(syn_skb);
+ 		}
+ 	} else {
+ 		struct sock *sk =3D bpf_sock->sk;
+@@ -4706,12 +4711,24 @@ static int bpf_sock_ops_get_syn(struct bpf_sock_o=
+ps_kern *bpf_sock,
+=20
+ 		if (optname =3D=3D TCP_BPF_SYN) {
+ 			hdr_start =3D saved_syn->data +
++				saved_syn->mac_hdrlen +
+ 				saved_syn->network_hdrlen;
+ 			ret =3D saved_syn->tcp_hdrlen;
++		} else if (optname =3D=3D TCP_BPF_SYN_IP) {
++			hdr_start =3D saved_syn->data +
++				saved_syn->mac_hdrlen;
++			ret =3D saved_syn->network_hdrlen +
++				saved_syn->tcp_hdrlen;
+ 		} else {
+-			/* optname =3D=3D TCP_BPF_SYN_IP */
++			/* optname =3D=3D TCP_BPF_SYN_MAC */
++
++			/* TCP_SAVE_SYN may not have saved the mac hdr */
++			if (!saved_syn->mac_hdrlen)
++				return -ENOENT;
++
+ 			hdr_start =3D saved_syn->data;
+-			ret =3D saved_syn->network_hdrlen +
++			ret =3D saved_syn->mac_hdrlen +
++				saved_syn->network_hdrlen +
+ 				saved_syn->tcp_hdrlen;
+ 		}
+ 	}
+@@ -4724,7 +4741,7 @@ BPF_CALL_5(bpf_sock_ops_getsockopt, struct bpf_sock=
+_ops_kern *, bpf_sock,
+ 	   int, level, int, optname, char *, optval, int, optlen)
+ {
+ 	if (IS_ENABLED(CONFIG_INET) && level =3D=3D SOL_TCP &&
+-	    optname >=3D TCP_BPF_SYN && optname <=3D TCP_BPF_SYN_IP) {
++	    optname >=3D TCP_BPF_SYN && optname <=3D TCP_BPF_SYN_MAC) {
+ 		int ret, copy_len =3D 0;
+ 		const u8 *start;
+=20
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 98606f94b01b..b3d275624658 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -3210,7 +3210,8 @@ static int do_tcp_setsockopt(struct sock *sk, int l=
+evel, int optname,
+ 		break;
+=20
+ 	case TCP_SAVE_SYN:
+-		if (val < 0 || val > 1)
++		/* 0: disable, 1: enable, 2: start from ether_header */
++		if (val < 0 || val > 2)
+ 			err =3D -EINVAL;
+ 		else
+ 			tp->save_syn =3D val;
 diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-index 6c38ca9de17e..d9c878001be2 100644
+index 43520dcaafe3..79ecd61ff613 100644
 --- a/net/ipv4/tcp_input.c
 +++ b/net/ipv4/tcp_input.c
-@@ -3799,7 +3799,7 @@ static void tcp_parse_fastopen_option(int len, cons=
-t unsigned char *cookie,
- 	foc->exp =3D exp_opt;
- }
-=20
--static void smc_parse_options(const struct tcphdr *th,
-+static bool smc_parse_options(const struct tcphdr *th,
- 			      struct tcp_options_received *opt_rx,
- 			      const unsigned char *ptr,
- 			      int opsize)
-@@ -3808,10 +3808,13 @@ static void smc_parse_options(const struct tcphdr=
- *th,
- 	if (static_branch_unlikely(&tcp_have_smc)) {
- 		if (th->syn && !(opsize & 1) &&
- 		    opsize >=3D TCPOLEN_EXP_SMC_BASE &&
--		    get_unaligned_be32(ptr) =3D=3D TCPOPT_SMC_MAGIC)
-+		    get_unaligned_be32(ptr) =3D=3D TCPOPT_SMC_MAGIC) {
- 			opt_rx->smc_ok =3D 1;
-+			return true;
+@@ -6686,12 +6686,24 @@ static void tcp_reqsk_record_syn(const struct soc=
+k *sk,
+ 	if (tcp_sk(sk)->save_syn) {
+ 		u32 len =3D skb_network_header_len(skb) + tcp_hdrlen(skb);
+ 		struct saved_syn *saved_syn;
++		u32 mac_hdrlen;
++		void *base;
++
++		if (tcp_sk(sk)->save_syn =3D=3D 2) {  /* Save full header. */
++			base =3D skb_mac_header(skb);
++			mac_hdrlen =3D skb_mac_header_len(skb);
++			len +=3D mac_hdrlen;
++		} else {
++			base =3D skb_network_header(skb);
++			mac_hdrlen =3D 0;
 +		}
+=20
+ 		saved_syn =3D kmalloc(len + sizeof(*saved_syn), GFP_ATOMIC);
+ 		if (saved_syn) {
++			saved_syn->mac_hdrlen =3D mac_hdrlen;
+ 			saved_syn->network_hdrlen =3D skb_network_header_len(skb);
+ 			saved_syn->tcp_hdrlen =3D tcp_hdrlen(skb);
+-			memcpy(saved_syn->data, skb_network_header(skb), len);
++			memcpy(saved_syn->data, base, len);
+ 			req->saved_syn =3D saved_syn;
+ 		}
  	}
- #endif
-+	return false;
- }
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index c6162ee573e9..68e71c948dc3 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -4455,6 +4455,7 @@ enum {
+ 	 */
+ 	TCP_BPF_SYN		=3D 1005, /* Copy the TCP header */
+ 	TCP_BPF_SYN_IP		=3D 1006, /* Copy the IP[46] and TCP header */
++	TCP_BPF_SYN_MAC         =3D 1007, /* Copy the MAC, IP[46], and TCP head=
+er */
+ };
 =20
- /* Try to parse the MSS option from the TCP header. Return 0 on failure,=
- clamped
-@@ -3864,7 +3867,8 @@ static u16 tcp_parse_mss_option(const struct tcphdr=
- *th, u16 user_mss)
- void tcp_parse_options(const struct net *net,
- 		       const struct sk_buff *skb,
- 		       struct tcp_options_received *opt_rx, int estab,
--		       struct tcp_fastopen_cookie *foc)
-+		       struct tcp_fastopen_cookie *foc,
-+		       bool *unknown_opt)
- {
- 	const unsigned char *ptr;
- 	const struct tcphdr *th =3D tcp_hdr(skb);
-@@ -3962,15 +3966,23 @@ void tcp_parse_options(const struct net *net,
- 				 */
- 				if (opsize >=3D TCPOLEN_EXP_FASTOPEN_BASE &&
- 				    get_unaligned_be16(ptr) =3D=3D
--				    TCPOPT_FASTOPEN_MAGIC)
-+				    TCPOPT_FASTOPEN_MAGIC) {
- 					tcp_parse_fastopen_option(opsize -
- 						TCPOLEN_EXP_FASTOPEN_BASE,
- 						ptr + 2, th->syn, foc, true);
--				else
--					smc_parse_options(th, opt_rx, ptr,
--							  opsize);
-+					break;
-+				}
-+
-+				if (smc_parse_options(th, opt_rx, ptr, opsize))
-+					break;
-+
-+				if (unknown_opt)
-+					*unknown_opt =3D true;
- 				break;
-=20
-+			default:
-+				if (unknown_opt)
-+					*unknown_opt =3D true;
- 			}
- 			ptr +=3D opsize-2;
- 			length -=3D opsize;
-@@ -4003,7 +4015,8 @@ static bool tcp_parse_aligned_timestamp(struct tcp_=
-sock *tp, const struct tcphdr
-  */
- static bool tcp_fast_parse_options(const struct net *net,
- 				   const struct sk_buff *skb,
--				   const struct tcphdr *th, struct tcp_sock *tp)
-+				   const struct tcphdr *th, struct tcp_sock *tp,
-+				   bool *unknown_opt)
- {
- 	/* In the spirit of fast parsing, compare doff directly to constant
- 	 * values.  Because equality is used, short doff can be ignored here.
-@@ -4017,7 +4030,7 @@ static bool tcp_fast_parse_options(const struct net=
- *net,
- 			return true;
- 	}
-=20
--	tcp_parse_options(net, skb, &tp->rx_opt, 1, NULL);
-+	tcp_parse_options(net, skb, &tp->rx_opt, 1, NULL, unknown_opt);
- 	if (tp->rx_opt.saw_tstamp && tp->rx_opt.rcv_tsecr)
- 		tp->rx_opt.rcv_tsecr -=3D tp->tsoffset;
-=20
-@@ -5492,9 +5505,10 @@ static bool tcp_validate_incoming(struct sock *sk,=
- struct sk_buff *skb,
- {
- 	struct tcp_sock *tp =3D tcp_sk(sk);
- 	bool rst_seq_match =3D false;
-+	bool unknown_opt =3D false;
-=20
- 	/* RFC1323: H1. Apply PAWS check first. */
--	if (tcp_fast_parse_options(sock_net(sk), skb, th, tp) &&
-+	if (tcp_fast_parse_options(sock_net(sk), skb, th, tp, &unknown_opt) &&
- 	    tp->rx_opt.saw_tstamp &&
- 	    tcp_paws_discard(sk, skb)) {
- 		if (!th->rst) {
-@@ -5866,7 +5880,7 @@ static bool tcp_rcv_fastopen_synack(struct sock *sk=
-, struct sk_buff *synack,
- 		/* Get original SYNACK MSS value if user MSS sets mss_clamp */
- 		tcp_clear_options(&opt);
- 		opt.user_mss =3D opt.mss_clamp =3D 0;
--		tcp_parse_options(sock_net(sk), synack, &opt, 0, NULL);
-+		tcp_parse_options(sock_net(sk), synack, &opt, 0, NULL, NULL);
- 		mss =3D opt.mss_clamp;
- 	}
-=20
-@@ -5951,7 +5965,7 @@ static int tcp_rcv_synsent_state_process(struct soc=
-k *sk, struct sk_buff *skb,
- 	int saved_clamp =3D tp->rx_opt.mss_clamp;
- 	bool fastopen_fail;
-=20
--	tcp_parse_options(sock_net(sk), skb, &tp->rx_opt, 0, &foc);
-+	tcp_parse_options(sock_net(sk), skb, &tp->rx_opt, 0, &foc, NULL);
- 	if (tp->rx_opt.saw_tstamp && tp->rx_opt.rcv_tsecr)
- 		tp->rx_opt.rcv_tsecr -=3D tp->tsoffset;
-=20
-@@ -6685,7 +6699,7 @@ int tcp_conn_request(struct request_sock_ops *rsk_o=
-ps,
- 	tmp_opt.mss_clamp =3D af_ops->mss_clamp;
- 	tmp_opt.user_mss  =3D tp->rx_opt.user_mss;
- 	tcp_parse_options(sock_net(sk), skb, &tmp_opt, 0,
--			  want_cookie ? NULL : &foc);
-+			  want_cookie ? NULL : &foc, NULL);
-=20
- 	if (want_cookie && !tmp_opt.saw_tstamp)
- 		tcp_clear_options(&tmp_opt);
-diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
-index 495dda2449fe..61f9194802c4 100644
---- a/net/ipv4/tcp_minisocks.c
-+++ b/net/ipv4/tcp_minisocks.c
-@@ -98,7 +98,7 @@ tcp_timewait_state_process(struct inet_timewait_sock *t=
-w, struct sk_buff *skb,
-=20
- 	tmp_opt.saw_tstamp =3D 0;
- 	if (th->doff > (sizeof(*th) >> 2) && tcptw->tw_ts_recent_stamp) {
--		tcp_parse_options(twsk_net(tw), skb, &tmp_opt, 0, NULL);
-+		tcp_parse_options(twsk_net(tw), skb, &tmp_opt, 0, NULL, NULL);
-=20
- 		if (tmp_opt.saw_tstamp) {
- 			if (tmp_opt.rcv_tsecr)
-@@ -580,7 +580,7 @@ struct sock *tcp_check_req(struct sock *sk, struct sk=
-_buff *skb,
-=20
- 	tmp_opt.saw_tstamp =3D 0;
- 	if (th->doff > (sizeof(struct tcphdr)>>2)) {
--		tcp_parse_options(sock_net(sk), skb, &tmp_opt, 0, NULL);
-+		tcp_parse_options(sock_net(sk), skb, &tmp_opt, 0, NULL, NULL);
-=20
- 		if (tmp_opt.saw_tstamp) {
- 			tmp_opt.ts_recent =3D req->ts_recent;
-diff --git a/net/ipv6/syncookies.c b/net/ipv6/syncookies.c
-index 13235a012388..f22961a73c2b 100644
---- a/net/ipv6/syncookies.c
-+++ b/net/ipv6/syncookies.c
-@@ -157,7 +157,7 @@ struct sock *cookie_v6_check(struct sock *sk, struct =
-sk_buff *skb)
-=20
- 	/* check for timestamp cookie support */
- 	memset(&tcp_opt, 0, sizeof(tcp_opt));
--	tcp_parse_options(sock_net(sk), skb, &tcp_opt, 0, NULL);
-+	tcp_parse_options(sock_net(sk), skb, &tcp_opt, 0, NULL, NULL);
-=20
- 	if (tcp_opt.saw_tstamp && tcp_opt.rcv_tsecr) {
- 		tsoff =3D secure_tcpv6_ts_off(sock_net(sk),
+ enum {
 --=20
 2.24.1
 
