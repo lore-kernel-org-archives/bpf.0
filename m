@@ -2,121 +2,116 @@ Return-Path: <SRS0=uBQJ=BJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 095CBC433E0
-	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 21:16:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E28CBC433E0
+	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 21:23:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D1197207F5
-	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 21:16:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA1BC20829
+	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 21:23:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cn461Dyo"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="UyQYWYtD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728171AbgG3VQW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Jul 2020 17:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726978AbgG3VQV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 30 Jul 2020 17:16:21 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6039C061574;
-        Thu, 30 Jul 2020 14:16:21 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id a34so10156151ybj.9;
-        Thu, 30 Jul 2020 14:16:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5NaovValSYr4yuny0MmOs2lawjRMcuEoZkrb5hbJG6U=;
-        b=cn461Dyoi/FtS3cTcEnVOK+iADAi1AfKNqHeQW6g9IpuK7n9mcfP1z912qf8c4FU0e
-         FJOGbiXD0xo32ZldXzVzsNXM2seTTWYtQTYdx3JvfWE9iAHznG6uCnDKOO/b+Q+/E+2m
-         05TTFFnRybxuiQcnEMaJOwp/DpVta+Qh8ewkg0e4cHuxt/HBcGcDnInsLAJ279rE124P
-         Wlpb5zqgFOB7EbJaQ9VhSqNOXDH/7fQIXVK5AtdDlU/FyUt+SnL15xlMvcIFjPlW4DWI
-         RbcCF+wi0p/92ziyFk6myhq47W24BEHcMm5Gxj2X8N3bYieOoZA1k9qEt93YGuZRbEzX
-         lOtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5NaovValSYr4yuny0MmOs2lawjRMcuEoZkrb5hbJG6U=;
-        b=rCh7l+BXoj+39rEPrW9HArvjrwQMU5Z6Ym2HUDNe8uve6uLct0dVXhUtugHuIqXJSo
-         eW20mJ5GWcKkzAir9ykwk9uwt/ePXGTTcRcU1aAETz/RY9AoQ/pndrqP1sFU5gLWXAJe
-         GP/PZUVNqPUl/u34gW4CNopkju7awPg2Db8NEMxaBQ01dQ6hgM97MMr/CPkKePx31C/S
-         ysVC3JktHpG5HrUzUTthqQ/Trs2l3QWAfYr36CNr+zCL0GEgj14DrBwx7yp0dJ0T/yAB
-         fh5/Hse8aV57Ohvj/SIqDDXnxNTC28XC7+hGI3zN5ruW77OFXmCavGQMjbok6M1YP5yo
-         OVcQ==
-X-Gm-Message-State: AOAM531SJ0+lmBtWAH2RpAtE5YMklzMXii2uttkQTK/Iv4gtGkZ0x3nQ
-        2Eoh63FuK7p79tzjnocNUY5JnXGQWYzGa/K1R3U=
-X-Google-Smtp-Source: ABdhPJy8z7GCu2Ce0xY7Vr+4b/zzcclnS0YqoyEkq2vpPyUZytHokhSXJSLMWaw7mDyrKpdZT/VKOAT7WNZaX2FxUkQ=
-X-Received: by 2002:a25:d84a:: with SMTP id p71mr1351602ybg.347.1596143781019;
- Thu, 30 Jul 2020 14:16:21 -0700 (PDT)
+        id S1730645AbgG3VXR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Jul 2020 17:23:17 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:11560 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730551AbgG3VXP (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 30 Jul 2020 17:23:15 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06ULEqWN024305
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2020 14:23:15 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=++GOQs6OyBg0NRpfI9Y2G3lb6tt1keWKXcgXu1XREmo=;
+ b=UyQYWYtD8I1Gq9MEbFHDXc3qiUaNabI+bN4UNQEFJueLaOxPH335/acYtqI1dDSN+Y+S
+ kornGtEWO3vyoz9XPQ3XeLIIlvcKi7HDzuCLKtRK6ymFZeBRkFskw7m472VqtWWQTs4Z
+ QMJyiE7YkRYQgWbI69+1kcyFqhFHXGfSBM8= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 32m01cj9v4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2020 14:23:15 -0700
+Received: from intmgw002.41.prn1.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 30 Jul 2020 14:23:14 -0700
+Received: by devvm1096.prn0.facebook.com (Postfix, from userid 111017)
+        id 9EA9020B00A0; Thu, 30 Jul 2020 14:23:12 -0700 (PDT)
+Smtp-Origin-Hostprefix: devvm
+From:   Roman Gushchin <guro@fb.com>
+Smtp-Origin-Hostname: devvm1096.prn0.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        <linux-kernel@vger.kernel.org>, Roman Gushchin <guro@fb.com>,
+        Song Liu <songliubraving@fb.com>
+Smtp-Origin-Cluster: prn0c01
+Subject: [PATCH bpf-next v3 03/29] bpf: refine memcg-based memory accounting for arraymap maps
+Date:   Thu, 30 Jul 2020 14:22:44 -0700
+Message-ID: <20200730212310.2609108-4-guro@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200730212310.2609108-1-guro@fb.com>
+References: <20200730212310.2609108-1-guro@fb.com>
 MIME-Version: 1.0
-References: <20200729230520.693207-1-andriin@fb.com> <20200729230520.693207-6-andriin@fb.com>
- <770B112E-DBDF-4537-8614-765D19EDF641@fb.com>
-In-Reply-To: <770B112E-DBDF-4537-8614-765D19EDF641@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 30 Jul 2020 14:16:09 -0700
-Message-ID: <CAEf4BzYOmtjmYRPjA_Crbt8TjQZpTG12YZSp1xTrr4d4dADcNA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 5/5] tools/bpftool: add documentation and
- bash-completion for `link detach`
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-30_15:2020-07-30,2020-07-30 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ adultscore=0 lowpriorityscore=0 suspectscore=38 mlxlogscore=913
+ phishscore=0 clxscore=1015 impostorscore=0 bulkscore=0 mlxscore=0
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2007300150
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Jul 30, 2020 at 2:13 PM Song Liu <songliubraving@fb.com> wrote:
->
->
->
-> > On Jul 29, 2020, at 4:05 PM, Andrii Nakryiko <andriin@fb.com> wrote:
-> >
-> > Add info on link detach sub-command to man page. Add detach to bash-completion
-> > as well.
-> >
-> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
->
-> Acked-by: Song Liu <songliubraving@fb.com>
->
-> With one nitpick below.
->
-> > ---
->
-> [...]
->
-> > @@ -49,6 +50,13 @@ DESCRIPTION
-> >                 contain a dot character ('.'), which is reserved for future
-> >                 extensions of *bpffs*.
-> >
-> > +     **bpftool link detach** *LINK*
-> > +               Force-detach link *LINK*. BPF link and its underlying BPF
-> > +               program will stay valid, but they will be detached from the
-> > +               respective BPF hook and BPF link will transition into
-> > +               a defunct state until last open file descriptor for that
->
-> Shall we say "a defunct state when the last open file descriptor for that..."?
+Include percpu arrays and auxiliary data into the memcg-based memory
+accounting.
 
+Signed-off-by: Roman Gushchin <guro@fb.com>
+Acked-by: Song Liu <songliubraving@fb.com>
+---
+ kernel/bpf/arraymap.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-No-no, it is in defunc state between LINK_DETACH and last FD being
-closed. Once last FD is closed, BPF link will get destructed and freed
-in kernel. So I think until is more precise here?
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 8ff419b632a6..9597fecff8da 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -28,12 +28,12 @@ static void bpf_array_free_percpu(struct bpf_array *a=
+rray)
+=20
+ static int bpf_array_alloc_percpu(struct bpf_array *array)
+ {
++	const gfp_t gfp =3D GFP_USER | __GFP_NOWARN | __GFP_ACCOUNT;
+ 	void __percpu *ptr;
+ 	int i;
+=20
+ 	for (i =3D 0; i < array->map.max_entries; i++) {
+-		ptr =3D __alloc_percpu_gfp(array->elem_size, 8,
+-					 GFP_USER | __GFP_NOWARN);
++		ptr =3D __alloc_percpu_gfp(array->elem_size, 8, gfp);
+ 		if (!ptr) {
+ 			bpf_array_free_percpu(array);
+ 			return -ENOMEM;
+@@ -969,7 +969,7 @@ static struct bpf_map *prog_array_map_alloc(union bpf=
+_attr *attr)
+ 	struct bpf_array_aux *aux;
+ 	struct bpf_map *map;
+=20
+-	aux =3D kzalloc(sizeof(*aux), GFP_KERNEL);
++	aux =3D kzalloc(sizeof(*aux), GFP_KERNEL_ACCOUNT);
+ 	if (!aux)
+ 		return ERR_PTR(-ENOMEM);
+=20
+--=20
+2.26.2
 
->
->
-> > +               link is closed.
-> > +
-> >       **bpftool link help**
-> >                 Print short help message.
-> >
->
-> [...]
