@@ -5,42 +5,43 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BF5AEC433E0
-	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 21:23:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1724FC433E0
+	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 21:23:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9AC5920829
-	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 21:23:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E782620829
+	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 21:23:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="kq9PXx8G"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="h+l5H8In"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730793AbgG3VXi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Jul 2020 17:23:38 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:18256 "EHLO
+        id S1730777AbgG3VXn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Jul 2020 17:23:43 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:13680 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730762AbgG3VX2 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 30 Jul 2020 17:23:28 -0400
+        by vger.kernel.org with ESMTP id S1730759AbgG3VX1 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 30 Jul 2020 17:23:27 -0400
 Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06ULEn27026364
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2020 14:23:27 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06ULEn25026364
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2020 14:23:26 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=9XrjEscWFD/xk5BNHsUOFgOBvFfD2qQEvoSpZ+fJsM4=;
- b=kq9PXx8GgfyFa7FrfZ36eZ/9NGAWr7pfXrf2Ey34KTk/70W0c0200pFGPS1Q4gVJembD
- U/1AP1gBIqfazLbxgVHlSH06rSU1aRQb0LVilCqcMOdu/sESLGui3rSD76gmhVgQAAcn
- VsJXPqPDI4REvDlO1V1i3Zyg5yAvWWKbBww= 
+ bh=2NLTNKGQaChctmMgNrDMQqfh9Vx5wEDOddaY8U8W8T4=;
+ b=h+l5H8Inyns8HN2aOJqITVC5Rivxg81VClOThhBclcLa83FE5RKZnoGOTAA2iYTuE9iO
+ mtSCBnGDqvy39sOB+lXRJedplWVyAifWcVFdRg0P0/XSOyhWHZrItvOXt5KUUCM1kjQO
+ Dh+bMa4tvyAq1J0wOJiUbZnSQ9oXYf9/iAo= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 32jp0uvkb7-14
+        by mx0a-00082601.pphosted.com with ESMTP id 32jp0uvkb7-12
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2020 14:23:27 -0700
-Received: from intmgw001.06.prn3.facebook.com (2620:10d:c085:208::11) by
+        for <bpf@vger.kernel.org>; Thu, 30 Jul 2020 14:23:26 -0700
+Received: from intmgw002.06.prn3.facebook.com (2620:10d:c085:208::11) by
  mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 30 Jul 2020 14:23:19 -0700
+ 15.1.1979.3; Thu, 30 Jul 2020 14:23:18 -0700
 Received: by devvm1096.prn0.facebook.com (Postfix, from userid 111017)
-        id B689220B00AA; Thu, 30 Jul 2020 14:23:12 -0700 (PDT)
+        id EC03620B00BE; Thu, 30 Jul 2020 14:23:12 -0700 (PDT)
 Smtp-Origin-Hostprefix: devvm
 From:   Roman Gushchin <guro@fb.com>
 Smtp-Origin-Hostname: devvm1096.prn0.facebook.com
@@ -50,9 +51,9 @@ CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         <linux-kernel@vger.kernel.org>, Roman Gushchin <guro@fb.com>,
         Song Liu <songliubraving@fb.com>
 Smtp-Origin-Cluster: prn0c01
-Subject: [PATCH bpf-next v3 08/29] bpf: memcg-based memory accounting for lpm_trie maps
-Date:   Thu, 30 Jul 2020 14:22:49 -0700
-Message-ID: <20200730212310.2609108-9-guro@fb.com>
+Subject: [PATCH bpf-next v3 17/29] bpf: eliminate rlimit-based memory accounting for devmap maps
+Date:   Thu, 30 Jul 2020 14:22:58 -0700
+Message-ID: <20200730212310.2609108-18-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200730212310.2609108-1-guro@fb.com>
 References: <20200730212310.2609108-1-guro@fb.com>
@@ -63,8 +64,8 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-07-30_15:2020-07-30,2020-07-30 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- mlxscore=0 phishscore=0 priorityscore=1501 suspectscore=13 malwarescore=0
- mlxlogscore=784 bulkscore=0 adultscore=0 impostorscore=0 spamscore=0
+ mlxscore=0 phishscore=0 priorityscore=1501 suspectscore=38 malwarescore=0
+ mlxlogscore=973 bulkscore=0 adultscore=0 impostorscore=0 spamscore=0
  clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2007300150
 X-FB-Internal: deliver
@@ -73,40 +74,71 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Include lpm trie and lpm trie node objects into the memcg-based memory
-accounting.
+Do not use rlimit-based memory accounting for devmap maps.
+It has been replaced with the memcg-based memory accounting.
 
 Signed-off-by: Roman Gushchin <guro@fb.com>
 Acked-by: Song Liu <songliubraving@fb.com>
 ---
- kernel/bpf/lpm_trie.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/bpf/devmap.c | 18 ++----------------
+ 1 file changed, 2 insertions(+), 16 deletions(-)
 
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 44474bf3ab7a..d85e0fc2cafc 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -282,7 +282,7 @@ static struct lpm_trie_node *lpm_trie_node_alloc(cons=
-t struct lpm_trie *trie,
- 	if (value)
- 		size +=3D trie->map.value_size;
+diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+index 05bf93088063..8148c7260a54 100644
+--- a/kernel/bpf/devmap.c
++++ b/kernel/bpf/devmap.c
+@@ -109,8 +109,6 @@ static inline struct hlist_head *dev_map_index_hash(s=
+truct bpf_dtab *dtab,
+ static int dev_map_init_map(struct bpf_dtab *dtab, union bpf_attr *attr)
+ {
+ 	u32 valsize =3D attr->value_size;
+-	u64 cost =3D 0;
+-	int err;
 =20
--	node =3D kmalloc_node(size, GFP_ATOMIC | __GFP_NOWARN,
-+	node =3D kmalloc_node(size, GFP_ATOMIC | __GFP_NOWARN | __GFP_ACCOUNT,
- 			    trie->map.numa_node);
- 	if (!node)
- 		return NULL;
-@@ -557,7 +557,7 @@ static struct bpf_map *trie_alloc(union bpf_attr *att=
-r)
- 	    attr->value_size > LPM_VAL_SIZE_MAX)
- 		return ERR_PTR(-EINVAL);
+ 	/* check sanity of attributes. 2 value sizes supported:
+ 	 * 4 bytes: ifindex
+@@ -135,21 +133,13 @@ static int dev_map_init_map(struct bpf_dtab *dtab, =
+union bpf_attr *attr)
 =20
--	trie =3D kzalloc(sizeof(*trie), GFP_USER | __GFP_NOWARN);
-+	trie =3D kzalloc(sizeof(*trie), GFP_USER | __GFP_NOWARN | __GFP_ACCOUNT=
-);
- 	if (!trie)
- 		return ERR_PTR(-ENOMEM);
+ 		if (!dtab->n_buckets) /* Overflow check */
+ 			return -EINVAL;
+-		cost +=3D (u64) sizeof(struct hlist_head) * dtab->n_buckets;
+-	} else {
+-		cost +=3D (u64) dtab->map.max_entries * sizeof(struct bpf_dtab_netdev =
+*);
+ 	}
 =20
+-	/* if map size is larger than memlock limit, reject it */
+-	err =3D bpf_map_charge_init(&dtab->map.memory, cost);
+-	if (err)
+-		return -EINVAL;
+-
+ 	if (attr->map_type =3D=3D BPF_MAP_TYPE_DEVMAP_HASH) {
+ 		dtab->dev_index_head =3D dev_map_create_hash(dtab->n_buckets,
+ 							   dtab->map.numa_node);
+ 		if (!dtab->dev_index_head)
+-			goto free_charge;
++			return -ENOMEM;
+=20
+ 		spin_lock_init(&dtab->index_lock);
+ 	} else {
+@@ -157,14 +147,10 @@ static int dev_map_init_map(struct bpf_dtab *dtab, =
+union bpf_attr *attr)
+ 						      sizeof(struct bpf_dtab_netdev *),
+ 						      dtab->map.numa_node);
+ 		if (!dtab->netdev_map)
+-			goto free_charge;
++			return -ENOMEM;
+ 	}
+=20
+ 	return 0;
+-
+-free_charge:
+-	bpf_map_charge_finish(&dtab->map.memory);
+-	return -ENOMEM;
+ }
+=20
+ static struct bpf_map *dev_map_alloc(union bpf_attr *attr)
 --=20
 2.26.2
 
