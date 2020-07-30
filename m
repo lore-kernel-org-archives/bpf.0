@@ -2,154 +2,185 @@ Return-Path: <SRS0=uBQJ=BJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACFBEC433DF
-	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 21:26:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5A19C433DF
+	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 21:50:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8292920829
-	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 21:26:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 998A820838
+	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 21:50:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="igYouFMy"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="A+s7doNv";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="a6ScdT+/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730645AbgG3V0c (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Jul 2020 17:26:32 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:15208 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730627AbgG3VXQ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 30 Jul 2020 17:23:16 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06ULGPh6004912
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2020 14:23:16 -0700
+        id S1730607AbgG3Vut (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Jul 2020 17:50:49 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36134 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730552AbgG3Vus (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 30 Jul 2020 17:50:48 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06ULaknV019076;
+        Thu, 30 Jul 2020 14:50:35 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=jvMhr6xjLlXo5Mo32W9tvDfiPRfeAVJSR18fyxbz+Gw=;
- b=igYouFMyjkzAwV7UstGP+H7Y2alihUFzHQmXv5TKA72PkW4Vo7cmQt97IJPDxv0Wq8+/
- OdOIRHsxuX0LKgluDhXBIwyVjuQ0iUOKGxOgUu+nJNIEVOpf8ZzPoCETWlqPA0zmfpz3
- 39zVNq1oSlhlTHgymdOcFujoPlb4ZgYmC6E= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 32m4kxrfu5-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 30 Jul 2020 14:23:15 -0700
-Received: from intmgw002.41.prn1.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=s2lFm7KxwtzE00jQIZqI1nr6j0EdVOgYYBJzoTA+5l8=;
+ b=A+s7doNv3rhBIPbFcax4Qdp3MMkdOtlLBi7lzF1pH+ckyrzR/vgVzKemixL4MLh50pso
+ Mb6P0mkNnSClgm3pS785sDgA22XRF+rwXDNFa5Ku3v8oQvuOK9XjOhfgltB8KqfCW9UB
+ ZlKaHC1iYPb27eH7T4h6NGaSmaP8yAck0Aw= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 32m35f91n7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 30 Jul 2020 14:50:35 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 30 Jul 2020 14:23:15 -0700
-Received: by devvm1096.prn0.facebook.com (Postfix, from userid 111017)
-        id B209520B00A8; Thu, 30 Jul 2020 14:23:12 -0700 (PDT)
-Smtp-Origin-Hostprefix: devvm
-From:   Roman Gushchin <guro@fb.com>
-Smtp-Origin-Hostname: devvm1096.prn0.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <linux-kernel@vger.kernel.org>, Roman Gushchin <guro@fb.com>,
-        Song Liu <songliubraving@fb.com>
-Smtp-Origin-Cluster: prn0c01
-Subject: [PATCH bpf-next v3 07/29] bpf: refine memcg-based memory accounting for hashtab maps
-Date:   Thu, 30 Jul 2020 14:22:48 -0700
-Message-ID: <20200730212310.2609108-8-guro@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200730212310.2609108-1-guro@fb.com>
-References: <20200730212310.2609108-1-guro@fb.com>
-MIME-Version: 1.0
+ 15.1.1979.3; Thu, 30 Jul 2020 14:50:34 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JynoabTVPqwtBfvnVC2jdGq+WXTiCAmao2qjSkfKMadVvs2SsoMoGwhgFFxR889tIl7+PAzUuk/sTIlNRdYpuycroMwQ1NFXh2Ayx8Hi1BkhvoLLCLXhudVWOu1yPHro/5uEe8DE8tHK+pSwUuYJgUbHXko20CtV8SXrkJq82Y9eTOPjdGMc4KF0IjCPvljfdSagzsaJY7RabfT2JaG6lMl8QGUc9N4SbWb790nETfi6KmGKMhnK07ht8ApzAq0Eh6SvXQ7tFOc4YjH5M2im7KN0v3OfshgEtFgaK7DslpiDyJAlfhR+0QmSHucAytzknXF9oNna/jzWjDl0oa/Ong==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s2lFm7KxwtzE00jQIZqI1nr6j0EdVOgYYBJzoTA+5l8=;
+ b=Zq4X6UZabvlHpXmSapWy0InGQLm9AUN0DQz87fkIKP9rAW6OhOjALcM5d/JepVxj+sW8mBKvlGo2MPOghjId4Rbt35JNtsMGR14f5BZe9fWvX/cMBZlchA1HGCgieZU6PKglGNDeDx2GGbjxVre+qqgRBAgvDiPNf0Sw6jRkG6k6JTkt2dSaQ4f5e0VEt5Y0jCvLoL7kapCqc+TQ9s7I2Ym7YU64ywCWQTAGkftzlhp52YkmiQszPyfPLfz9NOxhyfEjmqk1ajTiLJZMXffFU2wKR/A6LCpw0+fx2M5QxEAJtdGz1l6xWsIwGKs+RkReyhODhd6DzubJujJYC5Qrhg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=s2lFm7KxwtzE00jQIZqI1nr6j0EdVOgYYBJzoTA+5l8=;
+ b=a6ScdT+/eG7nsYHohKrKjWZsHal4Ce73hijSa0scwvNXghYcG84WYGIJOR2V/5r5SfefKSfkcemf0+VXAIqI9v4ng88gmQX6wPIGnKoUrbeiFHrbolFS5lbg+tz2XEFOM3oP9srUzi+h83PRpcL6j90mSKbbU2p7vxGmkP667EI=
+Received: from BYAPR15MB2999.namprd15.prod.outlook.com (2603:10b6:a03:fa::12)
+ by BYAPR15MB2776.namprd15.prod.outlook.com (2603:10b6:a03:154::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.24; Thu, 30 Jul
+ 2020 21:50:32 +0000
+Received: from BYAPR15MB2999.namprd15.prod.outlook.com
+ ([fe80::543:b185:ef4a:7e8]) by BYAPR15MB2999.namprd15.prod.outlook.com
+ ([fe80::543:b185:ef4a:7e8%5]) with mapi id 15.20.3239.020; Thu, 30 Jul 2020
+ 21:50:32 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+CC:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        =?iso-8859-1?Q?Toke_H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Subject: Re: [PATCH bpf-next 5/5] tools/bpftool: add documentation and
+ bash-completion for `link detach`
+Thread-Topic: [PATCH bpf-next 5/5] tools/bpftool: add documentation and
+ bash-completion for `link detach`
+Thread-Index: AQHWZfzjf8qCBt0Ndk2N70dqiVdn66kgoKUAgAAAqoCAAAmbgA==
+Date:   Thu, 30 Jul 2020 21:50:32 +0000
+Message-ID: <1BCA833A-4C0C-41BA-8603-E68C41C9FE60@fb.com>
+References: <20200729230520.693207-1-andriin@fb.com>
+ <20200729230520.693207-6-andriin@fb.com>
+ <770B112E-DBDF-4537-8614-765D19EDF641@fb.com>
+ <CAEf4BzYOmtjmYRPjA_Crbt8TjQZpTG12YZSp1xTrr4d4dADcNA@mail.gmail.com>
+In-Reply-To: <CAEf4BzYOmtjmYRPjA_Crbt8TjQZpTG12YZSp1xTrr4d4dADcNA@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3608.80.23.2.2)
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=fb.com;
+x-originating-ip: [2620:10d:c090:400::5:395d]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6aa026fb-6036-4eab-d18e-08d834d29555
+x-ms-traffictypediagnostic: BYAPR15MB2776:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR15MB2776EBE9786335F9F284A6DBB3710@BYAPR15MB2776.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: xYaciAfqBWAi/jLCDTTuLtuHdDpWaXqmPBeAXSp02ipUWfe35IAL8MWJ2D1tlLzLhf9RcFdtaDQsSnx/etLKORJERF/Y665nhAZ8p8Uf0UHos+U+k7MZse2t+v8DKHT9Y38QY+qX1jsuf1/E1QXPj2Pt/rKc5K3FllyR9bB5Rtl1adC29oLLhMxawWR8Trdlb0ok0Ytvt6moGK3xUz1Ih7DvJMNIWkwfHiAD54bbbulU9DJVu/CRoNtiWdBG+eCfZfSa7foA9PYlxgWndbKprkm+koRYnoEpBCf5AAqFMu/uYU33mPs/qB+J0RwQ43FCYsLQJdtpWckwK7fbrUu6L9m1hlnVj76SSC5CvuS6OT1J/qZ78u/tnK7a0pJDQOJm
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB2999.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(39860400002)(396003)(136003)(376002)(366004)(346002)(8936002)(86362001)(2906002)(54906003)(5660300002)(6916009)(83380400001)(36756003)(33656002)(6512007)(53546011)(6506007)(6486002)(478600001)(186003)(8676002)(66946007)(4326008)(2616005)(66556008)(66476007)(71200400001)(316002)(66446008)(76116006)(64756008)(81973001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: BmJgn3gNG4Px+Cng4MLNMrsqU1o1u6fMKFsBMm2am+8W9B+0cW9MeK+FSte3cGEeQg3wjeWPejlk37gWFvXi5Yqc/IpePO95LB3t/uRkk5eA1sKZ51/K59lGgKv3B8qCRi2OeIRCWnIM7wiFhkQim7PTIzqIAbLFSj2CP7nM9pnZszqILB2/M5xUSLXAVfOYh4alri9+psFfU++SiLspATiWiNP8FtVgQzSahk12tdM+A2VQEA9k14jiZgCUxVHxo3zvt6aeBgpZTuQQCJwN6YZZKyI0MNTNtlKS5D8Mb1Eu6GvrPJEzHDDCsk+0ui13V2O9lAJab7l/7vkRjG27JmYVfXxUeX8NDhaWgzWyXs+3+IFxoQA/v0lSjgSxYGi1BckxTeqx4UHYsIaU1QJPQCQUTJzZFwT7ndbii3SbXvJq7orQWoqDnX69UbGNSH5cAuitQ6VEN1dIcM8nB4/Ge1PgABUftLCSZR+J6OjGpxhbAOhbDNJz02HhUsC07R8HEaBhXKNLq5EwTjnJhiOd8g==
+Content-Type: text/plain; charset="iso-8859-1"
+Content-ID: <A307FA6C7C00C14A9FBF68809420CAB8@namprd15.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB2999.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6aa026fb-6036-4eab-d18e-08d834d29555
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jul 2020 21:50:32.4462
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dwlQkXE1YHdPpgAov+MxcF90Utzxim56jZ6E6OwonDlzMmBHJ2B8350emKoGmzHJLyQGOllg+Am/peJLw8tQxg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2776
+X-OriginatorOrg: fb.com
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-07-30_15:2020-07-30,2020-07-30 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- priorityscore=1501 lowpriorityscore=0 suspectscore=38 mlxlogscore=876
- malwarescore=0 phishscore=0 spamscore=0 impostorscore=0 bulkscore=0
- adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2007300150
+ definitions=2020-07-30_18:2020-07-30,2020-07-30 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ spamscore=0 mlxscore=0 bulkscore=0 adultscore=0 mlxlogscore=999
+ impostorscore=0 clxscore=1015 suspectscore=0 phishscore=0
+ lowpriorityscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2007300151
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Include percpu objects and the size of map metadata into the
-accounting.
 
-Signed-off-by: Roman Gushchin <guro@fb.com>
-Acked-by: Song Liu <songliubraving@fb.com>
----
- kernel/bpf/hashtab.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 024276787055..9d0432170812 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -263,10 +263,11 @@ static int prealloc_init(struct bpf_htab *htab)
- 		goto skip_percpu_elems;
-=20
- 	for (i =3D 0; i < num_entries; i++) {
-+		const gfp_t gfp =3D GFP_USER | __GFP_NOWARN | __GFP_ACCOUNT;
- 		u32 size =3D round_up(htab->map.value_size, 8);
- 		void __percpu *pptr;
-=20
--		pptr =3D __alloc_percpu_gfp(size, 8, GFP_USER | __GFP_NOWARN);
-+		pptr =3D __alloc_percpu_gfp(size, 8, gfp);
- 		if (!pptr)
- 			goto free_elems;
- 		htab_elem_set_ptr(get_htab_elem(htab, i), htab->map.key_size,
-@@ -321,7 +322,7 @@ static int alloc_extra_elems(struct bpf_htab *htab)
- 	int cpu;
-=20
- 	pptr =3D __alloc_percpu_gfp(sizeof(struct htab_elem *), 8,
--				  GFP_USER | __GFP_NOWARN);
-+				  GFP_USER | __GFP_NOWARN | __GFP_ACCOUNT);
- 	if (!pptr)
- 		return -ENOMEM;
-=20
-@@ -424,7 +425,7 @@ static struct bpf_map *htab_map_alloc(union bpf_attr =
-*attr)
- 	u64 cost;
- 	int err;
-=20
--	htab =3D kzalloc(sizeof(*htab), GFP_USER);
-+	htab =3D kzalloc(sizeof(*htab), GFP_USER | __GFP_ACCOUNT);
- 	if (!htab)
- 		return ERR_PTR(-ENOMEM);
-=20
-@@ -827,6 +828,7 @@ static struct htab_elem *alloc_htab_elem(struct bpf_h=
-tab *htab, void *key,
- 					 bool percpu, bool onallcpus,
- 					 struct htab_elem *old_elem)
- {
-+	const gfp_t gfp =3D GFP_ATOMIC | __GFP_NOWARN | __GFP_ACCOUNT;
- 	u32 size =3D htab->map.value_size;
- 	bool prealloc =3D htab_is_prealloc(htab);
- 	struct htab_elem *l_new, **pl_new;
-@@ -859,8 +861,7 @@ static struct htab_elem *alloc_htab_elem(struct bpf_h=
-tab *htab, void *key,
- 				l_new =3D ERR_PTR(-E2BIG);
- 				goto dec_count;
- 			}
--		l_new =3D kmalloc_node(htab->elem_size, GFP_ATOMIC | __GFP_NOWARN,
--				     htab->map.numa_node);
-+		l_new =3D kmalloc_node(htab->elem_size, gfp, htab->map.numa_node);
- 		if (!l_new) {
- 			l_new =3D ERR_PTR(-ENOMEM);
- 			goto dec_count;
-@@ -876,8 +877,7 @@ static struct htab_elem *alloc_htab_elem(struct bpf_h=
-tab *htab, void *key,
- 			pptr =3D htab_elem_get_ptr(l_new, key_size);
- 		} else {
- 			/* alloc_percpu zero-fills */
--			pptr =3D __alloc_percpu_gfp(size, 8,
--						  GFP_ATOMIC | __GFP_NOWARN);
-+			pptr =3D __alloc_percpu_gfp(size, 8, gfp);
- 			if (!pptr) {
- 				kfree(l_new);
- 				l_new =3D ERR_PTR(-ENOMEM);
---=20
-2.26.2
+> On Jul 30, 2020, at 2:16 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> =
+wrote:
+>=20
+> On Thu, Jul 30, 2020 at 2:13 PM Song Liu <songliubraving@fb.com> wrote:
+>>=20
+>>=20
+>>=20
+>>> On Jul 29, 2020, at 4:05 PM, Andrii Nakryiko <andriin@fb.com> wrote:
+>>>=20
+>>> Add info on link detach sub-command to man page. Add detach to bash-com=
+pletion
+>>> as well.
+>>>=20
+>>> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+>>=20
+>> Acked-by: Song Liu <songliubraving@fb.com>
+>>=20
+>> With one nitpick below.
+>>=20
+>>> ---
+>>=20
+>> [...]
+>>=20
+>>> @@ -49,6 +50,13 @@ DESCRIPTION
+>>>                contain a dot character ('.'), which is reserved for fut=
+ure
+>>>                extensions of *bpffs*.
+>>>=20
+>>> +     **bpftool link detach** *LINK*
+>>> +               Force-detach link *LINK*. BPF link and its underlying B=
+PF
+>>> +               program will stay valid, but they will be detached from=
+ the
+>>> +               respective BPF hook and BPF link will transition into
+>>> +               a defunct state until last open file descriptor for tha=
+t
+>>=20
+>> Shall we say "a defunct state when the last open file descriptor for tha=
+t..."?
+>=20
+>=20
+> No-no, it is in defunc state between LINK_DETACH and last FD being
+> closed. Once last FD is closed, BPF link will get destructed and freed
+> in kernel. So I think until is more precise here?
+
+Ah, I see. I misunderstood "defunct state". Please ignore the comment.=20
+
+Thanks,
+Song
 
