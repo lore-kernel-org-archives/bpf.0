@@ -2,647 +2,287 @@ Return-Path: <SRS0=uiV1=BK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CF0BC433E0
-	for <bpf@archiver.kernel.org>; Fri, 31 Jul 2020 00:16:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B391C433DF
+	for <bpf@archiver.kernel.org>; Fri, 31 Jul 2020 01:08:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 201832083E
-	for <bpf@archiver.kernel.org>; Fri, 31 Jul 2020 00:16:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D362920829
+	for <bpf@archiver.kernel.org>; Fri, 31 Jul 2020 01:08:53 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="HGczmnrB";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="Ss7L9bS9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730643AbgGaAP7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Jul 2020 20:15:59 -0400
-Received: from mga12.intel.com ([192.55.52.136]:31478 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730781AbgGaAP7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 30 Jul 2020 20:15:59 -0400
-IronPort-SDR: iKfxLVwVvnkwkYAidYtcGMWnjIeX58H8hGderqg6H6YpGNjG9MfZ4S1Xi6VzLSOssCem78Ia7A
- mnz2o3O2s+9A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9698"; a="131278087"
-X-IronPort-AV: E=Sophos;i="5.75,416,1589266800"; 
-   d="scan'208";a="131278087"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2020 17:08:56 -0700
-IronPort-SDR: HG1hPFbA09Fqjn/FTfQjRSd27y4UVKmv/hTm+vV6+9e4PtHenzyGHTlmyKhRLUxy7wJESJbLVM
- hudSdZkxUQ+g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,416,1589266800"; 
-   d="scan'208";a="435237882"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga004.jf.intel.com with ESMTP; 30 Jul 2020 17:08:54 -0700
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     ast@kernel.org, daniel@iogearbox.net
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn.topel@intel.com,
-        magnus.karlsson@intel.com,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v6 bpf-next 4/6] bpf, x64: rework pro/epilogue and tailcall handling in JIT
-Date:   Fri, 31 Jul 2020 02:03:22 +0200
-Message-Id: <20200731000324.2253-5-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200731000324.2253-1-maciej.fijalkowski@intel.com>
-References: <20200731000324.2253-1-maciej.fijalkowski@intel.com>
+        id S1731067AbgGaBIu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Jul 2020 21:08:50 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:39934 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730987AbgGaBIu (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 30 Jul 2020 21:08:50 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 06V15oeX009850;
+        Thu, 30 Jul 2020 18:08:33 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=zbmMTHUb7VCsqbfZsbWlNepNwmQ83FAySCCrm+KaP9w=;
+ b=HGczmnrBkuscBO2v5//mBlX0zgHnIm5aRQMDdYYs4idk45zQ5Y9RINihVpblfEZock05
+ dhfqdbPVanWEFvwwDzr7LWUFpVMebabwkbQ/lSyGNN8JfYEY/njFrngs9EfAfsSWAkvg
+ mnFTM2u3th9ixobtZA8HXKhauOxEXCPoNmg= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 32kcbuyvcy-11
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 30 Jul 2020 18:08:32 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 30 Jul 2020 18:08:29 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KbyyO2o9pxMpo54YhQYh/z+hsutFw83SDNc5Cxb06iAoW/3xPlhSmTxZhYF6o5Z4nvDtRvQQmTU6PSlPBhAcxTW2GWXeqRQmpbqdMjXvO/pLBnCGkNqrahiwyARzAhMNh8G2sXIWTzbLHhU3fmMGm5jbdu/Pfr6miErOZcEVTuO3EzKGUJq9mExCQ0SKX1VMWzqcv5Ai7PNHwJopxF+3d5SWHlMJd+CMnDFvQfCyPGEAZP6GWpgL+7mmVS5mVh3RcKkixY7OxEnDMPvjUh2dhDO4wlwccK6x8cNdA5kUGx0pSEfFZdm+Zm/Ff3//jWew4xkR/c5Oe/XCbOFf/pRLFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zbmMTHUb7VCsqbfZsbWlNepNwmQ83FAySCCrm+KaP9w=;
+ b=KxJipJu6FnKOG2RIZCMv8e9lWcYtEVL+L2Z2nmmK1fdBviS5Rxz7Dl3D5PD9XIjnsJJC6f591H1bXOEG2ig1ghUTpLFT7P7NK1q22cYmByTjjHSUOEnU5whJPpaFtDygolObsVPz2U1UTqlDVvpV8Zim1A80pTSLI7cPk3XXIgSiz088dHCohcYrsRiIcCk9C3/Xj1iqYdT6gxJHvl9tM33/yML2Spp2BWmWcVTWCZl/JtWlqHFkxLMybuwZb/BTPrvRoRsxvhSNaBxE/qT8mJImSCwOjS3XWchp97vgsEyKMnmrHAKmhpMwbI1rY1spNzM5PSgIbybpaAApSXhRKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zbmMTHUb7VCsqbfZsbWlNepNwmQ83FAySCCrm+KaP9w=;
+ b=Ss7L9bS9v1bFwiJZezKLr8niVlOuJ9FCJ0C+ii2zqIqLtMF1cPpu7SWHtN5ZBWWHnyvOtICQPl5YtbUX4SHmN69/K1gJY/0wKuqhHa1+9ZNMVubIQQQxj41HTuJgQRk0ppx4UVHq7N6iR26DHr0v5kUVXZPpCPB5G73i7c1n6nc=
+Authentication-Results: chromium.org; dkim=none (message not signed)
+ header.d=none;chromium.org; dmarc=none action=none header.from=fb.com;
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
+ by BYAPR15MB2950.namprd15.prod.outlook.com (2603:10b6:a03:f6::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.24; Fri, 31 Jul
+ 2020 01:08:28 +0000
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::d489:8f7f:614e:1b99]) by BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::d489:8f7f:614e:1b99%7]) with mapi id 15.20.3239.017; Fri, 31 Jul 2020
+ 01:08:28 +0000
+Date:   Thu, 30 Jul 2020 18:08:22 -0700
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     KP Singh <kpsingh@chromium.org>
+CC:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
+        Florent Revest <revest@chromium.org>
+Subject: Re: [PATCH bpf-next v7 5/7] bpf: Implement bpf_local_storage for
+ inodes
+Message-ID: <20200731010822.fctk5lawnr3p7blf@kafai-mbp.dhcp.thefacebook.com>
+References: <20200730140716.404558-1-kpsingh@chromium.org>
+ <20200730140716.404558-6-kpsingh@chromium.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200730140716.404558-6-kpsingh@chromium.org>
+X-ClientProxiedBy: BYAPR11CA0104.namprd11.prod.outlook.com
+ (2603:10b6:a03:f4::45) To BY5PR15MB3571.namprd15.prod.outlook.com
+ (2603:10b6:a03:1f6::32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from kafai-mbp.dhcp.thefacebook.com (2620:10d:c090:400::5:f049) by BYAPR11CA0104.namprd11.prod.outlook.com (2603:10b6:a03:f4::45) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3239.17 via Frontend Transport; Fri, 31 Jul 2020 01:08:27 +0000
+X-Originating-IP: [2620:10d:c090:400::5:f049]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8a7120be-27ed-4486-fc99-08d834ee3b59
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2950:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB29508ECF28B16318220FFF00D54E0@BYAPR15MB2950.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: U1RvTPOLXwxqOBJjfKfWnV+sM0ah2k8dtXkyIWp6gAk/bLO8WeHAnuAeCwUK9TthRL9rgi80NCWRANmWWxMGevjLnflkCPg62Wv6Kps/7X8YyBmwQes+5vPoDoIBLheW0MC5SvXA1hZvGVOTICPfSfaLc7t7KVoQhLOFKx4ANVS0eAooDpCP0TymLiBbBdysHsM4fHcbpX1bnJD4aTL00ZB8pbp3O3GoFFXjLabO9PBUDe5jZnLVD7nJh5mm8aBCxaDRJzbfCZQ/Tz2PNpihkiNKkGWbv0qWuH3q1VWXhP/FKvlu5OJgvJEbkPxbYIMNLfipyof2Bb8JBYMnpUrKSA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(346002)(366004)(376002)(39860400002)(136003)(396003)(4326008)(478600001)(186003)(83380400001)(6506007)(7696005)(52116002)(66476007)(8676002)(16526019)(86362001)(6916009)(66556008)(66946007)(6666004)(55016002)(54906003)(2906002)(1076003)(9686003)(5660300002)(8936002)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: Xt7VfWOzCpzakFaXyJ11DRZ742bTzDIC0L6OlH3+YWKCYYiBL5MGB1PLaPOijt7Wj+y6SWVSPGwW8yP1Y4RK3zYA7aFhe8F9xABywy3tNf7HBZkR/xDIYL05OZxegpb5E3BKu8I5pvV/S6fOpVnmhl4DLcqOuc++zk7CEEcQJSkpoRauRk+yhxeuFTFJUzBPEMf0fSm6+ARlWwr/whHqaewoRdACuakCe0HK4I0BzhdhSwODuu8VKzsW0sbzicRPPPX3uCHfkdktBFbOHXwuJ0dzi9mlTWwTJxPGvyn/fNj9vxm6fJSESOGAV90RrW3Gz8IjHgl2bGnXYM+N7gO9gkMmNZscEkFgezQaewW3GMdxLzpR1iK4jgBTYk22CBFSg5BLVI/XZ6qk5EDX4WXxBMun7u4Ntu2xyfZepD+V4Pg6sUEtSAZCYq7mhZTyqcpmGjgZNal2LPMds0Ny2NZdEOlAeYFvzlGinh1pNq3I0+C4H8C2gLgqM5+nA+GaNRgT+j7k1m9jEOm5r+zllfoFvQ==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a7120be-27ed-4486-fc99-08d834ee3b59
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2020 01:08:27.8697
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vIoX0kasqaF+s6L0SAHSLuAB9zCLY0W/+nUqmB2K7W4VYcID85bIjTD1QqHxCPlU
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2950
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-07-30_19:2020-07-30,2020-07-30 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=877
+ bulkscore=0 clxscore=1015 suspectscore=5 phishscore=0 malwarescore=0
+ priorityscore=1501 adultscore=0 spamscore=0 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2007310005
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This commit serves two things:
-1) it optimizes BPF prologue/epilogue generation
-2) it makes possible to have tailcalls within BPF subprogram
+On Thu, Jul 30, 2020 at 04:07:14PM +0200, KP Singh wrote:
+> From: KP Singh <kpsingh@google.com>
+> 
+> Similar to bpf_local_storage for sockets, add local storage for inodes.
+> The life-cycle of storage is managed with the life-cycle of the inode.
+> i.e. the storage is destroyed along with the owning inode.
+> 
+> The BPF LSM allocates an __rcu pointer to the bpf_local_storage in the
+> security blob which are now stackable and can co-exist with other LSMs.
+> 
 
-Both points are related to each other since without 1), 2) could not be
-achieved.
+[ ... ]
 
-In [1], Alexei says:
-"The prologue will look like:
-nop5
-xor eax,eax  // two new bytes if bpf_tail_call() is used in this
-             // function
-push rbp
-mov rbp, rsp
-sub rsp, rounded_stack_depth
-push rax // zero init tail_call counter
-variable number of push rbx,r13,r14,r15
+> +static int bpf_fd_inode_storage_update_elem(struct bpf_map *map, void *key,
+> +					 void *value, u64 map_flags)
+> +{
+> +	struct bpf_local_storage_data *sdata;
+> +	struct file *f;
+> +	int fd;
+> +
+> +	fd = *(int *)key;
+> +	f = fcheck(fd);
+> +	if (!f)
+> +		return -EINVAL;
+> +
+> +	sdata = bpf_local_storage_update(f->f_inode, map, value, map_flags);
+n00b question.  inode will not be going away here (like another
+task calls close(fd))?  and there is no chance that bpf_local_storage_update()
+will be adding new storage after bpf_inode_storage_free() was called?
 
-Then bpf_tail_call will pop variable number rbx,..
-and final 'pop rax'
-Then 'add rsp, size_of_current_stack_frame'
-jmp to next function and skip over 'nop5; xor eax,eax; push rpb; mov
-rbp, rsp'
+A few comments will be useful here.
 
-This way new function will set its own stack size and will init tail
-call
-counter with whatever value the parent had.
+> +	return PTR_ERR_OR_ZERO(sdata);
+> +}
+> +
+> +static int inode_storage_delete(struct inode *inode, struct bpf_map *map)
+> +{
+> +	struct bpf_local_storage_data *sdata;
+> +
+> +	sdata = inode_storage_lookup(inode, map, false);
+> +	if (!sdata)
+> +		return -ENOENT;
+> +
+> +	bpf_selem_unlink(SELEM(sdata));
+> +
+> +	return 0;
+> +}
+> +
+> +static int bpf_fd_inode_storage_delete_elem(struct bpf_map *map, void *key)
+> +{
+> +	struct file *f;
+> +	int fd;
+> +
+> +	fd = *(int *)key;
+> +	f = fcheck(fd);
+> +	if (!f)
+> +		return -EINVAL;
+> +
+> +	return inode_storage_delete(f->f_inode, map);
+> +}
+> +
+> +BPF_CALL_4(bpf_inode_storage_get, struct bpf_map *, map, struct inode *, inode,
+> +	   void *, value, u64, flags)
+> +{
+> +	struct bpf_local_storage_data *sdata;
+> +
+> +	if (flags & ~(BPF_LOCAL_STORAGE_GET_F_CREATE))
+> +		return (unsigned long)NULL;
+> +
+> +	sdata = inode_storage_lookup(inode, map, true);
+> +	if (sdata)
+> +		return (unsigned long)sdata->data;
+> +
+> +	if (flags & BPF_LOCAL_STORAGE_GET_F_CREATE) {
+> +		sdata = bpf_local_storage_update(inode, map, value,
+> +						 BPF_NOEXIST);
+The same question here
 
-If next function doesn't use bpf_tail_call it won't have 'xor eax,eax'.
-Instead it would need to have 'nop2' in there."
+> +		return IS_ERR(sdata) ? (unsigned long)NULL :
+> +					     (unsigned long)sdata->data;
+> +	}
+> +
+> +	return (unsigned long)NULL;
+> +}
+> +
+> +BPF_CALL_2(bpf_inode_storage_delete,
+> +	   struct bpf_map *, map, struct inode *, inode)
+> +{
+> +	return inode_storage_delete(inode, map);
+> +}
+> +
+> +static int notsupp_get_next_key(struct bpf_map *map, void *key,
+> +				void *next_key)
+> +{
+> +	return -ENOTSUPP;
+> +}
+> +
+> +static struct bpf_map *inode_storage_map_alloc(union bpf_attr *attr)
+> +{
+> +	struct bpf_local_storage_map *smap;
+> +
+> +	smap = bpf_local_storage_map_alloc(attr);
+> +	if (IS_ERR(smap))
+> +		return ERR_CAST(smap);
+> +
+> +	smap->cache_idx = bpf_local_storage_cache_idx_get(&inode_cache);
+> +	return &smap->map;
+> +}
+> +
+> +static void inode_storage_map_free(struct bpf_map *map)
+> +{
+> +	struct bpf_local_storage_map *smap;
+> +
+> +	smap = (struct bpf_local_storage_map *)map;
+> +	bpf_local_storage_cache_idx_free(&inode_cache, smap->cache_idx);
+> +	bpf_local_storage_map_free(smap);
+> +}
+> +
+> +static int sk_storage_map_btf_id;
+> +const struct bpf_map_ops inode_storage_map_ops = {
+> +	.map_alloc_check = bpf_local_storage_map_alloc_check,
+> +	.map_alloc = inode_storage_map_alloc,
+> +	.map_free = inode_storage_map_free,
+> +	.map_get_next_key = notsupp_get_next_key,
+> +	.map_lookup_elem = bpf_fd_inode_storage_lookup_elem,
+> +	.map_update_elem = bpf_fd_inode_storage_update_elem,
+> +	.map_delete_elem = bpf_fd_inode_storage_delete_elem,
+> +	.map_check_btf = bpf_local_storage_map_check_btf,
+> +	.map_btf_name = "bpf_local_storage_map",
+> +	.map_btf_id = &sk_storage_map_btf_id,
+> +	.map_owner_storage_ptr = inode_storage_ptr,
+> +};
+> +
+> +BTF_ID_LIST(bpf_inode_storage_get_btf_ids)
+> +BTF_ID(struct, inode)
+The ARG_PTR_TO_BTF_ID is the second arg instead of the first
+arg in bpf_inode_storage_get_proto.
+Does it just happen to work here without needing BTF_ID_UNUSED?
 
-Implement that suggestion.
-
-Since the layout of stack is changed, tail call counter handling can not
-rely anymore on popping it to rbx just like it have been handled for
-constant prologue case and later overwrite of rbx with actual value of
-rbx pushed to stack. Therefore, let's use one of the register (%rcx) that
-is considered to be volatile/caller-saved and pop the value of tail call
-counter in there in the epilogue.
-
-Drop the BUILD_BUG_ON in emit_prologue and in
-emit_bpf_tail_call_indirect where instruction layout is not constant
-anymore.
-
-Introduce new poke target, 'tailcall_bypass' to poke descriptor that is
-dedicated for skipping the register pops and stack unwind that are
-generated right before the actual jump to target program.
-For case when the target program is not present, BPF program will skip
-the pop instructions and nop5 dedicated for jmpq $target. An example of
-such state when only R6 of callee saved registers is used by program:
-
-ffffffffc0513aa1:       e9 0e 00 00 00          jmpq   0xffffffffc0513ab4
-ffffffffc0513aa6:       5b                      pop    %rbx
-ffffffffc0513aa7:       58                      pop    %rax
-ffffffffc0513aa8:       48 81 c4 00 00 00 00    add    $0x0,%rsp
-ffffffffc0513aaf:       0f 1f 44 00 00          nopl   0x0(%rax,%rax,1)
-ffffffffc0513ab4:       48 89 df                mov    %rbx,%rdi
-
-When target program is inserted, the jump that was there to skip
-pops/nop5 will become the nop5, so CPU will go over pops and do the
-actual tailcall.
-
-One might ask why there simply can not be pushes after the nop5?
-In the following example snippet:
-
-ffffffffc037030c:       48 89 fb                mov    %rdi,%rbx
-(...)
-ffffffffc0370332:       5b                      pop    %rbx
-ffffffffc0370333:       58                      pop    %rax
-ffffffffc0370334:       48 81 c4 00 00 00 00    add    $0x0,%rsp
-ffffffffc037033b:       0f 1f 44 00 00          nopl   0x0(%rax,%rax,1)
-ffffffffc0370340:       48 81 ec 00 00 00 00    sub    $0x0,%rsp
-ffffffffc0370347:       50                      push   %rax
-ffffffffc0370348:       53                      push   %rbx
-ffffffffc0370349:       48 89 df                mov    %rbx,%rdi
-ffffffffc037034c:       e8 f7 21 00 00          callq  0xffffffffc0372548
-
-There is the bpf2bpf call (at ffffffffc037034c) right after the tailcall
-and jump target is not present. ctx is in %rbx register and BPF
-subprogram that we will call into on ffffffffc037034c is relying on it,
-e.g. it will pick ctx from there. Such code layout is therefore broken
-as we would overwrite the content of %rbx with the value that was pushed
-on the prologue. That is the reason for the 'bypass' approach.
-
-Special care needs to be taken during the install/update/remove of
-tailcall target. In case when target program is not present, the CPU
-must not execute the pop instructions that precede the tailcall.
-
-To address that, the following states can be defined:
-A nop, unwind, nop
-B nop, unwind, tail
-C skip, unwind, nop
-D skip, unwind, tail
-
-A is forbidden (lead to incorrectness). The state transitions between
-tailcall install/update/remove will work as follows:
-
-First install tail call f: C->D->B(f)
- * poke the tailcall, after that get rid of the skip
-Update tail call f to f': B(f)->B(f')
- * poke the tailcall (poke->tailcall_target) and do NOT touch the
-   poke->tailcall_bypass
-Remove tail call: B(f')->C(f')
- * poke->tailcall_bypass is poked back to jump, then we wait the RCU
-   grace period so that other programs will finish its execution and
-   after that we are safe to remove the poke->tailcall_target
-Install new tail call (f''): C(f')->D(f'')->B(f'').
- * same as first step
-
-This way CPU can never be exposed to "unwind, tail" state.
-
-For regression checks, 'tailcalls' kselftest was executed:
-$ sudo ./test_progs -t tailcalls
- #64/1 tailcall_1:OK
- #64/2 tailcall_2:OK
- #64/3 tailcall_3:OK
- #64/4 tailcall_4:OK
- #64/5 tailcall_5:OK
- #64 tailcalls:OK
-Summary: 1/5 PASSED, 0 SKIPPED, 0 FAILED
-
-Tail call related cases from test_verifier kselftest are also working
-fine. Sample BPF programs that utilize tail calls (sockex3, tracex5)
-work properly as well.
-
-[1]: https://lore.kernel.org/bpf/20200517043227.2gpq22ifoq37ogst@ast-mbp.dhcp.thefacebook.com/
-
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
- arch/x86/net/bpf_jit_comp.c | 221 ++++++++++++++++++++++++++++--------
- include/linux/bpf.h         |   2 +
- kernel/bpf/arraymap.c       |  40 ++++++-
- kernel/bpf/core.c           |   2 +-
- 4 files changed, 212 insertions(+), 53 deletions(-)
-
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 44e64d406055..880f283adb66 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -221,14 +221,48 @@ struct jit_context {
- 
- /* Number of bytes emit_patch() needs to generate instructions */
- #define X86_PATCH_SIZE		5
-+/* Number of bytes that will be skipped on tailcall */
-+#define X86_TAIL_CALL_OFFSET	11
- 
--#define PROLOGUE_SIZE		25
-+static void push_callee_regs(u8 **pprog, bool *callee_regs_used)
-+{
-+	u8 *prog = *pprog;
-+	int cnt = 0;
-+
-+	if (callee_regs_used[0])
-+		EMIT1(0x53);         /* push rbx */
-+	if (callee_regs_used[1])
-+		EMIT2(0x41, 0x55);   /* push r13 */
-+	if (callee_regs_used[2])
-+		EMIT2(0x41, 0x56);   /* push r14 */
-+	if (callee_regs_used[3])
-+		EMIT2(0x41, 0x57);   /* push r15 */
-+	*pprog = prog;
-+}
-+
-+static void pop_callee_regs(u8 **pprog, bool *callee_regs_used)
-+{
-+	u8 *prog = *pprog;
-+	int cnt = 0;
-+
-+	if (callee_regs_used[3])
-+		EMIT2(0x41, 0x5F);   /* pop r15 */
-+	if (callee_regs_used[2])
-+		EMIT2(0x41, 0x5E);   /* pop r14 */
-+	if (callee_regs_used[1])
-+		EMIT2(0x41, 0x5D);   /* pop r13 */
-+	if (callee_regs_used[0])
-+		EMIT1(0x5B);         /* pop rbx */
-+	*pprog = prog;
-+}
- 
- /*
-- * Emit x86-64 prologue code for BPF program and check its size.
-- * bpf_tail_call helper will skip it while jumping into another program
-+ * Emit x86-64 prologue code for BPF program.
-+ * bpf_tail_call helper will skip the first X86_TAIL_CALL_OFFSET bytes
-+ * while jumping to another program
-  */
--static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf)
-+static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf,
-+			  bool tail_call)
- {
- 	u8 *prog = *pprog;
- 	int cnt = X86_PATCH_SIZE;
-@@ -238,19 +272,18 @@ static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf)
- 	 */
- 	memcpy(prog, ideal_nops[NOP_ATOMIC5], cnt);
- 	prog += cnt;
-+	if (!ebpf_from_cbpf) {
-+		if (tail_call)
-+			EMIT2(0x31, 0xC0); /* xor eax, eax */
-+		else
-+			EMIT2(0x66, 0x90); /* nop2 */
-+	}
- 	EMIT1(0x55);             /* push rbp */
- 	EMIT3(0x48, 0x89, 0xE5); /* mov rbp, rsp */
- 	/* sub rsp, rounded_stack_depth */
- 	EMIT3_off32(0x48, 0x81, 0xEC, round_up(stack_depth, 8));
--	EMIT1(0x53);             /* push rbx */
--	EMIT2(0x41, 0x55);       /* push r13 */
--	EMIT2(0x41, 0x56);       /* push r14 */
--	EMIT2(0x41, 0x57);       /* push r15 */
--	if (!ebpf_from_cbpf) {
--		/* zero init tail_call_cnt */
--		EMIT2(0x6a, 0x00);
--		BUILD_BUG_ON(cnt != PROLOGUE_SIZE);
--	}
-+	if (!ebpf_from_cbpf && tail_call)
-+		EMIT1(0x50);         /* push rax */
- 	*pprog = prog;
- }
- 
-@@ -314,13 +347,14 @@ static int __bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 	mutex_lock(&text_mutex);
- 	if (memcmp(ip, old_insn, X86_PATCH_SIZE))
- 		goto out;
-+	ret = 1;
- 	if (memcmp(ip, new_insn, X86_PATCH_SIZE)) {
- 		if (text_live)
- 			text_poke_bp(ip, new_insn, X86_PATCH_SIZE, NULL);
- 		else
- 			memcpy(ip, new_insn, X86_PATCH_SIZE);
-+		ret = 0;
- 	}
--	ret = 0;
- out:
- 	mutex_unlock(&text_mutex);
- 	return ret;
-@@ -337,6 +371,22 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 	return __bpf_arch_text_poke(ip, t, old_addr, new_addr, true);
- }
- 
-+static int get_pop_bytes(bool *callee_regs_used)
-+{
-+	int bytes = 0;
-+
-+	if (callee_regs_used[3])
-+		bytes += 2;
-+	if (callee_regs_used[2])
-+		bytes += 2;
-+	if (callee_regs_used[1])
-+		bytes += 2;
-+	if (callee_regs_used[0])
-+		bytes += 1;
-+
-+	return bytes;
-+}
-+
- /*
-  * Generate the following code:
-  *
-@@ -351,12 +401,26 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
-  *   goto *(prog->bpf_func + prologue_size);
-  * out:
-  */
--static void emit_bpf_tail_call_indirect(u8 **pprog)
-+static void emit_bpf_tail_call_indirect(u8 **pprog, bool *callee_regs_used,
-+					u32 stack_depth)
- {
-+	int tcc_off = -4 - round_up(stack_depth, 8);
- 	u8 *prog = *pprog;
--	int label1, label2, label3;
-+	int pop_bytes = 0;
-+	int off1 = 49;
-+	int off2 = 38;
-+	int off3 = 16;
- 	int cnt = 0;
- 
-+	/* count the additional bytes used for popping callee regs from stack
-+	 * that need to be taken into account for each of the offsets that
-+	 * are used for bailing out of the tail call
-+	 */
-+	pop_bytes = get_pop_bytes(callee_regs_used);
-+	off1 += pop_bytes;
-+	off2 += pop_bytes;
-+	off3 += pop_bytes;
-+
- 	/*
- 	 * rdi - pointer to ctx
- 	 * rsi - pointer to bpf_array
-@@ -370,21 +434,19 @@ static void emit_bpf_tail_call_indirect(u8 **pprog)
- 	EMIT2(0x89, 0xD2);                        /* mov edx, edx */
- 	EMIT3(0x39, 0x56,                         /* cmp dword ptr [rsi + 16], edx */
- 	      offsetof(struct bpf_array, map.max_entries));
--#define OFFSET1 (41 + RETPOLINE_RCX_BPF_JIT_SIZE) /* Number of bytes to jump */
-+#define OFFSET1 (off1 + RETPOLINE_RCX_BPF_JIT_SIZE) /* Number of bytes to jump */
- 	EMIT2(X86_JBE, OFFSET1);                  /* jbe out */
--	label1 = cnt;
- 
- 	/*
- 	 * if (tail_call_cnt > MAX_TAIL_CALL_CNT)
- 	 *	goto out;
- 	 */
--	EMIT2_off32(0x8B, 0x85, -36 - MAX_BPF_STACK); /* mov eax, dword ptr [rbp - 548] */
-+	EMIT2_off32(0x8B, 0x85, tcc_off);         /* mov eax, dword ptr [rbp - tcc_off] */
- 	EMIT3(0x83, 0xF8, MAX_TAIL_CALL_CNT);     /* cmp eax, MAX_TAIL_CALL_CNT */
--#define OFFSET2 (30 + RETPOLINE_RCX_BPF_JIT_SIZE)
-+#define OFFSET2 (off2 + RETPOLINE_RCX_BPF_JIT_SIZE)
- 	EMIT2(X86_JA, OFFSET2);                   /* ja out */
--	label2 = cnt;
- 	EMIT3(0x83, 0xC0, 0x01);                  /* add eax, 1 */
--	EMIT2_off32(0x89, 0x85, -36 - MAX_BPF_STACK); /* mov dword ptr [rbp -548], eax */
-+	EMIT2_off32(0x89, 0x85, tcc_off);         /* mov dword ptr [rbp - tcc_off], eax */
- 
- 	/* prog = array->ptrs[index]; */
- 	EMIT4_off32(0x48, 0x8B, 0x8C, 0xD6,       /* mov rcx, [rsi + rdx * 8 + offsetof(...)] */
-@@ -394,48 +456,84 @@ static void emit_bpf_tail_call_indirect(u8 **pprog)
- 	 * if (prog == NULL)
- 	 *	goto out;
- 	 */
--	EMIT3(0x48, 0x85, 0xC9);		  /* test rcx,rcx */
--#define OFFSET3 (8 + RETPOLINE_RCX_BPF_JIT_SIZE)
-+	EMIT3(0x48, 0x85, 0xC9);                  /* test rcx,rcx */
-+#define OFFSET3 (off3 + RETPOLINE_RCX_BPF_JIT_SIZE)
- 	EMIT2(X86_JE, OFFSET3);                   /* je out */
--	label3 = cnt;
- 
--	/* goto *(prog->bpf_func + prologue_size); */
-+	*pprog = prog;
-+	pop_callee_regs(pprog, callee_regs_used);
-+	prog = *pprog;
-+
-+	EMIT1(0x58);                              /* pop rax */
-+	EMIT3_off32(0x48, 0x81, 0xC4,             /* add rsp, sd */
-+		    round_up(stack_depth, 8));
-+
-+	/* goto *(prog->bpf_func + X86_TAIL_CALL_OFFSET); */
- 	EMIT4(0x48, 0x8B, 0x49,                   /* mov rcx, qword ptr [rcx + 32] */
- 	      offsetof(struct bpf_prog, bpf_func));
--	EMIT4(0x48, 0x83, 0xC1, PROLOGUE_SIZE);   /* add rcx, prologue_size */
--
-+	EMIT4(0x48, 0x83, 0xC1,                   /* add rcx, X86_TAIL_CALL_OFFSET */
-+	      X86_TAIL_CALL_OFFSET);
- 	/*
- 	 * Now we're ready to jump into next BPF program
- 	 * rdi == ctx (1st arg)
--	 * rcx == prog->bpf_func + prologue_size
-+	 * rcx == prog->bpf_func + X86_TAIL_CALL_OFFSET
- 	 */
- 	RETPOLINE_RCX_BPF_JIT();
- 
- 	/* out: */
--	BUILD_BUG_ON(cnt - label1 != OFFSET1);
--	BUILD_BUG_ON(cnt - label2 != OFFSET2);
--	BUILD_BUG_ON(cnt - label3 != OFFSET3);
- 	*pprog = prog;
- }
- 
- static void emit_bpf_tail_call_direct(struct bpf_jit_poke_descriptor *poke,
--				      u8 **pprog, int addr, u8 *image)
-+				      u8 **pprog, int addr, u8 *image,
-+				      bool *callee_regs_used, u32 stack_depth)
- {
-+	int tcc_off = -4 - round_up(stack_depth, 8);
- 	u8 *prog = *pprog;
-+	int pop_bytes = 0;
-+	int off1 = 27;
-+	int poke_off;
- 	int cnt = 0;
- 
-+	/* count the additional bytes used for popping callee regs to stack
-+	 * that need to be taken into account for jump offset that is used for
-+	 * bailing out from of the tail call when limit is reached
-+	 */
-+	pop_bytes = get_pop_bytes(callee_regs_used);
-+	off1 += pop_bytes;
-+
-+	/*
-+	 * total bytes for:
-+	 * - nop5/ jmpq $off
-+	 * - pop callee regs
-+	 * - sub rsp, $val
-+	 * - pop rax
-+	 */
-+	poke_off = X86_PATCH_SIZE + pop_bytes + 7 + 1;
-+
- 	/*
- 	 * if (tail_call_cnt > MAX_TAIL_CALL_CNT)
- 	 *	goto out;
- 	 */
--	EMIT2_off32(0x8B, 0x85, -36 - MAX_BPF_STACK); /* mov eax, dword ptr [rbp - 548] */
-+	EMIT2_off32(0x8B, 0x85, tcc_off);             /* mov eax, dword ptr [rbp - tcc_off] */
- 	EMIT3(0x83, 0xF8, MAX_TAIL_CALL_CNT);         /* cmp eax, MAX_TAIL_CALL_CNT */
--	EMIT2(X86_JA, 14);                            /* ja out */
-+	EMIT2(X86_JA, off1);                          /* ja out */
- 	EMIT3(0x83, 0xC0, 0x01);                      /* add eax, 1 */
--	EMIT2_off32(0x89, 0x85, -36 - MAX_BPF_STACK); /* mov dword ptr [rbp -548], eax */
-+	EMIT2_off32(0x89, 0x85, tcc_off);             /* mov dword ptr [rbp - tcc_off], eax */
- 
-+	poke->tailcall_bypass = image + (addr - poke_off - X86_PATCH_SIZE);
-+	poke->adj_off = X86_TAIL_CALL_OFFSET;
- 	poke->tailcall_target = image + (addr - X86_PATCH_SIZE);
--	poke->adj_off = PROLOGUE_SIZE;
-+	poke->bypass_addr = (u8 *)poke->tailcall_target + X86_PATCH_SIZE;
-+
-+	emit_jump(&prog, (u8 *)poke->tailcall_target + X86_PATCH_SIZE,
-+		  poke->tailcall_bypass);
-+
-+	*pprog = prog;
-+	pop_callee_regs(pprog, callee_regs_used);
-+	prog = *pprog;
-+	EMIT1(0x58);                                  /* pop rax */
-+	EMIT3_off32(0x48, 0x81, 0xC4, round_up(stack_depth, 8));
- 
- 	memcpy(prog, ideal_nops[NOP_ATOMIC5], X86_PATCH_SIZE);
- 	prog += X86_PATCH_SIZE;
-@@ -476,6 +574,11 @@ static void bpf_tail_call_direct_fixup(struct bpf_prog *prog)
- 						   (u8 *)target->bpf_func +
- 						   poke->adj_off, false);
- 			BUG_ON(ret < 0);
-+			ret = __bpf_arch_text_poke(poke->tailcall_bypass,
-+						   BPF_MOD_JUMP,
-+						   (u8 *)poke->tailcall_target +
-+						   X86_PATCH_SIZE, NULL, false);
-+			BUG_ON(ret < 0);
- 		}
- 		WRITE_ONCE(poke->tailcall_target_stable, true);
- 		mutex_unlock(&array->aux->poke_mutex);
-@@ -654,19 +757,44 @@ static bool ex_handler_bpf(const struct exception_table_entry *x,
- 	return true;
- }
- 
-+static void detect_reg_usage(struct bpf_insn *insn, int insn_cnt,
-+			     bool *regs_used, bool *tail_call_seen)
-+{
-+	int i;
-+
-+	for (i = 1; i <= insn_cnt; i++, insn++) {
-+		if (insn->code == (BPF_JMP | BPF_TAIL_CALL))
-+			*tail_call_seen = true;
-+		if (insn->dst_reg == BPF_REG_6 || insn->src_reg == BPF_REG_6)
-+			regs_used[0] = true;
-+		if (insn->dst_reg == BPF_REG_7 || insn->src_reg == BPF_REG_7)
-+			regs_used[1] = true;
-+		if (insn->dst_reg == BPF_REG_8 || insn->src_reg == BPF_REG_8)
-+			regs_used[2] = true;
-+		if (insn->dst_reg == BPF_REG_9 || insn->src_reg == BPF_REG_9)
-+			regs_used[3] = true;
-+	}
-+}
-+
- static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 		  int oldproglen, struct jit_context *ctx)
- {
- 	struct bpf_insn *insn = bpf_prog->insnsi;
-+	bool callee_regs_used[4] = {};
- 	int insn_cnt = bpf_prog->len;
-+	bool tail_call_seen = false;
- 	bool seen_exit = false;
- 	u8 temp[BPF_MAX_INSN_SIZE + BPF_INSN_SAFETY];
- 	int i, cnt = 0, excnt = 0;
- 	int proglen = 0;
- 	u8 *prog = temp;
- 
-+	detect_reg_usage(insn, insn_cnt, callee_regs_used,
-+			 &tail_call_seen);
-+
- 	emit_prologue(&prog, bpf_prog->aux->stack_depth,
--		      bpf_prog_was_classic(bpf_prog));
-+		      bpf_prog_was_classic(bpf_prog), tail_call_seen);
-+	push_callee_regs(&prog, callee_regs_used);
- 	addrs[0] = prog - temp;
- 
- 	for (i = 1; i <= insn_cnt; i++, insn++) {
-@@ -1111,9 +1239,13 @@ xadd:			if (is_imm8(insn->off))
- 		case BPF_JMP | BPF_TAIL_CALL:
- 			if (imm32)
- 				emit_bpf_tail_call_direct(&bpf_prog->aux->poke_tab[imm32 - 1],
--							  &prog, addrs[i], image);
-+							  &prog, addrs[i], image,
-+							  callee_regs_used,
-+							  bpf_prog->aux->stack_depth);
- 			else
--				emit_bpf_tail_call_indirect(&prog);
-+				emit_bpf_tail_call_indirect(&prog,
-+							    callee_regs_used,
-+							    bpf_prog->aux->stack_depth);
- 			break;
- 
- 			/* cond jump */
-@@ -1296,12 +1428,9 @@ xadd:			if (is_imm8(insn->off))
- 			seen_exit = true;
- 			/* Update cleanup_addr */
- 			ctx->cleanup_addr = proglen;
--			if (!bpf_prog_was_classic(bpf_prog))
--				EMIT1(0x5B); /* get rid of tail_call_cnt */
--			EMIT2(0x41, 0x5F);   /* pop r15 */
--			EMIT2(0x41, 0x5E);   /* pop r14 */
--			EMIT2(0x41, 0x5D);   /* pop r13 */
--			EMIT1(0x5B);         /* pop rbx */
-+			pop_callee_regs(&prog, callee_regs_used);
-+			if (!bpf_prog_was_classic(bpf_prog) && tail_call_seen)
-+				EMIT1(0x59); /* pop rcx, get rid of tail_call_cnt */
- 			EMIT1(0xC9);         /* leave */
- 			EMIT1(0xC3);         /* ret */
- 			break;
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 37a855d54162..b9d8937254d3 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -671,6 +671,8 @@ enum bpf_jit_poke_reason {
- /* Descriptor of pokes pointing /into/ the JITed image. */
- struct bpf_jit_poke_descriptor {
- 	void *tailcall_target;
-+	void *tailcall_bypass;
-+	void *bypass_addr;
- 	union {
- 		struct {
- 			struct bpf_map *map;
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 7e36b9a1827d..85f49d8206de 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -888,6 +888,7 @@ static void prog_array_map_poke_run(struct bpf_map *map, u32 key,
- 				    struct bpf_prog *old,
- 				    struct bpf_prog *new)
- {
-+	u8 *old_addr, *new_addr, *old_bypass_addr;
- 	struct prog_poke_elem *elem;
- 	struct bpf_array_aux *aux;
- 
-@@ -939,12 +940,39 @@ static void prog_array_map_poke_run(struct bpf_map *map, u32 key,
- 			    poke->tail_call.key != key)
- 				continue;
- 
--			ret = bpf_arch_text_poke(poke->tailcall_target, BPF_MOD_JUMP,
--						 old ? (u8 *)old->bpf_func +
--						 poke->adj_off : NULL,
--						 new ? (u8 *)new->bpf_func +
--						 poke->adj_off : NULL);
--			BUG_ON(ret < 0 && ret != -EINVAL);
-+			old_bypass_addr = old ? NULL : poke->bypass_addr;
-+			old_addr = old ? (u8 *)old->bpf_func + poke->adj_off : NULL;
-+			new_addr = new ? (u8 *)new->bpf_func + poke->adj_off : NULL;
-+
-+			if (new) {
-+				ret = bpf_arch_text_poke(poke->tailcall_target,
-+							 BPF_MOD_JUMP,
-+							 old_addr, new_addr);
-+				BUG_ON(ret < 0 && ret != -EINVAL);
-+				if (!old) {
-+					ret = bpf_arch_text_poke(poke->tailcall_bypass,
-+								 BPF_MOD_JUMP,
-+								 poke->bypass_addr,
-+								 NULL);
-+					BUG_ON(ret < 0 && ret != -EINVAL);
-+				}
-+			} else {
-+				ret = bpf_arch_text_poke(poke->tailcall_bypass,
-+							 BPF_MOD_JUMP,
-+							 old_bypass_addr,
-+							 poke->bypass_addr);
-+				BUG_ON(ret < 0 && ret != -EINVAL);
-+				/* let other CPUs finish the execution of program
-+				 * so that it will not possible to expose them
-+				 * to invalid nop, stack unwind, nop state
-+				 */
-+				if (!ret)
-+					synchronize_rcu();
-+				ret = bpf_arch_text_poke(poke->tailcall_target,
-+							 BPF_MOD_JUMP,
-+							 old_addr, NULL);
-+				BUG_ON(ret < 0 && ret != -EINVAL);
-+			}
- 		}
- 	}
- }
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 586f3a7330c3..48df54593444 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -774,7 +774,7 @@ int bpf_jit_add_poke_descriptor(struct bpf_prog *prog,
- 	if (size > poke_tab_max)
- 		return -ENOSPC;
- 	if (poke->tailcall_target || poke->tailcall_target_stable ||
--	    poke->adj_off)
-+	    poke->tailcall_bypass || poke->adj_off || poke->bypass_addr)
- 		return -EINVAL;
- 
- 	switch (poke->reason) {
--- 
-2.20.1
-
+> +
+> +const struct bpf_func_proto bpf_inode_storage_get_proto = {
+> +	.func		= bpf_inode_storage_get,
+> +	.gpl_only	= false,
+> +	.ret_type	= RET_PTR_TO_MAP_VALUE_OR_NULL,
+> +	.arg1_type	= ARG_CONST_MAP_PTR,
+> +	.arg2_type	= ARG_PTR_TO_BTF_ID,
+> +	.arg3_type	= ARG_PTR_TO_MAP_VALUE_OR_NULL,
+> +	.arg4_type	= ARG_ANYTHING,
+> +	.btf_id		= bpf_inode_storage_get_btf_ids,
+> +};
+> +
+> +BTF_ID_LIST(bpf_inode_storage_delete_btf_ids)
+> +BTF_ID(struct, inode)
+> +
+> +const struct bpf_func_proto bpf_inode_storage_delete_proto = {
+> +	.func		= bpf_inode_storage_delete,
+> +	.gpl_only	= false,
+> +	.ret_type	= RET_INTEGER,
+> +	.arg1_type	= ARG_CONST_MAP_PTR,
+> +	.arg2_type	= ARG_PTR_TO_BTF_ID,
+> +	.btf_id		= bpf_inode_storage_delete_btf_ids,
+> +};
