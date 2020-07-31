@@ -2,47 +2,50 @@ Return-Path: <SRS0=uiV1=BK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D651C433DF
-	for <bpf@archiver.kernel.org>; Fri, 31 Jul 2020 00:09:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CF0BC433E0
+	for <bpf@archiver.kernel.org>; Fri, 31 Jul 2020 00:16:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F0E6D2082E
-	for <bpf@archiver.kernel.org>; Fri, 31 Jul 2020 00:09:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 201832083E
+	for <bpf@archiver.kernel.org>; Fri, 31 Jul 2020 00:16:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730911AbgGaAJF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Jul 2020 20:09:05 -0400
-Received: from mga12.intel.com ([192.55.52.136]:31464 "EHLO mga12.intel.com"
+        id S1730643AbgGaAP7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Jul 2020 20:15:59 -0400
+Received: from mga12.intel.com ([192.55.52.136]:31478 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730643AbgGaAJE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 30 Jul 2020 20:09:04 -0400
-IronPort-SDR: QXMFplPfwx6wvd+O0jRmSgN/otPSfYlbHIZhmOdd8zoVYR73LhzIwN4tKTEfv3HI1fa671gHGs
- R8ZhMmK9NpvQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9698"; a="131278070"
+        id S1730781AbgGaAP7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 30 Jul 2020 20:15:59 -0400
+IronPort-SDR: iKfxLVwVvnkwkYAidYtcGMWnjIeX58H8hGderqg6H6YpGNjG9MfZ4S1Xi6VzLSOssCem78Ia7A
+ mnz2o3O2s+9A==
+X-IronPort-AV: E=McAfee;i="6000,8403,9698"; a="131278087"
 X-IronPort-AV: E=Sophos;i="5.75,416,1589266800"; 
-   d="scan'208";a="131278070"
+   d="scan'208";a="131278087"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2020 17:08:48 -0700
-IronPort-SDR: PidMeyEWPxsOtKGwP1FyyB9liCjoFTFLC8SRPzYzgQ/Ucen3bHKH2xn97pleWIWJpfB7ippjt4
- z2MCZSwVIsmw==
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2020 17:08:56 -0700
+IronPort-SDR: HG1hPFbA09Fqjn/FTfQjRSd27y4UVKmv/hTm+vV6+9e4PtHenzyGHTlmyKhRLUxy7wJESJbLVM
+ hudSdZkxUQ+g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.75,416,1589266800"; 
-   d="scan'208";a="435237849"
+   d="scan'208";a="435237882"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga004.jf.intel.com with ESMTP; 30 Jul 2020 17:08:45 -0700
+  by orsmga004.jf.intel.com with ESMTP; 30 Jul 2020 17:08:54 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     ast@kernel.org, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn.topel@intel.com,
         magnus.karlsson@intel.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v6 bpf-next 0/6] bpf: tailcalls in BPF subprograms
-Date:   Fri, 31 Jul 2020 02:03:18 +0200
-Message-Id: <20200731000324.2253-1-maciej.fijalkowski@intel.com>
+Subject: [PATCH v6 bpf-next 4/6] bpf, x64: rework pro/epilogue and tailcall handling in JIT
+Date:   Fri, 31 Jul 2020 02:03:22 +0200
+Message-Id: <20200731000324.2253-5-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200731000324.2253-1-maciej.fijalkowski@intel.com>
+References: <20200731000324.2253-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -51,70 +54,18 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-v5->v6:
-- propagate only those poke descriptors that individual subprogram is
-  actually using (Daniel)
-- drop the cumbersome check if poke desc got filled in map_poke_run()
-- move poke->ip renaming in bpf_jit_add_poke_descriptor() from patch 4
-  to patch 3 to provide bisectability (Daniel)
+This commit serves two things:
+1) it optimizes BPF prologue/epilogue generation
+2) it makes possible to have tailcalls within BPF subprogram
 
-v4->v5:
-- simplify the fix from v3/v4 (Daniel)
-
-v3->v4:
-- be more careful around the fix from v3
-
-v2->v3:
-- call map_poke_untrack() on each previously registered subprog's aux
-  struct to prog array if adding poke descriptor or tracking the aux
-  struct failed (Daniel)
-
-v1->v2:
-- include the rax->rcx conversion in first patch, target prog needs to be
-  placed in rcx in the tailcall indirect routine (Daniel)
-- add error checks to routines that add poke descriptors to subprograms
-  (Daniel)
-- don't allow this optimization when arch is different than x64 and when JIT is
-  disabled (Daniel)
-- pull out the rename of poke desc members onto a separate patch (Daniel)
-- add a new poke member to store the bypass address so that calculation of it
-  won't be necessary
-- avoid the special casing when old and new is null in map_poke_run (Daniel)
-- do not sync RCU when bypass target was not patched (Daniel)
-- do not introduce nop2 instruction to prologue for cBPF programs (Daniel)
-
-RFC->v1:
-- rename poke->ip/poke->ip_aux pair to
-  poke->tailcall_target/poke->tailcall_bypass (Alexei)
-- get rid of x86-specific code in prog_array_map_poke_run (Alexei)
-- use synchronize_rcu in prog_array_map_poke_run so that other CPUs in
-  the middle of execution will finish running the program and will not
-  stumble upon the incorrect state (Alexei)
-- update performance reports
-- rebase
-
-
-Hello,
-
-today bpf2bpf calls and tailcalls exclude each other. This set makes them
-work together.
-
-To give you an overview how this work started, previously I posted RFC
-that was targetted at getting rid of push/pop instructions for callee
-saved registers in x86-64 JIT that are not used by the BPF program.
-Alexei saw a potential that that work could be lifted a bit and
-tailcalls could work with BPF subprograms. More on that in [1], [2].
-
-For previous discussions on RFC version, see [3].
-For v1, see [4]. v2 is in [5], v3 can be ignored.
-v5 - [6].
+Both points are related to each other since without 1), 2) could not be
+achieved.
 
 In [1], Alexei says:
-
 "The prologue will look like:
 nop5
 xor eax,eax  // two new bytes if bpf_tail_call() is used in this
-function
+             // function
 push rbp
 mov rbp, rsp
 sub rsp, rounded_stack_depth
@@ -128,49 +79,70 @@ jmp to next function and skip over 'nop5; xor eax,eax; push rpb; mov
 rbp, rsp'
 
 This way new function will set its own stack size and will init tail
-call counter with whatever value the parent had.
+call
+counter with whatever value the parent had.
 
 If next function doesn't use bpf_tail_call it won't have 'xor eax,eax'.
 Instead it would need to have 'nop2' in there."
 
-So basically I gave a shot at that suggestion. Patch 4 has a description
-of implementation.
+Implement that suggestion.
 
-Quick overview of patches:
-Patch 1 changes BPF retpoline to use %rcx instead of %rax to store
-address of BPF tailcall target program
-Patch 2 propagates poke descriptors from main program to each subprogram
-Patch 3 renames poke->ip to poke->tailcall_target
-Patch 4 is the main dish in this set. It implements new prologue layout
-that was suggested by Alexei and reworks tailcall handling.
-Patch 5 relaxes verifier's restrictions about tailcalls being used with
-BPF subprograms for x64 JIT
-Patch 6 is the new selftest that proves tailcalls can be used from
-within BPF subprogram.
+Since the layout of stack is changed, tail call counter handling can not
+rely anymore on popping it to rbx just like it have been handled for
+constant prologue case and later overwrite of rbx with actual value of
+rbx pushed to stack. Therefore, let's use one of the register (%rcx) that
+is considered to be volatile/caller-saved and pop the value of tail call
+counter in there in the epilogue.
 
+Drop the BUILD_BUG_ON in emit_prologue and in
+emit_bpf_tail_call_indirect where instruction layout is not constant
+anymore.
 
--------------------------------------------------------------------
-prog_array_map_poke_run changes:
+Introduce new poke target, 'tailcall_bypass' to poke descriptor that is
+dedicated for skipping the register pops and stack unwind that are
+generated right before the actual jump to target program.
+For case when the target program is not present, BPF program will skip
+the pop instructions and nop5 dedicated for jmpq $target. An example of
+such state when only R6 of callee saved registers is used by program:
 
-Before the tailcall and with the new prologue layout, stack need to be
-unwinded and callee saved registers need to be popped. Instructions
-responsible for that are generated, but they should not be executed if
-target program is not present. To address that, new poke target
-'tailcall_bypass' is introduced to poke descriptor that will be used for
-skipping these instructions. This means there are two poke targets for
-handling direct tailcalls. Simplified flow can be presented as three
-sections:
+ffffffffc0513aa1:       e9 0e 00 00 00          jmpq   0xffffffffc0513ab4
+ffffffffc0513aa6:       5b                      pop    %rbx
+ffffffffc0513aa7:       58                      pop    %rax
+ffffffffc0513aa8:       48 81 c4 00 00 00 00    add    $0x0,%rsp
+ffffffffc0513aaf:       0f 1f 44 00 00          nopl   0x0(%rax,%rax,1)
+ffffffffc0513ab4:       48 89 df                mov    %rbx,%rdi
 
-1. skip call or nop (poke->tailcall_bypass)
-2. stack unwind
-3. call tail or nop (poke->tailcall_target)
+When target program is inserted, the jump that was there to skip
+pops/nop5 will become the nop5, so CPU will go over pops and do the
+actual tailcall.
 
-It would be possible under specific circumstances that one of CPU might
-be in point 2 and point 3 is not yet updated (nop), which would lead to
-problems mentioned in patch 4 commit message, IOW unwind section should
-not be executed if there is no target program.
+One might ask why there simply can not be pushes after the nop5?
+In the following example snippet:
 
-We can define the following state matrix for that (courtesy of Bjorn):
+ffffffffc037030c:       48 89 fb                mov    %rdi,%rbx
+(...)
+ffffffffc0370332:       5b                      pop    %rbx
+ffffffffc0370333:       58                      pop    %rax
+ffffffffc0370334:       48 81 c4 00 00 00 00    add    $0x0,%rsp
+ffffffffc037033b:       0f 1f 44 00 00          nopl   0x0(%rax,%rax,1)
+ffffffffc0370340:       48 81 ec 00 00 00 00    sub    $0x0,%rsp
+ffffffffc0370347:       50                      push   %rax
+ffffffffc0370348:       53                      push   %rbx
+ffffffffc0370349:       48 89 df                mov    %rbx,%rdi
+ffffffffc037034c:       e8 f7 21 00 00          callq  0xffffffffc0372548
+
+There is the bpf2bpf call (at ffffffffc037034c) right after the tailcall
+and jump target is not present. ctx is in %rbx register and BPF
+subprogram that we will call into on ffffffffc037034c is relying on it,
+e.g. it will pick ctx from there. Such code layout is therefore broken
+as we would overwrite the content of %rbx with the value that was pushed
+on the prologue. That is the reason for the 'bypass' approach.
+
+Special care needs to be taken during the install/update/remove of
+tailcall target. In case when target program is not present, the CPU
+must not execute the pop instructions that precede the tailcall.
+
+To address that, the following states can be defined:
 A nop, unwind, nop
 B nop, unwind, tail
 C skip, unwind, nop
@@ -193,184 +165,484 @@ Install new tail call (f''): C(f')->D(f'')->B(f'').
 
 This way CPU can never be exposed to "unwind, tail" state.
 
--------------------------------------------------------------------
-Performance impact:
+For regression checks, 'tailcalls' kselftest was executed:
+$ sudo ./test_progs -t tailcalls
+ #64/1 tailcall_1:OK
+ #64/2 tailcall_2:OK
+ #64/3 tailcall_3:OK
+ #64/4 tailcall_4:OK
+ #64/5 tailcall_5:OK
+ #64 tailcalls:OK
+Summary: 1/5 PASSED, 0 SKIPPED, 0 FAILED
 
-All of this work, as stated in [2], started as a way to speed up AF-XDP
-by dropping the push/pop of unused callee saved registers in prologue
-and epilogue. Impact is positive, 15% of performance gain.
-
-However, it is obvious that it will have a negative impact on BPF
-programs that utilize tailcalls, but we think its volume is acceptable
-for the feature that this set contains.
-
-Below are te numbers from 'perf stat' for two scenarios.
-First scenario is the output of command:
-
-$ sudo perf stat -ddd -r 1024 ./test_progs -t tailcalls
-
-tailcalls kselftest was modified in a following way:
-- only tailcall1 subtest is enabled
-- each of the bpf_prog_test_run() calls got set 'repeat' argument to
-  1000000
-
-Numbers without this set:
-
- Performance counter stats for './test_progs -t tailcalls' (1024 runs):
-
-            261.68 msec task-clock                #    0.998 CPUs utilized            ( +-  0.12% )
-                 5      context-switches          #    0.017 K/sec                    ( +-  0.54% )
-                 0      cpu-migrations            #    0.000 K/sec                    ( +- 23.37% )
-               113      page-faults               #    0.433 K/sec                    ( +-  0.03% )
-       877,156,850      cycles                    #    3.352 GHz                      ( +-  0.11% )  (30.31%)
-     1,379,322,515      instructions              #    1.57  insn per cycle           ( +-  0.02% )  (38.17%)
-       218,869,567      branches                  #  836.395 M/sec                    ( +-  0.01% )  (38.46%)
-        11,954,183      branch-misses             #    5.46% of all branches          ( +-  0.01% )  (38.74%)
-       283,350,418      L1-dcache-loads           # 1082.805 M/sec                    ( +-  0.01% )  (39.00%)
-           156,323      L1-dcache-load-misses     #    0.06% of all L1-dcache hits    ( +-  0.74% )  (39.05%)
-            37,309      LLC-loads                 #    0.143 M/sec                    ( +-  1.02% )  (31.08%)
-            15,263      LLC-load-misses           #   40.91% of all LL-cache hits     ( +-  0.90% )  (30.95%)
-   <not supported>      L1-icache-loads
-           130,427      L1-icache-load-misses                                         ( +-  0.45% )  (30.80%)
-       285,369,370      dTLB-loads                # 1090.520 M/sec                    ( +-  0.01% )  (30.64%)
-             1,154      dTLB-load-misses          #    0.00% of all dTLB cache hits   ( +-  1.26% )  (30.46%)
-             2,015      iTLB-loads                #    0.008 M/sec                    ( +-  1.12% )  (30.31%)
-               551      iTLB-load-misses          #   27.34% of all iTLB cache hits   ( +-  1.29% )  (30.20%)
-   <not supported>      L1-dcache-prefetches
-   <not supported>      L1-dcache-prefetch-misses
-
-          0.262276 +- 0.000316 seconds time elapsed  ( +-  0.12% )
-
-With:
-
- Performance counter stats for './test_progs -t tailcalls' (1024 runs):
-
-            362.37 msec task-clock                #    0.671 CPUs utilized            ( +-  0.11% )
-                28      context-switches          #    0.077 K/sec                    ( +-  0.15% )
-                 0      cpu-migrations            #    0.001 K/sec                    ( +-  4.46% )
-               113      page-faults               #    0.313 K/sec                    ( +-  0.03% )
-       895,804,416      cycles                    #    2.472 GHz                      ( +-  0.08% )  (30.50%)
-     1,339,401,398      instructions              #    1.50  insn per cycle           ( +-  0.04% )  (38.29%)
-       302,718,849      branches                  #  835.385 M/sec                    ( +-  0.04% )  (38.39%)
-        11,962,089      branch-misses             #    3.95% of all branches          ( +-  0.05% )  (38.56%)
-       248,044,443      L1-dcache-loads           #  684.505 M/sec                    ( +-  0.03% )  (38.70%)
-           239,882      L1-dcache-load-misses     #    0.10% of all L1-dcache hits    ( +-  0.49% )  (38.69%)
-            76,904      LLC-loads                 #    0.212 M/sec                    ( +-  0.96% )  (30.88%)
-            23,472      LLC-load-misses           #   30.52% of all LL-cache hits     ( +-  0.98% )  (30.85%)
-   <not supported>      L1-icache-loads
-           193,803      L1-icache-load-misses                                         ( +-  0.53% )  (30.81%)
-       249,775,412      dTLB-loads                #  689.282 M/sec                    ( +-  0.04% )  (30.81%)
-             2,176      dTLB-load-misses          #    0.00% of all dTLB cache hits   ( +-  1.53% )  (30.73%)
-             2,914      iTLB-loads                #    0.008 M/sec                    ( +-  1.23% )  (30.59%)
-               978      iTLB-load-misses          #   33.57% of all iTLB cache hits   ( +-  1.29% )  (30.48%)
-   <not supported>      L1-dcache-prefetches
-   <not supported>      L1-dcache-prefetch-misses
-
-          0.540236 +- 0.000454 seconds time elapsed  ( +-  0.08% )
-
-Second conducted measurement was on BPF kselftest flow_dissector that is
-using the progs/bpf_flow.c with 'repeat' argument on
-bpf_prog_test_run_xattr set also to 1000000.
-
-Without:
-
-Performance counter stats for './test_progs -t flow_dissector' (1024 runs):
-
-          1,355.18 msec task-clock                #    0.989 CPUs utilized            ( +-  0.11% )
-                28      context-switches          #    0.021 K/sec                    ( +-  0.49% )
-                 0      cpu-migrations            #    0.000 K/sec                    ( +-  7.86% )
-               125      page-faults               #    0.093 K/sec                    ( +-  0.03% )
-     4,609,228,676      cycles                    #    3.401 GHz                      ( +-  0.03% )  (30.70%)
-     6,735,946,489      instructions              #    1.46  insn per cycle           ( +-  0.01% )  (38.42%)
-     1,130,187,926      branches                  #  833.979 M/sec                    ( +-  0.01% )  (38.47%)
-        29,150,986      branch-misses             #    2.58% of all branches          ( +-  0.01% )  (38.51%)
-     1,737,548,851      L1-dcache-loads           # 1282.158 M/sec                    ( +-  0.01% )  (38.56%)
-           659,851      L1-dcache-load-misses     #    0.04% of all L1-dcache hits    ( +-  0.78% )  (38.56%)
-            71,196      LLC-loads                 #    0.053 M/sec                    ( +-  0.97% )  (30.81%)
-            22,218      LLC-load-misses           #   31.21% of all LL-cache hits     ( +-  0.83% )  (30.79%)
-   <not supported>      L1-icache-loads
-           770,586      L1-icache-load-misses                                         ( +-  0.67% )  (30.77%)
-     1,742,104,224      dTLB-loads                # 1285.520 M/sec                    ( +-  0.01% )  (30.74%)
-             7,060      dTLB-load-misses          #    0.00% of all dTLB cache hits   ( +-  2.08% )  (30.72%)
-             4,282      iTLB-loads                #    0.003 M/sec                    ( +- 16.98% )  (30.70%)
-             1,261      iTLB-load-misses          #   29.46% of all iTLB cache hits   ( +-  7.14% )  (30.68%)
-   <not supported>      L1-dcache-prefetches
-   <not supported>      L1-dcache-prefetch-misses
-
-           1.37087 +- 0.00145 seconds time elapsed  ( +-  0.11% )
-
-With:
-
- Performance counter stats for './test_progs -t flow_dissector' (1024 runs):
-
-          1,385.56 msec task-clock                #    0.989 CPUs utilized            ( +-  0.06% )
-                28      context-switches          #    0.020 K/sec                    ( +-  0.48% )
-                 0      cpu-migrations            #    0.000 K/sec                    ( +-  7.20% )
-               125      page-faults               #    0.091 K/sec                    ( +-  0.03% )
-     4,642,599,630      cycles                    #    3.351 GHz                      ( +-  0.03% )  (30.69%)
-     6,901,261,616      instructions              #    1.49  insn per cycle           ( +-  0.01% )  (38.41%)
-     1,130,623,950      branches                  #  816.006 M/sec                    ( +-  0.01% )  (38.45%)
-        29,161,215      branch-misses             #    2.58% of all branches          ( +-  0.01% )  (38.50%)
-     1,796,850,740      L1-dcache-loads           # 1296.842 M/sec                    ( +-  0.01% )  (38.55%)
-           673,908      L1-dcache-load-misses     #    0.04% of all L1-dcache hits    ( +-  0.89% )  (38.56%)
-            70,394      LLC-loads                 #    0.051 M/sec                    ( +-  1.08% )  (30.82%)
-            24,575      LLC-load-misses           #   34.91% of all LL-cache hits     ( +-  0.66% )  (30.80%)
-   <not supported>      L1-icache-loads
-           729,421      L1-icache-load-misses                                         ( +-  0.85% )  (30.77%)
-     1,800,871,042      dTLB-loads                # 1299.743 M/sec                    ( +-  0.01% )  (30.75%)
-             6,133      dTLB-load-misses          #    0.00% of all dTLB cache hits   ( +-  2.55% )  (30.73%)
-             1,998      iTLB-loads                #    0.001 M/sec                    ( +-  9.36% )  (30.70%)
-             1,152      iTLB-load-misses          #   57.66% of all iTLB cache hits   ( +-  3.02% )  (30.68%)
-   <not supported>      L1-dcache-prefetches
-   <not supported>      L1-dcache-prefetch-misses
-
-          1.400577 +- 0.000780 seconds time elapsed  ( +-  0.06% )
-
-
-Interesting fact is that I observed the huge iTLB-load-misses counts on
-clean kernel as well:
-
-flow_dissector test:
-             2,613      iTLB-loads                #    0.002 M/sec ( +- 21.90% )  (30.70%)
-            16,483      iTLB-load-misses          #  630.78% of all iTLB cache hits   ( +- 79.63% )  (30.68%)
-tailcalls test:
-             1,996      iTLB-loads                #    0.008 M/sec ( +-  1.08% )  (30.33%)
-             7,272      iTLB-load-misses          #  364.24% of all iTLB cache hits   ( +- 92.01% )  (30.21%)
-
-So probably Alexei's suspicion about get_random_int() doing strange things
-was right.
-
--------------------------------------------------------------------
-
-Thank you,
-Maciej
+Tail call related cases from test_verifier kselftest are also working
+fine. Sample BPF programs that utilize tail calls (sockex3, tracex5)
+work properly as well.
 
 [1]: https://lore.kernel.org/bpf/20200517043227.2gpq22ifoq37ogst@ast-mbp.dhcp.thefacebook.com/
-[2]: https://lore.kernel.org/bpf/20200511143912.34086-1-maciej.fijalkowski@intel.com/
-[3]: https://lore.kernel.org/bpf/20200702134930.4717-1-maciej.fijalkowski@intel.com/
-[4]: https://lore.kernel.org/bpf/20200715233634.3868-1-maciej.fijalkowski@intel.com/
-[5]: https://lore.kernel.org/netdev/20200721115321.3099-1-maciej.fijalkowski@intel.com/
-[6]: https://lore.kernel.org/netdev/20200724173557.5764-1-maciej.fijalkowski@intel.com/
 
-Maciej Fijalkowski (6):
-  bpf, x64: use %rcx instead of %rax for tail call retpolines
-  bpf: propagate poke descriptors to subprograms
-  bpf: rename poke descriptor's 'ip' member to 'tailcall_target'
-  bpf, x64: rework pro/epilogue and tailcall handling in JIT
-  bpf: allow for tailcalls in BPF subprograms for x64 JIT
-  selftests: bpf: add dummy prog for bpf2bpf with tailcall
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+ arch/x86/net/bpf_jit_comp.c | 221 ++++++++++++++++++++++++++++--------
+ include/linux/bpf.h         |   2 +
+ kernel/bpf/arraymap.c       |  40 ++++++-
+ kernel/bpf/core.c           |   2 +-
+ 4 files changed, 212 insertions(+), 53 deletions(-)
 
- arch/x86/include/asm/nospec-branch.h          |  16 +-
- arch/x86/net/bpf_jit_comp.c                   | 249 +++++++++++++-----
- include/linux/bpf.h                           |   7 +-
- kernel/bpf/arraymap.c                         |  55 +++-
- kernel/bpf/core.c                             |   3 +-
- kernel/bpf/verifier.c                         |  57 +++-
- .../selftests/bpf/prog_tests/tailcalls.c      |  85 ++++++
- tools/testing/selftests/bpf/progs/tailcall6.c |  38 +++
- 8 files changed, 424 insertions(+), 86 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall6.c
-
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 44e64d406055..880f283adb66 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -221,14 +221,48 @@ struct jit_context {
+ 
+ /* Number of bytes emit_patch() needs to generate instructions */
+ #define X86_PATCH_SIZE		5
++/* Number of bytes that will be skipped on tailcall */
++#define X86_TAIL_CALL_OFFSET	11
+ 
+-#define PROLOGUE_SIZE		25
++static void push_callee_regs(u8 **pprog, bool *callee_regs_used)
++{
++	u8 *prog = *pprog;
++	int cnt = 0;
++
++	if (callee_regs_used[0])
++		EMIT1(0x53);         /* push rbx */
++	if (callee_regs_used[1])
++		EMIT2(0x41, 0x55);   /* push r13 */
++	if (callee_regs_used[2])
++		EMIT2(0x41, 0x56);   /* push r14 */
++	if (callee_regs_used[3])
++		EMIT2(0x41, 0x57);   /* push r15 */
++	*pprog = prog;
++}
++
++static void pop_callee_regs(u8 **pprog, bool *callee_regs_used)
++{
++	u8 *prog = *pprog;
++	int cnt = 0;
++
++	if (callee_regs_used[3])
++		EMIT2(0x41, 0x5F);   /* pop r15 */
++	if (callee_regs_used[2])
++		EMIT2(0x41, 0x5E);   /* pop r14 */
++	if (callee_regs_used[1])
++		EMIT2(0x41, 0x5D);   /* pop r13 */
++	if (callee_regs_used[0])
++		EMIT1(0x5B);         /* pop rbx */
++	*pprog = prog;
++}
+ 
+ /*
+- * Emit x86-64 prologue code for BPF program and check its size.
+- * bpf_tail_call helper will skip it while jumping into another program
++ * Emit x86-64 prologue code for BPF program.
++ * bpf_tail_call helper will skip the first X86_TAIL_CALL_OFFSET bytes
++ * while jumping to another program
+  */
+-static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf)
++static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf,
++			  bool tail_call)
+ {
+ 	u8 *prog = *pprog;
+ 	int cnt = X86_PATCH_SIZE;
+@@ -238,19 +272,18 @@ static void emit_prologue(u8 **pprog, u32 stack_depth, bool ebpf_from_cbpf)
+ 	 */
+ 	memcpy(prog, ideal_nops[NOP_ATOMIC5], cnt);
+ 	prog += cnt;
++	if (!ebpf_from_cbpf) {
++		if (tail_call)
++			EMIT2(0x31, 0xC0); /* xor eax, eax */
++		else
++			EMIT2(0x66, 0x90); /* nop2 */
++	}
+ 	EMIT1(0x55);             /* push rbp */
+ 	EMIT3(0x48, 0x89, 0xE5); /* mov rbp, rsp */
+ 	/* sub rsp, rounded_stack_depth */
+ 	EMIT3_off32(0x48, 0x81, 0xEC, round_up(stack_depth, 8));
+-	EMIT1(0x53);             /* push rbx */
+-	EMIT2(0x41, 0x55);       /* push r13 */
+-	EMIT2(0x41, 0x56);       /* push r14 */
+-	EMIT2(0x41, 0x57);       /* push r15 */
+-	if (!ebpf_from_cbpf) {
+-		/* zero init tail_call_cnt */
+-		EMIT2(0x6a, 0x00);
+-		BUILD_BUG_ON(cnt != PROLOGUE_SIZE);
+-	}
++	if (!ebpf_from_cbpf && tail_call)
++		EMIT1(0x50);         /* push rax */
+ 	*pprog = prog;
+ }
+ 
+@@ -314,13 +347,14 @@ static int __bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 	mutex_lock(&text_mutex);
+ 	if (memcmp(ip, old_insn, X86_PATCH_SIZE))
+ 		goto out;
++	ret = 1;
+ 	if (memcmp(ip, new_insn, X86_PATCH_SIZE)) {
+ 		if (text_live)
+ 			text_poke_bp(ip, new_insn, X86_PATCH_SIZE, NULL);
+ 		else
+ 			memcpy(ip, new_insn, X86_PATCH_SIZE);
++		ret = 0;
+ 	}
+-	ret = 0;
+ out:
+ 	mutex_unlock(&text_mutex);
+ 	return ret;
+@@ -337,6 +371,22 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 	return __bpf_arch_text_poke(ip, t, old_addr, new_addr, true);
+ }
+ 
++static int get_pop_bytes(bool *callee_regs_used)
++{
++	int bytes = 0;
++
++	if (callee_regs_used[3])
++		bytes += 2;
++	if (callee_regs_used[2])
++		bytes += 2;
++	if (callee_regs_used[1])
++		bytes += 2;
++	if (callee_regs_used[0])
++		bytes += 1;
++
++	return bytes;
++}
++
+ /*
+  * Generate the following code:
+  *
+@@ -351,12 +401,26 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+  *   goto *(prog->bpf_func + prologue_size);
+  * out:
+  */
+-static void emit_bpf_tail_call_indirect(u8 **pprog)
++static void emit_bpf_tail_call_indirect(u8 **pprog, bool *callee_regs_used,
++					u32 stack_depth)
+ {
++	int tcc_off = -4 - round_up(stack_depth, 8);
+ 	u8 *prog = *pprog;
+-	int label1, label2, label3;
++	int pop_bytes = 0;
++	int off1 = 49;
++	int off2 = 38;
++	int off3 = 16;
+ 	int cnt = 0;
+ 
++	/* count the additional bytes used for popping callee regs from stack
++	 * that need to be taken into account for each of the offsets that
++	 * are used for bailing out of the tail call
++	 */
++	pop_bytes = get_pop_bytes(callee_regs_used);
++	off1 += pop_bytes;
++	off2 += pop_bytes;
++	off3 += pop_bytes;
++
+ 	/*
+ 	 * rdi - pointer to ctx
+ 	 * rsi - pointer to bpf_array
+@@ -370,21 +434,19 @@ static void emit_bpf_tail_call_indirect(u8 **pprog)
+ 	EMIT2(0x89, 0xD2);                        /* mov edx, edx */
+ 	EMIT3(0x39, 0x56,                         /* cmp dword ptr [rsi + 16], edx */
+ 	      offsetof(struct bpf_array, map.max_entries));
+-#define OFFSET1 (41 + RETPOLINE_RCX_BPF_JIT_SIZE) /* Number of bytes to jump */
++#define OFFSET1 (off1 + RETPOLINE_RCX_BPF_JIT_SIZE) /* Number of bytes to jump */
+ 	EMIT2(X86_JBE, OFFSET1);                  /* jbe out */
+-	label1 = cnt;
+ 
+ 	/*
+ 	 * if (tail_call_cnt > MAX_TAIL_CALL_CNT)
+ 	 *	goto out;
+ 	 */
+-	EMIT2_off32(0x8B, 0x85, -36 - MAX_BPF_STACK); /* mov eax, dword ptr [rbp - 548] */
++	EMIT2_off32(0x8B, 0x85, tcc_off);         /* mov eax, dword ptr [rbp - tcc_off] */
+ 	EMIT3(0x83, 0xF8, MAX_TAIL_CALL_CNT);     /* cmp eax, MAX_TAIL_CALL_CNT */
+-#define OFFSET2 (30 + RETPOLINE_RCX_BPF_JIT_SIZE)
++#define OFFSET2 (off2 + RETPOLINE_RCX_BPF_JIT_SIZE)
+ 	EMIT2(X86_JA, OFFSET2);                   /* ja out */
+-	label2 = cnt;
+ 	EMIT3(0x83, 0xC0, 0x01);                  /* add eax, 1 */
+-	EMIT2_off32(0x89, 0x85, -36 - MAX_BPF_STACK); /* mov dword ptr [rbp -548], eax */
++	EMIT2_off32(0x89, 0x85, tcc_off);         /* mov dword ptr [rbp - tcc_off], eax */
+ 
+ 	/* prog = array->ptrs[index]; */
+ 	EMIT4_off32(0x48, 0x8B, 0x8C, 0xD6,       /* mov rcx, [rsi + rdx * 8 + offsetof(...)] */
+@@ -394,48 +456,84 @@ static void emit_bpf_tail_call_indirect(u8 **pprog)
+ 	 * if (prog == NULL)
+ 	 *	goto out;
+ 	 */
+-	EMIT3(0x48, 0x85, 0xC9);		  /* test rcx,rcx */
+-#define OFFSET3 (8 + RETPOLINE_RCX_BPF_JIT_SIZE)
++	EMIT3(0x48, 0x85, 0xC9);                  /* test rcx,rcx */
++#define OFFSET3 (off3 + RETPOLINE_RCX_BPF_JIT_SIZE)
+ 	EMIT2(X86_JE, OFFSET3);                   /* je out */
+-	label3 = cnt;
+ 
+-	/* goto *(prog->bpf_func + prologue_size); */
++	*pprog = prog;
++	pop_callee_regs(pprog, callee_regs_used);
++	prog = *pprog;
++
++	EMIT1(0x58);                              /* pop rax */
++	EMIT3_off32(0x48, 0x81, 0xC4,             /* add rsp, sd */
++		    round_up(stack_depth, 8));
++
++	/* goto *(prog->bpf_func + X86_TAIL_CALL_OFFSET); */
+ 	EMIT4(0x48, 0x8B, 0x49,                   /* mov rcx, qword ptr [rcx + 32] */
+ 	      offsetof(struct bpf_prog, bpf_func));
+-	EMIT4(0x48, 0x83, 0xC1, PROLOGUE_SIZE);   /* add rcx, prologue_size */
+-
++	EMIT4(0x48, 0x83, 0xC1,                   /* add rcx, X86_TAIL_CALL_OFFSET */
++	      X86_TAIL_CALL_OFFSET);
+ 	/*
+ 	 * Now we're ready to jump into next BPF program
+ 	 * rdi == ctx (1st arg)
+-	 * rcx == prog->bpf_func + prologue_size
++	 * rcx == prog->bpf_func + X86_TAIL_CALL_OFFSET
+ 	 */
+ 	RETPOLINE_RCX_BPF_JIT();
+ 
+ 	/* out: */
+-	BUILD_BUG_ON(cnt - label1 != OFFSET1);
+-	BUILD_BUG_ON(cnt - label2 != OFFSET2);
+-	BUILD_BUG_ON(cnt - label3 != OFFSET3);
+ 	*pprog = prog;
+ }
+ 
+ static void emit_bpf_tail_call_direct(struct bpf_jit_poke_descriptor *poke,
+-				      u8 **pprog, int addr, u8 *image)
++				      u8 **pprog, int addr, u8 *image,
++				      bool *callee_regs_used, u32 stack_depth)
+ {
++	int tcc_off = -4 - round_up(stack_depth, 8);
+ 	u8 *prog = *pprog;
++	int pop_bytes = 0;
++	int off1 = 27;
++	int poke_off;
+ 	int cnt = 0;
+ 
++	/* count the additional bytes used for popping callee regs to stack
++	 * that need to be taken into account for jump offset that is used for
++	 * bailing out from of the tail call when limit is reached
++	 */
++	pop_bytes = get_pop_bytes(callee_regs_used);
++	off1 += pop_bytes;
++
++	/*
++	 * total bytes for:
++	 * - nop5/ jmpq $off
++	 * - pop callee regs
++	 * - sub rsp, $val
++	 * - pop rax
++	 */
++	poke_off = X86_PATCH_SIZE + pop_bytes + 7 + 1;
++
+ 	/*
+ 	 * if (tail_call_cnt > MAX_TAIL_CALL_CNT)
+ 	 *	goto out;
+ 	 */
+-	EMIT2_off32(0x8B, 0x85, -36 - MAX_BPF_STACK); /* mov eax, dword ptr [rbp - 548] */
++	EMIT2_off32(0x8B, 0x85, tcc_off);             /* mov eax, dword ptr [rbp - tcc_off] */
+ 	EMIT3(0x83, 0xF8, MAX_TAIL_CALL_CNT);         /* cmp eax, MAX_TAIL_CALL_CNT */
+-	EMIT2(X86_JA, 14);                            /* ja out */
++	EMIT2(X86_JA, off1);                          /* ja out */
+ 	EMIT3(0x83, 0xC0, 0x01);                      /* add eax, 1 */
+-	EMIT2_off32(0x89, 0x85, -36 - MAX_BPF_STACK); /* mov dword ptr [rbp -548], eax */
++	EMIT2_off32(0x89, 0x85, tcc_off);             /* mov dword ptr [rbp - tcc_off], eax */
+ 
++	poke->tailcall_bypass = image + (addr - poke_off - X86_PATCH_SIZE);
++	poke->adj_off = X86_TAIL_CALL_OFFSET;
+ 	poke->tailcall_target = image + (addr - X86_PATCH_SIZE);
+-	poke->adj_off = PROLOGUE_SIZE;
++	poke->bypass_addr = (u8 *)poke->tailcall_target + X86_PATCH_SIZE;
++
++	emit_jump(&prog, (u8 *)poke->tailcall_target + X86_PATCH_SIZE,
++		  poke->tailcall_bypass);
++
++	*pprog = prog;
++	pop_callee_regs(pprog, callee_regs_used);
++	prog = *pprog;
++	EMIT1(0x58);                                  /* pop rax */
++	EMIT3_off32(0x48, 0x81, 0xC4, round_up(stack_depth, 8));
+ 
+ 	memcpy(prog, ideal_nops[NOP_ATOMIC5], X86_PATCH_SIZE);
+ 	prog += X86_PATCH_SIZE;
+@@ -476,6 +574,11 @@ static void bpf_tail_call_direct_fixup(struct bpf_prog *prog)
+ 						   (u8 *)target->bpf_func +
+ 						   poke->adj_off, false);
+ 			BUG_ON(ret < 0);
++			ret = __bpf_arch_text_poke(poke->tailcall_bypass,
++						   BPF_MOD_JUMP,
++						   (u8 *)poke->tailcall_target +
++						   X86_PATCH_SIZE, NULL, false);
++			BUG_ON(ret < 0);
+ 		}
+ 		WRITE_ONCE(poke->tailcall_target_stable, true);
+ 		mutex_unlock(&array->aux->poke_mutex);
+@@ -654,19 +757,44 @@ static bool ex_handler_bpf(const struct exception_table_entry *x,
+ 	return true;
+ }
+ 
++static void detect_reg_usage(struct bpf_insn *insn, int insn_cnt,
++			     bool *regs_used, bool *tail_call_seen)
++{
++	int i;
++
++	for (i = 1; i <= insn_cnt; i++, insn++) {
++		if (insn->code == (BPF_JMP | BPF_TAIL_CALL))
++			*tail_call_seen = true;
++		if (insn->dst_reg == BPF_REG_6 || insn->src_reg == BPF_REG_6)
++			regs_used[0] = true;
++		if (insn->dst_reg == BPF_REG_7 || insn->src_reg == BPF_REG_7)
++			regs_used[1] = true;
++		if (insn->dst_reg == BPF_REG_8 || insn->src_reg == BPF_REG_8)
++			regs_used[2] = true;
++		if (insn->dst_reg == BPF_REG_9 || insn->src_reg == BPF_REG_9)
++			regs_used[3] = true;
++	}
++}
++
+ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 		  int oldproglen, struct jit_context *ctx)
+ {
+ 	struct bpf_insn *insn = bpf_prog->insnsi;
++	bool callee_regs_used[4] = {};
+ 	int insn_cnt = bpf_prog->len;
++	bool tail_call_seen = false;
+ 	bool seen_exit = false;
+ 	u8 temp[BPF_MAX_INSN_SIZE + BPF_INSN_SAFETY];
+ 	int i, cnt = 0, excnt = 0;
+ 	int proglen = 0;
+ 	u8 *prog = temp;
+ 
++	detect_reg_usage(insn, insn_cnt, callee_regs_used,
++			 &tail_call_seen);
++
+ 	emit_prologue(&prog, bpf_prog->aux->stack_depth,
+-		      bpf_prog_was_classic(bpf_prog));
++		      bpf_prog_was_classic(bpf_prog), tail_call_seen);
++	push_callee_regs(&prog, callee_regs_used);
+ 	addrs[0] = prog - temp;
+ 
+ 	for (i = 1; i <= insn_cnt; i++, insn++) {
+@@ -1111,9 +1239,13 @@ xadd:			if (is_imm8(insn->off))
+ 		case BPF_JMP | BPF_TAIL_CALL:
+ 			if (imm32)
+ 				emit_bpf_tail_call_direct(&bpf_prog->aux->poke_tab[imm32 - 1],
+-							  &prog, addrs[i], image);
++							  &prog, addrs[i], image,
++							  callee_regs_used,
++							  bpf_prog->aux->stack_depth);
+ 			else
+-				emit_bpf_tail_call_indirect(&prog);
++				emit_bpf_tail_call_indirect(&prog,
++							    callee_regs_used,
++							    bpf_prog->aux->stack_depth);
+ 			break;
+ 
+ 			/* cond jump */
+@@ -1296,12 +1428,9 @@ xadd:			if (is_imm8(insn->off))
+ 			seen_exit = true;
+ 			/* Update cleanup_addr */
+ 			ctx->cleanup_addr = proglen;
+-			if (!bpf_prog_was_classic(bpf_prog))
+-				EMIT1(0x5B); /* get rid of tail_call_cnt */
+-			EMIT2(0x41, 0x5F);   /* pop r15 */
+-			EMIT2(0x41, 0x5E);   /* pop r14 */
+-			EMIT2(0x41, 0x5D);   /* pop r13 */
+-			EMIT1(0x5B);         /* pop rbx */
++			pop_callee_regs(&prog, callee_regs_used);
++			if (!bpf_prog_was_classic(bpf_prog) && tail_call_seen)
++				EMIT1(0x59); /* pop rcx, get rid of tail_call_cnt */
+ 			EMIT1(0xC9);         /* leave */
+ 			EMIT1(0xC3);         /* ret */
+ 			break;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 37a855d54162..b9d8937254d3 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -671,6 +671,8 @@ enum bpf_jit_poke_reason {
+ /* Descriptor of pokes pointing /into/ the JITed image. */
+ struct bpf_jit_poke_descriptor {
+ 	void *tailcall_target;
++	void *tailcall_bypass;
++	void *bypass_addr;
+ 	union {
+ 		struct {
+ 			struct bpf_map *map;
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 7e36b9a1827d..85f49d8206de 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -888,6 +888,7 @@ static void prog_array_map_poke_run(struct bpf_map *map, u32 key,
+ 				    struct bpf_prog *old,
+ 				    struct bpf_prog *new)
+ {
++	u8 *old_addr, *new_addr, *old_bypass_addr;
+ 	struct prog_poke_elem *elem;
+ 	struct bpf_array_aux *aux;
+ 
+@@ -939,12 +940,39 @@ static void prog_array_map_poke_run(struct bpf_map *map, u32 key,
+ 			    poke->tail_call.key != key)
+ 				continue;
+ 
+-			ret = bpf_arch_text_poke(poke->tailcall_target, BPF_MOD_JUMP,
+-						 old ? (u8 *)old->bpf_func +
+-						 poke->adj_off : NULL,
+-						 new ? (u8 *)new->bpf_func +
+-						 poke->adj_off : NULL);
+-			BUG_ON(ret < 0 && ret != -EINVAL);
++			old_bypass_addr = old ? NULL : poke->bypass_addr;
++			old_addr = old ? (u8 *)old->bpf_func + poke->adj_off : NULL;
++			new_addr = new ? (u8 *)new->bpf_func + poke->adj_off : NULL;
++
++			if (new) {
++				ret = bpf_arch_text_poke(poke->tailcall_target,
++							 BPF_MOD_JUMP,
++							 old_addr, new_addr);
++				BUG_ON(ret < 0 && ret != -EINVAL);
++				if (!old) {
++					ret = bpf_arch_text_poke(poke->tailcall_bypass,
++								 BPF_MOD_JUMP,
++								 poke->bypass_addr,
++								 NULL);
++					BUG_ON(ret < 0 && ret != -EINVAL);
++				}
++			} else {
++				ret = bpf_arch_text_poke(poke->tailcall_bypass,
++							 BPF_MOD_JUMP,
++							 old_bypass_addr,
++							 poke->bypass_addr);
++				BUG_ON(ret < 0 && ret != -EINVAL);
++				/* let other CPUs finish the execution of program
++				 * so that it will not possible to expose them
++				 * to invalid nop, stack unwind, nop state
++				 */
++				if (!ret)
++					synchronize_rcu();
++				ret = bpf_arch_text_poke(poke->tailcall_target,
++							 BPF_MOD_JUMP,
++							 old_addr, NULL);
++				BUG_ON(ret < 0 && ret != -EINVAL);
++			}
+ 		}
+ 	}
+ }
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 586f3a7330c3..48df54593444 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -774,7 +774,7 @@ int bpf_jit_add_poke_descriptor(struct bpf_prog *prog,
+ 	if (size > poke_tab_max)
+ 		return -ENOSPC;
+ 	if (poke->tailcall_target || poke->tailcall_target_stable ||
+-	    poke->adj_off)
++	    poke->tailcall_bypass || poke->adj_off || poke->bypass_addr)
+ 		return -EINVAL;
+ 
+ 	switch (poke->reason) {
 -- 
 2.20.1
 
