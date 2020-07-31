@@ -1,136 +1,217 @@
-Return-Path: <SRS0=uBQJ=BJ=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=uiV1=BK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D985DC433E0
-	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 23:18:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AB2DC433DF
+	for <bpf@archiver.kernel.org>; Fri, 31 Jul 2020 00:05:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B11FC20809
-	for <bpf@archiver.kernel.org>; Thu, 30 Jul 2020 23:18:20 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=Mellanox.com header.i=@Mellanox.com header.b="tgOGjQsP"
+	by mail.kernel.org (Postfix) with ESMTP id 2034B2082E
+	for <bpf@archiver.kernel.org>; Fri, 31 Jul 2020 00:05:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730761AbgG3XST (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Jul 2020 19:18:19 -0400
-Received: from mail-db8eur05on2060.outbound.protection.outlook.com ([40.107.20.60]:11105
-        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730236AbgG3XSR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 30 Jul 2020 19:18:17 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MXbvpHjapWs1d0OvAXimOUBzrgQDEx9gjdot6BUUX3jBtpCL3JvG7Y0fw/aFxy5S4JGo1Z8d4fsgrjnB//hgHteWyxramZhENB+8oeVrb9RNJCaI36/eGFGtzt8c2FbAXQp2ekwNRutVAQLAXvuuajsWX8H4gFGHWOnWZvP0g0CsoNS8L4ewzDjxHDOXfONSrBspt4LhdlyEZA2hY6Do1BkOAe1eQDTLTlRz1oB3PwQVP/ZAXQR2LZKN6ewc2lT8Rz3uKyPoBp3GugwNxPCzXO0m3HWqqfrVF1YuGY4gwPn/F6vio1uMrpRi7q8KpMiLF52nviP3ygks/PiQcOQ6BA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uXcI7RZu+CQyym1BYLVmSEokEYMwlhVpgMWZ9KvjSik=;
- b=T6rLOV8xhEpDeaB1q5CbxKDwTj1TRfRwpJuw3Ws4QJeQixYJwCqLAZY4vw5TDRPLaTccE3GQ5fGoI6uLvUhmASl0QPsnALLn/ikddZjmyf2TdzfmU4jvqMqIZ19J+VQuBe6Uth/NThy63AviEF6AxIuXDvvIcoZzCiCsmP5KaZOy41YrhcMDmUeyXBMK0u05X4gMgJRkjh9u/UWXlfJ9vxPWfh8wvitnxpV79/1kb/bQCMSHeOs1XC/t9CFW+oqSo4aS4iggNdG5MUHL+LvIQanT1NaZ/oSZpDbCxT7P800XrLBoD9NhnqtF6wUXrJMLztxZfiUqUpl4/ngjbCFlsw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
- dkim=pass header.d=mellanox.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uXcI7RZu+CQyym1BYLVmSEokEYMwlhVpgMWZ9KvjSik=;
- b=tgOGjQsPA7JeRslNntXhQi/d7udwxrleZgdXZzfrhHtyR1Jmv/vTqrgMWP6rul98jqGhjTCVudm85pDRemtq2oDWv+buuJFu+bbIlGublhvprwijuoHsMyO00upCT1pf6fFJfi7wXzt72/ooTFEaEtg0ewVfhl2Km4mO0skfX6s=
-Received: from VI1PR05MB5102.eurprd05.prod.outlook.com (2603:10a6:803:5e::23)
- by VI1PR05MB3517.eurprd05.prod.outlook.com (2603:10a6:802:20::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3216.20; Thu, 30 Jul
- 2020 23:18:12 +0000
-Received: from VI1PR05MB5102.eurprd05.prod.outlook.com
- ([fe80::508a:d074:ad3a:3529]) by VI1PR05MB5102.eurprd05.prod.outlook.com
- ([fe80::508a:d074:ad3a:3529%5]) with mapi id 15.20.3216.034; Thu, 30 Jul 2020
- 23:18:12 +0000
-From:   Saeed Mahameed <saeedm@mellanox.com>
-To:     "songliubraving@fb.com" <songliubraving@fb.com>,
-        "hawk@kernel.org" <hawk@kernel.org>, "kafai@fb.com" <kafai@fb.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kpsingh@chromium.org" <kpsingh@chromium.org>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "xiongx18@fudan.edu.cn" <xiongx18@fudan.edu.cn>,
-        "yhs@fb.com" <yhs@fb.com>, "andriin@fb.com" <andriin@fb.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Tariq Toukan <tariqt@mellanox.com>
-CC:     "xiyuyang19@fudan.edu.cn" <xiyuyang19@fudan.edu.cn>,
-        "tanxin.ctf@gmail.com" <tanxin.ctf@gmail.com>,
-        "yuanxzhang@fudan.edu.cn" <yuanxzhang@fudan.edu.cn>
-Subject: Re: [PATCH v2] net/mlx5e: fix bpf_prog reference count leaks in
- mlx5e_alloc_rq
-Thread-Topic: [PATCH v2] net/mlx5e: fix bpf_prog reference count leaks in
- mlx5e_alloc_rq
-Thread-Index: AQHWZlxtuTAQ1g3moE6AlXkzFrMjXakgwqSA
-Date:   Thu, 30 Jul 2020 23:18:10 +0000
-Message-ID: <913f7fe1d895bc5b80b42e92304d086c6a550193.camel@mellanox.com>
-References: <20200730102941.5536-1-xiongx18@fudan.edu.cn>
-In-Reply-To: <20200730102941.5536-1-xiongx18@fudan.edu.cn>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.4 (3.36.4-1.fc32) 
-authentication-results: fb.com; dkim=none (message not signed)
- header.d=none;fb.com; dmarc=none action=none header.from=mellanox.com;
-x-originating-ip: [73.15.39.150]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: ec237e2b-087a-480c-c257-08d834ded42d
-x-ms-traffictypediagnostic: VI1PR05MB3517:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR05MB3517550AEF7672B59B2624D0BE710@VI1PR05MB3517.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5516;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cTRnINQby9zk7+uMY/ApB1PRR26yJ31fb8gc0QkufIXYxvzsAG/p2lIGbkEtwPtMg+IjZ5crMbuixmZma34aIYlFOgj7UrTN97lbP86uztzR0V3nh4bY/f3dy9FukkAshY0GZzo1+RkRWmm8g4Tt/Cb4R99cPTNwdADf6nRtGSN9CJSn3PrRfihGTP1K7zar3ywynTfCIQr7L8AOqoJxRgBfEpCODmgx/9e8mL+dzPpP1Lb1gQDXKJ2i4XpzKPlOWrCxJLFZ7OHM9sSjvQ5scMoDOog5sT6lvVOE1vI3J0Nr+0dmtWY/LncWa2FCE4dnxGZ1c0UozIpK6w6QS0lKO8fsKUhXqBmMl7alxz8/pTj+vcwECgEa+VYNJnToAL19
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR05MB5102.eurprd05.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(4636009)(136003)(39860400002)(346002)(376002)(396003)(366004)(5660300002)(4326008)(110136005)(6486002)(316002)(8936002)(6512007)(6506007)(6636002)(26005)(186003)(478600001)(54906003)(8676002)(71200400001)(86362001)(4744005)(91956017)(64756008)(76116006)(66476007)(2906002)(36756003)(66446008)(66556008)(2616005)(7416002)(66946007)(921003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: WPlSDd9VC9wZ2hZWEgZT8ram61oXb7Ie621kGJCL/yhi+GQ8cinQPCovgIgSQ4BXSnamacwULOS/ZOYYym5O16/eZ++DPODrp0BAvAMXpzyJfMU9VmtUqtePQUwg+/SJWp3QempoipCIN4YQXihiWSo9bbtmExN6kjSexR/ErdgmGT6YIWIoXAD/ZRhuTMP1AfyhEwQp2k8kVavp3CVw657FQgCwMfdm2iCkv+Xlc474ikdSRLuiFXRl/RQsgrJJpp2ftQnwTEO4E8jkw4ETmz4DOGNW5nGyyBBFNlVMVbYpyy+ySVpYUgtXkw/LTbUYoXC8/awEx2uCQCCkCqdlyoVaulIaoMfbIbysuxv5J4CdINE1ychScElm1CncyYDAdVF1XPCHacVfP+oAhLnUxhyr8qMwUesTq6NV2i7QSSZRXnEPKa9OBpg+vwlS8nIz0pb+94eKw+hsj0emmYCvA9oB5Ys3jtmPHTOQ8rmbZrQ=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <60823BD76E9F244EAD3C285D40895CC9@eurprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1730729AbgGaAFF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Jul 2020 20:05:05 -0400
+Received: from www62.your-server.de ([213.133.104.62]:45658 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728086AbgGaAFF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 30 Jul 2020 20:05:05 -0400
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1k1IXd-0006zp-9m; Fri, 31 Jul 2020 02:04:53 +0200
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1k1IXd-000XoE-3O; Fri, 31 Jul 2020 02:04:53 +0200
+Subject: Re: [PATCH bpf-next v5 15/15] selftests/bpf: Tests for BPF_SK_LOOKUP
+ attach point
+To:     Jakub Sitnicki <jakub@cloudflare.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+References: <20200717103536.397595-1-jakub@cloudflare.com>
+ <20200717103536.397595-16-jakub@cloudflare.com>
+ <CAEf4BzZHf7838t88Ed3Gzp32UFMq2o2zryL3=hjAL4mELzUC+w@mail.gmail.com>
+ <891f94a4-1663-0830-516c-348c965844fe@iogearbox.net>
+ <87mu3iwvio.fsf@cloudflare.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <884c4328-8515-33e6-d535-6f9747ce007d@iogearbox.net>
+Date:   Fri, 31 Jul 2020 02:04:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR05MB5102.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec237e2b-087a-480c-c257-08d834ded42d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jul 2020 23:18:11.7921
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6dm4iwH39JF0kkUE8l7KzEXEzGmJ9lWKg4XucliqpWNTDO02rvatrouekc9xKUnbWaDs6IJAOzhY/zRPuXgnWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR05MB3517
+In-Reply-To: <87mu3iwvio.fsf@cloudflare.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.3/25889/Thu Jul 30 17:03:53 2020)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-T24gVGh1LCAyMDIwLTA3LTMwIGF0IDE4OjI5ICswODAwLCBYaW4gWGlvbmcgd3JvdGU6DQo+IFRo
-ZSBmdW5jdGlvbiBpbnZva2VzIGJwZl9wcm9nX2luYygpLCB3aGljaCBpbmNyZWFzZXMgdGhlIHJl
-ZmVyZW5jZQ0KPiBjb3VudCBvZiBhIGJwZl9wcm9nIG9iamVjdCAicnEtPnhkcF9wcm9nIiBpZiB0
-aGUgb2JqZWN0IGlzbid0IE5VTEwuDQo+IA0KPiBUaGUgcmVmY291bnQgbGVhayBpc3N1ZXMgdGFr
-ZSBwbGFjZSBpbiB0d28gZXJyb3IgaGFuZGxpbmcgcGF0aHMuIFdoZW4NCj4gZWl0aGVyIG1seDVf
-d3FfbGxfY3JlYXRlKCkgb3IgbWx4NV93cV9jeWNfY3JlYXRlKCkgZmFpbHMsIHRoZQ0KPiBmdW5j
-dGlvbg0KPiBzaW1wbHkgcmV0dXJucyB0aGUgZXJyb3IgY29kZSBhbmQgZm9yZ2V0cyB0byBkcm9w
-IHRoZSByZWZlcmVuY2UgY291bnQNCj4gaW5jcmVhc2VkIGVhcmxpZXIsIGNhdXNpbmcgYSByZWZl
-cmVuY2UgY291bnQgbGVhayBvZiAicnEtPnhkcF9wcm9nIi4NCj4gDQo+IEZpeCB0aGlzIGlzc3Vl
-IGJ5IGp1bXBpbmcgdG8gdGhlIGVycm9yIGhhbmRsaW5nIHBhdGgNCj4gZXJyX3JxX3dxX2Rlc3Ry
-b3kNCj4gd2hpbGUgZWl0aGVyIGZ1bmN0aW9uIGZhaWxzLg0KPiANCj4gRml4ZXM6IDQyMmQ0YzQw
-MWVkZCAoIm5ldC9tbHg1ZTogUlgsIFNwbGl0IFdRIG9iamVjdHMgZm9yIGRpZmZlcmVudA0KPiBS
-UQ0KPiB0eXBlcyIpDQo+IA0KDQpQbGVhc2UgZG9uJ3QgYnJlYWsgdGhlIGxpbmUgb2YgdGhlIGZp
-eGVzIHRhZy4NCkkgd2lsbCBmaXggdGhpcyB1cC4NCg0KPiBTaWduZWQtb2ZmLWJ5OiBYaW4gWGlv
-bmcgPHhpb25neDE4QGZ1ZGFuLmVkdS5jbj4NCj4gU2lnbmVkLW9mZi1ieTogWGl5dSBZYW5nIDx4
-aXl1eWFuZzE5QGZ1ZGFuLmVkdS5jbj4NCj4gU2lnbmVkLW9mZi1ieTogWGluIFRhbiA8dGFueGlu
-LmN0ZkBnbWFpbC5jb20+DQo+IC0tLQ0KPiB2MSAtPiB2MjoNCj4gLSBBbWVuZGVkIHBhcnRzIG9m
-IHdvcmRpbmcgdG8gYmUgYmV0dGVyIHVuZGVyc3Rvb2QNCj4gLSBBZGRlZCBGaXhlcyB0YWcNCj4g
-LS0tDQoNCkFwcGxpZWQgdG8gbmV0LW1seDUsIFRoYW5rcyAhDQoNCg==
+On 7/29/20 10:55 AM, Jakub Sitnicki wrote:
+> Hi Daniel,
+> 
+> On Tue, Jul 28, 2020 at 10:47 PM CEST, Daniel Borkmann wrote:
+> 
+> [...]
+> 
+>> Jakub, I'm actually seeing a slightly different one on my test machine with sk_lookup:
+>>
+>> # ./test_progs -t sk_lookup
+>> #14 cgroup_skb_sk_lookup:OK
+>> #73/1 query lookup prog:OK
+>> #73/2 TCP IPv4 redir port:OK
+>> #73/3 TCP IPv4 redir addr:OK
+>> #73/4 TCP IPv4 redir with reuseport:OK
+>> #73/5 TCP IPv4 redir skip reuseport:OK
+>> #73/6 TCP IPv6 redir port:OK
+>> #73/7 TCP IPv6 redir addr:OK
+>> #73/8 TCP IPv4->IPv6 redir port:OK
+>> #73/9 TCP IPv6 redir with reuseport:OK
+>> #73/10 TCP IPv6 redir skip reuseport:OK
+>> #73/11 UDP IPv4 redir port:OK
+>> #73/12 UDP IPv4 redir addr:OK
+>> #73/13 UDP IPv4 redir with reuseport:OK
+>> attach_lookup_prog:PASS:open 0 nsec
+>> attach_lookup_prog:PASS:bpf_program__attach_netns 0 nsec
+>> make_socket:PASS:make_address 0 nsec
+>> make_socket:PASS:socket 0 nsec
+>> make_socket:PASS:setsockopt(SO_SNDTIMEO) 0 nsec
+>> make_socket:PASS:setsockopt(SO_RCVTIMEO) 0 nsec
+>> make_server:PASS:setsockopt(IP_RECVORIGDSTADDR) 0 nsec
+>> make_server:PASS:setsockopt(SO_REUSEPORT) 0 nsec
+>> make_server:PASS:bind 0 nsec
+>> make_server:PASS:attach_reuseport 0 nsec
+>> update_lookup_map:PASS:bpf_map__fd 0 nsec
+>> update_lookup_map:PASS:bpf_map_update_elem 0 nsec
+>> make_socket:PASS:make_address 0 nsec
+>> make_socket:PASS:socket 0 nsec
+>> make_socket:PASS:setsockopt(SO_SNDTIMEO) 0 nsec
+>> make_socket:PASS:setsockopt(SO_RCVTIMEO) 0 nsec
+>> make_server:PASS:setsockopt(IP_RECVORIGDSTADDR) 0 nsec
+>> make_server:PASS:setsockopt(SO_REUSEPORT) 0 nsec
+>> make_server:PASS:bind 0 nsec
+>> make_server:PASS:attach_reuseport 0 nsec
+>> update_lookup_map:PASS:bpf_map__fd 0 nsec
+>> update_lookup_map:PASS:bpf_map_update_elem 0 nsec
+>> make_socket:PASS:make_address 0 nsec
+>> make_socket:PASS:socket 0 nsec
+>> make_socket:PASS:setsockopt(SO_SNDTIMEO) 0 nsec
+>> make_socket:PASS:setsockopt(SO_RCVTIMEO) 0 nsec
+>> make_server:PASS:setsockopt(IP_RECVORIGDSTADDR) 0 nsec
+>> make_server:PASS:setsockopt(SO_REUSEPORT) 0 nsec
+>> make_server:PASS:bind 0 nsec
+>> make_server:PASS:attach_reuseport 0 nsec
+>> run_lookup_prog:PASS:getsockname 0 nsec
+>> run_lookup_prog:PASS:connect 0 nsec
+>> make_socket:PASS:make_address 0 nsec
+>> make_socket:PASS:socket 0 nsec
+>> make_socket:PASS:setsockopt(SO_SNDTIMEO) 0 nsec
+>> make_socket:PASS:setsockopt(SO_RCVTIMEO) 0 nsec
+>> make_client:PASS:make_client 0 nsec
+>> send_byte:PASS:send_byte 0 nsec
+>> udp_recv_send:FAIL:recvmsg failed
+>> (/root/bpf-next/tools/testing/selftests/bpf/prog_tests/sk_lookup.c:339: errno: Resource temporarily unavailable) failed to receive
+>> #73/14 UDP IPv4 redir and reuseport with conns:FAIL
+>> #73/15 UDP IPv4 redir skip reuseport:OK
+>> #73/16 UDP IPv6 redir port:OK
+>> #73/17 UDP IPv6 redir addr:OK
+>> #73/18 UDP IPv4->IPv6 redir port:OK
+>> #73/19 UDP IPv6 redir and reuseport:OK
+>> attach_lookup_prog:PASS:open 0 nsec
+>> attach_lookup_prog:PASS:bpf_program__attach_netns 0 nsec
+>> make_socket:PASS:make_address 0 nsec
+>> make_socket:PASS:socket 0 nsec
+>> make_socket:PASS:setsockopt(SO_SNDTIMEO) 0 nsec
+>> make_socket:PASS:setsockopt(SO_RCVTIMEO) 0 nsec
+>> make_server:PASS:setsockopt(IP_RECVORIGDSTADDR) 0 nsec
+>> make_server:PASS:setsockopt(IPV6_RECVORIGDSTADDR) 0 nsec
+>> make_server:PASS:setsockopt(SO_REUSEPORT) 0 nsec
+>> make_server:PASS:bind 0 nsec
+>> make_server:PASS:attach_reuseport 0 nsec
+>> update_lookup_map:PASS:bpf_map__fd 0 nsec
+>> update_lookup_map:PASS:bpf_map_update_elem 0 nsec
+>> make_socket:PASS:make_address 0 nsec
+>> make_socket:PASS:socket 0 nsec
+>> make_socket:PASS:setsockopt(SO_SNDTIMEO) 0 nsec
+>> make_socket:PASS:setsockopt(SO_RCVTIMEO) 0 nsec
+>> make_server:PASS:setsockopt(IP_RECVORIGDSTADDR) 0 nsec
+>> make_server:PASS:setsockopt(IPV6_RECVORIGDSTADDR) 0 nsec
+>> make_server:PASS:setsockopt(SO_REUSEPORT) 0 nsec
+>> make_server:PASS:bind 0 nsec
+>> make_server:PASS:attach_reuseport 0 nsec
+>> update_lookup_map:PASS:bpf_map__fd 0 nsec
+>> update_lookup_map:PASS:bpf_map_update_elem 0 nsec
+>> make_socket:PASS:make_address 0 nsec
+>> make_socket:PASS:socket 0 nsec
+>> make_socket:PASS:setsockopt(SO_SNDTIMEO) 0 nsec
+>> make_socket:PASS:setsockopt(SO_RCVTIMEO) 0 nsec
+>> make_server:PASS:setsockopt(IP_RECVORIGDSTADDR) 0 nsec
+>> make_server:PASS:setsockopt(IPV6_RECVORIGDSTADDR) 0 nsec
+>> make_server:PASS:setsockopt(SO_REUSEPORT) 0 nsec
+>> make_server:PASS:bind 0 nsec
+>> make_server:PASS:attach_reuseport 0 nsec
+>> run_lookup_prog:PASS:getsockname 0 nsec
+>> run_lookup_prog:PASS:connect 0 nsec
+>> make_socket:PASS:make_address 0 nsec
+>> make_socket:PASS:socket 0 nsec
+>> make_socket:PASS:setsockopt(SO_SNDTIMEO) 0 nsec
+>> make_socket:PASS:setsockopt(SO_RCVTIMEO) 0 nsec
+>> make_client:PASS:make_client 0 nsec
+>> send_byte:PASS:send_byte 0 nsec
+>> udp_recv_send:FAIL:recvmsg failed
+>> (/root/bpf-next/tools/testing/selftests/bpf/prog_tests/sk_lookup.c:339: errno: Resource temporarily unavailable) failed to receive
+>> #73/20 UDP IPv6 redir and reuseport with conns:FAIL
+>> #73/21 UDP IPv6 redir skip reuseport:OK
+>> #73/22 TCP IPv4 drop on lookup:OK
+>> #73/23 TCP IPv6 drop on lookup:OK
+>> #73/24 UDP IPv4 drop on lookup:OK
+>> #73/25 UDP IPv6 drop on lookup:OK
+>> #73/26 TCP IPv4 drop on reuseport:OK
+>> #73/27 TCP IPv6 drop on reuseport:OK
+>> #73/28 UDP IPv4 drop on reuseport:OK
+>> #73/29 TCP IPv6 drop on reuseport:OK
+>> #73/30 sk_assign returns EEXIST:OK
+>> #73/31 sk_assign honors F_REPLACE:OK
+>> #73/32 sk_assign accepts NULL socket:OK
+>> #73/33 access ctx->sk:OK
+>> #73/34 narrow access to ctx v4:OK
+>> #73/35 narrow access to ctx v6:OK
+>> #73/36 sk_assign rejects TCP established:OK
+>> #73/37 sk_assign rejects UDP connected:OK
+>> #73/38 multi prog - pass, pass:OK
+>> #73/39 multi prog - drop, drop:OK
+>> #73/40 multi prog - pass, drop:OK
+>> #73/41 multi prog - drop, pass:OK
+>> #73/42 multi prog - pass, redir:OK
+>> #73/43 multi prog - redir, pass:OK
+>> #73/44 multi prog - drop, redir:OK
+>> #73/45 multi prog - redir, drop:OK
+>> #73/46 multi prog - redir, redir:OK
+>> #73 sk_lookup:FAIL
+>> Summary: 1/44 PASSED, 0 SKIPPED, 3 FAILED
+> 
+> This patch addresses the failures:
+> 
+>    https://lore.kernel.org/bpf/20200726120228.1414348-1-jakub@cloudflare.com/
+> 
+> It spawned a discussion on what to do about reuseport bpf returning
+> connected udp sockets, and the conclusion was that it would be best to
+> change reuseport logic itself if no one is relying on said behavior.
+> 
+> IOW, I belive the fix does the right thing and can be applied as is. We
+> get the same reuseport behavior everywhere, that is with regular socket
+> lookup and BPF sk lookup, even if that behavior needs to be changed.
+
+Seems reasonable to me, I've applied it to bpf-next, thanks Jakub!
