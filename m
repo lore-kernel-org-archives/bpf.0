@@ -2,84 +2,182 @@ Return-Path: <SRS0=uiV1=BK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74122C433E0
-	for <bpf@archiver.kernel.org>; Fri, 31 Jul 2020 00:07:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27A0EC433E0
+	for <bpf@archiver.kernel.org>; Fri, 31 Jul 2020 00:08:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4AC2F2082E
-	for <bpf@archiver.kernel.org>; Fri, 31 Jul 2020 00:07:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0B6E42082E
+	for <bpf@archiver.kernel.org>; Fri, 31 Jul 2020 00:08:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730793AbgGaAHr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 30 Jul 2020 20:07:47 -0400
-Received: from www62.your-server.de ([213.133.104.62]:46030 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730786AbgGaAHq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 30 Jul 2020 20:07:46 -0400
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1k1IaM-0007C3-P9; Fri, 31 Jul 2020 02:07:42 +0200
-Received: from [178.196.57.75] (helo=pc-9.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1k1IaM-0007Me-IO; Fri, 31 Jul 2020 02:07:42 +0200
-Subject: Re: [PATCH net] net/bpfilter: initialize pos in
- __bpfilter_process_sockopt
-To:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Rodrigo Madera <rodrigo.madera@gmail.com>
-References: <20200730160900.187157-1-hch@lst.de>
- <20200730161303.erzgrhqsgc77d4ny@wittgenstein>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <03954b8f-0db7-427b-cfd6-7146da9b5466@iogearbox.net>
-Date:   Fri, 31 Jul 2020 02:07:42 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1730800AbgGaAIw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 30 Jul 2020 20:08:52 -0400
+Received: from mga12.intel.com ([192.55.52.136]:31466 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730774AbgGaAIw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 30 Jul 2020 20:08:52 -0400
+IronPort-SDR: rmEDXd97gnUSnrYhbFhA567JZQqrQIjHzgs3nRwJO+FaTln9DDGAlwXxo4kWIq+9hju6HJVco+
+ b/GCthR0R/YA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9698"; a="131278072"
+X-IronPort-AV: E=Sophos;i="5.75,416,1589266800"; 
+   d="scan'208";a="131278072"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2020 17:08:50 -0700
+IronPort-SDR: obiXbEr96oHwOupqK6vdpUM7ukz4qU18X7oc1K8vJXWQJQyzhaJrgnoYhQRODJ9mum6r7eoITj
+ BLvpy8uJOgWA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,416,1589266800"; 
+   d="scan'208";a="435237855"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by orsmga004.jf.intel.com with ESMTP; 30 Jul 2020 17:08:48 -0700
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     ast@kernel.org, daniel@iogearbox.net
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn.topel@intel.com,
+        magnus.karlsson@intel.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH v6 bpf-next 1/6] bpf, x64: use %rcx instead of %rax for tail call retpolines
+Date:   Fri, 31 Jul 2020 02:03:19 +0200
+Message-Id: <20200731000324.2253-2-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200731000324.2253-1-maciej.fijalkowski@intel.com>
+References: <20200731000324.2253-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20200730161303.erzgrhqsgc77d4ny@wittgenstein>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.3/25889/Thu Jul 30 17:03:53 2020)
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 7/30/20 6:13 PM, Christian Brauner wrote:
-> On Thu, Jul 30, 2020 at 06:09:00PM +0200, Christoph Hellwig wrote:
->> __bpfilter_process_sockopt never initialized the pos variable passed to
->> the pipe write.  This has been mostly harmless in the past as pipes
->> ignore the offset, but the switch to kernel_write no verified the
-> 
-> s/no/now/
-> 
->> position, which can lead to a failure depending on the exact stack
->> initialization patter.  Initialize the variable to zero to make
-> 
-> s/patter/pattern/
-> 
->> rw_verify_area happy.
->>
->> Fixes: 6955a76fbcd5 ("bpfilter: switch to kernel_write")
->> Reported-by: Christian Brauner <christian.brauner@ubuntu.com>
->> Reported-by: Rodrigo Madera <rodrigo.madera@gmail.com>
->> Signed-off-by: Christoph Hellwig <hch@lst.de>
->> Tested-by: Rodrigo Madera <rodrigo.madera@gmail.com>
->> ---
-> 
-> Thanks for tracking this down, Christoph! This fixes the logging issue
-> for me.
-> Tested-by: Christian Brauner <christian.brauner@ubuntu.com>
-> Reviewed-by: Christian Brauner <christian.brauner@ubuntu.com>
+Currently, %rax is used to store the jump target when BPF program is
+emitting the retpoline instructions that are handling the indirect
+tailcall.
 
-Applied to bpf & fixed up the typos in the commit msg, thanks everyone!
+There is a plan to use %rax for different purpose, which is storing the
+tail call counter. In order to preserve this value across the tailcalls,
+adjust the BPF indirect tailcalls so that the target program will reside
+in %rcx and teach the retpoline instructions about new location of jump
+target.
+
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+ arch/x86/include/asm/nospec-branch.h | 16 ++++++++--------
+ arch/x86/net/bpf_jit_comp.c          | 20 ++++++++++----------
+ 2 files changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+index e7752b4038ff..e491c3d9f227 100644
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -314,19 +314,19 @@ static inline void mds_idle_clear_cpu_buffers(void)
+  *    lfence
+  *    jmp spec_trap
+  *  do_rop:
+- *    mov %rax,(%rsp) for x86_64
++ *    mov %rcx,(%rsp) for x86_64
+  *    mov %edx,(%esp) for x86_32
+  *    retq
+  *
+  * Without retpolines configured:
+  *
+- *    jmp *%rax for x86_64
++ *    jmp *%rcx for x86_64
+  *    jmp *%edx for x86_32
+  */
+ #ifdef CONFIG_RETPOLINE
+ # ifdef CONFIG_X86_64
+-#  define RETPOLINE_RAX_BPF_JIT_SIZE	17
+-#  define RETPOLINE_RAX_BPF_JIT()				\
++#  define RETPOLINE_RCX_BPF_JIT_SIZE	17
++#  define RETPOLINE_RCX_BPF_JIT()				\
+ do {								\
+ 	EMIT1_off32(0xE8, 7);	 /* callq do_rop */		\
+ 	/* spec_trap: */					\
+@@ -334,7 +334,7 @@ do {								\
+ 	EMIT3(0x0F, 0xAE, 0xE8); /* lfence */			\
+ 	EMIT2(0xEB, 0xF9);       /* jmp spec_trap */		\
+ 	/* do_rop: */						\
+-	EMIT4(0x48, 0x89, 0x04, 0x24); /* mov %rax,(%rsp) */	\
++	EMIT4(0x48, 0x89, 0x0C, 0x24); /* mov %rcx,(%rsp) */	\
+ 	EMIT1(0xC3);             /* retq */			\
+ } while (0)
+ # else /* !CONFIG_X86_64 */
+@@ -352,9 +352,9 @@ do {								\
+ # endif
+ #else /* !CONFIG_RETPOLINE */
+ # ifdef CONFIG_X86_64
+-#  define RETPOLINE_RAX_BPF_JIT_SIZE	2
+-#  define RETPOLINE_RAX_BPF_JIT()				\
+-	EMIT2(0xFF, 0xE0);       /* jmp *%rax */
++#  define RETPOLINE_RCX_BPF_JIT_SIZE	2
++#  define RETPOLINE_RCX_BPF_JIT()				\
++	EMIT2(0xFF, 0xE1);       /* jmp *%rcx */
+ # else /* !CONFIG_X86_64 */
+ #  define RETPOLINE_EDX_BPF_JIT()				\
+ 	EMIT2(0xFF, 0xE2)        /* jmp *%edx */
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 42b6709e6dc7..5b3f19799efb 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -370,7 +370,7 @@ static void emit_bpf_tail_call_indirect(u8 **pprog)
+ 	EMIT2(0x89, 0xD2);                        /* mov edx, edx */
+ 	EMIT3(0x39, 0x56,                         /* cmp dword ptr [rsi + 16], edx */
+ 	      offsetof(struct bpf_array, map.max_entries));
+-#define OFFSET1 (41 + RETPOLINE_RAX_BPF_JIT_SIZE) /* Number of bytes to jump */
++#define OFFSET1 (41 + RETPOLINE_RCX_BPF_JIT_SIZE) /* Number of bytes to jump */
+ 	EMIT2(X86_JBE, OFFSET1);                  /* jbe out */
+ 	label1 = cnt;
+ 
+@@ -380,36 +380,36 @@ static void emit_bpf_tail_call_indirect(u8 **pprog)
+ 	 */
+ 	EMIT2_off32(0x8B, 0x85, -36 - MAX_BPF_STACK); /* mov eax, dword ptr [rbp - 548] */
+ 	EMIT3(0x83, 0xF8, MAX_TAIL_CALL_CNT);     /* cmp eax, MAX_TAIL_CALL_CNT */
+-#define OFFSET2 (30 + RETPOLINE_RAX_BPF_JIT_SIZE)
++#define OFFSET2 (30 + RETPOLINE_RCX_BPF_JIT_SIZE)
+ 	EMIT2(X86_JA, OFFSET2);                   /* ja out */
+ 	label2 = cnt;
+ 	EMIT3(0x83, 0xC0, 0x01);                  /* add eax, 1 */
+ 	EMIT2_off32(0x89, 0x85, -36 - MAX_BPF_STACK); /* mov dword ptr [rbp -548], eax */
+ 
+ 	/* prog = array->ptrs[index]; */
+-	EMIT4_off32(0x48, 0x8B, 0x84, 0xD6,       /* mov rax, [rsi + rdx * 8 + offsetof(...)] */
++	EMIT4_off32(0x48, 0x8B, 0x8C, 0xD6,       /* mov rcx, [rsi + rdx * 8 + offsetof(...)] */
+ 		    offsetof(struct bpf_array, ptrs));
+ 
+ 	/*
+ 	 * if (prog == NULL)
+ 	 *	goto out;
+ 	 */
+-	EMIT3(0x48, 0x85, 0xC0);		  /* test rax,rax */
+-#define OFFSET3 (8 + RETPOLINE_RAX_BPF_JIT_SIZE)
++	EMIT3(0x48, 0x85, 0xC9);		  /* test rcx,rcx */
++#define OFFSET3 (8 + RETPOLINE_RCX_BPF_JIT_SIZE)
+ 	EMIT2(X86_JE, OFFSET3);                   /* je out */
+ 	label3 = cnt;
+ 
+ 	/* goto *(prog->bpf_func + prologue_size); */
+-	EMIT4(0x48, 0x8B, 0x40,                   /* mov rax, qword ptr [rax + 32] */
++	EMIT4(0x48, 0x8B, 0x49,                   /* mov rcx, qword ptr [rcx + 32] */
+ 	      offsetof(struct bpf_prog, bpf_func));
+-	EMIT4(0x48, 0x83, 0xC0, PROLOGUE_SIZE);   /* add rax, prologue_size */
++	EMIT4(0x48, 0x83, 0xC1, PROLOGUE_SIZE);   /* add rcx, prologue_size */
+ 
+ 	/*
+-	 * Wow we're ready to jump into next BPF program
++	 * Now we're ready to jump into next BPF program
+ 	 * rdi == ctx (1st arg)
+-	 * rax == prog->bpf_func + prologue_size
++	 * rcx == prog->bpf_func + prologue_size
+ 	 */
+-	RETPOLINE_RAX_BPF_JIT();
++	RETPOLINE_RCX_BPF_JIT();
+ 
+ 	/* out: */
+ 	BUILD_BUG_ON(cnt - label1 != OFFSET1);
+-- 
+2.20.1
+
