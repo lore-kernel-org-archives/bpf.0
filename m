@@ -2,94 +2,214 @@ Return-Path: <SRS0=+7Cc=BL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84D8CC433E0
-	for <bpf@archiver.kernel.org>; Sat,  1 Aug 2020 07:19:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28E89C433DF
+	for <bpf@archiver.kernel.org>; Sat,  1 Aug 2020 08:49:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 690EE2071E
-	for <bpf@archiver.kernel.org>; Sat,  1 Aug 2020 07:19:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 08C552076A
+	for <bpf@archiver.kernel.org>; Sat,  1 Aug 2020 08:49:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="cuFAjrHR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725497AbgHAHTL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 1 Aug 2020 03:19:11 -0400
-Received: from mga01.intel.com ([192.55.52.88]:34362 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725283AbgHAHTK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 1 Aug 2020 03:19:10 -0400
-IronPort-SDR: +O18yqpXbWZzWCm2FJzuQIq89nn/fnwHoyF2axbVULWQGjxKHD/XKherUFwEd98SlbASju2EhK
- RpJVfMCDn28A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9699"; a="170018819"
-X-IronPort-AV: E=Sophos;i="5.75,420,1589266800"; 
-   d="scan'208";a="170018819"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2020 00:19:10 -0700
-IronPort-SDR: Zo2derKvn82YH/lYinaB54acmt0x8hQMNm+RRz6vaZU7cPCumIWnSQDDlulX+EYZF52CDRVhYu
- lxgICzo2g4NA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,420,1589266800"; 
-   d="scan'208";a="491786526"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Aug 2020 00:19:08 -0700
-Date:   Sat, 1 Aug 2020 09:13:57 +0200
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     ast@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        bjorn.topel@intel.com, magnus.karlsson@intel.com
-Subject: Re: [PATCH v6 bpf-next 0/6] bpf: tailcalls in BPF subprograms
-Message-ID: <20200801071357.GA19421@ranger.igk.intel.com>
-References: <20200731000324.2253-1-maciej.fijalkowski@intel.com>
- <fbe6e5ca-65ba-7698-3b8d-1214b5881e88@iogearbox.net>
+        id S1725931AbgHAItt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 1 Aug 2020 04:49:49 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:3128 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726364AbgHAIts (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 1 Aug 2020 04:49:48 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0718mPNA022611
+        for <bpf@vger.kernel.org>; Sat, 1 Aug 2020 01:49:47 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=vdX/GltbK6AC9lvrmsjSBcxCEJYHeciHw/4RADdW77s=;
+ b=cuFAjrHR5I9sZl4Z1iJgTR5Y8zF5eZi75vwq4pilOBG2HVma+rJixB6kTFzMR1/lbYM7
+ 6jSAbaouC2mmECFQQrm2eXufBiQYTy1UDPA3iqrQEjDYPSeO27+WAfe0xeDvKbJTLAXI
+ dEQ9v3Nzljl8pi+z3f7mDAlHCk2NPgHZOMM= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 32n42m05vp-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sat, 01 Aug 2020 01:49:47 -0700
+Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Sat, 1 Aug 2020 01:49:46 -0700
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id 42C0362E53CC; Sat,  1 Aug 2020 01:47:29 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Song Liu <songliubraving@fb.com>
+Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
+To:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@chromium.org>,
+        <brouer@redhat.com>, <dlxu@fb.com>,
+        Song Liu <songliubraving@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next 3/5] selftests/bpf: add selftest for BPF_PROG_TYPE_USER
+Date:   Sat, 1 Aug 2020 01:47:19 -0700
+Message-ID: <20200801084721.1812607-4-songliubraving@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200801084721.1812607-1-songliubraving@fb.com>
+References: <20200801084721.1812607-1-songliubraving@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fbe6e5ca-65ba-7698-3b8d-1214b5881e88@iogearbox.net>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-01_07:2020-07-31,2020-08-01 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 bulkscore=0
+ suspectscore=0 mlxlogscore=999 spamscore=0 phishscore=0 adultscore=0
+ malwarescore=0 impostorscore=0 lowpriorityscore=0 clxscore=1015
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008010068
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Aug 01, 2020 at 03:03:19AM +0200, Daniel Borkmann wrote:
-> On 7/31/20 2:03 AM, Maciej Fijalkowski wrote:
-> > v5->v6:
-> > - propagate only those poke descriptors that individual subprogram is
-> >    actually using (Daniel)
-> > - drop the cumbersome check if poke desc got filled in map_poke_run()
-> > - move poke->ip renaming in bpf_jit_add_poke_descriptor() from patch 4
-> >    to patch 3 to provide bisectability (Daniel)
-> 
-> I did a basic test with Cilium on K8s with this set, spawning a few Pods
-> and checking connectivity & whether we're not crashing since it has bit more
-> elaborate tail call use. So far so good. I was inclined to push the series
-> out, but there is one more issue I noticed and didn't notice earlier when
-> reviewing, and that is overall stack size:
-> 
-> What happens when you create a single program that has nested BPF to BPF
-> calls e.g. either up to the maximum nesting or one call that is using up
-> the max stack size which is then doing another BPF to BPF call that contains
-> the tail call. In the tail call map, you have the same program in there.
-> This means we create a worst case stack from BPF size of max_stack_size *
-> max_tail_call_size, that is, 512*32. So that adds 16k worst case. For x86
-> we have a stack of arch/x86/include/asm/page_64_types.h:
-> 
->   #define THREAD_SIZE_ORDER       (2 + KASAN_STACK_ORDER)
->  #define THREAD_SIZE  (PAGE_SIZE << THREAD_SIZE_ORDER)
-> 
-> So we end up with 16k in a typical case. And this will cause kernel stack
-> overflow; I'm at least not seeing where we handle this situation in the
-> set. Hm, need to think more, but maybe this needs tracking of max stack
-> across tail calls to force an upper limit..
+This test checks the correctness of BPF_PROG_TYPE_USER program, including=
+:
+running on the right cpu, passing in correct args, returning retval, and
+being able to call bpf_get_stack|stackid.
 
-My knee jerk reaction would be to decrement the allowed max tail calls,
-but not sure if it's an option and if it would help.
+Signed-off-by: Song Liu <songliubraving@fb.com>
+---
+ .../selftests/bpf/prog_tests/user_prog.c      | 52 +++++++++++++++++
+ tools/testing/selftests/bpf/progs/user_prog.c | 56 +++++++++++++++++++
+ 2 files changed, 108 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/user_prog.c
+ create mode 100644 tools/testing/selftests/bpf/progs/user_prog.c
 
-Otherwise I'm not sure how to pass around the stack size just like we're
-doing it in this set with tail call counter that sits in %rax.
+diff --git a/tools/testing/selftests/bpf/prog_tests/user_prog.c b/tools/t=
+esting/selftests/bpf/prog_tests/user_prog.c
+new file mode 100644
+index 0000000000000..416707b3bff01
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/user_prog.c
+@@ -0,0 +1,52 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#include <test_progs.h>
++#include "user_prog.skel.h"
++
++static int duration;
++
++void test_user_prog(void)
++{
++	struct bpf_user_prog_args args =3D {{0, 1, 2, 3, 4}};
++	struct bpf_prog_test_run_attr attr =3D {};
++	struct user_prog *skel;
++	int i, numcpu, ret;
++
++	skel =3D user_prog__open_and_load();
++
++	if (CHECK(!skel, "user_prog__open_and_load",
++		  "skeleton open_and_laod failed\n"))
++		return;
++
++	numcpu =3D libbpf_num_possible_cpus();
++
++	attr.prog_fd =3D bpf_program__fd(skel->progs.user_func);
++	attr.data_size_in =3D sizeof(args);
++	attr.data_in =3D &args;
++
++	/* start from -1, so we test cpu_plus =3D=3D 0 */
++	for (i =3D -1; i < numcpu; i++) {
++		args.args[0] =3D i + 1;
++		attr.cpu_plus =3D i + 1;
++		ret =3D bpf_prog_test_run_xattr(&attr);
++		CHECK(ret, "bpf_prog_test_run_xattr", "returns error\n");
++
++		/* skip two tests for i =3D=3D -1 */
++		if (i =3D=3D -1)
++			continue;
++		CHECK(attr.retval !=3D i + 2, "bpf_prog_test_run_xattr",
++		      "doesn't get expected retval\n");
++		CHECK(skel->data->sum !=3D 11 + i, "user_prog_args_test",
++		      "sum of args doesn't match\n");
++	}
++
++	CHECK(skel->data->cpu_match =3D=3D 0, "cpu_match_test", "failed\n");
++	CHECK(skel->bss->get_stack_success !=3D numcpu + 1, "test_bpf_get_stack=
+",
++	      "failed on %d cores\n", numcpu - skel->bss->get_stack_success);
++	CHECK(skel->bss->get_stackid_success !=3D numcpu + 1,
++	      "test_bpf_get_stackid",
++	      "failed on %d cores\n",
++	      numcpu + 1 - skel->bss->get_stackid_success);
++
++	user_prog__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/user_prog.c b/tools/testin=
+g/selftests/bpf/progs/user_prog.c
+new file mode 100644
+index 0000000000000..cf320e97f107a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/user_prog.c
+@@ -0,0 +1,56 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") =3D "GPL";
++
++#ifndef PERF_MAX_STACK_DEPTH
++#define PERF_MAX_STACK_DEPTH         127
++#endif
++
++typedef __u64 stack_trace_t[PERF_MAX_STACK_DEPTH];
++
++struct {
++	__uint(type, BPF_MAP_TYPE_STACK_TRACE);
++	__uint(max_entries, 16384);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(stack_trace_t));
++} stackmap SEC(".maps");
++
++volatile int cpu_match =3D 1;
++volatile __u64 sum =3D 1;
++volatile int get_stack_success =3D 0;
++volatile int get_stackid_success =3D 0;
++volatile __u64 stacktrace[PERF_MAX_STACK_DEPTH];
++
++SEC("user")
++int user_func(struct bpf_user_prog_ctx *ctx)
++{
++	int cpu =3D bpf_get_smp_processor_id();
++	__u32 key =3D cpu;
++	long stackid, err;
++
++	/* check the program runs on the right cpu */
++	if (ctx->args[0] && ctx->args[0] !=3D cpu + 1)
++		cpu_match =3D 0;
++
++	/* check the sum of arguments are correct */
++	sum =3D ctx->args[0] + ctx->args[1] + ctx->args[2] +
++		ctx->args[3] + ctx->args[4];
++
++	/* check bpf_get_stackid works */
++	stackid =3D bpf_get_stackid(ctx, &stackmap, 0);
++	if (stackid >=3D 0)
++		get_stackid_success++;
++
++	/* check bpf_get_stack works */
++	err =3D bpf_get_stack(ctx, (void *)stacktrace,
++			    PERF_MAX_STACK_DEPTH * sizeof(__u64),
++			    BPF_F_USER_STACK);
++	if (err >=3D 0)
++		get_stack_success++;
++
++	return cpu + 2;
++}
+--=20
+2.24.1
 
-> 
-> Thanks,
-> Daniel
