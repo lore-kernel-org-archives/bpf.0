@@ -5,42 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28E89C433DF
-	for <bpf@archiver.kernel.org>; Sat,  1 Aug 2020 08:49:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E520C433DF
+	for <bpf@archiver.kernel.org>; Sat,  1 Aug 2020 08:49:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 08C552076A
-	for <bpf@archiver.kernel.org>; Sat,  1 Aug 2020 08:49:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 49BEF2076A
+	for <bpf@archiver.kernel.org>; Sat,  1 Aug 2020 08:49:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="cuFAjrHR"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="TQhOkKHS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725931AbgHAItt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 1 Aug 2020 04:49:49 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:3128 "EHLO
+        id S1728491AbgHAItv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 1 Aug 2020 04:49:51 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:30770 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726364AbgHAIts (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 1 Aug 2020 04:49:48 -0400
+        by vger.kernel.org with ESMTP id S1726364AbgHAItv (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 1 Aug 2020 04:49:51 -0400
 Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0718mPNA022611
-        for <bpf@vger.kernel.org>; Sat, 1 Aug 2020 01:49:47 -0700
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0718mPNC022611
+        for <bpf@vger.kernel.org>; Sat, 1 Aug 2020 01:49:50 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=vdX/GltbK6AC9lvrmsjSBcxCEJYHeciHw/4RADdW77s=;
- b=cuFAjrHR5I9sZl4Z1iJgTR5Y8zF5eZi75vwq4pilOBG2HVma+rJixB6kTFzMR1/lbYM7
- 6jSAbaouC2mmECFQQrm2eXufBiQYTy1UDPA3iqrQEjDYPSeO27+WAfe0xeDvKbJTLAXI
- dEQ9v3Nzljl8pi+z3f7mDAlHCk2NPgHZOMM= 
+ bh=5RPWFtVuXAxEQqbG8nvPzo+ekxrYzxIosVhRDbbFtRc=;
+ b=TQhOkKHSxPnkUVPxz91FcLwJvwey5tZM7TUz1+PwNo+ehPKmNc1xYDZrpq1OEI1T9hyh
+ s0sLm7PKtMTS1ZMEMEolruK6FEosPR6W++9wMqWCnSrFFuhUzNvP00glO2531JocY36h
+ 7s/cqIPeWr9Fx4PWvXvpEVHi0JQrf6FZ0LA= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 32n42m05vp-2
+        by m0001303.ppops.net with ESMTP id 32n42m05vt-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Sat, 01 Aug 2020 01:49:47 -0700
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+        for <bpf@vger.kernel.org>; Sat, 01 Aug 2020 01:49:50 -0700
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Sat, 1 Aug 2020 01:49:46 -0700
+ 15.1.1979.3; Sat, 1 Aug 2020 01:49:49 -0700
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 42C0362E53CC; Sat,  1 Aug 2020 01:47:29 -0700 (PDT)
+        id 52B3862E53D6; Sat,  1 Aug 2020 01:47:33 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Song Liu <songliubraving@fb.com>
 Smtp-Origin-Hostname: devbig006.ftw2.facebook.com
@@ -51,9 +51,9 @@ CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <brouer@redhat.com>, <dlxu@fb.com>,
         Song Liu <songliubraving@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 3/5] selftests/bpf: add selftest for BPF_PROG_TYPE_USER
-Date:   Sat, 1 Aug 2020 01:47:19 -0700
-Message-ID: <20200801084721.1812607-4-songliubraving@fb.com>
+Subject: [PATCH bpf-next 5/5] selftests/bpf: add benchmark for uprobe vs. user_prog
+Date:   Sat, 1 Aug 2020 01:47:21 -0700
+Message-ID: <20200801084721.1812607-6-songliubraving@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200801084721.1812607-1-songliubraving@fb.com>
 References: <20200801084721.1812607-1-songliubraving@fb.com>
@@ -74,141 +74,174 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This test checks the correctness of BPF_PROG_TYPE_USER program, including=
-:
-running on the right cpu, passing in correct args, returning retval, and
-being able to call bpf_get_stack|stackid.
+Add a benchmark to compare performance of
+  1) uprobe;
+  2) user program w/o args;
+  3) user program w/ args;
+  4) user program w/ args on random cpu.
+
+Sample output:
+
+./test_progs -t uprobe_vs_user_prog -v
+test_uprobe_vs_user_prog:PASS:uprobe_vs_user_prog__open_and_load 0 nsec
+test_uprobe_vs_user_prog:PASS:get_base_addr 0 nsec
+test_uprobe_vs_user_prog:PASS:attach_uprobe 0 nsec
+run_perf_test:PASS:uprobe 0 nsec
+Each uprobe uses 1419 nanoseconds
+run_perf_test:PASS:user_prog_no_args 0 nsec
+Each user_prog_no_args uses 313 nanoseconds
+run_perf_test:PASS:user_prog_with_args 0 nsec
+Each user_prog_with_args uses 335 nanoseconds
+run_perf_test:PASS:user_prog_with_args_on_cpu 0 nsec
+Each user_prog_with_args_on_cpu uses 2821 nanoseconds
+Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
 
 Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- .../selftests/bpf/prog_tests/user_prog.c      | 52 +++++++++++++++++
- tools/testing/selftests/bpf/progs/user_prog.c | 56 +++++++++++++++++++
- 2 files changed, 108 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/user_prog.c
- create mode 100644 tools/testing/selftests/bpf/progs/user_prog.c
+ .../bpf/prog_tests/uprobe_vs_user_prog.c      | 101 ++++++++++++++++++
+ .../selftests/bpf/progs/uprobe_vs_user_prog.c |  21 ++++
+ 2 files changed, 122 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/uprobe_vs_user=
+_prog.c
+ create mode 100644 tools/testing/selftests/bpf/progs/uprobe_vs_user_prog=
+.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/user_prog.c b/tools/t=
-esting/selftests/bpf/prog_tests/user_prog.c
+diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_vs_user_prog.c=
+ b/tools/testing/selftests/bpf/prog_tests/uprobe_vs_user_prog.c
 new file mode 100644
-index 0000000000000..416707b3bff01
+index 0000000000000..dadd7b56e69ec
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/user_prog.c
-@@ -0,0 +1,52 @@
++++ b/tools/testing/selftests/bpf/prog_tests/uprobe_vs_user_prog.c
+@@ -0,0 +1,101 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
 +#include <test_progs.h>
-+#include "user_prog.skel.h"
++#include "uprobe_vs_user_prog.skel.h"
++
++#define REPEAT_CNT 10000ULL
 +
 +static int duration;
 +
-+void test_user_prog(void)
++static noinline void uprobe_target(void)
 +{
-+	struct bpf_user_prog_args args =3D {{0, 1, 2, 3, 4}};
-+	struct bpf_prog_test_run_attr attr =3D {};
-+	struct user_prog *skel;
-+	int i, numcpu, ret;
++	asm ("");
++}
 +
-+	skel =3D user_prog__open_and_load();
++struct bpf_prog_test_run_attr attr;
 +
-+	if (CHECK(!skel, "user_prog__open_and_load",
++static void call_user_prog(void)
++{
++	bpf_prog_test_run_xattr(&attr);
++}
++
++static int numcpu;
++
++static void call_user_prog_on_cpu(void)
++{
++	static int cpu =3D 0;
++
++	attr.cpu_plus =3D cpu + 1;
++	bpf_prog_test_run_xattr(&attr);
++	cpu =3D (cpu + 1) % numcpu;
++}
++
++typedef void (__run_func)(void);
++
++static void run_perf_test(struct uprobe_vs_user_prog *skel,
++			  __run_func func, const char *name)
++{
++	__u64 start_time, total_time;
++	int i;
++
++	skel->bss->sum =3D 0;
++
++	start_time =3D time_get_ns();
++	for (i =3D 0; i < REPEAT_CNT; i++)
++		func();
++	total_time =3D time_get_ns() - start_time;
++
++	CHECK(skel->bss->sum !=3D REPEAT_CNT, name,
++	      "missed %llu times\n", REPEAT_CNT - skel->bss->sum);
++	printf("Each %s uses %llu nanoseconds\n", name, total_time / REPEAT_CNT=
+);
++}
++
++void test_uprobe_vs_user_prog(void)
++{
++	struct bpf_user_prog_args args =3D {};
++	struct uprobe_vs_user_prog *skel;
++	struct bpf_link *uprobe_link;
++	size_t uprobe_offset;
++	ssize_t base_addr;
++
++	skel =3D uprobe_vs_user_prog__open_and_load();
++
++	if (CHECK(!skel, "uprobe_vs_user_prog__open_and_load",
 +		  "skeleton open_and_laod failed\n"))
 +		return;
 +
-+	numcpu =3D libbpf_num_possible_cpus();
++	base_addr =3D get_base_addr();
++	if (CHECK(base_addr < 0, "get_base_addr",
++		  "failed to find base addr: %zd", base_addr))
++		return;
++	uprobe_offset =3D (size_t)&uprobe_target - base_addr;
++	uprobe_link =3D bpf_program__attach_uprobe(skel->progs.handle_uprobe,
++						 false /* retprobe */,
++						 0 /* self pid */,
++						 "/proc/self/exe",
++						 uprobe_offset);
 +
-+	attr.prog_fd =3D bpf_program__fd(skel->progs.user_func);
++	if (CHECK(IS_ERR(uprobe_link), "attach_uprobe",
++		  "err %ld\n", PTR_ERR(uprobe_link)))
++		goto cleanup;
++	skel->links.handle_uprobe =3D uprobe_link;
++
++	run_perf_test(skel, uprobe_target, "uprobe");
++
++	attr.prog_fd =3D bpf_program__fd(skel->progs.user_prog);
++	run_perf_test(skel, call_user_prog, "user_prog_no_args");
++
 +	attr.data_size_in =3D sizeof(args);
 +	attr.data_in =3D &args;
++	run_perf_test(skel, call_user_prog, "user_prog_with_args");
 +
-+	/* start from -1, so we test cpu_plus =3D=3D 0 */
-+	for (i =3D -1; i < numcpu; i++) {
-+		args.args[0] =3D i + 1;
-+		attr.cpu_plus =3D i + 1;
-+		ret =3D bpf_prog_test_run_xattr(&attr);
-+		CHECK(ret, "bpf_prog_test_run_xattr", "returns error\n");
++	numcpu =3D libbpf_num_possible_cpus();
 +
-+		/* skip two tests for i =3D=3D -1 */
-+		if (i =3D=3D -1)
-+			continue;
-+		CHECK(attr.retval !=3D i + 2, "bpf_prog_test_run_xattr",
-+		      "doesn't get expected retval\n");
-+		CHECK(skel->data->sum !=3D 11 + i, "user_prog_args_test",
-+		      "sum of args doesn't match\n");
-+	}
++	if (numcpu <=3D 0)
++		goto cleanup;
 +
-+	CHECK(skel->data->cpu_match =3D=3D 0, "cpu_match_test", "failed\n");
-+	CHECK(skel->bss->get_stack_success !=3D numcpu + 1, "test_bpf_get_stack=
-",
-+	      "failed on %d cores\n", numcpu - skel->bss->get_stack_success);
-+	CHECK(skel->bss->get_stackid_success !=3D numcpu + 1,
-+	      "test_bpf_get_stackid",
-+	      "failed on %d cores\n",
-+	      numcpu + 1 - skel->bss->get_stackid_success);
++	run_perf_test(skel, call_user_prog_on_cpu,
++		      "user_prog_with_args_on_cpu");
 +
-+	user_prog__destroy(skel);
++cleanup:
++	uprobe_vs_user_prog__destroy(skel);
 +}
-diff --git a/tools/testing/selftests/bpf/progs/user_prog.c b/tools/testin=
-g/selftests/bpf/progs/user_prog.c
+diff --git a/tools/testing/selftests/bpf/progs/uprobe_vs_user_prog.c b/to=
+ols/testing/selftests/bpf/progs/uprobe_vs_user_prog.c
 new file mode 100644
-index 0000000000000..cf320e97f107a
+index 0000000000000..8b327b7cee30d
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/user_prog.c
-@@ -0,0 +1,56 @@
++++ b/tools/testing/selftests/bpf/progs/uprobe_vs_user_prog.c
+@@ -0,0 +1,21 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
++// Copyright (c) 2017 Facebook
 +#include "vmlinux.h"
 +#include <bpf/bpf_helpers.h>
 +#include <bpf/bpf_tracing.h>
 +
-+char _license[] SEC("license") =3D "GPL";
++volatile __u64 sum =3D 0;
 +
-+#ifndef PERF_MAX_STACK_DEPTH
-+#define PERF_MAX_STACK_DEPTH         127
-+#endif
-+
-+typedef __u64 stack_trace_t[PERF_MAX_STACK_DEPTH];
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_STACK_TRACE);
-+	__uint(max_entries, 16384);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(stack_trace_t));
-+} stackmap SEC(".maps");
-+
-+volatile int cpu_match =3D 1;
-+volatile __u64 sum =3D 1;
-+volatile int get_stack_success =3D 0;
-+volatile int get_stackid_success =3D 0;
-+volatile __u64 stacktrace[PERF_MAX_STACK_DEPTH];
++SEC("uprobe/func")
++int handle_uprobe(struct pt_regs *ctx)
++{
++	sum++;
++	return 0;
++}
 +
 +SEC("user")
-+int user_func(struct bpf_user_prog_ctx *ctx)
++int user_prog(struct pt_regs *ctx)
 +{
-+	int cpu =3D bpf_get_smp_processor_id();
-+	__u32 key =3D cpu;
-+	long stackid, err;
-+
-+	/* check the program runs on the right cpu */
-+	if (ctx->args[0] && ctx->args[0] !=3D cpu + 1)
-+		cpu_match =3D 0;
-+
-+	/* check the sum of arguments are correct */
-+	sum =3D ctx->args[0] + ctx->args[1] + ctx->args[2] +
-+		ctx->args[3] + ctx->args[4];
-+
-+	/* check bpf_get_stackid works */
-+	stackid =3D bpf_get_stackid(ctx, &stackmap, 0);
-+	if (stackid >=3D 0)
-+		get_stackid_success++;
-+
-+	/* check bpf_get_stack works */
-+	err =3D bpf_get_stack(ctx, (void *)stacktrace,
-+			    PERF_MAX_STACK_DEPTH * sizeof(__u64),
-+			    BPF_F_USER_STACK);
-+	if (err >=3D 0)
-+		get_stack_success++;
-+
-+	return cpu + 2;
++	sum++;
++	return 0;
 +}
 --=20
 2.24.1
