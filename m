@@ -2,100 +2,114 @@ Return-Path: <SRS0=He8s=BM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 577DFC433DF
-	for <bpf@archiver.kernel.org>; Sun,  2 Aug 2020 18:26:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59212C433DF
+	for <bpf@archiver.kernel.org>; Sun,  2 Aug 2020 18:26:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 32D112065E
-	for <bpf@archiver.kernel.org>; Sun,  2 Aug 2020 18:26:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 38BF92065E
+	for <bpf@archiver.kernel.org>; Sun,  2 Aug 2020 18:26:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex-team.ru header.i=@yandex-team.ru header.b="1o368LbN"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="P5Ih+SVk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726947AbgHBS0t (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sun, 2 Aug 2020 14:26:49 -0400
-Received: from forwardcorp1j.mail.yandex.net ([5.45.199.163]:40716 "EHLO
-        forwardcorp1j.mail.yandex.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725917AbgHBS0t (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 2 Aug 2020 14:26:49 -0400
-Received: from vla1-fdfb804fb3f3.qloud-c.yandex.net (vla1-fdfb804fb3f3.qloud-c.yandex.net [IPv6:2a02:6b8:c0d:3199:0:640:fdfb:804f])
-        by forwardcorp1j.mail.yandex.net (Yandex) with ESMTP id 19E102E0906;
-        Sun,  2 Aug 2020 21:26:45 +0300 (MSK)
-Received: from vla5-58875c36c028.qloud-c.yandex.net (vla5-58875c36c028.qloud-c.yandex.net [2a02:6b8:c18:340b:0:640:5887:5c36])
-        by vla1-fdfb804fb3f3.qloud-c.yandex.net (mxbackcorp/Yandex) with ESMTP id lm7E2se0Dk-QiqegKo0;
-        Sun, 02 Aug 2020 21:26:44 +0300
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1596392804; bh=7brAAly1pD7yvGyvgRESCqVN7vgpJY4GDunvZawZmpY=;
-        h=In-Reply-To:Message-Id:References:Date:Subject:To:From:Cc;
-        b=1o368LbNpvAl2vIqK16feRpcqTpje1D6gyPMm+x5ea3I5Zn1nfXSc/czoPysr7iLO
-         kUvrRDEBbt0Od5nkqh8n+PeBLwox58VAg/RUWiTqC1pGhPaOdM6O6zdz4/Pbb3pojf
-         3bhCBEsalCiD1IJVcud2JMxeJScuzwOGdxPixswU=
-Authentication-Results: vla1-fdfb804fb3f3.qloud-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-Received: from unknown (unknown [178.154.220.66])
-        by vla5-58875c36c028.qloud-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id BgDnkfhBPV-Qij4YBtA;
-        Sun, 02 Aug 2020 21:26:44 +0300
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client certificate not present)
-From:   Dmitry Yakunin <zeil@yandex-team.ru>
-To:     alexei.starovoitov@gmail.com, daniel@iogearbox.net,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     sdf@google.com
-Subject: [PATCH bpf-next v4 1/2] bpf: setup socket family and addresses in bpf_prog_test_run_skb
-Date:   Sun,  2 Aug 2020 21:26:37 +0300
-Message-Id: <20200802182638.77377-2-zeil@yandex-team.ru>
-In-Reply-To: <20200802182638.77377-1-zeil@yandex-team.ru>
-References: <20200802182638.77377-1-zeil@yandex-team.ru>
+        id S1726985AbgHBS0w (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 2 Aug 2020 14:26:52 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:58616 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726970AbgHBS0w (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 2 Aug 2020 14:26:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1596392811;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m4ZEC7OhluV+W96KXLUZXn0tjvD0qGEj9H9evHmPVNw=;
+        b=P5Ih+SVkollo+LFpQyp3bF3G74vIa1h90JfIPqAlR4xZ2GFsjjrxt3WJFUZ04HA8tByX8z
+        zq80CGaQP+5CajiRS7MKYeOhXKgssIzd3+tjosCiwglEqSQoCuK0yEIcKZpTiXq6GuZMAA
+        Lx/8DtynzwzBo8N6KZVwXIbQ4fnbvdk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-302-l_infEziPbOXnAOUpnc7cA-1; Sun, 02 Aug 2020 14:26:47 -0400
+X-MC-Unique: l_infEziPbOXnAOUpnc7cA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D8F8C1005504;
+        Sun,  2 Aug 2020 18:26:44 +0000 (UTC)
+Received: from krava (unknown [10.40.192.18])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 28B2F8A195;
+        Sun,  2 Aug 2020 18:26:40 +0000 (UTC)
+Date:   Sun, 2 Aug 2020 20:26:40 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
+        David Miller <davem@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Wenbo Zhang <ethercflow@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Brendan Gregg <bgregg@netflix.com>,
+        Florent Revest <revest@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v9 bpf-next 10/14] bpf: Add d_path helper
+Message-ID: <20200802182640.GA139274@krava>
+References: <20200801170322.75218-1-jolsa@kernel.org>
+ <20200801170322.75218-11-jolsa@kernel.org>
+ <20200802031342.3bfxqo22ezi2zzu4@ast-mbp.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200802031342.3bfxqo22ezi2zzu4@ast-mbp.dhcp.thefacebook.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Now it's impossible to test all branches of cgroup_skb bpf program which
-accesses skb->family and skb->{local,remote}_ip{4,6} fields because they
-are zeroed during socket allocation. This commit fills socket family and
-addresses from related fields in constructed skb.
+On Sat, Aug 01, 2020 at 08:13:42PM -0700, Alexei Starovoitov wrote:
+> On Sat, Aug 01, 2020 at 07:03:18PM +0200, Jiri Olsa wrote:
+> > Adding d_path helper function that returns full path for
+> > given 'struct path' object, which needs to be the kernel
+> > BTF 'path' object. The path is returned in buffer provided
+> > 'buf' of size 'sz' and is zero terminated.
+> > 
+> >   bpf_d_path(&file->f_path, buf, size);
+> > 
+> > The helper calls directly d_path function, so there's only
+> > limited set of function it can be called from. Adding just
+> > very modest set for the start.
+> > 
+> > Updating also bpf.h tools uapi header and adding 'path' to
+> > bpf_helpers_doc.py script.
+> > 
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  include/uapi/linux/bpf.h       | 13 +++++++++
+> >  kernel/trace/bpf_trace.c       | 48 ++++++++++++++++++++++++++++++++++
+> >  scripts/bpf_helpers_doc.py     |  2 ++
+> >  tools/include/uapi/linux/bpf.h | 13 +++++++++
+> >  4 files changed, 76 insertions(+)
+> > 
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index eb5e0c38eb2c..a356ea1357bf 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -3389,6 +3389,18 @@ union bpf_attr {
+> >   *		A non-negative value equal to or less than *size* on success,
+> >   *		or a negative error in case of failure.
+> >   *
+> > + * int bpf_d_path(struct path *path, char *buf, u32 sz)
+> 
+> Please make it return 'long'. As you well ware the generated code will be better.
+> 
 
-v2:
-  - fix build without CONFIG_IPV6 (kernel test robot <lkp@intel.com>)
+will do, thanks
 
-Signed-off-by: Dmitry Yakunin <zeil@yandex-team.ru>
----
- net/bpf/test_run.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index b03c469..2521b27 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -449,6 +449,23 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	skb->protocol = eth_type_trans(skb, current->nsproxy->net_ns->loopback_dev);
- 	skb_reset_network_header(skb);
- 
-+	switch (skb->protocol) {
-+	case htons(ETH_P_IP):
-+		sk->sk_family = AF_INET;
-+		sk->sk_rcv_saddr = ip_hdr(skb)->saddr;
-+		sk->sk_daddr = ip_hdr(skb)->daddr;
-+		break;
-+#if IS_ENABLED(CONFIG_IPV6)
-+	case htons(ETH_P_IPV6):
-+		sk->sk_family = AF_INET6;
-+		sk->sk_v6_rcv_saddr = ipv6_hdr(skb)->saddr;
-+		sk->sk_v6_daddr = ipv6_hdr(skb)->daddr;
-+		break;
-+#endif
-+	default:
-+		break;
-+	}
-+
- 	if (is_l2)
- 		__skb_push(skb, hh_len);
- 	if (is_direct_pkt_access)
--- 
-2.7.4
+jirka
 
