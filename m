@@ -1,117 +1,262 @@
-Return-Path: <SRS0=+7Cc=BL=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=He8s=BM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2530C433DF
-	for <bpf@archiver.kernel.org>; Sat,  1 Aug 2020 19:48:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EB41C433E0
+	for <bpf@archiver.kernel.org>; Sun,  2 Aug 2020 01:32:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A66BE206E9
-	for <bpf@archiver.kernel.org>; Sat,  1 Aug 2020 19:48:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 801312076A
+	for <bpf@archiver.kernel.org>; Sun,  2 Aug 2020 01:32:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cxXfQUbd"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="BoKRvvOe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725939AbgHATsu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 1 Aug 2020 15:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725883AbgHATst (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 1 Aug 2020 15:48:49 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D252FC06174A;
-        Sat,  1 Aug 2020 12:48:49 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id g19so6306634plq.0;
-        Sat, 01 Aug 2020 12:48:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=D/zKsPT50/brRt6TQ94qvPI8VW7jt5RqidXgO91dbKA=;
-        b=cxXfQUbdWAv5Q1PSHtTmYyxr4TWeAH2VpZs7yypxRFxoctSqlLGqImL3/wJeRI12SP
-         9jbrwT1oRJSvTo1cxVm8JCLGKMn7uk5KWjYBnS7pE1IvV9jSsl/xS7XwWXP0Xs1DuIe2
-         wD358QjSfLvbk5nq/ND1+Jen8VIKBNTOMhkVP3314bv+0TAf3+MjWWHSYlDPzUJtf0xC
-         po7jVaP3lakpIkxsnqw9NbhGx56vxinDxhwEWADfqMgdgOek8KHSr2+aCp4Az+ioByS1
-         cYVspwvAEByNv+oC8uBj/CSSh2usnS4RJ6ibkM3z1Ndwt7/xTo3sLq/vLJbsvL4k5iHb
-         gc0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D/zKsPT50/brRt6TQ94qvPI8VW7jt5RqidXgO91dbKA=;
-        b=t+XtR1cTQ1RHKU7a5LkbS5YgF/uveafTqtmpa3J3q4vxCpKPtYHGlWaxp7lqjlK5wj
-         PoIMSCKIdT+LOcIYM+99zCJUFTC8xDWlKXkALVw8NJq+EDoAxnbsw1IBigMFGK398C/b
-         vxCccLbuiIwVnUvcMwcpn1969JIyf0ITGyqRyJbwl2aYUu9wF4yprhLbbJ7tx5xnnMZB
-         Ro2lY/f09H9WlWgM+cDLUS1wpoetWwMgAGykXfZ9O4jAiPLhUjGO/kvg8sbXJG4tJXgM
-         JPqsFdPrKqunzrOyp+qNkC1dW8cU9Jx2F9lqWGVeLtsVbyOh8+gFtOq03GDv0GkkO8w8
-         q+0g==
-X-Gm-Message-State: AOAM532BMZuouSMKvd+9jtCom2fogPJCw9/A8Wk+xJAZL9FSXYm6nKq5
-        KDUQaPTldJvhi1k7bY2WfO8=
-X-Google-Smtp-Source: ABdhPJyZmsSRAtwKHUgKvrRVZquGxxpXMiTCw6T+Na+Re7YXxks6NrlDC9q5U48690eyjt3T1ajvjw==
-X-Received: by 2002:a17:90a:5208:: with SMTP id v8mr10250476pjh.29.1596311329344;
-        Sat, 01 Aug 2020 12:48:49 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:65b5])
-        by smtp.gmail.com with ESMTPSA id u66sm14834950pfb.191.2020.08.01.12.48.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Aug 2020 12:48:48 -0700 (PDT)
-Date:   Sat, 1 Aug 2020 12:48:46 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Christoph Hellwig <hch@lst.de>, davem@davemloft.net,
-        kuba@kernel.org, ast@kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Rodrigo Madera <rodrigo.madera@gmail.com>
-Subject: Re: [PATCH net] net/bpfilter: initialize pos in
- __bpfilter_process_sockopt
-Message-ID: <20200801194846.dxmvg5fmg67nuhwy@ast-mbp.dhcp.thefacebook.com>
-References: <20200730160900.187157-1-hch@lst.de>
- <20200730161303.erzgrhqsgc77d4ny@wittgenstein>
- <03954b8f-0db7-427b-cfd6-7146da9b5466@iogearbox.net>
+        id S1727968AbgHBBca (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 1 Aug 2020 21:32:30 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:39530 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725883AbgHBBca (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 1 Aug 2020 21:32:30 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0721WQGE001863
+        for <bpf@vger.kernel.org>; Sat, 1 Aug 2020 18:32:28 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=dIRQgYPm2Ig0B9ZcNS3cvoWgnUdf0N22Gx5j7REbWhE=;
+ b=BoKRvvOeesLfJa4pnQPJkOfb2ZAfz8LfMy9v51/F59Id/LqywGqX1VBO4YlzN6t6Acvy
+ QmPN3bRV56MViX2No9VPeeQWZyN25pQFRnE+51bd8ltD/fHqPr29H8nLXVPkU/wRaLxr
+ hiCFm5NQsrYbcJzyM4WqpQdbgWb8wzU+gnM= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net with ESMTP id 32n80t1syc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Sat, 01 Aug 2020 18:32:28 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Sat, 1 Aug 2020 18:32:27 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id E7BF32EC50C3; Sat,  1 Aug 2020 18:32:22 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH bpf-next 1/3] libbpf: add btf__parse_raw() and generic btf__parse() APIs
+Date:   Sat, 1 Aug 2020 18:32:17 -0700
+Message-ID: <20200802013219.864880-2-andriin@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200802013219.864880-1-andriin@fb.com>
+References: <20200802013219.864880-1-andriin@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <03954b8f-0db7-427b-cfd6-7146da9b5466@iogearbox.net>
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-02_01:2020-07-31,2020-08-02 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ suspectscore=25 spamscore=0 clxscore=1015 lowpriorityscore=0
+ priorityscore=1501 impostorscore=0 mlxscore=0 mlxlogscore=796 phishscore=0
+ bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008020009
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 02:07:42AM +0200, Daniel Borkmann wrote:
-> On 7/30/20 6:13 PM, Christian Brauner wrote:
-> > On Thu, Jul 30, 2020 at 06:09:00PM +0200, Christoph Hellwig wrote:
-> > > __bpfilter_process_sockopt never initialized the pos variable passed to
-> > > the pipe write.  This has been mostly harmless in the past as pipes
-> > > ignore the offset, but the switch to kernel_write no verified the
-> > 
-> > s/no/now/
-> > 
-> > > position, which can lead to a failure depending on the exact stack
-> > > initialization patter.  Initialize the variable to zero to make
-> > 
-> > s/patter/pattern/
-> > 
-> > > rw_verify_area happy.
-> > > 
-> > > Fixes: 6955a76fbcd5 ("bpfilter: switch to kernel_write")
-> > > Reported-by: Christian Brauner <christian.brauner@ubuntu.com>
-> > > Reported-by: Rodrigo Madera <rodrigo.madera@gmail.com>
-> > > Signed-off-by: Christoph Hellwig <hch@lst.de>
-> > > Tested-by: Rodrigo Madera <rodrigo.madera@gmail.com>
-> > > ---
-> > 
-> > Thanks for tracking this down, Christoph! This fixes the logging issue
-> > for me.
-> > Tested-by: Christian Brauner <christian.brauner@ubuntu.com>
-> > Reviewed-by: Christian Brauner <christian.brauner@ubuntu.com>
-> 
-> Applied to bpf & fixed up the typos in the commit msg, thanks everyone!
+Add public APIs to parse BTF from raw data file (e.g.,
+/sys/kernel/btf/vmlinux), as well as generic btf__parse(), which will try=
+ to
+determine correct format, currently either raw or ELF.
 
-Daniel,
-why is it necessary in bpf tree?
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/btf.c      | 114 ++++++++++++++++++++++++++-------------
+ tools/lib/bpf/btf.h      |   5 +-
+ tools/lib/bpf/libbpf.map |   2 +
+ 3 files changed, 83 insertions(+), 38 deletions(-)
 
-I fixed it already in bpf-next in commit a4fa458950b4 ("bpfilter: Initialize pos variable")
-two weeks ago...
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index ded5b29965f9..856b09a04563 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -562,6 +562,83 @@ struct btf *btf__parse_elf(const char *path, struct =
+btf_ext **btf_ext)
+ 	return btf;
+ }
+=20
++struct btf *btf__parse_raw(const char *path)
++{
++	void *data =3D NULL;
++	struct btf *btf;
++	FILE *f =3D NULL;
++	__u16 magic;
++	int err =3D 0;
++	long sz;
++
++	f =3D fopen(path, "rb");
++	if (!f) {
++		err =3D -errno;
++		goto err_out;
++	}
++
++	/* check BTF magic */
++	if (fread(&magic, 1, sizeof(magic), f) < sizeof(magic)) {
++		err =3D -EIO;
++		goto err_out;
++	}
++	if (magic !=3D BTF_MAGIC) {
++		/* definitely not a raw BTF */
++		err =3D -EPROTO;
++		goto err_out;
++	}
++
++	/* get file size */
++	if (fseek(f, 0, SEEK_END)) {
++		err =3D -errno;
++		goto err_out;
++	}
++	sz =3D ftell(f);
++	if (sz < 0) {
++		err =3D -errno;
++		goto err_out;
++	}
++	/* rewind to the start */
++	if (fseek(f, 0, SEEK_SET)) {
++		err =3D -errno;
++		goto err_out;
++	}
++
++	/* pre-alloc memory and read all of BTF data */
++	data =3D malloc(sz);
++	if (!data) {
++		err =3D -ENOMEM;
++		goto err_out;
++	}
++	if (fread(data, 1, sz, f) < sz) {
++		err =3D -EIO;
++		goto err_out;
++	}
++
++	/* finally parse BTF data */
++	btf =3D btf__new(data, sz);
++
++err_out:
++	free(data);
++	if (f)
++		fclose(f);
++	return err ? ERR_PTR(err) : btf;
++}
++
++struct btf *btf__parse(const char *path, struct btf_ext **btf_ext)
++{
++	struct btf *btf;
++
++	if (btf_ext)
++		*btf_ext =3D NULL;
++
++	btf =3D btf__parse_raw(path);
++	if (!IS_ERR(btf) || PTR_ERR(btf) !=3D -EPROTO)
++		return btf;
++
++	return btf__parse_elf(path, btf_ext);
++}
++
+ static int compare_vsi_off(const void *_a, const void *_b)
+ {
+ 	const struct btf_var_secinfo *a =3D _a;
+@@ -2951,41 +3028,6 @@ static int btf_dedup_remap_types(struct btf_dedup =
+*d)
+ 	return 0;
+ }
+=20
+-static struct btf *btf_load_raw(const char *path)
+-{
+-	struct btf *btf;
+-	size_t read_cnt;
+-	struct stat st;
+-	void *data;
+-	FILE *f;
+-
+-	if (stat(path, &st))
+-		return ERR_PTR(-errno);
+-
+-	data =3D malloc(st.st_size);
+-	if (!data)
+-		return ERR_PTR(-ENOMEM);
+-
+-	f =3D fopen(path, "rb");
+-	if (!f) {
+-		btf =3D ERR_PTR(-errno);
+-		goto cleanup;
+-	}
+-
+-	read_cnt =3D fread(data, 1, st.st_size, f);
+-	fclose(f);
+-	if (read_cnt < st.st_size) {
+-		btf =3D ERR_PTR(-EBADF);
+-		goto cleanup;
+-	}
+-
+-	btf =3D btf__new(data, read_cnt);
+-
+-cleanup:
+-	free(data);
+-	return btf;
+-}
+-
+ /*
+  * Probe few well-known locations for vmlinux kernel image and try to lo=
+ad BTF
+  * data out of it to use for target BTF.
+@@ -3021,7 +3063,7 @@ struct btf *libbpf_find_kernel_btf(void)
+ 			continue;
+=20
+ 		if (locations[i].raw_btf)
+-			btf =3D btf_load_raw(path);
++			btf =3D btf__parse_raw(path);
+ 		else
+ 			btf =3D btf__parse_elf(path, NULL);
+=20
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index 491c7b41ffdc..f4a1a1d2b9a3 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -64,8 +64,9 @@ struct btf_ext_header {
+=20
+ LIBBPF_API void btf__free(struct btf *btf);
+ LIBBPF_API struct btf *btf__new(const void *data, __u32 size);
+-LIBBPF_API struct btf *btf__parse_elf(const char *path,
+-				      struct btf_ext **btf_ext);
++LIBBPF_API struct btf *btf__parse(const char *path, struct btf_ext **btf=
+_ext);
++LIBBPF_API struct btf *btf__parse_elf(const char *path, struct btf_ext *=
+*btf_ext);
++LIBBPF_API struct btf *btf__parse_raw(const char *path);
+ LIBBPF_API int btf__finalize_data(struct bpf_object *obj, struct btf *bt=
+f);
+ LIBBPF_API int btf__load(struct btf *btf);
+ LIBBPF_API __s32 btf__find_by_name(const struct btf *btf,
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index ca49a6a7e5b2..edf6a38807ea 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -291,5 +291,7 @@ LIBBPF_0.1.0 {
+ 		bpf_program__is_sk_lookup;
+ 		bpf_program__set_autoload;
+ 		bpf_program__set_sk_lookup;
++		btf__parse;
++		btf__parse_raw;
+ 		btf__set_fd;
+ } LIBBPF_0.0.9;
+--=20
+2.24.1
 
