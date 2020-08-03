@@ -2,58 +2,58 @@ Return-Path: <SRS0=579k=BN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEEDAC433E0
-	for <bpf@archiver.kernel.org>; Mon,  3 Aug 2020 16:47:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 078DFC433DF
+	for <bpf@archiver.kernel.org>; Mon,  3 Aug 2020 16:47:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 88460207DF
-	for <bpf@archiver.kernel.org>; Mon,  3 Aug 2020 16:47:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C178F207DF
+	for <bpf@archiver.kernel.org>; Mon,  3 Aug 2020 16:47:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="TXuJnfJs"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="eWR6jHvb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726767AbgHCQrB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 3 Aug 2020 12:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
+        id S1727804AbgHCQrI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 3 Aug 2020 12:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725945AbgHCQrA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 3 Aug 2020 12:47:00 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C2EC06174A
-        for <bpf@vger.kernel.org>; Mon,  3 Aug 2020 09:47:00 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id df16so11373826edb.9
-        for <bpf@vger.kernel.org>; Mon, 03 Aug 2020 09:47:00 -0700 (PDT)
+        with ESMTP id S1727076AbgHCQrH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 3 Aug 2020 12:47:07 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC76AC06174A
+        for <bpf@vger.kernel.org>; Mon,  3 Aug 2020 09:47:05 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id bo3so16713924ejb.11
+        for <bpf@vger.kernel.org>; Mon, 03 Aug 2020 09:47:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+GB5MKOgUI8A7DovU8H5BzRSBkTVczydPMIAKJRE0pA=;
-        b=TXuJnfJsusmUF8ldIZxcJRu28lnCE9/0aLAturws4wKkDpEL+LHLVcZUEeKeGf0Y3e
-         LwM42Rys19UAoi/hpotmiJk9kxZfkol1eo23dfSN90N3tGk41jZV07ANqsg39sNmR200
-         fsX9Sq7VOXOHO+zZLXTH2m+04uUyzY8im9dtM=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=1zSKCZIC04ktUpGy5qb8XjhNv00x+wnYV9SCAZoYP3s=;
+        b=eWR6jHvb0a39GIjdHpwgxZshg1qa4wfu8cIjIZa9Kvmjbc01LBTbETDznV4KqjPKsD
+         XYxU3q1rQTDRtloTeqv90ywtWoUqUX5TVabOFpkcbWu/bu8V1nxCx7rnvtjRThLAi0gY
+         c4fUxJhaQXkBTkWtpAnEfzHNObYAzZL91d1Tk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+GB5MKOgUI8A7DovU8H5BzRSBkTVczydPMIAKJRE0pA=;
-        b=IyIJqUseJL3TSC8Li7nbJYqiWZfI2WWKLzCD510K0yPZhExdbq7G45HxwtHc4QCL3h
-         O8hhJGUFus2DbWXOAKCIT97AUVi94UKZztdLCcTArcdVoKvaWdvNvhYlpJ0xUTPIl120
-         0NzjsYK71Duf0uccQfY4NqbYHYHW/Pbb3Qv9VxiwGuqcVz9yfdnpBqE+Vpq+4GxDeefj
-         mGLHn28TCTP7vKvpaKkhgnSUIto9VARrFs1bwssQcSLcdUVWL+LzhEy3gxB55y8s4di+
-         iAum/wcYqmc9VzEHu9hfr1JbOmfFyxmYGwTw8RsPEvEy01sTAOYuIdYfs26D9Cq+xCdi
-         V6vw==
-X-Gm-Message-State: AOAM531h8VGtuuv2bPWc8VF2tzA3LhKfzlGwFM4nnXSxRu18cKnq1WBF
-        BCxxPwMbkol7vnTF33/Icd5BtQ==
-X-Google-Smtp-Source: ABdhPJwykO3ByvIbUHueIQJt/TWEiYWdK0Gbm94tKO6TwXmg6eX2TRwUiBDrwBvK/FWiFYlny50Igw==
-X-Received: by 2002:a05:6402:456:: with SMTP id p22mr16137651edw.177.1596473219106;
-        Mon, 03 Aug 2020 09:46:59 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1zSKCZIC04ktUpGy5qb8XjhNv00x+wnYV9SCAZoYP3s=;
+        b=T97Gs1Y4qOs/lZc3RUZUb8FxydfZ/AygrpAiwVchwEk/qCQtCXK4yDnSnbfMU/tAMJ
+         DVaOcErtJehLAtrCLrLzqRnkhbNJ0JDiPfUaPVmNsZYBD3LMOAhUDwuiMqj0F18itKUc
+         gHkHvICwXB3McZ8yIuIvEVfQukEBFplkr8mgrvdnWCCYzaUccp0ixmCWyHKc7o19VjZ0
+         GSRWOCzagbMg5jyUJNnVzwzS0prvPx9GXk/fW/ejToTq+dbyBIHsKdtefZo1WpvG93oN
+         vvm3ycgXnqsb0P+Xr+2m6gS7Rs/DbwVEJmYacUWeZXueQdAFTdQZujjTUatAlh62x07d
+         Vn2A==
+X-Gm-Message-State: AOAM532sW/87QcXGo74v7mUQD4tKBn3Oy/WTjVjZ6w1xej18i7L9RXcx
+        5wPTvFP5WbvdYcND9ufLGHU/Kw==
+X-Google-Smtp-Source: ABdhPJz4cDDRZ7ii9ujX/ihGeihkzzGTlhkHoakNEXuhWswT655DmKONxGWvJuCJk8XUXJsBku5GfA==
+X-Received: by 2002:a17:906:5246:: with SMTP id y6mr17178995ejm.316.1596473224223;
+        Mon, 03 Aug 2020 09:47:04 -0700 (PDT)
 Received: from kpsingh.zrh.corp.google.com ([81.6.44.51])
-        by smtp.gmail.com with ESMTPSA id j7sm16385654ejb.64.2020.08.03.09.46.57
+        by smtp.gmail.com with ESMTPSA id j7sm16385654ejb.64.2020.08.03.09.47.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2020 09:46:57 -0700 (PDT)
+        Mon, 03 Aug 2020 09:47:03 -0700 (PDT)
 From:   KP Singh <kpsingh@chromium.org>
 To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
         linux-security-module@vger.kernel.org
@@ -62,10 +62,12 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
         Florent Revest <revest@chromium.org>
-Subject: [PATCH bpf-next v8 0/7] Generalizing bpf_local_storage
-Date:   Mon,  3 Aug 2020 18:46:48 +0200
-Message-Id: <20200803164655.1924498-1-kpsingh@chromium.org>
+Subject: [PATCH bpf-next v8 4/7] bpf: Split bpf_local_storage to bpf_sk_storage
+Date:   Mon,  3 Aug 2020 18:46:52 +0200
+Message-Id: <20200803164655.1924498-5-kpsingh@chromium.org>
 X-Mailer: git-send-email 2.28.0.163.g6104cc2f0b6-goog
+In-Reply-To: <20200803164655.1924498-1-kpsingh@chromium.org>
+References: <20200803164655.1924498-1-kpsingh@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -75,131 +77,1620 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: KP Singh <kpsingh@google.com>
 
-# v7 -> v8
+A purely mechanical change:
 
-- Fixed an issue with BTF IDs for helpers and added
-  bpf_<>_storage_delete to selftests to catch this issue.
-- Update comments about refcounts and grabbed a refcount to the open
-  file for userspace inode helpers.
-- Rebase.
+	bpf_sk_storage.c = bpf_sk_storage.c + bpf_local_storage.c
+	bpf_sk_storage.h = bpf_sk_storage.h + bpf_local_storage.h
 
-# v6 -> v7
-
-- Updated the series to use Martin's POC patch:
-
-  https://lore.kernel.org/bpf/20200725013047.4006241-1-kafai@fb.com/
-
-  I added a Co-developed-by: tag, but would need Martin's Signoff
-  (was not sure of the procedure here).
-
-- Rebase.
-
-# v5 -> v6
-
-- Fixed a build warning.
-- Rebase.
-
-# v4 -> v5
-
-- Split non-functional changes into separate commits.
-- Updated the cache macros to be simpler.
-- Fixed some bugs noticed by Martin.
-- Updated the userspace map functions to use an fd for lookups, updates
-  and deletes.
-- Rebase.
-
-# v3 -> v4
-
-- Fixed a missing include to bpf_sk_storage.h in bpf_sk_storage.c
-- Fixed some functions that were not marked as static which led to
-  W=1 compilation warnings.
-
-# v2 -> v3
-
-* Restructured the code as per Martin's suggestions:
-  - Common functionality in bpf_local_storage.c
-  - bpf_sk_storage functionality remains in net/bpf_sk_storage.
-  - bpf_inode_storage is kept separate as it is enabled only with
-    CONFIG_BPF_LSM.
-* A separate cache for inode and sk storage with macros to define it.
-* Use the ops style approach as suggested by Martin instead of the
-  enum + switch style.
-* Added the inode map to bpftool bash completion and docs.
-* Rebase and indentation fixes.
-
-# v1 -> v2
-
-* Use the security blob pointer instead of dedicated member in
-  struct inode.
-* Better code re-use as suggested by Alexei.
-* Dropped the inode count arithmetic as pointed out by Alexei.
-* Minor bug fixes and rebase.
-
-bpf_sk_storage can already be used by some BPF program types to annotate
-socket objects. These annotations are managed with the life-cycle of the
-object (i.e. freed when the object is freed) which makes BPF programs
-much simpler and less prone to errors and leaks.
-
-This patch series:
-
-* Generalizes the bpf_sk_storage infrastructure to allow easy
-  implementation of local storage for other objects
-* Implements local storage for inodes
-* Makes both bpf_{sk, inode}_storage available to LSM programs.
-
-Local storage is safe to use in LSM programs as the attachment sites are
-limited and the owning object won't be freed, however, this is not the
-case for tracing. Usage in tracing is expected to follow a white-list
-based approach similar to the d_path helper
-(https://lore.kernel.org/bpf/20200506132946.2164578-1-jolsa@kernel.org).
-
-Access to local storage would allow LSM programs to implement stateful
-detections like detecting the unlink of a running executable from the
-examples shared as a part of the KRSI series
-https://lore.kernel.org/bpf/20200329004356.27286-1-kpsingh@chromium.org/
-and
-https://github.com/sinkap/linux-krsi/blob/patch/v1/examples/samples/bpf/lsm_detect_exec_unlink.c
-
-
-KP Singh (7):
-  A purely mechanical change to split the renaming from the actual
-    generalization.
-  bpf: Generalize caching for sk_storage.
-  bpf: Generalize bpf_sk_storage
-  bpf: Split bpf_local_storage to bpf_sk_storage
-  bpf: Implement bpf_local_storage for inodes
-  bpf: Allow local storage to be used from LSM programs
-  bpf: Add selftests for local_storage
-
- include/linux/bpf.h                           |   9 +
- include/linux/bpf_local_storage.h             | 173 ++++
- include/linux/bpf_lsm.h                       |  21 +
- include/linux/bpf_types.h                     |   3 +
- include/net/bpf_sk_storage.h                  |  13 +
- include/net/sock.h                            |   4 +-
- include/uapi/linux/bpf.h                      |  54 +-
- kernel/bpf/Makefile                           |   2 +
- kernel/bpf/bpf_inode_storage.c                | 265 ++++++
- kernel/bpf/bpf_local_storage.c                | 600 +++++++++++++
- kernel/bpf/bpf_lsm.c                          |  21 +-
- kernel/bpf/syscall.c                          |   3 +-
- kernel/bpf/verifier.c                         |  10 +
- net/core/bpf_sk_storage.c                     | 825 +++---------------
- security/bpf/hooks.c                          |   7 +
- .../bpf/bpftool/Documentation/bpftool-map.rst |   2 +-
- tools/bpf/bpftool/bash-completion/bpftool     |   3 +-
- tools/bpf/bpftool/map.c                       |   3 +-
- tools/include/uapi/linux/bpf.h                |  54 +-
- tools/lib/bpf/libbpf_probes.c                 |   5 +-
- .../bpf/prog_tests/test_local_storage.c       |  60 ++
- .../selftests/bpf/progs/local_storage.c       | 140 +++
- 22 files changed, 1566 insertions(+), 711 deletions(-)
+Signed-off-by: KP Singh <kpsingh@google.com>
+---
+ include/linux/bpf_local_storage.h | 163 ++++++++
+ include/net/bpf_sk_storage.h      |  61 +--
+ kernel/bpf/Makefile               |   1 +
+ kernel/bpf/bpf_local_storage.c    | 600 ++++++++++++++++++++++++++
+ net/core/bpf_sk_storage.c         | 672 +-----------------------------
+ 5 files changed, 766 insertions(+), 731 deletions(-)
  create mode 100644 include/linux/bpf_local_storage.h
- create mode 100644 kernel/bpf/bpf_inode_storage.c
  create mode 100644 kernel/bpf/bpf_local_storage.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/test_local_storage.c
- create mode 100644 tools/testing/selftests/bpf/progs/local_storage.c
 
+diff --git a/include/linux/bpf_local_storage.h b/include/linux/bpf_local_storage.h
+new file mode 100644
+index 000000000000..3685f681a7fc
+--- /dev/null
++++ b/include/linux/bpf_local_storage.h
+@@ -0,0 +1,163 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (c) 2019 Facebook
++ * Copyright 2020 Google LLC.
++ */
++
++#ifndef _BPF_LOCAL_STORAGE_H
++#define _BPF_LOCAL_STORAGE_H
++
++#include <linux/bpf.h>
++#include <linux/rculist.h>
++#include <linux/list.h>
++#include <linux/hash.h>
++#include <linux/types.h>
++#include <uapi/linux/btf.h>
++
++#define BPF_LOCAL_STORAGE_CACHE_SIZE	16
++
++struct bpf_local_storage_map_bucket {
++	struct hlist_head list;
++	raw_spinlock_t lock;
++};
++
++/* Thp map is not the primary owner of a bpf_local_storage_elem.
++ * Instead, the container object (eg. sk->sk_bpf_storage) is.
++ *
++ * The map (bpf_local_storage_map) is for two purposes
++ * 1. Define the size of the "local storage".  It is
++ *    the map's value_size.
++ *
++ * 2. Maintain a list to keep track of all elems such
++ *    that they can be cleaned up during the map destruction.
++ *
++ * When a bpf local storage is being looked up for a
++ * particular object,  the "bpf_map" pointer is actually used
++ * as the "key" to search in the list of elem in
++ * the respective bpf_local_storage owned by the object.
++ *
++ * e.g. sk->sk_bpf_storage is the mini-map with the "bpf_map" pointer
++ * as the searching key.
++ */
++struct bpf_local_storage_map {
++	struct bpf_map map;
++	/* Lookup elem does not require accessing the map.
++	 *
++	 * Updating/Deleting requires a bucket lock to
++	 * link/unlink the elem from the map.  Having
++	 * multiple buckets to improve contention.
++	 */
++	struct bpf_local_storage_map_bucket *buckets;
++	u32 bucket_log;
++	u16 elem_size;
++	u16 cache_idx;
++};
++
++struct bpf_local_storage_data {
++	/* smap is used as the searching key when looking up
++	 * from the object's bpf_local_storage.
++	 *
++	 * Put it in the same cacheline as the data to minimize
++	 * the number of cachelines access during the cache hit case.
++	 */
++	struct bpf_local_storage_map __rcu *smap;
++	u8 data[] __aligned(8);
++};
++
++/* Linked to bpf_local_storage and bpf_local_storage_map */
++struct bpf_local_storage_elem {
++	struct hlist_node map_node;	/* Linked to bpf_local_storage_map */
++	struct hlist_node snode;	/* Linked to bpf_local_storage */
++	struct bpf_local_storage __rcu *local_storage;
++	struct rcu_head rcu;
++	/* 8 bytes hole */
++	/* The data is stored in aother cacheline to minimize
++	 * the number of cachelines access during a cache hit.
++	 */
++	struct bpf_local_storage_data sdata ____cacheline_aligned;
++};
++
++struct bpf_local_storage {
++	struct bpf_local_storage_data __rcu *cache[BPF_LOCAL_STORAGE_CACHE_SIZE];
++	struct hlist_head list; /* List of bpf_local_storage_elem */
++	void *owner;		/* The object that owns the the above "list" of
++				 * bpf_local_storage_elem.
++				 */
++	struct rcu_head rcu;
++	raw_spinlock_t lock;	/* Protect adding/removing from the "list" */
++};
++
++/* U16_MAX is much more than enough for sk local storage
++ * considering a tcp_sock is ~2k.
++ */
++#define BPF_LOCAL_STORAGE_MAX_VALUE_SIZE				       \
++	min_t(u32,                                                             \
++	      (KMALLOC_MAX_SIZE - MAX_BPF_STACK -                              \
++	       sizeof(struct bpf_local_storage_elem)),                         \
++	      (U16_MAX - sizeof(struct bpf_local_storage_elem)))
++
++#define SELEM(_SDATA)                                                          \
++	container_of((_SDATA), struct bpf_local_storage_elem, sdata)
++#define SDATA(_SELEM) (&(_SELEM)->sdata)
++
++#define BPF_LOCAL_STORAGE_CACHE_SIZE	16
++
++struct bpf_local_storage_cache {
++	spinlock_t idx_lock;
++	u64 idx_usage_counts[BPF_LOCAL_STORAGE_CACHE_SIZE];
++};
++
++#define DEFINE_BPF_STORAGE_CACHE(name)				\
++static struct bpf_local_storage_cache name = {			\
++	.idx_lock = __SPIN_LOCK_UNLOCKED(name.idx_lock),	\
++}
++
++u16 bpf_local_storage_cache_idx_get(struct bpf_local_storage_cache *cache);
++void bpf_local_storage_cache_idx_free(struct bpf_local_storage_cache *cache,
++				      u16 idx);
++
++/* Helper functions for bpf_local_storage */
++int bpf_local_storage_map_alloc_check(union bpf_attr *attr);
++
++struct bpf_local_storage_map *bpf_local_storage_map_alloc(union bpf_attr *attr);
++
++struct bpf_local_storage_data *
++bpf_local_storage_lookup(struct bpf_local_storage *local_storage,
++			 struct bpf_local_storage_map *smap,
++			 bool cacheit_lockit);
++
++void bpf_local_storage_map_free(struct bpf_local_storage_map *smap);
++
++int bpf_local_storage_map_check_btf(const struct bpf_map *map,
++				    const struct btf *btf,
++				    const struct btf_type *key_type,
++				    const struct btf_type *value_type);
++
++void bpf_selem_link_storage(struct bpf_local_storage *local_storage,
++			    struct bpf_local_storage_elem *selem);
++
++bool bpf_selem_unlink_storage(struct bpf_local_storage *local_storage,
++			      struct bpf_local_storage_elem *selem,
++			      bool uncharge_omem);
++
++void bpf_selem_unlink(struct bpf_local_storage_elem *selem);
++
++void bpf_selem_link_map(struct bpf_local_storage_map *smap,
++			struct bpf_local_storage_elem *selem);
++
++void bpf_selem_unlink_map(struct bpf_local_storage_elem *selem);
++
++struct bpf_local_storage_elem *
++bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner, void *value,
++		bool charge_mem);
++
++int
++bpf_local_storage_alloc(void *owner,
++			struct bpf_local_storage_map *smap,
++			struct bpf_local_storage_elem *first_selem);
++
++struct bpf_local_storage_data *
++bpf_local_storage_update(void *owner, struct bpf_map *map, void *value,
++			 u64 map_flags);
++
++#endif /* _BPF_LOCAL_STORAGE_H */
+diff --git a/include/net/bpf_sk_storage.h b/include/net/bpf_sk_storage.h
+index 05b777950eb3..847926cf2899 100644
+--- a/include/net/bpf_sk_storage.h
++++ b/include/net/bpf_sk_storage.h
+@@ -12,6 +12,7 @@
+ #include <net/sock.h>
+ #include <uapi/linux/sock_diag.h>
+ #include <uapi/linux/btf.h>
++#include <linux/bpf_local_storage.h>
+ 
+ struct sock;
+ 
+@@ -25,66 +26,6 @@ struct sk_buff;
+ struct nlattr;
+ struct sock;
+ 
+-#define BPF_LOCAL_STORAGE_CACHE_SIZE	16
+-
+-struct bpf_local_storage_cache {
+-	spinlock_t idx_lock;
+-	u64 idx_usage_counts[BPF_LOCAL_STORAGE_CACHE_SIZE];
+-};
+-
+-#define DEFINE_BPF_STORAGE_CACHE(name)				\
+-static struct bpf_local_storage_cache name = {			\
+-	.idx_lock = __SPIN_LOCK_UNLOCKED(name.idx_lock),	\
+-}
+-
+-u16 bpf_local_storage_cache_idx_get(struct bpf_local_storage_cache *cache);
+-void bpf_local_storage_cache_idx_free(struct bpf_local_storage_cache *cache,
+-				      u16 idx);
+-
+-/* Helper functions for bpf_local_storage */
+-int bpf_local_storage_map_alloc_check(union bpf_attr *attr);
+-
+-struct bpf_local_storage_map *bpf_local_storage_map_alloc(union bpf_attr *attr);
+-
+-struct bpf_local_storage_data *
+-bpf_local_storage_lookup(struct bpf_local_storage *local_storage,
+-			 struct bpf_local_storage_map *smap,
+-			 bool cacheit_lockit);
+-
+-void bpf_local_storage_map_free(struct bpf_local_storage_map *smap);
+-
+-int bpf_local_storage_map_check_btf(const struct bpf_map *map,
+-				    const struct btf *btf,
+-				    const struct btf_type *key_type,
+-				    const struct btf_type *value_type);
+-
+-void bpf_selem_link_storage(struct bpf_local_storage *local_storage,
+-			    struct bpf_local_storage_elem *selem);
+-
+-bool bpf_selem_unlink_storage(struct bpf_local_storage *local_storage,
+-			      struct bpf_local_storage_elem *selem,
+-			      bool uncharge_omem);
+-
+-void bpf_selem_unlink(struct bpf_local_storage_elem *selem);
+-
+-void bpf_selem_link_map(struct bpf_local_storage_map *smap,
+-			struct bpf_local_storage_elem *selem);
+-
+-void bpf_selem_unlink_map(struct bpf_local_storage_elem *selem);
+-
+-struct bpf_local_storage_elem *
+-bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner, void *value,
+-		bool charge_mem);
+-
+-int
+-bpf_local_storage_alloc(void *owner,
+-			struct bpf_local_storage_map *smap,
+-			struct bpf_local_storage_elem *first_selem);
+-
+-struct bpf_local_storage_data *
+-bpf_local_storage_update(void *owner, struct bpf_map *map, void *value,
+-			 u64 map_flags);
+-
+ #ifdef CONFIG_BPF_SYSCALL
+ int bpf_sk_storage_clone(const struct sock *sk, struct sock *newsk);
+ struct bpf_sk_storage_diag *
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index e6eb9c0402da..a9a147e18600 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -12,6 +12,7 @@ obj-$(CONFIG_BPF_JIT) += dispatcher.o
+ ifeq ($(CONFIG_NET),y)
+ obj-$(CONFIG_BPF_SYSCALL) += devmap.o
+ obj-$(CONFIG_BPF_SYSCALL) += cpumap.o
++obj-$(CONFIG_BPF_SYSCALL) += bpf_local_storage.o
+ obj-$(CONFIG_BPF_SYSCALL) += offload.o
+ obj-$(CONFIG_BPF_SYSCALL) += net_namespace.o
+ endif
+diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+new file mode 100644
+index 000000000000..79750579dd7a
+--- /dev/null
++++ b/kernel/bpf/bpf_local_storage.c
+@@ -0,0 +1,600 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2019 Facebook  */
++#include <linux/rculist.h>
++#include <linux/list.h>
++#include <linux/hash.h>
++#include <linux/types.h>
++#include <linux/spinlock.h>
++#include <linux/bpf.h>
++#include <linux/btf_ids.h>
++#include <linux/bpf_local_storage.h>
++#include <net/sock.h>
++#include <uapi/linux/sock_diag.h>
++#include <uapi/linux/btf.h>
++
++#define BPF_LOCAL_STORAGE_CREATE_FLAG_MASK (BPF_F_NO_PREALLOC | BPF_F_CLONE)
++
++static struct bpf_local_storage_map_bucket *
++select_bucket(struct bpf_local_storage_map *smap,
++	      struct bpf_local_storage_elem *selem)
++{
++	return &smap->buckets[hash_ptr(selem, smap->bucket_log)];
++}
++
++static int mem_charge(struct bpf_local_storage_map *smap, void *owner, u32 size)
++{
++	struct bpf_map *map = &smap->map;
++
++	if (!map->ops->map_local_storage_charge)
++		return 0;
++
++	return map->ops->map_local_storage_charge(smap, owner, size);
++}
++
++static void mem_uncharge(struct bpf_local_storage_map *smap, void *owner,
++			 u32 size)
++{
++	struct bpf_map *map = &smap->map;
++
++	if (map->ops->map_local_storage_uncharge)
++		map->ops->map_local_storage_uncharge(smap, owner, size);
++}
++
++static struct bpf_local_storage __rcu **
++owner_storage(struct bpf_local_storage_map *smap, void *owner)
++{
++	struct bpf_map *map = &smap->map;
++
++	return map->ops->map_owner_storage_ptr(owner);
++}
++
++static bool selem_linked_to_storage(const struct bpf_local_storage_elem *selem)
++{
++	return !hlist_unhashed(&selem->snode);
++}
++
++static bool selem_linked_to_map(const struct bpf_local_storage_elem *selem)
++{
++	return !hlist_unhashed(&selem->map_node);
++}
++
++struct bpf_local_storage_elem *
++bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner,
++		void *value, bool charge_mem)
++{
++	struct bpf_local_storage_elem *selem;
++
++	if (charge_mem && mem_charge(smap, owner, smap->elem_size))
++		return NULL;
++
++	selem = kzalloc(smap->elem_size, GFP_ATOMIC | __GFP_NOWARN);
++	if (selem) {
++		if (value)
++			memcpy(SDATA(selem)->data, value, smap->map.value_size);
++		return selem;
++	}
++
++	if (charge_mem)
++		mem_uncharge(smap, owner, smap->elem_size);
++
++	return NULL;
++}
++
++/* local_storage->lock must be held and selem->sk_storage == sk_storage.
++ * The caller must ensure selem->smap is still valid to be
++ * dereferenced for its smap->elem_size and smap->cache_idx.
++ */
++bool bpf_selem_unlink_storage(struct bpf_local_storage *local_storage,
++			      struct bpf_local_storage_elem *selem,
++			      bool uncharge_mem)
++{
++	struct bpf_local_storage_map *smap;
++	bool free_local_storage;
++	void *owner;
++
++	smap = rcu_dereference(SDATA(selem)->smap);
++	owner = local_storage->owner;
++
++	/* All uncharging on owner must be done first.
++	 * The owner may be freed once the last selem is unlinked from
++	 * local_storage.
++	 */
++	if (uncharge_mem)
++		mem_uncharge(smap, owner, smap->elem_size);
++
++	free_local_storage = hlist_is_singular_node(&selem->snode,
++						    &local_storage->list);
++	if (free_local_storage) {
++		mem_uncharge(smap, owner, sizeof(struct bpf_local_storage));
++		local_storage->owner = NULL;
++
++		/* After this RCU_INIT, owner may be freed and cannot be used */
++		RCU_INIT_POINTER(*owner_storage(smap, owner), NULL);
++
++		/* local_storage is not freed now.  local_storage->lock is
++		 * still held and raw_spin_unlock_bh(&local_storage->lock)
++		 * will be done by the caller.
++		 *
++		 * Although the unlock will be done under
++		 * rcu_read_lock(),  it is more intutivie to
++		 * read if kfree_rcu(local_storage, rcu) is done
++		 * after the raw_spin_unlock_bh(&local_storage->lock).
++		 *
++		 * Hence, a "bool free_local_storage" is returned
++		 * to the caller which then calls the kfree_rcu()
++		 * after unlock.
++		 */
++	}
++	hlist_del_init_rcu(&selem->snode);
++	if (rcu_access_pointer(local_storage->cache[smap->cache_idx]) ==
++	    SDATA(selem))
++		RCU_INIT_POINTER(local_storage->cache[smap->cache_idx], NULL);
++
++	kfree_rcu(selem, rcu);
++
++	return free_local_storage;
++}
++
++static void __bpf_selem_unlink_storage(struct bpf_local_storage_elem *selem)
++{
++	struct bpf_local_storage *local_storage;
++	bool free_local_storage = false;
++
++	if (unlikely(!selem_linked_to_storage(selem)))
++		/* selem has already been unlinked from sk */
++		return;
++
++	local_storage = rcu_dereference(selem->local_storage);
++	raw_spin_lock_bh(&local_storage->lock);
++	if (likely(selem_linked_to_storage(selem)))
++		free_local_storage =
++			bpf_selem_unlink_storage(local_storage, selem, true);
++	raw_spin_unlock_bh(&local_storage->lock);
++
++	if (free_local_storage)
++		kfree_rcu(local_storage, rcu);
++}
++
++void bpf_selem_link_storage(struct bpf_local_storage *local_storage,
++			    struct bpf_local_storage_elem *selem)
++{
++	RCU_INIT_POINTER(selem->local_storage, local_storage);
++	hlist_add_head(&selem->snode, &local_storage->list);
++}
++
++void bpf_selem_unlink_map(struct bpf_local_storage_elem *selem)
++{
++	struct bpf_local_storage_map *smap;
++	struct bpf_local_storage_map_bucket *b;
++
++	if (unlikely(!selem_linked_to_map(selem)))
++		/* selem has already be unlinked from smap */
++		return;
++
++	smap = rcu_dereference(SDATA(selem)->smap);
++	b = select_bucket(smap, selem);
++	raw_spin_lock_bh(&b->lock);
++	if (likely(selem_linked_to_map(selem)))
++		hlist_del_init_rcu(&selem->map_node);
++	raw_spin_unlock_bh(&b->lock);
++}
++
++void bpf_selem_link_map(struct bpf_local_storage_map *smap,
++			struct bpf_local_storage_elem *selem)
++{
++	struct bpf_local_storage_map_bucket *b = select_bucket(smap, selem);
++
++	raw_spin_lock_bh(&b->lock);
++	RCU_INIT_POINTER(SDATA(selem)->smap, smap);
++	hlist_add_head_rcu(&selem->map_node, &b->list);
++	raw_spin_unlock_bh(&b->lock);
++}
++
++void bpf_selem_unlink(struct bpf_local_storage_elem *selem)
++{
++	/* Always unlink from map before unlinking from local_storage
++	 * because selem will be freed after successfully unlinked from
++	 * the local_storage.
++	 */
++	bpf_selem_unlink_map(selem);
++	__bpf_selem_unlink_storage(selem);
++}
++
++struct bpf_local_storage_data *
++bpf_local_storage_lookup(struct bpf_local_storage *local_storage,
++			 struct bpf_local_storage_map *smap,
++			 bool cacheit_lockit)
++{
++	struct bpf_local_storage_data *sdata;
++	struct bpf_local_storage_elem *selem;
++
++	/* Fast path (cache hit) */
++	sdata = rcu_dereference(local_storage->cache[smap->cache_idx]);
++	if (sdata && rcu_access_pointer(sdata->smap) == smap)
++		return sdata;
++
++	/* Slow path (cache miss) */
++	hlist_for_each_entry_rcu(selem, &local_storage->list, snode)
++		if (rcu_access_pointer(SDATA(selem)->smap) == smap)
++			break;
++
++	if (!selem)
++		return NULL;
++
++	sdata = SDATA(selem);
++	if (cacheit_lockit) {
++		/* spinlock is needed to avoid racing with the
++		 * parallel delete.  Otherwise, publishing an already
++		 * deleted sdata to the cache will become a use-after-free
++		 * problem in the next bpf_local_storage_lookup().
++		 */
++		raw_spin_lock_bh(&local_storage->lock);
++		if (selem_linked_to_storage(selem))
++			rcu_assign_pointer(local_storage->cache[smap->cache_idx],
++					   sdata);
++		raw_spin_unlock_bh(&local_storage->lock);
++	}
++
++	return sdata;
++}
++
++static int check_flags(const struct bpf_local_storage_data *old_sdata,
++		       u64 map_flags)
++{
++	if (old_sdata && (map_flags & ~BPF_F_LOCK) == BPF_NOEXIST)
++		/* elem already exists */
++		return -EEXIST;
++
++	if (!old_sdata && (map_flags & ~BPF_F_LOCK) == BPF_EXIST)
++		/* elem doesn't exist, cannot update it */
++		return -ENOENT;
++
++	return 0;
++}
++
++int bpf_local_storage_alloc(void *owner,
++			    struct bpf_local_storage_map *smap,
++			    struct bpf_local_storage_elem *first_selem)
++{
++	struct bpf_local_storage *prev_storage, *storage;
++	struct bpf_local_storage **owner_storage_ptr;
++	int err;
++
++	err = mem_charge(smap, owner, sizeof(*storage));
++	if (err)
++		return err;
++
++	storage = kzalloc(sizeof(*storage), GFP_ATOMIC | __GFP_NOWARN);
++	if (!storage) {
++		err = -ENOMEM;
++		goto uncharge;
++	}
++
++	INIT_HLIST_HEAD(&storage->list);
++	raw_spin_lock_init(&storage->lock);
++	storage->owner = owner;
++
++	bpf_selem_link_storage(storage, first_selem);
++	bpf_selem_link_map(smap, first_selem);
++
++	owner_storage_ptr =
++		(struct bpf_local_storage **)owner_storage(smap, owner);
++	/* Publish storage to the owner.
++	 * Instead of using any lock of the kernel object (i.e. owner),
++	 * cmpxchg will work with any kernel object regardless what
++	 * the running context is, bh, irq...etc.
++	 *
++	 * From now on, the owner->storage pointer (e.g. sk->sk_bpf_storage)
++	 * is protected by the storage->lock.  Hence, when freeing
++	 * the owner->storage, the storage->lock must be held before
++	 * setting owner->storage ptr to NULL.
++	 */
++	prev_storage = cmpxchg(owner_storage_ptr, NULL, storage);
++	if (unlikely(prev_storage)) {
++		bpf_selem_unlink_map(first_selem);
++		err = -EAGAIN;
++		goto uncharge;
++
++		/* Note that even first_selem was linked to smap's
++		 * bucket->list, first_selem can be freed immediately
++		 * (instead of kfree_rcu) because
++		 * bpf_local_storage_map_free() does a
++		 * synchronize_rcu() before walking the bucket->list.
++		 * Hence, no one is accessing selem from the
++		 * bucket->list under rcu_read_lock().
++		 */
++	}
++
++	return 0;
++
++uncharge:
++	kfree(storage);
++	mem_uncharge(smap, owner, sizeof(*storage));
++	return err;
++}
++
++/* sk cannot be going away because it is linking new elem
++ * to sk->sk_bpf_storage. (i.e. sk->sk_refcnt cannot be 0).
++ * Otherwise, it will become a leak (and other memory issues
++ * during map destruction).
++ */
++struct bpf_local_storage_data *
++bpf_local_storage_update(void *owner, struct bpf_map *map,
++			 void *value, u64 map_flags)
++{
++	struct bpf_local_storage_data *old_sdata = NULL;
++	struct bpf_local_storage_elem *selem;
++	struct bpf_local_storage *local_storage;
++	struct bpf_local_storage_map *smap;
++	int err;
++
++	/* BPF_EXIST and BPF_NOEXIST cannot be both set */
++	if (unlikely((map_flags & ~BPF_F_LOCK) > BPF_EXIST) ||
++	    /* BPF_F_LOCK can only be used in a value with spin_lock */
++	    unlikely((map_flags & BPF_F_LOCK) && !map_value_has_spin_lock(map)))
++		return ERR_PTR(-EINVAL);
++
++	smap = (struct bpf_local_storage_map *)map;
++	local_storage = rcu_dereference(*owner_storage(smap, owner));
++	if (!local_storage || hlist_empty(&local_storage->list)) {
++		/* Very first elem for the owner */
++		err = check_flags(NULL, map_flags);
++		if (err)
++			return ERR_PTR(err);
++
++		selem = bpf_selem_alloc(smap, owner, value, true);
++		if (!selem)
++			return ERR_PTR(-ENOMEM);
++
++		err = bpf_local_storage_alloc(owner, smap, selem);
++		if (err) {
++			kfree(selem);
++			mem_uncharge(smap, owner, smap->elem_size);
++			return ERR_PTR(err);
++		}
++
++		return SDATA(selem);
++	}
++
++	if ((map_flags & BPF_F_LOCK) && !(map_flags & BPF_NOEXIST)) {
++		/* Hoping to find an old_sdata to do inline update
++		 * such that it can avoid taking the local_storage->lock
++		 * and changing the lists.
++		 */
++		old_sdata = bpf_local_storage_lookup(local_storage, smap,
++						     false);
++		err = check_flags(old_sdata, map_flags);
++		if (err)
++			return ERR_PTR(err);
++		if (old_sdata && selem_linked_to_storage(SELEM(old_sdata))) {
++			copy_map_value_locked(map, old_sdata->data,
++					      value, false);
++			return old_sdata;
++		}
++	}
++
++	raw_spin_lock_bh(&local_storage->lock);
++
++	/* Recheck local_storage->list under local_storage->lock */
++	if (unlikely(hlist_empty(&local_storage->list))) {
++		/* A parallel del is happening and local_storage is going
++		 * away.  It has just been checked before, so very
++		 * unlikely.  Return instead of retry to keep things
++		 * simple.
++		 */
++		err = -EAGAIN;
++		goto unlock_err;
++	}
++
++	old_sdata = bpf_local_storage_lookup(local_storage, smap, false);
++	err = check_flags(old_sdata, map_flags);
++	if (err)
++		goto unlock_err;
++
++	if (old_sdata && (map_flags & BPF_F_LOCK)) {
++		copy_map_value_locked(map, old_sdata->data, value, false);
++		selem = SELEM(old_sdata);
++		goto unlock;
++	}
++
++	/* local_storage->lock is held.  Hence, we are sure
++	 * we can unlink and uncharge the old_sdata successfully
++	 * later.  Hence, instead of charging the new selem now
++	 * and then uncharge the old selem later (which may cause
++	 * a potential but unnecessary charge failure),  avoid taking
++	 * a charge at all here (the "!old_sdata" check) and the
++	 * old_sdata will not be uncharged later during
++	 * bpf_selem_unlink_storage().
++	 */
++	selem = bpf_selem_alloc(smap, owner, value, !old_sdata);
++	if (!selem) {
++		err = -ENOMEM;
++		goto unlock_err;
++	}
++
++	/* First, link the new selem to the map */
++	bpf_selem_link_map(smap, selem);
++
++	/* Second, link (and publish) the new selem to local_storage */
++	bpf_selem_link_storage(local_storage, selem);
++
++	/* Third, remove old selem, SELEM(old_sdata) */
++	if (old_sdata) {
++		bpf_selem_unlink_map(SELEM(old_sdata));
++		bpf_selem_unlink_storage(local_storage, SELEM(old_sdata), false);
++	}
++
++unlock:
++	raw_spin_unlock_bh(&local_storage->lock);
++	return SDATA(selem);
++
++unlock_err:
++	raw_spin_unlock_bh(&local_storage->lock);
++	return ERR_PTR(err);
++}
++
++u16 bpf_local_storage_cache_idx_get(struct bpf_local_storage_cache *cache)
++{
++	u64 min_usage = U64_MAX;
++	u16 i, res = 0;
++
++	spin_lock(&cache->idx_lock);
++
++	for (i = 0; i < BPF_LOCAL_STORAGE_CACHE_SIZE; i++) {
++		if (cache->idx_usage_counts[i] < min_usage) {
++			min_usage = cache->idx_usage_counts[i];
++			res = i;
++
++			/* Found a free cache_idx */
++			if (!min_usage)
++				break;
++		}
++	}
++	cache->idx_usage_counts[res]++;
++
++	spin_unlock(&cache->idx_lock);
++
++	return res;
++}
++
++void bpf_local_storage_cache_idx_free(struct bpf_local_storage_cache *cache,
++				      u16 idx)
++{
++	spin_lock(&cache->idx_lock);
++	cache->idx_usage_counts[idx]--;
++	spin_unlock(&cache->idx_lock);
++}
++
++void bpf_local_storage_map_free(struct bpf_local_storage_map *smap)
++{
++	struct bpf_local_storage_elem *selem;
++	struct bpf_local_storage_map_bucket *b;
++	unsigned int i;
++
++	/* Note that this map might be concurrently cloned from
++	 * bpf_sk_storage_clone. Wait for any existing bpf_sk_storage_clone
++	 * RCU read section to finish before proceeding. New RCU
++	 * read sections should be prevented via bpf_map_inc_not_zero.
++	 */
++	synchronize_rcu();
++
++	/* bpf prog and the userspace can no longer access this map
++	 * now.  No new selem (of this map) can be added
++	 * to the bpf_local_storage or to the map bucket's list.
++	 *
++	 * The elem of this map can be cleaned up here
++	 * or
++	 * by bpf_local_storage_free() during the destruction of the
++	 * owner object. eg. __sk_destruct.
++	 */
++	for (i = 0; i < (1U << smap->bucket_log); i++) {
++		b = &smap->buckets[i];
++
++		rcu_read_lock();
++		/* No one is adding to b->list now */
++		while ((selem = hlist_entry_safe(
++				rcu_dereference_raw(hlist_first_rcu(&b->list)),
++				struct bpf_local_storage_elem, map_node))) {
++			bpf_selem_unlink(selem);
++			cond_resched_rcu();
++		}
++		rcu_read_unlock();
++	}
++
++	/* bpf_local_storage_free() may still need to access the map.
++	 * e.g. bpf_local_storage_free() has unlinked selem from the map
++	 * which then made the above while((selem = ...)) loop
++	 * exited immediately.
++	 *
++	 * However, the bpf_local_storage_free() still needs to access
++	 * the smap->elem_size to do the uncharging in
++	 * bpf_selem_unlink_storage().
++	 *
++	 * Hence, wait another rcu grace period for the
++	 * bpf_local_storage_free() to finish.
++	 */
++	synchronize_rcu();
++
++	kvfree(smap->buckets);
++	kfree(smap);
++}
++
++int bpf_local_storage_map_alloc_check(union bpf_attr *attr)
++{
++	if (attr->map_flags & ~BPF_LOCAL_STORAGE_CREATE_FLAG_MASK ||
++	    !(attr->map_flags & BPF_F_NO_PREALLOC) ||
++	    attr->max_entries ||
++	    attr->key_size != sizeof(int) || !attr->value_size ||
++	    /* Enforce BTF for userspace sk dumping */
++	    !attr->btf_key_type_id || !attr->btf_value_type_id)
++		return -EINVAL;
++
++	if (!bpf_capable())
++		return -EPERM;
++
++	if (attr->value_size > BPF_LOCAL_STORAGE_MAX_VALUE_SIZE)
++		return -E2BIG;
++
++	return 0;
++}
++
++struct bpf_local_storage_map *bpf_local_storage_map_alloc(union bpf_attr *attr)
++{
++	struct bpf_local_storage_map *smap;
++	unsigned int i;
++	u32 nbuckets;
++	u64 cost;
++	int ret;
++
++	smap = kzalloc(sizeof(*smap), GFP_USER | __GFP_NOWARN);
++	if (!smap)
++		return ERR_PTR(-ENOMEM);
++	bpf_map_init_from_attr(&smap->map, attr);
++
++	nbuckets = roundup_pow_of_two(num_possible_cpus());
++	/* Use at least 2 buckets, select_bucket() is undefined behavior with 1 bucket */
++	nbuckets = max_t(u32, 2, nbuckets);
++	smap->bucket_log = ilog2(nbuckets);
++	cost = sizeof(*smap->buckets) * nbuckets + sizeof(*smap);
++
++	ret = bpf_map_charge_init(&smap->map.memory, cost);
++	if (ret < 0) {
++		kfree(smap);
++		return ERR_PTR(ret);
++	}
++
++	smap->buckets = kvcalloc(sizeof(*smap->buckets), nbuckets,
++				 GFP_USER | __GFP_NOWARN);
++	if (!smap->buckets) {
++		bpf_map_charge_finish(&smap->map.memory);
++		kfree(smap);
++		return ERR_PTR(-ENOMEM);
++	}
++
++	for (i = 0; i < nbuckets; i++) {
++		INIT_HLIST_HEAD(&smap->buckets[i].list);
++		raw_spin_lock_init(&smap->buckets[i].lock);
++	}
++
++	smap->elem_size =
++		sizeof(struct bpf_local_storage_elem) + attr->value_size;
++
++	return smap;
++}
++
++int bpf_local_storage_map_check_btf(const struct bpf_map *map,
++				    const struct btf *btf,
++				    const struct btf_type *key_type,
++				    const struct btf_type *value_type)
++{
++	u32 int_data;
++
++	if (BTF_INFO_KIND(key_type->info) != BTF_KIND_INT)
++		return -EINVAL;
++
++	int_data = *(u32 *)(key_type + 1);
++	if (BTF_INT_BITS(int_data) != 32 || BTF_INT_OFFSET(int_data))
++		return -EINVAL;
++
++	return 0;
++}
+diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+index bb2375769ca1..8f6a8d6549be 100644
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -7,97 +7,14 @@
+ #include <linux/spinlock.h>
+ #include <linux/bpf.h>
+ #include <linux/btf_ids.h>
++#include <linux/bpf_local_storage.h>
+ #include <net/bpf_sk_storage.h>
+ #include <net/sock.h>
+ #include <uapi/linux/sock_diag.h>
+ #include <uapi/linux/btf.h>
+ 
+-#define BPF_LOCAL_STORAGE_CREATE_FLAG_MASK (BPF_F_NO_PREALLOC | BPF_F_CLONE)
+-
+ DEFINE_BPF_STORAGE_CACHE(sk_cache);
+ 
+-struct bpf_local_storage_map_bucket {
+-	struct hlist_head list;
+-	raw_spinlock_t lock;
+-};
+-
+-/* Thp map is not the primary owner of a bpf_local_storage_elem.
+- * Instead, the container object (eg. sk->sk_bpf_storage) is.
+- *
+- * The map (bpf_local_storage_map) is for two purposes
+- * 1. Define the size of the "local storage".  It is
+- *    the map's value_size.
+- *
+- * 2. Maintain a list to keep track of all elems such
+- *    that they can be cleaned up during the map destruction.
+- *
+- * When a bpf local storage is being looked up for a
+- * particular object,  the "bpf_map" pointer is actually used
+- * as the "key" to search in the list of elem in
+- * the respective bpf_local_storage owned by the object.
+- *
+- * e.g. sk->sk_bpf_storage is the mini-map with the "bpf_map" pointer
+- * as the searching key.
+- */
+-struct bpf_local_storage_map {
+-	struct bpf_map map;
+-	/* Lookup elem does not require accessing the map.
+-	 *
+-	 * Updating/Deleting requires a bucket lock to
+-	 * link/unlink the elem from the map.  Having
+-	 * multiple buckets to improve contention.
+-	 */
+-	struct bpf_local_storage_map_bucket *buckets;
+-	u32 bucket_log;
+-	u16 elem_size;
+-	u16 cache_idx;
+-};
+-
+-struct bpf_local_storage_data {
+-	/* smap is used as the searching key when looking up
+-	 * from the object's bpf_local_storage.
+-	 *
+-	 * Put it in the same cacheline as the data to minimize
+-	 * the number of cachelines access during the cache hit case.
+-	 */
+-	struct bpf_local_storage_map __rcu *smap;
+-	u8 data[] __aligned(8);
+-};
+-
+-/* Linked to bpf_local_storage and bpf_local_storage_map */
+-struct bpf_local_storage_elem {
+-	struct hlist_node map_node;	/* Linked to bpf_local_storage_map */
+-	struct hlist_node snode;	/* Linked to bpf_local_storage */
+-	struct bpf_local_storage __rcu *local_storage;
+-	struct rcu_head rcu;
+-	/* 8 bytes hole */
+-	/* The data is stored in aother cacheline to minimize
+-	 * the number of cachelines access during a cache hit.
+-	 */
+-	struct bpf_local_storage_data sdata ____cacheline_aligned;
+-};
+-
+-#define SELEM(_SDATA)							\
+-	container_of((_SDATA), struct bpf_local_storage_elem, sdata)
+-#define SDATA(_SELEM) (&(_SELEM)->sdata)
+-
+-struct bpf_local_storage {
+-	struct bpf_local_storage_data __rcu *cache[BPF_LOCAL_STORAGE_CACHE_SIZE];
+-	struct hlist_head list; /* List of bpf_local_storage_elem */
+-	void *owner;		/* The object that owns the the above "list" of
+-				 * bpf_local_storage_elem.
+-				 */
+-	struct rcu_head rcu;
+-	raw_spinlock_t lock;	/* Protect adding/removing from the "list" */
+-};
+-
+-static struct bpf_local_storage_map_bucket *
+-select_bucket(struct bpf_local_storage_map *smap,
+-	      struct bpf_local_storage_elem *selem)
+-{
+-	return &smap->buckets[hash_ptr(selem, smap->bucket_log)];
+-}
+-
+ static int omem_charge(struct sock *sk, unsigned int size)
+ {
+ 	/* same check as in sock_kmalloc() */
+@@ -110,223 +27,6 @@ static int omem_charge(struct sock *sk, unsigned int size)
+ 	return -ENOMEM;
+ }
+ 
+-static int mem_charge(struct bpf_local_storage_map *smap, void *owner, u32 size)
+-{
+-	struct bpf_map *map = &smap->map;
+-
+-	if (!map->ops->map_local_storage_charge)
+-		return 0;
+-
+-	return map->ops->map_local_storage_charge(smap, owner, size);
+-}
+-
+-static void mem_uncharge(struct bpf_local_storage_map *smap, void *owner,
+-			 u32 size)
+-{
+-	struct bpf_map *map = &smap->map;
+-
+-	if (map->ops->map_local_storage_uncharge)
+-		map->ops->map_local_storage_uncharge(smap, owner, size);
+-}
+-
+-static struct bpf_local_storage __rcu **
+-owner_storage(struct bpf_local_storage_map *smap, void *owner)
+-{
+-	struct bpf_map *map = &smap->map;
+-
+-	return map->ops->map_owner_storage_ptr(owner);
+-}
+-
+-static bool selem_linked_to_storage(const struct bpf_local_storage_elem *selem)
+-{
+-	return !hlist_unhashed(&selem->snode);
+-}
+-
+-static bool selem_linked_to_map(const struct bpf_local_storage_elem *selem)
+-{
+-	return !hlist_unhashed(&selem->map_node);
+-}
+-
+-struct bpf_local_storage_elem *
+-bpf_selem_alloc(struct bpf_local_storage_map *smap, void *owner,
+-		void *value, bool charge_mem)
+-{
+-	struct bpf_local_storage_elem *selem;
+-
+-	if (charge_mem && mem_charge(smap, owner, smap->elem_size))
+-		return NULL;
+-
+-	selem = kzalloc(smap->elem_size, GFP_ATOMIC | __GFP_NOWARN);
+-	if (selem) {
+-		if (value)
+-			memcpy(SDATA(selem)->data, value, smap->map.value_size);
+-		return selem;
+-	}
+-
+-	if (charge_mem)
+-		mem_uncharge(smap, owner, smap->elem_size);
+-
+-	return NULL;
+-}
+-
+-/* local_storage->lock must be held and selem->sk_storage == sk_storage.
+- * The caller must ensure selem->smap is still valid to be
+- * dereferenced for its smap->elem_size and smap->cache_idx.
+- */
+-bool bpf_selem_unlink_storage(struct bpf_local_storage *local_storage,
+-			      struct bpf_local_storage_elem *selem,
+-			      bool uncharge_mem)
+-{
+-	struct bpf_local_storage_map *smap;
+-	bool free_local_storage;
+-	void *owner;
+-
+-	smap = rcu_dereference(SDATA(selem)->smap);
+-	owner = local_storage->owner;
+-
+-	/* All uncharging on owner must be done first.
+-	 * The owner may be freed once the last selem is unlinked from
+-	 * local_storage.
+-	 */
+-	if (uncharge_mem)
+-		mem_uncharge(smap, owner, smap->elem_size);
+-
+-	free_local_storage = hlist_is_singular_node(&selem->snode,
+-						    &local_storage->list);
+-	if (free_local_storage) {
+-		mem_uncharge(smap, owner, sizeof(struct bpf_local_storage));
+-		local_storage->owner = NULL;
+-
+-		/* After this RCU_INIT, owner may be freed and cannot be used */
+-		RCU_INIT_POINTER(*owner_storage(smap, owner), NULL);
+-
+-		/* local_storage is not freed now.  local_storage->lock is
+-		 * still held and raw_spin_unlock_bh(&local_storage->lock)
+-		 * will be done by the caller.
+-		 *
+-		 * Although the unlock will be done under
+-		 * rcu_read_lock(),  it is more intutivie to
+-		 * read if kfree_rcu(local_storage, rcu) is done
+-		 * after the raw_spin_unlock_bh(&local_storage->lock).
+-		 *
+-		 * Hence, a "bool free_local_storage" is returned
+-		 * to the caller which then calls the kfree_rcu()
+-		 * after unlock.
+-		 */
+-	}
+-	hlist_del_init_rcu(&selem->snode);
+-	if (rcu_access_pointer(local_storage->cache[smap->cache_idx]) ==
+-	    SDATA(selem))
+-		RCU_INIT_POINTER(local_storage->cache[smap->cache_idx], NULL);
+-
+-	kfree_rcu(selem, rcu);
+-
+-	return free_local_storage;
+-}
+-
+-static void __bpf_selem_unlink_storage(struct bpf_local_storage_elem *selem)
+-{
+-	struct bpf_local_storage *local_storage;
+-	bool free_local_storage = false;
+-
+-	if (unlikely(!selem_linked_to_storage(selem)))
+-		/* selem has already been unlinked from sk */
+-		return;
+-
+-	local_storage = rcu_dereference(selem->local_storage);
+-	raw_spin_lock_bh(&local_storage->lock);
+-	if (likely(selem_linked_to_storage(selem)))
+-		free_local_storage =
+-			bpf_selem_unlink_storage(local_storage, selem, true);
+-	raw_spin_unlock_bh(&local_storage->lock);
+-
+-	if (free_local_storage)
+-		kfree_rcu(local_storage, rcu);
+-}
+-
+-void bpf_selem_link_storage(struct bpf_local_storage *local_storage,
+-			    struct bpf_local_storage_elem *selem)
+-{
+-	RCU_INIT_POINTER(selem->local_storage, local_storage);
+-	hlist_add_head(&selem->snode, &local_storage->list);
+-}
+-
+-void bpf_selem_unlink_map(struct bpf_local_storage_elem *selem)
+-{
+-	struct bpf_local_storage_map *smap;
+-	struct bpf_local_storage_map_bucket *b;
+-
+-	if (unlikely(!selem_linked_to_map(selem)))
+-		/* selem has already be unlinked from smap */
+-		return;
+-
+-	smap = rcu_dereference(SDATA(selem)->smap);
+-	b = select_bucket(smap, selem);
+-	raw_spin_lock_bh(&b->lock);
+-	if (likely(selem_linked_to_map(selem)))
+-		hlist_del_init_rcu(&selem->map_node);
+-	raw_spin_unlock_bh(&b->lock);
+-}
+-
+-void bpf_selem_link_map(struct bpf_local_storage_map *smap,
+-			struct bpf_local_storage_elem *selem)
+-{
+-	struct bpf_local_storage_map_bucket *b = select_bucket(smap, selem);
+-
+-	raw_spin_lock_bh(&b->lock);
+-	RCU_INIT_POINTER(SDATA(selem)->smap, smap);
+-	hlist_add_head_rcu(&selem->map_node, &b->list);
+-	raw_spin_unlock_bh(&b->lock);
+-}
+-
+-void bpf_selem_unlink(struct bpf_local_storage_elem *selem)
+-{
+-	/* Always unlink from map before unlinking from local_storage
+-	 * because selem will be freed after successfully unlinked from
+-	 * the local_storage.
+-	 */
+-	bpf_selem_unlink_map(selem);
+-	__bpf_selem_unlink_storage(selem);
+-}
+-
+-struct bpf_local_storage_data *
+-bpf_local_storage_lookup(struct bpf_local_storage *local_storage,
+-			 struct bpf_local_storage_map *smap,
+-			 bool cacheit_lockit)
+-{
+-	struct bpf_local_storage_data *sdata;
+-	struct bpf_local_storage_elem *selem;
+-
+-	/* Fast path (cache hit) */
+-	sdata = rcu_dereference(local_storage->cache[smap->cache_idx]);
+-	if (sdata && rcu_access_pointer(sdata->smap) == smap)
+-		return sdata;
+-
+-	/* Slow path (cache miss) */
+-	hlist_for_each_entry_rcu(selem, &local_storage->list, snode)
+-		if (rcu_access_pointer(SDATA(selem)->smap) == smap)
+-			break;
+-
+-	if (!selem)
+-		return NULL;
+-
+-	sdata = SDATA(selem);
+-	if (cacheit_lockit) {
+-		/* spinlock is needed to avoid racing with the
+-		 * parallel delete.  Otherwise, publishing an already
+-		 * deleted sdata to the cache will become a use-after-free
+-		 * problem in the next bpf_local_storage_lookup().
+-		 */
+-		raw_spin_lock_bh(&local_storage->lock);
+-		if (selem_linked_to_storage(selem))
+-			rcu_assign_pointer(local_storage->cache[smap->cache_idx],
+-					   sdata);
+-		raw_spin_unlock_bh(&local_storage->lock);
+-	}
+-
+-	return sdata;
+-}
+-
+ static struct bpf_local_storage_data *
+ sk_storage_lookup(struct sock *sk, struct bpf_map *map, bool cacheit_lockit)
+ {
+@@ -341,201 +41,6 @@ sk_storage_lookup(struct sock *sk, struct bpf_map *map, bool cacheit_lockit)
+ 	return bpf_local_storage_lookup(sk_storage, smap, cacheit_lockit);
+ }
+ 
+-static int check_flags(const struct bpf_local_storage_data *old_sdata,
+-		       u64 map_flags)
+-{
+-	if (old_sdata && (map_flags & ~BPF_F_LOCK) == BPF_NOEXIST)
+-		/* elem already exists */
+-		return -EEXIST;
+-
+-	if (!old_sdata && (map_flags & ~BPF_F_LOCK) == BPF_EXIST)
+-		/* elem doesn't exist, cannot update it */
+-		return -ENOENT;
+-
+-	return 0;
+-}
+-
+-int bpf_local_storage_alloc(void *owner,
+-			    struct bpf_local_storage_map *smap,
+-			    struct bpf_local_storage_elem *first_selem)
+-{
+-	struct bpf_local_storage *prev_storage, *storage;
+-	struct bpf_local_storage **owner_storage_ptr;
+-	int err;
+-
+-	err = mem_charge(smap, owner, sizeof(*storage));
+-	if (err)
+-		return err;
+-
+-	storage = kzalloc(sizeof(*storage), GFP_ATOMIC | __GFP_NOWARN);
+-	if (!storage) {
+-		err = -ENOMEM;
+-		goto uncharge;
+-	}
+-
+-	INIT_HLIST_HEAD(&storage->list);
+-	raw_spin_lock_init(&storage->lock);
+-	storage->owner = owner;
+-
+-	bpf_selem_link_storage(storage, first_selem);
+-	bpf_selem_link_map(smap, first_selem);
+-
+-	owner_storage_ptr =
+-		(struct bpf_local_storage **)owner_storage(smap, owner);
+-	/* Publish storage to the owner.
+-	 * Instead of using any lock of the kernel object (i.e. owner),
+-	 * cmpxchg will work with any kernel object regardless what
+-	 * the running context is, bh, irq...etc.
+-	 *
+-	 * From now on, the owner->storage pointer (e.g. sk->sk_bpf_storage)
+-	 * is protected by the storage->lock.  Hence, when freeing
+-	 * the owner->storage, the storage->lock must be held before
+-	 * setting owner->storage ptr to NULL.
+-	 */
+-	prev_storage = cmpxchg(owner_storage_ptr, NULL, storage);
+-	if (unlikely(prev_storage)) {
+-		bpf_selem_unlink_map(first_selem);
+-		err = -EAGAIN;
+-		goto uncharge;
+-
+-		/* Note that even first_selem was linked to smap's
+-		 * bucket->list, first_selem can be freed immediately
+-		 * (instead of kfree_rcu) because
+-		 * bpf_local_storage_map_free() does a
+-		 * synchronize_rcu() before walking the bucket->list.
+-		 * Hence, no one is accessing selem from the
+-		 * bucket->list under rcu_read_lock().
+-		 */
+-	}
+-
+-	return 0;
+-
+-uncharge:
+-	kfree(storage);
+-	mem_uncharge(smap, owner, sizeof(*storage));
+-	return err;
+-}
+-
+-/* sk cannot be going away because it is linking new elem
+- * to sk->sk_bpf_storage. (i.e. sk->sk_refcnt cannot be 0).
+- * Otherwise, it will become a leak (and other memory issues
+- * during map destruction).
+- */
+-struct bpf_local_storage_data *
+-bpf_local_storage_update(void *owner, struct bpf_map *map,
+-			 void *value, u64 map_flags)
+-{
+-	struct bpf_local_storage_data *old_sdata = NULL;
+-	struct bpf_local_storage_elem *selem;
+-	struct bpf_local_storage *local_storage;
+-	struct bpf_local_storage_map *smap;
+-	int err;
+-
+-	/* BPF_EXIST and BPF_NOEXIST cannot be both set */
+-	if (unlikely((map_flags & ~BPF_F_LOCK) > BPF_EXIST) ||
+-	    /* BPF_F_LOCK can only be used in a value with spin_lock */
+-	    unlikely((map_flags & BPF_F_LOCK) && !map_value_has_spin_lock(map)))
+-		return ERR_PTR(-EINVAL);
+-
+-	smap = (struct bpf_local_storage_map *)map;
+-	local_storage = rcu_dereference(*owner_storage(smap, owner));
+-	if (!local_storage || hlist_empty(&local_storage->list)) {
+-		/* Very first elem for the owner */
+-		err = check_flags(NULL, map_flags);
+-		if (err)
+-			return ERR_PTR(err);
+-
+-		selem = bpf_selem_alloc(smap, owner, value, true);
+-		if (!selem)
+-			return ERR_PTR(-ENOMEM);
+-
+-		err = bpf_local_storage_alloc(owner, smap, selem);
+-		if (err) {
+-			kfree(selem);
+-			mem_uncharge(smap, owner, smap->elem_size);
+-			return ERR_PTR(err);
+-		}
+-
+-		return SDATA(selem);
+-	}
+-
+-	if ((map_flags & BPF_F_LOCK) && !(map_flags & BPF_NOEXIST)) {
+-		/* Hoping to find an old_sdata to do inline update
+-		 * such that it can avoid taking the local_storage->lock
+-		 * and changing the lists.
+-		 */
+-		old_sdata = bpf_local_storage_lookup(local_storage, smap,
+-						     false);
+-		err = check_flags(old_sdata, map_flags);
+-		if (err)
+-			return ERR_PTR(err);
+-		if (old_sdata && selem_linked_to_storage(SELEM(old_sdata))) {
+-			copy_map_value_locked(map, old_sdata->data,
+-					      value, false);
+-			return old_sdata;
+-		}
+-	}
+-
+-	raw_spin_lock_bh(&local_storage->lock);
+-
+-	/* Recheck local_storage->list under local_storage->lock */
+-	if (unlikely(hlist_empty(&local_storage->list))) {
+-		/* A parallel del is happening and local_storage is going
+-		 * away.  It has just been checked before, so very
+-		 * unlikely.  Return instead of retry to keep things
+-		 * simple.
+-		 */
+-		err = -EAGAIN;
+-		goto unlock_err;
+-	}
+-
+-	old_sdata = bpf_local_storage_lookup(local_storage, smap, false);
+-	err = check_flags(old_sdata, map_flags);
+-	if (err)
+-		goto unlock_err;
+-
+-	if (old_sdata && (map_flags & BPF_F_LOCK)) {
+-		copy_map_value_locked(map, old_sdata->data, value, false);
+-		selem = SELEM(old_sdata);
+-		goto unlock;
+-	}
+-
+-	/* local_storage->lock is held.  Hence, we are sure
+-	 * we can unlink and uncharge the old_sdata successfully
+-	 * later.  Hence, instead of charging the new selem now
+-	 * and then uncharge the old selem later (which may cause
+-	 * a potential but unnecessary charge failure),  avoid taking
+-	 * a charge at all here (the "!old_sdata" check) and the
+-	 * old_sdata will not be uncharged later during
+-	 * bpf_selem_unlink_storage().
+-	 */
+-	selem = bpf_selem_alloc(smap, owner, value, !old_sdata);
+-	if (!selem) {
+-		err = -ENOMEM;
+-		goto unlock_err;
+-	}
+-
+-	/* First, link the new selem to the map */
+-	bpf_selem_link_map(smap, selem);
+-
+-	/* Second, link (and publish) the new selem to local_storage */
+-	bpf_selem_link_storage(local_storage, selem);
+-
+-	/* Third, remove old selem, SELEM(old_sdata) */
+-	if (old_sdata) {
+-		bpf_selem_unlink_map(SELEM(old_sdata));
+-		bpf_selem_unlink_storage(local_storage, SELEM(old_sdata), false);
+-	}
+-
+-unlock:
+-	raw_spin_unlock_bh(&local_storage->lock);
+-	return SDATA(selem);
+-
+-unlock_err:
+-	raw_spin_unlock_bh(&local_storage->lock);
+-	return ERR_PTR(err);
+-}
+-
+ static int sk_storage_delete(struct sock *sk, struct bpf_map *map)
+ {
+ 	struct bpf_local_storage_data *sdata;
+@@ -549,38 +54,6 @@ static int sk_storage_delete(struct sock *sk, struct bpf_map *map)
+ 	return 0;
+ }
+ 
+-u16 bpf_local_storage_cache_idx_get(struct bpf_local_storage_cache *cache)
+-{
+-	u64 min_usage = U64_MAX;
+-	u16 i, res = 0;
+-
+-	spin_lock(&cache->idx_lock);
+-
+-	for (i = 0; i < BPF_LOCAL_STORAGE_CACHE_SIZE; i++) {
+-		if (cache->idx_usage_counts[i] < min_usage) {
+-			min_usage = cache->idx_usage_counts[i];
+-			res = i;
+-
+-			/* Found a free cache_idx */
+-			if (!min_usage)
+-				break;
+-		}
+-	}
+-	cache->idx_usage_counts[res]++;
+-
+-	spin_unlock(&cache->idx_lock);
+-
+-	return res;
+-}
+-
+-void bpf_local_storage_cache_idx_free(struct bpf_local_storage_cache *cache,
+-				      u16 idx)
+-{
+-	spin_lock(&cache->idx_lock);
+-	cache->idx_usage_counts[idx]--;
+-	spin_unlock(&cache->idx_lock);
+-}
+-
+ /* Called by __sk_destruct() & bpf_sk_storage_clone() */
+ void bpf_sk_storage_free(struct sock *sk)
+ {
+@@ -621,60 +94,6 @@ void bpf_sk_storage_free(struct sock *sk)
+ 		kfree_rcu(sk_storage, rcu);
+ }
+ 
+-void bpf_local_storage_map_free(struct bpf_local_storage_map *smap)
+-{
+-	struct bpf_local_storage_elem *selem;
+-	struct bpf_local_storage_map_bucket *b;
+-	unsigned int i;
+-
+-	/* Note that this map might be concurrently cloned from
+-	 * bpf_sk_storage_clone. Wait for any existing bpf_sk_storage_clone
+-	 * RCU read section to finish before proceeding. New RCU
+-	 * read sections should be prevented via bpf_map_inc_not_zero.
+-	 */
+-	synchronize_rcu();
+-
+-	/* bpf prog and the userspace can no longer access this map
+-	 * now.  No new selem (of this map) can be added
+-	 * to the bpf_local_storage or to the map bucket's list.
+-	 *
+-	 * The elem of this map can be cleaned up here
+-	 * or
+-	 * by bpf_local_storage_free() during the destruction of the
+-	 * owner object. eg. __sk_destruct.
+-	 */
+-	for (i = 0; i < (1U << smap->bucket_log); i++) {
+-		b = &smap->buckets[i];
+-
+-		rcu_read_lock();
+-		/* No one is adding to b->list now */
+-		while ((selem = hlist_entry_safe(
+-				rcu_dereference_raw(hlist_first_rcu(&b->list)),
+-				struct bpf_local_storage_elem, map_node))) {
+-			bpf_selem_unlink(selem);
+-			cond_resched_rcu();
+-		}
+-		rcu_read_unlock();
+-	}
+-
+-	/* bpf_local_storage_free() may still need to access the map.
+-	 * e.g. bpf_local_storage_free() has unlinked selem from the map
+-	 * which then made the above while((selem = ...)) loop
+-	 * exited immediately.
+-	 *
+-	 * However, the bpf_local_storage_free() still needs to access
+-	 * the smap->elem_size to do the uncharging in
+-	 * bpf_selem_unlink_storage().
+-	 *
+-	 * Hence, wait another rcu grace period for the
+-	 * bpf_local_storage_free() to finish.
+-	 */
+-	synchronize_rcu();
+-
+-	kvfree(smap->buckets);
+-	kfree(smap);
+-}
+-
+ static void sk_storage_map_free(struct bpf_map *map)
+ {
+ 	struct bpf_local_storage_map *smap;
+@@ -684,78 +103,6 @@ static void sk_storage_map_free(struct bpf_map *map)
+ 	bpf_local_storage_map_free(smap);
+ }
+ 
+-/* U16_MAX is much more than enough for sk local storage
+- * considering a tcp_sock is ~2k.
+- */
+-#define BPF_LOCAL_STORAGE_MAX_VALUE_SIZE				\
+-	min_t(u32,							\
+-	      (KMALLOC_MAX_SIZE - MAX_BPF_STACK -			\
+-	       sizeof(struct bpf_local_storage_elem)),			\
+-	      (U16_MAX - sizeof(struct bpf_local_storage_elem)))
+-
+-int bpf_local_storage_map_alloc_check(union bpf_attr *attr)
+-{
+-	if (attr->map_flags & ~BPF_LOCAL_STORAGE_CREATE_FLAG_MASK ||
+-	    !(attr->map_flags & BPF_F_NO_PREALLOC) ||
+-	    attr->max_entries ||
+-	    attr->key_size != sizeof(int) || !attr->value_size ||
+-	    /* Enforce BTF for userspace sk dumping */
+-	    !attr->btf_key_type_id || !attr->btf_value_type_id)
+-		return -EINVAL;
+-
+-	if (!bpf_capable())
+-		return -EPERM;
+-
+-	if (attr->value_size > BPF_LOCAL_STORAGE_MAX_VALUE_SIZE)
+-		return -E2BIG;
+-
+-	return 0;
+-}
+-
+-struct bpf_local_storage_map *bpf_local_storage_map_alloc(union bpf_attr *attr)
+-{
+-	struct bpf_local_storage_map *smap;
+-	unsigned int i;
+-	u32 nbuckets;
+-	u64 cost;
+-	int ret;
+-
+-	smap = kzalloc(sizeof(*smap), GFP_USER | __GFP_NOWARN);
+-	if (!smap)
+-		return ERR_PTR(-ENOMEM);
+-	bpf_map_init_from_attr(&smap->map, attr);
+-
+-	nbuckets = roundup_pow_of_two(num_possible_cpus());
+-	/* Use at least 2 buckets, select_bucket() is undefined behavior with 1 bucket */
+-	nbuckets = max_t(u32, 2, nbuckets);
+-	smap->bucket_log = ilog2(nbuckets);
+-	cost = sizeof(*smap->buckets) * nbuckets + sizeof(*smap);
+-
+-	ret = bpf_map_charge_init(&smap->map.memory, cost);
+-	if (ret < 0) {
+-		kfree(smap);
+-		return ERR_PTR(ret);
+-	}
+-
+-	smap->buckets = kvcalloc(sizeof(*smap->buckets), nbuckets,
+-				 GFP_USER | __GFP_NOWARN);
+-	if (!smap->buckets) {
+-		bpf_map_charge_finish(&smap->map.memory);
+-		kfree(smap);
+-		return ERR_PTR(-ENOMEM);
+-	}
+-
+-	for (i = 0; i < nbuckets; i++) {
+-		INIT_HLIST_HEAD(&smap->buckets[i].list);
+-		raw_spin_lock_init(&smap->buckets[i].lock);
+-	}
+-
+-	smap->elem_size =
+-		sizeof(struct bpf_local_storage_elem) + attr->value_size;
+-
+-	return smap;
+-}
+-
+ static struct bpf_map *sk_storage_map_alloc(union bpf_attr *attr)
+ {
+ 	struct bpf_local_storage_map *smap;
+@@ -774,23 +121,6 @@ static int notsupp_get_next_key(struct bpf_map *map, void *key,
+ 	return -ENOTSUPP;
+ }
+ 
+-int bpf_local_storage_map_check_btf(const struct bpf_map *map,
+-				    const struct btf *btf,
+-				    const struct btf_type *key_type,
+-				    const struct btf_type *value_type)
+-{
+-	u32 int_data;
+-
+-	if (BTF_INFO_KIND(key_type->info) != BTF_KIND_INT)
+-		return -EINVAL;
+-
+-	int_data = *(u32 *)(key_type + 1);
+-	if (BTF_INT_BITS(int_data) != 32 || BTF_INT_OFFSET(int_data))
+-		return -EINVAL;
+-
+-	return 0;
+-}
+-
+ static void *bpf_fd_sk_storage_lookup_elem(struct bpf_map *map, void *key)
+ {
+ 	struct bpf_local_storage_data *sdata;
 -- 
 2.28.0.163.g6104cc2f0b6-goog
 
