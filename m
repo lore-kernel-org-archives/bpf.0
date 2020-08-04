@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 317B1C433E0
-	for <bpf@archiver.kernel.org>; Tue,  4 Aug 2020 18:24:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42DD6C433E0
+	for <bpf@archiver.kernel.org>; Tue,  4 Aug 2020 18:24:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 001342086A
-	for <bpf@archiver.kernel.org>; Tue,  4 Aug 2020 18:24:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 25FA82086A
+	for <bpf@archiver.kernel.org>; Tue,  4 Aug 2020 18:24:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hna1fsXJ"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="MXeAjPWj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726401AbgHDSYe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 4 Aug 2020 14:24:34 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:19028 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726721AbgHDSYc (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 4 Aug 2020 14:24:32 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 074I9hvH029418
-        for <bpf@vger.kernel.org>; Tue, 4 Aug 2020 11:24:29 -0700
+        id S1726965AbgHDSYh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 4 Aug 2020 14:24:37 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:4648 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726230AbgHDSYg (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 4 Aug 2020 14:24:36 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 074I9Yeu023482
+        for <bpf@vger.kernel.org>; Tue, 4 Aug 2020 11:24:33 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=GbCfDBDkZfdZi+y40vZLr1c8Y368HjIBs070rZbBHUM=;
- b=hna1fsXJXNTxFf1WJsW4sJHoiMS2RuqqovWdMcnMHb1YHoa5AwUgDy72yF4eouBaYfkD
- uafNU9I/D283ZovXrhjgUBxtUIHvkXvqhBjJERHyWJcUIkxJM8z6PtauvxwTsaXNoord
- zS5/IFxoXpClCvsVUOH+b28eBdSLAzu2Cwg= 
+ bh=VbdtU2g9mb6i2s1nO8GbpW3yuc+dqh4K1wVkejRUCWs=;
+ b=MXeAjPWjBBrjAnKsgq1p8rfP4ZYfvBtTdaLDTerYpiV9SbFcC2d+7HhtVWGz9VY4zE0q
+ bOP8B1jH7sIjQSHo3DacTEStcLpiVRln7Nrje5aqt8MPSRP3CohkC1+Sbp49UzMSgjlJ
+ FjNgFZkOZYjkEMFN3h1dAa1UfBlxjJp3S8c= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 32n81fx7pb-9
+        by mx0a-00082601.pphosted.com with ESMTP id 32nrcsbpbk-12
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2020 11:24:29 -0700
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 04 Aug 2020 11:24:32 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 4 Aug 2020 11:24:27 -0700
+ 15.1.1979.3; Tue, 4 Aug 2020 11:24:23 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id ACA0E2EC52E0; Tue,  4 Aug 2020 11:24:26 -0700 (PDT)
+        id 2726D2EC52E0; Tue,  4 Aug 2020 11:24:20 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [RFC PATCH bpf-next 5/9] libbpf: implement type-based CO-RE relocations support
-Date:   Tue, 4 Aug 2020 11:24:05 -0700
-Message-ID: <20200804182409.1512434-6-andriin@fb.com>
+Subject: [RFC PATCH bpf-next 2/9] libbpf: clean up and improve CO-RE reloc logging
+Date:   Tue, 4 Aug 2020 11:24:02 -0700
+Message-ID: <20200804182409.1512434-3-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200804182409.1512434-1-andriin@fb.com>
 References: <20200804182409.1512434-1-andriin@fb.com>
@@ -61,177 +61,173 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-04_04:2020-08-03,2020-08-04 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- priorityscore=1501 spamscore=0 impostorscore=0 mlxscore=0 phishscore=0
- suspectscore=8 lowpriorityscore=0 bulkscore=0 adultscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008040132
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ phishscore=0 clxscore=1015 adultscore=0 bulkscore=0 mlxlogscore=999
+ suspectscore=2 mlxscore=0 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2008040132
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Implement support for TYPE_EXISTS/TYPE_SIZE/TYPE_ID_LOCAL/TYPE_ID_REMOTE
-relocations. These are examples of type-based relocations, as opposed to
-field-based relocations supported already. The difference is that they ar=
+Add logging of local/target type kind (struct/union/typedef/etc). Preserv=
 e
-calculating relocation values based on the type itself, not a field withi=
-n
-a struct/union.
-
-Type-based relos have slightly different semantics when matching local ty=
-pes
-to kernel target types, see comments in bpf_core_types_are_compat() for
-details. Their behavior on failure to find target type in kernel BTF also
-differs. Instead of "poisoning" relocatable instruction and failing load
-subsequently in kernel, they return 0 (which is rarely a valid return res=
-ult,
-so user BPF code can use that to detect success/failure of the relocation=
- and
-deal with it without extra "guarding" relocations). Also, it's always pos=
-sible
-to check existence of the type in target kernel with TYPE_EXISTS relocati=
-on,
-similarly to a field-based FIELD_EXISTS.
-
-TYPE_ID_LOCAL relocation is a bit special in that it always succeeds (bar=
-ring
-any libbpf/Clang bugs) and resolved to BTF ID using **local** BTF info of=
- BPF
-program itself. Tests in subsequent patches demonstrate the usage and
-semantics of new relocations.
+unresolved root type ID (for cases of typedef). Improve the format of CO-=
+RE
+reloc spec output format to contain only relevant and succinct info.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/Makefile          |   2 +-
- tools/lib/bpf/bpf_core_read.h   |  52 ++++++-
- tools/lib/bpf/libbpf.c          | 231 ++++++++++++++++++++++++++++----
- tools/lib/bpf/libbpf_internal.h |   4 +
- 4 files changed, 264 insertions(+), 25 deletions(-)
+ tools/lib/bpf/btf.c             |  17 ++--
+ tools/lib/bpf/btf.h             |  38 --------
+ tools/lib/bpf/libbpf.c          | 165 ++++++++++++++++++++------------
+ tools/lib/bpf/libbpf_internal.h |  78 +++++++++++----
+ 4 files changed, 169 insertions(+), 129 deletions(-)
 
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index bf8ed134cb8a..95c946e94ca5 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -107,7 +107,7 @@ ifeq ($(feature-reallocarray), 0)
- endif
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 856b09a04563..354cde25ae54 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -1054,14 +1054,14 @@ static int btf_ext_setup_line_info(struct btf_ext=
+ *btf_ext)
+ 	return btf_ext_setup_info(btf_ext, &param);
+ }
 =20
- # Append required CFLAGS
--override CFLAGS +=3D $(EXTRA_WARNINGS)
-+override CFLAGS +=3D $(EXTRA_WARNINGS) -Wno-switch-enum
- override CFLAGS +=3D -Werror -Wall
- override CFLAGS +=3D -fPIC
- override CFLAGS +=3D $(INCLUDES)
-diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.=
-h
-index eae5cccff761..1b2f9aa1bc39 100644
---- a/tools/lib/bpf/bpf_core_read.h
-+++ b/tools/lib/bpf/bpf_core_read.h
-@@ -19,6 +19,18 @@ enum bpf_field_info_kind {
- 	BPF_FIELD_RSHIFT_U64 =3D 5,
- };
+-static int btf_ext_setup_field_reloc(struct btf_ext *btf_ext)
++static int btf_ext_setup_core_relos(struct btf_ext *btf_ext)
+ {
+ 	struct btf_ext_sec_setup_param param =3D {
+-		.off =3D btf_ext->hdr->field_reloc_off,
+-		.len =3D btf_ext->hdr->field_reloc_len,
+-		.min_rec_size =3D sizeof(struct bpf_field_reloc),
+-		.ext_info =3D &btf_ext->field_reloc_info,
+-		.desc =3D "field_reloc",
++		.off =3D btf_ext->hdr->core_relo_off,
++		.len =3D btf_ext->hdr->core_relo_len,
++		.min_rec_size =3D sizeof(struct bpf_core_relo),
++		.ext_info =3D &btf_ext->core_relo_info,
++		.desc =3D "core_relo",
+ 	};
 =20
-+/* second argument to __builtin_btf_type_id() built-in */
-+enum bpf_type_id_kind {
-+	BPF_TYPE_ID_LOCAL =3D 0,		/* BTF type ID in local program */
-+	BPF_TYPE_ID_TARGET =3D 1,		/* BTF type ID in target kernel */
-+};
-+
-+/* second argument to __builtin_preserve_type_info() built-in */
-+enum bpf_type_info_kind {
-+	BPF_TYPE_EXISTS =3D 0,		/* type existence in target kernel */
-+	BPF_TYPE_SIZE =3D 1,		/* type size in target kernel */
-+};
-+
- #define __CORE_RELO(src, field, info)					      \
- 	__builtin_preserve_field_info((src)->field, BPF_FIELD_##info)
+ 	return btf_ext_setup_info(btf_ext, &param);
+@@ -1140,10 +1140,9 @@ struct btf_ext *btf_ext__new(__u8 *data, __u32 siz=
+e)
+ 	if (err)
+ 		goto done;
 =20
-@@ -92,12 +104,50 @@ enum bpf_field_info_kind {
- 	__builtin_preserve_field_info(field, BPF_FIELD_EXISTS)
+-	if (btf_ext->hdr->hdr_len <
+-	    offsetofend(struct btf_ext_header, field_reloc_len))
++	if (btf_ext->hdr->hdr_len < offsetofend(struct btf_ext_header, core_rel=
+o_len))
+ 		goto done;
+-	err =3D btf_ext_setup_field_reloc(btf_ext);
++	err =3D btf_ext_setup_core_relos(btf_ext);
+ 	if (err)
+ 		goto done;
 =20
- /*
-- * Convenience macro to get byte size of a field. Works for integers,
-+ * Convenience macro to get the byte size of a field. Works for integers=
-,
-  * struct/unions, pointers, arrays, and enums.
-  */
- #define bpf_core_field_size(field)					    \
- 	__builtin_preserve_field_info(field, BPF_FIELD_BYTE_SIZE)
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index f4a1a1d2b9a3..7a97fd12f710 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -24,44 +24,6 @@ struct btf_type;
 =20
-+/*
-+ * Convenience macro to get BTF type ID of a specified type, using a loc=
-al BTF
-+ * information. Return 32-bit unsigned integer with type ID from program=
-'s own
-+ * BTF. Always succeeds.
-+ */
-+#define bpf_core_type_id_local(type)					    \
-+	__builtin_btf_type_id(*(typeof(type) *)0, BPF_TYPE_ID_LOCAL)
-+
-+/*
-+ * Convenience macro to get BTF type ID of a target kernel's type that m=
-atches
-+ * specified local type.
-+ * Returns:
-+ *    - valid 32-bit unsigned type ID in kernel BTF;
-+ *    - 0, if no matching type was found in a target kernel BTF.
-+ */
-+#define bpf_core_type_id_kernel(type)					    \
-+	__builtin_btf_type_id(*(typeof(type) *)0, BPF_TYPE_ID_TARGET)
-+
-+/*
-+ * Convenience macro to check that provided named type
-+ * (struct/union/enum/typedef) exists in a target kernel.
-+ * Returns:
-+ *    1, if such type is present in target kernel's BTF;
-+ *    0, if no matching type is found.
-+ */
-+#define bpf_core_type_exists(type)					    \
-+	__builtin_preserve_type_info(*(typeof(type) *)0, BPF_TYPE_EXISTS)
-+
-+/*
-+ * Convenience macro to get the byte size of a provided named type
-+ * (struct/union/enum/typedef) in a target kernel.
-+ * Returns:
-+ *    >=3D 0 size (in bytes), if type is present in target kernel's BTF;
-+ *    0, if no matching type is found.
-+ */
-+#define bpf_core_type_size(type)					    \
-+	__builtin_preserve_type_info(*(typeof(type) *)0, BPF_TYPE_SIZE)
-+
- /*
-  * bpf_core_read() abstracts away bpf_probe_read() call and captures off=
-set
-  * relocation for source address using __builtin_preserve_access_index()
+ struct bpf_object;
+=20
+-/*
+- * The .BTF.ext ELF section layout defined as
+- *   struct btf_ext_header
+- *   func_info subsection
+- *
+- * The func_info subsection layout:
+- *   record size for struct bpf_func_info in the func_info subsection
+- *   struct btf_sec_func_info for section #1
+- *   a list of bpf_func_info records for section #1
+- *     where struct bpf_func_info mimics one in include/uapi/linux/bpf.h
+- *     but may not be identical
+- *   struct btf_sec_func_info for section #2
+- *   a list of bpf_func_info records for section #2
+- *   ......
+- *
+- * Note that the bpf_func_info record size in .BTF.ext may not
+- * be the same as the one defined in include/uapi/linux/bpf.h.
+- * The loader should ensure that record_size meets minimum
+- * requirement and pass the record as is to the kernel. The
+- * kernel will handle the func_info properly based on its contents.
+- */
+-struct btf_ext_header {
+-	__u16	magic;
+-	__u8	version;
+-	__u8	flags;
+-	__u32	hdr_len;
+-
+-	/* All offsets are in bytes relative to the end of this header */
+-	__u32	func_info_off;
+-	__u32	func_info_len;
+-	__u32	line_info_off;
+-	__u32	line_info_len;
+-
+-	/* optional part of .BTF.ext header */
+-	__u32	field_reloc_off;
+-	__u32	field_reloc_len;
+-};
+-
+ LIBBPF_API void btf__free(struct btf *btf);
+ LIBBPF_API struct btf *btf__new(const void *data, __u32 size);
+ LIBBPF_API struct btf *btf__parse(const char *path, struct btf_ext **btf=
+_ext);
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index d3b268a2dc8b..8ef83dfa8530 100644
+index 62f944c5addd..b80a50ac0707 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -4072,6 +4072,10 @@ static const char *core_relo_kind_str(enum bpf_cor=
-e_relo_kind kind)
- 	case BPF_FIELD_SIGNED: return "signed";
- 	case BPF_FIELD_LSHIFT_U64: return "lshift_u64";
- 	case BPF_FIELD_RSHIFT_U64: return "rshift_u64";
-+	case BPF_TYPE_ID_LOCAL: return "local_type_id";
-+	case BPF_TYPE_ID_TARGET: return "target_type_id";
-+	case BPF_TYPE_EXISTS: return "type_exists";
-+	case BPF_TYPE_SIZE: return "type_size";
- 	default: return "unknown";
- 	}
- }
-@@ -4091,6 +4095,19 @@ static bool core_relo_is_field_based(enum bpf_core=
-_relo_kind kind)
- 	}
+@@ -2520,7 +2520,7 @@ static int bpf_object__load_vmlinux_btf(struct bpf_=
+object *obj)
+ 	int err;
+=20
+ 	/* CO-RE relocations need kernel BTF */
+-	if (obj->btf_ext && obj->btf_ext->field_reloc_info.len)
++	if (obj->btf_ext && obj->btf_ext->core_relo_info.len)
+ 		need_vmlinux_btf =3D true;
+=20
+ 	bpf_object__for_each_program(prog, obj) {
+@@ -4029,6 +4029,10 @@ struct bpf_core_spec {
+ 	const struct btf *btf;
+ 	/* high-level spec: named fields and array indices only */
+ 	struct bpf_core_accessor spec[BPF_CORE_SPEC_MAX_LEN];
++	/* original unresolved (no skip_mods_or_typedefs) root type ID */
++	__u32 root_type_id;
++	/* CO-RE relocation kind */
++	enum bpf_core_relo_kind relo_kind;
+ 	/* high-level spec length */
+ 	int len;
+ 	/* raw, low-level spec: 1-to-1 with accessor spec string */
+@@ -4059,8 +4063,36 @@ static bool is_flex_arr(const struct btf *btf,
+ 	return acc->idx =3D=3D btf_vlen(t) - 1;
  }
 =20
-+static bool core_relo_is_type_based(enum bpf_core_relo_kind kind)
++static const char *core_relo_kind_str(enum bpf_core_relo_kind kind)
 +{
 +	switch (kind) {
-+	case BPF_TYPE_ID_LOCAL:
-+	case BPF_TYPE_ID_TARGET:
-+	case BPF_TYPE_EXISTS:
-+	case BPF_TYPE_SIZE:
++	case BPF_FIELD_BYTE_OFFSET: return "byte_off";
++	case BPF_FIELD_BYTE_SIZE: return "byte_sz";
++	case BPF_FIELD_EXISTS: return "field_exists";
++	case BPF_FIELD_SIGNED: return "signed";
++	case BPF_FIELD_LSHIFT_U64: return "lshift_u64";
++	case BPF_FIELD_RSHIFT_U64: return "rshift_u64";
++	default: return "unknown";
++	}
++}
++
++static bool core_relo_is_field_based(enum bpf_core_relo_kind kind)
++{
++	switch (kind) {
++	case BPF_FIELD_BYTE_OFFSET:
++	case BPF_FIELD_BYTE_SIZE:
++	case BPF_FIELD_EXISTS:
++	case BPF_FIELD_SIGNED:
++	case BPF_FIELD_LSHIFT_U64:
++	case BPF_FIELD_RSHIFT_U64:
 +		return true;
 +	default:
 +		return false;
@@ -239,430 +235,481 @@ _relo_kind kind)
 +}
 +
  /*
-  * Turn bpf_core_relo into a low- and high-level spec representation,
+- * Turn bpf_field_reloc into a low- and high-level spec representation,
++ * Turn bpf_core_relo into a low- and high-level spec representation,
   * validating correctness along the way, as well as calculating resultin=
 g
-@@ -4121,6 +4138,9 @@ static bool core_relo_is_field_based(enum bpf_core_=
-relo_kind kind)
-  *   - field 'a' access (corresponds to '2' in low-level spec);
+  * field bit offset, specified by accessor string. Low-level spec captur=
+es
+  * every single level of nestedness, including traversing anonymous
+@@ -4090,9 +4122,10 @@ static bool is_flex_arr(const struct btf *btf,
   *   - array element #3 access (corresponds to '3' in low-level spec).
   *
-+ * Type-based relocations (TYPE_EXISTS/TYPE_SIZE,
-+ * TYPE_ID_LOCAL/TYPE_ID_TARGET) don't capture any field information. Th=
-eir
-+ * spec and raw_spec are kept empty.
   */
- static int bpf_core_parse_spec(const struct btf *btf,
+-static int bpf_core_spec_parse(const struct btf *btf,
++static int bpf_core_parse_spec(const struct btf *btf,
  			       __u32 type_id,
-@@ -4143,6 +4163,13 @@ static int bpf_core_parse_spec(const struct btf *b=
-tf,
- 	spec->root_type_id =3D type_id;
- 	spec->relo_kind =3D relo_kind;
+ 			       const char *spec_str,
++			       enum bpf_core_relo_kind relo_kind,
+ 			       struct bpf_core_spec *spec)
+ {
+ 	int access_idx, parsed_len, i;
+@@ -4107,6 +4140,8 @@ static int bpf_core_spec_parse(const struct btf *bt=
+f,
 =20
-+	/* type-based relocations don't have a field access string */
-+	if (core_relo_is_type_based(relo_kind)) {
-+		if (strcmp(spec_str, "0"))
-+			return -EINVAL;
-+		return 0;
-+	}
-+
+ 	memset(spec, 0, sizeof(*spec));
+ 	spec->btf =3D btf;
++	spec->root_type_id =3D type_id;
++	spec->relo_kind =3D relo_kind;
+=20
  	/* parse spec_str=3D"0:1:2:3:4" into array raw_spec=3D[0, 1, 2, 3, 4] *=
 /
  	while (*spec_str) {
- 		if (*spec_str =3D=3D ':')
-@@ -4278,7 +4305,7 @@ static struct ids_vec *bpf_core_find_cands(const st=
-ruct btf *local_btf,
+@@ -4133,6 +4168,9 @@ static int bpf_core_spec_parse(const struct btf *bt=
+f,
+ 	spec->spec[0].idx =3D access_idx;
+ 	spec->len++;
+=20
++	if (!core_relo_is_field_based(relo_kind))
++		return -EINVAL;
++
+ 	sz =3D btf__resolve_size(btf, id);
+ 	if (sz < 0)
+ 		return sz;
+@@ -4240,17 +4278,17 @@ static struct ids_vec *bpf_core_find_cands(const =
+struct btf *local_btf,
  					   const struct btf *targ_btf)
  {
  	size_t local_essent_len, targ_essent_len;
--	const char *local_name, *targ_name, *targ_kind;
-+	const char *local_name, *targ_name;
- 	const struct btf_type *t, *local_t;
+-	const char *local_name, *targ_name;
+-	const struct btf_type *t;
++	const char *local_name, *targ_name, *targ_kind;
++	const struct btf_type *t, *local_t;
  	struct ids_vec *cand_ids;
  	__u32 *new_ids;
-@@ -4300,13 +4327,11 @@ static struct ids_vec *bpf_core_find_cands(const =
-struct btf *local_btf,
- 	n =3D btf__get_nr_types(targ_btf);
- 	for (i =3D 1; i <=3D n; i++) {
- 		t =3D btf__type_by_id(targ_btf, i);
--		targ_name =3D btf__name_by_offset(targ_btf, t->name_off);
--		if (str_is_empty(targ_name))
-+		if (btf_kind(t) !=3D btf_kind(local_t))
- 			continue;
--		targ_kind =3D btf_kind_str(t);
+ 	int i, err, n;
 =20
--		t =3D skip_mods_and_typedefs(targ_btf, i, NULL);
--		if (!btf_is_composite(t) && !btf_is_array(t))
-+		targ_name =3D btf__name_by_offset(targ_btf, t->name_off);
-+		if (str_is_empty(targ_name))
- 			continue;
+-	t =3D btf__type_by_id(local_btf, local_type_id);
+-	if (!t)
++	local_t =3D btf__type_by_id(local_btf, local_type_id);
++	if (!local_t)
+ 		return ERR_PTR(-EINVAL);
 =20
- 		targ_essent_len =3D bpf_core_essential_name_len(targ_name);
-@@ -4316,7 +4341,7 @@ static struct ids_vec *bpf_core_find_cands(const st=
+-	local_name =3D btf__name_by_offset(local_btf, t->name_off);
++	local_name =3D btf__name_by_offset(local_btf, local_t->name_off);
+ 	if (str_is_empty(local_name))
+ 		return ERR_PTR(-EINVAL);
+ 	local_essent_len =3D bpf_core_essential_name_len(local_name);
+@@ -4265,6 +4303,7 @@ static struct ids_vec *bpf_core_find_cands(const st=
 ruct btf *local_btf,
+ 		targ_name =3D btf__name_by_offset(targ_btf, t->name_off);
+ 		if (str_is_empty(targ_name))
+ 			continue;
++		targ_kind =3D btf_kind_str(t);
+=20
+ 		t =3D skip_mods_and_typedefs(targ_btf, i, NULL);
+ 		if (!btf_is_composite(t) && !btf_is_array(t))
+@@ -4275,8 +4314,9 @@ static struct ids_vec *bpf_core_find_cands(const st=
+ruct btf *local_btf,
+ 			continue;
+=20
  		if (strncmp(local_name, targ_name, local_essent_len) =3D=3D 0) {
- 			pr_debug("CO-RE relocating [%d] %s %s: found target candidate [%d] %s=
+-			pr_debug("[%d] %s: found candidate [%d] %s\n",
+-				 local_type_id, local_name, i, targ_name);
++			pr_debug("CO-RE relocating [%d] %s %s: found target candidate [%d] %s=
  %s\n",
- 				 local_type_id, btf_kind_str(local_t),
--				 local_name, i, targ_kind, targ_name);
-+				 local_name, i, btf_kind_str(t), targ_name);
++				 local_type_id, btf_kind_str(local_t),
++				 local_name, i, targ_kind, targ_name);
  			new_ids =3D reallocarray(cand_ids->data,
  					       cand_ids->len + 1,
  					       sizeof(*cand_ids->data));
-@@ -4334,8 +4359,9 @@ static struct ids_vec *bpf_core_find_cands(const st=
-ruct btf *local_btf,
- 	return ERR_PTR(err);
- }
+@@ -4465,6 +4505,8 @@ static int bpf_core_spec_match(struct bpf_core_spec=
+ *local_spec,
 =20
--/* Check two types for compatibility, skipping const/volatile/restrict a=
-nd
-- * typedefs, to ensure we are relocating compatible entities:
-+/* Check two types for compatibility for the purpose of field access
-+ * relocation. const/volatile/restrict and typedefs are skipped to ensur=
-e we
-+ * are relocating semantically compatible entities:
-  *   - any two STRUCTs/UNIONs are compatible and can be mixed;
-  *   - any two FWDs are compatible, if their names match (modulo flavor =
-suffix);
-  *   - any two PTRs are always compatible;
-@@ -4490,6 +4516,100 @@ static int bpf_core_match_member(const struct btf=
- *local_btf,
- 	return 0;
- }
+ 	memset(targ_spec, 0, sizeof(*targ_spec));
+ 	targ_spec->btf =3D targ_btf;
++	targ_spec->root_type_id =3D targ_id;
++	targ_spec->relo_kind =3D local_spec->relo_kind;
 =20
-+/* Check local and target types for compatibility. This check is used fo=
-r
-+ * type-based CO-RE relocations and follow slightly different rules than
-+ * field-based relocations. This function assumes that root types were a=
-lready
-+ * checked for name match. Beyond that initial root-level name check, na=
-mes
-+ * are completely ignored. Compatibility rules are as follows:
-+ *   - any two STRUCTs/UNIONs/FWDs/ENUMs/INTs are considered compatible,=
- but
-+ *     kind should match for local and target types (i.e., STRUCT is not
-+ *     compatible with UNION);
-+ *   - for ENUMs, the size is ignored;
-+ *   - for INT, size and signedness are ignored;
-+ *   - for ARRAY, dimensionality is ignored, element types are checked f=
-or
-+ *     compatibility recursively;
-+ *   - CONST/VOLATILE/RESTRICT modifiers are ignored;
-+ *   - TYPEDEFs/PTRs are compatible if types they pointing to are compat=
-ible;
-+ *   - FUNC_PROTOs are compatible if they have compatible signature: sam=
-e
-+ *     number of input args and compatible return and argument types.
-+ * These rules are not set in stone and probably will be adjusted as we =
-get
-+ * more experience with using BPF CO-RE relocations.
-+ */
-+static int bpf_core_types_are_compat(const struct btf *local_btf, __u32 =
-local_id,
-+				     const struct btf *targ_btf, __u32 targ_id)
-+{
-+	const struct btf_type *local_type, *targ_type;
-+	int depth =3D 32; /* max recursion depth */
-+
-+	/* caller made sure that names match (ignoring flavor suffix) */
-+	local_type =3D btf__type_by_id(local_btf, local_id);
-+	targ_type =3D btf__type_by_id(local_btf, local_id);
-+	if (btf_kind(local_type) !=3D btf_kind(targ_type))
-+		return 0;
-+
-+recur:
-+	depth--;
-+	if (depth < 0)
-+		return -EINVAL;
-+
-+	local_type =3D skip_mods_and_typedefs(local_btf, local_id, &local_id);
-+	targ_type =3D skip_mods_and_typedefs(targ_btf, targ_id, &targ_id);
-+	if (!local_type || !targ_type)
-+		return -EINVAL;
-+
-+	if (btf_kind(local_type) !=3D btf_kind(targ_type))
-+		return 0;
-+
-+	switch (btf_kind(local_type)) {
-+	case BTF_KIND_UNKN:
-+	case BTF_KIND_STRUCT:
-+	case BTF_KIND_UNION:
-+	case BTF_KIND_ENUM:
-+	case BTF_KIND_FWD:
-+		return 1;
-+	case BTF_KIND_INT:
-+		/* just reject deprecated bitfield-like integers; all other
-+		 * integers are by default compatible between each other
-+		 */
-+		return btf_int_offset(local_type) =3D=3D 0 && btf_int_offset(targ_type=
-) =3D=3D 0;
-+	case BTF_KIND_PTR:
-+		local_id =3D local_type->type;
-+		targ_id =3D targ_type->type;
-+		goto recur;
-+	case BTF_KIND_ARRAY:
-+		local_id =3D btf_array(local_type)->type;
-+		targ_id =3D btf_array(targ_type)->type;
-+		goto recur;
-+	case BTF_KIND_FUNC_PROTO: {
-+		struct btf_param *local_p =3D btf_params(local_type);
-+		struct btf_param *targ_p =3D btf_params(targ_type);
-+		__u16 local_vlen =3D btf_vlen(local_type);
-+		__u16 targ_vlen =3D btf_vlen(targ_type);
-+		int i, err;
-+
-+		if (local_vlen !=3D targ_vlen)
-+			return 0;
-+
-+		for (i =3D 0; i < local_vlen; i++, local_p++, targ_p++) {
-+			skip_mods_and_typedefs(local_btf, local_p->type, &local_id);
-+			skip_mods_and_typedefs(targ_btf, targ_p->type, &targ_id);
-+			err =3D bpf_core_types_are_compat(local_btf, local_id, targ_btf, targ=
-_id);
-+			if (err <=3D 0)
-+				return err;
-+		}
-+
-+		/* tail recurse for return type check */
-+		skip_mods_and_typedefs(local_btf, local_type->type, &local_id);
-+		skip_mods_and_typedefs(targ_btf, targ_type->type, &targ_id);
-+		goto recur;
-+	}
-+	default:
-+		pr_warn("unexpected kind %s relocated, local [%d], target [%d]\n",
-+			btf_kind_str(local_type), local_id, targ_id);
-+		return 0;
-+	}
-+}
-+
- /*
-  * Try to match local spec to a target type and, if successful, produce =
-full
-  * target spec (high-level, low-level + bit offset).
-@@ -4508,6 +4628,12 @@ static int bpf_core_spec_match(struct bpf_core_spe=
-c *local_spec,
- 	targ_spec->root_type_id =3D targ_id;
- 	targ_spec->relo_kind =3D local_spec->relo_kind;
-=20
-+	if (core_relo_is_type_based(local_spec->relo_kind)) {
-+		return bpf_core_types_are_compat(local_spec->btf,
-+						 local_spec->root_type_id,
-+						 targ_btf, targ_id);
-+	}
-+
  	local_acc =3D &local_spec->spec[0];
  	targ_acc =3D &targ_spec->spec[0];
-=20
-@@ -4681,6 +4807,40 @@ static int bpf_core_calc_field_relo(const struct b=
-pf_program *prog,
- 	return 0;
+@@ -4525,7 +4567,7 @@ static int bpf_core_spec_match(struct bpf_core_spec=
+ *local_spec,
  }
 =20
-+static int bpf_core_calc_type_relo(const struct bpf_core_relo *relo,
-+				   const struct bpf_core_spec *spec,
-+				   __u32 *val)
-+{
-+	__s64 sz;
-+
-+	/* type-based relos return zero when target type is not found */
-+	if (!spec) {
-+		*val =3D 0;
-+		return 0;
-+	}
-+
-+	switch (relo->kind) {
-+	case BPF_TYPE_ID_TARGET:
-+		*val =3D spec->root_type_id;
-+		break;
-+	case BPF_TYPE_EXISTS:
-+		*val =3D 1;
-+		break;
-+	case BPF_TYPE_SIZE:
-+		sz =3D btf__resolve_size(spec->btf, spec->root_type_id);
-+		if (sz < 0)
-+			return -EINVAL;
-+		*val =3D sz;
-+		break;
-+	case BPF_TYPE_ID_LOCAL:
-+	/* BPF_TYPE_ID_LOCAL is handled specially and shouldn't get here */
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-+
- struct bpf_core_relo_res
+ static int bpf_core_calc_field_relo(const struct bpf_program *prog,
+-				    const struct bpf_field_reloc *relo,
++				    const struct bpf_core_relo *relo,
+ 				    const struct bpf_core_spec *spec,
+ 				    __u32 *val, bool *validate)
  {
- 	/* expected value in the instruction, unless validate =3D=3D false */
-@@ -4716,6 +4876,9 @@ static int bpf_core_calc_relo(const struct bpf_prog=
-ram *prog,
- 	if (core_relo_is_field_based(relo->kind)) {
- 		err =3D bpf_core_calc_field_relo(prog, relo, local_spec, &res->orig_va=
-l, &res->validate);
- 		err =3D err ?: bpf_core_calc_field_relo(prog, relo, targ_spec, &res->n=
-ew_val, NULL);
-+	} else if (core_relo_is_type_based(relo->kind)) {
-+		err =3D bpf_core_calc_type_relo(relo, local_spec, &res->orig_val);
-+		err =3D err ?: bpf_core_calc_type_relo(relo, targ_spec, &res->new_val)=
-;
- 	}
+@@ -4646,7 +4688,7 @@ static int bpf_core_calc_field_relo(const struct bp=
+f_program *prog,
+  * 2. rX +=3D <imm> (arithmetic operations with immediate operand);
+  */
+ static int bpf_core_reloc_insn(struct bpf_program *prog,
+-			       const struct bpf_field_reloc *relo,
++			       const struct bpf_core_relo *relo,
+ 			       int relo_idx,
+ 			       const struct bpf_core_spec *local_spec,
+ 			       const struct bpf_core_spec *targ_spec)
+@@ -4750,25 +4792,30 @@ static void bpf_core_dump_spec(int level, const s=
+truct bpf_core_spec *spec)
+ 	__u32 type_id;
+ 	int i;
 =20
- 	if (err =3D=3D -EUCLEAN) {
-@@ -4855,6 +5018,9 @@ static void bpf_core_dump_spec(int level, const str=
-uct bpf_core_spec *spec)
+-	type_id =3D spec->spec[0].type_id;
++	type_id =3D spec->root_type_id;
+ 	t =3D btf__type_by_id(spec->btf, type_id);
+ 	s =3D btf__name_by_offset(spec->btf, t->name_off);
+-	libbpf_print(level, "[%u] %s + ", type_id, s);
 =20
- 	libbpf_print(level, "[%u] %s %s", type_id, btf_kind_str(t), str_is_empt=
+-	for (i =3D 0; i < spec->raw_len; i++)
+-		libbpf_print(level, "%d%s", spec->raw_spec[i],
+-			     i =3D=3D spec->raw_len - 1 ? " =3D> " : ":");
++	libbpf_print(level, "[%u] %s %s", type_id, btf_kind_str(t), str_is_empt=
 y(s) ? "<anon>" : s);
-=20
-+	if (core_relo_is_type_based(spec->relo_kind))
-+		return;
 +
- 	if (core_relo_is_field_based(spec->relo_kind)) {
- 		for (i =3D 0; i < spec->len; i++) {
- 			if (spec->spec[i].name)
-@@ -4872,6 +5038,7 @@ static void bpf_core_dump_spec(int level, const str=
-uct bpf_core_spec *spec)
- 				     spec->bit_offset / 8, spec->bit_offset % 8);
++	if (core_relo_is_field_based(spec->relo_kind)) {
++		for (i =3D 0; i < spec->len; i++) {
++			if (spec->spec[i].name)
++				libbpf_print(level, ".%s", spec->spec[i].name);
++			else if (i > 0 || spec->spec[i].idx > 0)
++				libbpf_print(level, "[%u]", spec->spec[i].idx);
++		}
+=20
+-	libbpf_print(level, "%u.%u @ &x",
+-		     spec->bit_offset / 8, spec->bit_offset % 8);
++		libbpf_print(level, " (");
++		for (i =3D 0; i < spec->raw_len; i++)
++			libbpf_print(level, "%s%d", i =3D=3D 0 ? "" : ":", spec->raw_spec[i])=
+;
+=20
+-	for (i =3D 0; i < spec->len; i++) {
+-		if (spec->spec[i].name)
+-			libbpf_print(level, ".%s", spec->spec[i].name);
++		if (spec->bit_offset % 8)
++			libbpf_print(level, " @ offset %u.%u)",
++				     spec->bit_offset / 8, spec->bit_offset % 8);
  		else
- 			libbpf_print(level, " @ offset %u)", spec->bit_offset / 8);
-+		return;
+-			libbpf_print(level, "[%u]", spec->spec[i].idx);
++			libbpf_print(level, " @ offset %u)", spec->bit_offset / 8);
  	}
+-
  }
 =20
-@@ -4940,12 +5107,12 @@ static void *u32_as_hash_key(__u32 x)
+ static size_t bpf_core_hash_fn(const void *key, void *ctx)
+@@ -4832,12 +4879,12 @@ static void *u32_as_hash_key(__u32 x)
+  *    CPU-wise compared to prebuilding a map from all local type names t=
+o
+  *    a list of candidate type names. It's also sped up by caching resol=
+ved
+  *    list of matching candidates per each local "root" type ID, that ha=
+s at
+- *    least one bpf_field_reloc associated with it. This list is shared
++ *    least one bpf_core_relo associated with it. This list is shared
   *    between multiple relocations for the same type ID and is updated a=
 s some
   *    of the candidates are pruned due to structural incompatibility.
   */
--static int bpf_core_reloc_field(struct bpf_program *prog,
--				 const struct bpf_core_relo *relo,
--				 int relo_idx,
--				 const struct btf *local_btf,
--				 const struct btf *targ_btf,
--				 struct hashmap *cand_cache)
-+static int bpf_core_apply_relo(struct bpf_program *prog,
-+			       const struct bpf_core_relo *relo,
-+			       int relo_idx,
-+			       const struct btf *local_btf,
-+			       const struct btf *targ_btf,
-+			       struct hashmap *cand_cache)
- {
+ static int bpf_core_reloc_field(struct bpf_program *prog,
+-				 const struct bpf_field_reloc *relo,
++				 const struct bpf_core_relo *relo,
+ 				 int relo_idx,
+ 				 const struct btf *local_btf,
+ 				 const struct btf *targ_btf,
+@@ -4846,8 +4893,8 @@ static int bpf_core_reloc_field(struct bpf_program =
+*prog,
  	const char *prog_name =3D bpf_program__title(prog, false);
  	struct bpf_core_spec local_spec, cand_spec, targ_spec;
-@@ -4964,7 +5131,7 @@ static int bpf_core_reloc_field(struct bpf_program =
-*prog,
+ 	const void *type_key =3D u32_as_hash_key(relo->type_id);
+-	const struct btf_type *local_type, *cand_type;
+-	const char *local_name, *cand_name;
++	const struct btf_type *local_type;
++	const char *local_name;
+ 	struct ids_vec *cand_ids;
+ 	__u32 local_id, cand_id;
+ 	const char *spec_str;
+@@ -4866,24 +4913,24 @@ static int bpf_core_reloc_field(struct bpf_progra=
+m *prog,
+ 	if (str_is_empty(spec_str))
  		return -EINVAL;
 =20
- 	local_name =3D btf__name_by_offset(local_btf, local_type->name_off);
--	if (str_is_empty(local_name))
-+	if (!local_name)
- 		return -EINVAL;
-=20
- 	spec_str =3D btf__name_by_offset(local_btf, relo->access_str_off);
-@@ -4975,7 +5142,8 @@ static int bpf_core_reloc_field(struct bpf_program =
-*prog,
+-	err =3D bpf_core_spec_parse(local_btf, local_id, spec_str, &local_spec)=
+;
++	err =3D bpf_core_parse_spec(local_btf, local_id, spec_str, relo->kind, =
+&local_spec);
  	if (err) {
- 		pr_warn("prog '%s': relo #%d: parsing [%d] %s %s + %s failed: %d\n",
- 			prog_name, relo_idx, local_id, btf_kind_str(local_type),
--			local_name, spec_str, err);
-+			str_is_empty(local_name) ? "<anon>" : local_name,
-+			spec_str, err);
+-		pr_warn("prog '%s': relo #%d: parsing [%d] %s + %s failed: %d\n",
+-			prog_name, relo_idx, local_id, local_name, spec_str,
+-			err);
++		pr_warn("prog '%s': relo #%d: parsing [%d] %s %s + %s failed: %d\n",
++			prog_name, relo_idx, local_id, btf_kind_str(local_type),
++			local_name, spec_str, err);
  		return -EINVAL;
  	}
 =20
-@@ -4984,12 +5152,28 @@ static int bpf_core_reloc_field(struct bpf_progra=
-m *prog,
+-	pr_debug("prog '%s': relo #%d: kind %d, spec is ", prog_name, relo_idx,
+-		 relo->kind);
++	pr_debug("prog '%s': relo #%d: kind <%s> (%d), spec is ", prog_name,
++		 relo_idx, core_relo_kind_str(relo->kind), relo->kind);
  	bpf_core_dump_spec(LIBBPF_DEBUG, &local_spec);
  	libbpf_print(LIBBPF_DEBUG, "\n");
 =20
-+	/* TYPE_ID_LOCAL relo is special and doesn't need candidate search */
-+	if (relo->kind =3D=3D BPF_TYPE_ID_LOCAL) {
-+		targ_res.validate =3D true;
-+		targ_res.poison =3D false;
-+		targ_res.orig_val =3D local_spec.root_type_id;
-+		targ_res.new_val =3D local_spec.root_type_id;
-+		goto patch_insn;
-+	}
-+
-+	/* libbpf doesn't support candidate search for anonymous types */
-+	if (str_is_empty(spec_str)) {
-+		pr_warn("prog '%s': relo #%d: <%s> (%d) relocation doesn't support ano=
-nymous types\n",
-+			prog_name, relo_idx, core_relo_kind_str(relo->kind), relo->kind);
-+		return -EOPNOTSUPP;
-+	}
-+
  	if (!hashmap__find(cand_cache, type_key, (void **)&cand_ids)) {
  		cand_ids =3D bpf_core_find_cands(local_btf, local_id, targ_btf);
  		if (IS_ERR(cand_ids)) {
- 			pr_warn("prog '%s': relo #%d: target candidate search failed for [%d]=
+-			pr_warn("prog '%s': relo #%d: target candidate search failed for [%d]=
+ %s: %ld",
+-				prog_name, relo_idx, local_id, local_name,
++			pr_warn("prog '%s': relo #%d: target candidate search failed for [%d]=
  %s %s: %ld",
--				prog_name, relo_idx, local_id, btf_kind_str(local_type), local_name,
--				PTR_ERR(cand_ids));
-+				prog_name, relo_idx, local_id, btf_kind_str(local_type),
-+				local_name, PTR_ERR(cand_ids));
++				prog_name, relo_idx, local_id, btf_kind_str(local_type), local_name,
+ 				PTR_ERR(cand_ids));
  			return PTR_ERR(cand_ids);
  		}
- 		err =3D hashmap__set(cand_cache, type_key, cand_ids, NULL, NULL);
-@@ -5045,7 +5229,7 @@ static int bpf_core_reloc_field(struct bpf_program =
-*prog,
- 			return -EINVAL;
- 		}
+@@ -4896,20 +4943,20 @@ static int bpf_core_reloc_field(struct bpf_progra=
+m *prog,
 =20
--		cand_ids->data[j++] =3D cand_spec.spec[0].type_id;
-+		cand_ids->data[j++] =3D cand_spec.root_type_id;
- 	}
-=20
- 	/*
-@@ -5064,7 +5248,7 @@ static int bpf_core_reloc_field(struct bpf_program =
-*prog,
- 	 * as well as expected case, depending whether instruction w/
- 	 * relocation is guarded in some way that makes it unreachable (dead
- 	 * code) if relocation can't be resolved. This is handled in
--	 * bpf_core_reloc_insn() uniformly by replacing that instruction with
-+	 * bpf_core_patch_insn() uniformly by replacing that instruction with
- 	 * BPF helper call insn (using invalid helper ID). If that instruction
- 	 * is indeed unreachable, then it will be ignored and eliminated by
- 	 * verifier. If it was an error, then verifier will complain and point
-@@ -5080,6 +5264,7 @@ static int bpf_core_reloc_field(struct bpf_program =
-*prog,
+ 	for (i =3D 0, j =3D 0; i < cand_ids->len; i++) {
+ 		cand_id =3D cand_ids->data[i];
+-		cand_type =3D btf__type_by_id(targ_btf, cand_id);
+-		cand_name =3D btf__name_by_offset(targ_btf, cand_type->name_off);
+-
+-		err =3D bpf_core_spec_match(&local_spec, targ_btf,
+-					  cand_id, &cand_spec);
+-		pr_debug("prog '%s': relo #%d: matching candidate #%d %s against spec =
+",
+-			 prog_name, relo_idx, i, cand_name);
+-		bpf_core_dump_spec(LIBBPF_DEBUG, &cand_spec);
+-		libbpf_print(LIBBPF_DEBUG, ": %d\n", err);
++		err =3D bpf_core_spec_match(&local_spec, targ_btf, cand_id, &cand_spec=
+);
+ 		if (err < 0) {
+-			pr_warn("prog '%s': relo #%d: matching error: %d\n",
+-				prog_name, relo_idx, err);
++			pr_warn("prog '%s': relo #%d: error matching candidate #%d ",
++				prog_name, relo_idx, i);
++			bpf_core_dump_spec(LIBBPF_WARN, &cand_spec);
++			libbpf_print(LIBBPF_WARN, ": %d\n", err);
  			return err;
+ 		}
++
++		pr_debug("prog '%s': relo #%d: %s candidate #%d ", prog_name,
++			 relo_idx, err =3D=3D 0 ? "non-matching" : "matching", i);
++		bpf_core_dump_spec(LIBBPF_DEBUG, &cand_spec);
++		libbpf_print(LIBBPF_DEBUG, "\n");
++
+ 		if (err =3D=3D 0)
+ 			continue;
+=20
+@@ -4951,8 +4998,8 @@ static int bpf_core_reloc_field(struct bpf_program =
+*prog,
+ 	 * to a specific instruction number in its log.
+ 	 */
+ 	if (j =3D=3D 0)
+-		pr_debug("prog '%s': relo #%d: no matching targets found for [%d] %s +=
+ %s\n",
+-			 prog_name, relo_idx, local_id, local_name, spec_str);
++		pr_debug("prog '%s': relo #%d: no matching targets found\n",
++			 prog_name, relo_idx);
+=20
+ 	/* bpf_core_reloc_insn should know how to handle missing targ_spec */
+ 	err =3D bpf_core_reloc_insn(prog, relo, relo_idx, &local_spec,
+@@ -4967,10 +5014,10 @@ static int bpf_core_reloc_field(struct bpf_progra=
+m *prog,
+ }
+=20
+ static int
+-bpf_core_reloc_fields(struct bpf_object *obj, const char *targ_btf_path)
++bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_p=
+ath)
+ {
+ 	const struct btf_ext_info_sec *sec;
+-	const struct bpf_field_reloc *rec;
++	const struct bpf_core_relo *rec;
+ 	const struct btf_ext_info *seg;
+ 	struct hashmap_entry *entry;
+ 	struct hashmap *cand_cache =3D NULL;
+@@ -4979,6 +5026,9 @@ bpf_core_reloc_fields(struct bpf_object *obj, const=
+ char *targ_btf_path)
+ 	const char *sec_name;
+ 	int i, err =3D 0;
+=20
++	if (obj->btf_ext->core_relo_info.len =3D=3D 0)
++		return 0;
++
+ 	if (targ_btf_path)
+ 		targ_btf =3D btf__parse_elf(targ_btf_path, NULL);
+ 	else
+@@ -4994,7 +5044,7 @@ bpf_core_reloc_fields(struct bpf_object *obj, const=
+ char *targ_btf_path)
+ 		goto out;
  	}
 =20
-+patch_insn:
- 	/* bpf_core_patch_insn() should know how to handle missing targ_spec */
- 	err =3D bpf_core_patch_insn(prog, relo, relo_idx, &targ_res);
- 	if (err) {
-@@ -5147,8 +5332,8 @@ bpf_object__relocate_core(struct bpf_object *obj, c=
-onst char *targ_btf_path)
- 			 sec_name, sec->num_info);
+-	seg =3D &obj->btf_ext->field_reloc_info;
++	seg =3D &obj->btf_ext->core_relo_info;
+ 	for_each_btf_ext_sec(seg, sec) {
+ 		sec_name =3D btf__name_by_offset(obj->btf, sec->sec_name_off);
+ 		if (str_is_empty(sec_name)) {
+@@ -5042,17 +5092,6 @@ bpf_core_reloc_fields(struct bpf_object *obj, cons=
+t char *targ_btf_path)
+ 	return err;
+ }
 =20
- 		for_each_btf_ext_rec(seg, sec, i, rec) {
--			err =3D bpf_core_reloc_field(prog, rec, i, obj->btf,
--						   targ_btf, cand_cache);
-+			err =3D bpf_core_apply_relo(prog, rec, i, obj->btf,
-+						  targ_btf, cand_cache);
- 			if (err) {
- 				pr_warn("prog '%s': relo #%d: failed to relocate: %d\n",
- 					sec_name, i, err);
+-static int
+-bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_p=
+ath)
+-{
+-	int err =3D 0;
+-
+-	if (obj->btf_ext->field_reloc_info.len)
+-		err =3D bpf_core_reloc_fields(obj, targ_btf_path);
+-
+-	return err;
+-}
+-
+ static int
+ bpf_program__reloc_text(struct bpf_program *prog, struct bpf_object *obj=
+,
+ 			struct reloc_desc *relo)
 diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
 nal.h
-index b776a7125c92..30eb2cf33789 100644
+index 50d70e90d5f1..b776a7125c92 100644
 --- a/tools/lib/bpf/libbpf_internal.h
 +++ b/tools/lib/bpf/libbpf_internal.h
-@@ -218,6 +218,10 @@ enum bpf_core_relo_kind {
- 	BPF_FIELD_SIGNED =3D 3,		/* field signedness (0 - unsigned, 1 - signed)=
- */
- 	BPF_FIELD_LSHIFT_U64 =3D 4,	/* bitfield-specific left bitshift */
- 	BPF_FIELD_RSHIFT_U64 =3D 5,	/* bitfield-specific right bitshift */
-+	BPF_TYPE_ID_LOCAL =3D 6,		/* type ID in local BPF object */
-+	BPF_TYPE_ID_TARGET =3D 7,		/* type ID in target kernel */
-+	BPF_TYPE_EXISTS =3D 8,		/* type existence in target kernel */
-+	BPF_TYPE_SIZE =3D 9,		/* type size in bytes */
+@@ -138,6 +138,44 @@ struct btf_ext_info {
+ 	     i < (sec)->num_info;					\
+ 	     i++, rec =3D (void *)rec + (seg)->rec_size)
+=20
++/*
++ * The .BTF.ext ELF section layout defined as
++ *   struct btf_ext_header
++ *   func_info subsection
++ *
++ * The func_info subsection layout:
++ *   record size for struct bpf_func_info in the func_info subsection
++ *   struct btf_sec_func_info for section #1
++ *   a list of bpf_func_info records for section #1
++ *     where struct bpf_func_info mimics one in include/uapi/linux/bpf.h
++ *     but may not be identical
++ *   struct btf_sec_func_info for section #2
++ *   a list of bpf_func_info records for section #2
++ *   ......
++ *
++ * Note that the bpf_func_info record size in .BTF.ext may not
++ * be the same as the one defined in include/uapi/linux/bpf.h.
++ * The loader should ensure that record_size meets minimum
++ * requirement and pass the record as is to the kernel. The
++ * kernel will handle the func_info properly based on its contents.
++ */
++struct btf_ext_header {
++	__u16	magic;
++	__u8	version;
++	__u8	flags;
++	__u32	hdr_len;
++
++	/* All offsets are in bytes relative to the end of this header */
++	__u32	func_info_off;
++	__u32	func_info_len;
++	__u32	line_info_off;
++	__u32	line_info_len;
++
++	/* optional part of .BTF.ext header */
++	__u32	core_relo_off;
++	__u32	core_relo_len;
++};
++
+ struct btf_ext {
+ 	union {
+ 		struct btf_ext_header *hdr;
+@@ -145,7 +183,7 @@ struct btf_ext {
+ 	};
+ 	struct btf_ext_info func_info;
+ 	struct btf_ext_info line_info;
+-	struct btf_ext_info field_reloc_info;
++	struct btf_ext_info core_relo_info;
+ 	__u32 data_size;
  };
 =20
- /* The minimum bpf_core_relo checked by the loader
+@@ -170,32 +208,34 @@ struct bpf_line_info_min {
+ 	__u32	line_col;
+ };
+=20
+-/* bpf_field_info_kind encodes which aspect of captured field has to be
+- * adjusted by relocations. Currently supported values are:
+- *   - BPF_FIELD_BYTE_OFFSET: field offset (in bytes);
+- *   - BPF_FIELD_EXISTS: field existence (1, if field exists; 0, otherwi=
+se);
++/* bpf_core_relo_kind encodes which aspect of captured field/type/enum v=
+alue
++ * has to be adjusted by relocations.
+  */
+-enum bpf_field_info_kind {
++enum bpf_core_relo_kind {
+ 	BPF_FIELD_BYTE_OFFSET =3D 0,	/* field byte offset */
+-	BPF_FIELD_BYTE_SIZE =3D 1,
++	BPF_FIELD_BYTE_SIZE =3D 1,	/* field size in bytes */
+ 	BPF_FIELD_EXISTS =3D 2,		/* field existence in target kernel */
+-	BPF_FIELD_SIGNED =3D 3,
+-	BPF_FIELD_LSHIFT_U64 =3D 4,
+-	BPF_FIELD_RSHIFT_U64 =3D 5,
++	BPF_FIELD_SIGNED =3D 3,		/* field signedness (0 - unsigned, 1 - signed)=
+ */
++	BPF_FIELD_LSHIFT_U64 =3D 4,	/* bitfield-specific left bitshift */
++	BPF_FIELD_RSHIFT_U64 =3D 5,	/* bitfield-specific right bitshift */
+ };
+=20
+-/* The minimum bpf_field_reloc checked by the loader
++/* The minimum bpf_core_relo checked by the loader
+  *
+- * Field relocation captures the following data:
++ * CO-RE relocation captures the following data:
+  * - insn_off - instruction offset (in bytes) within a BPF program that =
+needs
+  *   its insn->imm field to be relocated with actual field info;
+  * - type_id - BTF type ID of the "root" (containing) entity of a reloca=
+table
+- *   field;
++ *   type or field;
+  * - access_str_off - offset into corresponding .BTF string section. Str=
+ing
+- *   itself encodes an accessed field using a sequence of field and arra=
+y
+- *   indicies, separated by colon (:). It's conceptually very close to L=
+LVM's
+- *   getelementptr ([0]) instruction's arguments for identifying offset =
+to=20
+- *   a field.
++ *   interpretation depends on specific relocation kind:
++ *     - for field-based relocations, string encodes an accessed field u=
+sing
++ *     a sequence of field and array indices, separated by colon (:). It=
+'s
++ *     conceptually very close to LLVM's getelementptr ([0]) instruction=
+'s
++ *     arguments for identifying offset to a field.
++ *     - for type-based relocations, strings is expected to be just "0";
++ *     - for enum value-based relocations, string contains an index of e=
+num
++ *     value within its enum type;
+  *
+  * Example to provide a better feel.
+  *
+@@ -226,11 +266,11 @@ enum bpf_field_info_kind {
+  *
+  *   [0] https://llvm.org/docs/LangRef.html#getelementptr-instruction
+  */
+-struct bpf_field_reloc {
++struct bpf_core_relo {
+ 	__u32   insn_off;
+ 	__u32   type_id;
+ 	__u32   access_str_off;
+-	enum bpf_field_info_kind kind;
++	enum bpf_core_relo_kind kind;
+ };
+=20
+ #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
 --=20
 2.24.1
 
