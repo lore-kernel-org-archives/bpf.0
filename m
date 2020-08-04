@@ -5,42 +5,43 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D70CC433E1
-	for <bpf@archiver.kernel.org>; Tue,  4 Aug 2020 18:24:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F210C433E1
+	for <bpf@archiver.kernel.org>; Tue,  4 Aug 2020 18:24:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 82BCF2086A
-	for <bpf@archiver.kernel.org>; Tue,  4 Aug 2020 18:24:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10BD12086A
+	for <bpf@archiver.kernel.org>; Tue,  4 Aug 2020 18:24:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ZrmE1QyB"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="P7BdQk6V"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726721AbgHDSYn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 4 Aug 2020 14:24:43 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:8248 "EHLO
+        id S1726542AbgHDSYl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 4 Aug 2020 14:24:41 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:39744 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726897AbgHDSYn (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 4 Aug 2020 14:24:43 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 074IAx1D019370
-        for <bpf@vger.kernel.org>; Tue, 4 Aug 2020 11:24:41 -0700
+        by vger.kernel.org with ESMTP id S1726230AbgHDSYk (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 4 Aug 2020 14:24:40 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 074I9Yf3023482
+        for <bpf@vger.kernel.org>; Tue, 4 Aug 2020 11:24:37 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=XDWvdnu4Na6YutyvBrfhBrjqgwsi3eGzgb2lWYnNZ7A=;
- b=ZrmE1QyBEv6A/ofT8U9tNhIC47xG+Q1S56+E+9BOEaFFpJlVBlSREMrLTBaqBGJphJwA
- VrSVcHQl6B747ppx050plQN38iC5g5UCyZpXLY/Ms0bDNFALT16jPKSOgmhWZoH/Xq+f
- z103FomOUeh+g2orDIgMVuOrnhethXmoidU= 
+ bh=riItqePbBvruBhlBPTl/NbP6d4aPZKTbCKmuafEUxFw=;
+ b=P7BdQk6V0dEYq+jgaJxd6n3SPZNWd8yCP3+9IskweN14rq+oMV8wohClK7L/Yb5ogsAL
+ O06ZIu1EwPwPj4YPAz5oM/tIRpsgwdo21UpZIsT/LBnvjy7/Nrp3lVNBdFEQLxRY7SV6
+ vfLq2uNi1z36BzhSR4hgudjrMolcsTnk8v0= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 32nrnp3jee-3
+        by mx0a-00082601.pphosted.com with ESMTP id 32nrcsbpbk-19
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 04 Aug 2020 11:24:41 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 04 Aug 2020 11:24:37 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 4 Aug 2020 11:24:39 -0700
+ 15.1.1979.3; Tue, 4 Aug 2020 11:24:29 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 69E3C2EC52E0; Tue,  4 Aug 2020 11:24:35 -0700 (PDT)
+        id DF8822EC52E0; Tue,  4 Aug 2020 11:24:28 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -49,9 +50,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [RFC PATCH bpf-next 9/9] selftests/bpf: add tests for ENUMVAL_EXISTS/ENUMVAL_VALUE relocations
-Date:   Tue, 4 Aug 2020 11:24:09 -0700
-Message-ID: <20200804182409.1512434-10-andriin@fb.com>
+Subject: [RFC PATCH bpf-next 6/9] selftests/bpf: test TYPE_EXISTS and TYPE_SIZE CO-RE relocations
+Date:   Tue, 4 Aug 2020 11:24:06 -0700
+Message-ID: <20200804182409.1512434-7-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200804182409.1512434-1-andriin@fb.com>
 References: <20200804182409.1512434-1-andriin@fb.com>
@@ -61,321 +62,485 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-04_04:2020-08-03,2020-08-04 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- lowpriorityscore=0 adultscore=0 malwarescore=0 spamscore=0 impostorscore=0
- bulkscore=0 suspectscore=25 phishscore=0 mlxscore=0 mlxlogscore=999
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008040132
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ phishscore=0 clxscore=1015 adultscore=0 bulkscore=0 mlxlogscore=896
+ suspectscore=8 mlxscore=0 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2008040132
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add tests validating existence and value relocations for enum value-based
-relocations.
+Add selftests for TYPE_EXISTS and TYPE_SIZE relocations, testing correctn=
+ess
+of relocations and handling of type compatiblity/incompatibility.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- .../selftests/bpf/prog_tests/core_reloc.c     | 77 ++++++++++++++++-
- .../bpf/progs/btf__core_reloc_enumval.c       |  3 +
- .../progs/btf__core_reloc_enumval___diff.c    |  3 +
- .../btf__core_reloc_enumval___err_missing.c   |  3 +
- .../btf__core_reloc_enumval___val3_missing.c  |  3 +
- .../selftests/bpf/progs/core_reloc_types.h    | 84 +++++++++++++++++++
- .../bpf/progs/test_core_reloc_enumval.c       | 69 +++++++++++++++
- 7 files changed, 240 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_enu=
-mval.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_enu=
-mval___diff.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_enu=
-mval___err_missing.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_enu=
-mval___val3_missing.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_core_reloc_enu=
-mval.c
+ .../selftests/bpf/prog_tests/core_reloc.c     | 103 +++++++--
+ .../bpf/progs/btf__core_reloc_type_based.c    |   3 +
+ ...btf__core_reloc_type_based___all_missing.c |   3 +
+ .../btf__core_reloc_type_based___diff_sz.c    |   3 +
+ ...f__core_reloc_type_based___fn_wrong_args.c |   3 +
+ .../btf__core_reloc_type_based___incompat.c   |   3 +
+ .../selftests/bpf/progs/core_reloc_types.h    | 203 +++++++++++++++++-
+ .../bpf/progs/test_core_reloc_type_based.c    | 121 +++++++++++
+ 8 files changed, 428 insertions(+), 14 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_typ=
+e_based.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_typ=
+e_based___all_missing.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_typ=
+e_based___diff_sz.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_typ=
+e_based___fn_wrong_args.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf__core_reloc_typ=
+e_based___incompat.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_core_reloc_typ=
+e_based.c
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/=
 testing/selftests/bpf/prog_tests/core_reloc.c
-index 43c5f96b0d81..3fb809074480 100644
+index 7d8f3645c330..7ccb89016f6f 100644
 --- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
 +++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-@@ -289,6 +289,23 @@ static int duration =3D 0;
+@@ -177,14 +177,13 @@
  	.fails =3D true,							\
  }
 =20
-+#define ENUMVAL_CASE_COMMON(name)					\
+-#define EXISTENCE_CASE_COMMON(name)					\
++#define FIELD_EXISTS_CASE_COMMON(name)					\
+ 	.case_name =3D #name,						\
+ 	.bpf_obj_file =3D "test_core_reloc_existence.o",			\
+-	.btf_src_file =3D "btf__core_reloc_" #name ".o",			\
+-	.relaxed_core_relocs =3D true
++	.btf_src_file =3D "btf__core_reloc_" #name ".o"			\
+=20
+-#define EXISTENCE_ERR_CASE(name) {					\
+-	EXISTENCE_CASE_COMMON(name),					\
++#define FIELD_EXISTS_ERR_CASE(name) {					\
++	FIELD_EXISTS_CASE_COMMON(name),					\
+ 	.fails =3D true,							\
+ }
+=20
+@@ -253,6 +252,23 @@
+ 	.fails =3D true,							\
+ }
+=20
++#define TYPE_BASED_CASE_COMMON(name)					\
 +	.case_name =3D #name,						\
-+	.bpf_obj_file =3D "test_core_reloc_enumval.o",			\
++	.bpf_obj_file =3D "test_core_reloc_type_based.o",		\
 +	.btf_src_file =3D "btf__core_reloc_" #name ".o"			\
 +
-+#define ENUMVAL_CASE(name, ...) {					\
-+	ENUMVAL_CASE_COMMON(name),					\
-+	.output =3D STRUCT_TO_CHAR_PTR(core_reloc_enumval_output)		\
++#define TYPE_BASED_CASE(name, ...) {					\
++	TYPE_BASED_CASE_COMMON(name),					\
++	.output =3D STRUCT_TO_CHAR_PTR(core_reloc_type_based_output)	\
 +			__VA_ARGS__,					\
-+	.output_len =3D sizeof(struct core_reloc_enumval_output),		\
++	.output_len =3D sizeof(struct core_reloc_type_based_output),	\
 +}
 +
-+#define ENUMVAL_ERR_CASE(name) {					\
-+	ENUMVAL_CASE_COMMON(name),					\
++#define TYPE_BASED_ERR_CASE(name) {					\
++	TYPE_BASED_CASE_COMMON(name),					\
 +	.fails =3D true,							\
 +}
 +
- struct core_reloc_test_case;
+ struct core_reloc_test_case {
+ 	const char *case_name;
+ 	const char *bpf_obj_file;
+@@ -364,7 +380,7 @@ static struct core_reloc_test_case test_cases[] =3D {
 =20
- typedef int (*setup_test_fn)(struct core_reloc_test_case *test);
-@@ -318,7 +335,7 @@ int find_btf_type(const struct btf *btf, const char *=
-name, __u32 kind)
- 	return id;
- }
-=20
--static int setup_type_id_case_success(struct core_reloc_test_case *test)
-+static int setup_type_id_case_local(struct core_reloc_test_case *test)
+ 	/* validate field existence checks */
+ 	{
+-		EXISTENCE_CASE_COMMON(existence),
++		FIELD_EXISTS_CASE_COMMON(existence),
+ 		.input =3D STRUCT_TO_CHAR_PTR(core_reloc_existence) {
+ 			.a =3D 1,
+ 			.b =3D 2,
+@@ -388,7 +404,7 @@ static struct core_reloc_test_case test_cases[] =3D {
+ 		.output_len =3D sizeof(struct core_reloc_existence_output),
+ 	},
+ 	{
+-		EXISTENCE_CASE_COMMON(existence___minimal),
++		FIELD_EXISTS_CASE_COMMON(existence___minimal),
+ 		.input =3D STRUCT_TO_CHAR_PTR(core_reloc_existence___minimal) {
+ 			.a =3D 42,
+ 		},
+@@ -408,12 +424,12 @@ static struct core_reloc_test_case test_cases[] =3D=
  {
- 	struct core_reloc_type_id_output *exp =3D (void *)test->output;
- 	struct btf *local_btf =3D btf__parse(test->bpf_obj_file, NULL);
-@@ -386,6 +403,22 @@ static int setup_type_id_case_success(struct core_re=
-loc_test_case *test)
- 	exp->local_func_proto_typedef =3D find_btf_type(local_btf, "func_proto_=
-typedef", BTF_KIND_TYPEDEF);
- 	exp->local_arr_typedef =3D find_btf_type(local_btf, "arr_typedef", BTF_=
-KIND_TYPEDEF);
+ 		.output_len =3D sizeof(struct core_reloc_existence_output),
+ 	},
 =20
-+	btf__free(local_btf);
-+	btf__free(targ_btf);
-+	return 0;
-+}
-+
-+static int setup_type_id_case_success(struct core_reloc_test_case *test)=
- {
-+	struct core_reloc_type_id_output *exp =3D (void *)test->output;
-+	struct btf *targ_btf =3D btf__parse(test->btf_src_file, NULL);
-+	int err;
-+
-+	err =3D setup_type_id_case_local(test);
-+	if (err)
-+		return err;
-+
-+	targ_btf =3D btf__parse(test->btf_src_file, NULL);
-+
- 	exp->targ_struct =3D find_btf_type(targ_btf, "a_struct", BTF_KIND_STRUC=
-T);
- 	exp->targ_union =3D find_btf_type(targ_btf, "a_union", BTF_KIND_UNION);
- 	exp->targ_enum =3D find_btf_type(targ_btf, "an_enum", BTF_KIND_ENUM);
-@@ -394,6 +427,7 @@ static int setup_type_id_case_success(struct core_rel=
-oc_test_case *test)
- 	exp->targ_func_proto_typedef =3D find_btf_type(targ_btf, "func_proto_ty=
-pedef", BTF_KIND_TYPEDEF);
- 	exp->targ_arr_typedef =3D find_btf_type(targ_btf, "arr_typedef", BTF_KI=
-ND_TYPEDEF);
+-	EXISTENCE_ERR_CASE(existence__err_int_sz),
+-	EXISTENCE_ERR_CASE(existence__err_int_type),
+-	EXISTENCE_ERR_CASE(existence__err_int_kind),
+-	EXISTENCE_ERR_CASE(existence__err_arr_kind),
+-	EXISTENCE_ERR_CASE(existence__err_arr_value_type),
+-	EXISTENCE_ERR_CASE(existence__err_struct_type),
++	FIELD_EXISTS_ERR_CASE(existence__err_int_sz),
++	FIELD_EXISTS_ERR_CASE(existence__err_int_type),
++	FIELD_EXISTS_ERR_CASE(existence__err_int_kind),
++	FIELD_EXISTS_ERR_CASE(existence__err_arr_kind),
++	FIELD_EXISTS_ERR_CASE(existence__err_arr_value_type),
++	FIELD_EXISTS_ERR_CASE(existence__err_struct_type),
 =20
-+	btf__free(targ_btf);
- 	return 0;
- }
-=20
-@@ -402,7 +436,7 @@ static int setup_type_id_case_failure(struct core_rel=
-oc_test_case *test)
- 	struct core_reloc_type_id_output *exp =3D (void *)test->output;
- 	int err;
-=20
--	err =3D setup_type_id_case_success(test);
-+	err =3D setup_type_id_case_local(test);
- 	if (err)
- 		return err;
-=20
-@@ -669,6 +703,45 @@ static struct core_reloc_test_case test_cases[] =3D =
+ 	/* bitfield relocation checks */
+ 	BITFIELDS_CASE(bitfields, {
+@@ -453,6 +469,67 @@ static struct core_reloc_test_case test_cases[] =3D =
 {
- 	/* BTF_TYPE_ID_LOCAL/BTF_TYPE_ID_TARGET tests */
- 	TYPE_ID_CASE(type_id, setup_type_id_case_success),
- 	TYPE_ID_CASE(type_id___missing_targets, setup_type_id_case_failure),
+ 	SIZE_CASE(size),
+ 	SIZE_CASE(size___diff_sz),
+ 	SIZE_ERR_CASE(size___err_ambiguous),
 +
-+	/* Enumerator value existence and value relocations */
-+	ENUMVAL_CASE(enumval, {
-+		.named_val1_exists =3D true,
-+		.named_val2_exists =3D true,
-+		.named_val3_exists =3D true,
-+		.anon_val1_exists =3D true,
-+		.anon_val2_exists =3D true,
-+		.anon_val3_exists =3D true,
-+		.named_val1 =3D 1,
-+		.named_val2 =3D 2,
-+		.anon_val1 =3D 0x10,
-+		.anon_val2 =3D 0x20,
++	/* validate type existence and size relocations */
++	TYPE_BASED_CASE(type_based, {
++		.struct_exists =3D 1,
++		.union_exists =3D 1,
++		.enum_exists =3D 1,
++		.typedef_named_struct_exists =3D 1,
++		.typedef_anon_struct_exists =3D 1,
++		.typedef_struct_ptr_exists =3D 1,
++		.typedef_int_exists =3D 1,
++		.typedef_enum_exists =3D 1,
++		.typedef_void_ptr_exists =3D 1,
++		.typedef_func_proto_exists =3D 1,
++		.typedef_arr_exists =3D 1,
++		.struct_sz =3D sizeof(struct a_struct),
++		.union_sz =3D sizeof(union a_union),
++		.enum_sz =3D sizeof(enum an_enum),
++		.typedef_named_struct_sz =3D sizeof(named_struct_typedef),
++		.typedef_anon_struct_sz =3D sizeof(anon_struct_typedef),
++		.typedef_struct_ptr_sz =3D sizeof(struct_ptr_typedef),
++		.typedef_int_sz =3D sizeof(int_typedef),
++		.typedef_enum_sz =3D sizeof(enum_typedef),
++		.typedef_void_ptr_sz =3D sizeof(void_ptr_typedef),
++		.typedef_func_proto_sz =3D sizeof(func_proto_typedef),
++		.typedef_arr_sz =3D sizeof(arr_typedef),
 +	}),
-+	ENUMVAL_CASE(enumval___diff, {
-+		.named_val1_exists =3D true,
-+		.named_val2_exists =3D true,
-+		.named_val3_exists =3D true,
-+		.anon_val1_exists =3D true,
-+		.anon_val2_exists =3D true,
-+		.anon_val3_exists =3D true,
-+		.named_val1 =3D 101,
-+		.named_val2 =3D 202,
-+		.anon_val1 =3D 0x11,
-+		.anon_val2 =3D 0x22,
++	TYPE_BASED_CASE(type_based___all_missing, {
++		/* all zeros */
 +	}),
-+	ENUMVAL_CASE(enumval___val3_missing, {
-+		.named_val1_exists =3D true,
-+		.named_val2_exists =3D true,
-+		.named_val3_exists =3D false,
-+		.anon_val1_exists =3D true,
-+		.anon_val2_exists =3D true,
-+		.anon_val3_exists =3D false,
-+		.named_val1 =3D 111,
-+		.named_val2 =3D 222,
-+		.anon_val1 =3D 0x111,
-+		.anon_val2 =3D 0x222,
++	TYPE_BASED_CASE(type_based___diff_sz, {
++		.struct_exists =3D 1,
++		.union_exists =3D 1,
++		.enum_exists =3D 1,
++		.typedef_named_struct_exists =3D 1,
++		.typedef_anon_struct_exists =3D 1,
++		.typedef_struct_ptr_exists =3D 1,
++		.typedef_int_exists =3D 1,
++		.typedef_enum_exists =3D 1,
++		.typedef_void_ptr_exists =3D 1,
++		.typedef_func_proto_exists =3D 1,
++		.typedef_arr_exists =3D 1,
++		.struct_sz =3D sizeof(struct a_struct___diff_sz),
++		.union_sz =3D sizeof(union a_union___diff_sz),
++		.enum_sz =3D sizeof(enum an_enum___diff_sz),
++		.typedef_named_struct_sz =3D sizeof(named_struct_typedef___diff_sz),
++		.typedef_anon_struct_sz =3D sizeof(anon_struct_typedef___diff_sz),
++		.typedef_struct_ptr_sz =3D sizeof(struct_ptr_typedef___diff_sz),
++		.typedef_int_sz =3D sizeof(int_typedef___diff_sz),
++		.typedef_enum_sz =3D sizeof(enum_typedef___diff_sz),
++		.typedef_void_ptr_sz =3D sizeof(void_ptr_typedef___diff_sz),
++		.typedef_func_proto_sz =3D sizeof(func_proto_typedef___diff_sz),
++		.typedef_arr_sz =3D sizeof(arr_typedef___diff_sz),
 +	}),
-+	ENUMVAL_ERR_CASE(enumval___err_missing),
++	TYPE_BASED_CASE(type_based___incompat, {
++		.enum_exists =3D 1,
++		.enum_sz =3D sizeof(enum an_enum),
++	}),
++	TYPE_BASED_CASE(type_based___fn_wrong_args, {
++		.struct_exists =3D 1,
++		.struct_sz =3D sizeof(struct a_struct),
++	}),
  };
 =20
  struct data {
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_enumval.c =
-b/tools/testing/selftests/bpf/progs/btf__core_reloc_enumval.c
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_type_based=
+.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_type_based.c
 new file mode 100644
-index 000000000000..48e62f3f074f
+index 000000000000..fc3f69e58c71
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_enumval.c
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_type_based.c
 @@ -0,0 +1,3 @@
 +#include "core_reloc_types.h"
 +
-+void f(struct core_reloc_enumval x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_enumval___=
-diff.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_enumval___diff=
-.c
++void f(struct core_reloc_type_based x) {}
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_type_based=
+___all_missing.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_type=
+_based___all_missing.c
 new file mode 100644
-index 000000000000..53e5e5a76888
+index 000000000000..51511648b4ec
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_enumval___diff.c
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_type_based___all_=
+missing.c
 @@ -0,0 +1,3 @@
 +#include "core_reloc_types.h"
 +
-+void f(struct core_reloc_enumval___diff x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_enumval___=
-err_missing.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_enumval=
-___err_missing.c
++void f(struct core_reloc_type_based___all_missing x) {}
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_type_based=
+___diff_sz.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_type_bas=
+ed___diff_sz.c
 new file mode 100644
-index 000000000000..d024fb2ac06e
+index 000000000000..67db3dceb279
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_enumval___err_mis=
-sing.c
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_type_based___diff=
+_sz.c
 @@ -0,0 +1,3 @@
 +#include "core_reloc_types.h"
 +
-+void f(struct core_reloc_enumval___err_missing x) {}
-diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_enumval___=
-val3_missing.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_enumva=
-l___val3_missing.c
++void f(struct core_reloc_type_based___diff_sz x) {}
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_type_based=
+___fn_wrong_args.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_ty=
+pe_based___fn_wrong_args.c
 new file mode 100644
-index 000000000000..9de6595d250c
+index 000000000000..b357fc65431d
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_enumval___val3_mi=
-ssing.c
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_type_based___fn_w=
+rong_args.c
 @@ -0,0 +1,3 @@
 +#include "core_reloc_types.h"
 +
-+void f(struct core_reloc_enumval___val3_missing x) {}
++void f(struct core_reloc_type_based___fn_wrong_args x) {}
+diff --git a/tools/testing/selftests/bpf/progs/btf__core_reloc_type_based=
+___incompat.c b/tools/testing/selftests/bpf/progs/btf__core_reloc_type_ba=
+sed___incompat.c
+new file mode 100644
+index 000000000000..8ddf20d33d9e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/btf__core_reloc_type_based___inco=
+mpat.c
+@@ -0,0 +1,3 @@
++#include "core_reloc_types.h"
++
++void f(struct core_reloc_type_based___incompat x) {}
 diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools=
 /testing/selftests/bpf/progs/core_reloc_types.h
-index 5160ffb6063f..21efa337a485 100644
+index 29fa901b72d8..49aeb6d4e12c 100644
 --- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
 +++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-@@ -1070,3 +1070,87 @@ struct core_reloc_type_id {
- struct core_reloc_type_id___missing_targets {
- 	/* nothing */
+@@ -647,7 +647,7 @@ struct core_reloc_misc_extensible {
+ };
+=20
+ /*
+- * EXISTENCE
++ * FIELD EXISTENCE
+  */
+ struct core_reloc_existence_output {
+ 	int a_exists;
+@@ -829,3 +829,204 @@ struct core_reloc_size___err_ambiguous2 {
+ 	void *ptr_field;
+ 	enum { VALUE___2 =3D 123 } enum_field;
  };
 +
 +/*
-+ * ENUMERATOR VALUE EXISTENCE AND VALUE RELOCATION
++ * TYPE EXISTENCE & SIZE
 + */
-+struct core_reloc_enumval_output {
-+	bool named_val1_exists;
-+	bool named_val2_exists;
-+	bool named_val3_exists;
-+	bool anon_val1_exists;
-+	bool anon_val2_exists;
-+	bool anon_val3_exists;
++struct core_reloc_type_based_output {
++	bool struct_exists;
++	bool union_exists;
++	bool enum_exists;
++	bool typedef_named_struct_exists;
++	bool typedef_anon_struct_exists;
++	bool typedef_struct_ptr_exists;
++	bool typedef_int_exists;
++	bool typedef_enum_exists;
++	bool typedef_void_ptr_exists;
++	bool typedef_func_proto_exists;
++	bool typedef_arr_exists;
 +
-+	int named_val1;
-+	int named_val2;
-+	int anon_val1;
-+	int anon_val2;
++	int struct_sz;
++	int union_sz;
++	int enum_sz;
++	int typedef_named_struct_sz;
++	int typedef_anon_struct_sz;
++	int typedef_struct_ptr_sz;
++	int typedef_int_sz;
++	int typedef_enum_sz;
++	int typedef_void_ptr_sz;
++	int typedef_func_proto_sz;
++	int typedef_arr_sz;
 +};
 +
-+enum named_enum {
-+	NAMED_ENUM_VAL1 =3D 1,
-+	NAMED_ENUM_VAL2 =3D 2,
-+	NAMED_ENUM_VAL3 =3D 3,
++struct a_struct {
++	int x;
 +};
 +
-+typedef enum {
-+	ANON_ENUM_VAL1 =3D 0x10,
-+	ANON_ENUM_VAL2 =3D 0x20,
-+	ANON_ENUM_VAL3 =3D 0x30,
-+} anon_enum;
-+
-+struct core_reloc_enumval {
-+	enum named_enum f1;
-+	anon_enum f2;
++union a_union {
++	int y;
++	int z;
 +};
 +
-+/* differing enumerator values */
-+enum named_enum___diff {
-+	NAMED_ENUM_VAL1___diff =3D 101,
-+	NAMED_ENUM_VAL2___diff =3D 202,
-+	NAMED_ENUM_VAL3___diff =3D 303,
++typedef struct a_struct named_struct_typedef;
++
++typedef struct { int x, y, z; } anon_struct_typedef;
++
++typedef struct {
++	int a, b, c;
++} *struct_ptr_typedef;
++
++enum an_enum {
++	AN_ENUM_VAL1 =3D 1,
++	AN_ENUM_VAL2 =3D 2,
++	AN_ENUM_VAL3 =3D 3,
 +};
 +
-+typedef enum {
-+	ANON_ENUM_VAL1___diff =3D 0x11,
-+	ANON_ENUM_VAL2___diff =3D 0x22,
-+	ANON_ENUM_VAL3___diff =3D 0x33,
-+} anon_enum___diff;
++typedef int int_typedef;
 +
-+struct core_reloc_enumval___diff {
-+	enum named_enum___diff f1;
-+	anon_enum___diff f2;
++typedef enum { TYPEDEF_ENUM_VAL1, TYPEDEF_ENUM_VAL2 } enum_typedef;
++
++typedef void *void_ptr_typedef;
++
++typedef int (*func_proto_typedef)(long);
++
++typedef char arr_typedef[20];
++
++struct core_reloc_type_based {
++	struct a_struct f1;
++	union a_union f2;
++	enum an_enum f3;
++	named_struct_typedef f4;
++	anon_struct_typedef f5;
++	struct_ptr_typedef f6;
++	int_typedef f7;
++	enum_typedef f8;
++	void_ptr_typedef f9;
++	func_proto_typedef f10;
++	arr_typedef f11;
 +};
 +
-+/* missing (optional) third enum value */
-+enum named_enum___val3_missing {
-+	NAMED_ENUM_VAL1___val3_missing =3D 111,
-+	NAMED_ENUM_VAL2___val3_missing =3D 222,
++/* no types in target */
++struct core_reloc_type_based___all_missing {
 +};
 +
-+typedef enum {
-+	ANON_ENUM_VAL1___val3_missing =3D 0x111,
-+	ANON_ENUM_VAL2___val3_missing =3D 0x222,
-+} anon_enum___val3_missing;
-+
-+struct core_reloc_enumval___val3_missing {
-+	enum named_enum___val3_missing f1;
-+	anon_enum___val3_missing f2;
++/* different type sizes, extra modifiers, anon vs named enums, etc */
++struct a_struct___diff_sz {
++	long x;
++	int y;
++	char z;
 +};
 +
-+/* missing (mandatory) second enum value, should fail */
-+enum named_enum___err_missing {
-+	NAMED_ENUM_VAL1___err_missing =3D 1,
-+	NAMED_ENUM_VAL3___err_missing =3D 3,
++union a_union___diff_sz {
++	char yy;
++	char zz;
 +};
 +
-+typedef enum {
-+	ANON_ENUM_VAL1___err_missing =3D 0x111,
-+	ANON_ENUM_VAL3___err_missing =3D 0x222,
-+} anon_enum___err_missing;
++typedef struct a_struct___diff_sz named_struct_typedef___diff_sz;
 +
-+struct core_reloc_enumval___err_missing {
-+	enum named_enum___err_missing f1;
-+	anon_enum___err_missing f2;
++typedef struct { long xx, yy, zzz; } anon_struct_typedef___diff_sz;
++
++typedef struct {
++	char aa[1], bb[2], cc[3];
++} *struct_ptr_typedef___diff_sz;
++
++enum an_enum___diff_sz {
++	AN_ENUM_VAL1___diff_sz =3D 0x123412341234,
++	AN_ENUM_VAL2___diff_sz =3D 2,
 +};
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c =
-b/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
++
++typedef unsigned long int_typedef___diff_sz;
++
++typedef enum an_enum___diff_sz enum_typedef___diff_sz;
++
++typedef const void * const void_ptr_typedef___diff_sz;
++
++typedef int_typedef___diff_sz (*func_proto_typedef___diff_sz)(char);
++
++typedef int arr_typedef___diff_sz[2];
++
++struct core_reloc_type_based___diff_sz {
++	struct a_struct___diff_sz f1;
++	union a_union___diff_sz f2;
++	enum an_enum___diff_sz f3;
++	named_struct_typedef___diff_sz f4;
++	anon_struct_typedef___diff_sz f5;
++	struct_ptr_typedef___diff_sz f6;
++	int_typedef___diff_sz f7;
++	enum_typedef___diff_sz f8;
++	void_ptr_typedef___diff_sz f9;
++	func_proto_typedef___diff_sz f10;
++	arr_typedef___diff_sz f11;
++};
++
++/* incompatibilities between target and local types */
++union a_struct___incompat { /* union instead of struct */
++	int x;
++};
++
++struct a_union___incompat { /* struct instead of union */
++	int y;
++	int z;
++};
++
++/* typedef to union, not to struct */
++typedef union a_struct___incompat named_struct_typedef___incompat;
++
++/* typedef to void pointer, instead of struct */
++typedef void *anon_struct_typedef___incompat;
++
++/* extra pointer indirection */
++typedef struct {
++	int a, b, c;
++} **struct_ptr_typedef___incompat;
++
++/* typedef of a struct with int, instead of int */
++typedef struct { int x; } int_typedef___incompat;
++
++/* typedef to func_proto, instead of enum */
++typedef int (*enum_typedef___incompat)(void);
++
++/* pointer to char instead of void */
++typedef char *void_ptr_typedef___incompat;
++
++/* void return type instead of int */
++typedef void (*func_proto_typedef___incompat)(long);
++
++/* multi-dimensional array instead of a single-dimensional */
++typedef int arr_typedef___incompat[20][2];
++
++struct core_reloc_type_based___incompat {
++	union a_struct___incompat f1;
++	struct a_union___incompat f2;
++	/* the only valid one is enum, to check that something still succeeds *=
+/
++	enum an_enum f3;
++	named_struct_typedef___incompat f4;
++	anon_struct_typedef___incompat f5;
++	struct_ptr_typedef___incompat f6;
++	int_typedef___incompat f7;
++	enum_typedef___incompat f8;
++	void_ptr_typedef___incompat f9;
++	func_proto_typedef___incompat f10;
++	arr_typedef___incompat f11;
++};
++
++/* func_proto with incompatible signature */
++typedef void (*func_proto_typedef___fn_wrong_ret1)(long);
++typedef int * (*func_proto_typedef___fn_wrong_ret2)(long);
++typedef struct { int x; } int_struct_typedef;
++typedef int_struct_typedef (*func_proto_typedef___fn_wrong_ret3)(long);
++typedef int (*func_proto_typedef___fn_wrong_arg)(void *);
++typedef int (*func_proto_typedef___fn_wrong_arg_cnt1)(long, long);
++typedef int (*func_proto_typedef___fn_wrong_arg_cnt2)(void);
++
++struct core_reloc_type_based___fn_wrong_args {
++	/* one valid type to make sure relos still work */
++	struct a_struct f1;
++	func_proto_typedef___fn_wrong_ret1 f2;
++	func_proto_typedef___fn_wrong_ret2 f3;
++	func_proto_typedef___fn_wrong_ret3 f4;
++	func_proto_typedef___fn_wrong_arg f5;
++	func_proto_typedef___fn_wrong_arg_cnt1 f6;
++	func_proto_typedef___fn_wrong_arg_cnt2 f7;
++};
++
+diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_type_based=
+.c b/tools/testing/selftests/bpf/progs/test_core_reloc_type_based.c
 new file mode 100644
-index 000000000000..e92f06115937
+index 000000000000..0c0fabcda691
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_enumval.c
-@@ -0,0 +1,69 @@
++++ b/tools/testing/selftests/bpf/progs/test_core_reloc_type_based.c
+@@ -0,0 +1,121 @@
 +// SPDX-License-Identifier: GPL-2.0
 +// Copyright (c) 2020 Facebook
 +
@@ -392,61 +557,114 @@ index 000000000000..e92f06115937
 +	char out[256];
 +} data =3D {};
 +
-+enum named_enum {
-+	NAMED_ENUM_VAL1 =3D 1,
-+	NAMED_ENUM_VAL2 =3D 2,
-+	NAMED_ENUM_VAL3 =3D 3,
++struct a_struct {
++	int x;
 +};
 +
-+typedef enum {
-+	ANON_ENUM_VAL1 =3D 0x10,
-+	ANON_ENUM_VAL2 =3D 0x20,
-+	ANON_ENUM_VAL3 =3D 0x30,
-+} anon_enum;
++union a_union {
++	int y;
++	int z;
++};
 +
-+struct core_reloc_enumval_output {
-+	bool named_val1_exists;
-+	bool named_val2_exists;
-+	bool named_val3_exists;
-+	bool anon_val1_exists;
-+	bool anon_val2_exists;
-+	bool anon_val3_exists;
++typedef struct a_struct named_struct_typedef;
 +
-+	int named_val1;
-+	int named_val2;
-+	int anon_val1;
-+	int anon_val2;
++typedef struct { int x, y, z; } anon_struct_typedef;
++
++typedef struct {
++	int a, b, c;
++} *struct_ptr_typedef;
++
++enum an_enum {
++	AN_ENUM_VAL1 =3D 1,
++	AN_ENUM_VAL2 =3D 2,
++	AN_ENUM_VAL3 =3D 3,
++};
++
++typedef int int_typedef;
++
++typedef enum { TYPEDEF_ENUM_VAL1, TYPEDEF_ENUM_VAL2 } enum_typedef;
++
++typedef void *void_ptr_typedef;
++
++typedef int (*func_proto_typedef)(long);
++
++typedef char arr_typedef[20];
++
++struct core_reloc_type_based {
++	struct a_struct f1;
++	union a_union f2;
++	enum an_enum f3;
++	named_struct_typedef f4;
++	anon_struct_typedef f5;
++	struct_ptr_typedef f6;
++	int_typedef f7;
++	enum_typedef f8;
++	void_ptr_typedef f9;
++	func_proto_typedef f10;
++	arr_typedef f11;
++};
++
++struct core_reloc_type_based_output {
++	bool struct_exists;
++	bool union_exists;
++	bool enum_exists;
++	bool typedef_named_struct_exists;
++	bool typedef_anon_struct_exists;
++	bool typedef_struct_ptr_exists;
++	bool typedef_int_exists;
++	bool typedef_enum_exists;
++	bool typedef_void_ptr_exists;
++	bool typedef_func_proto_exists;
++	bool typedef_arr_exists;
++
++	int struct_sz;
++	int union_sz;
++	int enum_sz;
++	int typedef_named_struct_sz;
++	int typedef_anon_struct_sz;
++	int typedef_struct_ptr_sz;
++	int typedef_int_sz;
++	int typedef_enum_sz;
++	int typedef_void_ptr_sz;
++	int typedef_func_proto_sz;
++	int typedef_arr_sz;
 +};
 +
 +SEC("raw_tracepoint/sys_enter")
-+int test_core_enumval(void *ctx)
++int test_core_type_based(void *ctx)
 +{
-+	struct core_reloc_enumval_output *out =3D (void *)&data.out;
++	struct core_reloc_type_based_output *out =3D (void *)&data.out;
 +
-+	enum named_enum named =3D 0;
-+	anon_enum anon =3D 0;
++	out->struct_exists =3D bpf_core_type_exists(struct a_struct);
++	out->union_exists =3D bpf_core_type_exists(union a_union);
++	out->enum_exists =3D bpf_core_type_exists(enum an_enum);
++	out->typedef_named_struct_exists =3D bpf_core_type_exists(named_struct_=
+typedef);
++	out->typedef_anon_struct_exists =3D bpf_core_type_exists(anon_struct_ty=
+pedef);
++	out->typedef_struct_ptr_exists =3D bpf_core_type_exists(struct_ptr_type=
+def);
++	out->typedef_int_exists =3D bpf_core_type_exists(int_typedef);
++	out->typedef_enum_exists =3D bpf_core_type_exists(enum_typedef);
++	out->typedef_void_ptr_exists =3D bpf_core_type_exists(void_ptr_typedef)=
+;
++	out->typedef_func_proto_exists =3D bpf_core_type_exists(func_proto_type=
+def);
++	out->typedef_arr_exists =3D bpf_core_type_exists(arr_typedef);
 +
-+	out->named_val1_exists =3D bpf_core_enum_value_exists(named, NAMED_ENUM=
-_VAL1);
-+	out->named_val2_exists =3D bpf_core_enum_value_exists(enum named_enum, =
-NAMED_ENUM_VAL2);
-+	out->named_val3_exists =3D bpf_core_enum_value_exists(enum named_enum, =
-NAMED_ENUM_VAL3);
-+
-+	out->anon_val1_exists =3D bpf_core_enum_value_exists(anon, ANON_ENUM_VA=
-L1);
-+	out->anon_val2_exists =3D bpf_core_enum_value_exists(anon_enum, ANON_EN=
-UM_VAL2);
-+	out->anon_val3_exists =3D bpf_core_enum_value_exists(anon_enum, ANON_EN=
-UM_VAL3);
-+
-+	out->named_val1 =3D bpf_core_enum_value(named, NAMED_ENUM_VAL1);
-+	out->named_val2 =3D bpf_core_enum_value(named, NAMED_ENUM_VAL2);
-+	/* NAMED_ENUM_VAL3 value is optional */
-+
-+	out->anon_val1 =3D bpf_core_enum_value(anon, ANON_ENUM_VAL1);
-+	out->anon_val2 =3D bpf_core_enum_value(anon, ANON_ENUM_VAL2);
-+	/* ANON_ENUM_VAL3 value is optional */
++	out->struct_sz =3D bpf_core_type_size(struct a_struct);
++	out->union_sz =3D bpf_core_type_size(union a_union);
++	out->enum_sz =3D bpf_core_type_size(enum an_enum);
++	out->typedef_named_struct_sz =3D bpf_core_type_size(named_struct_typede=
+f);
++	out->typedef_anon_struct_sz =3D bpf_core_type_size(anon_struct_typedef)=
+;
++	out->typedef_struct_ptr_sz =3D bpf_core_type_size(struct_ptr_typedef);
++	out->typedef_int_sz =3D bpf_core_type_size(int_typedef);
++	out->typedef_enum_sz =3D bpf_core_type_size(enum_typedef);
++	out->typedef_void_ptr_sz =3D bpf_core_type_size(void_ptr_typedef);
++	out->typedef_func_proto_sz =3D bpf_core_type_size(func_proto_typedef);
++	out->typedef_arr_sz =3D bpf_core_type_size(arr_typedef);
 +
 +	return 0;
 +}
