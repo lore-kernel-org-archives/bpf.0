@@ -2,217 +2,168 @@ Return-Path: <SRS0=Tx/Z=BP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E874C433E0
-	for <bpf@archiver.kernel.org>; Wed,  5 Aug 2020 19:17:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB577C433DF
+	for <bpf@archiver.kernel.org>; Wed,  5 Aug 2020 19:19:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 705A12068F
-	for <bpf@archiver.kernel.org>; Wed,  5 Aug 2020 19:17:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A97012068F
+	for <bpf@archiver.kernel.org>; Wed,  5 Aug 2020 19:19:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="vAs/HbUy"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ocjdj/QD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728147AbgHETRp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 5 Aug 2020 15:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41572 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728114AbgHETPo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Aug 2020 15:15:44 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34E1C0617A1
-        for <bpf@vger.kernel.org>; Wed,  5 Aug 2020 11:32:14 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id e14so10442429ybf.4
-        for <bpf@vger.kernel.org>; Wed, 05 Aug 2020 11:32:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xlGI3bW9njaeuOj+GH5bf3fixwyyXkcjXvo8VHxgChc=;
-        b=vAs/HbUyYg58sOyqdy603+OO1dbX+lA0CJTghf0UHincCOSu0GXgwtsSk5kpWl1BB9
-         YeAdE8MYIbGqCYbLjypBmIbIv/XVwFiCxVREWV1fHz/C2O09C6PmK37Qice+yI5U55ul
-         VfA1oN3fMHjFfE93PQOcorLaH9ZGn66taJm+ihP/EhBk47QwIh4o3G05zanBvr6tpW+y
-         C5OsiFgS+/qhE+8F6mlGDLNwvjmHAzJFsiGOTu44rWELJpaGrv7xTzRcgIGFmg8qtStJ
-         kwcmtN7oHQyWqWYafcCzkS7Pm0j+Sr4iuJxcKSHXNXtVIVmL+5AMrOeXbVJnraELsERp
-         Rsbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xlGI3bW9njaeuOj+GH5bf3fixwyyXkcjXvo8VHxgChc=;
-        b=lNqmiAjnqI+MjymU9obwbIpjDSau2H36ZkbsGy25hXJx2E3Ro15EALu3T6gG+Qs5g9
-         MLpy6wyyQEJxJpRkC7voSVzpHjRVaSUaNkZeG8UIs5hWiabTOc+a184w3HMUj4EeEeIX
-         BhLSgtLHkpY8wl0FWfbIqnVYfViCCdlXmuZrxICaRiX+CAc9hlEYWp6nKW6gWjkEFz2l
-         mFahF5OIXWIYoij1x9l9sUWNYplxUiOHTFRu1toVwMSx7v+Wb5kQoDqe/+5HZ7ygqowO
-         nJkwArWCGSGOH3d80tTuzI6hakgD/Y/R9NEWndZPdKUVXSoxR2gclNHBI/m3+Kr86h5p
-         Hrdw==
-X-Gm-Message-State: AOAM531djAzdV9m4j5vrUQmf9ocQQcXs/fmhRCagNT/AIbY0+p9shA7h
-        1iKI4HfOU/GVURHMCtjhg9ORj838OQEhuznbhkY=
-X-Google-Smtp-Source: ABdhPJwahb+Qtp1VfuLYKZrTtd9YyOYq5wwc0LIe8VTj17oZzzA2kpGhvyK/stekbLh6FSfl1f7j3p+qKkX1B14Ne0o=
-X-Received: by 2002:a25:ad5a:: with SMTP id l26mr6409191ybe.510.1596652334145;
- Wed, 05 Aug 2020 11:32:14 -0700 (PDT)
+        id S1728019AbgHETSu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Aug 2020 15:18:50 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:49041 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729090AbgHER7C (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 5 Aug 2020 13:59:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1596650340;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ESShx0Xg3JcVgsVOiqAqDzi1HFrTrI8aPD9Dv5alf9s=;
+        b=Ocjdj/QDYpT+lyj24zcFR2a2zBJGzlDqgnwAeeeT8YJ8mHrGocumUPOD4Xefzq7+WQyreE
+        NfOJtBuER4fiBefsxpEgQRR9BzUrDMM3XU/W3t7TgYWAPJa6a4s5cjyK0EAva/0J+l1bdY
+        Kdw8bb6i5RDZhQBq1irAcwpYAQtqwW4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-158-KZrzfVvcO3OJ_vGv55Nw1A-1; Wed, 05 Aug 2020 13:58:56 -0400
+X-MC-Unique: KZrzfVvcO3OJ_vGv55Nw1A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3B509102CC43;
+        Wed,  5 Aug 2020 17:58:54 +0000 (UTC)
+Received: from krava (unknown [10.40.192.11])
+        by smtp.corp.redhat.com (Postfix) with SMTP id E0B8E19C71;
+        Wed,  5 Aug 2020 17:58:50 +0000 (UTC)
+Date:   Wed, 5 Aug 2020 19:58:50 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        David Miller <davem@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Wenbo Zhang <ethercflow@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Brendan Gregg <bgregg@netflix.com>,
+        Florent Revest <revest@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v9 bpf-next 10/14] bpf: Add d_path helper
+Message-ID: <20200805175850.GD319954@krava>
+References: <20200801170322.75218-1-jolsa@kernel.org>
+ <20200801170322.75218-11-jolsa@kernel.org>
+ <CAEf4BzY5b8GhoovkKZgT4YSUUW=GPZBU0Qjg4eqeHNjoPHCMTw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20200728120059.132256-1-iii@linux.ibm.com> <20200728120059.132256-4-iii@linux.ibm.com>
- <CAEf4BzaSJp-fOn2MG_8Fc2mo9ji5gZBLn2xCGyCiAmPbHkqSQQ@mail.gmail.com>
- <bea74a32-746c-c310-67c8-477dcd442fb3@iogearbox.net> <CAEf4BzZtsOF0iuWrtBn7Up2zZFv79PvF5TC1RukBxQBxpN4pFQ@mail.gmail.com>
- <b6cbb797-02c4-d904-5231-54608706f99d@iogearbox.net> <CAEf4Bzarzp1a_XBy33ULKaYmh0muHtDAr61EZNUEd2rJrZ3j7g@mail.gmail.com>
- <f96ed8e0-66d2-fef5-14a4-8930a1ef759e@iogearbox.net> <CAEf4BzbD=e8x8BEBCic+5DHcCewZUfp1h3JSj5zRQ9i2KW1-dQ@mail.gmail.com>
- <6177128b-bef5-7445-bf00-8051f8efa3bc@iogearbox.net> <CAEf4BzbGMKPTUw=B1tC=NsYn7oUQb3tmUEghRd-URT1tu0hNiA@mail.gmail.com>
- <da7fa961-39da-948b-f7b1-c0e74e15c19c@iogearbox.net>
-In-Reply-To: <da7fa961-39da-948b-f7b1-c0e74e15c19c@iogearbox.net>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 5 Aug 2020 11:32:02 -0700
-Message-ID: <CAEf4BzaPR399J4oCOWY-nOiQuD0gmf_i_h-efEXUfvXTcTz8dA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/3] libbpf: Use bpf_probe_read_kernel
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Ilya Leoshkevich <iii@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzY5b8GhoovkKZgT4YSUUW=GPZBU0Qjg4eqeHNjoPHCMTw@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Jul 31, 2020 at 1:34 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> On 7/31/20 7:41 PM, Andrii Nakryiko wrote:
-> > On Wed, Jul 29, 2020 at 3:12 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
-> >> On 7/30/20 12:05 AM, Andrii Nakryiko wrote:
-> >>> On Wed, Jul 29, 2020 at 2:54 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
-> >>>> On 7/29/20 11:36 PM, Andrii Nakryiko wrote:
-> >>>>> On Wed, Jul 29, 2020 at 2:01 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
-> >>>>>> On 7/29/20 6:06 AM, Andrii Nakryiko wrote:
-> >>>>>>> On Tue, Jul 28, 2020 at 2:16 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
-> >>>>>>>> On 7/28/20 9:11 PM, Andrii Nakryiko wrote:
-> >>>>>>>>> On Tue, Jul 28, 2020 at 5:15 AM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
-> >>>>>>>>>>
-> >>>>>>>>>> Yet another adaptation to commit 0ebeea8ca8a4 ("bpf: Restrict
-> >>>>>>>>>> bpf_probe_read{, str}() only to archs where they work") that makes more
-> >>>>>>>>>> samples compile on s390.
-> >>>>>>>>>>
-> >>>>>>>>>> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> >>>>>>>>>
-> >>>>>>>>> Sorry, we can't do this yet. This will break on older kernels that
-> >>>>>>>>> don't yet have bpf_probe_read_kernel() implemented. Met and Yonghong
-> >>>>>>>>> are working on extending a set of CO-RE relocations, that would allow
-> >>>>>>>>> to do bpf_probe_read_kernel() detection on BPF side, transparently for
-> >>>>>>>>> an application, and will pick either bpf_probe_read() or
-> >>>>>>>>> bpf_probe_read_kernel(). It should be ready soon (this or next week,
-> >>>>>>>>> most probably), though it will have dependency on the latest Clang.
-> >>>>>>>>> But for now, please don't change this.
-> >>>>>>>>
-> >>>>>>>> Could you elaborate what this means wrt dependency on latest clang? Given clang
-> >>>>>>>> releases have a rather long cadence, what about existing users with current clang
-> >>>>>>>> releases?
-> >>>>>>>
-> >>>>>>> So the overall idea is to use something like this to do kernel reads:
-> >>>>>>>
-> >>>>>>> static __always_inline int bpf_probe_read_universal(void *dst, u32 sz,
-> >>>>>>> const void *src)
-> >>>>>>> {
-> >>>>>>>         if (bpf_core_type_exists(btf_bpf_probe_read_kernel))
-> >>>>>>>             return bpf_probe_read_kernel(dst, sz, src);
-> >>>>>>>         else
-> >>>>>>>             return bpf_probe_read(dst, sz, src);
-> >>>>>>> }
-> >>>>>>>
-> >>>>>>> And then use bpf_probe_read_universal() in BPF_CORE_READ and family.
-> >>>>>>>
-> >>>>>>> This approach relies on few things:
-> >>>>>>>
-> >>>>>>> 1. each BPF helper has a corresponding btf_<helper-name> type defined for it
-> >>>>>>> 2. bpf_core_type_exists(some_type) returns 0 or 1, depending if
-> >>>>>>> specified type is found in kernel BTF (so needs kernel BTF, of
-> >>>>>>> course). This is the part me and Yonghong are working on at the
-> >>>>>>> moment.
-> >>>>>>> 3. verifier's dead code elimination, which will leave only
-> >>>>>>> bpf_probe_read() or bpf_probe_read_kernel() calls and will remove the
-> >>>>>>> other one. So on older kernels, there will never be unsupoorted call
-> >>>>>>> to bpf_probe_read_kernel().
-> >>>>>>>
-> >>>>>>> The new type existence relocation requires the latest Clang. So the
-> >>>>>>> way to deal with older Clangs would be to just fallback to
-> >>>>>>> bpf_probe_read, if we detect that Clang is too old and can't emit
-> >>>>>>> necessary relocation.
-> >>>>>>
-> >>>>>> Okay, seems reasonable overall. One question though: couldn't libbpf transparently
-> >>>>>> fix up the selection of bpf_probe_read() vs bpf_probe_read_kernel()? E.g. it would
-> >>>>>> probe the kernel whether bpf_probe_read_kernel() is available and if it is then it
-> >>>>>> would rewrite the raw call number from the instruction from bpf_probe_read() into
-> >>>>>> the one for bpf_probe_read_kernel()? I guess the question then becomes whether the
-> >>>>>> original use for bpf_probe_read() was related to CO-RE. But I think this could also
-> >>>>>> be overcome by adding a fake helper signature in libbpf with a unreasonable high
-> >>>>>> number that is dedicated to probing mem via CO-RE and then libbpf picks the right
-> >>>>>> underlying helper call number for the insn. That avoids fiddling with macros and
-> >>>>>> need for new clang version, no (unless I'm missing something)?
-> >>>>>
-> >>>>> Libbpf could do it, but I'm a bit worried that unconditionally
-> >>>>> changing bpf_probe_read() into bpf_probe_read_kernel() is going to be
-> >>>>> wrong in some cases. If that wasn't the case, why wouldn't we just
-> >>>>> re-purpose bpf_probe_read() into bpf_probe_read_kernel() in kernel
-> >>>>> itself, right?
-> >>>>
-> >>>> Yes, that is correct, but I mentioned above that this new 'fake' helper call number
-> >>>> that libbpf would be fixing up would only be used for bpf_probe_read{,str}() inside
-> >>>> bpf_core_read.h.
-> >>>>
-> >>>> Small example, bpf_core_read.h would be changed to (just an extract):
-> >>>>
-> >>>> diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.h
-> >>>> index eae5cccff761..4bddb2ddf3f0 100644
-> >>>> --- a/tools/lib/bpf/bpf_core_read.h
-> >>>> +++ b/tools/lib/bpf/bpf_core_read.h
-> >>>> @@ -115,7 +115,7 @@ enum bpf_field_info_kind {
-> >>>>      * (local) BTF, used to record relocation.
-> >>>>      */
-> >>>>     #define bpf_core_read(dst, sz, src)                                        \
-> >>>> -       bpf_probe_read(dst, sz,                                             \
-> >>>> +       bpf_probe_read_selector(dst, sz,                                                    \
-> >>>>                           (const void *)__builtin_preserve_access_index(src))
-> >>>>
-> >>>>     /*
-> >>>> @@ -124,7 +124,7 @@ enum bpf_field_info_kind {
-> >>>>      * argument.
-> >>>>      */
-> >>>>     #define bpf_core_read_str(dst, sz, src)                                            \
-> >>>> -       bpf_probe_read_str(dst, sz,                                         \
-> >>>> +       bpf_probe_read_str_selector(dst, sz,                                        \
-> >>>>                               (const void *)__builtin_preserve_access_index(src))
-> >>>>
-> >>>>     #define ___concat(a, b) a ## b
-> >>>>
-> >>>> And bpf_probe_read_{,str_}selector would be defined as e.g. ...
-> >>>>
-> >>>> static long (*bpf_probe_read_selector)(void *dst, __u32 size, const void *unsafe_ptr) = (void *) -1;
-> >>>> static long (*bpf_probe_read_str_selector)(void *dst, __u32 size, const void *unsafe_ptr) = (void *) -2;
-> >>>>
-> >>>> ... where libbpf would do the fix up to either 4 or 45 for insn->imm. But it's still
-> >>>> confined to usage in bpf_core_read.h when the CO-RE macros are used.
-> >>>
-> >>> Ah, I see. Yeah, I suppose that would work as well. Do you prefer me
-> >>> to go this way?
-> >>
-> >> I would suggest we should try this path given this can be used with any clang version
-> >> that has the BPF backend, not just latest upstream git.
+On Tue, Aug 04, 2020 at 11:35:53PM -0700, Andrii Nakryiko wrote:
+> On Sat, Aug 1, 2020 at 10:04 AM Jiri Olsa <jolsa@kernel.org> wrote:
 > >
-> > I have an even better solution, I think. Convert everything to
-> > bpf_probe_read_kernel() or bpf_probe_read_user() unconditionally, but
-> > let libbpf switch those two to bpf_probe_read() if _kernel()/_user()
-> > variants are not yet in the kernel. That should handle both CO-RE
-> > helpers and just pretty much any use case that was converted.
->
-> Yes, agree, that is an even cleaner solution and avoids to 'pollute' the
-> helper ID space with such remapping. The user intent with bpf_probe_read_kernel()
-> or bpf_probe_read_user() is rather clear so bpf_probe_read() can be a fallback
-> for this direction. Lets go with that.
->
+> > Adding d_path helper function that returns full path for
+> > given 'struct path' object, which needs to be the kernel
+> > BTF 'path' object. The path is returned in buffer provided
+> > 'buf' of size 'sz' and is zero terminated.
+> >
+> >   bpf_d_path(&file->f_path, buf, size);
+> >
+> > The helper calls directly d_path function, so there's only
+> > limited set of function it can be called from. Adding just
+> > very modest set for the start.
+> >
+> > Updating also bpf.h tools uapi header and adding 'path' to
+> > bpf_helpers_doc.py script.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  include/uapi/linux/bpf.h       | 13 +++++++++
+> >  kernel/trace/bpf_trace.c       | 48 ++++++++++++++++++++++++++++++++++
+> >  scripts/bpf_helpers_doc.py     |  2 ++
+> >  tools/include/uapi/linux/bpf.h | 13 +++++++++
+> >  4 files changed, 76 insertions(+)
+> >
+> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > index eb5e0c38eb2c..a356ea1357bf 100644
+> > --- a/include/uapi/linux/bpf.h
+> > +++ b/include/uapi/linux/bpf.h
+> > @@ -3389,6 +3389,18 @@ union bpf_attr {
+> >   *             A non-negative value equal to or less than *size* on success,
+> >   *             or a negative error in case of failure.
+> >   *
+> > + * int bpf_d_path(struct path *path, char *buf, u32 sz)
+> 
+> nit: probably would be good to do `const struct path *` here, even if
+> we don't do const-ification properly in all helpers.
 
-Ok, I have all this working locally. I'll post patches once bpf-next re-opens.
+ok
 
-> Thanks,
-> Daniel
+> 
+> > + *     Description
+> > + *             Return full path for given 'struct path' object, which
+> > + *             needs to be the kernel BTF 'path' object. The path is
+> > + *             returned in buffer provided 'buf' of size 'sz' and
+> 
+> typo: in the provided buffer 'buf' of size ... ?
+
+ugh, sure
+
+> 
+> > + *             is zero terminated.
+> > + *
+> > + *     Return
+> > + *             On success, the strictly positive length of the string,
+> > + *             including the trailing NUL character. On error, a negative
+> > + *             value.
+> > + *
+> >   */
+> >  #define __BPF_FUNC_MAPPER(FN)          \
+> >         FN(unspec),                     \
+> > @@ -3533,6 +3545,7 @@ union bpf_attr {
+> >         FN(skc_to_tcp_request_sock),    \
+> >         FN(skc_to_udp6_sock),           \
+> >         FN(get_task_stack),             \
+> > +       FN(d_path),                     \
+> >         /* */
+> >
+> >  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > index cb91ef902cc4..02a76e246545 100644
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> > @@ -1098,6 +1098,52 @@ static const struct bpf_func_proto bpf_send_signal_thread_proto = {
+> >         .arg1_type      = ARG_ANYTHING,
+> >  };
+> >
+> > +BPF_CALL_3(bpf_d_path, struct path *, path, char *, buf, u32, sz)
+> > +{
+> > +       int len;
+> > +       char *p;
+> > +
+> > +       if (!sz)
+> > +               return -ENAMETOOLONG;
+> 
+> if we are modeling this after bpf_probe_read_str(), sz == 0 returns
+> success and just does nothing. I don't think anyone will ever handle
+> or expect this error. I'd just return 0.
+
+ook
+
+thanks,
+jirka
+
