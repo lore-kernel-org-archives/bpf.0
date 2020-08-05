@@ -4,69 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F21A8C433E3
-	for <bpf@archiver.kernel.org>; Wed,  5 Aug 2020 17:41:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52F6BC433E0
+	for <bpf@archiver.kernel.org>; Wed,  5 Aug 2020 17:55:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C9474206B6
-	for <bpf@archiver.kernel.org>; Wed,  5 Aug 2020 17:41:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2106B21D95
+	for <bpf@archiver.kernel.org>; Wed,  5 Aug 2020 17:55:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h6d9ayU8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tT0P2gfI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728825AbgHERjn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 5 Aug 2020 13:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55056 "EHLO
+        id S1728472AbgHERzn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Aug 2020 13:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728652AbgHERjc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Aug 2020 13:39:32 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99978C061575;
-        Wed,  5 Aug 2020 10:39:25 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id c18so16804395ybr.1;
-        Wed, 05 Aug 2020 10:39:25 -0700 (PDT)
+        with ESMTP id S1729062AbgHERzO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 5 Aug 2020 13:55:14 -0400
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0875C06179E;
+        Wed,  5 Aug 2020 10:45:57 -0700 (PDT)
+Received: by mail-pg1-x543.google.com with SMTP id t6so24880229pgq.1;
+        Wed, 05 Aug 2020 10:45:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6bCWT90m+exQNL7T3YkjqTWHZL3/pjla0SdPnQEcSjE=;
-        b=h6d9ayU8rD7uRA7O7Asg5SlRILgwRCihDPAyG0mmvRm3cYQiDc2KYz8OxWUGkB29kc
-         ngD4QUzYihunW8SFC1H4geK8flbV492NRZD9Iv30hNQSLu8besFJ8Ja6ukFFrQ3QITl5
-         nMkqVepugob5HO4/s2W05rBC0j/MJguMshXc9QKNHGVZsQrWzh7eI+dz5nZeE0Zhgrtz
-         T//Mrcd5z8bI3sOxrz03QZ+uALXiBhIMLI7Wjamtnnn4SRUQYHL2pnTEi3nc/d1a8x2A
-         S/i5P0gOPMSucyjcVE0d9HprXKBgBwwfY2dVfsKBy8ec+DGjOcLKyr2SQycq5jkxTOdq
-         q/Wg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HFuNCX7vqXeZP0x+Utx9kB2XZUBqZjp8rc7Bdm45/qU=;
+        b=tT0P2gfIBM66/aJTeoG1Ry7EK5FwTaNH/hlK9HkMVvLN+kVAmmhOdPAi8ELLHeEDCU
+         0KXraLAtr1n8NyIr/QEri23c7DWrpESf+63g9VTADVPubl7bW1Z+EP6v1tlSB/1JfTXO
+         R2Ee3Q9xlZZBppnEA29QGNXWPd0zDiCL+Bapiw+xtI6AI2WQ+U8EN9bp9+EIOmYICacP
+         LLjt8e6wVyuUViQDMPBq5A0c2uHfEujrgGYPHh7CFpvTFAwqPYkZ3bHCARgdKHyEPw8Y
+         7asQguu96AFxxFYEsEFKKyTL1HTZRj5YaEsbWrkd1zij4iO1vMkPYzPBe21ixFgCrxOR
+         OsMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6bCWT90m+exQNL7T3YkjqTWHZL3/pjla0SdPnQEcSjE=;
-        b=Jhu3pWzFPyT7KrOfwiMGSuCuylXW7YmsOF8O97sVzxUlk3g8oU+uFI5zIlYKZ+XAp4
-         Z0cB0evrs5ID+0hmLUqXm3kHodHCVErIFxQiScva/Z5RV33lhlxTYrZsc7nIEdkkHaJ/
-         4UHdfCbTe29fEUjY8x7yZPBa4zmzk6gcjUy6grGzxajlDItt2MrqoJopS7F9jnow8Um3
-         EcHsKEtHC9PAwh3eFOjUQbUszZrlbSxjcG07SxndLghfSE4KwAxwlOiQT7L3EIMVTOo3
-         rMSeeNPGWhV+S8z1Th5w23KnFi+iByAL5ipluZRh0Qcv0cXDQgpxo55M+cCdjPFW6x3J
-         zBfg==
-X-Gm-Message-State: AOAM532KwgnMpJSlCr9ZSekSXnMPxMY22+Q9rjRxEcGlYp7OrwoDZJhP
-        qHxzD78rLPdpvDw1+O7Vzs5Gkjy/FSN+mxXTjKKXjw==
-X-Google-Smtp-Source: ABdhPJxEiAKm6++XAj2hiUGpV4D578WKfSqcDGi9gLHZTanMHFDVL+qsmbNeKqvBcGqQXt7T7t5kBmsLEMaAsrhXQa4=
-X-Received: by 2002:a25:d84a:: with SMTP id p71mr6853153ybg.347.1596649164750;
- Wed, 05 Aug 2020 10:39:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200801084721.1812607-1-songliubraving@fb.com>
- <20200801084721.1812607-6-songliubraving@fb.com> <CAEf4BzaP4TGF7kcmZRAKsy=oWPpFA6sUGFkctpGz-fPp+YuSOQ@mail.gmail.com>
- <DDCD362E-21D3-46BF-90A6-8F3221CBB54E@fb.com> <CAEf4BzY5RYMM6w8wn3qEB3AsuKWv-TMaD5NVFj=YqbCW4DLjqA@mail.gmail.com>
- <7384B583-EE19-4045-AC72-B6FE87C187DD@fb.com> <CAEf4BzaiJnCu14AWougmxH80msGdOp4S8ZNmAiexMmtwUM_2Xg@mail.gmail.com>
- <AF9D0E8C-0AA5-4BE4-90F4-946FABAB63FD@fb.com> <CAEf4BzZ29G2KexhKY=CffOPK_DiqAXxRHWuVRREHv0dnXgobRQ@mail.gmail.com>
- <BA750BC0-0A3B-488B-806C-90C1B6CDF586@fb.com>
-In-Reply-To: <BA750BC0-0A3B-488B-806C-90C1B6CDF586@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 5 Aug 2020 10:39:13 -0700
-Message-ID: <CAEf4Bza_P-b2-OXer8NjxQ3vHcY-=jbNaUBPMFUezy=LVOO16A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 5/5] selftests/bpf: add benchmark for uprobe vs. user_prog
-To:     Song Liu <songliubraving@fb.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HFuNCX7vqXeZP0x+Utx9kB2XZUBqZjp8rc7Bdm45/qU=;
+        b=MUK8EN+2eKUV9r6eUZYE6/NCxU6rJnGjxSs8uxVsVwRgeU/1RykwUOEfnvZvxwkHNA
+         4I2BD2cAkz8lpGI9vJFoUtrz8kR4hSL2VHYeJWdocuHsWBXU2teOsliHSqoP6GHunQKT
+         qm0CvUDYRh8PHjMkw3ZjWQWDNuqSThUzmgetIv5xhEg8QvBkHE4V+umz8cQyzwdQI7CS
+         MsfctzgwPsFUtlyh684m+aD2B+ruC6tQ5+SeRo8Vt+5uPAYsuMDyC0LUCAgujf5iU5qe
+         2lPuw88leEcgkWf3p0bp9SPFQYWHAs8GRWwm4QddBgW4tfvgaIryBkQDu3N+UJFKuDci
+         qNAg==
+X-Gm-Message-State: AOAM532z17hWDXdNZf6drMYWSgnxsLjcXz0siVdUQHv3nstCZSFzfUCq
+        73kaZaChDKbAY1tStxvsMlwWunVQ
+X-Google-Smtp-Source: ABdhPJz/iOEFhIC/CFRoJ1NFwM7w82wEaRPvuLiln4IJEueHqgu17lX1jCDSmDaz9r2m2Alk9DYwMw==
+X-Received: by 2002:a63:8f08:: with SMTP id n8mr4130648pgd.9.1596649556565;
+        Wed, 05 Aug 2020 10:45:56 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:16b0])
+        by smtp.gmail.com with ESMTPSA id a2sm4840937pfh.152.2020.08.05.10.45.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Aug 2020 10:45:54 -0700 (PDT)
+Date:   Wed, 5 Aug 2020 10:45:52 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Song Liu <songliubraving@fb.com>,
+        open list <linux-kernel@vger.kernel.org>,
         bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -75,271 +70,75 @@ Cc:     open list <linux-kernel@vger.kernel.org>,
         KP Singh <kpsingh@chromium.org>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         Daniel Xu <dlxu@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next 5/5] selftests/bpf: add benchmark for uprobe vs.
+ user_prog
+Message-ID: <20200805174552.56q6eauad7glyzgm@ast-mbp.dhcp.thefacebook.com>
+References: <20200801084721.1812607-1-songliubraving@fb.com>
+ <20200801084721.1812607-6-songliubraving@fb.com>
+ <CAEf4BzaP4TGF7kcmZRAKsy=oWPpFA6sUGFkctpGz-fPp+YuSOQ@mail.gmail.com>
+ <DDCD362E-21D3-46BF-90A6-8F3221CBB54E@fb.com>
+ <CAEf4BzY5RYMM6w8wn3qEB3AsuKWv-TMaD5NVFj=YqbCW4DLjqA@mail.gmail.com>
+ <7384B583-EE19-4045-AC72-B6FE87C187DD@fb.com>
+ <CAEf4BzaiJnCu14AWougmxH80msGdOp4S8ZNmAiexMmtwUM_2Xg@mail.gmail.com>
+ <AF9D0E8C-0AA5-4BE4-90F4-946FABAB63FD@fb.com>
+ <20200805171639.tsqjmifd7eb3htou@ast-mbp.dhcp.thefacebook.com>
+ <CAEf4BzYFfAubxo1QY6Axth=gwS9DfzwRkvnYLspfk9tLia0LPg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzYFfAubxo1QY6Axth=gwS9DfzwRkvnYLspfk9tLia0LPg@mail.gmail.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Aug 5, 2020 at 12:01 AM Song Liu <songliubraving@fb.com> wrote:
->
->
->
-> > On Aug 4, 2020, at 10:47 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com=
-> wrote:
+On Wed, Aug 05, 2020 at 10:27:28AM -0700, Andrii Nakryiko wrote:
+> On Wed, Aug 5, 2020 at 10:16 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
 > >
-> > On Tue, Aug 4, 2020 at 9:47 PM Song Liu <songliubraving@fb.com> wrote:
-> >>
-> >>
-> >>
-> >>> On Aug 4, 2020, at 6:52 PM, Andrii Nakryiko <andrii.nakryiko@gmail.co=
-m> wrote:
-> >>>
-> >>> On Tue, Aug 4, 2020 at 2:01 PM Song Liu <songliubraving@fb.com> wrote=
-:
-> >>>>
-> >>>>
-> >>>>
-> >>>>> On Aug 2, 2020, at 10:10 PM, Andrii Nakryiko <andrii.nakryiko@gmail=
-.com> wrote:
-> >>>>>
-> >>>>> On Sun, Aug 2, 2020 at 9:47 PM Song Liu <songliubraving@fb.com> wro=
-te:
-> >>>>>>
-> >>>>>>
-> >>>>>>> On Aug 2, 2020, at 6:51 PM, Andrii Nakryiko <andrii.nakryiko@gmai=
-l.com> wrote:
-> >>>>>>>
-> >>>>>>> On Sat, Aug 1, 2020 at 1:50 AM Song Liu <songliubraving@fb.com> w=
-rote:
-> >>>>>>>>
-> >>>>>>>> Add a benchmark to compare performance of
-> >>>>>>>> 1) uprobe;
-> >>>>>>>> 2) user program w/o args;
-> >>>>>>>> 3) user program w/ args;
-> >>>>>>>> 4) user program w/ args on random cpu.
-> >>>>>>>>
-> >>>>>>>
-> >>>>>>> Can you please add it to the existing benchmark runner instead, e=
-.g.,
-> >>>>>>> along the other bench_trigger benchmarks? No need to re-implement
-> >>>>>>> benchmark setup. And also that would also allow to compare existi=
-ng
-> >>>>>>> ways of cheaply triggering a program vs this new _USER program?
-> >>>>>>
-> >>>>>> Will try.
-> >>>>>>
-> >>>>>>>
-> >>>>>>> If the performance is not significantly better than other ways, d=
-o you
-> >>>>>>> think it still makes sense to add a new BPF program type? I think
-> >>>>>>> triggering KPROBE/TRACEPOINT from bpf_prog_test_run() would be ve=
-ry
-> >>>>>>> nice, maybe it's possible to add that instead of a new program ty=
-pe?
-> >>>>>>> Either way, let's see comparison with other program triggering
-> >>>>>>> mechanisms first.
-> >>>>>>
-> >>>>>> Triggering KPROBE and TRACEPOINT from bpf_prog_test_run() will be =
-useful.
-> >>>>>> But I don't think they can be used instead of user program, for a =
-couple
-> >>>>>> reasons. First, KPROBE/TRACEPOINT may be triggered by other progra=
-ms
-> >>>>>> running in the system, so user will have to filter those noise out=
- in
-> >>>>>> each program. Second, it is not easy to specify CPU for KPROBE/TRA=
-CEPOINT,
-> >>>>>> while this feature could be useful in many cases, e.g. get stack t=
-race
-> >>>>>> on a given CPU.
-> >>>>>>
-> >>>>>
-> >>>>> Right, it's not as convenient with KPROBE/TRACEPOINT as with the US=
-ER
-> >>>>> program you've added specifically with that feature in mind. But if
-> >>>>> you pin user-space thread on the needed CPU and trigger kprobe/tp,
-> >>>>> then you'll get what you want. As for the "noise", see how
-> >>>>> bench_trigger() deals with that: it records thread ID and filters
-> >>>>> everything not matching. You can do the same with CPU ID. It's not =
-as
-> >>>>> automatic as with a special BPF program type, but still pretty simp=
-le,
-> >>>>> which is why I'm still deciding (for myself) whether USER program t=
-ype
-> >>>>> is necessary :)
-> >>>>
-> >>>> Here are some bench_trigger numbers:
-> >>>>
-> >>>> base      :    1.698 =C2=B1 0.001M/s
-> >>>> tp        :    1.477 =C2=B1 0.001M/s
-> >>>> rawtp     :    1.567 =C2=B1 0.001M/s
-> >>>> kprobe    :    1.431 =C2=B1 0.000M/s
-> >>>> fentry    :    1.691 =C2=B1 0.000M/s
-> >>>> fmodret   :    1.654 =C2=B1 0.000M/s
-> >>>> user      :    1.253 =C2=B1 0.000M/s
-> >>>> fentry-on-cpu:    0.022 =C2=B1 0.011M/s
-> >>>> user-on-cpu:    0.315 =C2=B1 0.001M/s
-> >>>>
-> >>>
-> >>> Ok, so basically all of raw_tp,tp,kprobe,fentry/fexit are
-> >>> significantly faster than USER programs. Sure, when compared to
-> >>> uprobe, they are faster, but not when doing on-specific-CPU run, it
-> >>> seems (judging from this patch's description, if I'm reading it
-> >>> right). Anyways, speed argument shouldn't be a reason for doing this,
-> >>> IMO.
-> >>>
-> >>>> The two "on-cpu" tests run the program on a different CPU (see the p=
-atch
-> >>>> at the end).
-> >>>>
-> >>>> "user" is about 25% slower than "fentry". I think this is mostly bec=
-ause
-> >>>> getpgid() is a faster syscall than bpf(BPF_TEST_RUN).
-> >>>
-> >>> Yes, probably.
-> >>>
-> >>>>
-> >>>> "user-on-cpu" is more than 10x faster than "fentry-on-cpu", because =
-IPI
-> >>>> is way faster than moving the process (via sched_setaffinity).
-> >>>
-> >>> I don't think that's a good comparison, because you are actually
-> >>> testing sched_setaffinity performance on each iteration vs IPI in the
-> >>> kernel, not a BPF overhead.
-> >>>
-> >>> I think the fair comparison for this would be to create a thread and
-> >>> pin it on necessary CPU, and only then BPF program calls in a loop.
-> >>> But I bet any of existing program types would beat USER program.
-> >>>
-> >>>>
-> >>>> For use cases that we would like to call BPF program on specific CPU=
-,
-> >>>> triggering it via IPI is a lot faster.
-> >>>
-> >>> So these use cases would be nice to expand on in the motivational par=
-t
-> >>> of the patch set. It's not really emphasized and it's not at all clea=
-r
-> >>> what you are trying to achieve. It also seems, depending on latency
-> >>> requirements, it's totally possible to achieve comparable results by
-> >>> pre-creating a thread for each CPU, pinning each one to its designate=
-d
-> >>> CPU and then using any suitable user-space signaling mechanism (a
-> >>> queue, condvar, etc) to ask a thread to trigger BPF program (fentry o=
-n
-> >>> getpgid(), for instance).
-> >>
-> >> I don't see why user space signal plus fentry would be faster than IPI=
-.
-> >> If the target cpu is running something, this gonna add two context
-> >> switches.
-> >>
+> > On Wed, Aug 05, 2020 at 04:47:30AM +0000, Song Liu wrote:
+> > >
+> > > Being able to trigger BPF program on a different CPU could enable many
+> > > use cases and optimizations. The use case I am looking at is to access
+> > > perf_event and percpu maps on the target CPU. For example:
+> > >       0. trigger the program
+> > >       1. read perf_event on cpu x;
+> > >       2. (optional) check which process is running on cpu x;
+> > >       3. add perf_event value to percpu map(s) on cpu x.
 > >
-> > I didn't say faster, did I? I said it would be comparable and wouldn't
-> > require a new program type.
->
-> Well, I don't think adding program type is that big a deal. If that is
-> really a problem, we can use a new attach type instead. The goal is to
-> trigger it with sys_bpf() on a different cpu. So we can call it kprobe
-> attach to nothing and hack that way. I add the new type because it makes
-> sense. The user just want to trigger a BPF program from user space.
+> > If the whole thing is about doing the above then I don't understand why new
+> > prog type is needed. Can prog_test_run support existing BPF_PROG_TYPE_KPROBE?
+> > "enable many use cases" sounds vague. I don't think folks reading
+> > the patches can guess those "use cases".
+> > "Testing existing kprobe bpf progs" would sound more convincing to me.
+> 
+> Was just about to propose the same :) I wonder if generic test_run()
+> capability to trigger test programs of whatever supported type on a
+> specified CPU through IPI can be added. That way you can even use the
+> XDP program to do what Song seems to need.
+> 
+> TRACEPOINTs might also be a good fit here, given it seems simpler to
+> let users specify custom tracepoint data for test_run(). Having the
+> ability to unit-test KPROBE and TRACEPOINT, however rudimentary, is
+> already a big win.
+> 
+> > If the test_run framework can be extended to trigger kprobe with correct pt_regs.
+> > As part of it test_run would trigger on a given cpu with $ip pointing
+> > to some test fuction in test_run.c. For local test_run the stack trace
+> > would include bpf syscall chain. For IPI the stack trace would include
+> > the corresponding kernel pieces where top is our special test function.
+> > Sort of like pseudo kprobe where there is no actual kprobe logic,
+> > since kprobe prog doesn't care about mechanism. It needs correct
+> > pt_regs only as input context.
+> > The kprobe prog output (return value) has special meaning though,
+> > so may be kprobe prog type is not a good fit.
+> 
+> It does? I don't remember returning 1 from KPROBE changing anything. I
+> thought it's only the special bpf_override_return() that can influence
+> the kernel function return result.
 
-I thought we already concluded that it's not really "trigger a BPF
-program from user space", because for that you have many existing and
-even faster options. After a few rounds of emails, it seems it's more
-about triggering the BPF program on another CPU without preempting
-whatever is running on that CPU. It would be helpful to be clear and
-upfront about the requirements.
-
->
-> > But then again, without knowing all the
-> > details, it's a bit hard to discuss this. E.g., if you need to trigger
-> > that BPF program periodically, you can sleep in those per-CPU threads,
-> > or epoll, or whatever. Or maybe you can set up a per-CPU perf event
-> > that would trigger your program on the desired CPU, etc.My point is
-> > that I and others shouldn't be guessing this, I'd expect someone who's
-> > proposing an entire new BPF program type to motivate why this new
-> > program type is necessary and what problem it's solving that can't be
-> > solved with existing means.
->
-> Yes, there are other options. But they all come with non-trivial cost.
-> Per-CPU-per-process threads and/or per-CPU perf event are cost we have
-> to pay in production. IMO, these cost are much higher than a new program
-> type (or attach type).
->
-
-So for threads I know the costs (a bit of memory for thread stack,
-plus some internal book keeping stuff in kernel), which is arguable
-how big of a deal is that if those threads do pretty much nothing most
-of the time. But what's the exact cost of perf events and why it's
-unacceptably high?
-
-The reason I'm asking is that it seems to me that one alternative,
-which is more generic (and thus potentially more useful) would be to
-have a manually-triggerable perf event. Some sort of software event,
-that's triggered from ioctl or some other syscall, that's appropriate
-for perf subsystem. You'd pre-create a perf_event for each CPU,
-remember their FDs, then would trigger the one you need (corresponding
-to desired CPU). From the BPF side, you'd just use a normal perf_event
-program to handle perf_event activation. But it could be used even
-outside of the BPF ecosystem, which is a good sign for me, because it
-allows more flexible composition of building blocks.
-
-> >
-> > BTW, how frequently do you need to trigger the BPF program? Seems very
-> > frequently, if 2 vs 1 context switches might be a problem?
->
-> The whole solution requires two BPF programs. One on each context switch,
-> the other is the user program. The user program will not trigger very
-> often.
-
-Ok, so performance was never an objective, I wonder why it is put as
-the main reason for this new type of BPF program?
-
->
-> >
-> >>> I bet in this case the  performance would be
-> >>> really nice for a lot of practical use cases. But then again, I don't
-> >>> know details of the intended use case, so please provide some more
-> >>> details.
-> >>
-> >> Being able to trigger BPF program on a different CPU could enable many
-> >> use cases and optimizations. The use case I am looking at is to access
-> >> perf_event and percpu maps on the target CPU. For example:
-> >>        0. trigger the program
-> >>        1. read perf_event on cpu x;
-> >>        2. (optional) check which process is running on cpu x;
-> >>        3. add perf_event value to percpu map(s) on cpu x.
-> >>
-> >> If we do these steps in a BPF program on cpu x, the cost is:
-> >>        A.0) trigger BPF via IPI;
-> >>        A.1) read perf_event locally;
-> >>        A.2) local access current;
-> >>        A.3) local access of percpu map(s).
-> >>
-> >> If we can only do these on a different CPU, the cost will be:
-> >>        B.0) trigger BPF locally;
-> >>        B.1) read perf_event via IPI;
-> >>        B.2) remote access current on cpu x;
-> >>        B.3) remote access percpu map(s), or use non-percpu map(2).
-> >>
-> >> Cost of (A.0 + A.1) is about same as (B.0 + B.1), maybe a little highe=
-r
-> >> (sys_bpf(), vs. sys_getpgid()). But A.2 and A.3 will be significantly
-> >> cheaper than B.2 and B.3.
-> >>
-> >> Does this make sense?
-> >
-> > It does, thanks. But what I was describing is still A, no? BPF program
-> > will be triggered on your desired cpu X, wouldn't it?
->
-> Well, that would be option C, but C could not do step 2, because we conte=
-xt
-> switch to the dedicated thread.
->
-
-So I think *this* is a real requirement. No preemption of the running
-process on a different CPU. That does sound like what perf event does,
-doesn't it? See above.
+See comment in trace_call_bpf().
+And logic to handle it in kprobe_perf_func() for kprobes.
+and in perf_trace_run_bpf_submit() for tracepoints.
+It's historical and Song actually discovered an issue with such behavior.
+I don't remember whether we've concluded on the solution.
