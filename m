@@ -2,130 +2,128 @@ Return-Path: <SRS0=Tx/Z=BP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20417C433DF
-	for <bpf@archiver.kernel.org>; Wed,  5 Aug 2020 19:07:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0A37C433E1
+	for <bpf@archiver.kernel.org>; Wed,  5 Aug 2020 19:16:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F233020842
-	for <bpf@archiver.kernel.org>; Wed,  5 Aug 2020 19:06:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1596654420;
-	bh=3MsIB79zBI0fO6hFED+2PELXN5lzdVBWP95KH0wBH9I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=mfBU79zuhjF73soLWbwcya/msKeva5ajAIP8v4s9+aWkx5cBGb7kKM9+Q3eObgmdu
-	 K0TH/Ee4RtAnQzfDin+dixoNMzMh2DoaHBDXEbmOTez2Jo68W5DKC5gNAyraeS4V8M
-	 3WrqFIHKuaVYgl01xf2HymA6fgI7HWzDmdJoOFfI=
+	by mail.kernel.org (Postfix) with ESMTP id CF8F1206B6
+	for <bpf@archiver.kernel.org>; Wed,  5 Aug 2020 19:16:20 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="P3dIBfDV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728312AbgHETG5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 5 Aug 2020 15:06:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41956 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728234AbgHES6m (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Aug 2020 14:58:42 -0400
-Received: from localhost (unknown [122.171.202.192])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1728534AbgHETQT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Aug 2020 15:16:19 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:47392 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729148AbgHESAq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 5 Aug 2020 14:00:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1596650445;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=x7wUh8ZexL7KK6TXDeSUui6HhK29BUIFxrtlXH2p+X0=;
+        b=P3dIBfDVMvwPYMqNJVPrhjN5Xd6HR5PxTr3fKB8aUwOFkjDsx+t/o5O1FoObJNdDKkeSkW
+        W6V9eACRUhBWpF7+/tFWtG3mao2rwvoeurA0MaB17oBCnPsamklvhv2rVcEzYrQaVv/Cu6
+        0/tF1Kl52YlNWOurRk1XwbHzTpWfd7M=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-227-KBeJp0gSNJmafExVxB_dFw-1; Wed, 05 Aug 2020 14:00:41 -0400
+X-MC-Unique: KBeJp0gSNJmafExVxB_dFw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0BEA822D75;
-        Wed,  5 Aug 2020 13:19:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596633566;
-        bh=3MsIB79zBI0fO6hFED+2PELXN5lzdVBWP95KH0wBH9I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RZK5/PZXQyb5E2xDXei3LEsgNsjsWbhsLQmYNpOCHlPpt0GCwrSwYNqCYvD4kfeIP
-         Hbpk+HWDzMbC0+cK8xnUE31SqMuhCjoSMDTuv+MHlP37YeDKS4CJVRAzciNnNhNaCk
-         ptJnG0ENBNRlSaZjIhOZo9NHqiG1R18UllMX4O+k=
-Date:   Wed, 5 Aug 2020 18:49:22 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Li Yang <leoyang.li@nxp.com>, Zhang Wei <zw@zh-kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EC23F8CE800;
+        Wed,  5 Aug 2020 18:00:38 +0000 (UTC)
+Received: from krava (unknown [10.40.192.11])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 9C46770105;
+        Wed,  5 Aug 2020 18:00:35 +0000 (UTC)
+Date:   Wed, 5 Aug 2020 20:00:34 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
+        Wenbo Zhang <ethercflow@gmail.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        David Miller <davem@redhat.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH][next] dmaengine: Use fallthrough pseudo-keyword
-Message-ID: <20200805131922.GZ12965@vkoul-mobl>
-References: <20200727203413.GA6245@embeddedor>
+        KP Singh <kpsingh@chromium.org>,
+        Brendan Gregg <bgregg@netflix.com>,
+        Florent Revest <revest@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v9 bpf-next 13/14] selftests/bpf: Add test for d_path
+ helper
+Message-ID: <20200805180034.GE319954@krava>
+References: <20200801170322.75218-1-jolsa@kernel.org>
+ <20200801170322.75218-14-jolsa@kernel.org>
+ <CAEf4BzYq5jhTPZRiRzDmi_92qg+0vwobmkyLEqB50mrG_39BeQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200727203413.GA6245@embeddedor>
+In-Reply-To: <CAEf4BzYq5jhTPZRiRzDmi_92qg+0vwobmkyLEqB50mrG_39BeQ@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 27-07-20, 15:34, Gustavo A. R. Silva wrote:
+On Tue, Aug 04, 2020 at 11:40:05PM -0700, Andrii Nakryiko wrote:
 
-> diff --git a/drivers/dma/pl330.c b/drivers/dma/pl330.c
-> index 2c508ee672b9..9b69716172a4 100644
-> --- a/drivers/dma/pl330.c
-> +++ b/drivers/dma/pl330.c
-> @@ -1061,16 +1061,16 @@ static bool _start(struct pl330_thread *thrd)
->  
->  		if (_state(thrd) == PL330_STATE_KILLING)
->  			UNTIL(thrd, PL330_STATE_STOPPED)
-> -		/* fall through */
-> +		fallthrough;
->  
->  	case PL330_STATE_FAULTING:
->  		_stop(thrd);
-> -		/* fall through */
-> +		fallthrough;
->  
->  	case PL330_STATE_KILLING:
->  	case PL330_STATE_COMPLETING:
->  		UNTIL(thrd, PL330_STATE_STOPPED)
-> -		/* fall through */
-> +		fallthrough;
->  
->  	case PL330_STATE_STOPPED:
->  		return _trigger(thrd);
-> @@ -1121,7 +1121,6 @@ static u32 _emit_load(unsigned int dry_run, u8 buf[],
->  
->  	switch (direction) {
->  	case DMA_MEM_TO_MEM:
-> -		/* fall through */
->  	case DMA_MEM_TO_DEV:
->  		off += _emit_LD(dry_run, &buf[off], cond);
->  		break;
-> @@ -1155,7 +1154,6 @@ static inline u32 _emit_store(unsigned int dry_run, u8 buf[],
->  
->  	switch (direction) {
->  	case DMA_MEM_TO_MEM:
-> -		/* fall through */
->  	case DMA_DEV_TO_MEM:
->  		off += _emit_ST(dry_run, &buf[off], cond);
->  		break;
-> @@ -1216,7 +1214,6 @@ static int _bursts(struct pl330_dmac *pl330, unsigned dry_run, u8 buf[],
->  
->  	switch (pxs->desc->rqtype) {
->  	case DMA_MEM_TO_DEV:
-> -		/* fall through */
->  	case DMA_DEV_TO_MEM:
->  		off += _ldst_peripheral(pl330, dry_run, &buf[off], pxs, cyc,
->  			cond);
-> @@ -1266,7 +1263,6 @@ static int _dregs(struct pl330_dmac *pl330, unsigned int dry_run, u8 buf[],
->  
->  	switch (pxs->desc->rqtype) {
->  	case DMA_MEM_TO_DEV:
-> -		/* fall through */
+SNIP
 
-replacement missed here and above few
+> > +SEC("fentry/vfs_getattr")
+> > +int BPF_PROG(prog_stat, struct path *path, struct kstat *stat,
+> > +            __u32 request_mask, unsigned int query_flags)
+> > +{
+> > +       pid_t pid = bpf_get_current_pid_tgid() >> 32;
+> > +       int ret;
+> > +
+> > +       if (pid != my_pid)
+> > +               return 0;
+> > +
+> > +       if (cnt_stat >= MAX_FILES)
+> > +               return 0;
+> > +       ret = bpf_d_path(path, paths_stat[cnt_stat], MAX_PATH_LEN);
+> > +
+> > +       /* We need to recheck cnt_stat for verifier. */
+> > +       if (cnt_stat >= MAX_FILES)
+> > +               return 0;
+> > +       rets_stat[cnt_stat] = ret;
+> > +
+> > +       cnt_stat++;
+> > +       return 0;
+> > +}
+> > +
+> > +SEC("fentry/filp_close")
+> > +int BPF_PROG(prog_close, struct file *file, void *id)
+> > +{
+> > +       pid_t pid = bpf_get_current_pid_tgid() >> 32;
+> > +       int ret;
+> > +
+> > +       if (pid != my_pid)
+> > +               return 0;
+> > +
+> > +       if (cnt_close >= MAX_FILES)
+> > +               return 0;
+> > +       ret = bpf_d_path(&file->f_path,
+> > +                        paths_close[cnt_close], MAX_PATH_LEN);
+> > +
+> > +       /* We need to recheck cnt_stat for verifier. */
+> 
+> you need to do it because you are re-reading a global variable; if you
+> stored cnt_close in a local variable, then did >= MAX_FILES check
+> once, you probably could have avoided this duplication. Same for
+> another instance above.
 
--- 
-~Vinod
+I see, nice.. I'll update both comments
+
+thanks,
+jirka
+
