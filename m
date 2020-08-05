@@ -2,273 +2,163 @@ Return-Path: <SRS0=Tx/Z=BP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 29F72C433DF
-	for <bpf@archiver.kernel.org>; Wed,  5 Aug 2020 17:55:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 88BA3C433E0
+	for <bpf@archiver.kernel.org>; Wed,  5 Aug 2020 17:58:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EA56A2073E
-	for <bpf@archiver.kernel.org>; Wed,  5 Aug 2020 17:55:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6300921D95
+	for <bpf@archiver.kernel.org>; Wed,  5 Aug 2020 17:58:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lz9h/9Ts"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TvzFO7TU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728430AbgHERzm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 5 Aug 2020 13:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729061AbgHERzO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 5 Aug 2020 13:55:14 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71FF7C061757;
-        Wed,  5 Aug 2020 10:45:11 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id e14so10370555ybf.4;
-        Wed, 05 Aug 2020 10:45:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WASnyqpRdX3pKbpXG9wBHZsTQpXpNL3ba2dFW/cytJg=;
-        b=lz9h/9TsV9rSWTnJYNn6ppFAXqyT82G4yQRK/yeyn1L0pu83Wg8DDjN/XvMNaLK1Ff
-         s699Q+oNFtp3j4FwZ0RyDxOgWudW49RYRaNLl3gwGRrYZTz7luLxYTrKSCv9+ErsWdWq
-         INvY3CMrAteZA/Q8DvGu8eDRqIN6y0nqQE20DOto68YEL9+7daUtm5pAl5xYxqCznVtH
-         SdouWsdMlk/N93eAOE8otLqXmfGeiYJ1G1hhO892NjUNSmVLtMHDxUnAY6GtwDUf/W4g
-         cNtYxBHev1jXwn+MEFNWsX1c5bYWlz8luCYnGAZDcul7McvLs7mmx3kPdahO3HOvP7ai
-         S9MA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WASnyqpRdX3pKbpXG9wBHZsTQpXpNL3ba2dFW/cytJg=;
-        b=An4+1/UB89ahgwCgjD5CcrotIyXgc8901MVYbvGMy455wXqUwiyoU2POiIygbFS62B
-         bXZlLH4qGtjCpJvCdz8UyYY/s6gg2cBSnh6LcMI7WInC7sRUs52qo2gIXWuWUBEEhL0X
-         +JNK/gOukoWd6v7ZC8c0OBf9BJCp4Ozy18a+3cu40TtakGNSqeItY11z3RPdr6USt9Of
-         040vU/R5n5s2q9vxbZYImHrElUKS/9aK4Xvi3kqz29Ql2rsDFwPO1BuPsp7LbGdmH0Ae
-         l1Pcmbo4kr1jB0wnLX9znPkk3k1jmQ0oW8p84YPLdCr+Ar/uY26EpC8tjRdm7Ew7L+KC
-         khug==
-X-Gm-Message-State: AOAM532Rcl3lHYzXV/MTiiugYrhfHKje7z2SdbszSfnSgnAMEB9sd1iA
-        N70dwrU2z73P7On9t5PCXg2kts1Fv2bJPl99E9uYQg==
-X-Google-Smtp-Source: ABdhPJyz1QXVgqVK8+dIwmFgxFVPfScHXk6KuaCo4C84uXyJXxmWd99+aubDp31eFiZDo7C1LBefr+6JPeTPdFDCEWw=
-X-Received: by 2002:a5b:44d:: with SMTP id s13mr6588545ybp.403.1596649509768;
- Wed, 05 Aug 2020 10:45:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200801084721.1812607-1-songliubraving@fb.com>
- <20200801084721.1812607-3-songliubraving@fb.com> <CAEf4BzYp4gO1P+OrY7hGyQjdia3BuSu4DX2_z=UF6RfGNa+gkQ@mail.gmail.com>
- <9C1285C1-ECD6-46BD-BA95-3E9E81C00EF0@fb.com> <CAEf4BzYojfFiMn6VeUkxUsdSTdFK0A4MzKQxhCCp_OowkseznQ@mail.gmail.com>
- <5BC1D7AD-32C1-4CDC-BA99-F4DABE61EEA3@fb.com> <CAEf4BzbbCZmijrU4vfkmq2PFsMMFG+xz9qR1e4wfrdm6tF4_hA@mail.gmail.com>
- <4DB698F2-BC51-4E96-BC3B-F478BE9AE106@fb.com> <CAEf4Bza4KXkVov=UwouryG5JcqYQ=9mDG8nBoWmb97rv+_yqTw@mail.gmail.com>
- <88081DFA-39FF-42BB-98F4-CCDE634A1775@fb.com>
-In-Reply-To: <88081DFA-39FF-42BB-98F4-CCDE634A1775@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 5 Aug 2020 10:44:59 -0700
-Message-ID: <CAEf4Bza+GYLb=jVLsf_Q7O8Tpa-EXP4tiHGuuyDmTXs80njXRQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/5] libbpf: support BPF_PROG_TYPE_USER programs
-To:     Song Liu <songliubraving@fb.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S1728863AbgHER6N (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 5 Aug 2020 13:58:13 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:30659 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728488AbgHER5d (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 5 Aug 2020 13:57:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1596650223;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=P4GwPGZ/qA7/1Etd6zeUZoWHTvIjf2vNyQGUeZrsaF4=;
+        b=TvzFO7TU0IuijnBfer8LFVFjauWZ8Y2cRnug824+6j3ZXk0CbdTgTbxlDGQ3bgOqoJHv4x
+        C1SUCeg8ZLpOI5yljHvmKz2mEvDi2ixz+s9vCCokSU91Hg1VPMOuZAkZHEwfBk5+IzKPqQ
+        qm9I+uctUu8RyT97FvBRa9GCSbDYSyo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-490-kUmyyq7uMuSzYrSO1dv1WQ-1; Wed, 05 Aug 2020 13:57:01 -0400
+X-MC-Unique: kUmyyq7uMuSzYrSO1dv1WQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B0063A3485D;
+        Wed,  5 Aug 2020 17:56:56 +0000 (UTC)
+Received: from krava (unknown [10.40.192.11])
+        by smtp.corp.redhat.com (Postfix) with SMTP id C4F2F1024879;
+        Wed,  5 Aug 2020 17:56:52 +0000 (UTC)
+Date:   Wed, 5 Aug 2020 19:56:51 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        David Miller <davem@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Wenbo Zhang <ethercflow@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Daniel Xu <dlxu@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        Brendan Gregg <bgregg@netflix.com>,
+        Florent Revest <revest@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v9 bpf-next 08/14] bpf: Add btf_struct_ids_match function
+Message-ID: <20200805175651.GC319954@krava>
+References: <20200801170322.75218-1-jolsa@kernel.org>
+ <20200801170322.75218-9-jolsa@kernel.org>
+ <CAEf4BzaWGZT-6h8axOupzQ6Z2UiCakgv+v284PuXDZ6_VF5M9Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzaWGZT-6h8axOupzQ6Z2UiCakgv+v284PuXDZ6_VF5M9Q@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Aug 5, 2020 at 12:23 AM Song Liu <songliubraving@fb.com> wrote:
->
->
->
-> > On Aug 4, 2020, at 11:54 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Tue, Aug 4, 2020 at 11:26 PM Song Liu <songliubraving@fb.com> wrote:
-> >>
-> >>
-> >>
-> >>> On Aug 4, 2020, at 10:32 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >>>
-> >>> On Tue, Aug 4, 2020 at 8:59 PM Song Liu <songliubraving@fb.com> wrote:
-> >>>>
-> >>>>
-> >>>>
-> >>>>> On Aug 4, 2020, at 6:38 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >>>>>
-> >>>>> On Mon, Aug 3, 2020 at 6:18 PM Song Liu <songliubraving@fb.com> wrote:
-> >>>>>>
-> >>>>>>
-> >>>>>>
-> >>>>>>> On Aug 2, 2020, at 6:40 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> >>>>>>>
-> >>>>>>> On Sat, Aug 1, 2020 at 1:50 AM Song Liu <songliubraving@fb.com> wrote:
-> >>>>>>>>
-> >>>>>>
-> >>>>>> [...]
-> >>>>>>
-> >>>>>>>
-> >>>>>>>> };
-> >>>>>>>>
-> >>>>>>>> LIBBPF_API int bpf_prog_test_run_xattr(struct bpf_prog_test_run_attr *test_attr);
-> >>>>>>>> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> >>>>>>>> index b9f11f854985b..9ce175a486214 100644
-> >>>>>>>> --- a/tools/lib/bpf/libbpf.c
-> >>>>>>>> +++ b/tools/lib/bpf/libbpf.c
-> >>>>>>>> @@ -6922,6 +6922,7 @@ static const struct bpf_sec_def section_defs[] = {
-> >>>>>>>>     BPF_PROG_SEC("lwt_out",                 BPF_PROG_TYPE_LWT_OUT),
-> >>>>>>>>     BPF_PROG_SEC("lwt_xmit",                BPF_PROG_TYPE_LWT_XMIT),
-> >>>>>>>>     BPF_PROG_SEC("lwt_seg6local",           BPF_PROG_TYPE_LWT_SEG6LOCAL),
-> >>>>>>>> +       BPF_PROG_SEC("user",                    BPF_PROG_TYPE_USER),
-> >>>>>>>
-> >>>>>>> let's do "user/" for consistency with most other prog types (and nice
-> >>>>>>> separation between prog type and custom user name)
-> >>>>>>
-> >>>>>> About "user" vs. "user/", I still think "user" is better.
-> >>>>>>
-> >>>>>> Unlike kprobe and tracepoint, user prog doesn't use the part after "/".
-> >>>>>> This is similar to "perf_event" for BPF_PROG_TYPE_PERF_EVENT, "xdl" for
-> >>>>>> BPF_PROG_TYPE_XDP, etc. If we specify "user" here, "user/" and "user/xxx"
-> >>>>>> would also work. However, if we specify "user/" here, programs that used
-> >>>>>> "user" by accident will fail to load, with a message like:
-> >>>>>>
-> >>>>>>      libbpf: failed to load program 'user'
-> >>>>>>
-> >>>>>> which is confusing.
-> >>>>>
-> >>>>> xdp, perf_event and a bunch of others don't enforce it, that's true,
-> >>>>> they are a bit of a legacy,
-> >>>>
-> >>>> I don't see w/o "/" is a legacy thing. BPF_PROG_TYPE_STRUCT_OPS just uses
-> >>>> "struct_ops".
-> >>>>
-> >>>>> unfortunately. But all the recent ones do,
-> >>>>> and we explicitly did that for xdp_dev/xdp_cpu, for instance.
-> >>>>> Specifying just "user" in the spec would allow something nonsensical
-> >>>>> like "userargh", for instance, due to this being treated as a prefix.
-> >>>>> There is no harm to require users to do "user/my_prog", though.
-> >>>>
-> >>>> I don't see why allowing "userargh" is a problem. Failing "user" is
-> >>>> more confusing. We can probably improve that by a hint like:
-> >>>>
-> >>>>   libbpf: failed to load program 'user', do you mean "user/"?
-> >>>>
-> >>>> But it is pretty silly. "user/something_never_used" also looks weird.
-> >>>
-> >>> "userargh" is terrible, IMO. It's a different identifier that just
-> >>> happens to have the first 4 letters matching "user" program type.
-> >>> There must be either a standardized separator (which happens to be
-> >>> '/') or none. See the suggestion below.
-> >>
-> >> We have no problem deal with "a different identifier that just happens
-> >> to have the first letters matching", like xdp vs. xdp_devmap and
-> >> xdp_cpumap, right?
-> >>
-> >
-> > xdp vs xdp_devmap is an entirely different thing. We deal with it by
-> > checking xdp_devmap first. What I'm saying is that user can do
-> > "xdpomg" and libbpf would be happy (today). And I don't think that's
-> > good. But further, if someone does something like "xdp_devmap_omg",
-> > guess which program type will be inferred? Hint: not xdp_devmap and
-> > libbpf won't report an error either. All because "xdp" is so lax
-> > today.
-> >
-> >>>>
-> >>>>> Alternatively, we could introduce a new convention in the spec,
-> >>>>> something like "user?", which would accept either "user" or
-> >>>>> "user/something", but not "user/" nor "userblah". We can try that as
-> >>>>> well.
-> >>>>
-> >>>> Again, I don't really understand why allowing "userblah" is a problem.
-> >>>> We already have "xdp", "xdp_devmap/", and "xdp_cpumap/", they all work
-> >>>> fine so far.
-> >>>
-> >>> Right, we have "xdp_devmap/" and "xdp_cpumap/", as you say. I haven't
-> >>> seen so much pushback against trailing forward slash with those ;)
-> >>
-> >> I haven't seen any issue with old "perf_event", "xdp" and new "struct_ops"
-> >> either.
-> >>
-> >>>
-> >>> But anyways, as part of deprecating APIs and preparing libbpf for 1.0
-> >>> release over this half, I think I'm going to emit warnings for names
-> >>> like "prog_type_whatever" or "prog_typeevenworse", etc. And asking
-> >>> users to normalize section names to either "prog_type" or
-> >>> "prog_type/something/here", whichever makes sense for a specific
-> >>> program type.
-> >>
-> >> Exactly, "user" makes sense here; while "kprobe/__set_task_comm" makes
-> >> sense for kprobe.
-> >
-> > Right, but "userblah" doesn't. It would be great if you could help
-> > make what I described above become true. But at least don't make it
-> > worse by allowing unrestricted "user" prefix. I'm OK with strict
-> > "user" or "user/blah", I'm not OK with "userblah", I'm sorry.
->
-> If the concern with "userblah" is real and unbearable, so is "xdpblah"
-> and "perf_eventblah", and so on, and so on.
->
+On Tue, Aug 04, 2020 at 11:27:55PM -0700, Andrii Nakryiko wrote:
 
-Oh yeah, "xdpblah" makes me cringe. "Some other kid is doing wrong
-thing, let me do it as well" style of argument never worked for me
-with my parents, I don't see why it should work here :)
+SNIP
 
-But anyways, let's table this discussion, it's not worth spending so
-much time on it. As I said, I'm going to start enforcing standardized
-separator or a single program type word soon enough. Might as well do
-that for "userblah".
-
+> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> > index 7bacc2f56061..ba05b15ad599 100644
+> > --- a/kernel/bpf/btf.c
+> > +++ b/kernel/bpf/btf.c
+> > @@ -4160,6 +4160,37 @@ int btf_struct_access(struct bpf_verifier_log *log,
+> >         return -EINVAL;
+> >  }
 > >
-> >>
-> >>> Right now libbpf doesn't allow two separate BPF programs
-> >>> with the same section name, so enforcing strict "user" is limiting to
-> >>> users. We are going to lift that restriction pretty soon, though. But
-> >>> for now, please stick with what we've been doing lately and mark it as
-> >>> "user/", later we'll allow just "user" as well.
-> >>
-> >> Since we would allow "user" later, why we have to reject it for now?
-> >
-> > Because libbpf is dumb in that regard today? And instead of migrating
-> > users later, I want to prevent users making bad choices right now.
->
-> The good choice here is to use "user", IMO. And you are preventing people
-> to use it. If user has to use "user/" for now. They will have to update
-> the programs later, right? If the conclusion is "user/xxx" is the ultimate
-> goal, I would agree with "user/" for now.
+> > +bool btf_struct_ids_match(struct bpf_verifier_log *log,
+> > +                         int off, u32 id, u32 need_type_id)
+> > +{
+> > +       const struct btf_type *type;
+> > +       int err;
+> > +
+> > +       /* Are we already done? */
+> > +       if (need_type_id == id && off == 0)
+> > +               return true;
+> > +
+> > +again:
+> > +       type = btf_type_by_id(btf_vmlinux, id);
+> > +       if (!type)
+> > +               return false;
+> > +       err = btf_struct_walk(log, type, off, 1, &id);
+> 
+> nit: this size=1 looks a bit artificial, seems like btf_struct_walk()
+> will work with size==0 just as well, no?
 
-They won't have to update, "user/something" would still work.
+right, it will work the same for 0 ... not sure why I put
+originaly 1 byte for size.. probably got mixed up by some
+condition in btf_struct_walk that I thought 0 wouldn't pass,
+but it should work, I'll change it, it's less tricky
 
->
-> > Then relax it, if necessary. Alternatively, we can fix up libbpf logic
-> > before the USER program type lands.
->
-> I don't see why the USER program type need to wait for libbpf fix, as
-> "xdp", "perf_event", etc. all work well today.
+> 
+> > +       if (err != WALK_STRUCT)
+> > +               return false;
+> > +
+> > +       /* We found nested struct object. If it matches
+> > +        * the requested ID, we're done. Otherwise let's
+> > +        * continue the search with offset 0 in the new
+> > +        * type.
+> > +        */
+> > +       if (need_type_id != id) {
+> > +               off = 0;
+> > +               goto again;
+> > +       }
+> > +
+> > +       return true;
+> > +}
+> > +
+> >  int btf_resolve_helper_id(struct bpf_verifier_log *log,
+> >                           const struct bpf_func_proto *fn, int arg)
+> >  {
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index b6ccfce3bf4c..bb6ca19f282d 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -3960,16 +3960,21 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+> >                                 goto err_type;
+> >                 }
+> >         } else if (arg_type == ARG_PTR_TO_BTF_ID) {
+> > +               bool ids_match = false;
+> > +
+> >                 expected_type = PTR_TO_BTF_ID;
+> >                 if (type != expected_type)
+> >                         goto err_type;
+> >                 if (!fn->check_btf_id) {
+> > -                       if (reg->btf_id != meta->btf_id) {
+> > -                               verbose(env, "Helper has type %s got %s in R%d\n",
+> > -                                       kernel_type_name(meta->btf_id),
+> > -                                       kernel_type_name(reg->btf_id), regno);
+> > -
+> > -                               return -EACCES;
+> > +                       if (reg->btf_id != meta->btf_id || reg->off) {
+> 
+> Will it ever succeed if reg->btf_id == meta->btf_id, but reg->off > 0?
+> That would require recursively nested type, which is not possible,
+> right? Or what am I missing? Is it just a simplification of the error
+> handling path?
 
-It's about being a good citizen and helping move libbpf forward.
+ok, I wanted to cover all possible cases, but did not realized this
+one is not possible ;-) will revert it to previous version
 
->
-> >
-> >> Imagine the user just compiled and booted into a new kernel with user
-> >> program support; and then got the following message:
-> >>
-> >>        libbpf: failed to load program 'user'
-> >>
-> >> If I were the user, I would definitely question whether the kernel was
-> >> correct...
-> >
-> > That's also bad, and again, we can make libbpf better. I think moving
-> > forward any non-recognized BPF program type should be reported by
-> > libbpf as an error. But we can't do it right now, we have to have a
-> > period in which users will get a chance to update their BPF programs.
-> > This will have to happen over few libbpf releases at least. So please
-> > join in on the fun of fixing stuff like this.
->
-> I'd love to join the fun. Maybe after user program lands ;)
->
->
+thanks,
+jirka
 
-Of course :) see above.
