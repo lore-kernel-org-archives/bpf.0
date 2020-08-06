@@ -2,97 +2,96 @@ Return-Path: <SRS0=fFcV=BQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60229C433E1
-	for <bpf@archiver.kernel.org>; Thu,  6 Aug 2020 18:02:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E744C433E0
+	for <bpf@archiver.kernel.org>; Thu,  6 Aug 2020 18:36:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF5DC206A2
-	for <bpf@archiver.kernel.org>; Thu,  6 Aug 2020 18:02:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DAFF3206B5
+	for <bpf@archiver.kernel.org>; Thu,  6 Aug 2020 18:36:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TwXGtrEL"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="evTkLWKy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728371AbgHFSCM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 6 Aug 2020 14:02:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
+        id S1728723AbgHFSf5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 6 Aug 2020 14:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725927AbgHFSCL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Aug 2020 14:02:11 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CB6C061574;
-        Thu,  6 Aug 2020 11:02:11 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id d2so20957982lfj.1;
-        Thu, 06 Aug 2020 11:02:11 -0700 (PDT)
+        with ESMTP id S1729246AbgHFSfN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 6 Aug 2020 14:35:13 -0400
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBEAC061575
+        for <bpf@vger.kernel.org>; Thu,  6 Aug 2020 11:26:14 -0700 (PDT)
+Received: by mail-qt1-x84a.google.com with SMTP id n12so17310280qtr.6
+        for <bpf@vger.kernel.org>; Thu, 06 Aug 2020 11:26:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1yWU+/2TNwaR73Azbye1A/oyewvoVzzzR97G8l1acWA=;
-        b=TwXGtrEL6+F3dhTesINjf0jQll2IJYfy4lV8CpCPzC/SZ1KcB6+mR5t+OdsknbNsWT
-         ZBSrMC+vVq+cGRsweMcKsyeMDwqxU13D8mmBz5xz6id1SW7BABQ9ggfIdwRmS4/Hj9yW
-         CNs9lH+625sp2JCie/x2Kba265S2w7Mx1DcFZIdhJTVyVFzcfEgXOKVav13n7tdrXPTL
-         Ghb8IYyV71G5XmlnmZTF3T56xcA5Wv5kINKQwFB4M8ZzqktfOnm+gRfI4sBkIck7gd9E
-         hYswbQahPHvOsW/W3oFzkl03rKjOgtHZr9ZHj5rSxzzLVw1jyr4QuuEglHBDpBt8ouab
-         5ccA==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=h6CKdCAZ7nexLhptlfsLTSjR9JI36kIOk0ydm+WNJwQ=;
+        b=evTkLWKyKJUcisp3sGIXFUzGQr/MOZpzg42XmX/3wYkt6nypVuYzShvTK0BAaORJcN
+         skrZLkEOZmUKhikjELX5tIRaLtV5dVzTT4+dB7ozAsswSyUPpsBmWaSKaFXoF8jw0Opf
+         Gka0cHPFf5G49l6q1E/kFeyrD/qGGn/fK9VyYAdI48jUIijXp2fqVgQXDet8ei6F88l/
+         syitSbcg8CD5FDsOAukvj7xwgTY1Hmg5JRAHEJl6IzUJwZbcGb8igqHaIl0nWeksDwC+
+         YJThB36usPn0UHVK6wI4g/eAeKklr+FvpM9LmgDcOKUX2yNA8KtL7qt20xRZ6YoHFYN2
+         3ppQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1yWU+/2TNwaR73Azbye1A/oyewvoVzzzR97G8l1acWA=;
-        b=tY5RC61BYNCg9dbFTHAtAV3dSk7GaLiewieA58630NL/FCFA0Ba6j6tmzf0B+MX8om
-         6ZPDZCoVC4yskuJg/Z+z+4W9WFmjMs+YY2gWK/RSGk5LpyHaSeLhb2Agojn0Z9c6FcNq
-         RXC8oxJ3xu79P8B31at/AnqXbnRwdr/CwPhgnImSqIK+FINTPYB2xC/Y6Pa93NKpF6bd
-         iH+GH79PM1ANe947ym/oz954Ffzr6Ol8axcPGRX2uS8aErcN9hbV8a8c4hS49xI42HDZ
-         Txau9GRsT2tLQbwq+8At7U8FjkJyVfUwMSbEElrv39pWxEHdZy9sbzNMIZ0FtmYSpJa0
-         6pxg==
-X-Gm-Message-State: AOAM532kg53o04F6gWO4hmILALRIYloRh81yP1hcLJq4nmyVPByYOfxz
-        Tt6DO9oLGydsdjFtPDRIoq2rKUlRdLDuSoNijvw=
-X-Google-Smtp-Source: ABdhPJxHHrS80IX4QvwuTmBuVdrgJM4zDnRZPInfSiLWxorGQ543gGTcrDt5DBr4Hb5GHpKmBx5zDuSip0VhrDggVLE=
-X-Received: by 2002:a05:6512:74b:: with SMTP id c11mr4336640lfs.119.1596736929599;
- Thu, 06 Aug 2020 11:02:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200802013219.864880-1-andriin@fb.com> <20200806173931.GJ71359@kernel.org>
- <CAEf4BzbQTg7ct0+JpSFY2rQ4H8j6vScb0z_wJ-PeFqDzS=aE7Q@mail.gmail.com>
-In-Reply-To: <CAEf4BzbQTg7ct0+JpSFY2rQ4H8j6vScb0z_wJ-PeFqDzS=aE7Q@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 6 Aug 2020 11:01:57 -0700
-Message-ID: <CAADnVQ+hVvmYh=ez_s3XJOy9MEPCAHU=opegxeQevZE4NZyh_w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/3] Add generic and raw BTF parsing APIs to libbpf
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=h6CKdCAZ7nexLhptlfsLTSjR9JI36kIOk0ydm+WNJwQ=;
+        b=JAHa5a+5IOWpp6rZ/Srbh1EM+sn/qXXUhVS7Im53x6duAmtts45zCL+KowtmddhT2B
+         SUcpfp4y4Svd3JEyGGL/3nx0hjb35A4JayAvJW9TebqWxwQgbpMp8te64I18vWOV3S8H
+         Y9HO9pNGtwBPYNi7dJAKqvL40M9kGrb+sowV8yZPMyMiT0fFtRJMLTXWjC2ZnlxOxPdw
+         XKjRDzdta21zZEWCzkMg7i7gioD4b6pL5MFVgy6ugPjAltmFWhpymBdU4bYlxQA3Ejb5
+         TSXRydKEXHgagmRP/vr7Fjp/G35SmZ6b4V+0MNfH6An33cxiX6OjMBbnQY7YOVvpfOY5
+         +D9A==
+X-Gm-Message-State: AOAM5307LNvCZoJagMjO8OIyrIGGpDG/Kv6Y+rpM35PztuQv+TM0MRkJ
+        H77HvVa1tgCWn6qsRDsdSyO9ugg=
+X-Google-Smtp-Source: ABdhPJz1Fv5DIBVnHlfSBLv3sf2vQ9E+wLoBoKa8WwHCPB8AYq6Gsk70z9kID5J4BihogzMQjDcFH14=
+X-Received: by 2002:a0c:f4d3:: with SMTP id o19mr10564858qvm.204.1596738373936;
+ Thu, 06 Aug 2020 11:26:13 -0700 (PDT)
+Date:   Thu,  6 Aug 2020 11:26:12 -0700
+Message-Id: <20200806182612.1390883-1-sdf@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.236.gb10cc79966-goog
+Subject: [PATCH bpf] bpf: remove inline from bpf_do_trace_printk
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
+        Stanislav Fomichev <sdf@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Aug 6, 2020 at 10:51 AM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
-> > I haven't checked which of the patches, or some in other series caused
-> > this on Clear Linux:
-> >
-> >   21 clearlinux:latest             : FAIL gcc (Clear Linux OS for Intel Architecture) 10.2.1 20200723 releases/gcc-10.2.0-3-g677b80db41, clang ver
-> > sion 10.0.1
-> >
-> >   gcc (Clear Linux OS for Intel Architecture) 10.2.1 20200723 releases/gcc-10.2.0-3-g677b80db41
-> >
-> >   btf.c: In function 'btf__parse_raw':
-> >   btf.c:625:28: error: 'btf' may be used uninitialized in this function [-Werror=maybe-uninitialized]
-> >     625 |  return err ? ERR_PTR(err) : btf;
-> >         |         ~~~~~~~~~~~~~~~~~~~^~~~~
-> >
->
-> Yeah, fixed in https://patchwork.ozlabs.org/project/netdev/patch/20200805223359.32109-1-danieltimlee@gmail.com/
->
+I get the following error during compilation on my side:
+kernel/trace/bpf_trace.c: In function 'bpf_do_trace_printk':
+kernel/trace/bpf_trace.c:386:34: error: function 'bpf_do_trace_printk' can never be inlined because it uses variable argument lists
+ static inline __printf(1, 0) int bpf_do_trace_printk(const char *fmt, ...)
+                                  ^
 
-Thanks for headsup.
-The fix will be pushed to bpf tree when net tree gets ffwd-ed to
-Linus. Hopefully today.
+Fixes: ac5a72ea5c89 ("bpf: Use dedicated bpf_trace_printk event instead of trace_printk()")
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+---
+ kernel/trace/bpf_trace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index cb91ef902cc4..a8d4f253ed77 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -383,7 +383,7 @@ static DEFINE_RAW_SPINLOCK(trace_printk_lock);
+ 
+ #define BPF_TRACE_PRINTK_SIZE   1024
+ 
+-static inline __printf(1, 0) int bpf_do_trace_printk(const char *fmt, ...)
++static __printf(1, 0) int bpf_do_trace_printk(const char *fmt, ...)
+ {
+ 	static char buf[BPF_TRACE_PRINTK_SIZE];
+ 	unsigned long flags;
+-- 
+2.28.0.236.gb10cc79966-goog
+
