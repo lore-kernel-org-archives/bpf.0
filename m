@@ -2,143 +2,90 @@ Return-Path: <SRS0=fFcV=BQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-20.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DECE5C433DF
-	for <bpf@archiver.kernel.org>; Thu,  6 Aug 2020 16:47:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6237FC433DF
+	for <bpf@archiver.kernel.org>; Thu,  6 Aug 2020 17:07:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B72A2311A
-	for <bpf@archiver.kernel.org>; Thu,  6 Aug 2020 16:47:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AA91E20786
+	for <bpf@archiver.kernel.org>; Thu,  6 Aug 2020 17:07:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="VmoCVrPZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JhX/CubU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729381AbgHFQrE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 6 Aug 2020 12:47:04 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:43670 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727081AbgHFQpO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Aug 2020 12:45:14 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 076EXSii075967;
-        Thu, 6 Aug 2020 14:43:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=theamiPcOekYRX6Mv+pKryKVA4+IUThIhqCbFzscYqY=;
- b=VmoCVrPZHrL4uHzHSvj14hJdREyXwOFtbXUrsaMLAjjWGwMww/GLYv/sxUgO/6Rf42CJ
- OJlG6zZ8A5l52eMYKNdzy9S2bKZN+XZIP8K5lw/15OWzCABQdEY0Gih0UbDzNLy/vEDs
- yq6cJQizIstrW3kNpYZo497C8qUAlWVtzsJDTQpFltRWEfwa8LHcRolIT3KQGZI8LT9f
- tufp8yPamsnMOLDSLQN9XxtbAerBX4frvFiwPKYys8MtzIEZFX28gNn3sRw0V9+kSeFx
- RcucPHUZbLd4RwSNh0i7LnjimFbh/eF0ikoWiq6VPbuwytvBoLZjc1fr5eX34J10TnS2 7Q== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 32r6gwucgc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 06 Aug 2020 14:43:02 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 076Egxms192395;
-        Thu, 6 Aug 2020 14:43:01 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 32pdnwj85k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 06 Aug 2020 14:43:01 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 076EgjIB005861;
-        Thu, 6 Aug 2020 14:42:45 GMT
-Received: from localhost.uk.oracle.com (/10.175.182.235)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 06 Aug 2020 07:42:45 -0700
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com, yhs@fb.com
-Cc:     linux@rasmusvillemoes.dk, andriy.shevchenko@linux.intel.com,
-        pmladek@suse.com, kafai@fb.com, songliubraving@fb.com,
-        john.fastabend@gmail.com, kpsingh@chromium.org, shuah@kernel.org,
-        rdna@fb.com, scott.branden@broadcom.com, quentin@isovalent.com,
-        cneirabustos@gmail.com, jakub@cloudflare.com, mingo@redhat.com,
-        rostedt@goodmis.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [RFC PATCH bpf-next 1/4] bpf: provide function to get vmlinux BTF information
-Date:   Thu,  6 Aug 2020 15:42:22 +0100
-Message-Id: <1596724945-22859-2-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1596724945-22859-1-git-send-email-alan.maguire@oracle.com>
-References: <1596724945-22859-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9704 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 mlxscore=0
- bulkscore=0 adultscore=0 phishscore=0 malwarescore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2008060105
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9704 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 spamscore=0
- impostorscore=0 mlxscore=0 mlxlogscore=999 adultscore=0 priorityscore=1501
- phishscore=0 clxscore=1015 suspectscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2008060104
+        id S1730072AbgHFRHB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 6 Aug 2020 13:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729748AbgHFRGk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 6 Aug 2020 13:06:40 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC7AC00214C
+        for <bpf@vger.kernel.org>; Thu,  6 Aug 2020 08:52:29 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id g3so2816262pjm.7
+        for <bpf@vger.kernel.org>; Thu, 06 Aug 2020 08:52:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=DKaDTZahT68TPrt3y8j8xlCXfU2IoxIayJ09loOj8ZE=;
+        b=JhX/CubUYC7aE5m4SNb/d0hwzJDwU2Bbm5eAj2Yyc5a4e+N8KWNhLqWC7VHcPVtjA/
+         BDuIqKNdDwQ6tK4UA9tkY3+1yycjawE/a0qINJ872mqNwfgizOcn9j/wuo9lNHEVCYEa
+         DcLb49hX1HQQnA4i7Ofv3IwjK5THQAPMnpUSVBC6hBzdsWHkq2VHC4KxoxGBj+bKXSLD
+         EsGRZDnp5TrMqf/tGeKbMvq8vtFmjNXmTwsn8WzCsbkGCyKO49uGcuxXhp4lR6XOOreA
+         BYOgbj65at0sIRqHUkxUTYZ7AHxsDVtV2Mgl2uud2hT4+MPIynP2K2HlnGh+zE6HBvU3
+         6cnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=DKaDTZahT68TPrt3y8j8xlCXfU2IoxIayJ09loOj8ZE=;
+        b=WF11QxCLcqnG3iJgKgpcuOjfjxF34c9CdWQ/cZplomkhDuMyl2M2ccGYhk60udGHuS
+         /RWKvIEZYaY73FBEga1aYq1cLiyPtfMEnGMKzBBhRFWFcMnxnZFLwbvwgVUq7idRwIKl
+         2AzCBc9G8gB/y2S5Z3ZTQYnVVilBZfzo4Tk5S3PbATeqTbLL4cb0Rb5pYFAnqcGUgLqW
+         fyo6QI2ZTctA1/0KAEiBpEQwTAfZUsnzJSVQzjJtFhjaIB4G+tVdIUMMdP7+USzpo4cG
+         9Fx+VoHlF4ORVartQdFbxXUH0UMoqmyZvkmLVsoVSlL9Wo1DvmQVjRXqXxfFlXvTfGMJ
+         epEA==
+X-Gm-Message-State: AOAM530NQIE37mVGPCVQa/NrvRYX0KMMNKV0UWZg8hQ5GTXDgGed5xjQ
+        8plfx0eteFjToTBrReHo+Q7oQnY=
+X-Google-Smtp-Source: ABdhPJx+QUh0epEg1PjEslt5Re46VsWuyd9HeUPmxJfHw2mw+1qHTKNCTw2mORGskGzXsRnvkmWY1N8=
+X-Received: by 2002:a17:90a:9516:: with SMTP id t22mr8184569pjo.134.1596729147206;
+ Thu, 06 Aug 2020 08:52:27 -0700 (PDT)
+Date:   Thu,  6 Aug 2020 08:52:25 -0700
+Message-Id: <20200806155225.637202-1-sdf@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.28.0.236.gb10cc79966-goog
+Subject: [PATCH bpf] bpf: add missing return to resolve_btfids
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It will be used later for BPF structure display support
+int sets_patch(struct object *obj) doesn't have a 'return 0' at the end.
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- include/linux/bpf.h   |  2 ++
- kernel/bpf/verifier.c | 18 ++++++++++++------
- 2 files changed, 14 insertions(+), 6 deletions(-)
+ tools/bpf/resolve_btfids/main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index cef4ef0..55eb67d 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1290,6 +1290,8 @@ int bpf_check(struct bpf_prog **fp, union bpf_attr *attr,
- 	      union bpf_attr __user *uattr);
- void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
+diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+index 52d883325a23..4d9ecb975862 100644
+--- a/tools/bpf/resolve_btfids/main.c
++++ b/tools/bpf/resolve_btfids/main.c
+@@ -566,6 +566,7 @@ static int sets_patch(struct object *obj)
  
-+struct btf *bpf_get_btf_vmlinux(void);
-+
- /* Map specifics */
- struct xdp_buff;
- struct sk_buff;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b6ccfce..05dfc41 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11064,6 +11064,17 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 		next = rb_next(next);
  	}
++	return 0;
  }
  
-+struct btf *bpf_get_btf_vmlinux(void)
-+{
-+	if (!btf_vmlinux && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
-+		mutex_lock(&bpf_verifier_lock);
-+		if (!btf_vmlinux)
-+			btf_vmlinux = btf_parse_vmlinux();
-+		mutex_unlock(&bpf_verifier_lock);
-+	}
-+	return btf_vmlinux;
-+}
-+
- int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
- 	      union bpf_attr __user *uattr)
- {
-@@ -11097,12 +11108,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
- 	env->ops = bpf_verifier_ops[env->prog->type];
- 	is_priv = bpf_capable();
- 
--	if (!btf_vmlinux && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
--		mutex_lock(&bpf_verifier_lock);
--		if (!btf_vmlinux)
--			btf_vmlinux = btf_parse_vmlinux();
--		mutex_unlock(&bpf_verifier_lock);
--	}
-+	bpf_get_btf_vmlinux();
- 
- 	/* grab the mutex to protect few globals used by verifier */
- 	if (!is_priv)
+ static int symbols_patch(struct object *obj)
 -- 
-1.8.3.1
+2.28.0.236.gb10cc79966-goog
 
