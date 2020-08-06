@@ -2,96 +2,76 @@ Return-Path: <SRS0=fFcV=BQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E744C433E0
-	for <bpf@archiver.kernel.org>; Thu,  6 Aug 2020 18:36:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DDFC2C433DF
+	for <bpf@archiver.kernel.org>; Thu,  6 Aug 2020 18:41:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DAFF3206B5
-	for <bpf@archiver.kernel.org>; Thu,  6 Aug 2020 18:36:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2DC6922C9F
+	for <bpf@archiver.kernel.org>; Thu,  6 Aug 2020 18:41:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="evTkLWKy"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M8K5R9TU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728723AbgHFSf5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 6 Aug 2020 14:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59702 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729246AbgHFSfN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Aug 2020 14:35:13 -0400
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBEAC061575
-        for <bpf@vger.kernel.org>; Thu,  6 Aug 2020 11:26:14 -0700 (PDT)
-Received: by mail-qt1-x84a.google.com with SMTP id n12so17310280qtr.6
-        for <bpf@vger.kernel.org>; Thu, 06 Aug 2020 11:26:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=h6CKdCAZ7nexLhptlfsLTSjR9JI36kIOk0ydm+WNJwQ=;
-        b=evTkLWKyKJUcisp3sGIXFUzGQr/MOZpzg42XmX/3wYkt6nypVuYzShvTK0BAaORJcN
-         skrZLkEOZmUKhikjELX5tIRaLtV5dVzTT4+dB7ozAsswSyUPpsBmWaSKaFXoF8jw0Opf
-         Gka0cHPFf5G49l6q1E/kFeyrD/qGGn/fK9VyYAdI48jUIijXp2fqVgQXDet8ei6F88l/
-         syitSbcg8CD5FDsOAukvj7xwgTY1Hmg5JRAHEJl6IzUJwZbcGb8igqHaIl0nWeksDwC+
-         YJThB36usPn0UHVK6wI4g/eAeKklr+FvpM9LmgDcOKUX2yNA8KtL7qt20xRZ6YoHFYN2
-         3ppQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=h6CKdCAZ7nexLhptlfsLTSjR9JI36kIOk0ydm+WNJwQ=;
-        b=JAHa5a+5IOWpp6rZ/Srbh1EM+sn/qXXUhVS7Im53x6duAmtts45zCL+KowtmddhT2B
-         SUcpfp4y4Svd3JEyGGL/3nx0hjb35A4JayAvJW9TebqWxwQgbpMp8te64I18vWOV3S8H
-         Y9HO9pNGtwBPYNi7dJAKqvL40M9kGrb+sowV8yZPMyMiT0fFtRJMLTXWjC2ZnlxOxPdw
-         XKjRDzdta21zZEWCzkMg7i7gioD4b6pL5MFVgy6ugPjAltmFWhpymBdU4bYlxQA3Ejb5
-         TSXRydKEXHgagmRP/vr7Fjp/G35SmZ6b4V+0MNfH6An33cxiX6OjMBbnQY7YOVvpfOY5
-         +D9A==
-X-Gm-Message-State: AOAM5307LNvCZoJagMjO8OIyrIGGpDG/Kv6Y+rpM35PztuQv+TM0MRkJ
-        H77HvVa1tgCWn6qsRDsdSyO9ugg=
-X-Google-Smtp-Source: ABdhPJz1Fv5DIBVnHlfSBLv3sf2vQ9E+wLoBoKa8WwHCPB8AYq6Gsk70z9kID5J4BihogzMQjDcFH14=
-X-Received: by 2002:a0c:f4d3:: with SMTP id o19mr10564858qvm.204.1596738373936;
- Thu, 06 Aug 2020 11:26:13 -0700 (PDT)
-Date:   Thu,  6 Aug 2020 11:26:12 -0700
-Message-Id: <20200806182612.1390883-1-sdf@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.28.0.236.gb10cc79966-goog
-Subject: [PATCH bpf] bpf: remove inline from bpf_do_trace_printk
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        Stanislav Fomichev <sdf@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1729307AbgHFSlD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 6 Aug 2020 14:41:03 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:51551 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729028AbgHFSky (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 6 Aug 2020 14:40:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1596739253;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc; bh=/VHZefJEyFsI3PH6lymhdIaEYCu1BSLgdAY4PvnxLgw=;
+        b=M8K5R9TU9k9qKHkK/Goxldqz2jreaSTlKZj51bqa2JaVlRx0jM/wJd5uwzDW16GnUzFiY4
+        V9fFN+c1legg9OQt6VNuXBpyKl6lcdqIl5oqTYeybnvdtv0TMYCDRTyI/G6bBurr1ngKMe
+        xoDuMb7hSpXFKlCXwlIZFtum/ZmcDpk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-510-4aU_zOQRM5CCXDpdaEh2Sg-1; Thu, 06 Aug 2020 14:40:50 -0400
+X-MC-Unique: 4aU_zOQRM5CCXDpdaEh2Sg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0E6BC1800D42;
+        Thu,  6 Aug 2020 18:40:50 +0000 (UTC)
+Received: from griffin.upir.cz (unknown [10.40.192.77])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 576345D9DC;
+        Thu,  6 Aug 2020 18:40:49 +0000 (UTC)
+From:   Jiri Benc <jbenc@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org
+Subject: [PATCH bpf] selftests: bpf: switch off timeout
+Date:   Thu,  6 Aug 2020 20:39:59 +0200
+Message-Id: <7a9198ed10917f4ecab4a3dd74bcda1200791efd.1596739059.git.jbenc@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-I get the following error during compilation on my side:
-kernel/trace/bpf_trace.c: In function 'bpf_do_trace_printk':
-kernel/trace/bpf_trace.c:386:34: error: function 'bpf_do_trace_printk' can never be inlined because it uses variable argument lists
- static inline __printf(1, 0) int bpf_do_trace_printk(const char *fmt, ...)
-                                  ^
+Several bpf tests are interrupted by the default timeout of 45 seconds added
+by commit 852c8cbf34d3 ("selftests/kselftest/runner.sh: Add 45 second
+timeout per test"). In my case it was test_progs, test_tunnel.sh,
+test_lwt_ip_encap.sh and test_xdping.sh.
 
-Fixes: ac5a72ea5c89 ("bpf: Use dedicated bpf_trace_printk event instead of trace_printk()")
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
+There's not much value in having a timeout for bpf tests, switch it off.
+
+Signed-off-by: Jiri Benc <jbenc@redhat.com>
 ---
- kernel/trace/bpf_trace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/settings | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 tools/testing/selftests/bpf/settings
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index cb91ef902cc4..a8d4f253ed77 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -383,7 +383,7 @@ static DEFINE_RAW_SPINLOCK(trace_printk_lock);
- 
- #define BPF_TRACE_PRINTK_SIZE   1024
- 
--static inline __printf(1, 0) int bpf_do_trace_printk(const char *fmt, ...)
-+static __printf(1, 0) int bpf_do_trace_printk(const char *fmt, ...)
- {
- 	static char buf[BPF_TRACE_PRINTK_SIZE];
- 	unsigned long flags;
+diff --git a/tools/testing/selftests/bpf/settings b/tools/testing/selftests/bpf/settings
+new file mode 100644
+index 000000000000..e7b9417537fb
+--- /dev/null
++++ b/tools/testing/selftests/bpf/settings
+@@ -0,0 +1 @@
++timeout=0
 -- 
-2.28.0.236.gb10cc79966-goog
+2.18.1
 
