@@ -2,263 +2,119 @@ Return-Path: <SRS0=fFcV=BQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DACBAC433E0
-	for <bpf@archiver.kernel.org>; Thu,  6 Aug 2020 17:26:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BA0E0C433E0
+	for <bpf@archiver.kernel.org>; Thu,  6 Aug 2020 17:40:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3DC982311A
-	for <bpf@archiver.kernel.org>; Thu,  6 Aug 2020 17:26:53 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qJOOeObm"
+	by mail.kernel.org (Postfix) with ESMTP id 1CC17206B2
+	for <bpf@archiver.kernel.org>; Thu,  6 Aug 2020 17:40:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1596735643;
+	bh=k8VyjNakQywVff5mE3aARE4tHjpNjuPZcVFyWpPMxzo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=V3b2z9cQ8L0p+9Mv6Si2+QzT+QNMb0Zbf9wSVWeQjsbk3PW0fnc3NxKmB8XttIjQZ
+	 qTsX38L7SGLoVRrt/GY9m5/JpQF7VmYqyGwSWKsS8cbo6WwZwNVRcynHFg7wi3VYge
+	 BYXlUCfVAMdLJdjTL5J3PtoisYJSc96Y0fJ4dObM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729989AbgHFR0E (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 6 Aug 2020 13:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729680AbgHFRCZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 6 Aug 2020 13:02:25 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF23C0A54D9;
-        Thu,  6 Aug 2020 07:03:30 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id p4so1195485qkf.0;
-        Thu, 06 Aug 2020 07:03:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=JOvK3mlRWVtrCzRPPugSEdDzfzMZZqm2wdlRVxRdHEA=;
-        b=qJOOeObm+/nub/UBnhSekFVsw6Jzss/ug0YWz664tPulD2NoRqV4A3NyxE/uwMScRD
-         KN74mIpBB8uMFgBw9CV21yAoYdFJjRbDL61csI+1JjI3mOJpaxrsSJMOM7zoHWvOzyj5
-         1zI0PUtNpHv1GLsrcMFCLY8q0RQQocOK04skuubgTmJINgFsxFrboFe9upgPCt9DN/2n
-         Ml68KF5235AkRVXYfpX/XfLh91lbKl2rOb5X2PxaZvPhGLAq+fyLOeHgqjLr4v95VzO5
-         I7+cWJCIuQAn+dYzdOJK7DysgeY0JYcRAAB9x1bY4WwjuyCuQOYII4AgeRhBHRF3kEIb
-         vDeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JOvK3mlRWVtrCzRPPugSEdDzfzMZZqm2wdlRVxRdHEA=;
-        b=Bpbz9vrYVGTZUlKLWZXunqje50eaWEM1AIKqrTooO+v5qWA9F2p2bSuOa/CuLzACKl
-         6NHQ6Q/x4vQj0c0JQ9ct1PRyjoEq/SWSs4bE6eUXu/3BayxcgIc2dxFzAqqVuJC8GcTF
-         O5c099nApjkh2OUCce/JdJZ1XV/PjUEZ1LPuQjpp8xwgELg7BUoe2DELs7pNeYmhHNaA
-         WLuZ0wmvVKTwG0RAAOJj9OhdSwC2IkC2aUTKykAa2BULHEyaHvift3WRlyBs4VvQVq0g
-         Rmi4g+LNmThzF6ABQOZlfgSHLjrsZNeLSd2Or3QAUZP5Y3H6pWwlJz2myNT1ij+4fgk5
-         1GAA==
-X-Gm-Message-State: AOAM5307v/VIP2yzby9lw3tr3kBCtsTby+q84FUDmNaKypS/SAO9SM7U
-        Ek0XmdfQTrqmngnRXYFx4kA=
-X-Google-Smtp-Source: ABdhPJw4yglAOFwmGHEN2MssKpWIn/Cu9cU1Q7NsC61jUQWR3rDI6JTZ+wnSJRKug+xBLToRvHeTFQ==
-X-Received: by 2002:a37:64d7:: with SMTP id y206mr8361357qkb.133.1596722605635;
-        Thu, 06 Aug 2020 07:03:25 -0700 (PDT)
-Received: from bpf-dev (pc-199-79-45-190.cm.vtr.net. [190.45.79.199])
-        by smtp.gmail.com with ESMTPSA id y26sm4727644qto.75.2020.08.06.07.03.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2020 07:03:24 -0700 (PDT)
-Date:   Thu, 6 Aug 2020 10:03:20 -0400
-From:   Carlos Antonio Neira Bustos <cneirabustos@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Networking <netdev@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH v4 bpf-next] bpf/selftests: fold
- test_current_pid_tgid_new_ns into test_progs.
-Message-ID: <20200806140319.GA40984@bpf-dev>
-References: <20200805163503.40381-1-cneirabustos@gmail.com>
- <CAEf4BzYrek8shqzUj+zNC=TjGkDPCKUFP=YnbiNf6360f1MyTw@mail.gmail.com>
+        id S1728715AbgHFRkk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 6 Aug 2020 13:40:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59454 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729380AbgHFRje (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 6 Aug 2020 13:39:34 -0400
+Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EF4D4206B2;
+        Thu,  6 Aug 2020 17:39:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1596735574;
+        bh=k8VyjNakQywVff5mE3aARE4tHjpNjuPZcVFyWpPMxzo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f1FgK7sOi2bcIKi9+O+McdfwEJGG6L5hSJzy9+8Nw3/ua9161Pa7lc1SJlQXtkSV6
+         kixQZAYjcw/3NAMz3zR9MY9biKz4PW9prpNZXvy66CL6JHSb0EsLL4Fod8X42t9cmg
+         X8lPdLxhrwc5dpWgB6Z/r6sqiZvJ9Vq1RyQL+QPA=
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3925140524; Thu,  6 Aug 2020 14:39:31 -0300 (-03)
+Date:   Thu, 6 Aug 2020 14:39:31 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
+        daniel@iogearbox.net, andrii.nakryiko@gmail.com, kernel-team@fb.com
+Subject: Re: [PATCH bpf-next 0/3] Add generic and raw BTF parsing APIs to
+ libbpf
+Message-ID: <20200806173931.GJ71359@kernel.org>
+References: <20200802013219.864880-1-andriin@fb.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEf4BzYrek8shqzUj+zNC=TjGkDPCKUFP=YnbiNf6360f1MyTw@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200802013219.864880-1-andriin@fb.com>
+X-Url:  http://acmel.wordpress.com
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Aug 05, 2020 at 01:15:05PM -0700, Andrii Nakryiko wrote:
-> On Wed, Aug 5, 2020 at 1:06 PM Carlos Neira <cneirabustos@gmail.com> wrote:
-> >
-> > Currently tests for bpf_get_ns_current_pid_tgid() are outside test_progs.
-> > This change folds a test case into test_progs.
-> >
-> > Changes from V3:
-> >  - STAT(2) check changed from CHECK_FAIL to CHECK.
-> >  - Changed uses of _open_ to _open_and_load.
-> >  - Fixed error codes were not being returned on exit.
-> >  - Removed unnecessary dependency on Makefile
-> >
-> > Signed-off-by: Carlos Neira <cneirabustos@gmail.com>
-> > ---
+Em Sat, Aug 01, 2020 at 06:32:16PM -0700, Andrii Nakryiko escreveu:
+> It's pretty common for applications to want to parse raw (binary) BTF data
+> from file, as opposed to parsing it from ELF sections. It's also pretty common
+> for tools to not care whether given file is ELF or raw BTF format. This patch
+> series exposes internal raw BTF parsing API and adds generic variant of BTF
+> parsing, which will efficiently determine the format of a given fail and will
+> parse BTF appropriately.
 > 
-> bpf-next is closed, you'll have to re-submit once it opens in roughly
-> two weeks. Looks good overall, few minor things below, please
-> incorporate into next revision with my ack:
+> Patches #2 and #3 removes re-implementations of such APIs from bpftool and
+> resolve_btfids tools.
 > 
-> Acked-by: Andrii Nakryiko <andriin@fb.com>
-> 
-> >  tools/testing/selftests/bpf/.gitignore        |   2 +-
-> >  tools/testing/selftests/bpf/Makefile          |   4 +-
-> >  .../bpf/prog_tests/ns_current_pid_tgid.c      |  85 ----------
-> >  .../bpf/prog_tests/ns_current_pidtgid.c       |  54 ++++++
-> >  .../bpf/progs/test_ns_current_pid_tgid.c      |  37 ----
-> >  .../bpf/progs/test_ns_current_pidtgid.c       |  25 +++
-> >  .../bpf/test_current_pid_tgid_new_ns.c        | 159 ------------------
-> >  .../bpf/test_ns_current_pidtgid_newns.c       |  91 ++++++++++
-> >  8 files changed, 173 insertions(+), 284 deletions(-)
-> >  delete mode 100644 tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
-> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/ns_current_pidtgid.c
-> >  delete mode 100644 tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
-> >  create mode 100644 tools/testing/selftests/bpf/progs/test_ns_current_pidtgid.c
-> >  delete mode 100644 tools/testing/selftests/bpf/test_current_pid_tgid_new_ns.c
-> >  create mode 100644 tools/testing/selftests/bpf/test_ns_current_pidtgid_newns.c
-> >
-> > diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-> > index 1bb204cee853..022055f23592 100644
-> > --- a/tools/testing/selftests/bpf/.gitignore
-> > +++ b/tools/testing/selftests/bpf/.gitignore
-> > @@ -30,8 +30,8 @@ test_tcpnotify_user
-> >  test_libbpf
-> >  test_tcp_check_syncookie_user
-> >  test_sysctl
-> > -test_current_pid_tgid_new_ns
-> >  xdping
-> > +test_ns_current_pidtgid_newns
-> >  test_cpp
-> >  *.skel.h
-> >  /no_alu32
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> > index e7a8cf83ba48..92fb616cdd27 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -36,8 +36,8 @@ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test
-> >         test_sock test_btf test_sockmap get_cgroup_id_user test_socket_cookie \
-> >         test_cgroup_storage \
-> >         test_netcnt test_tcpnotify_user test_sock_fields test_sysctl \
-> > -       test_progs-no_alu32 \
-> > -       test_current_pid_tgid_new_ns
-> > +       test_progs-no_alu32\
-> 
-> accidentally removed space?
-> 
-> > +       test_ns_current_pidtgid_newns
-> >
-> >  # Also test bpf-gcc, if present
-> >  ifneq ($(BPF_GCC),)
-> 
-> [...]
-> 
-> > +
-> > +void test_ns_current_pidtgid(void)
-> > +{
-> > +       struct test_ns_current_pidtgid__bss  *bss;
-> > +       struct test_ns_current_pidtgid *skel;
-> > +       int err, duration = 0;
-> > +       struct stat st;
-> > +       __u64 id;
-> > +
-> > +       skel = test_ns_current_pidtgid__open_and_load();
-> > +       CHECK(!skel, "skel_open_load", "failed to load skeleton\n");
-> > +               goto cleanup;
-> > +
-> > +       pid_t tid = syscall(SYS_gettid);
-> > +       pid_t pid = getpid();
-> 
-> hm... I probably missed this last time. This is not a valid C89
-> standard-compliant code, all variables have to be declared up top,
-> please split variable declaration and initialization.
-> 
-> > +
-> > +       id = (__u64) tid << 32 | pid;
-> > +
-> > +       err = stat("/proc/self/ns/pid", &st);
-> > +       if (CHECK(err, "stat", "failed /proc/self/ns/pid: %d", err))
-> > +               goto cleanup;
-> > +
-> 
-> [...]
-> 
-> > diff --git a/tools/testing/selftests/bpf/progs/test_ns_current_pidtgid.c b/tools/testing/selftests/bpf/progs/test_ns_current_pidtgid.c
-> > new file mode 100644
-> > index 000000000000..9818a56510d9
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/test_ns_current_pidtgid.c
-> > @@ -0,0 +1,25 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/* Copyright (c) 2019 Carlos Neira cneirabustos@gmail.com */
-> > +
-> > +#include <linux/bpf.h>
-> > +#include <stdint.h>
-> > +#include <bpf/bpf_helpers.h>
-> > +
-> > +__u64 user_pid_tgid = 0;
-> > +__u64 dev = 0;
-> > +__u64 ino = 0;
-> > +
-> > +SEC("raw_tracepoint/sys_enter")
-> > +int handler(const void *ctx)
-> > +{
-> > +       struct bpf_pidns_info nsdata;
-> > +
-> > +       if (bpf_get_ns_current_pid_tgid(dev, ino, &nsdata,
-> > +                  sizeof(struct bpf_pidns_info)))
-> > +               return 0;
-> > +       user_pid_tgid = (__u64)nsdata.tgid << 32 | nsdata.pid;
-> 
-> nit: good idea to put () around << expression when combined with other
-> bitwise operators.
-> 
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +char _license[] SEC("license") = "GPL";
-> 
-> [...]
-> 
-> > +static int newns_pidtgid(void *arg)
-> > +{
-> > +       struct test_ns_current_pidtgid__bss  *bss;
-> > +       struct test_ns_current_pidtgid *skel;
-> > +       int pidns_fd = 0, err = 0;
-> > +       pid_t pid, tid;
-> > +       struct stat st;
-> > +       __u64 id;
-> > +
-> > +       skel = test_ns_current_pidtgid__open_and_load();
-> > +       if (!skel) {
-> > +               perror("Failed to load skeleton");
-> > +               goto cleanup;
-> > +       }
-> > +
-> > +       tid = syscall(SYS_gettid);
-> > +       pid = getpid();
-> > +       id = (__u64) tid << 32 | pid;
-> 
-> see, you don't do it here :)
-> 
-> 
-> > +
-> > +       if (stat("/proc/self/ns/pid", &st)) {
-> > +               printf("Failed to stat /proc/self/ns/pid: %s\n",
-> > +                       strerror(errno));
-> > +               goto cleanup;
-> > +       }
-> > +
-> > +       bss = skel->bss;
-> > +       bss->dev = st.st_dev;
-> > +       bss->ino = st.st_ino;
-> > +       bss->user_pid_tgid = 0;
-> > +
-> 
-> [...]
+> Andrii Nakryiko (3):
+>   libbpf: add btf__parse_raw() and generic btf__parse() APIs
+>   tools/bpftool: use libbpf's btf__parse() API for parsing BTF from file
+>   tools/resolve_btfids: use libbpf's btf__parse() API
 
-Andrii,
+I haven't checked which of the patches, or some in other series caused
+this on Clear Linux:
 
-Thank you very much, I'll incorporate these changes on the next revision.
+  21 clearlinux:latest             : FAIL gcc (Clear Linux OS for Intel Architecture) 10.2.1 20200723 releases/gcc-10.2.0-3-g677b80db41, clang ver
+sion 10.0.1
 
-Bests.
+  gcc (Clear Linux OS for Intel Architecture) 10.2.1 20200723 releases/gcc-10.2.0-3-g677b80db41
+
+  btf.c: In function 'btf__parse_raw':
+  btf.c:625:28: error: 'btf' may be used uninitialized in this function [-Werror=maybe-uninitialized]
+    625 |  return err ? ERR_PTR(err) : btf;
+        |         ~~~~~~~~~~~~~~~~~~~^~~~~
+
+This is what I have:
+
+[acme@quaco perf]$ git log -10 --oneline tools/lib/bpf
+94a1fedd63ed libbpf: Add btf__parse_raw() and generic btf__parse() APIs
+2e49527e5248 libbpf: Add bpf_link detach APIs
+1acf8f90ea7e libbpf: Fix register in PT_REGS MIPS macros
+50450fc716c1 libbpf: Make destructors more robust by handling ERR_PTR(err) cases
+dc8698cac7aa libbpf: Add support for BPF XDP link
+d4b4dd6ce770 libbpf: Print hint when PERF_EVENT_IOC_SET_BPF returns -EPROTO
+cd31039a7347 tools/libbpf: Add support for bpf map element iterator
+da7a35062bcc libbpf bpf_helpers: Use __builtin_offsetof for offsetof
+499dd29d90bb libbpf: Add support for SK_LOOKUP program type
+4be556cf5aef libbpf: Add SEC name for xdp programs attached to CPUMAP
+[acme@quaco perf]$
+
+>  tools/bpf/bpftool/btf.c             |  54 +------------
+>  tools/bpf/resolve_btfids/.gitignore |   4 +
+>  tools/bpf/resolve_btfids/main.c     |  58 +-------------
+>  tools/lib/bpf/btf.c                 | 114 +++++++++++++++++++---------
+>  tools/lib/bpf/btf.h                 |   5 +-
+>  tools/lib/bpf/libbpf.map            |   2 +
+>  6 files changed, 89 insertions(+), 148 deletions(-)
+>  create mode 100644 tools/bpf/resolve_btfids/.gitignore
+> 
+> -- 
+> 2.24.1
+> 
+
+-- 
+
+- Arnaldo
