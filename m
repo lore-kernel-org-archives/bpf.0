@@ -2,115 +2,145 @@ Return-Path: <SRS0=MNkI=BR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72FB3C433DF
-	for <bpf@archiver.kernel.org>; Fri,  7 Aug 2020 11:51:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5F0BC433E0
+	for <bpf@archiver.kernel.org>; Fri,  7 Aug 2020 14:21:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 306C92075D
-	for <bpf@archiver.kernel.org>; Fri,  7 Aug 2020 11:51:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9E89020866
+	for <bpf@archiver.kernel.org>; Fri,  7 Aug 2020 14:21:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="eC3rj+Wq"
+	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="MZSYZmcb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728403AbgHGLvp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 7 Aug 2020 07:51:45 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:36502 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726293AbgHGLvp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 7 Aug 2020 07:51:45 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 077BmC3q067021;
-        Fri, 7 Aug 2020 11:51:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2020-01-29;
- bh=BzRCQKw4HJidRU+uGZjtCmLzqvvN9xHo3BaIpDfHdFI=;
- b=eC3rj+WqLjibfxMc8cBJn3xQ7T5RWcR9Fi15EaKyTm3zJsjjs7fJmMcg8ohGQvKzdZFJ
- Og8lRTpa0h4W3dX+/Vh+DsTgo0JKdFbRAyqQBt9xbs7p0reXCUN0OTUAlbaFdghOE3J6
- yp3LMKkv3LxUY8/MHjTcUr8fNgemJyml4rNVywNyd1vdX9VHe566w7cOU1QfTRXU7sc7
- TgLDBkczJBpfDIPezM9A8O04JcrCm30jQotAMyqXNA8CPmTXBILPQInF5lmA0FNZH6oa
- SPzgvASaHBWOGA5mxqRCU/p4Vn161eY+rpexvUNPHSbGyl24IKMQenr5bzjMHKjnQicP 7A== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 32r6ep84af-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 07 Aug 2020 11:50:59 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 077BnEcx045454;
-        Fri, 7 Aug 2020 11:50:59 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 32qy8qfmuy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 07 Aug 2020 11:50:59 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 077BosmC014478;
-        Fri, 7 Aug 2020 11:50:54 GMT
-Received: from localhost.uk.oracle.com (/10.175.183.82)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 07 Aug 2020 04:50:54 -0700
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     ast@kernel.org, daniel@iogearbox.net
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
-        john.fastabend@gmail.com, kpsingh@chromium.org,
-        rostedt@goodmis.org, linux-doc@vger.kernel.org, corbet@lwn.net,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH bpf] bpf: doc: remove references to warning message when using bpf_trace_printk()
-Date:   Fri,  7 Aug 2020 12:50:29 +0100
-Message-Id: <1596801029-32395-1-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9705 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- spamscore=0 bulkscore=0 mlxscore=0 mlxlogscore=999 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008070085
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9705 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 bulkscore=0
- malwarescore=0 clxscore=1011 mlxscore=0 priorityscore=1501 adultscore=0
- impostorscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008070085
+        id S1726096AbgHGOVC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 7 Aug 2020 10:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725815AbgHGOVB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 7 Aug 2020 10:21:01 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C8BC061756
+        for <bpf@vger.kernel.org>; Fri,  7 Aug 2020 07:21:01 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id m22so2254394eje.10
+        for <bpf@vger.kernel.org>; Fri, 07 Aug 2020 07:21:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=Oxe2JB52HyB43ucYYj0/ASqKcH4GBHp3SzRnnzqpx7E=;
+        b=MZSYZmcb9cAtQX8VKct6v971lRbzb3LZWabIyIdv7XtkxEfKt8HPr+ilh/ug2dpY0/
+         v/2bFZyPEMeN3hsWgRavmpu+qgVnCGcJj1s5cfVJUMLYvBQ59UHZyRgreAiSIwIaW0ai
+         wvMofm3Ch5H+dnLR8fHySSAk35D5WEfMJbcg6WTQI79GMdS277RFtTBmO9FO+LwUjxxl
+         SD8QhP4vyJhalJ7slqIf3AFbU1JMSYS+Bso4V5lYxAT+34MnzUJBm79Y7NSZNH4OmdFg
+         mtIpHFm41hqSqNxQRnzk+y9h8mgCWq09WIou8GAx7BNuyAzWbAp2NW8B4GGl5yrvVrre
+         v/Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=Oxe2JB52HyB43ucYYj0/ASqKcH4GBHp3SzRnnzqpx7E=;
+        b=JbRulVlYbnQHIksHDyvd2vRar8wxOr1EGSTlLIxClVH16B5TuufG/QWsNHU9RZ8zJS
+         bFAR/TFaat9n4174PGLS80gPupLf3mD/6gV9TAlhs1PlNLvHGi5dComQBqHNOQWXJ7GN
+         ZuWOCbGelL69V441UDljqQDo0Oe5yYElxqw+AP3QEEd2wy43ZJZ6Xr420Zmxpzpesv8F
+         k1GIDZ06g58VOFk7q86aJo8cWuY0NnlyXWVjzwdXlFTt4GtXQm2DJVvjrf8/jGLd6OMt
+         Q2fry9V0CFzw6Z4vbleICyyqzu/38PgYg/exvNua8ygrSaPttFDIlqoZnXUUegivmQhi
+         Pflg==
+X-Gm-Message-State: AOAM530c4wOVwZA2FB6f9IYgSH4Bi6aXjJlZP4wa9bBD0hpSK5J4I6Lu
+        2focPb+41vszMMiGeT0WGUI4m1bmT1M=
+X-Google-Smtp-Source: ABdhPJxhn6fcjHi7NUb4nLSOn1ZP/YyBA9qocFglvd43RCKqURXu6ICwI3MIO3K33XTgOyr4re0dXg==
+X-Received: by 2002:a17:906:ca4f:: with SMTP id jx15mr10013569ejb.449.1596810059924;
+        Fri, 07 Aug 2020 07:20:59 -0700 (PDT)
+Received: from [192.168.0.28] ([188.252.224.6])
+        by smtp.gmail.com with ESMTPSA id j7sm5993269ejb.64.2020.08.07.07.20.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Aug 2020 07:20:59 -0700 (PDT)
+To:     bpf@vger.kernel.org
+Cc:     Andrii Nakryiko <andriin@fb.com>,
+        Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>,
+        Jakov Smolic <jakov.smolic@sartura.hr>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Luka Perkov <luka.perkov@sartura.hr>
+From:   Jakov Petrina <jakov.petrina@sartura.hr>
+Subject: eBPF CO-RE cross-compilation for 32-bit ARM platforms
+Message-ID: <f1b8e140-bc41-4e56-e73f-db11062dddbd@sartura.hr>
+Date:   Fri, 7 Aug 2020 16:20:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The BPF helper bpf_trace_printk() no longer uses trace_printk();
-it is now triggers a dedicated trace event.  Hence the described
-warning is no longer present, so remove the discussion of it as
-it may confuse people.
+Hi everyone,
 
-Fixes: ac5a72ea5c89 ("bpf: Use dedicated bpf_trace_printk event instead of trace_printk()")
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- Documentation/bpf/bpf_design_QA.rst | 11 -----------
- 1 file changed, 11 deletions(-)
+recently we have begun extensive research into eBPF and related 
+technologies. Seeking an easier development process, we have switched 
+over to using the eBPF CO-RE [0] approach internally which has enabled 
+us to simplify most aspects of eBPF development, especially those 
+related to cross-compilation.
 
-diff --git a/Documentation/bpf/bpf_design_QA.rst b/Documentation/bpf/bpf_design_QA.rst
-index 12a246f..2df7b06 100644
---- a/Documentation/bpf/bpf_design_QA.rst
-+++ b/Documentation/bpf/bpf_design_QA.rst
-@@ -246,17 +246,6 @@ program is loaded the kernel will print warning message, so
- this helper is only useful for experiments and prototypes.
- Tracing BPF programs are root only.
- 
--Q: bpf_trace_printk() helper warning
--------------------------------------
--Q: When bpf_trace_printk() helper is used the kernel prints nasty
--warning message. Why is that?
--
--A: This is done to nudge program authors into better interfaces when
--programs need to pass data to user space. Like bpf_perf_event_output()
--can be used to efficiently stream data via perf ring buffer.
--BPF maps can be used for asynchronous data sharing between kernel
--and user space. bpf_trace_printk() should only be used for debugging.
--
- Q: New functionality via kernel modules?
- ----------------------------------------
- Q: Can BPF functionality such as new program or map types, new
--- 
-1.8.3.1
+However, as part of these efforts we have stumbled upon several problems 
+that we feel would benefit from a community discussion where we may 
+share our solutions and discuss alternatives moving forward.
 
+As a reference point, we have started researching and modifying several 
+eBPF CO-RE samples that have been developed or migrated from existing 
+`bcc` tooling. Most notable examples are those present in `bcc`'s 
+`libbpf-tools` directory [1]. Some of these samples have just recently 
+been converted to respective eBPF CO-RE variants, of which the 
+`tcpconnect` tracing sample has proven to be very interesting.
+
+First showstopper for cross-compiling aforementioned example on the ARM 
+32-bit platform has been with regards to generation of the required 
+`vmlinux.h` kernel header from the BTF information. More specifically, 
+our initial approach to have e.g. a compilation target dependency which 
+would invoke `bpftool` at configure time was not appropriate due to 
+several issues: a) CO-RE requires host kernel to have been compiled in 
+such a way to expose BTF information which may not available, and b) the 
+generated `vmlinux.h` was actually architecture-specific.
+
+The second point proved interesting because `tcpconnect` makes use of 
+the `BPF_KPROBE` and `BPF_KRETPROBE` macros, which pass `struct pt_regs 
+*ctx` as the first function parameter. The `pt_regs` structure is 
+defined by the kernel and is architecture-specific. Since `libbpf` does 
+have architecture-specific conditionals, pairing it with an "invalid" 
+`vmlinux.h` resulted in cross-compilation failure as `libbpf` provided 
+macros that work with ARM `pt_regs`, and `vmlinux.h` had an x86 
+`pt_regs` definition. To resolve this issue, we have resorted to 
+including pre-generated `<arch>_vmlinux.h` files in our CO-RE build system.
+
+However, there are certainly drawbacks to this approach: a) (relatively) 
+large file size of the generated headers, b) regular maintenance to 
+re-generate the header files for various architectures and kernel 
+versions, and c) incompatible definitions being generated, to name a 
+few. This last point relates to the the fact that our `aarch64`/`arm64` 
+kernel generates the following definition using `bpftool`, which has 
+resulted in compilation failure:
+
+```
+typedef __Poly8_t poly8x16_t[16];
+```
+
+AFAICT these are ARM NEON intrinsic definitions which are GCC-specific. 
+We have opted to comment out this line as there was no additional 
+`poly8x16_t` usage in the header file.
+
+Given various issues we have encountered so far (among which is a kernel 
+panic/crash on a specific device), additional input and feedback 
+regarding cross-compilation of the eBPF utilities would be greatly 
+appreciated.
+
+[0]
+https://facebookmicrosites.github.io/bpf/blog/2020/02/19/bpf-portability-and-co-re.html
+[1] https://github.com/iovisor/bcc/tree/master/libbpf-tools
+
+Best regards,
+
+Sartura eBPF Team
