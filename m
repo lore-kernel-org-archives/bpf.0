@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABE08C433DF
-	for <bpf@archiver.kernel.org>; Fri,  7 Aug 2020 09:48:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF4CCC433E1
+	for <bpf@archiver.kernel.org>; Fri,  7 Aug 2020 09:48:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8541F221E5
-	for <bpf@archiver.kernel.org>; Fri,  7 Aug 2020 09:48:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9EFE022CAF
+	for <bpf@archiver.kernel.org>; Fri,  7 Aug 2020 09:48:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1596793683;
-	bh=YGSvNyNd5na3iWnvUPNnxlQLsHkSlqv9nR06AQa+KJ4=;
+	s=default; t=1596793684;
+	bh=fInHMws2TaSEvcC56Q4Pz3KkmXMUpi9BhV5ohlk0Gv4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=eFTGHypq79N4qAD/as0Ayou9Bhv1kLGszUSa15Q/jA+M2WUyIvlZb4OJXhpIyshqS
-	 ARybb83RGnkWbZz9LvlborF+8lsYUMv9iZEJt+a5DfPDiuqHz6J1Vj34gq3GfZ+YuD
-	 JGB3Ebe2JLZYJD7M5tmDSJrTdP4Q+lphhr6Ify/c=
+	b=UmC17MECQWVIkkB0aKS6EYjKX/+2f7vphZ0yqAdgJZGqxb7R4+5W6eUQNS9gmBG3x
+	 9hMiC88HNJqIulPu+26CuI3R2pOS5QVv0DlJU+ZHy/YjzZJk4B+1wRFbRgRtGbvaE+
+	 wzqwhdZ6vYakec3/TUAvFugSkIMEpMor2KOXMvXI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727017AbgHGJsD convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 7 Aug 2020 05:48:03 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:48051 "EHLO
+        id S1726721AbgHGJsE convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 7 Aug 2020 05:48:04 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:39811 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726721AbgHGJsD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 7 Aug 2020 05:48:03 -0400
+        with ESMTP id S1727012AbgHGJsE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 7 Aug 2020 05:48:04 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-223-MFaUMEtIO8-q3J3JvqCLmg-1; Fri, 07 Aug 2020 05:46:47 -0400
-X-MC-Unique: MFaUMEtIO8-q3J3JvqCLmg-1
+ us-mta-207-aFbQwEDKMiq6Cfja3abtDw-1; Fri, 07 Aug 2020 05:46:17 -0400
+X-MC-Unique: aFbQwEDKMiq6Cfja3abtDw-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B155A101C8A0;
-        Fri,  7 Aug 2020 09:46:45 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D761580046B;
+        Fri,  7 Aug 2020 09:46:14 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.194.188])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5B87D69501;
-        Fri,  7 Aug 2020 09:46:42 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7F2015C1D3;
+        Fri,  7 Aug 2020 09:46:11 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -52,9 +52,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Brendan Gregg <bgregg@netflix.com>,
         Florent Revest <revest@chromium.org>,
         Al Viro <viro@zeniv.linux.org.uk>
-Subject: [PATCH v10 bpf-next 10/14] bpf: Add d_path helper
-Date:   Fri,  7 Aug 2020 11:45:55 +0200
-Message-Id: <20200807094559.571260-11-jolsa@kernel.org>
+Subject: [PATCH v10 bpf-next 03/14] bpf: Move btf_resolve_size into __btf_resolve_size
+Date:   Fri,  7 Aug 2020 11:45:48 +0200
+Message-Id: <20200807094559.571260-4-jolsa@kernel.org>
 In-Reply-To: <20200807094559.571260-1-jolsa@kernel.org>
 References: <20200807094559.571260-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -70,176 +70,114 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding d_path helper function that returns full path for
-given 'struct path' object, which needs to be the kernel
-BTF 'path' object. The path is returned in buffer provided
-'buf' of size 'sz' and is zero terminated.
+Moving btf_resolve_size into __btf_resolve_size and
+keeping btf_resolve_size public with just first 3
+arguments, because the rest of the arguments are not
+used by outside callers.
 
-  bpf_d_path(&file->f_path, buf, size);
+Following changes are adding more arguments, which
+are not useful to outside callers. They will be added
+to the __btf_resolve_size function.
 
-The helper calls directly d_path function, so there's only
-limited set of function it can be called from. Adding just
-very modest set for the start.
-
-Updating also bpf.h tools uapi header and adding 'path' to
-bpf_helpers_doc.py script.
-
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- include/uapi/linux/bpf.h       | 13 +++++++++
- kernel/trace/bpf_trace.c       | 48 ++++++++++++++++++++++++++++++++++
- scripts/bpf_helpers_doc.py     |  2 ++
- tools/include/uapi/linux/bpf.h | 13 +++++++++
- 4 files changed, 76 insertions(+)
+ include/linux/btf.h         |  3 +--
+ kernel/bpf/bpf_struct_ops.c |  6 ++----
+ kernel/bpf/btf.c            | 21 ++++++++++++++-------
+ 3 files changed, 17 insertions(+), 13 deletions(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index b134e679e9db..338504fb2ea1 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3394,6 +3394,18 @@ union bpf_attr {
-  *		A non-negative value equal to or less than *size* on success,
-  *		or a negative error in case of failure.
-  *
-+ * long bpf_d_path(struct path *path, char *buf, u32 sz)
-+ *	Description
-+ *		Return full path for given 'struct path' object, which
-+ *		needs to be the kernel BTF 'path' object. The path is
-+ *		returned in the provided buffer 'buf' of size 'sz' and
-+ *		is zero terminated.
-+ *
-+ *	Return
-+ *		On success, the strictly positive length of the string,
-+ *		including the trailing NUL character. On error, a negative
-+ *		value.
-+ *
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 8b81fbb4497c..a9af5e7a7ece 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -64,8 +64,7 @@ const struct btf_type *btf_type_resolve_func_ptr(const struct btf *btf,
+ 						 u32 id, u32 *res_id);
+ const struct btf_type *
+ btf_resolve_size(const struct btf *btf, const struct btf_type *type,
+-		 u32 *type_size, const struct btf_type **elem_type,
+-		 u32 *total_nelems);
++		 u32 *type_size);
+ 
+ #define for_each_member(i, struct_type, member)			\
+ 	for (i = 0, member = btf_type_member(struct_type);	\
+diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+index 969c5d47f81f..4c3b543bb33b 100644
+--- a/kernel/bpf/bpf_struct_ops.c
++++ b/kernel/bpf/bpf_struct_ops.c
+@@ -298,8 +298,7 @@ static int check_zero_holes(const struct btf_type *t, void *data)
+ 			return -EINVAL;
+ 
+ 		mtype = btf_type_by_id(btf_vmlinux, member->type);
+-		mtype = btf_resolve_size(btf_vmlinux, mtype, &msize,
+-					 NULL, NULL);
++		mtype = btf_resolve_size(btf_vmlinux, mtype, &msize);
+ 		if (IS_ERR(mtype))
+ 			return PTR_ERR(mtype);
+ 		prev_mend = moff + msize;
+@@ -396,8 +395,7 @@ static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
+ 			u32 msize;
+ 
+ 			mtype = btf_type_by_id(btf_vmlinux, member->type);
+-			mtype = btf_resolve_size(btf_vmlinux, mtype, &msize,
+-						 NULL, NULL);
++			mtype = btf_resolve_size(btf_vmlinux, mtype, &msize);
+ 			if (IS_ERR(mtype)) {
+ 				err = PTR_ERR(mtype);
+ 				goto reset_unlock;
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 91afdd4c82e3..6ed4ecc60381 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -1088,10 +1088,10 @@ static const struct resolve_vertex *env_stack_peak(struct btf_verifier_env *env)
+  * *elem_type: same as return type ("struct X")
+  * *total_nelems: 1
   */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3538,6 +3550,7 @@ union bpf_attr {
- 	FN(skc_to_tcp_request_sock),	\
- 	FN(skc_to_udp6_sock),		\
- 	FN(get_task_stack),		\
-+	FN(d_path),			\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index cb91ef902cc4..d7fc2868cd6f 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1098,6 +1098,52 @@ static const struct bpf_func_proto bpf_send_signal_thread_proto = {
- 	.arg1_type	= ARG_ANYTHING,
- };
- 
-+BPF_CALL_3(bpf_d_path, struct path *, path, char *, buf, u32, sz)
-+{
-+	long len;
-+	char *p;
-+
-+	if (!sz)
-+		return 0;
-+
-+	p = d_path(path, buf, sz);
-+	if (IS_ERR(p)) {
-+		len = PTR_ERR(p);
-+	} else {
-+		len = buf + sz - p;
-+		memmove(buf, p, len);
-+	}
-+
-+	return len;
-+}
-+
-+BTF_SET_START(btf_allowlist_d_path)
-+BTF_ID(func, vfs_truncate)
-+BTF_ID(func, vfs_fallocate)
-+BTF_ID(func, dentry_open)
-+BTF_ID(func, vfs_getattr)
-+BTF_ID(func, filp_close)
-+BTF_SET_END(btf_allowlist_d_path)
-+
-+static bool bpf_d_path_allowed(const struct bpf_prog *prog)
-+{
-+	return btf_id_set_contains(&btf_allowlist_d_path, prog->aux->attach_btf_id);
-+}
-+
-+BTF_ID_LIST(bpf_d_path_btf_ids)
-+BTF_ID(struct, path)
-+
-+static const struct bpf_func_proto bpf_d_path_proto = {
-+	.func		= bpf_d_path,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_BTF_ID,
-+	.arg2_type	= ARG_PTR_TO_MEM,
-+	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
-+	.btf_id		= bpf_d_path_btf_ids,
-+	.allowed	= bpf_d_path_allowed,
-+};
-+
- const struct bpf_func_proto *
- bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+-const struct btf_type *
+-btf_resolve_size(const struct btf *btf, const struct btf_type *type,
+-		 u32 *type_size, const struct btf_type **elem_type,
+-		 u32 *total_nelems)
++static const struct btf_type *
++__btf_resolve_size(const struct btf *btf, const struct btf_type *type,
++		   u32 *type_size, const struct btf_type **elem_type,
++		   u32 *total_nelems)
  {
-@@ -1579,6 +1625,8 @@ tracing_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return prog->expected_attach_type == BPF_TRACE_ITER ?
- 		       &bpf_seq_write_proto :
- 		       NULL;
-+	case BPF_FUNC_d_path:
-+		return &bpf_d_path_proto;
- 	default:
- 		return raw_tp_prog_func_proto(func_id, prog);
- 	}
-diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
-index 5bfa448b4704..08388173973f 100755
---- a/scripts/bpf_helpers_doc.py
-+++ b/scripts/bpf_helpers_doc.py
-@@ -432,6 +432,7 @@ class PrinterHelpers(Printer):
-             'struct __sk_buff',
-             'struct sk_msg_md',
-             'struct xdp_md',
-+            'struct path',
-     ]
-     known_types = {
-             '...',
-@@ -472,6 +473,7 @@ class PrinterHelpers(Printer):
-             'struct tcp_request_sock',
-             'struct udp6_sock',
-             'struct task_struct',
-+            'struct path',
-     }
-     mapped_types = {
-             'u8': '__u8',
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index b134e679e9db..338504fb2ea1 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3394,6 +3394,18 @@ union bpf_attr {
-  *		A non-negative value equal to or less than *size* on success,
-  *		or a negative error in case of failure.
-  *
-+ * long bpf_d_path(struct path *path, char *buf, u32 sz)
-+ *	Description
-+ *		Return full path for given 'struct path' object, which
-+ *		needs to be the kernel BTF 'path' object. The path is
-+ *		returned in the provided buffer 'buf' of size 'sz' and
-+ *		is zero terminated.
-+ *
-+ *	Return
-+ *		On success, the strictly positive length of the string,
-+ *		including the trailing NUL character. On error, a negative
-+ *		value.
-+ *
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3538,6 +3550,7 @@ union bpf_attr {
- 	FN(skc_to_tcp_request_sock),	\
- 	FN(skc_to_udp6_sock),		\
- 	FN(get_task_stack),		\
-+	FN(d_path),			\
- 	/* */
+ 	const struct btf_type *array_type = NULL;
+ 	const struct btf_array *array;
+@@ -1150,6 +1150,13 @@ btf_resolve_size(const struct btf *btf, const struct btf_type *type,
+ 	return array_type ? : type;
+ }
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
++const struct btf_type *
++btf_resolve_size(const struct btf *btf, const struct btf_type *type,
++		 u32 *type_size)
++{
++	return __btf_resolve_size(btf, type, type_size, NULL, NULL);
++}
++
+ /* The input param "type_id" must point to a needs_resolve type */
+ static const struct btf_type *btf_type_id_resolve(const struct btf *btf,
+ 						  u32 *type_id)
+@@ -3976,8 +3983,8 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 		mtype = btf_type_by_id(btf_vmlinux, member->type);
+ 		mname = __btf_name_by_offset(btf_vmlinux, member->name_off);
+ 
+-		mtype = btf_resolve_size(btf_vmlinux, mtype, &msize,
+-					 &elem_type, &total_nelems);
++		mtype = __btf_resolve_size(btf_vmlinux, mtype, &msize,
++					   &elem_type, &total_nelems);
+ 		if (IS_ERR(mtype)) {
+ 			bpf_log(log, "field %s doesn't have size\n", mname);
+ 			return -EFAULT;
+@@ -3991,7 +3998,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 		if (btf_type_is_array(mtype)) {
+ 			u32 elem_idx;
+ 
+-			/* btf_resolve_size() above helps to
++			/* __btf_resolve_size() above helps to
+ 			 * linearize a multi-dimensional array.
+ 			 *
+ 			 * The logic here is treating an array
 -- 
 2.25.4
 
