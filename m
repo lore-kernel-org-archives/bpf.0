@@ -2,41 +2,42 @@ Return-Path: <SRS0=gyPw=BT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1AC71C433E0
-	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:03:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CD0B7C433DF
+	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:03:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E3BAA206B2
-	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:03:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A32B5206B5
+	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:03:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1596985398;
-	bh=3AOeNU/ddba8wMez960BWboMRztk18Y5BghzMvaL/Us=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=N/O+HnBGGgYe7MAtLrtXTjd5fOfD42D+yahUVQp2L06/OhVAqdrrxDy4J2GRXsFjn
-	 f346bZ5qZPVUXy+dE/coqAzK6t1My+GJ7z97nq8F0g1ZdXA67stirBTSS4xGKBWxJd
-	 bg+RmQmI9Ic+lPNH7F0Y/SgGQB/6j2E6t4BPzsDY=
+	s=default; t=1596985407;
+	bh=V80y0YChXEX3Uns6oXpRMSMjzqvbmnHamcFcrmZiNrA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=mGyEL5P/FuvgSbFu7u3HM8jmg2hUISaIhJ5g9iRoHuEEun+b8c7SRCeCTIA/KpMqp
+	 jIGe3jzS6phtR/ebUSdKaeSp9qh8LXAKxkuKSXiemMgGd2vIC+yq2N5WO/OgyX72HV
+	 RcvvK6f1KDj9WINEpQRMRNpMgfUyh0QGz5twUEKs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726207AbgHIPDQ convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sun, 9 Aug 2020 11:03:16 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:46859 "EHLO
+        id S1726299AbgHIPDX convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sun, 9 Aug 2020 11:03:23 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:47459 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726070AbgHIPDQ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 9 Aug 2020 11:03:16 -0400
+        by vger.kernel.org with ESMTP id S1726289AbgHIPDW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 9 Aug 2020 11:03:22 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-233-eKOxNw7vMi22eVazqaLZ5A-1; Sun, 09 Aug 2020 11:03:09 -0400
-X-MC-Unique: eKOxNw7vMi22eVazqaLZ5A-1
+ us-mta-292-rR8m0nkEML24wLbAetfLbQ-1; Sun, 09 Aug 2020 11:03:17 -0400
+X-MC-Unique: rR8m0nkEML24wLbAetfLbQ-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 29EDC80BCA2;
-        Sun,  9 Aug 2020 15:03:07 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8BE3180183C;
+        Sun,  9 Aug 2020 15:03:15 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.192.79])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 374225F1EA;
-        Sun,  9 Aug 2020 15:03:03 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 618CD72AD1;
+        Sun,  9 Aug 2020 15:03:12 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -51,9 +52,11 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Brendan Gregg <bgregg@netflix.com>,
         Florent Revest <revest@chromium.org>,
         Al Viro <viro@zeniv.linux.org.uk>
-Subject: [RFC PATCH v11 bpf-next 00/14] bpf: Add d_path helper
-Date:   Sun,  9 Aug 2020 17:02:48 +0200
-Message-Id: <20200809150302.686149-1-jolsa@kernel.org>
+Subject: [RFC PATCH v11 bpf-next 02/14] tools resolve_btfids: Add support for set symbols
+Date:   Sun,  9 Aug 2020 17:02:50 +0200
+Message-Id: <20200809150302.686149-3-jolsa@kernel.org>
+In-Reply-To: <20200809150302.686149-1-jolsa@kernel.org>
+References: <20200809150302.686149-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Authentication-Results: relay.mimecast.com;
@@ -67,70 +70,56 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-hi,
-adding d_path helper function that returns full path for
-given 'struct path' object, which needs to be the kernel
-BTF 'path' object. The path is returned in buffer provided
-'buf' of size 'sz' and is zero terminated.
+The set symbol does not have the unique number suffix,
+so we need to give it a special parsing function.
 
-  long bpf_d_path(struct path *path, char *buf, u32 sz);
+This was omitted in the first batch, because there was
+no set support yet, so it slipped in the testing.
 
-The helper calls directly d_path function, so there's only
-limited set of function it can be called from.
-
-The patchset also adds support to add set of BTF IDs for
-a helper to define functions that the helper is allowed
-to be called from.
-
-Also available at:
-  https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-  bpf/d_path
-
-v11 changes:
-  - fixed condition i ncheck_func_arg [Andrii]
-  - added few acks
-
-thanks,
-jirka
-
-
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
-Jiri Olsa (14):
-      tools resolve_btfids: Add size check to get_id function
-      tools resolve_btfids: Add support for set symbols
-      bpf: Move btf_resolve_size into __btf_resolve_size
-      bpf: Add elem_id pointer as argument to __btf_resolve_size
-      bpf: Add type_id pointer as argument to __btf_resolve_size
-      bpf: Remove recursion call in btf_struct_access
-      bpf: Factor btf_struct_access function
-      bpf: Add btf_struct_ids_match function
-      bpf: Add BTF_SET_START/END macros
-      bpf: Add d_path helper
-      bpf: Update .BTF_ids section in btf.rst with sets info
-      selftests/bpf: Add verifier test for d_path helper
-      selftests/bpf: Add test for d_path helper
-      selftests/bpf: Add set test to resolve_btfids
+ tools/bpf/resolve_btfids/main.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
- Documentation/bpf/btf.rst                               |  25 +++++++++++++++
- include/linux/bpf.h                                     |   6 ++++
- include/linux/btf.h                                     |   3 +-
- include/linux/btf_ids.h                                 |  51 +++++++++++++++++++++++++++++-
- include/uapi/linux/bpf.h                                |  13 ++++++++
- kernel/bpf/bpf_struct_ops.c                             |   6 ++--
- kernel/bpf/btf.c                                        | 163 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--------------
- kernel/bpf/verifier.c                                   |  22 +++++++++----
- kernel/trace/bpf_trace.c                                |  48 ++++++++++++++++++++++++++++
- scripts/bpf_helpers_doc.py                              |   2 ++
- tools/bpf/resolve_btfids/main.c                         |  29 +++++++++++++++--
- tools/include/linux/btf_ids.h                           |  51 +++++++++++++++++++++++++++++-
- tools/include/uapi/linux/bpf.h                          |  13 ++++++++
- tools/testing/selftests/bpf/prog_tests/d_path.c         | 147 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- tools/testing/selftests/bpf/prog_tests/resolve_btfids.c |  39 ++++++++++++++++++++++-
- tools/testing/selftests/bpf/progs/test_d_path.c         |  58 ++++++++++++++++++++++++++++++++++
- tools/testing/selftests/bpf/test_verifier.c             |  19 ++++++++++-
- tools/testing/selftests/bpf/verifier/d_path.c           |  37 ++++++++++++++++++++++
- 18 files changed, 690 insertions(+), 42 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/d_path.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_d_path.c
- create mode 100644 tools/testing/selftests/bpf/verifier/d_path.c
+diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+index b83369887df6..81782c3ff485 100644
+--- a/tools/bpf/resolve_btfids/main.c
++++ b/tools/bpf/resolve_btfids/main.c
+@@ -227,6 +227,24 @@ static char *get_id(const char *prefix_end)
+ 	return id;
+ }
+ 
++static struct btf_id *add_set(struct object *obj, char *name)
++{
++	/*
++	 * __BTF_ID__set__name
++	 * name =    ^
++	 * id   =         ^
++	 */
++	char *id = name + sizeof(BTF_SET "__") - 1;
++	int len = strlen(name);
++
++	if (id >= name + len) {
++		pr_err("FAILED to parse set name: %s\n", name);
++		return NULL;
++	}
++
++	return btf_id__add(&obj->sets, id, true);
++}
++
+ static struct btf_id *add_symbol(struct rb_root *root, char *name, size_t size)
+ {
+ 	char *id;
+@@ -383,7 +401,7 @@ static int symbols_collect(struct object *obj)
+ 			id = add_symbol(&obj->funcs, prefix, sizeof(BTF_FUNC) - 1);
+ 		/* set */
+ 		} else if (!strncmp(prefix, BTF_SET, sizeof(BTF_SET) - 1)) {
+-			id = add_symbol(&obj->sets, prefix, sizeof(BTF_SET) - 1);
++			id = add_set(obj, prefix);
+ 			/*
+ 			 * SET objects store list's count, which is encoded
+ 			 * in symbol's size, together with 'cnt' field hence
+-- 
+2.25.4
 
