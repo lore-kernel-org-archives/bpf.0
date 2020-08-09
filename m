@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AAA60C433DF
-	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:04:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB9B2C433DF
+	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:05:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 89023206B2
-	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:04:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 89105206B2
+	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:05:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1596985490;
-	bh=lIpS+kSo7cMHhxao7IU+1cd5r2pS+Z9Bl0iElZ/hGBk=;
+	s=default; t=1596985516;
+	bh=+cP7qZU7RjhPROcSQnGehoa+6D/4iuT7CNfAGA5IYz4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=WRAO0uXrP0j6kdNwkq2OvpMx18YFbiCFcPr/4i6X4vIoHhFNkZEWrl8X8MpeIatt9
-	 MyHc6foGur9H0k7m47cZdIZKbXUIcfm4WFmyRyqFB0Nvi+xTVOASsguB2wW/xMti8a
-	 nMQMItq4wdUXpZFBfco/lD88MugwF1XYzvfEF6rU=
+	b=ExQ83ZGdJN+tofW1gSu3mvel09LC9jcodcy/rEBpITCXrs0ozt+xlzLeiwoM2/jyB
+	 7VMckByL3n4xifH5i7EfdObQ+WKC8+hIaEAvHrZI/VYaMmfYaEAlyZjgVb0WSgU4EV
+	 MNgeCf6R+8kx+s7YtfPSPViVOCsvyPnwJFn/eoE8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726510AbgHIPEt convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sun, 9 Aug 2020 11:04:49 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:55255 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726386AbgHIPDr (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 9 Aug 2020 11:03:47 -0400
+        id S1726550AbgHIPFP convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sun, 9 Aug 2020 11:05:15 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:25593 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726386AbgHIPFF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 9 Aug 2020 11:05:05 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-507-eJNe4_I2O0CxVYP-66LW7g-1; Sun, 09 Aug 2020 11:03:41 -0400
-X-MC-Unique: eJNe4_I2O0CxVYP-66LW7g-1
+ us-mta-491-U72mEHGwMSOuUXAOF9Do5g-1; Sun, 09 Aug 2020 11:03:57 -0400
+X-MC-Unique: U72mEHGwMSOuUXAOF9Do5g-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D0C8D1DE0;
-        Sun,  9 Aug 2020 15:03:38 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 52F03801504;
+        Sun,  9 Aug 2020 15:03:55 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.192.79])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A8C7A5F1EA;
-        Sun,  9 Aug 2020 15:03:35 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9F4215F1EA;
+        Sun,  9 Aug 2020 15:03:50 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -52,9 +52,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Brendan Gregg <bgregg@netflix.com>,
         Florent Revest <revest@chromium.org>,
         Al Viro <viro@zeniv.linux.org.uk>
-Subject: [RFC PATCH v11 bpf-next 08/14] bpf: Add btf_struct_ids_match function
-Date:   Sun,  9 Aug 2020 17:02:56 +0200
-Message-Id: <20200809150302.686149-9-jolsa@kernel.org>
+Subject: [RFC PATCH v11 bpf-next 12/14] selftests/bpf: Add verifier test for d_path helper
+Date:   Sun,  9 Aug 2020 17:03:00 +0200
+Message-Id: <20200809150302.686149-13-jolsa@kernel.org>
 In-Reply-To: <20200809150302.686149-1-jolsa@kernel.org>
 References: <20200809150302.686149-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -70,126 +70,100 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding btf_struct_ids_match function to check if given address provided
-by BTF object + offset is also address of another nested BTF object.
+Adding verifier test for attaching tracing program and
+calling d_path helper from within and testing that it's
+allowed for dentry_open function and denied for 'd_path'
+function with appropriate error.
 
-This allows to pass an argument to helper, which is defined via parent
-BTF object + offset, like for bpf_d_path (added in following changes):
-
-  SEC("fentry/filp_close")
-  int BPF_PROG(prog_close, struct file *file, void *id)
-  {
-    ...
-    ret = bpf_d_path(&file->f_path, ...
-
-The first bpf_d_path argument is hold by verifier as BTF file object
-plus offset of f_path member.
-
-The btf_struct_ids_match function will walk the struct file object and
-check if there's nested struct path object on the given offset.
-
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- include/linux/bpf.h   |  2 ++
- kernel/bpf/btf.c      | 31 +++++++++++++++++++++++++++++++
- kernel/bpf/verifier.c | 17 +++++++++++------
- 3 files changed, 44 insertions(+), 6 deletions(-)
+ tools/testing/selftests/bpf/test_verifier.c   | 19 +++++++++-
+ tools/testing/selftests/bpf/verifier/d_path.c | 37 +++++++++++++++++++
+ 2 files changed, 55 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/verifier/d_path.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index cef4ef0d2b4e..9fead3baa31c 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1338,6 +1338,8 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 		      const struct btf_type *t, int off, int size,
- 		      enum bpf_access_type atype,
- 		      u32 *next_btf_id);
-+bool btf_struct_ids_match(struct bpf_verifier_log *log,
-+			  int off, u32 id, u32 need_type_id);
- int btf_resolve_helper_id(struct bpf_verifier_log *log,
- 			  const struct bpf_func_proto *fn, int);
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 78a6bae56ea6..9be395d9dc64 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -114,6 +114,7 @@ struct bpf_test {
+ 		bpf_testdata_struct_t retvals[MAX_TEST_RUNS];
+ 	};
+ 	enum bpf_attach_type expected_attach_type;
++	const char *kfunc;
+ };
  
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index d8d64201c4e0..df966acaaeb1 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -4160,6 +4160,37 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 	return -EINVAL;
- }
+ /* Note we want this to be 64 bit aligned so that the end of our array is
+@@ -984,8 +985,24 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 		attr.log_level = 4;
+ 	attr.prog_flags = pflags;
  
-+bool btf_struct_ids_match(struct bpf_verifier_log *log,
-+			  int off, u32 id, u32 need_type_id)
-+{
-+	const struct btf_type *type;
-+	int err;
-+
-+	/* Are we already done? */
-+	if (need_type_id == id && off == 0)
-+		return true;
-+
-+again:
-+	type = btf_type_by_id(btf_vmlinux, id);
-+	if (!type)
-+		return false;
-+	err = btf_struct_walk(log, type, off, 1, &id);
-+	if (err != WALK_STRUCT)
-+		return false;
-+
-+	/* We found nested struct object. If it matches
-+	 * the requested ID, we're done. Otherwise let's
-+	 * continue the search with offset 0 in the new
-+	 * type.
-+	 */
-+	if (need_type_id != id) {
-+		off = 0;
-+		goto again;
++	if (prog_type == BPF_PROG_TYPE_TRACING && test->kfunc) {
++		attr.attach_btf_id = libbpf_find_vmlinux_btf_id(test->kfunc,
++						attr.expected_attach_type);
++		if (attr.attach_btf_id < 0) {
++			printf("FAIL\nFailed to find BTF ID for '%s'!\n",
++				test->kfunc);
++			(*errors)++;
++			return;
++		}
 +	}
 +
-+	return true;
-+}
+ 	fd_prog = bpf_load_program_xattr(&attr, bpf_vlog, sizeof(bpf_vlog));
+-	if (fd_prog < 0 && !bpf_probe_prog_type(prog_type, 0)) {
 +
- int btf_resolve_helper_id(struct bpf_verifier_log *log,
- 			  const struct bpf_func_proto *fn, int arg)
- {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b6ccfce3bf4c..34d3be105086 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3960,16 +3960,21 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 				goto err_type;
- 		}
- 	} else if (arg_type == ARG_PTR_TO_BTF_ID) {
-+		bool ids_match = false;
-+
- 		expected_type = PTR_TO_BTF_ID;
- 		if (type != expected_type)
- 			goto err_type;
- 		if (!fn->check_btf_id) {
- 			if (reg->btf_id != meta->btf_id) {
--				verbose(env, "Helper has type %s got %s in R%d\n",
--					kernel_type_name(meta->btf_id),
--					kernel_type_name(reg->btf_id), regno);
--
--				return -EACCES;
-+				ids_match = btf_struct_ids_match(&env->log, reg->off, reg->btf_id,
-+								 meta->btf_id);
-+				if (!ids_match) {
-+					verbose(env, "Helper has type %s got %s in R%d\n",
-+						kernel_type_name(meta->btf_id),
-+						kernel_type_name(reg->btf_id), regno);
-+					return -EACCES;
-+				}
- 			}
- 		} else if (!fn->check_btf_id(reg->btf_id, arg)) {
- 			verbose(env, "Helper does not support %s in R%d\n",
-@@ -3977,7 +3982,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 
- 			return -EACCES;
- 		}
--		if (!tnum_is_const(reg->var_off) || reg->var_off.value || reg->off) {
-+		if ((reg->off && !ids_match) || !tnum_is_const(reg->var_off) || reg->var_off.value) {
- 			verbose(env, "R%d is a pointer to in-kernel struct with non-zero offset\n",
- 				regno);
- 			return -EACCES;
++	/* BPF_PROG_TYPE_TRACING requires more setup and
++	 * bpf_probe_prog_type won't give correct answer
++	 */
++	if (fd_prog < 0 && prog_type != BPF_PROG_TYPE_TRACING &&
++	    !bpf_probe_prog_type(prog_type, 0)) {
+ 		printf("SKIP (unsupported program type %d)\n", prog_type);
+ 		skips++;
+ 		goto close_fds;
+diff --git a/tools/testing/selftests/bpf/verifier/d_path.c b/tools/testing/selftests/bpf/verifier/d_path.c
+new file mode 100644
+index 000000000000..b988396379a7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/verifier/d_path.c
+@@ -0,0 +1,37 @@
++{
++	"d_path accept",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_1, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_MOV64_IMM(BPF_REG_6, 0),
++	BPF_STX_MEM(BPF_DW, BPF_REG_2, BPF_REG_6, 0),
++	BPF_LD_IMM64(BPF_REG_3, 8),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_d_path),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_TRACING,
++	.expected_attach_type = BPF_TRACE_FENTRY,
++	.kfunc = "dentry_open",
++},
++{
++	"d_path reject",
++	.insns = {
++	BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_1, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_MOV64_IMM(BPF_REG_6, 0),
++	BPF_STX_MEM(BPF_DW, BPF_REG_2, BPF_REG_6, 0),
++	BPF_LD_IMM64(BPF_REG_3, 8),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_d_path),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.errstr = "helper call is not allowed in probe",
++	.result = REJECT,
++	.prog_type = BPF_PROG_TYPE_TRACING,
++	.expected_attach_type = BPF_TRACE_FENTRY,
++	.kfunc = "d_path",
++},
 -- 
 2.25.4
 
