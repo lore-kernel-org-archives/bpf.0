@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58EA9C433E0
-	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:04:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ADC4C433DF
+	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:04:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2C4E1206B2
-	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:04:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4B723206B2
+	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:04:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1596985472;
-	bh=foCw8y64Sqrt6pe47rLC0Q5WhyegpAIZ/uZBoQSR+lo=;
+	s=default; t=1596985476;
+	bh=DC6rT73w/qQqdltBZKQbLGJHyx9tQw5XuElVNA7TmOg=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=GPXdqQevtgjXxLpFYnoqtZWi/oBiArNwu/5GobSXv2mwPHdQ0hjZRJ5gjx8EdN/PF
-	 /sZEXyi2eBo+m8nm2yQg7qqBM6BEDVxQv/Wz78+wd992DiHgPVxNUAHsAVSfdEkJsI
-	 OS5ew8wMYJee5th/eREctH/jqQeCtaEeHNrIs3RA=
+	b=0rKTHHwds9Ed+whW8bY73skBmaruYeXr69Ns+KtjTvuT4zc/3MUepUN6xzo7R4omz
+	 DwVIJSHUtdmVeNaGcogvaKbO2BgVhPvNXHkPSAceZnoe+fHC6TNoPds/I05+n5h27/
+	 /GSXihHfVM+wtWEC8otHdVGMuNAu9nvFdjVVtks8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726491AbgHIPEX convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sun, 9 Aug 2020 11:04:23 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:24394 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726403AbgHIPDv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sun, 9 Aug 2020 11:03:51 -0400
+        id S1726398AbgHIPDr convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sun, 9 Aug 2020 11:03:47 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:35644 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726335AbgHIPDi (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 9 Aug 2020 11:03:38 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-474-OqRZ97jJO9GH8k4RlAEqtg-1; Sun, 09 Aug 2020 11:03:45 -0400
-X-MC-Unique: OqRZ97jJO9GH8k4RlAEqtg-1
+ us-mta-101-HUgoV91QMGajU5Zi92raXA-1; Sun, 09 Aug 2020 11:03:35 -0400
+X-MC-Unique: HUgoV91QMGajU5Zi92raXA-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 33CC080183C;
-        Sun,  9 Aug 2020 15:03:43 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3F6931DE0;
+        Sun,  9 Aug 2020 15:03:28 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.192.79])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2F7DB72AD1;
-        Sun,  9 Aug 2020 15:03:39 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 84E505F1EA;
+        Sun,  9 Aug 2020 15:03:24 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -52,9 +52,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Brendan Gregg <bgregg@netflix.com>,
         Florent Revest <revest@chromium.org>,
         Al Viro <viro@zeniv.linux.org.uk>
-Subject: [RFC PATCH v11 bpf-next 09/14] bpf: Add BTF_SET_START/END macros
-Date:   Sun,  9 Aug 2020 17:02:57 +0200
-Message-Id: <20200809150302.686149-10-jolsa@kernel.org>
+Subject: [RFC PATCH v11 bpf-next 05/14] bpf: Add type_id pointer as argument to __btf_resolve_size
+Date:   Sun,  9 Aug 2020 17:02:53 +0200
+Message-Id: <20200809150302.686149-6-jolsa@kernel.org>
 In-Reply-To: <20200809150302.686149-1-jolsa@kernel.org>
 References: <20200809150302.686149-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -70,273 +70,82 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding support to define sorted set of BTF ID values.
-
-Following defines sorted set of BTF ID values:
-
-  BTF_SET_START(btf_allowlist_d_path)
-  BTF_ID(func, vfs_truncate)
-  BTF_ID(func, vfs_fallocate)
-  BTF_ID(func, dentry_open)
-  BTF_ID(func, vfs_getattr)
-  BTF_ID(func, filp_close)
-  BTF_SET_END(btf_allowlist_d_path)
-
-It defines following 'struct btf_id_set' variable to access
-values and count:
-
-  struct btf_id_set btf_allowlist_d_path;
-
-Adding 'allowed' callback to struct bpf_func_proto, to allow
-verifier the check on allowed callers.
-
-Adding btf_id_set_contains function, which will be used by
-allowed callbacks to verify the caller's BTF ID value is
-within allowed set.
-
-Also removing extra '\' in __BTF_ID_LIST macro.
-
-Added BTF_SET_START_GLOBAL macro for global sets.
+Adding type_id pointer as argument to __btf_resolve_size
+to return also BTF ID of the resolved type. It will be
+used in following changes.
 
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- include/linux/bpf.h           |  4 +++
- include/linux/btf_ids.h       | 51 ++++++++++++++++++++++++++++++++++-
- kernel/bpf/btf.c              | 14 ++++++++++
- kernel/bpf/verifier.c         |  5 ++++
- tools/include/linux/btf_ids.h | 51 ++++++++++++++++++++++++++++++++++-
- 5 files changed, 123 insertions(+), 2 deletions(-)
+ kernel/bpf/btf.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 9fead3baa31c..c2026a0a1118 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -309,6 +309,7 @@ struct bpf_func_proto {
- 						    * for this argument.
- 						    */
- 	int *ret_btf_id; /* return value btf_id */
-+	bool (*allowed)(const struct bpf_prog *prog);
- };
- 
- /* bpf_context is intentionally undefined structure. Pointer to bpf_context is
-@@ -1850,4 +1851,7 @@ enum bpf_text_poke_type {
- int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 		       void *addr1, void *addr2);
- 
-+struct btf_id_set;
-+bool btf_id_set_contains(struct btf_id_set *set, u32 id);
-+
- #endif /* _LINUX_BPF_H */
-diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-index 4867d549e3c1..210b086188a3 100644
---- a/include/linux/btf_ids.h
-+++ b/include/linux/btf_ids.h
-@@ -3,6 +3,11 @@
- #ifndef _LINUX_BTF_IDS_H
- #define _LINUX_BTF_IDS_H
- 
-+struct btf_id_set {
-+	u32 cnt;
-+	u32 ids[];
-+};
-+
- #ifdef CONFIG_DEBUG_INFO_BTF
- 
- #include <linux/compiler.h> /* for __PASTE */
-@@ -62,7 +67,7 @@ asm(							\
- ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
- "." #scope " " #name ";                        \n"	\
- #name ":;                                      \n"	\
--".popsection;                                  \n");	\
-+".popsection;                                  \n");
- 
- #define BTF_ID_LIST(name)				\
- __BTF_ID_LIST(name, local)				\
-@@ -88,12 +93,56 @@ asm(							\
- ".zero 4                                       \n"	\
- ".popsection;                                  \n");
- 
-+/*
-+ * The BTF_SET_START/END macros pair defines sorted list of
-+ * BTF IDs plus its members count, with following layout:
-+ *
-+ * BTF_SET_START(list)
-+ * BTF_ID(type1, name1)
-+ * BTF_ID(type2, name2)
-+ * BTF_SET_END(list)
-+ *
-+ * __BTF_ID__set__list:
-+ * .zero 4
-+ * list:
-+ * __BTF_ID__type1__name1__3:
-+ * .zero 4
-+ * __BTF_ID__type2__name2__4:
-+ * .zero 4
-+ *
-+ */
-+#define __BTF_SET_START(name, scope)			\
-+asm(							\
-+".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
-+"." #scope " __BTF_ID__set__" #name ";         \n"	\
-+"__BTF_ID__set__" #name ":;                    \n"	\
-+".zero 4                                       \n"	\
-+".popsection;                                  \n");
-+
-+#define BTF_SET_START(name)				\
-+__BTF_ID_LIST(name, local)				\
-+__BTF_SET_START(name, local)
-+
-+#define BTF_SET_START_GLOBAL(name)			\
-+__BTF_ID_LIST(name, globl)				\
-+__BTF_SET_START(name, globl)
-+
-+#define BTF_SET_END(name)				\
-+asm(							\
-+".pushsection " BTF_IDS_SECTION ",\"a\";      \n"	\
-+".size __BTF_ID__set__" #name ", .-" #name "  \n"	\
-+".popsection;                                 \n");	\
-+extern struct btf_id_set name;
-+
- #else
- 
- #define BTF_ID_LIST(name) static u32 name[5];
- #define BTF_ID(prefix, name)
- #define BTF_ID_UNUSED
- #define BTF_ID_LIST_GLOBAL(name) u32 name[1];
-+#define BTF_SET_START(name) static struct btf_id_set name = { 0 };
-+#define BTF_SET_START_GLOBAL(name) static struct btf_id_set name = { 0 };
-+#define BTF_SET_END(name)
- 
- #endif /* CONFIG_DEBUG_INFO_BTF */
- 
 diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index df966acaaeb1..f9ac6935ab3c 100644
+index dbc70fedfb44..ee0e2a5e6c88 100644
 --- a/kernel/bpf/btf.c
 +++ b/kernel/bpf/btf.c
-@@ -21,6 +21,8 @@
- #include <linux/btf_ids.h>
- #include <linux/skmsg.h>
- #include <linux/perf_event.h>
-+#include <linux/bsearch.h>
-+#include <linux/btf_ids.h>
- #include <net/sock.h>
- 
- /* BTF (BPF Type Format) is the meta data format which describes
-@@ -4762,3 +4764,15 @@ u32 btf_id(const struct btf *btf)
+@@ -1082,6 +1082,7 @@ static const struct resolve_vertex *env_stack_peak(struct btf_verifier_env *env)
+  * *elem_id: id of u32
+  * *total_nelems: (x * y).  Hence, individual elem size is
+  *                (*type_size / *total_nelems)
++ * *type_id: id of type if it's changed within the function, 0 if not
+  *
+  * type: is not an array (e.g. const struct X)
+  * return type: type "struct X"
+@@ -1089,15 +1090,16 @@ static const struct resolve_vertex *env_stack_peak(struct btf_verifier_env *env)
+  * *elem_type: same as return type ("struct X")
+  * *elem_id: 0
+  * *total_nelems: 1
++ * *type_id: id of type if it's changed within the function, 0 if not
+  */
+ static const struct btf_type *
+ __btf_resolve_size(const struct btf *btf, const struct btf_type *type,
+ 		   u32 *type_size, const struct btf_type **elem_type,
+-		   u32 *elem_id, u32 *total_nelems)
++		   u32 *elem_id, u32 *total_nelems, u32 *type_id)
  {
- 	return btf->id;
+ 	const struct btf_type *array_type = NULL;
+ 	const struct btf_array *array = NULL;
+-	u32 i, size, nelems = 1;
++	u32 i, size, nelems = 1, id = 0;
+ 
+ 	for (i = 0; i < MAX_RESOLVE_DEPTH; i++) {
+ 		switch (BTF_INFO_KIND(type->info)) {
+@@ -1118,6 +1120,7 @@ __btf_resolve_size(const struct btf *btf, const struct btf_type *type,
+ 		case BTF_KIND_VOLATILE:
+ 		case BTF_KIND_CONST:
+ 		case BTF_KIND_RESTRICT:
++			id = type->type;
+ 			type = btf_type_by_id(btf, type->type);
+ 			break;
+ 
+@@ -1150,6 +1153,8 @@ __btf_resolve_size(const struct btf *btf, const struct btf_type *type,
+ 		*elem_type = type;
+ 	if (elem_id)
+ 		*elem_id = array ? array->type : 0;
++	if (type_id && id)
++		*type_id = id;
+ 
+ 	return array_type ? : type;
  }
-+
-+static int btf_id_cmp_func(const void *a, const void *b)
-+{
-+	const int *pa = a, *pb = b;
-+
-+	return *pa - *pb;
-+}
-+
-+bool btf_id_set_contains(struct btf_id_set *set, u32 id)
-+{
-+	return bsearch(&id, set->ids, set->cnt, sizeof(u32), btf_id_cmp_func) != NULL;
-+}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 34d3be105086..85cdcd8a5ea7 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4780,6 +4780,11 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
- 		return -EINVAL;
- 	}
+@@ -1158,7 +1163,7 @@ const struct btf_type *
+ btf_resolve_size(const struct btf *btf, const struct btf_type *type,
+ 		 u32 *type_size)
+ {
+-	return __btf_resolve_size(btf, type, type_size, NULL, NULL);
++	return __btf_resolve_size(btf, type, type_size, NULL, NULL, NULL, NULL);
+ }
  
-+	if (fn->allowed && !fn->allowed(env->prog)) {
-+		verbose(env, "helper call is not allowed in probe\n");
-+		return -EINVAL;
-+	}
-+
- 	/* With LD_ABS/IND some JITs save/restore skb from r1. */
- 	changes_data = bpf_helper_changes_pkt_data(fn->func);
- 	if (changes_data && fn->arg1_type != ARG_PTR_TO_CTX) {
-diff --git a/tools/include/linux/btf_ids.h b/tools/include/linux/btf_ids.h
-index 4867d549e3c1..210b086188a3 100644
---- a/tools/include/linux/btf_ids.h
-+++ b/tools/include/linux/btf_ids.h
-@@ -3,6 +3,11 @@
- #ifndef _LINUX_BTF_IDS_H
- #define _LINUX_BTF_IDS_H
+ /* The input param "type_id" must point to a needs_resolve type */
+@@ -3988,7 +3993,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 		mname = __btf_name_by_offset(btf_vmlinux, member->name_off);
  
-+struct btf_id_set {
-+	u32 cnt;
-+	u32 ids[];
-+};
-+
- #ifdef CONFIG_DEBUG_INFO_BTF
- 
- #include <linux/compiler.h> /* for __PASTE */
-@@ -62,7 +67,7 @@ asm(							\
- ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
- "." #scope " " #name ";                        \n"	\
- #name ":;                                      \n"	\
--".popsection;                                  \n");	\
-+".popsection;                                  \n");
- 
- #define BTF_ID_LIST(name)				\
- __BTF_ID_LIST(name, local)				\
-@@ -88,12 +93,56 @@ asm(							\
- ".zero 4                                       \n"	\
- ".popsection;                                  \n");
- 
-+/*
-+ * The BTF_SET_START/END macros pair defines sorted list of
-+ * BTF IDs plus its members count, with following layout:
-+ *
-+ * BTF_SET_START(list)
-+ * BTF_ID(type1, name1)
-+ * BTF_ID(type2, name2)
-+ * BTF_SET_END(list)
-+ *
-+ * __BTF_ID__set__list:
-+ * .zero 4
-+ * list:
-+ * __BTF_ID__type1__name1__3:
-+ * .zero 4
-+ * __BTF_ID__type2__name2__4:
-+ * .zero 4
-+ *
-+ */
-+#define __BTF_SET_START(name, scope)			\
-+asm(							\
-+".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
-+"." #scope " __BTF_ID__set__" #name ";         \n"	\
-+"__BTF_ID__set__" #name ":;                    \n"	\
-+".zero 4                                       \n"	\
-+".popsection;                                  \n");
-+
-+#define BTF_SET_START(name)				\
-+__BTF_ID_LIST(name, local)				\
-+__BTF_SET_START(name, local)
-+
-+#define BTF_SET_START_GLOBAL(name)			\
-+__BTF_ID_LIST(name, globl)				\
-+__BTF_SET_START(name, globl)
-+
-+#define BTF_SET_END(name)				\
-+asm(							\
-+".pushsection " BTF_IDS_SECTION ",\"a\";      \n"	\
-+".size __BTF_ID__set__" #name ", .-" #name "  \n"	\
-+".popsection;                                 \n");	\
-+extern struct btf_id_set name;
-+
- #else
- 
- #define BTF_ID_LIST(name) static u32 name[5];
- #define BTF_ID(prefix, name)
- #define BTF_ID_UNUSED
- #define BTF_ID_LIST_GLOBAL(name) u32 name[1];
-+#define BTF_SET_START(name) static struct btf_id_set name = { 0 };
-+#define BTF_SET_START_GLOBAL(name) static struct btf_id_set name = { 0 };
-+#define BTF_SET_END(name)
- 
- #endif /* CONFIG_DEBUG_INFO_BTF */
- 
+ 		mtype = __btf_resolve_size(btf_vmlinux, mtype, &msize,
+-					   &elem_type, NULL, &total_nelems);
++					   &elem_type, NULL, &total_nelems, NULL);
+ 		if (IS_ERR(mtype)) {
+ 			bpf_log(log, "field %s doesn't have size\n", mname);
+ 			return -EFAULT;
 -- 
 2.25.4
 
