@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D686C433E0
-	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:03:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C362C433DF
+	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:03:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DE0DD206B2
-	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:03:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE705206B2
+	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:03:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1596985429;
-	bh=b+ayeidIXbgyAiOMn2eKpg6hiyDxc603nbWdjxJmEhI=;
+	s=default; t=1596985439;
+	bh=g7ICu+yBQc3qai6PfhWZlxdrJNXMb7+p06n/oF9hqhI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=bY3g9KrpOacWIajjlolOkSXNzcCZhnq7jywV6d9XlQ6j2jaiX40PFucxY3de/f8x9
-	 Em05OSAUyV9KRAoXfhzoqxnAeXHC9NP3eoGbwiv9m6mTTlx8PIcvQjpPK/cJMMWySJ
-	 nItuiYqWFZYAExBuqPx7O75W0Qsg8CQPBoiW7XFY=
+	b=PyZgHnPIzdVAbSZN4lYarBwG63QwRFAGe8N5VT0PwfOAweAJMzEa0kHSPb2r28AMU
+	 OcFcJA/Dy4X/0/rRWMpD9VP2uLzYOtVMrrKfZl0NFkTFzpHO1xonHuI5FrHLtV/aib
+	 7pr+eM6Rw3dX7H+Y5X42tpX+Orzt20NRGGGfiNf0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726380AbgHIPDs convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sun, 9 Aug 2020 11:03:48 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:36993 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726361AbgHIPDi (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 9 Aug 2020 11:03:38 -0400
+        id S1726458AbgHIPD5 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Sun, 9 Aug 2020 11:03:57 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:38532 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726418AbgHIPDz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 9 Aug 2020 11:03:55 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-46-VX6_2A22NqW-4z5VV_kxjw-1; Sun, 09 Aug 2020 11:03:33 -0400
-X-MC-Unique: VX6_2A22NqW-4z5VV_kxjw-1
+ us-mta-220-15afvRCxO_WxmD4zOUcGgQ-1; Sun, 09 Aug 2020 11:03:48 -0400
+X-MC-Unique: 15afvRCxO_WxmD4zOUcGgQ-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CCF7F1005504;
-        Sun,  9 Aug 2020 15:03:31 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B1C2710059A2;
+        Sun,  9 Aug 2020 15:03:46 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.192.79])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 92EAD7177B;
-        Sun,  9 Aug 2020 15:03:28 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 878C45F1EA;
+        Sun,  9 Aug 2020 15:03:43 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -52,9 +52,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Brendan Gregg <bgregg@netflix.com>,
         Florent Revest <revest@chromium.org>,
         Al Viro <viro@zeniv.linux.org.uk>
-Subject: [RFC PATCH v11 bpf-next 06/14] bpf: Remove recursion call in btf_struct_access
-Date:   Sun,  9 Aug 2020 17:02:54 +0200
-Message-Id: <20200809150302.686149-7-jolsa@kernel.org>
+Subject: [RFC PATCH v11 bpf-next 10/14] bpf: Add d_path helper
+Date:   Sun,  9 Aug 2020 17:02:58 +0200
+Message-Id: <20200809150302.686149-11-jolsa@kernel.org>
 In-Reply-To: <20200809150302.686149-1-jolsa@kernel.org>
 References: <20200809150302.686149-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -70,40 +70,177 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Andrii suggested we can simply jump to again label
-instead of making recursion call.
+Adding d_path helper function that returns full path for
+given 'struct path' object, which needs to be the kernel
+BTF 'path' object. The path is returned in buffer provided
+'buf' of size 'sz' and is zero terminated.
 
-Suggested-by: Andrii Nakryiko <andriin@fb.com>
+  bpf_d_path(&file->f_path, buf, size);
+
+The helper calls directly d_path function, so there's only
+limited set of function it can be called from. Adding just
+very modest set for the start.
+
+Updating also bpf.h tools uapi header and adding 'path' to
+bpf_helpers_doc.py script.
+
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- kernel/bpf/btf.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ include/uapi/linux/bpf.h       | 13 +++++++++
+ kernel/trace/bpf_trace.c       | 48 ++++++++++++++++++++++++++++++++++
+ scripts/bpf_helpers_doc.py     |  2 ++
+ tools/include/uapi/linux/bpf.h | 13 +++++++++
+ 4 files changed, 76 insertions(+)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index ee0e2a5e6c88..4488c5b03941 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3931,14 +3931,13 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 		/* Only allow structure for now, can be relaxed for
- 		 * other types later.
- 		 */
--		elem_type = btf_type_skip_modifiers(btf_vmlinux,
--						    array_elem->type, NULL);
--		if (!btf_type_is_struct(elem_type))
-+		t = btf_type_skip_modifiers(btf_vmlinux, array_elem->type,
-+					    NULL);
-+		if (!btf_type_is_struct(t))
- 			goto error;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index b134e679e9db..338504fb2ea1 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -3394,6 +3394,18 @@ union bpf_attr {
+  *		A non-negative value equal to or less than *size* on success,
+  *		or a negative error in case of failure.
+  *
++ * long bpf_d_path(struct path *path, char *buf, u32 sz)
++ *	Description
++ *		Return full path for given 'struct path' object, which
++ *		needs to be the kernel BTF 'path' object. The path is
++ *		returned in the provided buffer 'buf' of size 'sz' and
++ *		is zero terminated.
++ *
++ *	Return
++ *		On success, the strictly positive length of the string,
++ *		including the trailing NUL character. On error, a negative
++ *		value.
++ *
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -3538,6 +3550,7 @@ union bpf_attr {
+ 	FN(skc_to_tcp_request_sock),	\
+ 	FN(skc_to_udp6_sock),		\
+ 	FN(get_task_stack),		\
++	FN(d_path),			\
+ 	/* */
  
--		off = (off - moff) % elem_type->size;
--		return btf_struct_access(log, elem_type, off, size, atype,
--					 next_btf_id);
-+		off = (off - moff) % t->size;
-+		goto again;
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index cb91ef902cc4..d7fc2868cd6f 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1098,6 +1098,52 @@ static const struct bpf_func_proto bpf_send_signal_thread_proto = {
+ 	.arg1_type	= ARG_ANYTHING,
+ };
  
- error:
- 		bpf_log(log, "access beyond struct %s at off %u size %u\n",
++BPF_CALL_3(bpf_d_path, struct path *, path, char *, buf, u32, sz)
++{
++	long len;
++	char *p;
++
++	if (!sz)
++		return 0;
++
++	p = d_path(path, buf, sz);
++	if (IS_ERR(p)) {
++		len = PTR_ERR(p);
++	} else {
++		len = buf + sz - p;
++		memmove(buf, p, len);
++	}
++
++	return len;
++}
++
++BTF_SET_START(btf_allowlist_d_path)
++BTF_ID(func, vfs_truncate)
++BTF_ID(func, vfs_fallocate)
++BTF_ID(func, dentry_open)
++BTF_ID(func, vfs_getattr)
++BTF_ID(func, filp_close)
++BTF_SET_END(btf_allowlist_d_path)
++
++static bool bpf_d_path_allowed(const struct bpf_prog *prog)
++{
++	return btf_id_set_contains(&btf_allowlist_d_path, prog->aux->attach_btf_id);
++}
++
++BTF_ID_LIST(bpf_d_path_btf_ids)
++BTF_ID(struct, path)
++
++static const struct bpf_func_proto bpf_d_path_proto = {
++	.func		= bpf_d_path,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_PTR_TO_BTF_ID,
++	.arg2_type	= ARG_PTR_TO_MEM,
++	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.btf_id		= bpf_d_path_btf_ids,
++	.allowed	= bpf_d_path_allowed,
++};
++
+ const struct bpf_func_proto *
+ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ {
+@@ -1579,6 +1625,8 @@ tracing_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return prog->expected_attach_type == BPF_TRACE_ITER ?
+ 		       &bpf_seq_write_proto :
+ 		       NULL;
++	case BPF_FUNC_d_path:
++		return &bpf_d_path_proto;
+ 	default:
+ 		return raw_tp_prog_func_proto(func_id, prog);
+ 	}
+diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
+index 5bfa448b4704..08388173973f 100755
+--- a/scripts/bpf_helpers_doc.py
++++ b/scripts/bpf_helpers_doc.py
+@@ -432,6 +432,7 @@ class PrinterHelpers(Printer):
+             'struct __sk_buff',
+             'struct sk_msg_md',
+             'struct xdp_md',
++            'struct path',
+     ]
+     known_types = {
+             '...',
+@@ -472,6 +473,7 @@ class PrinterHelpers(Printer):
+             'struct tcp_request_sock',
+             'struct udp6_sock',
+             'struct task_struct',
++            'struct path',
+     }
+     mapped_types = {
+             'u8': '__u8',
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index b134e679e9db..338504fb2ea1 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -3394,6 +3394,18 @@ union bpf_attr {
+  *		A non-negative value equal to or less than *size* on success,
+  *		or a negative error in case of failure.
+  *
++ * long bpf_d_path(struct path *path, char *buf, u32 sz)
++ *	Description
++ *		Return full path for given 'struct path' object, which
++ *		needs to be the kernel BTF 'path' object. The path is
++ *		returned in the provided buffer 'buf' of size 'sz' and
++ *		is zero terminated.
++ *
++ *	Return
++ *		On success, the strictly positive length of the string,
++ *		including the trailing NUL character. On error, a negative
++ *		value.
++ *
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -3538,6 +3550,7 @@ union bpf_attr {
+ 	FN(skc_to_tcp_request_sock),	\
+ 	FN(skc_to_udp6_sock),		\
+ 	FN(get_task_stack),		\
++	FN(d_path),			\
+ 	/* */
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
 -- 
 2.25.4
 
