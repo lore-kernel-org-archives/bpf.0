@@ -1,134 +1,112 @@
-Return-Path: <SRS0=QuW9=BS=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=gyPw=BT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25E3FC433E0
-	for <bpf@archiver.kernel.org>; Sat,  8 Aug 2020 23:49:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 06A6DC433E0
+	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 14:47:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00C8A20672
-	for <bpf@archiver.kernel.org>; Sat,  8 Aug 2020 23:49:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1596930564;
-	bh=UCGiZ204cxB9dbRnXHlFZB9TQWCCrxb35jvAi/jUETw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=h89Do3PdNmC+jPvEebJ3JVSRfNNU9V2GsFlzAltq0OsSLtBvmn17LixPxBV5EjgOJ
-	 +YlhEyGgEjlc79BlwL5tQ63TbY5RHJToEEGMjCBmeRMuX5cy4yLnD499C2CnRa6UwJ
-	 5Tovf1F9BXBzgBWfdmj7e2iIX5rd8RYbwlcXGhnc=
+	by mail.kernel.org (Postfix) with ESMTP id D4E76206B5
+	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 14:47:18 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="irFd1tVE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727824AbgHHXhF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 8 Aug 2020 19:37:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49964 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725950AbgHHXhF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 8 Aug 2020 19:37:05 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726241AbgHIOrS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 9 Aug 2020 10:47:18 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:59713 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726175AbgHIOrS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sun, 9 Aug 2020 10:47:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1596984437;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gKK414gvYPxO64jiz+P/8qj08kR5l/OAlU0hgufW1/c=;
+        b=irFd1tVEYIGOHe0dg/P1yfLgaSTl1hI5HfHHNgm2+zbR/X2Yo8yOXtUuiEX/Wac2PcttVV
+        hh2uZSXygrMf05XNoT4CqvuoXIb6skJoVboIeIJrGqCjjHkYZTZjGKWclplL/IzXUu5YyC
+        oAKjwP0IyuRQKTKdszTEiWMcrCf4vXo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-30-PPsk5wR5Mw2jNQC81EhACQ-1; Sun, 09 Aug 2020 10:47:13 -0400
+X-MC-Unique: PPsk5wR5Mw2jNQC81EhACQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A6367207FB;
-        Sat,  8 Aug 2020 23:37:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1596929824;
-        bh=UCGiZ204cxB9dbRnXHlFZB9TQWCCrxb35jvAi/jUETw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wbJe7HAXu6Bl3aPU/Pau1GNgGg0KgeuxrSoxjZTWMVZUyoTeZ5FTe21V0hMiUU2aI
-         y7QGf1wQCgnNxILxlLt2PyDB4O2kiISM9/jmTCjl6G7hTc0NFI7Zot8ho5gaQGKOgt
-         /5Tv/psAX9+RGa/+8pBetd2tjPMm82iLfz6Q6zic=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>, Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 57/72] seccomp: Fix ioctl number for SECCOMP_IOCTL_NOTIF_ID_VALID
-Date:   Sat,  8 Aug 2020 19:35:26 -0400
-Message-Id: <20200808233542.3617339-57-sashal@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200808233542.3617339-1-sashal@kernel.org>
-References: <20200808233542.3617339-1-sashal@kernel.org>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6EC768015CE;
+        Sun,  9 Aug 2020 14:47:11 +0000 (UTC)
+Received: from krava (unknown [10.40.192.79])
+        by smtp.corp.redhat.com (Postfix) with SMTP id B150C6179B;
+        Sun,  9 Aug 2020 14:47:07 +0000 (UTC)
+Date:   Sun, 9 Aug 2020 16:47:06 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        David Miller <davem@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Wenbo Zhang <ethercflow@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Brendan Gregg <bgregg@netflix.com>,
+        Florent Revest <revest@chromium.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v10 bpf-next 08/14] bpf: Add btf_struct_ids_match function
+Message-ID: <20200809144706.GD619980@krava>
+References: <20200807094559.571260-1-jolsa@kernel.org>
+ <20200807094559.571260-9-jolsa@kernel.org>
+ <CAEf4BzY8vE8k9c5fBB+3mcEpxOWc38dWBK8ji2aRpHM79nra_Q@mail.gmail.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzY8vE8k9c5fBB+3mcEpxOWc38dWBK8ji2aRpHM79nra_Q@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+On Fri, Aug 07, 2020 at 01:04:26PM -0700, Andrii Nakryiko wrote:
 
-[ Upstream commit 47e33c05f9f07cac3de833e531bcac9ae052c7ca ]
+SNIP
 
-When SECCOMP_IOCTL_NOTIF_ID_VALID was first introduced it had the wrong
-direction flag set. While this isn't a big deal as nothing currently
-enforces these bits in the kernel, it should be defined correctly. Fix
-the define and provide support for the old command until it is no longer
-needed for backward compatibility.
+> > +                               }
+> >                         }
+> >                 } else if (!fn->check_btf_id(reg->btf_id, arg)) {
+> 
+> Put this on a wishlist for now. I don't think we should expect
+> fb->check_btf_id() to do btf_struct_ids_match() internally, so to
+> support this, we'd have to call fb->check_btf_id() inside the loop
+> while doing WALK_STRUCT struct. But let's not change all this in this
+> patch set, it's involved enough already.
+> 
+> >                         verbose(env, "Helper does not support %s in R%d\n",
+> > @@ -3977,7 +3982,8 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+> >
+> >                         return -EACCES;
+> >                 }
+> > -               if (!tnum_is_const(reg->var_off) || reg->var_off.value || reg->off) {
+> > +               if (!ids_match &&
+> > +                   (!tnum_is_const(reg->var_off) || reg->var_off.value || reg->off)) {
+> 
+> Isn't this still wrong? if ids_match, but reg->var_off is non-zero,
+> that's still bad, right?
+> ids_match just "mitigates" reg->off check, so should be something like this:
+> 
+> if ((reg->off && !ids_match) || !tnum_is_const(reg->var_off) ||
+> reg->var_off.value)
+>  ... then bad ...
 
-Fixes: 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/uapi/linux/seccomp.h                  | 3 ++-
- kernel/seccomp.c                              | 9 +++++++++
- tools/testing/selftests/seccomp/seccomp_bpf.c | 2 +-
- 3 files changed, 12 insertions(+), 2 deletions(-)
+damn you're right, those are separated things,
+I mixed it up, I'll send new version
 
-diff --git a/include/uapi/linux/seccomp.h b/include/uapi/linux/seccomp.h
-index c1735455bc536..965290f7dcc28 100644
---- a/include/uapi/linux/seccomp.h
-+++ b/include/uapi/linux/seccomp.h
-@@ -123,5 +123,6 @@ struct seccomp_notif_resp {
- #define SECCOMP_IOCTL_NOTIF_RECV	SECCOMP_IOWR(0, struct seccomp_notif)
- #define SECCOMP_IOCTL_NOTIF_SEND	SECCOMP_IOWR(1,	\
- 						struct seccomp_notif_resp)
--#define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOR(2, __u64)
-+#define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOW(2, __u64)
-+
- #endif /* _UAPI_LINUX_SECCOMP_H */
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index d653d8426de90..c461ba9925136 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -42,6 +42,14 @@
- #include <linux/uaccess.h>
- #include <linux/anon_inodes.h>
- 
-+/*
-+ * When SECCOMP_IOCTL_NOTIF_ID_VALID was first introduced, it had the
-+ * wrong direction flag in the ioctl number. This is the broken one,
-+ * which the kernel needs to keep supporting until all userspaces stop
-+ * using the wrong command number.
-+ */
-+#define SECCOMP_IOCTL_NOTIF_ID_VALID_WRONG_DIR	SECCOMP_IOR(2, __u64)
-+
- enum notify_state {
- 	SECCOMP_NOTIFY_INIT,
- 	SECCOMP_NOTIFY_SENT,
-@@ -1186,6 +1194,7 @@ static long seccomp_notify_ioctl(struct file *file, unsigned int cmd,
- 		return seccomp_notify_recv(filter, buf);
- 	case SECCOMP_IOCTL_NOTIF_SEND:
- 		return seccomp_notify_send(filter, buf);
-+	case SECCOMP_IOCTL_NOTIF_ID_VALID_WRONG_DIR:
- 	case SECCOMP_IOCTL_NOTIF_ID_VALID:
- 		return seccomp_notify_id_valid(filter, buf);
- 	default:
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 252140a525531..ccf276e138829 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -180,7 +180,7 @@ struct seccomp_metadata {
- #define SECCOMP_IOCTL_NOTIF_RECV	SECCOMP_IOWR(0, struct seccomp_notif)
- #define SECCOMP_IOCTL_NOTIF_SEND	SECCOMP_IOWR(1,	\
- 						struct seccomp_notif_resp)
--#define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOR(2, __u64)
-+#define SECCOMP_IOCTL_NOTIF_ID_VALID	SECCOMP_IOW(2, __u64)
- 
- struct seccomp_notif {
- 	__u64 id;
--- 
-2.25.1
+thanks,
+jirka
 
