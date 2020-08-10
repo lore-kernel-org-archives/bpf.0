@@ -4,63 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 100BDC433DF
-	for <bpf@archiver.kernel.org>; Mon, 10 Aug 2020 19:07:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9130AC433E0
+	for <bpf@archiver.kernel.org>; Mon, 10 Aug 2020 19:17:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E70C420885
-	for <bpf@archiver.kernel.org>; Mon, 10 Aug 2020 19:07:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6125C2080C
+	for <bpf@archiver.kernel.org>; Mon, 10 Aug 2020 19:17:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728190AbgHJTHq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 10 Aug 2020 15:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41586 "EHLO
+        id S1729153AbgHJTRZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 10 Aug 2020 15:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728071AbgHJTHq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 10 Aug 2020 15:07:46 -0400
+        with ESMTP id S1728618AbgHJTRY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 10 Aug 2020 15:17:24 -0400
 Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2183CC061756;
-        Mon, 10 Aug 2020 12:07:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CF8C061756;
+        Mon, 10 Aug 2020 12:17:24 -0700 (PDT)
 Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
         (using TLSv1 with cipher AES256-SHA (256/256 bits))
         (Client did not present a certificate)
         (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id B0A49127517B7;
-        Mon, 10 Aug 2020 11:50:56 -0700 (PDT)
-Date:   Mon, 10 Aug 2020 12:07:39 -0700 (PDT)
-Message-Id: <20200810.120739.1883274758298088684.davem@davemloft.net>
-To:     hch@lst.de
-Cc:     kuba@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        edumazet@google.com, john.stultz@linaro.org
-Subject: Re: [PATCH] net: Revert "net: optimize the sockptr_t for unified
- kernel/user address spaces"
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 167D112753C7F;
+        Mon, 10 Aug 2020 12:00:37 -0700 (PDT)
+Date:   Mon, 10 Aug 2020 12:17:22 -0700 (PDT)
+Message-Id: <20200810.121722.482500427015958955.davem@davemloft.net>
+To:     ndesaulniers@google.com
+Cc:     samitolvanen@google.com, kuba@kernel.org, stable@vger.kernel.org,
+        masahiroy@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org, elder@linaro.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH v2 net] bitfield.h: don't compile-time validate _val in
+ FIELD_FIT
 From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200810164214.9978-1-hch@lst.de>
-References: <20200810164214.9978-1-hch@lst.de>
+In-Reply-To: <20200810182112.2221964-1-ndesaulniers@google.com>
+References: <20200810182112.2221964-1-ndesaulniers@google.com>
 X-Mailer: Mew version 6.8 on Emacs 26.3
 Mime-Version: 1.0
 Content-Type: Text/Plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 10 Aug 2020 11:50:57 -0700 (PDT)
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 10 Aug 2020 12:00:37 -0700 (PDT)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
-Date: Mon, 10 Aug 2020 18:42:14 +0200
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 10 Aug 2020 11:21:11 -0700
 
-> This reverts commits 6d04fe15f78acdf8e32329e208552e226f7a8ae6 and
-> a31edb2059ed4e498f9aa8230c734b59d0ad797a.
+> From: Jakub Kicinski <kuba@kernel.org>
 > 
-> It turns out the idea to share a single pointer for both kernel and user
-> space address causes various kinds of problems.  So use the slightly less
-> optimal version that uses an extra bit, but which is guaranteed to be safe
-> everywhere.
+> When ur_load_imm_any() is inlined into jeq_imm(), it's possible for the
+> compiler to deduce a case where _val can only have the value of -1 at
+> compile time. Specifically,
 > 
-> Fixes: 6d04fe15f78a ("net: optimize the sockptr_t for unified kernel/user address spaces")
-> Reported-by: Eric Dumazet <edumazet@google.com>
-> Reported-by: John Stultz <john.stultz@linaro.org>
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> /* struct bpf_insn: _s32 imm */
+> u64 imm = insn->imm; /* sign extend */
+> if (imm >> 32) { /* non-zero only if insn->imm is negative */
+>   /* inlined from ur_load_imm_any */
+>   u32 __imm = imm >> 32; /* therefore, always 0xffffffff */
+>   if (__builtin_constant_p(__imm) && __imm > 255)
+>     compiletime_assert_XXX()
+> 
+> This can result in tripping a BUILD_BUG_ON() in __BF_FIELD_CHECK() that
+> checks that a given value is representable in one byte (interpreted as
+> unsigned).
+> 
+> FIELD_FIT() should return true or false at runtime for whether a value
+> can fit for not. Don't break the build over a value that's too large for
+> the mask. We'd prefer to keep the inlining and compiler optimizations
+> though we know this case will always return false.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 1697599ee301a ("bitfield.h: add FIELD_FIT() helper")
+> Link: https://lore.kernel.org/kernel-hardening/CAK7LNASvb0UDJ0U5wkYYRzTAdnEs64HjXpEUL7d=V0CXiAXcNw@mail.gmail.com/
+> Reported-by: Masahiro Yamada <masahiroy@kernel.org>
+> Debugged-by: Sami Tolvanen <samitolvanen@google.com>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+> Changes V1->V2:
+> * add Fixes tag.
 
-Applied, thanks.
+Applied, thank you.
