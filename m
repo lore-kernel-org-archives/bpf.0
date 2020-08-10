@@ -1,309 +1,240 @@
-Return-Path: <SRS0=gyPw=BT=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=CgHR=BU=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B3A3C433E0
-	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:05:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5640EC433E0
+	for <bpf@archiver.kernel.org>; Mon, 10 Aug 2020 01:21:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D4547206B5
-	for <bpf@archiver.kernel.org>; Sun,  9 Aug 2020 15:05:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1596985518;
-	bh=xAPcaXED/v5BUdzak1fdSCSP5FA28V/dyzvm3eYJ9kw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=cufEtL6FnzFJLdV8W312Zy+JaRHzuw5eq++X5GSydeb00ojifIuSpBfztqnn36yO/
-	 KzDviVFJ/whaCuYy/P5xBvb4HwiHNtscwLq9y66iFwG2vN+prULCCjZM1LcEhcae8W
-	 xfPF6mcsYBWLGg0uRffdyAjIEdMfHknKRTkR4YbA=
+	by mail.kernel.org (Postfix) with ESMTP id 1CA88206A5
+	for <bpf@archiver.kernel.org>; Mon, 10 Aug 2020 01:21:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="khcw2qSW";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="bvsd3ulP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726563AbgHIPFQ convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sun, 9 Aug 2020 11:05:16 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:51942 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726547AbgHIPFP (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sun, 9 Aug 2020 11:05:15 -0400
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-89-pIWPNUzoMB6Lj9tiEk6pRg-1; Sun, 09 Aug 2020 11:04:01 -0400
-X-MC-Unique: pIWPNUzoMB6Lj9tiEk6pRg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C8602800477;
-        Sun,  9 Aug 2020 15:03:59 +0000 (UTC)
-Received: from krava.redhat.com (unknown [10.40.192.79])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A7D8F5F1EA;
-        Sun,  9 Aug 2020 15:03:55 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     Wenbo Zhang <ethercflow@gmail.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>, Martin KaFai Lau <kafai@fb.com>,
-        David Miller <davem@redhat.com>,
+        id S1726338AbgHJBVh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sun, 9 Aug 2020 21:21:37 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:27138 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726335AbgHJBVh (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sun, 9 Aug 2020 21:21:37 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07A1IE5k010593;
+        Sun, 9 Aug 2020 18:21:18 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=1y1dGaPumaRNGs+WGqhVnb5gvfAgZfIT0LGPcXP5HXM=;
+ b=khcw2qSWR9GbORLIu6OWWVIHuqDccex4r+Ik4zF4kVj8LOb3a10Abv9jJuazCpjwkU+z
+ WtWMX+NOWPIlpirLqnH3FDu+9DrvQxci+FDI8IoaB7fkDFEjog9SOpfuO/F4GdTWNscG
+ GfSJ+BPGWvoqZyOB+ZtuLqD+Se7i8pVxYnI= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 32tbvkaatw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Sun, 09 Aug 2020 18:21:18 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Sun, 9 Aug 2020 18:21:18 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iLXM4XOiFIEq7REM0+43OeF/HgdViKhFWOZHWqnrt+HPaeTfei5Kprg7p4qRAz95BMy3eVard06rUb786axrpIlxfgUP7mwvzuMJM71H7vKb2Q6HAvGrydUxF24FsXzEgH7W97z9/Tw56rHPV5HK+Vrq9hCZrzW0NKmUW7RoBnnoduLefPqrnniuZz6qOt0Y7KhRMShibhax7Bz4GNYwDMxiM22f+OJ63mwfjqyENZdScRLThkHPxIXVeLaQf8Y8KnMgW7oZgk06VH4OdtkjGY0tsQEIynoB+a93Z6HjQDxJ1gv2wKJIHYGv/a+vtaMjrNcBIjItUTakxE5yACSWXw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1y1dGaPumaRNGs+WGqhVnb5gvfAgZfIT0LGPcXP5HXM=;
+ b=OnDiKVjHOz7L7mJ5Yl+FDp+Aqq2EkFBJe0mfL0DOj7tdTkPxAUCiu5RK6ZuWGLpslokS5UcbIziPfMNNT+0hORvqk/VBpzdO/MHaHdBmhepUKzdagxng0IssgywJF5ZYAg60qEoGnBPBSIoQO4nE94OhKRFT4LpRhGXvSX/S4It5G9tjtOMZQgZ/Sv34J5Tcm6Lkrk45yAkFSZqmJxMQH0oS7FyO7tgTAjx0xnohrYi4cJBSXu8kPnUHJGwH02k2dF3CeME2t3uxnvmTyMGPeqhUPWo1ilY246ZsrzO3I26AFcoxVuydgJ4clHbPUohX/ED2shmnF58aiO0UP4JNEA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1y1dGaPumaRNGs+WGqhVnb5gvfAgZfIT0LGPcXP5HXM=;
+ b=bvsd3ulPbdAddl2MOWPj8D1LCiEFjKg12DDlLJVzM0z3QRdU2VQBGz8JcSSgQ4epsylh/3LMlpsuYc7pYE4Yj6t/tqBCbUjW3w0jmsdDFrtKeWUDI+ct3n52MMw42joyvDMfbHtXd02Lxjrhyqf/cNKEzynYQ/N5EtCAoCw1rss=
+Authentication-Results: chromium.org; dkim=none (message not signed)
+ header.d=none;chromium.org; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BY5PR15MB3620.namprd15.prod.outlook.com (2603:10b6:a03:1f8::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.20; Mon, 10 Aug
+ 2020 01:21:03 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::56b:2925:8762:2d80]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::56b:2925:8762:2d80%7]) with mapi id 15.20.3261.024; Mon, 10 Aug 2020
+ 01:21:03 +0000
+Subject: Re: [RFC] bpf: verifier check for dead branch
+To:     Jiri Olsa <jolsa@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Brendan Gregg <bgregg@netflix.com>,
-        Florent Revest <revest@chromium.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: [RFC PATCH v11 bpf-next 13/14] selftests/bpf: Add test for d_path helper
-Date:   Sun,  9 Aug 2020 17:03:01 +0200
-Message-Id: <20200809150302.686149-14-jolsa@kernel.org>
-In-Reply-To: <20200809150302.686149-1-jolsa@kernel.org>
-References: <20200809150302.686149-1-jolsa@kernel.org>
+        KP Singh <kpsingh@chromium.org>
+References: <20200807173045.GC561444@krava>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <f13fde40-0c07-ff73-eeb3-3c59c5694f74@fb.com>
+Date:   Sun, 9 Aug 2020 18:21:01 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.11.0
+In-Reply-To: <20200807173045.GC561444@krava>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BY5PR04CA0010.namprd04.prod.outlook.com
+ (2603:10b6:a03:1d0::20) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: kernel.org
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: 8BIT
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:21cf::11f6] (2620:10d:c090:400::5:8eb1) by BY5PR04CA0010.namprd04.prod.outlook.com (2603:10b6:a03:1d0::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3261.18 via Frontend Transport; Mon, 10 Aug 2020 01:21:02 +0000
+X-Originating-IP: [2620:10d:c090:400::5:8eb1]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ac9167cf-11f8-4627-ad30-08d83ccba598
+X-MS-TrafficTypeDiagnostic: BY5PR15MB3620:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BY5PR15MB3620812AAC702581C09A9859D3440@BY5PR15MB3620.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: m2P7dwLdKEKN2dl09gh+REfw3JZvnqnOzNHjp6N2jtWHNRsnIbV7Ykac3eMHFyL1UoRoO/rvH2hFJIwUvb65lIS9YmzAy94BoocvmDDiso2Xs+6CgrXTYw2InCxjnBSdQ5Lv7VadCSSIGgPBg8zMhck5tswo2XecpiEioFtsYBxCQPLiG5eXYVWtWyV807kJfTFKBE6iQnBDS1cWuSd7/TyYfBDWTnl0JjH8NSPGnd849nV1df+BpppTfGHpsMEzNUiMRNHGb1wt34PGetcOkpMAdwj3eooPZ374/JKNXwHzq6UvcWe4jZN4AgE1O80av8gVEExqa+l0jicwhP/Pibch94KA0h1OQM+ui2qWsmf58BEK/HAI2leS8CYZq42b
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFTY:;SFS:(39860400002)(366004)(396003)(376002)(346002)(136003)(52116002)(186003)(86362001)(53546011)(36756003)(66946007)(16526019)(66556008)(66476007)(4326008)(31696002)(478600001)(2616005)(31686004)(110136005)(54906003)(8676002)(8936002)(5660300002)(316002)(2906002)(83380400001)(6486002)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: OtWM/lTHXobjfcHqFC+jaf3VFuk1Vkz5+ylZOy+BkLEjUT2vMIx6y/fHZ9IN9XjAl3bwksaX9QslVk8DhL2jLPdS2vGLKXpSib02uFNYxK+/oNFWh2PSoH4+aehLSSk0eYqv1VWHv3xMDAVi3YOdRuRA6O613CaG2TXAhhbknRZV75orfjsxhrBDA6Nir8SLdo6KErClAU3MohfYij0p0G2cia2aRereKWnadEJcJOpgg9Fj3QkMYoXu1CSQFsafKcs21R/FR+TMP8PohD7QKbUNNMBnAV1QE4/CAtRLH6dfaxfQmsryab7tbWHJ02zG8t0D6uTPil1QaJEYKTlExOSB3VYDhA9soRaSoHmT9gw77HnQ8l5d4vNa/Jwiwbqj14ffqQ5XT5wJIjaATgqwIRj7vNbXZO3qtD2Y2Dg5kuhK8WQ2JjRxjGFaN8/HWNepsdTIeOQCuHSz5SQpWW/oxPI7/2QYHRmB6qUc4u1M269bkK/IJC7JNQ6gY89oEfgXkIhKQlbynt39FSW+D3//iI/Tnec1RtF9LtK6z7nyhEFq7/kLAGK1Ahz1x86JW8zeJriP+aSkYDlEPFODIf57MNFOuX/t3zqMo80mKpml99rqM2RSPg/Np0XAvZkH/3TYSFQGq+nn0HHxHpIj+DPRXLPMU16wl9/GkHodQLUo/WA=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ac9167cf-11f8-4627-ad30-08d83ccba598
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2020 01:21:02.9787
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Q8Yyq44tjRJtW2sN813294+EKzVCrPE/FwyADHvPh2EwMIdZLRGyazWEvMWsUaB3
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR15MB3620
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-09_12:2020-08-06,2020-08-09 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
+ priorityscore=1501 impostorscore=0 spamscore=0 clxscore=1015 phishscore=0
+ bulkscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0 suspectscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008100007
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding test for d_path helper which is pretty much
-copied from Wenbo Zhang's test for bpf_get_fd_path,
-which never made it in.
 
-The test is doing fstat/close on several fd types,
-and verifies we got the d_path helper working on
-kernel probes for vfs_getattr/filp_close functions.
 
-Original-patch-by: Wenbo Zhang <ethercflow@gmail.com>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- .../testing/selftests/bpf/prog_tests/d_path.c | 147 ++++++++++++++++++
- .../testing/selftests/bpf/progs/test_d_path.c |  58 +++++++
- 2 files changed, 205 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/d_path.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_d_path.c
+On 8/7/20 10:30 AM, Jiri Olsa wrote:
+> hi,
+> we have a customer facing some odd verifier fails on following
+> sk_skb program:
+> 
+>     0. r2 = *(u32 *)(r1 + data_end)
+>     1. r4 = *(u32 *)(r1 + data)
+>     2. r3 = r4
+>     3. r3 += 42
+>     4. r1 = 0
+>     5. if r3 > r2 goto 8
+>     6. r4 += 14
+>     7. r1 = r4
+>     8. if r3 > r2 goto 10
+>     9. r2 = *(u8 *)(r1 + 9)
+>    10. r0 = 0
+>    11. exit
+> 
+> The code checks if the skb data is big enough (5) and if it is,
+> it prepares pointer in r1 (7), then there's again size check (8)
+> and finally data load from r1 (9).
+> 
+> It's and odd code, but apparently this is something that can
+> get produced by clang.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/d_path.c b/tools/testing/selftests/bpf/prog_tests/d_path.c
-new file mode 100644
-index 000000000000..058765da17e6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/d_path.c
-@@ -0,0 +1,147 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <test_progs.h>
-+#include <sys/stat.h>
-+#include <linux/sched.h>
-+#include <sys/syscall.h>
-+
-+#define MAX_PATH_LEN		128
-+#define MAX_FILES		7
-+
-+#include "test_d_path.skel.h"
-+
-+static int duration;
-+
-+static struct {
-+	__u32 cnt;
-+	char paths[MAX_FILES][MAX_PATH_LEN];
-+} src;
-+
-+static int set_pathname(int fd, pid_t pid)
-+{
-+	char buf[MAX_PATH_LEN];
-+
-+	snprintf(buf, MAX_PATH_LEN, "/proc/%d/fd/%d", pid, fd);
-+	return readlink(buf, src.paths[src.cnt++], MAX_PATH_LEN);
-+}
-+
-+static int trigger_fstat_events(pid_t pid)
-+{
-+	int sockfd = -1, procfd = -1, devfd = -1;
-+	int localfd = -1, indicatorfd = -1;
-+	int pipefd[2] = { -1, -1 };
-+	struct stat fileStat;
-+	int ret = -1;
-+
-+	/* unmountable pseudo-filesystems */
-+	if (CHECK(pipe(pipefd) < 0, "trigger", "pipe failed\n"))
-+		return ret;
-+	/* unmountable pseudo-filesystems */
-+	sockfd = socket(AF_INET, SOCK_STREAM, 0);
-+	if (CHECK(sockfd < 0, "trigger", "scoket failed\n"))
-+		goto out_close;
-+	/* mountable pseudo-filesystems */
-+	procfd = open("/proc/self/comm", O_RDONLY);
-+	if (CHECK(procfd < 0, "trigger", "open /proc/self/comm failed\n"))
-+		goto out_close;
-+	devfd = open("/dev/urandom", O_RDONLY);
-+	if (CHECK(devfd < 0, "trigger", "open /dev/urandom failed\n"))
-+		goto out_close;
-+	localfd = open("/tmp/d_path_loadgen.txt", O_CREAT | O_RDONLY);
-+	if (CHECK(localfd < 0, "trigger", "open /tmp/d_path_loadgen.txt failed\n"))
-+		goto out_close;
-+	/* bpf_d_path will return path with (deleted) */
-+	remove("/tmp/d_path_loadgen.txt");
-+	indicatorfd = open("/tmp/", O_PATH);
-+	if (CHECK(indicatorfd < 0, "trigger", "open /tmp/ failed\n"))
-+		goto out_close;
-+
-+	ret = set_pathname(pipefd[0], pid);
-+	if (CHECK(ret < 0, "trigger", "set_pathname failed for pipe[0]\n"))
-+		goto out_close;
-+	ret = set_pathname(pipefd[1], pid);
-+	if (CHECK(ret < 0, "trigger", "set_pathname failed for pipe[1]\n"))
-+		goto out_close;
-+	ret = set_pathname(sockfd, pid);
-+	if (CHECK(ret < 0, "trigger", "set_pathname failed for socket\n"))
-+		goto out_close;
-+	ret = set_pathname(procfd, pid);
-+	if (CHECK(ret < 0, "trigger", "set_pathname failed for proc\n"))
-+		goto out_close;
-+	ret = set_pathname(devfd, pid);
-+	if (CHECK(ret < 0, "trigger", "set_pathname failed for dev\n"))
-+		goto out_close;
-+	ret = set_pathname(localfd, pid);
-+	if (CHECK(ret < 0, "trigger", "set_pathname failed for file\n"))
-+		goto out_close;
-+	ret = set_pathname(indicatorfd, pid);
-+	if (CHECK(ret < 0, "trigger", "set_pathname failed for dir\n"))
-+		goto out_close;
-+
-+	/* triggers vfs_getattr */
-+	fstat(pipefd[0], &fileStat);
-+	fstat(pipefd[1], &fileStat);
-+	fstat(sockfd, &fileStat);
-+	fstat(procfd, &fileStat);
-+	fstat(devfd, &fileStat);
-+	fstat(localfd, &fileStat);
-+	fstat(indicatorfd, &fileStat);
-+
-+out_close:
-+	/* triggers filp_close */
-+	close(pipefd[0]);
-+	close(pipefd[1]);
-+	close(sockfd);
-+	close(procfd);
-+	close(devfd);
-+	close(localfd);
-+	close(indicatorfd);
-+	return ret;
-+}
-+
-+void test_d_path(void)
-+{
-+	struct test_d_path__bss *bss;
-+	struct test_d_path *skel;
-+	int err;
-+
-+	skel = test_d_path__open_and_load();
-+	if (CHECK(!skel, "setup", "d_path skeleton failed\n"))
-+		goto cleanup;
-+
-+	err = test_d_path__attach(skel);
-+	if (CHECK(err, "setup", "attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	bss = skel->bss;
-+	bss->my_pid = getpid();
-+
-+	err = trigger_fstat_events(bss->my_pid);
-+	if (err < 0)
-+		goto cleanup;
-+
-+	for (int i = 0; i < MAX_FILES; i++) {
-+		CHECK(strncmp(src.paths[i], bss->paths_stat[i], MAX_PATH_LEN),
-+		      "check",
-+		      "failed to get stat path[%d]: %s vs %s\n",
-+		      i, src.paths[i], bss->paths_stat[i]);
-+		CHECK(strncmp(src.paths[i], bss->paths_close[i], MAX_PATH_LEN),
-+		      "check",
-+		      "failed to get close path[%d]: %s vs %s\n",
-+		      i, src.paths[i], bss->paths_close[i]);
-+		/* The d_path helper returns size plus NUL char, hence + 1 */
-+		CHECK(bss->rets_stat[i] != strlen(bss->paths_stat[i]) + 1,
-+		      "check",
-+		      "failed to match stat return [%d]: %d vs %zd [%s]\n",
-+		      i, bss->rets_stat[i], strlen(bss->paths_stat[i]) + 1,
-+		      bss->paths_stat[i]);
-+		CHECK(bss->rets_close[i] != strlen(bss->paths_stat[i]) + 1,
-+		      "check",
-+		      "failed to match stat return [%d]: %d vs %zd [%s]\n",
-+		      i, bss->rets_close[i], strlen(bss->paths_close[i]) + 1,
-+		      bss->paths_stat[i]);
-+	}
-+
-+cleanup:
-+	test_d_path__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_d_path.c b/tools/testing/selftests/bpf/progs/test_d_path.c
-new file mode 100644
-index 000000000000..61f007855649
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_d_path.c
-@@ -0,0 +1,58 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+#define MAX_PATH_LEN		128
-+#define MAX_FILES		7
-+
-+pid_t my_pid = 0;
-+__u32 cnt_stat = 0;
-+__u32 cnt_close = 0;
-+char paths_stat[MAX_FILES][MAX_PATH_LEN] = {};
-+char paths_close[MAX_FILES][MAX_PATH_LEN] = {};
-+int rets_stat[MAX_FILES] = {};
-+int rets_close[MAX_FILES] = {};
-+
-+SEC("fentry/vfs_getattr")
-+int BPF_PROG(prog_stat, struct path *path, struct kstat *stat,
-+	     __u32 request_mask, unsigned int query_flags)
-+{
-+	pid_t pid = bpf_get_current_pid_tgid() >> 32;
-+	__u32 cnt = cnt_stat;
-+	int ret;
-+
-+	if (pid != my_pid)
-+		return 0;
-+
-+	if (cnt >= MAX_FILES)
-+		return 0;
-+	ret = bpf_d_path(path, paths_stat[cnt], MAX_PATH_LEN);
-+
-+	rets_stat[cnt] = ret;
-+	cnt_stat++;
-+	return 0;
-+}
-+
-+SEC("fentry/filp_close")
-+int BPF_PROG(prog_close, struct file *file, void *id)
-+{
-+	pid_t pid = bpf_get_current_pid_tgid() >> 32;
-+	__u32 cnt = cnt_close;
-+	int ret;
-+
-+	if (pid != my_pid)
-+		return 0;
-+
-+	if (cnt >= MAX_FILES)
-+		return 0;
-+	ret = bpf_d_path(&file->f_path,
-+			 paths_close[cnt], MAX_PATH_LEN);
-+
-+	rets_close[cnt] = ret;
-+	cnt_close++;
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.25.4
+Could you provide a test case where clang generates the above code?
+I would like to see whether clang can do a better job to avoid
+such codes.
 
+> 
+> I made selftest out of it and it fails to load with:
+> 
+>    # test_verifier -v 267
+>    #267/p dead path check FAIL
+>    Failed to load prog 'Success'!
+>    0: (61) r2 = *(u32 *)(r1 +80)
+>    1: (61) r4 = *(u32 *)(r1 +76)
+>    2: (bf) r3 = r4
+>    3: (07) r3 += 42
+>    4: (b7) r1 = 0
+>    5: (2d) if r3 > r2 goto pc+2
+> 
+>    from 5 to 8: R1_w=inv0 R2_w=pkt_end(id=0,off=0,imm=0) R3_w=pkt(id=0,off=42,r=0,imm=0) R4_w=pkt(id=0,off=0,r=0,imm=0) R10=fp0
+>    8: (2d) if r3 > r2 goto pc+1
+>     R1_w=inv0 R2_w=pkt_end(id=0,off=0,imm=0) R3_w=pkt(id=0,off=42,r=42,imm=0) R4_w=pkt(id=0,off=0,r=42,imm=0) R10=fp0
+>    9: (69) r2 = *(u16 *)(r1 +9)
+>    R1 invalid mem access 'inv'
+>    processed 15 insns (limit 1000000) max_states_per_insn 0 total_states 1 peak_states 1 mark_read 0
+> 
+> The verifier does not seem to take into account that code can't
+> ever reach instruction 9 if the size check fails and r1 will be
+> always valid when size check succeeds.
+> 
+> My guess is that verifier does not have such check, but I'm still
+> scratching on the surface of it, so I could be totally wrong and
+> missing something.. before I dive in I was wondering you guys
+> could help me out with some insights or suggestions.
+
+There are no bits in reg_state to indicate a pkt pointer already goes 
+beyond the packet_end. So insn 8 cannot conclude the condition r3 > r2 
+is always true...
+
+If a bit to indicate packet pointer exceeding the end, it should work.
+Fixing in verifier probably not too hard. But this should be a corner 
+case and it will be good to check whether we can avoid it in clang.
+
+> 
+> thanks,
+> jirka
+> 
+> 
+> ---
+>   .../testing/selftests/bpf/verifier/ctx_skb.c  | 21 +++++++++++++++++++
+>   1 file changed, 21 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/verifier/ctx_skb.c b/tools/testing/selftests/bpf/verifier/ctx_skb.c
+> index 2e16b8e268f2..54578f1fb662 100644
+> --- a/tools/testing/selftests/bpf/verifier/ctx_skb.c
+> +++ b/tools/testing/selftests/bpf/verifier/ctx_skb.c
+> @@ -346,6 +346,27 @@
+>   	.result = ACCEPT,
+>   	.prog_type = BPF_PROG_TYPE_SK_SKB,
+>   },
+> +{
+> +	"dead path check",
+> +	.insns = {
+> +	BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_1,		//  0. r2 = *(u32 *)(r1 + data_end)
+> +		    offsetof(struct __sk_buff, data_end)),
+> +	BPF_LDX_MEM(BPF_W, BPF_REG_4, BPF_REG_1,		//  1. r4 = *(u32 *)(r1 + data)
+> +		    offsetof(struct __sk_buff, data)),
+> +	BPF_MOV64_REG(BPF_REG_3, BPF_REG_4),			//  2. r3 = r4
+> +	BPF_ALU64_IMM(BPF_ADD, BPF_REG_3, 42),			//  3. r3 += 42
+> +	BPF_MOV64_IMM(BPF_REG_1, 0),				//  4. r1 = 0
+> +	BPF_JMP_REG(BPF_JGT, BPF_REG_3, BPF_REG_2, 2),		//  5. if r3 > r2 goto 8
+> +	BPF_ALU64_IMM(BPF_ADD, BPF_REG_4, 14),			//  6. r4 += 14
+> +	BPF_MOV64_REG(BPF_REG_1, BPF_REG_4),			//  7. r1 = r4
+> +	BPF_JMP_REG(BPF_JGT, BPF_REG_3, BPF_REG_2, 1),		//  8. if r3 > r2 goto 10
+> +	BPF_LDX_MEM(BPF_H, BPF_REG_2, BPF_REG_1, 9),		//  9. r2 = *(u8 *)(r1 + 9)
+> +	BPF_MOV64_IMM(BPF_REG_0, 0),				// 10. r0 = 0
+> +	BPF_EXIT_INSN(),					// 11. exit
+> +	},
+> +	.result = ACCEPT,
+> +	.prog_type = BPF_PROG_TYPE_SK_SKB,
+> +},
+>   {
+>   	"overlapping checks for direct packet access SK_SKB",
+>   	.insns = {
+> 
