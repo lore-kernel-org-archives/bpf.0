@@ -5,67 +5,67 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F9A3C433E5
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0CDDC433EB
 	for <bpf@archiver.kernel.org>; Wed, 12 Aug 2020 16:33:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 29E592076B
+	by mail.kernel.org (Postfix) with ESMTP id 89F41207DA
 	for <bpf@archiver.kernel.org>; Wed, 12 Aug 2020 16:33:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fw1fncLs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hv+/j9Md"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726506AbgHLQdS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 12 Aug 2020 12:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37368 "EHLO
+        id S1726642AbgHLQdT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 12 Aug 2020 12:33:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726510AbgHLQdR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1726518AbgHLQdR (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 12 Aug 2020 12:33:17 -0400
-Received: from mail-vs1-xe41.google.com (mail-vs1-xe41.google.com [IPv6:2607:f8b0:4864:20::e41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D99AC061386;
+Received: from mail-vk1-xa42.google.com (mail-vk1-xa42.google.com [IPv6:2607:f8b0:4864:20::a42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EB6C061385;
         Wed, 12 Aug 2020 09:33:17 -0700 (PDT)
-Received: by mail-vs1-xe41.google.com with SMTP id j23so1409890vsq.7;
+Received: by mail-vk1-xa42.google.com with SMTP id k1so638748vkb.7;
         Wed, 12 Aug 2020 09:33:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=5zVIJDDFQTLQ+d3i+TnZGWfN6fBF17Z8BnHl3szZTvM=;
-        b=Fw1fncLs9N0kOhyZ+y18hlRkHqKcJsry/P/47v6+jAjql6/8ZUL4A4Se0c3lf2xwOx
-         eimAsYjEyPSpGcPJ5kxovhXZbLs2rcCSUsf3LeyYgQyAKHfiIqJcTKMOSaqz/cl+Ox03
-         Qgar/Wi6fPaUpyQoFHmg/GMMDbgdmSG5NWMX7v6dXFiMKWtiqKeB2E7gS+PDqHe3Y5pn
-         Nsm137JZeHulxYD8gDcHeaLiyQ7Iuf4wu9MCq5tyVQ7RxaJUoCWGUuKdcNY658yZlVJe
-         J2AwGaxihGAF0XAdsgIkPDIlnPPgv2Lxo3SxaYZdNi8z4xmkf79y8R0uYIvV7TkwW3Iu
-         jRVw==
+        bh=FsV6tN7LcqDEjOofCki0Oq8dlSR26H06wV4vGa5fjaI=;
+        b=hv+/j9MdhYgykHf3BaW4nHKCRtp7AbbGKtZuDN1gScNdKxN57aDrjKMCqZnhNglvwR
+         7ZczlXShBzD6t0ijfV7129P/fm2pptb+tqFPuRAWYdrH8Pf9FVb28O2eFMlG2QWT90aQ
+         sESuxVXnZG5mzzeAPqYfQFEAStc4VNLykqtZdg7TzcHpzuq/FH8ywKyYdQragV5qKBkJ
+         1AZ+K0B1t9kaYzvVODyIHNRoJeIK6J1JhdnVDjCcrD+A9MZ4UnWsut43Gad5jFBshDJd
+         17gnhWPv5yi831HhYDPexZmINYtMAk7GmEf64b3mc4iyzl/haZw/YFrKdnOW0CkMOLoB
+         L+IA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=5zVIJDDFQTLQ+d3i+TnZGWfN6fBF17Z8BnHl3szZTvM=;
-        b=NXdnMLn1JjGqixJHby0oJ0aK20q+vKN6FHXIQaNqc30wZksGucgLH/r81gaQ1vHmDx
-         yX60sAI7+p81XfuXhsdm5pSuhYfMI0PGs0G3aBqU2dcpjq5xLMImLAXUzDO7nxn2lRnq
-         zR59u4OvP0OaHH8fYJ6df0t+j1n4JKPvmcUufTIZrmdJ88lAKoCtpk773/VheWPR2IvS
-         3Lf+TPelFmlrhCl4PK8wBHF0Wd8HkNuJmQZ4EENaN9eIB5/nYkgaQjenbitRsYysXNLB
-         54n+zowOxnZA09YHqYp68k+dlpaalllYWzF6ohVRp8fA49yN9Vdjxif2l6D9ABOvaIyq
-         ySrg==
-X-Gm-Message-State: AOAM530ZMJkBggVQt2RskrB/zwhwJdp4fA52EGcPCtr5++SvarIo2VZT
-        lwz0+IR7mtg/ZhigODvY0dcCceGHt5M=
-X-Google-Smtp-Source: ABdhPJymvgvpqfjRrlFIKo2KP4YxXOKSnw/sjxNdmdQJWAB+l5ralqX/jDuM9CNmYwdU+sQ0ZKTn3g==
-X-Received: by 2002:a67:ce12:: with SMTP id s18mr981167vsl.116.1597249996383;
-        Wed, 12 Aug 2020 09:33:16 -0700 (PDT)
+        bh=FsV6tN7LcqDEjOofCki0Oq8dlSR26H06wV4vGa5fjaI=;
+        b=d/tjRP4yU13APsXbUvpuH6rnxWuEIdb2tTdKciovF3HAWdxix1tBFS8mFAq/KrV7V2
+         4pRaTXIJERdA142YxWSEik9yh36lC5Jx3/9ZvoNbmbdC6gjp4FQi6611G42bYzW3AwT1
+         6hckFlB10GXqva+VGugYzbvrKdrUskjgNmPe6rEgRPi9zFR4/43HOeiX2rlTduq+xT5r
+         +YJpZm4qquOu1TucE0+siyZrHtDKYZS/sEd9u54Xk4EsMpaktm+ZQK82y4qsN+oq62ZW
+         nOv2YBHn09ndgw1Pzf2L73aV1OpdMjmH1PplzUl72B3N0vdl0pRrcrjcuGRpXtTNlk+s
+         ztzw==
+X-Gm-Message-State: AOAM5303vq5ef23D9QpEKxQw6ZovBcgXCsubzlKCMQCXl6h0jp7n8UNT
+        WWPa9aDiLb8ayxIjF64sdU24DvXgLdY=
+X-Google-Smtp-Source: ABdhPJwe/0VfZJOfrIYPbuN7Gm+7OU2KnRrh1bZFF4HL/vA5eA5mBYC8fM034iC2Ew5JvaQruy4snA==
+X-Received: by 2002:a1f:9048:: with SMTP id s69mr191601vkd.73.1597249995853;
+        Wed, 12 Aug 2020 09:33:15 -0700 (PDT)
 Received: from ebpf-cloudtop.c.googlers.com.com (39.119.74.34.bc.googleusercontent.com. [34.74.119.39])
         by smtp.googlemail.com with ESMTPSA id e8sm245374uar.11.2020.08.12.09.33.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2020 09:33:16 -0700 (PDT)
+        Wed, 12 Aug 2020 09:33:15 -0700 (PDT)
 From:   Leah Rumancik <leah.rumancik@gmail.com>
 To:     bpf@vger.kernel.org, linux-block@vger.kernel.org
 Cc:     leah.rumancik@gmail.com, orbekk@google.com, harshads@google.com,
         jasiu@google.com, saranyamohan@google.com, tytso@google.com,
         bvanassche@google.com
-Subject: [RFC PATCH 3/4] bpf: add eBPF IO filter documentation
-Date:   Wed, 12 Aug 2020 16:33:04 +0000
-Message-Id: <20200812163305.545447-4-leah.rumancik@gmail.com>
+Subject: [RFC PATCH 2/4] bpf: add protect_gpt sample program
+Date:   Wed, 12 Aug 2020 16:33:03 +0000
+Message-Id: <20200812163305.545447-3-leah.rumancik@gmail.com>
 X-Mailer: git-send-email 2.28.0.236.gb10cc79966-goog
 In-Reply-To: <20200812163305.545447-1-leah.rumancik@gmail.com>
 References: <20200812163305.545447-1-leah.rumancik@gmail.com>
@@ -77,60 +77,214 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add page in Documentation/block describing overview of IO filter
+Sample program to protect GUID partition table. Uses IO filter bpf
+program type.
 
 Signed-off-by: Kjetil Ørbekk <orbekk@google.com>
 Signed-off-by: Harshad Shirwadkar <harshads@google.com>
 Signed-off-by: Leah Rumancik <leah.rumancik@gmail.com>
 ---
- Documentation/block/bpf_io_filter.rst | 28 +++++++++++++++++++++++++++
- Documentation/block/index.rst         |  1 +
- 2 files changed, 29 insertions(+)
- create mode 100644 Documentation/block/bpf_io_filter.rst
+ samples/bpf/Makefile           |   3 +
+ samples/bpf/protect_gpt_kern.c |  21 ++++++
+ samples/bpf/protect_gpt_user.c | 133 +++++++++++++++++++++++++++++++++
+ 3 files changed, 157 insertions(+)
+ create mode 100644 samples/bpf/protect_gpt_kern.c
+ create mode 100644 samples/bpf/protect_gpt_user.c
 
-diff --git a/Documentation/block/bpf_io_filter.rst b/Documentation/block/bpf_io_filter.rst
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 8403e4762306..f02ae9b2a283 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -53,6 +53,7 @@ tprogs-y += task_fd_query
+ tprogs-y += xdp_sample_pkts
+ tprogs-y += ibumad
+ tprogs-y += hbm
++tprogs-y += protect_gpt
+ 
+ # Libbpf dependencies
+ LIBBPF = $(TOOLS_PATH)/lib/bpf/libbpf.a
+@@ -109,6 +110,7 @@ task_fd_query-objs := bpf_load.o task_fd_query_user.o $(TRACE_HELPERS)
+ xdp_sample_pkts-objs := xdp_sample_pkts_user.o $(TRACE_HELPERS)
+ ibumad-objs := bpf_load.o ibumad_user.o $(TRACE_HELPERS)
+ hbm-objs := bpf_load.o hbm.o $(CGROUP_HELPERS)
++protect_gpt-objs := bpf_load.o protect_gpt_user.o $(TRACE_HELPERS)
+ 
+ # Tell kbuild to always build the programs
+ always-y := $(tprogs-y)
+@@ -170,6 +172,7 @@ always-y += ibumad_kern.o
+ always-y += hbm_out_kern.o
+ always-y += hbm_edt_kern.o
+ always-y += xdpsock_kern.o
++always-y += protect_gpt_kern.o
+ 
+ ifeq ($(ARCH), arm)
+ # Strip all except -D__LINUX_ARM_ARCH__ option needed to handle linux
+diff --git a/samples/bpf/protect_gpt_kern.c b/samples/bpf/protect_gpt_kern.c
 new file mode 100644
-index 000000000000..956997576ae5
+index 000000000000..cc49d66c120a
 --- /dev/null
-+++ b/Documentation/block/bpf_io_filter.rst
-@@ -0,0 +1,28 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/samples/bpf/protect_gpt_kern.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+======================
-+IO Filtering with eBPF
-+======================
++#include <linux/bpf.h>
++#include <linux/blk_types.h>
++#include "bpf/bpf_helpers.h"
 +
-+Bio requests can be filtered with the eBPF IO filter program type (BPF_PROG_TYPE_IO_FILTER). To use this program type, the kernel must be compiled with CONFIG_BPF_IO_FILTER.
++char _license[] SEC("license") = "GPL";
 +
-+Attachment
-+==========
++#define GPT_SECTORS 34
 +
-+IO filter programs can be attached to disks using the  BPF_BIO_SUBMIT attach type. Up to 64 filter programs can be attached to a single disk. References to the attached programs are stored in the gendisk struct as a bpf_prog_array.
++SEC("gpt_io_filter")
++int protect_gpt(struct bpf_io_request *io_req)
++{
++	/* within GPT and not a read operation */
++	if (io_req->sector_start < GPT_SECTORS && (io_req->opf & REQ_OP_MASK) != REQ_OP_READ)
++		return IO_BLOCK;
 +
-+API
-+===
++	return IO_ALLOW;
++}
 +
-+Data is passed between the userspace and kernel eBPF code via a new struct bpf_io_request. This struct contains three fields: sector_start (starting sector of the bio request), sector_cnt (size of the request in sectors), and opf (operation information, opf field from the bio).
 +
-+Hook
-+====
+diff --git a/samples/bpf/protect_gpt_user.c b/samples/bpf/protect_gpt_user.c
+new file mode 100644
+index 000000000000..21ca25bc78af
+--- /dev/null
++++ b/samples/bpf/protect_gpt_user.c
+@@ -0,0 +1,133 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+The eBPF programs for a given disk are run whenever a bio request is submitted to that disk. The eBPF programs return IO_BLOCK or IO_ALLOW. If any of the programs return IO_BLOCK, the bio request is blocked. Because of the placement of the hook in submit_bio, as of this version, mechanisms which bypass submit_bio, such as SG_IO and NVMe passthrough, are not able to be filtered.
++#define _GNU_SOURCE
 +
-+Example
-+=======
++#include <stdio.h>
++#include <fcntl.h>
++#include <unistd.h>
++#include <linux/bpf.h>
++#include <errno.h>
++#include "trace_helpers.h"
++#include "bpf_load.h"
 +
-+An example, protect_gpt, is provided in the /samples/bpf/ folder. This sample uses an IO filter program to protect the GUID partition table by preventing writes to the first 34 sectors.
++/*
++ * user program to load bpf program (protect_gpt_kern) to prevent
++ * writing to GUID parititon table
++ *
++ * argument 1: device where program will be attached (ie. /dev/sda)
++ * argument 2: name for pinned program
++ * argument 3: --attach or --detach to attach/detach program
++ */
 +
-diff --git a/Documentation/block/index.rst b/Documentation/block/index.rst
-index 026addfc69bc..145930622a92 100644
---- a/Documentation/block/index.rst
-+++ b/Documentation/block/index.rst
-@@ -24,3 +24,4 @@ Block
-    stat
-    switching-sched
-    writeback_cache_control
-+   bpf-io-filter
++static int attach(char *dev, char *path)
++{
++	struct bpf_object *obj;
++	int ret, devfd, progfd;
++
++	progfd = bpf_obj_get(path);
++	if (progfd >= 0) {
++		fprintf(stderr, "Error: object already pinned at given location (%s)\n", path);
++		return 1;
++	}
++
++	ret = bpf_prog_load("protect_gpt_kern.o",
++			    BPF_PROG_TYPE_IO_FILTER, &obj, &progfd);
++	if (ret) {
++		fprintf(stderr, "Error: failed to load program\n");
++		return 1;
++	}
++
++	devfd = open(dev, O_RDONLY);
++	if (devfd == -1) {
++		fprintf(stderr, "Error: failed to open block device %s\n", dev);
++		return 1;
++	}
++
++	ret = bpf_prog_attach(progfd, devfd, BPF_BIO_SUBMIT, 0);
++	if (ret) {
++		fprintf(stderr, "Error: failed to attach program to device\n");
++		close(devfd);
++		return 1;
++	}
++
++	ret = bpf_obj_pin(progfd, path);
++	if (ret != 0) {
++		fprintf(stderr, "Error pinning program: %s\n", strerror(errno));
++		fprintf(stderr, "Detaching program from device\n");
++
++		if (bpf_prog_detach2(progfd, devfd, BPF_BIO_SUBMIT))
++			fprintf(stderr, "Error: failed to detach program\n");
++
++		close(devfd);
++		return 1;
++	}
++
++	close(devfd);
++	printf("Attached protect_gpt program to device %s.\n", dev);
++	printf("Program pinned to %s.\n", path);
++	return 0;
++}
++
++static int detach(char *dev, char *path)
++{
++	int ret, devfd, progfd;
++
++	progfd = bpf_obj_get(path);
++	if (progfd < 0) {
++		fprintf(stderr, "Error: failed to get pinned program from path %s\n", path);
++		return 1;
++	}
++
++	devfd = open(dev, O_RDONLY);
++	if (devfd == -1) {
++		fprintf(stderr, "Error: failed to open block device %s\n", dev);
++		return 1;
++	}
++
++	ret = bpf_prog_detach2(progfd, devfd, BPF_BIO_SUBMIT);
++	if (ret) {
++		fprintf(stderr, "Error: failed to detach program\n");
++		close(devfd);
++		return 1;
++	}
++
++	close(devfd);
++
++	ret = unlink(path);
++	if (ret < 0) {
++		fprintf(stderr, "Error unpinning map at %s: %s\n", path, strerror(errno));
++		return 1;
++	}
++
++	printf("Detached and unpinned program.\n");
++	return 0;
++}
++
++static void usage(char *exec)
++{
++	printf("Usage:\n");
++	printf("\t %s <device> <prog name> --attach\n", exec);
++	printf("\t %s <device> <prog name> --detach\n", exec);
++}
++
++int main(int argc, char **argv)
++{
++	char path[256];
++
++	if (argc != 4) {
++		usage(argv[0]);
++		return 1;
++	}
++
++	strcpy(path, "/sys/fs/bpf/");
++	strcat(path, argv[2]);
++
++	if (strcmp(argv[3], "--attach") == 0)
++		return attach(argv[1], path);
++	else if (strcmp(argv[3], "--detach") == 0)
++		return detach(argv[1], path);
++
++	fprintf(stderr, "Error: invalid flag, please specify --attach or --detach");
++	return 1;
++}
++
 -- 
 2.28.0.236.gb10cc79966-goog
 
