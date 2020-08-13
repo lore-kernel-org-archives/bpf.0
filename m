@@ -5,42 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A8875C433DF
-	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 20:40:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47A08C433DF
+	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 20:40:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 83CB120716
-	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 20:40:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1EAD820716
+	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 20:40:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="CV9b1hM6"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="AoqGOZlS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726679AbgHMUkJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Aug 2020 16:40:09 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:38804 "EHLO
+        id S1726669AbgHMUkM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Aug 2020 16:40:12 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:31032 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726667AbgHMUkI (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 13 Aug 2020 16:40:08 -0400
+        by vger.kernel.org with ESMTP id S1726681AbgHMUkK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 13 Aug 2020 16:40:10 -0400
 Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07DKcluv020858
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 13:40:08 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07DKclv0020858
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 13:40:09 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=L1/KeXujsHkqioj6VLgkViGteh/lMwdZqTKnC0KlOKc=;
- b=CV9b1hM66Dr4qzNKS0tGAhymCgcK3FQIDEz9Jac6Uu51Hy36ERVDMuYGK9Hv5SFk2hfU
- nJYGTcThwg6qTwhf8QKHzWVCRebIXPLbpPIAWITv/2BNuoEX5rePkbYcn5ruEHsX5+8N
- XZwI4ZkSEKkF2WmkNDE7VH67JKnv21dQ4QE= 
+ bh=zdOUMlPLM5CeGR3mHvYZL7On1+O0+1hDd4dBEIzkVd4=;
+ b=AoqGOZlS15WKBlYcmKcfG8ukFkyRvTq6AsIPPunYVeRohs+FSvmzlEQZvEWxKAir4PQK
+ MM8+txVGppEPYO2WD311ZRL3y8w8neg63ozrKjPmTRkRpkQlmxl/oA2Yd5Dj9vkQYnYP
+ MUvfeYx5e4+L9PH3dtCMrCgZ/XhkRV5wtes= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 32v0kfkxtr-12
+        by mx0a-00082601.pphosted.com with ESMTP id 32v0kfkxtr-15
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 13:40:08 -0700
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 13:40:09 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 13 Aug 2020 13:39:52 -0700
+ 15.1.1979.3; Thu, 13 Aug 2020 13:39:59 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 964A82EC596D; Thu, 13 Aug 2020 13:39:46 -0700 (PDT)
+        id 6D8FD2EC596D; Thu, 13 Aug 2020 13:39:57 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf 3/9] libbpf: fix BTF-defined map-in-map initialization on 32-bit host arches
-Date:   Thu, 13 Aug 2020 13:39:23 -0700
-Message-ID: <20200813203930.978141-4-andriin@fb.com>
+Subject: [PATCH v2 bpf 8/9] tools/bpftool: generate data section struct with conservative alignment
+Date:   Thu, 13 Aug 2020 13:39:28 -0700
+Message-ID: <20200813203930.978141-9-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200813203930.978141-1-andriin@fb.com>
 References: <20200813203930.978141-1-andriin@fb.com>
@@ -72,70 +72,42 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Libbpf built in 32-bit mode should be careful about not conflating 64-bit=
- BPF
-pointers in BPF ELF file and host architecture pointers. This patch fixes
-issue of incorrect initializating of map-in-map inner map slots due to su=
-ch
-difference.
+The comment in the code describes this in good details. Generate such a m=
+emory
+layout that would work both on 32-bit and 64-bit architectures for user-s=
+pace.
 
-Fixes: 646f02ffdd49 ("libbpf: Add BTF-defined map-in-map support")
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/libbpf.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ tools/bpf/bpftool/gen.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 0a06124f7999..4a8524b2dda1 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5194,7 +5194,8 @@ static int bpf_object__collect_st_ops_relos(struct =
-bpf_object *obj,
- static int bpf_object__collect_map_relos(struct bpf_object *obj,
- 					 GElf_Shdr *shdr, Elf_Data *data)
- {
--	int i, j, nrels, new_sz, ptr_sz =3D sizeof(void *);
-+	const int bpf_ptr_sz =3D 8, host_ptr_sz =3D sizeof(void *);
-+	int i, j, nrels, new_sz;
- 	const struct btf_var_secinfo *vi =3D NULL;
- 	const struct btf_type *sec, *var, *def;
- 	const struct btf_member *member;
-@@ -5243,7 +5244,7 @@ static int bpf_object__collect_map_relos(struct bpf=
-_object *obj,
-=20
- 			vi =3D btf_var_secinfos(sec) + map->btf_var_idx;
- 			if (vi->offset <=3D rel.r_offset &&
--			    rel.r_offset + sizeof(void *) <=3D vi->offset + vi->size)
-+			    rel.r_offset + bpf_ptr_sz <=3D vi->offset + vi->size)
- 				break;
- 		}
- 		if (j =3D=3D obj->nr_maps) {
-@@ -5279,17 +5280,20 @@ static int bpf_object__collect_map_relos(struct b=
-pf_object *obj,
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index db80e836816e..f61184653633 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -143,6 +143,20 @@ static int codegen_datasec_def(struct bpf_object *ob=
+j,
+ 			      var_name, align);
  			return -EINVAL;
-=20
- 		moff =3D rel.r_offset - vi->offset - moff;
--		if (moff % ptr_sz)
-+		/* here we use BPF pointer size, which is always 64 bit, as we
-+		 * are parsing ELF that was built for BPF target
+ 		}
++		/* Assume 32-bit architectures when generating data section
++		 * struct memory layout. Given bpftool can't know which target
++		 * host architecture it's emitting skeleton for, we need to be
++		 * conservative and assume 32-bit one to ensure enough padding
++		 * bytes are generated for pointer and long types. This will
++		 * still work correctly for 64-bit architectures, because in
++		 * the worst case we'll generate unnecessary padding field,
++		 * which on 64-bit architectures is not strictly necessary and
++		 * would be handled by natural 8-byte alignment. But it still
++		 * will be a correct memory layout, based on recorded offsets
++		 * in BTF.
 +		 */
-+		if (moff % bpf_ptr_sz)
- 			return -EINVAL;
--		moff /=3D ptr_sz;
-+		moff /=3D bpf_ptr_sz;
- 		if (moff >=3D map->init_slots_sz) {
- 			new_sz =3D moff + 1;
--			tmp =3D realloc(map->init_slots, new_sz * ptr_sz);
-+			tmp =3D realloc(map->init_slots, new_sz * host_ptr_sz);
- 			if (!tmp)
- 				return -ENOMEM;
- 			map->init_slots =3D tmp;
- 			memset(map->init_slots + map->init_slots_sz, 0,
--			       (new_sz - map->init_slots_sz) * ptr_sz);
-+			       (new_sz - map->init_slots_sz) * host_ptr_sz);
- 			map->init_slots_sz =3D new_sz;
- 		}
- 		map->init_slots[moff] =3D targ_map;
++		if (align > 4)
++			align =3D 4;
+=20
+ 		align_off =3D (off + align - 1) / align * align;
+ 		if (align_off !=3D need_off) {
 --=20
 2.24.1
 
