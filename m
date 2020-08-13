@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98977C433DF
-	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 07:17:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C259C433E1
+	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 07:17:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 783032078B
-	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 07:17:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 273B42078B
+	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 07:17:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Y6AMcdq/"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="QyCJI9de"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726632AbgHMHRm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726647AbgHMHRm (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 13 Aug 2020 03:17:42 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:58182 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726486AbgHMHRe (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 13 Aug 2020 03:17:34 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 07D7FUBj025951
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 00:17:33 -0700
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:64204 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726632AbgHMHRk (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 13 Aug 2020 03:17:40 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07D7EfbK021792
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 00:17:39 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=L1/KeXujsHkqioj6VLgkViGteh/lMwdZqTKnC0KlOKc=;
- b=Y6AMcdq/K8VR5Ha0H7oS6CgrCQRNE6XPuL5GNmvTE33Cf3lWO6F4UPJy+/aFeHm/OBpB
- UQBcsxlyFcgOQ6COwqTz9AnmeentUWKiuhc6xX5B+p2Yo0S5YQzMgP7exK/M7xw5m2af
- OVv4Zb0tyVAJaOPCKqHLHtd5Hbk7GwDeYcM= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 32v0kh8ckc-3
+ bh=dZ/6d6r5sz9GcD0wgNaMearIT/YA7cjblJFShTofgT0=;
+ b=QyCJI9deaynfrsKEOmOIv6c1v7S8AJm70YYFnx0XI+PC+7AgYrsEC1R9OnbNEqnmhCom
+ 1idu4dKL560McqjpZ8HnN63pEIQJSvMDH1jirD0AHF7dyFlqxGcGvAeVJtnl9OxLB4nb
+ C3OvHADxobx0gR78jr2lpHWxYj5YSfCCnaI= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 32v0kfghr9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 00:17:33 -0700
-Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 00:17:39 -0700
+Received: from intmgw005.03.ash8.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 13 Aug 2020 00:17:32 -0700
+ 15.1.1979.3; Thu, 13 Aug 2020 00:17:38 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 56A922EC5928; Thu, 13 Aug 2020 00:17:31 -0700 (PDT)
+        id 9F7732EC5928; Thu, 13 Aug 2020 00:17:35 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf 3/9] libbpf: fix BTF-defined map-in-map initialization on 32-bit host arches
-Date:   Thu, 13 Aug 2020 00:17:16 -0700
-Message-ID: <20200813071722.2213397-4-andriin@fb.com>
+Subject: [PATCH bpf 5/9] selftests/bpf: fix btf_dump test cases on 32-bit arches
+Date:   Thu, 13 Aug 2020 00:17:18 -0700
+Message-ID: <20200813071722.2213397-6-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200813071722.2213397-1-andriin@fb.com>
 References: <20200813071722.2213397-1-andriin@fb.com>
@@ -61,10 +61,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-13_04:2020-08-13,2020-08-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 spamscore=0
- phishscore=0 suspectscore=8 mlxlogscore=999 priorityscore=1501
- adultscore=0 malwarescore=0 clxscore=1015 lowpriorityscore=0
- impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ adultscore=0 mlxscore=0 clxscore=1015 priorityscore=1501
+ lowpriorityscore=0 mlxlogscore=999 suspectscore=8 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2006250000 definitions=main-2008130055
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -72,70 +72,67 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Libbpf built in 32-bit mode should be careful about not conflating 64-bit=
- BPF
-pointers in BPF ELF file and host architecture pointers. This patch fixes
-issue of incorrect initializating of map-in-map inner map slots due to su=
-ch
-difference.
+Fix btf_dump test cases by hard-coding BPF's pointer size of 8 bytes for =
+cases
+where it's impossible to deterimne the pointer size (no long type in BTF)=
+. In
+cases where it's known, validate libbpf correctly determines it as 8.
 
-Fixes: 646f02ffdd49 ("libbpf: Add BTF-defined map-in-map support")
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/libbpf.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ .../selftests/bpf/prog_tests/btf_dump.c       | 27 ++++++++++++++-----
+ 1 file changed, 20 insertions(+), 7 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 0a06124f7999..4a8524b2dda1 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5194,7 +5194,8 @@ static int bpf_object__collect_st_ops_relos(struct =
-bpf_object *obj,
- static int bpf_object__collect_map_relos(struct bpf_object *obj,
- 					 GElf_Shdr *shdr, Elf_Data *data)
- {
--	int i, j, nrels, new_sz, ptr_sz =3D sizeof(void *);
-+	const int bpf_ptr_sz =3D 8, host_ptr_sz =3D sizeof(void *);
-+	int i, j, nrels, new_sz;
- 	const struct btf_var_secinfo *vi =3D NULL;
- 	const struct btf_type *sec, *var, *def;
- 	const struct btf_member *member;
-@@ -5243,7 +5244,7 @@ static int bpf_object__collect_map_relos(struct bpf=
-_object *obj,
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/te=
+sting/selftests/bpf/prog_tests/btf_dump.c
+index cb33a7ee4e04..39fb81d9daeb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
+@@ -12,15 +12,16 @@ void btf_dump_printf(void *ctx, const char *fmt, va_l=
+ist args)
+ static struct btf_dump_test_case {
+ 	const char *name;
+ 	const char *file;
++	bool known_ptr_sz;
+ 	struct btf_dump_opts opts;
+ } btf_dump_test_cases[] =3D {
+-	{"btf_dump: syntax", "btf_dump_test_case_syntax", {}},
+-	{"btf_dump: ordering", "btf_dump_test_case_ordering", {}},
+-	{"btf_dump: padding", "btf_dump_test_case_padding", {}},
+-	{"btf_dump: packing", "btf_dump_test_case_packing", {}},
+-	{"btf_dump: bitfields", "btf_dump_test_case_bitfields", {}},
+-	{"btf_dump: multidim", "btf_dump_test_case_multidim", {}},
+-	{"btf_dump: namespacing", "btf_dump_test_case_namespacing", {}},
++	{"btf_dump: syntax", "btf_dump_test_case_syntax", true, {}},
++	{"btf_dump: ordering", "btf_dump_test_case_ordering", false, {}},
++	{"btf_dump: padding", "btf_dump_test_case_padding", true, {}},
++	{"btf_dump: packing", "btf_dump_test_case_packing", true, {}},
++	{"btf_dump: bitfields", "btf_dump_test_case_bitfields", true, {}},
++	{"btf_dump: multidim", "btf_dump_test_case_multidim", false, {}},
++	{"btf_dump: namespacing", "btf_dump_test_case_namespacing", false, {}},
+ };
 =20
- 			vi =3D btf_var_secinfos(sec) + map->btf_var_idx;
- 			if (vi->offset <=3D rel.r_offset &&
--			    rel.r_offset + sizeof(void *) <=3D vi->offset + vi->size)
-+			    rel.r_offset + bpf_ptr_sz <=3D vi->offset + vi->size)
- 				break;
- 		}
- 		if (j =3D=3D obj->nr_maps) {
-@@ -5279,17 +5280,20 @@ static int bpf_object__collect_map_relos(struct b=
-pf_object *obj,
- 			return -EINVAL;
+ static int btf_dump_all_types(const struct btf *btf,
+@@ -62,6 +63,18 @@ static int test_btf_dump_case(int n, struct btf_dump_t=
+est_case *t)
+ 		goto done;
+ 	}
 =20
- 		moff =3D rel.r_offset - vi->offset - moff;
--		if (moff % ptr_sz)
-+		/* here we use BPF pointer size, which is always 64 bit, as we
-+		 * are parsing ELF that was built for BPF target
-+		 */
-+		if (moff % bpf_ptr_sz)
- 			return -EINVAL;
--		moff /=3D ptr_sz;
-+		moff /=3D bpf_ptr_sz;
- 		if (moff >=3D map->init_slots_sz) {
- 			new_sz =3D moff + 1;
--			tmp =3D realloc(map->init_slots, new_sz * ptr_sz);
-+			tmp =3D realloc(map->init_slots, new_sz * host_ptr_sz);
- 			if (!tmp)
- 				return -ENOMEM;
- 			map->init_slots =3D tmp;
- 			memset(map->init_slots + map->init_slots_sz, 0,
--			       (new_sz - map->init_slots_sz) * ptr_sz);
-+			       (new_sz - map->init_slots_sz) * host_ptr_sz);
- 			map->init_slots_sz =3D new_sz;
- 		}
- 		map->init_slots[moff] =3D targ_map;
++	/* tests with t->known_ptr_sz have no "long" or "unsigned long" type,
++	 * so it's impossible to determine correct pointer size; but if they
++	 * do, it should be 8 regardless of host architecture, becaues BPF
++	 * target is always 64-bit
++	 */
++	if (!t->known_ptr_sz) {
++		btf__set_pointer_size(btf, 8);
++	} else {
++		CHECK(btf__pointer_size(btf) !=3D 8, "ptr_sz", "exp %d, got %zu\n",
++		      8, btf__pointer_size(btf));
++	}
++
+ 	snprintf(out_file, sizeof(out_file), "/tmp/%s.output.XXXXXX", t->file);
+ 	fd =3D mkstemp(out_file);
+ 	if (CHECK(fd < 0, "create_tmp", "failed to create file: %d\n", fd)) {
 --=20
 2.24.1
 
