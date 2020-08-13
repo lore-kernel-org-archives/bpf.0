@@ -2,112 +2,129 @@ Return-Path: <SRS0=LFNc=BX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47A08C433DF
-	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 20:40:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A28A3C433E1
+	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 20:46:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1EAD820716
-	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 20:40:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7877220675
+	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 20:46:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="AoqGOZlS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tqikhG8E"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726669AbgHMUkM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Aug 2020 16:40:12 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:31032 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726681AbgHMUkK (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 13 Aug 2020 16:40:10 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07DKclv0020858
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 13:40:09 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=zdOUMlPLM5CeGR3mHvYZL7On1+O0+1hDd4dBEIzkVd4=;
- b=AoqGOZlS15WKBlYcmKcfG8ukFkyRvTq6AsIPPunYVeRohs+FSvmzlEQZvEWxKAir4PQK
- MM8+txVGppEPYO2WD311ZRL3y8w8neg63ozrKjPmTRkRpkQlmxl/oA2Yd5Dj9vkQYnYP
- MUvfeYx5e4+L9PH3dtCMrCgZ/XhkRV5wtes= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 32v0kfkxtr-15
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 13:40:09 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 13 Aug 2020 13:39:59 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 6D8FD2EC596D; Thu, 13 Aug 2020 13:39:57 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf 8/9] tools/bpftool: generate data section struct with conservative alignment
-Date:   Thu, 13 Aug 2020 13:39:28 -0700
-Message-ID: <20200813203930.978141-9-andriin@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200813203930.978141-1-andriin@fb.com>
-References: <20200813203930.978141-1-andriin@fb.com>
+        id S1726593AbgHMUqf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Aug 2020 16:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44086 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726192AbgHMUqf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Aug 2020 16:46:35 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE1DC061757;
+        Thu, 13 Aug 2020 13:46:34 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id x10so3995491ybj.13;
+        Thu, 13 Aug 2020 13:46:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4YqrEj5VRWDiRt2Idp5zIwlFmoyUZaY/uAgM+dXmFH4=;
+        b=tqikhG8E5NukICJvqeaDLtEal+Gvsucc9DJUqflCvDbAUQZ9aTOa7jItS5MvTH8wrf
+         n+VE/NGS2m8Rv/OZ1wJOmKHD0b9gBZyUqybKYliB2dwor+RgkUOnFTxxB7GXzgn+bXsT
+         2prqk1aOgtas4azQAjKbIxBGGQDghgXoLnvTkY3Dj/blpBN3ndlC2S6J9AIhyE+iEJ40
+         SF4Mo1w9QOaTuOelK1f/ibUw+xoo/U+RSIVflbkQ8LMH7zsRm96/nA6wOooyGQ+B0HFZ
+         9JoS/0Dx3pF3S8eONkiZQi3qq8NxI3F2PMuMTme1615CKkvBMbtrfSXvccl4jQjfDxq3
+         F1Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4YqrEj5VRWDiRt2Idp5zIwlFmoyUZaY/uAgM+dXmFH4=;
+        b=H3Ri1NzvZjJTauw3DK/+IIDa6/9AiHIlnHrKG3079gSkziCvmgJeZNuu5iYhCeWnrG
+         j8x2UjjjbuYB6z3KldpFKbIaaWwBNJ1rVrzpbUt2dJ+7/pWCZpZK9xPdilktltpj9Srv
+         MDWm5/sYwaBSwELGqSquzzccKWVTv6njqSbGvDcAKdS2xZLSn8nk4NgpZInva76XaTMD
+         I2PT+oWMmB2yAqtnx6nw6H+0Ls7akzAyGWy6WmQ4Sl0fpbknsml0mi2cHfAwA5WgklMA
+         h6QV/hE1YQX1VpqEg4HAG8L0ErL5EaSlxS5zWyRx9934L4JPvTAYTxOum3vs/oF2L03i
+         rgaA==
+X-Gm-Message-State: AOAM5330Pgm1SSLH4rh1h4o2iYj4l/T1RzS+iRZEm4qfV8O/6aneaR4s
+        cETk5KWqwjLxE7h0U8DvJP4hTOXFvqjA8MQerPgPdQ==
+X-Google-Smtp-Source: ABdhPJydVgPplLHFHTfNVor8TInwj6C9QLDzkQ0ei87thQcdZTMMUOLqUxGlwl88rzbm1Ys5ysIAI5nydZVKLK/rm7k=
+X-Received: by 2002:a25:bc50:: with SMTP id d16mr8656916ybk.230.1597351594148;
+ Thu, 13 Aug 2020 13:46:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-13_17:2020-08-13,2020-08-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- adultscore=0 mlxscore=0 clxscore=1015 priorityscore=1501
- lowpriorityscore=0 mlxlogscore=999 suspectscore=8 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2008130147
-X-FB-Internal: deliver
+References: <20200813203930.978141-1-andriin@fb.com> <20200813203930.978141-5-andriin@fb.com>
+In-Reply-To: <20200813203930.978141-5-andriin@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 13 Aug 2020 13:46:23 -0700
+Message-ID: <CAEf4BzZMDf2gcjMESy-umCr80N5BDMtrtCSz2EisEPz8qf79kw@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf 4/9] libbpf: handle BTF pointer sizes more carefully
+To:     Andrii Nakryiko <andriin@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The comment in the code describes this in good details. Generate such a m=
-emory
-layout that would work both on 32-bit and 64-bit architectures for user-s=
-pace.
+On Thu, Aug 13, 2020 at 1:39 PM Andrii Nakryiko <andriin@fb.com> wrote:
+>
+> With libbpf and BTF it is pretty common to have libbpf built for one
+> architecture, while BTF information was generated for a different architecture
+> (typically, but not always, BPF). In such case, the size of a pointer might
+> differ betweem architectures. libbpf previously was always making an
+> assumption that pointer size for BTF is the same as native architecture
+> pointer size, but that breaks for cases where libbpf is built as 32-bit
+> library, while BTF is for 64-bit architecture.
+>
+> To solve this, add heuristic to determine pointer size by searching for `long`
+> or `unsigned long` integer type and using its size as a pointer size. Also,
+> allow to override the pointer size with a new API btf__set_pointer_size(), for
+> cases where application knows which pointer size should be used. User
+> application can check what libbpf "guessed" by looking at the result of
+> btf__pointer_size(). If it's not 0, then libbpf successfully determined a
+> pointer size, otherwise native arch pointer size will be used.
+>
+> For cases where BTF is parsed from ELF file, use ELF's class (32-bit or
+> 64-bit) to determine pointer size.
+>
+> Fixes: 8a138aed4a80 ("bpf: btf: Add BTF support to libbpf")
+> Fixes: 351131b51c7a ("libbpf: add btf_dump API for BTF-to-C conversion")
+> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> ---
+>  tools/lib/bpf/btf.c      | 83 ++++++++++++++++++++++++++++++++++++++--
+>  tools/lib/bpf/btf.h      |  2 +
+>  tools/lib/bpf/btf_dump.c |  4 +-
+>  tools/lib/bpf/libbpf.map |  2 +
+>  4 files changed, 87 insertions(+), 4 deletions(-)
+>
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/bpf/bpftool/gen.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+[...]
 
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index db80e836816e..f61184653633 100644
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -143,6 +143,20 @@ static int codegen_datasec_def(struct bpf_object *ob=
-j,
- 			      var_name, align);
- 			return -EINVAL;
- 		}
-+		/* Assume 32-bit architectures when generating data section
-+		 * struct memory layout. Given bpftool can't know which target
-+		 * host architecture it's emitting skeleton for, we need to be
-+		 * conservative and assume 32-bit one to ensure enough padding
-+		 * bytes are generated for pointer and long types. This will
-+		 * still work correctly for 64-bit architectures, because in
-+		 * the worst case we'll generate unnecessary padding field,
-+		 * which on 64-bit architectures is not strictly necessary and
-+		 * would be handled by natural 8-byte alignment. But it still
-+		 * will be a correct memory layout, based on recorded offsets
-+		 * in BTF.
-+		 */
-+		if (align > 4)
-+			align =3D 4;
-=20
- 		align_off =3D (off + align - 1) / align * align;
- 		if (align_off !=3D need_off) {
---=20
-2.24.1
+>
+> +       switch (gelf_getclass(elf)) {
+> +       case ELFCLASS32:
+> +               btf__set_pointer_size(btf, 4);
+> +               break;
+> +       case ELFCLASS64:
+> +               btf__set_pointer_size(btf, 8);
+> +               break;
+> +       default:
+> +               pr_warn("failed to get ELF class (bitness) for %s\n", path);
+> +               goto done;
 
+This is not right, it should have been a break, not sure what
+happened. I'll send v3, maybe the cover letter also won't go missing
+this time.
+
+> +       }
+> +
+>         if (btf_ext && btf_ext_data) {
+>                 *btf_ext = btf_ext__new(btf_ext_data->d_buf,
+>                                         btf_ext_data->d_size);
+
+[...]
