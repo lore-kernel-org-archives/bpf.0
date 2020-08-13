@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7B60C433DF
-	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 20:39:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47858C433DF
+	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 20:39:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A2FD920716
-	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 20:39:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 17E7120716
+	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 20:39:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="gP6oMMhD"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="pENPTwcT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726499AbgHMUjt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Aug 2020 16:39:49 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:3372 "EHLO
+        id S1726578AbgHMUjz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Aug 2020 16:39:55 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:20296 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726312AbgHMUjs (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 13 Aug 2020 16:39:48 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07DKZPU1016280
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 13:39:47 -0700
+        by vger.kernel.org with ESMTP id S1726486AbgHMUjy (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 13 Aug 2020 16:39:54 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07DKd0AF026582
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 13:39:52 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=nxAKZ8Az69/8rLy2V1EBnunQAgjn24A9Diwa1zub0Bc=;
- b=gP6oMMhDwwefr8qRRE2UfVwihyKRa3UxGZKDYImQxCmtg3zsDLdBihWkJTgrOSc6ULTg
- gRD6TbK1o8PrAMNgTAu2s5y+w0kVwGl1Ut1EvEEJmWLeHdoiJVRcxWb5qQ9bUupo2Dlg
- qVS+RHv6Pu/yuJ0/8JPU0+YTgjHmW426xTA= 
+ bh=jtvSOrNm31kmP0Nh36z08RxvJbyj2OS6wDcGp1KxhW8=;
+ b=pENPTwcTEmrFvgjb8WD21VGeFZoDgqCmtVQFDqTdwp/7AA+hKHUZQvRIEcOkKTaH5i1N
+ RQUi/VqXO1Q40rdCwV1Fk13rO53XHxEK/bfm8EULGjJpnX9iQFAjc8TSmtR+Ag8FoV40
+ DzAvA33lpTZAtQUHMW8qUv92kJDhnJvEeZs= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 32w2yejy5u-4
+        by mx0a-00082601.pphosted.com with ESMTP id 32v0kdbu6c-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 13:39:47 -0700
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 13:39:52 -0700
 Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 13 Aug 2020 13:39:45 -0700
+ 15.1.1979.3; Thu, 13 Aug 2020 13:39:50 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 46A292EC596D; Thu, 13 Aug 2020 13:39:42 -0700 (PDT)
+        id C1F4D2EC596D; Thu, 13 Aug 2020 13:39:48 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf 1/9] tools/bpftool: fix compilation warnings in 32-bit mode
-Date:   Thu, 13 Aug 2020 13:39:21 -0700
-Message-ID: <20200813203930.978141-2-andriin@fb.com>
+Subject: [PATCH v2 bpf 4/9] libbpf: handle BTF pointer sizes more carefully
+Date:   Thu, 13 Aug 2020 13:39:24 -0700
+Message-ID: <20200813203930.978141-5-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200813203930.978141-1-andriin@fb.com>
 References: <20200813203930.978141-1-andriin@fb.com>
@@ -61,166 +61,237 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-13_17:2020-08-13,2020-08-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- mlxscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501 adultscore=0
- malwarescore=0 suspectscore=8 bulkscore=0 clxscore=1015 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008130146
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ suspectscore=8 lowpriorityscore=0 bulkscore=0 mlxlogscore=512
+ clxscore=1015 mlxscore=0 adultscore=0 priorityscore=1501 spamscore=0
+ impostorscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2008130147
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix few compilation warnings in bpftool when compiling in 32-bit mode.
-Abstract away u64 to pointer conversion into a helper function.
+With libbpf and BTF it is pretty common to have libbpf built for one
+architecture, while BTF information was generated for a different archite=
+cture
+(typically, but not always, BPF). In such case, the size of a pointer mig=
+ht
+differ betweem architectures. libbpf previously was always making an
+assumption that pointer size for BTF is the same as native architecture
+pointer size, but that breaks for cases where libbpf is built as 32-bit
+library, while BTF is for 64-bit architecture.
 
+To solve this, add heuristic to determine pointer size by searching for `=
+long`
+or `unsigned long` integer type and using its size as a pointer size. Als=
+o,
+allow to override the pointer size with a new API btf__set_pointer_size()=
+, for
+cases where application knows which pointer size should be used. User
+application can check what libbpf "guessed" by looking at the result of
+btf__pointer_size(). If it's not 0, then libbpf successfully determined a
+pointer size, otherwise native arch pointer size will be used.
+
+For cases where BTF is parsed from ELF file, use ELF's class (32-bit or
+64-bit) to determine pointer size.
+
+Fixes: 8a138aed4a80 ("bpf: btf: Add BTF support to libbpf")
+Fixes: 351131b51c7a ("libbpf: add btf_dump API for BTF-to-C conversion")
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/bpf/bpftool/btf_dumper.c |  2 +-
- tools/bpf/bpftool/link.c       |  4 ++--
- tools/bpf/bpftool/main.h       | 10 +++++++++-
- tools/bpf/bpftool/prog.c       | 16 ++++++++--------
- 4 files changed, 20 insertions(+), 12 deletions(-)
+ tools/lib/bpf/btf.c      | 83 ++++++++++++++++++++++++++++++++++++++--
+ tools/lib/bpf/btf.h      |  2 +
+ tools/lib/bpf/btf_dump.c |  4 +-
+ tools/lib/bpf/libbpf.map |  2 +
+ 4 files changed, 87 insertions(+), 4 deletions(-)
 
-diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumpe=
-r.c
-index ede162f83eea..0e9310727281 100644
---- a/tools/bpf/bpftool/btf_dumper.c
-+++ b/tools/bpf/bpftool/btf_dumper.c
-@@ -67,7 +67,7 @@ static int dump_prog_id_as_func_ptr(const struct btf_du=
-mper *d,
- 	if (!info->btf_id || !info->nr_func_info ||
- 	    btf__get_from_id(info->btf_id, &prog_btf))
- 		goto print;
--	finfo =3D (struct bpf_func_info *)info->func_info;
-+	finfo =3D u64_to_ptr(info->func_info);
- 	func_type =3D btf__type_by_id(prog_btf, finfo->type_id);
- 	if (!func_type || !btf_is_func(func_type))
- 		goto print;
-diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-index 1b793759170e..a89f09e3c848 100644
---- a/tools/bpf/bpftool/link.c
-+++ b/tools/bpf/bpftool/link.c
-@@ -106,7 +106,7 @@ static int show_link_close_json(int fd, struct bpf_li=
-nk_info *info)
- 	switch (info->type) {
- 	case BPF_LINK_TYPE_RAW_TRACEPOINT:
- 		jsonw_string_field(json_wtr, "tp_name",
--				   (const char *)info->raw_tracepoint.tp_name);
-+				   u64_to_ptr(info->raw_tracepoint.tp_name));
- 		break;
- 	case BPF_LINK_TYPE_TRACING:
- 		err =3D get_prog_info(info->prog_id, &prog_info);
-@@ -185,7 +185,7 @@ static int show_link_close_plain(int fd, struct bpf_l=
-ink_info *info)
- 	switch (info->type) {
- 	case BPF_LINK_TYPE_RAW_TRACEPOINT:
- 		printf("\n\ttp '%s'  ",
--		       (const char *)info->raw_tracepoint.tp_name);
-+		       (const char *)u64_to_ptr(info->raw_tracepoint.tp_name));
- 		break;
- 	case BPF_LINK_TYPE_TRACING:
- 		err =3D get_prog_info(info->prog_id, &prog_info);
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index e3a79b5a9960..c46e52137b87 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -21,7 +21,15 @@
- /* Make sure we do not use kernel-only integer typedefs */
- #pragma GCC poison u8 u16 u32 u64 s8 s16 s32 s64
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 4843e44916f7..1a6fc7609f49 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -41,6 +41,7 @@ struct btf {
+ 	__u32 types_size;
+ 	__u32 data_size;
+ 	int fd;
++	int ptr_sz;
+ };
 =20
--#define ptr_to_u64(ptr)	((__u64)(unsigned long)(ptr))
-+static inline __u64 ptr_to_u64(const void *ptr)
+ static inline __u64 ptr_to_u64(const void *ptr)
+@@ -221,6 +222,70 @@ const struct btf_type *btf__type_by_id(const struct =
+btf *btf, __u32 type_id)
+ 	return btf->types[type_id];
+ }
+=20
++static int determine_ptr_size(const struct btf *btf)
 +{
-+	return (__u64)(unsigned long)ptr;
++	const struct btf_type *t;
++	const char *name;
++	int i;
++
++	for (i =3D 1; i <=3D btf->nr_types; i++) {
++		t =3D btf__type_by_id(btf, i);
++		if (!btf_is_int(t))
++			continue;
++
++		name =3D btf__name_by_offset(btf, t->name_off);
++		if (!name)
++			continue;
++
++		if (strcmp(name, "long int") =3D=3D 0 ||
++		    strcmp(name, "long unsigned int") =3D=3D 0) {
++			if (t->size !=3D 4 && t->size !=3D 8)
++				continue;
++			return t->size;
++		}
++	}
++
++	return -1;
 +}
 +
-+static inline void *u64_to_ptr(__u64 ptr)
++static size_t btf_ptr_sz(const struct btf *btf)
 +{
-+	return (void *)(unsigned long)ptr;
++	if (!btf->ptr_sz)
++		((struct btf *)btf)->ptr_sz =3D determine_ptr_size(btf);
++	return btf->ptr_sz < 0 ? sizeof(void *) : btf->ptr_sz;
 +}
++
++/* Return pointer size this BTF instance assumes. The size is heuristica=
+lly
++ * determined by looking for 'long' or 'unsigned long' integer type and
++ * recording its size in bytes. If BTF type information doesn't have any=
+ such
++ * type, this function returns 0. In the latter case, native architectur=
+e's
++ * pointer size is assumed, so will be either 4 or 8, depending on
++ * architecture that libbpf was compiled for. It's possible to override
++ * guessed value by using btf__set_pointer_size() API.
++ */
++size_t btf__pointer_size(const struct btf *btf)
++{
++	if (!btf->ptr_sz)
++		((struct btf *)btf)->ptr_sz =3D determine_ptr_size(btf);
++
++	if (btf->ptr_sz < 0)
++		/* not enough BTF type info to guess */
++		return 0;
++
++	return btf->ptr_sz;
++}
++
++/* Override or set pointer size in bytes. Only values of 4 and 8 are
++ * supported.
++ */
++int btf__set_pointer_size(struct btf *btf, size_t ptr_sz)
++{
++	if (ptr_sz !=3D 4 && ptr_sz !=3D 8)
++		return -EINVAL;
++	btf->ptr_sz =3D ptr_sz;
++	return 0;
++}
++
+ static bool btf_type_is_void(const struct btf_type *t)
+ {
+ 	return t =3D=3D &btf_void || btf_is_fwd(t);
+@@ -253,7 +318,7 @@ __s64 btf__resolve_size(const struct btf *btf, __u32 =
+type_id)
+ 			size =3D t->size;
+ 			goto done;
+ 		case BTF_KIND_PTR:
+-			size =3D sizeof(void *);
++			size =3D btf_ptr_sz(btf);
+ 			goto done;
+ 		case BTF_KIND_TYPEDEF:
+ 		case BTF_KIND_VOLATILE:
+@@ -293,9 +358,9 @@ int btf__align_of(const struct btf *btf, __u32 id)
+ 	switch (kind) {
+ 	case BTF_KIND_INT:
+ 	case BTF_KIND_ENUM:
+-		return min(sizeof(void *), (size_t)t->size);
++		return min(btf_ptr_sz(btf), (size_t)t->size);
+ 	case BTF_KIND_PTR:
+-		return sizeof(void *);
++		return btf_ptr_sz(btf);
+ 	case BTF_KIND_TYPEDEF:
+ 	case BTF_KIND_VOLATILE:
+ 	case BTF_KIND_CONST:
+@@ -533,6 +598,18 @@ struct btf *btf__parse_elf(const char *path, struct =
+btf_ext **btf_ext)
+ 	if (IS_ERR(btf))
+ 		goto done;
 =20
- #define NEXT_ARG()	({ argc--; argv++; if (argc < 0) usage(); })
- #define NEXT_ARGP()	({ (*argc)--; (*argv)++; if (*argc < 0) usage(); })
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 158995d853b0..d393eb8263a6 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -428,14 +428,14 @@ prog_dump(struct bpf_prog_info *info, enum dump_mod=
-e mode,
- 			p_info("no instructions returned");
- 			return -1;
- 		}
--		buf =3D (unsigned char *)(info->jited_prog_insns);
-+		buf =3D u64_to_ptr(info->jited_prog_insns);
- 		member_len =3D info->jited_prog_len;
- 	} else {	/* DUMP_XLATED */
- 		if (info->xlated_prog_len =3D=3D 0 || !info->xlated_prog_insns) {
- 			p_err("error retrieving insn dump: kernel.kptr_restrict set?");
- 			return -1;
- 		}
--		buf =3D (unsigned char *)info->xlated_prog_insns;
-+		buf =3D u64_to_ptr(info->xlated_prog_insns);
- 		member_len =3D info->xlated_prog_len;
- 	}
++	switch (gelf_getclass(elf)) {
++	case ELFCLASS32:
++		btf__set_pointer_size(btf, 4);
++		break;
++	case ELFCLASS64:
++		btf__set_pointer_size(btf, 8);
++		break;
++	default:
++		pr_warn("failed to get ELF class (bitness) for %s\n", path);
++		goto done;
++	}
++
+ 	if (btf_ext && btf_ext_data) {
+ 		*btf_ext =3D btf_ext__new(btf_ext_data->d_buf,
+ 					btf_ext_data->d_size);
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index f4a1a1d2b9a3..1ca14448df4c 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -76,6 +76,8 @@ LIBBPF_API __s32 btf__find_by_name_kind(const struct bt=
+f *btf,
+ LIBBPF_API __u32 btf__get_nr_types(const struct btf *btf);
+ LIBBPF_API const struct btf_type *btf__type_by_id(const struct btf *btf,
+ 						  __u32 id);
++LIBBPF_API size_t btf__pointer_size(const struct btf *btf);
++LIBBPF_API int btf__set_pointer_size(struct btf *btf, size_t ptr_sz);
+ LIBBPF_API __s64 btf__resolve_size(const struct btf *btf, __u32 type_id)=
+;
+ LIBBPF_API int btf__resolve_type(const struct btf *btf, __u32 type_id);
+ LIBBPF_API int btf__align_of(const struct btf *btf, __u32 id);
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index ac81f3f8957a..fe39bd774697 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -61,6 +61,7 @@ struct btf_dump {
+ 	const struct btf_ext *btf_ext;
+ 	btf_dump_printf_fn_t printf_fn;
+ 	struct btf_dump_opts opts;
++	int ptr_sz;
+ 	bool strip_mods;
 =20
-@@ -444,7 +444,7 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode =
-mode,
- 		return -1;
- 	}
+ 	/* per-type auxiliary state */
+@@ -139,6 +140,7 @@ struct btf_dump *btf_dump__new(const struct btf *btf,
+ 	d->btf_ext =3D btf_ext;
+ 	d->printf_fn =3D printf_fn;
+ 	d->opts.ctx =3D opts ? opts->ctx : NULL;
++	d->ptr_sz =3D btf__pointer_size(btf) ? : sizeof(void *);
 =20
--	func_info =3D (void *)info->func_info;
-+	func_info =3D u64_to_ptr(info->func_info);
+ 	d->type_names =3D hashmap__new(str_hash_fn, str_equal_fn, NULL);
+ 	if (IS_ERR(d->type_names)) {
+@@ -804,7 +806,7 @@ static void btf_dump_emit_bit_padding(const struct bt=
+f_dump *d,
+ 				      int align, int lvl)
+ {
+ 	int off_diff =3D m_off - cur_off;
+-	int ptr_bits =3D sizeof(void *) * 8;
++	int ptr_bits =3D d->ptr_sz * 8;
 =20
- 	if (info->nr_line_info) {
- 		prog_linfo =3D bpf_prog_linfo__new(info);
-@@ -462,7 +462,7 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode =
-mode,
-=20
- 		n =3D write(fd, buf, member_len);
- 		close(fd);
--		if (n !=3D member_len) {
-+		if (n !=3D (ssize_t)member_len) {
- 			p_err("error writing output file: %s",
- 			      n < 0 ? strerror(errno) : "short write");
- 			return -1;
-@@ -492,13 +492,13 @@ prog_dump(struct bpf_prog_info *info, enum dump_mod=
-e mode,
- 			__u32 i;
- 			if (info->nr_jited_ksyms) {
- 				kernel_syms_load(&dd);
--				ksyms =3D (__u64 *) info->jited_ksyms;
-+				ksyms =3D u64_to_ptr(info->jited_ksyms);
- 			}
-=20
- 			if (json_output)
- 				jsonw_start_array(json_wtr);
-=20
--			lens =3D (__u32 *) info->jited_func_lens;
-+			lens =3D u64_to_ptr(info->jited_func_lens);
- 			for (i =3D 0; i < info->nr_jited_func_lens; i++) {
- 				if (ksyms) {
- 					sym =3D kernel_syms_search(&dd, ksyms[i]);
-@@ -559,7 +559,7 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode =
-mode,
- 	} else {
- 		kernel_syms_load(&dd);
- 		dd.nr_jited_ksyms =3D info->nr_jited_ksyms;
--		dd.jited_ksyms =3D (__u64 *) info->jited_ksyms;
-+		dd.jited_ksyms =3D u64_to_ptr(info->jited_ksyms);
- 		dd.btf =3D btf;
- 		dd.func_info =3D func_info;
- 		dd.finfo_rec_size =3D info->func_info_rec_size;
-@@ -1681,7 +1681,7 @@ static char *profile_target_name(int tgt_fd)
- 		goto out;
- 	}
-=20
--	func_info =3D (struct bpf_func_info *)(info_linear->info.func_info);
-+	func_info =3D u64_to_ptr(info_linear->info.func_info);
- 	t =3D btf__type_by_id(btf, func_info[0].type_id);
- 	if (!t) {
- 		p_err("btf %d doesn't have type %d",
+ 	if (off_diff <=3D 0)
+ 		/* no gap */
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 0c4722bfdd0a..e35bd6cdbdbf 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -295,5 +295,7 @@ LIBBPF_0.1.0 {
+ 		bpf_program__set_sk_lookup;
+ 		btf__parse;
+ 		btf__parse_raw;
++		btf__pointer_size;
+ 		btf__set_fd;
++		btf__set_pointer_size;
+ } LIBBPF_0.0.9;
 --=20
 2.24.1
 
