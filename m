@@ -2,59 +2,225 @@ Return-Path: <SRS0=LFNc=BX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B46A7C433DF
-	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 21:37:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B36E4C433E1
+	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 21:46:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E5DE20768
-	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 21:37:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 732F020715
+	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 21:46:02 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="EO+GwRZ1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726384AbgHMVhU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Aug 2020 17:37:20 -0400
-Received: from www62.your-server.de ([213.133.104.62]:47180 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726192AbgHMVhU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 13 Aug 2020 17:37:20 -0400
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1k6KuT-0007i3-RI; Thu, 13 Aug 2020 23:37:17 +0200
-Received: from [178.196.57.75] (helo=pc-9.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1k6KuT-0006hj-Mz; Thu, 13 Aug 2020 23:37:17 +0200
-Subject: Re: [PATCH bpf] doc: Add link to bpf helpers man page
-To:     Joe Stringer <joe@wand.net.nz>, bpf@vger.kernel.org
-Cc:     ast@kernel.org
-References: <20200813180807.2821735-1-joe@wand.net.nz>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <7d5a8e3b-30da-2835-dab8-5e24aa440d8b@iogearbox.net>
-Date:   Thu, 13 Aug 2020 23:37:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1726499AbgHMVqC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Aug 2020 17:46:02 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:15386 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726192AbgHMVqC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 13 Aug 2020 17:46:02 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07DLikPl011335
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 14:46:01 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=nxAKZ8Az69/8rLy2V1EBnunQAgjn24A9Diwa1zub0Bc=;
+ b=EO+GwRZ14s9gieFR+LDgKjT+SsfPhnuCgkTGf1YFZ6VPRLJtUScKIrvPlYFVXV14QsXS
+ Eo1VFzO8fauQF7H8lkLGkbWFckCF8HrCbBm6d/QzonRGnB/DgDau/zcxJjLh4+cL6qeS
+ RRCTBBDVvWTNirAvtq3+EO391mxXpjaXGxM= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 32v0kg49wt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 14:46:01 -0700
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 13 Aug 2020 14:45:30 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 468B32EC597F; Thu, 13 Aug 2020 13:49:53 -0700 (PDT)
+Smtp-Origin-Hostprefix: devbig
+From:   Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Smtp-Origin-Cluster: ftw2c04
+Subject: [PATCH v3 bpf 1/9] tools/bpftool: fix compilation warnings in 32-bit mode
+Date:   Thu, 13 Aug 2020 13:49:37 -0700
+Message-ID: <20200813204945.1020225-2-andriin@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200813204945.1020225-1-andriin@fb.com>
+References: <20200813204945.1020225-1-andriin@fb.com>
 MIME-Version: 1.0
-In-Reply-To: <20200813180807.2821735-1-joe@wand.net.nz>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/25901/Thu Aug 13 09:01:24 2020)
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-13_17:2020-08-13,2020-08-13 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
+ priorityscore=1501 phishscore=0 suspectscore=8 adultscore=0 mlxscore=0
+ lowpriorityscore=0 mlxlogscore=999 clxscore=1015 impostorscore=0
+ bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008130154
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 8/13/20 8:08 PM, Joe Stringer wrote:
-> The bpf-helpers(7) man pages provide an invaluable description of the
-> functions that an eBPF program can call at runtime. Link them here.
-> 
-> Signed-off-by: Joe Stringer <joe@wand.net.nz>
+Fix few compilation warnings in bpftool when compiling in 32-bit mode.
+Abstract away u64 to pointer conversion into a helper function.
 
-Applied, thanks! (I fixed up the newlines in this paragraph to make them
-consistent with the rest of this doc.)
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/bpf/bpftool/btf_dumper.c |  2 +-
+ tools/bpf/bpftool/link.c       |  4 ++--
+ tools/bpf/bpftool/main.h       | 10 +++++++++-
+ tools/bpf/bpftool/prog.c       | 16 ++++++++--------
+ 4 files changed, 20 insertions(+), 12 deletions(-)
+
+diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumpe=
+r.c
+index ede162f83eea..0e9310727281 100644
+--- a/tools/bpf/bpftool/btf_dumper.c
++++ b/tools/bpf/bpftool/btf_dumper.c
+@@ -67,7 +67,7 @@ static int dump_prog_id_as_func_ptr(const struct btf_du=
+mper *d,
+ 	if (!info->btf_id || !info->nr_func_info ||
+ 	    btf__get_from_id(info->btf_id, &prog_btf))
+ 		goto print;
+-	finfo =3D (struct bpf_func_info *)info->func_info;
++	finfo =3D u64_to_ptr(info->func_info);
+ 	func_type =3D btf__type_by_id(prog_btf, finfo->type_id);
+ 	if (!func_type || !btf_is_func(func_type))
+ 		goto print;
+diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
+index 1b793759170e..a89f09e3c848 100644
+--- a/tools/bpf/bpftool/link.c
++++ b/tools/bpf/bpftool/link.c
+@@ -106,7 +106,7 @@ static int show_link_close_json(int fd, struct bpf_li=
+nk_info *info)
+ 	switch (info->type) {
+ 	case BPF_LINK_TYPE_RAW_TRACEPOINT:
+ 		jsonw_string_field(json_wtr, "tp_name",
+-				   (const char *)info->raw_tracepoint.tp_name);
++				   u64_to_ptr(info->raw_tracepoint.tp_name));
+ 		break;
+ 	case BPF_LINK_TYPE_TRACING:
+ 		err =3D get_prog_info(info->prog_id, &prog_info);
+@@ -185,7 +185,7 @@ static int show_link_close_plain(int fd, struct bpf_l=
+ink_info *info)
+ 	switch (info->type) {
+ 	case BPF_LINK_TYPE_RAW_TRACEPOINT:
+ 		printf("\n\ttp '%s'  ",
+-		       (const char *)info->raw_tracepoint.tp_name);
++		       (const char *)u64_to_ptr(info->raw_tracepoint.tp_name));
+ 		break;
+ 	case BPF_LINK_TYPE_TRACING:
+ 		err =3D get_prog_info(info->prog_id, &prog_info);
+diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+index e3a79b5a9960..c46e52137b87 100644
+--- a/tools/bpf/bpftool/main.h
++++ b/tools/bpf/bpftool/main.h
+@@ -21,7 +21,15 @@
+ /* Make sure we do not use kernel-only integer typedefs */
+ #pragma GCC poison u8 u16 u32 u64 s8 s16 s32 s64
+=20
+-#define ptr_to_u64(ptr)	((__u64)(unsigned long)(ptr))
++static inline __u64 ptr_to_u64(const void *ptr)
++{
++	return (__u64)(unsigned long)ptr;
++}
++
++static inline void *u64_to_ptr(__u64 ptr)
++{
++	return (void *)(unsigned long)ptr;
++}
+=20
+ #define NEXT_ARG()	({ argc--; argv++; if (argc < 0) usage(); })
+ #define NEXT_ARGP()	({ (*argc)--; (*argv)++; if (*argc < 0) usage(); })
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index 158995d853b0..d393eb8263a6 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -428,14 +428,14 @@ prog_dump(struct bpf_prog_info *info, enum dump_mod=
+e mode,
+ 			p_info("no instructions returned");
+ 			return -1;
+ 		}
+-		buf =3D (unsigned char *)(info->jited_prog_insns);
++		buf =3D u64_to_ptr(info->jited_prog_insns);
+ 		member_len =3D info->jited_prog_len;
+ 	} else {	/* DUMP_XLATED */
+ 		if (info->xlated_prog_len =3D=3D 0 || !info->xlated_prog_insns) {
+ 			p_err("error retrieving insn dump: kernel.kptr_restrict set?");
+ 			return -1;
+ 		}
+-		buf =3D (unsigned char *)info->xlated_prog_insns;
++		buf =3D u64_to_ptr(info->xlated_prog_insns);
+ 		member_len =3D info->xlated_prog_len;
+ 	}
+=20
+@@ -444,7 +444,7 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode =
+mode,
+ 		return -1;
+ 	}
+=20
+-	func_info =3D (void *)info->func_info;
++	func_info =3D u64_to_ptr(info->func_info);
+=20
+ 	if (info->nr_line_info) {
+ 		prog_linfo =3D bpf_prog_linfo__new(info);
+@@ -462,7 +462,7 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode =
+mode,
+=20
+ 		n =3D write(fd, buf, member_len);
+ 		close(fd);
+-		if (n !=3D member_len) {
++		if (n !=3D (ssize_t)member_len) {
+ 			p_err("error writing output file: %s",
+ 			      n < 0 ? strerror(errno) : "short write");
+ 			return -1;
+@@ -492,13 +492,13 @@ prog_dump(struct bpf_prog_info *info, enum dump_mod=
+e mode,
+ 			__u32 i;
+ 			if (info->nr_jited_ksyms) {
+ 				kernel_syms_load(&dd);
+-				ksyms =3D (__u64 *) info->jited_ksyms;
++				ksyms =3D u64_to_ptr(info->jited_ksyms);
+ 			}
+=20
+ 			if (json_output)
+ 				jsonw_start_array(json_wtr);
+=20
+-			lens =3D (__u32 *) info->jited_func_lens;
++			lens =3D u64_to_ptr(info->jited_func_lens);
+ 			for (i =3D 0; i < info->nr_jited_func_lens; i++) {
+ 				if (ksyms) {
+ 					sym =3D kernel_syms_search(&dd, ksyms[i]);
+@@ -559,7 +559,7 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode =
+mode,
+ 	} else {
+ 		kernel_syms_load(&dd);
+ 		dd.nr_jited_ksyms =3D info->nr_jited_ksyms;
+-		dd.jited_ksyms =3D (__u64 *) info->jited_ksyms;
++		dd.jited_ksyms =3D u64_to_ptr(info->jited_ksyms);
+ 		dd.btf =3D btf;
+ 		dd.func_info =3D func_info;
+ 		dd.finfo_rec_size =3D info->func_info_rec_size;
+@@ -1681,7 +1681,7 @@ static char *profile_target_name(int tgt_fd)
+ 		goto out;
+ 	}
+=20
+-	func_info =3D (struct bpf_func_info *)(info_linear->info.func_info);
++	func_info =3D u64_to_ptr(info_linear->info.func_info);
+ 	t =3D btf__type_by_id(btf, func_info[0].type_id);
+ 	if (!t) {
+ 		p_err("btf %d doesn't have type %d",
+--=20
+2.24.1
+
