@@ -2,305 +2,97 @@ Return-Path: <SRS0=LFNc=BX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2C42C433E1
-	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 07:18:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48A8AC433E1
+	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 13:01:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8F2BD2078B
-	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 07:18:02 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="WPosc3nQ"
+	by mail.kernel.org (Postfix) with ESMTP id 18815207DA
+	for <bpf@archiver.kernel.org>; Thu, 13 Aug 2020 13:01:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1597323692;
+	bh=1KOO84jBp9k+vGNx1PLhbzn8bP6+PJCQeuZYx6xdx/k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=J/x0wotJ15TBnWEUdNbI4HZCOs4VfjNlp9iYVEjnHfjlFXe830ENLFukN8TuuAowN
+	 EX15LtWq6FpHgYt6yX/T63EWdsyL888u+iu+GieuLzqjICoUO/3DSJPmadfbmZZLEJ
+	 95yH5BW0J92r1W0hGYn/a80jRgsmcUv3ylenbIng=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726694AbgHMHR4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 13 Aug 2020 03:17:56 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:63636 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726683AbgHMHRw (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 13 Aug 2020 03:17:52 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07D7BOcY005909
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 00:17:52 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=vsGbIfBVjfmeWQEtBH7b9ZovMw2naPbz9pZYdjeHFZI=;
- b=WPosc3nQwtB2uykQuWhZfq2smeIxyMAZX+4x8Ho8emhMdOFC8wY8zoz+CuzVrhFmybE/
- bcI9FrdXckLDmpAFzlwPGLz3MIS3wc70hY+D+bSxLkF3unIYc051EEB6R/jLJWkAsiER
- HoSu4PP0gmgg8c8EFEA9+/XLbRYo2mx8ycA= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 32v0kgrf66-11
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 13 Aug 2020 00:17:52 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 13 Aug 2020 00:17:45 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id EF9492EC5928; Thu, 13 Aug 2020 00:17:39 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf 7/9] selftests/bpf: correct various core_reloc 64-bit assumptions
-Date:   Thu, 13 Aug 2020 00:17:20 -0700
-Message-ID: <20200813071722.2213397-8-andriin@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200813071722.2213397-1-andriin@fb.com>
-References: <20200813071722.2213397-1-andriin@fb.com>
+        id S1726192AbgHMNBb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 13 Aug 2020 09:01:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56630 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726131AbgHMNBb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 13 Aug 2020 09:01:31 -0400
+Received: from quaco.ghostprotocols.net (177.207.136.251.dynamic.adsl.gvt.net.br [177.207.136.251])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 60C992078D;
+        Thu, 13 Aug 2020 13:01:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597323690;
+        bh=1KOO84jBp9k+vGNx1PLhbzn8bP6+PJCQeuZYx6xdx/k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kGUPXWdcoZ4yL8eY3VdCnSHYNaNMlfsZcxOlOSzA8v0O3rXynGwN3qL0o1WXOwjA/
+         0k1o1iLSWtsn+c5gslmMgNly9ZNQGMivPXorPSscTJoNJ77bRLo7XvAj8NlJ5kOYCx
+         r+NrNYsTG0aoGpG61GcbkIQO4pMk7BeqCjKCJxW4=
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id A86BE4097F; Thu, 13 Aug 2020 10:01:27 -0300 (-03)
+Date:   Thu, 13 Aug 2020 10:01:27 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Tom Hebb <tommyhebb@gmail.com>
+Cc:     Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>
+Subject: Re: [PATCH] tools build feature: Quote CC and CXX for their arguments
+Message-ID: <20200813130127.GO13995@kernel.org>
+References: <20200812221518.2869003-1-daniel.diaz@linaro.org>
+ <CAMcCCgRGpi+3D4479MLU2xQZJYBA1c6mzZ=bb1VLEwPg3VAgLg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-13_04:2020-08-13,2020-08-13 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- mlxlogscore=961 priorityscore=1501 mlxscore=0 suspectscore=8 clxscore=1015
- phishscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008130055
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMcCCgRGpi+3D4479MLU2xQZJYBA1c6mzZ=bb1VLEwPg3VAgLg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Ensure that types are memory layout- and field alignment-compatible regar=
-dless
-of 32/64-bitness mix of libbpf and BPF architecture.
+Em Wed, Aug 12, 2020 at 07:31:32PM -0700, Tom Hebb escreveu:
+> On Wed, Aug 12, 2020 at 3:15 PM Daniel Díaz <daniel.diaz@linaro.org> wrote:
+> >   Makefile.config:414: *** No gnu/libc-version.h found, please install glibc-dev[el].  Stop.
+> >   Makefile.perf:230: recipe for target 'sub-make' failed
+> >   make[1]: *** [sub-make] Error 2
+> >   Makefile:69: recipe for target 'all' failed
+> >   make: *** [all] Error 2
+> >
+> > With CC and CXX quoted, some of those features are now detected.
+> >
+> > Fixes: e3232c2f39ac ("tools build feature: Use CC and CXX from parent")
+> >
+> > Signed-off-by: Daniel Díaz <daniel.diaz@linaro.org>
+> 
+> Whoops, I'm the one who introduced this issue. Fix looks good, thanks!
+> 
+> Reviewed-by: Thomas Hebb <tommyhebb@gmail.com>
+> Fixes: e3232c2f39ac ("tools build feature: Use CC and CXX from parent")
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- .../selftests/bpf/prog_tests/core_reloc.c     | 20 +++---
- .../selftests/bpf/progs/core_reloc_types.h    | 69 ++++++++++---------
- 2 files changed, 47 insertions(+), 42 deletions(-)
+Thanks, applied.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/=
-testing/selftests/bpf/prog_tests/core_reloc.c
-index 084ed26a7d78..a54eafc5e4b3 100644
---- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-@@ -237,8 +237,8 @@
- 		.union_sz =3D sizeof(((type *)0)->union_field),		\
- 		.arr_sz =3D sizeof(((type *)0)->arr_field),		\
- 		.arr_elem_sz =3D sizeof(((type *)0)->arr_field[0]),	\
--		.ptr_sz =3D sizeof(((type *)0)->ptr_field),		\
--		.enum_sz =3D sizeof(((type *)0)->enum_field),	\
-+		.ptr_sz =3D 8, /* always 8-byte pointer for BPF */	\
-+		.enum_sz =3D sizeof(((type *)0)->enum_field),		\
- 	}
-=20
- #define SIZE_CASE(name) {						\
-@@ -432,20 +432,20 @@ static struct core_reloc_test_case test_cases[] =3D=
- {
- 		.sb4 =3D -1,
- 		.sb20 =3D -0x17654321,
- 		.u32 =3D 0xBEEF,
--		.s32 =3D -0x3FEDCBA987654321,
-+		.s32 =3D -0x3FEDCBA987654321LL,
- 	}),
- 	BITFIELDS_CASE(bitfields___bitfield_vs_int, {
--		.ub1 =3D 0xFEDCBA9876543210,
-+		.ub1 =3D 0xFEDCBA9876543210LL,
- 		.ub2 =3D 0xA6,
--		.ub7 =3D -0x7EDCBA987654321,
--		.sb4 =3D -0x6123456789ABCDE,
--		.sb20 =3D 0xD00D,
-+		.ub7 =3D -0x7EDCBA987654321LL,
-+		.sb4 =3D -0x6123456789ABCDELL,
-+		.sb20 =3D 0xD00DLL,
- 		.u32 =3D -0x76543,
--		.s32 =3D 0x0ADEADBEEFBADB0B,
-+		.s32 =3D 0x0ADEADBEEFBADB0BLL,
- 	}),
- 	BITFIELDS_CASE(bitfields___just_big_enough, {
--		.ub1 =3D 0xF,
--		.ub2 =3D 0x0812345678FEDCBA,
-+		.ub1 =3D 0xFLL,
-+		.ub2 =3D 0x0812345678FEDCBALL,
- 	}),
- 	BITFIELDS_ERR_CASE(bitfields___err_too_big_bitfield),
-=20
-diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools=
-/testing/selftests/bpf/progs/core_reloc_types.h
-index 34d84717c946..69139ed66216 100644
---- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
-+++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-@@ -1,5 +1,10 @@
- #include <stdint.h>
- #include <stdbool.h>
-+
-+void preserce_ptr_sz_fn(long x) {}
-+
-+#define __bpf_aligned __attribute__((aligned(8)))
-+
- /*
-  * KERNEL
-  */
-@@ -444,51 +449,51 @@ struct core_reloc_primitives {
- 	char a;
- 	int b;
- 	enum core_reloc_primitives_enum c;
--	void *d;
--	int (*f)(const char *);
-+	void *d __bpf_aligned;
-+	int (*f)(const char *) __bpf_aligned;
- };
-=20
- struct core_reloc_primitives___diff_enum_def {
- 	char a;
- 	int b;
--	void *d;
--	int (*f)(const char *);
-+	void *d __bpf_aligned;
-+	int (*f)(const char *) __bpf_aligned;
- 	enum {
- 		X =3D 100,
- 		Y =3D 200,
--	} c; /* inline enum def with differing set of values */
-+	} c __bpf_aligned; /* inline enum def with differing set of values */
- };
-=20
- struct core_reloc_primitives___diff_func_proto {
--	void (*f)(int); /* incompatible function prototype */
--	void *d;
--	enum core_reloc_primitives_enum c;
-+	void (*f)(int) __bpf_aligned; /* incompatible function prototype */
-+	void *d __bpf_aligned;
-+	enum core_reloc_primitives_enum c __bpf_aligned;
- 	int b;
- 	char a;
- };
-=20
- struct core_reloc_primitives___diff_ptr_type {
--	const char * const d; /* different pointee type + modifiers */
--	char a;
-+	const char * const d __bpf_aligned; /* different pointee type + modifie=
-rs */
-+	char a __bpf_aligned;
- 	int b;
- 	enum core_reloc_primitives_enum c;
--	int (*f)(const char *);
-+	int (*f)(const char *) __bpf_aligned;
- };
-=20
- struct core_reloc_primitives___err_non_enum {
- 	char a[1];
- 	int b;
- 	int c; /* int instead of enum */
--	void *d;
--	int (*f)(const char *);
-+	void *d __bpf_aligned;
-+	int (*f)(const char *) __bpf_aligned;
- };
-=20
- struct core_reloc_primitives___err_non_int {
- 	char a[1];
--	int *b; /* ptr instead of int */
--	enum core_reloc_primitives_enum c;
--	void *d;
--	int (*f)(const char *);
-+	int *b __bpf_aligned; /* ptr instead of int */
-+	enum core_reloc_primitives_enum c __bpf_aligned;
-+	void *d __bpf_aligned;
-+	int (*f)(const char *) __bpf_aligned;
- };
-=20
- struct core_reloc_primitives___err_non_ptr {
-@@ -496,7 +501,7 @@ struct core_reloc_primitives___err_non_ptr {
- 	int b;
- 	enum core_reloc_primitives_enum c;
- 	int d; /* int instead of ptr */
--	int (*f)(const char *);
-+	int (*f)(const char *) __bpf_aligned;
- };
-=20
- /*
-@@ -507,7 +512,7 @@ struct core_reloc_mods_output {
- };
-=20
- typedef const int int_t;
--typedef const char *char_ptr_t;
-+typedef const char *char_ptr_t __bpf_aligned;
- typedef const int arr_t[7];
-=20
- struct core_reloc_mods_substruct {
-@@ -523,9 +528,9 @@ typedef struct {
- struct core_reloc_mods {
- 	int a;
- 	int_t b;
--	char *c;
-+	char *c __bpf_aligned;
- 	char_ptr_t d;
--	int e[3];
-+	int e[3] __bpf_aligned;
- 	arr_t f;
- 	struct core_reloc_mods_substruct g;
- 	core_reloc_mods_substruct_t h;
-@@ -535,9 +540,9 @@ struct core_reloc_mods {
- struct core_reloc_mods___mod_swap {
- 	int b;
- 	int_t a;
--	char *d;
-+	char *d __bpf_aligned;
- 	char_ptr_t c;
--	int f[3];
-+	int f[3] __bpf_aligned;
- 	arr_t e;
- 	struct {
- 		int y;
-@@ -555,7 +560,7 @@ typedef arr1_t arr2_t;
- typedef arr2_t arr3_t;
- typedef arr3_t arr4_t;
-=20
--typedef const char * const volatile fancy_char_ptr_t;
-+typedef const char * const volatile fancy_char_ptr_t __bpf_aligned;
-=20
- typedef core_reloc_mods_substruct_t core_reloc_mods_substruct_tt;
-=20
-@@ -567,7 +572,7 @@ struct core_reloc_mods___typedefs {
- 	arr4_t e;
- 	fancy_char_ptr_t d;
- 	fancy_char_ptr_t c;
--	int3_t b;
-+	int3_t b __bpf_aligned;
- 	int3_t a;
- };
-=20
-@@ -739,19 +744,19 @@ struct core_reloc_bitfields___bit_sz_change {
- 	int8_t		sb4: 1;		/*  4 ->  1 */
- 	int32_t		sb20: 30;	/* 20 -> 30 */
- 	/* non-bitfields */
--	uint16_t	u32;		/* 32 -> 16 */
--	int64_t		s32;		/* 32 -> 64 */
-+	uint16_t	u32;			/* 32 -> 16 */
-+	int64_t		s32 __bpf_aligned;	/* 32 -> 64 */
- };
-=20
- /* turn bitfield into non-bitfield and vice versa */
- struct core_reloc_bitfields___bitfield_vs_int {
- 	uint64_t	ub1;		/*  3 -> 64 non-bitfield */
- 	uint8_t		ub2;		/* 20 ->  8 non-bitfield */
--	int64_t		ub7;		/*  7 -> 64 non-bitfield signed */
--	int64_t		sb4;		/*  4 -> 64 non-bitfield signed */
--	uint64_t	sb20;		/* 20 -> 16 non-bitfield unsigned */
--	int32_t		u32: 20;	/* 32 non-bitfield -> 20 bitfield */
--	uint64_t	s32: 60;	/* 32 non-bitfield -> 60 bitfield */
-+	int64_t		ub7 __bpf_aligned;	/*  7 -> 64 non-bitfield signed */
-+	int64_t		sb4 __bpf_aligned;	/*  4 -> 64 non-bitfield signed */
-+	uint64_t	sb20 __bpf_aligned;	/* 20 -> 16 non-bitfield unsigned */
-+	int32_t		u32: 20;		/* 32 non-bitfield -> 20 bitfield */
-+	uint64_t	s32: 60 __bpf_aligned;	/* 32 non-bitfield -> 60 bitfield */
- };
-=20
- struct core_reloc_bitfields___just_big_enough {
---=20
-2.24.1
-
+- Arnaldo
