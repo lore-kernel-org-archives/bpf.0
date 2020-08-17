@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 082BFC433E1
-	for <bpf@archiver.kernel.org>; Mon, 17 Aug 2020 08:18:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F15E8C433E1
+	for <bpf@archiver.kernel.org>; Mon, 17 Aug 2020 08:19:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DBAB620738
-	for <bpf@archiver.kernel.org>; Mon, 17 Aug 2020 08:18:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA71B20738
+	for <bpf@archiver.kernel.org>; Mon, 17 Aug 2020 08:19:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N+PqmoMs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TEUbjnnR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726817AbgHQISr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Aug 2020 04:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51384 "EHLO
+        id S1727961AbgHQITI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Aug 2020 04:19:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727107AbgHQISQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Aug 2020 04:18:16 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C01C061389;
-        Mon, 17 Aug 2020 01:18:16 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id t10so7119076plz.10;
-        Mon, 17 Aug 2020 01:18:16 -0700 (PDT)
+        with ESMTP id S1727107AbgHQITD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Aug 2020 04:19:03 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6B6C061388;
+        Mon, 17 Aug 2020 01:19:03 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id h12so7752460pgm.7;
+        Mon, 17 Aug 2020 01:19:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=VuEUvmYOOxy0cBG1vy1x0k+OUnxToU/d3epXaoj+zgU=;
-        b=N+PqmoMsa7OSrh+YQoRWbjcFhyvAZVpnAGN18Dq9JnExrNg1QK1YiDTfCKZWX0tzAU
-         w0Zv/q4BWvCVtYiBfxDO5AN18qkpPyECLdQM2sHFbyPzeAGVGdx1mGpOCt0IaXqUd3Mg
-         /aiQZlslyJOYdh8VUcL0yXF3dJ7Q1LMsB8zAbDOEGpUcfKrPorsxdu5Qz/XnPbEPdy4B
-         THV+bJCufjjEx4mVBDuLeJQWYBIiHX5Dxiq0N7Fit+YRUFklquEoieue7mHVIO5+HU9y
-         bxOXL9nx9QPjhA9TOMwq1tLPi38SgRYtHGENItORu5NwrcVAl59CHDzoy4jqUksgAt+i
-         rsBA==
+        bh=ssSSz7f3Ql8I/02L7v0dEm57rAmAG5QqUNmcYkmicic=;
+        b=TEUbjnnRYtLTSLXt82s3M/Tu0/Dfm/cSIzdCRLdoOboLsxmozgAGCXKnGPI2nAAzNC
+         EmGMZDaze5DV1KuQa752lOTgT+eqV0fI4Oyujx30mDci1i3Wp0qufhkaGhhWv5em1n2y
+         0QA2FUP7JeZ+GKPClXiSVQa3tg2i9QAOCS8UCHqADZAh546W6d38Z6uT9ZRhKV2sj00p
+         Y+XLsIKpO3S8Zy53NpFF4k5kkK2Mj6OAdzk+Nrbm4hOz/kwdFdQK36tyhr8mLbQie9pw
+         sp0WqRPYbJ3sPhQgxNPh5BwIeb6S4yxbwxB+YDPOg+VIknpzMdPYw2B7XmoGm5Eae2RI
+         g8kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=VuEUvmYOOxy0cBG1vy1x0k+OUnxToU/d3epXaoj+zgU=;
-        b=p+biaUZNIMKU/nSQaf93UptD+bnJoUCz/NCElmVpsDvKEje0WuoN/2MQD0MSFlY3AW
-         BUIAd4HHmxxTZSeH0cuuTmaJTG63KTAV8IOaMO/u85RhYKr+f6omb80UHZIyO9Fj76RI
-         1dJCbmnHNB0VjMxhunjbppQxzLa2958NwrYKJZoMopekIZLar6CQ75gMrNxXC30E3X44
-         KaWDkXW6F06jzwCRfMMEVH53bELKeJ+5NydYBhtRFXQGSckVUZ9hhoto6PTp0aAa7+k4
-         X42Zb8YukOSJn0FjWaR1iBFNeNomlqDFYgrBqHsiNKc6vIV/wGhWI7atPysnsZtmuX1S
-         yl+g==
-X-Gm-Message-State: AOAM531+9Y/9PD9/Y/5dVvcf3bupNdi9ahduZkO67ilpxG4Ju8QYjjXQ
-        TwW6ee1lGnlWweJL4GsuNRs=
-X-Google-Smtp-Source: ABdhPJxdwkKw4yzWqHKwHEGaahSJ53uh/FCPjaY9jium8wPVcefU6BXuAp+4B0DoFuGrH/xG8g/t3g==
-X-Received: by 2002:a17:90a:46c2:: with SMTP id x2mr11593387pjg.184.1597652296086;
-        Mon, 17 Aug 2020 01:18:16 -0700 (PDT)
+        bh=ssSSz7f3Ql8I/02L7v0dEm57rAmAG5QqUNmcYkmicic=;
+        b=VG/XU7pit/pgigCBMQeoTJH5PtrMe6NAiMBB3bd4pbVuzJYAcJIC9CrbLH3bJJniGe
+         JfhN/bV+vAckJ72c3Vv+8FDzjGYKMOXaogHEeB79GwqWM3FSj9t64GTtgs0x7PRU7lnj
+         2MyGfSfmMtPPTWyRSA2XbfbwQLndBYC8BoNgVO2J4s0u7Rm10MN3PnGy3+gDnUHmmfs8
+         r/XGWPvKb488K0ARtpfR9ntnhEaR2q3TjG9BgLuIt4cryYg7SXD77NYwUJTdl/FgdhLC
+         +PPhSBcNQSKnYx7QXVohs4wBQ27g88Qzzu+cYxPhr1wKr1JuVi0hkUTFghE1fpJFVer6
+         uhhA==
+X-Gm-Message-State: AOAM530pTFL14S7oMHTC3IYWKjHfCMNQP/2NtCeaEoxLwtDaZc8nMcl0
+        sz8+vkeeT+CZMgkMHWmldALbdlMnG7lN0w==
+X-Google-Smtp-Source: ABdhPJy/L1S0pESv+N3Vx6Fjhj55gZLQvmhaIt7kWIR8XqiTFsZtfrFUisjaRrccHbbBe+p68Se4vg==
+X-Received: by 2002:a62:79d7:: with SMTP id u206mr10467523pfc.97.1597652343406;
+        Mon, 17 Aug 2020 01:19:03 -0700 (PDT)
 Received: from localhost.localdomain ([49.207.202.98])
-        by smtp.gmail.com with ESMTPSA id d93sm16735334pjk.44.2020.08.17.01.18.07
+        by smtp.gmail.com with ESMTPSA id d93sm16735334pjk.44.2020.08.17.01.18.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Aug 2020 01:18:15 -0700 (PDT)
+        Mon, 17 Aug 2020 01:19:02 -0700 (PDT)
 From:   Allen Pais <allen.lkml@gmail.com>
 To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
         festevam@gmail.com, linux-imx@nxp.com, ast@kernel.org,
@@ -71,9 +71,9 @@ Cc:     keescook@chromium.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org,
         Allen Pais <allen.lkml@gmail.com>,
         Romain Perier <romain.perier@gmail.com>
-Subject: [PATCH 03/35] dma: at_xdmac: convert tasklets to use new tasklet_setup() API
-Date:   Mon, 17 Aug 2020 13:46:54 +0530
-Message-Id: <20200817081726.20213-4-allen.lkml@gmail.com>
+Subject: [PATCH 08/35] dma: imx-dma: convert tasklets to use new tasklet_setup() API
+Date:   Mon, 17 Aug 2020 13:46:59 +0530
+Message-Id: <20200817081726.20213-9-allen.lkml@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200817081726.20213-1-allen.lkml@gmail.com>
 References: <20200817081726.20213-1-allen.lkml@gmail.com>
@@ -90,32 +90,35 @@ and from_tasklet() to pass the tasklet pointer explicitly.
 Signed-off-by: Romain Perier <romain.perier@gmail.com>
 Signed-off-by: Allen Pais <allen.lkml@gmail.com>
 ---
- drivers/dma/at_xdmac.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/dma/imx-dma.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/dma/at_xdmac.c b/drivers/dma/at_xdmac.c
-index fd92f048c491..18fc0f3f817f 100644
---- a/drivers/dma/at_xdmac.c
-+++ b/drivers/dma/at_xdmac.c
-@@ -1615,7 +1615,7 @@ static void at_xdmac_handle_error(struct at_xdmac_chan *atchan)
+diff --git a/drivers/dma/imx-dma.c b/drivers/dma/imx-dma.c
+index 5c0fb3134825..67b9f2bf35b7 100644
+--- a/drivers/dma/imx-dma.c
++++ b/drivers/dma/imx-dma.c
+@@ -613,9 +613,9 @@ static int imxdma_xfer_desc(struct imxdma_desc *d)
+ 	return 0;
+ }
  
- static void at_xdmac_tasklet(unsigned long data)
+-static void imxdma_tasklet(unsigned long data)
++static void imxdma_tasklet(struct tasklet_struct *t)
  {
--	struct at_xdmac_chan	*atchan = (struct at_xdmac_chan *)data;
-+	struct at_xdmac_chan	*atchan = from_tasklet(atchan, t, tasklet);
- 	struct at_xdmac_desc	*desc;
- 	u32			error_mask;
+-	struct imxdma_channel *imxdmac = (void *)data;
++	struct imxdma_channel *imxdmac = from_tasklet(imxdmac, t, dma_tasklet);
+ 	struct imxdma_engine *imxdma = imxdmac->imxdma;
+ 	struct imxdma_desc *desc, *next_desc;
+ 	unsigned long flags;
+@@ -1169,8 +1169,7 @@ static int __init imxdma_probe(struct platform_device *pdev)
+ 		INIT_LIST_HEAD(&imxdmac->ld_free);
+ 		INIT_LIST_HEAD(&imxdmac->ld_active);
  
-@@ -2063,8 +2063,7 @@ static int at_xdmac_probe(struct platform_device *pdev)
- 		spin_lock_init(&atchan->lock);
- 		INIT_LIST_HEAD(&atchan->xfers_list);
- 		INIT_LIST_HEAD(&atchan->free_descs_list);
--		tasklet_init(&atchan->tasklet, at_xdmac_tasklet,
--			     (unsigned long)atchan);
-+		tasklet_setup(&atchan->tasklet, at_xdmac_tasklet);
- 
- 		/* Clear pending interrupts. */
- 		while (at_xdmac_chan_read(atchan, AT_XDMAC_CIS))
+-		tasklet_init(&imxdmac->dma_tasklet, imxdma_tasklet,
+-			     (unsigned long)imxdmac);
++		tasklet_setup(&imxdmac->dma_tasklet, imxdma_tasklet);
+ 		imxdmac->chan.device = &imxdma->dma_device;
+ 		dma_cookie_init(&imxdmac->chan);
+ 		imxdmac->channel = i;
 -- 
 2.17.1
 
