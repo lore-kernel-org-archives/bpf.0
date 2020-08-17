@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 00A2CC433F2
-	for <bpf@archiver.kernel.org>; Mon, 17 Aug 2020 22:12:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1ADCC433F4
+	for <bpf@archiver.kernel.org>; Mon, 17 Aug 2020 22:12:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D572F2072E
-	for <bpf@archiver.kernel.org>; Mon, 17 Aug 2020 22:12:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7A5920674
+	for <bpf@archiver.kernel.org>; Mon, 17 Aug 2020 22:12:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730317AbgHQWMC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Aug 2020 18:12:02 -0400
-Received: from out01.mta.xmission.com ([166.70.13.231]:47250 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730271AbgHQWLv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1730321AbgHQWMD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Aug 2020 18:12:03 -0400
+Received: from out03.mta.xmission.com ([166.70.13.233]:33606 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730257AbgHQWLv (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 17 Aug 2020 18:11:51 -0400
 Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out01.mta.xmission.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        by out03.mta.xmission.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1k7nM6-004wAs-AJ; Mon, 17 Aug 2020 16:11:50 -0600
+        id 1k7nM5-001H8C-Vy; Mon, 17 Aug 2020 16:11:50 -0600
 Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.int.ebiederm.org)
         by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.87)
         (envelope-from <ebiederm@xmission.com>)
-        id 1k7nKe-0004PB-Bh; Mon, 17 Aug 2020 16:10:21 -0600
+        id 1k7nKm-0004PB-L7; Mon, 17 Aug 2020 16:10:29 -0600
 From:   "Eric W. Biederman" <ebiederm@xmission.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-fsdevel@vger.kernel.org, criu@openvz.org,
@@ -55,18 +55,18 @@ Cc:     linux-fsdevel@vger.kernel.org, criu@openvz.org,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         "Eric W. Biederman" <ebiederm@xmission.com>
-Date:   Mon, 17 Aug 2020 17:04:20 -0500
-Message-Id: <20200817220425.9389-12-ebiederm@xmission.com>
+Date:   Mon, 17 Aug 2020 17:04:22 -0500
+Message-Id: <20200817220425.9389-14-ebiederm@xmission.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <87ft8l6ic3.fsf@x220.int.ebiederm.org>
 References: <87ft8l6ic3.fsf@x220.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1k7nKe-0004PB-Bh;;;mid=<20200817220425.9389-12-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+qmfRJ3lIgWJPZ2rZtUxGKy6lZEDFtyz4=
+X-XM-SPF: eid=1k7nKm-0004PB-L7;;;mid=<20200817220425.9389-14-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+/b1FqIJGp7GfPLwyPwndSgsGRDfb1vTc=
 X-SA-Exim-Connect-IP: 68.227.160.95
 X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: [PATCH 12/17] proc/fd: In fdinfo seq_show don't use get_files_struct
+Subject: [PATCH 14/17] file: Merge __fd_install into fd_install
 X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
 X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Sender: bpf-owner@vger.kernel.org
@@ -74,63 +74,96 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When discussing[1] exec and posix file locks it was realized that none
-of the callers of get_files_struct fundamentally needed to call
-get_files_struct, and that by switching them to helper functions
-instead it will both simplify their code and remove unnecessary
-increments of files_struct.count.  Those unnecessary increments can
-result in exec unnecessarily unsharing files_struct which breaking
-posix locks, and it can result in fget_light having to fallback to
-fget reducing system performance.
+The function __fd_install was added to support binder[1].  With binder
+fixed[2] there are no more users.  Further with get_files_struct
+removed there can be no more users of __fd_install that pass anything
+except current->files.
 
-Instead hold task_lock for the duration that task->files needs to be
-stable in seq_show.  The task_lock was already taken in
-get_files_struct, and so skipping get_files_struct performs less work
-overall, and avoids the problems with the files_struct reference
-count.
+As fd_install just calls __fd_install with "files=current->files",
+merge them together by transforming the files parameter into a
+local variable initialized to current->files.
 
-[1] https://lkml.kernel.org/r/20180915160423.GA31461@redhat.com
-Suggested-by: Oleg Nesterov <oleg@redhat.com>
+[1] f869e8a7f753 ("expose a low-level variant of fd_install() for binder")
+[2] 44d8047f1d87 ("binder: use standard functions to allocate fds")
 Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 ---
- fs/proc/fd.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ fs/file.c               | 25 ++++++-------------------
+ include/linux/fdtable.h |  2 --
+ 2 files changed, 6 insertions(+), 21 deletions(-)
 
-diff --git a/fs/proc/fd.c b/fs/proc/fd.c
-index d9fee5390fd7..0b46eea154b7 100644
---- a/fs/proc/fd.c
-+++ b/fs/proc/fd.c
-@@ -28,9 +28,8 @@ static int seq_show(struct seq_file *m, void *v)
- 	if (!task)
- 		return -ENOENT;
+diff --git a/fs/file.c b/fs/file.c
+index 605e756f3c63..1a755811669d 100644
+--- a/fs/file.c
++++ b/fs/file.c
+@@ -157,7 +157,7 @@ static int expand_fdtable(struct files_struct *files, unsigned int nr)
+ 	spin_unlock(&files->file_lock);
+ 	new_fdt = alloc_fdtable(nr);
  
--	files = get_files_struct(task);
--	put_task_struct(task);
+-	/* make sure all __fd_install() have seen resize_in_progress
++	/* make sure all fd_install() have seen resize_in_progress
+ 	 * or have finished their rcu_read_lock_sched() section.
+ 	 */
+ 	if (atomic_read(&files->count) > 1)
+@@ -180,7 +180,7 @@ static int expand_fdtable(struct files_struct *files, unsigned int nr)
+ 	rcu_assign_pointer(files->fdt, new_fdt);
+ 	if (cur_fdt != &files->fdtab)
+ 		call_rcu(&cur_fdt->rcu, free_fdtable_rcu);
+-	/* coupled with smp_rmb() in __fd_install() */
++	/* coupled with smp_rmb() in fd_install() */
+ 	smp_wmb();
+ 	return 1;
+ }
+@@ -569,17 +569,13 @@ EXPORT_SYMBOL(put_unused_fd);
+  * It should never happen - if we allow dup2() do it, _really_ bad things
+  * will follow.
+  *
+- * NOTE: __fd_install() variant is really, really low-level; don't
+- * use it unless you are forced to by truly lousy API shoved down
+- * your throat.  'files' *MUST* be either current->files or obtained
+- * by get_files_struct(current) done by whoever had given it to you,
+- * or really bad things will happen.  Normally you want to use
+- * fd_install() instead.
++ * This consumes the "file" refcount, so callers should treat it
++ * as if they had called fput(file).
+  */
+ 
+-void __fd_install(struct files_struct *files, unsigned int fd,
+-		struct file *file)
++void fd_install(unsigned int fd, struct file *file)
+ {
++	struct files_struct *files = current->files;
+ 	struct fdtable *fdt;
+ 
+ 	rcu_read_lock_sched();
+@@ -601,15 +597,6 @@ void __fd_install(struct files_struct *files, unsigned int fd,
+ 	rcu_read_unlock_sched();
+ }
+ 
+-/*
+- * This consumes the "file" refcount, so callers should treat it
+- * as if they had called fput(file).
+- */
+-void fd_install(unsigned int fd, struct file *file)
+-{
+-	__fd_install(current->files, fd, file);
+-}
 -
-+	task_lock(task);
-+	files = task->files;
- 	if (files) {
- 		unsigned int fd = proc_fd(m->private);
+ EXPORT_SYMBOL(fd_install);
  
-@@ -47,8 +46,9 @@ static int seq_show(struct seq_file *m, void *v)
- 			ret = 0;
- 		}
- 		spin_unlock(&files->file_lock);
--		put_files_struct(files);
- 	}
-+	task_unlock(task);
-+	put_task_struct(task);
+ static struct file *pick_file(struct files_struct *files, unsigned fd)
+diff --git a/include/linux/fdtable.h b/include/linux/fdtable.h
+index 8c4bc6aa19c9..4da8aacc461a 100644
+--- a/include/linux/fdtable.h
++++ b/include/linux/fdtable.h
+@@ -118,8 +118,6 @@ int iterate_fd(struct files_struct *, unsigned,
  
- 	if (ret)
- 		return ret;
-@@ -57,6 +57,7 @@ static int seq_show(struct seq_file *m, void *v)
- 		   (long long)file->f_pos, f_flags,
- 		   real_mount(file->f_path.mnt)->mnt_id);
- 
-+	/* show_fd_locks() never deferences files so a stale value is safe */
- 	show_fd_locks(m, file, files);
- 	if (seq_has_overflowed(m))
- 		goto out;
+ extern int __alloc_fd(struct files_struct *files,
+ 		      unsigned start, unsigned end, unsigned flags);
+-extern void __fd_install(struct files_struct *files,
+-		      unsigned int fd, struct file *file);
+ extern int __close_fd(struct files_struct *files,
+ 		      unsigned int fd);
+ extern int __close_range(unsigned int fd, unsigned int max_fd, unsigned int flags);
 -- 
 2.25.0
 
