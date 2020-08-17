@@ -8,55 +8,55 @@ X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93D16C433E1
-	for <bpf@archiver.kernel.org>; Mon, 17 Aug 2020 08:19:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0343C433DF
+	for <bpf@archiver.kernel.org>; Mon, 17 Aug 2020 08:19:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 703FB20738
-	for <bpf@archiver.kernel.org>; Mon, 17 Aug 2020 08:19:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BAC4820738
+	for <bpf@archiver.kernel.org>; Mon, 17 Aug 2020 08:19:52 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UgrPYIJb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OYFh+2d+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728034AbgHQITk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Aug 2020 04:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51604 "EHLO
+        id S1727041AbgHQITX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Aug 2020 04:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728021AbgHQITg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Aug 2020 04:19:36 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12419C061388;
-        Mon, 17 Aug 2020 01:19:36 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id m8so7872604pfh.3;
-        Mon, 17 Aug 2020 01:19:36 -0700 (PDT)
+        with ESMTP id S1727992AbgHQITQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Aug 2020 04:19:16 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0178C061388;
+        Mon, 17 Aug 2020 01:19:16 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id v15so7756474pgh.6;
+        Mon, 17 Aug 2020 01:19:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Hn4KAQ3gCFoOl9r0ujaoL0SRctsTF3JFLZ2Rz0kI31Y=;
-        b=UgrPYIJbdqsyAE/Fx6gmPFEQMc7zf7xRzMLMRZQ81mNRQ8r/wsHJ5XnwLrP0u+jzbb
-         dl3/wP7rbEMaBGkc9Dqh7I1vj/vWVr3IK/R+KEaSPz4L/YA1WrTHfP/DZkyv+D2dF8YO
-         fGRQUc6xscqzKG31PNgreYX86TUNQz1GEkpBWD/hgEIQ3mOEeU7i4VyvByRvd2vo5xyX
-         ysyJpOD0qtT+rbSeT3efFP9ythU3610pUWwg6Rnq7OGQiNd5+PSg6HNKzwO4+bFpfjUN
-         htIUzpe4CYMH51WkhSfmWhRu+7rfrE6sTreHEqQTr+ON8HSS40dT+eLoYpXYWUOI8X9f
-         utiA==
+        bh=jWR4tpYKdIgwTfTifXGcZkODpDZhHIDKqvJr9MK44Qo=;
+        b=OYFh+2d+PvKPM1X1rs+IA+8SX7qx1z1ncQwibPS2FwYo+kTpxsmxlZE9XxbUtNm+tv
+         AtBfUUth4VbOKdd2rod3vSx5BrzO6OfIsUX4eNFbo63ls/Un+mZgFuOI9zrd5PSmi0mW
+         H16w2TyJV7ro8jO/jGh4t4forYJtnlH6hrEdr4/bfLh3c7tlqcu7pV8ykwMCV1ujbk1I
+         /vRGMPVCJk6q71CRLDZ896xcZRAOaVw4MLpDpGh/5Rfo8xdzG+956Z1u+uG0lqEebRuf
+         G+wjGGZFdWy/VHbmmvR2INPNPdeEJO0RrFN0fVosHIqm+ZdcpzHMVsoAyb+OwlMi1/EG
+         vONA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=Hn4KAQ3gCFoOl9r0ujaoL0SRctsTF3JFLZ2Rz0kI31Y=;
-        b=glVEqdhiEwsVmQTBz0HGS39ad27gbvJjIiyOEJdJmtaTtBu9VVVoBklpTMjSkSBMqw
-         1HEYEeZkq+4wkVa4RGfn7n6EUh+9d9sZcRJsyhKaDr36I1vnjHCfiFVRxQv2XjAy+F+v
-         yk1kQz2GX9Q+cvn89bcnwDEjX0cKObiRnZc7ffRGBBzfqGQYMau5uYRCOSgtnBO9337M
-         BjvR5WJkTciGZNAmWaNcqt4Cw0d8FafIwmtGDVDRMnlhp9WPQLB1stPDkuXkD+/drUgw
-         E3AXx0HXLeMPfOC+mhBVTcMnGOmXhkIk06kzPyOiJr8iKp8Lh68d423ZPgeVka351HW5
-         QfOA==
-X-Gm-Message-State: AOAM530rjVxRwrceJNkJaG3o3fLBpiuDvOLywjGH+z/2hxfBJRuDH6Mp
-        tfevmR9lJ0lEta2ELIvFz/I=
-X-Google-Smtp-Source: ABdhPJwKzgY7w0A1JlXR4OuCaZ4g4WLJQtisLZUR6BZuNQ4S9PcFCNNh4aK23T5dkHQTo4ssudR52Q==
-X-Received: by 2002:a05:6a00:91:: with SMTP id c17mr10263590pfj.151.1597652375645;
-        Mon, 17 Aug 2020 01:19:35 -0700 (PDT)
+        bh=jWR4tpYKdIgwTfTifXGcZkODpDZhHIDKqvJr9MK44Qo=;
+        b=fhqJtMJVL9xuntPnTmzc5Mz9U51/5GHSWNqQUCvD9N666dQlKf1+bBS6P9IwzyX7d0
+         V61QKq7pEXzrJNKdL38X3TU61HFATD8RPTeI7Pt52yVUsHacRD7KpXid94tXeRd9Vbjz
+         /E49H7WYzfKttKx/Q60HwtSrRBsl/hoClv/t7s12ezFzb+pKONBOOcE9GZbUtTOGrROy
+         VyFFvHSnlWSvhBeenV/iajESghFkX3axGlIIZkx1cQt5HSTOELy8yvmcxKLZKKTJajCQ
+         rpyom8LC6ktDmGqBU814FWS8sjFOQgF/2VWJDNe8o17E2DJ5YA0x801z78tKCYtI1VDr
+         Buyg==
+X-Gm-Message-State: AOAM533t6SmMPO0MmGQtdPgJyOW/p/Ha9PIV7Cr8gijpLqKu6Zugq6Wz
+        gzmCKutg+n9dNZCiaXwPXVw=
+X-Google-Smtp-Source: ABdhPJzQZQ8jCbyqROLlM27Ni7dlU0vjA+PPip0ZkkUZjaj/KtF/PrsiQ7sLHmgguZb6B+CXPAkl7w==
+X-Received: by 2002:a63:fa09:: with SMTP id y9mr9461516pgh.0.1597652356434;
+        Mon, 17 Aug 2020 01:19:16 -0700 (PDT)
 Received: from localhost.localdomain ([49.207.202.98])
-        by smtp.gmail.com with ESMTPSA id d93sm16735334pjk.44.2020.08.17.01.19.26
+        by smtp.gmail.com with ESMTPSA id d93sm16735334pjk.44.2020.08.17.01.19.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Aug 2020 01:19:34 -0700 (PDT)
+        Mon, 17 Aug 2020 01:19:15 -0700 (PDT)
 From:   Allen Pais <allen.lkml@gmail.com>
 To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
         festevam@gmail.com, linux-imx@nxp.com, ast@kernel.org,
@@ -71,9 +71,9 @@ Cc:     keescook@chromium.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org,
         Allen Pais <allen.lkml@gmail.com>,
         Romain Perier <romain.perier@gmail.com>
-Subject: [PATCH 11/35] dma: ipu: convert tasklets to use new tasklet_setup() API
-Date:   Mon, 17 Aug 2020 13:47:02 +0530
-Message-Id: <20200817081726.20213-12-allen.lkml@gmail.com>
+Subject: [PATCH 09/35] dma: ioat: convert tasklets to use new tasklet_setup() API
+Date:   Mon, 17 Aug 2020 13:47:00 +0530
+Message-Id: <20200817081726.20213-10-allen.lkml@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200817081726.20213-1-allen.lkml@gmail.com>
 References: <20200817081726.20213-1-allen.lkml@gmail.com>
@@ -90,34 +90,71 @@ and from_tasklet() to pass the tasklet pointer explicitly.
 Signed-off-by: Romain Perier <romain.perier@gmail.com>
 Signed-off-by: Allen Pais <allen.lkml@gmail.com>
 ---
- drivers/dma/ipu/ipu_idmac.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/dma/ioat/dma.c  | 6 +++---
+ drivers/dma/ioat/dma.h  | 2 +-
+ drivers/dma/ioat/init.c | 4 +---
+ 3 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/dma/ipu/ipu_idmac.c b/drivers/dma/ipu/ipu_idmac.c
-index 0457b1f26540..38036db284cb 100644
---- a/drivers/dma/ipu/ipu_idmac.c
-+++ b/drivers/dma/ipu/ipu_idmac.c
-@@ -1299,9 +1299,9 @@ static irqreturn_t idmac_interrupt(int irq, void *dev_id)
- 	return IRQ_HANDLED;
+diff --git a/drivers/dma/ioat/dma.c b/drivers/dma/ioat/dma.c
+index a814b200299b..bfcf67febfe6 100644
+--- a/drivers/dma/ioat/dma.c
++++ b/drivers/dma/ioat/dma.c
+@@ -165,7 +165,7 @@ void ioat_stop(struct ioatdma_chan *ioat_chan)
+ 	tasklet_kill(&ioat_chan->cleanup_task);
+ 
+ 	/* final cleanup now that everything is quiesced and can't re-arm */
+-	ioat_cleanup_event((unsigned long)&ioat_chan->dma_chan);
++	ioat_cleanup_event(&ioat_chan->cleanup_task);
  }
  
--static void ipu_gc_tasklet(unsigned long arg)
-+static void ipu_gc_tasklet(struct tasklet_struct *t)
+ static void __ioat_issue_pending(struct ioatdma_chan *ioat_chan)
+@@ -690,9 +690,9 @@ static void ioat_cleanup(struct ioatdma_chan *ioat_chan)
+ 	spin_unlock_bh(&ioat_chan->cleanup_lock);
+ }
+ 
+-void ioat_cleanup_event(unsigned long data)
++void ioat_cleanup_event(struct tasklet_struct *t)
  {
--	struct ipu *ipu = (struct ipu *)arg;
-+	struct ipu *ipu = from_tasklet(ipu, t, tasklet);
- 	int i;
+-	struct ioatdma_chan *ioat_chan = to_ioat_chan((void *)data);
++	struct ioatdma_chan *ioat_chan = from_tasklet(ioat_chan, t, cleanup_task);
  
- 	for (i = 0; i < IPU_CHANNELS_NUM; i++) {
-@@ -1740,7 +1740,7 @@ static int __init ipu_probe(struct platform_device *pdev)
- 	if (ret < 0)
- 		goto err_idmac_init;
+ 	ioat_cleanup(ioat_chan);
+ 	if (!test_bit(IOAT_RUN, &ioat_chan->state))
+diff --git a/drivers/dma/ioat/dma.h b/drivers/dma/ioat/dma.h
+index f7f31fdf14cf..140cfe3782fb 100644
+--- a/drivers/dma/ioat/dma.h
++++ b/drivers/dma/ioat/dma.h
+@@ -393,7 +393,7 @@ int ioat_reset_hw(struct ioatdma_chan *ioat_chan);
+ enum dma_status
+ ioat_tx_status(struct dma_chan *c, dma_cookie_t cookie,
+ 		struct dma_tx_state *txstate);
+-void ioat_cleanup_event(unsigned long data);
++void ioat_cleanup_event(struct tasklet_struct *t);
+ void ioat_timer_event(struct timer_list *t);
+ int ioat_check_space_lock(struct ioatdma_chan *ioat_chan, int num_descs);
+ void ioat_issue_pending(struct dma_chan *chan);
+diff --git a/drivers/dma/ioat/init.c b/drivers/dma/ioat/init.c
+index 8a53f5c96b16..191b59279007 100644
+--- a/drivers/dma/ioat/init.c
++++ b/drivers/dma/ioat/init.c
+@@ -767,8 +767,6 @@ ioat_init_channel(struct ioatdma_device *ioat_dma,
+ 		  struct ioatdma_chan *ioat_chan, int idx)
+ {
+ 	struct dma_device *dma = &ioat_dma->dma_dev;
+-	struct dma_chan *c = &ioat_chan->dma_chan;
+-	unsigned long data = (unsigned long) c;
  
--	tasklet_init(&ipu_data.tasklet, ipu_gc_tasklet, (unsigned long)&ipu_data);
-+	tasklet_setup(&ipu_data.tasklet, ipu_gc_tasklet);
+ 	ioat_chan->ioat_dma = ioat_dma;
+ 	ioat_chan->reg_base = ioat_dma->reg_base + (0x80 * (idx + 1));
+@@ -778,7 +776,7 @@ ioat_init_channel(struct ioatdma_device *ioat_dma,
+ 	list_add_tail(&ioat_chan->dma_chan.device_node, &dma->channels);
+ 	ioat_dma->idx[idx] = ioat_chan;
+ 	timer_setup(&ioat_chan->timer, ioat_timer_event, 0);
+-	tasklet_init(&ioat_chan->cleanup_task, ioat_cleanup_event, data);
++	tasklet_setup(&ioat_chan->cleanup_task, ioat_cleanup_event);
+ }
  
- 	ipu_data.dev = &pdev->dev;
- 
+ #define IOAT_NUM_SRC_TEST 6 /* must be <= 8 */
 -- 
 2.17.1
 
