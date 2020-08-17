@@ -5,58 +5,58 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F41BC433DF
-	for <bpf@archiver.kernel.org>; Mon, 17 Aug 2020 08:20:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82FA8C433E3
+	for <bpf@archiver.kernel.org>; Mon, 17 Aug 2020 08:21:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2A2B120658
-	for <bpf@archiver.kernel.org>; Mon, 17 Aug 2020 08:20:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E43D20658
+	for <bpf@archiver.kernel.org>; Mon, 17 Aug 2020 08:21:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JHXohDxe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DhBo3QVZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727828AbgHQIUf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 17 Aug 2020 04:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
+        id S1728166AbgHQIVB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 17 Aug 2020 04:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727013AbgHQIUa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 17 Aug 2020 04:20:30 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D474BC061388;
-        Mon, 17 Aug 2020 01:20:29 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id f9so7332852pju.4;
-        Mon, 17 Aug 2020 01:20:29 -0700 (PDT)
+        with ESMTP id S1728161AbgHQIU5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 17 Aug 2020 04:20:57 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99149C061388;
+        Mon, 17 Aug 2020 01:20:57 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id f193so7853804pfa.12;
+        Mon, 17 Aug 2020 01:20:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=zY00DfBPk2FI3CMNWn52CBXvi0OzneRvuEaVydUrqYM=;
-        b=JHXohDxeJ/Dh1zXnUGOIBhnD05rLIOt0WPhf5lY0Z1SOp2iutpPlMhSNVdP842Ujnn
-         MDU3wcpMFCC3NAPRruONdOxR58Iu4lTi1Tt+xUudFOxXyNWG+U2tONhNCyIoxOOrbFKU
-         2oIt00L630r9KMmiXtkYWvRJNRJfF62nHnvc6hmqFqtPMZCIjpjBxma0W4k9Me3G2iNm
-         kelj92TPaz96JgekkO5nuv2nmqBA2LGFDNJFNou0XvCWKbUiJOfNfwsXBA6Y43f3ThAQ
-         Ju7n8KKdnB/MnHns8wOt4ve7rjgpzVpfXJOmZr2gp1ui3RHfoohqHG48mxAtJKPC83tb
-         CZRg==
+        bh=dBdUK8kTW7LlD2iWbT6JIJ3+2TeLAftGafICpZAEwWI=;
+        b=DhBo3QVZ7RG3vmgoNkItvwt1S5mOvic4xOre9KplQouw/zjrMkde3nmUrVsRNShSgQ
+         tPrNCl473k5OZbUWRxdiDJpQXpEIYG14b+73qK8djI5DITUJ6lihsmtYD7kPn1KlDVX2
+         ZtX0p/IGpjDOl4xzqiKlPdZfFh+q96wAvw/z5dqY/kpvVYALHYAYtGZzvFEd4k1jYUTa
+         QYPpbUn5w1xwiPMA3ppiW0gqQX1HFzJUDf85kqm+UcfpWqbypl3AQdwR1TfnHTaB0lvq
+         bYrknS9FRIOZUI/R2DT1dEU2sI7BXsnpQLIayv3U4tE70PZpg0yne09vnOwYATGXrAWi
+         AeEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=zY00DfBPk2FI3CMNWn52CBXvi0OzneRvuEaVydUrqYM=;
-        b=n7fmhf6tnF+sbduNeobruenmnldkrzLUPdqnDF3goAcuSu8Pf9A5tjMzKRYHWoM4tW
-         YPUCPtOZi2iSn1vKp5wajVSHIbbQQQHl1zvKKAkg94OSPx46pVw62YO+QpZuZSrllg3A
-         2HGmPG3CrRBtZGdv+dDDoLD+DhSQ06v7Rs3+KBLpqSR7RRmCB3W1xq6xebtDQbZA3dC4
-         sJwwv5COWO47dm1x0vmnBW0YEzDhmr/yjYleLJ3WCT0XjVuMvgmpHyB6uTafCJG2qZow
-         ZE6Vb6mfdCPB+w87typ/HaJQJT+MA5LF7kzKOY0wmbWvPlzQbO1mzlCA2qAABlBSHCjY
-         tzng==
-X-Gm-Message-State: AOAM531DyFZei9DyfmE/4sqZSCQfgBQpilyQKNKEmhR9XPOb3YMjIeZI
-        jzrp5FeTW2DQlhvChZxKClTGzo1KwJJjxw==
-X-Google-Smtp-Source: ABdhPJy9hNIs3sa3AQpSygkE4NBuQaTMYIQe8TcPYBT2GBobmrg/Uht24FGujnLWHAiWPhcMsHqZ2Q==
-X-Received: by 2002:a17:90a:dc06:: with SMTP id i6mr11151231pjv.161.1597652429423;
-        Mon, 17 Aug 2020 01:20:29 -0700 (PDT)
+        bh=dBdUK8kTW7LlD2iWbT6JIJ3+2TeLAftGafICpZAEwWI=;
+        b=O4WDQhhYSwGSeCu6Q/pNwjplr04nEpLpE/1Tx5oKQd+sPa+LSLeAvItoZONF313+RK
+         340BAwOQbxupxhGz7jtGpX/iYCmwkBrzaQ9OHai+wLch0asPRQp2jNJ3YroxIqc5VGSO
+         35LMzZ8Y7/ypJpCcJ3tisNYAxrR6doutJi7pgPV9166e1xm2yIEVUe1dp1T1IiFzbWeR
+         HSBkYCS4KJXzMMunGlUqhhIzmWWCgPOJcNrAZLMGBCEgjBxvxCt92vHUgi8Srs9iVQ1S
+         FUi5W/K1zduoq3IGw+ILZuWL3hPzmasYQgpzvgW/p0IbL7BTUFyxEUi/i7JML2I0x4tX
+         C77w==
+X-Gm-Message-State: AOAM532mhMViZi74lA4u7jAx9/8rC/YqaFrP93UrAqT0yQfGx3WBPOL6
+        0GO3CmwCjfiihkt/pzqd7rw=
+X-Google-Smtp-Source: ABdhPJxV6aGgsyONYJ85KZCc26Mwj2MNfgxuNI7M/Y4k7HNeoWAcKtP56vFtLZwXEmS9pw15U3I4EQ==
+X-Received: by 2002:a63:d40d:: with SMTP id a13mr385021pgh.232.1597652457198;
+        Mon, 17 Aug 2020 01:20:57 -0700 (PDT)
 Received: from localhost.localdomain ([49.207.202.98])
-        by smtp.gmail.com with ESMTPSA id d93sm16735334pjk.44.2020.08.17.01.20.20
+        by smtp.gmail.com with ESMTPSA id d93sm16735334pjk.44.2020.08.17.01.20.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Aug 2020 01:20:28 -0700 (PDT)
+        Mon, 17 Aug 2020 01:20:56 -0700 (PDT)
 From:   Allen Pais <allen.lkml@gmail.com>
 To:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
         festevam@gmail.com, linux-imx@nxp.com, ast@kernel.org,
@@ -71,9 +71,9 @@ Cc:     keescook@chromium.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org,
         Allen Pais <allen.lkml@gmail.com>,
         Romain Perier <romain.perier@gmail.com>
-Subject: [PATCH 16/35] dma: mv_xor: convert tasklets to use new tasklet_setup() API
-Date:   Mon, 17 Aug 2020 13:47:07 +0530
-Message-Id: <20200817081726.20213-17-allen.lkml@gmail.com>
+Subject: [PATCH 19/35] dma: pch_dma: convert tasklets to use new tasklet_setup() API
+Date:   Mon, 17 Aug 2020 13:47:10 +0530
+Message-Id: <20200817081726.20213-20-allen.lkml@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20200817081726.20213-1-allen.lkml@gmail.com>
 References: <20200817081726.20213-1-allen.lkml@gmail.com>
@@ -90,62 +90,34 @@ and from_tasklet() to pass the tasklet pointer explicitly.
 Signed-off-by: Romain Perier <romain.perier@gmail.com>
 Signed-off-by: Allen Pais <allen.lkml@gmail.com>
 ---
- drivers/dma/mv_xor.c    | 7 +++----
- drivers/dma/mv_xor_v2.c | 8 ++++----
- 2 files changed, 7 insertions(+), 8 deletions(-)
+ drivers/dma/pch_dma.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/dma/mv_xor.c b/drivers/dma/mv_xor.c
-index 0ac8e7b34e12..00cd1335eeba 100644
---- a/drivers/dma/mv_xor.c
-+++ b/drivers/dma/mv_xor.c
-@@ -336,9 +336,9 @@ static void mv_chan_slot_cleanup(struct mv_xor_chan *mv_chan)
- 		mv_chan->dmachan.completed_cookie = cookie;
+diff --git a/drivers/dma/pch_dma.c b/drivers/dma/pch_dma.c
+index a3b0b4c56a19..0cd0311e6e87 100644
+--- a/drivers/dma/pch_dma.c
++++ b/drivers/dma/pch_dma.c
+@@ -670,9 +670,9 @@ static int pd_device_terminate_all(struct dma_chan *chan)
+ 	return 0;
  }
  
--static void mv_xor_tasklet(unsigned long data)
-+static void mv_xor_tasklet(struct tasklet_struct *t)
+-static void pdc_tasklet(unsigned long data)
++static void pdc_tasklet(struct tasklet_struct *t)
  {
--	struct mv_xor_chan *chan = (struct mv_xor_chan *) data;
-+	struct mv_xor_chan *chan = from_tasklet(chan, t, irq_tasklet);
+-	struct pch_dma_chan *pd_chan = (struct pch_dma_chan *)data;
++	struct pch_dma_chan *pd_chan = from_tasklet(pd_chan, t, tasklet);
+ 	unsigned long flags;
  
- 	spin_lock(&chan->lock);
- 	mv_chan_slot_cleanup(chan);
-@@ -1097,8 +1097,7 @@ mv_xor_channel_add(struct mv_xor_device *xordev,
+ 	if (!pdc_is_idle(pd_chan)) {
+@@ -898,8 +898,7 @@ static int pch_dma_probe(struct pci_dev *pdev,
+ 		INIT_LIST_HEAD(&pd_chan->queue);
+ 		INIT_LIST_HEAD(&pd_chan->free_list);
  
- 	mv_chan->mmr_base = xordev->xor_base;
- 	mv_chan->mmr_high_base = xordev->xor_high_base;
--	tasklet_init(&mv_chan->irq_tasklet, mv_xor_tasklet, (unsigned long)
--		     mv_chan);
-+	tasklet_setup(&mv_chan->irq_tasklet, mv_xor_tasklet);
- 
- 	/* clear errors before enabling interrupts */
- 	mv_chan_clear_err_status(mv_chan);
-diff --git a/drivers/dma/mv_xor_v2.c b/drivers/dma/mv_xor_v2.c
-index 9225f08dfee9..2753a6b916f6 100644
---- a/drivers/dma/mv_xor_v2.c
-+++ b/drivers/dma/mv_xor_v2.c
-@@ -553,9 +553,10 @@ int mv_xor_v2_get_pending_params(struct mv_xor_v2_device *xor_dev,
- /*
-  * handle the descriptors after HW process
-  */
--static void mv_xor_v2_tasklet(unsigned long data)
-+static void mv_xor_v2_tasklet(struct tasklet_struct *t)
- {
--	struct mv_xor_v2_device *xor_dev = (struct mv_xor_v2_device *) data;
-+	struct mv_xor_v2_device *xor_dev = from_tasklet(xor_dev, t,
-+							irq_tasklet);
- 	int pending_ptr, num_of_pending, i;
- 	struct mv_xor_v2_sw_desc *next_pending_sw_desc = NULL;
- 
-@@ -780,8 +781,7 @@ static int mv_xor_v2_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto free_msi_irqs;
- 
--	tasklet_init(&xor_dev->irq_tasklet, mv_xor_v2_tasklet,
--		     (unsigned long) xor_dev);
-+	tasklet_setup(&xor_dev->irq_tasklet, mv_xor_v2_tasklet);
- 
- 	xor_dev->desc_size = mv_xor_v2_set_desc_size(xor_dev);
+-		tasklet_init(&pd_chan->tasklet, pdc_tasklet,
+-			     (unsigned long)pd_chan);
++		tasklet_setup(&pd_chan->tasklet, pdc_tasklet);
+ 		list_add_tail(&pd_chan->chan.device_node, &pd->dma.channels);
+ 	}
  
 -- 
 2.17.1
