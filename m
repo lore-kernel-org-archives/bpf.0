@@ -2,85 +2,147 @@ Return-Path: <SRS0=j30r=B4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF874C433E1
-	for <bpf@archiver.kernel.org>; Tue, 18 Aug 2020 12:52:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A66CDC433DF
+	for <bpf@archiver.kernel.org>; Tue, 18 Aug 2020 12:53:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A174F20706
-	for <bpf@archiver.kernel.org>; Tue, 18 Aug 2020 12:52:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F3D420706
+	for <bpf@archiver.kernel.org>; Tue, 18 Aug 2020 12:53:48 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="px6BOetx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726612AbgHRMwI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Aug 2020 08:52:08 -0400
-Received: from out02.mta.xmission.com ([166.70.13.232]:60680 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726391AbgHRMwF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Aug 2020 08:52:05 -0400
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out02.mta.xmission.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1k815n-002tHu-Ks; Tue, 18 Aug 2020 06:51:55 -0600
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.xmission.com)
-        by in02.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.87)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1k815m-0002uy-Vs; Tue, 18 Aug 2020 06:51:55 -0600
-From:   ebiederm@xmission.com (Eric W. Biederman)
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        criu@openvz.org, bpf@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Jann Horn <jann@thejh.net>, Kees Cook <keescook@chromium.org>,
-        "Daniel P. Berrang\?\?" <berrange@redhat.com>,
-        Jeff Layton <jlayton@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Matthew Wilcox <willy@debian.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Matthew Wilcox <matthew@wil.cx>,
-        Trond Myklebust <trond.myklebust@fys.uio.no>,
-        Chris Wright <chrisw@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-References: <87ft8l6ic3.fsf@x220.int.ebiederm.org>
-        <20200817220425.9389-17-ebiederm@xmission.com>
-        <20200818112020.GA17080@infradead.org>
-Date:   Tue, 18 Aug 2020 07:48:21 -0500
-In-Reply-To: <20200818112020.GA17080@infradead.org> (Christoph Hellwig's
-        message of "Tue, 18 Aug 2020 12:20:20 +0100")
-Message-ID: <87blj83ysq.fsf@x220.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1726711AbgHRMxr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Aug 2020 08:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726611AbgHRMxq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Aug 2020 08:53:46 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91ADC061389
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2020 05:53:45 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id c10so15143315edk.6
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2020 05:53:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=ZNHqIo/o5PTzslTmWoWeSNX4Sf55a+mcEE0Ya1Wrqu4=;
+        b=px6BOetxPov2VXZZYWCIwmQJXRiJdu2zYyppgQ4NJ0GFSaVjXYbMaWUeRKZJzvjVVK
+         bQM1szrg0N5zIbrxv4Aw/tfY0Bd9U18IDyG1Znu7edZasCe6ou407EkE8OnjKZM1Z2oE
+         wDUJMG6BbOdP2OKwZ7roQlXrLaCTGu+IZFjqo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version:content-transfer-encoding;
+        bh=ZNHqIo/o5PTzslTmWoWeSNX4Sf55a+mcEE0Ya1Wrqu4=;
+        b=myXI5hKchVHPsq0f3X+ypT2IBipfm8emjnH+BQb1pAisYu0M9XP0HsxglwlMHedq5w
+         rAmJRzXUoncdaF21UD64v1pEHz2SbQGvO1KF6b1KXadMgXLFxvxpr312JAMnYzIQrPK6
+         +WRX6iCsP43ts1oSjXwMNuxWZ4JWcQGM/d+lJXahDIz6cE/gQhDDw7EmYMR3imjKpfRR
+         Fyw9yRxWgdvRsqqbnuHUbZd67TIeT/qeDVu7dYib3uz0cNCcdDTimS1fFo/i13CEKRU6
+         V2rviZDmMB6e0dvoMwiRm8eCO1sN9lCtYPh4HlWifsKjCRebLNhIaAXHZKYqWvvZnrfk
+         jS6g==
+X-Gm-Message-State: AOAM531sicxHpn/5XSVvXBHpyKxNV5ySHzDG0lGadsiWEW04qCtqnMum
+        tkqgia9Zpdj6ZC3qyzd8JZBHNg==
+X-Google-Smtp-Source: ABdhPJyIhdEd4dxx01MULiiDY53D0MAL/G49AynyKxTBCBWiwvdErSQptzndvDSyYLQHJa0lENC/1A==
+X-Received: by 2002:a05:6402:c81:: with SMTP id cm1mr19000313edb.256.1597755224405;
+        Tue, 18 Aug 2020 05:53:44 -0700 (PDT)
+Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
+        by smtp.gmail.com with ESMTPSA id j1sm15478983edq.58.2020.08.18.05.53.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Aug 2020 05:53:43 -0700 (PDT)
+References: <20200812163305.545447-1-leah.rumancik@gmail.com> <20200812163305.545447-2-leah.rumancik@gmail.com>
+User-agent: mu4e 1.1.0; emacs 26.3
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Leah Rumancik <leah.rumancik@gmail.com>
+Cc:     bpf@vger.kernel.org, linux-block@vger.kernel.org,
+        orbekk@google.com, harshads@google.com, jasiu@google.com,
+        saranyamohan@google.com, tytso@google.com, bvanassche@google.com
+Subject: Re: [RFC PATCH 1/4] bpf: add new prog_type BPF_PROG_TYPE_IO_FILTER
+In-reply-to: <20200812163305.545447-2-leah.rumancik@gmail.com>
+Date:   Tue, 18 Aug 2020 14:53:42 +0200
+Message-ID: <87mu2sru7d.fsf@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1k815m-0002uy-Vs;;;mid=<87blj83ysq.fsf@x220.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX19i1uubQLTFHwGCBALZbWaXu5opyhIYahI=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: Re: [PATCH 17/17] file: Rename __close_fd to close_fd and remove the files parameter
-X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Christoph Hellwig <hch@infradead.org> writes:
+On Wed, Aug 12, 2020 at 06:33 PM CEST, Leah Rumancik wrote:
+> Introducing a new program type BPF_PROG_TYPE_IO_FILTER and a new
+> attach type BPF_BIO_SUBMIT.
+>
+> This program type is intended to help filter and monitor IO requests.
+>
+> Co-developed-by: Saranya Muruganandam <saranyamohan@google.com>
+> Signed-off-by: Saranya Muruganandam <saranyamohan@google.com>
+> Signed-off-by: Kjetil =C3=98rbekk <orbekk@google.com>
+> Signed-off-by: Harshad Shirwadkar <harshads@google.com>
+> Signed-off-by: Leah Rumancik <leah.rumancik@gmail.com>
+> ---
 
-> Please kill off ksys_close as well while you're at it.
+[...]
 
-Good point.  ksys_close is just a trivial wrapper around close_fd.  So
-the one caller of ksys_close autofs_dev_ioctl_closemount can be
-trivially changed to call close_fd.
+> diff --git a/block/blk-bpf-io-filter.c b/block/blk-bpf-io-filter.c
+> new file mode 100644
+> index 000000000000..453d6b156bd2
+> --- /dev/null
+> +++ b/block/blk-bpf-io-filter.c
 
-Eric
+[...]
+
+> +int io_filter_prog_attach(const union bpf_attr *attr, struct bpf_prog *p=
+rog)
+> +{
+> +	struct gendisk *disk;
+> +	struct fd f;
+> +	struct bpf_prog_array *old_array;
+> +	struct bpf_prog_array *new_array;
+> +	int ret;
+> +
+> +	if (attr->attach_flags)
+> +		return -EINVAL;
+> +
+> +	f =3D fdget(attr->target_fd);
+            ^^^^^
+
+Missing corresponding fdput?
+
+As per Martin's suggestion, with bpf_link this will become the
+link_create callback, but the comment still stands.
+
+> +	if (!f.file)
+> +		return -EBADF;
+> +
+> +	disk =3D I_BDEV(f.file->f_mapping->host)->bd_disk;
+> +	if (disk =3D=3D NULL)
+> +		return -ENXIO;
+> +
+> +	ret =3D mutex_lock_interruptible(&disk->io_filter_lock);
+> +	if (ret)
+> +		return ret;
+> +
+> +	old_array =3D io_filter_rcu_dereference_progs(disk);
+> +	if (old_array && bpf_prog_array_length(old_array) >=3D BPF_MAX_PROGS) {
+> +		ret =3D -E2BIG;
+> +		goto unlock;
+> +	}
+> +
+> +	ret =3D bpf_prog_array_copy(old_array, NULL, prog, &new_array);
+> +	if (ret < 0)
+> +		goto unlock;
+> +
+> +	rcu_assign_pointer(disk->progs, new_array);
+> +	bpf_prog_array_free(old_array);
+> +
+> +unlock:
+> +	mutex_unlock(&disk->io_filter_lock);
+> +	return ret;
+> +}
+
+[...]
