@@ -8,40 +8,40 @@ X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 88CCFC433E1
-	for <bpf@archiver.kernel.org>; Tue, 18 Aug 2020 21:59:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77254C433DF
+	for <bpf@archiver.kernel.org>; Tue, 18 Aug 2020 21:59:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6072A20709
-	for <bpf@archiver.kernel.org>; Tue, 18 Aug 2020 21:59:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4C3EA2075E
+	for <bpf@archiver.kernel.org>; Tue, 18 Aug 2020 21:59:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Qeu7rkDX"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="HxropeWy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726945AbgHRV73 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Aug 2020 17:59:29 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:11410 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726799AbgHRV72 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 18 Aug 2020 17:59:28 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07ILueh0029214
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2020 14:59:27 -0700
+        id S1726896AbgHRV71 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Aug 2020 17:59:27 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:26090 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726884AbgHRV7Y (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 18 Aug 2020 17:59:24 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 07ILwUv0002195
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2020 14:59:21 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=AFMfneqWrl/uKXX51lGxf4hgFXQ8Nam4MH3QQNOIKz0=;
- b=Qeu7rkDXoOM79Bl1sc4U/M8uK+PXWlK9dLWJl+7vfwCEKpP2eHIX1HIobxKR6MnGj+Kt
- bv1vXlSo/UD4SxpB5k8+LvXmwIyh+m42GDp3RzQSCI+iR5slorwcQCN8pNIkozf5lZ1u
- 6D3sex5916hfKQ+JJEfk2lw7boLT7vp6fso= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3304p3d88n-4
+ bh=/XdwSot3eNLcnpVwjXqLfJp6n00aSexBd77/mvuhnJs=;
+ b=HxropeWyKEIiHtRs8hoe1Gn/v7BvrAs0ooWzIaR6iPLj5MgUDxcxUuaPozTyID9kiNc7
+ Y05Tx06/ytYM+3S8ex4nx1PA43qOcT2lQzZDQPz5pPBArYRHGVj6u8WP/pHXXB/XZKjk
+ dci+dTgbq9qjQQr1Y2Ybns8H7MaJ0UaxAX4= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 3304jq58sk-9
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2020 14:59:26 -0700
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2020 14:59:21 -0700
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 18 Aug 2020 14:59:25 -0700
+ 15.1.1979.3; Tue, 18 Aug 2020 14:59:16 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 710A12EC5EB3; Tue, 18 Aug 2020 14:59:20 -0700 (PDT)
+        id D945B2EC5EB3; Tue, 18 Aug 2020 14:59:13 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -50,9 +50,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 4/4] tools: remove feature-libelf-mmap feature detection
-Date:   Tue, 18 Aug 2020 14:59:08 -0700
-Message-ID: <20200818215908.2746786-5-andriin@fb.com>
+Subject: [PATCH bpf-next 1/4] libbpf: remove any use of reallocarray() in libbpf
+Date:   Tue, 18 Aug 2020 14:59:05 -0700
+Message-ID: <20200818215908.2746786-2-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200818215908.2746786-1-andriin@fb.com>
 References: <20200818215908.2746786-1-andriin@fb.com>
@@ -62,10 +62,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-18_16:2020-08-18,2020-08-18 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- spamscore=0 mlxscore=0 clxscore=1015 suspectscore=8 adultscore=0
- bulkscore=0 impostorscore=0 phishscore=0 priorityscore=1501 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ impostorscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=999
+ clxscore=1015 malwarescore=0 suspectscore=8 phishscore=0 spamscore=0
+ mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2008180157
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -73,189 +73,310 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It's trivial to handle missing ELF_C_MMAP_READ support in libelf the way =
-that
-objtool has solved it in
-("774bec3fddcc objtool: Add fallback from ELF_C_READ_MMAP to ELF_C_READ")=
-.
+Re-implement glibc's reallocarray() for libbpf internal-only use.
+reallocarray(), unfortunately, is not available in all versions of glibc,=
+ so
+requires extra feature detection and using reallocarray() stub from
+<tools/libc_compat.h> and COMPAT_NEED_REALLOCARRAY. All this complicates =
+build
+of libbpf unnecessarily and is just a maintenance burden. Instead, it's
+trivial to implement libbpf-specific internal version and use it througho=
+ut
+libbpf.
 
-So instead of having an entire feature detector for that, just do what ob=
-jtool
-does for perf and libbpf. And keep their Makefiles a bit simpler.
+Which is what this patch does, along with converting some realloc() uses =
+that
+should really have been reallocarray() in the first place.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/build/Makefile.feature           |  1 -
- tools/build/feature/Makefile           |  4 ----
- tools/build/feature/test-all.c         |  4 ----
- tools/build/feature/test-libelf-mmap.c |  9 ---------
- tools/lib/bpf/Makefile                 |  6 +-----
- tools/lib/bpf/libbpf.c                 | 14 ++++++--------
- tools/perf/Makefile.config             |  4 ----
- tools/perf/util/symbol.h               |  2 +-
- 8 files changed, 8 insertions(+), 36 deletions(-)
- delete mode 100644 tools/build/feature/test-libelf-mmap.c
+ tools/lib/bpf/Makefile          |  6 +-----
+ tools/lib/bpf/btf.c             | 11 +++++------
+ tools/lib/bpf/btf_dump.c        |  6 ++----
+ tools/lib/bpf/libbpf.c          | 21 ++++++++++-----------
+ tools/lib/bpf/libbpf_internal.h | 25 +++++++++++++++++++++++++
+ tools/lib/bpf/ringbuf.c         |  5 ++---
+ 6 files changed, 45 insertions(+), 29 deletions(-)
 
-diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
-index c1daf4d57518..38415d251075 100644
---- a/tools/build/Makefile.feature
-+++ b/tools/build/Makefile.feature
-@@ -46,7 +46,6 @@ FEATURE_TESTS_BASIC :=3D                  \
-         libelf-getphdrnum               \
-         libelf-gelf_getnote             \
-         libelf-getshdrstrndx            \
--        libelf-mmap                     \
-         libnuma                         \
-         numa_num_possible_cpus          \
-         libperl                         \
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index d220fe952747..b2a2347c67ed 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -25,7 +25,6 @@ FILES=3D                                          \
-          test-libelf-getphdrnum.bin             \
-          test-libelf-gelf_getnote.bin           \
-          test-libelf-getshdrstrndx.bin          \
--         test-libelf-mmap.bin                   \
-          test-libdebuginfod.bin                 \
-          test-libnuma.bin                       \
-          test-numa_num_possible_cpus.bin        \
-@@ -146,9 +145,6 @@ $(OUTPUT)test-dwarf.bin:
- $(OUTPUT)test-dwarf_getlocations.bin:
- 	$(BUILD) $(DWARFLIBS)
-=20
--$(OUTPUT)test-libelf-mmap.bin:
--	$(BUILD) -lelf
--
- $(OUTPUT)test-libelf-getphdrnum.bin:
- 	$(BUILD) -lelf
-=20
-diff --git a/tools/build/feature/test-all.c b/tools/build/feature/test-al=
-l.c
-index 5479e543b194..5284e6e9c756 100644
---- a/tools/build/feature/test-all.c
-+++ b/tools/build/feature/test-all.c
-@@ -30,10 +30,6 @@
- # include "test-libelf.c"
- #undef main
-=20
--#define main main_test_libelf_mmap
--# include "test-libelf-mmap.c"
--#undef main
--
- #define main main_test_get_current_dir_name
- # include "test-get_current_dir_name.c"
- #undef main
-diff --git a/tools/build/feature/test-libelf-mmap.c b/tools/build/feature=
-/test-libelf-mmap.c
-deleted file mode 100644
-index 2c3ef81affe2..000000000000
---- a/tools/build/feature/test-libelf-mmap.c
-+++ /dev/null
-@@ -1,9 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#include <libelf.h>
--
--int main(void)
--{
--	Elf *elf =3D elf_begin(0, ELF_C_READ_MMAP, 0);
--
--	return (long)elf;
--}
 diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index 99796cfc1b9b..eb193bdf43f9 100644
+index bf8ed134cb8a..99796cfc1b9b 100644
 --- a/tools/lib/bpf/Makefile
 +++ b/tools/lib/bpf/Makefile
 @@ -56,7 +56,7 @@ ifndef VERBOSE
  endif
 =20
  FEATURE_USER =3D .libbpf
--FEATURE_TESTS =3D libelf libelf-mmap zlib bpf
-+FEATURE_TESTS =3D libelf zlib bpf
+-FEATURE_TESTS =3D libelf libelf-mmap zlib bpf reallocarray
++FEATURE_TESTS =3D libelf libelf-mmap zlib bpf
  FEATURE_DISPLAY =3D libelf zlib bpf
 =20
  INCLUDES =3D -I. -I$(srctree)/tools/include -I$(srctree)/tools/arch/$(AR=
 CH)/include/uapi -I$(srctree)/tools/include/uapi
-@@ -98,10 +98,6 @@ else
-   CFLAGS :=3D -g -Wall
+@@ -102,10 +102,6 @@ ifeq ($(feature-libelf-mmap), 1)
+   override CFLAGS +=3D -DHAVE_LIBELF_MMAP_SUPPORT
  endif
 =20
--ifeq ($(feature-libelf-mmap), 1)
--  override CFLAGS +=3D -DHAVE_LIBELF_MMAP_SUPPORT
+-ifeq ($(feature-reallocarray), 0)
+-  override CFLAGS +=3D -DCOMPAT_NEED_REALLOCARRAY
 -endif
 -
  # Append required CFLAGS
  override CFLAGS +=3D $(EXTRA_WARNINGS)
  override CFLAGS +=3D -Werror -Wall
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 7dfca7016aaa..d3dc090364c5 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -61,7 +61,7 @@ static int btf_add_type(struct btf *btf, struct btf_typ=
+e *t)
+ 		expand_by =3D max(btf->types_size >> 2, 16U);
+ 		new_size =3D min(BTF_MAX_NR_TYPES, btf->types_size + expand_by);
+=20
+-		new_types =3D realloc(btf->types, sizeof(*new_types) * new_size);
++		new_types =3D libbpf_reallocarray(btf->types, new_size, sizeof(*new_ty=
+pes));
+ 		if (!new_types)
+ 			return -ENOMEM;
+=20
+@@ -1575,7 +1575,7 @@ static int btf_dedup_hypot_map_add(struct btf_dedup=
+ *d,
+ 		__u32 *new_list;
+=20
+ 		d->hypot_cap +=3D max((size_t)16, d->hypot_cap / 2);
+-		new_list =3D realloc(d->hypot_list, sizeof(__u32) * d->hypot_cap);
++		new_list =3D libbpf_reallocarray(d->hypot_list, d->hypot_cap, sizeof(_=
+_u32));
+ 		if (!new_list)
+ 			return -ENOMEM;
+ 		d->hypot_list =3D new_list;
+@@ -1871,8 +1871,7 @@ static int btf_dedup_strings(struct btf_dedup *d)
+ 			struct btf_str_ptr *new_ptrs;
+=20
+ 			strs.cap +=3D max(strs.cnt / 2, 16U);
+-			new_ptrs =3D realloc(strs.ptrs,
+-					   sizeof(strs.ptrs[0]) * strs.cap);
++			new_ptrs =3D libbpf_reallocarray(strs.ptrs, strs.cap, sizeof(strs.ptr=
+s[0]));
+ 			if (!new_ptrs) {
+ 				err =3D -ENOMEM;
+ 				goto done;
+@@ -2957,8 +2956,8 @@ static int btf_dedup_compact_types(struct btf_dedup=
+ *d)
+ 	d->btf->nr_types =3D next_type_id - 1;
+ 	d->btf->types_size =3D d->btf->nr_types;
+ 	d->btf->hdr->type_len =3D p - types_start;
+-	new_types =3D realloc(d->btf->types,
+-			    (1 + d->btf->nr_types) * sizeof(struct btf_type *));
++	new_types =3D libbpf_reallocarray(d->btf->types, (1 + d->btf->nr_types)=
+,
++					sizeof(struct btf_type *));
+ 	if (!new_types)
+ 		return -ENOMEM;
+ 	d->btf->types =3D new_types;
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index fe39bd774697..1ad852ad0a86 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -323,8 +323,7 @@ static int btf_dump_add_emit_queue_id(struct btf_dump=
+ *d, __u32 id)
+=20
+ 	if (d->emit_queue_cnt >=3D d->emit_queue_cap) {
+ 		new_cap =3D max(16, d->emit_queue_cap * 3 / 2);
+-		new_queue =3D realloc(d->emit_queue,
+-				    new_cap * sizeof(new_queue[0]));
++		new_queue =3D libbpf_reallocarray(d->emit_queue, new_cap, sizeof(new_q=
+ueue[0]));
+ 		if (!new_queue)
+ 			return -ENOMEM;
+ 		d->emit_queue =3D new_queue;
+@@ -1003,8 +1002,7 @@ static int btf_dump_push_decl_stack_id(struct btf_d=
+ump *d, __u32 id)
+=20
+ 	if (d->decl_stack_cnt >=3D d->decl_stack_cap) {
+ 		new_cap =3D max(16, d->decl_stack_cap * 3 / 2);
+-		new_stack =3D realloc(d->decl_stack,
+-				    new_cap * sizeof(new_stack[0]));
++		new_stack =3D libbpf_reallocarray(d->decl_stack, new_cap, sizeof(new_s=
+tack[0]));
+ 		if (!new_stack)
+ 			return -ENOMEM;
+ 		d->decl_stack =3D new_stack;
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index f3f4963d6ba4..78d883c5a8f7 100644
+index 5d20b2da4427..a3de369bb2fb 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -150,12 +150,6 @@ static void pr_perm_msg(int err)
- 	___err; })
- #endif
+@@ -44,7 +44,6 @@
+ #include <sys/vfs.h>
+ #include <sys/utsname.h>
+ #include <sys/resource.h>
+-#include <tools/libc_compat.h>
+ #include <libelf.h>
+ #include <gelf.h>
+ #include <zlib.h>
+@@ -565,7 +564,7 @@ bpf_object__add_program(struct bpf_object *obj, void =
+*data, size_t size,
+ 	progs =3D obj->programs;
+ 	nr_progs =3D obj->nr_programs;
 =20
--#ifdef HAVE_LIBELF_MMAP_SUPPORT
--# define LIBBPF_ELF_C_READ_MMAP ELF_C_READ_MMAP
--#else
--# define LIBBPF_ELF_C_READ_MMAP ELF_C_READ
--#endif
--
- static inline __u64 ptr_to_u64(const void *ptr)
- {
- 	return (__u64) (unsigned long) ptr;
-@@ -1062,6 +1056,11 @@ static void bpf_object__elf_finish(struct bpf_obje=
-ct *obj)
- 	obj->efile.obj_buf_sz =3D 0;
- }
+-	progs =3D reallocarray(progs, nr_progs + 1, sizeof(progs[0]));
++	progs =3D libbpf_reallocarray(progs, nr_progs + 1, sizeof(progs[0]));
+ 	if (!progs) {
+ 		/*
+ 		 * In this case the original obj->programs
+@@ -1290,7 +1289,7 @@ static struct bpf_map *bpf_object__add_map(struct b=
+pf_object *obj)
+ 		return &obj->maps[obj->nr_maps++];
 =20
-+/* if libelf is old and doesn't support mmap(), fall back to read() */
-+#ifndef ELF_C_READ_MMAP
-+#define ELF_C_READ_MMAP ELF_C_READ
-+#endif
-+
- static int bpf_object__elf_init(struct bpf_object *obj)
- {
- 	int err =3D 0;
-@@ -1090,8 +1089,7 @@ static int bpf_object__elf_init(struct bpf_object *=
-obj)
- 			return err;
+ 	new_cap =3D max((size_t)4, obj->maps_cap * 3 / 2);
+-	new_maps =3D realloc(obj->maps, new_cap * sizeof(*obj->maps));
++	new_maps =3D libbpf_reallocarray(obj->maps, new_cap, sizeof(*obj->maps)=
+);
+ 	if (!new_maps) {
+ 		pr_warn("alloc maps for object failed\n");
+ 		return ERR_PTR(-ENOMEM);
+@@ -2686,8 +2685,8 @@ static int bpf_object__elf_collect(struct bpf_objec=
+t *obj)
+ 				continue;
+ 			}
+=20
+-			sects =3D reallocarray(sects, nr_sects + 1,
+-					     sizeof(*obj->efile.reloc_sects));
++			sects =3D libbpf_reallocarray(sects, nr_sects + 1,
++						    sizeof(*obj->efile.reloc_sects));
+ 			if (!sects) {
+ 				pr_warn("reloc_sects realloc failed\n");
+ 				return -ENOMEM;
+@@ -2890,7 +2889,7 @@ static int bpf_object__collect_externs(struct bpf_o=
+bject *obj)
+ 			continue;
+=20
+ 		ext =3D obj->externs;
+-		ext =3D reallocarray(ext, obj->nr_extern + 1, sizeof(*ext));
++		ext =3D libbpf_reallocarray(ext, obj->nr_extern + 1, sizeof(*ext));
+ 		if (!ext)
+ 			return -ENOMEM;
+ 		obj->externs =3D ext;
+@@ -4259,9 +4258,9 @@ static struct ids_vec *bpf_core_find_cands(const st=
+ruct btf *local_btf,
+ 		if (strncmp(local_name, targ_name, local_essent_len) =3D=3D 0) {
+ 			pr_debug("[%d] %s: found candidate [%d] %s\n",
+ 				 local_type_id, local_name, i, targ_name);
+-			new_ids =3D reallocarray(cand_ids->data,
+-					       cand_ids->len + 1,
+-					       sizeof(*cand_ids->data));
++			new_ids =3D libbpf_reallocarray(cand_ids->data,
++						      cand_ids->len + 1,
++						      sizeof(*cand_ids->data));
+ 			if (!new_ids) {
+ 				err =3D -ENOMEM;
+ 				goto err_out;
+@@ -5051,7 +5050,7 @@ bpf_program__reloc_text(struct bpf_program *prog, s=
+truct bpf_object *obj,
+ 			return -LIBBPF_ERRNO__RELOC;
  		}
+ 		new_cnt =3D prog->insns_cnt + text->insns_cnt;
+-		new_insn =3D reallocarray(prog->insns, new_cnt, sizeof(*insn));
++		new_insn =3D libbpf_reallocarray(prog->insns, new_cnt, sizeof(*insn));
+ 		if (!new_insn) {
+ 			pr_warn("oom in prog realloc\n");
+ 			return -ENOMEM;
+@@ -5293,7 +5292,7 @@ static int bpf_object__collect_map_relos(struct bpf=
+_object *obj,
+ 		moff /=3D bpf_ptr_sz;
+ 		if (moff >=3D map->init_slots_sz) {
+ 			new_sz =3D moff + 1;
+-			tmp =3D realloc(map->init_slots, new_sz * host_ptr_sz);
++			tmp =3D libbpf_reallocarray(map->init_slots, new_sz, host_ptr_sz);
+ 			if (!tmp)
+ 				return -ENOMEM;
+ 			map->init_slots =3D tmp;
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
+nal.h
+index 50d70e90d5f1..2c9fe73b71e0 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -9,6 +9,7 @@
+ #ifndef __LIBBPF_LIBBPF_INTERNAL_H
+ #define __LIBBPF_LIBBPF_INTERNAL_H
 =20
--		obj->efile.elf =3D elf_begin(obj->efile.fd,
--					   LIBBPF_ELF_C_READ_MMAP, NULL);
-+		obj->efile.elf =3D elf_begin(obj->efile.fd, ELF_C_READ_MMAP, NULL);
++#include <stdlib.h>
+ #include "libbpf.h"
+=20
+ #define BTF_INFO_ENC(kind, kind_flag, vlen) \
+@@ -23,6 +24,12 @@
+ #define BTF_PARAM_ENC(name, type) (name), (type)
+ #define BTF_VAR_SECINFO_ENC(type, offset, size) (type), (offset), (size)
+=20
++#ifndef likely
++#define likely(x) __builtin_expect(!!(x), 1)
++#endif
++#ifndef unlikely
++#define unlikely(x) __builtin_expect(!!(x), 0)
++#endif
+ #ifndef min
+ # define min(x, y) ((x) < (y) ? (x) : (y))
+ #endif
+@@ -63,6 +70,24 @@ do {				\
+ #define pr_info(fmt, ...)	__pr(LIBBPF_INFO, fmt, ##__VA_ARGS__)
+ #define pr_debug(fmt, ...)	__pr(LIBBPF_DEBUG, fmt, ##__VA_ARGS__)
+=20
++/*
++ * Re-implement glibc's reallocarray() for libbpf internal-only use.
++ * reallocarray(), unfortunately, is not available in all versions of gl=
+ibc,
++ * so requires extra feature detection and using reallocarray() stub fro=
+m
++ * <tools/libc_compat.h> and COMPAT_NEED_REALLOCARRAY. All this complica=
+tes
++ * build of libbpf unnecessarily and is just a maintenance burden. Inste=
+ad,
++ * it's trivial to implement libbpf-specific internal version and use it
++ * throughout libbpf.
++ */
++static inline void *libbpf_reallocarray(void *ptr, size_t nmemb, size_t =
+size)
++{
++	size_t total;
++
++	if (unlikely(__builtin_mul_overflow(nmemb, size, &total)))
++		return NULL;
++	return realloc(ptr, total);
++}
++
+ static inline bool libbpf_validate_opts(const char *opts,
+ 					size_t opts_sz, size_t user_sz,
+ 					const char *type_name)
+diff --git a/tools/lib/bpf/ringbuf.c b/tools/lib/bpf/ringbuf.c
+index 4fc6c6cbb4eb..5bd234be8a14 100644
+--- a/tools/lib/bpf/ringbuf.c
++++ b/tools/lib/bpf/ringbuf.c
+@@ -16,7 +16,6 @@
+ #include <asm/barrier.h>
+ #include <sys/mman.h>
+ #include <sys/epoll.h>
+-#include <tools/libc_compat.h>
+=20
+ #include "libbpf.h"
+ #include "libbpf_internal.h"
+@@ -82,12 +81,12 @@ int ring_buffer__add(struct ring_buffer *rb, int map_=
+fd,
+ 		return -EINVAL;
  	}
 =20
- 	if (!obj->efile.elf) {
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 190be4fa5c21..81bb099f6f06 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -483,10 +483,6 @@ ifndef NO_LIBELF
-   EXTLIBS +=3D -lelf
-   $(call detected,CONFIG_LIBELF)
+-	tmp =3D reallocarray(rb->rings, rb->ring_cnt + 1, sizeof(*rb->rings));
++	tmp =3D libbpf_reallocarray(rb->rings, rb->ring_cnt + 1, sizeof(*rb->ri=
+ngs));
+ 	if (!tmp)
+ 		return -ENOMEM;
+ 	rb->rings =3D tmp;
 =20
--  ifeq ($(feature-libelf-mmap), 1)
--    CFLAGS +=3D -DHAVE_LIBELF_MMAP_SUPPORT
--  endif
--
-   ifeq ($(feature-libelf-getphdrnum), 1)
-     CFLAGS +=3D -DHAVE_ELF_GETPHDRNUM_SUPPORT
-   endif
-diff --git a/tools/perf/util/symbol.h b/tools/perf/util/symbol.h
-index ff4f4c47e148..03e264a27cd3 100644
---- a/tools/perf/util/symbol.h
-+++ b/tools/perf/util/symbol.h
-@@ -28,7 +28,7 @@ struct option;
-  * libelf 0.8.x and earlier do not support ELF_C_READ_MMAP;
-  * for newer versions we can use mmap to reduce memory usage:
-  */
--#ifdef HAVE_LIBELF_MMAP_SUPPORT
-+#ifdef ELF_C_READ_MMAP
- # define PERF_ELF_C_READ_MMAP ELF_C_READ_MMAP
- #else
- # define PERF_ELF_C_READ_MMAP ELF_C_READ
+-	tmp =3D reallocarray(rb->events, rb->ring_cnt + 1, sizeof(*rb->events))=
+;
++	tmp =3D libbpf_reallocarray(rb->events, rb->ring_cnt + 1, sizeof(*rb->e=
+vents));
+ 	if (!tmp)
+ 		return -ENOMEM;
+ 	rb->events =3D tmp;
 --=20
 2.24.1
 
