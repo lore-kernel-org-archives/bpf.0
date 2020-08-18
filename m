@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E222C433E1
-	for <bpf@archiver.kernel.org>; Tue, 18 Aug 2020 21:34:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 424D6C433DF
+	for <bpf@archiver.kernel.org>; Tue, 18 Aug 2020 21:34:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 327E1206DA
-	for <bpf@archiver.kernel.org>; Tue, 18 Aug 2020 21:34:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1FB432075E
+	for <bpf@archiver.kernel.org>; Tue, 18 Aug 2020 21:34:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Wr4vdRcG"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="p6EhBSVS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726632AbgHRVeU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Aug 2020 17:34:20 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:58976 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726617AbgHRVeT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 18 Aug 2020 17:34:19 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07ILTpkE013445
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2020 14:34:18 -0700
+        id S1726884AbgHRVe2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Aug 2020 17:34:28 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:2974 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726868AbgHRVe1 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 18 Aug 2020 17:34:27 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07ILXLPh016723
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2020 14:34:26 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=NtWgSBHMlRBU3D8pfovl8LeA7mltK+oVVy1/dlunmiQ=;
- b=Wr4vdRcGYzJVjdhSMknKvx1FPTYDQuW5f7cYKdFoheEfLSh9NOJ3OfkwU9Q+w6Js7lQH
- 4+0FuMYF45ZQzfpS/7gd0+2xiK7525z7xu3Rdscd7DM1UsDCpRPnlJIgBXUvADjf0R5a
- mLBhVz3kl4/LSBYbMX8d6ASMQ9pYIK7ZE64= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3304jbd6u6-1
+ bh=Qba6TtLd7ff/329K8MaTklR0w5dpisYe4n+bCVWlBrk=;
+ b=p6EhBSVSAcNiN7gP/z3hKCtXi0PWhN3jwKl7I07qM+3WSTH1HQv8H4c82Glg1h4EzUDl
+ twzs1XAgvBh2hWN8iiv9hkBGbRATEFdRvRJTNHWkdQCcjKavswe7mfpY3zc/a3PT3Odx
+ tNJRv3Qjv+3JIzulvfGi+31Q3suncgs3cgk= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3304p7w9ff-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2020 14:34:17 -0700
-Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 18 Aug 2020 14:34:26 -0700
+Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 18 Aug 2020 14:34:17 -0700
+ 15.1.1979.3; Tue, 18 Aug 2020 14:34:25 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 888D82EC5EAC; Tue, 18 Aug 2020 14:34:12 -0700 (PDT)
+        id F23A62EC5EAC; Tue, 18 Aug 2020 14:34:16 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 5/7] selftests/bpf: fix test_vmlinux test to use bpf_probe_read_user()
-Date:   Tue, 18 Aug 2020 14:33:54 -0700
-Message-ID: <20200818213356.2629020-6-andriin@fb.com>
+Subject: [PATCH bpf-next 7/7] libbpf: detect minimal BTF support and skip BTF loading, if missing
+Date:   Tue, 18 Aug 2020 14:33:56 -0700
+Message-ID: <20200818213356.2629020-8-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200818213356.2629020-1-andriin@fb.com>
 References: <20200818213356.2629020-1-andriin@fb.com>
@@ -61,81 +61,96 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-18_15:2020-08-18,2020-08-18 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- mlxlogscore=877 mlxscore=0 spamscore=0 clxscore=1015 suspectscore=8
- priorityscore=1501 adultscore=0 bulkscore=0 phishscore=0 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008180153
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=25
+ adultscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=999
+ clxscore=1015 spamscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0
+ phishscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2008180154
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The test is reading UAPI kernel structure from user-space. So it doesn't =
-need
-CO-RE relocations and has to use bpf_probe_read_user().
+Detect whether a kernel supports any BTF at all, and if not, don't even
+attempt loading BTF to avoid unnecessary log messages like:
 
-Fixes: acbd06206bbb ("selftests/bpf: Add vmlinux.h selftest exercising tr=
-acing of syscalls")
+  libbpf: Error loading BTF: Invalid argument(22)
+  libbpf: Error loading .BTF into kernel: -22. BTF is optional, ignoring.
+
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/testing/selftests/bpf/progs/test_vmlinux.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ tools/lib/bpf/libbpf.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_vmlinux.c b/tools/tes=
-ting/selftests/bpf/progs/test_vmlinux.c
-index 29fa09d6a6c6..e9dfa0313d1b 100644
---- a/tools/testing/selftests/bpf/progs/test_vmlinux.c
-+++ b/tools/testing/selftests/bpf/progs/test_vmlinux.c
-@@ -19,12 +19,14 @@ SEC("tp/syscalls/sys_enter_nanosleep")
- int handle__tp(struct trace_event_raw_sys_enter *args)
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index bdc08f89a5c0..5f971796d196 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -170,6 +170,8 @@ enum kern_feature_id {
+ 	FEAT_PROG_NAME,
+ 	/* v5.2: kernel support for global data sections. */
+ 	FEAT_GLOBAL_DATA,
++	/* BTF support */
++	FEAT_BTF,
+ 	/* BTF_KIND_FUNC and BTF_KIND_FUNC_PROTO support */
+ 	FEAT_BTF_FUNC,
+ 	/* BTF_KIND_VAR and BTF_KIND_DATASEC support */
+@@ -2533,6 +2535,15 @@ static int bpf_object__sanitize_and_load_btf(struc=
+t bpf_object *obj)
+ 	if (!obj->btf)
+ 		return 0;
+=20
++	if (!kernel_supports(FEAT_BTF)) {
++		if (kernel_needs_btf(obj)) {
++			err =3D -EOPNOTSUPP;
++			goto report;
++		}
++		pr_debug("Kernel doesn't support BTF, skipping uploading it.\n");
++		return 0;
++	}
++
+ 	sanitize =3D btf_needs_sanitization(obj);
+ 	if (sanitize) {
+ 		const void *raw_data;
+@@ -2558,6 +2569,7 @@ static int bpf_object__sanitize_and_load_btf(struct=
+ bpf_object *obj)
+ 		}
+ 		btf__free(kern_btf);
+ 	}
++report:
+ 	if (err) {
+ 		btf_mandatory =3D kernel_needs_btf(obj);
+ 		pr_warn("Error loading .BTF into kernel: %d. %s\n", err,
+@@ -3502,6 +3514,18 @@ static int probe_kern_global_data(void)
+ 	return probe_fd(ret);
+ }
+=20
++static int probe_kern_btf(void)
++{
++	static const char strs[] =3D "\0int";
++	__u32 types[] =3D {
++		/* int */
++		BTF_TYPE_INT_ENC(1, BTF_INT_SIGNED, 0, 32, 4),
++	};
++
++	return probe_fd(libbpf__load_raw_btf((char *)types, sizeof(types),
++					     strs, sizeof(strs)));
++}
++
+ static int probe_kern_btf_func(void)
  {
- 	struct __kernel_timespec *ts;
-+	long tv_nsec;
-=20
- 	if (args->id !=3D __NR_nanosleep)
- 		return 0;
-=20
- 	ts =3D (void *)args->args[0];
--	if (BPF_CORE_READ(ts, tv_nsec) !=3D MY_TV_NSEC)
-+	if (bpf_probe_read_user(&tv_nsec, sizeof(ts->tv_nsec), &ts->tv_nsec) ||
-+	    tv_nsec !=3D MY_TV_NSEC)
- 		return 0;
-=20
- 	tp_called =3D true;
-@@ -35,12 +37,14 @@ SEC("raw_tp/sys_enter")
- int BPF_PROG(handle__raw_tp, struct pt_regs *regs, long id)
- {
- 	struct __kernel_timespec *ts;
-+	long tv_nsec;
-=20
- 	if (id !=3D __NR_nanosleep)
- 		return 0;
-=20
- 	ts =3D (void *)PT_REGS_PARM1_CORE(regs);
--	if (BPF_CORE_READ(ts, tv_nsec) !=3D MY_TV_NSEC)
-+	if (bpf_probe_read_user(&tv_nsec, sizeof(ts->tv_nsec), &ts->tv_nsec) ||
-+	    tv_nsec !=3D MY_TV_NSEC)
- 		return 0;
-=20
- 	raw_tp_called =3D true;
-@@ -51,12 +55,14 @@ SEC("tp_btf/sys_enter")
- int BPF_PROG(handle__tp_btf, struct pt_regs *regs, long id)
- {
- 	struct __kernel_timespec *ts;
-+	long tv_nsec;
-=20
- 	if (id !=3D __NR_nanosleep)
- 		return 0;
-=20
- 	ts =3D (void *)PT_REGS_PARM1_CORE(regs);
--	if (BPF_CORE_READ(ts, tv_nsec) !=3D MY_TV_NSEC)
-+	if (bpf_probe_read_user(&tv_nsec, sizeof(ts->tv_nsec), &ts->tv_nsec) ||
-+	    tv_nsec !=3D MY_TV_NSEC)
- 		return 0;
-=20
- 	tp_btf_called =3D true;
+ 	static const char strs[] =3D "\0int\0x\0a";
+@@ -3633,6 +3657,9 @@ static struct kern_feature_desc {
+ 	[FEAT_GLOBAL_DATA] =3D {
+ 		"global variables", probe_kern_global_data,
+ 	},
++	[FEAT_BTF] =3D {
++		"minimal BTF", probe_kern_btf,
++	},
+ 	[FEAT_BTF_FUNC] =3D {
+ 		"BTF functions", probe_kern_btf_func,
+ 	},
 --=20
 2.24.1
 
