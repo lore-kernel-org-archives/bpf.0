@@ -2,212 +2,171 @@ Return-Path: <SRS0=4a0o=B5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 997AEC433E1
-	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 07:08:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1C45C433E1
+	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 07:11:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7022D20786
-	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 07:08:53 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c7V8C5p4"
+	by mail.kernel.org (Postfix) with ESMTP id D69062054F
+	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 07:11:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726422AbgHSHIw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Aug 2020 03:08:52 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:44868 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728067AbgHSHIT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 19 Aug 2020 03:08:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1597820897;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vu8HMBRz/cvUQPdI+DHONr8PVdBMzXN6JvGtbrgRhTU=;
-        b=c7V8C5p4xRiDFcR63vLAkJ25L/36HU6qL8BWO1ClktW0/eLMRk3jcTNimMUASvV99e7U+u
-        U5lLepC+b62mbKeDc/GeF3G/jJJsVzufFT1yT8avjo6eBs2NEEIG3bQM27Vl1gSY7ewf5W
-        FyM+Z+CTcMpicCWthZju/TLXoLcYHkI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-506-T_TcvgBOOlSHlgYJqSf25A-1; Wed, 19 Aug 2020 03:08:13 -0400
-X-MC-Unique: T_TcvgBOOlSHlgYJqSf25A-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6F00A1084C84;
-        Wed, 19 Aug 2020 07:08:10 +0000 (UTC)
-Received: from carbon (unknown [10.40.208.64])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 972FF100AE55;
-        Wed, 19 Aug 2020 07:07:57 +0000 (UTC)
-Date:   Wed, 19 Aug 2020 09:07:56 +0200
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Thomas Ptacek <thomas@sockpuppet.org>,
-        Adhipati Blambangan <adhipati@tuta.io>,
-        David Ahern <dsahern@gmail.com>,
-        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>, brouer@redhat.com
-Subject: Re: [PATCH net v6] net: xdp: account for layer 3 packets in generic
- skb handler
-Message-ID: <20200819090756.07f76eb9@carbon>
-In-Reply-To: <20200815074102.5357-1-Jason@zx2c4.com>
-References: <20200814.135546.2266851283177227377.davem@davemloft.net>
-        <20200815074102.5357-1-Jason@zx2c4.com>
+        id S1727887AbgHSHLf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Aug 2020 03:11:35 -0400
+Received: from mga11.intel.com ([192.55.52.93]:59332 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727927AbgHSHIn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Aug 2020 03:08:43 -0400
+IronPort-SDR: Se8FeWK9kbDFM2wk1mnRyV6C2c916wuK0cvB1gQGmwePJbPQSseJB1MpOAvknDuWbzfssbXHNu
+ T0jkmoBVj+bA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9717"; a="152677109"
+X-IronPort-AV: E=Sophos;i="5.76,330,1592895600"; 
+   d="scan'208";a="152677109"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2020 23:44:36 -0700
+IronPort-SDR: UP/bWo7cvexJr+5xpiXGIF3K+sedaZKf06Sk9pZSmzsB1yW1Bjk6/gql68V9VKeg+yGI7Z06Xj
+ mWiOzr0kjyfw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,330,1592895600"; 
+   d="scan'208";a="497126683"
+Received: from skirillo-mobl2.ccr.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.249.32.199])
+  by fmsmga006.fm.intel.com with ESMTP; 18 Aug 2020 23:44:33 -0700
+Subject: =?UTF-8?B?UmU6IOetlOWkjTogW0ludGVsLXdpcmVkLWxhbl0gW1BBVENIIDAvMl0g?=
+ =?UTF-8?Q?intel/xdp_fixes_for_fliping_rx_buffer?=
+To:     "Li,Rongqing" <lirongqing@baidu.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Cc:     Netdev <netdev@vger.kernel.org>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        bpf <bpf@vger.kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Piotr <piotr.raczynski@intel.com>,
+        Maciej <maciej.machnikowski@intel.com>
+References: <1594967062-20674-1-git-send-email-lirongqing@baidu.com>
+ <CAJ+HfNi2B+2KYP9A7yCfFUhfUBd=sFPeuGbNZMjhNSdq3GEpMg@mail.gmail.com>
+ <4268316b200049d58b9973ec4dc4725c@baidu.com>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Message-ID: <83e45ec2-1c66-59f6-e817-d4c523879007@intel.com>
+Date:   Wed, 19 Aug 2020 08:44:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+In-Reply-To: <4268316b200049d58b9973ec4dc4725c@baidu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, 15 Aug 2020 09:41:02 +0200
-"Jason A. Donenfeld" <Jason@zx2c4.com> wrote:
+On 2020-08-19 03:37, Li,Rongqing wrote:
+[...]
+ > Hi:
+ >
+ > Thanks for your explanation.
+ >
+ > But we can reproduce this bug
+ >
+ > We use ebpf to redirect only-Vxlan packets to non-zerocopy AF_XDP, 
+First we see panic on tcp stack, in tcp_collapse: BUG_ON(offset < 0); it 
+is very hard to reproduce.
+ >
+ > Then we use the scp to do test, and has lots of vxlan packet at the 
+same time, scp will be broken frequently.
+ >
 
-> A user reported that packets from wireguard were possibly ignored by XDP
-> [1]. Another user reported that modifying packets from layer 3
-> interfaces results in impossible to diagnose drops.
->=20
-> Apparently, the generic skb xdp handler path seems to assume that
-> packets will always have an ethernet header, which really isn't always
-> the case for layer 3 packets, which are produced by multiple drivers.
-> This patch fixes the oversight. If the mac_len is 0 and so is
-> hard_header_len, then we know that the skb is a layer 3 packet, and in
-> that case prepend a pseudo ethhdr to the packet whose h_proto is copied
-> from skb->protocol, which will have the appropriate v4 or v6 ethertype.
-> This allows us to keep XDP programs' assumption correct about packets
-> always having that ethernet header, so that existing code doesn't break,
-> while still allowing layer 3 devices to use the generic XDP handler.
->=20
-> We push on the ethernet header and then pull it right off and set
-> mac_len to the ethernet header size, so that the rest of the XDP code
-> does not need any changes. That is, it makes it so that the skb has its
-> ethernet header just before the data pointer, of size ETH_HLEN.
->=20
-> Previous discussions have included the point that maybe XDP should just
-> be intentionally broken on layer 3 interfaces, by design, and that layer
-> 3 people should be using cls_bpf. However, I think there are good
-> grounds to reconsider this perspective:
->=20
-> - Complicated deployments wind up applying XDP modifications to a
->   variety of different devices on a given host, some of which are using
->   specialized ethernet cards and other ones using virtual layer 3
->   interfaces, such as WireGuard. Being able to apply one codebase to
->   each of these winds up being essential.
->=20
-> - cls_bpf does not support the same feature set as XDP, and operates at
->   a slightly different stage in the networking stack. You may reply,
->   "then add all the features you want to cls_bpf", but that seems to be
->   missing the point, and would still result in there being two ways to
->   do everything, which is not desirable for anyone actually _using_ this
->   code.
->=20
-> - While XDP was originally made for hardware offloading, and while many
->   look disdainfully upon the generic mode, it nevertheless remains a
->   highly useful and popular way of adding bespoke packet
->   transformations, and from that perspective, a difference between layer
->   2 and layer 3 packets is immaterial if the user is primarily concerned
->   with transformations to layer 3 and beyond.
->=20
-> - It's not impossible to imagine layer 3 hardware (e.g. a WireGuard PCIe
->   card) including eBPF/XDP functionality built-in. In that case, why
->   limit XDP as a technology to only layer 2? Then, having generic XDP
->   work for layer 3 would naturally fit as well.
->=20
-> [1] https://lore.kernel.org/wireguard/M5WzVK5--3-2@tuta.io/
->=20
-> Reported-by: Thomas Ptacek <thomas@sockpuppet.org>
-> Reported-by: Adhipati Blambangan <adhipati@tuta.io>
-> Cc: David Ahern <dsahern@gmail.com>
-> Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> Cc: Jesper Dangaard Brouer <brouer@redhat.com>
-> Cc: John Fastabend <john.fastabend@gmail.com>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: David S. Miller <davem@davemloft.net>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> ---
->=20
-> I had originally dropped this patch, but the issue kept coming up in
-> user reports, so here's a v4 of it. Testing of it is still rather slim,
-> but hopefully that will change in the coming days.
->=20
-> Changes v5->v6:
-> - The fix to the skb->protocol changing case is now in a separate
->   stand-alone patch, and removed from this one, so that it can be
->   evaluated separately.
->=20
-> Changes v4->v5:
-> - Rather than tracking in a messy manner whether the skb is l3, we just
->   do the check once, and then adjust the skb geometry to be identical to
->   the l2 case. This simplifies the code quite a bit.
-> - Fix a preexisting bug where the l2 header remained attached if
->   skb->protocol was updated.
->=20
-> Changes v3->v4:
-> - We now preserve the same logic for XDP_TX/XDP_REDIRECT as before.
-> - hard_header_len is checked in addition to mac_len.
->=20
->  net/core/dev.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->=20
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 151f1651439f..79c15f4244e6 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -4630,6 +4630,18 @@ static u32 netif_receive_generic_xdp(struct sk_buf=
-f *skb,
->  	 * header.
->  	 */
->  	mac_len =3D skb->data - skb_mac_header(skb);
-> +	if (!mac_len && !skb->dev->hard_header_len) {
-> +		/* For l3 packets, we push on a fake mac header, and then
-> +		 * pull it off again, so that it has the same skb geometry
-> +		 * as for the l2 case.
-> +		 */
-> +		eth =3D skb_push(skb, ETH_HLEN);
-> +		eth_zero_addr(eth->h_source);
-> +		eth_zero_addr(eth->h_dest);
-> +		eth->h_proto =3D skb->protocol;
-> +		__skb_pull(skb, ETH_HLEN);
-> +		mac_len =3D ETH_HLEN;
-> +	}
+Ok! Just so that I'm certain of your setup. You receive packets to an
+i40e netdev where there's an XDP program. The program does XDP_PASS or
+XDP_REDIRECT to e.g. devmap for non-vxlan packets. However, vxlan
+packets are redirected to AF_XDP socket(s) in *copy-mode*. Am I
+understanding that correct?
 
-You are consuming a little bit of the headroom here.
+I'm assuming this is an x86-64 with 4k page size, right? :-) The page
+flipping is a bit different if the PAGE_SIZE is not 4k.
 
->  	hlen =3D skb_headlen(skb) + mac_len;
->  	xdp->data =3D skb->data - mac_len;
->  	xdp->data_meta =3D xdp->data;
+ > With this fixes, scp has not been broken again, and kernel is not 
+panic again
+ >
 
-The XDP-prog is allowed to change eth->h_proto.  Later (in code) we
-detect this and update skb->protocol with the new protocol.
+Let's dig into your scenario.
 
-What will happen if my XDP-prog adds a VLAN header?
+Are you saying the following:
 
-The selftest tools/testing/selftests/bpf/test_xdp_vlan.sh test these
-situations.  You can use it as an example, and write/construct a test
-that does the same for your Wireguard devices.  As minimum you need to
-provide such a selftest together with this patch.
+Page A:
++------------
+| "first skb" ----> Rx HW ring entry X
++------------
+| "second skb"----> Rx HW ring entry X+1 (or X+n)
++------------
 
-Generally speaking, IMHO generic-XDP was a mistake, because it is hard
-to maintain and slows down the development of XDP.  (I have a number of
-fixes in my TODO backlog for generic-XDP).  Adding this will just give
-us more corner-cases that need to be maintained.
+This is a scenario that shouldn't be allowed, because there are now
+two users of the page. If that's the case, the refcounting is
+broken. Is that the case?
 
---=20
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+Check out i40e_can_reuse_rx_page(). The idea with page flipping/reuse
+is that the page is only reused if there is only one user.
 
+ > Seem your explanation is unable to solve my analysis:
+ >
+ >         1. first skb is not for xsk, and forwarded to another device
+ >            or socket queue
+
+The data for the "first skb" resides on a page:
+A:
++------------
+| "first skb"
++------------
+| to be reused
++------------
+refcount >>1
+
+ >         2. seconds skb is for xsk, copy data to xsk memory, and page
+ >            of skb->data is released
+
+Note that page B != page A.
+
+B:
++------------
+| to be reused/or used by the stack
++------------
+| "second skb for xsk"
++------------
+refcount >>1
+
+data is copied to socket, page_frag_free() is called, and the page
+count is decreased. The driver will then check if the page can be
+reused. If not, it's freed to the page allocator.
+
+ >         3. rx_buff is reusable since only first skb is in it, but
+ >            *_rx_buffer_flip will make that page_offset is set to
+ >            first skb data
+
+I'm having trouble grasping how this is possible. More than one user
+implies that it wont be reused. If this is possible, the
+recounting/reuse mechanism is broken, and that is what should be
+fixed.
+
+The AF_XDP redirect should not have semantics different from, say,
+devmap redirect. It's just that the page_frag_free() is called earlier
+for AF_XDP, instead of from i40e_clean_tx_irq() as the case for
+devmap/XDP_TX.
+
+ >         4. then reuse rx buffer, first skb which still is living
+ >            will be corrupted.
+ >
+ >
+ > The root cause is difference you said upper, so I only fixes for 
+non-zerocopy AF_XDP
+ >
+
+I have only addressed non-zerocopy, so we're on the same page (pun
+intended) here!
+
+
+Björn
+
+ > -Li
