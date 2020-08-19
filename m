@@ -2,151 +2,114 @@ Return-Path: <SRS0=4a0o=B5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73B32C433DF
-	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 01:53:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FF5FC433E1
+	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 02:00:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 55DB82067C
-	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 01:53:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F16B12075E
+	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 02:00:40 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nyuFA3kT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726372AbgHSBxZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Aug 2020 21:53:25 -0400
-Received: from mx20.baidu.com ([111.202.115.85]:43794 "EHLO baidu.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726367AbgHSBxY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Aug 2020 21:53:24 -0400
-X-Greylist: delayed 916 seconds by postgrey-1.27 at vger.kernel.org; Tue, 18 Aug 2020 21:53:21 EDT
-Received: from Bc-Mail-Ex13.internal.baidu.com (unknown [172.31.51.53])
-        by Forcepoint Email with ESMTPS id EDC1F408959950DF5B29;
-        Wed, 19 Aug 2020 09:37:58 +0800 (CST)
-Received: from BJHW-Mail-Ex13.internal.baidu.com (10.127.64.36) by
- Bc-Mail-Ex13.internal.baidu.com (172.31.51.53) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1979.3; Wed, 19 Aug 2020 09:37:59 +0800
-Received: from BJHW-Mail-Ex13.internal.baidu.com ([100.100.100.36]) by
- BJHW-Mail-Ex13.internal.baidu.com ([100.100.100.36]) with mapi id
- 15.01.1979.003; Wed, 19 Aug 2020 09:37:58 +0800
-From:   "Li,Rongqing" <lirongqing@baidu.com>
-To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-CC:     Netdev <netdev@vger.kernel.org>,
-        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        bpf <bpf@vger.kernel.org>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Piotr <piotr.raczynski@intel.com>,
-        Maciej <maciej.machnikowski@intel.com>
-Subject: =?utf-8?B?562U5aSNOiBbSW50ZWwtd2lyZWQtbGFuXSBbUEFUQ0ggMC8yXSBpbnRlbC94?=
- =?utf-8?Q?dp_fixes_for_fliping_rx_buffer?=
-Thread-Topic: [Intel-wired-lan] [PATCH 0/2] intel/xdp fixes for fliping rx
- buffer
-Thread-Index: AQHWdWiRooPzdFWc8kC0ZfZ0v0ywr6k+oKRA
-Date:   Wed, 19 Aug 2020 01:37:58 +0000
-Message-ID: <4268316b200049d58b9973ec4dc4725c@baidu.com>
-References: <1594967062-20674-1-git-send-email-lirongqing@baidu.com>
- <CAJ+HfNi2B+2KYP9A7yCfFUhfUBd=sFPeuGbNZMjhNSdq3GEpMg@mail.gmail.com>
-In-Reply-To: <CAJ+HfNi2B+2KYP9A7yCfFUhfUBd=sFPeuGbNZMjhNSdq3GEpMg@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.198.8]
-x-baidu-bdmsfe-datecheck: 1_Bc-Mail-Ex13_2020-08-19 09:37:59:367
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1726834AbgHSCAk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Aug 2020 22:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47478 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726815AbgHSCAj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Aug 2020 22:00:39 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F84C061389;
+        Tue, 18 Aug 2020 19:00:37 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id c10so465906pjn.1;
+        Tue, 18 Aug 2020 19:00:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PN3fIhrJJyl3pPILHSdeC20nIVFKLI7QiZuW9O5IrG8=;
+        b=nyuFA3kTs2vyDGWig2dHP/Ats5sZqUVGiHjlEiAlC7fXpMSOaL1Me1NmdnnY9yJXfg
+         n2+leRzk4IrRkKQr9MaJHE4t7uMUp1+UOUOgiWHobt5sWglD0qSV+E1mKVc2pDyLJpe8
+         zF2w87+6FhxbDkIumxHyCcujBTmQsBvFjJpNsViuaSs63zzjOnqk99ns8B7/MOBAeU1T
+         /Coah0bsoyQoXM9Md+in2c8+vA/2CSpRx/B6BmBUHOfk13WpQ+0XYURdi67708dvrQLQ
+         LNzjm1u8WBH6/tqSt3ChxzKhj1B5hpSVcUJbOkDhheVHGCIhAqFoHuPdE4eH3lcBiasj
+         FCRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=PN3fIhrJJyl3pPILHSdeC20nIVFKLI7QiZuW9O5IrG8=;
+        b=X7YszeNH432Q5c/0RtA3xeriMNuEkghk5eJ3B0gnHZfSy9PS3ACZcCZroOfcbpHxgY
+         czsQUzivGictq532G9GGYQMSKrZAYm3xitoodVmwai/K9uH+eM8aI6z0UfHlvCN5Yell
+         lv2n5/Y0ygPaHD42Hh0QEYQ0lqirAjwmuYFz65Hk0mPjrNUU29tf/NZtwfUzl7f8bYK5
+         wRShB9t37aWc8K6uBo+HDzBIu1UVijNd0k/r5bl5K/u/Pgkbuzw38ret1hrt91rSyq8c
+         NQgB9a8ZK14HS9HDd3FSFf5KtZ6U+9cIQz7D3+5io8VJb8+/KeILv6sCg8RVvUF2k/Bs
+         9G+w==
+X-Gm-Message-State: AOAM531Rk16VEjALnooEpNM/cqgGYVMiJcfbl+PLyoU7txZL+Cjo9xyg
+        mmNfmUeegLbI+RvyjuGQOXg=
+X-Google-Smtp-Source: ABdhPJyHoPlHv2D4U6jfifzRErwvbcJHRRK4idYx+IiPISLEG7z6KKd8UIDsQ02S29N9d7Z7a3s/UA==
+X-Received: by 2002:a17:90a:77ca:: with SMTP id e10mr2157509pjs.150.1597802436327;
+        Tue, 18 Aug 2020 19:00:36 -0700 (PDT)
+Received: from athina.mtv.corp.google.com ([2620:15c:211:0:a28c:fdff:fee1:f370])
+        by smtp.gmail.com with ESMTPSA id q6sm1120812pjr.20.2020.08.18.19.00.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Aug 2020 19:00:35 -0700 (PDT)
+From:   =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <zenczykowski@gmail.com>
+To:     =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Linux Network Development Mailing List <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        BPF Mailing List <bpf@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: [PATCH bpf-next] net-veth: add type safety to veth_xdp_to_ptr() and veth_ptr_to_xdp()
+Date:   Tue, 18 Aug 2020 19:00:27 -0700
+Message-Id: <20200819020027.4072288-1-zenczykowski@gmail.com>
+X-Mailer: git-send-email 2.28.0.220.ged08abb693-goog
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-DQoNCj4gLS0tLS3pgq7ku7bljp/ku7YtLS0tLQ0KPiDlj5Hku7bkuro6IEJqw7ZybiBUw7ZwZWwg
-W21haWx0bzpiam9ybi50b3BlbEBnbWFpbC5jb21dDQo+IOWPkemAgeaXtumXtDogMjAyMOW5tDjm
-nIgxOOaXpSAyMjowNQ0KPiDmlLbku7bkuro6IExpLFJvbmdxaW5nIDxsaXJvbmdxaW5nQGJhaWR1
-LmNvbT4NCj4g5oqE6YCBOiBOZXRkZXYgPG5ldGRldkB2Z2VyLmtlcm5lbC5vcmc+OyBpbnRlbC13
-aXJlZC1sYW4NCj4gPGludGVsLXdpcmVkLWxhbkBsaXN0cy5vc3Vvc2wub3JnPjsgS2FybHNzb24s
-IE1hZ251cw0KPiA8bWFnbnVzLmthcmxzc29uQGludGVsLmNvbT47IEJqw7ZybiBUw7ZwZWwgPGJq
-b3JuLnRvcGVsQGludGVsLmNvbT47IGJwZg0KPiA8YnBmQHZnZXIua2VybmVsLm9yZz47IE1hY2ll
-aiBGaWphbGtvd3NraSA8bWFjaWVqLmZpamFsa293c2tpQGludGVsLmNvbT47DQo+IFBpb3RyIDxw
-aW90ci5yYWN6eW5za2lAaW50ZWwuY29tPjsgTWFjaWVqIDxtYWNpZWoubWFjaG5pa293c2tpQGlu
-dGVsLmNvbT4NCj4g5Li76aKYOiBSZTogW0ludGVsLXdpcmVkLWxhbl0gW1BBVENIIDAvMl0gaW50
-ZWwveGRwIGZpeGVzIGZvciBmbGlwaW5nIHJ4IGJ1ZmZlcg0KPiANCj4gT24gRnJpLCAxNyBKdWwg
-MjAyMCBhdCAwODoyNCwgTGkgUm9uZ1FpbmcgPGxpcm9uZ3FpbmdAYmFpZHUuY29tPiB3cm90ZToN
-Cj4gPg0KPiA+IFRoaXMgZml4ZXMgaWNlL2k0MGUvaXhnYmUvaXhnYmV2Zl9yeF9idWZmZXJfZmxp
-cCBpbiBjb3B5IG1vZGUgeGRwIHRoYXQNCj4gPiBjYW4gbGVhZCB0byBkYXRhIGNvcnJ1cHRpb24u
-DQo+ID4NCj4gPiBJIHNwbGl0IHR3byBwYXRjaGVzLCBzaW5jZSBpNDBlL3hnYmUvaXhnYmV2ZiBz
-dXBwb3J0cyB4c2sgcmVjZWl2aW5nDQo+ID4gZnJvbSA0LjE4LCBwdXQgdGhlaXIgZml4ZXMgaW4g
-YSBwYXRjaA0KPiA+DQo+IA0KPiBMaSwgc29ycnkgZm9yIHRoZSBsb29vbmcgbGF0ZW5jeS4gSSB0
-b29rIGEgbG9vb25nIHZhY2F0aW9uLiA6LVANCj4gDQo+IFRoYW5rcyBmb3IgdGFraW5nIGEgbG9v
-ayBhdCB0aGlzLCBidXQgSSBiZWxpZXZlIHRoaXMgaXMgbm90IGEgYnVnLg0KPiANCj4gVGhlIElu
-dGVsIEV0aGVybmV0IGRyaXZlcnMgKG9idmlvdXNseSBub24temVyb2NvcHkgQUZfWERQIC0tICJn
-b29kIG9sJw0KPiBYRFAiKSB1c2UgYSBwYWdlIHJldXNlIGFsZ29yaXRobS4NCj4gDQo+IEJhc2lj
-IGlkZWEgaXMgdGhhdCBhIHBhZ2UgaXMgYWxsb2NhdGVkIGZyb20gdGhlIHBhZ2UgYWxsb2NhdG9y
-DQo+IChpNDBlX2FsbG9jX21hcHBlZF9wYWdlKCkpLiBUaGUgcmVmY291bnQgaXMgaW5jcmVhc2Vk
-IHRvIFVTSFJUX01BWC4gVGhlDQo+IHBhZ2UgaXMgc3BsaXQgaW50byB0d28gY2h1bmtzIChzaW1w
-bGlmaWVkKS4gSWYgdGhlcmUncyBvbmUgdXNlciBvZiB0aGUgcGFnZSwgdGhlDQo+IHBhZ2UgY2Fu
-IGJlIHJldXNlZCAoZmxpcHBlZCkuIElmIG5vdCwgYSBuZXcgcGFnZSBuZWVkcyB0byBiZSBhbGxv
-Y2F0ZWQgKHdpdGggdGhlDQo+IGxhcmdlIHJlZmNvdW50KS4NCj4gDQo+IFNvLCB0aGUgaWRlYSBp
-cyB0aGF0IHVzdWFsbHkgdGhlIHBhZ2UgY2FuIGJlIHJldXNlZCAoZmxpcHBlZCksIGFuZCB0aGUg
-cGFnZSBvbmx5DQo+IG5lZWRzIHRvIGJlICJwdXQiIG5vdCAiZ2V0IiBzaW5jZSB0aGUgcmVmY291
-bnQgd2FzIGluaXRhbGx5IGJ1bXBlZCB0byBhIGxhcmdlDQo+IHZhbHVlLg0KPiANCj4gQWxsIGZy
-YW1lcyAoZXhjZXB0IFhEUF9EUk9QIHdoaWNoIGNhbiBiZSByZXVzZWQgZGlyZWN0bHkpICJkaWUi
-IHZpYQ0KPiBwYWdlX2ZyYWdfZnJlZSgpIHdoaWNoIGRlY3JlYXNlcyB0aGUgcGFnZSByZWZjb3Vu
-dCwgYW5kIGZyZWVzIHRoZSBwYWdlIGlmIHRoZQ0KPiByZWZjb3VudCBpcyB6ZXJvLg0KPiANCj4g
-TGV0J3MgdGFrZSBzb21lIHNjZW5hcmlvcyBhcyBleGFtcGxlczoNCj4gDQo+IDEuIEEgZnJhbWUg
-aXMgcmVjZWl2ZWQgaW4gInZhbmlsbGEiIFhEUCAoTUVNX1RZUEVfUEFHRV9TSEFSRUQpLCBhbmQN
-Cj4gICAgdGhlIFhEUCBwcm9ncmFtIHZlcmRpY3QgaXMgWERQX1RYLiBUaGUgZnJhbWUgd2lsbCBi
-ZSBwbGFjZWQgb24gdGhlDQo+ICAgIEhXIFR4IHJpbmcsIGFuZCBmcmVlZCogKGFzeW5jKSBpbiBp
-NDBlX2NsZWFuX3R4X2lycToNCj4gICAgICAgICAvKiBmcmVlIHRoZSBza2IvWERQIGRhdGEgKi8N
-Cj4gICAgICAgICBpZiAocmluZ19pc194ZHAodHhfcmluZykpDQo+ICAgICAgICAgICAgIHhkcF9y
-ZXR1cm5fZnJhbWUodHhfYnVmLT54ZHBmKTsgLy8gY2FsbHMgcGFnZV9mcmFnX2ZyZWUoKQ0KPiAN
-Cj4gMi4gQSBmcmFtZSBpcyBwYXNzZWQgdG8gdGhlIHN0YWNrLCBldmVudHVhbGx5IGl0J3MgZnJl
-ZWQqIHZpYQ0KPiAgICBza2JfZnJlZV9mcmFnKCkuDQo+IA0KPiAzLiBBIGZyYW1lIGlzIHBhc3Nl
-ZCB0byBhbiBBRl9YRFAgc29ja2V0LiBUaGUgZGF0YSBpcyBjb3BpZWQgdG8gdGhlDQo+ICAgIHNv
-Y2tldCBkYXRhIGFyZWEsIGFuZCB0aGUgZnJhbWUgaXMgZGlyZWN0bHkgZnJlZWQqLg0KPiANCj4g
-Tm90IHRoZSAqIGJ5IHRoZSBmcmVlZC4gQWN0dWFsbHkgZnJlZWluZyBoZXJlIG1lYW5zIGNhbGxp
-bmcgcGFnZV9mcmFnX2ZyZWUoKSwNCj4gd2hpY2ggbWVhbnMgZGVjcmVhc2luZyB0aGUgcmVmY291
-bnQuIFRoZSBwYWdlIHJldXNlIGFsZ29yaXRobSBtYWtlcyBzdXJlDQo+IHRoYXQgdGhlIGJ1ZmZl
-cnMgYXJlIG5vdCBzdGFsZS4NCj4gDQo+IFRoZSBvbmx5IGRpZmZlcmVuY2UgZnJvbSBYRFBfVFgg
-YW5kIFhEUF9ESVJFQ1QgdG8gZGV2L2NwdW1hcHMsIGNvbXBhcmVkDQo+IHRvIEFGX1hEUCBzb2Nr
-ZXRzIGlzIHRoYXQgdGhlIGxhdHRlciBjYWxscyBwYWdlX2ZyYWdfZnJlZSgpIGRpcmVjdGx5LCB3
-aGVyZWFzDQo+IHRoZSBvdGhlciBkb2VzIGl0IGFzeW5jaHJvbm91cyBmcm9tIHRoZSBUeCBjbGVh
-biB1cCBwaGFzZS4NCj4gDQoNCkhpOg0KDQpUaGFua3MgZm9yIHlvdXIgZXhwbGFuYXRpb24uDQoN
-CkJ1dCB3ZSBjYW4gcmVwcm9kdWNlIHRoaXMgYnVnDQoNCldlIHVzZSBlYnBmIHRvIHJlZGlyZWN0
-IG9ubHktVnhsYW4gcGFja2V0cyB0byBub24temVyb2NvcHkgQUZfWERQLCAgRmlyc3Qgd2Ugc2Vl
-IHBhbmljIG9uIHRjcCBzdGFjaywgaW4gdGNwX2NvbGxhcHNlOiBCVUdfT04ob2Zmc2V0IDwgMCk7
-IGl0IGlzIHZlcnkgaGFyZCB0byByZXByb2R1Y2UuDQoNClRoZW4gd2UgdXNlIHRoZSBzY3AgdG8g
-ZG8gdGVzdCwgYW5kIGhhcyBsb3RzIG9mIHZ4bGFuIHBhY2tldCBhdCB0aGUgc2FtZSB0aW1lLCBz
-Y3Agd2lsbCBiZSBicm9rZW4gZnJlcXVlbnRseS4NCg0KV2l0aCB0aGlzIGZpeGVzLCBzY3AgaGFz
-IG5vdCBiZWVuIGJyb2tlbiBhZ2FpbiwgYW5kIGtlcm5lbCBpcyBub3QgcGFuaWMgYWdhaW4NCg0K
-U2VlbSB5b3VyIGV4cGxhbmF0aW9uIGlzIHVuYWJsZSB0byBzb2x2ZSBteSBhbmFseXNpczoNCg0K
-ICAgICAgIDEuIGZpcnN0IHNrYiBpcyBub3QgZm9yIHhzaywgYW5kIGZvcndhcmRlZCB0byBhbm90
-aGVyIGRldmljZQ0KICAgICAgICAgIG9yIHNvY2tldCBxdWV1ZQ0KICAgICAgIDIuIHNlY29uZHMg
-c2tiIGlzIGZvciB4c2ssIGNvcHkgZGF0YSB0byB4c2sgbWVtb3J5LCBhbmQgcGFnZQ0KICAgICAg
-ICAgIG9mIHNrYi0+ZGF0YSBpcyByZWxlYXNlZA0KICAgICAgIDMuIHJ4X2J1ZmYgaXMgcmV1c2Fi
-bGUgc2luY2Ugb25seSBmaXJzdCBza2IgaXMgaW4gaXQsIGJ1dA0KICAgICAgICAgICpfcnhfYnVm
-ZmVyX2ZsaXAgd2lsbCBtYWtlIHRoYXQgcGFnZV9vZmZzZXQgaXMgc2V0IHRvDQogICAgICAgICAg
-Zmlyc3Qgc2tiIGRhdGENCiAgICAgICA0LiB0aGVuIHJldXNlIHJ4IGJ1ZmZlciwgZmlyc3Qgc2ti
-IHdoaWNoIHN0aWxsIGlzIGxpdmluZw0KICAgICAgICAgIHdpbGwgYmUgY29ycnVwdGVkLg0KDQoN
-ClRoZSByb290IGNhdXNlIGlzIGRpZmZlcmVuY2UgeW91IHNhaWQgdXBwZXIsIHNvIEkgb25seSBm
-aXhlcyBmb3Igbm9uLXplcm9jb3B5IEFGX1hEUA0KDQotTGkNCj4gTGV0IG1lIGtub3cgaWYgaXQn
-cyBzdGlsbCBub3QgY2xlYXIsIGJ1dCB0aGUgYm90dG9tIGxpbmUgaXMgdGhhdCBub25lIG9mIHRo
-ZXNlDQo+IHBhdGNoZXMgYXJlIG5lZWRlZC4NCj4gDQo+IA0KPiBUaGFua3MhDQo+IEJqw7Zybg0K
-PiANCj4gDQo+ID4gTGkgUm9uZ1FpbmcgKDIpOg0KPiA+ICAgeGRwOiBpNDBlOiBpeGdiZTogaXhn
-YmV2Zjogbm90IGZsaXAgcnggYnVmZmVyIGZvciBjb3B5IG1vZGUgeGRwDQo+ID4gICBpY2UveGRw
-OiBub3QgYWRqdXN0IHJ4IGJ1ZmZlciBmb3IgY29weSBtb2RlIHhkcA0KPiA+DQo+ID4gIGRyaXZl
-cnMvbmV0L2V0aGVybmV0L2ludGVsL2k0MGUvaTQwZV90eHJ4LmMgICAgICAgfCA1ICsrKystDQo+
-ID4gIGRyaXZlcnMvbmV0L2V0aGVybmV0L2ludGVsL2ljZS9pY2VfdHhyeC5jICAgICAgICAgfCA1
-ICsrKystDQo+ID4gIGRyaXZlcnMvbmV0L2V0aGVybmV0L2ludGVsL2l4Z2JlL2l4Z2JlX21haW4u
-YyAgICAgfCA1ICsrKystDQo+ID4gIGRyaXZlcnMvbmV0L2V0aGVybmV0L2ludGVsL2l4Z2JldmYv
-aXhnYmV2Zl9tYWluLmMgfCA1ICsrKystDQo+ID4gIGluY2x1ZGUvbmV0L3hkcC5oICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgfCAzICsrKw0KPiA+ICBuZXQveGRwL3hzay5jICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgNCArKystDQo+ID4gIDYgZmlsZXMgY2hh
-bmdlZCwgMjIgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkNCj4gPg0KPiA+IC0tDQo+ID4g
-Mi4xNi4yDQo+ID4NCj4gPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXw0KPiA+IEludGVsLXdpcmVkLWxhbiBtYWlsaW5nIGxpc3QNCj4gPiBJbnRlbC13aXJl
-ZC1sYW5Ab3N1b3NsLm9yZw0KPiA+IGh0dHBzOi8vbGlzdHMub3N1b3NsLm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2ludGVsLXdpcmVkLWxhbg0K
+From: Maciej Żenczykowski <maze@google.com>
+
+This reduces likelihood of incorrect use.
+
+Test: builds
+Signed-off-by: Maciej Żenczykowski <maze@google.com>
+---
+ drivers/net/veth.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index e56cd562a664..b80cbffeb88e 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -234,14 +234,14 @@ static bool veth_is_xdp_frame(void *ptr)
+ 	return (unsigned long)ptr & VETH_XDP_FLAG;
+ }
+ 
+-static void *veth_ptr_to_xdp(void *ptr)
++static struct xdp_frame *veth_ptr_to_xdp(void *ptr)
+ {
+ 	return (void *)((unsigned long)ptr & ~VETH_XDP_FLAG);
+ }
+ 
+-static void *veth_xdp_to_ptr(void *ptr)
++static void *veth_xdp_to_ptr(struct xdp_frame *xdp)
+ {
+-	return (void *)((unsigned long)ptr | VETH_XDP_FLAG);
++	return (void *)((unsigned long)xdp | VETH_XDP_FLAG);
+ }
+ 
+ static void veth_ptr_free(void *ptr)
+-- 
+2.28.0.220.ged08abb693-goog
+
