@@ -2,465 +2,124 @@ Return-Path: <SRS0=4a0o=B5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A355CC433E1
-	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 05:29:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38B47C433E1
+	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 05:32:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7D68F206DA
-	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 05:29:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1283820772
+	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 05:32:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="i1QrhBGQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="idxkSLt7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725883AbgHSF3c (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Aug 2020 01:29:32 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:29510 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725939AbgHSF3b (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 19 Aug 2020 01:29:31 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 07J5Er44026199
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2020 22:29:28 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=yP3pC9V41F6pfc/Hb89mqHEdiq3seKO9PGP8eYQJ4rI=;
- b=i1QrhBGQSdvFj1orTlW5AHSxvVCKznY5atbdn7ZxTMBvzrHPRSdI5uoiVR15iQyg1106
- ggaXf67T8ZudG5XVeonB+j7Y2fMfXZL8IiHx2oTqzkIQgd8I3TC2P0zofwaT24eIQHVR
- ayBPR6JN7tmaFrHdIagy1/raFABnvXHNbj8= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 3304jq6rub-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 18 Aug 2020 22:29:28 -0700
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 18 Aug 2020 22:29:10 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 017FA2EC5C14; Tue, 18 Aug 2020 22:29:00 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v2 bpf-next 4/5] libbpf: implement enum value-based CO-RE relocations
-Date:   Tue, 18 Aug 2020 22:28:48 -0700
-Message-ID: <20200819052849.336700-5-andriin@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200819052849.336700-1-andriin@fb.com>
-References: <20200819052849.336700-1-andriin@fb.com>
+        id S1725306AbgHSFcz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Aug 2020 01:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725283AbgHSFcx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Aug 2020 01:32:53 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723F6C061389;
+        Tue, 18 Aug 2020 22:32:53 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id a34so12660468ybj.9;
+        Tue, 18 Aug 2020 22:32:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nInBslMemewmJR6XwL9uFhtJNcEgzVaw5eUhNFIih2Q=;
+        b=idxkSLt7jTuIgo81/o1cn+tbYqWRApz739JHe61Kq7/X++4Skkuzkb4L4TwINf57i5
+         sUpi+z8GyKesEtGSfEcxXG9TnHqSBnh43560ryniAFnxNHqEkQvJoWG+2i2/K1k9+9y7
+         AlYv0lv+HwS/45vEKJ4HP2lMfoLyKVapIQuIR2cv08RrShuNsGuM5C9NgOXvlpiEkOP0
+         61ILC+wd672dFpqRodtdmaX2YN9ogb3Elux+NIQagh5qZILChyGHoSPVEQE/hYwxTJE8
+         0H2UhjdoFCg0QmJSBnMoMpzp8yimOLOj9ZF7xeoRUI2t2bKPluLxjgs8TSYrZIiquOHo
+         9Enw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nInBslMemewmJR6XwL9uFhtJNcEgzVaw5eUhNFIih2Q=;
+        b=NcwvLgDR0mPLwrmmFIlt4ibgG4q1O9zmu2SfjMhiVYdu4f8YVVYgYWUCypv72SB5XC
+         AgQu7hKzLN4OeAWBjAf6oRxrdMQjG06thQj3R4L1WmDzfb+8GamhTnQeuFQ2n+z3m4+L
+         Jb79CFffXhqkjbbR6ohKvIelz3gDL5ZkAP0TqB3ytDXI5YHJ546aozVZ+Bx8NYTZxX47
+         qtA12RCd/XZlNYL6PUiOsIkKmvKGQxGiGD0Mqz50+XrDkFPErHcDHIE8Ze17XqkbRerF
+         RDNx0wrb5fYbwXw6Z3c3LDJMjiPMo8J7RtORX6Vqq4CFqccv/IseQ3JuodxbaRTl9lyK
+         rYrQ==
+X-Gm-Message-State: AOAM531I/YIIvVEFgpE9N6iMBZOBUten/oFmeIAodO57h0B8X20eECXk
+        6Sh/pStFglsFZZM993kmJke5Hb157ASbjE1bsDjVLi27
+X-Google-Smtp-Source: ABdhPJz3nC37q2jGnWxdty0RUDTCQirqVuDkOQ91xhi8xtRI5r0DWalLaW1ru7IUKz4+cw0Ed9ue7r+k8RxdGDdxmnQ=
+X-Received: by 2002:a25:2ad3:: with SMTP id q202mr30245113ybq.27.1597815171991;
+ Tue, 18 Aug 2020 22:32:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-19_03:2020-08-18,2020-08-19 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- impostorscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=876
- clxscore=1015 malwarescore=0 suspectscore=8 phishscore=0 spamscore=0
- mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008190043
-X-FB-Internal: deliver
+References: <20200818223921.2911963-1-andriin@fb.com> <20200819012146.okpmhcqcffoe43sw@ast-mbp.dhcp.thefacebook.com>
+ <CAEf4BzbpJ4M0X2XPEadXPzPM+2cOPf-9QDMp=2qz3VvY+bbqsg@mail.gmail.com> <20200819013703.cgbty6b6ufp7wuqm@ast-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20200819013703.cgbty6b6ufp7wuqm@ast-mbp.dhcp.thefacebook.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 18 Aug 2020 22:32:41 -0700
+Message-ID: <CAEf4BzZG7fi4fZLW4O_OB4tueGjX8jz3PdX7iFNjCi9zZc6QQg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/9] Add support for type-based and enum
+ value-based CO-RE relocations
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Implement two relocations of a new enumerator value-based CO-RE relocatio=
-n
-kind: ENUMVAL_EXISTS and ENUMVAL_VALUE.
+On Tue, Aug 18, 2020 at 6:37 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Tue, Aug 18, 2020 at 06:31:51PM -0700, Andrii Nakryiko wrote:
+> > On Tue, Aug 18, 2020 at 6:21 PM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Tue, Aug 18, 2020 at 03:39:12PM -0700, Andrii Nakryiko wrote:
+> > > > This patch set adds libbpf support to two new classes of CO-RE relocations:
+> > > > type-based (TYPE_EXISTS/TYPE_SIZE/TYPE_ID_LOCAL/TYPE_ID_TARGET) and enum
+> > > > value-vased (ENUMVAL_EXISTS/ENUMVAL_VALUE):
+> > > >
+> > > > LLVM patches adding these relocation in Clang:
+> > > >   - __builtin_btf_type_id() ([0], [1], [2]);
+> > > >   - __builtin_preserve_type_info(), __builtin_preserve_enum_value() ([3], [4]).
+> > >
+> > > I've applied patches 1-4, since they're somewhat indepedent of new features in 5+.
+> > > What should be the process to land the rest?
+> > > Land llvm first and add to bpf/README.rst that certain llvm commmits are necessary
+> > > to build the tests?
+> >
+> > Clang patches landed about two weeks ago, so they are already in Clang
+> > nightly builds. libbpf CI should work fine as it uses clang-12 nightly
+> > builds.
+> >
+> >
+> > > But CI will start failing. We can wait for that to be fixed,
+> > > but I wonder is there way to detect new clang __builtins automatically in
+> > > selftests and skip them if clang is too old?
+> >
+> > There is a way to detect built-ins availability (__has_builtin macro,
+> > [0]) from C code. If we want to do it from Makefile, though, we'd need
+> > to do feature detection similar to how we did reallocarray and
+> > libbpf-elf-mmap detection I just removed in the other patch set :).
+> > Then we'll also need to somehow blacklist tests. Maintaining that
+> > would be a pain, honestly. So far selftests/bpf assumed the latest
+> > Clang, though, so do you think we should change that, or you were
+> > worried that patches hadn't landed yet?
+>
+> I was hoping that libbpf.h can have builtins unconditionally, but selftests can
+> do feature detection automatically and mark them as 'skip'.
+> People have been forever complaining about constant need to upgrade clang.
+> In this case I think the feature is not fundamental enough (unlike the first
+> set of builtins) to force adoption of new clang.
+> If/when we start using these new builtins beyond selftests
+> that would be a different story.
 
-First, ENUMVAL_EXISTS, allows to detect the presence of a named enumerato=
-r
-value in the target (kernel) BTF. This is useful to do BPF helper/map/pro=
-gram
-type support detection from BPF program side. bpf_core_enum_value_exists(=
-)
-macro helper is provided to simplify built-in usage.
-
-Second, ENUMVAL_VALUE, allows to capture enumerator integer value and rel=
-ocate
-it according to the target BTF, if it changes. This is useful to have
-a guarantee against intentional or accidental re-ordering/re-numbering of=
- some
-of the internal (non-UAPI) enumerations, where kernel developers don't ca=
-re
-about UAPI backwards compatiblity concerns. bpf_core_enum_value() allows =
-to
-capture this succinctly and use correct enum values in code.
-
-LLVM uses ldimm64 instruction to capture enumerator value-based relocatio=
-ns,
-so add support for ldimm64 instruction patching as well.
-
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/lib/bpf/bpf_core_read.h   |  28 ++++++
- tools/lib/bpf/libbpf.c          | 145 ++++++++++++++++++++++++++++++--
- tools/lib/bpf/libbpf_internal.h |   2 +
- 3 files changed, 170 insertions(+), 5 deletions(-)
-
-diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.=
-h
-index 684bfb86361a..bbcefb3ff5a5 100644
---- a/tools/lib/bpf/bpf_core_read.h
-+++ b/tools/lib/bpf/bpf_core_read.h
-@@ -31,6 +31,12 @@ enum bpf_type_info_kind {
- 	BPF_TYPE_SIZE =3D 1,		/* type size in target kernel */
- };
-=20
-+/* second argument to __builtin_preserve_enum_value() built-in */
-+enum bpf_enum_value_kind {
-+	BPF_ENUMVAL_EXISTS =3D 0,		/* enum value existence in kernel */
-+	BPF_ENUMVAL_VALUE =3D 1,		/* enum value value relocation */
-+};
-+
- #define __CORE_RELO(src, field, info)					      \
- 	__builtin_preserve_field_info((src)->field, BPF_FIELD_##info)
-=20
-@@ -150,6 +156,28 @@ enum bpf_type_info_kind {
- #define bpf_core_type_size(type)					    \
- 	__builtin_preserve_type_info(*(typeof(type) *)0, BPF_TYPE_SIZE)
-=20
-+/*
-+ * Convenience macro to check that provided enumerator value is defined =
-in
-+ * a target kernel.
-+ * Returns:
-+ *    1, if specified enum type and its enumerator value are present in =
-target
-+ *    kernel's BTF;
-+ *    0, if no matching enum and/or enum value within that enum is found=
-.
-+ */
-+#define bpf_core_enum_value_exists(enum_type, enum_value)		    \
-+	__builtin_preserve_enum_value(*(typeof(enum_type) *)enum_value, BPF_ENU=
-MVAL_EXISTS)
-+
-+/*
-+ * Convenience macro to get the integer value of an enumerator value in
-+ * a target kernel.
-+ * Returns:
-+ *    64-bit value, if specified enum type and its enumerator value are
-+ *    present in target kernel's BTF;
-+ *    0, if no matching enum and/or enum value within that enum is found=
-.
-+ */
-+#define bpf_core_enum_value(enum_type, enum_value)			    \
-+	__builtin_preserve_enum_value(*(typeof(enum_type) *)enum_value, BPF_ENU=
-MVAL_VALUE)
-+
- /*
-  * bpf_core_read() abstracts away bpf_probe_read_kernel() call and captu=
-res
-  * offset relocation for source address using __builtin_preserve_access_=
-index()
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 882759dfc33e..77d420c02094 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -4115,6 +4115,8 @@ static const char *core_relo_kind_str(enum bpf_core=
-_relo_kind kind)
- 	case BPF_TYPE_ID_TARGET: return "target_type_id";
- 	case BPF_TYPE_EXISTS: return "type_exists";
- 	case BPF_TYPE_SIZE: return "type_size";
-+	case BPF_ENUMVAL_EXISTS: return "enumval_exists";
-+	case BPF_ENUMVAL_VALUE: return "enumval_value";
- 	default: return "unknown";
- 	}
- }
-@@ -4147,6 +4149,17 @@ static bool core_relo_is_type_based(enum bpf_core_=
-relo_kind kind)
- 	}
- }
-=20
-+static bool core_relo_is_enumval_based(enum bpf_core_relo_kind kind)
-+{
-+	switch (kind) {
-+	case BPF_ENUMVAL_EXISTS:
-+	case BPF_ENUMVAL_VALUE:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
- /*
-  * Turn bpf_core_relo into a low- and high-level spec representation,
-  * validating correctness along the way, as well as calculating resultin=
-g
-@@ -4180,6 +4193,9 @@ static bool core_relo_is_type_based(enum bpf_core_r=
-elo_kind kind)
-  * Type-based relocations (TYPE_EXISTS/TYPE_SIZE,
-  * TYPE_ID_LOCAL/TYPE_ID_TARGET) don't capture any field information. Th=
-eir
-  * spec and raw_spec are kept empty.
-+ *
-+ * Enum value-based relocations (ENUMVAL_EXISTS/ENUMVAL_VALUE) use acces=
-s
-+ * string to specify enumerator's value index that need to be relocated.
-  */
- static int bpf_core_parse_spec(const struct btf *btf,
- 			       __u32 type_id,
-@@ -4224,16 +4240,25 @@ static int bpf_core_parse_spec(const struct btf *=
-btf,
- 	if (spec->raw_len =3D=3D 0)
- 		return -EINVAL;
-=20
--	/* first spec value is always reloc type array index */
- 	t =3D skip_mods_and_typedefs(btf, type_id, &id);
- 	if (!t)
- 		return -EINVAL;
-=20
- 	access_idx =3D spec->raw_spec[0];
--	spec->spec[0].type_id =3D id;
--	spec->spec[0].idx =3D access_idx;
-+	acc =3D &spec->spec[0];
-+	acc->type_id =3D id;
-+	acc->idx =3D access_idx;
- 	spec->len++;
-=20
-+	if (core_relo_is_enumval_based(relo_kind)) {
-+		if (!btf_is_enum(t) || spec->raw_len > 1 || access_idx >=3D btf_vlen(t=
-))
-+			return -EINVAL;
-+
-+		/* record enumerator name in a first accessor */
-+		acc->name =3D btf__name_by_offset(btf, btf_enum(t)[access_idx].name_of=
-f);
-+		return 0;
-+	}
-+
- 	if (!core_relo_is_field_based(relo_kind))
- 		return -EINVAL;
-=20
-@@ -4676,6 +4701,39 @@ static int bpf_core_spec_match(struct bpf_core_spe=
-c *local_spec,
- 	local_acc =3D &local_spec->spec[0];
- 	targ_acc =3D &targ_spec->spec[0];
-=20
-+	if (core_relo_is_enumval_based(local_spec->relo_kind)) {
-+		size_t local_essent_len, targ_essent_len;
-+		const struct btf_enum *e;
-+		const char *targ_name;
-+
-+		/* has to resolve to an enum */
-+		targ_type =3D skip_mods_and_typedefs(targ_spec->btf, targ_id, &targ_id=
-);
-+		if (!btf_is_enum(targ_type))
-+			return 0;
-+
-+		local_essent_len =3D bpf_core_essential_name_len(local_acc->name);
-+
-+		for (i =3D 0, e =3D btf_enum(targ_type); i < btf_vlen(targ_type); i++,=
- e++) {
-+			targ_name =3D btf__name_by_offset(targ_spec->btf, e->name_off);
-+			targ_essent_len =3D bpf_core_essential_name_len(targ_name);
-+			if (targ_essent_len !=3D local_essent_len)
-+				continue;
-+			if (strncmp(local_acc->name, targ_name, local_essent_len) =3D=3D 0) {
-+				targ_acc->type_id =3D targ_id;
-+				targ_acc->idx =3D i;
-+				targ_acc->name =3D targ_name;
-+				targ_spec->len++;
-+				targ_spec->raw_spec[targ_spec->raw_len] =3D targ_acc->idx;
-+				targ_spec->raw_len++;
-+				return 1;
-+			}
-+		}
-+		return 0;
-+	}
-+
-+	if (!core_relo_is_field_based(local_spec->relo_kind))
-+		return -EINVAL;
-+
- 	for (i =3D 0; i < local_spec->len; i++, local_acc++, targ_acc++) {
- 		targ_type =3D skip_mods_and_typedefs(targ_spec->btf, targ_id,
- 						   &targ_id);
-@@ -4880,6 +4938,31 @@ static int bpf_core_calc_type_relo(const struct bp=
-f_core_relo *relo,
- 	return 0;
- }
-=20
-+static int bpf_core_calc_enumval_relo(const struct bpf_core_relo *relo,
-+				      const struct bpf_core_spec *spec,
-+				      __u32 *val)
-+{
-+	const struct btf_type *t;
-+	const struct btf_enum *e;
-+
-+	switch (relo->kind) {
-+	case BPF_ENUMVAL_EXISTS:
-+		*val =3D spec ? 1 : 0;
-+		break;
-+	case BPF_ENUMVAL_VALUE:
-+		if (!spec)
-+			return -EUCLEAN; /* request instruction poisoning */
-+		t =3D btf__type_by_id(spec->btf, spec->spec[0].type_id);
-+		e =3D btf_enum(t) + spec->spec[0].idx;
-+		*val =3D e->val;
-+		break;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-+
- struct bpf_core_relo_res
- {
- 	/* expected value in the instruction, unless validate =3D=3D false */
-@@ -4918,6 +5001,9 @@ static int bpf_core_calc_relo(const struct bpf_prog=
-ram *prog,
- 	} else if (core_relo_is_type_based(relo->kind)) {
- 		err =3D bpf_core_calc_type_relo(relo, local_spec, &res->orig_val);
- 		err =3D err ?: bpf_core_calc_type_relo(relo, targ_spec, &res->new_val)=
-;
-+	} else if (core_relo_is_enumval_based(relo->kind)) {
-+		err =3D bpf_core_calc_enumval_relo(relo, local_spec, &res->orig_val);
-+		err =3D err ?: bpf_core_calc_enumval_relo(relo, targ_spec, &res->new_v=
-al);
- 	}
-=20
- 	if (err =3D=3D -EUCLEAN) {
-@@ -4954,6 +5040,11 @@ static void bpf_core_poison_insn(struct bpf_progra=
-m *prog, int relo_idx,
- 	insn->imm =3D 195896080; /* =3D> 0xbad2310 =3D> "bad relo" */
- }
-=20
-+static bool is_ldimm64(struct bpf_insn *insn)
-+{
-+	return insn->code =3D=3D (BPF_LD | BPF_IMM | BPF_DW);
-+}
-+
- /*
-  * Patch relocatable BPF instruction.
-  *
-@@ -4966,6 +5057,7 @@ static void bpf_core_poison_insn(struct bpf_program=
- *prog, int relo_idx,
-  * Currently three kinds of BPF instructions are supported:
-  * 1. rX =3D <imm> (assignment with immediate operand);
-  * 2. rX +=3D <imm> (arithmetic operations with immediate operand);
-+ * 3. rX =3D <imm64> (load with 64-bit immediate value).
-  */
- static int bpf_core_patch_insn(struct bpf_program *prog,
- 			       const struct bpf_core_relo *relo,
-@@ -4984,6 +5076,11 @@ static int bpf_core_patch_insn(struct bpf_program =
-*prog,
- 	class =3D BPF_CLASS(insn->code);
-=20
- 	if (res->poison) {
-+		/* poison second part of ldimm64 to avoid confusing error from
-+		 * verifier about "unknown opcode 00"
-+		 */
-+		if (is_ldimm64(insn))
-+			bpf_core_poison_insn(prog, relo_idx, insn_idx + 1, insn + 1);
- 		bpf_core_poison_insn(prog, relo_idx, insn_idx, insn);
- 		return 0;
- 	}
-@@ -5012,7 +5109,7 @@ static int bpf_core_patch_insn(struct bpf_program *=
-prog,
- 	case BPF_ST:
- 	case BPF_STX:
- 		if (res->validate && insn->off !=3D orig_val) {
--			pr_warn("prog '%s': relo #%d: unexpected insn #%d (LD/LDX/ST/STX) val=
-ue: got %u, exp %u -> %u\n",
-+			pr_warn("prog '%s': relo #%d: unexpected insn #%d (LDX/ST/STX) value:=
- got %u, exp %u -> %u\n",
- 				bpf_program__title(prog, false), relo_idx,
- 				insn_idx, insn->off, orig_val, new_val);
- 			return -EINVAL;
-@@ -5029,8 +5126,36 @@ static int bpf_core_patch_insn(struct bpf_program =
-*prog,
- 			 bpf_program__title(prog, false), relo_idx, insn_idx,
- 			 orig_val, new_val);
- 		break;
-+	case BPF_LD: {
-+		__u64 imm;
-+
-+		if (!is_ldimm64(insn) ||
-+		    insn[0].src_reg !=3D 0 || insn[0].off !=3D 0 ||
-+		    insn_idx + 1 >=3D prog->insns_cnt ||
-+		    insn[1].code !=3D 0 || insn[1].dst_reg !=3D 0 ||
-+		    insn[1].src_reg !=3D 0 || insn[1].off !=3D 0) {
-+			pr_warn("prog '%s': relo #%d: insn #%d (LDIMM64) has unexpected form\=
-n",
-+				bpf_program__title(prog, false), relo_idx, insn_idx);
-+			return -EINVAL;
-+		}
-+
-+		imm =3D insn[0].imm + ((__u64)insn[1].imm << 32);
-+		if (res->validate && imm !=3D orig_val) {
-+			pr_warn("prog '%s': relo #%d: unexpected insn #%d (LDIMM64) value: go=
-t %llu, exp %u -> %u\n",
-+				bpf_program__title(prog, false), relo_idx,
-+				insn_idx, imm, orig_val, new_val);
-+			return -EINVAL;
-+		}
-+
-+		insn[0].imm =3D new_val;
-+		insn[1].imm =3D 0; /* currently only 32-bit values are supported */
-+		pr_debug("prog '%s': relo #%d: patched insn #%d (LDIMM64) imm64 %llu -=
-> %u\n",
-+			 bpf_program__title(prog, false), relo_idx, insn_idx,
-+			 imm, new_val);
-+		break;
-+	}
- 	default:
--		pr_warn("prog '%s': relo #%d: trying to relocate unrecognized insn #%d=
-, code:%x, src:%x, dst:%x, off:%x, imm:%x\n",
-+		pr_warn("prog '%s': relo #%d: trying to relocate unrecognized insn #%d=
-, code:0x%x, src:0x%x, dst:0x%x, off:0x%x, imm:0x%x\n",
- 			bpf_program__title(prog, false), relo_idx,
- 			insn_idx, insn->code, insn->src_reg, insn->dst_reg,
- 			insn->off, insn->imm);
-@@ -5047,6 +5172,7 @@ static int bpf_core_patch_insn(struct bpf_program *=
-prog,
- static void bpf_core_dump_spec(int level, const struct bpf_core_spec *sp=
-ec)
- {
- 	const struct btf_type *t;
-+	const struct btf_enum *e;
- 	const char *s;
- 	__u32 type_id;
- 	int i;
-@@ -5060,6 +5186,15 @@ static void bpf_core_dump_spec(int level, const st=
-ruct bpf_core_spec *spec)
- 	if (core_relo_is_type_based(spec->relo_kind))
- 		return;
-=20
-+	if (core_relo_is_enumval_based(spec->relo_kind)) {
-+		t =3D skip_mods_and_typedefs(spec->btf, type_id, NULL);
-+		e =3D btf_enum(t) + spec->raw_spec[0];
-+		s =3D btf__name_by_offset(spec->btf, e->name_off);
-+
-+		libbpf_print(level, "::%s =3D %u", s, e->val);
-+		return;
-+	}
-+
- 	if (core_relo_is_field_based(spec->relo_kind)) {
- 		for (i =3D 0; i < spec->len; i++) {
- 			if (spec->spec[i].name)
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
-nal.h
-index edd3511aa242..61dff515a2f0 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -242,6 +242,8 @@ enum bpf_core_relo_kind {
- 	BPF_TYPE_ID_TARGET =3D 7,		/* type ID in target kernel */
- 	BPF_TYPE_EXISTS =3D 8,		/* type existence in target kernel */
- 	BPF_TYPE_SIZE =3D 9,		/* type size in bytes */
-+	BPF_ENUMVAL_EXISTS =3D 10,	/* enum value existence in target kernel */
-+	BPF_ENUMVAL_VALUE =3D 11,		/* enum value integer value */
- };
-=20
- /* The minimum bpf_core_relo checked by the loader
---=20
-2.24.1
-
+Ok, took some tinkering to do this for btf_type_id() tests, but
+everything works now as you described above. Posted v2.
