@@ -2,126 +2,206 @@ Return-Path: <SRS0=4a0o=B5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAF43C433E1
-	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 22:41:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 372D2C433DF
+	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 22:41:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B2D0D20888
-	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 22:41:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0B6F220888
+	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 22:41:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="oyjRIqCq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fPSQeyfO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726681AbgHSWl3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Aug 2020 18:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
+        id S1727074AbgHSWli (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Aug 2020 18:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727920AbgHSWky (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Aug 2020 18:40:54 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B8EC061358
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 15:40:48 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id v10so235048plp.5
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 15:40:48 -0700 (PDT)
+        with ESMTP id S1727966AbgHSWla (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Aug 2020 18:41:30 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2729C061383;
+        Wed, 19 Aug 2020 15:41:29 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id j13so99265pjd.4;
+        Wed, 19 Aug 2020 15:41:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=NLjzglEfUx/tYjZ6bE489vKKomGgM6zRTKGgnxbmNyw=;
-        b=oyjRIqCqy9fSSlUqNZozmrxpfmDEkCPtM3Cbc/Cnz1QCDqFxh3i6SpKu6iDmReppja
-         dtK/A8mDKHu06jn23AvBgZCKx+ZRrUwIpzpfBg67FF20329ReDCclK/KenPGjzDVbi98
-         M/i6GSj6NgfhscpB31fcZDq2zOuBc8qGR9VzGqpidj4qwhW9LalXAE+AUV0PoPFcUY9B
-         yZ6wFH/k8ZWaUpOO5ECXxkMp0iL2iw8lOmzQ+Orr4ailvkpDzMw7hclCPDS5ZBHPhWPo
-         Dq+URx2udIlMrRS4wtzgbHWS3ZgzuF6n4c6ZSwSGsPPm61DvhzDOWej2iH6nWltjmrNv
-         vP/w==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=ejbU9wiMvRABH95+7vVgeFIowVeF650G8x7BsTQc4xM=;
+        b=fPSQeyfOR8pxiw9y+HfuBmp02HhWUmvpRcO6pUEaYTG5nPEu62ffgQVmuI4te7kccI
+         lIVIPdNM03idJM2nWNOKZ69hxjS0kP0de//8vW/Z8sFN/o6ahM1TU1WPFQvHNg2aLudB
+         tfg9E7bMn4tiemv0Rli+6TFKNqXx8htc5Uy0kZtsGmKfJnJEIL1FIepLS7UdZ32eYl6k
+         bUcGQtAm3eJTe1EXi6ImxdEj3B41uP5AC+lUxpnUSb4HhcEss5GLVI2j9N+X/eTmpvuk
+         7cNsHbaiFiBDZVQMsXZsQp68qOpAAJrmebi35vitrrvLQDspdGE0w3amkx7ohyus/p0p
+         MxFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=NLjzglEfUx/tYjZ6bE489vKKomGgM6zRTKGgnxbmNyw=;
-        b=JWK7vbGKEdpLUH6uyVO4b07Al9UsLM3Pz3dH7Xxs4yRycIszq6GNMHzSCuYR0QbDKf
-         6aQfTz1DkT400BLNHj9HkFslYSMsb68AnCA3IUnGa1tpQk9BxhVRVWxfgPwSXnWA+SWs
-         LrItmxzMjAZZpftIMVTw49zqZPaTQlXUNrZtlC6FMdqfnroMPZgawRMjQuDtKV3rnTz5
-         wcCGnLtCsVGqPhxGWPZnlYCtOZAHa30AoXiYrWw/STExzBCuIJy3+SRk1B4ii86lfWl2
-         HCUJEUGI5FJqXSogww71Ilr0XF7JjctOrMP1Nkox8ZaanCw8pmKnkrVzBx1Xne/iNU8p
-         K4Vg==
-X-Gm-Message-State: AOAM53182J8feHba0OUtFtILA6UxxS0tQ9ztJ4j/ncnM4G1GgDfvVz6l
-        4Z3tTosc4Ib+gqy6jDzvq+YJHhZDU10=
-X-Google-Smtp-Source: ABdhPJx1hKQ8+B9EP1bBAT5p24RynlXXCuRT/DErWwZMGYM0QNfK2w7ueHo92OOANb7IeKdC4KJnmB+h4jw=
-X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:f693:9fff:fef4:e444])
- (user=haoluo job=sendgmr) by 2002:a17:90a:7485:: with SMTP id
- p5mr92595pjk.130.1597876848380; Wed, 19 Aug 2020 15:40:48 -0700 (PDT)
-Date:   Wed, 19 Aug 2020 15:40:29 -0700
-In-Reply-To: <20200819224030.1615203-1-haoluo@google.com>
-Message-Id: <20200819224030.1615203-8-haoluo@google.com>
-Mime-Version: 1.0
-References: <20200819224030.1615203-1-haoluo@google.com>
-X-Mailer: git-send-email 2.28.0.220.ged08abb693-goog
-Subject: [PATCH bpf-next v1 7/8] bpf: Propagate bpf_per_cpu_ptr() to /tools
-From:   Hao Luo <haoluo@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=ejbU9wiMvRABH95+7vVgeFIowVeF650G8x7BsTQc4xM=;
+        b=P3qpH477XKdo65Cch6qi4yt//OTmY6U4OJBujE3RgPe7kR2n8s747vSoF89S+rvxVe
+         /j9S4BFe56dD0V41YhOrQdIuXU8uCTJd4wMSx1VxxjlrQ+wVrD4gZ0ZlAwf5l3pSek9z
+         CzRpzDQNPj1zjLu6FPqTDcOg2NhPEi4py3/hVBPi1sRDBaEXVoBVUOoCtMYNSrpB1kSi
+         vVVHiDjuDkO31cobcILT2smp89pQuFFhRCe8jy0ZkBd911fX+rhJknVwUQZlQq5Xuq/I
+         blG+ULIXzZAQ+fW5gxh2bveFoeCRT2jxMKGXoOR+pGQ8Wl7cE8csZ7ulRSwY4p7piMqu
+         hL5A==
+X-Gm-Message-State: AOAM532cBttPX/nPKhQohsjf2l0bQ/EBO2xlEKHpnBDvN0AAChUSp3Ja
+        KB859PUtYH7slu9XgTPL6NU=
+X-Google-Smtp-Source: ABdhPJzUzXp7NEbydKWCfez4krNStXJtwrBEI9AlFXJnczBqndXt31EHxlQQHUEtTj/xUL6jdM0bKQ==
+X-Received: by 2002:a17:90a:eb18:: with SMTP id j24mr103652pjz.76.1597876889512;
+        Wed, 19 Aug 2020 15:41:29 -0700 (PDT)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id v78sm252407pfc.121.2020.08.19.15.41.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Aug 2020 15:41:28 -0700 (PDT)
+Date:   Wed, 19 Aug 2020 15:41:21 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     John Fastabend <john.fastabend@gmail.com>,
+        Lorenz Bauer <lmb@cloudflare.com>, jakub@cloudflare.com,
+        john.fastabend@gmail.com, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Hao Luo <haoluo@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Andrey Ignatov <rdna@fb.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+        Lorenz Bauer <lmb@cloudflare.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     kernel-team@cloudflare.com, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <5f3daa91265a7_1b0e2ab87245e5c05@john-XPS-13-9370.notmuch>
+In-Reply-To: <5f3d982f51f22_2c9b2adeefb585bccb@john-XPS-13-9370.notmuch>
+References: <20200819092436.58232-1-lmb@cloudflare.com>
+ <20200819092436.58232-6-lmb@cloudflare.com>
+ <5f3d982f51f22_2c9b2adeefb585bccb@john-XPS-13-9370.notmuch>
+Subject: RE: [PATCH bpf-next 5/6] bpf: sockmap: allow update from BPF
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Sync tools/include/linux/uapi/bpf.h with include/linux/uapi/bpf.h
+John Fastabend wrote:
+> Lorenz Bauer wrote:
+> > Allow calling bpf_map_update_elem on sockmap and sockhash from a BPF
+> > context. The synchronization required for this is a bit fiddly: we
+> > need to prevent the socket from changing it's state while we add it
+> > to the sockmap, since we rely on getting a callback via
+> > sk_prot->unhash. However, we can't just lock_sock like in
+> > sock_map_sk_acquire because that might sleep. So instead we disable
+> > softirq processing and use bh_lock_sock to prevent further
+> > modification.
+> > 
+> > Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+> > ---
+> >  kernel/bpf/verifier.c |  6 ++++--
+> >  net/core/sock_map.c   | 24 ++++++++++++++++++++++++
+> >  2 files changed, 28 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 47f9b94bb9d4..421fccf18dea 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -4254,7 +4254,8 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
+> >  		    func_id != BPF_FUNC_map_delete_elem &&
+> >  		    func_id != BPF_FUNC_msg_redirect_map &&
+> >  		    func_id != BPF_FUNC_sk_select_reuseport &&
+> > -		    func_id != BPF_FUNC_map_lookup_elem)
+> > +		    func_id != BPF_FUNC_map_lookup_elem &&
+> > +		    func_id != BPF_FUNC_map_update_elem)
+> >  			goto error;
+> >  		break;
+> >  	case BPF_MAP_TYPE_SOCKHASH:
+> > @@ -4263,7 +4264,8 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
+> >  		    func_id != BPF_FUNC_map_delete_elem &&
+> >  		    func_id != BPF_FUNC_msg_redirect_hash &&
+> >  		    func_id != BPF_FUNC_sk_select_reuseport &&
+> > -		    func_id != BPF_FUNC_map_lookup_elem)
+> > +		    func_id != BPF_FUNC_map_lookup_elem &&
+> > +		    func_id != BPF_FUNC_map_update_elem)
+> 
+> I lost track of a detail here, map_lookup_elem should return
+> PTR_TO_MAP_VALUE_OR_NULL but if we want to feed that back into
+> the map_update_elem() we need to return PTR_TO_SOCKET_OR_NULL
+> and then presumably have a null check to get a PTR_TO_SOCKET
+> type as expect.
+> 
+> Can we use the same logic for expected arg (previous patch) on the
+> ret_type. Or did I miss it:/ Need some coffee I guess.
 
-Signed-off-by: Hao Luo <haoluo@google.com>
----
- tools/include/uapi/linux/bpf.h | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+OK, I tracked this down. It looks like we rely on mark_ptr_or_null_reg()
+to update the reg->tyype to PTR_TO_SOCKET. I do wonder if it would be
+a bit more straight forward to do something similar to the previous
+patch and refine it earlier to PTR_TO_SOCKET_OR_NULL, but should be
+safe as-is for now.
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 468376f2910b..7e3dfb2bbb86 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3415,6 +3415,20 @@ union bpf_attr {
-  *		A non-negative value equal to or less than *size* on success,
-  *		or a negative error in case of failure.
-  *
-+ * void *bpf_per_cpu_ptr(const void *ptr, u32 cpu)
-+ *	Description
-+ *		Take the address of a percpu ksym and return a pointer pointing
-+ *		to the variable on *cpu*. A ksym is an extern variable decorated
-+ *		with '__ksym'. A ksym is percpu if there is a global percpu var
-+ *		(either static or global) defined of the same name in the kernel.
-+ *
-+ *		bpf_per_cpu_ptr() has the same semantic as per_cpu_ptr() in the
-+ *		kernel, except that bpf_per_cpu_ptr() may return NULL. This
-+ *		happens if *cpu* is larger than nr_cpu_ids. The caller of
-+ *		bpf_per_cpu_ptr() must check the returned value.
-+ *	Return
-+ *		A generic pointer pointing to the variable on *cpu*.
-+ *
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3559,6 +3573,7 @@ union bpf_attr {
- 	FN(skc_to_tcp_request_sock),	\
- 	FN(skc_to_udp6_sock),		\
- 	FN(get_task_stack),		\
-+	FN(bpf_per_cpu_ptr),		\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
--- 
-2.28.0.220.ged08abb693-goog
+I still have the below question though.
+
+> 
+> >  			goto error;
+> >  		break;
+> >  	case BPF_MAP_TYPE_REUSEPORT_SOCKARRAY:
+> > diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> > index 018367fb889f..b2c886c34566 100644
+> > --- a/net/core/sock_map.c
+> > +++ b/net/core/sock_map.c
+> > @@ -603,6 +603,28 @@ int sock_map_update_elem_sys(struct bpf_map *map, void *key,
+> >  	return ret;
+> >  }
+> >  
+> > +static int sock_map_update_elem(struct bpf_map *map, void *key,
+> > +				void *value, u64 flags)
+> > +{
+> > +	struct sock *sk = (struct sock *)value;
+> > +	int ret;
+> > +
+> > +	if (!sock_map_sk_is_suitable(sk))
+> > +		return -EOPNOTSUPP;
+> > +
+> > +	local_bh_disable();
+> > +	bh_lock_sock(sk);
+> 
+> How do ensure we are not being called from some context which
+> already has the bh_lock_sock() held? It seems we can call map_update_elem()
+> from any context, kprobes, tc, xdp, etc.?
+> 
+> > +	if (!sock_map_sk_state_allowed(sk))
+> > +		ret = -EOPNOTSUPP;
+> > +	else if (map->map_type == BPF_MAP_TYPE_SOCKMAP)
+> > +		ret = sock_map_update_common(map, *(u32 *)key, sk, flags);
+> > +	else
+> > +		ret = sock_hash_update_common(map, key, sk, flags);
+> > +	bh_unlock_sock(sk);
+> > +	local_bh_enable();
+> > +	return ret;
+> > +}
+> > +
+> >  BPF_CALL_4(bpf_sock_map_update, struct bpf_sock_ops_kern *, sops,
+> >  	   struct bpf_map *, map, void *, key, u64, flags)
+> >  {
+> > @@ -687,6 +709,7 @@ const struct bpf_map_ops sock_map_ops = {
+> >  	.map_free		= sock_map_free,
+> >  	.map_get_next_key	= sock_map_get_next_key,
+> >  	.map_lookup_elem_sys_only = sock_map_lookup_sys,
+> > +	.map_update_elem	= sock_map_update_elem,
+> >  	.map_delete_elem	= sock_map_delete_elem,
+> >  	.map_lookup_elem	= sock_map_lookup,
+> >  	.map_release_uref	= sock_map_release_progs,
+> > @@ -1180,6 +1203,7 @@ const struct bpf_map_ops sock_hash_ops = {
+> >  	.map_alloc		= sock_hash_alloc,
+> >  	.map_free		= sock_hash_free,
+> >  	.map_get_next_key	= sock_hash_get_next_key,
+> > +	.map_update_elem	= sock_map_update_elem,
+> >  	.map_delete_elem	= sock_hash_delete_elem,
+> >  	.map_lookup_elem	= sock_hash_lookup,
+> >  	.map_lookup_elem_sys_only = sock_hash_lookup_sys,
+> > -- 
+> > 2.25.1
+> > 
+> 
+> 
+
 
