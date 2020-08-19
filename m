@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B109DC433E1
-	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 13:26:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF2F9C433E1
+	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 13:26:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 90423206FA
-	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 13:26:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8AE9C205CB
+	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 13:26:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1597843581;
-	bh=KNhS+XgSQFMkxqqK71xmMmn8OOeheh+Ve42J2rRDFN8=;
+	s=default; t=1597843609;
+	bh=Y061M4ar3nglvUj4QoM5qnmcswxlbE0Bc8f2da2JCd8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=nGOVD6H6IRV9Xb0Kn7ZZMjvGjqm98bvBhn+qR7+Y/Tuegd3oiyS+PDhm0FH5TnkCu
-	 zDQu/sChynAUm9l3/bdw7fsaFFlDXTwxd0gDLVUS3Eb6Yv4Q/91HvuA+YCX3wpGNtm
-	 U2ZvDsUw0jgdlAJ8iYLpdegVZIz2JT7FIXG8Usr0=
+	b=qzg3fjWrBIP7VVBf37nG6F+eHW1cVmV/ukcMH7iUHlfXbzP9jvjXQqo1foam+Sk1j
+	 65fmVBqTgiFf7LnfWXWH3rf3o5akUgOk4gOQJNN0+8lehC9TXXR1zr9+Wu/Qh83QMO
+	 +75QMVKVBoZdNWPshY9L7UmvZK98ng4EKxoQLGCw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728543AbgHSN0U (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Aug 2020 09:26:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58568 "EHLO mail.kernel.org"
+        id S1728450AbgHSN0r (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Aug 2020 09:26:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58526 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728590AbgHSNPv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Aug 2020 09:15:51 -0400
+        id S1728589AbgHSNPu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Aug 2020 09:15:50 -0400
 Received: from lore-desk.redhat.com (unknown [151.48.139.80])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5179120855;
-        Wed, 19 Aug 2020 13:14:52 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 64E4F20825;
+        Wed, 19 Aug 2020 13:14:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597842893;
-        bh=KNhS+XgSQFMkxqqK71xmMmn8OOeheh+Ve42J2rRDFN8=;
+        s=default; t=1597842891;
+        bh=Y061M4ar3nglvUj4QoM5qnmcswxlbE0Bc8f2da2JCd8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bA8LG/Ig3abwY4e74b+g2To0mxIaMH/iSeZ41Q030KQLi4wRx4FA0nZl1x/4kNWku
-         9YPX1pubVc9a3HTAg3UGb/gD6io8EfKkoln28ezvaeYmgSexT/rA8pOe4xhw/aBY6a
-         0pEuds2zOAnSzU0LhMQA3BDcU8NYLV6C6kd+6LR0=
+        b=waDwV3ovAeJ0rxBu4jayO71bWU1iRbaFQefg0soVnP4nr1aSFfZ4c4oOL8abYiIf4
+         fvpck8WMylgN+80uTgjmqHnvT8wVjPEGqG4u6toehGP1knZoyI7RyzhJKSL/SlkZLa
+         ETjBNWG1nhUBq1OsnjGKTrTiFEtWJubfcwxPaixk=
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, davem@davemloft.net,
         lorenzo.bianconi@redhat.com, brouer@redhat.com,
         echaudro@redhat.com, sameehj@amazon.com, kuba@kernel.org
-Subject: [PATCH net-next 4/6] xdp: add multi-buff support to xdp_return_{buff/frame}
-Date:   Wed, 19 Aug 2020 15:13:49 +0200
-Message-Id: <7ff49193140f3cb5341732612c72bcc2c5fb3372.1597842004.git.lorenzo@kernel.org>
+Subject: [PATCH net-next 3/6] net: mvneta: update mb bit before passing the xdp buffer to eBPF layer
+Date:   Wed, 19 Aug 2020 15:13:48 +0200
+Message-Id: <08f8656e906ff69bd30915a6a37a01d5f0422194.1597842004.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1597842004.git.lorenzo@kernel.org>
 References: <cover.1597842004.git.lorenzo@kernel.org>
@@ -56,105 +56,33 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Take into account if the received xdp_buff/xdp_frame is non-linear
-recycling/returning the frame memory to the allocator
+Update multi-buffer bit (mb) in xdp_buff to notify XDP/eBPF layer and
+XDP remote drivers if this is a "non-linear" XDP buffer
 
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- include/net/xdp.h | 17 +++++++++++++++--
- net/core/xdp.c    | 36 ++++++++++++++++++++++++++++++++++++
- 2 files changed, 51 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/marvell/mvneta.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 42f439f9fcda..37c4522fc1bb 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -208,10 +208,23 @@ void __xdp_release_frame(void *data, struct xdp_mem_info *mem);
- static inline void xdp_release_frame(struct xdp_frame *xdpf)
+diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
+index 832bbb8b05c8..36a3defa63fa 100644
+--- a/drivers/net/ethernet/marvell/mvneta.c
++++ b/drivers/net/ethernet/marvell/mvneta.c
+@@ -2170,11 +2170,14 @@ mvneta_run_xdp(struct mvneta_port *pp, struct mvneta_rx_queue *rxq,
+ 	       struct bpf_prog *prog, struct xdp_buff *xdp,
+ 	       u32 frame_sz, struct mvneta_stats *stats)
  {
- 	struct xdp_mem_info *mem = &xdpf->mem;
-+	struct skb_shared_info *sinfo;
-+	int i;
++	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
+ 	unsigned int len, data_len, sync;
+ 	u32 ret, act;
  
- 	/* Curr only page_pool needs this */
--	if (mem->type == MEM_TYPE_PAGE_POOL)
--		__xdp_release_frame(xdpf->data, mem);
-+	if (mem->type != MEM_TYPE_PAGE_POOL)
-+		return;
+ 	len = xdp->data_end - xdp->data_hard_start - pp->rx_offset_correction;
+ 	data_len = xdp->data_end - xdp->data;
 +
-+	__xdp_release_frame(xdpf->data, mem);
-+	if (!xdpf->mb)
-+		return;
-+
-+	sinfo = xdp_get_shared_info_from_frame(xdpf);
-+	for (i = 0; i < sinfo->nr_frags; i++) {
-+		struct page *page = skb_frag_page(&sinfo->frags[i]);
-+
-+		__xdp_release_frame(page_address(page), mem);
-+	}
- }
++	xdp->mb = !!sinfo->nr_frags;
+ 	act = bpf_prog_run_xdp(prog, xdp);
  
- int xdp_rxq_info_reg(struct xdp_rxq_info *xdp_rxq,
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 884f140fc3be..006b24b5d276 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -370,19 +370,55 @@ static void __xdp_return(void *data, struct xdp_mem_info *mem, bool napi_direct)
- 
- void xdp_return_frame(struct xdp_frame *xdpf)
- {
-+	struct skb_shared_info *sinfo;
-+	int i;
-+
- 	__xdp_return(xdpf->data, &xdpf->mem, false);
-+	if (!xdpf->mb)
-+		return;
-+
-+	sinfo = xdp_get_shared_info_from_frame(xdpf);
-+	for (i = 0; i < sinfo->nr_frags; i++) {
-+		struct page *page = skb_frag_page(&sinfo->frags[i]);
-+
-+		__xdp_return(page_address(page), &xdpf->mem, false);
-+	}
- }
- EXPORT_SYMBOL_GPL(xdp_return_frame);
- 
- void xdp_return_frame_rx_napi(struct xdp_frame *xdpf)
- {
-+	struct skb_shared_info *sinfo;
-+	int i;
-+
- 	__xdp_return(xdpf->data, &xdpf->mem, true);
-+	if (!xdpf->mb)
-+		return;
-+
-+	sinfo = xdp_get_shared_info_from_frame(xdpf);
-+	for (i = 0; i < sinfo->nr_frags; i++) {
-+		struct page *page = skb_frag_page(&sinfo->frags[i]);
-+
-+		__xdp_return(page_address(page), &xdpf->mem, true);
-+	}
- }
- EXPORT_SYMBOL_GPL(xdp_return_frame_rx_napi);
- 
- void xdp_return_buff(struct xdp_buff *xdp)
- {
-+	struct skb_shared_info *sinfo;
-+	int i;
-+
- 	__xdp_return(xdp->data, &xdp->rxq->mem, true);
-+	if (!xdp->mb)
-+		return;
-+
-+	sinfo = xdp_get_shared_info_from_buff(xdp);
-+	for (i = 0; i < sinfo->nr_frags; i++) {
-+		struct page *page = skb_frag_page(&sinfo->frags[i]);
-+
-+		__xdp_return(page_address(page), &xdp->rxq->mem, true);
-+	}
- }
- 
- /* Only called for MEM_TYPE_PAGE_POOL see xdp.h */
+ 	/* Due xdp_adjust_tail: DMA sync for_device cover max len CPU touch */
 -- 
 2.26.2
 
