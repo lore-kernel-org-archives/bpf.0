@@ -2,115 +2,174 @@ Return-Path: <SRS0=4a0o=B5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4806C433DF
-	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 13:04:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE851C433E1
+	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 13:23:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9705C206FA
-	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 13:04:51 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gXzVlZtv"
+	by mail.kernel.org (Postfix) with ESMTP id B6E69206FA
+	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 13:23:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1597843419;
+	bh=mlXtpV4RumDcUdeDl1As6YLh6yaath69tXGDy+qUR/Q=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=sdyymYGpkERjxQv20MIS3kcquU4oQJhRonItWKiM4Y4BQOD6OEP7lm8O91CDBEdyW
+	 b/JBlgHRT7wIMcJpmestefc6PkmYiDhQvY9avgtHhtOvzoDW+d/lBJFB8tQK38Kz6J
+	 HEs9CLBXdonA8Oh+gUcXIc3JNb9bXWP4k7JOlWoM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728503AbgHSNEr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Aug 2020 09:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728590AbgHSNCK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Aug 2020 09:02:10 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B893C06134C
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 06:01:20 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id jp10so26221312ejb.0
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 06:01:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=S08efVGlFbnCRWAooQ5BgeOCyESGGd5F97xt8fYK1v0=;
-        b=gXzVlZtvnou0mDkrZAK2Fnuw9dSHO7Edi/cQP/i3F+AAbHgN3yCpdOvzogBHylOWmq
-         Qc0FKLbxNWpaTbSaQEuwm+ujFF001aQbadp4GYn5t3ogCQHV/SqT1EaYeGyGK5d1Zyc7
-         esDQ142rLIroj8edGg4TAizj7oV8OgZaOxosM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=S08efVGlFbnCRWAooQ5BgeOCyESGGd5F97xt8fYK1v0=;
-        b=jAMrhipQHcyAcipZvdJjbnTFRPlGWIcUVOT3dPi1jNLeWBEgX9uVnFKXDgFnYaYhEN
-         1+keSMTv5+s7IYerdVrQFlsEicovR2H6+xCe19rRygje3QBuk1VWKaAJp9Hx1fZ6h6nR
-         LC3iiKYM16PXPMzwzUU1nVIm97YPtRBZm3zc6Da418q70OQtpA82LhCT49mysLRes226
-         pZw42rBds3VP58D7HPpgLLeTwUIEGjMeh4VUvkTIZaOVdf6YqHmlAoeBUpI8OHmq0fJb
-         yYSIWFURx2u8C1HUgUVdHmsslLwk43WUYY9kaShGaVAPjvPCSS5MCAg62ecdtR7O7IFV
-         X+Ug==
-X-Gm-Message-State: AOAM5326vUT27+PgKhUWHU7aog6PzXh+la7VqnDKJxFRcttjqE7f2fkz
-        2XUwrOlhZBBfQ15jBh1CvmFveQ==
-X-Google-Smtp-Source: ABdhPJxS2tf0sP7AgOv/ZCmElHwH5nT7hhwed9Oh3Cg6C5L9jxDqiFxUJFEr130TB6JjA6KVwlTe4w==
-X-Received: by 2002:a17:906:1f15:: with SMTP id w21mr24281904ejj.152.1597842078291;
-        Wed, 19 Aug 2020 06:01:18 -0700 (PDT)
-Received: from [192.168.2.66] ([81.6.44.51])
-        by smtp.gmail.com with ESMTPSA id o25sm18529498ejm.34.2020.08.19.06.01.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Aug 2020 06:01:17 -0700 (PDT)
-Subject: Re: [PATCH bpf-next v8 6/7] bpf: Allow local storage to be used from
- LSM programs
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
-        Florent Revest <revest@chromium.org>
-References: <20200803164655.1924498-1-kpsingh@chromium.org>
- <20200803164655.1924498-7-kpsingh@chromium.org>
- <20200818041638.2dv5cewlgwerd7hm@kafai-mbp.dhcp.thefacebook.com>
-From:   KP Singh <kpsingh@chromium.org>
-Message-ID: <87e6c97f-5d72-ddb9-331a-4a79ccab11c1@chromium.org>
-Date:   Wed, 19 Aug 2020 15:01:17 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1728368AbgHSNXV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Aug 2020 09:23:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59962 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727926AbgHSNRW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Aug 2020 09:17:22 -0400
+Received: from lore-desk.redhat.com (unknown [151.48.139.80])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 80E0F207BB;
+        Wed, 19 Aug 2020 13:14:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1597842898;
+        bh=mlXtpV4RumDcUdeDl1As6YLh6yaath69tXGDy+qUR/Q=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RopQzmh4j/cQwjr/QWivkZCYTb2pRFI+rInVjUbN4ekyDORLr97eA6uA+VccnDGvX
+         ZdFYpniOEmvRuEhYesp5t5QzgSr9ZE3aVYz3EtMQI4EyvbeKQRvh6guH+Rw0ypdh3G
+         dlvqa8IQ20zH8uzajMQPiT4AgY5J7NOCfZKB9Epw=
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, davem@davemloft.net,
+        lorenzo.bianconi@redhat.com, brouer@redhat.com,
+        echaudro@redhat.com, sameehj@amazon.com, kuba@kernel.org
+Subject: [PATCH net-next 5/6] net: mvneta: add multi buffer support to XDP_TX
+Date:   Wed, 19 Aug 2020 15:13:50 +0200
+Message-Id: <d98ef80cf624f1eaf524328e57f15bc7e8d336f6.1597842004.git.lorenzo@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1597842004.git.lorenzo@kernel.org>
+References: <cover.1597842004.git.lorenzo@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20200818041638.2dv5cewlgwerd7hm@kafai-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Introduce the capability to map non-linear xdp buffer running
+mvneta_xdp_submit_frame() for XDP_TX and XDP_REDIRECT
 
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+---
+ drivers/net/ethernet/marvell/mvneta.c | 79 +++++++++++++++++----------
+ 1 file changed, 49 insertions(+), 30 deletions(-)
 
-On 8/18/20 6:16 AM, Martin KaFai Lau wrote:
-> On Mon, Aug 03, 2020 at 06:46:54PM +0200, KP Singh wrote:
->> From: KP Singh <kpsingh@google.com>
->>
->> Adds support for both bpf_{sk, inode}_storage_{get, delete} to be used
->> in LSM programs. These helpers are not used for tracing programs
+diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
+index 36a3defa63fa..efac4a5e0439 100644
+--- a/drivers/net/ethernet/marvell/mvneta.c
++++ b/drivers/net/ethernet/marvell/mvneta.c
+@@ -1854,8 +1854,8 @@ static void mvneta_txq_bufs_free(struct mvneta_port *pp,
+ 			bytes_compl += buf->skb->len;
+ 			pkts_compl++;
+ 			dev_kfree_skb_any(buf->skb);
+-		} else if (buf->type == MVNETA_TYPE_XDP_TX ||
+-			   buf->type == MVNETA_TYPE_XDP_NDO) {
++		} else if ((buf->type == MVNETA_TYPE_XDP_TX ||
++			    buf->type == MVNETA_TYPE_XDP_NDO) && buf->xdpf) {
+ 			xdp_return_frame(buf->xdpf);
+ 		}
+ 	}
+@@ -2040,43 +2040,62 @@ static int
+ mvneta_xdp_submit_frame(struct mvneta_port *pp, struct mvneta_tx_queue *txq,
+ 			struct xdp_frame *xdpf, bool dma_map)
+ {
+-	struct mvneta_tx_desc *tx_desc;
+-	struct mvneta_tx_buf *buf;
+-	dma_addr_t dma_addr;
++	struct skb_shared_info *sinfo = xdp_get_shared_info_from_frame(xdpf);
++	int i, num_frames = xdpf->mb ? sinfo->nr_frags + 1 : 1;
++	struct mvneta_tx_desc *tx_desc = NULL;
++	struct page *page;
+ 
+-	if (txq->count >= txq->tx_stop_threshold)
++	if (txq->count + num_frames >= txq->tx_stop_threshold)
+ 		return MVNETA_XDP_DROPPED;
+ 
+-	tx_desc = mvneta_txq_next_desc_get(txq);
++	for (i = 0; i < num_frames; i++) {
++		struct mvneta_tx_buf *buf = &txq->buf[txq->txq_put_index];
++		skb_frag_t *frag = i ? &sinfo->frags[i - 1] : NULL;
++		int len = frag ? skb_frag_size(frag) : xdpf->len;
++		dma_addr_t dma_addr;
+ 
+-	buf = &txq->buf[txq->txq_put_index];
+-	if (dma_map) {
+-		/* ndo_xdp_xmit */
+-		dma_addr = dma_map_single(pp->dev->dev.parent, xdpf->data,
+-					  xdpf->len, DMA_TO_DEVICE);
+-		if (dma_mapping_error(pp->dev->dev.parent, dma_addr)) {
+-			mvneta_txq_desc_put(txq);
+-			return MVNETA_XDP_DROPPED;
++		tx_desc = mvneta_txq_next_desc_get(txq);
++		if (dma_map) {
++			/* ndo_xdp_xmit */
++			void *data;
++
++			data = frag ? page_address(skb_frag_page(frag))
++				    : xdpf->data;
++			dma_addr = dma_map_single(pp->dev->dev.parent, data,
++						  len, DMA_TO_DEVICE);
++			if (dma_mapping_error(pp->dev->dev.parent, dma_addr)) {
++				for (; i >= 0; i--)
++					mvneta_txq_desc_put(txq);
++				return MVNETA_XDP_DROPPED;
++			}
++			buf->type = MVNETA_TYPE_XDP_NDO;
++		} else {
++			page = frag ? skb_frag_page(frag)
++				    : virt_to_page(xdpf->data);
++			dma_addr = page_pool_get_dma_addr(page);
++			if (!frag)
++				dma_addr += sizeof(*xdpf) + xdpf->headroom;
++			dma_sync_single_for_device(pp->dev->dev.parent,
++						   dma_addr, len,
++						   DMA_BIDIRECTIONAL);
++			buf->type = MVNETA_TYPE_XDP_TX;
+ 		}
+-		buf->type = MVNETA_TYPE_XDP_NDO;
+-	} else {
+-		struct page *page = virt_to_page(xdpf->data);
++		buf->xdpf = i ? NULL : xdpf;
+ 
+-		dma_addr = page_pool_get_dma_addr(page) +
+-			   sizeof(*xdpf) + xdpf->headroom;
+-		dma_sync_single_for_device(pp->dev->dev.parent, dma_addr,
+-					   xdpf->len, DMA_BIDIRECTIONAL);
+-		buf->type = MVNETA_TYPE_XDP_TX;
++		if (!i)
++			tx_desc->command = MVNETA_TXD_F_DESC;
++		tx_desc->buf_phys_addr = dma_addr;
++		tx_desc->data_size = len;
++
++		mvneta_txq_inc_put(txq);
+ 	}
+-	buf->xdpf = xdpf;
+ 
+-	tx_desc->command = MVNETA_TXD_FLZ_DESC;
+-	tx_desc->buf_phys_addr = dma_addr;
+-	tx_desc->data_size = xdpf->len;
++	/*last descriptor */
++	if (tx_desc)
++		tx_desc->command |= MVNETA_TXD_L_DESC | MVNETA_TXD_Z_PAD;
+ 
+-	mvneta_txq_inc_put(txq);
+-	txq->pending++;
+-	txq->count++;
++	txq->pending += num_frames;
++	txq->count += num_frames;
+ 
+ 	return MVNETA_XDP_TX;
+ }
+-- 
+2.26.2
 
-[...]
-
->> @@ -2823,6 +2823,10 @@ union bpf_attr {
->>   *		"type". The bpf-local-storage "type" (i.e. the *map*) is
->>   *		searched against all bpf-local-storages residing at *sk*.
->>   *
->> + *		For socket programs, *sk* should be a **struct bpf_sock** pointer
->> + *		and an **ARG_PTR_TO_BTF_ID** of type **struct sock** for LSM
->> + *		programs.
-> I found it a little vague on what "socket programs" is.  May be:
-> 
-> *sk* is a kernel **struct sock** pointer for LSM program.
-> *sk* is a **struct bpf_sock** pointer for other program types.
-
-This is better, Thanks!
-
-- KP
-
-> 
-> Others LGTM
-> 
-> Acked-by: Martin KaFai Lau <kafai@fb.com>
-> 
