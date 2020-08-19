@@ -2,124 +2,130 @@ Return-Path: <SRS0=4a0o=B5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A1C5C433DF
-	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 01:37:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76833C433DF
+	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 01:39:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 032AC20882
-	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 01:37:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D47420882
+	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 01:39:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V5PruPQV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rA5owWm5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727821AbgHSBhH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 18 Aug 2020 21:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43902 "EHLO
+        id S1726681AbgHSBj1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 18 Aug 2020 21:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726367AbgHSBhH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 18 Aug 2020 21:37:07 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23344C061389;
-        Tue, 18 Aug 2020 18:37:07 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id d188so10855570pfd.2;
-        Tue, 18 Aug 2020 18:37:07 -0700 (PDT)
+        with ESMTP id S1726367AbgHSBj0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 18 Aug 2020 21:39:26 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0678FC061389;
+        Tue, 18 Aug 2020 18:39:25 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id a34so12432317ybj.9;
+        Tue, 18 Aug 2020 18:39:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rTy6HFqlxocYasXQ/q0NDy2ayNYu7hnpMHqjSN3l5hk=;
-        b=V5PruPQVi7l6N8wdwlONTCnDsUkLp9FiHTtcykZG6XHisFfwRG/ywmhxbDqYH9bpHv
-         BcgpAtbNMg2DsbXmTwbs5tu2KIPAW4l07lS2q5ywMhV2i5NqwiTiSwOTdNRIIBukwwqH
-         mdSVjbNemoa4ViORZeRgJKcN6US2T+RNuf/AnNd8ZpnI6xoums9vhw83DI0rA/Y1ZDaL
-         XNS8xqF03ogktZwbJJ+htSdecsjl+DNC11yTys5GByy75gsFhJiUfTMLtLhXwT0A13jO
-         5uHP9mwHmKb7xGsFFbo9sVYHKt2xZokb1uN72W79CQb8Me4kMWCWz8t1v64gzAJLIuGy
-         owDw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=gUq2e4CgBr1fHk/2rAJErzEp3SApcCE9FrdZ5LYKV+0=;
+        b=rA5owWm5D7deAhf/XCoqQzx5Bqv9AhKuWqGJthnKSIoEEGeCO831HLIOhepxKAT045
+         d2rlpx5AY0rQ51vPV8Wb/Vk204fQqOMxTQcjFiMvzBTqQ/cTSFTljR51RB1FdxjxMyu2
+         Vq0VpigME8Gv7JeleoOYI4xWB4rr8xXSUhwFHAfJJEXO+Ftef2ekv8aOj9Lp0wOpG8pJ
+         NP/h8spERhXY0xfA3mIgiAegenvlhuobVycUEaolIhT84kcwWKfcJgB1UwkT5wzyP9N/
+         a0FG19r82IZ7Y7FWNuEhcSLuv/2T9l/ilN/DD9R9VY7/7w0j0ZboAlSJkaNSpTch0Zyz
+         G2IA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rTy6HFqlxocYasXQ/q0NDy2ayNYu7hnpMHqjSN3l5hk=;
-        b=KksmuKqDJjXeHJbBrkfVJMnroP/eLfrpSd4oRQmFStuGYYHFVhfK3SzMT1mjQKdNpx
-         dCekK5sbxzd3r87ehksnuM0Hg/gEnsLrRCFNgjmLAH+Dc+wvccjgwxU6tQi3YezaYJ+8
-         WSvFYNAqkS0rceT8hfsBmI8oGnTOmh1E7/2PBDX/eVmNAlPz+LS3zII0ZK0FPXiTE/zB
-         EYz8K4/BSMn8Nr6CJ1SFMVZNMUwUqQtpJEv4qL24wYDP1tVGUhZSx24oVotGvR3oBmID
-         MUIfnlG2LpWx4h6ZdiK+PLB2d+KBxkHY3TrtYKSUV/mcwL1EB8B8NGpDKsaLgiiZsseE
-         6zvw==
-X-Gm-Message-State: AOAM53081b1ButwtnCw1yD+JiaxGGLtVC5WhkfDL64SoKEfC4U51vZId
-        PL5Fw+wX+hpLkSFxcfGDKmL4fqSCSr0=
-X-Google-Smtp-Source: ABdhPJzauZPtzaZRaMEPGLwPBsT3Vqy8zbtX0togxL4EW2r7gUVcsY3HmXYnb+fPzM3dpDs7JqNKQw==
-X-Received: by 2002:a65:66c4:: with SMTP id c4mr15815180pgw.442.1597801026581;
-        Tue, 18 Aug 2020 18:37:06 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:20fd])
-        by smtp.gmail.com with ESMTPSA id 5sm26716805pfw.25.2020.08.18.18.37.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2020 18:37:05 -0700 (PDT)
-Date:   Tue, 18 Aug 2020 18:37:03 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gUq2e4CgBr1fHk/2rAJErzEp3SApcCE9FrdZ5LYKV+0=;
+        b=Ngcv8RLMK5RMd3FwPINWN/JiAERDhcobXKCQwJ0SFYEekjA9rXZWlEIwdGXCRWxp8p
+         /Pck+ZpvEhagAMO6CkNkPSUr5ChsPyt5RYqH5WkBzexZh+FO3nT7b+PgAugdUosZFnl9
+         oZlmvuSzfukE7GlXsMBT8WPgtbTrfH37F7QyyX3Db8pT6/3xksFlktj19njbLOh7wH5t
+         cyxQtgyxhGX2dge+3AGZ/v+6VLpJmvmAL6S1e0AUUnfn3ybVIQZszivngL1RI4o7C98n
+         aV40p77HYxRxqTe91ImD0kwCQq/LukYUvsTRQX2+ff/sAaBWI+IRzTxlxZHSOt7pO1Wg
+         74Zg==
+X-Gm-Message-State: AOAM531QxugKIChQcASqKzkoYGbBKMTh6QnmyC9cSc+S6IR+G2Tevon4
+        BDrnUruqIn/6fJIt6KXf7mh8HbwVfN5Bylm0vXM=
+X-Google-Smtp-Source: ABdhPJx64lCgXZwo4aS3JVCif0ZoY4Vi+/iKIAEqi06W2K6AtKoZsvXtkhWMcArTt17KeSIBBOf9A8ACUsf2ycvcfkY=
+X-Received: by 2002:a25:ad5a:: with SMTP id l26mr29779904ybe.510.1597801165267;
+ Tue, 18 Aug 2020 18:39:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200818213356.2629020-1-andriin@fb.com> <20200818213356.2629020-2-andriin@fb.com>
+ <b26b5c66-f335-2e47-bf6c-f557853ce2d7@fb.com>
+In-Reply-To: <b26b5c66-f335-2e47-bf6c-f557853ce2d7@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 18 Aug 2020 18:39:14 -0700
+Message-ID: <CAEf4BzaTWVhymaGuSHHHL8+TCbP=qRFc+YvG+ZMYMNTEg-vA-A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/7] libbpf: disable -Wswitch-enum compiler warning
+To:     Yonghong Song <yhs@fb.com>
 Cc:     Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
         Networking <netdev@vger.kernel.org>,
         Alexei Starovoitov <ast@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Kernel Team <kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next 0/9] Add support for type-based and enum
- value-based CO-RE relocations
-Message-ID: <20200819013703.cgbty6b6ufp7wuqm@ast-mbp.dhcp.thefacebook.com>
-References: <20200818223921.2911963-1-andriin@fb.com>
- <20200819012146.okpmhcqcffoe43sw@ast-mbp.dhcp.thefacebook.com>
- <CAEf4BzbpJ4M0X2XPEadXPzPM+2cOPf-9QDMp=2qz3VvY+bbqsg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzbpJ4M0X2XPEadXPzPM+2cOPf-9QDMp=2qz3VvY+bbqsg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Aug 18, 2020 at 06:31:51PM -0700, Andrii Nakryiko wrote:
-> On Tue, Aug 18, 2020 at 6:21 PM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Tue, Aug 18, 2020 at 03:39:12PM -0700, Andrii Nakryiko wrote:
-> > > This patch set adds libbpf support to two new classes of CO-RE relocations:
-> > > type-based (TYPE_EXISTS/TYPE_SIZE/TYPE_ID_LOCAL/TYPE_ID_TARGET) and enum
-> > > value-vased (ENUMVAL_EXISTS/ENUMVAL_VALUE):
-> > >
-> > > LLVM patches adding these relocation in Clang:
-> > >   - __builtin_btf_type_id() ([0], [1], [2]);
-> > >   - __builtin_preserve_type_info(), __builtin_preserve_enum_value() ([3], [4]).
-> >
-> > I've applied patches 1-4, since they're somewhat indepedent of new features in 5+.
-> > What should be the process to land the rest?
-> > Land llvm first and add to bpf/README.rst that certain llvm commmits are necessary
-> > to build the tests?
-> 
-> Clang patches landed about two weeks ago, so they are already in Clang
-> nightly builds. libbpf CI should work fine as it uses clang-12 nightly
-> builds.
-> 
-> 
-> > But CI will start failing. We can wait for that to be fixed,
-> > but I wonder is there way to detect new clang __builtins automatically in
-> > selftests and skip them if clang is too old?
-> 
-> There is a way to detect built-ins availability (__has_builtin macro,
-> [0]) from C code. If we want to do it from Makefile, though, we'd need
-> to do feature detection similar to how we did reallocarray and
-> libbpf-elf-mmap detection I just removed in the other patch set :).
-> Then we'll also need to somehow blacklist tests. Maintaining that
-> would be a pain, honestly. So far selftests/bpf assumed the latest
-> Clang, though, so do you think we should change that, or you were
-> worried that patches hadn't landed yet?
+On Tue, Aug 18, 2020 at 6:23 PM Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 8/18/20 2:33 PM, Andrii Nakryiko wrote:
+> > That compilation warning is more annoying, than helpful.
+>
+> Curious which compiler and which version caused this issue?
+> I did not hit with gcc 8.2 or latest clang in my environment.
+>
 
-I was hoping that libbpf.h can have builtins unconditionally, but selftests can
-do feature detection automatically and mark them as 'skip'.
-People have been forever complaining about constant need to upgrade clang.
-In this case I think the feature is not fundamental enough (unlike the first
-set of builtins) to force adoption of new clang.
-If/when we start using these new builtins beyond selftests
-that would be a different story.
+Strange, I just tried on bpf-next, removed -Wno-switch-enum and got
+tons of errors:
+
+libbpf.c: In function =E2=80=98bpf_object__sanitize_prog=E2=80=99:
+libbpf.c:5560:3: error: enumeration value =E2=80=98BPF_FUNC_unspec=E2=80=99=
+ not
+handled in switch [-Werror=3Dswitch-enum]
+   switch (func_id) {
+   ^~~~~~
+libbpf.c:5560:3: error: enumeration value =E2=80=98BPF_FUNC_map_lookup_elem=
+=E2=80=99
+not handled in switch [-Werror=3Dswitch-enum]
+libbpf.c:5560:3: error: enumeration value =E2=80=98BPF_FUNC_map_update_elem=
+=E2=80=99
+not handled in switch [-Werror=3Dswitch-enum]
+... and many more ...
+
+My compiler:
+
+$ cc --version
+cc (GCC) 8.2.1 20180801 (Red Hat 8.2.1-2)
+
+
+> >
+> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> > ---
+> >   tools/lib/bpf/Makefile | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+> > index bf8ed134cb8a..95c946e94ca5 100644
+> > --- a/tools/lib/bpf/Makefile
+> > +++ b/tools/lib/bpf/Makefile
+> > @@ -107,7 +107,7 @@ ifeq ($(feature-reallocarray), 0)
+> >   endif
+> >
+> >   # Append required CFLAGS
+> > -override CFLAGS +=3D $(EXTRA_WARNINGS)
+> > +override CFLAGS +=3D $(EXTRA_WARNINGS) -Wno-switch-enum
+> >   override CFLAGS +=3D -Werror -Wall
+> >   override CFLAGS +=3D -fPIC
+> >   override CFLAGS +=3D $(INCLUDES)
+> >
