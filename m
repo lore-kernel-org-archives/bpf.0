@@ -2,147 +2,86 @@ Return-Path: <SRS0=4a0o=B5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3FC2C433E1
-	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 22:42:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CF9AC433DF
+	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 23:22:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D06C420888
-	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 22:42:12 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="vqBrpVaL"
+	by mail.kernel.org (Postfix) with ESMTP id 3B9E1207DA
+	for <bpf@archiver.kernel.org>; Wed, 19 Aug 2020 23:22:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728035AbgHSWmB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Aug 2020 18:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
+        id S1726362AbgHSXWt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Aug 2020 19:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727859AbgHSWkk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 19 Aug 2020 18:40:40 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE6DC061342
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 15:40:39 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id j37so9842pgi.16
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 15:40:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=4lUOSfg5crC/CXFRp8F/K1Jb1PQLzPLA9O5+4H789wU=;
-        b=vqBrpVaLG5hgyuLORPxN8M2fiZFQB9dD18R/Ooo0adUnZ41ijb7pOrysJRfD0R3QWh
-         Ad1zPUlUDRdgRHl6q1yvEdA+t0YasDSvU5kcljOIAHzujqBZo1fV5ygeNVw0jYT0poGC
-         bWQahRedPnzPBQkh0DEDaII0mgLKbi4mi+sMdw8Za+uAtyt4OPAhkWNN1Mtu4TZgFAU4
-         6C74G1IiRmIW8+IF4ZDmaSUcoh4dyqUx7pc2wnJeY0+MV50EipBwVjS36jTc6VQflbvT
-         5LnFtOofo9HL8sPEOxaDyAC5Ia/2Hzl6Bvm7qCu4zPqc0pfm+ZZI2hu0FhiRVl6ZuIzW
-         Cb6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=4lUOSfg5crC/CXFRp8F/K1Jb1PQLzPLA9O5+4H789wU=;
-        b=rAX/QRkDQZqRDUqUquxEfVI6cI0BZmmcqA/0CuIT1KNr1V2J+B8HI4G8X2KRnlBuK0
-         KgdvVDXynM6F+olz4kZS/yWmHfNK5Pq7sjwkxtAZetyi7gz7CDlgAOnC0hs5cch8GmlV
-         ALu6Ong0F+NnHchuj0PNE7T1KJFxzE96Q7WvKAvjjWcS9aPx1cOEzCxGSKkQGtFY7gXq
-         s2bFjRTMZiYct8qMjvfCj6kz3ZbFRF+kUfuRHpRNU5OfNpUTrZRuK9capEBa3Qe5DUkJ
-         x0YE8StjKQ8zHKzmmH9JcRDkd1mm6KaxuoGCVRXORP6kOASuWFl8GLvkwErI8/t70rle
-         ZAkg==
-X-Gm-Message-State: AOAM530/x6MEDjr+gTFJwZPNWxf9tvJFcKdKmClk6asoQ4Y4/fwCiX+I
-        xv6pZY+bRLP4zUS/kuZbTjRY9xdwyWE=
-X-Google-Smtp-Source: ABdhPJw60HhYSD5xD+NKMghulZyrwy7CSfEqKWANtTW3eDGeqH3EPOr0UctlJdOGdV4ZXKaGvMSwbdfQlz4=
-X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:f693:9fff:fef4:e444])
- (user=haoluo job=sendgmr) by 2002:aa7:8ec4:: with SMTP id b4mr34434pfr.227.1597876838302;
- Wed, 19 Aug 2020 15:40:38 -0700 (PDT)
-Date:   Wed, 19 Aug 2020 15:40:24 -0700
-In-Reply-To: <20200819224030.1615203-1-haoluo@google.com>
-Message-Id: <20200819224030.1615203-3-haoluo@google.com>
+        with ESMTP id S1726209AbgHSXWt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Aug 2020 19:22:49 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A2A7C061757;
+        Wed, 19 Aug 2020 16:22:49 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 7631511E4576A;
+        Wed, 19 Aug 2020 16:06:02 -0700 (PDT)
+Date:   Wed, 19 Aug 2020 16:22:47 -0700 (PDT)
+Message-Id: <20200819.162247.527509541688231611.davem@davemloft.net>
+To:     Jason@zx2c4.com
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, thomas@sockpuppet.org,
+        adhipati@tuta.io, dsahern@gmail.com, toke@redhat.com,
+        kuba@kernel.org, alexei.starovoitov@gmail.com, brouer@redhat.com,
+        john.fastabend@gmail.com, daniel@iogearbox.net
+Subject: Re: [PATCH net v6] net: xdp: account for layer 3 packets in
+ generic skb handler
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200815074102.5357-1-Jason@zx2c4.com>
+References: <20200814.135546.2266851283177227377.davem@davemloft.net>
+        <20200815074102.5357-1-Jason@zx2c4.com>
+X-Mailer: Mew version 6.8 on Emacs 26.3
 Mime-Version: 1.0
-References: <20200819224030.1615203-1-haoluo@google.com>
-X-Mailer: git-send-email 2.28.0.220.ged08abb693-goog
-Subject: [PATCH bpf-next v1 2/8] bpf: Propagate BPF_PSEUDO_BTF_ID to uapi
- headers in /tools
-From:   Hao Luo <haoluo@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Hao Luo <haoluo@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Andrey Ignatov <rdna@fb.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 19 Aug 2020 16:06:02 -0700 (PDT)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Propagate BPF_PSEUDO_BTF_ID from include/linux/uapi/bpf.h to
-tools/include/linux/uapi/bpf.h.
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date: Sat, 15 Aug 2020 09:41:02 +0200
 
-Signed-off-by: Hao Luo <haoluo@google.com>
----
- tools/include/uapi/linux/bpf.h | 38 ++++++++++++++++++++++++++--------
- 1 file changed, 29 insertions(+), 9 deletions(-)
+> A user reported that packets from wireguard were possibly ignored by XDP
+> [1]. Another user reported that modifying packets from layer 3
+> interfaces results in impossible to diagnose drops.
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 0480f893facd..468376f2910b 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -346,18 +346,38 @@ enum bpf_link_type {
- #define BPF_F_TEST_STATE_FREQ	(1U << 3)
- 
- /* When BPF ldimm64's insn[0].src_reg != 0 then this can have
-- * two extensions:
-- *
-- * insn[0].src_reg:  BPF_PSEUDO_MAP_FD   BPF_PSEUDO_MAP_VALUE
-- * insn[0].imm:      map fd              map fd
-- * insn[1].imm:      0                   offset into value
-- * insn[0].off:      0                   0
-- * insn[1].off:      0                   0
-- * ldimm64 rewrite:  address of map      address of map[0]+offset
-- * verifier type:    CONST_PTR_TO_MAP    PTR_TO_MAP_VALUE
-+ * the following extensions:
-+ *
-+ * insn[0].src_reg:  BPF_PSEUDO_MAP_FD
-+ * insn[0].imm:      map fd
-+ * insn[1].imm:      0
-+ * insn[0].off:      0
-+ * insn[1].off:      0
-+ * ldimm64 rewrite:  address of map
-+ * verifier type:    CONST_PTR_TO_MAP
-  */
- #define BPF_PSEUDO_MAP_FD	1
-+/*
-+ * insn[0].src_reg:  BPF_PSEUDO_MAP_VALUE
-+ * insn[0].imm:      map fd
-+ * insn[1].imm:      offset into value
-+ * insn[0].off:      0
-+ * insn[1].off:      0
-+ * ldimm64 rewrite:  address of map[0]+offset
-+ * verifier type:    PTR_TO_MAP_VALUE
-+ */
- #define BPF_PSEUDO_MAP_VALUE	2
-+/*
-+ * insn[0].src_reg:  BPF_PSEUDO_BTF_ID
-+ * insn[0].imm:      kernel btd id of VAR
-+ * insn[1].imm:      0
-+ * insn[0].off:      0
-+ * insn[1].off:      0
-+ * ldimm64 rewrite:  address of the kernel variable
-+ * verifier type:    PTR_TO_BTF_ID or PTR_TO_MEM, depending on whether the var
-+ *                   is struct/union.
-+ */
-+#define BPF_PSEUDO_BTF_ID	3
- 
- /* when bpf_call->src_reg == BPF_PSEUDO_CALL, bpf_call->imm == pc-relative
-  * offset to another bpf function
--- 
-2.28.0.220.ged08abb693-goog
+Jason this really is a minefield.
 
+If you make everything look like ethernet, even when it isn't, that is
+a huge pile of worms.
+
+If the XDP program changes the fake ethernet header's protocol field,
+what will update the next protocol field in the wireguard
+encapsulation headers so that it matches?
+
+How do you support pushing VLAN headers as some XDP programs do?  What
+will undo the fake ethernet header and push the VLAN header into the
+right place, and set it's next protocol field correctly?
+
+And so on, and so forth...
+
+With so many unanswered questions and unclear semantics the only
+reasonable approach right now is to reject L3 devices from having XDP
+programs attached at this time.
+
+Arguably the best answer is the hardest answer, which is that we
+expose device protocols and headers exactly how they are and don't try
+to pretend they are something else.  But it really means that XDP
+programs have to be written targetted to the attach point device type.
+And it also means we need a way to update skb->protocol properly,
+handle the pushing of new headers, etc.
+
+In short, you can't just push a fake ethernet header and expect
+everything to just work.
