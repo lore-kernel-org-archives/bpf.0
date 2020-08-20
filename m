@@ -5,167 +5,177 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89878C433E3
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 16:13:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCF2AC433E1
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 16:16:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 66A14207BB
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 16:13:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4EDD2075E
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 16:16:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="OG8nWb3x"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="aS8KE4iT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729748AbgHTQMq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Aug 2020 12:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34606 "EHLO
+        id S1729601AbgHTQQM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Aug 2020 12:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729778AbgHTQMb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Aug 2020 12:12:31 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E3BC061386
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 09:12:30 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id e6so2346700oii.4
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 09:12:30 -0700 (PDT)
+        with ESMTP id S1729471AbgHTQQC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Aug 2020 12:16:02 -0400
+Received: from mail-oo1-xc43.google.com (mail-oo1-xc43.google.com [IPv6:2607:f8b0:4864:20::c43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43265C061385
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 09:16:01 -0700 (PDT)
+Received: by mail-oo1-xc43.google.com with SMTP id j16so536169ooc.7
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 09:16:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=ud0t0O/A9Zxe4AUQrrfIW1bhDjfdc8SKj1ooJkDSnEc=;
-        b=OG8nWb3xyhE1WjhqnLw+bu8z2arHxNdpvBUUxE713nK5l/9FVUUvdMaxu0aiJ/QJkp
-         v0eEF8Y9nrBafzmEg7AiAQzgIMA32FhyYPWEc7o7zz0NRivisQeRFNKh+4x+rgETdweS
-         Ar6aVVMzVPpzpMQYvX3xQg1HRbjItfwGiGDM0=
+        bh=UpPzndwiSYhaVueh4zOqhGfv4Oo3BxfBjljCA4pNUIM=;
+        b=aS8KE4iTIRs5uiKqL5IP+COnR+Ldcy7QhNI0Fs+SpBbNkrd+GF28NFlOZwVXfU00zl
+         j9xlxMBX1SaNs94apFw+bOvHsfgwzhfHg1mPOjpSs/xwohYSdnaeU8+R/NArdJ7qfbDH
+         VS5lDOzW9PQPL6PgxyyMlRs2hVSikCAJXxPls=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ud0t0O/A9Zxe4AUQrrfIW1bhDjfdc8SKj1ooJkDSnEc=;
-        b=IrxIx6GayaZlDQKMsRg/wbPTuX9+U9MWuGphEPP9rpZGn6pnJmfQFRYSJBGKTXkGZt
-         4uIY/P8BOyeuplB5FDMv2QoUhqMO/LUvndvJfkxgRFgrtdFovZzg9UYh+4VoPkLFhXW1
-         C+gQxTTKLcmqtUMHsj1UPCvRu5+4vTgpP5gi05jLZZ+rV4XLiH3l2LYp2b39Ncz7u4Gh
-         qP4DgwTusVFLpbD61AnAvrBgJ5BTzsgor1dWJGJFczKhlz2i3CDCPgiQs0oqy0MTWEOs
-         Ir1om7um2/z/xYuFBdUsdUJCGS3hKcPEhrjuKMBZoRkxpjUf/xu/ZBimKuxuTwIli60M
-         9ECw==
-X-Gm-Message-State: AOAM530y+yBZMk8stxCjHp04f8bFL8SLi6s6aKAtYmEf7+AQGZLp1cv/
-        e6J9UU8tSs+O0JGzxGn0v4EvzaCFJiJwXFyJm9aseA==
-X-Google-Smtp-Source: ABdhPJyOjtYelp22Uu3YGbeY+hgPk19hR7Mb45ss3oGk4BF19/Wv9MbETzwWzjM5dduq31TsR0O7FMA/xPtxyFMHsZM=
-X-Received: by 2002:aca:cfd0:: with SMTP id f199mr2098445oig.102.1597939950149;
- Thu, 20 Aug 2020 09:12:30 -0700 (PDT)
+        bh=UpPzndwiSYhaVueh4zOqhGfv4Oo3BxfBjljCA4pNUIM=;
+        b=j3+1zZfvrHv0liGB4Rkv0g958TrOYwP+RNYa+LPFA4UjwNgVKM8jhVEDuliVOXLAYG
+         mzAZx6BJgKCPHNfKbMahgjoeK486KTrudbLNW/ambgoCj/lmw3LtdOu+PXT01aQR4Wib
+         r7iJONGG4jbpKgUq599juiDs5QV96AivLyZnhp7RevUuE9A9JU2i3e2A8DvWsse9uG0c
+         OthJa+y1oV/ShGMRm3G8lO4vV1QZgc5eM6AKXKhc/cI9N5USIFdFv3VH0Wzp3t4hMFb1
+         WcxhJDR3apygqt405eh17HQ8TH9hJ2ANLLE2N1R+HUSLjHa0O/wZqpBmrr7NWv0bz0iZ
+         XSMw==
+X-Gm-Message-State: AOAM532T+FS/fa67mEZtKpVWCD7KdhPWhAUJ2gq4RsDv2PtKxk6EC3TF
+        DK92Jxd1g799QXX+TuGS0UxqrGR4XHobH+7XJuDttQ==
+X-Google-Smtp-Source: ABdhPJxhIFwfgHxw3SxwdM5trgHfAXmTzg6cKfXYVIO/ijSC/WKBlr9CdxjuEg4Cgs9XTqRC/fGONcWAjPxBeg7NZYw=
+X-Received: by 2002:a4a:de49:: with SMTP id z9mr3004747oot.6.1597940160388;
+ Thu, 20 Aug 2020 09:16:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200819092436.58232-1-lmb@cloudflare.com> <20200819092436.58232-7-lmb@cloudflare.com>
- <1ad29823-1925-01ee-f042-20b422a62a73@fb.com> <CACAyw9-ORs29Gt0c02qsco9ah_h88OqQh5cq36SpDCD19x89uw@mail.gmail.com>
- <582e57e2-58e6-8a37-7dbc-67a2a1db7ecb@fb.com>
-In-Reply-To: <582e57e2-58e6-8a37-7dbc-67a2a1db7ecb@fb.com>
+References: <20200820135729.135783-1-lmb@cloudflare.com> <20200820135729.135783-5-lmb@cloudflare.com>
+ <34027dbc-d5c6-e886-21f8-f3e73e2fde4a@fb.com>
+In-Reply-To: <34027dbc-d5c6-e886-21f8-f3e73e2fde4a@fb.com>
 From:   Lorenz Bauer <lmb@cloudflare.com>
-Date:   Thu, 20 Aug 2020 17:12:18 +0100
-Message-ID: <CACAyw98oAK2Ds1DShkNHq6AYKNF0sL_LOAji3rriuxRa35brAA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 6/6] selftests: bpf: test sockmap update from BPF
+Date:   Thu, 20 Aug 2020 17:15:48 +0100
+Message-ID: <CACAyw98gaWmpJT-LPhqKbKgaPG9s=aNU=K2Db1144dihFHzXJA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/6] bpf: override the meaning of
+ ARG_PTR_TO_MAP_VALUE for sockmap and sockhash
 To:     Yonghong Song <yhs@fb.com>
 Cc:     Jakub Sitnicki <jakub@cloudflare.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         kernel-team <kernel-team@cloudflare.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 20 Aug 2020 at 15:49, Yonghong Song <yhs@fb.com> wrote:
+On Thu, 20 Aug 2020 at 17:10, Yonghong Song <yhs@fb.com> wrote:
 >
 >
 >
-> On 8/20/20 4:58 AM, Lorenz Bauer wrote:
-> > On Wed, 19 Aug 2020 at 21:46, Yonghong Song <yhs@fb.com> wrote:
-> >>
-> >>
-> >>
-> >> On 8/19/20 2:24 AM, Lorenz Bauer wrote:
-> >>> Add a test which copies a socket from a sockmap into another sockmap
-> >>> or sockhash. This excercises bpf_map_update_elem support from BPF
-> >>> context. Compare the socket cookies from source and destination to
-> >>> ensure that the copy succeeded.
-> >>>
-> >>> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-> >>> ---
-> >>>    .../selftests/bpf/prog_tests/sockmap_basic.c  | 76 +++++++++++++++++++
-> >>>    .../selftests/bpf/progs/test_sockmap_copy.c   | 48 ++++++++++++
-> >>>    2 files changed, 124 insertions(+)
-> >>>    create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_copy.c
-> >>>
-> >>> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> >>> index 96e7b7f84c65..d30cabc00e9e 100644
-> >>> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> >>> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> >>> @@ -4,6 +4,7 @@
-> >>>
-> >>>    #include "test_progs.h"
-> >>>    #include "test_skmsg_load_helpers.skel.h"
-> >>> +#include "test_sockmap_copy.skel.h"
-> >>>
-> >>>    #define TCP_REPAIR          19      /* TCP sock is under repair right now */
-> >>>
-> >>> @@ -101,6 +102,77 @@ static void test_skmsg_helpers(enum bpf_map_type map_type)
-> >>>        test_skmsg_load_helpers__destroy(skel);
-> >>>    }
-> >>>
-> >>> +static void test_sockmap_copy(enum bpf_map_type map_type)
-> >>> +{
-> >>> +     struct bpf_prog_test_run_attr attr;
-> >>> +     struct test_sockmap_copy *skel;
-> >>> +     __u64 src_cookie, dst_cookie;
-> >>> +     int err, prog, s, src, dst;
-> >>> +     const __u32 zero = 0;
-> >>> +     char dummy[14] = {0};
-> >>> +
-> >>> +     s = connected_socket_v4();
-> >>
-> >> Maybe change variable name to "sk" for better clarity?
+> On 8/20/20 6:57 AM, Lorenz Bauer wrote:
+> > The verifier assumes that map values are simple blobs of memory, and
+> > therefore treats ARG_PTR_TO_MAP_VALUE, etc. as such. However, there are
+> > map types where this isn't true. For example, sockmap and sockhash store
+> > sockets. In general this isn't a big problem: we can just
+> > write helpers that explicitly requests PTR_TO_SOCKET instead of
+> > ARG_PTR_TO_MAP_VALUE.
 > >
-> > Yup!
+> > The one exception are the standard map helpers like map_update_elem,
+> > map_lookup_elem, etc. Here it would be nice we could overload the
+> > function prototype for different kinds of maps. Unfortunately, this
+> > isn't entirely straight forward:
+> > We only know the type of the map once we have resolved meta->map_ptr
+> > in check_func_arg. This means we can't swap out the prototype
+> > in check_helper_call until we're half way through the function.
 > >
-> >>
-> >>> +     if (CHECK_FAIL(s == -1))
-> >>> +             return;
-> >>> +
-> >>> +     skel = test_sockmap_copy__open_and_load();
-> >>> +     if (CHECK_FAIL(!skel)) {
-> >>> +             close(s);
-> >>> +             perror("test_sockmap_copy__open_and_load");
-> >>> +             return;
-> >>> +     }
-> >>
-> >> Could you use CHECK instead of CHECK_FAIL?
-> >> With CHECK, you can print additional information without perror.
+> > Instead, modify check_func_arg to treat ARG_PTR_TO_MAP_VALUE* to
+> > mean "the native type for the map" instead of "pointer to memory"
+> > for sockmap and sockhash. This means we don't have to modify the
+> > function prototype at all
 > >
-> > I avoid CHECK because it requires `duration`, which doesn't make sense
-> > for most things that I call CHECK_FAIL on here. So either it outputs 0
-> > nsec (which is bogus) or it outputs the value from the last
-> > bpf_prog_test_run call (which is also bogus). How do other tests
-> > handle this? Just ignore it?
+> > Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+> > ---
+> >   kernel/bpf/verifier.c | 37 +++++++++++++++++++++++++++++++++++++
+> >   1 file changed, 37 insertions(+)
+> >
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index b6ccfce3bf4c..24feec515d3e 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -3872,6 +3872,35 @@ static int int_ptr_type_to_size(enum bpf_arg_type type)
+> >       return -EINVAL;
+> >   }
+> >
+> > +static int resolve_map_arg_type(struct bpf_verifier_env *env,
+> > +                              const struct bpf_call_arg_meta *meta,
+> > +                              enum bpf_arg_type *arg_type)
+> > +{
+> > +     if (!meta->map_ptr) {
+> > +             /* kernel subsystem misconfigured verifier */
+> > +             verbose(env, "invalid map_ptr to access map->type\n");
+> > +             return -EACCES;
+> > +     }
+> > +
+> > +     switch (meta->map_ptr->map_type) {
+> > +     case BPF_MAP_TYPE_SOCKMAP:
+> > +     case BPF_MAP_TYPE_SOCKHASH:
+> > +             if (*arg_type == ARG_PTR_TO_MAP_VALUE) {
+> > +                     *arg_type = ARG_PTR_TO_SOCKET;
+> > +             } else if (*arg_type == ARG_PTR_TO_MAP_VALUE_OR_NULL) {
+> > +                     *arg_type = ARG_PTR_TO_SOCKET_OR_NULL;
 >
-> Just ignore it. You can define a static variable duration in the
-> beginning of file and then use CHECK in the rest of file.
+> Is this *arg_type == ARG_PTR_TO_MAP_VALUE_OR_NULL possible with
+> current implementation?
 
-Ok, will do in v3!
+No, the only user is bpf_sk_storage_get and friends which requires
+BPF_MAP_TYPE_SK_STORAGE.
+I seemed to make sense to map ARG_PTR_TO_MAP_VALUE_OR_NULL, but I can
+remove it as
+well if you prefer. Do you think this is dangerous?
 
 >
+> If not, we can remove this "else if" and return -EINVAL, right?
+>
+> > +             } else {
+> > +                     verbose(env, "invalid arg_type for sockmap/sockhash\n");
+> > +                     return -EINVAL;
+> > +             }
+> > +             break;
+> > +
+> > +     default:
+> > +             break;
+> > +     }
+> > +     return 0;
+> > +}
+> > +
+> >   static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+> >                         struct bpf_call_arg_meta *meta,
+> >                         const struct bpf_func_proto *fn)
+> > @@ -3904,6 +3933,14 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+> >               return -EACCES;
+> >       }
 > >
-> >>
-> >>
-> >>> +
-> >>> +     prog = bpf_program__fd(skel->progs.copy_sock_map);
-> >>> +     src = bpf_map__fd(skel->maps.src);
-> >>> +     if (map_type == BPF_MAP_TYPE_SOCKMAP)
-> >>> +             dst = bpf_map__fd(skel->maps.dst_sock_map);
-> >>> +     else
-> >>> +             dst = bpf_map__fd(skel->maps.dst_sock_hash);
-> >>> +
-> [...]
+> > +     if (arg_type == ARG_PTR_TO_MAP_VALUE ||
+> > +         arg_type == ARG_PTR_TO_UNINIT_MAP_VALUE ||
+> > +         arg_type == ARG_PTR_TO_MAP_VALUE_OR_NULL) {
+> > +             err = resolve_map_arg_type(env, meta, &arg_type);
+>
+> I am okay with this to cover all MAP_VALUE types with func
+> name resolve_map_arg_type as a generic helper.
+>
+> > +             if (err)
+> > +                     return err;
+> > +     }
+> > +
+> >       if (arg_type == ARG_PTR_TO_MAP_KEY ||
+> >           arg_type == ARG_PTR_TO_MAP_VALUE ||
+> >           arg_type == ARG_PTR_TO_UNINIT_MAP_VALUE ||
+> >
 
 
 
