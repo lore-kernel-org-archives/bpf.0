@@ -2,162 +2,127 @@ Return-Path: <SRS0=CWvS=B6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F164CC433E1
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 22:49:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6565C433E1
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 22:54:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CFF88207DA
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 22:49:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 747A2207DF
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 22:54:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="V8fynO1Y"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vcVii9Xo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728518AbgHTWty (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Aug 2020 18:49:54 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36298 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728625AbgHTWtx (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 20 Aug 2020 18:49:53 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07KMnkFa007017
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 15:49:52 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=JQHjQ781PNu2wmdJr1YFCMxvQzOxx+uwBKjxfuIlxzI=;
- b=V8fynO1YLyyshiGQFog5xMm8iRdYdUWiZUmhr910EU89/ZhBLExL9hUZ+2HhAdJUAYMz
- 799+c97ATbxZL1ohdUyZ2ssg6c6jijlFbbH4+dHnfvtBUwBHEhvQM2kFv4ULOaj1KXhJ
- rHO/Hp6wDeO8NnPFqtcb0zkl6CxviMD+Bd4= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3304kq12ex-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 15:49:51 -0700
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 20 Aug 2020 15:49:23 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 8DB213704EF5; Thu, 20 Aug 2020 15:49:18 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v2 2/3] bpf: implement link_query callbacks in map element iterators
-Date:   Thu, 20 Aug 2020 15:49:18 -0700
-Message-ID: <20200820224918.483254-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200820224917.483062-1-yhs@fb.com>
-References: <20200820224917.483062-1-yhs@fb.com>
+        id S1728446AbgHTWyy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Aug 2020 18:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728368AbgHTWyy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Aug 2020 18:54:54 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F8EC061385
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 15:54:53 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id q75so3946045iod.1
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 15:54:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hZ9RCEDYy0Jv7CL1iweZtq7KZE1Pa4Rqj0pAp5KNN+4=;
+        b=vcVii9Xozm1NiX9HUBWiTu59L91FPbln8Pi7oURmk1ILxiTGFj5r8NlCjWIPFllRNt
+         GkcUcRrpvqcvSLDEFf1EWm0dftn80P/q8tkoUBOWpNtIOeALMUXeReMnZdV+fM8vrswA
+         bg0F2r14VwMcBJSooRlHPei+iFoaWqscgd5K4pqdZ/I/7f7+Ksd+Q3fHW5YiN9U6fqJ3
+         Hxxnc6rJnCHP0kOFfKSkJD89Sy+QEvYCc10MrW+OAopiz6HpDd0hXpuxvgWfZz4mD3+O
+         j9P/v3vIQHRTpZLRs1zKhTC4oC9qk9PGLoRroQFeer8oe4Cxf8Fy32yrYGtfTRVxyCEO
+         QBdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hZ9RCEDYy0Jv7CL1iweZtq7KZE1Pa4Rqj0pAp5KNN+4=;
+        b=ZZJdbfygUKCIUnGFRfldzEaGT+GRLW1HNwcKdJdhvxx6uEE3WAkbH5Onuuph/Ij+hu
+         pMmHUIqV+/mC6m9u7MDgIJrIchuwtUydv4UYJlDtwmpCbHQQo9Swr2nUEqHqX6rse5Ce
+         5zT/SwXm8WiEXQJj4jzkRx5EAR7aSzHe2OWq2Mjpgx003RtKT0xovPu8Y2O5GRdfC1HL
+         X06nOwYW3fe+e31jbAlAhtUGiqfiHcAsoN4CrO0QuJl5jR5Q8xWwDVLbW/WMV/wAQ5LL
+         9Ro31gcWXLjlKB0z2yWT01FqEYBtOXkZ9U0SoezHPDfOjrxXlgFurgB3wyFZjBpwgVqJ
+         cM5w==
+X-Gm-Message-State: AOAM533VksldY0aw8jLIaZ6mp6UHDXTdW0wcVuGI2de44jxh1iZ9l2pJ
+        jU01nhOPbYgf8G9elYzv0ZZwT3DFNh9MNAUI0OcI6w==
+X-Google-Smtp-Source: ABdhPJwc2RwKrGlo6izY21jXM03aX6zRakNqYeo+rANcunKg4EughUCRiYuX9t9Jv+WXmOwpKInr/UlXqtxAFVQdaWw=
+X-Received: by 2002:a02:3f0d:: with SMTP id d13mr32867jaa.99.1597964092417;
+ Thu, 20 Aug 2020 15:54:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-20_07:2020-08-19,2020-08-20 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015 spamscore=0
- impostorscore=0 mlxscore=0 adultscore=0 malwarescore=0 mlxlogscore=899
- lowpriorityscore=0 suspectscore=8 phishscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008200186
-X-FB-Internal: deliver
+References: <20200820190008.2883500-1-kafai@fb.com> <20200820190052.2885316-1-kafai@fb.com>
+ <alpine.OSX.2.23.453.2008201529350.59053@mjmartin-mac01.local>
+In-Reply-To: <alpine.OSX.2.23.453.2008201529350.59053@mjmartin-mac01.local>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 20 Aug 2020 15:54:40 -0700
+Message-ID: <CANn89iKVEUVbL7mKmGzq7DGXFFL2JwGneR=PKoO_NX0Vym-JpA@mail.gmail.com>
+Subject: Re: [PATCH v5 bpf-next 07/12] bpf: tcp: Add bpf_skops_hdr_opt_len()
+ and bpf_skops_write_hdr_opt()
+To:     Mat Martineau <mathew.j.martineau@linux.intel.com>
+Cc:     Martin KaFai Lau <kafai@fb.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        kernel-team <kernel-team@fb.com>,
+        Lawrence Brakmo <brakmo@fb.com>,
+        Neal Cardwell <ncardwell@google.com>,
+        netdev <netdev@vger.kernel.org>,
+        Yuchung Cheng <ycheng@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For bpf_map_elem and bpf_sk_local_storage bpf iterators,
-additional map_id should be shown for fdinfo and
-userspace query. For example, the following is for
-a bpf_map_elem iterator.
-  $ cat /proc/1753/fdinfo/9
-  pos:    0
-  flags:  02000000
-  mnt_id: 14
-  link_type:      iter
-  link_id:        34
-  prog_tag:       104be6d3fe45e6aa
-  prog_id:        173
-  target_name:    bpf_map_elem
-  map_id:         127
+On Thu, Aug 20, 2020 at 3:39 PM Mat Martineau
+<mathew.j.martineau@linux.intel.com> wrote:
+>
+>
+> On Thu, 20 Aug 2020, Martin KaFai Lau wrote:
+>
+> > The bpf prog needs to parse the SYN header to learn what options have
+> > been sent by the peer's bpf-prog before writing its options into SYNACK.
+> > This patch adds a "syn_skb" arg to tcp_make_synack() and send_synack().
+> > This syn_skb will eventually be made available (as read-only) to the
+> > bpf prog.  This will be the only SYN packet available to the bpf
+> > prog during syncookie.  For other regular cases, the bpf prog can
+> > also use the saved_syn.
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- include/linux/bpf.h       |  4 ++++
- kernel/bpf/map_iter.c     | 15 +++++++++++++++
- net/core/bpf_sk_storage.c |  2 ++
- 3 files changed, 21 insertions(+)
+> > diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
+> > index 5084333b5ab6..631a5ee0dd4e 100644
+> > --- a/net/ipv4/tcp_ipv4.c
+> > +++ b/net/ipv4/tcp_ipv4.c
+>
+> ...
+>
+> > @@ -826,6 +886,15 @@ static unsigned int tcp_established_options(struct sock *sk, struct sk_buff *skb
+> >                       opts->num_sack_blocks * TCPOLEN_SACK_PERBLOCK;
+> >       }
+> >
+> > +     if (unlikely(BPF_SOCK_OPS_TEST_FLAG(tp,
+> > +                                         BPF_SOCK_OPS_WRITE_HDR_OPT_CB_FLAG))) {
+> > +             unsigned int remaining = MAX_TCP_OPTION_SPACE - size;
+> > +
+> > +             bpf_skops_hdr_opt_len(sk, skb, NULL, NULL, 0, opts, &remaining);
+> > +
+> > +             size = MAX_TCP_OPTION_SPACE - remaining;
+> > +     }
+> > +
+> >       return size;
+> > }
+> >
+>
+> Since bpf_skops_hdr_opt_len() is called after the SACK code tries to use
+> up all remaining option space for SACK blocks, it's less likely that there
+> will be sufficient space remaining. Did you consider moving this hunk
+> before the SACK option space is allocated to give the bpf prog higher
+> priority?
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 529e9b183eeb..30c144af894a 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1256,6 +1256,10 @@ int bpf_iter_new_fd(struct bpf_link *link);
- bool bpf_link_is_iter(struct bpf_link *link);
- struct bpf_prog *bpf_iter_get_info(struct bpf_iter_meta *meta, bool in_s=
-top);
- int bpf_iter_run_prog(struct bpf_prog *prog, void *ctx);
-+void bpf_iter_map_show_fdinfo(const struct bpf_iter_aux_info *aux,
-+			      struct seq_file *seq);
-+int bpf_iter_map_fill_link_info(const struct bpf_iter_aux_info *aux,
-+				struct bpf_link_info *info);
-=20
- int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value);
- int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value);
-diff --git a/kernel/bpf/map_iter.c b/kernel/bpf/map_iter.c
-index af86048e5afd..714e74556aa2 100644
---- a/kernel/bpf/map_iter.c
-+++ b/kernel/bpf/map_iter.c
-@@ -149,6 +149,19 @@ static void bpf_iter_detach_map(struct bpf_iter_aux_=
-info *aux)
- 	bpf_map_put_with_uref(aux->map);
- }
-=20
-+void bpf_iter_map_show_fdinfo(const struct bpf_iter_aux_info *aux,
-+			      struct seq_file *seq)
-+{
-+	seq_printf(seq, "map_id:\t\t%u\n", aux->map->id);
-+}
-+
-+int bpf_iter_map_fill_link_info(const struct bpf_iter_aux_info *aux,
-+				struct bpf_link_info *info)
-+{
-+	info->iter.map.map_id =3D aux->map->id;
-+	return 0;
-+}
-+
- DEFINE_BPF_ITER_FUNC(bpf_map_elem, struct bpf_iter_meta *meta,
- 		     struct bpf_map *map, void *key, void *value)
-=20
-@@ -156,6 +169,8 @@ static const struct bpf_iter_reg bpf_map_elem_reg_inf=
-o =3D {
- 	.target			=3D "bpf_map_elem",
- 	.attach_target		=3D bpf_iter_attach_map,
- 	.detach_target		=3D bpf_iter_detach_map,
-+	.show_fdinfo		=3D bpf_iter_map_show_fdinfo,
-+	.fill_link_info		=3D bpf_iter_map_fill_link_info,
- 	.ctx_arg_info_size	=3D 2,
- 	.ctx_arg_info		=3D {
- 		{ offsetof(struct bpf_iter__bpf_map_elem, key),
-diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-index b988f48153a4..281200dc0a01 100644
---- a/net/core/bpf_sk_storage.c
-+++ b/net/core/bpf_sk_storage.c
-@@ -1437,6 +1437,8 @@ static struct bpf_iter_reg bpf_sk_storage_map_reg_i=
-nfo =3D {
- 	.target			=3D "bpf_sk_storage_map",
- 	.attach_target		=3D bpf_iter_attach_map,
- 	.detach_target		=3D bpf_iter_detach_map,
-+	.show_fdinfo		=3D bpf_iter_map_show_fdinfo,
-+	.fill_link_info		=3D bpf_iter_map_fill_link_info,
- 	.ctx_arg_info_size	=3D 2,
- 	.ctx_arg_info		=3D {
- 		{ offsetof(struct bpf_iter__bpf_sk_storage_map, sk),
---=20
-2.24.1
+We have tcp_is_sack(tp) returning a bool. We do not want to return a
+flaky value.
 
+If you need to limit the number of sack ranges to one, please handle
+this separately.
