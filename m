@@ -2,97 +2,128 @@ Return-Path: <SRS0=CWvS=B6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B6A3C433DF
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 07:29:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39F83C433DF
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 07:47:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 396D8208B3
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 07:29:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 119242076E
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 07:47:23 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cgKJy8PT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726707AbgHTH3H (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Aug 2020 03:29:07 -0400
-Received: from mail.netline.ch ([148.251.143.178]:42737 "EHLO
-        netline-mail3.netline.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725797AbgHTH3H (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Aug 2020 03:29:07 -0400
-X-Greylist: delayed 471 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Aug 2020 03:29:05 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by netline-mail3.netline.ch (Postfix) with ESMTP id 9BE3A2A6042;
-        Thu, 20 Aug 2020 09:21:11 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at netline-mail3.netline.ch
-Received: from netline-mail3.netline.ch ([127.0.0.1])
-        by localhost (netline-mail3.netline.ch [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id mT6Tvc2NwglX; Thu, 20 Aug 2020 09:21:11 +0200 (CEST)
-Received: from thor (212.174.63.188.dynamic.wline.res.cust.swisscom.ch [188.63.174.212])
-        by netline-mail3.netline.ch (Postfix) with ESMTPSA id 0ADF22A6016;
-        Thu, 20 Aug 2020 09:21:09 +0200 (CEST)
-Received: from localhost ([::1])
-        by thor with esmtp (Exim 4.94)
-        (envelope-from <michel@daenzer.net>)
-        id 1k8esn-002Aez-Ao; Thu, 20 Aug 2020 09:21:09 +0200
-Subject: Re: [PATCH 00/49] DRM driver for Hikey 970
-To:     Sam Ravnborg <sam@ravnborg.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
-        Wanchun Zheng <zhengwanchun@hisilicon.com>,
-        linuxarm@huawei.com, dri-devel <dri-devel@lists.freedesktop.org>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        devel@driverdev.osuosl.org, Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Xiubin Zhang <zhangxiubin1@huawei.com>,
-        Wei Xu <xuwei5@hisilicon.com>, David Airlie <airlied@linux.ie>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Bogdan Togorean <bogdan.togorean@analog.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Laurentiu Palcu <laurentiu.palcu@nxp.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        Liwei Cai <cailiwei@hisilicon.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Chen Feng <puck.chen@hisilicon.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linaro-mm-sig@lists.linaro.org, Rob Herring <robh+dt@kernel.org>,
-        mauro.chehab@huawei.com, Rob Clark <robdclark@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Liuyao An <anliuyao@huawei.com>,
-        netdev@vger.kernel.org, Rongrong Zou <zourongrong@gmail.com>,
-        bpf@vger.kernel.org, "David S. Miller" <davem@davemloft.net>
-References: <cover.1597833138.git.mchehab+huawei@kernel.org>
- <20200819152120.GA106437@ravnborg.org> <20200819174027.70b39ee9@coco.lan>
- <20200819204800.GA110118@ravnborg.org>
-From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>
-Message-ID: <0ddfd309-46d8-b69b-d1c6-e22384b78070@daenzer.net>
-Date:   Thu, 20 Aug 2020 09:21:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        id S1725823AbgHTHrW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Aug 2020 03:47:22 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:20814 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725797AbgHTHrV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 20 Aug 2020 03:47:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1597909640;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=afYAmefC1IpSW3rtllSNigzU5YzEXsMpfpWcsvn1W1o=;
+        b=cgKJy8PTkQmUk9E8eOaj/dsnO98LUQpbxJ5kH5aFBRUNxi67X61Vx0c2b8TtdxnHyo6YDq
+        PxwGc0SbPhTfgVMfrUzWDF72kflp79bFnBPr+VjeB5EO5jw7JtEBXGu2EE363mZofRCxd5
+        pn/AAC2BAoWLqWhAOnNUfh/Eva4QbOQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-468-bs6FjRRYMdOYKUqEOWOF-Q-1; Thu, 20 Aug 2020 03:47:16 -0400
+X-MC-Unique: bs6FjRRYMdOYKUqEOWOF-Q-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 22A7E425D5;
+        Thu, 20 Aug 2020 07:47:15 +0000 (UTC)
+Received: from carbon (unknown [10.40.208.64])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 951897E30E;
+        Thu, 20 Aug 2020 07:47:05 +0000 (UTC)
+Date:   Thu, 20 Aug 2020 09:47:04 +0200
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, davem@davemloft.net, echaudro@redhat.com,
+        sameehj@amazon.com, brouer@redhat.com,
+        Eric Dumazet <eric.dumazet@gmail.com>
+Subject: Re: [PATCH net-next 6/6] net: mvneta: enable jumbo frames for XDP
+Message-ID: <20200820094704.17840324@carbon>
+In-Reply-To: <5f3da06d5de6c_1b0e2ab87245e5c01b@john-XPS-13-9370.notmuch>
+References: <cover.1597842004.git.lorenzo@kernel.org>
+        <3e0d98fafaf955868205272354e36f0eccc80430.1597842004.git.lorenzo@kernel.org>
+        <20200819122328.0dab6a53@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20200819202223.GA179529@lore-desk>
+        <20200819141428.24e5183a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <5f3da06d5de6c_1b0e2ab87245e5c01b@john-XPS-13-9370.notmuch>
 MIME-Version: 1.0
-In-Reply-To: <20200819204800.GA110118@ravnborg.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2020-08-19 10:48 p.m., Sam Ravnborg wrote:
-> Hi Mauro.
+On Wed, 19 Aug 2020 14:58:05 -0700
+John Fastabend <john.fastabend@gmail.com> wrote:
+
+> Jakub Kicinski wrote:
+> > On Wed, 19 Aug 2020 22:22:23 +0200 Lorenzo Bianconi wrote:  
+> > > > On Wed, 19 Aug 2020 15:13:51 +0200 Lorenzo Bianconi wrote:    
+> > > > > Enable the capability to receive jumbo frames even if the interface is
+> > > > > running in XDP mode
+> > > > > 
+> > > > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>    
+> > > > 
+> > > > Hm, already? Is all the infra in place? Or does it not imply
+> > > > multi-buffer.  
+> > > 
+> > > with this series mvneta supports xdp multi-buff on both rx and tx sides (XDP_TX
+> > > and ndo_xpd_xmit()) so we can remove MTU limitation.  
+> > 
+> > Is there an API for programs to access the multi-buf frames?  
 > 
-> It seems my review comments failed to reach dri-devel - likely due to
-> the size of the mail.
+> Hi Lorenzo,
+> 
+> This is not enough to support multi-buffer in my opinion. I have the
+> same comment as Jakub. We need an API to pull in the multiple
+> buffers otherwise we break the ability to parse the packets and that
+> is a hard requirement to me. I don't want to lose visibility to get
+> jumbo frames.
+> 
+> At minimum we need a bpf_xdp_pull_data() to adjust pointer. In the
+> skmsg case we use this,
+> 
+>   bpf_msg_pull_data(u32 start, u32 end, u64 flags)
+> 
+> Where start is the offset into the packet and end is the last byte we
+> want to adjust start/end pointers to. This way we can walk pages if
+> we want and avoid having to linearize the data unless the user actual
+> asks us for a block that crosses a page range. Smart users then never
+> do a start/end that crosses a page boundary if possible. I think the
+> same would apply here.
+> 
+> XDP by default gives you the first page start/end to use freely. If
+> you need to parse deeper into the payload then you call bpf_msg_pull_data
+> with the byte offsets needed.
 
-Right, some e-mails in this thread went through the dri-devel moderation
-queue due to their sizes. This mail of yours did as well, because you
-didn't trim the quoted text (hint, hint).
+I agree that we need a helper like this. (I also think Daniel have
+proposed this before).  This would also be useful for Eric Dumazet /
+Google's header-split use-case[1].  As I understood from his talk[1],
+the NIC HW might not always split the packet correctly (due to HW
+limits). This helper could solve part of this challenge.
 
 
+[1] https://netdevconf.info/0x14/session.html?talk-the-path-to-tcp-4k-mtu-and-rx-zerocopy
 -- 
-Earthling Michel Dänzer               |               https://redhat.com
-Libre software enthusiast             |             Mesa and X developer
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
+
