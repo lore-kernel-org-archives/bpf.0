@@ -2,164 +2,123 @@ Return-Path: <SRS0=CWvS=B6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26738C433E3
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 07:03:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01CCDC433DF
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 07:21:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00F6B20855
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 07:03:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D03D920855
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 07:21:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1597907027;
-	bh=rxLdO7cakOHvaDBZxCktkD2vNW5pXxH+L8dnLiX+3l0=;
+	s=default; t=1597908082;
+	bh=Zq62Yi8puI9hJDCGZSsFugaJwyxuNLefoKRAmrJhm3A=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=rwSEDPvCx+Oh7cdouQqEV1X35ROzAiZgdbQzxE1Tk4qr2iVmnVHlmZC9lyU/IrptI
-	 UHw24NGstXDmttoYDfGtU1Y/6DFcHuFZsIm1Hg4nFQJZRD4UOIpVzSfm2OLmlItzkH
-	 pqvPyI96gaa4fxsndrBnx7uy+JzD+Wt0wZDWA42Q=
+	b=VB1d3CtNvS8ilIDOA1HBjQcfrwsfInifVB45H7BhuFUec5TfMExpPU78fAN1OhLcG
+	 RhhhnRaSNzs8X11YKLY6Fhkt6rNQEdQMy0h9eYVq8QAURiUblMOLOW2kC3Melnn9ia
+	 gwlVNXlMduas7FcPXJdOgjv5c4n6WAWQt9spolsc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725820AbgHTHDi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Aug 2020 03:03:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33356 "EHLO mail.kernel.org"
+        id S1725820AbgHTHVW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Aug 2020 03:21:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34406 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725797AbgHTHDh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Aug 2020 03:03:37 -0400
+        id S1725778AbgHTHVV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Aug 2020 03:21:21 -0400
 Received: from coco.lan (ip5f5ad5a3.dynamic.kabel-deutschland.de [95.90.213.163])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0D65C20738;
-        Thu, 20 Aug 2020 07:03:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AEDA72078B;
+        Thu, 20 Aug 2020 07:21:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597907017;
-        bh=rxLdO7cakOHvaDBZxCktkD2vNW5pXxH+L8dnLiX+3l0=;
+        s=default; t=1597908081;
+        bh=Zq62Yi8puI9hJDCGZSsFugaJwyxuNLefoKRAmrJhm3A=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZqoFqS0Qk5EvC6CMaAigGknwQX73VDCtk2GLWe6mI2YG3xO28JIlb4JiNpLdRRVN9
-         bYuy9Uqckq5vYNH22NQGflnygdTrodblOQ8XYx5iE+rBj05fEeWdD5XeV6ZzhjYIvj
-         OD4L++Wn3c+kTd2qDyL5dNQdO1HmnIJgomtu35bc=
-Date:   Thu, 20 Aug 2020 09:03:26 +0200
+        b=J9k8h5M43Qx2spsmVYYJjRUU0UEst9opFNuXhI8qbEDJS4InjWBvL+/jFNAgQSE/e
+         KY6oWBl0i07qdAXgcOKjn1UZub5AH3qe6/A149bkNB6fDwyEXfOJe0U0ysWb+cxUSQ
+         4HXpQmQNlVTYCpo2TZwichIkmrV93ZSkZYbrJiXk=
+Date:   Thu, 20 Aug 2020 09:21:11 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
         Wanchun Zheng <zhengwanchun@hisilicon.com>,
         linuxarm@huawei.com, dri-devel <dri-devel@lists.freedesktop.org>,
         Andrzej Hajda <a.hajda@samsung.com>,
-        driverdevel <devel@driverdev.osuosl.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        devel@driverdev.osuosl.org, Daniel Borkmann <daniel@iogearbox.net>,
         John Fastabend <john.fastabend@gmail.com>,
         Xiubin Zhang <zhangxiubin1@huawei.com>,
-        Wei Xu <xuwei5@hisilicon.com>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
+        Wei Xu <xuwei5@hisilicon.com>, David Airlie <airlied@linux.ie>,
         Xinwei Kong <kong.kongxinwei@hisilicon.com>,
         Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Bogdan Togorean <bogdan.togorean@analog.com>,
-        Jakub Kicinski <kuba@kernel.org>,
         Laurentiu Palcu <laurentiu.palcu@nxp.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Liwei Cai <cailiwei@hisilicon.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Liwei Cai <cailiwei@hisilicon.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         Manivannan Sadhasivam <mani@kernel.org>,
         Chen Feng <puck.chen@hisilicon.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>, Rob Herring <robh+dt@kernel.org>,
-        mauro.chehab@huawei.com, Rob Clark <robdclark@chromium.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Liuyao An <anliuyao@huawei.com>,
-        Network Development <netdev@vger.kernel.org>,
-        Rongrong Zou <zourongrong@gmail.com>,
-        BPF Mailing List <bpf@vger.kernel.org>,
+        linaro-mm-sig@lists.linaro.org, Rob Herring <robh+dt@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, mauro.chehab@huawei.com,
+        Rob Clark <robdclark@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Liuyao An <anliuyao@huawei.com>,
+        Rongrong Zou <zourongrong@gmail.com>, bpf@vger.kernel.org,
         "David S. Miller" <davem@davemloft.net>
 Subject: Re: [PATCH 00/49] DRM driver for Hikey 970
-Message-ID: <20200820090326.3f400a15@coco.lan>
-In-Reply-To: <CALAqxLUXnPRec3UYbMKge8yNKBagLOatOeRCagF=JEyPEfWeKA@mail.gmail.com>
+Message-ID: <20200820092111.2a5f348e@coco.lan>
+In-Reply-To: <20200819204800.GA110118@ravnborg.org>
 References: <cover.1597833138.git.mchehab+huawei@kernel.org>
         <20200819152120.GA106437@ravnborg.org>
-        <20200819153045.GA18469@pendragon.ideasonboard.com>
-        <CALAqxLUXnPRec3UYbMKge8yNKBagLOatOeRCagF=JEyPEfWeKA@mail.gmail.com>
+        <20200819174027.70b39ee9@coco.lan>
+        <20200819204800.GA110118@ravnborg.org>
 X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Wed, 19 Aug 2020 12:52:06 -0700
-John Stultz <john.stultz@linaro.org> escreveu:
+Hi Sam,
 
-> On Wed, Aug 19, 2020 at 8:31 AM Laurent Pinchart
-> <laurent.pinchart@ideasonboard.com> wrote:
-> > On Wed, Aug 19, 2020 at 05:21:20PM +0200, Sam Ravnborg wrote: =20
-> > > On Wed, Aug 19, 2020 at 01:45:28PM +0200, Mauro Carvalho Chehab wrote=
-: =20
-> > > > This patch series port the out-of-tree driver for Hikey 970 (which
-> > > > should also support Hikey 960) from the official 96boards tree:
-> > > >
-> > > >    https://github.com/96boards-hikey/linux/tree/hikey970-v4.9
-> > > >
-> > > > Based on his history, this driver seems to be originally written
-> > > > for Kernel 4.4, and was later ported to Kernel 4.9. The original
-> > > > driver used to depend on ION (from Kernel 4.4) and had its own
-> > > > implementation for FB dev API.
-> > > >
-> > > > As I need to preserve the original history (with has patches from
-> > > > both HiSilicon and from Linaro),  I'm starting from the original
-> > > > patch applied there. The remaining patches are incremental,
-> > > > and port this driver to work with upstream Kernel.
-> > > > =20
-> ...
-> > > > - Due to legal reasons, I need to preserve the authorship of
-> > > >   each one responsbile for each patch. So, I need to start from
-> > > >   the original patch from Kernel 4.4; =20
-> ...
-> > > I do acknowledge you need to preserve history and all -
-> > > but this patchset is not easy to review. =20
-> >
-> > Why do we need to preserve history ? Adding relevant Signed-off-by and
-> > Co-developed-by should be enough, shouldn't it ? Having a public branch
-> > that contains the history is useful if anyone is interested, but I don't
-> > think it's required in mainline. =20
->=20
-> Yea. I concur with Laurent here. I'm not sure what legal reasoning you
-> have on this but preserving the "absolute" history here is actively
-> detrimental for review and understanding of the patch set.
->=20
-> Preserving Authorship, Signed-off-by lines and adding Co-developed-by
-> lines should be sufficient to provide both atribution credit and DCO
-> history.
+Em Wed, 19 Aug 2020 22:48:00 +0200
+Sam Ravnborg <sam@ravnborg.org> escreveu:
 
-I'm not convinced that, from legal standpoint, folding things would
-be enough. See, there are at least 3 legal systems involved here
-among the different patch authors:
+> Hi Mauro.
+> 
+> It seems my review comments failed to reach dri-devel - likely due to
+> the size of the mail.
 
-	- civil law;
-	- common law;
-	- customary law + common law.
+Probably. It reached here properly.
 
-Merging stuff altogether from different law systems can be problematic,
-and trying to discuss this with experienced IP property lawyers will
-for sure take a lot of time and efforts. I also bet that different
-lawyers will have different opinions, because laws are subject to=20
-interpretation. With that matter I'm not aware of any court rules=20
-with regards to folded patches. So, it sounds to me that folding=20
-patches is something that has yet to be proofed in courts around
-the globe.
+> Link:
+> https://lore.kernel.org/linux-devicetree/20200819173558.GA3733@ravnborg.org/
+> 
+> I my review feedback I refer to checkpatch a few time.
+> For drivers/gpu/ we have some nice tooling support.
+> One thing our tooling does for us is running checkpatch every time
+> we apply a patch.
+> 
+>     checkpatch -q --emacs --strict --show-types
+> 
+> So we expect patches to be more or less checkpatch --strict clean.
+> 
+> "more or less" - as common sense also plays a role.
+> And sometimes checkpatch is just wrong.
+> 
+> Just in case you wondered why checkpatch --strict was requested.
 
-At least for US legal system, it sounds that the Country of
-origin of a patch is relevant, as they have a concept of
-"national technology" that can be subject to export regulations.
+We also use checkpatch --strict for media as a reference,
+ignoring the things that would make things worse during review :-)
 
-=46rom my side, I really prefer to play safe and stay out of any such
-legal discussions.
+I'll run checkpatch here and ensure that the coding style
+issues will be properly addressed.
 
 Thanks,
 Mauro
