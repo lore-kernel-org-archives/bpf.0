@@ -2,47 +2,41 @@ Return-Path: <SRS0=CWvS=B6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 01CCDC433DF
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 07:21:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B6A3C433DF
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 07:29:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D03D920855
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 07:21:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1597908082;
-	bh=Zq62Yi8puI9hJDCGZSsFugaJwyxuNLefoKRAmrJhm3A=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=VB1d3CtNvS8ilIDOA1HBjQcfrwsfInifVB45H7BhuFUec5TfMExpPU78fAN1OhLcG
-	 RhhhnRaSNzs8X11YKLY6Fhkt6rNQEdQMy0h9eYVq8QAURiUblMOLOW2kC3Melnn9ia
-	 gwlVNXlMduas7FcPXJdOgjv5c4n6WAWQt9spolsc=
+	by mail.kernel.org (Postfix) with ESMTP id 396D8208B3
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 07:29:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725820AbgHTHVW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Aug 2020 03:21:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34406 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725778AbgHTHVV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Aug 2020 03:21:21 -0400
-Received: from coco.lan (ip5f5ad5a3.dynamic.kabel-deutschland.de [95.90.213.163])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AEDA72078B;
-        Thu, 20 Aug 2020 07:21:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1597908081;
-        bh=Zq62Yi8puI9hJDCGZSsFugaJwyxuNLefoKRAmrJhm3A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=J9k8h5M43Qx2spsmVYYJjRUU0UEst9opFNuXhI8qbEDJS4InjWBvL+/jFNAgQSE/e
-         KY6oWBl0i07qdAXgcOKjn1UZub5AH3qe6/A149bkNB6fDwyEXfOJe0U0ysWb+cxUSQ
-         4HXpQmQNlVTYCpo2TZwichIkmrV93ZSkZYbrJiXk=
-Date:   Thu, 20 Aug 2020 09:21:11 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+        id S1726707AbgHTH3H (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Aug 2020 03:29:07 -0400
+Received: from mail.netline.ch ([148.251.143.178]:42737 "EHLO
+        netline-mail3.netline.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725797AbgHTH3H (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Aug 2020 03:29:07 -0400
+X-Greylist: delayed 471 seconds by postgrey-1.27 at vger.kernel.org; Thu, 20 Aug 2020 03:29:05 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by netline-mail3.netline.ch (Postfix) with ESMTP id 9BE3A2A6042;
+        Thu, 20 Aug 2020 09:21:11 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at netline-mail3.netline.ch
+Received: from netline-mail3.netline.ch ([127.0.0.1])
+        by localhost (netline-mail3.netline.ch [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id mT6Tvc2NwglX; Thu, 20 Aug 2020 09:21:11 +0200 (CEST)
+Received: from thor (212.174.63.188.dynamic.wline.res.cust.swisscom.ch [188.63.174.212])
+        by netline-mail3.netline.ch (Postfix) with ESMTPSA id 0ADF22A6016;
+        Thu, 20 Aug 2020 09:21:09 +0200 (CEST)
+Received: from localhost ([::1])
+        by thor with esmtp (Exim 4.94)
+        (envelope-from <michel@daenzer.net>)
+        id 1k8esn-002Aez-Ao; Thu, 20 Aug 2020 09:21:09 +0200
+Subject: Re: [PATCH 00/49] DRM driver for Hikey 970
+To:     Sam Ravnborg <sam@ravnborg.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
         Xinliang Liu <xinliang.liu@linaro.org>,
         Wanchun Zheng <zhengwanchun@hisilicon.com>,
         linuxarm@huawei.com, dri-devel <dri-devel@lists.freedesktop.org>,
@@ -55,6 +49,7 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Xinwei Kong <kong.kongxinwei@hisilicon.com>,
         Tomi Valkeinen <tomi.valkeinen@ti.com>,
         Bogdan Togorean <bogdan.togorean@analog.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Laurentiu Palcu <laurentiu.palcu@nxp.com>,
         linux-media@vger.kernel.org, devicetree@vger.kernel.org,
         Liwei Cai <cailiwei@hisilicon.com>,
@@ -63,62 +58,41 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Chen Feng <puck.chen@hisilicon.com>,
         Alexei Starovoitov <ast@kernel.org>,
         linaro-mm-sig@lists.linaro.org, Rob Herring <robh+dt@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, mauro.chehab@huawei.com,
-        Rob Clark <robdclark@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        mauro.chehab@huawei.com, Rob Clark <robdclark@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org, Liuyao An <anliuyao@huawei.com>,
-        Rongrong Zou <zourongrong@gmail.com>, bpf@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 00/49] DRM driver for Hikey 970
-Message-ID: <20200820092111.2a5f348e@coco.lan>
-In-Reply-To: <20200819204800.GA110118@ravnborg.org>
+        netdev@vger.kernel.org, Rongrong Zou <zourongrong@gmail.com>,
+        bpf@vger.kernel.org, "David S. Miller" <davem@davemloft.net>
 References: <cover.1597833138.git.mchehab+huawei@kernel.org>
-        <20200819152120.GA106437@ravnborg.org>
-        <20200819174027.70b39ee9@coco.lan>
-        <20200819204800.GA110118@ravnborg.org>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+ <20200819152120.GA106437@ravnborg.org> <20200819174027.70b39ee9@coco.lan>
+ <20200819204800.GA110118@ravnborg.org>
+From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel@daenzer.net>
+Message-ID: <0ddfd309-46d8-b69b-d1c6-e22384b78070@daenzer.net>
+Date:   Thu, 20 Aug 2020 09:21:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20200819204800.GA110118@ravnborg.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Sam,
-
-Em Wed, 19 Aug 2020 22:48:00 +0200
-Sam Ravnborg <sam@ravnborg.org> escreveu:
-
+On 2020-08-19 10:48 p.m., Sam Ravnborg wrote:
 > Hi Mauro.
 > 
 > It seems my review comments failed to reach dri-devel - likely due to
 > the size of the mail.
 
-Probably. It reached here properly.
+Right, some e-mails in this thread went through the dri-devel moderation
+queue due to their sizes. This mail of yours did as well, because you
+didn't trim the quoted text (hint, hint).
 
-> Link:
-> https://lore.kernel.org/linux-devicetree/20200819173558.GA3733@ravnborg.org/
-> 
-> I my review feedback I refer to checkpatch a few time.
-> For drivers/gpu/ we have some nice tooling support.
-> One thing our tooling does for us is running checkpatch every time
-> we apply a patch.
-> 
->     checkpatch -q --emacs --strict --show-types
-> 
-> So we expect patches to be more or less checkpatch --strict clean.
-> 
-> "more or less" - as common sense also plays a role.
-> And sometimes checkpatch is just wrong.
-> 
-> Just in case you wondered why checkpatch --strict was requested.
 
-We also use checkpatch --strict for media as a reference,
-ignoring the things that would make things worse during review :-)
-
-I'll run checkpatch here and ensure that the coding style
-issues will be properly addressed.
-
-Thanks,
-Mauro
+-- 
+Earthling Michel Dänzer               |               https://redhat.com
+Libre software enthusiast             |             Mesa and X developer
