@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8296C433E3
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 19:01:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F37C5C433E1
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 19:01:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A87F52075E
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 19:01:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CF3942075E
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 19:01:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="mCZxovqW"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="QwW5ftfO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727952AbgHTTBe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Aug 2020 15:01:34 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:3004 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727956AbgHTTBS (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 20 Aug 2020 15:01:18 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07KJ0U8D016496
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 12:01:18 -0700
+        id S1728013AbgHTTBi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Aug 2020 15:01:38 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:13838 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727943AbgHTTB3 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 20 Aug 2020 15:01:29 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07KIxlR5003104
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 12:01:27 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=6tAT+doT1U/Hj+Jq4B5YaWu3S+rEo2R4DqnySvTWGdA=;
- b=mCZxovqW/rcvPrFucPKArwWJ1ZwvWg9fYghaKzhT7NzM94C0Im7qAAt8KyJ3vzq1Rz+Q
- I/6ME+08bpR23xY6qF8wAy4udhjoiHxjwQKMa/52B4FTjtFpSoZ6Czet4ekQuwIWnVIp
- F412BxdW2zH6FHlwzXkFWD0iz12r1IRF7W4= 
+ bh=VkKpc32CmSVk3dL75W9HH6zZJ1B77FZXq7v4m+xfnkY=;
+ b=QwW5ftfOs+6tbjD4ljFqyguhEO7Q138ll9iCMFx2o7YXL7eRqYyjpA9IzxyImpTmFqSZ
+ wBFfiPE0S3J7sryTAAoor3O5AV5wKcswyxfaoiOy0JzfwtyNrNqxAcB2QSOfKsyHCzuo
+ bfHY/Xfk5jh0wMRtr/33R7+RApLvJrG4X/U= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 331cue53pd-4
+        by mx0a-00082601.pphosted.com with ESMTP id 3304kpyybx-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 12:01:18 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 12:01:27 -0700
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 20 Aug 2020 12:01:15 -0700
+ 15.1.1979.3; Thu, 20 Aug 2020 12:01:25 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 29F142945825; Thu, 20 Aug 2020 12:01:11 -0700 (PDT)
+        id AA4D52945825; Thu, 20 Aug 2020 12:01:23 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Martin KaFai Lau <kafai@fb.com>
 Smtp-Origin-Hostname: devbig005.ftw2.facebook.com
@@ -52,9 +52,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Neal Cardwell <ncardwell@google.com>, <netdev@vger.kernel.org>,
         Yuchung Cheng <ycheng@google.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH v5 bpf-next 10/12] bpf: selftests: Add fastopen_connect to network_helpers
-Date:   Thu, 20 Aug 2020 12:01:11 -0700
-Message-ID: <20200820190111.2886196-1-kafai@fb.com>
+Subject: [PATCH v5 bpf-next 12/12] tcp: bpf: Optionally store mac header in TCP_SAVE_SYN
+Date:   Thu, 20 Aug 2020 12:01:23 -0700
+Message-ID: <20200820190123.2886935-1-kafai@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200820190008.2883500-1-kafai@fb.com>
 References: <20200820190008.2883500-1-kafai@fb.com>
@@ -64,10 +64,10 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-20_03:2020-08-19,2020-08-20 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- priorityscore=1501 suspectscore=13 spamscore=0 impostorscore=0 mlxscore=0
- adultscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015 spamscore=0
+ impostorscore=0 mlxscore=0 adultscore=0 malwarescore=0 mlxlogscore=952
+ lowpriorityscore=0 suspectscore=3 phishscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2008200151
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -75,83 +75,231 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch adds a fastopen_connect() helper which will
-be used in a later test.
+This patch is adapted from Eric's patch in an earlier discussion [1].
 
+The TCP_SAVE_SYN currently only stores the network header and
+tcp header.  This patch allows it to optionally store
+the mac header also if the setsockopt's optval is 2.
+
+It requires one more bit for the "save_syn" bit field in tcp_sock.
+This patch achieves this by moving the syn_smc bit next to the is_mptcp.
+The syn_smc is currently used with the TCP experimental option.  Since
+syn_smc is only used when CONFIG_SMC is enabled, this patch also puts
+the "IS_ENABLED(CONFIG_SMC)" around it like the is_mptcp did
+with "IS_ENABLED(CONFIG_MPTCP)".
+
+The mac_hdrlen is also stored in the "struct saved_syn"
+to allow a quick offset from the bpf prog if it chooses to start
+getting from the network header or the tcp header.
+
+[1]: https://lore.kernel.org/netdev/CANn89iLJNWh6bkH7DNhy_kmcAexuUCccqERq=
+e7z2QsvPhGrYPQ@mail.gmail.com/
+
+Suggested-by: Eric Dumazet <edumazet@google.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- tools/testing/selftests/bpf/network_helpers.c | 37 +++++++++++++++++++
- tools/testing/selftests/bpf/network_helpers.h |  2 +
- 2 files changed, 39 insertions(+)
+ include/linux/tcp.h            | 13 ++++++++-----
+ include/net/request_sock.h     |  1 +
+ include/uapi/linux/bpf.h       |  1 +
+ net/core/filter.c              | 27 ++++++++++++++++++++++-----
+ net/ipv4/tcp.c                 |  3 ++-
+ net/ipv4/tcp_input.c           | 14 +++++++++++++-
+ tools/include/uapi/linux/bpf.h |  1 +
+ 7 files changed, 48 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testin=
-g/selftests/bpf/network_helpers.c
-index f56655690f9b..12ee40284da0 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -104,6 +104,43 @@ int start_server(int family, int type, const char *a=
-ddr_str, __u16 port,
- 	return -1;
+diff --git a/include/linux/tcp.h b/include/linux/tcp.h
+index 29d166263ae7..56ff2952edaf 100644
+--- a/include/linux/tcp.h
++++ b/include/linux/tcp.h
+@@ -239,14 +239,13 @@ struct tcp_sock {
+ 		repair      : 1,
+ 		frto        : 1;/* F-RTO (RFC5682) activated in CA_Loss */
+ 	u8	repair_queue;
+-	u8	syn_data:1,	/* SYN includes data */
++	u8	save_syn:2,	/* Save headers of SYN packet */
++		syn_data:1,	/* SYN includes data */
+ 		syn_fastopen:1,	/* SYN includes Fast Open option */
+ 		syn_fastopen_exp:1,/* SYN includes Fast Open exp. option */
+ 		syn_fastopen_ch:1, /* Active TFO re-enabling probe */
+ 		syn_data_acked:1,/* data in SYN is acked by SYN-ACK */
+-		save_syn:1,	/* Save headers of SYN packet */
+-		is_cwnd_limited:1,/* forward progress limited by snd_cwnd? */
+-		syn_smc:1;	/* SYN includes SMC */
++		is_cwnd_limited:1;/* forward progress limited by snd_cwnd? */
+ 	u32	tlp_high_seq;	/* snd_nxt at the time of TLP */
+=20
+ 	u32	tcp_tx_delay;	/* delay (in usec) added to TX packets */
+@@ -393,6 +392,9 @@ struct tcp_sock {
+ #if IS_ENABLED(CONFIG_MPTCP)
+ 	bool	is_mptcp;
+ #endif
++#if IS_ENABLED(CONFIG_SMC)
++	bool	syn_smc;	/* SYN includes SMC */
++#endif
+=20
+ #ifdef CONFIG_TCP_MD5SIG
+ /* TCP AF-Specific parts; only used by MD5 Signature support so far */
+@@ -488,7 +490,8 @@ static inline void tcp_saved_syn_free(struct tcp_sock=
+ *tp)
+=20
+ static inline u32 tcp_saved_syn_len(const struct saved_syn *saved_syn)
+ {
+-	return saved_syn->network_hdrlen + saved_syn->tcp_hdrlen;
++	return saved_syn->mac_hdrlen + saved_syn->network_hdrlen +
++		saved_syn->tcp_hdrlen;
  }
 =20
-+int fastopen_connect(int server_fd, const char *data, unsigned int data_=
-len,
-+		     int timeout_ms)
-+{
-+	struct sockaddr_storage addr;
-+	socklen_t addrlen =3D sizeof(addr);
-+	struct sockaddr_in *addr_in;
-+	int fd, ret;
-+
-+	if (getsockname(server_fd, (struct sockaddr *)&addr, &addrlen)) {
-+		log_err("Failed to get server addr");
-+		return -1;
-+	}
-+
-+	addr_in =3D (struct sockaddr_in *)&addr;
-+	fd =3D socket(addr_in->sin_family, SOCK_STREAM, 0);
-+	if (fd < 0) {
-+		log_err("Failed to create client socket");
-+		return -1;
-+	}
-+
-+	if (settimeo(fd, timeout_ms))
-+		goto error_close;
-+
-+	ret =3D sendto(fd, data, data_len, MSG_FASTOPEN, (struct sockaddr *)&ad=
-dr,
-+		     addrlen);
-+	if (ret !=3D data_len) {
-+		log_err("sendto(data, %u) !=3D %d\n", data_len, ret);
-+		goto error_close;
-+	}
-+
-+	return fd;
-+
-+error_close:
-+	save_errno_close(fd);
-+	return -1;
-+}
-+
- static int connect_fd_to_addr(int fd,
- 			      const struct sockaddr_storage *addr,
- 			      socklen_t addrlen)
-diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testin=
-g/selftests/bpf/network_helpers.h
-index c3728f6667e4..7205f8afdba1 100644
---- a/tools/testing/selftests/bpf/network_helpers.h
-+++ b/tools/testing/selftests/bpf/network_helpers.h
-@@ -37,6 +37,8 @@ int start_server(int family, int type, const char *addr=
-, __u16 port,
- 		 int timeout_ms);
- int connect_to_fd(int server_fd, int timeout_ms);
- int connect_fd_to_fd(int client_fd, int server_fd, int timeout_ms);
-+int fastopen_connect(int server_fd, const char *data, unsigned int data_=
-len,
-+		     int timeout_ms);
- int make_sockaddr(int family, const char *addr_str, __u16 port,
- 		  struct sockaddr_storage *addr, socklen_t *len);
+ struct sk_buff *tcp_get_timestamping_opt_stats(const struct sock *sk,
+diff --git a/include/net/request_sock.h b/include/net/request_sock.h
+index 7d9ed99a77bd..29e41ff3ec93 100644
+--- a/include/net/request_sock.h
++++ b/include/net/request_sock.h
+@@ -42,6 +42,7 @@ struct request_sock_ops {
+ int inet_rtx_syn_ack(const struct sock *parent, struct request_sock *req=
+);
 =20
+ struct saved_syn {
++	u32 mac_hdrlen;
+ 	u32 network_hdrlen;
+ 	u32 tcp_hdrlen;
+ 	u8 data[];
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 277b145bf7c3..38f6da373b5d 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4533,6 +4533,7 @@ enum {
+ 	 */
+ 	TCP_BPF_SYN		=3D 1005, /* Copy the TCP header */
+ 	TCP_BPF_SYN_IP		=3D 1006, /* Copy the IP[46] and TCP header */
++	TCP_BPF_SYN_MAC         =3D 1007, /* Copy the MAC, IP[46], and TCP head=
+er */
+ };
+=20
+ enum {
+diff --git a/net/core/filter.c b/net/core/filter.c
+index ab5603d5b62a..47eef9a0be6a 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4682,11 +4682,16 @@ static int bpf_sock_ops_get_syn(struct bpf_sock_o=
+ps_kern *bpf_sock,
+ 		if (optname =3D=3D TCP_BPF_SYN) {
+ 			hdr_start =3D syn_skb->data;
+ 			ret =3D tcp_hdrlen(syn_skb);
+-		} else {
+-			/* optname =3D=3D TCP_BPF_SYN_IP */
++		} else if (optname =3D=3D TCP_BPF_SYN_IP) {
+ 			hdr_start =3D skb_network_header(syn_skb);
+ 			ret =3D skb_network_header_len(syn_skb) +
+ 				tcp_hdrlen(syn_skb);
++		} else {
++			/* optname =3D=3D TCP_BPF_SYN_MAC */
++			hdr_start =3D skb_mac_header(syn_skb);
++			ret =3D skb_mac_header_len(syn_skb) +
++				skb_network_header_len(syn_skb) +
++				tcp_hdrlen(syn_skb);
+ 		}
+ 	} else {
+ 		struct sock *sk =3D bpf_sock->sk;
+@@ -4706,12 +4711,24 @@ static int bpf_sock_ops_get_syn(struct bpf_sock_o=
+ps_kern *bpf_sock,
+=20
+ 		if (optname =3D=3D TCP_BPF_SYN) {
+ 			hdr_start =3D saved_syn->data +
++				saved_syn->mac_hdrlen +
+ 				saved_syn->network_hdrlen;
+ 			ret =3D saved_syn->tcp_hdrlen;
++		} else if (optname =3D=3D TCP_BPF_SYN_IP) {
++			hdr_start =3D saved_syn->data +
++				saved_syn->mac_hdrlen;
++			ret =3D saved_syn->network_hdrlen +
++				saved_syn->tcp_hdrlen;
+ 		} else {
+-			/* optname =3D=3D TCP_BPF_SYN_IP */
++			/* optname =3D=3D TCP_BPF_SYN_MAC */
++
++			/* TCP_SAVE_SYN may not have saved the mac hdr */
++			if (!saved_syn->mac_hdrlen)
++				return -ENOENT;
++
+ 			hdr_start =3D saved_syn->data;
+-			ret =3D saved_syn->network_hdrlen +
++			ret =3D saved_syn->mac_hdrlen +
++				saved_syn->network_hdrlen +
+ 				saved_syn->tcp_hdrlen;
+ 		}
+ 	}
+@@ -4724,7 +4741,7 @@ BPF_CALL_5(bpf_sock_ops_getsockopt, struct bpf_sock=
+_ops_kern *, bpf_sock,
+ 	   int, level, int, optname, char *, optval, int, optlen)
+ {
+ 	if (IS_ENABLED(CONFIG_INET) && level =3D=3D SOL_TCP &&
+-	    optname >=3D TCP_BPF_SYN && optname <=3D TCP_BPF_SYN_IP) {
++	    optname >=3D TCP_BPF_SYN && optname <=3D TCP_BPF_SYN_MAC) {
+ 		int ret, copy_len =3D 0;
+ 		const u8 *start;
+=20
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 6075cb091a20..57a568875539 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -3211,7 +3211,8 @@ static int do_tcp_setsockopt(struct sock *sk, int l=
+evel, int optname,
+ 		break;
+=20
+ 	case TCP_SAVE_SYN:
+-		if (val < 0 || val > 1)
++		/* 0: disable, 1: enable, 2: start from ether_header */
++		if (val < 0 || val > 2)
+ 			err =3D -EINVAL;
+ 		else
+ 			tp->save_syn =3D val;
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 319cc7fd5117..4337841faeff 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -6676,13 +6676,25 @@ static void tcp_reqsk_record_syn(const struct soc=
+k *sk,
+ 	if (tcp_sk(sk)->save_syn) {
+ 		u32 len =3D skb_network_header_len(skb) + tcp_hdrlen(skb);
+ 		struct saved_syn *saved_syn;
++		u32 mac_hdrlen;
++		void *base;
++
++		if (tcp_sk(sk)->save_syn =3D=3D 2) {  /* Save full header. */
++			base =3D skb_mac_header(skb);
++			mac_hdrlen =3D skb_mac_header_len(skb);
++			len +=3D mac_hdrlen;
++		} else {
++			base =3D skb_network_header(skb);
++			mac_hdrlen =3D 0;
++		}
+=20
+ 		saved_syn =3D kmalloc(struct_size(saved_syn, data, len),
+ 				    GFP_ATOMIC);
+ 		if (saved_syn) {
++			saved_syn->mac_hdrlen =3D mac_hdrlen;
+ 			saved_syn->network_hdrlen =3D skb_network_header_len(skb);
+ 			saved_syn->tcp_hdrlen =3D tcp_hdrlen(skb);
+-			memcpy(saved_syn->data, skb_network_header(skb), len);
++			memcpy(saved_syn->data, base, len);
+ 			req->saved_syn =3D saved_syn;
+ 		}
+ 	}
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index 277b145bf7c3..38f6da373b5d 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -4533,6 +4533,7 @@ enum {
+ 	 */
+ 	TCP_BPF_SYN		=3D 1005, /* Copy the TCP header */
+ 	TCP_BPF_SYN_IP		=3D 1006, /* Copy the IP[46] and TCP header */
++	TCP_BPF_SYN_MAC         =3D 1007, /* Copy the MAC, IP[46], and TCP head=
+er */
+ };
+=20
+ enum {
 --=20
 2.24.1
 
