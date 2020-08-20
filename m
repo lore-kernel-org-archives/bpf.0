@@ -2,45 +2,45 @@ Return-Path: <SRS0=CWvS=B6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FD7DC433E1
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 23:13:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78999C433E3
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 23:13:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7B034207DF
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 23:13:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4BDFB207DE
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 23:13:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="on7leMls"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="R79fKsqW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728659AbgHTXNT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Aug 2020 19:13:19 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:24682 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728698AbgHTXNK (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 20 Aug 2020 19:13:10 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07KNAHGj013508
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 16:13:08 -0700
+        id S1728715AbgHTXNU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Aug 2020 19:13:20 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:41262 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728751AbgHTXNN (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 20 Aug 2020 19:13:13 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 07KNAejb002690
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 16:13:13 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=APcFe2EuJ+n4/7IuWy0zbpVbnNZ5LqOI4qpmZ3gF1U4=;
- b=on7leMlscFGLg93wWuI7anjUh458BADzuzcDF4TyhEQJi4Q8CGgcFLPHJFbqZToXgXmp
- OZY5kz6OwcmS2K9Fe5whimFY4ZkotX4q+y6ApqezoL4hmyqiBFMZk4JgoeOgfmXq12/K
- ZEO07qBRYSekVWRQUKIIpm4DG2EI03i0pjQ= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3304ny18b3-2
+ bh=mEDQee9iyEJJCFjIsWtEzTG7ffroulHysBXrWIZcfos=;
+ b=R79fKsqWHbr5Y4g/UXfaia3hla968ryuTr9I32kqgb2i6rNrFB/o4kbIQ//nlFt4oaab
+ uulIl3kWzNHakIV5PiqTZmCsT164wFw697DnfyBTgKlVHI9EMbJ7061OzPJEtnljU2Mf
+ d6RGoRoF4U+s+1syviBfwl9/5JV0k7faE70= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net with ESMTP id 331hcbw7by-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 16:13:08 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 16:13:13 -0700
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 20 Aug 2020 16:13:08 -0700
+ 15.1.1979.3; Thu, 20 Aug 2020 16:13:11 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 2FF592EC5F42; Thu, 20 Aug 2020 16:13:05 -0700 (PDT)
+        id 895212EC5F42; Thu, 20 Aug 2020 16:13:09 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -49,9 +49,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 06/16] libbpf: ensure ELF symbols table is found before further ELF processing
-Date:   Thu, 20 Aug 2020 16:12:40 -0700
-Message-ID: <20200820231250.1293069-7-andriin@fb.com>
+Subject: [PATCH bpf-next 08/16] libbpf: support CO-RE relocations for multi-prog sections
+Date:   Thu, 20 Aug 2020 16:12:42 -0700
+Message-ID: <20200820231250.1293069-9-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200820231250.1293069-1-andriin@fb.com>
 References: <20200820231250.1293069-1-andriin@fb.com>
@@ -61,91 +61,185 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-20_07:2020-08-19,2020-08-20 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
- impostorscore=0 spamscore=0 bulkscore=0 mlxlogscore=712 clxscore=1015
- priorityscore=1501 malwarescore=0 lowpriorityscore=0 suspectscore=8
- mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008200189
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
+ priorityscore=1501 suspectscore=8 clxscore=1015 bulkscore=0
+ mlxlogscore=999 lowpriorityscore=0 phishscore=0 impostorscore=0
+ adultscore=0 mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2008200189
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-libbpf ELF parsing logic might need symbols available before ELF parsing =
-is
-completed, so we need to make sure that symbols table section is found in
-a separate pass before all the subsequent sections are processed.
+Fix up CO-RE relocation code to handle relocations against ELF sections
+containing multiple BPF programs. This requires lookup of a BPF program b=
+y its
+section name and instruction index it contains. While it could have been =
+done
+as a simple loop, it could run into performance issues pretty quickly, as
+number of CO-RE relocations can be quite large in real-world applications=
+, and
+each CO-RE relocation incurs BPF program look up now. So instead of simpl=
+e
+loop, implement a binary search by section name + insn offset.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/libbpf.c | 40 +++++++++++++++++++++++++++++-----------
- 1 file changed, 29 insertions(+), 11 deletions(-)
+ tools/lib/bpf/libbpf.c | 82 +++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 74 insertions(+), 8 deletions(-)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 5a53cc9c1327..8629dd158361 100644
+index 8e77032a8f21..443a91f6f239 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -2719,14 +2719,38 @@ static int bpf_object__elf_collect(struct bpf_obj=
-ect *obj)
+@@ -2752,6 +2752,18 @@ static bool ignore_elf_section(GElf_Shdr *hdr, con=
+st char *name)
+ 	return false;
+ }
+=20
++static int cmp_progs(const void *_a, const void *_b)
++{
++	const struct bpf_program *a =3D _a;
++	const struct bpf_program *b =3D _b;
++
++	if (a->sec_idx !=3D b->sec_idx)
++		return a->sec_idx < b->sec_idx ? -1 : 1;
++
++	/* sec_insn_off can't be the same within the section */
++	return a->sec_insn_off < b->sec_insn_off ? -1 : 1;
++}
++
+ static int bpf_object__elf_collect(struct bpf_object *obj)
+ {
  	Elf *elf =3D obj->efile.elf;
- 	Elf_Data *btf_ext_data =3D NULL;
- 	Elf_Data *btf_data =3D NULL;
--	Elf_Scn *scn =3D NULL;
- 	int idx =3D 0, err =3D 0;
-+	const char *name;
-+	Elf_Data *data;
-+	Elf_Scn *scn;
-+	GElf_Shdr sh;
-=20
-+	/* a bunch of ELF parsing functionality depends on processing symbols,
-+	 * so do the first pass and find the symbol table
-+	 */
-+	scn =3D NULL;
- 	while ((scn =3D elf_nextscn(elf, scn)) !=3D NULL) {
--		const char *name;
--		GElf_Shdr sh;
--		Elf_Data *data;
-+		if (elf_sec_hdr(obj, scn, &sh))
-+			return -LIBBPF_ERRNO__FORMAT;
-+
-+		if (sh.sh_type =3D=3D SHT_SYMTAB) {
-+			if (obj->efile.symbols) {
-+				pr_warn("elf: multiple symbol tables in %s\n", obj->path);
-+				return -LIBBPF_ERRNO__FORMAT;
-+			}
-=20
-+			data =3D elf_sec_data(obj, scn);
-+			if (!data)
-+				return -LIBBPF_ERRNO__FORMAT;
-+
-+			obj->efile.symbols =3D data;
-+			obj->efile.symbols_shndx =3D elf_ndxscn(scn);
-+			obj->efile.strtabidx =3D sh.sh_link;
-+		}
-+	}
-+
-+	scn =3D NULL;
-+	while ((scn =3D elf_nextscn(elf, scn)) !=3D NULL) {
- 		idx++;
-=20
- 		if (elf_sec_hdr(obj, scn, &sh))
-@@ -2765,13 +2789,7 @@ static int bpf_object__elf_collect(struct bpf_obje=
+@@ -2885,6 +2897,11 @@ static int bpf_object__elf_collect(struct bpf_obje=
 ct *obj)
- 		} else if (strcmp(name, BTF_EXT_ELF_SEC) =3D=3D 0) {
- 			btf_ext_data =3D data;
- 		} else if (sh.sh_type =3D=3D SHT_SYMTAB) {
--			if (obj->efile.symbols) {
--				pr_warn("elf: multiple symbol tables in %s\n", obj->path);
--				return -LIBBPF_ERRNO__FORMAT;
+ 		pr_warn("elf: symbol strings section missing or invalid in %s\n", obj-=
+>path);
+ 		return -LIBBPF_ERRNO__FORMAT;
+ 	}
++
++	/* sort BPF programs by section name and in-section instruction offset
++	 * for faster search */
++	qsort(obj->programs, obj->nr_programs, sizeof(*obj->programs), cmp_prog=
+s);
++
+ 	return bpf_object__init_btf(obj, btf_data, btf_ext_data);
+ }
+=20
+@@ -3413,6 +3430,37 @@ static int bpf_program__record_reloc(struct bpf_pr=
+ogram *prog,
+ 	return 0;
+ }
+=20
++static bool prog_contains_insn(const struct bpf_program *prog, size_t in=
+sn_idx)
++{
++	return insn_idx >=3D prog->sec_insn_off &&
++	       insn_idx < prog->sec_insn_off + prog->sec_insn_cnt;
++}
++
++static struct bpf_program *find_prog_by_sec_insn(const struct bpf_object=
+ *obj,
++						 size_t sec_idx, size_t insn_idx)
++{
++	int l =3D 0, r =3D obj->nr_programs - 1, m;
++	struct bpf_program *prog;
++
++	while (l < r) {
++		m =3D l + (r - l + 1) / 2;
++		prog =3D &obj->programs[m];
++
++		if (prog->sec_idx < sec_idx ||
++		    (prog->sec_idx =3D=3D sec_idx && prog->sec_insn_off <=3D insn_idx)=
+)
++			l =3D m;
++		else
++			r =3D m - 1;
++	}
++	/* matching program could be at index l, but it still might be the
++	 * wrong one, so we need to double check conditions for the last time
++	 */
++	prog =3D &obj->programs[l];
++	if (prog->sec_idx =3D=3D sec_idx && prog_contains_insn(prog, insn_idx))
++		return prog;
++	return NULL;
++}
++
+ static int
+ bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
+ 			   Elf_Data *data, struct bpf_object *obj)
+@@ -5227,6 +5275,11 @@ static int bpf_core_patch_insn(struct bpf_program =
+*prog,
+ 	if (relo->insn_off % BPF_INSN_SZ)
+ 		return -EINVAL;
+ 	insn_idx =3D relo->insn_off / BPF_INSN_SZ;
++	/* adjust insn_idx from section frame of reference to the local
++	 * program's frame of reference; (sub-)program code is not yet
++	 * relocated, so it's enough to just subtract in-section offset
++	 */
++	insn_idx =3D insn_idx - prog->sec_insn_off;
+ 	insn =3D &prog->insns[insn_idx];
+ 	class =3D BPF_CLASS(insn->code);
+=20
+@@ -5616,7 +5669,7 @@ bpf_object__relocate_core(struct bpf_object *obj, c=
+onst char *targ_btf_path)
+ 	struct bpf_program *prog;
+ 	struct btf *targ_btf;
+ 	const char *sec_name;
+-	int i, err =3D 0;
++	int i, err =3D 0, insn_idx, sec_idx;
+=20
+ 	if (obj->btf_ext->core_relo_info.len =3D=3D 0)
+ 		return 0;
+@@ -5643,24 +5696,37 @@ bpf_object__relocate_core(struct bpf_object *obj,=
+ const char *targ_btf_path)
+ 			err =3D -EINVAL;
+ 			goto out;
+ 		}
++		/* bpf_object's ELF is gone by now so it's not easy to find
++		 * section index by section name, but we can find *any*
++		 * bpf_program within desired section name and use it's
++		 * prog->sec_idx to do a proper search by section index and
++		 * instruction offset
++		 */
+ 		prog =3D NULL;
+ 		for (i =3D 0; i < obj->nr_programs; i++) {
+-			if (!strcmp(obj->programs[i].section_name, sec_name)) {
+-				prog =3D &obj->programs[i];
++			prog =3D &obj->programs[i];
++			if (strcmp(prog->section_name, sec_name) =3D=3D 0)
+ 				break;
 -			}
--			obj->efile.symbols =3D data;
--			obj->efile.symbols_shndx =3D idx;
--			obj->efile.strtabidx =3D sh.sh_link;
-+			/* already processed during the first pass above */
- 		} else if (sh.sh_type =3D=3D SHT_PROGBITS && data->d_size > 0) {
- 			if (sh.sh_flags & SHF_EXECINSTR) {
- 				if (strcmp(name, ".text") =3D=3D 0)
+ 		}
+ 		if (!prog) {
+-			pr_warn("failed to find program '%s' for CO-RE offset relocation\n",
+-				sec_name);
+-			err =3D -EINVAL;
+-			goto out;
++			pr_warn("sec '%s': failed to find a BPF program\n", sec_name);
++			return -ENOENT;
+ 		}
++		sec_idx =3D prog->sec_idx;
+=20
+ 		pr_debug("sec '%s': found %d CO-RE relocations\n",
+ 			 sec_name, sec->num_info);
+=20
+ 		for_each_btf_ext_rec(seg, sec, i, rec) {
++			insn_idx =3D rec->insn_off / BPF_INSN_SZ;
++			prog =3D find_prog_by_sec_insn(obj, sec_idx, insn_idx);
++			if (!prog) {
++				pr_warn("sec '%s': failed to find program at insn #%d for CO-RE offs=
+et relocation #%d\n",
++					sec_name, insn_idx, i);
++				err =3D -EINVAL;
++				goto out;
++			}
++
+ 			err =3D bpf_core_apply_relo(prog, rec, i, obj->btf,
+ 						  targ_btf, cand_cache);
+ 			if (err) {
 --=20
 2.24.1
 
