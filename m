@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D537C433E3
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 00:13:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5661AC433E1
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 00:13:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 06DCF2075E
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 00:13:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 324722075E
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 00:13:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Ak6grs+1"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="e7dHGikO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728579AbgHTANe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Aug 2020 20:13:34 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:44958 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728490AbgHTANd (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 19 Aug 2020 20:13:33 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07K09x8I003971
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 17:13:31 -0700
+        id S1728300AbgHTANp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Aug 2020 20:13:45 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:1928 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728641AbgHTANh (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 19 Aug 2020 20:13:37 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07K0DYlU023747
+        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 17:13:36 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=9y+etqO9sBJKXPOq7icEU7PZmKHO/+X7lwULsNZesGQ=;
- b=Ak6grs+1XSPF0eYS7DONK4jG6Fk7yQ6C+gSRtAm1hTnYuCNJidjhU40zdf4FmDIFOe3h
- +/RVAEMiYAN7+XB305vOoKYlzc15atY6sRhTwP+ok/pxFtud/16hv+3gQFTfy1nAkVx4
- 3VUCT5/x3hXupmiEfU/BhvOKEQMLuESoCyY= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3318g0hpn1-2
+ bh=R7+iagKH/ujEk3wpyWZt8qRXFk7hx29qjMJYKXlBbvw=;
+ b=e7dHGikO7/WWD/OC6WrDnC5jjgQo8LFJ69h3rIVYQiwHkavZ70imI2+IZUV9Y/QZmG1P
+ nKISCp3fkSa+d/c8dd2KdbB11yf+uWArk9sqWXD69HB2MBZIa17vAZ/1EgsuFdnPnv+r
+ 7uHcO9/lJijRY6wZW7v9/5oetTAqu3lnZ7c= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3304m33gq5-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 17:13:31 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 17:13:36 -0700
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 19 Aug 2020 17:13:29 -0700
+ 15.1.1979.3; Wed, 19 Aug 2020 17:13:25 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 028B637053B6; Wed, 19 Aug 2020 17:13:25 -0700 (PDT)
+        id 845DD3705675; Wed, 19 Aug 2020 17:13:23 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 3/3] bpftool: implement link_query for bpf iterators
-Date:   Wed, 19 Aug 2020 17:13:25 -0700
-Message-ID: <20200820001325.3741202-1-yhs@fb.com>
+Subject: [PATCH bpf-next 1/3] bpf: implement link_query for bpf iterators
+Date:   Wed, 19 Aug 2020 17:13:23 -0700
+Message-ID: <20200820001323.3740936-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200820001323.3740798-1-yhs@fb.com>
 References: <20200820001323.3740798-1-yhs@fb.com>
@@ -60,155 +60,183 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-19_13:2020-08-19,2020-08-19 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 spamscore=0
- lowpriorityscore=0 clxscore=1015 bulkscore=0 priorityscore=1501
- mlxlogscore=999 suspectscore=8 mlxscore=0 adultscore=0 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008190193
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=939
+ impostorscore=0 mlxscore=0 bulkscore=0 suspectscore=8 spamscore=0
+ phishscore=0 lowpriorityscore=0 malwarescore=0 clxscore=1015 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008200000
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The link query for bpf iterators is implemented.
-Besides being shown to the user what bpf iterator
-the link represents, the target_name is also used
-to filter out what additional information should be
-printed out, e.g., whether map_id should be shown or not.
-The following is an example of bpf_iter link dump,
-plain output or pretty output.
+This patch implemented bpf_link callback functions
+show_fdinfo and fill_link_info to support link_query
+interface.
 
-  $ bpftool link show
-  11: iter  prog 59  target_name task
-          pids test_progs(1749)
-  34: iter  prog 173  target_name bpf_map_elem  map_id 127
-          pids test_progs_1(1753)
-  $ bpftool -p link show
-  [{
-          "id": 11,
-          "type": "iter",
-          "prog_id": 59,
-          "target_name": "task",
-          "pids": [{
-                  "pid": 1749,
-                  "comm": "test_progs"
-              }
-          ]
-      },{
-          "id": 34,
-          "type": "iter",
-          "prog_id": 173,
-          "target_name": "bpf_map_elem",
-          "map_id": 127,
-          "pids": [{
-                  "pid": 1753,
-                  "comm": "test_progs_1"
-              }
-          ]
-      }
-  ]
+The general interface for show_fdinfo and fill_link_info
+will print/fill the target_name. Each targets can
+register show_fdinfo and fill_link_info callbacks
+to print/fill more target specific information.
+
+For example, the below is a fdinfo result for a bpf
+task iterator.
+  $ cat /proc/1749/fdinfo/7
+  pos:    0
+  flags:  02000000
+  mnt_id: 14
+  link_type:      iter
+  link_id:        11
+  prog_tag:       990e1f8152f7e54f
+  prog_id:        59
+  target_name:    task
 
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- tools/bpf/bpftool/link.c | 44 +++++++++++++++++++++++++++++++++++++---
- 1 file changed, 41 insertions(+), 3 deletions(-)
+ include/linux/bpf.h            |  6 ++++
+ include/uapi/linux/bpf.h       |  7 ++++
+ kernel/bpf/bpf_iter.c          | 58 ++++++++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h |  7 ++++
+ 4 files changed, 78 insertions(+)
 
-diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-index a89f09e3c848..e77e1525d20a 100644
---- a/tools/bpf/bpftool/link.c
-+++ b/tools/bpf/bpftool/link.c
-@@ -77,6 +77,22 @@ static void show_link_attach_type_json(__u32 attach_ty=
-pe, json_writer_t *wtr)
- 		jsonw_uint_field(wtr, "attach_type", attach_type);
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 55f694b63164..66cd0fb8d70f 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1218,12 +1218,18 @@ typedef int (*bpf_iter_attach_target_t)(struct bp=
+f_prog *prog,
+ 					union bpf_iter_link_info *linfo,
+ 					struct bpf_iter_aux_info *aux);
+ typedef void (*bpf_iter_detach_target_t)(struct bpf_iter_aux_info *aux);
++typedef void (*bpf_iter_show_fdinfo_t) (const struct bpf_iter_aux_info *=
+aux,
++					struct seq_file *seq);
++typedef int (*bpf_iter_fill_link_info_t)(const struct bpf_iter_aux_info =
+*aux,
++					 struct bpf_link_info *info);
+=20
+ #define BPF_ITER_CTX_ARG_MAX 2
+ struct bpf_iter_reg {
+ 	const char *target;
+ 	bpf_iter_attach_target_t attach_target;
+ 	bpf_iter_detach_target_t detach_target;
++	bpf_iter_show_fdinfo_t show_fdinfo;
++	bpf_iter_fill_link_info_t fill_link_info;
+ 	u32 ctx_arg_info_size;
+ 	struct bpf_ctx_arg_aux ctx_arg_info[BPF_ITER_CTX_ARG_MAX];
+ 	const struct bpf_iter_seq_info *seq_info;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 0480f893facd..a1bbaff7a0af 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4071,6 +4071,13 @@ struct bpf_link_info {
+ 			__u64 cgroup_id;
+ 			__u32 attach_type;
+ 		} cgroup;
++		struct {
++			__aligned_u64 target_name; /* in/out: target_name buffer ptr */
++			__u32 target_name_len;	   /* in/out: target_name buffer len */
++			union {
++				__u32 map_id;
++			} map;
++		} iter;
+ 		struct  {
+ 			__u32 netns_ino;
+ 			__u32 attach_type;
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+index b6715964b685..adbffade91cd 100644
+--- a/kernel/bpf/bpf_iter.c
++++ b/kernel/bpf/bpf_iter.c
+@@ -377,10 +377,68 @@ static int bpf_iter_link_replace(struct bpf_link *l=
+ink,
+ 	return ret;
  }
 =20
-+static bool is_iter_map_target(const char *target_name)
++static void bpf_iter_link_show_fdinfo(const struct bpf_link *link,
++				      struct seq_file *seq)
 +{
-+	return strcmp(target_name, "bpf_map_elem") =3D=3D 0 ||
-+	       strcmp(target_name, "bpf_sk_storage_map") =3D=3D 0;
++	struct bpf_iter_link *iter_link =3D
++		container_of(link, struct bpf_iter_link, link);
++	bpf_iter_show_fdinfo_t show_fdinfo;
++
++	seq_printf(seq,
++		   "target_name:\t%s\n",
++		   iter_link->tinfo->reg_info->target);
++
++	show_fdinfo =3D iter_link->tinfo->reg_info->show_fdinfo;
++	if (show_fdinfo)
++		show_fdinfo(&iter_link->aux, seq);
 +}
 +
-+static void show_iter_json(struct bpf_link_info *info, json_writer_t *wt=
-r)
++static int bpf_iter_link_fill_link_info(const struct bpf_link *link,
++					struct bpf_link_info *info)
 +{
-+	const char *target_name =3D u64_to_ptr(info->iter.target_name);
++	struct bpf_iter_link *iter_link =3D
++		container_of(link, struct bpf_iter_link, link);
++	char __user *ubuf =3D u64_to_user_ptr(info->iter.target_name);
++	bpf_iter_fill_link_info_t fill_link_info;
++	u32 ulen =3D info->iter.target_name_len;
++	const char *target_name;
++	u32 target_len;
 +
-+	jsonw_string_field(wtr, "target_name", target_name);
++	if (ulen && !ubuf)
++		return -EINVAL;
 +
-+	if (is_iter_map_target(target_name))
-+		jsonw_uint_field(wtr, "map_id", info->iter.map.map_id);
-+}
++	target_name =3D iter_link->tinfo->reg_info->target;
++	target_len =3D  strlen(target_name);
++	info->iter.target_name_len =3D target_len + 1;
++	if (!ubuf)
++		return 0;
 +
- static int get_prog_info(int prog_id, struct bpf_prog_info *info)
- {
- 	__u32 len =3D sizeof(*info);
-@@ -128,6 +144,9 @@ static int show_link_close_json(int fd, struct bpf_li=
-nk_info *info)
- 				   info->cgroup.cgroup_id);
- 		show_link_attach_type_json(info->cgroup.attach_type, json_wtr);
- 		break;
-+	case BPF_LINK_TYPE_ITER:
-+		show_iter_json(info, json_wtr);
-+		break;
- 	case BPF_LINK_TYPE_NETNS:
- 		jsonw_uint_field(json_wtr, "netns_ino",
- 				 info->netns.netns_ino);
-@@ -175,6 +194,16 @@ static void show_link_attach_type_plain(__u32 attach=
-_type)
- 		printf("attach_type %u  ", attach_type);
- }
-=20
-+static void show_iter_plain(struct bpf_link_info *info)
-+{
-+	const char *target_name =3D u64_to_ptr(info->iter.target_name);
++	if (ulen >=3D target_len + 1) {
++		if (copy_to_user(ubuf, target_name, target_len + 1))
++			return -EFAULT;
++	} else {
++		char zero =3D '\0';
 +
-+	printf("target_name %s  ", target_name);
-+
-+	if (is_iter_map_target(target_name))
-+		printf("map_id %u  ", info->iter.map.map_id);
-+}
-+
- static int show_link_close_plain(int fd, struct bpf_link_info *info)
- {
- 	struct bpf_prog_info prog_info;
-@@ -204,6 +233,9 @@ static int show_link_close_plain(int fd, struct bpf_l=
-ink_info *info)
- 		printf("\n\tcgroup_id %zu  ", (size_t)info->cgroup.cgroup_id);
- 		show_link_attach_type_plain(info->cgroup.attach_type);
- 		break;
-+	case BPF_LINK_TYPE_ITER:
-+		show_iter_plain(info);
-+		break;
- 	case BPF_LINK_TYPE_NETNS:
- 		printf("\n\tnetns_ino %u  ", info->netns.netns_ino);
- 		show_link_attach_type_plain(info->netns.attach_type);
-@@ -231,7 +263,7 @@ static int do_show_link(int fd)
- {
- 	struct bpf_link_info info;
- 	__u32 len =3D sizeof(info);
--	char raw_tp_name[256];
-+	char buf[256];
- 	int err;
-=20
- 	memset(&info, 0, sizeof(info));
-@@ -245,8 +277,14 @@ static int do_show_link(int fd)
- 	}
- 	if (info.type =3D=3D BPF_LINK_TYPE_RAW_TRACEPOINT &&
- 	    !info.raw_tracepoint.tp_name) {
--		info.raw_tracepoint.tp_name =3D (unsigned long)&raw_tp_name;
--		info.raw_tracepoint.tp_name_len =3D sizeof(raw_tp_name);
-+		info.raw_tracepoint.tp_name =3D (unsigned long)&buf;
-+		info.raw_tracepoint.tp_name_len =3D sizeof(buf);
-+		goto again;
++		if (copy_to_user(ubuf, target_name, ulen - 1))
++			return -EFAULT;
++		if (put_user(zero, ubuf + ulen - 1))
++			return -EFAULT;
++		return -ENOSPC;
 +	}
-+	if (info.type =3D=3D BPF_LINK_TYPE_ITER &&
-+	    !info.iter.target_name) {
-+		info.iter.target_name =3D (unsigned long)&buf;
-+		info.iter.target_name_len =3D sizeof(buf);
- 		goto again;
- 	}
++
++	fill_link_info =3D iter_link->tinfo->reg_info->fill_link_info;
++	if (fill_link_info)
++		return fill_link_info(&iter_link->aux, info);
++
++        return 0;
++}
++
+ static const struct bpf_link_ops bpf_iter_link_lops =3D {
+ 	.release =3D bpf_iter_link_release,
+ 	.dealloc =3D bpf_iter_link_dealloc,
+ 	.update_prog =3D bpf_iter_link_replace,
++	.show_fdinfo =3D bpf_iter_link_show_fdinfo,
++	.fill_link_info =3D bpf_iter_link_fill_link_info,
+ };
 =20
+ bool bpf_link_is_iter(struct bpf_link *link)
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index 0480f893facd..a1bbaff7a0af 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -4071,6 +4071,13 @@ struct bpf_link_info {
+ 			__u64 cgroup_id;
+ 			__u32 attach_type;
+ 		} cgroup;
++		struct {
++			__aligned_u64 target_name; /* in/out: target_name buffer ptr */
++			__u32 target_name_len;	   /* in/out: target_name buffer len */
++			union {
++				__u32 map_id;
++			} map;
++		} iter;
+ 		struct  {
+ 			__u32 netns_ino;
+ 			__u32 attach_type;
 --=20
 2.24.1
 
