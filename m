@@ -2,173 +2,117 @@ Return-Path: <SRS0=CWvS=B6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.5 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EB38C433DF
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 13:59:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB264C433DF
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 14:06:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6B8D1206DA
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 13:59:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 83AA620738
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 14:06:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="ISzJ/yiz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UJkB6f8E"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731352AbgHTN7M (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Aug 2020 09:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
+        id S1727944AbgHTOGe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Aug 2020 10:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731172AbgHTN6T (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Aug 2020 09:58:19 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6590C061343
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 06:58:07 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id a14so2135913wra.5
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 06:58:07 -0700 (PDT)
+        with ESMTP id S1727973AbgHTOAa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Aug 2020 10:00:30 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B223C061385;
+        Thu, 20 Aug 2020 07:00:30 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id f19so1242498qtp.2;
+        Thu, 20 Aug 2020 07:00:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=dIlmZJB9+eDgtcHSXwLK+yE9xrsf8loBEu9kCmv2aII=;
-        b=ISzJ/yiz5+C1y/r+rRZ0TH2WqW8foBXQtXCtMXa3Ni88vEdoiMbBvipWviQ5t6C7U+
-         ORFWwpN8EzD38dgFERXavPfGAQat4AxfLfBVhlOMlqMqevnkYtJalb12WuMsaDkzuLbZ
-         BCq0OrLB3+/+Pwp7+CpmjceQJ6GuZBxxXxT9k=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=y7kkZbgDKvfpk/574axpOPBBzS1cZF0VR+SWjBoO9H0=;
+        b=UJkB6f8EFnalqyaUZ8xxRkZa/deKn9zHwP/QN0nYHhh0DnGBB+xdUmx1s2WfRWMxwD
+         yEqcrDdCI4yQEg9zIMM4tU4wZIWEISRJutE318s0IR3dvwSiCDWqMWT3I4rqv4nAu9Za
+         TIdIBV8ujpbdCOWWSGWizwDlyamNPswkvAlRVXUSunP59QNsCYH2RfHEab4b6i2Yn801
+         F0j1ln4MQe520NWTXicnIjtT0Bs+HGaOLb0KnZzhodh8EBMGg0WD2H2IVyG3mLrOwhqn
+         4wQY5ejivfNU9JNBxuJ05alPdqOIwDYxaPbY+JHziVw11Gpskx94yLkvhA2WLYKkfzjs
+         o8aQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=dIlmZJB9+eDgtcHSXwLK+yE9xrsf8loBEu9kCmv2aII=;
-        b=GjpxZN13eu0Kvtsq/upRYd7P2zKFTQgx+/81sx9CRjKEaDeGW02x3MSln2ht/viyo5
-         ggu8F19Z9zXFRjuQQgk4iSBhuFwq9GPQJxhzX4Rm4G08oJOZVF64Z0kLylBUMdGwai9J
-         i/DNO1lCRwQudDC1X/WLwQAXpYjah38BGy3/T1eSGFepqxOSWZBUNVQ6i6LP2/lPwpF1
-         fsM1gHA8em1Ds30ovzCL6hnRPok7xP7ms9nuApFq+4jpbZQuCeBL2RJ3C/eBkuT3cJgG
-         six5YhKlaipBmUT6xNcZa7smnMHTkm91m71SsZ502aZEXdjRy4vPnt16UNRzJol2hJK+
-         6zVA==
-X-Gm-Message-State: AOAM533uaNnvH6otBbq3YmUQKFfKH2P8mt1aIe9F4m8pQIu+qNMs9Z4m
-        FyF1d/bUGSLgGAxG2NqE/vsAwQ==
-X-Google-Smtp-Source: ABdhPJy88DpUAqZntYnMkF6kISfRxqrYXFVdlbWXeJsDdhysjZI6wBEPNnqgskjI2emFz26INYdKOg==
-X-Received: by 2002:a5d:4bcf:: with SMTP id l15mr3325677wrt.384.1597931886563;
-        Thu, 20 Aug 2020 06:58:06 -0700 (PDT)
-Received: from antares.lan (d.0.f.e.b.c.7.2.d.c.3.8.4.8.d.9.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:9d84:83cd:27cb:ef0d])
-        by smtp.gmail.com with ESMTPSA id l81sm4494215wmf.4.2020.08.20.06.58.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Aug 2020 06:58:06 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     jakub@cloudflare.com, john.fastabend@gmail.com,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Cc:     kernel-team@cloudflare.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/6] bpf: sockmap: merge sockmap and sockhash update functions
-Date:   Thu, 20 Aug 2020 14:57:25 +0100
-Message-Id: <20200820135729.135783-3-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200820135729.135783-1-lmb@cloudflare.com>
-References: <20200820135729.135783-1-lmb@cloudflare.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=y7kkZbgDKvfpk/574axpOPBBzS1cZF0VR+SWjBoO9H0=;
+        b=Jo/c6Dft181PytDVpP5S/n7qQSyZDYNrwUAHo4VUwksqft+3IN7M2v8a65dk6IRwYj
+         gkBUOzPCsiGv66HLsSma15gRa4jbkE/mGjcL7VxbQhacDu8uhA+hzJBMBlMvz8LvDRMP
+         21UWhb2Hs9ChcIk9WSFZGC47MysUzTKzXLgaRnKQPD6u32kQThlfGctL8IfZSHWKQk+p
+         fXnZib2FZiOgARcs++SgcESDN8RTraH4GwvWU9P1jCXeQuIJHdD8i1Ny4fi+qpMG4yej
+         uU+N92fzyPTvqpFMW/VC3h5UHcl39t4y2NkJRZZ4qUVnIsZaVRdqIrxTGs8/0+PJvvvi
+         LU8Q==
+X-Gm-Message-State: AOAM530Yerclc+vZKfX8GLUXSlvr7k6ira8lxpSi0ykzA3FK6PrZJQe2
+        G2Xb1KWjkJujRBV2nfs4z28=
+X-Google-Smtp-Source: ABdhPJzNPNvFa9F9ysTxspkq0uataKkZ7GDKUu3868rXwV4g7nFWZdGmIZoPnveSD9k5k0gUm9ei8g==
+X-Received: by 2002:ac8:6b92:: with SMTP id z18mr2670985qts.96.1597932029418;
+        Thu, 20 Aug 2020 07:00:29 -0700 (PDT)
+Received: from ?IPv6:2601:282:803:7700:4452:db16:7f2f:e7bf? ([2601:282:803:7700:4452:db16:7f2f:e7bf])
+        by smtp.googlemail.com with ESMTPSA id m26sm3198218qtc.83.2020.08.20.07.00.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Aug 2020 07:00:28 -0700 (PDT)
+Subject: Re: xdp generic default option
+To:     Jesper Dangaard Brouer <brouer@redhat.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Lorenzo Bianconi <lorenzo@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
+References: <20200819092811.GA2420@lore-desk>
+ <CAEf4BzZSui9r=-yDzy0CjWKVx9zKvQWX6ZBNXmSUTOHCOR+7RA@mail.gmail.com>
+ <20200820102539.35ad8687@carbon>
+From:   David Ahern <dsahern@gmail.com>
+Message-ID: <dad435ca-d7df-f78e-93bf-4016545c15d8@gmail.com>
+Date:   Thu, 20 Aug 2020 08:00:26 -0600
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200820102539.35ad8687@carbon>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Merge the two very similar functions sock_map_update_elem and
-sock_hash_update_elem into one.
+On 8/20/20 2:25 AM, Jesper Dangaard Brouer wrote:
+>>> diff --git a/net/core/dev.c b/net/core/dev.c
+>>> index a00aa737ce29..1f85880ee412 100644
+>>> --- a/net/core/dev.c
+>>> +++ b/net/core/dev.c
+>>> @@ -8747,9 +8747,9 @@ static enum bpf_xdp_mode dev_xdp_mode(u32 flags)
+>>>  {
+>>>         if (flags & XDP_FLAGS_HW_MODE)
+>>>                 return XDP_MODE_HW;
+>>> -       if (flags & XDP_FLAGS_DRV_MODE)
+>>> -               return XDP_MODE_DRV;
+>>> -       return XDP_MODE_SKB;
+>>> +       if (flags & XDP_FLAGS_SKB_MODE)
+>>> +               return XDP_MODE_SKB;
+>>> +       return XDP_MODE_DRV;
+>>>  }
+>>>  
+>>
+>> I think the better way would be to choose XDP_MODE_DRV if ndo_bpf !=
+>> NULL and XDP_MODE_SKB otherwise. That seems to be matching original
+>> behavior, no?
+> 
+> Yes, but this silent fallback to XDP_MODE_SKB (generic-XDP) have
+> cause a lot of support issues in the past.  I wish we could change it.
+> We already changed all the samples/bpf/ to ask for XDP_FLAGS_DRV_MODE,
+> so they behave this way.
+> 
 
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
- net/core/sock_map.c | 49 +++++++--------------------------------------
- 1 file changed, 7 insertions(+), 42 deletions(-)
-
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index abe4bac40db9..905e2dd765aa 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -559,10 +559,12 @@ static bool sock_map_sk_state_allowed(const struct sock *sk)
- 	return false;
- }
- 
-+static int sock_hash_update_common(struct bpf_map *map, void *key,
-+				   struct sock *sk, u64 flags);
-+
- static int sock_map_update_elem(struct bpf_map *map, void *key,
- 				void *value, u64 flags)
- {
--	u32 idx = *(u32 *)key;
- 	struct socket *sock;
- 	struct sock *sk;
- 	int ret;
-@@ -591,8 +593,10 @@ static int sock_map_update_elem(struct bpf_map *map, void *key,
- 	sock_map_sk_acquire(sk);
- 	if (!sock_map_sk_state_allowed(sk))
- 		ret = -EOPNOTSUPP;
-+	else if (map->map_type == BPF_MAP_TYPE_SOCKMAP)
-+		ret = sock_map_update_common(map, *(u32 *)key, sk, flags);
- 	else
--		ret = sock_map_update_common(map, idx, sk, flags);
-+		ret = sock_hash_update_common(map, key, sk, flags);
- 	sock_map_sk_release(sk);
- out:
- 	fput(sock->file);
-@@ -909,45 +913,6 @@ static int sock_hash_update_common(struct bpf_map *map, void *key,
- 	return ret;
- }
- 
--static int sock_hash_update_elem(struct bpf_map *map, void *key,
--				 void *value, u64 flags)
--{
--	struct socket *sock;
--	struct sock *sk;
--	int ret;
--	u64 ufd;
--
--	if (map->value_size == sizeof(u64))
--		ufd = *(u64 *)value;
--	else
--		ufd = *(u32 *)value;
--	if (ufd > S32_MAX)
--		return -EINVAL;
--
--	sock = sockfd_lookup(ufd, &ret);
--	if (!sock)
--		return ret;
--	sk = sock->sk;
--	if (!sk) {
--		ret = -EINVAL;
--		goto out;
--	}
--	if (!sock_map_sk_is_suitable(sk)) {
--		ret = -EOPNOTSUPP;
--		goto out;
--	}
--
--	sock_map_sk_acquire(sk);
--	if (!sock_map_sk_state_allowed(sk))
--		ret = -EOPNOTSUPP;
--	else
--		ret = sock_hash_update_common(map, key, sk, flags);
--	sock_map_sk_release(sk);
--out:
--	fput(sock->file);
--	return ret;
--}
--
- static int sock_hash_get_next_key(struct bpf_map *map, void *key,
- 				  void *key_next)
- {
-@@ -1216,7 +1181,7 @@ const struct bpf_map_ops sock_hash_ops = {
- 	.map_alloc		= sock_hash_alloc,
- 	.map_free		= sock_hash_free,
- 	.map_get_next_key	= sock_hash_get_next_key,
--	.map_update_elem	= sock_hash_update_elem,
-+	.map_update_elem	= sock_map_update_elem,
- 	.map_delete_elem	= sock_hash_delete_elem,
- 	.map_lookup_elem	= sock_hash_lookup,
- 	.map_lookup_elem_sys_only = sock_hash_lookup_sys,
--- 
-2.25.1
-
+I would prefer the flags check in Lorenzo's proposed patch which is an
+explicit opt in to the SKB mode.
