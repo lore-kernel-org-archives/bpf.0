@@ -2,62 +2,62 @@ Return-Path: <SRS0=CWvS=B6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2E4CC433E5
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 09:43:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7070AC433E4
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 09:43:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE678208E4
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 09:43:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4D06322CB1
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 09:43:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mFpMIvb7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sVZlRY07"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729233AbgHTJnN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Aug 2020 05:43:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
+        id S1726989AbgHTJnO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Aug 2020 05:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729149AbgHTJmS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Aug 2020 05:42:18 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920F2C061386
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 02:42:18 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id t4so1115554iln.1
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 02:42:18 -0700 (PDT)
+        with ESMTP id S1729151AbgHTJmU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Aug 2020 05:42:20 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A85C061387
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 02:42:20 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id p18so1082606ilm.7
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 02:42:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=YeDsV6ML0VVk8480/NX5VmSSMK1mBoWtNTtZqIJn+Zs=;
-        b=mFpMIvb7p5DOTQKEUOECdemzi5bIB2qv3fsyEzyqyG3Q2YdGtWEraHMplh/yTatxD7
-         s8+azk0nBzvQw5xDe8XJMYOXxL2a2UXq32WFUFHpo8pyu4wZcnqoBXSDXV0lhu8f9G4b
-         WkVlAXbLowZ4flM4FqehqfBupsuc0b/k8oLVoqyaPTzdYswkeHVAFhVssTIAmNsLFSi/
-         ybEXZ9cJQLRwTWIPK4TbUVdAjIkQ+/QBllKRNvjV59KPGC4ErmCDwCpT8781OadJS4e9
-         C87hlmWV/cw8k54W2bTgtvgNOumbe1ufZwy0EK99RX3jh23BYiZBbdbyxbwGleTw0L3G
-         FbhA==
+        bh=dw9oaIsYVsMP//1WkW1HJx6Q5+EKILk45et8oS2R3QM=;
+        b=sVZlRY07kRjb4dbSVaeWrm/fiscDnw8pwYegx05Vwxe0cbQRHClfe8YYitQLVgLTAg
+         poSDmjrHug5HJmAWyo0+r+1cwRrfqP4AioM6V9zvR0Cj+savlCiCceQIfry6T6FGKHGm
+         Pl71z9W29U/gX/MrO1oZyrNU0XRx6jmVKtPRC+kc+QvLxFkDnDP2Iga7jgpN8cV2/EGM
+         ktCxbqbYDnp7gp6xUWMcMlrOw3IdamupkeV52clZH1mDY8NwaBt8qmYgC+zWzLbdr8m8
+         1WZpIhYPPMJW82vky3V3h0vhjqq4m4zTpFa50F5e5LdXP9T4o/Jtk6dHkf4L6+D1ZRND
+         5rhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=YeDsV6ML0VVk8480/NX5VmSSMK1mBoWtNTtZqIJn+Zs=;
-        b=h/QhrXa09B2ioWI7rFLkp1VFe5Fb0+cxXt9eSwO2VScXtmwWfLcVIF1/L66lX53dqG
-         kCZY2UA9Zc4hwVNsnDXqyHQOw2ecSv+Psohfr2TphJQRNd6BirjpJJBx6BGHRwTV2UZz
-         5/c3+Iuh93nNs3YzJcAqZzT+8sT8q7U8XwCIqIlGRJFTSImKpsarkZHyMvckaprCUGIj
-         6GAVfrsxM912qfVhnlvH8YUUi+Izus7+fMYY6qvEQV2hgQWyXZr3B7XxDqqAZRjRVvpL
-         xOolPW34LS4udKLCkh2ZhaZA+HCd3g4ZWBdW+/7c6nTWxTAQI/ErDRZx0VCpGEtGzGmR
-         pRRA==
-X-Gm-Message-State: AOAM533wZmlmCRP4yfpMRmW2O7m52eXWARPEqhz7c8jCYMRrMUREXmWP
-        OHSgkY/RVH5wy1TsbdzfjcbaZehLdCHWiMk/
-X-Google-Smtp-Source: ABdhPJyaVrQ1Ev83jHJeNwmjoTMDiUQQ5Mf/Hi6MSGy4JydM9dhAr20nba/yqOFPBrZTrqp9gARcPw==
-X-Received: by 2002:a92:295:: with SMTP id 143mr1983504ilc.240.1597916537501;
-        Thu, 20 Aug 2020 02:42:17 -0700 (PDT)
+        bh=dw9oaIsYVsMP//1WkW1HJx6Q5+EKILk45et8oS2R3QM=;
+        b=WG+S0O+VAplet0odjEVDohrpVD/Z4K3xiKlpgnZqHr/VMcIuLGZS5Cbxhkmak2c32n
+         VBfw0AqNXbdQI6m2FtHyODZ3GEbTmzXBZH7mHMtky8QWRJqBHJfXpFLKtTTDmmzMYAdP
+         dUKKAbgXCAQoWfkJDHa2B2bZSEPwtFve0S1XYNMOYjRnriu2dNWRBvF6w4fUM9D6W7Lm
+         niytiRZ9z7QwU9GpAp0xHHEyt0urokkIP3OlHsnCsKKNWE95YelHBcNxC8gZw4qI17gg
+         dZa22s5EFuAawJmdRPsu4VvKDRcTwep+IyPPYh/hHC7RF16/FCVCRhj0qfaV+tRhrDGS
+         wSjA==
+X-Gm-Message-State: AOAM531hzYsxQhehkrW1FF7rAq/B+bmag359iJXL71zynvztPMf02FlI
+        Ctm6aq4MfqyrZ4Pe4rhRrckqlqxnTB1lAEi8
+X-Google-Smtp-Source: ABdhPJy7a2S45kGnGIY3R1X0Oas8sGCXxWlSptQ4hSfIzkBJPi2AhRzJvRFc7JS3XybrOL31XZrJwQ==
+X-Received: by 2002:a92:c60f:: with SMTP id p15mr624614ilm.173.1597916539146;
+        Thu, 20 Aug 2020 02:42:19 -0700 (PDT)
 Received: from localhost.localdomain (host-173-230-99-219.tnkngak.clients.pavlovmedia.com. [173.230.99.219])
-        by smtp.gmail.com with ESMTPSA id r3sm1145597iov.22.2020.08.20.02.42.16
+        by smtp.gmail.com with ESMTPSA id r3sm1145597iov.22.2020.08.20.02.42.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Aug 2020 02:42:17 -0700 (PDT)
+        Thu, 20 Aug 2020 02:42:18 -0700 (PDT)
 From:   YiFei Zhu <zhuyifei1999@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -65,9 +65,9 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Mahesh Bandewar <maheshb@google.com>,
         YiFei Zhu <zhuyifei@google.com>
-Subject: [PATCH bpf-next 3/5] libbpf: Add BPF_PROG_BIND_MAP syscall and use it on .metadata section
-Date:   Thu, 20 Aug 2020 04:42:09 -0500
-Message-Id: <b65c850c8e9f9ae8309c8a328a3d53ab76289c5b.1597915265.git.zhuyifei@google.com>
+Subject: [PATCH bpf-next 5/5] selftests/bpf: Test bpftool loading and dumping metadata
+Date:   Thu, 20 Aug 2020 04:42:11 -0500
+Message-Id: <788b0e49bd5dfc292b71a57f21cbf010821a0aca.1597915265.git.zhuyifei@google.com>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <cover.1597915265.git.zhuyifei@google.com>
 References: <cover.1597915265.git.zhuyifei@google.com>
@@ -80,283 +80,164 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: YiFei Zhu <zhuyifei@google.com>
 
-The patch adds a simple wrapper bpf_prog_bind_map around the syscall.
-And when using libbpf to load a program, it will probe the kernel for
-the support of this syscall, and scan for the .metadata ELF section
-and load it as an internal map like a .data section.
-
-In the case that kernel supports the BPF_PROG_BIND_MAP syscall and
-a .metadata section exists, the map will be explicitly bound to
-the program via the syscall immediately after program is loaded.
--EEXIST is ignored for this syscall.
+This is a simple test to check that loading and dumping metadata
+works, whether or not metadata contents are used by the program.
 
 Signed-off-by: YiFei Zhu <zhuyifei@google.com>
 ---
- tools/lib/bpf/bpf.c      |  11 +++++
- tools/lib/bpf/bpf.h      |   1 +
- tools/lib/bpf/libbpf.c   | 100 ++++++++++++++++++++++++++++++++++++++-
- tools/lib/bpf/libbpf.map |   1 +
- 4 files changed, 112 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/Makefile          |  3 +-
+ .../selftests/bpf/progs/metadata_unused.c     | 15 ++++
+ .../selftests/bpf/progs/metadata_used.c       | 15 ++++
+ .../selftests/bpf/test_bpftool_metadata.sh    | 82 +++++++++++++++++++
+ 4 files changed, 114 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/metadata_unused.c
+ create mode 100644 tools/testing/selftests/bpf/progs/metadata_used.c
+ create mode 100755 tools/testing/selftests/bpf/test_bpftool_metadata.sh
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 82b983ff6569..383b29ecb1fd 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -872,3 +872,14 @@ int bpf_enable_stats(enum bpf_stats_type type)
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index a83b5827532f..04e56c6843c6 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -68,7 +68,8 @@ TEST_PROGS := test_kmod.sh \
+ 	test_tc_edt.sh \
+ 	test_xdping.sh \
+ 	test_bpftool_build.sh \
+-	test_bpftool.sh
++	test_bpftool.sh \
++	test_bpftool_metadata.sh \
  
- 	return sys_bpf(BPF_ENABLE_STATS, &attr, sizeof(attr));
- }
+ TEST_PROGS_EXTENDED := with_addr.sh \
+ 	with_tunnels.sh \
+diff --git a/tools/testing/selftests/bpf/progs/metadata_unused.c b/tools/testing/selftests/bpf/progs/metadata_unused.c
+new file mode 100644
+index 000000000000..523b3c332426
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/metadata_unused.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +
-+int bpf_prog_bind_map(int prog_fd, int map_fd, int flags)
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++char metadata_a[] SEC(".metadata") = "foo";
++int metadata_b SEC(".metadata") = 1;
++
++SEC("cgroup_skb/egress")
++int prog(struct xdp_md *ctx)
 +{
-+	union bpf_attr attr = {};
-+
-+	attr.prog_bind_map.prog_fd = prog_fd;
-+	attr.prog_bind_map.map_fd = map_fd;
-+	attr.prog_bind_map.flags = flags;
-+
-+	return sys_bpf(BPF_PROG_BIND_MAP, &attr, sizeof(attr));
-+}
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 015d13f25fcc..32994a4e0bf6 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -243,6 +243,7 @@ LIBBPF_API int bpf_task_fd_query(int pid, int fd, __u32 flags, char *buf,
- enum bpf_stats_type; /* defined in up-to-date linux/bpf.h */
- LIBBPF_API int bpf_enable_stats(enum bpf_stats_type type);
- 
-+LIBBPF_API int bpf_prog_bind_map(int prog_fd, int map_fd, int flags);
- #ifdef __cplusplus
- } /* extern "C" */
- #endif
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 77d420c02094..4725859099c5 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -174,6 +174,8 @@ enum kern_feature_id {
- 	FEAT_EXP_ATTACH_TYPE,
- 	/* bpf_probe_read_{kernel,user}[_str] helpers */
- 	FEAT_PROBE_READ_KERN,
-+	/* bpf_prog_bind_map helper */
-+	FEAT_PROG_BIND_MAP,
- 	__FEAT_CNT,
- };
- 
-@@ -283,6 +285,7 @@ struct bpf_struct_ops {
- #define KCONFIG_SEC ".kconfig"
- #define KSYMS_SEC ".ksyms"
- #define STRUCT_OPS_SEC ".struct_ops"
-+#define METADATA_SEC ".metadata"
- 
- enum libbpf_map_type {
- 	LIBBPF_MAP_UNSPEC,
-@@ -290,6 +293,7 @@ enum libbpf_map_type {
- 	LIBBPF_MAP_BSS,
- 	LIBBPF_MAP_RODATA,
- 	LIBBPF_MAP_KCONFIG,
-+	LIBBPF_MAP_METADATA,
- };
- 
- static const char * const libbpf_type_to_btf_name[] = {
-@@ -297,6 +301,7 @@ static const char * const libbpf_type_to_btf_name[] = {
- 	[LIBBPF_MAP_BSS]	= BSS_SEC,
- 	[LIBBPF_MAP_RODATA]	= RODATA_SEC,
- 	[LIBBPF_MAP_KCONFIG]	= KCONFIG_SEC,
-+	[LIBBPF_MAP_METADATA]	= METADATA_SEC,
- };
- 
- struct bpf_map {
-@@ -375,6 +380,8 @@ struct bpf_object {
- 	size_t nr_maps;
- 	size_t maps_cap;
- 
-+	struct bpf_map *metadata_map;
-+
- 	char *kconfig;
- 	struct extern_desc *externs;
- 	int nr_extern;
-@@ -398,6 +405,7 @@ struct bpf_object {
- 		Elf_Data *rodata;
- 		Elf_Data *bss;
- 		Elf_Data *st_ops_data;
-+		Elf_Data *metadata;
- 		size_t strtabidx;
- 		struct {
- 			GElf_Shdr shdr;
-@@ -413,6 +421,7 @@ struct bpf_object {
- 		int rodata_shndx;
- 		int bss_shndx;
- 		int st_ops_shndx;
-+		int metadata_shndx;
- 	} efile;
- 	/*
- 	 * All loaded bpf_object is linked in a list, which is
-@@ -1022,6 +1031,7 @@ static struct bpf_object *bpf_object__new(const char *path,
- 	obj->efile.obj_buf_sz = obj_buf_sz;
- 	obj->efile.maps_shndx = -1;
- 	obj->efile.btf_maps_shndx = -1;
-+	obj->efile.metadata_shndx = -1;
- 	obj->efile.data_shndx = -1;
- 	obj->efile.rodata_shndx = -1;
- 	obj->efile.bss_shndx = -1;
-@@ -1387,6 +1397,9 @@ bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
- 	if (data)
- 		memcpy(map->mmaped, data, data_sz);
- 
-+	if (type == LIBBPF_MAP_METADATA)
-+		obj->metadata_map = map;
-+
- 	pr_debug("map %td is \"%s\"\n", map - obj->maps, map->name);
- 	return 0;
- }
-@@ -1422,6 +1435,14 @@ static int bpf_object__init_global_data_maps(struct bpf_object *obj)
- 		if (err)
- 			return err;
- 	}
-+	if (obj->efile.metadata_shndx >= 0) {
-+		err = bpf_object__init_internal_map(obj, LIBBPF_MAP_METADATA,
-+						    obj->efile.metadata_shndx,
-+						    obj->efile.metadata->d_buf,
-+						    obj->efile.metadata->d_size);
-+		if (err)
-+			return err;
-+	}
- 	return 0;
- }
- 
-@@ -2698,6 +2719,9 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
- 			} else if (strcmp(name, STRUCT_OPS_SEC) == 0) {
- 				obj->efile.st_ops_data = data;
- 				obj->efile.st_ops_shndx = idx;
-+			} else if (strcmp(name, METADATA_SEC) == 0) {
-+				obj->efile.metadata = data;
-+				obj->efile.metadata_shndx = idx;
- 			} else {
- 				pr_debug("skip section(%d) %s\n", idx, name);
- 			}
-@@ -3111,7 +3135,8 @@ static bool bpf_object__shndx_is_data(const struct bpf_object *obj,
- {
- 	return shndx == obj->efile.data_shndx ||
- 	       shndx == obj->efile.bss_shndx ||
--	       shndx == obj->efile.rodata_shndx;
-+	       shndx == obj->efile.rodata_shndx ||
-+	       shndx == obj->efile.metadata_shndx;
- }
- 
- static bool bpf_object__shndx_is_maps(const struct bpf_object *obj,
-@@ -3132,6 +3157,8 @@ bpf_object__section_to_libbpf_map_type(const struct bpf_object *obj, int shndx)
- 		return LIBBPF_MAP_RODATA;
- 	else if (shndx == obj->efile.symbols_shndx)
- 		return LIBBPF_MAP_KCONFIG;
-+	else if (shndx == obj->efile.metadata_shndx)
-+		return LIBBPF_MAP_METADATA;
- 	else
- 		return LIBBPF_MAP_UNSPEC;
- }
-@@ -3655,6 +3682,60 @@ static int probe_kern_probe_read_kernel(void)
- 	return probe_fd(bpf_load_program_xattr(&attr, NULL, 0));
- }
- 
-+static int probe_prog_bind_map(void)
-+{
-+	struct bpf_load_program_attr prog_attr;
-+	struct bpf_create_map_attr map_attr;
-+	char *cp, errmsg[STRERR_BUFSIZE];
-+	struct bpf_insn insns[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	int ret = 0, prog, map;
-+
-+	if (!kernel_supports(FEAT_GLOBAL_DATA))
-+		return 0;
-+
-+	memset(&map_attr, 0, sizeof(map_attr));
-+	map_attr.map_type = BPF_MAP_TYPE_ARRAY;
-+	map_attr.key_size = sizeof(int);
-+	map_attr.value_size = 32;
-+	map_attr.max_entries = 1;
-+
-+	map = bpf_create_map_xattr(&map_attr);
-+	if (map < 0) {
-+		ret = -errno;
-+		cp = libbpf_strerror_r(ret, errmsg, sizeof(errmsg));
-+		pr_warn("Error in %s():%s(%d). Couldn't create simple array map.\n",
-+			__func__, cp, -ret);
-+		return ret;
-+	}
-+
-+	memset(&prog_attr, 0, sizeof(prog_attr));
-+	prog_attr.prog_type = BPF_PROG_TYPE_SOCKET_FILTER;
-+	prog_attr.insns = insns;
-+	prog_attr.insns_cnt = ARRAY_SIZE(insns);
-+	prog_attr.license = "GPL";
-+
-+	prog = bpf_load_program_xattr(&prog_attr, NULL, 0);
-+	if (prog < 0) {
-+		ret = -errno;
-+		cp = libbpf_strerror_r(ret, errmsg, sizeof(errmsg));
-+		pr_warn("Error in %s():%s(%d). Couldn't create simple program.\n",
-+			__func__, cp, -ret);
-+
-+		close(map);
-+		return ret;
-+	}
-+
-+	if (!bpf_prog_bind_map(prog, map, 0))
-+		ret = 1;
-+
-+	close(map);
-+	close(prog);
-+	return ret;
++	return 0;
 +}
 +
- enum kern_feature_result {
- 	FEAT_UNKNOWN = 0,
- 	FEAT_SUPPORTED = 1,
-@@ -3695,6 +3776,9 @@ static struct kern_feature_desc {
- 	},
- 	[FEAT_PROBE_READ_KERN] = {
- 		"bpf_probe_read_kernel() helper", probe_kern_probe_read_kernel,
-+	},
-+	[FEAT_PROG_BIND_MAP] = {
-+		"bpf_prog_bind_map() helper", probe_prog_bind_map,
- 	}
- };
- 
-@@ -5954,6 +6038,20 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 	if (ret >= 0) {
- 		if (log_buf && load_attr.log_level)
- 			pr_debug("verifier log:\n%s", log_buf);
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/metadata_used.c b/tools/testing/selftests/bpf/progs/metadata_used.c
+new file mode 100644
+index 000000000000..59785404f7bb
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/metadata_used.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +
-+		if (prog->obj->metadata_map && kernel_supports(FEAT_PROG_BIND_MAP)) {
-+			if (bpf_prog_bind_map(ret, bpf_map__fd(prog->obj->metadata_map), 0) &&
-+			    errno != EEXIST) {
-+				int fd = ret;
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
 +
-+				ret = -errno;
-+				cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
-+				pr_warn("add metadata map failed: %s\n", cp);
-+				close(fd);
-+				goto out;
-+			}
-+		}
++char metadata_a[] SEC(".metadata") = "bar";
++int metadata_b SEC(".metadata") = 2;
 +
- 		*pfd = ret;
- 		ret = 0;
- 		goto out;
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index e35bd6cdbdbf..4baf18a6df69 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -288,6 +288,7 @@ LIBBPF_0.1.0 {
- 		bpf_map__set_value_size;
- 		bpf_map__type;
- 		bpf_map__value_size;
-+		bpf_prog_bind_map;
- 		bpf_program__attach_xdp;
- 		bpf_program__autoload;
- 		bpf_program__is_sk_lookup;
++SEC("cgroup_skb/egress")
++int prog(struct xdp_md *ctx)
++{
++	return metadata_b ? 1 : 0;
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/test_bpftool_metadata.sh b/tools/testing/selftests/bpf/test_bpftool_metadata.sh
+new file mode 100755
+index 000000000000..a7515c09dc2d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_bpftool_metadata.sh
+@@ -0,0 +1,82 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
++TESTNAME=bpftool_metadata
++BPF_FS=$(awk '$3 == "bpf" {print $2; exit}' /proc/mounts)
++BPF_DIR=$BPF_FS/test_$TESTNAME
++
++_cleanup()
++{
++	set +e
++	rm -rf $BPF_DIR 2> /dev/null
++}
++
++cleanup_skip()
++{
++	echo "selftests: $TESTNAME [SKIP]"
++	_cleanup
++
++	exit $ksft_skip
++}
++
++cleanup()
++{
++	if [ "$?" = 0 ]; then
++		echo "selftests: $TESTNAME [PASS]"
++	else
++		echo "selftests: $TESTNAME [FAILED]"
++	fi
++	_cleanup
++}
++
++if [ $(id -u) -ne 0 ]; then
++	echo "selftests: $TESTNAME [SKIP] Need root privileges"
++	exit $ksft_skip
++fi
++
++if [ -z "$BPF_FS" ]; then
++	echo "selftests: $TESTNAME [SKIP] Could not run test without bpffs mounted"
++	exit $ksft_skip
++fi
++
++if ! bpftool version > /dev/null 2>&1; then
++	echo "selftests: $TESTNAME [SKIP] Could not run test without bpftool"
++	exit $ksft_skip
++fi
++
++set -e
++
++trap cleanup_skip EXIT
++
++mkdir $BPF_DIR
++
++trap cleanup EXIT
++
++bpftool prog load metadata_unused.o $BPF_DIR/unused
++
++METADATA_PLAIN="$(bpftool prog --metadata)"
++echo "$METADATA_PLAIN" | grep 'metadata_a = "foo"' > /dev/null
++echo "$METADATA_PLAIN" | grep 'metadata_b = 1' > /dev/null
++
++bpftool prog --metadata --json | grep '"metadata":{"metadata_a":"foo","metadata_b":1}' > /dev/null
++
++bpftool map | grep 'metada.metadata' > /dev/null
++
++rm $BPF_DIR/unused
++
++bpftool prog load metadata_used.o $BPF_DIR/used
++
++METADATA_PLAIN="$(bpftool prog --metadata)"
++echo "$METADATA_PLAIN" | grep 'metadata_a = "bar"' > /dev/null
++echo "$METADATA_PLAIN" | grep 'metadata_b = 2' > /dev/null
++
++bpftool prog --metadata --json | grep '"metadata":{"metadata_a":"bar","metadata_b":2}' > /dev/null
++
++bpftool map | grep 'metada.metadata' > /dev/null
++
++rm $BPF_DIR/used
++
++exit 0
 -- 
 2.28.0
 
