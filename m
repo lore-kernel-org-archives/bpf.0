@@ -5,43 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB4E4C433E1
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 23:13:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F2C8C433DF
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 23:13:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C5B06207DE
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 23:13:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E1D64207DE
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 23:13:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ZC30WhB8"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="h+Xjq3WN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728799AbgHTXNf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1728806AbgHTXNf (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 20 Aug 2020 19:13:35 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:64004 "EHLO
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33638 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728784AbgHTXN1 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 20 Aug 2020 19:13:27 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07KNAalK003403
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 16:13:27 -0700
+        by vger.kernel.org with ESMTP id S1728798AbgHTXNe (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 20 Aug 2020 19:13:34 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07KNAxTb017463
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 16:13:34 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=Us9yAaCT4hpzumcOhTKpzAwbr2VYiTQNPgezAz9tOik=;
- b=ZC30WhB85odEr+QE55MQH7YhgmFE+1Md/L3URBdnyMiXjF20shFwCGergDxL2X5Y4LHn
- jP6uAmmMT0svIbLQc2p8N3TotPL55OqSKPAP5IenGk3hZoke+oLLi069mvfMXqbL84kp
- 1K7lfafNFy9iKe4ZtD1yk9WHSA/gzNQbbi4= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 331d50p5uk-3
+ bh=8KOABgKxDkAoto+UcDpKTGt7jXSInxscyWv4gdzXTaE=;
+ b=h+Xjq3WN+C55q6h38OK6ddI27CQfNJkAPn1E/DbP+2wRtSQ0jsiPXhe8FgU00RdsQSYD
+ ydEjYWHfgM8Uyz4hMpxHz28TH3WUY1uLgZSTkaYPTIeT3enZ3TjLXnbgGuF3UQU6Xhxm
+ 1wubc833pZVSQ8Ngd7rsdgFqZ/yFuOm+qqI= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3304p3s80q-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 16:13:27 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 16:13:34 -0700
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 20 Aug 2020 16:13:25 -0700
+ 15.1.1979.3; Thu, 20 Aug 2020 16:13:33 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id C835F2EC5F42; Thu, 20 Aug 2020 16:13:22 -0700 (PDT)
+        id EF4D12EC5F42; Thu, 20 Aug 2020 16:13:27 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
@@ -50,9 +49,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 14/16] selftests/bpf: don't use deprecated libbpf APIs
-Date:   Thu, 20 Aug 2020 16:12:48 -0700
-Message-ID: <20200820231250.1293069-15-andriin@fb.com>
+Subject: [PATCH bpf-next 16/16] selftests/bpf: turn fexit_bpf2bpf into test with subtests
+Date:   Thu, 20 Aug 2020 16:12:50 -0700
+Message-ID: <20200820231250.1293069-17-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200820231250.1293069-1-andriin@fb.com>
 References: <20200820231250.1293069-1-andriin@fb.com>
@@ -62,76 +61,46 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-20_07:2020-08-19,2020-08-20 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- malwarescore=0 mlxlogscore=999 priorityscore=1501 impostorscore=0
- clxscore=1015 phishscore=0 suspectscore=8 adultscore=0 bulkscore=0
- mlxscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2008200189
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=785
+ spamscore=0 mlxscore=0 clxscore=1015 suspectscore=8 adultscore=0
+ bulkscore=0 impostorscore=0 phishscore=0 priorityscore=1501 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008200189
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Remove all uses of bpf_program__title() and
-bpf_program__find_program_by_title().
+There are clearly 4 subtests, so make it official.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/testing/selftests/bpf/flow_dissector_load.h         | 8 +++++++-
- .../testing/selftests/bpf/prog_tests/reference_tracking.c | 2 +-
- tools/testing/selftests/bpf/test_socket_cookie.c          | 2 +-
- 3 files changed, 9 insertions(+), 3 deletions(-)
+ .../testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/flow_dissector_load.h b/tools/te=
-sting/selftests/bpf/flow_dissector_load.h
-index daeaeb518894..7290401ec172 100644
---- a/tools/testing/selftests/bpf/flow_dissector_load.h
-+++ b/tools/testing/selftests/bpf/flow_dissector_load.h
-@@ -23,7 +23,13 @@ static inline int bpf_flow_load(struct bpf_object **ob=
-j,
- 	if (ret)
- 		return ret;
+diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/too=
+ls/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+index 197d0d217b56..12fe8b94cc04 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
++++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+@@ -143,8 +143,12 @@ static void test_func_replace_verify(void)
 =20
--	main_prog =3D bpf_object__find_program_by_title(*obj, section_name);
-+	main_prog =3D NULL;
-+	bpf_object__for_each_program(prog, *obj) {
-+		if (strcmp(section_name, bpf_program__section_name(prog)) =3D=3D 0) {
-+			main_prog =3D prog;
-+			break;
-+		}
-+	}
- 	if (!main_prog)
- 		return -1;
-=20
-diff --git a/tools/testing/selftests/bpf/prog_tests/reference_tracking.c =
-b/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
-index fc0d7f4f02cf..ac1ee10cffd8 100644
---- a/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
-+++ b/tools/testing/selftests/bpf/prog_tests/reference_tracking.c
-@@ -27,7 +27,7 @@ void test_reference_tracking(void)
- 		const char *title;
-=20
- 		/* Ignore .text sections */
--		title =3D bpf_program__title(prog, false);
-+		title =3D bpf_program__section_name(prog);
- 		if (strstr(title, ".text") !=3D NULL)
- 			continue;
-=20
-diff --git a/tools/testing/selftests/bpf/test_socket_cookie.c b/tools/tes=
-ting/selftests/bpf/test_socket_cookie.c
-index 154a8fd2a48d..ca7ca87e91aa 100644
---- a/tools/testing/selftests/bpf/test_socket_cookie.c
-+++ b/tools/testing/selftests/bpf/test_socket_cookie.c
-@@ -151,7 +151,7 @@ static int run_test(int cgfd)
- 	}
-=20
- 	bpf_object__for_each_program(prog, pobj) {
--		prog_name =3D bpf_program__title(prog, /*needs_copy*/ false);
-+		prog_name =3D bpf_program__section_name(prog);
-=20
- 		if (libbpf_attach_type_by_name(prog_name, &attach_type))
- 			goto err;
+ void test_fexit_bpf2bpf(void)
+ {
+-	test_target_no_callees();
+-	test_target_yes_callees();
+-	test_func_replace();
+-	test_func_replace_verify();
++	if (test__start_subtest("target_no_callees"))
++		test_target_no_callees();
++	if (test__start_subtest("target_yes_callees"))
++		test_target_yes_callees();
++	if (test__start_subtest("func_replace"))
++		test_func_replace();
++	if (test__start_subtest("func_replace_verify"))
++		test_func_replace_verify();
+ }
 --=20
 2.24.1
 
