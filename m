@@ -2,120 +2,185 @@ Return-Path: <SRS0=CWvS=B6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 030A9C433DF
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 12:20:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 150F7C433E1
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 12:34:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DD1A82072D
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 12:20:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D8141207DA
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 12:34:25 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="XPae7+kr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730399AbgHTMUi convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 20 Aug 2020 08:20:38 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:20602 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730475AbgHTMUg (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 20 Aug 2020 08:20:36 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-118-q-2yRy14OXaDjkU2wgyLYg-1; Thu, 20 Aug 2020 13:20:32 +0100
-X-MC-Unique: q-2yRy14OXaDjkU2wgyLYg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Thu, 20 Aug 2020 13:20:25 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Thu, 20 Aug 2020 13:20:25 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Jakub Sitnicki' <jakub@cloudflare.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>,
+        id S1729780AbgHTMeV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Aug 2020 08:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729759AbgHTMeJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Aug 2020 08:34:09 -0400
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99689C061386
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 05:34:09 -0700 (PDT)
+Received: by mail-ot1-x344.google.com with SMTP id q9so1300917oth.5
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 05:34:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BIs6d/jQFwGlnkZ5L4RtC3BBouLuQNHRbQqNyXKW5UA=;
+        b=XPae7+krQuaIKLfqBwHPdeeqh4BCT2yAY1Kx/KY4xCqMP8r+sRNyl0bTAEA1mCUV/6
+         W6JulKNVZzjnr/6wCrVOicF//Ednj9hvSSv9Y2pP3FVoJpWIRv3zJ9+vZCTYlPkLOo0W
+         BtfK4tT9nkXPhvzon3pOhchSSBcJxqBNfiHZ0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BIs6d/jQFwGlnkZ5L4RtC3BBouLuQNHRbQqNyXKW5UA=;
+        b=pC1xr2p9rmcwFIS5tGEWmsbdPHnLAe5Sj1PrwaLaBydetsAe4kwZskRw1dgX5LrS6L
+         fIkpjvq0lUdXlrNpF2gV5l7edQEcM1hYFMfWZlu59ilZlGre4v9GLa7Q1tRvSlc3EClS
+         ZGsnTNvUgiKuVDL4IZM2GpWBy6xIR/sn7nK8qFGGAYqfTorwixPy9OFdKwgKcDdW0GS1
+         56T4jOiP0gDyChgy1f0/b5j0fgXT27GmU4Kblj65ZvvUJ2vj91+MXr/pJ4dGA0zG24++
+         8WSvynZok8NoXigNki3hYBKPgbLsSYfHUCFiTcoSGUW1TdTUp5dx/uc1kn+sbF91d7rQ
+         euKg==
+X-Gm-Message-State: AOAM530gvqgQ/YMTgV//sPLaufOuemI4Mr6sMFgeXZ04CvtVqiqWtqJ4
+        tBLoLxZKv/x1IXskpxjvVavaRJP8DVUnoNVibI4T+Q==
+X-Google-Smtp-Source: ABdhPJzN7dBfvBuuP0F4Tco7q0JAyPALhhyXQWprRuputnZqvXCVX5jNbqueDmKE8m8pQCaVCnop35OD4eN2Ba1w4w4=
+X-Received: by 2002:a9d:6e18:: with SMTP id e24mr1890875otr.132.1597926848493;
+ Thu, 20 Aug 2020 05:34:08 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200819092436.58232-1-lmb@cloudflare.com> <20200819092436.58232-5-lmb@cloudflare.com>
+ <5d64158b-35ed-d28d-9857-6ee725d287f2@fb.com>
+In-Reply-To: <5d64158b-35ed-d28d-9857-6ee725d287f2@fb.com>
+From:   Lorenz Bauer <lmb@cloudflare.com>
+Date:   Thu, 20 Aug 2020 13:33:57 +0100
+Message-ID: <CACAyw9_4_PZ1bHd0W-mAN5b0i-ZriTZSxWtoS59baXdRg6wk0g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 4/6] bpf: override the meaning of
+ ARG_PTR_TO_MAP_VALUE for sockmap and sockhash
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Jakub Sitnicki <jakub@cloudflare.com>,
+        John Fastabend <john.fastabend@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Marek Majkowski <marek@cloudflare.com>,
-        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>
-Subject: RE: BPF sk_lookup v5 - TCP SYN and UDP 0-len flood benchmarks
-Thread-Topic: BPF sk_lookup v5 - TCP SYN and UDP 0-len flood benchmarks
-Thread-Index: AQHWdtzbHJLXFHCDqUy9ea5Q2RcL9qlA6Vow
-Date:   Thu, 20 Aug 2020 12:20:25 +0000
-Message-ID: <ad210e824dd74c05b1072655fc5dc69c@AcuMS.aculab.com>
-References: <20200717103536.397595-1-jakub@cloudflare.com>
- <87lficrm2v.fsf@cloudflare.com>
- <CAADnVQKE6y9h2fwX6OS837v-Uf+aBXnT_JXiN_bbo2gitZQ3tA@mail.gmail.com>
- <87k0xtsj91.fsf@cloudflare.com>
-In-Reply-To: <87k0xtsj91.fsf@cloudflare.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0.001
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+        kernel-team <kernel-team@cloudflare.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jakub Sitnicki
-> Sent: 20 August 2020 11:30
-> Subject: Re: BPF sk_lookup v5 - TCP SYN and UDP 0-len flood benchmarks
-> 
-> On Tue, Aug 18, 2020 at 08:19 PM CEST, Alexei Starovoitov wrote:
-> > On Tue, Aug 18, 2020 at 8:49 AM Jakub Sitnicki <jakub@cloudflare.com> wrote:
-> >>          :                      rcu_read_lock();
-> >>          :                      run_array = rcu_dereference(net-
-> >bpf.run_array[NETNS_BPF_SK_LOOKUP]);
-> >>     0.01 :   ffffffff817f8624:       mov    0xd68(%r12),%rsi
-> >>          :                      if (run_array) {
-> >>     0.00 :   ffffffff817f862c:       test   %rsi,%rsi
-> >>     0.00 :   ffffffff817f862f:       je     ffffffff817f87a9 <__udp4_lib_lookup+0x2c9>
-> >>          :                      struct bpf_sk_lookup_kern ctx = {
-> >>     1.05 :   ffffffff817f8635:       xor    %eax,%eax
-> >>     0.00 :   ffffffff817f8637:       mov    $0x6,%ecx
-> >>     0.01 :   ffffffff817f863c:       movl   $0x110002,0x40(%rsp)
-> >>     0.00 :   ffffffff817f8644:       lea    0x48(%rsp),%rdi
-> >>    18.76 :   ffffffff817f8649:       rep stos %rax,%es:(%rdi)
-> >>     1.12 :   ffffffff817f864c:       mov    0xc(%rsp),%eax
-> >>     0.00 :   ffffffff817f8650:       mov    %ebp,0x48(%rsp)
-> >>     0.00 :   ffffffff817f8654:       mov    %eax,0x44(%rsp)
-> >>     0.00 :   ffffffff817f8658:       movzwl 0x10(%rsp),%eax
-> >>     1.21 :   ffffffff817f865d:       mov    %ax,0x60(%rsp)
-> >>     0.00 :   ffffffff817f8662:       movzwl 0x20(%rsp),%eax
-> >>     0.00 :   ffffffff817f8667:       mov    %ax,0x62(%rsp)
-> >>          :                      .sport          = sport,
-> >>          :                      .dport          = dport,
-> >>          :                      };
+On Wed, 19 Aug 2020 at 21:13, Yonghong Song <yhs@fb.com> wrote:
+>
+>
+>
+> On 8/19/20 2:24 AM, Lorenz Bauer wrote:
+> > The verifier assumes that map values are simple blobs of memory, and
+> > therefore treats ARG_PTR_TO_MAP_VALUE, etc. as such. However, there are
+> > map types where this isn't true. For example, sockmap and sockhash store
+> > sockets. In general this isn't a big problem: we can just
+> > write helpers that explicitly requests PTR_TO_SOCKET instead of
+> > ARG_PTR_TO_MAP_VALUE.
 > >
-> > Such heavy hit to zero init 56-byte structure is surprising.
-> > There are two 4-byte holes in this struct. You can try to pack it and
-> > make sure that 'rep stoq' is used instead of 'rep stos' (8 byte at a time vs 4).
-> 
-> Thanks for the tip. I'll give it a try.
+> > The one exception are the standard map helpers like map_update_elem,
+> > map_lookup_elem, etc. Here it would be nice we could overload the
+> > function prototype for different kinds of maps. Unfortunately, this
+> > isn't entirely straight forward:
+> > We only know the type of the map once we have resolved meta->map_ptr
+> > in check_func_arg. This means we can't swap out the prototype
+> > in check_helper_call until we're half way through the function.
+> >
+> > Instead, modify check_func_arg to treat ARG_PTR_TO_MAP_VALUE* to
+> > mean "the native type for the map" instead of "pointer to memory"
+> > for sockmap and sockhash. This means we don't have to modify the
+> > function prototype at all
+> >
+> > Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+> > ---
+> >   kernel/bpf/verifier.c | 40 ++++++++++++++++++++++++++++++++++++++++
+> >   1 file changed, 40 insertions(+)
+> >
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index b6ccfce3bf4c..47f9b94bb9d4 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -3872,6 +3872,38 @@ static int int_ptr_type_to_size(enum bpf_arg_type type)
+> >       return -EINVAL;
+> >   }
+> >
+> > +static int override_map_arg_type(struct bpf_verifier_env *env,
+> > +                              const struct bpf_call_arg_meta *meta,
+> > +                              enum bpf_arg_type *arg_type)
+> > +{
+> > +     if (!meta->map_ptr) {
+> > +             /* kernel subsystem misconfigured verifier */
+> > +             verbose(env, "invalid map_ptr to access map->type\n");
+> > +             return -EACCES;
+> > +     }
+> > +
+> > +     switch (meta->map_ptr->map_type) {
+> > +     case BPF_MAP_TYPE_SOCKMAP:
+> > +     case BPF_MAP_TYPE_SOCKHASH:
+> > +             switch (*arg_type) {
+> > +             case ARG_PTR_TO_MAP_VALUE:
+> > +                     *arg_type = ARG_PTR_TO_SOCKET;
+> > +                     break;
+> > +             case ARG_PTR_TO_MAP_VALUE_OR_NULL:
+> > +                     *arg_type = ARG_PTR_TO_SOCKET_OR_NULL;
+> > +                     break;
+> > +             default:
+> > +                     verbose(env, "invalid arg_type for sockmap/sockhash\n");
+> > +                     return -EINVAL;
+> > +             }
+> > +             break;
+> > +
+> > +     default:
+> > +             break;
+> > +     }
+> > +     return 0;
+> > +}
+> > +
+> >   static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+> >                         struct bpf_call_arg_meta *meta,
+> >                         const struct bpf_func_proto *fn)
+> > @@ -3904,6 +3936,14 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+> >               return -EACCES;
+> >       }
+> >
+> > +     if (arg_type == ARG_PTR_TO_MAP_VALUE ||
+> > +         arg_type == ARG_PTR_TO_UNINIT_MAP_VALUE ||
+> > +         arg_type == ARG_PTR_TO_MAP_VALUE_OR_NULL) {
+>
+> We probably do not need ARG_PTR_TO_UNINIT_MAP_VALUE here.
+>
+> Do we need ARG_PTR_TO_MAP_VALUE_OR_NULL? bpf_map_update_elem arg type
+> is ARG_PTR_TO_MAP_VALUE.
 
-You probably don't want to use 'rep stos' in any of its forms.
-The instruction 'setup' time is horrid on most cpu variants.
-For a 48 byte structure six writes of a zero register will be faster.
+I did this to be consistent: in a single function definition you
+either get the map specific
+types or the regular semantics. You don't get to mix and match them.
+For the same
+reason I included ARG_PTR_TO_UNINIT_MAP_VALUE: the semantics don't make
+sense for sockmap, so a function using this doesn't make sense either.
 
-If gcc is generating the 'rep stos' then the compiler source code for that
-pessimisation needs deleting...
+>
+> > +             err = override_map_arg_type(env, meta, &arg_type);
+> > +             if (err)
+> > +                     return err;
+> > +     }
+> > +
+> >       if (arg_type == ARG_PTR_TO_MAP_KEY ||
+> >           arg_type == ARG_PTR_TO_MAP_VALUE ||
+> >           arg_type == ARG_PTR_TO_UNINIT_MAP_VALUE ||
+> >
 
-	David
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
 
+-- 
+Lorenz Bauer  |  Systems Engineer
+6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
+
+www.cloudflare.com
