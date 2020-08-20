@@ -2,61 +2,62 @@ Return-Path: <SRS0=CWvS=B6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A1F8C433E1
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2E4CC433E5
 	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 09:43:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 18CAD2173E
+	by mail.kernel.org (Postfix) with ESMTP id BE678208E4
 	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 09:43:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GC4KoTR+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mFpMIvb7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729231AbgHTJnM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Aug 2020 05:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58714 "EHLO
+        id S1729233AbgHTJnN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Aug 2020 05:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729146AbgHTJmR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Aug 2020 05:42:17 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAB7C061757
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 02:42:16 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id g14so1561382iom.0
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 02:42:16 -0700 (PDT)
+        with ESMTP id S1729149AbgHTJmS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Aug 2020 05:42:18 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920F2C061386
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 02:42:18 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id t4so1115554iln.1
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 02:42:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hfrDwkUxCWJWhcrr/MkZm9iD6Oaf34/kRmbpIKwwIkA=;
-        b=GC4KoTR+glWOgbethpzs30WzX+5FToyNviIynKCIW8vaPERfA/3+DRIZyYqCWupBJ3
-         Mg6EbRPb7NJ8Y392ikW0K8c+7NhHhw1dI8yMTN51qsPeKqJk6b7iGBAgET8RcHaFmxVP
-         Uf0cHnGVJ7wzZJlakWlgJrohOnOOmbHRPALCTanlHa8kO8xl+zbW6gFJzD5Oc71txxiT
-         qvZvawMG0tNYD/fwGGlP+Zi6ltsKOQ7HBxwuGa1eUTMzyJoVuMNRD2Lars0K+RkE0dLN
-         SLPPb/eW47CbeBJTGSouyzaT8vkKbYIKDpAMcF2VgQZcIqSxZFsCU/436zCDrMKQBmhD
-         jAXA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=YeDsV6ML0VVk8480/NX5VmSSMK1mBoWtNTtZqIJn+Zs=;
+        b=mFpMIvb7p5DOTQKEUOECdemzi5bIB2qv3fsyEzyqyG3Q2YdGtWEraHMplh/yTatxD7
+         s8+azk0nBzvQw5xDe8XJMYOXxL2a2UXq32WFUFHpo8pyu4wZcnqoBXSDXV0lhu8f9G4b
+         WkVlAXbLowZ4flM4FqehqfBupsuc0b/k8oLVoqyaPTzdYswkeHVAFhVssTIAmNsLFSi/
+         ybEXZ9cJQLRwTWIPK4TbUVdAjIkQ+/QBllKRNvjV59KPGC4ErmCDwCpT8781OadJS4e9
+         C87hlmWV/cw8k54W2bTgtvgNOumbe1ufZwy0EK99RX3jh23BYiZBbdbyxbwGleTw0L3G
+         FbhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hfrDwkUxCWJWhcrr/MkZm9iD6Oaf34/kRmbpIKwwIkA=;
-        b=P3j0lD1aA5nfBAbxDbAPVvtA9c8T/CFSEBKea5ebyqbNFxN1sR5eOqgy5K9OjPIDgN
-         ewISdp3WoW2I9KEYlS0Keq15awVOb+XxVhh+NDmQgdBWgMEt88Gmt2yQKY63bUtjsgB/
-         BRXCwJJxhLwD1oe7J2JlDX/KqBOAas0A+x9hurCdU46HWx2+Wb4yCtmsEmM/7mrFI0V7
-         3mo4LXR5wYyPPxS5csQYVQPmu2xAltb+TS5H8oqJBpCc62qIA04V2FbbmBYbcZsOnrge
-         8avMHanyj5A/PY4qmmQNZaeuDYCkMaPqlGEfzCgqAuPQHv6FJ075nfAJNkZMKl+xJVRm
-         meYA==
-X-Gm-Message-State: AOAM532SfNPR6oHS4nyl8XwqMWlmlOl3TfAt+KkHi0mvi6Sv/1eJPVX2
-        gJtmBQHbS1Ya2oXvzwA13xMqhRutCE4Iuw==
-X-Google-Smtp-Source: ABdhPJwRVzUHGWZZWBPG7oFSOJ7tbU30+JNE+T+JanSJ/ibZ8FoZOCbZpcDH6h3DlpDvSEZ4LdWW1w==
-X-Received: by 2002:a05:6638:13c5:: with SMTP id i5mr2393322jaj.29.1597916535130;
-        Thu, 20 Aug 2020 02:42:15 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=YeDsV6ML0VVk8480/NX5VmSSMK1mBoWtNTtZqIJn+Zs=;
+        b=h/QhrXa09B2ioWI7rFLkp1VFe5Fb0+cxXt9eSwO2VScXtmwWfLcVIF1/L66lX53dqG
+         kCZY2UA9Zc4hwVNsnDXqyHQOw2ecSv+Psohfr2TphJQRNd6BirjpJJBx6BGHRwTV2UZz
+         5/c3+Iuh93nNs3YzJcAqZzT+8sT8q7U8XwCIqIlGRJFTSImKpsarkZHyMvckaprCUGIj
+         6GAVfrsxM912qfVhnlvH8YUUi+Izus7+fMYY6qvEQV2hgQWyXZr3B7XxDqqAZRjRVvpL
+         xOolPW34LS4udKLCkh2ZhaZA+HCd3g4ZWBdW+/7c6nTWxTAQI/ErDRZx0VCpGEtGzGmR
+         pRRA==
+X-Gm-Message-State: AOAM533wZmlmCRP4yfpMRmW2O7m52eXWARPEqhz7c8jCYMRrMUREXmWP
+        OHSgkY/RVH5wy1TsbdzfjcbaZehLdCHWiMk/
+X-Google-Smtp-Source: ABdhPJyaVrQ1Ev83jHJeNwmjoTMDiUQQ5Mf/Hi6MSGy4JydM9dhAr20nba/yqOFPBrZTrqp9gARcPw==
+X-Received: by 2002:a92:295:: with SMTP id 143mr1983504ilc.240.1597916537501;
+        Thu, 20 Aug 2020 02:42:17 -0700 (PDT)
 Received: from localhost.localdomain (host-173-230-99-219.tnkngak.clients.pavlovmedia.com. [173.230.99.219])
-        by smtp.gmail.com with ESMTPSA id r3sm1145597iov.22.2020.08.20.02.42.14
+        by smtp.gmail.com with ESMTPSA id r3sm1145597iov.22.2020.08.20.02.42.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Aug 2020 02:42:14 -0700 (PDT)
+        Thu, 20 Aug 2020 02:42:17 -0700 (PDT)
 From:   YiFei Zhu <zhuyifei1999@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -64,10 +65,12 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Mahesh Bandewar <maheshb@google.com>,
         YiFei Zhu <zhuyifei@google.com>
-Subject: [PATCH bpf-next 0/5] Allow storage of flexible metadata information for eBPF programs
-Date:   Thu, 20 Aug 2020 04:42:06 -0500
-Message-Id: <cover.1597915265.git.zhuyifei@google.com>
+Subject: [PATCH bpf-next 3/5] libbpf: Add BPF_PROG_BIND_MAP syscall and use it on .metadata section
+Date:   Thu, 20 Aug 2020 04:42:09 -0500
+Message-Id: <b65c850c8e9f9ae8309c8a328a3d53ab76289c5b.1597915265.git.zhuyifei@google.com>
 X-Mailer: git-send-email 2.28.0
+In-Reply-To: <cover.1597915265.git.zhuyifei@google.com>
+References: <cover.1597915265.git.zhuyifei@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -77,83 +80,283 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: YiFei Zhu <zhuyifei@google.com>
 
-Currently, if a user wants to store arbitrary metadata for an eBPF
-program, for example, the program build commit hash or version, they
-could store it in a map, and conveniently libbpf uses .data section to
-populate an internal map. However, if the program does not actually
-reference the map, then the map would be de-refcounted and freed.
+The patch adds a simple wrapper bpf_prog_bind_map around the syscall.
+And when using libbpf to load a program, it will probe the kernel for
+the support of this syscall, and scan for the .metadata ELF section
+and load it as an internal map like a .data section.
 
-This patch set introduces a new syscall BPF_PROG_BIND_MAP to add a map
-to a program's used_maps, even if the program instructions does not
-reference the map. libbpf is extended to recognize the .metadata section
-and load it as an internal map, and use the new syscall to ensure the
-map is bound. bpftool is also extended to have a new flag to prog
-subcommand, "--metadata" to dump the contents of the metadata section
-without a separate map dump call.
+In the case that kernel supports the BPF_PROG_BIND_MAP syscall and
+a .metadata section exists, the map will be explicitly bound to
+the program via the syscall immediately after program is loaded.
+-EEXIST is ignored for this syscall.
 
-An example use of this would be BPF C file declaring:
+Signed-off-by: YiFei Zhu <zhuyifei@google.com>
+---
+ tools/lib/bpf/bpf.c      |  11 +++++
+ tools/lib/bpf/bpf.h      |   1 +
+ tools/lib/bpf/libbpf.c   | 100 ++++++++++++++++++++++++++++++++++++++-
+ tools/lib/bpf/libbpf.map |   1 +
+ 4 files changed, 112 insertions(+), 1 deletion(-)
 
-  char commit_hash[] SEC(".metadata") = "abcdef123456";
-
-and bpftool would emit:
-
-  $ bpftool prog --metadata
-  [...]
-  	metadata:
-  		commit_hash = "abcdef123456"
-
-Patch 1 protects the used_maps array and count with a mutex.
-
-Patch 2 implements the new syscall.
-
-Patch 3 extends libbpf to have a wrapper around the syscall, probe the
-kernel for support of this new syscall, and use it on .metadata section
-if supported and the section exists.
-
-Patch 4 extends bpftool so that it is able to dump metadata from prog
-show.
-
-Patch 5 adds a test to check the metadata loading and dumping.
-
-Changes since RFC:
-* Fixed a few missing unlocks, and missing close while iterating map fds.
-* Move mutex initialization to right after prog aux allocation, and mutex
-  destroy to right after prog aux free.
-* s/ADD_MAP/BIND_MAP/
-* Use mutex only instead of RCU to protect the used_map array & count.
-
-YiFei Zhu (5):
-  bpf: Mutex protect used_maps array and count
-  bpf: Add BPF_PROG_BIND_MAP syscall
-  libbpf: Add BPF_PROG_BIND_MAP syscall and use it on .metadata section
-  bpftool: support dumping metadata
-  selftests/bpf: Test bpftool loading and dumping metadata
-
- .../net/ethernet/netronome/nfp/bpf/offload.c  |  18 ++-
- include/linux/bpf.h                           |   1 +
- include/uapi/linux/bpf.h                      |   7 +
- kernel/bpf/core.c                             |  15 +-
- kernel/bpf/syscall.c                          |  81 ++++++++++-
- net/core/dev.c                                |  11 +-
- tools/bpf/bpftool/json_writer.c               |   6 +
- tools/bpf/bpftool/json_writer.h               |   3 +
- tools/bpf/bpftool/main.c                      |  10 ++
- tools/bpf/bpftool/main.h                      |   1 +
- tools/bpf/bpftool/prog.c                      | 135 ++++++++++++++++++
- tools/include/uapi/linux/bpf.h                |   7 +
- tools/lib/bpf/bpf.c                           |  11 ++
- tools/lib/bpf/bpf.h                           |   1 +
- tools/lib/bpf/libbpf.c                        | 100 ++++++++++++-
- tools/lib/bpf/libbpf.map                      |   1 +
- tools/testing/selftests/bpf/Makefile          |   3 +-
- .../selftests/bpf/progs/metadata_unused.c     |  15 ++
- .../selftests/bpf/progs/metadata_used.c       |  15 ++
- .../selftests/bpf/test_bpftool_metadata.sh    |  82 +++++++++++
- 20 files changed, 504 insertions(+), 19 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/metadata_unused.c
- create mode 100644 tools/testing/selftests/bpf/progs/metadata_used.c
- create mode 100755 tools/testing/selftests/bpf/test_bpftool_metadata.sh
-
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 82b983ff6569..383b29ecb1fd 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -872,3 +872,14 @@ int bpf_enable_stats(enum bpf_stats_type type)
+ 
+ 	return sys_bpf(BPF_ENABLE_STATS, &attr, sizeof(attr));
+ }
++
++int bpf_prog_bind_map(int prog_fd, int map_fd, int flags)
++{
++	union bpf_attr attr = {};
++
++	attr.prog_bind_map.prog_fd = prog_fd;
++	attr.prog_bind_map.map_fd = map_fd;
++	attr.prog_bind_map.flags = flags;
++
++	return sys_bpf(BPF_PROG_BIND_MAP, &attr, sizeof(attr));
++}
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 015d13f25fcc..32994a4e0bf6 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -243,6 +243,7 @@ LIBBPF_API int bpf_task_fd_query(int pid, int fd, __u32 flags, char *buf,
+ enum bpf_stats_type; /* defined in up-to-date linux/bpf.h */
+ LIBBPF_API int bpf_enable_stats(enum bpf_stats_type type);
+ 
++LIBBPF_API int bpf_prog_bind_map(int prog_fd, int map_fd, int flags);
+ #ifdef __cplusplus
+ } /* extern "C" */
+ #endif
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 77d420c02094..4725859099c5 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -174,6 +174,8 @@ enum kern_feature_id {
+ 	FEAT_EXP_ATTACH_TYPE,
+ 	/* bpf_probe_read_{kernel,user}[_str] helpers */
+ 	FEAT_PROBE_READ_KERN,
++	/* bpf_prog_bind_map helper */
++	FEAT_PROG_BIND_MAP,
+ 	__FEAT_CNT,
+ };
+ 
+@@ -283,6 +285,7 @@ struct bpf_struct_ops {
+ #define KCONFIG_SEC ".kconfig"
+ #define KSYMS_SEC ".ksyms"
+ #define STRUCT_OPS_SEC ".struct_ops"
++#define METADATA_SEC ".metadata"
+ 
+ enum libbpf_map_type {
+ 	LIBBPF_MAP_UNSPEC,
+@@ -290,6 +293,7 @@ enum libbpf_map_type {
+ 	LIBBPF_MAP_BSS,
+ 	LIBBPF_MAP_RODATA,
+ 	LIBBPF_MAP_KCONFIG,
++	LIBBPF_MAP_METADATA,
+ };
+ 
+ static const char * const libbpf_type_to_btf_name[] = {
+@@ -297,6 +301,7 @@ static const char * const libbpf_type_to_btf_name[] = {
+ 	[LIBBPF_MAP_BSS]	= BSS_SEC,
+ 	[LIBBPF_MAP_RODATA]	= RODATA_SEC,
+ 	[LIBBPF_MAP_KCONFIG]	= KCONFIG_SEC,
++	[LIBBPF_MAP_METADATA]	= METADATA_SEC,
+ };
+ 
+ struct bpf_map {
+@@ -375,6 +380,8 @@ struct bpf_object {
+ 	size_t nr_maps;
+ 	size_t maps_cap;
+ 
++	struct bpf_map *metadata_map;
++
+ 	char *kconfig;
+ 	struct extern_desc *externs;
+ 	int nr_extern;
+@@ -398,6 +405,7 @@ struct bpf_object {
+ 		Elf_Data *rodata;
+ 		Elf_Data *bss;
+ 		Elf_Data *st_ops_data;
++		Elf_Data *metadata;
+ 		size_t strtabidx;
+ 		struct {
+ 			GElf_Shdr shdr;
+@@ -413,6 +421,7 @@ struct bpf_object {
+ 		int rodata_shndx;
+ 		int bss_shndx;
+ 		int st_ops_shndx;
++		int metadata_shndx;
+ 	} efile;
+ 	/*
+ 	 * All loaded bpf_object is linked in a list, which is
+@@ -1022,6 +1031,7 @@ static struct bpf_object *bpf_object__new(const char *path,
+ 	obj->efile.obj_buf_sz = obj_buf_sz;
+ 	obj->efile.maps_shndx = -1;
+ 	obj->efile.btf_maps_shndx = -1;
++	obj->efile.metadata_shndx = -1;
+ 	obj->efile.data_shndx = -1;
+ 	obj->efile.rodata_shndx = -1;
+ 	obj->efile.bss_shndx = -1;
+@@ -1387,6 +1397,9 @@ bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map_type type,
+ 	if (data)
+ 		memcpy(map->mmaped, data, data_sz);
+ 
++	if (type == LIBBPF_MAP_METADATA)
++		obj->metadata_map = map;
++
+ 	pr_debug("map %td is \"%s\"\n", map - obj->maps, map->name);
+ 	return 0;
+ }
+@@ -1422,6 +1435,14 @@ static int bpf_object__init_global_data_maps(struct bpf_object *obj)
+ 		if (err)
+ 			return err;
+ 	}
++	if (obj->efile.metadata_shndx >= 0) {
++		err = bpf_object__init_internal_map(obj, LIBBPF_MAP_METADATA,
++						    obj->efile.metadata_shndx,
++						    obj->efile.metadata->d_buf,
++						    obj->efile.metadata->d_size);
++		if (err)
++			return err;
++	}
+ 	return 0;
+ }
+ 
+@@ -2698,6 +2719,9 @@ static int bpf_object__elf_collect(struct bpf_object *obj)
+ 			} else if (strcmp(name, STRUCT_OPS_SEC) == 0) {
+ 				obj->efile.st_ops_data = data;
+ 				obj->efile.st_ops_shndx = idx;
++			} else if (strcmp(name, METADATA_SEC) == 0) {
++				obj->efile.metadata = data;
++				obj->efile.metadata_shndx = idx;
+ 			} else {
+ 				pr_debug("skip section(%d) %s\n", idx, name);
+ 			}
+@@ -3111,7 +3135,8 @@ static bool bpf_object__shndx_is_data(const struct bpf_object *obj,
+ {
+ 	return shndx == obj->efile.data_shndx ||
+ 	       shndx == obj->efile.bss_shndx ||
+-	       shndx == obj->efile.rodata_shndx;
++	       shndx == obj->efile.rodata_shndx ||
++	       shndx == obj->efile.metadata_shndx;
+ }
+ 
+ static bool bpf_object__shndx_is_maps(const struct bpf_object *obj,
+@@ -3132,6 +3157,8 @@ bpf_object__section_to_libbpf_map_type(const struct bpf_object *obj, int shndx)
+ 		return LIBBPF_MAP_RODATA;
+ 	else if (shndx == obj->efile.symbols_shndx)
+ 		return LIBBPF_MAP_KCONFIG;
++	else if (shndx == obj->efile.metadata_shndx)
++		return LIBBPF_MAP_METADATA;
+ 	else
+ 		return LIBBPF_MAP_UNSPEC;
+ }
+@@ -3655,6 +3682,60 @@ static int probe_kern_probe_read_kernel(void)
+ 	return probe_fd(bpf_load_program_xattr(&attr, NULL, 0));
+ }
+ 
++static int probe_prog_bind_map(void)
++{
++	struct bpf_load_program_attr prog_attr;
++	struct bpf_create_map_attr map_attr;
++	char *cp, errmsg[STRERR_BUFSIZE];
++	struct bpf_insn insns[] = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	int ret = 0, prog, map;
++
++	if (!kernel_supports(FEAT_GLOBAL_DATA))
++		return 0;
++
++	memset(&map_attr, 0, sizeof(map_attr));
++	map_attr.map_type = BPF_MAP_TYPE_ARRAY;
++	map_attr.key_size = sizeof(int);
++	map_attr.value_size = 32;
++	map_attr.max_entries = 1;
++
++	map = bpf_create_map_xattr(&map_attr);
++	if (map < 0) {
++		ret = -errno;
++		cp = libbpf_strerror_r(ret, errmsg, sizeof(errmsg));
++		pr_warn("Error in %s():%s(%d). Couldn't create simple array map.\n",
++			__func__, cp, -ret);
++		return ret;
++	}
++
++	memset(&prog_attr, 0, sizeof(prog_attr));
++	prog_attr.prog_type = BPF_PROG_TYPE_SOCKET_FILTER;
++	prog_attr.insns = insns;
++	prog_attr.insns_cnt = ARRAY_SIZE(insns);
++	prog_attr.license = "GPL";
++
++	prog = bpf_load_program_xattr(&prog_attr, NULL, 0);
++	if (prog < 0) {
++		ret = -errno;
++		cp = libbpf_strerror_r(ret, errmsg, sizeof(errmsg));
++		pr_warn("Error in %s():%s(%d). Couldn't create simple program.\n",
++			__func__, cp, -ret);
++
++		close(map);
++		return ret;
++	}
++
++	if (!bpf_prog_bind_map(prog, map, 0))
++		ret = 1;
++
++	close(map);
++	close(prog);
++	return ret;
++}
++
+ enum kern_feature_result {
+ 	FEAT_UNKNOWN = 0,
+ 	FEAT_SUPPORTED = 1,
+@@ -3695,6 +3776,9 @@ static struct kern_feature_desc {
+ 	},
+ 	[FEAT_PROBE_READ_KERN] = {
+ 		"bpf_probe_read_kernel() helper", probe_kern_probe_read_kernel,
++	},
++	[FEAT_PROG_BIND_MAP] = {
++		"bpf_prog_bind_map() helper", probe_prog_bind_map,
+ 	}
+ };
+ 
+@@ -5954,6 +6038,20 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 	if (ret >= 0) {
+ 		if (log_buf && load_attr.log_level)
+ 			pr_debug("verifier log:\n%s", log_buf);
++
++		if (prog->obj->metadata_map && kernel_supports(FEAT_PROG_BIND_MAP)) {
++			if (bpf_prog_bind_map(ret, bpf_map__fd(prog->obj->metadata_map), 0) &&
++			    errno != EEXIST) {
++				int fd = ret;
++
++				ret = -errno;
++				cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
++				pr_warn("add metadata map failed: %s\n", cp);
++				close(fd);
++				goto out;
++			}
++		}
++
+ 		*pfd = ret;
+ 		ret = 0;
+ 		goto out;
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index e35bd6cdbdbf..4baf18a6df69 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -288,6 +288,7 @@ LIBBPF_0.1.0 {
+ 		bpf_map__set_value_size;
+ 		bpf_map__type;
+ 		bpf_map__value_size;
++		bpf_prog_bind_map;
+ 		bpf_program__attach_xdp;
+ 		bpf_program__autoload;
+ 		bpf_program__is_sk_lookup;
 -- 
 2.28.0
 
