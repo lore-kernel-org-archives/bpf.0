@@ -2,99 +2,146 @@ Return-Path: <SRS0=CWvS=B6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1D05C433E3
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 00:14:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 426B5C433E3
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 02:02:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 959E92075E
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 00:14:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2106320825
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 02:02:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="G0ioPFLg"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YnPCB7Gy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727807AbgHTAOL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 19 Aug 2020 20:14:11 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:15860 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726841AbgHTAN3 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 19 Aug 2020 20:13:29 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 07K0AYIe018193
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 17:13:26 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=zEf3czixZcMWyNQbFcY66yuu9ivUqSRPkOj+BJh3UFc=;
- b=G0ioPFLgHOMKaYWW3WoDAIoZ50vMc3oC2aDhiJ5G1JHNCuZel1Kw0qU6xl5sU4g99qW/
- iLgziG+3B8Oa751sVkGXpEbO8K5d+lV/rYTsRwdaEVyJ/292L5v/o+OWN+30BExqnbCA
- cfAwPbbPSgGVlq+h7kwcxXGBzu7WOM0ZKEM= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 3304jqbcwt-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 17:13:26 -0700
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 19 Aug 2020 17:13:24 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 4A1B437053B6; Wed, 19 Aug 2020 17:13:23 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 0/3] bpf: implement link_query for bpf iterators
-Date:   Wed, 19 Aug 2020 17:13:23 -0700
-Message-ID: <20200820001323.3740798-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
+        id S1726707AbgHTCCB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 19 Aug 2020 22:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44680 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726640AbgHTCCA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 19 Aug 2020 22:02:00 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0243C061383
+        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 19:01:59 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id z18so261576otk.6
+        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 19:01:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=a6AI5eeMLSnuHLbo6ZZjQDIfs8rhjaUq4nVIf2nIA4s=;
+        b=YnPCB7GyyenNNj4m6DTSkuaI05qpfHVG/QgzwK6ZW5cfzjXcjHWN5LAYlS6/sxdjkz
+         Q3B6OAL6VkfXwnio6GpcqFThGxYHL16LeanA7XHdVMfn26QoX0g+phi2xhTniJx/oG4b
+         By+2BEurn0lcdeK0Stus91++uccTrtAGABYgjAbl+ipAdepdfWEyi3uEFSsTuQd5UZBx
+         BRrztqVUVKEKekr/BYTkoCsnvAO2Pj7IHdqvtB+4JORdtJ9ivIHukRoFwzuDiHXHnEM+
+         GW1diuJzzXcDmzpqOY7Sm35sNw8MEKZLt3qU+FvbRqjP0SgosGrMRbrNiWiPtlstFAhc
+         xoVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=a6AI5eeMLSnuHLbo6ZZjQDIfs8rhjaUq4nVIf2nIA4s=;
+        b=bP5apP5ShjVTumfdvqbw1r/s+NTvhYmMpbGPDCtcXG7J3ocQL1GMZtGnKjxPTOLJVA
+         gxi7VqymtHS9Fst/rwgtOC95BF1X6GdWdlW+R+atooNHfFKvBNltHZ0/RDbxo/ZgahoH
+         5YsmAsrboEUH8AaMDhVXKg7CWzolcDn0SzIR3r+ymB9+oXGRQwDWgCFMmpt/y2vB/u0b
+         xhQMD6wBJC/AH6TNkuG7jWrNICNaPxQpqmJi7VyjC1cAHyRLNcrWe4av1WRaPyLtcIOL
+         E2hNW9bHyceho7Z+tr/PXEemlcv+SnXzJbLy9kXQdFU7aS8bt7QIEioW7u5s+vl5+gDt
+         jCbg==
+X-Gm-Message-State: AOAM533/9suATF0KdCNvN0a3L8aqOUUlopYR+rgcPIvgsibFarndFatE
+        EssLMZQgotCvQjDitmHKrGM87vfkjQGzR5iFdicYkg==
+X-Google-Smtp-Source: ABdhPJy4t5xNUInvTbrdNktpIEEwJa9WXJ3VbyfLmNGHa9Tlogcfk1xfE/pD2NZhBS1V2JSKNp49dZbkVm49zRPUArk=
+X-Received: by 2002:a05:6830:237b:: with SMTP id r27mr528934oth.352.1597888918873;
+ Wed, 19 Aug 2020 19:01:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-19_13:2020-08-19,2020-08-19 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- impostorscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=664
- clxscore=1015 malwarescore=0 suspectscore=8 phishscore=0 spamscore=0
- mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008190193
-X-FB-Internal: deliver
+References: <cover.1597833138.git.mchehab+huawei@kernel.org> <CALAqxLU3bt6fT4nGHZFSnzyQq4xJo2On=c_Oa9ONED9-jhaFgw@mail.gmail.com>
+In-Reply-To: <CALAqxLU3bt6fT4nGHZFSnzyQq4xJo2On=c_Oa9ONED9-jhaFgw@mail.gmail.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Wed, 19 Aug 2020 19:01:46 -0700
+Message-ID: <CALAqxLW98nVc-=8Q6nx-wRP1z8pzkw1_zNc9M7V3GhnJQqM9rg@mail.gmail.com>
+Subject: Re: [PATCH 00/49] DRM driver for Hikey 970
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Bogdan Togorean <bogdan.togorean@analog.com>,
+        Liwei Cai <cailiwei@hisilicon.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Wanchun Zheng <zhengwanchun@hisilicon.com>,
+        driverdevel <devel@driverdev.osuosl.org>,
+        BPF Mailing List <bpf@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Clark <robdclark@chromium.org>,
+        Laurentiu Palcu <laurentiu.palcu@nxp.com>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Liuyao An <anliuyao@huawei.com>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>, Wei Xu <xuwei5@hisilicon.com>,
+        Rongrong Zou <zourongrong@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Chen Feng <puck.chen@hisilicon.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-"link" has been an important concept for bpf ecosystem to connect
-bpf program with other properties. Currently, the information related
-information can be queried from userspace through bpf command
-BPF_LINK_GET_NEXT_ID, BPF_LINK_GET_FD_BY_ID and BPF_OBJ_GET_INFO_BY_FD.
-The information is also available by "cating" /proc/<pid>/fdinfo/<link_fd=
->.
-Raw_tracepoint, tracing, cgroup, netns and xdp links are already
-supported in the kernel and bpftool.
+On Wed, Aug 19, 2020 at 2:36 PM John Stultz <john.stultz@linaro.org> wrote:
+>
+> On Wed, Aug 19, 2020 at 4:46 AM Mauro Carvalho Chehab
+> <mchehab+huawei@kernel.org> wrote:
+> > So, IMO, the best is to keep it on staging for a while, until those
+> > remaining bugs gets solved.
+> >
+> > I added this series, together with the regulator driver and
+> > a few other patches (including a hack to fix a Kernel 5.8
+> > regression at WiFi ) at:
+> >
+> >         https://gitlab.freedesktop.org/mchehab_kernel/hikey-970/-/commits/master
+>
+> Sorry, one more small request: Could you create a branch that only has
+> the DRM driver changes in it?
+>
+> The reason I ask, is that since the HiKey960 isn't affected by the
+> majority of the problems you listed as motivation for going through
+> staging. So if we can validate that your tree works fine on HiKey960,
+> the series can be cleaned up and submitted properly upstream to enable
+> that SoC, and the outstanding 970 issues can be worked out afterwards
+> against mainline.
 
-This patch added support for bpf iterator. Patch #1 added generic support
-for link querying interface. Patch #2 implemented callback functions
-for map element bpf iterators. Patch #3 added bpftool support.
+Just as a heads up, I tried testing your tree with my HiKey960, and
+after fixing the compat string inconsistency, the drivers seem to load
+properly. However the drm_hwcomposer seems to have some trouble with
+the driver:
+01-01 00:12:41.456   345   345 E hwc-drm-display-compositor: Commit
+test failed for display 0, FIXME
+01-01 00:12:41.456   345   345 E hwc-drm-two: Failed to apply the
+frame composition ret=-22
+01-01 00:12:41.456   351   351 E HWComposer:
+presentAndGetReleaseFences: present failed for display 0: BadParameter
+(4)
 
-Yonghong Song (3):
-  bpf: implement link_query for bpf iterators
-  bpf: implement link_query callbacks in map element iterators
-  bpftool: implement link_query for bpf iterators
+I'll dig in a bit further as to why, but wanted to give you a heads up.
 
- include/linux/bpf.h            | 10 ++++++
- include/uapi/linux/bpf.h       |  7 ++++
- kernel/bpf/bpf_iter.c          | 58 ++++++++++++++++++++++++++++++++++
- kernel/bpf/map_iter.c          | 15 +++++++++
- net/core/bpf_sk_storage.c      |  2 ++
- tools/bpf/bpftool/link.c       | 44 ++++++++++++++++++++++++--
- tools/include/uapi/linux/bpf.h |  7 ++++
- 7 files changed, 140 insertions(+), 3 deletions(-)
-
---=20
-2.24.1
-
+thanks
+-john
