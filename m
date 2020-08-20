@@ -2,125 +2,167 @@ Return-Path: <SRS0=CWvS=B6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE36EC433DF
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 14:10:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4CD8C433E1
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 14:14:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AFED320758
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 14:10:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A9B6E20738
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 14:14:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Qgob22Et"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PHul54+i"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726970AbgHTOIo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Aug 2020 10:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42048 "EHLO
+        id S1726905AbgHTOOe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Aug 2020 10:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731158AbgHTN6F (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Aug 2020 09:58:05 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B61C061386
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 06:58:05 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id 88so2138923wrh.3
-        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 06:58:05 -0700 (PDT)
+        with ESMTP id S1725823AbgHTOO0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Aug 2020 10:14:26 -0400
+Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AF3C061385;
+        Thu, 20 Aug 2020 07:14:26 -0700 (PDT)
+Received: by mail-qk1-x741.google.com with SMTP id b79so1601482qkg.9;
+        Thu, 20 Aug 2020 07:14:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kde3u3HFPYfuRfECAfMIiyKrmgr3zdkcjvZMTk3eLDM=;
-        b=Qgob22Eti6jORi7jdQCQ7THfTNNOTA2JNT6c1xYrIu9O0VbwEMFKfBo6LJfT2N2YQT
-         JrmvKCwF9iGitucFxGWfLkGdtqMU2iPsBxMJp4DvVZq9+ckYokMR8cCEv219EsfsfrTm
-         7oVb70aprHUQVBSiiWqGVfLFLu8AZGS2VJyjU=
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=MbyEv8DIUXpuUpb2BRbOL6BERGEvF0v2TeCqsuSGqbA=;
+        b=PHul54+ivQAGumKBZSINu8ZrWdyARLylFkl2mP2bSCMA8na2Vha7+6xjBxobbJCTgf
+         V1a5CUUv3MrJpyMWRUoyrAkzHC0sWkqZQElwD1HhM6uo1275o0kFFhpf7Dbwk3OGdrbI
+         ZgPXwSx0kzYOfC0Hr4z45RiZX1fy3HC5GLijw67Q+VgGFVMZJKn/YxIeMud1Cc8M7oc1
+         AZZ+RHIjsmZMRjhPXyaEAw9sbTLHT723vlrl7dgnkWQzbNgrwbHKDSDbCz5eskgzrBCU
+         cxzWEeorXvdPmbu+sknSIJbxH7tWCwizbkp4WX1QJ2mSorj21ndJAIVeYdOfcvWve3GS
+         yCLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=kde3u3HFPYfuRfECAfMIiyKrmgr3zdkcjvZMTk3eLDM=;
-        b=KAU/8oJ+2rInWlG0Ykw5AufgHUHwkOYr3oW9a5RlWW+AA2lhlXGnf0UKWnDpi9BTAv
-         NXTULb94M+PoIqhApz27KOpYZsLOoy54jJvous+s4aDGFmKV0iS8HMI4hEEYMRaN3VN6
-         l+o273afiuLvPf9mqepckt+hXQvemASNYWGmJW7/7iUEm/yyxfLi3mDD44jI/YzAipeL
-         iCDifdveMXxSXEDkJlZPL3ADYWxYrhUi0AHQCos7Uf3zMBnLxc4gszfaU31EuhdKaaa3
-         8FPKcy79iY19+r5lkr8fNlB/tQeUWs3uwtLgaL+Vn6Hq7JIIM9mI89j+kAZKJrEc4PSQ
-         9Bhg==
-X-Gm-Message-State: AOAM533umJXfqRE01QkwUDu/aZAR2E3Pg2i4tvkYkb04LomYORysNUIr
-        M4jiC1mDToqXWkxrLkXqcFotPA==
-X-Google-Smtp-Source: ABdhPJyX2YxrmJ0WJsq2rzq0AmiRTb/+U7SKiSvn21ip7fjjEM9/SN7nPmweGKYWTCWQXIJWKA9OZg==
-X-Received: by 2002:a05:6000:c:: with SMTP id h12mr3257295wrx.49.1597931882880;
-        Thu, 20 Aug 2020 06:58:02 -0700 (PDT)
-Received: from antares.lan (d.0.f.e.b.c.7.2.d.c.3.8.4.8.d.9.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:9d84:83cd:27cb:ef0d])
-        by smtp.gmail.com with ESMTPSA id l81sm4494215wmf.4.2020.08.20.06.58.01
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=MbyEv8DIUXpuUpb2BRbOL6BERGEvF0v2TeCqsuSGqbA=;
+        b=T0GNApI6dfhWYtDJkTM/6J0otfxB3AAK/fcXbvHeT2Q1zD60IXYS88Q3M0Km670aBS
+         vxOq9JjfHOauLgtI5xA1weaI8dckOANio24fkqh80q90D89bxsPs41mPzjgtWIvsLB+n
+         JSLyZUab+Vk+T9KknhJuZGCS1XHp1TgS7Lp6BB/7kgF3s75ZUDH8sBsuICaejuWnVGcZ
+         p7uBeRALGc3StXtcsdkhZgm7oqPfzekGmKUJUvCrpBoVuHC2dGX5Ag+AcDm0cmMVBd61
+         FYb96ZMRPx0xpwFPzVrlPoaHVnpZaPlZeFReZupmR4WBOEahG1P8+Fa85fV/GbrQcJ6M
+         06NA==
+X-Gm-Message-State: AOAM532EHElAmQcQ0XFZ8If+VkroVcRyC1zTMDMiekM8Cw7KtZfVqqja
+        TXEwzS3yedelryIG/ikiCjU=
+X-Google-Smtp-Source: ABdhPJw5AqH+AVnPf5GAbdfcZp04qpgaGMY9zeipsYlLu/fhWSP1ILdrkgh8kFVW6bBL5psJH0BGdg==
+X-Received: by 2002:a05:620a:1a:: with SMTP id j26mr2786184qki.183.1597932865468;
+        Thu, 20 Aug 2020 07:14:25 -0700 (PDT)
+Received: from bpf-dev (pc-199-79-45-190.cm.vtr.net. [190.45.79.199])
+        by smtp.gmail.com with ESMTPSA id n128sm2244447qke.8.2020.08.20.07.14.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Aug 2020 06:58:01 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     jakub@cloudflare.com, john.fastabend@gmail.com,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 0/6] Allow updating sockmap / sockhash from BPF
-Date:   Thu, 20 Aug 2020 14:57:23 +0100
-Message-Id: <20200820135729.135783-1-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 20 Aug 2020 07:14:24 -0700 (PDT)
+Date:   Thu, 20 Aug 2020 10:14:20 -0400
+From:   Carlos Antonio Neira Bustos <cneirabustos@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Networking <netdev@vger.kernel.org>, Yonghong Song <yhs@fb.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andriin@fb.com>
+Subject: Re: [PATCH v5] bpf/selftests: fold test_current_pid_tgid_new_ns into
+ test_progs.
+Message-ID: <20200820141419.GA45373@bpf-dev>
+References: <20200818204325.26228-1-cneirabustos@gmail.com>
+ <CAEf4Bzbd32RLcPThiXnmPYfBkN+eghWqAgHG5YfA6ovO88u7aQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4Bzbd32RLcPThiXnmPYfBkN+eghWqAgHG5YfA6ovO88u7aQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We're currently building a control plane for our BPF socket dispatch
-work. As part of that, we have a need to create a copy of an existing
-sockhash, to allow us to change the keys. I previously proposed allowing
-privileged userspace to look up sockets, which doesn't work due to
-security concerns (see [1]).
+On Tue, Aug 18, 2020 at 05:41:57PM -0700, Andrii Nakryiko wrote:
+> On Tue, Aug 18, 2020 at 1:44 PM Carlos Neira <cneirabustos@gmail.com> wrote:
+> >
+> > Currently tests for bpf_get_ns_current_pid_tgid() are outside test_progs.
+> > This change folds a test case into test_progs.
+> >
+> > Changes from V4:
+> >  - Added accidentally removed blank space in Makefile.
+> >  - Added () around bit-shift operations.
+> >  - Fixed not valid C89 standard-compliant code.
+> >
+> > Signed-off-by: Carlos Neira <cneirabustos@gmail.com>
+> > Acked-by: Andrii Nakryiko <andriin@fb.com>
+> > ---
+> >  tools/testing/selftests/bpf/.gitignore        |   2 +-
+> >  tools/testing/selftests/bpf/Makefile          |   2 +-
+> >  .../bpf/prog_tests/ns_current_pid_tgid.c      |  85 ----------
+> >  .../bpf/prog_tests/ns_current_pidtgid.c       |  55 ++++++
+> >  .../bpf/progs/test_ns_current_pid_tgid.c      |  37 ----
+> >  .../bpf/progs/test_ns_current_pidtgid.c       |  25 +++
+> >  .../bpf/test_current_pid_tgid_new_ns.c        | 159 ------------------
+> >  .../bpf/test_ns_current_pidtgid_newns.c       |  91 ++++++++++
+> >  8 files changed, 173 insertions(+), 283 deletions(-)
+> >  delete mode 100644 tools/testing/selftests/bpf/prog_tests/ns_current_pid_tgid.c
+> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/ns_current_pidtgid.c
+> >  delete mode 100644 tools/testing/selftests/bpf/progs/test_ns_current_pid_tgid.c
+> >  create mode 100644 tools/testing/selftests/bpf/progs/test_ns_current_pidtgid.c
+> >  delete mode 100644 tools/testing/selftests/bpf/test_current_pid_tgid_new_ns.c
+> >  create mode 100644 tools/testing/selftests/bpf/test_ns_current_pidtgid_newns.c
+> >
+> > diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+> > index 1bb204cee853..022055f23592 100644
+> > --- a/tools/testing/selftests/bpf/.gitignore
+> > +++ b/tools/testing/selftests/bpf/.gitignore
+> > @@ -30,8 +30,8 @@ test_tcpnotify_user
+> >  test_libbpf
+> >  test_tcp_check_syncookie_user
+> >  test_sysctl
+> > -test_current_pid_tgid_new_ns
+> >  xdping
+> > +test_ns_current_pidtgid_newns
+> >  test_cpp
+> >  *.skel.h
+> >  /no_alu32
+> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> > index e7a8cf83ba48..e308cc7c8598 100644
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+> > @@ -37,7 +37,7 @@ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test
+> >         test_cgroup_storage \
+> >         test_netcnt test_tcpnotify_user test_sock_fields test_sysctl \
+> >         test_progs-no_alu32 \
+> > -       test_current_pid_tgid_new_ns
+> > +       test_ns_current_pidtgid_newns
+> 
+> Have you tried doing a parallel build with make -j$(nproc) or
+> something like that? It fails for me:
+> 
+> test_ns_current_pidtgid_newns.c:6:10: fatal error:
+> test_ns_current_pidtgid.skel.h: No such file or directory
+> 
+>  #include "test_ns_current_pidtgid.skel.h"
+> 
+>           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> The problem seems to be that you haven't recorded dependency on the
+> skeleton file for this new test_ns_current_pidtgid_newns.
+> 
+> But rather than fixing it, let's just fold
+> test_ns_current_pidtgid_newns into test_progs as well? Then all such
+> issues will be handled automatically and this test will be executed
+> regularly.
+> 
+> >
+> >  # Also test bpf-gcc, if present
+> >  ifneq ($(BPF_GCC),)
+> 
+> [...]
 
-In follow up discussions during BPF office hours we identified bpf_iter
-as a possible solution: instead of accessing sockets from user space
-we can iterate the source sockhash, and insert the values into a new
-map. Enabling this requires two pieces: the ability to iterate
-sockmap and sockhash, as well as being able to call map_update_elem
-from BPF.
+Hi Andrii,
 
-This patch set implements the latter: it's now possible to update
-sockmap from BPF context. As a next step, we can implement bpf_iter
-for sockmap.
+You are right, really all tests should be folded into test_progs.
+I'll fold both tests into test_progs in my next version.
+Thank you for your feedback.
 
-Changes in v2:
-- Fix warning in patch #2 (Jakub K)
-- Renamed override_map_arg_type (John)
-- Only allow updating sockmap from known safe contexts (John)
-- Use __s64 for sockmap updates from user space (Yonghong)
-- Various small test fixes around test macros and such (Yonghong)
-
-Thank your for your reviews!
-
-1: https://lore.kernel.org/bpf/20200310174711.7490-1-lmb@cloudflare.com/
-
-Lorenz Bauer (6):
-  net: sk_msg: simplify sk_psock initialization
-  bpf: sockmap: merge sockmap and sockhash update functions
-  bpf: sockmap: call sock_map_update_elem directly
-  bpf: override the meaning of ARG_PTR_TO_MAP_VALUE for sockmap and
-    sockhash
-  bpf: sockmap: allow update from BPF
-  selftests: bpf: test sockmap update from BPF
-
- include/linux/bpf.h                           |   7 +
- include/linux/skmsg.h                         |  17 ---
- kernel/bpf/syscall.c                          |   5 +-
- kernel/bpf/verifier.c                         |  78 +++++++++-
- net/core/skmsg.c                              |  34 ++++-
- net/core/sock_map.c                           | 137 ++++++++----------
- net/ipv4/tcp_bpf.c                            |  13 +-
- net/ipv4/udp_bpf.c                            |   9 +-
- .../selftests/bpf/prog_tests/sockmap_basic.c  |  71 +++++++++
- .../selftests/bpf/progs/test_sockmap_copy.c   |  48 ++++++
- 10 files changed, 301 insertions(+), 118 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_copy.c
-
--- 
-2.25.1
-
+Bests
