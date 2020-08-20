@@ -2,148 +2,230 @@ Return-Path: <SRS0=CWvS=B6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EECEC433DF
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 10:39:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CF54C433E1
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 11:38:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EF41220639
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 10:39:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58823204EA
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 11:38:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="P+r5Gooa"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="dNd1ucF6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731561AbgHTKjc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Aug 2020 06:39:32 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:32937 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731224AbgHTKS1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Aug 2020 06:18:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1597918704;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zVRgxsfepYzYkU+vpFAChRcrhAuOfHEv8LFvPPE6d28=;
-        b=P+r5Gooa85xwjVB5WlCJZF7bMyjGulCXN7QTnkZ+Xrj+wLIFr3xEkTyNmoMY4Gehg8wQdQ
-        Ne1Gm80yBHXOjZiX9F1vUbDTHE9UW0msF8RoosPzizsWo3HKs3VJnROmEnGcTeZivtOOTD
-        0VR9hbZFeKxTV1h14GQmKZon3lYkJMw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-425-CakX2Xi6PCqH5-AxDXr1nQ-1; Thu, 20 Aug 2020 06:18:22 -0400
-X-MC-Unique: CakX2Xi6PCqH5-AxDXr1nQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9EB2E807332;
-        Thu, 20 Aug 2020 10:18:20 +0000 (UTC)
-Received: from krava (unknown [10.40.194.187])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5239319C66;
-        Thu, 20 Aug 2020 10:18:11 +0000 (UTC)
-Date:   Thu, 20 Aug 2020 12:18:10 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     =?utf-8?B?RsSBbmctcnXDrCBTw7JuZw==?= <maskray@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
+        id S1730595AbgHTLef (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Aug 2020 07:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730703AbgHTLd1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Aug 2020 07:33:27 -0400
+Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6D3C061386
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 04:33:27 -0700 (PDT)
+Received: by mail-ot1-x342.google.com with SMTP id h22so1156402otq.11
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 04:33:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QDmA2I/vpmdly65/ewdOkuvkgD5OTZaOmPpGyJss1r8=;
+        b=dNd1ucF68FOwK698++MeDaHZC8R4QTfkj/7ds5fx+EVzNfJCMORnX8FAOUdJXqjhwB
+         KzyLCNsY8RwuHBIj/D1WqqnFEjPzWvq/PbQrZhsKiZ2hAM1Tl2HAg7aZ9Om4JaruuI0q
+         ECAeeAY4+/MbKn5cW+ySGsEjinxUvgEoWpJtY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QDmA2I/vpmdly65/ewdOkuvkgD5OTZaOmPpGyJss1r8=;
+        b=JaZmVOmh2tY40kr8HnksfI2aa1dvR78A74rcLrd7vjzRiI0TEZxuwppLvBKAviW2i+
+         vQfub57xWL3+6Md08IXiMxxT8TxUtmctnE5cAnoGdTHjqCz9Z9KzrT70gtHCBLVHdmVp
+         b7kjNPgB2nt6+z5TNRMG1z4yw/Dre+klEd6bXXG6giJSYMG7nAiZ3N8zAdwa8vcdVImn
+         P8cRj/qBCqK6Jb+hKjK6b7yZagHdFHvR5rPferLxLt8R+BWAVMNy898OA0gHf5rSo4fv
+         WJXim6W9ND4g/rEzo9FWbJINGcTQZ8zmy5hyYaaEmo1Lv2SCWacA87gW9rvamCgr1SgT
+         lH+Q==
+X-Gm-Message-State: AOAM532MV2WMIXh4F5fVNy8ceRyqSBJm5kb/gw1T9eIFtSuEdlifE3P4
+        pJGW1DkgnASrnTAqDNi+XKNB8Ly9xNDSogGdE9FQng==
+X-Google-Smtp-Source: ABdhPJz5sS9SzkLweMOTau3oDrIAtuUMdCvWcs9y5ZeCHjWJmjdV0SWMRwsXpqL0zJOpQbQIgTkvrSUYiwFOo9W6SY8=
+X-Received: by 2002:a9d:2f23:: with SMTP id h32mr1908222otb.334.1597923206365;
+ Thu, 20 Aug 2020 04:33:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200819092436.58232-1-lmb@cloudflare.com> <20200819092436.58232-6-lmb@cloudflare.com>
+ <5f3d982f51f22_2c9b2adeefb585bccb@john-XPS-13-9370.notmuch> <5f3daa91265a7_1b0e2ab87245e5c05@john-XPS-13-9370.notmuch>
+In-Reply-To: <5f3daa91265a7_1b0e2ab87245e5c05@john-XPS-13-9370.notmuch>
+From:   Lorenz Bauer <lmb@cloudflare.com>
+Date:   Thu, 20 Aug 2020 12:33:15 +0100
+Message-ID: <CACAyw9_oa5BKq+0gLS6pAuGu6pj9MsRHhEAxFvts167DwpdhLw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 5/6] bpf: sockmap: allow update from BPF
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     Jakub Sitnicki <jakub@cloudflare.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Mark Wielaard <mjw@redhat.com>,
-        Nick Clifton <nickc@redhat.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        clang-built-linux <clang-built-linux@googlegroups.com>
-Subject: Re: [PATCH bpf-next] tools/resolve_btfids: Fix sections with wrong
- alignment
-Message-ID: <20200820101810.GA336489@krava>
-References: <20200819092342.259004-1-jolsa@kernel.org>
- <254246ed-1b76-c435-a7bd-0783a29094d9@fb.com>
- <20200819173618.GH177896@krava>
- <CAKwvOdnfy4ASdeVqPjMtALXOXgMKdEB8U0UzWDPBKVqdhcPaFg@mail.gmail.com>
- <2e35cf9e-d815-5cd7-9106-7947e5b9fe3f@fb.com>
- <CAFP8O3+mqgQr_zVS9pMXSpFsCm0yp5y5Vgx1jmDc+wi-8-HOVQ@mail.gmail.com>
- <ba7bbec7-9fb5-5f8f-131e-1e0aeff843fa@fb.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ba7bbec7-9fb5-5f8f-131e-1e0aeff843fa@fb.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Aug 19, 2020 at 08:23:10PM -0700, Yonghong Song wrote:
-> 
-> 
-> On 8/19/20 7:27 PM, Fāng-ruì Sòng wrote:
-> > > > >     section(36) .comment, size 44, link 0, flags 30, type=1
-> > > > >     section(37) .debug_aranges, size 45684, link 0, flags 800, type=1
-> > > > >      - fixing wrong alignment sh_addralign 16, expected 8
-> > > > >     section(38) .debug_info, size 129104957, link 0, flags 800, type=1
-> > > > >      - fixing wrong alignment sh_addralign 1, expected 8
-> > > > >     section(39) .debug_abbrev, size 1152583, link 0, flags 800, type=1
-> > > > >      - fixing wrong alignment sh_addralign 1, expected 8
-> > > > >     section(40) .debug_line, size 7374522, link 0, flags 800, type=1
-> > > > >      - fixing wrong alignment sh_addralign 1, expected 8
-> > > > >     section(41) .debug_frame, size 702463, link 0, flags 800, type=1
-> > > > >     section(42) .debug_str, size 1017571, link 0, flags 830, type=1
-> > > > >      - fixing wrong alignment sh_addralign 1, expected 8
-> > > > >     section(43) .debug_loc, size 3019453, link 0, flags 800, type=1
-> > > > >      - fixing wrong alignment sh_addralign 1, expected 8
-> > > > >     section(44) .debug_ranges, size 1744583, link 0, flags 800, type=1
-> > > > >      - fixing wrong alignment sh_addralign 16, expected 8
-> > > > >     section(45) .symtab, size 2955888, link 46, flags 0, type=2
-> > > > >     section(46) .strtab, size 2613072, link 0, flags 0, type=3
-> > 
-> > I think this is resolve_btfids's bug. GNU ld and LLD are innocent.
-> > These .debug_* sections work fine if their sh_addralign is 1.
-> > When the section flag SHF_COMPRESSED is set, the meaningful alignment
-> > is Elf64_Chdr::ch_addralign, after the header is uncompressed.
-> > 
-> > On Wed, Aug 19, 2020 at 2:30 PM Yonghong Song <yhs@fb.com> wrote:
-> > > 
-> > > 
-> > > 
-> > > On 8/19/20 11:16 AM, Nick Desaulniers wrote:
-> > > > On Wed, Aug 19, 2020 at 10:36 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> > > > > 
-> > > > > On Wed, Aug 19, 2020 at 08:31:51AM -0700, Yonghong Song wrote:
-> > > > > > 
-> > > > > > 
-> > > > > > On 8/19/20 2:23 AM, Jiri Olsa wrote:
-> > > > > > > The data of compressed section should be aligned to 4
-> > > > > > > (for 32bit) or 8 (for 64 bit) bytes.
-> > > > > > > 
-> > > > > > > The binutils ld sets sh_addralign to 1, which makes libelf
-> > > > > > > fail with misaligned section error during the update as
-> > > > > > > reported by Jesper:
-> > > > > > > 
-> > > > > > >       FAILED elf_update(WRITE): invalid section alignment
-> 
-> Jiri,
-> 
-> Since Fangrui mentioned this is not a ld/lld bug, then changing
-> alighment from 1 to 4 might have some adverse effect for the binary,
-> I guess.
+On Wed, 19 Aug 2020 at 23:41, John Fastabend <john.fastabend@gmail.com> wrote:
+>
+> John Fastabend wrote:
+> > Lorenz Bauer wrote:
+> > > Allow calling bpf_map_update_elem on sockmap and sockhash from a BPF
+> > > context. The synchronization required for this is a bit fiddly: we
+> > > need to prevent the socket from changing it's state while we add it
+> > > to the sockmap, since we rely on getting a callback via
+> > > sk_prot->unhash. However, we can't just lock_sock like in
+> > > sock_map_sk_acquire because that might sleep. So instead we disable
+> > > softirq processing and use bh_lock_sock to prevent further
+> > > modification.
+> > >
+> > > Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+> > > ---
+> > >  kernel/bpf/verifier.c |  6 ++++--
+> > >  net/core/sock_map.c   | 24 ++++++++++++++++++++++++
+> > >  2 files changed, 28 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > index 47f9b94bb9d4..421fccf18dea 100644
+> > > --- a/kernel/bpf/verifier.c
+> > > +++ b/kernel/bpf/verifier.c
+> > > @@ -4254,7 +4254,8 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
+> > >                 func_id != BPF_FUNC_map_delete_elem &&
+> > >                 func_id != BPF_FUNC_msg_redirect_map &&
+> > >                 func_id != BPF_FUNC_sk_select_reuseport &&
+> > > -               func_id != BPF_FUNC_map_lookup_elem)
+> > > +               func_id != BPF_FUNC_map_lookup_elem &&
+> > > +               func_id != BPF_FUNC_map_update_elem)
+> > >                     goto error;
+> > >             break;
+> > >     case BPF_MAP_TYPE_SOCKHASH:
+> > > @@ -4263,7 +4264,8 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
+> > >                 func_id != BPF_FUNC_map_delete_elem &&
+> > >                 func_id != BPF_FUNC_msg_redirect_hash &&
+> > >                 func_id != BPF_FUNC_sk_select_reuseport &&
+> > > -               func_id != BPF_FUNC_map_lookup_elem)
+> > > +               func_id != BPF_FUNC_map_lookup_elem &&
+> > > +               func_id != BPF_FUNC_map_update_elem)
+> >
+> > I lost track of a detail here, map_lookup_elem should return
+> > PTR_TO_MAP_VALUE_OR_NULL but if we want to feed that back into
+> > the map_update_elem() we need to return PTR_TO_SOCKET_OR_NULL
+> > and then presumably have a null check to get a PTR_TO_SOCKET
+> > type as expect.
+> >
+> > Can we use the same logic for expected arg (previous patch) on the
+> > ret_type. Or did I miss it:/ Need some coffee I guess.
+>
+> OK, I tracked this down. It looks like we rely on mark_ptr_or_null_reg()
+> to update the reg->tyype to PTR_TO_SOCKET. I do wonder if it would be
+> a bit more straight forward to do something similar to the previous
+> patch and refine it earlier to PTR_TO_SOCKET_OR_NULL, but should be
+> safe as-is for now.
 
-not sure about that.. Mark? ;-)
+Yes, it took me a while to figure this out as well. I think we can use
+the same approach, but I wanted to keep this series simple.
 
-> 
-> Do you think we could skip these .debug_* sections somehow in elf parsing in
-> resolve_btfids? resolve_btfids does not need to read
-> these sections. This way, no need to change their alignment either.
+> I still have the below question though.
+>
+> >
+> > >                     goto error;
+> > >             break;
+> > >     case BPF_MAP_TYPE_REUSEPORT_SOCKARRAY:
+> > > diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> > > index 018367fb889f..b2c886c34566 100644
+> > > --- a/net/core/sock_map.c
+> > > +++ b/net/core/sock_map.c
+> > > @@ -603,6 +603,28 @@ int sock_map_update_elem_sys(struct bpf_map *map, void *key,
+> > >     return ret;
+> > >  }
+> > >
+> > > +static int sock_map_update_elem(struct bpf_map *map, void *key,
+> > > +                           void *value, u64 flags)
+> > > +{
+> > > +   struct sock *sk = (struct sock *)value;
+> > > +   int ret;
+> > > +
+> > > +   if (!sock_map_sk_is_suitable(sk))
+> > > +           return -EOPNOTSUPP;
+> > > +
+> > > +   local_bh_disable();
+> > > +   bh_lock_sock(sk);
+> >
+> > How do ensure we are not being called from some context which
+> > already has the bh_lock_sock() held? It seems we can call map_update_elem()
+> > from any context, kprobes, tc, xdp, etc.?
 
-I'm don't think libelf interface allows for that, will check
+Yeah, to be honest I'm not entirely sure.
 
-jirka
+XDP, TC, sk_lookup are fine I think. We have bpf_sk_lookup_tcp and
+friends, but these aren't locked, and the BPF doesn't run in a context
+where there is a locked socket.
 
+As you point out, kprobes / tracing is problematic because the probe
+_can_ run at a point where an sk is locked. If the tracing program
+somehow gets a hold of this socket via sk_lookup_* or
+a sockmap the program could deadlock.
+
+bpf_sock_ops is also problematic since ctx->sk is in various states of
+locking. For example, BPF_SOCK_OPS_TCP_LISTEN_CB is called with
+lock_sock held, so unproblematic. BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB
+on the other hand is called with the spinlock held.
+
+It seems to me like the only option is to instead only allow updates
+from "safe" contexts, such as XDP, tc, bpf_iter etc.
+
+Am I missing something?
+
+
+> >
+> > > +   if (!sock_map_sk_state_allowed(sk))
+> > > +           ret = -EOPNOTSUPP;
+> > > +   else if (map->map_type == BPF_MAP_TYPE_SOCKMAP)
+> > > +           ret = sock_map_update_common(map, *(u32 *)key, sk, flags);
+> > > +   else
+> > > +           ret = sock_hash_update_common(map, key, sk, flags);
+> > > +   bh_unlock_sock(sk);
+> > > +   local_bh_enable();
+> > > +   return ret;
+> > > +}
+> > > +
+> > >  BPF_CALL_4(bpf_sock_map_update, struct bpf_sock_ops_kern *, sops,
+> > >        struct bpf_map *, map, void *, key, u64, flags)
+> > >  {
+> > > @@ -687,6 +709,7 @@ const struct bpf_map_ops sock_map_ops = {
+> > >     .map_free               = sock_map_free,
+> > >     .map_get_next_key       = sock_map_get_next_key,
+> > >     .map_lookup_elem_sys_only = sock_map_lookup_sys,
+> > > +   .map_update_elem        = sock_map_update_elem,
+> > >     .map_delete_elem        = sock_map_delete_elem,
+> > >     .map_lookup_elem        = sock_map_lookup,
+> > >     .map_release_uref       = sock_map_release_progs,
+> > > @@ -1180,6 +1203,7 @@ const struct bpf_map_ops sock_hash_ops = {
+> > >     .map_alloc              = sock_hash_alloc,
+> > >     .map_free               = sock_hash_free,
+> > >     .map_get_next_key       = sock_hash_get_next_key,
+> > > +   .map_update_elem        = sock_map_update_elem,
+> > >     .map_delete_elem        = sock_hash_delete_elem,
+> > >     .map_lookup_elem        = sock_hash_lookup,
+> > >     .map_lookup_elem_sys_only = sock_hash_lookup_sys,
+> > > --
+> > > 2.25.1
+> > >
+> >
+> >
+>
+>
+
+
+--
+Lorenz Bauer  |  Systems Engineer
+6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
+
+www.cloudflare.com
