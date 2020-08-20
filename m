@@ -7,139 +7,105 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2818C433E1
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 06:14:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 428B8C433DF
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 06:14:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 89E31207DE
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 06:14:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19BFB2078D
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 06:14:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Q6zyzUKn"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="gW2q1r98"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726781AbgHTGOe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Aug 2020 02:14:34 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:19532 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726765AbgHTGOc (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 20 Aug 2020 02:14:32 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07K6DYlX001964
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 23:14:32 -0700
+        id S1725780AbgHTGOi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Aug 2020 02:14:38 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:10520 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726766AbgHTGOh (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 20 Aug 2020 02:14:37 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 07K6EWe9007090
+        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 23:14:36 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=q3Py9zDbr9xpWqiEoF+77aFtI1FDT2lKyza5+vOGYxI=;
- b=Q6zyzUKng+Y5uUQjsyCqMYMxiRtWoQWdKypY+Ks17rvUBxn456fEVtLx6tqC+1WiwETc
- BSbQSfP9sqySDNIlhRpPDBsKuYUChUSXI2R2XXPq/8AlK7BgtP1f7xqLdi4msPolOGRs
- 8dy2PX/BFowR+Xg9wC4zXv608NammcGbMFM= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 331crb9f73-1
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=23X/0OoFMp1lkx9fJ069SLw3UlOPehuxdZ0ns2v1g5E=;
+ b=gW2q1r98OjR6IsYTilYxM/EhqUfJDOiAwaSxAqNTvK59ATFR1+LcwkXuHli644IRI82X
+ 8m6TEn+6OnVYR8wcwzOvClT7yLMfInPaFSx42WoUxru9f7Ihvz6mix6c7526azO9biS7
+ CxlLL5O2gy7ijs8O3IPata+TNPqio/ea7ck= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net with ESMTP id 331hcbreqn-6
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 23:14:32 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 19 Aug 2020 23:14:36 -0700
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 19 Aug 2020 23:14:25 -0700
+ 15.1.1979.3; Wed, 19 Aug 2020 23:14:14 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 467FD2EC5ED6; Wed, 19 Aug 2020 23:14:19 -0700 (PDT)
+        id B5FE62EC5ED6; Wed, 19 Aug 2020 23:14:12 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Andrii Nakryiko <andriin@fb.com>
 Smtp-Origin-Hostname: devbig012.ftw2.facebook.com
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 4/4] selftests/bpf: list newest Clang built-ins needed for some CO-RE selftests
-Date:   Wed, 19 Aug 2020 23:14:11 -0700
-Message-ID: <20200820061411.1755905-4-andriin@fb.com>
+Subject: [PATCH bpf-next 1/4] libbpf: fix detection of BPF helper call instruction
+Date:   Wed, 19 Aug 2020 23:14:08 -0700
+Message-ID: <20200820061411.1755905-1-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200820061411.1755905-1-andriin@fb.com>
-References: <20200820061411.1755905-1-andriin@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-19_13:2020-08-19,2020-08-19 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- lowpriorityscore=0 malwarescore=0 adultscore=0 mlxlogscore=999 spamscore=0
- clxscore=1015 bulkscore=0 mlxscore=0 priorityscore=1501 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008200054
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
+ priorityscore=1501 suspectscore=8 clxscore=1015 bulkscore=0
+ mlxlogscore=807 lowpriorityscore=0 phishscore=0 impostorscore=0
+ adultscore=0 mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2008200055
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Record which built-ins are optional and needed for some of recent BPF CO-=
-RE
-subtests. Document Clang diff that fixed corner-case issue with
-__builtin_btf_type_id().
+BPF_CALL | BPF_JMP32 is explicitly not allowed by verifier for BPF helper
+calls, so don't detect it as a valid call. Also drop the check on func_id
+pointer, as it's currently always non-null.
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Reported-by: Yonghong Song <yhs@fb.com>
+Fixes: 109cea5a594f ("libbpf: Sanitize BPF program code for bpf_probe_rea=
+d_{kernel, user}[_str]")
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/testing/selftests/bpf/README.rst        | 21 +++++++++++++++++++
- .../bpf/progs/test_core_reloc_type_id.c       |  4 +++-
- 2 files changed, 24 insertions(+), 1 deletion(-)
+ tools/lib/bpf/libbpf.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selft=
-ests/bpf/README.rst
-index e885d351595f..66acfcf15ff2 100644
---- a/tools/testing/selftests/bpf/README.rst
-+++ b/tools/testing/selftests/bpf/README.rst
-@@ -43,3 +43,24 @@ This is due to a llvm BPF backend bug. The fix
-   https://reviews.llvm.org/D78466
- has been pushed to llvm 10.x release branch and will be
- available in 10.0.1. The fix is available in llvm 11.0.0 trunk.
-+
-+BPF CO-RE-based tests and Clang version
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+A set of selftests use BPF target-specific built-ins, which might requir=
-e
-+bleeding-edge Clang versions (Clang 12 nightly at this time).
-+
-+Few sub-tests of core_reloc test suit (part of test_progs test runner) r=
-equire
-+the following built-ins, listed with corresponding Clang diffs introduci=
-ng
-+them to Clang/LLVM. These sub-tests are going to be skipped if Clang is =
-too
-+old to support them, they shouldn't cause build failures or runtime test
-+failures:
-+
-+  - __builtin_btf_type_id() ([0], [1], [2]);
-+  - __builtin_preserve_type_info(), __builtin_preserve_enum_value() ([3]=
-, [4]).
-+
-+  [0] https://reviews.llvm.org/D74572
-+  [1] https://reviews.llvm.org/D74668
-+  [2] https://reviews.llvm.org/D85174
-+  [3] https://reviews.llvm.org/D83878
-+  [4] https://reviews.llvm.org/D83242
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_type_id.c =
-b/tools/testing/selftests/bpf/progs/test_core_reloc_type_id.c
-index 23e6e6bf276c..22aba3f6e344 100644
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_type_id.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_type_id.c
-@@ -75,10 +75,12 @@ int test_core_type_id(void *ctx)
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 77d420c02094..92ca4eb6ba2d 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -5844,14 +5844,12 @@ static int bpf_object__collect_reloc(struct bpf_o=
+bject *obj)
+=20
+ static bool insn_is_helper_call(struct bpf_insn *insn, enum bpf_func_id =
+*func_id)
  {
- 	/* We use __builtin_btf_type_id() in this tests, but up until the time
- 	 * __builtin_preserve_type_info() was added it contained a bug that
--	 * would make this test fail. The bug was fixed with addition of
-+	 * would make this test fail. The bug was fixed ([0]) with addition of
- 	 * __builtin_preserve_type_info(), though, so that's what we are using
- 	 * to detect whether this test has to be executed, however strange
- 	 * that might look like.
-+	 *
-+	 *   [0] https://reviews.llvm.org/D85174
- 	 */
- #if __has_builtin(__builtin_preserve_type_info)
- 	struct core_reloc_type_id_output *out =3D (void *)&data.out;
+-	__u8 class =3D BPF_CLASS(insn->code);
+-
+-	if ((class =3D=3D BPF_JMP || class =3D=3D BPF_JMP32) &&
++	if (BPF_CLASS(insn->code) =3D=3D BPF_JMP &&
+ 	    BPF_OP(insn->code) =3D=3D BPF_CALL &&
+ 	    BPF_SRC(insn->code) =3D=3D BPF_K &&
+-	    insn->src_reg =3D=3D 0 && insn->dst_reg =3D=3D 0) {
+-		    if (func_id)
+-			    *func_id =3D insn->imm;
++	    insn->src_reg =3D=3D 0 &&
++	    insn->dst_reg =3D=3D 0) {
++		    *func_id =3D insn->imm;
+ 		    return true;
+ 	}
+ 	return false;
 --=20
 2.24.1
 
