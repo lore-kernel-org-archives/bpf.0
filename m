@@ -2,165 +2,295 @@ Return-Path: <SRS0=CWvS=B6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 150E4C433E1
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 09:14:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EC69C433DF
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 09:43:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DFFDC2078D
-	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 09:14:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E2702208E4
+	for <bpf@archiver.kernel.org>; Thu, 20 Aug 2020 09:43:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Y6iqPXWa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tBshSWyo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726759AbgHTJOl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 20 Aug 2020 05:14:41 -0400
-Received: from mail.zx2c4.com ([192.95.5.64]:37407 "EHLO mail.zx2c4.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726951AbgHTJOG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 20 Aug 2020 05:14:06 -0400
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTP id acce9074;
-        Thu, 20 Aug 2020 08:47:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=mime-version
-        :references:in-reply-to:from:date:message-id:subject:to:cc
-        :content-type; s=mail; bh=EmqNmAaP9d5tln4z5/gXHm1XFQk=; b=Y6iqPX
-        WaA2oJk4rNuOxnfLhqF7entIN6S3kDv2hCqZN6B32nJzyTCpJKn5orL9UubNa2DI
-        R4ROW/buKNsGHuLJ2JjDarVa80noHhUL+fROwzJFE6Aa6X0gUf2redFYk5Ed7bQE
-        InRFtIq1qpCG0jmCPQW3KVCFSxrUeToVZo6rbt7wJZxDej/mSb+asVP0lIOfq78t
-        9Qgt7MpdwfnnPcU0jSeBabsTzUqVAip1dmsIyhdu8xhUWKnNMMV+VVtOyIIcRH1F
-        e3P+vz0OL60ERH3kkh9CtR53eJmqYq+2HbTnQL3H/GEWrKHLqJZ7u7iudRqzf9TE
-        Q9O8Ysh4Alv2Jigw==
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c146ec0b (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Thu, 20 Aug 2020 08:47:37 +0000 (UTC)
-Received: by mail-io1-f46.google.com with SMTP id b17so1452280ion.7;
-        Thu, 20 Aug 2020 02:14:01 -0700 (PDT)
-X-Gm-Message-State: AOAM530gpQXUighAJQfZ4nwkTikY5fS8iwwnouGjX0TMgJkTxOFKITa/
-        3GWKzgzRals59LgjjnGxhqI0MPzBBIp47Y8vc1w=
-X-Google-Smtp-Source: ABdhPJwrD+kMX381ZsNH5ZVv7XZpJr3WPE37RwgpGR8uD3r1z7iibyb0fdT8uJc3F2IdHO7K9Ylo+qHdlk4BWFZdUgE=
-X-Received: by 2002:a6b:b211:: with SMTP id b17mr1793664iof.29.1597914841074;
- Thu, 20 Aug 2020 02:14:01 -0700 (PDT)
+        id S1729224AbgHTJmx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 20 Aug 2020 05:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729147AbgHTJmR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 20 Aug 2020 05:42:17 -0400
+Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D683C061383
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 02:42:16 -0700 (PDT)
+Received: by mail-il1-x143.google.com with SMTP id t13so1073658ile.9
+        for <bpf@vger.kernel.org>; Thu, 20 Aug 2020 02:42:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=1rlIyE7c4KLlxD5gCyeY6MsqamG9FBghZ8kzijQ88sA=;
+        b=tBshSWyoA0N+bBpWnAjAML9ZxB867uOitrL8sJlvnJQHtpnENzIScjXAjSD3+u2qpI
+         xk5y/IH8Ahf+7AZqL8UHj01e2xY9v/2mKKgNnSOg6SHUeTkI42L4O23z+8inKSI2PZu/
+         sJj3Sy6Im9B99NXo71LFBd9erPGwIJZzg5Gm3cchmSvLl2nM8xZMSBj5l3jSdty+y5nd
+         X/CUIEyfLIEEf141fjpY5Y+Kv34pvNiQ0d6xHW6rYKI1EWo9zpnkdIRZCEQxfZk+G0gu
+         7LfZaITG3SaFoykt6FOv/2MMfqpHveRHWsWcIltybFszsIjXYw7/Ul/wUcnwDci604p9
+         bSsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1rlIyE7c4KLlxD5gCyeY6MsqamG9FBghZ8kzijQ88sA=;
+        b=oKu0U7n0dQLIhmJN7B4fbZS7L2aLF063vspkbdweargUbGI4YfNNI4fOYxYNvivv8t
+         5ZlAA+3HfBEUAfhEBXpqAl8dzLEswklcYT8L8h3N2beV+qBx47PBqzSyqYzCOZXYaSWz
+         e78STLzj1viSXbNriwGysRJQP+k97OuSg/zA6r3GEoTU9bd6saaDcishgNax2Arkw1Xd
+         AxR7sL8olk5TK2kR3EgiI6/dpuA/ymv3+MQiwob8u5JURUtNTNO0uV18ecIpUwNDVO65
+         F11WTJTGOB+koqesU6TpBe4P0/rwyVzY9km/NpfRBu5mSOXpD8VB4gUxM0wXWZrh+M1x
+         cYvA==
+X-Gm-Message-State: AOAM532OdW8L//SgH7pa21pOkDBK4T8IcuSuegnM/6CuV1pKHVMy5xy3
+        vPc1F1ZGZDbE3Xb36Y/4P98ZRe9DODylIXPM
+X-Google-Smtp-Source: ABdhPJwM+Le0kpsS4XAe70Q255qS58KMTRAe6lo4CuhMNc+0TbQ8nSyxul9/zb9qmvzshG1yN2INYA==
+X-Received: by 2002:a92:b106:: with SMTP id t6mr1831630ilh.122.1597916535962;
+        Thu, 20 Aug 2020 02:42:15 -0700 (PDT)
+Received: from localhost.localdomain (host-173-230-99-219.tnkngak.clients.pavlovmedia.com. [173.230.99.219])
+        by smtp.gmail.com with ESMTPSA id r3sm1145597iov.22.2020.08.20.02.42.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Aug 2020 02:42:15 -0700 (PDT)
+From:   YiFei Zhu <zhuyifei1999@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Stanislav Fomichev <sdf@google.com>,
+        Mahesh Bandewar <maheshb@google.com>,
+        YiFei Zhu <zhuyifei@google.com>
+Subject: [PATCH bpf-next 1/5] bpf: Mutex protect used_maps array and count
+Date:   Thu, 20 Aug 2020 04:42:07 -0500
+Message-Id: <d8dd3a17e80558f9b57815f2165e403c1aa24858.1597915265.git.zhuyifei@google.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <cover.1597915265.git.zhuyifei@google.com>
+References: <cover.1597915265.git.zhuyifei@google.com>
 MIME-Version: 1.0
-References: <20200814.135546.2266851283177227377.davem@davemloft.net>
- <20200815074102.5357-1-Jason@zx2c4.com> <20200819.162247.527509541688231611.davem@davemloft.net>
-In-Reply-To: <20200819.162247.527509541688231611.davem@davemloft.net>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Thu, 20 Aug 2020 11:13:49 +0200
-X-Gmail-Original-Message-ID: <CAHmME9oBQu-k6VKJ5QzVLpE-ZuYoo=qHGKESj8JbxQhDq9QNrQ@mail.gmail.com>
-Message-ID: <CAHmME9oBQu-k6VKJ5QzVLpE-ZuYoo=qHGKESj8JbxQhDq9QNrQ@mail.gmail.com>
-Subject: Re: [PATCH net v6] net: xdp: account for layer 3 packets in generic
- skb handler
-To:     David Miller <davem@davemloft.net>
-Cc:     Netdev <netdev@vger.kernel.org>, bpf@vger.kernel.org,
-        Thomas Ptacek <thomas@sockpuppet.org>,
-        Adhipati Blambangan <adhipati@tuta.io>,
-        David Ahern <dsahern@gmail.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        john.fastabend@gmail.com, Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Aug 20, 2020 at 1:22 AM David Miller <davem@davemloft.net> wrote:
->
-> From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-> Date: Sat, 15 Aug 2020 09:41:02 +0200
->
-> > A user reported that packets from wireguard were possibly ignored by XDP
-> > [1]. Another user reported that modifying packets from layer 3
-> > interfaces results in impossible to diagnose drops.
->
-> Jason this really is a minefield.
->
-> If you make everything look like ethernet, even when it isn't, that is
-> a huge pile of worms.
->
-> If the XDP program changes the fake ethernet header's protocol field,
-> what will update the next protocol field in the wireguard
-> encapsulation headers so that it matches?
->
-> How do you support pushing VLAN headers as some XDP programs do?  What
-> will undo the fake ethernet header and push the VLAN header into the
-> right place, and set it's next protocol field correctly?
->
-> And so on, and so forth...
+From: YiFei Zhu <zhuyifei@google.com>
 
-Huh, that's an interesting set of considerations. It looks like after
-the generic XDP program runs, there's a call to
-skb_vlan_untag()->skb_reorder_vlan_header() if skb->protocol is 8021q
-or 8021qad, which makes me think the stack will just do the right
-thing? I'm probably overlooking some critical detail that you and
-Jesper find clear. My understanding of the generic XDP handler for L2
-packets is:
+To support modifying the used_maps array, we use a mutex to protect
+the use of the counter and the array. The mutex is initialized right
+after the prog aux is allocated, and destroyed right before prog
+aux is freed. This way we guarantee it's initialized for both cBPF
+and eBPF.
 
-1. They arrive with skb->data pointing at L3, but skb->data - mac_len
-is the L2 header.
-2. This skb->data - mac_len pointer is what's passed to the eBPF executor.
-3. When it's done, skb->data still points to the L3 data, but the eBPF
-program might have pushed some things on before that or altered the
-ethernet header.
-4. If the ethernet header's h_proto is changed, so skb->protocol is
-updated (along with the broadcast/multicast flag too).
-5. The skb is passed onto the rest of the stack, with skb->data still
-pointing to L3, but with L2 existing in the area just before
-skb->data, just like how it came in.
+Signed-off-by: YiFei Zhu <zhuyifei@google.com>
+---
+ .../net/ethernet/netronome/nfp/bpf/offload.c   | 18 ++++++++++++------
+ include/linux/bpf.h                            |  1 +
+ kernel/bpf/core.c                              | 15 +++++++++++----
+ kernel/bpf/syscall.c                           | 16 ++++++++++++----
+ net/core/dev.c                                 | 11 ++++++++---
+ 5 files changed, 44 insertions(+), 17 deletions(-)
 
-This patch attempts to add L3 semantics that slightly modify the flow
-for L3 packets:
+diff --git a/drivers/net/ethernet/netronome/nfp/bpf/offload.c b/drivers/net/ethernet/netronome/nfp/bpf/offload.c
+index ac02369174a9..53851853562c 100644
+--- a/drivers/net/ethernet/netronome/nfp/bpf/offload.c
++++ b/drivers/net/ethernet/netronome/nfp/bpf/offload.c
+@@ -111,7 +111,9 @@ static int
+ nfp_map_ptrs_record(struct nfp_app_bpf *bpf, struct nfp_prog *nfp_prog,
+ 		    struct bpf_prog *prog)
+ {
+-	int i, cnt, err;
++	int i, cnt, err = 0;
++
++	mutex_lock(&prog->aux->used_maps_mutex);
+ 
+ 	/* Quickly count the maps we will have to remember */
+ 	cnt = 0;
+@@ -119,13 +121,15 @@ nfp_map_ptrs_record(struct nfp_app_bpf *bpf, struct nfp_prog *nfp_prog,
+ 		if (bpf_map_offload_neutral(prog->aux->used_maps[i]))
+ 			cnt++;
+ 	if (!cnt)
+-		return 0;
++		goto out;
+ 
+ 	nfp_prog->map_records = kmalloc_array(cnt,
+ 					      sizeof(nfp_prog->map_records[0]),
+ 					      GFP_KERNEL);
+-	if (!nfp_prog->map_records)
+-		return -ENOMEM;
++	if (!nfp_prog->map_records) {
++		err = -ENOMEM;
++		goto out;
++	}
+ 
+ 	for (i = 0; i < prog->aux->used_map_cnt; i++)
+ 		if (bpf_map_offload_neutral(prog->aux->used_maps[i])) {
+@@ -133,12 +137,14 @@ nfp_map_ptrs_record(struct nfp_app_bpf *bpf, struct nfp_prog *nfp_prog,
+ 						 prog->aux->used_maps[i]);
+ 			if (err) {
+ 				nfp_map_ptrs_forget(bpf, nfp_prog);
+-				return err;
++				goto out;
+ 			}
+ 		}
+ 	WARN_ON(cnt != nfp_prog->map_records_cnt);
+ 
+-	return 0;
++out:
++	mutex_unlock(&prog->aux->used_maps_mutex);
++	return err;
+ }
+ 
+ static int
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 55f694b63164..abbdde104cea 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -723,6 +723,7 @@ struct bpf_prog_aux {
+ 	struct bpf_ksym ksym;
+ 	const struct bpf_prog_ops *ops;
+ 	struct bpf_map **used_maps;
++	struct mutex used_maps_mutex; /* mutex for used_maps and used_map_cnt */
+ 	struct bpf_prog *prog;
+ 	struct user_struct *user;
+ 	u64 load_time; /* ns since boottime */
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index ed0b3578867c..2a20c2833996 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -98,6 +98,7 @@ struct bpf_prog *bpf_prog_alloc_no_stats(unsigned int size, gfp_t gfp_extra_flag
+ 	fp->jit_requested = ebpf_jit_enabled();
+ 
+ 	INIT_LIST_HEAD_RCU(&fp->aux->ksym.lnode);
++	mutex_init(&fp->aux->used_maps_mutex);
+ 
+ 	return fp;
+ }
+@@ -253,6 +254,7 @@ struct bpf_prog *bpf_prog_realloc(struct bpf_prog *fp_old, unsigned int size,
+ void __bpf_prog_free(struct bpf_prog *fp)
+ {
+ 	if (fp->aux) {
++		mutex_destroy(&fp->aux->used_maps_mutex);
+ 		free_percpu(fp->aux->stats);
+ 		kfree(fp->aux->poke_tab);
+ 		kfree(fp->aux);
+@@ -1747,8 +1749,9 @@ bool bpf_prog_array_compatible(struct bpf_array *array,
+ static int bpf_check_tail_call(const struct bpf_prog *fp)
+ {
+ 	struct bpf_prog_aux *aux = fp->aux;
+-	int i;
++	int i, ret = 0;
+ 
++	mutex_lock(&aux->used_maps_mutex);
+ 	for (i = 0; i < aux->used_map_cnt; i++) {
+ 		struct bpf_map *map = aux->used_maps[i];
+ 		struct bpf_array *array;
+@@ -1757,11 +1760,15 @@ static int bpf_check_tail_call(const struct bpf_prog *fp)
+ 			continue;
+ 
+ 		array = container_of(map, struct bpf_array, map);
+-		if (!bpf_prog_array_compatible(array, fp))
+-			return -EINVAL;
++		if (!bpf_prog_array_compatible(array, fp)) {
++			ret = -EINVAL;
++			goto out;
++		}
+ 	}
+ 
+-	return 0;
++out:
++	mutex_unlock(&aux->used_maps_mutex);
++	return ret;
+ }
+ 
+ static void bpf_prog_select_func(struct bpf_prog *fp)
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 86299a292214..f49fd709ccd5 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3152,21 +3152,25 @@ static const struct bpf_map *bpf_map_from_imm(const struct bpf_prog *prog,
+ 	const struct bpf_map *map;
+ 	int i;
+ 
++	mutex_lock(&prog->aux->used_maps_mutex);
+ 	for (i = 0, *off = 0; i < prog->aux->used_map_cnt; i++) {
+ 		map = prog->aux->used_maps[i];
+ 		if (map == (void *)addr) {
+ 			*type = BPF_PSEUDO_MAP_FD;
+-			return map;
++			goto out;
+ 		}
+ 		if (!map->ops->map_direct_value_meta)
+ 			continue;
+ 		if (!map->ops->map_direct_value_meta(map, addr, off)) {
+ 			*type = BPF_PSEUDO_MAP_VALUE;
+-			return map;
++			goto out;
+ 		}
+ 	}
++	map = NULL;
+ 
+-	return NULL;
++out:
++	mutex_unlock(&prog->aux->used_maps_mutex);
++	return map;
+ }
+ 
+ static struct bpf_insn *bpf_insn_prepare_dump(const struct bpf_prog *prog,
+@@ -3284,6 +3288,7 @@ static int bpf_prog_get_info_by_fd(struct file *file,
+ 	memcpy(info.tag, prog->tag, sizeof(prog->tag));
+ 	memcpy(info.name, prog->aux->name, sizeof(prog->aux->name));
+ 
++	mutex_lock(&prog->aux->used_maps_mutex);
+ 	ulen = info.nr_map_ids;
+ 	info.nr_map_ids = prog->aux->used_map_cnt;
+ 	ulen = min_t(u32, info.nr_map_ids, ulen);
+@@ -3293,9 +3298,12 @@ static int bpf_prog_get_info_by_fd(struct file *file,
+ 
+ 		for (i = 0; i < ulen; i++)
+ 			if (put_user(prog->aux->used_maps[i]->id,
+-				     &user_map_ids[i]))
++				     &user_map_ids[i])) {
++				mutex_unlock(&prog->aux->used_maps_mutex);
+ 				return -EFAULT;
++			}
+ 	}
++	mutex_unlock(&prog->aux->used_maps_mutex);
+ 
+ 	err = set_info_rec_size(&info);
+ 	if (err)
+diff --git a/net/core/dev.c b/net/core/dev.c
+index b5d1129d8310..6957b31127d9 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -5441,15 +5441,20 @@ static int generic_xdp_install(struct net_device *dev, struct netdev_bpf *xdp)
+ 	if (new) {
+ 		u32 i;
+ 
++		mutex_lock(&new->aux->used_maps_mutex);
++
+ 		/* generic XDP does not work with DEVMAPs that can
+ 		 * have a bpf_prog installed on an entry
+ 		 */
+ 		for (i = 0; i < new->aux->used_map_cnt; i++) {
+-			if (dev_map_can_have_prog(new->aux->used_maps[i]))
+-				return -EINVAL;
+-			if (cpu_map_prog_allowed(new->aux->used_maps[i]))
++			if (dev_map_can_have_prog(new->aux->used_maps[i]) ||
++			    cpu_map_prog_allowed(new->aux->used_maps[i])) {
++				mutex_unlock(&new->aux->used_maps_mutex);
+ 				return -EINVAL;
++			}
+ 		}
++
++		mutex_unlock(&new->aux->used_maps_mutex);
+ 	}
+ 
+ 	switch (xdp->command) {
+-- 
+2.28.0
 
-1. They arrive with skb->data pointing at L3, with nothing coherent
-before skb->data.
-2. An ethernet header is pushed onto the packet, and then pulled off
-again, so that skb->data points at L3 but skb->data - ETH_HLEN points
-to the fake L2.
-3. Steps 2-5 from the above flow now apply.
-
-It seems like if an eBPF program pushes on a VLAN tag or changes the
-protocol or does any other modification, it will be treated in exactly
-the same way as the L2 packet above by the remaining parts of the
-networking stack.
-
-However, Jesper points out in his previous message (I think) that by
-only calling skb_push(skb, ETH_HLEN), I'm not actually increasing the
-head room enough for eBPF programs to safely tack on vlan tags and
-other things. In other words, I need to increase the head room more,
-beyond a measly ETH_HLEN. That seems like an easy change.
-
-> With so many unanswered questions and unclear semantics the only
-> reasonable approach right now is to reject L3 devices from having XDP
-> programs attached at this time.
-
-I don't know if there are _so_ many unanswered questions, but it seems
-like there remain some unknowns, but Jesper has made a good suggestion
-that I start going through that test suite and make sure that
-everything works properly there. It might be that one test starts
-failing catastrophically, and when I investigate I find that there's
-not a very clear cut answer as to how to fix it, reinforcing your
-point. Or, perhaps it will all kind of work nicely without scary or
-fundamental changes required. Mostly out of my own curiosity, I'll
-give it a try when I'm at my desk again and report back.
-
-> Arguably the best answer is the hardest answer, which is that we
-> expose device protocols and headers exactly how they are and don't try
-> to pretend they are something else.  But it really means that XDP
-> programs have to be written targetted to the attach point device type.
-> And it also means we need a way to update skb->protocol properly,
-> handle the pushing of new headers, etc.
-
-That's actually where this patch started many months ago, with just a
-simple change to quit trying to cast skb->data-mac_len to an ethhdr in
-the case that it's an L3 packet. Of course indeed that didn't address
-skb->protocol. And it also didn't help L3 packets _become_ L2 packets,
-which might be desirable. And in general it would mean that no
-existing XDP programs would work with it, as Toke pointed out. So I
-think if the pseudo ethernet header winds up being actually doable and
-consistent, that's probably the best approach. You seem skeptical that
-it is actually consistent, and you're probably right. I'll let you
-know if I notice otherwise though, once I get that test suite rolling.
-
-Jason
