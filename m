@@ -5,66 +5,70 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A13FC433E1
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 10:30:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C720C433E3
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 10:31:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 10854206DA
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 10:30:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 50C6820748
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 10:31:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="R6p7I49m"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Rzq0kpit"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728665AbgHUKas (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Aug 2020 06:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
+        id S1728587AbgHUKaT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Aug 2020 06:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728630AbgHUKa0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 21 Aug 2020 06:30:26 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FE3C061385
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 03:30:19 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id 9so1331752wmj.5
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 03:30:19 -0700 (PDT)
+        with ESMTP id S1728182AbgHUKaO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Aug 2020 06:30:14 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBBAC061388
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 03:30:10 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id y3so1472286wrl.4
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 03:30:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Ljj6mTtU91lq7b/TfTSVrxl5C/pW9YScENl9tsdXqbE=;
-        b=R6p7I49mAyk1+W/1Y8Pnkj+mPEMAav3VZSQytD31wbItfpPh1Qs0BJRa8ngMSMmjVq
-         lsT3jzTRAxyRpyrFWE4AEx/R/OIiq4h52+GF1ZVtXGRHSjxdRyzllAiImC/uBP6TtXnM
-         wkVWRM2JUBizEGV5pleLWeCgkBHVUm4VjMoLs=
+        bh=VmAXVNOEmIagpqI9zXk7Vr777a8DyEKJO6sU2ZRhMZE=;
+        b=Rzq0kpitnECfcGAFrcsWBqzeRB0qH1BFiTIQ8vafWUdpBIOtZzqPNLwXUazVQx/fjE
+         diAvxmipMcHduHNdpHnxRpKX5HOL3U1sAbiPc4dK5r9xW6nIJmHB9buIVfPxsCxAX2Z/
+         enb+4orKTK+NPtmboMWaolDXrgAoG4z+04IuM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Ljj6mTtU91lq7b/TfTSVrxl5C/pW9YScENl9tsdXqbE=;
-        b=C1G8+gr/0bTpj9XKzXQzdvYEp1KjUB2tjOpaeVYFkM7vqT45mz9jJH8t5DWbODjfEo
-         GchrLkeZyAZQYWwUXMhxVOqw4nxABULhddGlkQkJ1NX0RvFtbtAKb3T4DWLaPuqrndkK
-         ODL0y47T6ffNKvBszqqlu5O6zmOJp9/yhvj0HzXGz+bXcDr9x3mYouVdyY3M2pitmEkQ
-         TQ6Hn1K2ylX6lcrfBDPZtMDSKCzqhPJvwGJN/QHBNHCm1uoPheDhySg1+ISUUCP807vG
-         4DP0crAouQt3HFj7SdNRVe+6x7PDamtsnuvCJDIms8lKj6ncnigjrNK/vVQl0pqrpsKj
-         EMLw==
-X-Gm-Message-State: AOAM530sIiZ92yAI+qCJ4S+N4TUkPJaFnbHod6gUeOtiMmHsoM3a3/HT
-        T1GtSxo+hGvi4CwDkRmNdMPnZg==
-X-Google-Smtp-Source: ABdhPJz9f3ah9Zo/6HnA8IeHmu273+Rifoigfi0sKLMZW8R0SQvk9WprxK0NUVRIpTs//b2yLmRzdg==
-X-Received: by 2002:a1c:9803:: with SMTP id a3mr2979278wme.57.1598005817804;
-        Fri, 21 Aug 2020 03:30:17 -0700 (PDT)
+        bh=VmAXVNOEmIagpqI9zXk7Vr777a8DyEKJO6sU2ZRhMZE=;
+        b=Ve8PpzW41EGoIrrWZ68dzp7DU0HJDf+8JSCnWBhUToS5jqgPXrDD1C1b4+rfFKkvK0
+         /CnxQEgZpD2Xutjmqt46mBa5aLQoc9IXlnag8ggMyT4YsgckjJF1VFwsy7G2ac0pex4Y
+         e+fyqSZjcm3zT7S97ASKhxrEBuVRqjEZgd0CkotQmPu1Zpl/imyPVK4dDBYadHeewrOw
+         Fd3TIElbqGlNg+C586DPl/ivbjaddKdzyWu4tGAA5MhJBY6wI75p/T7CaTcv8HNupd4P
+         xURYBmS8uvgGrvg50WxhalpRvK09lgruzt8BUQ8uaBoy1zDadFc7dxQKTdeAebNyaG81
+         dNvQ==
+X-Gm-Message-State: AOAM530yX/tSAurz7ShzdLU0DZoEdsVhcfYjFFyjTITnJFeQtiaxvkOv
+        YrkpaV+pYxpGH8jYRNdvNZDyHw==
+X-Google-Smtp-Source: ABdhPJzfyddOvZLyRUXWcEt7Dsro4x7b0NM/HUKksdULhsg6VGyQsYEg0+haAn59SlqWhRkduM9NiQ==
+X-Received: by 2002:adf:edd0:: with SMTP id v16mr2278186wro.271.1598005808354;
+        Fri, 21 Aug 2020 03:30:08 -0700 (PDT)
 Received: from antares.lan (2.2.9.a.d.9.4.f.6.1.8.9.f.9.8.5.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:589f:9816:f49d:a922])
-        by smtp.gmail.com with ESMTPSA id o2sm3296885wrj.21.2020.08.21.03.30.16
+        by smtp.gmail.com with ESMTPSA id o2sm3296885wrj.21.2020.08.21.03.30.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2020 03:30:17 -0700 (PDT)
+        Fri, 21 Aug 2020 03:30:07 -0700 (PDT)
 From:   Lorenz Bauer <lmb@cloudflare.com>
 To:     jakub@cloudflare.com, john.fastabend@gmail.com, yhs@fb.com,
-        Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 6/6] selftests: bpf: test sockmap update from BPF
-Date:   Fri, 21 Aug 2020 11:29:48 +0100
-Message-Id: <20200821102948.21918-7-lmb@cloudflare.com>
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     kernel-team@cloudflare.com, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3 1/6] net: sk_msg: simplify sk_psock initialization
+Date:   Fri, 21 Aug 2020 11:29:43 +0100
+Message-Id: <20200821102948.21918-2-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200821102948.21918-1-lmb@cloudflare.com>
 References: <20200821102948.21918-1-lmb@cloudflare.com>
@@ -75,206 +79,231 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a test which copies a socket from a sockmap into another sockmap
-or sockhash. This excercises bpf_map_update_elem support from BPF
-context. Compare the socket cookies from source and destination to
-ensure that the copy succeeded.
+Initializing psock->sk_proto and other saved callbacks is only
+done in sk_psock_update_proto, after sk_psock_init has returned.
+The logic for this is difficult to follow, and needlessly complex.
 
-Also check that the verifier rejects map_update from unsafe contexts.
+Instead, initialize psock->sk_proto whenever we allocate a new
+psock. Additionally, assert the following invariants:
 
+* The SK has no ULP: ULP does it's own finagling of sk->sk_prot
+* sk_user_data is unused: we need it to store sk_psock
+
+Protect our access to sk_user_data with sk_callback_lock, which
+is what other users like reuseport arrays, etc. do.
+
+The result is that an sk_psock is always fully initialized, and
+that psock->sk_proto is always the "original" struct proto.
+The latter allows us to use psock->sk_proto when initializing
+IPv6 TCP / UDP callbacks for sockmap.
+
+Acked-by: John Fastabend <john.fastabend@gmail.com>
 Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 ---
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 78 +++++++++++++++++++
- .../bpf/progs/test_sockmap_invalid_update.c   | 23 ++++++
- .../selftests/bpf/progs/test_sockmap_update.c | 48 ++++++++++++
- 3 files changed, 149 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_invalid_update.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_update.c
+ include/linux/skmsg.h | 17 -----------------
+ net/core/skmsg.c      | 34 ++++++++++++++++++++++++++++------
+ net/core/sock_map.c   | 14 ++++----------
+ net/ipv4/tcp_bpf.c    | 13 +++++--------
+ net/ipv4/udp_bpf.c    |  9 ++++-----
+ 5 files changed, 41 insertions(+), 46 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 96e7b7f84c65..65ce7c289534 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -4,6 +4,8 @@
- 
- #include "test_progs.h"
- #include "test_skmsg_load_helpers.skel.h"
-+#include "test_sockmap_update.skel.h"
-+#include "test_sockmap_invalid_update.skel.h"
- 
- #define TCP_REPAIR		19	/* TCP sock is under repair right now */
- 
-@@ -101,6 +103,76 @@ static void test_skmsg_helpers(enum bpf_map_type map_type)
- 	test_skmsg_load_helpers__destroy(skel);
+diff --git a/include/linux/skmsg.h b/include/linux/skmsg.h
+index 1e9ed840b9fc..3119928fc103 100644
+--- a/include/linux/skmsg.h
++++ b/include/linux/skmsg.h
+@@ -340,23 +340,6 @@ static inline void sk_psock_update_proto(struct sock *sk,
+ 					 struct sk_psock *psock,
+ 					 struct proto *ops)
+ {
+-	/* Initialize saved callbacks and original proto only once, since this
+-	 * function may be called multiple times for a psock, e.g. when
+-	 * psock->progs.msg_parser is updated.
+-	 *
+-	 * Since we've not installed the new proto, psock is not yet in use and
+-	 * we can initialize it without synchronization.
+-	 */
+-	if (!psock->sk_proto) {
+-		struct proto *orig = READ_ONCE(sk->sk_prot);
+-
+-		psock->saved_unhash = orig->unhash;
+-		psock->saved_close = orig->close;
+-		psock->saved_write_space = sk->sk_write_space;
+-
+-		psock->sk_proto = orig;
+-	}
+-
+ 	/* Pairs with lockless read in sk_clone_lock() */
+ 	WRITE_ONCE(sk->sk_prot, ops);
  }
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 6a32a1fd34f8..1c81caf9630f 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -494,14 +494,34 @@ static void sk_psock_backlog(struct work_struct *work)
  
-+static void test_sockmap_update(enum bpf_map_type map_type)
-+{
-+	struct bpf_prog_test_run_attr tattr;
-+	int err, prog, src, dst, duration = 0;
-+	struct test_sockmap_update *skel;
-+	__u64 src_cookie, dst_cookie;
-+	const __u32 zero = 0;
-+	char dummy[14] = {0};
-+	__s64 sk;
+ struct sk_psock *sk_psock_init(struct sock *sk, int node)
+ {
+-	struct sk_psock *psock = kzalloc_node(sizeof(*psock),
+-					      GFP_ATOMIC | __GFP_NOWARN,
+-					      node);
+-	if (!psock)
+-		return NULL;
++	struct sk_psock *psock;
++	struct proto *prot;
+ 
++	write_lock_bh(&sk->sk_callback_lock);
 +
-+	sk = connected_socket_v4();
-+	if (CHECK(sk == -1, "connected_socket_v4", "cannot connect\n"))
-+		return;
-+
-+	skel = test_sockmap_update__open_and_load();
-+	if (CHECK(!skel, "open_and_load", "cannot load skeleton\n")) {
-+		close(sk);
-+		return;
++	if (inet_csk_has_ulp(sk)) {
++		psock = ERR_PTR(-EINVAL);
++		goto out;
 +	}
 +
-+	prog = bpf_program__fd(skel->progs.copy_sock_map);
-+	src = bpf_map__fd(skel->maps.src);
-+	if (map_type == BPF_MAP_TYPE_SOCKMAP)
-+		dst = bpf_map__fd(skel->maps.dst_sock_map);
-+	else
-+		dst = bpf_map__fd(skel->maps.dst_sock_hash);
-+
-+	err = bpf_map_update_elem(src, &zero, &sk, BPF_NOEXIST);
-+	if (CHECK(err, "update_elem(src)", "errno=%u\n", errno))
++	if (sk->sk_user_data) {
++		psock = ERR_PTR(-EBUSY);
 +		goto out;
++	}
 +
-+	err = bpf_map_lookup_elem(src, &zero, &src_cookie);
-+	if (CHECK(err, "lookup_elem(src, cookie)", "errno=%u\n", errno))
++	psock = kzalloc_node(sizeof(*psock), GFP_ATOMIC | __GFP_NOWARN, node);
++	if (!psock) {
++		psock = ERR_PTR(-ENOMEM);
 +		goto out;
++	}
 +
-+	tattr = (struct bpf_prog_test_run_attr){
-+		.prog_fd = prog,
-+		.repeat = 1,
-+		.data_in = dummy,
-+		.data_size_in = sizeof(dummy),
-+	};
-+
-+	err = bpf_prog_test_run_xattr(&tattr);
-+	if (CHECK_ATTR(err || !tattr.retval, "bpf_prog_test_run",
-+		       "errno=%u retval=%u\n", errno, tattr.retval))
-+		goto out;
-+
-+	err = bpf_map_lookup_elem(dst, &zero, &dst_cookie);
-+	if (CHECK(err, "lookup_elem(dst, cookie)", "errno=%u\n", errno))
-+		goto out;
-+
-+	CHECK(dst_cookie != src_cookie, "cookie mismatch", "%llu != %llu\n",
-+	      dst_cookie, src_cookie);
-+
++	prot = READ_ONCE(sk->sk_prot);
+ 	psock->sk = sk;
+-	psock->eval =  __SK_NONE;
++	psock->eval = __SK_NONE;
++	psock->sk_proto = prot;
++	psock->saved_unhash = prot->unhash;
++	psock->saved_close = prot->close;
++	psock->saved_write_space = sk->sk_write_space;
+ 
+ 	INIT_LIST_HEAD(&psock->link);
+ 	spin_lock_init(&psock->link_lock);
+@@ -516,6 +536,8 @@ struct sk_psock *sk_psock_init(struct sock *sk, int node)
+ 	rcu_assign_sk_user_data_nocopy(sk, psock);
+ 	sock_hold(sk);
+ 
 +out:
-+	close(sk);
-+	test_sockmap_update__destroy(skel);
-+}
-+
-+static void test_sockmap_invalid_update(void)
-+{
-+	struct test_sockmap_invalid_update *skel;
-+	int duration = 0;
-+
-+	skel = test_sockmap_invalid_update__open_and_load();
-+	CHECK(skel, "open_and_load", "verifier accepted map_update\n");
-+	if (skel)
-+		test_sockmap_invalid_update__destroy(skel);
-+}
-+
- void test_sockmap_basic(void)
- {
- 	if (test__start_subtest("sockmap create_update_free"))
-@@ -111,4 +183,10 @@ void test_sockmap_basic(void)
- 		test_skmsg_helpers(BPF_MAP_TYPE_SOCKMAP);
- 	if (test__start_subtest("sockhash sk_msg load helpers"))
- 		test_skmsg_helpers(BPF_MAP_TYPE_SOCKHASH);
-+	if (test__start_subtest("sockmap update"))
-+		test_sockmap_update(BPF_MAP_TYPE_SOCKMAP);
-+	if (test__start_subtest("sockhash update"))
-+		test_sockmap_update(BPF_MAP_TYPE_SOCKHASH);
-+	if (test__start_subtest("sockmap update in unsafe context"))
-+		test_sockmap_invalid_update();
++	write_unlock_bh(&sk->sk_callback_lock);
+ 	return psock;
  }
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_invalid_update.c b/tools/testing/selftests/bpf/progs/test_sockmap_invalid_update.c
-new file mode 100644
-index 000000000000..02a59e220cbc
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_invalid_update.c
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2020 Cloudflare
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} map SEC(".maps");
-+
-+SEC("sockops")
-+int bpf_sockmap(struct bpf_sock_ops *skops)
-+{
-+	__u32 key = 0;
-+
-+	if (skops->sk)
-+		bpf_map_update_elem(&map, &key, skops->sk, 0);
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_update.c b/tools/testing/selftests/bpf/progs/test_sockmap_update.c
-new file mode 100644
-index 000000000000..9d0c9f28cab2
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_update.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2020 Cloudflare
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} src SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} dst_sock_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKHASH);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} dst_sock_hash SEC(".maps");
-+
-+SEC("classifier/copy_sock_map")
-+int copy_sock_map(void *ctx)
-+{
-+	struct bpf_sock *sk;
-+	bool failed = false;
-+	__u32 key = 0;
-+
-+	sk = bpf_map_lookup_elem(&src, &key);
-+	if (!sk)
-+		return SK_DROP;
-+
-+	if (bpf_map_update_elem(&dst_sock_map, &key, sk, 0))
-+		failed = true;
-+
-+	if (bpf_map_update_elem(&dst_sock_hash, &key, sk, 0))
-+		failed = true;
-+
-+	bpf_sk_release(sk);
-+	return failed ? SK_DROP : SK_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+ EXPORT_SYMBOL_GPL(sk_psock_init);
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index 119f52a99dc1..abe4bac40db9 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -184,8 +184,6 @@ static int sock_map_init_proto(struct sock *sk, struct sk_psock *psock)
+ {
+ 	struct proto *prot;
+ 
+-	sock_owned_by_me(sk);
+-
+ 	switch (sk->sk_type) {
+ 	case SOCK_STREAM:
+ 		prot = tcp_bpf_get_proto(sk, psock);
+@@ -272,8 +270,8 @@ static int sock_map_link(struct bpf_map *map, struct sk_psock_progs *progs,
+ 		}
+ 	} else {
+ 		psock = sk_psock_init(sk, map->numa_node);
+-		if (!psock) {
+-			ret = -ENOMEM;
++		if (IS_ERR(psock)) {
++			ret = PTR_ERR(psock);
+ 			goto out_progs;
+ 		}
+ 	}
+@@ -322,8 +320,8 @@ static int sock_map_link_no_progs(struct bpf_map *map, struct sock *sk)
+ 
+ 	if (!psock) {
+ 		psock = sk_psock_init(sk, map->numa_node);
+-		if (!psock)
+-			return -ENOMEM;
++		if (IS_ERR(psock))
++			return PTR_ERR(psock);
+ 	}
+ 
+ 	ret = sock_map_init_proto(sk, psock);
+@@ -478,8 +476,6 @@ static int sock_map_update_common(struct bpf_map *map, u32 idx,
+ 		return -EINVAL;
+ 	if (unlikely(idx >= map->max_entries))
+ 		return -E2BIG;
+-	if (inet_csk_has_ulp(sk))
+-		return -EINVAL;
+ 
+ 	link = sk_psock_init_link();
+ 	if (!link)
+@@ -855,8 +851,6 @@ static int sock_hash_update_common(struct bpf_map *map, void *key,
+ 	WARN_ON_ONCE(!rcu_read_lock_held());
+ 	if (unlikely(flags > BPF_EXIST))
+ 		return -EINVAL;
+-	if (inet_csk_has_ulp(sk))
+-		return -EINVAL;
+ 
+ 	link = sk_psock_init_link();
+ 	if (!link)
+diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+index 7aa68f4aae6c..37f4cb2bba5c 100644
+--- a/net/ipv4/tcp_bpf.c
++++ b/net/ipv4/tcp_bpf.c
+@@ -567,10 +567,9 @@ static void tcp_bpf_rebuild_protos(struct proto prot[TCP_BPF_NUM_CFGS],
+ 	prot[TCP_BPF_TX].sendpage		= tcp_bpf_sendpage;
+ }
+ 
+-static void tcp_bpf_check_v6_needs_rebuild(struct sock *sk, struct proto *ops)
++static void tcp_bpf_check_v6_needs_rebuild(struct proto *ops)
+ {
+-	if (sk->sk_family == AF_INET6 &&
+-	    unlikely(ops != smp_load_acquire(&tcpv6_prot_saved))) {
++	if (unlikely(ops != smp_load_acquire(&tcpv6_prot_saved))) {
+ 		spin_lock_bh(&tcpv6_prot_lock);
+ 		if (likely(ops != tcpv6_prot_saved)) {
+ 			tcp_bpf_rebuild_protos(tcp_bpf_prots[TCP_BPF_IPV6], ops);
+@@ -603,13 +602,11 @@ struct proto *tcp_bpf_get_proto(struct sock *sk, struct sk_psock *psock)
+ 	int family = sk->sk_family == AF_INET6 ? TCP_BPF_IPV6 : TCP_BPF_IPV4;
+ 	int config = psock->progs.msg_parser   ? TCP_BPF_TX   : TCP_BPF_BASE;
+ 
+-	if (!psock->sk_proto) {
+-		struct proto *ops = READ_ONCE(sk->sk_prot);
+-
+-		if (tcp_bpf_assert_proto_ops(ops))
++	if (sk->sk_family == AF_INET6) {
++		if (tcp_bpf_assert_proto_ops(psock->sk_proto))
+ 			return ERR_PTR(-EINVAL);
+ 
+-		tcp_bpf_check_v6_needs_rebuild(sk, ops);
++		tcp_bpf_check_v6_needs_rebuild(psock->sk_proto);
+ 	}
+ 
+ 	return &tcp_bpf_prots[family][config];
+diff --git a/net/ipv4/udp_bpf.c b/net/ipv4/udp_bpf.c
+index eddd973e6575..7a94791efc1a 100644
+--- a/net/ipv4/udp_bpf.c
++++ b/net/ipv4/udp_bpf.c
+@@ -22,10 +22,9 @@ static void udp_bpf_rebuild_protos(struct proto *prot, const struct proto *base)
+ 	prot->close  = sock_map_close;
+ }
+ 
+-static void udp_bpf_check_v6_needs_rebuild(struct sock *sk, struct proto *ops)
++static void udp_bpf_check_v6_needs_rebuild(struct proto *ops)
+ {
+-	if (sk->sk_family == AF_INET6 &&
+-	    unlikely(ops != smp_load_acquire(&udpv6_prot_saved))) {
++	if (unlikely(ops != smp_load_acquire(&udpv6_prot_saved))) {
+ 		spin_lock_bh(&udpv6_prot_lock);
+ 		if (likely(ops != udpv6_prot_saved)) {
+ 			udp_bpf_rebuild_protos(&udp_bpf_prots[UDP_BPF_IPV6], ops);
+@@ -46,8 +45,8 @@ struct proto *udp_bpf_get_proto(struct sock *sk, struct sk_psock *psock)
+ {
+ 	int family = sk->sk_family == AF_INET ? UDP_BPF_IPV4 : UDP_BPF_IPV6;
+ 
+-	if (!psock->sk_proto)
+-		udp_bpf_check_v6_needs_rebuild(sk, READ_ONCE(sk->sk_prot));
++	if (sk->sk_family == AF_INET6)
++		udp_bpf_check_v6_needs_rebuild(psock->sk_proto);
+ 
+ 	return &udp_bpf_prots[family];
+ }
 -- 
 2.25.1
 
