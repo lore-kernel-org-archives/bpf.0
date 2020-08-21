@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DF7B0C433E3
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:27:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB710C433E1
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:28:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE979207C3
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:27:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BB87B207C3
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:28:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="IslLzGLl"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="b8vgBKhg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728146AbgHUP1z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Aug 2020 11:27:55 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:33318 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728138AbgHUP1y (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 21 Aug 2020 11:27:54 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 07LFOkW9025127
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 08:27:53 -0700
+        id S1728180AbgHUP2s (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Aug 2020 11:28:48 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:59134 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727782AbgHUP2q (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 21 Aug 2020 11:28:46 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07LFQl4w025666
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 08:28:44 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=EEpqwTzKkypMtrBvrrEkYY77aZvBu5WCYIpWBrRCXs4=;
- b=IslLzGLlX40iReOAMTnV0+Qryo41u4KIiYuBhYl24y790dUoAwOUZMCNqWgiifqIXtEl
- dDQGPC2ygtSh3Tc13NggScpk9lUjCh7kya5hJPitNNTmSrwHrLGPqXGHn3hkcBHmItmu
- LW6PcLuswOFqsiX5pCWE73Z6TBEzOvh86gs= 
+ bh=QJ4UraS5Q3q15PU57x30nEIbg+862MWUX7q91oaWF44=;
+ b=b8vgBKhggGIHrAJeS1F19MuULvjGeGvvtDU2+ERQiDUthA5PZXm3DVmUdjinDlPKh6Et
+ H4FG5plJQ4iKO5aOHI6djxq6eFDA1uknNWSHwKAUb8qUCiMH7W9lm5wjCzZvS4G3ydB6
+ g+tIM2tz0I0PQzYc+AieOMFBYf/luLq2eCM= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 331hcc165w-7
+        by mx0a-00082601.pphosted.com with ESMTP id 331cueabbu-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 08:27:53 -0700
-Received: from intmgw003.06.prn3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 08:28:44 -0700
+Received: from intmgw004.06.prn3.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 21 Aug 2020 08:27:46 -0700
+ 15.1.1979.3; Fri, 21 Aug 2020 08:28:43 -0700
 Received: by devvm1096.prn0.facebook.com (Postfix, from userid 111017)
-        id 9B86F3441075; Fri, 21 Aug 2020 08:01:35 -0700 (PDT)
+        id AABF2344107B; Fri, 21 Aug 2020 08:01:35 -0700 (PDT)
 Smtp-Origin-Hostprefix: devvm
 From:   Roman Gushchin <guro@fb.com>
 Smtp-Origin-Hostname: devvm1096.prn0.facebook.com
@@ -50,12 +50,11 @@ CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Johannes Weiner <hannes@cmpxchg.org>,
         Shakeel Butt <shakeelb@google.com>, <linux-mm@kvack.org>,
-        Roman Gushchin <guro@fb.com>, Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
+        Roman Gushchin <guro@fb.com>, Song Liu <songliubraving@fb.com>
 Smtp-Origin-Cluster: prn0c01
-Subject: [PATCH bpf-next v4 23/30] bpf: eliminate rlimit-based memory accounting for bpf ringbuffer
-Date:   Fri, 21 Aug 2020 08:01:27 -0700
-Message-ID: <20200821150134.2581465-24-guro@fb.com>
+Subject: [PATCH bpf-next v4 26/30] bpf: eliminate rlimit-based memory accounting for socket storage maps
+Date:   Fri, 21 Aug 2020 08:01:30 -0700
+Message-ID: <20200821150134.2581465-27-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200821150134.2581465-1-guro@fb.com>
 References: <20200821150134.2581465-1-guro@fb.com>
@@ -65,97 +64,62 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-21_08:2020-08-21,2020-08-21 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- priorityscore=1501 suspectscore=38 clxscore=1015 bulkscore=0
- mlxlogscore=849 lowpriorityscore=0 phishscore=0 impostorscore=0
- adultscore=0 mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2008210144
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ priorityscore=1501 suspectscore=13 spamscore=0 impostorscore=0 mlxscore=0
+ adultscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 mlxlogscore=882
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008210144
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Do not use rlimit-based memory accounting for bpf ringbuffer.
+Do not use rlimit-based memory accounting for socket storage maps.
 It has been replaced with the memcg-based memory accounting.
-
-bpf_ringbuf_alloc() can't return anything except ERR_PTR(-ENOMEM)
-and a valid pointer, so to simplify the code make it return NULL
-in the first case. This allows to drop a couple of lines in
-ringbuf_map_alloc() and also makes it look similar to other memory
-allocating function like kmalloc().
 
 Signed-off-by: Roman Gushchin <guro@fb.com>
 Acked-by: Song Liu <songliubraving@fb.com>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
 ---
- kernel/bpf/ringbuf.c | 24 ++++--------------------
- 1 file changed, 4 insertions(+), 20 deletions(-)
+ net/core/bpf_sk_storage.c | 11 -----------
+ 1 file changed, 11 deletions(-)
 
-diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-index e8e2c39cbdc9..e687b798d097 100644
---- a/kernel/bpf/ringbuf.c
-+++ b/kernel/bpf/ringbuf.c
-@@ -48,7 +48,6 @@ struct bpf_ringbuf {
-=20
- struct bpf_ringbuf_map {
- 	struct bpf_map map;
--	struct bpf_map_memory memory;
- 	struct bpf_ringbuf *rb;
- };
-=20
-@@ -135,7 +134,7 @@ static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t d=
-ata_sz, int numa_node)
-=20
- 	rb =3D bpf_ringbuf_area_alloc(data_sz, numa_node);
- 	if (!rb)
--		return ERR_PTR(-ENOMEM);
-+		return NULL;
-=20
- 	spin_lock_init(&rb->spinlock);
- 	init_waitqueue_head(&rb->waitq);
-@@ -151,8 +150,6 @@ static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t d=
-ata_sz, int numa_node)
- static struct bpf_map *ringbuf_map_alloc(union bpf_attr *attr)
- {
- 	struct bpf_ringbuf_map *rb_map;
+diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+index 806b7a9f836e..bc378ce499f4 100644
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -676,8 +676,6 @@ static struct bpf_map *bpf_sk_storage_map_alloc(union=
+ bpf_attr *attr)
+ 	struct bpf_sk_storage_map *smap;
+ 	unsigned int i;
+ 	u32 nbuckets;
 -	u64 cost;
--	int err;
+-	int ret;
 =20
- 	if (attr->map_flags & ~RINGBUF_CREATE_FLAG_MASK)
- 		return ERR_PTR(-EINVAL);
-@@ -174,26 +171,13 @@ static struct bpf_map *ringbuf_map_alloc(union bpf_=
-attr *attr)
-=20
- 	bpf_map_init_from_attr(&rb_map->map, attr);
-=20
--	cost =3D sizeof(struct bpf_ringbuf_map) +
--	       sizeof(struct bpf_ringbuf) +
--	       attr->max_entries;
--	err =3D bpf_map_charge_init(&rb_map->map.memory, cost);
--	if (err)
--		goto err_free_map;
+ 	smap =3D kzalloc(sizeof(*smap), GFP_USER | __GFP_NOWARN | __GFP_ACCOUNT=
+);
+ 	if (!smap)
+@@ -688,18 +686,9 @@ static struct bpf_map *bpf_sk_storage_map_alloc(unio=
+n bpf_attr *attr)
+ 	/* Use at least 2 buckets, select_bucket() is undefined behavior with 1=
+ bucket */
+ 	nbuckets =3D max_t(u32, 2, nbuckets);
+ 	smap->bucket_log =3D ilog2(nbuckets);
+-	cost =3D sizeof(*smap->buckets) * nbuckets + sizeof(*smap);
 -
- 	rb_map->rb =3D bpf_ringbuf_alloc(attr->max_entries, rb_map->map.numa_no=
-de);
--	if (IS_ERR(rb_map->rb)) {
--		err =3D PTR_ERR(rb_map->rb);
--		goto err_uncharge;
-+	if (!rb_map->rb) {
-+		kfree(rb_map);
-+		return ERR_PTR(-ENOMEM);
+-	ret =3D bpf_map_charge_init(&smap->map.memory, cost);
+-	if (ret < 0) {
+-		kfree(smap);
+-		return ERR_PTR(ret);
+-	}
+-
+ 	smap->buckets =3D kvcalloc(sizeof(*smap->buckets), nbuckets,
+ 				 GFP_USER | __GFP_NOWARN | __GFP_ACCOUNT);
+ 	if (!smap->buckets) {
+-		bpf_map_charge_finish(&smap->map.memory);
+ 		kfree(smap);
+ 		return ERR_PTR(-ENOMEM);
  	}
-=20
- 	return &rb_map->map;
--
--err_uncharge:
--	bpf_map_charge_finish(&rb_map->map.memory);
--err_free_map:
--	kfree(rb_map);
--	return ERR_PTR(err);
- }
-=20
- static void bpf_ringbuf_free(struct bpf_ringbuf *rb)
 --=20
 2.26.2
 
