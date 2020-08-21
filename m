@@ -2,126 +2,113 @@ Return-Path: <SRS0=M9Uk=B7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1084C433DF
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:18:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 712E1C433DF
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:18:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AD2BA207BB
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:18:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 48000207BB
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:18:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="bkc8WAgj"
+	dkim=pass (2048-bit key) header.d=tessares-net.20150623.gappssmtp.com header.i=@tessares-net.20150623.gappssmtp.com header.b="gE1uffvk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728116AbgHUPSI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Aug 2020 11:18:08 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:41422 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728121AbgHUPR5 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 21 Aug 2020 11:17:57 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07LFATTU023038
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 08:17:56 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=LNqDcun6xOIbIYkt7APuKm2n1cxQU9Xgs1+YBzvY3CU=;
- b=bkc8WAgjswd6/P9ezFXqKebSYv3F5r46qS7qWlyI1IgLW+ckvGB4ve6nWBhkW/QFtqqF
- PTwnwq/m945BNsQagr6yoBdbqfEgRpF7hCiqENUnt/BMJXYOaR+SFxyYotsBNFUZ7Hz6
- jfvyMG6s8Z/IhhDJbYMb07WbzIHl6fE0hb0= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 332ehfrrfd-9
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 08:17:56 -0700
-Received: from intmgw002.41.prn1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 21 Aug 2020 08:17:52 -0700
-Received: by devvm1096.prn0.facebook.com (Postfix, from userid 111017)
-        id 970993441073; Fri, 21 Aug 2020 08:01:35 -0700 (PDT)
-Smtp-Origin-Hostprefix: devvm
-From:   Roman Gushchin <guro@fb.com>
-Smtp-Origin-Hostname: devvm1096.prn0.facebook.com
-To:     <bpf@vger.kernel.org>
-CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <linux-kernel@vger.kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeelb@google.com>, <linux-mm@kvack.org>,
-        Roman Gushchin <guro@fb.com>, Song Liu <songliubraving@fb.com>
-Smtp-Origin-Cluster: prn0c01
-Subject: [PATCH bpf-next v4 22/30] bpf: eliminate rlimit-based memory accounting for reuseport_array maps
-Date:   Fri, 21 Aug 2020 08:01:26 -0700
-Message-ID: <20200821150134.2581465-23-guro@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200821150134.2581465-1-guro@fb.com>
-References: <20200821150134.2581465-1-guro@fb.com>
+        id S1728139AbgHUPSN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Aug 2020 11:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51940 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726542AbgHUPSH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Aug 2020 11:18:07 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F55C061573
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 08:18:07 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id bs17so1736123edb.1
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 08:18:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares-net.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EW86S+wOpEKW8Kx1XDDlLAS9uMUipxyI6cdNEFb3Vyc=;
+        b=gE1uffvkQ25P/5633mrrWxh8bc7NtDkX3krN3YHGog8ioySgsKwYrYIjKpLUwJEqj0
+         /cB3n1LkfGWtRU9dZn3uY8rYFUa88pVyEB2MDEHXGzj03D6nIcV5rvssfwfp37+/xUfq
+         u+LPKbKan9sXbY233/JYB0+SuRDm11ph2ehAQvn1fk7IFhnfISd62SqoSRkOo9rg47sO
+         fsa3mKa5hBfYnLJzQnUEqFVs7IqyycEiHSMa/23WU0wIobD3bWR+Dyr5WOkSUhxSOo/e
+         QtPgrJhHhV7CIRluNvapatdHo/7riRekygzRlKkmxv1NtNvlxYM2kJ2uuiAD0y65o3MJ
+         fZyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EW86S+wOpEKW8Kx1XDDlLAS9uMUipxyI6cdNEFb3Vyc=;
+        b=pIjP2nRkfQAvUHdlcLYRe/bUfnZNpoQ4LQTaRuA1CvIEa8bZa+Ev3qy/ZNRj8X+hp9
+         dDfGU6S2908MZNZtLJRpQjMWkhkFb11Nyq4Hz5Ti74MEYAtuhKLbuxyBG86YMi4YgCgx
+         KV/IiaTJbJiQIFmh08ZFFQQcjS18TnizzNW1izbUM5OxFzTFUYoqCXViiR9DSr1DDSyx
+         FuNy7+02m9d2Y/0NWmkma2QlPa3h2T0uWTm9A4sS4CmiHWyv5MTGVv9lEkct0eF5LGpU
+         WJAGL0AbdALd2CkPf9sjwu9xkYmG+VidnhWjuu9vSZl4xmzEFt4xJokIgfRyMfmKUQ9h
+         +cwg==
+X-Gm-Message-State: AOAM531pE7+APA1LIkyGUjsXiund7tfy7vUJn6QVvNX6WOemRVLMHuoq
+        /asZz9+l1c0aYz5SWM8Zr/FB5w==
+X-Google-Smtp-Source: ABdhPJwMNB68/r/+Pn1Djk2McNP2tPUKyR/yeSAbMTRbuPvKKlWLlLS4F9/9jsYD8g4maRjcgs/p+Q==
+X-Received: by 2002:a05:6402:3130:: with SMTP id dd16mr3250341edb.55.1598023085801;
+        Fri, 21 Aug 2020 08:18:05 -0700 (PDT)
+Received: from localhost.localdomain (223.60-242-81.adsl-dyn.isp.belgacom.be. [81.242.60.223])
+        by smtp.gmail.com with ESMTPSA id qp16sm1482709ejb.89.2020.08.21.08.18.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Aug 2020 08:18:05 -0700 (PDT)
+From:   Nicolas Rybowski <nicolas.rybowski@tessares.net>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
+Cc:     Nicolas Rybowski <nicolas.rybowski@tessares.net>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mptcp@lists.01.org, netdev@vger.kernel.org
+Subject: [PATCH bpf-next 0/3] bpf: add MPTCP subflow support
+Date:   Fri, 21 Aug 2020 17:15:38 +0200
+Message-Id: <20200821151544.1211989-1-nicolas.rybowski@tessares.net>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-21_08:2020-08-21,2020-08-21 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- priorityscore=1501 spamscore=0 mlxscore=0 suspectscore=38 mlxlogscore=752
- phishscore=0 malwarescore=0 impostorscore=0 clxscore=1015 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008210143
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Do not use rlimit-based memory accounting for reuseport_array maps.
-It has been replaced with the memcg-based memory accounting.
+Previously it was not possible to make a distinction between plain TCP
+sockets and MPTCP subflow sockets on the BPF_PROG_TYPE_SOCK_OPS hook.
 
-Signed-off-by: Roman Gushchin <guro@fb.com>
-Acked-by: Song Liu <songliubraving@fb.com>
----
- kernel/bpf/reuseport_array.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+This patch series now enables a fine control of subflow sockets. In its
+current state, it allows to put different sockopt on each subflow from a
+same MPTCP connection (socket mark, TCP congestion algorithm, ...) using
+BPF programs.
 
-diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
-index 90b29c5b1da7..9d0161fdfec7 100644
---- a/kernel/bpf/reuseport_array.c
-+++ b/kernel/bpf/reuseport_array.c
-@@ -150,9 +150,8 @@ static void reuseport_array_free(struct bpf_map *map)
-=20
- static struct bpf_map *reuseport_array_alloc(union bpf_attr *attr)
- {
--	int err, numa_node =3D bpf_map_attr_numa_node(attr);
-+	int numa_node =3D bpf_map_attr_numa_node(attr);
- 	struct reuseport_array *array;
--	struct bpf_map_memory mem;
- 	u64 array_size;
-=20
- 	if (!bpf_capable())
-@@ -161,20 +160,13 @@ static struct bpf_map *reuseport_array_alloc(union =
-bpf_attr *attr)
- 	array_size =3D sizeof(*array);
- 	array_size +=3D (u64)attr->max_entries * sizeof(struct sock *);
-=20
--	err =3D bpf_map_charge_init(&mem, array_size);
--	if (err)
--		return ERR_PTR(err);
--
- 	/* allocate all map elements and zero-initialize them */
- 	array =3D bpf_map_area_alloc(array_size, numa_node);
--	if (!array) {
--		bpf_map_charge_finish(&mem);
-+	if (!array)
- 		return ERR_PTR(-ENOMEM);
--	}
-=20
- 	/* copy mandatory map attributes */
- 	bpf_map_init_from_attr(&array->map, attr);
--	bpf_map_charge_move(&array->map.memory, &mem);
-=20
- 	return &array->map;
- }
---=20
-2.26.2
+It should also be the basis of exposing MPTCP-specific fields through BPF.
+
+Nicolas Rybowski (3):
+  bpf: expose is_mptcp flag to bpf_tcp_sock
+  mptcp: attach subflow socket to parent cgroup
+  bpf: add 'bpf_mptcp_sock' structure and helper
+
+ include/linux/bpf.h            | 33 ++++++++++++++++
+ include/uapi/linux/bpf.h       | 14 +++++++
+ kernel/bpf/verifier.c          | 30 ++++++++++++++
+ net/core/filter.c              | 13 +++++-
+ net/mptcp/Makefile             |  2 +
+ net/mptcp/bpf.c                | 72 ++++++++++++++++++++++++++++++++++
+ net/mptcp/subflow.c            | 27 +++++++++++++
+ scripts/bpf_helpers_doc.py     |  2 +
+ tools/include/uapi/linux/bpf.h | 14 +++++++
+ 9 files changed, 206 insertions(+), 1 deletion(-)
+ create mode 100644 net/mptcp/bpf.c
+
+-- 
+2.28.0
 
