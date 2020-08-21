@@ -5,42 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21B0FC433E1
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:06:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4516C433E1
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:07:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EF41320656
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:06:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81583207DE
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:07:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="cLxEmRzX"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Ooka7yuP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727907AbgHUPGs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Aug 2020 11:06:48 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:43488 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727903AbgHUPGr (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 21 Aug 2020 11:06:47 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07LF4DCN006669
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 08:06:45 -0700
+        id S1728046AbgHUPHE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Aug 2020 11:07:04 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:22026 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727072AbgHUPGs (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 21 Aug 2020 11:06:48 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 07LF2Uu4003793
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 08:06:47 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=RZYe74Umrx4SuZo82U3dVJ635qqku6CpK0PXhAa9zAQ=;
- b=cLxEmRzXscG58p7pjoeY9Bt63iqgWSCYGe1GZCekwZ1Ev7ZpZj5KPKSpB/GKYZd/pUoY
- Z6BAkQ3h3PAJYxwECwvIBAnhIxth0SR5eLPB3SukbHSONbQ+cdN3W85yNc8qMrbBLrWg
- ESiA9z61XbruDivix7d35oaLa6qMwejvnSs= 
+ bh=vNrR4zSzmcgBz+DK2EJwB/LPCbtsGJ9/WTDRVxCAlTk=;
+ b=Ooka7yuPU9b8tDuL+hra78HFmpQeMZ2wYkPY4DK2YrbHQemwFySzL7XEGhI7h724apCb
+ VR0lwpIl/JNO9R3J/IonMzSmcRR8vGJJqrsDBn5JvGUrhIpKWhrWMCH7zPZsCL7fdnW3
+ /gDZLkOAj6/TiH93p7GAzZdiP4gvP4aLlNw= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3318g0uc06-4
+        by m0001303.ppops.net with ESMTP id 3304jjn1y5-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 08:06:45 -0700
-Received: from intmgw004.06.prn3.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 08:06:47 -0700
+Received: from intmgw004.06.prn3.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1979.3; Fri, 21 Aug 2020 08:06:43 -0700
 Received: by devvm1096.prn0.facebook.com (Postfix, from userid 111017)
-        id B4D80344107F; Fri, 21 Aug 2020 08:01:35 -0700 (PDT)
+        id 78BFF3441067; Fri, 21 Aug 2020 08:01:35 -0700 (PDT)
 Smtp-Origin-Hostprefix: devvm
 From:   Roman Gushchin <guro@fb.com>
 Smtp-Origin-Hostname: devvm1096.prn0.facebook.com
@@ -50,11 +50,11 @@ CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         <linux-kernel@vger.kernel.org>,
         Johannes Weiner <hannes@cmpxchg.org>,
         Shakeel Butt <shakeelb@google.com>, <linux-mm@kvack.org>,
-        Roman Gushchin <guro@fb.com>
+        Roman Gushchin <guro@fb.com>, Song Liu <songliubraving@fb.com>
 Smtp-Origin-Cluster: prn0c01
-Subject: [PATCH bpf-next v4 28/30] bpf: eliminate rlimit-based memory accounting infra for bpf maps
-Date:   Fri, 21 Aug 2020 08:01:32 -0700
-Message-ID: <20200821150134.2581465-29-guro@fb.com>
+Subject: [PATCH bpf-next v4 16/30] bpf: eliminate rlimit-based memory accounting for cpumap maps
+Date:   Fri, 21 Aug 2020 08:01:20 -0700
+Message-ID: <20200821150134.2581465-17-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200821150134.2581465-1-guro@fb.com>
 References: <20200821150134.2581465-1-guro@fb.com>
@@ -64,208 +64,70 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-21_08:2020-08-21,2020-08-21 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 spamscore=0
- lowpriorityscore=0 clxscore=1015 bulkscore=0 priorityscore=1501
- mlxlogscore=999 suspectscore=38 mlxscore=0 adultscore=0 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008210142
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=38
+ lowpriorityscore=0 priorityscore=1501 malwarescore=0 spamscore=0
+ impostorscore=0 bulkscore=0 mlxlogscore=908 phishscore=0 mlxscore=0
+ clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008210141
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Remove rlimit-based accounting infrastructure code, which is not used
-anymore.
+Do not use rlimit-based memory accounting for cpumap maps.
+It has been replaced with the memcg-based memory accounting.
 
 Signed-off-by: Roman Gushchin <guro@fb.com>
+Acked-by: Song Liu <songliubraving@fb.com>
 ---
- include/linux/bpf.h                           | 12 ----
- kernel/bpf/syscall.c                          | 64 +------------------
- .../selftests/bpf/progs/map_ptr_kern.c        |  5 --
- 3 files changed, 2 insertions(+), 79 deletions(-)
+ kernel/bpf/cpumap.c | 16 +---------------
+ 1 file changed, 1 insertion(+), 15 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index b5f178afde94..7f81cbb981a6 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -113,11 +113,6 @@ struct bpf_map_ops {
- 	const struct bpf_iter_seq_info *iter_seq_info;
- };
-=20
--struct bpf_map_memory {
--	u32 pages;
--	struct user_struct *user;
--};
--
- struct bpf_map {
- 	/* The first two cachelines with read-mostly members of which some
- 	 * are also accessed in fast-path (e.g. ops, max_entries).
-@@ -138,7 +133,6 @@ struct bpf_map {
- 	u32 btf_key_type_id;
- 	u32 btf_value_type_id;
- 	struct btf *btf;
--	struct bpf_map_memory memory;
- #ifdef CONFIG_MEMCG_KMEM
- 	struct mem_cgroup *memcg;
- #endif
-@@ -1148,12 +1142,6 @@ void bpf_map_inc_with_uref(struct bpf_map *map);
- struct bpf_map * __must_check bpf_map_inc_not_zero(struct bpf_map *map);
- void bpf_map_put_with_uref(struct bpf_map *map);
- void bpf_map_put(struct bpf_map *map);
--int bpf_map_charge_memlock(struct bpf_map *map, u32 pages);
--void bpf_map_uncharge_memlock(struct bpf_map *map, u32 pages);
--int bpf_map_charge_init(struct bpf_map_memory *mem, u64 size);
--void bpf_map_charge_finish(struct bpf_map_memory *mem);
--void bpf_map_charge_move(struct bpf_map_memory *dst,
--			 struct bpf_map_memory *src);
- void *bpf_map_area_alloc(u64 size, int numa_node);
- void *bpf_map_area_mmapable_alloc(u64 size, int numa_node);
- void bpf_map_area_free(void *base);
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 683614c17a95..392e3b2f58e4 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -355,60 +355,6 @@ static void bpf_uncharge_memlock(struct user_struct =
-*user, u32 pages)
- 		atomic_long_sub(pages, &user->locked_vm);
- }
-=20
--int bpf_map_charge_init(struct bpf_map_memory *mem, u64 size)
--{
--	u32 pages =3D round_up(size, PAGE_SIZE) >> PAGE_SHIFT;
--	struct user_struct *user;
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index 74ae9fcbe82e..50f3444a3301 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -86,8 +86,6 @@ static struct bpf_map *cpu_map_alloc(union bpf_attr *at=
+tr)
+ 	u32 value_size =3D attr->value_size;
+ 	struct bpf_cpu_map *cmap;
+ 	int err =3D -ENOMEM;
+-	u64 cost;
 -	int ret;
+=20
+ 	if (!bpf_capable())
+ 		return ERR_PTR(-EPERM);
+@@ -111,26 +109,14 @@ static struct bpf_map *cpu_map_alloc(union bpf_attr=
+ *attr)
+ 		goto free_cmap;
+ 	}
+=20
+-	/* make sure page count doesn't overflow */
+-	cost =3D (u64) cmap->map.max_entries * sizeof(struct bpf_cpu_map_entry =
+*);
 -
--	if (size >=3D U32_MAX - PAGE_SIZE)
--		return -E2BIG;
--
--	user =3D get_current_user();
--	ret =3D bpf_charge_memlock(user, pages);
+-	/* Notice returns -EPERM on if map size is larger than memlock limit */
+-	ret =3D bpf_map_charge_init(&cmap->map.memory, cost);
 -	if (ret) {
--		free_uid(user);
--		return ret;
+-		err =3D ret;
+-		goto free_cmap;
 -	}
 -
--	mem->pages =3D pages;
--	mem->user =3D user;
--
--	return 0;
--}
--
--void bpf_map_charge_finish(struct bpf_map_memory *mem)
--{
--	bpf_uncharge_memlock(mem->user, mem->pages);
--	free_uid(mem->user);
--}
--
--void bpf_map_charge_move(struct bpf_map_memory *dst,
--			 struct bpf_map_memory *src)
--{
--	*dst =3D *src;
--
--	/* Make sure src will not be used for the redundant uncharging. */
--	memset(src, 0, sizeof(struct bpf_map_memory));
--}
--
--int bpf_map_charge_memlock(struct bpf_map *map, u32 pages)
--{
--	int ret;
--
--	ret =3D bpf_charge_memlock(map->memory.user, pages);
--	if (ret)
--		return ret;
--	map->memory.pages +=3D pages;
--	return ret;
--}
--
--void bpf_map_uncharge_memlock(struct bpf_map *map, u32 pages)
--{
--	bpf_uncharge_memlock(map->memory.user, pages);
--	map->memory.pages -=3D pages;
--}
--
- static int bpf_map_alloc_id(struct bpf_map *map)
- {
- 	int id;
-@@ -478,13 +424,10 @@ static void bpf_map_release_memcg(struct bpf_map *m=
-ap)
- static void bpf_map_free_deferred(struct work_struct *work)
- {
- 	struct bpf_map *map =3D container_of(work, struct bpf_map, work);
--	struct bpf_map_memory mem;
+ 	/* Alloc array for possible remote "destination" CPUs */
+ 	cmap->cpu_map =3D bpf_map_area_alloc(cmap->map.max_entries *
+ 					   sizeof(struct bpf_cpu_map_entry *),
+ 					   cmap->map.numa_node);
+ 	if (!cmap->cpu_map)
+-		goto free_charge;
++		goto free_cmap;
 =20
--	bpf_map_charge_move(&mem, &map->memory);
- 	security_bpf_map_free(map);
- 	/* implementation dependent freeing */
- 	map->ops->map_free(map);
--	bpf_map_charge_finish(&mem);
- 	bpf_map_release_memcg(map);
- }
-=20
-@@ -564,7 +507,7 @@ static void bpf_map_show_fdinfo(struct seq_file *m, s=
-truct file *filp)
- 		   "value_size:\t%u\n"
- 		   "max_entries:\t%u\n"
- 		   "map_flags:\t%#x\n"
--		   "memlock:\t%llu\n"
-+		   "memlock:\t%llu\n" /* deprecated */
- 		   "map_id:\t%u\n"
- 		   "frozen:\t%u\n",
- 		   map->map_type,
-@@ -572,7 +515,7 @@ static void bpf_map_show_fdinfo(struct seq_file *m, s=
-truct file *filp)
- 		   map->value_size,
- 		   map->max_entries,
- 		   map->map_flags,
--		   map->memory.pages * 1ULL << PAGE_SHIFT,
-+		   0LLU,
- 		   map->id,
- 		   READ_ONCE(map->frozen));
- 	if (type) {
-@@ -813,7 +756,6 @@ static int map_check_btf(struct bpf_map *map, const s=
-truct btf *btf,
- static int map_create(union bpf_attr *attr)
- {
- 	int numa_node =3D bpf_map_attr_numa_node(attr);
--	struct bpf_map_memory mem;
- 	struct bpf_map *map;
- 	int f_flags;
- 	int err;
-@@ -912,9 +854,7 @@ static int map_create(union bpf_attr *attr)
- 	security_bpf_map_free(map);
- free_map:
- 	btf_put(map->btf);
--	bpf_map_charge_move(&mem, &map->memory);
- 	map->ops->map_free(map);
--	bpf_map_charge_finish(&mem);
- 	return err;
- }
-=20
-diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/tes=
-ting/selftests/bpf/progs/map_ptr_kern.c
-index 473665cac67e..49d1dcaf7999 100644
---- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-+++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-@@ -26,17 +26,12 @@ __u32 g_line =3D 0;
- 		return 0;	\
- })
-=20
--struct bpf_map_memory {
--	__u32 pages;
--} __attribute__((preserve_access_index));
--
- struct bpf_map {
- 	enum bpf_map_type map_type;
- 	__u32 key_size;
- 	__u32 value_size;
- 	__u32 max_entries;
- 	__u32 id;
--	struct bpf_map_memory memory;
- } __attribute__((preserve_access_index));
-=20
- static inline int check_bpf_map_fields(struct bpf_map *map, __u32 key_si=
-ze,
+ 	return &cmap->map;
+-free_charge:
+-	bpf_map_charge_finish(&cmap->map.memory);
+ free_cmap:
+ 	kfree(cmap);
+ 	return ERR_PTR(err);
 --=20
 2.26.2
 
