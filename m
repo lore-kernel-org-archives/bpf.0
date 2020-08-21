@@ -2,133 +2,287 @@ Return-Path: <SRS0=M9Uk=B7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFD98C433E1
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 17:09:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A555EC433E1
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 17:44:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A91DA20656
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 17:09:21 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V3/MFuya"
+	by mail.kernel.org (Postfix) with ESMTP id 80F0420738
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 17:44:26 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728650AbgHURIa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Aug 2020 13:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726181AbgHUQRo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 21 Aug 2020 12:17:44 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090C0C061573;
-        Fri, 21 Aug 2020 09:17:44 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id i19so1183100lfj.8;
-        Fri, 21 Aug 2020 09:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ciQpCZNqlUAY76HFlpjGJHUNDAs9xwtRbJI1yNtcuhM=;
-        b=V3/MFuyaaic5NHAkMdBvSSzRXUx1HZnX7/7tVB5SKdqFl4sCYkXTJLsJGDC8JzAEBz
-         QQHAWx1G5tLg68B/f+jO/GTnmuGXHhqqsBY99hXSUagyg+/ese3ijTQFcPm59tc/Om0j
-         93zEOpjIPKN+nJsVkX97YNxBsJZ8beku0FZSKz1vyd0ww1TeaPiS8O9rAmi4VkXJ0jVM
-         YJVQVXWk6cpCcjykvdwRko4eFY+lYyAh9hfbpflaqRK7YwSgbZddXWy4G4blNIg5Dmc4
-         RU7t62cdxvy05TJm67EQ7n0CS3ldhL2OQ1YZfsFLOzNquURORpOUln5VqamVCzY6TsIZ
-         zDuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ciQpCZNqlUAY76HFlpjGJHUNDAs9xwtRbJI1yNtcuhM=;
-        b=tTOBuY/c8XDoyb9OQOZjTkvb+LM+j2P3XHryuaV8pLuY8mwy3uf1dfWt7yL40xs/MY
-         NOFVabsq4HRMUWHy+eFu/QYZnsHGbL3HNeBW00h4Lc2LARFk/E+6P0uvDwSUphPK9SKl
-         ROJAYgGE+aq2H0MHB7rZE4ERfpftWbUm9zBRP5mayKqXvmUgth3AAJc4hOZF/37lauun
-         /v9nH3KK9T+HcbMIjkLEoIa6ROJD4FIo4tNDSNsk9lEQDgBto/EVMqjZuWyGjiwI1Mwg
-         EJnh0L9mdgU5XN5X9SHEZdRKMHk7gn1yP851v8h6iKYSTnKes8JlNu5cXEomw00S7HkW
-         UrXg==
-X-Gm-Message-State: AOAM5320FRkl99HPk8tjWY4w//0hstpZPuZJgW5dZYb8oJErJxwaDUi+
-        zjiVAdBor+RY5ojxpJdP3r3vCfu/yDlUpg6jqL8=
-X-Google-Smtp-Source: ABdhPJwm4JQ0bHBpLTQfTKEIlpZDWvTsAm23urM4zWdMRprV3Ar817MgJFfm1txpjI+CAqlIEnxa8dYFBlvOP4wMeaM=
-X-Received: by 2002:ac2:59c5:: with SMTP id x5mr1766672lfn.174.1598026662334;
- Fri, 21 Aug 2020 09:17:42 -0700 (PDT)
+        id S1726181AbgHURoY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Aug 2020 13:44:24 -0400
+Received: from mga07.intel.com ([134.134.136.100]:54066 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726231AbgHURoR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Aug 2020 13:44:17 -0400
+IronPort-SDR: mWxeZNfcG5y+WI0Q2VMGzdVHtdEBFdvSrIgHEuIeYUbQUjjp+uRaIOX5oWG/LrbUM2h7ennTpt
+ AEv9fUa/kkTw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9720"; a="219878826"
+X-IronPort-AV: E=Sophos;i="5.76,338,1592895600"; 
+   d="scan'208";a="219878826"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2020 10:43:53 -0700
+IronPort-SDR: mEb6d0/YJXbGaaVtvjKVghWGvIkJY4pP9aMJ6zktQ6WmwNMAmnLE82G8aRn1/DCGWlcQ94JFIR
+ w/NsLekSeY2g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,338,1592895600"; 
+   d="scan'208";a="498601057"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by fmsmga005.fm.intel.com with ESMTP; 21 Aug 2020 10:43:50 -0700
+Date:   Fri, 21 Aug 2020 19:38:15 +0200
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>, ast@kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn.topel@intel.com,
+        magnus.karlsson@intel.com
+Subject: Re: [PATCH v6 bpf-next 0/6] bpf: tailcalls in BPF subprograms
+Message-ID: <20200821173815.GA3811@ranger.igk.intel.com>
+References: <20200731000324.2253-1-maciej.fijalkowski@intel.com>
+ <fbe6e5ca-65ba-7698-3b8d-1214b5881e88@iogearbox.net>
+ <20200801071357.GA19421@ranger.igk.intel.com>
+ <20200802030752.bnebgrr6jkl3dgnk@ast-mbp.dhcp.thefacebook.com>
+ <f37dea67-9128-a1a2-beaa-2e74b321504a@iogearbox.net>
 MIME-Version: 1.0
-References: <87ft8l6ic3.fsf@x220.int.ebiederm.org> <20200817220425.9389-9-ebiederm@xmission.com>
- <CAHk-=whCU_psWXHod0-WqXXKB4gKzgW9q=d_ZEFPNATr3kG=QQ@mail.gmail.com>
- <875z9g7oln.fsf@x220.int.ebiederm.org> <CAHk-=wjk_CnGHt4LBi2WsOeYOxE5j79R8xHzZytCy8t-_9orQw@mail.gmail.com>
- <20200818110556.q5i5quflrcljv4wa@wittgenstein> <87pn7m22kn.fsf@x220.int.ebiederm.org>
- <CAADnVQKpDaaogmbZPD0bv3SrTXo9i5eSBMz1dd=3wOn9pxDOWA@mail.gmail.com> <871rk0t45v.fsf@x220.int.ebiederm.org>
-In-Reply-To: <871rk0t45v.fsf@x220.int.ebiederm.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 21 Aug 2020 09:17:30 -0700
-Message-ID: <CAADnVQL2ugp+t39kXnd_iQMM8RGM=O2nD7OBL7XvB1GBHcyoxA@mail.gmail.com>
-Subject: Re: [PATCH 09/17] file: Implement fnext_task
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "<linux-fsdevel@vger.kernel.org>" <linux-fsdevel@vger.kernel.org>,
-        criu@openvz.org, bpf <bpf@vger.kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Jann Horn <jann@thejh.net>, Kees Cook <keescook@chromium.org>,
-        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
-        Jeff Layton <jlayton@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Matthew Wilcox <willy@debian.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Matthew Wilcox <matthew@wil.cx>,
-        Trond Myklebust <trond.myklebust@fys.uio.no>,
-        Chris Wright <chrisw@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f37dea67-9128-a1a2-beaa-2e74b321504a@iogearbox.net>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Aug 21, 2020 at 8:26 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
->
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
->
-> > On Wed, Aug 19, 2020 at 6:25 AM Eric W. Biederman <ebiederm@xmission.com> wrote:
-> >>
-> >> The bug in the existing code is that bpf_iter does get_file instead
-> >> of get_file_rcu.  Does anyone have any sense of how to add debugging
-> >> to get_file to notice when it is being called in the wrong context?
-> >
-> > That bug is already fixed in bpf tree.
-> > See commit cf28f3bbfca0 ("bpf: Use get_file_rcu() instead of
-> > get_file() for task_file iterator")
->
-> I wished you had based that change on -rc1 instead of some random
-> looking place in David's Millers net tree.
+On Mon, Aug 03, 2020 at 04:00:10PM +0200, Daniel Borkmann wrote:
+> On 8/2/20 5:07 AM, Alexei Starovoitov wrote:
+> > On Sat, Aug 01, 2020 at 09:13:57AM +0200, Maciej Fijalkowski wrote:
+> > > On Sat, Aug 01, 2020 at 03:03:19AM +0200, Daniel Borkmann wrote:
+> > > > On 7/31/20 2:03 AM, Maciej Fijalkowski wrote:
+> > > > > v5->v6:
+> > > > > - propagate only those poke descriptors that individual subprogram is
+> > > > >     actually using (Daniel)
+> > > > > - drop the cumbersome check if poke desc got filled in map_poke_run()
+> > > > > - move poke->ip renaming in bpf_jit_add_poke_descriptor() from patch 4
+> > > > >     to patch 3 to provide bisectability (Daniel)
+> > > > 
+> > > > I did a basic test with Cilium on K8s with this set, spawning a few Pods
+> > > > and checking connectivity & whether we're not crashing since it has bit more
+> > > > elaborate tail call use. So far so good. I was inclined to push the series
+> > > > out, but there is one more issue I noticed and didn't notice earlier when
+> > > > reviewing, and that is overall stack size:
+> > > > 
+> > > > What happens when you create a single program that has nested BPF to BPF
+> > > > calls e.g. either up to the maximum nesting or one call that is using up
+> > > > the max stack size which is then doing another BPF to BPF call that contains
+> > > > the tail call. In the tail call map, you have the same program in there.
+> > > > This means we create a worst case stack from BPF size of max_stack_size *
+> > > > max_tail_call_size, that is, 512*32. So that adds 16k worst case. For x86
+> > > > we have a stack of arch/x86/include/asm/page_64_types.h:
+> > > > 
+> > > >    #define THREAD_SIZE_ORDER       (2 + KASAN_STACK_ORDER)
+> > > >   #define THREAD_SIZE  (PAGE_SIZE << THREAD_SIZE_ORDER)
+> > > > 
+> > > > So we end up with 16k in a typical case. And this will cause kernel stack
+> > > > overflow; I'm at least not seeing where we handle this situation in the
+> > 
+> > Not quite. The subprog is always 32 byte stack (from safety pov).
+> > The real stack (when JITed) can be lower or zero.
+> > So the max stack is (512 - 32) * 32 = 15360.
+> > So there is no overflow, but may be a bit too close to comfort.
+> 
+> I did a check with adding `stack_not_used(current)` to various points which
+> provides some useful data under CONFIG_DEBUG_STACK_USAGE. From tc ingress side
+> I'm getting roughly 13k free stack space which is definitely less than 15k even
+> at tc layer. I also checked on sk_filter_trim_cap() on ingress and worst case I
+> saw is very close to 12k, so a malicious or by accident a buggy program would be
+> able to cause a stack overflow as-is.
+> 
+> > Imo the room is ok to land the set and the better enforcement can
+> > be done as a follow up later, like below idea...
+> > 
+> > > > set. Hm, need to think more, but maybe this needs tracking of max stack
+> > > > across tail calls to force an upper limit..
+> > > 
+> > > My knee jerk reaction would be to decrement the allowed max tail calls,
+> > > but not sure if it's an option and if it would help.
+> > 
+> > How about make the verifier use a lower bound for a function with a tail call ?
+> > Something like 64 would work.
+> > subprog_info[idx].stack_depth with tail_call will be >= 64.
+> > Then the main function will be automatically limited to 512-64 and the worst
+> > case stack = 14kbyte.
+> 
+> Even 14k is way too close, see above. Some archs that are supported by the kernel
+> run under 8k total stack size. In the long run if more archs would support tail
+> calls with bpf-to-bpf calls, we might need a per-arch upper cap, but I think in
+> this context here an upper total cap on x86 that is 4k should be reasonable, it
+> sounds broken to me if more is indeed needed for the vast majority of use cases.
+> 
+> > When the sub prog with tail call is not an empty body (malicious stack
+> > abuser) then the lower bound won't affect anything.
+> > A bit annoying that stack_depth will be used by JIT to actually allocate
+> > that much. Some of it will not be used potentially, but I think it's fine.
+> > It's much simpler solution than to keep two variables to track stack size.
+> > Or may be check_max_stack_depth() can be a bit smarter and it can detect
+> > that subprog is using tail_call without actually hacking stack_depth variable.
+> 
+> +1, I think that would be better, maybe we could have a different cost function
+> for the tail call counter itself depending in which call-depth we are, but that
+> also requires two vars for tracking (tail call counter, call depth counter), so
+> more JIT changes & emitted insns required. :/ Otoh, what if tail call counter
+> is limited to 4k and we subtract stack usage instead with a min cost (e.g. 128)
+> if progs use less than that? Though the user experience will be really bad in
+> this case given these semantics feel less deterministic / hard to debug from
+> user PoV.
 
-random?
-It's a well documented process. Please see:
-Documentation/bpf/bpf_devel_QA.rst
+Let's get this rolling again.
+I like this approach, but from the opposite way - instead of decrementing
+from 4k, let's start with 0 like we did before and add up the
+max(stack_size, 128) on each tailcall as you suggested.
 
-> I am glad to see that our existing debug checks can catch that
-> kind of problem when the code is exercised enough.
+Reason for that is no need for changes in prologue, we can keep the xor
+eax,eax insn which occupies 2 bytes whereas mov eax, 4096 needs 5 bytes
+from what I see.
 
-They did not. Please see the commit log of the fix.
-It was a NULL pointer dereference.
+cmp eax, 4096 also needs more bytes than what cmp eax, MAX_TAIL_CALL_CNT
+needed, but that's something we need as well as change mentioned below.
 
-> I am going to pull this change into my tree on top of -rc1 so we won't
-> have unnecessary conflicts.  Hopefully this will show up in -rc2 so the
-> final version of this patchset can use an easily describable base.
+One last change is add eax, 1 becomes the add eax, max(stack_size, 128)
+and it is also encoded differently.
 
-Please do not cherry pick fixes from other trees. You need to wait
-until the bpf tree gets merged into net tree and net into Linus's tree.
-It's only a couple days away. Hopefully it's there by -rc2,
-but I cannot speak for Dave's schedule.
-We'll send bpf tree pull-req to Dave today.
+Let me know if you're fine with that and if i can post v7.
+Dirty patch below that I will squash onto patch 5 if it's fine.
+
+From 01d2494eed07284ea56134f40c6a304b109090ab Mon Sep 17 00:00:00 2001
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Date: Fri, 21 Aug 2020 14:04:27 +0200
+Subject: [PATCH] bpf: track stack size in tailcall
+
+WIP
+
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+ arch/x86/net/bpf_jit_comp.c | 37 ++++++++++++++++++++-----------------
+ include/linux/bpf.h         |  1 +
+ 2 files changed, 21 insertions(+), 17 deletions(-)
+
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 880f283adb66..56b38536b1dd 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -393,7 +393,7 @@ static int get_pop_bytes(bool *callee_regs_used)
+  * ... bpf_tail_call(void *ctx, struct bpf_array *array, u64 index) ...
+  *   if (index >= array->map.max_entries)
+  *     goto out;
+- *   if (++tail_call_cnt > MAX_TAIL_CALL_CNT)
++ *   if (tail_call_stack_depth + stack_depth > MAX_TAIL_CALL_STACK_DEPTH)
+  *     goto out;
+  *   prog = array->ptrs[index];
+  *   if (prog == NULL)
+@@ -404,11 +404,12 @@ static int get_pop_bytes(bool *callee_regs_used)
+ static void emit_bpf_tail_call_indirect(u8 **pprog, bool *callee_regs_used,
+ 					u32 stack_depth)
+ {
+-	int tcc_off = -4 - round_up(stack_depth, 8);
++	u16 sd = max_t(u16, round_up(stack_depth, 8), 128);
++	int tcsd_off = -4 - round_up(stack_depth, 8);
+ 	u8 *prog = *pprog;
+ 	int pop_bytes = 0;
+-	int off1 = 49;
+-	int off2 = 38;
++	int off1 = 49 + 4;
++	int off2 = 38 + 2;
+ 	int off3 = 16;
+ 	int cnt = 0;
+ 
+@@ -438,15 +439,16 @@ static void emit_bpf_tail_call_indirect(u8 **pprog, bool *callee_regs_used,
+ 	EMIT2(X86_JBE, OFFSET1);                  /* jbe out */
+ 
+ 	/*
+-	 * if (tail_call_cnt > MAX_TAIL_CALL_CNT)
++	 * if (tail_call_stack_depth > MAX_TAIL_CALL_STACK_DEPTH)
+ 	 *	goto out;
+ 	 */
+-	EMIT2_off32(0x8B, 0x85, tcc_off);         /* mov eax, dword ptr [rbp - tcc_off] */
+-	EMIT3(0x83, 0xF8, MAX_TAIL_CALL_CNT);     /* cmp eax, MAX_TAIL_CALL_CNT */
++	EMIT2_off32(0x8B, 0x85, tcsd_off);        /* mov eax, dword ptr [rbp - tcsd_off] */
++	EMIT1_off32(0x3D,                         /* cmp eax, MAX_TAIL_CALL_STACK_DEPTH */
++		    MAX_TAIL_CALL_STACK_DEPTH);
+ #define OFFSET2 (off2 + RETPOLINE_RCX_BPF_JIT_SIZE)
+ 	EMIT2(X86_JA, OFFSET2);                   /* ja out */
+-	EMIT3(0x83, 0xC0, 0x01);                  /* add eax, 1 */
+-	EMIT2_off32(0x89, 0x85, tcc_off);         /* mov dword ptr [rbp - tcc_off], eax */
++	EMIT1_off32(0x05, sd);                    /* add eax, stack_depth */
++	EMIT2_off32(0x89, 0x85, tcsd_off);        /* mov dword ptr [rbp - tcsd_off], eax */
+ 
+ 	/* prog = array->ptrs[index]; */
+ 	EMIT4_off32(0x48, 0x8B, 0x8C, 0xD6,       /* mov rcx, [rsi + rdx * 8 + offsetof(...)] */
+@@ -488,10 +490,11 @@ static void emit_bpf_tail_call_direct(struct bpf_jit_poke_descriptor *poke,
+ 				      u8 **pprog, int addr, u8 *image,
+ 				      bool *callee_regs_used, u32 stack_depth)
+ {
+-	int tcc_off = -4 - round_up(stack_depth, 8);
++	u16 sd = max_t(u16, round_up(stack_depth, 8), 128);
++	int tcsd_off = -4 - round_up(stack_depth, 8);
+ 	u8 *prog = *pprog;
+ 	int pop_bytes = 0;
+-	int off1 = 27;
++	int off1 = 27 + 2;
+ 	int poke_off;
+ 	int cnt = 0;
+ 
+@@ -512,14 +515,14 @@ static void emit_bpf_tail_call_direct(struct bpf_jit_poke_descriptor *poke,
+ 	poke_off = X86_PATCH_SIZE + pop_bytes + 7 + 1;
+ 
+ 	/*
+-	 * if (tail_call_cnt > MAX_TAIL_CALL_CNT)
++	 * if (tail_call_stack_depth > MAX_TAIL_CALL_STACK_DEPTH)
+ 	 *	goto out;
+ 	 */
+-	EMIT2_off32(0x8B, 0x85, tcc_off);             /* mov eax, dword ptr [rbp - tcc_off] */
+-	EMIT3(0x83, 0xF8, MAX_TAIL_CALL_CNT);         /* cmp eax, MAX_TAIL_CALL_CNT */
++	EMIT2_off32(0x8B, 0x85, tcsd_off);            /* mov eax, dword ptr [rbp - tcsd_off] */
++	EMIT1_off32(0x3D, MAX_TAIL_CALL_STACK_DEPTH); /* cmp eax, MAX_TAIL_CALL_STACK_DEPTH */
+ 	EMIT2(X86_JA, off1);                          /* ja out */
+-	EMIT3(0x83, 0xC0, 0x01);                      /* add eax, 1 */
+-	EMIT2_off32(0x89, 0x85, tcc_off);             /* mov dword ptr [rbp - tcc_off], eax */
++	EMIT1_off32(0x05, sd);                        /* add eax, stack_size */
++	EMIT2_off32(0x89, 0x85, tcsd_off);            /* mov dword ptr [rbp - tcsd_off], eax */
+ 
+ 	poke->tailcall_bypass = image + (addr - poke_off - X86_PATCH_SIZE);
+ 	poke->adj_off = X86_TAIL_CALL_OFFSET;
+@@ -1430,7 +1433,7 @@ xadd:			if (is_imm8(insn->off))
+ 			ctx->cleanup_addr = proglen;
+ 			pop_callee_regs(&prog, callee_regs_used);
+ 			if (!bpf_prog_was_classic(bpf_prog) && tail_call_seen)
+-				EMIT1(0x59); /* pop rcx, get rid of tail_call_cnt */
++				EMIT1(0x59); /* pop rcx, get rid of tail_call_stack_depth */
+ 			EMIT1(0xC9);         /* leave */
+ 			EMIT1(0xC3);         /* ret */
+ 			break;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index c9c460a437ed..5600dfd2217a 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -895,6 +895,7 @@ struct bpf_array {
+ 
+ #define BPF_COMPLEXITY_LIMIT_INSNS      1000000 /* yes. 1M insns */
+ #define MAX_TAIL_CALL_CNT 32
++#define MAX_TAIL_CALL_STACK_DEPTH 4096
+ 
+ #define BPF_F_ACCESS_MASK	(BPF_F_RDONLY |		\
+ 				 BPF_F_RDONLY_PROG |	\
+-- 
+2.20.1
+
+> 
+> > Essentially I'm proposing to tweak this formula:
+> > depth += round_up(max_t(u32, subprog[idx].stack_depth, 1), 32);
+> > and replace 1 with 64 for subprogs with tail_call.
+> > 
+> 
