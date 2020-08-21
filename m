@@ -2,68 +2,72 @@ Return-Path: <SRS0=M9Uk=B7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03345C433E1
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 10:30:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A13FC433E1
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 10:30:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D37AB20748
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 10:30:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 10854206DA
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 10:30:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="j2wwRETP"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="R6p7I49m"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728499AbgHUKaP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Aug 2020 06:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
+        id S1728665AbgHUKas (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Aug 2020 06:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728095AbgHUKaM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 21 Aug 2020 06:30:12 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10675C061386
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 03:30:10 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id k8so1317013wma.2
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 03:30:10 -0700 (PDT)
+        with ESMTP id S1728630AbgHUKa0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Aug 2020 06:30:26 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FE3C061385
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 03:30:19 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id 9so1331752wmj.5
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 03:30:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jQYG0BGezwb75avWb46nKmCGvRRkSOGM09wxiKUleCo=;
-        b=j2wwRETPAhvpz6uv19N2pdptpg0yx34DepixeVoQE2DzHdVDTYRFVafNWaVadPmos7
-         K+Ys0ZAj5wexvoVeyPQbiUtnDk76tWKmvM9naXSRYUJ+dFgpUImh9r2TdDRP+y5+osLu
-         +dtQRdurOvf5iWnC12WqwaIEbodXoy8AkfN6A=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Ljj6mTtU91lq7b/TfTSVrxl5C/pW9YScENl9tsdXqbE=;
+        b=R6p7I49mAyk1+W/1Y8Pnkj+mPEMAav3VZSQytD31wbItfpPh1Qs0BJRa8ngMSMmjVq
+         lsT3jzTRAxyRpyrFWE4AEx/R/OIiq4h52+GF1ZVtXGRHSjxdRyzllAiImC/uBP6TtXnM
+         wkVWRM2JUBizEGV5pleLWeCgkBHVUm4VjMoLs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jQYG0BGezwb75avWb46nKmCGvRRkSOGM09wxiKUleCo=;
-        b=tC1dP4X77n8/EzGHURQzap5BA+MuZzGqk4UyDkcqPFY8H/b0aA/dGnIu8HY/BxtJot
-         S7KWUZICXQE8HotnZGEl03V9eAWhGOCZDmiiT4ZxJvGbFTjgBpv+7O0cL9AEJva959Q0
-         XGDcu0/RRIyVNB0j7Vywl/oI6zjD8HHtJtKh5r/+61x44rJRe6tp1X4X/dI/gNuf3S2b
-         iEiQB4aw1MnOHy2kC5s85c3+oVGkNMED1j3Sz7hOlPbRD0ZuUPTdnohE08GRaymQWIko
-         iJ256+97eKVj36ZQ8lQ4Rh6eF8ZrHd3NUyjpErMSYnQ8b9uD/gn2zTi3mgPt+gsuKKIa
-         JE4g==
-X-Gm-Message-State: AOAM53371U+6x/nRRGrJ8+n4Va2xjFp8TNhB94sl+GegqIuCGd8et1Fg
-        2y2CAKjJbk9gQRC6LRmxRquGrw==
-X-Google-Smtp-Source: ABdhPJzgtPMSqVfHwwbCddCrKyRemrs+dG8AEaFXstyLrBPgU0d8BUKMnEKk/bAeGmJN7JQbqY6U/A==
-X-Received: by 2002:a1c:f60e:: with SMTP id w14mr2372122wmc.19.1598005805392;
-        Fri, 21 Aug 2020 03:30:05 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Ljj6mTtU91lq7b/TfTSVrxl5C/pW9YScENl9tsdXqbE=;
+        b=C1G8+gr/0bTpj9XKzXQzdvYEp1KjUB2tjOpaeVYFkM7vqT45mz9jJH8t5DWbODjfEo
+         GchrLkeZyAZQYWwUXMhxVOqw4nxABULhddGlkQkJ1NX0RvFtbtAKb3T4DWLaPuqrndkK
+         ODL0y47T6ffNKvBszqqlu5O6zmOJp9/yhvj0HzXGz+bXcDr9x3mYouVdyY3M2pitmEkQ
+         TQ6Hn1K2ylX6lcrfBDPZtMDSKCzqhPJvwGJN/QHBNHCm1uoPheDhySg1+ISUUCP807vG
+         4DP0crAouQt3HFj7SdNRVe+6x7PDamtsnuvCJDIms8lKj6ncnigjrNK/vVQl0pqrpsKj
+         EMLw==
+X-Gm-Message-State: AOAM530sIiZ92yAI+qCJ4S+N4TUkPJaFnbHod6gUeOtiMmHsoM3a3/HT
+        T1GtSxo+hGvi4CwDkRmNdMPnZg==
+X-Google-Smtp-Source: ABdhPJz9f3ah9Zo/6HnA8IeHmu273+Rifoigfi0sKLMZW8R0SQvk9WprxK0NUVRIpTs//b2yLmRzdg==
+X-Received: by 2002:a1c:9803:: with SMTP id a3mr2979278wme.57.1598005817804;
+        Fri, 21 Aug 2020 03:30:17 -0700 (PDT)
 Received: from antares.lan (2.2.9.a.d.9.4.f.6.1.8.9.f.9.8.5.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:589f:9816:f49d:a922])
-        by smtp.gmail.com with ESMTPSA id o2sm3296885wrj.21.2020.08.21.03.30.04
+        by smtp.gmail.com with ESMTPSA id o2sm3296885wrj.21.2020.08.21.03.30.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2020 03:30:04 -0700 (PDT)
+        Fri, 21 Aug 2020 03:30:17 -0700 (PDT)
 From:   Lorenz Bauer <lmb@cloudflare.com>
 To:     jakub@cloudflare.com, john.fastabend@gmail.com, yhs@fb.com,
+        Shuah Khan <shuah@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 0/6] Allow updating sockmap / sockhash from BPF
-Date:   Fri, 21 Aug 2020 11:29:42 +0100
-Message-Id: <20200821102948.21918-1-lmb@cloudflare.com>
+Subject: [PATCH bpf-next v3 6/6] selftests: bpf: test sockmap update from BPF
+Date:   Fri, 21 Aug 2020 11:29:48 +0100
+Message-Id: <20200821102948.21918-7-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200821102948.21918-1-lmb@cloudflare.com>
+References: <20200821102948.21918-1-lmb@cloudflare.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -71,70 +75,206 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-We're currently building a control plane for our BPF socket dispatch
-work. As part of that, we have a need to create a copy of an existing
-sockhash, to allow us to change the keys. I previously proposed allowing
-privileged userspace to look up sockets, which doesn't work due to
-security concerns (see [1]).
+Add a test which copies a socket from a sockmap into another sockmap
+or sockhash. This excercises bpf_map_update_elem support from BPF
+context. Compare the socket cookies from source and destination to
+ensure that the copy succeeded.
 
-In follow up discussions during BPF office hours we identified bpf_iter
-as a possible solution: instead of accessing sockets from user space
-we can iterate the source sockhash, and insert the values into a new
-map. Enabling this requires two pieces: the ability to iterate
-sockmap and sockhash, as well as being able to call map_update_elem
-from BPF.
+Also check that the verifier rejects map_update from unsafe contexts.
 
-This patch set implements the latter: it's now possible to update
-sockmap from BPF context. As a next step, we can implement bpf_iter
-for sockmap.
-
-===
-
-I've done some more fixups, and audited the safe contexts more
-thoroughly. As a result I'm removing CGROUP_SKB, SK_MSG and SK_SKB
-for now.
-
-Changes in v3:
-- Use CHECK as much as possible (Yonghong)
-- Reject ARG_PTR_TO_MAP_VALUE_OR_NULL for sockmap (Yonghong)
-- Remove CGROUP_SKB, SK_MSG, SK_SKB from safe contexts
-- Test that the verifier rejects update from unsafe context
-
-Changes in v2:
-- Fix warning in patch #2 (Jakub K)
-- Renamed override_map_arg_type (John)
-- Only allow updating sockmap from known safe contexts (John)
-- Use __s64 for sockmap updates from user space (Yonghong)
-- Various small test fixes around test macros and such (Yonghong)
-
-Thank your for your reviews!
-
-1: https://lore.kernel.org/bpf/20200310174711.7490-1-lmb@cloudflare.com/
-
-Lorenz Bauer (6):
-  net: sk_msg: simplify sk_psock initialization
-  bpf: sockmap: merge sockmap and sockhash update functions
-  bpf: sockmap: call sock_map_update_elem directly
-  bpf: override the meaning of ARG_PTR_TO_MAP_VALUE for sockmap and
-    sockhash
-  bpf: sockmap: allow update from BPF
-  selftests: bpf: test sockmap update from BPF
-
- include/linux/bpf.h                           |   7 +
- include/linux/skmsg.h                         |  17 ---
- kernel/bpf/syscall.c                          |   5 +-
- kernel/bpf/verifier.c                         |  73 +++++++++-
- net/core/skmsg.c                              |  34 ++++-
- net/core/sock_map.c                           | 137 ++++++++----------
- net/ipv4/tcp_bpf.c                            |  13 +-
- net/ipv4/udp_bpf.c                            |   9 +-
- .../selftests/bpf/prog_tests/sockmap_basic.c  |  78 ++++++++++
- .../bpf/progs/test_sockmap_invalid_update.c   |  23 +++
- .../selftests/bpf/progs/test_sockmap_update.c |  48 ++++++
- 11 files changed, 326 insertions(+), 118 deletions(-)
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+---
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 78 +++++++++++++++++++
+ .../bpf/progs/test_sockmap_invalid_update.c   | 23 ++++++
+ .../selftests/bpf/progs/test_sockmap_update.c | 48 ++++++++++++
+ 3 files changed, 149 insertions(+)
  create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_invalid_update.c
  create mode 100644 tools/testing/selftests/bpf/progs/test_sockmap_update.c
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 96e7b7f84c65..65ce7c289534 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -4,6 +4,8 @@
+ 
+ #include "test_progs.h"
+ #include "test_skmsg_load_helpers.skel.h"
++#include "test_sockmap_update.skel.h"
++#include "test_sockmap_invalid_update.skel.h"
+ 
+ #define TCP_REPAIR		19	/* TCP sock is under repair right now */
+ 
+@@ -101,6 +103,76 @@ static void test_skmsg_helpers(enum bpf_map_type map_type)
+ 	test_skmsg_load_helpers__destroy(skel);
+ }
+ 
++static void test_sockmap_update(enum bpf_map_type map_type)
++{
++	struct bpf_prog_test_run_attr tattr;
++	int err, prog, src, dst, duration = 0;
++	struct test_sockmap_update *skel;
++	__u64 src_cookie, dst_cookie;
++	const __u32 zero = 0;
++	char dummy[14] = {0};
++	__s64 sk;
++
++	sk = connected_socket_v4();
++	if (CHECK(sk == -1, "connected_socket_v4", "cannot connect\n"))
++		return;
++
++	skel = test_sockmap_update__open_and_load();
++	if (CHECK(!skel, "open_and_load", "cannot load skeleton\n")) {
++		close(sk);
++		return;
++	}
++
++	prog = bpf_program__fd(skel->progs.copy_sock_map);
++	src = bpf_map__fd(skel->maps.src);
++	if (map_type == BPF_MAP_TYPE_SOCKMAP)
++		dst = bpf_map__fd(skel->maps.dst_sock_map);
++	else
++		dst = bpf_map__fd(skel->maps.dst_sock_hash);
++
++	err = bpf_map_update_elem(src, &zero, &sk, BPF_NOEXIST);
++	if (CHECK(err, "update_elem(src)", "errno=%u\n", errno))
++		goto out;
++
++	err = bpf_map_lookup_elem(src, &zero, &src_cookie);
++	if (CHECK(err, "lookup_elem(src, cookie)", "errno=%u\n", errno))
++		goto out;
++
++	tattr = (struct bpf_prog_test_run_attr){
++		.prog_fd = prog,
++		.repeat = 1,
++		.data_in = dummy,
++		.data_size_in = sizeof(dummy),
++	};
++
++	err = bpf_prog_test_run_xattr(&tattr);
++	if (CHECK_ATTR(err || !tattr.retval, "bpf_prog_test_run",
++		       "errno=%u retval=%u\n", errno, tattr.retval))
++		goto out;
++
++	err = bpf_map_lookup_elem(dst, &zero, &dst_cookie);
++	if (CHECK(err, "lookup_elem(dst, cookie)", "errno=%u\n", errno))
++		goto out;
++
++	CHECK(dst_cookie != src_cookie, "cookie mismatch", "%llu != %llu\n",
++	      dst_cookie, src_cookie);
++
++out:
++	close(sk);
++	test_sockmap_update__destroy(skel);
++}
++
++static void test_sockmap_invalid_update(void)
++{
++	struct test_sockmap_invalid_update *skel;
++	int duration = 0;
++
++	skel = test_sockmap_invalid_update__open_and_load();
++	CHECK(skel, "open_and_load", "verifier accepted map_update\n");
++	if (skel)
++		test_sockmap_invalid_update__destroy(skel);
++}
++
+ void test_sockmap_basic(void)
+ {
+ 	if (test__start_subtest("sockmap create_update_free"))
+@@ -111,4 +183,10 @@ void test_sockmap_basic(void)
+ 		test_skmsg_helpers(BPF_MAP_TYPE_SOCKMAP);
+ 	if (test__start_subtest("sockhash sk_msg load helpers"))
+ 		test_skmsg_helpers(BPF_MAP_TYPE_SOCKHASH);
++	if (test__start_subtest("sockmap update"))
++		test_sockmap_update(BPF_MAP_TYPE_SOCKMAP);
++	if (test__start_subtest("sockhash update"))
++		test_sockmap_update(BPF_MAP_TYPE_SOCKHASH);
++	if (test__start_subtest("sockmap update in unsafe context"))
++		test_sockmap_invalid_update();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_invalid_update.c b/tools/testing/selftests/bpf/progs/test_sockmap_invalid_update.c
+new file mode 100644
+index 000000000000..02a59e220cbc
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sockmap_invalid_update.c
+@@ -0,0 +1,23 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Cloudflare
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} map SEC(".maps");
++
++SEC("sockops")
++int bpf_sockmap(struct bpf_sock_ops *skops)
++{
++	__u32 key = 0;
++
++	if (skops->sk)
++		bpf_map_update_elem(&map, &key, skops->sk, 0);
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_update.c b/tools/testing/selftests/bpf/progs/test_sockmap_update.c
+new file mode 100644
+index 000000000000..9d0c9f28cab2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sockmap_update.c
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Cloudflare
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} src SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} dst_sock_map SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SOCKHASH);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} dst_sock_hash SEC(".maps");
++
++SEC("classifier/copy_sock_map")
++int copy_sock_map(void *ctx)
++{
++	struct bpf_sock *sk;
++	bool failed = false;
++	__u32 key = 0;
++
++	sk = bpf_map_lookup_elem(&src, &key);
++	if (!sk)
++		return SK_DROP;
++
++	if (bpf_map_update_elem(&dst_sock_map, &key, sk, 0))
++		failed = true;
++
++	if (bpf_map_update_elem(&dst_sock_hash, &key, sk, 0))
++		failed = true;
++
++	bpf_sk_release(sk);
++	return failed ? SK_DROP : SK_PASS;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.25.1
 
