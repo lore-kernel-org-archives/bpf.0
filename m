@@ -2,241 +2,154 @@ Return-Path: <SRS0=M9Uk=B7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,NICE_REPLY_A,RCVD_ILLEGAL_IP,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63C99C433E1
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:36:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B842C433E1
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:46:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B00D2063A
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:36:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 12DE2207BB
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:46:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="L3xgNlAr"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="P/axgW8N";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="C5OdQn0i"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728175AbgHUPgy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Aug 2020 11:36:54 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:56078 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728153AbgHUPfy (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 21 Aug 2020 11:35:54 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 07LFYqYD006840
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 08:35:52 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=rXeyZ0FBoPaFvFBYMPqIc3bVEw60f44pF1vN4j0vpS8=;
- b=L3xgNlAr/spCo2dnDENDFPmhDHdgja7HaiplThUJVq1c4TmxYrs+ax6MXocOxR4VZoBA
- WJdlWN/yDKsIwgVCTw0lhKlD2sY8FGCzQPczmkgspHtM/mQ+vQz/Da/WNMeM7OTe4zly
- vgksI/+AbovhGqGImiLQp3q3xJWU5v6Nx3E= 
+        id S1727955AbgHUPq1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Aug 2020 11:46:27 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:3996 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725828AbgHUPq0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 21 Aug 2020 11:46:26 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07LFjXdk009503;
+        Fri, 21 Aug 2020 08:46:12 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=qy8eyuKSDqRkkp6Siw8XdjEsivmY+/4nPZZ4JrzUznI=;
+ b=P/axgW8NDTo8xQJ71UYaeHUaf/PNBRPzeYuWzL+gAXaaTB/iKCfjY5P4v9PHMuXQ7GC5
+ qeE6tGCboUaUEoYQNDuWWxmOPF6B1ViYHJrj8u16HsMUgByrmS3RRefBasKSdph/w2oN
+ 0SrBWuUOAB0O4Ii8HouCLw+suv601Qmumqw= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 331hcc17h1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 08:35:52 -0700
-Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        by mx0a-00082601.pphosted.com with ESMTP id 331d50t96d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 21 Aug 2020 08:46:12 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.103) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 21 Aug 2020 08:35:51 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 7CBE43704B1A; Fri, 21 Aug 2020 08:35:46 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
+ 15.1.1979.3; Fri, 21 Aug 2020 08:46:10 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G6TKONwRGLKNr1dP/N4GcW15chJu+reBhPpD3t+1zymCl9mzEJ8GYKTYMEc0HW4slbIi+zapaiOAtsAofa1JoIXpEk2SGDsCG4YbVUoLEcyRzpmdz4xnX40zBFegRPfQgxARIfNdHUhTiyZc4Wdzjpq0FilBJSjbZDtYL7Qtxnroybqb3glJzIT5Gy4wFOn8nKJi7EjfarWreaFi3g092YeayfqwT80jEkh6+Ujv0Yn8uWduXV5PlOR4FCRlrhYS3wbA6vXZLzmB1aqwWWs8bvvu/g355bAAj28Q3wbj3cBpJVAWkrH4mA1aiH2tRR0IIgevWa+qnnG4yFuX3CXJEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qy8eyuKSDqRkkp6Siw8XdjEsivmY+/4nPZZ4JrzUznI=;
+ b=Hdy87Sdp8vfAZ2EPIOrUN5z/linRNRc1dNdsZ6AhhmbOmEr6Xh3ORbY6ewR8g2T008YavR8mrVaqo4vt6/sKcEd5PKQScuFLKvmw8752JxYUiqJav8qW8/5IgvGRnYXjnTQRxRbjbGRFN8ZJPUFZ95mRUrFFPNwnX1xEzoJ1+RjHcH825op7FufUleY0D4PNpeWKfJQPsCHw+eqatSrlsDCy/JJc9+uMsluibgNra98a+FC8PK2C6Yt+WC4oN0n/FSiEGCL5SeT6yDaXHdo7uG+IrgYHfRUzlnMcQEv5sg2CwvafaOsQjPvzLVV+Oi06nfUyIKREWMvqt5zVw7ztbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qy8eyuKSDqRkkp6Siw8XdjEsivmY+/4nPZZ4JrzUznI=;
+ b=C5OdQn0irLIiP4Pby+cUNriTsn3yo+JFpoYYtyVlNEU4shz/mfCGCYLWsJKBlWWKkeisTG1JG5jww7vMW7jHoHenskYkwT3+dnOSY5A53yt4QwmKmM94YNqdVaasI68W3EyZ1h8JOm6vFoMxaKKMox7R4CT5YIT6wekiMCVklXk=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB3046.namprd15.prod.outlook.com (2603:10b6:a03:fa::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.25; Fri, 21 Aug
+ 2020 15:46:09 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::56b:2925:8762:2d80]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::56b:2925:8762:2d80%7]) with mapi id 15.20.3305.026; Fri, 21 Aug 2020
+ 15:46:09 +0000
+Subject: Re: [PATCH bpf-next v3 4/6] bpf: override the meaning of
+ ARG_PTR_TO_MAP_VALUE for sockmap and sockhash
+To:     Lorenz Bauer <lmb@cloudflare.com>, <jakub@cloudflare.com>,
+        <john.fastabend@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+CC:     <kernel-team@cloudflare.com>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20200821102948.21918-1-lmb@cloudflare.com>
+ <20200821102948.21918-5-lmb@cloudflare.com>
 From:   Yonghong Song <yhs@fb.com>
-Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next v3 1/3] bpf: implement link_query for bpf iterators
-Date:   Fri, 21 Aug 2020 08:35:46 -0700
-Message-ID: <20200821153546.4056223-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200821153546.4056166-1-yhs@fb.com>
-References: <20200821153546.4056166-1-yhs@fb.com>
+Message-ID: <f140db9b-ed23-7e56-e5b9-d90caf6493cb@fb.com>
+Date:   Fri, 21 Aug 2020 08:46:05 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.11.0
+In-Reply-To: <20200821102948.21918-5-lmb@cloudflare.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL1PR13CA0036.namprd13.prod.outlook.com
+ (2603:10b6:208:257::11) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from 255.255.255.255 (255.255.255.255) by BL1PR13CA0036.namprd13.prod.outlook.com (2603:10b6:208:257::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3326.10 via Frontend Transport; Fri, 21 Aug 2020 15:46:07 +0000
+X-Originating-IP: [2620:10d:c091:480::1:8c09]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9afca455-4227-40ca-021a-08d845e952f5
+X-MS-TrafficTypeDiagnostic: BYAPR15MB3046:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB3046E096E62B2AE9A9EE014ED35B0@BYAPR15MB3046.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7rTlbuhdhUxNjZWC43ECzLb1dOs2Fo9822q/hCODA2JkohEMrT7m/JYIO/GIXZZkjsrKDTeblVGTNwrUyKjOrMO+n47e+pDeTj/sQ6mI129vvdWalm/DEZ3Fe3KdMyoYj+44UVLkLkWP0075paSGdVz7c0GBYFUUXWMPcpjlzTJDVvMu8zmXvEPs3Qe9CJBRA7HirlIc6C84ci5SxFCguacY8bl4awjXycheipqeuS+UOCgB66rP4kwlTf7TU8/Ib/JB8nUuR0POCMGFWS/a7ZZflELjIZAE1fLon94rz1mipK1I9JQd8M6RnL0gGmPKS5PMKexGJPqI6p0xKWsbGSodcpMFgN+A1PYemXrYWsVBO59PAiwvkryD/FwnmkgZ9E51ii3/5Tz3k3j12W7uvU6fRffDa1FlPIh6h62MOWg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(376002)(366004)(396003)(136003)(346002)(478600001)(66476007)(4326008)(186003)(36756003)(8936002)(16576012)(5660300002)(110136005)(8676002)(52116002)(2616005)(31686004)(956004)(110011004)(316002)(83380400001)(66946007)(31696002)(6486002)(2906002)(66556008)(86362001)(53546011)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: X8leT9dd/Ep/X7grllCxKIMKBJ6fRDDO1szTKhlXW6TbSJrXrPzWoyVUL+uP2AOirMO38C+QXveUMxPLGC4cDIp6k9Jw/BWpKghNEEu+i33Zlo+Oy5dXP6749iivyb08xBIbkSwGPT896RdpBw47A6xyLrhLSfv2M+k5MEkm0PvyVHxH5BvHUg8N3fU7tzwBtRcvV8TyE2tdqgN40UrrWd5qv+lApCmomVvMjJWINvGOAwM+JGmSP/nlMOIiENGulo+E5WrrkyK7h+USq/isLuc3IfQ6CrRoxyKcLNgWa4ZMJsDAFlZ8d50yXRvj+bzOkCw32SN4fmvG37q6AGXZRB1X7s3Y4uYdXCdVgc5TRGMmM7iQM9s6h368JP/aHvGG7L8TXtNSZc09K72O5cWU/k+IVURmmVJ834Zr0IfGPhYVkVA2pMgA47v2LlvDNT/h9cIAWP/DzoNFXR01VRhP5ueEndDJUCmRK8rpeSJ1G9WjpSDMWGwtMjTFhINq/NbWkYNr/C04TfgBis9xcimzjC4nq0O2V4xHRc4FvQVvKeH7LOfN/5b0LpNpuB9QmhboZfh00OOm50QfTGqVLLlp+KmlId3RLwMiUhX1IsPQxk9nAt/ZDvDwzM1D5y2TjJu6nOGuOCozDLXlXPPzlVOjGATHNTFpnYPsEqlaFstwfQRie9ESvS0UrcETA4Cfmr40
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9afca455-4227-40ca-021a-08d845e952f5
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2020 15:46:09.6978
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: IS+mQUTi+bi7CVLndCtFptqOB8fnqDsCd7EQYyjLzZiTNkGRPyUDBhW/Y9E0a0Lq
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3046
+X-OriginatorOrg: fb.com
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-21_08:2020-08-21,2020-08-21 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- priorityscore=1501 suspectscore=8 clxscore=1015 bulkscore=0
- mlxlogscore=939 lowpriorityscore=0 phishscore=0 impostorscore=0
- adultscore=0 mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2008210145
+ malwarescore=0 mlxlogscore=545 priorityscore=1501 impostorscore=0
+ clxscore=1015 phishscore=0 suspectscore=0 adultscore=0 bulkscore=0
+ mlxscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2008210147
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch implemented bpf_link callback functions
-show_fdinfo and fill_link_info to support link_query
-interface.
 
-The general interface for show_fdinfo and fill_link_info
-will print/fill the target_name. Each targets can
-register show_fdinfo and fill_link_info callbacks
-to print/fill more target specific information.
 
-For example, the below is a fdinfo result for a bpf
-task iterator.
-  $ cat /proc/1749/fdinfo/7
-  pos:    0
-  flags:  02000000
-  mnt_id: 14
-  link_type:      iter
-  link_id:        11
-  prog_tag:       990e1f8152f7e54f
-  prog_id:        59
-  target_name:    task
+On 8/21/20 3:29 AM, Lorenz Bauer wrote:
+> The verifier assumes that map values are simple blobs of memory, and
+> therefore treats ARG_PTR_TO_MAP_VALUE, etc. as such. However, there are
+> map types where this isn't true. For example, sockmap and sockhash store
+> sockets. In general this isn't a big problem: we can just
+> write helpers that explicitly requests PTR_TO_SOCKET instead of
+> ARG_PTR_TO_MAP_VALUE.
+> 
+> The one exception are the standard map helpers like map_update_elem,
+> map_lookup_elem, etc. Here it would be nice we could overload the
+> function prototype for different kinds of maps. Unfortunately, this
+> isn't entirely straight forward:
+> We only know the type of the map once we have resolved meta->map_ptr
+> in check_func_arg. This means we can't swap out the prototype
+> in check_helper_call until we're half way through the function.
+> 
+> Instead, modify check_func_arg to treat ARG_PTR_TO_MAP_VALUE to
+> mean "the native type for the map" instead of "pointer to memory"
+> for sockmap and sockhash. This means we don't have to modify the
+> function prototype at all
+> 
+> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- include/linux/bpf.h            |  6 ++++
- include/uapi/linux/bpf.h       |  7 ++++
- kernel/bpf/bpf_iter.c          | 58 ++++++++++++++++++++++++++++++++++
- tools/include/uapi/linux/bpf.h |  7 ++++
- 4 files changed, 78 insertions(+)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index a9b7185a6b37..529e9b183eeb 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1218,12 +1218,18 @@ typedef int (*bpf_iter_attach_target_t)(struct bp=
-f_prog *prog,
- 					union bpf_iter_link_info *linfo,
- 					struct bpf_iter_aux_info *aux);
- typedef void (*bpf_iter_detach_target_t)(struct bpf_iter_aux_info *aux);
-+typedef void (*bpf_iter_show_fdinfo_t) (const struct bpf_iter_aux_info *=
-aux,
-+					struct seq_file *seq);
-+typedef int (*bpf_iter_fill_link_info_t)(const struct bpf_iter_aux_info =
-*aux,
-+					 struct bpf_link_info *info);
-=20
- #define BPF_ITER_CTX_ARG_MAX 2
- struct bpf_iter_reg {
- 	const char *target;
- 	bpf_iter_attach_target_t attach_target;
- 	bpf_iter_detach_target_t detach_target;
-+	bpf_iter_show_fdinfo_t show_fdinfo;
-+	bpf_iter_fill_link_info_t fill_link_info;
- 	u32 ctx_arg_info_size;
- 	struct bpf_ctx_arg_aux ctx_arg_info[BPF_ITER_CTX_ARG_MAX];
- 	const struct bpf_iter_seq_info *seq_info;
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 0480f893facd..a1bbaff7a0af 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -4071,6 +4071,13 @@ struct bpf_link_info {
- 			__u64 cgroup_id;
- 			__u32 attach_type;
- 		} cgroup;
-+		struct {
-+			__aligned_u64 target_name; /* in/out: target_name buffer ptr */
-+			__u32 target_name_len;	   /* in/out: target_name buffer len */
-+			union {
-+				__u32 map_id;
-+			} map;
-+		} iter;
- 		struct  {
- 			__u32 netns_ino;
- 			__u32 attach_type;
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index b6715964b685..124e3ce02ce2 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -377,10 +377,68 @@ static int bpf_iter_link_replace(struct bpf_link *l=
-ink,
- 	return ret;
- }
-=20
-+static void bpf_iter_link_show_fdinfo(const struct bpf_link *link,
-+				      struct seq_file *seq)
-+{
-+	struct bpf_iter_link *iter_link =3D
-+		container_of(link, struct bpf_iter_link, link);
-+	bpf_iter_show_fdinfo_t show_fdinfo;
-+
-+	seq_printf(seq,
-+		   "target_name:\t%s\n",
-+		   iter_link->tinfo->reg_info->target);
-+
-+	show_fdinfo =3D iter_link->tinfo->reg_info->show_fdinfo;
-+	if (show_fdinfo)
-+		show_fdinfo(&iter_link->aux, seq);
-+}
-+
-+static int bpf_iter_link_fill_link_info(const struct bpf_link *link,
-+					struct bpf_link_info *info)
-+{
-+	struct bpf_iter_link *iter_link =3D
-+		container_of(link, struct bpf_iter_link, link);
-+	char __user *ubuf =3D u64_to_user_ptr(info->iter.target_name);
-+	bpf_iter_fill_link_info_t fill_link_info;
-+	u32 ulen =3D info->iter.target_name_len;
-+	const char *target_name;
-+	u32 target_len;
-+
-+	if (ulen && !ubuf)
-+		return -EINVAL;
-+
-+	target_name =3D iter_link->tinfo->reg_info->target;
-+	target_len =3D  strlen(target_name);
-+	info->iter.target_name_len =3D target_len + 1;
-+	if (!ubuf)
-+		return 0;
-+
-+	if (ulen >=3D target_len + 1) {
-+		if (copy_to_user(ubuf, target_name, target_len + 1))
-+			return -EFAULT;
-+	} else {
-+		char zero =3D '\0';
-+
-+		if (copy_to_user(ubuf, target_name, ulen - 1))
-+			return -EFAULT;
-+		if (put_user(zero, ubuf + ulen - 1))
-+			return -EFAULT;
-+		return -ENOSPC;
-+	}
-+
-+	fill_link_info =3D iter_link->tinfo->reg_info->fill_link_info;
-+	if (fill_link_info)
-+		return fill_link_info(&iter_link->aux, info);
-+
-+	return 0;
-+}
-+
- static const struct bpf_link_ops bpf_iter_link_lops =3D {
- 	.release =3D bpf_iter_link_release,
- 	.dealloc =3D bpf_iter_link_dealloc,
- 	.update_prog =3D bpf_iter_link_replace,
-+	.show_fdinfo =3D bpf_iter_link_show_fdinfo,
-+	.fill_link_info =3D bpf_iter_link_fill_link_info,
- };
-=20
- bool bpf_link_is_iter(struct bpf_link *link)
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 0480f893facd..a1bbaff7a0af 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -4071,6 +4071,13 @@ struct bpf_link_info {
- 			__u64 cgroup_id;
- 			__u32 attach_type;
- 		} cgroup;
-+		struct {
-+			__aligned_u64 target_name; /* in/out: target_name buffer ptr */
-+			__u32 target_name_len;	   /* in/out: target_name buffer len */
-+			union {
-+				__u32 map_id;
-+			} map;
-+		} iter;
- 		struct  {
- 			__u32 netns_ino;
- 			__u32 attach_type;
---=20
-2.24.1
-
+Acked-by: Yonghong Song <yhs@fb.com>
