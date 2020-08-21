@@ -2,106 +2,254 @@ Return-Path: <SRS0=M9Uk=B7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FD5CC433E1
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 14:42:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE4AAC433DF
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:02:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D8CB7207DE
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 14:42:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598020943;
-	bh=oZnskDyx49feGRU1KivrlcX9Ad2+BpqnA5lPTA64O8U=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=Kgxhs/W67TlkHMK5eYYUgNWU4rvbM7NGoRDV1eY8ila+QG/mmpHzUcxsEUYqQbkPo
-	 g8bXGD0UdAEyFuGxDfmTQEF1vGvqx1NFKs+5qdvUiXyQ7XJbMzSH/vDqHzsjCF1faU
-	 Ul8VYnUqdvb8efi8Yfn7hjwXZo4l8tY8h2SHSE/U=
+	by mail.kernel.org (Postfix) with ESMTP id BD2B4207C3
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 15:02:11 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="X9UBRfaZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727822AbgHUOmL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Aug 2020 10:42:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44628 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726610AbgHUOmK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 21 Aug 2020 10:42:10 -0400
-Received: from coco.lan (ip5f5ad5bf.dynamic.kabel-deutschland.de [95.90.213.191])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 05D512078B;
-        Fri, 21 Aug 2020 14:42:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598020928;
-        bh=oZnskDyx49feGRU1KivrlcX9Ad2+BpqnA5lPTA64O8U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TM5fK7GvQnAs4QuEft/iwxbpoY78lVyQ499aIFK9Sa67v+FeZFjpsiiZREgfmjpP7
-         F3wg8pER3AL0vqDXvCJz2TcQ0e0v2xkCaUoU0CrC5EmmIP99YKxfqHltzvoTX1ZBz7
-         /XGjEqvRbxj0QEnDxNw/MfGzBLR1d5g80zBFWmO8=
-Date:   Fri, 21 Aug 2020 16:41:58 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
-        Wanchun Zheng <zhengwanchun@hisilicon.com>,
-        linuxarm@huawei.com, dri-devel <dri-devel@lists.freedesktop.org>,
-        Andrzej Hajda <a.hajda@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        devel@driverdev.osuosl.org, Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Xiubin Zhang <zhangxiubin1@huawei.com>,
-        Wei Xu <xuwei5@hisilicon.com>, David Airlie <airlied@linux.ie>,
-        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Bogdan Togorean <bogdan.togorean@analog.com>,
-        Laurentiu Palcu <laurentiu.palcu@nxp.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        Liwei Cai <cailiwei@hisilicon.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Chen Feng <puck.chen@hisilicon.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linaro-mm-sig@lists.linaro.org, Rob Herring <robh+dt@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, mauro.chehab@huawei.com,
-        Rob Clark <robdclark@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Liuyao An <anliuyao@huawei.com>,
-        Rongrong Zou <zourongrong@gmail.com>, bpf@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 00/49] DRM driver for Hikey 970
-Message-ID: <20200821164158.22777f95@coco.lan>
-In-Reply-To: <20200819173558.GA3733@ravnborg.org>
-References: <cover.1597833138.git.mchehab+huawei@kernel.org>
-        <20200819152120.GA106437@ravnborg.org>
-        <20200819174027.70b39ee9@coco.lan>
-        <20200819173558.GA3733@ravnborg.org>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1727931AbgHUPCK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Aug 2020 11:02:10 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:9404 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728087AbgHUPBr (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 21 Aug 2020 11:01:47 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07LExm3u019716
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 08:01:47 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=Ul+xf1TI54FnPjFpxc3Ihst3TQMepDvmciNWWocFk1Q=;
+ b=X9UBRfaZyQqWzJ9tvDuKhWjfiKeHCzV8LSU6YcfZQqOEyfgA1Iu7cmymBDHunq6oDngT
+ qPnd/sfDuIbLthIrW0mC6czuKOVvFwjEXSqZpgBg2RnQBmb03ZZy/yusAU9zlsfskQmW
+ qNbD42wqrAo7zWO0iiRwsRsLBllgeViIPPE= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 3304m3da81-8
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 21 Aug 2020 08:01:47 -0700
+Received: from intmgw004.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 21 Aug 2020 08:01:41 -0700
+Received: by devvm1096.prn0.facebook.com (Postfix, from userid 111017)
+        id 3163A344104B; Fri, 21 Aug 2020 08:01:35 -0700 (PDT)
+Smtp-Origin-Hostprefix: devvm
+From:   Roman Gushchin <guro@fb.com>
+Smtp-Origin-Hostname: devvm1096.prn0.facebook.com
+To:     <bpf@vger.kernel.org>
+CC:     <netdev@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        <linux-kernel@vger.kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shakeel Butt <shakeelb@google.com>, <linux-mm@kvack.org>,
+        Roman Gushchin <guro@fb.com>
+Smtp-Origin-Cluster: prn0c01
+Subject: [PATCH bpf-next v4 03/30] bpf: memcg-based memory accounting for bpf maps
+Date:   Fri, 21 Aug 2020 08:01:07 -0700
+Message-ID: <20200821150134.2581465-4-guro@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200821150134.2581465-1-guro@fb.com>
+References: <20200821150134.2581465-1-guro@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-08-21_08:2020-08-21,2020-08-21 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ impostorscore=0 mlxscore=0 bulkscore=0 suspectscore=38 spamscore=0
+ phishscore=0 lowpriorityscore=0 malwarescore=0 clxscore=1015 adultscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008210141
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Another quick question:
+This patch enables memcg-based memory accounting for memory allocated
+by __bpf_map_area_alloc(), which is used by most map types for
+large allocations.
 
-Em Wed, 19 Aug 2020 19:35:58 +0200
-Sam Ravnborg <sam@ravnborg.org> escreveu:
+If a map is updated from an interrupt context, and the update
+results in memory allocation, the memory cgroup can't be determined
+from the context of the current process. To address this case,
+bpf map preserves a pointer to the memory cgroup of the process,
+which created the map. This memory cgroup is charged for allocations
+from interrupt context.
 
-> > +#define DSS_REDUCE(x)	((x) > 0 ? ((x) - 1) : (x))  
-> Use generic macros for this?
+Following patches in the series will refine the accounting for
+some map types.
 
-Do you know a generic macro similar to this? Or do you mean adding
-it to include/kernel.h?
+Signed-off-by: Roman Gushchin <guro@fb.com>
+---
+ include/linux/bpf.h  |  4 ++++
+ kernel/bpf/helpers.c | 37 ++++++++++++++++++++++++++++++++++++-
+ kernel/bpf/syscall.c | 27 ++++++++++++++++++++++++++-
+ 3 files changed, 66 insertions(+), 2 deletions(-)
 
-There are the atomic sub ones, but doesn't make sense here.
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index a9b7185a6b37..b5f178afde94 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -34,6 +34,7 @@ struct btf_type;
+ struct exception_table_entry;
+ struct seq_operations;
+ struct bpf_iter_aux_info;
++struct mem_cgroup;
+=20
+ extern struct idr btf_idr;
+ extern spinlock_t btf_idr_lock;
+@@ -138,6 +139,9 @@ struct bpf_map {
+ 	u32 btf_value_type_id;
+ 	struct btf *btf;
+ 	struct bpf_map_memory memory;
++#ifdef CONFIG_MEMCG_KMEM
++	struct mem_cgroup *memcg;
++#endif
+ 	char name[BPF_OBJ_NAME_LEN];
+ 	u32 btf_vmlinux_value_type_id;
+ 	bool bypass_spec_v1;
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index be43ab3e619f..f8ce7bc7003f 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -14,6 +14,7 @@
+ #include <linux/jiffies.h>
+ #include <linux/pid_namespace.h>
+ #include <linux/proc_ns.h>
++#include <linux/sched/mm.h>
+=20
+ #include "../../lib/kstrtox.h"
+=20
+@@ -41,11 +42,45 @@ const struct bpf_func_proto bpf_map_lookup_elem_proto=
+ =3D {
+ 	.arg2_type	=3D ARG_PTR_TO_MAP_KEY,
+ };
+=20
++#ifdef CONFIG_MEMCG_KMEM
++static __always_inline int __bpf_map_update_elem(struct bpf_map *map, vo=
+id *key,
++						 void *value, u64 flags)
++{
++	struct mem_cgroup *old_memcg;
++	bool in_interrupt;
++	int ret;
++
++	/*
++	 * If update from an interrupt context results in a memory allocation,
++	 * the memory cgroup to charge can't be determined from the context
++	 * of the current task. Instead, we charge the memory cgroup, which
++	 * contained a process created the map.
++	 */
++	in_interrupt =3D in_interrupt();
++	if (in_interrupt)
++		old_memcg =3D memalloc_use_memcg(map->memcg);
++
++	ret =3D map->ops->map_update_elem(map, key, value, flags);
++
++	if (in_interrupt)
++		memalloc_use_memcg(old_memcg);
++
++	return ret;
++}
++#else
++static __always_inline int __bpf_map_update_elem(struct bpf_map *map, vo=
+id *key,
++						 void *value, u64 flags)
++{
++	return map->ops->map_update_elem(map, key, value, flags);
++}
++#endif
++
+ BPF_CALL_4(bpf_map_update_elem, struct bpf_map *, map, void *, key,
+ 	   void *, value, u64, flags)
+ {
+ 	WARN_ON_ONCE(!rcu_read_lock_held());
+-	return map->ops->map_update_elem(map, key, value, flags);
++
++	return __bpf_map_update_elem(map, key, value, flags);
+ }
+=20
+ const struct bpf_func_proto bpf_map_update_elem_proto =3D {
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 689d736b6904..683614c17a95 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -29,6 +29,7 @@
+ #include <linux/bpf_lsm.h>
+ #include <linux/poll.h>
+ #include <linux/bpf-netns.h>
++#include <linux/memcontrol.h>
+=20
+ #define IS_FD_ARRAY(map) ((map)->map_type =3D=3D BPF_MAP_TYPE_PERF_EVENT=
+_ARRAY || \
+ 			  (map)->map_type =3D=3D BPF_MAP_TYPE_CGROUP_ARRAY || \
+@@ -275,7 +276,7 @@ static void *__bpf_map_area_alloc(u64 size, int numa_=
+node, bool mmapable)
+ 	 * __GFP_RETRY_MAYFAIL to avoid such situations.
+ 	 */
+=20
+-	const gfp_t gfp =3D __GFP_NOWARN | __GFP_ZERO;
++	const gfp_t gfp =3D __GFP_NOWARN | __GFP_ZERO | __GFP_ACCOUNT;
+ 	unsigned int flags =3D 0;
+ 	unsigned long align =3D 1;
+ 	void *area;
+@@ -452,6 +453,27 @@ void bpf_map_free_id(struct bpf_map *map, bool do_id=
+r_lock)
+ 		__release(&map_idr_lock);
+ }
+=20
++#ifdef CONFIG_MEMCG_KMEM
++static void bpf_map_save_memcg(struct bpf_map *map)
++{
++	map->memcg =3D get_mem_cgroup_from_mm(current->mm);
++}
++
++static void bpf_map_release_memcg(struct bpf_map *map)
++{
++	mem_cgroup_put(map->memcg);
++}
++
++#else
++static void bpf_map_save_memcg(struct bpf_map *map)
++{
++}
++
++static void bpf_map_release_memcg(struct bpf_map *map)
++{
++}
++#endif
++
+ /* called from workqueue */
+ static void bpf_map_free_deferred(struct work_struct *work)
+ {
+@@ -463,6 +485,7 @@ static void bpf_map_free_deferred(struct work_struct =
+*work)
+ 	/* implementation dependent freeing */
+ 	map->ops->map_free(map);
+ 	bpf_map_charge_finish(&mem);
++	bpf_map_release_memcg(map);
+ }
+=20
+ static void bpf_map_put_uref(struct bpf_map *map)
+@@ -869,6 +892,8 @@ static int map_create(union bpf_attr *attr)
+ 	if (err)
+ 		goto free_map_sec;
+=20
++	bpf_map_save_memcg(map);
++
+ 	err =3D bpf_map_new_fd(map, f_flags);
+ 	if (err < 0) {
+ 		/* failed to allocate fd.
+--=20
+2.26.2
 
-The closest one I found was min_not_zero(), but this would
-take two args.
-
-Btw, I agree that the name here is a bit odd... I would
-have called such macro as 'dec_not_zero()'.
-
-Thanks,
-Mauro
