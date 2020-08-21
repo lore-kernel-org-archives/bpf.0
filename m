@@ -2,68 +2,118 @@ Return-Path: <SRS0=M9Uk=B7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A28EC433E1
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 19:55:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CEBE3C433E1
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 20:09:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07F6120FC3
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 19:55:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A85FB20748
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 20:09:23 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WR4wVgmu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbgHUTzT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Aug 2020 15:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38514 "EHLO
+        id S1726408AbgHUUJX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Aug 2020 16:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726971AbgHUTzR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 21 Aug 2020 15:55:17 -0400
-Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9435AC061573;
-        Fri, 21 Aug 2020 12:55:17 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 1A3B6128911D4;
-        Fri, 21 Aug 2020 12:38:28 -0700 (PDT)
-Date:   Fri, 21 Aug 2020 12:55:08 -0700 (PDT)
-Message-Id: <20200821.125508.1308628373006121882.davem@davemloft.net>
-To:     alexei.starovoitov@gmail.com
-Cc:     daniel@iogearbox.net, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@fb.com
-Subject: Re: pull-request: bpf 2020-08-21
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200821194949.71179-1-alexei.starovoitov@gmail.com>
-References: <20200821194949.71179-1-alexei.starovoitov@gmail.com>
-X-Mailer: Mew version 6.8 on Emacs 26.3
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 21 Aug 2020 12:38:28 -0700 (PDT)
+        with ESMTP id S1725801AbgHUUJV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Aug 2020 16:09:21 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90037C061573;
+        Fri, 21 Aug 2020 13:09:21 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id a34so1656265ybj.9;
+        Fri, 21 Aug 2020 13:09:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OlqUo3Dge1orlY+cxzOKP+C7gVBbYdp4PpHHz814e9c=;
+        b=WR4wVgmu2qTjwJc5qujv7bzHaNk0RvFcGAd54SXtSEm0V8FTOyTd+Xx6KhBAAp+gZK
+         YlYMtv0KuCvDcouC81zSWj0IR4D5wBBTgisW74V/8d1YBSHvYtmyqp5s9oSbRyQymBe6
+         vI2GmRQ5K7AOTco6z91rD2gXcjMqSiwo76+9NyHklfdoCKJucSCl43ThmThLdpH+6TFd
+         JkJtJzYxe9RPxqTSG/xNFlPHi47GMpHel0FR4wgy4xqlcX88GUMODtIn8gPSA6sjNrEf
+         9k8480QOYdjY6UTss7+BfDHZCjcYWBVNCdQW63Xvy3B4V1vz4LA5UcmitUrbeFD3NfCx
+         jX2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OlqUo3Dge1orlY+cxzOKP+C7gVBbYdp4PpHHz814e9c=;
+        b=N349eTraZ5U5etKJMdcn4SYc91lB0u9OC2ufxlOsecjiYptMMzkfeJMQJwpIQjQQSZ
+         /fDsg+5tTfw8zkbhVSWQFYeU6HNsugQghr0A9eGtkp4cNFUV3VMSRPkNDYqh8ZIjD1L9
+         5Yc1Ono+p1frP/Ri4JNGjvRMmQd7YxtnfwZIZbogNXKExs58LMzT7S5V51bNrjKhC4eh
+         32t/Qn5HzyXr4Y5zXXgDAQQoOldsq+hduZzt++fNAcr+lERmNU5oZMy9dYQ712m8cqYP
+         TwgzQjOd6CQfl11LcxDyrpNOXK6jtTAJMHTKDWvzqPWhEcdLIRO36Mm7wPONnQfZBIkB
+         ZXKA==
+X-Gm-Message-State: AOAM530bPDTkILUH8YWlnjsxC/21m3WH+gXRgGQEcZwk9oiL0PPV3Uj/
+        uUjZ/l+jU4gQkJcBZlv9E/hhRUSaVv1tB6ZiMAk=
+X-Google-Smtp-Source: ABdhPJwrk1iCzTk6KzhCz09vBXaW/eTD6J/3EojIhuAb8Ds06Sge5HXnkkZ+pNjvyW/I6/8pX3Rzl9Is0s0r0dWfTdo=
+X-Received: by 2002:a25:bc50:: with SMTP id d16mr5609943ybk.230.1598040557470;
+ Fri, 21 Aug 2020 13:09:17 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200821191054.714731-1-yhs@fb.com>
+In-Reply-To: <20200821191054.714731-1-yhs@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 21 Aug 2020 13:09:06 -0700
+Message-ID: <CAEf4BzYkHraBsaaApbaBAUsQfjnYJtnBU7EcNybzxqaHmSNBCg@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: fix a buffer out-of-bound access when filling
+ raw_tp link_info
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 21 Aug 2020 12:49:49 -0700
+On Fri, Aug 21, 2020 at 12:11 PM Yonghong Song <yhs@fb.com> wrote:
+>
+> Commit f2e10bff16a0 ("bpf: Add support for BPF_OBJ_GET_INFO_BY_FD for bpf_link")
+> added link query for raw_tp. One of fields in link_info is to
+> fill a user buffer with tp_name. The Scurrent checking only
+> declares "ulen && !ubuf" as invalid. So "!ulen && ubuf" will be
+> valid. Later on, we do "copy_to_user(ubuf, tp_name, ulen - 1)" which
+> may overwrite user memory incorrectly.
+>
+> This patch fixed the problem by disallowing "!ulen && ubuf" case as well.
+>
+> Fixes: f2e10bff16a0 ("bpf: Add support for BPF_OBJ_GET_INFO_BY_FD for bpf_link")
+> Cc: Andrii Nakryiko <andriin@fb.com>
+> Signed-off-by: Yonghong Song <yhs@fb.com>
+> ---
+>  kernel/bpf/syscall.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 86299a292214..ac6c784c0576 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -2634,7 +2634,7 @@ static int bpf_raw_tp_link_fill_link_info(const struct bpf_link *link,
+>         u32 ulen = info->raw_tracepoint.tp_name_len;
+>         size_t tp_len = strlen(tp_name);
+>
+> -       if (ulen && !ubuf)
+> +       if (!ulen ^ !ubuf)
+>                 return -EINVAL;
 
-> The following pull-request contains BPF updates for your *net* tree.
-> 
-> We've added 11 non-merge commits during the last 5 day(s) which contain
-> a total of 12 files changed, 78 insertions(+), 24 deletions(-).
-> 
-> The main changes are:
-> 
-> 1) three fixes in BPF task iterator logic, from Yonghong.
-> 
-> 2) fix for compressed dwarf sections in vmlinux, from Jiri.
-> 
-> 3) fix xdp attach regression, from Andrii.
-> 
-> Please consider pulling these changes from:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+I think my original idea was to allow ulen == 0 && ubuf != NULL as a
+still valid way to get real ulen, but it's clearly wrong with ulen-1
+below. So instead of special-casing ulen==0 for the case I wanted to
+support, it's easier to disallow ulen==0 && ubuf!=NULL.
 
-Pulled, thank you.
+So thanks for the fix!
+
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+
+>
+>         info->raw_tracepoint.tp_name_len = tp_len + 1;
+> --
+> 2.24.1
+>
