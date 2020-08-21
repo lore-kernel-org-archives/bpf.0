@@ -2,137 +2,153 @@ Return-Path: <SRS0=M9Uk=B7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,NICE_REPLY_A,RCVD_ILLEGAL_IP,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9009C433DF
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 06:23:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17730C433E1
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 06:31:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A70F720738
-	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 06:23:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E5F53207DA
+	for <bpf@archiver.kernel.org>; Fri, 21 Aug 2020 06:31:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="qK4U174u";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="hFIHmE3u"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RpBZYrRf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725958AbgHUGXm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 21 Aug 2020 02:23:42 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:50860 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725268AbgHUGXl (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 21 Aug 2020 02:23:41 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 07L6Kg23029207;
-        Thu, 20 Aug 2020 23:23:25 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=oJqD6h1uGsMt/DPXUc+VepazS7W0mXU0VAxhK054uM0=;
- b=qK4U174uEdbz38ckDFm6grBpK1UPNKlTRDpWkdnkJYAg8uLg7pxyeWbYdjvC9qlCtz7P
- vQrg3dgJq6b+jrjJg2w1F9zJBRKyxMlHKGuZPcIw+a03nBQ6V5bIQIDwhqGYHk3gznqy
- RkutFeoRdt6M6qaRJD+VOMGQ59Fa1HYOSn4= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 331hcbxsgh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 20 Aug 2020 23:23:25 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.228) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 20 Aug 2020 23:23:24 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QjiPe5IWqVbsVHJOa0gaUtqbcx4hhg/LvE5WUcciTWx6MxEPnG1q2L2Jg+jVh2UTpjH1eBG6sOlUIv1sxRE7iIUpo4ThXzNhd957P6XqxXXVPVUzXht+FZToU6OA5dsQMwU4SPhvXG57jEN+7Au69QfTm3ZoHIHN7ETqXw5GwbEVySshgIVCqmzhzQ3gsBJyRF0GxmwKgxgemWBLvdQP+aAcDVOtryV0HCcEtkEAD5DctEPVM997PHmMXn3auq181W3HpsohesIA3BW9Auy2hmOFAd7dQWVapsAxqu6HxNsBsh2DPvdlf+uQKZVjNJGilkVr9zT1WOCnQo6mIeX/Ew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oJqD6h1uGsMt/DPXUc+VepazS7W0mXU0VAxhK054uM0=;
- b=SZmARdhgzawhAxThjUypfWPHhS7fvAc4hJDcXbdpm6L/wYDR3G+m78UsHhKvggEmXTgleeKvd1o9Q309tmrxaXJ4AVXFgdSGUFmkgcV1pl5B+UWkkUAcR9sdmTX14CEAILBhZZL+yJaHjlEM0vl8dPSdOKkSZpI1segYhWQKdKMgWcoRqtAFyqVxhbvTpzFdA0jrSNKB76/e/5VG6CpoePGRfT82tzn11JABgHQ+HAWxuYErRAGEovP7XCus0Mi8MEb28jIckG0Ccm7E+R3bl3YHJK53NFfpzE0Xwh+5twTd7viI0q6hKrF7Q1iheNEu7SRjMSOXITkNnVXaR0WgZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oJqD6h1uGsMt/DPXUc+VepazS7W0mXU0VAxhK054uM0=;
- b=hFIHmE3usPMrDoA5+T9V+CquEoA3YUHMsD8DdATdfQvtQE86lWTwCGho4bhU42aZJDo9a2QRSenCSM+YiWJT+fCqWhJrwQ+o1EJoBATiTR2QyjJuKPuYtrC3d24dzWTakvQ6hEiOpv4Au0fJ24ZnFQK/dm/8lYGbAh0AOvQb46E=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=fb.com;
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
- by BYAPR15MB2582.namprd15.prod.outlook.com (2603:10b6:a03:154::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3283.16; Fri, 21 Aug
- 2020 06:23:23 +0000
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::56b:2925:8762:2d80]) by BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::56b:2925:8762:2d80%7]) with mapi id 15.20.3305.026; Fri, 21 Aug 2020
- 06:23:23 +0000
-Subject: Re: [PATCH bpf-next] docs: correct subject prefix and update LLVM
- info
-To:     Jianlin Lv <Jianlin.Lv@arm.com>, <bpf@vger.kernel.org>
-CC:     <davem@davemloft.net>, <kuba@kernel.org>, <ast@kernel.org>,
-        <daniel@iogearbox.net>, <Song.Zhu@arm.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-References: <20200821052817.46887-1-Jianlin.Lv@arm.com>
-From:   Yonghong Song <yhs@fb.com>
-Message-ID: <2b3ed0fe-5be3-05a4-4db0-d0039709e488@fb.com>
-Date:   Thu, 20 Aug 2020 23:23:17 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.11.0
-In-Reply-To: <20200821052817.46887-1-Jianlin.Lv@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MN2PR19CA0046.namprd19.prod.outlook.com
- (2603:10b6:208:19b::23) To BYAPR15MB4088.namprd15.prod.outlook.com
- (2603:10b6:a02:c3::18)
+        id S1726906AbgHUGbs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 21 Aug 2020 02:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725951AbgHUGbq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 21 Aug 2020 02:31:46 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40F0C061385;
+        Thu, 20 Aug 2020 23:31:45 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id i10so481567ybt.11;
+        Thu, 20 Aug 2020 23:31:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y7CnQ43knVpw8jT9GDPqGRZu+4r4FWZskBB7+2K5rVc=;
+        b=RpBZYrRfzsp9NUSqUglclmHsa95JMVyfrDQhmRNxQsuaQqrhKK+HZogs625wqUSlfK
+         dbScB0aDoF85H4RxbakrJrVpDJiMmoHGNe4J9gPOayzKoMp6zy51zfZM/F7GDj7IRSTp
+         /R6iWd0q0HhqhB/QxxaifQAI9ds+6yg1iXh/tEpurWVSF9z32ZhY8zOXJfWlSqA2dtXN
+         JIyjgDFNELH0Yu66eQtjl0vzjxzbCZYmlpDRL/yTsZX9qVWZSSH+ciYDyTrd0JnxjW1D
+         N1fFQk2ehBoSCi6RKBEtF2pGAgT/bRHCQCiLIQvvpgjAQnaCrbBNq4yhNR9b01asOHuF
+         9AWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y7CnQ43knVpw8jT9GDPqGRZu+4r4FWZskBB7+2K5rVc=;
+        b=pSXVZOs9dOC08+xEhI8Zt6A7zKmwwKC8E5PMLSJiABK3J4Oo1lVyVBQ/N00Qg04gLN
+         xyBCWn06BIFlZsTWhe+HpPGw5tbTXY4rWWpL8jy8HYjJm3nLGU7OpLA3Mvl24R4+nh+y
+         ZLTJWqmUIPhoDuGVfjSgDIiRi/pf0LQ6Ts3pDO+GsAXsENPgLctmj/JbbAyWilg8qpxW
+         OOodBm8xnHR3BET3jI8dVwOUdeu2FLE+EP1ea22X6eX/x5GhpNrDSSA7GP8/WmfYxBne
+         GaUl8v6BhW2bec/umBNDFnfG/ECRI6BRoKWwhBWuqT59/aWhv8pAd6+CFFswsUEkSeOK
+         izxw==
+X-Gm-Message-State: AOAM5327SkFlQwjmWV4iMaT9tONuFVDGALHTapin7ODoiX1I7JWEqw0f
+        gRCkZE4HM1dtPnaxxh2vPa/vDmtu6Wj2rc2cgKLIY8vVOxE=
+X-Google-Smtp-Source: ABdhPJxIN/wtdPmlZdifU0G1f+g2tLU0OSKSzS4uhZJbxKfTLmelnhAWzK65Cd+2APTxGP8bHbW8XtxJsk7a/MsuFHE=
+X-Received: by 2002:a25:ad5a:: with SMTP id l26mr1700257ybe.510.1597991505198;
+ Thu, 20 Aug 2020 23:31:45 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from 255.255.255.255 (255.255.255.255) by MN2PR19CA0046.namprd19.prod.outlook.com (2603:10b6:208:19b::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3305.25 via Frontend Transport; Fri, 21 Aug 2020 06:23:21 +0000
-X-Originating-IP: [2620:10d:c091:480::1:a192]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 26c64768-eb3f-4545-b6f8-08d8459ab492
-X-MS-TrafficTypeDiagnostic: BYAPR15MB2582:
-X-Microsoft-Antispam-PRVS: <BYAPR15MB2582F091EAB2282A00237BF5D35B0@BYAPR15MB2582.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:2803;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(366004)(346002)(136003)(396003)(39860400002)(31696002)(110011004)(83380400001)(5660300002)(4744005)(6486002)(66946007)(316002)(86362001)(52116002)(36756003)(4326008)(66476007)(53546011)(186003)(2906002)(2616005)(478600001)(956004)(16576012)(15650500001)(31686004)(8676002)(8936002)(6666004)(66556008)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-CrossTenant-Network-Message-Id: 26c64768-eb3f-4545-b6f8-08d8459ab492
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2020 06:23:23.1778
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: B21HfuMXt8PdZ2Y38GE1HNSu6OletOaXU3rBJiH/OuhPZG/RdlYMOAQgzm1CQdwa
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2582
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-21_05:2020-08-19,2020-08-21 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- priorityscore=1501 suspectscore=0 clxscore=1011 bulkscore=0
- mlxlogscore=627 lowpriorityscore=0 phishscore=0 impostorscore=0
- adultscore=0 mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2008210060
-X-FB-Internal: deliver
+References: <20200820224917.483062-1-yhs@fb.com> <20200820224917.483128-1-yhs@fb.com>
+In-Reply-To: <20200820224917.483128-1-yhs@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 20 Aug 2020 23:31:34 -0700
+Message-ID: <CAEf4BzZ32inDH2MhLFv5o8PiQ9=4EGR0C75Ks6dWzHjVsgozAg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: implement link_query for bpf iterators
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Thu, Aug 20, 2020 at 3:50 PM Yonghong Song <yhs@fb.com> wrote:
+>
+> This patch implemented bpf_link callback functions
+> show_fdinfo and fill_link_info to support link_query
+> interface.
+>
+> The general interface for show_fdinfo and fill_link_info
+> will print/fill the target_name. Each targets can
+> register show_fdinfo and fill_link_info callbacks
+> to print/fill more target specific information.
+>
+> For example, the below is a fdinfo result for a bpf
+> task iterator.
+>   $ cat /proc/1749/fdinfo/7
+>   pos:    0
+>   flags:  02000000
+>   mnt_id: 14
+>   link_type:      iter
+>   link_id:        11
+>   prog_tag:       990e1f8152f7e54f
+>   prog_id:        59
+>   target_name:    task
+>
+> Signed-off-by: Yonghong Song <yhs@fb.com>
+> ---
+>  include/linux/bpf.h            |  6 ++++
+>  include/uapi/linux/bpf.h       |  7 ++++
+>  kernel/bpf/bpf_iter.c          | 58 ++++++++++++++++++++++++++++++++++
+>  tools/include/uapi/linux/bpf.h |  7 ++++
+>  4 files changed, 78 insertions(+)
+>
 
+[...]
 
-On 8/20/20 10:28 PM, Jianlin Lv wrote:
-> bpf_devel_QA.rst:152 The subject prefix information is not accurate, it
-> should be 'PATCH bpf-next v2'
-> 
-> Also update LLVM version info and add information about
-> ‘-DLLVM_TARGETS_TO_BUILD’ to prompt the developer to build the desired
-> target.
-> 
-> Signed-off-by: Jianlin Lv <Jianlin.Lv@arm.com>
+> +
+> +static int bpf_iter_link_fill_link_info(const struct bpf_link *link,
+> +                                       struct bpf_link_info *info)
+> +{
+> +       struct bpf_iter_link *iter_link =
+> +               container_of(link, struct bpf_iter_link, link);
+> +       char __user *ubuf = u64_to_user_ptr(info->iter.target_name);
+> +       bpf_iter_fill_link_info_t fill_link_info;
+> +       u32 ulen = info->iter.target_name_len;
+> +       const char *target_name;
+> +       u32 target_len;
+> +
+> +       if (ulen && !ubuf)
+> +               return -EINVAL;
+> +
+> +       target_name = iter_link->tinfo->reg_info->target;
+> +       target_len =  strlen(target_name);
+> +       info->iter.target_name_len = target_len + 1;
+> +       if (!ubuf)
+> +               return 0;
 
-Acked-by: Yonghong Song <yhs@fb.com>
+this might return prematurely before fill_link_info() below gets a
+chance to fill in some extra info?
+
+> +
+> +       if (ulen >= target_len + 1) {
+> +               if (copy_to_user(ubuf, target_name, target_len + 1))
+> +                       return -EFAULT;
+> +       } else {
+> +               char zero = '\0';
+> +
+> +               if (copy_to_user(ubuf, target_name, ulen - 1))
+> +                       return -EFAULT;
+> +               if (put_user(zero, ubuf + ulen - 1))
+> +                       return -EFAULT;
+> +               return -ENOSPC;
+> +       }
+> +
+> +       fill_link_info = iter_link->tinfo->reg_info->fill_link_info;
+> +       if (fill_link_info)
+> +               return fill_link_info(&iter_link->aux, info);
+> +
+> +       return 0;
+> +}
+> +
+
+[...]
