@@ -2,82 +2,119 @@ Return-Path: <SRS0=dkA9=CC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 847C4C433DF
-	for <bpf@archiver.kernel.org>; Mon, 24 Aug 2020 09:00:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57499C433E1
+	for <bpf@archiver.kernel.org>; Mon, 24 Aug 2020 09:40:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 593D0206BE
-	for <bpf@archiver.kernel.org>; Mon, 24 Aug 2020 09:00:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 33BB42071E
+	for <bpf@archiver.kernel.org>; Mon, 24 Aug 2020 09:40:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sF0cp1Jr"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="MB9S7b84"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728480AbgHXJAy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Aug 2020 05:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
+        id S1728433AbgHXJkj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Aug 2020 05:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730475AbgHXJAR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Aug 2020 05:00:17 -0400
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69ABC061574
-        for <bpf@vger.kernel.org>; Mon, 24 Aug 2020 02:00:15 -0700 (PDT)
-Received: by mail-vk1-xa34.google.com with SMTP id m12so1809307vko.5
-        for <bpf@vger.kernel.org>; Mon, 24 Aug 2020 02:00:15 -0700 (PDT)
+        with ESMTP id S1729251AbgHXIpp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Aug 2020 04:45:45 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A23C061573
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2020 01:45:45 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id x5so7513082wmi.2
+        for <bpf@vger.kernel.org>; Mon, 24 Aug 2020 01:45:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=KfhSuOovLnLRVmlJFLbo80kBFl4FB5sqA5U4FgRWdXE=;
-        b=sF0cp1JrdrQ5w+tMqws5LD4vUPY/tS2GNl0kwpIxrT7Z2tvlIvQl3kp/UupnnkFEhw
-         P97cQIaiKcoqDiXPPChDUtgG3floGftRcROmppacO3HxwKH80TUEl6Vr2WM8I8s6S9u4
-         sghLN2nBSTyQpm7VBixjZNrvVUOMM/VwZ9MTfhS9bA+x3LYj8x587UWnrhiWQ5rK/S8c
-         sMrf0vOlbgVyn3Kyh06cI3dtcOykPduzolO2XbUM1mCa0bnxK2/e3X+I5MI/OAbvIQer
-         RrVqK3fqYbCfcU1Er/UikCOKQm8VTa1SsBPUTpUo+OGY8a8L4QX9n2TrQR1KnduIIb2p
-         xhCQ==
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Kr1c3haT1yhxfl33XmTaSeXi33h/k6BkkvRpBNN6lwQ=;
+        b=MB9S7b84pla+BcD84lZT3P3lcWv5hFKe/OmZWr/j6lT3iPORefJiqMEKXuN0fjX0xo
+         ND+USgWsApxiI9xGI2VhDWpIYbX/HiS74u8N7aHlhlcrts7l/eBG5rGzARwbAzT99Wyi
+         HUPOiI6wQa8vHsP3vDYKDT2SOHe8XPwliUqhg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=KfhSuOovLnLRVmlJFLbo80kBFl4FB5sqA5U4FgRWdXE=;
-        b=V3MTCxHuGIB39Za0dNhj5NlpMkyB2cjLehyiDIRMoquVTcl2EJ9yH07oo/bg7OsIRB
-         6QOVQOhZU6GFYK/1TqrdET33GrBQhpvrY0UluxYtuDu6f3UUgth/LLejUC1BEs0RgaXF
-         KP2KWAFaZ5PeOf7Vk2vPh1555I/ND9plJ7DjXcuYkw3+qBcmJ6SfV6KbiVNkU/2oPk1q
-         MSnarmGDQXkaEQHhHGyWNRjH/QR4S9pTGY6JiXfZfHybNYrrJLOGmMOKsp9MmMPtdJtA
-         EWQ0q9OsH8/HyGNpLydGPhAuamveN08VaTeKgH1RYaUSIccTDJV28BuuX8E0f5WrPUX0
-         6nWQ==
-X-Gm-Message-State: AOAM533LEfGSYLR2GBVTxCu9fTlo89BS2ZY/cdh+LWUTYUqK8IG+6lLp
-        hwy99q1o0BvzQhPkBahv+hiKHtpyKmW18OLaaIv4ceHoFJ/yffHA
-X-Google-Smtp-Source: ABdhPJz/KtMppW2wUDSI5hh9kF22nqOYQnim3Qj7+E4taS5Wd7au/tHa/tVWNgJla6ZbMnBGXUm+Vz9lK3r+rPtUyo4=
-X-Received: by 2002:a1f:eecb:: with SMTP id m194mr1767325vkh.40.1598259613475;
- Mon, 24 Aug 2020 02:00:13 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Kr1c3haT1yhxfl33XmTaSeXi33h/k6BkkvRpBNN6lwQ=;
+        b=ONcsfcSj+AFHxllvDtD8OW7FTdWMEsRsJvRNBYMaGJHLIJlDuPNsHGt1TWQUZ1nt1J
+         dwWJpYSy3+vDQFVzgIwWIzi5x5x9qoUh8FkW7dhh7n3vSvspdNsx77b/aIe+oXQNUzdN
+         E0ruNHOlDFUK+KGqinQQdkt1e9VOUMdVbxOpo68QO2wk+IIrd/uDe2rIKyRxdGMVxOlD
+         XQaL2DVQeQu0ZzfDzhktSgsJhUF8TKHr/+4qyXLDx+Dv24tynTDEZFUs5kzok4hxbVfo
+         98C0OzFV/xF9kLuD1hkKbRKDxKS+aezeTvrhHhjtjMvN++dsU9v8XuxD0a87WZDcNHQX
+         mZyQ==
+X-Gm-Message-State: AOAM5322jFMGl1iZ1ePC1Uvd9fL7sfqgK9cIJlg/qRO8tCo90HZ7d0qo
+        HuHdsEVexv0OqWvcHk4RBgzRog==
+X-Google-Smtp-Source: ABdhPJx8dImHvW2WWOV9cX7FzTbLm1HFOCVVN/8wMcBEsm4gnokQEx+mxngPfhEVF1w1Nmd0+jGx+g==
+X-Received: by 2002:a1c:818e:: with SMTP id c136mr4802397wmd.170.1598258744015;
+        Mon, 24 Aug 2020 01:45:44 -0700 (PDT)
+Received: from antares.lan (f.b.d.5.c.0.0.9.c.8.0.f.d.9.d.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:d9d:f08c:900c:5dbf])
+        by smtp.gmail.com with ESMTPSA id t70sm40377848wmt.3.2020.08.24.01.45.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2020 01:45:43 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     ast@kernel.org, yhs@fb.com, daniel@iogearbox.net
+Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com,
+        Lorenz Bauer <lmb@cloudflare.com>
+Subject: [PATCH bpf-next] selftests: bpf: fix sockmap update nits
+Date:   Mon, 24 Aug 2020 09:45:23 +0100
+Message-Id: <20200824084523.13104-1-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 24 Aug 2020 14:30:01 +0530
-Message-ID: <CA+G9fYvWkGp9p95DQ5T87GDBmUMecEYBZC0TYHmfwHysanQ7zA@mail.gmail.com>
-Subject: expects argument of type 'size_t', but argument 5 has type 'Elf64_Xword
-To:     bpf <bpf@vger.kernel.org>, Netdev <netdev@vger.kernel.org>,
-        ast@fb.com, Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Kernel Team <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>, lkft-triage@lists.linaro.org,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-while building perf with gcc 7.3.0 on linux next this warning/error is found.
+Address review by Yonghong, to bring the new tests in line with the
+usual code style.
 
-In file included from libbpf.c:55:0:
-libbpf.c: In function 'bpf_object__elf_collect':
-libbpf_internal.h:74:22: error: format '%zu' expects argument of type
-'size_t', but argument 5 has type 'Elf64_Xword {aka long long unsigned
-int}' [-Werror=format=]
-  libbpf_print(level, "libbpf: " fmt, ##__VA_ARGS__);
-cc1: all warnings being treated as errors
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+---
+ .../testing/selftests/bpf/prog_tests/sockmap_basic.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-OE perf build long link,
-https://ci.linaro.org/view/lkft/job/openembedded-lkft-linux-next/DISTRO=lkft,MACHINE=am57xx-evm,label=docker-lkft/846/consoleText
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 65ce7c289534..0b79d78b98db 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -118,10 +118,8 @@ static void test_sockmap_update(enum bpf_map_type map_type)
+ 		return;
+ 
+ 	skel = test_sockmap_update__open_and_load();
+-	if (CHECK(!skel, "open_and_load", "cannot load skeleton\n")) {
+-		close(sk);
+-		return;
+-	}
++	if (CHECK(!skel, "open_and_load", "cannot load skeleton\n"))
++		goto close_sk;
+ 
+ 	prog = bpf_program__fd(skel->progs.copy_sock_map);
+ 	src = bpf_map__fd(skel->maps.src);
+@@ -158,8 +156,9 @@ static void test_sockmap_update(enum bpf_map_type map_type)
+ 	      dst_cookie, src_cookie);
+ 
+ out:
+-	close(sk);
+ 	test_sockmap_update__destroy(skel);
++close_sk:
++	close(sk);
+ }
+ 
+ static void test_sockmap_invalid_update(void)
+@@ -168,8 +167,7 @@ static void test_sockmap_invalid_update(void)
+ 	int duration = 0;
+ 
+ 	skel = test_sockmap_invalid_update__open_and_load();
+-	CHECK(skel, "open_and_load", "verifier accepted map_update\n");
+-	if (skel)
++	if (CHECK(skel, "open_and_load", "verifier accepted map_update\n"))
+ 		test_sockmap_invalid_update__destroy(skel);
+ }
+ 
+-- 
+2.25.1
 
-- Naresh
