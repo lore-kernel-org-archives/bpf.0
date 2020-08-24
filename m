@@ -4,49 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 54257C433E1
-	for <bpf@archiver.kernel.org>; Mon, 24 Aug 2020 17:26:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB52C433DF
+	for <bpf@archiver.kernel.org>; Mon, 24 Aug 2020 17:26:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 334572075B
-	for <bpf@archiver.kernel.org>; Mon, 24 Aug 2020 17:26:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 910BD20738
+	for <bpf@archiver.kernel.org>; Mon, 24 Aug 2020 17:26:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598289961;
-	bh=0qKFt4rBMJJe2mXKHEb4MCWoeQnV2O2OwSgCNEIKOr4=;
+	s=default; t=1598290019;
+	bh=oTARuwR/1mchUtNNkLCWoveYMMVPoNEEk5qgz+NHa2U=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=03C940K9g2DsjZ8M0BOSrX56q0BRvHNM6OWZB6JxuTwiidvzTWwr+W22x8w0QMrbj
-	 gUNzGtQEcgD/t8x5sLf4I2BXb9VUL0CLBc3a7+9gvix87RxVK3tbvQOTFoRqf5h3xL
-	 r1ROxpBAJUhrZCbcmlKScq23HMEIwChmfqehbyls=
+	b=Do8lJ3TzBsaolwM8IMWVzb97VUukRsCeyRJQtY1PYejtQDx3lqFkAPzTRKkYaI5nd
+	 oL9p+RU+ox7Fxfftvl/+S0ANSl1rO/4RI3uNQlTd0kqM14nt2LF/zOXY91wBrO0pyj
+	 i3i9AU7+VmK2Pf+qHr+EMRc+giFPpcBxZUY9iOy8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726905AbgHXRZp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Aug 2020 13:25:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39970 "EHLO mail.kernel.org"
+        id S1728258AbgHXQfh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Aug 2020 12:35:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39632 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728259AbgHXQfj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Aug 2020 12:35:39 -0400
+        id S1726225AbgHXQfe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Aug 2020 12:35:34 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A7BEA22B49;
-        Mon, 24 Aug 2020 16:35:37 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 30C4522B49;
+        Mon, 24 Aug 2020 16:35:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1598286938;
-        bh=0qKFt4rBMJJe2mXKHEb4MCWoeQnV2O2OwSgCNEIKOr4=;
+        s=default; t=1598286934;
+        bh=oTARuwR/1mchUtNNkLCWoveYMMVPoNEEk5qgz+NHa2U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sCQEI4sQHacWLhdVQtpT/chdiWj7D8gjgr0JtXpf6KsX++05yQNrE7FUv2q+EBveK
-         0/M+ci7J7XR1PFUC+JXufsIXeD6gb0jevIKP9INFV6aH1LnS0tI6iksX4jI0P6hlQD
-         9XsAmvc/MBG0yXiTKS9X0wwBMdRSGTTFZfvy16mI=
+        b=2sYpRwk3lOxeas0m1I7XFWL/i3634PjbcENEL882PCxpHxC+fs/wFQrZVPoAaiTQ7
+         MRKtnBpsEdfXgic9KnS5en6eEcJ41TSYBKm9Uy/KUPjyTDmwOq7gFbQwU6R4BwzJBi
+         k8Ijg6yLTm9csWf9pA1axymVl2A0rreO/tPHgtLs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrii Nakryiko <andriin@fb.com>,
+Cc:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Jakov Petrina <jakov.petrina@sartura.hr>,
         Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.8 25/63] tools/bpftool: Fix compilation warnings in 32-bit mode
-Date:   Mon, 24 Aug 2020 12:34:25 -0400
-Message-Id: <20200824163504.605538-25-sashal@kernel.org>
+        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 5.8 22/63] libbpf: Handle GCC built-in types for Arm NEON
+Date:   Mon, 24 Aug 2020 12:34:22 -0400
+Message-Id: <20200824163504.605538-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200824163504.605538-1-sashal@kernel.org>
 References: <20200824163504.605538-1-sashal@kernel.org>
@@ -59,153 +61,113 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrii Nakryiko <andriin@fb.com>
+From: Jean-Philippe Brucker <jean-philippe@linaro.org>
 
-[ Upstream commit 09f44b753a7d120becc80213c3459183c8acd26b ]
+[ Upstream commit 702eddc77a905782083b14ccd05b23840675fd18 ]
 
-Fix few compilation warnings in bpftool when compiling in 32-bit mode.
-Abstract away u64 to pointer conversion into a helper function.
+When building Arm NEON (SIMD) code from lib/raid6/neon.uc, GCC emits
+DWARF information using a base type "__Poly8_t", which is internal to
+GCC and not recognized by Clang. This causes build failures when
+building with Clang a vmlinux.h generated from an arm64 kernel that was
+built with GCC.
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+	vmlinux.h:47284:9: error: unknown type name '__Poly8_t'
+	typedef __Poly8_t poly8x16_t[16];
+	        ^~~~~~~~~
+
+The polyX_t types are defined as unsigned integers in the "Arm C
+Language Extension" document (101028_Q220_00_en). Emit typedefs based on
+standard integer types for the GCC internal types, similar to those
+emitted by Clang.
+
+Including linux/kernel.h to use ARRAY_SIZE() incidentally redefined
+max(), causing a build bug due to different types, hence the seemingly
+unrelated change.
+
+Reported-by: Jakov Petrina <jakov.petrina@sartura.hr>
+Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20200813204945.1020225-2-andriin@fb.com
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Link: https://lore.kernel.org/bpf/20200812143909.3293280-1-jean-philippe@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/bpf/bpftool/btf_dumper.c |  2 +-
- tools/bpf/bpftool/link.c       |  4 ++--
- tools/bpf/bpftool/main.h       | 10 +++++++++-
- tools/bpf/bpftool/prog.c       | 16 ++++++++--------
- 4 files changed, 20 insertions(+), 12 deletions(-)
+ tools/lib/bpf/btf_dump.c | 35 ++++++++++++++++++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
 
-diff --git a/tools/bpf/bpftool/btf_dumper.c b/tools/bpf/bpftool/btf_dumper.c
-index ede162f83eea0..0e9310727281a 100644
---- a/tools/bpf/bpftool/btf_dumper.c
-+++ b/tools/bpf/bpftool/btf_dumper.c
-@@ -67,7 +67,7 @@ static int dump_prog_id_as_func_ptr(const struct btf_dumper *d,
- 	if (!info->btf_id || !info->nr_func_info ||
- 	    btf__get_from_id(info->btf_id, &prog_btf))
- 		goto print;
--	finfo = (struct bpf_func_info *)info->func_info;
-+	finfo = u64_to_ptr(info->func_info);
- 	func_type = btf__type_by_id(prog_btf, finfo->type_id);
- 	if (!func_type || !btf_is_func(func_type))
- 		goto print;
-diff --git a/tools/bpf/bpftool/link.c b/tools/bpf/bpftool/link.c
-index fca57ee8fafe4..dea691c83afca 100644
---- a/tools/bpf/bpftool/link.c
-+++ b/tools/bpf/bpftool/link.c
-@@ -101,7 +101,7 @@ static int show_link_close_json(int fd, struct bpf_link_info *info)
- 	switch (info->type) {
- 	case BPF_LINK_TYPE_RAW_TRACEPOINT:
- 		jsonw_string_field(json_wtr, "tp_name",
--				   (const char *)info->raw_tracepoint.tp_name);
-+				   u64_to_ptr(info->raw_tracepoint.tp_name));
- 		break;
- 	case BPF_LINK_TYPE_TRACING:
- 		err = get_prog_info(info->prog_id, &prog_info);
-@@ -177,7 +177,7 @@ static int show_link_close_plain(int fd, struct bpf_link_info *info)
- 	switch (info->type) {
- 	case BPF_LINK_TYPE_RAW_TRACEPOINT:
- 		printf("\n\ttp '%s'  ",
--		       (const char *)info->raw_tracepoint.tp_name);
-+		       (const char *)u64_to_ptr(info->raw_tracepoint.tp_name));
- 		break;
- 	case BPF_LINK_TYPE_TRACING:
- 		err = get_prog_info(info->prog_id, &prog_info);
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 5cdf0bc049bd9..5917484c2e027 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -21,7 +21,15 @@
- /* Make sure we do not use kernel-only integer typedefs */
- #pragma GCC poison u8 u16 u32 u64 s8 s16 s32 s64
+diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+index bbb4303172606..4edf76c5a7101 100644
+--- a/tools/lib/bpf/btf_dump.c
++++ b/tools/lib/bpf/btf_dump.c
+@@ -13,6 +13,7 @@
+ #include <errno.h>
+ #include <linux/err.h>
+ #include <linux/btf.h>
++#include <linux/kernel.h>
+ #include "btf.h"
+ #include "hashmap.h"
+ #include "libbpf.h"
+@@ -548,6 +549,9 @@ static int btf_dump_order_type(struct btf_dump *d, __u32 id, bool through_ptr)
+ 	}
+ }
  
--#define ptr_to_u64(ptr)	((__u64)(unsigned long)(ptr))
-+static inline __u64 ptr_to_u64(const void *ptr)
++static void btf_dump_emit_missing_aliases(struct btf_dump *d, __u32 id,
++					  const struct btf_type *t);
++
+ static void btf_dump_emit_struct_fwd(struct btf_dump *d, __u32 id,
+ 				     const struct btf_type *t);
+ static void btf_dump_emit_struct_def(struct btf_dump *d, __u32 id,
+@@ -670,6 +674,9 @@ static void btf_dump_emit_type(struct btf_dump *d, __u32 id, __u32 cont_id)
+ 
+ 	switch (kind) {
+ 	case BTF_KIND_INT:
++		/* Emit type alias definitions if necessary */
++		btf_dump_emit_missing_aliases(d, id, t);
++
+ 		tstate->emit_state = EMITTED;
+ 		break;
+ 	case BTF_KIND_ENUM:
+@@ -869,7 +876,7 @@ static void btf_dump_emit_struct_def(struct btf_dump *d,
+ 			btf_dump_printf(d, ": %d", m_sz);
+ 			off = m_off + m_sz;
+ 		} else {
+-			m_sz = max(0, btf__resolve_size(d->btf, m->type));
++			m_sz = max(0LL, btf__resolve_size(d->btf, m->type));
+ 			off = m_off + m_sz * 8;
+ 		}
+ 		btf_dump_printf(d, ";");
+@@ -889,6 +896,32 @@ static void btf_dump_emit_struct_def(struct btf_dump *d,
+ 		btf_dump_printf(d, " __attribute__((packed))");
+ }
+ 
++static const char *missing_base_types[][2] = {
++	/*
++	 * GCC emits typedefs to its internal __PolyX_t types when compiling Arm
++	 * SIMD intrinsics. Alias them to standard base types.
++	 */
++	{ "__Poly8_t",		"unsigned char" },
++	{ "__Poly16_t",		"unsigned short" },
++	{ "__Poly64_t",		"unsigned long long" },
++	{ "__Poly128_t",	"unsigned __int128" },
++};
++
++static void btf_dump_emit_missing_aliases(struct btf_dump *d, __u32 id,
++					  const struct btf_type *t)
 +{
-+	return (__u64)(unsigned long)ptr;
++	const char *name = btf_dump_type_name(d, id);
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(missing_base_types); i++) {
++		if (strcmp(name, missing_base_types[i][0]) == 0) {
++			btf_dump_printf(d, "typedef %s %s;\n\n",
++					missing_base_types[i][1], name);
++			break;
++		}
++	}
 +}
 +
-+static inline void *u64_to_ptr(__u64 ptr)
-+{
-+	return (void *)(unsigned long)ptr;
-+}
- 
- #define NEXT_ARG()	({ argc--; argv++; if (argc < 0) usage(); })
- #define NEXT_ARGP()	({ (*argc)--; (*argv)++; if (*argc < 0) usage(); })
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index a5eff83496f2d..2c6f7e160b248 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -537,14 +537,14 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode mode,
- 			p_info("no instructions returned");
- 			return -1;
- 		}
--		buf = (unsigned char *)(info->jited_prog_insns);
-+		buf = u64_to_ptr(info->jited_prog_insns);
- 		member_len = info->jited_prog_len;
- 	} else {	/* DUMP_XLATED */
- 		if (info->xlated_prog_len == 0 || !info->xlated_prog_insns) {
- 			p_err("error retrieving insn dump: kernel.kptr_restrict set?");
- 			return -1;
- 		}
--		buf = (unsigned char *)info->xlated_prog_insns;
-+		buf = u64_to_ptr(info->xlated_prog_insns);
- 		member_len = info->xlated_prog_len;
- 	}
- 
-@@ -553,7 +553,7 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode mode,
- 		return -1;
- 	}
- 
--	func_info = (void *)info->func_info;
-+	func_info = u64_to_ptr(info->func_info);
- 
- 	if (info->nr_line_info) {
- 		prog_linfo = bpf_prog_linfo__new(info);
-@@ -571,7 +571,7 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode mode,
- 
- 		n = write(fd, buf, member_len);
- 		close(fd);
--		if (n != member_len) {
-+		if (n != (ssize_t)member_len) {
- 			p_err("error writing output file: %s",
- 			      n < 0 ? strerror(errno) : "short write");
- 			return -1;
-@@ -601,13 +601,13 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode mode,
- 			__u32 i;
- 			if (info->nr_jited_ksyms) {
- 				kernel_syms_load(&dd);
--				ksyms = (__u64 *) info->jited_ksyms;
-+				ksyms = u64_to_ptr(info->jited_ksyms);
- 			}
- 
- 			if (json_output)
- 				jsonw_start_array(json_wtr);
- 
--			lens = (__u32 *) info->jited_func_lens;
-+			lens = u64_to_ptr(info->jited_func_lens);
- 			for (i = 0; i < info->nr_jited_func_lens; i++) {
- 				if (ksyms) {
- 					sym = kernel_syms_search(&dd, ksyms[i]);
-@@ -668,7 +668,7 @@ prog_dump(struct bpf_prog_info *info, enum dump_mode mode,
- 	} else {
- 		kernel_syms_load(&dd);
- 		dd.nr_jited_ksyms = info->nr_jited_ksyms;
--		dd.jited_ksyms = (__u64 *) info->jited_ksyms;
-+		dd.jited_ksyms = u64_to_ptr(info->jited_ksyms);
- 		dd.btf = btf;
- 		dd.func_info = func_info;
- 		dd.finfo_rec_size = info->func_info_rec_size;
-@@ -1790,7 +1790,7 @@ static char *profile_target_name(int tgt_fd)
- 		goto out;
- 	}
- 
--	func_info = (struct bpf_func_info *)(info_linear->info.func_info);
-+	func_info = u64_to_ptr(info_linear->info.func_info);
- 	t = btf__type_by_id(btf, func_info[0].type_id);
- 	if (!t) {
- 		p_err("btf %d doesn't have type %d",
+ static void btf_dump_emit_enum_fwd(struct btf_dump *d, __u32 id,
+ 				   const struct btf_type *t)
+ {
 -- 
 2.25.1
 
