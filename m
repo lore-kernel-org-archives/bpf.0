@@ -2,172 +2,119 @@ Return-Path: <SRS0=dkA9=CC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA3E4C433E1
-	for <bpf@archiver.kernel.org>; Mon, 24 Aug 2020 15:26:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1F8BC433E1
+	for <bpf@archiver.kernel.org>; Mon, 24 Aug 2020 16:06:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C280D2078D
-	for <bpf@archiver.kernel.org>; Mon, 24 Aug 2020 15:26:20 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lB8woOsv"
+	by mail.kernel.org (Postfix) with ESMTP id CDDF021741
+	for <bpf@archiver.kernel.org>; Mon, 24 Aug 2020 16:06:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1598285175;
+	bh=03hAu4nRPFwVwIO4v5NWL3jE+EDhR0ft7Y0oPd1gP0w=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=skkGTjrXaXyoG22WYRGqFGT1mH3NYmXMwg49U00zU3iLssl9aX6bnt8XfvWGuSFwa
+	 hyh2o/qN0uwNtbsAH5zNCbm447mgatNYoNik+PIIJM4fs/ZgIggNs3mRNHqV1ES0tR
+	 6PX/oV6N09SKu6OMsSOSG0uTnCZjTgR+IhJCLcoE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726878AbgHXPGV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 24 Aug 2020 11:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39438 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726697AbgHXPFb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 24 Aug 2020 11:05:31 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A607FC0617AA
-        for <bpf@vger.kernel.org>; Mon, 24 Aug 2020 08:05:16 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id t2so8437287wma.0
-        for <bpf@vger.kernel.org>; Mon, 24 Aug 2020 08:05:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4Z9CfRsQ0JPDJK+OdpY56vYSFlw0MvtWCYo+D9zzr0o=;
-        b=lB8woOsvvYhCqqAhBrrOI4RyghVGWXTQFIz7QP/geKRTgxJ5Ydbnf0ULekEb2fnx6E
-         LIx5ZXOroEf5QkkzXGFUuatWpWzKU8BXTOBLol8vcK0GyEzvqLzwcxlZnouQiPxO3vQ9
-         YGWWtTbmSO/FTFZTk4MxFuHaMnbSLcTjsA1ixnxCiRwMl/N9Pfkdkvi4wlAN5mU6s9lB
-         gfGU+rWbIdYtgAAD952agaykme1dVHqFB5Gh+HyTuc0ShwRZSGX5SVSVxfFojiNsdqwW
-         dbYPzTJBm3+Wps1nFdfCfuJTK4Z1wFTBwlBSW4yF/FROXrF4h55RK2I5C2uAGtuCIbGW
-         1k+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4Z9CfRsQ0JPDJK+OdpY56vYSFlw0MvtWCYo+D9zzr0o=;
-        b=tcxMCyB24BBFflfi4RLAp0Atj7fzI+VD0wwc8BrwN2BPlRQ2wS8z1g9sN6hEw+hqKb
-         WRer3Jn/h7TCgNZUfuIReVkO5VlawASszkm1f/LdhF+f0tg7e60sSMyDzWLZh1I9cw9M
-         puGO2ZToMzm0A9lLl/b/4PErKzfcwYEomcjCbrJwfMg0BH30B3P5/3hVit///YCOEX7e
-         5D2sbb/gRKkZlpGO7KsqEJlnxNzX7ylof7z/4ncf+BErIQTtOIhvFAqLr5M6RbpJbV7j
-         bzD91Be+dGYmqlo8Q0lS/qvCfE/5g0vOwdQq8yyDEr/JTcFi1d/BRsw/r6YsHItV38Zy
-         KDzQ==
-X-Gm-Message-State: AOAM531cBgDwMaWvFUOyMD4ozI3ratE8BLAtxIevYm6EUw1lBrm0i45j
-        hKk5OHdSiqd30a6UoT1JM9yNag==
-X-Google-Smtp-Source: ABdhPJz3KjGHHQA/f94TebnygpE4VIUsNqkOfejclgeosK32BVVg2F+4exTc1VOTgF6WyK7QdPxObw==
-X-Received: by 2002:a7b:cd88:: with SMTP id y8mr5875966wmj.14.1598281509685;
-        Mon, 24 Aug 2020 08:05:09 -0700 (PDT)
-Received: from google.com ([2a00:79e0:42:204:1ea0:b8ff:fe80:839])
-        by smtp.gmail.com with ESMTPSA id y13sm14526834wrn.48.2020.08.24.08.05.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2020 08:05:08 -0700 (PDT)
-Date:   Mon, 24 Aug 2020 17:05:04 +0200
-From:   Brendan Jackman <jackmanb@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
+        id S1726599AbgHXQGN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 24 Aug 2020 12:06:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47756 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725780AbgHXQGM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 24 Aug 2020 12:06:12 -0400
+Received: from coco.lan (unknown [95.90.213.182])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D10B92072D;
+        Mon, 24 Aug 2020 16:06:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1598285171;
+        bh=03hAu4nRPFwVwIO4v5NWL3jE+EDhR0ft7Y0oPd1gP0w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=y7swRGyvuvKiCu9/nrs1SXr8C+kHHYOQrQUSAJjGAjyfAkO2vlAob2lP+2GvOiVv3
+         Pt1iO8jmNElYCkalrWgU0wwBm1cz8FdwsHljARxYM9slVfU3ws0JegC3Brl+1hW/zf
+         NjcQkkkNKRa79YYaPTJPVie4PrwlTYTaf84FyRb4=
+Date:   Mon, 24 Aug 2020 18:06:01 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Wanchun Zheng <zhengwanchun@hisilicon.com>,
+        linuxarm@huawei.com, dri-devel <dri-devel@lists.freedesktop.org>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        devel@driverdev.osuosl.org, Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Xiubin Zhang <zhangxiubin1@huawei.com>,
+        Wei Xu <xuwei5@hisilicon.com>, David Airlie <airlied@linux.ie>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Bogdan Togorean <bogdan.togorean@analog.com>,
+        Laurentiu Palcu <laurentiu.palcu@nxp.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Liwei Cai <cailiwei@hisilicon.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Chen Feng <puck.chen@hisilicon.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        James Morris <jmorris@namei.org>, pjt@google.com,
-        Jann Horn <jannh@google.com>, rafael.j.wysocki@intel.com,
-        thgarnie@chromium.org, KP Singh <kpsingh@google.com>,
-        paul.renauld.epfl@gmail.com
-Subject: Re: [RFC] security: replace indirect calls with static calls
-Message-ID: <20200824150504.GA575149@google.com>
-References: <20200820164753.3256899-1-jackmanb@chromium.org>
- <202008201435.97CF8296@keescook>
- <CA+i-1C0XEuWWRm5nMPWCzEPUao7rp5346Eotpt1A_S3Za3Wysw@mail.gmail.com>
- <20200824143344.GB3982@worktop.programming.kicks-ass.net>
+        linaro-mm-sig@lists.linaro.org, Rob Herring <robh+dt@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, mauro.chehab@huawei.com,
+        Rob Clark <robdclark@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Liuyao An <anliuyao@huawei.com>,
+        Rongrong Zou <zourongrong@gmail.com>, bpf@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 00/49] DRM driver for Hikey 970
+Message-ID: <20200824180601.192adc3b@coco.lan>
+In-Reply-To: <20200821155650.GB300361@ravnborg.org>
+References: <cover.1597833138.git.mchehab+huawei@kernel.org>
+        <20200819152120.GA106437@ravnborg.org>
+        <20200819174027.70b39ee9@coco.lan>
+        <20200819173558.GA3733@ravnborg.org>
+        <20200821164158.22777f95@coco.lan>
+        <20200821155650.GB300361@ravnborg.org>
+X-Mailer: Claws Mail 3.17.6 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200824143344.GB3982@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 04:33:44PM +0200, Peter Zijlstra wrote:
-> On Mon, Aug 24, 2020 at 04:09:09PM +0200, Brendan Jackman wrote:
-> 
-> > > > Why this trick with a switch statement? The table of static call is defined
-> > > > at compile time. The number of hook callbacks that will be defined is
-> > > > unknown at that time, and the table cannot be resized at runtime.  Static
-> > > > calls do not define a conditional execution for a non-void function, so the
-> > > > executed slots must be non-empty.  With this use of the table and the
-> > > > switch, it is possible to jump directly to the first used slot and execute
-> > > > all of the slots after. This essentially makes the entry point of the table
-> > > > dynamic. Instead, it would also be possible to start from 0 and break after
-> > > > the final populated slot, but that would require an additional conditional
-> > > > after each slot.
-> > >
-> > > Instead of just "NOP", having the static branches perform a jump would
-> > > solve this pretty cleanly, yes? Something like:
-> > >
-> > >         ret = DEFAULT_RET;
-> > >
-> > >         ret = A(args); <--- direct call, no retpoline
-> > >         if ret != 0:
-> > >                 goto out;
-> > >
-> > >         ret = B(args); <--- direct call, no retpoline
-> > >         if ret != 0:
-> > >                 goto out;
-> > >
-> > >         goto out;
-> > >         if ret != 0:
-> > >                 goto out;
-> > >
-> > > out:
-> > >         return ret;
-> > 
-> > Hmm yeah that's a cool idea. This would either need to be implemented
-> > with custom code-modification logic for the LSM hooks, or we'd need to
-> > think of a way to express it in a sensible addition to the static_call
-> > API. I do wonder if the latter could take the form of a generic system
-> > for arrays of static calls.
-> 
-> So you basically want something like:
-> 
-> 	if (A[0] && (ret = static_call(A[0])(...)))
-> 		return ret;
-> 
-> 	if (A[1] && (ret = static_call(A[1])(...)))
-> 		return ret;
-> 
-> 	....
-> 
-> 	return ret;
-> 
-> Right? The problem with static_call_cond() is that we don't know what to
-> do with the return value when !func, which is why it's limited to void
-> return type.
-> 
-> You can however construct something like the above with a combination of
-> static_branch() and static_call() though. It'll not be pretty, but it
-> ought to work:
-> 
-> 	if (static_branch_likely(A[0].key)) {
-> 		ret = static_call(A[0].call)(...);
-> 		if (ret)
-> 			return ret;
-> 	}
-> 
-> 	...
-> 
-> 	return ret;
-> 
-Right. That's actually exactly what Paul's first implementation
-looked like for call_int_hook. But we thought the switch thing was
-easier to understand.
+Em Fri, 21 Aug 2020 17:56:50 +0200
+Sam Ravnborg <sam@ravnborg.org> escreveu:
 
+> Hi Mauro.
 > 
-> > It would also need to handle the fact that IIUC at the moment the last
-> > static_call may be a tail call, so we'd be patching an existing jump
-> > into a jump to a different target, I don't know if we can do that
-> > atomically.
+> On Fri, Aug 21, 2020 at 04:41:58PM +0200, Mauro Carvalho Chehab wrote:
+> > Another quick question:
+> > 
+> > Em Wed, 19 Aug 2020 19:35:58 +0200
+> > Sam Ravnborg <sam@ravnborg.org> escreveu:
+> >   
+> > > > +#define DSS_REDUCE(x)	((x) > 0 ? ((x) - 1) : (x))    
+> > > Use generic macros for this?  
+> > 
+> > Do you know a generic macro similar to this? Or do you mean adding
+> > it to include/kernel.h?  
 > 
-> Of course we can, the static_call() series supports tail-calls just
-> fine. In fact, patching jumps is far easier, it was patching call that
-> was the real problem because it mucks about with the stack.
+> It looked like something there should be a macro for.
+> But I do not know one.
 > 
-OK great. I had a vague apprehension that we could only patch to or from
-a NOP.
+> And no, do not try to go the kernel.h route on this.
+> At least not until you see more than one user.
+
+Yeah, adding this to kernel.h just for a single usage is overkill. I would
+be expecting that a non-underflow decrement logic is something that 
+would be used on other places at the Kernel, but identifying this
+pattern would require some time. Maybe Kernel janitors could write some
+coccinelle script to replace similar patterns like that into some
+macro in the future.
+
+Thanks,
+Mauro
