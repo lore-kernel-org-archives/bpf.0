@@ -2,54 +2,56 @@ Return-Path: <SRS0=alw5=CD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7EDFC433DF
-	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 19:22:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADCCBC433E1
+	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 19:28:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C1CB22071E
-	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 19:22:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 866422072D
+	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 19:28:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598383371;
-	bh=uEn/eSwIOwGH0vC3zWuUp4EdRG1ivg9BrrMIH1twmAg=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=oYAXPNMG7HbYP0qD4zoEVsvCxFf2zWWaD7DOEiftnrwzZtrh/3oQa9DDVAAq3ulgo
-	 i0G81K3zg8om079sXhI+L5BtRmwAdKIuIk4zNsXs7rGem6rYUkItgMEIxkH463sdiJ
-	 rqItmyi1i3brzQFwOsP9B4itPVXe8PGbCy4j1MPk=
+	s=default; t=1598383686;
+	bh=fInHMws2TaSEvcC56Q4Pz3KkmXMUpi9BhV5ohlk0Gv4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=aTtGr/GNqxkcbTtSvKOAaaGqtDdBAyjyKb/GFrUe0WUuhoVGnzCF/dk1f6UQEKlQV
+	 3LlmW1UhGCGouz/0fq6mSKSLRIYiGcKClWRQrY6+BcqJQ8o/4bFDfLZTokp+Vdn8UZ
+	 F/n3MsCAeFg8EfHoXDbKhl5UkIO4BQv4igYvggf0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726988AbgHYTWu convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 25 Aug 2020 15:22:50 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:32746 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726336AbgHYTWs (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 25 Aug 2020 15:22:48 -0400
+        id S1726158AbgHYT2F convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 25 Aug 2020 15:28:05 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:48021 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726149AbgHYT2E (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Aug 2020 15:28:04 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-24-x7u3CpNmO2yfhTvhXpyEoQ-1; Tue, 25 Aug 2020 15:21:34 -0400
-X-MC-Unique: x7u3CpNmO2yfhTvhXpyEoQ-1
+ us-mta-111-VMol4-ZeNV28MIj4i6Zz4w-1; Tue, 25 Aug 2020 15:21:46 -0400
+X-MC-Unique: VMol4-ZeNV28MIj4i6Zz4w-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DE3F63FE7;
-        Tue, 25 Aug 2020 19:21:32 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4766751AE;
+        Tue, 25 Aug 2020 19:21:44 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.192.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 96A6819C4F;
-        Tue, 25 Aug 2020 19:21:25 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A9DD919C4F;
+        Tue, 25 Aug 2020 19:21:40 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
+Cc:     Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: [PATCH v12 bpf-next 00/14] bpf: Add d_path helper
-Date:   Tue, 25 Aug 2020 21:21:10 +0200
-Message-Id: <20200825192124.710397-1-jolsa@kernel.org>
+Subject: [PATCH v12 bpf-next 03/14] bpf: Move btf_resolve_size into __btf_resolve_size
+Date:   Tue, 25 Aug 2020 21:21:13 +0200
+Message-Id: <20200825192124.710397-4-jolsa@kernel.org>
+In-Reply-To: <20200825192124.710397-1-jolsa@kernel.org>
+References: <20200825192124.710397-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Authentication-Results: relay.mimecast.com;
@@ -63,71 +65,114 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-hi,
-adding d_path helper function that returns full path for
-given 'struct path' object, which needs to be the kernel
-BTF 'path' object. The path is returned in buffer provided
-'buf' of size 'sz' and is zero terminated.
+Moving btf_resolve_size into __btf_resolve_size and
+keeping btf_resolve_size public with just first 3
+arguments, because the rest of the arguments are not
+used by outside callers.
 
-  long bpf_d_path(struct path *path, char *buf, u32 sz);
+Following changes are adding more arguments, which
+are not useful to outside callers. They will be added
+to the __btf_resolve_size function.
 
-The helper calls directly d_path function, so there's only
-limited set of function it can be called from.
-
-The patchset also adds support to add set of BTF IDs for
-a helper to define functions that the helper is allowed
-to be called from.
-
-Also available at:
-  https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-  bpf/d_path
-
-v12 changes:
-  - added acks
-  - rebased on latest bpf-next
-  - reposted without RFC tag
-
-thanks,
-jirka
-
-
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
-Jiri Olsa (14):
-      tools resolve_btfids: Add size check to get_id function
-      tools resolve_btfids: Add support for set symbols
-      bpf: Move btf_resolve_size into __btf_resolve_size
-      bpf: Add elem_id pointer as argument to __btf_resolve_size
-      bpf: Add type_id pointer as argument to __btf_resolve_size
-      bpf: Remove recursion call in btf_struct_access
-      bpf: Factor btf_struct_access function
-      bpf: Add btf_struct_ids_match function
-      bpf: Add BTF_SET_START/END macros
-      bpf: Add d_path helper
-      bpf: Update .BTF_ids section in btf.rst with sets info
-      selftests/bpf: Add verifier test for d_path helper
-      selftests/bpf: Add test for d_path helper
-      selftests/bpf: Add set test to resolve_btfids
+ include/linux/btf.h         |  3 +--
+ kernel/bpf/bpf_struct_ops.c |  6 ++----
+ kernel/bpf/btf.c            | 21 ++++++++++++++-------
+ 3 files changed, 17 insertions(+), 13 deletions(-)
 
- Documentation/bpf/btf.rst                               |  25 +++++++++++++++
- include/linux/bpf.h                                     |   6 ++++
- include/linux/btf.h                                     |   3 +-
- include/linux/btf_ids.h                                 |  51 +++++++++++++++++++++++++++++-
- include/uapi/linux/bpf.h                                |  16 +++++++++-
- kernel/bpf/bpf_struct_ops.c                             |   6 ++--
- kernel/bpf/btf.c                                        | 163 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--------------
- kernel/bpf/verifier.c                                   |  22 +++++++++----
- kernel/trace/bpf_trace.c                                |  48 ++++++++++++++++++++++++++++
- scripts/bpf_helpers_doc.py                              |   2 ++
- tools/bpf/resolve_btfids/main.c                         |  29 +++++++++++++++--
- tools/include/linux/btf_ids.h                           |  51 +++++++++++++++++++++++++++++-
- tools/include/uapi/linux/bpf.h                          |  16 +++++++++-
- tools/testing/selftests/bpf/prog_tests/d_path.c         | 147 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- tools/testing/selftests/bpf/prog_tests/resolve_btfids.c |  39 ++++++++++++++++++++++-
- tools/testing/selftests/bpf/progs/test_d_path.c         |  58 ++++++++++++++++++++++++++++++++++
- tools/testing/selftests/bpf/test_verifier.c             |  19 ++++++++++-
- tools/testing/selftests/bpf/verifier/d_path.c           |  37 ++++++++++++++++++++++
- 18 files changed, 694 insertions(+), 44 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/d_path.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_d_path.c
- create mode 100644 tools/testing/selftests/bpf/verifier/d_path.c
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index 8b81fbb4497c..a9af5e7a7ece 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -64,8 +64,7 @@ const struct btf_type *btf_type_resolve_func_ptr(const struct btf *btf,
+ 						 u32 id, u32 *res_id);
+ const struct btf_type *
+ btf_resolve_size(const struct btf *btf, const struct btf_type *type,
+-		 u32 *type_size, const struct btf_type **elem_type,
+-		 u32 *total_nelems);
++		 u32 *type_size);
+ 
+ #define for_each_member(i, struct_type, member)			\
+ 	for (i = 0, member = btf_type_member(struct_type);	\
+diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+index 969c5d47f81f..4c3b543bb33b 100644
+--- a/kernel/bpf/bpf_struct_ops.c
++++ b/kernel/bpf/bpf_struct_ops.c
+@@ -298,8 +298,7 @@ static int check_zero_holes(const struct btf_type *t, void *data)
+ 			return -EINVAL;
+ 
+ 		mtype = btf_type_by_id(btf_vmlinux, member->type);
+-		mtype = btf_resolve_size(btf_vmlinux, mtype, &msize,
+-					 NULL, NULL);
++		mtype = btf_resolve_size(btf_vmlinux, mtype, &msize);
+ 		if (IS_ERR(mtype))
+ 			return PTR_ERR(mtype);
+ 		prev_mend = moff + msize;
+@@ -396,8 +395,7 @@ static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
+ 			u32 msize;
+ 
+ 			mtype = btf_type_by_id(btf_vmlinux, member->type);
+-			mtype = btf_resolve_size(btf_vmlinux, mtype, &msize,
+-						 NULL, NULL);
++			mtype = btf_resolve_size(btf_vmlinux, mtype, &msize);
+ 			if (IS_ERR(mtype)) {
+ 				err = PTR_ERR(mtype);
+ 				goto reset_unlock;
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 91afdd4c82e3..6ed4ecc60381 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -1088,10 +1088,10 @@ static const struct resolve_vertex *env_stack_peak(struct btf_verifier_env *env)
+  * *elem_type: same as return type ("struct X")
+  * *total_nelems: 1
+  */
+-const struct btf_type *
+-btf_resolve_size(const struct btf *btf, const struct btf_type *type,
+-		 u32 *type_size, const struct btf_type **elem_type,
+-		 u32 *total_nelems)
++static const struct btf_type *
++__btf_resolve_size(const struct btf *btf, const struct btf_type *type,
++		   u32 *type_size, const struct btf_type **elem_type,
++		   u32 *total_nelems)
+ {
+ 	const struct btf_type *array_type = NULL;
+ 	const struct btf_array *array;
+@@ -1150,6 +1150,13 @@ btf_resolve_size(const struct btf *btf, const struct btf_type *type,
+ 	return array_type ? : type;
+ }
+ 
++const struct btf_type *
++btf_resolve_size(const struct btf *btf, const struct btf_type *type,
++		 u32 *type_size)
++{
++	return __btf_resolve_size(btf, type, type_size, NULL, NULL);
++}
++
+ /* The input param "type_id" must point to a needs_resolve type */
+ static const struct btf_type *btf_type_id_resolve(const struct btf *btf,
+ 						  u32 *type_id)
+@@ -3976,8 +3983,8 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 		mtype = btf_type_by_id(btf_vmlinux, member->type);
+ 		mname = __btf_name_by_offset(btf_vmlinux, member->name_off);
+ 
+-		mtype = btf_resolve_size(btf_vmlinux, mtype, &msize,
+-					 &elem_type, &total_nelems);
++		mtype = __btf_resolve_size(btf_vmlinux, mtype, &msize,
++					   &elem_type, &total_nelems);
+ 		if (IS_ERR(mtype)) {
+ 			bpf_log(log, "field %s doesn't have size\n", mname);
+ 			return -EFAULT;
+@@ -3991,7 +3998,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 		if (btf_type_is_array(mtype)) {
+ 			u32 elem_idx;
+ 
+-			/* btf_resolve_size() above helps to
++			/* __btf_resolve_size() above helps to
+ 			 * linearize a multi-dimensional array.
+ 			 *
+ 			 * The logic here is treating an array
+-- 
+2.25.4
 
