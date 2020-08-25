@@ -2,166 +2,139 @@ Return-Path: <SRS0=alw5=CD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36AACC433DF
-	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 11:41:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEB90C433DF
+	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 12:31:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0F149206F0
-	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 11:41:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D4BD20738
+	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 12:31:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KxPN3LdU"
+	dkim=pass (2048-bit key) header.d=fooishbar-org.20150623.gappssmtp.com header.i=@fooishbar-org.20150623.gappssmtp.com header.b="wEO9WqPQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730006AbgHYLky (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Aug 2020 07:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
+        id S1726986AbgHYMbm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Aug 2020 08:31:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729363AbgHYLga (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Aug 2020 07:36:30 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C47C061755;
-        Tue, 25 Aug 2020 04:36:16 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id u20so7142236pfn.0;
-        Tue, 25 Aug 2020 04:36:16 -0700 (PDT)
+        with ESMTP id S1726646AbgHYMbb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Aug 2020 08:31:31 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52A8EC0613ED
+        for <bpf@vger.kernel.org>; Tue, 25 Aug 2020 05:31:30 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id q14so1410847wrn.9
+        for <bpf@vger.kernel.org>; Tue, 25 Aug 2020 05:31:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=MKByQ46pgwwug2FS04MHEvNcYmmcyxdFTwu8Aog6KoM=;
-        b=KxPN3LdURiJQJJHI+7W95jH6ria7e92JnvDmYZ7sJfxiC4VpG4107WK+DCGB8aH2Yb
-         W0rzC1IL3n7ra0sbNPycNgX0fPf3XmQZhGterI4gFWkEvPn0txoDpmCeuWo54CogFORG
-         kwGLMlHDdpS2vJqtiCmIHqP8RqkCh1NB/Q7O4jxcpIzopQAw5x+Ohdjdnq1BuAajGHcg
-         3ao4QtB8ptWDYRQKqTao2pULQiiig48U0PaQ4s0jm3LcE4g8YYwRsaUGHBXMEtydSUTc
-         6AGWG9jx08aI2ffMNyDlVi0TjDz4/Hzx+VsP9hGI4m6pzfdN2My74O548l4jiuAMoQxt
-         6szA==
+        d=fooishbar-org.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+HLPhy+qXHIinU4+E7TS6jEdPNtNrgqFPzcA0O6t5kU=;
+        b=wEO9WqPQBcLwZUKcvqXvWeTQyatZBnoj8MNgvqBl3wXtPJizAT/oQ/SdGZfZ4EMq/E
+         eyFKyYTJISm+DV330UA3npw7Dk0YMydTsCuYN9jpA+MHjIs/adfjauEBoaNXRZ0HI9Le
+         JDdxy0U/s9OnS3u2btlKuWA8skzmnHXl+FdDvALKESloVFY3kHERMGM8vAtLPvLngs7q
+         pN4QuFCkbyvSu3wmqoe19Atprq/sp9hCBmKWOpw9qfETRsv0KPDoH2X3ZJsbn1hKBRKu
+         pSMBFzyQPBylG6jIRY2gLJ9lFIrCS6nd9xiUy1RuilZMNT57weEJFi5aBrdPQmLzGZTH
+         70ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MKByQ46pgwwug2FS04MHEvNcYmmcyxdFTwu8Aog6KoM=;
-        b=onmViFSTUAF2/M5vWw+xBMLiXvA4jGuajCAhEYCt/DX7e+6SwsB3F8AB/lg1yS/S58
-         j+8Kmil6gjIMfBKgIREJNItWf/gTpp8ArmZurbXsOPxuZrjjQAKSlrOosTJvk+0ZEtLy
-         wwel3nccUA6mJ7u9795/sXsLu8YowpuksexL9UImgheb/s5LfxH3niwoWBoeSHUX9vGm
-         qxivXPsxgPRwnbNQRVWtHYHSgQugiNf0wrmS9JnhdUK6plXVYTr3b6V8fn9OsQU1UjBM
-         9r4zHui/N8YYvOonQaHIWrqI6wEVIZI9ibPFp/F8J31p3Es+PLJot7dJZ7l8WieKTX+1
-         9jWQ==
-X-Gm-Message-State: AOAM530QXGrtRymxZkBPEiYPfG+x/GOX0hQ7Bvs+ApHrWCXo48GhSbka
-        E7/HqpvlcteIEd3ycfO+Jz0=
-X-Google-Smtp-Source: ABdhPJy089I37yUmgoghRv6ll7QM6Tz7TRYt0VT7Dn/UuGtC67TNorNbHf/g6lUG6Bo5pMugRHcQkQ==
-X-Received: by 2002:a17:902:780f:: with SMTP id p15mr7737669pll.56.1598355375887;
-        Tue, 25 Aug 2020 04:36:15 -0700 (PDT)
-Received: from btopel-mobl.ger.intel.com ([192.55.54.40])
-        by smtp.gmail.com with ESMTPSA id e7sm12699937pgn.64.2020.08.25.04.36.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Aug 2020 04:36:15 -0700 (PDT)
-From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
-To:     intel-wired-lan@lists.osuosl.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        magnus.karlsson@intel.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, kuba@kernel.org
-Subject: [PATCH net-next v2 1/3] i40e, xsk: remove HW descriptor prefetch in AF_XDP path
-Date:   Tue, 25 Aug 2020 13:35:54 +0200
-Message-Id: <20200825113556.18342-2-bjorn.topel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200825113556.18342-1-bjorn.topel@gmail.com>
-References: <20200825113556.18342-1-bjorn.topel@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+HLPhy+qXHIinU4+E7TS6jEdPNtNrgqFPzcA0O6t5kU=;
+        b=KPnQh4GKG+On7m4BMJcOaQA9WeXgnYmNTnnx3IhV9Y5HcwDgs45OEhKtMYbK74QTgO
+         nFG1kGREWChSLpXc1zUDgITnqu+PsNU+LaN/teD9bkNqeZ1a1R/ZOXLGHlg2XZfDk3V0
+         AtncB2+phqmldzGtSoAH0zN7Cz3Q2SV0cH10yROni9EMZghZl93NCVW3D4eZzsT/Vxdx
+         arWu+Mg+rhWLi9QaOxxKsiYjU4xtGL07Glp5/YELZ8xNkg/0xHvLAm9xC5vlG9IeXuRM
+         1p+uVDhXA4AKrR/Fj3PsYPfbYqXkN3/OGQrBiFU2Q7yGO9hvmiaart6zkZKhDyfGwvk/
+         iSHw==
+X-Gm-Message-State: AOAM533MXWXa04S6jB/X8Pyq7ox5p+RE5+Bp8hgbOcqeoOEzG0a55/nF
+        jLO+8LYGlqcU5sUw/QKpkp7DLAI0hdGbZbJtvJ+cwg==
+X-Google-Smtp-Source: ABdhPJz1mB4Fdo1aDIpEuz/ea4FV6oUPMILZjNgY202nHhhVQ2y6zu7/a0D9cIzuEsl4KQKXulFb7/NPn2fB9IdTTE0=
+X-Received: by 2002:a5d:644b:: with SMTP id d11mr10206039wrw.373.1598358688698;
+ Tue, 25 Aug 2020 05:31:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <cover.1597833138.git.mchehab+huawei@kernel.org>
+ <20200819152120.GA106437@ravnborg.org> <20200819153045.GA18469@pendragon.ideasonboard.com>
+ <CALAqxLUXnPRec3UYbMKge8yNKBagLOatOeRCagF=JEyPEfWeKA@mail.gmail.com>
+ <20200820090326.3f400a15@coco.lan> <20200820100205.GA5962@pendragon.ideasonboard.com>
+ <CAPM=9twzsw7T=GD6Jc1EFenXq9ZhTgf_Nuo71uLfX2W33oa=6w@mail.gmail.com> <20200825133025.13f047f0@coco.lan>
+In-Reply-To: <20200825133025.13f047f0@coco.lan>
+From:   Daniel Stone <daniel@fooishbar.org>
+Date:   Tue, 25 Aug 2020 13:31:16 +0100
+Message-ID: <CAPj87rNkqp0hDEv63jhJsMzsQ0qMLucjWE4KVByCFoMRrnfUKA@mail.gmail.com>
+Subject: Re: [PATCH 00/49] DRM driver for Hikey 970
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Dave Airlie <airlied@gmail.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        Wanchun Zheng <zhengwanchun@hisilicon.com>,
+        linuxarm@huawei.com, dri-devel <dri-devel@lists.freedesktop.org>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        driverdevel <devel@driverdev.osuosl.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Xiubin Zhang <zhangxiubin1@huawei.com>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Bogdan Togorean <bogdan.togorean@analog.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Laurentiu Palcu <laurentiu.palcu@nxp.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Liwei Cai <cailiwei@hisilicon.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Chen Feng <puck.chen@hisilicon.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        mauro.chehab@huawei.com, Rob Clark <robdclark@chromium.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Liuyao An <anliuyao@huawei.com>,
+        Network Development <netdev@vger.kernel.org>,
+        Rongrong Zou <zourongrong@gmail.com>,
+        BPF Mailing List <bpf@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+Hi Mauro,
 
-The software prefetching of HW descriptors has a negative impact on
-the performance. Therefore, it is now removed.
+On Tue, 25 Aug 2020 at 12:30, Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+> Sorry, but I can't agree that review is more important than to be able
+> to properly indicate copyrights in a valid way at the legal systems that
+> it would apply ;-)
 
-Performance for the rx_drop benchmark increased with 2%.
+The way to properly indicate copyright coverage is to insert a
+copyright statement in the file. This has been the accepted way of
+communicating copyright notices since approximately the dawn of time.
+The value of the 'author' field within a chain of git commits does not
+have privileged legal value.
 
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
----
- drivers/net/ethernet/intel/i40e/i40e_txrx.c        | 13 +++++++++++++
- drivers/net/ethernet/intel/i40e/i40e_txrx_common.h | 13 -------------
- drivers/net/ethernet/intel/i40e/i40e_xsk.c         | 12 ++++++++++++
- 3 files changed, 25 insertions(+), 13 deletions(-)
+If what you were saying is true, it would be impossible for any
+project to copy code from any other project, unless they did git
+filter-branch and made sure to follow renames too. As others have
+noted, it would also be impossible for any patches to be developed
+collaboratively by different copyright holders, or for maintainers to
+apply changes.
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-index 3e5c566ceb01..e1a76fc05b8d 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-@@ -2299,6 +2299,19 @@ void i40e_finalize_xdp_rx(struct i40e_ring *rx_ring, unsigned int xdp_res)
- 	}
- }
- 
-+/**
-+ * i40e_inc_ntc: Advance the next_to_clean index
-+ * @rx_ring: Rx ring
-+ **/
-+static void i40e_inc_ntc(struct i40e_ring *rx_ring)
-+{
-+	u32 ntc = rx_ring->next_to_clean + 1;
-+
-+	ntc = (ntc < rx_ring->count) ? ntc : 0;
-+	rx_ring->next_to_clean = ntc;
-+	prefetch(I40E_RX_DESC(rx_ring, ntc));
-+}
-+
- /**
-  * i40e_clean_rx_irq - Clean completed descriptors from Rx ring - bounce buf
-  * @rx_ring: rx descriptor ring to transact packets on
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx_common.h b/drivers/net/ethernet/intel/i40e/i40e_txrx_common.h
-index 667c4dc4b39f..1397dd3c1c57 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_txrx_common.h
-+++ b/drivers/net/ethernet/intel/i40e/i40e_txrx_common.h
-@@ -99,19 +99,6 @@ static inline bool i40e_rx_is_programming_status(u64 qword1)
- 	return qword1 & I40E_RXD_QW1_LENGTH_SPH_MASK;
- }
- 
--/**
-- * i40e_inc_ntc: Advance the next_to_clean index
-- * @rx_ring: Rx ring
-- **/
--static inline void i40e_inc_ntc(struct i40e_ring *rx_ring)
--{
--	u32 ntc = rx_ring->next_to_clean + 1;
--
--	ntc = (ntc < rx_ring->count) ? ntc : 0;
--	rx_ring->next_to_clean = ntc;
--	prefetch(I40E_RX_DESC(rx_ring, ntc));
--}
--
- void i40e_xsk_clean_rx_ring(struct i40e_ring *rx_ring);
- void i40e_xsk_clean_tx_ring(struct i40e_ring *tx_ring);
- bool i40e_xsk_any_rx_ring_enabled(struct i40e_vsi *vsi);
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-index 8ce57b507a21..1f2dd591dbf1 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-@@ -253,6 +253,18 @@ static struct sk_buff *i40e_construct_skb_zc(struct i40e_ring *rx_ring,
- 	return skb;
- }
- 
-+/**
-+ * i40e_inc_ntc: Advance the next_to_clean index
-+ * @rx_ring: Rx ring
-+ **/
-+static void i40e_inc_ntc(struct i40e_ring *rx_ring)
-+{
-+	u32 ntc = rx_ring->next_to_clean + 1;
-+
-+	ntc = (ntc < rx_ring->count) ? ntc : 0;
-+	rx_ring->next_to_clean = ntc;
-+}
-+
- /**
-  * i40e_clean_rx_irq_zc - Consumes Rx packets from the hardware ring
-  * @rx_ring: Rx ring
--- 
-2.25.1
+This is accepted community practice and has passed signoffs from a
+million different lawyers and copyright holders. If you wish to break
+with this and do something different, the onus is on you to provide
+the community with _specific_ legal advice; if this is accepted, the
+development model would have to drastically change in the presence of
+single pieces of code developed by multiple distinct copyright
+holders.
 
+Cheers,
+Daniel
