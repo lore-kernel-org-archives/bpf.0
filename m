@@ -2,177 +2,121 @@ Return-Path: <SRS0=alw5=CD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ADCCBC433E1
-	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 19:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21D14C433E1
+	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 20:22:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 866422072D
-	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 19:28:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598383686;
-	bh=fInHMws2TaSEvcC56Q4Pz3KkmXMUpi9BhV5ohlk0Gv4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=aTtGr/GNqxkcbTtSvKOAaaGqtDdBAyjyKb/GFrUe0WUuhoVGnzCF/dk1f6UQEKlQV
-	 3LlmW1UhGCGouz/0fq6mSKSLRIYiGcKClWRQrY6+BcqJQ8o/4bFDfLZTokp+Vdn8UZ
-	 F/n3MsCAeFg8EfHoXDbKhl5UkIO4BQv4igYvggf0=
+	by mail.kernel.org (Postfix) with ESMTP id 0DF972075E
+	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 20:22:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726158AbgHYT2F convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 25 Aug 2020 15:28:05 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:48021 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726149AbgHYT2E (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 25 Aug 2020 15:28:04 -0400
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-111-VMol4-ZeNV28MIj4i6Zz4w-1; Tue, 25 Aug 2020 15:21:46 -0400
-X-MC-Unique: VMol4-ZeNV28MIj4i6Zz4w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1726222AbgHYUWF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Aug 2020 16:22:05 -0400
+Received: from asavdk3.altibox.net ([109.247.116.14]:49118 "EHLO
+        asavdk3.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726149AbgHYUWF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Aug 2020 16:22:05 -0400
+Received: from ravnborg.org (unknown [188.228.123.71])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4766751AE;
-        Tue, 25 Aug 2020 19:21:44 +0000 (UTC)
-Received: from krava.redhat.com (unknown [10.40.192.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A9DD919C4F;
-        Tue, 25 Aug 2020 19:21:40 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        by asavdk3.altibox.net (Postfix) with ESMTPS id 199B620024;
+        Tue, 25 Aug 2020 22:21:54 +0200 (CEST)
+Date:   Tue, 25 Aug 2020 22:21:53 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Wanchun Zheng <zhengwanchun@hisilicon.com>,
+        linuxarm@huawei.com, dri-devel <dri-devel@lists.freedesktop.org>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        devel@driverdev.osuosl.org, Daniel Borkmann <daniel@iogearbox.net>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: [PATCH v12 bpf-next 03/14] bpf: Move btf_resolve_size into __btf_resolve_size
-Date:   Tue, 25 Aug 2020 21:21:13 +0200
-Message-Id: <20200825192124.710397-4-jolsa@kernel.org>
-In-Reply-To: <20200825192124.710397-1-jolsa@kernel.org>
-References: <20200825192124.710397-1-jolsa@kernel.org>
+        Xiubin Zhang <zhangxiubin1@huawei.com>,
+        Wei Xu <xuwei5@hisilicon.com>, David Airlie <airlied@linux.ie>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Bogdan Togorean <bogdan.togorean@analog.com>,
+        Laurentiu Palcu <laurentiu.palcu@nxp.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        Liwei Cai <cailiwei@hisilicon.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Chen Feng <puck.chen@hisilicon.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        linaro-mm-sig@lists.linaro.org, Rob Herring <robh+dt@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, mauro.chehab@huawei.com,
+        Rob Clark <robdclark@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Liuyao An <anliuyao@huawei.com>,
+        Rongrong Zou <zourongrong@gmail.com>, bpf@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 00/49] DRM driver for Hikey 970
+Message-ID: <20200825202153.GA237836@ravnborg.org>
+References: <cover.1597833138.git.mchehab+huawei@kernel.org>
+ <20200819152120.GA106437@ravnborg.org>
+ <20200819174027.70b39ee9@coco.lan>
+ <20200819173558.GA3733@ravnborg.org>
+ <20200821155801.0b820fc6@coco.lan>
+ <20200821155505.GA300361@ravnborg.org>
+ <20200824180225.1a515b6a@coco.lan>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
-X-Mimecast-Spam-Score: 0.001
-X-Mimecast-Originator: kernel.org
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200824180225.1a515b6a@coco.lan>
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=f+hm+t6M c=1 sm=1 tr=0
+        a=S6zTFyMACwkrwXSdXUNehg==:117 a=S6zTFyMACwkrwXSdXUNehg==:17
+        a=kj9zAlcOel0A:10 a=e5mUnYsNAAAA:8 a=jmfwfdV-BNFhccFjUE8A:9
+        a=CjuIK1q_8ugA:10 a=pBTelFdiagIA:10 a=Vxmtnl_E_bksehYqCbjh:22
+        a=pHzHmUro8NiASowvMSCR:22 a=xoEH_sTeL_Rfw54TyV31:22
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Moving btf_resolve_size into __btf_resolve_size and
-keeping btf_resolve_size public with just first 3
-arguments, because the rest of the arguments are not
-used by outside callers.
+Hi Mauro.
 
-Following changes are adding more arguments, which
-are not useful to outside callers. They will be added
-to the __btf_resolve_size function.
+Laurent and I discussed this driver a little on irc.
+Some highlights:
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- include/linux/btf.h         |  3 +--
- kernel/bpf/bpf_struct_ops.c |  6 ++----
- kernel/bpf/btf.c            | 21 ++++++++++++++-------
- 3 files changed, 17 insertions(+), 13 deletions(-)
+This parts could use register names:
++       writel(0x2, noc_dss_base + 0xc);
++       writel(0x2, noc_dss_base + 0x8c);
++       writel(0x2, noc_dss_base + 0x10c);
++       writel(0x2, noc_dss_base + 0x18c);
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 8b81fbb4497c..a9af5e7a7ece 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -64,8 +64,7 @@ const struct btf_type *btf_type_resolve_func_ptr(const struct btf *btf,
- 						 u32 id, u32 *res_id);
- const struct btf_type *
- btf_resolve_size(const struct btf *btf, const struct btf_type *type,
--		 u32 *type_size, const struct btf_type **elem_type,
--		 u32 *total_nelems);
-+		 u32 *type_size);
- 
- #define for_each_member(i, struct_type, member)			\
- 	for (i = 0, member = btf_type_member(struct_type);	\
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index 969c5d47f81f..4c3b543bb33b 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -298,8 +298,7 @@ static int check_zero_holes(const struct btf_type *t, void *data)
- 			return -EINVAL;
- 
- 		mtype = btf_type_by_id(btf_vmlinux, member->type);
--		mtype = btf_resolve_size(btf_vmlinux, mtype, &msize,
--					 NULL, NULL);
-+		mtype = btf_resolve_size(btf_vmlinux, mtype, &msize);
- 		if (IS_ERR(mtype))
- 			return PTR_ERR(mtype);
- 		prev_mend = moff + msize;
-@@ -396,8 +395,7 @@ static int bpf_struct_ops_map_update_elem(struct bpf_map *map, void *key,
- 			u32 msize;
- 
- 			mtype = btf_type_by_id(btf_vmlinux, member->type);
--			mtype = btf_resolve_size(btf_vmlinux, mtype, &msize,
--						 NULL, NULL);
-+			mtype = btf_resolve_size(btf_vmlinux, mtype, &msize);
- 			if (IS_ERR(mtype)) {
- 				err = PTR_ERR(mtype);
- 				goto reset_unlock;
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 91afdd4c82e3..6ed4ecc60381 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -1088,10 +1088,10 @@ static const struct resolve_vertex *env_stack_peak(struct btf_verifier_env *env)
-  * *elem_type: same as return type ("struct X")
-  * *total_nelems: 1
-  */
--const struct btf_type *
--btf_resolve_size(const struct btf *btf, const struct btf_type *type,
--		 u32 *type_size, const struct btf_type **elem_type,
--		 u32 *total_nelems)
-+static const struct btf_type *
-+__btf_resolve_size(const struct btf *btf, const struct btf_type *type,
-+		   u32 *type_size, const struct btf_type **elem_type,
-+		   u32 *total_nelems)
- {
- 	const struct btf_type *array_type = NULL;
- 	const struct btf_array *array;
-@@ -1150,6 +1150,13 @@ btf_resolve_size(const struct btf *btf, const struct btf_type *type,
- 	return array_type ? : type;
- }
- 
-+const struct btf_type *
-+btf_resolve_size(const struct btf *btf, const struct btf_type *type,
-+		 u32 *type_size)
-+{
-+	return __btf_resolve_size(btf, type, type_size, NULL, NULL);
-+}
-+
- /* The input param "type_id" must point to a needs_resolve type */
- static const struct btf_type *btf_type_id_resolve(const struct btf *btf,
- 						  u32 *type_id)
-@@ -3976,8 +3983,8 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 		mtype = btf_type_by_id(btf_vmlinux, member->type);
- 		mname = __btf_name_by_offset(btf_vmlinux, member->name_off);
- 
--		mtype = btf_resolve_size(btf_vmlinux, mtype, &msize,
--					 &elem_type, &total_nelems);
-+		mtype = __btf_resolve_size(btf_vmlinux, mtype, &msize,
-+					   &elem_type, &total_nelems);
- 		if (IS_ERR(mtype)) {
- 			bpf_log(log, "field %s doesn't have size\n", mname);
- 			return -EFAULT;
-@@ -3991,7 +3998,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 		if (btf_type_is_array(mtype)) {
- 			u32 elem_idx;
- 
--			/* btf_resolve_size() above helps to
-+			/* __btf_resolve_size() above helps to
- 			 * linearize a multi-dimensional array.
- 			 *
- 			 * The logic here is treating an array
--- 
-2.25.4
+The two nodes in the DT for DPE and DSI uses overlapping range for reg
+entries. It looks like a syscon node or some iommu thing is needed to do
+this properly.
 
+The chain will lok like this:
+
+DPE -> DSI -> video mux -> {adv7533, panel}
+
+But drm_bridge has not yet support for such non-linear setup.
+The recommendation is to focus on the HDMI prat. Then we can later
+come up with support for a video mux.
+
+The video mux should have a dedicated node with one input node and two
+output nodes. Which is also where the gpio should be.
+
+The DSI node references two DPHY instances - should it be PHY driver(s)?
+
+Does the DSI part contain one or two instances. Clocks looks duplicated.
+
+Does the DPE and DSI share a lot of register blocks - or does it just
+look like this from a first point of view?
+
+You can read though the logs here:
+https://people.freedesktop.org/~cbrill/dri-log/index.php
+
+Could you please try to get back on some of the points above so we can
+help you move forward in the right direction.
+
+Thanks,
+	Sam
