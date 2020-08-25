@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7420C433E4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A1C0C433E3
 	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 19:22:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 92C32207FB
+	by mail.kernel.org (Postfix) with ESMTP id 758A1207DF
 	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 19:22:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=default; t=1598383325;
-	bh=b+ayeidIXbgyAiOMn2eKpg6hiyDxc603nbWdjxJmEhI=;
+	bh=RCpl3+a6Dco8Sb/ZZOt6qvGlBse+wCaRvb/AdvY8Hws=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=vcedwAM46Cr/aFDaazIxfzB/JABY+Ax4wa/ENN8bSO7w/ubzfZw75/eVGF9kepU9/
-	 3MpRLRz7SyjTe6vZVu7itnAgvFgC13Y/1ey/gGr3SXbAzyrsEilxdlpn5HEYbwNdUs
-	 krl9LfsVe3I44MkJQZhAtCwG42SfpYk/PObonuL8=
+	b=Ote7BMnJpc8Vv2fuvczzfwmprPvji/UH5UD9QaUc3cagdhhThn92myFUkOTXEe8tA
+	 iPs9mZDEa9+0oj5DXsXVWCps/LtlRCYGaJAj0vz9eyDsEn4GBh7/e6CYOCJ4MTTNRO
+	 1IfCtLQa/a+iqmwrZlBrrVe26mumt6O6wYH6Yl0M=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726838AbgHYTWF convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 25 Aug 2020 15:22:05 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:54740 "EHLO
+        id S1726723AbgHYTWE convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 25 Aug 2020 15:22:04 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:31565 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726884AbgHYTWD (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 25 Aug 2020 15:22:03 -0400
+        by vger.kernel.org with ESMTP id S1726882AbgHYTWC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 25 Aug 2020 15:22:02 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-566-MSdIkeLfPbyo9gV-5nzICw-1; Tue, 25 Aug 2020 15:22:00 -0400
-X-MC-Unique: MSdIkeLfPbyo9gV-5nzICw-1
+ us-mta-440-vTs8F96kOoaze9bzHRiYtQ-1; Tue, 25 Aug 2020 15:21:44 -0400
+X-MC-Unique: vTs8F96kOoaze9bzHRiYtQ-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A7F66801AB7;
-        Tue, 25 Aug 2020 19:21:58 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EF6E01005E5B;
+        Tue, 25 Aug 2020 19:21:39 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.192.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A6E3D19C4F;
-        Tue, 25 Aug 2020 19:21:55 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 30B5619C4F;
+        Tue, 25 Aug 2020 19:21:36 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
@@ -47,16 +47,16 @@ Cc:     Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: [PATCH v12 bpf-next 06/14] bpf: Remove recursion call in btf_struct_access
-Date:   Tue, 25 Aug 2020 21:21:16 +0200
-Message-Id: <20200825192124.710397-7-jolsa@kernel.org>
+Subject: [PATCH v12 bpf-next 02/14] tools resolve_btfids: Add support for set symbols
+Date:   Tue, 25 Aug 2020 21:21:12 +0200
+Message-Id: <20200825192124.710397-3-jolsa@kernel.org>
 In-Reply-To: <20200825192124.710397-1-jolsa@kernel.org>
 References: <20200825192124.710397-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Authentication-Results: relay.mimecast.com;
         auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
-X-Mimecast-Spam-Score: 0.001
+X-Mimecast-Spam-Score: 0.0
 X-Mimecast-Originator: kernel.org
 Content-Type: text/plain; charset=WINDOWS-1252
 Content-Transfer-Encoding: 8BIT
@@ -65,40 +65,56 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Andrii suggested we can simply jump to again label
-instead of making recursion call.
+The set symbol does not have the unique number suffix,
+so we need to give it a special parsing function.
 
-Suggested-by: Andrii Nakryiko <andriin@fb.com>
+This was omitted in the first batch, because there was
+no set support yet, so it slipped in the testing.
+
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- kernel/bpf/btf.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ tools/bpf/resolve_btfids/main.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index ee0e2a5e6c88..4488c5b03941 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3931,14 +3931,13 @@ int btf_struct_access(struct bpf_verifier_log *log,
- 		/* Only allow structure for now, can be relaxed for
- 		 * other types later.
- 		 */
--		elem_type = btf_type_skip_modifiers(btf_vmlinux,
--						    array_elem->type, NULL);
--		if (!btf_type_is_struct(elem_type))
-+		t = btf_type_skip_modifiers(btf_vmlinux, array_elem->type,
-+					    NULL);
-+		if (!btf_type_is_struct(t))
- 			goto error;
+diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+index 35a172d3d80d..6152d1356d7b 100644
+--- a/tools/bpf/resolve_btfids/main.c
++++ b/tools/bpf/resolve_btfids/main.c
+@@ -227,6 +227,24 @@ static char *get_id(const char *prefix_end)
+ 	return id;
+ }
  
--		off = (off - moff) % elem_type->size;
--		return btf_struct_access(log, elem_type, off, size, atype,
--					 next_btf_id);
-+		off = (off - moff) % t->size;
-+		goto again;
- 
- error:
- 		bpf_log(log, "access beyond struct %s at off %u size %u\n",
++static struct btf_id *add_set(struct object *obj, char *name)
++{
++	/*
++	 * __BTF_ID__set__name
++	 * name =    ^
++	 * id   =         ^
++	 */
++	char *id = name + sizeof(BTF_SET "__") - 1;
++	int len = strlen(name);
++
++	if (id >= name + len) {
++		pr_err("FAILED to parse set name: %s\n", name);
++		return NULL;
++	}
++
++	return btf_id__add(&obj->sets, id, true);
++}
++
+ static struct btf_id *add_symbol(struct rb_root *root, char *name, size_t size)
+ {
+ 	char *id;
+@@ -383,7 +401,7 @@ static int symbols_collect(struct object *obj)
+ 			id = add_symbol(&obj->funcs, prefix, sizeof(BTF_FUNC) - 1);
+ 		/* set */
+ 		} else if (!strncmp(prefix, BTF_SET, sizeof(BTF_SET) - 1)) {
+-			id = add_symbol(&obj->sets, prefix, sizeof(BTF_SET) - 1);
++			id = add_set(obj, prefix);
+ 			/*
+ 			 * SET objects store list's count, which is encoded
+ 			 * in symbol's size, together with 'cnt' field hence
 -- 
 2.25.4
 
