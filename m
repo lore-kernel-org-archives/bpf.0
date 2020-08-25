@@ -7,40 +7,40 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27ED6C433E3
-	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 23:21:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AB67C433DF
+	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 23:21:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E46CF2075F
-	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 23:21:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1C87B20767
+	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 23:21:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="SaVF08fi"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="h4HDgXe4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726836AbgHYXVF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Aug 2020 19:21:05 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:45422 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726802AbgHYXU5 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 25 Aug 2020 19:20:57 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 07PNJXMx019351
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2020 16:20:56 -0700
+        id S1726750AbgHYXUv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Aug 2020 19:20:51 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:44198 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726706AbgHYXUq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 25 Aug 2020 19:20:46 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07PNIe51004192
+        for <bpf@vger.kernel.org>; Tue, 25 Aug 2020 16:20:46 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=HgzqjB5ACMQJ2wKbBOxw1UrrEi03bKtksEwZ/GfWJPA=;
- b=SaVF08fiLwawS+4d8TAKY8afEW0pOD61fe4CmOC70DRkzrpgENMwSm29WyaoNBn/SagA
- 60wlbcU0fRudFTf2YTLCXxta0BlEtecAszx6yayz+KQ3N0tmAkuse1x81aW8DWvPBKkk
- ZhmD/sfpEuE7ibrPZd0bY2FjMo66VZG6HsI= 
+ bh=6hP5mUKG/j4pRCIHETlDk5rGb7u5IR+keJvIHYWiKi4=;
+ b=h4HDgXe423usHrrmubcMu4Ztvdwqyn0R/8FdSR2E2aLqetI9I+Rs5Z4Kkm17ya/QhBZW
+ uqI3DhsFDdZ/J64Hz0IhsXym7VsH8PsrlFAB6Rl6wUKx5Oq+4IG7SXH1eplkJPzEB8iW
+ BmhnGPSzoBKvLERH8wDNsmr1t2ebbmu134k= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 3359k9rydx-1
+        by mx0a-00082601.pphosted.com with ESMTP id 333kmn60g1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2020 16:20:56 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 25 Aug 2020 16:20:45 -0700
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 25 Aug 2020 16:20:56 -0700
+ 15.1.1979.3; Tue, 25 Aug 2020 16:20:44 -0700
 Received: by devbig218.frc2.facebook.com (Postfix, from userid 116055)
-        id C637E20785A; Tue, 25 Aug 2020 16:20:52 -0700 (PDT)
+        id A03182077AE; Tue, 25 Aug 2020 16:20:41 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Udip Pant <udippant@fb.com>
 Smtp-Origin-Hostname: devbig218.frc2.facebook.com
@@ -52,9 +52,9 @@ To:     Udip Pant <udippant@fb.com>, Alexei Starovoitov <ast@kernel.org>,
 CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 Smtp-Origin-Cluster: frc2c02
-Subject: [PATCH bpf-next v3 4/4] selftests/bpf: test for map update access from within EXT programs
-Date:   Tue, 25 Aug 2020 16:20:03 -0700
-Message-ID: <20200825232003.2877030-5-udippant@fb.com>
+Subject: [PATCH bpf-next v3 1/4] bpf: verifier: use target program's type for access verifications
+Date:   Tue, 25 Aug 2020 16:20:00 -0700
+Message-ID: <20200825232003.2877030-2-udippant@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200825232003.2877030-1-udippant@fb.com>
 References: <20200825232003.2877030-1-udippant@fb.com>
@@ -64,187 +64,175 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-25_10:2020-08-25,2020-08-25 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- mlxscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 adultscore=0
- clxscore=1015 phishscore=0 priorityscore=1501 suspectscore=0
- malwarescore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2008250173
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 adultscore=0
+ bulkscore=0 lowpriorityscore=0 impostorscore=0 malwarescore=0
+ mlxlogscore=999 phishscore=0 clxscore=1015 spamscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008250173
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds further tests to ensure access permissions and restrictions
-are applied properly for some map types such as sock-map.
-It also adds another negative tests to assert static functions cannot be
-replaced. In the 'unreliable' mode it still fails with error 'tracing pro=
-gs
-cannot use bpf_spin_lock yet' with the change in the verifier
+This patch adds changes in verifier to make decisions such as granting
+of read / write access or enforcement of return code status based on
+the program type of the target program while using dynamic program
+extension (of type BPF_PROG_TYPE_EXT).
+
+The BPF_PROG_TYPE_EXT type can be used to extend types such as XDP, SKB
+and others. Since the BPF_PROG_TYPE_EXT program type on itself is just a
+placeholder for those, we need this extended check for those extended
+programs to actually work with proper access, while using this option.
+
+Specifically, it introduces following changes:
+- may_access_direct_pkt_data:
+    allow access to packet data based on the target prog
+- check_return_code:
+    enforce return code based on the target prog
+    (currently, this check is skipped for EXT program)
+- check_ld_abs:
+    check for 'may_access_skb' based on the target prog
+- check_map_prog_compatibility:
+    enforce the map compatibility check based on the target prog
+- may_update_sockmap:
+    allow sockmap update based on the target prog
+
+Some other occurrences of prog->type is left as it without replacing
+with the 'resolved' type:
+- do_check_common() and check_attach_btf_id():
+    already have specific logic to handle the EXT prog type
+- jit_subprogs() and bpf_check():
+    Not changed for jit compilation or while inferring env->ops
+
+Next few patches in this series include selftests for some of these cases=
+.
 
 Signed-off-by: Udip Pant <udippant@fb.com>
 ---
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 33 +++++++++++++--
- .../bpf/progs/freplace_attach_probe.c         | 40 +++++++++++++++++++
- .../bpf/progs/freplace_cls_redirect.c         | 34 ++++++++++++++++
- 3 files changed, 104 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/freplace_attach_pro=
-be.c
- create mode 100644 tools/testing/selftests/bpf/progs/freplace_cls_redire=
-ct.c
+ kernel/bpf/verifier.c | 32 +++++++++++++++++++++-----------
+ 1 file changed, 21 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/too=
-ls/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-index d295ca9bbf96..a550dab9ba7a 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-@@ -142,7 +142,20 @@ static void test_func_replace_verify(void)
- 				  prog_name, false);
- }
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 38748794518e..95c715508034 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2625,11 +2625,19 @@ static int check_map_access(struct bpf_verifier_e=
+nv *env, u32 regno,
 =20
--static void test_func_replace_return_code(void)
-+static void test_func_sockmap_update(void)
+ #define MAX_PACKET_OFF 0xffff
+=20
++static enum bpf_prog_type resolve_prog_type(struct bpf_prog *prog)
 +{
-+	const char *prog_name[] =3D {
-+		"freplace/cls_redirect",
-+	};
-+	test_fexit_bpf2bpf_common("./freplace_cls_redirect.o",
-+				  "./test_cls_redirect.o",
-+				  ARRAY_SIZE(prog_name),
-+				  prog_name, false);
++	return prog->aux->linked_prog ? prog->aux->linked_prog->type
++				      : prog->type;
 +}
 +
-+static void test_obj_load_failure_common(const char *obj_file,
-+					  const char *target_obj_file)
-+
+ static bool may_access_direct_pkt_data(struct bpf_verifier_env *env,
+ 				       const struct bpf_call_arg_meta *meta,
+ 				       enum bpf_access_type t)
  {
+-	switch (env->prog->type) {
++	enum bpf_prog_type prog_type =3D resolve_prog_type(env->prog);
++
++	switch (prog_type) {
+ 	/* Program types only with direct read access go here! */
+ 	case BPF_PROG_TYPE_LWT_IN:
+ 	case BPF_PROG_TYPE_LWT_OUT:
+@@ -4181,7 +4189,7 @@ static int check_func_arg(struct bpf_verifier_env *=
+env, u32 arg,
+ static bool may_update_sockmap(struct bpf_verifier_env *env, int func_id=
+)
+ {
+ 	enum bpf_attach_type eatype =3D env->prog->expected_attach_type;
+-	enum bpf_prog_type type =3D env->prog->type;
++	enum bpf_prog_type type =3D resolve_prog_type(env->prog);
+=20
+ 	if (func_id !=3D BPF_FUNC_map_update_elem)
+ 		return false;
+@@ -7366,7 +7374,7 @@ static int check_ld_abs(struct bpf_verifier_env *en=
+v, struct bpf_insn *insn)
+ 	u8 mode =3D BPF_MODE(insn->code);
+ 	int i, err;
+=20
+-	if (!may_access_skb(env->prog->type)) {
++	if (!may_access_skb(resolve_prog_type(env->prog))) {
+ 		verbose(env, "BPF_LD_[ABS|IND] instructions not allowed for this progr=
+am type\n");
+ 		return -EINVAL;
+ 	}
+@@ -7454,11 +7462,12 @@ static int check_return_code(struct bpf_verifier_=
+env *env)
+ 	const struct bpf_prog *prog =3D env->prog;
+ 	struct bpf_reg_state *reg;
+ 	struct tnum range =3D tnum_range(0, 1);
++	enum bpf_prog_type prog_type =3D resolve_prog_type(env->prog);
+ 	int err;
+=20
+ 	/* LSM and struct_ops func-ptr's return type could be "void" */
+-	if ((env->prog->type =3D=3D BPF_PROG_TYPE_STRUCT_OPS ||
+-	     env->prog->type =3D=3D BPF_PROG_TYPE_LSM) &&
++	if ((prog_type =3D=3D BPF_PROG_TYPE_STRUCT_OPS ||
++	     prog_type =3D=3D BPF_PROG_TYPE_LSM) &&
+ 	    !prog->aux->attach_func_proto->type)
+ 		return 0;
+=20
+@@ -7477,7 +7486,7 @@ static int check_return_code(struct bpf_verifier_en=
+v *env)
+ 		return -EACCES;
+ 	}
+=20
+-	switch (env->prog->type) {
++	switch (prog_type) {
+ 	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
+ 		if (env->prog->expected_attach_type =3D=3D BPF_CGROUP_UDP4_RECVMSG ||
+ 		    env->prog->expected_attach_type =3D=3D BPF_CGROUP_UDP6_RECVMSG ||
+@@ -9233,6 +9242,7 @@ static int check_map_prog_compatibility(struct bpf_=
+verifier_env *env,
+ 					struct bpf_prog *prog)
+=20
+ {
++	enum bpf_prog_type prog_type =3D resolve_prog_type(prog);
  	/*
- 	 * standalone test that asserts failure to load freplace prog
-@@ -151,8 +164,6 @@ static void test_func_replace_return_code(void)
- 	struct bpf_object *obj =3D NULL, *pkt_obj;
- 	int err, pkt_fd;
- 	__u32 duration =3D 0;
--	const char *target_obj_file =3D "./connect4_prog.o";
--	const char *obj_file =3D "./freplace_connect_v4_prog.o";
+ 	 * Validate that trace type programs use preallocated hash maps.
+ 	 *
+@@ -9250,8 +9260,8 @@ static int check_map_prog_compatibility(struct bpf_=
+verifier_env *env,
+ 	 * now, but warnings are emitted so developers are made aware of
+ 	 * the unsafety and can fix their programs before this is enforced.
+ 	 */
+-	if (is_tracing_prog_type(prog->type) && !is_preallocated_map(map)) {
+-		if (prog->type =3D=3D BPF_PROG_TYPE_PERF_EVENT) {
++	if (is_tracing_prog_type(prog_type) && !is_preallocated_map(map)) {
++		if (prog_type =3D=3D BPF_PROG_TYPE_PERF_EVENT) {
+ 			verbose(env, "perf_event programs can only use preallocated hash map\=
+n");
+ 			return -EINVAL;
+ 		}
+@@ -9263,8 +9273,8 @@ static int check_map_prog_compatibility(struct bpf_=
+verifier_env *env,
+ 		verbose(env, "trace type programs with run-time allocated hash maps ar=
+e unsafe. Switch to preallocated hash maps.\n");
+ 	}
 =20
- 	err =3D bpf_prog_load(target_obj_file, BPF_PROG_TYPE_UNSPEC,
- 			    &pkt_obj, &pkt_fd);
-@@ -181,11 +192,27 @@ static void test_func_replace_return_code(void)
- 	bpf_object__close(pkt_obj);
- }
-=20
-+static void test_func_replace_return_code(void)
-+{
-+	/* test invalid return code in the replaced program */
-+	test_obj_load_failure_common("./freplace_connect_v4_prog.o",
-+				     "./connect4_prog.o");
-+}
-+
-+static void test_func_map_prog_compatibility(void)
-+{
-+	/* test with spin lock map value in the replaced program */
-+	test_obj_load_failure_common("./freplace_attach_probe.o",
-+				     "./test_attach_probe.o");
-+}
-+
- void test_fexit_bpf2bpf(void)
- {
- 	test_target_no_callees();
- 	test_target_yes_callees();
- 	test_func_replace();
- 	test_func_replace_verify();
-+	test_func_sockmap_update();
- 	test_func_replace_return_code();
-+	test_func_map_prog_compatibility();
- }
-diff --git a/tools/testing/selftests/bpf/progs/freplace_attach_probe.c b/=
-tools/testing/selftests/bpf/progs/freplace_attach_probe.c
-new file mode 100644
-index 000000000000..bb2a77c5b62b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/freplace_attach_probe.c
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2020 Facebook
-+
-+#include <linux/ptrace.h>
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+#define VAR_NUM 2
-+
-+struct hmap_elem {
-+	struct bpf_spin_lock lock;
-+	int var[VAR_NUM];
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct hmap_elem);
-+} hash_map SEC(".maps");
-+
-+SEC("freplace/handle_kprobe")
-+int new_handle_kprobe(struct pt_regs *ctx)
-+{
-+	struct hmap_elem zero =3D {}, *val;
-+	int key =3D 0;
-+
-+	val =3D bpf_map_lookup_elem(&hash_map, &key);
-+	if (!val)
-+		return 1;
-+	/* spin_lock in hash map */
-+	bpf_spin_lock(&val->lock);
-+	val->var[0] =3D 99;
-+	bpf_spin_unlock(&val->lock);
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/freplace_cls_redirect.c b/=
-tools/testing/selftests/bpf/progs/freplace_cls_redirect.c
-new file mode 100644
-index 000000000000..68a5a9db928a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/freplace_cls_redirect.c
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2020 Facebook
-+
-+#include <linux/stddef.h>
-+#include <linux/bpf.h>
-+#include <linux/pkt_cls.h>
-+#include <bpf/bpf_endian.h>
-+#include <bpf/bpf_helpers.h>
-+
-+struct bpf_map_def SEC("maps") sock_map =3D {
-+	.type =3D BPF_MAP_TYPE_SOCKMAP,
-+	.key_size =3D sizeof(int),
-+	.value_size =3D sizeof(int),
-+	.max_entries =3D 2,
-+};
-+
-+SEC("freplace/cls_redirect")
-+int freplace_cls_redirect_test(struct __sk_buff *skb)
-+{
-+	int ret =3D 0;
-+	const int zero =3D 0;
-+	struct bpf_sock *sk;
-+
-+	sk =3D bpf_map_lookup_elem(&sock_map, &zero);
-+	if (!sk)
-+		return TC_ACT_SHOT;
-+
-+	ret =3D bpf_map_update_elem(&sock_map, &zero, sk, 0);
-+	bpf_sk_release(sk);
-+
-+	return ret =3D=3D 0 ? TC_ACT_OK : TC_ACT_SHOT;
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
+-	if ((is_tracing_prog_type(prog->type) ||
+-	     prog->type =3D=3D BPF_PROG_TYPE_SOCKET_FILTER) &&
++	if ((is_tracing_prog_type(prog_type) ||
++	     prog_type =3D=3D BPF_PROG_TYPE_SOCKET_FILTER) &&
+ 	    map_value_has_spin_lock(map)) {
+ 		verbose(env, "tracing progs cannot use bpf_spin_lock yet\n");
+ 		return -EINVAL;
+@@ -9976,7 +9986,7 @@ static int convert_ctx_accesses(struct bpf_verifier=
+_env *env)
+ 				insn->code =3D BPF_LDX | BPF_PROBE_MEM |
+ 					BPF_SIZE((insn)->code);
+ 				env->prog->aux->num_exentries++;
+-			} else if (env->prog->type !=3D BPF_PROG_TYPE_STRUCT_OPS) {
++			} else if (resolve_prog_type(env->prog) !=3D BPF_PROG_TYPE_STRUCT_OPS=
+) {
+ 				verbose(env, "Writes through BTF pointers are not allowed\n");
+ 				return -EINVAL;
+ 			}
 --=20
 2.24.1
 
