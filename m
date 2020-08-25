@@ -2,44 +2,45 @@ Return-Path: <SRS0=alw5=CD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C019DC433DF
-	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 23:20:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 630B9C433E1
+	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 23:20:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 709DB2075F
-	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 23:20:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 345C52075F
+	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 23:20:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="NHsqbFmK"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ZZUjbEkA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbgHYXUl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Aug 2020 19:20:41 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:36114 "EHLO
+        id S1726737AbgHYXU4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Aug 2020 19:20:56 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:21686 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726551AbgHYXUk (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 25 Aug 2020 19:20:40 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07PNGlT8019074
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2020 16:20:40 -0700
+        by vger.kernel.org with ESMTP id S1726798AbgHYXUy (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 25 Aug 2020 19:20:54 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07PNFm3a017393
+        for <bpf@vger.kernel.org>; Tue, 25 Aug 2020 16:20:54 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=7vFPxfbUZkYxWAD0+nMscJ1pZa6+fxgsolX0ujeyhgk=;
- b=NHsqbFmKZntSF0WU0EKbv/Zb7124/L7ItbUD/UTTDypokd8KuFN491uW2VxLjuF7eJE/
- z7vzhdyh2C3xNhIqWNVMPHdIPNS3Mn2GT2WOAZEPA+1WuKCAwjfl+aKnZwBLyC8YIkCi
- OLWtNzHLXcFXlM0JsUHerrvTLFWZCu5QsfQ= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=gHRsN4yg6VWCazPfiN3ZDsGxHrKWI0qlbo1YebDXZV0=;
+ b=ZZUjbEkAvsanzKD+Z4ButmM3NXVKUGuo01SKsEvW39nds+3gCw1lmiVK6Zic4ERN2+xm
+ CbmZlYNXOw9ft75XuA8/e1eRQ2Fxa+nUzbFFWf9VP4jjb08MkpHiRjU0NN44s0gghLfG
+ aLkdSVa4HLUiCwvgRUZ76Us/h8BVZvSIguM= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 333juu638b-1
+        by mx0a-00082601.pphosted.com with ESMTP id 333ke6nv0q-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2020 16:20:40 -0700
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 25 Aug 2020 16:20:54 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 25 Aug 2020 16:20:39 -0700
+ 15.1.1979.3; Tue, 25 Aug 2020 16:20:50 -0700
 Received: by devbig218.frc2.facebook.com (Postfix, from userid 116055)
-        id A08A4207586; Tue, 25 Aug 2020 16:20:35 -0700 (PDT)
+        id A2B9620785A; Tue, 25 Aug 2020 16:20:48 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Udip Pant <udippant@fb.com>
 Smtp-Origin-Hostname: devbig218.frc2.facebook.com
@@ -51,76 +52,125 @@ To:     Udip Pant <udippant@fb.com>, Alexei Starovoitov <ast@kernel.org>,
 CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 Smtp-Origin-Cluster: frc2c02
-Subject: [PATCH bpf-next v3 0/4] bpf: verifier: use target program's type for access verifications
-Date:   Tue, 25 Aug 2020 16:19:59 -0700
-Message-ID: <20200825232003.2877030-1-udippant@fb.com>
+Subject: [PATCH bpf-next v3 3/4] selftests/bpf: test for checking return code for the extended prog
+Date:   Tue, 25 Aug 2020 16:20:02 -0700
+Message-ID: <20200825232003.2877030-4-udippant@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200825232003.2877030-1-udippant@fb.com>
+References: <20200825232003.2877030-1-udippant@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-25_10:2020-08-25,2020-08-25 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
- priorityscore=1501 spamscore=0 bulkscore=0 phishscore=0 mlxlogscore=978
- clxscore=1015 impostorscore=0 malwarescore=0 suspectscore=0
- lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2008250173
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 mlxscore=0
+ bulkscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0 adultscore=0
+ priorityscore=1501 suspectscore=0 impostorscore=0 clxscore=1015
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2008250173
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch series adds changes in verifier to make decisions such as gran=
-ting
-of read / write access or enforcement of return code status based on
-the program type of the target program while using dynamic program
-extension (of type BPF_PROG_TYPE_EXT).
+This adds test to enforce same check for the return code for the extended=
+ prog
+as it is enforced for the target program. It asserts failure for a
+return code, which is permitted without the patch in this series, while
+it is restricted after the application of this patch.
 
-The BPF_PROG_TYPE_EXT type can be used to extend types such as XDP, SKB
-and others. Since the BPF_PROG_TYPE_EXT program type on itself is just a
-placeholder for those, we need this extended check for those extended
-programs to actually work with proper access, while using this option.
-
-Patch #1 includes changes in the verifier.
-Patch #2 adds selftests to verify write access on a packet for a valid=20
-extension program type
-Patch #3 adds selftests to verify proper check for the return code
-Patch #4 adds selftests to ensure access permissions and restrictions=20
-for some map types such sockmap.
-
-Changelogs:
-  v2 -> v3:
-    * more comprehensive resolution of the program type in the verifier
-      based on the target program (and not just for the packet access)
-    * selftests for checking return code and map access
-    * Also moved this patch to 'bpf-next' from 'bpf' tree
-  v1 -> v2:
-    * extraction of the logic to resolve prog type into a separate method
-    * selftests to check for packet access for a valid freplace prog
-
-Udip Pant (4):
-  bpf: verifier: use target program's type for access verifications
-  selftests/bpf: add test for freplace program with write access
-  selftests/bpf: test for checking return code for the extended prog
-  selftests/bpf: test for map update access from within EXT programs
-
- kernel/bpf/verifier.c                         | 32 ++++++---
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 68 +++++++++++++++++++
- .../selftests/bpf/progs/fexit_bpf2bpf.c       | 27 ++++++++
- .../bpf/progs/freplace_attach_probe.c         | 40 +++++++++++
- .../bpf/progs/freplace_cls_redirect.c         | 34 ++++++++++
- .../bpf/progs/freplace_connect_v4_prog.c      | 19 ++++++
- .../selftests/bpf/progs/test_pkt_access.c     | 20 ++++++
- 7 files changed, 229 insertions(+), 11 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/freplace_attach_pro=
-be.c
- create mode 100644 tools/testing/selftests/bpf/progs/freplace_cls_redire=
-ct.c
+Signed-off-by: Udip Pant <udippant@fb.com>
+---
+ .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 40 +++++++++++++++++++
+ .../bpf/progs/freplace_connect_v4_prog.c      | 19 +++++++++
+ 2 files changed, 59 insertions(+)
  create mode 100644 tools/testing/selftests/bpf/progs/freplace_connect_v4=
 _prog.c
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/too=
+ls/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+index 7c7168963d52..d295ca9bbf96 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
++++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+@@ -142,10 +142,50 @@ static void test_func_replace_verify(void)
+ 				  prog_name, false);
+ }
+=20
++static void test_func_replace_return_code(void)
++{
++	/*
++	 * standalone test that asserts failure to load freplace prog
++	 * because of invalid return code.
++	 */
++	struct bpf_object *obj =3D NULL, *pkt_obj;
++	int err, pkt_fd;
++	__u32 duration =3D 0;
++	const char *target_obj_file =3D "./connect4_prog.o";
++	const char *obj_file =3D "./freplace_connect_v4_prog.o";
++
++	err =3D bpf_prog_load(target_obj_file, BPF_PROG_TYPE_UNSPEC,
++			    &pkt_obj, &pkt_fd);
++	/* the target prog should load fine */
++	if (CHECK(err, "tgt_prog_load", "file %s err %d errno %d\n",
++		  target_obj_file, err, errno))
++		return;
++	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts,
++			    .attach_prog_fd =3D pkt_fd,
++			   );
++
++	obj =3D bpf_object__open_file(obj_file, &opts);
++	if (CHECK(IS_ERR_OR_NULL(obj), "obj_open",
++		  "failed to open %s: %ld\n", obj_file,
++		  PTR_ERR(obj)))
++		goto close_prog;
++
++	/* It should fail to load the program */
++	err =3D bpf_object__load(obj);
++	if (CHECK(!err, "bpf_obj_load should fail", "err %d\n", err))
++		goto close_prog;
++
++close_prog:
++	if (!IS_ERR_OR_NULL(obj))
++		bpf_object__close(obj);
++	bpf_object__close(pkt_obj);
++}
++
+ void test_fexit_bpf2bpf(void)
+ {
+ 	test_target_no_callees();
+ 	test_target_yes_callees();
+ 	test_func_replace();
+ 	test_func_replace_verify();
++	test_func_replace_return_code();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/freplace_connect_v4_prog.c=
+ b/tools/testing/selftests/bpf/progs/freplace_connect_v4_prog.c
+new file mode 100644
+index 000000000000..544e5ac90461
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/freplace_connect_v4_prog.c
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Facebook
++
++#include <linux/stddef.h>
++#include <linux/ipv6.h>
++#include <linux/bpf.h>
++#include <linux/in.h>
++#include <sys/socket.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_endian.h>
++
++SEC("freplace/connect_v4_prog")
++int new_connect_v4_prog(struct bpf_sock_addr *ctx)
++{
++	// return value thats in invalid range
++	return 255;
++}
++
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.24.1
 
