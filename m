@@ -2,195 +2,254 @@ Return-Path: <SRS0=alw5=CD=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB5DCC433E3
-	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 23:21:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B82F4C433E4
+	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 23:27:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A75152075F
-	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 23:21:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8FFE82075F
+	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 23:27:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="f3tmtc2f"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MivpLulG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726551AbgHYXUv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 25 Aug 2020 19:20:51 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:58606 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726730AbgHYXUt (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 25 Aug 2020 19:20:49 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07PNHLjZ016445
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2020 16:20:48 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=CrnoMD0NeVZDGnzgwKPVVuhrCRvjB5I1gOKyBPSfx4Y=;
- b=f3tmtc2fjf0310tAysttYqdwtUepDxFjzvPI8DTunO/0fXhNhQj+NTEbOoABs4gowcC4
- ySVmM5CJYrANoTHqySIzmdqx9mXjQhWaduo7niqMiWowWKKPu39fKC2W8UEUbcoajRnQ
- /wc5QmktKz7pnduSkgGwZhdctCrZZzz0UWk= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 333jv9x0ts-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 25 Aug 2020 16:20:48 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 25 Aug 2020 16:20:47 -0700
-Received: by devbig218.frc2.facebook.com (Postfix, from userid 116055)
-        id 3FD1A2077AE; Tue, 25 Aug 2020 16:20:45 -0700 (PDT)
-Smtp-Origin-Hostprefix: devbig
-From:   Udip Pant <udippant@fb.com>
-Smtp-Origin-Hostname: devbig218.frc2.facebook.com
-To:     Udip Pant <udippant@fb.com>, Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        "David S . Miller" <davem@davemloft.net>
-CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Smtp-Origin-Cluster: frc2c02
-Subject: [PATCH bpf-next v3 2/4] selftests/bpf: add test for freplace program with write access
-Date:   Tue, 25 Aug 2020 16:20:01 -0700
-Message-ID: <20200825232003.2877030-3-udippant@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200825232003.2877030-1-udippant@fb.com>
-References: <20200825232003.2877030-1-udippant@fb.com>
+        id S1726180AbgHYX1Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 25 Aug 2020 19:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60516 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726542AbgHYX1X (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 25 Aug 2020 19:27:23 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1904CC061756
+        for <bpf@vger.kernel.org>; Tue, 25 Aug 2020 16:27:23 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id v12so191158ljc.10
+        for <bpf@vger.kernel.org>; Tue, 25 Aug 2020 16:27:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4aOowIVQKsAzoG/P7qB+XM1QLU3nXt4GRb8Wo9/pT9s=;
+        b=MivpLulGK4Df48K69jSdRc8nfiLb1OWc2/wR1DW9HP1UG9qr6eck3TpeDaRdIaIjdG
+         rxm5jZM11EHi+oItPdIngPTflqJTW525HxxUOW32sq5Gory52QXBrrZD+9XtLvW2iAQy
+         6IlL8dhtXq8YuUQhq57cX2xfGeb+y7uEVCIGil0nToLklCaDAbCqy1RMsFiLN0B0qYK1
+         uk9yDHbHzMTVF8FdqTUhmw5BWyLbgq5Bsa6Hrwi5mcRMCo8mBoeOAqeWHfKqU8P/tyS1
+         IVYPdEA4R1k0Yj70tBH82ddD4ZTizX6+qLjNd4E2c/qlhsZDbLCznDNPJD/e4ZHNU/fq
+         nDYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4aOowIVQKsAzoG/P7qB+XM1QLU3nXt4GRb8Wo9/pT9s=;
+        b=VPaS6j8kos7/9HkAHb5iQG7AvcedDU6M75/IpZEdpze9Ft0BdlBvShW0P4n1JlUULD
+         7ZLgQHtv2Dv3AEBpr5QrQ9eY8PEdJoddFOWgfaIn3rvQsFBWT9bU3/UUG2nkGI+viABq
+         n9CyTt12MOgIkCmhp92gFCbym4fmzAngPMiB+6vuD9oZmmXqfwrXGhMApiMbEs+/AFhR
+         4IW1aACJt/PTQdSXGutg051UzevEn6LA6dz5RR/PO9RvaRx60Kqygvo6+NSmK2qf7mqV
+         9MWPt457vzJrFm34o4XHHBefEElSeC4PnkaYUE1ME6mzkwIgwtECJzOBcwfoyh2G3keC
+         RLlg==
+X-Gm-Message-State: AOAM530tmbwLgplEpj8+IWVKJES1FSv3zeNo2RbjvvJ6yYuGXPbvzzsk
+        pqd9KSNEliHggbpuI6v7fAFzJj+08MFltbw5qnC4C0OVfiOOKw==
+X-Google-Smtp-Source: ABdhPJwOL01yVem6yxTF35XI/WnXhkpj83kmMggS8kPiQlIzw7frhGlHAbXcxnwtMKqkWQ2mxYEgWoZt/di+VkJ6PAs=
+X-Received: by 2002:a2e:5d8:: with SMTP id 207mr5279398ljf.58.1598398040350;
+ Tue, 25 Aug 2020 16:27:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-08-25_10:2020-08-25,2020-08-25 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- suspectscore=0 mlxlogscore=999 lowpriorityscore=0 clxscore=1015 mlxscore=0
- spamscore=0 adultscore=0 impostorscore=0 bulkscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2008250173
-X-FB-Internal: deliver
+References: <20200821150134.2581465-1-guro@fb.com> <20200821150134.2581465-4-guro@fb.com>
+In-Reply-To: <20200821150134.2581465-4-guro@fb.com>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Tue, 25 Aug 2020 16:27:09 -0700
+Message-ID: <CALvZod70cywN0-HCXUPfyLN1vQdOBb46uCRk5E3NkOTDeWcEtg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 03/30] bpf: memcg-based memory accounting for
+ bpf maps
+To:     Roman Gushchin <guro@fb.com>
+Cc:     bpf@vger.kernel.org, netdev <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Linux MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This adds a selftest that tests the behavior when a freplace target progr=
-am
-attempts to make a write access on a packet. The expectation is that the =
-read or write
-access is granted based on the program type of the linked program and
-not itself (which is of type, for e.g., BPF_PROG_TYPE_EXT).
+On Fri, Aug 21, 2020 at 8:01 AM Roman Gushchin <guro@fb.com> wrote:
+>
+> This patch enables memcg-based memory accounting for memory allocated
+> by __bpf_map_area_alloc(), which is used by most map types for
+> large allocations.
+>
+> If a map is updated from an interrupt context, and the update
+> results in memory allocation, the memory cgroup can't be determined
+> from the context of the current process. To address this case,
+> bpf map preserves a pointer to the memory cgroup of the process,
+> which created the map. This memory cgroup is charged for allocations
+> from interrupt context.
+>
+> Following patches in the series will refine the accounting for
+> some map types.
+>
+> Signed-off-by: Roman Gushchin <guro@fb.com>
+> ---
+>  include/linux/bpf.h  |  4 ++++
+>  kernel/bpf/helpers.c | 37 ++++++++++++++++++++++++++++++++++++-
+>  kernel/bpf/syscall.c | 27 ++++++++++++++++++++++++++-
+>  3 files changed, 66 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index a9b7185a6b37..b5f178afde94 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -34,6 +34,7 @@ struct btf_type;
+>  struct exception_table_entry;
+>  struct seq_operations;
+>  struct bpf_iter_aux_info;
+> +struct mem_cgroup;
+>
+>  extern struct idr btf_idr;
+>  extern spinlock_t btf_idr_lock;
+> @@ -138,6 +139,9 @@ struct bpf_map {
+>         u32 btf_value_type_id;
+>         struct btf *btf;
+>         struct bpf_map_memory memory;
+> +#ifdef CONFIG_MEMCG_KMEM
+> +       struct mem_cgroup *memcg;
+> +#endif
+>         char name[BPF_OBJ_NAME_LEN];
+>         u32 btf_vmlinux_value_type_id;
+>         bool bypass_spec_v1;
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index be43ab3e619f..f8ce7bc7003f 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/jiffies.h>
+>  #include <linux/pid_namespace.h>
+>  #include <linux/proc_ns.h>
+> +#include <linux/sched/mm.h>
+>
+>  #include "../../lib/kstrtox.h"
+>
+> @@ -41,11 +42,45 @@ const struct bpf_func_proto bpf_map_lookup_elem_proto = {
+>         .arg2_type      = ARG_PTR_TO_MAP_KEY,
+>  };
+>
+> +#ifdef CONFIG_MEMCG_KMEM
+> +static __always_inline int __bpf_map_update_elem(struct bpf_map *map, void *key,
+> +                                                void *value, u64 flags)
+> +{
+> +       struct mem_cgroup *old_memcg;
+> +       bool in_interrupt;
+> +       int ret;
+> +
+> +       /*
+> +        * If update from an interrupt context results in a memory allocation,
+> +        * the memory cgroup to charge can't be determined from the context
+> +        * of the current task. Instead, we charge the memory cgroup, which
+> +        * contained a process created the map.
+> +        */
+> +       in_interrupt = in_interrupt();
+> +       if (in_interrupt)
+> +               old_memcg = memalloc_use_memcg(map->memcg);
+> +
 
-This test fails without the associated patch on the verifier.
+The memcg_kmem_bypass() will bypass all __GFP_ACCOUNT allocations even
+before looking at current->active_memcg, so, this patch will be a
+noop.
 
-Signed-off-by: Udip Pant <udippant@fb.com>
----
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  |  1 +
- .../selftests/bpf/progs/fexit_bpf2bpf.c       | 27 +++++++++++++++++++
- .../selftests/bpf/progs/test_pkt_access.c     | 20 ++++++++++++++
- 3 files changed, 48 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/too=
-ls/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-index 197d0d217b56..7c7168963d52 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-@@ -123,6 +123,7 @@ static void test_func_replace(void)
- 		"freplace/get_skb_len",
- 		"freplace/get_skb_ifindex",
- 		"freplace/get_constant",
-+		"freplace/test_pkt_write_access_subprog",
- 	};
- 	test_fexit_bpf2bpf_common("./fexit_bpf2bpf.o",
- 				  "./test_pkt_access.o",
-diff --git a/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c b/tools/te=
-sting/selftests/bpf/progs/fexit_bpf2bpf.c
-index 98e1efe14549..49a84a3a2306 100644
---- a/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/progs/fexit_bpf2bpf.c
-@@ -1,8 +1,10 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2019 Facebook */
- #include <linux/stddef.h>
-+#include <linux/if_ether.h>
- #include <linux/ipv6.h>
- #include <linux/bpf.h>
-+#include <linux/tcp.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_endian.h>
- #include <bpf/bpf_tracing.h>
-@@ -151,4 +153,29 @@ int new_get_constant(long val)
- 	test_get_constant =3D 1;
- 	return test_get_constant; /* original get_constant() returns val - 122 =
-*/
- }
-+
-+__u64 test_pkt_write_access_subprog =3D 0;
-+SEC("freplace/test_pkt_write_access_subprog")
-+int new_test_pkt_write_access_subprog(struct __sk_buff *skb, __u32 off)
-+{
-+
-+	void *data =3D (void *)(long)skb->data;
-+	void *data_end =3D (void *)(long)skb->data_end;
-+	struct tcphdr *tcp;
-+
-+	if (off > sizeof(struct ethhdr) + sizeof(struct ipv6hdr))
-+		return -1;
-+
-+	tcp =3D data + off;
-+	if (tcp + 1 > data_end)
-+		return -1;
-+
-+	/* make modifications to the packet data */
-+	tcp->check++;
-+	tcp->syn =3D 0;
-+
-+	test_pkt_write_access_subprog =3D 1;
-+	return 0;
-+}
-+
- char _license[] SEC("license") =3D "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_pkt_access.c b/tools/=
-testing/selftests/bpf/progs/test_pkt_access.c
-index e72eba4a93d2..852051064507 100644
---- a/tools/testing/selftests/bpf/progs/test_pkt_access.c
-+++ b/tools/testing/selftests/bpf/progs/test_pkt_access.c
-@@ -79,6 +79,24 @@ int get_skb_ifindex(int val, struct __sk_buff *skb, in=
-t var)
- 	return skb->ifindex * val * var;
- }
-=20
-+__attribute__ ((noinline))
-+int test_pkt_write_access_subprog(struct __sk_buff *skb, __u32 off)
-+{
-+	void *data =3D (void *)(long)skb->data;
-+	void *data_end =3D (void *)(long)skb->data_end;
-+	struct tcphdr *tcp =3D NULL;
-+
-+	if (off > sizeof(struct ethhdr) + sizeof(struct ipv6hdr))
-+		return -1;
-+
-+	tcp =3D data + off;
-+	if (tcp + 1 > data_end)
-+		return -1;
-+	/* make modification to the packet data */
-+	tcp->check++;
-+	return 0;
-+}
-+
- SEC("classifier/test_pkt_access")
- int test_pkt_access(struct __sk_buff *skb)
- {
-@@ -117,6 +135,8 @@ int test_pkt_access(struct __sk_buff *skb)
- 	if (test_pkt_access_subprog3(3, skb) !=3D skb->len * 3 * skb->ifindex)
- 		return TC_ACT_SHOT;
- 	if (tcp) {
-+		if (test_pkt_write_access_subprog(skb, (void *)tcp - data))
-+			return TC_ACT_SHOT;
- 		if (((void *)(tcp) + 20) > data_end || proto !=3D 6)
- 			return TC_ACT_SHOT;
- 		barrier(); /* to force ordering of checks */
---=20
-2.24.1
-
+> +       ret = map->ops->map_update_elem(map, key, value, flags);
+> +
+> +       if (in_interrupt)
+> +               memalloc_use_memcg(old_memcg);
+> +
+> +       return ret;
+> +}
+> +#else
+> +static __always_inline int __bpf_map_update_elem(struct bpf_map *map, void *key,
+> +                                                void *value, u64 flags)
+> +{
+> +       return map->ops->map_update_elem(map, key, value, flags);
+> +}
+> +#endif
+> +
+>  BPF_CALL_4(bpf_map_update_elem, struct bpf_map *, map, void *, key,
+>            void *, value, u64, flags)
+>  {
+>         WARN_ON_ONCE(!rcu_read_lock_held());
+> -       return map->ops->map_update_elem(map, key, value, flags);
+> +
+> +       return __bpf_map_update_elem(map, key, value, flags);
+>  }
+>
+>  const struct bpf_func_proto bpf_map_update_elem_proto = {
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 689d736b6904..683614c17a95 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -29,6 +29,7 @@
+>  #include <linux/bpf_lsm.h>
+>  #include <linux/poll.h>
+>  #include <linux/bpf-netns.h>
+> +#include <linux/memcontrol.h>
+>
+>  #define IS_FD_ARRAY(map) ((map)->map_type == BPF_MAP_TYPE_PERF_EVENT_ARRAY || \
+>                           (map)->map_type == BPF_MAP_TYPE_CGROUP_ARRAY || \
+> @@ -275,7 +276,7 @@ static void *__bpf_map_area_alloc(u64 size, int numa_node, bool mmapable)
+>          * __GFP_RETRY_MAYFAIL to avoid such situations.
+>          */
+>
+> -       const gfp_t gfp = __GFP_NOWARN | __GFP_ZERO;
+> +       const gfp_t gfp = __GFP_NOWARN | __GFP_ZERO | __GFP_ACCOUNT;
+>         unsigned int flags = 0;
+>         unsigned long align = 1;
+>         void *area;
+> @@ -452,6 +453,27 @@ void bpf_map_free_id(struct bpf_map *map, bool do_idr_lock)
+>                 __release(&map_idr_lock);
+>  }
+>
+> +#ifdef CONFIG_MEMCG_KMEM
+> +static void bpf_map_save_memcg(struct bpf_map *map)
+> +{
+> +       map->memcg = get_mem_cgroup_from_mm(current->mm);
+> +}
+> +
+> +static void bpf_map_release_memcg(struct bpf_map *map)
+> +{
+> +       mem_cgroup_put(map->memcg);
+> +}
+> +
+> +#else
+> +static void bpf_map_save_memcg(struct bpf_map *map)
+> +{
+> +}
+> +
+> +static void bpf_map_release_memcg(struct bpf_map *map)
+> +{
+> +}
+> +#endif
+> +
+>  /* called from workqueue */
+>  static void bpf_map_free_deferred(struct work_struct *work)
+>  {
+> @@ -463,6 +485,7 @@ static void bpf_map_free_deferred(struct work_struct *work)
+>         /* implementation dependent freeing */
+>         map->ops->map_free(map);
+>         bpf_map_charge_finish(&mem);
+> +       bpf_map_release_memcg(map);
+>  }
+>
+>  static void bpf_map_put_uref(struct bpf_map *map)
+> @@ -869,6 +892,8 @@ static int map_create(union bpf_attr *attr)
+>         if (err)
+>                 goto free_map_sec;
+>
+> +       bpf_map_save_memcg(map);
+> +
+>         err = bpf_map_new_fd(map, f_flags);
+>         if (err < 0) {
+>                 /* failed to allocate fd.
+> --
+> 2.26.2
+>
