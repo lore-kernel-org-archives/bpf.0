@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A1C0C433E3
-	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 19:22:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F2BCC433DF
+	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 19:22:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 758A1207DF
-	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 19:22:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3A84B2071E
+	for <bpf@archiver.kernel.org>; Tue, 25 Aug 2020 19:22:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598383325;
-	bh=RCpl3+a6Dco8Sb/ZZOt6qvGlBse+wCaRvb/AdvY8Hws=;
+	s=default; t=1598383333;
+	bh=9V6UyEXHZZpQfAB3UkbwbsLITwHNUDAPMuqrQDgEz8Q=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Ote7BMnJpc8Vv2fuvczzfwmprPvji/UH5UD9QaUc3cagdhhThn92myFUkOTXEe8tA
-	 iPs9mZDEa9+0oj5DXsXVWCps/LtlRCYGaJAj0vz9eyDsEn4GBh7/e6CYOCJ4MTTNRO
-	 1IfCtLQa/a+iqmwrZlBrrVe26mumt6O6wYH6Yl0M=
+	b=JLGH4LM+lQcUPo6Cju24FiEMwEt6WN012OnqB2iURuozjksFg7dCW/wWYDX1E6vBX
+	 iX7H6rwEECjgJs0urd/P1HPWDeW4GhZdah3C93kTRgHXpkCMkCxobzRIi5lXy2bzo/
+	 9A1lvT/aWMjrgD0dYxBmdzha3Hbupr5qPW+sKVj0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726723AbgHYTWE convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 25 Aug 2020 15:22:04 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:31565 "EHLO
+        id S1726938AbgHYTWM convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 25 Aug 2020 15:22:12 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:47805 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726882AbgHYTWC (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 25 Aug 2020 15:22:02 -0400
+        by vger.kernel.org with ESMTP id S1726939AbgHYTWK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 25 Aug 2020 15:22:10 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-440-vTs8F96kOoaze9bzHRiYtQ-1; Tue, 25 Aug 2020 15:21:44 -0400
-X-MC-Unique: vTs8F96kOoaze9bzHRiYtQ-1
+ us-mta-177-ClstaEwFOKO069Zf3p0HTw-1; Tue, 25 Aug 2020 15:22:03 -0400
+X-MC-Unique: ClstaEwFOKO069Zf3p0HTw-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EF6E01005E5B;
-        Tue, 25 Aug 2020 19:21:39 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D781F51AE;
+        Tue, 25 Aug 2020 19:22:01 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.192.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 30B5619C4F;
-        Tue, 25 Aug 2020 19:21:36 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0FB2D19C4F;
+        Tue, 25 Aug 2020 19:21:58 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
@@ -47,16 +47,16 @@ Cc:     Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: [PATCH v12 bpf-next 02/14] tools resolve_btfids: Add support for set symbols
-Date:   Tue, 25 Aug 2020 21:21:12 +0200
-Message-Id: <20200825192124.710397-3-jolsa@kernel.org>
+Subject: [PATCH v12 bpf-next 07/14] bpf: Factor btf_struct_access function
+Date:   Tue, 25 Aug 2020 21:21:17 +0200
+Message-Id: <20200825192124.710397-8-jolsa@kernel.org>
 In-Reply-To: <20200825192124.710397-1-jolsa@kernel.org>
 References: <20200825192124.710397-1-jolsa@kernel.org>
 MIME-Version: 1.0
 X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Authentication-Results: relay.mimecast.com;
         auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
-X-Mimecast-Spam-Score: 0.0
+X-Mimecast-Spam-Score: 0.001
 X-Mimecast-Originator: kernel.org
 Content-Type: text/plain; charset=WINDOWS-1252
 Content-Transfer-Encoding: 8BIT
@@ -65,56 +65,179 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The set symbol does not have the unique number suffix,
-so we need to give it a special parsing function.
+Adding btf_struct_walk function that walks through the
+struct type + given offset and returns following values:
 
-This was omitted in the first batch, because there was
-no set support yet, so it slipped in the testing.
+  enum bpf_struct_walk_result {
+       /* < 0 error */
+       WALK_SCALAR = 0,
+       WALK_PTR,
+       WALK_STRUCT,
+  };
+
+WALK_SCALAR - when SCALAR_VALUE is found
+WALK_PTR    - when pointer value is found, its ID is stored
+              in 'next_btf_id' output param
+WALK_STRUCT - when nested struct object is found, its ID is stored
+              in 'next_btf_id' output param
+
+It will be used in following patches to get all nested
+struct objects for given type and offset.
+
+The btf_struct_access now calls btf_struct_walk function,
+as long as it gets nested structs as return value.
 
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/bpf/resolve_btfids/main.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+ kernel/bpf/btf.c | 75 +++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 65 insertions(+), 10 deletions(-)
 
-diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-index 35a172d3d80d..6152d1356d7b 100644
---- a/tools/bpf/resolve_btfids/main.c
-+++ b/tools/bpf/resolve_btfids/main.c
-@@ -227,6 +227,24 @@ static char *get_id(const char *prefix_end)
- 	return id;
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 4488c5b03941..d8d64201c4e0 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3886,16 +3886,22 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 	return true;
  }
  
-+static struct btf_id *add_set(struct object *obj, char *name)
+-int btf_struct_access(struct bpf_verifier_log *log,
+-		      const struct btf_type *t, int off, int size,
+-		      enum bpf_access_type atype,
+-		      u32 *next_btf_id)
++enum bpf_struct_walk_result {
++	/* < 0 error */
++	WALK_SCALAR = 0,
++	WALK_PTR,
++	WALK_STRUCT,
++};
++
++static int btf_struct_walk(struct bpf_verifier_log *log,
++			   const struct btf_type *t, int off, int size,
++			   u32 *next_btf_id)
+ {
+ 	u32 i, moff, mtrue_end, msize = 0, total_nelems = 0;
+ 	const struct btf_type *mtype, *elem_type = NULL;
+ 	const struct btf_member *member;
+ 	const char *tname, *mname;
+-	u32 vlen;
++	u32 vlen, elem_id, mid;
+ 
+ again:
+ 	tname = __btf_name_by_offset(btf_vmlinux, t->name_off);
+@@ -3966,7 +3972,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 			 */
+ 			if (off <= moff &&
+ 			    BITS_ROUNDUP_BYTES(end_bit) <= off + size)
+-				return SCALAR_VALUE;
++				return WALK_SCALAR;
+ 
+ 			/* off may be accessing a following member
+ 			 *
+@@ -3988,11 +3994,13 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 			break;
+ 
+ 		/* type of the field */
++		mid = member->type;
+ 		mtype = btf_type_by_id(btf_vmlinux, member->type);
+ 		mname = __btf_name_by_offset(btf_vmlinux, member->name_off);
+ 
+ 		mtype = __btf_resolve_size(btf_vmlinux, mtype, &msize,
+-					   &elem_type, NULL, &total_nelems, NULL);
++					   &elem_type, &elem_id, &total_nelems,
++					   &mid);
+ 		if (IS_ERR(mtype)) {
+ 			bpf_log(log, "field %s doesn't have size\n", mname);
+ 			return -EFAULT;
+@@ -4054,6 +4062,7 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 			elem_idx = (off - moff) / msize;
+ 			moff += elem_idx * msize;
+ 			mtype = elem_type;
++			mid = elem_id;
+ 		}
+ 
+ 		/* the 'off' we're looking for is either equal to start
+@@ -4063,6 +4072,12 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 			/* our field must be inside that union or struct */
+ 			t = mtype;
+ 
++			/* return if the offset matches the member offset */
++			if (off == moff) {
++				*next_btf_id = mid;
++				return WALK_STRUCT;
++			}
++
+ 			/* adjust offset we're looking for */
+ 			off -= moff;
+ 			goto again;
+@@ -4078,11 +4093,10 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 					mname, moff, tname, off, size);
+ 				return -EACCES;
+ 			}
+-
+ 			stype = btf_type_skip_modifiers(btf_vmlinux, mtype->type, &id);
+ 			if (btf_type_is_struct(stype)) {
+ 				*next_btf_id = id;
+-				return PTR_TO_BTF_ID;
++				return WALK_PTR;
+ 			}
+ 		}
+ 
+@@ -4099,12 +4113,53 @@ int btf_struct_access(struct bpf_verifier_log *log,
+ 			return -EACCES;
+ 		}
+ 
+-		return SCALAR_VALUE;
++		return WALK_SCALAR;
+ 	}
+ 	bpf_log(log, "struct %s doesn't have field at offset %d\n", tname, off);
+ 	return -EINVAL;
+ }
+ 
++int btf_struct_access(struct bpf_verifier_log *log,
++		      const struct btf_type *t, int off, int size,
++		      enum bpf_access_type atype __maybe_unused,
++		      u32 *next_btf_id)
 +{
-+	/*
-+	 * __BTF_ID__set__name
-+	 * name =    ^
-+	 * id   =         ^
-+	 */
-+	char *id = name + sizeof(BTF_SET "__") - 1;
-+	int len = strlen(name);
++	int err;
++	u32 id;
 +
-+	if (id >= name + len) {
-+		pr_err("FAILED to parse set name: %s\n", name);
-+		return NULL;
-+	}
++	do {
++		err = btf_struct_walk(log, t, off, size, &id);
 +
-+	return btf_id__add(&obj->sets, id, true);
++		switch (err) {
++		case WALK_PTR:
++			/* If we found the pointer or scalar on t+off,
++			 * we're done.
++			 */
++			*next_btf_id = id;
++			return PTR_TO_BTF_ID;
++		case WALK_SCALAR:
++			return SCALAR_VALUE;
++		case WALK_STRUCT:
++			/* We found nested struct, so continue the search
++			 * by diving in it. At this point the offset is
++			 * aligned with the new type, so set it to 0.
++			 */
++			t = btf_type_by_id(btf_vmlinux, id);
++			off = 0;
++			break;
++		default:
++			/* It's either error or unknown return value..
++			 * scream and leave.
++			 */
++			if (WARN_ONCE(err > 0, "unknown btf_struct_walk return value"))
++				return -EINVAL;
++			return err;
++		}
++	} while (t);
++
++	return -EINVAL;
 +}
 +
- static struct btf_id *add_symbol(struct rb_root *root, char *name, size_t size)
+ int btf_resolve_helper_id(struct bpf_verifier_log *log,
+ 			  const struct bpf_func_proto *fn, int arg)
  {
- 	char *id;
-@@ -383,7 +401,7 @@ static int symbols_collect(struct object *obj)
- 			id = add_symbol(&obj->funcs, prefix, sizeof(BTF_FUNC) - 1);
- 		/* set */
- 		} else if (!strncmp(prefix, BTF_SET, sizeof(BTF_SET) - 1)) {
--			id = add_symbol(&obj->sets, prefix, sizeof(BTF_SET) - 1);
-+			id = add_set(obj, prefix);
- 			/*
- 			 * SET objects store list's count, which is encoded
- 			 * in symbol's size, together with 'cnt' field hence
 -- 
 2.25.4
 
