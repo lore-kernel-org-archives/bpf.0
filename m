@@ -2,109 +2,135 @@ Return-Path: <SRS0=7q6j=CE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-4.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 619DDC433E3
-	for <bpf@archiver.kernel.org>; Wed, 26 Aug 2020 10:19:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FAFDC433DF
+	for <bpf@archiver.kernel.org>; Wed, 26 Aug 2020 12:19:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3521E2071E
-	for <bpf@archiver.kernel.org>; Wed, 26 Aug 2020 10:19:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1598437143;
-	bh=oMZ/pDcBG0pA0M1fiZrmqeeaHRwFG/LWxyPEViczBZU=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=E3P0G5OvdjscpRrE3qiqIvAYugcEpaESk9DXL8LiaF5ld/cd3nGJpa1E8whRexirz
-	 U5JMCQF4uoODXihFLCFxzmZzHY572rNy1rq1QgmB+ioVqf/MF6GSE5w5Pn+2JUefFs
-	 qHvSvDKAabLcmpHRzk5WUmlXQDrZs4tBJJgW3dKQ=
+	by mail.kernel.org (Postfix) with ESMTP id 6DEAA2080C
+	for <bpf@archiver.kernel.org>; Wed, 26 Aug 2020 12:19:41 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=microsoft.com header.i=@microsoft.com header.b="Ab8NV8Gv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727884AbgHZKTC convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 26 Aug 2020 06:19:02 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:25385 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728184AbgHZKTB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Aug 2020 06:19:01 -0400
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-269-axKnq8jwPNyk4FK5q1gRMw-1; Wed, 26 Aug 2020 06:18:54 -0400
-X-MC-Unique: axKnq8jwPNyk4FK5q1gRMw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0BB20807332;
-        Wed, 26 Aug 2020 10:18:52 +0000 (UTC)
-Received: from krava.redhat.com (unknown [10.40.194.188])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3960F1992F;
-        Wed, 26 Aug 2020 10:18:46 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: [PATCH bpf-next] selftests/bpf: Fix open call in trigger_fstat_events
-Date:   Wed, 26 Aug 2020 12:18:45 +0200
-Message-Id: <20200826101845.747617-1-jolsa@kernel.org>
+        id S1728977AbgHZMTk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Aug 2020 08:19:40 -0400
+Received: from mail-eopbgr150094.outbound.protection.outlook.com ([40.107.15.94]:38950
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728682AbgHZMTj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Aug 2020 08:19:39 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=beIUGiqBFX3SGPJbajHnCz1mD06m5tk9fPc3MkmO8SYSVzrD1+JRXxKFtPZBYwx0nlgssUTn/f64MJ50OF+mzibySKp/clkbbwea7PRACIhNPyoW3fjxcsbvXk9rPqvCkzI8RfcRix4qxsCGj/T0c58UocMINYBALx8iIQsRfRQfWuEdhkp6w4tjOzMotlKW+UEWCPN9vXYLJmVX0S/R7zxWglse0xS4BYI9cIzqR85lvFVPlUsp1T9rj5R2HZ5qyF3B1ACjJjn1+nSbZ/mnZCNVClHg0mxZYJSyJwzWS7oDvFivFCgIep1Cnb8rvnONOLXF+ESKJahnJ7mZL3qo3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K1io2rGKtYlqZnhdum4MoDcbUgkbtqt42/FXvw/upfU=;
+ b=eUquV46XBGg02kSEp9I5GHGYhLvrWShsE7DSvxhAb7G3mOw1IQku8qh7ViJSnJVw635g1JjpzG+hI91mdQDxcPWGLIdvizemp+kVa1qzYP+j8r/QMEMp+oksp8KANUeRWdjNS0d9S7UfcyPtz9C2qt0Pj5eSQBvsiFPzUY0B74B9AHl5IGXFkRoEOvcya/LNYRyzVspx/mpwMJc4RI6j91XuMpm4UoJC2wEQB8mtPBNLk126ioaPg80r02NBZJxQHh6Xo93IUsFPel/CFi5haMdg/7Gd503qPh6wvFKWDs8w6XDGaYIQAbAAx4yDn7juIakG0BI4zG9Sz3i1WJI2UQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=K1io2rGKtYlqZnhdum4MoDcbUgkbtqt42/FXvw/upfU=;
+ b=Ab8NV8Gvrsufw4UEv0xWnX+LDBdlQhAMyTygQGp59cS9GnJV/0iFOGCL9bL2fhGYpB/qyVpTdlAwXzcxENsDc5LRgtqLzMBdQkPTxCL2FuFr6O68AyfKZozDYcuiaO1BJ7BjWfT0ZkWwU2bPz3LEXmm2lL9tSXgENCB1/oxF/9w=
+Received: from AM0PR83MB0275.EURPRD83.prod.outlook.com (2603:10a6:208:94::26)
+ by AM0PR83MB0273.EURPRD83.prod.outlook.com (2603:10a6:208:94::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.4; Wed, 26 Aug
+ 2020 12:19:32 +0000
+Received: from AM0PR83MB0275.EURPRD83.prod.outlook.com
+ ([fe80::4dd5:3b7e:321f:b1bd]) by AM0PR83MB0275.EURPRD83.prod.outlook.com
+ ([fe80::4dd5:3b7e:321f:b1bd%8]) with mapi id 15.20.3348.005; Wed, 26 Aug 2020
+ 12:19:32 +0000
+From:   Kevin Sheldrake <Kevin.Sheldrake@microsoft.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: RE: [EXTERNAL] Re: Clang | llc incorrect jumps
+Thread-Topic: [EXTERNAL] Re: Clang | llc incorrect jumps
+Thread-Index: AdZ6+BhyKlwHLo/hTjGCiXuCkGGBSQAB3rQAACiyYNA=
+Date:   Wed, 26 Aug 2020 12:19:31 +0000
+Message-ID: <AM0PR83MB02753E93882896A2138995ADFB540@AM0PR83MB0275.EURPRD83.prod.outlook.com>
+References: <AM0PR83MB0275B96730F50564861C3C55FB570@AM0PR83MB0275.EURPRD83.prod.outlook.com>
+ <CAADnVQ+BpWg5aFMG2QV1OWvPgzrwqpPO+9fJ6NfwEPLp3Gp6Mw@mail.gmail.com>
+In-Reply-To: <CAADnVQ+BpWg5aFMG2QV1OWvPgzrwqpPO+9fJ6NfwEPLp3Gp6Mw@mail.gmail.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=True;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Owner=kesheldr@microsoft.com;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2020-08-26T12:19:28.9062338Z;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=General;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Application=Microsoft Azure
+ Information Protection;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=41a2629c-0c62-4158-93d1-7b6a297316e5;
+ MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Extended_MSFT_Method=Automatic
+authentication-results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=microsoft.com;
+x-originating-ip: [149.12.0.58]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 04bd2c34-960f-4761-2b5a-08d849ba49c1
+x-ms-traffictypediagnostic: AM0PR83MB0273:
+x-microsoft-antispam-prvs: <AM0PR83MB02737AE48637AF7A8B1BBFC1FB540@AM0PR83MB0273.EURPRD83.prod.outlook.com>
+x-o365-sonar-daas-pilot: True
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0zUQ+CmgutfublKROlj2TfUJUrry9kkdVSHONbgx7WeHxnjwyogPFF4tlrhHyj5Bgw4miruImhtxeEcN1tMPCAJwGaDselNcaRLHAks1HXDSgFbBMlv3U13yBopDVOI22JheKGNUndX4qOJUe+TmUe29/8zfFOLvsfV7uwroIDhJQ+2SNfuWg7aboYrZoEWIVYNLgJC/hgpHdt7rvJyaBfUAfK5rBCd5HRa9SYDoDAjcOPgZ40O6h2jcz9QDFQ7HL1JHGZRVK1JPJd/pBTGEdsl6NU/YEJb8ha1wNECcu0BPSOqufRx1qlqe8cwSaIsS
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR83MB0275.EURPRD83.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(376002)(136003)(39860400002)(396003)(366004)(316002)(110136005)(33656002)(8676002)(66446008)(8936002)(83380400001)(82950400001)(82960400001)(7696005)(64756008)(10290500003)(66556008)(186003)(71200400001)(76116006)(66946007)(6506007)(2906002)(53546011)(52536014)(86362001)(9686003)(5660300002)(4326008)(8990500004)(26005)(55016002)(478600001)(66476007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: XKUHtk3sFv5IIE+qHFbDWBrUAvOuHyHX2FqiG+3b090qu8t+UG/y9RcYXzvyLOo0o6WoKRWPhCMqL37nCLckjroYGC7eKZ0/EtwEkXgVIXuLOTXNwGl8ZqnzQ5wLRqLu9O4dmNBSKqmmZNCOojchUjI2huep++R+szDwTiVhjuaZpDK9rP3InxhEXZXcabpELBM+uCnbXqppBfDRPRKoeKukpiThFh8EpFIc36BJgJYz/6fAKhfzf9m4LY0gI/wA7BGNx6RvH+a/iHxy35V0EingP2diPGKSJp8GNhmZiE9sI9auJ8sEuq3pXmVgzc2X69wdYsVaIXwcZklnzDtaOjWIpYCRLod1pkPkOiKMnZKWbG2JJBxOSXMvJL66ZpDVphTf1DGELxDS//HCShJmTPBYy9Lbqr3SlTiEVCTXGFQEykz4g6ZONUJshZwDHBncNkARIgITV093wQdgIp+kDNqfEksxe5Y2cBT0Y29M3in+u5Hxfcaa57nDa+nJqH2A76sE7r4x8YN6hBdfdwXxhwYK6lFEkFV6qOHq+HSdHmL7je32gDQ5ud7hTbpXLSBx+XaOm1R0kx3UCB4ApAiB3KZv27aDuTO3w15LzEBPW7EB3gAgE6sNw0LGGR8z8M83nkGmU4zxqeRjZhBmuuYygg==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
-X-Mimecast-Spam-Score: 0.002
-X-Mimecast-Originator: kernel.org
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR83MB0275.EURPRD83.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04bd2c34-960f-4761-2b5a-08d849ba49c1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Aug 2020 12:19:32.0427
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yqSno1al/+8S8HF1biryoHNC7CgXIjYN7kZZjozclD0j47N2vvUUL7vEc0oJRK6iMe7PUJCbEzKk0LS4g/e84A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR83MB0273
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Alexei reported compile breakage on newer systems with
-following error:
-
-  In file included from /usr/include/fcntl.h:290:0,
-  4814                 from ./test_progs.h:29,
-  4815                 from
-  .../bpf-next/tools/testing/selftests/bpf/prog_tests/d_path.c:3:
-  4816In function ‘open’,
-  4817    inlined from ‘trigger_fstat_events’ at
-  .../bpf-next/tools/testing/selftests/bpf/prog_tests/d_path.c:50:10,
-  4818    inlined from ‘test_d_path’ at
-  .../bpf-next/tools/testing/selftests/bpf/prog_tests/d_path.c:119:6:
-  4819/usr/include/x86_64-linux-gnu/bits/fcntl2.h:50:4: error: call to
-  ‘__open_missing_mode’ declared with attribute error: open with O_CREAT
-  or O_TMPFILE in second argument needs 3 arguments
-  4820    __open_missing_mode ();
-  4821    ^~~~~~~~~~~~~~~~~~~~~~
-
-We're missing permission bits as 3rd argument
-for open call with O_CREAT flag specified.
-
-Reported-by: Alexei Starovoitov <ast@kernel.org>
-Fixes: e4d1af4b16f8 ("selftests/bpf: Add test for d_path helper")
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- tools/testing/selftests/bpf/prog_tests/d_path.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/d_path.c b/tools/testing/selftests/bpf/prog_tests/d_path.c
-index 058765da17e6..43ffbeacd680 100644
---- a/tools/testing/selftests/bpf/prog_tests/d_path.c
-+++ b/tools/testing/selftests/bpf/prog_tests/d_path.c
-@@ -47,7 +47,7 @@ static int trigger_fstat_events(pid_t pid)
- 	devfd = open("/dev/urandom", O_RDONLY);
- 	if (CHECK(devfd < 0, "trigger", "open /dev/urandom failed\n"))
- 		goto out_close;
--	localfd = open("/tmp/d_path_loadgen.txt", O_CREAT | O_RDONLY);
-+	localfd = open("/tmp/d_path_loadgen.txt", O_CREAT | O_RDONLY, 0644);
- 	if (CHECK(localfd < 0, "trigger", "open /tmp/d_path_loadgen.txt failed\n"))
- 		goto out_close;
- 	/* bpf_d_path will return path with (deleted) */
--- 
-2.25.4
-
+DQpPbiBUdWUsIEF1ZyAyNSwgMjAyMCBhdCA1OjQ5IFBNIEFsZXhlaSBTdGFyb3ZvaXRvdiA8YWxl
+eGVpLnN0YXJvdm9pdG92QGdtYWlsLmNvbT4gd3JvdGU6DQo+IE9uIFR1ZSwgQXVnIDI1LCAyMDIw
+IGF0IDk6MzQgQU0gS2V2aW4gU2hlbGRyYWtlDQo+IDxLZXZpbi5TaGVsZHJha2VAbWljcm9zb2Z0
+LmNvbT4gd3JvdGU6DQo8U05JUD4NCj4gPiBJZiBJIHJlbW92ZSBvbmUgc2VjdGlvbiBvZiBjb2Rl
+LCB1bnJlbGF0ZWQgdG8gd2hlcmUgdGhlIGlsbGVnYWwganVtcHMgYXJlLA0KPiByZWR1Y2luZyB0
+aGUgb3ZlcmFsbCBzaXplIHRvIDI0NDgwIGluc3RydWN0aW9ucywgdGhlIGlsbGVnYWwganVtcHMg
+ZGlzYXBwZWFyLiAgSWYNCj4gSSByZWVuYWJsZSB0aGF0IHNlY3Rpb24gb2YgY29kZSBhbmQgcmVt
+b3ZlIGEgZGlmZmVyZW50IHNlY3Rpb24gb2YgY29kZSwgYWxzbw0KPiB1bnJlbGF0ZWQgdG8gdGhl
+IGlsbGVnYWwganVtcHMsIHJlZHVjaW5nIHRoZSBvdmVyYWxsIHNpemUgdG8gNDc0NDQgaW5zdHJ1
+Y3Rpb25zLA0KPiB0aGUgaWxsZWdhbCBqdW1wcyBkaXNhcHBlYXIgYWdhaW4uDQo+IA0KPiBJIHN1
+c3BlY3QgaXQncyBhIGJ1ZyBpbiBsbHZtLiBJdCBkb2Vzbid0IGhhdmUgYSBjaGVjayB0aGF0IHRo
+ZSBicmFuY2ggdGFyZ2V0IGZpdHMNCj4gaW50byAxNi1iaXRzLg0KPiBJdCBzaW1wbHkgZG9lczoN
+Cj4gbGx2bS9saWIvVGFyZ2V0L0JQRi9NQ1RhcmdldERlc2MvQlBGQXNtQmFja2VuZC5jcHANCj4g
+ICAgIFZhbHVlID0gKHVpbnQxNl90KSgoVmFsdWUgLSA4KSAvIDgpOw0KPiAgICAgc3VwcG9ydDo6
+ZW5kaWFuOjp3cml0ZTx1aW50MTZfdD4oJkRhdGFbRml4dXAuZ2V0T2Zmc2V0KCkgKyAyXSwgVmFs
+dWUsDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBFbmRpYW4pOyBDb3Vs
+ZCB5b3UgYWRkIGEgbG9nIGFyb3VuZCB0aGF0IGxpbmUgdG8gZG91YmxlDQo+IGNoZWNrIHRoYXQn
+cyB0aGUgY2FzZT8NCj4gTWF5IGJlIHlvdSBjb3VsZCBzZW5kIGEgcGF0Y2ggdG8gYWRkIGFuIGFz
+c2VydCB0aGVyZT8NCj4gSXQgd2lsbCBoZWxwIG90aGVycyBhdm9pZCB0aGlzIGRlYnVnZ2luZy4N
+Cj4gDQo+IEluIHRoZSBwYXN0IHdlJ3ZlIHRhbGtlZCBhYm91dCBleHRlbmRpbmcgQlBGIElTQSB3
+aXRoIDMyLWJpdCB1bmNvbmRpdGlvbmFsDQo+IGp1bXAgaW5zdHJ1Y3Rpb24uDQo+IEJ1dCBubyBv
+bmUgZGlkbid0IGNvbWUgYXJvdW5kIHRvIGFjdHVhbGx5IGltcGxlbWVudGluZyBpdC4NCj4gT25j
+ZSB3ZSBoYXZlIHN1Y2ggaW5zbiBsbHZtIHNob3VsZCBiZSBhYmxlIHRvIGRldGVjdCB0aGlzIDE2
+LWJpdCBvdmVyZmxvdw0KPiBhbmQgdXNlIHRoaXMgbmV3IGptcCBpbnNuLg0KDQpIZWxsbyBBbGV4
+ZWkNCg0KVGhhbmsgeW91IGZvciB0aGlzIGluc2lnaHQgLSB0aGF0J3MgcmVhbGx5IGhlbHBmdWwu
+ICBJJ2xsIGdldCBvbiBpdCB3aGVuIEknbSBiYWNrIGF0IHdvcmsgb24gRnJpZGF5IGFuZCBJJ2xs
+IHN1Ym1pdCBhIHBhdGNoLg0KDQpUaGFua3MNCg0KS2V2aW4gU2hlbGRyYWtlDQoNCg==
