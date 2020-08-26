@@ -2,165 +2,243 @@ Return-Path: <SRS0=7q6j=CE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C7CDC433E1
-	for <bpf@archiver.kernel.org>; Wed, 26 Aug 2020 14:38:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37E6BC433E1
+	for <bpf@archiver.kernel.org>; Wed, 26 Aug 2020 14:44:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3FEB0214F1
-	for <bpf@archiver.kernel.org>; Wed, 26 Aug 2020 14:38:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C826208E4
+	for <bpf@archiver.kernel.org>; Wed, 26 Aug 2020 14:44:39 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20150623.gappssmtp.com header.i=@ndufresne-ca.20150623.gappssmtp.com header.b="k4m5mEJB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726995AbgHZOib (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Aug 2020 10:38:31 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:55040 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726936AbgHZOiY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Aug 2020 10:38:24 -0400
-Received: by mail-io1-f72.google.com with SMTP id o18so1358466ioa.21
-        for <bpf@vger.kernel.org>; Wed, 26 Aug 2020 07:38:23 -0700 (PDT)
+        id S1726718AbgHZOoi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Aug 2020 10:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726834AbgHZOod (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Aug 2020 10:44:33 -0400
+Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD42C0613ED
+        for <bpf@vger.kernel.org>; Wed, 26 Aug 2020 07:44:32 -0700 (PDT)
+Received: by mail-qt1-x842.google.com with SMTP id k20so1510884qtq.11
+        for <bpf@vger.kernel.org>; Wed, 26 Aug 2020 07:44:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ndufresne-ca.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=3fltz4Tid80yvbd7ycd5CEvXCm5Dl/pplKlQTmdAxKA=;
+        b=k4m5mEJBWpHKc8UCyiMSoWpLFbB9PLsFXQSse1GeHDwA4DKW/bxLFf2oq06iweP+iL
+         M8bgXdl0A9155UGa8Nz8VJmE6L39gWW8oVIXtrtnNW2XbaFdQ7/KhobmLnk55ujnHV/2
+         tPPob3cH4BlQEISinoXdsc01CEIIJiQYM7T+gkUDqRjYhkY6CbBd83M1+SskyHHbWLvL
+         rHtzPGZUMHG7eDyNL2Q4ZV/nAiZIzogvhqr+a2Knoik0r52ut2ISFzGOCWsps3sZCmxq
+         fBsjIPcK+lwVA+ap0kK3kVNC6i6d4qEdXhZRr9MSKdg1iPVBdKJXwariY86XZf+E2JPH
+         +9mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Xxqad3xL8qqUrM4EVjmvmkbniZ+gtAPelAMhad+ABBc=;
-        b=cOBa15kFW6r3emr/btuVfuK3sk6s63thipVzQirdCKVJ2sAjGt41GOxHjdtfijtv8d
-         Rgh9Nmr7tNwvtozaGiZO4GWqf1ezKEsa5D1O77WWXret1M/SrS1Da4qddzb98tsddjUj
-         F8KvG16/AMEOicspn64Os8tSH27woL1UnRjviHsd5daLQokDvcEfQYP6YACzOAXJMXgt
-         9gP7gMdsclDartIHrBtGXxyft6xsW1QrwtGlBroyyMeJP+EkL5F1/YLWzGMfSLEski4a
-         6JS1/H133uLYbo40iJGOGEqkE1GxHNHRQeFRCZNMY3pbkgUWVbhjJ/JGGtOnR9j5I2F3
-         GCTA==
-X-Gm-Message-State: AOAM532iIuT7nqY1e20HoXbdD15lMcG+q03VAA8SklduG8dO6iitQOCe
-        mqHDl44X3a060LTW02UMQSZ6p+mLjtH9aQkjyi+NNVrq1WPy
-X-Google-Smtp-Source: ABdhPJx/wE3q6toYtnfpdXKUpmAL2eZoCUl21CrqenWwy9a2FBEuv8fnXX8NeASztT0UzeKqqCLDzTQYVEgaZz53g+szfsyEfCYQ
-MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2b08:: with SMTP id p8mr8153004iov.180.1598452703156;
- Wed, 26 Aug 2020 07:38:23 -0700 (PDT)
-Date:   Wed, 26 Aug 2020 07:38:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008fddd805adc8c56f@google.com>
-Subject: general protection fault in rt6_fill_node
-From:   syzbot <syzbot+81af6e9b3c4b8bc874f8@syzkaller.appspotmail.com>
-To:     John.Linn@xilinx.com, a@unstable.cc, andriin@fb.com,
-        anirudh@xilinx.com, ast@kernel.org,
-        b.a.t.m.a.n@lists.open-mesh.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, davem@davemloft.net, hancock@sedsystems.ca,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@chromium.org,
-        kuba@kernel.org, kuznet@ms2.inr.ac.ru,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        mareklindner@neomailbox.ch, michal.simek@xilinx.com,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        sw@simonwunderlich.de, syzkaller-bugs@googlegroups.com, yhs@fb.com,
-        yoshfuji@linux-ipv6.org
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=3fltz4Tid80yvbd7ycd5CEvXCm5Dl/pplKlQTmdAxKA=;
+        b=l3wnaGrLJNnrNqT4XwmHnWsj2uBhB4/4+Ld9dMnJhPE7cD8ZGkdI8YFSOKBEYrRIJI
+         5M7EqA6SgIPoDCwtiNo7+BFSgqBoCEEMBV5nXfWz3xOLz/Qf21Fkp/VaFbnx4QqzN0tu
+         ju/eayynQh8pQexwVayXLcJIRuYV7cIxROurq4p7niDw8+G7gsGRLz2zX0lJc5QgX1zy
+         GvFnZgvyVyjzP1a+LwUFud78IjIjZulLeaJ7+5J+xsHwoS4tHrxgl1uCyMQoPFuOQ1A+
+         6/TRHO/Wpfk9OKdxFkn9uYWstXV4hpAyfiQBXKm8VRu5R9BaqcBkh/khH3+Ob0T26HdF
+         Tq+A==
+X-Gm-Message-State: AOAM531XmicgrgMdZQJ2jXNujJGfvSowgwdILGi+oAsygYZfOIyaz1OZ
+        viMhfIzpx5Zz1hIsoEuanYCTIg==
+X-Google-Smtp-Source: ABdhPJzCRDv2m2NsfRzSYdU3punl1WmSuoZIWY3X6Qrw3w/UZAKmzNkoM0/3I601SkHanbswK7RLyw==
+X-Received: by 2002:ac8:33a1:: with SMTP id c30mr10693591qtb.156.1598453071797;
+        Wed, 26 Aug 2020 07:44:31 -0700 (PDT)
+Received: from skullcanyon ([192.222.193.21])
+        by smtp.gmail.com with ESMTPSA id a203sm1862906qkg.30.2020.08.26.07.44.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Aug 2020 07:44:31 -0700 (PDT)
+Message-ID: <aade022eeea9d9196774d0f21cbdaa118de8f885.camel@ndufresne.ca>
+Subject: Re: [PATCH 00/49] DRM driver for Hikey 970
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Dave Airlie <airlied@gmail.com>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        Wanchun Zheng <zhengwanchun@hisilicon.com>,
+        linuxarm@huawei.com, dri-devel <dri-devel@lists.freedesktop.org>,
+        Andrzej Hajda <a.hajda@samsung.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        driverdevel <devel@driverdev.osuosl.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Xiubin Zhang <zhangxiubin1@huawei.com>,
+        Wei Xu <xuwei5@hisilicon.com>,
+        Xinliang Liu <xinliang.liu@linaro.org>,
+        Xinwei Kong <kong.kongxinwei@hisilicon.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Bogdan Togorean <bogdan.togorean@analog.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Laurentiu Palcu <laurentiu.palcu@nxp.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Liwei Cai <cailiwei@hisilicon.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Chen Feng <puck.chen@hisilicon.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>, Rob Herring <robh+dt@kernel.org>,
+        mauro.chehab@huawei.com, Rob Clark <robdclark@chromium.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Liuyao An <anliuyao@huawei.com>,
+        Network Development <netdev@vger.kernel.org>,
+        Rongrong Zou <zourongrong@gmail.com>,
+        BPF Mailing List <bpf@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Date:   Wed, 26 Aug 2020 10:44:28 -0400
+In-Reply-To: <20200825133025.13f047f0@coco.lan>
+References: <cover.1597833138.git.mchehab+huawei@kernel.org>
+         <20200819152120.GA106437@ravnborg.org>
+         <20200819153045.GA18469@pendragon.ideasonboard.com>
+         <CALAqxLUXnPRec3UYbMKge8yNKBagLOatOeRCagF=JEyPEfWeKA@mail.gmail.com>
+         <20200820090326.3f400a15@coco.lan>
+         <20200820100205.GA5962@pendragon.ideasonboard.com>
+         <CAPM=9twzsw7T=GD6Jc1EFenXq9ZhTgf_Nuo71uLfX2W33oa=6w@mail.gmail.com>
+         <20200825133025.13f047f0@coco.lan>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+Le mardi 25 août 2020 à 13:30 +0200, Mauro Carvalho Chehab a écrit :
+> Em Tue, 25 Aug 2020 05:29:29 +1000
+> Dave Airlie <airlied@gmail.com> escreveu:
+> 
+> > On Thu, 20 Aug 2020 at 20:02, Laurent Pinchart
+> > <laurent.pinchart@ideasonboard.com> wrote:
+> > > Hi Mauro,
+> > > 
+> > > On Thu, Aug 20, 2020 at 09:03:26AM +0200, Mauro Carvalho Chehab wrote:  
+> > > > Em Wed, 19 Aug 2020 12:52:06 -0700 John Stultz escreveu:  
+> > > > > On Wed, Aug 19, 2020 at 8:31 AM Laurent Pinchart wrote:  
+> > > > > > On Wed, Aug 19, 2020 at 05:21:20PM +0200, Sam Ravnborg wrote:  
+> > > > > > > On Wed, Aug 19, 2020 at 01:45:28PM +0200, Mauro Carvalho Chehab wrote:  
+> > > > > > > > This patch series port the out-of-tree driver for Hikey 970 (which
+> > > > > > > > should also support Hikey 960) from the official 96boards tree:
+> > > > > > > > 
+> > > > > > > >    https://github.com/96boards-hikey/linux/tree/hikey970-v4.9
+> > > > > > > > 
+> > > > > > > > Based on his history, this driver seems to be originally written
+> > > > > > > > for Kernel 4.4, and was later ported to Kernel 4.9. The original
+> > > > > > > > driver used to depend on ION (from Kernel 4.4) and had its own
+> > > > > > > > implementation for FB dev API.
+> > > > > > > > 
+> > > > > > > > As I need to preserve the original history (with has patches from
+> > > > > > > > both HiSilicon and from Linaro),  I'm starting from the original
+> > > > > > > > patch applied there. The remaining patches are incremental,
+> > > > > > > > and port this driver to work with upstream Kernel.
+> > > > > > > >  
+> > > > > ...  
+> > > > > > > > - Due to legal reasons, I need to preserve the authorship of
+> > > > > > > >   each one responsbile for each patch. So, I need to start from
+> > > > > > > >   the original patch from Kernel 4.4;  
+> > > > > ...  
+> > > > > > > I do acknowledge you need to preserve history and all -
+> > > > > > > but this patchset is not easy to review.  
+> > > > > > 
+> > > > > > Why do we need to preserve history ? Adding relevant Signed-off-by and
+> > > > > > Co-developed-by should be enough, shouldn't it ? Having a public branch
+> > > > > > that contains the history is useful if anyone is interested, but I don't
+> > > > > > think it's required in mainline.  
+> > > > > 
+> > > > > Yea. I concur with Laurent here. I'm not sure what legal reasoning you
+> > > > > have on this but preserving the "absolute" history here is actively
+> > > > > detrimental for review and understanding of the patch set.
+> > > > > 
+> > > > > Preserving Authorship, Signed-off-by lines and adding Co-developed-by
+> > > > > lines should be sufficient to provide both atribution credit and DCO
+> > > > > history.  
+> > > > 
+> > > > I'm not convinced that, from legal standpoint, folding things would
+> > > > be enough. See, there are at least 3 legal systems involved here
+> > > > among the different patch authors:
+> > > > 
+> > > >       - civil law;
+> > > >       - common law;
+> > > >       - customary law + common law.
+> > > > 
+> > > > Merging stuff altogether from different law systems can be problematic,
+> > > > and trying to discuss this with experienced IP property lawyers will
+> > > > for sure take a lot of time and efforts. I also bet that different
+> > > > lawyers will have different opinions, because laws are subject to
+> > > > interpretation. With that matter I'm not aware of any court rules
+> > > > with regards to folded patches. So, it sounds to me that folding
+> > > > patches is something that has yet to be proofed in courts around
+> > > > the globe.
+> > > > 
+> > > > At least for US legal system, it sounds that the Country of
+> > > > origin of a patch is relevant, as they have a concept of
+> > > > "national technology" that can be subject to export regulations.
+> > > > 
+> > > > From my side, I really prefer to play safe and stay out of any such
+> > > > legal discussions.  
+> > > 
+> > > Let's be serious for a moment. If you think there are legal issues in
+> > > taking GPL-v2.0-only patches and squashing them while retaining
+> > > authorship information through tags, the Linux kernel if *full* of that.
+> > > You also routinely modify patches that you commit to the media subsystem
+> > > to fix "small issues".
+> > > 
+> > > The country of origin argument makes no sense either, the kernel code
+> > > base if full of code coming from pretty much all country on the planet.
+> > > 
+> > > Keeping the patches separate make this hard to review. Please squash
+> > > them.  
+> > 
+> > I'm inclined to agree with Laurent here.
+> > 
+> > Patches submitted as GPL-v2 with DCO lines and author names/companies
+> > should be fine to be squashed and rearranged,
+> > as long as the DCO and Authorship is kept somewhere in the new patch
+> > that is applied.
+> > 
+> > Review is more important here.
+> 
+> Sorry, but I can't agree that review is more important than to be able
+> to properly indicate copyrights in a valid way at the legal systems that
+> it would apply ;-)
 
-syzbot found the following issue on:
+Regardless of the "review-ability", our users distribute the Linux
+Kernel as a whole, so who contributed which specific line of code is
+already lost in a way. All we see in the distribution if a list of
+copyright holder and licenses. In this context, the per patches
+ownership have no legal implication. My two, non lawyer cents.
 
-HEAD commit:    d7223aa5 Merge branch 'l2tp-replace-custom-logging-code-wi..
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1399802e900000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3d400a47d1416652
-dashboard link: https://syzkaller.appspot.com/bug?extid=81af6e9b3c4b8bc874f8
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12949b5a900000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17b60e46900000
+> 
+> In any case, there's an easy way to make the code easy to review:
+> I can write the patches against staging (where it is OK to submit
+> preserving the history) and then add a final patch moving it out
+> of staging.
+> 
+> You can then just review the last patch, as it will contain the
+> entire code on it.
+> 
+> Another alternative, as I'm already doing with Sam, is for me to
+> submit the folded code as a reply to 00/xx. You can then just 
+> review the final code, without concerning about how the code reached
+> there.
+> 
+> From review point of the view, this will be the same as reviewing
+> a folded patch, but, from legal standpoint, the entire copyright
+> chain will be preserved.
+> 
+> Thanks,
+> Mauro
 
-The issue was bisected to:
-
-commit 867d03bc238f62fcd28f287b9da8af5e483baeab
-Author: Robert Hancock <hancock@sedsystems.ca>
-Date:   Thu Jun 6 22:28:14 2019 +0000
-
-    net: axienet: Add DMA registers to ethtool register dump
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1523f266900000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=1723f266900000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1323f266900000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+81af6e9b3c4b8bc874f8@syzkaller.appspotmail.com
-Fixes: 867d03bc238f ("net: axienet: Add DMA registers to ethtool register dump")
-
-IPv6: RTM_NEWROUTE with no NLM_F_CREATE or NLM_F_REPLACE
-IPv6: NLM_F_CREATE should be set when creating new route
-IPv6: NLM_F_CREATE should be set when creating new route
-general protection fault, probably for non-canonical address 0xdffffc0000000010: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000080-0x0000000000000087]
-CPU: 1 PID: 7050 Comm: syz-executor648 Not tainted 5.9.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:nexthop_is_blackhole include/net/nexthop.h:240 [inline]
-RIP: 0010:rt6_fill_node+0x1396/0x2940 net/ipv6/route.c:5584
-Code: 3c 02 00 0f 85 ef 14 00 00 4d 8b 6d 10 e8 f2 1c 87 fa 49 8d bd 80 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 10 15 00 00 4d 8b ad 80 00 00 00 e8 34 4b 06 01
-RSP: 0018:ffffc900063672b0 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: ffff8880a88bd800 RCX: ffffffff86ed2456
-RDX: 0000000000000010 RSI: ffffffff86ed248e RDI: 0000000000000080
-RBP: ffffc900063673e8 R08: 0000000000000001 R09: ffff8880a88bd847
-R10: 0000000000000001 R11: 0000000000000000 R12: ffff8880a8ded940
-R13: 0000000000000000 R14: ffff8880a899ea00 R15: 0000000000000000
-FS:  00000000010e3880(0000) GS:ffff8880ae700000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000300 CR3: 00000000a8efa000 CR4: 00000000001506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- inet6_rt_notify+0x14c/0x2b0 net/ipv6/route.c:6017
- fib6_add_rt2node net/ipv6/ip6_fib.c:1246 [inline]
- fib6_add+0x2840/0x3ed0 net/ipv6/ip6_fib.c:1473
- __ip6_ins_rt net/ipv6/route.c:1317 [inline]
- ip6_route_add+0x8b/0x150 net/ipv6/route.c:3744
- inet6_rtm_newroute+0x152/0x160 net/ipv6/route.c:5360
- rtnetlink_rcv_msg+0x44e/0xad0 net/core/rtnetlink.c:5563
- netlink_rcv_skb+0x15a/0x430 net/netlink/af_netlink.c:2470
- netlink_unicast_kernel net/netlink/af_netlink.c:1304 [inline]
- netlink_unicast+0x533/0x7d0 net/netlink/af_netlink.c:1330
- netlink_sendmsg+0x856/0xd90 net/netlink/af_netlink.c:1919
- sock_sendmsg_nosec net/socket.c:651 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:671
- ____sys_sendmsg+0x6e8/0x810 net/socket.c:2353
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2407
- __sys_sendmsg+0xe5/0x1b0 net/socket.c:2440
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x443ef9
-Code: e8 8c 07 03 00 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 bb 09 fc ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007fff25138308 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000443ef9
-RDX: 0000000000000000 RSI: 0000000020000300 RDI: 0000000000000003
-RBP: 00007fff25138310 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 000000000000e25f
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-Modules linked in:
----[ end trace 46e9e8854602a8a3 ]---
-RIP: 0010:nexthop_is_blackhole include/net/nexthop.h:240 [inline]
-RIP: 0010:rt6_fill_node+0x1396/0x2940 net/ipv6/route.c:5584
-Code: 3c 02 00 0f 85 ef 14 00 00 4d 8b 6d 10 e8 f2 1c 87 fa 49 8d bd 80 00 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 10 15 00 00 4d 8b ad 80 00 00 00 e8 34 4b 06 01
-RSP: 0018:ffffc900063672b0 EFLAGS: 00010202
-RAX: dffffc0000000000 RBX: ffff8880a88bd800 RCX: ffffffff86ed2456
-RDX: 0000000000000010 RSI: ffffffff86ed248e RDI: 0000000000000080
-RBP: ffffc900063673e8 R08: 0000000000000001 R09: ffff8880a88bd847
-R10: 0000000000000001 R11: 0000000000000000 R12: ffff8880a8ded940
-R13: 0000000000000000 R14: ffff8880a899ea00 R15: 0000000000000000
-FS:  00000000010e3880(0000) GS:ffff8880ae700000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020000300 CR3: 00000000a8efa000 CR4: 00000000001506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
