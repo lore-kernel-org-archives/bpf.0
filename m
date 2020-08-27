@@ -5,42 +5,42 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62997C433DF
-	for <bpf@archiver.kernel.org>; Thu, 27 Aug 2020 00:06:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E5F77C433DF
+	for <bpf@archiver.kernel.org>; Thu, 27 Aug 2020 00:06:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4423720791
-	for <bpf@archiver.kernel.org>; Thu, 27 Aug 2020 00:06:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C191C20825
+	for <bpf@archiver.kernel.org>; Thu, 27 Aug 2020 00:06:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="XfObal2+"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Qa6ZuEW1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726788AbgH0AG0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Aug 2020 20:06:26 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:30390 "EHLO
+        id S1726828AbgH0AGa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Aug 2020 20:06:30 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:46012 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726753AbgH0AG0 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 26 Aug 2020 20:06:26 -0400
+        by vger.kernel.org with ESMTP id S1726839AbgH0AG3 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 26 Aug 2020 20:06:29 -0400
 Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07R05YuW032208
-        for <bpf@vger.kernel.org>; Wed, 26 Aug 2020 17:06:25 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 07R05Yub032208
+        for <bpf@vger.kernel.org>; Wed, 26 Aug 2020 17:06:27 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=PoctbjKW2PqcwUYfWkP0gtzAdd17ljuE+ugTmwzAGbI=;
- b=XfObal2+nvUMOQ1b71lZ9DHb6y1ltHC5E8Nu6xjcmgVVokcNm2iTz+2Hy0aAWbxX3moo
- kb6EmhBwJWC+oYRMYL+Y+RXuFOvDdXje63peTtZiWzZdKyBOooqWHQ5es3J3KudU1IRV
- IV9EPp4mvVj+UDhV3CrMdBFHykYVrlKhua4= 
+ bh=Bj1FGEHaoqbiaRh/ZSXUetNzMCXqGCc22v1K92GuKZA=;
+ b=Qa6ZuEW1V4JApraTk7w1bK9v4bySl69LE4d2lUQjJgXcXIlpQZsasaNKU/Kg35CmPkQ9
+ 7L+y9UAH9phQP5u/1c6sXcxjX25bMD/Gy+P9ACIIj7J/0omcLzIO+RGFlkac33jtbaHy
+ 65Rd8tdvBYsRxPxnIzCUe1LrU7tBZ4NHgUI= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 335up8jbxp-8
+        by mx0a-00082601.pphosted.com with ESMTP id 335up8jbxp-13
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 26 Aug 2020 17:06:25 -0700
+        for <bpf@vger.kernel.org>; Wed, 26 Aug 2020 17:06:27 -0700
 Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 26 Aug 2020 17:06:22 -0700
+ 15.1.1979.3; Wed, 26 Aug 2020 17:06:23 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 103843705306; Wed, 26 Aug 2020 17:06:19 -0700 (PDT)
+        id C3EE137052E0; Wed, 26 Aug 2020 17:06:21 -0700 (PDT)
 Smtp-Origin-Hostprefix: devbig
 From:   Yonghong Song <yhs@fb.com>
 Smtp-Origin-Hostname: devbig003.ftw2.facebook.com
@@ -48,9 +48,9 @@ To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
 Smtp-Origin-Cluster: ftw2c04
-Subject: [PATCH bpf-next 1/5] bpf: make bpf_link_info.iter similar to bpf_iter_link_info
-Date:   Wed, 26 Aug 2020 17:06:19 -0700
-Message-ID: <20200827000619.2711883-1-yhs@fb.com>
+Subject: [PATCH bpf-next 3/5] bpf: add link_query support for newly added main_thread_only info
+Date:   Wed, 26 Aug 2020 17:06:21 -0700
+Message-ID: <20200827000621.2712111-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200827000618.2711826-1-yhs@fb.com>
 References: <20200827000618.2711826-1-yhs@fb.com>
@@ -61,7 +61,7 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-08-26_14:2020-08-26,2020-08-26 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- lowpriorityscore=0 mlxlogscore=827 clxscore=1015 bulkscore=0 adultscore=0
+ lowpriorityscore=0 mlxlogscore=999 clxscore=1015 bulkscore=0 adultscore=0
  impostorscore=0 priorityscore=1501 phishscore=0 spamscore=0 mlxscore=0
  suspectscore=8 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2008260187
@@ -71,72 +71,96 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf_link_info.iter is used by link_query to return
-bpf_iter_link_info to user space. Fields may be different
-,e.g., map_fd vs. map_id, so we cannot reuse
-the exact structure. But make them similar, e.g.,
-  struct bpf_link_info {
-     /* common fields */
-     union {
-	struct { ... } raw_tracepoint;
-	struct { ... } tracing;
-	...
-	struct {
-	    /* common fields for iter */
-	    union {
-		struct {
-		    __u32 map_id;
-		} map;
-		/* other structs for other targets */
-	    };
-	};
-    };
- };
-so the structure is extensible the same way as
-bpf_iter_link_info.
+Added support for link_query for main_thread_only information
+with task/task_file iterators.
 
-Fixes: 6b0a249a301e ("bpf: Implement link_query for bpf iterators")
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- include/uapi/linux/bpf.h       | 6 ++++--
- tools/include/uapi/linux/bpf.h | 6 ++++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
+ include/uapi/linux/bpf.h       |  5 +++++
+ kernel/bpf/task_iter.c         | 17 +++++++++++++++++
+ tools/include/uapi/linux/bpf.h |  5 +++++
+ 3 files changed, 27 insertions(+)
 
 diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 0388bc0200b0..ef7af384f5ee 100644
+index af5c600bf673..595bdc4c9431 100644
 --- a/include/uapi/linux/bpf.h
 +++ b/include/uapi/linux/bpf.h
-@@ -4251,8 +4251,10 @@ struct bpf_link_info {
- 			__aligned_u64 target_name; /* in/out: target_name buffer ptr */
- 			__u32 target_name_len;	   /* in/out: target_name buffer len */
- 			union {
--				__u32 map_id;
--			} map;
+@@ -4259,6 +4259,11 @@ struct bpf_link_info {
+ 				struct {
+ 					__u32 map_id;
+ 				} map;
++
 +				struct {
-+					__u32 map_id;
-+				} map;
-+			};
++					__u32 main_thread_only:1;
++					__u32 :31;
++				} task;
+ 			};
  		} iter;
  		struct  {
- 			__u32 netns_ino;
+diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+index 362bf2dda63a..7636abe05f27 100644
+--- a/kernel/bpf/task_iter.c
++++ b/kernel/bpf/task_iter.c
+@@ -329,6 +329,19 @@ static int bpf_iter_attach_task(struct bpf_prog *pro=
+g,
+ 	return 0;
+ }
+=20
++static void bpf_iter_task_show_fdinfo(const struct bpf_iter_aux_info *au=
+x,
++				      struct seq_file *seq)
++{
++	seq_printf(seq, "main_thread_only:\t%u\n", aux->main_thread_only);
++}
++
++static int bpf_iter_task_fill_link_info(const struct bpf_iter_aux_info *=
+aux,
++					struct bpf_link_info *info)
++{
++	info->iter.task.main_thread_only =3D aux->main_thread_only;
++	return 0;
++}
++
+ BTF_ID_LIST(btf_task_file_ids)
+ BTF_ID(struct, task_struct)
+ BTF_ID(struct, file)
+@@ -343,6 +356,8 @@ static const struct bpf_iter_seq_info task_seq_info =3D=
+ {
+ static struct bpf_iter_reg task_reg_info =3D {
+ 	.target			=3D "task",
+ 	.attach_target		=3D bpf_iter_attach_task,
++	.show_fdinfo		=3D bpf_iter_task_show_fdinfo,
++	.fill_link_info		=3D bpf_iter_task_fill_link_info,
+ 	.ctx_arg_info_size	=3D 1,
+ 	.ctx_arg_info		=3D {
+ 		{ offsetof(struct bpf_iter__task, task),
+@@ -361,6 +376,8 @@ static const struct bpf_iter_seq_info task_file_seq_i=
+nfo =3D {
+ static struct bpf_iter_reg task_file_reg_info =3D {
+ 	.target			=3D "task_file",
+ 	.attach_target		=3D bpf_iter_attach_task,
++	.show_fdinfo		=3D bpf_iter_task_show_fdinfo,
++	.fill_link_info		=3D bpf_iter_task_fill_link_info,
+ 	.ctx_arg_info_size	=3D 2,
+ 	.ctx_arg_info		=3D {
+ 		{ offsetof(struct bpf_iter__task_file, task),
 diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
 f.h
-index 0388bc0200b0..ef7af384f5ee 100644
+index af5c600bf673..595bdc4c9431 100644
 --- a/tools/include/uapi/linux/bpf.h
 +++ b/tools/include/uapi/linux/bpf.h
-@@ -4251,8 +4251,10 @@ struct bpf_link_info {
- 			__aligned_u64 target_name; /* in/out: target_name buffer ptr */
- 			__u32 target_name_len;	   /* in/out: target_name buffer len */
- 			union {
--				__u32 map_id;
--			} map;
+@@ -4259,6 +4259,11 @@ struct bpf_link_info {
+ 				struct {
+ 					__u32 map_id;
+ 				} map;
++
 +				struct {
-+					__u32 map_id;
-+				} map;
-+			};
++					__u32 main_thread_only:1;
++					__u32 :31;
++				} task;
+ 			};
  		} iter;
  		struct  {
- 			__u32 netns_ino;
 --=20
 2.24.1
 
