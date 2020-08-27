@@ -2,66 +2,65 @@ Return-Path: <SRS0=MPUm=CF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C196DC433DF
-	for <bpf@archiver.kernel.org>; Thu, 27 Aug 2020 01:19:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E218C433E1
+	for <bpf@archiver.kernel.org>; Thu, 27 Aug 2020 01:24:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A567F2075B
-	for <bpf@archiver.kernel.org>; Thu, 27 Aug 2020 01:19:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24F1B21775
+	for <bpf@archiver.kernel.org>; Thu, 27 Aug 2020 01:24:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VZVi7M5H"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SJwPhgwU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726880AbgH0BT4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 26 Aug 2020 21:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
+        id S1726790AbgH0BYV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 26 Aug 2020 21:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726820AbgH0BTy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 26 Aug 2020 21:19:54 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3F5AC0617A3
-        for <bpf@vger.kernel.org>; Wed, 26 Aug 2020 18:19:52 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id i14so2012229lfl.12
-        for <bpf@vger.kernel.org>; Wed, 26 Aug 2020 18:19:52 -0700 (PDT)
+        with ESMTP id S1726779AbgH0BYU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 26 Aug 2020 21:24:20 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49E1C0617A4
+        for <bpf@vger.kernel.org>; Wed, 26 Aug 2020 18:24:19 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id h19so4524011ljg.13
+        for <bpf@vger.kernel.org>; Wed, 26 Aug 2020 18:24:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=qr1VNGCaHREOJfJgh+HpFtWG4t0r62i9OyPJ4zGslYU=;
-        b=VZVi7M5HZVbCPyzNn3OhWj/JnfoXRrXJmUVOV9saZPvSfGl9kPM21pf3WZYr+uxDAG
-         YOK8e1zHxuHOOPMCFszQuSvkROJHazjQ2GY//CVZQqAyTdQepc3bGPgrLIkA0lNhd3fB
-         wTjoBLRxzFX8HE737dC2R2Ln+pUNZfIa3CNuRgMsx+6UmAqbUexVwi8ACRSe1G7/N1oO
-         D0aHwVyMSKPCGjao7JOTNQkKJ7K/kKJeWTCuhL5lLVJm4EX7H+hItH9woFIezVhMEgO5
-         NC86WhczxtxhAH0KAVkzJfnV3+m3DMG9YXCw47THnPqHeHa8FJXm9XXd2Whby9hjR61p
-         hx5w==
+        bh=eaAhVe9NZ1R5g2YS2CTJE0/6e8EYtB7aMqdHknvKesA=;
+        b=SJwPhgwUnUn2mBarnoa9bYz42e0tKRZQflSAKfXVW+1WuaJWh+0RePI1uNHutnyd2A
+         YtVQxlK3Ffu4N1UF5nmbSAY8tUkVP/fRLD1G6u72jYG2ksFuQncrACVRRuOt6NpKvUPv
+         fFXWzySHC85dONXfxUUAVinyHVrTxzc1msjDoirhDLNmiEGqoml2RaLfP/5L37cUSmEF
+         2x+SKK69lCzSR0Uv2KNHpby9FLNCjb7H8RSlrh0dQvGgW+FHpK2t/Ozqil8Gfn1CgePU
+         jjPFsyRGDg6X5bOe51QDiLaAWrD4UjhlZUsnCBSu2IvNakzMXZJxI7xDxSFVtk9hclHh
+         Ey+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=qr1VNGCaHREOJfJgh+HpFtWG4t0r62i9OyPJ4zGslYU=;
-        b=rwsauzONdFPbnI+NgMdrX0bqsyJloZLpnXqUs8we4YNFsHt2YoE0Z0xlKHL9Ez6I8w
-         wPPLz9qucmpeKdukeXNW4AFVCH4Vk3n6Dix4JFsLvrETFnwv0eYvNyNSrtAGhGQ4Gr60
-         bZmStXDoVlNiIpPRsA0FsjH+N9/nehB+cfdg5c1mKdeg+qC4Edz/60HjASE16NeleiLT
-         +7EZBZ6PVkRalXHBLxcLOi/4FazsErv4kDBJ+jQyl81K5Zk7PBTw/zxsiVRj7YykbLBZ
-         SX7lRHBLDyU/37xydQ6Pg7bdshHGOpj6nsKVnk5QHuG8Naa7v3u16vmD7DqdtvRNKXLG
-         MEZA==
-X-Gm-Message-State: AOAM533CGLa6a+sqnoII1DIwKt8wSR4022hEfFytfV99lIU5/kiQj8ae
-        xsa4J4O4Q3zrCvmXDRH+kDJO4OEjmNGnl6fzI7fyVQ==
-X-Google-Smtp-Source: ABdhPJxVpL2PQx+AgSySngZI+BlVg6NFrXTzDO1PwtIfv6Pv3OB5iSbleqV1dzuEG1n5MNZRvyfIOcLrwDdpBo0+1t8=
-X-Received: by 2002:a19:4853:: with SMTP id v80mr4964941lfa.125.1598491190269;
- Wed, 26 Aug 2020 18:19:50 -0700 (PDT)
+        bh=eaAhVe9NZ1R5g2YS2CTJE0/6e8EYtB7aMqdHknvKesA=;
+        b=mpZjCcdnJpgTHIwpOUJXDV+0axZ4thmIl5mWVdhzEAbcv+bpAN7cV+d9ldJQhwGDo5
+         j17PDoxuM8YNFGBbS9RD7HQpAZR828PgO1mDBcQxRgGijG8bk60qfLGCXvlwcxqu+iyV
+         dxI8hGTgIbLVVIt7jaLlfBmfvvjA1JJLeWyaUlQnm0u5BFDZRXq1OeY9ZNFCD8WTfgAO
+         9VmT4Mv0fpclBGt9QD2Vyp3Shqz9gW5RxMn3qKN1bSeFig5yoe+15v2mw9e//Fv0xHcV
+         YitMZ3kavVQF+jdkDj4fkMV00Hv2bHYTh1PrJ2HWpIVkN4npRuUqUXrdi9EC1mMxhsZ/
+         LnvQ==
+X-Gm-Message-State: AOAM530Xjw2pi/VoO2lh9Fq+0CfKkEm5QdvaP4PkRl5uJZz86Lf87RMY
+        EgsIETdWjPGEpIIG3uHzf9BwJhADW3uS04jlbLo1kliaAi0=
+X-Google-Smtp-Source: ABdhPJxgDGcNP9DxOQTWxsXv8cwD05YmMvT1hmUzl2euif9r0/9glXhCkah+fd374MAxguSaIYX9w6tni5KTkeihFKQ=
+X-Received: by 2002:a2e:5d8:: with SMTP id 207mr7665336ljf.58.1598491458086;
+ Wed, 26 Aug 2020 18:24:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200821150134.2581465-1-guro@fb.com> <20200821150134.2581465-5-guro@fb.com>
-In-Reply-To: <20200821150134.2581465-5-guro@fb.com>
+References: <20200821150134.2581465-1-guro@fb.com> <20200821150134.2581465-6-guro@fb.com>
+In-Reply-To: <20200821150134.2581465-6-guro@fb.com>
 From:   Shakeel Butt <shakeelb@google.com>
-Date:   Wed, 26 Aug 2020 18:19:39 -0700
-Message-ID: <CALvZod79Z114rHPpq7nvCJ2rkLYiV8EEH-WEMXAPB9yyAH3WEQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 04/30] bpf: refine memcg-based memory
- accounting for arraymap maps
+Date:   Wed, 26 Aug 2020 18:24:07 -0700
+Message-ID: <CALvZod5Fb50fVSC9XaYyQ3awjYU8sc4-VYh66z4U__v5Pfxd8w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 05/30] bpf: refine memcg-based memory
+ accounting for cpumap maps
 To:     Roman Gushchin <guro@fb.com>
 Cc:     bpf@vger.kernel.org, netdev <netdev@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -78,46 +77,9 @@ X-Mailing-List: bpf@vger.kernel.org
 
 On Fri, Aug 21, 2020 at 8:11 AM Roman Gushchin <guro@fb.com> wrote:
 >
-> Include percpu arrays and auxiliary data into the memcg-based memory
-> accounting.
+> Include metadata and percpu data into the memcg-based memory accounting.
 >
 > Signed-off-by: Roman Gushchin <guro@fb.com>
 > Acked-by: Song Liu <songliubraving@fb.com>
-> ---
->  kernel/bpf/arraymap.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-> index 8ff419b632a6..9597fecff8da 100644
-> --- a/kernel/bpf/arraymap.c
-> +++ b/kernel/bpf/arraymap.c
-> @@ -28,12 +28,12 @@ static void bpf_array_free_percpu(struct bpf_array *array)
->
->  static int bpf_array_alloc_percpu(struct bpf_array *array)
->  {
-> +       const gfp_t gfp = GFP_USER | __GFP_NOWARN | __GFP_ACCOUNT;
->         void __percpu *ptr;
->         int i;
->
->         for (i = 0; i < array->map.max_entries; i++) {
-> -               ptr = __alloc_percpu_gfp(array->elem_size, 8,
-> -                                        GFP_USER | __GFP_NOWARN);
-> +               ptr = __alloc_percpu_gfp(array->elem_size, 8, gfp);
->                 if (!ptr) {
->                         bpf_array_free_percpu(array);
->                         return -ENOMEM;
-> @@ -969,7 +969,7 @@ static struct bpf_map *prog_array_map_alloc(union bpf_attr *attr)
->         struct bpf_array_aux *aux;
->         struct bpf_map *map;
->
-> -       aux = kzalloc(sizeof(*aux), GFP_KERNEL);
-> +       aux = kzalloc(sizeof(*aux), GFP_KERNEL_ACCOUNT);
->         if (!aux)
->                 return ERR_PTR(-ENOMEM);
->
 
-There are a couple other allocations in the file. Can you please
-comment why those are fine without __GFP_ACCOUNT flag. One seems to be
-iterator allocation which should be temporary and fine without
-__GFP_ACCOUNT but what about the ones in prog_array_map_poke_track()
-and bpf_event_entry_gen()?
+Reviewed-by: Shakeel Butt <shakeelb@google.com>
