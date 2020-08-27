@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF14AC433DF
-	for <bpf@archiver.kernel.org>; Thu, 27 Aug 2020 15:38:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADB11C433E4
+	for <bpf@archiver.kernel.org>; Thu, 27 Aug 2020 15:38:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A96772177B
-	for <bpf@archiver.kernel.org>; Thu, 27 Aug 2020 15:38:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A7312177B
+	for <bpf@archiver.kernel.org>; Thu, 27 Aug 2020 15:38:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="udLJOSUb"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="l8oxS2MI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726938AbgH0PiM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 27 Aug 2020 11:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
+        id S1726009AbgH0PiP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 27 Aug 2020 11:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727099AbgH0PiK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 27 Aug 2020 11:38:10 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC66FC061264
-        for <bpf@vger.kernel.org>; Thu, 27 Aug 2020 08:38:09 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id a21so8292885ejp.0
-        for <bpf@vger.kernel.org>; Thu, 27 Aug 2020 08:38:09 -0700 (PDT)
+        with ESMTP id S1726995AbgH0PiN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 27 Aug 2020 11:38:13 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107B2C06121B
+        for <bpf@vger.kernel.org>; Thu, 27 Aug 2020 08:38:13 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id a21so8293131ejp.0
+        for <bpf@vger.kernel.org>; Thu, 27 Aug 2020 08:38:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=BgezLxNLD39j7OqPZk7tsI5umtS3vpaKa0Ky+SbavLg=;
-        b=udLJOSUbiqa0OlKm1uFZhw/KRHP+llMVqKJIOEwvuF1DdwEbzQbMqG2Huh+Q99d95Y
-         qOyRw/L9YEzZxqp1pU5AMKjxEHc86jWCD1O8Sl8cd7ALiX8135VeXG8AZDTgHM2NKFLT
-         oMU6fJNUaMF3k/tbKBqiv/M/Y39izTvo0Wc1mpAQiFy+mn1gXOh+ekYmnOiKQ+7GvCV2
-         Xr79U8fJV1rGf5eacQu4Q1LINWRv+xzM+2Xwv9ORV/UWxzK0TgcIl+ojGOyLEDPN/eHs
-         uTB5wSmbTxgiGjFLImcuomPc9CPi+TpDZl9UINptIJrxQp7UARn6dC5RYoFkBCCbzRK/
-         kzQA==
+        bh=v0FgighIwdmM/GwCv8tksYLJpYPYvU6sl0BqpPn2H6s=;
+        b=l8oxS2MIS5ymcvd2DzvHjvFpQCZU7T1S1yljxP0yRdqoNskUq0gjLFybxd/ySXAyaN
+         B1q+RikCsT72yE6bGRemR99UjziVE/8Lq75KmnPGpkCsYJh1/ecM9droa9WegRMj6P65
+         Niie3+may9hLnssUX9Qk5zgjUnTYB7jBha/AB+3UwF8hegdXW9YFt0wf0n3mGTtOlpjC
+         YNHbK0ZwgBTO6XmQOzWiD1gl9FaJ8Y6rWm5mEIxpRnOJx7rf0d/D0mzb/hEaKG4zCVVX
+         +pYxhLo4KHd3t9yo/TyStaLgLPgWEvTFtK1LnPWvzz/GoIVAd8wV64xA7wyb+1LU5Sf1
+         /JIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=BgezLxNLD39j7OqPZk7tsI5umtS3vpaKa0Ky+SbavLg=;
-        b=OfYYCBZqU5/g4h3ttOhlo8LKSS0WromnSMf6Oov55Occu/34iko53F2t8DnO4G0MaF
-         dLG8hI82PvZLlBj2v90pYlPZDF/rmnULGudVfCcoWRnS21p7KtjLJryQ07nraK4pQ3Bq
-         LMHdtwdY2+fnbKkCe6MRqWsyPX0zXDUvxDsFRl3lgaGpybPRLOqLsaWocPQ1LVocE7OA
-         t4GeU6mfwpBmHtLVBdoZ74/bsh+9hABDVw49+C23Ovno0OOu9JAU51SS1hxgSB2OHNfc
-         9cV/whnk2qsZpHDtsmMULIb4UkQRQaWQrZXuuKhd7FhhdyZPugBb1xgO6VFc7NK9b9oM
-         KUXg==
-X-Gm-Message-State: AOAM530fhoSxz0MpuDAUYCaTIRp/Iz7zT5UtIE5RRdTqqrqKAvaAiLyH
-        BpOBp3VOA2cJK/9VF619/iqvOw==
-X-Google-Smtp-Source: ABdhPJwPnAu6GxEtbvkmBsYYlq37s7S/b+SLfP/dnWOFbAPo+CfGLMLoumhTbTjwqhD7uD2j9lvR6w==
-X-Received: by 2002:a17:906:f8ce:: with SMTP id lh14mr13610883ejb.89.1598542688455;
-        Thu, 27 Aug 2020 08:38:08 -0700 (PDT)
+        bh=v0FgighIwdmM/GwCv8tksYLJpYPYvU6sl0BqpPn2H6s=;
+        b=ShxOEqv8u6t4+ODteJudyK5zh7fyAbKE3uk43CJNHBaG09KuK5SdO71ZavEtdweJjg
+         xf7jsp1hDbieOVNOoJoNBIExGEE/Lkw9bKAlDoYxci7oTHpmrYOM4g/Zv/6WWAzVTdxp
+         1azQBm4dp6i9OsLHURSWHbtzbbZ0Zn1R4KvJW6UGUbMOViUPEsyuxRrm2W2yCteStPRF
+         OdGHdjUGAUNjlyuxwLVJ+6e6xtTZMl1/cL0cZqoVmdEJthEVHV2hM5ADySfNtZ2LKt+P
+         r12AC4ZWlZGaY6Xe0vzH1utJ4fxECTLKZxhrdHOArN6jeFOO5KXg+xAuLBOP/Rq+xrpw
+         uUMQ==
+X-Gm-Message-State: AOAM532LS4BXWRLHiYbFuEkodhJ0L/WvFAiHGwMGFYC6whWF8GoVnQIE
+        WgRFV4ijW1PlmUqMR0lGaMFx0g==
+X-Google-Smtp-Source: ABdhPJwyQCaAezpLu/msj4Wm8kAo6W6LLXcDXbhHWJsOLToMqCuFqw2GWb8nAUs7Z/NrJdmFc5gxow==
+X-Received: by 2002:a17:906:1719:: with SMTP id c25mr22440976eje.487.1598542691776;
+        Thu, 27 Aug 2020 08:38:11 -0700 (PDT)
 Received: from localhost.localdomain ([2001:1715:4e26:a7e0:116c:c27a:3e7f:5eaf])
-        by smtp.gmail.com with ESMTPSA id i25sm1765616edt.1.2020.08.27.08.38.07
+        by smtp.gmail.com with ESMTPSA id i25sm1765616edt.1.2020.08.27.08.38.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Aug 2020 08:38:07 -0700 (PDT)
+        Thu, 27 Aug 2020 08:38:11 -0700 (PDT)
 From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
 To:     ast@kernel.org, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, kafai@fb.com, songliubraving@fb.com,
         yhs@fb.com, andriin@fb.com, john.fastabend@gmail.com,
         kpsingh@chromium.org,
         Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH bpf-next 3/6] tools/bpftool: Fix cross-build
-Date:   Thu, 27 Aug 2020 17:36:27 +0200
-Message-Id: <20200827153629.3820891-4-jean-philippe@linaro.org>
+Subject: [PATCH bpf-next 6/6] tools/runqslower: Build bpftool using HOSTCC
+Date:   Thu, 27 Aug 2020 17:36:30 +0200
+Message-Id: <20200827153629.3820891-7-jean-philippe@linaro.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200827153629.3820891-1-jean-philippe@linaro.org>
 References: <20200827153629.3820891-1-jean-philippe@linaro.org>
@@ -76,112 +76,30 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpftool build first creates an intermediate binary, executed on the
-host, to generate skeletons required by the final build. When
-cross-building bpftool for an architecture different from the host, the
-intermediate binary should be built using the host compiler (gcc) and
-the final bpftool using the cross compiler (e.g. aarch64-linux-gnu-gcc).
-
-Generate the intermediate objects into the bootstrap/ directory using
-the host toolchain.
+When cross building runqslower for an other architecture, the
+intermediate bpftool used to generate a skeleton must be built using the
+host toolchain. Pass HOSTCC and HOSTLD, defined in Makefile.include, to
+the bpftool Makefile.
 
 Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 ---
- tools/bpf/bpftool/Makefile | 32 +++++++++++++++++++++++++-------
- 1 file changed, 25 insertions(+), 7 deletions(-)
+ tools/bpf/runqslower/Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 26a0006f329d..383489b5173a 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -19,24 +19,36 @@ BPF_DIR = $(srctree)/tools/lib/bpf/
- ifneq ($(OUTPUT),)
-   LIBBPF_OUTPUT = $(OUTPUT)/libbpf/
-   LIBBPF_PATH = $(LIBBPF_OUTPUT)
-+  BOOTSTRAP_OUTPUT = $(OUTPUT)/bootstrap/
- else
-   LIBBPF_PATH = $(BPF_DIR)
-+  BOOTSTRAP_OUTPUT = $(CURDIR)/bootstrap/
- endif
+diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
+index 861f4dcde960..fa5c18b70dd0 100644
+--- a/tools/bpf/runqslower/Makefile
++++ b/tools/bpf/runqslower/Makefile
+@@ -85,7 +85,8 @@ $(BPFOBJ)-clean: $(BPFOBJ_OUTPUT)
+ 	$(Q)$(MAKE) -C $(LIBBPF_SRC) OUTPUT=$(BPFOBJ_OUTPUT) clean
  
- LIBBPF = $(LIBBPF_PATH)libbpf.a
-+LIBBPF_BOOTSTRAP_OUTPUT = $(BOOTSTRAP_OUTPUT)libbpf/
-+LIBBPF_BOOTSTRAP = $(LIBBPF_BOOTSTRAP_OUTPUT)libbpf.a
+ $(DEFAULT_BPFTOOL): | $(BPFTOOL_OUTPUT)
+-	$(Q)$(MAKE) $(submake_extras) -C ../bpftool OUTPUT=$(BPFTOOL_OUTPUT)
++	$(Q)$(MAKE) $(submake_extras) -C ../bpftool OUTPUT=$(BPFTOOL_OUTPUT)   \
++		    CC=$(HOSTCC) LD=$(HOSTLD)
  
- BPFTOOL_VERSION := $(shell make -rR --no-print-directory -sC ../../.. kernelversion)
- 
--$(LIBBPF_OUTPUT):
-+$(LIBBPF_OUTPUT) $(BOOTSTRAP_OUTPUT) $(LIBBPF_BOOTSTRAP_OUTPUT):
- 	$(QUIET_MKDIR)mkdir -p $@
- 
- $(LIBBPF): FORCE | $(LIBBPF_OUTPUT)
- 	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_OUTPUT) $(LIBBPF_OUTPUT)libbpf.a
- 
-+$(LIBBPF_BOOTSTRAP): FORCE | $(LIBBPF_BOOTSTRAP_OUTPUT)
-+	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_BOOTSTRAP_OUTPUT) \
-+		ARCH= CC=$(HOSTCC) LD=$(HOSTLD) $@
-+
- $(LIBBPF)-clean: $(LIBBPF_OUTPUT)
- 	$(call QUIET_CLEAN, libbpf)
- 	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_OUTPUT) clean >/dev/null
- 
-+$(LIBBPF_BOOTSTRAP)-clean: $(LIBBPF_BOOTSTRAP_OUTPUT)
-+	$(call QUIET_CLEAN, libbpf-bootstrap)
-+	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_BOOTSTRAP_OUTPUT) clean >/dev/null
-+
- prefix ?= /usr/local
- bash_compdir ?= /usr/share/bash-completion/completions
- 
-@@ -94,6 +106,7 @@ CFLAGS += -DCOMPAT_NEED_REALLOCARRAY
- endif
- 
- LIBS = $(LIBBPF) -lelf -lz
-+LIBS_BOOTSTRAP = $(LIBBPF_BOOTSTRAP) -lelf -lz
- ifeq ($(feature-libcap), 1)
- CFLAGS += -DUSE_LIBCAP
- LIBS += -lcap
-@@ -120,9 +133,9 @@ CFLAGS += -DHAVE_LIBBFD_SUPPORT
- SRCS += $(BFD_SRCS)
- endif
- 
--BPFTOOL_BOOTSTRAP := $(if $(OUTPUT),$(OUTPUT)bpftool-bootstrap,./bpftool-bootstrap)
-+BPFTOOL_BOOTSTRAP := $(BOOTSTRAP_OUTPUT)bpftool
- 
--BOOTSTRAP_OBJS = $(addprefix $(OUTPUT),main.o common.o json_writer.o gen.o btf.o)
-+BOOTSTRAP_OBJS = $(addprefix $(BOOTSTRAP_OUTPUT),main.o common.o json_writer.o gen.o btf.o)
- OBJS = $(patsubst %.c,$(OUTPUT)%.o,$(SRCS)) $(OUTPUT)disasm.o
- 
- VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)				\
-@@ -169,20 +182,25 @@ $(OUTPUT)disasm.o: $(srctree)/kernel/bpf/disasm.c
- 
- $(OUTPUT)feature.o: | zdep
- 
--$(BPFTOOL_BOOTSTRAP): $(BOOTSTRAP_OBJS) $(LIBBPF)
--	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(BOOTSTRAP_OBJS) $(LIBS)
-+$(BPFTOOL_BOOTSTRAP): $(BOOTSTRAP_OBJS) $(LIBBPF_BOOTSTRAP)
-+	$(QUIET_LINK)$(HOSTCC) $(CFLAGS) $(LDFLAGS) -o $@ $(BOOTSTRAP_OBJS) \
-+		$(LIBS_BOOTSTRAP)
- 
- $(OUTPUT)bpftool: $(OBJS) $(LIBBPF)
- 	$(QUIET_LINK)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(OBJS) $(LIBS)
- 
-+$(BOOTSTRAP_OUTPUT)%.o: %.c | $(BOOTSTRAP_OUTPUT)
-+	$(QUIET_CC)$(HOSTCC) $(CFLAGS) -c -MMD -o $@ $<
-+
- $(OUTPUT)%.o: %.c
- 	$(QUIET_CC)$(CC) $(CFLAGS) -c -MMD -o $@ $<
- 
--clean: $(LIBBPF)-clean
-+clean: $(LIBBPF)-clean $(LIBBPF_BOOTSTRAP)-clean
- 	$(call QUIET_CLEAN, bpftool)
- 	$(Q)$(RM) -- $(OUTPUT)bpftool $(OUTPUT)*.o $(OUTPUT)*.d
--	$(Q)$(RM) -- $(BPFTOOL_BOOTSTRAP) $(OUTPUT)*.skel.h $(OUTPUT)vmlinux.h
-+	$(Q)$(RM) -- $(OUTPUT)*.skel.h $(OUTPUT)vmlinux.h
- 	$(Q)$(RM) -r -- $(OUTPUT)libbpf/
-+	$(Q)$(RM) -r -- $(BOOTSTRAP_OUTPUT)
- 	$(call QUIET_CLEAN, core-gen)
- 	$(Q)$(RM) -- $(OUTPUT)FEATURE-DUMP.bpftool
- 	$(Q)$(RM) -r -- $(OUTPUT)feature/
+ $(DEFAULT_BPFTOOL)-clean: $(BPFTOOL_OUTPUT)
+ ifeq ($(DEFAULT_BPFTOOL),$(BPFTOOL))
 -- 
 2.28.0
 
