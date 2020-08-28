@@ -7,219 +7,190 @@ X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80D03C433E2
-	for <bpf@archiver.kernel.org>; Fri, 28 Aug 2020 19:36:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62648C433E2
+	for <bpf@archiver.kernel.org>; Fri, 28 Aug 2020 19:36:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6108F2075B
-	for <bpf@archiver.kernel.org>; Fri, 28 Aug 2020 19:36:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4314B2075B
+	for <bpf@archiver.kernel.org>; Fri, 28 Aug 2020 19:36:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="JNfXcrsJ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="AYSFWGB0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726236AbgH1Tg1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 28 Aug 2020 15:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
+        id S1726775AbgH1Tgg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 28 Aug 2020 15:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726379AbgH1TgK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 28 Aug 2020 15:36:10 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC2EC061264
-        for <bpf@vger.kernel.org>; Fri, 28 Aug 2020 12:36:09 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id g127so298372ybf.11
-        for <bpf@vger.kernel.org>; Fri, 28 Aug 2020 12:36:09 -0700 (PDT)
+        with ESMTP id S1726464AbgH1TgO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 28 Aug 2020 15:36:14 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4FEBC061236
+        for <bpf@vger.kernel.org>; Fri, 28 Aug 2020 12:36:13 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id u128so277468ybg.17
+        for <bpf@vger.kernel.org>; Fri, 28 Aug 2020 12:36:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=tu9rQycvDFHsopcgF1sWVBo36uc1asKlJZljej9AH7o=;
-        b=JNfXcrsJfkiEjNwP0c2+O4/OWDT/PBBaJEL0UNxjmry8plnpyG3ntTpKG8u3oEJsLO
-         YKz/FVKFDdArVRXuahnKbPkL+dX7x3Ht4qOpgndVT9l7vd+DoQWXiGrbY26T3Xu3M/aa
-         fa2V9YQQcp/D4DmYs2g2OkSvW9IuGwCJpjeJZUYw3XZ6t1NPsIiNvvg+da15oOvwjpmQ
-         GTus8jXRpMiC4a07eZzmhmQwnzZ2Ddt4wyU1J6IdIv9fAABtRxwnfEqK6JmRvkL4Tda4
-         65QnT4a3Vb4uzY3bYK7yAMKmfkSMjG9Nrsc7FHReB5hvCZki7j4FEZ5G2RygSBYzJ1VF
-         KLCg==
+         :from:to:cc:content-transfer-encoding;
+        bh=ntqqP+oTxa4ovownU4E037j4DkCLhsnQeuQG8e3plIM=;
+        b=AYSFWGB0h2DV9xVaVkEI26P9ljTv1zdH+jfmkkGrSfczvU46QdPGP64IbKG5HNWTJE
+         dCVk8FL1csrb5vKbFrQ2qkmmBr1Jk82ZGpJBBMIixBCZ9GyOzs8qypRzfFUOpNm24IRo
+         R71ayaswh4D3Xv2a3Dyid+gYLiD9heFR8AcgQyKKIO3zTZDd7SSvp2SsjxNunoGkB2Sf
+         /gsyI+3tJ7PEThFvyD2NGjM+MB+zIwmn76B9MxlxMaf1ey0GJoSJz+RHztC+jQPeBh4M
+         eFbMQNy1/ImaMSRU658oZTTTEgeel0S6AGhlL3oIQ0KO91SblE4q9StCI6ZoMLIza+NV
+         DTnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=tu9rQycvDFHsopcgF1sWVBo36uc1asKlJZljej9AH7o=;
-        b=ssGg37Xz5e/ZNCBOBEjYffqZ52dZmP31Aw1JG2+MdiYc+55wAL7WT7K4VJ0yw15/x/
-         hCGRjx81/6F/KWk5HEvGz5goOFhXQDmSwgIyqw0dGhtJF8iPBKvAuK8IksauMpQF0mV8
-         TIC8MYKjjyku51DALKWkwH3MUxuFe7/k1xC+/aJcdYR8x9wof6r6lxpvnN2kf5aC3YO7
-         T4HnyGA1eWhg/kQ7NA6RIKL4ydkQKB4UXHwmXp9C5k8aQg/IVAj5PIOMZOaIvPOKn+Pg
-         gfrUz1JNcjBjBmOCnwKE5dNxoBhIhXewujRDN4iETQZR7TFazBHarhWk+SIcus9MtdFA
-         aaMw==
-X-Gm-Message-State: AOAM532FK17UYe9VgZ+36JXYvVb3GpoCezgYwCb4UgKkUkQ5K8nSxZsv
-        l8SqYM6eGbiGXRrDzTBYQ1npgjE=
-X-Google-Smtp-Source: ABdhPJzpvTUIFX4E5Amy6cqWb6cIo3TsgFzY8ls1/bpAhA4PFUMkyKP1SXUTctAwtqMVV02ubw55klU=
+         :references:subject:from:to:cc:content-transfer-encoding;
+        bh=ntqqP+oTxa4ovownU4E037j4DkCLhsnQeuQG8e3plIM=;
+        b=RV7OnwDGwwmJft2dW81BDTUUNHk+No3IalPY4qcLZj0ImmWa2jd3Z2mPCr8JUvbuZ3
+         GPTKr+ivxcWhOWviwza6ZnB7yHikJlkJrGpHz6Win0WUa6w6uYAo+rgXUsLaQ8ep28bl
+         bm7gLm2/g4PMbfyPto9W06nGoYFBh2mNDM6BTpn//sAbQ85sGpzwZz7fZiwyZ5pCGsOo
+         CaLrAr1ok+A84FMxRA22izKKBLAF7vrp94beCyC41CrMz9h4k1vlOVbeyZaD7nffigAn
+         SjABA95zeUjAAG6+FWWEmcKbmx3RHUuaBnkh6RR0p+KPk2zLuRomyGh59Spp1/Llz9oY
+         5AVw==
+X-Gm-Message-State: AOAM5315SUvl7TDeVyGnVfKrul5e2rezk7OwH6LjyxpYu9jGsZgs2LuD
+        nTsMau0kVFOstTLZigZjWNB3S40=
+X-Google-Smtp-Source: ABdhPJx1IsJHBHlIzxza1al3CcA+8QFR4gJT1AnNn6Andp0lI5xEqPTU0Sat/qun+98IJbgmrVY3GFI=
 X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:1:7220:84ff:fe09:7732])
- (user=sdf job=sendgmr) by 2002:a25:cc12:: with SMTP id l18mr4803916ybf.224.1598643369167;
- Fri, 28 Aug 2020 12:36:09 -0700 (PDT)
-Date:   Fri, 28 Aug 2020 12:35:57 -0700
+ (user=sdf job=sendgmr) by 2002:a25:1fd5:: with SMTP id f204mr4340421ybf.142.1598643373098;
+ Fri, 28 Aug 2020 12:36:13 -0700 (PDT)
+Date:   Fri, 28 Aug 2020 12:35:59 -0700
 In-Reply-To: <20200828193603.335512-1-sdf@google.com>
-Message-Id: <20200828193603.335512-3-sdf@google.com>
+Message-Id: <20200828193603.335512-5-sdf@google.com>
 Mime-Version: 1.0
 References: <20200828193603.335512-1-sdf@google.com>
 X-Mailer: git-send-email 2.28.0.402.g5ffc5be6b7-goog
-Subject: [PATCH bpf-next v3 2/8] bpf: Add BPF_PROG_BIND_MAP syscall
+Subject: [PATCH bpf-next v3 4/8] libbpf: implement bpf_prog_find_metadata
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        YiFei Zhu <zhuyifei@google.com>,
-        YiFei Zhu <zhuyifei1999@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>
+        Stanislav Fomichev <sdf@google.com>,
+        "=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?=" <toke@redhat.com>,
+        YiFei Zhu <zhuyifei1999@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: YiFei Zhu <zhuyifei@google.com>
+This is a low-level function (hence in bpf.c) to find out the metadata
+map id for the provided program fd.
+It will be used in the next commits from bpftool.
 
-This syscall binds a map to a program. -EEXIST if the map is
-already bound to the program.
-
+Cc: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 Cc: YiFei Zhu <zhuyifei1999@gmail.com>
-Signed-off-by: YiFei Zhu <zhuyifei@google.com>
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- include/uapi/linux/bpf.h       |  7 ++++
- kernel/bpf/syscall.c           | 65 ++++++++++++++++++++++++++++++++++
- tools/include/uapi/linux/bpf.h |  7 ++++
- 3 files changed, 79 insertions(+)
+ tools/lib/bpf/bpf.c      | 74 ++++++++++++++++++++++++++++++++++++++++
+ tools/lib/bpf/bpf.h      |  1 +
+ tools/lib/bpf/libbpf.map |  1 +
+ 3 files changed, 76 insertions(+)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index ef7af384f5ee..d232c71c4560 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -124,6 +124,7 @@ enum bpf_cmd {
- 	BPF_ENABLE_STATS,
- 	BPF_ITER_CREATE,
- 	BPF_LINK_DETACH,
-+	BPF_PROG_BIND_MAP,
- };
- 
- enum bpf_map_type {
-@@ -650,6 +651,12 @@ union bpf_attr {
- 		__u32		flags;
- 	} iter_create;
- 
-+	struct { /* struct used by BPF_PROG_BIND_MAP command */
-+		__u32		prog_fd;
-+		__u32		map_fd;
-+		__u32		flags;		/* extra flags */
-+	} prog_bind_map;
-+
- } __attribute__((aligned(8)));
- 
- /* The description below is an attempt at providing documentation to eBPF
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index c9b8a97fbbdf..8c1fad2826d1 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4154,6 +4154,68 @@ static int bpf_iter_create(union bpf_attr *attr)
- 	return err;
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 5f6c5676cc45..01c0ede1625d 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -885,3 +885,77 @@ int bpf_prog_bind_map(int prog_fd, int map_fd,
+=20
+ 	return sys_bpf(BPF_PROG_BIND_MAP, &attr, sizeof(attr));
  }
- 
-+#define BPF_PROG_BIND_MAP_LAST_FIELD prog_bind_map.flags
 +
-+static int bpf_prog_bind_map(union bpf_attr *attr)
++int bpf_prog_find_metadata(int prog_fd)
 +{
-+	struct bpf_prog *prog;
-+	struct bpf_map *map;
-+	struct bpf_map **used_maps_old, **used_maps_new;
-+	int i, ret = 0;
++	struct bpf_prog_info prog_info =3D {};
++	struct bpf_map_info map_info;
++	__u32 prog_info_len;
++	__u32 map_info_len;
++	int saved_errno;
++	__u32 *map_ids;
++	int nr_maps;
++	int map_fd;
++	int ret;
++	int i;
 +
-+	if (CHECK_ATTR(BPF_PROG_BIND_MAP))
-+		return -EINVAL;
++	prog_info_len =3D sizeof(prog_info);
 +
-+	if (attr->prog_bind_map.flags)
-+		return -EINVAL;
++	ret =3D bpf_obj_get_info_by_fd(prog_fd, &prog_info, &prog_info_len);
++	if (ret)
++		return ret;
 +
-+	prog = bpf_prog_get(attr->prog_bind_map.prog_fd);
-+	if (IS_ERR(prog))
-+		return PTR_ERR(prog);
++	if (!prog_info.nr_map_ids)
++		return -1;
 +
-+	map = bpf_map_get(attr->prog_bind_map.map_fd);
-+	if (IS_ERR(map)) {
-+		ret = PTR_ERR(map);
-+		goto out_prog_put;
-+	}
++	map_ids =3D calloc(prog_info.nr_map_ids, sizeof(__u32));
++	if (!map_ids)
++		return -1;
 +
-+	mutex_lock(&prog->aux->used_maps_mutex);
++	nr_maps =3D prog_info.nr_map_ids;
++	memset(&prog_info, 0, sizeof(prog_info));
++	prog_info.nr_map_ids =3D nr_maps;
++	prog_info.map_ids =3D ptr_to_u64(map_ids);
++	prog_info_len =3D sizeof(prog_info);
 +
-+	used_maps_old = prog->aux->used_maps;
++	ret =3D bpf_obj_get_info_by_fd(prog_fd, &prog_info, &prog_info_len);
++	if (ret)
++		goto free_map_ids;
 +
-+	for (i = 0; i < prog->aux->used_map_cnt; i++)
-+		if (used_maps_old[i] == map) {
-+			ret = -EEXIST;
-+			goto out_unlock;
++	ret =3D -1;
++	for (i =3D 0; i < prog_info.nr_map_ids; i++) {
++		map_fd =3D bpf_map_get_fd_by_id(map_ids[i]);
++		if (map_fd < 0) {
++			ret =3D -1;
++			goto free_map_ids;
 +		}
 +
-+	used_maps_new = kmalloc_array(prog->aux->used_map_cnt + 1,
-+				      sizeof(used_maps_new[0]),
-+				      GFP_KERNEL);
-+	if (!used_maps_new) {
-+		ret = -ENOMEM;
-+		goto out_unlock;
++		memset(&map_info, 0, sizeof(map_info));
++		map_info_len =3D sizeof(map_info);
++		ret =3D bpf_obj_get_info_by_fd(map_fd, &map_info, &map_info_len);
++		saved_errno =3D errno;
++		close(map_fd);
++		errno =3D saved_errno;
++		if (ret)
++			goto free_map_ids;
++
++		if (map_info.type !=3D BPF_MAP_TYPE_ARRAY)
++			continue;
++		if (map_info.key_size !=3D sizeof(int))
++			continue;
++		if (map_info.max_entries !=3D 1)
++			continue;
++		if (!map_info.btf_value_type_id)
++			continue;
++		if (!strstr(map_info.name, ".metadata"))
++			continue;
++
++		ret =3D map_ids[i];
++		break;
 +	}
 +
-+	memcpy(used_maps_new, used_maps_old,
-+	       sizeof(used_maps_old[0]) * prog->aux->used_map_cnt);
-+	used_maps_new[prog->aux->used_map_cnt] = map;
 +
-+	prog->aux->used_map_cnt++;
-+	prog->aux->used_maps = used_maps_new;
-+
-+	kfree(used_maps_old);
-+
-+out_unlock:
-+	mutex_unlock(&prog->aux->used_maps_mutex);
-+
-+	if (ret)
-+		bpf_map_put(map);
-+out_prog_put:
-+	bpf_prog_put(prog);
++free_map_ids:
++	free(map_ids);
 +	return ret;
 +}
-+
- SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, size)
- {
- 	union bpf_attr attr;
-@@ -4287,6 +4349,9 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
- 	case BPF_LINK_DETACH:
- 		err = link_detach(&attr);
- 		break;
-+	case BPF_PROG_BIND_MAP:
-+		err = bpf_prog_bind_map(&attr);
-+		break;
- 	default:
- 		err = -EINVAL;
- 		break;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index ef7af384f5ee..d232c71c4560 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -124,6 +124,7 @@ enum bpf_cmd {
- 	BPF_ENABLE_STATS,
- 	BPF_ITER_CREATE,
- 	BPF_LINK_DETACH,
-+	BPF_PROG_BIND_MAP,
- };
- 
- enum bpf_map_type {
-@@ -650,6 +651,12 @@ union bpf_attr {
- 		__u32		flags;
- 	} iter_create;
- 
-+	struct { /* struct used by BPF_PROG_BIND_MAP command */
-+		__u32		prog_fd;
-+		__u32		map_fd;
-+		__u32		flags;		/* extra flags */
-+	} prog_bind_map;
-+
- } __attribute__((aligned(8)));
- 
- /* The description below is an attempt at providing documentation to eBPF
--- 
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 8c1ac4b42f90..8982ffa7cfd2 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -251,6 +251,7 @@ struct bpf_prog_bind_opts {
+=20
+ LIBBPF_API int bpf_prog_bind_map(int prog_fd, int map_fd,
+ 				 const struct bpf_prog_bind_opts *opts);
++LIBBPF_API int bpf_prog_find_metadata(int prog_fd);
+ #ifdef __cplusplus
+ } /* extern "C" */
+ #endif
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 529b99c0c2c3..b7a40f543b2b 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -307,4 +307,5 @@ LIBBPF_0.2.0 {
+ 		perf_buffer__buffer_fd;
+ 		perf_buffer__epoll_fd;
+ 		perf_buffer__consume_buffer;
++		bpf_prog_find_metadata;
+ } LIBBPF_0.1.0;
+--=20
 2.28.0.402.g5ffc5be6b7-goog
 
