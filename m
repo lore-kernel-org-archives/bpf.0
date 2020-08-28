@@ -7,34 +7,34 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C7AFC433E2
-	for <bpf@archiver.kernel.org>; Fri, 28 Aug 2020 08:27:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DEF7FC433E6
+	for <bpf@archiver.kernel.org>; Fri, 28 Aug 2020 08:28:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F3D8A20776
-	for <bpf@archiver.kernel.org>; Fri, 28 Aug 2020 08:27:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B1C0120776
+	for <bpf@archiver.kernel.org>; Fri, 28 Aug 2020 08:28:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728745AbgH1I1r (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 28 Aug 2020 04:27:47 -0400
-Received: from mga03.intel.com ([134.134.136.65]:23546 "EHLO mga03.intel.com"
+        id S1728509AbgH1I2D (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 28 Aug 2020 04:28:03 -0400
+Received: from mga03.intel.com ([134.134.136.65]:23538 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728715AbgH1I1a (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 28 Aug 2020 04:27:30 -0400
-IronPort-SDR: vcJasqLb5eRW1MqCT0E4DJhvlam6vVcKT+oYvH6SuP8VO1cE59joJ1UpvH93Ar13Mphz0GXdDe
- 5wj7TWyTTfuQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9726"; a="156634013"
+        id S1728581AbgH1I1t (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 28 Aug 2020 04:27:49 -0400
+IronPort-SDR: 2g7loLEuyJeryPQV2CvLCJUdr1XTr9VT2v219dVzqhQoSdAKCcrgO5z2+dLXw5+7KWuUF3BGKt
+ DA9+mUDTEK+Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9726"; a="156634061"
 X-IronPort-AV: E=Sophos;i="5.76,363,1592895600"; 
-   d="scan'208";a="156634013"
+   d="scan'208";a="156634061"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2020 01:27:11 -0700
-IronPort-SDR: r+MoDDE1zIgsVXCGdeJKzMQrL7s+IcpntuSQ2rt4kRfBOqXQOuV8CgGjshNZuvil4e67jopfaV
- KPe3Rq0jYn2A==
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2020 01:27:39 -0700
+IronPort-SDR: zqyjrOcXGB2TfwMYHevhvO+TaQxu2RdIOBVnD9fVT4DXg4UOsnbakOO0MwgiZtIMaNB6dC7bd7
+ cB/oOfnmXb+Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,363,1592895600"; 
-   d="scan'208";a="444762736"
+   d="scan'208";a="444762930"
 Received: from mkarlsso-mobl.ger.corp.intel.com (HELO localhost.localdomain) ([10.249.36.33])
-  by orsmga004.jf.intel.com with ESMTP; 28 Aug 2020 01:27:07 -0700
+  by orsmga004.jf.intel.com with ESMTP; 28 Aug 2020 01:27:36 -0700
 From:   Magnus Karlsson <magnus.karlsson@intel.com>
 To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
@@ -42,9 +42,9 @@ To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
 Cc:     bpf@vger.kernel.org, jeffrey.t.kirsher@intel.com,
         anthony.l.nguyen@intel.com, maciej.fijalkowski@intel.com,
         maciejromanfijalkowski@gmail.com, cristian.dumitrescu@intel.com
-Subject: [PATCH bpf-next v5 08/15] xsk: enable sharing of dma mappings
-Date:   Fri, 28 Aug 2020 10:26:22 +0200
-Message-Id: <1598603189-32145-9-git-send-email-magnus.karlsson@intel.com>
+Subject: [PATCH bpf-next v5 15/15] xsk: documentation for XDP_SHARED_UMEM between queues and netdevs
+Date:   Fri, 28 Aug 2020 10:26:29 +0200
+Message-Id: <1598603189-32145-16-git-send-email-magnus.karlsson@intel.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1598603189-32145-1-git-send-email-magnus.karlsson@intel.com>
 References: <1598603189-32145-1-git-send-email-magnus.karlsson@intel.com>
@@ -56,340 +56,119 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Enable the sharing of dma mappings by moving them out from the buffer
-pool. Instead we put each dma mapped umem region in a list in the umem
-structure. If dma has already been mapped for this umem and device, it
-is not mapped again and the existing dma mappings are reused.
+Add documentation for the XDP_SHARED_UMEM feature when a UMEM is
+shared between different queues and/or netdevs.
 
 Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
 Acked-by: Björn Töpel <bjorn.topel@intel.com>
 ---
- include/net/xdp_sock.h      |   1 +
- include/net/xsk_buff_pool.h |  13 ++++
- net/xdp/xdp_umem.c          |   1 +
- net/xdp/xsk_buff_pool.c     | 183 ++++++++++++++++++++++++++++++++++----------
- 4 files changed, 156 insertions(+), 42 deletions(-)
+ Documentation/networking/af_xdp.rst | 68 +++++++++++++++++++++++++++++++------
+ 1 file changed, 58 insertions(+), 10 deletions(-)
 
-diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-index 126d243..282aeba 100644
---- a/include/net/xdp_sock.h
-+++ b/include/net/xdp_sock.h
-@@ -30,6 +30,7 @@ struct xdp_umem {
- 	u8 flags;
- 	int id;
- 	bool zc;
-+	struct list_head xsk_dma_list;
- };
+diff --git a/Documentation/networking/af_xdp.rst b/Documentation/networking/af_xdp.rst
+index 5bc55a4..2ccc564 100644
+--- a/Documentation/networking/af_xdp.rst
++++ b/Documentation/networking/af_xdp.rst
+@@ -258,14 +258,21 @@ socket into zero-copy mode or fail.
+ XDP_SHARED_UMEM bind flag
+ -------------------------
  
- struct xsk_map {
-diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-index 83f100c..356d0ac 100644
---- a/include/net/xsk_buff_pool.h
-+++ b/include/net/xsk_buff_pool.h
-@@ -28,10 +28,23 @@ struct xdp_buff_xsk {
- 	struct list_head free_list_node;
- };
+-This flag enables you to bind multiple sockets to the same UMEM, but
+-only if they share the same queue id. In this mode, each socket has
+-their own RX and TX rings, but the UMEM (tied to the fist socket
+-created) only has a single FILL ring and a single COMPLETION
+-ring. To use this mode, create the first socket and bind it in the normal
+-way. Create a second socket and create an RX and a TX ring, or at
+-least one of them, but no FILL or COMPLETION rings as the ones from
+-the first socket will be used. In the bind call, set he
++This flag enables you to bind multiple sockets to the same UMEM. It
++works on the same queue id, between queue ids and between
++netdevs/devices. In this mode, each socket has their own RX and TX
++rings as usual, but you are going to have one or more FILL and
++COMPLETION ring pairs. You have to create one of these pairs per
++unique netdev and queue id tuple that you bind to.
++
++Starting with the case were we would like to share a UMEM between
++sockets bound to the same netdev and queue id. The UMEM (tied to the
++fist socket created) will only have a single FILL ring and a single
++COMPLETION ring as there is only on unique netdev,queue_id tuple that
++we have bound to. To use this mode, create the first socket and bind
++it in the normal way. Create a second socket and create an RX and a TX
++ring, or at least one of them, but no FILL or COMPLETION rings as the
++ones from the first socket will be used. In the bind call, set he
+ XDP_SHARED_UMEM option and provide the initial socket's fd in the
+ sxdp_shared_umem_fd field. You can attach an arbitrary number of extra
+ sockets this way.
+@@ -305,11 +312,41 @@ concurrently. There are no synchronization primitives in the
+ libbpf code that protects multiple users at this point in time.
  
-+struct xsk_dma_map {
-+	dma_addr_t *dma_pages;
-+	struct device *dev;
-+	struct net_device *netdev;
-+	refcount_t users;
-+	struct list_head list; /* Protected by the RTNL_LOCK */
-+	u32 dma_pages_cnt;
-+	bool dma_need_sync;
-+};
-+
- struct xsk_buff_pool {
- 	struct xsk_queue *fq;
- 	struct xsk_queue *cq;
- 	struct list_head free_list;
-+	/* For performance reasons, each buff pool has its own array of dma_pages
-+	 * even when they are identical.
-+	 */
- 	dma_addr_t *dma_pages;
- 	struct xdp_buff_xsk *heads;
- 	u64 chunk_mask;
-diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-index 77604c3..a7227b4 100644
---- a/net/xdp/xdp_umem.c
-+++ b/net/xdp/xdp_umem.c
-@@ -198,6 +198,7 @@ static int xdp_umem_reg(struct xdp_umem *umem, struct xdp_umem_reg *mr)
- 	umem->user = NULL;
- 	umem->flags = mr->flags;
+ Libbpf uses this mode if you create more than one socket tied to the
+-same umem. However, note that you need to supply the
++same UMEM. However, note that you need to supply the
+ XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD libbpf_flag with the
+ xsk_socket__create calls and load your own XDP program as there is no
+ built in one in libbpf that will route the traffic for you.
  
-+	INIT_LIST_HEAD(&umem->xsk_dma_list);
- 	refcount_set(&umem->users, 1);
++The second case is when you share a UMEM between sockets that are
++bound to different queue ids and/or netdevs. In this case you have to
++create one FILL ring and one COMPLETION ring for each unique
++netdev,queue_id pair. Let us say you want to create two sockets bound
++to two different queue ids on the same netdev. Create the first socket
++and bind it in the normal way. Create a second socket and create an RX
++and a TX ring, or at least one of them, and then one FILL and
++COMPLETION ring for this socket. Then in the bind call, set he
++XDP_SHARED_UMEM option and provide the initial socket's fd in the
++sxdp_shared_umem_fd field as you registered the UMEM on that
++socket. These two sockets will now share one and the same UMEM.
++
++There is no need to supply an XDP program like the one in the previous
++case where sockets were bound to the same queue id and
++device. Instead, use the NIC's packet steering capabilities to steer
++the packets to the right queue. In the previous example, there is only
++one queue shared among sockets, so the NIC cannot do this steering. It
++can only steer between queues.
++
++In libbpf, you need to use the xsk_socket__create_shared() API as it
++takes a reference to a FILL ring and a COMPLETION ring that will be
++created for you and bound to the shared UMEM. You can use this
++function for all the sockets you create, or you can use it for the
++second and following ones and use xsk_socket__create() for the first
++one. Both methods yield the same result.
++
++Note that a UMEM can be shared between sockets on the same queue id
++and device, as well as between queues on the same device and between
++devices at the same time.
++
+ XDP_USE_NEED_WAKEUP bind flag
+ -----------------------------
  
- 	err = xdp_umem_account_pages(umem);
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index c563874..547eb41 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -104,6 +104,25 @@ void xp_set_rxq_info(struct xsk_buff_pool *pool, struct xdp_rxq_info *rxq)
- }
- EXPORT_SYMBOL(xp_set_rxq_info);
+@@ -364,7 +401,7 @@ resources by only setting up one of them. Both the FILL ring and the
+ COMPLETION ring are mandatory as you need to have a UMEM tied to your
+ socket. But if the XDP_SHARED_UMEM flag is used, any socket after the
+ first one does not have a UMEM and should in that case not have any
+-FILL or COMPLETION rings created as the ones from the shared umem will
++FILL or COMPLETION rings created as the ones from the shared UMEM will
+ be used. Note, that the rings are single-producer single-consumer, so
+ do not try to access them from multiple processes at the same
+ time. See the XDP_SHARED_UMEM section.
+@@ -567,6 +604,17 @@ A: The short answer is no, that is not supported at the moment. The
+    switch, or other distribution mechanism, in your NIC to direct
+    traffic to the correct queue id and socket.
  
-+static void xp_disable_drv_zc(struct xsk_buff_pool *pool)
-+{
-+	struct netdev_bpf bpf;
-+	int err;
++Q: My packets are sometimes corrupted. What is wrong?
 +
-+	ASSERT_RTNL();
++A: Care has to be taken not to feed the same buffer in the UMEM into
++   more than one ring at the same time. If you for example feed the
++   same buffer into the FILL ring and the TX ring at the same time, the
++   NIC might receive data into the buffer at the same time it is
++   sending it. This will cause some packets to become corrupted. Same
++   thing goes for feeding the same buffer into the FILL rings
++   belonging to different queue ids or netdevs bound with the
++   XDP_SHARED_UMEM flag.
 +
-+	if (pool->umem->zc) {
-+		bpf.command = XDP_SETUP_XSK_POOL;
-+		bpf.xsk.pool = NULL;
-+		bpf.xsk.queue_id = pool->queue_id;
-+
-+		err = pool->netdev->netdev_ops->ndo_bpf(pool->netdev, &bpf);
-+
-+		if (err)
-+			WARN(1, "Failed to disable zero-copy!\n");
-+	}
-+}
-+
- int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *netdev,
- 		  u16 queue_id, u16 flags)
- {
-@@ -122,6 +141,8 @@ int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *netdev,
- 	if (xsk_get_pool_from_qid(netdev, queue_id))
- 		return -EBUSY;
+ Credits
+ =======
  
-+	pool->netdev = netdev;
-+	pool->queue_id = queue_id;
- 	err = xsk_reg_pool_at_qid(netdev, pool, queue_id);
- 	if (err)
- 		return err;
-@@ -155,11 +176,15 @@ int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *netdev,
- 	if (err)
- 		goto err_unreg_pool;
- 
--	pool->netdev = netdev;
--	pool->queue_id = queue_id;
-+	if (!pool->dma_pages) {
-+		WARN(1, "Driver did not DMA map zero-copy buffers");
-+		goto err_unreg_xsk;
-+	}
- 	pool->umem->zc = true;
- 	return 0;
- 
-+err_unreg_xsk:
-+	xp_disable_drv_zc(pool);
- err_unreg_pool:
- 	if (!force_zc)
- 		err = 0; /* fallback to copy mode */
-@@ -170,25 +195,10 @@ int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *netdev,
- 
- void xp_clear_dev(struct xsk_buff_pool *pool)
- {
--	struct netdev_bpf bpf;
--	int err;
--
--	ASSERT_RTNL();
--
- 	if (!pool->netdev)
- 		return;
- 
--	if (pool->umem->zc) {
--		bpf.command = XDP_SETUP_XSK_POOL;
--		bpf.xsk.pool = NULL;
--		bpf.xsk.queue_id = pool->queue_id;
--
--		err = pool->netdev->netdev_ops->ndo_bpf(pool->netdev, &bpf);
--
--		if (err)
--			WARN(1, "Failed to disable zero-copy!\n");
--	}
--
-+	xp_disable_drv_zc(pool);
- 	xsk_clear_pool_at_qid(pool->netdev, pool->queue_id);
- 	dev_put(pool->netdev);
- 	pool->netdev = NULL;
-@@ -233,70 +243,159 @@ void xp_put_pool(struct xsk_buff_pool *pool)
- 	}
- }
- 
--void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
-+static struct xsk_dma_map *xp_find_dma_map(struct xsk_buff_pool *pool)
-+{
-+	struct xsk_dma_map *dma_map;
-+
-+	list_for_each_entry(dma_map, &pool->umem->xsk_dma_list, list) {
-+		if (dma_map->netdev == pool->netdev)
-+			return dma_map;
-+	}
-+
-+	return NULL;
-+}
-+
-+static struct xsk_dma_map *xp_create_dma_map(struct device *dev, struct net_device *netdev,
-+					     u32 nr_pages, struct xdp_umem *umem)
-+{
-+	struct xsk_dma_map *dma_map;
-+
-+	dma_map = kzalloc(sizeof(*dma_map), GFP_KERNEL);
-+	if (!dma_map)
-+		return NULL;
-+
-+	dma_map->dma_pages = kvcalloc(nr_pages, sizeof(*dma_map->dma_pages), GFP_KERNEL);
-+	if (!dma_map) {
-+		kfree(dma_map);
-+		return NULL;
-+	}
-+
-+	dma_map->netdev = netdev;
-+	dma_map->dev = dev;
-+	dma_map->dma_need_sync = false;
-+	dma_map->dma_pages_cnt = nr_pages;
-+	refcount_set(&dma_map->users, 0);
-+	list_add(&dma_map->list, &umem->xsk_dma_list);
-+	return dma_map;
-+}
-+
-+static void xp_destroy_dma_map(struct xsk_dma_map *dma_map)
-+{
-+	list_del(&dma_map->list);
-+	kvfree(dma_map->dma_pages);
-+	kfree(dma_map);
-+}
-+
-+static void __xp_dma_unmap(struct xsk_dma_map *dma_map, unsigned long attrs)
- {
- 	dma_addr_t *dma;
- 	u32 i;
- 
--	if (pool->dma_pages_cnt == 0)
--		return;
--
--	for (i = 0; i < pool->dma_pages_cnt; i++) {
--		dma = &pool->dma_pages[i];
-+	for (i = 0; i < dma_map->dma_pages_cnt; i++) {
-+		dma = &dma_map->dma_pages[i];
- 		if (*dma) {
--			dma_unmap_page_attrs(pool->dev, *dma, PAGE_SIZE,
-+			dma_unmap_page_attrs(dma_map->dev, *dma, PAGE_SIZE,
- 					     DMA_BIDIRECTIONAL, attrs);
- 			*dma = 0;
- 		}
- 	}
- 
-+	xp_destroy_dma_map(dma_map);
-+}
-+
-+void xp_dma_unmap(struct xsk_buff_pool *pool, unsigned long attrs)
-+{
-+	struct xsk_dma_map *dma_map;
-+
-+	if (pool->dma_pages_cnt == 0)
-+		return;
-+
-+	dma_map = xp_find_dma_map(pool);
-+	if (!dma_map) {
-+		WARN(1, "Could not find dma_map for device");
-+		return;
-+	}
-+
-+	if (!refcount_dec_and_test(&dma_map->users))
-+		return;
-+
-+	__xp_dma_unmap(dma_map, attrs);
- 	kvfree(pool->dma_pages);
- 	pool->dma_pages_cnt = 0;
- 	pool->dev = NULL;
- }
- EXPORT_SYMBOL(xp_dma_unmap);
- 
--static void xp_check_dma_contiguity(struct xsk_buff_pool *pool)
-+static void xp_check_dma_contiguity(struct xsk_dma_map *dma_map)
- {
- 	u32 i;
- 
--	for (i = 0; i < pool->dma_pages_cnt - 1; i++) {
--		if (pool->dma_pages[i] + PAGE_SIZE == pool->dma_pages[i + 1])
--			pool->dma_pages[i] |= XSK_NEXT_PG_CONTIG_MASK;
-+	for (i = 0; i < dma_map->dma_pages_cnt - 1; i++) {
-+		if (dma_map->dma_pages[i] + PAGE_SIZE == dma_map->dma_pages[i + 1])
-+			dma_map->dma_pages[i] |= XSK_NEXT_PG_CONTIG_MASK;
- 		else
--			pool->dma_pages[i] &= ~XSK_NEXT_PG_CONTIG_MASK;
-+			dma_map->dma_pages[i] &= ~XSK_NEXT_PG_CONTIG_MASK;
- 	}
- }
- 
-+static int xp_init_dma_info(struct xsk_buff_pool *pool, struct xsk_dma_map *dma_map)
-+{
-+	pool->dma_pages = kvcalloc(dma_map->dma_pages_cnt, sizeof(*pool->dma_pages), GFP_KERNEL);
-+	if (!pool->dma_pages)
-+		return -ENOMEM;
-+
-+	pool->dev = dma_map->dev;
-+	pool->dma_pages_cnt = dma_map->dma_pages_cnt;
-+	pool->dma_need_sync = dma_map->dma_need_sync;
-+	refcount_inc(&dma_map->users);
-+	memcpy(pool->dma_pages, dma_map->dma_pages,
-+	       pool->dma_pages_cnt * sizeof(*pool->dma_pages));
-+
-+	return 0;
-+}
-+
- int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
- 	       unsigned long attrs, struct page **pages, u32 nr_pages)
- {
-+	struct xsk_dma_map *dma_map;
- 	dma_addr_t dma;
-+	int err;
- 	u32 i;
- 
--	pool->dma_pages = kvcalloc(nr_pages, sizeof(*pool->dma_pages),
--				   GFP_KERNEL);
--	if (!pool->dma_pages)
--		return -ENOMEM;
-+	dma_map = xp_find_dma_map(pool);
-+	if (dma_map) {
-+		err = xp_init_dma_info(pool, dma_map);
-+		if (err)
-+			return err;
- 
--	pool->dev = dev;
--	pool->dma_pages_cnt = nr_pages;
--	pool->dma_need_sync = false;
-+		return 0;
-+	}
- 
--	for (i = 0; i < pool->dma_pages_cnt; i++) {
-+	dma_map = xp_create_dma_map(dev, pool->netdev, nr_pages, pool->umem);
-+	if (!dma_map)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < dma_map->dma_pages_cnt; i++) {
- 		dma = dma_map_page_attrs(dev, pages[i], 0, PAGE_SIZE,
- 					 DMA_BIDIRECTIONAL, attrs);
- 		if (dma_mapping_error(dev, dma)) {
--			xp_dma_unmap(pool, attrs);
-+			__xp_dma_unmap(dma_map, attrs);
- 			return -ENOMEM;
- 		}
- 		if (dma_need_sync(dev, dma))
--			pool->dma_need_sync = true;
--		pool->dma_pages[i] = dma;
-+			dma_map->dma_need_sync = true;
-+		dma_map->dma_pages[i] = dma;
- 	}
- 
- 	if (pool->unaligned)
--		xp_check_dma_contiguity(pool);
-+		xp_check_dma_contiguity(dma_map);
-+
-+	err = xp_init_dma_info(pool, dma_map);
-+	if (err) {
-+		__xp_dma_unmap(dma_map, attrs);
-+		return err;
-+	}
-+
- 	return 0;
- }
- EXPORT_SYMBOL(xp_dma_map);
 -- 
 2.7.4
 
