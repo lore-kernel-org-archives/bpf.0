@@ -2,47 +2,46 @@ Return-Path: <SRS0=EP3I=CJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0C7BC433E2
-	for <bpf@archiver.kernel.org>; Mon, 31 Aug 2020 21:03:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B589C433E2
+	for <bpf@archiver.kernel.org>; Mon, 31 Aug 2020 21:25:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8109C2067C
-	for <bpf@archiver.kernel.org>; Mon, 31 Aug 2020 21:03:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1111420639
+	for <bpf@archiver.kernel.org>; Mon, 31 Aug 2020 21:25:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728354AbgHaVDS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 31 Aug 2020 17:03:18 -0400
-Received: from www62.your-server.de ([213.133.104.62]:46324 "EHLO
+        id S1728899AbgHaVZf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 31 Aug 2020 17:25:35 -0400
+Received: from www62.your-server.de ([213.133.104.62]:48980 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727019AbgHaVDR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 31 Aug 2020 17:03:17 -0400
+        with ESMTP id S1728352AbgHaVZf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 31 Aug 2020 17:25:35 -0400
 Received: from sslproxy02.your-server.de ([78.47.166.47])
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1kCqxO-0007Tf-4A; Mon, 31 Aug 2020 23:03:14 +0200
+        id 1kCrIq-0001ul-7c; Mon, 31 Aug 2020 23:25:24 +0200
 Received: from [178.196.57.75] (helo=pc-9.home)
         by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <daniel@iogearbox.net>)
-        id 1kCqxN-0008pD-Aq; Mon, 31 Aug 2020 23:03:13 +0200
-Subject: Re: [PATCH bpf-next] samples/bpf: fix to xdpsock to avoid recycling
- frames
-To:     Weqaar Janjua <weqaar.a.janjua@intel.com>,
-        magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
-        netdev@vger.kernel.org, jonathan.lemon@gmail.com
-Cc:     bpf@vger.kernel.org
-References: <20200828161717.42705-1-weqaar.a.janjua@intel.com>
+        id 1kCrIq-0007yz-2B; Mon, 31 Aug 2020 23:25:24 +0200
+Subject: Re: [PATCH bpf-next] bpf: Remove bpf_lsm_file_mprotect from sleepable
+ list.
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        davem@davemloft.net
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com
+References: <20200831201651.82447-1-alexei.starovoitov@gmail.com>
 From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <a93a08b1-9460-8f46-af79-372bb41bf5ad@iogearbox.net>
-Date:   Mon, 31 Aug 2020 23:03:07 +0200
+Message-ID: <c6df42da-6185-3958-0528-55a43d0a9444@iogearbox.net>
+Date:   Mon, 31 Aug 2020 23:25:23 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20200828161717.42705-1-weqaar.a.janjua@intel.com>
+In-Reply-To: <20200831201651.82447-1-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -53,14 +52,40 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 8/28/20 6:17 PM, Weqaar Janjua wrote:
-> The txpush program in the xdpsock sample application is supposed
-> to send out all packets in the umem in a round-robin fashion.
-> The problem is that it only cycled through the first BATCH_SIZE
-> worth of packets. Fixed this so that it cycles through all buffers
-> in the umem as intended.
+On 8/31/20 10:16 PM, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
 > 
-> Fixes: 248c7f9c0e21 ("samples/bpf: convert xdpsock to use libbpf for AF_XDP access")
-> Signed-off-by: Weqaar Janjua <weqaar.a.janjua@intel.com>
+> Technically the bpf programs can sleep while attached to bpf_lsm_file_mprotect,
+> but such programs need to access user memory. So they're in might_fault()
+> category. Which means they cannot be called from file_mprotect lsm hook that
+> takes write lock on mm->mmap_lock.
+> Adjust the test accordingly.
+> 
+> Also add might_fault() to __bpf_prog_enter_sleepable() to catch such deadlocks early.
+> 
+> Reported-by: Yonghong Song <yhs@fb.com>
+> Fixes: 1e6c62a88215 ("bpf: Introduce sleepable BPF programs")
+> Fixes: e68a144547fc ("selftests/bpf: Add sleepable tests")
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> ---
+>   kernel/bpf/trampoline.c                 |  1 +
+>   kernel/bpf/verifier.c                   |  1 -
+>   tools/testing/selftests/bpf/progs/lsm.c | 34 ++++++++++++-------------
+>   3 files changed, 18 insertions(+), 18 deletions(-)
+> 
+> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> index c2b76545153c..7dd523a7e32d 100644
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
+> @@ -409,6 +409,7 @@ void notrace __bpf_prog_exit(struct bpf_prog *prog, u64 start)
+>   void notrace __bpf_prog_enter_sleepable(void)
+>   {
+>   	rcu_read_lock_trace();
+> +	might_fault();
 
-Applied, thanks!
+Makes sense, was wondering about a __might_sleep() but that will cover it internally
+too. Applied, thanks!
+
+>   }
+>   
+>   void notrace __bpf_prog_exit_sleepable(void)
