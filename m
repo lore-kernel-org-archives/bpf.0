@@ -7,48 +7,48 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C15BDC433E6
-	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 01:50:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A50F2C433E7
+	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 01:50:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9DCEF20707
-	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 01:50:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8323420707
+	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 01:50:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="XPVabcXS"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="nhyUL3/r"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726173AbgIABuN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 31 Aug 2020 21:50:13 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:16240 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725941AbgIABuN (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 31 Aug 2020 21:50:13 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0811n8lo002027
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2020 18:50:11 -0700
+        id S1726293AbgIABu2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 31 Aug 2020 21:50:28 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:55086 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726518AbgIABu0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 31 Aug 2020 21:50:26 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0811jTgH007042
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2020 18:50:25 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=QW4UyBhQv4+GsYvi9VOq+Hxw6wgrRheCnzlMhUOthEI=;
- b=XPVabcXSBSamC3tN4dF/kW6dH3Cjs6YeIcE1or0KVlaD2pYFDT+WLWxmcUhwtsXMuvUZ
- ooCfbMr5MniHOY2gkv5Nm7hd4MY7o60W9FrVLAhVCLyeInh6OfKAwt4KotFrFjB2UEvb
- zgVleZAoMAKKLmQLINPusRCiQ8JOHGrrjY8= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 337muh2xyx-1
+ bh=xZfr7J7vumhx1Zgou/Z0il+VrwbvbOFRutiV/wfxi9k=;
+ b=nhyUL3/rnsu+hCujoNYh7nOtb/NgGgCuhYuBv5BcqhcoiH7CmX0WbOkFa3/36RwmTGrN
+ vll2mwRQZlz7auKMx0Bres6Dd/yslRILHlGTCVBmHm/KacHzBc/xLGnpGOd9whYvIoRP
+ VWb2huOMg+5RoNL80lAWkyEtvIVLbIMVpf0= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 3386gt84fc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2020 18:50:11 -0700
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2020 18:50:25 -0700
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 31 Aug 2020 18:50:10 -0700
+ 15.1.1979.3; Mon, 31 Aug 2020 18:50:24 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 53F382EC663B; Mon, 31 Aug 2020 18:50:07 -0700 (PDT)
+        id 8B9872EC663B; Mon, 31 Aug 2020 18:50:22 -0700 (PDT)
 From:   Andrii Nakryiko <andriin@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH v2 bpf-next 01/14] libbpf: ensure ELF symbols table is found before further ELF processing
-Date:   Mon, 31 Aug 2020 18:49:50 -0700
-Message-ID: <20200901015003.2871861-2-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 08/14] tools/bpftool: replace bpf_program__title() with bpf_program__section_name()
+Date:   Mon, 31 Aug 2020 18:49:57 -0700
+Message-ID: <20200901015003.2871861-9-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200901015003.2871861-1-andriin@fb.com>
 References: <20200901015003.2871861-1-andriin@fb.com>
@@ -58,91 +58,50 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-01_01:2020-08-31,2020-09-01 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
- lowpriorityscore=0 priorityscore=1501 mlxlogscore=759 suspectscore=8
- phishscore=0 adultscore=0 malwarescore=0 spamscore=0 clxscore=1015
- impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2009010014
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
+ priorityscore=1501 phishscore=0 impostorscore=0 mlxlogscore=602
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 malwarescore=0 suspectscore=8
+ mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009010014
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-libbpf ELF parsing logic might need symbols available before ELF parsing =
-is
-completed, so we need to make sure that symbols table section is found in
-a separate pass before all the subsequent sections are processed.
+bpf_program__title() is deprecated, switch to bpf_program__section_name()=
+ and
+avoid compilation warnings.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/libbpf.c | 40 +++++++++++++++++++++++++++++-----------
- 1 file changed, 29 insertions(+), 11 deletions(-)
+ tools/bpf/bpftool/prog.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index b688aadf09c5..ac56d4db6d3e 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -2720,14 +2720,38 @@ static int bpf_object__elf_collect(struct bpf_obj=
-ect *obj)
- 	Elf *elf =3D obj->efile.elf;
- 	Elf_Data *btf_ext_data =3D NULL;
- 	Elf_Data *btf_data =3D NULL;
--	Elf_Scn *scn =3D NULL;
- 	int idx =3D 0, err =3D 0;
-+	const char *name;
-+	Elf_Data *data;
-+	Elf_Scn *scn;
-+	GElf_Shdr sh;
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index d393eb8263a6..f7923414a052 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -1304,7 +1304,7 @@ static int load_with_options(int argc, char **argv,=
+ bool first_prog_only)
+ 		enum bpf_prog_type prog_type =3D common_prog_type;
 =20
-+	/* a bunch of ELF parsing functionality depends on processing symbols,
-+	 * so do the first pass and find the symbol table
-+	 */
-+	scn =3D NULL;
- 	while ((scn =3D elf_nextscn(elf, scn)) !=3D NULL) {
--		const char *name;
--		GElf_Shdr sh;
--		Elf_Data *data;
-+		if (elf_sec_hdr(obj, scn, &sh))
-+			return -LIBBPF_ERRNO__FORMAT;
-+
-+		if (sh.sh_type =3D=3D SHT_SYMTAB) {
-+			if (obj->efile.symbols) {
-+				pr_warn("elf: multiple symbol tables in %s\n", obj->path);
-+				return -LIBBPF_ERRNO__FORMAT;
-+			}
+ 		if (prog_type =3D=3D BPF_PROG_TYPE_UNSPEC) {
+-			const char *sec_name =3D bpf_program__title(pos, false);
++			const char *sec_name =3D bpf_program__section_name(pos);
 =20
-+			data =3D elf_sec_data(obj, scn);
-+			if (!data)
-+				return -LIBBPF_ERRNO__FORMAT;
-+
-+			obj->efile.symbols =3D data;
-+			obj->efile.symbols_shndx =3D elf_ndxscn(scn);
-+			obj->efile.strtabidx =3D sh.sh_link;
-+		}
-+	}
-+
-+	scn =3D NULL;
-+	while ((scn =3D elf_nextscn(elf, scn)) !=3D NULL) {
- 		idx++;
-=20
- 		if (elf_sec_hdr(obj, scn, &sh))
-@@ -2766,13 +2790,7 @@ static int bpf_object__elf_collect(struct bpf_obje=
-ct *obj)
- 		} else if (strcmp(name, BTF_EXT_ELF_SEC) =3D=3D 0) {
- 			btf_ext_data =3D data;
- 		} else if (sh.sh_type =3D=3D SHT_SYMTAB) {
--			if (obj->efile.symbols) {
--				pr_warn("elf: multiple symbol tables in %s\n", obj->path);
--				return -LIBBPF_ERRNO__FORMAT;
--			}
--			obj->efile.symbols =3D data;
--			obj->efile.symbols_shndx =3D idx;
--			obj->efile.strtabidx =3D sh.sh_link;
-+			/* already processed during the first pass above */
- 		} else if (sh.sh_type =3D=3D SHT_PROGBITS && data->d_size > 0) {
- 			if (sh.sh_flags & SHF_EXECINSTR) {
- 				if (strcmp(name, ".text") =3D=3D 0)
+ 			err =3D get_prog_type_by_name(sec_name, &prog_type,
+ 						    &expected_attach_type);
+@@ -1398,7 +1398,7 @@ static int load_with_options(int argc, char **argv,=
+ bool first_prog_only)
+ 		err =3D bpf_obj_pin(bpf_program__fd(prog), pinfile);
+ 		if (err) {
+ 			p_err("failed to pin program %s",
+-			      bpf_program__title(prog, false));
++			      bpf_program__section_name(prog));
+ 			goto err_close_obj;
+ 		}
+ 	} else {
 --=20
 2.24.1
 
