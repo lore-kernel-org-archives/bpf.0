@@ -2,91 +2,70 @@ Return-Path: <SRS0=+JL0=CK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A0F4C433E7
-	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 16:14:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C093C433E2
+	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 16:14:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BEFB9204EC
-	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 16:14:15 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OQ9fWUen"
+	by mail.kernel.org (Postfix) with ESMTP id 234FF2078B
+	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 16:14:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730679AbgIAQOM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Sep 2020 12:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731206AbgIAPf3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Sep 2020 11:35:29 -0400
-Received: from mail-qk1-x743.google.com (mail-qk1-x743.google.com [IPv6:2607:f8b0:4864:20::743])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB6AC061244;
-        Tue,  1 Sep 2020 08:35:28 -0700 (PDT)
-Received: by mail-qk1-x743.google.com with SMTP id o64so1326813qkb.10;
-        Tue, 01 Sep 2020 08:35:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Pt5riNry0LXCdMMDirjaAvuNNxR72mnnngurjuADZZo=;
-        b=OQ9fWUenknF9Q+nAncqv3JwfcFuORp9ef2xNGcB2GbZd1SeyaJtCYvuGT2hsWlAqmb
-         2I0s+TbyT6aN/1H4W+LX4oqLaVm6fElKHZ/3RF0MRHeObQD8S8UAoPjsVUtEEe5BkQR9
-         j9xZG86MQ+b0n/bT4QWLiPPRIgt8kmhTbMRfb3XMfXPZ/CmsIE/vn6bDdS+gdhi35OcD
-         lTeZOalVPTuJZ2AvYShSeC/yD05B0RzZ+mJYR+QE8NhqK9W3+n15AoeUfcIWNMHL4Hd2
-         CaZOr5GWGQqNEQqPsGiBjEhwGAEHbj0SXnIOpu8e0eq06KzxcjiB1IRFSu3dq9M0/O+u
-         xU0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Pt5riNry0LXCdMMDirjaAvuNNxR72mnnngurjuADZZo=;
-        b=MuoRdiBO7SaD3Dwy3odEkcuGwZidu2+z1GOZk9K0ch0sduMrf1F82RkwTUr2SABZuv
-         FelD1QfJdfbKWe0NPyO9e//v2CbR3BINik3mYGBUYbH4T/BYhFNL/6ULj9ZOO04lS0VN
-         4EojvyEEtMZoQUARJzQVnXyZoizRzFiHhV1M8mDQAKotGWacEPWhGvXq8FKEn3F/Zhyn
-         lXpTqYRhClK3wa3ej5TmBkIzQPlAD9hF3kQRpy9mPAeHbHwdFUK3G313dE3yHR4hzUX+
-         tyuuixEMoWU8YaDdu8MA2vw1msYENq+iPcZgp7woEGcpcTnie+csSIKekIOjw6FFQ6kY
-         ZLug==
-X-Gm-Message-State: AOAM533UmtX2JN136EBDBrunHzPVUKnc3BY+VeCR1CtG0SCu7+0LnagO
-        Z6m+Lo0h9/m5zqePhoytuDk=
-X-Google-Smtp-Source: ABdhPJxNPwyKBVSlUPOK2GEeBXN58bPo+Amwwb+B5yOvnjOXV0smnRsYTwJzbLJWIhWk8Ju0NzLxtA==
-X-Received: by 2002:a05:620a:b1a:: with SMTP id t26mr2437752qkg.353.1598974527257;
-        Tue, 01 Sep 2020 08:35:27 -0700 (PDT)
-Received: from leah-Ubuntu ([2601:4c3:200:c230:dd5a:a6db:5e16:1fed])
-        by smtp.gmail.com with ESMTPSA id f7sm1971818qkj.32.2020.09.01.08.35.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 01 Sep 2020 08:35:26 -0700 (PDT)
-Date:   Tue, 1 Sep 2020 11:35:25 -0400
-From:   Leah Rumancik <leah.rumancik@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     bpf@vger.kernel.org, linux-block@vger.kernel.org,
-        orbekk@google.com, harshads@google.com, jasiu@google.com,
-        saranyamohan@google.com, tytso@google.com, bvanassche@google.com
-Subject: Re: [RFC PATCH 3/4] bpf: add eBPF IO filter documentation
-Message-ID: <20200901153524.GB5599@leah-Ubuntu>
-References: <20200812163305.545447-1-leah.rumancik@gmail.com>
- <20200812163305.545447-4-leah.rumancik@gmail.com>
- <20200812115011.337c0099@lwn.net>
+        id S1728239AbgIAQOs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Sep 2020 12:14:48 -0400
+Received: from www62.your-server.de ([213.133.104.62]:33212 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731424AbgIAQNu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Sep 2020 12:13:50 -0400
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kD8uj-0002pa-A7; Tue, 01 Sep 2020 18:13:41 +0200
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kD8uj-0001E8-4A; Tue, 01 Sep 2020 18:13:41 +0200
+Subject: Re: [PATCH bpf] tools/bpf: build: make sure resolve_btfids cleans up
+ after itself
+To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Jiri Olsa <jolsa@redhat.com>
+Cc:     ast@fb.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        jolsa@kernel.org
+References: <20200901144343.179552-1-toke@redhat.com>
+ <20200901152048.GA470123@krava> <87sgc1iior.fsf@toke.dk>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <68904564-aa5a-0ba7-01e6-21484daceb8c@iogearbox.net>
+Date:   Tue, 1 Sep 2020 18:13:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200812115011.337c0099@lwn.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <87sgc1iior.fsf@toke.dk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/25917/Tue Sep  1 15:24:01 2020)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Aug 12, 2020 at 11:50:11AM -0600, Jonathan Corbet wrote:
-> Please wrap your text to a reasonable column width just like with any
-> other kernel file.
+On 9/1/20 6:08 PM, Toke Høiland-Jørgensen wrote:
+> Jiri Olsa <jolsa@redhat.com> writes:
 > 
-> Thanks,
-> 
-> jon
+>> On Tue, Sep 01, 2020 at 04:43:43PM +0200, Toke HÃ¸iland-JÃ¸rgensen wrote:
+>>> The new resolve_btfids tool did not clean up the feature detection folder
+>>> on 'make clean', and also was not called properly from the clean rule in
+>>> tools/make/ folder on its 'make clean'. This lead to stale objects being
+>>> left around, which could cause feature detection to fail on subsequent
+>>> builds.
+>>>
+>>> Fixes: fbbb68de80a4 ("bpf: Add resolve_btfids tool to resolve BTF IDs in ELF object")
+>>> Signed-off-by: Toke HÃ¸iland-JÃ¸rgensen <toke@redhat.com>
 
-Will do.
+Applied, thanks guys!
 
-Thanks,
-Leah
