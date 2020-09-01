@@ -5,51 +5,50 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 087A0C433E2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 89B97C433E6
 	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 01:50:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CFB4C20707
-	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 01:50:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6A7A720707
+	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 01:50:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ftpZLhkI"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="k7qCbKX2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726939AbgIABud (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726929AbgIABud (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Mon, 31 Aug 2020 21:50:33 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:54048 "EHLO
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:14566 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726594AbgIABub (ORCPT
+        by vger.kernel.org with ESMTP id S1726521AbgIABub (ORCPT
         <rfc822;bpf@vger.kernel.org>); Mon, 31 Aug 2020 21:50:31 -0400
 Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0811oS8b000567
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2020 18:50:29 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0811oTiG000573
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2020 18:50:30 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=OpWgueuaIcFJyK9ePf5/NZ87oL4kDblrNjW1wQwl0UQ=;
- b=ftpZLhkIAIa+MdH3o1lJRyZzCICvmaT4CcgZUhQ+ssVHRDyauRimQijMi8xlEQhfL8hD
- 3qte4ARtUnRRfzIUrVxjA2/qE1ogXRq0OSNHTiZhXM8iBMihuVcGqtOT6fQkxJQVwZGX
- YaDsjscwwG8zRA7ooiKcjyXo17ZAkK7hhHk= 
+ bh=3YXWbfU+xHMn+sEzz6aI+hd2wll1ug2hqySovglrps0=;
+ b=k7qCbKX2lce1oZuwqcN7m79WfxbXOzEWKSNn6R+FGLFhEQO5bqDqmMLMmvagU9MK8KJm
+ m7dfBU+C3s5H9Ox/LNHi+m4uigPYkW7WQ9IzB1ObujDf3Uouxx2gNbRaLoc1WfGTcPR6
+ AcTL4UltBjGJ6aDrSNFjleRGI11AHSg2Vqs= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 338734g0mm-3
+        by mx0a-00082601.pphosted.com with ESMTP id 338734g0mt-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2020 18:50:29 -0700
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2020 18:50:30 -0700
 Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 31 Aug 2020 18:50:16 -0700
+ 15.1.1979.3; Mon, 31 Aug 2020 18:50:28 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 11D702EC663B; Mon, 31 Aug 2020 18:50:16 -0700 (PDT)
+        id 61E9B2EC663B; Mon, 31 Aug 2020 18:50:20 -0700 (PDT)
 From:   Andrii Nakryiko <andriin@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH v2 bpf-next 05/14] libbpf: implement generalized .BTF.ext func/line info adjustment
-Date:   Mon, 31 Aug 2020 18:49:54 -0700
-Message-ID: <20200901015003.2871861-6-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 07/14] selftests/bpf: add selftest for multi-prog sections and bpf-to-bpf calls
+Date:   Mon, 31 Aug 2020 18:49:56 -0700
+Message-ID: <20200901015003.2871861-8-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200901015003.2871861-1-andriin@fb.com>
 References: <20200901015003.2871861-1-andriin@fb.com>
@@ -60,7 +59,7 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-01_01:2020-08-31,2020-09-01 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- suspectscore=25 impostorscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0
+ suspectscore=8 impostorscore=0 lowpriorityscore=0 phishscore=0 mlxscore=0
  malwarescore=0 bulkscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2009010015
@@ -70,325 +69,176 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Complete multi-prog sections and multi sub-prog support in libbpf by prop=
-erly
-adjusting .BTF.ext's line and function information. Mark exposed
-btf_ext__reloc_func_info() and btf_ext__reloc_func_info() APIs as depreca=
-ted.
-These APIs have simplistic assumption that all sub-programs are going to =
-be
-appended to all main BPF programs, which doesn't hold in real life. It's
-unlikely there are any users of this API, as it's very libbpf
-internals-specific.
+Add a selftest excercising bpf-to-bpf subprogram calls, as well as multip=
+le
+entry-point BPF programs per section. Also make sure that BPF CO-RE works=
+ for
+such set ups both for sub-programs and for multi-entry sections.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/btf.h           |  18 +--
- tools/lib/bpf/libbpf.c        | 217 ++++++++++++++++++++++------------
- tools/lib/bpf/libbpf_common.h |   2 +
- 3 files changed, 153 insertions(+), 84 deletions(-)
+ .../selftests/bpf/prog_tests/subprogs.c       |  31 ++++++
+ .../selftests/bpf/progs/test_subprogs.c       | 103 ++++++++++++++++++
+ 2 files changed, 134 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/subprogs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_subprogs.c
 
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 91f0ad0e0325..2a55320d87d0 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -57,14 +57,16 @@ LIBBPF_API struct btf_ext *btf_ext__new(__u8 *data, _=
-_u32 size);
- LIBBPF_API void btf_ext__free(struct btf_ext *btf_ext);
- LIBBPF_API const void *btf_ext__get_raw_data(const struct btf_ext *btf_e=
-xt,
- 					     __u32 *size);
--LIBBPF_API int btf_ext__reloc_func_info(const struct btf *btf,
--					const struct btf_ext *btf_ext,
--					const char *sec_name, __u32 insns_cnt,
--					void **func_info, __u32 *cnt);
--LIBBPF_API int btf_ext__reloc_line_info(const struct btf *btf,
--					const struct btf_ext *btf_ext,
--					const char *sec_name, __u32 insns_cnt,
--					void **line_info, __u32 *cnt);
-+LIBBPF_API LIBBPF_DEPRECATED("btf_ext__reloc_func_info was never meant a=
-s a public API and has wrong assumptions embedded in it; it will be remov=
-ed in the future libbpf versions")
-+int btf_ext__reloc_func_info(const struct btf *btf,
-+			     const struct btf_ext *btf_ext,
-+			     const char *sec_name, __u32 insns_cnt,
-+			     void **func_info, __u32 *cnt);
-+LIBBPF_API LIBBPF_DEPRECATED("btf_ext__reloc_line_info was never meant a=
-s a public API and has wrong assumptions embedded in it; it will be remov=
-ed in the future libbpf versions")
-+int btf_ext__reloc_line_info(const struct btf *btf,
-+			     const struct btf_ext *btf_ext,
-+			     const char *sec_name, __u32 insns_cnt,
-+			     void **line_info, __u32 *cnt);
- LIBBPF_API __u32 btf_ext__func_info_rec_size(const struct btf_ext *btf_e=
-xt);
- LIBBPF_API __u32 btf_ext__line_info_rec_size(const struct btf_ext *btf_e=
-xt);
-=20
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 172e47707f5d..a2ac10511852 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -4241,75 +4241,6 @@ bpf_object__create_maps(struct bpf_object *obj)
- 	return err;
- }
-=20
--static int
--check_btf_ext_reloc_err(struct bpf_program *prog, int err,
--			void *btf_prog_info, const char *info_name)
--{
--	if (err !=3D -ENOENT) {
--		pr_warn("Error in loading %s for sec %s.\n",
--			info_name, prog->section_name);
--		return err;
--	}
--
--	/* err =3D=3D -ENOENT (i.e. prog->section_name not found in btf_ext) */
--
--	if (btf_prog_info) {
--		/*
--		 * Some info has already been found but has problem
--		 * in the last btf_ext reloc. Must have to error out.
--		 */
--		pr_warn("Error in relocating %s for sec %s.\n",
--			info_name, prog->section_name);
--		return err;
--	}
--
--	/* Have problem loading the very first info. Ignore the rest. */
--	pr_warn("Cannot find %s for main program sec %s. Ignore all %s.\n",
--		info_name, prog->section_name, info_name);
--	return 0;
--}
--
--static int
--bpf_program_reloc_btf_ext(struct bpf_program *prog, struct bpf_object *o=
-bj,
--			  const char *section_name,  __u32 insn_offset)
--{
--	int err;
--
--	if (!insn_offset || prog->func_info) {
--		/*
--		 * !insn_offset =3D> main program
--		 *
--		 * For sub prog, the main program's func_info has to
--		 * be loaded first (i.e. prog->func_info !=3D NULL)
--		 */
--		err =3D btf_ext__reloc_func_info(obj->btf, obj->btf_ext,
--					       section_name, insn_offset,
--					       &prog->func_info,
--					       &prog->func_info_cnt);
--		if (err)
--			return check_btf_ext_reloc_err(prog, err,
--						       prog->func_info,
--						       "bpf_func_info");
--
--		prog->func_info_rec_size =3D btf_ext__func_info_rec_size(obj->btf_ext)=
-;
--	}
--
--	if (!insn_offset || prog->line_info) {
--		err =3D btf_ext__reloc_line_info(obj->btf, obj->btf_ext,
--					       section_name, insn_offset,
--					       &prog->line_info,
--					       &prog->line_info_cnt);
--		if (err)
--			return check_btf_ext_reloc_err(prog, err,
--						       prog->line_info,
--						       "bpf_line_info");
--
--		prog->line_info_rec_size =3D btf_ext__line_info_rec_size(obj->btf_ext)=
-;
--	}
--
--	return 0;
--}
--
- #define BPF_CORE_SPEC_MAX_LEN 64
-=20
- /* represents BPF CO-RE field or array element accessor */
-@@ -5855,6 +5786,147 @@ bpf_object__relocate_data(struct bpf_object *obj,=
- struct bpf_program *prog)
- 	return 0;
- }
-=20
-+static int adjust_prog_btf_ext_info(const struct bpf_object *obj,
-+				    const struct bpf_program *prog,
-+				    const struct btf_ext_info *ext_info,
-+				    void **prog_info, __u32 *prog_rec_cnt,
-+				    __u32 *prog_rec_sz)
+diff --git a/tools/testing/selftests/bpf/prog_tests/subprogs.c b/tools/te=
+sting/selftests/bpf/prog_tests/subprogs.c
+new file mode 100644
+index 000000000000..a00abf58c037
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/subprogs.c
+@@ -0,0 +1,31 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#include <test_progs.h>
++#include <time.h>
++#include "test_subprogs.skel.h"
++
++static int duration;
++
++void test_subprogs(void)
 +{
-+	void *copy_start =3D NULL, *copy_end =3D NULL;
-+	void *rec, *rec_end, *new_prog_info;
-+	const struct btf_ext_info_sec *sec;
-+	size_t old_sz, new_sz;
-+	const char *sec_name;
-+	int i, off_adj;
-+
-+	for_each_btf_ext_sec(ext_info, sec) {
-+		sec_name =3D btf__name_by_offset(obj->btf, sec->sec_name_off);
-+		if (!sec_name)
-+			return -EINVAL;
-+		if (strcmp(sec_name, prog->section_name) !=3D 0)
-+			continue;
-+
-+		for_each_btf_ext_rec(ext_info, sec, i, rec) {
-+			__u32 insn_off =3D *(__u32 *)rec / BPF_INSN_SZ;
-+
-+			if (insn_off < prog->sec_insn_off)
-+				continue;
-+			if (insn_off >=3D prog->sec_insn_off + prog->sec_insn_cnt)
-+				break;
-+
-+			if (!copy_start)
-+				copy_start =3D rec;
-+			copy_end =3D rec + ext_info->rec_size;
-+		}
-+
-+		if (!copy_start)
-+			return -ENOENT;
-+
-+		/* append func/line info of a given (sub-)program to the main
-+		 * program func/line info
-+		 */
-+		old_sz =3D (*prog_rec_cnt) * ext_info->rec_size;
-+		new_sz =3D old_sz + (copy_end - copy_start);
-+		new_prog_info =3D realloc(*prog_info, new_sz);
-+		if (!new_prog_info)
-+			return -ENOMEM;
-+		*prog_info =3D new_prog_info;
-+		*prog_rec_cnt =3D new_sz / ext_info->rec_size;
-+		memcpy(new_prog_info + old_sz, copy_start, copy_end - copy_start);
-+
-+		/* Kernel instruction offsets are in units of 8-byte
-+		 * instructions, while .BTF.ext instruction offsets generated
-+		 * by Clang are in units of bytes. So convert Clang offsets
-+		 * into kernel offsets and adjust offset according to program
-+		 * relocated position.
-+		 */
-+		off_adj =3D prog->sub_insn_off - prog->sec_insn_off;
-+		rec =3D new_prog_info + old_sz;
-+		rec_end =3D new_prog_info + new_sz;
-+		for (; rec < rec_end; rec +=3D ext_info->rec_size) {
-+			__u32 *insn_off =3D rec;
-+
-+			*insn_off =3D *insn_off / BPF_INSN_SZ + off_adj;
-+		}
-+		*prog_rec_sz =3D ext_info->rec_size;
-+		return 0;
-+	}
-+
-+	return -ENOENT;
-+}
-+
-+static int
-+reloc_prog_func_and_line_info(const struct bpf_object *obj,
-+			      struct bpf_program *main_prog,
-+			      const struct bpf_program *prog)
-+{
++	struct test_subprogs *skel;
 +	int err;
 +
-+	/* no .BTF.ext relocation if .BTF.ext is missing or kernel doesn't
-+	 * supprot func/line info
++	skel =3D test_subprogs__open_and_load();
++	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
++		return;
++
++	err =3D test_subprogs__attach(skel);
++	if (CHECK(err, "skel_attach", "failed to attach skeleton: %d\n", err))
++		goto cleanup;
++
++	usleep(1);
++
++	CHECK(skel->bss->res1 !=3D 12, "res1", "got %d, exp %d\n", skel->bss->r=
+es1, 12);
++	CHECK(skel->bss->res2 !=3D 17, "res2", "got %d, exp %d\n", skel->bss->r=
+es2, 17);
++	CHECK(skel->bss->res3 !=3D 19, "res3", "got %d, exp %d\n", skel->bss->r=
+es3, 19);
++	CHECK(skel->bss->res4 !=3D 36, "res4", "got %d, exp %d\n", skel->bss->r=
+es4, 36);
++
++cleanup:
++	test_subprogs__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_subprogs.c b/tools/te=
+sting/selftests/bpf/progs/test_subprogs.c
+new file mode 100644
+index 000000000000..d3c5673c0218
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_subprogs.c
+@@ -0,0 +1,103 @@
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_core_read.h>
++
++const char LICENSE[] SEC("license") =3D "GPL";
++
++__noinline int sub1(int x)
++{
++	return x + 1;
++}
++
++static __noinline int sub5(int v);
++
++__noinline int sub2(int y)
++{
++	return sub5(y + 2);
++}
++
++static __noinline int sub3(int z)
++{
++	return z + 3 + sub1(4);
++}
++
++static __noinline int sub4(int w)
++{
++	return w + sub3(5) + sub1(6);
++}
++
++/* sub5() is an identitify function, just to test weirder functions layo=
+ut and
++ * call patterns
++ */
++static __noinline int sub5(int v)
++{
++	return sub1(v) - 1; /* compensates sub1()'s + 1 */
++}
++
++/* unfortunately verifier rejects `struct task_struct *t` as an unkown p=
+ointer
++ * type, so we need to accept pointer as integer and then cast it inside=
+ the
++ * function
++ */
++__noinline int get_task_tgid(uintptr_t t)
++{
++	/* this ensures that CO-RE relocs work in multi-subprogs .text */
++	return BPF_CORE_READ((struct task_struct *)(void *)t, tgid);
++}
++
++int res1 =3D 0;
++int res2 =3D 0;
++int res3 =3D 0;
++int res4 =3D 0;
++
++SEC("raw_tp/sys_enter")
++int prog1(void *ctx)
++{
++	/* perform some CO-RE relocations to ensure they work with multi-prog
++	 * sections correctly
 +	 */
-+	if (!obj->btf_ext || !kernel_supports(FEAT_BTF_FUNC))
-+		return 0;
++	struct task_struct *t =3D (void *)bpf_get_current_task();
 +
-+	/* only attempt func info relocation if main program's func_info
-+	 * relocation was successful
-+	 */
-+	if (main_prog !=3D prog && !main_prog->func_info)
-+		goto line_info;
++	if (!BPF_CORE_READ(t, pid) || !get_task_tgid((uintptr_t)t))
++		return 1;
 +
-+	err =3D adjust_prog_btf_ext_info(obj, prog, &obj->btf_ext->func_info,
-+				       &main_prog->func_info,
-+				       &main_prog->func_info_cnt,
-+				       &main_prog->func_info_rec_size);
-+	if (err) {
-+		if (err !=3D -ENOENT) {
-+			pr_warn("prog '%s': error relocating .BTF.ext function info: %d\n",
-+				prog->name, err);
-+			return err;
-+		}
-+		if (main_prog->func_info) {
-+			/*
-+			 * Some info has already been found but has problem
-+			 * in the last btf_ext reloc. Must have to error out.
-+			 */
-+			pr_warn("prog '%s': missing .BTF.ext function info.\n", prog->name);
-+			return err;
-+		}
-+		/* Have problem loading the very first info. Ignore the rest. */
-+		pr_warn("prog '%s': missing .BTF.ext function info for the main progra=
-m, skipping all of .BTF.ext func info.\n",
-+			prog->name);
-+	}
-+
-+line_info:
-+	/* don't relocate line info if main program's relocation failed */
-+	if (main_prog !=3D prog && !main_prog->line_info)
-+		return 0;
-+
-+	err =3D adjust_prog_btf_ext_info(obj, prog, &obj->btf_ext->line_info,
-+				       &main_prog->line_info,
-+				       &main_prog->line_info_cnt,
-+				       &main_prog->line_info_rec_size);
-+	if (err) {
-+		if (err !=3D -ENOENT) {
-+			pr_warn("prog '%s': error relocating .BTF.ext line info: %d\n",
-+				prog->name, err);
-+			return err;
-+		}
-+		if (main_prog->line_info) {
-+			/*
-+			 * Some info has already been found but has problem
-+			 * in the last btf_ext reloc. Must have to error out.
-+			 */
-+			pr_warn("prog '%s': missing .BTF.ext line info.\n", prog->name);
-+			return err;
-+		}
-+		/* Have problem loading the very first info. Ignore the rest. */
-+		pr_warn("prog '%s': missing .BTF.ext line info for the main program, s=
-kipping all of .BTF.ext line info.\n",
-+			prog->name);
-+	}
++	res1 =3D sub1(1) + sub3(2); /* (1 + 1) + (2 + 3 + (4 + 1)) =3D 12 */
 +	return 0;
 +}
 +
- static int cmp_relo_by_insn_idx(const void *key, const void *elem)
- {
- 	size_t insn_idx =3D *(const size_t *)key;
-@@ -5975,13 +6047,6 @@ bpf_object__relocate_calls(struct bpf_object *obj,=
- struct bpf_program *prog)
- 	struct bpf_program *subprog;
- 	int i, j, err;
-=20
--	if (obj->btf_ext) {
--		err =3D bpf_program_reloc_btf_ext(prog, obj,
--						prog->section_name, 0);
--		if (err)
--			return err;
--	}
--
- 	/* mark all subprogs as not relocated (yet) within the context of
- 	 * current main program
- 	 */
-diff --git a/tools/lib/bpf/libbpf_common.h b/tools/lib/bpf/libbpf_common.=
-h
-index a23ae1ac27eb..947d8bd8a7bb 100644
---- a/tools/lib/bpf/libbpf_common.h
-+++ b/tools/lib/bpf/libbpf_common.h
-@@ -15,6 +15,8 @@
- #define LIBBPF_API __attribute__((visibility("default")))
- #endif
-=20
-+#define LIBBPF_DEPRECATED(msg) __attribute__((deprecated(msg)))
++SEC("raw_tp/sys_exit")
++int prog2(void *ctx)
++{
++	struct task_struct *t =3D (void *)bpf_get_current_task();
 +
- /* Helper macro to declare and initialize libbpf options struct
-  *
-  * This dance with uninitialized declaration, followed by memset to zero=
-,
++	if (!BPF_CORE_READ(t, pid) || !get_task_tgid((uintptr_t)t))
++		return 1;
++
++	res2 =3D sub2(3) + sub3(4); /* (3 + 2) + (4 + 3 + (4 + 1)) =3D 17 */
++	return 0;
++}
++
++/* prog3 has the same section name as prog1 */
++SEC("raw_tp/sys_enter")
++int prog3(void *ctx)
++{
++	struct task_struct *t =3D (void *)bpf_get_current_task();
++
++	if (!BPF_CORE_READ(t, pid) || !get_task_tgid((uintptr_t)t))
++		return 1;
++
++	res3 =3D sub3(5) + 6; /* (5 + 3 + (4 + 1)) + 6 =3D 19 */
++	return 0;
++}
++
++/* prog4 has the same section name as prog2 */
++SEC("raw_tp/sys_exit")
++int prog4(void *ctx)
++{
++	struct task_struct *t =3D (void *)bpf_get_current_task();
++
++	if (!BPF_CORE_READ(t, pid) || !get_task_tgid((uintptr_t)t))
++		return 1;
++
++	res4 =3D sub4(7) + sub1(8); /* (7 + (5 + 3 + (4 + 1)) + (6 + 1)) + (8 +=
+ 1) =3D 36 */
++	return 0;
++}
 --=20
 2.24.1
 
