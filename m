@@ -7,48 +7,48 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C1576C43461
-	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 01:50:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B3E1C433E6
+	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 01:50:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 96AD32098B
-	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 01:50:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D8C220707
+	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 01:50:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="A3QIqTRl"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="rMJu1ofK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727037AbgIABun (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 31 Aug 2020 21:50:43 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:48292 "EHLO
+        id S1727088AbgIABup (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 31 Aug 2020 21:50:45 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:60734 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726928AbgIABuk (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 31 Aug 2020 21:50:40 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0811jMZq006980
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2020 18:50:37 -0700
+        by vger.kernel.org with ESMTP id S1727058AbgIABum (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 31 Aug 2020 21:50:42 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0811nN7N011705
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2020 18:50:41 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=MZYTgs054aI2pdvN4mKlp7nhrK0YtMrGQo2HYohZC90=;
- b=A3QIqTRl8ED9p7kFe5dM3BwBCBXor9IT4lLmjSk4j6YdG1vfzpjocP04bl9bDzaLDoxQ
- fy/kAeux/DqyRX3+jrK72ywnot/buGW4LsW9HmRbYbi1U7NjUTVP5E7nXO4R+HfJZKmA
- prMaYGKHinFNxsvPNvENm8VTI02vUlCMts8= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3386gt84fy-1
+ bh=0WGDoTwtCkfLjfaw3S08TJ1zbZDbtcNaDi58NHF9v44=;
+ b=rMJu1ofKX0x6dIX0pioISN8eTwvu45R2PFwmX8DHkNAGhPZqPjkf8XDuNNvUtOFdzPW1
+ h/N00qVTok/rNLnvG9ocl90kFDUTRyNaBtLmqGpP3HXmITHYxwdC+6qz//XK9AgcjAIH
+ x6RCKbOSS5407eBgXxEUrrHKB+OOLRzgvEc= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 33879ng0t2-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2020 18:50:37 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2020 18:50:41 -0700
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 31 Aug 2020 18:50:36 -0700
+ 15.1.1979.3; Mon, 31 Aug 2020 18:50:39 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 32D0B2EC663B; Mon, 31 Aug 2020 18:50:26 -0700 (PDT)
+        id 2E3BC2EC663B; Mon, 31 Aug 2020 18:50:36 -0700 (PDT)
 From:   Andrii Nakryiko <andriin@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH v2 bpf-next 10/14] libbpf: deprecate notion of BPF program "title" in favor of "section name"
-Date:   Mon, 31 Aug 2020 18:49:59 -0700
-Message-ID: <20200901015003.2871861-11-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 14/14] selftests/bpf: convert cls_redirect selftest to use __noinline
+Date:   Mon, 31 Aug 2020 18:50:03 -0700
+Message-ID: <20200901015003.2871861-15-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200901015003.2871861-1-andriin@fb.com>
 References: <20200901015003.2871861-1-andriin@fb.com>
@@ -58,884 +58,365 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-01_01:2020-08-31,2020-09-01 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- priorityscore=1501 phishscore=0 impostorscore=0 mlxlogscore=999
- lowpriorityscore=0 bulkscore=0 clxscore=1015 malwarescore=0
- suspectscore=29 mlxscore=0 adultscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009010014
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ mlxlogscore=999 spamscore=0 lowpriorityscore=0 bulkscore=0
+ priorityscore=1501 adultscore=0 malwarescore=0 phishscore=0 mlxscore=0
+ clxscore=1015 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2009010014
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-BPF program title is ambigious and misleading term. It is ELF section nam=
-e, so
-let's just call it that and deprecate bpf_program__title() API in favor o=
-f
-bpf_program__section_name().
-
-Additionally, using bpf_object__find_program_by_title() is now inherently
-dangerous and ambiguous, as multiple BPF program can have the same sectio=
-n
-name. So deprecate this API as well and recommend to switch to non-ambigu=
-ous
-bpf_object__find_program_by_name().
-
-Internally, clean up usage and mis-usage of BPF program section name for
-denoting BPF program name. Shorten the field name to prog->sec_name to be
-consistent with all other prog->sec_* variables.
+As one of the most complicated and close-to-real-world programs, cls_redi=
+rect
+is a good candidate to excercise libbpf's logic of handling bpf2bpf calls=
+. So
+convert it to explicit __noinline for majority of functions except few mo=
+st
+basic ones. If those few functions are inlined, verifier starts to compla=
+in
+about program instruction limit of 1mln instructions being exceeded, most
+probably due to instruction overhead of doing a sub-program call.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/libbpf.c   | 215 ++++++++++++++++++---------------------
- tools/lib/bpf/libbpf.h   |   5 +-
- tools/lib/bpf/libbpf.map |   1 +
- 3 files changed, 101 insertions(+), 120 deletions(-)
+ .../selftests/bpf/progs/test_cls_redirect.c   | 99 ++++++++++---------
+ 1 file changed, 50 insertions(+), 49 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 1485e562ec32..f65502d2963d 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -217,7 +217,7 @@ struct bpf_sec_def {
+diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tool=
+s/testing/selftests/bpf/progs/test_cls_redirect.c
+index f0b72e86bee5..c3fc410f7d9c 100644
+--- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
++++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
+@@ -125,7 +125,7 @@ typedef struct buf {
+ 	uint8_t *const tail;
+ } buf_t;
+=20
+-static size_t buf_off(const buf_t *buf)
++static __always_inline size_t buf_off(const buf_t *buf)
+ {
+ 	/* Clang seems to optimize constructs like
+ 	 *    a - b + c
+@@ -145,7 +145,7 @@ static size_t buf_off(const buf_t *buf)
+ 	return off;
+ }
+=20
+-static bool buf_copy(buf_t *buf, void *dst, size_t len)
++static __always_inline bool buf_copy(buf_t *buf, void *dst, size_t len)
+ {
+ 	if (bpf_skb_load_bytes(buf->skb, buf_off(buf), dst, len)) {
+ 		return false;
+@@ -155,7 +155,7 @@ static bool buf_copy(buf_t *buf, void *dst, size_t le=
+n)
+ 	return true;
+ }
+=20
+-static bool buf_skip(buf_t *buf, const size_t len)
++static __always_inline bool buf_skip(buf_t *buf, const size_t len)
+ {
+ 	/* Check whether off + len is valid in the non-linear part. */
+ 	if (buf_off(buf) + len > buf->skb->len) {
+@@ -173,7 +173,7 @@ static bool buf_skip(buf_t *buf, const size_t len)
+  * If scratch is not NULL, the function will attempt to load non-linear
+  * data via bpf_skb_load_bytes. On success, scratch is returned.
   */
- struct bpf_program {
- 	const struct bpf_sec_def *sec_def;
--	char *section_name;
-+	char *sec_name;
- 	size_t sec_idx;
- 	/* this program's instruction offset (in number of instructions)
- 	 * within its containing ELF section
-@@ -239,7 +239,7 @@ struct bpf_program {
- 	size_t sub_insn_off;
-=20
- 	char *name;
--	/* section_name with / replaced by _; makes recursive pinning
-+	/* sec_name with / replaced by _; makes recursive pinning
- 	 * in bpf_object__pin_programs easier
- 	 */
- 	char *pin_name;
-@@ -515,7 +515,7 @@ static void bpf_program__exit(struct bpf_program *pro=
-g)
-=20
- 	bpf_program__unload(prog);
- 	zfree(&prog->name);
--	zfree(&prog->section_name);
-+	zfree(&prog->sec_name);
- 	zfree(&prog->pin_name);
- 	zfree(&prog->insns);
- 	zfree(&prog->reloc_desc);
-@@ -529,7 +529,7 @@ static char *__bpf_program__pin_name(struct bpf_progr=
-am *prog)
+-static void *buf_assign(buf_t *buf, const size_t len, void *scratch)
++static __always_inline void *buf_assign(buf_t *buf, const size_t len, vo=
+id *scratch)
  {
- 	char *name, *p;
-=20
--	name =3D p =3D strdup(prog->section_name);
-+	name =3D p =3D strdup(prog->sec_name);
- 	while ((p =3D strchr(p, '/')))
- 		*p =3D '_';
-=20
-@@ -574,8 +574,8 @@ bpf_object__init_prog(struct bpf_object *obj, struct =
-bpf_program *prog,
- 	prog->instances.fds =3D NULL;
- 	prog->instances.nr =3D -1;
-=20
--	prog->section_name =3D strdup(sec_name);
--	if (!prog->section_name)
-+	prog->sec_name =3D strdup(sec_name);
-+	if (!prog->sec_name)
- 		goto errout;
-=20
- 	prog->name =3D strdup(name);
-@@ -3254,7 +3254,7 @@ bpf_object__find_program_by_title(const struct bpf_=
-object *obj,
- 	struct bpf_program *pos;
-=20
- 	bpf_object__for_each_program(pos, obj) {
--		if (pos->section_name && !strcmp(pos->section_name, title))
-+		if (pos->sec_name && !strcmp(pos->sec_name, title))
- 			return pos;
- 	}
- 	return NULL;
-@@ -4994,8 +4994,7 @@ static int bpf_core_calc_field_relo(const struct bp=
-f_program *prog,
- 			*val =3D sz;
- 		} else {
- 			pr_warn("prog '%s': relo %d at insn #%d can't be applied to array acc=
-ess\n",
--				bpf_program__title(prog, false),
--				relo->kind, relo->insn_off / 8);
-+				prog->name, relo->kind, relo->insn_off / 8);
- 			return -EINVAL;
- 		}
- 		if (validate)
-@@ -5017,8 +5016,7 @@ static int bpf_core_calc_field_relo(const struct bp=
-f_program *prog,
- 			if (byte_sz >=3D 8) {
- 				/* bitfield can't be read with 64-bit read */
- 				pr_warn("prog '%s': relo %d at insn #%d can't be satisfied for bitfi=
-eld\n",
--					bpf_program__title(prog, false),
--					relo->kind, relo->insn_off / 8);
-+					prog->name, relo->kind, relo->insn_off / 8);
- 				return -E2BIG;
- 			}
- 			byte_sz *=3D 2;
-@@ -5183,8 +5181,8 @@ static int bpf_core_calc_relo(const struct bpf_prog=
-ram *prog,
- 	} else if (err =3D=3D -EOPNOTSUPP) {
- 		/* EOPNOTSUPP means unknown/unsupported relocation */
- 		pr_warn("prog '%s': relo #%d: unrecognized CO-RE relocation %s (%d) at=
- insn #%d\n",
--			bpf_program__title(prog, false), relo_idx,
--			core_relo_kind_str(relo->kind), relo->kind, relo->insn_off / 8);
-+			prog->name, relo_idx, core_relo_kind_str(relo->kind),
-+			relo->kind, relo->insn_off / 8);
- 	}
-=20
- 	return err;
-@@ -5198,7 +5196,7 @@ static void bpf_core_poison_insn(struct bpf_program=
- *prog, int relo_idx,
- 				 int insn_idx, struct bpf_insn *insn)
- {
- 	pr_debug("prog '%s': relo #%d: substituting insn #%d w/ invalid insn\n"=
-,
--		 bpf_program__title(prog, false), relo_idx, insn_idx);
-+		 prog->name, relo_idx, insn_idx);
- 	insn->code =3D BPF_JMP | BPF_CALL;
- 	insn->dst_reg =3D 0;
- 	insn->src_reg =3D 0;
-@@ -5270,14 +5268,14 @@ static int bpf_core_patch_insn(struct bpf_program=
- *prog,
- 			return -EINVAL;
- 		if (res->validate && insn->imm !=3D orig_val) {
- 			pr_warn("prog '%s': relo #%d: unexpected insn #%d (ALU/ALU64) value: =
-got %u, exp %u -> %u\n",
--				bpf_program__title(prog, false), relo_idx,
-+				prog->name, relo_idx,
- 				insn_idx, insn->imm, orig_val, new_val);
- 			return -EINVAL;
- 		}
- 		orig_val =3D insn->imm;
- 		insn->imm =3D new_val;
- 		pr_debug("prog '%s': relo #%d: patched insn #%d (ALU/ALU64) imm %u -> =
-%u\n",
--			 bpf_program__title(prog, false), relo_idx, insn_idx,
-+			 prog->name, relo_idx, insn_idx,
- 			 orig_val, new_val);
- 		break;
- 	case BPF_LDX:
-@@ -5285,21 +5283,18 @@ static int bpf_core_patch_insn(struct bpf_program=
- *prog,
- 	case BPF_STX:
- 		if (res->validate && insn->off !=3D orig_val) {
- 			pr_warn("prog '%s': relo #%d: unexpected insn #%d (LDX/ST/STX) value:=
- got %u, exp %u -> %u\n",
--				bpf_program__title(prog, false), relo_idx,
--				insn_idx, insn->off, orig_val, new_val);
-+				prog->name, relo_idx, insn_idx, insn->off, orig_val, new_val);
- 			return -EINVAL;
- 		}
- 		if (new_val > SHRT_MAX) {
- 			pr_warn("prog '%s': relo #%d: insn #%d (LDX/ST/STX) value too big: %u=
-\n",
--				bpf_program__title(prog, false), relo_idx,
--				insn_idx, new_val);
-+				prog->name, relo_idx, insn_idx, new_val);
- 			return -ERANGE;
- 		}
- 		orig_val =3D insn->off;
- 		insn->off =3D new_val;
- 		pr_debug("prog '%s': relo #%d: patched insn #%d (LDX/ST/STX) off %u ->=
- %u\n",
--			 bpf_program__title(prog, false), relo_idx, insn_idx,
--			 orig_val, new_val);
-+			 prog->name, relo_idx, insn_idx, orig_val, new_val);
- 		break;
- 	case BPF_LD: {
- 		__u64 imm;
-@@ -5310,14 +5305,14 @@ static int bpf_core_patch_insn(struct bpf_program=
- *prog,
- 		    insn[1].code !=3D 0 || insn[1].dst_reg !=3D 0 ||
- 		    insn[1].src_reg !=3D 0 || insn[1].off !=3D 0) {
- 			pr_warn("prog '%s': relo #%d: insn #%d (LDIMM64) has unexpected form\=
-n",
--				bpf_program__title(prog, false), relo_idx, insn_idx);
-+				prog->name, relo_idx, insn_idx);
- 			return -EINVAL;
- 		}
-=20
- 		imm =3D insn[0].imm + ((__u64)insn[1].imm << 32);
- 		if (res->validate && imm !=3D orig_val) {
- 			pr_warn("prog '%s': relo #%d: unexpected insn #%d (LDIMM64) value: go=
-t %llu, exp %u -> %u\n",
--				bpf_program__title(prog, false), relo_idx,
-+				prog->name, relo_idx,
- 				insn_idx, (unsigned long long)imm,
- 				orig_val, new_val);
- 			return -EINVAL;
-@@ -5326,15 +5321,14 @@ static int bpf_core_patch_insn(struct bpf_program=
- *prog,
- 		insn[0].imm =3D new_val;
- 		insn[1].imm =3D 0; /* currently only 32-bit values are supported */
- 		pr_debug("prog '%s': relo #%d: patched insn #%d (LDIMM64) imm64 %llu -=
-> %u\n",
--			 bpf_program__title(prog, false), relo_idx, insn_idx,
-+			 prog->name, relo_idx, insn_idx,
- 			 (unsigned long long)imm, new_val);
- 		break;
- 	}
- 	default:
- 		pr_warn("prog '%s': relo #%d: trying to relocate unrecognized insn #%d=
-, code:0x%x, src:0x%x, dst:0x%x, off:0x%x, imm:0x%x\n",
--			bpf_program__title(prog, false), relo_idx,
--			insn_idx, insn->code, insn->src_reg, insn->dst_reg,
--			insn->off, insn->imm);
-+			prog->name, relo_idx, insn_idx, insn->code,
-+			insn->src_reg, insn->dst_reg, insn->off, insn->imm);
- 		return -EINVAL;
- 	}
-=20
-@@ -5464,7 +5458,6 @@ static int bpf_core_apply_relo(struct bpf_program *=
-prog,
- 			       const struct btf *targ_btf,
- 			       struct hashmap *cand_cache)
- {
--	const char *prog_name =3D bpf_program__title(prog, false);
- 	struct bpf_core_spec local_spec, cand_spec, targ_spec =3D {};
- 	const void *type_key =3D u32_as_hash_key(relo->type_id);
- 	struct bpf_core_relo_res cand_res, targ_res;
-@@ -5491,13 +5484,13 @@ static int bpf_core_apply_relo(struct bpf_program=
- *prog,
- 	err =3D bpf_core_parse_spec(local_btf, local_id, spec_str, relo->kind, =
-&local_spec);
- 	if (err) {
- 		pr_warn("prog '%s': relo #%d: parsing [%d] %s %s + %s failed: %d\n",
--			prog_name, relo_idx, local_id, btf_kind_str(local_type),
-+			prog->name, relo_idx, local_id, btf_kind_str(local_type),
- 			str_is_empty(local_name) ? "<anon>" : local_name,
- 			spec_str, err);
- 		return -EINVAL;
- 	}
-=20
--	pr_debug("prog '%s': relo #%d: kind <%s> (%d), spec is ", prog_name,
-+	pr_debug("prog '%s': relo #%d: kind <%s> (%d), spec is ", prog->name,
- 		 relo_idx, core_relo_kind_str(relo->kind), relo->kind);
- 	bpf_core_dump_spec(LIBBPF_DEBUG, &local_spec);
- 	libbpf_print(LIBBPF_DEBUG, "\n");
-@@ -5514,7 +5507,7 @@ static int bpf_core_apply_relo(struct bpf_program *=
-prog,
- 	/* libbpf doesn't support candidate search for anonymous types */
- 	if (str_is_empty(spec_str)) {
- 		pr_warn("prog '%s': relo #%d: <%s> (%d) relocation doesn't support ano=
-nymous types\n",
--			prog_name, relo_idx, core_relo_kind_str(relo->kind), relo->kind);
-+			prog->name, relo_idx, core_relo_kind_str(relo->kind), relo->kind);
- 		return -EOPNOTSUPP;
- 	}
-=20
-@@ -5522,7 +5515,7 @@ static int bpf_core_apply_relo(struct bpf_program *=
-prog,
- 		cand_ids =3D bpf_core_find_cands(local_btf, local_id, targ_btf);
- 		if (IS_ERR(cand_ids)) {
- 			pr_warn("prog '%s': relo #%d: target candidate search failed for [%d]=
- %s %s: %ld",
--				prog_name, relo_idx, local_id, btf_kind_str(local_type),
-+				prog->name, relo_idx, local_id, btf_kind_str(local_type),
- 				local_name, PTR_ERR(cand_ids));
- 			return PTR_ERR(cand_ids);
- 		}
-@@ -5538,13 +5531,13 @@ static int bpf_core_apply_relo(struct bpf_program=
- *prog,
- 		err =3D bpf_core_spec_match(&local_spec, targ_btf, cand_id, &cand_spec=
-);
- 		if (err < 0) {
- 			pr_warn("prog '%s': relo #%d: error matching candidate #%d ",
--				prog_name, relo_idx, i);
-+				prog->name, relo_idx, i);
- 			bpf_core_dump_spec(LIBBPF_WARN, &cand_spec);
- 			libbpf_print(LIBBPF_WARN, ": %d\n", err);
- 			return err;
- 		}
-=20
--		pr_debug("prog '%s': relo #%d: %s candidate #%d ", prog_name,
-+		pr_debug("prog '%s': relo #%d: %s candidate #%d ", prog->name,
- 			 relo_idx, err =3D=3D 0 ? "non-matching" : "matching", i);
- 		bpf_core_dump_spec(LIBBPF_DEBUG, &cand_spec);
- 		libbpf_print(LIBBPF_DEBUG, "\n");
-@@ -5564,7 +5557,7 @@ static int bpf_core_apply_relo(struct bpf_program *=
-prog,
- 			 * should all resolve to the same bit offset
- 			 */
- 			pr_warn("prog '%s': relo #%d: field offset ambiguity: %u !=3D %u\n",
--				prog_name, relo_idx, cand_spec.bit_offset,
-+				prog->name, relo_idx, cand_spec.bit_offset,
- 				targ_spec.bit_offset);
- 			return -EINVAL;
- 		} else if (cand_res.poison !=3D targ_res.poison || cand_res.new_val !=3D=
- targ_res.new_val) {
-@@ -5573,7 +5566,7 @@ static int bpf_core_apply_relo(struct bpf_program *=
-prog,
- 			 * proceed due to ambiguity
- 			 */
- 			pr_warn("prog '%s': relo #%d: relocation decision ambiguity: %s %u !=3D=
- %s %u\n",
--				prog_name, relo_idx,
-+				prog->name, relo_idx,
- 				cand_res.poison ? "failure" : "success", cand_res.new_val,
- 				targ_res.poison ? "failure" : "success", targ_res.new_val);
- 			return -EINVAL;
-@@ -5606,7 +5599,7 @@ static int bpf_core_apply_relo(struct bpf_program *=
-prog,
- 	 */
- 	if (j =3D=3D 0) {
- 		pr_debug("prog '%s': relo #%d: no matching targets found\n",
--			 prog_name, relo_idx);
-+			 prog->name, relo_idx);
-=20
- 		/* calculate single target relo result explicitly */
- 		err =3D bpf_core_calc_relo(prog, relo, relo_idx, &local_spec, NULL, &t=
-arg_res);
-@@ -5619,7 +5612,7 @@ static int bpf_core_apply_relo(struct bpf_program *=
-prog,
- 	err =3D bpf_core_patch_insn(prog, relo, relo_idx, &targ_res);
- 	if (err) {
- 		pr_warn("prog '%s': relo #%d: failed to patch insn at offset %d: %d\n"=
-,
--			prog_name, relo_idx, relo->insn_off, err);
-+			prog->name, relo_idx, relo->insn_off, err);
- 		return -EINVAL;
- 	}
-=20
-@@ -5673,7 +5666,7 @@ bpf_object__relocate_core(struct bpf_object *obj, c=
-onst char *targ_btf_path)
- 		prog =3D NULL;
- 		for (i =3D 0; i < obj->nr_programs; i++) {
- 			prog =3D &obj->programs[i];
--			if (strcmp(prog->section_name, sec_name) =3D=3D 0)
-+			if (strcmp(prog->sec_name, sec_name) =3D=3D 0)
- 				break;
- 		}
- 		if (!prog) {
-@@ -5787,7 +5780,7 @@ static int adjust_prog_btf_ext_info(const struct bp=
-f_object *obj,
- 		sec_name =3D btf__name_by_offset(obj->btf, sec->sec_name_off);
- 		if (!sec_name)
- 			return -EINVAL;
--		if (strcmp(sec_name, prog->section_name) !=3D 0)
-+		if (strcmp(sec_name, prog->sec_name) !=3D 0)
- 			continue;
-=20
- 		for_each_btf_ext_rec(ext_info, sec, i, rec) {
-@@ -6438,8 +6431,7 @@ int bpf_program__load(struct bpf_program *prog, cha=
-r *license, __u32 kern_ver)
- 	int err =3D 0, fd, i, btf_id;
-=20
- 	if (prog->obj->loaded) {
--		pr_warn("prog '%s'('%s'): can't load after object was loaded\n",
--			prog->name, prog->section_name);
-+		pr_warn("prog '%s': can't load after object was loaded\n", prog->name)=
-;
- 		return -EINVAL;
- 	}
-=20
-@@ -6455,7 +6447,7 @@ int bpf_program__load(struct bpf_program *prog, cha=
-r *license, __u32 kern_ver)
- 	if (prog->instances.nr < 0 || !prog->instances.fds) {
- 		if (prog->preprocessor) {
- 			pr_warn("Internal error: can't load program '%s'\n",
--				prog->section_name);
-+				prog->name);
- 			return -LIBBPF_ERRNO__INTERNAL;
- 		}
-=20
-@@ -6470,8 +6462,8 @@ int bpf_program__load(struct bpf_program *prog, cha=
-r *license, __u32 kern_ver)
-=20
- 	if (!prog->preprocessor) {
- 		if (prog->instances.nr !=3D 1) {
--			pr_warn("Program '%s' is inconsistent: nr(%d) !=3D 1\n",
--				prog->section_name, prog->instances.nr);
-+			pr_warn("prog '%s': inconsistent nr(%d) !=3D 1\n",
-+				prog->name, prog->instances.nr);
- 		}
- 		err =3D load_program(prog, prog->insns, prog->insns_cnt,
- 				   license, kern_ver, &fd);
-@@ -6489,13 +6481,13 @@ int bpf_program__load(struct bpf_program *prog, c=
-har *license, __u32 kern_ver)
- 				   prog->insns_cnt, &result);
- 		if (err) {
- 			pr_warn("Preprocessing the %dth instance of program '%s' failed\n",
--				i, prog->section_name);
-+				i, prog->name);
- 			goto out;
- 		}
-=20
- 		if (!result.new_insn_ptr || !result.new_insn_cnt) {
- 			pr_debug("Skip loading the %dth instance of program '%s'\n",
--				 i, prog->section_name);
-+				 i, prog->name);
- 			prog->instances.fds[i] =3D -1;
- 			if (result.pfd)
- 				*result.pfd =3D -1;
-@@ -6506,7 +6498,7 @@ int bpf_program__load(struct bpf_program *prog, cha=
-r *license, __u32 kern_ver)
- 				   result.new_insn_cnt, license, kern_ver, &fd);
- 		if (err) {
- 			pr_warn("Loading the %dth instance of program '%s' failed\n",
--				i, prog->section_name);
-+				i, prog->name);
- 			goto out;
- 		}
-=20
-@@ -6516,7 +6508,7 @@ int bpf_program__load(struct bpf_program *prog, cha=
-r *license, __u32 kern_ver)
- 	}
- out:
- 	if (err)
--		pr_warn("failed to load program '%s'\n", prog->section_name);
-+		pr_warn("failed to load program '%s'\n", prog->name);
- 	zfree(&prog->insns);
- 	prog->insns_cnt =3D 0;
- 	return err;
-@@ -6608,7 +6600,7 @@ __bpf_object__open(const char *path, const void *ob=
-j_buf, size_t obj_buf_sz,
- 	bpf_object__elf_finish(obj);
-=20
- 	bpf_object__for_each_program(prog, obj) {
--		prog->sec_def =3D find_sec_def(prog->section_name);
-+		prog->sec_def =3D find_sec_def(prog->sec_name);
- 		if (!prog->sec_def)
- 			/* couldn't guess, but user might manually specify */
- 			continue;
-@@ -6989,7 +6981,7 @@ int bpf_program__pin_instance(struct bpf_program *p=
-rog, const char *path,
-=20
- 	if (instance < 0 || instance >=3D prog->instances.nr) {
- 		pr_warn("invalid prog instance %d of prog %s (max %d)\n",
--			instance, prog->section_name, prog->instances.nr);
-+			instance, prog->name, prog->instances.nr);
- 		return -EINVAL;
- 	}
-=20
-@@ -7020,7 +7012,7 @@ int bpf_program__unpin_instance(struct bpf_program =
-*prog, const char *path,
-=20
- 	if (instance < 0 || instance >=3D prog->instances.nr) {
- 		pr_warn("invalid prog instance %d of prog %s (max %d)\n",
--			instance, prog->section_name, prog->instances.nr);
-+			instance, prog->name, prog->instances.nr);
- 		return -EINVAL;
- 	}
-=20
-@@ -7050,8 +7042,7 @@ int bpf_program__pin(struct bpf_program *prog, cons=
-t char *path)
- 	}
-=20
- 	if (prog->instances.nr <=3D 0) {
--		pr_warn("no instances of prog %s to pin\n",
--			   prog->section_name);
-+		pr_warn("no instances of prog %s to pin\n", prog->name);
- 		return -EINVAL;
- 	}
-=20
-@@ -7113,8 +7104,7 @@ int bpf_program__unpin(struct bpf_program *prog, co=
-nst char *path)
- 	}
-=20
- 	if (prog->instances.nr <=3D 0) {
--		pr_warn("no instances of prog %s to pin\n",
--			   prog->section_name);
-+		pr_warn("no instances of prog %s to pin\n", prog->name);
- 		return -EINVAL;
- 	}
-=20
-@@ -7649,11 +7639,16 @@ const char *bpf_program__name(const struct bpf_pr=
-ogram *prog)
- 	return prog->name;
+ 	if (buf->head + len > buf->tail) {
+ 		if (scratch =3D=3D NULL) {
+@@ -188,7 +188,7 @@ static void *buf_assign(buf_t *buf, const size_t len,=
+ void *scratch)
+ 	return ptr;
  }
 =20
-+const char *bpf_program__section_name(const struct bpf_program *prog)
-+{
-+	return prog->sec_name;
-+}
+-static bool pkt_skip_ipv4_options(buf_t *buf, const struct iphdr *ipv4)
++static __noinline bool pkt_skip_ipv4_options(buf_t *buf, const struct ip=
+hdr *ipv4)
+ {
+ 	if (ipv4->ihl <=3D 5) {
+ 		return true;
+@@ -197,13 +197,13 @@ static bool pkt_skip_ipv4_options(buf_t *buf, const=
+ struct iphdr *ipv4)
+ 	return buf_skip(buf, (ipv4->ihl - 5) * 4);
+ }
+=20
+-static bool ipv4_is_fragment(const struct iphdr *ip)
++static __noinline bool ipv4_is_fragment(const struct iphdr *ip)
+ {
+ 	uint16_t frag_off =3D ip->frag_off & bpf_htons(IP_OFFSET_MASK);
+ 	return (ip->frag_off & bpf_htons(IP_MF)) !=3D 0 || frag_off > 0;
+ }
+=20
+-static struct iphdr *pkt_parse_ipv4(buf_t *pkt, struct iphdr *scratch)
++static __always_inline struct iphdr *pkt_parse_ipv4(buf_t *pkt, struct i=
+phdr *scratch)
+ {
+ 	struct iphdr *ipv4 =3D buf_assign(pkt, sizeof(*ipv4), scratch);
+ 	if (ipv4 =3D=3D NULL) {
+@@ -222,7 +222,7 @@ static struct iphdr *pkt_parse_ipv4(buf_t *pkt, struc=
+t iphdr *scratch)
+ }
+=20
+ /* Parse the L4 ports from a packet, assuming a layout like TCP or UDP. =
+*/
+-static bool pkt_parse_icmp_l4_ports(buf_t *pkt, flow_ports_t *ports)
++static __noinline bool pkt_parse_icmp_l4_ports(buf_t *pkt, flow_ports_t =
+*ports)
+ {
+ 	if (!buf_copy(pkt, ports, sizeof(*ports))) {
+ 		return false;
+@@ -237,7 +237,7 @@ static bool pkt_parse_icmp_l4_ports(buf_t *pkt, flow_=
+ports_t *ports)
+ 	return true;
+ }
+=20
+-static uint16_t pkt_checksum_fold(uint32_t csum)
++static __noinline uint16_t pkt_checksum_fold(uint32_t csum)
+ {
+ 	/* The highest reasonable value for an IPv4 header
+ 	 * checksum requires two folds, so we just do that always.
+@@ -247,7 +247,7 @@ static uint16_t pkt_checksum_fold(uint32_t csum)
+ 	return (uint16_t)~csum;
+ }
+=20
+-static void pkt_ipv4_checksum(struct iphdr *iph)
++static __noinline void pkt_ipv4_checksum(struct iphdr *iph)
+ {
+ 	iph->check =3D 0;
+=20
+@@ -268,10 +268,11 @@ static void pkt_ipv4_checksum(struct iphdr *iph)
+ 	iph->check =3D pkt_checksum_fold(acc);
+ }
+=20
+-static bool pkt_skip_ipv6_extension_headers(buf_t *pkt,
+-					    const struct ipv6hdr *ipv6,
+-					    uint8_t *upper_proto,
+-					    bool *is_fragment)
++static __noinline
++bool pkt_skip_ipv6_extension_headers(buf_t *pkt,
++				     const struct ipv6hdr *ipv6,
++				     uint8_t *upper_proto,
++				     bool *is_fragment)
+ {
+ 	/* We understand five extension headers.
+ 	 * https://tools.ietf.org/html/rfc8200#section-4.1 states that all
+@@ -336,7 +337,7 @@ static bool pkt_skip_ipv6_extension_headers(buf_t *pk=
+t,
+  * scratch is allocated on the stack. However, this usage should be safe=
+ since
+  * it's the callers stack after all.
+  */
+-static inline __attribute__((__always_inline__)) struct ipv6hdr *
++static __always_inline struct ipv6hdr *
+ pkt_parse_ipv6(buf_t *pkt, struct ipv6hdr *scratch, uint8_t *proto,
+ 	       bool *is_fragment)
+ {
+@@ -354,20 +355,20 @@ pkt_parse_ipv6(buf_t *pkt, struct ipv6hdr *scratch,=
+ uint8_t *proto,
+=20
+ /* Global metrics, per CPU
+  */
+-struct bpf_map_def metrics_map SEC("maps") =3D {
+-	.type =3D BPF_MAP_TYPE_PERCPU_ARRAY,
+-	.key_size =3D sizeof(unsigned int),
+-	.value_size =3D sizeof(metrics_t),
+-	.max_entries =3D 1,
+-};
+-
+-static metrics_t *get_global_metrics(void)
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, unsigned int);
++	__type(value, metrics_t);
++} metrics_map SEC(".maps");
 +
- const char *bpf_program__title(const struct bpf_program *prog, bool need=
-s_copy)
++static __noinline metrics_t *get_global_metrics(void)
  {
- 	const char *title;
-=20
--	title =3D prog->section_name;
-+	title =3D prog->sec_name;
- 	if (needs_copy) {
- 		title =3D strdup(title);
- 		if (!title) {
-@@ -7726,14 +7721,14 @@ int bpf_program__nth_fd(const struct bpf_program =
-*prog, int n)
-=20
- 	if (n >=3D prog->instances.nr || n < 0) {
- 		pr_warn("Can't get the %dth fd from program %s: only %d instances\n",
--			n, prog->section_name, prog->instances.nr);
-+			n, prog->name, prog->instances.nr);
- 		return -EINVAL;
- 	}
-=20
- 	fd =3D prog->instances.fds[n];
- 	if (fd < 0) {
- 		pr_warn("%dth instance of program '%s' is invalid\n",
--			n, prog->section_name);
-+			n, prog->name);
- 		return -ENOENT;
- 	}
-=20
-@@ -8170,7 +8165,7 @@ static int bpf_object__collect_st_ops_relos(struct =
-bpf_object *obj,
- 		if (prog->type =3D=3D BPF_PROG_TYPE_UNSPEC) {
- 			const struct bpf_sec_def *sec_def;
-=20
--			sec_def =3D find_sec_def(prog->section_name);
-+			sec_def =3D find_sec_def(prog->sec_name);
- 			if (sec_def &&
- 			    sec_def->prog_type !=3D BPF_PROG_TYPE_STRUCT_OPS) {
- 				/* for pr_warn */
-@@ -8193,7 +8188,7 @@ static int bpf_object__collect_st_ops_relos(struct =
-bpf_object *obj,
-=20
- invalid_prog:
- 	pr_warn("struct_ops reloc %s: cannot use prog %s in sec %s with type %u=
- attach_btf_id %u expected_attach_type %u for func ptr %s\n",
--		map->name, prog->name, prog->section_name, prog->type,
-+		map->name, prog->name, prog->sec_name, prog->type,
- 		prog->attach_btf_id, prog->expected_attach_type, name);
- 	return -EINVAL;
+ 	uint64_t key =3D 0;
+ 	return bpf_map_lookup_elem(&metrics_map, &key);
  }
-@@ -8297,7 +8292,7 @@ static int libbpf_find_attach_btf_id(struct bpf_pro=
-gram *prog)
+=20
+-static ret_t accept_locally(struct __sk_buff *skb, encap_headers_t *enca=
+p)
++static __noinline ret_t accept_locally(struct __sk_buff *skb, encap_head=
+ers_t *encap)
  {
- 	enum bpf_attach_type attach_type =3D prog->expected_attach_type;
- 	__u32 attach_prog_fd =3D prog->attach_prog_fd;
--	const char *name =3D prog->section_name;
-+	const char *name =3D prog->sec_name;
- 	int i, err;
-=20
- 	if (!name)
-@@ -8824,14 +8819,14 @@ struct bpf_link *bpf_program__attach_perf_event(s=
-truct bpf_program *prog,
- 	int prog_fd, err;
-=20
- 	if (pfd < 0) {
--		pr_warn("program '%s': invalid perf event FD %d\n",
--			bpf_program__title(prog, false), pfd);
-+		pr_warn("prog '%s': invalid perf event FD %d\n",
-+			prog->name, pfd);
- 		return ERR_PTR(-EINVAL);
- 	}
- 	prog_fd =3D bpf_program__fd(prog);
- 	if (prog_fd < 0) {
--		pr_warn("program '%s': can't attach BPF program w/o FD (did you load i=
-t?)\n",
--			bpf_program__title(prog, false));
-+		pr_warn("prog '%s': can't attach BPF program w/o FD (did you load it?)=
-\n",
-+			prog->name);
- 		return ERR_PTR(-EINVAL);
- 	}
-=20
-@@ -8844,20 +8839,18 @@ struct bpf_link *bpf_program__attach_perf_event(s=
-truct bpf_program *prog,
- 	if (ioctl(pfd, PERF_EVENT_IOC_SET_BPF, prog_fd) < 0) {
- 		err =3D -errno;
- 		free(link);
--		pr_warn("program '%s': failed to attach to pfd %d: %s\n",
--			bpf_program__title(prog, false), pfd,
--			   libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
-+		pr_warn("prog '%s': failed to attach to pfd %d: %s\n",
-+			prog->name, pfd, libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
- 		if (err =3D=3D -EPROTO)
--			pr_warn("program '%s': try add PERF_SAMPLE_CALLCHAIN to or remove exc=
-lude_callchain_[kernel|user] from pfd %d\n",
--				bpf_program__title(prog, false), pfd);
-+			pr_warn("prog '%s': try add PERF_SAMPLE_CALLCHAIN to or remove exclud=
-e_callchain_[kernel|user] from pfd %d\n",
-+				prog->name, pfd);
- 		return ERR_PTR(err);
- 	}
- 	if (ioctl(pfd, PERF_EVENT_IOC_ENABLE, 0) < 0) {
- 		err =3D -errno;
- 		free(link);
--		pr_warn("program '%s': failed to enable pfd %d: %s\n",
--			bpf_program__title(prog, false), pfd,
--			   libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
-+		pr_warn("prog '%s': failed to enable pfd %d: %s\n",
-+			prog->name, pfd, libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
- 		return ERR_PTR(err);
- 	}
- 	return link;
-@@ -8979,9 +8972,8 @@ struct bpf_link *bpf_program__attach_kprobe(struct =
-bpf_program *prog,
- 	pfd =3D perf_event_open_probe(false /* uprobe */, retprobe, func_name,
- 				    0 /* offset */, -1 /* pid */);
- 	if (pfd < 0) {
--		pr_warn("program '%s': failed to create %s '%s' perf event: %s\n",
--			bpf_program__title(prog, false),
--			retprobe ? "kretprobe" : "kprobe", func_name,
-+		pr_warn("prog '%s': failed to create %s '%s' perf event: %s\n",
-+			prog->name, retprobe ? "kretprobe" : "kprobe", func_name,
- 			libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
- 		return ERR_PTR(pfd);
- 	}
-@@ -8989,9 +8981,8 @@ struct bpf_link *bpf_program__attach_kprobe(struct =
-bpf_program *prog,
- 	if (IS_ERR(link)) {
- 		close(pfd);
- 		err =3D PTR_ERR(link);
--		pr_warn("program '%s': failed to attach to %s '%s': %s\n",
--			bpf_program__title(prog, false),
--			retprobe ? "kretprobe" : "kprobe", func_name,
-+		pr_warn("prog '%s': failed to attach to %s '%s': %s\n",
-+			prog->name, retprobe ? "kretprobe" : "kprobe", func_name,
- 			libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
- 		return link;
- 	}
-@@ -9004,7 +8995,7 @@ static struct bpf_link *attach_kprobe(const struct =
-bpf_sec_def *sec,
- 	const char *func_name;
- 	bool retprobe;
-=20
--	func_name =3D bpf_program__title(prog, false) + sec->len;
-+	func_name =3D prog->sec_name + sec->len;
- 	retprobe =3D strcmp(sec->sec, "kretprobe/") =3D=3D 0;
-=20
- 	return bpf_program__attach_kprobe(prog, retprobe, func_name);
-@@ -9022,9 +9013,8 @@ struct bpf_link *bpf_program__attach_uprobe(struct =
-bpf_program *prog,
- 	pfd =3D perf_event_open_probe(true /* uprobe */, retprobe,
- 				    binary_path, func_offset, pid);
- 	if (pfd < 0) {
--		pr_warn("program '%s': failed to create %s '%s:0x%zx' perf event: %s\n=
-",
--			bpf_program__title(prog, false),
--			retprobe ? "uretprobe" : "uprobe",
-+		pr_warn("prog '%s': failed to create %s '%s:0x%zx' perf event: %s\n",
-+			prog->name, retprobe ? "uretprobe" : "uprobe",
- 			binary_path, func_offset,
- 			libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
- 		return ERR_PTR(pfd);
-@@ -9033,9 +9023,8 @@ struct bpf_link *bpf_program__attach_uprobe(struct =
-bpf_program *prog,
- 	if (IS_ERR(link)) {
- 		close(pfd);
- 		err =3D PTR_ERR(link);
--		pr_warn("program '%s': failed to attach to %s '%s:0x%zx': %s\n",
--			bpf_program__title(prog, false),
--			retprobe ? "uretprobe" : "uprobe",
-+		pr_warn("prog '%s': failed to attach to %s '%s:0x%zx': %s\n",
-+			prog->name, retprobe ? "uretprobe" : "uprobe",
- 			binary_path, func_offset,
- 			libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
- 		return link;
-@@ -9103,9 +9092,8 @@ struct bpf_link *bpf_program__attach_tracepoint(str=
-uct bpf_program *prog,
-=20
- 	pfd =3D perf_event_open_tracepoint(tp_category, tp_name);
- 	if (pfd < 0) {
--		pr_warn("program '%s': failed to create tracepoint '%s/%s' perf event:=
- %s\n",
--			bpf_program__title(prog, false),
--			tp_category, tp_name,
-+		pr_warn("prog '%s': failed to create tracepoint '%s/%s' perf event: %s=
-\n",
-+			prog->name, tp_category, tp_name,
- 			libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
- 		return ERR_PTR(pfd);
- 	}
-@@ -9113,9 +9101,8 @@ struct bpf_link *bpf_program__attach_tracepoint(str=
-uct bpf_program *prog,
- 	if (IS_ERR(link)) {
- 		close(pfd);
- 		err =3D PTR_ERR(link);
--		pr_warn("program '%s': failed to attach to tracepoint '%s/%s': %s\n",
--			bpf_program__title(prog, false),
--			tp_category, tp_name,
-+		pr_warn("prog '%s': failed to attach to tracepoint '%s/%s': %s\n",
-+			prog->name, tp_category, tp_name,
- 			libbpf_strerror_r(err, errmsg, sizeof(errmsg)));
- 		return link;
- 	}
-@@ -9128,7 +9115,7 @@ static struct bpf_link *attach_tp(const struct bpf_=
-sec_def *sec,
- 	char *sec_name, *tp_cat, *tp_name;
- 	struct bpf_link *link;
-=20
--	sec_name =3D strdup(bpf_program__title(prog, false));
-+	sec_name =3D strdup(prog->sec_name);
- 	if (!sec_name)
- 		return ERR_PTR(-ENOMEM);
-=20
-@@ -9157,8 +9144,7 @@ struct bpf_link *bpf_program__attach_raw_tracepoint=
-(struct bpf_program *prog,
-=20
- 	prog_fd =3D bpf_program__fd(prog);
- 	if (prog_fd < 0) {
--		pr_warn("program '%s': can't attach before loaded\n",
--			bpf_program__title(prog, false));
-+		pr_warn("prog '%s': can't attach before loaded\n", prog->name);
- 		return ERR_PTR(-EINVAL);
- 	}
-=20
-@@ -9171,9 +9157,8 @@ struct bpf_link *bpf_program__attach_raw_tracepoint=
-(struct bpf_program *prog,
- 	if (pfd < 0) {
- 		pfd =3D -errno;
- 		free(link);
--		pr_warn("program '%s': failed to attach to raw tracepoint '%s': %s\n",
--			bpf_program__title(prog, false), tp_name,
--			libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
-+		pr_warn("prog '%s': failed to attach to raw tracepoint '%s': %s\n",
-+			prog->name, tp_name, libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
- 		return ERR_PTR(pfd);
- 	}
- 	link->fd =3D pfd;
-@@ -9183,7 +9168,7 @@ struct bpf_link *bpf_program__attach_raw_tracepoint=
-(struct bpf_program *prog,
- static struct bpf_link *attach_raw_tp(const struct bpf_sec_def *sec,
- 				      struct bpf_program *prog)
- {
--	const char *tp_name =3D bpf_program__title(prog, false) + sec->len;
-+	const char *tp_name =3D prog->sec_name + sec->len;
-=20
- 	return bpf_program__attach_raw_tracepoint(prog, tp_name);
+ 	const int payload_off =3D
+ 		sizeof(*encap) +
+@@ -388,8 +389,8 @@ static ret_t accept_locally(struct __sk_buff *skb, en=
+cap_headers_t *encap)
+ 	return bpf_redirect(skb->ifindex, BPF_F_INGRESS);
  }
-@@ -9197,8 +9182,7 @@ static struct bpf_link *bpf_program__attach_btf_id(=
-struct bpf_program *prog)
 =20
- 	prog_fd =3D bpf_program__fd(prog);
- 	if (prog_fd < 0) {
--		pr_warn("program '%s': can't attach before loaded\n",
--			bpf_program__title(prog, false));
-+		pr_warn("prog '%s': can't attach before loaded\n", prog->name);
- 		return ERR_PTR(-EINVAL);
- 	}
-=20
-@@ -9211,9 +9195,8 @@ static struct bpf_link *bpf_program__attach_btf_id(=
-struct bpf_program *prog)
- 	if (pfd < 0) {
- 		pfd =3D -errno;
- 		free(link);
--		pr_warn("program '%s': failed to attach: %s\n",
--			bpf_program__title(prog, false),
--			libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
-+		pr_warn("prog '%s': failed to attach: %s\n",
-+			prog->name, libbpf_strerror_r(pfd, errmsg, sizeof(errmsg)));
- 		return ERR_PTR(pfd);
- 	}
- 	link->fd =3D pfd;
-@@ -9259,8 +9242,7 @@ bpf_program__attach_fd(struct bpf_program *prog, in=
-t target_fd,
-=20
- 	prog_fd =3D bpf_program__fd(prog);
- 	if (prog_fd < 0) {
--		pr_warn("program '%s': can't attach before loaded\n",
--			bpf_program__title(prog, false));
-+		pr_warn("prog '%s': can't attach before loaded\n", prog->name);
- 		return ERR_PTR(-EINVAL);
- 	}
-=20
-@@ -9274,8 +9256,8 @@ bpf_program__attach_fd(struct bpf_program *prog, in=
-t target_fd,
- 	if (link_fd < 0) {
- 		link_fd =3D -errno;
- 		free(link);
--		pr_warn("program '%s': failed to attach to %s: %s\n",
--			bpf_program__title(prog, false), target_name,
-+		pr_warn("prog '%s': failed to attach to %s: %s\n",
-+			prog->name, target_name,
- 			libbpf_strerror_r(link_fd, errmsg, sizeof(errmsg)));
- 		return ERR_PTR(link_fd);
- 	}
-@@ -9319,8 +9301,7 @@ bpf_program__attach_iter(struct bpf_program *prog,
-=20
- 	prog_fd =3D bpf_program__fd(prog);
- 	if (prog_fd < 0) {
--		pr_warn("program '%s': can't attach before loaded\n",
--			bpf_program__title(prog, false));
-+		pr_warn("prog '%s': can't attach before loaded\n", prog->name);
- 		return ERR_PTR(-EINVAL);
- 	}
-=20
-@@ -9334,9 +9315,8 @@ bpf_program__attach_iter(struct bpf_program *prog,
- 	if (link_fd < 0) {
- 		link_fd =3D -errno;
- 		free(link);
--		pr_warn("program '%s': failed to attach to iterator: %s\n",
--			bpf_program__title(prog, false),
--			libbpf_strerror_r(link_fd, errmsg, sizeof(errmsg)));
-+		pr_warn("prog '%s': failed to attach to iterator: %s\n",
-+			prog->name, libbpf_strerror_r(link_fd, errmsg, sizeof(errmsg)));
- 		return ERR_PTR(link_fd);
- 	}
- 	link->fd =3D link_fd;
-@@ -9347,7 +9327,7 @@ struct bpf_link *bpf_program__attach(struct bpf_pro=
-gram *prog)
+-static ret_t forward_with_gre(struct __sk_buff *skb, encap_headers_t *en=
+cap,
+-			      struct in_addr *next_hop, metrics_t *metrics)
++static __noinline ret_t forward_with_gre(struct __sk_buff *skb, encap_he=
+aders_t *encap,
++					 struct in_addr *next_hop, metrics_t *metrics)
  {
- 	const struct bpf_sec_def *sec_def;
+ 	metrics->forwarded_packets_total_gre++;
 =20
--	sec_def =3D find_sec_def(bpf_program__title(prog, false));
-+	sec_def =3D find_sec_def(prog->sec_name);
- 	if (!sec_def || !sec_def->attach_fn)
- 		return ERR_PTR(-ESRCH);
+@@ -509,8 +510,8 @@ static ret_t forward_with_gre(struct __sk_buff *skb, =
+encap_headers_t *encap,
+ 	return bpf_redirect(skb->ifindex, 0);
+ }
 =20
-@@ -10417,12 +10397,11 @@ int bpf_object__attach_skeleton(struct bpf_obje=
-ct_skeleton *s)
- 		struct bpf_program *prog =3D *s->progs[i].prog;
- 		struct bpf_link **link =3D s->progs[i].link;
- 		const struct bpf_sec_def *sec_def;
--		const char *sec_name =3D bpf_program__title(prog, false);
+-static ret_t forward_to_next_hop(struct __sk_buff *skb, encap_headers_t =
+*encap,
+-				 struct in_addr *next_hop, metrics_t *metrics)
++static __noinline ret_t forward_to_next_hop(struct __sk_buff *skb, encap=
+_headers_t *encap,
++					    struct in_addr *next_hop, metrics_t *metrics)
+ {
+ 	/* swap L2 addresses */
+ 	/* This assumes that packets are received from a router.
+@@ -546,7 +547,7 @@ static ret_t forward_to_next_hop(struct __sk_buff *sk=
+b, encap_headers_t *encap,
+ 	return bpf_redirect(skb->ifindex, 0);
+ }
 =20
- 		if (!prog->load)
- 			continue;
+-static ret_t skip_next_hops(buf_t *pkt, int n)
++static __noinline ret_t skip_next_hops(buf_t *pkt, int n)
+ {
+ 	switch (n) {
+ 	case 1:
+@@ -566,8 +567,8 @@ static ret_t skip_next_hops(buf_t *pkt, int n)
+  * pkt is positioned just after the variable length GLB header
+  * iff the call is successful.
+  */
+-static ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
+-			  struct in_addr *next_hop)
++static __noinline ret_t get_next_hop(buf_t *pkt, encap_headers_t *encap,
++				     struct in_addr *next_hop)
+ {
+ 	if (encap->unigue.next_hop > encap->unigue.hop_count) {
+ 		return TC_ACT_SHOT;
+@@ -601,8 +602,8 @@ static ret_t get_next_hop(buf_t *pkt, encap_headers_t=
+ *encap,
+  * return value, and calling code works while still being "generic" to
+  * IPv4 and IPv6.
+  */
+-static uint64_t fill_tuple(struct bpf_sock_tuple *tuple, void *iph,
+-			   uint64_t iphlen, uint16_t sport, uint16_t dport)
++static __noinline uint64_t fill_tuple(struct bpf_sock_tuple *tuple, void=
+ *iph,
++				      uint64_t iphlen, uint16_t sport, uint16_t dport)
+ {
+ 	switch (iphlen) {
+ 	case sizeof(struct iphdr): {
+@@ -630,9 +631,9 @@ static uint64_t fill_tuple(struct bpf_sock_tuple *tup=
+le, void *iph,
+ 	}
+ }
 =20
--		sec_def =3D find_sec_def(sec_name);
-+		sec_def =3D find_sec_def(prog->sec_name);
- 		if (!sec_def || !sec_def->attach_fn)
- 			continue;
+-static verdict_t classify_tcp(struct __sk_buff *skb,
+-			      struct bpf_sock_tuple *tuple, uint64_t tuplen,
+-			      void *iph, struct tcphdr *tcp)
++static __noinline verdict_t classify_tcp(struct __sk_buff *skb,
++					 struct bpf_sock_tuple *tuple, uint64_t tuplen,
++					 void *iph, struct tcphdr *tcp)
+ {
+ 	struct bpf_sock *sk =3D
+ 		bpf_skc_lookup_tcp(skb, tuple, tuplen, BPF_F_CURRENT_NETNS, 0);
+@@ -663,8 +664,8 @@ static verdict_t classify_tcp(struct __sk_buff *skb,
+ 	return UNKNOWN;
+ }
 =20
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 308e0ded8f14..a750f67a23f6 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -198,8 +198,9 @@ LIBBPF_API void bpf_program__set_ifindex(struct bpf_p=
-rogram *prog,
- 					 __u32 ifindex);
+-static verdict_t classify_udp(struct __sk_buff *skb,
+-			      struct bpf_sock_tuple *tuple, uint64_t tuplen)
++static __noinline verdict_t classify_udp(struct __sk_buff *skb,
++					 struct bpf_sock_tuple *tuple, uint64_t tuplen)
+ {
+ 	struct bpf_sock *sk =3D
+ 		bpf_sk_lookup_udp(skb, tuple, tuplen, BPF_F_CURRENT_NETNS, 0);
+@@ -681,9 +682,9 @@ static verdict_t classify_udp(struct __sk_buff *skb,
+ 	return UNKNOWN;
+ }
 =20
- LIBBPF_API const char *bpf_program__name(const struct bpf_program *prog)=
-;
--LIBBPF_API const char *bpf_program__title(const struct bpf_program *prog=
-,
--					  bool needs_copy);
-+LIBBPF_API const char *bpf_program__section_name(const struct bpf_progra=
-m *prog);
-+LIBBPF_API LIBBPF_DEPRECATED("BPF program title is confusing term; pleas=
-e use bpf_program__section_name() instead")
-+const char *bpf_program__title(const struct bpf_program *prog, bool need=
-s_copy);
- LIBBPF_API bool bpf_program__autoload(const struct bpf_program *prog);
- LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool =
-autoload);
+-static verdict_t classify_icmp(struct __sk_buff *skb, uint8_t proto,
+-			       struct bpf_sock_tuple *tuple, uint64_t tuplen,
+-			       metrics_t *metrics)
++static __noinline verdict_t classify_icmp(struct __sk_buff *skb, uint8_t=
+ proto,
++					  struct bpf_sock_tuple *tuple, uint64_t tuplen,
++					  metrics_t *metrics)
+ {
+ 	switch (proto) {
+ 	case IPPROTO_TCP:
+@@ -698,7 +699,7 @@ static verdict_t classify_icmp(struct __sk_buff *skb,=
+ uint8_t proto,
+ 	}
+ }
 =20
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 3fedcdc4ae2f..92ceb48a5ca2 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -302,6 +302,7 @@ LIBBPF_0.1.0 {
+-static verdict_t process_icmpv4(buf_t *pkt, metrics_t *metrics)
++static __noinline verdict_t process_icmpv4(buf_t *pkt, metrics_t *metric=
+s)
+ {
+ 	struct icmphdr icmp;
+ 	if (!buf_copy(pkt, &icmp, sizeof(icmp))) {
+@@ -745,7 +746,7 @@ static verdict_t process_icmpv4(buf_t *pkt, metrics_t=
+ *metrics)
+ 			     sizeof(tuple.ipv4), metrics);
+ }
 =20
- LIBBPF_0.2.0 {
- 	global:
-+		bpf_program__section_name;
- 		perf_buffer__buffer_cnt;
- 		perf_buffer__buffer_fd;
- 		perf_buffer__epoll_fd;
+-static verdict_t process_icmpv6(buf_t *pkt, metrics_t *metrics)
++static __noinline verdict_t process_icmpv6(buf_t *pkt, metrics_t *metric=
+s)
+ {
+ 	struct icmp6hdr icmp6;
+ 	if (!buf_copy(pkt, &icmp6, sizeof(icmp6))) {
+@@ -797,8 +798,8 @@ static verdict_t process_icmpv6(buf_t *pkt, metrics_t=
+ *metrics)
+ 			     metrics);
+ }
+=20
+-static verdict_t process_tcp(buf_t *pkt, void *iph, uint64_t iphlen,
+-			     metrics_t *metrics)
++static __noinline verdict_t process_tcp(buf_t *pkt, void *iph, uint64_t =
+iphlen,
++					metrics_t *metrics)
+ {
+ 	metrics->l4_protocol_packets_total_tcp++;
+=20
+@@ -819,8 +820,8 @@ static verdict_t process_tcp(buf_t *pkt, void *iph, u=
+int64_t iphlen,
+ 	return classify_tcp(pkt->skb, &tuple, tuplen, iph, tcp);
+ }
+=20
+-static verdict_t process_udp(buf_t *pkt, void *iph, uint64_t iphlen,
+-			     metrics_t *metrics)
++static __noinline verdict_t process_udp(buf_t *pkt, void *iph, uint64_t =
+iphlen,
++					metrics_t *metrics)
+ {
+ 	metrics->l4_protocol_packets_total_udp++;
+=20
+@@ -837,7 +838,7 @@ static verdict_t process_udp(buf_t *pkt, void *iph, u=
+int64_t iphlen,
+ 	return classify_udp(pkt->skb, &tuple, tuplen);
+ }
+=20
+-static verdict_t process_ipv4(buf_t *pkt, metrics_t *metrics)
++static __noinline verdict_t process_ipv4(buf_t *pkt, metrics_t *metrics)
+ {
+ 	metrics->l3_protocol_packets_total_ipv4++;
+=20
+@@ -874,7 +875,7 @@ static verdict_t process_ipv4(buf_t *pkt, metrics_t *=
+metrics)
+ 	}
+ }
+=20
+-static verdict_t process_ipv6(buf_t *pkt, metrics_t *metrics)
++static __noinline verdict_t process_ipv6(buf_t *pkt, metrics_t *metrics)
+ {
+ 	metrics->l3_protocol_packets_total_ipv6++;
+=20
 --=20
 2.24.1
 
