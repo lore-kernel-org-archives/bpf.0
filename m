@@ -7,48 +7,48 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A50F2C433E7
-	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 01:50:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 061CFC433E6
+	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 01:50:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8323420707
+	by mail.kernel.org (Postfix) with ESMTP id D9F1720707
 	for <bpf@archiver.kernel.org>; Tue,  1 Sep 2020 01:50:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="nhyUL3/r"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="nrF4hesm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726293AbgIABu2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 31 Aug 2020 21:50:28 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:55086 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726518AbgIABu0 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 31 Aug 2020 21:50:26 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0811jTgH007042
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2020 18:50:25 -0700
+        id S1726543AbgIABu1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 31 Aug 2020 21:50:27 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:58530 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726293AbgIABuY (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 31 Aug 2020 21:50:24 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0811oCEO014917
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2020 18:50:23 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=xZfr7J7vumhx1Zgou/Z0il+VrwbvbOFRutiV/wfxi9k=;
- b=nhyUL3/rnsu+hCujoNYh7nOtb/NgGgCuhYuBv5BcqhcoiH7CmX0WbOkFa3/36RwmTGrN
- vll2mwRQZlz7auKMx0Bres6Dd/yslRILHlGTCVBmHm/KacHzBc/xLGnpGOd9whYvIoRP
- VWb2huOMg+5RoNL80lAWkyEtvIVLbIMVpf0= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3386gt84fc-1
+ bh=fJMxN8Zuw20jslCbO+L7rVqWMogYw/X9JRFMkr9yhz4=;
+ b=nrF4hesmXExzwIdCYr/V8erOsR7M/IpTT4X+3Sox4M4yxWXqRRuNeUcvhKwG9HULvHOm
+ NGsRL5F3HoAcR/UYD8ByGzTWHph3sGlAfaBm8x0Ko8RlDGWXozV8t04N07t74P20ci6C
+ yJAXZ87b0QPEobJelPMkvgoQtpR3aGBmZos= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 337jh03bdq-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 31 Aug 2020 18:50:25 -0700
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 31 Aug 2020 18:50:23 -0700
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 31 Aug 2020 18:50:24 -0700
+ 15.1.1979.3; Mon, 31 Aug 2020 18:50:22 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 8B9872EC663B; Mon, 31 Aug 2020 18:50:22 -0700 (PDT)
+        id 3ACBF2EC663B; Mon, 31 Aug 2020 18:50:18 -0700 (PDT)
 From:   Andrii Nakryiko <andriin@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH v2 bpf-next 08/14] tools/bpftool: replace bpf_program__title() with bpf_program__section_name()
-Date:   Mon, 31 Aug 2020 18:49:57 -0700
-Message-ID: <20200901015003.2871861-9-andriin@fb.com>
+Subject: [PATCH v2 bpf-next 06/14] libbpf: add multi-prog section support for struct_ops
+Date:   Mon, 31 Aug 2020 18:49:55 -0700
+Message-ID: <20200901015003.2871861-7-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200901015003.2871861-1-andriin@fb.com>
 References: <20200901015003.2871861-1-andriin@fb.com>
@@ -58,50 +58,96 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-01_01:2020-08-31,2020-09-01 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- priorityscore=1501 phishscore=0 impostorscore=0 mlxlogscore=602
- lowpriorityscore=0 bulkscore=0 clxscore=1015 malwarescore=0 suspectscore=8
- mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009010014
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 malwarescore=0
+ spamscore=0 lowpriorityscore=0 bulkscore=0 adultscore=0 priorityscore=1501
+ phishscore=0 suspectscore=8 impostorscore=0 mlxlogscore=999 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009010014
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf_program__title() is deprecated, switch to bpf_program__section_name()=
- and
-avoid compilation warnings.
+Adjust struct_ops handling code to work with multi-program ELF sections
+properly.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/bpf/bpftool/prog.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/lib/bpf/libbpf.c | 26 ++++++++------------------
+ 1 file changed, 8 insertions(+), 18 deletions(-)
 
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index d393eb8263a6..f7923414a052 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -1304,7 +1304,7 @@ static int load_with_options(int argc, char **argv,=
- bool first_prog_only)
- 		enum bpf_prog_type prog_type =3D common_prog_type;
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index a2ac10511852..1485e562ec32 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -73,8 +73,6 @@
+ #define __printf(a, b)	__attribute__((format(printf, a, b)))
 =20
- 		if (prog_type =3D=3D BPF_PROG_TYPE_UNSPEC) {
--			const char *sec_name =3D bpf_program__title(pos, false);
-+			const char *sec_name =3D bpf_program__section_name(pos);
+ static struct bpf_map *bpf_object__add_map(struct bpf_object *obj);
+-static struct bpf_program *bpf_object__find_prog_by_idx(struct bpf_objec=
+t *obj,
+-							int idx);
+ static const struct btf_type *
+ skip_mods_and_typedefs(const struct btf *btf, __u32 id, __u32 *res_id);
 =20
- 			err =3D get_prog_type_by_name(sec_name, &prog_type,
- 						    &expected_attach_type);
-@@ -1398,7 +1398,7 @@ static int load_with_options(int argc, char **argv,=
- bool first_prog_only)
- 		err =3D bpf_obj_pin(bpf_program__fd(prog), pinfile);
- 		if (err) {
- 			p_err("failed to pin program %s",
--			      bpf_program__title(prog, false));
-+			      bpf_program__section_name(prog));
- 			goto err_close_obj;
+@@ -3249,20 +3247,6 @@ static int bpf_object__collect_externs(struct bpf_=
+object *obj)
+ 	return 0;
+ }
+=20
+-static struct bpf_program *
+-bpf_object__find_prog_by_idx(struct bpf_object *obj, int idx)
+-{
+-	struct bpf_program *prog;
+-	size_t i;
+-
+-	for (i =3D 0; i < obj->nr_programs; i++) {
+-		prog =3D &obj->programs[i];
+-		if (prog->sec_idx =3D=3D idx)
+-			return prog;
+-	}
+-	return NULL;
+-}
+-
+ struct bpf_program *
+ bpf_object__find_program_by_title(const struct bpf_object *obj,
+ 				  const char *title)
+@@ -8109,7 +8093,7 @@ static int bpf_object__collect_st_ops_relos(struct =
+bpf_object *obj,
+ 	const struct btf *btf;
+ 	struct bpf_map *map;
+ 	Elf_Data *symbols;
+-	unsigned int moff;
++	unsigned int moff, insn_idx;
+ 	const char *name;
+ 	__u32 member_idx;
+ 	GElf_Sym sym;
+@@ -8154,6 +8138,12 @@ static int bpf_object__collect_st_ops_relos(struct=
+ bpf_object *obj,
+ 				map->name, (size_t)rel.r_offset, shdr_idx);
+ 			return -LIBBPF_ERRNO__RELOC;
  		}
- 	} else {
++		if (sym.st_value % BPF_INSN_SZ) {
++			pr_warn("struct_ops reloc %s: invalid target program offset %llu\n",
++				map->name, (__u64)sym.st_value);
++			return -LIBBPF_ERRNO__FORMAT;
++		}
++		insn_idx =3D sym.st_value / BPF_INSN_SZ;
+=20
+ 		member =3D find_member_by_offset(st_ops->type, moff * 8);
+ 		if (!member) {
+@@ -8170,7 +8160,7 @@ static int bpf_object__collect_st_ops_relos(struct =
+bpf_object *obj,
+ 			return -EINVAL;
+ 		}
+=20
+-		prog =3D bpf_object__find_prog_by_idx(obj, shdr_idx);
++		prog =3D find_prog_by_sec_insn(obj, shdr_idx, insn_idx);
+ 		if (!prog) {
+ 			pr_warn("struct_ops reloc %s: cannot find prog at shdr_idx %u to relo=
+cate func ptr %s\n",
+ 				map->name, shdr_idx, name);
 --=20
 2.24.1
 
