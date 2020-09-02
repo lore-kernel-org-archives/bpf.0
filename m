@@ -2,53 +2,54 @@ Return-Path: <SRS0=GkhW=CL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EF61C433E7
-	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 18:33:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69FCEC433E2
+	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 18:35:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3514020758
-	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 18:33:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 525B520758
+	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 18:35:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728009AbgIBSd4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Sep 2020 14:33:56 -0400
-Received: from www62.your-server.de ([213.133.104.62]:51896 "EHLO
+        id S1726858AbgIBSfa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Sep 2020 14:35:30 -0400
+Received: from www62.your-server.de ([213.133.104.62]:52144 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726446AbgIBSdz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Sep 2020 14:33:55 -0400
+        with ESMTP id S1726567AbgIBSfa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Sep 2020 14:35:30 -0400
 Received: from sslproxy06.your-server.de ([78.46.172.3])
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1kDXZn-0004fd-Hx; Wed, 02 Sep 2020 20:33:43 +0200
+        id 1kDXbR-0004oI-74; Wed, 02 Sep 2020 20:35:25 +0200
 Received: from [178.196.57.75] (helo=pc-9.home)
         by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <daniel@iogearbox.net>)
-        id 1kDXZn-000QLd-A8; Wed, 02 Sep 2020 20:33:43 +0200
-Subject: Re: [PATCH][next] xsk: Fix null check on error return path
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        id 1kDXbQ-000VRx-Uj; Wed, 02 Sep 2020 20:35:24 +0200
+Subject: Re: [PATCH][next] xsk: fix incorrect memory allocation failure check
+ on dma_map->dma_pages
+To:     Colin King <colin.king@canonical.com>,
         =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
         Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200902150750.GA7257@embeddedor>
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20200902161332.199961-1-colin.king@canonical.com>
 From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <9b7e36c3-0532-245c-763a-8f4e7e36b358@iogearbox.net>
-Date:   Wed, 2 Sep 2020 20:33:41 +0200
+Message-ID: <01a1216b-3b9e-1755-33a2-b491cf48ab8c@iogearbox.net>
+Date:   Wed, 2 Sep 2020 20:35:24 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20200902150750.GA7257@embeddedor>
+In-Reply-To: <20200902161332.199961-1-colin.king@canonical.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -59,14 +60,16 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 9/2/20 5:07 PM, Gustavo A. R. Silva wrote:
-> Currently, dma_map is being checked, when the right object identifier
-> to be null-checked is dma_map->dma_pages, instead.
+On 9/2/20 6:13 PM, Colin King wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
-> Fix this by null-checking dma_map->dma_pages.
+> The failed memory allocation check for dma_map->dma_pages is incorrect,
+> it is null checking dma_map and not dma_map->dma_pages. Fix this.
 > 
-> Addresses-Coverity-ID: 1496811 ("Logically dead code")
+> Addresses-Coverity: ("Logicall dead code")
 > Fixes: 921b68692abb ("xsk: Enable sharing of dma mappings")
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
 
-Applied, thanks!
+Thanks, already applied a fix that was sent earlier [0].
+
+   [0] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=1d6fd78a213ee3874f46bdce083b7a41d208886d
