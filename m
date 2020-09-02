@@ -4,45 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EB66C433E7
-	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 20:14:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4ACCC433E2
+	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 20:14:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 890502083B
-	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 20:14:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D6E120BED
+	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 20:14:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726994AbgIBUOh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Sep 2020 16:14:37 -0400
-Received: from mga05.intel.com ([192.55.52.43]:48059 "EHLO mga05.intel.com"
+        id S1726298AbgIBUO3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Sep 2020 16:14:29 -0400
+Received: from mga05.intel.com ([192.55.52.43]:48041 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726948AbgIBUOg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Sep 2020 16:14:36 -0400
-IronPort-SDR: eKfXIObYbKkGy9zPh5wZYhbqorxiQlgWdGvC9Ik+UdZvoIrZuNmcUIIhdzBG3QMePqAE65TJ6c
- 4abI7XbmDqhg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="242291958"
+        id S1726293AbgIBUO1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Sep 2020 16:14:27 -0400
+IronPort-SDR: KeiLLYJ49xo4QZD1kLUQ3+qyQ/hXIQZ0KNI1LJPP015SWegKYkuzKN0rSZvnZl6KEebdCnn+jT
+ WhexlwziTduA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="242291939"
 X-IronPort-AV: E=Sophos;i="5.76,384,1592895600"; 
-   d="scan'208";a="242291958"
+   d="scan'208";a="242291939"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 13:14:35 -0700
-IronPort-SDR: AtBmPwASTeUI3YAmyQycy2VEyGrtzFANxqpF14kTOGOgz4iQaKqOo0DTWVzP1YMq+4T/zsS8FA
- I/DO2X4PaaFQ==
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 13:14:26 -0700
+IronPort-SDR: nk6VJ0rmPShuHuIntkbJO28VhXVN+kEVdeD3SCmdxjPKfIPQmrvZKt9WKSrHfUQX0W9s3FnLn2
+ S1CxHOp6QRVg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,384,1592895600"; 
-   d="scan'208";a="477778291"
+   d="scan'208";a="477778262"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga005.jf.intel.com with ESMTP; 02 Sep 2020 13:14:34 -0700
+  by orsmga005.jf.intel.com with ESMTP; 02 Sep 2020 13:14:25 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     ast@kernel.org, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn.topel@intel.com,
         magnus.karlsson@intel.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v7 bpf-next 7/7] selftests: bpf: add dummy prog for bpf2bpf with tailcall
-Date:   Wed,  2 Sep 2020 22:08:15 +0200
-Message-Id: <20200902200815.3924-8-maciej.fijalkowski@intel.com>
+Subject: [PATCH v7 bpf-next 3/7] bpf: rename poke descriptor's 'ip' member to 'tailcall_target'
+Date:   Wed,  2 Sep 2020 22:08:11 +0200
+Message-Id: <20200902200815.3924-4-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200902200815.3924-1-maciej.fijalkowski@intel.com>
 References: <20200902200815.3924-1-maciej.fijalkowski@intel.com>
@@ -53,167 +53,148 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce 6th test to taicalls kselftest that checks if tailcall can be
-correctly executed from the BPF subprogram.
+Reflect the actual purpose of poke->ip and rename it to
+poke->tailcall_target so that it will not the be confused with another
+poke target that will be introduced in next commit.
+
+While at it, do the same thing with poke->ip_stable - rename it to
+poke->tailcall_target_stable.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- .../selftests/bpf/prog_tests/tailcalls.c      | 85 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/tailcall6.c | 38 +++++++++
- 2 files changed, 123 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/tailcall6.c
+ arch/x86/net/bpf_jit_comp.c | 20 +++++++++++---------
+ include/linux/bpf.h         |  4 ++--
+ kernel/bpf/arraymap.c       | 17 +++++++++--------
+ kernel/bpf/core.c           |  3 ++-
+ 4 files changed, 24 insertions(+), 20 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-index bb8fe646dd9f..192c94896809 100644
---- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <network_helpers.h>
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 6fb8c9435980..7b0ff169c9a0 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -434,7 +434,7 @@ static void emit_bpf_tail_call_direct(struct bpf_jit_poke_descriptor *poke,
+ 	EMIT3(0x83, 0xC0, 0x01);                      /* add eax, 1 */
+ 	EMIT2_off32(0x89, 0x85, -36 - MAX_BPF_STACK); /* mov dword ptr [rbp -548], eax */
  
- /* test_tailcall_1 checks basic functionality by patching multiple locations
-  * in a single program for a single tail call slot with nop->jmp, jmp->nop
-@@ -472,6 +473,88 @@ static void test_tailcall_5(void)
- 	bpf_object__close(obj);
- }
+-	poke->ip = image + (addr - X86_PATCH_SIZE);
++	poke->tailcall_target = image + (addr - X86_PATCH_SIZE);
+ 	poke->adj_off = PROLOGUE_SIZE;
  
-+/* test_tailcall_6 purpose is to make sure that tailcalls are working
-+ * correctly in correlation with BPF subprograms
-+ */
-+static void test_tailcall_6(void)
-+{
-+	int err, map_fd, prog_fd, main_fd, i;
-+	struct bpf_map *prog_array;
-+	struct bpf_program *prog;
-+	struct bpf_object *obj;
-+	__u32 retval, duration;
-+	char prog_name[32];
-+
-+	err = bpf_prog_load("tailcall6.o", BPF_PROG_TYPE_SCHED_CLS, &obj,
-+			    &prog_fd);
-+	if (CHECK_FAIL(err))
-+		return;
-+
-+	prog = bpf_object__find_program_by_title(obj, "classifier");
-+	if (CHECK_FAIL(!prog))
-+		goto out;
-+
-+	main_fd = bpf_program__fd(prog);
-+	if (CHECK_FAIL(main_fd < 0))
-+		goto out;
-+
-+	prog_array = bpf_object__find_map_by_name(obj, "jmp_table");
-+	if (CHECK_FAIL(!prog_array))
-+		goto out;
-+
-+	map_fd = bpf_map__fd(prog_array);
-+	if (CHECK_FAIL(map_fd < 0))
-+		goto out;
-+
-+	/* nop -> jmp */
-+	for (i = 0; i < bpf_map__def(prog_array)->max_entries; i++) {
-+		snprintf(prog_name, sizeof(prog_name), "classifier/%i", i);
-+
-+		prog = bpf_object__find_program_by_title(obj, prog_name);
-+		if (CHECK_FAIL(!prog))
-+			goto out;
-+
-+		prog_fd = bpf_program__fd(prog);
-+		if (CHECK_FAIL(prog_fd < 0))
-+			goto out;
-+
-+		err = bpf_map_update_elem(map_fd, &i, &prog_fd, BPF_ANY);
-+		if (CHECK_FAIL(err))
-+			goto out;
-+	}
-+
-+	err = bpf_prog_test_run(main_fd, 1, &pkt_v4, sizeof(pkt_v4), 0,
-+				0, &retval, &duration);
-+	CHECK(err || retval != 1, "tailcall",
-+	      "err %d errno %d retval %d\n", err, errno, retval);
-+
-+	/* jmp -> nop, call subprog that will do tailcall */
-+	i = 1;
-+	err = bpf_map_delete_elem(map_fd, &i);
-+	if (CHECK_FAIL(err))
-+		goto out;
-+
-+	err = bpf_prog_test_run(main_fd, 1, &pkt_v4, sizeof(pkt_v4), 0,
-+				0, &retval, &duration);
-+	CHECK(err || retval != 0, "tailcall", "err %d errno %d retval %d\n",
-+	      err, errno, retval);
-+
-+	/* make sure that subprog can access ctx and entry prog that
-+	 * called this subprog can properly return
-+	 */
-+	i = 0;
-+	err = bpf_map_delete_elem(map_fd, &i);
-+	if (CHECK_FAIL(err))
-+		goto out;
-+
-+	err = bpf_prog_test_run(main_fd, 1, &pkt_v4, sizeof(pkt_v4), 0,
-+				0, &retval, &duration);
-+	CHECK(err || retval != 108, "tailcall", "err %d errno %d retval %d\n",
-+	      err, errno, retval);
-+out:
-+	bpf_object__close(obj);
-+}
-+
- void test_tailcalls(void)
- {
- 	if (test__start_subtest("tailcall_1"))
-@@ -484,4 +567,6 @@ void test_tailcalls(void)
- 		test_tailcall_4();
- 	if (test__start_subtest("tailcall_5"))
- 		test_tailcall_5();
-+	if (test__start_subtest("tailcall_6"))
-+		test_tailcall_6();
+ 	memcpy(prog, ideal_nops[NOP_ATOMIC5], X86_PATCH_SIZE);
+@@ -453,7 +453,7 @@ static void bpf_tail_call_direct_fixup(struct bpf_prog *prog)
+ 
+ 	for (i = 0; i < prog->aux->size_poke_tab; i++) {
+ 		poke = &prog->aux->poke_tab[i];
+-		WARN_ON_ONCE(READ_ONCE(poke->ip_stable));
++		WARN_ON_ONCE(READ_ONCE(poke->tailcall_target_stable));
+ 
+ 		if (poke->reason != BPF_POKE_REASON_TAIL_CALL)
+ 			continue;
+@@ -464,18 +464,20 @@ static void bpf_tail_call_direct_fixup(struct bpf_prog *prog)
+ 		if (target) {
+ 			/* Plain memcpy is used when image is not live yet
+ 			 * and still not locked as read-only. Once poke
+-			 * location is active (poke->ip_stable), any parallel
+-			 * bpf_arch_text_poke() might occur still on the
+-			 * read-write image until we finally locked it as
+-			 * read-only. Both modifications on the given image
+-			 * are under text_mutex to avoid interference.
++			 * location is active (poke->tailcall_target_stable),
++			 * any parallel bpf_arch_text_poke() might occur
++			 * still on the read-write image until we finally
++			 * locked it as read-only. Both modifications on
++			 * the given image are under text_mutex to avoid
++			 * interference.
+ 			 */
+-			ret = __bpf_arch_text_poke(poke->ip, BPF_MOD_JUMP, NULL,
++			ret = __bpf_arch_text_poke(poke->tailcall_target,
++						   BPF_MOD_JUMP, NULL,
+ 						   (u8 *)target->bpf_func +
+ 						   poke->adj_off, false);
+ 			BUG_ON(ret < 0);
+ 		}
+-		WRITE_ONCE(poke->ip_stable, true);
++		WRITE_ONCE(poke->tailcall_target_stable, true);
+ 		mutex_unlock(&array->aux->poke_mutex);
+ 	}
  }
-diff --git a/tools/testing/selftests/bpf/progs/tailcall6.c b/tools/testing/selftests/bpf/progs/tailcall6.c
-new file mode 100644
-index 000000000000..e72ca5869b58
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tailcall6.c
-@@ -0,0 +1,38 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 2);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+} jmp_table SEC(".maps");
-+
-+#define TAIL_FUNC(x) 				\
-+	SEC("classifier/" #x)			\
-+	int bpf_func_##x(struct __sk_buff *skb)	\
-+	{					\
-+		return x;			\
-+	}
-+TAIL_FUNC(0)
-+TAIL_FUNC(1)
-+
-+static __attribute__ ((noinline))
-+int subprog_tail(struct __sk_buff *skb)
-+{
-+	bpf_tail_call(skb, &jmp_table, 0);
-+
-+	return skb->len * 2;
-+}
-+
-+SEC("classifier")
-+int entry(struct __sk_buff *skb)
-+{
-+	bpf_tail_call(skb, &jmp_table, 1);
-+
-+	return subprog_tail(skb);
-+}
-+
-+char __license[] SEC("license") = "GPL";
-+int _version SEC("version") = 1;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index a3f92500e493..366cef9b67ee 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -697,14 +697,14 @@ enum bpf_jit_poke_reason {
+ 
+ /* Descriptor of pokes pointing /into/ the JITed image. */
+ struct bpf_jit_poke_descriptor {
+-	void *ip;
++	void *tailcall_target;
+ 	union {
+ 		struct {
+ 			struct bpf_map *map;
+ 			u32 key;
+ 		} tail_call;
+ 	};
+-	bool ip_stable;
++	bool tailcall_target_stable;
+ 	u8 adj_off;
+ 	u16 reason;
+ 	u32 insn_idx;
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index e046fb7d17cd..60abf7fe12de 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -918,12 +918,13 @@ static void prog_array_map_poke_run(struct bpf_map *map, u32 key,
+ 			 *    there could be danger of use after free otherwise.
+ 			 * 2) Initially when we start tracking aux, the program
+ 			 *    is not JITed yet and also does not have a kallsyms
+-			 *    entry. We skip these as poke->ip_stable is not
+-			 *    active yet. The JIT will do the final fixup before
+-			 *    setting it stable. The various poke->ip_stable are
+-			 *    successively activated, so tail call updates can
+-			 *    arrive from here while JIT is still finishing its
+-			 *    final fixup for non-activated poke entries.
++			 *    entry. We skip these as poke->tailcall_target_stable
++			 *    is not active yet. The JIT will do the final fixup
++			 *    before setting it stable. The various
++			 *    poke->tailcall_target_stable are successively
++			 *    activated, so tail call updates can arrive from here
++			 *    while JIT is still finishing its final fixup for
++			 *    non-activated poke entries.
+ 			 * 3) On program teardown, the program's kallsym entry gets
+ 			 *    removed out of RCU callback, but we can only untrack
+ 			 *    from sleepable context, therefore bpf_arch_text_poke()
+@@ -940,7 +941,7 @@ static void prog_array_map_poke_run(struct bpf_map *map, u32 key,
+ 			 * 5) Any other error happening below from bpf_arch_text_poke()
+ 			 *    is a unexpected bug.
+ 			 */
+-			if (!READ_ONCE(poke->ip_stable))
++			if (!READ_ONCE(poke->tailcall_target_stable))
+ 				continue;
+ 			if (poke->reason != BPF_POKE_REASON_TAIL_CALL)
+ 				continue;
+@@ -948,7 +949,7 @@ static void prog_array_map_poke_run(struct bpf_map *map, u32 key,
+ 			    poke->tail_call.key != key)
+ 				continue;
+ 
+-			ret = bpf_arch_text_poke(poke->ip, BPF_MOD_JUMP,
++			ret = bpf_arch_text_poke(poke->tailcall_target, BPF_MOD_JUMP,
+ 						 old ? (u8 *)old->bpf_func +
+ 						 poke->adj_off : NULL,
+ 						 new ? (u8 *)new->bpf_func +
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index ed0b3578867c..a60c342e27e9 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -773,7 +773,8 @@ int bpf_jit_add_poke_descriptor(struct bpf_prog *prog,
+ 
+ 	if (size > poke_tab_max)
+ 		return -ENOSPC;
+-	if (poke->ip || poke->ip_stable || poke->adj_off)
++	if (poke->tailcall_target || poke->tailcall_target_stable ||
++	    poke->adj_off)
+ 		return -EINVAL;
+ 
+ 	switch (poke->reason) {
 -- 
 2.20.1
 
