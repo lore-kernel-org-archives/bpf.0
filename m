@@ -7,42 +7,42 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C691EC43461
-	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 20:14:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FDEFC433E7
+	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 20:14:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B0CF920C56
-	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 20:14:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5F50620BED
+	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 20:14:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726895AbgIBUOa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Sep 2020 16:14:30 -0400
-Received: from mga05.intel.com ([192.55.52.43]:48037 "EHLO mga05.intel.com"
+        id S1726942AbgIBUOf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Sep 2020 16:14:35 -0400
+Received: from mga05.intel.com ([192.55.52.43]:48055 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726226AbgIBUOZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Sep 2020 16:14:25 -0400
-IronPort-SDR: 37MusKCEUF88d0rT40u4CdjGweyrUT0Uz+qYey7OXW92XF9ih4tiRzTGAHvhvlRl//JaC4gi8S
- 0H3at8MgW+Sw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="242291935"
+        id S1726226AbgIBUOe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Sep 2020 16:14:34 -0400
+IronPort-SDR: 9qHG6LMdJ/+TmOvn1asajj+spLXRutOWk4yIfyeaYom1wJn8ApTLgJRvWmZmYpFJEKsjHs1F0c
+ T4ht9hH0z/mQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="242291955"
 X-IronPort-AV: E=Sophos;i="5.76,384,1592895600"; 
-   d="scan'208";a="242291935"
+   d="scan'208";a="242291955"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 13:14:24 -0700
-IronPort-SDR: NHvtzV1AHi+W5BUygx0E5pAzHqQCbfsK8Ef6e1B4YmikscHL1Hfk7rDxXnLLLYQWjIUX4u2vMQ
- x+nBWGLZG+WQ==
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 13:14:32 -0700
+IronPort-SDR: y/o2psJxavFkJiftCTTeWy4GutkMYpextkFn9DMf22PPutCOrtfuASBjV/NOb9Ss4Iznu+SyQc
+ wcczWZGlmNig==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.76,384,1592895600"; 
-   d="scan'208";a="477778254"
+   d="scan'208";a="477778284"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga005.jf.intel.com with ESMTP; 02 Sep 2020 13:14:23 -0700
+  by orsmga005.jf.intel.com with ESMTP; 02 Sep 2020 13:14:32 -0700
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     ast@kernel.org, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn.topel@intel.com,
         magnus.karlsson@intel.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v7 bpf-next 2/7] bpf: propagate poke descriptors to subprograms
-Date:   Wed,  2 Sep 2020 22:08:10 +0200
-Message-Id: <20200902200815.3924-3-maciej.fijalkowski@intel.com>
+Subject: [PATCH v7 bpf-next 6/7] bpf: allow for tailcalls in BPF subprograms for x64 JIT
+Date:   Wed,  2 Sep 2020 22:08:14 +0200
+Message-Id: <20200902200815.3924-7-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200902200815.3924-1-maciej.fijalkowski@intel.com>
 References: <20200902200815.3924-1-maciej.fijalkowski@intel.com>
@@ -53,139 +53,43 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Previously, there was no need for poke descriptors being present in
-subprogram's bpf_prog_aux struct since tailcalls were simply not allowed
-in them. Each subprog is JITed independently so in order to enable
-JITing subprograms that use tailcalls, do the following:
+Relax verifier's restriction that was meant to forbid tailcall usage
+when subprog count was higher than 1.
 
-- in fixup_bpf_calls() store the index of tailcall insn onto the generated
-  poke descriptor,
-- then in jit_subprogs() check whether the given poke descriptor belongs
-  to the current subprog by checking if that previously stored absolute
-  index of tail call insn is in the scope of the insns of given subprog,
-- update the insn->imm with new poke descriptor slot so that while JITing
-  the proper poke descriptor will be grabbed
-
-This way each of the main program's poke descriptors are distributed
-across the subprograms poke descriptor array, so main program's
-descriptors can be untracked out of the prog array map.
-
-Add also subprog's aux struct to the BPF map poke_progs list by calling
-on it map_poke_track().
-
-In case of any error, call the map_poke_untrack() on subprog's aux
-structs that have already been registered to prog array map.
+Also, do not max out the stack depth of program that utilizes tailcalls.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- include/linux/bpf.h   |  1 +
- kernel/bpf/verifier.c | 53 ++++++++++++++++++++++++++++++++++++++++---
- 2 files changed, 51 insertions(+), 3 deletions(-)
+ kernel/bpf/verifier.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c6d9f2c444f4..a3f92500e493 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -707,6 +707,7 @@ struct bpf_jit_poke_descriptor {
- 	bool ip_stable;
- 	u8 adj_off;
- 	u16 reason;
-+	u32 insn_idx;
- };
- 
- /* reg_type info for ctx arguments */
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b4e9c56b8b32..8f9e95f5f73f 100644
+index b12527d87edb..deb6bf3d9f5d 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -10165,6 +10165,7 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- {
- 	struct bpf_prog *prog = env->prog, **func, *tmp;
- 	int i, j, subprog_start, subprog_end = 0, len, subprog;
-+	struct bpf_map *map_ptr;
- 	struct bpf_insn *insn;
- 	void *old_bpf_func;
- 	int err, num_exentries;
-@@ -10232,6 +10233,31 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 		func[i]->aux->btf = prog->aux->btf;
- 		func[i]->aux->func_info = prog->aux->func_info;
- 
-+		for (j = 0; j < prog->aux->size_poke_tab; j++) {
-+			u32 insn_idx = prog->aux->poke_tab[j].insn_idx;
-+			int ret;
-+
-+			if (!(insn_idx >= subprog_start &&
-+			      insn_idx <= subprog_end))
-+				continue;
-+
-+			ret = bpf_jit_add_poke_descriptor(func[i],
-+							  &prog->aux->poke_tab[j]);
-+			if (ret < 0) {
-+				verbose(env, "adding tail call poke descriptor failed\n");
-+				goto out_free;
-+			}
-+
-+			func[i]->insnsi[insn_idx - subprog_start].imm = ret + 1;
-+
-+			map_ptr = func[i]->aux->poke_tab[ret].tail_call.map;
-+			ret = map_ptr->ops->map_poke_track(map_ptr, func[i]->aux);
-+			if (ret < 0) {
-+				verbose(env, "tracking tail call prog failed\n");
-+				goto out_free;
-+			}
-+		}
-+
- 		/* Use bpf_prog_F_tag to indicate functions in stack traces.
- 		 * Long term would need debug info to populate names
- 		 */
-@@ -10257,6 +10283,19 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+@@ -4367,10 +4367,12 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
+ 	case BPF_FUNC_tail_call:
+ 		if (map->map_type != BPF_MAP_TYPE_PROG_ARRAY)
+ 			goto error;
++#if !defined(CONFIG_X86_64) || !defined(CONFIG_BPF_JIT_ALWAYS_ON)
+ 		if (env->subprog_cnt > 1) {
+ 			verbose(env, "tail_calls are not allowed in programs with bpf-to-bpf calls\n");
+ 			return -EINVAL;
  		}
- 		cond_resched();
- 	}
-+
-+	/* Untrack main program's aux structs so that during map_poke_run()
-+	 * we will not stumble upon the unfilled poke descriptors; each
-+	 * of the main program's poke descs got distributed across subprogs
-+	 * and got tracked onto map, so we are sure that none of them will
-+	 * be missed after the operation below
-+	 */
-+	for (i = 0; i < prog->aux->size_poke_tab; i++) {
-+		map_ptr = prog->aux->poke_tab[i].tail_call.map;
-+
-+		map_ptr->ops->map_poke_untrack(map_ptr, prog->aux);
-+	}
-+
- 	/* at this point all bpf functions were successfully JITed
- 	 * now populate all bpf_calls with correct addresses and
- 	 * run last pass of JIT
-@@ -10325,9 +10364,16 @@ static int jit_subprogs(struct bpf_verifier_env *env)
- 	bpf_prog_free_unused_jited_linfo(prog);
- 	return 0;
- out_free:
--	for (i = 0; i < env->subprog_cnt; i++)
--		if (func[i])
--			bpf_jit_free(func[i]);
-+	for (i = 0; i < env->subprog_cnt; i++) {
-+		if (!func[i])
-+			continue;
-+
-+		for (j = 0; j < func[i]->aux->size_poke_tab; j++) {
-+			map_ptr = func[i]->aux->poke_tab[j].tail_call.map;
-+			map_ptr->ops->map_poke_untrack(map_ptr, func[i]->aux);
-+		}
-+		bpf_jit_free(func[i]);
-+	}
- 	kfree(func);
- out_undo_insn:
- 	/* cleanup main prog to be interpreted */
-@@ -10545,6 +10591,7 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
- 					.reason = BPF_POKE_REASON_TAIL_CALL,
- 					.tail_call.map = BPF_MAP_PTR(aux->map_ptr_state),
- 					.tail_call.key = bpf_map_key_immediate(aux),
-+					.insn_idx = i,
- 				};
++#endif
+ 		break;
+ 	case BPF_FUNC_perf_event_read:
+ 	case BPF_FUNC_perf_event_output:
+@@ -10598,7 +10600,9 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
+ 			 * the program array.
+ 			 */
+ 			prog->cb_access = 1;
++#if !defined(CONFIG_X86_64) || !defined(CONFIG_BPF_JIT_ALWAYS_ON)
+ 			env->prog->aux->stack_depth = MAX_BPF_STACK;
++#endif
+ 			env->prog->aux->max_pkt_offset = MAX_PACKET_OFF;
  
- 				ret = bpf_jit_add_poke_descriptor(prog, &desc);
+ 			/* mark bpf_tail_call as different opcode to avoid
 -- 
 2.20.1
 
