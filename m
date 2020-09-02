@@ -2,127 +2,122 @@ Return-Path: <SRS0=GkhW=CL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA012C433E7
-	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 20:14:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A978BC433E7
+	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 20:20:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B363B2083B
-	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 20:14:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6A5B520773
+	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 20:20:09 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="TYr8bQq+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726938AbgIBUOe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Sep 2020 16:14:34 -0400
-Received: from mga05.intel.com ([192.55.52.43]:48051 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726928AbgIBUOc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Sep 2020 16:14:32 -0400
-IronPort-SDR: AWlKX7be8k7f3MGccJDTMQopKa6Rwq9kHwY1K6L/l07E78nY71i6RQZMPWUwNnpHvDJFbGcENZ
- hj4noj4jKoaQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9732"; a="242291952"
-X-IronPort-AV: E=Sophos;i="5.76,384,1592895600"; 
-   d="scan'208";a="242291952"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2020 13:14:30 -0700
-IronPort-SDR: 8RZe0q/ynjijoP/vSD8tnpLtw3B/ameEnsl07LYN+kRtp8wfBL5aA34N6Z3LhHcqVSbYBGX3Qy
- Q1K87gkBD9rA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,384,1592895600"; 
-   d="scan'208";a="477778276"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga005.jf.intel.com with ESMTP; 02 Sep 2020 13:14:29 -0700
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     ast@kernel.org, daniel@iogearbox.net
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn.topel@intel.com,
-        magnus.karlsson@intel.com,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v7 bpf-next 5/7] bpf: limit caller's stack depth 256 for subprogs with tailcalls
-Date:   Wed,  2 Sep 2020 22:08:13 +0200
-Message-Id: <20200902200815.3924-6-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200902200815.3924-1-maciej.fijalkowski@intel.com>
-References: <20200902200815.3924-1-maciej.fijalkowski@intel.com>
+        id S1726285AbgIBUUJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Sep 2020 16:20:09 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:38254 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726226AbgIBUUH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Sep 2020 16:20:07 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 082KF4nY005672;
+        Wed, 2 Sep 2020 20:20:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=CcXGJDhbqrqQreD1wdsFgymKQNH0vY1IS1y30FBVOE0=;
+ b=TYr8bQq+hhhR5b0L0bsQQBnAvrp6ms342OAUXGjTANKw0xdLHRckP3dMNnumag2KCtHo
+ TEEd4IHK/0Dl7Gdd0wt1txCBGEBeBQX7QbqKZsSEG2qLxqP1xWKpvjMRWFVAfgAFhZIR
+ MzQVn52jiObAQUGq+RmL9bx02I3vPktXyU35ZwVW3ENhL9yCUgutE450UYwvaR6ysDEF
+ FfG/SnsGY3BTvC5EwXuOo7d7Sgv4ZmgIHRfn8YjcnY7f3QXYla9zDqAXaLAZUIHljBdZ
+ VWKXrK7pxZpxfKSJJzyRfDjXFxbCdvOXA6xmdeFOzwRdzM8ju0R4TqAsCOx7jCK5mQVg Wg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 337eer52t0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 02 Sep 2020 20:20:04 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 082KEgF6069394;
+        Wed, 2 Sep 2020 20:20:03 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 3380x7qamc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 02 Sep 2020 20:20:03 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 082KK2SP028364;
+        Wed, 2 Sep 2020 20:20:02 GMT
+Received: from termi.oracle.com (/10.175.48.72)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 02 Sep 2020 13:20:01 -0700
+From:   "Jose E. Marchesi" <jose.marchesi@oracle.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>
+Subject: Re: EF_BPF_GNU_XBPF
+References: <87mu282gay.fsf@oracle.com>
+        <CAADnVQ+AZvXTSitF+Fj5ohYiKWERN2yrPtOLR9udKcBTHSZzxA@mail.gmail.com>
+Date:   Wed, 02 Sep 2020 22:19:58 +0200
+In-Reply-To: <CAADnVQ+AZvXTSitF+Fj5ohYiKWERN2yrPtOLR9udKcBTHSZzxA@mail.gmail.com>
+        (Alexei Starovoitov's message of "Wed, 2 Sep 2020 12:31:53 -0700")
+Message-ID: <87y2ls0w41.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9732 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 phishscore=0
+ mlxlogscore=999 adultscore=0 suspectscore=0 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009020189
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9732 signatures=668679
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 priorityscore=1501
+ lowpriorityscore=0 malwarescore=0 adultscore=0 spamscore=0 mlxscore=0
+ phishscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009020189
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Protect against potential stack overflow that might happen when bpf2bpf
-calls get combined with tailcalls. Limit the caller's stack depth for
-such case down to 256 so that the worst case scenario would result in 8k
-stack size (32 which is tailcall limit * 256 = 8k).
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
- include/linux/bpf_verifier.h |  1 +
- kernel/bpf/verifier.c        | 28 ++++++++++++++++++++++++++++
- 2 files changed, 29 insertions(+)
+>> Hello BPF people!
+>>
+>> In order to ease the testing of the GCC bpf port we are adding a number
+>> of extensions to the BPF ISA.
+>>
+>> We would like to use one bit in the e_flags field of the ELF header in
+>> order to flag that the code in the ELF file is not plain eBPF:
+>>
+>> For EM_BPF:
+>>
+>> #define EF_BPF_GNU_XBPF 0x00000001
+>>
+>> Any objection?
+>
+> I've looked at your lpc slides and the extensions don't look like BPF
+> extensions.
+> At least I didn't see any attempt to make them verifiable.
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 53c7bd568c5d..5026b75db972 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -358,6 +358,7 @@ struct bpf_subprog_info {
- 	u32 start; /* insn idx of function entry point */
- 	u32 linfo_idx; /* The idx to the main_prog->aux->linfo */
- 	u16 stack_depth; /* max. stack depth used by this function */
-+	bool has_tail_call;
- };
- 
- /* single container for all structs
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 8f9e95f5f73f..b12527d87edb 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1490,6 +1490,8 @@ static int check_subprogs(struct bpf_verifier_env *env)
- 	for (i = 0; i < insn_cnt; i++) {
- 		u8 code = insn[i].code;
- 
-+		if (insn[i].imm == BPF_FUNC_tail_call)
-+			subprog[cur_subprog].has_tail_call = true;
- 		if (BPF_CLASS(code) != BPF_JMP && BPF_CLASS(code) != BPF_JMP32)
- 			goto next;
- 		if (BPF_OP(code) == BPF_EXIT || BPF_OP(code) == BPF_CALL)
-@@ -2983,6 +2985,32 @@ static int check_max_stack_depth(struct bpf_verifier_env *env)
- 	int ret_prog[MAX_CALL_FRAMES];
- 
- process_func:
-+#if defined(CONFIG_X86_64) && defined(CONFIG_BPF_JIT_ALWAYS_ON)
-+	/* protect against potential stack overflow that might happen when
-+	 * bpf2bpf calls get combined with tailcalls. Limit the caller's stack
-+	 * depth for such case down to 256 so that the worst case scenario
-+	 * would result in 8k stack size (32 which is tailcall limit * 256 =
-+	 * 8k).
-+	 *
-+	 * To get the idea what might happen, see an example:
-+	 * func1 -> sub rsp, 128
-+	 *  subfunc1 -> sub rsp, 256
-+	 *  tailcall1 -> add rsp, 256
-+	 *   func2 -> sub rsp, 192 (total stack size = 128 + 192 = 320)
-+	 *   subfunc2 -> sub rsp, 64
-+	 *   subfunc22 -> sub rsp, 128
-+	 *   tailcall2 -> add rsp, 128
-+	 *    func3 -> sub rsp, 32 (total stack size 128 + 192 + 64 + 32 = 416)
-+	 *
-+	 * tailcall will unwind the current stack frame but it will not get rid
-+	 * of caller's stack as shown on the example above.
-+	 */
-+	if (idx && subprog[idx].has_tail_call && depth >= 256) {
-+		verbose(env, "Cannot do bpf_tail_call in subprog %d when call stack of previous frames is %d bytes. Too large\n",
-+			idx, depth);
-+		return -EACCES;
-+	}
-+#endif
- 	/* round up to 32-bytes, since this is granularity
- 	 * of interpreter stack size
- 	 */
--- 
-2.20.1
+It is an extension in the sense it is a superset of BPF.  Call it a
+variant if you want.
 
+As such, the property of being verifiable is irrelevant.  If we wanted
+the extensions to be verifiable we would probably ask for them to be
+added to BPF proper.  That's not the case, and that's precisely the
+reason why we need to use that bit.
+
+> In that sense it's not BPF and it's not correct to use EM_BPF for it.
+> I suggest to define your own EM for your ISA.
+
+Sorry, but that's not how ELF machine numbers work :)
+
+It is perfectly normal, and also common practice, to use the same
+machine code for several variants of the same base architecture, and I
+see no reason for EM_BPF to be handled differently.  It would be silly,
+and very inconvenient, to allocate a new machine number.
+
+I don't think you people are using that bit in e_flags (or any bit, for
+that matter).  So we just need to agree in reserving that bit for
+EF_BPF_GNU_XBPF.
+
+Shouldn't be a big matter surely?  There are 31 bits left ;)
