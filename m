@@ -2,52 +2,55 @@ Return-Path: <SRS0=GkhW=CL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76B2BC433E2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93783C433E6
 	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 00:26:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 48BD02068E
+	by mail.kernel.org (Postfix) with ESMTP id 6E974206EF
 	for <bpf@archiver.kernel.org>; Wed,  2 Sep 2020 00:26:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="IEruMLfq"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="bWpf9nyL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726618AbgIBA0k (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726298AbgIBA0k (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 1 Sep 2020 20:26:40 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:6220 "EHLO
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:17880 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726622AbgIBA0j (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 1 Sep 2020 20:26:39 -0400
+        by vger.kernel.org with ESMTP id S1726623AbgIBA0k (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 1 Sep 2020 20:26:40 -0400
 Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0820Qbek031315
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0820Qbem031315
         for <bpf@vger.kernel.org>; Tue, 1 Sep 2020 17:26:39 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=csu76dAsrzZBz+UB4+X/YCZX21I9wzyRKl8bhrEEiww=;
- b=IEruMLfqzZain07bU/fTfFZzttQb76Q1E/aMch1SkiWZ98MkYEFw47HV3PtnHi3psBs+
- vB8/JeTXbSqUbTxeOd6jCOZE4NrjHYtmZOvv9oxSZV2Uu9Mvt2jsqLob38Nc9j7dcQXV
- a39FWJxQh9mxN/PwfgW+312q2oXqqB0TJXk= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=lWhyUqCAMrh3WNjXI8GGSxZ/gB+B24TZajA1aV3gpV8=;
+ b=bWpf9nyLn5H9a1LnowcNfScep1DigbbxNbMuP+ZPk5keUzJIw6mOUIE2CL+rxFKXMbv7
+ Rg1w+JModHpNXo+t072aX0b3a3it1Yny8+7w0KE34j9jLox53hbgvh+QLe0kZqieBIIy
+ t6xfMv9T9AMvteAvW7pgnZppmqqOlI4buyw= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 338734p2js-3
+        by mx0a-00082601.pphosted.com with ESMTP id 338734p2js-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Tue, 01 Sep 2020 17:26:39 -0700
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c085:208::f) by
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::f) by
  mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 1 Sep 2020 17:26:11 -0700
+ 15.1.1979.3; Tue, 1 Sep 2020 17:26:13 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 35F0437050EC; Tue,  1 Sep 2020 17:26:08 -0700 (PDT)
+        id A2916370518A; Tue,  1 Sep 2020 17:26:09 -0700 (PDT)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next v3 0/2] bpf: avoid iterating duplicated files for task_file iterator
-Date:   Tue, 1 Sep 2020 17:26:07 -0700
-Message-ID: <20200902002608.994598-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: test task_file iterator without visiting pthreads
+Date:   Tue, 1 Sep 2020 17:26:09 -0700
+Message-ID: <20200902002609.994834-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200902002608.994598-1-yhs@fb.com>
+References: <20200902002608.994598-1-yhs@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
@@ -65,49 +68,98 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Commit e679654a704e ("bpf: Fix a rcu_sched stall issue with
-bpf task/task_file iterator") introduced rate limiting in
-bpf_seq_read() to fix a case where traversing too many tasks
-and files (tens of millions of files) may cause kernel rcu stall.
-But rate limiting won't reduce the amount of work to traverse
-all these files.
+Modified existing bpf_iter_test_file.c program to check whether
+all accessed files from the main thread or not.
 
-In practice, for a user process, typically all threads belongs
-to that process share the same file table and there is no need
-to visit every thread for its files.
+Modified existing bpf_iter_test_file program to check
+whether all accessed files from the main thread or not.
+  $ ./test_progs -n 4
+  ...
+  #4/7 task_file:OK
+  ...
+  #4 bpf_iter:OK
+  Summary: 1/24 PASSED, 0 SKIPPED, 0 FAILED
 
-This patch added additional logic for task_file iterator to
-skip tasks if those tasks are not group_leaders and their files
-are the same as those of group_leaders.
-Such reduction of unnecessary work will make iterator runtime
-much faster if there are a lot of non-main threads and open
-files for the process.
-
-Patch #1 is the kernel implementation and Patch #2 is the
-selftest.
-
-Changelogs:
-  v2 -> v3:
-    - add put_task_struct(task) for those skipped tasks
-      to avoid leaking tasks. (Josef)
-  v1 -> v2:
-    - for task_file, no need for additional user parameter,
-      kernel can just skip those files already visited, and
-      this should not impact user space. (Andrii)
-    - to add group_leader-only customization for task will
-      be considered later.
-    - remove Patch #1 and sent it separately as this patch set
-      won't depend on it any more.
-
-Yonghong Song (2):
-  bpf: avoid iterating duplicated files for task_file iterator
-  selftests/bpf: test task_file iterator without visiting pthreads
-
- kernel/bpf/task_iter.c                        | 15 +++++++++----
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
  .../selftests/bpf/prog_tests/bpf_iter.c       | 21 +++++++++++++++++++
  .../selftests/bpf/progs/bpf_iter_task_file.c  | 10 ++++++++-
- 3 files changed, 41 insertions(+), 5 deletions(-)
+ 2 files changed, 30 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/te=
+sting/selftests/bpf/prog_tests/bpf_iter.c
+index 7375d9a6d242..375ffaf85d78 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -132,17 +132,38 @@ static void test_task_stack(void)
+ 	bpf_iter_task_stack__destroy(skel);
+ }
+=20
++static void *do_nothing(void *arg)
++{
++	pthread_exit(arg);
++}
++
+ static void test_task_file(void)
+ {
+ 	struct bpf_iter_task_file *skel;
++	pthread_t thread_id;
++	void *ret;
+=20
+ 	skel =3D bpf_iter_task_file__open_and_load();
+ 	if (CHECK(!skel, "bpf_iter_task_file__open_and_load",
+ 		  "skeleton open_and_load failed\n"))
+ 		return;
+=20
++	skel->bss->tgid =3D getpid();
++
++	if (CHECK(pthread_create(&thread_id, NULL, &do_nothing, NULL),
++		  "pthread_create", "pthread_create failed\n"))
++		goto done;
++
+ 	do_dummy_read(skel->progs.dump_task_file);
+=20
++	if (CHECK(pthread_join(thread_id, &ret) || ret !=3D NULL,
++		  "pthread_join", "pthread_join failed\n"))
++		goto done;
++
++	CHECK(skel->bss->count !=3D 0, "",
++	      "invalid non pthread file visit %d\n", skel->bss->count);
++
++done:
+ 	bpf_iter_task_file__destroy(skel);
+ }
+=20
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task_file.c b/too=
+ls/testing/selftests/bpf/progs/bpf_iter_task_file.c
+index 8b787baa2654..b2f7c7c5f952 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_task_file.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_task_file.c
+@@ -6,6 +6,9 @@
+=20
+ char _license[] SEC("license") =3D "GPL";
+=20
++int count =3D 0;
++int tgid =3D 0;
++
+ SEC("iter/task_file")
+ int dump_task_file(struct bpf_iter__task_file *ctx)
+ {
+@@ -17,8 +20,13 @@ int dump_task_file(struct bpf_iter__task_file *ctx)
+ 	if (task =3D=3D (void *)0 || file =3D=3D (void *)0)
+ 		return 0;
+=20
+-	if (ctx->meta->seq_num =3D=3D 0)
++	if (ctx->meta->seq_num =3D=3D 0) {
++		count =3D 0;
+ 		BPF_SEQ_PRINTF(seq, "    tgid      gid       fd      file\n");
++	}
++
++	if (tgid =3D=3D task->tgid && task->tgid !=3D task->pid)
++		count++;
+=20
+ 	BPF_SEQ_PRINTF(seq, "%8d %8d %8d %lx\n", task->tgid, task->pid, fd,
+ 		       (long)file->f_op);
 --=20
 2.24.1
 
