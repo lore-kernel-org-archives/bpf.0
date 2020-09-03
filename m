@@ -2,114 +2,106 @@ Return-Path: <SRS0=zf1N=CM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E3C8C35256
-	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:37:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52F7AC31E5C
+	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:37:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 733392071B
-	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:37:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 33CFD20684
+	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:37:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b8Z56R9v"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="NWEf/WBW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729406AbgICUhN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1729696AbgICUhN (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 3 Sep 2020 16:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729729AbgICUg5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Sep 2020 16:36:57 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26802C061244;
-        Thu,  3 Sep 2020 13:36:57 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id q3so3054177ybp.7;
-        Thu, 03 Sep 2020 13:36:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2E7KS28zfC4tVsTRRkYzuj1mxceg9YfnccbGKN5EM2Y=;
-        b=b8Z56R9vFCgocfa8RWukYzYWSYA3gtr6wje77Wssz6K+yjxqD8f20ntZRZheoOVV+v
-         BDgrP0DtuIjNozxXUxj5gCg9caRvd/P+tM9finPeseB/BU1EGEVNuDDUCUhc6fRW0+nv
-         ipw4HTaUQsw0mD/UVxhcoksGGtRHcfpjSL9gdBe9rLiF683BWUicBR0v5tH9ve/YOECY
-         CRBkxBs6Drv3tPFtYRZzKysdE0NXzSFgndTRv8sHMiGEPIn/N3Hy6jz0Y1HBJtbaGfQs
-         2tl62L8jQBmWUR4YbZ+pMBird4XhD+ApWBH/laeIzawJImWgckQ8geGawy72noVBmYN7
-         2BYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2E7KS28zfC4tVsTRRkYzuj1mxceg9YfnccbGKN5EM2Y=;
-        b=F3Yb6WkV5Ht9SqyzXYDGFKnBQWJmOR0w2OhERh83PfsCB56mSjQhLx2QkGDgs+WXC3
-         a2hkwpVcjOPkGaUjadZhQYr4C3fNEejj6aYE9Q6y9j2tukXA2nqhDESGaMmNvGWfos5Q
-         xrfipchqB7H7gS4A5t1xZGXfvvPcRMRXLvtMrgQocMWBzHIXorc8WS5FHm7bJDx2shJR
-         nY1ooQk2T3yzTEYphbhLL6y5i+aezOKPRts4A5QG8u3FogP9zH0O9nLC+20Tl8+qbguP
-         p5Etq+bgxM2HN5l67lGt9U1TXOCYQim/J4WOtGaF5bQpMswMuXJcsec0/+vnZqeEbHYH
-         uI7w==
-X-Gm-Message-State: AOAM532HTyYh5kJKbsH9b59IZpJLToqbSoV5DHMjudwzLqo5KjOCFBjC
-        orA0XKfQruoENGPFoBBQILl6rgA7YPljT1itV5U=
-X-Google-Smtp-Source: ABdhPJyDQfdxjra9IKhfUae9dPcHOGQ0OPr4g2ImIt6wfz0b1j2FGZbTmo+bBtcrYt4XI6l5mjIApkQYAlXK5G6M1C4=
-X-Received: by 2002:a25:6885:: with SMTP id d127mr5150392ybc.27.1599165416443;
- Thu, 03 Sep 2020 13:36:56 -0700 (PDT)
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:50566 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729747AbgICUhK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 3 Sep 2020 16:37:10 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 083KV17a026435
+        for <bpf@vger.kernel.org>; Thu, 3 Sep 2020 13:37:07 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=xZfr7J7vumhx1Zgou/Z0il+VrwbvbOFRutiV/wfxi9k=;
+ b=NWEf/WBWYouPNDxR8+RV9FudEaJJHqtGbyAmHaaBQRxMQEaZV6jJPn4nqi0oxQxkiAdC
+ Xuro7qQVgwWUOlP881MngTiv8RlyzfO8o83Ph5oL/mBqEwIq5lhkZX4Fm2/gJ8EdzEko
+ rwRAn1h1MOPUgwcbkjvLL3Gqr/rmzW2pwIc= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 33a4cnjue8-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2020 13:37:07 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 3 Sep 2020 13:36:10 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id BA61D2EC6814; Thu,  3 Sep 2020 13:36:00 -0700 (PDT)
+From:   Andrii Nakryiko <andriin@fb.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Subject: [PATCH v3 bpf-next 08/14] tools/bpftool: replace bpf_program__title() with bpf_program__section_name()
+Date:   Thu, 3 Sep 2020 13:35:36 -0700
+Message-ID: <20200903203542.15944-9-andriin@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200903203542.15944-1-andriin@fb.com>
+References: <20200903203542.15944-1-andriin@fb.com>
 MIME-Version: 1.0
-References: <20200903200528.747884-1-haoluo@google.com>
-In-Reply-To: <20200903200528.747884-1-haoluo@google.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 3 Sep 2020 13:36:45 -0700
-Message-ID: <CAEf4Bza6e+x8Rqy7cBzMG0F0D5WCzE7xPRoAqJgSbfyqXxtT5A@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: Fix check in global_data_init.
-To:     Hao Luo <haoluo@google.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        KP Singh <kpsingh@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-03_13:2020-09-03,2020-09-03 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ malwarescore=0 bulkscore=0 impostorscore=0 priorityscore=1501
+ mlxlogscore=608 adultscore=0 suspectscore=8 lowpriorityscore=0 spamscore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009030183
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 3, 2020 at 1:06 PM Hao Luo <haoluo@google.com> wrote:
->
-> The returned value of bpf_object__open_file() should be checked with
-> libbpf_get_error() rather than NULL. This fix prevents test_progs from
-> crash when test_global_data.o is not present.
->
-> Signed-off-by: Hao Luo <haoluo@google.com>
-> ---
+bpf_program__title() is deprecated, switch to bpf_program__section_name()=
+ and
+avoid compilation warnings.
 
-thanks!
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/bpf/bpftool/prog.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index d393eb8263a6..f7923414a052 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -1304,7 +1304,7 @@ static int load_with_options(int argc, char **argv,=
+ bool first_prog_only)
+ 		enum bpf_prog_type prog_type =3D common_prog_type;
+=20
+ 		if (prog_type =3D=3D BPF_PROG_TYPE_UNSPEC) {
+-			const char *sec_name =3D bpf_program__title(pos, false);
++			const char *sec_name =3D bpf_program__section_name(pos);
+=20
+ 			err =3D get_prog_type_by_name(sec_name, &prog_type,
+ 						    &expected_attach_type);
+@@ -1398,7 +1398,7 @@ static int load_with_options(int argc, char **argv,=
+ bool first_prog_only)
+ 		err =3D bpf_obj_pin(bpf_program__fd(prog), pinfile);
+ 		if (err) {
+ 			p_err("failed to pin program %s",
+-			      bpf_program__title(prog, false));
++			      bpf_program__section_name(prog));
+ 			goto err_close_obj;
+ 		}
+ 	} else {
+--=20
+2.24.1
 
->  tools/testing/selftests/bpf/prog_tests/global_data_init.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> index 3bdaa5a40744..ee46b11f1f9a 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> @@ -12,7 +12,8 @@ void test_global_data_init(void)
->         size_t sz;
->
->         obj = bpf_object__open_file(file, NULL);
-> -       if (CHECK_FAIL(!obj))
-> +       err = libbpf_get_error(obj);
-> +       if (CHECK_FAIL(err))
->                 return;
->
->         map = bpf_object__find_map_by_name(obj, "test_glo.rodata");
-> --
-> 2.28.0.526.ge36021eeef-goog
->
