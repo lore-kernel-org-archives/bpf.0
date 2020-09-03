@@ -7,48 +7,49 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64E55C31E40
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3173BC2D0E1
 	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:37:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4349520678
+	by mail.kernel.org (Postfix) with ESMTP id 08C8B20678
 	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:37:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="lq4wGKhm"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="LOkWcITQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729637AbgICUgF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Sep 2020 16:36:05 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:49484 "EHLO
+        id S1729584AbgICUht (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Sep 2020 16:37:49 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:53664 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729708AbgICUgA (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 3 Sep 2020 16:36:00 -0400
+        by vger.kernel.org with ESMTP id S1729156AbgICUgk (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 3 Sep 2020 16:36:40 -0400
 Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 083KWeVL032202
-        for <bpf@vger.kernel.org>; Thu, 3 Sep 2020 13:35:59 -0700
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 083KWhv5032407
+        for <bpf@vger.kernel.org>; Thu, 3 Sep 2020 13:36:37 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=yVxNGyjv60kTIQULO/t6nZK8NZMd5sxgr/HqKDuPX5c=;
- b=lq4wGKhmdbnh0yb+p+CuPGjDSZfWRAqbcu3+HQAUScwLSJ3bI+wDx7NvDrkWKw08mArr
- 7jTDq3KDdZx3m4j+UG7Vy568ISEorDCn4x8K2uQ2OwER4GXM4EdlD647q7HSIXGYigZg
- bzcl6eve/ekDIhHgEyCuECpd6U5QpANIf9Q= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 33b4crs720-1
+ bh=gPVpYmzIBHmyAVxd/1CHdhoXGtfSjQ/5lwsWOow9JU8=;
+ b=LOkWcITQTpRpBquqJst5zscZJVsQ72dMcjQbTrZLntv4+4QOk2juE4xg90xyVIc67yF2
+ Ejxa8pzjGN9xEWCt7vybxDKlq0o2A8MbNi/v0tbbxDnZaJWUWne8qYRHyplELmrIageW
+ MZDf0BhvfF+vFujeGHtKuHSVqVJnWY8Unw8= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 33b4crs73k-13
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2020 13:35:59 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2020 13:36:36 -0700
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 3 Sep 2020 13:35:58 -0700
+ 15.1.1979.3; Thu, 3 Sep 2020 13:35:55 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 697F12EC6814; Thu,  3 Sep 2020 13:35:56 -0700 (PDT)
+        id AD3B22EC6814; Thu,  3 Sep 2020 13:35:47 -0700 (PDT)
 From:   Andrii Nakryiko <andriin@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH v3 bpf-next 06/14] libbpf: add multi-prog section support for struct_ops
-Date:   Thu, 3 Sep 2020 13:35:34 -0700
-Message-ID: <20200903203542.15944-7-andriin@fb.com>
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: [PATCH v3 bpf-next 02/14] libbpf: parse multi-function sections into multiple BPF programs
+Date:   Thu, 3 Sep 2020 13:35:30 -0700
+Message-ID: <20200903203542.15944-3-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200903203542.15944-1-andriin@fb.com>
 References: <20200903203542.15944-1-andriin@fb.com>
@@ -59,9 +60,9 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-03_13:2020-09-03,2020-09-03 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 mlxscore=0
- clxscore=1015 lowpriorityscore=0 suspectscore=8 priorityscore=1501
+ clxscore=1015 lowpriorityscore=0 suspectscore=9 priorityscore=1501
  phishscore=0 bulkscore=0 malwarescore=0 spamscore=0 impostorscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ mlxlogscore=903 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2009030183
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -69,85 +70,436 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adjust struct_ops handling code to work with multi-program ELF sections
-properly.
+Teach libbpf how to parse code sections into potentially multiple bpf_pro=
+gram
+instances, based on ELF FUNC symbols. Each BPF program will keep track of=
+ its
+position within containing ELF section for translating section instructio=
+n
+offsets into program instruction offsets: regardless of BPF program's loc=
+ation
+in ELF section, it's first instruction is always at local instruction off=
+set
+0, so when libbpf is working with relocations (which use section-based
+instruction offsets) this is critical to make proper translations.
 
+Acked-by: John Fastabend <john.fastabend@gmail.com>
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/libbpf.c | 26 ++++++++------------------
- 1 file changed, 8 insertions(+), 18 deletions(-)
+ tools/lib/bpf/libbpf.c | 249 +++++++++++++++++++++++------------------
+ 1 file changed, 142 insertions(+), 107 deletions(-)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index ca2b5c9145da..2d6bf0af3305 100644
+index ac56d4db6d3e..57f87eee5be5 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -73,8 +73,6 @@
- #define __printf(a, b)	__attribute__((format(printf, a, b)))
+@@ -217,20 +217,45 @@ struct bpf_sec_def {
+  * linux/filter.h.
+  */
+ struct bpf_program {
+-	/* Index in elf obj file, for relocation use. */
+-	int idx;
+-	char *name;
+-	int prog_ifindex;
+-	char *section_name;
+ 	const struct bpf_sec_def *sec_def;
++	char *section_name;
++	size_t sec_idx;
++	/* this program's instruction offset (in number of instructions)
++	 * within its containing ELF section
++	 */
++	size_t sec_insn_off;
++	/* number of original instructions in ELF section belonging to this
++	 * program, not taking into account subprogram instructions possible
++	 * appended later during relocation
++	 */
++	size_t sec_insn_cnt;
++	/* Offset (in number of instructions) of the start of instruction
++	 * belonging to this BPF program  within its containing main BPF
++	 * program. For the entry-point (main) BPF program, this is always
++	 * zero. For a sub-program, this gets reset before each of main BPF
++	 * programs are processed and relocated and is used to determined
++	 * whether sub-program was already appended to the main program, and
++	 * if yes, at which instruction offset.
++	 */
++	size_t sub_insn_off;
++
++	char *name;
+ 	/* section_name with / replaced by _; makes recursive pinning
+ 	 * in bpf_object__pin_programs easier
+ 	 */
+ 	char *pin_name;
++
++	/* instructions that belong to BPF program; insns[0] is located at
++	 * sec_insn_off instruction within its ELF section in ELF file, so
++	 * when mapping ELF file instruction index to the local instruction,
++	 * one needs to subtract sec_insn_off; and vice versa.
++	 */
+ 	struct bpf_insn *insns;
++	/* actual number of instruction in this BPF program's image; for
++	 * entry-point BPF programs this includes the size of main program
++	 * itself plus all the used sub-programs, appended at the end
++	 */
+ 	size_t insns_cnt, main_prog_cnt;
+-	enum bpf_prog_type type;
+-	bool load;
 =20
- static struct bpf_map *bpf_object__add_map(struct bpf_object *obj);
--static struct bpf_program *bpf_object__find_prog_by_idx(struct bpf_objec=
-t *obj,
--							int idx);
- static const struct btf_type *
- skip_mods_and_typedefs(const struct btf *btf, __u32 id, __u32 *res_id);
+ 	struct reloc_desc *reloc_desc;
+ 	int nr_reloc;
+@@ -246,7 +271,10 @@ struct bpf_program {
+ 	void *priv;
+ 	bpf_program_clear_priv_t clear_priv;
 =20
-@@ -3249,20 +3247,6 @@ static int bpf_object__collect_externs(struct bpf_=
-object *obj)
- 	return 0;
++	bool load;
++	enum bpf_prog_type type;
+ 	enum bpf_attach_type expected_attach_type;
++	int prog_ifindex;
+ 	__u32 attach_btf_id;
+ 	__u32 attach_prog_fd;
+ 	void *func_info;
+@@ -446,6 +474,8 @@ static Elf_Scn *elf_sec_by_name(const struct bpf_obje=
+ct *obj, const char *name);
+ static int elf_sec_hdr(const struct bpf_object *obj, Elf_Scn *scn, GElf_=
+Shdr *hdr);
+ static const char *elf_sec_name(const struct bpf_object *obj, Elf_Scn *s=
+cn);
+ static Elf_Data *elf_sec_data(const struct bpf_object *obj, Elf_Scn *scn=
+);
++static int elf_sym_by_sec_off(const struct bpf_object *obj, size_t sec_i=
+dx,
++			      size_t off, __u32 sym_type, GElf_Sym *sym);
+=20
+ void bpf_program__unload(struct bpf_program *prog)
+ {
+@@ -493,7 +523,7 @@ static void bpf_program__exit(struct bpf_program *pro=
+g)
+=20
+ 	prog->nr_reloc =3D 0;
+ 	prog->insns_cnt =3D 0;
+-	prog->idx =3D -1;
++	prog->sec_idx =3D -1;
  }
 =20
--static struct bpf_program *
--bpf_object__find_prog_by_idx(struct bpf_object *obj, int idx)
--{
--	struct bpf_program *prog;
--	size_t i;
+ static char *__bpf_program__pin_name(struct bpf_program *prog)
+@@ -508,130 +538,118 @@ static char *__bpf_program__pin_name(struct bpf_p=
+rogram *prog)
+ }
+=20
+ static int
+-bpf_program__init(void *data, size_t size, const char *section_name, int=
+ idx,
+-		  struct bpf_program *prog)
++bpf_program__init(struct bpf_program *prog, const char *name,
++		  size_t sec_idx, const char *sec_name, size_t sec_off,
++		  void *insn_data, size_t insn_data_sz)
+ {
+-	const size_t bpf_insn_sz =3D sizeof(struct bpf_insn);
 -
--	for (i =3D 0; i < obj->nr_programs; i++) {
--		prog =3D &obj->programs[i];
--		if (prog->sec_idx =3D=3D idx)
--			return prog;
+-	if (size =3D=3D 0 || size % bpf_insn_sz) {
+-		pr_warn("corrupted section '%s', size: %zu\n",
+-			section_name, size);
++	if (insn_data_sz =3D=3D 0 || insn_data_sz % BPF_INSN_SZ || sec_off % BP=
+F_INSN_SZ) {
++		pr_warn("sec '%s': corrupted program '%s', offset %zu, size %zu\n",
++			sec_name, name, sec_off, insn_data_sz);
+ 		return -EINVAL;
+ 	}
+=20
+-	memset(prog, 0, sizeof(*prog));
++	prog->sec_idx =3D sec_idx;
++	prog->sec_insn_off =3D sec_off / BPF_INSN_SZ;
++	prog->sec_insn_cnt =3D insn_data_sz / BPF_INSN_SZ;
++	/* insns_cnt can later be increased by appending used subprograms */
++	prog->insns_cnt =3D prog->sec_insn_cnt;
+=20
+-	prog->section_name =3D strdup(section_name);
+-	if (!prog->section_name) {
+-		pr_warn("failed to alloc name for prog under section(%d) %s\n",
+-			idx, section_name);
++	prog->type =3D BPF_PROG_TYPE_UNSPEC;
++	prog->load =3D true;
++
++	prog->instances.fds =3D NULL;
++	prog->instances.nr =3D -1;
++
++	prog->section_name =3D strdup(sec_name);
++	if (!prog->section_name)
++		goto errout;
++
++	prog->name =3D strdup(name);
++	if (!prog->name)
+ 		goto errout;
 -	}
--	return NULL;
+=20
+ 	prog->pin_name =3D __bpf_program__pin_name(prog);
+-	if (!prog->pin_name) {
+-		pr_warn("failed to alloc pin name for prog under section(%d) %s\n",
+-			idx, section_name);
++	if (!prog->pin_name)
+ 		goto errout;
+-	}
+=20
+-	prog->insns =3D malloc(size);
+-	if (!prog->insns) {
+-		pr_warn("failed to alloc insns for prog under section %s\n",
+-			section_name);
++	prog->insns =3D malloc(insn_data_sz);
++	if (!prog->insns)
+ 		goto errout;
+-	}
+-	prog->insns_cnt =3D size / bpf_insn_sz;
+-	memcpy(prog->insns, data, size);
+-	prog->idx =3D idx;
+-	prog->instances.fds =3D NULL;
+-	prog->instances.nr =3D -1;
+-	prog->type =3D BPF_PROG_TYPE_UNSPEC;
+-	prog->load =3D true;
++	memcpy(prog->insns, insn_data, insn_data_sz);
+=20
+ 	return 0;
+ errout:
++	pr_warn("sec '%s': failed to allocate memory for prog '%s'\n", sec_name=
+, name);
+ 	bpf_program__exit(prog);
+ 	return -ENOMEM;
+ }
+=20
+ static int
+-bpf_object__add_program(struct bpf_object *obj, void *data, size_t size,
+-			const char *section_name, int idx)
++bpf_object__add_programs(struct bpf_object *obj, Elf_Data *sec_data,
++			 const char *sec_name, int sec_idx)
+ {
+-	struct bpf_program prog, *progs;
++	struct bpf_program *prog, *progs;
++	void *data =3D sec_data->d_buf;
++	size_t sec_sz =3D sec_data->d_size, sec_off, prog_sz;
+ 	int nr_progs, err;
+-
+-	err =3D bpf_program__init(data, size, section_name, idx, &prog);
+-	if (err)
+-		return err;
++	const char *name;
++	GElf_Sym sym;
+=20
+ 	progs =3D obj->programs;
+ 	nr_progs =3D obj->nr_programs;
++	sec_off =3D 0;
+=20
+-	progs =3D libbpf_reallocarray(progs, nr_progs + 1, sizeof(progs[0]));
+-	if (!progs) {
+-		/*
+-		 * In this case the original obj->programs
+-		 * is still valid, so don't need special treat for
+-		 * bpf_close_object().
+-		 */
+-		pr_warn("failed to alloc a new program under section '%s'\n",
+-			section_name);
+-		bpf_program__exit(&prog);
+-		return -ENOMEM;
+-	}
+-
+-	pr_debug("elf: found program '%s'\n", prog.section_name);
+-	obj->programs =3D progs;
+-	obj->nr_programs =3D nr_progs + 1;
+-	prog.obj =3D obj;
+-	progs[nr_progs] =3D prog;
+-	return 0;
 -}
 -
- struct bpf_program *
- bpf_object__find_program_by_title(const struct bpf_object *obj,
- 				  const char *title)
-@@ -8198,7 +8182,7 @@ static int bpf_object__collect_st_ops_relos(struct =
-bpf_object *obj,
- 	const struct btf *btf;
- 	struct bpf_map *map;
- 	Elf_Data *symbols;
--	unsigned int moff;
-+	unsigned int moff, insn_idx;
- 	const char *name;
- 	__u32 member_idx;
- 	GElf_Sym sym;
-@@ -8243,6 +8227,12 @@ static int bpf_object__collect_st_ops_relos(struct=
- bpf_object *obj,
- 				map->name, (size_t)rel.r_offset, shdr_idx);
- 			return -LIBBPF_ERRNO__RELOC;
- 		}
-+		if (sym.st_value % BPF_INSN_SZ) {
-+			pr_warn("struct_ops reloc %s: invalid target program offset %llu\n",
-+				map->name, (__u64)sym.st_value);
+-static int
+-bpf_object__init_prog_names(struct bpf_object *obj)
+-{
+-	Elf_Data *symbols =3D obj->efile.symbols;
+-	struct bpf_program *prog;
+-	size_t pi, si;
++	while (sec_off < sec_sz) {
++		if (elf_sym_by_sec_off(obj, sec_idx, sec_off, STT_FUNC, &sym)) {
++			pr_warn("sec '%s': failed to find program symbol at offset %zu\n",
++				sec_name, sec_off);
 +			return -LIBBPF_ERRNO__FORMAT;
 +		}
-+		insn_idx =3D sym.st_value / BPF_INSN_SZ;
 =20
- 		member =3D find_member_by_offset(st_ops->type, moff * 8);
- 		if (!member) {
-@@ -8259,7 +8249,7 @@ static int bpf_object__collect_st_ops_relos(struct =
-bpf_object *obj,
- 			return -EINVAL;
+-	for (pi =3D 0; pi < obj->nr_programs; pi++) {
+-		const char *name =3D NULL;
++		prog_sz =3D sym.st_size;
+=20
+-		prog =3D &obj->programs[pi];
++		name =3D elf_sym_str(obj, sym.st_name);
++		if (!name) {
++			pr_warn("sec '%s': failed to get symbol name for offset %zu\n",
++				sec_name, sec_off);
++			return -LIBBPF_ERRNO__FORMAT;
++		}
+=20
+-		for (si =3D 0; si < symbols->d_size / sizeof(GElf_Sym) && !name; si++)=
+ {
+-			GElf_Sym sym;
++		if (sec_off + prog_sz > sec_sz) {
++			pr_warn("sec '%s': program at offset %zu crosses section boundary\n",
++				sec_name, sec_off);
++			return -LIBBPF_ERRNO__FORMAT;
++		}
+=20
+-			if (!gelf_getsym(symbols, si, &sym))
+-				continue;
+-			if (sym.st_shndx !=3D prog->idx)
+-				continue;
+-			if (GELF_ST_BIND(sym.st_info) !=3D STB_GLOBAL)
+-				continue;
++		pr_debug("sec '%s': found program '%s' at offset %zu, code size %zu by=
+tes\n",
++			 sec_name, name, sec_off, prog_sz);
+=20
+-			name =3D elf_sym_str(obj, sym.st_name);
+-			if (!name) {
+-				pr_warn("prog '%s': failed to get symbol name\n",
+-					prog->section_name);
+-				return -LIBBPF_ERRNO__LIBELF;
+-			}
++		progs =3D reallocarray(progs, nr_progs + 1, sizeof(*progs));
++		if (!progs) {
++			/*
++			 * In this case the original obj->programs
++			 * is still valid, so don't need special treat for
++			 * bpf_close_object().
++			 */
++			pr_warn("sec '%s': failed to alloc memory for new program '%s'\n",
++				sec_name, name);
++			return -ENOMEM;
  		}
++		obj->programs =3D progs;
 =20
--		prog =3D bpf_object__find_prog_by_idx(obj, shdr_idx);
-+		prog =3D find_prog_by_sec_insn(obj, shdr_idx, insn_idx);
- 		if (!prog) {
- 			pr_warn("struct_ops reloc %s: cannot find prog at shdr_idx %u to relo=
-cate func ptr %s\n",
- 				map->name, shdr_idx, name);
+-		if (!name && prog->idx =3D=3D obj->efile.text_shndx)
+-			name =3D ".text";
++		prog =3D &progs[nr_progs];
++		memset(prog, 0, sizeof(*prog));
++		prog->obj =3D obj;
+=20
+-		if (!name) {
+-			pr_warn("prog '%s': failed to find program symbol\n",
+-				prog->section_name);
+-			return -EINVAL;
+-		}
++		err =3D bpf_program__init(prog, name, sec_idx, sec_name, sec_off,
++					data + sec_off, prog_sz);
++		if (err)
++			return err;
+=20
+-		prog->name =3D strdup(name);
+-		if (!prog->name)
+-			return -ENOMEM;
++		nr_progs++;
++		obj->nr_programs =3D nr_progs;
++
++		sec_off +=3D prog_sz;
+ 	}
+=20
+ 	return 0;
+@@ -2675,6 +2693,26 @@ static Elf_Data *elf_sec_data(const struct bpf_obj=
+ect *obj, Elf_Scn *scn)
+ 	return data;
+ }
+=20
++static int elf_sym_by_sec_off(const struct bpf_object *obj, size_t sec_i=
+dx,
++			      size_t off, __u32 sym_type, GElf_Sym *sym)
++{
++	Elf_Data *symbols =3D obj->efile.symbols;
++	size_t n =3D symbols->d_size / sizeof(GElf_Sym);
++	int i;
++
++	for (i =3D 0; i < n; i++) {
++		if (!gelf_getsym(symbols, i, sym))
++			continue;
++		if (sym->st_shndx !=3D sec_idx || sym->st_value !=3D off)
++			continue;
++		if (GELF_ST_TYPE(sym->st_info) !=3D sym_type)
++			continue;
++		return 0;
++	}
++
++	return -ENOENT;
++}
++
+ static bool is_sec_name_dwarf(const char *name)
+ {
+ 	/* approximation, but the actual list is too long */
+@@ -2795,9 +2833,7 @@ static int bpf_object__elf_collect(struct bpf_objec=
+t *obj)
+ 			if (sh.sh_flags & SHF_EXECINSTR) {
+ 				if (strcmp(name, ".text") =3D=3D 0)
+ 					obj->efile.text_shndx =3D idx;
+-				err =3D bpf_object__add_program(obj, data->d_buf,
+-							      data->d_size,
+-							      name, idx);
++				err =3D bpf_object__add_programs(obj, data, name, idx);
+ 				if (err)
+ 					return err;
+ 			} else if (strcmp(name, DATA_SEC) =3D=3D 0) {
+@@ -3183,7 +3219,7 @@ bpf_object__find_prog_by_idx(struct bpf_object *obj=
+, int idx)
+=20
+ 	for (i =3D 0; i < obj->nr_programs; i++) {
+ 		prog =3D &obj->programs[i];
+-		if (prog->idx =3D=3D idx)
++		if (prog->sec_idx =3D=3D idx)
+ 			return prog;
+ 	}
+ 	return NULL;
+@@ -5660,7 +5696,7 @@ bpf_program__reloc_text(struct bpf_program *prog, s=
+truct bpf_object *obj,
+ 	size_t new_cnt;
+ 	int err;
+=20
+-	if (prog->idx !=3D obj->efile.text_shndx && prog->main_prog_cnt =3D=3D =
+0) {
++	if (prog->sec_idx !=3D obj->efile.text_shndx && prog->main_prog_cnt =3D=
+=3D 0) {
+ 		text =3D bpf_object__find_prog_by_idx(obj, obj->efile.text_shndx);
+ 		if (!text) {
+ 			pr_warn("no .text section found yet relo into text exist\n");
+@@ -5783,7 +5819,7 @@ bpf_object__relocate(struct bpf_object *obj, const =
+char *targ_btf_path)
+ 	 */
+ 	for (i =3D 0; i < obj->nr_programs; i++) {
+ 		prog =3D &obj->programs[i];
+-		if (prog->idx !=3D obj->efile.text_shndx)
++		if (prog->sec_idx !=3D obj->efile.text_shndx)
+ 			continue;
+=20
+ 		err =3D bpf_program__relocate(prog, obj);
+@@ -5799,7 +5835,7 @@ bpf_object__relocate(struct bpf_object *obj, const =
+char *targ_btf_path)
+ 	 */
+ 	for (i =3D 0; i < obj->nr_programs; i++) {
+ 		prog =3D &obj->programs[i];
+-		if (prog->idx =3D=3D obj->efile.text_shndx)
++		if (prog->sec_idx =3D=3D obj->efile.text_shndx)
+ 			continue;
+=20
+ 		err =3D bpf_program__relocate(prog, obj);
+@@ -6215,7 +6251,7 @@ int bpf_program__load(struct bpf_program *prog, cha=
+r *license, __u32 kern_ver)
+ static bool bpf_program__is_function_storage(const struct bpf_program *p=
+rog,
+ 					     const struct bpf_object *obj)
+ {
+-	return prog->idx =3D=3D obj->efile.text_shndx && obj->has_pseudo_calls;
++	return prog->sec_idx =3D=3D obj->efile.text_shndx && obj->has_pseudo_ca=
+lls;
+ }
+=20
+ static int
+@@ -6298,7 +6334,6 @@ __bpf_object__open(const char *path, const void *ob=
+j_buf, size_t obj_buf_sz,
+ 	err =3D err ? : bpf_object__collect_externs(obj);
+ 	err =3D err ? : bpf_object__finalize_btf(obj);
+ 	err =3D err ? : bpf_object__init_maps(obj, opts);
+-	err =3D err ? : bpf_object__init_prog_names(obj);
+ 	err =3D err ? : bpf_object__collect_reloc(obj);
+ 	if (err)
+ 		goto out;
 --=20
 2.24.1
 
