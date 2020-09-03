@@ -2,243 +2,114 @@ Return-Path: <SRS0=zf1N=CM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.5 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_INVALID,DKIM_SIGNED,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 12D82C43461
-	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:36:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E3C8C35256
+	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:37:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2E3420684
-	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:36:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 733392071B
+	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:37:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="dErUfk8x"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b8Z56R9v"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729167AbgICUgl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Sep 2020 16:36:41 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:39984 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729059AbgICUgg (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 3 Sep 2020 16:36:36 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 083KWhux032407
-        for <bpf@vger.kernel.org>; Thu, 3 Sep 2020 13:36:35 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=yt9JXruQ8mdTgAcAIJjOfqgaF/x2K6iu1Ja1AyvqY10=;
- b=dErUfk8xhBHxrBKKf8sem06CQeOjFpXlsKwOF1iyiDwNFwFnwN7CFUXM95F9eRaw+a+6
- BVAPYHMd1nvZIpAir+A9yWilF6oBA3rgYepkBV8bKqaJ4j4FI/66Nf8xy2auDYSG+RI3
- mAFfUrBT1bqreL0CcQWQS6wxbqr7tqzflLA= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 33b4crs73k-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2020 13:36:35 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 3 Sep 2020 13:35:53 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id D86782EC6814; Thu,  3 Sep 2020 13:35:49 -0700 (PDT)
-From:   Andrii Nakryiko <andriin@fb.com>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: [PATCH v3 bpf-next 03/14] libbpf: support CO-RE relocations for multi-prog sections
-Date:   Thu, 3 Sep 2020 13:35:31 -0700
-Message-ID: <20200903203542.15944-4-andriin@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200903203542.15944-1-andriin@fb.com>
-References: <20200903203542.15944-1-andriin@fb.com>
+        id S1729406AbgICUhN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Sep 2020 16:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729729AbgICUg5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Sep 2020 16:36:57 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26802C061244;
+        Thu,  3 Sep 2020 13:36:57 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id q3so3054177ybp.7;
+        Thu, 03 Sep 2020 13:36:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2E7KS28zfC4tVsTRRkYzuj1mxceg9YfnccbGKN5EM2Y=;
+        b=b8Z56R9vFCgocfa8RWukYzYWSYA3gtr6wje77Wssz6K+yjxqD8f20ntZRZheoOVV+v
+         BDgrP0DtuIjNozxXUxj5gCg9caRvd/P+tM9finPeseB/BU1EGEVNuDDUCUhc6fRW0+nv
+         ipw4HTaUQsw0mD/UVxhcoksGGtRHcfpjSL9gdBe9rLiF683BWUicBR0v5tH9ve/YOECY
+         CRBkxBs6Drv3tPFtYRZzKysdE0NXzSFgndTRv8sHMiGEPIn/N3Hy6jz0Y1HBJtbaGfQs
+         2tl62L8jQBmWUR4YbZ+pMBird4XhD+ApWBH/laeIzawJImWgckQ8geGawy72noVBmYN7
+         2BYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2E7KS28zfC4tVsTRRkYzuj1mxceg9YfnccbGKN5EM2Y=;
+        b=F3Yb6WkV5Ht9SqyzXYDGFKnBQWJmOR0w2OhERh83PfsCB56mSjQhLx2QkGDgs+WXC3
+         a2hkwpVcjOPkGaUjadZhQYr4C3fNEejj6aYE9Q6y9j2tukXA2nqhDESGaMmNvGWfos5Q
+         xrfipchqB7H7gS4A5t1xZGXfvvPcRMRXLvtMrgQocMWBzHIXorc8WS5FHm7bJDx2shJR
+         nY1ooQk2T3yzTEYphbhLL6y5i+aezOKPRts4A5QG8u3FogP9zH0O9nLC+20Tl8+qbguP
+         p5Etq+bgxM2HN5l67lGt9U1TXOCYQim/J4WOtGaF5bQpMswMuXJcsec0/+vnZqeEbHYH
+         uI7w==
+X-Gm-Message-State: AOAM532HTyYh5kJKbsH9b59IZpJLToqbSoV5DHMjudwzLqo5KjOCFBjC
+        orA0XKfQruoENGPFoBBQILl6rgA7YPljT1itV5U=
+X-Google-Smtp-Source: ABdhPJyDQfdxjra9IKhfUae9dPcHOGQ0OPr4g2ImIt6wfz0b1j2FGZbTmo+bBtcrYt4XI6l5mjIApkQYAlXK5G6M1C4=
+X-Received: by 2002:a25:6885:: with SMTP id d127mr5150392ybc.27.1599165416443;
+ Thu, 03 Sep 2020 13:36:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-03_13:2020-09-03,2020-09-03 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 mlxscore=0
- clxscore=1015 lowpriorityscore=0 suspectscore=8 priorityscore=1501
- phishscore=0 bulkscore=0 malwarescore=0 spamscore=0 impostorscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009030183
-X-FB-Internal: deliver
+References: <20200903200528.747884-1-haoluo@google.com>
+In-Reply-To: <20200903200528.747884-1-haoluo@google.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 3 Sep 2020 13:36:45 -0700
+Message-ID: <CAEf4Bza6e+x8Rqy7cBzMG0F0D5WCzE7xPRoAqJgSbfyqXxtT5A@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: Fix check in global_data_init.
+To:     Hao Luo <haoluo@google.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        KP Singh <kpsingh@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix up CO-RE relocation code to handle relocations against ELF sections
-containing multiple BPF programs. This requires lookup of a BPF program b=
-y its
-section name and instruction index it contains. While it could have been =
-done
-as a simple loop, it could run into performance issues pretty quickly, as
-number of CO-RE relocations can be quite large in real-world applications=
-, and
-each CO-RE relocation incurs BPF program look up now. So instead of simpl=
-e
-loop, implement a binary search by section name + insn offset.
+On Thu, Sep 3, 2020 at 1:06 PM Hao Luo <haoluo@google.com> wrote:
+>
+> The returned value of bpf_object__open_file() should be checked with
+> libbpf_get_error() rather than NULL. This fix prevents test_progs from
+> crash when test_global_data.o is not present.
+>
+> Signed-off-by: Hao Luo <haoluo@google.com>
+> ---
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/lib/bpf/libbpf.c | 82 +++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 74 insertions(+), 8 deletions(-)
+thanks!
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 57f87eee5be5..11ad230ec20c 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -2753,6 +2753,18 @@ static bool ignore_elf_section(GElf_Shdr *hdr, con=
-st char *name)
- 	return false;
- }
-=20
-+static int cmp_progs(const void *_a, const void *_b)
-+{
-+	const struct bpf_program *a =3D _a;
-+	const struct bpf_program *b =3D _b;
-+
-+	if (a->sec_idx !=3D b->sec_idx)
-+		return a->sec_idx < b->sec_idx ? -1 : 1;
-+
-+	/* sec_insn_off can't be the same within the section */
-+	return a->sec_insn_off < b->sec_insn_off ? -1 : 1;
-+}
-+
- static int bpf_object__elf_collect(struct bpf_object *obj)
- {
- 	Elf *elf =3D obj->efile.elf;
-@@ -2887,6 +2899,11 @@ static int bpf_object__elf_collect(struct bpf_obje=
-ct *obj)
- 		pr_warn("elf: symbol strings section missing or invalid in %s\n", obj-=
->path);
- 		return -LIBBPF_ERRNO__FORMAT;
- 	}
-+
-+	/* sort BPF programs by section name and in-section instruction offset
-+	 * for faster search */
-+	qsort(obj->programs, obj->nr_programs, sizeof(*obj->programs), cmp_prog=
-s);
-+
- 	return bpf_object__init_btf(obj, btf_data, btf_ext_data);
- }
-=20
-@@ -3415,6 +3432,37 @@ static int bpf_program__record_reloc(struct bpf_pr=
-ogram *prog,
- 	return 0;
- }
-=20
-+static bool prog_contains_insn(const struct bpf_program *prog, size_t in=
-sn_idx)
-+{
-+	return insn_idx >=3D prog->sec_insn_off &&
-+	       insn_idx < prog->sec_insn_off + prog->sec_insn_cnt;
-+}
-+
-+static struct bpf_program *find_prog_by_sec_insn(const struct bpf_object=
- *obj,
-+						 size_t sec_idx, size_t insn_idx)
-+{
-+	int l =3D 0, r =3D obj->nr_programs - 1, m;
-+	struct bpf_program *prog;
-+
-+	while (l < r) {
-+		m =3D l + (r - l + 1) / 2;
-+		prog =3D &obj->programs[m];
-+
-+		if (prog->sec_idx < sec_idx ||
-+		    (prog->sec_idx =3D=3D sec_idx && prog->sec_insn_off <=3D insn_idx)=
-)
-+			l =3D m;
-+		else
-+			r =3D m - 1;
-+	}
-+	/* matching program could be at index l, but it still might be the
-+	 * wrong one, so we need to double check conditions for the last time
-+	 */
-+	prog =3D &obj->programs[l];
-+	if (prog->sec_idx =3D=3D sec_idx && prog_contains_insn(prog, insn_idx))
-+		return prog;
-+	return NULL;
-+}
-+
- static int
- bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
- 			   Elf_Data *data, struct bpf_object *obj)
-@@ -5229,6 +5277,11 @@ static int bpf_core_patch_insn(struct bpf_program =
-*prog,
- 	if (relo->insn_off % BPF_INSN_SZ)
- 		return -EINVAL;
- 	insn_idx =3D relo->insn_off / BPF_INSN_SZ;
-+	/* adjust insn_idx from section frame of reference to the local
-+	 * program's frame of reference; (sub-)program code is not yet
-+	 * relocated, so it's enough to just subtract in-section offset
-+	 */
-+	insn_idx =3D insn_idx - prog->sec_insn_off;
- 	insn =3D &prog->insns[insn_idx];
- 	class =3D BPF_CLASS(insn->code);
-=20
-@@ -5619,7 +5672,7 @@ bpf_object__relocate_core(struct bpf_object *obj, c=
-onst char *targ_btf_path)
- 	struct bpf_program *prog;
- 	struct btf *targ_btf;
- 	const char *sec_name;
--	int i, err =3D 0;
-+	int i, err =3D 0, insn_idx, sec_idx;
-=20
- 	if (obj->btf_ext->core_relo_info.len =3D=3D 0)
- 		return 0;
-@@ -5646,24 +5699,37 @@ bpf_object__relocate_core(struct bpf_object *obj,=
- const char *targ_btf_path)
- 			err =3D -EINVAL;
- 			goto out;
- 		}
-+		/* bpf_object's ELF is gone by now so it's not easy to find
-+		 * section index by section name, but we can find *any*
-+		 * bpf_program within desired section name and use it's
-+		 * prog->sec_idx to do a proper search by section index and
-+		 * instruction offset
-+		 */
- 		prog =3D NULL;
- 		for (i =3D 0; i < obj->nr_programs; i++) {
--			if (!strcmp(obj->programs[i].section_name, sec_name)) {
--				prog =3D &obj->programs[i];
-+			prog =3D &obj->programs[i];
-+			if (strcmp(prog->section_name, sec_name) =3D=3D 0)
- 				break;
--			}
- 		}
- 		if (!prog) {
--			pr_warn("failed to find program '%s' for CO-RE offset relocation\n",
--				sec_name);
--			err =3D -EINVAL;
--			goto out;
-+			pr_warn("sec '%s': failed to find a BPF program\n", sec_name);
-+			return -ENOENT;
- 		}
-+		sec_idx =3D prog->sec_idx;
-=20
- 		pr_debug("sec '%s': found %d CO-RE relocations\n",
- 			 sec_name, sec->num_info);
-=20
- 		for_each_btf_ext_rec(seg, sec, i, rec) {
-+			insn_idx =3D rec->insn_off / BPF_INSN_SZ;
-+			prog =3D find_prog_by_sec_insn(obj, sec_idx, insn_idx);
-+			if (!prog) {
-+				pr_warn("sec '%s': failed to find program at insn #%d for CO-RE offs=
-et relocation #%d\n",
-+					sec_name, insn_idx, i);
-+				err =3D -EINVAL;
-+				goto out;
-+			}
-+
- 			err =3D bpf_core_apply_relo(prog, rec, i, obj->btf,
- 						  targ_btf, cand_cache);
- 			if (err) {
---=20
-2.24.1
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 
+>  tools/testing/selftests/bpf/prog_tests/global_data_init.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> index 3bdaa5a40744..ee46b11f1f9a 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> @@ -12,7 +12,8 @@ void test_global_data_init(void)
+>         size_t sz;
+>
+>         obj = bpf_object__open_file(file, NULL);
+> -       if (CHECK_FAIL(!obj))
+> +       err = libbpf_get_error(obj);
+> +       if (CHECK_FAIL(err))
+>                 return;
+>
+>         map = bpf_object__find_map_by_name(obj, "test_glo.rodata");
+> --
+> 2.28.0.526.ge36021eeef-goog
+>
