@@ -2,149 +2,142 @@ Return-Path: <SRS0=zf1N=CM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD0C1C2D0A7
-	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:37:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DBA8C433E2
+	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:59:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F97B20678
-	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:37:59 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="KSLb4mPv"
+	by mail.kernel.org (Postfix) with ESMTP id D4FD2206C9
+	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:59:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1599166749;
+	bh=eNqYbb2UwOFJOvg8nHjHg56kZ9XVLK+ZfxCwWscomT0=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=IUl54y/T3Zq4NG2rHNWRQ93ZlPylnyTcdKLKkn/wz4sGNPNsBS+3uHOMPCMyADET0
+	 ksaCOwH2gpBHVgb5STaCTQVtihs6q4oakrqv6XpmwJNGfT2ZmUhQHStOIZlpNDv001
+	 +dQiHbg5nNvfJ6woNs5aOfFmfeg2KHwAilO48914=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727065AbgICUh6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Sep 2020 16:37:58 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63062 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728988AbgICUfy (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 3 Sep 2020 16:35:54 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 083KYLe4011008
-        for <bpf@vger.kernel.org>; Thu, 3 Sep 2020 13:35:52 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=nBWtBxtyHmjoS2voQlhYPBCiKjNcxWGI+7tWUJVYzn8=;
- b=KSLb4mPvSLZ6WKDMLf804KNUua4DNXaxBimJ+Gil8mY9Zp6j6RD/PPXkN2njvcRJLuhi
- 26Si4RGK0TaFubarGu7IS/7L1S9QE+Ctsfsmo8g8VB4eUkjZ/fdAU8vrmZdEnntQpmUr
- 30TGITx70MaB8iHeGQfut4qOYMdpbX1vKkg= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 338gqnr9a5-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2020 13:35:52 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 3 Sep 2020 13:35:50 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 825972EC6814; Thu,  3 Sep 2020 13:35:45 -0700 (PDT)
-From:   Andrii Nakryiko <andriin@fb.com>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: [PATCH v3 bpf-next 01/14] libbpf: ensure ELF symbols table is found before further ELF processing
-Date:   Thu, 3 Sep 2020 13:35:29 -0700
-Message-ID: <20200903203542.15944-2-andriin@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200903203542.15944-1-andriin@fb.com>
-References: <20200903203542.15944-1-andriin@fb.com>
+        id S1728061AbgICU7J (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Sep 2020 16:59:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55988 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726088AbgICU7H (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Sep 2020 16:59:07 -0400
+Received: from lore-desk.redhat.com (unknown [151.66.86.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BA944206B8;
+        Thu,  3 Sep 2020 20:59:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599166747;
+        bh=eNqYbb2UwOFJOvg8nHjHg56kZ9XVLK+ZfxCwWscomT0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kZIgUr895BUcIAPmCIidt3UE9H44i+OZO7OPtbF8slSvdU5mXUc4nhs+dfpG211L4
+         Lwg3UvbbK5EPpo2yWoXiEM6ZBjq162GG94eOQti9OQcWyt7l08niCOeNtSLDhO8Vd7
+         AVuNsDxXwT+58QOFuWjtLRrgOkx2u4Rg0rjj1e7I=
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, davem@davemloft.net,
+        lorenzo.bianconi@redhat.com, brouer@redhat.com,
+        echaudro@redhat.com, sameehj@amazon.com, kuba@kernel.org,
+        john.fastabend@gmail.com, daniel@iogearbox.net, ast@kernel.org,
+        shayagr@amazon.com
+Subject: [PATCH v2 net-next 0/9] mvneta: introduce XDP multi-buffer support
+Date:   Thu,  3 Sep 2020 22:58:44 +0200
+Message-Id: <cover.1599165031.git.lorenzo@kernel.org>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-03_13:2020-09-03,2020-09-03 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- impostorscore=0 phishscore=0 clxscore=1015 suspectscore=8 malwarescore=0
- priorityscore=1501 bulkscore=0 adultscore=0 lowpriorityscore=0 mlxscore=0
- mlxlogscore=749 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009030183
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-libbpf ELF parsing logic might need symbols available before ELF parsing =
-is
-completed, so we need to make sure that symbols table section is found in
-a separate pass before all the subsequent sections are processed.
+- Finalize XDP multi-buffer support for mvneta driver introducing the
+  capability to map non-linear buffers on tx side.
+- Introduce multi-buffer bit (mb) in xdp_frame/xdp_buffer to specify if
+  shared_info area has been properly initialized.
+- Initialize multi-buffer bit (mb) to 0 in all XDP-capable drivers.
+- Add multi-buff support to xdp_return_{buff/frame} utility routines.
+- Introduce bpf_xdp_adjust_mb_header helper to adjust frame headers moving
+  *offset* bytes from/to the second buffer to/from the first one.
+  This helper can be used to move headers when the hw DMA SG is not able
+  to copy all the headers in the first fragment and split header and data
+  pages. A possible use case for bpf_xdp_adjust_mb_header is described
+  here [0]
+- Introduce bpf_xdp_get_frag_count and bpf_xdp_get_frags_total_size helpers to
+  report the total number/size of frags for a given xdp multi-buff.
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
----
- tools/lib/bpf/libbpf.c | 40 +++++++++++++++++++++++++++++-----------
- 1 file changed, 29 insertions(+), 11 deletions(-)
+XDP multi-buffer design principles are described here [1]
+For the moment we have not implemented any self-test for the introduced the bpf
+helpers. We can address this in a follow up series if the proposed approach
+is accepted.
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index b688aadf09c5..ac56d4db6d3e 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -2720,14 +2720,38 @@ static int bpf_object__elf_collect(struct bpf_obj=
-ect *obj)
- 	Elf *elf =3D obj->efile.elf;
- 	Elf_Data *btf_ext_data =3D NULL;
- 	Elf_Data *btf_data =3D NULL;
--	Elf_Scn *scn =3D NULL;
- 	int idx =3D 0, err =3D 0;
-+	const char *name;
-+	Elf_Data *data;
-+	Elf_Scn *scn;
-+	GElf_Shdr sh;
-=20
-+	/* a bunch of ELF parsing functionality depends on processing symbols,
-+	 * so do the first pass and find the symbol table
-+	 */
-+	scn =3D NULL;
- 	while ((scn =3D elf_nextscn(elf, scn)) !=3D NULL) {
--		const char *name;
--		GElf_Shdr sh;
--		Elf_Data *data;
-+		if (elf_sec_hdr(obj, scn, &sh))
-+			return -LIBBPF_ERRNO__FORMAT;
-+
-+		if (sh.sh_type =3D=3D SHT_SYMTAB) {
-+			if (obj->efile.symbols) {
-+				pr_warn("elf: multiple symbol tables in %s\n", obj->path);
-+				return -LIBBPF_ERRNO__FORMAT;
-+			}
-=20
-+			data =3D elf_sec_data(obj, scn);
-+			if (!data)
-+				return -LIBBPF_ERRNO__FORMAT;
-+
-+			obj->efile.symbols =3D data;
-+			obj->efile.symbols_shndx =3D elf_ndxscn(scn);
-+			obj->efile.strtabidx =3D sh.sh_link;
-+		}
-+	}
-+
-+	scn =3D NULL;
-+	while ((scn =3D elf_nextscn(elf, scn)) !=3D NULL) {
- 		idx++;
-=20
- 		if (elf_sec_hdr(obj, scn, &sh))
-@@ -2766,13 +2790,7 @@ static int bpf_object__elf_collect(struct bpf_obje=
-ct *obj)
- 		} else if (strcmp(name, BTF_EXT_ELF_SEC) =3D=3D 0) {
- 			btf_ext_data =3D data;
- 		} else if (sh.sh_type =3D=3D SHT_SYMTAB) {
--			if (obj->efile.symbols) {
--				pr_warn("elf: multiple symbol tables in %s\n", obj->path);
--				return -LIBBPF_ERRNO__FORMAT;
--			}
--			obj->efile.symbols =3D data;
--			obj->efile.symbols_shndx =3D idx;
--			obj->efile.strtabidx =3D sh.sh_link;
-+			/* already processed during the first pass above */
- 		} else if (sh.sh_type =3D=3D SHT_PROGBITS && data->d_size > 0) {
- 			if (sh.sh_flags & SHF_EXECINSTR) {
- 				if (strcmp(name, ".text") =3D=3D 0)
---=20
-2.24.1
+Changes since v1:
+- Fix use-after-free in xdp_return_{buff/frame}
+- Introduce bpf helpers
+- Introduce xdp_mb sample program
+- access skb_shared_info->nr_frags only on the last fragment
+
+Changes since RFC:
+- squash multi-buffer bit initialization in a single patch
+- add mvneta non-linear XDP buff support for tx side
+
+[0] https://netdevconf.info/0x14/session.html?talk-the-path-to-tcp-4k-mtu-and-rx-zerocopy
+[1] https://github.com/xdp-project/xdp-project/blob/master/areas/core/xdp-multi-buffer01-design.org
+
+Lorenzo Bianconi (7):
+  xdp: introduce mb in xdp_buff/xdp_frame
+  xdp: initialize xdp_buff mb bit to 0 in all XDP drivers
+  net: mvneta: update mb bit before passing the xdp buffer to eBPF layer
+  xdp: add multi-buff support to xdp_return_{buff/frame}
+  net: mvneta: add multi buffer support to XDP_TX
+  bpf: helpers: add bpf_xdp_adjust_mb_header helper
+  net: mvneta: enable jumbo frames for XDP
+
+Sameeh Jubran (2):
+  bpf: helpers: add multibuffer support
+  samples/bpf: add bpf program that uses xdp mb helpers
+
+ drivers/net/ethernet/amazon/ena/ena_netdev.c  |   1 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c |   1 +
+ .../net/ethernet/cavium/thunder/nicvf_main.c  |   1 +
+ .../net/ethernet/freescale/dpaa2/dpaa2-eth.c  |   1 +
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c   |   1 +
+ drivers/net/ethernet/intel/ice/ice_txrx.c     |   1 +
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c |   1 +
+ .../net/ethernet/intel/ixgbevf/ixgbevf_main.c |   1 +
+ drivers/net/ethernet/marvell/mvneta.c         | 126 ++++++------
+ .../net/ethernet/marvell/mvpp2/mvpp2_main.c   |   1 +
+ drivers/net/ethernet/mellanox/mlx4/en_rx.c    |   1 +
+ .../net/ethernet/mellanox/mlx5/core/en_rx.c   |   1 +
+ .../ethernet/netronome/nfp/nfp_net_common.c   |   1 +
+ drivers/net/ethernet/qlogic/qede/qede_fp.c    |   1 +
+ drivers/net/ethernet/sfc/rx.c                 |   1 +
+ drivers/net/ethernet/socionext/netsec.c       |   1 +
+ drivers/net/ethernet/ti/cpsw.c                |   1 +
+ drivers/net/ethernet/ti/cpsw_new.c            |   1 +
+ drivers/net/hyperv/netvsc_bpf.c               |   1 +
+ drivers/net/tun.c                             |   2 +
+ drivers/net/veth.c                            |   1 +
+ drivers/net/virtio_net.c                      |   2 +
+ drivers/net/xen-netfront.c                    |   1 +
+ include/net/xdp.h                             |  26 ++-
+ include/uapi/linux/bpf.h                      |  39 +++-
+ net/core/dev.c                                |   1 +
+ net/core/filter.c                             |  93 +++++++++
+ net/core/xdp.c                                |  40 ++++
+ samples/bpf/Makefile                          |   3 +
+ samples/bpf/xdp_mb_kern.c                     |  68 +++++++
+ samples/bpf/xdp_mb_user.c                     | 182 ++++++++++++++++++
+ tools/include/uapi/linux/bpf.h                |  40 +++-
+ 32 files changed, 572 insertions(+), 70 deletions(-)
+ create mode 100644 samples/bpf/xdp_mb_kern.c
+ create mode 100644 samples/bpf/xdp_mb_user.c
+
+-- 
+2.26.2
 
