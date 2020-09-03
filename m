@@ -2,52 +2,56 @@ Return-Path: <SRS0=zf1N=CM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D879C2D0A6
-	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:37:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4EEBDC31E49
+	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:37:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7953A20678
-	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:37:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2F25620678
+	for <bpf@archiver.kernel.org>; Thu,  3 Sep 2020 20:37:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="NZ43jkcw"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="K2nbK+FY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729538AbgICUf5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Sep 2020 16:35:57 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:9046 "EHLO
+        id S1729189AbgICUhz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Sep 2020 16:37:55 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:61888 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729273AbgICUfz (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 3 Sep 2020 16:35:55 -0400
+        by vger.kernel.org with ESMTP id S1729532AbgICUf6 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 3 Sep 2020 16:35:58 -0400
 Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 083KWgLX032306
-        for <bpf@vger.kernel.org>; Thu, 3 Sep 2020 13:35:54 -0700
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 083KWeVJ032202
+        for <bpf@vger.kernel.org>; Thu, 3 Sep 2020 13:35:56 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=xJmp28btJh24nQluHJ6E+yjOaTdt15okri30qMaZNxY=;
- b=NZ43jkcwc/mfee2RxliKq+gY8wOtPhZVjLfhCKN5Cjyjg/kEkwkteJavUEi3tECSSAy5
- tOrdK7oWcINWWrtx1nkS6lMZJEtLDYcW5J7tftjCsrre4H/z96t8jl8z3Umj5OkB0Oah
- 9v+BLnw8eWdOwFmrhy164pCdb+iEGnTVaEg= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=fe+0NLZeQepAV0FyiXPM+p5K2uHFBYyrk6bRFfW1isg=;
+ b=K2nbK+FYrK3oU/RmtivBwsKVROmsZ/oC3mB0hudUEMkko0M1TKakKYkw7az5WYz2vPjE
+ ci3QQqtBSo/60XMfeA1AVgGNrmW0FexnvQKNGuLURhAXCBYqdwObO4Lz8U8YGrMJWw9w
+ 4bUJoPEojqTOTeRT4JkfsfInUbuuHF1qZOk= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 33b4crs702-10
+        by m0001303.ppops.net with ESMTP id 33b4crs71p-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 03 Sep 2020 13:35:53 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 03 Sep 2020 13:35:56 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 3 Sep 2020 13:35:50 -0700
+ 15.1.1979.3; Thu, 3 Sep 2020 13:35:55 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 596F72EC6814; Thu,  3 Sep 2020 13:35:43 -0700 (PDT)
+        id 3F2572EC6814; Thu,  3 Sep 2020 13:35:54 -0700 (PDT)
 From:   Andrii Nakryiko <andriin@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH v3 bpf-next 00/14] Add libbpf full support for BPF-to-BPF calls
-Date:   Thu, 3 Sep 2020 13:35:28 -0700
-Message-ID: <20200903203542.15944-1-andriin@fb.com>
+Subject: [PATCH v3 bpf-next 05/14] libbpf: implement generalized .BTF.ext func/line info adjustment
+Date:   Thu, 3 Sep 2020 13:35:33 -0700
+Message-ID: <20200903203542.15944-6-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200903203542.15944-1-andriin@fb.com>
+References: <20200903203542.15944-1-andriin@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
@@ -55,9 +59,9 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-03_13:2020-09-03,2020-09-03 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 mlxscore=0
- clxscore=1015 lowpriorityscore=0 suspectscore=8 priorityscore=1501
+ clxscore=1015 lowpriorityscore=0 suspectscore=25 priorityscore=1501
  phishscore=0 bulkscore=0 malwarescore=0 spamscore=0 impostorscore=0
- mlxlogscore=783 classifier=spam adjust=0 reason=mlx scancount=1
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2009030183
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -65,136 +69,325 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, libbpf supports a limited form of BPF-to-BPF subprogram calls.=
- The
-restriction is that entry-point BPF program should use *all* of defined
-sub-programs in BPF .o file. If any of the subprograms is not used, such
-entry-point BPF program will be rejected by verifier as containing unreac=
-hable
-dead code. This is not a big limitation for cases with single entry-point=
- BPF
-programs, but is quite a heavy restriction for multi-programs that use on=
-ly
-partially overlapping set of subprograms.
+Complete multi-prog sections and multi sub-prog support in libbpf by prop=
+erly
+adjusting .BTF.ext's line and function information. Mark exposed
+btf_ext__reloc_func_info() and btf_ext__reloc_func_info() APIs as depreca=
+ted.
+These APIs have simplistic assumption that all sub-programs are going to =
+be
+appended to all main BPF programs, which doesn't hold in real life. It's
+unlikely there are any users of this API, as it's very libbpf
+internals-specific.
 
-This patch set removes all such restrictions and adds complete support fo=
-r
-using BPF sub-program calls on BPF side. This is achieved through libbpf
-tracking subprograms individually and detecting which subprograms are use=
-d by
-any given entry-point BPF program, and subsequently only appending and
-relocating code for just those used subprograms.
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/btf.h           |  18 +--
+ tools/lib/bpf/libbpf.c        | 217 ++++++++++++++++++++++------------
+ tools/lib/bpf/libbpf_common.h |   2 +
+ 3 files changed, 153 insertions(+), 84 deletions(-)
 
-In addition, libbpf now also supports multiple entry-point BPF programs w=
-ithin
-the same ELF section. This allows to structure code so that there are few
-variants of BPF programs of the same type and attaching to the same targe=
-t
-(e.g., for tracepoints and kprobes) without the need to worry about ELF
-section name clashes.
-
-This patch set opens way for more wider adoption of BPF subprogram calls,
-especially for real-world production use-cases with complicated net of
-subprograms. This will allow to further scale BPF verification process th=
-rough
-good use of global functions, which can be verified independently. This i=
-s
-also important prerequisite for static linking which allows static BPF
-libraries to not worry about naming clashes for section names, as well as=
- use
-static non-inlined functions (subprograms) without worries of verifier
-rejecting program due to dead code.
-
-Patch set is structured as follows:
-- patched 1-6 contain all the libbpf changes necessary to support multi-p=
-rog
-  sections and bpf2bpf subcalls;
-- patch 7 adds dedicated selftests validating all combinations of possibl=
-e
-  sub-calls (within and across sections, static vs global functions);
-- patch 8 deprecated bpf_program__title() in favor of
-  bpf_program__section_name(). The intent was to also deprecate
-  bpf_object__find_program_by_title() as it's now non-sensical with multi=
-ple
-  programs per section. But there were too many selftests uses of this an=
-d
-  I didn't want to delay this patches further and make it even bigger, so=
- left
-  it for a follow up cleanup;
-- patches 9-10 remove uses for title-related APIs from bpftool and
-  bpf_program__title() use from selftests;
-- patch 11 is converting fexit_bpf2bpf to have explicit subtest (it does
-  contain 4 subtests, which are not handled as sub-tests);
-- patches 12-14 convert few complicated BPF selftests to use __noinline
-  functions to further validate correctness of libbpf's bpf2bpf processin=
-g
-  logic.
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index 91f0ad0e0325..2a55320d87d0 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -57,14 +57,16 @@ LIBBPF_API struct btf_ext *btf_ext__new(__u8 *data, _=
+_u32 size);
+ LIBBPF_API void btf_ext__free(struct btf_ext *btf_ext);
+ LIBBPF_API const void *btf_ext__get_raw_data(const struct btf_ext *btf_e=
+xt,
+ 					     __u32 *size);
+-LIBBPF_API int btf_ext__reloc_func_info(const struct btf *btf,
+-					const struct btf_ext *btf_ext,
+-					const char *sec_name, __u32 insns_cnt,
+-					void **func_info, __u32 *cnt);
+-LIBBPF_API int btf_ext__reloc_line_info(const struct btf *btf,
+-					const struct btf_ext *btf_ext,
+-					const char *sec_name, __u32 insns_cnt,
+-					void **line_info, __u32 *cnt);
++LIBBPF_API LIBBPF_DEPRECATED("btf_ext__reloc_func_info was never meant a=
+s a public API and has wrong assumptions embedded in it; it will be remov=
+ed in the future libbpf versions")
++int btf_ext__reloc_func_info(const struct btf *btf,
++			     const struct btf_ext *btf_ext,
++			     const char *sec_name, __u32 insns_cnt,
++			     void **func_info, __u32 *cnt);
++LIBBPF_API LIBBPF_DEPRECATED("btf_ext__reloc_line_info was never meant a=
+s a public API and has wrong assumptions embedded in it; it will be remov=
+ed in the future libbpf versions")
++int btf_ext__reloc_line_info(const struct btf *btf,
++			     const struct btf_ext *btf_ext,
++			     const char *sec_name, __u32 insns_cnt,
++			     void **line_info, __u32 *cnt);
+ LIBBPF_API __u32 btf_ext__func_info_rec_size(const struct btf_ext *btf_e=
+xt);
+ LIBBPF_API __u32 btf_ext__line_info_rec_size(const struct btf_ext *btf_e=
+xt);
 =20
-v2->v3:
-  - explained subprog relocation algorithm in more details (Alexei);
-  - pyperf, strobelight and cls_redirect got new subprog variants, leavin=
-g
-    other modes intact (Alexei);
-v1->v2:
-  - rename DEPRECATED to LIBBPF_DEPRECATED to avoid name clashes;
-  - fix test_subprogs build;
-  - convert a bunch of complicated selftests to __noinline (Alexei).
-
-Andrii Nakryiko (14):
-  libbpf: ensure ELF symbols table is found before further ELF
-    processing
-  libbpf: parse multi-function sections into multiple BPF programs
-  libbpf: support CO-RE relocations for multi-prog sections
-  libbpf: make RELO_CALL work for multi-prog sections and sub-program
-    calls
-  libbpf: implement generalized .BTF.ext func/line info adjustment
-  libbpf: add multi-prog section support for struct_ops
-  selftests/bpf: add selftest for multi-prog sections and bpf-to-bpf
-    calls
-  tools/bpftool: replace bpf_program__title() with
-    bpf_program__section_name()
-  selftests/bpf: don't use deprecated libbpf APIs
-  libbpf: deprecate notion of BPF program "title" in favor of "section
-    name"
-  selftests/bpf: turn fexit_bpf2bpf into test with subtests
-  selftests/bpf: add subprogs to pyperf, strobemeta, and l4lb_noinline
-    tests
-  selftests/bpf: modernize xdp_noinline test w/ skeleton and __noinline
-  selftests/bpf: add __noinline variant of cls_redirect selftest
-
- tools/bpf/bpftool/prog.c                      |    4 +-
- tools/lib/bpf/btf.h                           |   18 +-
- tools/lib/bpf/libbpf.c                        | 1287 +++++++++++------
- tools/lib/bpf/libbpf.h                        |    5 +-
- tools/lib/bpf/libbpf.map                      |    1 +
- tools/lib/bpf/libbpf_common.h                 |    2 +
- .../selftests/bpf/flow_dissector_load.h       |    8 +-
- .../bpf/prog_tests/bpf_verif_scale.c          |    4 +
- .../selftests/bpf/prog_tests/cls_redirect.c   |   72 +-
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  |   21 +-
- .../selftests/bpf/prog_tests/l4lb_all.c       |    9 +-
- .../bpf/prog_tests/reference_tracking.c       |    2 +-
- .../selftests/bpf/prog_tests/subprogs.c       |   31 +
- .../selftests/bpf/prog_tests/xdp_noinline.c   |   49 +-
- tools/testing/selftests/bpf/progs/pyperf.h    |   11 +-
- .../selftests/bpf/progs/pyperf_subprogs.c     |    5 +
- .../testing/selftests/bpf/progs/strobemeta.h  |   30 +-
- .../selftests/bpf/progs/strobemeta_subprogs.c |   10 +
- .../selftests/bpf/progs/test_cls_redirect.c   |  105 +-
- .../bpf/progs/test_cls_redirect_subprogs.c    |    2 +
- .../selftests/bpf/progs/test_l4lb_noinline.c  |   41 +-
- .../selftests/bpf/progs/test_subprogs.c       |  103 ++
- .../selftests/bpf/progs/test_xdp_noinline.c   |   36 +-
- .../selftests/bpf/test_socket_cookie.c        |    2 +-
- 24 files changed, 1247 insertions(+), 611 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/subprogs.c
- create mode 100644 tools/testing/selftests/bpf/progs/pyperf_subprogs.c
- create mode 100644 tools/testing/selftests/bpf/progs/strobemeta_subprogs=
-.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_cls_redirect_s=
-ubprogs.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_subprogs.c
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 4e32a1028379..ca2b5c9145da 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -4241,75 +4241,6 @@ bpf_object__create_maps(struct bpf_object *obj)
+ 	return err;
+ }
+=20
+-static int
+-check_btf_ext_reloc_err(struct bpf_program *prog, int err,
+-			void *btf_prog_info, const char *info_name)
+-{
+-	if (err !=3D -ENOENT) {
+-		pr_warn("Error in loading %s for sec %s.\n",
+-			info_name, prog->section_name);
+-		return err;
+-	}
+-
+-	/* err =3D=3D -ENOENT (i.e. prog->section_name not found in btf_ext) */
+-
+-	if (btf_prog_info) {
+-		/*
+-		 * Some info has already been found but has problem
+-		 * in the last btf_ext reloc. Must have to error out.
+-		 */
+-		pr_warn("Error in relocating %s for sec %s.\n",
+-			info_name, prog->section_name);
+-		return err;
+-	}
+-
+-	/* Have problem loading the very first info. Ignore the rest. */
+-	pr_warn("Cannot find %s for main program sec %s. Ignore all %s.\n",
+-		info_name, prog->section_name, info_name);
+-	return 0;
+-}
+-
+-static int
+-bpf_program_reloc_btf_ext(struct bpf_program *prog, struct bpf_object *o=
+bj,
+-			  const char *section_name,  __u32 insn_offset)
+-{
+-	int err;
+-
+-	if (!insn_offset || prog->func_info) {
+-		/*
+-		 * !insn_offset =3D> main program
+-		 *
+-		 * For sub prog, the main program's func_info has to
+-		 * be loaded first (i.e. prog->func_info !=3D NULL)
+-		 */
+-		err =3D btf_ext__reloc_func_info(obj->btf, obj->btf_ext,
+-					       section_name, insn_offset,
+-					       &prog->func_info,
+-					       &prog->func_info_cnt);
+-		if (err)
+-			return check_btf_ext_reloc_err(prog, err,
+-						       prog->func_info,
+-						       "bpf_func_info");
+-
+-		prog->func_info_rec_size =3D btf_ext__func_info_rec_size(obj->btf_ext)=
+;
+-	}
+-
+-	if (!insn_offset || prog->line_info) {
+-		err =3D btf_ext__reloc_line_info(obj->btf, obj->btf_ext,
+-					       section_name, insn_offset,
+-					       &prog->line_info,
+-					       &prog->line_info_cnt);
+-		if (err)
+-			return check_btf_ext_reloc_err(prog, err,
+-						       prog->line_info,
+-						       "bpf_line_info");
+-
+-		prog->line_info_rec_size =3D btf_ext__line_info_rec_size(obj->btf_ext)=
+;
+-	}
+-
+-	return 0;
+-}
+-
+ #define BPF_CORE_SPEC_MAX_LEN 64
+=20
+ /* represents BPF CO-RE field or array element accessor */
+@@ -5855,6 +5786,147 @@ bpf_object__relocate_data(struct bpf_object *obj,=
+ struct bpf_program *prog)
+ 	return 0;
+ }
+=20
++static int adjust_prog_btf_ext_info(const struct bpf_object *obj,
++				    const struct bpf_program *prog,
++				    const struct btf_ext_info *ext_info,
++				    void **prog_info, __u32 *prog_rec_cnt,
++				    __u32 *prog_rec_sz)
++{
++	void *copy_start =3D NULL, *copy_end =3D NULL;
++	void *rec, *rec_end, *new_prog_info;
++	const struct btf_ext_info_sec *sec;
++	size_t old_sz, new_sz;
++	const char *sec_name;
++	int i, off_adj;
++
++	for_each_btf_ext_sec(ext_info, sec) {
++		sec_name =3D btf__name_by_offset(obj->btf, sec->sec_name_off);
++		if (!sec_name)
++			return -EINVAL;
++		if (strcmp(sec_name, prog->section_name) !=3D 0)
++			continue;
++
++		for_each_btf_ext_rec(ext_info, sec, i, rec) {
++			__u32 insn_off =3D *(__u32 *)rec / BPF_INSN_SZ;
++
++			if (insn_off < prog->sec_insn_off)
++				continue;
++			if (insn_off >=3D prog->sec_insn_off + prog->sec_insn_cnt)
++				break;
++
++			if (!copy_start)
++				copy_start =3D rec;
++			copy_end =3D rec + ext_info->rec_size;
++		}
++
++		if (!copy_start)
++			return -ENOENT;
++
++		/* append func/line info of a given (sub-)program to the main
++		 * program func/line info
++		 */
++		old_sz =3D (*prog_rec_cnt) * ext_info->rec_size;
++		new_sz =3D old_sz + (copy_end - copy_start);
++		new_prog_info =3D realloc(*prog_info, new_sz);
++		if (!new_prog_info)
++			return -ENOMEM;
++		*prog_info =3D new_prog_info;
++		*prog_rec_cnt =3D new_sz / ext_info->rec_size;
++		memcpy(new_prog_info + old_sz, copy_start, copy_end - copy_start);
++
++		/* Kernel instruction offsets are in units of 8-byte
++		 * instructions, while .BTF.ext instruction offsets generated
++		 * by Clang are in units of bytes. So convert Clang offsets
++		 * into kernel offsets and adjust offset according to program
++		 * relocated position.
++		 */
++		off_adj =3D prog->sub_insn_off - prog->sec_insn_off;
++		rec =3D new_prog_info + old_sz;
++		rec_end =3D new_prog_info + new_sz;
++		for (; rec < rec_end; rec +=3D ext_info->rec_size) {
++			__u32 *insn_off =3D rec;
++
++			*insn_off =3D *insn_off / BPF_INSN_SZ + off_adj;
++		}
++		*prog_rec_sz =3D ext_info->rec_size;
++		return 0;
++	}
++
++	return -ENOENT;
++}
++
++static int
++reloc_prog_func_and_line_info(const struct bpf_object *obj,
++			      struct bpf_program *main_prog,
++			      const struct bpf_program *prog)
++{
++	int err;
++
++	/* no .BTF.ext relocation if .BTF.ext is missing or kernel doesn't
++	 * supprot func/line info
++	 */
++	if (!obj->btf_ext || !kernel_supports(FEAT_BTF_FUNC))
++		return 0;
++
++	/* only attempt func info relocation if main program's func_info
++	 * relocation was successful
++	 */
++	if (main_prog !=3D prog && !main_prog->func_info)
++		goto line_info;
++
++	err =3D adjust_prog_btf_ext_info(obj, prog, &obj->btf_ext->func_info,
++				       &main_prog->func_info,
++				       &main_prog->func_info_cnt,
++				       &main_prog->func_info_rec_size);
++	if (err) {
++		if (err !=3D -ENOENT) {
++			pr_warn("prog '%s': error relocating .BTF.ext function info: %d\n",
++				prog->name, err);
++			return err;
++		}
++		if (main_prog->func_info) {
++			/*
++			 * Some info has already been found but has problem
++			 * in the last btf_ext reloc. Must have to error out.
++			 */
++			pr_warn("prog '%s': missing .BTF.ext function info.\n", prog->name);
++			return err;
++		}
++		/* Have problem loading the very first info. Ignore the rest. */
++		pr_warn("prog '%s': missing .BTF.ext function info for the main progra=
+m, skipping all of .BTF.ext func info.\n",
++			prog->name);
++	}
++
++line_info:
++	/* don't relocate line info if main program's relocation failed */
++	if (main_prog !=3D prog && !main_prog->line_info)
++		return 0;
++
++	err =3D adjust_prog_btf_ext_info(obj, prog, &obj->btf_ext->line_info,
++				       &main_prog->line_info,
++				       &main_prog->line_info_cnt,
++				       &main_prog->line_info_rec_size);
++	if (err) {
++		if (err !=3D -ENOENT) {
++			pr_warn("prog '%s': error relocating .BTF.ext line info: %d\n",
++				prog->name, err);
++			return err;
++		}
++		if (main_prog->line_info) {
++			/*
++			 * Some info has already been found but has problem
++			 * in the last btf_ext reloc. Must have to error out.
++			 */
++			pr_warn("prog '%s': missing .BTF.ext line info.\n", prog->name);
++			return err;
++		}
++		/* Have problem loading the very first info. Ignore the rest. */
++		pr_warn("prog '%s': missing .BTF.ext line info for the main program, s=
+kipping all of .BTF.ext line info.\n",
++			prog->name);
++	}
++	return 0;
++}
++
+ static int cmp_relo_by_insn_idx(const void *key, const void *elem)
+ {
+ 	size_t insn_idx =3D *(const size_t *)key;
+@@ -6064,13 +6136,6 @@ bpf_object__relocate_calls(struct bpf_object *obj,=
+ struct bpf_program *prog)
+ 	struct bpf_program *subprog;
+ 	int i, j, err;
+=20
+-	if (obj->btf_ext) {
+-		err =3D bpf_program_reloc_btf_ext(prog, obj,
+-						prog->section_name, 0);
+-		if (err)
+-			return err;
+-	}
+-
+ 	/* mark all subprogs as not relocated (yet) within the context of
+ 	 * current main program
+ 	 */
+diff --git a/tools/lib/bpf/libbpf_common.h b/tools/lib/bpf/libbpf_common.=
+h
+index a23ae1ac27eb..947d8bd8a7bb 100644
+--- a/tools/lib/bpf/libbpf_common.h
++++ b/tools/lib/bpf/libbpf_common.h
+@@ -15,6 +15,8 @@
+ #define LIBBPF_API __attribute__((visibility("default")))
+ #endif
+=20
++#define LIBBPF_DEPRECATED(msg) __attribute__((deprecated(msg)))
++
+ /* Helper macro to declare and initialize libbpf options struct
+  *
+  * This dance with uninitialized declaration, followed by memset to zero=
+,
 --=20
 2.24.1
 
