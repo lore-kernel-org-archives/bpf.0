@@ -2,75 +2,72 @@ Return-Path: <SRS0=/x2n=CN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B71EFC433E2
-	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 13:55:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09569C433E2
+	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 13:55:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 734802065E
-	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 13:55:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D1EF32073B
+	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 13:55:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Edvfi7J9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="puo0JhpF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730569AbgIDNzS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Sep 2020 09:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54776 "EHLO
+        id S1730669AbgIDNzg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Sep 2020 09:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730705AbgIDNy0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Sep 2020 09:54:26 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4E5C061246;
-        Fri,  4 Sep 2020 06:54:24 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id k13so1172037plk.13;
-        Fri, 04 Sep 2020 06:54:24 -0700 (PDT)
+        with ESMTP id S1730593AbgIDNyW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Sep 2020 09:54:22 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10089C06124F;
+        Fri,  4 Sep 2020 06:54:10 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id y6so1178778plk.10;
+        Fri, 04 Sep 2020 06:54:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ndlvsQFIeAXfc3bcbH6mbqQWsrzfWC6PhjjCGX9XLA8=;
-        b=Edvfi7J9dq/mGVeTaUoSyXhsYATv0l+s2ALa97MuHv8o4cr4zqviEdBmBps0FWI+XC
-         DnpzaaBRMb/pmRy9XntxBWagDNu+rKf8OXgltLwPK8S1Ye4vvu176e5ICCHhsg1HW8kR
-         SC/khNiqpJTblNrrFCODwQmfhdklLZAVno2vEgO7eaLdOEZPWwlgg5iQLORKUipo/TzM
-         IDrp6GMOmjd+ieuKLb7FyFr8Rv7a13+xQg4zvfmKNujpgionXQFFyn6wvRiwo0HAxzsE
-         L/60XL562FzCK7CF7iLLG7oRN1PGfrhTEiDU2+mjhNmOB+zlBZty6TDk/nC8q7njJQgY
-         GUCA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2aCjamiYVf5Fz4JcQ9yUML0QnDOk7OXiiU5nDXWEwD0=;
+        b=puo0JhpFM/7egg5fp7hRaI8LDpHmsLvXJv7riq9oNdHutC17OsH/HaGt09Qdfho+iO
+         ZuXgAcjON8xjCojcMtVrta52BIVNECoc1wvjQoInsk5sR+P4m3qxxvKOQmV67+syZwy8
+         ajsrBDj98PNiaaPd59YLt5UIEy+BO3IPWYRMgKTKGqUjVBzMU0ZzMuVs7KidXjCFzbaM
+         R+JaVn971EJHeA5Hkd8ukyC48yko5ArskqvG/qx3Jc2q8MkQNoVBJ9X0moWDG12w+V5C
+         AXFPXOtpfIG1R6/L83pQBRslDUq3tIeaOr+Y74mwjoZXjEknXHRy/bnaChvTEW2aTdQ3
+         gkpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ndlvsQFIeAXfc3bcbH6mbqQWsrzfWC6PhjjCGX9XLA8=;
-        b=qBqi+ZLTi1ks8w6ivuJbMMktdNcF0LW5o0m9A4avqOvCnEa5iJgpZdSlYQn1e1ikbX
-         ry8nErpXG8TJ2gR2ZYnDJP4/xEBAwdSlgLozQTs7kNGWPIMEpMkgvK/omckn9+Hg4Gel
-         s5M98aAUZErkBubNw2xhSpL719D7qiHDFMvtEofwJS8laZ+9UEzsDPdt/ZRZ7KAdHFXX
-         jDG7UWdxbavq+5Ye9P2+QnVkxcHxcrhRJrMbFxUA1IO8VCDAZDsAnWZZu34/SWemR3DJ
-         235JywMx2BFMDrokrtoEmDyDknPT84y0Hct38SubyAO6J+K3rz98dDmlPi7WEYZnw0wY
-         bQjg==
-X-Gm-Message-State: AOAM533M7G3hiy7B4RksM1snElfyc/4ZEVLgZqXt09u1pIqY4qf8zibr
-        eM8gJlc53SL3ij5Bllb2nxE=
-X-Google-Smtp-Source: ABdhPJweTAGZ9F7Kn14qT3nNdQ72xvhDC1jpCcaeNMvBJHFxl/NA7IL76Ulfc8SEUIDLSb+nE6kthA==
-X-Received: by 2002:a17:902:7607:: with SMTP id k7mr8577410pll.91.1599227664587;
-        Fri, 04 Sep 2020 06:54:24 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2aCjamiYVf5Fz4JcQ9yUML0QnDOk7OXiiU5nDXWEwD0=;
+        b=YGtVH/XjQI4APsdT0m2sQq6gm2O2k4y4L+furHHOqzblo6hTJc9Fk4pnQciwYF1Vwh
+         iOTfWwhIESi2LqqP2Tb2YqfGhOt7Ygv+QHH6USyNiPP++9fpjfgkp0Q1Am9mNyDwRQm8
+         h6Y+r209flfqFqEOoOv1uYhp6ckE5fgneCDY36feb88xVA5iU791hVzF2KImSywnPZAv
+         Uu/AG63QU8LIxYLocgfE+w3ffiP+gkeFvzCUlgYjdUyioo1d46UCWwACJkUDPil1RbK1
+         qICLIWDEj1byescLz0n/amjDQn0OrkhuIAn6ONO7Q5fpmGkZBjM298cZP1VWo1f8Epuy
+         Mh6Q==
+X-Gm-Message-State: AOAM531hUsaFSXs82M2WkKMxTBiaSnl4OdD55ipriMu0nlDr4CUDL/nG
+        WU2ACbzg2pPBa3I+q4/A0Qr6npy5BFzLSSD+
+X-Google-Smtp-Source: ABdhPJxZgvJHgq3RHHk1C3vHyPEaKjSQXka5JtO6smUfKJcJRynh77CPs2qFRIPnqjv1dUCbwUdbMw==
+X-Received: by 2002:a17:902:8eca:: with SMTP id x10mr8823985plo.129.1599227649496;
+        Fri, 04 Sep 2020 06:54:09 -0700 (PDT)
 Received: from btopel-mobl.ger.intel.com ([192.55.55.41])
-        by smtp.gmail.com with ESMTPSA id g9sm6931239pfr.172.2020.09.04.06.54.19
+        by smtp.gmail.com with ESMTPSA id g9sm6931239pfr.172.2020.09.04.06.54.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2020 06:54:24 -0700 (PDT)
+        Fri, 04 Sep 2020 06:54:08 -0700 (PDT)
 From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
 To:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        magnus.karlsson@intel.com, davem@davemloft.net, kuba@kernel.org,
-        hawk@kernel.org, john.fastabend@gmail.com,
-        intel-wired-lan@lists.osuosl.org
-Subject: [PATCH bpf-next 3/6] xsk: introduce xsk_do_redirect_rx_full() helper
-Date:   Fri,  4 Sep 2020 15:53:28 +0200
-Message-Id: <20200904135332.60259-4-bjorn.topel@gmail.com>
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>,
+        magnus.karlsson@intel.com, bjorn.topel@intel.com,
+        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+        john.fastabend@gmail.com, intel-wired-lan@lists.osuosl.org
+Subject: [PATCH bpf-next 0/6] xsk: exit NAPI loop when AF_XDP Rx ring is full
+Date:   Fri,  4 Sep 2020 15:53:25 +0200
+Message-Id: <20200904135332.60259-1-bjorn.topel@gmail.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200904135332.60259-1-bjorn.topel@gmail.com>
-References: <20200904135332.60259-1-bjorn.topel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -79,43 +76,62 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+This series addresses a problem that arises when AF_XDP zero-copy is
+enabled, and the kernel softirq Rx processing and userland process is
+running on the same core.
 
-The xsk_do_redirect_rx_full() helper can be used to check if a failure
-of xdp_do_redirect() was due to the AF_XDP socket had a full Rx ring.
+In contrast to the two-core case, when the userland process/Rx softirq
+shares one core, it it very important that the kernel is not doing
+unnecessary work, but instead let the userland process run. This has
+not been the case.
 
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
----
- include/net/xdp_sock_drv.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+For the Intel drivers, when the XDP_REDIRECT fails due to a full Rx
+ring, the NAPI loop will simply drop the packet and continue
+processing the next packet. The XDP_REDIRECT operation will then fail
+again, since userland has not been able to empty the full Rx ring.
 
-diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
-index 5b1ee8a9976d..34c58b5fbc28 100644
---- a/include/net/xdp_sock_drv.h
-+++ b/include/net/xdp_sock_drv.h
-@@ -116,6 +116,11 @@ static inline void xsk_buff_raw_dma_sync_for_device(struct xsk_buff_pool *pool,
- 	xp_dma_sync_for_device(pool, dma, size);
- }
- 
-+static inline bool xsk_do_redirect_rx_full(int err, enum bpf_map_type map_type)
-+{
-+	return err == -ENOBUFS && map_type == BPF_MAP_TYPE_XSKMAP;
-+}
-+
- #else
- 
- static inline void xsk_tx_completed(struct xsk_buff_pool *pool, u32 nb_entries)
-@@ -235,6 +240,10 @@ static inline void xsk_buff_raw_dma_sync_for_device(struct xsk_buff_pool *pool,
- {
- }
- 
-+static inline bool xsk_do_redirect_rx_full(int err, enum bpf_map_type map_type)
-+{
-+	return false;
-+}
- #endif /* CONFIG_XDP_SOCKETS */
- 
- #endif /* _LINUX_XDP_SOCK_DRV_H */
+The fix for this is letting the NAPI loop exit early, if the AF_XDP
+socket Rx ring is full.
+
+The outline is as following; The first patch cleans up the error codes
+returned by xdp_do_redirect(), so that a driver can figure out when
+the Rx ring is full (ENOBUFS). Patch two adds an extended
+xdp_do_redirect() variant that returns what kind of map that was used
+in the XDP_REDIRECT action. The third patch adds an AF_XDP driver
+helper to figure out if the Rx ring was full. Finally, the last three
+patches implements the "early exit" support for Intel.
+
+On my machine the "one core scenario Rx drop" performance went from
+~65Kpps to 21Mpps. In other words, from "not usable" to
+"usable". YMMV.
+
+I prefer to route this series via bpf-next, since it include core
+changes, and not only driver changes.
+
+
+Have a nice weekend!
+Björn
+
+Björn Töpel (6):
+  xsk: improve xdp_do_redirect() error codes
+  xdp: introduce xdp_do_redirect_ext() function
+  xsk: introduce xsk_do_redirect_rx_full() helper
+  i40e, xsk: finish napi loop if AF_XDP Rx queue is full
+  ice, xsk: finish napi loop if AF_XDP Rx queue is full
+  ixgbe, xsk: finish napi loop if AF_XDP Rx queue is full
+
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c   | 23 ++++++++++++++------
+ drivers/net/ethernet/intel/ice/ice_xsk.c     | 23 ++++++++++++++------
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c | 23 ++++++++++++++------
+ include/linux/filter.h                       |  2 ++
+ include/net/xdp_sock_drv.h                   |  9 ++++++++
+ net/core/filter.c                            | 16 ++++++++++++--
+ net/xdp/xsk.c                                |  2 +-
+ net/xdp/xsk_queue.h                          |  2 +-
+ 8 files changed, 75 insertions(+), 25 deletions(-)
+
+
+base-commit: 8eb629585d2231e90112148009e2a11b0979ca38
 -- 
 2.25.1
 
