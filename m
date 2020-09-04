@@ -8,56 +8,56 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86091C433E2
-	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 13:54:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DEEBC433E2
+	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 13:54:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 58AFB20E65
-	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 13:54:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 337C620FC3
+	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 13:54:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nGTEE85e"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eEtCcZfJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730715AbgIDNyj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Sep 2020 09:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
+        id S1730721AbgIDNyn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Sep 2020 09:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730567AbgIDNyW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Sep 2020 09:54:22 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C48C061251;
-        Fri,  4 Sep 2020 06:54:14 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id mm21so3231175pjb.4;
-        Fri, 04 Sep 2020 06:54:14 -0700 (PDT)
+        with ESMTP id S1730712AbgIDNyj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Sep 2020 09:54:39 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D65C061251;
+        Fri,  4 Sep 2020 06:54:35 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id v15so4363382pgh.6;
+        Fri, 04 Sep 2020 06:54:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=6p167BPsiF1zCEf+N843XcEpo+Z9u7WNQshAXfhw53E=;
-        b=nGTEE85eET4Yo/K0po0+3VC/lho4Sptjai1sa27si/N2Pw9KQwRo/4JcoMOUr3AUIC
-         OkZj0RRwmNGcYQOet6ZCVuUpdP3FSoudXnbTtIwVB5OyXVM0DexMLRilWu39Zi7zJew8
-         SNir4AG8wQL8ytTXD0RCe0+pYBHAS32jDxSnyHFB5S2vQ6cqY2InZ3SLbjUB9UtcWHr5
-         xHhUW7NT3cCcJiwZC21q1JBiJ12flAWDXjp6fjKQdifZVeUE8L1IbrISXNVvwJNFReN4
-         EIPGXPS3WhRlmMG2xwNJyUYYiwHBWWQWfTBfA/eaFVAQNEJxv2cLMHSVKWiceNV2nV7s
-         qbnA==
+        bh=3Br4mU3YiIC4VRDX0+F3OpOlmSyiXlfba1PWnn12174=;
+        b=eEtCcZfJUz2RsWJUBs5W2X/s5sEfMqXT4rlVpRRcCoJmiqFZPRb85GFIko7b/IbW9o
+         gCz6V+k7YM0Bzo7A/sqeM/YUNVTmUimNxL9DQuu5S+y4PV8Y/r4bQrlr4kGsj55JMdjg
+         5lwGPxhAIgKaGL/4OpmwbBt7yqDDBojMoJYXOFCdXbra5W5aAjCE9BKog3w8T55uAyAt
+         9iL6r7s5sd8bsSwW2uESigaZAuY+gE1ZLnkkECL7dW5pIExz2bG/N54U2/XyQq5ReNB4
+         /bwo5DD0ns2bQa3Z1ZKhdNyx5aw1TXwzwiTeRmHjlEtaSXzFb5AOmvcWmIGAEv1YBNln
+         m0VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=6p167BPsiF1zCEf+N843XcEpo+Z9u7WNQshAXfhw53E=;
-        b=oHSRAV/0ZGP7qkIzqvaSIvAd0sxFWAvj98Xukftwvuq+r47/QXbtHmtPI3CVNGTkUn
-         3wXbGJi18QpBv3+WHw36kqOtefbWe7hjHqz7HLjhVlvzMZQ23IWRSdxolfoxN0GtbhkO
-         8n7fK4jqWqUhEaFgn73NHNBivDa4Y2uXQ8HQPIp79NQ2XqW9kPn5wyLBSLVKlodtFwkt
-         59k2YUfBRbDBlcnokF28EgaGsAxM3PzrtfWXj03s1T5Lr6Q0K9CkmaKqj2ro2Ho61QY+
-         eFhWNlB8WMEJ5Eky+Uc1abc552uhKxnMT7ekRnn4UBhKyKQZUS2i3eCjr70pqHZwfkq0
-         1ydw==
-X-Gm-Message-State: AOAM532hFD+YJCOJ8xZosU+ym6izf/sBloSUvMFaQntG//KBRf3YV/Z9
-        5UASUyCMyTLIq3QfkNgiDkM=
-X-Google-Smtp-Source: ABdhPJz49bRPhGh1Ztm9ufAlKTs0J93VJw8p0pB+61IOeisgN9GSLaKg24JMuQcmFL63AhwbMGyVJQ==
-X-Received: by 2002:a17:90a:4046:: with SMTP id k6mr8232176pjg.11.1599227654415;
-        Fri, 04 Sep 2020 06:54:14 -0700 (PDT)
+        bh=3Br4mU3YiIC4VRDX0+F3OpOlmSyiXlfba1PWnn12174=;
+        b=PeUH7Pooobz5K4YctgVVWCRAHNJDmz9QVc6AHcnk47vD2l5v8eY1POuWzid43Os8n2
+         +n+QkL8Y3rQQcZwRKmeix/gg3RY+lMJbnjk0VIA/oKHGkDITpvyBe6OLPH+tnT1/t1WZ
+         VmrOvwn2kn+eO3VvMwIBIPYJ4csmJ6HrcQ5wBUuMOh1JQZYAiTZwoRg+1eHX7/NLq78W
+         Lpw0riaNMi0d5QSwrmFDON0RZdfs2H22kXC3kxLOyDE45+vAHrXVKBKcSfnagLx5GWOj
+         nghgC8oRp5inS/rK2MiI+GJRMBo89yeqhyO0rWXdlfD4DWVnEZycfEjUBbhI0Lm15Dpf
+         cpZA==
+X-Gm-Message-State: AOAM532oK1+gfv8qTZpYmy/KsmFKoJ4ygHahM4BD5zOL5ecuICxax9Pk
+        wSw85rKyhAZa5/cdkMWdLPY=
+X-Google-Smtp-Source: ABdhPJyi17LWympwfyGZ/fupgfwzB/WqdpEYgSTY9m58p2VgIMdE2I7itIooXJ3yJtNtKqvns2tY/A==
+X-Received: by 2002:a63:2d42:: with SMTP id t63mr7458188pgt.450.1599227675061;
+        Fri, 04 Sep 2020 06:54:35 -0700 (PDT)
 Received: from btopel-mobl.ger.intel.com ([192.55.55.41])
-        by smtp.gmail.com with ESMTPSA id g9sm6931239pfr.172.2020.09.04.06.54.09
+        by smtp.gmail.com with ESMTPSA id g9sm6931239pfr.172.2020.09.04.06.54.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2020 06:54:13 -0700 (PDT)
+        Fri, 04 Sep 2020 06:54:34 -0700 (PDT)
 From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
 To:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
         bpf@vger.kernel.org
@@ -65,9 +65,9 @@ Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
         magnus.karlsson@intel.com, davem@davemloft.net, kuba@kernel.org,
         hawk@kernel.org, john.fastabend@gmail.com,
         intel-wired-lan@lists.osuosl.org
-Subject: [PATCH bpf-next 1/6] xsk: improve xdp_do_redirect() error codes
-Date:   Fri,  4 Sep 2020 15:53:26 +0200
-Message-Id: <20200904135332.60259-2-bjorn.topel@gmail.com>
+Subject: [PATCH bpf-next 5/6] ice, xsk: finish napi loop if AF_XDP Rx queue is full
+Date:   Fri,  4 Sep 2020 15:53:30 +0200
+Message-Id: <20200904135332.60259-6-bjorn.topel@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200904135332.60259-1-bjorn.topel@gmail.com>
 References: <20200904135332.60259-1-bjorn.topel@gmail.com>
@@ -81,59 +81,105 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Björn Töpel <bjorn.topel@intel.com>
 
-The error codes returned by xdp_do_redirect() when redirecting a frame
-to an AF_XDP socket has not been very useful. A driver could not
-distinguish between different errors. Prior this change the following
-codes where used:
+Make the AF_XDP zero-copy path aware that the reason for redirect
+failure was due to full Rx queue. If so, exit the napi loop as soon as
+possible (exit the softirq processing), so that the userspace AF_XDP
+process can hopefully empty the Rx queue. This mainly helps the "one
+core scenario", where the userland process and Rx softirq processing
+is on the same core.
 
-Socket not bound or incorrect queue/netdev: EINVAL
-XDP frame/AF_XDP buffer size mismatch: ENOSPC
-Could not allocate buffer (copy mode): ENOSPC
-AF_XDP Rx buffer full: ENOSPC
+Note that the early exit can only be performed if the "need wakeup"
+feature is enabled, because otherwise there is no notification
+mechanism available from the kernel side.
 
-After this change:
-
-Socket not bound or incorrect queue/netdev: EINVAL
-XDP frame/AF_XDP buffer size mismatch: ENOSPC
-Could not allocate buffer (copy mode): ENOMEM
-AF_XDP Rx buffer full: ENOBUFS
-
-An AF_XDP zero-copy driver can now potentially determine if the
-failure was due to a full Rx buffer, and if so stop processing more
-frames, yielding to the userland AF_XDP application.
+This requires that the driver starts using the newly introduced
+xdp_do_redirect_ext() and xsk_do_redirect_rx_full() functions.
 
 Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
 ---
- net/xdp/xsk.c       | 2 +-
- net/xdp/xsk_queue.h | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_xsk.c | 23 ++++++++++++++++-------
+ 1 file changed, 16 insertions(+), 7 deletions(-)
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 3895697f8540..db38560c4af7 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -197,7 +197,7 @@ static int __xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len,
- 	xsk_xdp = xsk_buff_alloc(xs->pool);
- 	if (!xsk_xdp) {
- 		xs->rx_dropped++;
--		return -ENOSPC;
-+		return -ENOMEM;
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index 797886524054..f698d0199b0a 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -502,13 +502,15 @@ ice_construct_skb_zc(struct ice_ring *rx_ring, struct ice_rx_buf *rx_buf)
+  * ice_run_xdp_zc - Executes an XDP program in zero-copy path
+  * @rx_ring: Rx ring
+  * @xdp: xdp_buff used as input to the XDP program
++ * @early_exit: true means that the napi loop should exit early
+  *
+  * Returns any of ICE_XDP_{PASS, CONSUMED, TX, REDIR}
+  */
+ static int
+-ice_run_xdp_zc(struct ice_ring *rx_ring, struct xdp_buff *xdp)
++ice_run_xdp_zc(struct ice_ring *rx_ring, struct xdp_buff *xdp, bool *early_exit)
+ {
+ 	int err, result = ICE_XDP_PASS;
++	enum bpf_map_type map_type;
+ 	struct bpf_prog *xdp_prog;
+ 	struct ice_ring *xdp_ring;
+ 	u32 act;
+@@ -529,8 +531,13 @@ ice_run_xdp_zc(struct ice_ring *rx_ring, struct xdp_buff *xdp)
+ 		result = ice_xmit_xdp_buff(xdp, xdp_ring);
+ 		break;
+ 	case XDP_REDIRECT:
+-		err = xdp_do_redirect(rx_ring->netdev, xdp, xdp_prog);
+-		result = !err ? ICE_XDP_REDIR : ICE_XDP_CONSUMED;
++		err = xdp_do_redirect_ext(rx_ring->netdev, xdp, xdp_prog, &map_type);
++		if (err) {
++			*early_exit = xsk_do_redirect_rx_full(err, map_type);
++			result = ICE_XDP_CONSUMED;
++		} else {
++			result = ICE_XDP_REDIR;
++		}
+ 		break;
+ 	default:
+ 		bpf_warn_invalid_xdp_action(act);
+@@ -558,8 +565,8 @@ int ice_clean_rx_irq_zc(struct ice_ring *rx_ring, int budget)
+ {
+ 	unsigned int total_rx_bytes = 0, total_rx_packets = 0;
+ 	u16 cleaned_count = ICE_DESC_UNUSED(rx_ring);
++	bool early_exit = false, failure = false;
+ 	unsigned int xdp_xmit = 0;
+-	bool failure = false;
+ 
+ 	while (likely(total_rx_packets < (unsigned int)budget)) {
+ 		union ice_32b_rx_flex_desc *rx_desc;
+@@ -597,7 +604,7 @@ int ice_clean_rx_irq_zc(struct ice_ring *rx_ring, int budget)
+ 		rx_buf->xdp->data_end = rx_buf->xdp->data + size;
+ 		xsk_buff_dma_sync_for_cpu(rx_buf->xdp, rx_ring->xsk_pool);
+ 
+-		xdp_res = ice_run_xdp_zc(rx_ring, rx_buf->xdp);
++		xdp_res = ice_run_xdp_zc(rx_ring, rx_buf->xdp, &early_exit);
+ 		if (xdp_res) {
+ 			if (xdp_res & (ICE_XDP_TX | ICE_XDP_REDIR))
+ 				xdp_xmit |= xdp_res;
+@@ -610,6 +617,8 @@ int ice_clean_rx_irq_zc(struct ice_ring *rx_ring, int budget)
+ 			cleaned_count++;
+ 
+ 			ice_bump_ntc(rx_ring);
++			if (early_exit)
++				break;
+ 			continue;
+ 		}
+ 
+@@ -646,12 +655,12 @@ int ice_clean_rx_irq_zc(struct ice_ring *rx_ring, int budget)
+ 	ice_update_rx_ring_stats(rx_ring, total_rx_packets, total_rx_bytes);
+ 
+ 	if (xsk_uses_need_wakeup(rx_ring->xsk_pool)) {
+-		if (failure || rx_ring->next_to_clean == rx_ring->next_to_use)
++		if (early_exit || failure || rx_ring->next_to_clean == rx_ring->next_to_use)
+ 			xsk_set_rx_need_wakeup(rx_ring->xsk_pool);
+ 		else
+ 			xsk_clear_rx_need_wakeup(rx_ring->xsk_pool);
+ 
+-		return (int)total_rx_packets;
++		return early_exit ? 0 : (int)total_rx_packets;
  	}
  
- 	xsk_copy_xdp(xsk_xdp, xdp, len);
-diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-index 2d883f631c85..b76966cf122e 100644
---- a/net/xdp/xsk_queue.h
-+++ b/net/xdp/xsk_queue.h
-@@ -305,7 +305,7 @@ static inline int xskq_prod_reserve_desc(struct xsk_queue *q,
- 	u32 idx;
- 
- 	if (xskq_prod_is_full(q))
--		return -ENOSPC;
-+		return -ENOBUFS;
- 
- 	/* A, matches D */
- 	idx = q->cached_prod++ & q->ring_mask;
+ 	return failure ? budget : (int)total_rx_packets;
 -- 
 2.25.1
 
