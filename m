@@ -7,60 +7,60 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CD2DC2BB84
-	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 11:28:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44F72C433E2
+	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 11:28:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 650A1206B7
-	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 11:28:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 14CA9206B7
+	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 11:28:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="BclZNy56"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="mkTfdlgk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726171AbgIDL2i (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Sep 2020 07:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59616 "EHLO
+        id S1730160AbgIDL2j (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Sep 2020 07:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730197AbgIDL0C (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1730203AbgIDL0C (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 4 Sep 2020 07:26:02 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C651C0619C2
-        for <bpf@vger.kernel.org>; Fri,  4 Sep 2020 04:24:18 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id w5so6369042wrp.8
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2020 04:24:18 -0700 (PDT)
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CC9C0619C6
+        for <bpf@vger.kernel.org>; Fri,  4 Sep 2020 04:24:23 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id e16so6393704wrm.2
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2020 04:24:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=KaDl48Pga4QEbzcA0z5fJMx4Mo2Pt/XvOLNWfi7T27A=;
-        b=BclZNy566ovAagP2odZPY0wMHOwiqUO5dP3BPTBIwcJ8axSeP+m5DlRyFSNG5n9Ncy
-         iGoFgglP8Rg52SzdlR2wFqUC2WeGvq2N4NScgHB2brde3TM1yg77mNNktPguAz920y69
-         Q8/kg2homlZPRww6CQ6nUiQyOHCWfDUZ0OXW0=
+        bh=mAW7ccSoKpXBNDJ+uJzqj1Q1GSSeJCNiacCC/Ro7bB0=;
+        b=mkTfdlgko5wg5uZiJ0lV2YS/JwjYLs2HjjrxPsgFRNjpZZ/IAOWQzahNX4kyE1A1re
+         NlQVx15axULO6RwdBs4L/arzhtgqDLc1WYoIOI7xr4JhytGjcKJkvN/QkkeJMvB499Fp
+         rz1GyiSZF/Ws2V3Wx5azQAU0Jzz1Ywx89V9Ho=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=KaDl48Pga4QEbzcA0z5fJMx4Mo2Pt/XvOLNWfi7T27A=;
-        b=XuXp6hlMTI+ls4leqr7WCMY7J2bPItKTRkpiQExoTNTUSm0AUtvtwHBkRboBPhTZZp
-         FDmpbxEplTGLXXnZAaaYpfjpwkIjngs5LAcCSCw38V3/e2T6q9ndJU2QypbXD2xN0OeK
-         LF/3waPT6Ag6ljjsdZsmX0/r/N3l+Vn1r1KQRXlGXS6w2EXKJVJMUtGvq/NxhF/xD7X7
-         4qaOkoeHOVhwko58q8KUgw6h0KKF0noMleipuJsuI66cVX72biswbtuIaiiS2YKvNX7+
-         GxfzhUoGQzKYF26mBgBO78MXJSSB9BYQM4ZkEGeaykNYBlBVLrO7fwY3xaSDXPNci9WO
-         jvtg==
-X-Gm-Message-State: AOAM530kCTSZy6el+nlXUpi7zDquXAevF8SXztYk3m5f7PXcySYo94+Z
-        w6nns3DV3zjvscmR0q1MS0shIw==
-X-Google-Smtp-Source: ABdhPJxcHsE2SFbxXWtbozn4SX6A2LJf/kFtMUYuhgZQk8aqbDWNcGPPNK17VEzVQDxLsfOgn67Txg==
-X-Received: by 2002:a05:6000:1c4:: with SMTP id t4mr2815717wrx.350.1599218657081;
-        Fri, 04 Sep 2020 04:24:17 -0700 (PDT)
+        bh=mAW7ccSoKpXBNDJ+uJzqj1Q1GSSeJCNiacCC/Ro7bB0=;
+        b=SE/vNRoLmjeU5ij5KMbAhEF4q7X5l4xGb7sbV4S2Z53d/AcdrPEcCxthuumdxUc3UW
+         DMJltxE8SR87UgnhRRwHhqH8y7rNLcdNjXWmiUMDm5EQ0aU3C2MhKyyCzDoC3BFQsOCc
+         laM7dtFdB0XGzh2+mw/jJZ8rsaMPwlOfB95umNFvYGBmQyQtQspFhNdqOtqKsDFhpp25
+         m1hMJWeRmXqzyRNYFAyhWuWBX5lMdDxL4R11IPD8GoLZjZbdsKpVRHwame70KA1jGsZ6
+         1XbKZfj66BDHW83bEU/rFdvT8DboJdxyh6gBN5Qe70SERaF9Mhm1A5XYlig+/ABDe36P
+         ifkQ==
+X-Gm-Message-State: AOAM531Hbeqg7GeNBZ0Jmnm7FL/TCiCHIuSO39OQ9kYTvgQvbPz4R6P6
+        xqGU8YF4k5ft27XTgABSHX/okY3nyvbSvQ==
+X-Google-Smtp-Source: ABdhPJwPXY1RC25RKYQh/t2x402qG4EJFgZn4IFEk6nZKs36cSd80P7gxAUap0WbjXNKdBEnfiIihQ==
+X-Received: by 2002:adf:eece:: with SMTP id a14mr6880096wrp.330.1599218662203;
+        Fri, 04 Sep 2020 04:24:22 -0700 (PDT)
 Received: from antares.lan (111.253.187.81.in-addr.arpa. [81.187.253.111])
-        by smtp.gmail.com with ESMTPSA id v2sm9104408wrm.16.2020.09.04.04.24.16
+        by smtp.gmail.com with ESMTPSA id v2sm9104408wrm.16.2020.09.04.04.24.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2020 04:24:16 -0700 (PDT)
+        Fri, 04 Sep 2020 04:24:21 -0700 (PDT)
 From:   Lorenz Bauer <lmb@cloudflare.com>
 To:     ast@kernel.org, yhs@fb.com, daniel@iogearbox.net, kafai@fb.com
 Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next 04/11] bpf: check scalar or invalid register in check_helper_mem_access
-Date:   Fri,  4 Sep 2020 12:23:54 +0100
-Message-Id: <20200904112401.667645-5-lmb@cloudflare.com>
+Subject: [PATCH bpf-next 08/11] bpf: set meta->raw_mode for pointers to memory closer to it's use
+Date:   Fri,  4 Sep 2020 12:23:58 +0100
+Message-Id: <20200904112401.667645-9-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200904112401.667645-1-lmb@cloudflare.com>
 References: <20200904112401.667645-1-lmb@cloudflare.com>
@@ -71,57 +71,42 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move the check for a NULL or zero register to check_helper_mem_access. This
-makes check_stack_boundary easier to understand.
+If we encounter a pointer to memory, we set meta->raw_mode depending
+on the type of memory we point at. What isn't obvious is that this
+information is only used when the next memory size argument is
+encountered.
+
+Move the assignment closer to where it's used, and add a comment that
+explains what is going on.
 
 Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 ---
- kernel/bpf/verifier.c | 24 +++++++++++-------------
- 1 file changed, 11 insertions(+), 13 deletions(-)
+ kernel/bpf/verifier.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 509754c3aa7d..649bcfb4535e 100644
+index ba710a702cae..734ae5af9db9 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -3594,18 +3594,6 @@ static int check_stack_boundary(struct bpf_verifier_env *env, int regno,
- 	struct bpf_func_state *state = func(env, reg);
- 	int err, min_off, max_off, i, j, slot, spi;
- 
--	if (reg->type != PTR_TO_STACK) {
--		/* Allow zero-byte read from NULL, regardless of pointer type */
--		if (zero_size_allowed && access_size == 0 &&
--		    register_is_null(reg))
--			return 0;
--
--		verbose(env, "R%d type=%s expected=%s\n", regno,
--			reg_type_str[reg->type],
--			reg_type_str[PTR_TO_STACK]);
--		return -EACCES;
--	}
--
- 	if (tnum_is_const(reg->var_off)) {
- 		min_off = max_off = reg->var_off.value + reg->off;
- 		err = __check_stack_boundary(env, regno, min_off, access_size,
-@@ -3750,9 +3738,19 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
- 					   access_size, zero_size_allowed,
- 					   "rdwr",
- 					   &env->prog->aux->max_rdwr_access);
--	default: /* scalar_value|ptr_to_stack or invalid ptr */
-+	case PTR_TO_STACK:
- 		return check_stack_boundary(env, regno, access_size,
- 					    zero_size_allowed, meta);
-+	default: /* scalar_value or invalid ptr */
-+		/* Allow zero-byte read from NULL, regardless of pointer type */
-+		if (zero_size_allowed && access_size == 0 &&
-+		    register_is_null(reg))
-+			return 0;
-+
-+		verbose(env, "R%d type=%s expected=%s\n", regno,
-+			reg_type_str[reg->type],
-+			reg_type_str[PTR_TO_STACK]);
-+		return -EACCES;
- 	}
- }
+@@ -4027,7 +4027,6 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			 type != PTR_TO_RDWR_BUF &&
+ 			 type != expected_type)
+ 			goto err_type;
+-		meta->raw_mode = arg_type == ARG_PTR_TO_UNINIT_MEM;
+ 	} else if (arg_type_is_alloc_mem_ptr(arg_type)) {
+ 		expected_type = PTR_TO_MEM;
+ 		if (register_is_null(reg) &&
+@@ -4120,6 +4119,11 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 		err = check_helper_mem_access(env, regno,
+ 					      meta->map_ptr->value_size, false,
+ 					      meta);
++	} else if (arg_type_is_mem_ptr(arg_type)) {
++		/* The access to this pointer is only checked when we hit the
++		 * next is_mem_size argument below.
++		 */
++		meta->raw_mode = (arg_type == ARG_PTR_TO_UNINIT_MEM);
+ 	} else if (arg_type_is_mem_size(arg_type)) {
+ 		bool zero_size_allowed = (arg_type == ARG_CONST_SIZE_OR_ZERO);
  
 -- 
 2.25.1
