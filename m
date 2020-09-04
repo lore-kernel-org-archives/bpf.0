@@ -2,140 +2,113 @@ Return-Path: <SRS0=/x2n=CN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8AF0EC43461
-	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 16:03:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DFF8C433E2
+	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 16:13:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 694EA2074D
-	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 16:03:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CECD820772
+	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 16:13:37 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="iQ+DNj3y"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726776AbgIDQDe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Sep 2020 12:03:34 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:40108 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726511AbgIDQDd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Sep 2020 12:03:33 -0400
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-540-hb8g6iE0O5mrNFWlNdWvUA-1; Fri, 04 Sep 2020 12:03:28 -0400
-X-MC-Unique: hb8g6iE0O5mrNFWlNdWvUA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 22B2E108050D;
-        Fri,  4 Sep 2020 16:03:15 +0000 (UTC)
-Received: from krava (ovpn-112-34.ams2.redhat.com [10.36.112.34])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 86FEE88F2A;
-        Fri,  4 Sep 2020 16:03:09 +0000 (UTC)
-Date:   Fri, 4 Sep 2020 18:03:03 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v2 2/5] perf record: Prevent override of
- attr->sample_period for libpfm4 events
-Message-ID: <20200904160303.GD939481@krava>
-References: <20200728085734.609930-1-irogers@google.com>
- <20200728085734.609930-3-irogers@google.com>
- <20200728155940.GC1319041@krava>
- <20200728160954.GD1319041@krava>
- <CAP-5=fVqto0LrwgW6dHQupp7jFA3wToRBonBaXXQW4wwYcTreg@mail.gmail.com>
- <CAP-5=fWNniZuYfYhz_Cz7URQ+2E4T4Kg3DJqGPtDg70i38Er_A@mail.gmail.com>
+        id S1726984AbgIDQNe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Sep 2020 12:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726733AbgIDQNd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Sep 2020 12:13:33 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B292C061246
+        for <bpf@vger.kernel.org>; Fri,  4 Sep 2020 09:13:32 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id b79so6574109wmb.4
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2020 09:13:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=r5Ypt2i5o7p6XAAulXW4iZCF9Jky9zXLQDQcsSL+JwI=;
+        b=iQ+DNj3yfOULjXXeM25GLhsssn6UfEKoL2ySHnvL/gCi900fuHh9QwtYHZyUrYEe0r
+         g8eWOSwetaScL4UDn56Ehc9i6ffTHCpw3w6u1dGrW/pt9Aqymwz7MQKHrJB13xj2giL8
+         0DpmG2JI98pcVSsTmCIMqMbGvDJka9Jam0pfm4tcGLTAGsi5iz+e7AD3NA8NSa85o/41
+         Nq2o4RTxp1fiZhop7+2725HB2frR5D+rT/+Q7ZEhYtADlXGnOOiyRbbdB5N9kQrSJvX1
+         o9W7NoA1P4UpSUqKcThAgJg7BzDtNBZ4C0c0JHSxQRKP6kkgyroKx0qAZHULLisho8Vr
+         1aSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=r5Ypt2i5o7p6XAAulXW4iZCF9Jky9zXLQDQcsSL+JwI=;
+        b=Tzoxs/8Sw+HXFtBelYUWTWGMIm7yhtwoVKy9n/49IUjVuWuRQxt5G38zHOcw9BLT+0
+         +seJUcId3QlPIrJqZ9/evsj67UEsYnCUxGxAwb7GIeDDW+EHACQMmHAWH6uzFCd5DofZ
+         QN9SDhDH7xmuLzgNQKDfiGiKtHcIwl7OJK5l9h0OInXyizVAOKgZTjV1IpiItJCeO/Hc
+         eljpm9fAURtPOuyC8Aevu+d5t/b/LX6gsQPJdIOBIc2Y/rg1GchB7SR3/1au6TL8h+Jq
+         hwz+MlsWfU2SUz1Tr8aIEnvp5j6wRn7ZSGbR8YSW3kr6s4AGjhQuuT5TGWf78HbVQrM+
+         ZzHQ==
+X-Gm-Message-State: AOAM531C000iLdWw5QgCm0DfvDQOg+5k7G7SdyugxxUKeFIofDvxskfB
+        6lpMpfHM91s52UPDp/cJqbE9vw==
+X-Google-Smtp-Source: ABdhPJzkneI/d/hPFnmrGeMryuVYR/UALlZRGUWuF9bWBq+aF0mc9og2EByzXF+ZBo8YzGusjDOaPg==
+X-Received: by 2002:a7b:c5d0:: with SMTP id n16mr8077048wmk.7.1599236011208;
+        Fri, 04 Sep 2020 09:13:31 -0700 (PDT)
+Received: from localhost.localdomain ([194.35.117.134])
+        by smtp.gmail.com with ESMTPSA id a83sm11909611wmh.48.2020.09.04.09.13.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Sep 2020 09:13:30 -0700 (PDT)
+From:   Quentin Monnet <quentin@isovalent.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Martynas Pumputis <m@lambda.lt>,
+        Quentin Monnet <quentin@isovalent.com>
+Subject: [PATCH bpf-next 1/2] tools: bpftool: dump outer maps content
+Date:   Fri,  4 Sep 2020 17:13:12 +0100
+Message-Id: <20200904161313.29535-2-quentin@isovalent.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200904161313.29535-1-quentin@isovalent.com>
+References: <20200904161313.29535-1-quentin@isovalent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP-5=fWNniZuYfYhz_Cz7URQ+2E4T4Kg3DJqGPtDg70i38Er_A@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 03, 2020 at 10:41:14PM -0700, Ian Rogers wrote:
-> On Wed, Jul 29, 2020 at 4:24 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > On Tue, Jul 28, 2020 at 9:10 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> > >
-> > > On Tue, Jul 28, 2020 at 05:59:46PM +0200, Jiri Olsa wrote:
-> > > > On Tue, Jul 28, 2020 at 01:57:31AM -0700, Ian Rogers wrote:
-> > > > > From: Stephane Eranian <eranian@google.com>
-> > > > >
-> > > > > Before:
-> > > > > $ perf record -c 10000 --pfm-events=cycles:period=77777
-> > > > >
-> > > > > Would yield a cycles event with period=10000, instead of 77777.
-> > > > >
-> > > > > This was due to an ordering issue between libpfm4 parsing
-> > > > > the event string and perf record initializing the event.
-> > > > >
-> > > > > This patch fixes the problem by preventing override for
-> > > > > events with attr->sample_period != 0 by the time
-> > > > > perf_evsel__config() is invoked. This seems to have been the
-> > > > > intent of the author.
-> > > > >
-> > > > > Signed-off-by: Stephane Eranian <eranian@google.com>
-> > > > > Reviewed-by: Ian Rogers <irogers@google.com>
-> > > > > ---
-> > > > >  tools/perf/util/evsel.c | 3 +--
-> > > > >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > > > >
-> > > > > diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> > > > > index 811f538f7d77..8afc24e2ec52 100644
-> > > > > --- a/tools/perf/util/evsel.c
-> > > > > +++ b/tools/perf/util/evsel.c
-> > > > > @@ -976,8 +976,7 @@ void evsel__config(struct evsel *evsel, struct record_opts *opts,
-> > > > >      * We default some events to have a default interval. But keep
-> > > > >      * it a weak assumption overridable by the user.
-> > > > >      */
-> > > > > -   if (!attr->sample_period || (opts->user_freq != UINT_MAX ||
-> > > > > -                                opts->user_interval != ULLONG_MAX)) {
-> > > > > +   if (!attr->sample_period) {
-> > > >
-> > > > I was wondering why this wouldn't break record/top
-> > > > but we take care of the via record_opts__config
-> > > >
-> > > > as long as 'perf test attr' works it looks ok to me
-> > >
-> > > hum ;-)
-> > >
-> > > [jolsa@krava perf]$ sudo ./perf test 17 -v
-> > > 17: Setup struct perf_event_attr                          :
-> > > ...
-> > > running './tests/attr/test-record-C0'
-> > > expected sample_period=4000, got 3000
-> > > FAILED './tests/attr/test-record-C0' - match failure
-> >
-> > I'm not able to reproduce this. Do you have a build configuration or
-> > something else to look at? The test doesn't seem obviously connected
-> > with this patch.
-> >
-> > Thanks,
-> > Ian
-> 
-> Jiri, any update? Thanks,
+Although user space can lookup and dump the content of an outer map
+(hash-of-maps or array-of-maps), bpftool does not allow to do so.
 
-sorry, I rebased and ran it again and it passes for me now,
-so it got fixed along the way
+It seems that the only reason for that is historical. Lookups for outer
+maps was added in commit 14dc6f04f49d ("bpf: Add syscall lookup support
+for fd array and htab"), and although the relevant code in bpftool had
+not been merged yet, I suspect it had already been written with the
+assumption that user space could not read outer maps.
 
-jirka
+Let's remove the restriction, dump for outer maps works with no further
+change.
+
+Reported-by: Martynas Pumputis <m@lambda.lt>
+Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+---
+ tools/bpf/bpftool/map.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index bc0071228f88..cb3a75eb5531 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -739,10 +739,6 @@ static int dump_map_elem(int fd, void *key, void *value,
+ 	/* lookup error handling */
+ 	lookup_errno = errno;
+ 
+-	if (map_is_map_of_maps(map_info->type) ||
+-	    map_is_map_of_progs(map_info->type))
+-		return 0;
+-
+ 	if (json_output) {
+ 		jsonw_start_object(json_wtr);
+ 		jsonw_name(json_wtr, "key");
+-- 
+2.25.1
 
