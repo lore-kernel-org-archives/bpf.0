@@ -2,147 +2,138 @@ Return-Path: <SRS0=/x2n=CN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A60AC2BB84
-	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 13:53:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86091C433E2
+	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 13:54:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2B3FC204FD
-	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 13:53:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58AFB20E65
+	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 13:54:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gsvw/BF2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nGTEE85e"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730671AbgIDNwz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Sep 2020 09:52:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:40431 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730617AbgIDNwV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 4 Sep 2020 09:52:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599227535;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uYq/ngNtxyj1dA7QpICDFe09d9alOPPDrbtnlBjMrSY=;
-        b=Gsvw/BF2otF7jNOrK3nZqxVvf3PWvdkOnlRskVm1tTCWn2hLi+5vi9SQxLFvcHvSKtRQF0
-        Cid4REz4F6IlCV1/iOBDXXOYy6SxkqF2bX+3lhM1cYMufp7JXU4Oyq6D/TMdqCQ5YKx7KX
-        9a0nEDh1nqqAtcjFGWf1Hl7ABs332UU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-64-T6kWIjYaNR6eFjQq0PN0IA-1; Fri, 04 Sep 2020 09:52:13 -0400
-X-MC-Unique: T6kWIjYaNR6eFjQq0PN0IA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id ED2A21DE15;
-        Fri,  4 Sep 2020 13:52:11 +0000 (UTC)
-Received: from carbon (unknown [10.40.208.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0D02A7E410;
-        Fri,  4 Sep 2020 13:52:01 +0000 (UTC)
-Date:   Fri, 4 Sep 2020 15:52:00 +0200
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
-        lorenzo.bianconi@redhat.com, echaudro@redhat.com,
-        sameehj@amazon.com, kuba@kernel.org, john.fastabend@gmail.com,
-        daniel@iogearbox.net, ast@kernel.org, shayagr@amazon.com,
-        brouer@redhat.com
-Subject: Re: [PATCH v2 net-next 6/9] bpf: helpers: add
- bpf_xdp_adjust_mb_header helper
-Message-ID: <20200904155200.75f8d65a@carbon>
-In-Reply-To: <20200904075031.GC2884@lore-desk>
-References: <cover.1599165031.git.lorenzo@kernel.org>
-        <b7475687bb09aac6ec051596a8ccbb311a54cb8a.1599165031.git.lorenzo@kernel.org>
-        <20200904011358.kbdxf4awugi3qwjl@ast-mbp.dhcp.thefacebook.com>
-        <20200904075031.GC2884@lore-desk>
+        id S1730715AbgIDNyj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Sep 2020 09:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730567AbgIDNyW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Sep 2020 09:54:22 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C48C061251;
+        Fri,  4 Sep 2020 06:54:14 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id mm21so3231175pjb.4;
+        Fri, 04 Sep 2020 06:54:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6p167BPsiF1zCEf+N843XcEpo+Z9u7WNQshAXfhw53E=;
+        b=nGTEE85eET4Yo/K0po0+3VC/lho4Sptjai1sa27si/N2Pw9KQwRo/4JcoMOUr3AUIC
+         OkZj0RRwmNGcYQOet6ZCVuUpdP3FSoudXnbTtIwVB5OyXVM0DexMLRilWu39Zi7zJew8
+         SNir4AG8wQL8ytTXD0RCe0+pYBHAS32jDxSnyHFB5S2vQ6cqY2InZ3SLbjUB9UtcWHr5
+         xHhUW7NT3cCcJiwZC21q1JBiJ12flAWDXjp6fjKQdifZVeUE8L1IbrISXNVvwJNFReN4
+         EIPGXPS3WhRlmMG2xwNJyUYYiwHBWWQWfTBfA/eaFVAQNEJxv2cLMHSVKWiceNV2nV7s
+         qbnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6p167BPsiF1zCEf+N843XcEpo+Z9u7WNQshAXfhw53E=;
+        b=oHSRAV/0ZGP7qkIzqvaSIvAd0sxFWAvj98Xukftwvuq+r47/QXbtHmtPI3CVNGTkUn
+         3wXbGJi18QpBv3+WHw36kqOtefbWe7hjHqz7HLjhVlvzMZQ23IWRSdxolfoxN0GtbhkO
+         8n7fK4jqWqUhEaFgn73NHNBivDa4Y2uXQ8HQPIp79NQ2XqW9kPn5wyLBSLVKlodtFwkt
+         59k2YUfBRbDBlcnokF28EgaGsAxM3PzrtfWXj03s1T5Lr6Q0K9CkmaKqj2ro2Ho61QY+
+         eFhWNlB8WMEJ5Eky+Uc1abc552uhKxnMT7ekRnn4UBhKyKQZUS2i3eCjr70pqHZwfkq0
+         1ydw==
+X-Gm-Message-State: AOAM532hFD+YJCOJ8xZosU+ym6izf/sBloSUvMFaQntG//KBRf3YV/Z9
+        5UASUyCMyTLIq3QfkNgiDkM=
+X-Google-Smtp-Source: ABdhPJz49bRPhGh1Ztm9ufAlKTs0J93VJw8p0pB+61IOeisgN9GSLaKg24JMuQcmFL63AhwbMGyVJQ==
+X-Received: by 2002:a17:90a:4046:: with SMTP id k6mr8232176pjg.11.1599227654415;
+        Fri, 04 Sep 2020 06:54:14 -0700 (PDT)
+Received: from btopel-mobl.ger.intel.com ([192.55.55.41])
+        by smtp.gmail.com with ESMTPSA id g9sm6931239pfr.172.2020.09.04.06.54.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Sep 2020 06:54:13 -0700 (PDT)
+From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        magnus.karlsson@intel.com, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, john.fastabend@gmail.com,
+        intel-wired-lan@lists.osuosl.org
+Subject: [PATCH bpf-next 1/6] xsk: improve xdp_do_redirect() error codes
+Date:   Fri,  4 Sep 2020 15:53:26 +0200
+Message-Id: <20200904135332.60259-2-bjorn.topel@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200904135332.60259-1-bjorn.topel@gmail.com>
+References: <20200904135332.60259-1-bjorn.topel@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 4 Sep 2020 09:50:31 +0200
-Lorenzo Bianconi <lorenzo@kernel.org> wrote:
+From: Björn Töpel <bjorn.topel@intel.com>
 
-> > On Thu, Sep 03, 2020 at 10:58:50PM +0200, Lorenzo Bianconi wrote:  
-> > > +BPF_CALL_2(bpf_xdp_adjust_mb_header, struct  xdp_buff *, xdp,
-> > > +	   int, offset)
-> > > +{
-> > > +	void *data_hard_end, *data_end;
-> > > +	struct skb_shared_info *sinfo;
-> > > +	int frag_offset, frag_len;
-> > > +	u8 *addr;
-> > > +
-> > > +	if (!xdp->mb)
-> > > +		return -EOPNOTSUPP;
-> > > +
-> > > +	sinfo = xdp_get_shared_info_from_buff(xdp);
-> > > +
-> > > +	frag_len = skb_frag_size(&sinfo->frags[0]);
-> > > +	if (offset > frag_len)
-> > > +		return -EINVAL;
-> > > +
-> > > +	frag_offset = skb_frag_off(&sinfo->frags[0]);
-> > > +	data_end = xdp->data_end + offset;
-> > > +
-> > > +	if (offset < 0 && (-offset > frag_offset ||
-> > > +			   data_end < xdp->data + ETH_HLEN))
-> > > +		return -EINVAL;
-> > > +
-> > > +	data_hard_end = xdp_data_hard_end(xdp); /* use xdp->frame_sz */
-> > > +	if (data_end > data_hard_end)
-> > > +		return -EINVAL;
-> > > +
-> > > +	addr = page_address(skb_frag_page(&sinfo->frags[0])) + frag_offset;
-> > > +	if (offset > 0) {
-> > > +		memcpy(xdp->data_end, addr, offset);
-> > > +	} else {
-> > > +		memcpy(addr + offset, xdp->data_end + offset, -offset);
-> > > +		memset(xdp->data_end + offset, 0, -offset);
-> > > +	}
-> > > +
-> > > +	skb_frag_size_sub(&sinfo->frags[0], offset);
-> > > +	skb_frag_off_add(&sinfo->frags[0], offset);
-> > > +	xdp->data_end = data_end;
-> > > +
-> > > +	return 0;
-> > > +}  
-> > 
-> > wait a sec. Are you saying that multi buffer XDP actually should be skb based?
-> > If that's what mvneta driver is doing that's fine, but that is not a
-> > reasonable requirement to put on all other drivers.  
-> 
-> I did not got what you mean here. The xdp multi-buffer layout uses
-> the skb_shared_info at the end of the first buffer to link subsequent
-> frames [0] and we rely on skb_frag* utilities to set/read offset and
-> length of subsequent buffers.
+The error codes returned by xdp_do_redirect() when redirecting a frame
+to an AF_XDP socket has not been very useful. A driver could not
+distinguish between different errors. Prior this change the following
+codes where used:
 
-Yes, for now the same layout as "skb_shared_info" is "reuse", but I
-think we should think of this as "xdp_shared_info" instead, as how it
-is used for XDP is going to divert from SKBs.  We already discussed (in
-conf call) that we could store the total len of "frags" here, to
-simplify the other helper.
+Socket not bound or incorrect queue/netdev: EINVAL
+XDP frame/AF_XDP buffer size mismatch: ENOSPC
+Could not allocate buffer (copy mode): ENOSPC
+AF_XDP Rx buffer full: ENOSPC
 
-Using the skb_frag_* helper functions are misleading, and will make it
-more difficult to divert from how SKB handle frags.  What about
-introducing xdp_frag_* wrappers? (what do others think?)
+After this change:
 
+Socket not bound or incorrect queue/netdev: EINVAL
+XDP frame/AF_XDP buffer size mismatch: ENOSPC
+Could not allocate buffer (copy mode): ENOMEM
+AF_XDP Rx buffer full: ENOBUFS
 
-> 
-> [0] http://people.redhat.com/lbiancon/conference/NetDevConf2020-0x14/add-xdp-on-driver.html
->     - XDP multi-buffers section (slide 40)
+An AF_XDP zero-copy driver can now potentially determine if the
+failure was due to a full Rx buffer, and if so stop processing more
+frames, yielding to the userland AF_XDP application.
 
+Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+---
+ net/xdp/xsk.c       | 2 +-
+ net/xdp/xsk_queue.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 3895697f8540..db38560c4af7 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -197,7 +197,7 @@ static int __xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len,
+ 	xsk_xdp = xsk_buff_alloc(xs->pool);
+ 	if (!xsk_xdp) {
+ 		xs->rx_dropped++;
+-		return -ENOSPC;
++		return -ENOMEM;
+ 	}
+ 
+ 	xsk_copy_xdp(xsk_xdp, xdp, len);
+diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
+index 2d883f631c85..b76966cf122e 100644
+--- a/net/xdp/xsk_queue.h
++++ b/net/xdp/xsk_queue.h
+@@ -305,7 +305,7 @@ static inline int xskq_prod_reserve_desc(struct xsk_queue *q,
+ 	u32 idx;
+ 
+ 	if (xskq_prod_is_full(q))
+-		return -ENOSPC;
++		return -ENOBUFS;
+ 
+ 	/* A, matches D */
+ 	idx = q->cached_prod++ & q->ring_mask;
 -- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+2.25.1
 
