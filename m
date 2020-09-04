@@ -7,60 +7,60 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D1EC6C2BB84
-	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 11:29:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B8581C433E2
+	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 11:29:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A7B15206B7
-	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 11:29:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E391208B3
+	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 11:29:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="LQLaK3E4"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="YtuBg19G"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730143AbgIDL3j (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Sep 2020 07:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
+        id S1730178AbgIDL3p (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Sep 2020 07:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730196AbgIDL0C (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1730193AbgIDL0C (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 4 Sep 2020 07:26:02 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38654C0611E0
-        for <bpf@vger.kernel.org>; Fri,  4 Sep 2020 04:24:17 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id x14so6332418wrl.12
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2020 04:24:17 -0700 (PDT)
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2AFC061233
+        for <bpf@vger.kernel.org>; Fri,  4 Sep 2020 04:24:14 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id s13so5718147wmh.4
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2020 04:24:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=owpNQQ+uIJCQXVSt0+1sgwOe70+wghAb9TxeyhOSzdA=;
-        b=LQLaK3E4hhgF0sqaa0xcxlqC4hcBE8zEPudcwELM/WbxI905d8LURtEJjAXPqG+q47
-         b6yOTtoRGYqonMVvHroDJW+iavdF/IQ8n4XQqHeu/AxzXXyJalJAPvrl1UZYCkzGPl+X
-         1nZgnwHgh0euMJFvEWXHynGxVt4J43Rq2eizo=
+        bh=UsZcPNRuXjAj8BE6HDRDUYJhFGRJK7BfcdRk8sZ8GDQ=;
+        b=YtuBg19GPz8DWrNVVsU8ZrW/10qMfj50ogiJo08i8yu17bpZh8aQ0EKI823xkmTKrV
+         eWqaBcILybItyqNwyrdvKaM69rCXJ72EINmS2O+fXF+i5s27oIV2HD4YOElwxvamGD8O
+         fBUT+4MCgwgeFjuk8D4RWPwvZA7HHc1MywWbk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=owpNQQ+uIJCQXVSt0+1sgwOe70+wghAb9TxeyhOSzdA=;
-        b=Myn5anc0nb37YB3nV03FwavCMOMU5PL8MHcRjYO7J/hHbay0mCAb/lmHQuj+6iCDO+
-         Tmpk3gmT+2/S7Am0ZVff5ZQsHIy1imCYf3M0Rjyn63maxRPzXOoSbdb0pV2RdTnj7Rof
-         YzW8N2KAAlNTuD1c1nGAmuYxCsbJqs6axnFHorK5lLkHfi5zBLXchiuwtenvRkheYQdH
-         gMbIN698CqBP0QXld7BIUHZpwGOAoyLJ31V4ZymRj/5jqUsOmb48GDTD6I2bymNYFjdR
-         Oz0Guq/tw5iJzqY9c6OoynSYX6hJMe/stVosGeorzEmrIisAzb/wb3oandP6PuMcVTgM
-         w5oQ==
-X-Gm-Message-State: AOAM532spqdVlRaQaffxEHa+sEITU9diNh7+DK6Ngn8Z6odtQrBhuWrn
-        N5d4xysYALMJywyHSzVKQBeeMQ==
-X-Google-Smtp-Source: ABdhPJyRYozlZl96pAlyrtGQZ0j5cFKkqb1QRVHAHa/ObAd1annJ6d+ETPAwRDlJQ5te7Eb7L37ccA==
-X-Received: by 2002:adf:8b48:: with SMTP id v8mr7121008wra.21.1599218655945;
-        Fri, 04 Sep 2020 04:24:15 -0700 (PDT)
+        bh=UsZcPNRuXjAj8BE6HDRDUYJhFGRJK7BfcdRk8sZ8GDQ=;
+        b=RZDXRLLOqAebdVpW4Ijy37DmytIrDELe1xtDRByP9YWIi9f9FRq1a8Hdr8sglmnq0w
+         nM4Fvm+YbFmhilsBP/TL0NhGjpOIBvFsLBMh0P6OU6ed+mmSh+HdQXRa0yWJGiv9/jGM
+         VXwG/MsZxZwOhh8dCam+Hx4vFYEm4gnNaGtpbyFF0NA9DXzKHjXfDJ4O1kvl4pI4l7si
+         5Mo3Sku40ogmaplba2jsxLwa3VrMFOMWa9PnUGH3kmWbouksxyU1redYIgim7jHBEKa7
+         zxmJS/TvTcR3zXxk+hKler4ChjfBGAH44cfAouga9FUHC+rUOGLRpyY1BAj3lJLkhC6N
+         QK9g==
+X-Gm-Message-State: AOAM531/waw+ZdAo1dvSyjl9OlfKjwRaHWYrPvmB1Zii5XJdjjEBtpRa
+        4Kx7zRmURw+oNnzHXmTMY2eh6Q==
+X-Google-Smtp-Source: ABdhPJxwtNebf6IeEa0Jv492IQAbM2vaZWF56FrY2QjO0a1OdHsPeLnw/83uQm6aBdwGdUO12W8Z6A==
+X-Received: by 2002:a7b:c0c5:: with SMTP id s5mr7026992wmh.152.1599218653412;
+        Fri, 04 Sep 2020 04:24:13 -0700 (PDT)
 Received: from antares.lan (111.253.187.81.in-addr.arpa. [81.187.253.111])
-        by smtp.gmail.com with ESMTPSA id v2sm9104408wrm.16.2020.09.04.04.24.14
+        by smtp.gmail.com with ESMTPSA id v2sm9104408wrm.16.2020.09.04.04.24.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2020 04:24:15 -0700 (PDT)
+        Fri, 04 Sep 2020 04:24:12 -0700 (PDT)
 From:   Lorenz Bauer <lmb@cloudflare.com>
 To:     ast@kernel.org, yhs@fb.com, daniel@iogearbox.net, kafai@fb.com
 Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next 03/11] btf: make btf_set_contains take a const pointer
-Date:   Fri,  4 Sep 2020 12:23:53 +0100
-Message-Id: <20200904112401.667645-4-lmb@cloudflare.com>
+Subject: [PATCH bpf-next 01/11] btf: Fix BTF_SET_START_GLOBAL macro
+Date:   Fri,  4 Sep 2020 12:23:51 +0100
+Message-Id: <20200904112401.667645-2-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200904112401.667645-1-lmb@cloudflare.com>
 References: <20200904112401.667645-1-lmb@cloudflare.com>
@@ -71,39 +71,65 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bsearch doesn't modify the contents of the array, so we can take a const pointer.
+The extern symbol declaration should be on the BTF_SET_START macro, not
+on BTF_SET_START_GLOBAL, since in the global case the symbol will be
+declared in a header somewhere.
 
+Fixes: eae2e83e6263 ("bpf: Add BTF_SET_START/END macros")
 Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 ---
- include/linux/bpf.h | 2 +-
- kernel/bpf/btf.c    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ include/linux/btf_ids.h       | 6 +++---
+ tools/include/linux/btf_ids.h | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c6d9f2c444f4..6b72cdf52ebc 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1900,6 +1900,6 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 		       void *addr1, void *addr2);
+diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+index 210b086188a3..42aa667d4433 100644
+--- a/include/linux/btf_ids.h
++++ b/include/linux/btf_ids.h
+@@ -121,7 +121,8 @@ asm(							\
  
- struct btf_id_set;
--bool btf_id_set_contains(struct btf_id_set *set, u32 id);
-+bool btf_id_set_contains(const struct btf_id_set *set, u32 id);
+ #define BTF_SET_START(name)				\
+ __BTF_ID_LIST(name, local)				\
+-__BTF_SET_START(name, local)
++__BTF_SET_START(name, local)				\
++extern struct btf_id_set name;
  
- #endif /* _LINUX_BPF_H */
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index f9ac6935ab3c..a2330f6fe2e6 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -4772,7 +4772,7 @@ static int btf_id_cmp_func(const void *a, const void *b)
- 	return *pa - *pb;
- }
+ #define BTF_SET_START_GLOBAL(name)			\
+ __BTF_ID_LIST(name, globl)				\
+@@ -131,8 +132,7 @@ __BTF_SET_START(name, globl)
+ asm(							\
+ ".pushsection " BTF_IDS_SECTION ",\"a\";      \n"	\
+ ".size __BTF_ID__set__" #name ", .-" #name "  \n"	\
+-".popsection;                                 \n");	\
+-extern struct btf_id_set name;
++".popsection;                                 \n");
  
--bool btf_id_set_contains(struct btf_id_set *set, u32 id)
-+bool btf_id_set_contains(const struct btf_id_set *set, u32 id)
- {
- 	return bsearch(&id, set->ids, set->cnt, sizeof(u32), btf_id_cmp_func) != NULL;
- }
+ #else
+ 
+diff --git a/tools/include/linux/btf_ids.h b/tools/include/linux/btf_ids.h
+index 210b086188a3..42aa667d4433 100644
+--- a/tools/include/linux/btf_ids.h
++++ b/tools/include/linux/btf_ids.h
+@@ -121,7 +121,8 @@ asm(							\
+ 
+ #define BTF_SET_START(name)				\
+ __BTF_ID_LIST(name, local)				\
+-__BTF_SET_START(name, local)
++__BTF_SET_START(name, local)				\
++extern struct btf_id_set name;
+ 
+ #define BTF_SET_START_GLOBAL(name)			\
+ __BTF_ID_LIST(name, globl)				\
+@@ -131,8 +132,7 @@ __BTF_SET_START(name, globl)
+ asm(							\
+ ".pushsection " BTF_IDS_SECTION ",\"a\";      \n"	\
+ ".size __BTF_ID__set__" #name ", .-" #name "  \n"	\
+-".popsection;                                 \n");	\
+-extern struct btf_id_set name;
++".popsection;                                 \n");
+ 
+ #else
+ 
 -- 
 2.25.1
 
