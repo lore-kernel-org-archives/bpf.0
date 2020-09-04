@@ -7,60 +7,60 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F479C433E2
-	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 11:28:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D3BBC43461
+	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 11:29:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74394206B7
-	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 11:28:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 50707206B7
+	for <bpf@archiver.kernel.org>; Fri,  4 Sep 2020 11:29:26 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="LftXd0gA"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="mzr0PB3a"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730182AbgIDL2j (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Sep 2020 07:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
+        id S1730232AbgIDL3T (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Sep 2020 07:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730187AbgIDL0C (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1728263AbgIDL0C (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 4 Sep 2020 07:26:02 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F067C06123A
-        for <bpf@vger.kernel.org>; Fri,  4 Sep 2020 04:24:16 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id z1so6408977wrt.3
-        for <bpf@vger.kernel.org>; Fri, 04 Sep 2020 04:24:16 -0700 (PDT)
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F64C0619C4
+        for <bpf@vger.kernel.org>; Fri,  4 Sep 2020 04:24:21 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id k15so6342663wrn.10
+        for <bpf@vger.kernel.org>; Fri, 04 Sep 2020 04:24:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Wv2ddb+2QDJ2ZGRPuXQTiHYRYSzKaO0Pxw0bhRAUNbo=;
-        b=LftXd0gAOiyniRk9C7WdEhC4KppmqK4hsYGQlUk5mKlxWg5X9r3MsPE8O1gnVfNlij
-         aQg3Me/sxqLYaZd99RlpCyQAM4S6sC3pW5hA5uDfg4gqIPnaRpl3Wxd+6UI/3Ma5vSXB
-         PvbJCye+wOqOOeaP5byZSOMPCWpE29016yC+k=
+        bh=QTxDMqIedGHd6nEHPaqkTSyOMImcvTE/s8Ne5HgNwhY=;
+        b=mzr0PB3aDKq5/Lxp4ONFu0pyaVkB36cYtaOb5BsF08YNWZmxJHN74LjX9ZwrqlpYrW
+         ecugmyEAooZbNNjTjiXHnZof4QcEc0Cf4aerzP4OeA02EB08cRcOrCE+5XdDP9Xwjvyl
+         8UkvynE89RuKwLnaoO3mqkCl6aPgmBWMOsT0A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Wv2ddb+2QDJ2ZGRPuXQTiHYRYSzKaO0Pxw0bhRAUNbo=;
-        b=Ctjj9r3Eaf7nVdKQ4aNe/SS0wk5bFjLbJvA+5rxjX+t4+mp67vWd3f5TEl0OO2I3Jf
-         7oknmCl1G1PKXId/3P1Hj1gw0K7y4De+1B5h6dn62e5SB0oify1oDvVqv8TYcb9CkkFy
-         mdLnVKtV2RrfWmAx9ZeLhIrLsJH1k16LGubnnRsp14wzwApxjY486WRCVga5QZyaHP/b
-         YkTkcDJ7Qt1J4DQdQ6rA82m6bItGuVXrKjNiw01poRZcj7PXKlex48zjpF/7+WfwQ3r2
-         YmbQsydl34E+IowdFlQCGX4BlJupra7ovn42YKPsSvAQ2wmdHoSLY9tuZDkNqULc+nAW
-         /R8Q==
-X-Gm-Message-State: AOAM532ARh7PJzBrpN7nFjYDOPwx14z1dR35VxQZuVPy/93Rnt9jkaME
-        w+RvyJO0jShBwxcOp4MpgopgyQ==
-X-Google-Smtp-Source: ABdhPJyKnrZeNZ2IMQWcgv7+l+SG0nUyHTLMeud8GZY4Zfc9Huk/HsF8nPIUwN95oHJggIxADlKtsA==
-X-Received: by 2002:adf:f082:: with SMTP id n2mr1838517wro.35.1599218654825;
-        Fri, 04 Sep 2020 04:24:14 -0700 (PDT)
+        bh=QTxDMqIedGHd6nEHPaqkTSyOMImcvTE/s8Ne5HgNwhY=;
+        b=IxVSi6NnysfugmCHFyGeMTv582jbzdaMqVr8UUL8CKZcIsgc7Ia2Q41oDwGti5URog
+         sZI1+2mFHlp0GCQrWezY1LeezkKN5iw3OnUHOejGx+6Q5qyeeWtXR0CxUCgvInbPCviR
+         Y+8QUf6P/9IJ+QYlq8s+IuVZx+yckjCwW36zTUUPDqcNaWVCBGcrAZvSLTet8ISQVDGN
+         ddRDWCsgLQ63gUSCKKL8s0Xsbbh/H5uVrpZfM0iRtb7K3BhoXhBhF2h8Mg6x8m4bmtzy
+         opzoXXCjQyEUoDlEHypBNOLVGwKVeG9P9cF9c1k8iXpYN8/bxDXD3a5QGYDyxlNklRpj
+         H4rw==
+X-Gm-Message-State: AOAM531gFXkK1fTzRCoZ6o9KPmHqT11DD5qiHxmkvBYGIxyr+Z/nSfRq
+        f0HvJLY5YMTm/55A8gkyvAodqQ==
+X-Google-Smtp-Source: ABdhPJwr9RvTnKQ8LB1QlqOFU/xwIYprm8BN2DMQ1bbX4TWGOaeAlGKuleWkvMPFuuC+KzSAizE+7Q==
+X-Received: by 2002:adf:df0f:: with SMTP id y15mr7087825wrl.127.1599218659714;
+        Fri, 04 Sep 2020 04:24:19 -0700 (PDT)
 Received: from antares.lan (111.253.187.81.in-addr.arpa. [81.187.253.111])
-        by smtp.gmail.com with ESMTPSA id v2sm9104408wrm.16.2020.09.04.04.24.13
+        by smtp.gmail.com with ESMTPSA id v2sm9104408wrm.16.2020.09.04.04.24.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Sep 2020 04:24:14 -0700 (PDT)
+        Fri, 04 Sep 2020 04:24:19 -0700 (PDT)
 From:   Lorenz Bauer <lmb@cloudflare.com>
 To:     ast@kernel.org, yhs@fb.com, daniel@iogearbox.net, kafai@fb.com
 Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next 02/11] btf: add a global set of valid BTF socket ids
-Date:   Fri,  4 Sep 2020 12:23:52 +0100
-Message-Id: <20200904112401.667645-3-lmb@cloudflare.com>
+Subject: [PATCH bpf-next 06/11] bpf: make reference tracking in check_func_arg generic
+Date:   Fri,  4 Sep 2020 12:23:56 +0100
+Message-Id: <20200904112401.667645-7-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200904112401.667645-1-lmb@cloudflare.com>
 References: <20200904112401.667645-1-lmb@cloudflare.com>
@@ -71,60 +71,66 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Similar to the existing btf_sock_ids, add a set for the same data.
-This allows searching for sockets using btf_set_contains.
+Instead of dealing with reg->ref_obj_id individually for every arg type that
+needs it, rely on the fact that ref_obj_id is zero if the register is not
+reference tracked.
 
 Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 ---
- include/linux/btf_ids.h       | 1 +
- net/core/filter.c             | 7 +++++++
- tools/include/linux/btf_ids.h | 1 +
- 3 files changed, 9 insertions(+)
+ kernel/bpf/verifier.c | 26 ++++++++++----------------
+ 1 file changed, 10 insertions(+), 16 deletions(-)
 
-diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-index 42aa667d4433..eb6739ebbba4 100644
---- a/include/linux/btf_ids.h
-+++ b/include/linux/btf_ids.h
-@@ -174,6 +174,7 @@ MAX_BTF_SOCK_TYPE,
- };
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 45759638e1b8..c7df4ccad8e2 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3988,15 +3988,6 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 		/* Any sk pointer can be ARG_PTR_TO_SOCK_COMMON */
+ 		if (!type_is_sk_pointer(type))
+ 			goto err_type;
+-		if (reg->ref_obj_id) {
+-			if (meta->ref_obj_id) {
+-				verbose(env, "verifier internal error: more than one arg with ref_obj_id R%d %u %u\n",
+-					regno, reg->ref_obj_id,
+-					meta->ref_obj_id);
+-				return -EFAULT;
+-			}
+-			meta->ref_obj_id = reg->ref_obj_id;
+-		}
+ 	} else if (arg_type == ARG_PTR_TO_SOCKET ||
+ 		   arg_type == ARG_PTR_TO_SOCKET_OR_NULL) {
+ 		expected_type = PTR_TO_SOCKET;
+@@ -4047,13 +4038,6 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			/* final test in check_stack_boundary() */;
+ 		else if (type != expected_type)
+ 			goto err_type;
+-		if (meta->ref_obj_id) {
+-			verbose(env, "verifier internal error: more than one arg with ref_obj_id R%d %u %u\n",
+-				regno, reg->ref_obj_id,
+-				meta->ref_obj_id);
+-			return -EFAULT;
+-		}
+-		meta->ref_obj_id = reg->ref_obj_id;
+ 	} else if (arg_type_is_int_ptr(arg_type)) {
+ 		expected_type = PTR_TO_STACK;
+ 		if (!type_is_pkt_pointer(type) &&
+@@ -4087,6 +4071,16 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 		}
+ 	}
  
- extern u32 btf_sock_ids[];
-+extern struct btf_id_set btf_sock_ids_set;
- #endif
- 
- #endif
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 47eef9a0be6a..c7f96cfea1b0 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -9903,8 +9903,15 @@ BTF_ID_LIST_GLOBAL(btf_sock_ids)
- #define BTF_SOCK_TYPE(name, type) BTF_ID(struct, type)
- BTF_SOCK_TYPE_xxx
- #undef BTF_SOCK_TYPE
++	if (reg->ref_obj_id) {
++		if (meta->ref_obj_id) {
++			verbose(env, "verifier internal error: more than one arg with ref_obj_id R%d %u %u\n",
++				regno, reg->ref_obj_id,
++				meta->ref_obj_id);
++			return -EFAULT;
++		}
++		meta->ref_obj_id = reg->ref_obj_id;
++	}
 +
-+BTF_SET_START_GLOBAL(btf_sock_ids_set)
-+#define BTF_SOCK_TYPE(name, type) BTF_ID(struct, type)
-+BTF_SOCK_TYPE_xxx
-+#undef BTF_SOCK_TYPE
-+BTF_SET_END(btf_sock_ids_set)
- #else
- u32 btf_sock_ids[MAX_BTF_SOCK_TYPE];
-+struct btf_id_set btf_sock_ids_set;
- #endif
- 
- static bool check_arg_btf_id(u32 btf_id, u32 arg)
-diff --git a/tools/include/linux/btf_ids.h b/tools/include/linux/btf_ids.h
-index 42aa667d4433..eb6739ebbba4 100644
---- a/tools/include/linux/btf_ids.h
-+++ b/tools/include/linux/btf_ids.h
-@@ -174,6 +174,7 @@ MAX_BTF_SOCK_TYPE,
- };
- 
- extern u32 btf_sock_ids[];
-+extern struct btf_id_set btf_sock_ids_set;
- #endif
- 
- #endif
+ 	if (arg_type == ARG_CONST_MAP_PTR) {
+ 		/* bpf_map_xxx(map_ptr) call: remember that map_ptr */
+ 		meta->map_ptr = reg->map_ptr;
 -- 
 2.25.1
 
