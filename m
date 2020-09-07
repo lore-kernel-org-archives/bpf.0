@@ -2,114 +2,318 @@ Return-Path: <SRS0=5Irp=CQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DF66C433E2
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:27:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 79245C43461
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:37:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D011C207DE
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:27:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 345CB21927
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:37:22 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="LzeUHCuP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730491AbgIGQ1f (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Sep 2020 12:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33164 "EHLO
+        id S1730914AbgIGQgz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Sep 2020 12:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730372AbgIGQ13 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Sep 2020 12:27:29 -0400
-Received: from sym2.noone.org (sym2.noone.org [IPv6:2a01:4f8:120:4161::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3D1C061573;
-        Mon,  7 Sep 2020 09:27:28 -0700 (PDT)
-Received: by sym2.noone.org (Postfix, from userid 1002)
-        id 4BlYbL5f6Gzvjc1; Mon,  7 Sep 2020 18:27:26 +0200 (CEST)
-Date:   Mon, 7 Sep 2020 18:27:26 +0200
-From:   Tobias Klauser <tklauser@distanz.ch>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: Re: [PATCH] perf tools: Do not use deprecated bpf_program__title
-Message-ID: <20200907162726.o36peh673a7l46kn@distanz.ch>
-References: <20200907110237.1329532-1-jolsa@kernel.org>
- <20200907110549.GI1199773@krava>
- <20200907155945.2ynl7dojgx572j62@distanz.ch>
- <20200907162249.GO1199773@krava>
+        with ESMTP id S1730517AbgIGQgp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Sep 2020 12:36:45 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF74C061573
+        for <bpf@vger.kernel.org>; Mon,  7 Sep 2020 09:36:44 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id x23so4974061wmi.3
+        for <bpf@vger.kernel.org>; Mon, 07 Sep 2020 09:36:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=WYfb4HWcJBJMQdB3pqwUW7b6FRg6vrPe0DE1icCl/CA=;
+        b=LzeUHCuPZgMZRfyTCiGhiPj0Iflpe7PNnruPAN6w9rHEYIgOofCgNsdottEDdUZzzx
+         v/3N/z9QhGEzjWwnnKEqg2yuQhCAcmfNPd3T5Nb7/gdcmoLt28bhjz9L1Z+ZnueZ5pQy
+         iEUrx/9VJ8m2qX5lCYxk634Sq9sDLqPGx9bV8usWHXuZiP5Jc++p3W4bkeJ6YVcGg1aN
+         fRExS71wkvoWj5cYfjbUXefTIllrBfeECeQuwaKCbf+Rk1uNmurp9dUaLyDEwpX2IZuQ
+         KcEn9APPEJFSMQq3ZIOd88E81HeovixVVvsaNsBGCT3E2IPNTkA8W6yI1wPSXueLaQZ8
+         R7xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=WYfb4HWcJBJMQdB3pqwUW7b6FRg6vrPe0DE1icCl/CA=;
+        b=KCwiW7N+FcWAy4GGAcFI9r4Sdpt0LX3dMwAOoCzAFbN63Rvo0TfooPEeNXQbnimtMH
+         ibwA1DUVrokOSkQTgFkEtbrNOjkqkrNNvYCVwLpAgwhyC+jXPbw+kkWVVfnp7PnSVZBw
+         iUj74otZ/jjuaLllI7FUEcr3rq1iij6tT27UAhWcKq9LzKkHxpVllF0PtCwU+sF4uduk
+         9OIWMckcWTu1G/67WsbbQJntn3ap4v10VmUBYaIHjz9DhL3KpblvTbesAqluVD4Zu1Ks
+         qyrR6jAbm9OAC8kz4YImkZAm3QWvk3ueR6Od1vfDFyNWvTQ7kZMglSr+3s7ACHyvlAf9
+         5fVA==
+X-Gm-Message-State: AOAM531x62wfG8XLHK/hrGzEptAvfACmDaSlzFa8xTMXkyzldA2F3EAU
+        zOBxStIJ+5czO9tBOTeB1Mh+mg==
+X-Google-Smtp-Source: ABdhPJxgf3Ms4f6Cfdx5mGCULGYbEwJdDPdE2IxsiiANVmfaw0JFm5LRMCB3noqsG9vKJF8bqxJ+hg==
+X-Received: by 2002:a1c:234d:: with SMTP id j74mr125626wmj.157.1599496602801;
+        Mon, 07 Sep 2020 09:36:42 -0700 (PDT)
+Received: from localhost.localdomain ([194.35.119.17])
+        by smtp.gmail.com with ESMTPSA id p11sm26443677wma.11.2020.09.07.09.36.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Sep 2020 09:36:42 -0700 (PDT)
+From:   Quentin Monnet <quentin@isovalent.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Subject: [PATCH bpf-next v2 2/2] tools: bpftool: add "inner_map" to "bpftool map create" outer maps
+Date:   Mon,  7 Sep 2020 17:36:34 +0100
+Message-Id: <20200907163634.27469-3-quentin@isovalent.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200907163634.27469-1-quentin@isovalent.com>
+References: <20200907163634.27469-1-quentin@isovalent.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200907162249.GO1199773@krava>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2020-09-07 at 18:22:49 +0200, Jiri Olsa <jolsa@redhat.com> wrote:
-> On Mon, Sep 07, 2020 at 05:59:46PM +0200, Tobias Klauser wrote:
-> > On 2020-09-07 at 13:05:49 +0200, Jiri Olsa <jolsa@redhat.com> wrote:
-> > > On Mon, Sep 07, 2020 at 01:02:37PM +0200, Jiri Olsa wrote:
-> > > > The bpf_program__title function got deprecated in libbpf,
-> > > > use the suggested alternative.
-> > > > 
-> > > > Fixes: 521095842027 ("libbpf: Deprecate notion of BPF program "title" in favor of "section name"")
-> > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > 
-> > > Arnaldo,
-> > > the commit in 'Fixes' is not yet in your tree yet and the patch
-> > > below will make the perf compilation fail in your perf/core..
-> > > 
-> > > it fixes perf compilation on top of bpf-next tree.. so I think it
-> > > should go in through bpf-next tree
-> > > 
-> > > thanks,
-> > > jirka
-> > > 
-> > > > ---
-> > > >  tools/perf/util/bpf-loader.c | 4 ++--
-> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > > 
-> > > > diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
-> > > > index 2feb751516ab..73de3973c8ec 100644
-> > > > --- a/tools/perf/util/bpf-loader.c
-> > > > +++ b/tools/perf/util/bpf-loader.c
-> > > > @@ -328,7 +328,7 @@ config_bpf_program(struct bpf_program *prog)
-> > > >  	probe_conf.no_inlines = false;
-> > > >  	probe_conf.force_add = false;
-> > > >  
-> > > > -	config_str = bpf_program__title(prog, false);
-> > > > +	config_str = bpf_program__section_name(prog);
-> > > >  	if (IS_ERR(config_str)) {
-> > > >  		pr_debug("bpf: unable to get title for program\n");
-> > > >  		return PTR_ERR(config_str);
-> > > > @@ -454,7 +454,7 @@ preproc_gen_prologue(struct bpf_program *prog, int n,
-> > > >  	if (err) {
-> > > >  		const char *title;
-> > > >  
-> > > > -		title = bpf_program__title(prog, false);
-> > > > +		title = bpf_program__section_name(prog);
-> > > >  		if (!title)
-> > > >  			title = "[unknown]";
-> > 
-> > I think bpf_program__title at line 457 in preproc_gen_prologue also needs to be
-> > changed given the following build failure:
-> 
-> hum, that's where the 2nd hunk, right? I dont see any other instance
-> of bpf_program__title after the patch is applied
+There is no support for creating maps of types array-of-map or
+hash-of-map in bpftool. This is because the kernel needs an inner_map_fd
+to collect metadata on the inner maps to be supported by the new map,
+but bpftool does not provide a way to pass this file descriptor.
 
-Sorry for the noise, I didn't read the patch correctly. You're of course
-correct. I was confused because it is still assigned to variable
-`title`.
+Add a new optional "inner_map" keyword that can be used to pass a
+reference to a map, retrieve a fd to that map, and pass it as the
+inner_map_fd.
 
-Reviewed-by: Tobias Klauser <tklauser@distanz.ch>
+Add related documentation and bash completion. Note that we can
+reference the inner map by its name, meaning we can have several times
+the keyword "name" with different meanings (mandatory outer map name,
+and possibly a name to use to find the inner_map_fd). The bash
+completion will offer it just once, and will not suggest "name" on the
+following command:
 
-Thanks
-Tobias
+    # bpftool map create /sys/fs/bpf/my_outer_map type hash_of_maps \
+        inner_map name my_inner_map [TAB]
+
+Fixing that specific case seems too convoluted. Completion will work as
+expected, however, if the outer map name comes first and the "inner_map
+name ..." is passed second.
+
+Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+---
+ .../bpf/bpftool/Documentation/bpftool-map.rst | 10 +++-
+ tools/bpf/bpftool/bash-completion/bpftool     | 22 ++++++++-
+ tools/bpf/bpftool/map.c                       | 48 +++++++++++++------
+ 3 files changed, 62 insertions(+), 18 deletions(-)
+
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+index 083db6c2fc67..ca9d62d7e0bd 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+@@ -23,7 +23,8 @@ MAP COMMANDS
+ 
+ |	**bpftool** **map** { **show** | **list** }   [*MAP*]
+ |	**bpftool** **map create**     *FILE* **type** *TYPE* **key** *KEY_SIZE* **value** *VALUE_SIZE* \
+-|		**entries** *MAX_ENTRIES* **name** *NAME* [**flags** *FLAGS*] [**dev** *NAME*]
++|		**entries** *MAX_ENTRIES* **name** *NAME* [**flags** *FLAGS*] [**inner_map** *MAP*] \
++|		[**dev** *NAME*]
+ |	**bpftool** **map dump**       *MAP*
+ |	**bpftool** **map update**     *MAP* [**key** *DATA*] [**value** *VALUE*] [*UPDATE_FLAGS*]
+ |	**bpftool** **map lookup**     *MAP* [**key** *DATA*]
+@@ -67,7 +68,7 @@ DESCRIPTION
+ 		  maps. On such kernels bpftool will automatically emit this
+ 		  information as well.
+ 
+-	**bpftool map create** *FILE* **type** *TYPE* **key** *KEY_SIZE* **value** *VALUE_SIZE*  **entries** *MAX_ENTRIES* **name** *NAME* [**flags** *FLAGS*] [**dev** *NAME*]
++	**bpftool map create** *FILE* **type** *TYPE* **key** *KEY_SIZE* **value** *VALUE_SIZE*  **entries** *MAX_ENTRIES* **name** *NAME* [**flags** *FLAGS*] [**inner_map** *MAP*] [**dev** *NAME*]
+ 		  Create a new map with given parameters and pin it to *bpffs*
+ 		  as *FILE*.
+ 
+@@ -75,6 +76,11 @@ DESCRIPTION
+ 		  desired flags, e.g. 1024 for **BPF_F_MMAPABLE** (see bpf.h
+ 		  UAPI header for existing flags).
+ 
++		  To create maps of type array-of-maps or hash-of-maps, the
++		  **inner_map** keyword must be used to pass an inner map. The
++		  kernel needs it to collect metadata related to the inner maps
++		  that the new map will work with.
++
+ 		  Keyword **dev** expects a network interface name, and is used
+ 		  to request hardware offload for the map.
+ 
+diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
+index 7b68e3c0a5fb..3f1da30c4da6 100644
+--- a/tools/bpf/bpftool/bash-completion/bpftool
++++ b/tools/bpf/bpftool/bash-completion/bpftool
+@@ -709,9 +709,26 @@ _bpftool()
+                                                    "$cur" ) )
+                             return 0
+                             ;;
+-                        key|value|flags|name|entries)
++                        key|value|flags|entries)
+                             return 0
+                             ;;
++                        inner_map)
++                            COMPREPLY=( $( compgen -W "$MAP_TYPE" -- "$cur" ) )
++                            return 0
++                            ;;
++                        id)
++                            _bpftool_get_map_ids
++                            ;;
++                        name)
++                            case $pprev in
++                                inner_map)
++                                    _bpftool_get_map_names
++                                    ;;
++                                *)
++                                    return 0
++                                    ;;
++                            esac
++                            ;;
+                         *)
+                             _bpftool_once_attr 'type'
+                             _bpftool_once_attr 'key'
+@@ -719,6 +736,9 @@ _bpftool()
+                             _bpftool_once_attr 'entries'
+                             _bpftool_once_attr 'name'
+                             _bpftool_once_attr 'flags'
++                            if _bpftool_search_list 'array_of_maps' 'hash_of_maps'; then
++                                _bpftool_once_attr 'inner_map'
++                            fi
+                             _bpftool_once_attr 'dev'
+                             return 0
+                             ;;
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index c8159cb4fb1e..7370fdd57de3 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -1250,7 +1250,7 @@ static int do_create(int argc, char **argv)
+ {
+ 	struct bpf_create_map_attr attr = { NULL, };
+ 	const char *pinfile;
+-	int err, fd;
++	int err = -1, fd;
+ 
+ 	if (!REQ_ARGS(7))
+ 		return -1;
+@@ -1265,13 +1265,13 @@ static int do_create(int argc, char **argv)
+ 
+ 			if (attr.map_type) {
+ 				p_err("map type already specified");
+-				return -1;
++				goto exit;
+ 			}
+ 
+ 			attr.map_type = map_type_from_str(*argv);
+ 			if ((int)attr.map_type < 0) {
+ 				p_err("unrecognized map type: %s", *argv);
+-				return -1;
++				goto exit;
+ 			}
+ 			NEXT_ARG();
+ 		} else if (is_prefix(*argv, "name")) {
+@@ -1280,43 +1280,56 @@ static int do_create(int argc, char **argv)
+ 		} else if (is_prefix(*argv, "key")) {
+ 			if (parse_u32_arg(&argc, &argv, &attr.key_size,
+ 					  "key size"))
+-				return -1;
++				goto exit;
+ 		} else if (is_prefix(*argv, "value")) {
+ 			if (parse_u32_arg(&argc, &argv, &attr.value_size,
+ 					  "value size"))
+-				return -1;
++				goto exit;
+ 		} else if (is_prefix(*argv, "entries")) {
+ 			if (parse_u32_arg(&argc, &argv, &attr.max_entries,
+ 					  "max entries"))
+-				return -1;
++				goto exit;
+ 		} else if (is_prefix(*argv, "flags")) {
+ 			if (parse_u32_arg(&argc, &argv, &attr.map_flags,
+ 					  "flags"))
+-				return -1;
++				goto exit;
+ 		} else if (is_prefix(*argv, "dev")) {
+ 			NEXT_ARG();
+ 
+ 			if (attr.map_ifindex) {
+ 				p_err("offload device already specified");
+-				return -1;
++				goto exit;
+ 			}
+ 
+ 			attr.map_ifindex = if_nametoindex(*argv);
+ 			if (!attr.map_ifindex) {
+ 				p_err("unrecognized netdevice '%s': %s",
+ 				      *argv, strerror(errno));
+-				return -1;
++				goto exit;
+ 			}
+ 			NEXT_ARG();
++		} else if (is_prefix(*argv, "inner_map")) {
++			struct bpf_map_info info = {};
++			__u32 len = sizeof(info);
++			int inner_map_fd;
++
++			NEXT_ARG();
++			if (!REQ_ARGS(2))
++				usage();
++			inner_map_fd = map_parse_fd_and_info(&argc, &argv,
++							     &info, &len);
++			if (inner_map_fd < 0)
++				return -1;
++			attr.inner_map_fd = inner_map_fd;
+ 		} else {
+ 			p_err("unknown arg %s", *argv);
+-			return -1;
++			goto exit;
+ 		}
+ 	}
+ 
+ 	if (!attr.name) {
+ 		p_err("map name not specified");
+-		return -1;
++		goto exit;
+ 	}
+ 
+ 	set_max_rlimit();
+@@ -1324,17 +1337,22 @@ static int do_create(int argc, char **argv)
+ 	fd = bpf_create_map_xattr(&attr);
+ 	if (fd < 0) {
+ 		p_err("map create failed: %s", strerror(errno));
+-		return -1;
++		goto exit;
+ 	}
+ 
+ 	err = do_pin_fd(fd, pinfile);
+ 	close(fd);
+ 	if (err)
+-		return err;
++		goto exit;
+ 
+ 	if (json_output)
+ 		jsonw_null(json_wtr);
+-	return 0;
++
++exit:
++	if (attr.inner_map_fd > 0)
++		close(attr.inner_map_fd);
++
++	return err;
+ }
+ 
+ static int do_pop_dequeue(int argc, char **argv)
+@@ -1420,7 +1438,7 @@ static int do_help(int argc, char **argv)
+ 		"Usage: %1$s %2$s { show | list }   [MAP]\n"
+ 		"       %1$s %2$s create     FILE type TYPE key KEY_SIZE value VALUE_SIZE \\\n"
+ 		"                                  entries MAX_ENTRIES name NAME [flags FLAGS] \\\n"
+-		"                                  [dev NAME]\n"
++		"                                  [inner_map MAP] [dev NAME]\n"
+ 		"       %1$s %2$s dump       MAP\n"
+ 		"       %1$s %2$s update     MAP [key DATA] [value VALUE] [UPDATE_FLAGS]\n"
+ 		"       %1$s %2$s lookup     MAP [key DATA]\n"
+-- 
+2.25.1
+
