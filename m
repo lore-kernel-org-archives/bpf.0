@@ -2,107 +2,112 @@ Return-Path: <SRS0=5Irp=CQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F54CC2BB84
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:03:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 566A4C43461
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:03:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D1FB2080A
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:03:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F5462087D
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:03:57 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="BHf/AKJz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730016AbgIGQDQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Sep 2020 12:03:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729966AbgIGP76 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1730173AbgIGP76 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Mon, 7 Sep 2020 11:59:58 -0400
-Received: from sym2.noone.org (sym2.noone.org [IPv6:2a01:4f8:120:4161::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C43C061573;
-        Mon,  7 Sep 2020 08:59:54 -0700 (PDT)
-Received: by sym2.noone.org (Postfix, from userid 1002)
-        id 4BlXzQ607Bzvjc1; Mon,  7 Sep 2020 17:59:46 +0200 (CEST)
-Date:   Mon, 7 Sep 2020 17:59:46 +0200
-From:   Tobias Klauser <tklauser@distanz.ch>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: Re: [PATCH] perf tools: Do not use deprecated bpf_program__title
-Message-ID: <20200907155945.2ynl7dojgx572j62@distanz.ch>
-References: <20200907110237.1329532-1-jolsa@kernel.org>
- <20200907110549.GI1199773@krava>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729998AbgIGOsb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Sep 2020 10:48:31 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD830C061757
+        for <bpf@vger.kernel.org>; Mon,  7 Sep 2020 07:48:30 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id l9so14464775wme.3
+        for <bpf@vger.kernel.org>; Mon, 07 Sep 2020 07:48:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Vfp8n6DVc0oODsUGu6ZVYaW1CH61INrkZIfFkv2gVnw=;
+        b=BHf/AKJz1829Lg83WzSwfGXrEifbEg5SkqK29SEqyBsM5Srjhu2Qr2LlgkAE8LIR69
+         s2EJvfw4c9dytNVFjs3qGABTKo59V214wYl/v/+rzcb14fVirkF55wY2xTZZVXN3J1/0
+         ilJVzNQD3LTU+4SNdZLmM94zCKQr/RrJWh7uE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Vfp8n6DVc0oODsUGu6ZVYaW1CH61INrkZIfFkv2gVnw=;
+        b=jHOMox0t+qK5UkJkrG0/H2Yk6QDFAKVZD/ZqoCFryEjQCzHjjEXyRhi6YbQ2tQ4CUP
+         aWE+DD493G4BkS+AL7OCwq9XaUqYuUu/V4IaLFnK7aDiHOCzuDhclEw3CgzcJnPgGKsb
+         Iw/Dbohx5CaOuQtwV2R70/dhOoRVHniHzXWmt4NFaX3KJCLhVotbzc2DejxkhdfLVhOM
+         yQGkcvUHtqUUYq20LS7ebAQX8Tc/SbLXfF1LT/1zsgyCNP8EnwvurRL0LAptTb8x+vzc
+         Li+eYo9F6tUhTXXJbgxD/1BparesoUhk+goDJO9NHWIfNlKUw97O3DCitRbxiMpdy97n
+         zwKA==
+X-Gm-Message-State: AOAM530KXOPOG2Yj66nnPjODwwrVxBJ3orYEnf2e13Vo81xBbyz3gW98
+        AXCK25xWIF53yQleHQOKrNamQsjk1H+4SQ==
+X-Google-Smtp-Source: ABdhPJwre4LBfpd379RDlo7a3r1LMQ6ygrSI4EHa7LhG7VQXhF3YxWzMUWSUp7eSA1+71JwZprszuQ==
+X-Received: by 2002:a7b:c2aa:: with SMTP id c10mr20937949wmk.86.1599490109486;
+        Mon, 07 Sep 2020 07:48:29 -0700 (PDT)
+Received: from antares.lan (2.e.3.8.e.0.6.b.6.2.5.e.8.e.4.b.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:b4e8:e526:b60e:83e2])
+        by smtp.gmail.com with ESMTPSA id 59sm8816834wro.82.2020.09.07.07.48.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Sep 2020 07:48:28 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     ast@kernel.org, yhs@fb.com, daniel@iogearbox.net,
+        jakub@cloudflare.com, john.fastabend@gmail.com, kafai@fb.com
+Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com,
+        Lorenz Bauer <lmb@cloudflare.com>
+Subject: [PATCH bpf-next v4 2/7] net: sockmap: Remove unnecessary sk_fullsock checks
+Date:   Mon,  7 Sep 2020 15:46:56 +0100
+Message-Id: <20200907144701.44867-3-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200907144701.44867-1-lmb@cloudflare.com>
+References: <20200907144701.44867-1-lmb@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200907110549.GI1199773@krava>
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2020-09-07 at 13:05:49 +0200, Jiri Olsa <jolsa@redhat.com> wrote:
-> On Mon, Sep 07, 2020 at 01:02:37PM +0200, Jiri Olsa wrote:
-> > The bpf_program__title function got deprecated in libbpf,
-> > use the suggested alternative.
-> > 
-> > Fixes: 521095842027 ("libbpf: Deprecate notion of BPF program "title" in favor of "section name"")
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> 
-> Arnaldo,
-> the commit in 'Fixes' is not yet in your tree yet and the patch
-> below will make the perf compilation fail in your perf/core..
-> 
-> it fixes perf compilation on top of bpf-next tree.. so I think it
-> should go in through bpf-next tree
-> 
-> thanks,
-> jirka
-> 
-> > ---
-> >  tools/perf/util/bpf-loader.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
-> > index 2feb751516ab..73de3973c8ec 100644
-> > --- a/tools/perf/util/bpf-loader.c
-> > +++ b/tools/perf/util/bpf-loader.c
-> > @@ -328,7 +328,7 @@ config_bpf_program(struct bpf_program *prog)
-> >  	probe_conf.no_inlines = false;
-> >  	probe_conf.force_add = false;
-> >  
-> > -	config_str = bpf_program__title(prog, false);
-> > +	config_str = bpf_program__section_name(prog);
-> >  	if (IS_ERR(config_str)) {
-> >  		pr_debug("bpf: unable to get title for program\n");
-> >  		return PTR_ERR(config_str);
-> > @@ -454,7 +454,7 @@ preproc_gen_prologue(struct bpf_program *prog, int n,
-> >  	if (err) {
-> >  		const char *title;
-> >  
-> > -		title = bpf_program__title(prog, false);
-> > +		title = bpf_program__section_name(prog);
-> >  		if (!title)
-> >  			title = "[unknown]";
+The lookup paths for sockmap and sockhash currently include a check
+that returns NULL if the socket we just found is not a full socket.
+However, this check is not necessary. On insertion we ensure that
+we have a full socket (caveat around sock_ops), so request sockets
+are not a problem. Time-wait sockets are allocated separate from
+the original socket and then fed into the hashdance. They don't
+affect the sockets already stored in the sockmap.
 
-I think bpf_program__title at line 457 in preproc_gen_prologue also needs to be
-changed given the following build failure:
+Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+---
+ net/core/sock_map.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-util/bpf-loader.c: In function 'preproc_gen_prologue':
-util/bpf-loader.c:457:3: error: 'bpf_program__title' is deprecated: BPF program title is confusing term; please use bpf_program__section_name() instead [-Werror=deprecated-declarations]
-  457 |   title = bpf_program__title(prog, false);
-      |   ^~~~~
-In file included from util/bpf-loader.c:10:
-/home/tklauser/src/linux/tools/lib/bpf/libbpf.h:203:13: note: declared here
-  203 | const char *bpf_program__title(const struct bpf_program *prog, bool needs_copy);
-      |             ^~~~~~~~~~~~~~~~~~
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index 078386d7d9a2..82494810d0ee 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -382,7 +382,7 @@ static void *sock_map_lookup(struct bpf_map *map, void *key)
+ 	struct sock *sk;
+ 
+ 	sk = __sock_map_lookup_elem(map, *(u32 *)key);
+-	if (!sk || !sk_fullsock(sk))
++	if (!sk)
+ 		return NULL;
+ 	if (sk_is_refcounted(sk) && !refcount_inc_not_zero(&sk->sk_refcnt))
+ 		return NULL;
+@@ -1110,7 +1110,7 @@ static void *sock_hash_lookup(struct bpf_map *map, void *key)
+ 	struct sock *sk;
+ 
+ 	sk = __sock_hash_lookup_elem(map, key);
+-	if (!sk || !sk_fullsock(sk))
++	if (!sk)
+ 		return NULL;
+ 	if (sk_is_refcounted(sk) && !refcount_inc_not_zero(&sk->sk_refcnt))
+ 		return NULL;
+-- 
+2.25.1
+
