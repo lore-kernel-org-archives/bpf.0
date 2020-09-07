@@ -2,70 +2,73 @@ Return-Path: <SRS0=5Irp=CQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7DFDC433E2
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:40:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CC1FC2BB84
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:41:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 679C4206B5
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:40:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0F8421775
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:41:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="MAFjd/xV"
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="EdcltclX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729831AbgIGQkb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Sep 2020 12:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
+        id S1731020AbgIGQkf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Sep 2020 12:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730119AbgIGQkY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Sep 2020 12:40:24 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5AEC061573
-        for <bpf@vger.kernel.org>; Mon,  7 Sep 2020 09:40:23 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id z1so16467167wrt.3
-        for <bpf@vger.kernel.org>; Mon, 07 Sep 2020 09:40:23 -0700 (PDT)
+        with ESMTP id S1730829AbgIGQk2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Sep 2020 12:40:28 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92D7C061757
+        for <bpf@vger.kernel.org>; Mon,  7 Sep 2020 09:40:24 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id x14so16378451wrl.12
+        for <bpf@vger.kernel.org>; Mon, 07 Sep 2020 09:40:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sqofUc8zWEtfn+646yQyHV6NmB9WV8nndhuaIKpsu8o=;
-        b=MAFjd/xVjC3AlDAISmhAVdSkBa+rK+WyPVh1o820TCdj1cOCjA6t7eKe9587gOc3gx
-         LBLaH6MKeS36NI/3pBEFBWeeoNSkannYJDSZklk00H2npXEDiNOdLmHvgdSUO0hLaRyH
-         fG5QtcW0vHAirk+PC/g1IDR6sYBgnLm2yG9wvY7+rqwsM+prGYgEhRmzwsFRMm/Oatqy
-         q3cXIRk2uzVPso+wHckUGzY62tV1Ja101lhjQMa+ORlW5tL+xw0Pch0aQYuH+bggwej0
-         r/6XJVWJQZGNNrsU+HFLgtkdqjE6ThF6MAsTUo4ssjB1VI+lu3KIRJbNWWEfJPX/Fdv9
-         cXoA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=dmD2b8RGT1c+PL+8f8t7lEov0+eIeTHs2a/hYyfmvv8=;
+        b=EdcltclXIb0L7iqZaFmlFZpp8qdLKnXAL2omTAKGhcG8eJ1b8SX9dco7Ui4ka/6NNx
+         IwfQRvVzZwfMBfKYiJDpPlKc2zvGfkhD8ZpWj/NvwV3zgNg3BR8hFsdudATYLrTNXI3E
+         8pEGDzFatNWDuxjELS9idZmiXPizgK1NaCAwaGldEOLvOTXzn7bmYaGx2aXve+UZfwCa
+         siFf6dWudNRU2iXdD1cMa96vJOKsHWSXUAfbMcLzMRWCXqv8Pwzv5cFSQ6nrMYuPmNoH
+         cLEBjQKJaf994SciO1CLyfmlaILNTTabTt0kzaHcb2ehkNqV+anJlifzWjARz9KkuPEi
+         I20Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=sqofUc8zWEtfn+646yQyHV6NmB9WV8nndhuaIKpsu8o=;
-        b=nwapOjaOjbrbe1RRdhvZI40TvtlHX1If3wbph6QFJvKgv4YzxInvDr0QuRO3/XVT33
-         MwCkOX9CUeDMMB5+oXxub5fMVXgbs1sd0eE1LZ4m84hnub4wi5u1ghmemDZKvyOdaFG9
-         DVqVgrTUqPESRA3y/Z9WcvbXym1QJWJCNAMJGNXT2sDQ6fYvSL6q3E2iggyLgK9th30d
-         RZBC8UqfCN9FTDt8P0PVxZzkHI9G9Vhxf/TbUeJHRfz1kwsGbmgSB9VEWyiaOHWxlm4C
-         vFttbusTE7xyMsHtpVs4WtqqupBMO1894hV3KibG5T0l5bvm1JxomrZJcCO8PL0qd7tQ
-         e2Gg==
-X-Gm-Message-State: AOAM5306U8Dq+CUqKBMTD3NVUWJGt+krDmXQVBTGY+E+tjoYehZRkh5P
-        RjKCsUSIRY7PB2K6o/1aWi3FCA==
-X-Google-Smtp-Source: ABdhPJzSahTn/UmHXn1MKEztfjpMjfbbGbaZ8uNP+BEZwggJO7Oa4j76uEzfEKzYvr8E0X+GVwHHfg==
-X-Received: by 2002:adf:fcc7:: with SMTP id f7mr22097344wrs.274.1599496820813;
-        Mon, 07 Sep 2020 09:40:20 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=dmD2b8RGT1c+PL+8f8t7lEov0+eIeTHs2a/hYyfmvv8=;
+        b=NFKr+t0shLGdVmwG0cLnY2qGC0BEVV1/bb70HvakHQEGE+PjBE4nVAqlm9xHOzFP0n
+         8DPnR9pib5tSt0hlbfdV8tT6dcmCT7ZQGUZJFcgtBTfpOqH3EQFB8mx3SM7a5cKxmPlq
+         dfoZ4uDYaWp4R1OUzMrQMfkX/SK1iJlSFPIwwgQimi1zG9+TLcTgsKGtpFjl3cGn2i/r
+         9dhPjDw+dJEKTbKIzF6mwZuoWrGAKKzPb7QUoNMX6uFMXjBo9nUaLg8DmaJk0FaLkg05
+         ftGo0P2Ng9rpfx9b9d/VPKqFJ42/RhtMqyjQAG6uLzqYSgluTGx/2FlLYae2MLUZPWlp
+         OPMA==
+X-Gm-Message-State: AOAM531ECK2xf04EiAiI2RJUkRlTFVODHufI8FkS/cF0rBN2AsCNGQpH
+        RqC0nHN9gBFfxpXqYzWR1kSIwA==
+X-Google-Smtp-Source: ABdhPJx9mk/XHsQJvxR3aFpKfZrDwQhWme7+dEKdu79Tn4K1QRVInFlJLIEkcma3dF/ouM+DPChCIg==
+X-Received: by 2002:a5d:69c9:: with SMTP id s9mr4767972wrw.348.1599496822762;
+        Mon, 07 Sep 2020 09:40:22 -0700 (PDT)
 Received: from localhost.localdomain ([194.35.119.187])
-        by smtp.gmail.com with ESMTPSA id d2sm9934895wro.34.2020.09.07.09.40.19
+        by smtp.gmail.com with ESMTPSA id d2sm9934895wro.34.2020.09.07.09.40.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2020 09:40:20 -0700 (PDT)
+        Mon, 07 Sep 2020 09:40:22 -0700 (PDT)
 From:   Quentin Monnet <quentin@isovalent.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next 0/2] bpf: detect build errors for man pages for bpftool and eBPF helpers
-Date:   Mon,  7 Sep 2020 17:40:15 +0100
-Message-Id: <20200907164017.30644-1-quentin@isovalent.com>
+Subject: [PATCH bpf-next 2/2] selftests, bpftool: add bpftool (and eBPF helpers) documentation build
+Date:   Mon,  7 Sep 2020 17:40:17 +0100
+Message-Id: <20200907164017.30644-3-quentin@isovalent.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200907164017.30644-1-quentin@isovalent.com>
+References: <20200907164017.30644-1-quentin@isovalent.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -73,26 +76,57 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This set aims at improving the checks for building bpftool's documentation
-(including the man page for eBPF helper functions). The first patch lowers
-the log-level from rst2man and fix the reported informational messages. The
-second one extends the script used to build bpftool in the eBPF selftests,
-so that we also check a documentation build.
+eBPF selftests include a script to check that bpftool builds correctly
+with different command lines. Let's add one build for bpftool's
+documentation so as to detect errors or warning reported by rst2man when
+compiling the man pages.
 
-This is after a suggestion from Andrii Nakryiko.
+This also builds and checks warnings for the man page for eBPF helpers,
+which is built along bpftool's documentation.
 
-Quentin Monnet (2):
-  tools: bpftool: log info-level messages when building bpftool man
-    pages
-  selftests, bpftool: add bpftool (and eBPF helpers) documentation build
-
- tools/bpf/bpftool/Documentation/Makefile      |  2 +-
- .../bpf/bpftool/Documentation/bpftool-btf.rst |  3 +++
- .../bpf/bpftool/Documentation/bpftool-gen.rst |  4 ++++
- .../bpf/bpftool/Documentation/bpftool-map.rst |  3 +++
+Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+---
  .../selftests/bpf/test_bpftool_build.sh       | 23 +++++++++++++++++++
- 5 files changed, 34 insertions(+), 1 deletion(-)
+ 1 file changed, 23 insertions(+)
 
+diff --git a/tools/testing/selftests/bpf/test_bpftool_build.sh b/tools/testing/selftests/bpf/test_bpftool_build.sh
+index ac349a5cea7e..22fbf1bf6eec 100755
+--- a/tools/testing/selftests/bpf/test_bpftool_build.sh
++++ b/tools/testing/selftests/bpf/test_bpftool_build.sh
+@@ -85,6 +85,25 @@ make_with_tmpdir() {
+ 	echo
+ }
+ 
++make_doc_and_clean() {
++	echo -e "\$PWD:    $PWD"
++	echo -e "command: make -s $* doc >/dev/null"
++	# rst2man returns 0 even in case of warnings/errors, so we check that
++	# stderr is empty.
++	make $J -s $* doc |& tee /dev/stderr | [ $(wc -l) -eq 0 ] || false
++	if [ $? -ne 0 ] ; then
++		ERROR=1
++		printf "FAILURE: Errors or warnings when building documentation\n"
++	fi
++	(
++		if [ $# -ge 1 ] ; then
++			cd ${@: -1}
++		fi
++		make -s doc-clean
++	)
++	echo
++}
++
+ echo "Trying to build bpftool"
+ echo -e "... through kbuild\n"
+ 
+@@ -145,3 +164,7 @@ make_and_clean
+ make_with_tmpdir OUTPUT
+ 
+ make_with_tmpdir O
++
++echo -e "Checking documentation build\n"
++# From tools/bpf/bpftool
++make_doc_and_clean
 -- 
 2.25.1
 
