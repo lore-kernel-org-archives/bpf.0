@@ -2,234 +2,102 @@ Return-Path: <SRS0=5Irp=CQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 68DEAC433E2
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:42:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EE825C433E2
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 17:00:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2BDEF208C7
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:42:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A188207DE
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 17:00:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="Fk8rzZu7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hdUgddej"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730885AbgIGQmu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Sep 2020 12:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34590 "EHLO
+        id S1731228AbgIGQ7N (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Sep 2020 12:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730910AbgIGQgn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Sep 2020 12:36:43 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E710C061755
-        for <bpf@vger.kernel.org>; Mon,  7 Sep 2020 09:36:42 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id a17so16392464wrn.6
-        for <bpf@vger.kernel.org>; Mon, 07 Sep 2020 09:36:42 -0700 (PDT)
+        with ESMTP id S1731070AbgIGQ7I (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Sep 2020 12:59:08 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC589C061573;
+        Mon,  7 Sep 2020 09:59:07 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id o8so5824994ejb.10;
+        Mon, 07 Sep 2020 09:59:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=w1o8W2B7Zhme6wXQ+MUTOwcBEeetzzjkb46yP9OL+9Y=;
-        b=Fk8rzZu74dzkud4w0RH5Tq8dgt5syuBgJ0kA77yLP2SixiisbRuNRjUk45JBTd5v5G
-         CLGr5Q4XC4pMMXQIAyhiaGdT/eWrEKRI2GTYCF9ACIklsxlw9fPHZgPhtKyvLQxmAPDt
-         V1q5IKg8HvrMrX57Rns5CPXbWavAPn6a69nAmOmKZgnY5IW/s+56XQz/HDEwlb2RgQC2
-         4Byth4ZekzJneVL+6I1KZUPoBHZTtrIPt7+MzYX6GNcqGT/bn0DqHwCIbYi0aSkgC5xk
-         bBKG7OpFwxUhkAO8th0nH+ZWoJh1I8PAlxykD3+6jKRSWfFzNA1fAPxFrXTEOqb5Rx7t
-         GrEg==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FSSQ5eEjvBfhK807SWIcw97DGS95KSklYE2gmtef1t0=;
+        b=hdUgddej3tJJcBEACrFgAVYJeTJBrmtxkkiIZgZ5crLTxdO5vBp6/vqVL7OOtLdWU+
+         B/b++CvkPUsj75RtGRYARrHiKWG26UpWPNaHHWjiKDgVNnH7bl7H9dF+yCiP0JJr3SsZ
+         2KMBVCkINnAJRoqAhOL/japDvVF1GQmKTC3HETcPZ9Br58r97a+0S0iKo0bbUDysvkD7
+         thgFNCC5BkKoADP6mIhRToUobE8BD4mtZGJsqD22aH7v5+eoA+L9ScnWkCy2AbK/Spy9
+         u8DNo7SVJ0tX8TvaT72yIEF3KdY7OL0xmjGWDAxzVl6oWRSqQsDWFu0vbBm1CIu+im55
+         pOFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=w1o8W2B7Zhme6wXQ+MUTOwcBEeetzzjkb46yP9OL+9Y=;
-        b=S9gk0PrBS0UlaGMXTxW7Eqex07r6f/e1l8vCNAymXQsJ+dlrLYgqzClCCT6v5AR+om
-         VNiRzPplMH912OeBMJ9CF5AoZgXyLqyV37vbHhNYuPB503m39CwzyyLJV/IizGKBTtJH
-         G6t92lHj1nm38ICpxMA715BfC6ZHRr9p8hncytW9XUE7DuKPv4ZbaQis6+Qya9V5o3rk
-         qtfWgSOKHrXwehP190MqhVqg1kWcJPlfAXQnpiThrvy8sMMAeQLttsO4Wdu9b3GRBh5l
-         MtmOmgJesDDh+al9wDRl2JTikI+6znaIKd2gnayYzu+dknaky/NMaTS4kY0DAs9d9MLt
-         +tBg==
-X-Gm-Message-State: AOAM533Nuw08zsjdDnHWoyuWVTdvWLC+CcIuEqAKCMUQ0n2/cx6eucVV
-        rOkcLUrd9oh9XirLMK5Fuw0z2A==
-X-Google-Smtp-Source: ABdhPJx/YhoGx9+d1gk+CLtrXEOer35LvJlBjS9IhQXG+fqw3H36DLFpDYSzCbtWr8BrBfgOJTg3nA==
-X-Received: by 2002:a5d:668b:: with SMTP id l11mr18448771wru.89.1599496601559;
-        Mon, 07 Sep 2020 09:36:41 -0700 (PDT)
-Received: from localhost.localdomain ([194.35.119.17])
-        by smtp.gmail.com with ESMTPSA id p11sm26443677wma.11.2020.09.07.09.36.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2020 09:36:40 -0700 (PDT)
-From:   Quentin Monnet <quentin@isovalent.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next v2 1/2] tools: bpftool: clean up function to dump map entry
-Date:   Mon,  7 Sep 2020 17:36:33 +0100
-Message-Id: <20200907163634.27469-2-quentin@isovalent.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200907163634.27469-1-quentin@isovalent.com>
-References: <20200907163634.27469-1-quentin@isovalent.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FSSQ5eEjvBfhK807SWIcw97DGS95KSklYE2gmtef1t0=;
+        b=cWdYFvU6995Zy79V/joBR3eouDsMCz3346IMg81aqehdGIOJckFGk0NMZmxjfXm/eK
+         WAMDdjxxm2QbxcXtHmtzuZcJ9Jc5X6YEukLU8hPdLY7XhLAsWxAl+0F5TMuykv3f+nET
+         TNcNFCVLjCEI5T1VIvXNeaACRqThju7JoQR8/MD0uUtqrwlWsTSAL0vCGde9gz2N3s9C
+         kblzr+FWd/UCZZHAe2W/sksshLaPQzPlNT9wBrfePQ068Eo/+kce1W+lCbtKiaJS9jNK
+         tEo93YzWWXNukg+vxW/Rq1dayLlHBlLGWITDKzQYDx2p76Dt3kMvPsQmXk2R0wOGqH2y
+         Sj9w==
+X-Gm-Message-State: AOAM530DVjCWSSBjHvsVBq5KYdJ1EZZIdK5XqSD5/j0YSlp5e88aGi29
+        jXMJ/8D/TP4rA6TvqGMmt3AEEuDdl2Noi73oQA==
+X-Google-Smtp-Source: ABdhPJw0eeuTYNiz4u8KLsJa0QaI0XDiRttA1yFczCd1re+DXlZlEibVxxBwnSsWyc34jTKiLtZc76yaC2LFgDEtfaY=
+X-Received: by 2002:a17:906:4c51:: with SMTP id d17mr21659428ejw.28.1599497946504;
+ Mon, 07 Sep 2020 09:59:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200905154137.24800-1-danieltimlee@gmail.com> <5f562f6a.1c69fb81.b9e0.0669SMTPIN_ADDED_BROKEN@mx.google.com>
+In-Reply-To: <5f562f6a.1c69fb81.b9e0.0669SMTPIN_ADDED_BROKEN@mx.google.com>
+From:   "Daniel T. Lee" <danieltimlee@gmail.com>
+Date:   Tue, 8 Sep 2020 01:58:57 +0900
+Message-ID: <CAEKGpzj5QszNFeDbj7aZsg0jxRYhHC3j4wPhTGTLhZMwZjut=g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] samples: bpf: refactor xdp_sample_pkts_kern with
+ BTF-defined map
+To:     Michal Rostecki <mrostecki@opensuse.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The function used to dump a map entry in bpftool is a bit difficult to
-follow, as a consequence to earlier refactorings. There is a variable
-("num_elems") which does not appear to be necessary, and the error
-handling would look cleaner if moved to its own function. Let's clean it
-up. No functional change.
+On Mon, Sep 7, 2020 at 10:02 PM Michal Rostecki <mrostecki@opensuse.org> wrote:
+>
+> Daniel T. Lee writes:
+> > Most of the samples were converted to use the new BTF-defined MAP as
+> > they moved to libbbpf, but some of the samples were missing.
+> >
+> > Instead of using the previous BPF MAP definition, this commit refactors
+> > xdp_sample_pkts_kern MAP definition with the new BTF-defined MAP format.
+> >
+> > Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
+> > ---
+> >  samples/bpf/xdp_sample_pkts_kern.c | 12 ++++++------
+> >  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> I see that samples/bpf/ibumad_kern.c and samples/bpf/xdp_monitor_kern.c
+> still have old style BPF map definitions. Maybe you could change them as
+> well?
 
-v2:
-- v1 was erroneously removing the check on fd maps in an attempt to get
-  support for outer map dumps. This is already working. Instead, v2
-  focuses on cleaning up the dump_map_elem() function, to avoid
-  similar confusion in the future.
 
-Signed-off-by: Quentin Monnet <quentin@isovalent.com>
----
- tools/bpf/bpftool/map.c | 101 +++++++++++++++++++++-------------------
- 1 file changed, 52 insertions(+), 49 deletions(-)
+Thanks for the review!
 
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index bc0071228f88..c8159cb4fb1e 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -213,8 +213,9 @@ static void print_entry_json(struct bpf_map_info *info, unsigned char *key,
- 	jsonw_end_object(json_wtr);
- }
- 
--static void print_entry_error(struct bpf_map_info *info, unsigned char *key,
--			      const char *error_msg)
-+static void
-+print_entry_error_msg(struct bpf_map_info *info, unsigned char *key,
-+		      const char *error_msg)
- {
- 	int msg_size = strlen(error_msg);
- 	bool single_line, break_names;
-@@ -232,6 +233,40 @@ static void print_entry_error(struct bpf_map_info *info, unsigned char *key,
- 	printf("\n");
- }
- 
-+static void
-+print_entry_error(struct bpf_map_info *map_info, void *key, int lookup_errno)
-+{
-+	/* For prog_array maps or arrays of maps, failure to lookup the value
-+	 * means there is no entry for that key. Do not print an error message
-+	 * in that case.
-+	 */
-+	if (map_is_map_of_maps(map_info->type) ||
-+	    map_is_map_of_progs(map_info->type))
-+		return;
-+
-+	if (json_output) {
-+		jsonw_start_object(json_wtr);	/* entry */
-+		jsonw_name(json_wtr, "key");
-+		print_hex_data_json(key, map_info->key_size);
-+		jsonw_name(json_wtr, "value");
-+		jsonw_start_object(json_wtr);	/* error */
-+		jsonw_string_field(json_wtr, "error", strerror(lookup_errno));
-+		jsonw_end_object(json_wtr);	/* error */
-+		jsonw_end_object(json_wtr);	/* entry */
-+	} else {
-+		const char *msg = NULL;
-+
-+		if (lookup_errno == ENOENT)
-+			msg = "<no entry>";
-+		else if (lookup_errno == ENOSPC &&
-+			 map_info->type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY)
-+			msg = "<cannot read>";
-+
-+		print_entry_error_msg(map_info, key,
-+				      msg ? : strerror(lookup_errno));
-+	}
-+}
-+
- static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
- 			      unsigned char *value)
- {
-@@ -713,56 +748,23 @@ static int dump_map_elem(int fd, void *key, void *value,
- 			 struct bpf_map_info *map_info, struct btf *btf,
- 			 json_writer_t *btf_wtr)
- {
--	int num_elems = 0;
--	int lookup_errno;
--
--	if (!bpf_map_lookup_elem(fd, key, value)) {
--		if (json_output) {
--			print_entry_json(map_info, key, value, btf);
--		} else {
--			if (btf) {
--				struct btf_dumper d = {
--					.btf = btf,
--					.jw = btf_wtr,
--					.is_plain_text = true,
--				};
--
--				do_dump_btf(&d, map_info, key, value);
--			} else {
--				print_entry_plain(map_info, key, value);
--			}
--			num_elems++;
--		}
--		return num_elems;
-+	if (bpf_map_lookup_elem(fd, key, value)) {
-+		print_entry_error(map_info, key, errno);
-+		return -1;
- 	}
- 
--	/* lookup error handling */
--	lookup_errno = errno;
--
--	if (map_is_map_of_maps(map_info->type) ||
--	    map_is_map_of_progs(map_info->type))
--		return 0;
--
- 	if (json_output) {
--		jsonw_start_object(json_wtr);
--		jsonw_name(json_wtr, "key");
--		print_hex_data_json(key, map_info->key_size);
--		jsonw_name(json_wtr, "value");
--		jsonw_start_object(json_wtr);
--		jsonw_string_field(json_wtr, "error", strerror(lookup_errno));
--		jsonw_end_object(json_wtr);
--		jsonw_end_object(json_wtr);
--	} else {
--		const char *msg = NULL;
--
--		if (lookup_errno == ENOENT)
--			msg = "<no entry>";
--		else if (lookup_errno == ENOSPC &&
--			 map_info->type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY)
--			msg = "<cannot read>";
-+		print_entry_json(map_info, key, value, btf);
-+	} else if (btf) {
-+		struct btf_dumper d = {
-+			.btf = btf,
-+			.jw = btf_wtr,
-+			.is_plain_text = true,
-+		};
- 
--		print_entry_error(map_info, key,
--				  msg ? : strerror(lookup_errno));
-+		do_dump_btf(&d, map_info, key, value);
-+	} else {
-+		print_entry_plain(map_info, key, value);
- 	}
- 
- 	return 0;
-@@ -873,7 +875,8 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
- 				err = 0;
- 			break;
- 		}
--		num_elems += dump_map_elem(fd, key, value, info, btf, wtr);
-+		if (!dump_map_elem(fd, key, value, info, btf, wtr))
-+			num_elems++;
- 		prev_key = key;
- 	}
- 
--- 
-2.25.1
+Actually, I'm well aware that there are some samples left with old style map
+definitions, But those examples should be transferred from bpf_load to
+libbbpf, not just bpf map changes.
 
+I'm also planning to refactor those patches in the future.
+For now I've just refactored this file, but if you think this patch
+size is small,
+I'll send it with other changes.
