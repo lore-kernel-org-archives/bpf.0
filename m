@@ -2,133 +2,105 @@ Return-Path: <SRS0=5Irp=CQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9208EC433E2
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 14:50:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63200C43461
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 15:03:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CE75215A4
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 14:50:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 29F6621481
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 15:03:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="WSD0N0SP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NcmCsZqy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729990AbgIGOts (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Sep 2020 10:49:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
+        id S1730104AbgIGPDY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Sep 2020 11:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730008AbgIGOtl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Sep 2020 10:49:41 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA51C061575
-        for <bpf@vger.kernel.org>; Mon,  7 Sep 2020 07:49:39 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id x14so16043766wrl.12
-        for <bpf@vger.kernel.org>; Mon, 07 Sep 2020 07:49:39 -0700 (PDT)
+        with ESMTP id S1730084AbgIGPCt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Sep 2020 11:02:49 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B143C061755;
+        Mon,  7 Sep 2020 08:02:48 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id v15so8150853pgh.6;
+        Mon, 07 Sep 2020 08:02:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=i3X9AwHqV2PdCwhnBEigdjE7qNVl8KxFfSqLBkYYfwk=;
-        b=WSD0N0SPm2DeLiNtK22+aF8jRobUtyHJupJjOeLc1JeDDiQvZzD1LoeOofiviya2cd
-         W3fFJQrEUF+FQiXKhbZRvX7LnweOFeau6H/YNoB5uQuvtoGqckaHwwcTaJx2u1sDtNVd
-         jbM+EE/7rh1GTdjWLF6zHyBskOAv085ui2x9dbFKcF1fnKsa/ZDyvRdTG9ahVsl/rg2E
-         kIc5nR54M6zsH/8Ut6F6oxoqB/Ue5KLZzk+9Y2lpdZrAyUCZFDBQFANU/JxPnH0rCZDA
-         Bk25h5bp8wwNVXQUyr7OM0gVsjXdg33UZkMwiaET6pCYGGA6wFEKPWdHeJHZijE3wTwe
-         rGVA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=oi4BSZHdphLvMn4ImifMad+2Dzg1/daPi3Jxv2xnQrs=;
+        b=NcmCsZqyCCq+KwtlcULSkCBfkjSDbIC6YHcT/uAIpORTGHCs3JrlZ0GL17TJSobwkq
+         n4FhtNTGrv/AnGiFZoZkLj9JY1Y+4wY4lBiOWFx7+b8yYXemJKwnsfcFpgz11t27Ik4z
+         gaitglCZf7n37ihZLFM2alBSrmcWjaSTu4O/pDozVCCeunH1UGTKCy/7ANBQ9oaaWaSy
+         F/il0qCN65nxGXP/lWtzxcf+vKv25+T4QP4gZyuAaBis/1TPJByNvJ8TR08rLz2KVeu1
+         NYaXHvlqndCRvd8KcUGC9x//1Q24d1C9Dk4NQXDXG3SqKl9cC1ucsovrAJYgxwwKKCP3
+         X2+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=i3X9AwHqV2PdCwhnBEigdjE7qNVl8KxFfSqLBkYYfwk=;
-        b=XSALe96ulOjawXt1EVE+83ZYKIL8Cp/XxWc4Xv834/X0i6KcaYp18zS6MJ360TD0tf
-         MVD87TjyH49YhznwoLgQaFDgk9BISxtr+UikcwbTRqGV5EwxWCzgf21b9vBV6EubQFKX
-         MrpSbSlH+iaQpCMcPjye4Vn823fXBwSONZmiz4ioY5fNYq/ekOeXbi7kDomA45NTixqm
-         7CdpgeyHZDCvkz41p3sMvzqvZyA3TJoLIa5AKvzXpBKQFk2DqPAGLadnrMrWlf6nhW1T
-         eJ8rgc+iFVS/9q0WdjkpSIvv+GAi/J8n8jnFB3vxuUg0d7A5/6Bci23azboW56jaOnXR
-         lQmw==
-X-Gm-Message-State: AOAM530g5/SVow6zIYuIE0K0/YAZixP7+ene+iyY8dVZM40u5N6ssnK9
-        +zlsQ0wA4XCARy4qXHI8SmI1rC6x72EIXHSO
-X-Google-Smtp-Source: ABdhPJzEjMlQEAU9vmXm11Dv7SHOUnxf+aY52t89xTXJboKX/jo5zvlCBEQvarUW8UK5NAijkC7DcQ==
-X-Received: by 2002:adf:f903:: with SMTP id b3mr22690308wrr.142.1599490176092;
-        Mon, 07 Sep 2020 07:49:36 -0700 (PDT)
-Received: from [192.168.1.12] ([194.35.119.8])
-        by smtp.gmail.com with ESMTPSA id z9sm27921046wmg.46.2020.09.07.07.49.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Sep 2020 07:49:35 -0700 (PDT)
-Subject: Re: [PATCH bpf-next 1/2] tools: bpftool: dump outer maps content
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Martynas Pumputis <m@lambda.lt>
-References: <20200904161313.29535-1-quentin@isovalent.com>
- <20200904161313.29535-2-quentin@isovalent.com>
- <CAEf4BzbEE9sGp=z6MUuFoR=1_Ma27p-nH5BkEN+p2j20mhJ3mQ@mail.gmail.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-Message-ID: <4db0675f-ddc3-188f-f1ab-cc6d85010955@isovalent.com>
-Date:   Mon, 7 Sep 2020 15:49:35 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.2.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=oi4BSZHdphLvMn4ImifMad+2Dzg1/daPi3Jxv2xnQrs=;
+        b=DPKTTTT2zjR5uAEQ42bV1naxCmsANbCwM4RdHv47lLjWNqm10KFgfleWiVFZ7yoeA1
+         GdBAWNSp4J3VhmHh4A4tgQ7QQHnlCaN/Bbx+YVwZw13ISIrpGo7MkBK8wXu+Jc1Qdju1
+         e10kLvtOncWUwMzEKgmG9zQOpeaq+Fju+oJGJ0yMMxJPCfZXLz4GxyOC2NleznUtYSwy
+         U0/m3h3wiB2JmdgepbZDNz/Tl+rG/oCyc2zvpsR9Ge12vyesqs+eTvj2oO/XM3IGMcPJ
+         X+0gKYjDe1zUzocMx5h9Hgb68NqDpEiJsLMl1rVGsIKdnzzLuUbhXz277Kw77VqLLw43
+         VqaQ==
+X-Gm-Message-State: AOAM530hB4d98yLsLvRajzOsvr0zsDu8a/u4bxmV8TOyGeU2p1AgJ2uw
+        pkqNa/nsBBg60t0S95t4CBs=
+X-Google-Smtp-Source: ABdhPJyK0Eh/ki5AGgO8dibVUfobmkKI1lVGKcG2ekDu8CgUcH2I44/GYY3jjsR8QDXg9+H8arJEZw==
+X-Received: by 2002:a62:14d4:: with SMTP id 203mr1508796pfu.186.1599490967814;
+        Mon, 07 Sep 2020 08:02:47 -0700 (PDT)
+Received: from btopel-mobl.ger.intel.com ([192.55.55.43])
+        by smtp.gmail.com with ESMTPSA id g129sm15436022pfb.33.2020.09.07.08.02.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Sep 2020 08:02:47 -0700 (PDT)
+From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        magnus.karlsson@intel.com, kuba@kernel.org,
+        intel-wired-lan@lists.osuosl.org
+Subject: [PATCH bpf-next 3/4] ice, xsk: use XSK_NAPI_WEIGHT as NAPI poll budget
+Date:   Mon,  7 Sep 2020 17:02:16 +0200
+Message-Id: <20200907150217.30888-4-bjorn.topel@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200907150217.30888-1-bjorn.topel@gmail.com>
+References: <20200907150217.30888-1-bjorn.topel@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzbEE9sGp=z6MUuFoR=1_Ma27p-nH5BkEN+p2j20mhJ3mQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 04/09/2020 23:03, Andrii Nakryiko wrote:
-> On Fri, Sep 4, 2020 at 9:14 AM Quentin Monnet <quentin@isovalent.com> wrote:
->>
->> Although user space can lookup and dump the content of an outer map
->> (hash-of-maps or array-of-maps), bpftool does not allow to do so.
->>
->> It seems that the only reason for that is historical. Lookups for outer
->> maps was added in commit 14dc6f04f49d ("bpf: Add syscall lookup support
->> for fd array and htab"), and although the relevant code in bpftool had
->> not been merged yet, I suspect it had already been written with the
->> assumption that user space could not read outer maps.
->>
->> Let's remove the restriction, dump for outer maps works with no further
->> change.
->>
->> Reported-by: Martynas Pumputis <m@lambda.lt>
->> Signed-off-by: Quentin Monnet <quentin@isovalent.com>
->> ---
->>  tools/bpf/bpftool/map.c | 4 ----
->>  1 file changed, 4 deletions(-)
->>
->> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
->> index bc0071228f88..cb3a75eb5531 100644
->> --- a/tools/bpf/bpftool/map.c
->> +++ b/tools/bpf/bpftool/map.c
->> @@ -739,10 +739,6 @@ static int dump_map_elem(int fd, void *key, void *value,
->>         /* lookup error handling */
->>         lookup_errno = errno;
->>
->> -       if (map_is_map_of_maps(map_info->type) ||
->> -           map_is_map_of_progs(map_info->type))
->> -               return 0;
->> -
-> 
-> this code path handles the error case when lookup fails, or am I
-> misreading it? It's fine to remove this restriction, but the commit
-> message is completely misleading. That whole dump_map_elem() code is a
-> bit confusing. E.g., what's the purpose of num_elems there?..
-> 
-> Also, can you please update the commit message with how the output
-> looks like for map-of-maps with your change?
+From: Björn Töpel <bjorn.topel@intel.com>
 
-Ok, the function _is_ confusing and _I_ totally got confused. Dumping
-outer maps is already supported and this patch is not needed (and as you
-mentioned, it does not do what I expected and wrote). Sorry about that.
+Start using XSK_NAPI_WEIGHT as NAPI poll budget for the AF_XDP Rx
+zero-copy path.
 
-I'll send a clean-up for that function instead in v2, to avoid confusion
-in the future. Thanks for the review!
+Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+---
+ drivers/net/ethernet/intel/ice/ice_xsk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Quentin
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index 797886524054..cb473ccdf613 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -561,7 +561,7 @@ int ice_clean_rx_irq_zc(struct ice_ring *rx_ring, int budget)
+ 	unsigned int xdp_xmit = 0;
+ 	bool failure = false;
+ 
+-	while (likely(total_rx_packets < (unsigned int)budget)) {
++	while (likely(total_rx_packets < XSK_NAPI_WEIGHT)) {
+ 		union ice_32b_rx_flex_desc *rx_desc;
+ 		unsigned int size, xdp_res = 0;
+ 		struct ice_rx_buf *rx_buf;
+-- 
+2.25.1
+
