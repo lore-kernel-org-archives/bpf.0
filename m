@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B6447C433E2
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:41:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0EA67C43461
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:42:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5D23B21532
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:41:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C546E207DE
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:42:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="tFC8ebq1"
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="ToM4U/qV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730678AbgIGQlI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Sep 2020 12:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35176 "EHLO
+        id S1730668AbgIGQmO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Sep 2020 12:42:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730905AbgIGQkY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Sep 2020 12:40:24 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7491C061755
-        for <bpf@vger.kernel.org>; Mon,  7 Sep 2020 09:40:23 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id l9so14756259wme.3
-        for <bpf@vger.kernel.org>; Mon, 07 Sep 2020 09:40:23 -0700 (PDT)
+        with ESMTP id S1730949AbgIGQiK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Sep 2020 12:38:10 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A69C061756
+        for <bpf@vger.kernel.org>; Mon,  7 Sep 2020 09:38:09 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id q9so14915579wmj.2
+        for <bpf@vger.kernel.org>; Mon, 07 Sep 2020 09:38:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=I8wCFuJU0Og2ORXiyJtRFP7tNYq0Nqq6buOkhSo/qnU=;
-        b=tFC8ebq1Igo6X1/lUQDrP/oRFNwnslRG5ImFqF9wTFCMMSUKhmtiykxfLpNKZdNs7G
-         C10Tm0UO94ZolKIs07XKREWA+lyv6lQkKA28E3HOYEfkATEoTyRN87M1r8nWqu9MZUaX
-         ym8IfpMsIIBs8+iDbZ/WN3UfoQ1wpCw6Akfbub/H4XEfFWjnH463ZSJT7UcZj+Nu7uIq
-         OB4PkxkbQuVjLzyiATlmepfdL1x4MabwcQwKlxlIv5Bi7Nva4pIyoEzNkE6TPnu41Wih
-         gPQCy7KTd7RCt380YeV5ks7c8J22P85L4rV6QUJg6A4yF1qhHsWL0lechaocV79HqxMu
-         dq+A==
+        bh=b2xWEMPcmt/iqgsnU6EN8PE8BpQh8kn2V7/tuMrBBZM=;
+        b=ToM4U/qV4BMWoSDOTYQJ21ekOH8A3oku2Q7cuTQI2Zg2fw7ycqgfS7q/152A4iiYRm
+         uO4MnOSgfkdL8/qJqgSdLbEMgPpDjRg+ebEh78eXQW1e2DBwARnkqAEza9rpLGelqUEJ
+         KVBaVZI/EO7ILVKlDQ41c5tpImTkLgrrhJzG8Ff+h10RL5Xuv1Oys8Q2wfFgzZl9sz8R
+         IvnxMDEntXu8KtVGwT0ialMjRQPFv3BxQqK3h3x/0t9TDX8chbRmJ11Vj2CqliYCeR3J
+         dRYonD3ZF7cPrzTH6q70UGofVC8dVu3DwOhZ/iqSxxhrUhLnA03BbM14oubtRESeuLX2
+         m9Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=I8wCFuJU0Og2ORXiyJtRFP7tNYq0Nqq6buOkhSo/qnU=;
-        b=VY6LXFDx16Y7KVctPbSvAkZssE67HtIYTl138NTIoU7tYaaAv1JD2WHvUXdQ+OJ60a
-         hxATsGGeSkSp0m+XYjlmOE7bS/UuJ/iJ16rvmwA1gxVUNbQwqwDahLje7WrZAq+AeGHa
-         itYqEYCJY+INHqZkopb+QBIWgz7HY+kBZMP8aS3BjW8BiioPdGVU8dI7UhCkT94SST5j
-         J2088tlFeSoCykfExswAL9V7iiOXcDmSPP9wgARTu2SzoElGWOM+Qh/5juQBn7ftgjrI
-         3PsyiyoaQ3G53M4LBzUel294jt5s/BgqaYWTZkdQl7IzfWoqBpZwvQA5w7VdG+cpCx8o
-         ozXA==
-X-Gm-Message-State: AOAM5334xYhVwPD3IqEUQPRIh4KO8Itlcd/p8WnWXIQ8u6ctHgafUuAn
-        9BWr2t8jSrO08rPzZ0mkQPBz7A==
-X-Google-Smtp-Source: ABdhPJwErNckX12lW8vfabhGZNcDE0Ix0dGRrtXPvdbluPRU4j4HJ5FQIMqfX9rwlE4TaMhnfuP/4Q==
-X-Received: by 2002:a1c:2903:: with SMTP id p3mr183752wmp.170.1599496821731;
-        Mon, 07 Sep 2020 09:40:21 -0700 (PDT)
-Received: from localhost.localdomain ([194.35.119.187])
-        by smtp.gmail.com with ESMTPSA id d2sm9934895wro.34.2020.09.07.09.40.20
+        bh=b2xWEMPcmt/iqgsnU6EN8PE8BpQh8kn2V7/tuMrBBZM=;
+        b=BrSR1lmoOi2JHJ39T+5KWvsocBXl9SwSYR+UFDYCMsXJ0Ff3FH/8pUH37tEg2UIm3i
+         ayQ5isEhZ+hDNdZ0EmRsByA0zmFv0jpjbVAsXkAYlWY27TGs8FOj8HLulh1l9Kb9vtqo
+         FJcBaCughiCqO9dA2JPtm0csv0CuhheArJ8j6c2zK80laVkems6DxpfY0XwH4GtFICmA
+         gofR+edhHMakl6BybVexbHxl+AIey8AutGTJDZZxth/59KUEy6qpZxQ1DDXEssmET2hg
+         oFAfQOOlg+uKKMfrM6rEUlbdYoajlylsLi7XwIABlgJcjkgoMw69qvWhcVPJqcEL6qbL
+         RCBQ==
+X-Gm-Message-State: AOAM531cBuhRztr6HC+Fw5i/h04hATHLIS9WuuWFBA0O7Ma6vnErUmjh
+        vQCEwUR+8xqj6BvwdXUjgpJeBKoFO37EUiOU
+X-Google-Smtp-Source: ABdhPJzoI9xxdZ10nw+rquNPnLj2xG2ZSwpqD6J/HI1yG5jX0jTGax21edF69eJa8spo+dHxjGSz1w==
+X-Received: by 2002:a1c:f415:: with SMTP id z21mr185324wma.88.1599496688198;
+        Mon, 07 Sep 2020 09:38:08 -0700 (PDT)
+Received: from localhost.localdomain ([194.35.119.17])
+        by smtp.gmail.com with ESMTPSA id g12sm26546580wro.89.2020.09.07.09.38.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2020 09:40:21 -0700 (PDT)
+        Mon, 07 Sep 2020 09:38:07 -0700 (PDT)
 From:   Quentin Monnet <quentin@isovalent.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next 1/2] tools: bpftool: log info-level messages when building bpftool man pages
-Date:   Mon,  7 Sep 2020 17:40:16 +0100
-Message-Id: <20200907164017.30644-2-quentin@isovalent.com>
+        Quentin Monnet <quentin@isovalent.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Subject: [PATCH bpf-next v2 2/3] tools: bpftool: include common options from separate file
+Date:   Mon,  7 Sep 2020 17:38:03 +0100
+Message-Id: <20200907163804.29244-3-quentin@isovalent.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200907164017.30644-1-quentin@isovalent.com>
-References: <20200907164017.30644-1-quentin@isovalent.com>
+In-Reply-To: <20200907163804.29244-1-quentin@isovalent.com>
+References: <20200907163804.29244-1-quentin@isovalent.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -76,127 +77,448 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To build man pages for bpftool (and for eBPF helper functions), rst2man
-can log different levels of information. Let's make it log all levels
-to keep the RST files clean.
+Nearly all man pages for bpftool have the same common set of option
+flags (--help, --version, --json, --pretty, --debug). The description is
+duplicated across all the pages, which is more difficult to maintain if
+the description of an option changes. It may also be confusing to sort
+out what options are not "common" and should not be copied when creating
+new manual pages.
 
-Doing so, rst2man complains about double colons, used for literal
-blocks, that look like underlines for section titles. Let's add the
-necessary blank lines.
+Let's move the description for those common options to a separate file,
+which is included with a RST directive when generating the man pages.
 
 Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/bpf/bpftool/Documentation/Makefile        | 2 +-
- tools/bpf/bpftool/Documentation/bpftool-btf.rst | 3 +++
- tools/bpf/bpftool/Documentation/bpftool-gen.rst | 4 ++++
- tools/bpf/bpftool/Documentation/bpftool-map.rst | 3 +++
- 4 files changed, 11 insertions(+), 1 deletion(-)
+ tools/bpf/bpftool/Documentation/Makefile      |  2 +-
+ .../bpf/bpftool/Documentation/bpftool-btf.rst | 17 +------------
+ .../bpftool/Documentation/bpftool-cgroup.rst  | 17 +------------
+ .../bpftool/Documentation/bpftool-feature.rst | 17 +------------
+ .../bpf/bpftool/Documentation/bpftool-gen.rst | 17 +------------
+ .../bpftool/Documentation/bpftool-iter.rst    | 11 +--------
+ .../bpftool/Documentation/bpftool-link.rst    | 17 +------------
+ .../bpf/bpftool/Documentation/bpftool-map.rst | 17 +------------
+ .../bpf/bpftool/Documentation/bpftool-net.rst | 17 +------------
+ .../bpftool/Documentation/bpftool-perf.rst    | 17 +------------
+ .../bpftool/Documentation/bpftool-prog.rst    | 18 +-------------
+ .../Documentation/bpftool-struct_ops.rst      | 18 +-------------
+ tools/bpf/bpftool/Documentation/bpftool.rst   | 24 +------------------
+ .../bpftool/Documentation/common_options.rst  | 22 +++++++++++++++++
+ 14 files changed, 35 insertions(+), 196 deletions(-)
+ create mode 100644 tools/bpf/bpftool/Documentation/common_options.rst
 
 diff --git a/tools/bpf/bpftool/Documentation/Makefile b/tools/bpf/bpftool/Documentation/Makefile
-index 815ac9804aee..e871f28a5312 100644
+index 815ac9804aee..becbb8c52257 100644
 --- a/tools/bpf/bpftool/Documentation/Makefile
 +++ b/tools/bpf/bpftool/Documentation/Makefile
-@@ -33,7 +33,7 @@ $(OUTPUT)%.8: %.rst
- ifndef RST2MAN_DEP
- 	$(error "rst2man not found, but required to generate man pages")
- endif
--	$(QUIET_GEN)rst2man $< > $@
-+	$(QUIET_GEN)rst2man -r 1 $< > $@
+@@ -19,7 +19,7 @@ man8dir = $(mandir)/man8
+ # Load targets for building eBPF helpers man page.
+ include ../../Makefile.helpers
  
- clean: helpers-clean
- 	$(call QUIET_CLEAN, Documentation)
+-MAN8_RST = $(filter-out $(HELPERS_RST),$(wildcard *.rst))
++MAN8_RST = $(wildcard bpftool*.rst)
+ 
+ _DOC_MAN8 = $(patsubst %.rst,%.8,$(MAN8_RST))
+ DOC_MAN8 = $(addprefix $(OUTPUT),$(_DOC_MAN8))
 diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-index 896f4c6c2870..864553e62af4 100644
+index 896f4c6c2870..0020bb55cf7e 100644
 --- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
 +++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
-@@ -91,6 +91,7 @@ OPTIONS
+@@ -71,22 +71,7 @@ DESCRIPTION
+ 
+ OPTIONS
+ =======
+-	-h, --help
+-		  Print short generic help message (similar to **bpftool help**).
+-
+-	-V, --version
+-		  Print version number (similar to **bpftool version**).
+-
+-	-j, --json
+-		  Generate JSON output. For commands that cannot produce JSON, this
+-		  option has no effect.
+-
+-	-p, --pretty
+-		  Generate human-readable JSON output. Implies **-j**.
+-
+-	-d, --debug
+-		  Print all logs available from libbpf, including debug-level
+-		  information.
++	.. include:: common_options.rst
+ 
  EXAMPLES
  ========
- **# bpftool btf dump id 1226**
-+
- ::
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
+index a226aee3574f..3dba89db000e 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
+@@ -116,26 +116,11 @@ DESCRIPTION
  
-   [1] PTR '(anon)' type_id=2
-@@ -104,6 +105,7 @@ EXAMPLES
- This gives an example of default output for all supported BTF kinds.
+ OPTIONS
+ =======
+-	-h, --help
+-		  Print short generic help message (similar to **bpftool help**).
+-
+-	-V, --version
+-		  Print version number (similar to **bpftool version**).
+-
+-	-j, --json
+-		  Generate JSON output. For commands that cannot produce JSON, this
+-		  option has no effect.
+-
+-	-p, --pretty
+-		  Generate human-readable JSON output. Implies **-j**.
++	.. include:: common_options.rst
  
- **$ cat prog.c**
-+
- ::
+ 	-f, --bpffs
+ 		  Show file names of pinned programs.
  
-   struct fwd_struct;
-@@ -144,6 +146,7 @@ This gives an example of default output for all supported BTF kinds.
-   }
+-	-d, --debug
+-		  Print all logs available from libbpf, including debug-level
+-		  information.
+-
+ EXAMPLES
+ ========
+ |
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-feature.rst b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
+index 8609f06e71de..f1aae5690e3c 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-feature.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
+@@ -71,22 +71,7 @@ DESCRIPTION
  
- **$ bpftool btf dump file prog.o**
-+
- ::
+ OPTIONS
+ =======
+-	-h, --help
+-		  Print short generic help message (similar to **bpftool help**).
+-
+-	-V, --version
+-		  Print version number (similar to **bpftool version**).
+-
+-	-j, --json
+-		  Generate JSON output. For commands that cannot produce JSON, this
+-		  option has no effect.
+-
+-	-p, --pretty
+-		  Generate human-readable JSON output. Implies **-j**.
+-
+-	-d, --debug
+-		  Print all logs available from libbpf, including debug-level
+-		  information.
++	.. include:: common_options.rst
  
-   [1] PTR '(anon)' type_id=2
+ SEE ALSO
+ ========
 diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-index df85dbd962c0..d52b03a352d7 100644
+index df85dbd962c0..e3b7ff3c09d7 100644
 --- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
 +++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-@@ -146,6 +146,7 @@ OPTIONS
+@@ -126,22 +126,7 @@ DESCRIPTION
+ 
+ OPTIONS
+ =======
+-	-h, --help
+-		  Print short generic help message (similar to **bpftool help**).
+-
+-	-V, --version
+-		  Print version number (similar to **bpftool version**).
+-
+-	-j, --json
+-		  Generate JSON output. For commands that cannot produce JSON,
+-		  this option has no effect.
+-
+-	-p, --pretty
+-		  Generate human-readable JSON output. Implies **-j**.
+-
+-	-d, --debug
+-		  Print all logs available from libbpf, including debug-level
+-		  information.
++	.. include:: common_options.rst
+ 
  EXAMPLES
  ========
- **$ cat example.c**
-+
- ::
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-iter.rst b/tools/bpf/bpftool/Documentation/bpftool-iter.rst
+index 070ffacb42b5..b688cf11805c 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-iter.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-iter.rst
+@@ -51,16 +51,7 @@ DESCRIPTION
  
-   #include <stdbool.h>
-@@ -187,6 +188,7 @@ This is example BPF application with two BPF programs and a mix of BPF maps
- and global variables.
+ OPTIONS
+ =======
+-	-h, --help
+-		  Print short generic help message (similar to **bpftool help**).
+-
+-	-V, --version
+-		  Print version number (similar to **bpftool version**).
+-
+-	-d, --debug
+-		  Print all logs available, even debug-level information. This
+-		  includes logs from libbpf as well as from the verifier, when
+-		  attempting to load programs.
++	.. include:: common_options.rst
  
- **$ bpftool gen skeleton example.o**
-+
- ::
+ EXAMPLES
+ ========
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-link.rst b/tools/bpf/bpftool/Documentation/bpftool-link.rst
+index dc7693b5e606..ce122be58bae 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-link.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-link.rst
+@@ -62,18 +62,7 @@ DESCRIPTION
  
-   /* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
-@@ -241,6 +243,7 @@ and global variables.
-   #endif /* __EXAMPLE_SKEL_H__ */
+ OPTIONS
+ =======
+-	-h, --help
+-		  Print short generic help message (similar to **bpftool help**).
+-
+-	-V, --version
+-		  Print version number (similar to **bpftool version**).
+-
+-	-j, --json
+-		  Generate JSON output. For commands that cannot produce JSON, this
+-		  option has no effect.
+-
+-	-p, --pretty
+-		  Generate human-readable JSON output. Implies **-j**.
++	.. include:: common_options.rst
  
- **$ cat example_user.c**
-+
- ::
+ 	-f, --bpffs
+ 		  When showing BPF links, show file names of pinned
+@@ -83,10 +72,6 @@ OPTIONS
+ 		  Do not automatically attempt to mount any virtual file system
+ 		  (such as tracefs or BPF virtual file system) when necessary.
  
-   #include "example.skel.h"
-@@ -283,6 +286,7 @@ and global variables.
-   }
- 
- **# ./example_user**
-+
- ::
- 
-   my_map name: my_map
+-	-d, --debug
+-		  Print all logs available, even debug-level information. This
+-		  includes logs from libbpf.
+-
+ EXAMPLES
+ ========
+ **# bpftool link show**
 diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-index 083db6c2fc67..8f187c6416cd 100644
+index 083db6c2fc67..e06a65cd467e 100644
 --- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
 +++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-@@ -182,6 +182,7 @@ OPTIONS
+@@ -155,18 +155,7 @@ DESCRIPTION
+ 
+ OPTIONS
+ =======
+-	-h, --help
+-		  Print short generic help message (similar to **bpftool help**).
+-
+-	-V, --version
+-		  Print version number (similar to **bpftool version**).
+-
+-	-j, --json
+-		  Generate JSON output. For commands that cannot produce JSON, this
+-		  option has no effect.
+-
+-	-p, --pretty
+-		  Generate human-readable JSON output. Implies **-j**.
++	.. include:: common_options.rst
+ 
+ 	-f, --bpffs
+ 		  Show file names of pinned maps.
+@@ -175,10 +164,6 @@ OPTIONS
+ 		  Do not automatically attempt to mount any virtual file system
+ 		  (such as tracefs or BPF virtual file system) when necessary.
+ 
+-	-d, --debug
+-		  Print all logs available from libbpf, including debug-level
+-		  information.
+-
  EXAMPLES
  ========
  **# bpftool map show**
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-net.rst b/tools/bpf/bpftool/Documentation/bpftool-net.rst
+index aa7450736179..56439c32934d 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-net.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-net.rst
+@@ -75,22 +75,7 @@ DESCRIPTION
+ 
+ OPTIONS
+ =======
+-	-h, --help
+-		  Print short generic help message (similar to **bpftool help**).
+-
+-	-V, --version
+-		  Print version number (similar to **bpftool version**).
+-
+-	-j, --json
+-		  Generate JSON output. For commands that cannot produce JSON, this
+-		  option has no effect.
+-
+-	-p, --pretty
+-		  Generate human-readable JSON output. Implies **-j**.
+-
+-	-d, --debug
+-		  Print all logs available from libbpf, including debug-level
+-		  information.
++	.. include:: common_options.rst
+ 
+ EXAMPLES
+ ========
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-perf.rst b/tools/bpf/bpftool/Documentation/bpftool-perf.rst
+index 9c592b7c6775..36d257a36e9b 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-perf.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-perf.rst
+@@ -40,22 +40,7 @@ DESCRIPTION
+ 
+ OPTIONS
+ =======
+-	-h, --help
+-		  Print short generic help message (similar to **bpftool help**).
+-
+-	-V, --version
+-		  Print version number (similar to **bpftool version**).
+-
+-	-j, --json
+-		  Generate JSON output. For commands that cannot produce JSON, this
+-		  option has no effect.
+-
+-	-p, --pretty
+-		  Generate human-readable JSON output. Implies **-j**.
+-
+-	-d, --debug
+-		  Print all logs available from libbpf, including debug-level
+-		  information.
++	.. include:: common_options.rst
+ 
+ EXAMPLES
+ ========
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+index 82e356b664e8..9b2b18e2a3ac 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+@@ -210,18 +210,7 @@ DESCRIPTION
+ 
+ OPTIONS
+ =======
+-	-h, --help
+-		  Print short generic help message (similar to **bpftool help**).
+-
+-	-V, --version
+-		  Print version number (similar to **bpftool version**).
+-
+-	-j, --json
+-		  Generate JSON output. For commands that cannot produce JSON, this
+-		  option has no effect.
+-
+-	-p, --pretty
+-		  Generate human-readable JSON output. Implies **-j**.
++	.. include:: common_options.rst
+ 
+ 	-f, --bpffs
+ 		  When showing BPF programs, show file names of pinned
+@@ -234,11 +223,6 @@ OPTIONS
+ 		  Do not automatically attempt to mount any virtual file system
+ 		  (such as tracefs or BPF virtual file system) when necessary.
+ 
+-	-d, --debug
+-		  Print all logs available, even debug-level information. This
+-		  includes logs from libbpf as well as from the verifier, when
+-		  attempting to load programs.
+-
+ EXAMPLES
+ ========
+ **# bpftool prog show**
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-struct_ops.rst b/tools/bpf/bpftool/Documentation/bpftool-struct_ops.rst
+index d93cd1cb8b0f..315f1f21f2ba 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-struct_ops.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-struct_ops.rst
+@@ -60,23 +60,7 @@ DESCRIPTION
+ 
+ OPTIONS
+ =======
+-	-h, --help
+-		  Print short generic help message (similar to **bpftool help**).
+-
+-	-V, --version
+-		  Print version number (similar to **bpftool version**).
+-
+-	-j, --json
+-		  Generate JSON output. For commands that cannot produce JSON, this
+-		  option has no effect.
+-
+-	-p, --pretty
+-		  Generate human-readable JSON output. Implies **-j**.
+-
+-	-d, --debug
+-		  Print all logs available, even debug-level information. This
+-		  includes logs from libbpf as well as from the verifier, when
+-		  attempting to load programs.
++	.. include:: common_options.rst
+ 
+ EXAMPLES
+ ========
+diff --git a/tools/bpf/bpftool/Documentation/bpftool.rst b/tools/bpf/bpftool/Documentation/bpftool.rst
+index a3629a3f1175..b87f8c2df49d 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool.rst
+@@ -46,24 +46,7 @@ DESCRIPTION
+ 
+ OPTIONS
+ =======
+-	-h, --help
+-		  Print short help message (similar to **bpftool help**).
+-
+-	-V, --version
+-		  Print version number (similar to **bpftool version**), and
+-		  optional features that were included when bpftool was
+-		  compiled. Optional features include linking against libbfd to
+-		  provide the disassembler for JIT-ted programs (**bpftool prog
+-		  dump jited**) and usage of BPF skeletons (some features like
+-		  **bpftool prog profile** or showing pids associated to BPF
+-		  objects may rely on it).
+-
+-	-j, --json
+-		  Generate JSON output. For commands that cannot produce JSON, this
+-		  option has no effect.
+-
+-	-p, --pretty
+-		  Generate human-readable JSON output. Implies **-j**.
++	.. include:: common_options.rst
+ 
+ 	-m, --mapcompat
+ 		  Allow loading maps with unknown map definitions.
+@@ -72,11 +55,6 @@ OPTIONS
+ 		  Do not automatically attempt to mount any virtual file system
+ 		  (such as tracefs or BPF virtual file system) when necessary.
+ 
+-	-d, --debug
+-		  Print all logs available, even debug-level information. This
+-		  includes logs from libbpf as well as from the verifier, when
+-		  attempting to load programs.
+-
+ SEE ALSO
+ ========
+ 	**bpf**\ (2),
+diff --git a/tools/bpf/bpftool/Documentation/common_options.rst b/tools/bpf/bpftool/Documentation/common_options.rst
+new file mode 100644
+index 000000000000..05d06c74dcaa
+--- /dev/null
++++ b/tools/bpf/bpftool/Documentation/common_options.rst
+@@ -0,0 +1,22 @@
++-h, --help
++	  Print short help message (similar to **bpftool help**).
 +
- ::
- 
-   10: hash  name some_map  flags 0x0
-@@ -203,6 +204,7 @@ The following three commands are equivalent:
- 
- 
- **# bpftool map dump id 10**
++-V, --version
++	  Print version number (similar to **bpftool version**), and optional
++	  features that were included when bpftool was compiled. Optional
++	  features include linking against libbfd to provide the disassembler
++	  for JIT-ted programs (**bpftool prog dump jited**) and usage of BPF
++	  skeletons (some features like **bpftool prog profile** or showing
++	  pids associated to BPF objects may rely on it).
 +
- ::
- 
-   key: 00 01 02 03  value: 00 01 02 03 04 05 06 07
-@@ -210,6 +212,7 @@ The following three commands are equivalent:
-   Found 2 elements
- 
- **# bpftool map getnext id 10 key 0 1 2 3**
++-j, --json
++	  Generate JSON output. For commands that cannot produce JSON, this
++	  option has no effect.
 +
- ::
- 
-   key:
++-p, --pretty
++	  Generate human-readable JSON output. Implies **-j**.
++
++-d, --debug
++	  Print all logs available, even debug-level information. This includes
++	  logs from libbpf as well as from the verifier, when attempting to
++	  load programs.
 -- 
 2.25.1
 
