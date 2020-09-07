@@ -2,100 +2,117 @@ Return-Path: <SRS0=5Irp=CQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D335DC43461
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 17:56:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42599C433E2
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 18:03:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8BD2B2080A
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 17:56:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1599501376;
-	bh=few+SPI/Oy8S+VrQdUBXsEisTbEhd4ob+xpR7tk7F78=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=HrGF0j6jKwG4b6xwS681MhIWQbZSukZlQ2ps1evm9PpKyKUckz4oYES2co3EcNrlc
-	 DA/55v0Po05J73Bg3rxSRnBRMf8fxIUPtS6ZDkpYEEmPeedjJKsk1wWbULpljF9S2V
-	 3jBemTJNzTVYfS99tc2XJYLBiTtO6y81oMGXgqFo=
+	by mail.kernel.org (Postfix) with ESMTP id EEF41206B5
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 18:03:11 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fz4IwXLW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728925AbgIGR4P convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 7 Sep 2020 13:56:15 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:52094 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728809AbgIGLVb (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 7 Sep 2020 07:21:31 -0400
+        id S1729226AbgIGSDI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Sep 2020 14:03:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:38878 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728916AbgIGSDG (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 7 Sep 2020 14:03:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1599501784;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0yqo1lsdLkRhOfjW7UHT4yV+lc6hHGYfKUzEMxekKbg=;
+        b=fz4IwXLWeR1GwL/X5SvbZUFqGeJ9kvBLDK9oLqQn2/5tLN7M9cbMHTvP4r7jj8XHAYptqp
+        w3BwaUmZQYeksRqGSwKgPpoUKwF/ukzvhgX6R+KkYPe+IocaHpKyAdozXvQhBAf+DH4Apx
+        zn7XLnb1JVv473E13Fra/nmzGeaBZD8=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-164-jBWXxxlPOsqCyMA0FODBgg-1; Mon, 07 Sep 2020 07:02:47 -0400
-X-MC-Unique: jBWXxxlPOsqCyMA0FODBgg-1
+ us-mta-205-2n510tkfOXepvjf57EsPaQ-1; Mon, 07 Sep 2020 14:03:00 -0400
+X-MC-Unique: 2n510tkfOXepvjf57EsPaQ-1
 Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9EA9D18B9EC1;
-        Mon,  7 Sep 2020 11:02:45 +0000 (UTC)
-Received: from krava.redhat.com (ovpn-112-180.ams2.redhat.com [10.36.112.180])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1F4661A3D7;
-        Mon,  7 Sep 2020 11:02:38 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: [PATCH] perf tools: Do not use deprecated bpf_program__title
-Date:   Mon,  7 Sep 2020 13:02:37 +0200
-Message-Id: <20200907110237.1329532-1-jolsa@kernel.org>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9D0C7801AAD;
+        Mon,  7 Sep 2020 18:02:58 +0000 (UTC)
+Received: from carbon (unknown [10.40.208.42])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 61BB819C4F;
+        Mon,  7 Sep 2020 18:02:47 +0000 (UTC)
+Date:   Mon, 7 Sep 2020 20:02:45 +0200
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     David Ahern <dsahern@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, davem@davemloft.net,
+        lorenzo.bianconi@redhat.com, echaudro@redhat.com,
+        sameehj@amazon.com, kuba@kernel.org, john.fastabend@gmail.com,
+        daniel@iogearbox.net, ast@kernel.org, shayagr@amazon.com,
+        David Ahern <dsahern@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        brouer@redhat.com
+Subject: Re: [PATCH v2 net-next 1/9] xdp: introduce mb in xdp_buff/xdp_frame
+Message-ID: <20200907200245.0cdb63f1@carbon>
+In-Reply-To: <107260d3-1fea-b582-84d3-2d092f3112b1@gmail.com>
+References: <cover.1599165031.git.lorenzo@kernel.org>
+        <1e8e82f72e46264b7a7a1ac704d24e163ebed100.1599165031.git.lorenzo@kernel.org>
+        <20200904010705.jm6dnuyj3oq4cpjd@ast-mbp.dhcp.thefacebook.com>
+        <20200904091939.069592e4@carbon>
+        <1c3e478c-5000-1726-6ce9-9b0a3ccfe1e5@gmail.com>
+        <20200904175946.6be0f565@carbon>
+        <107260d3-1fea-b582-84d3-2d092f3112b1@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
-X-Mimecast-Spam-Score: 0.001
-X-Mimecast-Originator: kernel.org
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: 8BIT
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The bpf_program__title function got deprecated in libbpf,
-use the suggested alternative.
+On Fri, 4 Sep 2020 10:30:48 -0600
+David Ahern <dsahern@gmail.com> wrote:
 
-Fixes: 521095842027 ("libbpf: Deprecate notion of BPF program "title" in favor of "section name"")
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- tools/perf/util/bpf-loader.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> On 9/4/20 9:59 AM, Jesper Dangaard Brouer wrote:
+> >> dev_rx for example seems like it could just be the netdev
+> >> index rather than a pointer or perhaps can be removed completely. I
+> >> believe it is only used for 1 use case (redirects to CPUMAP); maybe that
+> >> code can be refactored to handle the dev outside of xdp_frame.  
+> > 
+> > The dev_rx is needed when creating an SKB from a xdp_frame (basically
+> > skb->dev = rx_dev). Yes, that is done in cpumap, but I want to
+> > generalize this.  The veth also creates SKBs from xdp_frame, but use
+> > itself as skb->dev.
+> > 
+> > And yes, we could save some space storing the index instead, and trade
+> > space for cycles in a lookup.  
+> 
+> I think this can be managed without adding a reference to the xdp_frame.
+> I'll start a separate thread on that.
+> 
+> >>
+> >> As for frame_sz, why does it need to be larger than a u16?  
+> > 
+> > Because PAGE_SIZE can be 64KiB on some archs.
+> >   
 
-diff --git a/tools/perf/util/bpf-loader.c b/tools/perf/util/bpf-loader.c
-index 2feb751516ab..73de3973c8ec 100644
---- a/tools/perf/util/bpf-loader.c
-+++ b/tools/perf/util/bpf-loader.c
-@@ -328,7 +328,7 @@ config_bpf_program(struct bpf_program *prog)
- 	probe_conf.no_inlines = false;
- 	probe_conf.force_add = false;
- 
--	config_str = bpf_program__title(prog, false);
-+	config_str = bpf_program__section_name(prog);
- 	if (IS_ERR(config_str)) {
- 		pr_debug("bpf: unable to get title for program\n");
- 		return PTR_ERR(config_str);
-@@ -454,7 +454,7 @@ preproc_gen_prologue(struct bpf_program *prog, int n,
- 	if (err) {
- 		const char *title;
- 
--		title = bpf_program__title(prog, false);
-+		title = bpf_program__section_name(prog);
- 		if (!title)
- 			title = "[unknown]";
- 
+I also believe syzbot managed to create packets for generic-XDP with
+frame_sz 128KiB, which was a bit weird (it's on my todo list to
+investigate and fix).
+
+> ok, is there any alignment requirement? can frame_sz be number of 32-bit
+> words? I believe bit shifts are cheap.
+
+No that is not possible, because some drivers and generic-XDP have a
+fully dynamic frame_sz.
+
 -- 
-2.26.2
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
