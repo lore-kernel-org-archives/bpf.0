@@ -8,56 +8,56 @@ X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 52ABBC433E2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 784AFC2D0A8
 	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 08:28:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0B6062145D
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 08:28:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 37D3221582
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 08:28:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D6FLI5Fy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B/k/ae4I"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728258AbgIGI2F (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Sep 2020 04:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43724 "EHLO
+        id S1728261AbgIGI2G (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Sep 2020 04:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728165AbgIGI2D (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1726978AbgIGI2D (ORCPT <rfc822;bpf@vger.kernel.org>);
         Mon, 7 Sep 2020 04:28:03 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC72C061575;
-        Mon,  7 Sep 2020 01:28:03 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id b16so6381719pjp.0;
-        Mon, 07 Sep 2020 01:28:03 -0700 (PDT)
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB62BC061574;
+        Mon,  7 Sep 2020 01:28:00 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id j34so2309072pgi.7;
+        Mon, 07 Sep 2020 01:28:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=YLGvO/+4eEJ9UtM5N+e5p6B/6lir86qnFUrck89IjxI=;
-        b=D6FLI5Fy3oLSHeVdgfEx8gB0QI2KKfPr/UzvGyE47hPqATTRXkEUdbOmhlHNTeRfxm
-         gtWD6P/T4diqxRsl66Ym26Xvbn9eOWHmMBddCPIv48hnTEgCWRIo9npbXCHQhcWragNB
-         RKqIOrCXH6YHAFMNDjn2AMnku0cz4l/JVJMGZL69u28ltFrL9917Z3G1TXhMRF5aNnsE
-         aHZ3984LU0/BYTsKW4+UQwykayWSsLuVDbGWReeQBVV+3MBpwZmf8KnWfqmhXEPKwAf/
-         3YQymLGT8dY0ghpkHyQ93k9CCSObSrmibWZsxeUZWlXWeoH/Sa2N/At7XNZhGdzvCjw7
-         P9Eg==
+        bh=yu9ai3ka0Urr1PE3fckzfU3yErmF0BY1tH7rUpbVQ3Y=;
+        b=B/k/ae4ItVGf7OIPzXZbPkAjrkvgRMwaAlsXJFk+beC5/rHUxWCou+6yHRjbjvxAQ6
+         gDM8FMezWgdwSyxVK5A9t5iicuCdsfgr95FHjWDdfogk+wodT1WE9DPOepZy03KZPxhv
+         msVUc6ACztyeagrpea5tPAjvp1M9OyJGbgAS8cfMqjk1Rv2+mQ3FPj6JbN7uE4uiCOj6
+         yF2hzNn6Bmp4KNkei1zkzJ4E98MuCPJ8ZtxhL7pFTDjY+8z2qPSZGJKXTGUbJFa33xaF
+         xXKwtNs3nRRrAwBxVquIZEwD2505YKWeNM9rSB8LAV5AYhSyfbw403rk0hBabX9FJIaW
+         sfTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=YLGvO/+4eEJ9UtM5N+e5p6B/6lir86qnFUrck89IjxI=;
-        b=JWmKGju78Bzmq569L1FdpKWajwGUwC3m+2IiCbok+u+sCV4aDJCfKTBmelSkCiCUzY
-         TL3DkXrL4FaiWq4uR2zVxaNx3vLBE5KoFUa1vgvDQfnX5AipaxCyleUMgOpbCBvFzPGm
-         ulYobIKX5cRKbAgEHJ17NIb112Ma64h/i1os+Y5QMMrp/1LN4vzyihULyAKSk3YluCI/
-         rPdGMg2Xc6BFnkqE81Et63RRt17m/IWBLfkV1Q1I63DUy2VThZ7t8GNfsTotVGJbSgFH
-         qbxIgNCObjmB7iXzGzw8TkpHpZPOY4CEqmq4l2mSmeeIADKHPMEkIDIUVoK7y0SKukQ8
-         tIyg==
-X-Gm-Message-State: AOAM532UlrZJ/4oPkJolQ1G61+vjkj4G4uGDLnR8mm7wcxYTq7qpklA1
-        MstoY1ppmIRUjdVzDvPfIudO1HN1V+3ONQ==
-X-Google-Smtp-Source: ABdhPJycRwgFCFLVSOyY8WzQtgf8wxT+hwuGLDngIzPRKybS3KNo0N+YEcSNJ6IvNoCKotJ8yobFCA==
-X-Received: by 2002:a17:90b:a44:: with SMTP id gw4mr18625812pjb.26.1599467282713;
-        Mon, 07 Sep 2020 01:28:02 -0700 (PDT)
+        bh=yu9ai3ka0Urr1PE3fckzfU3yErmF0BY1tH7rUpbVQ3Y=;
+        b=QT+jhkuuxhZsYOGm35rgSnDDQOyM/jeYJK5Z5U9/yLTevT6aLyF/Zyb4yEhh4GM4V6
+         8ncCrolMRvbXAKlzTG/1wrnyI5tZ2ucv1pYanuRvES0dg1GEXUcEuqHsTI1D4304khbF
+         3c7pz3SkMt7VyVao/FBUIjTB/PRK68L0E8hlhLXk/xIfmCQlE/1FOlVL3dl+k4j4wEMg
+         umbPzrYXbAH5GmjMNTysINCiyLs5OYkK1YZUk5pXkTj3bNIPmomyDYZbv3AWTMVa98Vb
+         LSI0z5QHVb5EU2gJG8aE6H8n01Dka7+lSXA3kgEejInT2Ylo6Y+U2pTE8A4Ku/B2Hwwm
+         ufvw==
+X-Gm-Message-State: AOAM530/nLex5p58JNlYwPOrYHUsshHHCICJvzXNxAOkQLupP8/0y0TN
+        hfrYk8JlDidmtc5vdLLk48RCch8ifhXTNA==
+X-Google-Smtp-Source: ABdhPJxdYs49Yrvy6bA7E7o3X8o6OC0TTrdIwgzTewJw9w6efqGe4rH7KFIJmvGnZsGMcdbq0eGkZg==
+X-Received: by 2002:a65:4c0f:: with SMTP id u15mr15114283pgq.296.1599467274478;
+        Mon, 07 Sep 2020 01:27:54 -0700 (PDT)
 Received: from dhcp-12-153.nay.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id i20sm11756311pgk.77.2020.09.07.01.27.58
+        by smtp.gmail.com with ESMTPSA id i20sm11756311pgk.77.2020.09.07.01.27.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2020 01:28:02 -0700 (PDT)
+        Mon, 07 Sep 2020 01:27:54 -0700 (PDT)
 From:   Hangbin Liu <liuhangbin@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org,
@@ -70,9 +70,9 @@ Cc:     netdev@vger.kernel.org,
         David Ahern <dsahern@gmail.com>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv11 bpf-next 5/5] selftests/bpf: Add verifier tests for bpf arg ARG_CONST_MAP_PTR_OR_NULL
-Date:   Mon,  7 Sep 2020 16:27:24 +0800
-Message-Id: <20200907082724.1721685-6-liuhangbin@gmail.com>
+Subject: [PATCHv11 bpf-next 3/5] sample/bpf: add xdp_redirect_map_multicast test
+Date:   Mon,  7 Sep 2020 16:27:22 +0800
+Message-Id: <20200907082724.1721685-4-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20200907082724.1721685-1-liuhangbin@gmail.com>
 References: <20200903102701.3913258-1-liuhangbin@gmail.com>
@@ -84,164 +84,277 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use helper bpf_redirect_map() and bpf_redirect_map_multi() to test bpf
-arg ARG_CONST_MAP_PTR and ARG_CONST_MAP_PTR_OR_NULL. Make sure the
-map arg could be verified correctly when it is NULL or valid map
-pointer.
-
-Add devmap and devmap_hash in struct bpf_test due to bpf_redirect_{map,
-map_multi} limit.
-
-Test result:
- ]# ./test_verifier 702 705
- #702/p ARG_CONST_MAP_PTR: null pointer OK
- #703/p ARG_CONST_MAP_PTR: valid map pointer OK
- #704/p ARG_CONST_MAP_PTR_OR_NULL: null pointer for ex_map OK
- #705/p ARG_CONST_MAP_PTR_OR_NULL: valid map pointer for ex_map OK
- Summary: 4 PASSED, 0 SKIPPED, 0 FAILED
+This is a sample for xdp multicast. In the sample we could forward all
+packets between given interfaces.
 
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
 
-v2-v11: no update
+v10-v11: no update
+v9: use NULL directly for arg2 and redefine the maps with btf format
+v5: add a null_map as we have strict the arg2 to ARG_CONST_MAP_PTR.
+    Move the testing part to bpf selftest in next patch.
+v4: no update.
+v3: add rxcnt map to show the packet transmit speed.
+v2: no update.
 
 ---
- tools/testing/selftests/bpf/test_verifier.c   | 22 +++++-
- .../testing/selftests/bpf/verifier/map_ptr.c  | 70 +++++++++++++++++++
- 2 files changed, 91 insertions(+), 1 deletion(-)
+ samples/bpf/Makefile                      |   3 +
+ samples/bpf/xdp_redirect_map_multi_kern.c |  43 ++++++
+ samples/bpf/xdp_redirect_map_multi_user.c | 166 ++++++++++++++++++++++
+ 3 files changed, 212 insertions(+)
+ create mode 100644 samples/bpf/xdp_redirect_map_multi_kern.c
+ create mode 100644 samples/bpf/xdp_redirect_map_multi_user.c
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 9be395d9dc64..f89a13e60692 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -50,7 +50,7 @@
- #define MAX_INSNS	BPF_MAXINSNS
- #define MAX_TEST_INSNS	1000000
- #define MAX_FIXUPS	8
--#define MAX_NR_MAPS	20
-+#define MAX_NR_MAPS	22
- #define MAX_TEST_RUNS	8
- #define POINTER_VALUE	0xcafe4all
- #define TEST_DATA_LEN	64
-@@ -87,6 +87,8 @@ struct bpf_test {
- 	int fixup_sk_storage_map[MAX_FIXUPS];
- 	int fixup_map_event_output[MAX_FIXUPS];
- 	int fixup_map_reuseport_array[MAX_FIXUPS];
-+	int fixup_map_devmap[MAX_FIXUPS];
-+	int fixup_map_devmap_hash[MAX_FIXUPS];
- 	const char *errstr;
- 	const char *errstr_unpriv;
- 	uint32_t insn_processed;
-@@ -640,6 +642,8 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
- 	int *fixup_sk_storage_map = test->fixup_sk_storage_map;
- 	int *fixup_map_event_output = test->fixup_map_event_output;
- 	int *fixup_map_reuseport_array = test->fixup_map_reuseport_array;
-+	int *fixup_map_devmap = test->fixup_map_devmap;
-+	int *fixup_map_devmap_hash = test->fixup_map_devmap_hash;
- 
- 	if (test->fill_helper) {
- 		test->fill_insns = calloc(MAX_TEST_INSNS, sizeof(struct bpf_insn));
-@@ -817,6 +821,22 @@ static void do_test_fixup(struct bpf_test *test, enum bpf_prog_type prog_type,
- 			fixup_map_reuseport_array++;
- 		} while (*fixup_map_reuseport_array);
- 	}
-+	if (*fixup_map_devmap) {
-+		map_fds[20] = __create_map(BPF_MAP_TYPE_DEVMAP,
-+					   sizeof(u32), sizeof(u32), 1, 0);
-+		do {
-+			prog[*fixup_map_devmap].imm = map_fds[20];
-+			fixup_map_devmap++;
-+		} while (*fixup_map_devmap);
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 4f1ed0e3cf9f..cad63d4ea164 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -41,6 +41,7 @@ tprogs-y += test_map_in_map
+ tprogs-y += per_socket_stats_example
+ tprogs-y += xdp_redirect
+ tprogs-y += xdp_redirect_map
++tprogs-y += xdp_redirect_map_multi
+ tprogs-y += xdp_redirect_cpu
+ tprogs-y += xdp_monitor
+ tprogs-y += xdp_rxq_info
+@@ -98,6 +99,7 @@ test_map_in_map-objs := test_map_in_map_user.o
+ per_socket_stats_example-objs := cookie_uid_helper_example.o
+ xdp_redirect-objs := xdp_redirect_user.o
+ xdp_redirect_map-objs := xdp_redirect_map_user.o
++xdp_redirect_map_multi-objs := xdp_redirect_map_multi_user.o
+ xdp_redirect_cpu-objs := bpf_load.o xdp_redirect_cpu_user.o
+ xdp_monitor-objs := bpf_load.o xdp_monitor_user.o
+ xdp_rxq_info-objs := xdp_rxq_info_user.o
+@@ -158,6 +160,7 @@ always-y += tcp_tos_reflect_kern.o
+ always-y += tcp_dumpstats_kern.o
+ always-y += xdp_redirect_kern.o
+ always-y += xdp_redirect_map_kern.o
++always-y += xdp_redirect_map_multi_kern.o
+ always-y += xdp_redirect_cpu_kern.o
+ always-y += xdp_monitor_kern.o
+ always-y += xdp_rxq_info_kern.o
+diff --git a/samples/bpf/xdp_redirect_map_multi_kern.c b/samples/bpf/xdp_redirect_map_multi_kern.c
+new file mode 100644
+index 000000000000..db58d56cef89
+--- /dev/null
++++ b/samples/bpf/xdp_redirect_map_multi_kern.c
+@@ -0,0 +1,43 @@
++/* SPDX-License-Identifier: GPL-2.0
++ *
++ * modify it under the terms of version 2 of the GNU General Public
++ * License as published by the Free Software Foundation.
++ *
++ * This program is distributed in the hope that it will be useful, but
++ * WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
++ * General Public License for more details.
++ */
++#define KBUILD_MODNAME "foo"
++#include <uapi/linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_DEVMAP_HASH);
++	__uint(key_size, sizeof(int));
++	__uint(value_size, sizeof(int));
++	__uint(max_entries, 256);
++} forward_map SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
++	__type(key, u32);
++	__type(value, long);
++	__uint(max_entries, 1);
++} rxcnt SEC(".maps");
++
++SEC("xdp_redirect_map_multi")
++int xdp_redirect_map_multi_prog(struct xdp_md *ctx)
++{
++	long *value;
++	u32 key = 0;
++
++	/* count packet in global counter */
++	value = bpf_map_lookup_elem(&rxcnt, &key);
++	if (value)
++		*value += 1;
++
++	return bpf_redirect_map_multi(&forward_map, NULL, BPF_F_EXCLUDE_INGRESS);
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/samples/bpf/xdp_redirect_map_multi_user.c b/samples/bpf/xdp_redirect_map_multi_user.c
+new file mode 100644
+index 000000000000..49f44c91b672
+--- /dev/null
++++ b/samples/bpf/xdp_redirect_map_multi_user.c
+@@ -0,0 +1,166 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <linux/if_link.h>
++#include <assert.h>
++#include <errno.h>
++#include <signal.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <net/if.h>
++#include <unistd.h>
++#include <libgen.h>
++
++#include "bpf_util.h"
++#include <bpf/bpf.h>
++#include <bpf/libbpf.h>
++
++#define MAX_IFACE_NUM 32
++
++static __u32 xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
++static int ifaces[MAX_IFACE_NUM] = {};
++static int rxcnt;
++
++static void int_exit(int sig)
++{
++	__u32 prog_id = 0;
++	int i;
++
++	for (i = 0; ifaces[i] > 0; i++) {
++		if (bpf_get_link_xdp_id(ifaces[i], &prog_id, xdp_flags)) {
++			printf("bpf_get_link_xdp_id failed\n");
++			exit(1);
++		}
++		if (prog_id)
++			bpf_set_link_xdp_fd(ifaces[i], -1, xdp_flags);
 +	}
-+	if (*fixup_map_devmap_hash) {
-+		map_fds[21] = __create_map(BPF_MAP_TYPE_DEVMAP_HASH,
-+					   sizeof(u32), sizeof(u32), 1, 0);
-+		do {
-+			prog[*fixup_map_devmap_hash].imm = map_fds[21];
-+			fixup_map_devmap_hash++;
-+		} while (*fixup_map_devmap_hash);
++
++	exit(0);
++}
++
++static void poll_stats(int interval)
++{
++	unsigned int nr_cpus = bpf_num_possible_cpus();
++	__u64 values[nr_cpus], prev[nr_cpus];
++
++	memset(prev, 0, sizeof(prev));
++
++	while (1) {
++		__u64 sum = 0;
++		__u32 key = 0;
++		int i;
++
++		sleep(interval);
++		assert(bpf_map_lookup_elem(rxcnt, &key, values) == 0);
++		for (i = 0; i < nr_cpus; i++)
++			sum += (values[i] - prev[i]);
++		if (sum)
++			printf("Forwarding %10llu pkt/s\n", sum / interval);
++		memcpy(prev, values, sizeof(values));
 +	}
- }
- 
- struct libcap {
-diff --git a/tools/testing/selftests/bpf/verifier/map_ptr.c b/tools/testing/selftests/bpf/verifier/map_ptr.c
-index b52209db8250..51df7d8784dc 100644
---- a/tools/testing/selftests/bpf/verifier/map_ptr.c
-+++ b/tools/testing/selftests/bpf/verifier/map_ptr.c
-@@ -60,3 +60,73 @@
- 	.result = ACCEPT,
- 	.retval = 1,
- },
++}
++
++static void usage(const char *prog)
 +{
-+	"ARG_CONST_MAP_PTR: null pointer",
-+	.insns = {
-+		/* bpf_redirect_map arg1 (map) */
-+		BPF_MOV64_IMM(BPF_REG_1, 0),
-+		/* bpf_redirect_map arg2 (ifindex) */
-+		BPF_MOV64_IMM(BPF_REG_2, 0),
-+		/* bpf_redirect_map arg3 (flags) */
-+		BPF_MOV64_IMM(BPF_REG_3, 0),
-+		BPF_EMIT_CALL(BPF_FUNC_redirect_map),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = REJECT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+	.errstr = "R1 type=inv expected=map_ptr",
-+},
++	fprintf(stderr,
++		"usage: %s [OPTS] <IFNAME|IFINDEX> <IFNAME|IFINDEX> ...\n"
++		"OPTS:\n"
++		"    -S    use skb-mode\n"
++		"    -N    enforce native mode\n"
++		"    -F    force loading prog\n",
++		prog);
++}
++
++int main(int argc, char **argv)
 +{
-+	"ARG_CONST_MAP_PTR: valid map pointer",
-+	.insns = {
-+		BPF_MOV64_IMM(BPF_REG_1, 0),
-+		/* bpf_redirect_map arg1 (map) */
-+		BPF_LD_MAP_FD(BPF_REG_1, 0),
-+		/* bpf_redirect_map arg2 (ifindex) */
-+		BPF_MOV64_IMM(BPF_REG_2, 0),
-+		/* bpf_redirect_map arg3 (flags) */
-+		BPF_MOV64_IMM(BPF_REG_3, 0),
-+		BPF_EMIT_CALL(BPF_FUNC_redirect_map),
-+		BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_devmap = { 1 },
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+},
-+{
-+	"ARG_CONST_MAP_PTR_OR_NULL: null pointer for ex_map",
-+	.insns = {
-+		BPF_MOV64_IMM(BPF_REG_1, 0),
-+		/* bpf_redirect_map_multi arg1 (in_map) */
-+		BPF_LD_MAP_FD(BPF_REG_1, 0),
-+		/* bpf_redirect_map_multi arg2 (ex_map) */
-+		BPF_MOV64_IMM(BPF_REG_2, 0),
-+		/* bpf_redirect_map_multi arg3 (flags) */
-+		BPF_MOV64_IMM(BPF_REG_3, 0),
-+		BPF_EMIT_CALL(BPF_FUNC_redirect_map_multi),
-+		BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_devmap = { 1 },
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+	.retval = 4,
-+},
-+{
-+	"ARG_CONST_MAP_PTR_OR_NULL: valid map pointer for ex_map",
-+	.insns = {
-+		BPF_MOV64_IMM(BPF_REG_1, 0),
-+		/* bpf_redirect_map_multi arg1 (in_map) */
-+		BPF_LD_MAP_FD(BPF_REG_1, 0),
-+		/* bpf_redirect_map_multi arg2 (ex_map) */
-+		BPF_LD_MAP_FD(BPF_REG_2, 1),
-+		/* bpf_redirect_map_multi arg3 (flags) */
-+		BPF_MOV64_IMM(BPF_REG_3, 0),
-+		BPF_EMIT_CALL(BPF_FUNC_redirect_map_multi),
-+		BPF_EXIT_INSN(),
-+	},
-+	.fixup_map_devmap = { 1 },
-+	.fixup_map_devmap_hash = { 3 },
-+	.result = ACCEPT,
-+	.prog_type = BPF_PROG_TYPE_XDP,
-+	.retval = 4,
-+},
++	struct bpf_prog_load_attr prog_load_attr = {
++		.prog_type      = BPF_PROG_TYPE_XDP,
++	};
++	int prog_fd, forward_map;
++	int i, ret, opt, ifindex;
++	char ifname[IF_NAMESIZE];
++	struct bpf_object *obj;
++	char filename[256];
++
++	while ((opt = getopt(argc, argv, "SNF")) != -1) {
++		switch (opt) {
++		case 'S':
++			xdp_flags |= XDP_FLAGS_SKB_MODE;
++			break;
++		case 'N':
++			/* default, set below */
++			break;
++		case 'F':
++			xdp_flags &= ~XDP_FLAGS_UPDATE_IF_NOEXIST;
++			break;
++		default:
++			usage(basename(argv[0]));
++			return 1;
++		}
++	}
++
++	if (!(xdp_flags & XDP_FLAGS_SKB_MODE))
++		xdp_flags |= XDP_FLAGS_DRV_MODE;
++
++	if (optind == argc) {
++		printf("usage: %s <IFNAME|IFINDEX> <IFNAME|IFINDEX> ...\n", argv[0]);
++		return 1;
++	}
++
++	printf("Get interfaces");
++	for (i = 0; i < MAX_IFACE_NUM && argv[optind + i]; i++) {
++		ifaces[i] = if_nametoindex(argv[optind + i]);
++		if (!ifaces[i])
++			ifaces[i] = strtoul(argv[optind + i], NULL, 0);
++		if (!if_indextoname(ifaces[i], ifname)) {
++			perror("Invalid interface name or i");
++			return 1;
++		}
++		printf(" %d", ifaces[i]);
++	}
++	printf("\n");
++
++	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
++	prog_load_attr.file = filename;
++
++	if (bpf_prog_load_xattr(&prog_load_attr, &obj, &prog_fd))
++		return 1;
++
++	forward_map = bpf_object__find_map_fd_by_name(obj, "forward_map");
++	rxcnt = bpf_object__find_map_fd_by_name(obj, "rxcnt");
++
++	if (forward_map < 0 || rxcnt < 0) {
++		printf("bpf_object__find_map_fd_by_name failed\n");
++		return 1;
++	}
++
++	signal(SIGINT, int_exit);
++	signal(SIGTERM, int_exit);
++
++	/* Init forward multicast groups and exclude group */
++	for (i = 0; ifaces[i] > 0; i++) {
++		ifindex = ifaces[i];
++
++		/* Add all the interfaces to group all */
++		ret = bpf_map_update_elem(forward_map, &ifindex, &ifindex, 0);
++		if (ret) {
++			perror("bpf_map_update_elem");
++			goto err_out;
++		}
++
++		/* bind prog_fd to each interface */
++		ret = bpf_set_link_xdp_fd(ifindex, prog_fd, xdp_flags);
++		if (ret) {
++			printf("Set xdp fd failed on %d\n", ifindex);
++			goto err_out;
++		}
++
++	}
++
++	poll_stats(2);
++
++	return 0;
++
++err_out:
++	return 1;
++}
 -- 
 2.25.4
 
