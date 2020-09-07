@@ -2,127 +2,219 @@ Return-Path: <SRS0=5Irp=CQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 159DAC433E2
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 17:24:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7560BC43461
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 17:48:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D858A20658
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 17:24:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3CDF121532
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 17:48:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KSy7/aim"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Bu+XmXRe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729577AbgIGRYv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Sep 2020 13:24:51 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:49418 "EHLO
+        id S1729305AbgIGRss (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Sep 2020 13:48:48 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:28530 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729624AbgIGNlY (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 7 Sep 2020 09:41:24 -0400
+        by vger.kernel.org with ESMTP id S1729225AbgIGMpm (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 7 Sep 2020 08:45:42 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599486082;
+        s=mimecast20190719; t=1599482726;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mx0HitpHOfVEuxavEK5m2SMEcJVCFnXIoy6pEZlAL9w=;
-        b=KSy7/aimN1Tc/FMrvJvulDHfb/MYTVTVaxFXDXhINm+1LuHx2JFBcNjC16//xK6tmc8x9F
-        emhW1VIGiSMoZUzvAxF6t+VgRU+/p37CN9ZJKgyTUlZz7VxjtoQvKI1pnmuGBRtUFyXQcZ
-        nOyobn2GCJktid/9eHZoMs4mn/MlmUw=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-273-CyjkLx4kN5Km9b8_puugSQ-1; Mon, 07 Sep 2020 09:33:00 -0400
-X-MC-Unique: CyjkLx4kN5Km9b8_puugSQ-1
-Received: by mail-wr1-f70.google.com with SMTP id v12so5718871wrm.9
-        for <bpf@vger.kernel.org>; Mon, 07 Sep 2020 06:33:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=mx0HitpHOfVEuxavEK5m2SMEcJVCFnXIoy6pEZlAL9w=;
-        b=seRA5xWxYU83VdMrVLtHF1Eatqqkw31ga6qcyMBfJd+s3QPgBx6g+m4DYH4pvRRXGR
-         jczirAIlRfV2UI1tHi1gioMFawIR/5VYinHBKhnK4AXeTpyuU8rhwBe+xz6/pGK9D8wF
-         OVVt3jyIMYLV+rSFg49uvYePMuAPwuKt7W5vh8yhCAYWkMXfUeCWtUwHxfMUI7bGWnJm
-         zDmgPrvn0L0TAlDTowtsOSR/h+zCvLygMY0s3/nYIT6RxKJzNr8cJ2MYmX+NcQDAOv48
-         D9jA179S6jzp+u2ZcH9Fs3WjgXUt/1unPj4CKRcXX8WrmqBdO9kFNhJmnQLF5/h1cNyf
-         p6Cg==
-X-Gm-Message-State: AOAM532TRjW8Hq17NyrMM8N01/nc4KFVV3h7bqSMdKg4iXO38ArueLi+
-        oJQeHdU9pXlrOiblyfLuaQY7MTpJ/YhftbQPSy9/Fk6FZYxGPBHVRVGdjFMZf6EGRKN6KqNvq42
-        nup/tp77YPAbg
-X-Received: by 2002:adf:a18c:: with SMTP id u12mr22429550wru.90.1599485578833;
-        Mon, 07 Sep 2020 06:32:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzTQDEUKyKYpoKhV6e9kqnUpqInxvY6mXvKDlN1WLTG+p30H/JZ2ZVv0WLVSsrs9mojCzV9xg==
-X-Received: by 2002:adf:a18c:: with SMTP id u12mr22429519wru.90.1599485578415;
-        Mon, 07 Sep 2020 06:32:58 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id t22sm20618520wmt.1.2020.09.07.06.32.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2020 06:32:57 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 64EF1180497; Mon,  7 Sep 2020 15:32:57 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Borna Cafuk <borna.cafuk@sartura.hr>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf@vger.kernel.org, Luka Perkov <luka.perkov@sartura.hr>,
-        kpsingh@google.com
-Subject: Re: HASH_OF_MAPS inner map allocation from BPF
-In-Reply-To: <CAGeTCaWSSBJye72NCQW4N=XtsFx-rv-EEgTowTT3VEtus=pFtA@mail.gmail.com>
-References: <CAGeTCaU1fEGVVWnXKR_zv4ZSoCrBGSN65-RpFuKg9Gf-_z6TOw@mail.gmail.com>
- <CAADnVQKsbbd9dbPYQqa5=QsRfLo07hEjr1rSC=5DfVpzUK7Ajw@mail.gmail.com>
- <CAGeTCaWSSBJye72NCQW4N=XtsFx-rv-EEgTowTT3VEtus=pFtA@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Mon, 07 Sep 2020 15:32:57 +0200
-Message-ID: <878sdlpv92.fsf@toke.dk>
+        bh=roaevUwoEk/ZQMYrEJKVf+IX4sE5Ce77Mkr/rtN0U/Y=;
+        b=Bu+XmXReMas0afJ/voqmydQS7aQx5NtX1/s0BQiG99FW8wTl5S9dLWJkS8bF/IoNqrBEge
+        bxoaG+XjXgiC6oW2IBXeZXBFTf3xFnq1nITMU7sYEmIHiX3BNYaCFIhJFR1raohHv4Pv4v
+        OLIrnO/vRxwrKB00MlAYODOz7F6WgPE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-453-etlBzSY0Mw-JCDu5_rnuvA-1; Mon, 07 Sep 2020 08:45:23 -0400
+X-MC-Unique: etlBzSY0Mw-JCDu5_rnuvA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 29494107465A;
+        Mon,  7 Sep 2020 12:45:21 +0000 (UTC)
+Received: from carbon (unknown [10.40.208.42])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 79DE227C29;
+        Mon,  7 Sep 2020 12:45:11 +0000 (UTC)
+Date:   Mon, 7 Sep 2020 14:45:08 +0200
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, magnus.karlsson@intel.com,
+        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
+        john.fastabend@gmail.com, intel-wired-lan@lists.osuosl.org,
+        brouer@redhat.com,
+        Toke =?UTF-8?B?SMO4?= =?UTF-8?B?aWxhbmQtSsO4cmdlbnNlbg==?= 
+        <toke@redhat.com>
+Subject: Re: [PATCH bpf-next 3/6] xsk: introduce xsk_do_redirect_rx_full()
+ helper
+Message-ID: <20200907144508.3ddda938@carbon>
+In-Reply-To: <dfa75afc-ceb7-76ce-6ba3-3b89c53f92f3@intel.com>
+References: <20200904135332.60259-1-bjorn.topel@gmail.com>
+        <20200904135332.60259-4-bjorn.topel@gmail.com>
+        <20200904171143.5868999a@carbon>
+        <dfa75afc-ceb7-76ce-6ba3-3b89c53f92f3@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Borna Cafuk <borna.cafuk@sartura.hr> writes:
+On Fri, 4 Sep 2020 17:39:17 +0200
+Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com> wrote:
 
-> On Sat, Sep 5, 2020 at 12:47 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
->>
->> On Fri, Sep 4, 2020 at 7:57 AM Borna Cafuk <borna.cafuk@sartura.hr> wrote:
->> >
->> > Hello everyone,
->> >
->> > Judging by [0], the inner maps in BPF_MAP_TYPE_HASH_OF_MAPS can only be created
->> > from the userspace. This seems quite limiting in regard to what can be done
->> > with them.
->> >
->> > Are there any plans to allow for creating the inner maps from BPF programs?
->> >
->> > [0] https://stackoverflow.com/a/63391528
->>
->> Did you ask that question or your use case is different?
->> Creating a new map for map_in_map from bpf prog can be implemented.
->> bpf_map_update_elem() is doing memory allocation for map elements.
->> In such a case calling this helper on map_in_map can, in theory, create a new
->> inner map and insert it into the outer map.
->
-> No, it wasn't me who asked that question, but it seemed close enough to
-> my issue. My use case calls for modifying the syscount example from BCC[1].
->
-> The idea is to have an outer map where the keys are PIDs, and inner maps where
-> the keys are system call numbers. This would enable tracking the number of
-> syscalls made by each process and the makeup of those calls for all processes
-> simultaneously.
->
-> [1] https://github.com/iovisor/bcc/blob/master/libbpf-tools/syscount.bpf.c
+> On 2020-09-04 17:11, Jesper Dangaard Brouer wrote:
+> > On Fri,  4 Sep 2020 15:53:28 +0200 Bj=C3=B6rn T=C3=B6pel
+> > <bjorn.topel@gmail.com> wrote:
+> >  =20
+> >> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+> >>=20
+> >> The xsk_do_redirect_rx_full() helper can be used to check if a
+> >> failure of xdp_do_redirect() was due to the AF_XDP socket had a
+> >> full Rx ring. =20
+> >=20
+> > This is very AF_XDP specific.  I think that the cpumap could likely=20
+> > benefit from similar approach? e.g. if the cpumap kthread is
+> > scheduled on the same CPU.
+> >  =20
+>=20
+> At least I thought this was *very* AF_XDP specific, since the kernel is
+> dependent of that userland runs. Allocation (source) and Rx ring (sink).
+> Maybe I was wrong! :-)
+>=20
+> The thing with AF_XDP zero-copy, is that we sort of assume that if a
+> user enabled that most packets will have XDP_REDIRECT to an AF_XDP socket.
+>=20
+>=20
+> > But for cpumap we only want this behavior if sched on the same CPU
+> > as RX-NAPI.  This could be "seen" by the cpumap code itself in the
+> > case bq_flush_to_queue() drops packets, check if rcpu->cpu equal=20
+> > smp_processor_id().  Maybe I'm taking this too far?
+> >  =20
+>=20
+> Interesting. So, if you're running on the same core, and redirect fail
+> for CPUMAP, you'd like to yield the NAPI loop? Is that really OK from a
+> fairness perspective? I mean, with AF_XDP zero-copy we pretty much know
+> that all actions will be redirect to socket. For CPUMAP type of
+> applications, can that assumption be made?
 
-Well, if you just want to count, map-in-map seems a bit overkill? You
-could just do:
+Yes, you are right.  The RX NAPI loop could be doing something else,
+and yielding the NAPI loop due to detecting same-CPU is stalling on
+cpumap delivery might not be correct action.
 
-struct {
-  u32 pid;
-  u32 syscall;
-} map_key;
+I just tested the same-CPU processing case for cpumap (result below
+signature), and it doesn't exhibit the bad 'dropping-off-edge'
+performance slowdown.  The cpumap code also already tries to mitigate
+this, by calling wake_up_process() for every 8 packets (CPU_MAP_BULK_SIZE).
 
-and use that?
+I find your patchset very interesting, as I believe we do need some
+kind of general push-back "flow-control" mechanism for XDP. Maybe I
+should solve this differently in our XDP-TX-QoS pipe dream ;-)
 
--Toke
+--=20
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
+
+Quick benchmark of cpumap.
+
+
+Same CPU RX and cpumap processing:
+----------------------------------
+
+(Doing XDP_DROP on CPU)
+Running XDP/eBPF prog_name:xdp_cpu_map0
+XDP-cpumap      CPU:to  pps            drop-pps    extra-info
+XDP-RX          4       9,189,700      0           0         =20
+XDP-RX          total   9,189,700      0         =20
+cpumap-enqueue    4:4   9,189,696      0           8.00       bulk-average
+cpumap-enqueue  sum:4   9,189,696      0           8.00       bulk-average
+cpumap_kthread  4       9,189,702      0           143,582    sched
+cpumap_kthread  total   9,189,702      0           143,582    sched-sum
+redirect_err    total   0              0         =20
+xdp_exception   total   0              0         =20
+
+2nd remote XDP/eBPF prog_name: xdp1
+XDP-cpumap      CPU:to  xdp-pass       xdp-drop    xdp-redir
+xdp-in-kthread  4       0              9,189,702   0        =20
+xdp-in-kthread  total   0              9,189,702   0        =20
+
+ %CPU
+ 51,8 ksoftirqd/4                      =20
+ 48,2 cpumap/4/map:17                  =20
+
+
+(Doing XDP_PASS on CPU)
+Running XDP/eBPF prog_name:xdp_cpu_map0
+XDP-cpumap      CPU:to  pps            drop-pps    extra-info
+XDP-RX          4       8,593,822      0           0         =20
+XDP-RX          total   8,593,822      0         =20
+cpumap-enqueue    4:4   8,593,888      7,714,949   8.00       bulk-average
+cpumap-enqueue  sum:4   8,593,888      7,714,949   8.00       bulk-average
+cpumap_kthread  4       878,930        0           13,732     sched
+cpumap_kthread  total   878,930        0           13,732     sched-sum
+redirect_err    total   0              0         =20
+xdp_exception   total   0              0         =20
+
+2nd remote XDP/eBPF prog_name: xdp_redirect_dummy
+XDP-cpumap      CPU:to  xdp-pass       xdp-drop    xdp-redir
+xdp-in-kthread  4       878,931        0           0        =20
+xdp-in-kthread  total   878,931        0           0        =20
+
+
+
+Another CPU getting cpumap redirected packets:
+----------------------------------------------
+
+(Doing XDP_DROP on CPU)
+Running XDP/eBPF prog_name:xdp_cpu_map0
+XDP-cpumap      CPU:to  pps            drop-pps    extra-info
+XDP-RX          4       17,526,797     0           0         =20
+XDP-RX          total   17,526,797     0         =20
+cpumap-enqueue    4:0   17,526,796     245,811     8.00       bulk-average
+cpumap-enqueue  sum:0   17,526,796     245,811     8.00       bulk-average
+cpumap_kthread  0       17,281,001     0           16,351     sched
+cpumap_kthread  total   17,281,001     0           16,351     sched-sum
+redirect_err    total   0              0         =20
+xdp_exception   total   0              0         =20
+
+2nd remote XDP/eBPF prog_name: xdp1
+XDP-cpumap      CPU:to  xdp-pass       xdp-drop    xdp-redir
+xdp-in-kthread  0       0              17,281,001  0        =20
+xdp-in-kthread  total   0              17,281,001  0        =20
+
+
+(Doing XDP_PASS on CPU)
+Running XDP/eBPF prog_name:xdp_cpu_map0
+XDP-cpumap      CPU:to  pps            drop-pps    extra-info
+XDP-RX          4       14,603,587     0           0         =20
+XDP-RX          total   14,603,587     0         =20
+cpumap-enqueue    4:0   14,603,582     12,999,248  8.00       bulk-average
+cpumap-enqueue  sum:0   14,603,582     12,999,248  8.00       bulk-average
+cpumap_kthread  0       1,604,338      0           0         =20
+cpumap_kthread  total   1,604,338      0           0         =20
+redirect_err    total   0              0         =20
+xdp_exception   total   0              0         =20
+
+2nd remote XDP/eBPF prog_name: xdp_redirect_dummy
+XDP-cpumap      CPU:to  xdp-pass       xdp-drop    xdp-redir
+xdp-in-kthread  0       1,604,338      0           0        =20
+xdp-in-kthread  total   1,604,338      0           0        =20
+
+
+
+
+
 
