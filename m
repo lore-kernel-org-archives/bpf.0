@@ -6,65 +6,65 @@ X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
 	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C3C4C433E2
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:38:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7DFDC433E2
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:40:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5949B21D80
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:38:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 679C4206B5
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:40:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="CPg9ttNw"
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="MAFjd/xV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730957AbgIGQiP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Sep 2020 12:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
+        id S1729831AbgIGQkb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Sep 2020 12:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729845AbgIGQiI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Sep 2020 12:38:08 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7410C061573
-        for <bpf@vger.kernel.org>; Mon,  7 Sep 2020 09:38:07 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id x23so4977339wmi.3
-        for <bpf@vger.kernel.org>; Mon, 07 Sep 2020 09:38:07 -0700 (PDT)
+        with ESMTP id S1730119AbgIGQkY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Sep 2020 12:40:24 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5AEC061573
+        for <bpf@vger.kernel.org>; Mon,  7 Sep 2020 09:40:23 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id z1so16467167wrt.3
+        for <bpf@vger.kernel.org>; Mon, 07 Sep 2020 09:40:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=jWk4nkLLyrHboAdsfa8uYQwdthzQYMkDhW9EJWZBW7A=;
-        b=CPg9ttNwJtUWrqYC1wKGCBWzVe2egQVfJ8W5ZkiYQrjdyJd6VIO7HH1Gx11+EtBUNa
-         I2zxjdpE2PiboglqaM0TmZ7GWZDd0G7C3015kTXb4d3WG2cdhMGyWOI9KtlhRNBQf4VF
-         lkJNfF2oQCwP8Hlvk5vFvZmXBNSsvGabP0VnjrmLsplryVW7TrJZ3UxIPQMLsazu4/wi
-         Ev4/CtXjEl+tAvAovxSUr1nqHk5KNpXfvbHWLdMOFfuj980YT9h3nPwJkd00BsUOEujN
-         kaqrJr5b/tU0zX7FedE/yN7zJVLFGcy3uZVZSAqtRsOkLifSDEZV63N5uC8rUghXQ2QV
-         2ENg==
+        bh=sqofUc8zWEtfn+646yQyHV6NmB9WV8nndhuaIKpsu8o=;
+        b=MAFjd/xVjC3AlDAISmhAVdSkBa+rK+WyPVh1o820TCdj1cOCjA6t7eKe9587gOc3gx
+         LBLaH6MKeS36NI/3pBEFBWeeoNSkannYJDSZklk00H2npXEDiNOdLmHvgdSUO0hLaRyH
+         fG5QtcW0vHAirk+PC/g1IDR6sYBgnLm2yG9wvY7+rqwsM+prGYgEhRmzwsFRMm/Oatqy
+         q3cXIRk2uzVPso+wHckUGzY62tV1Ja101lhjQMa+ORlW5tL+xw0Pch0aQYuH+bggwej0
+         r/6XJVWJQZGNNrsU+HFLgtkdqjE6ThF6MAsTUo4ssjB1VI+lu3KIRJbNWWEfJPX/Fdv9
+         cXoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=jWk4nkLLyrHboAdsfa8uYQwdthzQYMkDhW9EJWZBW7A=;
-        b=YO/OV0eYwN/c1Vy57IYTQdgGwYlpUrJkL5lNalQwPmA3guUFSTm5UR/313Ibq1VDwL
-         bGTi5ZKLjisvlnQPH73+BxAr2H/MvstRsrIe5xO+EkbTPGa2BsMP/g+P2H0Hwq3k2lyW
-         ZoZdhs88GYewJd+zodxekHAt7cYcmJm9q4RtWC9BnqoVQ2sLMa0iAq70F/UuVoNZhEgu
-         Jv4fAWD9x/uMR5kqwWwdnF0EHo/IfHevhPRk3g/m7V9KNs/h35+jdLsdRRITQk002lQn
-         +0TqXXI5COWWq1aQaKES6ZP7m7NdWr5tEJ5oEZ/48t54J8yM6arc9TPF7Es33ty/Sl5k
-         g+lw==
-X-Gm-Message-State: AOAM531O2L/19pyyQEVAZdx7xJFKORZRYSI9RzFxOZ7a0yAAnt+FRrvh
-        p1kVZAP937BL/RGy9jN3oIoI2w==
-X-Google-Smtp-Source: ABdhPJzUSSCGWpdzfRI7CKoAPaKEGnKwtAHBZ4ctXUKJ09MYzd3BxcddK4erW9ay29vF+o1sw6QTCg==
-X-Received: by 2002:a1c:c910:: with SMTP id f16mr184459wmb.82.1599496686477;
-        Mon, 07 Sep 2020 09:38:06 -0700 (PDT)
-Received: from localhost.localdomain ([194.35.119.17])
-        by smtp.gmail.com with ESMTPSA id g12sm26546580wro.89.2020.09.07.09.38.05
+        bh=sqofUc8zWEtfn+646yQyHV6NmB9WV8nndhuaIKpsu8o=;
+        b=nwapOjaOjbrbe1RRdhvZI40TvtlHX1If3wbph6QFJvKgv4YzxInvDr0QuRO3/XVT33
+         MwCkOX9CUeDMMB5+oXxub5fMVXgbs1sd0eE1LZ4m84hnub4wi5u1ghmemDZKvyOdaFG9
+         DVqVgrTUqPESRA3y/Z9WcvbXym1QJWJCNAMJGNXT2sDQ6fYvSL6q3E2iggyLgK9th30d
+         RZBC8UqfCN9FTDt8P0PVxZzkHI9G9Vhxf/TbUeJHRfz1kwsGbmgSB9VEWyiaOHWxlm4C
+         vFttbusTE7xyMsHtpVs4WtqqupBMO1894hV3KibG5T0l5bvm1JxomrZJcCO8PL0qd7tQ
+         e2Gg==
+X-Gm-Message-State: AOAM5306U8Dq+CUqKBMTD3NVUWJGt+krDmXQVBTGY+E+tjoYehZRkh5P
+        RjKCsUSIRY7PB2K6o/1aWi3FCA==
+X-Google-Smtp-Source: ABdhPJzSahTn/UmHXn1MKEztfjpMjfbbGbaZ8uNP+BEZwggJO7Oa4j76uEzfEKzYvr8E0X+GVwHHfg==
+X-Received: by 2002:adf:fcc7:: with SMTP id f7mr22097344wrs.274.1599496820813;
+        Mon, 07 Sep 2020 09:40:20 -0700 (PDT)
+Received: from localhost.localdomain ([194.35.119.187])
+        by smtp.gmail.com with ESMTPSA id d2sm9934895wro.34.2020.09.07.09.40.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2020 09:38:06 -0700 (PDT)
+        Mon, 07 Sep 2020 09:40:20 -0700 (PDT)
 From:   Quentin Monnet <quentin@isovalent.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next v2 0/3] tools: bpftool: print built-in features, automate some of the documentation
-Date:   Mon,  7 Sep 2020 17:38:01 +0100
-Message-Id: <20200907163804.29244-1-quentin@isovalent.com>
+Subject: [PATCH bpf-next 0/2] bpf: detect build errors for man pages for bpftool and eBPF helpers
+Date:   Mon,  7 Sep 2020 17:40:15 +0100
+Message-Id: <20200907164017.30644-1-quentin@isovalent.com>
 X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -73,47 +73,25 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There are two changes for bpftool in this series.
+This set aims at improving the checks for building bpftool's documentation
+(including the man page for eBPF helper functions). The first patch lowers
+the log-level from rst2man and fix the reported informational messages. The
+second one extends the script used to build bpftool in the eBPF selftests,
+so that we also check a documentation build.
 
-The first one is a modification to the "version" command, to have it print
-the status (compiled or not) of some of the optional features for bpftool.
-This is to help determine if a bpftool binary is able to, for example,
-disassemble JIT-compiled programs.
+This is after a suggestion from Andrii Nakryiko.
 
-The last two patches try to automate the generation of some repetitive
-sections in the man pages for bpftool, namely the description of the
-options shared by all commands, and the "see also" section. The objective
-is to make it easier to maintain the pages and to reduce the risk of
-omissions when adding the documentation for new commands.
-
-v2:
-- Fix incorrect JSON output.
-- Use "echo -n" instead of "printf" in Makefile to avoid the risk of
-  passing and evaluating formatting strings.
-
-Quentin Monnet (3):
-  tools: bpftool: print optional built-in features along with version
-  tools: bpftool: include common options from separate file
-  tools: bpftool: automate generation for "SEE ALSO" sections in man
+Quentin Monnet (2):
+  tools: bpftool: log info-level messages when building bpftool man
     pages
+  selftests, bpftool: add bpftool (and eBPF helpers) documentation build
 
- tools/bpf/bpftool/Documentation/Makefile      | 14 ++++++--
- .../bpf/bpftool/Documentation/bpftool-btf.rst | 34 +-----------------
- .../bpftool/Documentation/bpftool-cgroup.rst  | 33 +----------------
- .../bpftool/Documentation/bpftool-feature.rst | 33 +----------------
- .../bpf/bpftool/Documentation/bpftool-gen.rst | 33 +----------------
- .../bpftool/Documentation/bpftool-iter.rst    | 27 +-------------
- .../bpftool/Documentation/bpftool-link.rst    | 34 +-----------------
- .../bpf/bpftool/Documentation/bpftool-map.rst | 33 +----------------
- .../bpf/bpftool/Documentation/bpftool-net.rst | 34 +-----------------
- .../bpftool/Documentation/bpftool-perf.rst    | 34 +-----------------
- .../bpftool/Documentation/bpftool-prog.rst    | 34 +-----------------
- .../Documentation/bpftool-struct_ops.rst      | 35 +------------------
- tools/bpf/bpftool/Documentation/bpftool.rst   | 34 +-----------------
- .../bpftool/Documentation/common_options.rst  | 22 ++++++++++++
- tools/bpf/bpftool/main.c                      | 26 ++++++++++++--
- 15 files changed, 70 insertions(+), 390 deletions(-)
- create mode 100644 tools/bpf/bpftool/Documentation/common_options.rst
+ tools/bpf/bpftool/Documentation/Makefile      |  2 +-
+ .../bpf/bpftool/Documentation/bpftool-btf.rst |  3 +++
+ .../bpf/bpftool/Documentation/bpftool-gen.rst |  4 ++++
+ .../bpf/bpftool/Documentation/bpftool-map.rst |  3 +++
+ .../selftests/bpf/test_bpftool_build.sh       | 23 +++++++++++++++++++
+ 5 files changed, 34 insertions(+), 1 deletion(-)
 
 -- 
 2.25.1
