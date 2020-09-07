@@ -2,120 +2,110 @@ Return-Path: <SRS0=5Irp=CQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EFDBC43461
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 15:11:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D5176C433E2
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 15:15:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B0542176B
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 15:11:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9350A217BA
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 15:15:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jtd/zKbs"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Dox/3mpX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730075AbgIGPKw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Sep 2020 11:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730069AbgIGPCn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Sep 2020 11:02:43 -0400
-Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2754C061574;
-        Mon,  7 Sep 2020 08:02:39 -0700 (PDT)
-Received: by mail-pg1-x541.google.com with SMTP id m8so2859678pgi.3;
-        Mon, 07 Sep 2020 08:02:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oCwcXoLsWMukL1+vXt1yI38gQtqXVGiihrBEQpJvTYo=;
-        b=Jtd/zKbsueQrBTL7VJ5Slx40lKB2sw3dzum3wsYwe8BUGi4ZRFsOTM/4WGNeZEu5qE
-         0s2kLBj/P6fuhzmqQ928pebpR1fUVFTqSdf2Hr/IJIGqVee1MBu3tx1w+p5rtMlH0cD3
-         1OUJfHofzV9MBSWdR22VgdLFiQJk1YxoouJ2b9L1iunUB7TlTOYILIbfQ7+YRMuSYHn1
-         XZWJQ2Oi7mNgfElOyCXmDuXAw5ErNN3Yx2Z84eE8AUMWnD6XWENsQWHWC8Cn5kSATaSe
-         G3zOkE/GjyNRSQH3Gcl0ie2Y54csLZwH9wBh/0uEWuo45b1te7MdjctT8Ih24p44/fdC
-         07Ew==
+        id S1730117AbgIGPPB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Sep 2020 11:15:01 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:22332 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729826AbgIGPOx (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 7 Sep 2020 11:14:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1599491691;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=rqGaOWFIXNlSj3bhgxs5sVqMIMu+K7S3Y4NQ2hq64AE=;
+        b=Dox/3mpXSyHwSkKJ9fAiMHHIpwg8TPivMd+LdSCAmZYRHCCjYVtT266mEHYaPkVEm462tN
+        WbhPPiQWKEdjO2A0PSqTJVc9a9qmUDAha/olN/0KyVe0BHnSehWt7o5IveCUCA7DSTJzG4
+        l/tg7L9Ja8rzYexBxEo2dteXtZ25Ntc=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-256-VFb78OFOP8-QHI0IhgfhXw-1; Mon, 07 Sep 2020 11:14:49 -0400
+X-MC-Unique: VFb78OFOP8-QHI0IhgfhXw-1
+Received: by mail-wr1-f71.google.com with SMTP id f18so5790732wrv.19
+        for <bpf@vger.kernel.org>; Mon, 07 Sep 2020 08:14:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oCwcXoLsWMukL1+vXt1yI38gQtqXVGiihrBEQpJvTYo=;
-        b=pUWMwtwDpQ40THk/D5rnQGWu6H7NWr7BNV/tQXxV1L/zMMesVzmYDUmRHP84tV2pnk
-         JDMTe74Fgq2+0EzscpsohsrjZZcjdHlgdZbYOEwFzzKp5IdD1goNEkKsoE3sYzYBmwBB
-         AuYg0ezJNUajgUz30haVeFZvk6FVtBNONiLwLm5S0fty01b4A8LTPXkZtBtlAYmUV4vz
-         uzLGaZJT7r1C/cuaozMjq6igaaGNNM3tQacqZnJFgpGraIcMa1/83AWif7CV67ayHIJP
-         UDmqnfdD0C2/7Qsh7GxtUDoHkIqSpwf3ibaeGJBhn9Csy/WgmUNpFRz4GwKEdJj4BOeS
-         +MAA==
-X-Gm-Message-State: AOAM5315l7joYlUcZO8H9VeoETbNLpNuvwivaxhtkuaAhgU0DoaEfV1R
-        RwzE8DeSbG1hnKRLSqPP5eo=
-X-Google-Smtp-Source: ABdhPJzlb0YD6IjyVjw81EJMj1W/ABvKa4l/z7cI+rhquS1hPLeA60joniP+Kj27CgcmXo4K4UtJrQ==
-X-Received: by 2002:a62:648c:: with SMTP id y134mr21292351pfb.114.1599490959561;
-        Mon, 07 Sep 2020 08:02:39 -0700 (PDT)
-Received: from btopel-mobl.ger.intel.com ([192.55.55.43])
-        by smtp.gmail.com with ESMTPSA id g129sm15436022pfb.33.2020.09.07.08.02.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2020 08:02:38 -0700 (PDT)
-From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
-To:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        magnus.karlsson@intel.com, kuba@kernel.org,
-        intel-wired-lan@lists.osuosl.org
-Subject: [PATCH bpf-next 1/4] xsk: add XSK_NAPI_WEIGHT define
-Date:   Mon,  7 Sep 2020 17:02:14 +0200
-Message-Id: <20200907150217.30888-2-bjorn.topel@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200907150217.30888-1-bjorn.topel@gmail.com>
-References: <20200907150217.30888-1-bjorn.topel@gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=rqGaOWFIXNlSj3bhgxs5sVqMIMu+K7S3Y4NQ2hq64AE=;
+        b=KDza8C838wQMdIjHXqAVrnf58I1HF/xYJEpbo49l15JfIou05Q96RQpqqpeMyWha/9
+         e0QNE6YjxCs3TTbRulSw+XmvaFMztCviJ27yoMR01a33Q8/lHuvp49998ynMDyUO5x0+
+         75HS/KY3jH+5bI4u9uqOQBbEC2dLop06PF6TSZMx4Z3/y/ryTgeacV3kptzTCU4ogs7+
+         PuWRK8BBKOw1UlCLJlBQt5zKDuLQFypjLCc6iiHqyD0Q14il/+ClGQe3xdXpG+cqvfRL
+         sh9rX+b/9lX+833Obtlz+d73JaXEbFhMgezobPSkiCYJB34kyBSAfAkHOadIIlt+vOan
+         wyLA==
+X-Gm-Message-State: AOAM53122Cd0oaGS1oXzeNOZnL4m5nlA7jtKuDoHmpIhCngFW40UKyi4
+        EIOr88XKYPtoLpxkqTmh/oJIkHFXwzGHbxGQjYfJPf/edJ2/T8NdPUQhM3a8EAFv2Kc08QgZRPr
+        mA054TjJMvXNa0LKIinzVOjmplq/Q
+X-Received: by 2002:a5d:4fcc:: with SMTP id h12mr22124212wrw.199.1599491688329;
+        Mon, 07 Sep 2020 08:14:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz4me6vRr4w/q5zn2LDtFcf3yOg4vgUaio2bYYRBHrAZG55FhqW07kod+9bi0UWY95aChmHsjmw1qGGzzh7ENw=
+X-Received: by 2002:a5d:4fcc:: with SMTP id h12mr22124197wrw.199.1599491688167;
+ Mon, 07 Sep 2020 08:14:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From:   Yauheni Kaliuta <ykaliuta@redhat.com>
+Date:   Mon, 7 Sep 2020 18:14:32 +0300
+Message-ID: <CANoWswkaj1HysW3BxBMG9_nd48fm0MxM5egdtmHU6YsEc_GUtQ@mail.gmail.com>
+Subject: arm64 jit ctx.offset[-1] access
+To:     bpf <bpf@vger.kernel.org>
+Cc:     Zi Shen Lim <zlim.lnx@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+Hi!
 
-The NAPI budget (NAPI_POLL_WEIGHT), meaning the number of received
-packets that are allowed to be processed for each NAPI invocation,
-takes into consideration that each received packet is aimed for the
-kernel networking stack.
+Looks like my first message did not reach the list, resending:
 
-That is not the case for the AF_XDP receive path, where the cost of
-each packet is significantly less. Therefore, this commit adds a new
-NAPI budget, which is the NAPI_POLL_WEIGHT scaled by 4. Typically that
-would be 256 in most configuration. It is encouraged that AF_XDP
-zero-copy capable drivers use the XSK_NAPI_WEIGHT, when zero-copy is
-enabled.
+I have a question about arm64 bpf jit implementation.
 
-Processing 256 packets targeted for AF_XDP is still less work than 64
-(NAPI_POLL_WEIGHT) packets going to the kernel networking stack.
+The problem I observe is "taken loop with back jump to 1st insn"
+verifier test, the subprogram is:
 
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
----
- include/net/xdp_sock_drv.h | 3 +++
- 1 file changed, 3 insertions(+)
+BPF_ALU64_REG(BPF_ADD, BPF_REG_2, BPF_REG_1),
+BPF_ALU64_IMM(BPF_SUB, BPF_REG_1, 1),
+BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, -3),
+BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
+BPF_EXIT_INSN(),
 
-diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
-index 5b1ee8a9976d..4fc8e931d56f 100644
---- a/include/net/xdp_sock_drv.h
-+++ b/include/net/xdp_sock_drv.h
-@@ -7,8 +7,11 @@
- #define _LINUX_XDP_SOCK_DRV_H
- 
- #include <net/xdp_sock.h>
-+#include <linux/netdevice.h>
- #include <net/xsk_buff_pool.h>
- 
-+#define XSK_NAPI_WEIGHT (NAPI_POLL_WEIGHT << 2)
-+
- #ifdef CONFIG_XDP_SOCKETS
- 
- void xsk_tx_completed(struct xsk_buff_pool *pool, u32 nb_entries);
+Jitting the program causes invocation of bpf2a64_offset(-1, 2, ctx)
+from
+        jmp_offset = bpf2a64_offset(i + off, i, ctx);
+
+which does ctx->offset[-1] then (and works by accident when it
+returns 0).
+
+As far as I see, the offset[] keeps actually offsets of the next
+instruction:
+
+                ret = build_insn(insn, ctx, extra_pass);
+                if (ret > 0) {
+                        i++;
+                        if (ctx->image == NULL)
+                                ctx->offset[i] = ctx->idx;
+                        continue;
+                }
+                if (ctx->image == NULL)
+                        ctx->offset[i] = ctx->idx;
+
+
+ctx->idx is updated by build_insn() already.
+
+How is that supposed to work?
+
 -- 
-2.25.1
+WBR, Yauheni
 
