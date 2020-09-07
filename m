@@ -2,121 +2,123 @@ Return-Path: <SRS0=5Irp=CQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E77F9C43461
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71BAAC43461
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:02:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9EAD62087D
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:00:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 297FF2087D
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:02:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="UJTmLlRC"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="YQ5kAaBV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729924AbgIGQAN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Sep 2020 12:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729996AbgIGOsa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Sep 2020 10:48:30 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4F8C061755
-        for <bpf@vger.kernel.org>; Mon,  7 Sep 2020 07:48:28 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id e16so16090590wrm.2
-        for <bpf@vger.kernel.org>; Mon, 07 Sep 2020 07:48:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yF7Oj8Xzl9YcsssWtQRfNaxtAUmkzCjL1OJNCKC79AU=;
-        b=UJTmLlRCQSDDMZLMfoAEiPZTYhqNGmQcX5BBsW6rtubtdVBfkJAF0YvUdPVG0LgSWt
-         jePLAWNH9Z+0CLqvolCI4gTJDWq6sRsAkY3Xig8uJEe6e4/JsxL1DYC78DSK7SReIjW5
-         1oglEI5flVoiwflCpiNH9WSc0xtUZvITTKW10=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=yF7Oj8Xzl9YcsssWtQRfNaxtAUmkzCjL1OJNCKC79AU=;
-        b=IK7JRRRVckggDhUMuLkwpxvuUDZR4wsA8w/C1K8rxE8CCqKArbKoyrLNAQ2w+t06tm
-         2qH3rf/snJ8r3WAnK586douNQ+vINSx7nrzmszx365++WMFCrw6UdnEAlLaKLXfESCuz
-         OvOe2cn20Ltw+A+UxlE7oxMZBa1dVNf9j7Q3/u6Ppr2pzH8oop3hFWRM1BGVTYzazHI5
-         MAQsl2Ed9tr8pz8L/5iK08OvtR1iL2tW5TEzmxv0uJkA8fACnGfcSgT+TtSW/eXRJCIp
-         Zbc1+MpzkXlUnYKmQjyP5nSgoi6V3zA6pplktFVyh9XXcxwPCi8ID4P6mxtNxXOBKZy6
-         1fUQ==
-X-Gm-Message-State: AOAM530StZhLoUi5eFOrMwo5ceFB/0zG2ExaAZlX5ncKeqR5JyNfiYTn
-        fI5hef0dUuU2vNI1DiSXnROMFA==
-X-Google-Smtp-Source: ABdhPJyBV3JV2bKh8nPH8CxOCluqf1rV4B8nkZUWprcQzcILCwnhl/J2L8p1Qh2rJwXX/Uakz2xfEA==
-X-Received: by 2002:adf:f78c:: with SMTP id q12mr22113404wrp.6.1599490106899;
-        Mon, 07 Sep 2020 07:48:26 -0700 (PDT)
-Received: from antares.lan (2.e.3.8.e.0.6.b.6.2.5.e.8.e.4.b.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:b4e8:e526:b60e:83e2])
-        by smtp.gmail.com with ESMTPSA id 59sm8816834wro.82.2020.09.07.07.48.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2020 07:48:26 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     ast@kernel.org, yhs@fb.com, daniel@iogearbox.net,
-        jakub@cloudflare.com, john.fastabend@gmail.com, kafai@fb.com
-Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com,
-        Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next v4 0/7] Sockmap iterator
-Date:   Mon,  7 Sep 2020 15:46:54 +0100
-Message-Id: <20200907144701.44867-1-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.25.1
+        id S1730331AbgIGQCK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Sep 2020 12:02:10 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:4586 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729998AbgIGQAN (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 7 Sep 2020 12:00:13 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 087FWF4q047733;
+        Mon, 7 Sep 2020 12:00:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : date : in-reply-to : references : content-type : mime-version
+ : content-transfer-encoding; s=pp1;
+ bh=S7T/TXOrEn9Vrt5dzPb/xYrfynM/Jiz4+yngT9IfgsM=;
+ b=YQ5kAaBVSeE7XHsZlII8D0tWxmRncFcAT5OjwvaqBPzekJwYR0/Otyvh4t03o7+zyrpp
+ oulOihLETxngS0R6TdekyO8axZPa7RubyJRDBw11R4J3o3IdLmAWrp7AXJw28OG1BbEJ
+ YI4Dw9cQ/mSXeeENIA7A3DYuL6mdZNEyjPd0GGmEYW7LkdX3ZdBVnc4Jcg4/OWOEQnlo
+ VQwM3MBn5L2leNLtr6xNVf64CmOnmBDVCr4XzfQJQB/fg/3dAeIqHVF1RUAwndnBwysT
+ 5CZTPmrm8pnK9UmJDWJEJ2HlMPNny7gbLCIDT+pPQN4GERUeJ7RndOzXmy9+gU46yodY Rw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33dpm8j7qv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Sep 2020 12:00:01 -0400
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 087FWVVl048563;
+        Mon, 7 Sep 2020 12:00:01 -0400
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 33dpm8j7qa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Sep 2020 12:00:01 -0400
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 087Fv89V004917;
+        Mon, 7 Sep 2020 15:59:59 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma05fra.de.ibm.com with ESMTP id 33c2a89j9m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Sep 2020 15:59:59 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 087Fxv9636372792
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 7 Sep 2020 15:59:57 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2908511C050;
+        Mon,  7 Sep 2020 15:59:57 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E37FD11C04C;
+        Mon,  7 Sep 2020 15:59:56 +0000 (GMT)
+Received: from sig-9-145-16-19.uk.ibm.com (unknown [9.145.16.19])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  7 Sep 2020 15:59:56 +0000 (GMT)
+Message-ID: <9e99c5301fbbb4f5f601b69816ee1dc9ab0df948.camel@linux.ibm.com>
+Subject: Re: Problem with endianess of pahole BTF output for vmlinux
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Tony Ambardar <tony.ambardar@gmail.com>, bpf@vger.kernel.org,
+        dwarves@vger.kernel.org
+Date:   Mon, 07 Sep 2020 17:59:56 +0200
+In-Reply-To: <CAPGftE8ipAacAnm9xMHFabXCL-XrCXGmOsX-Nsjvz9wnh3Zx-w@mail.gmail.com>
+References: <CAPGftE8ipAacAnm9xMHFabXCL-XrCXGmOsX-Nsjvz9wnh3Zx-w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-07_10:2020-09-07,2020-09-07 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ phishscore=0 priorityscore=1501 clxscore=1011 adultscore=0 suspectscore=3
+ spamscore=0 lowpriorityscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009070149
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Martin pointed out that a struct sock pointer may not be a full socket.
-It's therefore invalid to accept such a pointer in lieu of PTR_TO_SOCKET.
-Instead, we can allow passing it instead of PTR_TO_SOCK_COMMON. The sockmap
-helpers are then adjusted to accept PTR_TO_SOCK_COMMON. This requires no
-changes to the sockmap code itself since it already checks for fullsocks.
+On Sat, 2020-09-05 at 21:16 -0700, Tony Ambardar wrote:
+> Hello,
+> 
+> I'm using GCC 8.4.0, binutils 2.34 and pahole 1.17, compiling on an
+> Ubuntu/x86_64 host and targeting both little- and big-endian mips
+> running on malta/qemu. When cross-compiling Linux 5.4.x LTS and
+> testing bpftool/BTF functionality on the target, I encounter errors
+> on
+> big-endian targets:
+> 
+> > root@OpenWrt:/# bpftool btf dump file /sys/kernel/btf/vmlinux
+> > libbpf: failed to get EHDR from /sys/kernel/btf/vmlinux
+> > Error: failed to load BTF from /sys/kernel/btf/vmlinux: No error
+> > information
+> 
+> After investigating, the problem appears to be that "pahole -J"
+> running on the x86_64 little-endian host will always generate raw BTF
+> of native endianness (based on BTF magic), which causes the error
+> above on big-endian targets.
+> 
+> Is this expected? Is DEBUG_INFO_BTF supported in general when
+> cross-compiling? How does one generate BTF encoded for the target
+> endianness with pahole?
+> 
+> Thanks for any feedback or suggestions,
+> Tony
 
-Changes in v4:
-- Alias struct sock* to PTR_TO_SOCK_COMMON instead of PTR_TO_SOCKET (Martin)
+We have the same problem on s390, and I'm not aware of any solution at
+the moment. It would be great if we could figure out how to resolve 
+this.
 
-Changes in v3:
-- Use PTR_TO_BTF_ID in iterator context (Yonghong, Martin)
-- Use rcu_dereference instead of rcu_dereference_raw (Jakub)
-- Fix various test nits (Jakub, Andrii)
-
-Changes in v2:
-- Remove unnecessary sk_fullsock checks (Jakub)
-- Nits for test output (Jakub)
-- Increase number of sockets in tests to 64 (Jakub)
-- Handle ENOENT in tests (Jakub)
-- Actually test SOCKHASH iteration (myself)
-- Fix SOCKHASH iterator initialization (myself)
-
-v1: https://lore.kernel.org/bpf/20200828094834.23290-1-lmb@cloudflare.com/
-v2: https://lore.kernel.org/bpf/20200901103210.54607-1-lmb@cloudflare.com/
-
-Lorenz Bauer (7):
-  bpf: Allow passing BTF pointers as PTR_TO_SOCK_COMMON
-  net: sockmap: Remove unnecessary sk_fullsock checks
-  net: Allow iterating sockmap and sockhash
-  bpf: sockmap: accept sock_common pointer when updating
-  selftests: bpf: Ensure that BTF sockets cannot be released
-  selftests: bpf: Add helper to compare socket cookies
-  selftests: bpf: Test copying a sockmap via bpf_iter
-
- kernel/bpf/verifier.c                         |  63 ++--
- net/core/sock_map.c                           | 284 +++++++++++++++++-
- .../bpf/prog_tests/reference_tracking.c       |  20 +-
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 138 ++++++++-
- tools/testing/selftests/bpf/progs/bpf_iter.h  |   9 +
- .../selftests/bpf/progs/bpf_iter_sockmap.c    |  57 ++++
- .../selftests/bpf/progs/bpf_iter_sockmap.h    |   3 +
- .../bpf/progs/test_sk_ref_track_invalid.c     |  20 ++
- 8 files changed, 549 insertions(+), 45 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_sockmap.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_sockmap.h
- create mode 100644 tools/testing/selftests/bpf/progs/test_sk_ref_track_invalid.c
-
--- 
-2.25.1
+Best regards,
+Ilya
 
