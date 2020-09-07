@@ -2,133 +2,98 @@ Return-Path: <SRS0=5Irp=CQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38F39C43461
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:04:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 49A11C2BB84
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:05:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E93AD2080A
-	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:04:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 016E1208C7
+	for <bpf@archiver.kernel.org>; Mon,  7 Sep 2020 16:05:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="0O3oYQou"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iD4rAhxz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730284AbgIGQEx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Sep 2020 12:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729993AbgIGOs3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Sep 2020 10:48:29 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778B6C061574
-        for <bpf@vger.kernel.org>; Mon,  7 Sep 2020 07:48:26 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id x14so16040168wrl.12
-        for <bpf@vger.kernel.org>; Mon, 07 Sep 2020 07:48:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Zcr/JFbOol6wmiv3ts+IPWkhlKfqLS4DXUzUuwROYDw=;
-        b=0O3oYQouP6wny4HR0gX5uARvtGXyrY1DyzJZK3wGPwhHGxlCX3Q/uq/fr17tsdKEgr
-         vaHacKzgK7VM0YacBH7cQ52DJtd17+SIPF228cYeU9lT6dy5+yroVGshCr/fJbRRwOdp
-         IpoSsgtIUGdRjPc/+f20/y4xH1lzu6Shr6y6KEMLUYyIiXg7BPC7KQAJmwLMDMxkHHSQ
-         ntFbNX2Zgx5qjmDo5vxrg81KTupVnej1fzOU54WUzEHdJB5CnP4FcUI3nfofZQ3pkbfu
-         VY0VvI329twT2iXY3JnkdHUcp++xOm0jFVIhNN0OR3M5t4OPzVeGNoXN/WZ4z0RmHn2O
-         6LPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Zcr/JFbOol6wmiv3ts+IPWkhlKfqLS4DXUzUuwROYDw=;
-        b=hwFxpZiDRNRu43QN63GHxFx80I7c9EhgKFZYJzuQII79KxwWybRnrbHY6YnSDUNr4A
-         SMrXwYa839uTK+eYYrbtUWqDe2kJ1gUaZggI0HLHsdkrCI92BhbNNwX/HFbIWDJcrSqv
-         UFoREdjPjwMrzVj9bJuGxc9tYGGaJQ6e7biBIrmM9SGK0xDH9WRGc6O/XnLJedAjZ8Vq
-         OkZoisHrym0nv3+rdc6qDXZA+F04MMtKwSi696SLliuz2ZtANClpK7OQmaBAhLZRi2gO
-         MFDOTToxb8N68okwzE1/gMZjq0//eITgGrfA4JCQYJ3aWJ7sVPa37FeZD511lI7bei/a
-         RsYw==
-X-Gm-Message-State: AOAM530BjL5wE0btNrM9uNfdScYJAw5ruZdZSTfPpsSRlrs6T5c+ONHQ
-        Uu5c1mfqDhWadr2qFJkTVvmIwA==
-X-Google-Smtp-Source: ABdhPJxuVdu3o+AbMraDvK4KyLqjFrn9eH5E67uU3ldgNAGrPeezXenWLxcTp4eXcRkUZWkg9FfyDQ==
-X-Received: by 2002:adf:b442:: with SMTP id v2mr23710487wrd.213.1599490104922;
-        Mon, 07 Sep 2020 07:48:24 -0700 (PDT)
-Received: from [192.168.1.12] ([194.35.119.57])
-        by smtp.gmail.com with ESMTPSA id d190sm28977705wmd.23.2020.09.07.07.48.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Sep 2020 07:48:24 -0700 (PDT)
-Subject: Re: [PATCH bpf-next 0/3] bpf: format fixes for BPF helpers and
- bpftool documentation
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>
-References: <20200904161454.31135-1-quentin@isovalent.com>
- <CAEf4BzYi8ELhNhxPikFQLQmB7HAXr7sRsyKi6QYJs+XBoDiwhw@mail.gmail.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-Message-ID: <35e3b69b-3df3-d384-9969-b03d1c816bb5@isovalent.com>
-Date:   Mon, 7 Sep 2020 15:48:23 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.2.1
+        id S1730308AbgIGQFI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Sep 2020 12:05:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22845 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729985AbgIGOsC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 7 Sep 2020 10:48:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1599490081;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=Hn1f0D3gK+jmS/twWbASzEx0oTYYOotgrflxJ+Qif70=;
+        b=iD4rAhxzfhOm+tqW5dQzPqOqfoGvcaGpZ9HoEg3Ee4gSzYynHON4hCzbLa4F6rIhglRj0z
+        hf/ykQV1c1ak4tKPflCQg7LtT6wqvwroTNo4HvWX35qt66bbUrETaN4DwAxTkOSbPnZbQl
+        WeeIBdpcF6/xRJ5G4FsqZyZRXGGhDRI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-496-Wtj6T1NoNxO-KEnza1pFLw-1; Mon, 07 Sep 2020 10:39:14 -0400
+X-MC-Unique: Wtj6T1NoNxO-KEnza1pFLw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E2AF018C5201;
+        Mon,  7 Sep 2020 14:39:13 +0000 (UTC)
+Received: from astarta.redhat.com (ovpn-112-127.ams2.redhat.com [10.36.112.127])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 128935C1BB;
+        Mon,  7 Sep 2020 14:39:12 +0000 (UTC)
+From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To:     Zi Shen Lim <zlim.lnx@gmail.com>
+Cc:     bpf@vger.kernel.org
+Subject: amr64 jit ctx.offset[-1] access
+Date:   Mon, 07 Sep 2020 17:39:10 +0300
+Message-ID: <xunypn6xd52p.fsf@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzYi8ELhNhxPikFQLQmB7HAXr7sRsyKi6QYJs+XBoDiwhw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 04/09/2020 22:40, Andrii Nakryiko wrote:
-> On Fri, Sep 4, 2020 at 9:15 AM Quentin Monnet <quentin@isovalent.com> wrote:
->>
->> This series contains minor fixes (or harmonisation edits) for the
->> bpftool-link documentation (first patch) and BPF helpers documentation
->> (last two patches), so that all related man pages can build without errors.
->>
->> Quentin Monnet (3):
->>   tools: bpftool: fix formatting in bpftool-link documentation
->>   bpf: fix formatting in documentation for BPF helpers
->>   tools, bpf: synchronise BPF UAPI header with tools
->>
->>  include/uapi/linux/bpf.h                      | 87 ++++++++++---------
->>  .../bpftool/Documentation/bpftool-link.rst    |  2 +-
->>  tools/include/uapi/linux/bpf.h                | 87 ++++++++++---------
->>  3 files changed, 91 insertions(+), 85 deletions(-)
->>
->> --
->> 2.20.1
->>
-> 
-> This obviously looks good to me:
-> 
-> Acked-by: Andrii Nakryiko <andriin@fb.com>
-> 
-> But do you think we can somehow prevent issues like this? Consider
-> adding building/testing of documentation to selftests or something.
-> Not sure if that will catch all the issues you've fixed, but that
-> would be a good start.
-> 
+Hi!
 
-Thanks for the review.
+I have a qustion about arm64 bpf jit implementation.
 
-As for preventing future issues, I see two cases. Some minor fixes done
-to harmonise the look of the description for the different helpers could
-be checked with some kind of dedicated checkpatch-like script that would
-validate new helpers I suppose, but I'm not sure whether that's worth
-the trouble of creating that script, creating rules and then enforcing them.
+The problem I observe is "taken loop with back jump to 1st insn"
+verifier test, the subprogram is:
 
-The issues that do raise warnings are more important to fix, and easier
-to detect. We could simply build bpftool's documentation (which also
-happens to build the doc for eBPF helpers) and checks for warnings. We
-already have a script to test bpftool build in the selftests, so I can
-add it there as a follow-up and make doc build fail on warnings.
+BPF_ALU64_REG(BPF_ADD, BPF_REG_2, BPF_REG_1),
+BPF_ALU64_IMM(BPF_SUB, BPF_REG_1, 1),
+BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, -3),
+BPF_MOV64_REG(BPF_REG_0, BPF_REG_2),
+BPF_EXIT_INSN(),
 
-On a somewhat related note I also started to work on a script to check
-that bpftool is correctly sync'ed (with kernel regarding prog names /
-map names etc., and between source code / doc / bash completion) but I
-haven't found the time to finish that work yet.
+Jitting the program causes invokation of bpf2a64_offset(-1, 2, ctx)
+from
+        jmp_offset = bpf2a64_offset(i + off, i, ctx);
 
-Quentin
+which does ctx->offset[-1] then (and works by accident when it
+returns 0).
+
+As far as I see, the offset[] keeps actually offsets of the next
+instruction:
+
+		ret = build_insn(insn, ctx, extra_pass);
+		if (ret > 0) {
+			i++;
+			if (ctx->image == NULL)
+				ctx->offset[i] = ctx->idx;
+			continue;
+		}
+		if (ctx->image == NULL)
+			ctx->offset[i] = ctx->idx;
+
+
+ctx->idx is updated by build_insn() already.
+
+How is that supposed to work?
+
+-- 
+WBR,
+Yauheni Kaliuta
+
