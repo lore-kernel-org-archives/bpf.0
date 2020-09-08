@@ -2,95 +2,140 @@ Return-Path: <SRS0=2QCY=CR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC4A6C433E2
-	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 13:37:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 708DFC2D0F6
+	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 15:55:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C1002078B
-	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 13:37:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E81D251C3
+	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 15:55:27 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="qLXdLXVz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729908AbgIHNgo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Sep 2020 09:36:44 -0400
-Received: from mga05.intel.com ([192.55.52.43]:41206 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729545AbgIHLMP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Sep 2020 07:12:15 -0400
-IronPort-SDR: KA3BG1x0/KIeeZJWRQ2PSqK8SdoysORIFBjUVTrWzEd0/GJiop6netUoDF9Xu/eYG7gKtiTT34
- zaQ4BB/gYHaw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9737"; a="242925918"
-X-IronPort-AV: E=Sophos;i="5.76,405,1592895600"; 
-   d="scan'208";a="242925918"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2020 04:12:15 -0700
-IronPort-SDR: ebvqiBbYWXapEz4ci64bdBQOaYcK2mF5S/5oFyorAuRylRf//LSSu5CczC0iF3r2Si+jwAY83+
- zoimXcqZvq6Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,405,1592895600"; 
-   d="scan'208";a="284479300"
-Received: from pgierasi-mobl.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.39.2])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Sep 2020 04:12:13 -0700
-Subject: Re: [Intel-wired-lan] [PATCH bpf-next 4/4] ixgbe, xsk: use
- XSK_NAPI_WEIGHT as NAPI poll budget
-To:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     kuba@kernel.org, intel-wired-lan@lists.osuosl.org,
-        magnus.karlsson@intel.com
-References: <20200907150217.30888-1-bjorn.topel@gmail.com>
- <20200907150217.30888-5-bjorn.topel@gmail.com>
- <82901368-8e17-a63d-0e46-2434b5777c04@molgen.mpg.de>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-Message-ID: <0fb03a39-d098-8fc9-ba70-e919ef8e091e@intel.com>
-Date:   Tue, 8 Sep 2020 13:12:12 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1730832AbgIHPvs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Sep 2020 11:51:48 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:16276 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730829AbgIHPux (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 8 Sep 2020 11:50:53 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 088FoCKA016185
+        for <bpf@vger.kernel.org>; Tue, 8 Sep 2020 08:50:40 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=9JwYIjoC0IbU1GFXnenfpT1paK1+I3w8jYW2p5RWCz8=;
+ b=qLXdLXVzdzmH5lrYSPk0A3W2CT8YxrmmoQq/RQaeWhUWvlJBtkM32QtdiqJdFuh7uPz3
+ pAGJrocbkyLtcYDoFBok5CyEQszyAGzWyGUPv/D/MO/+Li0/dDf0SK2oOzDB7MCeSKuN
+ a6CjEXmMkrKhziwEU12CFnkLljMf3OCEz9Y= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 33c6624xpb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2020 08:50:40 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 8 Sep 2020 08:50:39 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 2E0AD3701AD2; Tue,  8 Sep 2020 08:50:33 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: add test for map_ptr arithmetic
+Date:   Tue, 8 Sep 2020 08:50:33 -0700
+Message-ID: <20200908155033.1502860-1-yhs@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200908155032.1502450-1-yhs@fb.com>
+References: <20200908155032.1502450-1-yhs@fb.com>
 MIME-Version: 1.0
-In-Reply-To: <82901368-8e17-a63d-0e46-2434b5777c04@molgen.mpg.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-08_08:2020-09-08,2020-09-08 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ adultscore=0 mlxscore=0 mlxlogscore=961 impostorscore=0 lowpriorityscore=0
+ malwarescore=0 bulkscore=0 spamscore=0 suspectscore=8 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009080151
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2020-09-08 12:12, Paul Menzel wrote:
-> Dear Björn,
-> 
-> 
-> Am 07.09.20 um 17:02 schrieb Björn Töpel:
->> From: Björn Töpel <bjorn.topel@intel.com>
->>
->> Start using XSK_NAPI_WEIGHT as NAPI poll budget for the AF_XDP Rx
->> zero-copy path.
-> 
-> Could you please add the description from the patch series cover letter 
-> to this commit too? To my knowledge, the message in the cover letter 
-> won’t be stored in the git repository.
->
+change selftest map_ptr_kern.c which will fail without previous
+verifier change. Also added to verifier test for both
+"map_ptr +=3D scalar" and "scalar +=3D map_ptr" arithmetic.
 
-Paul, thanks for the input! The netdev/bpf trees always include the 
-cover letter in the merge commit.
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ .../selftests/bpf/progs/map_ptr_kern.c        |  4 +--
+ .../testing/selftests/bpf/verifier/map_ptr.c  | 32 +++++++++++++++++++
+ 2 files changed, 34 insertions(+), 2 deletions(-)
 
+diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/tes=
+ting/selftests/bpf/progs/map_ptr_kern.c
+index 982a2d8aa844..d93413d24128 100644
+--- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
++++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+@@ -74,8 +74,8 @@ static inline int check(struct bpf_map *indirect, struc=
+t bpf_map *direct,
+ 	return 1;
+ }
+=20
+-static inline int check_default(struct bpf_map *indirect,
+-				struct bpf_map *direct)
++static __attribute__ ((noinline)) int
++check_default(struct bpf_map *indirect, struct bpf_map *direct)
+ {
+ 	VERIFY(check(indirect, direct, sizeof(__u32), sizeof(__u32),
+ 		     MAX_ENTRIES));
+diff --git a/tools/testing/selftests/bpf/verifier/map_ptr.c b/tools/testi=
+ng/selftests/bpf/verifier/map_ptr.c
+index b52209db8250..637f9293bda8 100644
+--- a/tools/testing/selftests/bpf/verifier/map_ptr.c
++++ b/tools/testing/selftests/bpf/verifier/map_ptr.c
+@@ -60,3 +60,35 @@
+ 	.result =3D ACCEPT,
+ 	.retval =3D 1,
+ },
++{
++	"bpf_map_ptr: r =3D 0, map_ptr =3D map_ptr + r",
++	.insns =3D {
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_hash_16b =3D { 4 },
++	.result =3D ACCEPT,
++},
++{
++	"bpf_map_ptr: r =3D 0, r =3D r + map_ptr",
++	.insns =3D {
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_MOV64_IMM(BPF_REG_1, 0),
++	BPF_LD_MAP_FD(BPF_REG_0, 0),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_hash_16b =3D { 4 },
++	.result =3D ACCEPT,
++},
+--=20
+2.24.1
 
-Cheers,
-Björn
-
->> Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
->> ---
->>   drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> […]
-> 
-> 
-> Kind regards,
-> 
-> Paul
