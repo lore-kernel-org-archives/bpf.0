@@ -2,216 +2,251 @@ Return-Path: <SRS0=2QCY=CR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E8EAC433E2
-	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 19:53:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 576B3C433E2
+	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 19:58:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D60C207DE
-	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 19:53:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0467E20658
+	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 19:58:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="osOmNmC5";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="T1R0V1D0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l/IX42nq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730694AbgIHTxA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Sep 2020 15:53:00 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:14240 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730460AbgIHTwp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 8 Sep 2020 15:52:45 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 088JlKtr010264;
-        Tue, 8 Sep 2020 12:52:31 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=+kciaNCu5WODnq+DiOC3i8Wscpe8OhfUlxlszxW0aNs=;
- b=osOmNmC58O6huVCDx+GbxVoKQj3vHgMnVQztd9mlE+3D9/MjrUmaCvvyvmfPFS6YP+Bs
- wCWxT6xywaNMoL9gPHhYwSSFtHIW/PGHC3llwpSjXQ+kndow+1KAaF9bvLnfkV/Ct00D
- FvmnqttQZGQrY+kqzB8X8iZwRhvbQdtZD8I= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 33c91he7qb-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 08 Sep 2020 12:52:31 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.198) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 8 Sep 2020 12:52:29 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VtqG4WKWx2JzfVLeXGaPWWmHZb4PuZ6V0fa+zHckXpOonRHjbxHsMhMb1geC8LpHuNmzpYvW79ldiNVOLvxFjRarSxTbJbHhebCrS0IKYBJfKfJHUpwphw5r6HTmdctDnyLdbXn3LTXgJd8Drxwdap41KN47Hi1Rm3mGcKyNU8eEVO0BzpfK2xplItJ65U6lUtZq5jHPNH9y5069bM1qmb4hmu8EppbgMxMjcy/k8vUq08ULqEBLSAgKF+5jRsqIrlQGboDZeclybzOYpQUqIrruJKAWkoSmb2Mes+XsemjKIq8Ks/b3NUw3a8wDEMZprDi/UGQSHL2BuMqJQTHgjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+kciaNCu5WODnq+DiOC3i8Wscpe8OhfUlxlszxW0aNs=;
- b=YTKLjBd4nOIJ9cIm0pBL02FXFcQ3/6buqc9CZxBKuubSEQjFmS2cyxcL0sfSVhktg25vJEOo0NBSySNV9OdrDwKNeslJR3iwVAjauH5DjYhal/m7rFEy+lqOROqpePA42hJ4djLz7XITcADFsXHMEBjwuI3+n9RDXvJ49cSq4ZODTNOf2ISs2XiTEmD/THXm9jxtC+/V+7zHKensDSOKA/N26ABeMabfwp11TDQ1WAy1fmPHNzRDbj+Tuyp2F7PxBUnEqpa9KuO9TY/cpkeOM8RFfAm7EDESAukJVU3FQ9aT8SpHdNu39oywuw0gYr+e+cEB7n0glMAWUKyBmimd/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+kciaNCu5WODnq+DiOC3i8Wscpe8OhfUlxlszxW0aNs=;
- b=T1R0V1D0wQs3Cly2OujTSRcoBGMVAmvth2YYSVZvSX9soY9/SEis+rpvLpOUi66Vn8HCqqra1S2z2kRN+a06xynI5+gpEJe3xHncxSKeGehLVecKqdWJyH3sPfBccvQxIShBLFVCHfS8vVl4eOs+6geIesfrZW1wp+t1SPHaFuE=
-Authentication-Results: cloudflare.com; dkim=none (message not signed)
- header.d=none;cloudflare.com; dmarc=none action=none header.from=fb.com;
-Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
- by BYAPR15MB2886.namprd15.prod.outlook.com (2603:10b6:a03:f7::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.15; Tue, 8 Sep
- 2020 19:52:18 +0000
-Received: from BY5PR15MB3571.namprd15.prod.outlook.com
- ([fe80::c13c:fca9:5e04:9bfb]) by BY5PR15MB3571.namprd15.prod.outlook.com
- ([fe80::c13c:fca9:5e04:9bfb%3]) with mapi id 15.20.3348.019; Tue, 8 Sep 2020
- 19:52:18 +0000
-Date:   Tue, 8 Sep 2020 12:52:12 -0700
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     Lorenz Bauer <lmb@cloudflare.com>
-CC:     Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        bpf <bpf@vger.kernel.org>,
-        kernel-team <kernel-team@cloudflare.com>
-Subject: Re: [PATCH bpf-next v3 1/6] bpf: Allow passing BTF pointers as
- PTR_TO_SOCKET
-Message-ID: <20200908195212.ekr3jn6ejnowhlz3@kafai-mbp>
-References: <20200904095904.612390-1-lmb@cloudflare.com>
- <20200904095904.612390-2-lmb@cloudflare.com>
- <20200906224008.fph4frjkkegs6w3b@kafai-mbp.dhcp.thefacebook.com>
- <CACAyw9-ftMBnoqOt_0dhir+Y=2EW4iLsh=LYSH78hEF=STA1iw@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACAyw9-ftMBnoqOt_0dhir+Y=2EW4iLsh=LYSH78hEF=STA1iw@mail.gmail.com>
-X-ClientProxiedBy: BY5PR17CA0036.namprd17.prod.outlook.com
- (2603:10b6:a03:1b8::49) To BY5PR15MB3571.namprd15.prod.outlook.com
- (2603:10b6:a03:1f6::32)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from kafai-mbp (2620:10d:c090:400::5:b20e) by BY5PR17CA0036.namprd17.prod.outlook.com (2603:10b6:a03:1b8::49) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.16 via Frontend Transport; Tue, 8 Sep 2020 19:52:17 +0000
-X-Originating-IP: [2620:10d:c090:400::5:b20e]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c37ebaad-7659-4d07-aaae-08d85430b0d0
-X-MS-TrafficTypeDiagnostic: BYAPR15MB2886:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR15MB2886D865B626244D7001BCB8D5290@BYAPR15MB2886.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lcCI8xInZvNs2YzP7zNRMFQ1xK0oGMrxoOpmqoCuBdoxgWx2sP3/nfjtLSKyWIQgDVB2slytdf1APutz9NvgTUY9n9dRPRXNT41UveNVKjFpi+Yyhi2aiP2cMZSsMRESjf3xN2AQVL6LMq+4MqVS7sYItx3/wirw0BYz8YchjLOHwWB9fNb/XqM+imTk174jtZEELk7oWmUVD9PRCZTg4nxvHcmkhxcyXG3jI/qxf1asOXl6yyXDJd/XqCszHeKKBoDWSONwRZSj3rsQMrtehvCcEtQOl/1McZcJagnPDFIDxuNlmHt2fjcfyHcB6LY5y4yVlupCX5SPApURB5VD+Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(346002)(136003)(39850400004)(366004)(376002)(16526019)(5660300002)(6666004)(186003)(55016002)(83380400001)(6916009)(4326008)(54906003)(316002)(9686003)(86362001)(8936002)(33716001)(52116002)(6496006)(8676002)(478600001)(66476007)(1076003)(66556008)(2906002)(66946007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: oPAiO4AzUvttmmoQjiOh1whE8gG9AUQcvoWDxH16juZKg6cMkfnadf+8F+TULAjpwzJF5ZLwSXeme1UCy1+D85HHMVRx7k3M79/3I8qFDdeo/uPWy4eeX3Ow/1T92ofHMPqMvdH09/dHuz6pDheWLS17EH81Of4V1XBmy0Pt73a5nE7MvjaW/R3IjZfj687vQX2LauD1PD/MX3uNePgaMRtNCnjEkV4vE014KHoXDOxQDaMZzElGpM7ASTn5c3ZpzV5i0FEYgZrutYl76nNxyDZEcTBQU/sFrYmodL+xUl1DmpdArVwiatuv9VhKUl7f/usNh1xBWuNKr52w51uULKGBdf467tPVMYxlX8pqKerpD4lK80xnnGOF3uW0/ybRIfDwVVm0ouADzk27MIFrosE+0KMyqLZQgbohzuZk6YccJUzRfd6w9Zro4hgXDBfVbWrddRLQGCKYBDxQdBsUdx2U9IM23hz+FqONLDKqKdj9tpDw8CUQCMrRxyFLHs5JgOkJdCs2UXwOFWpOc8giWw6CBU+ui+874WtBSw/pKs2e6RQdSAwg0aOrKYwqV6NXSOue6yhbsR7txjTs1zz58E0xxLNgq3VjITDHsuTiDqZ4wKDObHr7OISR9H7kLx/ZLO8wOWfff5CRHuf1fBK17gI8R2DA5BXMcTkO4rbQLHo=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c37ebaad-7659-4d07-aaae-08d85430b0d0
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2020 19:52:17.8831
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9TWJ1+QzrYToCSNn4R8gB7S9eT5g2ocKhfM3pGFIzXPWs8fG/wvl2cjYXSNoO6YR
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2886
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-08_09:2020-09-08,2020-09-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
- priorityscore=1501 malwarescore=0 suspectscore=1 adultscore=0 spamscore=0
- bulkscore=0 mlxlogscore=999 impostorscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009080181
-X-FB-Internal: deliver
+        id S1732554AbgIHT6F (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Sep 2020 15:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731533AbgIHT6C (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Sep 2020 15:58:02 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A4FC061573;
+        Tue,  8 Sep 2020 12:58:01 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id n14so57595pff.6;
+        Tue, 08 Sep 2020 12:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=t1FFZYa1Mtu/BUWpW5DmxBtlSdSmEJ+N7+ptNlY0L1k=;
+        b=l/IX42nqAeUXFd1LGaglx6+FphFwAArzrYFQ3IXIJcYHK/nL6eiMulZUgLHUXHQSS4
+         RsXM3woch0grLGh8gZmiy6+5blKSVtZr4iKP24MsT0rJXn0m3QCVi5mIbJKOg+6lUkNm
+         NyAkS8bxRXziCAve2E5DAhBp/gnG3MkMjcY+Fv1vpM/JI01aRmtiLmKYOnlZxP7wwEmy
+         K17KGTo9/QQ/WEacmPAN13fELIc3qRggDNn/zJpg+CA37dvHuU15PHLDP0xyVH3SfiLn
+         2hatHzfG3KtdbfKqb6sf7SlaJ7NrMuttDjkfjaeTWfT2a4Mr3cAUYrqwUDioixqJBcOI
+         46/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=t1FFZYa1Mtu/BUWpW5DmxBtlSdSmEJ+N7+ptNlY0L1k=;
+        b=GK3xPFAkIXWoX1JYKJydk9OZR+JFOK0s4mGGtk8VjSdtLtvpBZm6hibus3o3zSx5uY
+         gt6Xn37o60j3k6Iec5Sj88M5Idw6sQdgRFBRIbTuEyKPAoLULPu78iZ2dM9xi40Sd4ME
+         eYCjqA4nSegQrujbZN5fFU6KMRzFgpOt80xwyucLBo2nQBw7d1ItBSTsrn3VdZQsRJu/
+         hy4tonjVAeCgEcpIyz4xum2Q7boKWOcAH6lH9xASmYRyKB6XPi9wPfeMaUo+3szvchuT
+         PfWnS5g+eUc20NG5Bb3LgPPqIsKloK68eHU8gQ3LDEoQrnqjHCAotA7xoMS+FRdqUpoW
+         XzIw==
+X-Gm-Message-State: AOAM532j+6RRt4ZqboeD/X54hMCFb+oS+XL/s3XxuMa7NcgeU4eMn8Hf
+        J5ElLGE+0NbERicpb6e+Fo0=
+X-Google-Smtp-Source: ABdhPJx5JUcRUiJx0UFIXo/tai4m2m5SELTkT6kz+6nENwQyPoLFOtULQFfVKI3hVQod1gdtw74Paw==
+X-Received: by 2002:a62:55c5:: with SMTP id j188mr351992pfb.103.1599595081401;
+        Tue, 08 Sep 2020 12:58:01 -0700 (PDT)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id l5sm115122pgm.80.2020.09.08.12.57.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2020 12:58:00 -0700 (PDT)
+Date:   Tue, 08 Sep 2020 12:57:50 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Lorenzo Bianconi <lorenzo@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+        lorenzo.bianconi@redhat.com, brouer@redhat.com,
+        echaudro@redhat.com, sameehj@amazon.com, kuba@kernel.org,
+        daniel@iogearbox.net, ast@kernel.org, shayagr@amazon.com,
+        edumazet@google.com
+Message-ID: <5f57e23e513b2_10343208e0@john-XPS-13-9370.notmuch>
+In-Reply-To: <20200906133617.GC2785@lore-desk>
+References: <cover.1599165031.git.lorenzo@kernel.org>
+ <b7475687bb09aac6ec051596a8ccbb311a54cb8a.1599165031.git.lorenzo@kernel.org>
+ <5f51e2f2eb22_3eceb20837@john-XPS-13-9370.notmuch>
+ <20200904094511.GF2884@lore-desk>
+ <5f525be3da548_1932208b6@john-XPS-13-9370.notmuch>
+ <20200906133617.GC2785@lore-desk>
+Subject: Re: [PATCH v2 net-next 6/9] bpf: helpers: add
+ bpf_xdp_adjust_mb_header helper
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Sep 07, 2020 at 09:57:06AM +0100, Lorenz Bauer wrote:
-> On Sun, 6 Sep 2020 at 23:40, Martin KaFai Lau <kafai@fb.com> wrote:
-> >
-> > On Fri, Sep 04, 2020 at 10:58:59AM +0100, Lorenz Bauer wrote:
-> > > Tracing programs can derive struct sock pointers from a variety
-> > > of sources, e.g. a bpf_iter for sk_storage maps receives one as
-> > > part of the context. It's desirable to be able to pass these to
-> > > functions that expect PTR_TO_SOCKET. For example, it enables us
-> > > to insert such a socket into a sockmap via map_elem_update.
-> > >
-> > > Teach the verifier that a PTR_TO_BTF_ID for a struct sock is
-> > > equivalent to PTR_TO_SOCKET. There is one hazard here:
-> > > bpf_sk_release also takes a PTR_TO_SOCKET, but expects it to be
-> > > refcounted. Since this isn't the case for pointers derived from
-> > > BTF we must prevent them from being passed to the function.
-> > > Luckily, we can simply check that the ref_obj_id is not zero
-> > > in release_reference, and return an error otherwise.
-> > >
-> > > Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-> > > ---
-> > >  kernel/bpf/verifier.c | 61 +++++++++++++++++++++++++------------------
-> > >  1 file changed, 36 insertions(+), 25 deletions(-)
-> > >
-> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > index b4e9c56b8b32..509754c3aa7d 100644
-> > > --- a/kernel/bpf/verifier.c
-> > > +++ b/kernel/bpf/verifier.c
-> > > @@ -3908,6 +3908,9 @@ static int resolve_map_arg_type(struct bpf_verifier_env *env,
-> > >       return 0;
-> > >  }
-> > >
-> > > +BTF_ID_LIST(btf_fullsock_ids)
-> > > +BTF_ID(struct, sock)
-> > It may be fine for the sockmap iter case to treat the "struct sock" BTF_ID
-> > as a fullsock (i.e. PTR_TO_SOCKET).
+Lorenzo Bianconi wrote:
+> > Lorenzo Bianconi wrote:
+> > > > Lorenzo Bianconi wrote:
 > 
-> I think it's unsafe even for the sockmap iter. Since it's a tracing
-> prog there might
-> be other ways for it to obtain a struct sock * in the future.
+> [...]
 > 
-> > This is a generic verifier change though.  For tracing, it is not always the
-> > case.  It cannot always assume that the "struct sock *" in the function being
-> > traced is always a fullsock.
-> 
-> Yes, I see, thanks for reminding me. What a footgun. I think the
-> problem boils down
-> to the fact that we can't express "this is a full socket" in BTF,
-> since there is no such
-> type in the kernel.
-> 
-> Which makes me wonder: how do tracing programs deal with struct sock*
-> that really
-> is a request sock or something?
-PTR_TO_BTF_ID is handled differently, by BPF_PROBE_MEM, to take care
-of cases like this.  bpf_jit_comp.c has some more details.
+> > > > > + *	Description
+> > > > > + *		Adjust frame headers moving *offset* bytes from/to the second
+> > > > > + *		buffer to/from the first one. This helper can be used to move
+> > > > > + *		headers when the hw DMA SG does not copy all the headers in
+> > > > > + *		the first fragment.
+> > > 
+> > > + Eric to the discussion
+> > > 
 
-[ ... ]
+[...]
 
-> > > @@ -4561,6 +4569,9 @@ static int release_reference(struct bpf_verifier_env *env,
-> > >       int err;
-> > >       int i;
-> > >
-> > > +     if (!ref_obj_id)
-> > > +             return -EINVAL;
-> > hmm...... Is it sure this is needed?  If it was, it seems there was
-> > an existing bug in release_reference_state() below which could not catch
-> > the case where "bpf_sk_release()" is called on a pointer that has no
-> > reference acquired before.
+> > > > > +BPF_CALL_2(bpf_xdp_adjust_mb_header, struct  xdp_buff *, xdp,
+> > > > > +	   int, offset)
+> > > > > +{
+> > > > > +	void *data_hard_end, *data_end;
+> > > > > +	struct skb_shared_info *sinfo;
+> > > > > +	int frag_offset, frag_len;
+> > > > > +	u8 *addr;
+> > > > > +
+> > > > > +	if (!xdp->mb)
+> > > > > +		return -EOPNOTSUPP;
+> > 
+> > Not required for this patch necessarily but I think it would be better user
+> > experience if instead of EOPNOTSUPP here we did the header split. This
+> > would allocate a frag and copy the bytes around as needed. Yes it might
+> > be slow if you don't have a frag free in the driver, but if user wants to
+> > do header split and their hardware can't do it we would have a way out.
+> > 
+> > I guess it could be an improvement for later though.
 > 
-> Since sk_release takes a PTR_TO_SOCKET, it's possible to pass a tracing
-> struct sock * to it after this patch. Adding this check prevents the
-> release from
-> succeeding.
-Not all existing PTR_TO_SOCK_COMMON takes a reference also.
-Does it mean all these existing cases are broken?
-For example, bpf_sk_release(__sk_buff->sk) is allowed now?
+> I have no a strong opinion on this, I did it in this way to respect the rule "we
+> do not allocate memory for XDP".
+> 
+> @Jesper, David: thoughts?
+
+Consider adding a flags field to the helper so we could do this later with
+a flag. Then users who want the alloc can set the flag and get it.
+
+[...]
 
 > 
-> >
-> > Can you write a verifier test to demonstrate the issue?
+> > 
+> > How/when does the header split go wrong on the mvneta device? I guess
+> > this is to fix a real bug/issue not some theoritical one? An example
+> > in the commit message would make this concrete. Soemthing like,
+> > "When using RX zerocopy to mmap data into userspace application if
+> > a packet with [all these wild headers] is received rx zerocopy breaks
+> > because header split puts headers X in the data frag confusing apps".
 > 
-> There is a selftest in this series that ensures calling sk_release
-> doesn't work, which exercises this.b
-I am not sure what Patch 4 of this series is testing.
-bpf_sk_release is not even available in bpf tracing iter program.
+> This issue does not occur with mvneta since the driver is not capable of
+> performing header split AFAIK. The helper has been introduced to cover the
+> "issue" reported by Eric in his NetDevConf presentation. In order to test the
+> helper I modified the mventa rx napi loop in a controlled way (this patch can't
+> be sent upstream, it is for testing only :))
+> I will improve commit message in v3.
 
-There are ref tracking tests in tools/testing/selftests/bpf/verifier/ref_tracking.c.
-Please add all ref count related test there to catch the issue.
+Ah ok so really there is no users for the helper then IMO just drop
+the patch until we have a user then.
+
+> 
+> > 
+> > > 
+> > > > 
+> > > > Also and even more concerning I think this API requires the
+> > > > driver to populate shinfo. If we use TX_REDIRECT a lot or TX_XMIT
+> > > > this means we need to populate shinfo when its probably not ever
+> > > > used. If our driver is smart L2/L3 headers are in the readable
+> > > > data and prefetched. Writing frags into the end of a page is likely
+> > > > not free.
+> > > 
+> > > Sorry I did not get what you mean with "populate shinfo" here. We need to
+> > > properly set shared_info in order to create the xdp multi-buff.
+> > > Apart of header splits, please consider the main uses-cases for
+> > > xdp multi-buff are XDP with TSO and Jumbo frames.
+> > 
+> > The use case I have in mind is a XDP_TX or XDP_REDIRECT load balancer.
+> > I wont know this at the driver level and now I'll have to write into
+> > the back of every page with this shinfo just in case. If header
+> > split is working I should never need to even touch the page outside
+> > the first N bytes that were DMAd and in cache with DDIO. So its extra
+> > overhead for something that is unlikely to happen in the LB case.
+> 
+> So far the skb_shared_info in constructed in mvneta only if the hw splits
+> the received data in multiple buffers (so if the MTU is greater than 1 PAGE,
+> please see comments below). Moreover the shared_info is present only in the
+> first buffer.
+
+Still in a normal L2/L3/L4 use case I expect all the headers you
+need to be in the fist buffer so its unlikely for use cases that
+send most traffic via XDP_TX for example to ever need the extra
+info. In these cases I think you are paying some penalty for
+having to do the work of populating the shinfo. Maybe its measurable
+maybe not I'm not sure.
+
+Also if we make it required for multi-buffer than we also need
+the shinfo on 40gbps or 100gbps nics and now even small costs
+matter.
+
+> 
+> > 
+> > If you take the simplest possible program that just returns XDP_TX
+> > and run a pkt generator against it. I believe (haven't run any
+> > tests) that you will see overhead now just from populating this
+> > shinfo. I think it needs to only be done when its needed e.g. when
+> > user makes this helper call or we need to build the skb and populate
+> > the frags there.
+> 
+> sure, I will carry out some tests.
+
+Thanks!
+
+> 
+> > 
+> > I think a smart driver will just keep the frags list in whatever
+> > form it has them (rx descriptors?) and push them over to the
+> > tx descriptors without having to do extra work with frag lists.
+> 
+> I think there are many use-cases where we want to have this info available in
+> xdp_buff/xdp_frame. E.g: let's consider the following Jumbo frame example:
+> - MTU > 1 PAGE (so we the driver will split the received data in multiple rx
+>   descriptors)
+> - the driver performs a XDP_REDIRECT to a veth or cpumap
+> 
+> Relying on the proposed architecture we could enable GRO in veth or cpumap I
+> guess since we can build a non-linear skb from the xdp multi-buff, right?
+
+I'm not disputing there are use-cases. But, I'm trying to see if we
+can cover those without introducing additional latency in other
+cases. Hence the extra benchmarks request ;)
+
+> 
+> > 
+> > > 
+> > > > 
+> > > > Did you benchmark this?
+> > > 
+> > > will do, I need to understand if we can use tiny buffers in mvneta.
+> > 
+> > Why tiny buffers? How does mvneta layout the frags when doing
+> > header split? Can we just benchmark what mvneta is doing at the
+> > end of this patch series?
+> 
+> for the moment mvneta can split the received data when the previous buffer is
+> full (e.g. when we the first page is completely written). I want to explore if
+> I can set a tiny buffer (e.g. 128B) as max received buffer to run some performance
+> tests and have some "comparable" results respect to the ones I got when I added XDP
+> support to mvneta.
+
+OK would be great.
+
+> 
+> > 
+> > Also can you try the basic XDP_TX case mentioned above.
+> > I don't want this to degrade existing use cases if at all
+> > possible.
+> 
+> sure, will do.
+
+Thanks!
