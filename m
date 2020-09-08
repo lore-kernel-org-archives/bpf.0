@@ -2,194 +2,185 @@ Return-Path: <SRS0=2QCY=CR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EB61C43461
-	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 18:34:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE9D7C43461
+	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 19:10:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A2DC2080A
-	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 18:34:50 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L5KOJT6d"
+	by mail.kernel.org (Postfix) with ESMTP id 7C6E420C09
+	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 19:10:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731397AbgIHSet (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Sep 2020 14:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50312 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731737AbgIHScm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Sep 2020 14:32:42 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6846AC0617BB;
-        Tue,  8 Sep 2020 11:24:33 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id h126so90230ybg.4;
-        Tue, 08 Sep 2020 11:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SRWPjeh5wOZKPdRn3jxewIK/0dHDoc31s09B3dnlvws=;
-        b=L5KOJT6drjugCLK8cSVnNImUIs2YEvrEEZwWTpqB8ELNYp6wAxAnIfueB35u7evSOs
-         lf18U4ZDuNP17Zgtbx0w4/iN9OIp3y5AiZczPSQKHlS63cPk/VZ6vOfATZR4QWLj5eyu
-         OyDh8nJqoH9a+KhxVilaCkjNK1gCdcJIf93Yth9RkR/JdfGgAlR5gLJfGRPohYdgnZ2j
-         Pi+w0ueUlbrzyyWbcBDWT/OqwSjuNvc2mNcCHSjxJZVJ2Y+4oN9Tpb1XMBc4S7E+yVu7
-         WcE0QjFk0wPw/LBgkkqRQbOjS1rVHhMt2sJKm7ceQeCsJToQO3NglormfC0B+Xu5XIxe
-         G0iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SRWPjeh5wOZKPdRn3jxewIK/0dHDoc31s09B3dnlvws=;
-        b=tj6oJUi+SHv6WG0ZJtOlMmTphfW5p9+m5sC8q8H8vZz8CXmNpgqJqHk69UhFOKK8zl
-         Z+Vgqk6Yhx/FIopl/GMLcOzHDoSwYPjCYKi6uuSE/f4W4bY/2yHDkl+rs6y4oVUVaHVy
-         aea0lM+nazVtvRWil/Q7HV7tca47vpzcnGdsa3bTcYrpS3HQg5qGAaQS3Tq+ja1QZMsx
-         UhoSjUfkBaCeyY0oyz9iK+iflKSfBOrVLYY/OEF+K4KK/rRHyc7eaJ6DXo6TjY+KEeO/
-         kqEU3+DepcZWk9UVieZq9dtIM2iP+LTfYwJnSPbPde2gpxC4XhdZeAiyav2Irex6RNS3
-         hHOA==
-X-Gm-Message-State: AOAM5321i+xRk+SSwCNNK6Dc608/IdKsth0s4zv/h0IP4ejRcMS2xEV5
-        gLuh2MOSgCywev2jMKT4/1MXTcv0OUkZHe+Re3I=
-X-Google-Smtp-Source: ABdhPJwWsgbV9GxUwhkDktkqV7clEDaUC4FES99B8MZcvJbD1sQWVw36GldSCofBEdM16xRumdCcxAVk6AD57VMG4UA=
-X-Received: by 2002:a25:cb57:: with SMTP id b84mr175016ybg.425.1599589471961;
- Tue, 08 Sep 2020 11:24:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200828193603.335512-1-sdf@google.com> <20200828193603.335512-4-sdf@google.com>
- <CAEf4BzZtYTyBT=jURkF4RQLHXORooVwXrRRRkoSWDqCemyGQeA@mail.gmail.com>
- <20200904012909.c7cx5adhy5f23ovo@ast-mbp.dhcp.thefacebook.com>
- <CAEf4BzZp4ODLbjEiv=W7byoR9XzTqAQ052wZM_wD4=aTPmkjbw@mail.gmail.com> <20200908174449.GA34763@rdna-mbp>
-In-Reply-To: <20200908174449.GA34763@rdna-mbp>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 8 Sep 2020 11:24:21 -0700
-Message-ID: <CAEf4Bzb+2xpacSmxF_NqENu8EtP3Z8GOv=amL_e1Q94=YPVhLA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/8] libbpf: Add BPF_PROG_BIND_MAP syscall and
- use it on .metadata section
-To:     Andrey Ignatov <rdna@fb.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        id S1731234AbgIHTKS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Sep 2020 15:10:18 -0400
+Received: from mga05.intel.com ([192.55.52.43]:5038 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730863AbgIHQFY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Sep 2020 12:05:24 -0400
+IronPort-SDR: RJ3x76OnPqea4RzF6ZLVF6xqXeUg3DQSkPjbNhgE6dabPP1N4wS1oEaWFaRFO96oqAVawyppJZ
+ MFDpBuknpioQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9737"; a="242933152"
+X-IronPort-AV: E=Sophos;i="5.76,405,1592895600"; 
+   d="scan'208";a="242933152"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2020 05:21:58 -0700
+IronPort-SDR: QUZMhhRD1HWIh4p0bJnRJT+K3mq14UH3G2hgwzsaSFMld+41gAv2OcrN7ze0CMMigaojXbm5/+
+ kDmRxJyMxlPQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.76,405,1592895600"; 
+   d="scan'208";a="284495341"
+Received: from pgierasi-mobl.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.39.2])
+  by fmsmga007.fm.intel.com with ESMTP; 08 Sep 2020 05:21:55 -0700
+Subject: Re: [PATCH bpf-next 0/6] xsk: exit NAPI loop when AF_XDP Rx ring is
+ full
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Maxim Mikityanskiy <maximmi@nvidia.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        YiFei Zhu <zhuyifei1999@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Maxim Mikityanskiy <maximmi@mellanox.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        "David S. Miller" <davem@davemloft.net>, kuba@kernel.org,
+        hawk@kernel.org, John Fastabend <john.fastabend@gmail.com>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>
+References: <20200904135332.60259-1-bjorn.topel@gmail.com>
+ <0257f769-0f43-a5b7-176d-7c5ff8eaac3a@intel.com>
+ <11f663ec-5ea7-926c-370d-0b67d3052583@nvidia.com>
+ <CAJ8uoz3WbS7E1OiC5p8x+o48vwkN43R9JxMwvRvgVk4n3SNiZg@mail.gmail.com>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Message-ID: <75146564-2774-47ac-cc75-40d74bea50d8@intel.com>
+Date:   Tue, 8 Sep 2020 14:21:54 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
+In-Reply-To: <CAJ8uoz3WbS7E1OiC5p8x+o48vwkN43R9JxMwvRvgVk4n3SNiZg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Sep 8, 2020 at 10:45 AM Andrey Ignatov <rdna@fb.com> wrote:
+On 2020-09-08 13:37, Magnus Karlsson wrote:
+> On Tue, Sep 8, 2020 at 12:33 PM Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
+>>
+>> On 2020-09-04 16:59, Björn Töpel wrote:
+>>> On 2020-09-04 15:53, Björn Töpel wrote:
+>>>> This series addresses a problem that arises when AF_XDP zero-copy is
+>>>> enabled, and the kernel softirq Rx processing and userland process
+>>>> is running on the same core.
+>>>>
+>>> [...]
+>>>>
+>>>
+>>> @Maxim I'm not well versed in Mellanox drivers. Would this be relevant
+>>> to mlx5 as well?
+>>
+>> Thanks for letting me know about this series! So the basic idea is to
+>> stop processing hardware completions if the RX ring gets full, because
+>> the application didn't have chance to run? Yes, I think it's also
+>> relevant to mlx5, the issue is not driver-specific, and a similar fix is
+>> applicable. However, it may lead to completion queue overflows - some
+>> analysis is needed to understand what happens then and how to handle it.
+>>
+>> Regarding the feature, I think it should be opt-in (disabled by
+>> default), because old applications may not wakeup RX after they process
+>> packets in the RX ring.
 >
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> [Fri, 2020-09-04 16:19 -0700]:
-> > On Thu, Sep 3, 2020 at 6:29 PM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Wed, Sep 02, 2020 at 07:31:33PM -0700, Andrii Nakryiko wrote:
-> > > > On Fri, Aug 28, 2020 at 12:37 PM Stanislav Fomichev <sdf@google.com> wrote:
-> > > > >
-> > > > > From: YiFei Zhu <zhuyifei@google.com>
-> > > > >
-> > > > > The patch adds a simple wrapper bpf_prog_bind_map around the syscall.
-> > > > > And when using libbpf to load a program, it will probe the kernel for
-> > > > > the support of this syscall, and scan for the .metadata ELF section
-> > > > > and load it as an internal map like a .data section.
-> > > > >
-> > > > > In the case that kernel supports the BPF_PROG_BIND_MAP syscall and
-> > > > > a .metadata section exists, the map will be explicitly bound to
-> > > > > the program via the syscall immediately after program is loaded.
-> > > > > -EEXIST is ignored for this syscall.
-> > > >
-> > > > Here is the question I have. How important is it that all this
-> > > > metadata is in a separate map? What if libbpf just PROG_BIND_MAP all
-> > > > the maps inside a single BPF .o file to all BPF programs in that file?
-> > > > Including ARRAY maps created for .data, .rodata and .bss, even if the
-> > > > BPF program doesn't use any of the global variables? If it's too
-> > > > extreme, we could do it only for global data maps, leaving explicit
-> > > > map definitions in SEC(".maps") alone. Would that be terrible?
-> > > > Conceptually it makes sense, because when you program in user-space,
-> > > > you expect global variables to be there, even if you don't reference
-> > > > it directly, right? The only downside is that you won't have a special
-> > > > ".metadata" map, rather it will be part of ".rodata" one.
-> > >
-> > > That's an interesting idea.
-> > > Indeed. If we have BPF_PROG_BIND_MAP command why do we need to create
-> > > another map that behaves exactly like .rodata but has a different name?
-> >
-> > That was exactly my thought when I re-read this patch set :)
-> >
-> > > Wouldn't it be better to identify metadata elements some other way?
-> > > Like by common prefix/suffix name of the variables or
-> > > via grouping them under one structure with standard prefix?
-> > > Like:
-> > > struct bpf_prog_metadata_blahblah {
-> > >   char compiler_name[];
-> > >   int my_internal_prog_version;
-> > > } = { .compiler_name[] = "clang v.12", ...};
-> > >
-> > > In the past we did this hack for 'version' and for 'license',
-> > > but we did it because we didn't have BTF and there was no other way
-> > > to determine the boundaries.
-> > > I think libbpf can and should support multiple rodata sections with
-> >
-> > Yep, that's coming, we already have a pretty common .rodata.str1.1
-> > section emitted by Clang for some cases, which libbpf currently
-> > ignores, but that should change. Creating a separate map for all such
-> > small sections seems excessive, so my plan is to combine them and
-> > their BTFs into one, as you assumed below.
-> >
-> > > arbitrary names, but hardcoding one specific ".metadata" name?
-> > > Hmm. Let's think through the implications.
-> > > Multiple .o support and static linking is coming soon.
-> > > When two .o-s with multiple bpf progs are statically linked libbpf
-> > > won't have any choice but to merge them together under single
-> > > ".metadata" section and single map that will be BPF_PROG_BIND_MAP-ed
-> > > to different progs. Meaning that metadata applies to final elf file
-> > > after linking. It's _not_ per program metadata.
-> >
-> > Right, exactly.
-> >
-> > > May be we should talk about problem statement and goals.
-> > > Do we actually need metadata per program or metadata per single .o
-> > > or metadata per final .o with multiple .o linked together?
-> > > What is this metadata?
-> >
-> > Yep, that's a very valid question. I've also CC'ed Andrey.
->
-> From my side the problem statement is to be able to save a bunch of
-> metadata fields per BPF object file (I don't distinguish "final .o" and
-> "multiple .o linked together" since we have only the former in prod).
 
-We don't *yet*. But reading below, you have the entire BPF application
-(i.e., a collection of maps, variables and programs) in mind, not
-specifically single .c file compiled into a single .o file. So
-everything works out, I think.
+First of all; Max, thanks for some really good input as usual!
 
+
+> How about need_wakeup enable/disable at bind time being that opt-in,
+> instead of a new option? It is off by default, and when it is off, the
+> driver busy-spins on the Rx ring until it can put an entry there. It
+> will not yield to the application by returning something less than
+> budget. Applications need not check the need_wakeup flag. If
+> need_wakeup is enabled by the user, the contract is that user-space
+> needs to check the need_wakeup flag and act on it. If it does not,
+> then that is a programming error and it can be set for any unspecified
+> reason. No reason to modify the application, if it checks need_wakeup.
+> But if this patch behaves like that I have not checked.
 >
-> Specifically things like oncall team who owns the programs in the object
-> (the most important info), build info (repository revision, build commit
-> time, build time), etc. The plan is to integrate it with build system
-> and be able to quickly identify source code and point of contact for any
-> particular program.
+
+It does not behave exactly like this. If need_wakeup is enabled, the 
+napi look exists, but if not the napi is rearmed -- so we'll get a less 
+efficient loop. I'll need address this.
+
+I'm leaning towards a more explicit opt-in like Max suggested. As Max 
+pointed out, AF_XDP/XDP_TX is actually a non-insane(!) way of using 
+AF_XDP zero-copy, which will suffer from the early exit.
+
+
+> Good points in the rest of the mail, that I think should be addressed.
 >
-> All these things are always the same for all programs in one object. It
-> may change in the future, but at the moment I'm not aware of any
-> use-case where these things can be different for different programs in
-> the same object.
->
-> I don't have strong preferences on the implementation side as long as it
-> covers the use-case, e.g. the one in the patch set would work FWIW.
->
-> > > If it's just unreferenced by program read only data then no special names or
-> > > prefixes are needed. We can introduce BPF_PROG_BIND_MAP to bind any map to any
-> > > program and it would be up to tooling to decide the meaning of the data in the
-> > > map. For example, bpftool can choose to print all variables from all read only
-> > > maps that match "bpf_metadata_" prefix, but it will be bpftool convention only
-> > > and not hard coded in libbpf.
-> >
-> > Agree as well. It feels a bit odd for libbpf to handle ".metadata"
-> > specially, given libbpf itself doesn't care about its contents at all.
-> >
-> > So thanks for bringing this up, I think this is an important discussion to have.
->
-> --
-> Andrey Ignatov
+
+Yeah, I agree. I will take a step back an rethink. I'll experiment with
+the busy-polling suggested by Jakub, and also an opt-in early exit.
+
+Thanks for all the suggestions folks!
+
+
+Cheers,
+Björn
+
+
+> /Magnus
+> 
+>> Is it required to change xdpsock accordingly?
+>> Also, when need_wakeup is disabled, your driver implementation seems to
+>> quit NAPI anyway, but it shouldn't happen, because no one will send a
+>> wakeup.
+>>
+>> Waiting until the RX ring fills up, then passing control to the
+>> application and waiting until the hardware completion queue fills up,
+>> and so on increases latency - the busy polling approach sounds more
+>> legit here.
+>>
+>> The behavior may be different depending on the driver implementation:
+>>
+>> 1. If you arm the completion queue and leave interrupts enabled on early
+>> exit too, the application will soon be interrupted anyway and won't have
+>> much time to process many packets, leading to app <-> NAPI ping-pong one
+>> packet at a time, making NAPI inefficient.
+>>
+>> 2. If you don't arm the completion queue on early exit and wait for the
+>> explicit wakeup from the application, it will easily overflow the
+>> hardware completion queue, because we don't have a symmetric mechanism
+>> to stop the application on imminent hardware queue overflow. It doesn't
+>> feel correct and may be trickier to handle: if the application is too
+>> slow, such drops should happen on driver/kernel level, not in hardware.
+>>
+>> Which behavior is used in your drivers? Or am I missing some more options?
+>>
+>> BTW, it should be better to pass control to the application before the
+>> first dropped packet, not after it has been dropped.
+>>
+>> Some workloads different from pure AF_XDP, for example, 50/50 AF_XDP and
+>> XDP_TX may suffer from such behavior, so it's another point to make a
+>> knob on the application layer to enable/disable it.
+>>
+>>   From the driver API perspective, I would prefer to see a simpler API if
+>> possible. The current API exposes things that the driver shouldn't know
+>> (BPF map type), and requires XSK-specific handling. It would be better
+>> if some specific error code returned from xdp_do_redirect was reserved
+>> to mean "exit NAPI early if you support it". This way we wouldn't need
+>> two new helpers, two xdp_do_redirect functions, and this approach would
+>> be extensible to other non-XSK use cases without further changes in the
+>> driver, and also the logic to opt-in the feature could be put inside the
+>> kernel.
+>>
+>> Thanks,
+>> Max
+>>
+>>>
+>>> Cheers,
+>>> Björn
+>>
