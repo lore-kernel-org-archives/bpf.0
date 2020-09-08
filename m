@@ -2,130 +2,130 @@ Return-Path: <SRS0=JSZK=CS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A60B1C433E2
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 02:34:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C020EC433E2
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 02:39:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 619DB20936
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 02:34:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C56521D24
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 02:39:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IfqMRsFc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tQLUGce1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726699AbgIICee (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Sep 2020 22:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
+        id S1729048AbgIICi5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Sep 2020 22:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726605AbgIICee (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Sep 2020 22:34:34 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EDDC061573
-        for <bpf@vger.kernel.org>; Tue,  8 Sep 2020 19:34:33 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id k25so1461229ljg.9
-        for <bpf@vger.kernel.org>; Tue, 08 Sep 2020 19:34:33 -0700 (PDT)
+        with ESMTP id S1726657AbgIICiw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Sep 2020 22:38:52 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532C9C061573;
+        Tue,  8 Sep 2020 19:38:50 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id j11so1331536ejk.0;
+        Tue, 08 Sep 2020 19:38:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=vFkfZWpjgRh1NQLNys9wcGlctEWtDdWXhoTm7TOKGhA=;
-        b=IfqMRsFcEqAEyQpgkhq3fnSaWmqPqUyP8iGmAVwzMTSxY/NYaWhd0p7GvFrUqAFObB
-         bLryPzXhjioucS3cch1erP1WY2cmYgno3V4klDIBbTWN4JUxKPcOWLEzO2KyTknJz4UE
-         9Fr78Wa3jUr0VW0b9odSyZHAtF9egdPJ9uloOE1slZkz0GtdJG6BWau1Vvnta5qaNhXm
-         Clf+SMQubTlaO5XVoQgrKzvOW6YgpV1ruprAzQE9s4AsQRiSUrKGF9Xi0iXxElELhd3h
-         tbUpT1h3KddcdGzZ3p93HEIgayBe5bUshFEsp70SAYa3VnUZD1CheTIGYfoRcqerDfY5
-         XdJQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c0LG+vk1ojJvbaF+oWlNIKJX2tMsE657ayPjppgcqDA=;
+        b=tQLUGce1kM+Ambd5UX5C/U6nBufPVlR1fZEO0J8r+c4VUfQqLYRYZzkU5le65aXAAo
+         PxzcQiqBISVYM+ZxB1i5ZNKU5/vj5XWW9oaHgMMIpaVeoEo/3aG7XXCmVhbvPNJFBYzr
+         dGvLlKYwIaRAtoBAjYKQWrhspgWbIn5IJ64CRArRRFxReQoxSvD2yE2xosst2MIAJFik
+         H2N29P0T3JVU1OKFuB/t0HEPHBj2Veex8gUexQ9DpjkbSUYP0SEswKiEfcN1XFCZIXm9
+         XROCc4dlNnHzViVm7VvMf27Y3/KU8ic3zIJ3AZ6pbRpuRkG0iVUC/vIYNXPGhZ32Gm7v
+         eLrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=vFkfZWpjgRh1NQLNys9wcGlctEWtDdWXhoTm7TOKGhA=;
-        b=NjoNkVgLN83aIi+/9z/BHjfH+ClQo45QNB1cdd1rO+AKJ5W3sJAs8x71IVC04eGC2o
-         xfVla80fFYttUJv6LVUVav67gIZ99zqzpRZc8LIh8IM+omY+kXPM3MATVUqjzDpJ2+nF
-         f10HMEcRIGWFPFdecLv/DtrlhAgGvfkoZDVfUmFdC7WsWkNMa5nw02MZ2hNwVqzJ2NX2
-         t5yjKJWA34oBfCWwclUUqGKwY3GuSBi1GwkZEADQU4Mk2H9xeYraa3ZUskQmfhm1RaX1
-         2OgstEULPQOUKUi62U3TEZrL0bub8ts2JxpG702AV2kYYyRoru4qKG6NkRQA4lazTROS
-         j+YA==
-X-Gm-Message-State: AOAM531WOvQFu6Y9nAazuLnPKIHFFsxiDE+GuG9B3tAPNbYDn2q98THQ
-        0J4ch900fbMeJfVVOj3c9eZk9M3LD2OV8JKRXr1EFMM9MWU=
-X-Google-Smtp-Source: ABdhPJw27csrEJmdh53yYMNgcORThxaqGSuryhRx7GMN5H6q/0tigL0P2Hh6/bWhrIL4y9v23WF1m6UZq7TASX0J9eg=
-X-Received: by 2002:a2e:9dcb:: with SMTP id x11mr429099ljj.450.1599618871908;
- Tue, 08 Sep 2020 19:34:31 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c0LG+vk1ojJvbaF+oWlNIKJX2tMsE657ayPjppgcqDA=;
+        b=TjnUTrT9jq38jgWvvp4Ywk33EBJuj4aSKNXxNUKOpXQ4xaRdNe0IBgOsQRdLwhTNEk
+         MnjAKtffS493+u0MQNImkV/cyBsSGIXeB2ST/+R5yq5li4Jtln/mAbCz31tSTlTd34/T
+         fMZiemveJFNPkryc6brLLKGw+kKL4b/lxEFffMyvSbU39aoKRtJYCfbwszmj4xDer9h9
+         vv5rGqG7DusETMi9y2xmKqd6MOr9I2dMfzVfC25xDxF445bCy1a7+bU0K6letgYln04v
+         HaP7TCK4ixGfVpbJQ0Z7KJfMz2mYH2YU/m3T8WzQiDVKYa1+RUMy2+1WpubqUC5F/4DF
+         sVlw==
+X-Gm-Message-State: AOAM531zYqKQjYl4HPXUH5LHGJXVA/sEBCk9DnwqZtdG5DIdT+b9UDQI
+        L3Ja3ZW4GUpDEHPpM6xTFzBJr0DH5EV7/hCy/Gdkc/AyKw==
+X-Google-Smtp-Source: ABdhPJx0uyCHYlMDgFzFnM942bI3iP0KfOS+PYYCVHo6EXx0kCmCLrNmfIYzA8A8Dorbvk9Y8qQHNedt9iLULOYEIdA=
+X-Received: by 2002:a17:906:9491:: with SMTP id t17mr1432099ejx.227.1599619129060;
+ Tue, 08 Sep 2020 19:38:49 -0700 (PDT)
 MIME-Version: 1.0
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 8 Sep 2020 19:34:20 -0700
-Message-ID: <CAADnVQK_AiX+S_L_A4CQWT11XyveppBbQSQgH_qWGyzu_E8Yeg@mail.gmail.com>
-Subject: slow sync rcu_tasks_trace
-To:     bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
+References: <20200905154137.24800-1-danieltimlee@gmail.com> <CAEf4BzZ+tGgeqpPiKmChRYQ7FH==3AHXUK5V+Sy2tjZiO58u+w@mail.gmail.com>
+In-Reply-To: <CAEf4BzZ+tGgeqpPiKmChRYQ7FH==3AHXUK5V+Sy2tjZiO58u+w@mail.gmail.com>
+From:   "Daniel T. Lee" <danieltimlee@gmail.com>
+Date:   Wed, 9 Sep 2020 02:38:26 +0900
+Message-ID: <CAEKGpzhxyrNkRQ5Feu-DH8j4s+sMUCfGD-+JuYEv1rjS5_qcyg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] samples: bpf: refactor xdp_sample_pkts_kern with
+ BTF-defined map
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Paul,
+On Wed, Sep 9, 2020 at 8:24 AM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Sat, Sep 5, 2020 at 8:41 AM Daniel T. Lee <danieltimlee@gmail.com> wrote:
+> >
+> > Most of the samples were converted to use the new BTF-defined MAP as
+> > they moved to libbbpf, but some of the samples were missing.
+> >
+> > Instead of using the previous BPF MAP definition, this commit refactors
+> > xdp_sample_pkts_kern MAP definition with the new BTF-defined MAP format.
+> >
+> > Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
+> > ---
+> >  samples/bpf/xdp_sample_pkts_kern.c | 12 ++++++------
+> >  1 file changed, 6 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/samples/bpf/xdp_sample_pkts_kern.c b/samples/bpf/xdp_sample_pkts_kern.c
+> > index 33377289e2a8..b15172b7d455 100644
+> > --- a/samples/bpf/xdp_sample_pkts_kern.c
+> > +++ b/samples/bpf/xdp_sample_pkts_kern.c
+> > @@ -7,12 +7,12 @@
+> >  #define SAMPLE_SIZE 64ul
+> >  #define MAX_CPUS 128
+> >
+> > -struct bpf_map_def SEC("maps") my_map = {
+> > -       .type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
+> > -       .key_size = sizeof(int),
+> > -       .value_size = sizeof(u32),
+> > -       .max_entries = MAX_CPUS,
+> > -};
+> > +struct {
+> > +       __uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
+> > +       __uint(key_size, sizeof(int));
+> > +       __uint(value_size, sizeof(u32));
+> > +       __uint(max_entries, MAX_CPUS);
+>
+> if you drop max_entries property, libbpf will set it to the maximum
+> configured number of CPUs on the host, which is what you probably
+> want. Do you might sending v2 without MAX_CPUS (check if macro is
+> still used anywhere else). Thanks!
+>
 
-Looks like sync rcu_tasks_trace got slower or we simply didn't notice
-it earlier.
+Thanks for your time and effort for the review.
 
-In selftests/bpf try:
-time ./test_progs -t trampoline_count
-#101 trampoline_count:OK
-Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+I'll check and send the next version of patch.
 
-real    1m17.082s
-user    0m0.145s
-sys    0m1.369s
 
-But with the following hack:
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 7dd523a7e32d..c417b817ec5d 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -217,7 +217,7 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
-         * programs finish executing.
-         * Wait for these two grace periods together.
-         */
--       synchronize_rcu_mult(call_rcu_tasks, call_rcu_tasks_trace);
-+//     synchronize_rcu_mult(call_rcu_tasks, call_rcu_tasks_trace);
+> > +} my_map SEC(".maps");
+> >
+> >  SEC("xdp_sample")
+> >  int xdp_sample_prog(struct xdp_md *ctx)
+> > --
+> > 2.25.1
+> >
 
-I see:
-time ./test_progs -t trampoline_count
-#101 trampoline_count:OK
-Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-
-real    0m1.588s
-user    0m0.131s
-sys    0m1.342s
-
-It takes an extra minute to do 40 sync rcu_tasks_trace calls.
-It means that every sync takes more than a second.
-That feels excessive.
-
-Doing:
--       synchronize_rcu_mult(call_rcu_tasks, call_rcu_tasks_trace);
-+       synchronize_rcu();
-is also fast:
-time ./test_progs -t trampoline_count
-#101 trampoline_count:OK
-Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-
-real    0m2.089s
-user    0m0.139s
-sys    0m1.282s
-
-sync rcu_tasks() is fast too:
--       synchronize_rcu_mult(call_rcu_tasks, call_rcu_tasks_trace);
-+       synchronize_rcu_tasks();
-time ./test_progs -t trampoline_count
-#101 trampoline_count:OK
-Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-
-real    0m2.209s
-user    0m0.117s
-sys    0m1.344s
-
-so it's really something going on with sync rcu_tasks_trace.
-Could you please take a look?
+-- 
+Best,
+Daniel T. Lee
