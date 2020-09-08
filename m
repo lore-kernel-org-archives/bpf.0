@@ -2,93 +2,144 @@ Return-Path: <SRS0=2QCY=CR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD280C433E2
-	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 19:50:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B43ECC433E2
+	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 19:53:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 78D4920768
-	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 19:50:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7F5B120768
+	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 19:53:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="DWjX7Nc3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hffwUQwG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732302AbgIHTuO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Sep 2020 15:50:14 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:35202 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730824AbgIHPuu (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 8 Sep 2020 11:50:50 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 088Fjd7x000590
-        for <bpf@vger.kernel.org>; Tue, 8 Sep 2020 08:50:38 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=YJ+oTQRwqeJ+bz3Ja0wJgm1cTWGh3Hw95sB9h+E9kCk=;
- b=DWjX7Nc30XOMPubG1U+iuwbDQLV6sE0DEZqZ3yiUaOpc4gdsSHMU43+MLLuMdCnbRxas
- vd+1QhdulH+QNc4O9cEwCwh4cPKSBNnis8slQMwwkoHI7dVdOSA8jbHt0y5gD55/9vmr
- kv2vB4RXWZ+tP1mVgUjJR3MWQVtxBJbOWss= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 33ctr6a1ff-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 08 Sep 2020 08:50:38 -0700
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 8 Sep 2020 08:50:37 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 23B8E3701AD2; Tue,  8 Sep 2020 08:50:32 -0700 (PDT)
-From:   Yonghong Song <yhs@fb.com>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next v2 0/2] bpf: permit map_ptr arithmetic with opcode add and offset 0
-Date:   Tue, 8 Sep 2020 08:50:32 -0700
-Message-ID: <20200908155032.1502450-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
+        id S1730859AbgIHTxd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Sep 2020 15:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730929AbgIHTxW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Sep 2020 15:53:22 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28FD8C061573;
+        Tue,  8 Sep 2020 12:53:22 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id q3so239967ybp.7;
+        Tue, 08 Sep 2020 12:53:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=yTyF/F5IvxMDOioXAQzY5e9blFLDz2CDbDpAejd1H8Q=;
+        b=hffwUQwGoFx4hBJQZQ6YWJ3KuFzmytvE02tnlBPzEO9pm6VBLYLzFigkGSv+Z7v6MV
+         Syx0UZYsQr4O82A8QdGlpuPFXWHeq7QD3eOF1ugdbAoxI0Qaq21Un1RrcaYKGtXEaewN
+         xzpiyicrIhvzoyk5DuYfZr+GCd4u4MbE8E61/pQOGOhb+zhrV2Fjk6Sa2CJBIMhlZO2s
+         JV8cBI1fuOExCUwliCPLqxaZU9r36DhM3/H8z/i3M0ggCIrh+oJlEw5MybkrA9JzpF5P
+         CBQPqgE+Qke6rFGKeMN6jZR62KrVCioCrP0bRY98hd7PqRET2QraiXwpxg0susB5L1zU
+         EAiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=yTyF/F5IvxMDOioXAQzY5e9blFLDz2CDbDpAejd1H8Q=;
+        b=PnZhp0HcvhYx17d+n4w9Uy4+Daf6Z8BSe5V1kVyozDUPOal7MsL44e5SAXDqHSrb2V
+         32SWlWB5OLwp5ETksf0ds5ElqTdx4pY/IN1PYj7w1GxwEHDMuJyQVMvr96ajGYcXDtET
+         OndofahlGQgvmEz0jJdktQATzzBkt43QtHG9kFIQUHuyq+xGwvxrvY0Scg/gunBNijNb
+         K3VEsmWwhP1kk7AhHJlX3rxaBCWLrDLfsduZuRZg59KHjv+roHNH7au07eocFcsVz1bb
+         NNNE09oLkuaWY8kKRPIKe3Ty8v4yjNUPRSR6aIQ18lVd7F5LBDvgpEpvL137VyCW/WEC
+         rfyA==
+X-Gm-Message-State: AOAM5312MS0er+3d9/pzn2KT6hCJYW0i0G4rUTHK6uFkuZ8z98G7q0os
+        Aaf5tp/oQG7LP98WZmVzcEHiHc6yRsnW2m4YA1g=
+X-Google-Smtp-Source: ABdhPJypdtRntJkWOeqoqZ6XwPLWfAEpxJr1JgmZrfwrp7n+nNGFoQWUG/WIwHXJE2gWbQlfnZ8M4rNP1ZYilorEIWw=
+X-Received: by 2002:a25:c049:: with SMTP id c70mr717935ybf.403.1599594801125;
+ Tue, 08 Sep 2020 12:53:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-08_08:2020-09-08,2020-09-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0
- mlxlogscore=881 phishscore=0 bulkscore=0 malwarescore=0 clxscore=1015
- adultscore=0 suspectscore=8 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2009080150
-X-FB-Internal: deliver
+References: <20200905214831.1565465-1-Tony.Ambardar@gmail.com>
+In-Reply-To: <20200905214831.1565465-1-Tony.Ambardar@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 8 Sep 2020 12:53:10 -0700
+Message-ID: <CAEf4BzYmHLvnMrg-b5rgLCU2fg3C1q1SHbonao96fFOPYagC8w@mail.gmail.com>
+Subject: Re: [PATCH bpf v1] tools/libbpf: avoid counting local symbols in ABI check
+To:     Tony Ambardar <tony.ambardar@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Andrey Ignatov <rdna@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With CORE, it is possible that the compiler may produce code like
-  r1 =3D 0  // relocation instruction
-  map_ptr +=3D r1
-  ...
-Currently verifier does not allow map_ptr arithmetic, even for adding wit=
-h 0.
-This patch set relaxed the condition so the above code can be accepted.
-Patch #1 is the kernel implementation and Patch #2 added selftest tests t=
-o
-cover the new functionality.
+On Sat, Sep 5, 2020 at 2:49 PM Tony Ambardar <tony.ambardar@gmail.com> wrote:
+>
+> Encountered the following failure building libbpf from kernel 5.8.5 sources
+> with GCC 8.4.0 and binutils 2.34: (long paths shortened)
+>
+>   Warning: Num of global symbols in sharedobjs/libbpf-in.o (234) does NOT
+>   match with num of versioned symbols in libbpf.so (236). Please make sure
+>   all LIBBPF_API symbols are versioned in libbpf.map.
+>   --- libbpf_global_syms.tmp    2020-09-02 07:30:58.920084380 +0000
+>   +++ libbpf_versioned_syms.tmp 2020-09-02 07:30:58.924084388 +0000
+>   @@ -1,3 +1,5 @@
+>   +_fini
+>   +_init
+>    bpf_btf_get_fd_by_id
+>    bpf_btf_get_next_id
+>    bpf_create_map
+>   make[4]: *** [Makefile:210: check_abi] Error 1
+>
+> Investigation shows _fini and _init are actually local symbols counted
+> amongst global ones:
+>
+>   $ readelf --dyn-syms --wide libbpf.so|head -10
+>
+>   Symbol table '.dynsym' contains 343 entries:
+>      Num:    Value  Size Type    Bind   Vis      Ndx Name
+>        0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND
+>        1: 00004098     0 SECTION LOCAL  DEFAULT   11
+>        2: 00004098     8 FUNC    LOCAL  DEFAULT   11 _init@@LIBBPF_0.0.1
+>        3: 00023040     8 FUNC    LOCAL  DEFAULT   14 _fini@@LIBBPF_0.0.1
+>        4: 00000000     0 OBJECT  GLOBAL DEFAULT  ABS LIBBPF_0.0.4
+>        5: 00000000     0 OBJECT  GLOBAL DEFAULT  ABS LIBBPF_0.0.1
+>        6: 0000ffa4     8 FUNC    GLOBAL DEFAULT   12 bpf_object__find_map_by_offset@@LIBBPF_0.0.1
+>
+> A previous commit filtered global symbols in sharedobjs/libbpf-in.o. Do the
+> same with the libbpf.so DSO for consistent comparison.
+>
+> Fixes: 306b267cb3c4 ("libbpf: Verify versioned symbols")
+>
+> Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
+> ---
 
-Changelog:
-  v1 -> v2:
-    . add comment to clarify smin_val represents the const. (Andrii)
+LGTM, thanks!
 
-Yonghong Song (2):
-  bpf: permit map_ptr arithmetic with opcode add and offset 0
-  selftests/bpf: add test for map_ptr arithmetic
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 
- kernel/bpf/verifier.c                         |  4 +++
- .../selftests/bpf/progs/map_ptr_kern.c        |  4 +--
- .../testing/selftests/bpf/verifier/map_ptr.c  | 32 +++++++++++++++++++
- 3 files changed, 38 insertions(+), 2 deletions(-)
-
---=20
-2.24.1
-
+>  tools/lib/bpf/Makefile | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+> index b78484e7a608..9ae8f4ef0aac 100644
+> --- a/tools/lib/bpf/Makefile
+> +++ b/tools/lib/bpf/Makefile
+> @@ -152,6 +152,7 @@ GLOBAL_SYM_COUNT = $(shell readelf -s --wide $(BPF_IN_SHARED) | \
+>                            awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}' | \
+>                            sort -u | wc -l)
+>  VERSIONED_SYM_COUNT = $(shell readelf --dyn-syms --wide $(OUTPUT)libbpf.so | \
+> +                             awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}' | \
+>                               grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | sort -u | wc -l)
+>
+>  CMD_TARGETS = $(LIB_TARGET) $(PC_FILE)
+> @@ -219,6 +220,7 @@ check_abi: $(OUTPUT)libbpf.so
+>                     awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}'|  \
+>                     sort -u > $(OUTPUT)libbpf_global_syms.tmp;           \
+>                 readelf --dyn-syms --wide $(OUTPUT)libbpf.so |           \
+> +                   awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}'|  \
+>                     grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 |             \
+>                     sort -u > $(OUTPUT)libbpf_versioned_syms.tmp;        \
+>                 diff -u $(OUTPUT)libbpf_global_syms.tmp                  \
+> --
+> 2.25.1
+>
