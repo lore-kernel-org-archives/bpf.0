@@ -2,79 +2,82 @@ Return-Path: <SRS0=2QCY=CR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43562C433E2
-	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 18:29:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6560FC2BC11
+	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 18:34:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 12ABA2192A
-	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 18:29:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 357C02087C
+	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 18:34:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1599590078;
+	bh=Q2aUeWbmIlzFAIQ2g+Em1W7hGUhQ3SdVjRw0XbA9Qjk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=fR3hLFKoS9fHU3/X0PDlTvdBXEEGzD8N+PtjeEirTC5P/0hTb1n10qczIWj4koIc2
+	 Bf5OowtfIUS5zA7xTyYO/xgueyfHbJE6U9JLWwM31bw3l8d9yBugvEapllIpeH20Ro
+	 W0O3cU5UPzjpx9Slt2HeC4OxGB2Sgz8COjnzKheg=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731449AbgIHS2l (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Sep 2020 14:28:41 -0400
-Received: from mga18.intel.com ([134.134.136.126]:64232 "EHLO mga18.intel.com"
+        id S1730764AbgIHSec (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Sep 2020 14:34:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41214 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731418AbgIHS2T (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Sep 2020 14:28:19 -0400
-IronPort-SDR: /+K4GfWQ/belPr3gIptrPZWe7jp+qxN+2wNFnJXDEFaI1yU7lTBy+VqKaqlBvFfmMZDespM/P+
- ogw4eRRKV4sw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9738"; a="145915014"
-X-IronPort-AV: E=Sophos;i="5.76,406,1592895600"; 
-   d="scan'208";a="145915014"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2020 11:28:17 -0700
-IronPort-SDR: rIk4qiBYBbFqOusR2NS4novT1JNqm7J1bFNOuDpX6Fzl17TOITXUt2bnEVUcysEaTBJaFqXxuw
- PnYgv8M8CM1A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,406,1592895600"; 
-   d="scan'208";a="284608686"
-Received: from pgierasi-mobl.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.39.2])
-  by fmsmga007.fm.intel.com with ESMTP; 08 Sep 2020 11:28:14 -0700
+        id S1731687AbgIHSe3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Sep 2020 14:34:29 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7BE882080A;
+        Tue,  8 Sep 2020 18:34:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599590069;
+        bh=Q2aUeWbmIlzFAIQ2g+Em1W7hGUhQ3SdVjRw0XbA9Qjk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Mz+X30XHvoisG0Te7TqkD0luE9o9NUqKpjRKbe02fUXLCRpPFOC1s1AcGtPTvCqsr
+         zvd5u2MFdNMkm0rHdRb80dzIDVHtb8Vd9AoIntUG5pA+WHW8CKX8DSlJZUp7h1z7TH
+         xmuhU7/QNb4YE1ekcr+6iF9WceYwVNz94FcqLG7c=
+Date:   Tue, 8 Sep 2020 11:34:26 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBl?= =?UTF-8?B?bA==?= 
+        <bjorn.topel@gmail.com>, Eric Dumazet <eric.dumazet@gmail.com>,
+        ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, magnus.karlsson@intel.com,
+        davem@davemloft.net, john.fastabend@gmail.com,
+        intel-wired-lan@lists.osuosl.org
 Subject: Re: [PATCH bpf-next 0/6] xsk: exit NAPI loop when AF_XDP Rx ring is
  full
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        magnus.karlsson@intel.com, davem@davemloft.net,
-        john.fastabend@gmail.com, intel-wired-lan@lists.osuosl.org
+Message-ID: <20200908113426.7af79b5b@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <12536115-3dae-1efa-5c0d-34fc951fca48@intel.com>
 References: <20200904135332.60259-1-bjorn.topel@gmail.com>
- <20200904162751.632c4443@carbon>
- <27e05518-99c6-15e2-b801-cbc0310630ef@intel.com>
- <20200904165837.16d8ecfd@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <1d2e781e-b26d-4cf0-0178-25b8835dbe26@intel.com>
- <20200907114055.27c95483@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <8f698ac5-916f-9bb0-cce2-f00fba6ba407@intel.com>
- <20200908102438.28351aab@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-Message-ID: <12536115-3dae-1efa-5c0d-34fc951fca48@intel.com>
-Date:   Tue, 8 Sep 2020 20:28:14 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        <20200904162751.632c4443@carbon>
+        <27e05518-99c6-15e2-b801-cbc0310630ef@intel.com>
+        <20200904165837.16d8ecfd@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <1d2e781e-b26d-4cf0-0178-25b8835dbe26@intel.com>
+        <20200907114055.27c95483@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <8f698ac5-916f-9bb0-cce2-f00fba6ba407@intel.com>
+        <20200908102438.28351aab@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <12536115-3dae-1efa-5c0d-34fc951fca48@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20200908102438.28351aab@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2020-09-08 19:24, Jakub Kicinski wrote:
->> I'll start playing around a bit, but again, I think this simple series
->> should go in just to make AF_XDP single core usable*today*.
-> No objection from me.
+On Tue, 8 Sep 2020 20:28:14 +0200 Bj=C3=B6rn T=C3=B6pel wrote:
+> On 2020-09-08 19:24, Jakub Kicinski wrote:
+> >> I'll start playing around a bit, but again, I think this simple series
+> >> should go in just to make AF_XDP single core usable*today*. =20
+> > No objection from me. =20
+>=20
+> Thanks Jakub, but as you (probably) noticed in the other thread Maxim=20
+> had some valid concerns. Let's drop this for now, and I'll get back=20
+> after some experimentation/hacking.
 
-Thanks Jakub, but as you (probably) noticed in the other thread Maxim 
-had some valid concerns. Let's drop this for now, and I'll get back 
-after some experimentation/hacking.
+Yeah, I sort of assumed you got the wake-up problem down :S
 
-
-Again, thanks for the ideas! Very much appreciated!
-Björn
+If it gets complicated it may not be worth pursuing this optimization.
