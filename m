@@ -2,62 +2,65 @@ Return-Path: <SRS0=2QCY=CR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFF22C433E2
-	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 17:57:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3FF8C2D0A7
+	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 17:57:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 690CD2074B
-	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 17:57:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F73021924
+	for <bpf@archiver.kernel.org>; Tue,  8 Sep 2020 17:57:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="bbqDHaAY"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="eXlFAnje"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729802AbgIHR5W (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Sep 2020 13:57:22 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:34392 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732090AbgIHR5N (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 8 Sep 2020 13:57:13 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 088HtW6m016598
-        for <bpf@vger.kernel.org>; Tue, 8 Sep 2020 10:57:12 -0700
+        id S1732158AbgIHR5b (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Sep 2020 13:57:31 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:6728 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1732147AbgIHR53 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 8 Sep 2020 13:57:29 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 088HvH2T007609
+        for <bpf@vger.kernel.org>; Tue, 8 Sep 2020 10:57:29 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=kM8n0ZP0Aws+jsdQw0Zf7gHq68l6vzED6c5DDHwLnZo=;
- b=bbqDHaAY1eKGxknTWr/u2qp4kjdD2NZjvYvuR5w4G7Wo9Zh1CsXHIIjxRQxi8ASO3btL
- sJcqgWRZk8ShNtJQnQRg0bmFXnbR1dgYs2zqqjVFT7SElO+Hp0zz2ZpJ9Vk4RZDdkMwp
- R+xNAAO9B1I6xOXA1waKxtj/qDfHcL6OhIg= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=9dIqUSAOyW4JTjJ0Sx+D38qoYSVKeVPCJyRl+wMhUAU=;
+ b=eXlFAnjeRGKpvARRqEY6uP8OxxfZKAJlyiSh8+wFrQzSDS+Isnnd62gSqicZUFbkUrFb
+ VtfMWWMXzrTOIvt7vBUHKkCoA5FRlO2fc2lh60QC29WP5068KcTnWXOv95693c82BJGt
+ eUU8Cd+Wz6xOm0Awnt/PiPZevocoxcYUT6U= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 33ct69js1s-1
+        by m0001303.ppops.net with ESMTP id 33c91hdmt9-11
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 08 Sep 2020 10:57:12 -0700
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2020 10:57:29 -0700
+Received: from intmgw005.03.ash8.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1979.3; Tue, 8 Sep 2020 10:57:11 -0700
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 702673704B12; Tue,  8 Sep 2020 10:57:02 -0700 (PDT)
+        id E2C013704E21; Tue,  8 Sep 2020 10:57:03 -0700 (PDT)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next v3 0/2] bpf: permit map_ptr arithmetic with opcode add and offset 0
-Date:   Tue, 8 Sep 2020 10:57:02 -0700
-Message-ID: <20200908175702.2463416-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: add test for map_ptr arithmetic
+Date:   Tue, 8 Sep 2020 10:57:03 -0700
+Message-ID: <20200908175703.2463721-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200908175702.2463416-1-yhs@fb.com>
+References: <20200908175702.2463416-1-yhs@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-08_09:2020-09-08,2020-09-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- priorityscore=1501 mlxscore=0 spamscore=0 phishscore=0 clxscore=1015
- mlxlogscore=954 impostorscore=0 bulkscore=0 malwarescore=0 adultscore=0
- suspectscore=8 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
+ priorityscore=1501 malwarescore=0 suspectscore=8 adultscore=0 spamscore=0
+ bulkscore=0 mlxlogscore=957 impostorscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2009080170
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
@@ -65,36 +68,88 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With CORE, it is possible that the compiler may produce code like
-  r1 =3D 0  // relocation instruction
-  map_ptr +=3D r1
-  ...
-Currently verifier does not allow map_ptr arithmetic, even for adding wit=
-h 0.
-This patch set relaxed the condition so the above code can be accepted.
-Patch #1 is the kernel implementation and Patch #2 added selftest tests t=
-o
-cover the new functionality.
+Change selftest map_ptr_kern.c with disabling inlining for
+one of subtests, which will fail the test without previous
+verifier change. Also added to verifier test for both
+"map_ptr +=3D scalar" and "scalar +=3D map_ptr" arithmetic.
 
-Changelog:
-  v2 -> v3:
-    . only change hashmap subtest to use non-inline version of check_defa=
-ult(),
-      other subtests still used inline version. This will provide coverag=
-e for
-      both inline and non-inline check_default(). (Andrey)
-  v1 -> v2:
-    . add comment to clarify smin_val represents the const. (Andrii)
-
-Yonghong Song (2):
-  bpf: permit map_ptr arithmetic with opcode add and offset 0
-  selftests/bpf: add test for map_ptr arithmetic
-
- kernel/bpf/verifier.c                         |  4 +++
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
  .../selftests/bpf/progs/map_ptr_kern.c        | 10 +++++-
  .../testing/selftests/bpf/verifier/map_ptr.c  | 32 +++++++++++++++++++
- 3 files changed, 45 insertions(+), 1 deletion(-)
+ 2 files changed, 41 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/tes=
+ting/selftests/bpf/progs/map_ptr_kern.c
+index 982a2d8aa844..0b754106407d 100644
+--- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
++++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+@@ -82,6 +82,14 @@ static inline int check_default(struct bpf_map *indire=
+ct,
+ 	return 1;
+ }
+=20
++static __attribute__ ((noinline)) int
++check_default_noinline(struct bpf_map *indirect, struct bpf_map *direct)
++{
++	VERIFY(check(indirect, direct, sizeof(__u32), sizeof(__u32),
++		     MAX_ENTRIES));
++	return 1;
++}
++
+ typedef struct {
+ 	int counter;
+ } atomic_t;
+@@ -107,7 +115,7 @@ static inline int check_hash(void)
+ 	struct bpf_map *map =3D (struct bpf_map *)&m_hash;
+ 	int i;
+=20
+-	VERIFY(check_default(&hash->map, map));
++	VERIFY(check_default_noinline(&hash->map, map));
+=20
+ 	VERIFY(hash->n_buckets =3D=3D MAX_ENTRIES);
+ 	VERIFY(hash->elem_size =3D=3D 64);
+diff --git a/tools/testing/selftests/bpf/verifier/map_ptr.c b/tools/testi=
+ng/selftests/bpf/verifier/map_ptr.c
+index b52209db8250..637f9293bda8 100644
+--- a/tools/testing/selftests/bpf/verifier/map_ptr.c
++++ b/tools/testing/selftests/bpf/verifier/map_ptr.c
+@@ -60,3 +60,35 @@
+ 	.result =3D ACCEPT,
+ 	.retval =3D 1,
+ },
++{
++	"bpf_map_ptr: r =3D 0, map_ptr =3D map_ptr + r",
++	.insns =3D {
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_hash_16b =3D { 4 },
++	.result =3D ACCEPT,
++},
++{
++	"bpf_map_ptr: r =3D 0, r =3D r + map_ptr",
++	.insns =3D {
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_MOV64_IMM(BPF_REG_1, 0),
++	BPF_LD_MAP_FD(BPF_REG_0, 0),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_1, BPF_REG_0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_hash_16b =3D { 4 },
++	.result =3D ACCEPT,
++},
 --=20
 2.24.1
 
