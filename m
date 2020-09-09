@@ -2,431 +2,167 @@ Return-Path: <SRS0=JSZK=CS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB2F5C433E2
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 16:28:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5688C43461
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 16:31:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 94782215A4
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 16:28:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 650ED2087C
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 16:31:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="dsQHU2yO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U0xW/PWy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731035AbgIIQ2Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Sep 2020 12:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
+        id S1731022AbgIIQbD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Sep 2020 12:31:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730574AbgIIQ1r (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Sep 2020 12:27:47 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA77C061756
-        for <bpf@vger.kernel.org>; Wed,  9 Sep 2020 09:27:47 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id a9so3016328wmm.2
-        for <bpf@vger.kernel.org>; Wed, 09 Sep 2020 09:27:47 -0700 (PDT)
+        with ESMTP id S1730995AbgIIQa3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Sep 2020 12:30:29 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B74C061573;
+        Wed,  9 Sep 2020 09:30:28 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id h126so2166419ybg.4;
+        Wed, 09 Sep 2020 09:30:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=zZ9QbxDdNDSOlAy4MSZ177vTpuQ3OmxNZoFmXtn1kwg=;
-        b=dsQHU2yOYgitZkVg7LSikEoY0cKL1Qm4G8U2/5GcOFMbX8ovmIdhyhE9RTtXOFTY0M
-         yeH2llsntISmOo5IWy2koOyMJsRxuOna95/239KRtYTsshK2KhiZjoK2f/+aRBzQP0sU
-         wJFRmweZcwZVuVFccRC4CgYh4It/nsd0Tvqk0=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0QK7G3OyjCcv7IbDXGjZ8zdSkmHRX5aAM05FHu5la4k=;
+        b=U0xW/PWyO6Nq24v7Hzrq4Vhx+mevveDvk03yjC48qc7I7KrPdaM/5vhnerYJxdA8in
+         3BDNEJsvpMRFbQtxKF1SQpDVtIDWbn/+z1ZkNN9rP10pWCtA2YP4JJLhoA7wmgJJ6sLH
+         lMy+MEQ73NuggqnBxjYzlI+JKSl8T4uNfTTBA3lVmdLxvhXKwkvplxeD6LPrfb9fV6y5
+         H+AMeWvA0QV35g2m2iiGUYsF35Zxk0A7F3MZIcim5HuqnOan+Lpk0dFZWVwz6uHIr/5A
+         Ys8/WHE9SKMQ33MyrwfGF5Hv3kqTTSs4z1wbJs0I47siKY917bqy6h5OR1at5dkDEXSU
+         rLbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=zZ9QbxDdNDSOlAy4MSZ177vTpuQ3OmxNZoFmXtn1kwg=;
-        b=Nk0fhlrtTvvBtwVYnNlblM6HePDhAk1Chmnl6yAm735VoMYYQ46vT0TEsfbZdVIoMx
-         0vt0MZdI93EygpXJSbbDs38BOTQsRj906QBbflKYAw9UZY+77c8OZ/dosvREQZbRu8tg
-         kArRPtgQiCSM9VUgHf1JtktQtURReLSsZnjcdwqnABFOVcOS5xJgrPky5KEUtWcUHUPo
-         6Dvyobk0V/TZGMEtw8+PPDj8v36UEzBHBGuf4qH7l/hmwwxPbXowv0rDNovQ06wBHswy
-         jrECXY99vwynf5n8GTf7IXNOluCnGx1CwLE2tM5uuGxn+fXtRlFFx3cfN+zaqFJcM9L9
-         o+pw==
-X-Gm-Message-State: AOAM530xRvW2xEKsu4lktkbTNd79qeiJAScNOjGCP0oj/0kzXFvFYF9T
-        92QBJrcYzoIZzMCW821iVJpl3w==
-X-Google-Smtp-Source: ABdhPJxyextT8g8+ivylMYlv8HNw9yU2wIuaRCiyd5voX0ixNRKRZZ3wOzM+XWrP9wU67XZg7aKckA==
-X-Received: by 2002:a1c:f003:: with SMTP id a3mr4323781wmb.170.1599668865822;
-        Wed, 09 Sep 2020 09:27:45 -0700 (PDT)
-Received: from antares.lan (111.253.187.81.in-addr.arpa. [81.187.253.111])
-        by smtp.gmail.com with ESMTPSA id l16sm5644276wrb.70.2020.09.09.09.27.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2020 09:27:45 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     ast@kernel.org, yhs@fb.com, daniel@iogearbox.net,
-        jakub@cloudflare.com, john.fastabend@gmail.com, kafai@fb.com
-Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com,
-        Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next v5 2/3] net: Allow iterating sockmap and sockhash
-Date:   Wed,  9 Sep 2020 17:27:11 +0100
-Message-Id: <20200909162712.221874-3-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200909162712.221874-1-lmb@cloudflare.com>
-References: <20200909162712.221874-1-lmb@cloudflare.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0QK7G3OyjCcv7IbDXGjZ8zdSkmHRX5aAM05FHu5la4k=;
+        b=igliwoVdXUFfc6nptbvZ4IlFXOQ7mgGkR9DxsTKc/8rhyeyOv+xCtjylgwVx+JX7Re
+         7ufff07BBOKx6/zdsxc8mRGQ4IcLeVHiWohgEgLI3sxhyqk9WC1uYMf5fnPXsJ4HWVZY
+         F8sdJGhpwpwQqdSBcAsXLzWoOYx5N4gRYlN2Y5F94reMmm5SFDj8TNi+WGHp63sy0ZkI
+         gSMWo069bUtdy+JFCl4Qu/YAGD/Nl0UxwzsXW5zoDfa6LRJCDo00IS7k7H2ZZ3GSLb3e
+         apFOxoT9rCZNeR2t81x3E1P6G0IuINoVuIF9q2d22fIq993eWQp/L8/BroHtNUccOHSk
+         Vg9Q==
+X-Gm-Message-State: AOAM532TFd96o6dejaYhGwZV0V161HgfIRMPhS3X1u/y2mZfINugRfyd
+        oM6vnCz0oYLifpI8GVpKtyoW9D61JZrfI2wRamGid8iG
+X-Google-Smtp-Source: ABdhPJzYGsROsXcSMqxr70PK+Sazr3tYarpSZreyWmoD7y0iqrPw9uoP98rkWCw2VhySkVngI0ukNX2iM9K+9yFY8o8=
+X-Received: by 2002:a25:c049:: with SMTP id c70mr6935662ybf.403.1599669027080;
+ Wed, 09 Sep 2020 09:30:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200907163634.27469-1-quentin@isovalent.com> <20200907163634.27469-2-quentin@isovalent.com>
+ <CAEf4Bzb8QLVdjBY9hRCP7QdnqE-JwWqDn8hFytOL40S=Z+KW-w@mail.gmail.com> <b89b4bbd-a28e-4dde-b400-4d64fc391bfe@isovalent.com>
+In-Reply-To: <b89b4bbd-a28e-4dde-b400-4d64fc391bfe@isovalent.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 9 Sep 2020 09:30:16 -0700
+Message-ID: <CAEf4Bzb0SdZBfDfd2ZBXOBgpneAc6mKFhzULj_Msd0MoNSG5ng@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] tools: bpftool: clean up function to dump
+ map entry
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add bpf_iter support for sockmap / sockhash, based on the bpf_sk_storage and
-hashtable implementation. sockmap and sockhash share the same iteration
-context: a pointer to an arbitrary key and a pointer to a socket. Both
-pointers may be NULL, and so BPF has to perform a NULL check before accessing
-them. Technically it's not possible for sockhash iteration to yield a NULL
-socket, but we ignore this to be able to use a single iteration point.
+On Wed, Sep 9, 2020 at 1:19 AM Quentin Monnet <quentin@isovalent.com> wrote:
+>
+> On 09/09/2020 04:25, Andrii Nakryiko wrote:
+> > On Mon, Sep 7, 2020 at 9:36 AM Quentin Monnet <quentin@isovalent.com> wrote:
+> >>
+> >> The function used to dump a map entry in bpftool is a bit difficult to
+> >> follow, as a consequence to earlier refactorings. There is a variable
+> >> ("num_elems") which does not appear to be necessary, and the error
+> >> handling would look cleaner if moved to its own function. Let's clean it
+> >> up. No functional change.
+> >>
+> >> v2:
+> >> - v1 was erroneously removing the check on fd maps in an attempt to get
+> >>   support for outer map dumps. This is already working. Instead, v2
+> >>   focuses on cleaning up the dump_map_elem() function, to avoid
+> >>   similar confusion in the future.
+> >>
+> >> Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+> >> ---
+> >>  tools/bpf/bpftool/map.c | 101 +++++++++++++++++++++-------------------
+> >>  1 file changed, 52 insertions(+), 49 deletions(-)
+> >>
+> >> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+> >> index bc0071228f88..c8159cb4fb1e 100644
+> >> --- a/tools/bpf/bpftool/map.c
+> >> +++ b/tools/bpf/bpftool/map.c
+> >> @@ -213,8 +213,9 @@ static void print_entry_json(struct bpf_map_info *info, unsigned char *key,
+> >>         jsonw_end_object(json_wtr);
+> >>  }
+> >>
+> >> -static void print_entry_error(struct bpf_map_info *info, unsigned char *key,
+> >> -                             const char *error_msg)
+> >> +static void
+> >> +print_entry_error_msg(struct bpf_map_info *info, unsigned char *key,
+> >> +                     const char *error_msg)
+> >>  {
+> >>         int msg_size = strlen(error_msg);
+> >>         bool single_line, break_names;
+> >> @@ -232,6 +233,40 @@ static void print_entry_error(struct bpf_map_info *info, unsigned char *key,
+> >>         printf("\n");
+> >>  }
+> >>
+> >> +static void
+> >> +print_entry_error(struct bpf_map_info *map_info, void *key, int lookup_errno)
+> >> +{
+> >> +       /* For prog_array maps or arrays of maps, failure to lookup the value
+> >> +        * means there is no entry for that key. Do not print an error message
+> >> +        * in that case.
+> >> +        */
+> >
+> > this is the case when error is ENOENT, all the other ones should be
+> > treated the same, no?
+>
+> Do you mean all map types should be treated the same? If so, I can
+> remove the check below, as in v1. Or do you mean there is a missing
+> check on the error value? In which case I can extend this check to
+> verify we have ENOENT.
 
-Iteration will visit all keys that remain unmodified during the lifetime of
-the iterator. It may or may not visit newly added ones.
+The former, probably. I don't see how map-in-map is different for
+lookups and why it needs special handling.
 
-Switch from using rcu_dereference_raw to plain rcu_dereference, so we gain
-another guard rail if CONFIG_PROVE_RCU is enabled.
-
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
----
- net/core/sock_map.c | 280 +++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 278 insertions(+), 2 deletions(-)
-
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 82494810d0ee..e1f05e3fa1d0 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -2,6 +2,7 @@
- /* Copyright (c) 2017 - 2018 Covalent IO, Inc. http://covalent.io */
- 
- #include <linux/bpf.h>
-+#include <linux/btf_ids.h>
- #include <linux/filter.h>
- #include <linux/errno.h>
- #include <linux/file.h>
-@@ -703,6 +704,109 @@ const struct bpf_func_proto bpf_msg_redirect_map_proto = {
- 	.arg4_type      = ARG_ANYTHING,
- };
- 
-+struct sock_map_seq_info {
-+	struct bpf_map *map;
-+	struct sock *sk;
-+	u32 index;
-+};
-+
-+struct bpf_iter__sockmap {
-+	__bpf_md_ptr(struct bpf_iter_meta *, meta);
-+	__bpf_md_ptr(struct bpf_map *, map);
-+	__bpf_md_ptr(void *, key);
-+	__bpf_md_ptr(struct sock *, sk);
-+};
-+
-+DEFINE_BPF_ITER_FUNC(sockmap, struct bpf_iter_meta *meta,
-+		     struct bpf_map *map, void *key,
-+		     struct sock *sk)
-+
-+static void *sock_map_seq_lookup_elem(struct sock_map_seq_info *info)
-+{
-+	if (unlikely(info->index >= info->map->max_entries))
-+		return NULL;
-+
-+	info->sk = __sock_map_lookup_elem(info->map, info->index);
-+
-+	/* can't return sk directly, since that might be NULL */
-+	return info;
-+}
-+
-+static void *sock_map_seq_start(struct seq_file *seq, loff_t *pos)
-+{
-+	struct sock_map_seq_info *info = seq->private;
-+
-+	if (*pos == 0)
-+		++*pos;
-+
-+	/* pairs with sock_map_seq_stop */
-+	rcu_read_lock();
-+	return sock_map_seq_lookup_elem(info);
-+}
-+
-+static void *sock_map_seq_next(struct seq_file *seq, void *v, loff_t *pos)
-+{
-+	struct sock_map_seq_info *info = seq->private;
-+
-+	++*pos;
-+	++info->index;
-+
-+	return sock_map_seq_lookup_elem(info);
-+}
-+
-+static int sock_map_seq_show(struct seq_file *seq, void *v)
-+{
-+	struct sock_map_seq_info *info = seq->private;
-+	struct bpf_iter__sockmap ctx = {};
-+	struct bpf_iter_meta meta;
-+	struct bpf_prog *prog;
-+
-+	meta.seq = seq;
-+	prog = bpf_iter_get_info(&meta, !v);
-+	if (!prog)
-+		return 0;
-+
-+	ctx.meta = &meta;
-+	ctx.map = info->map;
-+	if (v) {
-+		ctx.key = &info->index;
-+		ctx.sk = info->sk;
-+	}
-+
-+	return bpf_iter_run_prog(prog, &ctx);
-+}
-+
-+static void sock_map_seq_stop(struct seq_file *seq, void *v)
-+{
-+	if (!v)
-+		(void)sock_map_seq_show(seq, NULL);
-+
-+	/* pairs with sock_map_seq_start */
-+	rcu_read_unlock();
-+}
-+
-+static const struct seq_operations sock_map_seq_ops = {
-+	.start	= sock_map_seq_start,
-+	.next	= sock_map_seq_next,
-+	.stop	= sock_map_seq_stop,
-+	.show	= sock_map_seq_show,
-+};
-+
-+static int sock_map_init_seq_private(void *priv_data,
-+				     struct bpf_iter_aux_info *aux)
-+{
-+	struct sock_map_seq_info *info = priv_data;
-+
-+	info->map = aux->map;
-+	return 0;
-+}
-+
-+static const struct bpf_iter_seq_info sock_map_iter_seq_info = {
-+	.seq_ops		= &sock_map_seq_ops,
-+	.init_seq_private	= sock_map_init_seq_private,
-+	.seq_priv_size		= sizeof(struct sock_map_seq_info),
-+};
-+
- static int sock_map_btf_id;
- const struct bpf_map_ops sock_map_ops = {
- 	.map_meta_equal		= bpf_map_meta_equal,
-@@ -717,6 +821,7 @@ const struct bpf_map_ops sock_map_ops = {
- 	.map_check_btf		= map_check_no_btf,
- 	.map_btf_name		= "bpf_stab",
- 	.map_btf_id		= &sock_map_btf_id,
-+	.iter_seq_info		= &sock_map_iter_seq_info,
- };
- 
- struct bpf_shtab_elem {
-@@ -953,7 +1058,7 @@ static int sock_hash_get_next_key(struct bpf_map *map, void *key,
- 	if (!elem)
- 		goto find_first_elem;
- 
--	elem_next = hlist_entry_safe(rcu_dereference_raw(hlist_next_rcu(&elem->node)),
-+	elem_next = hlist_entry_safe(rcu_dereference(hlist_next_rcu(&elem->node)),
- 				     struct bpf_shtab_elem, node);
- 	if (elem_next) {
- 		memcpy(key_next, elem_next->key, key_size);
-@@ -965,7 +1070,7 @@ static int sock_hash_get_next_key(struct bpf_map *map, void *key,
- find_first_elem:
- 	for (; i < htab->buckets_num; i++) {
- 		head = &sock_hash_select_bucket(htab, i)->head;
--		elem_next = hlist_entry_safe(rcu_dereference_raw(hlist_first_rcu(head)),
-+		elem_next = hlist_entry_safe(rcu_dereference(hlist_first_rcu(head)),
- 					     struct bpf_shtab_elem, node);
- 		if (elem_next) {
- 			memcpy(key_next, elem_next->key, key_size);
-@@ -1199,6 +1304,117 @@ const struct bpf_func_proto bpf_msg_redirect_hash_proto = {
- 	.arg4_type      = ARG_ANYTHING,
- };
- 
-+struct sock_hash_seq_info {
-+	struct bpf_map *map;
-+	struct bpf_shtab *htab;
-+	u32 bucket_id;
-+};
-+
-+static void *sock_hash_seq_find_next(struct sock_hash_seq_info *info,
-+				     struct bpf_shtab_elem *prev_elem)
-+{
-+	const struct bpf_shtab *htab = info->htab;
-+	struct bpf_shtab_bucket *bucket;
-+	struct bpf_shtab_elem *elem;
-+	struct hlist_node *node;
-+
-+	/* try to find next elem in the same bucket */
-+	if (prev_elem) {
-+		node = rcu_dereference(hlist_next_rcu(&prev_elem->node));
-+		elem = hlist_entry_safe(node, struct bpf_shtab_elem, node);
-+		if (elem)
-+			return elem;
-+
-+		/* no more elements, continue in the next bucket */
-+		info->bucket_id++;
-+	}
-+
-+	for (; info->bucket_id < htab->buckets_num; info->bucket_id++) {
-+		bucket = &htab->buckets[info->bucket_id];
-+		node = rcu_dereference(hlist_first_rcu(&bucket->head));
-+		elem = hlist_entry_safe(node, struct bpf_shtab_elem, node);
-+		if (elem)
-+			return elem;
-+	}
-+
-+	return NULL;
-+}
-+
-+static void *sock_hash_seq_start(struct seq_file *seq, loff_t *pos)
-+{
-+	struct sock_hash_seq_info *info = seq->private;
-+
-+	if (*pos == 0)
-+		++*pos;
-+
-+	/* pairs with sock_hash_seq_stop */
-+	rcu_read_lock();
-+	return sock_hash_seq_find_next(info, NULL);
-+}
-+
-+static void *sock_hash_seq_next(struct seq_file *seq, void *v, loff_t *pos)
-+{
-+	struct sock_hash_seq_info *info = seq->private;
-+
-+	++*pos;
-+	return sock_hash_seq_find_next(info, v);
-+}
-+
-+static int sock_hash_seq_show(struct seq_file *seq, void *v)
-+{
-+	struct sock_hash_seq_info *info = seq->private;
-+	struct bpf_iter__sockmap ctx = {};
-+	struct bpf_shtab_elem *elem = v;
-+	struct bpf_iter_meta meta;
-+	struct bpf_prog *prog;
-+
-+	meta.seq = seq;
-+	prog = bpf_iter_get_info(&meta, !elem);
-+	if (!prog)
-+		return 0;
-+
-+	ctx.meta = &meta;
-+	ctx.map = info->map;
-+	if (elem) {
-+		ctx.key = elem->key;
-+		ctx.sk = elem->sk;
-+	}
-+
-+	return bpf_iter_run_prog(prog, &ctx);
-+}
-+
-+static void sock_hash_seq_stop(struct seq_file *seq, void *v)
-+{
-+	if (!v)
-+		(void)sock_hash_seq_show(seq, NULL);
-+
-+	/* pairs with sock_hash_seq_start */
-+	rcu_read_unlock();
-+}
-+
-+static const struct seq_operations sock_hash_seq_ops = {
-+	.start	= sock_hash_seq_start,
-+	.next	= sock_hash_seq_next,
-+	.stop	= sock_hash_seq_stop,
-+	.show	= sock_hash_seq_show,
-+};
-+
-+static int sock_hash_init_seq_private(void *priv_data,
-+				     struct bpf_iter_aux_info *aux)
-+{
-+	struct sock_hash_seq_info *info = priv_data;
-+
-+	info->map = aux->map;
-+	info->htab = container_of(aux->map, struct bpf_shtab, map);
-+	return 0;
-+}
-+
-+static const struct bpf_iter_seq_info sock_hash_iter_seq_info = {
-+	.seq_ops		= &sock_hash_seq_ops,
-+	.init_seq_private	= sock_hash_init_seq_private,
-+	.seq_priv_size		= sizeof(struct sock_hash_seq_info),
-+};
-+
- static int sock_hash_map_btf_id;
- const struct bpf_map_ops sock_hash_ops = {
- 	.map_meta_equal		= bpf_map_meta_equal,
-@@ -1213,6 +1429,7 @@ const struct bpf_map_ops sock_hash_ops = {
- 	.map_check_btf		= map_check_no_btf,
- 	.map_btf_name		= "bpf_shtab",
- 	.map_btf_id		= &sock_hash_map_btf_id,
-+	.iter_seq_info		= &sock_hash_iter_seq_info,
- };
- 
- static struct sk_psock_progs *sock_map_progs(struct bpf_map *map)
-@@ -1323,3 +1540,62 @@ void sock_map_close(struct sock *sk, long timeout)
- 	release_sock(sk);
- 	saved_close(sk, timeout);
- }
-+
-+static int sock_map_iter_attach_target(struct bpf_prog *prog,
-+				       union bpf_iter_link_info *linfo,
-+				       struct bpf_iter_aux_info *aux)
-+{
-+	struct bpf_map *map;
-+	int err = -EINVAL;
-+
-+	if (!linfo->map.map_fd)
-+		return -EBADF;
-+
-+	map = bpf_map_get_with_uref(linfo->map.map_fd);
-+	if (IS_ERR(map))
-+		return PTR_ERR(map);
-+
-+	if (map->map_type != BPF_MAP_TYPE_SOCKMAP &&
-+	    map->map_type != BPF_MAP_TYPE_SOCKHASH)
-+		goto put_map;
-+
-+	if (prog->aux->max_rdonly_access > map->key_size) {
-+		err = -EACCES;
-+		goto put_map;
-+	}
-+
-+	aux->map = map;
-+	return 0;
-+
-+put_map:
-+	bpf_map_put_with_uref(map);
-+	return err;
-+}
-+
-+static void sock_map_iter_detach_target(struct bpf_iter_aux_info *aux)
-+{
-+	bpf_map_put_with_uref(aux->map);
-+}
-+
-+static struct bpf_iter_reg sock_map_iter_reg = {
-+	.target			= "sockmap",
-+	.attach_target		= sock_map_iter_attach_target,
-+	.detach_target		= sock_map_iter_detach_target,
-+	.show_fdinfo		= bpf_iter_map_show_fdinfo,
-+	.fill_link_info		= bpf_iter_map_fill_link_info,
-+	.ctx_arg_info_size	= 2,
-+	.ctx_arg_info		= {
-+		{ offsetof(struct bpf_iter__sockmap, key),
-+		  PTR_TO_RDONLY_BUF_OR_NULL },
-+		{ offsetof(struct bpf_iter__sockmap, sk),
-+		  PTR_TO_BTF_ID_OR_NULL },
-+	},
-+};
-+
-+static int __init bpf_sockmap_iter_init(void)
-+{
-+	sock_map_iter_reg.ctx_arg_info[1].btf_id =
-+		btf_sock_ids[BTF_SOCK_TYPE_SOCK];
-+	return bpf_iter_reg_target(&sock_map_iter_reg);
-+}
-+late_initcall(bpf_sockmap_iter_init);
--- 
-2.25.1
-
+>
+> >> +       if (map_is_map_of_maps(map_info->type) ||
+> >> +           map_is_map_of_progs(map_info->type))
+> >> +               return;
+> >> +
+> >> +       if (json_output) {
+> >> +               jsonw_start_object(json_wtr);   /* entry */
+> >> +               jsonw_name(json_wtr, "key");
+> >> +               print_hex_data_json(key, map_info->key_size);
+> >> +               jsonw_name(json_wtr, "value");
+> >> +               jsonw_start_object(json_wtr);   /* error */
+> >> +               jsonw_string_field(json_wtr, "error", strerror(lookup_errno));
+> >> +               jsonw_end_object(json_wtr);     /* error */
+> >> +               jsonw_end_object(json_wtr);     /* entry */
+> >> +       } else {
+> >> +               const char *msg = NULL;
+> >> +
+> >> +               if (lookup_errno == ENOENT)
+> >> +                       msg = "<no entry>";
+> >> +               else if (lookup_errno == ENOSPC &&
+> >> +                        map_info->type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY)
+> >> +                       msg = "<cannot read>";
+> >> +
+> >> +               print_entry_error_msg(map_info, key,
+> >> +                                     msg ? : strerror(lookup_errno));
+> >> +       }
+> >> +}
+> >> +
+> >
+> > [...]
+> >
+>
