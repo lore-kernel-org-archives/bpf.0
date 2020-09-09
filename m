@@ -7,61 +7,61 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ACBE8C433E2
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 17:12:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C1758C433E2
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 17:12:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 739C32166E
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 17:12:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 62CA42166E
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 17:12:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="WpFGeKWc"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="fKsQWMJo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731222AbgIIRMM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Sep 2020 13:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35234 "EHLO
+        id S1730271AbgIIRMV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Sep 2020 13:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731208AbgIIRML (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Sep 2020 13:12:11 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0733C061756
-        for <bpf@vger.kernel.org>; Wed,  9 Sep 2020 10:12:10 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id l9so3150438wme.3
-        for <bpf@vger.kernel.org>; Wed, 09 Sep 2020 10:12:10 -0700 (PDT)
+        with ESMTP id S1730337AbgIIRMQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Sep 2020 13:12:16 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD5FC061755
+        for <bpf@vger.kernel.org>; Wed,  9 Sep 2020 10:12:15 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id s12so3766450wrw.11
+        for <bpf@vger.kernel.org>; Wed, 09 Sep 2020 10:12:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VGnSte/PWuuWLLiQPY0aYt8mPU312KivF/nZQTZv/vI=;
-        b=WpFGeKWcWeTMlZMgEq7iQ/ScGrbXWZXq3F9nmybPXUfnNCfe+f5jC4Ha8XfRH2ZFzN
-         vw8IQg2iOUj6Nj+draUVJ3356HsY/5Tc0VvFO1T9KVqfdE7IRusJBFpCzTKbtTvICwYE
-         ltBnB3o+aeVE8BvSSgIyTr2YjFMQxun2YeeOE=
+        bh=dJFl+2zg7LbqBMwza/2tMQ9lfaScC9r4gXZCukHKDe0=;
+        b=fKsQWMJoPL235m7NefmqtGpPT++wzZujdhD6vULkEV12e04isD6p4f+FgQuw8XVH/s
+         Yc0JeNDWrayp2d7l+p/LRKKzKTbAg0RLZcUU/pPdK+9K018h12WHWXYFvxuD4IOqw2Rz
+         hDh1RWRMcbwB7uu1k1M3QtDoQl0GrEfRK4u10=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VGnSte/PWuuWLLiQPY0aYt8mPU312KivF/nZQTZv/vI=;
-        b=WzhHxwki8VQygd3EH3GPeA1tWLv5Mywp2u1d3ovgC/SLKm1+G/ia+YArtCGeDcApkA
-         jq1jo7s5+8Y2/jxXiMnvVqha8v+CkyBMovNtvrpMs+4C1njdr1e11QBAhF3YGknNtJHF
-         23ITYVjDWLf16BvNlzl9oZd9xdEC8rV5GZq7fU6m996Vn/46HiZ2H2r0+H3IYut0XMQJ
-         O9eAewpfeaBlMPJLQ8XM6NJPEVFJtVlmDfTSa99T3RqjHzQ/Ie07z8kr6GhD1DCD72/L
-         SNSXjIoebnyndoouRLAugZePE9Toe6tYMVC6DTqIgMQfwZ7jbtlt3JRDI3YTK9WSpk0f
-         ujUQ==
-X-Gm-Message-State: AOAM5315bz84CpQjnFJLcWs0bj6Ywxcd2Snsg54vQTQt+EnQHeG3l8Do
-        SwhEFHhf0mZ2llPTBcEaRhHBUA==
-X-Google-Smtp-Source: ABdhPJzrlV4yhxJEWfmwLG4dw7f+Gad535rSlmWd8AiWJFu6b39NFY4i/EsjQetGu9XJp9Ea540u/A==
-X-Received: by 2002:a7b:c255:: with SMTP id b21mr4414735wmj.17.1599671529357;
-        Wed, 09 Sep 2020 10:12:09 -0700 (PDT)
+        bh=dJFl+2zg7LbqBMwza/2tMQ9lfaScC9r4gXZCukHKDe0=;
+        b=GYhN4Cf9p1igspmq0a+RGUnfzlnKgrSoOv4K/df/oJ/ZDSQbYUBLTph4roCDfWDOSY
+         /OkCHMr6unQDr1jvcL3FmWtpZaI3YCnMMmLCKLFPuU7q0mJo0w+xAWIa/Fatj5woswn/
+         qK5WdQub3ZC7bJXF5j+2A69/UhhPUOP7KLgqljV4aaGGsSjpSTLeavFOiJbhNaTmWAvK
+         8eaVf4wWBwJigwMYJrS603eUJ0965SfS9b03KevcknTg9OsOCyzKFK+euNnkXD6HPEDk
+         BiiFGg+5tZCYBlAs0XjSNK7oTpNlev6kp/lt9OqdC55P5FcEV0SxkfzwSuZ2qsOg1+Ao
+         N/2Q==
+X-Gm-Message-State: AOAM532ZbIxeQ973j03SLdqtSjYffcMCqVsmTeep6xlDpLtonO7WVfsP
+        7cYWOpkQiGChY224qbHB1bR2OQ==
+X-Google-Smtp-Source: ABdhPJwJLWgvWl+G3RGH7RHYsuvWaJDFL0yP6FNCWuhZtJ5APySW3zwOP23EMH4eb7p5MrYKVFpoTA==
+X-Received: by 2002:a5d:4151:: with SMTP id c17mr5255496wrq.302.1599671534256;
+        Wed, 09 Sep 2020 10:12:14 -0700 (PDT)
 Received: from antares.lan (1.3.0.0.8.d.4.4.b.b.8.a.1.4.5.e.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:e541:a8bb:44d8:31])
-        by smtp.gmail.com with ESMTPSA id g131sm3746743wmf.25.2020.09.09.10.12.07
+        by smtp.gmail.com with ESMTPSA id g131sm3746743wmf.25.2020.09.09.10.12.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2020 10:12:08 -0700 (PDT)
+        Wed, 09 Sep 2020 10:12:13 -0700 (PDT)
 From:   Lorenz Bauer <lmb@cloudflare.com>
 To:     ast@kernel.org, yhs@fb.com, daniel@iogearbox.net, kafai@fb.com,
         andriin@fb.com
 Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next v2 06/11] bpf: make reference tracking generic
-Date:   Wed,  9 Sep 2020 18:11:50 +0100
-Message-Id: <20200909171155.256601-7-lmb@cloudflare.com>
+Subject: [PATCH bpf-next v2 09/11] bpf: check ARG_PTR_TO_SPINLOCK register type in check_func_arg
+Date:   Wed,  9 Sep 2020 18:11:53 +0100
+Message-Id: <20200909171155.256601-10-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200909171155.256601-1-lmb@cloudflare.com>
 References: <20200909171155.256601-1-lmb@cloudflare.com>
@@ -72,67 +72,68 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Instead of dealing with reg->ref_obj_id individually for every arg type that
-needs it, rely on the fact that ref_obj_id is zero if the register is not
-reference tracked.
+Move the check for PTR_TO_MAP_VALUE to check_func_arg, where all other
+checking is done as well. Move the invocation of process_spin_lock away
+from the register type checking, to allow a future refactoring.
 
 Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
 ---
- kernel/bpf/verifier.c | 26 ++++++++++----------------
- 1 file changed, 10 insertions(+), 16 deletions(-)
+ kernel/bpf/verifier.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b949e0afef8a..43df3bae93aa 100644
+index e0ab3b8c489d..42f68ffa2b52 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -3983,15 +3983,6 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 		/* Any sk pointer can be ARG_PTR_TO_SOCK_COMMON */
- 		if (!type_is_sk_pointer(type))
+@@ -3781,10 +3781,6 @@ static int process_spin_lock(struct bpf_verifier_env *env, int regno,
+ 	struct bpf_map *map = reg->map_ptr;
+ 	u64 val = reg->var_off.value;
+ 
+-	if (reg->type != PTR_TO_MAP_VALUE) {
+-		verbose(env, "R%d is not a pointer to map_value\n", regno);
+-		return -EINVAL;
+-	}
+ 	if (!is_const) {
+ 		verbose(env,
+ 			"R%d doesn't have constant offset. bpf_spin_lock has to be at the constant offset\n",
+@@ -3993,16 +3989,9 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 		if (type != expected_type)
  			goto err_type;
--		if (reg->ref_obj_id) {
--			if (meta->ref_obj_id) {
--				verbose(env, "verifier internal error: more than one arg with ref_obj_id R%d %u %u\n",
--					regno, reg->ref_obj_id,
--					meta->ref_obj_id);
--				return -EFAULT;
--			}
--			meta->ref_obj_id = reg->ref_obj_id;
--		}
- 	} else if (arg_type == ARG_PTR_TO_SOCKET ||
- 		   arg_type == ARG_PTR_TO_SOCKET_OR_NULL) {
- 		expected_type = PTR_TO_SOCKET;
-@@ -4040,13 +4031,6 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 			/* final test in check_stack_boundary() */;
- 		else if (type != expected_type)
- 			goto err_type;
--		if (meta->ref_obj_id) {
--			verbose(env, "verifier internal error: more than one arg with ref_obj_id R%d %u %u\n",
--				regno, reg->ref_obj_id,
--				meta->ref_obj_id);
+ 	} else if (arg_type == ARG_PTR_TO_SPIN_LOCK) {
+-		if (meta->func_id == BPF_FUNC_spin_lock) {
+-			if (process_spin_lock(env, regno, true))
+-				return -EACCES;
+-		} else if (meta->func_id == BPF_FUNC_spin_unlock) {
+-			if (process_spin_lock(env, regno, false))
+-				return -EACCES;
+-		} else {
+-			verbose(env, "verifier internal error\n");
 -			return -EFAULT;
 -		}
--		meta->ref_obj_id = reg->ref_obj_id;
- 	} else if (arg_type_is_int_ptr(arg_type)) {
++		expected_type = PTR_TO_MAP_VALUE;
++		if (type != expected_type)
++			goto err_type;
+ 	} else if (arg_type_is_mem_ptr(arg_type)) {
  		expected_type = PTR_TO_STACK;
- 		if (!type_is_pkt_pointer(type) &&
-@@ -4078,6 +4062,16 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 		}
- 	}
- 
-+	if (reg->ref_obj_id) {
-+		if (meta->ref_obj_id) {
-+			verbose(env, "verifier internal error: more than one arg with ref_obj_id R%d %u %u\n",
-+				regno, reg->ref_obj_id,
-+				meta->ref_obj_id);
+ 		/* One exception here. In case function allows for NULL to be
+@@ -4108,6 +4097,17 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 		err = check_helper_mem_access(env, regno,
+ 					      meta->map_ptr->value_size, false,
+ 					      meta);
++	} else if (arg_type == ARG_PTR_TO_SPIN_LOCK) {
++		if (meta->func_id == BPF_FUNC_spin_lock) {
++			if (process_spin_lock(env, regno, true))
++				return -EACCES;
++		} else if (meta->func_id == BPF_FUNC_spin_unlock) {
++			if (process_spin_lock(env, regno, false))
++				return -EACCES;
++		} else {
++			verbose(env, "verifier internal error\n");
 +			return -EFAULT;
 +		}
-+		meta->ref_obj_id = reg->ref_obj_id;
-+	}
-+
- 	if (arg_type == ARG_CONST_MAP_PTR) {
- 		/* bpf_map_xxx(map_ptr) call: remember that map_ptr */
- 		meta->map_ptr = reg->map_ptr;
+ 	} else if (arg_type_is_mem_ptr(arg_type)) {
+ 		/* The access to this pointer is only checked when we hit the
+ 		 * next is_mem_size argument below.
 -- 
 2.25.1
 
