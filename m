@@ -7,427 +7,168 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B2AD6C43461
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 01:59:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ADD4FC2D0A8
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 01:59:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7718B206DB
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 01:59:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7109020708
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 01:59:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OtTUnBx6"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BT4b1AhX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729789AbgIJB7B (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Sep 2020 21:59:01 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:15788 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729822AbgIJBo5 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 9 Sep 2020 21:44:57 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 089N1up6025509;
-        Wed, 9 Sep 2020 19:25:26 -0400
+        id S1728363AbgIJB7C (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Sep 2020 21:59:02 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:44908 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729824AbgIJBpB (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 9 Sep 2020 21:45:01 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 089NZI5e128144;
+        Wed, 9 Sep 2020 19:37:15 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pp1;
- bh=kp2f+VHZgUNccwbWt3aRbAZVCwfMbVuF/oAh8BIIM7w=;
- b=OtTUnBx6ALTu+ozRNbAs1acU60izVArPVTlRiKUjiwba5hCSmvZzbY86aYNHBRvrC6lq
- PSEMEzl06AZrC9ki95wZv/bUb+fpOIUp9GpHN9l7ditqx8qnH2fUYtvk8iPqYrMK+NIV
- AZvbnGHhGAbXagBczmck2rQZbfivpoKwrSt56goOcUDfEdWY2ydV8N+JpLfWWfoNeUt/
- TE6j9CSfePFFGI9MNEXFgrG8WwYru2YbDB15ZGa5EItgTBbD+XsTRLlxQBjIt2OFVXq+
- ilx06OeYHvANTw9NrbvobdFPloH4Ttb0VcdqOiZmELUq0TF7CbTmbnvTEFgVMPP3Zsao DQ== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33f8310u08-1
+ bh=pBMLCZNcYuWQcclrP/ceXhKw5ZPXEsDgH8qPadhIZMA=;
+ b=BT4b1AhXzbLFM8c947LEhRa+9tapDmN9/i/o4lOvmhePIX5TxydtYe+88ljywoh92Xq8
+ rpnMTlei+TaYQmFf75zXkhsnQQYz+IDMVIMWInUbFntrFMVPSKCbvKyQ7elWtNPc9TeG
+ jBluvlRLAcuu/LttF6n20OZ/0kCGjY/cdRWW1oPlqV8WXp1UEOWib+/wbL4ov2tzOvjy
+ Aak9T7juM9dFI3VmkI7tNtPA3JsE56jTOLFCG1MsRwpRMO48MsOIpZT9wGB+U9OJuzKx
+ 69kupZSa4TR8rGdKa8ypNR9Hbwc4sBTgWD0rPX9esRtnBlvcw1gKK7jbmEQYIVKSIHt3 dA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33f7v598b2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Sep 2020 19:25:26 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 089NID3F011244;
-        Wed, 9 Sep 2020 23:25:24 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma01fra.de.ibm.com with ESMTP id 33c2a811q5-1
+        Wed, 09 Sep 2020 19:37:15 -0400
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 089NZxjv131604;
+        Wed, 9 Sep 2020 19:37:15 -0400
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33f7v598ap-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Sep 2020 23:25:23 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 089NPLjJ39977220
+        Wed, 09 Sep 2020 19:37:14 -0400
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 089NbDhW028000;
+        Wed, 9 Sep 2020 23:37:13 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 33c2a8dbcv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 09 Sep 2020 23:37:13 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 089NbAIu34406714
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Sep 2020 23:25:21 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 136A311C050;
-        Wed,  9 Sep 2020 23:25:21 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ACB4D11C04A;
-        Wed,  9 Sep 2020 23:25:20 +0000 (GMT)
+        Wed, 9 Sep 2020 23:37:10 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8AD1FA4040;
+        Wed,  9 Sep 2020 23:37:10 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 271D1A404D;
+        Wed,  9 Sep 2020 23:37:10 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.145.5.224])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  9 Sep 2020 23:25:20 +0000 (GMT)
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  9 Sep 2020 23:37:10 +0000 (GMT)
 From:   Ilya Leoshkevich <iii@linux.ibm.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
+        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next 2/3] selftests/bpf: Fix endianness issues in sk_lookup/ctx_narrow_access
-Date:   Thu, 10 Sep 2020 01:24:42 +0200
-Message-Id: <20200909232443.3099637-3-iii@linux.ibm.com>
+Subject: [PATCH RFC bpf-next 5/5] bpf: Do not include the original insn in zext patchlet
+Date:   Thu, 10 Sep 2020 01:34:39 +0200
+Message-Id: <20200909233439.3100292-6-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20200909232443.3099637-1-iii@linux.ibm.com>
-References: <20200909232443.3099637-1-iii@linux.ibm.com>
+In-Reply-To: <20200909233439.3100292-1-iii@linux.ibm.com>
+References: <20200909233439.3100292-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-09_17:2020-09-09,2020-09-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- priorityscore=1501 lowpriorityscore=0 mlxscore=0 clxscore=1015
- adultscore=0 phishscore=0 mlxlogscore=999 spamscore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009090197
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ clxscore=1015 mlxscore=0 suspectscore=0 mlxlogscore=987 priorityscore=1501
+ malwarescore=0 impostorscore=0 adultscore=0 spamscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009090202
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This test makes a lot of narrow load checks while assuming little
-endian architecture, and therefore fails on s390.
+If the original insn is a jump, then it is not subjected to branch
+adjustment, which is incorrect. As discovered by Yauheni in
 
-Fix by introducing LSB and LSW macros and using them to perform narrow
-loads.
+https://lore.kernel.org/bpf/20200903140542.156624-1-yauheni.kaliuta@redhat.com/
 
-Fixes: 0ab5539f8584 ("selftests/bpf: Tests for BPF_SK_LOOKUP attach point")
+this causes `test_progs -t global_funcs` failures on s390.
+
+Most likely, the current code includes the original insn in the
+patchlet, because there was no infrastructure to insert new insns, only
+to replace the existing ones. Now that bpf_patch_insns_data() can do
+insertions, stop including the original insns in zext patchlets.
+
+Fixes: a4b1d3c1ddf6 ("bpf: verifier: insert zero extension according to analysis result")
+Reported-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- .../selftests/bpf/progs/test_sk_lookup.c      | 264 ++++++++++--------
- 1 file changed, 149 insertions(+), 115 deletions(-)
+ kernel/bpf/verifier.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_sk_lookup.c b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
-index bbf8296f4d66..94e6d370967b 100644
---- a/tools/testing/selftests/bpf/progs/test_sk_lookup.c
-+++ b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
-@@ -19,6 +19,17 @@
- #define IP6(aaaa, bbbb, cccc, dddd)			\
- 	{ bpf_htonl(aaaa), bpf_htonl(bbbb), bpf_htonl(cccc), bpf_htonl(dddd) }
- 
-+/* Macros for least-significant byte and word accesses. */
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+#define LSE_INDEX(index, size) (index)
-+#else
-+#define LSE_INDEX(index, size) ((size) - (index) - 1)
-+#endif
-+#define LSB(value, index)				\
-+	(((__u8 *)&(value))[LSE_INDEX((index), sizeof(value))])
-+#define LSW(value, index)				\
-+	(((__u16 *)&(value))[LSE_INDEX((index), sizeof(value) / 2)])
-+
- #define MAX_SOCKS 32
- 
- struct {
-@@ -369,171 +380,194 @@ int ctx_narrow_access(struct bpf_sk_lookup *ctx)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 17c2e926e436..64a04953c631 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9911,7 +9911,7 @@ static int opt_remove_nops(struct bpf_verifier_env *env)
+ static int opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
+ 					 const union bpf_attr *attr)
  {
- 	struct bpf_sock *sk;
- 	int err, family;
--	__u16 *half;
--	__u8 *byte;
- 	bool v4;
+-	struct bpf_insn *patch, zext_patch[2], rnd_hi32_patch[4];
++	struct bpf_insn *patch, zext_patch, rnd_hi32_patch[4];
+ 	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+ 	int i, patch_len, delta = 0, len = env->prog->len;
+ 	struct bpf_insn *insns = env->prog->insnsi;
+@@ -9919,13 +9919,14 @@ static int opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
+ 	bool rnd_hi32;
  
- 	v4 = (ctx->family == AF_INET);
+ 	rnd_hi32 = attr->prog_flags & BPF_F_TEST_RND_HI32;
+-	zext_patch[1] = BPF_ZEXT_REG(0);
++	zext_patch = BPF_ZEXT_REG(0);
+ 	rnd_hi32_patch[1] = BPF_ALU64_IMM(BPF_MOV, BPF_REG_AX, 0);
+ 	rnd_hi32_patch[2] = BPF_ALU64_IMM(BPF_LSH, BPF_REG_AX, 32);
+ 	rnd_hi32_patch[3] = BPF_ALU64_REG(BPF_OR, 0, BPF_REG_AX);
+ 	for (i = 0; i < len; i++) {
+ 		int adj_idx = i + delta;
+ 		struct bpf_insn insn;
++		int len_old = 1;
  
- 	/* Narrow loads from family field */
--	byte = (__u8 *)&ctx->family;
--	half = (__u16 *)&ctx->family;
--	if (byte[0] != (v4 ? AF_INET : AF_INET6) ||
--	    byte[1] != 0 || byte[2] != 0 || byte[3] != 0)
-+	if (LSB(ctx->family, 0) != (v4 ? AF_INET : AF_INET6) ||
-+	    LSB(ctx->family, 1) != 0 || LSB(ctx->family, 2) != 0 ||
-+	    LSB(ctx->family, 3) != 0)
- 		return SK_DROP;
--	if (half[0] != (v4 ? AF_INET : AF_INET6))
-+	if (LSW(ctx->family, 0) != (v4 ? AF_INET : AF_INET6))
- 		return SK_DROP;
+ 		insn = insns[adj_idx];
+ 		if (!aux[adj_idx].zext_dst) {
+@@ -9968,20 +9969,21 @@ static int opt_subreg_zext_lo32_rnd_hi32(struct bpf_verifier_env *env,
+ 		if (!bpf_jit_needs_zext())
+ 			continue;
  
--	byte = (__u8 *)&ctx->protocol;
--	if (byte[0] != IPPROTO_TCP ||
--	    byte[1] != 0 || byte[2] != 0 || byte[3] != 0)
-+	/* Narrow loads from protocol field */
-+	if (LSB(ctx->protocol, 0) != IPPROTO_TCP ||
-+	    LSB(ctx->protocol, 1) != 0 || LSB(ctx->protocol, 2) != 0 ||
-+	    LSB(ctx->protocol, 3) != 0)
- 		return SK_DROP;
--	half = (__u16 *)&ctx->protocol;
--	if (half[0] != IPPROTO_TCP)
-+	if (LSW(ctx->protocol, 0) != IPPROTO_TCP)
- 		return SK_DROP;
- 
- 	/* Narrow loads from remote_port field. Expect non-0 value. */
--	byte = (__u8 *)&ctx->remote_port;
--	if (byte[0] == 0 && byte[1] == 0 && byte[2] == 0 && byte[3] == 0)
-+	if (LSB(ctx->remote_port, 0) == 0 && LSB(ctx->remote_port, 1) == 0 &&
-+	    LSB(ctx->remote_port, 2) == 0 && LSB(ctx->remote_port, 3) == 0)
- 		return SK_DROP;
--	half = (__u16 *)&ctx->remote_port;
--	if (half[0] == 0)
-+	if (LSW(ctx->remote_port, 0) == 0)
- 		return SK_DROP;
- 
- 	/* Narrow loads from local_port field. Expect DST_PORT. */
--	byte = (__u8 *)&ctx->local_port;
--	if (byte[0] != ((DST_PORT >> 0) & 0xff) ||
--	    byte[1] != ((DST_PORT >> 8) & 0xff) ||
--	    byte[2] != 0 || byte[3] != 0)
-+	if (LSB(ctx->local_port, 0) != ((DST_PORT >> 0) & 0xff) ||
-+	    LSB(ctx->local_port, 1) != ((DST_PORT >> 8) & 0xff) ||
-+	    LSB(ctx->local_port, 2) != 0 || LSB(ctx->local_port, 3) != 0)
- 		return SK_DROP;
--	half = (__u16 *)&ctx->local_port;
--	if (half[0] != DST_PORT)
-+	if (LSW(ctx->local_port, 0) != DST_PORT)
- 		return SK_DROP;
- 
- 	/* Narrow loads from IPv4 fields */
- 	if (v4) {
- 		/* Expect non-0.0.0.0 in remote_ip4 */
--		byte = (__u8 *)&ctx->remote_ip4;
--		if (byte[0] == 0 && byte[1] == 0 &&
--		    byte[2] == 0 && byte[3] == 0)
-+		if (LSB(ctx->remote_ip4, 0) == 0 &&
-+		    LSB(ctx->remote_ip4, 1) == 0 &&
-+		    LSB(ctx->remote_ip4, 2) == 0 &&
-+		    LSB(ctx->remote_ip4, 3) == 0)
- 			return SK_DROP;
--		half = (__u16 *)&ctx->remote_ip4;
--		if (half[0] == 0 && half[1] == 0)
-+		if (LSW(ctx->remote_ip4, 0) == 0 &&
-+		    LSW(ctx->remote_ip4, 1) == 0)
- 			return SK_DROP;
- 
- 		/* Expect DST_IP4 in local_ip4 */
--		byte = (__u8 *)&ctx->local_ip4;
--		if (byte[0] != ((DST_IP4 >>  0) & 0xff) ||
--		    byte[1] != ((DST_IP4 >>  8) & 0xff) ||
--		    byte[2] != ((DST_IP4 >> 16) & 0xff) ||
--		    byte[3] != ((DST_IP4 >> 24) & 0xff))
-+		if (LSB(ctx->local_ip4, 0) != ((DST_IP4 >> 0) & 0xff) ||
-+		    LSB(ctx->local_ip4, 1) != ((DST_IP4 >> 8) & 0xff) ||
-+		    LSB(ctx->local_ip4, 2) != ((DST_IP4 >> 16) & 0xff) ||
-+		    LSB(ctx->local_ip4, 3) != ((DST_IP4 >> 24) & 0xff))
- 			return SK_DROP;
--		half = (__u16 *)&ctx->local_ip4;
--		if (half[0] != ((DST_IP4 >>  0) & 0xffff) ||
--		    half[1] != ((DST_IP4 >> 16) & 0xffff))
-+		if (LSW(ctx->local_ip4, 0) != ((DST_IP4 >> 0) & 0xffff) ||
-+		    LSW(ctx->local_ip4, 1) != ((DST_IP4 >> 16) & 0xffff))
- 			return SK_DROP;
- 	} else {
- 		/* Expect 0.0.0.0 IPs when family != AF_INET */
--		byte = (__u8 *)&ctx->remote_ip4;
--		if (byte[0] != 0 || byte[1] != 0 &&
--		    byte[2] != 0 || byte[3] != 0)
-+		if (LSB(ctx->remote_ip4, 0) != 0 ||
-+		    LSB(ctx->remote_ip4, 1) != 0 ||
-+		    LSB(ctx->remote_ip4, 2) != 0 ||
-+		    LSB(ctx->remote_ip4, 3) != 0)
- 			return SK_DROP;
--		half = (__u16 *)&ctx->remote_ip4;
--		if (half[0] != 0 || half[1] != 0)
-+		if (LSW(ctx->remote_ip4, 0) != 0 ||
-+		    LSW(ctx->remote_ip4, 1) != 0)
- 			return SK_DROP;
- 
--		byte = (__u8 *)&ctx->local_ip4;
--		if (byte[0] != 0 || byte[1] != 0 &&
--		    byte[2] != 0 || byte[3] != 0)
-+		if (LSB(ctx->local_ip4, 0) != 0 ||
-+		    LSB(ctx->local_ip4, 1) != 0 ||
-+		    LSB(ctx->local_ip4, 2) != 0 || LSB(ctx->local_ip4, 3) != 0)
- 			return SK_DROP;
--		half = (__u16 *)&ctx->local_ip4;
--		if (half[0] != 0 || half[1] != 0)
-+		if (LSW(ctx->local_ip4, 0) != 0 || LSW(ctx->local_ip4, 1) != 0)
- 			return SK_DROP;
+-		zext_patch[0] = insn;
+-		zext_patch[1].dst_reg = insn.dst_reg;
+-		zext_patch[1].src_reg = insn.dst_reg;
+-		patch = zext_patch;
+-		patch_len = 2;
++		zext_patch.dst_reg = insn.dst_reg;
++		zext_patch.src_reg = insn.dst_reg;
++		patch = &zext_patch;
++		patch_len = 1;
++		adj_idx++;
++		len_old = 0;
+ apply_patch_buffer:
+-		new_prog = bpf_patch_insns_data(env, adj_idx, 1, patch,
++		new_prog = bpf_patch_insns_data(env, adj_idx, len_old, patch,
+ 						patch_len);
+ 		if (!new_prog)
+ 			return -ENOMEM;
+ 		env->prog = new_prog;
+ 		insns = new_prog->insnsi;
+ 		aux = env->insn_aux_data;
+-		delta += patch_len - 1;
++		delta += patch_len - len_old;
  	}
  
- 	/* Narrow loads from IPv6 fields */
- 	if (!v4) {
--		/* Expenct non-:: IP in remote_ip6 */
--		byte = (__u8 *)&ctx->remote_ip6;
--		if (byte[0] == 0 && byte[1] == 0 &&
--		    byte[2] == 0 && byte[3] == 0 &&
--		    byte[4] == 0 && byte[5] == 0 &&
--		    byte[6] == 0 && byte[7] == 0 &&
--		    byte[8] == 0 && byte[9] == 0 &&
--		    byte[10] == 0 && byte[11] == 0 &&
--		    byte[12] == 0 && byte[13] == 0 &&
--		    byte[14] == 0 && byte[15] == 0)
-+		/* Expect non-:: IP in remote_ip6 */
-+		if (LSB(ctx->remote_ip6[0], 0) == 0 &&
-+		    LSB(ctx->remote_ip6[0], 1) == 0 &&
-+		    LSB(ctx->remote_ip6[0], 2) == 0 &&
-+		    LSB(ctx->remote_ip6[0], 3) == 0 &&
-+		    LSB(ctx->remote_ip6[1], 0) == 0 &&
-+		    LSB(ctx->remote_ip6[1], 1) == 0 &&
-+		    LSB(ctx->remote_ip6[1], 2) == 0 &&
-+		    LSB(ctx->remote_ip6[1], 3) == 0 &&
-+		    LSB(ctx->remote_ip6[2], 0) == 0 &&
-+		    LSB(ctx->remote_ip6[2], 1) == 0 &&
-+		    LSB(ctx->remote_ip6[2], 2) == 0 &&
-+		    LSB(ctx->remote_ip6[2], 3) == 0 &&
-+		    LSB(ctx->remote_ip6[3], 0) == 0 &&
-+		    LSB(ctx->remote_ip6[3], 1) == 0 &&
-+		    LSB(ctx->remote_ip6[3], 2) == 0 &&
-+		    LSB(ctx->remote_ip6[3], 3) == 0)
- 			return SK_DROP;
--		half = (__u16 *)&ctx->remote_ip6;
--		if (half[0] == 0 && half[1] == 0 &&
--		    half[2] == 0 && half[3] == 0 &&
--		    half[4] == 0 && half[5] == 0 &&
--		    half[6] == 0 && half[7] == 0)
-+		if (LSW(ctx->remote_ip6[0], 0) == 0 &&
-+		    LSW(ctx->remote_ip6[0], 1) == 0 &&
-+		    LSW(ctx->remote_ip6[1], 0) == 0 &&
-+		    LSW(ctx->remote_ip6[1], 1) == 0 &&
-+		    LSW(ctx->remote_ip6[2], 0) == 0 &&
-+		    LSW(ctx->remote_ip6[2], 1) == 0 &&
-+		    LSW(ctx->remote_ip6[3], 0) == 0 &&
-+		    LSW(ctx->remote_ip6[3], 1) == 0)
- 			return SK_DROP;
--
- 		/* Expect DST_IP6 in local_ip6 */
--		byte = (__u8 *)&ctx->local_ip6;
--		if (byte[0] != ((DST_IP6[0] >>  0) & 0xff) ||
--		    byte[1] != ((DST_IP6[0] >>  8) & 0xff) ||
--		    byte[2] != ((DST_IP6[0] >> 16) & 0xff) ||
--		    byte[3] != ((DST_IP6[0] >> 24) & 0xff) ||
--		    byte[4] != ((DST_IP6[1] >>  0) & 0xff) ||
--		    byte[5] != ((DST_IP6[1] >>  8) & 0xff) ||
--		    byte[6] != ((DST_IP6[1] >> 16) & 0xff) ||
--		    byte[7] != ((DST_IP6[1] >> 24) & 0xff) ||
--		    byte[8] != ((DST_IP6[2] >>  0) & 0xff) ||
--		    byte[9] != ((DST_IP6[2] >>  8) & 0xff) ||
--		    byte[10] != ((DST_IP6[2] >> 16) & 0xff) ||
--		    byte[11] != ((DST_IP6[2] >> 24) & 0xff) ||
--		    byte[12] != ((DST_IP6[3] >>  0) & 0xff) ||
--		    byte[13] != ((DST_IP6[3] >>  8) & 0xff) ||
--		    byte[14] != ((DST_IP6[3] >> 16) & 0xff) ||
--		    byte[15] != ((DST_IP6[3] >> 24) & 0xff))
-+		if (LSB(ctx->local_ip6[0], 0) != ((DST_IP6[0] >> 0) & 0xff) ||
-+		    LSB(ctx->local_ip6[0], 1) != ((DST_IP6[0] >> 8) & 0xff) ||
-+		    LSB(ctx->local_ip6[0], 2) != ((DST_IP6[0] >> 16) & 0xff) ||
-+		    LSB(ctx->local_ip6[0], 3) != ((DST_IP6[0] >> 24) & 0xff) ||
-+		    LSB(ctx->local_ip6[1], 0) != ((DST_IP6[1] >> 0) & 0xff) ||
-+		    LSB(ctx->local_ip6[1], 1) != ((DST_IP6[1] >> 8) & 0xff) ||
-+		    LSB(ctx->local_ip6[1], 2) != ((DST_IP6[1] >> 16) & 0xff) ||
-+		    LSB(ctx->local_ip6[1], 3) != ((DST_IP6[1] >> 24) & 0xff) ||
-+		    LSB(ctx->local_ip6[2], 0) != ((DST_IP6[2] >> 0) & 0xff) ||
-+		    LSB(ctx->local_ip6[2], 1) != ((DST_IP6[2] >> 8) & 0xff) ||
-+		    LSB(ctx->local_ip6[2], 2) != ((DST_IP6[2] >> 16) & 0xff) ||
-+		    LSB(ctx->local_ip6[2], 3) != ((DST_IP6[2] >> 24) & 0xff) ||
-+		    LSB(ctx->local_ip6[3], 0) != ((DST_IP6[3] >> 0) & 0xff) ||
-+		    LSB(ctx->local_ip6[3], 1) != ((DST_IP6[3] >> 8) & 0xff) ||
-+		    LSB(ctx->local_ip6[3], 2) != ((DST_IP6[3] >> 16) & 0xff) ||
-+		    LSB(ctx->local_ip6[3], 3) != ((DST_IP6[3] >> 24) & 0xff))
- 			return SK_DROP;
--		half = (__u16 *)&ctx->local_ip6;
--		if (half[0] != ((DST_IP6[0] >>  0) & 0xffff) ||
--		    half[1] != ((DST_IP6[0] >> 16) & 0xffff) ||
--		    half[2] != ((DST_IP6[1] >>  0) & 0xffff) ||
--		    half[3] != ((DST_IP6[1] >> 16) & 0xffff) ||
--		    half[4] != ((DST_IP6[2] >>  0) & 0xffff) ||
--		    half[5] != ((DST_IP6[2] >> 16) & 0xffff) ||
--		    half[6] != ((DST_IP6[3] >>  0) & 0xffff) ||
--		    half[7] != ((DST_IP6[3] >> 16) & 0xffff))
-+		if (LSW(ctx->local_ip6[0], 0) != ((DST_IP6[0] >> 0) & 0xffff) ||
-+		    LSW(ctx->local_ip6[0], 1) !=
-+			    ((DST_IP6[0] >> 16) & 0xffff) ||
-+		    LSW(ctx->local_ip6[1], 0) != ((DST_IP6[1] >> 0) & 0xffff) ||
-+		    LSW(ctx->local_ip6[1], 1) !=
-+			    ((DST_IP6[1] >> 16) & 0xffff) ||
-+		    LSW(ctx->local_ip6[2], 0) != ((DST_IP6[2] >> 0) & 0xffff) ||
-+		    LSW(ctx->local_ip6[2], 1) !=
-+			    ((DST_IP6[2] >> 16) & 0xffff) ||
-+		    LSW(ctx->local_ip6[3], 0) != ((DST_IP6[3] >> 0) & 0xffff) ||
-+		    LSW(ctx->local_ip6[3], 1) != ((DST_IP6[3] >> 16) & 0xffff))
- 			return SK_DROP;
- 	} else {
- 		/* Expect :: IPs when family != AF_INET6 */
--		byte = (__u8 *)&ctx->remote_ip6;
--		if (byte[0] != 0 || byte[1] != 0 ||
--		    byte[2] != 0 || byte[3] != 0 ||
--		    byte[4] != 0 || byte[5] != 0 ||
--		    byte[6] != 0 || byte[7] != 0 ||
--		    byte[8] != 0 || byte[9] != 0 ||
--		    byte[10] != 0 || byte[11] != 0 ||
--		    byte[12] != 0 || byte[13] != 0 ||
--		    byte[14] != 0 || byte[15] != 0)
-+		if (LSB(ctx->remote_ip6[0], 0) != 0 ||
-+		    LSB(ctx->remote_ip6[0], 1) != 0 ||
-+		    LSB(ctx->remote_ip6[0], 2) != 0 ||
-+		    LSB(ctx->remote_ip6[0], 3) != 0 ||
-+		    LSB(ctx->remote_ip6[1], 0) != 0 ||
-+		    LSB(ctx->remote_ip6[1], 1) != 0 ||
-+		    LSB(ctx->remote_ip6[1], 2) != 0 ||
-+		    LSB(ctx->remote_ip6[1], 3) != 0 ||
-+		    LSB(ctx->remote_ip6[2], 0) != 0 ||
-+		    LSB(ctx->remote_ip6[2], 1) != 0 ||
-+		    LSB(ctx->remote_ip6[2], 2) != 0 ||
-+		    LSB(ctx->remote_ip6[2], 3) != 0 ||
-+		    LSB(ctx->remote_ip6[3], 0) != 0 ||
-+		    LSB(ctx->remote_ip6[3], 1) != 0 ||
-+		    LSB(ctx->remote_ip6[3], 2) != 0 ||
-+		    LSB(ctx->remote_ip6[3], 3) != 0)
- 			return SK_DROP;
--		half = (__u16 *)&ctx->remote_ip6;
--		if (half[0] != 0 || half[1] != 0 ||
--		    half[2] != 0 || half[3] != 0 ||
--		    half[4] != 0 || half[5] != 0 ||
--		    half[6] != 0 || half[7] != 0)
-+		if (LSW(ctx->remote_ip6[0], 0) != 0 ||
-+		    LSW(ctx->remote_ip6[0], 1) != 0 ||
-+		    LSW(ctx->remote_ip6[1], 0) != 0 ||
-+		    LSW(ctx->remote_ip6[1], 1) != 0 ||
-+		    LSW(ctx->remote_ip6[2], 0) != 0 ||
-+		    LSW(ctx->remote_ip6[2], 1) != 0 ||
-+		    LSW(ctx->remote_ip6[3], 0) != 0 ||
-+		    LSW(ctx->remote_ip6[3], 1) != 0)
- 			return SK_DROP;
- 
--		byte = (__u8 *)&ctx->local_ip6;
--		if (byte[0] != 0 || byte[1] != 0 ||
--		    byte[2] != 0 || byte[3] != 0 ||
--		    byte[4] != 0 || byte[5] != 0 ||
--		    byte[6] != 0 || byte[7] != 0 ||
--		    byte[8] != 0 || byte[9] != 0 ||
--		    byte[10] != 0 || byte[11] != 0 ||
--		    byte[12] != 0 || byte[13] != 0 ||
--		    byte[14] != 0 || byte[15] != 0)
-+		if (LSB(ctx->local_ip6[0], 0) != 0 ||
-+		    LSB(ctx->local_ip6[0], 1) != 0 ||
-+		    LSB(ctx->local_ip6[0], 2) != 0 ||
-+		    LSB(ctx->local_ip6[0], 3) != 0 ||
-+		    LSB(ctx->local_ip6[1], 0) != 0 ||
-+		    LSB(ctx->local_ip6[1], 1) != 0 ||
-+		    LSB(ctx->local_ip6[1], 2) != 0 ||
-+		    LSB(ctx->local_ip6[1], 3) != 0 ||
-+		    LSB(ctx->local_ip6[2], 0) != 0 ||
-+		    LSB(ctx->local_ip6[2], 1) != 0 ||
-+		    LSB(ctx->local_ip6[2], 2) != 0 ||
-+		    LSB(ctx->local_ip6[2], 3) != 0 ||
-+		    LSB(ctx->local_ip6[3], 0) != 0 ||
-+		    LSB(ctx->local_ip6[3], 1) != 0 ||
-+		    LSB(ctx->local_ip6[3], 2) != 0 ||
-+		    LSB(ctx->local_ip6[3], 3) != 0)
- 			return SK_DROP;
--		half = (__u16 *)&ctx->local_ip6;
--		if (half[0] != 0 || half[1] != 0 ||
--		    half[2] != 0 || half[3] != 0 ||
--		    half[4] != 0 || half[5] != 0 ||
--		    half[6] != 0 || half[7] != 0)
-+		if (LSW(ctx->remote_ip6[0], 0) != 0 ||
-+		    LSW(ctx->remote_ip6[0], 1) != 0 ||
-+		    LSW(ctx->remote_ip6[1], 0) != 0 ||
-+		    LSW(ctx->remote_ip6[1], 1) != 0 ||
-+		    LSW(ctx->remote_ip6[2], 0) != 0 ||
-+		    LSW(ctx->remote_ip6[2], 1) != 0 ||
-+		    LSW(ctx->remote_ip6[3], 0) != 0 ||
-+		    LSW(ctx->remote_ip6[3], 1) != 0)
- 			return SK_DROP;
- 	}
- 
+ 	return 0;
 -- 
 2.25.4
 
