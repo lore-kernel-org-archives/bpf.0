@@ -7,219 +7,427 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 84E5CC433E2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B2AD6C43461
 	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 01:59:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 41D9220708
+	by mail.kernel.org (Postfix) with ESMTP id 7718B206DB
 	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 01:59:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="R22iXF94"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OtTUnBx6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730270AbgIJB64 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Sep 2020 21:58:56 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:33918 "EHLO
+        id S1729789AbgIJB7B (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Sep 2020 21:59:01 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:15788 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729161AbgIJBk1 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 9 Sep 2020 21:40:27 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 089N39FT093847;
-        Wed, 9 Sep 2020 19:21:50 -0400
+        by vger.kernel.org with ESMTP id S1729822AbgIJBo5 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 9 Sep 2020 21:44:57 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 089N1up6025509;
+        Wed, 9 Sep 2020 19:25:26 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=0ObmlIaqZCCPTCEiq1V4O0N6iHP+bfImgDug7JXh0rw=;
- b=R22iXF94MadTHojVA0JAb+NVUdqEFRpwvYiK9/6LuXWPy/haWhBHTy3c3XEtTQLURNJT
- QxBtgb6m45d/YPU5pCOeQ+OzikVHrIRhYzLM1IKI/xceD2UVch/rRu7DIp4VmHJ5HoKa
- rRpqSQvMmGwcNmHAAyYwc4bAZMxNxh6FkxoyvcjjmDm8lleSSu/IaJx+Fc0hniIEVzXX
- m8sXV4aKLOSO8LcLcVjpdqleBA+7h9TDePzudzlPSywib04jSNBzWAwa2CdrrqZPL5gn
- mgxizITqtv1h0FIgaP0SoCzdMPLai0iqiotKCJmZfQ5PD6KGbPhVEa9TcSopUN2FSl9x rA== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33f7nhh9h5-1
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=kp2f+VHZgUNccwbWt3aRbAZVCwfMbVuF/oAh8BIIM7w=;
+ b=OtTUnBx6ALTu+ozRNbAs1acU60izVArPVTlRiKUjiwba5hCSmvZzbY86aYNHBRvrC6lq
+ PSEMEzl06AZrC9ki95wZv/bUb+fpOIUp9GpHN9l7ditqx8qnH2fUYtvk8iPqYrMK+NIV
+ AZvbnGHhGAbXagBczmck2rQZbfivpoKwrSt56goOcUDfEdWY2ydV8N+JpLfWWfoNeUt/
+ TE6j9CSfePFFGI9MNEXFgrG8WwYru2YbDB15ZGa5EItgTBbD+XsTRLlxQBjIt2OFVXq+
+ ilx06OeYHvANTw9NrbvobdFPloH4Ttb0VcdqOiZmELUq0TF7CbTmbnvTEFgVMPP3Zsao DQ== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33f8310u08-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Sep 2020 19:21:50 -0400
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 089NHK7v030452;
-        Wed, 9 Sep 2020 23:21:48 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 33dxdr2ggg-1
+        Wed, 09 Sep 2020 19:25:26 -0400
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 089NID3F011244;
+        Wed, 9 Sep 2020 23:25:24 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma01fra.de.ibm.com with ESMTP id 33c2a811q5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Sep 2020 23:21:48 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 089NLjXQ29622600
+        Wed, 09 Sep 2020 23:25:23 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 089NPLjJ39977220
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Sep 2020 23:21:45 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 42EA95204F;
-        Wed,  9 Sep 2020 23:21:45 +0000 (GMT)
+        Wed, 9 Sep 2020 23:25:21 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 136A311C050;
+        Wed,  9 Sep 2020 23:25:21 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id ACB4D11C04A;
+        Wed,  9 Sep 2020 23:25:20 +0000 (GMT)
 Received: from localhost.localdomain (unknown [9.145.5.224])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id DF2C752051;
-        Wed,  9 Sep 2020 23:21:44 +0000 (GMT)
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  9 Sep 2020 23:25:20 +0000 (GMT)
 From:   Ilya Leoshkevich <iii@linux.ibm.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next] s390/bpf: Fix multiple tail calls
-Date:   Thu, 10 Sep 2020 01:21:41 +0200
-Message-Id: <20200909232141.3099367-1-iii@linux.ibm.com>
+Subject: [PATCH bpf-next 2/3] selftests/bpf: Fix endianness issues in sk_lookup/ctx_narrow_access
+Date:   Thu, 10 Sep 2020 01:24:42 +0200
+Message-Id: <20200909232443.3099637-3-iii@linux.ibm.com>
 X-Mailer: git-send-email 2.25.4
+In-Reply-To: <20200909232443.3099637-1-iii@linux.ibm.com>
+References: <20200909232443.3099637-1-iii@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-09_17:2020-09-09,2020-09-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
- impostorscore=0 bulkscore=0 phishscore=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 mlxlogscore=999 suspectscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009090202
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxscore=0 clxscore=1015
+ adultscore=0 phishscore=0 mlxlogscore=999 spamscore=0 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009090197
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In order to branch around tail calls (due to out-of-bounds index,
-exceeding tail call count or missing tail call target), JIT uses
-label[0] field, which contains the address of the instruction following
-the tail call. When there are multiple tail calls, label[0] value comes
-from handling of a previous tail call, which is incorrect.
+This test makes a lot of narrow load checks while assuming little
+endian architecture, and therefore fails on s390.
 
-Fix by getting rid of label array and resolving the label address
-locally: for all 3 branches that jump to it, emit 0 offsets at the
-beginning, and then backpatch them with the correct value.
+Fix by introducing LSB and LSW macros and using them to perform narrow
+loads.
 
-Also, do not use the long jump infrastructure: the tail call sequence
-is known to be short, so make all 3 jumps short.
-
-Fixes: 6651ee070b31 ("s390/bpf: implement bpf_tail_call() helper")
+Fixes: 0ab5539f8584 ("selftests/bpf: Tests for BPF_SK_LOOKUP attach point")
 Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- arch/s390/net/bpf_jit_comp.c | 61 ++++++++++++++++--------------------
- 1 file changed, 27 insertions(+), 34 deletions(-)
+ .../selftests/bpf/progs/test_sk_lookup.c      | 264 ++++++++++--------
+ 1 file changed, 149 insertions(+), 115 deletions(-)
 
-diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index be4b8532dd3c..0a4182792876 100644
---- a/arch/s390/net/bpf_jit_comp.c
-+++ b/arch/s390/net/bpf_jit_comp.c
-@@ -50,7 +50,6 @@ struct bpf_jit {
- 	int r14_thunk_ip;	/* Address of expoline thunk for 'br %r14' */
- 	int tail_call_start;	/* Tail call start offset */
- 	int excnt;		/* Number of exception table entries */
--	int labels[1];		/* Labels for local jumps */
- };
+diff --git a/tools/testing/selftests/bpf/progs/test_sk_lookup.c b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
+index bbf8296f4d66..94e6d370967b 100644
+--- a/tools/testing/selftests/bpf/progs/test_sk_lookup.c
++++ b/tools/testing/selftests/bpf/progs/test_sk_lookup.c
+@@ -19,6 +19,17 @@
+ #define IP6(aaaa, bbbb, cccc, dddd)			\
+ 	{ bpf_htonl(aaaa), bpf_htonl(bbbb), bpf_htonl(cccc), bpf_htonl(dddd) }
  
- #define SEEN_MEM	BIT(0)		/* use mem[] for temporary storage */
-@@ -229,18 +228,18 @@ static inline void reg_set_seen(struct bpf_jit *jit, u32 b1)
- 	REG_SET_SEEN(b3);					\
- })
- 
--#define EMIT6_PCREL_LABEL(op1, op2, b1, b2, label, mask)	\
-+#define EMIT6_PCREL_RIEB(op1, op2, b1, b2, mask, target)	\
- ({								\
--	int rel = (jit->labels[label] - jit->prg) >> 1;		\
-+	unsigned int rel = (int)((target) - jit->prg) / 2;	\
- 	_EMIT6((op1) | reg(b1, b2) << 16 | (rel & 0xffff),	\
- 	       (op2) | (mask) << 12);				\
- 	REG_SET_SEEN(b1);					\
- 	REG_SET_SEEN(b2);					\
- })
- 
--#define EMIT6_PCREL_IMM_LABEL(op1, op2, b1, imm, label, mask)	\
-+#define EMIT6_PCREL_RIEC(op1, op2, b1, imm, mask, target)	\
- ({								\
--	int rel = (jit->labels[label] - jit->prg) >> 1;		\
-+	unsigned int rel = (int)((target) - jit->prg) / 2;	\
- 	_EMIT6((op1) | (reg_high(b1) | (mask)) << 16 |		\
- 		(rel & 0xffff), (op2) | ((imm) & 0xff) << 8);	\
- 	REG_SET_SEEN(b1);					\
-@@ -1282,7 +1281,9 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
- 		EMIT4(0xb9040000, BPF_REG_0, REG_2);
- 		break;
- 	}
--	case BPF_JMP | BPF_TAIL_CALL:
-+	case BPF_JMP | BPF_TAIL_CALL: {
-+		int patch_1_clrj, patch_2_clij, patch_3_brc;
++/* Macros for least-significant byte and word accesses. */
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++#define LSE_INDEX(index, size) (index)
++#else
++#define LSE_INDEX(index, size) ((size) - (index) - 1)
++#endif
++#define LSB(value, index)				\
++	(((__u8 *)&(value))[LSE_INDEX((index), sizeof(value))])
++#define LSW(value, index)				\
++	(((__u16 *)&(value))[LSE_INDEX((index), sizeof(value) / 2)])
 +
- 		/*
- 		 * Implicit input:
- 		 *  B1: pointer to ctx
-@@ -1300,16 +1301,10 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
- 		EMIT6_DISP_LH(0xe3000000, 0x0016, REG_W1, REG_0, BPF_REG_2,
- 			      offsetof(struct bpf_array, map.max_entries));
- 		/* if ((u32)%b3 >= (u32)%w1) goto out; */
--		if (!is_first_pass(jit) && can_use_rel(jit, jit->labels[0])) {
--			/* clrj %b3,%w1,0xa,label0 */
--			EMIT6_PCREL_LABEL(0xec000000, 0x0077, BPF_REG_3,
--					  REG_W1, 0, 0xa);
--		} else {
--			/* clr %b3,%w1 */
--			EMIT2(0x1500, BPF_REG_3, REG_W1);
--			/* brcl 0xa,label0 */
--			EMIT6_PCREL_RILC(0xc0040000, 0xa, jit->labels[0]);
--		}
-+		/* clrj %b3,%w1,0xa,out */
-+		patch_1_clrj = jit->prg;
-+		EMIT6_PCREL_RIEB(0xec000000, 0x0077, BPF_REG_3, REG_W1, 0xa,
-+				 jit->prg);
+ #define MAX_SOCKS 32
  
- 		/*
- 		 * if (tail_call_cnt++ > MAX_TAIL_CALL_CNT)
-@@ -1324,16 +1319,10 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
- 		EMIT4_IMM(0xa7080000, REG_W0, 1);
- 		/* laal %w1,%w0,off(%r15) */
- 		EMIT6_DISP_LH(0xeb000000, 0x00fa, REG_W1, REG_W0, REG_15, off);
--		if (!is_first_pass(jit) && can_use_rel(jit, jit->labels[0])) {
--			/* clij %w1,MAX_TAIL_CALL_CNT,0x2,label0 */
--			EMIT6_PCREL_IMM_LABEL(0xec000000, 0x007f, REG_W1,
--					      MAX_TAIL_CALL_CNT, 0, 0x2);
--		} else {
--			/* clfi %w1,MAX_TAIL_CALL_CNT */
--			EMIT6_IMM(0xc20f0000, REG_W1, MAX_TAIL_CALL_CNT);
--			/* brcl 0x2,label0 */
--			EMIT6_PCREL_RILC(0xc0040000, 0x2, jit->labels[0]);
--		}
-+		/* clij %w1,MAX_TAIL_CALL_CNT,0x2,out */
-+		patch_2_clij = jit->prg;
-+		EMIT6_PCREL_RIEC(0xec000000, 0x007f, REG_W1, MAX_TAIL_CALL_CNT,
-+				 2, jit->prg);
+ struct {
+@@ -369,171 +380,194 @@ int ctx_narrow_access(struct bpf_sk_lookup *ctx)
+ {
+ 	struct bpf_sock *sk;
+ 	int err, family;
+-	__u16 *half;
+-	__u8 *byte;
+ 	bool v4;
  
- 		/*
- 		 * prog = array->ptrs[index];
-@@ -1348,13 +1337,9 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
- 		/* ltg %r1,prog(%b2,%r1) */
- 		EMIT6_DISP_LH(0xe3000000, 0x0002, REG_1, BPF_REG_2,
- 			      REG_1, offsetof(struct bpf_array, ptrs));
--		if (!is_first_pass(jit) && can_use_rel(jit, jit->labels[0])) {
--			/* brc 0x8,label0 */
--			EMIT4_PCREL_RIC(0xa7040000, 0x8, jit->labels[0]);
--		} else {
--			/* brcl 0x8,label0 */
--			EMIT6_PCREL_RILC(0xc0040000, 0x8, jit->labels[0]);
--		}
-+		/* brc 0x8,out */
-+		patch_3_brc = jit->prg;
-+		EMIT4_PCREL_RIC(0xa7040000, 8, jit->prg);
+ 	v4 = (ctx->family == AF_INET);
  
- 		/*
- 		 * Restore registers before calling function
-@@ -1371,8 +1356,16 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
- 		/* bc 0xf,tail_call_start(%r1) */
- 		_EMIT4(0x47f01000 + jit->tail_call_start);
- 		/* out: */
--		jit->labels[0] = jit->prg;
-+		if (jit->prg_buf) {
-+			*(u16 *)(jit->prg_buf + patch_1_clrj + 2) =
-+				(jit->prg - patch_1_clrj) >> 1;
-+			*(u16 *)(jit->prg_buf + patch_2_clij + 2) =
-+				(jit->prg - patch_2_clij) >> 1;
-+			*(u16 *)(jit->prg_buf + patch_3_brc + 2) =
-+				(jit->prg - patch_3_brc) >> 1;
-+		}
- 		break;
-+	}
- 	case BPF_JMP | BPF_EXIT: /* return b0 */
- 		last = (i == fp->len - 1) ? 1 : 0;
- 		if (last)
+ 	/* Narrow loads from family field */
+-	byte = (__u8 *)&ctx->family;
+-	half = (__u16 *)&ctx->family;
+-	if (byte[0] != (v4 ? AF_INET : AF_INET6) ||
+-	    byte[1] != 0 || byte[2] != 0 || byte[3] != 0)
++	if (LSB(ctx->family, 0) != (v4 ? AF_INET : AF_INET6) ||
++	    LSB(ctx->family, 1) != 0 || LSB(ctx->family, 2) != 0 ||
++	    LSB(ctx->family, 3) != 0)
+ 		return SK_DROP;
+-	if (half[0] != (v4 ? AF_INET : AF_INET6))
++	if (LSW(ctx->family, 0) != (v4 ? AF_INET : AF_INET6))
+ 		return SK_DROP;
+ 
+-	byte = (__u8 *)&ctx->protocol;
+-	if (byte[0] != IPPROTO_TCP ||
+-	    byte[1] != 0 || byte[2] != 0 || byte[3] != 0)
++	/* Narrow loads from protocol field */
++	if (LSB(ctx->protocol, 0) != IPPROTO_TCP ||
++	    LSB(ctx->protocol, 1) != 0 || LSB(ctx->protocol, 2) != 0 ||
++	    LSB(ctx->protocol, 3) != 0)
+ 		return SK_DROP;
+-	half = (__u16 *)&ctx->protocol;
+-	if (half[0] != IPPROTO_TCP)
++	if (LSW(ctx->protocol, 0) != IPPROTO_TCP)
+ 		return SK_DROP;
+ 
+ 	/* Narrow loads from remote_port field. Expect non-0 value. */
+-	byte = (__u8 *)&ctx->remote_port;
+-	if (byte[0] == 0 && byte[1] == 0 && byte[2] == 0 && byte[3] == 0)
++	if (LSB(ctx->remote_port, 0) == 0 && LSB(ctx->remote_port, 1) == 0 &&
++	    LSB(ctx->remote_port, 2) == 0 && LSB(ctx->remote_port, 3) == 0)
+ 		return SK_DROP;
+-	half = (__u16 *)&ctx->remote_port;
+-	if (half[0] == 0)
++	if (LSW(ctx->remote_port, 0) == 0)
+ 		return SK_DROP;
+ 
+ 	/* Narrow loads from local_port field. Expect DST_PORT. */
+-	byte = (__u8 *)&ctx->local_port;
+-	if (byte[0] != ((DST_PORT >> 0) & 0xff) ||
+-	    byte[1] != ((DST_PORT >> 8) & 0xff) ||
+-	    byte[2] != 0 || byte[3] != 0)
++	if (LSB(ctx->local_port, 0) != ((DST_PORT >> 0) & 0xff) ||
++	    LSB(ctx->local_port, 1) != ((DST_PORT >> 8) & 0xff) ||
++	    LSB(ctx->local_port, 2) != 0 || LSB(ctx->local_port, 3) != 0)
+ 		return SK_DROP;
+-	half = (__u16 *)&ctx->local_port;
+-	if (half[0] != DST_PORT)
++	if (LSW(ctx->local_port, 0) != DST_PORT)
+ 		return SK_DROP;
+ 
+ 	/* Narrow loads from IPv4 fields */
+ 	if (v4) {
+ 		/* Expect non-0.0.0.0 in remote_ip4 */
+-		byte = (__u8 *)&ctx->remote_ip4;
+-		if (byte[0] == 0 && byte[1] == 0 &&
+-		    byte[2] == 0 && byte[3] == 0)
++		if (LSB(ctx->remote_ip4, 0) == 0 &&
++		    LSB(ctx->remote_ip4, 1) == 0 &&
++		    LSB(ctx->remote_ip4, 2) == 0 &&
++		    LSB(ctx->remote_ip4, 3) == 0)
+ 			return SK_DROP;
+-		half = (__u16 *)&ctx->remote_ip4;
+-		if (half[0] == 0 && half[1] == 0)
++		if (LSW(ctx->remote_ip4, 0) == 0 &&
++		    LSW(ctx->remote_ip4, 1) == 0)
+ 			return SK_DROP;
+ 
+ 		/* Expect DST_IP4 in local_ip4 */
+-		byte = (__u8 *)&ctx->local_ip4;
+-		if (byte[0] != ((DST_IP4 >>  0) & 0xff) ||
+-		    byte[1] != ((DST_IP4 >>  8) & 0xff) ||
+-		    byte[2] != ((DST_IP4 >> 16) & 0xff) ||
+-		    byte[3] != ((DST_IP4 >> 24) & 0xff))
++		if (LSB(ctx->local_ip4, 0) != ((DST_IP4 >> 0) & 0xff) ||
++		    LSB(ctx->local_ip4, 1) != ((DST_IP4 >> 8) & 0xff) ||
++		    LSB(ctx->local_ip4, 2) != ((DST_IP4 >> 16) & 0xff) ||
++		    LSB(ctx->local_ip4, 3) != ((DST_IP4 >> 24) & 0xff))
+ 			return SK_DROP;
+-		half = (__u16 *)&ctx->local_ip4;
+-		if (half[0] != ((DST_IP4 >>  0) & 0xffff) ||
+-		    half[1] != ((DST_IP4 >> 16) & 0xffff))
++		if (LSW(ctx->local_ip4, 0) != ((DST_IP4 >> 0) & 0xffff) ||
++		    LSW(ctx->local_ip4, 1) != ((DST_IP4 >> 16) & 0xffff))
+ 			return SK_DROP;
+ 	} else {
+ 		/* Expect 0.0.0.0 IPs when family != AF_INET */
+-		byte = (__u8 *)&ctx->remote_ip4;
+-		if (byte[0] != 0 || byte[1] != 0 &&
+-		    byte[2] != 0 || byte[3] != 0)
++		if (LSB(ctx->remote_ip4, 0) != 0 ||
++		    LSB(ctx->remote_ip4, 1) != 0 ||
++		    LSB(ctx->remote_ip4, 2) != 0 ||
++		    LSB(ctx->remote_ip4, 3) != 0)
+ 			return SK_DROP;
+-		half = (__u16 *)&ctx->remote_ip4;
+-		if (half[0] != 0 || half[1] != 0)
++		if (LSW(ctx->remote_ip4, 0) != 0 ||
++		    LSW(ctx->remote_ip4, 1) != 0)
+ 			return SK_DROP;
+ 
+-		byte = (__u8 *)&ctx->local_ip4;
+-		if (byte[0] != 0 || byte[1] != 0 &&
+-		    byte[2] != 0 || byte[3] != 0)
++		if (LSB(ctx->local_ip4, 0) != 0 ||
++		    LSB(ctx->local_ip4, 1) != 0 ||
++		    LSB(ctx->local_ip4, 2) != 0 || LSB(ctx->local_ip4, 3) != 0)
+ 			return SK_DROP;
+-		half = (__u16 *)&ctx->local_ip4;
+-		if (half[0] != 0 || half[1] != 0)
++		if (LSW(ctx->local_ip4, 0) != 0 || LSW(ctx->local_ip4, 1) != 0)
+ 			return SK_DROP;
+ 	}
+ 
+ 	/* Narrow loads from IPv6 fields */
+ 	if (!v4) {
+-		/* Expenct non-:: IP in remote_ip6 */
+-		byte = (__u8 *)&ctx->remote_ip6;
+-		if (byte[0] == 0 && byte[1] == 0 &&
+-		    byte[2] == 0 && byte[3] == 0 &&
+-		    byte[4] == 0 && byte[5] == 0 &&
+-		    byte[6] == 0 && byte[7] == 0 &&
+-		    byte[8] == 0 && byte[9] == 0 &&
+-		    byte[10] == 0 && byte[11] == 0 &&
+-		    byte[12] == 0 && byte[13] == 0 &&
+-		    byte[14] == 0 && byte[15] == 0)
++		/* Expect non-:: IP in remote_ip6 */
++		if (LSB(ctx->remote_ip6[0], 0) == 0 &&
++		    LSB(ctx->remote_ip6[0], 1) == 0 &&
++		    LSB(ctx->remote_ip6[0], 2) == 0 &&
++		    LSB(ctx->remote_ip6[0], 3) == 0 &&
++		    LSB(ctx->remote_ip6[1], 0) == 0 &&
++		    LSB(ctx->remote_ip6[1], 1) == 0 &&
++		    LSB(ctx->remote_ip6[1], 2) == 0 &&
++		    LSB(ctx->remote_ip6[1], 3) == 0 &&
++		    LSB(ctx->remote_ip6[2], 0) == 0 &&
++		    LSB(ctx->remote_ip6[2], 1) == 0 &&
++		    LSB(ctx->remote_ip6[2], 2) == 0 &&
++		    LSB(ctx->remote_ip6[2], 3) == 0 &&
++		    LSB(ctx->remote_ip6[3], 0) == 0 &&
++		    LSB(ctx->remote_ip6[3], 1) == 0 &&
++		    LSB(ctx->remote_ip6[3], 2) == 0 &&
++		    LSB(ctx->remote_ip6[3], 3) == 0)
+ 			return SK_DROP;
+-		half = (__u16 *)&ctx->remote_ip6;
+-		if (half[0] == 0 && half[1] == 0 &&
+-		    half[2] == 0 && half[3] == 0 &&
+-		    half[4] == 0 && half[5] == 0 &&
+-		    half[6] == 0 && half[7] == 0)
++		if (LSW(ctx->remote_ip6[0], 0) == 0 &&
++		    LSW(ctx->remote_ip6[0], 1) == 0 &&
++		    LSW(ctx->remote_ip6[1], 0) == 0 &&
++		    LSW(ctx->remote_ip6[1], 1) == 0 &&
++		    LSW(ctx->remote_ip6[2], 0) == 0 &&
++		    LSW(ctx->remote_ip6[2], 1) == 0 &&
++		    LSW(ctx->remote_ip6[3], 0) == 0 &&
++		    LSW(ctx->remote_ip6[3], 1) == 0)
+ 			return SK_DROP;
+-
+ 		/* Expect DST_IP6 in local_ip6 */
+-		byte = (__u8 *)&ctx->local_ip6;
+-		if (byte[0] != ((DST_IP6[0] >>  0) & 0xff) ||
+-		    byte[1] != ((DST_IP6[0] >>  8) & 0xff) ||
+-		    byte[2] != ((DST_IP6[0] >> 16) & 0xff) ||
+-		    byte[3] != ((DST_IP6[0] >> 24) & 0xff) ||
+-		    byte[4] != ((DST_IP6[1] >>  0) & 0xff) ||
+-		    byte[5] != ((DST_IP6[1] >>  8) & 0xff) ||
+-		    byte[6] != ((DST_IP6[1] >> 16) & 0xff) ||
+-		    byte[7] != ((DST_IP6[1] >> 24) & 0xff) ||
+-		    byte[8] != ((DST_IP6[2] >>  0) & 0xff) ||
+-		    byte[9] != ((DST_IP6[2] >>  8) & 0xff) ||
+-		    byte[10] != ((DST_IP6[2] >> 16) & 0xff) ||
+-		    byte[11] != ((DST_IP6[2] >> 24) & 0xff) ||
+-		    byte[12] != ((DST_IP6[3] >>  0) & 0xff) ||
+-		    byte[13] != ((DST_IP6[3] >>  8) & 0xff) ||
+-		    byte[14] != ((DST_IP6[3] >> 16) & 0xff) ||
+-		    byte[15] != ((DST_IP6[3] >> 24) & 0xff))
++		if (LSB(ctx->local_ip6[0], 0) != ((DST_IP6[0] >> 0) & 0xff) ||
++		    LSB(ctx->local_ip6[0], 1) != ((DST_IP6[0] >> 8) & 0xff) ||
++		    LSB(ctx->local_ip6[0], 2) != ((DST_IP6[0] >> 16) & 0xff) ||
++		    LSB(ctx->local_ip6[0], 3) != ((DST_IP6[0] >> 24) & 0xff) ||
++		    LSB(ctx->local_ip6[1], 0) != ((DST_IP6[1] >> 0) & 0xff) ||
++		    LSB(ctx->local_ip6[1], 1) != ((DST_IP6[1] >> 8) & 0xff) ||
++		    LSB(ctx->local_ip6[1], 2) != ((DST_IP6[1] >> 16) & 0xff) ||
++		    LSB(ctx->local_ip6[1], 3) != ((DST_IP6[1] >> 24) & 0xff) ||
++		    LSB(ctx->local_ip6[2], 0) != ((DST_IP6[2] >> 0) & 0xff) ||
++		    LSB(ctx->local_ip6[2], 1) != ((DST_IP6[2] >> 8) & 0xff) ||
++		    LSB(ctx->local_ip6[2], 2) != ((DST_IP6[2] >> 16) & 0xff) ||
++		    LSB(ctx->local_ip6[2], 3) != ((DST_IP6[2] >> 24) & 0xff) ||
++		    LSB(ctx->local_ip6[3], 0) != ((DST_IP6[3] >> 0) & 0xff) ||
++		    LSB(ctx->local_ip6[3], 1) != ((DST_IP6[3] >> 8) & 0xff) ||
++		    LSB(ctx->local_ip6[3], 2) != ((DST_IP6[3] >> 16) & 0xff) ||
++		    LSB(ctx->local_ip6[3], 3) != ((DST_IP6[3] >> 24) & 0xff))
+ 			return SK_DROP;
+-		half = (__u16 *)&ctx->local_ip6;
+-		if (half[0] != ((DST_IP6[0] >>  0) & 0xffff) ||
+-		    half[1] != ((DST_IP6[0] >> 16) & 0xffff) ||
+-		    half[2] != ((DST_IP6[1] >>  0) & 0xffff) ||
+-		    half[3] != ((DST_IP6[1] >> 16) & 0xffff) ||
+-		    half[4] != ((DST_IP6[2] >>  0) & 0xffff) ||
+-		    half[5] != ((DST_IP6[2] >> 16) & 0xffff) ||
+-		    half[6] != ((DST_IP6[3] >>  0) & 0xffff) ||
+-		    half[7] != ((DST_IP6[3] >> 16) & 0xffff))
++		if (LSW(ctx->local_ip6[0], 0) != ((DST_IP6[0] >> 0) & 0xffff) ||
++		    LSW(ctx->local_ip6[0], 1) !=
++			    ((DST_IP6[0] >> 16) & 0xffff) ||
++		    LSW(ctx->local_ip6[1], 0) != ((DST_IP6[1] >> 0) & 0xffff) ||
++		    LSW(ctx->local_ip6[1], 1) !=
++			    ((DST_IP6[1] >> 16) & 0xffff) ||
++		    LSW(ctx->local_ip6[2], 0) != ((DST_IP6[2] >> 0) & 0xffff) ||
++		    LSW(ctx->local_ip6[2], 1) !=
++			    ((DST_IP6[2] >> 16) & 0xffff) ||
++		    LSW(ctx->local_ip6[3], 0) != ((DST_IP6[3] >> 0) & 0xffff) ||
++		    LSW(ctx->local_ip6[3], 1) != ((DST_IP6[3] >> 16) & 0xffff))
+ 			return SK_DROP;
+ 	} else {
+ 		/* Expect :: IPs when family != AF_INET6 */
+-		byte = (__u8 *)&ctx->remote_ip6;
+-		if (byte[0] != 0 || byte[1] != 0 ||
+-		    byte[2] != 0 || byte[3] != 0 ||
+-		    byte[4] != 0 || byte[5] != 0 ||
+-		    byte[6] != 0 || byte[7] != 0 ||
+-		    byte[8] != 0 || byte[9] != 0 ||
+-		    byte[10] != 0 || byte[11] != 0 ||
+-		    byte[12] != 0 || byte[13] != 0 ||
+-		    byte[14] != 0 || byte[15] != 0)
++		if (LSB(ctx->remote_ip6[0], 0) != 0 ||
++		    LSB(ctx->remote_ip6[0], 1) != 0 ||
++		    LSB(ctx->remote_ip6[0], 2) != 0 ||
++		    LSB(ctx->remote_ip6[0], 3) != 0 ||
++		    LSB(ctx->remote_ip6[1], 0) != 0 ||
++		    LSB(ctx->remote_ip6[1], 1) != 0 ||
++		    LSB(ctx->remote_ip6[1], 2) != 0 ||
++		    LSB(ctx->remote_ip6[1], 3) != 0 ||
++		    LSB(ctx->remote_ip6[2], 0) != 0 ||
++		    LSB(ctx->remote_ip6[2], 1) != 0 ||
++		    LSB(ctx->remote_ip6[2], 2) != 0 ||
++		    LSB(ctx->remote_ip6[2], 3) != 0 ||
++		    LSB(ctx->remote_ip6[3], 0) != 0 ||
++		    LSB(ctx->remote_ip6[3], 1) != 0 ||
++		    LSB(ctx->remote_ip6[3], 2) != 0 ||
++		    LSB(ctx->remote_ip6[3], 3) != 0)
+ 			return SK_DROP;
+-		half = (__u16 *)&ctx->remote_ip6;
+-		if (half[0] != 0 || half[1] != 0 ||
+-		    half[2] != 0 || half[3] != 0 ||
+-		    half[4] != 0 || half[5] != 0 ||
+-		    half[6] != 0 || half[7] != 0)
++		if (LSW(ctx->remote_ip6[0], 0) != 0 ||
++		    LSW(ctx->remote_ip6[0], 1) != 0 ||
++		    LSW(ctx->remote_ip6[1], 0) != 0 ||
++		    LSW(ctx->remote_ip6[1], 1) != 0 ||
++		    LSW(ctx->remote_ip6[2], 0) != 0 ||
++		    LSW(ctx->remote_ip6[2], 1) != 0 ||
++		    LSW(ctx->remote_ip6[3], 0) != 0 ||
++		    LSW(ctx->remote_ip6[3], 1) != 0)
+ 			return SK_DROP;
+ 
+-		byte = (__u8 *)&ctx->local_ip6;
+-		if (byte[0] != 0 || byte[1] != 0 ||
+-		    byte[2] != 0 || byte[3] != 0 ||
+-		    byte[4] != 0 || byte[5] != 0 ||
+-		    byte[6] != 0 || byte[7] != 0 ||
+-		    byte[8] != 0 || byte[9] != 0 ||
+-		    byte[10] != 0 || byte[11] != 0 ||
+-		    byte[12] != 0 || byte[13] != 0 ||
+-		    byte[14] != 0 || byte[15] != 0)
++		if (LSB(ctx->local_ip6[0], 0) != 0 ||
++		    LSB(ctx->local_ip6[0], 1) != 0 ||
++		    LSB(ctx->local_ip6[0], 2) != 0 ||
++		    LSB(ctx->local_ip6[0], 3) != 0 ||
++		    LSB(ctx->local_ip6[1], 0) != 0 ||
++		    LSB(ctx->local_ip6[1], 1) != 0 ||
++		    LSB(ctx->local_ip6[1], 2) != 0 ||
++		    LSB(ctx->local_ip6[1], 3) != 0 ||
++		    LSB(ctx->local_ip6[2], 0) != 0 ||
++		    LSB(ctx->local_ip6[2], 1) != 0 ||
++		    LSB(ctx->local_ip6[2], 2) != 0 ||
++		    LSB(ctx->local_ip6[2], 3) != 0 ||
++		    LSB(ctx->local_ip6[3], 0) != 0 ||
++		    LSB(ctx->local_ip6[3], 1) != 0 ||
++		    LSB(ctx->local_ip6[3], 2) != 0 ||
++		    LSB(ctx->local_ip6[3], 3) != 0)
+ 			return SK_DROP;
+-		half = (__u16 *)&ctx->local_ip6;
+-		if (half[0] != 0 || half[1] != 0 ||
+-		    half[2] != 0 || half[3] != 0 ||
+-		    half[4] != 0 || half[5] != 0 ||
+-		    half[6] != 0 || half[7] != 0)
++		if (LSW(ctx->remote_ip6[0], 0) != 0 ||
++		    LSW(ctx->remote_ip6[0], 1) != 0 ||
++		    LSW(ctx->remote_ip6[1], 0) != 0 ||
++		    LSW(ctx->remote_ip6[1], 1) != 0 ||
++		    LSW(ctx->remote_ip6[2], 0) != 0 ||
++		    LSW(ctx->remote_ip6[2], 1) != 0 ||
++		    LSW(ctx->remote_ip6[3], 0) != 0 ||
++		    LSW(ctx->remote_ip6[3], 1) != 0)
+ 			return SK_DROP;
+ 	}
+ 
 -- 
 2.25.4
 
