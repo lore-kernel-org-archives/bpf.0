@@ -2,130 +2,158 @@ Return-Path: <SRS0=JSZK=CS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C020EC433E2
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 02:39:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21BC5C43461
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 03:12:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8C56521D24
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 02:39:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D111D21941
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 03:12:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tQLUGce1"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="LdL3ZV0k"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729048AbgIICi5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Sep 2020 22:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726657AbgIICiw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Sep 2020 22:38:52 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532C9C061573;
-        Tue,  8 Sep 2020 19:38:50 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id j11so1331536ejk.0;
-        Tue, 08 Sep 2020 19:38:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c0LG+vk1ojJvbaF+oWlNIKJX2tMsE657ayPjppgcqDA=;
-        b=tQLUGce1kM+Ambd5UX5C/U6nBufPVlR1fZEO0J8r+c4VUfQqLYRYZzkU5le65aXAAo
-         PxzcQiqBISVYM+ZxB1i5ZNKU5/vj5XWW9oaHgMMIpaVeoEo/3aG7XXCmVhbvPNJFBYzr
-         dGvLlKYwIaRAtoBAjYKQWrhspgWbIn5IJ64CRArRRFxReQoxSvD2yE2xosst2MIAJFik
-         H2N29P0T3JVU1OKFuB/t0HEPHBj2Veex8gUexQ9DpjkbSUYP0SEswKiEfcN1XFCZIXm9
-         XROCc4dlNnHzViVm7VvMf27Y3/KU8ic3zIJ3AZ6pbRpuRkG0iVUC/vIYNXPGhZ32Gm7v
-         eLrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c0LG+vk1ojJvbaF+oWlNIKJX2tMsE657ayPjppgcqDA=;
-        b=TjnUTrT9jq38jgWvvp4Ywk33EBJuj4aSKNXxNUKOpXQ4xaRdNe0IBgOsQRdLwhTNEk
-         MnjAKtffS493+u0MQNImkV/cyBsSGIXeB2ST/+R5yq5li4Jtln/mAbCz31tSTlTd34/T
-         fMZiemveJFNPkryc6brLLKGw+kKL4b/lxEFffMyvSbU39aoKRtJYCfbwszmj4xDer9h9
-         vv5rGqG7DusETMi9y2xmKqd6MOr9I2dMfzVfC25xDxF445bCy1a7+bU0K6letgYln04v
-         HaP7TCK4ixGfVpbJQ0Z7KJfMz2mYH2YU/m3T8WzQiDVKYa1+RUMy2+1WpubqUC5F/4DF
-         sVlw==
-X-Gm-Message-State: AOAM531zYqKQjYl4HPXUH5LHGJXVA/sEBCk9DnwqZtdG5DIdT+b9UDQI
-        L3Ja3ZW4GUpDEHPpM6xTFzBJr0DH5EV7/hCy/Gdkc/AyKw==
-X-Google-Smtp-Source: ABdhPJx0uyCHYlMDgFzFnM942bI3iP0KfOS+PYYCVHo6EXx0kCmCLrNmfIYzA8A8Dorbvk9Y8qQHNedt9iLULOYEIdA=
-X-Received: by 2002:a17:906:9491:: with SMTP id t17mr1432099ejx.227.1599619129060;
- Tue, 08 Sep 2020 19:38:49 -0700 (PDT)
+        id S1726801AbgIIDMj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Sep 2020 23:12:39 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:39752 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726714AbgIIDMi (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 8 Sep 2020 23:12:38 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08935ikB025755
+        for <bpf@vger.kernel.org>; Tue, 8 Sep 2020 20:12:36 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=8JMpMtg+XayFo9WE9QGMX4q7Nd6Cx7JanSwtFyRcP/k=;
+ b=LdL3ZV0kyjEkOdm5RVGHR7TsAjZ98FtKDRpNGxLPlE1riq5AKq6va4b4aQBMu57R/doK
+ 0+hNlDU9iAvTzNgMY7+JhihE+4GqGZ+OCXgAzTEkEGOtwfE5ica6ib2j21Em3QTeRPX/
+ hEPaz6tNr1v8kLSVF5BF0pxvYfI3lIKDmTY= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 33ct69n3mb-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2020 20:12:36 -0700
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 8 Sep 2020 20:12:35 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 2B9B53704DF8; Tue,  8 Sep 2020 20:12:27 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Subject: [PATCH bpf-next] selftests/bpf: fix test_sysctl_loop{1,2} failure due to clang change
+Date:   Tue, 8 Sep 2020 20:12:27 -0700
+Message-ID: <20200909031227.963161-1-yhs@fb.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-References: <20200905154137.24800-1-danieltimlee@gmail.com> <CAEf4BzZ+tGgeqpPiKmChRYQ7FH==3AHXUK5V+Sy2tjZiO58u+w@mail.gmail.com>
-In-Reply-To: <CAEf4BzZ+tGgeqpPiKmChRYQ7FH==3AHXUK5V+Sy2tjZiO58u+w@mail.gmail.com>
-From:   "Daniel T. Lee" <danieltimlee@gmail.com>
-Date:   Wed, 9 Sep 2020 02:38:26 +0900
-Message-ID: <CAEKGpzhxyrNkRQ5Feu-DH8j4s+sMUCfGD-+JuYEv1rjS5_qcyg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] samples: bpf: refactor xdp_sample_pkts_kern with
- BTF-defined map
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-09_02:2020-09-08,2020-09-09 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ priorityscore=1501 mlxscore=0 spamscore=0 phishscore=0 clxscore=1015
+ mlxlogscore=981 impostorscore=0 bulkscore=0 malwarescore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009090027
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Sep 9, 2020 at 8:24 AM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Sat, Sep 5, 2020 at 8:41 AM Daniel T. Lee <danieltimlee@gmail.com> wrote:
-> >
-> > Most of the samples were converted to use the new BTF-defined MAP as
-> > they moved to libbbpf, but some of the samples were missing.
-> >
-> > Instead of using the previous BPF MAP definition, this commit refactors
-> > xdp_sample_pkts_kern MAP definition with the new BTF-defined MAP format.
-> >
-> > Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
-> > ---
-> >  samples/bpf/xdp_sample_pkts_kern.c | 12 ++++++------
-> >  1 file changed, 6 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/samples/bpf/xdp_sample_pkts_kern.c b/samples/bpf/xdp_sample_pkts_kern.c
-> > index 33377289e2a8..b15172b7d455 100644
-> > --- a/samples/bpf/xdp_sample_pkts_kern.c
-> > +++ b/samples/bpf/xdp_sample_pkts_kern.c
-> > @@ -7,12 +7,12 @@
-> >  #define SAMPLE_SIZE 64ul
-> >  #define MAX_CPUS 128
-> >
-> > -struct bpf_map_def SEC("maps") my_map = {
-> > -       .type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
-> > -       .key_size = sizeof(int),
-> > -       .value_size = sizeof(u32),
-> > -       .max_entries = MAX_CPUS,
-> > -};
-> > +struct {
-> > +       __uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
-> > +       __uint(key_size, sizeof(int));
-> > +       __uint(value_size, sizeof(u32));
-> > +       __uint(max_entries, MAX_CPUS);
->
-> if you drop max_entries property, libbpf will set it to the maximum
-> configured number of CPUs on the host, which is what you probably
-> want. Do you might sending v2 without MAX_CPUS (check if macro is
-> still used anywhere else). Thanks!
->
+Andrii reported that with latest clang, when building selftests, we have
+error likes:
+  error: progs/test_sysctl_loop1.c:23:16: in function sysctl_tcp_mem i32 =
+(%struct.bpf_sysctl*):
+  Looks like the BPF stack limit of 512 bytes is exceeded.
+  Please move large on stack variables into BPF per-cpu array map.
 
-Thanks for your time and effort for the review.
+The error is triggered by the following LLVM patch:
+  https://reviews.llvm.org/D87134
 
-I'll check and send the next version of patch.
+For example, the following code is from test_sysctl_loop1.c:
+  static __always_inline int is_tcp_mem(struct bpf_sysctl *ctx)
+  {
+    volatile char tcp_mem_name[] =3D "net/ipv4/tcp_mem/very_very_very_ver=
+y_long_pointless_string";
+    ...
+  }
+Without the above LLVM patch, the compiler did optimization to load the s=
+tring
+(59 bytes long) with 7 64bit loads, 1 8bit load and 1 16bit load,
+occupying 64 byte stack size.
 
+With the above LLVM patch, the compiler only uses 8bit loads, but subregi=
+ster is 32bit.
+So stack requirements become 4 * 59 =3D 236 bytes. Together with other st=
+uff on
+the stack, total stack size exceeds 512 bytes, hence compiler complains a=
+nd quits.
 
-> > +} my_map SEC(".maps");
-> >
-> >  SEC("xdp_sample")
-> >  int xdp_sample_prog(struct xdp_md *ctx)
-> > --
-> > 2.25.1
-> >
+To fix the issue, removing "volatile" key word or changing "volatile" to
+"const"/"static const" does not work, the string is put in .rodata.str1.1=
+ section,
+which libbpf did not process it and errors out with
+  libbpf: elf: skipping unrecognized data section(6) .rodata.str1.1
+  libbpf: prog 'sysctl_tcp_mem': bad map relo against '.L__const.is_tcp_m=
+em.tcp_mem_name'
+          in section '.rodata.str1.1'
 
--- 
-Best,
-Daniel T. Lee
+Defining the string const as global variable can fix the issue as it puts=
+ the string constant
+in '.rodata' section which is recognized by libbpf. In the future, when l=
+ibbpf can process
+'.rodata.str*.*' properly, the global definition can be changed back to l=
+ocal definition.
+
+Reported-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ tools/testing/selftests/bpf/progs/test_sysctl_loop1.c | 2 +-
+ tools/testing/selftests/bpf/progs/test_sysctl_loop2.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c b/tool=
+s/testing/selftests/bpf/progs/test_sysctl_loop1.c
+index 458b0d69133e..4b600b1f522f 100644
+--- a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
++++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
+@@ -18,9 +18,9 @@
+ #define MAX_ULONG_STR_LEN 7
+ #define MAX_VALUE_STR_LEN (TCP_MEM_LOOPS * MAX_ULONG_STR_LEN)
+=20
++const char tcp_mem_name[] =3D "net/ipv4/tcp_mem/very_very_very_very_long=
+_pointless_string";
+ static __always_inline int is_tcp_mem(struct bpf_sysctl *ctx)
+ {
+-	volatile char tcp_mem_name[] =3D "net/ipv4/tcp_mem/very_very_very_very_=
+long_pointless_string";
+ 	unsigned char i;
+ 	char name[64];
+ 	int ret;
+diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c b/tool=
+s/testing/selftests/bpf/progs/test_sysctl_loop2.c
+index b2e6f9b0894d..3c292c087395 100644
+--- a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
++++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
+@@ -18,9 +18,9 @@
+ #define MAX_ULONG_STR_LEN 7
+ #define MAX_VALUE_STR_LEN (TCP_MEM_LOOPS * MAX_ULONG_STR_LEN)
+=20
++const char tcp_mem_name[] =3D "net/ipv4/tcp_mem/very_very_very_very_long=
+_pointless_string_to_stress_byte_loop";
+ static __attribute__((noinline)) int is_tcp_mem(struct bpf_sysctl *ctx)
+ {
+-	volatile char tcp_mem_name[] =3D "net/ipv4/tcp_mem/very_very_very_very_=
+long_pointless_string_to_stress_byte_loop";
+ 	unsigned char i;
+ 	char name[64];
+ 	int ret;
+--=20
+2.24.1
+
