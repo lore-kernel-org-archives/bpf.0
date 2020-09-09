@@ -2,154 +2,213 @@ Return-Path: <SRS0=JSZK=CS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C31C6C433E2
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 17:14:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB3A0C43461
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 17:15:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7A30C2166E
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 17:14:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 702A320732
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 17:15:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a0DrxPYI"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="cxOm2AWN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731074AbgIIROl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Sep 2020 13:14:41 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:23038 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730233AbgIIP3b (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 9 Sep 2020 11:29:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599665359;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PKRnalg2poH5SKe24cXt6xfvhbyMJHnXY+iW3AplBHU=;
-        b=a0DrxPYIyMe6hipmW4Jx9Jl/ZBHdNV3LO11SL0pH7B4UacRC8GTTjxK9Jq5wwCUTFo+GLs
-        +pEmdotWhCzJ+FBu4XbDA5y6+7GBbyXUy+x25TFMNmL7hnTGpoDRnpJ3JeuuQjbir0fngQ
-        S+6IElwoqoUgax8HpvISJnOX1iCp/So=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-110-oDeaobKyMgqSuIKovxUQjQ-1; Wed, 09 Sep 2020 11:10:56 -0400
-X-MC-Unique: oDeaobKyMgqSuIKovxUQjQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 805371009441;
-        Wed,  9 Sep 2020 15:10:55 +0000 (UTC)
-Received: from krava (unknown [10.40.194.81])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 1DB3E838BE;
-        Wed,  9 Sep 2020 15:10:53 +0000 (UTC)
-Date:   Wed, 9 Sep 2020 17:10:53 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>
-Subject: Re: slow sync rcu_tasks_trace
-Message-ID: <20200909151053.GF1498025@krava>
-References: <CAADnVQK_AiX+S_L_A4CQWT11XyveppBbQSQgH_qWGyzu_E8Yeg@mail.gmail.com>
- <20200909113858.GF29330@paulmck-ThinkPad-P72>
+        id S1730189AbgIIRPw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Sep 2020 13:15:52 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:10664 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730204AbgIIRPs (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 9 Sep 2020 13:15:48 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 089HDWrp014161
+        for <bpf@vger.kernel.org>; Wed, 9 Sep 2020 10:15:47 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=UZH6YSBNmrbYIy7e8KjRWyEqMdxtWGYvbvWLaxPejcY=;
+ b=cxOm2AWNAywgrMflQ4mqDRsdKy1XwqJkBHOb9oOXTpIo4vMHf+KwPnJbOd3Xb0iBU75G
+ nNpvGG1Uu3DFYtHDZRkDyHaVl1dMEArmm8XWkQVWO6OawY2y3dT8QVt8jXKxVne56d9f
+ 8bE7HfIjywrDSgv8KCjG3ulFqJQ/VVehpSM= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net with ESMTP id 33exvhsj9v-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 09 Sep 2020 10:15:47 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 9 Sep 2020 10:15:44 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 7DB733702A55; Wed,  9 Sep 2020 10:15:42 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Subject: [PATCH bpf-next v3] selftests/bpf: fix test_sysctl_loop{1,2} failure due to clang change
+Date:   Wed, 9 Sep 2020 10:15:42 -0700
+Message-ID: <20200909171542.3673449-1-yhs@fb.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200909113858.GF29330@paulmck-ThinkPad-P72>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-09_12:2020-09-09,2020-09-09 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
+ lowpriorityscore=0 priorityscore=1501 suspectscore=0 clxscore=1015
+ adultscore=0 impostorscore=0 spamscore=0 malwarescore=0 bulkscore=0
+ mlxlogscore=999 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2009090154
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Sep 09, 2020 at 04:38:58AM -0700, Paul E. McKenney wrote:
-> On Tue, Sep 08, 2020 at 07:34:20PM -0700, Alexei Starovoitov wrote:
-> > Hi Paul,
-> > 
-> > Looks like sync rcu_tasks_trace got slower or we simply didn't notice
-> > it earlier.
-> > 
-> > In selftests/bpf try:
-> > time ./test_progs -t trampoline_count
-> > #101 trampoline_count:OK
-> > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-> > 
-> > real    1m17.082s
-> > user    0m0.145s
-> > sys    0m1.369s
-> > 
-> > But with the following hack:
-> > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> > index 7dd523a7e32d..c417b817ec5d 100644
-> > --- a/kernel/bpf/trampoline.c
-> > +++ b/kernel/bpf/trampoline.c
-> > @@ -217,7 +217,7 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
-> >          * programs finish executing.
-> >          * Wait for these two grace periods together.
-> >          */
-> > -       synchronize_rcu_mult(call_rcu_tasks, call_rcu_tasks_trace);
-> > +//     synchronize_rcu_mult(call_rcu_tasks, call_rcu_tasks_trace);
-> > 
-> > I see:
-> > time ./test_progs -t trampoline_count
-> > #101 trampoline_count:OK
-> > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-> > 
-> > real    0m1.588s
-> > user    0m0.131s
-> > sys    0m1.342s
-> > 
-> > It takes an extra minute to do 40 sync rcu_tasks_trace calls.
-> > It means that every sync takes more than a second.
-> > That feels excessive.
-> > 
-> > Doing:
-> > -       synchronize_rcu_mult(call_rcu_tasks, call_rcu_tasks_trace);
-> > +       synchronize_rcu();
-> > is also fast:
-> > time ./test_progs -t trampoline_count
-> > #101 trampoline_count:OK
-> > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-> > 
-> > real    0m2.089s
-> > user    0m0.139s
-> > sys    0m1.282s
-> > 
-> > sync rcu_tasks() is fast too:
-> > -       synchronize_rcu_mult(call_rcu_tasks, call_rcu_tasks_trace);
-> > +       synchronize_rcu_tasks();
-> > time ./test_progs -t trampoline_count
-> > #101 trampoline_count:OK
-> > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-> > 
-> > real    0m2.209s
-> > user    0m0.117s
-> > sys    0m1.344s
-> > 
-> > so it's really something going on with sync rcu_tasks_trace.
-> > Could you please take a look?
-> 
-> I am guessing that your .config has CONFIG_TASKS_TRACE_RCU_READ_MB=n.
-> If I am wrong, please try CONFIG_TASKS_TRACE_RCU_READ_MB=y.
+Andrii reported that with latest clang, when building selftests, we have
+error likes:
+  error: progs/test_sysctl_loop1.c:23:16: in function sysctl_tcp_mem i32 =
+(%struct.bpf_sysctl*):
+  Looks like the BPF stack limit of 512 bytes is exceeded.
+  Please move large on stack variables into BPF per-cpu array map.
 
-hi,
-I noticed the slowdown as well, and adding CONFIG_TASKS_TRACE_RCU_READ_MB=y
-speeds it up for me
+The error is triggered by the following LLVM patch:
+  https://reviews.llvm.org/D87134
 
-thanks,
-jirka
+For example, the following code is from test_sysctl_loop1.c:
+  static __always_inline int is_tcp_mem(struct bpf_sysctl *ctx)
+  {
+    volatile char tcp_mem_name[] =3D "net/ipv4/tcp_mem/very_very_very_ver=
+y_long_pointless_string";
+    ...
+  }
+Without the above LLVM patch, the compiler did optimization to load the s=
+tring
+(59 bytes long) with 7 64bit loads, 1 8bit load and 1 16bit load,
+occupying 64 byte stack size.
 
-> 
-> Otherwise (or alternatively), could you please try booting with
-> rcupdate.rcu_task_ipi_delay=50?  The default value is 500, or half a
-> second on a HZ=1000 system, which on a busy system could easily result
-> in the grace-period delays that you are seeing.  The value of this
-> kernel boot parameter does interact with the tasklist-scan backoffs,
-> so its effect will not likely be linear.
-> 
-> Do either of those approaches help?
-> 
-> 							Thanx, Paul
-> 
+With the above LLVM patch, the compiler only uses 8bit loads, but subregi=
+ster is 32bit.
+So stack requirements become 4 * 59 =3D 236 bytes. Together with other st=
+uff on
+the stack, total stack size exceeds 512 bytes, hence compiler complains a=
+nd quits.
+
+To fix the issue, removing "volatile" key word or changing "volatile" to
+"const"/"static const" does not work, the string is put in .rodata.str1.1=
+ section,
+which libbpf did not process it and errors out with
+  libbpf: elf: skipping unrecognized data section(6) .rodata.str1.1
+  libbpf: prog 'sysctl_tcp_mem': bad map relo against '.L__const.is_tcp_m=
+em.tcp_mem_name'
+          in section '.rodata.str1.1'
+
+Defining the string const as global variable can fix the issue as it puts=
+ the string constant
+in '.rodata' section which is recognized by libbpf. In the future, when l=
+ibbpf can process
+'.rodata.str*.*' properly, the global definition can be changed back to l=
+ocal definition.
+
+Defining tcp_mem_name as a global, however, triggered a verifier failure.
+   ./test_progs -n 7/21
+  libbpf: load bpf program failed: Permission denied
+  libbpf: -- BEGIN DUMP LOG ---
+  libbpf:
+  invalid stack off=3D0 size=3D1
+  verification time 6975 usec
+  stack depth 160+64
+  processed 889 insns (limit 1000000) max_states_per_insn 4 total_states
+  14 peak_states 14 mark_read 10
+
+  libbpf: -- END LOG --
+  libbpf: failed to load program 'sysctl_tcp_mem'
+  libbpf: failed to load object 'test_sysctl_loop2.o'
+  test_bpf_verif_scale:FAIL:114
+  #7/21 test_sysctl_loop2.o:FAIL
+This actually exposed a bpf program bug. In test_sysctl_loop{1,2}, we hav=
+e code
+like
+  const char tcp_mem_name[] =3D "<...long string...>";
+  ...
+  char name[64];
+  ...
+  for (i =3D 0; i < sizeof(tcp_mem_name); ++i)
+      if (name[i] !=3D tcp_mem_name[i])
+          return 0;
+In the above code, if sizeof(tcp_mem_name) > 64, name[i] access may be
+out of bound. The sizeof(tcp_mem_name) is 59 for test_sysctl_loop1.c and
+79 for test_sysctl_loop2.c.
+
+Without promotion-to-global change, old compiler generates code where
+the overflowed stack access is actually filled with valid value, so hidin=
+g
+the bpf program bug. With promotion-to-global change, the code is differe=
+nt,
+more specifically, the previous loading constants to stack is gone, and
+"name" occupies stack[-64:0] and overflow access triggers a verifier erro=
+r.
+To fix the issue, adjust "name" buffer size properly.
+
+Reported-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ tools/testing/selftests/bpf/progs/test_sysctl_loop1.c | 4 ++--
+ tools/testing/selftests/bpf/progs/test_sysctl_loop2.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+Changelog:
+  v2 -> v3:
+    . using sizeof(tcp_mem_name) instead of hardcoded value for
+      local buf "name". (Andrii)
+  v1 -> v2:
+    . The tcp_mem_name change actually triggers a verifier failure due to
+      a bpf program bug. Fixing the bpf program bug can make test pass
+      with both old and latest llvm. (Alexei)
+
+diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c b/tool=
+s/testing/selftests/bpf/progs/test_sysctl_loop1.c
+index 458b0d69133e..553a282d816a 100644
+--- a/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
++++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop1.c
+@@ -18,11 +18,11 @@
+ #define MAX_ULONG_STR_LEN 7
+ #define MAX_VALUE_STR_LEN (TCP_MEM_LOOPS * MAX_ULONG_STR_LEN)
+=20
++const char tcp_mem_name[] =3D "net/ipv4/tcp_mem/very_very_very_very_long=
+_pointless_string";
+ static __always_inline int is_tcp_mem(struct bpf_sysctl *ctx)
+ {
+-	volatile char tcp_mem_name[] =3D "net/ipv4/tcp_mem/very_very_very_very_=
+long_pointless_string";
+ 	unsigned char i;
+-	char name[64];
++	char name[sizeof(tcp_mem_name)];
+ 	int ret;
+=20
+ 	memset(name, 0, sizeof(name));
+diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c b/tool=
+s/testing/selftests/bpf/progs/test_sysctl_loop2.c
+index b2e6f9b0894d..2b64bc563a12 100644
+--- a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
++++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
+@@ -18,11 +18,11 @@
+ #define MAX_ULONG_STR_LEN 7
+ #define MAX_VALUE_STR_LEN (TCP_MEM_LOOPS * MAX_ULONG_STR_LEN)
+=20
++const char tcp_mem_name[] =3D "net/ipv4/tcp_mem/very_very_very_very_long=
+_pointless_string_to_stress_byte_loop";
+ static __attribute__((noinline)) int is_tcp_mem(struct bpf_sysctl *ctx)
+ {
+-	volatile char tcp_mem_name[] =3D "net/ipv4/tcp_mem/very_very_very_very_=
+long_pointless_string_to_stress_byte_loop";
+ 	unsigned char i;
+-	char name[64];
++	char name[sizeof(tcp_mem_name)];
+ 	int ret;
+=20
+ 	memset(name, 0, sizeof(name));
+--=20
+2.24.1
 
