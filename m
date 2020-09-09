@@ -2,96 +2,124 @@ Return-Path: <SRS0=JSZK=CS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAC61C433E2
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 17:03:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54A40C10DAA
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 17:03:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8A6F321919
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 17:03:35 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20150623.gappssmtp.com header.i=@kernel-dk.20150623.gappssmtp.com header.b="1kTWQ0Rx"
+	by mail.kernel.org (Postfix) with ESMTP id 1C01721D7F
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 17:03:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1599671027;
+	bh=Y6KVpwfWcgf1NpTlHdYhXIWOVqfIZ8yOIqI7b4HfiAs=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=aI2PbhcVsTET1ZXD4NRgC/+ZLKMbI6kWjx8ykU5Suifn9eM+ncxfGPFJFeUXZ9LAM
+	 d50jltGAuEmF4okbGhqQCXt5cONzIozODjSNJapYisy8bMAu67w58K0uxUylGZbK4t
+	 5rZa+67NOauc+/ziMKIxGVTyJw15sLk1y4W3POto=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730455AbgIIRDc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Sep 2020 13:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730521AbgIIPrP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Sep 2020 11:47:15 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894E0C06137D
-        for <bpf@vger.kernel.org>; Wed,  9 Sep 2020 07:21:31 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id y2so2484095ilp.7
-        for <bpf@vger.kernel.org>; Wed, 09 Sep 2020 07:21:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=mtr65x6fK5IlIQRtZLNh/NxFbA0Ukhq43XJmWOA2CUc=;
-        b=1kTWQ0Rx17CB3a3l6zRYbeWVNhCtQNdeO1Nyt31G782X3qOLON4LuUwU2Tfa2HcPBh
-         eo2G7kbcA/xqYT4dUkojSxg3+vNGmZt2EyubttIOhQWjesQdymM00mjaHjpLaShFMpCn
-         61y8hoz4MVq8xiOPf9zkqwlAvhn2qYSfAPRjcDSAc5CspVC43c4n4VpfDyNYwdPamoJz
-         3A4tvoOXFutN7GNfYhYGLEIamInVZSviooYPkuI1G9U0ii130k/rjOPPzldqxP1mJCqV
-         nyFrsR/dfjygylN1VDNcS5jSBh1M2gvITzl/AbNA5+8HifN1lQdBIlmucO5fQ/pzz1+Y
-         LMJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=mtr65x6fK5IlIQRtZLNh/NxFbA0Ukhq43XJmWOA2CUc=;
-        b=p4Ib4VmetdPiqaZUyyBqisJVbspjAnPki/4da9YfHZx35HI9hz1ZeouKZfUsAaJenr
-         ssbXwDGp69QgeN6KNg3O8R3lgSqRoPXVM1sCGzeoKVlk7NLQeJaIea3AVGq/3nb/u3wd
-         CYkr+zLruwbb/6OzZAnDvdtgEgQiWeM4mtBCOeVlwENiXylxSEH3UZxETbIo80XOW0yI
-         XINzwplDT8n7QAN6dr/4o8hy6C8eFqWkcuvsmqveG3MjnYDPvJQVRpDSWZw3fbiIU4ch
-         SxaI9GnAKEd5lk1Vkij/CWjPY94RieYQqRP0LQGAXwSvkRx7A8TRfrH1pydxSguwJwrw
-         b7/A==
-X-Gm-Message-State: AOAM530l4BLq+OjslAvTyJCX3+a9gqBQ0fPUIfhSfISYJf898a9kLpyM
-        IMx1UgPsaLRR/ZJq0bJuhb6xQBzIO4YmsJEt
-X-Google-Smtp-Source: ABdhPJweYTpuCpa5hQXVyCKu1HNYd1h5alEfQqDr7iNE+D2ODqGnoa1Ri0/JOkdr4eXiKi7PQPRmEw==
-X-Received: by 2002:a05:6e02:d2:: with SMTP id r18mr3681539ilq.303.1599661290531;
-        Wed, 09 Sep 2020 07:21:30 -0700 (PDT)
-Received: from [192.168.1.10] ([65.144.74.34])
-        by smtp.gmail.com with ESMTPSA id j62sm1286878iof.53.2020.09.09.07.21.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Sep 2020 07:21:30 -0700 (PDT)
-Subject: Re: [PATCH] block: remove redundant empty check of mq_list
-To:     Xianting Tian <tian.xianting@h3c.com>, ast@kernel.org,
-        daniel@iogearbox.net, kafai@fb.com, songliubraving@fb.com,
-        yhs@fb.com, andriin@fb.com, john.fastabend@gmail.com,
-        kpsingh@chromium.org
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-References: <20200909064814.5704-1-tian.xianting@h3c.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <466b8c40-9d53-8a40-6c5b-f76db2974c04@kernel.dk>
-Date:   Wed, 9 Sep 2020 08:21:29 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S1730552AbgIIRDo convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 9 Sep 2020 13:03:44 -0400
+Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:49684 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730474AbgIIPq2 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 9 Sep 2020 11:46:28 -0400
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-574-GlHbXRhlPymod5mQwk-Pig-1; Wed, 09 Sep 2020 11:11:26 -0400
+X-MC-Unique: GlHbXRhlPymod5mQwk-Pig-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D6D84801AE8;
+        Wed,  9 Sep 2020 15:11:24 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.194.81])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 57AA9100238E;
+        Wed,  9 Sep 2020 15:11:16 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Eelco Chaudron <echaudro@redhat.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Subject: [PATCH bpf-next 1/2] bpf: Fix context type resolving for extension programs
+Date:   Wed,  9 Sep 2020 17:11:14 +0200
+Message-Id: <20200909151115.1559418-1-jolsa@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20200909064814.5704-1-tian.xianting@h3c.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Mimecast-Spam-Score: 0.0
+X-Mimecast-Originator: kernel.org
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: 8BIT
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 9/9/20 12:48 AM, Xianting Tian wrote:
-> blk_mq_flush_plug_list() itself will do the empty check of mq_list,
-> so remove such check in blk_flush_plug_list().
-> Actually normally mq_list is not empty when blk_flush_plug_list is
-> called.
+Eelco reported we can't properly access arguments if the tracing
+program is attached to extension program.
 
-It's cheaper to do in the caller, instead of doing the function call
-and then aborting if it's empty. So I'd suggest just leaving it alone.
-Right now this is the only caller, but it's nicer to assume we can
-be called in any state vs not having the check.
+Having following program:
 
+  SEC("classifier/test_pkt_md_access")
+  int test_pkt_md_access(struct __sk_buff *skb)
+
+with its extension:
+
+  SEC("freplace/test_pkt_md_access")
+  int test_pkt_md_access_new(struct __sk_buff *skb)
+
+and tracing that extension with:
+
+  SEC("fentry/test_pkt_md_access_new")
+  int BPF_PROG(fentry, struct sk_buff *skb)
+
+It's not possible to access skb argument in the fentry program,
+with following error from verifier:
+
+  ; int BPF_PROG(fentry, struct sk_buff *skb)
+  0: (79) r1 = *(u64 *)(r1 +0)
+  invalid bpf_context access off=0 size=8
+
+The problem is that btf_ctx_access gets the context type for the
+traced program, which is in this case the extension.
+
+But when we trace extension program, we want to get the context
+type of the program that the extension is attached to, so we can
+access the argument properly in the trace program.
+
+Reported-by: Eelco Chaudron <echaudro@redhat.com>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ kernel/bpf/btf.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index f9ac6935ab3c..37ad01c32e5a 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -3859,6 +3859,14 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 	}
+ 
+ 	info->reg_type = PTR_TO_BTF_ID;
++
++	/* When we trace extension program, we want to get the context
++	 * type of the program that the extension is attached to, so
++	 * we can access the argument properly in the trace program.
++	 */
++	if (tgt_prog && tgt_prog->type == BPF_PROG_TYPE_EXT)
++		tgt_prog = tgt_prog->aux->linked_prog;
++
+ 	if (tgt_prog) {
+ 		ret = btf_translate_to_vmlinux(log, btf, t, tgt_prog->type, arg);
+ 		if (ret > 0) {
 -- 
-Jens Axboe
+2.26.2
 
