@@ -2,110 +2,147 @@ Return-Path: <SRS0=JSZK=CS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B564C43461
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 04:04:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 03A35C43461
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 04:12:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 118DE21D24
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 04:04:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B381F21D40
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 04:12:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bEO5/lUu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DRnOl542"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725932AbgIIEE5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Sep 2020 00:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
+        id S1725807AbgIIEMe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Sep 2020 00:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725772AbgIIEE4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Sep 2020 00:04:56 -0400
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A31C061755;
-        Tue,  8 Sep 2020 21:04:56 -0700 (PDT)
-Received: by mail-lf1-x141.google.com with SMTP id u8so844412lff.1;
-        Tue, 08 Sep 2020 21:04:55 -0700 (PDT)
+        with ESMTP id S1725767AbgIIEMc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Sep 2020 00:12:32 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC65C061573
+        for <bpf@vger.kernel.org>; Tue,  8 Sep 2020 21:12:32 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id c17so918726ybe.0
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2020 21:12:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=PcIwnCyB/mqlMobJqUXVXH0vAK306iYzRjWvFPkuYlw=;
-        b=bEO5/lUu+ugYAlOleAfFJvIGtFoYJZrmuUv3O+9X9ZkpwMakNctaDHZNtxPop0FYbK
-         ic8I+8K+SXTKREjMP2J5kYj8toeIhdk8NDEtYZRv78U+F4cGcYhEXyIX6RL+vzIqqwgn
-         94QcGS5lATJ/5DM536cyJ9ofVmw+jxW6pPpxCru6Xbi70TjEgMSlC3jblvQMn/i3hl8U
-         X5kjtYhOCJ+CPICDmb7obMZ9QfoV2CgeAGsu1QZUj3ecnwhtcumMo+LIi5no/Y52drAM
-         KQsiDmIrWyRhwPhr8rlXxwck6V3L6MMK9ffBUAyCAHXIZIuUrXm2UsCsE5XInJg4h6A+
-         vXFw==
+        bh=LKk/7yHeC4nE7j5clVo7HcO/7iRZkJAeOttTSw3ex8Q=;
+        b=DRnOl542DmBHYjjYZkr2K3E2yIqAtkCPTn3j6Bgx/wke1fT2jcTroI8wLSpRayEIj9
+         nd1B5/PnFTwH7z6AwPwJhFDFwAujnWK3wUogyn0UR5xAQ4ASbLYCxa61jvn3/PzbogR7
+         q/zD/BZ9nTQE9R4qS5J25T2tI2lyV9uwm6Fqdh9AhpVayiOfRKdg1YNSGcFN6w/ETg85
+         GFKcd2ZkzWlPTzR0TTLB4TDbg49bIr1uXVpuFlfUL5fzM6QLnl2E60F4Yv+P9mgr9uep
+         bPSskWpXb7L40t5JVjvocoXJerclvu4g+GtMb3G+simF2gRn+I1CuWrpUTxBOwB8IBs0
+         d0nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=PcIwnCyB/mqlMobJqUXVXH0vAK306iYzRjWvFPkuYlw=;
-        b=IcdstWbPo1fEpm9ox/CU7Dj8FXWenvDirUMBS1GzJ6/qeN/n432lJA8Q+9tuFGu+gd
-         IyWEwwDWp1vA0tMUEPR89HkkQV1p142R8UTs3/dQ30jMF6D8kCzhl5bHsa01VIzdw+NZ
-         BWWFR9Jnekl8dI0iaRYZ+arHgJ6IvfDyB0pFK4FkQEJF6QdNUHIf+j+qWghQotIiP6i0
-         ZNroXRh1f9lg/DYzQI2kF1b8uKprkb7HuizivHTDjRNGPXt1n5pF7BF33VYmO4JWPbxb
-         XPxL5ZN9/hmFr/t5hl705G8Rp1Uanyu8RkmFOVvFMCO7N8k7md87qIHZTPC8h3YgRPZe
-         F6UA==
-X-Gm-Message-State: AOAM532hqdPhx0p+oUP3OptVoe0Sj0r1yTbrggtbrqHwaREq59ywC7uh
-        Ry2tVFesBeGIgN2PUCoTmociZHXVJmUnZQm22NvcAz1NqYk=
-X-Google-Smtp-Source: ABdhPJyErlBfAAUjJrwngSCHQm/mPhj53AaZjMrDlhFHL3xR3RtIuRk91VlnSNRgIvmzNfu0cPVsWGzWJPOj0xzjA3o=
-X-Received: by 2002:a19:f513:: with SMTP id j19mr971789lfb.174.1599624294281;
- Tue, 08 Sep 2020 21:04:54 -0700 (PDT)
+        bh=LKk/7yHeC4nE7j5clVo7HcO/7iRZkJAeOttTSw3ex8Q=;
+        b=QOW6a75SDrxdhgmJWIFWVfZx+L3sPqaAP004NlI95dBhtduf94pBERVQL9sYKOGDYI
+         6osQHNRGa64LjCy7jvX7MwCc4NNt/ZFUPlDDJbCtJWDmW3XfMFCJ8LHMkaMuoHBVFHdo
+         sP2ihgW+5VcNtDxov93Pt1qFJH4lhicIPnvhFMJ1LwAVIU1bjXnpGUq7/Ka4mMniSKlK
+         E9yP5XnB2IpYxeg0KipQ10AV45aDqRs4tOByWFWrikZnPsUNZdA9sx7jGlxq13z7XKdq
+         nkYS0zayRG9rYxgPw0f42NeQiD9OfV7aZSmj1tVjMnVhbKhoT2XzQ4O+xoysfU8b2Zrh
+         Uayg==
+X-Gm-Message-State: AOAM5305r373sfKxyQTMpO5RIat7J13cNuCdY6eaBRM5VlS2kWcMfTGr
+        6zkLTo+dE3OyoHnZEVYYlwM9twKoN6IZgtx2YMw=
+X-Google-Smtp-Source: ABdhPJy760NoSrPSxf27yhaANuzt6KVzC+ERFuS4oXB9zqW9ixmcstX6Z2FbnKyWTrLGGK8oFFp0bHfptVJuk1qBbjA=
+X-Received: by 2002:a25:aa8f:: with SMTP id t15mr2985737ybi.459.1599624751658;
+ Tue, 08 Sep 2020 21:12:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200909031227.963161-1-yhs@fb.com>
-In-Reply-To: <20200909031227.963161-1-yhs@fb.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 8 Sep 2020 21:04:43 -0700
-Message-ID: <CAADnVQKgZyAMgChwtnHPY2VTgNQN_s+dn2rwFqySiMq_c+C5iw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: fix test_sysctl_loop{1,2} failure
- due to clang change
-To:     Yonghong Song <yhs@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+References: <20200904112401.667645-1-lmb@cloudflare.com> <20200904112401.667645-3-lmb@cloudflare.com>
+In-Reply-To: <20200904112401.667645-3-lmb@cloudflare.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 8 Sep 2020 21:12:21 -0700
+Message-ID: <CAEf4BzbCxJz_8GcjfRMCAt5xY2hfJdKd_14Af57Hz2H9oysj6Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 02/11] btf: add a global set of valid BTF socket ids
+To:     Lorenz Bauer <lmb@cloudflare.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
+        Martin Lau <kafai@fb.com>, bpf <bpf@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Sep 8, 2020 at 8:12 PM Yonghong Song <yhs@fb.com> wrote:
-> diff --git a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
-> index b2e6f9b0894d..3c292c087395 100644
-> --- a/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
-> +++ b/tools/testing/selftests/bpf/progs/test_sysctl_loop2.c
-> @@ -18,9 +18,9 @@
->  #define MAX_ULONG_STR_LEN 7
->  #define MAX_VALUE_STR_LEN (TCP_MEM_LOOPS * MAX_ULONG_STR_LEN)
+On Fri, Sep 4, 2020 at 4:29 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
 >
-> +const char tcp_mem_name[] = "net/ipv4/tcp_mem/very_very_very_very_long_pointless_string_to_stress_byte_loop";
->  static __attribute__((noinline)) int is_tcp_mem(struct bpf_sysctl *ctx)
->  {
-> -       volatile char tcp_mem_name[] = "net/ipv4/tcp_mem/very_very_very_very_long_pointless_string_to_stress_byte_loop";
+> Similar to the existing btf_sock_ids, add a set for the same data.
+> This allows searching for sockets using btf_set_contains.
+>
+> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+> ---
+>  include/linux/btf_ids.h       | 1 +
+>  net/core/filter.c             | 7 +++++++
+>  tools/include/linux/btf_ids.h | 1 +
+>  3 files changed, 9 insertions(+)
+>
+> diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+> index 42aa667d4433..eb6739ebbba4 100644
+> --- a/include/linux/btf_ids.h
+> +++ b/include/linux/btf_ids.h
+> @@ -174,6 +174,7 @@ MAX_BTF_SOCK_TYPE,
+>  };
+>
+>  extern u32 btf_sock_ids[];
+> +extern struct btf_id_set btf_sock_ids_set;
+>  #endif
+>
+>  #endif
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 47eef9a0be6a..c7f96cfea1b0 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -9903,8 +9903,15 @@ BTF_ID_LIST_GLOBAL(btf_sock_ids)
+>  #define BTF_SOCK_TYPE(name, type) BTF_ID(struct, type)
+>  BTF_SOCK_TYPE_xxx
+>  #undef BTF_SOCK_TYPE
+> +
+> +BTF_SET_START_GLOBAL(btf_sock_ids_set)
+> +#define BTF_SOCK_TYPE(name, type) BTF_ID(struct, type)
+> +BTF_SOCK_TYPE_xxx
+> +#undef BTF_SOCK_TYPE
+> +BTF_SET_END(btf_sock_ids_set)
+>  #else
+>  u32 btf_sock_ids[MAX_BTF_SOCK_TYPE];
+> +struct btf_id_set btf_sock_ids_set;
+>  #endif
 
-It fixes the issue with new llvm, but breaks slightly older llvm:
- ./test_progs -n 7/21
-libbpf: load bpf program failed: Permission denied
-libbpf: -- BEGIN DUMP LOG ---
-libbpf:
-invalid stack off=0 size=1
-verification time 6975 usec
-stack depth 160+64
-processed 889 insns (limit 1000000) max_states_per_insn 4 total_states
-14 peak_states 14 mark_read 10
+I haven't looked yet how this is going to be used, but instead of two
+pairs of #define/#undef, wouldn't it be more straightforward to do:
 
-libbpf: -- END LOG --
-libbpf: failed to load program 'sysctl_tcp_mem'
-libbpf: failed to load object 'test_sysctl_loop2.o'
-test_bpf_verif_scale:FAIL:114
-#7/21 test_sysctl_loop2.o:FAIL
+#define BTF_SOCK_TYPE(name, type) BTF_ID(struct, type)
+BTF_ID_LIST_GLOBAL(btf_sock_ids)
+BTF_SOCK_TYPE_xxx
 
-clang --version
-clang version 12.0.0 (https://github.com/llvm/llvm-project.git
-6f3511a01a5227358a334803c264cfce4175ca5d)
+BTF_SET_START_GLOBAL(btf_sock_ids_set)
+BTF_SOCK_TYPE_xxx
+BTF_SET_END(btf_sock_ids_set)
+#undef BTF_SOCK_TYPE
+
+?
+
+>
+>  static bool check_arg_btf_id(u32 btf_id, u32 arg)
+> diff --git a/tools/include/linux/btf_ids.h b/tools/include/linux/btf_ids.h
+> index 42aa667d4433..eb6739ebbba4 100644
+> --- a/tools/include/linux/btf_ids.h
+> +++ b/tools/include/linux/btf_ids.h
+> @@ -174,6 +174,7 @@ MAX_BTF_SOCK_TYPE,
+>  };
+>
+>  extern u32 btf_sock_ids[];
+> +extern struct btf_id_set btf_sock_ids_set;
+>  #endif
+>
+>  #endif
+> --
+> 2.25.1
+>
