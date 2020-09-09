@@ -2,114 +2,130 @@ Return-Path: <SRS0=JSZK=CS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AC6D7C433E2
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 01:05:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A60B1C433E2
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 02:34:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6404F216C4
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 01:05:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 619DB20936
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 02:34:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kHr8dTzJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IfqMRsFc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726489AbgIIBFz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Sep 2020 21:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
+        id S1726699AbgIICee (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Sep 2020 22:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726369AbgIIBFw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Sep 2020 21:05:52 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27420C061573;
-        Tue,  8 Sep 2020 18:05:51 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id gf14so473146pjb.5;
-        Tue, 08 Sep 2020 18:05:51 -0700 (PDT)
+        with ESMTP id S1726605AbgIICee (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Sep 2020 22:34:34 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EDDC061573
+        for <bpf@vger.kernel.org>; Tue,  8 Sep 2020 19:34:33 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id k25so1461229ljg.9
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2020 19:34:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Zr6cnsJrgGJ7VyctdOhrp3MO2aQmMSjefw9UvSk2yzk=;
-        b=kHr8dTzJ2Zha+Du3DjsnzZDE2WU0Ygh7mE+tPAEPc9+Ol92EDfIY7UZcIyJoOCQjE/
-         Ng7GWuzA8UQpNUU8kTBDrFwXbrWGAZ6m5SkYDpIcgRZ00bzq0qiCdvg0lPuMuDsPu+dB
-         YrHE6xHmTFhildA5rPc+UyQImJMX4VtzyNN2MpQi5ETiSFYZ8qQmaUTJBdCRTMBrdxYK
-         cf2kLCvZtnBPxITWJB3g+a/jHTfk/xUqS2VyqmPRgTUrcxr+Db+oWgeF9+8IHFMCjiIp
-         8bO8+sXlHLVD/W0kKmKotOUY3QSqRTjYC7pbNU8JZ+1hWJBEPDKA6ppnp/4B+e25Zj0Z
-         buuw==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=vFkfZWpjgRh1NQLNys9wcGlctEWtDdWXhoTm7TOKGhA=;
+        b=IfqMRsFcEqAEyQpgkhq3fnSaWmqPqUyP8iGmAVwzMTSxY/NYaWhd0p7GvFrUqAFObB
+         bLryPzXhjioucS3cch1erP1WY2cmYgno3V4klDIBbTWN4JUxKPcOWLEzO2KyTknJz4UE
+         9Fr78Wa3jUr0VW0b9odSyZHAtF9egdPJ9uloOE1slZkz0GtdJG6BWau1Vvnta5qaNhXm
+         Clf+SMQubTlaO5XVoQgrKzvOW6YgpV1ruprAzQE9s4AsQRiSUrKGF9Xi0iXxElELhd3h
+         tbUpT1h3KddcdGzZ3p93HEIgayBe5bUshFEsp70SAYa3VnUZD1CheTIGYfoRcqerDfY5
+         XdJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Zr6cnsJrgGJ7VyctdOhrp3MO2aQmMSjefw9UvSk2yzk=;
-        b=G2a/golNWUsW0dUbvCtGLqDdBvGzBtCuQsLm4o5BFzP4jGuFpPiRajLEOQ3PiLBGfW
-         SHpE+hwGv+tMrej1kR11+FxIk/svElv2GcBhnmTNZ+F8vhJeHkmcX6awvegSnWKWo0dV
-         5IGISJbgs7KbuyXLx6UuKlIYRukFwtIKPAnHK44b8QyboPk/P4MG4dKm1pRY5XjCUiCI
-         Cq2s6QDN/qAwzUjej/gK7SPqX1OX0XxaY9sBm2zJc9YbZTT2Qz9fC2NCaghFktj6KkEh
-         gTMkZBI7P/Jg4UPJZkf2+Vg6nQxlHAjK8DTAHe88xfhxswtXI52gcYQy8mwJflmXVIBU
-         MoBA==
-X-Gm-Message-State: AOAM533SXOzIL7ettiH6yt4bAlRNGexzaIAfHO13DQ9cT7zv6cxPpehk
-        92gC6Bi4gPM99s5W1HgHWeM=
-X-Google-Smtp-Source: ABdhPJyO8D8EaICbd5KYVI64MaDJvzPXVnFgMcZYSKA+UeY0fuEonhQoNZoNuIBJQcKimWZl1l5zng==
-X-Received: by 2002:a17:90a:5304:: with SMTP id x4mr1298263pjh.16.1599613550538;
-        Tue, 08 Sep 2020 18:05:50 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:39bb])
-        by smtp.gmail.com with ESMTPSA id f207sm620986pfa.54.2020.09.08.18.05.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2020 18:05:49 -0700 (PDT)
-Date:   Tue, 8 Sep 2020 18:05:47 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: add test for map_ptr
- arithmetic
-Message-ID: <20200909010547.4xvmkqjt4x264wk7@ast-mbp.dhcp.thefacebook.com>
-References: <20200908175702.2463416-1-yhs@fb.com>
- <20200908175703.2463721-1-yhs@fb.com>
- <CAEf4BzZJ5MfLryVjZfp4TLHLmbukTm9k9EUgko1eyPAds+A2pw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=vFkfZWpjgRh1NQLNys9wcGlctEWtDdWXhoTm7TOKGhA=;
+        b=NjoNkVgLN83aIi+/9z/BHjfH+ClQo45QNB1cdd1rO+AKJ5W3sJAs8x71IVC04eGC2o
+         xfVla80fFYttUJv6LVUVav67gIZ99zqzpRZc8LIh8IM+omY+kXPM3MATVUqjzDpJ2+nF
+         f10HMEcRIGWFPFdecLv/DtrlhAgGvfkoZDVfUmFdC7WsWkNMa5nw02MZ2hNwVqzJ2NX2
+         t5yjKJWA34oBfCWwclUUqGKwY3GuSBi1GwkZEADQU4Mk2H9xeYraa3ZUskQmfhm1RaX1
+         2OgstEULPQOUKUi62U3TEZrL0bub8ts2JxpG702AV2kYYyRoru4qKG6NkRQA4lazTROS
+         j+YA==
+X-Gm-Message-State: AOAM531WOvQFu6Y9nAazuLnPKIHFFsxiDE+GuG9B3tAPNbYDn2q98THQ
+        0J4ch900fbMeJfVVOj3c9eZk9M3LD2OV8JKRXr1EFMM9MWU=
+X-Google-Smtp-Source: ABdhPJw27csrEJmdh53yYMNgcORThxaqGSuryhRx7GMN5H6q/0tigL0P2Hh6/bWhrIL4y9v23WF1m6UZq7TASX0J9eg=
+X-Received: by 2002:a2e:9dcb:: with SMTP id x11mr429099ljj.450.1599618871908;
+ Tue, 08 Sep 2020 19:34:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZJ5MfLryVjZfp4TLHLmbukTm9k9EUgko1eyPAds+A2pw@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 8 Sep 2020 19:34:20 -0700
+Message-ID: <CAADnVQK_AiX+S_L_A4CQWT11XyveppBbQSQgH_qWGyzu_E8Yeg@mail.gmail.com>
+Subject: slow sync rcu_tasks_trace
+To:     bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Sep 08, 2020 at 04:11:21PM -0700, Andrii Nakryiko wrote:
-> On Tue, Sep 8, 2020 at 10:58 AM Yonghong Song <yhs@fb.com> wrote:
-> >
-> > Change selftest map_ptr_kern.c with disabling inlining for
-> > one of subtests, which will fail the test without previous
-> > verifier change. Also added to verifier test for both
-> > "map_ptr += scalar" and "scalar += map_ptr" arithmetic.
-> >
-> > Signed-off-by: Yonghong Song <yhs@fb.com>
-> > ---
-> 
-> Acked-by: Andrii Nakryiko <andriin@fb.com>
-> 
-> >  .../selftests/bpf/progs/map_ptr_kern.c        | 10 +++++-
-> >  .../testing/selftests/bpf/verifier/map_ptr.c  | 32 +++++++++++++++++++
-> >  2 files changed, 41 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> > index 982a2d8aa844..0b754106407d 100644
-> > --- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> > +++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
-> > @@ -82,6 +82,14 @@ static inline int check_default(struct bpf_map *indirect,
-> >         return 1;
-> >  }
-> >
-> > +static __attribute__ ((noinline)) int
-> 
-> just fyi: there is now __noinline defined in bpf_helpers.h, saving a
-> bunch of typing
+Hi Paul,
 
-I fixed it manually while applying.
-Thanks everyone.
+Looks like sync rcu_tasks_trace got slower or we simply didn't notice
+it earlier.
+
+In selftests/bpf try:
+time ./test_progs -t trampoline_count
+#101 trampoline_count:OK
+Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+
+real    1m17.082s
+user    0m0.145s
+sys    0m1.369s
+
+But with the following hack:
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 7dd523a7e32d..c417b817ec5d 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -217,7 +217,7 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
+         * programs finish executing.
+         * Wait for these two grace periods together.
+         */
+-       synchronize_rcu_mult(call_rcu_tasks, call_rcu_tasks_trace);
++//     synchronize_rcu_mult(call_rcu_tasks, call_rcu_tasks_trace);
+
+I see:
+time ./test_progs -t trampoline_count
+#101 trampoline_count:OK
+Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+
+real    0m1.588s
+user    0m0.131s
+sys    0m1.342s
+
+It takes an extra minute to do 40 sync rcu_tasks_trace calls.
+It means that every sync takes more than a second.
+That feels excessive.
+
+Doing:
+-       synchronize_rcu_mult(call_rcu_tasks, call_rcu_tasks_trace);
++       synchronize_rcu();
+is also fast:
+time ./test_progs -t trampoline_count
+#101 trampoline_count:OK
+Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+
+real    0m2.089s
+user    0m0.139s
+sys    0m1.282s
+
+sync rcu_tasks() is fast too:
+-       synchronize_rcu_mult(call_rcu_tasks, call_rcu_tasks_trace);
++       synchronize_rcu_tasks();
+time ./test_progs -t trampoline_count
+#101 trampoline_count:OK
+Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+
+real    0m2.209s
+user    0m0.117s
+sys    0m1.344s
+
+so it's really something going on with sync rcu_tasks_trace.
+Could you please take a look?
