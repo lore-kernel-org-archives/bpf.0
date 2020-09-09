@@ -2,110 +2,154 @@ Return-Path: <SRS0=JSZK=CS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9C28C2D0A8
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 17:13:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C31C6C433E2
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 17:14:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8FDB32166E
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 17:13:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7A30C2166E
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 17:14:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="q97D02KH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a0DrxPYI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730460AbgIIRM7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Sep 2020 13:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729942AbgIIRMD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Sep 2020 13:12:03 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADB4C061573
-        for <bpf@vger.kernel.org>; Wed,  9 Sep 2020 10:12:02 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id a9so3156719wmm.2
-        for <bpf@vger.kernel.org>; Wed, 09 Sep 2020 10:12:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=v6+cahR1pl5c+cWIi0jixd4vtzACtZ6gKOl+XQd5lYg=;
-        b=q97D02KHi9y3QOwAYdbMT6fdudPj4WHp/VXhIAKHZB/4HnHx9GjbvNi26p1d15Q7a7
-         edr4+LRzdYETfeyvvdN7DjpjY8362a/7GEsse98N2mkMh/1l3WnvLseBBfP2ov14vwcM
-         Iha6rk0ypiGqbB0P9pKTljvMzXhDYsJY4Sy1k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=v6+cahR1pl5c+cWIi0jixd4vtzACtZ6gKOl+XQd5lYg=;
-        b=BT5ZugjkRQZmR/b/3BIbI+sWU/8/iv5aYCb6wc3kIJwTPnQdiQrKn9/UPHsPQ5F1Td
-         JkePGiDVjNzXveKbwGPGYlbdoRGLWdaKkMAEjP9m+1yU2nrOgDxeRv2gwiytl7qWkX25
-         QTEqqZ98j3pbGE9S+xHBqrcT8F/pQ3ohksJ70ikqcZKG575Ih9gUBEFjaqYQg+cOUkfG
-         /LQ9w1gMl44viZD/bIQlHIGxOWDU6Ty6UtLprEjmd/fvg40fAvWl4GU/plPkAK8Rtd00
-         P6WLfl/2I4fzK69GNyPhfvvKoKDip+j+tvHnw1CaoUCL/xbiKm4u0Gr2XRSgdnjw/K9U
-         4HPw==
-X-Gm-Message-State: AOAM532hB+B3fvdST2zunkaR+3bL0OSKk+Yu/L5ZLL2D4eTH5A69U0L6
-        WySELNmmahma0k2BEk1WEpDU0A==
-X-Google-Smtp-Source: ABdhPJwmIfhR2/ZVqaZtXcnTZ1KaXmiZTzYU5BwvAh6dog5KodfxRCgilpfWwu73h8t5w0plqJ6MIw==
-X-Received: by 2002:a1c:1dc7:: with SMTP id d190mr4832611wmd.154.1599671521287;
-        Wed, 09 Sep 2020 10:12:01 -0700 (PDT)
-Received: from antares.lan (1.3.0.0.8.d.4.4.b.b.8.a.1.4.5.e.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:e541:a8bb:44d8:31])
-        by smtp.gmail.com with ESMTPSA id g131sm3746743wmf.25.2020.09.09.10.11.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2020 10:12:00 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     ast@kernel.org, yhs@fb.com, daniel@iogearbox.net, kafai@fb.com,
-        andriin@fb.com
-Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com,
-        Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next v2 01/11] btf: make btf_set_contains take a const pointer
-Date:   Wed,  9 Sep 2020 18:11:45 +0100
-Message-Id: <20200909171155.256601-2-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200909171155.256601-1-lmb@cloudflare.com>
-References: <20200909171155.256601-1-lmb@cloudflare.com>
+        id S1731074AbgIIROl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Sep 2020 13:14:41 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:23038 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730233AbgIIP3b (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 9 Sep 2020 11:29:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1599665359;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PKRnalg2poH5SKe24cXt6xfvhbyMJHnXY+iW3AplBHU=;
+        b=a0DrxPYIyMe6hipmW4Jx9Jl/ZBHdNV3LO11SL0pH7B4UacRC8GTTjxK9Jq5wwCUTFo+GLs
+        +pEmdotWhCzJ+FBu4XbDA5y6+7GBbyXUy+x25TFMNmL7hnTGpoDRnpJ3JeuuQjbir0fngQ
+        S+6IElwoqoUgax8HpvISJnOX1iCp/So=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-110-oDeaobKyMgqSuIKovxUQjQ-1; Wed, 09 Sep 2020 11:10:56 -0400
+X-MC-Unique: oDeaobKyMgqSuIKovxUQjQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 805371009441;
+        Wed,  9 Sep 2020 15:10:55 +0000 (UTC)
+Received: from krava (unknown [10.40.194.81])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 1DB3E838BE;
+        Wed,  9 Sep 2020 15:10:53 +0000 (UTC)
+Date:   Wed, 9 Sep 2020 17:10:53 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>
+Subject: Re: slow sync rcu_tasks_trace
+Message-ID: <20200909151053.GF1498025@krava>
+References: <CAADnVQK_AiX+S_L_A4CQWT11XyveppBbQSQgH_qWGyzu_E8Yeg@mail.gmail.com>
+ <20200909113858.GF29330@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200909113858.GF29330@paulmck-ThinkPad-P72>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bsearch doesn't modify the contents of the array, so we can take a const pointer.
+On Wed, Sep 09, 2020 at 04:38:58AM -0700, Paul E. McKenney wrote:
+> On Tue, Sep 08, 2020 at 07:34:20PM -0700, Alexei Starovoitov wrote:
+> > Hi Paul,
+> > 
+> > Looks like sync rcu_tasks_trace got slower or we simply didn't notice
+> > it earlier.
+> > 
+> > In selftests/bpf try:
+> > time ./test_progs -t trampoline_count
+> > #101 trampoline_count:OK
+> > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> > 
+> > real    1m17.082s
+> > user    0m0.145s
+> > sys    0m1.369s
+> > 
+> > But with the following hack:
+> > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> > index 7dd523a7e32d..c417b817ec5d 100644
+> > --- a/kernel/bpf/trampoline.c
+> > +++ b/kernel/bpf/trampoline.c
+> > @@ -217,7 +217,7 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr)
+> >          * programs finish executing.
+> >          * Wait for these two grace periods together.
+> >          */
+> > -       synchronize_rcu_mult(call_rcu_tasks, call_rcu_tasks_trace);
+> > +//     synchronize_rcu_mult(call_rcu_tasks, call_rcu_tasks_trace);
+> > 
+> > I see:
+> > time ./test_progs -t trampoline_count
+> > #101 trampoline_count:OK
+> > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> > 
+> > real    0m1.588s
+> > user    0m0.131s
+> > sys    0m1.342s
+> > 
+> > It takes an extra minute to do 40 sync rcu_tasks_trace calls.
+> > It means that every sync takes more than a second.
+> > That feels excessive.
+> > 
+> > Doing:
+> > -       synchronize_rcu_mult(call_rcu_tasks, call_rcu_tasks_trace);
+> > +       synchronize_rcu();
+> > is also fast:
+> > time ./test_progs -t trampoline_count
+> > #101 trampoline_count:OK
+> > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> > 
+> > real    0m2.089s
+> > user    0m0.139s
+> > sys    0m1.282s
+> > 
+> > sync rcu_tasks() is fast too:
+> > -       synchronize_rcu_mult(call_rcu_tasks, call_rcu_tasks_trace);
+> > +       synchronize_rcu_tasks();
+> > time ./test_progs -t trampoline_count
+> > #101 trampoline_count:OK
+> > Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> > 
+> > real    0m2.209s
+> > user    0m0.117s
+> > sys    0m1.344s
+> > 
+> > so it's really something going on with sync rcu_tasks_trace.
+> > Could you please take a look?
+> 
+> I am guessing that your .config has CONFIG_TASKS_TRACE_RCU_READ_MB=n.
+> If I am wrong, please try CONFIG_TASKS_TRACE_RCU_READ_MB=y.
 
-Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
----
- include/linux/bpf.h | 2 +-
- kernel/bpf/btf.c    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+hi,
+I noticed the slowdown as well, and adding CONFIG_TASKS_TRACE_RCU_READ_MB=y
+speeds it up for me
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c6d9f2c444f4..6b72cdf52ebc 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1900,6 +1900,6 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 		       void *addr1, void *addr2);
- 
- struct btf_id_set;
--bool btf_id_set_contains(struct btf_id_set *set, u32 id);
-+bool btf_id_set_contains(const struct btf_id_set *set, u32 id);
- 
- #endif /* _LINUX_BPF_H */
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index f9ac6935ab3c..a2330f6fe2e6 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -4772,7 +4772,7 @@ static int btf_id_cmp_func(const void *a, const void *b)
- 	return *pa - *pb;
- }
- 
--bool btf_id_set_contains(struct btf_id_set *set, u32 id)
-+bool btf_id_set_contains(const struct btf_id_set *set, u32 id)
- {
- 	return bsearch(&id, set->ids, set->cnt, sizeof(u32), btf_id_cmp_func) != NULL;
- }
--- 
-2.25.1
+thanks,
+jirka
+
+> 
+> Otherwise (or alternatively), could you please try booting with
+> rcupdate.rcu_task_ipi_delay=50?  The default value is 500, or half a
+> second on a HZ=1000 system, which on a busy system could easily result
+> in the grace-period delays that you are seeing.  The value of this
+> kernel boot parameter does interact with the tasklist-scan backoffs,
+> so its effect will not likely be linear.
+> 
+> Do either of those approaches help?
+> 
+> 							Thanx, Paul
+> 
 
