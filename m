@@ -2,156 +2,214 @@ Return-Path: <SRS0=JSZK=CS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DAED8C433E2
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 15:56:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62AD4C433E2
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 16:23:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 79542206D4
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 15:56:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E5BB207DE
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 16:23:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i53HO3r3"
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="ISFL2M6T"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730411AbgIIP4R (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Sep 2020 11:56:17 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:29468 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730587AbgIIPzF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Sep 2020 11:55:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599666903;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2VaXpUx2RgFYaGXvPxTF0x5NFUabOVTHG+USRhiruLc=;
-        b=i53HO3r3SPcLzM7AYb97AHgK3Im5qD7ih1rwfmMvFBgt9IBN6dgEJMs3ZBhQWpeF9CPwI+
-        MQxd7KwRuRSefvGVlOC190i1DVh99xfNqjgwnpx9XlQke49EeWgk/v41Xf0k38PJ4wJ7So
-        x3pU9nm/Vxxx3S3K2n+0k7qdGoMNfnM=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-203-HETPSC4hNx-vcrrsQNfsGA-1; Wed, 09 Sep 2020 11:55:02 -0400
-X-MC-Unique: HETPSC4hNx-vcrrsQNfsGA-1
-Received: by mail-wr1-f69.google.com with SMTP id s8so1116445wrb.15
-        for <bpf@vger.kernel.org>; Wed, 09 Sep 2020 08:55:01 -0700 (PDT)
+        id S1731037AbgIIQXM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Sep 2020 12:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731031AbgIIQXI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Sep 2020 12:23:08 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BFAC061795
+        for <bpf@vger.kernel.org>; Wed,  9 Sep 2020 09:22:56 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id x14so3589609wrl.12
+        for <bpf@vger.kernel.org>; Wed, 09 Sep 2020 09:22:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=c0jB7YDfWeL0yhNH+AB7wsbwPBZkx4fR9TlB1ZNRvmc=;
+        b=ISFL2M6TX5LesvnAsTisLumGNCQJaFiODGwy/XuPQ5M7N2wTUtLsw/FLpS2x2Fuk/P
+         p7gJTYujZ2Dpycga+My5JJar3frkcy+vz6O+ihAEA3EkGmdd/4VUD8289yzqBJ2jjZNp
+         v0MDU7gdya/4Y71uguWGuZwOeT24Xg3CDtfj3IL75yd9mOAVxF1N3Gb1dUhbyPKh3jfl
+         qVIopbtm8CazJAt5O477Pj3+33cLbnWed6ERuCmM6+HLAQWEmrqyK0qjPdNaLsZwjBRU
+         jrkc6FuOmTeC38XNZtSMczYAj0K9OUAdF+FyUd1DW2VHP8NHlSZw7ovWJUYQ6f6xGPpb
+         nACg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=2VaXpUx2RgFYaGXvPxTF0x5NFUabOVTHG+USRhiruLc=;
-        b=TaI2ywdOQP03rCnFS2UdMzj7Ul29Ii3c+xFerg9R+pZzuYDc00nzQJ8vyQJ6w8tLn4
-         JKf63OlDeixGVqXQl9kKBrWRj76QvlxhkZLEk0SA8TGL8qLSxRFgUmhJN0h44CRPdHyp
-         MSgviGJhfb/9VK2FsRnpN8NIa8LXYqxW5ZzkAEmb+87Wnm7fvkmir9NHM9g0DR6+r+ul
-         VCPjLJ3XYB1VGAz/V786o+YyLy0sav/tH7nuKToxbt26T6ixjCnojrg3xNYOas2/IppA
-         /QTAhzEFS2wJXvRnrznI1swIj4/JrqOa9vO55xqPFbwOLSn4bzQuzRrP3zBBNa1WwYmi
-         b46A==
-X-Gm-Message-State: AOAM530R8dHIRTY6nSPkHMtXDwj8B+z+rDxxqnxFeEqCLHqAKYsJ3RbJ
-        6vFCtr65xQerYDar6Epx9qvo6/5do+67PIkzbCMLeANFXx7XERyPsjbIIlF7mXWXGTmGpWigOMM
-        NNtbfySFvu1NY
-X-Received: by 2002:a5d:608a:: with SMTP id w10mr4501723wrt.48.1599666899946;
-        Wed, 09 Sep 2020 08:54:59 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzaMzx/VEi+OD4KdcdvBWVIyUWE9NHTFTuqvs+ds8e6vK9qDG97AejivLuFgbBm5xOBHbzs9w==
-X-Received: by 2002:a5d:608a:: with SMTP id w10mr4501693wrt.48.1599666899595;
-        Wed, 09 Sep 2020 08:54:59 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id h184sm4718859wmh.41.2020.09.09.08.54.58
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=c0jB7YDfWeL0yhNH+AB7wsbwPBZkx4fR9TlB1ZNRvmc=;
+        b=pXstJBYdOzsPErnOYGqr/LI5SxWYsB2ezNTSRAm59HeRgqBLzQ9qmO4DCObDM/twY6
+         MWnrm7XvyhW0Im/MPk1EMVNVpgPr1mcGJFSUH+hxVN1Z6WMprzT5jSXjA0bhQFgqIps/
+         3kYEfccF0Bh/d6IYcnXtE8bEjOI/TeXVTnw/jogOPiGncTAWVkU7XE6Gxt6uSrUEcsXM
+         8KJ1MIKhkv5LdwiRXrfuQLHtEv9t9cOge6Kt9x5SxVnkSLCXKuaLcNJp91i/NkPBDd53
+         fXEUD9x7a7fODux47Dt2MsBLmTXvHZYdyZ0Y0/0CMJQVwZBdoD8nHgh0HwdE4GjRCSIl
+         1S5A==
+X-Gm-Message-State: AOAM533Dcebkwikmeps7p3TZahVFh8pqHtYQRc6bLsxMVIZabJ4oAy5l
+        RKR4VLkeLXHDFGEIcP3F8Q5iiw==
+X-Google-Smtp-Source: ABdhPJzbcaryeKOzvSIsxfeVSiseXUL8nrmPCd+wwr116qY41EIg1K+hl/eKtfAk1WFWdX0lrQSErw==
+X-Received: by 2002:a05:6000:1003:: with SMTP id a3mr4802353wrx.258.1599668574685;
+        Wed, 09 Sep 2020 09:22:54 -0700 (PDT)
+Received: from localhost.localdomain ([194.35.119.149])
+        by smtp.gmail.com with ESMTPSA id m1sm4747787wmc.28.2020.09.09.09.22.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2020 08:54:59 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 68F4D1829D4; Wed,  9 Sep 2020 17:54:58 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Wed, 09 Sep 2020 09:22:54 -0700 (PDT)
+From:   Quentin Monnet <quentin@isovalent.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Eelco Chaudron <echaudro@redhat.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Fix context type resolving for
- extension programs
-In-Reply-To: <20200909151115.1559418-1-jolsa@kernel.org>
-References: <20200909151115.1559418-1-jolsa@kernel.org>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Wed, 09 Sep 2020 17:54:58 +0200
-Message-ID: <871rjbc5d9.fsf@toke.dk>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Subject: [PATCH bpf-next v2 1/2] tools: bpftool: log info-level messages when building bpftool man pages
+Date:   Wed,  9 Sep 2020 17:22:50 +0100
+Message-Id: <20200909162251.15498-2-quentin@isovalent.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200909162251.15498-1-quentin@isovalent.com>
+References: <20200909162251.15498-1-quentin@isovalent.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Jiri Olsa <jolsa@kernel.org> writes:
+To build man pages for bpftool (and for eBPF helper functions), rst2man
+can log different levels of information. Let's make it log all levels
+to keep the RST files clean.
 
-> Eelco reported we can't properly access arguments if the tracing
-> program is attached to extension program.
->
-> Having following program:
->
->   SEC("classifier/test_pkt_md_access")
->   int test_pkt_md_access(struct __sk_buff *skb)
->
-> with its extension:
->
->   SEC("freplace/test_pkt_md_access")
->   int test_pkt_md_access_new(struct __sk_buff *skb)
->
-> and tracing that extension with:
->
->   SEC("fentry/test_pkt_md_access_new")
->   int BPF_PROG(fentry, struct sk_buff *skb)
->
-> It's not possible to access skb argument in the fentry program,
-> with following error from verifier:
->
->   ; int BPF_PROG(fentry, struct sk_buff *skb)
->   0: (79) r1 = *(u64 *)(r1 +0)
->   invalid bpf_context access off=0 size=8
->
-> The problem is that btf_ctx_access gets the context type for the
-> traced program, which is in this case the extension.
->
-> But when we trace extension program, we want to get the context
-> type of the program that the extension is attached to, so we can
-> access the argument properly in the trace program.
->
-> Reported-by: Eelco Chaudron <echaudro@redhat.com>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  kernel/bpf/btf.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index f9ac6935ab3c..37ad01c32e5a 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -3859,6 +3859,14 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
->  	}
->  
->  	info->reg_type = PTR_TO_BTF_ID;
-> +
-> +	/* When we trace extension program, we want to get the context
-> +	 * type of the program that the extension is attached to, so
-> +	 * we can access the argument properly in the trace program.
-> +	 */
-> +	if (tgt_prog && tgt_prog->type == BPF_PROG_TYPE_EXT)
-> +		tgt_prog = tgt_prog->aux->linked_prog;
-> +
+Doing so, rst2man complains about double colons, used for literal
+blocks, that look like underlines for section titles. Let's add the
+necessary blank lines.
 
-In the discussion about multi-attach for freplace we kinda concluded[0]
-that this linked_prog pointer was going away after attach. I have this
-basically working, but need to test a bit more before posting it (see
-[1] for current status).
+v2:
+- Use "--verbose" instead of "-r 1" (same behaviour but more readable).
+- Pass it through a RST2MAN_OPTS variable so we can easily pass other
+  options too.
 
-But with this I guess we'll need to either do something different? Maybe
-go chase down the target via the bpf_link or something?
+Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/bpf/bpftool/Documentation/Makefile        | 3 ++-
+ tools/bpf/bpftool/Documentation/bpftool-btf.rst | 3 +++
+ tools/bpf/bpftool/Documentation/bpftool-gen.rst | 4 ++++
+ tools/bpf/bpftool/Documentation/bpftool-map.rst | 3 +++
+ 4 files changed, 12 insertions(+), 1 deletion(-)
 
--Toke
-
-[0] https://lore.kernel.org/bpf/20200722002918.574pruibvlxfblyq@ast-mbp.dhcp.thefacebook.com/
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/log/?h=bpf-freplace-multi-attach-alt-03
+diff --git a/tools/bpf/bpftool/Documentation/Makefile b/tools/bpf/bpftool/Documentation/Makefile
+index 815ac9804aee..a45b51d98468 100644
+--- a/tools/bpf/bpftool/Documentation/Makefile
++++ b/tools/bpf/bpftool/Documentation/Makefile
+@@ -28,12 +28,13 @@ man: man8 helpers
+ man8: $(DOC_MAN8)
+ 
+ RST2MAN_DEP := $(shell command -v rst2man 2>/dev/null)
++RST2MAN_OPTS += --verbose
+ 
+ $(OUTPUT)%.8: %.rst
+ ifndef RST2MAN_DEP
+ 	$(error "rst2man not found, but required to generate man pages")
+ endif
+-	$(QUIET_GEN)rst2man $< > $@
++	$(QUIET_GEN)rst2man $(RST2MAN_OPTS) $< > $@
+ 
+ clean: helpers-clean
+ 	$(call QUIET_CLEAN, Documentation)
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+index 896f4c6c2870..864553e62af4 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+@@ -91,6 +91,7 @@ OPTIONS
+ EXAMPLES
+ ========
+ **# bpftool btf dump id 1226**
++
+ ::
+ 
+   [1] PTR '(anon)' type_id=2
+@@ -104,6 +105,7 @@ EXAMPLES
+ This gives an example of default output for all supported BTF kinds.
+ 
+ **$ cat prog.c**
++
+ ::
+ 
+   struct fwd_struct;
+@@ -144,6 +146,7 @@ This gives an example of default output for all supported BTF kinds.
+   }
+ 
+ **$ bpftool btf dump file prog.o**
++
+ ::
+ 
+   [1] PTR '(anon)' type_id=2
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+index df85dbd962c0..d52b03a352d7 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
+@@ -146,6 +146,7 @@ OPTIONS
+ EXAMPLES
+ ========
+ **$ cat example.c**
++
+ ::
+ 
+   #include <stdbool.h>
+@@ -187,6 +188,7 @@ This is example BPF application with two BPF programs and a mix of BPF maps
+ and global variables.
+ 
+ **$ bpftool gen skeleton example.o**
++
+ ::
+ 
+   /* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
+@@ -241,6 +243,7 @@ and global variables.
+   #endif /* __EXAMPLE_SKEL_H__ */
+ 
+ **$ cat example_user.c**
++
+ ::
+ 
+   #include "example.skel.h"
+@@ -283,6 +286,7 @@ and global variables.
+   }
+ 
+ **# ./example_user**
++
+ ::
+ 
+   my_map name: my_map
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+index 083db6c2fc67..8f187c6416cd 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+@@ -182,6 +182,7 @@ OPTIONS
+ EXAMPLES
+ ========
+ **# bpftool map show**
++
+ ::
+ 
+   10: hash  name some_map  flags 0x0
+@@ -203,6 +204,7 @@ The following three commands are equivalent:
+ 
+ 
+ **# bpftool map dump id 10**
++
+ ::
+ 
+   key: 00 01 02 03  value: 00 01 02 03 04 05 06 07
+@@ -210,6 +212,7 @@ The following three commands are equivalent:
+   Found 2 elements
+ 
+ **# bpftool map getnext id 10 key 0 1 2 3**
++
+ ::
+ 
+   key:
+-- 
+2.25.1
 
