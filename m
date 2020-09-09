@@ -2,126 +2,170 @@ Return-Path: <SRS0=JSZK=CS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 962D7C43461
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 16:58:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BBD95C10DAA
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 16:59:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5CEB12087C
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 16:58:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1599670726;
-	bh=3QKU+0GVeB+96nroBMgZ91EUK9wdQehsjmiYIqtH7tQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=oiSCYEL/bv+c1+8zq2tapGc7CHyFdToHqd4n2sqQmhOm7LQA8GgIPUS5qRDnXON0e
-	 Rl+BAIw2jokmmXEw9aee8gQauWo+c+e2SkQnfHNJ6l+u6K4bKYCpag7UxlJ64qfs9C
-	 9KOSUpA/5dZwKac1Rua2wl5NM/NREagKLcaUJUVg=
+	by mail.kernel.org (Postfix) with ESMTP id 8448F20C09
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 16:59:58 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="yNiER4Kj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730785AbgIIQ6j (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Sep 2020 12:58:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51822 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730656AbgIIPvM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Sep 2020 11:51:12 -0400
-Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0429C215A4;
-        Wed,  9 Sep 2020 14:27:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1599661673;
-        bh=3QKU+0GVeB+96nroBMgZ91EUK9wdQehsjmiYIqtH7tQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uPNLSBCa6BNOy67iY1Xp2gyqEo18XLg11tYEJvqhQnEHVDAj2Ob/mhiQjCUALDEBX
-         7nt9hBIYM2LFaEoStBq1pNgpwRcQhA3P6LKbJKi6kRlvyEHP8eZ+eqCeFezbmk1JOi
-         3ZIucEJDBz3ZVwRQFMq5Z5x9eU3aiPl1ByOE/aac=
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 0AC6340D3D; Wed,  9 Sep 2020 11:27:51 -0300 (-03)
-Date:   Wed, 9 Sep 2020 11:27:50 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ilya Leoshkevich <iii@linux.ibm.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Tony Ambardar <tony.ambardar@gmail.com>,
-        bpf <bpf@vger.kernel.org>, dwarves@vger.kernel.org
-Subject: Re: Problem with endianess of pahole BTF output for vmlinux
-Message-ID: <20200909142750.GC3788224@kernel.org>
-References: <CAPGftE8ipAacAnm9xMHFabXCL-XrCXGmOsX-Nsjvz9wnh3Zx-w@mail.gmail.com>
- <9e99c5301fbbb4f5f601b69816ee1dc9ab0df948.camel@linux.ibm.com>
- <CAEf4Bza9tZ-Jj0dj9Ne0fmxa95t=9XxxJR+Ce=6hDmw_d8uVFA@mail.gmail.com>
- <8cf42e2752e442bb54e988261d8bf3cd22ad00f2.camel@linux.ibm.com>
+        id S1730592AbgIIQ7y (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Sep 2020 12:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730717AbgIIQ7c (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Sep 2020 12:59:32 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A44EC061573
+        for <bpf@vger.kernel.org>; Wed,  9 Sep 2020 09:59:31 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id a17so3749593wrn.6
+        for <bpf@vger.kernel.org>; Wed, 09 Sep 2020 09:59:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=rK1dooZIpp1h74hOlKHLt7K9wmQsH3/G0NUSyO+Q9g0=;
+        b=yNiER4KjR6dhCyTlVCn8wih6n9HS+FxC0EB4iUWkwIbNcq5bcrvwUdQxhE3L1Rc46W
+         8Uo+i/dqd8hZlDblKkmNrO7dCBqqVgdbsFreJzSzsKLJXtQEmHnxbYdZD72HoqjKv1hy
+         Nm/wkm6ZzTqXDaxGHx/Qih1bMA0QehlMyZwUMVz2WJXArJR+ko6GMThvfBYJMsLFBiHy
+         o9vSZNWRRwQlgNmbo6N5YRyPFylai+RjxhLa1tVqUpsxqz6RKebaQS/E1PufoWM9IN8q
+         X8LnkqbgE8/1NIZRlgmSHfj9Lle2Asda8BBr+DvgiZkV5tXBp0Jxy2rNtwJ5rN1jLquq
+         SfJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=rK1dooZIpp1h74hOlKHLt7K9wmQsH3/G0NUSyO+Q9g0=;
+        b=NETXaS8J4p/jpYmumkY+fhCS1uviFpqoGCpJ+/auAWUHzVUhWikgbVNYgT4hD/PCql
+         1N/FtgMvdX/y21wlx6lNWxSCl0ZrryUQ9KPKt06qwP4aYavgYbrIloqKC+oy/uUppG9I
+         nGcssYkSOW5MDBE5bDfnwW931PmMPd9dsUO7r1lk0sDyDvPqkcvW4XRAHqoi+2kRkfGP
+         bc/7XxoNYgDK0/e2fiw80axLq8bZF/Y8FHmSmhe//pLcAF6xzARqC399qyehyQPTTws6
+         LfQENk+7dX7KY8hMzqWBBNAHUoc/It0aFqcehr6DVJkbCwSm3YXyIQGk4A+TLGcAlf3r
+         PPSw==
+X-Gm-Message-State: AOAM530Z7pBTe4TUaglYbnKYLiZdGmgDq8fnN1e6UJS1Ilr++09WtNCs
+        vThRG2tWiDUHTiHXbz1WcG+Gpw==
+X-Google-Smtp-Source: ABdhPJxADEW65JkOojRMh6tMYHhzi/gX3pRKE/CE1bu/ufiif5CepY98ZwCFT4Kb96ZPeJbie/wSmw==
+X-Received: by 2002:a5d:5642:: with SMTP id j2mr4747009wrw.417.1599670770216;
+        Wed, 09 Sep 2020 09:59:30 -0700 (PDT)
+Received: from [192.168.1.12] ([194.35.119.135])
+        by smtp.gmail.com with ESMTPSA id k22sm5085365wrd.29.2020.09.09.09.59.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Sep 2020 09:59:29 -0700 (PDT)
+Subject: Re: [PATCH bpf-next v2 1/2] tools: bpftool: clean up function to dump
+ map entry
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>
+References: <20200907163634.27469-1-quentin@isovalent.com>
+ <20200907163634.27469-2-quentin@isovalent.com>
+ <CAEf4Bzb8QLVdjBY9hRCP7QdnqE-JwWqDn8hFytOL40S=Z+KW-w@mail.gmail.com>
+ <b89b4bbd-a28e-4dde-b400-4d64fc391bfe@isovalent.com>
+ <CAEf4Bzb0SdZBfDfd2ZBXOBgpneAc6mKFhzULj_Msd0MoNSG5ng@mail.gmail.com>
+ <5a002828-c082-3cd7-9ee3-7d783cce2a2a@isovalent.com>
+ <CAEf4BzZA3Zcf9imXVEQ_x0cTiC8JV8jXV-iaaQC+NP4mqt_V_Q@mail.gmail.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+Message-ID: <997410b6-7428-173c-8197-ac9eae036e34@isovalent.com>
+Date:   Wed, 9 Sep 2020 17:59:29 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8cf42e2752e442bb54e988261d8bf3cd22ad00f2.camel@linux.ibm.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <CAEf4BzZA3Zcf9imXVEQ_x0cTiC8JV8jXV-iaaQC+NP4mqt_V_Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Wed, Sep 09, 2020 at 11:02:24AM +0200, Ilya Leoshkevich escreveu:
-> On Tue, 2020-09-08 at 13:18 -0700, Andrii Nakryiko wrote:
-> > On Mon, Sep 7, 2020 at 9:02 AM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
-> > > On Sat, 2020-09-05 at 21:16 -0700, Tony Ambardar wrote:
-
-> > > > I'm using GCC 8.4.0, binutils 2.34 and pahole 1.17, compiling on
-> > > > an Ubuntu/x86_64 host and targeting both little- and big-endian
-> > > > mips running on malta/qemu. When cross-compiling Linux 5.4.x LTS
-> > > > and testing bpftool/BTF functionality on the target, I encounter
-> > > > errors on big-endian targets:
-
-> > > > > root@OpenWrt:/# bpftool btf dump file /sys/kernel/btf/vmlinux
-> > > > > libbpf: failed to get EHDR from /sys/kernel/btf/vmlinux Error:
-> > > > > failed to load BTF from /sys/kernel/btf/vmlinux: No error
-> > > > > information
->
-> > > > After investigating, the problem appears to be that "pahole -J"
-> > > > running on the x86_64 little-endian host will always generate
-> > > > raw BTF of native endianness (based on BTF magic), which causes
-> > > > the error above on big-endian targets.
-
-> > > > Is this expected? Is DEBUG_INFO_BTF supported in general when
-> > > > cross-compiling? How does one generate BTF encoded for the
-> > > > target endianness with pahole?
-
-The BTF loader has support for endianness, its just the encoder that
-doesn't :-\
-
-I.e. pahole can grok a big endian BTF payload on a little endian machine
-and vice-versa, just can't cross-build BTF payloads ATM.
-
-> > Yes, it's expected, unfortunately. Right now cross-compiling to a
-> > different endianness isn't supported. You can cross-compile only if
-> > target endianness matches host endianness.
-
-I agree that having this in libbpf is better, it should be done as part
-of producing the result of the deduplication phase.
-
-> > > > Thanks for any feedback or suggestions,
-> > > > Tony
-> > > 
-> > > We have the same problem on s390, and I'm not aware of any solution
-> > > at
-> > > the moment. It would be great if we could figure out how to resolve
-> > > this.
-> > 
-> > I'm working on extending BTF APIs in libbpf at the moment. Switching
-> > endianness would be rather easy once all that is done. With these new
-> > APIs it will be possible to switch pahole to use libbpf APIs to
-> > produce BTF output and support arbitrary endianness as well. Right
-> > now, I'd rather avoid implementing this in pahole, libbpf is a much
-> > better place for this (and will require ongoing updates if/when we
-> > introduce new types and fields to BTF).
-
-Right, we could do it right after btf_dedup() and before
-btf_elf__write(), doing the same process as in btf_loader.c, i.e.
-checking if the ELF target arch is different in endianness and doing the
-reverse of the loader.
-
-> > Hope this plan works for you guys.
+On 09/09/2020 17:46, Andrii Nakryiko wrote:
+> On Wed, Sep 9, 2020 at 9:38 AM Quentin Monnet <quentin@isovalent.com> wrote:
+>>
+>> On 09/09/2020 17:30, Andrii Nakryiko wrote:
+>>> On Wed, Sep 9, 2020 at 1:19 AM Quentin Monnet <quentin@isovalent.com> wrote:
+>>>>
+>>>> On 09/09/2020 04:25, Andrii Nakryiko wrote:
+>>>>> On Mon, Sep 7, 2020 at 9:36 AM Quentin Monnet <quentin@isovalent.com> wrote:
+>>>>>>
+>>>>>> The function used to dump a map entry in bpftool is a bit difficult to
+>>>>>> follow, as a consequence to earlier refactorings. There is a variable
+>>>>>> ("num_elems") which does not appear to be necessary, and the error
+>>>>>> handling would look cleaner if moved to its own function. Let's clean it
+>>>>>> up. No functional change.
+>>>>>>
+>>>>>> v2:
+>>>>>> - v1 was erroneously removing the check on fd maps in an attempt to get
+>>>>>>   support for outer map dumps. This is already working. Instead, v2
+>>>>>>   focuses on cleaning up the dump_map_elem() function, to avoid
+>>>>>>   similar confusion in the future.
+>>>>>>
+>>>>>> Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+>>>>>> ---
+>>>>>>  tools/bpf/bpftool/map.c | 101 +++++++++++++++++++++-------------------
+>>>>>>  1 file changed, 52 insertions(+), 49 deletions(-)
+>>>>>>
+>>>>>> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+>>>>>> index bc0071228f88..c8159cb4fb1e 100644
+>>>>>> --- a/tools/bpf/bpftool/map.c
+>>>>>> +++ b/tools/bpf/bpftool/map.c
+>>>>>> @@ -213,8 +213,9 @@ static void print_entry_json(struct bpf_map_info *info, unsigned char *key,
+>>>>>>         jsonw_end_object(json_wtr);
+>>>>>>  }
+>>>>>>
+>>>>>> -static void print_entry_error(struct bpf_map_info *info, unsigned char *key,
+>>>>>> -                             const char *error_msg)
+>>>>>> +static void
+>>>>>> +print_entry_error_msg(struct bpf_map_info *info, unsigned char *key,
+>>>>>> +                     const char *error_msg)
+>>>>>>  {
+>>>>>>         int msg_size = strlen(error_msg);
+>>>>>>         bool single_line, break_names;
+>>>>>> @@ -232,6 +233,40 @@ static void print_entry_error(struct bpf_map_info *info, unsigned char *key,
+>>>>>>         printf("\n");
+>>>>>>  }
+>>>>>>
+>>>>>> +static void
+>>>>>> +print_entry_error(struct bpf_map_info *map_info, void *key, int lookup_errno)
+>>>>>> +{
+>>>>>> +       /* For prog_array maps or arrays of maps, failure to lookup the value
+>>>>>> +        * means there is no entry for that key. Do not print an error message
+>>>>>> +        * in that case.
+>>>>>> +        */
+>>>>>
+>>>>> this is the case when error is ENOENT, all the other ones should be
+>>>>> treated the same, no?
+>>>>
+>>>> Do you mean all map types should be treated the same? If so, I can
+>>>> remove the check below, as in v1. Or do you mean there is a missing
+>>>> check on the error value? In which case I can extend this check to
+>>>> verify we have ENOENT.
+>>>
+>>> The former, probably. I don't see how map-in-map is different for
+>>> lookups and why it needs special handling.
+>>
+>> I didn't find a particular reason in the logs. My guess is that they may
+>> be more likely to have "empty" entries than other types, and that it
+>> might be more difficult to spot the existing entries in the middle of a
+>> list of "<no entry>" messages.
+>>
+>> But I agree, let's get rid of this special case and have the same output
+>> for all types. I'll respin.
 > 
-> That sounds really good to me, thanks!
+> Oh, wait, I think what I had in mind is to special case ENOENT for
+> map-in-map and just skip those. So yeah, sorry, there is still a bit
+> of a special handling, but **only** for -ENOENT. When I was replying I
+> forgot bpftool emits "<no entry>" for each -ENOENT by default.
 
-- Arnaldo
+So do you prefer me to extend the check with errno == -ENOENT? Or shall
+I remove it entirely and just have the "<no entry>" messages like for
+the other map types?
+
+Quentin
