@@ -2,123 +2,152 @@ Return-Path: <SRS0=JSZK=CS=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85907C43461
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 16:41:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A2606C433E2
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 16:41:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 42B7021941
-	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 16:41:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 50E9E2166E
+	for <bpf@archiver.kernel.org>; Wed,  9 Sep 2020 16:41:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="RZ7sHxLa"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="eqBt7O85";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="dSfzIw1U"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730957AbgIIQlH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Sep 2020 12:41:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55962 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729298AbgIIQZF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Sep 2020 12:25:05 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A297AC061757
-        for <bpf@vger.kernel.org>; Wed,  9 Sep 2020 09:25:04 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id s13so2882621wmh.4
-        for <bpf@vger.kernel.org>; Wed, 09 Sep 2020 09:25:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ix+MU4cvPNIz6u3CoOIKbzdQmGESphnJbN4BB/aC/4A=;
-        b=RZ7sHxLaPVvHNd6Q1+E6yU36+g9EQTVaHi6wklS/XWqU1LvFanhemCuTJchygTZU79
-         c55Iquw6UEABWle2OmkTbyJa0NSHhzQtq1JgrUKF7zgjtoS6YTd4AWtfS9LbnczYz8Dg
-         9bOOkXbwI9mJXJLvVT1DDrk5rYGDlq8XLXdD1TMncKSiFhfoqG1gbriIThnar2SzHg//
-         idlDeYG0+FVlK7HMFES2sauBwOMVG2at13mbE6TuJW1cziTd1+rUHeC7jm3PrKqwCf9d
-         SY4VbKELLIjr2Et5ubZaOSZUsm4cGYjD91Qu4/7azV9edGNR3VMb/l5Il72Iy4+cEvwS
-         ZRnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ix+MU4cvPNIz6u3CoOIKbzdQmGESphnJbN4BB/aC/4A=;
-        b=XCJzkB0ckrCkkvIJPlGwFWh82JtiBnX8tEfvXjad/uvElXK0XTPSQw7VNQDIrGZB/s
-         WNkrKL7J68P55G6k+cspb3KClkFsRc7xu4vjyJvuod6RTLv0gkvtqMuoYVX4XICARItZ
-         3oxlozHanaYZdjT/VGfu1XzsLfBffiU8lVlGpisR7KLSGKZGjPLoqRkgekCt00+vQCfu
-         CBCbk0CCBD6UdgXlEnSy+lr4gPwsvlH8U7jTu2s0G7xas/Adtx597YHL801vUw4nfbok
-         sPoAyIv00xOAjyv+AgOCBX9sRM3nohv8cYgRafkqMQzzgXlAcs9uiouFwaGWCylYyFXD
-         TZdw==
-X-Gm-Message-State: AOAM530173hGEbWjNTO0rfEIzm2FkGksTFce1kbgnM/XUklQP+8qgtbc
-        jZVt55rrVRminbux6a+DVOXJnA==
-X-Google-Smtp-Source: ABdhPJyCooJk5TgGFn7FWe5TWJ2t6lwVp7AyqY2PZXycg17LJK4sDfWGN9KbSq3zi+OjdWFgnRRSgQ==
-X-Received: by 2002:a05:600c:28d:: with SMTP id 13mr4243445wmk.69.1599668702953;
-        Wed, 09 Sep 2020 09:25:02 -0700 (PDT)
-Received: from localhost.localdomain ([194.35.119.56])
-        by smtp.gmail.com with ESMTPSA id d3sm4821445wrr.84.2020.09.09.09.25.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2020 09:25:02 -0700 (PDT)
-From:   Quentin Monnet <quentin@isovalent.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next v3 0/3] tools: bpftool: print built-in features, automate some of the documentation
-Date:   Wed,  9 Sep 2020 17:24:57 +0100
-Message-Id: <20200909162500.17010-1-quentin@isovalent.com>
-X-Mailer: git-send-email 2.20.1
+        id S1731153AbgIIQlP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Sep 2020 12:41:15 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:36894 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730463AbgIIQlF (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 9 Sep 2020 12:41:05 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 089GeieK021423;
+        Wed, 9 Sep 2020 09:40:45 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=AQw7uURvMP77Km/HluD3CuMBaq3XogC/rzBAlBR/IUQ=;
+ b=eqBt7O857/CXUbQhQmTioRsYlqtfmRHHv327PTq8mmO69fkbUZgLyEF+Emds/vhmlLlx
+ eDUNZwMx2x86KtMm3jW83SGOaxw29OxKwDYIzkj4MciNg+xA6185mxHLXibQlKckt3LP
+ vTjfQMaifMOC5UpPwBO71HwU7LBdXtUCtuc= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 33ct5u0af8-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 09 Sep 2020 09:40:45 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 9 Sep 2020 09:40:16 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z8WC1KsQxuKeyZQJcN8wxRTL/eEhYaBZKjt9MAajeueo0x8F3bwLsKCsCashgCd0SStqMSHD0tZc+SCb/FBt+fiuDMsUe53HLCwYtTljcvzJbPx9SuJjNsPKcTyGyP9pJoJ1Xz+Np69Q6T+TU4UUosUqq7p2nW8/fap6tpeAmpwUgg5vPOmYMMfqvRaFwQWFIHYecQZkWZeIqvz3eIcjvMhNXKollUMsbvZqRJn5AMs36EpLPtevBRXqgNGmtgcYZE/XaY+n4Sre7lGMW2QPLckQF1swoTQjFeOLL082yYEhFdoO+pn7gwRmttwIwnuyrKbBbZ8XKLPOjb801/C5Ng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AQw7uURvMP77Km/HluD3CuMBaq3XogC/rzBAlBR/IUQ=;
+ b=Bt6Ll0Bu2kE8NJY/s+boXhhhWhsYxo21mqTosJFaMk5+LMXZViT8eL2w0Ih0B3Cmx+GnGMxhN4DjYFEGP+wng9m3Kbspg68VyY+7qLGREV8mner9AcTv9hoq/gdeTVNJBxFv5VZIfgGx4P0zg4zMn4WoJOluYm7vbJXKA9+vy/Mf6SxpzPLSXsDRz46T7r/sD19Kxg2zOmT78R7lNjSUBsX1B+geHapH9810i5lZ+qiWFYyR50bCI0Jw57szYWQBvR8z4YmMzTM8D5LwvF2CdgnJEs9ExYgcSDVlB7RA3RubHcRdjPG5iZj3zBVLxN8sy7uEEzUIkCB+nTxJCdW8aw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AQw7uURvMP77Km/HluD3CuMBaq3XogC/rzBAlBR/IUQ=;
+ b=dSfzIw1UeYLRYqjBRYsJ88obWnuY+T3oQ92H/2uthUSywCartBJYxZFy447pE2kbYYCHzsRzTu8ZA26WWwuh0ShrQBvyNz91q6MRHBDLk27v21iaUy1rYHrzpJFNzHLgwKn3jbKGr29Kg61pg8BQRfKAR0floid40pL8lqztx/o=
+Authentication-Results: cloudflare.com; dkim=none (message not signed)
+ header.d=none;cloudflare.com; dmarc=none action=none header.from=fb.com;
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
+ by BYAPR15MB2821.namprd15.prod.outlook.com (2603:10b6:a03:15d::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3348.16; Wed, 9 Sep
+ 2020 16:40:14 +0000
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::c13c:fca9:5e04:9bfb]) by BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::c13c:fca9:5e04:9bfb%3]) with mapi id 15.20.3370.016; Wed, 9 Sep 2020
+ 16:40:14 +0000
+Date:   Wed, 9 Sep 2020 09:40:02 -0700
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     Lorenz Bauer <lmb@cloudflare.com>
+CC:     Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>
+Subject: Re: [PATCH bpf-next v3 1/6] bpf: Allow passing BTF pointers as
+ PTR_TO_SOCKET
+Message-ID: <20200909164002.6icvwe7ex67cggrr@kafai-mbp.dhcp.thefacebook.com>
+References: <20200904095904.612390-1-lmb@cloudflare.com>
+ <20200904095904.612390-2-lmb@cloudflare.com>
+ <20200906224008.fph4frjkkegs6w3b@kafai-mbp.dhcp.thefacebook.com>
+ <CACAyw9-ftMBnoqOt_0dhir+Y=2EW4iLsh=LYSH78hEF=STA1iw@mail.gmail.com>
+ <20200908195212.ekr3jn6ejnowhlz3@kafai-mbp>
+ <CACAyw9-HZ0AzVYOg_2=PF9Y=xNwxNWUBk4VonxQLgRE6TmoZdQ@mail.gmail.com>
+ <CACAyw99BGEQORogx2+KvpG=qVcyVEn+UwBBAYV3KV6+BssYibQ@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACAyw99BGEQORogx2+KvpG=qVcyVEn+UwBBAYV3KV6+BssYibQ@mail.gmail.com>
+X-ClientProxiedBy: CO2PR04CA0083.namprd04.prod.outlook.com
+ (2603:10b6:102:1::51) To BY5PR15MB3571.namprd15.prod.outlook.com
+ (2603:10b6:a03:1f6::32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from kafai-mbp.dhcp.thefacebook.com (2620:10d:c090:400::5:cc17) by CO2PR04CA0083.namprd04.prod.outlook.com (2603:10b6:102:1::51) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16 via Frontend Transport; Wed, 9 Sep 2020 16:40:13 +0000
+X-Originating-IP: [2620:10d:c090:400::5:cc17]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2da10eb1-9552-45d6-cc30-08d854df06e3
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2821:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR15MB28216C61A860A2DCF989549FD5260@BYAPR15MB2821.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bctTECKeeGKAOboXsFFxp/vGhGoQvXnkD/REIQ2Bk+4m+00WwaVRRpflfoGCnN5nQIZWzdiTP2+sDIRcuvCKfqjw4XST8Gitcl2W2TknfGJm8NQd4dhPkP76foxu8EZy26jz4L973UCVQOXqcMlkQQiLQnABegREzY/1WWLquymIsc2BGQ2fbR6QruwBNHLYV2L6272EtxTiZR7cvZwSzzielYJ4Untj6Nmjj3+2qLna0ysOkUpHM1vWeUxXH939g+lPJUxRz9H2AKML/WxuyVtoAbVqXvhRJFid5GjEcNptWUrvwmRSkLQIb7gsiIz+KoxPoTS/IoeSZhnGULVubA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(376002)(136003)(39860400002)(346002)(396003)(6506007)(7696005)(66476007)(4744005)(478600001)(1076003)(86362001)(66946007)(5660300002)(66556008)(6666004)(2906002)(55016002)(186003)(316002)(4326008)(16526019)(52116002)(6916009)(8936002)(8676002)(54906003)(9686003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: zCIYet6Teuh93dnYqItYl9tMbvwmpkoqBdVbbSkyFeBZMirbbGeVho2ruqnvduxIPDN39bp27sBNc0SeryhAf7r7NomJqsLJPMoD+wYhqMlvdSn2sHoWcz+spbai2RVbuv8QjFY5mSuy4wf3pvBfPn8ZxM6zPPQ3ZdrsKxEs0oGLybebmdcHXrLcskckj724nX0uWxXUtdNPlGEuHHYAKWdqjxv/MiWPyv7Y7VaOAR4SRxm8eTIfza3omqdwHzGCz3959sJb9fBAK+daFInLpnhj6ixq5ITmsaDP5FVXabyzfUWvMecXha4rd+EA4Imgj0dvIhLuRG8daUtC/OfIIsBZqwlig6WqBG4/6u83v5bW0eo+uhQ7xkTfncUvmh+CIwL0YSvoD+Q+Rvl3jHL+DP98xBUZkjM6DhactlwQm72wDC5+C02bNZETdsyIbcPtRvc92XIV/A6I5ZRXV3Aky1fuqXiKUp8y6jRd052e7LL29A1vt1Cs3hZZ8ldnR4gUP8vAbP9uWhhkcdNzB4IN265YgJUHtmalN7f6OWeeKJrM108UwSMz3tn+63NJ6kJvJRj4NnZY5pWueF7a4igFtgNIfm3ukTz3zIYvoEgg2jSwEoXrpKCtGqBPJlMRgATvscPC+rGyyXB2LUByscUImSPtFEINc+F0QxYYyyV8Nn0=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2da10eb1-9552-45d6-cc30-08d854df06e3
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2020 16:40:14.5196
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qfC6EMj1UE1meErF9H+JQSJ06xcLgwyMm5T1bpC+6ZPCBAdiQwL8w/l7YQ39PH+o
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2821
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-09_12:2020-09-09,2020-09-09 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=1
+ malwarescore=0 impostorscore=0 priorityscore=1501 clxscore=1015
+ phishscore=0 bulkscore=0 mlxlogscore=811 mlxscore=0 adultscore=0
+ spamscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2009090149
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There are two changes for bpftool in this series.
-
-The first one is a modification to the "version" command, to have it print
-the status (compiled or not) of some of the optional features for bpftool.
-This is to help determine if a bpftool binary is able to, for example,
-disassemble JIT-compiled programs.
-
-The last two patches try to automate the generation of some repetitive
-sections in the man pages for bpftool, namely the description of the
-options shared by all commands, and the "see also" section. The objective
-is to make it easier to maintain the pages and to reduce the risk of
-omissions when adding the documentation for new commands.
-
-v3:
-- Use a simple list of features (no boolean values) for plain output when
-  dumping built-in features.
-
-v2:
-- Fix incorrect JSON output.
-- Use "echo -n" instead of "printf" in Makefile to avoid the risk of
-  passing and evaluating formatting strings.
-
-Quentin Monnet (3):
-  tools: bpftool: print optional built-in features along with version
-  tools: bpftool: include common options from separate file
-  tools: bpftool: automate generation for "SEE ALSO" sections in man
-    pages
-
- tools/bpf/bpftool/Documentation/Makefile      | 14 ++++++--
- .../bpf/bpftool/Documentation/bpftool-btf.rst | 34 +-----------------
- .../bpftool/Documentation/bpftool-cgroup.rst  | 33 +----------------
- .../bpftool/Documentation/bpftool-feature.rst | 33 +----------------
- .../bpf/bpftool/Documentation/bpftool-gen.rst | 33 +----------------
- .../bpftool/Documentation/bpftool-iter.rst    | 27 +-------------
- .../bpftool/Documentation/bpftool-link.rst    | 34 +-----------------
- .../bpf/bpftool/Documentation/bpftool-map.rst | 33 +----------------
- .../bpf/bpftool/Documentation/bpftool-net.rst | 34 +-----------------
- .../bpftool/Documentation/bpftool-perf.rst    | 34 +-----------------
- .../bpftool/Documentation/bpftool-prog.rst    | 34 +-----------------
- .../Documentation/bpftool-struct_ops.rst      | 35 +------------------
- tools/bpf/bpftool/Documentation/bpftool.rst   | 34 +-----------------
- .../bpftool/Documentation/common_options.rst  | 22 ++++++++++++
- tools/bpf/bpftool/main.c                      | 33 +++++++++++++++--
- 15 files changed, 77 insertions(+), 390 deletions(-)
- create mode 100644 tools/bpf/bpftool/Documentation/common_options.rst
-
--- 
-2.25.1
-
+On Wed, Sep 09, 2020 at 04:42:57PM +0100, Lorenz Bauer wrote:
+> On Wed, 9 Sep 2020 at 10:16, Lorenz Bauer <lmb@cloudflare.com> wrote:
+> >
+> > On Tue, 8 Sep 2020 at 20:52, Martin KaFai Lau <kafai@fb.com> wrote:
+> 
+> [...]
+> 
+> > > Not all existing PTR_TO_SOCK_COMMON takes a reference also.
+> > > Does it mean all these existing cases are broken?
+> > > For example, bpf_sk_release(__sk_buff->sk) is allowed now?
+> >
+> > I'll look into this. It's very possible I got the refcounting logic
+> > wrong, again.
+> 
+> bpf_sk_release(__sk_buff->sk) is fine, and there is a test from Martin
+> in verifier/sock.c that exercises this. The case I was worried about
+> can't happen since release_reference_state returns EINVAL if it can't
+> find a reference for the given ref_obj_id. Since we never allocate a
+> reference with id 0 this ends up as the same thing, just less explicit
+> than checking for id == 0.
+Thanks for checking!
