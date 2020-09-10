@@ -2,70 +2,71 @@ Return-Path: <SRS0=E2Hj=CT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17891C43461
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 10:28:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 91B97C43461
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 10:28:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CFD9821941
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 10:28:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 456C520BED
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 10:28:36 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="KdYK2Oxt"
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="uraQML+1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726663AbgIJK1b (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Sep 2020 06:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46382 "EHLO
+        id S1730751AbgIJK20 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Sep 2020 06:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730988AbgIJK1H (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Sep 2020 06:27:07 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B20C061757
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 03:27:04 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id w5so6084331wrp.8
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 03:27:04 -0700 (PDT)
+        with ESMTP id S1730995AbgIJK1Z (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Sep 2020 06:27:25 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60714C061798
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 03:27:07 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id m6so6137644wrn.0
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 03:27:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=w1o8W2B7Zhme6wXQ+MUTOwcBEeetzzjkb46yP9OL+9Y=;
-        b=KdYK2Oxt1h4+ACT1cPmZWuxvLWU1dPULmiAsH9Hh5La9CTcyvPkRvXPxEPuWV5kJR7
-         J3q0XCVJ8hif7mQVTkOJAp1FljvgPABeo4F9yEPbYM0qsouXFMq+PiQfIEjMp0rWH4RI
-         UDMqrJ2rSWmmTN51JifcBCWuckUxSiUgZMKvxxLer/71bwEc7BED+t1Z+QMilzDKu2sA
-         P8546KHXFXNjn0U+KW147iU/WCA0K7NZ/HS2ERtTsSL4KuGGE9yADXAP/raQImSOCN5E
-         VUq4dgapJ7v2RzC2TBO6/egAhmK6zuGJCgHfd4rAmzYm8SH1xFoTnGdUwcrObRGETOgT
-         zEfA==
+        bh=XC0iDw6777QFQ54Z7stSWW/UTmCzF7IOhEeUMJqpmVE=;
+        b=uraQML+1Cin1yukPe13IaWUaxZ+T7AUnXo9TCP30M1AqnoT5zi5+VhOQKynIgiP1C8
+         3mXapMQHt23CkFT/undoioMr+TscDmGiv1VsDLZ4jQ4Xxei/o7azhRn+pwVM/z0q2F+B
+         ECH7yiF7pCjz+bXHZpaf4m45cUJifG/dPFjbCHhSVVAlnCIqM+ljQHt4EK0+0xpo7jYp
+         DAGllqo40vKCeTebTvmi2i1hZyF/m3EG3Y2Kxxoe3MamI+W8VAxqdvawyTiCSBGiGjnw
+         0f86F4MhwhZl81ZQOjbudfCJOFp+aphnRRnuvj7kP8DQ9sxQp25GcMHMDZL9RyO8VptE
+         kc5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=w1o8W2B7Zhme6wXQ+MUTOwcBEeetzzjkb46yP9OL+9Y=;
-        b=NG/BLbMHImCx5Dxj3iUeqJmWanKoRie9v+/hEgHYJQW0j6rJ5bpOJ3rPIjded6zDc9
-         CD9jlK9qHagspkNVaKTXrRArC1nmV04SeLhH2aQLUkihB52aJF6G+t+Z5bIXfU8v3uNk
-         WLfkplYcpx1rdUARfkF23OR65YrbJpO+XiQDGqjFS41/tidbJtNxskS1JrngJMjvMhVv
-         8Mgjp52tuB130YYbSTuvSt0QpH88pJCq+Wuh5+RprnLYCk/NeyEgU9oBI6vi9dR3vz1t
-         MCRnGqNKLKVDB9VCJfhZqkmA5xfsjnI4ao8oPT5+Ut/cJN1EZB/4XH9iJXPd6WmvDGTt
-         w/5Q==
-X-Gm-Message-State: AOAM533IZYpGIHhYrFhjRgzWQe6f2eLTlH7o/cSV2dzeAZZhoWf0jrGU
-        3Ioklti/PT5a/9NwKEHQM7iLuA==
-X-Google-Smtp-Source: ABdhPJy9BQ2zrfLV4lMTWPOxPrm440OzkJ0MK03+7D2nC92I9zy97CLW2R0drFrxQ79yYiO/nRlpwQ==
-X-Received: by 2002:a5d:69c9:: with SMTP id s9mr8173797wrw.348.1599733623420;
-        Thu, 10 Sep 2020 03:27:03 -0700 (PDT)
+        bh=XC0iDw6777QFQ54Z7stSWW/UTmCzF7IOhEeUMJqpmVE=;
+        b=cAowLXCMMWBvbVXG+u8LVPqS8O6fAMkTHpfmCOM6UniuttVnxs9RnR0WOlN0IZTF0g
+         9R91u0ngJL8KTEzyzUVX/MSpovzXvTtbwmkmyxf8w2uHtN0TSVefO7P0h+opHol3dgZz
+         pNmzmYEgTUtIlzIe3iol//OahieohCYMTWYlmjFSCkdUdseOJ8zPBUmR6OSLg2UXXnKv
+         DbqEUnkWSDVD5Z9lUj8qHU/JrF3BX2+dWhUR2jWdJYQu8FvTC3GXlaaBhDXK7671yANp
+         r2n34gpjLJsTidGmFDbSsbDZv22h3Gx++aJ1b3sIW+CrkrH8ne5g0tiJusO3BKOjvmGy
+         FusQ==
+X-Gm-Message-State: AOAM532AAxF35a7Ynz0luw5q9mXR/aLGw6Ge+0wK7GiJqq8ACHPpmcIk
+        NWbSTTusWcVay94Sjy2BHhseQQ==
+X-Google-Smtp-Source: ABdhPJw03BQjuVXI10qJXEcfKLhaSU/Mz7OegpQSOyDcv3P0H39LmKMc1gOw46O2R7/7udYa6pY12g==
+X-Received: by 2002:a05:6000:151:: with SMTP id r17mr8018232wrx.311.1599733625697;
+        Thu, 10 Sep 2020 03:27:05 -0700 (PDT)
 Received: from localhost.localdomain ([194.35.119.178])
-        by smtp.gmail.com with ESMTPSA id h186sm3039494wmf.24.2020.09.10.03.27.02
+        by smtp.gmail.com with ESMTPSA id h186sm3039494wmf.24.2020.09.10.03.27.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 03:27:03 -0700 (PDT)
+        Thu, 10 Sep 2020 03:27:05 -0700 (PDT)
 From:   Quentin Monnet <quentin@isovalent.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next v3 1/3] tools: bpftool: clean up function to dump map entry
-Date:   Thu, 10 Sep 2020 11:26:50 +0100
-Message-Id: <20200910102652.10509-2-quentin@isovalent.com>
+        Quentin Monnet <quentin@isovalent.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Subject: [PATCH bpf-next v3 3/3] tools: bpftool: add "inner_map" to "bpftool map create" outer maps
+Date:   Thu, 10 Sep 2020 11:26:52 +0100
+Message-Id: <20200910102652.10509-4-quentin@isovalent.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200910102652.10509-1-quentin@isovalent.com>
 References: <20200910102652.10509-1-quentin@isovalent.com>
@@ -76,160 +77,243 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The function used to dump a map entry in bpftool is a bit difficult to
-follow, as a consequence to earlier refactorings. There is a variable
-("num_elems") which does not appear to be necessary, and the error
-handling would look cleaner if moved to its own function. Let's clean it
-up. No functional change.
+There is no support for creating maps of types array-of-map or
+hash-of-map in bpftool. This is because the kernel needs an inner_map_fd
+to collect metadata on the inner maps to be supported by the new map,
+but bpftool does not provide a way to pass this file descriptor.
 
-v2:
-- v1 was erroneously removing the check on fd maps in an attempt to get
-  support for outer map dumps. This is already working. Instead, v2
-  focuses on cleaning up the dump_map_elem() function, to avoid
-  similar confusion in the future.
+Add a new optional "inner_map" keyword that can be used to pass a
+reference to a map, retrieve a fd to that map, and pass it as the
+inner_map_fd.
+
+Add related documentation and bash completion. Note that we can
+reference the inner map by its name, meaning we can have several times
+the keyword "name" with different meanings (mandatory outer map name,
+and possibly a name to use to find the inner_map_fd). The bash
+completion will offer it just once, and will not suggest "name" on the
+following command:
+
+    # bpftool map create /sys/fs/bpf/my_outer_map type hash_of_maps \
+        inner_map name my_inner_map [TAB]
+
+Fixing that specific case seems too convoluted. Completion will work as
+expected, however, if the outer map name comes first and the "inner_map
+name ..." is passed second.
 
 Signed-off-by: Quentin Monnet <quentin@isovalent.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/bpf/bpftool/map.c | 101 +++++++++++++++++++++-------------------
- 1 file changed, 52 insertions(+), 49 deletions(-)
+ .../bpf/bpftool/Documentation/bpftool-map.rst | 10 +++-
+ tools/bpf/bpftool/bash-completion/bpftool     | 22 ++++++++-
+ tools/bpf/bpftool/map.c                       | 48 +++++++++++++------
+ 3 files changed, 62 insertions(+), 18 deletions(-)
 
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+index 083db6c2fc67..ca9d62d7e0bd 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+@@ -23,7 +23,8 @@ MAP COMMANDS
+ 
+ |	**bpftool** **map** { **show** | **list** }   [*MAP*]
+ |	**bpftool** **map create**     *FILE* **type** *TYPE* **key** *KEY_SIZE* **value** *VALUE_SIZE* \
+-|		**entries** *MAX_ENTRIES* **name** *NAME* [**flags** *FLAGS*] [**dev** *NAME*]
++|		**entries** *MAX_ENTRIES* **name** *NAME* [**flags** *FLAGS*] [**inner_map** *MAP*] \
++|		[**dev** *NAME*]
+ |	**bpftool** **map dump**       *MAP*
+ |	**bpftool** **map update**     *MAP* [**key** *DATA*] [**value** *VALUE*] [*UPDATE_FLAGS*]
+ |	**bpftool** **map lookup**     *MAP* [**key** *DATA*]
+@@ -67,7 +68,7 @@ DESCRIPTION
+ 		  maps. On such kernels bpftool will automatically emit this
+ 		  information as well.
+ 
+-	**bpftool map create** *FILE* **type** *TYPE* **key** *KEY_SIZE* **value** *VALUE_SIZE*  **entries** *MAX_ENTRIES* **name** *NAME* [**flags** *FLAGS*] [**dev** *NAME*]
++	**bpftool map create** *FILE* **type** *TYPE* **key** *KEY_SIZE* **value** *VALUE_SIZE*  **entries** *MAX_ENTRIES* **name** *NAME* [**flags** *FLAGS*] [**inner_map** *MAP*] [**dev** *NAME*]
+ 		  Create a new map with given parameters and pin it to *bpffs*
+ 		  as *FILE*.
+ 
+@@ -75,6 +76,11 @@ DESCRIPTION
+ 		  desired flags, e.g. 1024 for **BPF_F_MMAPABLE** (see bpf.h
+ 		  UAPI header for existing flags).
+ 
++		  To create maps of type array-of-maps or hash-of-maps, the
++		  **inner_map** keyword must be used to pass an inner map. The
++		  kernel needs it to collect metadata related to the inner maps
++		  that the new map will work with.
++
+ 		  Keyword **dev** expects a network interface name, and is used
+ 		  to request hardware offload for the map.
+ 
+diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
+index 7b68e3c0a5fb..3f1da30c4da6 100644
+--- a/tools/bpf/bpftool/bash-completion/bpftool
++++ b/tools/bpf/bpftool/bash-completion/bpftool
+@@ -709,9 +709,26 @@ _bpftool()
+                                                    "$cur" ) )
+                             return 0
+                             ;;
+-                        key|value|flags|name|entries)
++                        key|value|flags|entries)
+                             return 0
+                             ;;
++                        inner_map)
++                            COMPREPLY=( $( compgen -W "$MAP_TYPE" -- "$cur" ) )
++                            return 0
++                            ;;
++                        id)
++                            _bpftool_get_map_ids
++                            ;;
++                        name)
++                            case $pprev in
++                                inner_map)
++                                    _bpftool_get_map_names
++                                    ;;
++                                *)
++                                    return 0
++                                    ;;
++                            esac
++                            ;;
+                         *)
+                             _bpftool_once_attr 'type'
+                             _bpftool_once_attr 'key'
+@@ -719,6 +736,9 @@ _bpftool()
+                             _bpftool_once_attr 'entries'
+                             _bpftool_once_attr 'name'
+                             _bpftool_once_attr 'flags'
++                            if _bpftool_search_list 'array_of_maps' 'hash_of_maps'; then
++                                _bpftool_once_attr 'inner_map'
++                            fi
+                             _bpftool_once_attr 'dev'
+                             return 0
+                             ;;
 diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index bc0071228f88..c8159cb4fb1e 100644
+index d8581d5e98a1..a7efbd84fbcc 100644
 --- a/tools/bpf/bpftool/map.c
 +++ b/tools/bpf/bpftool/map.c
-@@ -213,8 +213,9 @@ static void print_entry_json(struct bpf_map_info *info, unsigned char *key,
- 	jsonw_end_object(json_wtr);
- }
- 
--static void print_entry_error(struct bpf_map_info *info, unsigned char *key,
--			      const char *error_msg)
-+static void
-+print_entry_error_msg(struct bpf_map_info *info, unsigned char *key,
-+		      const char *error_msg)
+@@ -1250,7 +1250,7 @@ static int do_create(int argc, char **argv)
  {
- 	int msg_size = strlen(error_msg);
- 	bool single_line, break_names;
-@@ -232,6 +233,40 @@ static void print_entry_error(struct bpf_map_info *info, unsigned char *key,
- 	printf("\n");
- }
+ 	struct bpf_create_map_attr attr = { NULL, };
+ 	const char *pinfile;
+-	int err, fd;
++	int err = -1, fd;
  
-+static void
-+print_entry_error(struct bpf_map_info *map_info, void *key, int lookup_errno)
-+{
-+	/* For prog_array maps or arrays of maps, failure to lookup the value
-+	 * means there is no entry for that key. Do not print an error message
-+	 * in that case.
-+	 */
-+	if (map_is_map_of_maps(map_info->type) ||
-+	    map_is_map_of_progs(map_info->type))
-+		return;
-+
-+	if (json_output) {
-+		jsonw_start_object(json_wtr);	/* entry */
-+		jsonw_name(json_wtr, "key");
-+		print_hex_data_json(key, map_info->key_size);
-+		jsonw_name(json_wtr, "value");
-+		jsonw_start_object(json_wtr);	/* error */
-+		jsonw_string_field(json_wtr, "error", strerror(lookup_errno));
-+		jsonw_end_object(json_wtr);	/* error */
-+		jsonw_end_object(json_wtr);	/* entry */
-+	} else {
-+		const char *msg = NULL;
-+
-+		if (lookup_errno == ENOENT)
-+			msg = "<no entry>";
-+		else if (lookup_errno == ENOSPC &&
-+			 map_info->type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY)
-+			msg = "<cannot read>";
-+
-+		print_entry_error_msg(map_info, key,
-+				      msg ? : strerror(lookup_errno));
-+	}
-+}
-+
- static void print_entry_plain(struct bpf_map_info *info, unsigned char *key,
- 			      unsigned char *value)
- {
-@@ -713,56 +748,23 @@ static int dump_map_elem(int fd, void *key, void *value,
- 			 struct bpf_map_info *map_info, struct btf *btf,
- 			 json_writer_t *btf_wtr)
- {
--	int num_elems = 0;
--	int lookup_errno;
--
--	if (!bpf_map_lookup_elem(fd, key, value)) {
--		if (json_output) {
--			print_entry_json(map_info, key, value, btf);
--		} else {
--			if (btf) {
--				struct btf_dumper d = {
--					.btf = btf,
--					.jw = btf_wtr,
--					.is_plain_text = true,
--				};
--
--				do_dump_btf(&d, map_info, key, value);
--			} else {
--				print_entry_plain(map_info, key, value);
--			}
--			num_elems++;
--		}
--		return num_elems;
-+	if (bpf_map_lookup_elem(fd, key, value)) {
-+		print_entry_error(map_info, key, errno);
-+		return -1;
- 	}
+ 	if (!REQ_ARGS(7))
+ 		return -1;
+@@ -1265,13 +1265,13 @@ static int do_create(int argc, char **argv)
  
--	/* lookup error handling */
--	lookup_errno = errno;
--
--	if (map_is_map_of_maps(map_info->type) ||
--	    map_is_map_of_progs(map_info->type))
--		return 0;
--
- 	if (json_output) {
--		jsonw_start_object(json_wtr);
--		jsonw_name(json_wtr, "key");
--		print_hex_data_json(key, map_info->key_size);
--		jsonw_name(json_wtr, "value");
--		jsonw_start_object(json_wtr);
--		jsonw_string_field(json_wtr, "error", strerror(lookup_errno));
--		jsonw_end_object(json_wtr);
--		jsonw_end_object(json_wtr);
--	} else {
--		const char *msg = NULL;
--
--		if (lookup_errno == ENOENT)
--			msg = "<no entry>";
--		else if (lookup_errno == ENOSPC &&
--			 map_info->type == BPF_MAP_TYPE_REUSEPORT_SOCKARRAY)
--			msg = "<cannot read>";
-+		print_entry_json(map_info, key, value, btf);
-+	} else if (btf) {
-+		struct btf_dumper d = {
-+			.btf = btf,
-+			.jw = btf_wtr,
-+			.is_plain_text = true,
-+		};
+ 			if (attr.map_type) {
+ 				p_err("map type already specified");
+-				return -1;
++				goto exit;
+ 			}
  
--		print_entry_error(map_info, key,
--				  msg ? : strerror(lookup_errno));
-+		do_dump_btf(&d, map_info, key, value);
-+	} else {
-+		print_entry_plain(map_info, key, value);
- 	}
+ 			attr.map_type = map_type_from_str(*argv);
+ 			if ((int)attr.map_type < 0) {
+ 				p_err("unrecognized map type: %s", *argv);
+-				return -1;
++				goto exit;
+ 			}
+ 			NEXT_ARG();
+ 		} else if (is_prefix(*argv, "name")) {
+@@ -1280,43 +1280,56 @@ static int do_create(int argc, char **argv)
+ 		} else if (is_prefix(*argv, "key")) {
+ 			if (parse_u32_arg(&argc, &argv, &attr.key_size,
+ 					  "key size"))
+-				return -1;
++				goto exit;
+ 		} else if (is_prefix(*argv, "value")) {
+ 			if (parse_u32_arg(&argc, &argv, &attr.value_size,
+ 					  "value size"))
+-				return -1;
++				goto exit;
+ 		} else if (is_prefix(*argv, "entries")) {
+ 			if (parse_u32_arg(&argc, &argv, &attr.max_entries,
+ 					  "max entries"))
+-				return -1;
++				goto exit;
+ 		} else if (is_prefix(*argv, "flags")) {
+ 			if (parse_u32_arg(&argc, &argv, &attr.map_flags,
+ 					  "flags"))
+-				return -1;
++				goto exit;
+ 		} else if (is_prefix(*argv, "dev")) {
+ 			NEXT_ARG();
  
- 	return 0;
-@@ -873,7 +875,8 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
- 				err = 0;
- 			break;
+ 			if (attr.map_ifindex) {
+ 				p_err("offload device already specified");
+-				return -1;
++				goto exit;
+ 			}
+ 
+ 			attr.map_ifindex = if_nametoindex(*argv);
+ 			if (!attr.map_ifindex) {
+ 				p_err("unrecognized netdevice '%s': %s",
+ 				      *argv, strerror(errno));
+-				return -1;
++				goto exit;
+ 			}
+ 			NEXT_ARG();
++		} else if (is_prefix(*argv, "inner_map")) {
++			struct bpf_map_info info = {};
++			__u32 len = sizeof(info);
++			int inner_map_fd;
++
++			NEXT_ARG();
++			if (!REQ_ARGS(2))
++				usage();
++			inner_map_fd = map_parse_fd_and_info(&argc, &argv,
++							     &info, &len);
++			if (inner_map_fd < 0)
++				return -1;
++			attr.inner_map_fd = inner_map_fd;
+ 		} else {
+ 			p_err("unknown arg %s", *argv);
+-			return -1;
++			goto exit;
  		}
--		num_elems += dump_map_elem(fd, key, value, info, btf, wtr);
-+		if (!dump_map_elem(fd, key, value, info, btf, wtr))
-+			num_elems++;
- 		prev_key = key;
  	}
  
+ 	if (!attr.name) {
+ 		p_err("map name not specified");
+-		return -1;
++		goto exit;
+ 	}
+ 
+ 	set_max_rlimit();
+@@ -1324,17 +1337,22 @@ static int do_create(int argc, char **argv)
+ 	fd = bpf_create_map_xattr(&attr);
+ 	if (fd < 0) {
+ 		p_err("map create failed: %s", strerror(errno));
+-		return -1;
++		goto exit;
+ 	}
+ 
+ 	err = do_pin_fd(fd, pinfile);
+ 	close(fd);
+ 	if (err)
+-		return err;
++		goto exit;
+ 
+ 	if (json_output)
+ 		jsonw_null(json_wtr);
+-	return 0;
++
++exit:
++	if (attr.inner_map_fd > 0)
++		close(attr.inner_map_fd);
++
++	return err;
+ }
+ 
+ static int do_pop_dequeue(int argc, char **argv)
+@@ -1420,7 +1438,7 @@ static int do_help(int argc, char **argv)
+ 		"Usage: %1$s %2$s { show | list }   [MAP]\n"
+ 		"       %1$s %2$s create     FILE type TYPE key KEY_SIZE value VALUE_SIZE \\\n"
+ 		"                                  entries MAX_ENTRIES name NAME [flags FLAGS] \\\n"
+-		"                                  [dev NAME]\n"
++		"                                  [inner_map MAP] [dev NAME]\n"
+ 		"       %1$s %2$s dump       MAP\n"
+ 		"       %1$s %2$s update     MAP [key DATA] [value VALUE] [UPDATE_FLAGS]\n"
+ 		"       %1$s %2$s lookup     MAP [key DATA]\n"
 -- 
 2.25.1
 
