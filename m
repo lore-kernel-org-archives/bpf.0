@@ -2,73 +2,70 @@ Return-Path: <SRS0=E2Hj=CT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 63CECC433E2
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 10:28:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6949C433E2
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 10:28:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2737820BED
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 10:28:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4F07206BE
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 10:28:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="X8439DK5"
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="povkCprx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730796AbgIJK2b (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Sep 2020 06:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
+        id S1730873AbgIJK2i (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Sep 2020 06:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730993AbgIJK1Z (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Sep 2020 06:27:25 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA41C061795
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 03:27:05 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id k15so6072635wrn.10
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 03:27:05 -0700 (PDT)
+        with ESMTP id S1730984AbgIJK1E (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Sep 2020 06:27:04 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF51C061756
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 03:27:03 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id t10so6125357wrv.1
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 03:27:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qCkbdaUxcOLV6qU6kxWcLZk/XxFKvurYHi1esL6nT4Q=;
-        b=X8439DK5LD0Um4SHGnfZ9NrT6nkk5Qo65cMJes1Zcouo8W6mXfM/Ct5nKnxRB3xdtl
-         NGMQcFybJwlQYduWlGhU4RxtTWUBtrTfNf8d//dxBc8HyaE/2R52QXwxHabbKs+fxmyK
-         EAQyTnpPGC2UpXRaXciqbmVdtC0WQ62PYSFz9XxClCJsFzAwa8E1rUf+PENtDeUCie45
-         FwLQlzYvTULrMAxbP4f3tCbK9YZDMXEJsy/dDdzTxCTuWP8O+z2YfiHdNhkLWNrLhyz3
-         3di6HhpmKjozMu/DfSRZOJoL+z37H9U5GtITeLtmekFbRGH7U8PtA67NiYexQycWx8sl
-         lWqw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WO5vaAWz6zN0FZiYh2WcgshVBm9JSmYHIvf75JDkwkc=;
+        b=povkCprx1nxa7PduohZnkEFMgX5YQaqAYI9H6/+Pt3k/kEzF5HderxhGIa2vT/fsgw
+         ZyOfJFgzKCFTYNVEbgg7CU5fHRat+n+r+Na952Iv6HUywTMntGb8E15OupOt1VrCJ5/E
+         e1Lgw/HzB7INnm7UE2nGFRh3hY8Ci4Xv6/WZD/g+Ul3FR7RWV1++AS/hFXiGYwLJLHRd
+         QhznOVYPDFqMRSRM1k64elgCIG92IyakCsqpd2m5BfmLMvGwOSVy/W+Pn0JOPsORGYWx
+         afDN+vKw1Wkddg++vblEb3MhXLp5s60H1Go8N1fqqmHGt8nRFlsxm/LMyqkY97BSawc5
+         AsUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qCkbdaUxcOLV6qU6kxWcLZk/XxFKvurYHi1esL6nT4Q=;
-        b=XzmfDjydXY2wWPPmaOMhuiejB7VjbVSVTRE80AEFvCMX9Ljo1yHM2NWVTML+CVNXj4
-         yvQiq70dvNOorkz7Vh4kbnYYran37l31G7nG0hu/AyoYTcOBspPIyiOMO9r5G8cBdBa6
-         UUxjuNuTbjY8eA7l53Syre6VCS/kYelADiwRGkKBCrIKaQlMxIJRwS6EVPpP1qVzBUnb
-         5eKBmiRZJZblRR5tep+qwQwyMkB2+fApFPBy4up1zFG0SQg1CewYJ3ld+tWIj/AbOYZO
-         Vup4CRy9+M8qcEk7AqyJ5OJe216bk8Swq7jRQe6BtraEwhsaeV93Ywt6tU8Ja0lWjjm3
-         nROg==
-X-Gm-Message-State: AOAM530Z85kDuFYJpbQMJKzn5sA2xynbmQLNL4oR1d86+mz4gQVVOLW2
-        RZ7gzEPDjdKBUFxPU8dtrr3kpw==
-X-Google-Smtp-Source: ABdhPJz4o34D4wwA7tquDWANd0D5MgxjXdf4OwgfcgkNG+xvHrjOF1WEDaWMzvrW8AP53Tu1Zoup7Q==
-X-Received: by 2002:adf:f3c4:: with SMTP id g4mr8468020wrp.168.1599733624322;
-        Thu, 10 Sep 2020 03:27:04 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=WO5vaAWz6zN0FZiYh2WcgshVBm9JSmYHIvf75JDkwkc=;
+        b=djC8xBhDbiZGAMidNeld0YIdRIF+o3q5hVwAUmj8Mt6/F/Y/Dy0Vw9xl8DKSFjf2Ww
+         o8Bljpc4O8BCSPOdX65EpywHD72ruL5GbYP63BtGdID8eHnfYRM/VYjFDkAVhAlpHd3u
+         iccUR1G8FQkqYCK6o4zzrQApsmVdrkPEXNFqdxzoFc6NoKxmD5GSnW/sVJfVRNAZYMNc
+         zQS8KA85T4oLm3skdHxR9wMWvir4AhSlXgTsLVIBqqeXhbwOx8CZNCNNKtPDTSlpKVJU
+         D6wOi1Jsvw09bzc+yBWjitHUK5tDMksx56YQLGddAYoQL/z1CEgx7BlX17q9pGx2XUB7
+         U7eA==
+X-Gm-Message-State: AOAM530DPX4+Vicf2TxZYiIVlrFz5e4PIL1P255RgKGPwtnMdqij3rpA
+        lCGi1kM0ksUVqODUYvq2FgWaUg==
+X-Google-Smtp-Source: ABdhPJw9kVA0zePHLa3oFTsXrh+4IQhuYDnz3JWs3wTwEUBmjCOCKYftMlpOsnmtsgMtWz+z+omBMg==
+X-Received: by 2002:adf:f7ca:: with SMTP id a10mr8165621wrq.321.1599733622416;
+        Thu, 10 Sep 2020 03:27:02 -0700 (PDT)
 Received: from localhost.localdomain ([194.35.119.178])
-        by smtp.gmail.com with ESMTPSA id h186sm3039494wmf.24.2020.09.10.03.27.03
+        by smtp.gmail.com with ESMTPSA id h186sm3039494wmf.24.2020.09.10.03.27.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 03:27:03 -0700 (PDT)
+        Thu, 10 Sep 2020 03:27:01 -0700 (PDT)
 From:   Quentin Monnet <quentin@isovalent.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next v3 2/3] tools: bpftool: keep errors for map-of-map dumps if distinct from ENOENT
-Date:   Thu, 10 Sep 2020 11:26:51 +0100
-Message-Id: <20200910102652.10509-3-quentin@isovalent.com>
+Subject: [PATCH bpf-next v3 0/2] tools: bpftool: support creating outer maps
+Date:   Thu, 10 Sep 2020 11:26:49 +0100
+Message-Id: <20200910102652.10509-1-quentin@isovalent.com>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200910102652.10509-1-quentin@isovalent.com>
-References: <20200910102652.10509-1-quentin@isovalent.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -76,38 +73,33 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When dumping outer maps or prog_array maps, and on lookup failure,
-bpftool simply skips the entry with no error message. This is because
-the kernel returns non-zero when no value is found for the provided key,
-which frequently happen for those maps if they have not been filled.
+This series makes bpftool able to create outer maps (maps of types
+array-of-maps and hash-of-maps). This is done by passing the relevant
+inner_map_fd, which we do through a new command-line keyword.
 
-When such a case occurs, errno is set to ENOENT. It seems unlikely we
-could receive other error codes at this stage (we successfully retrieved
-map info just before), but to be on the safe side, let's skip the entry
-only if errno was ENOENT, and not for the other errors.
+The first two patches also clean up the function related to dumping map
+elements.
 
-v3: New patch
+v3:
+- Add a check on errno being ENOENT before skipping outer map entry in
+  dumps.
 
-Signed-off-by: Quentin Monnet <quentin@isovalent.com>
----
- tools/bpf/bpftool/map.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v2:
+- v1 was wrongly expected to allow bpftool to dump the content of outer
+  maps (already supported). v2 skipped that patch, and instead replaced it
+  with a clean-up for the dump_map_elem() function.
 
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index c8159cb4fb1e..d8581d5e98a1 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -240,8 +240,8 @@ print_entry_error(struct bpf_map_info *map_info, void *key, int lookup_errno)
- 	 * means there is no entry for that key. Do not print an error message
- 	 * in that case.
- 	 */
--	if (map_is_map_of_maps(map_info->type) ||
--	    map_is_map_of_progs(map_info->type))
-+	if ((map_is_map_of_maps(map_info->type) ||
-+	     map_is_map_of_progs(map_info->type)) && lookup_errno == ENOENT)
- 		return;
- 
- 	if (json_output) {
+Quentin Monnet (3):
+  tools: bpftool: clean up function to dump map entry
+  tools: bpftool: keep errors for map-of-map dumps if distinct from
+    ENOENT
+  tools: bpftool: add "inner_map" to "bpftool map create" outer maps
+
+ .../bpf/bpftool/Documentation/bpftool-map.rst |  10 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |  22 ++-
+ tools/bpf/bpftool/map.c                       | 149 ++++++++++--------
+ 3 files changed, 114 insertions(+), 67 deletions(-)
+
 -- 
 2.25.1
 
