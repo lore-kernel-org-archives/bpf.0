@@ -2,138 +2,130 @@ Return-Path: <SRS0=E2Hj=CT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34FE9C43461
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 21:55:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CAC3C2D0A7
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 21:56:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F1FA420731
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 21:55:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 30E2120756
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 21:56:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="AUMWtDRI"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DR1FQXM7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728562AbgIJVms (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Sep 2020 17:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730474AbgIJM5o (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Sep 2020 08:57:44 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 790CAC061573
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 05:57:21 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id k18so5684004wmj.5
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 05:57:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gG4XJdaS4DleTuGpwAXD1/JzFt1hqa3YSjLjeS4l0ZQ=;
-        b=AUMWtDRIOEiUtB+DmmOkltmAlB/1ZM43sVWMTIMQNpxFjIVDeQZ0QFC8ZljJj2UjL2
-         Fc40dxRUlDCnc269vDmHSSrr8Oz4XWgOWDZ5ZXj/6yLkx68R2awHTV8HLyJVqFv5Dzhe
-         sSYuBoacY4Fiy5W/mkslsUJMN3cCSruHK7zZQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gG4XJdaS4DleTuGpwAXD1/JzFt1hqa3YSjLjeS4l0ZQ=;
-        b=E46+bbozfKQytKgRzLlT3UiJTUuDcM/8ylf8OijY+W1SQf7CB6L05DtmP3m3d6jWRF
-         DexNvpHILlH3eFr5I0KrRuvb6vzOzf2/VHC8IBzxZfhN3cz180SFNe4eyczxVEqzRBln
-         pfH2Db0k9EGQ8jkTgthqpRStQns5fMK9RPJB7jEhtOWd0DjpbwKIPOeqZc33yDgR7Dsh
-         c6cLQjwvOGBphFI5elIspBKBQw8zSMyUkh2blCqK4ufOv/M4MQQpgqLDzcyDS2c8RR19
-         HVXvJY8PvlzODAAswjl1ui8Ldu6osptq3mqv8+EQAdDbyt3qWxl4WQHc4AYi3dkFG4A9
-         y3eg==
-X-Gm-Message-State: AOAM532BogyxBgXKInenfJmkSnL7faX+f09DXbGskLwm90QCySkO+eSr
-        IlTtUi64mdPVDlxHPzzxW7j2/XKDS8ixxw==
-X-Google-Smtp-Source: ABdhPJziibVkNZECco5jjwnkzZ4wyN5zvqENNY6+Rl9Qlze4FmSayDpA9QELuRcxVr1g7OJvI5v5iw==
-X-Received: by 2002:a7b:c753:: with SMTP id w19mr8199113wmk.157.1599742640020;
-        Thu, 10 Sep 2020 05:57:20 -0700 (PDT)
-Received: from antares.lan (6.9.9.0.0.d.a.3.9.b.d.2.8.1.d.7.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:7d18:2db9:3ad0:996])
-        by smtp.gmail.com with ESMTPSA id v6sm8737400wrt.90.2020.09.10.05.57.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 05:57:19 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     ast@kernel.org, yhs@fb.com, daniel@iogearbox.net, kafai@fb.com,
-        andriin@fb.com
-Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com,
-        Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next v3 00/11] Make check_func_arg type checks table driven
-Date:   Thu, 10 Sep 2020 13:56:20 +0100
-Message-Id: <20200910125631.225188-1-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.25.1
+        id S1725280AbgIJV4I (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Sep 2020 17:56:08 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:21282 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725320AbgIJVzw (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 10 Sep 2020 17:55:52 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08ALWPtt052985;
+        Thu, 10 Sep 2020 17:55:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=0ac3Pa0++7KbmgQl06440c9JvmnKA7DrPkmoT3AgXnY=;
+ b=DR1FQXM715nk+2AqqJKVryVOk3DgJPHEcV+iIwDp7CZ+trTx9K57+DFS+PUxuKtK79hr
+ puYjnqJWd2/bWZ66VkW72dRbznua0C01FZLZZIzW89zhpUiXyLfhb5hMDh20ObSNNzAU
+ +TB8IO0cNWaf5HHzZzu8b+yT8afHBVI/iYvizFy3zJBNyFuzLZIiwFV113RXq80HvkGs
+ IVQmc9xvATx5Y3JazE4plbLO0aFirDPnqFp4b6DqlhrJ88a7YFeSrfWfpgijC+dBKcZT
+ 5PyoDY8Ug11pW2bH5FIshwVj6T+Pd/ora7Jx8fjjnNk5HEsACIb3IDsK88lfSczrKvmN 2A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33ftytte8b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Sep 2020 17:55:37 -0400
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08ALmpjP134688;
+        Thu, 10 Sep 2020 17:55:36 -0400
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 33ftytte7b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Sep 2020 17:55:36 -0400
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08ALtTd2006540;
+        Thu, 10 Sep 2020 21:55:34 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 33dxdr3p8t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 10 Sep 2020 21:55:34 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08ALtVwW34406756
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Sep 2020 21:55:31 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4E11DA4051;
+        Thu, 10 Sep 2020 21:55:31 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EAF6BA4040;
+        Thu, 10 Sep 2020 21:55:30 +0000 (GMT)
+Received: from sig-9-145-5-224.uk.ibm.com (unknown [9.145.5.224])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 10 Sep 2020 21:55:30 +0000 (GMT)
+Message-ID: <6453ae0b1c3ceebd6aaa6025997691610805a0f1.camel@linux.ibm.com>
+Subject: Re: [PATCH bpf-next 0/3] Fix three endianness issues in test_progs
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Date:   Thu, 10 Sep 2020 23:55:30 +0200
+In-Reply-To: <CAEf4BzYQ+81D4VgrOjTuX-1a1HgPBNq+zsX-te44Wa4=97Yqpg@mail.gmail.com>
+References: <20200909232443.3099637-1-iii@linux.ibm.com>
+         <CAEf4BzYQ+81D4VgrOjTuX-1a1HgPBNq+zsX-te44Wa4=97Yqpg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-10_09:2020-09-10,2020-09-10 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 bulkscore=0 lowpriorityscore=0 malwarescore=0
+ impostorscore=0 clxscore=1015 phishscore=0 mlxlogscore=999 mlxscore=0
+ adultscore=0 suspectscore=3 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2009100186
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Another round of review from Martin, thanks!
+On Thu, 2020-09-10 at 09:58 -0700, Andrii Nakryiko wrote:
+> On Wed, Sep 9, 2020 at 6:59 PM Ilya Leoshkevich <iii@linux.ibm.com>
+> wrote:
+> > This series fixes three test_progs failures on s390, all of which
+> > occur
+> > because of endianness issues.
+> > 
+> > Ilya Leoshkevich (3):
+> >   selftests/bpf: Fix endianness issue in test_sockopt_sk
+> >   selftests/bpf: Fix endianness issues in
+> > sk_lookup/ctx_narrow_access
+> >   selftests/bpf: Fix endianness issue in sk_assign
+> > 
+> >  .../selftests/bpf/prog_tests/sk_assign.c      |   2 +-
+> >  .../selftests/bpf/prog_tests/sockopt_sk.c     |   2 +-
+> >  .../selftests/bpf/progs/test_sk_lookup.c      | 264 ++++++++++--
+> > ------
+> >  3 files changed, 151 insertions(+), 117 deletions(-)
+> > 
+> > --
+> > 2.25.4
+> > 
+> 
+> Ilya,
+> 
+> libbpf Travis CI setup does only a build of libbpf for s390x right
+> now. But we additionally have a test that builds the latest kernel
+> and
+> selftests and runs them in qemu. All this is implemented for x86-64
+> right now. But if you'd like to spend some time to set this up for
+> s390x as well, please let me know. You'll be able to detect issues
+> like this much earlier.
 
-Changes in v3:
-- Fix BTF_ID_LIST_SINGLE if BTF is disabled (Martin)
-- Drop incorrect arg_btf_id in bpf_sk_storage.c (Martin)
-- Check for arg_btf_id in check_func_proto (Martin)
-- Drop incorrect PTR_TO_BTF_ID from fullsock_types (Martin)
-- Introduce btf_seq_file_ids in bpf_trace.c to reduce duplication
-
-Changes in v2:
-- Make the series stand alone (Martin)
-- Drop incorrect BTF_SET_START fix (Andrii)
-- Only support a single BTF ID per argument (Martin)
-- Introduce BTF_ID_LIST_SINGLE macro (Andrii)
-- Skip check_ctx_reg iff register is NULL
-- Change output of check_reg_type slightly, to avoid touching tests
-
-Original cover letter:
-
-Currently, check_func_arg has this pretty gnarly if statement that
-compares the valid arg_type with the actualy reg_type. Sprinkled
-in-between are checks for register_is_null, to short circuit these
-tests if we're dealing with a nullable arg_type. There is also some
-code for later bounds / access checking hidden away in there.
-
-This series of patches refactors the function into something like this:
-
-   if (reg_is_null && arg_type_is_nullable)
-     skip type checking
-
-   do type checking, including BTF validation
-
-   do bounds / access checking
-
-The type checking is now table driven, which makes it easy to extend
-the acceptable types. Maybe more importantly, using a table makes it
-easy to provide more helpful verifier output (see the last patch).
-
-Lorenz Bauer (11):
-  btf: make btf_set_contains take a const pointer
-  bpf: check scalar or invalid register in check_helper_mem_access
-  btf: Add BTF_ID_LIST_SINGLE macro
-  bpf: allow specifying a BTF ID per argument in function protos
-  bpf: make BTF pointer type checking generic
-  bpf: make reference tracking generic
-  bpf: make context access check generic
-  bpf: set meta->raw_mode for pointers close to use
-  bpf: check ARG_PTR_TO_SPINLOCK register type in check_func_arg
-  bpf: hoist type checking for nullable arg types
-  bpf: use a table to drive helper arg type checks
-
- include/linux/bpf.h            |  21 +-
- include/linux/btf_ids.h        |   8 +
- kernel/bpf/bpf_inode_storage.c |   8 +-
- kernel/bpf/btf.c               |  15 +-
- kernel/bpf/stackmap.c          |   5 +-
- kernel/bpf/verifier.c          | 338 ++++++++++++++++++---------------
- kernel/trace/bpf_trace.c       |  15 +-
- net/core/bpf_sk_storage.c      |   8 +-
- net/core/filter.c              |  31 +--
- net/ipv4/bpf_tcp_ca.c          |  19 +-
- tools/include/linux/btf_ids.h  |   8 +
- 11 files changed, 239 insertions(+), 237 deletions(-)
-
--- 
-2.25.1
+That sounds interesting. I will try to adjust your scripts to create a
+s390x rootfs, cross-compile s390x kernel and selftests, and run them
+on my laptop; when this works, I will send a PR.
 
