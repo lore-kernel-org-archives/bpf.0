@@ -2,185 +2,210 @@ Return-Path: <SRS0=E2Hj=CT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B581C43461
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 12:25:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 981E4C433E2
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 13:02:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2DD6120C09
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 12:25:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1599740719;
-	bh=6bkkq1TXecyvjjgPoFLlJc0qAmmBSZOn3uOgRzhqO9E=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=KXth2P3cRLrK1kz7m5x147OLaXaeqk6lWqJm8F/Hqa+KNpOvNtWLXRmud/OO8AAjL
-	 Jtvds7xszUMzx5vs6m5jvTQz8OsDdnbGEQPgu7F76ncfK9pwmhp4OKOhErAMxif5Ne
-	 bhsrVAFzcvX/hsCckReDBqop+ui1+P+VbW1eaC7g=
+	by mail.kernel.org (Postfix) with ESMTP id 434AD207FB
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 13:02:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="tN543buL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726932AbgIJMYz convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 10 Sep 2020 08:24:55 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:37114 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730633AbgIJMWh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Sep 2020 08:22:37 -0400
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-41-ZIZx2N4YMYuseLlSeE1wBw-1; Thu, 10 Sep 2020 08:22:30 -0400
-X-MC-Unique: ZIZx2N4YMYuseLlSeE1wBw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 15076801AEE;
-        Thu, 10 Sep 2020 12:22:28 +0000 (UTC)
-Received: from krava.redhat.com (unknown [10.40.192.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A6F9C7E8F2;
-        Thu, 10 Sep 2020 12:22:25 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Subject: [PATCH bpf-next] selftests/bpf: Check trampoline execution in d_path test
-Date:   Thu, 10 Sep 2020 14:22:24 +0200
-Message-Id: <20200910122224.1683258-1-jolsa@kernel.org>
+        id S1730411AbgIJNCJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Sep 2020 09:02:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730863AbgIJM7o (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Sep 2020 08:59:44 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F68C06179F
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 05:57:37 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id c18so6577165wrm.9
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 05:57:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=WgOfVKiukMVYw8gjT+O2u7q6lkrJccwwvIGwMbbjBUA=;
+        b=tN543buLTjrOx2kqLT+su3jEjWw7m9s3ruIVzHh274eKhdq7fNy+ALKiyaqqwMpNnX
+         kb6RfmTrF3sRtWQ3hxoTAt7hoh37mfVYBbQIRYOv1DTm+V/kSMcnTAlTJPD6MJ45lFUl
+         dU2XDYf4bJ+wkeZPLzO3ZNTjd2I13B4JJ0cR4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=WgOfVKiukMVYw8gjT+O2u7q6lkrJccwwvIGwMbbjBUA=;
+        b=DQdaBJwSt+QAnpQzs2p0WgD2ySJaViN+F6hcxN5tOdrqLBvaUeusTvPuTra2zXk7Eu
+         v4IDtLgvjAVTojW2IAWY2aqOSokrfCiyU9F2loalbXOZMuL9GLjGEhWAN6sS0fT+H2TM
+         9H/dCKa30XWCsADvwqaoJrV7UcL3ahz2AsOuZEjXqRQZQ9vlaTAbYj6z8hC1GYrsI1iQ
+         MFec/Hj1HBlCURxZFjOoEZBj3aMzPZOI4SNhZ7lnov7HJl6xPibnUQo7Rtx8Uw8AqedQ
+         8xxw0VJm1TwSQBmVeNVxQPoWK1RVHQ3OFNlKCcL/bXaTxh3fxtZ/TB8piB5XU0mf+v5D
+         3UHA==
+X-Gm-Message-State: AOAM531qdMwCt0oTV4PWlx85Mb87pSloc1sVhieLGOo8iuRb6RkgpAHS
+        TzeTA5+gRx5S3X3m/m3bsuwFkg==
+X-Google-Smtp-Source: ABdhPJyBe6/dYcJkdnVHfXy9PD7R72C8EOnzH3LIWgTgMjkl1NxqOZRrFT21mJgGdZE1IHYyIvLA3Q==
+X-Received: by 2002:a5d:4152:: with SMTP id c18mr9450760wrq.277.1599742656534;
+        Thu, 10 Sep 2020 05:57:36 -0700 (PDT)
+Received: from antares.lan (6.9.9.0.0.d.a.3.9.b.d.2.8.1.d.7.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:7d18:2db9:3ad0:996])
+        by smtp.gmail.com with ESMTPSA id v6sm8737400wrt.90.2020.09.10.05.57.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2020 05:57:35 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     ast@kernel.org, yhs@fb.com, daniel@iogearbox.net, kafai@fb.com,
+        andriin@fb.com
+Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com,
+        Lorenz Bauer <lmb@cloudflare.com>
+Subject: [PATCH bpf-next v3 10/11] bpf: hoist type checking for nullable arg types
+Date:   Thu, 10 Sep 2020 13:56:30 +0100
+Message-Id: <20200910125631.225188-11-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200910125631.225188-1-lmb@cloudflare.com>
+References: <20200910125631.225188-1-lmb@cloudflare.com>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Mimecast-Spam-Score: 0.0
-X-Mimecast-Originator: kernel.org
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Some kernels builds might inline vfs_getattr call within
-fstat syscall code path, so fentry/vfs_getattr trampoline
-is not called.
+check_func_arg has a plethora of weird if statements with empty branches.
+They work around the fact that *_OR_NULL argument types should accept a
+SCALAR_VALUE register, as long as it's value is 0. These statements make
+it difficult to reason about the type checking logic.
 
-I'm not sure how to handle this in some generic way other
-than use some other function, but that might get inlined at
-some point as well.
+Instead, skip more detailed type checking logic iff the register is 0,
+and the function expects a nullable type. This allows simplifying the type
+checking itself.
 
-Adding flags that indicate trampolines were called and failing
-the test if neither of them got called.
-
-  $ sudo ./test_progs -t d_path
-  test_d_path:PASS:setup 0 nsec
-  ...
-  trigger_fstat_events:PASS:trigger 0 nsec
-  test_d_path:FAIL:124 trampolines not called
-  #22 d_path:FAIL
-  Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
-
-If only one trampoline is called, it's still enough to test
-the helper, so only warn about missing trampoline call and
-continue in test.
-
-  $ sudo ./test_progs -t d_path -v
-  test_d_path:PASS:setup 0 nsec
-  ...
-  trigger_fstat_events:PASS:trigger 0 nsec
-  fentry/vfs_getattr not called
-  #22 d_path:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-
-Signed-off-by: Jiri Olsa <jolsa@redhat.com>
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
 ---
- .../testing/selftests/bpf/prog_tests/d_path.c | 25 +++++++++++++++----
- .../testing/selftests/bpf/progs/test_d_path.c |  7 ++++++
- 2 files changed, 27 insertions(+), 5 deletions(-)
+ kernel/bpf/verifier.c | 64 ++++++++++++++++++++-----------------------
+ 1 file changed, 30 insertions(+), 34 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/d_path.c b/tools/testing/selftests/bpf/prog_tests/d_path.c
-index fc12e0d445ff..ec15f7d1dd0a 100644
---- a/tools/testing/selftests/bpf/prog_tests/d_path.c
-+++ b/tools/testing/selftests/bpf/prog_tests/d_path.c
-@@ -120,26 +120,41 @@ void test_d_path(void)
- 	if (err < 0)
- 		goto cleanup;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index b228467cf837..3e5a3b6f5679 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -435,6 +435,15 @@ static bool arg_type_may_be_refcounted(enum bpf_arg_type type)
+ 	return type == ARG_PTR_TO_SOCK_COMMON;
+ }
  
-+	if (!bss->called_stat && !bss->called_close) {
-+		PRINT_FAIL("trampolines not called\n");
-+		goto cleanup;
-+	}
++static bool arg_type_may_be_null(enum bpf_arg_type type)
++{
++	return type == ARG_PTR_TO_MAP_VALUE_OR_NULL ||
++	       type == ARG_PTR_TO_MEM_OR_NULL ||
++	       type == ARG_PTR_TO_CTX_OR_NULL ||
++	       type == ARG_PTR_TO_SOCKET_OR_NULL ||
++	       type == ARG_PTR_TO_ALLOC_MEM_OR_NULL;
++}
 +
-+	if (!bss->called_stat) {
-+		fprintf(stdout, "fentry/vfs_getattr not called\n");
-+		goto cleanup;
-+	}
-+
-+	if (!bss->called_close) {
-+		fprintf(stdout, "fentry/filp_close not called\n");
-+		goto cleanup;
-+	}
-+
- 	for (int i = 0; i < MAX_FILES; i++) {
--		CHECK(strncmp(src.paths[i], bss->paths_stat[i], MAX_PATH_LEN),
-+		CHECK(bss->called_stat && strncmp(src.paths[i], bss->paths_stat[i], MAX_PATH_LEN),
- 		      "check",
- 		      "failed to get stat path[%d]: %s vs %s\n",
- 		      i, src.paths[i], bss->paths_stat[i]);
--		CHECK(strncmp(src.paths[i], bss->paths_close[i], MAX_PATH_LEN),
-+		CHECK(bss->called_close && strncmp(src.paths[i], bss->paths_close[i], MAX_PATH_LEN),
- 		      "check",
- 		      "failed to get close path[%d]: %s vs %s\n",
- 		      i, src.paths[i], bss->paths_close[i]);
- 		/* The d_path helper returns size plus NUL char, hence + 1 */
--		CHECK(bss->rets_stat[i] != strlen(bss->paths_stat[i]) + 1,
-+		CHECK(bss->called_stat && bss->rets_stat[i] != strlen(bss->paths_stat[i]) + 1,
- 		      "check",
- 		      "failed to match stat return [%d]: %d vs %zd [%s]\n",
- 		      i, bss->rets_stat[i], strlen(bss->paths_stat[i]) + 1,
- 		      bss->paths_stat[i]);
--		CHECK(bss->rets_close[i] != strlen(bss->paths_stat[i]) + 1,
-+		CHECK(bss->called_close && bss->rets_close[i] != strlen(bss->paths_close[i]) + 1,
- 		      "check",
- 		      "failed to match stat return [%d]: %d vs %zd [%s]\n",
- 		      i, bss->rets_close[i], strlen(bss->paths_close[i]) + 1,
--		      bss->paths_stat[i]);
-+		      bss->paths_close[i]);
+ /* Determine whether the function releases some resources allocated by another
+  * function call. The first reference type argument will be assumed to be
+  * released by release_reference().
+@@ -3941,17 +3950,20 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			return err;
  	}
  
- cleanup:
-diff --git a/tools/testing/selftests/bpf/progs/test_d_path.c b/tools/testing/selftests/bpf/progs/test_d_path.c
-index 61f007855649..9e7223b4a555 100644
---- a/tools/testing/selftests/bpf/progs/test_d_path.c
-+++ b/tools/testing/selftests/bpf/progs/test_d_path.c
-@@ -15,6 +15,9 @@ char paths_close[MAX_FILES][MAX_PATH_LEN] = {};
- int rets_stat[MAX_FILES] = {};
- int rets_close[MAX_FILES] = {};
- 
-+int called_stat = 0;
-+int called_close = 0;
++	if (register_is_null(reg) && arg_type_may_be_null(arg_type))
++		/* A NULL register has a SCALAR_VALUE type, so skip
++		 * type checking.
++		 */
++		goto skip_type_check;
 +
- SEC("fentry/vfs_getattr")
- int BPF_PROG(prog_stat, struct path *path, struct kstat *stat,
- 	     __u32 request_mask, unsigned int query_flags)
-@@ -23,6 +26,8 @@ int BPF_PROG(prog_stat, struct path *path, struct kstat *stat,
- 	__u32 cnt = cnt_stat;
- 	int ret;
+ 	if (arg_type == ARG_PTR_TO_MAP_KEY ||
+ 	    arg_type == ARG_PTR_TO_MAP_VALUE ||
+ 	    arg_type == ARG_PTR_TO_UNINIT_MAP_VALUE ||
+ 	    arg_type == ARG_PTR_TO_MAP_VALUE_OR_NULL) {
+ 		expected_type = PTR_TO_STACK;
+-		if (register_is_null(reg) &&
+-		    arg_type == ARG_PTR_TO_MAP_VALUE_OR_NULL)
+-			/* final test in check_stack_boundary() */;
+-		else if (!type_is_pkt_pointer(type) &&
+-			 type != PTR_TO_MAP_VALUE &&
+-			 type != expected_type)
++		if (!type_is_pkt_pointer(type) &&
++		    type != PTR_TO_MAP_VALUE &&
++		    type != expected_type)
+ 			goto err_type;
+ 	} else if (arg_type == ARG_CONST_SIZE ||
+ 		   arg_type == ARG_CONST_SIZE_OR_ZERO ||
+@@ -3966,11 +3978,8 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 	} else if (arg_type == ARG_PTR_TO_CTX ||
+ 		   arg_type == ARG_PTR_TO_CTX_OR_NULL) {
+ 		expected_type = PTR_TO_CTX;
+-		if (!(register_is_null(reg) &&
+-		      arg_type == ARG_PTR_TO_CTX_OR_NULL)) {
+-			if (type != expected_type)
+-				goto err_type;
+-		}
++		if (type != expected_type)
++			goto err_type;
+ 	} else if (arg_type == ARG_PTR_TO_SOCK_COMMON) {
+ 		expected_type = PTR_TO_SOCK_COMMON;
+ 		/* Any sk pointer can be ARG_PTR_TO_SOCK_COMMON */
+@@ -3979,11 +3988,8 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 	} else if (arg_type == ARG_PTR_TO_SOCKET ||
+ 		   arg_type == ARG_PTR_TO_SOCKET_OR_NULL) {
+ 		expected_type = PTR_TO_SOCKET;
+-		if (!(register_is_null(reg) &&
+-		      arg_type == ARG_PTR_TO_SOCKET_OR_NULL)) {
+-			if (type != expected_type)
+-				goto err_type;
+-		}
++		if (type != expected_type)
++			goto err_type;
+ 	} else if (arg_type == ARG_PTR_TO_BTF_ID) {
+ 		expected_type = PTR_TO_BTF_ID;
+ 		if (type != expected_type)
+@@ -3994,27 +4000,16 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			goto err_type;
+ 	} else if (arg_type_is_mem_ptr(arg_type)) {
+ 		expected_type = PTR_TO_STACK;
+-		/* One exception here. In case function allows for NULL to be
+-		 * passed in as argument, it's a SCALAR_VALUE type. Final test
+-		 * happens during stack boundary checking.
+-		 */
+-		if (register_is_null(reg) &&
+-		    (arg_type == ARG_PTR_TO_MEM_OR_NULL ||
+-		     arg_type == ARG_PTR_TO_ALLOC_MEM_OR_NULL))
+-			/* final test in check_stack_boundary() */;
+-		else if (!type_is_pkt_pointer(type) &&
+-			 type != PTR_TO_MAP_VALUE &&
+-			 type != PTR_TO_MEM &&
+-			 type != PTR_TO_RDONLY_BUF &&
+-			 type != PTR_TO_RDWR_BUF &&
+-			 type != expected_type)
++		if (!type_is_pkt_pointer(type) &&
++		    type != PTR_TO_MAP_VALUE &&
++		    type != PTR_TO_MEM &&
++		    type != PTR_TO_RDONLY_BUF &&
++		    type != PTR_TO_RDWR_BUF &&
++		    type != expected_type)
+ 			goto err_type;
+ 	} else if (arg_type_is_alloc_mem_ptr(arg_type)) {
+ 		expected_type = PTR_TO_MEM;
+-		if (register_is_null(reg) &&
+-		    arg_type == ARG_PTR_TO_ALLOC_MEM_OR_NULL)
+-			/* final test in check_stack_boundary() */;
+-		else if (type != expected_type)
++		if (type != expected_type)
+ 			goto err_type;
+ 	} else if (arg_type_is_int_ptr(arg_type)) {
+ 		expected_type = PTR_TO_STACK;
+@@ -4051,6 +4046,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 			return err;
+ 	}
  
-+	called_stat = 1;
-+
- 	if (pid != my_pid)
- 		return 0;
- 
-@@ -42,6 +47,8 @@ int BPF_PROG(prog_close, struct file *file, void *id)
- 	__u32 cnt = cnt_close;
- 	int ret;
- 
-+	called_close = 1;
-+
- 	if (pid != my_pid)
- 		return 0;
- 
++skip_type_check:
+ 	if (reg->ref_obj_id) {
+ 		if (meta->ref_obj_id) {
+ 			verbose(env, "verifier internal error: more than one arg with ref_obj_id R%d %u %u\n",
 -- 
-2.26.2
+2.25.1
 
