@@ -2,112 +2,147 @@ Return-Path: <SRS0=E2Hj=CT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03F57C433E2
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 02:52:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3DCC2C433E2
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 03:30:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A626A21D6C
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 02:52:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ECBA521D40
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 03:30:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="TjYSNa89"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OPrqthiK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730255AbgIJB6a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Sep 2020 21:58:30 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3614 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727055AbgIJBfW (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 9 Sep 2020 21:35:22 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 089N1uLR025476;
-        Wed, 9 Sep 2020 19:25:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=Ppmp+LdKfRhGSOfxacmlYmZEN1CSIgx406jU2hr8aDY=;
- b=TjYSNa89poNFn/QEK9CQsIcvYMkxWbpf+Fxvmgn7uf0Dl7iyjtox/LGRov7RBDmjVC5N
- FlK8nVHrlCaZH4U6E2b8GAcn+SlNJqIKvcRG6bnd2dENlf22uUAVzVgFthv/BgWPbUd0
- QEC5AKt6tUD9c100CjPVEumTABLVw521eLjfq9B7JyKDxyIOVE4M6rgOn/PEEL701WKr
- 1hDrhApzTBYV+GCzKgEnZRsmhsLjDc/mtUizBXixFpPQatURmL8tCGdKaTmW49Tl+oxF
- PJja3WisfrdVEZw2lDtE6CsuwwBdrq4XLHeXzSgq7gh9ZMs0t91w2/lNAQwTDtfkTlUd nw== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33f8310tt4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Sep 2020 19:25:04 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 089NIn4I031119;
-        Wed, 9 Sep 2020 23:25:02 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04fra.de.ibm.com with ESMTP id 33cm5hjnyq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 09 Sep 2020 23:25:02 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 089NOx8724117540
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 9 Sep 2020 23:24:59 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6F9C311C058;
-        Wed,  9 Sep 2020 23:24:59 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1A99111C054;
-        Wed,  9 Sep 2020 23:24:59 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.145.5.224])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  9 Sep 2020 23:24:59 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH bpf-next 1/3] selftests/bpf: Fix endianness issue in test_sockopt_sk
-Date:   Thu, 10 Sep 2020 01:24:41 +0200
-Message-Id: <20200909232443.3099637-2-iii@linux.ibm.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20200909232443.3099637-1-iii@linux.ibm.com>
-References: <20200909232443.3099637-1-iii@linux.ibm.com>
+        id S1726534AbgIJDa4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Sep 2020 23:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726642AbgIJDaq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Sep 2020 23:30:46 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1974C061573;
+        Wed,  9 Sep 2020 20:30:44 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id u6so5539999iow.9;
+        Wed, 09 Sep 2020 20:30:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=C4M2TfZe9EkGGeaZR5HyDrKfqg/6t6no4BM3W8xFfPk=;
+        b=OPrqthiKqt3RLRxj92+Sh5odbtDT9g4DQTZIzecceiTPoFuBPqOWtaBvIIwlW3lsfP
+         xhCeBFLhdJ30ipy0MkX3/ODkc4p8uv7YjevFNpohA/mZR+NN63yDZXHHnRohpnNQnRrt
+         WADD5Va+ZofluJxs44SM7soVLGb/8pQbk+gAfyDuJVtBnwAE8l01cUVe4elVNGCyrB0T
+         NDO7qujEQXemOQArGg8tulG6kO9d/92h/gmfia7uWSumjgCXP+ZOLe6aitmYwQ704VSA
+         LJo6HLiKP6LGXnZcgZVMLoV42QnS9fn398JQUtiOT7yn47DzYGp6YaJ728kcCuqsFWtC
+         n6Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=C4M2TfZe9EkGGeaZR5HyDrKfqg/6t6no4BM3W8xFfPk=;
+        b=Yt5i1SEN78kHBAtPQqXwuSzdVeSPq54GKDLmGqriu2m9N2D3vET8QSEDlT3NA6cyHV
+         PK1+tIdUlqmMlmAW+jHTSx5gL87fwj4jCHAzqVJSaBqThvSXEwLaq5vgubefvTaANhPR
+         WODp8LnMq1STh1OYJZmNsvOqiFE8OA6x3yP65mqwrxY+T+t+tFjuczqImM1JUTwaGwI9
+         Vvxsokig3RlRsz9QxH50d+O8aWNiIapnCq/f4Tyc+XKkEbxMteXQYASnIUH41yCMuXzU
+         aXxl0cBuBq3aWLf7v7x/Bc4M2LqwiKONFYA9uuuF8r9Y3l3vpRH3I6g/APSgeBnBXZ5u
+         PDXQ==
+X-Gm-Message-State: AOAM532WomggxmREQqb++SQRd+NYlg+KVPNz0kPxwDUt2ZEG+OSyaROy
+        bWyrnNfnlp7n23nD7vIE1lo=
+X-Google-Smtp-Source: ABdhPJyCodTqjk6acXm9qbUOgCGrhHf1vc4AsTGDG3M90tzAHczCBXhuMwmrEr7j6abViz2srcfucA==
+X-Received: by 2002:a02:a30b:: with SMTP id q11mr6821878jai.77.1599708642952;
+        Wed, 09 Sep 2020 20:30:42 -0700 (PDT)
+Received: from Davids-MacBook-Pro.local ([2601:282:803:7700:d97e:cc69:8585:c056])
+        by smtp.googlemail.com with ESMTPSA id k16sm2396163ilc.38.2020.09.09.20.30.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Sep 2020 20:30:42 -0700 (PDT)
+Subject: Re: [PATCHv11 bpf-next 2/5] xdp: add a new helper for dev map
+ multicast support
+To:     Hangbin Liu <liuhangbin@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Jiri Benc <jbenc@redhat.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>, ast@kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+References: <20200903102701.3913258-1-liuhangbin@gmail.com>
+ <20200907082724.1721685-1-liuhangbin@gmail.com>
+ <20200907082724.1721685-3-liuhangbin@gmail.com>
+ <20200909215206.bg62lvbvkmdc5phf@ast-mbp.dhcp.thefacebook.com>
+ <20200910023506.GT2531@dhcp-12-153.nay.redhat.com>
+From:   David Ahern <dsahern@gmail.com>
+Message-ID: <a1bcd5e8-89dd-0eca-f779-ac345b24661e@gmail.com>
+Date:   Wed, 9 Sep 2020 21:30:40 -0600
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-09_17:2020-09-09,2020-09-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- priorityscore=1501 lowpriorityscore=0 mlxscore=0 clxscore=1015
- adultscore=0 phishscore=0 mlxlogscore=999 spamscore=0 suspectscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009090197
+In-Reply-To: <20200910023506.GT2531@dhcp-12-153.nay.redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-getsetsockopt() calls getsockopt() with optlen == 1, but then checks
-the resulting int. It is ok on little endian, but not on big endian.
+On 9/9/20 8:35 PM, Hangbin Liu wrote:
+> Hi Alexei,
+> 
+> On Wed, Sep 09, 2020 at 02:52:06PM -0700, Alexei Starovoitov wrote:
+>> On Mon, Sep 07, 2020 at 04:27:21PM +0800, Hangbin Liu wrote:
+>>> This patch is for xdp multicast support. which has been discussed
+>>> before[0], The goal is to be able to implement an OVS-like data plane in
+>>> XDP, i.e., a software switch that can forward XDP frames to multiple ports.
+>>>
+>>> To achieve this, an application needs to specify a group of interfaces
+>>> to forward a packet to. It is also common to want to exclude one or more
+>>> physical interfaces from the forwarding operation - e.g., to forward a
+>>> packet to all interfaces in the multicast group except the interface it
+>>> arrived on. While this could be done simply by adding more groups, this
+>>> quickly leads to a combinatorial explosion in the number of groups an
+>>> application has to maintain.
+>>>
+>>> To avoid the combinatorial explosion, we propose to include the ability
+>>> to specify an "exclude group" as part of the forwarding operation. This
+>>> needs to be a group (instead of just a single port index), because a
+>>> physical interface can be part of a logical grouping, such as a bond
+>>> device.
+>>>
+>>> Thus, the logical forwarding operation becomes a "set difference"
+>>> operation, i.e. "forward to all ports in group A that are not also in
+>>> group B". This series implements such an operation using device maps to
+>>> represent the groups. This means that the XDP program specifies two
+>>> device maps, one containing the list of netdevs to redirect to, and the
+>>> other containing the exclude list.
+>>
+>> "set difference" and BPF_F_EXCLUDE_INGRESS makes sense to me as high level api,
+>> but I don't see how program or helper is going to modify the packet
+>> before multicasting it.
+>> Even to implement a basic switch the program would need to modify destination
+>> mac addresses before xmiting it on the device.
+>> In case of XDP_TX the bpf program is doing it manually.
+>> With this api the program is out of the loop.
+>> It can prepare a packet for one target netdev, but sending the same
+>> packet as-is to other netdevs isn't going to to work correctly.
+> 
+> Yes, we can't modify the packets on ingress as there are multi egress ports
+> and each one may has different requirements. So this helper will only forward
+> the packets to other group(looks like a multicast group) devices.
+> 
+> I think the packets modification (edit dst mac, add vlan tag, etc) should be
+> done on egress, which rely on David's XDP egress support.
 
-Fix by checking char instead.
+agreed. The DEVMAP used for redirect can have programs attached that
+update the packet headers - assuming you want to update them.
 
-Fixes: 8a027dc0 ("selftests/bpf: add sockopt test that exercises sk helpers")
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
- tools/testing/selftests/bpf/prog_tests/sockopt_sk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-index 5f54c6aec7f0..ba4da50987d6 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt_sk.c
-@@ -45,7 +45,7 @@ static int getsetsockopt(void)
- 		goto err;
- 	}
- 
--	if (*(int *)big_buf != 0x08) {
-+	if (*big_buf != 0x08) {
- 		log_err("Unexpected getsockopt(IP_TOS) optval 0x%x != 0x08",
- 			*(int *)big_buf);
- 		goto err;
--- 
-2.25.4
-
+This is tagged as "multicast" support but it really is redirecting a
+packet to multiple devices. One use case I see that evolves from this
+set is the ability to both forward packets (e.g., host ingress to VM)
+and grab a copy tcpdump style by redirecting packets to a virtual device
+(similar to a patch set for dropwatch). ie., no need for an perf-events
+style copy to push to userspace.
