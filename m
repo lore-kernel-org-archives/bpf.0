@@ -2,122 +2,85 @@ Return-Path: <SRS0=E2Hj=CT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 772B7C43461
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 17:51:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F04EC433E2
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 17:55:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1893C20BED
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 17:51:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B7AD2075B
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 17:55:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CAiDn31T"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FF0HjUMT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727837AbgIJRuk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Sep 2020 13:50:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22521 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727083AbgIJRuf (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 10 Sep 2020 13:50:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599760233;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Oc9SSvuXxYHkBDg1JbnZA739FJDROj6mx8oujVN34Go=;
-        b=CAiDn31T0Waf0jLLLyyhsBuV+q8q2JaOZ/0+yqLLycGKGbTldr/jw3yGJWJQ724wAx5pvJ
-        g49UjBgo59faUPNorRWGyRV/uXRClv1N5RZuX2360KFRYLs/9JYRGlYmPrZlmrOGzbE+/O
-        +5oFzBhqhZ5k0zFQRvpvdpIzlm00KK8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-587-qlFLwe6bPgaMKD8d8SVWJw-1; Thu, 10 Sep 2020 13:50:30 -0400
-X-MC-Unique: qlFLwe6bPgaMKD8d8SVWJw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 923341007479;
-        Thu, 10 Sep 2020 17:50:28 +0000 (UTC)
-Received: from carbon (unknown [10.40.208.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D1BA27E8EB;
-        Thu, 10 Sep 2020 17:50:15 +0000 (UTC)
-Date:   Thu, 10 Sep 2020 19:50:14 +0200
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        David Ahern <dsahern@gmail.com>,
-        Hangbin Liu <liuhangbin@gmail.com>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Jiri Benc <jbenc@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>, brouer@redhat.com
-Subject: Re: [PATCHv11 bpf-next 2/5] xdp: add a new helper for dev map
- multicast support
-Message-ID: <20200910195014.13ff24e4@carbon>
-In-Reply-To: <87o8mearu5.fsf@toke.dk>
-References: <20200903102701.3913258-1-liuhangbin@gmail.com>
-        <20200907082724.1721685-1-liuhangbin@gmail.com>
-        <20200907082724.1721685-3-liuhangbin@gmail.com>
-        <20200909215206.bg62lvbvkmdc5phf@ast-mbp.dhcp.thefacebook.com>
-        <20200910023506.GT2531@dhcp-12-153.nay.redhat.com>
-        <a1bcd5e8-89dd-0eca-f779-ac345b24661e@gmail.com>
-        <CAADnVQ+CooPL7Zu4Y-AJZajb47QwNZJU_rH7A3GSbV8JgA4AcQ@mail.gmail.com>
-        <87o8mearu5.fsf@toke.dk>
+        id S1727033AbgIJRyt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Sep 2020 13:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725864AbgIJRyj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Sep 2020 13:54:39 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7764CC061573;
+        Thu, 10 Sep 2020 10:54:36 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id u21so9337831ljl.6;
+        Thu, 10 Sep 2020 10:54:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gqF3JhrN6mkG5GJQl4SSfW7ZOq5CVu9Tyiyt1djrPOI=;
+        b=FF0HjUMTb4vljjTpUHoOXaFUNcWxhyq2McdoZ8I0iHYOCy1vqW4a05Hbs9qIIjJp7d
+         FsttDJaKdH4pvXY9H5ugSBQrwdBTi+CZUbSCyXYAp/BIWBOSclfGvRWElPcxs+6w9Otc
+         +DQeFk9duVGfZ+ombx5u7BMB+xsGDuv4FzQT3W2McTtU+uL+q3tiMOWASW5phNAdxf91
+         AFtlOV7DZsGP+sJg2lWBtiG4qvMKkn9GE+KzKjblUOOdb0dIUEkFyIHaO1/pSw27Fh7L
+         kQ49ZV71d7BF6Sca+03NCVHbLNHwYQC+ihpJVfQipul5c3fKIRYy4M6fvGTR9YFrOoC0
+         rk6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gqF3JhrN6mkG5GJQl4SSfW7ZOq5CVu9Tyiyt1djrPOI=;
+        b=FBIwO7BfsTI3WyakWTWyfQJ+JN8tO64kLmAiEqP00spUN27bhW9AwOuwMRnfEj8pwU
+         QdVOgrnq2vvdiFW0acZlXUChya9PnSIHYCNYDBPwcHDtho1QRUvKZeipLqhlDrMNRKQu
+         Fb2vIGtD+RFkYOVAzqoLoGC7Qg0eIy+rnpU4u1jQPvNBMPoUfwTOH1aBqsFAA89tNHJG
+         ljyAvWatQXlCRTUDdRYImUgqmFOB2GfPt8a+6HqrEDj/nkwPjPH3bptjV8T6JCJnSlBX
+         1WyC62pZ/astc+UkylpOejCTaQbKGD06eWsI2qaAVCpRWdHkl1AcRjJke+M+n56OMegA
+         S8gw==
+X-Gm-Message-State: AOAM532jeS9m277D6xPPIpAOY84aMUkDovVpG7PQQhsJwNssrnVOZvfV
+        oN5mXmPQOeEf/DZnkfmcw5vwUUjJAjQ1B/ay/zk=
+X-Google-Smtp-Source: ABdhPJw1ivHY+xUiwDvcHNKQDjtBRr9oD7QWBo9HvoSP6fsZBOZJ46jUFOo25YweDrDyNK5MD3Qu27OuNiTrbsiNL2Y=
+X-Received: by 2002:a2e:4554:: with SMTP id s81mr5276372lja.121.1599760469972;
+ Thu, 10 Sep 2020 10:54:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+References: <20200908132201.184005-1-chenzhou10@huawei.com> <CAEf4BzanC5xCLjq8tOyZKQ=ojhcyDYBhJkGVTcqCB-=uLctUvw@mail.gmail.com>
+In-Reply-To: <CAEf4BzanC5xCLjq8tOyZKQ=ojhcyDYBhJkGVTcqCB-=uLctUvw@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 10 Sep 2020 10:54:18 -0700
+Message-ID: <CAADnVQ+pFhuJ+KPPB6y9uDLsM7toMWSCFP5=m2rz7M1i7Ov0yw@mail.gmail.com>
+Subject: Re: [PATCH -next] bpf: Remove duplicate headers
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Chen Zhou <chenzhou10@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 10 Sep 2020 11:44:50 +0200
-Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> wrote:
-
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
->=20
-> > On Wed, Sep 9, 2020 at 8:30 PM David Ahern <dsahern@gmail.com> wrote: =
-=20
-> >> >
-> >> > I think the packets modification (edit dst mac, add vlan tag, etc) s=
-hould be
-> >> > done on egress, which rely on David's XDP egress support. =20
-> >>
-> >> agreed. The DEVMAP used for redirect can have programs attached that
-> >> update the packet headers - assuming you want to update them. =20
+On Tue, Sep 8, 2020 at 4:05 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Tue, Sep 8, 2020 at 1:07 PM Chen Zhou <chenzhou10@huawei.com> wrote:
 > >
-> > Then you folks have to submit them as one set.
-> > As-is the programmer cannot achieve correct behavior. =20
->=20
-> The ability to attach a program to devmaps is already there. See:
->=20
-> fbee97feed9b ("bpf: Add support to attach bpf program to a devmap entry")
->=20
-> But now that you mention it, it does appear that this series is skipping
-> the hook that will actually run such a program. Didn't realise that was
-> in the caller of bq_enqueue() and not inside bq_enqueue() itself...
+> > Remove duplicate headers which are included twice.
+> >
+> > Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
+> > ---
+>
+> Acked-by: Andrii Nakryiko <andriin@fb.com>
 
-In the first revisions of Ahern's patchset (before fully integrated in
-devmap), this was the case, but it changed in some of the last
-revisions. (This also lost the sort-n-bulk effect in the process, that
-optimize I-cache).  In these earlier revisions it operated on
-xdp_frame's.  It would have been a lot easier for Hangbin's patch if
-the devmap-prog operated on these xdp_frame's.
-
-Maybe we should change the devmap-prog approach, and run this on the
-xdp_frame's (in bq_xmit_all() to be precise) .  Hangbin's patchset
-clearly shows that we need this "layer" between running the xdp_prog and
-the devmap-prog.=20
-
---=20
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
-
+Applied. Thanks
