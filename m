@@ -2,100 +2,148 @@ Return-Path: <SRS0=E2Hj=CT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47909C43461
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 18:41:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7FA9C433E2
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 18:53:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F367D208E4
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 18:40:59 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DkxDHZCe"
+	by mail.kernel.org (Postfix) with ESMTP id AF7482087C
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 18:53:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1599764006;
+	bh=IyzcyPWtwQfIQTuMPX0yDlWdJqSVJdZSD67744Pcuv4=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:List-ID:
+	 From;
+	b=s2+HJCoNX1jldzFJOkCUdHyJFHdLvOMn1pDRCXYsoezxmvWgtT2YIRxMACMtlFqNp
+	 AglGUOuRDqKbQoCRcx7YE3TW7L4+atlMZ4v4Jay9lwquIRCFb213JfAqXqiMlUgHPF
+	 OODfCny7Sno5GoSiN4baplnypyuO5zA2j4h5zbPA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727072AbgIJSk5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Sep 2020 14:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726729AbgIJSTA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Sep 2020 14:19:00 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E02C06179A;
-        Thu, 10 Sep 2020 11:18:55 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id b19so9397082lji.11;
-        Thu, 10 Sep 2020 11:18:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=u0QoUpdiWuk/TleG1WhXpC/jMx3rJkmmsyPPORRnaNA=;
-        b=DkxDHZCeEq8gImW5b5s9dmFvlHa7JdgopAVHLW/ZIzpQoQYlG1BQYvWo9DEfzyX5VS
-         XJJ/yAafniBhM+cS9/LPxScGdLhajuJwnRmQnqlj6tBczIFlJ0wSo7+cR7XA3BUT2x7E
-         8RuxLMxEPJ18bJrs/9uRZbV/MP6Xcw7AMCfc/xz0U5Nmib3IxJEID2mjR0t6h/NIND+O
-         qups0J0Kc09djdWDzYfxNS6Q5tbHVOVU9BoCmL7/dDUSmBbrNkrOzxnG3cNu5WfwnhSx
-         VzJyjItHcEqp0osjRRLSk2JfDUnaQoaMnMfnEQ0BDcReJXzFrksAeWuFv/xjCcyUVtHZ
-         RVhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=u0QoUpdiWuk/TleG1WhXpC/jMx3rJkmmsyPPORRnaNA=;
-        b=EHtUriED04c5mk6R9VGzcVxj2oZB/xQspkGuMqtX10gty3SVU9wEgKBqSnKflFk6Ia
-         lCKfERwkxJ3hHuzGlkJ5WaxerYpV0zYPmVwW06MuYAE0/HZPdbGF6HUPzKAiK4s9XKk+
-         PxCjtmfamIvjakI+el6VqN1lGtYMqBfcF2uvOdblqQ3TLJtqMjzr3Mi4GlJLyfZkbY7B
-         KKNUmsyBtZ4kILeRjAVcovN/9P1PrlQzeJG+Sfv1ToX6mFwk4QctbDtsIydBEy2nGvif
-         dBCtwdmzLlyC6nV6yK/71pVhzmYM0xfr2ncF2CiThzM2kJHZkgAyNi72DWMqE39aCLvI
-         NA7A==
-X-Gm-Message-State: AOAM530O2JBz377OacMgzlZ/+gJJYtT3XGYCHWgjz3KGAJRIynThg0i1
-        oTAwbgqsyEoXtgtEzMOFSzWkhorVUpJIAIaIW+w=
-X-Google-Smtp-Source: ABdhPJyRz5V7THDsiTRBjlBEFsRmiRLAIZm1vHZm6P/v2qrNprvpIZsrwl+bOqx70qaO+kvUOtzO44C61GDp+vedvJM=
-X-Received: by 2002:a2e:808f:: with SMTP id i15mr4815444ljg.51.1599761933699;
- Thu, 10 Sep 2020 11:18:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200909162500.17010-1-quentin@isovalent.com> <20200909162500.17010-4-quentin@isovalent.com>
-In-Reply-To: <20200909162500.17010-4-quentin@isovalent.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 10 Sep 2020 11:18:42 -0700
-Message-ID: <CAADnVQ+b3y1LFRppZu5GYW6hZY6nSZc3wQKqpqHbevdNHNSCSA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/3] tools: bpftool: automate generation for
- "SEE ALSO" sections in man pages
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        id S1727001AbgIJSxS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Sep 2020 14:53:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58514 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726539AbgIJSvy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Sep 2020 14:51:54 -0400
+Received: from paulmck-ThinkPad-P72.home (unknown [50.45.173.55])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A8F4F2087C;
+        Thu, 10 Sep 2020 18:51:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599763909;
+        bh=IyzcyPWtwQfIQTuMPX0yDlWdJqSVJdZSD67744Pcuv4=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=VTYJEoq5Y5hxjg1PGTRraBkrmAiMfRRY+tiZbCvjK2716Y/t56Hsby52Fnun8gUxm
+         Cj035KYEOvrd584owoOY7R8bHxV2FwAq3vnIfIvekPNvadAMYaCYHokKOa5v11ChZU
+         kon1ldgjTpK87OuhT5Z3nU9w/n6kN01Dybpge2mg=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 68BEE3523080; Thu, 10 Sep 2020 11:51:49 -0700 (PDT)
+Date:   Thu, 10 Sep 2020 11:51:49 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Alexei Starovoitov <ast@fb.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
         bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>
+Subject: Re: slow sync rcu_tasks_trace
+Message-ID: <20200910185149.GR29330@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200909113858.GF29330@paulmck-ThinkPad-P72>
+ <20200909171228.dw7ra5mkmvqrvptp@ast-mbp.dhcp.thefacebook.com>
+ <20200909173512.GI29330@paulmck-ThinkPad-P72>
+ <20200909180418.hlivoaekhkchlidw@ast-mbp.dhcp.thefacebook.com>
+ <20200909193900.GK29330@paulmck-ThinkPad-P72>
+ <20200909194828.urz6islrqajifukj@ast-mbp.dhcp.thefacebook.com>
+ <20200909210447.GL29330@paulmck-ThinkPad-P72>
+ <20200909212212.GA21795@paulmck-ThinkPad-P72>
+ <20200910052727.GA4351@paulmck-ThinkPad-P72>
+ <619554b2-4746-635e-22f3-7f0f09d97760@fb.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <619554b2-4746-635e-22f3-7f0f09d97760@fb.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Sep 9, 2020 at 9:25 AM Quentin Monnet <quentin@isovalent.com> wrote:
->
-> The "SEE ALSO" sections of bpftool's manual pages refer to bpf(2),
-> bpf-helpers(7), then all existing bpftool man pages (save the current
-> one).
->
-> This leads to nearly-identical lists being duplicated in all manual
-> pages. Ideally, when a new page is created, all lists should be updated
-> accordingly, but this has led to omissions and inconsistencies multiple
-> times in the past.
->
-> Let's take it out of the RST files and generate the "SEE ALSO" sections
-> automatically in the Makefile when generating the man pages. The lists
-> are not really useful in the RST anyway because all other pages are
-> available in the same directory.
->
-> v2:
-> - Use "echo -n" instead of "printf" in Makefile, to avoid any risk of
->   passing a format string directly to the command.
->
-> Signed-off-by: Quentin Monnet <quentin@isovalent.com>
-> Acked-by: Andrii Nakryiko <andriin@fb.com>
+On Thu, Sep 10, 2020 at 11:33:58AM -0700, Alexei Starovoitov wrote:
+> On 9/9/20 10:27 PM, Paul E. McKenney wrote:
+> > On Wed, Sep 09, 2020 at 02:22:12PM -0700, Paul E. McKenney wrote:
+> > > On Wed, Sep 09, 2020 at 02:04:47PM -0700, Paul E. McKenney wrote:
+> > > > On Wed, Sep 09, 2020 at 12:48:28PM -0700, Alexei Starovoitov wrote:
+> > > > > On Wed, Sep 09, 2020 at 12:39:00PM -0700, Paul E. McKenney wrote:
+> > 
+> > [ . . . ]
+> > 
+> > > > > > My plan is to try the following:
+> > > > > > 
+> > > > > > 1.	Parameterize the backoff sequence so that RCU Tasks Trace
+> > > > > > 	uses faster rechecking than does RCU Tasks.  Experiment as
+> > > > > > 	needed to arrive at a good backoff value.
+> > > > > > 
+> > > > > > 2.	If the tasks-list scan turns out to be a tighter bottleneck
+> > > > > > 	than the backoff waits, look into parallelizing this scan.
+> > > > > > 	(This seems unlikely, but the fact remains that RCU Tasks
+> > > > > > 	Trace must do a bit more work per task than RCU Tasks.)
+> > > > > > 
+> > > > > > 3.	If these two approaches, still don't get the update-side
+> > > > > > 	latency where it needs to be, improvise.
+> > > > > > 
+> > > > > > The exact path into mainline will of course depend on how far down this
+> > > > > > list I must go, but first to get a solution.
+> > > > > 
+> > > > > I think there is a case of 4. Nothing is inside rcu_trace critical section.
+> > > > > I would expect single ipi would confirm that.
+> > > > 
+> > > > Unless the task moves, yes.  So a single IPI should suffice in the
+> > > > common case.
+> > > 
+> > > And what I am doing now is checking code paths.
+> > 
+> > And the following diff from a set of three patches gets my average
+> > RCU Tasks Trace grace-period latencies down to about 20 milliseconds,
+> > almost a 50x improvement from earlier today.
+> > 
+> > These are still quite rough and not yet suited for production use, but
+> > I will be testing.  If that goes well, I hope to send a more polished
+> > set of patches by end of day tomorrow, Pacific Time.  But if you get a
+> > chance to test them, I would value any feedback that you might have.
+> > 
+> > These patches do not require hand-tuning, they instead adjust the
+> > behavior according to CONFIG_TASKS_TRACE_RCU_READ_MB, which in turn
+> > adjusts according to CONFIG_PREEMPT_RT.  So you should get the desired
+> > latency reductions "out of the box", again, without tuning.
+> 
+> Great. Confirming improvement :)
+> 
+> time ./test_progs -t trampoline_count
+> #101 trampoline_count:OK
+> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> 
+> real	0m2.897s
+> user	0m0.128s
+> sys	0m1.527s
+> 
+> This is without CONFIG_TASKS_TRACE_RCU_READ_MB, of course.
 
-This patch failed to git am, but I've applied the first two patches.
-Thanks
+Good to hear, thank you!
+
+or is more required?  I can tweak to get more.  There is never a free
+lunch, though, and in this case the downside of further tweaking would
+be greater CPU overhead.  Alternatively, I could just as easily tweak
+it to be slower, thereby reducing the CPU overhead.
+
+If I don't hear otherwise, I will assume that the current settings
+work fine.
+
+Of course, if people start removing thousands of BPF programs at one go,
+I suspect that it will be necessary to provide a bulk-removal operation,
+similar to some of the bulk-configuration-change operations provided by
+networking.  The idea is to have a single RCU Tasks Trace grace period
+cover all of the thousands of BPF removal operations.
+
+							Thanx, Paul
