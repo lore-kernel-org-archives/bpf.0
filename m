@@ -2,177 +2,216 @@ Return-Path: <SRS0=E2Hj=CT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-Spam-Status: No, score=-14.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4087EC43461
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 18:08:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7BEB1C433E2
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 18:12:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF097207EA
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 18:08:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2212D21D40
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 18:12:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Azex/1rS";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="alLOclLt"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="cEMuXsWI";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="IJYnxxg7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726833AbgIJSIe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Sep 2020 14:08:34 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:6554 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726801AbgIJR7S (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 10 Sep 2020 13:59:18 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08AHunxq026742;
-        Thu, 10 Sep 2020 10:59:04 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=EdjfuqNbzXkb8Akf6zXuqxhRzNvfl0AHniMc96lYMDk=;
- b=Azex/1rSyL1Hu6Qg2xL3msuXtdfdy01P8wK6qYaCCJtHOPv1Dd3LpTg7eR03I1ZVHgqi
- qLVFDNVKI6LlDEdyaHrWJN7ifw8K5o/HFBfXNbeLYAOgyMT/qaeor8E4BSliNtoqLzz3
- FLbZ3KN9XVw8S+Ydv1UO+z0zmQln1tNwQZg= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 33fqeermfh-1
+        id S1726676AbgIJSMK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Sep 2020 14:12:10 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:46223 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726879AbgIJSLq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 10 Sep 2020 14:11:46 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08AIBR1C002438;
+        Thu, 10 Sep 2020 11:11:30 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=xCQGRNHI/zik77Z+3tYvBD7AvykyZduz9rF9J/12q0g=;
+ b=cEMuXsWIRvtJnWcPmnpj6sC9O3jrsKaSY4l0UVms5NEbZa1SNQQUgcRsLLXRQX9hUQje
+ yDlLsS9bSzHRgsBtZevpbanx0ybRC/as37Z6/aRCUm859riS2Xo7DMJ/09lTRd6Zy3GM
+ k2OjQXekYV5uDYhGRBDgEfUE01RhWXHTyww= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 33fjtd2578-15
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 10 Sep 2020 10:59:04 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.231) with Microsoft SMTP Server
+        Thu, 10 Sep 2020 11:11:30 -0700
+Received: from NAM02-CY1-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.36.101) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 10 Sep 2020 10:59:03 -0700
+ 15.1.1979.3; Thu, 10 Sep 2020 11:11:21 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TcXtQMwdJMzO4LUnkHbSprRfo2Jv36lZqYaNv2wUu2VJZxRDNXG3f8dIPStefpvnnvJFJryuBarlM1ij0OdOIA/zONXN07e7FTV0fqEwaF34iSQHckvpDBXhLmb27v4UM8KrL+Bg2w+JkG7cgzcjpG24Wh4dOIqw8Gm/8Ib9flDuvyoTk0h5wCt/+SEl/Nv2qMuwsxEr/XCdF6D9JVuuYbeQOZhZE6N3XvaVPX3xjZIO8tfl+jeHOK66ExSJ8WvUHCI9pEv7/VU2E9ZIeQVEKCbP+sa2V4BeUEfBC4FDFtOgxjE2m7Vbu/I+jee7ugHcSU0CPNGCtX7dYiL+UdR6FA==
+ b=Jc4VhtDdshaAGuimuinFsLePwdQy4yTstHimc+0kAlqrndHJqNi4aDnxXMVahr4pQGIsGM6U5ZP33C+x2ihnD1+Mos0pOyj/Rld3FFbXYSlk8qFVwf82cOSHZ5MOeN7HmGW/sYYGircXVGTSk7CBNTKzOCs7IST2ehbNM0QVj/4fkixT2lSvyfMBhi/q+ShKzkE1Hgf6zrxJUMU84jK9/vpIU9RRJ6/QJZsgEpEBxZ/M33AfhhGE7475nedo7Zs1VKe5+NqQ9iLeHexpSkzYImxK8Pw9tVonWgr5rf21u1LJthKfXNBfD/g1arBJv/7KyjqGnNnx/UGgsYqJhHRNcg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EdjfuqNbzXkb8Akf6zXuqxhRzNvfl0AHniMc96lYMDk=;
- b=BxOFqhJL6esBAPRwm4hudJexzeDMSB0QNsAPm2x3T8DqQhWEPF+6CidyQuAXEJGf9RnA7xwWAbBvmVSO3rpB1V/v5RC4nbAPf/97Ste9DJf8AcieJs6eturwD0NRntubkwclpigei5bEpqiAgH3tQCKmUp2fzbDcnVSmGrvGKEcZiHRNsk4rT9jQ9s2ev3l+BTWiPDlzI3mQU8Jd/r4WIGgzYWsLFEPwr4eXvSDH0gb/cIJscmOXL5HHYuaM8i7ZUEqWqxxGMfXBmvUZVKdumUQkOpieTj9G4ngZNbo99eMrNsVrhj01oCbXDhu/yLXXiCvH5aDdI3EgOUgWbMiV7g==
+ bh=xCQGRNHI/zik77Z+3tYvBD7AvykyZduz9rF9J/12q0g=;
+ b=hkvneODI+cR0kzhYwb5RsXsAV43jO1tQ28Hs0wM3htbhWq2dqHn5nJnd6C0+hEQEQI9lzIJtTDE7ncHrUhHqThci29+4Vhpy+0QbOt9xln8Qcqgnn92krpjDb4XJ4KYFuqEDYS6y1Abc8l2FzR1Ugs4AMOVhFvHNUFpBcUWif1/znRuuYTSN0TTmLxHql3z1vv6jHMFuJAG6JhJ80J30/MBMj2oqWRh1K2m5qZqv4UFA93vTc7oZsZbTJz5mjo+mUAk0ehwG3mOFSwLbolxBDBzljSqtCsDO9+tWgDR5cs7AnfnrEa/6zaRYjLEn09/vjS51maLBjp8rXOFhFXhZdg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
  header.d=fb.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
  s=selector2-fb-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EdjfuqNbzXkb8Akf6zXuqxhRzNvfl0AHniMc96lYMDk=;
- b=alLOclLtRVmUfxnynfvAq0dU7m9YJg6vXLFeq8OtFoo3vJmnVgVnOnMLeU6+1Jh9hWBG1KsdTs85E/WbI1Ifo5Rs6yzGGzgu+6I4tOtfsE1RZX/baaWCP7j6KHXY4DV4AOLPqNlrkOyIU/59Tigt7MvNS2+Xh2T/CJHPa8d8Le4=
+ bh=xCQGRNHI/zik77Z+3tYvBD7AvykyZduz9rF9J/12q0g=;
+ b=IJYnxxg7ikbHtosLS3ww/mtrbX9H6beC9eZbd+ONU8JhWn/Ys2ygPB+MExjJjZoo6c2qunPoeVkc6Qw6NHzHBR+arQYRzVc9Z8unT6fCziRFRSA3JQuS/AKM72nCYxnCl1aLxp/nvg7QrOZDouVD7cruUczxNfJVpvlsJ6QXibw=
 Authentication-Results: cloudflare.com; dkim=none (message not signed)
  header.d=none;cloudflare.com; dmarc=none action=none header.from=fb.com;
-Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
- by BY5PR15MB3713.namprd15.prod.outlook.com (2603:10b6:a03:1f8::21) with
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB4119.namprd15.prod.outlook.com (2603:10b6:a02:cd::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Thu, 10 Sep
- 2020 17:58:55 +0000
-Received: from BY5PR15MB3571.namprd15.prod.outlook.com
- ([fe80::c13c:fca9:5e04:9bfb]) by BY5PR15MB3571.namprd15.prod.outlook.com
- ([fe80::c13c:fca9:5e04:9bfb%3]) with mapi id 15.20.3370.016; Thu, 10 Sep 2020
- 17:58:55 +0000
-Date:   Thu, 10 Sep 2020 10:58:49 -0700
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     Lorenz Bauer <lmb@cloudflare.com>
-CC:     <ast@kernel.org>, <yhs@fb.com>, <daniel@iogearbox.net>,
-        <andriin@fb.com>, <bpf@vger.kernel.org>,
-        <kernel-team@cloudflare.com>
-Subject: Re: [PATCH bpf-next v3 04/11] bpf: allow specifying a BTF ID per
- argument in function protos
-Message-ID: <20200910175839.su73mcscacfmrzhn@kafai-mbp>
-References: <20200910125631.225188-1-lmb@cloudflare.com>
- <20200910125631.225188-5-lmb@cloudflare.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200910125631.225188-5-lmb@cloudflare.com>
-X-ClientProxiedBy: MWHPR21CA0051.namprd21.prod.outlook.com
- (2603:10b6:300:db::13) To BY5PR15MB3571.namprd15.prod.outlook.com
- (2603:10b6:a03:1f6::32)
+ 2020 18:11:20 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::8887:dd68:f497:ea42]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::8887:dd68:f497:ea42%3]) with mapi id 15.20.3370.016; Thu, 10 Sep 2020
+ 18:11:20 +0000
+Subject: Re: [PATCH bpf-next v5 3/3] selftests: bpf: Test iterating a sockmap
+To:     Lorenz Bauer <lmb@cloudflare.com>, <ast@kernel.org>,
+        <daniel@iogearbox.net>, <jakub@cloudflare.com>,
+        <john.fastabend@gmail.com>, <kafai@fb.com>
+CC:     <bpf@vger.kernel.org>, <kernel-team@cloudflare.com>
+References: <20200909162712.221874-1-lmb@cloudflare.com>
+ <20200909162712.221874-4-lmb@cloudflare.com>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <45e403c2-223d-3f29-e6ec-7ad71f5893d8@fb.com>
+Date:   Thu, 10 Sep 2020 11:11:16 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.12.0
+In-Reply-To: <20200909162712.221874-4-lmb@cloudflare.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MWHPR14CA0023.namprd14.prod.outlook.com
+ (2603:10b6:300:ae::33) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from kafai-mbp (2620:10d:c090:400::5:f5ef) by MWHPR21CA0051.namprd21.prod.outlook.com (2603:10b6:300:db::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.3 via Frontend Transport; Thu, 10 Sep 2020 17:58:54 +0000
-X-Originating-IP: [2620:10d:c090:400::5:f5ef]
+Received: from [IPv6:2620:10d:c085:21d6::11ea] (2620:10d:c090:400::5:271c) by MWHPR14CA0023.namprd14.prod.outlook.com (2603:10b6:300:ae::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16 via Frontend Transport; Thu, 10 Sep 2020 18:11:20 +0000
+X-Originating-IP: [2620:10d:c090:400::5:271c]
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bf37377c-6dbb-4729-3958-08d855b32ee9
-X-MS-TrafficTypeDiagnostic: BY5PR15MB3713:
+X-MS-Office365-Filtering-Correlation-Id: 7ce9ee52-a30b-4ff1-8c05-08d855b4eb8a
+X-MS-TrafficTypeDiagnostic: BYAPR15MB4119:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BY5PR15MB37133641694A8CC2828B2252D5270@BY5PR15MB3713.namprd15.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <BYAPR15MB4119FC95B4DCECD3DED28974D3270@BYAPR15MB4119.namprd15.prod.outlook.com>
 X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
+X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uCDGmk0JmfwLclCOWjar1/3RxxOgxbjEmyblqs6myI9xbRPcvid/mP2ySIhjV9eesX53kupZNVDr41zlAziFTBN4Ymt/AsigdKEEUPUT2Zvp0uTxT47H39uB12IyT1rV8loXu2o/Yud8e6uNAYoTKobRfN7WLi5JpoK8V7kv++jOck2Ix6RJOSMpXLyU2N0c4Cl85Cr68SCkKJO7BMuKpJMq4zXI4QSK+uP8xrqZD7Mxv8NW+rGHsgy3m4ExVcCtwDQyqTr/xAlqeJq4m8FJmWpluLR3Yk92FczH+hyfz57Xn4ESjxVztoY3molVhd/DsTxn4tVhWsOcFymBEsvlTg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(136003)(396003)(376002)(39860400002)(346002)(5660300002)(6666004)(6916009)(33716001)(1076003)(316002)(52116002)(6496006)(16526019)(186003)(83380400001)(9686003)(8936002)(478600001)(8676002)(4326008)(66556008)(66946007)(86362001)(55016002)(2906002)(66476007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: ZlmCHfBa65snZp27kipJv0+ZXmAhytF6IRINk88KhKFdoHFeX7IGZi6KlWwUWtG1uuXGGHdjDjKtZSPRKQ/lPJJxniyB2Us/Oixr/U2bMt/gCH7uwtTaspsjBMdq0C+fQsxE5C5FUzwbpU0nk/9Tm1XX8vgR58RE+Ze6uBaob7tfj/aAs5vcMBtLo7lS8jPFu1e5J0GyK/BR+UcTZdCptrkUjB7XwHdchQ6cnOBSEmOEjD7WkAQf3nfy5VHP/toVRkh30lfx43JwSYg+6D8MYJgGwOV3/2t9yckvbYEfKyc/bKP5wChc6Dxi0hFT8ted9t6AhXJbIhx5RMiuacynwJrUxgRPXvbaYUMc+k0+ZIJ+Lb2s8icecq9r55vicL3+FdQEGy7vGRdCODPWksJshxAM2FrZCXjMlQigFaIB7u4otbVjTUZxfxpm1ufOX/3X7VG5N/j1u7V9Dx6UyMOWASCX2tsQSkA3SFAuZ332L0wBsUOWrRGZxT0vkhpNdebU3uNgif7gL4SiGvwDxX3QgihcmzldEPUWJYEa2IvLwO560GW3GOoiEpS9pyDYQOYKMh75vHfML3zWa36WUGCqU/kzthkuwkZpKRoyukEGpadpjC51OWaHmn0BV+/oBE8QBcMbr9xqY5hILs4U3GzR7tGtHiYA9ghdeWxhpV9iS89+HKjdAtVWmv6QqBxbJA9U
-X-MS-Exchange-CrossTenant-Network-Message-Id: bf37377c-6dbb-4729-3958-08d855b32ee9
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
+X-Microsoft-Antispam-Message-Info: WTcpo4CRIBE7EC4hd7u1JwBNLbjElbKNIOFjYQ1YUNDfNeeIYV3pwQ9ctkJP0X+4/xRSBGf14S0Ua9Ua4vEpKresN6Xbsq3KJLUF+cRDxE75pvSrHJvXhNmNRe5zasboxL1NgyMlL3HQrtK3fgYToRZFJyTbGM0fkAPJDrHXjlQ0E0HjFZ+HsiD/wzSt17bonB3TTbrb2Vq3jWWW0vWqtTf1sV9xXUZ3c2hXnuRPQhjs/Rndcp2WbTMtUoht0m5NOmmqt2zuffQ1gHH+0JSlJZz6iIaRn/FjKwfpnIYGsunK90WTqGVFySJI9M/NvxGw3s1v84WmfO0yh2QgW3hv+3tWLu5ZctUlcriD5cDmoclcJHpGqSWwiCfqDxcuu9Df
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(136003)(396003)(376002)(366004)(346002)(8676002)(186003)(6486002)(316002)(4326008)(83380400001)(66946007)(5660300002)(2906002)(8936002)(36756003)(6666004)(478600001)(31696002)(53546011)(86362001)(31686004)(16526019)(52116002)(2616005)(66476007)(66556008)(6636002)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: OA3sH1SjmBMfJsYDLR6ufI5Fpsq4POn8hX3kbytBk5gaS8kgFDsAIptfZCnIEAxNxpV/oSJyx3h4jgzj5eXopJyV9pwLmqrbaCldPK5LWV/lHM5el7JcHCV8IF/m++CavjnxBQ7LFFfRTQcpTGohw5ZLzgZ+qdDbihwR706FmspYCtcpbV3k20VAlG7tuhiiaZEcvuYumVr8LY30uzTf7UiU+v5p+B+9V17Rs4kHX6krnPCiVwlrRXz5BM1ld8VWbVd0C3w8POVYCZJDDgKAfFyoryYJ1mJtsSswuk4/YpqfSUnqfGKYvAKJnzk1Mk5//yDjaid1m6YA8nmlU3MI9VkeilSwlPSsO08IGYcTr05QSTPmdLzNVfDimLaB3Ra7lCOww3+Ts0U9l9Mte8BbNAjpqZzJ5wJ+AYdHD0aXui7sfvx0iaWxfPyN8p7aWMvgf82F9aHPF7qCBNfCeeI9KcRlxZeKaYg/g0Lge4XcvCNBOqCAyk1ccDudEwhRiMNUmWfuJ+MHIrZNK0E15LdSjv4D4m7HD57/duBmQrKB9T6lpmfZXUJ7rJnR/2QYnNY1bXAEhDpMkHh2KxNHiJJYDrVxtgBD061YSeLjRCdBvPnnOq7oxNpwruMvzKf7scq/N4/OfdMEHiMiEgW1izSseDBdTnfilLkKL/obcWSAUzkI7mkDCaBcE251BgpF+klc
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ce9ee52-a30b-4ff1-8c05-08d855b4eb8a
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2020 17:58:54.9337
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Sep 2020 18:11:20.7954
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eW9XliysakQg3O+4qQ7wPS/H4bXVowRH8zbS7Fx42OCr375OoegKsptQbcGivKq1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR15MB3713
+X-MS-Exchange-CrossTenant-UserPrincipalName: QrJV86WprxhIkFF8wkb9zx+KaMFlG8scIG9E4r172jaKtGuxTbNisJZbLCLKsgf6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB4119
 X-OriginatorOrg: fb.com
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-10_05:2020-09-10,2020-09-10 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- suspectscore=1 priorityscore=1501 mlxlogscore=806 impostorscore=0
- malwarescore=0 mlxscore=0 spamscore=0 adultscore=0 phishscore=0
- lowpriorityscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2009100166
+ definitions=2020-09-10_08:2020-09-10,2020-09-10 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ lowpriorityscore=0 mlxscore=0 clxscore=1015 adultscore=0
+ priorityscore=1501 impostorscore=0 spamscore=0 suspectscore=0
+ mlxlogscore=999 phishscore=0 bulkscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009100168
 X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 01:56:24PM +0100, Lorenz Bauer wrote:
-> Function prototypes using ARG_PTR_TO_BTF_ID currently use two ways to signal
-> which BTF IDs are acceptable. First, bpf_func_proto.btf_id is an array of
-> IDs, one for each argument. This array is only accessed up to the highest
-> numbered argument that uses ARG_PTR_TO_BTF_ID and may therefore be less than
-> five arguments long. It usually points at a BTF_ID_LIST. Second, check_btf_id
-> is a function pointer that is called by the verifier if present. It gets the
-> actual BTF ID of the register, and the argument number we're currently checking.
-> It turns out that the only user check_arg_btf_id ignores the argument, and is
-> simply used to check whether the BTF ID has a struct sock_common at it's start.
-> 
-> Replace both of these mechanisms with an explicit BTF ID for each argument
-> in a function proto. Thanks to btf_struct_ids_match this is very flexible:
-> check_arg_btf_id can be replaced by requiring struct sock_common.
-> 
-[ ... ]
 
-> @@ -4002,29 +4001,23 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
->  				goto err_type;
->  		}
->  	} else if (arg_type == ARG_PTR_TO_BTF_ID) {
-> -		bool ids_match = false;
-> +		const u32 *btf_id = fn->arg_btf_id[arg];
->  
->  		expected_type = PTR_TO_BTF_ID;
->  		if (type != expected_type)
->  			goto err_type;
-> -		if (!fn->check_btf_id) {
-> -			if (reg->btf_id != meta->btf_id) {
-> -				ids_match = btf_struct_ids_match(&env->log, reg->off, reg->btf_id,
-> -								 meta->btf_id);
-> -				if (!ids_match) {
-> -					verbose(env, "Helper has type %s got %s in R%d\n",
-> -						kernel_type_name(meta->btf_id),
-> -						kernel_type_name(reg->btf_id), regno);
-> -					return -EACCES;
-> -				}
-> -			}
-> -		} else if (!fn->check_btf_id(reg->btf_id, arg)) {
-> -			verbose(env, "Helper does not support %s in R%d\n",
-> -				kernel_type_name(reg->btf_id), regno);
->  
-> +		if (!btf_id) {
-> +			verbose(env, "verifier internal error: missing BTF ID\n");
-> +			return -EFAULT;
-> +		}
+
+On 9/9/20 9:27 AM, Lorenz Bauer wrote:
+> Add a test that exercises a basic sockmap / sockhash iteration. For
+> now we simply count the number of elements seen. Once sockmap update
+> from iterators works we can extend this to perform a full copy.
+> 
+> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+> ---
+>   .../selftests/bpf/prog_tests/sockmap_basic.c  | 89 +++++++++++++++++++
+>   tools/testing/selftests/bpf/progs/bpf_iter.h  |  9 ++
+>   .../selftests/bpf/progs/bpf_iter_sockmap.c    | 43 +++++++++
+>   .../selftests/bpf/progs/bpf_iter_sockmap.h    |  3 +
+>   4 files changed, 144 insertions(+)
+>   create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_sockmap.c
+>   create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_sockmap.h
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> index 0b79d78b98db..3215f4d22720 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> @@ -6,6 +6,9 @@
+>   #include "test_skmsg_load_helpers.skel.h"
+>   #include "test_sockmap_update.skel.h"
+>   #include "test_sockmap_invalid_update.skel.h"
+> +#include "bpf_iter_sockmap.skel.h"
 > +
-> +		if (!btf_struct_ids_match(&env->log, reg->off, reg->btf_id, *btf_id)) {
-> +			verbose(env, "R%d has incompatible type %s\n", regno,
-> +				kernel_type_name(reg->btf_id));
-The original log has the expected kernel type also which will be a useful info.
-It could be a follow up.
+> +#include "progs/bpf_iter_sockmap.h"
+>   
+>   #define TCP_REPAIR		19	/* TCP sock is under repair right now */
+>   
+> @@ -171,6 +174,88 @@ static void test_sockmap_invalid_update(void)
+>   		test_sockmap_invalid_update__destroy(skel);
+>   }
+>   
+> +static void test_sockmap_iter(enum bpf_map_type map_type)
+> +{
+> +	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
+> +	int err, len, src_fd, iter_fd, duration;
+> +	union bpf_iter_link_info linfo = {0};
+> +	__s64 sock_fd[SOCKMAP_MAX_ENTRIES];
+> +	__u32 i, num_sockets, max_elems;
+> +	struct bpf_iter_sockmap *skel;
+> +	struct bpf_link *link;
+> +	struct bpf_map *src;
+> +	char buf[64];
+> +
+> +	skel = bpf_iter_sockmap__open_and_load();
+> +	if (CHECK(!skel, "bpf_iter_sockmap__open_and_load", "skeleton open_and_load failed\n"))
+> +		return;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(sock_fd); i++)
+> +		sock_fd[i] = -1;
+> +
+> +	/* Make sure we have at least one "empty" entry to test iteration of
+> +	 * an empty slot.
+> +	 */
+> +	num_sockets = ARRAY_SIZE(sock_fd) - 1;
+> +
+> +	if (map_type == BPF_MAP_TYPE_SOCKMAP) {
+> +		src = skel->maps.sockmap;
+> +		max_elems = bpf_map__max_entries(src);
+> +	} else {
+> +		src = skel->maps.sockhash;
+> +		max_elems = num_sockets;
+> +	}
 
-Acked-by: Martin KaFai Lau <kafai@fb.com>
+I know you include the shared header progs/bpf_iter_sockmap.h to
+supply SOCKMAP_MAX_ENTRIES in order to define sock_fd array.
+
+I think it is easier to understand if just using bpf_map__max_entries() 
+for both sockmap and sockhash to get max_elems and do dynamic allocation 
+for sock_fd. WDYT?
+
+> +
+> +	src_fd = bpf_map__fd(src);
+> +
+> +	for (i = 0; i < num_sockets; i++) {
+> +		sock_fd[i] = connected_socket_v4();
+> +		if (CHECK(sock_fd[i] == -1, "connected_socket_v4", "cannot connect\n"))
+> +			goto out;
+> +
+> +		err = bpf_map_update_elem(src_fd, &i, &sock_fd[i], BPF_NOEXIST);
+> +		if (CHECK(err, "map_update", "failed: %s\n", strerror(errno)))
+> +			goto out;
+> +	}
+> +
+[...]
