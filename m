@@ -2,64 +2,64 @@ Return-Path: <SRS0=E2Hj=CT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9B83C43461
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 17:00:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28D48C43461
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 17:04:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 836572074B
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 17:00:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D906320719
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 17:04:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="u2fDhy1X"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P6bZk+3x"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726776AbgIJRAP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Sep 2020 13:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51418 "EHLO
+        id S1727804AbgIJREY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Sep 2020 13:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727083AbgIJQ6t (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Sep 2020 12:58:49 -0400
+        with ESMTP id S1727790AbgIJQ4i (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Sep 2020 12:56:38 -0400
 Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317AEC061796
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 09:58:49 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id 195so4507860ybl.9
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 09:58:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA51C061795
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 09:56:28 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id 195so4503108ybl.9
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 09:56:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=XbsAP5bzmT5z2vU/d0JgAIbhMrvKZIbLgjgZusXXXTc=;
-        b=u2fDhy1XslVrZBzmRNM+dmV/HURrUKPH31wIORc4i8BUis0dWL2Oi9+zaq/RX7Lgsb
-         hzVui5icwuo7D5nEPPLSx6V/1c3N6cdqgrPCmE0463mx8HPj71pjk3VJEfUsppoEs9wr
-         QRL8LnE/XGcu/C62RnCBFELaxAhMYJPRCOrcvGUkJtz7gtTSq/OGAaXdmSdIZYlWb2GT
-         08CtMvmO5gi+sqRfjLH5/OiyD15bznzfkaCxPZzmvUXP8GYsYP+of9BmsLe1nJtsq5We
-         fcZyn2znNNd18Qrq3saLCCx/LAi1vBN4YzN3QKZX/pyJcvnj5gOlmBqRTH7PIpNyH//x
-         KLLg==
+        bh=CAhoX5lSQPf8vRqJD430I/KtexX6WEPJiQfEe/TRMok=;
+        b=P6bZk+3xcYk4JDIvQcZrAhprohK8LJatgetQWHHNSRMksfjnv439+nJDUnAmMh/gN/
+         vicODwzu6xkOujUh7NfcJm/0rsonkTIrAWT+g3kG0l0bQw7FDf9Mof+5x5GyC8js9ELc
+         zokGfsPDFXGkGubAygFVYH5SiV8nuyG7G3n/55lRovEBZp+ObypubPjjrJ3azeOOQnu1
+         NYr+lpik0rm8qx0qIqwf881OA8PoWNXRiCUR3OOQxggqeR5KMmOUcKarEWMot+c/sHQa
+         P4UUDY1NIYYatPsleFqrANuIta/t/yvuMe0ZyHNX9n+s0+5ohg/daewns5Kmux91Ub/f
+         nkkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XbsAP5bzmT5z2vU/d0JgAIbhMrvKZIbLgjgZusXXXTc=;
-        b=dtHejSS+cq/f6U0jH9GjAOL74WcssIYN4VXL/8LTk/oaXaWzKJ2y0oH6ufJzSCE9y0
-         DaHCPuMEhwXmveh/bJo6yIx8tbngbZTRK6ibjIb1KRz0UCvPgQwtYASyjzafr4ZS3MIi
-         6jcX//uWQpdVvXNhzdNFy/HrMxZ7ln4BSJgTTztjliYcDh53mbvmx9xvgbMe8ZdBpvO5
-         8FOyIiC5A5ajytO4hC5T1OwAgXp5bxULjkaQH99Ifwa8rIz2AH+NLAx0c0EWIAbobiJi
-         RZWqJPLjp+PSfmZs+5ZxQRO88tJHykzxJnhKJmm3k2/tlLCDu2MbN4SIwcOQseA/zQ7x
-         4Rdw==
-X-Gm-Message-State: AOAM530PEhLZJIhO9/F5UGLMAUQbnDIZnHvY0RmHw4XxJ7zJ1mLkara6
-        jrV0uawKqi8pZgPHNSQEBAu1tAzsfLWh97klWSc=
-X-Google-Smtp-Source: ABdhPJxGE04gel5C07Er5vNWSuOv2N0CP87lGGSNyMdxUkwc4QFPH+NqMaQUg9caoZr0gKSaN+V9ngk9XSFcix4r8bA=
-X-Received: by 2002:a25:ef43:: with SMTP id w3mr12710974ybm.230.1599757128413;
- Thu, 10 Sep 2020 09:58:48 -0700 (PDT)
+        bh=CAhoX5lSQPf8vRqJD430I/KtexX6WEPJiQfEe/TRMok=;
+        b=BMHoh49gOtegzPFOuPjVSixMoSCRHuRt1v1SJD0r4Xhv5TkIeFkNzWa6D0PvTWPkNE
+         EmorCvliqzxWppFugIWC5LlWTE6rP2pFBlsTEaY0md3G+zhlfF3kc7pZlRnjRsXZAVm2
+         7TfDUlWQ9pv96us2z6Vp29HMy1xh474KFCurRiFnB+s/XM4ZgT9bg5AxMV6mV73beKf/
+         65rJHx/SF3ANViYM1clrkWMAQgIrinx8XpeyvePb2MDEC+85NeAER5zZM8qgkSYaOiJL
+         9R9qYxzR/TH9LdHArbMvu+FEdz3p1l0aJ8xgpOMAbNiFE0QB7LZCjD0ysa9Z0pY6ZPb/
+         Ea0w==
+X-Gm-Message-State: AOAM531aPBNo5AZEJHdRoh6VlCMRdotW9bJ7D1uuaRc4uAxnCMb3cG06
+        1OAoi/4FIPq0JGGXXFHPzRA2wYvaCwza0H/0Y9bFSU8D
+X-Google-Smtp-Source: ABdhPJxmJOlWFPdnAmMZYx0gXkHn9gBWuevnFn2KDNayKvpBVRXdkNA+vi/YM12uauP8inhPe8SX+04KqcMeyFIoxb4=
+X-Received: by 2002:a25:7b81:: with SMTP id w123mr14670556ybc.260.1599756988077;
+ Thu, 10 Sep 2020 09:56:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200909232443.3099637-1-iii@linux.ibm.com>
-In-Reply-To: <20200909232443.3099637-1-iii@linux.ibm.com>
+References: <20200909232443.3099637-1-iii@linux.ibm.com> <20200909232443.3099637-4-iii@linux.ibm.com>
+In-Reply-To: <20200909232443.3099637-4-iii@linux.ibm.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 10 Sep 2020 09:58:37 -0700
-Message-ID: <CAEf4BzYQ+81D4VgrOjTuX-1a1HgPBNq+zsX-te44Wa4=97Yqpg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/3] Fix three endianness issues in test_progs
+Date:   Thu, 10 Sep 2020 09:56:17 -0700
+Message-ID: <CAEf4BzZbf0r6RuOBCA3JfeQ22S9pRVMoGujxiibVxxnzkYZRLw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Fix endianness issue in sk_assign
 To:     Ilya Leoshkevich <iii@linux.ibm.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -73,28 +73,34 @@ X-Mailing-List: bpf@vger.kernel.org
 
 On Wed, Sep 9, 2020 at 6:59 PM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
 >
-> This series fixes three test_progs failures on s390, all of which occur
-> because of endianness issues.
+> server_map's value size is 8, but the test tries to put an int there.
+> This sort of works on x86 (unless followed by non-0), but hard fails on
+> s390.
 >
-> Ilya Leoshkevich (3):
->   selftests/bpf: Fix endianness issue in test_sockopt_sk
->   selftests/bpf: Fix endianness issues in sk_lookup/ctx_narrow_access
->   selftests/bpf: Fix endianness issue in sk_assign
+> Fix by using long instead of int.
 >
->  .../selftests/bpf/prog_tests/sk_assign.c      |   2 +-
->  .../selftests/bpf/prog_tests/sockopt_sk.c     |   2 +-
->  .../selftests/bpf/progs/test_sk_lookup.c      | 264 ++++++++++--------
->  3 files changed, 151 insertions(+), 117 deletions(-)
+> Fixes: 2d7824ffd25c ("selftests: bpf: Add test for sk_assign")
+> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/sk_assign.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sk_assign.c b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+> index a49a26f95a8b..402d0da8e05a 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sk_assign.c
+> @@ -265,7 +265,7 @@ void test_sk_assign(void)
+>                 TEST("ipv6 udp port redir", AF_INET6, SOCK_DGRAM, false),
+>                 TEST("ipv6 udp addr redir", AF_INET6, SOCK_DGRAM, true),
+>         };
+> -       int server = -1;
+> +       long server = -1;
+
+this would still fail on 32-bit arches, so maybe __s64 instead?
+
+>         int server_map;
+>         int self_net;
+>         int i;
 > --
 > 2.25.4
 >
-
-Ilya,
-
-libbpf Travis CI setup does only a build of libbpf for s390x right
-now. But we additionally have a test that builds the latest kernel and
-selftests and runs them in qemu. All this is implemented for x86-64
-right now. But if you'd like to spend some time to set this up for
-s390x as well, please let me know. You'll be able to detect issues
-like this much earlier.
