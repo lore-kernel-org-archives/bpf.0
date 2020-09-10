@@ -2,70 +2,66 @@ Return-Path: <SRS0=E2Hj=CT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6949C433E2
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 10:28:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 667D5C433E2
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 11:06:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B4F07206BE
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 10:28:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0017520C09
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 11:06:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="povkCprx"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="UMwB+xyu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730873AbgIJK2i (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Sep 2020 06:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46376 "EHLO
+        id S1730223AbgIJLFo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Sep 2020 07:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730984AbgIJK1E (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Sep 2020 06:27:04 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF51C061756
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 03:27:03 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id t10so6125357wrv.1
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 03:27:03 -0700 (PDT)
+        with ESMTP id S1730733AbgIJLDf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Sep 2020 07:03:35 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E62C0613ED
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 04:03:35 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id k15so6191044wrn.10
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 04:03:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
+        d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=WO5vaAWz6zN0FZiYh2WcgshVBm9JSmYHIvf75JDkwkc=;
-        b=povkCprx1nxa7PduohZnkEFMgX5YQaqAYI9H6/+Pt3k/kEzF5HderxhGIa2vT/fsgw
-         ZyOfJFgzKCFTYNVEbgg7CU5fHRat+n+r+Na952Iv6HUywTMntGb8E15OupOt1VrCJ5/E
-         e1Lgw/HzB7INnm7UE2nGFRh3hY8Ci4Xv6/WZD/g+Ul3FR7RWV1++AS/hFXiGYwLJLHRd
-         QhznOVYPDFqMRSRM1k64elgCIG92IyakCsqpd2m5BfmLMvGwOSVy/W+Pn0JOPsORGYWx
-         afDN+vKw1Wkddg++vblEb3MhXLp5s60H1Go8N1fqqmHGt8nRFlsxm/LMyqkY97BSawc5
-         AsUw==
+        bh=jfqt6awegfu4eCKMTPUVt2xWS4iWxmPjrAG4fsrRWl8=;
+        b=UMwB+xyu2FbRNy+laHBG9WCGsbQgQzlOyXDoGnjuxl1vgL3M3dFU9x976IEjWfhFcB
+         0bRQmLGAVQtVx1ivjujqslpBmip3UapRlhddQ2OjHqN7nlHzrdr+Elm7PZxqC1dMg71z
+         lIP+6TnolGm9UCabGiEspsDathf8IlPDbG7J4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=WO5vaAWz6zN0FZiYh2WcgshVBm9JSmYHIvf75JDkwkc=;
-        b=djC8xBhDbiZGAMidNeld0YIdRIF+o3q5hVwAUmj8Mt6/F/Y/Dy0Vw9xl8DKSFjf2Ww
-         o8Bljpc4O8BCSPOdX65EpywHD72ruL5GbYP63BtGdID8eHnfYRM/VYjFDkAVhAlpHd3u
-         iccUR1G8FQkqYCK6o4zzrQApsmVdrkPEXNFqdxzoFc6NoKxmD5GSnW/sVJfVRNAZYMNc
-         zQS8KA85T4oLm3skdHxR9wMWvir4AhSlXgTsLVIBqqeXhbwOx8CZNCNNKtPDTSlpKVJU
-         D6wOi1Jsvw09bzc+yBWjitHUK5tDMksx56YQLGddAYoQL/z1CEgx7BlX17q9pGx2XUB7
-         U7eA==
-X-Gm-Message-State: AOAM530DPX4+Vicf2TxZYiIVlrFz5e4PIL1P255RgKGPwtnMdqij3rpA
-        lCGi1kM0ksUVqODUYvq2FgWaUg==
-X-Google-Smtp-Source: ABdhPJw9kVA0zePHLa3oFTsXrh+4IQhuYDnz3JWs3wTwEUBmjCOCKYftMlpOsnmtsgMtWz+z+omBMg==
-X-Received: by 2002:adf:f7ca:: with SMTP id a10mr8165621wrq.321.1599733622416;
-        Thu, 10 Sep 2020 03:27:02 -0700 (PDT)
-Received: from localhost.localdomain ([194.35.119.178])
-        by smtp.gmail.com with ESMTPSA id h186sm3039494wmf.24.2020.09.10.03.27.01
+        bh=jfqt6awegfu4eCKMTPUVt2xWS4iWxmPjrAG4fsrRWl8=;
+        b=rxQZwBVya6n4KRNz0NsEN2aY7H01V8vT1SdjWUf89MhOtUvIIEFz8oWTOMuHvJVRW1
+         9EgfDwfLLopgoOX6OShxaxVLVrJOPMZ1pios+u8AGaHlnorR+yYy8Xnle6nVeFYmnT7l
+         fsrkwgnRj7hQvWQbLkDaK01eMr3P1kkXawX4FIBjR5/2xywsufs+RnjwWD9TBWsyC60j
+         UJVIOXSFGglsuZTc0ilfm6I3YH6TeKs3xhimXl4sThwlYmJqPgpkmHQPOj1WSRGkjkTB
+         TJ/kQ9i0T/Y6Q71qfJBkn3AaF4DUuBPeSc9ORlm+8RrON5lpdUGLNbI90NDT331850dq
+         kj1g==
+X-Gm-Message-State: AOAM533qlq11gFb0rRWHkw2fRxX+a1bJi+310Z0mXdJddl+NncSHU7S+
+        T4UyiM8iddEZWArX+hSD5177VQ==
+X-Google-Smtp-Source: ABdhPJyQbVb2gXaLF9khRxz4hVgGGlPxaQ2CfD0oi3kWlmKrCbcP3FqB0BJVTnR0KbIbXjUoBXTasw==
+X-Received: by 2002:adf:eacb:: with SMTP id o11mr8158198wrn.209.1599735814060;
+        Thu, 10 Sep 2020 04:03:34 -0700 (PDT)
+Received: from antares.lan (6.9.9.0.0.d.a.3.9.b.d.2.8.1.d.7.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:7d18:2db9:3ad0:996])
+        by smtp.gmail.com with ESMTPSA id a85sm3238871wmd.26.2020.09.10.04.03.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 03:27:01 -0700 (PDT)
-From:   Quentin Monnet <quentin@isovalent.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>
-Subject: [PATCH bpf-next v3 0/2] tools: bpftool: support creating outer maps
-Date:   Thu, 10 Sep 2020 11:26:49 +0100
-Message-Id: <20200910102652.10509-1-quentin@isovalent.com>
-X-Mailer: git-send-email 2.20.1
+        Thu, 10 Sep 2020 04:03:33 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     ast@kernel.org, daniel@iogearbox.net, jakub@cloudflare.com
+Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com,
+        Lorenz Bauer <lmb@cloudflare.com>
+Subject: [PATCH bpf] bpf: plug hole in struct bpf_sk_lookup_kern
+Date:   Thu, 10 Sep 2020 12:02:48 +0100
+Message-Id: <20200910110248.198326-1-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
@@ -73,33 +69,95 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series makes bpftool able to create outer maps (maps of types
-array-of-maps and hash-of-maps). This is done by passing the relevant
-inner_map_fd, which we do through a new command-line keyword.
+As Alexei points out, struct bpf_sk_lookup_kern has two 4-byte holes.
+This leads to suboptimal instructions being generated (IPv4, x86):
 
-The first two patches also clean up the function related to dumping map
-elements.
+    1372                    struct bpf_sk_lookup_kern ctx = {
+       0xffffffff81b87f30 <+624>:   xor    %eax,%eax
+       0xffffffff81b87f32 <+626>:   mov    $0x6,%ecx
+       0xffffffff81b87f37 <+631>:   lea    0x90(%rsp),%rdi
+       0xffffffff81b87f3f <+639>:   movl   $0x110002,0x88(%rsp)
+       0xffffffff81b87f4a <+650>:   rep stos %rax,%es:(%rdi)
+       0xffffffff81b87f4d <+653>:   mov    0x8(%rsp),%eax
+       0xffffffff81b87f51 <+657>:   mov    %r13d,0x90(%rsp)
+       0xffffffff81b87f59 <+665>:   incl   %gs:0x7e4970a0(%rip)
+       0xffffffff81b87f60 <+672>:   mov    %eax,0x8c(%rsp)
+       0xffffffff81b87f67 <+679>:   movzwl 0x10(%rsp),%eax
+       0xffffffff81b87f6c <+684>:   mov    %ax,0xa8(%rsp)
+       0xffffffff81b87f74 <+692>:   movzwl 0x38(%rsp),%eax
+       0xffffffff81b87f79 <+697>:   mov    %ax,0xaa(%rsp)
 
-v3:
-- Add a check on errno being ENOENT before skipping outer map entry in
-  dumps.
+Fix this by moving around sport and dport. pahole confirms there
+are no more holes:
 
-v2:
-- v1 was wrongly expected to allow bpftool to dump the content of outer
-  maps (already supported). v2 skipped that patch, and instead replaced it
-  with a clean-up for the dump_map_elem() function.
+    struct bpf_sk_lookup_kern {
+        u16                        family;       /*     0     2 */
+        u16                        protocol;     /*     2     2 */
+        __be16                     sport;        /*     4     2 */
+        u16                        dport;        /*     6     2 */
+        struct {
+                __be32             saddr;        /*     8     4 */
+                __be32             daddr;        /*    12     4 */
+        } v4;                                    /*     8     8 */
+        struct {
+                const struct in6_addr  * saddr;  /*    16     8 */
+                const struct in6_addr  * daddr;  /*    24     8 */
+        } v6;                                    /*    16    16 */
+        struct sock *              selected_sk;  /*    32     8 */
+        bool                       no_reuseport; /*    40     1 */
 
-Quentin Monnet (3):
-  tools: bpftool: clean up function to dump map entry
-  tools: bpftool: keep errors for map-of-map dumps if distinct from
-    ENOENT
-  tools: bpftool: add "inner_map" to "bpftool map create" outer maps
+        /* size: 48, cachelines: 1, members: 8 */
+        /* padding: 7 */
+        /* last cacheline: 48 bytes */
+    };
 
- .../bpf/bpftool/Documentation/bpftool-map.rst |  10 +-
- tools/bpf/bpftool/bash-completion/bpftool     |  22 ++-
- tools/bpf/bpftool/map.c                       | 149 ++++++++++--------
- 3 files changed, 114 insertions(+), 67 deletions(-)
+The assembly also doesn't contain the pesky rep stos anymore:
 
+    1372                    struct bpf_sk_lookup_kern ctx = {
+       0xffffffff81b87f60 <+624>:   movzwl 0x10(%rsp),%eax
+       0xffffffff81b87f65 <+629>:   movq   $0x0,0xa8(%rsp)
+       0xffffffff81b87f71 <+641>:   movq   $0x0,0xb0(%rsp)
+       0xffffffff81b87f7d <+653>:   mov    %ax,0x9c(%rsp)
+       0xffffffff81b87f85 <+661>:   movzwl 0x38(%rsp),%eax
+       0xffffffff81b87f8a <+666>:   movq   $0x0,0xb8(%rsp)
+       0xffffffff81b87f96 <+678>:   mov    %ax,0x9e(%rsp)
+       0xffffffff81b87f9e <+686>:   mov    0x8(%rsp),%eax
+       0xffffffff81b87fa2 <+690>:   movq   $0x0,0xc0(%rsp)
+       0xffffffff81b87fae <+702>:   movl   $0x110002,0x98(%rsp)
+       0xffffffff81b87fb9 <+713>:   mov    %eax,0xa0(%rsp)
+       0xffffffff81b87fc0 <+720>:   mov    %r13d,0xa4(%rsp)
+
+1: https://lore.kernel.org/bpf/CAADnVQKE6y9h2fwX6OS837v-Uf+aBXnT_JXiN_bbo2gitZQ3tA@mail.gmail.com/
+
+Fixes: e9ddbb7707ff ("bpf: Introduce SK_LOOKUP program type with a dedicated attach point")
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+---
+ include/linux/filter.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 995625950cc1..e962dd8117d8 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1287,6 +1287,8 @@ int copy_bpf_fprog_from_user(struct sock_fprog *dst, sockptr_t src, int len);
+ struct bpf_sk_lookup_kern {
+ 	u16		family;
+ 	u16		protocol;
++	__be16		sport;
++	u16		dport;
+ 	struct {
+ 		__be32 saddr;
+ 		__be32 daddr;
+@@ -1295,8 +1297,6 @@ struct bpf_sk_lookup_kern {
+ 		const struct in6_addr *saddr;
+ 		const struct in6_addr *daddr;
+ 	} v6;
+-	__be16		sport;
+-	u16		dport;
+ 	struct sock	*selected_sk;
+ 	bool		no_reuseport;
+ };
 -- 
 2.25.1
 
