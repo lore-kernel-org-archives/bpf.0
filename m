@@ -2,67 +2,66 @@ Return-Path: <SRS0=E2Hj=CT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 943C3C2D0E1
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 21:42:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83AAEC433E2
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 21:42:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5BC6E208E4
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 21:42:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4DB1420BED
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 21:42:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="cuP0J+h/"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="g0euGQe+"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728575AbgIJVms (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Sep 2020 17:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41808 "EHLO
+        id S1728620AbgIJVmv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Sep 2020 17:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730592AbgIJM7g (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Sep 2020 08:59:36 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C98C061795
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 05:57:25 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id x23so5547053wmi.3
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 05:57:25 -0700 (PDT)
+        with ESMTP id S1730846AbgIJM7o (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Sep 2020 08:59:44 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3ACDC06179E
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 05:57:35 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id t10so6615571wrv.1
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 05:57:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zn1i8UCbSwtIzHhCvaQDmN+O/hazqmOSMJfFHBYOEyo=;
-        b=cuP0J+h/1FVt+WpFPwAreD8gPPLpf/+FpS50mKGN6kum6Cqd4iAWCJ7EWk7bd4ugJB
-         UhH7tjAsrCW/eJxyiG6m1KyNhFqc0MZ9/ZCvM7Agz/AnMHVaxxzmM1xgKxYx6fbMhZXy
-         8LWqIH7oAkX+Mx7xXwhYC/+dKpfz9sZhDrw14=
+        bh=flGDgBYbK1yfojWNgagEbTBwme1bGxX/ilfadwkiCwU=;
+        b=g0euGQe+KgH8lkPvkd3vLBuwY7uWegqB3VAz3tfQJvzoh11D1bU2gG3/SFpxZIT6cM
+         Un8tvg/qu2HR3NwXYRdjfl9vja1hvyIRCVg743Vl9AUWwT2dVBerVoUjYLY8DGf+Rgdb
+         ajzWygQlDIm3Zza9cuHAycNWTJU8YK5Sf4JAs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zn1i8UCbSwtIzHhCvaQDmN+O/hazqmOSMJfFHBYOEyo=;
-        b=BzT5eG1W8T3l1BqPU5MhNtce/ZpPFIxS18WLiiYbtCMsS2Yj4/7wDj3fjcjVVulSe5
-         gMTfCp/bH+zJV3/oBdAXAfNGFR/9iJhxn3RiCm3hseZKERn928uZxqHbmIWGPS11ywMG
-         3etm0+B/uqmSWxTW4P8PULmtQDfcw5YAmITM1QZeimQvRYO0v0fXUcybGmfmix4br8nx
-         dsvDzEknVx83zENm5kZV/nBH8iQxu3wzGVXz5wRjM82BlskBJMVth0wLvXLI/gyGQLfF
-         Et0ypskNqCZjv/pRTthwK2YILr7pA/4iPX7sGqYa8m02mj8H1BE9w+iLMRvPvx/2F+ok
-         0B+A==
-X-Gm-Message-State: AOAM531LTfvV4i8U5pWUKwo49Iu+7I1cT9awrJdYpomyhYolS/EaaBhK
-        Fxt2Uftzx+deWHrPg7QQ1diG4oF6vCiIGQ==
-X-Google-Smtp-Source: ABdhPJxUTY9ZHCOsYUcEdExRgYIq3txNFqY2IIMiWLkcATHiQmL0h3+HqOySbn9vLc7V34JD6Fb+Sw==
-X-Received: by 2002:a7b:c5c6:: with SMTP id n6mr8225989wmk.120.1599742644466;
-        Thu, 10 Sep 2020 05:57:24 -0700 (PDT)
+        bh=flGDgBYbK1yfojWNgagEbTBwme1bGxX/ilfadwkiCwU=;
+        b=rzTqcfJYKA70PkItnF+MZioLvnDfxaFDWf7wrcw83GBR2dnJJtpz0WPKFtA0Mk7vF1
+         nJL5W8MUvVX6jveQFTqzReser+YekOzUwnM1Vcd5csheBKFn2Lddp6Pb6GAoOkYTY/WF
+         PJKvxjEyTNpLhTz65S1+8eaVCfVDsytd9QcwkrYFcRP+8IAtpLQBUd25VCW4Shg9JrJ5
+         XwHbAtN0PQaIfDKauw4YFWOlbgkivhbMVZy2PP4q1ppNFcwPmamxbMfqr1wKYTf8+7tv
+         A53H5a8FmJVfXmmC86Qf0z+fZQFt30jULPxam/IFEmeO69An9ngVoRUzv00VAVmgv5RC
+         xOOg==
+X-Gm-Message-State: AOAM530syCDMFN1PwfZX6328C80SoGivmcnPjxFCnlzry30Kc8LzgM5R
+        vVQYoiDRDUhwCZmtn2+5HHeElg==
+X-Google-Smtp-Source: ABdhPJyPtafSgydO6fwVzky9UiNQsDsLlK1MvcNMIhNlMqIPpxntYf1WHKYGOOFBFMM6Hu6AU9xctw==
+X-Received: by 2002:adf:e385:: with SMTP id e5mr8664327wrm.129.1599742654607;
+        Thu, 10 Sep 2020 05:57:34 -0700 (PDT)
 Received: from antares.lan (6.9.9.0.0.d.a.3.9.b.d.2.8.1.d.7.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:7d18:2db9:3ad0:996])
-        by smtp.gmail.com with ESMTPSA id v6sm8737400wrt.90.2020.09.10.05.57.23
+        by smtp.gmail.com with ESMTPSA id v6sm8737400wrt.90.2020.09.10.05.57.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 05:57:23 -0700 (PDT)
+        Thu, 10 Sep 2020 05:57:33 -0700 (PDT)
 From:   Lorenz Bauer <lmb@cloudflare.com>
 To:     ast@kernel.org, yhs@fb.com, daniel@iogearbox.net, kafai@fb.com,
         andriin@fb.com
 Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com,
         Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next v3 03/11] btf: Add BTF_ID_LIST_SINGLE macro
-Date:   Thu, 10 Sep 2020 13:56:23 +0100
-Message-Id: <20200910125631.225188-4-lmb@cloudflare.com>
+Subject: [PATCH bpf-next v3 09/11] bpf: check ARG_PTR_TO_SPINLOCK register type in check_func_arg
+Date:   Thu, 10 Sep 2020 13:56:29 +0100
+Message-Id: <20200910125631.225188-10-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200910125631.225188-1-lmb@cloudflare.com>
 References: <20200910125631.225188-1-lmb@cloudflare.com>
@@ -73,68 +72,69 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a convenience macro that allows defining a BTF ID list with
-a single item. This lets us cut down on repetitive macros.
+Move the check for PTR_TO_MAP_VALUE to check_func_arg, where all other
+checking is done as well. Move the invocation of process_spin_lock away
+from the register type checking, to allow a future refactoring.
 
 Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-Suggested-by: Andrii Nakryiko <andriin@fb.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
 ---
- include/linux/btf_ids.h       | 8 ++++++++
- tools/include/linux/btf_ids.h | 8 ++++++++
- 2 files changed, 16 insertions(+)
+ kernel/bpf/verifier.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-index 210b086188a3..57890b357f85 100644
---- a/include/linux/btf_ids.h
-+++ b/include/linux/btf_ids.h
-@@ -76,6 +76,13 @@ extern u32 name[];
- #define BTF_ID_LIST_GLOBAL(name)			\
- __BTF_ID_LIST(name, globl)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c3527a32ec51..b228467cf837 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3781,10 +3781,6 @@ static int process_spin_lock(struct bpf_verifier_env *env, int regno,
+ 	struct bpf_map *map = reg->map_ptr;
+ 	u64 val = reg->var_off.value;
  
-+/* The BTF_ID_LIST_SINGLE macro defines a BTF_ID_LIST with
-+ * a single entry.
-+ */
-+#define BTF_ID_LIST_SINGLE(name, prefix, typename)	\
-+	BTF_ID_LIST(name) \
-+	BTF_ID(prefix, typename)
-+
- /*
-  * The BTF_ID_UNUSED macro defines 4 zero bytes.
-  * It's used when we want to define 'unused' entry
-@@ -140,6 +147,7 @@ extern struct btf_id_set name;
- #define BTF_ID(prefix, name)
- #define BTF_ID_UNUSED
- #define BTF_ID_LIST_GLOBAL(name) u32 name[1];
-+#define BTF_ID_LIST_SINGLE(name, prefix, typename) static u32 name[1];
- #define BTF_SET_START(name) static struct btf_id_set name = { 0 };
- #define BTF_SET_START_GLOBAL(name) static struct btf_id_set name = { 0 };
- #define BTF_SET_END(name)
-diff --git a/tools/include/linux/btf_ids.h b/tools/include/linux/btf_ids.h
-index 210b086188a3..57890b357f85 100644
---- a/tools/include/linux/btf_ids.h
-+++ b/tools/include/linux/btf_ids.h
-@@ -76,6 +76,13 @@ extern u32 name[];
- #define BTF_ID_LIST_GLOBAL(name)			\
- __BTF_ID_LIST(name, globl)
- 
-+/* The BTF_ID_LIST_SINGLE macro defines a BTF_ID_LIST with
-+ * a single entry.
-+ */
-+#define BTF_ID_LIST_SINGLE(name, prefix, typename)	\
-+	BTF_ID_LIST(name) \
-+	BTF_ID(prefix, typename)
-+
- /*
-  * The BTF_ID_UNUSED macro defines 4 zero bytes.
-  * It's used when we want to define 'unused' entry
-@@ -140,6 +147,7 @@ extern struct btf_id_set name;
- #define BTF_ID(prefix, name)
- #define BTF_ID_UNUSED
- #define BTF_ID_LIST_GLOBAL(name) u32 name[1];
-+#define BTF_ID_LIST_SINGLE(name, prefix, typename) static u32 name[1];
- #define BTF_SET_START(name) static struct btf_id_set name = { 0 };
- #define BTF_SET_START_GLOBAL(name) static struct btf_id_set name = { 0 };
- #define BTF_SET_END(name)
+-	if (reg->type != PTR_TO_MAP_VALUE) {
+-		verbose(env, "R%d is not a pointer to map_value\n", regno);
+-		return -EINVAL;
+-	}
+ 	if (!is_const) {
+ 		verbose(env,
+ 			"R%d doesn't have constant offset. bpf_spin_lock has to be at the constant offset\n",
+@@ -3993,16 +3989,9 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 		if (type != expected_type)
+ 			goto err_type;
+ 	} else if (arg_type == ARG_PTR_TO_SPIN_LOCK) {
+-		if (meta->func_id == BPF_FUNC_spin_lock) {
+-			if (process_spin_lock(env, regno, true))
+-				return -EACCES;
+-		} else if (meta->func_id == BPF_FUNC_spin_unlock) {
+-			if (process_spin_lock(env, regno, false))
+-				return -EACCES;
+-		} else {
+-			verbose(env, "verifier internal error\n");
+-			return -EFAULT;
+-		}
++		expected_type = PTR_TO_MAP_VALUE;
++		if (type != expected_type)
++			goto err_type;
+ 	} else if (arg_type_is_mem_ptr(arg_type)) {
+ 		expected_type = PTR_TO_STACK;
+ 		/* One exception here. In case function allows for NULL to be
+@@ -4108,6 +4097,17 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+ 		err = check_helper_mem_access(env, regno,
+ 					      meta->map_ptr->value_size, false,
+ 					      meta);
++	} else if (arg_type == ARG_PTR_TO_SPIN_LOCK) {
++		if (meta->func_id == BPF_FUNC_spin_lock) {
++			if (process_spin_lock(env, regno, true))
++				return -EACCES;
++		} else if (meta->func_id == BPF_FUNC_spin_unlock) {
++			if (process_spin_lock(env, regno, false))
++				return -EACCES;
++		} else {
++			verbose(env, "verifier internal error\n");
++			return -EFAULT;
++		}
+ 	} else if (arg_type_is_mem_ptr(arg_type)) {
+ 		/* The access to this pointer is only checked when we hit the
+ 		 * next is_mem_size argument below.
 -- 
 2.25.1
 
