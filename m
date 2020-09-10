@@ -2,68 +2,68 @@ Return-Path: <SRS0=E2Hj=CT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0DA23C433E2
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 21:39:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66598C433E2
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 21:39:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C9D88208E4
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 21:39:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2655A208E4
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 21:39:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AxIEn1+h"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BFohy9Ht"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728243AbgIJVj1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Sep 2020 17:39:27 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:25078 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730615AbgIJNKq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Sep 2020 09:10:46 -0400
+        id S1728216AbgIJVj0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Sep 2020 17:39:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:27156 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730635AbgIJNKq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 10 Sep 2020 09:10:46 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599743399;
+        s=mimecast20190719; t=1599743403;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=KIRSjC4TU6Nemo+ZjQS/Vw28P2tbe5/t6vRROo8Kshk=;
-        b=AxIEn1+h1mNtDeJ7cVz6itkN2avXai3wMisFwi1X5jCvyhuMgvVEmbXTkog3P7CAXU91Sj
-        C3NcLgJhaXpMyPjnaqIoYUsto/WC0N+/ESS/DnBs7EUPFht/E25VcgDjO60xwFaFWPXZQT
-        cqbJHihYYKhRLyDCsZ+PI+9xCPRmWgM=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-344-x4Ow6CVHPAi4U4XYDwjYLg-1; Thu, 10 Sep 2020 09:09:58 -0400
-X-MC-Unique: x4Ow6CVHPAi4U4XYDwjYLg-1
-Received: by mail-wr1-f71.google.com with SMTP id l9so2222229wrq.20
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 06:09:57 -0700 (PDT)
+        bh=HpWLSZdrVk4EANVgntxWb4ENr3KvTzRCWWUjgaXP9V8=;
+        b=BFohy9HtnYIA6i8M8T6tSvHukMf2YSCSjywp2wIvzkW4sDwrdqXbl3Wq9RUNhAPfo4jl6u
+        7rBS7X5IUu+052m4rk9ENfjDN9DUqRUcWHiUGhHm47X+GOyA7Njh04UDyrEYAPnhi61/pI
+        5DAqaI5KudraXwXF16GkHxsQVUQUeEM=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-412-5xMeOfCNNnywOkwlfKxVUQ-1; Thu, 10 Sep 2020 09:10:01 -0400
+X-MC-Unique: 5xMeOfCNNnywOkwlfKxVUQ-1
+Received: by mail-wm1-f70.google.com with SMTP id g79so879500wmg.0
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 06:10:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=KIRSjC4TU6Nemo+ZjQS/Vw28P2tbe5/t6vRROo8Kshk=;
-        b=alZ3UUu4x+sWUy7uGc+OegVi7LI+cjf9nAYQUfWSoP1G5h8WCJzbm1GTczMPwo1dEg
-         zqhBfh8+rsMdzvPRWniP8cf4UTmU65y8HGHmvfX8cDmzAoBVxaJk+ec5zvy6Ri7aohOr
-         VztADowIusd26va2zJDsSeU1RjYnTqomdYaalgjiJNo8gWt+CJEzqE13EidiPM/hRHOo
-         TO0lkLdGidswipctURDi8LtgW28q46pDxiuCTat0WBTWR3nRCZu0Ru0xqcwYBx7QJtzw
-         gE216vM6BpBPRptYw6sVtOlAzk7sea761AoTjFVFUBjV3xL7kBkz+h6EL3yZSLvwNqi6
-         lH8Q==
-X-Gm-Message-State: AOAM532sV0AD+UnDpeGvpzxr4YKlR7HEgqN5fxiY4rIY/5tJZh/bNVMm
-        qhVWsPMu8MmTUkw52kiF2SdVLTuy3VmQzdi5Tl9Y5NKWB99T4Z9rV4voMxKAPkto30SxCHMevzG
-        q0mCUtYkX+HU7
-X-Received: by 2002:a5d:4e0f:: with SMTP id p15mr8953114wrt.155.1599743396420;
-        Thu, 10 Sep 2020 06:09:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxaJQkuAcK5LP0R+Fk0JDjpDlHUxygUj/NTkx3QJ7H6UAmH6M0LuyJkDal5Yj4UIwPPtb109g==
-X-Received: by 2002:a5d:4e0f:: with SMTP id p15mr8953081wrt.155.1599743396088;
-        Thu, 10 Sep 2020 06:09:56 -0700 (PDT)
+        bh=HpWLSZdrVk4EANVgntxWb4ENr3KvTzRCWWUjgaXP9V8=;
+        b=cU8G+sGOsBnbr7XkZtnwwaotXdS4vLmYjWi50bpHvztKcei5gbOt3jg78quj7P3iCK
+         dRdNvSAAheZQ0AgK7XSvmtStpoKRxCM3DsOhqQSIgdeDeje43lviTM88UbpvktDl/vWF
+         oJXZEfqp/9uc0TV4XBOd23nK8JsoFL2NSDjXryO0Pe/dOr5o0flm19YMZu3ZRRMaN8ow
+         GCVsuZbETEKZCa2Z/3JDOxwYECOtTZyXXvQ5RBFrBSkddQA5VcJaRwdI24DtJPg3N280
+         hfZMuBJYYrH2O7RY9aWc8noz2Q2bcOWc3BA1Bf6Es5pSyMOoaVV6/uZh/8gRvGF5xcQe
+         qVfQ==
+X-Gm-Message-State: AOAM531/F6sL1HbWklRP8q9Mg1X4zn87/khlfpLEmn0oIQg6Djkb+Y0B
+        XsKud9cy2KlK7f/iIJh76xxLu+wEuYoz0UhMDUH1TtFtS3gONXYfUs7O2r0kV5V+uet+WQXov91
+        n/izxvo32Geau
+X-Received: by 2002:adf:e7ca:: with SMTP id e10mr8823294wrn.236.1599743398865;
+        Thu, 10 Sep 2020 06:09:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJys+qMTVTbazpXoQ/YUFFk44DvhdFRgqcDdn47ZLYK8HU90NOIoEIpWGieDdxyj48qLORhmVA==
+X-Received: by 2002:adf:e7ca:: with SMTP id e10mr8823250wrn.236.1599743398425;
+        Thu, 10 Sep 2020 06:09:58 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id m1sm3773204wmc.28.2020.09.10.06.09.55
+        by smtp.gmail.com with ESMTPSA id v3sm3596338wmh.6.2020.09.10.06.09.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 06:09:55 -0700 (PDT)
+        Thu, 10 Sep 2020 06:09:57 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 083A91829D4; Thu, 10 Sep 2020 15:09:55 +0200 (CEST)
-Subject: [PATCH bpf-next v3 5/9] bpf: Fix context type resolving for extension
- programs
+        id 39BA71829D4; Thu, 10 Sep 2020 15:09:57 +0200 (CEST)
+Subject: [PATCH bpf-next v3 7/9] libbpf: add support for supplying target to
+ bpf_raw_tracepoint_open()
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
@@ -75,8 +75,8 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Eelco Chaudron <echaudro@redhat.com>,
         KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Thu, 10 Sep 2020 15:09:54 +0200
-Message-ID: <159974339494.129227.6914052212273752713.stgit@toke.dk>
+Date:   Thu, 10 Sep 2020 15:09:57 +0200
+Message-ID: <159974339713.129227.17759670478076731926.stgit@toke.dk>
 In-Reply-To: <159974338947.129227.5610774877906475683.stgit@toke.dk>
 References: <159974338947.129227.5610774877906475683.stgit@toke.dk>
 User-Agent: StGit/0.23
@@ -90,68 +90,83 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-Eelco reported we can't properly access arguments if the tracing
-program is attached to extension program.
+This adds support for supplying a target fd and btf ID for the
+raw_tracepoint_open() BPF operation, using a new bpf_raw_tracepoint_opts
+structure. This can be used for attaching freplace programs to multiple
+destinations.
 
-Having following program:
-
-  SEC("classifier/test_pkt_md_access")
-  int test_pkt_md_access(struct __sk_buff *skb)
-
-with its extension:
-
-  SEC("freplace/test_pkt_md_access")
-  int test_pkt_md_access_new(struct __sk_buff *skb)
-
-and tracing that extension with:
-
-  SEC("fentry/test_pkt_md_access_new")
-  int BPF_PROG(fentry, struct sk_buff *skb)
-
-It's not possible to access skb argument in the fentry program,
-with following error from verifier:
-
-  ; int BPF_PROG(fentry, struct sk_buff *skb)
-  0: (79) r1 = *(u64 *)(r1 +0)
-  invalid bpf_context access off=0 size=8
-
-The problem is that btf_ctx_access gets the context type for the
-traced program, which is in this case the extension.
-
-But when we trace extension program, we want to get the context
-type of the program that the extension is attached to, so we can
-access the argument properly in the trace program.
-
-This version of the patch is tweaked slightly from Jiri's original one,
-since the refactoring in the previous patches means we have to get the
-target prog type from the new variable in prog->aux instead of directly
-from the target prog.
-
-Reported-by: Eelco Chaudron <echaudro@redhat.com>
-Suggested-by: Jiri Olsa <jolsa@kernel.org>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- kernel/bpf/btf.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ tools/lib/bpf/bpf.c      |   13 ++++++++++++-
+ tools/lib/bpf/bpf.h      |    9 +++++++++
+ tools/lib/bpf/libbpf.map |    1 +
+ 3 files changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index e10f13f8251c..1a48253ba168 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -3863,7 +3863,14 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 82b983ff6569..25c62993c406 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -804,17 +804,28 @@ int bpf_obj_get_info_by_fd(int bpf_fd, void *info, __u32 *info_len)
+ 	return err;
+ }
  
- 	info->reg_type = PTR_TO_BTF_ID;
- 	if (tgt_prog) {
--		ret = btf_translate_to_vmlinux(log, btf, t, tgt_prog->type, arg);
-+		enum bpf_prog_type tgt_type;
+-int bpf_raw_tracepoint_open(const char *name, int prog_fd)
++int bpf_raw_tracepoint_open_opts(const char *name, int prog_fd,
++				 struct bpf_raw_tracepoint_opts *opts)
+ {
+ 	union bpf_attr attr;
+ 
++	if (!OPTS_VALID(opts, bpf_raw_tracepoint_opts))
++		return -EINVAL;
 +
-+		if (tgt_prog->type == BPF_PROG_TYPE_EXT)
-+			tgt_type = tgt_prog->aux->tgt_prog_type;
-+		else
-+			tgt_type = tgt_prog->type;
+ 	memset(&attr, 0, sizeof(attr));
+ 	attr.raw_tracepoint.name = ptr_to_u64(name);
+ 	attr.raw_tracepoint.prog_fd = prog_fd;
++	attr.raw_tracepoint.tgt_prog_fd = OPTS_GET(opts, tgt_prog_fd, 0);
++	attr.raw_tracepoint.tgt_btf_id = OPTS_GET(opts, tgt_btf_id, 0);
+ 
+ 	return sys_bpf(BPF_RAW_TRACEPOINT_OPEN, &attr, sizeof(attr));
+ }
+ 
++int bpf_raw_tracepoint_open(const char *name, int prog_fd)
++{
++	return bpf_raw_tracepoint_open_opts(name, prog_fd, NULL);
++}
 +
-+		ret = btf_translate_to_vmlinux(log, btf, t, tgt_type, arg);
- 		if (ret > 0) {
- 			info->btf_id = ret;
- 			return true;
+ int bpf_load_btf(void *btf, __u32 btf_size, char *log_buf, __u32 log_buf_size,
+ 		 bool do_log)
+ {
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 015d13f25fcc..30e8854374c0 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -233,7 +233,16 @@ LIBBPF_API int bpf_obj_get_info_by_fd(int bpf_fd, void *info, __u32 *info_len);
+ LIBBPF_API int bpf_prog_query(int target_fd, enum bpf_attach_type type,
+ 			      __u32 query_flags, __u32 *attach_flags,
+ 			      __u32 *prog_ids, __u32 *prog_cnt);
++struct bpf_raw_tracepoint_opts {
++	size_t sz; /* size of this struct for forward/backward compatibility */
++	int tgt_prog_fd; /* target program to attach to */
++	__u32 tgt_btf_id; /* BTF ID of target function */
++};
++#define bpf_raw_tracepoint_opts__last_field tgt_btf_id
++
+ LIBBPF_API int bpf_raw_tracepoint_open(const char *name, int prog_fd);
++LIBBPF_API int bpf_raw_tracepoint_open_opts(const char *name, int prog_fd,
++					    struct bpf_raw_tracepoint_opts *opts);
+ LIBBPF_API int bpf_load_btf(void *btf, __u32 btf_size, char *log_buf,
+ 			    __u32 log_buf_size, bool do_log);
+ LIBBPF_API int bpf_task_fd_query(int pid, int fd, __u32 flags, char *buf,
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 92ceb48a5ca2..a23d9f3f940c 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -303,6 +303,7 @@ LIBBPF_0.1.0 {
+ LIBBPF_0.2.0 {
+ 	global:
+ 		bpf_program__section_name;
++		bpf_raw_tracepoint_open_opts;
+ 		perf_buffer__buffer_cnt;
+ 		perf_buffer__buffer_fd;
+ 		perf_buffer__epoll_fd;
 
