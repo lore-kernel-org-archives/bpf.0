@@ -2,92 +2,160 @@ Return-Path: <SRS0=E2Hj=CT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 38D7EC433E2
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 08:32:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4003BC433E2
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 08:32:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CE3222076D
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 08:32:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D994E20C09
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 08:32:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dgHIUboo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UHcE0TK6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730533AbgIJIc2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Sep 2020 04:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56562 "EHLO
+        id S1730302AbgIJIc1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Sep 2020 04:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730212AbgIJIbX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Sep 2020 04:31:23 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5E4C061756;
-        Thu, 10 Sep 2020 01:31:23 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id b17so2689617pji.1;
-        Thu, 10 Sep 2020 01:31:23 -0700 (PDT)
+        with ESMTP id S1730538AbgIJIb3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Sep 2020 04:31:29 -0400
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7369C0613ED;
+        Thu, 10 Sep 2020 01:31:28 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id o16so2670813pjr.2;
+        Thu, 10 Sep 2020 01:31:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=0y2x8BiD2jptL2ZlFD9al3tEepgcvno9MvSo+C6e0lE=;
-        b=dgHIUbooW0aLgh+Giwo+o2Ug4JfCHzbLfbZxTi7pcvzIUEP0Bd+YVx/s+GJIi1qKsh
-         bitmVAREddbN70xJRoMojKvPtR5gCZYsvo27czcD19q93V4fMK1uv1ccTzuuOJjOMA59
-         i+EicsBPoLCQQ8tmXv4bPkbuxcBv1IdXcmZ5NehtCqKOf96eyldOCETVbIaUsFNdm+ZN
-         UPv33CXrjvt7ghPfJm/HydRshoGdzT6DtP2lalJ0NcaJ5SFlt76GbCJad3Nh0cM7/R8W
-         FvMm1WonE+P3RaTTb1tB1QMeFZa1r7eMx/ipYSeYWx30leJ/DawF7hEmr9r+J1FR3AvS
-         GM2g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=sSNYJQoq7VIn+vtERBylFPcQxQX6LuWyosQXlSFU3cQ=;
+        b=UHcE0TK6XW0LUH+yA9/uVjm3cxevVJQZX3lUOg1MBIyA9raAg0xLnbcs8J3VQDy5xs
+         3pdHdQuPgGTt+7dXNFyL3pgB5Oin7dT3RhoPtZXZtoQiePs3LaoEDedgQgI7NDcMB1Pc
+         gY0cndgg9+n6pGnoJ84OdmJwt55+iWcfV83TcsVsTujfdSE69tlFJcdDH/bmYP3SATLo
+         3uPKm4MoW6LqvVCDRUw8KeKYr7TuuMPBMPF1RwaszfS2rh2GLcKSAY59iNmq3FnCJdF1
+         SCKhIhHUcYyn/6Z0zSUIZ9EWRmakE9kQIiRVKMvzib2IofPZ/NB5DkNhlRzR4hoR8zQ7
+         xk3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=0y2x8BiD2jptL2ZlFD9al3tEepgcvno9MvSo+C6e0lE=;
-        b=Iz5ugW4CCn8CniSNCY/eidG54piH8J8YWA0oiBNpXA/bRaCWXw62bH88wgxqMdCMm+
-         UOtT0JIXZu6zTyFr1oVkxbtqY76KPfPSpzSMyjxvBFF7eFYs9zbJLJKESmF2wIoXVzsG
-         3ygMyYRY8H+FNyNNykM3Dc8KnZnFD0kvRx61PFbrVBUwlxzecM2KJ2Mvn/Sdig2hAttL
-         ElLnjvfbBqsPorUGm1En4ZArq2XTMDDUSNGYZGRQ68Tx9T5Ezy6Qtdpa9hX1XYzJ6ZaS
-         qLEOEHxcecjOS4/yao+1KwD+Kv/ZvMmeM8SB2J4LooZNYS4p4LEWcPL9YNbHCbuLV857
-         pblA==
-X-Gm-Message-State: AOAM533S6JenJ5FbZDBmFT5t91J68rWNJ2wklWdSRsrlKIn0b7CPOTI/
-        Un1SSl2fZx4TI3IMrbYcdlM=
-X-Google-Smtp-Source: ABdhPJyYRCfQ+nFOb3PiocXWqKukgplvIaFfNXnL8Qmz7f8ZNdWztZ18ynlLeL5ArckE8UU2wiWNKQ==
-X-Received: by 2002:a17:90a:1f07:: with SMTP id u7mr1649055pja.219.1599726680024;
-        Thu, 10 Sep 2020 01:31:20 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=sSNYJQoq7VIn+vtERBylFPcQxQX6LuWyosQXlSFU3cQ=;
+        b=LBntxdedNatSoTO3Qtoz4ZuuCdCAZcs3yOoMsB+t3VANwkyokSLciIbB2sxBX0zTiv
+         pL3ZIMskOy0MnCgPy+keV3/SSq3Nw5olEjml1WjJhGJfY36Pi44VMcksvpzLVslY4PN3
+         YtM5iEcjEWVMY4TJ+jen4dJOKT1y1FL2DzosjAALoaQB51ws9vCaVmjEnIBhLcXviMC6
+         8G1DZyju5/JdDR5oxqqqVGXZyNg66Pqgws6cKuyWsfRipmHVOS3puNDuSA5whsZdg2Wg
+         INHEuqEx3kZmwWi949O0oMXFr2A5HIgFzGayHCuoPLRnVBWBWSzTC5WK35zGWWdTZP/2
+         RQsw==
+X-Gm-Message-State: AOAM533BHUrT+ZP9VFtclDekiZEPwXxZtexqULBUwU/IiQ7yiC2VZf3R
+        EnlvYwnCKKlrPGRKZGHCCM0=
+X-Google-Smtp-Source: ABdhPJxXAfEgM9tV8AlLz+vaUk2lc/oSuiwnQ6x9FyFJ93oagdyTA1EpdzmQ7jg/MS4Pcgc61E2aaQ==
+X-Received: by 2002:a17:902:9303:: with SMTP id bc3mr4616620plb.170.1599726688316;
+        Thu, 10 Sep 2020 01:31:28 -0700 (PDT)
 Received: from VM.ger.corp.intel.com ([192.55.54.40])
-        by smtp.gmail.com with ESMTPSA id c7sm5183438pfj.100.2020.09.10.01.31.17
+        by smtp.gmail.com with ESMTPSA id c7sm5183438pfj.100.2020.09.10.01.31.25
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 10 Sep 2020 01:31:19 -0700 (PDT)
+        Thu, 10 Sep 2020 01:31:27 -0700 (PDT)
 From:   Magnus Karlsson <magnus.karlsson@gmail.com>
 To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
         daniel@iogearbox.net, netdev@vger.kernel.org,
         jonathan.lemon@gmail.com
-Cc:     Magnus Karlsson <magnus.karlsson@gmail.com>, bpf@vger.kernel.org
-Subject: [PATCH bpf-next 0/3] samples/bpf: improve xdpsock application
-Date:   Thu, 10 Sep 2020 10:31:03 +0200
-Message-Id: <1599726666-8431-1-git-send-email-magnus.karlsson@gmail.com>
+Cc:     bpf@vger.kernel.org
+Subject: [PATCH bpf-next 3/3] samples/bpf: add quiet option to xdpsock
+Date:   Thu, 10 Sep 2020 10:31:06 +0200
+Message-Id: <1599726666-8431-4-git-send-email-magnus.karlsson@gmail.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1599726666-8431-1-git-send-email-magnus.karlsson@gmail.com>
+References: <1599726666-8431-1-git-send-email-magnus.karlsson@gmail.com>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This small series improves/fixes three things in the xdpsock sample
-application. Details can be found in the individual commit messages,
-but a brief summary follows:
+From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Patch 1: fix one packet sending in xdpsock
-Patch 2: fix possible deadlock in xdpsock
-Patch 3: add quiet option to xdpsock
+Add a quiet option (-Q) that disables the statistics print outs of
+xdpsock. This is good to have when measuring 0% loss rate performance
+as it will be quite terrible if the application uses printfs.
 
-This patch has been applied against commit 8081ede1f731 ("perf: Stop using deprecated bpf_program__title()")
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+---
+ samples/bpf/xdpsock_user.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
-Thanks: Magnus
-
-Magnus Karlsson (3):
-  samples/bpf: fix one packet sending in xdpsock
-  samples/bpf: fix possible deadlock in xdpsock
-  samples/bpf: add quiet option to xdpsock
-
- samples/bpf/xdpsock_user.c | 28 +++++++++++++++++++++++-----
- 1 file changed, 23 insertions(+), 5 deletions(-)
-
---
+diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
+index b60bf4e..b220173 100644
+--- a/samples/bpf/xdpsock_user.c
++++ b/samples/bpf/xdpsock_user.c
+@@ -78,6 +78,7 @@ static int opt_pkt_count;
+ static u16 opt_pkt_size = MIN_PKT_SIZE;
+ static u32 opt_pkt_fill_pattern = 0x12345678;
+ static bool opt_extra_stats;
++static bool opt_quiet;
+ static int opt_poll;
+ static int opt_interval = 1;
+ static u32 opt_xdp_bind_flags = XDP_USE_NEED_WAKEUP;
+@@ -718,6 +719,7 @@ static struct option long_options[] = {
+ 	{"tx-pkt-size", required_argument, 0, 's'},
+ 	{"tx-pkt-pattern", required_argument, 0, 'P'},
+ 	{"extra-stats", no_argument, 0, 'x'},
++	{"quiet", no_argument, 0, 'Q'},
+ 	{0, 0, 0, 0}
+ };
+ 
+@@ -753,6 +755,7 @@ static void usage(const char *prog)
+ 		"			Min size: %d, Max size %d.\n"
+ 		"  -P, --tx-pkt-pattern=nPacket fill pattern. Default: 0x%x\n"
+ 		"  -x, --extra-stats	Display extra statistics.\n"
++		"  -Q, --quiet          Do not display any stats.\n"
+ 		"\n";
+ 	fprintf(stderr, str, prog, XSK_UMEM__DEFAULT_FRAME_SIZE,
+ 		opt_batch_size, MIN_PKT_SIZE, MIN_PKT_SIZE,
+@@ -768,7 +771,7 @@ static void parse_command_line(int argc, char **argv)
+ 	opterr = 0;
+ 
+ 	for (;;) {
+-		c = getopt_long(argc, argv, "Frtli:q:pSNn:czf:muMd:b:C:s:P:x",
++		c = getopt_long(argc, argv, "Frtli:q:pSNn:czf:muMd:b:C:s:P:xQ",
+ 				long_options, &option_index);
+ 		if (c == -1)
+ 			break;
+@@ -852,6 +855,9 @@ static void parse_command_line(int argc, char **argv)
+ 		case 'x':
+ 			opt_extra_stats = 1;
+ 			break;
++		case 'Q':
++			opt_quiet = 1;
++			break;
+ 		default:
+ 			usage(basename(argv[0]));
+ 		}
+@@ -1286,9 +1292,11 @@ int main(int argc, char **argv)
+ 
+ 	setlocale(LC_ALL, "");
+ 
+-	ret = pthread_create(&pt, NULL, poller, NULL);
+-	if (ret)
+-		exit_with_error(ret);
++	if (!opt_quiet) {
++		ret = pthread_create(&pt, NULL, poller, NULL);
++		if (ret)
++			exit_with_error(ret);
++	}
+ 
+ 	prev_time = get_nsecs();
+ 	start_time = prev_time;
+@@ -1302,7 +1310,8 @@ int main(int argc, char **argv)
+ 
+ 	benchmark_done = true;
+ 
+-	pthread_join(pt, NULL);
++	if (!opt_quiet)
++		pthread_join(pt, NULL);
+ 
+ 	xdpsock_cleanup();
+ 
+-- 
 2.7.4
+
