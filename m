@@ -2,116 +2,110 @@ Return-Path: <SRS0=E2Hj=CT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 93E1DC43461
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 21:39:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 299ADC43461
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 21:42:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 58C97221E2
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 21:39:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CE9C4221E2
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 21:42:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="L5mFrcae"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="IH/TigCy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726738AbgIJVjr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Sep 2020 17:39:47 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:24105 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730618AbgIJNKq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Sep 2020 09:10:46 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1599743399;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Yw+OBp17cq1h1RyAy6dvNRDL5oF78jBZQhRd17iuPDs=;
-        b=L5mFrcaeXuz27jPbtqb+kz9BHnHddOzaZgvA8qmGyCCqoz89W+eeotmr0WO/TZcbfzgCgY
-        IKALmcETLK4WiU1mT4bRAL9cBCnQQYPD9ywP8y5iWX3O7mf/W+NT6AmS8TQPeC1TD6FUNO
-        VnqnK5boOahTK3XY3OaF3FOrIjZ3bw4=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-8-fu8Ou3nQMdWsnlbtQz5WTw-1; Thu, 10 Sep 2020 09:09:58 -0400
-X-MC-Unique: fu8Ou3nQMdWsnlbtQz5WTw-1
-Received: by mail-wr1-f69.google.com with SMTP id j7so2247362wro.14
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 06:09:58 -0700 (PDT)
+        id S1728537AbgIJVmo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Sep 2020 17:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730733AbgIJM5o (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Sep 2020 08:57:44 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B52C061756
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 05:57:22 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id q9so5559004wmj.2
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2020 05:57:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=v6+cahR1pl5c+cWIi0jixd4vtzACtZ6gKOl+XQd5lYg=;
+        b=IH/TigCyC2GWUaELrtaPENW8iif0sbEyA9pHs0ut1zpweJTYVDVV7pQa/USDs4ckS0
+         HCiLVkr/t5vDdpKGCzk92M3+QRfIWjyP0KYRz+j+Uzw3nfcKj64v8tlnyFj7yKDk4x9d
+         NP6Hradvv++F/C1lkbL6RnLjqWDBdqjJPe3Ao=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=Yw+OBp17cq1h1RyAy6dvNRDL5oF78jBZQhRd17iuPDs=;
-        b=fjVw+/MwKqnScfllU94b5sRcIrgUln7LA6/6fnkpBgqx4a1uNL4UdtBpqsy87GaHOt
-         LRj7OWLzXZSN2SLinAIHPUfersCYZWf7nlnohvANfoAgGMZ3Mk8RsiGZEzqFdmcr6HyK
-         xt2QwCt0/aoDTamFcGdKBHRR/SSbIdCZQADUicclAPj0xWVoDhaGZg1wvy+aU2fcGwu9
-         yXzAW107JrWaeTuHX7B/HVqNbfqABZnZJhFIj/a7PA9PbnhHy3PcoIDgBQO0Clhw+fbL
-         vAa2bY0Dm40MNWP81XojOj9y0HJaOeulbr452s6nwKeCOS/HHeah0zrySEOGT34z6+rD
-         1+QQ==
-X-Gm-Message-State: AOAM531N4V8q2RmOXk7ieMiJfkEz8MK033gpk3aWG5JMG69TKoCPKw0T
-        WmNsXgwREHvQ81S7fR55Ww5zvzTAnOeV+TIzPXbgz8KDZyUQdARGs5GyohSValCBB8GkWA2lBvk
-        JrA86gxivJhPy
-X-Received: by 2002:a7b:c111:: with SMTP id w17mr8183093wmi.109.1599743397122;
-        Thu, 10 Sep 2020 06:09:57 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJycEaK5TE/MoXeqj+IsAcLh/p9SQZRnb7s/lYfqop6e2OFEVCKao3zw4umSy+u7dd9kI5Ompw==
-X-Received: by 2002:a7b:c111:: with SMTP id w17mr8183071wmi.109.1599743396963;
-        Thu, 10 Sep 2020 06:09:56 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id 91sm9937489wrq.9.2020.09.10.06.09.56
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=v6+cahR1pl5c+cWIi0jixd4vtzACtZ6gKOl+XQd5lYg=;
+        b=cngzf1XK1dHlBJ0hUIN4Jo1523quy8ZdoH9lRc741se9alOcg+qMx7FuQ2w8RdkZe4
+         XPANzYVqjDWiWsUUnQoatc9FxlcqvD9WkBP+VRJXgHsFsN9QGA7+pOJMRTCMnatCFnCY
+         +CKOGXrJA/rCAMcuwuE2WuZnIZWvtqLkTktdafva3P1PZuZhzoGb6CUGZ4CmfQshEqsy
+         evHhYT6mXtbOZgE43TzD7Gjii0EDrkcwFz0gv7Ap3pF7+oH5Ss2kBcsPpPTFnF240Xw5
+         AQYCyWbG2gQkwqba/IirxK31KFbjyxUMsjkem286W9WiBautp5AyLBH7vf8OH3ctZtQK
+         86sw==
+X-Gm-Message-State: AOAM533tFFS/9/5ZcofDNqewD8hY2fp5grCILhfStCG4punCGF+4L9Ed
+        QQilr7G+YYm88IQz7pAakRX9RQ==
+X-Google-Smtp-Source: ABdhPJxwFXsApbfAzrKySZK1vPdz7KPda5XIzGO6ppo6RSnifHUKOxWpaHUVa2D0Bjibl7vuW+dWrw==
+X-Received: by 2002:a1c:a5ca:: with SMTP id o193mr8392200wme.106.1599742641657;
+        Thu, 10 Sep 2020 05:57:21 -0700 (PDT)
+Received: from antares.lan (6.9.9.0.0.d.a.3.9.b.d.2.8.1.d.7.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:7d18:2db9:3ad0:996])
+        by smtp.gmail.com with ESMTPSA id v6sm8737400wrt.90.2020.09.10.05.57.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2020 06:09:56 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 203A91829D5; Thu, 10 Sep 2020 15:09:56 +0200 (CEST)
-Subject: [PATCH bpf-next v3 6/9] tools: add new members to
- bpf_attr.raw_tracepoint in bpf.h
-From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Date:   Thu, 10 Sep 2020 15:09:56 +0200
-Message-ID: <159974339603.129227.16169601282261093819.stgit@toke.dk>
-In-Reply-To: <159974338947.129227.5610774877906475683.stgit@toke.dk>
-References: <159974338947.129227.5610774877906475683.stgit@toke.dk>
-User-Agent: StGit/0.23
+        Thu, 10 Sep 2020 05:57:20 -0700 (PDT)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     ast@kernel.org, yhs@fb.com, daniel@iogearbox.net, kafai@fb.com,
+        andriin@fb.com
+Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com,
+        Lorenz Bauer <lmb@cloudflare.com>
+Subject: [PATCH bpf-next v3 01/11] btf: make btf_set_contains take a const pointer
+Date:   Thu, 10 Sep 2020 13:56:21 +0100
+Message-Id: <20200910125631.225188-2-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200910125631.225188-1-lmb@cloudflare.com>
+References: <20200910125631.225188-1-lmb@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@redhat.com>
+bsearch doesn't modify the contents of the array, so we can take a const pointer.
 
-Sync addition of new members from main kernel tree.
-
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/include/uapi/linux/bpf.h |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ include/linux/bpf.h | 2 +-
+ kernel/bpf/btf.c    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 90359cab501d..0885ab6ac8d9 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -595,8 +595,10 @@ union bpf_attr {
- 	} query;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index c6d9f2c444f4..6b72cdf52ebc 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1900,6 +1900,6 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 		       void *addr1, void *addr2);
  
- 	struct { /* anonymous struct used by BPF_RAW_TRACEPOINT_OPEN command */
--		__u64 name;
--		__u32 prog_fd;
-+		__u64		name;
-+		__u32		prog_fd;
-+		__u32		tgt_prog_fd;
-+		__u32		tgt_btf_id;
- 	} raw_tracepoint;
+ struct btf_id_set;
+-bool btf_id_set_contains(struct btf_id_set *set, u32 id);
++bool btf_id_set_contains(const struct btf_id_set *set, u32 id);
  
- 	struct { /* anonymous struct for BPF_BTF_LOAD */
+ #endif /* _LINUX_BPF_H */
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index f9ac6935ab3c..a2330f6fe2e6 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -4772,7 +4772,7 @@ static int btf_id_cmp_func(const void *a, const void *b)
+ 	return *pa - *pb;
+ }
+ 
+-bool btf_id_set_contains(struct btf_id_set *set, u32 id)
++bool btf_id_set_contains(const struct btf_id_set *set, u32 id)
+ {
+ 	return bsearch(&id, set->ids, set->cnt, sizeof(u32), btf_id_cmp_func) != NULL;
+ }
+-- 
+2.25.1
 
