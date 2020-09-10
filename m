@@ -2,254 +2,360 @@ Return-Path: <SRS0=E2Hj=CT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A2FD3C2D0A7
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 19:41:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47B01C433E2
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 19:47:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5D53921D91
-	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 19:41:32 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UK8C9NDj"
+	by mail.kernel.org (Postfix) with ESMTP id F279821D81
+	for <bpf@archiver.kernel.org>; Thu, 10 Sep 2020 19:47:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1599767227;
+	bh=ZN0SJ1EKwbOTD/lLKidKKAYKB4i/3mXVLc4HpIBVubc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=XSoinr0EQNyeN9Neajg5CaiXHK8j9ocIcbMaORtfdpIJu9At81GgR3pakYcw7Pf/Y
+	 UvWqOHw7nlvY50OkIMJlhGTeYj62SxF9aaFHIwBTAg5kIBOPhUAhMHxSqqCGvwvARr
+	 X9ifAr+1NRhQMifagMTr4OuRRsvntbeTj2eL2npY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728054AbgIJTla (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Sep 2020 15:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48504 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727815AbgIJTlF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Sep 2020 15:41:05 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDE1C061573;
-        Thu, 10 Sep 2020 12:41:05 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id v78so4831033ybv.5;
-        Thu, 10 Sep 2020 12:41:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7NLoLuiSvemm18EApQM2ELQZ6rwM4D3aeHVfNMooP5Q=;
-        b=UK8C9NDjGgKBJ0/4pL2GuK77SdooL+zUDHQUw7Ehpzb9wIzq0fGteyHEFbyE2jOCiL
-         mn5rEl4L4iYLvWRBelOzVQLT7+vtoC42rv6M5Pmn8fuU7jyMhXExEDMw/jBEG7Jvm9cY
-         JDbWWnE9qJe7WalPdEiLEOF52cExyGlSznC1c2WoknQ/FD95dTuJ/xixUhpcyCud0rK1
-         5m/9YemQSypoyBnhFLzRK9MEDuwt+qgIGTpNdaB6zOiIvUNW5cmi7w8cGx1x0xggN8GB
-         LYB+pDX/zV1bqtX2y3atCq3EAVjOzDZ10CA6EZkmVazuOtuxJEopNa51QWLdQ6iawDfv
-         NVfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7NLoLuiSvemm18EApQM2ELQZ6rwM4D3aeHVfNMooP5Q=;
-        b=rTYfBtdy3xBT07VayAqj4Su8y/zUk1/bHSyNov8dyrEQERTLV600NnKMQ1yUaoi1dr
-         UxLmCfLNygegZ67FABWW/S1Rqje3WgDPek3cga0u0tCbfGx6wh8O9O9pxaX+tT9FecqK
-         djAPS3ISxCdNXYSt8MBtoaEdhN/aoHJp4ICQrjBbU155kaAOkn5lfikWsNF71ihoD63q
-         ubOR22DmllfVe9HrtFKRYZTQpDgCeASygqdrCZWD2UvbgHh067SGfke9fcWYOld+Mo3c
-         VdR4FHr/UlYoXCfzDJ1YARsWbx+fcKfPAzgHEyBsXN1bs/4aeANf/J3x5oGHDqJCFqU6
-         Ltwg==
-X-Gm-Message-State: AOAM531Yemy2PVyIlax4N5guWVnMi3Oddi9ZNygnItRJJsvWpmXWOwlK
-        30RhRF7WMzYPkkbASYKazZ2vCuo8h7IHVSeQE9U=
-X-Google-Smtp-Source: ABdhPJzq+QRV7V1mxn6clGBMEg/aL3hsMzscTRQMSMNVgpyQeFGyw5VYz7p3lEWhspp8baRZv1ULlAliokhuQpA+3pw=
-X-Received: by 2002:a25:cb57:: with SMTP id b84mr15009940ybg.425.1599766863823;
- Thu, 10 Sep 2020 12:41:03 -0700 (PDT)
+        id S1725974AbgIJTrD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Sep 2020 15:47:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54284 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731016AbgIJPZc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Sep 2020 11:25:32 -0400
+Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CA812206CA;
+        Thu, 10 Sep 2020 15:19:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1599751157;
+        bh=ZN0SJ1EKwbOTD/lLKidKKAYKB4i/3mXVLc4HpIBVubc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Cu5hyaKqUfGfXcehap6i+RedbshMx+EhKZbFOynd70ml3gkI4AQOutRe8rfYdD7/C
+         Nd/XLJ1/AyYOltvl+63cuYOih+nTJ43R1Hq28YiCBTy82pJxWXfwz1weMcAvHi3WXD
+         oCaNRMeucqh2dJ324hcN0PvciGaqmHzkyiz+mo4o=
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 1E0E340D3D; Thu, 10 Sep 2020 12:19:13 -0300 (-03)
+Date:   Thu, 10 Sep 2020 12:19:12 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Lorenz Bauer <lmb@cloudflare.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, jakub@cloudflare.com,
+        bpf@vger.kernel.org, kernel-team@cloudflare.com
+Subject: Re: [PATCH bpf] bpf: plug hole in struct bpf_sk_lookup_kern
+Message-ID: <20200910151912.GF4018363@kernel.org>
+References: <20200910110248.198326-1-lmb@cloudflare.com>
 MIME-Version: 1.0
-References: <20200909182406.3147878-1-sdf@google.com> <20200909182406.3147878-4-sdf@google.com>
-In-Reply-To: <20200909182406.3147878-4-sdf@google.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 10 Sep 2020 12:40:53 -0700
-Message-ID: <CAEf4BzaOmaOHdc2kkWk9KEByZqU+cKWHnFmFin4D3C2+xNubew@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 3/5] libbpf: Add BPF_PROG_BIND_MAP syscall and
- use it on .metadata section
-To:     Stanislav Fomichev <sdf@google.com>
-Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        YiFei Zhu <zhuyifei1999@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200910110248.198326-1-lmb@cloudflare.com>
+X-Url:  http://acmel.wordpress.com
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Sep 9, 2020 at 11:25 AM Stanislav Fomichev <sdf@google.com> wrote:
->
-> From: YiFei Zhu <zhuyifei@google.com>
->
-> The patch adds a simple wrapper bpf_prog_bind_map around the syscall.
-> When the libbpf tries to load a program, it will probe the kernel for
-> the support of this syscall and unconditionally bind .rodata section
+Em Thu, Sep 10, 2020 at 12:02:48PM +0100, Lorenz Bauer escreveu:
+> As Alexei points out, struct bpf_sk_lookup_kern has two 4-byte holes.
+> This leads to suboptimal instructions being generated (IPv4, x86):
+> 
+>     1372                    struct bpf_sk_lookup_kern ctx = {
+>        0xffffffff81b87f30 <+624>:   xor    %eax,%eax
+>        0xffffffff81b87f32 <+626>:   mov    $0x6,%ecx
+>        0xffffffff81b87f37 <+631>:   lea    0x90(%rsp),%rdi
+>        0xffffffff81b87f3f <+639>:   movl   $0x110002,0x88(%rsp)
+>        0xffffffff81b87f4a <+650>:   rep stos %rax,%es:(%rdi)
+>        0xffffffff81b87f4d <+653>:   mov    0x8(%rsp),%eax
+>        0xffffffff81b87f51 <+657>:   mov    %r13d,0x90(%rsp)
+>        0xffffffff81b87f59 <+665>:   incl   %gs:0x7e4970a0(%rip)
+>        0xffffffff81b87f60 <+672>:   mov    %eax,0x8c(%rsp)
+>        0xffffffff81b87f67 <+679>:   movzwl 0x10(%rsp),%eax
+>        0xffffffff81b87f6c <+684>:   mov    %ax,0xa8(%rsp)
+>        0xffffffff81b87f74 <+692>:   movzwl 0x38(%rsp),%eax
+>        0xffffffff81b87f79 <+697>:   mov    %ax,0xaa(%rsp)
+> 
+> Fix this by moving around sport and dport. pahole confirms there
+> are no more holes:
+> 
+>     struct bpf_sk_lookup_kern {
+>         u16                        family;       /*     0     2 */
+>         u16                        protocol;     /*     2     2 */
+>         __be16                     sport;        /*     4     2 */
+>         u16                        dport;        /*     6     2 */
+>         struct {
+>                 __be32             saddr;        /*     8     4 */
+>                 __be32             daddr;        /*    12     4 */
+>         } v4;                                    /*     8     8 */
+>         struct {
+>                 const struct in6_addr  * saddr;  /*    16     8 */
+>                 const struct in6_addr  * daddr;  /*    24     8 */
+>         } v6;                                    /*    16    16 */
+>         struct sock *              selected_sk;  /*    32     8 */
+>         bool                       no_reuseport; /*    40     1 */
+> 
+>         /* size: 48, cachelines: 1, members: 8 */
+>         /* padding: 7 */
+>         /* last cacheline: 48 bytes */
+>     };
 
-btw, you subject is out of sync, still mentions .metadata
+Cool, looking at:
 
-> to the program.
->
-> Cc: YiFei Zhu <zhuyifei1999@gmail.com>
-> Signed-off-by: YiFei Zhu <zhuyifei@google.com>
+[root@five ~]# pahole --sizes | grep ^bpf | sort -nr -k2 | head
+bpf_ringbuf	12288	4
+bpf_ctx_convert	6960	0
+bpf_verifier_env	4816	3
+bpf_func_state	1360	1
+bpf_trace_sample_data	1152	0
+bpf_verifier_log	1048	1
+bpf_dispatcher	1048	2
+bpf_struct_ops	976	0
+bpf_seq_printf_buf	768	0
+bpf_htab	640	1
+[root@five ~]# pahole --sizes | grep ^bpf | sort -nr -k3 | head
+bpf_ringbuf	12288	4
+bpf_verifier_env	4816	3
+bpf_verifier_state	120	2
+bpf_trampoline	376	2
+bpf_sk_lookup_kern	56	2
+bpf_reg_state	120	2
+bpf_func_proto	64	2
+bpf_dispatcher	1048	2
+bpf_verifier_log	1048	1
+bpf_struct_ops_value	64	1
+[root@five ~]#
 
-Please drop zhuyifei@google.com from CC list (it's unreachable), when
-you submit a new version.
+second column is size, third is number of holes (before your patch).
 
-> Signed-off-by: Stanislav Fomichev <sdf@google.com>
-> ---
->  tools/lib/bpf/bpf.c      | 13 ++++++
->  tools/lib/bpf/bpf.h      |  8 ++++
->  tools/lib/bpf/libbpf.c   | 94 ++++++++++++++++++++++++++++++++--------
->  tools/lib/bpf/libbpf.map |  1 +
->  4 files changed, 98 insertions(+), 18 deletions(-)
->
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 82b983ff6569..5f6c5676cc45 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -872,3 +872,16 @@ int bpf_enable_stats(enum bpf_stats_type type)
->
->         return sys_bpf(BPF_ENABLE_STATS, &attr, sizeof(attr));
->  }
-> +
-> +int bpf_prog_bind_map(int prog_fd, int map_fd,
-> +                     const struct bpf_prog_bind_opts *opts)
-> +{
-> +       union bpf_attr attr;
-> +
+bpf_ringbuf is interesting (this is all using /sys/kernel/btf/vmlinux):
 
-you forgot OPTS_VALID check here
+[root@five ~]# pahole bpf_ringbuf
+struct bpf_ringbuf {
+	wait_queue_head_t          waitq;                /*     0    24 */
+	struct irq_work            work;                 /*    24    24 */
+	u64                        mask;                 /*    48     8 */
+	struct page * *            pages;                /*    56     8 */
+	/* --- cacheline 1 boundary (64 bytes) --- */
+	int                        nr_pages;             /*    64     4 */
 
-> +       memset(&attr, 0, sizeof(attr));
-> +       attr.prog_bind_map.prog_fd = prog_fd;
-> +       attr.prog_bind_map.map_fd = map_fd;
-> +       attr.prog_bind_map.flags = OPTS_GET(opts, flags, 0);
-> +
-> +       return sys_bpf(BPF_PROG_BIND_MAP, &attr, sizeof(attr));
-> +}
+	/* XXX 60 bytes hole, try to pack */
 
-[...]
+	/* --- cacheline 2 boundary (128 bytes) --- */
+	spinlock_t                 spinlock;             /*   128     4 */
 
-> -static int probe_kern_global_data(void)
-> +static void probe_create_global_data(int *prog, int *map,
-> +                                    struct bpf_insn *insns, size_t insns_cnt)
->  {
->         struct bpf_load_program_attr prg_attr;
->         struct bpf_create_map_attr map_attr;
->         char *cp, errmsg[STRERR_BUFSIZE];
-> -       struct bpf_insn insns[] = {
-> -               BPF_LD_MAP_VALUE(BPF_REG_1, 0, 16),
-> -               BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 42),
-> -               BPF_MOV64_IMM(BPF_REG_0, 0),
-> -               BPF_EXIT_INSN(),
-> -       };
-> -       int ret, map;
-> +       int err;
->
->         memset(&map_attr, 0, sizeof(map_attr));
->         map_attr.map_type = BPF_MAP_TYPE_ARRAY;
-> @@ -3748,26 +3749,40 @@ static int probe_kern_global_data(void)
->         map_attr.value_size = 32;
->         map_attr.max_entries = 1;
->
-> -       map = bpf_create_map_xattr(&map_attr);
-> -       if (map < 0) {
-> -               ret = -errno;
-> -               cp = libbpf_strerror_r(ret, errmsg, sizeof(errmsg));
-> +       *map = bpf_create_map_xattr(&map_attr);
-> +       if (*map < 0) {
-> +               err = errno;
-> +               cp = libbpf_strerror_r(err, errmsg, sizeof(errmsg));
->                 pr_warn("Error in %s():%s(%d). Couldn't create simple array map.\n",
-> -                       __func__, cp, -ret);
-> -               return ret;
-> +                       __func__, cp, -err);
-> +               return;
->         }
->
-> -       insns[0].imm = map;
-> +       insns[0].imm = *map;
+	/* XXX 3964 bytes hole, try to pack */
 
-I think I already complained about this? You are assuming that
-insns[0] is BPF_LD_MAP_VALUE, which is true only for one case out of
-two already! It's just by luck that probe_prog_bind_map works because
-the verifier ignores the exit code, apparently.
+	/* --- cacheline 64 boundary (4096 bytes) --- */
+	long unsigned int          consumer_pos;         /*  4096     8 */
 
-If this doesn't generalize well, don't generalize. But let's not do a
-blind instruction rewrite, which will cause tons of confusion later.
+	/* XXX 4088 bytes hole, try to pack */
 
->
->         memset(&prg_attr, 0, sizeof(prg_attr));
->         prg_attr.prog_type = BPF_PROG_TYPE_SOCKET_FILTER;
->         prg_attr.insns = insns;
-> -       prg_attr.insns_cnt = ARRAY_SIZE(insns);
-> +       prg_attr.insns_cnt = insns_cnt;
->         prg_attr.license = "GPL";
->
-> -       ret = bpf_load_program_xattr(&prg_attr, NULL, 0);
-> +       *prog = bpf_load_program_xattr(&prg_attr, NULL, 0);
-> +}
-> +
-> +static int probe_kern_global_data(void)
-> +{
-> +       struct bpf_insn insns[] = {
-> +               BPF_LD_MAP_VALUE(BPF_REG_1, 0, 16),
-> +               BPF_ST_MEM(BPF_DW, BPF_REG_1, 0, 42),
-> +               BPF_MOV64_IMM(BPF_REG_0, 0),
-> +               BPF_EXIT_INSN(),
-> +       };
-> +       int prog = -1, map = -1;
-> +
-> +       probe_create_global_data(&prog, &map, insns, ARRAY_SIZE(insns));
-> +
->         close(map);
-> -       return probe_fd(ret);
-> +       return probe_fd(prog);
->  }
->
->  static int probe_kern_btf(void)
-> @@ -3894,6 +3909,32 @@ static int probe_kern_probe_read_kernel(void)
->         return probe_fd(bpf_load_program_xattr(&attr, NULL, 0));
->  }
->
-> +static int probe_prog_bind_map(void)
-> +{
-> +       struct bpf_insn insns[] = {
-> +               BPF_MOV64_IMM(BPF_REG_0, 0),
-> +               BPF_EXIT_INSN(),
-> +       };
-> +       int prog = -1, map = -1, ret = 0;
-> +
-> +       if (!kernel_supports(FEAT_GLOBAL_DATA))
-> +               return 0;
-> +
-> +       probe_create_global_data(&prog, &map, insns, ARRAY_SIZE(insns));
-> +
-> +       if (map >= 0 && prog < 0) {
-> +               close(map);
-> +               return 0;
-> +       }
-> +
-> +       if (!bpf_prog_bind_map(prog, map, NULL))
-> +               ret = 1;
-> +
-> +       close(map);
-> +       close(prog);
-> +       return ret;
-> +}
-> +
+	/* --- cacheline 128 boundary (8192 bytes) --- */
+	long unsigned int          producer_pos;         /*  8192     8 */
 
-[...]
+	/* XXX 4088 bytes hole, try to pack */
 
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 92ceb48a5ca2..0b7830f4ff8b 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -308,4 +308,5 @@ LIBBPF_0.2.0 {
->                 perf_buffer__epoll_fd;
->                 perf_buffer__consume_buffer;
->                 xsk_socket__create_shared;
-> +               bpf_prog_bind_map;
+	/* --- cacheline 192 boundary (12288 bytes) --- */
+	char                       data[];               /* 12288     0 */
 
-please keep this list sorted
+	/* size: 12288, cachelines: 192, members: 9 */
+	/* sum members: 88, holes: 4, sum holes: 12200 */
+};
+[root@five ~]#
 
->  } LIBBPF_0.1.0;
-> --
-> 2.28.0.526.ge36021eeef-goog
->
+Which seems crazy, lemme see using DWARF:
+
+[root@five ~]# pahole -F dwarf bpf_ringbuf
+struct bpf_ringbuf {
+	wait_queue_head_t          waitq;                /*     0    24 */
+	struct irq_work            work;                 /*    24    24 */
+	u64                        mask;                 /*    48     8 */
+	struct page * *            pages;                /*    56     8 */
+	/* --- cacheline 1 boundary (64 bytes) --- */
+	int                        nr_pages;             /*    64     4 */
+
+	/* XXX 60 bytes hole, try to pack */
+
+	/* --- cacheline 2 boundary (128 bytes) --- */
+	spinlock_t                 spinlock __attribute__((__aligned__(64))); /*   128     4 */
+
+	/* XXX 3964 bytes hole, try to pack */
+
+	/* --- cacheline 64 boundary (4096 bytes) --- */
+	long unsigned int          consumer_pos __attribute__((__aligned__(4096))); /*  4096     8 */
+
+	/* XXX 4088 bytes hole, try to pack */
+
+	/* --- cacheline 128 boundary (8192 bytes) --- */
+	long unsigned int          producer_pos __attribute__((__aligned__(4096))); /*  8192     8 */
+
+	/* XXX 4088 bytes hole, try to pack */
+
+	/* --- cacheline 192 boundary (12288 bytes) --- */
+	char                       data[] __attribute__((__aligned__(4096))); /* 12288     0 */
+
+	/* size: 12288, cachelines: 192, members: 9 */
+	/* sum members: 88, holes: 4, sum holes: 12200 */
+	/* forced alignments: 4, forced holes: 4, sum forced holes: 12200 */
+} __attribute__((__aligned__(4096)));
+[root@five ~]#
+
+Yeah, matches the header files:
+
+struct bpf_ringbuf {
+        wait_queue_head_t waitq;
+        struct irq_work work;
+        u64 mask;
+        struct page **pages;
+        int nr_pages;
+        spinlock_t spinlock ____cacheline_aligned_in_smp;
+        /* Consumer and producer counters are put into separate pages to allow
+         * mapping consumer page as r/w, but restrict producer page to r/o.
+         * This protects producer position from being modified by user-space
+         * application and ruining in-kernel position tracking.
+         */
+        unsigned long consumer_pos __aligned(PAGE_SIZE);
+        unsigned long producer_pos __aligned(PAGE_SIZE);
+        char data[] __aligned(PAGE_SIZE);
+};
+
+
+But:
+
+[root@five ~]# pahole bpf_verifier_env
+struct bpf_verifier_env {
+	u32                        insn_idx;             /*     0     4 */
+	u32                        prev_insn_idx;        /*     4     4 */
+	struct bpf_prog *          prog;                 /*     8     8 */
+	const struct bpf_verifier_ops  * ops;            /*    16     8 */
+	struct bpf_verifier_stack_elem * head;           /*    24     8 */
+	int                        stack_size;           /*    32     4 */
+	bool                       strict_alignment;     /*    36     1 */
+	bool                       test_state_freq;      /*    37     1 */
+
+	/* XXX 2 bytes hole, try to pack */
+
+	struct bpf_verifier_state * cur_state;           /*    40     8 */
+	struct bpf_verifier_state_list * * explored_states; /*    48     8 */
+	struct bpf_verifier_state_list * free_list;      /*    56     8 */
+	/* --- cacheline 1 boundary (64 bytes) --- */
+	struct bpf_map *           used_maps[64];        /*    64   512 */
+	/* --- cacheline 9 boundary (576 bytes) --- */
+	u32                        used_map_cnt;         /*   576     4 */
+	u32                        id_gen;               /*   580     4 */
+	bool                       allow_ptr_leaks;      /*   584     1 */
+	bool                       allow_ptr_to_map_access; /*   585     1 */
+	bool                       bpf_capable;          /*   586     1 */
+	bool                       bypass_spec_v1;       /*   587     1 */
+	bool                       bypass_spec_v4;       /*   588     1 */
+	bool                       seen_direct_write;    /*   589     1 */
+
+	/* XXX 2 bytes hole, try to pack */
+
+	struct bpf_insn_aux_data * insn_aux_data;        /*   592     8 */
+	const struct bpf_line_info  * prev_linfo;        /*   600     8 */
+	struct bpf_verifier_log    log;                  /*   608  1048 */
+	/* --- cacheline 25 boundary (1600 bytes) was 56 bytes ago --- */
+	struct bpf_subprog_info    subprog_info[257];    /*  1656  3084 */
+
+	/* XXX 4 bytes hole, try to pack */
+
+	/* --- cacheline 74 boundary (4736 bytes) was 8 bytes ago --- */
+	struct {
+		int *              insn_state;           /*  4744     8 */
+		int *              insn_stack;           /*  4752     8 */
+		int                cur_stack;            /*  4760     4 */
+	} cfg;                                           /*  4744    24 */
+
+	/* XXX last struct has 4 bytes of padding */
+
+	u32                        pass_cnt;             /*  4768     4 */
+	u32                        subprog_cnt;          /*  4772     4 */
+	u32                        prev_insn_processed;  /*  4776     4 */
+	u32                        insn_processed;       /*  4780     4 */
+	u32                        prev_jmps_processed;  /*  4784     4 */
+	u32                        jmps_processed;       /*  4788     4 */
+	u64                        verification_time;    /*  4792     8 */
+	/* --- cacheline 75 boundary (4800 bytes) --- */
+	u32                        max_states_per_insn;  /*  4800     4 */
+	u32                        total_states;         /*  4804     4 */
+	u32                        peak_states;          /*  4808     4 */
+	u32                        longest_mark_read_walk; /*  4812     4 */
+
+	/* size: 4816, cachelines: 76, members: 36 */
+	/* sum members: 4808, holes: 3, sum holes: 8 */
+	/* paddings: 1, sum paddings: 4 */
+	/* last cacheline: 16 bytes */
+};
+[root@five ~]#
+
+[root@five ~]# pahole --reorganize bpf_verifier_env | tail
+	u32                        jmps_processed;       /*  4788     4 */
+	u64                        verification_time;    /*  4792     8 */
+	/* --- cacheline 75 boundary (4800 bytes) --- */
+	u32                        max_states_per_insn;  /*  4800     4 */
+	u32                        total_states;         /*  4804     4 */
+
+	/* size: 4808, cachelines: 76, members: 36 */
+	/* paddings: 1, sum paddings: 4 */
+	/* last cacheline: 8 bytes */
+};   /* saved 8 bytes! */
+[root@five ~]#
+
+
+And headers have no explicit alignment in the headers. Maybe doing the
+reorg will not help.
+
+But looking at disasm for rep stos + pahole... humm...
+
+:-)
+
+One last comment:
+
+[root@five ~]# pahole bpf_trampoline
+struct bpf_trampoline {
+	struct hlist_node          hlist;                /*     0    16 */
+	struct mutex               mutex;                /*    16    32 */
+	refcount_t                 refcnt;               /*    48     4 */
+
+	/* XXX 4 bytes hole, try to pack */
+
+	u64                        key;                  /*    56     8 */
+	/* --- cacheline 1 boundary (64 bytes) --- */
+	struct {
+		struct btf_func_model model;             /*    64    14 */
+
+		/* XXX 2 bytes hole, try to pack */
+
+		void *             addr;                 /*    80     8 */
+		bool               ftrace_managed;       /*    88     1 */
+	} func;                                          /*    64    32 */
+
+	/* XXX last struct has 7 bytes of padding */
+
+	struct bpf_prog *          extension_prog;       /*    96     8 */
+	struct hlist_head          progs_hlist[3];       /*   104    24 */
+	/* --- cacheline 2 boundary (128 bytes) --- */
+	int                        progs_cnt[3];         /*   128    12 */
+
+	/* XXX 4 bytes hole, try to pack */
+
+	void *                     image;                /*   144     8 */
+	u64                        selector;             /*   152     8 */
+	struct bpf_ksym            ksym;                 /*   160   216 */
+
+	/* XXX last struct has 7 bytes of padding */
+
+	/* size: 376, cachelines: 6, members: 11 */
+	/* sum members: 368, holes: 2, sum holes: 8 */
+	/* paddings: 2, sum paddings: 14 */
+	/* last cacheline: 56 bytes */
+};
+[root@five ~]#
+
+perhaps moving ftrace_managed to before addr in that anonymous struct on
+the 'func' member may help?
+
+- Arnaldo
+
