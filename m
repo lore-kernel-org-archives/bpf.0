@@ -2,60 +2,60 @@ Return-Path: <SRS0=Rse5=CU=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F1F0C43461
-	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 16:45:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6757C433E2
+	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 17:01:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E5D30221E7
-	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 16:45:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3AE9E221EB
+	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 17:01:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="D2eebW1O"
+	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="0mB8mslJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725778AbgIKQoy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Sep 2020 12:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58304 "EHLO
+        id S1726246AbgIKRBq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Sep 2020 13:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726076AbgIKPIW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Sep 2020 11:08:22 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7685EC061757
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2020 07:57:09 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id t13so9227941ile.9
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2020 07:57:09 -0700 (PDT)
+        with ESMTP id S1726163AbgIKPEQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Sep 2020 11:04:16 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 901D0C0612F8
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2020 07:55:51 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id z25so11295035iol.10
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2020 07:55:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=sartura-hr.20150623.gappssmtp.com; s=20150623;
         h=mime-version:from:date:message-id:subject:to:cc;
-        bh=ykseYhJ90a1CbPCcoVWkcQnnJUIuSYT5dh8aD3YbFOE=;
-        b=D2eebW1OrS1EsxnjO/gPjG8eT62idCz9IEXRv1DYKyJK8PvR6/k9DjbkqiItuM3R6p
-         vocaqHBtsvDa0KWILYY3NhewAuLbWsZdyBMyu3T6SSJt/F252jjj6/iqRqKGJCs8Tdq2
-         gzf1u9gFjNrHkJLLDZf9jldzG3mGoJwAHWlqPjMu3zGjOgIBFFJ2sRoAjUMqC5hciDvY
-         h3Skykro16zLlTrLbG+l9HMae10Oa/9O2xQj4K+a+hYpyV6YjhEXyuPjPJlCkfWYV4NE
-         oBPT+k47UK6d9moi/2hOZkqPWrBVBXapWPUGJVTwnyrbCM+wrBMcQaMmgLBH5U7GLlw8
-         Ysyg==
+        bh=yo3dy5Vma+egQOknSTT7v4G13EtMgJGHzgkRhn8Lv4U=;
+        b=0mB8mslJ9ZnR0jUvPq3QKut0MVyc3f0/yD0wvR/b5hayQcJxZmp5sgdloSJ4tDx9oS
+         69WJx12+D+KyxFfpBy6lO1AB2uD2fyMbpJTwWQhUiJvQdsZ/ziGW28kwaYFQi7PiF+Tk
+         u+13LDocqY6r3ZtqpsrsjB0VmW+p7sQQJz1oB1VnhG3Dk5LdX7FsTg0YwoWOBq8KihdN
+         He1PNydnYqj0IqQkIEVo9kCIMNUex3z2F+9Vb944tllwOIuRFuQOGJyQLpmBC4azo6q2
+         e0Zn39nxhgYgOKCgQ+u+Ak6eq0K4aZpTMakQCqC+CCMd6WquM4iNLezWprRz12BWC2j0
+         kHBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=ykseYhJ90a1CbPCcoVWkcQnnJUIuSYT5dh8aD3YbFOE=;
-        b=K57h/KGRwL0F2wSXkpRrwaQjSNDUexKpD8pVo0d3u9a56ZQDzk3Bny68ETzbVdTGvY
-         Rpp84L+CJSSYgDPRk4YD3gBPOfaWBIhKTWfA2R/BiGYos/fFD7SDfHHoW4RO7vZFGhDt
-         b8dg4Q3tKvCvYsOxJsgmQbZESl/qqR7SQi1gAzyNSJDASXzWhj7H6n8vteJ0Sgr+bHbQ
-         Ie79mzMORAFdQvagcortWBf7PXtfkOBwCDIjvR6TmVVoz+Ppsb7rp2uqsBBlrJmJv4Js
-         TBJUk7DsOljAqW5ttqu4ERmpLubDE9caSGzWSeRLftnHz3GJpnhpJVBVO5+5VK6/MA/K
-         Zf/w==
-X-Gm-Message-State: AOAM530K/dB6ggSH/ce2JTfot7H5fXLlvTlerI9RNXJPzgwFUcQjhNgb
-        NkMNuHG1tyb/miI2oVZZ0bQ7uelFh4L8sIrGymK9ZBtWF+8Lcw==
-X-Google-Smtp-Source: ABdhPJy8jm85kawKVsCdI4q9H2rZ5aCR21bsoD1aH3lHeY29rFSzv/bG3y8qmxnI8f06SBgVNmm17UOzuOoT29D6aj8=
-X-Received: by 2002:a92:6b04:: with SMTP id g4mr2095402ilc.203.1599836226724;
- Fri, 11 Sep 2020 07:57:06 -0700 (PDT)
+        bh=yo3dy5Vma+egQOknSTT7v4G13EtMgJGHzgkRhn8Lv4U=;
+        b=S5japk+ooeDu08oH8Ok6Hm2HKgdRC6HdYmQDKkUxak3jjfjZhX01Mm2aiavMZZkufs
+         YCCpw1dkH+tbrS5tG9pSYV0/tjqq/D4sxw2+ktaCs/OY74D6bkDeiGv0ekWYpOy+tjvk
+         Bx3ONZrkvoinMLjf/6oto/BZO0SbvbUCyMAuSLslL3E16l/1bQng0M2np/4tiqJkgQt6
+         TvTa6rw09isBpJ/H9u3jZltxFBLh5VEOZb3Pkg46u5tZ5pxxsCHvotFKrlpVYAhWZgff
+         wtLmaL+kY16ZAVi+a/Du6iOYd2hKkQXQ7RISk4Mexrox03hikNICeNsufGZeM+zHSGDQ
+         OPSQ==
+X-Gm-Message-State: AOAM531Rf/1kt6vTslxiEfA27ghGDfQl9+xYLcpf8CoOQNDIR8OfgZW2
+        L3DX62EqYcQw9pXbrUkLOOPy42imrMuN8ewzpKZ3OmANtUsq+2zT
+X-Google-Smtp-Source: ABdhPJwh97MiplAFrPeWrGy1f3/KGQ0YjxM3uvPnjeSO7PZaqxYxXTr4uEQkOGdiPaFlAuyfGtT4aSLWLtoFY0GcGPM=
+X-Received: by 2002:a5e:9b0d:: with SMTP id j13mr2052799iok.210.1599836150019;
+ Fri, 11 Sep 2020 07:55:50 -0700 (PDT)
 MIME-Version: 1.0
-From:   Luka Oreskovic <luka.oreskovic@sartura.hr>
-Date:   Fri, 11 Sep 2020 16:56:56 +0200
-Message-ID: <CA+XBgLU=8PFkP8S32e4gpst0=R4MFv8rZA5KaO+cEPYSnTRYYw@mail.gmail.com>
-Subject: Problems with pointer offsets on ARM32
-To:     bpf@vger.kernel.org
+From:   Borna Cafuk <borna.cafuk@sartura.hr>
+Date:   Fri, 11 Sep 2020 16:55:39 +0200
+Message-ID: <CAGeTCaXCwN6XLNM6u6r+2_DuqQ+GFbqdZah345P38U9xOntMeQ@mail.gmail.com>
+Subject: map_lookup_and_delete_elem for BPF_MAP_TYPE_HASH
+To:     bpf <bpf@vger.kernel.org>
 Cc:     Luka Perkov <luka.perkov@sartura.hr>,
         Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>
 Content-Type: text/plain; charset="UTF-8"
@@ -64,90 +64,21 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Greetings everyone,
+Hello everyone,
 
-I have been testing various BPF programs on the ARM32 architecture and
-have encountered a strange error.
+As far as I can see, `map_lookup_and_delete_elem` is implemented only for
+`BPF_MAP_TYPE_QUEUE` and `BPF_MAP_TYPE_STACK` [0]. It might be useful to be
+able to do this operation on other kinds of maps, e.g. `BPF_MAP_TYPE_HASH`.
 
-When trying to run a simple program that prints out the arguments of
-the open syscall,
-I found some strange behaviour with the pointer offsets when accessing
-the arguments:
-The output of llvm-objdump differed from the verifier error dump log.
-Notice the differences in lines 0 and 1. Why is the bytecode being
-altered at runtime?
+If I'm not mistaken, it would have benefits over `bpf_map_lookup_elem` followed
+by `bpf_map_delete_elem` in regards to avoiding race conditions.
 
-I attached the program, the llvm-objdump result and the verifier dump below.
+Is there a reason this functionality wasn't implemented?
+Is it planned for any time soon?
 
-Best wishes,
-Luka Oreskovic
+I'm looking forward to your input.
 
-BPF program
---------------------------------------------
-#include "vmlinux.h"
-#include <bpf/bpf_helpers.h>
+Best regards,
+Borna Cafuk
 
-SEC("tracepoint/syscalls/sys_enter_open")
-int tracepoint__syscalls__sys_enter_open(struct trace_event_raw_sys_enter* ctx)
-{
-        const char *arg1 = (const char *)ctx->args[0];
-        int arg2 = (int)ctx->args[1];
-
-        bpf_printk("Open arg 1: %s\n", arg1);
-        bpf_printk("Open arg 2: %d\n", arg2);
-
-        return 0;
-}
-
-char LICENSE[] SEC("license") = "GPL";
-
-
-llvm-objdump of program
---------------------------------------------
-Disassembly of section tracepoint/syscalls/sys_enter_open:
-
-0000000000000000 tracepoint__syscalls__sys_enter_open:
-;       int arg2 = (int)ctx->args[1];
-       0:       79 16 18 00 00 00 00 00 r6 = *(u64 *)(r1 + 24)
-;       const char *arg1 = (const char *)ctx->args[0];
-       1:       79 13 10 00 00 00 00 00 r3 = *(u64 *)(r1 + 16)
-       2:       18 01 00 00 20 31 3a 20 00 00 00 00 25 73 0a 00 r1 =
-2941353058775328 ll
-;       bpf_printk("Open arg 1: %s\n", arg1);
-       4:       7b 1a f8 ff 00 00 00 00 *(u64 *)(r10 - 8) = r1
-       5:       18 07 00 00 4f 70 65 6e 00 00 00 00 20 61 72 67 r7 =
-7454127125170581583 ll
-       7:       7b 7a f0 ff 00 00 00 00 *(u64 *)(r10 - 16) = r7
-       8:       bf a1 00 00 00 00 00 00 r1 = r10
-       9:       07 01 00 00 f0 ff ff ff r1 += -16
-      10:       b7 02 00 00 10 00 00 00 r2 = 16
-      11:       85 00 00 00 06 00 00 00 call 6
-      12:       18 01 00 00 20 32 3a 20 00 00 00 00 25 64 0a 00 r1 =
-2924860384358944 ll
-;       bpf_printk("Open arg 2: %d\n", arg2);
-      14:       7b 1a f8 ff 00 00 00 00 *(u64 *)(r10 - 8) = r1
-      15:       7b 7a f0 ff 00 00 00 00 *(u64 *)(r10 - 16) = r7
-      16:       bf a1 00 00 00 00 00 00 r1 = r10
-      17:       07 01 00 00 f0 ff ff ff r1 += -16
-      18:       b7 02 00 00 10 00 00 00 r2 = 16
-      19:       bf 63 00 00 00 00 00 00 r3 = r6
-      20:       85 00 00 00 06 00 00 00 call 6
-;       return 0;
-      21:       b7 00 00 00 00 00 00 00 r0 = 0
-      22:       95 00 00 00 00 00 00 00 exit
-
-
-verifier output when running program
---------------------------------------------
-libbpf: -- BEGIN DUMP LOG ---
-libbpf:
-Unrecognized arg#0 type PTR
-; int arg2 = (int)ctx->args[1];
-0: (79) r6 = *(u64 *)(r1 +16)
-; const char *arg1 = (const char *)ctx->args[0];
-1: (79) r3 = *(u64 *)(r1 +12)
-invalid bpf_context access off=12 size=8
-processed 2 insns (limit 1000000) max_states_per_insn 0 total_states 0
-peak_states 0 mark_read 0
-
-libbpf: -- END LOG --
+[0] https://elixir.bootlin.com/linux/v5.9-rc4/source/kernel/bpf/syscall.c#L1501
