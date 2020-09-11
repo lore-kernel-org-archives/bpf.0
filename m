@@ -2,71 +2,72 @@ Return-Path: <SRS0=Rse5=CU=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-14.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8DFEFC433E2
-	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 15:51:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97681C433E2
+	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 15:58:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3BD0521D47
-	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 15:51:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 53C0421D7E
+	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 15:58:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OqKkm9m3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rLp1NySz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725851AbgIKPue (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Sep 2020 11:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
+        id S1725904AbgIKP6I (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Sep 2020 11:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725927AbgIKPtu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Sep 2020 11:49:50 -0400
-Received: from mail-qk1-x741.google.com (mail-qk1-x741.google.com [IPv6:2607:f8b0:4864:20::741])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4807C061757
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2020 08:49:37 -0700 (PDT)
-Received: by mail-qk1-x741.google.com with SMTP id w16so10300741qkj.7
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2020 08:49:37 -0700 (PDT)
+        with ESMTP id S1726582AbgIKP5t (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Sep 2020 11:57:49 -0400
+Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8575AC061786
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2020 08:57:49 -0700 (PDT)
+Received: by mail-qv1-xf42.google.com with SMTP id h1so5425702qvo.9
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2020 08:57:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KK9DqDT0nRrrH1BnI4TG9/GxMoG/9TkPvavel0k2iEE=;
-        b=OqKkm9m3GqjIFqLrSgv2aIJOycuG4TfjBYNODlxu6GOChwl5JD6GtO+/nhSsUlhsEs
-         1+ak2c/fzhQUsmA4OnAUjxE/E7ANlooVJwmIQbg/fLF7nDcBDCYrZRAKW96g+mauow6j
-         Xva5HvSsBHWgKmMx6anHFijKeKKkpz+wLHeJXJyQJKJDK+lQQ2KoHPX8xDo0ca5CvEXU
-         5R7f4C6A404p4qsMetxqb9GtC5z8GxTo99DW6UA7m0T66IwIMOsmqXUJnuYT7c4xX/Gx
-         K33g1XXQIxnxwQlYNHmoF+2I5I61hIw3zlo4C+hjELf1z4OZ9od70S76dPpDGDkpb+fL
-         4euQ==
+        bh=7EL5QIMCol+nNuuhHrYx3NpBAz3xMq+uHFMPEPZUHdY=;
+        b=rLp1NySzNWm5L4jWo+hY0vSfl0/xqBuHjKQVwf1WDpdwjdJGu9skxJVSHfNRONDd93
+         L5E5R/usjyvzxijBipEXLFNLPt3qmHFasqjd3+Xsn+NIggx/Et6Z1oGCA/hbhTO9YVeL
+         +VS0Nv8c5s69q4OTqKMh+hYiQQFY5RkcvplUV5xeL6SlCupRhLqqc+cT/s6U/MLlbLoO
+         XbxbDzDGDwiLlOse0Y2lryfCcNSXigxKe3q/bG+tJ7o4fddNC2pV1FMf++YPCGyBywuy
+         eTfxn81+HM1asfkTRTxjn2wmjAQrGpJH6KXtFXYjb7k+etQ7fotosxILtlgQwX3ybBcv
+         qCow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KK9DqDT0nRrrH1BnI4TG9/GxMoG/9TkPvavel0k2iEE=;
-        b=qgRr7xR+2VjpZYdlQrp+/lQhzxD1EpMTsI1E7QmIEclZFtBrNA/lNHkjg/A/eoALRt
-         QTEXdDrYXFaJ37dhaJc2nN50msJINEQJH7HaukiqqQpZcPhs2Zmp5+d1vUgfbf28U6NX
-         xS0drR1sJO57INoA3zvYT/3OqGSiVMdT9ZX9t5GLQE/jV810AYSE2p6+NFXBYWxe8jj5
-         hZK2SAkaHz9b/o45dWLmHzgffHZdYPG1HWTH1sfU8vEmRdfnO3Uyagr8Q5EsUBbrv+1z
-         ccTts3hF4Dnxu3QBz3FJ3HK84TNRRunpNhXvNY3KNY4vWtoSY+Qx0xx7lWGEvzM+eWWJ
-         jd9A==
-X-Gm-Message-State: AOAM5331RVuyxc2akfoTE5xhloT+omvArM3FR9QGBx2mjcKy6H/gf84K
-        klSTUS8xBIZbBzagpT4tazm0RWDZHRu/36SDtLmJQjNEjvmerg==
-X-Google-Smtp-Source: ABdhPJyV20mOCwhrDag0+eZAX1vU/Jz/dfXavw/33DwtltASXUYEAJVFmM/510FVmVyZ62iheN+xfYrfiRZLDEttqIk=
-X-Received: by 2002:a37:a6c3:: with SMTP id p186mr2077408qke.237.1599839376654;
- Fri, 11 Sep 2020 08:49:36 -0700 (PDT)
+        bh=7EL5QIMCol+nNuuhHrYx3NpBAz3xMq+uHFMPEPZUHdY=;
+        b=aW6eiTe9Aa1p2Yo9WYPPcxk6D9cn1U3fvMBRaDyF68hiILd0F11Rb+ZygiOgyTbj/k
+         jvzpR2gb+K547yUSXD9wQBgvrlp8K8JhaHEJFwVKgNP0s2jSC/am6JV6sVBEmbDzzJjR
+         PYZlm3TmTDvCRK3+un6+ggGThALdMuTgXVx07ZAl6RZxwv54rF5YHMB4zMmu8jf/OL2e
+         OhePIWMAbhTvx4gmVJr37cnFwCf/sonjm9gtuE6MOLT3uc0EtngxQMdYuQvwcCHLZrnl
+         4Z239JNZD6NgL1TP/stfneEBQZ8N9cyJcIWkWOGxgXaxRzEXqZBBUkd7U/NKISc/zH+i
+         buTw==
+X-Gm-Message-State: AOAM531+IH/GHdBmnLrhi/xP7ra/FMG+25rOuDIJT2BLBlt+AFzq/Js/
+        ClpM0G5/yoplf9KbC/Et8KGFKHe8A1qz3nKWeo5YEQ==
+X-Google-Smtp-Source: ABdhPJwzpIi715JRPFgu5PGIdnTrR5aO+y3zA2nI0tnr33CzB4RLydg7fngEbyQDu3GTloB40l4orxrYchhLrB3iztA=
+X-Received: by 2002:a0c:f48e:: with SMTP id i14mr2598321qvm.5.1599839868533;
+ Fri, 11 Sep 2020 08:57:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200909182406.3147878-1-sdf@google.com> <20200909182406.3147878-4-sdf@google.com>
- <CAEf4BzaOmaOHdc2kkWk9KEByZqU+cKWHnFmFin4D3C2+xNubew@mail.gmail.com>
-In-Reply-To: <CAEf4BzaOmaOHdc2kkWk9KEByZqU+cKWHnFmFin4D3C2+xNubew@mail.gmail.com>
+References: <20200909182406.3147878-1-sdf@google.com> <20200909182406.3147878-6-sdf@google.com>
+ <CAEf4BzY7Ca9ZpL3x_EkjxM4tZXtNJV5kV=MPGTbibkv_bSFB9w@mail.gmail.com>
+In-Reply-To: <CAEf4BzY7Ca9ZpL3x_EkjxM4tZXtNJV5kV=MPGTbibkv_bSFB9w@mail.gmail.com>
 From:   Stanislav Fomichev <sdf@google.com>
-Date:   Fri, 11 Sep 2020 08:49:25 -0700
-Message-ID: <CAKH8qBtJoZpacMj+4sEJkt1BcQ1-oju=Z9SOVq-GxitUTJch=w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 3/5] libbpf: Add BPF_PROG_BIND_MAP syscall and
- use it on .metadata section
+Date:   Fri, 11 Sep 2020 08:57:37 -0700
+Message-ID: <CAKH8qBvikNYe31NdGin=QYEVt=0LhRg6cDX725mL3D0E_3Jt0Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 5/5] selftests/bpf: Test load and dump
+ metadata with btftool and skel
 To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        YiFei Zhu <zhuyifei@google.com>,
         YiFei Zhu <zhuyifei1999@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
@@ -74,102 +75,32 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 12:41 PM Andrii Nakryiko
+On Thu, Sep 10, 2020 at 12:59 PM Andrii Nakryiko
 <andrii.nakryiko@gmail.com> wrote:
 >
 > On Wed, Sep 9, 2020 at 11:25 AM Stanislav Fomichev <sdf@google.com> wrote:
 > >
 > > From: YiFei Zhu <zhuyifei@google.com>
 > >
-> > The patch adds a simple wrapper bpf_prog_bind_map around the syscall.
-> > When the libbpf tries to load a program, it will probe the kernel for
-> > the support of this syscall and unconditionally bind .rodata section
->
-> btw, you subject is out of sync, still mentions .metadata
-Ooops, will fix, thanks!
-
-> > to the program.
+> > This is a simple test to check that loading and dumping metadata
+> > in btftool works, whether or not metadata contents are used by the
+> > program.
+> >
+> > A C test is also added to make sure the skeleton code can read the
+> > metadata values.
 > >
 > > Cc: YiFei Zhu <zhuyifei1999@gmail.com>
 > > Signed-off-by: YiFei Zhu <zhuyifei@google.com>
->
-> Please drop zhuyifei@google.com from CC list (it's unreachable), when
-> you submit a new version.
-I think git-send-email automatically adds it because of the sign-off,
-let me try to see if I can remove it. I guess I can just do
-s/zhuyifei@google.com/zhuyifei1999@gmail.com/ to make
-it quiet.
-
 > > Signed-off-by: Stanislav Fomichev <sdf@google.com>
 > > ---
-> >  tools/lib/bpf/bpf.c      | 13 ++++++
-> >  tools/lib/bpf/bpf.h      |  8 ++++
-> >  tools/lib/bpf/libbpf.c   | 94 ++++++++++++++++++++++++++++++++--------
-> >  tools/lib/bpf/libbpf.map |  1 +
-> >  4 files changed, 98 insertions(+), 18 deletions(-)
-> >
-> > diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> > index 82b983ff6569..5f6c5676cc45 100644
-> > --- a/tools/lib/bpf/bpf.c
-> > +++ b/tools/lib/bpf/bpf.c
-> > @@ -872,3 +872,16 @@ int bpf_enable_stats(enum bpf_stats_type type)
-> >
-> >         return sys_bpf(BPF_ENABLE_STATS, &attr, sizeof(attr));
-> >  }
-> > +
-> > +int bpf_prog_bind_map(int prog_fd, int map_fd,
-> > +                     const struct bpf_prog_bind_opts *opts)
-> > +{
-> > +       union bpf_attr attr;
-> > +
 >
-> you forgot OPTS_VALID check here
-Good point, will do!
+> It would be good to test that libbpf does bind .rodata even if BPF
+> program doesn't use it. So for metadata_unused you can get
+> bpf_prog_info and check that it does contain the id of .rodata?
+Good idea, will add that.
 
-> > @@ -3748,26 +3749,40 @@ static int probe_kern_global_data(void)
-> >         map_attr.value_size = 32;
-> >         map_attr.max_entries = 1;
-> >
-> > -       map = bpf_create_map_xattr(&map_attr);
-> > -       if (map < 0) {
-> > -               ret = -errno;
-> > -               cp = libbpf_strerror_r(ret, errmsg, sizeof(errmsg));
-> > +       *map = bpf_create_map_xattr(&map_attr);
-> > +       if (*map < 0) {
-> > +               err = errno;
-> > +               cp = libbpf_strerror_r(err, errmsg, sizeof(errmsg));
-> >                 pr_warn("Error in %s():%s(%d). Couldn't create simple array map.\n",
-> > -                       __func__, cp, -ret);
-> > -               return ret;
-> > +                       __func__, cp, -err);
-> > +               return;
-> >         }
-> >
-> > -       insns[0].imm = map;
-> > +       insns[0].imm = *map;
+> > +const char bpf_metadata_a[] SEC(".rodata") = "foo";
+> > +const int bpf_metadata_b SEC(".rodata") = 1;
 >
-> I think I already complained about this? You are assuming that
-> insns[0] is BPF_LD_MAP_VALUE, which is true only for one case out of
-> two already! It's just by luck that probe_prog_bind_map works because
-> the verifier ignores the exit code, apparently.
->
-> If this doesn't generalize well, don't generalize. But let's not do a
-> blind instruction rewrite, which will cause tons of confusion later.
-I might have missed your previous comment, sorry about that.
-Agreed, it might be easier to just copy-paste the original function
-and explicitly change the insns.
-
-> [...]
->
-> > diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> > index 92ceb48a5ca2..0b7830f4ff8b 100644
-> > --- a/tools/lib/bpf/libbpf.map
-> > +++ b/tools/lib/bpf/libbpf.map
-> > @@ -308,4 +308,5 @@ LIBBPF_0.2.0 {
-> >                 perf_buffer__epoll_fd;
-> >                 perf_buffer__consume_buffer;
-> >                 xsk_socket__create_shared;
-> > +               bpf_prog_bind_map;
->
-> please keep this list sorted
-Sure, will do!
+> please add volatile to ensure these are not optimized away
+Ack, ty!
