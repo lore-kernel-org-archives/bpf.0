@@ -5,64 +5,60 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4AB0C43461
-	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 16:43:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE83AC43461
+	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 16:44:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7487F221EB
-	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 16:43:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84A2C22209
+	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 16:44:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=tessares-net.20150623.gappssmtp.com header.i=@tessares-net.20150623.gappssmtp.com header.b="qySYWhW0"
+	dkim=pass (2048-bit key) header.d=tessares-net.20150623.gappssmtp.com header.i=@tessares-net.20150623.gappssmtp.com header.b="a15BUZJR"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726166AbgIKQm6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Sep 2020 12:42:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59294 "EHLO
+        id S1726393AbgIKQoP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Sep 2020 12:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726255AbgIKPKE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Sep 2020 11:10:04 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F12C06135E
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2020 07:31:06 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id q13so14066034ejo.9
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2020 07:31:06 -0700 (PDT)
+        with ESMTP id S1726387AbgIKPIW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Sep 2020 11:08:22 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04235C061366
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2020 07:31:16 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id p9so14094848ejf.6
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2020 07:31:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=tessares-net.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=8voqPtdkbS5RYnHXaRVOj2SC1jKq1kvwIX4dEXxo6Mc=;
-        b=qySYWhW0yC42rPW/IoqWQolhYfXTLM21q7M2YytnHh2yQU4RoGj86gmZePTxz8sAjT
-         GFnqtUFKRVnNvFFSoku5JBmqgqWLDyp3MH8ip3utZK5/D9/Q5oyLP69h10p78VRSCZL4
-         CjxstQ5GyKsCPPsHl+CbtPcFPb7vjpkHd29RXhjIRjBEWV+X8wVZQMmDOV0ELwoDcLmz
-         HrVgononjhPjTIsOluxMQICFWXylrDWQkjYNSlCBsEJOszmzHOOjtdqU3VA0Jdd7dB1w
-         X8H0violb+3GZwx8SNphe81iv+N5lCd4hWhgNDxulNEkayJY2qBM/9ftAQY8iAf/gPHo
-         GyDg==
+        bh=+i8R58kw/leW4I2M13LKbuHEybfMrzesYwlJiGTgtNk=;
+        b=a15BUZJRqua56q81WMjBEDQ3iSAVjqj55mNjlT0LHm7fj8zncIWlNPf3SrHkC/eofS
+         MUhGOCYkv34QW1doX+CMNH+ev+OYMNBtjPe9GoTZyrcxRq00tSwp53Z8f4pxs2Jw1udo
+         Z6k1oSYZLFfsSuR/MgGY022bxzWljeVKwumPP+KmaGAHP0/7QGVkbf3SA2+C8GzGvjt5
+         wDsUMZSigxwNqh19nEEHq3Yn9wkEF05CIk2+FnoopbRLINo3K1qss/pCs8zx7AwKQMhX
+         ROL8xgPAq1U794RkujJ3S5Bi024Rd92qVakoS/PyvX/Vv9XhMrkfYcv/0ovX0sczmaHf
+         sISg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=8voqPtdkbS5RYnHXaRVOj2SC1jKq1kvwIX4dEXxo6Mc=;
-        b=NgKAKzW4ZTQHcfuno58jAes3qBpFjKL0D+h55uyjtny4O10bSt5+AT150I+xLiuRDT
-         JsULcuvEjwh9FMg3bud5Su3rndNyp2fxrnz2PueKJX1o6KbdDqozIZdDURextk0hVRa2
-         ZkZ5iOk2mgEImD0dFLdn09RGteP+axTDiSXXAbTLs3Ok0FZwVAJKHNu/QzJQB6e+fBKL
-         mY4CEotUmAZ87r+kJDQ3Vxwo0+tK+OAghl6daElwSzDeU3IgojlbBzpsPRxtztpaZ9tz
-         c2RHO1sW4ZUqWn3+GUL7tnTWTaBfRuEO+z5JBq9n3rTAe9oiS6rgGTqDQV8N7PmdmaMp
-         DlQA==
-X-Gm-Message-State: AOAM533sbLjUovtt71C/YkkW9yQdnMB9lVa1xICeQuD3XgL0kGlkFNgT
-        nEpXuRsDmGnyR1Bshna4lkbe+Q==
-X-Google-Smtp-Source: ABdhPJx9aD+LYlhca0oVerMVXjMsebdQaEZZyd5ADDx85BMSztyKMmeinroRPPOAzwBmwtoOQ65huA==
-X-Received: by 2002:a17:906:5206:: with SMTP id g6mr2404464ejm.292.1599834665328;
-        Fri, 11 Sep 2020 07:31:05 -0700 (PDT)
+        bh=+i8R58kw/leW4I2M13LKbuHEybfMrzesYwlJiGTgtNk=;
+        b=aO1M/cgbeCIfFTlvJqiadVEZQSLTTtrXBep73L/Afv3qLJLthXN1zLq8PFoKEMNe43
+         gLocJrcmk10MdjZeINBQ762oEF/Vnj2bMKE7miqugQ6C+BhfzMSbW0ACDXVil16tGC0W
+         qjwMOUGyUgL7kJqLFFKW/4peoAhBGYn0NAOg1/j0/pFap34WpHqzffG5bJP05F5nkeJH
+         zDT/fDHpBBNseyoUodFwGQ+4+QjixHMDTf1vtLnTfmbNwU5j/o81SW3vO6VzLgc8TMoi
+         lbn0aJSUJnognQSp3gGSxbbCT9EIae9p8gU+q7y+tNKejLEjpYSAE3kdLD4Yf/MfP41p
+         YnPQ==
+X-Gm-Message-State: AOAM532ANCuoZLxennqTMHm3ovdokVYmE0+zjHVG3PIUmhvrq8zidyzY
+        KbNkSt7jaGkvqgs4EckBm/8x0w==
+X-Google-Smtp-Source: ABdhPJy1pF6nMvBpXqraqaRNOATVMTu/betL9JR2wN4Oe0zmBlv0YY5nb7O5C/sfCFUnKtFrAXQASw==
+X-Received: by 2002:a17:906:1b55:: with SMTP id p21mr2425207ejg.457.1599834675454;
+        Fri, 11 Sep 2020 07:31:15 -0700 (PDT)
 Received: from localhost.localdomain ([87.66.33.240])
-        by smtp.gmail.com with ESMTPSA id y21sm1716261eju.46.2020.09.11.07.31.04
+        by smtp.gmail.com with ESMTPSA id y21sm1716261eju.46.2020.09.11.07.31.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2020 07:31:04 -0700 (PDT)
+        Fri, 11 Sep 2020 07:31:14 -0700 (PDT)
 From:   Nicolas Rybowski <nicolas.rybowski@tessares.net>
-To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
@@ -70,12 +66,12 @@ To:     Mat Martineau <mathew.j.martineau@linux.intel.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>
 Cc:     Nicolas Rybowski <nicolas.rybowski@tessares.net>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        mptcp@lists.01.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/5] mptcp: attach subflow socket to parent cgroup
-Date:   Fri, 11 Sep 2020 16:30:17 +0200
-Message-Id: <20200911143022.414783-2-nicolas.rybowski@tessares.net>
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next v2 4/5] bpf: selftests: add MPTCP test base
+Date:   Fri, 11 Sep 2020 16:30:19 +0200
+Message-Id: <20200911143022.414783-4-nicolas.rybowski@tessares.net>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <20200911143022.414783-1-nicolas.rybowski@tessares.net>
 References: <20200911143022.414783-1-nicolas.rybowski@tessares.net>
@@ -86,75 +82,323 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-It has been observed that the kernel sockets created for the subflows
-(except the first one) are not in the same cgroup as their parents.
-That's because the additional subflows are created by kernel workers.
+This patch adds a base for MPTCP specific tests.
 
-This is a problem with eBPF programs attached to the parent's
-cgroup won't be executed for the children. But also with any other features
-of CGroup linked to a sk.
+It is currently limited to the is_mptcp field in case of plain TCP
+connection because for the moment there is no easy way to get the subflow
+sk from a msk in userspace. This implies that we cannot lookup the
+sk_storage attached to the subflow sk in the sockops program.
 
-This patch fixes this behaviour.
-
-As the subflow sockets are created by the kernel, we can't use
-'mem_cgroup_sk_alloc' because of the current context being the one of the
-kworker. This is why we have to do low level memcg manipulation, if
-required.
-
-Suggested-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-Suggested-by: Paolo Abeni <pabeni@redhat.com>
 Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-Reviewed-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
 Signed-off-by: Nicolas Rybowski <nicolas.rybowski@tessares.net>
 ---
- net/mptcp/subflow.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
 
-diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-index e8cac2655c82..535a3f9f8cfc 100644
---- a/net/mptcp/subflow.c
-+++ b/net/mptcp/subflow.c
-@@ -1130,6 +1130,30 @@ int __mptcp_subflow_connect(struct sock *sk, int ifindex,
- 	return err;
+Notes:
+    v1 -> v2:
+    - new patch: mandatory selftests (Alexei)
+
+ tools/testing/selftests/bpf/config            |   1 +
+ tools/testing/selftests/bpf/network_helpers.c |  37 +++++-
+ tools/testing/selftests/bpf/network_helpers.h |   3 +
+ .../testing/selftests/bpf/prog_tests/mptcp.c  | 119 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/mptcp.c     |  48 +++++++
+ 5 files changed, 203 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/mptcp.c
+ create mode 100644 tools/testing/selftests/bpf/progs/mptcp.c
+
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 2118e23ac07a..8377836ea976 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -39,3 +39,4 @@ CONFIG_BPF_JIT=y
+ CONFIG_BPF_LSM=y
+ CONFIG_SECURITY=y
+ CONFIG_LIRC=y
++CONFIG_MPTCP=y
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 12ee40284da0..85cbb683965c 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -14,6 +14,10 @@
+ #include "bpf_util.h"
+ #include "network_helpers.h"
+ 
++#ifndef IPPROTO_MPTCP
++#define IPPROTO_MPTCP 262
++#endif
++
+ #define clean_errno() (errno == 0 ? "None" : strerror(errno))
+ #define log_err(MSG, ...) ({						\
+ 			int __save = errno;				\
+@@ -66,8 +70,8 @@ static int settimeo(int fd, int timeout_ms)
+ 
+ #define save_errno_close(fd) ({ int __save = errno; close(fd); errno = __save; })
+ 
+-int start_server(int family, int type, const char *addr_str, __u16 port,
+-		 int timeout_ms)
++static int start_server_proto(int family, int type, int protocol,
++			      const char *addr_str, __u16 port, int timeout_ms)
+ {
+ 	struct sockaddr_storage addr = {};
+ 	socklen_t len;
+@@ -76,7 +80,7 @@ int start_server(int family, int type, const char *addr_str, __u16 port,
+ 	if (make_sockaddr(family, addr_str, port, &addr, &len))
+ 		return -1;
+ 
+-	fd = socket(family, type, 0);
++	fd = socket(family, type, protocol);
+ 	if (fd < 0) {
+ 		log_err("Failed to create server socket");
+ 		return -1;
+@@ -104,6 +108,19 @@ int start_server(int family, int type, const char *addr_str, __u16 port,
+ 	return -1;
  }
  
-+static void mptcp_attach_cgroup(struct sock *parent, struct sock *child)
++int start_server(int family, int type, const char *addr_str, __u16 port,
++		 int timeout_ms)
 +{
-+#ifdef CONFIG_SOCK_CGROUP_DATA
-+	struct sock_cgroup_data *parent_skcd = &parent->sk_cgrp_data,
-+				*child_skcd = &child->sk_cgrp_data;
-+
-+	/* only the additional subflows created by kworkers have to be modified */
-+	if (cgroup_id(sock_cgroup_ptr(parent_skcd)) !=
-+	    cgroup_id(sock_cgroup_ptr(child_skcd))) {
-+#ifdef CONFIG_MEMCG
-+		struct mem_cgroup *memcg = parent->sk_memcg;
-+
-+		mem_cgroup_sk_free(child);
-+		if (memcg && css_tryget(&memcg->css))
-+			child->sk_memcg = memcg;
-+#endif /* CONFIG_MEMCG */
-+
-+		cgroup_sk_free(child_skcd);
-+		*child_skcd = *parent_skcd;
-+		cgroup_sk_clone(child_skcd);
-+	}
-+#endif /* CONFIG_SOCK_CGROUP_DATA */
++	return start_server_proto(family, type, 0, addr_str, port, timeout_ms);
 +}
 +
- int mptcp_subflow_create_socket(struct sock *sk, struct socket **new_sock)
- {
- 	struct mptcp_subflow_context *subflow;
-@@ -1150,6 +1174,9 @@ int mptcp_subflow_create_socket(struct sock *sk, struct socket **new_sock)
- 
- 	lock_sock(sf->sk);
- 
-+	/* the newly created socket has to be in the same cgroup as its parent */
-+	mptcp_attach_cgroup(sk, sf->sk);
++int start_mptcp_server(int family, const char *addr_str, __u16 port,
++		       int timeout_ms)
++{
++	return start_server_proto(family, SOCK_STREAM, IPPROTO_MPTCP, addr_str,
++				  port, timeout_ms);
++}
 +
- 	/* kernel sockets do not by default acquire net ref, but TCP timer
- 	 * needs it.
- 	 */
+ int fastopen_connect(int server_fd, const char *data, unsigned int data_len,
+ 		     int timeout_ms)
+ {
+@@ -153,7 +170,7 @@ static int connect_fd_to_addr(int fd,
+ 	return 0;
+ }
+ 
+-int connect_to_fd(int server_fd, int timeout_ms)
++static int connect_to_fd_proto(int server_fd, int protocol, int timeout_ms)
+ {
+ 	struct sockaddr_storage addr;
+ 	struct sockaddr_in *addr_in;
+@@ -173,7 +190,7 @@ int connect_to_fd(int server_fd, int timeout_ms)
+ 	}
+ 
+ 	addr_in = (struct sockaddr_in *)&addr;
+-	fd = socket(addr_in->sin_family, type, 0);
++	fd = socket(addr_in->sin_family, type, protocol);
+ 	if (fd < 0) {
+ 		log_err("Failed to create client socket");
+ 		return -1;
+@@ -192,6 +209,16 @@ int connect_to_fd(int server_fd, int timeout_ms)
+ 	return -1;
+ }
+ 
++int connect_to_fd(int server_fd, int timeout_ms)
++{
++	return connect_to_fd_proto(server_fd, 0, timeout_ms);
++}
++
++int connect_to_mptcp_fd(int server_fd, int timeout_ms)
++{
++	return connect_to_fd_proto(server_fd, IPPROTO_MPTCP, timeout_ms);
++}
++
+ int connect_fd_to_fd(int client_fd, int server_fd, int timeout_ms)
+ {
+ 	struct sockaddr_storage addr;
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index 7205f8afdba1..336423a789e9 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -35,7 +35,10 @@ extern struct ipv6_packet pkt_v6;
+ 
+ int start_server(int family, int type, const char *addr, __u16 port,
+ 		 int timeout_ms);
++int start_mptcp_server(int family, const char *addr, __u16 port,
++		       int timeout_ms);
+ int connect_to_fd(int server_fd, int timeout_ms);
++int connect_to_mptcp_fd(int server_fd, int timeout_ms);
+ int connect_fd_to_fd(int client_fd, int server_fd, int timeout_ms);
+ int fastopen_connect(int server_fd, const char *data, unsigned int data_len,
+ 		     int timeout_ms);
+diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+new file mode 100644
+index 000000000000..0e65d64868e9
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+@@ -0,0 +1,119 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include "cgroup_helpers.h"
++#include "network_helpers.h"
++
++struct mptcp_storage {
++	__u32 invoked;
++	__u32 is_mptcp;
++};
++
++static int verify_sk(int map_fd, int client_fd, const char *msg, __u32 is_mptcp)
++{
++	int err = 0, cfd = client_fd;
++	struct mptcp_storage val;
++
++	/* Currently there is no easy way to get back the subflow sk from the MPTCP
++	 * sk, thus we cannot access here the sk_storage associated to the subflow
++	 * sk. Also, there is no sk_storage associated with the MPTCP sk since it
++	 * does not trigger sockops events.
++	 * We silently pass this situation at the moment.
++	 */
++	if (is_mptcp == 1)
++		return 0;
++
++	if (CHECK_FAIL(bpf_map_lookup_elem(map_fd, &cfd, &val) < 0)) {
++		perror("Failed to read socket storage");
++		return -1;
++	}
++
++	if (val.invoked != 1) {
++		log_err("%s: unexpected invoked count %d != %d",
++			msg, val.invoked, 1);
++		err++;
++	}
++
++	if (val.is_mptcp != is_mptcp) {
++		log_err("%s: unexpected bpf_tcp_sock.is_mptcp %d != %d",
++			msg, val.is_mptcp, is_mptcp);
++		err++;
++	}
++
++	return err;
++}
++
++static int run_test(int cgroup_fd, int server_fd, bool is_mptcp)
++{
++	int client_fd, prog_fd, map_fd, err;
++	struct bpf_object *obj;
++	struct bpf_map *map;
++
++	struct bpf_prog_load_attr attr = {
++		.prog_type = BPF_PROG_TYPE_SOCK_OPS,
++		.file = "./mptcp.o",
++		.expected_attach_type = BPF_CGROUP_SOCK_OPS,
++	};
++
++	err = bpf_prog_load_xattr(&attr, &obj, &prog_fd);
++	if (err) {
++		log_err("Failed to load BPF object");
++		return -1;
++	}
++
++	map = bpf_map__next(NULL, obj);
++	map_fd = bpf_map__fd(map);
++
++	err = bpf_prog_attach(prog_fd, cgroup_fd, BPF_CGROUP_SOCK_OPS, 0);
++	if (err) {
++		log_err("Failed to attach BPF program");
++		goto close_bpf_object;
++	}
++
++	client_fd = is_mptcp ? connect_to_mptcp_fd(server_fd, 0) :
++			       connect_to_fd(server_fd, 0);
++	if (client_fd < 0) {
++		err = -1;
++		goto close_client_fd;
++	}
++
++	err += is_mptcp ? verify_sk(map_fd, client_fd, "MPTCP subflow socket", 1) :
++			  verify_sk(map_fd, client_fd, "plain TCP socket", 0);
++
++close_client_fd:
++	close(client_fd);
++
++close_bpf_object:
++	bpf_object__close(obj);
++	return err;
++}
++
++void test_mptcp(void)
++{
++	int server_fd, cgroup_fd;
++
++	cgroup_fd = test__join_cgroup("/mptcp");
++	if (CHECK_FAIL(cgroup_fd < 0))
++		return;
++
++	/* without MPTCP */
++	server_fd = start_server(AF_INET, SOCK_STREAM, NULL, 0, 0);
++	if (CHECK_FAIL(server_fd < 0))
++		goto with_mptcp;
++
++	CHECK_FAIL(run_test(cgroup_fd, server_fd, false));
++
++	close(server_fd);
++
++with_mptcp:
++	/* with MPTCP */
++	server_fd = start_mptcp_server(AF_INET, NULL, 0, 0);
++	if (CHECK_FAIL(server_fd < 0))
++		goto close_cgroup_fd;
++
++	CHECK_FAIL(run_test(cgroup_fd, server_fd, true));
++
++	close(server_fd);
++
++close_cgroup_fd:
++	close(cgroup_fd);
++}
+diff --git a/tools/testing/selftests/bpf/progs/mptcp.c b/tools/testing/selftests/bpf/progs/mptcp.c
+new file mode 100644
+index 000000000000..be5ee8dac2b3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/mptcp.c
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") = "GPL";
++__u32 _version SEC("version") = 1;
++
++struct mptcp_storage {
++	__u32 invoked;
++	__u32 is_mptcp;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, int);
++	__type(value, struct mptcp_storage);
++} socket_storage_map SEC(".maps");
++
++SEC("sockops")
++int _sockops(struct bpf_sock_ops *ctx)
++{
++	struct mptcp_storage *storage;
++	struct bpf_tcp_sock *tcp_sk;
++	int op = (int)ctx->op;
++	struct bpf_sock *sk;
++
++	sk = ctx->sk;
++	if (!sk)
++		return 1;
++
++	storage = bpf_sk_storage_get(&socket_storage_map, sk, 0,
++				     BPF_SK_STORAGE_GET_F_CREATE);
++	if (!storage)
++		return 1;
++
++	if (op != BPF_SOCK_OPS_TCP_CONNECT_CB)
++		return 1;
++
++	tcp_sk = bpf_tcp_sock(sk);
++	if (!tcp_sk)
++		return 1;
++
++	storage->invoked++;
++	storage->is_mptcp = tcp_sk->is_mptcp;
++
++	return 1;
++}
 -- 
 2.28.0
 
