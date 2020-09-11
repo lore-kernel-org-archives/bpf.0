@@ -2,138 +2,167 @@ Return-Path: <SRS0=Rse5=CU=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50B3CC43461
-	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 17:26:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 194DFC43461
+	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 18:14:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1ABCC221E5
-	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 17:26:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 93C9220829
+	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 18:14:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Tx18GUKz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N5A57Kpk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726274AbgIKR0V (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Sep 2020 13:26:21 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:51118 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726052AbgIKM7I (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 11 Sep 2020 08:59:08 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08BCojmN131411;
-        Fri, 11 Sep 2020 08:58:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=IYEuItAi3wlJLQEvfcjRR1c2enzmHSxStOlUaJGsTw0=;
- b=Tx18GUKznzruk+f9dpN3OaWaJ+5yFhU3X0j+ChbzGp6R1aWoyIcP4ZvNregYqjIzPPOy
- +MfrmfjG1F79027ExcDYkIllab7cQ3A0ZKKTNMJeui4/leOTnfUfsYwQHMmq0zU0KUki
- VBmMzxcX8rijFcdVj3nPbprh9zcW44RasFGUVQ+uge8LrjrDXgJK+z5cIrnQU9bwEOt/
- 1/9gMiJhi1R/vz8ESn8j/co4eyiEg/+PD1qRMIgVQXVbtNTIkEsjlng2DybMfpGkC0ap
- 3MCOH6lYgKfi+lof8+fvBhDx843mCv7b950ZO+vw62QDsMi2uZn3v4HNDadPhYtcnj62 lw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33g9krr763-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Sep 2020 08:58:52 -0400
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08BCornL131797;
-        Fri, 11 Sep 2020 08:58:51 -0400
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 33g9krr753-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Sep 2020 08:58:51 -0400
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 08BCh4Kd011326;
-        Fri, 11 Sep 2020 12:58:49 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 33c2a8f8fd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Sep 2020 12:58:49 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 08BCwkpY25166080
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Sep 2020 12:58:46 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 36A6BA4057;
-        Fri, 11 Sep 2020 12:58:46 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C39E3A4065;
-        Fri, 11 Sep 2020 12:58:45 +0000 (GMT)
-Received: from sig-9-145-5-224.uk.ibm.com (unknown [9.145.5.224])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 11 Sep 2020 12:58:45 +0000 (GMT)
-Message-ID: <2b84f5c397ca43c5883f6e10c6e3a232b511d893.camel@linux.ibm.com>
-Subject: Re: [PATCH RFC bpf-next 5/5] bpf: Do not include the original insn
- in zext patchlet
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Date:   Fri, 11 Sep 2020 14:58:45 +0200
-In-Reply-To: <CAADnVQ+2RPKcftZw8d+B1UwB35cpBhpF5u3OocNh90D9pETPwg@mail.gmail.com>
-References: <20200909233439.3100292-1-iii@linux.ibm.com>
-         <20200909233439.3100292-6-iii@linux.ibm.com>
-         <CAADnVQ+2RPKcftZw8d+B1UwB35cpBhpF5u3OocNh90D9pETPwg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        id S1725794AbgIKSOM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Sep 2020 14:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725786AbgIKSOL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Sep 2020 14:14:11 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16AD3C061573
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2020 11:14:11 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id k2so4389613ybp.7
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2020 11:14:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0Dj/oiJbiDekdNciwuUGfGVBtikbPOcO3vY7csAetLM=;
+        b=N5A57KpkDu6u6/OBWXTBPmRiZLrARSOy4drokHNcKThGO9yhaK1sfkdwP8CVHye8+r
+         t+n2dhi7et4ePt2L2CADsenyElqBEjYKZ8Q4iUEc1Gpg6IFYgm92vCgaRXiN4yuZl5lb
+         I/gV6UNCO1dJkrVzreXjW1y5TzAcSt0YhT+mYY4ZAbN6FXGcrrwkwzWq1aOtXSfCT6ym
+         71DWuN1bNydLVt1hs1MPq0K5MJkoCanEUI0Tz6jeiMGrbwm4fYcU/LVMkXqMO5hwH4dk
+         URFemm8LesVreJybuMuh5Ek+d6uUoGCnekfecuAjAYy9sltf0PgXObZQqZaPrwb9V58j
+         JbQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0Dj/oiJbiDekdNciwuUGfGVBtikbPOcO3vY7csAetLM=;
+        b=iPfoA/Joabf/SPTWUAfDpV7peMonbNpJHxTrEM36KN7g6V07hh8UIusjJ7qmGnhVGr
+         dhnh5wNNnjLyB7p2MraLpNxiLzkovcVoxC/ZJeydbgXwbhyQ/qe+aakrUm6Atfp3jLgG
+         EJKj/vqHBTquX57rhyoz4x5wFljsWtnJYcImQ7CIDHelQ3dxC2C1jMXJFcgG4wSm4j/n
+         t+MRv8qTOGmeRHd/BCJnlMsUAi7MbG/amDSgxsoOd9wGb6l9VzKqf4h0W+giSnnUcOYl
+         P2uVV25vK1jTmbmCRJbiDKstPs2E5ShbvkR59YzkCAVGjlN+sbEVc2mo/ww0riWGtMm1
+         6IQQ==
+X-Gm-Message-State: AOAM532sU6iSvu7zX1FIfXkgcDqVxEuB76X0/4dSttbmNSh+7ERpEczh
+        aa6xYsBhzDNklDjf/m7yd76FR+h7l4bsxBfD51Zu5k4qPek=
+X-Google-Smtp-Source: ABdhPJzaj7Zx+IjThdlQJhRGX1EsdhkgMHgf4A25Dl0PWCFnD6KJfwlhJqKwzLCAzuHQWWRJ9rCVUHNT6eb/LYRm9nE=
+X-Received: by 2002:a25:ef43:: with SMTP id w3mr3765572ybm.230.1599848050105;
+ Fri, 11 Sep 2020 11:14:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-11_04:2020-09-10,2020-09-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- clxscore=1015 priorityscore=1501 lowpriorityscore=0 malwarescore=0
- mlxlogscore=939 suspectscore=3 adultscore=0 spamscore=0 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009110102
+References: <CA+XBgLU=8PFkP8S32e4gpst0=R4MFv8rZA5KaO+cEPYSnTRYYw@mail.gmail.com>
+In-Reply-To: <CA+XBgLU=8PFkP8S32e4gpst0=R4MFv8rZA5KaO+cEPYSnTRYYw@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 11 Sep 2020 11:13:59 -0700
+Message-ID: <CAEf4BzZvXvb7CsnJZkoNUzb0-o=w-i9-CHecq0O+QcCKpeuUKQ@mail.gmail.com>
+Subject: Re: Problems with pointer offsets on ARM32
+To:     Luka Oreskovic <luka.oreskovic@sartura.hr>
+Cc:     bpf <bpf@vger.kernel.org>, Luka Perkov <luka.perkov@sartura.hr>,
+        Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 2020-09-10 at 17:25 -0700, Alexei Starovoitov wrote:
-> On Wed, Sep 9, 2020 at 4:37 PM Ilya Leoshkevich <iii@linux.ibm.com>
-> wrote:
-> > If the original insn is a jump, then it is not subjected to branch
-> > adjustment, which is incorrect. As discovered by Yauheni in
-> 
-> I think the problem is elsewhere.
-> Something is wrong with zext logic.
-> the branch insn should not have been marked as zext_dst.
-> and in the line:
-> zext_patch[0] = insn;
-> this 'insn' should never be a branch.
-> See insn_no_def().
+On Fri, Sep 11, 2020 at 9:45 AM Luka Oreskovic
+<luka.oreskovic@sartura.hr> wrote:
+>
+> Greetings everyone,
+>
+> I have been testing various BPF programs on the ARM32 architecture and
+> have encountered a strange error.
+>
+> When trying to run a simple program that prints out the arguments of
+> the open syscall,
+> I found some strange behaviour with the pointer offsets when accessing
+> the arguments:
+> The output of llvm-objdump differed from the verifier error dump log.
+> Notice the differences in lines 0 and 1. Why is the bytecode being
+> altered at runtime?
+>
+> I attached the program, the llvm-objdump result and the verifier dump below.
+>
+> Best wishes,
+> Luka Oreskovic
+>
+> BPF program
+> --------------------------------------------
+> #include "vmlinux.h"
+> #include <bpf/bpf_helpers.h>
+>
+> SEC("tracepoint/syscalls/sys_enter_open")
+> int tracepoint__syscalls__sys_enter_open(struct trace_event_raw_sys_enter* ctx)
+> {
+>         const char *arg1 = (const char *)ctx->args[0];
+>         int arg2 = (int)ctx->args[1];
+>
+>         bpf_printk("Open arg 1: %s\n", arg1);
+>         bpf_printk("Open arg 2: %d\n", arg2);
+>
+>         return 0;
+> }
+>
+> char LICENSE[] SEC("license") = "GPL";
+>
+>
+> llvm-objdump of program
+> --------------------------------------------
+> Disassembly of section tracepoint/syscalls/sys_enter_open:
+>
+> 0000000000000000 tracepoint__syscalls__sys_enter_open:
+> ;       int arg2 = (int)ctx->args[1];
+>        0:       79 16 18 00 00 00 00 00 r6 = *(u64 *)(r1 + 24)
+> ;       const char *arg1 = (const char *)ctx->args[0];
+>        1:       79 13 10 00 00 00 00 00 r3 = *(u64 *)(r1 + 16)
+>        2:       18 01 00 00 20 31 3a 20 00 00 00 00 25 73 0a 00 r1 =
+> 2941353058775328 ll
+> ;       bpf_printk("Open arg 1: %s\n", arg1);
+>        4:       7b 1a f8 ff 00 00 00 00 *(u64 *)(r10 - 8) = r1
+>        5:       18 07 00 00 4f 70 65 6e 00 00 00 00 20 61 72 67 r7 =
+> 7454127125170581583 ll
+>        7:       7b 7a f0 ff 00 00 00 00 *(u64 *)(r10 - 16) = r7
+>        8:       bf a1 00 00 00 00 00 00 r1 = r10
+>        9:       07 01 00 00 f0 ff ff ff r1 += -16
+>       10:       b7 02 00 00 10 00 00 00 r2 = 16
+>       11:       85 00 00 00 06 00 00 00 call 6
+>       12:       18 01 00 00 20 32 3a 20 00 00 00 00 25 64 0a 00 r1 =
+> 2924860384358944 ll
+> ;       bpf_printk("Open arg 2: %d\n", arg2);
+>       14:       7b 1a f8 ff 00 00 00 00 *(u64 *)(r10 - 8) = r1
+>       15:       7b 7a f0 ff 00 00 00 00 *(u64 *)(r10 - 16) = r7
+>       16:       bf a1 00 00 00 00 00 00 r1 = r10
+>       17:       07 01 00 00 f0 ff ff ff r1 += -16
+>       18:       b7 02 00 00 10 00 00 00 r2 = 16
+>       19:       bf 63 00 00 00 00 00 00 r3 = r6
+>       20:       85 00 00 00 06 00 00 00 call 6
+> ;       return 0;
+>       21:       b7 00 00 00 00 00 00 00 r0 = 0
+>       22:       95 00 00 00 00 00 00 00 exit
+>
+>
+> verifier output when running program
+> --------------------------------------------
+> libbpf: -- BEGIN DUMP LOG ---
+> libbpf:
+> Unrecognized arg#0 type PTR
+> ; int arg2 = (int)ctx->args[1];
+> 0: (79) r6 = *(u64 *)(r1 +16)
+> ; const char *arg1 = (const char *)ctx->args[0];
+> 1: (79) r3 = *(u64 *)(r1 +12)
+> invalid bpf_context access off=12 size=8
+> processed 2 insns (limit 1000000) max_states_per_insn 0 total_states 0
+> peak_states 0 mark_read 0
+>
+> libbpf: -- END LOG --
 
-Would it make sense to add a WARN_ON(insn_no_def(&insn)) there?
 
-
-I believe the root cause is triggered by clear_caller_saved_regs().
-
-This is our prog:
-
-[     0]: BPF_JMP | BPF_CALL | BPF_K, BPF_REG_0, BPF_REG_1, 0x0, 0x1
-[     1]: BPF_JMP | BPF_EXIT | BPF_K, BPF_REG_0, BPF_REG_0, 0x0, 0x0
-[     2]: BPF_JMP | BPF_CALL | BPF_K, BPF_REG_0, BPF_REG_1, 0x0, 0x1
-[     3]: BPF_JMP | BPF_EXIT | BPF_K, BPF_REG_0, BPF_REG_0, 0x0, 0x0
-...
-
-and env->insn_idx is 2. clear_caller_saved_regs() calls
-
-	check_reg_arg(env, caller_saved[i], DST_OP_NO_MARK);
-
-for register 0, and then inside check_reg_arg() we come to
-
-	reg->subreg_def = rw64 ? DEF_NOT_SUBREG : env->insn_idx + 1;
-
-where rw64 is false, because insn 2 is a BPF_PSEUDO_CALL. Having
-non-zero subreg_def causes mark_insn_zext() to set zext_dst later on.
-
-Maybe mark_reg_unknown() can do something to prevent this? My knee-jerk
-reaction would be to set subreg_def to 0 there, but I'm not sure
-whether this would be correct.
-
+One suspect would be libbpf's CO-RE relocations. Can you send full
+debug libbpf logs, it will have a full log of what libbpf adjusted.
+Please also include the definition of struct trace_event_raw_sys_enter
+from your vmlinux.h, as well as commit that your kernel was built from
+(to check the original definition).
