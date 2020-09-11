@@ -2,232 +2,516 @@ Return-Path: <SRS0=Rse5=CU=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1B2DC433E2
-	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 16:17:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FC39C433E2
+	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 16:38:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5FD42221EB
-	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 16:17:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C356D22205
+	for <bpf@archiver.kernel.org>; Fri, 11 Sep 2020 16:38:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="lYQFghPb";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="YvlEZ29S"
+	dkim=pass (2048-bit key) header.d=tessares-net.20150623.gappssmtp.com header.i=@tessares-net.20150623.gappssmtp.com header.b="GXyxdu47"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725869AbgIKQRl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Sep 2020 12:17:41 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:1216 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725992AbgIKQR1 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 11 Sep 2020 12:17:27 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08BGG0Rl015326;
-        Fri, 11 Sep 2020 09:17:03 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=8E3jBmMp5Ia/MnVJsNSWAMJfY3r2fJN3Hcm2PUk4Kgs=;
- b=lYQFghPbwHF5OwOh7HH+s7bNQgoHHnyNoX0jS/AyVPEvQ2R7ZWpqht9ePPETTXLPfUrE
- xlotMnZdq5+aOpWjpyVSTrjybAkOpsLt3+y66xxXkqmCQVQAiP+bqm6668KwBuUY4kJF
- raubBWASVub5+nDtYtoYYaoMIAmr1rhDGtA= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 33f8bfjaea-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 11 Sep 2020 09:17:03 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.230) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 11 Sep 2020 09:17:02 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D60AoU761FxqVWHD0kAzsEXv5Bp0lFH7fy47p1aeL6aCrn070U/3Ck/dsbBRcvhVZNuOiIKjrnRN7oOF5+gyFQMCnwoToEXxq3/MIKewOU5hwVmW55DTCMdo2vl//nwn1rp2hQ3tQKepLeTzhHmozjY9VdhxGA7v46u1znNknnyAJCEJA3gvSr8xvSV4VuAKLXEpwXYLm5tuK9zVsp34cRg4Uol6Mz8Blt29uY6cWkogqLq8f4IdqK3JYuhmbQpKKjQ1jwil6CFnC4nic+hRtkS75w9MF/Rr0U5mpnUOtumdzwG6Oc0Tnsd4UoroQFsv+ntO+W372r3t1s3+hlYd7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8E3jBmMp5Ia/MnVJsNSWAMJfY3r2fJN3Hcm2PUk4Kgs=;
- b=BW8p9TMPgYPFXVB9ZAJNho4HlxjzxsrPimT5jF9j3mQNrBiUP40zdCgU4xotciA5l+jdleBVec113LqVXekStuKHoEbbsPP9o3FB/gda76xjIRVZkpsSihrvXhLyWLdDo5+lkX/DCW0WBZOp1U8Lj/E0J/x6CyCLxcxpWw8JDlqENjqKsm8MqtUkS4XblWloZPr+5vgNm0VN/AuerQCZd22K4P2qJd1cZ+YmqjJHhcU2FkE90THb/2oW7B7475rwBxrw7mEIS0u7QH7k2QveemI0ui96xTpS5LUU8W4LSj2fr1oSz8nF1BZcwsUqLSNknnzVUR53UUlpb6ddMgBvHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8E3jBmMp5Ia/MnVJsNSWAMJfY3r2fJN3Hcm2PUk4Kgs=;
- b=YvlEZ29Sy0EwTzOnpNDvCl5P/fpAxLnAuVsYPL3i20/oa4ScQ3KsKSZouBRMVPyyRO2DOMC/WUsuWwj0UzhluAqJIzfsHM+lQcIYkqXvmjjraB1ToCHCKUH1DHL+pviFLjxoyxiud1wkbF/7R6+qQMtdM1I9+avlMeBGMNE03GA=
-Authentication-Results: cloudflare.com; dkim=none (message not signed)
- header.d=none;cloudflare.com; dmarc=none action=none header.from=fb.com;
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
- by BYAPR15MB2261.namprd15.prod.outlook.com (2603:10b6:a02:8e::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Fri, 11 Sep
- 2020 16:17:01 +0000
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::8887:dd68:f497:ea42]) by BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::8887:dd68:f497:ea42%3]) with mapi id 15.20.3370.017; Fri, 11 Sep 2020
- 16:17:01 +0000
-Subject: Re: [PATCH bpf-next] bpf: selftests: remove shared header from
- sockmap iter test
-To:     Lorenz Bauer <lmb@cloudflare.com>, <ast@kernel.org>,
-        <daniel@iogearbox.net>
-CC:     <bpf@vger.kernel.org>, <kernel-team@cloudflare.com>
-References: <20200911091411.37645-1-lmb@cloudflare.com>
-From:   Yonghong Song <yhs@fb.com>
-Message-ID: <2c57d577-5859-4f6b-bfd2-8d2b6e935669@fb.com>
-Date:   Fri, 11 Sep 2020 09:16:58 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.12.0
-In-Reply-To: <20200911091411.37645-1-lmb@cloudflare.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MWHPR14CA0065.namprd14.prod.outlook.com
- (2603:10b6:300:81::27) To BYAPR15MB4088.namprd15.prod.outlook.com
- (2603:10b6:a02:c3::18)
+        id S1726355AbgIKPMR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Sep 2020 11:12:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726402AbgIKPKN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Sep 2020 11:10:13 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6509C061362
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2020 07:31:11 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id ay8so10154683edb.8
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2020 07:31:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares-net.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=FKkvcu84sYpCTZ/MXCNyDF95OUtfxDviJDI7snHzfWw=;
+        b=GXyxdu47UAMPwkML/Q5Ud6KV6e1YMZk5GlaBd6ru10Df7EFKq+TUhEx/XYK0JaEhjO
+         PWUz3eTT6jS0nJS1M2aYCzhBO4J9ipXTWVDjSjnwEEBBMRpgAhtJjJfAWwOTE6ZBjLOh
+         +DGLNf3ZKcu0d7JPNvVoY9R/vQbxuqkljrm9aMnOSAAT1Ej3Mq5rKe7EAOTk4nmii9EF
+         NVxaq/sSFQB5/H/t0rWmmYyLmy3mU4+5DNfm2bPXIU7SrOwuKQeX2sv1Tu+itJsNetQg
+         O9bpzAkIm2dCLONVGYsWtNHWYuq2sLIXLVeLYLDGjyf9o2s2v2wamkx/Lt08lN5dF7O/
+         M6OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=FKkvcu84sYpCTZ/MXCNyDF95OUtfxDviJDI7snHzfWw=;
+        b=V/BaT2eXu6jUxxCxB+OvtwJcLYgI0DqTLdPUuEERwwK2eCx3pnY9IJYv5Rah0lK6RD
+         Iy7YGtqhRpzlwuJlJt6cg0WBV7op2/riUzyTNe+PCeqGtnYkvksECeWZAFu+7+LephXB
+         BNjo9PSBy3cKNNBSgeyz2ZRNL4Aq4N6ZTDqrsJv19iiHGIemEuSLqIUCPMeiL9ECf1FY
+         RwIPwGv5Qd1PVqYMQd79D86QJEPp6Op2mYcy/anwkZARH6oQ31D+Q2xEGPiBOHvp+i9a
+         53pxwUBhTAsevd8x+0aCZNHT29+5JO378nUTunIVH7wyDXqqg9vu54cfzL8zNX6m7Bgt
+         JR8Q==
+X-Gm-Message-State: AOAM533pNw1xYq3D7sqsbxh2y5to/i/buPy6CqXFgyohGHf+DMF8X2uH
+        6mw6zGKlkpc8x/pyotFrCE1bQw==
+X-Google-Smtp-Source: ABdhPJzTjkwRowBAQIocdnQ4t5RAq/bQGP277dBKSlublhrCVD2uJiO83E5rqJXUAaY9BiWCsf3Dqg==
+X-Received: by 2002:a05:6402:1593:: with SMTP id c19mr2330321edv.33.1599834670311;
+        Fri, 11 Sep 2020 07:31:10 -0700 (PDT)
+Received: from localhost.localdomain ([87.66.33.240])
+        by smtp.gmail.com with ESMTPSA id y21sm1716261eju.46.2020.09.11.07.31.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Sep 2020 07:31:09 -0700 (PDT)
+From:   Nicolas Rybowski <nicolas.rybowski@tessares.net>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     Nicolas Rybowski <nicolas.rybowski@tessares.net>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, mptcp@lists.01.org
+Subject: [PATCH bpf-next v2 3/5] bpf: add 'bpf_mptcp_sock' structure and helper
+Date:   Fri, 11 Sep 2020 16:30:18 +0200
+Message-Id: <20200911143022.414783-3-nicolas.rybowski@tessares.net>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200911143022.414783-1-nicolas.rybowski@tessares.net>
+References: <20200911143022.414783-1-nicolas.rybowski@tessares.net>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2620:10d:c085:21e1::1249] (2620:10d:c090:400::5:da00) by MWHPR14CA0065.namprd14.prod.outlook.com (2603:10b6:300:81::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16 via Frontend Transport; Fri, 11 Sep 2020 16:17:00 +0000
-X-Originating-IP: [2620:10d:c090:400::5:da00]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ee7f4e83-c117-43e1-688c-08d8566e1d56
-X-MS-TrafficTypeDiagnostic: BYAPR15MB2261:
-X-Microsoft-Antispam-PRVS: <BYAPR15MB2261A6A976B01546DA75FDADD3240@BYAPR15MB2261.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: C3g6oMjjS3lDrTf0kTTsiEsD6RViUm8MeCgZYkKvRN8rCVPMOF/J692yp9q9PE2ctFKhRpJsqP4thJfTnlXrO2Xep4PeHjPOZqdHd1VsyBSOKXZg46FWZ3YXRVTbCaAzrHwRTN3Zmb6Uo5qHtwG7ceoYfjVglX0gsrqYcfUwiFQgZw2QxcqamIEilsgtws5YnKAjqUiDgbMbJ0PuG27jA73ZAfnb+IwFPo3tfsLEb7VKKe5hvbhtmChIE+NpbwVPigigq/HTPAxmSGHLZNfAtR8W0WsbWmGRkfRPmPMKwUe3G65/sfJC+lbhLyYA6F6C3qStGZh6r95qGPlPO3TOy7Lz+3hk4lpppOUdSH4nqWDOu3lAQCkQoSOTZy40vdHW
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(366004)(39860400002)(136003)(376002)(346002)(66476007)(66946007)(66556008)(2616005)(186003)(16526019)(478600001)(83380400001)(316002)(6486002)(8676002)(31696002)(2906002)(31686004)(5660300002)(8936002)(52116002)(36756003)(53546011)(4326008)(86362001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: 2+gvz7ImiwuiEF6LzuwU/T9c5udFr9T83A3g4Nuk7ahwe2u3PyWN7kXjUeN9uAhis68cTFi+CoyCfaevsyOgnfozrl7PGWr1MPmXvyqCPu9OOrAFL32J9qpE6gMfJYhDVq7h4mIULZGCC5kD7rD4UoH0nNrwgoNXAcPxA9lLPCh1rId6YthRb5Pr737ZF4Gp8Uf4PK7pdBE4YbDVxHbcyiJYjhgApdT+tvATK5zdhFRPeAK9Ky9ZI/4NzBtRtubmaaR7Qm1HP+IrRJ4fnxi0LgEyKzoRJDYxmF+AIhztNHO9j2vjL+xoXV87ccwmeBGw7XWgioKXlqVShr0FkXDiF/TfhdY+hi+MQhjtdlysYPIM29SUwoHfur+tmsQRTKoHOFmGAazRg+fIHH3Ulhnzin6JAvxP0MAT18/CeqBIdbhankbGeYe77ZharTLfv4v/Tb0xtEYm3E2STgsaMRni+vV4hXi8N6v9OlbZ035IqZhMCAMqj5KEoyp+D80WgZRHYNfw8knd1+MAkViG4OaI6S/uP5jjxDIB6bleclyRdTDhzMmTUrtUVBUu0nHLDe97ZXjyzG8GkMkXyEXsuPVRwTUS2GOwjYswd+FdxhaqnSPtHyUl6DuR34oUphqCfNLMq3zPa+n2uTESnJiBjgFN0WospyPhOnP+u4W4mYQwvsU=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ee7f4e83-c117-43e1-688c-08d8566e1d56
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2020 16:17:01.4686
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TA2f9IA3X1G2VnjkqkagvS6QIgqIDBVf5sPwzmT3EMUZzTswUXqyCrnddbca2JkE
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2261
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-11_08:2020-09-10,2020-09-11 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- impostorscore=0 priorityscore=1501 malwarescore=0 phishscore=0
- adultscore=0 mlxscore=0 mlxlogscore=999 suspectscore=0 clxscore=1015
- spamscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2009110133
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+In order to precisely identify the parent MPTCP connection of a subflow,
+it is required to access the mptcp_sock's token which uniquely identify a
+MPTCP connection.
 
+This patch adds a new structure 'bpf_mptcp_sock' exposing the 'token' field
+of the 'mptcp_sock' extracted from a subflow's 'tcp_sock'. It also adds the
+declaration of a new BPF helper of the same name to expose the newly
+defined structure in the userspace BPF API.
 
-On 9/11/20 2:14 AM, Lorenz Bauer wrote:
-> The shared header to define SOCKMAP_MAX_ENTRIES is a bit overkill.
-> Dynamically allocate the sock_fd array based on bpf_map__max_entries
-> instead.
-> 
-> Suggested-by: Yonghong Song <yhs@fb.com>
-> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+This is the foundation to expose more MPTCP-specific fields through BPF.
 
-Ack with some nits below.
+Currently, it is limited to the field 'token' of the msk but it is
+easily extensible.
 
-Acked-by: Yonghong Song <yhs@fb.com>
+Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Acked-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+Signed-off-by: Nicolas Rybowski <nicolas.rybowski@tessares.net>
+---
+ include/linux/bpf.h            | 33 ++++++++++++++++
+ include/uapi/linux/bpf.h       | 14 +++++++
+ kernel/bpf/verifier.c          | 30 ++++++++++++++
+ net/core/filter.c              |  4 ++
+ net/mptcp/Makefile             |  2 +
+ net/mptcp/bpf.c                | 72 ++++++++++++++++++++++++++++++++++
+ scripts/bpf_helpers_doc.py     |  2 +
+ tools/include/uapi/linux/bpf.h | 14 +++++++
+ 8 files changed, 171 insertions(+)
+ create mode 100644 net/mptcp/bpf.c
 
-> ---
->   .../selftests/bpf/prog_tests/sockmap_basic.c  | 39 ++++++++++---------
->   .../selftests/bpf/progs/bpf_iter_sockmap.c    |  5 +--
->   .../selftests/bpf/progs/bpf_iter_sockmap.h    |  3 --
->   3 files changed, 23 insertions(+), 24 deletions(-)
->   delete mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_sockmap.h
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> index 4b7a527e7e82..2672a91cd78f 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-> @@ -8,8 +8,6 @@
->   #include "test_sockmap_invalid_update.skel.h"
->   #include "bpf_iter_sockmap.skel.h"
->   
-> -#include "progs/bpf_iter_sockmap.h"
-> -
->   #define TCP_REPAIR		19	/* TCP sock is under repair right now */
->   
->   #define TCP_REPAIR_ON		1
-> @@ -179,9 +177,9 @@ static void test_sockmap_iter(enum bpf_map_type map_type)
->   	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
->   	int err, len, src_fd, iter_fd, duration = 0;
->   	union bpf_iter_link_info linfo = {0};
-> -	__s64 sock_fd[SOCKMAP_MAX_ENTRIES];
-> -	__u32 i, num_sockets, max_elems;
-> +	__u32 i, num_sockets, num_elems;
->   	struct bpf_iter_sockmap *skel;
-> +	__s64 *sock_fd = NULL;
->   	struct bpf_link *link;
->   	struct bpf_map *src;
->   	char buf[64];
-> @@ -190,22 +188,26 @@ static void test_sockmap_iter(enum bpf_map_type map_type)
->   	if (CHECK(!skel, "bpf_iter_sockmap__open_and_load", "skeleton open_and_load failed\n"))
->   		return;
->   
-> -	for (i = 0; i < ARRAY_SIZE(sock_fd); i++)
-> -		sock_fd[i] = -1;
-> -
-> -	/* Make sure we have at least one "empty" entry to test iteration of
-> -	 * an empty slot.
-> -	 */
-> -	num_sockets = ARRAY_SIZE(sock_fd) - 1;
-> -
->   	if (map_type == BPF_MAP_TYPE_SOCKMAP) {
->   		src = skel->maps.sockmap;
-> -		max_elems = bpf_map__max_entries(src);
-> +		num_elems = bpf_map__max_entries(src);
->   	} else {
->   		src = skel->maps.sockhash;
-> -		max_elems = num_sockets;
-> +		num_elems = bpf_map__max_entries(src) - 1;
->   	}
->   
-> +	/* Make sure we have at least one "empty" entry to test iteration of
-> +	 * an empty slot.
-> +	 */
-> +	num_sockets = bpf_map__max_entries(src) - 1;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index c6d9f2c444f4..6be74420f6fa 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -305,6 +305,7 @@ enum bpf_return_type {
+ 	RET_PTR_TO_SOCK_COMMON_OR_NULL,	/* returns a pointer to a sock_common or NULL */
+ 	RET_PTR_TO_ALLOC_MEM_OR_NULL,	/* returns a pointer to dynamically allocated memory or NULL */
+ 	RET_PTR_TO_BTF_ID_OR_NULL,	/* returns a pointer to a btf_id or NULL */
++	RET_PTR_TO_MPTCP_SOCK_OR_NULL,	/* returns a pointer to mptcp_sock or NULL */
+ };
+ 
+ /* eBPF function prototype used by verifier to allow BPF_CALLs from eBPF programs
+@@ -385,6 +386,8 @@ enum bpf_reg_type {
+ 	PTR_TO_RDONLY_BUF_OR_NULL, /* reg points to a readonly buffer or NULL */
+ 	PTR_TO_RDWR_BUF,	 /* reg points to a read/write buffer */
+ 	PTR_TO_RDWR_BUF_OR_NULL, /* reg points to a read/write buffer or NULL */
++	PTR_TO_MPTCP_SOCK,	 /* reg points to struct mptcp_sock */
++	PTR_TO_MPTCP_SOCK_OR_NULL, /* reg points to struct mptcp_sock or NULL */
+ };
+ 
+ /* The information passed from prog-specific *_is_valid_access
+@@ -1785,6 +1788,7 @@ extern const struct bpf_func_proto bpf_skc_to_tcp_timewait_sock_proto;
+ extern const struct bpf_func_proto bpf_skc_to_tcp_request_sock_proto;
+ extern const struct bpf_func_proto bpf_skc_to_udp6_sock_proto;
+ extern const struct bpf_func_proto bpf_copy_from_user_proto;
++extern const struct bpf_func_proto bpf_mptcp_sock_proto;
+ 
+ const struct bpf_func_proto *bpf_tracing_func_proto(
+ 	enum bpf_func_id func_id, const struct bpf_prog *prog);
+@@ -1841,6 +1845,35 @@ struct sk_reuseport_kern {
+ 	u32 reuseport_id;
+ 	bool bind_inany;
+ };
++
++#ifdef CONFIG_MPTCP
++bool bpf_mptcp_sock_is_valid_access(int off, int size,
++				    enum bpf_access_type type,
++				    struct bpf_insn_access_aux *info);
++
++u32 bpf_mptcp_sock_convert_ctx_access(enum bpf_access_type type,
++				      const struct bpf_insn *si,
++				      struct bpf_insn *insn_buf,
++				      struct bpf_prog *prog,
++				      u32 *target_size);
++#else /* CONFIG_MPTCP */
++static inline bool bpf_mptcp_sock_is_valid_access(int off, int size,
++						  enum bpf_access_type type,
++						  struct bpf_insn_access_aux *info)
++{
++	return false;
++}
++
++static inline u32 bpf_mptcp_sock_convert_ctx_access(enum bpf_access_type type,
++						    const struct bpf_insn *si,
++						    struct bpf_insn *insn_buf,
++						    struct bpf_prog *prog,
++						    u32 *target_size)
++{
++	return 0;
++}
++#endif /* CONFIG_MPTCP */
++
+ bool bpf_tcp_sock_is_valid_access(int off, int size, enum bpf_access_type type,
+ 				  struct bpf_insn_access_aux *info);
+ 
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 7d179eada1c3..ee7f6fd67f47 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -3579,6 +3579,15 @@ union bpf_attr {
+  * 		the data in *dst*. This is a wrapper of **copy_from_user**\ ().
+  * 	Return
+  * 		0 on success, or a negative error in case of failure.
++ *
++ * struct bpf_mptcp_sock *bpf_mptcp_sock(struct bpf_sock *sk)
++ *	Description
++ *		This helper gets a **struct bpf_mptcp_sock** pointer from a
++ *		**struct bpf_sock** pointer.
++ *	Return
++ *		A **struct bpf_mptcp_sock** pointer on success, or **NULL** in
++ *		case of failure.
++ *
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -3730,6 +3739,7 @@ union bpf_attr {
+ 	FN(inode_storage_delete),	\
+ 	FN(d_path),			\
+ 	FN(copy_from_user),		\
++	FN(mptcp_sock),			\
+ 	/* */
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+@@ -4063,6 +4073,10 @@ struct bpf_tcp_sock {
+ 	__u32 is_mptcp;		/* Is MPTCP subflow? */
+ };
+ 
++struct bpf_mptcp_sock {
++	__u32 token;		/* msk token */
++};
++
+ struct bpf_sock_tuple {
+ 	union {
+ 		struct {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 814bc6c1ad16..8a9ce121addd 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -392,6 +392,7 @@ static bool type_is_sk_pointer(enum bpf_reg_type type)
+ 	return type == PTR_TO_SOCKET ||
+ 		type == PTR_TO_SOCK_COMMON ||
+ 		type == PTR_TO_TCP_SOCK ||
++		type == PTR_TO_MPTCP_SOCK ||
+ 		type == PTR_TO_XDP_SOCK;
+ }
+ 
+@@ -399,6 +400,7 @@ static bool reg_type_not_null(enum bpf_reg_type type)
+ {
+ 	return type == PTR_TO_SOCKET ||
+ 		type == PTR_TO_TCP_SOCK ||
++		type == PTR_TO_MPTCP_SOCK ||
+ 		type == PTR_TO_MAP_VALUE ||
+ 		type == PTR_TO_SOCK_COMMON;
+ }
+@@ -409,6 +411,7 @@ static bool reg_type_may_be_null(enum bpf_reg_type type)
+ 	       type == PTR_TO_SOCKET_OR_NULL ||
+ 	       type == PTR_TO_SOCK_COMMON_OR_NULL ||
+ 	       type == PTR_TO_TCP_SOCK_OR_NULL ||
++	       type == PTR_TO_MPTCP_SOCK_OR_NULL ||
+ 	       type == PTR_TO_BTF_ID_OR_NULL ||
+ 	       type == PTR_TO_MEM_OR_NULL ||
+ 	       type == PTR_TO_RDONLY_BUF_OR_NULL ||
+@@ -427,6 +430,8 @@ static bool reg_type_may_be_refcounted_or_null(enum bpf_reg_type type)
+ 		type == PTR_TO_SOCKET_OR_NULL ||
+ 		type == PTR_TO_TCP_SOCK ||
+ 		type == PTR_TO_TCP_SOCK_OR_NULL ||
++		type == PTR_TO_MPTCP_SOCK ||
++		type == PTR_TO_MPTCP_SOCK_OR_NULL ||
+ 		type == PTR_TO_MEM ||
+ 		type == PTR_TO_MEM_OR_NULL;
+ }
+@@ -500,6 +505,8 @@ static const char * const reg_type_str[] = {
+ 	[PTR_TO_SOCK_COMMON_OR_NULL] = "sock_common_or_null",
+ 	[PTR_TO_TCP_SOCK]	= "tcp_sock",
+ 	[PTR_TO_TCP_SOCK_OR_NULL] = "tcp_sock_or_null",
++	[PTR_TO_MPTCP_SOCK]	= "mptcp_sock",
++	[PTR_TO_MPTCP_SOCK_OR_NULL] = "mptcp_sock_or_null",
+ 	[PTR_TO_TP_BUFFER]	= "tp_buffer",
+ 	[PTR_TO_XDP_SOCK]	= "xdp_sock",
+ 	[PTR_TO_BTF_ID]		= "ptr_",
+@@ -2177,6 +2184,8 @@ static bool is_spillable_regtype(enum bpf_reg_type type)
+ 	case PTR_TO_SOCK_COMMON_OR_NULL:
+ 	case PTR_TO_TCP_SOCK:
+ 	case PTR_TO_TCP_SOCK_OR_NULL:
++	case PTR_TO_MPTCP_SOCK:
++	case PTR_TO_MPTCP_SOCK_OR_NULL:
+ 	case PTR_TO_XDP_SOCK:
+ 	case PTR_TO_BTF_ID:
+ 	case PTR_TO_BTF_ID_OR_NULL:
+@@ -2786,6 +2795,9 @@ static int check_sock_access(struct bpf_verifier_env *env, int insn_idx,
+ 	case PTR_TO_TCP_SOCK:
+ 		valid = bpf_tcp_sock_is_valid_access(off, size, t, &info);
+ 		break;
++	case PTR_TO_MPTCP_SOCK:
++		valid = bpf_mptcp_sock_is_valid_access(off, size, t, &info);
++		break;
+ 	case PTR_TO_XDP_SOCK:
+ 		valid = bpf_xdp_sock_is_valid_access(off, size, t, &info);
+ 		break;
+@@ -2944,6 +2956,9 @@ static int check_ptr_alignment(struct bpf_verifier_env *env,
+ 	case PTR_TO_TCP_SOCK:
+ 		pointer_desc = "tcp_sock ";
+ 		break;
++	case PTR_TO_MPTCP_SOCK:
++		pointer_desc = "mptcp_sock ";
++		break;
+ 	case PTR_TO_XDP_SOCK:
+ 		pointer_desc = "xdp_sock ";
+ 		break;
+@@ -4997,6 +5012,10 @@ static int check_helper_call(struct bpf_verifier_env *env, int func_id, int insn
+ 		mark_reg_known_zero(env, regs, BPF_REG_0);
+ 		regs[BPF_REG_0].type = PTR_TO_TCP_SOCK_OR_NULL;
+ 		regs[BPF_REG_0].id = ++env->id_gen;
++	} else if (fn->ret_type == RET_PTR_TO_MPTCP_SOCK_OR_NULL) {
++		mark_reg_known_zero(env, regs, BPF_REG_0);
++		regs[BPF_REG_0].type = PTR_TO_MPTCP_SOCK_OR_NULL;
++		regs[BPF_REG_0].id = ++env->id_gen;
+ 	} else if (fn->ret_type == RET_PTR_TO_ALLOC_MEM_OR_NULL) {
+ 		mark_reg_known_zero(env, regs, BPF_REG_0);
+ 		regs[BPF_REG_0].type = PTR_TO_MEM_OR_NULL;
+@@ -5328,6 +5347,8 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+ 	case PTR_TO_SOCK_COMMON_OR_NULL:
+ 	case PTR_TO_TCP_SOCK:
+ 	case PTR_TO_TCP_SOCK_OR_NULL:
++	case PTR_TO_MPTCP_SOCK:
++	case PTR_TO_MPTCP_SOCK_OR_NULL:
+ 	case PTR_TO_XDP_SOCK:
+ 		verbose(env, "R%d pointer arithmetic on %s prohibited\n",
+ 			dst, reg_type_str[ptr_reg->type]);
+@@ -7048,6 +7069,8 @@ static void mark_ptr_or_null_reg(struct bpf_func_state *state,
+ 			reg->type = PTR_TO_SOCK_COMMON;
+ 		} else if (reg->type == PTR_TO_TCP_SOCK_OR_NULL) {
+ 			reg->type = PTR_TO_TCP_SOCK;
++		} else if (reg->type == PTR_TO_MPTCP_SOCK_OR_NULL) {
++			reg->type = PTR_TO_MPTCP_SOCK;
+ 		} else if (reg->type == PTR_TO_BTF_ID_OR_NULL) {
+ 			reg->type = PTR_TO_BTF_ID;
+ 		} else if (reg->type == PTR_TO_MEM_OR_NULL) {
+@@ -8411,6 +8434,8 @@ static bool regsafe(struct bpf_reg_state *rold, struct bpf_reg_state *rcur,
+ 	case PTR_TO_SOCK_COMMON_OR_NULL:
+ 	case PTR_TO_TCP_SOCK:
+ 	case PTR_TO_TCP_SOCK_OR_NULL:
++	case PTR_TO_MPTCP_SOCK:
++	case PTR_TO_MPTCP_SOCK_OR_NULL:
+ 	case PTR_TO_XDP_SOCK:
+ 		/* Only valid matches are exact, which memcmp() above
+ 		 * would have accepted
+@@ -8938,6 +8963,8 @@ static bool reg_type_mismatch_ok(enum bpf_reg_type type)
+ 	case PTR_TO_SOCK_COMMON_OR_NULL:
+ 	case PTR_TO_TCP_SOCK:
+ 	case PTR_TO_TCP_SOCK_OR_NULL:
++	case PTR_TO_MPTCP_SOCK:
++	case PTR_TO_MPTCP_SOCK_OR_NULL:
+ 	case PTR_TO_XDP_SOCK:
+ 	case PTR_TO_BTF_ID:
+ 	case PTR_TO_BTF_ID_OR_NULL:
+@@ -10076,6 +10103,9 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ 		case PTR_TO_TCP_SOCK:
+ 			convert_ctx_access = bpf_tcp_sock_convert_ctx_access;
+ 			break;
++		case PTR_TO_MPTCP_SOCK:
++			convert_ctx_access = bpf_mptcp_sock_convert_ctx_access;
++			break;
+ 		case PTR_TO_XDP_SOCK:
+ 			convert_ctx_access = bpf_xdp_sock_convert_ctx_access;
+ 			break;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index dab48528dceb..a9d964e4764e 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -6890,6 +6890,10 @@ sock_ops_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 	case BPF_FUNC_tcp_sock:
+ 		return &bpf_tcp_sock_proto;
+ #endif /* CONFIG_INET */
++#ifdef CONFIG_MPTCP
++	case BPF_FUNC_mptcp_sock:
++		return &bpf_mptcp_sock_proto;
++#endif /* CONFIG_MPTCP */
+ 	default:
+ 		return bpf_base_func_proto(func_id);
+ 	}
+diff --git a/net/mptcp/Makefile b/net/mptcp/Makefile
+index a611968be4d7..aae2ede220ed 100644
+--- a/net/mptcp/Makefile
++++ b/net/mptcp/Makefile
+@@ -10,3 +10,5 @@ obj-$(CONFIG_INET_MPTCP_DIAG) += mptcp_diag.o
+ mptcp_crypto_test-objs := crypto_test.o
+ mptcp_token_test-objs := token_test.o
+ obj-$(CONFIG_MPTCP_KUNIT_TESTS) += mptcp_crypto_test.o mptcp_token_test.o
++
++obj-$(CONFIG_BPF) += bpf.o
+diff --git a/net/mptcp/bpf.c b/net/mptcp/bpf.c
+new file mode 100644
+index 000000000000..5332469fbb28
+--- /dev/null
++++ b/net/mptcp/bpf.c
+@@ -0,0 +1,72 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Multipath TCP
++ *
++ * Copyright (c) 2020, Tessares SA.
++ *
++ * Author: Nicolas Rybowski <nicolas.rybowski@tessares.net>
++ *
++ */
++
++#include <linux/bpf.h>
++
++#include "protocol.h"
++
++bool bpf_mptcp_sock_is_valid_access(int off, int size, enum bpf_access_type type,
++				    struct bpf_insn_access_aux *info)
++{
++	if (off < 0 || off >= offsetofend(struct bpf_mptcp_sock, token))
++		return false;
++
++	if (off % size != 0)
++		return false;
++
++	switch (off) {
++	default:
++		return size == sizeof(__u32);
++	}
++}
++
++u32 bpf_mptcp_sock_convert_ctx_access(enum bpf_access_type type,
++				      const struct bpf_insn *si,
++				      struct bpf_insn *insn_buf,
++				      struct bpf_prog *prog, u32 *target_size)
++{
++	struct bpf_insn *insn = insn_buf;
++
++#define BPF_MPTCP_SOCK_GET_COMMON(FIELD)							\
++	do {											\
++		BUILD_BUG_ON(sizeof_field(struct mptcp_sock, FIELD) >				\
++				sizeof_field(struct bpf_mptcp_sock, FIELD));			\
++		*insn++ = BPF_LDX_MEM(BPF_FIELD_SIZEOF(struct mptcp_sock, FIELD),		\
++							si->dst_reg, si->src_reg,		\
++							offsetof(struct mptcp_sock, FIELD));	\
++	} while (0)
++
++	if (insn > insn_buf)
++		return insn - insn_buf;
++
++	switch (si->off) {
++	case offsetof(struct bpf_mptcp_sock, token):
++		BPF_MPTCP_SOCK_GET_COMMON(token);
++		break;
++	}
++
++	return insn - insn_buf;
++}
++
++BPF_CALL_1(bpf_mptcp_sock, struct sock *, sk)
++{
++	if (sk_fullsock(sk) && sk->sk_protocol == IPPROTO_TCP && sk_is_mptcp(sk)) {
++		struct mptcp_subflow_context *mptcp_sfc = mptcp_subflow_ctx(sk);
++
++		return (unsigned long)mptcp_sfc->conn;
++	}
++	return (unsigned long)NULL;
++}
++
++const struct bpf_func_proto bpf_mptcp_sock_proto = {
++	.func           = bpf_mptcp_sock,
++	.gpl_only       = false,
++	.ret_type       = RET_PTR_TO_MPTCP_SOCK_OR_NULL,
++	.arg1_type      = ARG_PTR_TO_SOCK_COMMON,
++};
+diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
+index 08388173973f..5c3e7aad8faa 100755
+--- a/scripts/bpf_helpers_doc.py
++++ b/scripts/bpf_helpers_doc.py
+@@ -428,6 +428,7 @@ class PrinterHelpers(Printer):
+             'struct tcp_request_sock',
+             'struct udp6_sock',
+             'struct task_struct',
++            'struct bpf_mptcp_sock',
+ 
+             'struct __sk_buff',
+             'struct sk_msg_md',
+@@ -474,6 +475,7 @@ class PrinterHelpers(Printer):
+             'struct udp6_sock',
+             'struct task_struct',
+             'struct path',
++            'struct bpf_mptcp_sock',
+     }
+     mapped_types = {
+             'u8': '__u8',
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 7d179eada1c3..ee7f6fd67f47 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -3579,6 +3579,15 @@ union bpf_attr {
+  * 		the data in *dst*. This is a wrapper of **copy_from_user**\ ().
+  * 	Return
+  * 		0 on success, or a negative error in case of failure.
++ *
++ * struct bpf_mptcp_sock *bpf_mptcp_sock(struct bpf_sock *sk)
++ *	Description
++ *		This helper gets a **struct bpf_mptcp_sock** pointer from a
++ *		**struct bpf_sock** pointer.
++ *	Return
++ *		A **struct bpf_mptcp_sock** pointer on success, or **NULL** in
++ *		case of failure.
++ *
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -3730,6 +3739,7 @@ union bpf_attr {
+ 	FN(inode_storage_delete),	\
+ 	FN(d_path),			\
+ 	FN(copy_from_user),		\
++	FN(mptcp_sock),			\
+ 	/* */
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+@@ -4063,6 +4073,10 @@ struct bpf_tcp_sock {
+ 	__u32 is_mptcp;		/* Is MPTCP subflow? */
+ };
+ 
++struct bpf_mptcp_sock {
++	__u32 token;		/* msk token */
++};
++
+ struct bpf_sock_tuple {
+ 	union {
+ 		struct {
+-- 
+2.28.0
 
-I found the logic above a little bit confusing in the sense you want
-num_elems and num_sockets the same for sockhash but from code they are
-assigned both from bpf_map__max_entries(src) - 1. Maybe the following 
-more clear?
-
-	/* Make sure we have at least one "empty" entry to test
-	 * iteration of an empty slot.
-	 */
-	if (map_type == BPF_MAP_TYPE_SOCKMAP) {
-		src = skel->maps.sockmap;
-		num_elems = bpf_map__max_entries(src);
-		num_sockets = num_elems - 1;
-	} else {
-		src = skel->maps.sockhash;
-		num_sockets = bpf_map__max_entries(src) - 1;
-		num_elems = num_sockets;
-	}
-
-> +
-> +	sock_fd = calloc(num_sockets, sizeof(*sock_fd));
-> +	if (CHECK(!sock_fd, "calloc(sock_fd)", "failed to allocate\n"))
-> +		goto out;
-
-calloc will initialize the value to 0, but it is overwritten below
-with -1. malloc is sufficient here.
-
-> +
-> +	for (i = 0; i < num_sockets; i++)
-> +		sock_fd[i] = -1;
-> +
->   	src_fd = bpf_map__fd(src);
->   
->   	for (i = 0; i < num_sockets; i++) {
-[...]
