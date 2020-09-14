@@ -2,159 +2,126 @@ Return-Path: <SRS0=2eLy=CX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 135F7C43461
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:15:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A86B4C433E2
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:20:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BDBCC21D41
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:15:07 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qLOMv5Rw"
+	by mail.kernel.org (Postfix) with ESMTP id 703EE2076C
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:20:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1600107657;
+	bh=BAjJTlDtrbfSxx3WpXifRRlUlkkL6nq/6bBLXSRWPJM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=BvCnIneXwLqgChm3SczgvoouqpTPm8yI5UbbURoaXIHphKCHqncBbQlhE06uEPO7/
+	 ITBUZXFc0nEu3cl+KoBoe2lWDiswIV6/g6uALkIf5nDA5DiqkTKpi//4BZViwjs7dW
+	 Z1iWGMuDM+XewNflJxhoJmH2M7+w8YWDlmj+L7p4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725970AbgINSPE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Sep 2020 14:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725964AbgINSPB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Sep 2020 14:15:01 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F27FC06174A;
-        Mon, 14 Sep 2020 11:15:01 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id h20so556059ybj.8;
-        Mon, 14 Sep 2020 11:15:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ma08YpN+pO0hWBciZeBb8sMUq8bp4nB2Wu8c3iKzAR0=;
-        b=qLOMv5RwTgQZDCrzvkcDts1DvSQOnWcC2yW24ULTUjJJmPf45+Ap9+suCOHlvC/8Ki
-         YACxMJvea28A0vdsmURLM1gUiJVvNeTyMe6+02i4SmUT0c/p+FGC+kbscYKplAy32Kyb
-         3gPTt5lVGo4+x0hQMv200k5HIp5T2A5XNraLX3C6GLbe0xaMlwh74FHnal+fGHhpUTdf
-         1klhrtKgFplSZJeHjsFO3DDEU+bbwDXzaCrBHxwJZC7ZIBMlyTlG1RQMRWrc4P4pyek/
-         VOyZ8x+7zypKW97Da8oABFPj2pA4XuID39g5ChhIREeC3yBHslDTHsoPWuuau4OOCV/c
-         JZ6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ma08YpN+pO0hWBciZeBb8sMUq8bp4nB2Wu8c3iKzAR0=;
-        b=dV8YuZ2P/1eAiaB7i4y+T1dTJxkeD7UbQLtfnMdOrhlE/zMb/eHtWhWvUBoiRBMRNV
-         OsF2Vv6hUa6zi1brJYdOiyJsYctmcu3SrIFnTrNqYXEGPrq1ChHKjS53fJ95ENQ8D3LE
-         Rm92uSHr4TmBbMq4a8LYijA/NwGZi0THGI1W3LdLb/j2D5bYa8m+xPbRRVM+yHosLOKi
-         YHlgvFoiwDEg48jJjbU8/Vx0XRiDiMySG9TPiRawR2oL34xGnroq8nArW2/28M3b0QkM
-         doge7Qyixc3V0M8HjAXL10GDMCK7z3VnNplZowWS6jcP1oaFcC6CLDOECAWL2bp3Mc6q
-         j52w==
-X-Gm-Message-State: AOAM532bVjffC44knLMfiIkGsNSE1YznOi23Izp3QlNi7aBfrtxhivm3
-        maKn7ykMJfDckp3AXOO5pftkmbFfzmnbfXRESnrCY6ux1IM=
-X-Google-Smtp-Source: ABdhPJxA0Cq2mtXXCLyfphGWu7wsPfoxBrmXd1DbdN1cfa47zgGp83Hy+0dkzv8bnJAmqIqnHVVE4zlDs5Pz40lmSVI=
-X-Received: by 2002:a25:e655:: with SMTP id d82mr23422446ybh.347.1600107300284;
- Mon, 14 Sep 2020 11:15:00 -0700 (PDT)
+        id S1725989AbgINSU4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Sep 2020 14:20:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45150 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725944AbgINSUy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Sep 2020 14:20:54 -0400
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 67E9321D7B;
+        Mon, 14 Sep 2020 18:20:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600107653;
+        bh=BAjJTlDtrbfSxx3WpXifRRlUlkkL6nq/6bBLXSRWPJM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=kPWTPtFmGeAcUwV2ZzcSWRLVUn+chuLd0NhGULBRQ+mOorNLZ19F5q/V2RhCj2MRj
+         vN3hZ1c3c87HkfKtvIQpoAf/F7rrxQgnJ5PTgfWTl9lNtg4pqyVtSwWPubgfqOnNCI
+         +zRYSUDpw8rpBpZQ/xk8gLHFcEZgPE+EE9CWAb5g=
+Received: by mail-lf1-f47.google.com with SMTP id d15so266429lfq.11;
+        Mon, 14 Sep 2020 11:20:53 -0700 (PDT)
+X-Gm-Message-State: AOAM533aiOb13/7WyyO9G5jKLmSQHASmgMA6xp2fBHTuSKdSB4SlPY/M
+        fGKSPkMoPt3UKHXR0B0u60htp59IdV1r96R3V8o=
+X-Google-Smtp-Source: ABdhPJxoTxm1xcGm5mS9x2ZonnbPk6/jiP4lwuM2k2GJ8gJUA03fMwGd0MKe4URzQ/whPBokmgSVduJDna9EJ/Gucek=
+X-Received: by 2002:a19:992:: with SMTP id 140mr4464849lfj.273.1600107651627;
+ Mon, 14 Sep 2020 11:20:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200914181022.925575-1-yhs@fb.com>
-In-Reply-To: <20200914181022.925575-1-yhs@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 14 Sep 2020 11:14:49 -0700
-Message-ID: <CAEf4BzZ6Y=uEFXZ5ZuR2VkV249xJT5Se0MY9-ZPKnCdY76Ed7g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpftool: fix build failure
-To:     Yonghong Song <yhs@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+References: <20200911143022.414783-1-nicolas.rybowski@tessares.net>
+In-Reply-To: <20200911143022.414783-1-nicolas.rybowski@tessares.net>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 14 Sep 2020 11:20:40 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW74oqvhySsVqLKrtz9r-EJxHrXza0gSGK2nm6GnKjmakQ@mail.gmail.com>
+Message-ID: <CAPhsuW74oqvhySsVqLKrtz9r-EJxHrXza0gSGK2nm6GnKjmakQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/5] bpf: expose is_mptcp flag to bpf_tcp_sock
+To:     Nicolas Rybowski <nicolas.rybowski@tessares.net>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        Quentin Monnet <quentin@isovalent.com>
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <mathew.j.martineau@linux.intel.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Sep 14, 2020 at 11:10 AM Yonghong Song <yhs@fb.com> wrote:
+On Fri, Sep 11, 2020 at 8:07 AM Nicolas Rybowski
+<nicolas.rybowski@tessares.net> wrote:
 >
-> When building bpf selftests like
->   make -C tools/testing/selftests/bpf -j20
-> I hit the following errors:
->   ...
->   GEN      /net-next/tools/testing/selftests/bpf/tools/build/bpftool/Documentation/bpftool-gen.8
->   <stdin>:75: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
->   <stdin>:71: (WARNING/2) Literal block ends without a blank line; unexpected unindent.
->   <stdin>:85: (WARNING/2) Literal block ends without a blank line; unexpected unindent.
->   <stdin>:57: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
->   <stdin>:66: (WARNING/2) Literal block ends without a blank line; unexpected unindent.
->   <stdin>:109: (WARNING/2) Literal block ends without a blank line; unexpected unindent.
->   <stdin>:175: (WARNING/2) Literal block ends without a blank line; unexpected unindent.
->   <stdin>:273: (WARNING/2) Literal block ends without a blank line; unexpected unindent.
->   make[1]: *** [/net-next/tools/testing/selftests/bpf/tools/build/bpftool/Documentation/bpftool-perf.8] Error 12
->   make[1]: *** Waiting for unfinished jobs....
->   make[1]: *** [/net-next/tools/testing/selftests/bpf/tools/build/bpftool/Documentation/bpftool-iter.8] Error 12
->   make[1]: *** [/net-next/tools/testing/selftests/bpf/tools/build/bpftool/Documentation/bpftool-struct_ops.8] Error 12
->   ...
+> is_mptcp is a field from struct tcp_sock used to indicate that the
+> current tcp_sock is part of the MPTCP protocol.
 >
-> I am using:
->   -bash-4.4$ rst2man --version
->   rst2man (Docutils 0.11 [repository], Python 2.7.5, on linux2)
->   -bash-4.4$
+> In this protocol, a first socket (mptcp_sock) is created with
+> sk_protocol set to IPPROTO_MPTCP (=262) for control purpose but it
+> isn't directly on the wire. This is the role of the subflow (kernel)
+> sockets which are classical tcp_sock with sk_protocol set to
+> IPPROTO_TCP. The only way to differentiate such sockets from plain TCP
+> sockets is the is_mptcp field from tcp_sock.
 >
-> The Makefile generated final .rst file (e.g., bpftool-cgroup.rst) looks like
->   ...
->       ID       AttachType      AttachFlags     Name
->   \n SEE ALSO\n========\n\t**bpf**\ (2),\n\t**bpf-helpers**\
->   (7),\n\t**bpftool**\ (8),\n\t**bpftool-btf**\
->   (8),\n\t**bpftool-feature**\ (8),\n\t**bpftool-gen**\
->   (8),\n\t**bpftool-iter**\ (8),\n\t**bpftool-link**\
->   (8),\n\t**bpftool-map**\ (8),\n\t**bpftool-net**\
->   (8),\n\t**bpftool-perf**\ (8),\n\t**bpftool-prog**\
->   (8),\n\t**bpftool-struct_ops**\ (8)\n
+> Such an exposure in BPF is thus required to be able to differentiate
+> plain TCP sockets from MPTCP subflow sockets in BPF_PROG_TYPE_SOCK_OPS
+> programs.
 >
-> The rst2man generated .8 file looks like
-> Literal block ends without a blank line; unexpected unindent.
->  .sp
->  n SEEALSOn========nt**bpf**(2),nt**bpf\-helpers**(7),nt**bpftool**(8),nt**bpftool\-btf**(8),nt**
->  bpftool\-feature**(8),nt**bpftool\-gen**(8),nt**bpftool\-iter**(8),nt**bpftool\-link**(8),nt**
->  bpftool\-map**(8),nt**bpftool\-net**(8),nt**bpftool\-perf**(8),nt**bpftool\-prog**(8),nt**
->  bpftool\-struct_ops**(8)n
+> The choice has been made to silently pass the case when CONFIG_MPTCP is
+> unset by defaulting is_mptcp to 0 in order to make BPF independent of
+> the MPTCP configuration. Another solution is to make the verifier fail
+> in 'bpf_tcp_sock_is_valid_ctx_access' but this will add an additional
+> '#ifdef CONFIG_MPTCP' in the BPF code and a same injected BPF program
+> will not run if MPTCP is not set.
 >
-> Looks like that particular version of rst2man prefers to have actual new line
-> instead of \n.
+> An example use-case is provided in
+> https://github.com/multipath-tcp/mptcp_net-next/tree/scripts/bpf/examples
 >
-> Since `echo -e` may not be available in some environment, let us use `printf`.
-> Some comments are added in Makefile to warn that '%' is not allowed in bpftool
-> man page names.
->
-> Cc: Quentin Monnet <quentin@isovalent.com>
-> Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> Fixes: 18841da98100 ("tools: bpftool: Automate generation for "SEE ALSO" sections in man pages")
-> Signed-off-by: Yonghong Song <yhs@fb.com>
+> Suggested-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> Acked-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> Acked-by: Mat Martineau <mathew.j.martineau@linux.intel.com>
+> Signed-off-by: Nicolas Rybowski <nicolas.rybowski@tessares.net>
 > ---
->  tools/bpf/bpftool/Documentation/Makefile | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+>  include/uapi/linux/bpf.h       | 1 +
+>  net/core/filter.c              | 9 ++++++++-
+>  tools/include/uapi/linux/bpf.h | 1 +
+>  3 files changed, 10 insertions(+), 1 deletion(-)
 >
-> diff --git a/tools/bpf/bpftool/Documentation/Makefile b/tools/bpf/bpftool/Documentation/Makefile
-> index 4c9dd1e45244..5dd68d79671e 100644
-> --- a/tools/bpf/bpftool/Documentation/Makefile
-> +++ b/tools/bpf/bpftool/Documentation/Makefile
-> @@ -40,11 +40,13 @@ see_also = $(subst " ",, \
->         $(foreach page,$(call list_pages,$(1)),",\n\t**$(page)**\\ (8)") \
->         "\n")
->
-> +# using printf for portability as `echo -e` does not work in some
-> +# environments. Note that bpftool man page names should not include '%'.
->  $(OUTPUT)%.8: %.rst
->  ifndef RST2MAN_DEP
->         $(error "rst2man not found, but required to generate man pages")
->  endif
-> -       $(QUIET_GEN)( cat $< ; echo -n $(call see_also,$<) ) | rst2man $(RST2MAN_OPTS) > $@
-> +       $(QUIET_GEN)( cat $< ; printf $(call see_also,$<) ) | rst2man $(RST2MAN_OPTS) > $@
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 7dd314176df7..7d179eada1c3 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -4060,6 +4060,7 @@ struct bpf_tcp_sock {
+>         __u32 delivered;        /* Total data packets delivered incl. rexmits */
+>         __u32 delivered_ce;     /* Like the above but only ECE marked packets */
+>         __u32 icsk_retransmits; /* Number of unrecovered [RTO] timeouts */
+> +       __u32 is_mptcp;         /* Is MPTCP subflow? */
 
-this doesn't have to be in "$(call ...)"?
+Shall we have an __u32 flags, and make is_mptcp a bit of it?
 
->
->  clean: helpers-clean
->         $(call QUIET_CLEAN, Documentation)
-> --
-> 2.24.1
->
+Thanks,
+Song
+[...]
