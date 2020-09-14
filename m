@@ -2,66 +2,67 @@ Return-Path: <SRS0=2eLy=CX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 205D2C433E2
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:36:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 25FC1C433E2
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:36:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DA83C208DB
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:36:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DA5E6208DB
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:36:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="E1/s6+lb"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="nwPN/7Ep"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726087AbgINSgf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Sep 2020 14:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
+        id S1726044AbgINSgu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Sep 2020 14:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726013AbgINSgX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Sep 2020 14:36:23 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66603C061797
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2020 11:36:23 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id fs5so623986pjb.7
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2020 11:36:23 -0700 (PDT)
+        with ESMTP id S1726085AbgINSg2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Sep 2020 14:36:28 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF17C061352
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2020 11:36:28 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id o11so614567pjj.9
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2020 11:36:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=jqsc+1d2ynBuBqET+rkKoXJHN1R2Af7JEusEUeR6x9I=;
-        b=E1/s6+lbfZ9KGbZcqp9LYf2HG9JFQ/s6uMO4OucTpDYUOol+ffV08+DB74ivwNhbXK
-         9DvNUEYYtbJigLt7k6CV4T3lHwFYszMr75Qx8xJVpu4GX9Ob9bLkVpvCgzaRWqkce940
-         VoENTVDP2+NXmOiJukn1Qxp5HyrjTZHkJ+3MlbM502EW+RcqczILRjANDIqK9aoR62DJ
-         W1XZBugqbJ6xBno/TcR0sZ5owmE18ABVgho61kc3yjsgKUYRo3phxx71XxLTJPj+Wgi4
-         f0YIdzx74iijLQNHPR9f2yqo2J9TOBP2BcVDJX9uZaNmfWpsrKgNQvXlz0sdD8/tzfh3
-         Earg==
+        bh=nbc36xItEcVbWzCY6GXnYOG2L+9ap0A5zaTqPoYG5tE=;
+        b=nwPN/7Ep2k+zQdSKZ1eBYEbBKZJZ8r6E+vNmq0NFUlZqlPWFy51vwDn2a58by+zq0d
+         RCg4ayL/eruZGPu/JETYi3UJpc12uWj+VMuBd6WZWX/3pnNy53ob4RJmE8nAl0otlqeP
+         n73a7FBd42RVBpUdzf+7a687PBvOwR5CIlNX+TFnxK0rjjt9f5uarQ9XYpOnHzaXL/pa
+         YfTbTMF5N/kY1zQR84dD+tiEQr/0Bgsv+RbOTadFINUOlLWD009FiCj8VImDg24/kvKH
+         i6trpxUoKdNEUSK5iw32f37O8O47gGW0zuSu2/eQUBfIe0U+frtvZfdwt8zD3No5ITZF
+         clmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=jqsc+1d2ynBuBqET+rkKoXJHN1R2Af7JEusEUeR6x9I=;
-        b=om0ITgSP3DmGWCVfcV+yr7Vc5RV8xGPR7N0EbECPAlLji0bWAi0xqd1STJIL7r2YL/
-         jDZkpCSctngwaWRmfk8uPymqFCO7u7+4zPnqpC5hRNHUhbfC50/6QMPaO5a5bbCB+IFK
-         803aD7cmhjEdN7ii4lC1VyaewImOIcAOe3edsAJ2B/4WggyHlNOXGMliKPq7DE1UGSCS
-         0vLCAlN8kQmqGXbO853qAxF0S7dxS4hnFDY+9SFj4YmOmuQDtahM3i7lt1x378W4/NaJ
-         4XEd1dRVvfMMH/Pra/K6R0JJblmDtGG6Hzoqi6DZsKgHNG9v2d8H6pKscEozRWLuXvGu
-         c6og==
-X-Gm-Message-State: AOAM531i0YYnpAaHtH1+RVdH363aJGKrz1yauK3StRvGE1QNOElgGnEo
-        JbmevfBa5EirV0vRhJD29fGq+YI=
-X-Google-Smtp-Source: ABdhPJwE120pXjv27VS9DhC/+c5eROjsa4niAXganasQ9i8N010Jt3x/tw5jFq4+ZhkYEq+pxJ8ZG2M=
+        bh=nbc36xItEcVbWzCY6GXnYOG2L+9ap0A5zaTqPoYG5tE=;
+        b=XjKugeot+VwFqvBifpYuh4qqlA/uUsunIbTxTVXcos2f6gezlTBgPaWP9myVen7EZO
+         WrOF/P4rz8eplbpRQjgt3ZpiF99jmnt+XFCO5c9g6pQCJ+twCBi9tfFieZy+9V38QBqk
+         YwgbzzNNsv09uJZIjaUpxuGUuHow9P8TwbdNoAWWEEjRIemtsGX15ScO6QDgARN9JK52
+         gmcq4goxzgaA/LG5rA28H9Uc2SkvMsPQVAOzn8Rhg2FUdY/aWi8vFsERxFvBV5C2/gyd
+         v41iuWBtCqbPpcHup7el7gyf5n95GAI2lVjdsXM6vDYEXpKCDHjSuSrafeoZX+HE45gT
+         6L4w==
+X-Gm-Message-State: AOAM531zDxqdQQb975gSDZMuHHzrRQN2g+hdtxmZNHI2ruqBBcFc+XCA
+        ibRJ4C3JqUUtfCU9eqWNKHIc9JM=
+X-Google-Smtp-Source: ABdhPJxs6B2cptFQM+6CIyjRJmv6A/+XoVAnT1Ga+Po1Do72A1XTrjONj5IbPtTWzeOA2upfJpQkKto=
 X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:1:7220:84ff:fe09:7732])
- (user=sdf job=sendgmr) by 2002:a17:90a:7ac1:: with SMTP id
- b1mr599998pjl.121.1600108582911; Mon, 14 Sep 2020 11:36:22 -0700 (PDT)
-Date:   Mon, 14 Sep 2020 11:36:13 -0700
+ (user=sdf job=sendgmr) by 2002:aa7:864c:0:b029:13c:1611:6591 with SMTP id
+ a12-20020aa7864c0000b029013c16116591mr13906728pfo.14.1600108587343; Mon, 14
+ Sep 2020 11:36:27 -0700 (PDT)
+Date:   Mon, 14 Sep 2020 11:36:15 -0700
 In-Reply-To: <20200914183615.2038347-1-sdf@google.com>
-Message-Id: <20200914183615.2038347-4-sdf@google.com>
+Message-Id: <20200914183615.2038347-6-sdf@google.com>
 Mime-Version: 1.0
 References: <20200914183615.2038347-1-sdf@google.com>
 X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
-Subject: [PATCH bpf-next v5 3/5] libbpf: Add BPF_PROG_BIND_MAP syscall and use
- it on .rodata section
+Subject: [PATCH bpf-next v5 5/5] selftests/bpf: Test load and dump metadata
+ with btftool and skel
 From:   Stanislav Fomichev <sdf@google.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
@@ -75,201 +76,319 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: YiFei Zhu <zhuyifei@google.com>
 
-The patch adds a simple wrapper bpf_prog_bind_map around the syscall.
-When the libbpf tries to load a program, it will probe the kernel for
-the support of this syscall and unconditionally bind .rodata section
-to the program.
+This is a simple test to check that loading and dumping metadata
+in btftool works, whether or not metadata contents are used by the
+program.
+
+A C test is also added to make sure the skeleton code can read the
+metadata values.
 
 Cc: YiFei Zhu <zhuyifei1999@gmail.com>
 Signed-off-by: YiFei Zhu <zhuyifei@google.com>
 Signed-off-by: Stanislav Fomichev <sdf@google.com>
 ---
- tools/lib/bpf/bpf.c      | 16 +++++++++
- tools/lib/bpf/bpf.h      |  8 +++++
- tools/lib/bpf/libbpf.c   | 72 ++++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.map |  1 +
- 4 files changed, 97 insertions(+)
+ tools/testing/selftests/bpf/Makefile          |   3 +-
+ .../selftests/bpf/prog_tests/metadata.c       | 141 ++++++++++++++++++
+ .../selftests/bpf/progs/metadata_unused.c     |  15 ++
+ .../selftests/bpf/progs/metadata_used.c       |  15 ++
+ .../selftests/bpf/test_bpftool_metadata.sh    |  82 ++++++++++
+ 5 files changed, 255 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/metadata.c
+ create mode 100644 tools/testing/selftests/bpf/progs/metadata_unused.c
+ create mode 100644 tools/testing/selftests/bpf/progs/metadata_used.c
+ create mode 100755 tools/testing/selftests/bpf/test_bpftool_metadata.sh
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 82b983ff6569..2baa1308737c 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -872,3 +872,19 @@ int bpf_enable_stats(enum bpf_stats_type type)
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 05798c2b5c67..2a63791177c4 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -68,7 +68,8 @@ TEST_PROGS := test_kmod.sh \
+ 	test_tc_edt.sh \
+ 	test_xdping.sh \
+ 	test_bpftool_build.sh \
+-	test_bpftool.sh
++	test_bpftool.sh \
++	test_bpftool_metadata.sh \
  
- 	return sys_bpf(BPF_ENABLE_STATS, &attr, sizeof(attr));
- }
+ TEST_PROGS_EXTENDED := with_addr.sh \
+ 	with_tunnels.sh \
+diff --git a/tools/testing/selftests/bpf/prog_tests/metadata.c b/tools/testing/selftests/bpf/prog_tests/metadata.c
+new file mode 100644
+index 000000000000..2c53eade88e3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/metadata.c
+@@ -0,0 +1,141 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +
-+int bpf_prog_bind_map(int prog_fd, int map_fd,
-+		      const struct bpf_prog_bind_opts *opts)
++/*
++ * Copyright 2020 Google LLC.
++ */
++
++#include <test_progs.h>
++#include <cgroup_helpers.h>
++#include <network_helpers.h>
++
++#include "metadata_unused.skel.h"
++#include "metadata_used.skel.h"
++
++static int duration;
++
++static int prog_holds_map(int prog_fd, int map_fd)
 +{
-+	union bpf_attr attr;
++	struct bpf_prog_info prog_info = {};
++	struct bpf_prog_info map_info = {};
++	__u32 prog_info_len;
++	__u32 map_info_len;
++	__u32 *map_ids;
++	int nr_maps;
++	int ret;
++	int i;
 +
-+	if (!OPTS_VALID(opts, bpf_prog_bind_opts))
-+		return -EINVAL;
++	map_info_len = sizeof(map_info);
++	ret = bpf_obj_get_info_by_fd(map_fd, &map_info, &map_info_len);
++	if (ret)
++		return -errno;
 +
-+	memset(&attr, 0, sizeof(attr));
-+	attr.prog_bind_map.prog_fd = prog_fd;
-+	attr.prog_bind_map.map_fd = map_fd;
-+	attr.prog_bind_map.flags = OPTS_GET(opts, flags, 0);
++	prog_info_len = sizeof(prog_info);
++	ret = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &prog_info_len);
++	if (ret)
++		return -errno;
 +
-+	return sys_bpf(BPF_PROG_BIND_MAP, &attr, sizeof(attr));
-+}
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 015d13f25fcc..8c1ac4b42f90 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -243,6 +243,14 @@ LIBBPF_API int bpf_task_fd_query(int pid, int fd, __u32 flags, char *buf,
- enum bpf_stats_type; /* defined in up-to-date linux/bpf.h */
- LIBBPF_API int bpf_enable_stats(enum bpf_stats_type type);
- 
-+struct bpf_prog_bind_opts {
-+	size_t sz; /* size of this struct for forward/backward compatibility */
-+	__u32 flags;
-+};
-+#define bpf_prog_bind_opts__last_field flags
++	map_ids = calloc(prog_info.nr_map_ids, sizeof(__u32));
++	if (!map_ids)
++		return -ENOMEM;
 +
-+LIBBPF_API int bpf_prog_bind_map(int prog_fd, int map_fd,
-+				 const struct bpf_prog_bind_opts *opts);
- #ifdef __cplusplus
- } /* extern "C" */
- #endif
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 550950eb1860..b68fa08e2fa9 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -174,6 +174,8 @@ enum kern_feature_id {
- 	FEAT_EXP_ATTACH_TYPE,
- 	/* bpf_probe_read_{kernel,user}[_str] helpers */
- 	FEAT_PROBE_READ_KERN,
-+	/* BPF_PROG_BIND_MAP is supported */
-+	FEAT_PROG_BIND_MAP,
- 	__FEAT_CNT,
- };
- 
-@@ -409,6 +411,7 @@ struct bpf_object {
- 	struct extern_desc *externs;
- 	int nr_extern;
- 	int kconfig_map_idx;
-+	int rodata_map_idx;
- 
- 	bool loaded;
- 	bool has_subcalls;
-@@ -1070,6 +1073,7 @@ static struct bpf_object *bpf_object__new(const char *path,
- 	obj->efile.bss_shndx = -1;
- 	obj->efile.st_ops_shndx = -1;
- 	obj->kconfig_map_idx = -1;
-+	obj->rodata_map_idx = -1;
- 
- 	obj->kern_version = get_kernel_version();
- 	obj->loaded = false;
-@@ -1428,6 +1432,8 @@ static int bpf_object__init_global_data_maps(struct bpf_object *obj)
- 						    obj->efile.rodata->d_size);
- 		if (err)
- 			return err;
++	nr_maps = prog_info.nr_map_ids;
++	memset(&prog_info, 0, sizeof(prog_info));
++	prog_info.nr_map_ids = nr_maps;
++	prog_info.map_ids = ptr_to_u64(map_ids);
++	prog_info_len = sizeof(prog_info);
 +
-+		obj->rodata_map_idx = obj->nr_maps - 1;
- 	}
- 	if (obj->efile.bss_shndx >= 0) {
- 		err = bpf_object__init_internal_map(obj, LIBBPF_MAP_BSS,
-@@ -3894,6 +3900,55 @@ static int probe_kern_probe_read_kernel(void)
- 	return probe_fd(bpf_load_program_xattr(&attr, NULL, 0));
- }
- 
-+static int probe_prog_bind_map(void)
-+{
-+	struct bpf_load_program_attr prg_attr;
-+	struct bpf_create_map_attr map_attr;
-+	char *cp, errmsg[STRERR_BUFSIZE];
-+	struct bpf_insn insns[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	int ret, map, prog;
-+
-+	if (!kernel_supports(FEAT_GLOBAL_DATA))
-+		return 0;
-+
-+	memset(&map_attr, 0, sizeof(map_attr));
-+	map_attr.map_type = BPF_MAP_TYPE_ARRAY;
-+	map_attr.key_size = sizeof(int);
-+	map_attr.value_size = 32;
-+	map_attr.max_entries = 1;
-+
-+	map = bpf_create_map_xattr(&map_attr);
-+	if (map < 0) {
++	ret = bpf_obj_get_info_by_fd(prog_fd, &prog_info, &prog_info_len);
++	if (ret) {
 +		ret = -errno;
-+		cp = libbpf_strerror_r(ret, errmsg, sizeof(errmsg));
-+		pr_warn("Error in %s():%s(%d). Couldn't create simple array map.\n",
-+			__func__, cp, -ret);
-+		return ret;
++		goto free_map_ids;
 +	}
 +
-+	memset(&prg_attr, 0, sizeof(prg_attr));
-+	prg_attr.prog_type = BPF_PROG_TYPE_SOCKET_FILTER;
-+	prg_attr.insns = insns;
-+	prg_attr.insns_cnt = ARRAY_SIZE(insns);
-+	prg_attr.license = "GPL";
-+
-+	prog = bpf_load_program_xattr(&prg_attr, NULL, 0);
-+	if (prog < 0) {
-+		close(map);
-+		return 0;
++	ret = -ENOENT;
++	for (i = 0; i < prog_info.nr_map_ids; i++) {
++		if (map_ids[i] == map_info.id) {
++			ret = 0;
++			break;
++		}
 +	}
 +
-+	ret = bpf_prog_bind_map(prog, map, NULL);
-+
-+	close(map);
-+	close(prog);
-+
-+	return ret >= 0;
++free_map_ids:
++	free(map_ids);
++	return ret;
 +}
 +
- enum kern_feature_result {
- 	FEAT_UNKNOWN = 0,
- 	FEAT_SUPPORTED = 1,
-@@ -3934,6 +3989,9 @@ static struct kern_feature_desc {
- 	},
- 	[FEAT_PROBE_READ_KERN] = {
- 		"bpf_probe_read_kernel() helper", probe_kern_probe_read_kernel,
-+	},
-+	[FEAT_PROG_BIND_MAP] = {
-+		"BPF_PROG_BIND_MAP support", probe_prog_bind_map,
- 	}
- };
- 
-@@ -6468,6 +6526,20 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 	if (ret >= 0) {
- 		if (log_buf && load_attr.log_level)
- 			pr_debug("verifier log:\n%s", log_buf);
++static void test_metadata_unused(void)
++{
++	struct metadata_unused *obj;
++	int err;
 +
-+		if (prog->obj->rodata_map_idx >= 0 &&
-+		    kernel_supports(FEAT_PROG_BIND_MAP)) {
-+			struct bpf_map *rodata_map =
-+				&prog->obj->maps[prog->obj->rodata_map_idx];
++	obj = metadata_unused__open_and_load();
++	if (CHECK(!obj, "skel-load", "errno %d", errno))
++		return;
 +
-+			if (bpf_prog_bind_map(ret, bpf_map__fd(rodata_map), NULL)) {
-+				cp = libbpf_strerror_r(errno, errmsg, sizeof(errmsg));
-+				pr_warn("prog '%s': failed to bind .rodata map: %s\n",
-+					prog->name, cp);
-+				/* Don't fail hard if can't bind rodata. */
-+			}
-+		}
++	err = prog_holds_map(bpf_program__fd(obj->progs.prog),
++			     bpf_map__fd(obj->maps.rodata));
++	if (CHECK(err, "prog-holds-rodata", "errno: %d", err))
++		return;
 +
- 		*pfd = ret;
- 		ret = 0;
- 		goto out;
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 92ceb48a5ca2..5f054dadf082 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -302,6 +302,7 @@ LIBBPF_0.1.0 {
- 
- LIBBPF_0.2.0 {
- 	global:
-+		bpf_prog_bind_map;
- 		bpf_program__section_name;
- 		perf_buffer__buffer_cnt;
- 		perf_buffer__buffer_fd;
++	/* Assert that we can access the metadata in skel and the values are
++	 * what we expect.
++	 */
++	if (CHECK(strncmp(obj->rodata->bpf_metadata_a, "foo",
++			  sizeof(obj->rodata->bpf_metadata_a)),
++		  "bpf_metadata_a", "expected \"foo\", value differ"))
++		goto close_bpf_object;
++	if (CHECK(obj->rodata->bpf_metadata_b != 1, "bpf_metadata_b",
++		  "expected 1, got %d", obj->rodata->bpf_metadata_b))
++		goto close_bpf_object;
++
++	/* Assert that binding metadata map to prog again succeeds. */
++	err = bpf_prog_bind_map(bpf_program__fd(obj->progs.prog),
++				bpf_map__fd(obj->maps.rodata), NULL);
++	CHECK(err, "rebind_map", "errno %d, expected 0", errno);
++
++close_bpf_object:
++	metadata_unused__destroy(obj);
++}
++
++static void test_metadata_used(void)
++{
++	struct metadata_used *obj;
++	int err;
++
++	obj = metadata_used__open_and_load();
++	if (CHECK(!obj, "skel-load", "errno %d", errno))
++		return;
++
++	err = prog_holds_map(bpf_program__fd(obj->progs.prog),
++			     bpf_map__fd(obj->maps.rodata));
++	if (CHECK(err, "prog-holds-rodata", "errno: %d", err))
++		return;
++
++	/* Assert that we can access the metadata in skel and the values are
++	 * what we expect.
++	 */
++	if (CHECK(strncmp(obj->rodata->bpf_metadata_a, "bar",
++			  sizeof(obj->rodata->bpf_metadata_a)),
++		  "metadata_a", "expected \"bar\", value differ"))
++		goto close_bpf_object;
++	if (CHECK(obj->rodata->bpf_metadata_b != 2, "metadata_b",
++		  "expected 2, got %d", obj->rodata->bpf_metadata_b))
++		goto close_bpf_object;
++
++	/* Assert that binding metadata map to prog again succeeds. */
++	err = bpf_prog_bind_map(bpf_program__fd(obj->progs.prog),
++				bpf_map__fd(obj->maps.rodata), NULL);
++	CHECK(err, "rebind_map", "errno %d, expected 0", errno);
++
++close_bpf_object:
++	metadata_used__destroy(obj);
++}
++
++void test_metadata(void)
++{
++	if (test__start_subtest("unused"))
++		test_metadata_unused();
++
++	if (test__start_subtest("used"))
++		test_metadata_used();
++}
+diff --git a/tools/testing/selftests/bpf/progs/metadata_unused.c b/tools/testing/selftests/bpf/progs/metadata_unused.c
+new file mode 100644
+index 000000000000..672a0d19f8d0
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/metadata_unused.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++volatile const char bpf_metadata_a[] SEC(".rodata") = "foo";
++volatile const int bpf_metadata_b SEC(".rodata") = 1;
++
++SEC("cgroup_skb/egress")
++int prog(struct xdp_md *ctx)
++{
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/metadata_used.c b/tools/testing/selftests/bpf/progs/metadata_used.c
+new file mode 100644
+index 000000000000..b7198e65383d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/metadata_used.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++volatile const char bpf_metadata_a[] SEC(".rodata") = "bar";
++volatile const int bpf_metadata_b SEC(".rodata") = 2;
++
++SEC("cgroup_skb/egress")
++int prog(struct xdp_md *ctx)
++{
++	return bpf_metadata_b ? 1 : 0;
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/test_bpftool_metadata.sh b/tools/testing/selftests/bpf/test_bpftool_metadata.sh
+new file mode 100755
+index 000000000000..1bf81b49457a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_bpftool_metadata.sh
+@@ -0,0 +1,82 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
++TESTNAME=bpftool_metadata
++BPF_FS=$(awk '$3 == "bpf" {print $2; exit}' /proc/mounts)
++BPF_DIR=$BPF_FS/test_$TESTNAME
++
++_cleanup()
++{
++	set +e
++	rm -rf $BPF_DIR 2> /dev/null
++}
++
++cleanup_skip()
++{
++	echo "selftests: $TESTNAME [SKIP]"
++	_cleanup
++
++	exit $ksft_skip
++}
++
++cleanup()
++{
++	if [ "$?" = 0 ]; then
++		echo "selftests: $TESTNAME [PASS]"
++	else
++		echo "selftests: $TESTNAME [FAILED]"
++	fi
++	_cleanup
++}
++
++if [ $(id -u) -ne 0 ]; then
++	echo "selftests: $TESTNAME [SKIP] Need root privileges"
++	exit $ksft_skip
++fi
++
++if [ -z "$BPF_FS" ]; then
++	echo "selftests: $TESTNAME [SKIP] Could not run test without bpffs mounted"
++	exit $ksft_skip
++fi
++
++if ! bpftool version > /dev/null 2>&1; then
++	echo "selftests: $TESTNAME [SKIP] Could not run test without bpftool"
++	exit $ksft_skip
++fi
++
++set -e
++
++trap cleanup_skip EXIT
++
++mkdir $BPF_DIR
++
++trap cleanup EXIT
++
++bpftool prog load metadata_unused.o $BPF_DIR/unused
++
++METADATA_PLAIN="$(bpftool prog)"
++echo "$METADATA_PLAIN" | grep 'a = "foo"' > /dev/null
++echo "$METADATA_PLAIN" | grep 'b = 1' > /dev/null
++
++bpftool prog --json | grep '"metadata":{"a":"foo","b":1}' > /dev/null
++
++bpftool map | grep 'metadata.rodata' > /dev/null
++
++rm $BPF_DIR/unused
++
++bpftool prog load metadata_used.o $BPF_DIR/used
++
++METADATA_PLAIN="$(bpftool prog)"
++echo "$METADATA_PLAIN" | grep 'a = "bar"' > /dev/null
++echo "$METADATA_PLAIN" | grep 'b = 2' > /dev/null
++
++bpftool prog --json | grep '"metadata":{"a":"bar","b":2}' > /dev/null
++
++bpftool map | grep 'metadata.rodata' > /dev/null
++
++rm $BPF_DIR/used
++
++exit 0
 -- 
 2.28.0.618.gf4bc123cb7-goog
 
