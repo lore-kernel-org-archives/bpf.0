@@ -2,73 +2,59 @@ Return-Path: <SRS0=2eLy=CX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EF1CAC433E2
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 16:12:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC872C433E2
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 16:13:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8C49E217BA
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 16:12:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B0D4221973
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 16:13:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ICF3TAyl"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UnunqAY4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726446AbgINQMa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Sep 2020 12:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726296AbgINQEE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Sep 2020 12:04:04 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D9EC06178C
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2020 09:04:01 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id s13so550215wmh.4
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2020 09:04:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O0l1UfcfUc0KBl9837XH5tw5OCJv2/86eThbuj5ZSqo=;
-        b=ICF3TAylQiyjXI2Z7P+4bS80fp4tXC4GA/U9W4//WskyOyXgEGJQpwk+fz2nUS40Tu
-         P8ITROvX8xgmIcA4h1PoKJylxWUGkjYfFXNysdcmL+k/QScf3zWV65wlwVCB7Ttty1Nv
-         Eb9VGmlX1oeHZXTU1yvX10+CLfW21FWTDFzH/ixewUNbuJV6vOeuyV5Ra5QdQGQQFxfk
-         8RhtlhMw7cPkb5hLrJSz1sDwtEV1NUh5gIzQqq89DnQHxbocklDqLAMKcRnWV1NTcnix
-         YV9tKHrKFWKfigwXvBB3/DjMkqviKlykhzWgDm+9B9sjPWA9WC6JtyPXTqU+PvPo2Blm
-         Ywzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=O0l1UfcfUc0KBl9837XH5tw5OCJv2/86eThbuj5ZSqo=;
-        b=bonRbvnAf0GhHMhafrKpWS6enfF7V9wrXJBqAEXVcbIrZ2p0Fhc0TkJEA8gFFRgXIx
-         /dHd7WxZJxYZaWFFbSAvJdde6Dqf9RXErbB9TCemPKqRDAZ9IkpQDupbx/cHr2luuuXS
-         LrTtgSuppwLKDncB2YE2yTCExf7FadWP5g7RLicKn++8paCnwJxJyn7sHCry4OgfMJ+O
-         KxFODEI+aEZCggFPkvG0xIILJ3p+s+CLoZEjdIqVAdCM2HHEMv2zgTa2VovEg+EF4xe8
-         naJJ5PWRQ0PgNfomU612ghvwkVj73KFmMwPSgPWBEQYyCkptMQQljQhER3k7+J2TlwVu
-         Jy+Q==
-X-Gm-Message-State: AOAM533iWRyLgtkX5heG+nRdOYrJTuiCWuqyPqpwIaBkbuhodFLuSv8r
-        pTlgxFbTMbKislPMWylxpG2FW6erd7yYzw==
-X-Google-Smtp-Source: ABdhPJzCuF1cawRkEdsS6dlgWacizeK6sJIZvSJhIt9gtQCWPViBRDdJE1W0SfhUHyK9PatHGeX9og==
-X-Received: by 2002:a1c:23c9:: with SMTP id j192mr137475wmj.6.1600099439486;
-        Mon, 14 Sep 2020 09:03:59 -0700 (PDT)
-Received: from apalos.home ([2a02:587:4615:c071:2e56:dcff:fe9a:8f06])
-        by smtp.gmail.com with ESMTPSA id l8sm21331412wrx.22.2020.09.14.09.03.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2020 09:03:58 -0700 (PDT)
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-To:     bpf@vger.kernel.org
-Cc:     ardb@kernel.org, naresh.kamboju@linaro.org,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Jiri Olsa <jolsa@kernel.org>,
+        id S1726142AbgINQN5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Sep 2020 12:13:57 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:36166 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726424AbgINQM7 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 14 Sep 2020 12:12:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1600099975;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NMcjuPLsban/s/KhGcm7R6jbGaWdBO7FK18RrhrF4m4=;
+        b=UnunqAY4EbEa+aaNV58/gBSPTDAZmoP+P+y136DkmHhYC2de6r9m7p0H61SPEh8m6MtL46
+        kEl4o9AwFLI6dbdkZEmGfk7uaYlzaxCuaAa1br6fCZooQlf8kqn4qspKgj3fQpNG2T0936
+        NWak+kb7fyX0bzL7Utjn+U+4zMflNn4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-233-lmWKx1gVNNS1mWTiGcUWJw-1; Mon, 14 Sep 2020 12:12:52 -0400
+X-MC-Unique: lmWKx1gVNNS1mWTiGcUWJw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7981D425FD;
+        Mon, 14 Sep 2020 16:12:49 +0000 (UTC)
+Received: from carbon (unknown [10.40.208.42])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1BA4B7EEC9;
+        Mon, 14 Sep 2020 16:12:35 +0000 (UTC)
+Date:   Mon, 14 Sep 2020 18:12:34 +0200
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     brouer@redhat.com, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        bpf@vger.kernel.org, ardb@kernel.org, naresh.kamboju@linaro.org,
         Jean-Philippe Brucker <jean-philippe@linaro.org>,
         Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Zi Shen Lim <zlim.lnx@gmail.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
@@ -77,182 +63,53 @@ Cc:     ardb@kernel.org, naresh.kamboju@linaro.org,
         Jakub Kicinski <kuba@kernel.org>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] arm64: bpf: Fix branch offset in JIT
-Date:   Mon, 14 Sep 2020 19:03:55 +0300
-Message-Id: <20200914160355.19179-1-ilias.apalodimas@linaro.org>
-X-Mailer: git-send-email 2.28.0
+        linux-kernel@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: [PATCH] arm64: bpf: Fix branch offset in JIT
+Message-ID: <20200914181234.0f1df8ba@carbon>
+In-Reply-To: <20200914140114.GG24441@willie-the-truck>
+References: <20200914083622.116554-1-ilias.apalodimas@linaro.org>
+        <20200914122042.GA24441@willie-the-truck>
+        <20200914123504.GA124316@apalos.home>
+        <20200914132350.GA126552@apalos.home>
+        <20200914140114.GG24441@willie-the-truck>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Running the eBPF test_verifier leads to random errors looking like this:
 
-[ 6525.735488] Unexpected kernel BRK exception at EL1
-[ 6525.735502] Internal error: ptrace BRK handler: f2000100 [#1] SMP
-[ 6525.741609] Modules linked in: nls_utf8 cifs libdes libarc4 dns_resolver fscache binfmt_misc nls_ascii nls_cp437 vfat fat aes_ce_blk crypto_simd cryptd aes_ce_cipher ghash_ce gf128mul efi_pstore sha2_ce sha256_arm64 sha1_ce evdev efivars efivarfs ip_tables x_tables autofs4 btrfs blake2b_generic xor xor_neon zstd_compress raid6_pq libcrc32c crc32c_generic ahci xhci_pci libahci xhci_hcd igb libata i2c_algo_bit nvme realtek usbcore nvme_core scsi_mod t10_pi netsec mdio_devres of_mdio gpio_keys fixed_phy libphy gpio_mb86s7x
-[ 6525.787760] CPU: 3 PID: 7881 Comm: test_verifier Tainted: G        W         5.9.0-rc1+ #47
-[ 6525.796111] Hardware name: Socionext SynQuacer E-series DeveloperBox, BIOS build #1 Jun  6 2020
-[ 6525.804812] pstate: 20000005 (nzCv daif -PAN -UAO BTYPE=--)
-[ 6525.810390] pc : bpf_prog_c3d01833289b6311_F+0xc8/0x9f4
-[ 6525.815613] lr : bpf_prog_d53bb52e3f4483f9_F+0x38/0xc8c
-[ 6525.820832] sp : ffff8000130cbb80
-[ 6525.824141] x29: ffff8000130cbbb0 x28: 0000000000000000
-[ 6525.829451] x27: 000005ef6fcbf39b x26: 0000000000000000
-[ 6525.834759] x25: ffff8000130cbb80 x24: ffff800011dc7038
-[ 6525.840067] x23: ffff8000130cbd00 x22: ffff0008f624d080
-[ 6525.845375] x21: 0000000000000001 x20: ffff800011dc7000
-[ 6525.850682] x19: 0000000000000000 x18: 0000000000000000
-[ 6525.855990] x17: 0000000000000000 x16: 0000000000000000
-[ 6525.861298] x15: 0000000000000000 x14: 0000000000000000
-[ 6525.866606] x13: 0000000000000000 x12: 0000000000000000
-[ 6525.871913] x11: 0000000000000001 x10: ffff8000000a660c
-[ 6525.877220] x9 : ffff800010951810 x8 : ffff8000130cbc38
-[ 6525.882528] x7 : 0000000000000000 x6 : 0000009864cfa881
-[ 6525.887836] x5 : 00ffffffffffffff x4 : 002880ba1a0b3e9f
-[ 6525.893144] x3 : 0000000000000018 x2 : ffff8000000a4374
-[ 6525.898452] x1 : 000000000000000a x0 : 0000000000000009
-[ 6525.903760] Call trace:
-[ 6525.906202]  bpf_prog_c3d01833289b6311_F+0xc8/0x9f4
-[ 6525.911076]  bpf_prog_d53bb52e3f4483f9_F+0x38/0xc8c
-[ 6525.915957]  bpf_dispatcher_xdp_func+0x14/0x20
-[ 6525.920398]  bpf_test_run+0x70/0x1b0
-[ 6525.923969]  bpf_prog_test_run_xdp+0xec/0x190
-[ 6525.928326]  __do_sys_bpf+0xc88/0x1b28
-[ 6525.932072]  __arm64_sys_bpf+0x24/0x30
-[ 6525.935820]  el0_svc_common.constprop.0+0x70/0x168
-[ 6525.940607]  do_el0_svc+0x28/0x88
-[ 6525.943920]  el0_sync_handler+0x88/0x190
-[ 6525.947838]  el0_sync+0x140/0x180
-[ 6525.951154] Code: d4202000 d4202000 d4202000 d4202000 (d4202000)
-[ 6525.957249] ---[ end trace cecc3f93b14927e2 ]---
+On Mon, 14 Sep 2020 15:01:15 +0100 Will Deacon <will@kernel.org> wrote:
 
-The reason is the offset[] creation and later usage while building
-the eBPF body. The code currently omits the first instruction, since
-build_insn() will increase our ctx->idx before saving it.
-That was fine up until bounded eBPF loops were introduced. After that
-introduction, offset[0] must be the offset of the end of prologue which
-is the start of the 1st insn while, offset[n] holds the
-offset of the end of n-th insn.
+> Hi Ilias,
+> 
+> On Mon, Sep 14, 2020 at 04:23:50PM +0300, Ilias Apalodimas wrote:
+> > On Mon, Sep 14, 2020 at 03:35:04PM +0300, Ilias Apalodimas wrote:  
+> > > On Mon, Sep 14, 2020 at 01:20:43PM +0100, Will Deacon wrote:  
+> > > > On Mon, Sep 14, 2020 at 11:36:21AM +0300, Ilias Apalodimas wrote:  
+> > > > > Running the eBPF test_verifier leads to random errors looking like this:  
+> 
+> [...]
+> > >   
+> > Any suggestion on any Fixes I should apply? The original code was 'correct' and
+> > broke only when bounded loops and their self-tests were introduced.  
+> 
+> Ouch, that's pretty bad as it means nobody is regression testing BPF on
+> arm64 with mainline. Damn.
 
-When "taken loop with back jump to 1st insn" test runs, it will
-eventually call bpf2a64_offset(-1, 2, ctx). Since negative indexing is
-permitted, the current outcome depends on the value stored in
-ctx->offset[-1], which has nothing to do with our array.
-If the value happens to be 0 the tests will work. If not this error
-triggers.
+Yes, it unfortunately seems that upstream is lacking BPF regression
+testing for ARM64 :-(
 
-7c2e988f400e ("bpf: fix x64 JIT code generation for jmp to 1st insn")
-fixed an indentical bug on x86 when eBPF bounded loops were introduced.
+This bug surfaced when Red Hat QA tested our kernel backports, on
+different archs.
 
-So let's fix it by creating the ctx->offset[] correctly in the first
-place and account for the first instruction while calculating the arm
-instruction offsets.
-
-Fixes: 2589726d12a1 ("bpf: introduce bounded loops")
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Reported-by: Jiri Olsa <jolsa@kernel.org>
-Co-developed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-Co-developed-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Signed-off-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-Signed-off-by: Ilias Apalodimas <ilias.apalodimas@linaro.org>
----
-Changes since v1: 
- - Added Co-developed-by, Reported-by and Fixes tags correctly
- - Describe the expected context of ctx->offset[] in comments
-
- arch/arm64/net/bpf_jit_comp.c | 28 ++++++++++++++++++++--------
- 1 file changed, 20 insertions(+), 8 deletions(-)
-
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index f8912e45be7a..0974effff58c 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -143,9 +143,13 @@ static inline void emit_addr_mov_i64(const int reg, const u64 val,
- 	}
- }
- 
--static inline int bpf2a64_offset(int bpf_to, int bpf_from,
-+static inline int bpf2a64_offset(int bpf_insn, int off,
- 				 const struct jit_ctx *ctx)
- {
-+	/* arm64 offset is relative to the branch instruction */
-+	int bpf_from = bpf_insn + 1;
-+	/* BPF JMP offset is relative to the next instruction */
-+	int bpf_to = bpf_insn + off + 1;
- 	int to = ctx->offset[bpf_to];
- 	/* -1 to account for the Branch instruction */
- 	int from = ctx->offset[bpf_from] - 1;
-@@ -642,7 +646,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 
- 	/* JUMP off */
- 	case BPF_JMP | BPF_JA:
--		jmp_offset = bpf2a64_offset(i + off, i, ctx);
-+		jmp_offset = bpf2a64_offset(i, off, ctx);
- 		check_imm26(jmp_offset);
- 		emit(A64_B(jmp_offset), ctx);
- 		break;
-@@ -669,7 +673,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	case BPF_JMP32 | BPF_JSLE | BPF_X:
- 		emit(A64_CMP(is64, dst, src), ctx);
- emit_cond_jmp:
--		jmp_offset = bpf2a64_offset(i + off, i, ctx);
-+		jmp_offset = bpf2a64_offset(i, off, ctx);
- 		check_imm19(jmp_offset);
- 		switch (BPF_OP(code)) {
- 		case BPF_JEQ:
-@@ -912,18 +916,26 @@ static int build_body(struct jit_ctx *ctx, bool extra_pass)
- 		const struct bpf_insn *insn = &prog->insnsi[i];
- 		int ret;
- 
-+		/*
-+		 * offset[0] offset of the end of prologue, start of the
-+		 * first insn.
-+		 * offset[x] - offset of the end of x insn.
-+		 */
-+		if (ctx->image == NULL)
-+			ctx->offset[i] = ctx->idx;
-+
- 		ret = build_insn(insn, ctx, extra_pass);
- 		if (ret > 0) {
- 			i++;
- 			if (ctx->image == NULL)
--				ctx->offset[i] = ctx->idx;
-+				ctx->offset[i] = ctx->offset[i - 1];
- 			continue;
- 		}
--		if (ctx->image == NULL)
--			ctx->offset[i] = ctx->idx;
- 		if (ret)
- 			return ret;
- 	}
-+	if (ctx->image == NULL)
-+		ctx->offset[i] = ctx->idx;
- 
- 	return 0;
- }
-@@ -1002,7 +1014,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	memset(&ctx, 0, sizeof(ctx));
- 	ctx.prog = prog;
- 
--	ctx.offset = kcalloc(prog->len, sizeof(int), GFP_KERNEL);
-+	ctx.offset = kcalloc(prog->len + 1, sizeof(int), GFP_KERNEL);
- 	if (ctx.offset == NULL) {
- 		prog = orig_prog;
- 		goto out_off;
-@@ -1089,7 +1101,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- 	prog->jited_len = prog_size;
- 
- 	if (!prog->is_func || extra_pass) {
--		bpf_prog_fill_jited_linfo(prog, ctx.offset);
-+		bpf_prog_fill_jited_linfo(prog, ctx.offset + 1);
- out_off:
- 		kfree(ctx.offset);
- 		kfree(jit_data);
 -- 
-2.28.0
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
