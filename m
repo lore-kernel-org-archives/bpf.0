@@ -2,155 +2,223 @@ Return-Path: <SRS0=2eLy=CX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 112C1C43461
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:37:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CAB9C433E2
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:39:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6B8A217BA
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:37:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A0D0208DB
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:39:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KKdrh2C8"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="NWFg5GIQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725987AbgINShZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Sep 2020 14:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48128 "EHLO
+        id S1725984AbgINSjV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Sep 2020 14:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726094AbgINShF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Sep 2020 14:37:05 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F14C06174A
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2020 11:37:00 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id t10so742636wrv.1
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2020 11:37:00 -0700 (PDT)
+        with ESMTP id S1726023AbgINSgV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Sep 2020 14:36:21 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1F1C06174A
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2020 11:36:21 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id b127so610296ybh.21
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2020 11:36:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=bcg5MkV7GMo2scuAb1zfDS6UH6+o9K/re2iSmd6wbvs=;
-        b=KKdrh2C8zETXi47pwmmq3wEd9qac/F6YSAv5uRZ7jSCDYcAyhLJcuJqobL/R53Cd+D
-         zj7B6TEZd79dp1G678VQ4G6l4FHSijlJx63WwgYXA3+jU/gjp7p/QKtcBTs82AWmrXQW
-         gPeFKkdlD4YfWcgM8M2RFiyGHuBmwqzAtIlqCDDu3/mHD8CZOUKG3LpYGoc28yIFIQEi
-         niIvmnDw084uEREF6MVGDESR4+9AUVPpl9vCTXuQiO/m75I14vLk34qYthRLr6pAlglv
-         bkEqpn9VoYtEzwuC0yc0JLTKPTLz+IDS5A0H8T5gYkgD56BWA1uoZ6sD5uWGzarAgKE4
-         ogwg==
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=2zAlitpz1bSHaXpmOBe1sEwQjxsIHDKKWn1soexKc5A=;
+        b=NWFg5GIQ7/lCJ8rJPXclzGK9Ioj0v57JBpc6Mgf6Do87IAfWr7CkaiOjHcPcasb6Jt
+         7/uDFPZ4J8C6Ot5NvFlwvuAOBycoNst4FL7JFGQTSCaH6YUfp0pvEfQ2+TWldYNGjFXv
+         HyUzDHqtorf6M+XBG1+m+0zkGfZCOSImmfHEyUYEJCA78lKWwd3/sHDiTWN/Z+C4QYpn
+         vwdfrgL/+fy3CcAxOF3xxWnDCgXW/cYLwL9lFJExwoOz1b40wpv+IWS8lB5JKfuRykqU
+         kIBxrjLJK62Cw0uJ/TJ1o4fTpgL1kbF99LIz/cM+wBqnlSdwsRh4HMFYrYwY44SU5ZEI
+         mGrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=bcg5MkV7GMo2scuAb1zfDS6UH6+o9K/re2iSmd6wbvs=;
-        b=ULUizhSuorHsXsrFCWVbSljtKXFYNTCq2xdI61ftvXRm6HdpAT8yDkHSlj0MZ+CrvF
-         n+d/jVRcmMeawhUqxWaNw3f2kvSVtb4/solvyY9JlwH8LM7W1/kpwqIQ9MEEFVraJIRW
-         fklKpRDLMplQMZFqSWYOz7+XR2gJTb5ASxNFc9z4CqgX0PXu02DV2zBm6L4PhOVmxBZx
-         7flUqOKFn5hA0Gi22qjScczw3URVs/p7YRXgx/ZfWR3y/VsfBfffNJNKec8brWOSqNF6
-         gL/xykib+1W58llDjl6WgN58SGrkubi8k/iPRNurZp5GK/XV4GLsQRNwdCm9Ekx4BQV7
-         qI0Q==
-X-Gm-Message-State: AOAM533i9NlN62osdLJJM3ourMkTNmwHjHhNfKA6um31A0JGwEnAq86N
-        DQDcqoXjxMMPSYs+bzzF9i/drg==
-X-Google-Smtp-Source: ABdhPJy0gpOVhE8x8dTv7A+XKUHITZMMmF32ReDMzwzwrkbFovspL6Bq2nYmj1jvbsD2AfiXK7cJoA==
-X-Received: by 2002:adf:f492:: with SMTP id l18mr18076356wro.280.1600108619101;
-        Mon, 14 Sep 2020 11:36:59 -0700 (PDT)
-Received: from apalos.home (athedsl-246545.home.otenet.gr. [85.73.10.175])
-        by smtp.gmail.com with ESMTPSA id s11sm21977314wrt.43.2020.09.14.11.36.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2020 11:36:58 -0700 (PDT)
-Date:   Mon, 14 Sep 2020 21:36:55 +0300
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-To:     Luke Nelson <luke.r.nels@gmail.com>
-Cc:     Xi Wang <xi.wang@gmail.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Will Deacon <will@kernel.org>, bpf <bpf@vger.kernel.org>,
-        ardb@kernel.org, naresh.kamboju@linaro.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=2zAlitpz1bSHaXpmOBe1sEwQjxsIHDKKWn1soexKc5A=;
+        b=t5prWbTqPA2uyHymE9s3JpzBF2+OtCBDTsp1zDZldOhgGIj/3AkdjMnPnNitXxXZc7
+         Kyg9eO8R20dZ+DPAZ1wgi71tUiVONG0qfWGJIvaJzrgvo1QnxppuoaBUu8X3jXLglj9E
+         q5HlYxqZJ84y/TcM47dvRLywVlSrSPVWKJo4k5Y1rfLs0OfZNzEFIJOP9HEEJW+jqOW9
+         e1/xVWhfmmXdDrE9BET++TIcBUelHGkaNrAknkV23R29TN8mmMuhB4pcs3XEUkVd2Zpr
+         zbRFMANzSFbxGwDuu/yKRkIXjDQSKflheiOJ8+QSTP5gd4MSMp25lkJ2H/OhpJkLIrEs
+         f8yg==
+X-Gm-Message-State: AOAM533ESpCmkkwGFSBRGCaWSI+A2hLiYNpS1k8Uyg8LT0Ej2+8ncVu6
+        dsY97bGa3W5+fmHZsp0Vv+aybzE=
+X-Google-Smtp-Source: ABdhPJzIIuHBD5Fem6UtPdobHRoqcsOF6vZLREqUydtxySAZLgt3Bs4bkL3LYQvbBfPwCZe3QNYw9lc=
+X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:1:7220:84ff:fe09:7732])
+ (user=sdf job=sendgmr) by 2002:a25:ae59:: with SMTP id g25mr10874818ybe.317.1600108580862;
+ Mon, 14 Sep 2020 11:36:20 -0700 (PDT)
+Date:   Mon, 14 Sep 2020 11:36:12 -0700
+In-Reply-To: <20200914183615.2038347-1-sdf@google.com>
+Message-Id: <20200914183615.2038347-3-sdf@google.com>
+Mime-Version: 1.0
+References: <20200914183615.2038347-1-sdf@google.com>
+X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
+Subject: [PATCH bpf-next v5 2/5] bpf: Add BPF_PROG_BIND_MAP syscall
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
         Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>
-Subject: Re: [PATCH] arm64: bpf: Fix branch offset in JIT
-Message-ID: <20200914183655.GA22481@apalos.home>
-References: <20200914122042.GA24441@willie-the-truck>
- <20200914123504.GA124316@apalos.home>
- <20200914132350.GA126552@apalos.home>
- <20200914140114.GG24441@willie-the-truck>
- <20200914181234.0f1df8ba@carbon>
- <20200914170205.GA20549@apalos.home>
- <CAKU6vyaxnzWVA=MPAuDwtu4UOTWS6s0cZOYQKVhQg5Mue7Wbww@mail.gmail.com>
- <20200914175516.GA21832@apalos.home>
- <CAKU6vybuEGYtqh9gL9bwFaJ6xD=diN-0w_Mgc2Xyu4tHMdWgAA@mail.gmail.com>
- <CAB-e3NSPcYB6r=ZjFtXQ=s=LU-a9D9OfXJPtGGbY3dupB1Z1Qg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAB-e3NSPcYB6r=ZjFtXQ=s=LU-a9D9OfXJPtGGbY3dupB1Z1Qg@mail.gmail.com>
+        YiFei Zhu <zhuyifei1999@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Luke, 
+From: YiFei Zhu <zhuyifei@google.com>
 
-On Mon, Sep 14, 2020 at 11:21:58AM -0700, Luke Nelson wrote:
-> On Mon, Sep 14, 2020 at 11:08 AM Xi Wang <xi.wang@gmail.com> wrote:
-> > I don't think there's some consistent semantics of "offsets" across
-> > the JITs of different architectures (maybe it's good to clean that
-> > up).  RV64 and RV32 JITs are doing something similar to arm64 with
-> > respect to offsets.  CCing Björn and Luke.
-> 
-> As I understand it, there are two strategies JITs use to keep track of
-> the ctx->offset table.
-> 
-> Some JITs (RV32, RV64, arm32, arm64 currently, x86-32) track the end
-> of each instruction (e.g., ctx->offset[i] marks the beginning of
-> instruction i + 1).
-> This requires care to handle jumps to the first instruction to avoid
-> using ctx->offset[-1]. The RV32 and RV64 JITs have special handling
-> for this case,
-> while the arm32, arm64, and x86-32 JITs appear not to. The arm32 and
-> x32 probably need to be fixed for the same reason arm64 does.
-> 
-> The other strategy is for ctx->offset[i] to track the beginning of
-> instruction i. The x86-64 JIT currently works this way.
-> This can be easier to use (no need to special case -1) but looks to be
-> trickier to construct. This patch changes the arm64 JIT to work this
-> way.
-> 
-> I don't think either strategy is inherently better, both can be
-> "correct" as long as the JIT uses ctx->offset in the right way.
-> This might be a good opportunity to change the JITs to be consistent
-> about this (especially if the arm32, arm64, and x32 JITs all need to
-> be fixed anyways).
-> Having all JITs agree on the meaning of ctx->offset could help future
-> readers debug / understand the code, and could help to someday verify
-> the
-> ctx->offset construction.
-> 
-> Any thoughts?
+This syscall binds a map to a program. Returns success if the map is
+already bound to the program.
 
-The common strategy does make a lot of sense and yes, both patches will  works 
-assuming the ctx->offset ends up being what the JIT engine expects it to be. 
-As I mentioned earlier we did consider both, but ended up using the later, 
-since as you said, removes the need for handling the special (-1) case.
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Cc: YiFei Zhu <zhuyifei1999@gmail.com>
+Signed-off-by: YiFei Zhu <zhuyifei@google.com>
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+---
+ include/uapi/linux/bpf.h       |  7 ++++
+ kernel/bpf/syscall.c           | 63 ++++++++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h |  7 ++++
+ 3 files changed, 77 insertions(+)
 
-Cheers
-/Ilias
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 7dd314176df7..a22812561064 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -124,6 +124,7 @@ enum bpf_cmd {
+ 	BPF_ENABLE_STATS,
+ 	BPF_ITER_CREATE,
+ 	BPF_LINK_DETACH,
++	BPF_PROG_BIND_MAP,
+ };
+ 
+ enum bpf_map_type {
+@@ -658,6 +659,12 @@ union bpf_attr {
+ 		__u32		flags;
+ 	} iter_create;
+ 
++	struct { /* struct used by BPF_PROG_BIND_MAP command */
++		__u32		prog_fd;
++		__u32		map_fd;
++		__u32		flags;		/* extra flags */
++	} prog_bind_map;
++
+ } __attribute__((aligned(8)));
+ 
+ /* The description below is an attempt at providing documentation to eBPF
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index a67b8c6746be..2ce32cad5c8e 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4161,6 +4161,66 @@ static int bpf_iter_create(union bpf_attr *attr)
+ 	return err;
+ }
+ 
++#define BPF_PROG_BIND_MAP_LAST_FIELD prog_bind_map.flags
++
++static int bpf_prog_bind_map(union bpf_attr *attr)
++{
++	struct bpf_prog *prog;
++	struct bpf_map *map;
++	struct bpf_map **used_maps_old, **used_maps_new;
++	int i, ret = 0;
++
++	if (CHECK_ATTR(BPF_PROG_BIND_MAP))
++		return -EINVAL;
++
++	if (attr->prog_bind_map.flags)
++		return -EINVAL;
++
++	prog = bpf_prog_get(attr->prog_bind_map.prog_fd);
++	if (IS_ERR(prog))
++		return PTR_ERR(prog);
++
++	map = bpf_map_get(attr->prog_bind_map.map_fd);
++	if (IS_ERR(map)) {
++		ret = PTR_ERR(map);
++		goto out_prog_put;
++	}
++
++	mutex_lock(&prog->aux->used_maps_mutex);
++
++	used_maps_old = prog->aux->used_maps;
++
++	for (i = 0; i < prog->aux->used_map_cnt; i++)
++		if (used_maps_old[i] == map)
++			goto out_unlock;
++
++	used_maps_new = kmalloc_array(prog->aux->used_map_cnt + 1,
++				      sizeof(used_maps_new[0]),
++				      GFP_KERNEL);
++	if (!used_maps_new) {
++		ret = -ENOMEM;
++		goto out_unlock;
++	}
++
++	memcpy(used_maps_new, used_maps_old,
++	       sizeof(used_maps_old[0]) * prog->aux->used_map_cnt);
++	used_maps_new[prog->aux->used_map_cnt] = map;
++
++	prog->aux->used_map_cnt++;
++	prog->aux->used_maps = used_maps_new;
++
++	kfree(used_maps_old);
++
++out_unlock:
++	mutex_unlock(&prog->aux->used_maps_mutex);
++
++	if (ret)
++		bpf_map_put(map);
++out_prog_put:
++	bpf_prog_put(prog);
++	return ret;
++}
++
+ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, size)
+ {
+ 	union bpf_attr attr;
+@@ -4294,6 +4354,9 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
+ 	case BPF_LINK_DETACH:
+ 		err = link_detach(&attr);
+ 		break;
++	case BPF_PROG_BIND_MAP:
++		err = bpf_prog_bind_map(&attr);
++		break;
+ 	default:
+ 		err = -EINVAL;
+ 		break;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 7dd314176df7..a22812561064 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -124,6 +124,7 @@ enum bpf_cmd {
+ 	BPF_ENABLE_STATS,
+ 	BPF_ITER_CREATE,
+ 	BPF_LINK_DETACH,
++	BPF_PROG_BIND_MAP,
+ };
+ 
+ enum bpf_map_type {
+@@ -658,6 +659,12 @@ union bpf_attr {
+ 		__u32		flags;
+ 	} iter_create;
+ 
++	struct { /* struct used by BPF_PROG_BIND_MAP command */
++		__u32		prog_fd;
++		__u32		map_fd;
++		__u32		flags;		/* extra flags */
++	} prog_bind_map;
++
+ } __attribute__((aligned(8)));
+ 
+ /* The description below is an attempt at providing documentation to eBPF
+-- 
+2.28.0.618.gf4bc123cb7-goog
 
-> 
-> - Luke
