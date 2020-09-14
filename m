@@ -2,114 +2,131 @@ Return-Path: <SRS0=2eLy=CX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC872C433E2
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 16:13:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9B1DC43461
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 16:23:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B0D4221973
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 16:13:59 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UnunqAY4"
+	by mail.kernel.org (Postfix) with ESMTP id A6A07206A4
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 16:23:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1600100586;
+	bh=eAVAzgvUkh0wc/I1j1/s8lyQbeYVFTOGhBfWS8xzoY0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=hqXQJfKj81efVWssvQu5MXMjNMDy9XoV1+lKzVvz0s8PPz0VcMbLmKnYW4HpGXKn/
+	 6H33/mmM6q0Eu97VMbpT192spVssE8J09frdgsbgmQHcI4OZLdTXWZLU/IdVuDX9qP
+	 Sr7I8K1oR+qf+KbslbRM2Enh8efGLMbMi/2QFwsw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726142AbgINQN5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Sep 2020 12:13:57 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:36166 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726424AbgINQM7 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 14 Sep 2020 12:12:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600099975;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NMcjuPLsban/s/KhGcm7R6jbGaWdBO7FK18RrhrF4m4=;
-        b=UnunqAY4EbEa+aaNV58/gBSPTDAZmoP+P+y136DkmHhYC2de6r9m7p0H61SPEh8m6MtL46
-        kEl4o9AwFLI6dbdkZEmGfk7uaYlzaxCuaAa1br6fCZooQlf8kqn4qspKgj3fQpNG2T0936
-        NWak+kb7fyX0bzL7Utjn+U+4zMflNn4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-233-lmWKx1gVNNS1mWTiGcUWJw-1; Mon, 14 Sep 2020 12:12:52 -0400
-X-MC-Unique: lmWKx1gVNNS1mWTiGcUWJw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1726482AbgINQVX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Sep 2020 12:21:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39898 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726098AbgINQVG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Sep 2020 12:21:06 -0400
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7981D425FD;
-        Mon, 14 Sep 2020 16:12:49 +0000 (UTC)
-Received: from carbon (unknown [10.40.208.42])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1BA4B7EEC9;
-        Mon, 14 Sep 2020 16:12:35 +0000 (UTC)
-Date:   Mon, 14 Sep 2020 18:12:34 +0200
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     brouer@redhat.com, Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        bpf@vger.kernel.org, ardb@kernel.org, naresh.kamboju@linaro.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: [PATCH] arm64: bpf: Fix branch offset in JIT
-Message-ID: <20200914181234.0f1df8ba@carbon>
-In-Reply-To: <20200914140114.GG24441@willie-the-truck>
-References: <20200914083622.116554-1-ilias.apalodimas@linaro.org>
-        <20200914122042.GA24441@willie-the-truck>
-        <20200914123504.GA124316@apalos.home>
-        <20200914132350.GA126552@apalos.home>
-        <20200914140114.GG24441@willie-the-truck>
+        by mail.kernel.org (Postfix) with ESMTPSA id 577BC20EDD;
+        Mon, 14 Sep 2020 16:21:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600100465;
+        bh=eAVAzgvUkh0wc/I1j1/s8lyQbeYVFTOGhBfWS8xzoY0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=xVLWwgJwu9iq1HXV108sMD+XNOpS4ODsXAKTu4PFwOeB7Q+pGs4qxy+Al3QyU9Vsz
+         GZNDkbbHKXyx+mwQUPDAKU1uInzXhTEOnT0hh7vGs+uM0RV0EnUODvSC+2WzEDhC3Q
+         DhpE106v1VJBq8OqdhjMejVWFX2hljIgmnryzE+8=
+Received: by mail-lj1-f178.google.com with SMTP id c2so151320ljj.12;
+        Mon, 14 Sep 2020 09:21:05 -0700 (PDT)
+X-Gm-Message-State: AOAM533vAPu0a9IZWm1tNINkBrbubPswf6Zb3PZmFNJob79AHpxUnQsy
+        QDlYKXWfU1O9FQTdUTvZKXO1zJWjdB7r3nGEomg=
+X-Google-Smtp-Source: ABdhPJwO3e8CVSM2h2kC53VTIZbFnvCMMpuEr2dDAgBR5ieztpYgRR6Cek/gSMFtFBdL6SgpgfNsPvTXlL3FMDQwm8Q=
+X-Received: by 2002:a2e:98cf:: with SMTP id s15mr5625684ljj.446.1600100463625;
+ Mon, 14 Sep 2020 09:21:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+References: <20200914061206.2625395-1-yhs@fb.com> <b942625c-7140-0a57-337e-3a95020cfa99@isovalent.com>
+In-Reply-To: <b942625c-7140-0a57-337e-3a95020cfa99@isovalent.com>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 14 Sep 2020 09:20:52 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5Ja5if-DOPQn1FrbiEsH-YXXYVGzM59XQkyG5_xNmD-A@mail.gmail.com>
+Message-ID: <CAPhsuW5Ja5if-DOPQn1FrbiEsH-YXXYVGzM59XQkyG5_xNmD-A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpftool: fix build failure
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Mon, Sep 14, 2020 at 1:20 AM Quentin Monnet <quentin@isovalent.com> wrote:
+>
+> On 14/09/2020 07:12, Yonghong Song wrote:
+> > When building bpf selftests like
+> >   make -C tools/testing/selftests/bpf -j20
+> > I hit the following errors:
+> >   ...
+> >   GEN      /net-next/tools/testing/selftests/bpf/tools/build/bpftool/Documentation/bpftool-gen.8
+> >   <stdin>:75: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
+> >   <stdin>:71: (WARNING/2) Literal block ends without a blank line; unexpected unindent.
+> >   <stdin>:85: (WARNING/2) Literal block ends without a blank line; unexpected unindent.
+> >   <stdin>:57: (WARNING/2) Block quote ends without a blank line; unexpected unindent.
+> >   <stdin>:66: (WARNING/2) Literal block ends without a blank line; unexpected unindent.
+> >   <stdin>:109: (WARNING/2) Literal block ends without a blank line; unexpected unindent.
+> >   <stdin>:175: (WARNING/2) Literal block ends without a blank line; unexpected unindent.
+> >   <stdin>:273: (WARNING/2) Literal block ends without a blank line; unexpected unindent.
+> >   make[1]: *** [/net-next/tools/testing/selftests/bpf/tools/build/bpftool/Documentation/bpftool-perf.8] Error 12
+> >   make[1]: *** Waiting for unfinished jobs....
+> >   make[1]: *** [/net-next/tools/testing/selftests/bpf/tools/build/bpftool/Documentation/bpftool-iter.8] Error 12
+> >   make[1]: *** [/net-next/tools/testing/selftests/bpf/tools/build/bpftool/Documentation/bpftool-struct_ops.8] Error 12
+> >   ...
+> >
+> > I am using:
+> >   -bash-4.4$ rst2man --version
+> >   rst2man (Docutils 0.11 [repository], Python 2.7.5, on linux2)
+> >   -bash-4.4$
+> >
+> > Looks like that particular version of rst2man prefers to have a blank line
+> > after literal blocks. This patch added block lines in related .rst files
+> > and compilation can then pass.
+> >
+> > Cc: Quentin Monnet <quentin@isovalent.com>
+> > Fixes: 18841da98100 ("tools: bpftool: Automate generation for "SEE ALSO" sections in man pages")
+> > Signed-off-by: Yonghong Song <yhs@fb.com>
+>
+>
+> Hi Yonghong, thanks for the fix! I didn't see those warnings on my
+> setup. For the record my rst2man version is:
+>
+>         rst2man (Docutils 0.16 [release], Python 3.8.2, on linux)
+>
+> Your patch looks good, but instead of having blank lines at the end of
+> most files, could you please check if the following works?
+>
+> ------
+>
+> diff --git a/tools/bpf/bpftool/Documentation/Makefile
+> b/tools/bpf/bpftool/Documentation/Makefile
+> index 4c9dd1e45244..01b30ed86eac 100644
+> --- a/tools/bpf/bpftool/Documentation/Makefile
+> +++ b/tools/bpf/bpftool/Documentation/Makefile
+> @@ -32,7 +32,7 @@ RST2MAN_OPTS += --verbose
+>
+>  list_pages = $(sort $(basename $(filter-out $(1),$(MAN8_RST))))
+>  see_also = $(subst " ",, \
+> -       "\n" \
+> +       "\n\n" \
+>         "SEE ALSO\n" \
+>         "========\n" \
+>         "\t**bpf**\ (2),\n" \
 
-On Mon, 14 Sep 2020 15:01:15 +0100 Will Deacon <will@kernel.org> wrote:
+Yes, this works (I am using the same rst2man as Yonghong's).
 
-> Hi Ilias,
-> 
-> On Mon, Sep 14, 2020 at 04:23:50PM +0300, Ilias Apalodimas wrote:
-> > On Mon, Sep 14, 2020 at 03:35:04PM +0300, Ilias Apalodimas wrote:  
-> > > On Mon, Sep 14, 2020 at 01:20:43PM +0100, Will Deacon wrote:  
-> > > > On Mon, Sep 14, 2020 at 11:36:21AM +0300, Ilias Apalodimas wrote:  
-> > > > > Running the eBPF test_verifier leads to random errors looking like this:  
-> 
-> [...]
-> > >   
-> > Any suggestion on any Fixes I should apply? The original code was 'correct' and
-> > broke only when bounded loops and their self-tests were introduced.  
-> 
-> Ouch, that's pretty bad as it means nobody is regression testing BPF on
-> arm64 with mainline. Damn.
-
-Yes, it unfortunately seems that upstream is lacking BPF regression
-testing for ARM64 :-(
-
-This bug surfaced when Red Hat QA tested our kernel backports, on
-different archs.
-
--- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
-
+Thanks,
+Song
