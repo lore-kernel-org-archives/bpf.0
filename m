@@ -2,173 +2,115 @@ Return-Path: <SRS0=2eLy=CX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47A11C2BC11
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:10:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A758C43461
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:10:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1541B217BA
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:10:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 48C9E214F1
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:10:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fFHj08vY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EJk+odAG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725948AbgINSKk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Sep 2020 14:10:40 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:15916 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726060AbgINSKe (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 14 Sep 2020 14:10:34 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08EIAOtT004625
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2020 11:10:28 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=QVZfykeII0yU8eMcGJj1P3591UuDP6NVwbIA/p0s0Zo=;
- b=fFHj08vYA2UjqCa//2FZTsXSE5Prnzj5zByGyGFl19UL/MV0c9CJAWWhwC224XVgAxkp
- NAPxr4hWDKxRcVAm2MAMpC+JJUefwg9MomRFePywY44l/svQawgPPc6zJ5axZ5vdWOLC
- l0Sh5b846DQR3cQH5JX8+bpyCzJU5MDJcqk= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 33hdub6gnj-8
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2020 11:10:28 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 14 Sep 2020 11:10:26 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 718E737056EB; Mon, 14 Sep 2020 11:10:22 -0700 (PDT)
-From:   Yonghong Song <yhs@fb.com>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Subject: [PATCH bpf-next v2] bpftool: fix build failure
-Date:   Mon, 14 Sep 2020 11:10:22 -0700
-Message-ID: <20200914181022.925575-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
+        id S1726171AbgINSJK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Sep 2020 14:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726100AbgINSIu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Sep 2020 14:08:50 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD939C06174A;
+        Mon, 14 Sep 2020 11:08:49 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id o5so1011539qke.12;
+        Mon, 14 Sep 2020 11:08:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=24YFM+Nh7pEwkm7cAsSqCM3onePtrQOnKk+utLA7aiY=;
+        b=EJk+odAGXK43RKGanFbisPiaXuq0ehzeSoY8YXMqQa7nw+Vrq3q3BhC08XmjawK3n2
+         1fxNcbU7QPtiuIkz3i8Z/GM0CqZOcKHZO436S6nJq6maBwVecKzAXr1TnJslzPISotH2
+         0OPxJMsfteTOJ2EHC2N3DLPaN6E2bYkUv5bXv+rHjrUoBXTHZOid9PYOPWFZ2NLENyqB
+         3U+2iz1go2bgWiWgDFz2nHG5QDzV0LYa+pDXtbGsB5h2W/DgLaGkhdspgawBuX8L+c3v
+         j8O461fd9dUqoEF+i/dwXrwDC5I3rM1hBSqqC4F6XmYUTXE8F87D98brktjjGKerEXHV
+         ol8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=24YFM+Nh7pEwkm7cAsSqCM3onePtrQOnKk+utLA7aiY=;
+        b=NFVtwVLShgibBE05Eo4kt86rD7R2lZq+/T38sFwTLo20feHKNh9HKoi/Q5fyQtQ0VQ
+         F9Xneo6qGXuExw/1Lblrhym3J37iqJsdJPXHG/Dzny1HHfasJkyjFeBwM3jZqqlwWdwA
+         iQiWdlWjHIgyiLruu7+mZ94qFfcroPN1Pwd8H97FH2pZvKMgtQ1wx79/7meTgsk/YvC2
+         iw/muy5XtKhF9D6Vgh0w8GKO5F5poVWUGxPhAMiTnNI8In/wE11eWF9u/UA4U3YlmcrA
+         urZAPF921uhi/PADvJGnNdHFeyD0lgsEuiKrItN6gdUQs9/+StBC7RqBAQT7XfPYWLLC
+         afSA==
+X-Gm-Message-State: AOAM531LNJ196yCMomfmveW511LZI3ZeEMWFNVODPmyytf5uVYycprUN
+        +MOYJRZ3dztEpYK2tAVWy4rUt4pLENzyZ5UQCEY=
+X-Google-Smtp-Source: ABdhPJwQKQrqj42CE0Aue6skP3OMvk4CVTz037dcgNqEkD9xxp0xkmj+BjFIIszWz5eSJkYVqYQWfe/aztQNHPDNnV4=
+X-Received: by 2002:a05:620a:2291:: with SMTP id o17mr13963182qkh.476.1600106928920;
+ Mon, 14 Sep 2020 11:08:48 -0700 (PDT)
 MIME-Version: 1.0
+References: <20200914083622.116554-1-ilias.apalodimas@linaro.org>
+ <20200914122042.GA24441@willie-the-truck> <20200914123504.GA124316@apalos.home>
+ <20200914132350.GA126552@apalos.home> <20200914140114.GG24441@willie-the-truck>
+ <20200914181234.0f1df8ba@carbon> <20200914170205.GA20549@apalos.home>
+ <CAKU6vyaxnzWVA=MPAuDwtu4UOTWS6s0cZOYQKVhQg5Mue7Wbww@mail.gmail.com> <20200914175516.GA21832@apalos.home>
+In-Reply-To: <20200914175516.GA21832@apalos.home>
+From:   Xi Wang <xi.wang@gmail.com>
+Date:   Mon, 14 Sep 2020 11:08:13 -0700
+Message-ID: <CAKU6vybuEGYtqh9gL9bwFaJ6xD=diN-0w_Mgc2Xyu4tHMdWgAA@mail.gmail.com>
+Subject: Re: [PATCH] arm64: bpf: Fix branch offset in JIT
+To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        ardb@kernel.org, naresh.kamboju@linaro.org,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        Luke Nelson <luke.r.nels@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-14_07:2020-09-14,2020-09-14 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- lowpriorityscore=0 suspectscore=8 spamscore=0 impostorscore=0 bulkscore=0
- priorityscore=1501 adultscore=0 phishscore=0 mlxlogscore=999
- malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009140145
-X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When building bpf selftests like
-  make -C tools/testing/selftests/bpf -j20
-I hit the following errors:
-  ...
-  GEN      /net-next/tools/testing/selftests/bpf/tools/build/bpftool/Docu=
-mentation/bpftool-gen.8
-  <stdin>:75: (WARNING/2) Block quote ends without a blank line; unexpect=
-ed unindent.
-  <stdin>:71: (WARNING/2) Literal block ends without a blank line; unexpe=
-cted unindent.
-  <stdin>:85: (WARNING/2) Literal block ends without a blank line; unexpe=
-cted unindent.
-  <stdin>:57: (WARNING/2) Block quote ends without a blank line; unexpect=
-ed unindent.
-  <stdin>:66: (WARNING/2) Literal block ends without a blank line; unexpe=
-cted unindent.
-  <stdin>:109: (WARNING/2) Literal block ends without a blank line; unexp=
-ected unindent.
-  <stdin>:175: (WARNING/2) Literal block ends without a blank line; unexp=
-ected unindent.
-  <stdin>:273: (WARNING/2) Literal block ends without a blank line; unexp=
-ected unindent.
-  make[1]: *** [/net-next/tools/testing/selftests/bpf/tools/build/bpftool=
-/Documentation/bpftool-perf.8] Error 12
-  make[1]: *** Waiting for unfinished jobs....
-  make[1]: *** [/net-next/tools/testing/selftests/bpf/tools/build/bpftool=
-/Documentation/bpftool-iter.8] Error 12
-  make[1]: *** [/net-next/tools/testing/selftests/bpf/tools/build/bpftool=
-/Documentation/bpftool-struct_ops.8] Error 12
-  ...
+On Mon, Sep 14, 2020 at 10:55 AM Ilias Apalodimas
+<ilias.apalodimas@linaro.org> wrote:
+> We've briefly discussed this approach with Yauheni while coming up with t=
+he
+> posted patch.
+> I think that contructing the array correctly in the first place is better=
+.
+> Right now it might only be used in bpf2a64_offset() and bpf_prog_fill_jit=
+ed_linfo()
+> but if we fixup the values on the fly in there, everyone that intends to =
+use the
+> offset for any reason will have to account for the missing instruction.
 
-I am using:
-  -bash-4.4$ rst2man --version
-  rst2man (Docutils 0.11 [repository], Python 2.7.5, on linux2)
-  -bash-4.4$
+I don't understand what you mean by "correctly."  What's your correctness s=
+pec?
 
-The Makefile generated final .rst file (e.g., bpftool-cgroup.rst) looks l=
-ike
-  ...
-      ID       AttachType      AttachFlags     Name
-  \n SEE ALSO\n=3D=3D=3D=3D=3D=3D=3D=3D\n\t**bpf**\ (2),\n\t**bpf-helpers=
-**\
-  (7),\n\t**bpftool**\ (8),\n\t**bpftool-btf**\
-  (8),\n\t**bpftool-feature**\ (8),\n\t**bpftool-gen**\
-  (8),\n\t**bpftool-iter**\ (8),\n\t**bpftool-link**\
-  (8),\n\t**bpftool-map**\ (8),\n\t**bpftool-net**\
-  (8),\n\t**bpftool-perf**\ (8),\n\t**bpftool-prog**\
-  (8),\n\t**bpftool-struct_ops**\ (8)\n
-
-The rst2man generated .8 file looks like
-Literal block ends without a blank line; unexpected unindent.
- .sp
- n SEEALSOn=3D=3D=3D=3D=3D=3D=3D=3Dnt**bpf**(2),nt**bpf\-helpers**(7),nt*=
-*bpftool**(8),nt**bpftool\-btf**(8),nt**
- bpftool\-feature**(8),nt**bpftool\-gen**(8),nt**bpftool\-iter**(8),nt**b=
-pftool\-link**(8),nt**
- bpftool\-map**(8),nt**bpftool\-net**(8),nt**bpftool\-perf**(8),nt**bpfto=
-ol\-prog**(8),nt**
- bpftool\-struct_ops**(8)n
-
-Looks like that particular version of rst2man prefers to have actual new =
-line
-instead of \n.
-
-Since `echo -e` may not be available in some environment, let us use `pri=
-ntf`.
-Some comments are added in Makefile to warn that '%' is not allowed in bp=
-ftool
-man page names.
-
-Cc: Quentin Monnet <quentin@isovalent.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Fixes: 18841da98100 ("tools: bpftool: Automate generation for "SEE ALSO" =
-sections in man pages")
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- tools/bpf/bpftool/Documentation/Makefile | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/tools/bpf/bpftool/Documentation/Makefile b/tools/bpf/bpftool=
-/Documentation/Makefile
-index 4c9dd1e45244..5dd68d79671e 100644
---- a/tools/bpf/bpftool/Documentation/Makefile
-+++ b/tools/bpf/bpftool/Documentation/Makefile
-@@ -40,11 +40,13 @@ see_also =3D $(subst " ",, \
- 	$(foreach page,$(call list_pages,$(1)),",\n\t**$(page)**\\ (8)") \
- 	"\n")
-=20
-+# using printf for portability as `echo -e` does not work in some
-+# environments. Note that bpftool man page names should not include '%'.
- $(OUTPUT)%.8: %.rst
- ifndef RST2MAN_DEP
- 	$(error "rst2man not found, but required to generate man pages")
- endif
--	$(QUIET_GEN)( cat $< ; echo -n $(call see_also,$<) ) | rst2man $(RST2MA=
-N_OPTS) > $@
-+	$(QUIET_GEN)( cat $< ; printf $(call see_also,$<) ) | rst2man $(RST2MAN=
-_OPTS) > $@
-=20
- clean: helpers-clean
- 	$(call QUIET_CLEAN, Documentation)
---=20
-2.24.1
-
+I don't think there's some consistent semantics of "offsets" across
+the JITs of different architectures (maybe it's good to clean that
+up).  RV64 and RV32 JITs are doing something similar to arm64 with
+respect to offsets.  CCing Bj=C3=B6rn and Luke.
