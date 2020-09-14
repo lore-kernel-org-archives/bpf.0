@@ -2,335 +2,134 @@ Return-Path: <SRS0=2eLy=CX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C5F3C433E2
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:21:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24511C433E2
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:22:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6D0D21974
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:21:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C24DD214F1
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 18:22:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="of99srZc";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="euarwS1Q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q7ZqaKpn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726077AbgINSVS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Sep 2020 14:21:18 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:41710 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726065AbgINSVA (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 14 Sep 2020 14:21:00 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08EI8dMo004050;
-        Mon, 14 Sep 2020 11:20:44 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=jojggWfokpO06pV68hfOv3b2McOBsnk0Im9CUIGUDTI=;
- b=of99srZcLEacN9DZDtsC/Mt/2tsnBetzNDXhr3IHV2cxrN5EBBwSMQK6XuEMnlgVkdw6
- USga6FsAxS3VTbBDsZwkrqMH0ISXJLPdxMyK8TDwNsY8ysf4K5UGnUXwflm5b1BZ+RvW
- fn8JzsQr0vMcFKRIlZ/IFK98/oItRwN4Htc= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 33j50dtk41-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 14 Sep 2020 11:20:44 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.173) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 14 Sep 2020 11:20:43 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m03w7hPq9K/yDnmfLnu+Q2pxg+NE5Qm4f5MQ+g6J7MoG1GjWLxpqJpx5VAuwUOM+D1oe9CUz5nkFSIFSRaF8qg4MlOJio51F9TBuU9detKyTIf1mn+QaoYyRAvBQCyIfbgDLHu+lquFfpKIqsUG85eaLs0XISPkPLUpsYHeMx3Oq9j3edNfOscxZe/kxuuiTVSouEU3L2Uc/FNLhcLMk8Cp5sNrsy4OmSVWMSCzs45rg0FaCgXfqxetDSZcdyIMGu38ES5VKsboWjKHGfL80SgK/eiJ7pXRtXkqUlEhu+REhM/k8Hzl1Hge9wehytRUo9ThWhsuf78SFokqFXvwU+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jojggWfokpO06pV68hfOv3b2McOBsnk0Im9CUIGUDTI=;
- b=KHplKg5lOqs9RrYylpbt7hHqfGbqSbYnap4UcnSTc8iLi6c5h5tc00QCUTwO8Qv6UavxcD8h46rM0MtkBnF5rq+e/L8DavdGH1/lTJEdrZRCkB28VwBAX7j8IpIQ8wV8nTb+5S6+fH6FjqKjNMJqyK8pu6HWlzuBOUe7/PSvryTOWycPbuG8XMnXoz71zNkv+I8IINJach1KXEAeJwsIksrlu9YNUI3nklBDFG1u5jj0x6g17zBsWcfvpFQ50fmWrDy2I81i7/Va27eFYX9A7cAO5ZEZm/L5ZW9TeCpS3mYT7onUVoKdA9eYwGkyBRW8f/ZEe7iepGXM4DVa/hku6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jojggWfokpO06pV68hfOv3b2McOBsnk0Im9CUIGUDTI=;
- b=euarwS1QWQ8FnvBrWhi8bD/n8gdy5v1e/CrkEPBUeX2C3ljQmdhZALkcXdcejsOH2LIh5Vvgc8GhGs/y9+y3KUHDq34tn9cZKnFIJNF6O/qPSAAgd+yy3nxrC387DBAfS9c7oEtJJyFO+75MVGsT+M6QOeFjtICbuoqpI9Wk6d0=
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
- by BYAPR15MB2325.namprd15.prod.outlook.com (2603:10b6:a02:85::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Mon, 14 Sep
- 2020 18:20:28 +0000
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::8887:dd68:f497:ea42]) by BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::8887:dd68:f497:ea42%3]) with mapi id 15.20.3370.019; Mon, 14 Sep 2020
- 18:20:28 +0000
-Subject: Re: [PATCH bpf-next] bpftool: fix build failure
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-CC:     Quentin Monnet <quentin@isovalent.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-References: <20200914061206.2625395-1-yhs@fb.com>
- <b942625c-7140-0a57-337e-3a95020cfa99@isovalent.com>
- <1ab672c7-f333-f953-16ec-49e9099b39d7@fb.com>
- <ca0b4c63-5632-f8a0-9669-975d1119c1e6@fb.com>
- <c8c33847-9ca6-5b81-ef03-02ce382acfb6@isovalent.com>
- <8601f597-9c7e-a9a5-b375-75191fa93530@fb.com>
- <CAEf4BzYd8Yp_CX52xYmbWg56JjyS__SmBD6Cb3y0M5hvVPYARw@mail.gmail.com>
- <e98c3f11-fc23-203a-3be0-f4535d8b062c@fb.com>
- <CAEf4BzY27sW4hmnD+XV2Ms6+EvP+_o4pu_6sr3p1mqr14rgjfw@mail.gmail.com>
-From:   Yonghong Song <yhs@fb.com>
-Message-ID: <22a85fba-546c-9341-edf6-de6dcc2aae3a@fb.com>
-Date:   Mon, 14 Sep 2020 11:20:25 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.12.0
-In-Reply-To: <CAEf4BzY27sW4hmnD+XV2Ms6+EvP+_o4pu_6sr3p1mqr14rgjfw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CO2PR04CA0091.namprd04.prod.outlook.com
- (2603:10b6:104:6::17) To BYAPR15MB4088.namprd15.prod.outlook.com
- (2603:10b6:a02:c3::18)
+        id S1726089AbgINSW2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Sep 2020 14:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726023AbgINSWU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Sep 2020 14:22:20 -0400
+Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B8EFC06174A;
+        Mon, 14 Sep 2020 11:22:11 -0700 (PDT)
+Received: by mail-wm1-x344.google.com with SMTP id y15so1021277wmi.0;
+        Mon, 14 Sep 2020 11:22:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=QwmdpKrctXZY8SsbeQhTPBt7ND8p7TZUdIMqRgAp49A=;
+        b=Q7ZqaKpnbyGyPvPJJ/i7BesuVwYV5eRqXM4dXhN/OCq1S9GrPiW1PQoD3eoi7TSQbf
+         vb7Hv5UXRk/XE1i9Stcc75xYDV/GhLH6RC/gu6k3+cpFyfaZ65ZlbqFe4XCYrdJzI2se
+         kNqM8UYDrm1kbvCsICZt7ryIp2NeZ6T8xIldIo5IXYFJLTtW2/IBHrNaLvW7mzo5DKxb
+         DvoIohJ33HFLUoysYMdgVeszRwIpv+guhWLLyZRoYZQI4JiuAf4RN6R5L304OW+vEUbb
+         dj84KuKIgnTvuB9JLmhDdFk6z3tgmb05exFWsrzzlDZvqgmLYunn1E+k2S9mFZQJPN7l
+         UxyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QwmdpKrctXZY8SsbeQhTPBt7ND8p7TZUdIMqRgAp49A=;
+        b=f/cI3b9/Ga0ly7KAwQkmgo1yb+qJTjvb/anWLtAzMHrMpbIhqjLEUPVisTdKHZ/U4P
+         kxKrnkCNWQkM7b++1jPRbmWv+DKp8v/CxqJB6cmHrh8GgzxaSfAortybJN+TztOY+cpq
+         nmGQWhzuNccFAKe/yAjnV6ozU777lMsaxqUAzlJFIMRHt35ABo/HDz/FSG9C4XeNWDmo
+         tp6mW2H+qckof9djDUHXrFJLcbj5u18Ew6DJXkTF3a+r/c3DJ/pjsTwzm/5iCYgzKTNV
+         kDTrkmNg2F4sxOb+ZeKYWAHpW7UbJZnrsR8rTunh+ZJLM0K1UWftJznNHIC+Sd5WlAJY
+         +toA==
+X-Gm-Message-State: AOAM530ckEeTrkpKlK5WnfxYhWOrQ2w3Qe5VsCez/EoYQmmwmpQmm0qn
+        v4Sg96GzGzgs2lx0dgQiez74PyCEIA6ECIx7I5c=
+X-Google-Smtp-Source: ABdhPJy3GJYqVWPPZg2D3pql45sSI2rbpWDrGStOP2zO/ZvDpfyuyRJQmu9ZM+Gu5J/7hnKw6pmXWzsSTd/912vBINI=
+X-Received: by 2002:a1c:6254:: with SMTP id w81mr643669wmb.94.1600107729958;
+ Mon, 14 Sep 2020 11:22:09 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2620:10d:c085:21c1::11ed] (2620:10d:c090:400::5:e354) by CO2PR04CA0091.namprd04.prod.outlook.com (2603:10b6:104:6::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.19 via Frontend Transport; Mon, 14 Sep 2020 18:20:27 +0000
-X-Originating-IP: [2620:10d:c090:400::5:e354]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c1ce64d4-cd69-4efa-672d-08d858dadb92
-X-MS-TrafficTypeDiagnostic: BYAPR15MB2325:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR15MB23252E015ADF645D98D34B77D3230@BYAPR15MB2325.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:2803;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: y+LMSOr1OTAgZ3RYvMlkXZWyWS5f2U1KjtH9AP+xcYpv0c2rUjsum7igquOtOgutekqTpbF1tc7liJEEiWkFw+vrXKYWr31mAnhMTl+RVXzibhl/aMVOhQxP9+Gd0He6HqFMHKySZPgVhIKZ+MYdKi8F70KGIlQszSuRhe/1h6eIqWqP6CU0qZcBg17AGpgYhTcHsr8a2c7eJk8+l6RqHV/bFiZ6B6pTIHggJgDisHN+FaqaYCuj6u9OLk0JQzCT5sav9DtOUsjxyTZbvfkihQI8YUTNzL3ZwYy1AE457PMQTSGiViCl9xpMUJUy/tcwpOcmHARzdnPq6d3plAK6Umy2ujRiBoCF6NKl8xYLQx4BOa6VegwpjqiYM4wZaJXWWqfleslh2U2m+EmSUtJFzjvtHWdOCOloLy3IQfCkWZZF2dqn01jdPUlvdlX4quFxUdRr3MthljW7+U+kZnLpDw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(376002)(136003)(366004)(346002)(39860400002)(66946007)(66476007)(86362001)(8936002)(54906003)(36756003)(83380400001)(31696002)(5660300002)(52116002)(53546011)(186003)(16526019)(478600001)(2616005)(31686004)(66556008)(6486002)(316002)(6916009)(2906002)(8676002)(4326008)(966005)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: mr82Sr+iTDO9s9ufUcmlPbM6vAZ2bvBqi7gUq9zFANanfq4NvOywQxO2tOc8wbnWoybUu15YYYXhGb+krFxSZx5/sW7IMW4srcqxorYLlLxjva8JG5tz3cQzGSRMeIJ8yfBvufNzUIGwqhA+RPop+fI8wPlz509GTkuklAdVqc/ZWluYO7Oh40Fam4eOT7bqfWgzhVQNQboKUeIdjyImIO5rwGaVrTQgcYV3suwP/LHGb4J96ooRZn+B7RVKtOQ/4Zh5AX7p+mpvEZ+L3hxC+KDz8tomkWz3NzPBF06b01pM8chyXp+7usbHQFmYVzvZFtzREvBAsX38fgm88PYq0aHgsFM3QfvyYHNVTJ/EZh8U41zfhnlApuFm6P1yK+XjlbAyPk4j4hW125tQs/aV2Eth8Y4UujaIPgO+/Z0GzbOzRcFdxiyj8oSLgkOcx6msgykPElA6WirJYraUMiWzWNPAcML00xxtYI6Lz0MXnyaGFPHWlI9wNeHbz8m0WGUu2WbYivr5pRhQOfTsy6ERn75Ni07TwKaIKOYcHWTez34JgN+iixgAQBs9QfuU/tYbIvACfsFV8hvFHtembK6Fp/lhE0GIRwCNpabWFLon+1Tc4GhZn6Yp7QvJMEus162kTxaC8Q0IoresjOYjE06d5mdTjGC48Cl/jyJc2kEJynw=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c1ce64d4-cd69-4efa-672d-08d858dadb92
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2020 18:20:28.3754
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +ftYXvzetJEEPIBekfjLI0o2fd4R8ji9tu1/SlL1JDd+kt1jZzBwfkswNhhmRzwN
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2325
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-14_07:2020-09-14,2020-09-14 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- clxscore=1015 priorityscore=1501 mlxscore=0 lowpriorityscore=0 bulkscore=0
- malwarescore=0 suspectscore=0 mlxlogscore=999 adultscore=0 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009140145
-X-FB-Internal: deliver
+References: <20200914083622.116554-1-ilias.apalodimas@linaro.org>
+ <20200914122042.GA24441@willie-the-truck> <20200914123504.GA124316@apalos.home>
+ <20200914132350.GA126552@apalos.home> <20200914140114.GG24441@willie-the-truck>
+ <20200914181234.0f1df8ba@carbon> <20200914170205.GA20549@apalos.home>
+ <CAKU6vyaxnzWVA=MPAuDwtu4UOTWS6s0cZOYQKVhQg5Mue7Wbww@mail.gmail.com>
+ <20200914175516.GA21832@apalos.home> <CAKU6vybuEGYtqh9gL9bwFaJ6xD=diN-0w_Mgc2Xyu4tHMdWgAA@mail.gmail.com>
+In-Reply-To: <CAKU6vybuEGYtqh9gL9bwFaJ6xD=diN-0w_Mgc2Xyu4tHMdWgAA@mail.gmail.com>
+From:   Luke Nelson <luke.r.nels@gmail.com>
+Date:   Mon, 14 Sep 2020 11:21:58 -0700
+Message-ID: <CAB-e3NSPcYB6r=ZjFtXQ=s=LU-a9D9OfXJPtGGbY3dupB1Z1Qg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: bpf: Fix branch offset in JIT
+To:     Xi Wang <xi.wang@gmail.com>
+Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Will Deacon <will@kernel.org>, bpf <bpf@vger.kernel.org>,
+        ardb@kernel.org, naresh.kamboju@linaro.org,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Mon, Sep 14, 2020 at 11:08 AM Xi Wang <xi.wang@gmail.com> wrote:
+> I don't think there's some consistent semantics of "offsets" across
+> the JITs of different architectures (maybe it's good to clean that
+> up).  RV64 and RV32 JITs are doing something similar to arm64 with
+> respect to offsets.  CCing Bj=C3=B6rn and Luke.
 
+As I understand it, there are two strategies JITs use to keep track of
+the ctx->offset table.
 
-On 9/14/20 11:13 AM, Andrii Nakryiko wrote:
-> On Mon, Sep 14, 2020 at 11:06 AM Yonghong Song <yhs@fb.com> wrote:
->>
->>
->>
->> On 9/14/20 10:55 AM, Andrii Nakryiko wrote:
->>> On Mon, Sep 14, 2020 at 10:46 AM Yonghong Song <yhs@fb.com> wrote:
->>>>
->>>>
->>>>
->>>> On 9/14/20 10:23 AM, Quentin Monnet wrote:
->>>>> On 14/09/2020 17:54, Yonghong Song wrote:
->>>>>>
->>>>>>
->>>>>> On 9/14/20 9:46 AM, Yonghong Song wrote:
->>>>>>>
->>>>>>>
->>>>>>> On 9/14/20 1:16 AM, Quentin Monnet wrote:
->>>>>>>> On 14/09/2020 07:12, Yonghong Song wrote:
->>>>>>>>> When building bpf selftests like
->>>>>>>>>       make -C tools/testing/selftests/bpf -j20
->>>>>>>>> I hit the following errors:
->>>>>>>>>       ...
->>>>>>>>>       GEN
->>>>>>>>> /net-next/tools/testing/selftests/bpf/tools/build/bpftool/Documentation/bpftool-gen.8
->>>>>>>>>
->>>>>>>>>       <stdin>:75: (WARNING/2) Block quote ends without a blank line;
->>>>>>>>> unexpected unindent.
->>>>>>>>>       <stdin>:71: (WARNING/2) Literal block ends without a blank line;
->>>>>>>>> unexpected unindent.
->>>>>>>>>       <stdin>:85: (WARNING/2) Literal block ends without a blank line;
->>>>>>>>> unexpected unindent.
->>>>>>>>>       <stdin>:57: (WARNING/2) Block quote ends without a blank line;
->>>>>>>>> unexpected unindent.
->>>>>>>>>       <stdin>:66: (WARNING/2) Literal block ends without a blank line;
->>>>>>>>> unexpected unindent.
->>>>>>>>>       <stdin>:109: (WARNING/2) Literal block ends without a blank line;
->>>>>>>>> unexpected unindent.
->>>>>>>>>       <stdin>:175: (WARNING/2) Literal block ends without a blank line;
->>>>>>>>> unexpected unindent.
->>>>>>>>>       <stdin>:273: (WARNING/2) Literal block ends without a blank line;
->>>>>>>>> unexpected unindent.
->>>>>>>>>       make[1]: ***
->>>>>>>>> [/net-next/tools/testing/selftests/bpf/tools/build/bpftool/Documentation/bpftool-perf.8]
->>>>>>>>> Error 12
->>>>>>>>>       make[1]: *** Waiting for unfinished jobs....
->>>>>>>>>       make[1]: ***
->>>>>>>>> [/net-next/tools/testing/selftests/bpf/tools/build/bpftool/Documentation/bpftool-iter.8]
->>>>>>>>> Error 12
->>>>>>>>>       make[1]: ***
->>>>>>>>> [/net-next/tools/testing/selftests/bpf/tools/build/bpftool/Documentation/bpftool-struct_ops.8]
->>>>>>>>> Error 12
->>>>>>>>>       ...
->>>>>>>>>
->>>>>>>>> I am using:
->>>>>>>>>       -bash-4.4$ rst2man --version
->>>>>>>>>       rst2man (Docutils 0.11 [repository], Python 2.7.5, on linux2)
->>>>>>>>>       -bash-4.4$
->>>>>>>>>
->>>>>>>>> Looks like that particular version of rst2man prefers to have a
->>>>>>>>> blank line
->>>>>>>>> after literal blocks. This patch added block lines in related .rst
->>>>>>>>> files
->>>>>>>>> and compilation can then pass.
->>>>>>>>>
->>>>>>>>> Cc: Quentin Monnet <quentin@isovalent.com>
->>>>>>>>> Fixes: 18841da98100 ("tools: bpftool: Automate generation for "SEE
->>>>>>>>> ALSO" sections in man pages")
->>>>>>>>> Signed-off-by: Yonghong Song <yhs@fb.com>
->>>>>>>>
->>>>>>>>
->>>>>>>> Hi Yonghong, thanks for the fix! I didn't see those warnings on my
->>>>>>>> setup. For the record my rst2man version is:
->>>>>>>>
->>>>>>>>        rst2man (Docutils 0.16 [release], Python 3.8.2, on linux)
->>>>>>>>
->>>>>>>> Your patch looks good, but instead of having blank lines at the end of
->>>>>>>> most files, could you please check if the following works?
->>>>>>>
->>>>>>> Thanks for the tip! I looked at the generated output again. My above
->>>>>>> fix can silent the warning, but certainly not correct.
->>>>>>>
->>>>>>> With the following change, I captured the intermediate result of the
->>>>>>> .rst file.
->>>>>>>
->>>>>>>      ifndef RST2MAN_DEP
->>>>>>>             $(error "rst2man not found, but required to generate man pages")
->>>>>>>      endif
->>>>>>> -       $(QUIET_GEN)( cat $< ; echo -n $(call see_also,$<) ) | rst2man
->>>>>>> $(RST2MAN_OPTS) > $@
->>>>>>> +       $(QUIET_GEN)( cat $< ; echo -n $(call see_also,$<) ) | tee
->>>>>>> /tmp/tt | rst2man $(RST2MAN_OPTS) > $@
->>>>>>>
->>>>>>> With below command,
->>>>>>>        make clean && make bpftool-cgroup.8
->>>>>>> I can get the new .rst file for bpftool-cgroup.
->>>>>>>
->>>>>>> At the end of file /tmp/tt (changed bpftool-cgroup.rst), I see
->>>>>>>
->>>>>>>         ID       AttachType      AttachFlags     Name
->>>>>>> \n SEE ALSO\n========\n\t**bpf**\ (2),\n\t**bpf-helpers**\
->>>>>>> (7),\n\t**bpftool**\ (8),\n\t**bpftool-btf**\
->>>>>>> (8),\n\t**bpftool-feature**\ (8),\n\t**bpftool-gen**\
->>>>>>> (8),\n\t**bpftool-iter**\ (8),\n\t**bpftool-link**\
->>>>>>> (8),\n\t**bpftool-map**\ (8),\n\t**bpftool-net**\
->>>>>>> (8),\n\t**bpftool-perf**\ (8),\n\t**bpftool-prog**\
->>>>>>> (8),\n\t**bpftool-struct_ops**\ (8)\n
->>>>>>>
->>>>>>> This sounds correct if we rst2man can successfully transforms '\n'
->>>>>>> or '\t' to proper encoding in the man page.
->>>>>>>
->>>>>>> Unfortunately, with my version of rst2man, I got
->>>>>>>
->>>>>>> .IP "System Message: WARNING/2 (<stdin>:, line 146)"
->>>>>>> Literal block ends without a blank line; unexpected unindent.
->>>>>>> .sp
->>>>>>> n SEE
->>>>>>> ALSOn========nt**bpf**(2),nt**bpf\-helpers**(7),nt**bpftool**(8),nt**bpftool\-btf**(8),nt**bpftool\-feature**(8),nt**bpftool\-gen**(8),nt**bpftool\-iter**(8),nt**bpftool\-link**(8),nt**bpftool\-map**(8),nt**bpftool\-net**(8),nt**bpftool\-perf**(8),nt**bpftool\-prog**(8),nt**bpftool\-struct_ops**(8)n
->>>>>>>
->>>>>>> .\" Generated by docutils manpage writer.
->>>>>>>
->>>>>>> The rst2man simply considered \n as 'n'. The same for '\t' and
->>>>>>> this caused the issue.
->>>>>>>
->>>>>>> I did not find a way to fix the problem https://urldefense.proofpoint.com/v2/url?u=https-3A__www.google.com_url-3Fq-3Dhttps-3A__zoom.us_j_94864957378-3Fpwd-253DbXFRL1ZaRUxTbDVKcm9uRitpTXgyUT09-26sa-3DD-26source-3Dcalendar-26ust-3D1600532408208000-26usg-3DAOvVaw3SJ0i8oz4ZM-2DGRb7hYkrYlyet&d=DwIDaQ&c=5VD0RTtNlTh3ycd41b3MUw&r=DA8e1B5r073vIqRrFz7MRA&m=kEK7ScPMF-y-i8dli-or8wWEGREW5V4qPB7UqHqDnkg&s=Br0g0MFXxL_pJuDVTOY5UrmvfD2ru_6Uf_X_8Nr2Rhk&e= .
->>>>>>
->>>>>> The following change works for me.
->>>>>>
->>>>>> @@ -44,7 +44,7 @@ $(OUTPUT)%.8: %.rst
->>>>>>     ifndef RST2MAN_DEP
->>>>>>            $(error "rst2man not found, but required to generate man pages")
->>>>>>     endif
->>>>>> -       $(QUIET_GEN)( cat $< ; echo -n $(call see_also,$<) ) | rst2man
->>>>>> $(RST2MAN_OPTS) > $@
->>>>>> +       $(QUIET_GEN)( cat $< ; echo -e $(call see_also,$<) ) | rst2man
->>>>>> $(RST2MAN_OPTS) > $@
->>>>>>
->>>>>>     clean: helpers-clean
->>>>>>            $(call QUIET_CLEAN, Documentation)
->>>>>> -bash-4.4$
->>>>>>
->>>>>> I will send revision 2 shortly.
->>>>>
->>>>> Thanks Yonghong, but this does not work on my setup :/. The version of
->>>>> echo which is called on my machine from the Makefile does not seem to
->>>>> interpret the "-e" option and writes something like "-e\nSEE ALSO",
->>>>> which causes rst2man to complain.
->>>>>
->>>>> I suspect the portable option here would be printf, even though Andrii
->>>>> had some concerns that we could pass a format specifier through the file
->>>>> names [0].
->>>>>
->>>>> Would this work on your setup?
->>>>>
->>>>>         $(QUIET_GEN)( cat $< ; printf $(call see_also,$<) ) | rst2man...
->>>>>
->>>>> Would that be acceptable?
->>>>
->>>> It works for me. Andrii originally suggested `echo -e`, but since `echo
->>>> -e` does not work in your environment let us use printf then. I will add
->>>> a comment about '%' in the bpftool man page name.
->>>
->>> It's amazing how incompatible echo can be. But that aside, I have
->>> nothing against printf itself, but:
->>>
->>> printf "%s" "whatever we want to print out"
->>>
->>> seems like the way to go, similarly how you'd do it in your C code, no?
->>
->> This won't really work :-(
->>
->> -bash-4.4$ printf "%s" "\n\n"
->> \n\n-bash-4.4$ printf "\n\n"
->>
->>
->> -bash-4.4$
->>
->> Looks like "\n" needs to be in format string to make a difference.
->>
-> 
-> I just learned that %b was added specifically for that case:
-> 
-> $ printf "%b" "\n\n"
+Some JITs (RV32, RV64, arm32, arm64 currently, x86-32) track the end
+of each instruction (e.g., ctx->offset[i] marks the beginning of
+instruction i + 1).
+This requires care to handle jumps to the first instruction to avoid
+using ctx->offset[-1]. The RV32 and RV64 JITs have special handling
+for this case,
+while the arm32, arm64, and x86-32 JITs appear not to. The arm32 and
+x32 probably need to be fixed for the same reason arm64 does.
 
-Great! I learned some bash magic today... Will send v3.
+The other strategy is for ctx->offset[i] to track the beginning of
+instruction i. The x86-64 JIT currently works this way.
+This can be easier to use (no need to special case -1) but looks to be
+trickier to construct. This patch changes the arm64 JIT to work this
+way.
 
-> 
-> 
-> $
-> 
->>
->>>
->>>>
->>>>>
->>>>> [0]
->>>>> https://lore.kernel.org/bpf/ca595fd6-e807-ac8e-f15f-68bfc7b7dbc4@isovalent.com/T/#m01bb298fd512121edd5e77a26ed5382c0c53939e
->>>>>
->>>>> Quentin
->>>>>
+I don't think either strategy is inherently better, both can be
+"correct" as long as the JIT uses ctx->offset in the right way.
+This might be a good opportunity to change the JITs to be consistent
+about this (especially if the arm32, arm64, and x32 JITs all need to
+be fixed anyways).
+Having all JITs agree on the meaning of ctx->offset could help future
+readers debug / understand the code, and could help to someday verify
+the
+ctx->offset construction.
+
+Any thoughts?
+
+- Luke
