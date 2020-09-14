@@ -2,115 +2,136 @@ Return-Path: <SRS0=2eLy=CX=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A082CC43461
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 14:51:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D228BC433E2
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 16:10:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6374220936
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 14:51:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 981D820715
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 16:10:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rEBAJXIP"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PXuS2Ron"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726654AbgINOvq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Sep 2020 10:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726870AbgINOut (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Sep 2020 10:50:49 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED00EC06174A;
-        Mon, 14 Sep 2020 07:50:48 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id jw11so5506464pjb.0;
-        Mon, 14 Sep 2020 07:50:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=d8JhAydeJgefGcMif2aqEmRa87zNidg2BYdeV5TRysU=;
-        b=rEBAJXIPgWFeFv48z0G034XmF5qyYKI8w77dhSIioMYD0pB360QUqSbkUQx7/dYyIN
-         1ogo1Q6N57fvdPlu3yZGGg92mTxLQ0i699CUJPJ27kghAF4R65/0inCaQYXbiXKXhPh/
-         rW79P8oaCpADUhmqjmhiGQW09r/BUxlZ2Y1N4KgsYyyRs34UFViXF1X59vieEtIQrmZT
-         ouwgTMFbbkCFbNIXgLST6W1mIUH1nn1B71LACxpdfhlaCv+c3E/eafuf6sPdZEU78/ix
-         S57ft4z2iJkabHUV3YEDgDE6TjwXx0M55oQvokxP3250YfcoHI6uktbDIsFLvG9nF9F0
-         xrig==
+        id S1726512AbgINQJx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Sep 2020 12:09:53 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:40815 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726416AbgINQIu (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 14 Sep 2020 12:08:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1600099728;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ia4ewCI4oFF+VxRjo3xc7IuSBeMatuSZAzdFNZ3n8es=;
+        b=PXuS2RonbcDYfNpe2WcqmHoziN3wJb2QYMxSoO6U7CDcM7vp9VAkdLI56/9+VyZNgKV8xj
+        N6bnw2ss08JFnosFdWBFB/3JsDb28Pec+K1RDNW47N4cWXHCQgkO5vJzn/uUK+hxEUvB3Q
+        gkuXJSg67kqNdlcDX2iMaCSzlA5v45c=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-326-7rkcg_V8NQOBBj4yWfzqtQ-1; Mon, 14 Sep 2020 12:08:46 -0400
+X-MC-Unique: 7rkcg_V8NQOBBj4yWfzqtQ-1
+Received: by mail-wr1-f71.google.com with SMTP id n15so39840wrv.23
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2020 09:08:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=d8JhAydeJgefGcMif2aqEmRa87zNidg2BYdeV5TRysU=;
-        b=BC4vAvlPt+QvNc6luAF5wcUcQwjAsVMF3UhRDfsw8K7+BClmcm9CpBOe7PopbFsJJi
-         gW/YlA1jRyKh5ySUoAKYGSOHhl2deZFSLvuKMV0jfbh8D5uAiGAf4vA1WJKODOt6MAVO
-         wLPtmXaIy+AlxDU2ogdfRi/LDEpMpm6VWh1oN/BWvSxXXYosUxsQcjrmzhzFcmfsSX01
-         frLhYkP7AJEKUHJPrqLeWkDR/bzLTKPrEzp7QqwJQEUXzGz5bHUGMo3FwVBhTpSxpyDA
-         Lty7yeTbDzB776WDlaupfbVBUWiLN7TvukXaPM3sNPX1sYjd/kO94WZI1HgtMQVy9zc9
-         0c8A==
-X-Gm-Message-State: AOAM530IbHxSout9orkZmgaVvBazgD45AYF8HeYNcUdTLCwbLdZ4t35j
-        QW0nCfttkui/7QW4Ab8Uvy3zjxR+Oh2ev29D
-X-Google-Smtp-Source: ABdhPJwRbGVDmXvZPWplKpXl+DdNNzdc86yp+kBxIACMjdMnl7ZNd48lPTfj4zv024y73ghGOGD1PA==
-X-Received: by 2002:a17:90a:1903:: with SMTP id 3mr14332402pjg.74.1600095048554;
-        Mon, 14 Sep 2020 07:50:48 -0700 (PDT)
-Received: from VM.ger.corp.intel.com ([192.55.55.43])
-        by smtp.gmail.com with ESMTPSA id q7sm8608849pgg.10.2020.09.14.07.50.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 14 Sep 2020 07:50:48 -0700 (PDT)
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org,
-        jonathan.lemon@gmail.com
-Cc:     bpf@vger.kernel.org
-Subject: [PATCH bpf-next] xsk: fix refcount warning in xp_dma_map
-Date:   Mon, 14 Sep 2020 16:50:36 +0200
-Message-Id: <1600095036-23868-1-git-send-email-magnus.karlsson@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=Ia4ewCI4oFF+VxRjo3xc7IuSBeMatuSZAzdFNZ3n8es=;
+        b=LOlNx0kluHg0r37LDynt4uwshxMIPyb6QwJQiF7JtY62v6iABi2g+HU3e5Xuo5kCM5
+         fkIal3FP2eBlndVIQyqaPseT2KjZM1mBrlirnymCHImhPSnMCwgYW0troFan3+E1wPWF
+         EUORXEGMzO9tRwEHzTujE+4G07t53ZbRRdmbw0goB0WxabQxqPF2dp1941GYxbyk2X0q
+         V6iiWdfES7H1ihdgDx5tTujnzplR++iSGSp+JB3WaROEQNtAQIL0tmyUOgfGWtK6/FK8
+         bw74kaNN93haEVMm5es+4u5SW1v0ACwnp4r41icp5Io/Q3WuI1U+0rB3FrT4/KcQDXIF
+         MA8w==
+X-Gm-Message-State: AOAM531lWcjkoSK3oKlTx44famnN5651olr5KXYvJ7hREzP7FuSDLw2h
+        0qCNGtRAr3FrrjNFShHZAIxdxUG6WWLTEtSK4ud11/9DVkYoXnXYLI1BqSO6H8tCf4HEB4ft71K
+        8Aw5XTKXAjkpb
+X-Received: by 2002:adf:ec86:: with SMTP id z6mr17050111wrn.109.1600099725017;
+        Mon, 14 Sep 2020 09:08:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx59XZFvjJGkQOQQ/Xp1rTDTlbN5frlh+8ObEF+trFc4NjRO84bjSN9y0ME8NW/KtApm95dng==
+X-Received: by 2002:adf:ec86:: with SMTP id z6mr17050088wrn.109.1600099724708;
+        Mon, 14 Sep 2020 09:08:44 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id t188sm21796643wmf.41.2020.09.14.09.08.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2020 09:08:44 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 871DC1829CB; Mon, 14 Sep 2020 18:08:43 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH RESEND bpf-next v3 4/9] bpf: support attaching freplace
+ programs to multiple attach points
+In-Reply-To: <CAEf4BzZMj0sPisgUZ+3qKvqaAxfzzRNHZTpoR-zuDXvKcY3URQ@mail.gmail.com>
+References: <159981835466.134722.8652987144251743467.stgit@toke.dk>
+ <159981835908.134722.4550898174324943652.stgit@toke.dk>
+ <CAEf4BzZMj0sPisgUZ+3qKvqaAxfzzRNHZTpoR-zuDXvKcY3URQ@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Mon, 14 Sep 2020 18:08:43 +0200
+Message-ID: <87imcgz6gk.fsf@toke.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Magnus Karlsson <magnus.karlsson@intel.com>
+Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
 
-Fix a potential refcount warning that a zero value is increased to one
-in xp_dma_map, by initializing the refcount to one to start with,
-instead of zero plus a refcount_inc().
+> On Fri, Sep 11, 2020 at 3:01 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
+dhat.com> wrote:
+>>
+>> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>>
+>> This enables support for attaching freplace programs to multiple attach
+>> points. It does this by amending UAPI for bpf_raw_tracepoint_open with a
+>> target prog fd and btf ID pair that can be used to supply the new
+>> attachment point. The target must be compatible with the target that was
+>> supplied at program load time.
+>>
+>> The implementation reuses the checks that were factored out of
+>> check_attach_btf_id() to ensure compatibility between the BTF types of t=
+he
+>> old and new attachment. If these match, a new bpf_tracing_link will be
+>> created for the new attach target, allowing multiple attachments to
+>> co-exist simultaneously.
+>>
+>> The code could theoretically support multiple-attach of other types of
+>> tracing programs as well, but since I don't have a use case for any of
+>> those, the bpf_tracing_prog_attach() function will reject new targets for
+>> anything other than PROG_TYPE_EXT programs.
+>>
+>> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>> ---
+>
+> It feels like using a semi-constructed bpf_tracing_link inside
+> prog->aux->tgt_link is just an unnecessary complication, after reading
+> this and previous patches. Seems more straightforward and simpler to
+> store tgt_attach_type/tgt_prog_type (permanently) and
+> tgt_prog/tgt_trampoline (until first attachment) in prog->aux and then
+> properly create bpf_link on attach.
 
-Fixes: 921b68692abb ("xsk: Enable sharing of dma mappings")
-Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
----
- net/xdp/xsk_buff_pool.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+I updated v4 with your comments, but kept the link in prog->aux; the
+reason being that having a container for the two pointers makes it
+possible to atomically swap it out with xchg() as you suggested
+previously. Could you please take a look at v4? If you still think it's
+better to just keep two separate pointers (and add a lock) in prog->aux,
+I can change it to that. But I'd rather avoid the lock if possible...
 
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index 5b00bc5..e63fadd 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -296,7 +296,7 @@ static struct xsk_dma_map *xp_create_dma_map(struct device *dev, struct net_devi
- 	dma_map->dev = dev;
- 	dma_map->dma_need_sync = false;
- 	dma_map->dma_pages_cnt = nr_pages;
--	refcount_set(&dma_map->users, 0);
-+	refcount_set(&dma_map->users, 1);
- 	list_add(&dma_map->list, &umem->xsk_dma_list);
- 	return dma_map;
- }
-@@ -369,7 +369,6 @@ static int xp_init_dma_info(struct xsk_buff_pool *pool, struct xsk_dma_map *dma_
- 	pool->dev = dma_map->dev;
- 	pool->dma_pages_cnt = dma_map->dma_pages_cnt;
- 	pool->dma_need_sync = dma_map->dma_need_sync;
--	refcount_inc(&dma_map->users);
- 	memcpy(pool->dma_pages, dma_map->dma_pages,
- 	       pool->dma_pages_cnt * sizeof(*pool->dma_pages));
- 
-@@ -390,6 +389,7 @@ int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
- 		if (err)
- 			return err;
- 
-+		refcount_inc(&dma_map->users);
- 		return 0;
- 	}
- 
--- 
-2.7.4
+-Toke
 
