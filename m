@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CAE7C43461
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 16:27:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 42F6AC433E2
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 16:28:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C660D2193E
-	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 16:27:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DE063217BA
+	for <bpf@archiver.kernel.org>; Mon, 14 Sep 2020 16:28:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Cu/4Pf80"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Hcwz/gPX"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726142AbgINQ04 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Sep 2020 12:26:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:43195 "EHLO
+        id S1726349AbgINQ07 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Sep 2020 12:26:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29679 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726532AbgINQNt (ORCPT
+        by vger.kernel.org with ESMTP id S1726535AbgINQNt (ORCPT
         <rfc822;bpf@vger.kernel.org>); Mon, 14 Sep 2020 12:13:49 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600100015;
+        s=mimecast20190719; t=1600100016;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=w9fKJXKN7VEhK7rTxzSRwDVyT2JXTZwoaKL+6VZUoBs=;
-        b=Cu/4Pf803BPrHR44pG5k6nTo+lAIwm4UIABVuZ1V91m4l1O8LrqBvS8OS6EhMDloEGdpb8
-        wWUhvpV68KnDaZlJc9ZFPhVA4Qh8wYl6SVVHooPwBv/igUlFd3cwvrrXnol4KinYd7KYeh
-        8R+WJj78gYVjIHK4GMH1/xveFjIxIy0=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-581-jZylLo2FPmmYYRjS70TNNw-1; Mon, 14 Sep 2020 12:13:32 -0400
-X-MC-Unique: jZylLo2FPmmYYRjS70TNNw-1
-Received: by mail-wm1-f71.google.com with SMTP id t10so171823wmi.9
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2020 09:13:31 -0700 (PDT)
+        bh=bKxu0gI3NP8CcGDo/E56sTrTiNg8cMjHfGpHFMTcnpo=;
+        b=Hcwz/gPXcyrJfyt92pRROPT2UDJ/ywyjUiD0rgdfzqvnu3K/J6euXqB/7TYirmc+Qtb3Vf
+        d71vDKg2NeT0GRxaNpEoBxfoizxv+YFzA+oSIOv/zNrgswlnn2AsFK//2b16Xcpe89AUYP
+        lwflx5eyjKsb/07DUUUsOum2elgnFys=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-59-YRioooCKO3WV76r21P4GbQ-1; Mon, 14 Sep 2020 12:13:34 -0400
+X-MC-Unique: YRioooCKO3WV76r21P4GbQ-1
+Received: by mail-wr1-f71.google.com with SMTP id 33so56131wrk.12
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2020 09:13:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=w9fKJXKN7VEhK7rTxzSRwDVyT2JXTZwoaKL+6VZUoBs=;
-        b=XE4Pk6wn2y9jVt3GhKkSA4riPNyidTYSpvnBryPRHWuB7nChTrgWPZshZTYre/JDYY
-         F6fc0tlp9mMhiOBwKnlLwugR6p+uk4yeWsL3xWUxjrSAaXKW9IK6M060DjcPlaIFT1uS
-         tcoPBwwsuxFF9+yDYf4ECho8fU4fmQ+GjzBJXHMb+1x52NgHaTPO7rYIbhcwPcxDpniN
-         DbjA50r9yK06Xb4Iu7KqGqJSJPfLRhUpbHgxl7/lqxhimpP9bfncKj7EgHOqflLcj5i0
-         Y/e3jyFfG0oj8jS0crvBQmISXU23FTt38tViKU8Uf+KWQa3UlwSafU/u+rFMg06Z1G9h
-         +gOg==
-X-Gm-Message-State: AOAM532dZy99IHNw9lLoCGscc6EcEkywZLCELcYrb6uiG+Awab28HqKn
-        JYyc696Xk4wdqhTB8hIXe0InqkV7OemAgkfM7/BOFC6xNMHIqD9/FRIpaHhRgFssQ0jTu2P5mJT
-        mQQqVtD0GTywY
-X-Received: by 2002:a1c:7d0c:: with SMTP id y12mr115202wmc.103.1600100010876;
-        Mon, 14 Sep 2020 09:13:30 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJycy67McyEKAjD6mxAKv2rQFFdOmXdWxlgOvPv9+JS+C20bpLj6ILkpKO5HV0IFL9mCFlu/SA==
-X-Received: by 2002:a1c:7d0c:: with SMTP id y12mr115177wmc.103.1600100010706;
-        Mon, 14 Sep 2020 09:13:30 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id t4sm21996062wrr.26.2020.09.14.09.13.29
+        bh=bKxu0gI3NP8CcGDo/E56sTrTiNg8cMjHfGpHFMTcnpo=;
+        b=KaoGKWQAVHGQs5W4giBcAqu36MTGHxpDy8zfvNgPgOktrc62vnCNtnIsMLRCNaTexp
+         iosizi2RqjP5mgGn/mJemllSgJKXM/SHZ1CctVconLOmTLnTtmgQsKQAJ34sndcwifUj
+         wpZWJ1q2mf/C8w4S4TnWQuB46cRZbSZr/MJQ/to7heH5MDVJX08HFD2oX8UyiJKOWJ5l
+         +QgRHlSGCpEQtykTJFVBBzgwYDELhAU71HM59L65v7OrFUEpFSLMAuM9eY/i93TKTYaD
+         9J5mdzbqZ3fJaavG8tn2yoLQvYDcTJw2aHBYT6o32NRw2q1KLSLXnXiku5zE0FaUTE0q
+         4+FQ==
+X-Gm-Message-State: AOAM531kUYcIuS7Bbi1xs0n3JBE7aLMyFbdfzm03ww7L8Bsk2m0lbma+
+        V6DY1pdEyuZXYV+AIqJh1Uoxaf8HswYJ4wzyw+pWBn3dN3csLQ/4eHfyEtsPmfUyw6SMBVfjbmx
+        +LQDsj7JOrd6T
+X-Received: by 2002:a1c:2b43:: with SMTP id r64mr133917wmr.164.1600100012839;
+        Mon, 14 Sep 2020 09:13:32 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzymn38Sc1H6g+2Td4p8iEhWnIPoL9wyn8Ds+kBBjuvjCm7o257Rq+nbxsI5IULwchqn8b4NQ==
+X-Received: by 2002:a1c:2b43:: with SMTP id r64mr133896wmr.164.1600100012545;
+        Mon, 14 Sep 2020 09:13:32 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id x2sm21488767wrl.13.2020.09.14.09.13.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2020 09:13:29 -0700 (PDT)
+        Mon, 14 Sep 2020 09:13:32 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 6EDC41829CC; Mon, 14 Sep 2020 18:13:29 +0200 (CEST)
-Subject: [PATCH bpf-next v4 6/8] libbpf: add support for freplace attachment
- in bpf_link_create
+        id A2C651829CC; Mon, 14 Sep 2020 18:13:31 +0200 (CEST)
+Subject: [PATCH bpf-next v4 8/8] selftests/bpf: Adding test for arg
+ dereference in extension trace
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
@@ -75,8 +75,8 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Eelco Chaudron <echaudro@redhat.com>,
         KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Mon, 14 Sep 2020 18:13:29 +0200
-Message-ID: <160010000935.80898.4271262373666475188.stgit@toke.dk>
+Date:   Mon, 14 Sep 2020 18:13:31 +0200
+Message-ID: <160010001156.80898.2494172135831865551.stgit@toke.dk>
 In-Reply-To: <160010000272.80898.13117015273092905112.stgit@toke.dk>
 References: <160010000272.80898.13117015273092905112.stgit@toke.dk>
 User-Agent: StGit/0.23
@@ -90,134 +90,207 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-This adds support for supplying a target btf ID for the bpf_link_create()
-operation, and adds a new bpf_program__attach_freplace() high-level API for
-attaching freplace functions with a target.
+Adding test that setup following program:
 
+  SEC("classifier/test_pkt_md_access")
+  int test_pkt_md_access(struct __sk_buff *skb)
+
+with its extension:
+
+  SEC("freplace/test_pkt_md_access")
+  int test_pkt_md_access_new(struct __sk_buff *skb)
+
+and tracing that extension with:
+
+  SEC("fentry/test_pkt_md_access_new")
+  int BPF_PROG(fentry, struct sk_buff *skb)
+
+The test verifies that the tracing program can
+dereference skb argument properly.
+
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/lib/bpf/bpf.c      |    1 +
- tools/lib/bpf/bpf.h      |    3 ++-
- tools/lib/bpf/libbpf.c   |   24 ++++++++++++++++++------
- tools/lib/bpf/libbpf.h   |    3 +++
- tools/lib/bpf/libbpf.map |    1 +
- 5 files changed, 25 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/trace_ext.c |  113 ++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_trace_ext.c |   18 +++
+ .../selftests/bpf/progs/test_trace_ext_tracing.c   |   25 ++++
+ 3 files changed, 156 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/trace_ext.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_trace_ext.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_trace_ext_tracing.c
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 82b983ff6569..e928456c0dd6 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -599,6 +599,7 @@ int bpf_link_create(int prog_fd, int target_fd,
- 	attr.link_create.iter_info =
- 		ptr_to_u64(OPTS_GET(opts, iter_info, (void *)0));
- 	attr.link_create.iter_info_len = OPTS_GET(opts, iter_info_len, 0);
-+	attr.link_create.target_btf_id = OPTS_GET(opts, target_btf_id, 0);
- 
- 	return sys_bpf(BPF_LINK_CREATE, &attr, sizeof(attr));
- }
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 015d13f25fcc..f8dbf666b62b 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -174,8 +174,9 @@ struct bpf_link_create_opts {
- 	__u32 flags;
- 	union bpf_iter_link_info *iter_info;
- 	__u32 iter_info_len;
-+	__u32 target_btf_id;
- };
--#define bpf_link_create_opts__last_field iter_info_len
-+#define bpf_link_create_opts__last_field target_btf_id
- 
- LIBBPF_API int bpf_link_create(int prog_fd, int target_fd,
- 			       enum bpf_attach_type attach_type,
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 550950eb1860..165131c73f40 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -9322,12 +9322,14 @@ static struct bpf_link *attach_iter(const struct bpf_sec_def *sec,
- 
- static struct bpf_link *
- bpf_program__attach_fd(struct bpf_program *prog, int target_fd,
--		       const char *target_name)
-+		       int target_btf_id, const char *target_name)
- {
- 	enum bpf_attach_type attach_type;
- 	char errmsg[STRERR_BUFSIZE];
- 	struct bpf_link *link;
- 	int prog_fd, link_fd;
-+	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts,
-+			    .target_btf_id = target_btf_id);
- 
- 	prog_fd = bpf_program__fd(prog);
- 	if (prog_fd < 0) {
-@@ -9340,8 +9342,12 @@ bpf_program__attach_fd(struct bpf_program *prog, int target_fd,
- 		return ERR_PTR(-ENOMEM);
- 	link->detach = &bpf_link__detach_fd;
- 
--	attach_type = bpf_program__get_expected_attach_type(prog);
--	link_fd = bpf_link_create(prog_fd, target_fd, attach_type, NULL);
-+	if (bpf_program__get_type(prog) == BPF_PROG_TYPE_EXT)
-+		attach_type = BPF_TRACE_FREPLACE;
-+	else
-+		attach_type = bpf_program__get_expected_attach_type(prog);
+diff --git a/tools/testing/selftests/bpf/prog_tests/trace_ext.c b/tools/testing/selftests/bpf/prog_tests/trace_ext.c
+new file mode 100644
+index 000000000000..49b554f560a4
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/trace_ext.c
+@@ -0,0 +1,113 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+	link_fd = bpf_link_create(prog_fd, target_fd, attach_type, &opts);
- 	if (link_fd < 0) {
- 		link_fd = -errno;
- 		free(link);
-@@ -9357,19 +9363,25 @@ bpf_program__attach_fd(struct bpf_program *prog, int target_fd,
- struct bpf_link *
- bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
- {
--	return bpf_program__attach_fd(prog, cgroup_fd, "cgroup");
-+	return bpf_program__attach_fd(prog, cgroup_fd, 0, "cgroup");
- }
- 
- struct bpf_link *
- bpf_program__attach_netns(struct bpf_program *prog, int netns_fd)
- {
--	return bpf_program__attach_fd(prog, netns_fd, "netns");
-+	return bpf_program__attach_fd(prog, netns_fd, 0, "netns");
- }
- 
- struct bpf_link *bpf_program__attach_xdp(struct bpf_program *prog, int ifindex)
- {
- 	/* target_fd/target_ifindex use the same field in LINK_CREATE */
--	return bpf_program__attach_fd(prog, ifindex, "xdp");
-+	return bpf_program__attach_fd(prog, ifindex, 0, "xdp");
++#define _GNU_SOURCE
++#include <test_progs.h>
++#include <network_helpers.h>
++#include <sys/stat.h>
++#include <linux/sched.h>
++#include <sys/syscall.h>
++
++#include "test_pkt_md_access.skel.h"
++#include "test_trace_ext.skel.h"
++#include "test_trace_ext_tracing.skel.h"
++
++static __u32 duration;
++
++void test_trace_ext(void)
++{
++	struct test_pkt_md_access *skel_pkt = NULL;
++	struct test_trace_ext_tracing *skel_trace = NULL;
++	struct test_trace_ext_tracing__bss *bss_trace;
++	struct test_trace_ext *skel_ext = NULL;
++	struct test_trace_ext__bss *bss_ext;
++	int err, pkt_fd, ext_fd;
++	struct bpf_program *prog;
++	char buf[100];
++	__u32 retval;
++	__u64 len;
++
++	/* open/load/attach test_pkt_md_access */
++	skel_pkt = test_pkt_md_access__open_and_load();
++	if (CHECK(!skel_pkt, "setup", "classifier/test_pkt_md_access open failed\n"))
++		goto cleanup;
++
++	err = test_pkt_md_access__attach(skel_pkt);
++	if (CHECK(err, "setup", "classifier/test_pkt_md_access attach failed: %d\n", err))
++		goto cleanup;
++
++	prog = skel_pkt->progs.test_pkt_md_access;
++	pkt_fd = bpf_program__fd(prog);
++
++	/* open extension */
++	skel_ext = test_trace_ext__open();
++	if (CHECK(!skel_ext, "setup", "freplace/test_pkt_md_access open failed\n"))
++		goto cleanup;
++
++	/* set extension's attach target - test_pkt_md_access  */
++	prog = skel_ext->progs.test_pkt_md_access_new;
++	bpf_program__set_attach_target(prog, pkt_fd, "test_pkt_md_access");
++
++	/* load/attach extension */
++	err = test_trace_ext__load(skel_ext);
++	if (CHECK(err, "setup", "freplace/test_pkt_md_access load failed\n")) {
++		libbpf_strerror(err, buf, sizeof(buf));
++		fprintf(stderr, "%s\n", buf);
++		goto cleanup;
++	}
++
++	err = test_trace_ext__attach(skel_ext);
++	if (CHECK(err, "setup", "freplace/test_pkt_md_access attach failed: %d\n", err))
++		goto cleanup;
++
++	prog = skel_ext->progs.test_pkt_md_access_new;
++	ext_fd = bpf_program__fd(prog);
++
++	/* open tracing  */
++	skel_trace = test_trace_ext_tracing__open();
++	if (CHECK(!skel_trace, "setup", "tracing/test_pkt_md_access_new open failed\n"))
++		goto cleanup;
++
++	/* set tracing's attach target - fentry */
++	prog = skel_trace->progs.fentry;
++	bpf_program__set_attach_target(prog, ext_fd, "test_pkt_md_access_new");
++
++	/* set tracing's attach target - fexit */
++	prog = skel_trace->progs.fexit;
++	bpf_program__set_attach_target(prog, ext_fd, "test_pkt_md_access_new");
++
++	/* load/attach tracing */
++	err = test_trace_ext_tracing__load(skel_trace);
++	if (CHECK(err, "setup", "tracing/test_pkt_md_access_new load failed\n")) {
++		libbpf_strerror(err, buf, sizeof(buf));
++		fprintf(stderr, "%s\n", buf);
++		goto cleanup;
++	}
++
++	err = test_trace_ext_tracing__attach(skel_trace);
++	if (CHECK(err, "setup", "tracing/test_pkt_md_access_new attach failed: %d\n", err))
++		goto cleanup;
++
++	/* trigger the test */
++	err = bpf_prog_test_run(pkt_fd, 1, &pkt_v4, sizeof(pkt_v4),
++				NULL, NULL, &retval, &duration);
++	CHECK(err || retval, "",
++	      "err %d errno %d retval %d duration %d\n",
++	      err, errno, retval, duration);
++
++	bss_ext = skel_ext->bss;
++	bss_trace = skel_trace->bss;
++
++	len = bss_ext->ext_called;
++
++	CHECK(bss_ext->ext_called == 0,
++		"check", "failed to trigger freplace/test_pkt_md_access\n");
++	CHECK(bss_trace->fentry_called != len,
++		"check", "failed to trigger fentry/test_pkt_md_access_new\n");
++	CHECK(bss_trace->fexit_called != len,
++		"check", "failed to trigger fexit/test_pkt_md_access_new\n");
++
++cleanup:
++	test_trace_ext_tracing__destroy(skel_trace);
++	test_trace_ext__destroy(skel_ext);
++	test_pkt_md_access__destroy(skel_pkt);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_trace_ext.c b/tools/testing/selftests/bpf/progs/test_trace_ext.c
+new file mode 100644
+index 000000000000..d19a634d0e78
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_trace_ext.c
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2019 Facebook
++#include <linux/bpf.h>
++#include <stdbool.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_endian.h>
++#include <bpf/bpf_tracing.h>
++
++__u64 ext_called = 0;
++
++SEC("freplace/test_pkt_md_access")
++int test_pkt_md_access_new(struct __sk_buff *skb)
++{
++	ext_called = skb->len;
++	return 0;
 +}
 +
-+struct bpf_link *bpf_program__attach_freplace(struct bpf_program *prog,
-+					      int target_fd, int target_btf_id)
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/test_trace_ext_tracing.c b/tools/testing/selftests/bpf/progs/test_trace_ext_tracing.c
+new file mode 100644
+index 000000000000..52f3baf98f20
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_trace_ext_tracing.c
+@@ -0,0 +1,25 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++__u64 fentry_called = 0;
++
++SEC("fentry/test_pkt_md_access_new")
++int BPF_PROG(fentry, struct sk_buff *skb)
 +{
-+	return bpf_program__attach_fd(prog, target_fd, target_btf_id, "freplace");
- }
- 
- struct bpf_link *
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index a750f67a23f6..ce5add9b9203 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -261,6 +261,9 @@ LIBBPF_API struct bpf_link *
- bpf_program__attach_netns(struct bpf_program *prog, int netns_fd);
- LIBBPF_API struct bpf_link *
- bpf_program__attach_xdp(struct bpf_program *prog, int ifindex);
-+LIBBPF_API struct bpf_link *
-+bpf_program__attach_freplace(struct bpf_program *prog,
-+			     int target_fd, int target_btf_id);
- 
- struct bpf_map;
- 
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 92ceb48a5ca2..3cc2c42f435d 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -302,6 +302,7 @@ LIBBPF_0.1.0 {
- 
- LIBBPF_0.2.0 {
- 	global:
-+		bpf_program__attach_freplace;
- 		bpf_program__section_name;
- 		perf_buffer__buffer_cnt;
- 		perf_buffer__buffer_fd;
++	fentry_called = skb->len;
++	return 0;
++}
++
++__u64 fexit_called = 0;
++
++SEC("fexit/test_pkt_md_access_new")
++int BPF_PROG(fexit, struct sk_buff *skb)
++{
++	fexit_called = skb->len;
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 
