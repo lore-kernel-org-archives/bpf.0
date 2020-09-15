@@ -2,155 +2,184 @@ Return-Path: <SRS0=lXxl=CY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1B2B6C433E2
-	for <bpf@archiver.kernel.org>; Tue, 15 Sep 2020 22:23:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6A28C2D0E3
+	for <bpf@archiver.kernel.org>; Tue, 15 Sep 2020 22:37:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D79DB20809
-	for <bpf@archiver.kernel.org>; Tue, 15 Sep 2020 22:23:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 80B4520936
+	for <bpf@archiver.kernel.org>; Tue, 15 Sep 2020 22:37:03 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WlfnMRq8"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="dLHrhjmo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727625AbgIOQY3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Sep 2020 12:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727664AbgIOQXF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Sep 2020 12:23:05 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F345C061A29;
-        Tue, 15 Sep 2020 09:12:17 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id x69so4469970oia.8;
-        Tue, 15 Sep 2020 09:12:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/3iUUyja5lm+/6wa/aCVVpjhqWNR9WtKq3mlGRCh/FI=;
-        b=WlfnMRq8mnwhrnShfwfJDHHVmHnFoDXkxBIpCXd1gu4g53sNXTRmBOIDtQQ1gbfZED
-         3qI8Z30KD8GeNLe/obUqGTrKUXp1IOlb07oajviyyaqxe3dmjXzAL7LMZcC1mXHs6Bsr
-         hd/K+1n/BEteaHcslaVJBY7Xjm3AS5zuTs+JtKJWbSeC+hAx/uI4tUDa6uBDSEzAmaJQ
-         cE+PSg+0IRpOTMEqB6wo1nyQ90mHKxScvoTJfNAzcpUVW1P50TV+CqDA6MQcpmNyQ3bo
-         IRuJGrUuvi9bZliD/xvKaFWMIK9TtTGcxOtgHBNDsfBP2jj8mVTyemXBh3HeS3xdNqq9
-         xF/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/3iUUyja5lm+/6wa/aCVVpjhqWNR9WtKq3mlGRCh/FI=;
-        b=j3mOc3pX5+slNAdrkdl7QqlYGqGJmJ0C3wf27ygJofIJQgxHsN6Icp/unYuRVyfAOR
-         nzocKIRcM1oOJAbK4cdjgp8RcbhMBDy1IOlpnxarZ7Rx2tQzWTI3mAdSy3bp7WO4ADU0
-         0pG7VKg8mDzv9FS4iBC6SOSI31ePRLfyFtK1lV0Aote0LFmZ5oaCxqpWC/017ph502Vs
-         aDHmHA3jGBhLtaD1unqnGMcgWyHuGc4ik+EY4CfcsS5BtduKIVOoXvLkbb6gcCB8dF3N
-         34OjDSzZvPXANDk/xPeIdZb/EXpt3SVazNDfMRvupDaGr/TEXF2SZFQrYYFBgQ1HZRMZ
-         uhdQ==
-X-Gm-Message-State: AOAM530V3782P+soh1ShqNwcoTPC7cXIy9yCL4GsahIm600QAVt7brcM
-        t3iralz2oiUt2g8sAYfuESM=
-X-Google-Smtp-Source: ABdhPJyeJ5lyHlqHThrax8EkokWoY/miEpBMV7UkK3kdf+uMj+cu8FhyZiUpQLKEB8oFCRsz/fKdhQ==
-X-Received: by 2002:a05:6808:14f:: with SMTP id h15mr81756oie.119.1600186336591;
-        Tue, 15 Sep 2020 09:12:16 -0700 (PDT)
-Received: from Davids-MacBook-Pro.local ([2601:282:803:7700:e439:1090:4bf9:75b6])
-        by smtp.googlemail.com with ESMTPSA id b79sm6733752oii.33.2020.09.15.09.12.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Sep 2020 09:12:11 -0700 (PDT)
-Subject: Re: [PATCHv11 bpf-next 2/5] xdp: add a new helper for dev map
- multicast support
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Hangbin Liu <liuhangbin@gmail.com>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Jiri Benc <jbenc@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-References: <20200903102701.3913258-1-liuhangbin@gmail.com>
- <20200907082724.1721685-1-liuhangbin@gmail.com>
- <20200907082724.1721685-3-liuhangbin@gmail.com>
- <20200909215206.bg62lvbvkmdc5phf@ast-mbp.dhcp.thefacebook.com>
- <20200910023506.GT2531@dhcp-12-153.nay.redhat.com>
- <a1bcd5e8-89dd-0eca-f779-ac345b24661e@gmail.com>
- <CAADnVQ+CooPL7Zu4Y-AJZajb47QwNZJU_rH7A3GSbV8JgA4AcQ@mail.gmail.com>
- <87o8mearu5.fsf@toke.dk> <20200910195014.13ff24e4@carbon>
- <47566856-75e2-8f2b-4347-f03a7cb5493b@gmail.com>
- <20200911095820.304d9877@carbon>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <3b498f73-0a0c-bd25-d1a1-b1098ed403e2@gmail.com>
-Date:   Tue, 15 Sep 2020 10:12:09 -0600
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.12.0
+        id S1727748AbgIOWff (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Sep 2020 18:35:35 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33324 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727581AbgIOWfU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 15 Sep 2020 18:35:20 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08FMZE1J013694
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2020 15:35:16 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=m425gCFPb89xt08xff+KNc+hc7+O91YowoSqlz1Kjhw=;
+ b=dLHrhjmoIoqd/s5sKJTKtRC9bqUZgyyS5aLShpQ6mP/X4HBAQgxFmaAsn2qDdhEF1rjb
+ FeTACiB9Z3LdMfLlZrllus6QzWXXsgrEYTvUsN0P0IhN+YPdlr++L2/tYcnVEgtoRq+0
+ SQFXFdaPzz9zeiG9YzOMYTCea6i9stoI2Y0= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 33k5q607qk-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2020 15:35:16 -0700
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 15 Sep 2020 15:35:11 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id D0A633700963; Tue, 15 Sep 2020 15:35:07 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>
+Subject: [PATCH bpf-next v2] bpf: using rcu_read_lock for bpf_sk_storage_map iterator
+Date:   Tue, 15 Sep 2020 15:35:07 -0700
+Message-ID: <20200915223507.3792641-1-yhs@fb.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-In-Reply-To: <20200911095820.304d9877@carbon>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-15_14:2020-09-15,2020-09-15 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ bulkscore=0 mlxscore=0 spamscore=0 lowpriorityscore=0 phishscore=0
+ mlxlogscore=742 suspectscore=8 malwarescore=0 impostorscore=0 adultscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009150177
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 9/11/20 1:58 AM, Jesper Dangaard Brouer wrote:
-> On Thu, 10 Sep 2020 12:35:33 -0600
-> David Ahern <dsahern@gmail.com> wrote:
-> 
->> On 9/10/20 11:50 AM, Jesper Dangaard Brouer wrote:
->>> Maybe we should change the devmap-prog approach, and run this on the
->>> xdp_frame's (in bq_xmit_all() to be precise) .  Hangbin's patchset
->>> clearly shows that we need this "layer" between running the xdp_prog and
->>> the devmap-prog.   
->>
->> I would prefer to leave it in dev_map_enqueue.
->>
->> The main premise at the moment is that the program attached to the
->> DEVMAP entry is an ACL specific to that dev. If the program is going to
->> drop the packet, then no sense queueing it.
->>
->> I also expect a follow on feature will be useful to allow the DEVMAP
->> program to do another REDIRECT (e.g., potentially after modifying). It
->> is not handled at the moment as it needs thought - e.g., limiting the
->> number of iterative redirects. If such a feature does happen, then no
->> sense queueing it to the current device.
-> 
-> It makes a lot of sense to do queuing before redirecting again.  The
-> (hidden) bulking we do at XDP redirect is the primary reason for the
-> performance boost. We all remember performance difference between
-> non-map version of redirect (which Toke fixed via always having the
-> bulking available in net_device->xdp_bulkq).
-> 
-> In a simple micro-benchmark I bet it will look better running the
-> devmap-prog right after the xdp_prog (which is what we have today). But
-> I claim this is the wrong approach, as soon as (1) traffic is more
-> intermixed, and (2) devmap-prog gets bigger and becomes more specific
-> to the egress-device (e.g. BPF update constants per egress-device).
-> When this happens performance suffers, as I-cache and data-access to
-> each egress-device gets pushed out of cache. (Hint VPP/fd.io approach)
-> 
-> Queuing xdp_frames up for your devmap-prog makes sense, as these share
-> common properties.  With intermix traffic the first xdp_prog will sort
-> packets into egress-devices, and then the devmap-prog can operate on
-> these.  The best illustration[1] of this sorting I saw in a Netflix
-> blogpost[2] about FreeBSD, section "RSS Assisted LRO" (not directly
-> related, but illustration was good).
-> 
-> 
-> [1] https://miro.medium.com/max/700/1%2alTGL1_D6hTMEMa7EDV8yZA.png
-> [2] https://netflixtechblog.com/serving-100-gbps-from-an-open-connect-appliance-cdb51dda3b99
-> 
+If a bucket contains a lot of sockets, during bpf_iter traversing
+a bucket, concurrent userspace bpf_map_update_elem() and
+bpf program bpf_sk_storage_{get,delete}() may experience
+some undesirable delays as they will compete with bpf_iter
+for bucket lock.
 
-I understand the theory and testing will need to bear that out. There is
-a bit of distance (code wise) between where the program is run now and
-where you want to put it - the conversion from xdp_buff
-to xdp_frame, the enqueue, and what it means to do a redirect to another
-device in bq_xmit_all.
+Note that the number of buckets for bpf_sk_storage_map
+is roughly the same as the number of cpus. So if there
+are lots of sockets in the system, each bucket could
+contain lots of sockets.
 
-More importantly though for a redirect is the current xdp_ok_fwd_dev
-check in __xdp_enqueue which for a redirect could be doing the wrong
-checks for the wrong device.
+Different actual use cases may experience different delays.
+Here, using selftest bpf_iter subtest bpf_sk_storage_map,
+I hacked the kernel with ktime_get_mono_fast_ns()
+to collect the time when a bucket was locked
+during bpf_iter prog traversing that bucket. This way,
+the maximum incurred delay was measured w.r.t. the
+number of elements in a bucket.
+    # elems in each bucket          delay(ns)
+      64                            17000
+      256                           72512
+      2048                          875246
+
+The potential delays will be further increased if
+we have even more elemnts in a bucket. Using rcu_read_lock()
+is a reasonable compromise here. It may lose some precision, e.g.,
+access stale sockets, but it will not hurt performance of
+bpf program or user space application which also tries
+to get/delete or update map elements.
+
+Cc: Martin KaFai Lau <kafai@fb.com>
+Acked-by: Song Liu <songliubraving@fb.com>
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ net/core/bpf_sk_storage.c | 21 ++++++++-------------
+ 1 file changed, 8 insertions(+), 13 deletions(-)
+
+Changelog:
+ v1 -> v2:
+   - added some performance number. (Song)
+   - tried to silence some sparse complains. but still has some left like
+       context imbalance in "..." - different lock contexts for basic blo=
+ck
+     which the code is too hard for sparse to analyze. (Jakub)
+
+diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+index 4a86ea34f29e..4fc6b03d3639 100644
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -678,6 +678,7 @@ struct bpf_iter_seq_sk_storage_map_info {
+ static struct bpf_local_storage_elem *
+ bpf_sk_storage_map_seq_find_next(struct bpf_iter_seq_sk_storage_map_info=
+ *info,
+ 				 struct bpf_local_storage_elem *prev_selem)
++	__acquires(RCU) __releases(RCU)
+ {
+ 	struct bpf_local_storage *sk_storage;
+ 	struct bpf_local_storage_elem *selem;
+@@ -701,7 +702,7 @@ bpf_sk_storage_map_seq_find_next(struct bpf_iter_seq_=
+sk_storage_map_info *info,
+ 		if (!selem) {
+ 			/* not found, unlock and go to the next bucket */
+ 			b =3D &smap->buckets[bucket_id++];
+-			raw_spin_unlock_bh(&b->lock);
++			rcu_read_unlock();
+ 			skip_elems =3D 0;
+ 			break;
+ 		}
+@@ -715,7 +716,7 @@ bpf_sk_storage_map_seq_find_next(struct bpf_iter_seq_=
+sk_storage_map_info *info,
+=20
+ 	for (i =3D bucket_id; i < (1U << smap->bucket_log); i++) {
+ 		b =3D &smap->buckets[i];
+-		raw_spin_lock_bh(&b->lock);
++		rcu_read_lock();
+ 		count =3D 0;
+ 		hlist_for_each_entry(selem, &b->list, map_node) {
+ 			sk_storage =3D rcu_dereference_raw(selem->local_storage);
+@@ -726,7 +727,7 @@ bpf_sk_storage_map_seq_find_next(struct bpf_iter_seq_=
+sk_storage_map_info *info,
+ 			}
+ 			count++;
+ 		}
+-		raw_spin_unlock_bh(&b->lock);
++		rcu_read_unlock();
+ 		skip_elems =3D 0;
+ 	}
+=20
+@@ -801,18 +802,12 @@ static int bpf_sk_storage_map_seq_show(struct seq_f=
+ile *seq, void *v)
+ }
+=20
+ static void bpf_sk_storage_map_seq_stop(struct seq_file *seq, void *v)
++	__releases(RCU)
+ {
+-	struct bpf_iter_seq_sk_storage_map_info *info =3D seq->private;
+-	struct bpf_local_storage_map *smap;
+-	struct bpf_local_storage_map_bucket *b;
+-
+-	if (!v) {
++	if (!v)
+ 		(void)__bpf_sk_storage_map_seq_show(seq, v);
+-	} else {
+-		smap =3D (struct bpf_local_storage_map *)info->map;
+-		b =3D &smap->buckets[info->bucket_id];
+-		raw_spin_unlock_bh(&b->lock);
+-	}
++	else
++		rcu_read_unlock();
+ }
+=20
+ static int bpf_iter_init_sk_storage_map(void *priv_data,
+--=20
+2.24.1
+
