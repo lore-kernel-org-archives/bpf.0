@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C20BC433E2
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA66EC2D0F6
 	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 00:49:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D51422076B
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 00:49:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C00420936
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 00:49:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LNhoVuUY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ann15Hem"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726413AbgIPAtJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Sep 2020 20:49:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:41907 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726403AbgIOLlh (ORCPT
+        id S1727089AbgIPAtI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Sep 2020 20:49:08 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:50192 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726413AbgIOLlh (ORCPT
         <rfc822;bpf@vger.kernel.org>); Tue, 15 Sep 2020 07:41:37 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600170066;
+        s=mimecast20190719; t=1600170069;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gxaNRdqeUWws340/khcAu0DCU4w/nKnErCzUcLE36/I=;
-        b=LNhoVuUYWv/VA3dp/yD0teFTpcEgdd8yxol4nUj+RhlROf6fg0jc5WZJDSL1sX0S/MJ2z+
-        YalNQIKXd2yu4kYVZLBzOWHz/ow0Q+mnq8ayPsNuK782TemPRYHP3sO9SKJ75aDXZXlXqZ
-        Pq9ExfSXZzKbwNEX9E6fqgF12InWJUY=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-80-djN0VIw0Pn-q9q6qqHaXug-1; Tue, 15 Sep 2020 07:41:04 -0400
-X-MC-Unique: djN0VIw0Pn-q9q6qqHaXug-1
-Received: by mail-ed1-f70.google.com with SMTP id y21so1110884edu.23
-        for <bpf@vger.kernel.org>; Tue, 15 Sep 2020 04:41:04 -0700 (PDT)
+        bh=9f/6eHNeg0s6Jj9GHDvmuH44xs14vn5rt2HXh2zzaBw=;
+        b=Ann15HemyMVY+SocGqlfTlBicAURGZa+BK5rbVp1hg7HLqQWOL6CA/BjrQgLpxJak+noaB
+        O82uLCi82+jxUq9ta2kSdHVskP+Xdf1C8p2yW1173cXYvyRaOuOT9Bo3hE0dHUmiKgduFg
+        j+qO9awzoy7wL6+Uq4HY5+YycpybNYs=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-106-3V8z0iVTMAijmHzBOZrMUg-1; Tue, 15 Sep 2020 07:41:07 -0400
+X-MC-Unique: 3V8z0iVTMAijmHzBOZrMUg-1
+Received: by mail-ej1-f69.google.com with SMTP id e13so1176808ejk.1
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2020 04:41:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=gxaNRdqeUWws340/khcAu0DCU4w/nKnErCzUcLE36/I=;
-        b=OPnTtvWhP8eQFE7Ke6LNPXcAm1cLeO+hwNE2VklDuk8x3J0Tvo9Y8mU6tBemk+5fGR
-         GrioWd3cw0SvPHAPqicscA0H8RNEcbz6QwmcNVyskmkvqCYTjtg9p3AnZNG3NVheHuY4
-         miel7MXy0VjRCNAQg/8hOZIvAO3sdPc6WrxM2ytf2FoHGCQuMD3SVk27oUvTvPtmO8jc
-         JT0ZAqJSBa16KCraKGTVQzh84St2tE8tgN/PnAsJumCFlprzev/2gJ/TdTTFj9IMPGEL
-         5R9iwApY7TrvQ2gORwyiVT234k3TL1jT4hNb7/vvFwsDPazq5H7+yYjvi+xjz7sM5nRF
-         x/mg==
-X-Gm-Message-State: AOAM530NT2GqV7rn/DETq8XENiK8j8a+XNoiDzOYbT3/H/6KsjPfKDZu
-        LtqudRXsYkEoAuMWKIs9Yf6BBIvzxL3cA23JUcxDyKCehCYA5OS4DB5/wzDSZeabn/AqGm6OuEg
-        XQdRLXQnTh72K
-X-Received: by 2002:aa7:d959:: with SMTP id l25mr21467313eds.383.1600170063321;
-        Tue, 15 Sep 2020 04:41:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxKzrIT6b9hQT1r0dnnnse74w6mbb51/BN2sV/26Ssr4//+vYJkwpGC2YJsY1+OWcjI9hVrzw==
-X-Received: by 2002:aa7:d959:: with SMTP id l25mr21467277eds.383.1600170062655;
-        Tue, 15 Sep 2020 04:41:02 -0700 (PDT)
+        bh=9f/6eHNeg0s6Jj9GHDvmuH44xs14vn5rt2HXh2zzaBw=;
+        b=NyUatThSJm4/pAdBp6+vBdE96UEHVPRen6Iv3lmBK6hGOEc43GTbgTk1SFvxBYX1UT
+         fYac/4tONjasjqreoHNF1MtxMNhMEHbjA8JgBu6KT9FljzPDAp0U//XhCu2yStI/gcn4
+         9W1KwPd7S7ik8DwaY775A5dGmb9evN+MTdL54JTerQZc0su16bTS8wROJc6L0+213V/o
+         HGyIrJbPacCkVxxfv19T1Qaos9jCMPsa12Rb5OlsXObtlBfmafbinZTapfOLM23MI7mX
+         X5CfJuXIhMP5YoSHa0EcMX7jgcwagThBUdylcx4L6ZeduL/aKlKvYvUJs+pgkw1LRm/0
+         p9ag==
+X-Gm-Message-State: AOAM530+m4T4NL2lzkvonJ9fqCk0FDNr6pFw55DXAxNhMY94r7NJP190
+        sPrdfLIxZ+Sdw90BJ4/pbWYAl4l1DX6WN+wXduWcCyU15PdLGFtznZc7AaVlz5S++0c44mpQ/H5
+        TU4ilV8yoh5LM
+X-Received: by 2002:a05:6402:1818:: with SMTP id g24mr21490388edy.332.1600170066024;
+        Tue, 15 Sep 2020 04:41:06 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzLf225edBty+O7aa8SiXMzOyvo/W/zux7fXC+lFDqqW/qjopGbr/zoKWlpy6Y2vJrpUWid+g==
+X-Received: by 2002:a05:6402:1818:: with SMTP id g24mr21490369edy.332.1600170065615;
+        Tue, 15 Sep 2020 04:41:05 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id nm7sm10051208ejb.70.2020.09.15.04.41.01
+        by smtp.gmail.com with ESMTPSA id o3sm11488272edt.79.2020.09.15.04.41.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2020 04:41:01 -0700 (PDT)
+        Tue, 15 Sep 2020 04:41:05 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 6617A1829CB; Tue, 15 Sep 2020 13:41:01 +0200 (CEST)
-Subject: [PATCH bpf-next v5 4/8] bpf: support attaching freplace programs to
- multiple attach points
+        id B2F2E1829CC; Tue, 15 Sep 2020 13:41:04 +0200 (CEST)
+Subject: [PATCH bpf-next v5 7/8] selftests: add test for multiple attachments
+ of freplace program
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
@@ -75,8 +75,8 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Eelco Chaudron <echaudro@redhat.com>,
         KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Tue, 15 Sep 2020 13:41:01 +0200
-Message-ID: <160017006133.98230.8867570651560085505.stgit@toke.dk>
+Date:   Tue, 15 Sep 2020 13:41:04 +0200
+Message-ID: <160017006463.98230.8855335735634444835.stgit@toke.dk>
 In-Reply-To: <160017005691.98230.13648200635390228683.stgit@toke.dk>
 References: <160017005691.98230.13648200635390228683.stgit@toke.dk>
 User-Agent: StGit/0.23
@@ -90,286 +90,300 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-This enables support for attaching freplace programs to multiple attach
-points. It does this by amending the UAPI for bpf_link_Create with a target
-btf ID that can be used to supply the new attachment point along with the
-target program fd. The target must be compatible with the target that was
-supplied at program load time.
-
-The implementation reuses the checks that were factored out of
-check_attach_btf_id() to ensure compatibility between the BTF types of the
-old and new attachment. If these match, a new bpf_tracing_link will be
-created for the new attach target, allowing multiple attachments to
-co-exist simultaneously.
-
-The code could theoretically support multiple-attach of other types of
-tracing programs as well, but since I don't have a use case for any of
-those, there is no API support for doing so.
+This adds a selftest for attaching an freplace program to multiple targets
+simultaneously.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- include/linux/bpf.h            |    2 +
- include/uapi/linux/bpf.h       |    2 +
- kernel/bpf/syscall.c           |   92 ++++++++++++++++++++++++++++++++++------
- kernel/bpf/verifier.c          |    9 ++++
- tools/include/uapi/linux/bpf.h |    2 +
- 5 files changed, 94 insertions(+), 13 deletions(-)
+ .../selftests/bpf/prog_tests/fexit_bpf2bpf.c       |  171 ++++++++++++++++----
+ .../selftests/bpf/progs/freplace_get_constant.c    |   15 ++
+ 2 files changed, 154 insertions(+), 32 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/freplace_get_constant.c
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 939b37c78d55..360e8291e6bb 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -743,6 +743,8 @@ struct bpf_prog_aux {
- 	struct mutex tgt_mutex; /* protects writing of tgt_* pointers below */
- 	struct bpf_prog *tgt_prog;
- 	struct bpf_trampoline *tgt_trampoline;
-+	enum bpf_prog_type tgt_prog_type;
-+	enum bpf_attach_type tgt_attach_type;
- 	bool verifier_zext; /* Zero extensions has been inserted by verifier. */
- 	bool offload_requested;
- 	bool attach_btf_trace; /* true if attaching to BTF-enabled raw tp */
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 7dd314176df7..46eaa3024dc3 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -239,6 +239,7 @@ enum bpf_attach_type {
- 	BPF_XDP_CPUMAP,
- 	BPF_SK_LOOKUP,
- 	BPF_XDP,
-+	BPF_TRACE_FREPLACE,
- 	__MAX_BPF_ATTACH_TYPE
- };
+diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+index eda682727787..3621d66e47dd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
++++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+@@ -2,36 +2,79 @@
+ /* Copyright (c) 2019 Facebook */
+ #include <test_progs.h>
+ #include <network_helpers.h>
++#include <bpf/btf.h>
++
++typedef int (*test_cb)(struct bpf_object *obj);
++
++static int check_data_map(struct bpf_object *obj, int prog_cnt, bool reset)
++{
++	struct bpf_map *data_map = NULL, *map;
++	__u64 *result = NULL;
++	const int zero = 0;
++	__u32 duration = 0;
++	int ret = -1, i;
++
++	result = malloc((prog_cnt + 32 /* spare */) * sizeof(__u64));
++	if (CHECK(!result, "alloc_memory", "failed to alloc memory"))
++		return -ENOMEM;
++
++	bpf_object__for_each_map(map, obj)
++		if (bpf_map__is_internal(map)) {
++			data_map = map;
++			break;
++		}
++	if (CHECK(!data_map, "find_data_map", "data map not found\n"))
++		goto out;
++
++	ret = bpf_map_lookup_elem(bpf_map__fd(data_map), &zero, result);
++	if (CHECK(ret, "get_result",
++		  "failed to get output data: %d\n", ret))
++		goto out;
++
++	for (i = 0; i < prog_cnt; i++) {
++		if (CHECK(result[i] != 1, "result",
++			  "fexit_bpf2bpf result[%d] failed err %llu\n",
++			  i, result[i]))
++			goto out;
++		result[i] = 0;
++	}
++	if (reset) {
++		ret = bpf_map_update_elem(bpf_map__fd(data_map), &zero, result, 0);
++		if (CHECK(ret, "reset_result", "failed to reset result\n"))
++			goto out;
++	}
++
++	ret = 0;
++out:
++	free(result);
++	return ret;
++}
  
-@@ -633,6 +634,7 @@ union bpf_attr {
- 		__u32		flags;		/* extra flags */
- 		__aligned_u64	iter_info;	/* extra bpf_iter_link_info */
- 		__u32		iter_info_len;	/* iter_info length */
-+		__u32		target_btf_id;	/* btf_id of target to attach to */
- 	} link_create;
- 
- 	struct { /* struct used by BPF_LINK_UPDATE command */
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index fc2bca2d9f05..429afa820c6f 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -4,6 +4,7 @@
- #include <linux/bpf.h>
- #include <linux/bpf_trace.h>
- #include <linux/bpf_lirc.h>
-+#include <linux/bpf_verifier.h>
- #include <linux/btf.h>
- #include <linux/syscalls.h>
- #include <linux/slab.h>
-@@ -2555,12 +2556,18 @@ static const struct bpf_link_ops bpf_tracing_link_lops = {
- 	.fill_link_info = bpf_tracing_link_fill_link_info,
- };
- 
--static int bpf_tracing_prog_attach(struct bpf_prog *prog)
-+static int bpf_tracing_prog_attach(struct bpf_prog *prog,
-+				   int tgt_prog_fd,
-+				   u32 btf_id)
+ static void test_fexit_bpf2bpf_common(const char *obj_file,
+ 				      const char *target_obj_file,
+ 				      int prog_cnt,
+ 				      const char **prog_name,
+-				      bool run_prog)
++				      bool run_prog,
++				      test_cb cb)
  {
- 	struct bpf_link_primer link_primer;
- 	struct bpf_prog *tgt_prog = NULL;
- 	struct bpf_tracing_link *link;
-+	struct btf_func_model fmodel;
-+	bool new_trampoline = false;
- 	struct bpf_trampoline *tr;
-+	long addr;
-+	u64 key;
- 	int err;
+-	struct bpf_object *obj = NULL, *pkt_obj;
+-	int err, pkt_fd, i;
+-	struct bpf_link **link = NULL;
++	struct bpf_object *obj = NULL, *tgt_obj;
+ 	struct bpf_program **prog = NULL;
++	struct bpf_link **link = NULL;
+ 	__u32 duration = 0, retval;
+-	struct bpf_map *data_map;
+-	const int zero = 0;
+-	__u64 *result = NULL;
++	int err, tgt_fd, i;
  
- 	switch (prog->type) {
-@@ -2588,6 +2595,24 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog)
- 		err = -EINVAL;
- 		goto out_put_prog;
+ 	err = bpf_prog_load(target_obj_file, BPF_PROG_TYPE_UNSPEC,
+-			    &pkt_obj, &pkt_fd);
++			    &tgt_obj, &tgt_fd);
+ 	if (CHECK(err, "tgt_prog_load", "file %s err %d errno %d\n",
+ 		  target_obj_file, err, errno))
+ 		return;
+ 	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts,
+-			    .attach_prog_fd = pkt_fd,
++			    .attach_prog_fd = tgt_fd,
+ 			   );
+ 
+ 	link = calloc(sizeof(struct bpf_link *), prog_cnt);
+ 	prog = calloc(sizeof(struct bpf_program *), prog_cnt);
+-	result = malloc((prog_cnt + 32 /* spare */) * sizeof(__u64));
+-	if (CHECK(!link || !prog || !result, "alloc_memory",
+-		  "failed to alloc memory"))
++	if (CHECK(!link || !prog, "alloc_memory", "failed to alloc memory"))
+ 		goto close_prog;
+ 
+ 	obj = bpf_object__open_file(obj_file, &opts);
+@@ -53,39 +96,33 @@ static void test_fexit_bpf2bpf_common(const char *obj_file,
+ 			goto close_prog;
  	}
-+	if (tgt_prog_fd) {
-+		/* For now we only allow new targets for BPF_PROG_TYPE_EXT */
-+		if (prog->type != BPF_PROG_TYPE_EXT || !btf_id) {
-+			err = -EINVAL;
-+			goto out_put_prog;
-+		}
-+
-+		tgt_prog = bpf_prog_get(tgt_prog_fd);
-+		if (IS_ERR(tgt_prog)) {
-+			err = PTR_ERR(tgt_prog);
-+			goto out_put_prog;
-+		}
-+
-+		key = ((u64)tgt_prog->aux->id) << 32 | btf_id;
-+	} else if (btf_id) {
-+		err = -EINVAL;
-+		goto out_put_prog;
+ 
+-	if (!run_prog)
+-		goto close_prog;
++	if (cb) {
++		err = cb(obj);
++		if (err)
++			goto close_prog;
 +	}
  
- 	link = kzalloc(sizeof(*link), GFP_USER);
- 	if (!link) {
-@@ -2600,33 +2625,65 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog)
+-	data_map = bpf_object__find_map_by_name(obj, "fexit_bp.bss");
+-	if (CHECK(!data_map, "find_data_map", "data map not found\n"))
++	if (!run_prog)
+ 		goto close_prog;
  
- 	mutex_lock(&prog->aux->tgt_mutex);
+-	err = bpf_prog_test_run(pkt_fd, 1, &pkt_v6, sizeof(pkt_v6),
++	err = bpf_prog_test_run(tgt_fd, 1, &pkt_v6, sizeof(pkt_v6),
+ 				NULL, NULL, &retval, &duration);
+ 	CHECK(err || retval, "ipv6",
+ 	      "err %d errno %d retval %d duration %d\n",
+ 	      err, errno, retval, duration);
  
--	if (!prog->aux->tgt_trampoline) {
--		err = -ENOENT;
--		goto out_unlock;
-+	if (!prog->aux->tgt_trampoline ||
-+	    (tgt_prog && prog->aux->tgt_trampoline->key != key)) {
-+		new_trampoline = true;
-+	} else {
-+		if (tgt_prog) {
-+			/* re-using ref to tgt_prog, don't take another */
-+			bpf_prog_put(tgt_prog);
-+		}
-+		tr = prog->aux->tgt_trampoline;
-+		tgt_prog = prog->aux->tgt_prog;
-+	}
-+
-+	if (new_trampoline) {
-+		if (!tgt_prog) {
-+			err = -ENOENT;
-+			goto out_unlock;
-+		}
-+
-+		err = bpf_check_attach_target(NULL, prog, tgt_prog, btf_id,
-+					      &fmodel, &addr, NULL, NULL);
-+		if (err) {
-+			bpf_prog_put(tgt_prog);
-+			goto out_unlock;
-+		}
-+
-+		tr = bpf_trampoline_get(key, (void *)addr, &fmodel);
-+		if (IS_ERR(tr)) {
-+			err = PTR_ERR(tr);
-+			bpf_prog_put(tgt_prog);
-+			goto out_unlock;
-+		}
- 	}
--	tr = prog->aux->tgt_trampoline;
--	tgt_prog = prog->aux->tgt_prog;
+-	err = bpf_map_lookup_elem(bpf_map__fd(data_map), &zero, result);
+-	if (CHECK(err, "get_result",
+-		  "failed to get output data: %d\n", err))
++	if (check_data_map(obj, prog_cnt, false))
+ 		goto close_prog;
  
- 	err = bpf_link_prime(&link->link, &link_primer);
- 	if (err) {
--		goto out_unlock;
-+		goto out_put_tgt;
- 	}
- 
- 	err = bpf_trampoline_link_prog(prog, tr);
- 	if (err) {
- 		bpf_link_cleanup(&link_primer);
- 		link = NULL;
--		goto out_unlock;
-+		goto out_put_tgt;
- 	}
- 
- 	link->tgt_prog = tgt_prog;
- 	link->trampoline = tr;
+-	for (i = 0; i < prog_cnt; i++)
+-		if (CHECK(result[i] != 1, "result", "fexit_bpf2bpf failed err %llu\n",
+-			  result[i]))
+-			goto close_prog;
 -
--	prog->aux->tgt_prog = NULL;
--	prog->aux->tgt_trampoline = NULL;
-+	if (!new_trampoline) {
-+		prog->aux->tgt_trampoline = NULL;
-+		prog->aux->tgt_prog = NULL;
-+	}
- 	mutex_unlock(&prog->aux->tgt_mutex);
- 
- 	return bpf_link_settle(&link_primer);
-+out_put_tgt:
-+	if (new_trampoline) {
-+		bpf_prog_put(tgt_prog);
-+		bpf_trampoline_put(tr);
-+	}
- out_unlock:
- 	mutex_unlock(&prog->aux->tgt_mutex);
- 	kfree(link);
-@@ -2744,7 +2801,7 @@ static int bpf_raw_tracepoint_open(const union bpf_attr *attr)
- 			tp_name = prog->aux->attach_func_name;
- 			break;
- 		}
--		return bpf_tracing_prog_attach(prog);
-+		return bpf_tracing_prog_attach(prog, 0, 0);
- 	case BPF_PROG_TYPE_RAW_TRACEPOINT:
- 	case BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE:
- 		if (strncpy_from_user(buf,
-@@ -2864,6 +2921,8 @@ attach_type_to_prog_type(enum bpf_attach_type attach_type)
- 	case BPF_CGROUP_GETSOCKOPT:
- 	case BPF_CGROUP_SETSOCKOPT:
- 		return BPF_PROG_TYPE_CGROUP_SOCKOPT;
-+	case BPF_TRACE_FREPLACE:
-+		return BPF_PROG_TYPE_EXT;
- 	case BPF_TRACE_ITER:
- 		return BPF_PROG_TYPE_TRACING;
- 	case BPF_SK_LOOKUP:
-@@ -3924,10 +3983,16 @@ static int tracing_bpf_link_attach(const union bpf_attr *attr, struct bpf_prog *
- 	    prog->expected_attach_type == BPF_TRACE_ITER)
- 		return bpf_iter_link_attach(attr, prog);
- 
-+	if (attr->link_create.attach_type == BPF_TRACE_FREPLACE &&
-+	    !prog->expected_attach_type)
-+		return bpf_tracing_prog_attach(prog,
-+					       attr->link_create.target_fd,
-+					       attr->link_create.target_btf_id);
-+
- 	return -EINVAL;
+ close_prog:
+ 	for (i = 0; i < prog_cnt; i++)
+ 		if (!IS_ERR_OR_NULL(link[i]))
+ 			bpf_link__destroy(link[i]);
+ 	if (!IS_ERR_OR_NULL(obj))
+ 		bpf_object__close(obj);
+-	bpf_object__close(pkt_obj);
++	bpf_object__close(tgt_obj);
+ 	free(link);
+ 	free(prog);
+-	free(result);
  }
  
--#define BPF_LINK_CREATE_LAST_FIELD link_create.iter_info_len
-+#define BPF_LINK_CREATE_LAST_FIELD link_create.target_btf_id
- static int link_create(union bpf_attr *attr)
- {
- 	enum bpf_prog_type ptype;
-@@ -3961,6 +4026,7 @@ static int link_create(union bpf_attr *attr)
- 		ret = cgroup_bpf_link_attach(attr, prog);
- 		break;
- 	case BPF_PROG_TYPE_TRACING:
-+	case BPF_PROG_TYPE_EXT:
- 		ret = tracing_bpf_link_attach(attr, prog);
- 		break;
- 	case BPF_PROG_TYPE_FLOW_DISSECTOR:
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 02f704367014..2dd5e2ad7f31 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -11202,6 +11202,12 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 		if (!btf_type_is_func_proto(t))
- 			return -EINVAL;
+ static void test_target_no_callees(void)
+@@ -96,7 +133,7 @@ static void test_target_no_callees(void)
+ 	test_fexit_bpf2bpf_common("./fexit_bpf2bpf_simple.o",
+ 				  "./test_pkt_md_access.o",
+ 				  ARRAY_SIZE(prog_name),
+-				  prog_name, true);
++				  prog_name, true, NULL);
+ }
  
-+		if ((prog->aux->tgt_prog_type &&
-+		     prog->aux->tgt_prog_type != tgt_prog->type) ||
-+		    (prog->aux->tgt_attach_type &&
-+		     prog->aux->tgt_attach_type != tgt_prog->expected_attach_type))
-+			return -EINVAL;
+ static void test_target_yes_callees(void)
+@@ -110,7 +147,7 @@ static void test_target_yes_callees(void)
+ 	test_fexit_bpf2bpf_common("./fexit_bpf2bpf.o",
+ 				  "./test_pkt_access.o",
+ 				  ARRAY_SIZE(prog_name),
+-				  prog_name, true);
++				  prog_name, true, NULL);
+ }
+ 
+ static void test_func_replace(void)
+@@ -128,7 +165,7 @@ static void test_func_replace(void)
+ 	test_fexit_bpf2bpf_common("./fexit_bpf2bpf.o",
+ 				  "./test_pkt_access.o",
+ 				  ARRAY_SIZE(prog_name),
+-				  prog_name, true);
++				  prog_name, true, NULL);
+ }
+ 
+ static void test_func_replace_verify(void)
+@@ -139,7 +176,75 @@ static void test_func_replace_verify(void)
+ 	test_fexit_bpf2bpf_common("./freplace_connect4.o",
+ 				  "./connect4_prog.o",
+ 				  ARRAY_SIZE(prog_name),
+-				  prog_name, false);
++				  prog_name, false, NULL);
++}
 +
- 		if (tgt_prog && conservative)
- 			t = NULL;
- 
-@@ -11300,6 +11306,9 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
- 		return ret;
- 
- 	if (tgt_prog) {
-+		prog->aux->tgt_prog_type = tgt_prog->type;
-+		prog->aux->tgt_attach_type = tgt_prog->expected_attach_type;
++static int test_second_attach(struct bpf_object *obj)
++{
++	const char *prog_name = "freplace/get_constant";
++	const char *tgt_name = prog_name + 9; /* cut off freplace/ */
++	const char *tgt_obj_file = "./test_pkt_access.o";
++	int err = 0, tgt_fd, tgt_btf_id, link_fd = -1;
++	struct bpf_program *prog = NULL;
++	struct bpf_object *tgt_obj;
++	__u32 duration = 0, retval;
++	struct btf *btf;
 +
- 		if (prog->type == BPF_PROG_TYPE_EXT) {
- 			env->ops = bpf_verifier_ops[tgt_prog->type];
- 			prog->expected_attach_type =
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 7dd314176df7..46eaa3024dc3 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -239,6 +239,7 @@ enum bpf_attach_type {
- 	BPF_XDP_CPUMAP,
- 	BPF_SK_LOOKUP,
- 	BPF_XDP,
-+	BPF_TRACE_FREPLACE,
- 	__MAX_BPF_ATTACH_TYPE
- };
++	prog = bpf_object__find_program_by_title(obj, prog_name);
++	if (CHECK(!prog, "find_prog", "prog %s not found\n", prog_name))
++		return -ENOENT;
++
++	err = bpf_prog_load(tgt_obj_file, BPF_PROG_TYPE_UNSPEC,
++			    &tgt_obj, &tgt_fd);
++	if (CHECK(err, "second_prog_load", "file %s err %d errno %d\n",
++		  tgt_obj_file, err, errno))
++		return err;
++
++	btf = bpf_object__btf(tgt_obj);
++	tgt_btf_id = btf__find_by_name_kind(btf, tgt_name, BTF_KIND_FUNC);
++	if (CHECK(tgt_btf_id < 0, "find_btf", "no BTF ID found for func %s\n", prog_name)) {
++		err = -ENOENT;
++		goto out;
++	}
++
++	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts,
++			    .target_btf_id = tgt_btf_id,
++			   );
++	link_fd = bpf_link_create(bpf_program__fd(prog), tgt_fd,
++				  BPF_TRACE_FREPLACE, &opts);
++	if (CHECK(link_fd < 0, "second_link", "err %d errno %d",
++		  link_fd, errno)) {
++		err = link_fd;
++		goto out;
++	}
++
++	err = bpf_prog_test_run(tgt_fd, 1, &pkt_v6, sizeof(pkt_v6),
++				NULL, NULL, &retval, &duration);
++	if (CHECK(err || retval, "ipv6",
++		  "err %d errno %d retval %d duration %d\n",
++		  err, errno, retval, duration))
++		goto out;
++
++	err = check_data_map(obj, 1, true);
++	if (err)
++		goto out;
++
++out:
++	if (link_fd >= 0)
++		close(link_fd);
++	bpf_object__close(tgt_obj);
++	return err;
++}
++
++static void test_func_replace_multi(void)
++{
++	const char *prog_name[] = {
++		"freplace/get_constant",
++	};
++	test_fexit_bpf2bpf_common("./freplace_get_constant.o",
++				  "./test_pkt_access.o",
++				  ARRAY_SIZE(prog_name),
++				  prog_name, true, test_second_attach);
+ }
  
-@@ -633,6 +634,7 @@ union bpf_attr {
- 		__u32		flags;		/* extra flags */
- 		__aligned_u64	iter_info;	/* extra bpf_iter_link_info */
- 		__u32		iter_info_len;	/* iter_info length */
-+		__u32		target_btf_id;	/* btf_id of target to attach to */
- 	} link_create;
+ static void test_func_sockmap_update(void)
+@@ -150,7 +255,7 @@ static void test_func_sockmap_update(void)
+ 	test_fexit_bpf2bpf_common("./freplace_cls_redirect.o",
+ 				  "./test_cls_redirect.o",
+ 				  ARRAY_SIZE(prog_name),
+-				  prog_name, false);
++				  prog_name, false, NULL);
+ }
  
- 	struct { /* struct used by BPF_LINK_UPDATE command */
+ static void test_obj_load_failure_common(const char *obj_file,
+@@ -222,4 +327,6 @@ void test_fexit_bpf2bpf(void)
+ 		test_func_replace_return_code();
+ 	if (test__start_subtest("func_map_prog_compatibility"))
+ 		test_func_map_prog_compatibility();
++	if (test__start_subtest("func_replace_multi"))
++		test_func_replace_multi();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/freplace_get_constant.c b/tools/testing/selftests/bpf/progs/freplace_get_constant.c
+new file mode 100644
+index 000000000000..8f0ecf94e533
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/freplace_get_constant.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_endian.h>
++
++volatile __u64 test_get_constant = 0;
++SEC("freplace/get_constant")
++int new_get_constant(long val)
++{
++	if (val != 123)
++		return 0;
++	test_get_constant = 1;
++	return test_get_constant; /* original get_constant() returns val - 122 */
++}
++char _license[] SEC("license") = "GPL";
 
