@@ -2,83 +2,119 @@ Return-Path: <SRS0=lXxl=CY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D21FBC43461
-	for <bpf@archiver.kernel.org>; Tue, 15 Sep 2020 23:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCABDC43461
+	for <bpf@archiver.kernel.org>; Tue, 15 Sep 2020 23:06:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9446320B1F
-	for <bpf@archiver.kernel.org>; Tue, 15 Sep 2020 23:00:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76DB2212CC
+	for <bpf@archiver.kernel.org>; Tue, 15 Sep 2020 23:06:04 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zs+wxazN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727025AbgIOW75 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Sep 2020 18:59:57 -0400
-Received: from www62.your-server.de ([213.133.104.62]:40766 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727322AbgIOPEj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Sep 2020 11:04:39 -0400
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1kICUf-0006cS-DR; Tue, 15 Sep 2020 17:03:41 +0200
-Received: from [178.196.57.75] (helo=pc-9.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1kICUf-0001Me-5p; Tue, 15 Sep 2020 17:03:41 +0200
-Subject: Re: [PATCH v7 bpf-next 7/7] selftests: bpf: add dummy prog for
- bpf2bpf with tailcall
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     ast@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        bjorn.topel@intel.com, magnus.karlsson@intel.com
-References: <20200902200815.3924-1-maciej.fijalkowski@intel.com>
- <20200902200815.3924-8-maciej.fijalkowski@intel.com>
- <20200903195114.ccfzmgcl4ngz2mqv@ast-mbp.dhcp.thefacebook.com>
- <20200911185927.GA2543@ranger.igk.intel.com>
- <20200915043924.uicfgbhuszccycbq@ast-mbp.dhcp.thefacebook.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <5bf5a63c-7607-a24d-7e14-e41caa84bfc3@iogearbox.net>
-Date:   Tue, 15 Sep 2020 17:03:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1727505AbgIOXGD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Sep 2020 19:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727201AbgIOOsG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Sep 2020 10:48:06 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6997CC061225
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2020 06:54:39 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id u21so5228552eja.2
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2020 06:54:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8j+lblg1sV2zcZbQlE+z8kJXho9SmxIjdqx8+vh4bbk=;
+        b=zs+wxazNDlzCncy6nDFpBVAZ1RQDAAaDIp4sgRNsL1wLq+A775Sonp1E73R0J25AVP
+         wy+SnCoRFJgQhHKHZxHVMgMyOAfT7swYrS/2Rkpjo9PLimRa4BF4VyHBmitwaNFAfcbz
+         PkB8vA6NoDvNsOx1u/zLDI1sXyOsnQ5gSnY6qSzqhMoaisXFVrFuMrFvjpWZULthxOZL
+         yBYcG7YdLvAu7bvVsIqNSivaWKPF3tEQyn6nXD0JOghQw6y+WAMp7D/93G/lWsu9zjwy
+         c9O1KIyEwffdY/suauSk9oektYPK33FRkuqorQX/7ozLl40NPRjHfLGr3LLDJQMrwpek
+         Fhyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8j+lblg1sV2zcZbQlE+z8kJXho9SmxIjdqx8+vh4bbk=;
+        b=aiNt0+UVYo9R0yEdnWxAt55blQVNvexR5RzGKA8dqjO/BlXhp/QdLv/36fUbJfrQEu
+         p8ODAPiQntVsQ//6LkWhkPTKfas4b0suCtj4Kp6FmUerQ4r/BHO/2y8yNVfTjpPfGebk
+         DDPmQoAnRNy/BnOb8yvxsAav513cCmGvNJcf/uMLvsFdrepIlrMfs7o4FdjlsQ+RN1Lm
+         uEugiwzWy8F4GTJezXNWnVJvOfCF+HkzYslafbFFULVJ2ecCXsJ7VUcjrnrdAfHTHbjR
+         D+oQqEwloiJZp+URkbn8Utso1eZe/QpJx4COcq4WR8dQ6KhbzpuiEiw6UccS0jsiMRuj
+         +1nA==
+X-Gm-Message-State: AOAM532sSlNge9Oj5y1bdX62BwnMMz4vW1yRoj4U71kHXKHSkJFqc92m
+        Jt9OInLW+uLxJga8wf+BPwuagw==
+X-Google-Smtp-Source: ABdhPJzqkOj32ZaO+3P5Qf1khy2XosqxXmtjomHSAQuuF7ae+SHvA1glksbWQzSbDtjFWs0zPPHdnw==
+X-Received: by 2002:a17:907:417c:: with SMTP id oe20mr19627489ejb.322.1600178078059;
+        Tue, 15 Sep 2020 06:54:38 -0700 (PDT)
+Received: from myrica ([2001:1715:4e26:a7e0:116c:c27a:3e7f:5eaf])
+        by smtp.gmail.com with ESMTPSA id ef3sm7912845ejb.114.2020.09.15.06.54.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2020 06:54:37 -0700 (PDT)
+Date:   Tue, 15 Sep 2020 15:54:19 +0200
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        bpf@vger.kernel.org, ardb@kernel.org, naresh.kamboju@linaro.org,
+        Jiri Olsa <jolsa@kernel.org>,
+        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arm64: bpf: Fix branch offset in JIT
+Message-ID: <20200915135419.GB1748187@myrica>
+References: <20200914160355.19179-1-ilias.apalodimas@linaro.org>
+ <20200915131102.GA26439@willie-the-truck>
 MIME-Version: 1.0
-In-Reply-To: <20200915043924.uicfgbhuszccycbq@ast-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/25930/Tue Sep 15 15:55:28 2020)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200915131102.GA26439@willie-the-truck>
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 9/15/20 6:39 AM, Alexei Starovoitov wrote:
-> On Fri, Sep 11, 2020 at 08:59:27PM +0200, Maciej Fijalkowski wrote:
->> On Thu, Sep 03, 2020 at 12:51:14PM -0700, Alexei Starovoitov wrote:
->>> On Wed, Sep 02, 2020 at 10:08:15PM +0200, Maciej Fijalkowski wrote:
-[...]
->>> Could you add few more tests to exercise the new feature more thoroughly?
->>> Something like tailcall3.c that checks 32 limit, but doing tail_call from subprog.
->>> And another test that consume non-trival amount of stack in each function.
->>> Adding 'volatile char arr[128] = {};' would do the trick.
->>
->> Yet another prolonged silence from my side, but not without a reason -
->> this request opened up a Pandora's box.
+On Tue, Sep 15, 2020 at 02:11:03PM +0100, Will Deacon wrote:
+> >  		ret = build_insn(insn, ctx, extra_pass);
+> >  		if (ret > 0) {
+> >  			i++;
+> >  			if (ctx->image == NULL)
+> > -				ctx->offset[i] = ctx->idx;
+> > +				ctx->offset[i] = ctx->offset[i - 1];
 > 
-> Great catch and thanks to our development practices! As a community we should
-> remember this lesson and request selftests more often than not.
+> Does it matter that we set the offset for both halves of a 16-byte BPF
+> instruction? I think that's a change in behaviour here.
 
-+1, speaking of pandora ... ;-) I recently noticed that we also have the legacy
-ld_abs/ld_ind instructions. Right now check_ld_abs() gates them by bailing out
-if env->subprog_cnt > 1, but that doesn't solve everything given the prog itself
-may not have bpf2bpf calls, but it could get tail-called out of a subprog. We
-need to reject such cases (& add selftests for it), otherwise this would be a
-verifier bypass given they may implicitly exit the program (and then mismatch
-the return type that the verifier was expecting).
+After testing this patch a bit, I think setting only the first slot should
+be sufficient, and we can drop these two lines. It does make a minor
+difference, because although the BPF verifier normally rejects a program
+that jumps into the middle of a 16-byte instruction, it can validate it in
+some cases: 
 
-Best,
-Daniel
+        BPF_LD_IMM64(BPF_REG_0, 2)		// 16-byte immediate load
+        BPF_JMP_IMM(BPF_JLE, BPF_REG_0, 1, -2)	// If r0 <= 1, branch to
+        BPF_EXIT_INSN()				//  the middle of the insn
+
+The verifier detects that the condition is always false and doesn't follow
+the branch, hands the program to the JIT. So if we don't set the second
+slot, then we generate an invalid branch offset. But that doesn't really
+matter as the branch is never taken.
+
+Thanks,
+Jean
