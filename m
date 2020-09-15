@@ -2,146 +2,223 @@ Return-Path: <SRS0=lXxl=CY=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3336EC43461
-	for <bpf@archiver.kernel.org>; Tue, 15 Sep 2020 23:38:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D898C43461
+	for <bpf@archiver.kernel.org>; Tue, 15 Sep 2020 23:46:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DCF8D20715
-	for <bpf@archiver.kernel.org>; Tue, 15 Sep 2020 23:38:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 278432078D
+	for <bpf@archiver.kernel.org>; Tue, 15 Sep 2020 23:46:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WPizD1wx"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="jX2EHABn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727070AbgIOXiA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Sep 2020 19:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
+        id S1727140AbgIOXqF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Sep 2020 19:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727068AbgIOXhy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Sep 2020 19:37:54 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEE2C06174A;
-        Tue, 15 Sep 2020 16:37:53 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id k13so2165836plk.3;
-        Tue, 15 Sep 2020 16:37:53 -0700 (PDT)
+        with ESMTP id S1727228AbgIOXpv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Sep 2020 19:45:51 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4424C06178C
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2020 16:45:49 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id w64so4468535qkc.14
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2020 16:45:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pMXma8x6YoTQVvMJ+K5iGZI7cwT1mYn89SVxWt3eduo=;
-        b=WPizD1wxMnvjpnrz8wJg3/dtWH7Js34Z5uRFxul13NlOksTSUm8sPmgXTQrG5IZULE
-         pE9FHEJLzowVMXDRBTpZJ3bKyQ8hYYb8V2Ob21RtjgIKXmaTYvPEmYap/pDxmJQFDmHK
-         RpAQx+16tUCGGaSEKUgbwaVXqXBcqVwp8ePYetLFb0FlW2UUYoQEo3jepORmz6TO/Vm4
-         i3VM0T2OGmO0t2JBs4Vn6ORrY+AemPHpAlkV4CenH0EgVxUuLi8y1w/ew3hdm1+IAjIV
-         VcZv1mG+idFjC5pJ5Nla2ts1EBUi8qxztRONaJ+5QG/tyUgNKfuup6Ws2t4ZXJF9GiZm
-         /+pw==
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=2zAlitpz1bSHaXpmOBe1sEwQjxsIHDKKWn1soexKc5A=;
+        b=jX2EHABnTF/zKy7dy9pWQ+vvvHxshCHxrKjT8OYU7KHefup5xZAWJY/FmiLosxqLNN
+         sZWq9NVyJCYWN3MC3mRbNEvTzI74lg2izQhOOTNOr5L/bfMZ0y+XlRgdf8ULhb8SJJ0v
+         +FHdWBf6RxJiEWZrCMCd5+ciWheB698sA9OVlikTGKRch7F+FVKTI8VnEet4Jv3m5iQ8
+         GL5TIKsGVBO/U5+NXYW7B5ye9mwi2/OWrfINfCUvy3LeiiKkSgytV1ZLO5tnl09ZKrdw
+         xwrgyhfbfTNzwfj8Y4wAh2oCovbxEz3PnQayuGkNsZV/Y3jFfPNMxJsENq07hvUsVFbM
+         0uAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pMXma8x6YoTQVvMJ+K5iGZI7cwT1mYn89SVxWt3eduo=;
-        b=DfkERMrMKoXdLE0lGvZCyuiUnFD48qd9WQeYZCUZBeSJpzuHHa+3DbN76EHlhN6xz+
-         hYYCKxszfP2Rc6/EMK1d3XiAauEBwZH1EwGL329YSQjFwUzGoQ+rPRRMyW6b3pO7fKww
-         R8kp+HnBqgWwTEJ3eRSMNn+7vlvlk8g3RFLhs5zy0QO7loNtPPR8fCuDntxjdZzL5qQ1
-         oDXATlakR29qMeibuGLAn4MC6Kesg73u8ntMkrXVMjCyNnBDwOIA0q1ka6LubU/3PpIK
-         ku7g+BILJtakwZG3gNeSmUeIYhAqE4uhG8YFsyrgpNzmuBZ1fhSFo0r4Ya8Xk0GLTiD0
-         gjHg==
-X-Gm-Message-State: AOAM531VfFyZTJPfLHI0x9DBqgRepPh2/GxU2IvOMT12zA4Zj2/vTzPz
-        FR8fOz9MaIUgc7/kCvgKZVo=
-X-Google-Smtp-Source: ABdhPJyMabW1j8fmLPCAQ2itUbWK+eznPeHgkOpFxEHZWNbCNfcVSDhbJRGNHdVd1hzJ7FwP4nhE0A==
-X-Received: by 2002:a17:90a:4b42:: with SMTP id o2mr1356472pjl.205.1600213073314;
-        Tue, 15 Sep 2020 16:37:53 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:8a26])
-        by smtp.gmail.com with ESMTPSA id d8sm12034698pgt.19.2020.09.15.16.37.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2020 16:37:52 -0700 (PDT)
-Date:   Tue, 15 Sep 2020 16:37:50 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Andrii Nakryiko <andriin@fb.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
-        daniel@iogearbox.net, andrii.nakryiko@gmail.com,
-        kernel-team@fb.com, yhs@fb.com, kafai@fb.com
-Subject: Re: [PATCH v2 bpf-next] selftests/bpf: merge most of test_btf into
- test_progs
-Message-ID: <20200915233750.imml2qj6p72olga4@ast-mbp.dhcp.thefacebook.com>
-References: <20200915014341.2949692-1-andriin@fb.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200915014341.2949692-1-andriin@fb.com>
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=2zAlitpz1bSHaXpmOBe1sEwQjxsIHDKKWn1soexKc5A=;
+        b=W0F5cWgkkZYJIDlmrHuU31m56ysi1fgcfr11398sHTwX3ETAMls6Zr8OkusJAqRihr
+         nHlsxrIYnXJfRkSfGacwYckF66E+hayy79WHy3ESGsjtEkjz2Z4jSxNNxyC1XcEWFH3/
+         VOqU9Dp81vnE7oSO6HOeJ24LyUaTmZaHsscdTe2h1lOj4C4iWvu7XxNCxhf30KEwuO/h
+         7FH4aSxOYlaxXgC5S23tORWAXgxmjJ0AbRdp1EkFlRVr3zDGTDTOnfAb3afXzS40sqzb
+         7K+oJow0kwxW2eyra2bs8Gsa6vbKblJVKSuvINtCSF49prXy6J9cDMzg6amKXyEJ6YhF
+         LfIQ==
+X-Gm-Message-State: AOAM530gAhcsPxOndm3Log4JJcxztGWerT4u6+j/t9qQHBusAhmejDI/
+        S4ci9335uGT2dyM/8Equr/Op92A=
+X-Google-Smtp-Source: ABdhPJxoH3lkhhMlmtoNrebqMPDbgJmQKZvR6/SrHw8LwfZ2rPqoKfyf2gd6tDrcoSaJyVsE+NgTvXY=
+X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:1:7220:84ff:fe09:7732])
+ (user=sdf job=sendgmr) by 2002:ad4:4527:: with SMTP id l7mr21049200qvu.2.1600213548790;
+ Tue, 15 Sep 2020 16:45:48 -0700 (PDT)
+Date:   Tue, 15 Sep 2020 16:45:40 -0700
+In-Reply-To: <20200915234543.3220146-1-sdf@google.com>
+Message-Id: <20200915234543.3220146-3-sdf@google.com>
+Mime-Version: 1.0
+References: <20200915234543.3220146-1-sdf@google.com>
+X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
+Subject: [PATCH bpf-next v6 2/5] bpf: Add BPF_PROG_BIND_MAP syscall
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
+        Andrii Nakryiko <andriin@fb.com>,
+        YiFei Zhu <zhuyifei1999@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Sep 14, 2020 at 06:43:41PM -0700, Andrii Nakryiko wrote:
-> Move almost 200 tests from test_btf into test_progs framework to be exercised
-> regularly. Pretty-printing tests were left alone and renamed into
-> test_btf_pprint because they are very slow and were not even executed by
-> default with test_btf.
+From: YiFei Zhu <zhuyifei@google.com>
 
-I think would be good to run them by default.
-The following trivial tweak makes them fast:
-diff --git a/tools/testing/selftests/bpf/test_btf.c b/tools/testing/selftests/bpf/test_btf.c
-index c75fc6447186..589afd4f0e47 100644
---- a/tools/testing/selftests/bpf/test_btf.c
-+++ b/tools/testing/selftests/bpf/test_btf.c
-@@ -4428,7 +4428,7 @@ static struct btf_raw_test pprint_test_template[] = {
-        .value_size = sizeof(struct pprint_mapv),
-        .key_type_id = 3,       /* unsigned int */
-        .value_type_id = 16,    /* struct pprint_mapv */
--       .max_entries = 128 * 1024,
-+       .max_entries = 128,
- },
+This syscall binds a map to a program. Returns success if the map is
+already bound to the program.
 
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Cc: YiFei Zhu <zhuyifei1999@gmail.com>
+Signed-off-by: YiFei Zhu <zhuyifei@google.com>
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+---
+ include/uapi/linux/bpf.h       |  7 ++++
+ kernel/bpf/syscall.c           | 63 ++++++++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h |  7 ++++
+ 3 files changed, 77 insertions(+)
+
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 7dd314176df7..a22812561064 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -124,6 +124,7 @@ enum bpf_cmd {
+ 	BPF_ENABLE_STATS,
+ 	BPF_ITER_CREATE,
+ 	BPF_LINK_DETACH,
++	BPF_PROG_BIND_MAP,
+ };
+ 
+ enum bpf_map_type {
+@@ -658,6 +659,12 @@ union bpf_attr {
+ 		__u32		flags;
+ 	} iter_create;
+ 
++	struct { /* struct used by BPF_PROG_BIND_MAP command */
++		__u32		prog_fd;
++		__u32		map_fd;
++		__u32		flags;		/* extra flags */
++	} prog_bind_map;
++
+ } __attribute__((aligned(8)));
+ 
+ /* The description below is an attempt at providing documentation to eBPF
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index a67b8c6746be..2ce32cad5c8e 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4161,6 +4161,66 @@ static int bpf_iter_create(union bpf_attr *attr)
+ 	return err;
+ }
+ 
++#define BPF_PROG_BIND_MAP_LAST_FIELD prog_bind_map.flags
++
++static int bpf_prog_bind_map(union bpf_attr *attr)
++{
++	struct bpf_prog *prog;
++	struct bpf_map *map;
++	struct bpf_map **used_maps_old, **used_maps_new;
++	int i, ret = 0;
++
++	if (CHECK_ATTR(BPF_PROG_BIND_MAP))
++		return -EINVAL;
++
++	if (attr->prog_bind_map.flags)
++		return -EINVAL;
++
++	prog = bpf_prog_get(attr->prog_bind_map.prog_fd);
++	if (IS_ERR(prog))
++		return PTR_ERR(prog);
++
++	map = bpf_map_get(attr->prog_bind_map.map_fd);
++	if (IS_ERR(map)) {
++		ret = PTR_ERR(map);
++		goto out_prog_put;
++	}
++
++	mutex_lock(&prog->aux->used_maps_mutex);
++
++	used_maps_old = prog->aux->used_maps;
++
++	for (i = 0; i < prog->aux->used_map_cnt; i++)
++		if (used_maps_old[i] == map)
++			goto out_unlock;
++
++	used_maps_new = kmalloc_array(prog->aux->used_map_cnt + 1,
++				      sizeof(used_maps_new[0]),
++				      GFP_KERNEL);
++	if (!used_maps_new) {
++		ret = -ENOMEM;
++		goto out_unlock;
++	}
++
++	memcpy(used_maps_new, used_maps_old,
++	       sizeof(used_maps_old[0]) * prog->aux->used_map_cnt);
++	used_maps_new[prog->aux->used_map_cnt] = map;
++
++	prog->aux->used_map_cnt++;
++	prog->aux->used_maps = used_maps_new;
++
++	kfree(used_maps_old);
++
++out_unlock:
++	mutex_unlock(&prog->aux->used_maps_mutex);
++
++	if (ret)
++		bpf_map_put(map);
++out_prog_put:
++	bpf_prog_put(prog);
++	return ret;
++}
++
+ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, size)
  {
-@@ -4493,7 +4493,7 @@ static struct btf_raw_test pprint_test_template[] = {
-        .value_size = sizeof(struct pprint_mapv),
-        .key_type_id = 3,       /* unsigned int */
-        .value_type_id = 16,    /* struct pprint_mapv */
--       .max_entries = 128 * 1024,
-+       .max_entries = 128,
- },
+ 	union bpf_attr attr;
+@@ -4294,6 +4354,9 @@ SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, siz
+ 	case BPF_LINK_DETACH:
+ 		err = link_detach(&attr);
+ 		break;
++	case BPF_PROG_BIND_MAP:
++		err = bpf_prog_bind_map(&attr);
++		break;
+ 	default:
+ 		err = -EINVAL;
+ 		break;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 7dd314176df7..a22812561064 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -124,6 +124,7 @@ enum bpf_cmd {
+ 	BPF_ENABLE_STATS,
+ 	BPF_ITER_CREATE,
+ 	BPF_LINK_DETACH,
++	BPF_PROG_BIND_MAP,
+ };
+ 
+ enum bpf_map_type {
+@@ -658,6 +659,12 @@ union bpf_attr {
+ 		__u32		flags;
+ 	} iter_create;
+ 
++	struct { /* struct used by BPF_PROG_BIND_MAP command */
++		__u32		prog_fd;
++		__u32		map_fd;
++		__u32		flags;		/* extra flags */
++	} prog_bind_map;
++
+ } __attribute__((aligned(8)));
+ 
+ /* The description below is an attempt at providing documentation to eBPF
+-- 
+2.28.0.618.gf4bc123cb7-goog
 
- {
-@@ -4564,7 +4564,7 @@ static struct btf_raw_test pprint_test_template[] = {
-        .value_size = sizeof(struct pprint_mapv),
-        .key_type_id = 3,       /* unsigned int */
-        .value_type_id = 16,    /* struct pprint_mapv */
--       .max_entries = 128 * 1024,
-+       .max_entries = 128,
- },
-
-Martin,
-do you remember why you picked such large numbers of entries
-for the test?
-If I read the code correctly smaller number doesn't reduce the test coverage.
-
-> All the test_btf tests that were moved are modeled as proper sub-tests in
-> test_progs framework for ease of debugging and reporting.
-> 
-> No functional or behavioral changes were intended, I tried to preserve
-> original behavior as close to the original as possible. `test_progs -v` will
-> activate "always_log" flag to emit BTF validation log.
-> 
-> Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-> ---
-> 
-> v1->v2:
->  - pretty-print BTF tests were renamed test_btf -> test_btf_pprint, which
->    allowed GIT to detect that majority of  test_btf code was moved into
->    prog_tests/btf.c; so diff is much-much smaller;
-
-Thanks. I hope with addition to pprint test the diff will be even smaller.
-I think it's worth to investigate why they're failing if moved to test_progs.
-I think they're the only tests that exercise seq_read logic.
-Clearly the bug:
-[   25.960993] WARNING: CPU: 2 PID: 1995 at kernel/bpf/hashtab.c:717 htab_map_get_next_key+0x7fc/0xab0
-is still there.
-If pprint tests were part of test_progs we would have caught that earlier.
-
-Yonghong,
-please take a look at that issue.
