@@ -2,190 +2,198 @@ Return-Path: <SRS0=xxat=CZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02524C433E2
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 00:19:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83918C2D0E3
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 00:22:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B389B2076B
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 00:19:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600215565;
-	bh=mAvLUOAjRYcfpkRMghrqjRsVA8/IFtwH77ihCDlpknE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=Q9r1OEQ8O9VnCfYUsGcQY9SLNiukWtFTlfxqmV8E+pIiTaGOQ6VeJPpvbeHWXwYRY
-	 ARwjmS2rGFGwvxhyGZWLNUu2JTxkbbLX7etklnoSkKlf3g6UpHTE9D6JWlUZb+21oI
-	 0/E58SOAO8GuPXPorXfHpLhz4YMs7QT5eh0OotU8=
+	by mail.kernel.org (Postfix) with ESMTP id 328852076B
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 00:22:41 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="nMR5Iokk";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="VpK2yZPj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727240AbgIPATW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Sep 2020 20:19:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37092 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726871AbgIOOV6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Sep 2020 10:21:58 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2B13D22261;
-        Tue, 15 Sep 2020 14:17:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600179435;
-        bh=mAvLUOAjRYcfpkRMghrqjRsVA8/IFtwH77ihCDlpknE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yOS1a7++OZZQQUW0Fnjm1zPPlLI5nMWD6R95VrcCLC1WROQDskm08QuULeX30eAG7
-         SRPGEvQMfgqv7WvKMoQmyaHGuxVuVLLLk0UjL5O8hYq9shuBeK0416fOYlD+16AHoD
-         y3QESZPG2XM/s/Keg3TfX+oCWfbO7iOxygZ5EnAc=
-Date:   Tue, 15 Sep 2020 15:17:08 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Cc:     bpf@vger.kernel.org, ardb@kernel.org, naresh.kamboju@linaro.org,
-        Jiri Olsa <jolsa@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: bpf: Fix branch offset in JIT
-Message-ID: <20200915141707.GB26439@willie-the-truck>
-References: <20200914160355.19179-1-ilias.apalodimas@linaro.org>
- <20200915131102.GA26439@willie-the-truck>
- <20200915135344.GA113966@apalos.home>
-MIME-Version: 1.0
+        id S1727451AbgIPAVg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Sep 2020 20:21:36 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:15984 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727300AbgIPAVc (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 15 Sep 2020 20:21:32 -0400
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08G0BLiO012193;
+        Tue, 15 Sep 2020 17:21:18 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=hfd7VxNVeFBhVtbvFrSwZQ89yCKtAWwdahB4dYa84A0=;
+ b=nMR5Iokksx0Pq4FF0/k0dXUuhBZlyTitkt92eGV8KSdVHX61ZS16GwbUdgd/HaW2nO2G
+ +dkr48DfD2E9ri9NgNClcwbvJcp4LKv1ODjswwwEW80tFuVlCDH5c1hbUeYriB3arcMc
+ +K3FTGq43Ky0YuGmYJV020/dzB1b+7xC+Hc= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 33k5q60pct-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 15 Sep 2020 17:21:18 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 15 Sep 2020 17:21:17 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jwWAOKulJUmG1XUkChtSFVHXpttLhcXI+qmEtqiF70h/cUQyQoFMcZCw4hLCLYT2ePU7u3LiT0NZojckdgTfTwY4qWkN+LbI6el8+VAV6Ndy80CukbKDT1ruPVYXvnU7I65HVIuXzClNlexUfm6pa/WiRNrd0CrQSOm2V5iGoWypBzdauv9u7R16o/cbY1VCcD1JygQBgvSFyOtycxZIjxTXSfj0Y/g8i/uwu1JsPPLR86ysj8ZGn3o+GuNoMfpAHTdttLew8/iqEQDPCeLsO17TCdCY0fadTVEwgkM941/L0sWA4f487SeOZ0KI7ZE5YBT8GMaTm16gd/stkz3BSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hfd7VxNVeFBhVtbvFrSwZQ89yCKtAWwdahB4dYa84A0=;
+ b=Ff2IQ3BZ5SxX5IHl1JdjhnBS/ucCaYKqNqDR1xfK5xpEyp+2G3FDQXELHsKNVUfbbzK1dWLXl6m6BjJcTdSXvcbT8UwCd5GhA5PS1zJGMlGyK8zBRiWc3TJUs9O5TiSGZJNvE+F7TNuei0L5oCjlk3ozficCA1h2yAyrv3ftcYsrv5VnATZcNYdi0+fBzuEdsXtn5Af0jx4DG56pPRf4lg0VyUAIWO2H1+tIK5RGBDM+xb+D1ovH+nMeMKgwpQ2X7X7a9bJVgex6m7Aou7pUnIDCbWJ0AYZIYQ/iYYjPvSTQNJe7GIADnIozot5V3dEynFLiNq+hrDGPKwFBYp+0+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hfd7VxNVeFBhVtbvFrSwZQ89yCKtAWwdahB4dYa84A0=;
+ b=VpK2yZPjy7JIsSwP98xpKUKpgQ6i2WtLR5lX9RQfEFeBy7yt/ZUQ+Awhc7QWsugqirp424ro0iqEotEF/kBLp8WWth3SuGSREht4LmsX/RuO6PPzM3VPOC3zDb+rByaA40X+o3XSa6Mx7JrICTjULN2imT8UKP04d6G6SFZvsAo=
+Authentication-Results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=fb.com;
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
+ by BYAPR15MB2647.namprd15.prod.outlook.com (2603:10b6:a03:153::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.11; Wed, 16 Sep
+ 2020 00:21:02 +0000
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::c13c:fca9:5e04:9bfb]) by BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::c13c:fca9:5e04:9bfb%3]) with mapi id 15.20.3391.011; Wed, 16 Sep 2020
+ 00:21:02 +0000
+Date:   Tue, 15 Sep 2020 17:20:55 -0700
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     Andrii Nakryiko <andriin@fb.com>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <ast@fb.com>, <daniel@iogearbox.net>,
+        <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>, <yhs@fb.com>
+Subject: Re: [PATCH v2 bpf-next] selftests/bpf: merge most of test_btf into
+ test_progs
+Message-ID: <20200916002033.vmn5bensn6r47t4x@kafai-mbp>
+References: <20200915014341.2949692-1-andriin@fb.com>
+ <20200915233750.imml2qj6p72olga4@ast-mbp.dhcp.thefacebook.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200915135344.GA113966@apalos.home>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200915233750.imml2qj6p72olga4@ast-mbp.dhcp.thefacebook.com>
+X-ClientProxiedBy: MWHPR13CA0013.namprd13.prod.outlook.com
+ (2603:10b6:300:16::23) To BY5PR15MB3571.namprd15.prod.outlook.com
+ (2603:10b6:a03:1f6::32)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from kafai-mbp (2620:10d:c090:400::5:30e3) by MWHPR13CA0013.namprd13.prod.outlook.com (2603:10b6:300:16::23) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.6 via Frontend Transport; Wed, 16 Sep 2020 00:21:01 +0000
+X-Originating-IP: [2620:10d:c090:400::5:30e3]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e3ce2bd5-8032-4d47-58f1-08d859d664b8
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2647:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR15MB2647BA2BC99CC036A3149B40D5210@BYAPR15MB2647.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cv7hUumVYVE1LtHdnH5ikaoaMG0o82uKTOMbumKR99Di1QKUJVdz6FTjWiudDvXm/jq6seqiETNEHvtU5pMsEiXaD2KCC5LIcP2tQuXDTcgTKuC4jJbbb6RVJVrxqj0u9A6yysYIaJ5UPYzVQJGsV5fFia98OoxKuhaEPTfvdgi8muItv0CXGnFcLUVIG/27SvSi0VgrjB/7xlxdOSWYrff2rG2aTjNisqDtQAMok3pcBKbGSb3mpKK7uWryCxfPBn5jsP9Y/jRuuHwkTyS3nDOIT8f+l+zL20gj518tr0KjB8cI4Hb9slXbLLdQlbn3OjKqZ9m2PxbyriKAnMqlhbky0DCvA7yAcz00qpCEX5DopUaIkcPsjL7p7KQ95xmj
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(346002)(136003)(39860400002)(376002)(396003)(186003)(16526019)(8936002)(9686003)(55016002)(1076003)(52116002)(6496006)(478600001)(66946007)(2906002)(33716001)(316002)(86362001)(4326008)(8676002)(83380400001)(5660300002)(6916009)(6666004)(66476007)(66556008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: yRUqmNQqVQxgW03adMBQHUiT8DhAXrLrNisAGDn983xHiTImvl2sEY7OeRfhYhE+dmOKtN6iw3pNlM9Vk++JnylE0lLfAo6ub2zKlygerpA9+0J6fQllfb3SHSe0Lx4v4seyhJDtqFWt1yxj1gBbyLhWY1bZsvS3GoYunjq7bCynrWVy+0JToIy88+T8NcrtZTDNUqoeFuliPBKol4rYNPNBEl+l0qd4gJBYm6HQKdXjnYpvI90xBvmCCTUx6+JjF4PAwx8fvdlzeDkQlHg8lBJIHruHh1e0RUekkFINYd7JUyL8xjOEmG9S5kUFLO+12FJDONzEukXT18tuhVTAuO6m3HuAI0wRN06bWlINSQ+pIodqLjMo3JtKEcjbmWDdF2NekimL9x6WfRJwI1rDcFDojIGAtUZFUlQ+V4Hv1fZ2QiAFH6AE5NlprEmfIDQnaC7snYmzea/dLbJEtfoTfZI1uefPbIevZkNkXUzDlWQu5Of4JhzoIJHKQ0bx4bWRf6M0PpTQwoIJ5NPDeeM/58FDN7mO7XoSfb+Y894KdVUQ2IJwIQWsswdaHgHoD/4zMo94hOb39Syt3Grt5GPFm413iqHegpUImKoZRTdcbMPZWyKmW53Nl5tiifE5lIiUH0E2SV+hCm1AoIYFr7RM8nxkml+vOpuoaMPUHlZRRwA=
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3ce2bd5-8032-4d47-58f1-08d859d664b8
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2020 00:21:02.2860
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: x2p56La+vLdFOAmJnj1yy+4MQ0zBactVkcRB3BeJK2J+z0q7H+8LkXyp/Dw4+Nk8
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2647
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-15_14:2020-09-15,2020-09-15 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ bulkscore=0 mlxscore=0 spamscore=0 lowpriorityscore=0 phishscore=0
+ mlxlogscore=999 suspectscore=1 malwarescore=0 impostorscore=0 adultscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009160000
+X-FB-Internal: deliver
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 04:53:44PM +0300, Ilias Apalodimas wrote:
-> On Tue, Sep 15, 2020 at 02:11:03PM +0100, Will Deacon wrote:
-> > Hi Ilias,
-> > 
-> > On Mon, Sep 14, 2020 at 07:03:55PM +0300, Ilias Apalodimas wrote:
-> > > Running the eBPF test_verifier leads to random errors looking like this:
-> > > 
-> > > [ 6525.735488] Unexpected kernel BRK exception at EL1
-> > > [ 6525.735502] Internal error: ptrace BRK handler: f2000100 [#1] SMP
-> > 
-> > Does this happen because we poison the BPF memory with BRK instructions?
-> > Maybe we should look at using a special immediate so we can detect this,
-> > rather than end up in the ptrace handler.
+On Tue, Sep 15, 2020 at 04:37:50PM -0700, Alexei Starovoitov wrote:
+> On Mon, Sep 14, 2020 at 06:43:41PM -0700, Andrii Nakryiko wrote:
+> > Move almost 200 tests from test_btf into test_progs framework to be exercised
+> > regularly. Pretty-printing tests were left alone and renamed into
+> > test_btf_pprint because they are very slow and were not even executed by
+> > default with test_btf.
 > 
-> As discussed offline this is what aarch64_insn_gen_branch_imm() will return for
-> offsets > 128M and yes replacing the handler with a more suitable message would 
-> be good.
+> I think would be good to run them by default.
+> The following trivial tweak makes them fast:
+> diff --git a/tools/testing/selftests/bpf/test_btf.c b/tools/testing/selftests/bpf/test_btf.c
+> index c75fc6447186..589afd4f0e47 100644
+> --- a/tools/testing/selftests/bpf/test_btf.c
+> +++ b/tools/testing/selftests/bpf/test_btf.c
+> @@ -4428,7 +4428,7 @@ static struct btf_raw_test pprint_test_template[] = {
+>         .value_size = sizeof(struct pprint_mapv),
+>         .key_type_id = 3,       /* unsigned int */
+>         .value_type_id = 16,    /* struct pprint_mapv */
+> -       .max_entries = 128 * 1024,
+> +       .max_entries = 128,
+>  },
+> 
+>  {
+> @@ -4493,7 +4493,7 @@ static struct btf_raw_test pprint_test_template[] = {
+>         .value_size = sizeof(struct pprint_mapv),
+>         .key_type_id = 3,       /* unsigned int */
+>         .value_type_id = 16,    /* struct pprint_mapv */
+> -       .max_entries = 128 * 1024,
+> +       .max_entries = 128,
+>  },
+> 
+>  {
+> @@ -4564,7 +4564,7 @@ static struct btf_raw_test pprint_test_template[] = {
+>         .value_size = sizeof(struct pprint_mapv),
+>         .key_type_id = 3,       /* unsigned int */
+>         .value_type_id = 16,    /* struct pprint_mapv */
+> -       .max_entries = 128 * 1024,
+> +       .max_entries = 128,
+>  },
+> 
+> Martin,
+> do you remember why you picked such large numbers of entries
+> for the test?
+It has been a while.  iirc, I think there was no particular reason but
+there was only one pprint test and then a few had been added since
+then.
 
-Can you give the diff below a shot, please? Hopefully printing a more useful
-message will mean these things get triaged/debugged better in future.
+> If I read the code correctly smaller number doesn't reduce the test coverage.
+Indeed.  Please go ahead to reduce the max_entries.  Sorry for the pain.
 
-Will
-
---->8
-
-diff --git a/arch/arm64/include/asm/extable.h b/arch/arm64/include/asm/extable.h
-index 840a35ed92ec..b15eb4a3e6b2 100644
---- a/arch/arm64/include/asm/extable.h
-+++ b/arch/arm64/include/asm/extable.h
-@@ -22,6 +22,15 @@ struct exception_table_entry
- 
- #define ARCH_HAS_RELATIVE_EXTABLE
- 
-+static inline bool in_bpf_jit(struct pt_regs *regs)
-+{
-+	if (!IS_ENABLED(CONFIG_BPF_JIT))
-+		return false;
-+
-+	return regs->pc >= BPF_JIT_REGION_START &&
-+	       regs->pc < BPF_JIT_REGION_END;
-+}
-+
- #ifdef CONFIG_BPF_JIT
- int arm64_bpf_fixup_exception(const struct exception_table_entry *ex,
- 			      struct pt_regs *regs);
-diff --git a/arch/arm64/kernel/debug-monitors.c b/arch/arm64/kernel/debug-monitors.c
-index 7310a4f7f993..fa76151de6ff 100644
---- a/arch/arm64/kernel/debug-monitors.c
-+++ b/arch/arm64/kernel/debug-monitors.c
-@@ -384,7 +384,7 @@ void __init debug_traps_init(void)
- 	hook_debug_fault_code(DBG_ESR_EVT_HWSS, single_step_handler, SIGTRAP,
- 			      TRAP_TRACE, "single-step handler");
- 	hook_debug_fault_code(DBG_ESR_EVT_BRK, brk_handler, SIGTRAP,
--			      TRAP_BRKPT, "ptrace BRK handler");
-+			      TRAP_BRKPT, "BRK handler");
- }
- 
- /* Re-enable single step for syscall restarting. */
-diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
-index 13ebd5ca2070..9f7fde99eda2 100644
---- a/arch/arm64/kernel/traps.c
-+++ b/arch/arm64/kernel/traps.c
-@@ -34,6 +34,7 @@
- #include <asm/daifflags.h>
- #include <asm/debug-monitors.h>
- #include <asm/esr.h>
-+#include <asm/extable.h>
- #include <asm/insn.h>
- #include <asm/kprobes.h>
- #include <asm/traps.h>
-@@ -994,6 +995,21 @@ static struct break_hook bug_break_hook = {
- 	.imm = BUG_BRK_IMM,
- };
- 
-+static int reserved_fault_handler(struct pt_regs *regs, unsigned int esr)
-+{
-+	pr_err("%s generated an invalid instruction at %pS!\n",
-+		in_bpf_jit(regs) ? "BPF JIT" : "Kernel runtime patching",
-+		instruction_pointer(regs));
-+
-+	/* We cannot handle this */
-+	return DBG_HOOK_ERROR;
-+}
-+
-+static struct break_hook fault_break_hook = {
-+	.fn = reserved_fault_handler,
-+	.imm = FAULT_BRK_IMM,
-+};
-+
- #ifdef CONFIG_KASAN_SW_TAGS
- 
- #define KASAN_ESR_RECOVER	0x20
-@@ -1059,6 +1075,7 @@ int __init early_brk64(unsigned long addr, unsigned int esr,
- void __init trap_init(void)
- {
- 	register_kernel_break_hook(&bug_break_hook);
-+	register_kernel_break_hook(&fault_break_hook);
- #ifdef CONFIG_KASAN_SW_TAGS
- 	register_kernel_break_hook(&kasan_break_hook);
- #endif
-diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
-index eee1732ab6cd..aa0060178343 100644
---- a/arch/arm64/mm/extable.c
-+++ b/arch/arm64/mm/extable.c
-@@ -14,9 +14,7 @@ int fixup_exception(struct pt_regs *regs)
- 	if (!fixup)
- 		return 0;
- 
--	if (IS_ENABLED(CONFIG_BPF_JIT) &&
--	    regs->pc >= BPF_JIT_REGION_START &&
--	    regs->pc < BPF_JIT_REGION_END)
-+	if (in_bpf_jit(regs))
- 		return arm64_bpf_fixup_exception(fixup, regs);
- 
- 	regs->pc = (unsigned long)&fixup->fixup + fixup->fixup;
+> 
+> > All the test_btf tests that were moved are modeled as proper sub-tests in
+> > test_progs framework for ease of debugging and reporting.
+> > 
+> > No functional or behavioral changes were intended, I tried to preserve
+> > original behavior as close to the original as possible. `test_progs -v` will
+> > activate "always_log" flag to emit BTF validation log.
+> > 
+> > Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+> > ---
+> > 
+> > v1->v2:
+> >  - pretty-print BTF tests were renamed test_btf -> test_btf_pprint, which
+> >    allowed GIT to detect that majority of  test_btf code was moved into
+> >    prog_tests/btf.c; so diff is much-much smaller;
+> 
+> Thanks. I hope with addition to pprint test the diff will be even smaller.
+> I think it's worth to investigate why they're failing if moved to test_progs.
+> I think they're the only tests that exercise seq_read logic.
+> Clearly the bug:
+> [   25.960993] WARNING: CPU: 2 PID: 1995 at kernel/bpf/hashtab.c:717 htab_map_get_next_key+0x7fc/0xab0
+> is still there.
+> If pprint tests were part of test_progs we would have caught that earlier.
+> 
+> Yonghong,
+> please take a look at that issue.
