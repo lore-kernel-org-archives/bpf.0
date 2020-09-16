@@ -2,134 +2,284 @@ Return-Path: <SRS0=xxat=CZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9EE0C433E2
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 22:32:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E08ECC43461
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 22:38:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7E6C120732
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 22:32:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A4CD12087D
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 22:38:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N8z0gb2l"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="jKuzcyRa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726608AbgIPWc5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Sep 2020 18:32:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51908 "EHLO
+        id S1726573AbgIPWh7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Sep 2020 18:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726397AbgIPWc4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Sep 2020 18:32:56 -0400
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2EF3C061797;
-        Wed, 16 Sep 2020 14:17:35 -0700 (PDT)
-Received: by mail-yb1-xb41.google.com with SMTP id x10so39125ybj.13;
-        Wed, 16 Sep 2020 14:17:35 -0700 (PDT)
+        with ESMTP id S1726513AbgIPWh6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Sep 2020 18:37:58 -0400
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89BCC061756
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2020 15:37:57 -0700 (PDT)
+Received: by mail-qt1-x849.google.com with SMTP id a26so7450065qtb.16
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2020 15:37:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=O9oURKzCK+SY2r7WF/hiBkZhA0HPPtP9OQSF2tHZCb4=;
-        b=N8z0gb2lxZPTenYaPje8kRJCFQ1YSG6WVnwU+NiJCuG/AsxP4na2Oj3Ic9QqnSv97k
-         AIS1gymLDWepQEHtRy2lG4MKS5ehWy7zU1jckAirXEnw2ys0RR9+aA8wrDJnlV4VvUl1
-         48rNjzLactFvBrlV8IHRz4zwk53P8aE3GprjqU2rLjiEGSkMtw3WSWO8KFBUqF+j8m/K
-         yKVd2ZvyplkCYJx82a1n2CjKVmNL89QZGTV33zjBVbb9ji5yhbtDGyIP73yc5GGBNgPn
-         LLUJBFt5UsocoOza/LCrxk+8Ga8s8SJoJ/IdPL/Iw4puLxz+gJ8OiTbVFJAI1VfPOCU9
-         yURw==
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=bOTgU+V9WHS2AttD7Gt4S3U4VytvOrvlnACqIIXTw50=;
+        b=jKuzcyRa6vcFj96g65YbrrE6wHzshTh1bTa8EqwSV5ky0BSpeysGGSuRm17xRGqIUb
+         MFcdJYncBnVXmBSE9FGXpb8kVASdXeNJzuc3imcg019oymrsH+vUwvu+/vPKymBNLpa7
+         oUTJSNNf5vOtrl4MR+PpmuFPVdHwb6Tf2HOOiXYE1NnD9bRi2WmvP4lWcxHYc1LewYjc
+         r6yIo44KlT2K7ctt2XAokjjFd4NdJv7icZKj7Zx274BUMYreAke/fHxwKtiRO83rprZ2
+         cmJ8ce4ePzbuGs0T1lw0LsplKtCMHHU7KpMXdHW388C65RFMxdblVNuxVs1oAGHOfMDM
+         +exg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=O9oURKzCK+SY2r7WF/hiBkZhA0HPPtP9OQSF2tHZCb4=;
-        b=gi64p3DdaBiiqHs727/r6+CJmzLb8e/vQB8XC1bfgAbJv8jjcqa02SoArBctPUhCqi
-         AS2bsYEDEhvcTcXoh3NoFAIXaXvRN5hnxWY5U3JO9hyJs3ElWciI2yfF400UgxnZhhbw
-         w8ZORPrEBZ7b1YbQ5Yc0B4s609dNVfLqVZSTk8FJWgkL6Bqr00X+v4BYAb24qLDloauZ
-         4genQn940DW1klYPtqg6kQyO8O4JD8fsmWeECgom5T4itImQlnt5xNUN6DpTE08+14Kf
-         jNKqGd+FMhh8qyjEB6SFRnXIhUR0aMiOgVUhf3xHx+C4tIVfd4HkXrMyXtakt6vF9kci
-         n4mg==
-X-Gm-Message-State: AOAM532qsq+cXyHribJFx2NHQNADoUuUrH6oSUFOyf3YY1n1pzhNu6ch
-        ylssmB92oJUOX3G5Evg1bam3oVUH/V5JSwu01sw=
-X-Google-Smtp-Source: ABdhPJz1NjlJNRKOu1OYGq4Uv2XMSa8M0PRGL+zygN6VI3zWo1ZU44vViaK3MXBgC1ju+Z3FSHu5ffUipZgvQyxPDus=
-X-Received: by 2002:a25:d70e:: with SMTP id o14mr28397822ybg.425.1600291054948;
- Wed, 16 Sep 2020 14:17:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <160017005691.98230.13648200635390228683.stgit@toke.dk>
- <160017006133.98230.8867570651560085505.stgit@toke.dk> <CAEf4BzYP6MpVEqJ1TVW6rcfqJjkBi9x9U9F8MZPQdGMmoaUX_A@mail.gmail.com>
- <87r1r1pgr5.fsf@toke.dk>
-In-Reply-To: <87r1r1pgr5.fsf@toke.dk>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 16 Sep 2020 14:17:23 -0700
-Message-ID: <CAEf4BzY+nMbye8wkQjiUra7wHtWZ14aWO5kNwkQFQaj=6-qp9w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 4/8] bpf: support attaching freplace programs
- to multiple attach points
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=bOTgU+V9WHS2AttD7Gt4S3U4VytvOrvlnACqIIXTw50=;
+        b=rzNz6nNgY/LH2f+PwgY45VvEi1CLpXkXR55vUvrmvNhkDqglmhHUAu0W9vn8mcZAbX
+         8ul5fYd4GzjKLgc+87wA6zLg+EoZZJpGsJCyFVc0ob4cGJLchSNt/t2AVgJNZTSiNbym
+         t0pq4OQMZKcKCAQQH89Zptee3wbmskF9zotyo57tIpBbUE7eBGqnRzKwDp/FbuA2YKSn
+         Q9+9slpG3EJp5o8UPsD7GlmNAYNtpHnJbt5GaGO96vmHRkv7Hz73CkVs8s6I+EOKDBzd
+         Xnv4xVhZ/1bEwvOXMKuxvXusKrSvfp2YupScOQctTkHgPp1GKtpOcrA7SuubRgC/Oy1a
+         1qnA==
+X-Gm-Message-State: AOAM530AMoFiH6iN9SoLzXUrQW3+Lqcad4HyzJje9OUlc1GRdKy/9OtX
+        A17oN+ZWtzAO41C9PAoACNNO2MWFEuc=
+X-Google-Smtp-Source: ABdhPJwcYM17a7lB7/GdFv0ATwXTwx6ATzs++Vy3wAEUdl971cBHAs2GhWFSdZ8C+yz5NRM7d4d+qpXywUw=
+X-Received: from haoluo.svl.corp.google.com ([2620:15c:2cd:202:f693:9fff:fef4:e444])
+ (user=haoluo job=sendgmr) by 2002:ad4:5743:: with SMTP id q3mr25282261qvx.6.1600295877122;
+ Wed, 16 Sep 2020 15:37:57 -0700 (PDT)
+Date:   Wed, 16 Sep 2020 15:35:08 -0700
+In-Reply-To: <20200916223512.2885524-1-haoluo@google.com>
+Message-Id: <20200916223512.2885524-3-haoluo@google.com>
+Mime-Version: 1.0
+References: <20200916223512.2885524-1-haoluo@google.com>
+X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
+Subject: [PATCH bpf-next v3 2/6] bpf/libbpf: BTF support for typed ksyms
+From:   Hao Luo <haoluo@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
         KP Singh <kpsingh@chromium.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+        Quentin Monnet <quentin@isovalent.com>,
+        Hao Luo <haoluo@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 2:13 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
-at.com> wrote:
->
->
-> [ will fix all your comments above ]
->
-> >> @@ -3924,10 +3983,16 @@ static int tracing_bpf_link_attach(const union=
- bpf_attr *attr, struct bpf_prog *
-> >>             prog->expected_attach_type =3D=3D BPF_TRACE_ITER)
-> >>                 return bpf_iter_link_attach(attr, prog);
-> >>
-> >> +       if (attr->link_create.attach_type =3D=3D BPF_TRACE_FREPLACE &&
-> >> +           !prog->expected_attach_type)
-> >> +               return bpf_tracing_prog_attach(prog,
-> >> +                                              attr->link_create.targe=
-t_fd,
-> >> +                                              attr->link_create.targe=
-t_btf_id);
-> >
-> > Hm.. so you added a "fake" BPF_TRACE_FREPLACE attach_type, which is
-> > not really set with BPF_PROG_TYPE_EXT and is only specified for the
-> > LINK_CREATE command. Are you just trying to satisfy the link_create
-> > flow of going from attach_type to program type? If that's the only
-> > reason, I think we can adjust link_create code to handle this more
-> > flexibly.
-> >
-> > I need to think a bit more whether we want BPF_TRACE_FREPLACE at all,
-> > but if we do, whether we should make it an expected_attach_type for
-> > BPF_PROG_TYPE_EXT then...
->
-> Yeah, wasn't too sure about this. But attach_type seemed to be the only
-> way to disambiguate between the different link types in the LINK_CREATE
-> command, so went with that. Didn't think too much about it, TBH :)
+If a ksym is defined with a type, libbpf will try to find the ksym's btf
+information from kernel btf. If a valid btf entry for the ksym is found,
+libbpf can pass in the found btf id to the verifier, which validates the
+ksym's type and value.
 
-having extra attach types has real costs in terms of memory (in cgroup
-land), which no one ever got to fixing yet. And then
-prog->expected_attach_type !=3D link's expected_attach_type looks weird
-and wrong and who knows which bugs we'll get later because of this.
+Typeless ksyms (i.e. those defined as 'void') will not have such btf_id,
+but it has the symbol's address (read from kallsyms) and its value is
+treated as a raw pointer.
 
->
-> I guess an alternative could be to just enforce attach_type=3D=3D0 and lo=
-ok
-> at prog->type? Or if you have any other ideas, I'm all ears!
+Signed-off-by: Hao Luo <haoluo@google.com>
+---
+ tools/lib/bpf/libbpf.c | 112 ++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 99 insertions(+), 13 deletions(-)
 
-Right, we have prog fd, so can get it (regardless of type), then do
-switch by type, then translate expected attach type to prog type and
-see if it matches, but only for program types that care (which right
-now is all but tracing, where it's obvious from prog_type alone, I
-think).
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 570235dbc922..cbde716c278b 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -390,6 +390,12 @@ struct extern_desc {
+ 		} kcfg;
+ 		struct {
+ 			unsigned long long addr;
++
++			/* target btf_id of the corresponding kernel var. */
++			int vmlinux_btf_id;
++
++			/* local btf_id of the ksym extern's type. */
++			__u32 type_id;
+ 		} ksym;
+ 	};
+ };
+@@ -2522,12 +2528,23 @@ static int bpf_object__load_vmlinux_btf(struct bpf_object *obj)
+ {
+ 	bool need_vmlinux_btf = false;
+ 	struct bpf_program *prog;
+-	int err;
++	int i, err;
+ 
+ 	/* CO-RE relocations need kernel BTF */
+ 	if (obj->btf_ext && obj->btf_ext->core_relo_info.len)
+ 		need_vmlinux_btf = true;
+ 
++	/* Support for typed ksyms needs kernel BTF */
++	for (i = 0; i < obj->nr_extern; i++) {
++		const struct extern_desc *ext;
++
++		ext = &obj->externs[i];
++		if (ext->type == EXT_KSYM && ext->ksym.type_id) {
++			need_vmlinux_btf = true;
++			break;
++		}
++	}
++
+ 	bpf_object__for_each_program(prog, obj) {
+ 		if (!prog->load)
+ 			continue;
+@@ -3156,16 +3173,10 @@ static int bpf_object__collect_externs(struct bpf_object *obj)
+ 				return -ENOTSUP;
+ 			}
+ 		} else if (strcmp(sec_name, KSYMS_SEC) == 0) {
+-			const struct btf_type *vt;
+-
+ 			ksym_sec = sec;
+ 			ext->type = EXT_KSYM;
+-
+-			vt = skip_mods_and_typedefs(obj->btf, t->type, NULL);
+-			if (!btf_is_void(vt)) {
+-				pr_warn("extern (ksym) '%s' is not typeless (void)\n", ext_name);
+-				return -ENOTSUP;
+-			}
++			skip_mods_and_typedefs(obj->btf, t->type,
++					       &ext->ksym.type_id);
+ 		} else {
+ 			pr_warn("unrecognized extern section '%s'\n", sec_name);
+ 			return -ENOTSUP;
+@@ -5800,8 +5811,13 @@ bpf_object__relocate_data(struct bpf_object *obj, struct bpf_program *prog)
+ 				insn[0].imm = obj->maps[obj->kconfig_map_idx].fd;
+ 				insn[1].imm = ext->kcfg.data_off;
+ 			} else /* EXT_KSYM */ {
+-				insn[0].imm = (__u32)ext->ksym.addr;
+-				insn[1].imm = ext->ksym.addr >> 32;
++				if (ext->ksym.type_id) { /* typed ksyms */
++					insn[0].src_reg = BPF_PSEUDO_BTF_ID;
++					insn[0].imm = ext->ksym.vmlinux_btf_id;
++				} else { /* typeless ksyms */
++					insn[0].imm = (__u32)ext->ksym.addr;
++					insn[1].imm = ext->ksym.addr >> 32;
++				}
+ 			}
+ 			relo->processed = true;
+ 			break;
+@@ -6933,10 +6949,72 @@ static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
+ 	return err;
+ }
+ 
++static int bpf_object__resolve_ksyms_btf_id(struct bpf_object *obj)
++{
++	struct extern_desc *ext;
++	int i, id;
++
++	for (i = 0; i < obj->nr_extern; i++) {
++		const struct btf_type *targ_var, *targ_type;
++		__u32 targ_type_id, local_type_id;
++		const char *targ_var_name;
++		int ret;
++
++		ext = &obj->externs[i];
++		if (ext->type != EXT_KSYM || !ext->ksym.type_id)
++			continue;
++
++		id = btf__find_by_name_kind(obj->btf_vmlinux, ext->name,
++					    BTF_KIND_VAR);
++		if (id <= 0) {
++			pr_warn("extern (ksym) '%s': failed to find BTF ID in vmlinux BTF.\n",
++				ext->name);
++			return -ESRCH;
++		}
++
++		/* find local type_id */
++		local_type_id = ext->ksym.type_id;
++
++		/* find target type_id */
++		targ_var = btf__type_by_id(obj->btf_vmlinux, id);
++		targ_var_name = btf__name_by_offset(obj->btf_vmlinux,
++						    targ_var->name_off);
++		targ_type = skip_mods_and_typedefs(obj->btf_vmlinux,
++						   targ_var->type,
++						   &targ_type_id);
++
++		ret = bpf_core_types_are_compat(obj->btf, local_type_id,
++						obj->btf_vmlinux, targ_type_id);
++		if (ret <= 0) {
++			const struct btf_type *local_type;
++			const char *targ_name, *local_name;
++
++			local_type = btf__type_by_id(obj->btf, local_type_id);
++			local_name = btf__name_by_offset(obj->btf,
++							 local_type->name_off);
++			targ_name = btf__name_by_offset(obj->btf_vmlinux,
++							targ_type->name_off);
++
++			pr_warn("extern (ksym) '%s': incompatible types, expected [%d] %s %s, but kernel has [%d] %s %s\n",
++				ext->name, local_type_id,
++				btf_kind_str(local_type), local_name, targ_type_id,
++				btf_kind_str(targ_type), targ_name);
++			return -EINVAL;
++		}
++
++		ext->is_set = true;
++		ext->ksym.vmlinux_btf_id = id;
++		pr_debug("extern (ksym) '%s': resolved to [%d] %s %s\n",
++			 ext->name, id, btf_kind_str(targ_var), targ_var_name);
++	}
++	return 0;
++}
++
+ static int bpf_object__resolve_externs(struct bpf_object *obj,
+ 				       const char *extra_kconfig)
+ {
+ 	bool need_config = false, need_kallsyms = false;
++	bool need_vmlinux_btf = false;
+ 	struct extern_desc *ext;
+ 	void *kcfg_data = NULL;
+ 	int err, i;
+@@ -6967,7 +7045,10 @@ static int bpf_object__resolve_externs(struct bpf_object *obj,
+ 			   strncmp(ext->name, "CONFIG_", 7) == 0) {
+ 			need_config = true;
+ 		} else if (ext->type == EXT_KSYM) {
+-			need_kallsyms = true;
++			if (ext->ksym.type_id)
++				need_vmlinux_btf = true;
++			else
++				need_kallsyms = true;
+ 		} else {
+ 			pr_warn("unrecognized extern '%s'\n", ext->name);
+ 			return -EINVAL;
+@@ -6996,6 +7077,11 @@ static int bpf_object__resolve_externs(struct bpf_object *obj,
+ 		if (err)
+ 			return -EINVAL;
+ 	}
++	if (need_vmlinux_btf) {
++		err = bpf_object__resolve_ksyms_btf_id(obj);
++		if (err)
++			return -EINVAL;
++	}
+ 	for (i = 0; i < obj->nr_extern; i++) {
+ 		ext = &obj->externs[i];
+ 
+@@ -7028,10 +7114,10 @@ int bpf_object__load_xattr(struct bpf_object_load_attr *attr)
+ 	}
+ 
+ 	err = bpf_object__probe_loading(obj);
++	err = err ? : bpf_object__load_vmlinux_btf(obj);
+ 	err = err ? : bpf_object__resolve_externs(obj, obj->kconfig);
+ 	err = err ? : bpf_object__sanitize_and_load_btf(obj);
+ 	err = err ? : bpf_object__sanitize_maps(obj);
+-	err = err ? : bpf_object__load_vmlinux_btf(obj);
+ 	err = err ? : bpf_object__init_kern_struct_ops_maps(obj);
+ 	err = err ? : bpf_object__create_maps(obj);
+ 	err = err ? : bpf_object__relocate(obj, attr->target_btf_path);
+-- 
+2.28.0.618.gf4bc123cb7-goog
 
->
-> -Toke
->
