@@ -1,294 +1,123 @@
-Return-Path: <SRS0=lXxl=CY=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=xxat=CZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D309C43461
-	for <bpf@archiver.kernel.org>; Tue, 15 Sep 2020 23:47:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D9F1C433E2
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 00:13:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4C7EB20809
-	for <bpf@archiver.kernel.org>; Tue, 15 Sep 2020 23:47:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CC00D20756
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 00:13:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="X1Ocorry"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RM4StYvI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727239AbgIOXrP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Sep 2020 19:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36582 "EHLO
+        id S1727023AbgIPANd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Sep 2020 20:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727406AbgIOXpt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Sep 2020 19:45:49 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B32A1C06178A
-        for <bpf@vger.kernel.org>; Tue, 15 Sep 2020 16:45:47 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id g18so2785313pgl.10
-        for <bpf@vger.kernel.org>; Tue, 15 Sep 2020 16:45:47 -0700 (PDT)
+        with ESMTP id S1727474AbgIPANO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Sep 2020 20:13:14 -0400
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E330EC06174A
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2020 17:13:12 -0700 (PDT)
+Received: by mail-io1-xd44.google.com with SMTP id m17so6278733ioo.1
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2020 17:13:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=5htW8/NrtaQSQKGByFCDzoFMBOFZd2oqLmR2u1zJJd8=;
-        b=X1Ocorryaqi/XfcpE4ADPOAchB4X+en3T3tv63Bkf3upMZbFYOruxHfOQPKEKg3GWp
-         5l7bvuYeRLC4Jd4SJsMVjlVv/s4B7XehciLdqTwVEYKYMG85/iqBor9WngO2lXEv5SIW
-         1KRNiRv42RTKmEBcgegerqwKd/npo6BuVEG9RiqiwYEShotV1P7l/e5C/nWRbwkYp6qx
-         I5geRPeWqJWaTMPseMnLLsBMXzCLdlmH9RtluD+I7wFBp5WrblFBPRw0QoPiMxTFj2E1
-         IYBZa/yM/LiaW/0uGPl95XEPMWnGSRfMw/Yq7sOi5t7DhZ00DSV5Owmlf9BjO8x9Yo+f
-         RDnA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=K16SS9rcPXwS/KBnQsaiiaLjK9KWOSN5Uw5UgElGEE4=;
+        b=RM4StYvI2cYuO7L8XUXzRU2wmAiwjmtIjwTmr4k19e++1WqPgmUjascPUP0w4VqkrH
+         tViLRoFMbM6+6SjFyPBJN5ij2KEkqAozyPfPN3Jw4GDzCv/8UvK7gSdDYjA2MdrZmzBX
+         OCV34G5VlHwCVy039uJ9r9l84x6tIXTZGNF7zUAHQeBzlWUeL6wxOq0GnKqblY3pHhsW
+         pdwvatPLB1QmHqvXmCdvc3ihgomB8cLhlvPzr+HtMGQqRxgVBBIShClFlSnVWsAg1Qsn
+         vcgyKbKpienH/klJNOy/KzryUVTkynSi8pTvQS0mhy3I3QlkyhzFDRYvhozjWuhzqtA1
+         u5eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=5htW8/NrtaQSQKGByFCDzoFMBOFZd2oqLmR2u1zJJd8=;
-        b=cNci2p2FS0NG0oKnbrx37k1P1Fc2rQ4MZF+nbCN8NVaIC6OImLwFPJUodUtCuFciY1
-         xNzfQ8K2UyD1EERLPOYR/KavWm5XWO3kXBmJFFMLWPJVhIF0sXPajeO1QV81gLDWgxfK
-         lOEhLdfCYbvzwNe2ZbLcUdQEbfNQSdR3UJdAL08+HonYNmkVpCEqaeXPdJSXQXTU66FS
-         /78ksIL0+xZwbGQz+2hbmXdM9ncc4gtXBySjNul3eM2CRjM9Dckl+3c9gLHXiC0uu89+
-         suz3x0OnyyoiiWTbFeLR1hjE83g3H/49lqtsFHijRfeB3EtGyPP+drVVd8AGEfw6aUOI
-         +8vQ==
-X-Gm-Message-State: AOAM531J5ZJLRsCA//LCKPIxf878NXt7lcxM290+uJ3Vwk7YiBvOwZfG
-        UWATV7zSvf6Ld2e3LoWIKM/Wt5I=
-X-Google-Smtp-Source: ABdhPJxUvnar8hLV3TeEXMyUisJd3xJZPcsabG8U1oJlipSKrVYarZcnTHdAsdobsNvDHbLbXnvA9u0=
-X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:1:7220:84ff:fe09:7732])
- (user=sdf job=sendgmr) by 2002:a17:90a:d485:: with SMTP id
- s5mr1483270pju.193.1600213546819; Tue, 15 Sep 2020 16:45:46 -0700 (PDT)
-Date:   Tue, 15 Sep 2020 16:45:39 -0700
-In-Reply-To: <20200915234543.3220146-1-sdf@google.com>
-Message-Id: <20200915234543.3220146-2-sdf@google.com>
-Mime-Version: 1.0
-References: <20200915234543.3220146-1-sdf@google.com>
-X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
-Subject: [PATCH bpf-next v6 1/5] bpf: Mutex protect used_maps array and count
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     davem@davemloft.net, ast@kernel.org, daniel@iogearbox.net,
-        Andrii Nakryiko <andriin@fb.com>,
-        YiFei Zhu <zhuyifei1999@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=K16SS9rcPXwS/KBnQsaiiaLjK9KWOSN5Uw5UgElGEE4=;
+        b=b0D3WyFaNlLWOPNPOvi1x1INKFidZ4ef70X2HNvre6D3c60baQKFdkjl1Fmq4UdCM/
+         e5EN7ck97kzxj6fkviq9vtJOy8MfzWv698sYImoY2fHL087eFb8zXr7ElT0qf9bgPRzM
+         P2nGL+mFlgD6J7UBdjlUavxTXb91cGYB924bmV99HjjMMsUhaetEPGXnWXFK5hrK4aUV
+         qWYEGQOpSJzp8KSRQcFGpDg3cl5Ddz/5aOpY70h/1X7Z7Jf2v6rgWlghB3JpymPvEDv3
+         8l9rYz6mmmRwXqWueYzD+fhRGhHK+GJifejAPTK3BQkhfvqina8mK7YYUE15JCFlu1mk
+         r63A==
+X-Gm-Message-State: AOAM532okeBvpWfi3S4GNcbcMxXUFUlIzg+rTCpeXiUW1eZ9ljG2N/nA
+        b10zVfA2EfZCJ6pY6t8lnTvgsJpxaehWvjHISbWdyA==
+X-Google-Smtp-Source: ABdhPJxcld7S0TfU57/c6MV0BtBBz450m+30655BTDKoD3NWCBexpyEM41tdzU3AAqi6oxmUEvqY1BD/vBbXmZmmVm8=
+X-Received: by 2002:a05:6638:144:: with SMTP id y4mr19842940jao.61.1600215192042;
+ Tue, 15 Sep 2020 17:13:12 -0700 (PDT)
+MIME-Version: 1.0
+References: <159921182827.1260200.9699352760916903781.stgit@firesoul>
+ <20200904163947.20839d7e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20200907160757.1f249256@carbon> <CANP3RGfjUOoVH152VHLXL3y7mBsF+sUCqEZgGAMdeb9_r_Z-Bw@mail.gmail.com>
+ <20200914160538.2bd51893@carbon> <CANP3RGftg2-_tBc=hGGzxjGZUq9b1amb=TiKRVHSBEyXq-A5QA@mail.gmail.com>
+ <87ft7jzas7.fsf@toke.dk>
+In-Reply-To: <87ft7jzas7.fsf@toke.dk>
+From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Date:   Tue, 15 Sep 2020 17:12:59 -0700
+Message-ID: <CANP3RGf581mZKE2Eky-bY6swU6TAFv1vzxxZ24SQ+yB9TGAD8w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: don't check against device MTU in __bpf_skb_max_len
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Linux NetDev <netdev@vger.kernel.org>,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: YiFei Zhu <zhuyifei@google.com>
+On Tue, Sep 15, 2020 at 1:47 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
+at.com> wrote:
+>
+> [ just jumping in to answer this bit: ]
+>
+> > Would you happen to know what ebpf startup overhead is?
+> > How big a problem is having two (or more) back to back tc programs
+> > instead of one?
+>
+> With a jit'ed BPF program and the in-kernel dispatcher code (which
+> avoids indirect calls), it's quite close to a native function call.
 
-To support modifying the used_maps array, we use a mutex to protect
-the use of the counter and the array. The mutex is initialized right
-after the prog aux is allocated, and destroyed right before prog
-aux is freed. This way we guarantee it's initialized for both cBPF
-and eBPF.
+Hmm, I know we have (had? they're upstream now I think) some CFI vs
+BPF interaction issues.
+We needed to mark the BPF call into JIT'ed code as CFI exempt.
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Cc: YiFei Zhu <zhuyifei1999@gmail.com>
-Signed-off-by: YiFei Zhu <zhuyifei@google.com>
-Signed-off-by: Stanislav Fomichev <sdf@google.com>
----
- .../net/ethernet/netronome/nfp/bpf/offload.c   | 18 ++++++++++++------
- include/linux/bpf.h                            |  1 +
- kernel/bpf/core.c                              | 15 +++++++++++----
- kernel/bpf/syscall.c                           | 16 ++++++++++++----
- net/core/dev.c                                 | 11 ++++++++---
- 5 files changed, 44 insertions(+), 17 deletions(-)
+CFI is Code Flow Integrity and is some compiler magic, to quote wikipedia:
+Google has shipped Android with the Linux kernel compiled by Clang
+with link-time optimization (LTO) and CFI since 2018.[12]
+I don't know much more about it.
 
-diff --git a/drivers/net/ethernet/netronome/nfp/bpf/offload.c b/drivers/net/ethernet/netronome/nfp/bpf/offload.c
-index ac02369174a9..53851853562c 100644
---- a/drivers/net/ethernet/netronome/nfp/bpf/offload.c
-+++ b/drivers/net/ethernet/netronome/nfp/bpf/offload.c
-@@ -111,7 +111,9 @@ static int
- nfp_map_ptrs_record(struct nfp_app_bpf *bpf, struct nfp_prog *nfp_prog,
- 		    struct bpf_prog *prog)
- {
--	int i, cnt, err;
-+	int i, cnt, err = 0;
-+
-+	mutex_lock(&prog->aux->used_maps_mutex);
- 
- 	/* Quickly count the maps we will have to remember */
- 	cnt = 0;
-@@ -119,13 +121,15 @@ nfp_map_ptrs_record(struct nfp_app_bpf *bpf, struct nfp_prog *nfp_prog,
- 		if (bpf_map_offload_neutral(prog->aux->used_maps[i]))
- 			cnt++;
- 	if (!cnt)
--		return 0;
-+		goto out;
- 
- 	nfp_prog->map_records = kmalloc_array(cnt,
- 					      sizeof(nfp_prog->map_records[0]),
- 					      GFP_KERNEL);
--	if (!nfp_prog->map_records)
--		return -ENOMEM;
-+	if (!nfp_prog->map_records) {
-+		err = -ENOMEM;
-+		goto out;
-+	}
- 
- 	for (i = 0; i < prog->aux->used_map_cnt; i++)
- 		if (bpf_map_offload_neutral(prog->aux->used_maps[i])) {
-@@ -133,12 +137,14 @@ nfp_map_ptrs_record(struct nfp_app_bpf *bpf, struct nfp_prog *nfp_prog,
- 						 prog->aux->used_maps[i]);
- 			if (err) {
- 				nfp_map_ptrs_forget(bpf, nfp_prog);
--				return err;
-+				goto out;
- 			}
- 		}
- 	WARN_ON(cnt != nfp_prog->map_records_cnt);
- 
--	return 0;
-+out:
-+	mutex_unlock(&prog->aux->used_maps_mutex);
-+	return err;
- }
- 
- static int
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c6d9f2c444f4..5dcce0364634 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -751,6 +751,7 @@ struct bpf_prog_aux {
- 	struct bpf_ksym ksym;
- 	const struct bpf_prog_ops *ops;
- 	struct bpf_map **used_maps;
-+	struct mutex used_maps_mutex; /* mutex for used_maps and used_map_cnt */
- 	struct bpf_prog *prog;
- 	struct user_struct *user;
- 	u64 load_time; /* ns since boottime */
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index ed0b3578867c..2a20c2833996 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -98,6 +98,7 @@ struct bpf_prog *bpf_prog_alloc_no_stats(unsigned int size, gfp_t gfp_extra_flag
- 	fp->jit_requested = ebpf_jit_enabled();
- 
- 	INIT_LIST_HEAD_RCU(&fp->aux->ksym.lnode);
-+	mutex_init(&fp->aux->used_maps_mutex);
- 
- 	return fp;
- }
-@@ -253,6 +254,7 @@ struct bpf_prog *bpf_prog_realloc(struct bpf_prog *fp_old, unsigned int size,
- void __bpf_prog_free(struct bpf_prog *fp)
- {
- 	if (fp->aux) {
-+		mutex_destroy(&fp->aux->used_maps_mutex);
- 		free_percpu(fp->aux->stats);
- 		kfree(fp->aux->poke_tab);
- 		kfree(fp->aux);
-@@ -1747,8 +1749,9 @@ bool bpf_prog_array_compatible(struct bpf_array *array,
- static int bpf_check_tail_call(const struct bpf_prog *fp)
- {
- 	struct bpf_prog_aux *aux = fp->aux;
--	int i;
-+	int i, ret = 0;
- 
-+	mutex_lock(&aux->used_maps_mutex);
- 	for (i = 0; i < aux->used_map_cnt; i++) {
- 		struct bpf_map *map = aux->used_maps[i];
- 		struct bpf_array *array;
-@@ -1757,11 +1760,15 @@ static int bpf_check_tail_call(const struct bpf_prog *fp)
- 			continue;
- 
- 		array = container_of(map, struct bpf_array, map);
--		if (!bpf_prog_array_compatible(array, fp))
--			return -EINVAL;
-+		if (!bpf_prog_array_compatible(array, fp)) {
-+			ret = -EINVAL;
-+			goto out;
-+		}
- 	}
- 
--	return 0;
-+out:
-+	mutex_unlock(&aux->used_maps_mutex);
-+	return ret;
- }
- 
- static void bpf_prog_select_func(struct bpf_prog *fp)
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 4108ef3b828b..a67b8c6746be 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3162,21 +3162,25 @@ static const struct bpf_map *bpf_map_from_imm(const struct bpf_prog *prog,
- 	const struct bpf_map *map;
- 	int i;
- 
-+	mutex_lock(&prog->aux->used_maps_mutex);
- 	for (i = 0, *off = 0; i < prog->aux->used_map_cnt; i++) {
- 		map = prog->aux->used_maps[i];
- 		if (map == (void *)addr) {
- 			*type = BPF_PSEUDO_MAP_FD;
--			return map;
-+			goto out;
- 		}
- 		if (!map->ops->map_direct_value_meta)
- 			continue;
- 		if (!map->ops->map_direct_value_meta(map, addr, off)) {
- 			*type = BPF_PSEUDO_MAP_VALUE;
--			return map;
-+			goto out;
- 		}
- 	}
-+	map = NULL;
- 
--	return NULL;
-+out:
-+	mutex_unlock(&prog->aux->used_maps_mutex);
-+	return map;
- }
- 
- static struct bpf_insn *bpf_insn_prepare_dump(const struct bpf_prog *prog,
-@@ -3294,6 +3298,7 @@ static int bpf_prog_get_info_by_fd(struct file *file,
- 	memcpy(info.tag, prog->tag, sizeof(prog->tag));
- 	memcpy(info.name, prog->aux->name, sizeof(prog->aux->name));
- 
-+	mutex_lock(&prog->aux->used_maps_mutex);
- 	ulen = info.nr_map_ids;
- 	info.nr_map_ids = prog->aux->used_map_cnt;
- 	ulen = min_t(u32, info.nr_map_ids, ulen);
-@@ -3303,9 +3308,12 @@ static int bpf_prog_get_info_by_fd(struct file *file,
- 
- 		for (i = 0; i < ulen; i++)
- 			if (put_user(prog->aux->used_maps[i]->id,
--				     &user_map_ids[i]))
-+				     &user_map_ids[i])) {
-+				mutex_unlock(&prog->aux->used_maps_mutex);
- 				return -EFAULT;
-+			}
- 	}
-+	mutex_unlock(&prog->aux->used_maps_mutex);
- 
- 	err = set_info_rec_size(&info);
- 	if (err)
-diff --git a/net/core/dev.c b/net/core/dev.c
-index d42c9ea0c3c0..75d7f91337d9 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -5441,15 +5441,20 @@ static int generic_xdp_install(struct net_device *dev, struct netdev_bpf *xdp)
- 	if (new) {
- 		u32 i;
- 
-+		mutex_lock(&new->aux->used_maps_mutex);
-+
- 		/* generic XDP does not work with DEVMAPs that can
- 		 * have a bpf_prog installed on an entry
- 		 */
- 		for (i = 0; i < new->aux->used_map_cnt; i++) {
--			if (dev_map_can_have_prog(new->aux->used_maps[i]))
--				return -EINVAL;
--			if (cpu_map_prog_allowed(new->aux->used_maps[i]))
-+			if (dev_map_can_have_prog(new->aux->used_maps[i]) ||
-+			    cpu_map_prog_allowed(new->aux->used_maps[i])) {
-+				mutex_unlock(&new->aux->used_maps_mutex);
- 				return -EINVAL;
-+			}
- 		}
-+
-+		mutex_unlock(&new->aux->used_maps_mutex);
- 	}
- 
- 	switch (xdp->command) {
--- 
-2.28.0.618.gf4bc123cb7-goog
+But we do BPF_JIT_ALWAYS_ON on 64-bit kernels, so it sounds like we
+might be good.
 
+> > We're running into both verifier performance scaling problems and code
+> > ownership issues with large programs...
+> >
+> > [btw. I understand for XDP we could only use 1 program anyway...]
+>
+> Working on that! See my talk at LPC:
+> https://linuxplumbersconf.org/event/7/contributions/671/
+
+Yes, I'm aware and excited about it!
+
+Unfortunately, Android S will only support 4.19, 5.4 and 5.10 for
+newly launched devices (and 4.9/4.14 for upgrades).
+(5.10 here means 'whatever is the next 5.x LTS', but that's most likely 5.1=
+0)
+I don't (yet) even have real phone hardware running 5.4, and 5.10
+within the next year is even more of a stretch.
+
+> Will post a follow-up to the list once the freplace multi-attach series
+> lands.
