@@ -2,161 +2,164 @@ Return-Path: <SRS0=dFgW=C2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03C99C433E2
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 13:00:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5ABAEC43461
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 13:00:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A51382075B
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 13:00:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 097F7206CA
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 13:00:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="te7dc7xb"
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="ad65BC6e"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727032AbgIQNAB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Sep 2020 09:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727127AbgIQMzJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Sep 2020 08:55:09 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C7FC06174A
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 05:55:03 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id r9so2059497ioa.2
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 05:55:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=zU1hG5tz1ucML96oj+7bEtqktjHV+/zxCb6i+SkaiGw=;
-        b=te7dc7xblHPDaP1pxrcBg78Q4qmJ0F2BQULVivczWzaSSUA6T1CVRNe5NyFDxdbfmg
-         N2WLdE425ld5SxaN0ZmBHBpMS5+cFBM3uoNk+fH0iCHeYn9WvhWuELF+YXbeBQ8lbvq+
-         YS1pCvRfM/RmLu+C9+CToww92ajd9/v2lj2YC6wcN/k6NlcsQraynJfykS0x+SR9eqYx
-         bgEg4BOTzqZ76ynKwUxaE24N1vWJYWu6ZbbatcTvgMExFKTjeKeDp844xvDr0ZEZ+EGq
-         5j2yAC5RFXttIPs+Ce8MBlhqjcwRhfZm0auSDGItTysz8NuQvlwKOrjoryucXmgFb1+W
-         w/5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zU1hG5tz1ucML96oj+7bEtqktjHV+/zxCb6i+SkaiGw=;
-        b=juZGSwHv999gUw1NE//lfEoVucdJFy2yfnSg6aDMS3NxJfSa7nPPJKUu7oQz6ULRR3
-         Kdy1qJmG5Nap5EFUYCxMPt0eARV8D7zjSejpTS71VyVKXaAhY8z6kpynBkXycT2/KflB
-         FqguKePikcdnvAqHImUe8QfivNlaCojI9oWOvI9A4sGGBCqZSVkOj7yzTH4GJd4LQl5Z
-         GU6pr8Fh0A4Wr1koMj7dHcsR8LqZoNrLGB0JvpWuFwWeKf0O8z/eXm1cSb2o6+bJkvte
-         KGY1gTOzRTwMmJNDV/c8U0GM5rXcDSNyCNjeC5W1okgUufUzWVgiuB6e65ppjHLSJJ4g
-         sN5w==
-X-Gm-Message-State: AOAM532r41kJ/lY2WFX19UT+XoMPfTDnnowOK2zmFUxyekXe5vjnVrk4
-        t6WRWSTy1eeu+fXnrdxoyndCe+QIUZjzO+rZAw6WDQ==
-X-Google-Smtp-Source: ABdhPJzsHcaDG0KP61yES0GHXoCWmYl8WUU4P/LvEYxDXd1QNesbXIJ1VDldNg9545XpwWkgaZkstgnba4QpB5/rM4c=
-X-Received: by 2002:a6b:b787:: with SMTP id h129mr23168970iof.202.1600347301893;
- Thu, 17 Sep 2020 05:55:01 -0700 (PDT)
+        id S1726948AbgIQNAN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Sep 2020 09:00:13 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:30074 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727047AbgIQMw6 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 17 Sep 2020 08:52:58 -0400
+X-Greylist: delayed 2272 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 08:52:54 EDT
+Received: from pps.filterd (m0042983.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08HCB4gd026086;
+        Thu, 17 Sep 2020 05:14:44 -0700
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-00082601.pphosted.com with ESMTP id 33k5pejmh1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Sep 2020 05:14:44 -0700
+Received: from pps.reinject (m0042983.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08HCE9Cs010240;
+        Thu, 17 Sep 2020 05:14:43 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 33k5p850ys-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 16 Sep 2020 10:56:12 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.173) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 16 Sep 2020 10:56:06 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kl5hYFcGYkXq5qLWgfbmpEZqAQsOdmdYjgFoTXlKZQtHzGLEQIazraZh9Uitcu2ls4n/HPK2xtaRCiDl6YkjXJgBzHdjg+KjvXaBP4wV655RVhsjHSX7tuVa4eLOk2/7m2msOFJ9OK714Nf34xCFt2Qt2GKdsfBrmtax17XrUsd04+Dz+qLickwRdA7IQe2c7lohd3t458sSmFWpltN1nZer2UJleKU6CyjAmeLY7hIulFdNdX3Fq8Tk4PAkT6pF3ct1oiBaQgeF+/25+Rjm5szy7dQqeIiDo9/19AdZH+nFNBKMlWPD/D+OM+a6A/xh+PCl36+vWsP63/l58X/2OQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kQf1yIQ5ic9r7G2x0AuPh4/fLuzBqcQM4p7AR5kYVtI=;
+ b=PoeaKVRQ7QJhlpakWbYNEIMADjc5hUayzJy0eqpeiNhYmR+7X7ZB9khUmD6kheJ4ZV9JltUct9w20bjta/fPJA1Cj3XcOVLjJ6Yci2WpDVBKI6EYPyQ2vBqoKWD8z3L3DXwO08ikpvaFR+b+B9wzfZfFockDBY1lJgMgYkT54xGkTqiwulIX7RdI4XG6e6qgkD7fhWqOQYPCtMC3hSNRlLUrsJ+pngV8E97tswDi5AQLpSa+UKLn0Isw+mMmm+zdKss96JcXOKzqK/rgETZg9w92ud440jOi35sBIxiyBStX5WqxbWi7xqUM2XFkN9GokqQaJ6AlazKgW1MSctAYrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kQf1yIQ5ic9r7G2x0AuPh4/fLuzBqcQM4p7AR5kYVtI=;
+ b=ad65BC6ez5t5AEdS5luDfUkO9XBEEM+KPEaUHFOzu6KcD7/RnVNdGD4GD8M7QNUyl6th4dq6rB8vAQybI2k3AEth9BIhvL4dY/IiDrQLUCl3LCObhTLrlzSKWFWLFPsH3rjRm/qGPBxg7LN7hUdnsHVLx81ohEMCEYQBBEWz3ws=
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
+ by BY5PR15MB3570.namprd15.prod.outlook.com (2603:10b6:a03:1f9::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Wed, 16 Sep
+ 2020 17:56:01 +0000
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::c13c:fca9:5e04:9bfb]) by BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::c13c:fca9:5e04:9bfb%3]) with mapi id 15.20.3391.011; Wed, 16 Sep 2020
+ 17:56:01 +0000
+Date:   Wed, 16 Sep 2020 10:55:53 -0700
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     Yonghong Song <yhs@fb.com>
+CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Song Liu <songliubraving@fb.com>
+Message-ID: <20200916175553.4fevmxgcv2r6nhiu@kafai-mbp>
+References: <20200916061649.1437414-1-yhs@fb.com>
+In-Reply-To: <20200916061649.1437414-1-yhs@fb.com>
+X-ClientProxiedBy: MWHPR19CA0004.namprd19.prod.outlook.com
+ (2603:10b6:300:d4::14) To BY5PR15MB3571.namprd15.prod.outlook.com
+ (2603:10b6:a03:1f6::32)
 MIME-Version: 1.0
-References: <20200917143846.37ce43a0@carbon>
-In-Reply-To: <20200917143846.37ce43a0@carbon>
-From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date:   Thu, 17 Sep 2020 05:54:48 -0700
-Message-ID: <CANP3RGcxM-Cno=Qw5Lut9DgmV=1suXqetnybA9RgxmW3KmwivQ@mail.gmail.com>
-Subject: Re: BPF redirect API design issue for BPF-prog MTU feedback?
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     Daniel Borkmann <borkmann@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        BPF-dev-list <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shaun Crampton <shaun@tigera.io>,
-        David Miller <davem@davemloft.net>,
-        Marek Majkowski <marek@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from kafai-mbp (2620:10d:c090:400::5:2074) by MWHPR19CA0004.namprd19.prod.outlook.com (2603:10b6:300:d4::14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.11 via Frontend Transport; Wed, 16 Sep 2020 17:56:00 +0000
+X-Originating-IP: [2620:10d:c090:400::5:2074]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4cf2b198-a64c-4b73-744c-08d85a69c5f6
+X-MS-TrafficTypeDiagnostic: BY5PR15MB3570:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BY5PR15MB357004D108CE7D0FE1C53CBFD5210@BY5PR15MB3570.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: syAbxq6ew28isSFxDPxn4DR5iUaoYXCh0bLZYe9ZTZqZkbbRHgi+ZCvZSo9FgJtRCFBrNPAuMaM7gsooIFdrHdqt0WIfmM+tY5EGPRn/mRzgXCuyizO+c6shtRg+R/o4I/zzBsCKzQtiGy7CqaQrAGymB1EOGnAbIKxCPJXNBHWnA4CxWVgMCHOM/hIMFnYW1XBGAG+K91A2u879jQEsoDEUDZ9JEq2/jiZFNhYNyVwn90ARoaF30fg9TXXQC1I4SldurNRZXwfiJ/Q/JruonL1SGZ6+Sgc/a1Qr6JUBpFqv8dtIJNSmLVXUtXIrn6I+8OGMbIcyEpan8h+qXJk/Ug==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(346002)(136003)(396003)(376002)(366004)(186003)(66556008)(16526019)(55016002)(86362001)(54906003)(316002)(8936002)(478600001)(9686003)(6666004)(52116002)(33716001)(1076003)(6496006)(66476007)(6636002)(4326008)(8676002)(83380400001)(2906002)(5660300002)(6862004)(66946007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: cgDiJhWyWUCNPzj+pYpddVUVCVD/JJGtR8Dl+gFhe3vGgQJQQNlsbPWpwKaD+r1xM622YktFAxxePAyu27Xz5BW1aw1ucEmE1XNMIs0kTdqG4zDVGwBh/30MSADUkRGqr4OjqeujduoliXFOWG47djmmYplEAKzG4vl7nTlnNBbGRy3EaJbdQazI5g7A5zw/ioFMJvsJopr7tdK8ZSclzVy2pUM+7fdv+FRZu/VdbmN5tvMM43LWMsMjNwdjVO4p5ZrP8/lDz/k7QFBZ6f7rEt++MYz1DihDHOKnTm9DvjOHVvMsPSzDuRUdlJMEmLvrVDGMGdUz+ztkh20i4lA9wtiEd3scgTfs0W/5mSONZyYyvNiLRI0kVLtkZu9SMHskukaKQf6EjI2Tw3Xd3Qdfbd+bYiNzZvfo81dLxwKhAtaPLhBGld9CWsaXDxAwnbOanBIJ8LckvcTo0ou2LC7xGZXce36kWL3NxuVuuEUbpc9DorvrFTXKb1CmV6FUzq4T5W3phdtFlKtvROoI8Y0JLBcDLacrRaa5wq9M5BChTtdLlqsKltUBWjN6wuZUQoQhMqUskuKqD3L52msB77hadP+DXjARJ9sF/0nurftpeVtVGCJaScq0FCH6xG5/QZV8Lif4zI4aNHZnFyNZpBiCZHnYwMAVGi/aHSp0QMBrSIk=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4cf2b198-a64c-4b73-744c-08d85a69c5f6
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2020 17:56:01.4842
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LDZgQeIYR2WG0IfhtkDKeNoEmOW16E2fB9TuVqZbQLJBA71gTYfGWcoOFFtVsjpl
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR15MB3570
+X-OriginatorOrg: fb.com
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-16_11:2020-09-16,2020-09-16 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ lowpriorityscore=0 suspectscore=2 mlxscore=0 clxscore=1015
+ priorityscore=1501 impostorscore=0 spamscore=0 bulkscore=0 phishscore=0
+ malwarescore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2009160127
+X-FB-Internal: deliver
+subject: Re: [PATCH bpf-next v3] bpf: using rcu_read_lock for bpf_sk_storage_map iterator
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-09-17_09:2020-09-16,2020-09-17 signatures=0
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 5:39 AM Jesper Dangaard Brouer
-<brouer@redhat.com> wrote:
->
->
-> As you likely know[1] I'm looking into moving the MTU check (for TC-BPF)
-> in __bpf_skb_max_len() when e.g. called by bpf_skb_adjust_room(),
-> because when redirecting packets to another netdev it is not correct to
-> limit the MTU based on the incoming netdev.
->
-> I was looking at doing the MTU check in bpf_redirect() helper, because
-> at this point we know the redirect to netdev, and returning an
-> indication/error that MTU was exceed, would allow the BPF-prog logic to
-> react, e.g. sending ICMP (instead of packet getting silently dropped).
-> BUT this is not possible because bpf_redirect(index, flags) helper
-> don't provide the packet context-object (so I cannot lookup the packet
-> length).
->
-> Seeking input:
->
-> Should/can we change the bpf_redirect API or create a new helper with
-> packet-context?
->
->  Note: We have the same need for the packet context for XDP when
->  redirecting the new multi-buffer packets, as not all destination netdev
->  will support these new multi-buffer packets.
->
-> I can of-cause do the MTU checks on kernel-side in skb_do_redirect, but
-> then how do people debug this? as packet will basically be silently dropp=
-ed.
->
->
->
-> (Looking at how does BPF-prog logic handle MTU today)
->
-> How do bpf_skb_adjust_room() report that the MTU was exceeded?
-> Unfortunately it uses a common return code -ENOTSUPP which used for
-> multiple cases (include MTU exceeded). Thus, the BPF-prog logic cannot
-> use this reliably to know if this is a MTU exceeded event. (Looked
-> BPF-prog code and they all simply exit with TC_ACT_SHOT for all error
-> codes, cloudflare have the most advanced handling with
-> metrics->errors_total_encap_adjust_failed++).
->
->
-> [1] https://lore.kernel.org/bpf/159921182827.1260200.9699352760916903781.=
-stgit@firesoul/
-> --
-> Best regards,
->   Jesper Dangaard Brouer
->   MSc.CS, Principal Kernel Engineer at Red Hat
->   LinkedIn: http://www.linkedin.com/in/brouer
->
+On Tue, Sep 15, 2020 at 11:16:49PM -0700, Yonghong Song wrote:
+[ ... ]
 
-(a) the current state of the world seems very hard to use correctly,
-so adding new apis,
-or even changing existing ones seems ok to me.
-especially if this just means changing what error code they return
+> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+> index 4a86ea34f29e..d43c3d6d0693 100644
+> --- a/net/core/bpf_sk_storage.c
+> +++ b/net/core/bpf_sk_storage.c
+> @@ -678,6 +678,7 @@ struct bpf_iter_seq_sk_storage_map_info {
+>  static struct bpf_local_storage_elem *
+>  bpf_sk_storage_map_seq_find_next(struct bpf_iter_seq_sk_storage_map_info *info,
+>  				 struct bpf_local_storage_elem *prev_selem)
+> +	__acquires(RCU) __releases(RCU)
+>  {
+>  	struct bpf_local_storage *sk_storage;
+>  	struct bpf_local_storage_elem *selem;
+In the while loop earlier in this function, if I read it correctly,
+it is sort of continuing the earlier hlist_for_each_entry_rcu() for the
+same bucket, so the hlist_entry_safe() needs to be changed also.
+Something like this (uncompiled code):
 
-(b) another complexity with bpf_redirect() is you can call it, it can succe=
-ed,
-but then you can not return TC_ACT_REDIRECT from the bpf program,
-which effectively makes the earlier *successful* bpf_redirect() call
-an utter no-op.
+        while (selem) {
+-               selem = hlist_entry_safe(selem->map_node.next,
++               selem = hlist_entry_safe(rcu_dereference(hlist_next_rcu(&selem->map_node)),
+                                         struct bpf_local_storage_elem, map_node);
+                if (!selem) {
+                        /* not found, unlock and go to the next bucket */
 
-(bpf_redirect() just determines what a future return TC_ACT_REDIRECT will d=
-o)
-
-so if you bpf_redirect to interface with larger mtu, then increase packet s=
-ize,
-then return TC_ACT_OK, then you potentially end up with excessively large
-packet egressing through original interface (with small mtu).
-
-My vote would be to return a new distinct error from bpf_redirect()
-based on then current
-packet size and interface being redirected to, save this interface mtu
-somewhere,
-then in operations that increase packet size check against this saved mtu,
-for correctness you still have to check mtu after the bpf program is done,
-but this is then just to deal with braindead bpf code (that calls
-bpf_redirect and returns TC_ACT_OK, or calls bpf_redirect() multiple
-times, or something...).
-
-Maciej =C5=BBenczykowski, Kernel Networking Developer @ Google
+> @@ -701,11 +702,11 @@ bpf_sk_storage_map_seq_find_next(struct bpf_iter_seq_sk_storage_map_info *info,
+>  		if (!selem) {
+>  			/* not found, unlock and go to the next bucket */
+>  			b = &smap->buckets[bucket_id++];
+> -			raw_spin_unlock_bh(&b->lock);
+> +			rcu_read_unlock();
+>  			skip_elems = 0;
+>  			break;
+>  		}
+> -		sk_storage = rcu_dereference_raw(selem->local_storage);
+> +		sk_storage = rcu_dereference(selem->local_storage);
+>  		if (sk_storage) {
+>  			info->skip_elems = skip_elems + count;
+>  			return selem;
