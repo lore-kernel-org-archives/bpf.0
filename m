@@ -2,152 +2,109 @@ Return-Path: <SRS0=xxat=CZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9EDEFC433E2
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:36:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2C61C43461
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:37:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4BB2C21974
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:36:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600288569;
-	bh=wHzKitDVJSgvk67KOzyNP8vKB+YLxZljYC9QDlZVGcE=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=H4rmG5kL7LTbgbfOkPhHhxejd9hLpTOAzhCBXwXYjxdlrMPkVGd1eX14h7/UVUwA/
-	 aYwwAC1tWTW9M4cWBRgRx0kDwBvcXZgmUUJXRGnoUbEc3sLTADWp3Uib9rIMnBKRJD
-	 EDRBGCdmCz2/ohC8ef/ywMJuHEInlB1vkd5T9An4=
+	by mail.kernel.org (Postfix) with ESMTP id 9A9582087D
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:37:13 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tyUNudra"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726920AbgIPUfV convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 16 Sep 2020 16:35:21 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:42877 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726794AbgIPRKo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 16 Sep 2020 13:10:44 -0400
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-211-D-DZJao1OIiChtMGd9S-Pg-1; Wed, 16 Sep 2020 07:24:22 -0400
-X-MC-Unique: D-DZJao1OIiChtMGd9S-Pg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4B7AF8030AC;
-        Wed, 16 Sep 2020 11:24:20 +0000 (UTC)
-Received: from krava.redhat.com (ovpn-114-172.ams2.redhat.com [10.36.114.172])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4D9B25DE46;
-        Wed, 16 Sep 2020 11:24:17 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
+        id S1727125AbgIPUhL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Sep 2020 16:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726666AbgIPRKP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Sep 2020 13:10:15 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62574C061223;
+        Wed, 16 Sep 2020 10:08:25 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id g96so1070143ybi.12;
+        Wed, 16 Sep 2020 10:08:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=7ptBkp4xdHHe4seAGHtrtcjPEqw5vfXo8/OjJOz+4vo=;
+        b=tyUNudrabayD3JwPEmQY4XYb0Z9um6wyD1MuAVIUGdE2zXPnviLL06emxcGClGBFsC
+         O/TaIxxK1iR/HUrbYWAxV1qIZsydniT4HHKNs8cGb2DIRgngIolIhLzN92SpM6JLhpfs
+         7v8jHz8Rh+N60BTTLdUj5s+tMkeiA8gujqUEv9Khx+yc4+ES8z33Z84M2khAEENA6ox+
+         Uz3GBBYSlUKMgS6peddac3bMQcAoT9pbafdY6WfHTOZruGOobTj/2s5aCiz/Iitl7T7c
+         1O7oGjG2yWDi/iaRrVvJ+08xrQ30ZAMuJZVUdSoXZUHc6RKX+E4pREep6h65hBJk2G1x
+         PG9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=7ptBkp4xdHHe4seAGHtrtcjPEqw5vfXo8/OjJOz+4vo=;
+        b=l39KEyTW8su38UbkZYY2BLO8KqHGYvP/nf1mb+X0n8mjod4orKU2GSSrI8tAaHQJrR
+         t3zn1YGUv47fQsy/YLMjmwOa7ykQwYGiNIgp4ZQL1ZcZKGc7k6AmFANNG9ctOWno9QPy
+         X4+vFkspd9pLxKs64ug9BlGk/aO8sZseL7qv2yB3CF3hEUiVL/KF70lHFWTxDNYLHY9f
+         q9T4+D6PDH9zbxrw+icCXVv/BYrBXNj0xfOeSKtmPXsX7+tHOsqqhOAYtHpHP+Vvfp5S
+         YOUoDoGuR7o2D+3zJOcKtBLLZMcH/bXEV0lLS3PXSVwF/IaoKAO2HvLXoKc1hUiOTUoB
+         0cIQ==
+X-Gm-Message-State: AOAM531lfidvezxhSBWTMpPXDukSubeHYrOnG1TOIk8mvR4ap5/M6mB1
+        9Ez/VBu2eXziwe3XBJ2xL2ViwEougmysU1T1w9Y=
+X-Google-Smtp-Source: ABdhPJxmcqGA5X1/GtJsWgz5/0S5cv1fNPTsbWnNm703TSNTsYGTekLKYo4nvUaIK9ZB3yTlZeGClthDD0+1eMf1DN4=
+X-Received: by 2002:a25:33c4:: with SMTP id z187mr21570384ybz.27.1600276104518;
+ Wed, 16 Sep 2020 10:08:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <160017005691.98230.13648200635390228683.stgit@toke.dk> <160017005805.98230.16775816864129373411.stgit@toke.dk>
+In-Reply-To: <160017005805.98230.16775816864129373411.stgit@toke.dk>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 16 Sep 2020 10:08:13 -0700
+Message-ID: <CAEf4BzaE7PzKw8nEesraKZRmK9oDSV-Ei=8v1fRH3Mf22zHgsA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 1/8] bpf: change logging calls from verbose()
+ to bpf_log() and use log pointer
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Subject: [PATCH bpf-next] selftests/bpf: Fix stat probe in d_path test
-Date:   Wed, 16 Sep 2020 13:24:16 +0200
-Message-Id: <20200916112416.2321204-1-jolsa@kernel.org>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
-X-Mimecast-Spam-Score: 0.001
-X-Mimecast-Originator: kernel.org
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: 8BIT
+        Jiri Olsa <jolsa@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Some kernels builds might inline vfs_getattr call within fstat
-syscall code path, so fentry/vfs_getattr trampoline is not called.
+On Tue, Sep 15, 2020 at 5:50 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
+at.com> wrote:
+>
+> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>
+> In preparation for moving code around, change a bunch of references to
+> env->log (and the verbose() logging helper) to use bpf_log() and a direct
+> pointer to struct bpf_verifier_log. While we're touching the function
+> signature, mark the 'prog' argument to bpf_check_type_match() as const.
+>
+> Also enhance the bpf_verifier_log_needed() check to handle NULL pointers
+> for the log struct so we can re-use the code with logging disabled.
+>
+> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> ---
 
-Alexei suggested [1] we should use security_inode_getattr instead,
-because it's less likely to get inlined.
+Ok, let's get this out of the way :)
 
-Adding security_inode_getattr to the d_path allowed list and
-switching the stat trampoline to security_inode_getattr.
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 
-Adding flags that indicate trampolines were called and failing
-the test if any of them got missed, so it's easier to identify
-the issue next time.
+>  include/linux/bpf.h          |    2 +-
+>  include/linux/bpf_verifier.h |    5 +++-
+>  kernel/bpf/btf.c             |    6 +++--
+>  kernel/bpf/verifier.c        |   48 +++++++++++++++++++++---------------=
+------
+>  4 files changed, 31 insertions(+), 30 deletions(-)
+>
 
-[1] https://lore.kernel.org/bpf/CAADnVQJ0FchoPqNWm+dEppyij-MOvvEG_trEfyrHdabtcEuZGg@mail.gmail.com/
-Fixes: e4d1af4b16f8 ("selftests/bpf: Add test for d_path helper")
-Signed-off-by: Jiri Olsa <jolsa@redhat.com>
----
- kernel/trace/bpf_trace.c                        | 1 +
- tools/testing/selftests/bpf/prog_tests/d_path.c | 6 ++++++
- tools/testing/selftests/bpf/progs/test_d_path.c | 9 ++++++++-
- 3 files changed, 15 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index b2a5380eb187..1001c053ebb3 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1122,6 +1122,7 @@ BTF_ID(func, vfs_truncate)
- BTF_ID(func, vfs_fallocate)
- BTF_ID(func, dentry_open)
- BTF_ID(func, vfs_getattr)
-+BTF_ID(func, security_inode_getattr)
- BTF_ID(func, filp_close)
- BTF_SET_END(btf_allowlist_d_path)
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/d_path.c b/tools/testing/selftests/bpf/prog_tests/d_path.c
-index fc12e0d445ff..f507f1a6fa3a 100644
---- a/tools/testing/selftests/bpf/prog_tests/d_path.c
-+++ b/tools/testing/selftests/bpf/prog_tests/d_path.c
-@@ -120,6 +120,12 @@ void test_d_path(void)
- 	if (err < 0)
- 		goto cleanup;
- 
-+	if (CHECK(!bss->called_stat || !bss->called_close,
-+		  "check",
-+		  "failed to call trampolines called_stat %d, bss->called_close %d\n",
-+		   bss->called_stat, bss->called_close))
-+		goto cleanup;
-+
- 	for (int i = 0; i < MAX_FILES; i++) {
- 		CHECK(strncmp(src.paths[i], bss->paths_stat[i], MAX_PATH_LEN),
- 		      "check",
-diff --git a/tools/testing/selftests/bpf/progs/test_d_path.c b/tools/testing/selftests/bpf/progs/test_d_path.c
-index 61f007855649..84e1f883f97b 100644
---- a/tools/testing/selftests/bpf/progs/test_d_path.c
-+++ b/tools/testing/selftests/bpf/progs/test_d_path.c
-@@ -15,7 +15,10 @@ char paths_close[MAX_FILES][MAX_PATH_LEN] = {};
- int rets_stat[MAX_FILES] = {};
- int rets_close[MAX_FILES] = {};
- 
--SEC("fentry/vfs_getattr")
-+int called_stat = 0;
-+int called_close = 0;
-+
-+SEC("fentry/security_inode_getattr")
- int BPF_PROG(prog_stat, struct path *path, struct kstat *stat,
- 	     __u32 request_mask, unsigned int query_flags)
- {
-@@ -23,6 +26,8 @@ int BPF_PROG(prog_stat, struct path *path, struct kstat *stat,
- 	__u32 cnt = cnt_stat;
- 	int ret;
- 
-+	called_stat = 1;
-+
- 	if (pid != my_pid)
- 		return 0;
- 
-@@ -42,6 +47,8 @@ int BPF_PROG(prog_close, struct file *file, void *id)
- 	__u32 cnt = cnt_close;
- 	int ret;
- 
-+	called_close = 1;
-+
- 	if (pid != my_pid)
- 		return 0;
- 
--- 
-2.26.2
-
+[...]
