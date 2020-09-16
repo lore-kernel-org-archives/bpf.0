@@ -2,173 +2,164 @@ Return-Path: <SRS0=xxat=CZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8836BC43461
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:38:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D6CCC43461
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:45:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1B91A21974
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:38:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D413A20770
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:45:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FtmJTING"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hBFNHl8V"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726837AbgIPRH4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Sep 2020 13:07:56 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:20923 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726793AbgIPRFw (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 16 Sep 2020 13:05:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600275946;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gyutKQ7iDiDszh0jv8Q/Pe+omXRolnMPIqJhMtRQapY=;
-        b=FtmJTINGr84yC3mvQZ4fCvGeQh1G1Bt+SUDhO56woKFq2XxSrc515rEtuaQJBWeUKg96Lw
-        QM05KIn3R7ey6TiFlD/045wXJ3W5DEU+Fyr1Ai1FegVwc0gcRcylsB0VwDbK0G4MNM53pj
-        dpNmKNGEt8tiN/Kefs+RmbimGxElYF0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-156-isAKG4fLMS2R26-5FIglVw-1; Wed, 16 Sep 2020 08:39:49 -0400
-X-MC-Unique: isAKG4fLMS2R26-5FIglVw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D1A19800C78;
-        Wed, 16 Sep 2020 12:39:45 +0000 (UTC)
-Received: from astarta.redhat.com (ovpn-114-67.ams2.redhat.com [10.36.114.67])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8D7A475137;
-        Wed, 16 Sep 2020 12:39:39 +0000 (UTC)
-From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Cc:     Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
-        ardb@kernel.org, naresh.kamboju@linaro.org,
-        Jiri Olsa <jolsa@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        id S1726766AbgIPUpJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Sep 2020 16:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726423AbgIPUpH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Sep 2020 16:45:07 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E01C06174A;
+        Wed, 16 Sep 2020 13:45:06 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id g96so1521059ybi.12;
+        Wed, 16 Sep 2020 13:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=a9McxN0SPcs/brf1883/a8qVYY3w5PNE9zRZ22kWcRk=;
+        b=hBFNHl8VKHdu0bMQEIo7Huplgr8OaeHxOaNxi/9ASLqR8KxJY2Ao1BNb1V+M+c9lTg
+         r9DBXjfMiTPgGu0H9PqiPKuSfwEagyVbq1T4d1A0gwI7A/pWVf8wuVZBZtybynO/g15W
+         0ASVoIPojLnbus2iG9NilaF8AO1Ecxzz8SmM+YUFNlgwppNffjkkGoVicv86jWEfk8Dn
+         qPGLvRXEs+dH+vboMLcNN690CROOSXE/6o1z6vbKJewwtNLPzZrL1v7GvsQHzefyK9Kw
+         q1A/OKnQdVf3kyq5hKSRa3RdRvdHs9c3OOpCujmaUr21BlbJ3jfVhWmCE4MZCRLkOvPL
+         c1Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=a9McxN0SPcs/brf1883/a8qVYY3w5PNE9zRZ22kWcRk=;
+        b=kbQEsGcrwSCEjyIHz/v4Bg0xOjhT2mUOsPlwHx+1kuwCzPIGRh+TdabHDrq+wMYSlg
+         xRiW6RGROkpvvH82BJ2zjDeFWBWK0Kw0srQrYkQZdvTosGSIEh9r3HvQWsVy6qHlOc9u
+         EM0AkZZtiRqOS4oN+7aVZsnNFB5lH/sLFnU/91Mpa80Ys/vfOApN+PbRfHy7f0yGOr9I
+         XA4n6YBh6e+OVx88nxO/USNNoLu6Up6r2PsEaK1irdE5hgz1YI5IYPjFhgVZvlilIM/Q
+         ucwpMwGn8D9L69N8rDjMJfqtzevpvy+ndCkGLQFxiscpNVU2B69lP2SJYj82WCyMloCK
+         Lo0w==
+X-Gm-Message-State: AOAM530lk8thYWC0UrYetj6elhvkR65p5NUdlhnpKCQ3/2Pd4euc/yk1
+        PyeyHUH6S0oAg2P4sNmSSGa2VH5d2PA8/Uktz20=
+X-Google-Smtp-Source: ABdhPJxFmQi3hG59ryei3OUQBmRUhVx/C5Pyc3w8gF8Juen+cyyKHcwqrv4XeTjDfnxDiVK+BiYVjGF+Dp8QJ6TRoTc=
+X-Received: by 2002:a25:33c4:: with SMTP id z187mr22702413ybz.27.1600289106079;
+ Wed, 16 Sep 2020 13:45:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <160017005691.98230.13648200635390228683.stgit@toke.dk> <160017006573.98230.17217160170336621916.stgit@toke.dk>
+In-Reply-To: <160017006573.98230.17217160170336621916.stgit@toke.dk>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 16 Sep 2020 13:44:55 -0700
+Message-ID: <CAEf4BzZg7rSaRJ5GkcEoOvV2TKTA5etsr0xn_dYMtQL7Ly-w_w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 8/8] selftests/bpf: Adding test for arg
+ dereference in extension trace
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
         KP Singh <kpsingh@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: bpf: Fix branch offset in JIT
-References: <20200914160355.19179-1-ilias.apalodimas@linaro.org>
-        <20200915131102.GA26439@willie-the-truck>
-        <20200915135344.GA113966@apalos.home>
-        <20200915141707.GB26439@willie-the-truck>
-        <20200915192311.GA124360@apalos.home>
-Date:   Wed, 16 Sep 2020 15:39:37 +0300
-In-Reply-To: <20200915192311.GA124360@apalos.home> (Ilias Apalodimas's message
-        of "Tue, 15 Sep 2020 22:23:11 +0300")
-Message-ID: <xunyo8m5hp4m.fsf@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi, Ilias!
+On Tue, Sep 15, 2020 at 5:50 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
+at.com> wrote:
+>
+> From: Jiri Olsa <jolsa@kernel.org>
+>
+> Adding test that setup following program:
+>
+>   SEC("classifier/test_pkt_md_access")
+>   int test_pkt_md_access(struct __sk_buff *skb)
+>
+> with its extension:
+>
+>   SEC("freplace/test_pkt_md_access")
+>   int test_pkt_md_access_new(struct __sk_buff *skb)
+>
+> and tracing that extension with:
+>
+>   SEC("fentry/test_pkt_md_access_new")
+>   int BPF_PROG(fentry, struct sk_buff *skb)
+>
+> The test verifies that the tracing program can
+> dereference skb argument properly.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> ---
 
->>>>> On Tue, 15 Sep 2020 22:23:11 +0300, Ilias Apalodimas  wrote:
+Looks good, with a minor CHECK() complaint below.
 
- > Hi Will, 
- > On Tue, Sep 15, 2020 at 03:17:08PM +0100, Will Deacon wrote:
- >> On Tue, Sep 15, 2020 at 04:53:44PM +0300, Ilias Apalodimas wrote:
- >> > On Tue, Sep 15, 2020 at 02:11:03PM +0100, Will Deacon wrote:
- >> > > Hi Ilias,
- >> > > 
- >> > > On Mon, Sep 14, 2020 at 07:03:55PM +0300, Ilias Apalodimas wrote:
- >> > > > Running the eBPF test_verifier leads to random errors looking like this:
- >> > > > 
- >> > > > [ 6525.735488] Unexpected kernel BRK exception at EL1
- >> > > > [ 6525.735502] Internal error: ptrace BRK handler: f2000100 [#1] SMP
- >> > > 
- >> > > Does this happen because we poison the BPF memory with BRK instructions?
- >> > > Maybe we should look at using a special immediate so we can detect this,
- >> > > rather than end up in the ptrace handler.
- >> > 
- >> > As discussed offline this is what aarch64_insn_gen_branch_imm() will return for
- >> > offsets > 128M and yes replacing the handler with a more suitable message would 
- >> > be good.
- >> 
- >> Can you give the diff below a shot, please? Hopefully printing a more useful
- >> message will mean these things get triaged/debugged better in future.
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 
- > [...]
+>  tools/testing/selftests/bpf/prog_tests/trace_ext.c |  113 ++++++++++++++=
+++++++
+>  tools/testing/selftests/bpf/progs/test_trace_ext.c |   18 +++
+>  .../selftests/bpf/progs/test_trace_ext_tracing.c   |   25 ++++
+>  3 files changed, 156 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/trace_ext.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_trace_ext.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_trace_ext_trac=
+ing.c
+>
 
- > The error print is going to be helpful imho. At least it will help
- > people notice something is wrong a lot faster than the previous one.
+[...]
 
+> +       err =3D test_trace_ext_tracing__attach(skel_trace);
+> +       if (CHECK(err, "setup", "tracing/test_pkt_md_access_new attach fa=
+iled: %d\n", err))
+> +               goto cleanup;
+> +
+> +       /* trigger the test */
+> +       err =3D bpf_prog_test_run(pkt_fd, 1, &pkt_v4, sizeof(pkt_v4),
+> +                               NULL, NULL, &retval, &duration);
+> +       CHECK(err || retval, "",
 
-If you start to amend extables, could you consider a change like
+please don't use empty string here
 
-05a68e892e89 ("s390/kernel: expand exception table logic to allow new handling options")
+> +             "err %d errno %d retval %d duration %d\n",
+> +             err, errno, retval, duration);
 
-and implementation of BPF_PROBE_MEM then?
+who and why cares about duration here?..
 
- > [ 575.273203] BPF JIT generated an invalid instruction at
- > bpf_prog_64e6f4ba80861823_F+0x2e4/0x9a4!
- > [  575.281996] Unexpected kernel BRK exception at EL1
- > [  575.286786] Internal error: BRK handler: f2000100 [#5] PREEMPT SMP
- > [ 575.292965] Modules linked in: crct10dif_ce drm ip_tables x_tables
- > ipv6 btrfs blake2b_generic libcrc32c xor xor_neon zstd_compress
- > raid6_pq nvme nvme_core realtek
- > [ 575.307516] CPU: 21 PID: 11760 Comm: test_verifier Tainted: G D W
- > 5.9.0-rc3-01410-ged6d9b022813-dirty #1
- > [ 575.318125] Hardware name: Socionext SynQuacer E-series
- > DeveloperBox, BIOS build #1 Jun 6 2020
- > [  575.326825] pstate: 20000005 (nzCv daif -PAN -UAO BTYPE=--)
- > [  575.332396] pc : bpf_prog_64e6f4ba80861823_F+0x2e4/0x9a4
- > [  575.337705] lr : bpf_prog_d3e125b76c96daac+0x40/0xdec
- > [  575.342752] sp : ffff8000144e3ba0
- > [  575.346061] x29: ffff8000144e3bd0 x28: 0000000000000000
- > [  575.351371] x27: 00000085f19dc08d x26: 0000000000000000
- > [  575.356681] x25: ffff8000144e3ba0 x24: ffff800011fdf038
- > [  575.361991] x23: ffff8000144e3d20 x22: 0000000000000001
- > [  575.367301] x21: ffff800011fdf000 x20: ffff0009609d4740
- > [  575.372611] x19: 0000000000000000 x18: 0000000000000000
- > [  575.377921] x17: 0000000000000000 x16: 0000000000000000
- > [  575.383231] x15: 0000000000000000 x14: 0000000000000000
- > [  575.388540] x13: 0000000000000000 x12: 0000000000000000
- > [  575.393850] x11: 0000000000000000 x10: ffff8000000bc65c
- > [  575.399160] x9 : 0000000000000000 x8 : ffff8000144e3c58
- > [  575.404469] x7 : 0000000000000000 x6 : 0000000dd7ae967a
- > [  575.409779] x5 : 00ffffffffffffff x4 : 0007fabd6992cf96
- > [  575.415088] x3 : 0000000000000018 x2 : ffff8000000ba214
- > [  575.420398] x1 : 000000000000000a x0 : 0000000000000009
- > [  575.425708] Call trace:
- > [  575.428152]  bpf_prog_64e6f4ba80861823_F+0x2e4/0x9a4
- > [  575.433114]  bpf_prog_d3e125b76c96daac+0x40/0xdec
- > [  575.437822]  bpf_dispatcher_xdp_func+0x10/0x1c
- > [  575.442265]  bpf_test_run+0x80/0x240
- > [  575.445838]  bpf_prog_test_run_xdp+0xe8/0x190
- > [  575.450196]  __do_sys_bpf+0x8e8/0x1b00
- > [  575.453943]  __arm64_sys_bpf+0x24/0x510
- > [  575.457780]  el0_svc_common.constprop.0+0x6c/0x170
- > [  575.462570]  do_el0_svc+0x24/0x90
- > [  575.465883]  el0_sync_handler+0x90/0x19c
- > [  575.469802]  el0_sync+0x158/0x180
- > [  575.473118] Code: d4202000 d4202000 d4202000 d4202000 (d4202000)
- > [  575.479211] ---[ end trace 8cd54c7d5c0ffda4 ]---
+> +
+> +       bss_ext =3D skel_ext->bss;
+> +       bss_trace =3D skel_trace->bss;
+> +
+> +       len =3D bss_ext->ext_called;
+> +
+> +       CHECK(bss_ext->ext_called =3D=3D 0,
+> +               "check", "failed to trigger freplace/test_pkt_md_access\n=
+");
+> +       CHECK(bss_trace->fentry_called !=3D len,
+> +               "check", "failed to trigger fentry/test_pkt_md_access_new=
+\n");
+> +       CHECK(bss_trace->fexit_called !=3D len,
+> +               "check", "failed to trigger fexit/test_pkt_md_access_new\=
+n");
+> +
+> +cleanup:
+> +       test_trace_ext_tracing__destroy(skel_trace);
+> +       test_trace_ext__destroy(skel_ext);
+> +       test_pkt_md_access__destroy(skel_pkt);
+> +}
 
- > Cheers
- > /Ilias
-
-
--- 
-WBR,
-Yauheni Kaliuta
-
+[...]
