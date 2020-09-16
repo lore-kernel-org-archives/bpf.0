@@ -4,145 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0F87C433E2
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:32:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DC548C433E2
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:33:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4CBE021582
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:32:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7276421582
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:33:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JAffHlIV"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YV7iGDY0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727633AbgIPUaS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Sep 2020 16:30:18 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:48063 "EHLO
+        id S1728260AbgIPUdw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Sep 2020 16:33:52 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:51366 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726915AbgIPRM4 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 16 Sep 2020 13:12:56 -0400
+        by vger.kernel.org with ESMTP id S1726917AbgIPRMz (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 16 Sep 2020 13:12:55 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1600276345;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=RQyq2xuCGNHkYvL97fJ+nfUr6mDnAugF/ipqA9mhYME=;
-        b=JAffHlIVZl6VFgcxbjk3iK0uUZf7IVQHlD3gcII6QkoTXWpw2Fyk83xU9vMdY1gKqN8+jD
-        TTb9hKBnIxuSPLJ8zwK64Tcb7cLQs1K2cf6KCgoyc4Hoj/35Dnfgd1kG4V/OATuf9AQ+Yr
-        x/URuo6hSFx/6gsDCcbdXtuZOocn6WQ=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-200-8PtYLylDMJu9DVG9dNssPw-1; Wed, 16 Sep 2020 07:37:30 -0400
-X-MC-Unique: 8PtYLylDMJu9DVG9dNssPw-1
-Received: by mail-ed1-f69.google.com with SMTP id r19so2328473edq.12
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2020 04:37:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=RQyq2xuCGNHkYvL97fJ+nfUr6mDnAugF/ipqA9mhYME=;
-        b=ncFWnP0BlrkKIQH9fjKyBm7DCRQO823PyNmfB1k9jB6K9n7gynImAFcHo+TqN5B2b9
-         zdYQ0BasGaC+fOGT71J3IiivXHyCfy1HAIVVM7g94X5hDmIqFxA+cJnG8mu0JRssbg+p
-         OoRJvzVBlDVrdDs45o9L1OJ7vr/P5sTlM2pGfXFS+coeIdgz9JbFuvkKBr2nS80U8yri
-         xRC7GYCsR6SzEZZieYQwSccWL8DhR0Usv3P1Wys5IBzxcGwnmtp2NrRUaFFt4Qnlzbmc
-         slxBeENwsOoTHDSS9mQ29g8vJBHs0+zhgMRNsL9HuLW15LBwAgbEUPnaL1N0LYBhkRLq
-         K6Dg==
-X-Gm-Message-State: AOAM531tfpYLl1xtDCMXaZUGecn+R3S0C3moMQQ+V9OAxbhdB6Hnwkgs
-        iQF3EJzYD0Nq8zVClKP2D9/8YMUci4k6DC/G3u47TK9LWNfmWjyzwh77hVtaqWaJN7KN0d5U+CJ
-        XgJ0BujrxZOOJ
-X-Received: by 2002:a17:906:3088:: with SMTP id 8mr14075906ejv.487.1600256249057;
-        Wed, 16 Sep 2020 04:37:29 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx5qscMaMnIvPB74Nt602ZvP3284TeQZsUwMmfnfhukiJAfLhlw8RjOfPXviImTQCvk2iGm6A==
-X-Received: by 2002:a17:906:3088:: with SMTP id 8mr14075875ejv.487.1600256248771;
-        Wed, 16 Sep 2020 04:37:28 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id o6sm13971569edh.40.2020.09.16.04.37.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2020 04:37:27 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 57809183A90; Wed, 16 Sep 2020 13:37:27 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Linux NetDev <netdev@vger.kernel.org>,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: don't check against device MTU in
- __bpf_skb_max_len
-In-Reply-To: <CANP3RGf581mZKE2Eky-bY6swU6TAFv1vzxxZ24SQ+yB9TGAD8w@mail.gmail.com>
-References: <159921182827.1260200.9699352760916903781.stgit@firesoul>
- <20200904163947.20839d7e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20200907160757.1f249256@carbon>
- <CANP3RGfjUOoVH152VHLXL3y7mBsF+sUCqEZgGAMdeb9_r_Z-Bw@mail.gmail.com>
- <20200914160538.2bd51893@carbon>
- <CANP3RGftg2-_tBc=hGGzxjGZUq9b1amb=TiKRVHSBEyXq-A5QA@mail.gmail.com>
- <87ft7jzas7.fsf@toke.dk>
- <CANP3RGf581mZKE2Eky-bY6swU6TAFv1vzxxZ24SQ+yB9TGAD8w@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Wed, 16 Sep 2020 13:37:27 +0200
-Message-ID: <875z8eq7ew.fsf@toke.dk>
+        bh=vEOYWIWUZZbjOvWaaaZu93r2/i0CVOT9x7lwnsy/CMY=;
+        b=YV7iGDY0Fb9YPpT+1IGPqcWcqz1eUJK2XOJFVehc98nG+DabWnhk8+Ncpitb9ADaGDGnmE
+        LEwGF/TEr1mOtAinWkpuaoSOJcfooIkdFtMAjDtwphlfRE3wqUIFDgbVg8kN16flAfIo+m
+        hdUQbTLQuE+LNHrtCw/OdkkkEw5tUgs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-97-rId4z_HRNOupn5g7JK_1kQ-1; Wed, 16 Sep 2020 09:45:35 -0400
+X-MC-Unique: rId4z_HRNOupn5g7JK_1kQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 13722AD682;
+        Wed, 16 Sep 2020 13:45:32 +0000 (UTC)
+Received: from astarta.redhat.com (ovpn-114-67.ams2.redhat.com [10.36.114.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 54A1A78811;
+        Wed, 16 Sep 2020 13:45:26 +0000 (UTC)
+From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        ardb@kernel.org, naresh.kamboju@linaro.org,
+        Jiri Olsa <jolsa@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arm64: bpf: Fix branch offset in JIT
+References: <20200914160355.19179-1-ilias.apalodimas@linaro.org>
+        <20200915131102.GA26439@willie-the-truck>
+        <20200915135344.GA113966@apalos.home>
+        <20200915141707.GB26439@willie-the-truck>
+        <20200915192311.GA124360@apalos.home> <xunyo8m5hp4m.fsf@redhat.com>
+        <20200916131702.GB5316@myrica>
+Date:   Wed, 16 Sep 2020 16:45:24 +0300
+In-Reply-To: <20200916131702.GB5316@myrica> (Jean-Philippe Brucker's message
+        of "Wed, 16 Sep 2020 15:17:02 +0200")
+Message-ID: <xunyk0wthm2z.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Maciej =C5=BBenczykowski <maze@google.com> writes:
+Hi, Jean-Philippe!
 
-> On Tue, Sep 15, 2020 at 1:47 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
-dhat.com> wrote:
->>
->> [ just jumping in to answer this bit: ]
->>
->> > Would you happen to know what ebpf startup overhead is?
->> > How big a problem is having two (or more) back to back tc programs
->> > instead of one?
->>
->> With a jit'ed BPF program and the in-kernel dispatcher code (which
->> avoids indirect calls), it's quite close to a native function call.
->
-> Hmm, I know we have (had? they're upstream now I think) some CFI vs
-> BPF interaction issues.
-> We needed to mark the BPF call into JIT'ed code as CFI exempt.
->
-> CFI is Code Flow Integrity and is some compiler magic, to quote wikipedia:
-> Google has shipped Android with the Linux kernel compiled by Clang
-> with link-time optimization (LTO) and CFI since 2018.[12]
-> I don't know much more about it.
->
-> But we do BPF_JIT_ALWAYS_ON on 64-bit kernels, so it sounds like we
-> might be good.
+>>>>> On Wed, 16 Sep 2020 15:17:02 +0200, Jean-Philippe Brucker  wrote:
 
-No idea about the CFI thing...
+ > On Wed, Sep 16, 2020 at 03:39:37PM +0300, Yauheni Kaliuta wrote:
+ >> If you start to amend extables, could you consider a change like
+ >> 
+ >> 05a68e892e89 ("s390/kernel: expand exception table logic to allow
+ >> new handling options")
+ >> 
+ >> and implementation of BPF_PROBE_MEM then?
 
->> > We're running into both verifier performance scaling problems and code
->> > ownership issues with large programs...
->> >
->> > [btw. I understand for XDP we could only use 1 program anyway...]
->>
->> Working on that! See my talk at LPC:
->> https://linuxplumbersconf.org/event/7/contributions/671/
->
-> Yes, I'm aware and excited about it!
+ > Commit 800834285361 ("bpf, arm64: Add BPF exception tables") should have
+ > taken care of that, no?
 
-Great! :)
+Ah, missed that. Thanks!
 
-> Unfortunately, Android S will only support 4.19, 5.4 and 5.10 for
-> newly launched devices (and 4.9/4.14 for upgrades).
-> (5.10 here means 'whatever is the next 5.x LTS', but that's most likely 5=
-.10)
-> I don't (yet) even have real phone hardware running 5.4, and 5.10
-> within the next year is even more of a stretch.
-
-Right, I saw your talk at LPC and of course the kernel version thing is
-a bit of an issue. I suppose you could do some compile-time magic to
-wrap programs and use the tail-call-based chaining for older kernels -
-bit of a hassle, though :/
-
--Toke
+-- 
+WBR,
+Yauheni Kaliuta
 
