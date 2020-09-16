@@ -2,149 +2,193 @@ Return-Path: <SRS0=xxat=CZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A56F8C433E2
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:27:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EBA60C433E2
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:29:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 424B921582
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:27:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 96D0721941
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:29:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="iSKsbfCa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cfsh1gc4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727003AbgIPRZW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Sep 2020 13:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
+        id S1726991AbgIPU24 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Sep 2020 16:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727005AbgIPRZT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Sep 2020 13:25:19 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4AF6C061A31
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2020 10:25:14 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id o5so7679690wrn.13
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2020 10:25:14 -0700 (PDT)
+        with ESMTP id S1726942AbgIPU2w (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Sep 2020 16:28:52 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7393C06174A;
+        Wed, 16 Sep 2020 13:28:51 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id c17so6383223ybe.0;
+        Wed, 16 Sep 2020 13:28:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FLIuBcEfXFqBGnCMg96s4H8fMHjOET/yZlTCC4s2SjY=;
-        b=iSKsbfCaH85JTyF93w9TDVj+qgI43v1QxUEyWe0EQUbDc2aQHYBMp7y1gRr8uJgVuM
-         1cVf+stUl9US5B0yTdv8lUKTKT+fgWT5ER7KxMErMG5bzGAZRoKGiAAiQD7o1yhB+czu
-         N8jMTmR0u6nEsuq1VQl1fAx9EM4X/d/DETGps=
+         :cc:content-transfer-encoding;
+        bh=MVIs1JBkJFZ61cdKipIPslS3rOhT6YsS69ihKIm6isI=;
+        b=Cfsh1gc4YG0BdHbDMGnWTV59MZNiCqZ1cxM25XnGcigdAnTeFkaoVX3xENNRc9suKS
+         6nGKYtDFymW+I0N39d6LSxl4hpkhZGetxgIHZGlp0B7iSzcws+LLNsn4XqXcrFFzkC2N
+         +0M3a2YtUaIieBSVVo30S3VmJt9Xzn3eSVMHhO8gJpfTKyXmFFFm7TkXLLqPjrIEiCXN
+         XcxgAXM41VNB87PuuQVGS5ok0ai8mrXTDJy8LDiv7f+Sbo3AV/sU1sHGbAf/aFo8sBGV
+         zeiolJ4RPtSAuG33JGpGIyBqoFwAWEoCm3B3kyHCBmrNB5Y/v3oWObRxV5YjErXvieTx
+         MSWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FLIuBcEfXFqBGnCMg96s4H8fMHjOET/yZlTCC4s2SjY=;
-        b=i783LB5AwIB9KKWIz3b8eFwl0jJsINhA/vQbopARfWwgsfu6s4pqk9m5mkQilj4Ag4
-         MaqZ31+OYp7UoB0KIaEheaK/dWcqWA8OZP6h7N2WGWakKzWMsxuf2VQxwHhy4GX79mPh
-         AdOf0e9SRUe9mBelEjLCIFanRLfl/zpkUN/st5TPctF6Rxl3JjjyoHuVnF4kvutSGZXl
-         ybmdQhCCO0gn2qLSRa1qsYxkRQqpIhisGL4QgVCaWPoDRfIjNv4iga3WV8OrVC7dL9YC
-         76IsOGBaJqiFPpIZgHe1yyQdDhuLGKRN4WXLarhiKSMx/zrRyAxix3vOiKNmxyYOGSy0
-         xU6w==
-X-Gm-Message-State: AOAM533iAXoI/SqjFxUQEFEmqyhjiG5Csr1H66PTOJMx0QkPAbdHU1em
-        KTW/dhc/vz+7WNRdLEn9a+hgyIPQYhlLZXZoMxcqfQ==
-X-Google-Smtp-Source: ABdhPJzFG0CKotHKNUMxQnzas0sxg7FAmpAAmBAxshrbYB7YiD0VwMPfDZp16xsSPod2p+vLLrtXqNwlDt36g8M7VhU=
-X-Received: by 2002:adf:e711:: with SMTP id c17mr28472007wrm.359.1600277113217;
- Wed, 16 Sep 2020 10:25:13 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=MVIs1JBkJFZ61cdKipIPslS3rOhT6YsS69ihKIm6isI=;
+        b=LTDRd4S2l2uN0vjS+RQi5LP7O7VanVnKyZIY3BFAJn6Lu6ODjosk2oMzLLATjf/I9n
+         9WHRAcDbFqCv0ijc7jw9+0/1Zv+Rr70v3gzt92T3/qPY7VbK6SEJCFM4pLuBagB+P+Gm
+         I4s8AQknyZB1lVr/Qp0r7nacxQirGf9vHztmBWRzGPYskggZQ2sNkBqHxJwM9fYguZaL
+         xqbPYDXnvsUoQeRO2J6ZsFmF/6/LMnC/NafB8ea6GKTbPF2VgLWGuwNfy23VkJHyRldR
+         3O3ou3TfrXXYcCOeXzri4Y9sgKDxj34GnRHlqkk30kk1ODPeu9eXvw75HULXXaRtpzY6
+         5eQw==
+X-Gm-Message-State: AOAM533YgpMNW4n0/MxaJpdRJuVnYYeKhRyXy1+26fm7LieiFEp0ejwX
+        OGfoIOPuN2duJdL0X0Y0LNdZBqlg206XtwE9dLM=
+X-Google-Smtp-Source: ABdhPJy3eu8Z76RA/1AIXZuufjmbSfPRmDcmQAJT8ImQJO0F9+8jPzCF0vugf5Q+b6Rwalze40D25vht+VEIyH3OzR4=
+X-Received: by 2002:a25:4446:: with SMTP id r67mr3608241yba.459.1600288131072;
+ Wed, 16 Sep 2020 13:28:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200916112416.2321204-1-jolsa@kernel.org>
-In-Reply-To: <20200916112416.2321204-1-jolsa@kernel.org>
-From:   KP Singh <kpsingh@chromium.org>
-Date:   Wed, 16 Sep 2020 19:25:02 +0200
-Message-ID: <CACYkzJ7Y8WhVE9-6jSCC1svVLeuFFzXQ0Q-A9sjHomGQGgtZCw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix stat probe in d_path test
-To:     Jiri Olsa <jolsa@kernel.org>
+References: <160017005691.98230.13648200635390228683.stgit@toke.dk>
+ <160017006242.98230.15812695975228745782.stgit@toke.dk> <CAEf4Bzafmu5w6wjWT_d0B-JaUnm3KOf0Dgp+552iZii2+=3DWg@mail.gmail.com>
+In-Reply-To: <CAEf4Bzafmu5w6wjWT_d0B-JaUnm3KOf0Dgp+552iZii2+=3DWg@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 16 Sep 2020 13:28:40 -0700
+Message-ID: <CAEf4BzbqW12q_nXvat6=iTvKpy1P+e-r0N+9eY3vgDAZ8rcfLQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 5/8] bpf: Fix context type resolving for
+ extension programs
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 1:24 PM Jiri Olsa <jolsa@kernel.org> wrote:
+On Wed, Sep 16, 2020 at 12:59 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
 >
-> Some kernels builds might inline vfs_getattr call within fstat
-> syscall code path, so fentry/vfs_getattr trampoline is not called.
+> On Tue, Sep 15, 2020 at 5:50 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
+dhat.com> wrote:
+> >
+> > From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> >
+> > Eelco reported we can't properly access arguments if the tracing
+> > program is attached to extension program.
+> >
+> > Having following program:
+> >
+> >   SEC("classifier/test_pkt_md_access")
+> >   int test_pkt_md_access(struct __sk_buff *skb)
+> >
+> > with its extension:
+> >
+> >   SEC("freplace/test_pkt_md_access")
+> >   int test_pkt_md_access_new(struct __sk_buff *skb)
+> >
+> > and tracing that extension with:
+> >
+> >   SEC("fentry/test_pkt_md_access_new")
+> >   int BPF_PROG(fentry, struct sk_buff *skb)
+> >
+> > It's not possible to access skb argument in the fentry program,
+> > with following error from verifier:
+> >
+> >   ; int BPF_PROG(fentry, struct sk_buff *skb)
+> >   0: (79) r1 =3D *(u64 *)(r1 +0)
+> >   invalid bpf_context access off=3D0 size=3D8
+> >
+> > The problem is that btf_ctx_access gets the context type for the
+> > traced program, which is in this case the extension.
+> >
+> > But when we trace extension program, we want to get the context
+> > type of the program that the extension is attached to, so we can
+> > access the argument properly in the trace program.
+> >
+> > This version of the patch is tweaked slightly from Jiri's original one,
+> > since the refactoring in the previous patches means we have to get the
+> > target prog type from the new variable in prog->aux instead of directly
+> > from the target prog.
+> >
+> > Reported-by: Eelco Chaudron <echaudro@redhat.com>
+> > Suggested-by: Jiri Olsa <jolsa@kernel.org>
+> > Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> > ---
+> >  kernel/bpf/btf.c |    9 ++++++++-
+> >  1 file changed, 8 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> > index 9228af9917a8..55f7b2ba1cbd 100644
+> > --- a/kernel/bpf/btf.c
+> > +++ b/kernel/bpf/btf.c
+> > @@ -3860,7 +3860,14 @@ bool btf_ctx_access(int off, int size, enum bpf_=
+access_type type,
+> >
+> >         info->reg_type =3D PTR_TO_BTF_ID;
+> >         if (tgt_prog) {
+> > -               ret =3D btf_translate_to_vmlinux(log, btf, t, tgt_prog-=
+>type, arg);
+> > +               enum bpf_prog_type tgt_type;
+> > +
+> > +               if (tgt_prog->type =3D=3D BPF_PROG_TYPE_EXT)
+> > +                       tgt_type =3D tgt_prog->aux->tgt_prog_type;
 >
-> Alexei suggested [1] we should use security_inode_getattr instead,
-> because it's less likely to get inlined.
+> what if tgt_prog->aux->tgt_prog_type is also BPF_PROG_TYPE_EXT? Should
+> this be a loop?
+
+ok, never mind this specifically. there is an explicit check
+
+if (tgt_prog->type =3D=3D prog->type) {
+    verbose(env, "Cannot recursively attach\n");
+    return -EINVAL;
+}
+
+that will prevent this.
+
+But, I think we still will be able to construct a long chain of
+fmod_ret -> freplace -> fmod_ret -> freplace -> and so on ad
+infinitum. Can you please construct such a selftest? And then we
+should probably fix those checks to also disallow FMOD_RET, in
+addition to BPF_TRACE_FENTRY/FEXIT (and someone more familiar with LSM
+prog type should check if that can cause any problems).
+
 >
-> Adding security_inode_getattr to the d_path allowed list and
-> switching the stat trampoline to security_inode_getattr.
+> Which also brings up a few follow up questions. Now that we allow same
+> PROG_EXT program to be attached to multiple other programs:
 >
-> Adding flags that indicate trampolines were called and failing
-> the test if any of them got missed, so it's easier to identify
-> the issue next time.
+> 1. what prevents us from attaching PROG_EXT to itself?
+> 2. How do we prevent long chain of EXT programs or even loops?
 >
-> [1] https://lore.kernel.org/bpf/CAADnVQJ0FchoPqNWm+dEppyij-MOvvEG_trEfyrHdabtcEuZGg@mail.gmail.com/
-> Fixes: e4d1af4b16f8 ("selftests/bpf: Add test for d_path helper")
-> Signed-off-by: Jiri Olsa <jolsa@redhat.com>
-
-Acked-by: KP Singh <kpsingh@google.com>
-
-> ---
->  kernel/trace/bpf_trace.c                        | 1 +
->  tools/testing/selftests/bpf/prog_tests/d_path.c | 6 ++++++
->  tools/testing/selftests/bpf/progs/test_d_path.c | 9 ++++++++-
->  3 files changed, 15 insertions(+), 1 deletion(-)
+> Can you please add a few selftests testing such cases? I have a
+> feeling that with your changes in this patch set now it's possible to
+> break the kernel very easily. I don't know what the proper solution
+> is, but let's at least have a test that does show breakage, then try
+> to figure out the solution. See also comment in check_attach_btf_id()
+> about fentry/fexit and freplace interactions. That might not be
+> enough.
 >
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index b2a5380eb187..1001c053ebb3 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -1122,6 +1122,7 @@ BTF_ID(func, vfs_truncate)
->  BTF_ID(func, vfs_fallocate)
->  BTF_ID(func, dentry_open)
->  BTF_ID(func, vfs_getattr)
-> +BTF_ID(func, security_inode_getattr)
->  BTF_ID(func, filp_close)
->  BTF_SET_END(btf_allowlist_d_path)
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/d_path.c b/tools/testing/selftests/bpf/prog_tests/d_path.c
-> index fc12e0d445ff..f507f1a6fa3a 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/d_path.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/d_path.c
-> @@ -120,6 +120,12 @@ void test_d_path(void)
->         if (err < 0)
->                 goto cleanup;
->
-> +       if (CHECK(!bss->called_stat || !bss->called_close,
-> +                 "check",
-> +                 "failed to call trampolines called_stat %d, bss->called_close %d\n",
-> +                  bss->called_stat, bss->called_close))
-
-optional:
-
-maybe it's better to add two separate checks with specific error messages?
-
-"stat", "trampoline for security_inode_getattr was not called\n"
-"close", "trampoline for filp_close was not called\n"
-
-I think this would make the output more readable.
-
-- KP
-
-> +               goto cleanup;
-> +
->         for (int i = 0; i < MAX_FILES; i++) {
->                 CHECK(strncmp(src.paths[i], bss->paths_stat[i], MAX_PATH_LEN),
->                       "check",
-
-[...]
-
->         if (pid != my_pid)
->                 return 0;
->
-> --
-> 2.26.2
->
+> > +               else
+> > +                       tgt_type =3D tgt_prog->type;
+> > +
+> > +               ret =3D btf_translate_to_vmlinux(log, btf, t, tgt_type,=
+ arg);
+> >                 if (ret > 0) {
+> >                         info->btf_id =3D ret;
+> >                         return true;
+> >
