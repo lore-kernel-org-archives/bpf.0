@@ -2,245 +2,173 @@ Return-Path: <SRS0=xxat=CZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE743C433E2
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:38:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8836BC43461
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:38:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8AC1C2087D
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:38:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1B91A21974
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:38:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lPBC0D/6"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FtmJTING"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728278AbgIPUh6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Sep 2020 16:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728301AbgIPUh4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Sep 2020 16:37:56 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D0EC06174A;
-        Wed, 16 Sep 2020 13:37:55 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id x10so6328668ybj.13;
-        Wed, 16 Sep 2020 13:37:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KF1Vj/GrUHdC3Iej6R3OIIzN4HD/yQo2mo/psmlHkQs=;
-        b=lPBC0D/6M+E7UW1gXJNwCWVc0TOQrFgUrI01rXU0JwXh4DsbMs8ZFXye5PN3CtGkzq
-         HoEat7T7934QMRVxZ2imxROpLu60PSYo3L4j/Mxh3YRa+BP52w7iZD3r+sSlv+ZNkcye
-         c/zDPlHrdpe9NiAqUzVU4A4d4p5eL0DNKzpRRWq+xDkQ4EvkT2okzfWRT3pFRGXhqufX
-         ku8q7OeSC+EcfTJ6XlE/4MeDBX/IWjz46V6BxaeKHojMXJpyNhPluFLeOmrbxa8JFEte
-         m89sd5fvy0nszt52VuMQPYatkHJgU8inyeDED//8WhB1SqWiQhTmtvOwqrUQ07AQ5pXQ
-         ikKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KF1Vj/GrUHdC3Iej6R3OIIzN4HD/yQo2mo/psmlHkQs=;
-        b=XG1L1+wkuER4AqMrijeLiItMTKpO5FExAXX37+dyhsomB508fNCaS2R2tKzKSWZNg/
-         OCODGHA7ey4BsiESnrUCaPySpMzb9pX/QGoBwt8ScjZnvSgscJRPO6KedvFMsszHw9J4
-         0cLSpemJVZH9aY0PGDcH6bnGgckcMcKgvVn5ZgtHHUl+iC9DPMnoDWvmJeK/Remy3BtM
-         MFshJd3g2gx0ANha6/ez5hPokF97JjkZdF0orTUr4gz4CF//t7eFi/3HqjIxLbAGBE2U
-         RwnLGs8BKNTwDJ50Gnk9QNdApPuDt9IexwyU7TSz/8fzUkecNn+K33IdmO8UeF3n40xj
-         zIXg==
-X-Gm-Message-State: AOAM533shJ8mbg9hVAhjWp2i6DRmoci5wA2CzofFwBej/HaEMZxnDSVz
-        BIPjSHpbflCCql0THXsY5Q2YWHZE0V2LQurdbSk=
-X-Google-Smtp-Source: ABdhPJzoS4rJ5sZ5XZPnY306pGr4ee8GMKI2s1Sz4Ja6yEt531ttO2inkQp81qjE+RkRLcBdnozx+qxNnTXuCp6CqUs=
-X-Received: by 2002:a25:8541:: with SMTP id f1mr6403037ybn.230.1600288675003;
- Wed, 16 Sep 2020 13:37:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <160017005691.98230.13648200635390228683.stgit@toke.dk> <160017006352.98230.621859348254499900.stgit@toke.dk>
-In-Reply-To: <160017006352.98230.621859348254499900.stgit@toke.dk>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 16 Sep 2020 13:37:44 -0700
-Message-ID: <CAEf4BzZx33sqDd2WU2j+Ht_njn2qfcV1C0ginPBde+wj8rROeQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 6/8] libbpf: add support for freplace
- attachment in bpf_link_create
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        id S1726837AbgIPRH4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Sep 2020 13:07:56 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:20923 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726793AbgIPRFw (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 16 Sep 2020 13:05:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1600275946;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gyutKQ7iDiDszh0jv8Q/Pe+omXRolnMPIqJhMtRQapY=;
+        b=FtmJTINGr84yC3mvQZ4fCvGeQh1G1Bt+SUDhO56woKFq2XxSrc515rEtuaQJBWeUKg96Lw
+        QM05KIn3R7ey6TiFlD/045wXJ3W5DEU+Fyr1Ai1FegVwc0gcRcylsB0VwDbK0G4MNM53pj
+        dpNmKNGEt8tiN/Kefs+RmbimGxElYF0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-156-isAKG4fLMS2R26-5FIglVw-1; Wed, 16 Sep 2020 08:39:49 -0400
+X-MC-Unique: isAKG4fLMS2R26-5FIglVw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D1A19800C78;
+        Wed, 16 Sep 2020 12:39:45 +0000 (UTC)
+Received: from astarta.redhat.com (ovpn-114-67.ams2.redhat.com [10.36.114.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8D7A475137;
+        Wed, 16 Sep 2020 12:39:39 +0000 (UTC)
+From:   Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Cc:     Will Deacon <will@kernel.org>, bpf@vger.kernel.org,
+        ardb@kernel.org, naresh.kamboju@linaro.org,
+        Jiri Olsa <jolsa@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
         KP Singh <kpsingh@chromium.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] arm64: bpf: Fix branch offset in JIT
+References: <20200914160355.19179-1-ilias.apalodimas@linaro.org>
+        <20200915131102.GA26439@willie-the-truck>
+        <20200915135344.GA113966@apalos.home>
+        <20200915141707.GB26439@willie-the-truck>
+        <20200915192311.GA124360@apalos.home>
+Date:   Wed, 16 Sep 2020 15:39:37 +0300
+In-Reply-To: <20200915192311.GA124360@apalos.home> (Ilias Apalodimas's message
+        of "Tue, 15 Sep 2020 22:23:11 +0300")
+Message-ID: <xunyo8m5hp4m.fsf@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 5:50 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
-at.com> wrote:
->
-> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->
-> This adds support for supplying a target btf ID for the bpf_link_create()
-> operation, and adds a new bpf_program__attach_freplace() high-level API f=
-or
-> attaching freplace functions with a target.
->
-> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> ---
->  tools/lib/bpf/bpf.c      |    1 +
->  tools/lib/bpf/bpf.h      |    3 ++-
->  tools/lib/bpf/libbpf.c   |   24 ++++++++++++++++++------
->  tools/lib/bpf/libbpf.h   |    3 +++
->  tools/lib/bpf/libbpf.map |    1 +
->  5 files changed, 25 insertions(+), 7 deletions(-)
->
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 82b983ff6569..e928456c0dd6 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -599,6 +599,7 @@ int bpf_link_create(int prog_fd, int target_fd,
->         attr.link_create.iter_info =3D
->                 ptr_to_u64(OPTS_GET(opts, iter_info, (void *)0));
->         attr.link_create.iter_info_len =3D OPTS_GET(opts, iter_info_len, =
-0);
-> +       attr.link_create.target_btf_id =3D OPTS_GET(opts, target_btf_id, =
-0);
->
->         return sys_bpf(BPF_LINK_CREATE, &attr, sizeof(attr));
->  }
-> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-> index 015d13f25fcc..f8dbf666b62b 100644
-> --- a/tools/lib/bpf/bpf.h
-> +++ b/tools/lib/bpf/bpf.h
-> @@ -174,8 +174,9 @@ struct bpf_link_create_opts {
->         __u32 flags;
->         union bpf_iter_link_info *iter_info;
->         __u32 iter_info_len;
-> +       __u32 target_btf_id;
->  };
-> -#define bpf_link_create_opts__last_field iter_info_len
-> +#define bpf_link_create_opts__last_field target_btf_id
->
->  LIBBPF_API int bpf_link_create(int prog_fd, int target_fd,
->                                enum bpf_attach_type attach_type,
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 550950eb1860..165131c73f40 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -9322,12 +9322,14 @@ static struct bpf_link *attach_iter(const struct =
-bpf_sec_def *sec,
->
->  static struct bpf_link *
->  bpf_program__attach_fd(struct bpf_program *prog, int target_fd,
-> -                      const char *target_name)
-> +                      int target_btf_id, const char *target_name)
->  {
->         enum bpf_attach_type attach_type;
->         char errmsg[STRERR_BUFSIZE];
->         struct bpf_link *link;
->         int prog_fd, link_fd;
-> +       DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts,
-> +                           .target_btf_id =3D target_btf_id);
->
->         prog_fd =3D bpf_program__fd(prog);
->         if (prog_fd < 0) {
-> @@ -9340,8 +9342,12 @@ bpf_program__attach_fd(struct bpf_program *prog, i=
-nt target_fd,
->                 return ERR_PTR(-ENOMEM);
->         link->detach =3D &bpf_link__detach_fd;
->
-> -       attach_type =3D bpf_program__get_expected_attach_type(prog);
-> -       link_fd =3D bpf_link_create(prog_fd, target_fd, attach_type, NULL=
-);
-> +       if (bpf_program__get_type(prog) =3D=3D BPF_PROG_TYPE_EXT)
-> +               attach_type =3D BPF_TRACE_FREPLACE;
+Hi, Ilias!
 
-doing this unconditionally will break an old-style freplace without
-target_fd/btf_id on older kernels. Safe and simple way would be to
-continue using raw_tracepoint_open when there is no target_fd/btf_id,
-and use LINK_CREATE for newer stuff. Alternatively, you'd need to do
-feature detection, but it's still would be nice to handle old-style
-attach through raw_tracepoint_open for bpf_program__attach_freplace.
+>>>>> On Tue, 15 Sep 2020 22:23:11 +0300, Ilias Apalodimas  wrote:
 
-so I suggest leaving bpf_program__attach_fd() as is and to create a
-custom bpf_program__attach_freplace() implementation.
+ > Hi Will, 
+ > On Tue, Sep 15, 2020 at 03:17:08PM +0100, Will Deacon wrote:
+ >> On Tue, Sep 15, 2020 at 04:53:44PM +0300, Ilias Apalodimas wrote:
+ >> > On Tue, Sep 15, 2020 at 02:11:03PM +0100, Will Deacon wrote:
+ >> > > Hi Ilias,
+ >> > > 
+ >> > > On Mon, Sep 14, 2020 at 07:03:55PM +0300, Ilias Apalodimas wrote:
+ >> > > > Running the eBPF test_verifier leads to random errors looking like this:
+ >> > > > 
+ >> > > > [ 6525.735488] Unexpected kernel BRK exception at EL1
+ >> > > > [ 6525.735502] Internal error: ptrace BRK handler: f2000100 [#1] SMP
+ >> > > 
+ >> > > Does this happen because we poison the BPF memory with BRK instructions?
+ >> > > Maybe we should look at using a special immediate so we can detect this,
+ >> > > rather than end up in the ptrace handler.
+ >> > 
+ >> > As discussed offline this is what aarch64_insn_gen_branch_imm() will return for
+ >> > offsets > 128M and yes replacing the handler with a more suitable message would 
+ >> > be good.
+ >> 
+ >> Can you give the diff below a shot, please? Hopefully printing a more useful
+ >> message will mean these things get triaged/debugged better in future.
 
-> +       else
-> +               attach_type =3D bpf_program__get_expected_attach_type(pro=
-g);
-> +
-> +       link_fd =3D bpf_link_create(prog_fd, target_fd, attach_type, &opt=
-s);
->         if (link_fd < 0) {
->                 link_fd =3D -errno;
->                 free(link);
-> @@ -9357,19 +9363,25 @@ bpf_program__attach_fd(struct bpf_program *prog, =
-int target_fd,
->  struct bpf_link *
->  bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
->  {
-> -       return bpf_program__attach_fd(prog, cgroup_fd, "cgroup");
-> +       return bpf_program__attach_fd(prog, cgroup_fd, 0, "cgroup");
->  }
->
->  struct bpf_link *
->  bpf_program__attach_netns(struct bpf_program *prog, int netns_fd)
->  {
-> -       return bpf_program__attach_fd(prog, netns_fd, "netns");
-> +       return bpf_program__attach_fd(prog, netns_fd, 0, "netns");
->  }
->
->  struct bpf_link *bpf_program__attach_xdp(struct bpf_program *prog, int i=
-findex)
->  {
->         /* target_fd/target_ifindex use the same field in LINK_CREATE */
-> -       return bpf_program__attach_fd(prog, ifindex, "xdp");
-> +       return bpf_program__attach_fd(prog, ifindex, 0, "xdp");
-> +}
-> +
-> +struct bpf_link *bpf_program__attach_freplace(struct bpf_program *prog,
-> +                                             int target_fd, int target_b=
-tf_id)
-> +{
-> +       return bpf_program__attach_fd(prog, target_fd, target_btf_id, "fr=
-eplace");
->  }
->
->  struct bpf_link *
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index a750f67a23f6..ce5add9b9203 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -261,6 +261,9 @@ LIBBPF_API struct bpf_link *
->  bpf_program__attach_netns(struct bpf_program *prog, int netns_fd);
->  LIBBPF_API struct bpf_link *
->  bpf_program__attach_xdp(struct bpf_program *prog, int ifindex);
-> +LIBBPF_API struct bpf_link *
-> +bpf_program__attach_freplace(struct bpf_program *prog,
-> +                            int target_fd, int target_btf_id);
+ > [...]
 
-maybe a const char * function name instead of target_btf_id would be a
-nicer API? Users won't have to deal with fetching target prog's BTF,
-searching it, etc. That's all pretty straightforward for libbpf to do,
-leaving users with more natural and simpler API.
+ > The error print is going to be helpful imho. At least it will help
+ > people notice something is wrong a lot faster than the previous one.
 
->
->  struct bpf_map;
->
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> index 92ceb48a5ca2..3cc2c42f435d 100644
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -302,6 +302,7 @@ LIBBPF_0.1.0 {
->
->  LIBBPF_0.2.0 {
->         global:
-> +               bpf_program__attach_freplace;
->                 bpf_program__section_name;
->                 perf_buffer__buffer_cnt;
->                 perf_buffer__buffer_fd;
->
+
+If you start to amend extables, could you consider a change like
+
+05a68e892e89 ("s390/kernel: expand exception table logic to allow new handling options")
+
+and implementation of BPF_PROBE_MEM then?
+
+ > [ 575.273203] BPF JIT generated an invalid instruction at
+ > bpf_prog_64e6f4ba80861823_F+0x2e4/0x9a4!
+ > [  575.281996] Unexpected kernel BRK exception at EL1
+ > [  575.286786] Internal error: BRK handler: f2000100 [#5] PREEMPT SMP
+ > [ 575.292965] Modules linked in: crct10dif_ce drm ip_tables x_tables
+ > ipv6 btrfs blake2b_generic libcrc32c xor xor_neon zstd_compress
+ > raid6_pq nvme nvme_core realtek
+ > [ 575.307516] CPU: 21 PID: 11760 Comm: test_verifier Tainted: G D W
+ > 5.9.0-rc3-01410-ged6d9b022813-dirty #1
+ > [ 575.318125] Hardware name: Socionext SynQuacer E-series
+ > DeveloperBox, BIOS build #1 Jun 6 2020
+ > [  575.326825] pstate: 20000005 (nzCv daif -PAN -UAO BTYPE=--)
+ > [  575.332396] pc : bpf_prog_64e6f4ba80861823_F+0x2e4/0x9a4
+ > [  575.337705] lr : bpf_prog_d3e125b76c96daac+0x40/0xdec
+ > [  575.342752] sp : ffff8000144e3ba0
+ > [  575.346061] x29: ffff8000144e3bd0 x28: 0000000000000000
+ > [  575.351371] x27: 00000085f19dc08d x26: 0000000000000000
+ > [  575.356681] x25: ffff8000144e3ba0 x24: ffff800011fdf038
+ > [  575.361991] x23: ffff8000144e3d20 x22: 0000000000000001
+ > [  575.367301] x21: ffff800011fdf000 x20: ffff0009609d4740
+ > [  575.372611] x19: 0000000000000000 x18: 0000000000000000
+ > [  575.377921] x17: 0000000000000000 x16: 0000000000000000
+ > [  575.383231] x15: 0000000000000000 x14: 0000000000000000
+ > [  575.388540] x13: 0000000000000000 x12: 0000000000000000
+ > [  575.393850] x11: 0000000000000000 x10: ffff8000000bc65c
+ > [  575.399160] x9 : 0000000000000000 x8 : ffff8000144e3c58
+ > [  575.404469] x7 : 0000000000000000 x6 : 0000000dd7ae967a
+ > [  575.409779] x5 : 00ffffffffffffff x4 : 0007fabd6992cf96
+ > [  575.415088] x3 : 0000000000000018 x2 : ffff8000000ba214
+ > [  575.420398] x1 : 000000000000000a x0 : 0000000000000009
+ > [  575.425708] Call trace:
+ > [  575.428152]  bpf_prog_64e6f4ba80861823_F+0x2e4/0x9a4
+ > [  575.433114]  bpf_prog_d3e125b76c96daac+0x40/0xdec
+ > [  575.437822]  bpf_dispatcher_xdp_func+0x10/0x1c
+ > [  575.442265]  bpf_test_run+0x80/0x240
+ > [  575.445838]  bpf_prog_test_run_xdp+0xe8/0x190
+ > [  575.450196]  __do_sys_bpf+0x8e8/0x1b00
+ > [  575.453943]  __arm64_sys_bpf+0x24/0x510
+ > [  575.457780]  el0_svc_common.constprop.0+0x6c/0x170
+ > [  575.462570]  do_el0_svc+0x24/0x90
+ > [  575.465883]  el0_sync_handler+0x90/0x19c
+ > [  575.469802]  el0_sync+0x158/0x180
+ > [  575.473118] Code: d4202000 d4202000 d4202000 d4202000 (d4202000)
+ > [  575.479211] ---[ end trace 8cd54c7d5c0ffda4 ]---
+
+ > Cheers
+ > /Ilias
+
+
+-- 
+WBR,
+Yauheni Kaliuta
+
