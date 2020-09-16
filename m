@@ -2,85 +2,261 @@ Return-Path: <SRS0=xxat=CZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7EA2C433E2
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 22:21:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C724C43461
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 22:21:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 264EC2080C
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 22:21:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600294870;
-	bh=M150LKiDiDW3DRD1azePQoVjIa7znfbdXjhsLdO+NxM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=J+9FVDh+Zf1s6jJX1VrOBU64qisRk/b+YqPLgEbxaFaEjhbWTSRd5TkT7diAuYrnZ
-	 WgRzqkvW/GF3yUrIbUwS9MWGPzQK46K61hPgHq+343dFY3qcdc3yoWTGWOaT4qR+fd
-	 m8zYj+KdYJC9Ic65tEnz6xa8y/LE4bCinOIQ3wsM=
+	by mail.kernel.org (Postfix) with ESMTP id E13A820732
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 22:21:38 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I4AoPSUt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726180AbgIPWVJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Sep 2020 18:21:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38958 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726187AbgIPWVH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Sep 2020 18:21:07 -0400
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2DA3E2080C
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2020 22:21:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600294867;
-        bh=M150LKiDiDW3DRD1azePQoVjIa7znfbdXjhsLdO+NxM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=F0ERzzkX3p0M5fu8LyN9p6Tph/TGg6h0HCOv67NYtqVs1/Lztrtp8+KvHxhFnEWLJ
-         ZI9fKusOzF3Bj9w0SthAe7ZvMbUyls+1/1U18D8nWHf6tpgTrbfMYq1zzzSwWTNTZa
-         pCse+VmW7aa+Q0bsOERfnRDmLOSqLoUWiUcaU00M=
-Received: by mail-lf1-f52.google.com with SMTP id w11so8683343lfn.2
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2020 15:21:07 -0700 (PDT)
-X-Gm-Message-State: AOAM532/B+d+tSCh8HRoixFE3BAF8dX2VsECebb2uLM7ZHRpCffLpf2F
-        0p8dDr3fHi0/P+3HK8u1w90oS2CsTMBFjF5RLwo=
-X-Google-Smtp-Source: ABdhPJz15MhXDkeC7rcPQCNaAnyWFYM2QesQGWcPrdCWOFdxgfpVaigmpeYTRcedbraZTqEuN9EPDPbuB3mAAKLfO20=
-X-Received: by 2002:a19:8907:: with SMTP id l7mr8172376lfd.105.1600294865403;
- Wed, 16 Sep 2020 15:21:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200915113928.3768496-1-iii@linux.ibm.com> <CAEf4BzaE_gAF7fHyD2HTQRgH0KLgD39yxh7WsJ8SxMrtXj6GKQ@mail.gmail.com>
-In-Reply-To: <CAEf4BzaE_gAF7fHyD2HTQRgH0KLgD39yxh7WsJ8SxMrtXj6GKQ@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Wed, 16 Sep 2020 15:20:54 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4+N0DunytSmbXGcfp=91pod6r_Rm-+i5NC2m6QwPfSGA@mail.gmail.com>
-Message-ID: <CAPhsuW4+N0DunytSmbXGcfp=91pod6r_Rm-+i5NC2m6QwPfSGA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix endianness issue in test_sockopt_sk
+        id S1726325AbgIPWVi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Sep 2020 18:21:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:21592 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726187AbgIPWVe (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 16 Sep 2020 18:21:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1600294891;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uYvo0H1Rjzjv0NWBOaMQkBnxRuElNbgBtZ6nMHuKkD4=;
+        b=I4AoPSUtBIglGG3NcFPMD/qNdOanjlUD2j0uSv6PTU+cG7urGFd64iid6Yq/NtrFFQ2XuQ
+        OpLdaiMHgAHC+Z9+3zq3gqlbiHKpTiT/wDL/je1nPP/yhHNOrCuJLutl30YSraxA/GO0BW
+        FgY1OLz85T2sWVIIoLpef4T6rkvTBzY=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-453-O3cGLlT-N4mgEUdwh0F-nw-1; Wed, 16 Sep 2020 17:21:14 -0400
+X-MC-Unique: O3cGLlT-N4mgEUdwh0F-nw-1
+Received: by mail-wr1-f71.google.com with SMTP id d9so3039236wrv.16
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2020 14:21:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=uYvo0H1Rjzjv0NWBOaMQkBnxRuElNbgBtZ6nMHuKkD4=;
+        b=jrAUSj5wExIKoTObhLTHMcmHcfpGlUt9sR/+oZ7Q6P9R7Fh3v7SU+DGho9JtBzy20I
+         wv/WDTTuuw6Ti1v/mrTWpIB2gpZm4wTDifOqMzk1QYye18Nvo1wxqXNu8JEt6WPulQ3U
+         bT8nVZgFvqMjnAkaaD/pnL4wvWBhW2QQBS2OWSb3sJenPZde6J7bogdb7tBngX0NUJVx
+         GQQKx2BIqa3RLJJzewBhk+3qaM9XEPNgFLmd4DsR2D8Ym/0eejZXVO8Zw3Ots8eG53F9
+         PWBsYMhVEXpuszkNdFSQBXACYrNlxujiz7Odl+XXTlPMpj8Jv5hUCr7T/rm83FQE3ZuH
+         UuGA==
+X-Gm-Message-State: AOAM5332eFh0A420BgifQIQ4S9nDUvXjwbDFoHq3jU1VCIF9IZ9BI/mk
+        ZBJW2KrSt+AWj1R48jpmLwOmrtzSaHsXQO/69bI/NDcvQkVRIYuG0gz0WvVvnI0y4A3TurOhgZw
+        YRD4zzJZkBam+
+X-Received: by 2002:adf:8b48:: with SMTP id v8mr28748183wra.21.1600291273159;
+        Wed, 16 Sep 2020 14:21:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzZNSLiRlSWecdTzovI64PYyISFchtEd/S31DTdIJEc3WTOk7+iIddmrHXw3zvXJlJM6Dqwdg==
+X-Received: by 2002:adf:8b48:: with SMTP id v8mr28748159wra.21.1600291272889;
+        Wed, 16 Sep 2020 14:21:12 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id t6sm39182304wre.30.2020.09.16.14.21.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Sep 2020 14:21:12 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 948DA183A90; Wed, 16 Sep 2020 23:21:11 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Ilya Leoshkevich <iii@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v5 6/8] libbpf: add support for freplace
+ attachment in bpf_link_create
+In-Reply-To: <CAEf4Bzb5pLJaW_Rkiq+5QacH6G-FFmj6eRBiZKybYCkkBVMzLA@mail.gmail.com>
+References: <160017005691.98230.13648200635390228683.stgit@toke.dk>
+ <160017006352.98230.621859348254499900.stgit@toke.dk>
+ <CAEf4BzZx33sqDd2WU2j+Ht_njn2qfcV1C0ginPBde+wj8rROeQ@mail.gmail.com>
+ <CAEf4Bzb5pLJaW_Rkiq+5QacH6G-FFmj6eRBiZKybYCkkBVMzLA@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Wed, 16 Sep 2020 23:21:11 +0200
+Message-ID: <87h7rxpge0.fsf@toke.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 6:20 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Tue, Sep 15, 2020 at 4:39 AM Ilya Leoshkevich <iii@linux.ibm.com> wrote:
-> >
-> > getsetsockopt() calls getsockopt() with optlen == 1, but then checks
-> > the resulting int. It is ok on little endian, but not on big endian.
-> >
-> > Fix by checking char instead.
-> >
-> > Fixes: 8a027dc0 ("selftests/bpf: add sockopt test that exercises sk helpers")
-> > Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
-> > ---
-> >
-> > v1->v2: Also pass a single byte to log_err.
-> >
->
-> Acked-by: Andrii Nakryiko <andriin@fb.com>
+Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
 
-Acked-by: Song Liu <songliubraving@fb.com>
+> On Wed, Sep 16, 2020 at 1:37 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+>>
+>> On Tue, Sep 15, 2020 at 5:50 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@r=
+edhat.com> wrote:
+>> >
+>> > From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>> >
+>> > This adds support for supplying a target btf ID for the bpf_link_creat=
+e()
+>> > operation, and adds a new bpf_program__attach_freplace() high-level AP=
+I for
+>> > attaching freplace functions with a target.
+>> >
+>> > Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>> > ---
+>> >  tools/lib/bpf/bpf.c      |    1 +
+>> >  tools/lib/bpf/bpf.h      |    3 ++-
+>> >  tools/lib/bpf/libbpf.c   |   24 ++++++++++++++++++------
+>> >  tools/lib/bpf/libbpf.h   |    3 +++
+>> >  tools/lib/bpf/libbpf.map |    1 +
+>> >  5 files changed, 25 insertions(+), 7 deletions(-)
+>> >
+>> > diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+>> > index 82b983ff6569..e928456c0dd6 100644
+>> > --- a/tools/lib/bpf/bpf.c
+>> > +++ b/tools/lib/bpf/bpf.c
+>> > @@ -599,6 +599,7 @@ int bpf_link_create(int prog_fd, int target_fd,
+>> >         attr.link_create.iter_info =3D
+>> >                 ptr_to_u64(OPTS_GET(opts, iter_info, (void *)0));
+>> >         attr.link_create.iter_info_len =3D OPTS_GET(opts, iter_info_le=
+n, 0);
+>> > +       attr.link_create.target_btf_id =3D OPTS_GET(opts, target_btf_i=
+d, 0);
+>> >
+>> >         return sys_bpf(BPF_LINK_CREATE, &attr, sizeof(attr));
+>> >  }
+>> > diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+>> > index 015d13f25fcc..f8dbf666b62b 100644
+>> > --- a/tools/lib/bpf/bpf.h
+>> > +++ b/tools/lib/bpf/bpf.h
+>> > @@ -174,8 +174,9 @@ struct bpf_link_create_opts {
+>> >         __u32 flags;
+>> >         union bpf_iter_link_info *iter_info;
+>> >         __u32 iter_info_len;
+>> > +       __u32 target_btf_id;
+>> >  };
+>> > -#define bpf_link_create_opts__last_field iter_info_len
+>> > +#define bpf_link_create_opts__last_field target_btf_id
+>> >
+>> >  LIBBPF_API int bpf_link_create(int prog_fd, int target_fd,
+>> >                                enum bpf_attach_type attach_type,
+>> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+>> > index 550950eb1860..165131c73f40 100644
+>> > --- a/tools/lib/bpf/libbpf.c
+>> > +++ b/tools/lib/bpf/libbpf.c
+>> > @@ -9322,12 +9322,14 @@ static struct bpf_link *attach_iter(const stru=
+ct bpf_sec_def *sec,
+>> >
+>> >  static struct bpf_link *
+>> >  bpf_program__attach_fd(struct bpf_program *prog, int target_fd,
+>> > -                      const char *target_name)
+>> > +                      int target_btf_id, const char *target_name)
+>> >  {
+>> >         enum bpf_attach_type attach_type;
+>> >         char errmsg[STRERR_BUFSIZE];
+>> >         struct bpf_link *link;
+>> >         int prog_fd, link_fd;
+>> > +       DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts,
+>> > +                           .target_btf_id =3D target_btf_id);
+>> >
+>> >         prog_fd =3D bpf_program__fd(prog);
+>> >         if (prog_fd < 0) {
+>> > @@ -9340,8 +9342,12 @@ bpf_program__attach_fd(struct bpf_program *prog=
+, int target_fd,
+>> >                 return ERR_PTR(-ENOMEM);
+>> >         link->detach =3D &bpf_link__detach_fd;
+>> >
+>> > -       attach_type =3D bpf_program__get_expected_attach_type(prog);
+>> > -       link_fd =3D bpf_link_create(prog_fd, target_fd, attach_type, N=
+ULL);
+>> > +       if (bpf_program__get_type(prog) =3D=3D BPF_PROG_TYPE_EXT)
+>> > +               attach_type =3D BPF_TRACE_FREPLACE;
+>>
+>> doing this unconditionally will break an old-style freplace without
+>> target_fd/btf_id on older kernels. Safe and simple way would be to
+>> continue using raw_tracepoint_open when there is no target_fd/btf_id,
+>> and use LINK_CREATE for newer stuff. Alternatively, you'd need to do
+>> feature detection, but it's still would be nice to handle old-style
+>> attach through raw_tracepoint_open for bpf_program__attach_freplace.
+>>
+>> so I suggest leaving bpf_program__attach_fd() as is and to create a
+>> custom bpf_program__attach_freplace() implementation.
+
+Sure, I'll take another pass at this. Not sure how useful feature
+detection in libbpf is; if the caller passes a target, libbpf can't
+really do much if the kernel doesn't support it...
+
+>> > +       else
+>> > +               attach_type =3D bpf_program__get_expected_attach_type(=
+prog);
+>> > +
+>> > +       link_fd =3D bpf_link_create(prog_fd, target_fd, attach_type, &=
+opts);
+>> >         if (link_fd < 0) {
+>> >                 link_fd =3D -errno;
+>> >                 free(link);
+>> > @@ -9357,19 +9363,25 @@ bpf_program__attach_fd(struct bpf_program *pro=
+g, int target_fd,
+>> >  struct bpf_link *
+>> >  bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
+>> >  {
+>> > -       return bpf_program__attach_fd(prog, cgroup_fd, "cgroup");
+>> > +       return bpf_program__attach_fd(prog, cgroup_fd, 0, "cgroup");
+>> >  }
+>> >
+>> >  struct bpf_link *
+>> >  bpf_program__attach_netns(struct bpf_program *prog, int netns_fd)
+>> >  {
+>> > -       return bpf_program__attach_fd(prog, netns_fd, "netns");
+>> > +       return bpf_program__attach_fd(prog, netns_fd, 0, "netns");
+>> >  }
+>> >
+>> >  struct bpf_link *bpf_program__attach_xdp(struct bpf_program *prog, in=
+t ifindex)
+>> >  {
+>> >         /* target_fd/target_ifindex use the same field in LINK_CREATE =
+*/
+>> > -       return bpf_program__attach_fd(prog, ifindex, "xdp");
+>> > +       return bpf_program__attach_fd(prog, ifindex, 0, "xdp");
+>> > +}
+>> > +
+>> > +struct bpf_link *bpf_program__attach_freplace(struct bpf_program *pro=
+g,
+>> > +                                             int target_fd, int targe=
+t_btf_id)
+>> > +{
+>> > +       return bpf_program__attach_fd(prog, target_fd, target_btf_id, =
+"freplace");
+>> >  }
+>> >
+>> >  struct bpf_link *
+>> > diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+>> > index a750f67a23f6..ce5add9b9203 100644
+>> > --- a/tools/lib/bpf/libbpf.h
+>> > +++ b/tools/lib/bpf/libbpf.h
+>> > @@ -261,6 +261,9 @@ LIBBPF_API struct bpf_link *
+>> >  bpf_program__attach_netns(struct bpf_program *prog, int netns_fd);
+>> >  LIBBPF_API struct bpf_link *
+>> >  bpf_program__attach_xdp(struct bpf_program *prog, int ifindex);
+>> > +LIBBPF_API struct bpf_link *
+>> > +bpf_program__attach_freplace(struct bpf_program *prog,
+>> > +                            int target_fd, int target_btf_id);
+>>
+>> maybe a const char * function name instead of target_btf_id would be a
+>> nicer API? Users won't have to deal with fetching target prog's BTF,
+>> searching it, etc. That's all pretty straightforward for libbpf to do,
+>> leaving users with more natural and simpler API.
+>>
+>
+> bpf_program__set_attach_target() uses string name for target
+> functions, we should definitely be consistent here
+
+All right, fair enough :)
+
+-Toke
+
