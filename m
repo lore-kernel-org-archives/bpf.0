@@ -2,139 +2,156 @@ Return-Path: <SRS0=xxat=CZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B65D3C43461
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 17:57:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CB965C433E2
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 18:50:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 59E2620771
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 17:57:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5E67620708
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 18:50:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Otyi0+6P"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D/GXJTn1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727652AbgIPR4v (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Sep 2020 13:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
+        id S1728092AbgIPSqE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Sep 2020 14:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727654AbgIPRyS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Sep 2020 13:54:18 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A88C06174A
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2020 10:53:31 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id z4so7853120wrr.4
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2020 10:53:31 -0700 (PDT)
+        with ESMTP id S1727939AbgIPSWV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Sep 2020 14:22:21 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB552C061756;
+        Wed, 16 Sep 2020 11:22:20 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id c17so6126060ybe.0;
+        Wed, 16 Sep 2020 11:22:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eVZDtIYLLKpSADsOjK7RRLgddTAamvFeSVhId/1V2Gk=;
-        b=Otyi0+6PHN8+a5kbjQ4eipTCbgWajd4H1TZ+KTnb7Zq6GoEp+tzs2cL2PKejysnmPn
-         Y28a2i46BpprdSvfwhr8yJONCQSN9t1NzjTz/bighGL1kB4VNYramNcqsSWKdb4A+iKY
-         nhisZofk1sXXG6mxgnGo9KtwJsrlMQuA0barg=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0yvq7JNthKxbYOHDHOWG0xNarv1GFWHVlIaBEc+BtOM=;
+        b=D/GXJTn1HM6gps0EGKWe8RnWjzIxNdP6IfbTrWQVSrXz+dt/4b7Txhvu3n3T+gagDU
+         6OF8h+QVOGMJrW9ggZjebNDBC1uWrtLPFJ4uSfXQTpW8CVlaHdwHHnxpKepBQ4j3tQvh
+         v0iPS8yxr5XZhi1gXyLS7XJVMXDUAkll9nqTtgn4jM90Hxnvf4Ql710DBmBwXGli0YCO
+         g6DuEFrL0Xr7X7bhWOnGdSAruGCDJ8fcsHVj0T5+vhxMtdNNnHHntLF/LfuhEtblfCyl
+         Ag9/W9gQLqHyNL8TwxCEuCxm3oHB9tGHa7PuxfOEhy+1beoHD00xzF2n3ztciQRb3Hxe
+         8dmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eVZDtIYLLKpSADsOjK7RRLgddTAamvFeSVhId/1V2Gk=;
-        b=qEE25x5EQpcgxb1BsagX53Axlx6llz0e9aGTXvMff2HSiNeJ4r5cEBMNwT0fnqw8U8
-         rXTbhIWfYLtJ0Ha1remrUEta3Sxsaj+w/+WOywe+no4kGyBKSXFDOXRzjRKIdF645bNx
-         3BCMuzg1jqmmSHC+DbmXK+bJRGIWtEqP2/bBUuECDPpGeU6Sz0d172oPZ1ze3uxiFY6O
-         n4axk15y6pnaV+DI0EGLJR18siI8p5XTMyJlamvezXXCKaaK94IfXQYgyljaGtRhbT5v
-         SrfkW1/CpdjmWSs8ai4YL2a9AD652cQuVCCpbYVch496GHYYf7nY10vU7QlntlDp0ru5
-         mukg==
-X-Gm-Message-State: AOAM530mxSqGiF09Rk8qqbSt3C2JsWuoarl1HHFRm0yoOO2cdOE+JKZg
-        54G9In/CzCBWTz3Qm/sxSJcCcA==
-X-Google-Smtp-Source: ABdhPJzceJWI37UQ6YYj8CBtZFCrnqgu9yyyO2+uu1+nCBDSzQu1VZ2O76ApbGOzU1sV37fU7O2dKA==
-X-Received: by 2002:a5d:4448:: with SMTP id x8mr29883805wrr.207.1600278809813;
-        Wed, 16 Sep 2020 10:53:29 -0700 (PDT)
-Received: from antares.lan (5.c.5.5.a.2.f.6.a.a.d.6.3.1.9.1.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:1913:6daa:6f2a:55c5])
-        by smtp.gmail.com with ESMTPSA id v17sm34177508wrr.60.2020.09.16.10.53.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2020 10:53:28 -0700 (PDT)
-From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     ast@kernel.org, yhs@fb.com, daniel@iogearbox.net, kafai@fb.com,
-        andriin@fb.com
-Cc:     bpf@vger.kernel.org, kernel-team@cloudflare.com,
-        Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH bpf-next v4 00/11] Make check_func_arg type checks table driven
-Date:   Wed, 16 Sep 2020 18:52:44 +0100
-Message-Id: <20200916175255.192040-1-lmb@cloudflare.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0yvq7JNthKxbYOHDHOWG0xNarv1GFWHVlIaBEc+BtOM=;
+        b=aaLIyd9UyZPB7JeP26Lni9MQ+7ZNfNDBZ9oC9PObGjWdRsZkEAB9Zd8DPrrFzu6a28
+         3rfJcKDWDwLEeCKJGGcNvtVkzglg1gkKSx3CCPHXdhzfIwOXC/IJgkYdOhwfobX6VEPi
+         VI+gdeHR1P3ABOJO0hYpRHyWP9XT85cF3zm1EUCKm/5lN13cr+jPwMep5yIrbf4HfiAg
+         8BM0LpRzoXDjmoImAiQwb4cDouzC+ntyedj+pk3G79j4cpPwXdMnE5ckO90+JaYd9TO1
+         /fLKTQ4oYMxs4TU3FMIFOfVkzyyRxEE1sByBmyFmFfBXFBqOUYJGS6rHpDsBdG0BIjpO
+         uRRQ==
+X-Gm-Message-State: AOAM533zgxyxbWn1hxHxcaaWtFLaKUcDsmjBVnz+wKolA/PGUk9NWdr2
+        aehgdHO4ktuIhOjqwFVexwRxjGq9buSmz4rptSY=
+X-Google-Smtp-Source: ABdhPJysUJyNB7gcgsAktzk2oaIoLFmQ/kJOZs9XR0p+ZpiN/WMfaYvyZKJYCtMsSuiZ8Z3SfVGRdtB/e+wh2Ugd6Po=
+X-Received: by 2002:a25:9d06:: with SMTP id i6mr35125340ybp.510.1600280539251;
+ Wed, 16 Sep 2020 11:22:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <160017005691.98230.13648200635390228683.stgit@toke.dk> <160017006024.98230.18011033601869719353.stgit@toke.dk>
+In-Reply-To: <160017006024.98230.18011033601869719353.stgit@toke.dk>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 16 Sep 2020 11:22:08 -0700
+Message-ID: <CAEf4BzZuvzb8Oqp=bLHo9H9fawPxh0a2+qhAhB+8KEO36YkX1g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 3/8] bpf: move prog->aux->linked_prog and
+ trampoline into bpf_link on attach
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Changes in v4:
-- Output the desired type on BTF ID mismatch (Martin)
+On Tue, Sep 15, 2020 at 5:50 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
+at.com> wrote:
+>
+> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>
+> In preparation for allowing multiple attachments of freplace programs, mo=
+ve
+> the references to the target program and trampoline into the
+> bpf_tracing_link structure when that is created. To do this atomically,
+> introduce a new mutex in prog->aux to protect writing to the two pointers
+> to target prog and trampoline, and rename the members to make it clear th=
+at
+> they are related.
+>
+> With this change, it is no longer possible to attach the same tracing
+> program multiple times (detaching in-between), since the reference from t=
+he
+> tracing program to the target disappears on the first attach. However,
+> since the next patch will let the caller supply an attach target, that wi=
+ll
+> also make it possible to attach to the same place multiple times.
+>
+> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> ---
 
-Changes in v3:
-- Fix BTF_ID_LIST_SINGLE if BTF is disabled (Martin)
-- Drop incorrect arg_btf_id in bpf_sk_storage.c (Martin)
-- Check for arg_btf_id in check_func_proto (Martin)
-- Drop incorrect PTR_TO_BTF_ID from fullsock_types (Martin)
-- Introduce btf_seq_file_ids in bpf_trace.c to reduce duplication
+Seems much more straightforward to me with mutex. And I don't have to
+worry about various transient NULL states.
 
-Changes in v2:
-- Make the series stand alone (Martin)
-- Drop incorrect BTF_SET_START fix (Andrii)
-- Only support a single BTF ID per argument (Martin)
-- Introduce BTF_ID_LIST_SINGLE macro (Andrii)
-- Skip check_ctx_reg iff register is NULL
-- Change output of check_reg_type slightly, to avoid touching tests
+Acked-by: Andrii Nakryiko <andriin@fb.com>
 
-Original cover letter:
+>  include/linux/bpf.h     |   15 +++++++++------
+>  kernel/bpf/btf.c        |    6 +++---
+>  kernel/bpf/core.c       |    9 ++++++---
+>  kernel/bpf/syscall.c    |   46 ++++++++++++++++++++++++++++++++++++++++-=
+-----
+>  kernel/bpf/trampoline.c |   12 ++++--------
+>  kernel/bpf/verifier.c   |    9 +++++----
+>  6 files changed, 67 insertions(+), 30 deletions(-)
+>
 
-Currently, check_func_arg has this pretty gnarly if statement that
-compares the valid arg_type with the actualy reg_type. Sprinkled
-in-between are checks for register_is_null, to short circuit these
-tests if we're dealing with a nullable arg_type. There is also some
-code for later bounds / access checking hidden away in there.
+[...]
 
-This series of patches refactors the function into something like this:
+> @@ -2583,19 +2598,38 @@ static int bpf_tracing_prog_attach(struct bpf_pro=
+g *prog)
+>                       &bpf_tracing_link_lops, prog);
+>         link->attach_type =3D prog->expected_attach_type;
+>
+> +       mutex_lock(&prog->aux->tgt_mutex);
+> +
+> +       if (!prog->aux->tgt_trampoline) {
+> +               err =3D -ENOENT;
+> +               goto out_unlock;
+> +       }
+> +       tr =3D prog->aux->tgt_trampoline;
+> +       tgt_prog =3D prog->aux->tgt_prog;
+> +
+>         err =3D bpf_link_prime(&link->link, &link_primer);
+>         if (err) {
+> -               kfree(link);
+> -               goto out_put_prog;
+> +               goto out_unlock;
+>         }
 
-   if (reg_is_null && arg_type_is_nullable)
-     skip type checking
+nit: unnecessary {} now
 
-   do type checking, including BTF validation
+>
+> -       err =3D bpf_trampoline_link_prog(prog);
+> +       err =3D bpf_trampoline_link_prog(prog, tr);
+>         if (err) {
+>                 bpf_link_cleanup(&link_primer);
+> -               goto out_put_prog;
+> +               link =3D NULL;
+> +               goto out_unlock;
+>         }
 
-   do bounds / access checking
-
-The type checking is now table driven, which makes it easy to extend
-the acceptable types. Maybe more importantly, using a table makes it
-easy to provide more helpful verifier output (see the last patch).
-
-Lorenz Bauer (11):
-  btf: make btf_set_contains take a const pointer
-  bpf: check scalar or invalid register in check_helper_mem_access
-  btf: Add BTF_ID_LIST_SINGLE macro
-  bpf: allow specifying a BTF ID per argument in function protos
-  bpf: make BTF pointer type checking generic
-  bpf: make reference tracking generic
-  bpf: make context access check generic
-  bpf: set meta->raw_mode for pointers close to use
-  bpf: check ARG_PTR_TO_SPINLOCK register type in check_func_arg
-  bpf: hoist type checking for nullable arg types
-  bpf: use a table to drive helper arg type checks
-
- include/linux/bpf.h            |  21 +-
- include/linux/btf_ids.h        |   8 +
- kernel/bpf/bpf_inode_storage.c |   8 +-
- kernel/bpf/btf.c               |  15 +-
- kernel/bpf/stackmap.c          |   5 +-
- kernel/bpf/verifier.c          | 338 ++++++++++++++++++---------------
- kernel/trace/bpf_trace.c       |  15 +-
- net/core/bpf_sk_storage.c      |   8 +-
- net/core/filter.c              |  31 +--
- net/ipv4/bpf_tcp_ca.c          |  19 +-
- tools/include/linux/btf_ids.h  |   8 +
- 11 files changed, 239 insertions(+), 237 deletions(-)
-
--- 
-2.25.1
-
+[...]
