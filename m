@@ -2,193 +2,147 @@ Return-Path: <SRS0=xxat=CZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EBA60C433E2
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:29:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0F87C433E2
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:32:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 96D0721941
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:29:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4CBE021582
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 20:32:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cfsh1gc4"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JAffHlIV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726991AbgIPU24 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Sep 2020 16:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726942AbgIPU2w (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Sep 2020 16:28:52 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7393C06174A;
-        Wed, 16 Sep 2020 13:28:51 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id c17so6383223ybe.0;
-        Wed, 16 Sep 2020 13:28:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=MVIs1JBkJFZ61cdKipIPslS3rOhT6YsS69ihKIm6isI=;
-        b=Cfsh1gc4YG0BdHbDMGnWTV59MZNiCqZ1cxM25XnGcigdAnTeFkaoVX3xENNRc9suKS
-         6nGKYtDFymW+I0N39d6LSxl4hpkhZGetxgIHZGlp0B7iSzcws+LLNsn4XqXcrFFzkC2N
-         +0M3a2YtUaIieBSVVo30S3VmJt9Xzn3eSVMHhO8gJpfTKyXmFFFm7TkXLLqPjrIEiCXN
-         XcxgAXM41VNB87PuuQVGS5ok0ai8mrXTDJy8LDiv7f+Sbo3AV/sU1sHGbAf/aFo8sBGV
-         zeiolJ4RPtSAuG33JGpGIyBqoFwAWEoCm3B3kyHCBmrNB5Y/v3oWObRxV5YjErXvieTx
-         MSWA==
+        id S1727633AbgIPUaS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Sep 2020 16:30:18 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:48063 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726915AbgIPRM4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 16 Sep 2020 13:12:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1600276345;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RQyq2xuCGNHkYvL97fJ+nfUr6mDnAugF/ipqA9mhYME=;
+        b=JAffHlIVZl6VFgcxbjk3iK0uUZf7IVQHlD3gcII6QkoTXWpw2Fyk83xU9vMdY1gKqN8+jD
+        TTb9hKBnIxuSPLJ8zwK64Tcb7cLQs1K2cf6KCgoyc4Hoj/35Dnfgd1kG4V/OATuf9AQ+Yr
+        x/URuo6hSFx/6gsDCcbdXtuZOocn6WQ=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-200-8PtYLylDMJu9DVG9dNssPw-1; Wed, 16 Sep 2020 07:37:30 -0400
+X-MC-Unique: 8PtYLylDMJu9DVG9dNssPw-1
+Received: by mail-ed1-f69.google.com with SMTP id r19so2328473edq.12
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2020 04:37:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=MVIs1JBkJFZ61cdKipIPslS3rOhT6YsS69ihKIm6isI=;
-        b=LTDRd4S2l2uN0vjS+RQi5LP7O7VanVnKyZIY3BFAJn6Lu6ODjosk2oMzLLATjf/I9n
-         9WHRAcDbFqCv0ijc7jw9+0/1Zv+Rr70v3gzt92T3/qPY7VbK6SEJCFM4pLuBagB+P+Gm
-         I4s8AQknyZB1lVr/Qp0r7nacxQirGf9vHztmBWRzGPYskggZQ2sNkBqHxJwM9fYguZaL
-         xqbPYDXnvsUoQeRO2J6ZsFmF/6/LMnC/NafB8ea6GKTbPF2VgLWGuwNfy23VkJHyRldR
-         3O3ou3TfrXXYcCOeXzri4Y9sgKDxj34GnRHlqkk30kk1ODPeu9eXvw75HULXXaRtpzY6
-         5eQw==
-X-Gm-Message-State: AOAM533YgpMNW4n0/MxaJpdRJuVnYYeKhRyXy1+26fm7LieiFEp0ejwX
-        OGfoIOPuN2duJdL0X0Y0LNdZBqlg206XtwE9dLM=
-X-Google-Smtp-Source: ABdhPJy3eu8Z76RA/1AIXZuufjmbSfPRmDcmQAJT8ImQJO0F9+8jPzCF0vugf5Q+b6Rwalze40D25vht+VEIyH3OzR4=
-X-Received: by 2002:a25:4446:: with SMTP id r67mr3608241yba.459.1600288131072;
- Wed, 16 Sep 2020 13:28:51 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=RQyq2xuCGNHkYvL97fJ+nfUr6mDnAugF/ipqA9mhYME=;
+        b=ncFWnP0BlrkKIQH9fjKyBm7DCRQO823PyNmfB1k9jB6K9n7gynImAFcHo+TqN5B2b9
+         zdYQ0BasGaC+fOGT71J3IiivXHyCfy1HAIVVM7g94X5hDmIqFxA+cJnG8mu0JRssbg+p
+         OoRJvzVBlDVrdDs45o9L1OJ7vr/P5sTlM2pGfXFS+coeIdgz9JbFuvkKBr2nS80U8yri
+         xRC7GYCsR6SzEZZieYQwSccWL8DhR0Usv3P1Wys5IBzxcGwnmtp2NrRUaFFt4Qnlzbmc
+         slxBeENwsOoTHDSS9mQ29g8vJBHs0+zhgMRNsL9HuLW15LBwAgbEUPnaL1N0LYBhkRLq
+         K6Dg==
+X-Gm-Message-State: AOAM531tfpYLl1xtDCMXaZUGecn+R3S0C3moMQQ+V9OAxbhdB6Hnwkgs
+        iQF3EJzYD0Nq8zVClKP2D9/8YMUci4k6DC/G3u47TK9LWNfmWjyzwh77hVtaqWaJN7KN0d5U+CJ
+        XgJ0BujrxZOOJ
+X-Received: by 2002:a17:906:3088:: with SMTP id 8mr14075906ejv.487.1600256249057;
+        Wed, 16 Sep 2020 04:37:29 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx5qscMaMnIvPB74Nt602ZvP3284TeQZsUwMmfnfhukiJAfLhlw8RjOfPXviImTQCvk2iGm6A==
+X-Received: by 2002:a17:906:3088:: with SMTP id 8mr14075875ejv.487.1600256248771;
+        Wed, 16 Sep 2020 04:37:28 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id o6sm13971569edh.40.2020.09.16.04.37.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Sep 2020 04:37:27 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 57809183A90; Wed, 16 Sep 2020 13:37:27 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Linux NetDev <netdev@vger.kernel.org>,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: don't check against device MTU in
+ __bpf_skb_max_len
+In-Reply-To: <CANP3RGf581mZKE2Eky-bY6swU6TAFv1vzxxZ24SQ+yB9TGAD8w@mail.gmail.com>
+References: <159921182827.1260200.9699352760916903781.stgit@firesoul>
+ <20200904163947.20839d7e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20200907160757.1f249256@carbon>
+ <CANP3RGfjUOoVH152VHLXL3y7mBsF+sUCqEZgGAMdeb9_r_Z-Bw@mail.gmail.com>
+ <20200914160538.2bd51893@carbon>
+ <CANP3RGftg2-_tBc=hGGzxjGZUq9b1amb=TiKRVHSBEyXq-A5QA@mail.gmail.com>
+ <87ft7jzas7.fsf@toke.dk>
+ <CANP3RGf581mZKE2Eky-bY6swU6TAFv1vzxxZ24SQ+yB9TGAD8w@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Wed, 16 Sep 2020 13:37:27 +0200
+Message-ID: <875z8eq7ew.fsf@toke.dk>
 MIME-Version: 1.0
-References: <160017005691.98230.13648200635390228683.stgit@toke.dk>
- <160017006242.98230.15812695975228745782.stgit@toke.dk> <CAEf4Bzafmu5w6wjWT_d0B-JaUnm3KOf0Dgp+552iZii2+=3DWg@mail.gmail.com>
-In-Reply-To: <CAEf4Bzafmu5w6wjWT_d0B-JaUnm3KOf0Dgp+552iZii2+=3DWg@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 16 Sep 2020 13:28:40 -0700
-Message-ID: <CAEf4BzbqW12q_nXvat6=iTvKpy1P+e-r0N+9eY3vgDAZ8rcfLQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 5/8] bpf: Fix context type resolving for
- extension programs
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 12:59 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Tue, Sep 15, 2020 at 5:50 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
+Maciej =C5=BBenczykowski <maze@google.com> writes:
+
+> On Tue, Sep 15, 2020 at 1:47 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
 dhat.com> wrote:
-> >
-> > From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> >
-> > Eelco reported we can't properly access arguments if the tracing
-> > program is attached to extension program.
-> >
-> > Having following program:
-> >
-> >   SEC("classifier/test_pkt_md_access")
-> >   int test_pkt_md_access(struct __sk_buff *skb)
-> >
-> > with its extension:
-> >
-> >   SEC("freplace/test_pkt_md_access")
-> >   int test_pkt_md_access_new(struct __sk_buff *skb)
-> >
-> > and tracing that extension with:
-> >
-> >   SEC("fentry/test_pkt_md_access_new")
-> >   int BPF_PROG(fentry, struct sk_buff *skb)
-> >
-> > It's not possible to access skb argument in the fentry program,
-> > with following error from verifier:
-> >
-> >   ; int BPF_PROG(fentry, struct sk_buff *skb)
-> >   0: (79) r1 =3D *(u64 *)(r1 +0)
-> >   invalid bpf_context access off=3D0 size=3D8
-> >
-> > The problem is that btf_ctx_access gets the context type for the
-> > traced program, which is in this case the extension.
-> >
-> > But when we trace extension program, we want to get the context
-> > type of the program that the extension is attached to, so we can
-> > access the argument properly in the trace program.
-> >
-> > This version of the patch is tweaked slightly from Jiri's original one,
-> > since the refactoring in the previous patches means we have to get the
-> > target prog type from the new variable in prog->aux instead of directly
-> > from the target prog.
-> >
-> > Reported-by: Eelco Chaudron <echaudro@redhat.com>
-> > Suggested-by: Jiri Olsa <jolsa@kernel.org>
-> > Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> > ---
-> >  kernel/bpf/btf.c |    9 ++++++++-
-> >  1 file changed, 8 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > index 9228af9917a8..55f7b2ba1cbd 100644
-> > --- a/kernel/bpf/btf.c
-> > +++ b/kernel/bpf/btf.c
-> > @@ -3860,7 +3860,14 @@ bool btf_ctx_access(int off, int size, enum bpf_=
-access_type type,
-> >
-> >         info->reg_type =3D PTR_TO_BTF_ID;
-> >         if (tgt_prog) {
-> > -               ret =3D btf_translate_to_vmlinux(log, btf, t, tgt_prog-=
->type, arg);
-> > +               enum bpf_prog_type tgt_type;
-> > +
-> > +               if (tgt_prog->type =3D=3D BPF_PROG_TYPE_EXT)
-> > +                       tgt_type =3D tgt_prog->aux->tgt_prog_type;
+>>
+>> [ just jumping in to answer this bit: ]
+>>
+>> > Would you happen to know what ebpf startup overhead is?
+>> > How big a problem is having two (or more) back to back tc programs
+>> > instead of one?
+>>
+>> With a jit'ed BPF program and the in-kernel dispatcher code (which
+>> avoids indirect calls), it's quite close to a native function call.
 >
-> what if tgt_prog->aux->tgt_prog_type is also BPF_PROG_TYPE_EXT? Should
-> this be a loop?
+> Hmm, I know we have (had? they're upstream now I think) some CFI vs
+> BPF interaction issues.
+> We needed to mark the BPF call into JIT'ed code as CFI exempt.
+>
+> CFI is Code Flow Integrity and is some compiler magic, to quote wikipedia:
+> Google has shipped Android with the Linux kernel compiled by Clang
+> with link-time optimization (LTO) and CFI since 2018.[12]
+> I don't know much more about it.
+>
+> But we do BPF_JIT_ALWAYS_ON on 64-bit kernels, so it sounds like we
+> might be good.
 
-ok, never mind this specifically. there is an explicit check
+No idea about the CFI thing...
 
-if (tgt_prog->type =3D=3D prog->type) {
-    verbose(env, "Cannot recursively attach\n");
-    return -EINVAL;
-}
+>> > We're running into both verifier performance scaling problems and code
+>> > ownership issues with large programs...
+>> >
+>> > [btw. I understand for XDP we could only use 1 program anyway...]
+>>
+>> Working on that! See my talk at LPC:
+>> https://linuxplumbersconf.org/event/7/contributions/671/
+>
+> Yes, I'm aware and excited about it!
 
-that will prevent this.
+Great! :)
 
-But, I think we still will be able to construct a long chain of
-fmod_ret -> freplace -> fmod_ret -> freplace -> and so on ad
-infinitum. Can you please construct such a selftest? And then we
-should probably fix those checks to also disallow FMOD_RET, in
-addition to BPF_TRACE_FENTRY/FEXIT (and someone more familiar with LSM
-prog type should check if that can cause any problems).
+> Unfortunately, Android S will only support 4.19, 5.4 and 5.10 for
+> newly launched devices (and 4.9/4.14 for upgrades).
+> (5.10 here means 'whatever is the next 5.x LTS', but that's most likely 5=
+.10)
+> I don't (yet) even have real phone hardware running 5.4, and 5.10
+> within the next year is even more of a stretch.
 
->
-> Which also brings up a few follow up questions. Now that we allow same
-> PROG_EXT program to be attached to multiple other programs:
->
-> 1. what prevents us from attaching PROG_EXT to itself?
-> 2. How do we prevent long chain of EXT programs or even loops?
->
-> Can you please add a few selftests testing such cases? I have a
-> feeling that with your changes in this patch set now it's possible to
-> break the kernel very easily. I don't know what the proper solution
-> is, but let's at least have a test that does show breakage, then try
-> to figure out the solution. See also comment in check_attach_btf_id()
-> about fentry/fexit and freplace interactions. That might not be
-> enough.
->
->
-> > +               else
-> > +                       tgt_type =3D tgt_prog->type;
-> > +
-> > +               ret =3D btf_translate_to_vmlinux(log, btf, t, tgt_type,=
- arg);
-> >                 if (ret > 0) {
-> >                         info->btf_id =3D ret;
-> >                         return true;
-> >
+Right, I saw your talk at LPC and of course the kernel version thing is
+a bit of an issue. I suppose you could do some compile-time magic to
+wrap programs and use the tail-call-based chaining for older kernels -
+bit of a hassle, though :/
+
+-Toke
+
