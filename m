@@ -2,162 +2,487 @@ Return-Path: <SRS0=xxat=CZ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB992C433E2
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 19:00:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE19EC433E2
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 19:50:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4D93C20809
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 19:00:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3E43121582
+	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 19:50:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="T4OsTgtK";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="br2m1Bt8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RFz/8p1g"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727569AbgIPRuc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Sep 2020 13:50:32 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:62358 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727499AbgIPRtF (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 16 Sep 2020 13:49:05 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08GH0q8o020512;
-        Wed, 16 Sep 2020 10:01:09 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=UUwy3YnOc4gLnCr7fvml2E0yREEpuznMqmgGpq2K1ws=;
- b=T4OsTgtK/2sq99KI1uu5ogXu5R6wUiRib6IF2WhMMgi1xT4jJrunmh6GuHDSbmBVgTH0
- PRO+NFR/ey8SziR8aASyMjWl2a4jinNOyYy9cKqaHsz5zH4Tdt4IGjMohaHzHtoNY03y
- DhPCVcOpyePPhq/EO1GxgBpMlWncUwJcPPI= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 33k5pkvqgb-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 16 Sep 2020 10:01:09 -0700
-Received: from NAM02-BL2-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 16 Sep 2020 10:01:00 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aGzZ5V21rFdSYJAB4uqFUGz/tZRttKd2iI8Gw2XTBnMs0aTrYQ1pTHVedchpY5FD60+jnvGFXwUYcNYarPPrKQF5wRlxn1Kk87wRUDYFmCmtEWXCVu5HveAj4kqabgCN48x/Ctua7CWPnCOPxQewX0XeUonBYQsA1rqMCvykIT1uah1uQVWbLhI+3PS/GuYRKE0qkyT7rg17w7wILwPXXr/nmzMq6fIoJor3V+kwKoNj8aBqvPyADapNL+qTay76NJJ/ASppXG1M6wMnawjubBkUZY7S566vUMW4/FLobAWzONLTmVctDC7v+iYmsUnacQg5Y5i/nRKQpWcRndJxuQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UUwy3YnOc4gLnCr7fvml2E0yREEpuznMqmgGpq2K1ws=;
- b=U9gJ6lJdDrgFJeNG/91QGAvONKoXuijk1iJg+wF3B9k1l8GermbNWPKnXZIKLb5UWnBfKikRrL6HvbVdDCQN9hJnDS8KMsgRXXSAlHnKK5ajWYhWn5uklBB9P+/73PBr/Eg4qkVOkCh2EnBr1tWcqd+I3OmG60TZohiiF+TI99tp+YEsaAT+1cVxdYQRo7XCMGw98vTEkET1eRVVUm8vGIzC5e+OjyXI1DZ/7la74rgDGlzMV3z/zFkmDRXTB9Q7wwRvt39pCYUkWqlAWK5sFRVbyaGg0heNcjl7RHoe9H8hcFtgN2qxE6/b1O+bfHUb+YXGoRvAVTdHlKCYR0Cwkg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UUwy3YnOc4gLnCr7fvml2E0yREEpuznMqmgGpq2K1ws=;
- b=br2m1Bt8gIRjpgrtZwqKHTtg7II7rA6TLkTmM76/E1O1tg2NafJDwUasSLLd+1wr2pHXSHoY6kWHZmfFQS0aCmfUaNHtczGCJrZn1GN4lRzbf2PJP8O0pGg9FQ+KJ7+KhLLXteIEiZW7F8z8Yu9I3cRzIOvhvkRSGEzvT1Z+z/s=
-Authentication-Results: cloudflare.com; dkim=none (message not signed)
- header.d=none;cloudflare.com; dmarc=none action=none header.from=fb.com;
-Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
- by BYAPR15MB3511.namprd15.prod.outlook.com (2603:10b6:a03:10e::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.11; Wed, 16 Sep
- 2020 17:00:59 +0000
-Received: from BY5PR15MB3571.namprd15.prod.outlook.com
- ([fe80::c13c:fca9:5e04:9bfb]) by BY5PR15MB3571.namprd15.prod.outlook.com
- ([fe80::c13c:fca9:5e04:9bfb%3]) with mapi id 15.20.3391.011; Wed, 16 Sep 2020
- 17:00:59 +0000
-Date:   Wed, 16 Sep 2020 10:00:52 -0700
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     Lorenz Bauer <lmb@cloudflare.com>
-CC:     <ast@kernel.org>, <yhs@fb.com>, <daniel@iogearbox.net>,
-        <andriin@fb.com>, <bpf@vger.kernel.org>,
-        <kernel-team@cloudflare.com>
-Subject: Re: [PATCH bpf-next v3 00/11] Make check_func_arg type checks table
- driven
-Message-ID: <20200916170052.6gw5md6hwxd6rsce@kafai-mbp>
-References: <20200910125631.225188-1-lmb@cloudflare.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200910125631.225188-1-lmb@cloudflare.com>
-X-ClientProxiedBy: MWHPR17CA0080.namprd17.prod.outlook.com
- (2603:10b6:300:c2::18) To BY5PR15MB3571.namprd15.prod.outlook.com
- (2603:10b6:a03:1f6::32)
+        id S1728097AbgIPTuP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Sep 2020 15:50:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727529AbgIPTuL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Sep 2020 15:50:11 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B38AC06174A;
+        Wed, 16 Sep 2020 12:50:11 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id x10so6233956ybj.13;
+        Wed, 16 Sep 2020 12:50:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=YnSmatLGhcEhyRp68fTzveCNhARxM7IKzZ+gMOB0rSs=;
+        b=RFz/8p1g80KGCYcUzcrZG7V1O941I2t0d8Wd5X3sisqm6a2NwuyLEocLZtcSbP/e4c
+         r1L3LP3zfY45H38eRdDl6TAXJXBAMTYafW3ER8FDC/9PvUtS7IRlRGxAXm566cfeuJQ4
+         VolsNYzx2GQy87dP2WA7c50Oz5EvlXKbiQZYbm61F98ThjeR3b4k9YmkoS6csnB+QGlP
+         J7jrQWneenxk5jcGPSDgrFhPw6ovB/5tci+4HFH+OeE0jn1wtHu9C/ecVkjAnNTJyxxT
+         KRtBm2MmTDo4MdejY9tMDPc0m7wsaTPRDtVM7QYvNQt8IvCqstkEcUq6dWjqu99oeZ1A
+         vrjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YnSmatLGhcEhyRp68fTzveCNhARxM7IKzZ+gMOB0rSs=;
+        b=I18txPDBX/NlRNqgKnm6lSnija2xxM7X9Mu2+mEAtlXMJrxoasENsSJBpyc191nB+M
+         LUwBqo1BnaHiKdxl4+J2oCwoiRlbRyHimy6u5/ZTgq279CIYqrl265DhzkxHiYo4l7e2
+         UttLX6/FlR90x3in3+03JMaKikpjMtw9CxdFuI+tAXdmKTTezlughC8QdIoi+/ctjWJD
+         ylvQEmYM1ZQ1H9aREuntkjR3qNY+YSbJ0yt5sW1KsJnGFwBQYWpN4PCfbl/5dLtRZeps
+         pGb2eU0r7QdLTbRgIdUTItQ6cXeXbUWK/WYAZBoubedI4bXMemf6J5+As4P5gKch7OU3
+         8ugg==
+X-Gm-Message-State: AOAM5332ETX+9dp+OK/FcIxIV9tRQ8cQlpVLxHN5fKSgayL4wcqcdXbp
+        INJX/05IpPLLarzYIIF1FvupX4No+VqvqGFVEVP7I3Tig6GTww==
+X-Google-Smtp-Source: ABdhPJzjYzMTHT1uPEnOkBsCEDavek+7qz/RcFbO6iDqBlfTdHzS0Si13JUOGZoGQTgLHndK+3H1QwC6hLva4ERr9q4=
+X-Received: by 2002:a25:da90:: with SMTP id n138mr17551317ybf.260.1600285808824;
+ Wed, 16 Sep 2020 12:50:08 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from kafai-mbp (2620:10d:c090:400::5:2074) by MWHPR17CA0080.namprd17.prod.outlook.com (2603:10b6:300:c2::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.14 via Frontend Transport; Wed, 16 Sep 2020 17:00:58 +0000
-X-Originating-IP: [2620:10d:c090:400::5:2074]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 09b3f1aa-d594-4b69-0d69-08d85a6215df
-X-MS-TrafficTypeDiagnostic: BYAPR15MB3511:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR15MB35116F0F00F8296C133F5E16D5210@BYAPR15MB3511.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0XYxasZCGKKuZRpQkUo2IMG+wGWvCsdMkt+85LUtYgWyroFocglbIixeUtMKDUBzqXiMRSkwOFvwI+HwXrJSm4kSbnokFh8fYFfOxgatuFOQ8xXrjKkdiFoEzngp+THcVc5UIe2P8cJ3uR5X1B97W9mgOUdqE66QQI21KhPpNlHbg1RC+p9NbQ+6FK7t6CtxOEuKcznXG1sjUA6OyTBR9Q/gvqJHzHDAqE1t8DDid4F+D6xPXpuRgJmq/3dqODtYXWMD06v+ahelgX6QRa7idt6wRKXYXe9q4JeG5W/VaLOtvm6AjSKg8HV5JmhH9Y1G4h9hdaGBKv54QoVomYBGsQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(366004)(346002)(136003)(376002)(396003)(2906002)(66476007)(66946007)(186003)(16526019)(66556008)(1076003)(478600001)(6666004)(316002)(6496006)(52116002)(5660300002)(33716001)(83380400001)(8936002)(86362001)(6916009)(55016002)(8676002)(4326008)(9686003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: esGcUpkVEdDkDkBoO+ZH5cfLYOMMCJdOLzL+WhUvf/lkUs4aIDpYI1JEmj+2pNYaLQQOPo8NqcTF3VDeJy3a+dYOlYZG5j4BtsxTLUDQqdOlpje+musQ6QZvuO02Gb0Jea2nOibu+A1mq1wHYuNzx2u13Xf5cmJGix7dLlFmgh7OhXKJy88Gaps8CE/U/Qiqg7ypvK6+mNXzyGBP66KYMmDWj8IPnhqMvMbG24MtdMpHE2Tgz4V6ijcAsy5Wg6amv8nBQ2gTCHCEhQKbUzmGNFhMHDU3Fm7tflauTomv+sOWnjYWMul0cOjBv4+8r865VrL7GcOXVYpcvTQme+OucjLr/bH8hS3pLX5uZDd8Rfc4tKyHdjGKPDs4Vuk66Z8ui9sX0eN5QgNKj/Yt+u96deBZJNI80jhoTmeUOKVICTwnOiJB1dP0b72A7855s1lQ8sepbbe7ppI6N8papl2uUr9CRlv4tP6kWgs+OSN49rCtC1hQyzG+kTDlVB2Xi1aBmeoDIbQHQeNLSZaP55ZZgNgt8YlVyrKI9+D0Y7pEvfQN+SAua/9hJ1jRehP1TNK47a1VAHww06KM/ZGj7qzJfK2bVDKLC3A1rg+xrvazG+ejqdHq9zSQJlqXv7mJIbeV1NcTNPTzPz9dXVv8x0feSlyIhKZKVFqWZJH4dlGQ1V0=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09b3f1aa-d594-4b69-0d69-08d85a6215df
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2020 17:00:59.6157
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wSi1fyGEql6zkXvIOvVZUF4W9w1A6Bz7H93lqnsq3CyuD+dBemfGwenlDsTCi9ev
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3511
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-16_11:2020-09-16,2020-09-16 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- clxscore=1015 malwarescore=0 mlxlogscore=969 mlxscore=0 adultscore=0
- priorityscore=1501 bulkscore=0 spamscore=0 phishscore=0 suspectscore=1
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009160120
-X-FB-Internal: deliver
+References: <160017005691.98230.13648200635390228683.stgit@toke.dk> <160017006133.98230.8867570651560085505.stgit@toke.dk>
+In-Reply-To: <160017006133.98230.8867570651560085505.stgit@toke.dk>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 16 Sep 2020 12:49:57 -0700
+Message-ID: <CAEf4BzYP6MpVEqJ1TVW6rcfqJjkBi9x9U9F8MZPQdGMmoaUX_A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/8] bpf: support attaching freplace programs
+ to multiple attach points
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: bpf-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 10, 2020 at 01:56:20PM +0100, Lorenz Bauer wrote:
-> Another round of review from Martin, thanks!
-> 
-> Changes in v3:
-> - Fix BTF_ID_LIST_SINGLE if BTF is disabled (Martin)
-> - Drop incorrect arg_btf_id in bpf_sk_storage.c (Martin)
-> - Check for arg_btf_id in check_func_proto (Martin)
-> - Drop incorrect PTR_TO_BTF_ID from fullsock_types (Martin)
-> - Introduce btf_seq_file_ids in bpf_trace.c to reduce duplication
-> 
-> Changes in v2:
-> - Make the series stand alone (Martin)
-> - Drop incorrect BTF_SET_START fix (Andrii)
-> - Only support a single BTF ID per argument (Martin)
-> - Introduce BTF_ID_LIST_SINGLE macro (Andrii)
-> - Skip check_ctx_reg iff register is NULL
-> - Change output of check_reg_type slightly, to avoid touching tests
-> 
-> Original cover letter:
-> 
-> Currently, check_func_arg has this pretty gnarly if statement that
-> compares the valid arg_type with the actualy reg_type. Sprinkled
-> in-between are checks for register_is_null, to short circuit these
-> tests if we're dealing with a nullable arg_type. There is also some
-> code for later bounds / access checking hidden away in there.
-> 
-> This series of patches refactors the function into something like this:
-> 
->    if (reg_is_null && arg_type_is_nullable)
->      skip type checking
-> 
->    do type checking, including BTF validation
-> 
->    do bounds / access checking
-> 
-> The type checking is now table driven, which makes it easy to extend
-> the acceptable types. Maybe more importantly, using a table makes it
-> easy to provide more helpful verifier output (see the last patch).
-This set is currently marked as "Changes Requested".  Since there is
-no other comment since then, can you respin v4?
+On Tue, Sep 15, 2020 at 5:50 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
+at.com> wrote:
+>
+> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>
+> This enables support for attaching freplace programs to multiple attach
+> points. It does this by amending the UAPI for bpf_link_Create with a targ=
+et
+> btf ID that can be used to supply the new attachment point along with the
+> target program fd. The target must be compatible with the target that was
+> supplied at program load time.
+>
+> The implementation reuses the checks that were factored out of
+> check_attach_btf_id() to ensure compatibility between the BTF types of th=
+e
+> old and new attachment. If these match, a new bpf_tracing_link will be
+> created for the new attach target, allowing multiple attachments to
+> co-exist simultaneously.
+>
+> The code could theoretically support multiple-attach of other types of
+> tracing programs as well, but since I don't have a use case for any of
+> those, there is no API support for doing so.
+>
+> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> ---
+>  include/linux/bpf.h            |    2 +
+>  include/uapi/linux/bpf.h       |    2 +
+>  kernel/bpf/syscall.c           |   92 ++++++++++++++++++++++++++++++++++=
+------
+>  kernel/bpf/verifier.c          |    9 ++++
+>  tools/include/uapi/linux/bpf.h |    2 +
+>  5 files changed, 94 insertions(+), 13 deletions(-)
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 939b37c78d55..360e8291e6bb 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -743,6 +743,8 @@ struct bpf_prog_aux {
+>         struct mutex tgt_mutex; /* protects writing of tgt_* pointers bel=
+ow */
+>         struct bpf_prog *tgt_prog;
+>         struct bpf_trampoline *tgt_trampoline;
+> +       enum bpf_prog_type tgt_prog_type;
+> +       enum bpf_attach_type tgt_attach_type;
+>         bool verifier_zext; /* Zero extensions has been inserted by verif=
+ier. */
+>         bool offload_requested;
+>         bool attach_btf_trace; /* true if attaching to BTF-enabled raw tp=
+ */
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 7dd314176df7..46eaa3024dc3 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -239,6 +239,7 @@ enum bpf_attach_type {
+>         BPF_XDP_CPUMAP,
+>         BPF_SK_LOOKUP,
+>         BPF_XDP,
+> +       BPF_TRACE_FREPLACE,
+>         __MAX_BPF_ATTACH_TYPE
+>  };
+>
+> @@ -633,6 +634,7 @@ union bpf_attr {
+>                 __u32           flags;          /* extra flags */
+>                 __aligned_u64   iter_info;      /* extra bpf_iter_link_in=
+fo */
+>                 __u32           iter_info_len;  /* iter_info length */
+> +               __u32           target_btf_id;  /* btf_id of target to at=
+tach to */
+
+iter_info + iter_info_len are mutually exclusive with target_btf_id,
+they should be inside a union with each other
+
+>         } link_create;
+>
+>         struct { /* struct used by BPF_LINK_UPDATE command */
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index fc2bca2d9f05..429afa820c6f 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -4,6 +4,7 @@
+>  #include <linux/bpf.h>
+>  #include <linux/bpf_trace.h>
+>  #include <linux/bpf_lirc.h>
+> +#include <linux/bpf_verifier.h>
+>  #include <linux/btf.h>
+>  #include <linux/syscalls.h>
+>  #include <linux/slab.h>
+> @@ -2555,12 +2556,18 @@ static const struct bpf_link_ops bpf_tracing_link=
+_lops =3D {
+>         .fill_link_info =3D bpf_tracing_link_fill_link_info,
+>  };
+>
+> -static int bpf_tracing_prog_attach(struct bpf_prog *prog)
+> +static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+> +                                  int tgt_prog_fd,
+> +                                  u32 btf_id)
+>  {
+>         struct bpf_link_primer link_primer;
+>         struct bpf_prog *tgt_prog =3D NULL;
+>         struct bpf_tracing_link *link;
+> +       struct btf_func_model fmodel;
+> +       bool new_trampoline =3D false;
+>         struct bpf_trampoline *tr;
+> +       long addr;
+> +       u64 key;
+>         int err;
+>
+>         switch (prog->type) {
+> @@ -2588,6 +2595,24 @@ static int bpf_tracing_prog_attach(struct bpf_prog=
+ *prog)
+>                 err =3D -EINVAL;
+>                 goto out_put_prog;
+>         }
+> +       if (tgt_prog_fd) {
+> +               /* For now we only allow new targets for BPF_PROG_TYPE_EX=
+T */
+> +               if (prog->type !=3D BPF_PROG_TYPE_EXT || !btf_id) {
+> +                       err =3D -EINVAL;
+> +                       goto out_put_prog;
+> +               }
+> +
+> +               tgt_prog =3D bpf_prog_get(tgt_prog_fd);
+> +               if (IS_ERR(tgt_prog)) {
+> +                       err =3D PTR_ERR(tgt_prog);
+> +                       goto out_put_prog;
+> +               }
+> +
+> +               key =3D ((u64)tgt_prog->aux->id) << 32 | btf_id;
+> +       } else if (btf_id) {
+> +               err =3D -EINVAL;
+> +               goto out_put_prog;
+> +       }
+
+These changes are unnecessarily tangled with this if/else and
+double-checking of btf_id. btf_id is required iff tgt_prog_fd is
+specified, right? So just check that explicitly:
+
+if (!!btf_id !=3D !!targ_prog_fd)
+  ...
+
+bpf_iter code uses ^ instead of !=3D, but does same checks
+
+
+if (targ_prog_fd) {
+  if (prog->type !=3D BPF_PROG_TYPE_EXT)
+    ...
+} /* no else here */
+
+More straightforward, IMO.
+
+>
+>         link =3D kzalloc(sizeof(*link), GFP_USER);
+>         if (!link) {
+
+here you are leaking tgt_prog
+
+> @@ -2600,33 +2625,65 @@ static int bpf_tracing_prog_attach(struct bpf_pro=
+g *prog)
+>
+>         mutex_lock(&prog->aux->tgt_mutex);
+>
+> -       if (!prog->aux->tgt_trampoline) {
+> -               err =3D -ENOENT;
+> -               goto out_unlock;
+> +       if (!prog->aux->tgt_trampoline ||
+> +           (tgt_prog && prog->aux->tgt_trampoline->key !=3D key)) {
+> +               new_trampoline =3D true;
+> +       } else {
+> +               if (tgt_prog) {
+> +                       /* re-using ref to tgt_prog, don't take another *=
+/
+> +                       bpf_prog_put(tgt_prog);
+
+this is just another complication to keep in mind, I propose to drop
+it and handle at the very end, see below
+
+> +               }
+> +               tr =3D prog->aux->tgt_trampoline;
+> +               tgt_prog =3D prog->aux->tgt_prog;
+> +       }
+
+this also seems too convoluted with this new_trampoline flag. Tell me
+where I'm missing something.
+
+0. get the *incorrectly* missing trampoline case (i.e., we already
+attached to it and we don't specify explicit target) right out of the
+way, without having nested checks:
+
+if (!prog->aux->tgt_trampoline && !tgt_prog)
+  err =3D -ENOENT, goto;
+
+1. Now we know that everything has to work out. new_trampoline
+detection at the end is very trivial as well, so there is no need to
+have this extra new_trampoline flag and split new trampoline handling
+into two ifs.
+
+if (!prog->aux->tgt_trampoline || key !=3D tgt_trampoline->key) {
+  /* gotta be a new trampoline */
+  bpf_check_attach_target()
+  tr =3D bpf_trampoline_get()
+} else {
+  /* reuse trampoline */
+  tr =3D ...;
+  tgt_prog =3D prog->aux->tgt_prog; /* we'll deal with refcount later */
+}
+
+> +
+> +       if (new_trampoline) {
+> +               if (!tgt_prog) {
+> +                       err =3D -ENOENT;
+> +                       goto out_unlock;
+> +               }
+> +
+> +               err =3D bpf_check_attach_target(NULL, prog, tgt_prog, btf=
+_id,
+> +                                             &fmodel, &addr, NULL, NULL)=
+;
+> +               if (err) {
+> +                       bpf_prog_put(tgt_prog);
+> +                       goto out_unlock;
+> +               }
+> +
+> +               tr =3D bpf_trampoline_get(key, (void *)addr, &fmodel);
+> +               if (IS_ERR(tr)) {
+> +                       err =3D PTR_ERR(tr);
+> +                       bpf_prog_put(tgt_prog);
+> +                       goto out_unlock;
+> +               }
+>         }
+
+this got rolled into a check above
+
+> -       tr =3D prog->aux->tgt_trampoline;
+> -       tgt_prog =3D prog->aux->tgt_prog;
+>
+>         err =3D bpf_link_prime(&link->link, &link_primer);
+>         if (err) {
+> -               goto out_unlock;
+> +               goto out_put_tgt;
+>         }
+>
+>         err =3D bpf_trampoline_link_prog(prog, tr);
+>         if (err) {
+>                 bpf_link_cleanup(&link_primer);
+>                 link =3D NULL;
+> -               goto out_unlock;
+> +               goto out_put_tgt;
+>         }
+>
+>         link->tgt_prog =3D tgt_prog;
+>         link->trampoline =3D tr;
+> -
+> -       prog->aux->tgt_prog =3D NULL;
+> -       prog->aux->tgt_trampoline =3D NULL;
+> +       if (!new_trampoline) {
+> +               prog->aux->tgt_trampoline =3D NULL;
+> +               prog->aux->tgt_prog =3D NULL;
+> +       }
+
+this is just:
+
+if (tr =3D=3D prog->aux->tgt_trampoline) {
+  /* drop ref held by prog itself, we've already got tgt_prog ref from
+syscall */
+  bpf_prog_put(prog->aux->tgt_prog);
+  prog->aux->tgt_prog =3D NULL;
+  prog->aux->tgt_trampoline =3D NULL;
+}
+
+>         mutex_unlock(&prog->aux->tgt_mutex);
+>
+>         return bpf_link_settle(&link_primer);
+> +out_put_tgt:
+
+see above, in some cases you are not putting tgt_prog where you
+should. If you initialize tr to NULL, then you can do this
+unconditionally on any error (no need to have different goto labels):
+
+if (tgt_prog_fd && tgt_prog)
+    bpf_prog_put(tgt_prog);
+if (tr && tr !=3D prog->aux->tgt_trampoline)
+    bpf_trampoline_put(tr);
+
+
+> +       if (new_trampoline) {
+> +               bpf_prog_put(tgt_prog);
+> +               bpf_trampoline_put(tr);
+> +       }
+>  out_unlock:
+>         mutex_unlock(&prog->aux->tgt_mutex);
+>         kfree(link);
+> @@ -2744,7 +2801,7 @@ static int bpf_raw_tracepoint_open(const union bpf_=
+attr *attr)
+>                         tp_name =3D prog->aux->attach_func_name;
+>                         break;
+>                 }
+> -               return bpf_tracing_prog_attach(prog);
+> +               return bpf_tracing_prog_attach(prog, 0, 0);
+>         case BPF_PROG_TYPE_RAW_TRACEPOINT:
+>         case BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE:
+>                 if (strncpy_from_user(buf,
+> @@ -2864,6 +2921,8 @@ attach_type_to_prog_type(enum bpf_attach_type attac=
+h_type)
+>         case BPF_CGROUP_GETSOCKOPT:
+>         case BPF_CGROUP_SETSOCKOPT:
+>                 return BPF_PROG_TYPE_CGROUP_SOCKOPT;
+> +       case BPF_TRACE_FREPLACE:
+> +               return BPF_PROG_TYPE_EXT;
+>         case BPF_TRACE_ITER:
+>                 return BPF_PROG_TYPE_TRACING;
+>         case BPF_SK_LOOKUP:
+> @@ -3924,10 +3983,16 @@ static int tracing_bpf_link_attach(const union bp=
+f_attr *attr, struct bpf_prog *
+>             prog->expected_attach_type =3D=3D BPF_TRACE_ITER)
+>                 return bpf_iter_link_attach(attr, prog);
+>
+> +       if (attr->link_create.attach_type =3D=3D BPF_TRACE_FREPLACE &&
+> +           !prog->expected_attach_type)
+> +               return bpf_tracing_prog_attach(prog,
+> +                                              attr->link_create.target_f=
+d,
+> +                                              attr->link_create.target_b=
+tf_id);
+
+Hm.. so you added a "fake" BPF_TRACE_FREPLACE attach_type, which is
+not really set with BPF_PROG_TYPE_EXT and is only specified for the
+LINK_CREATE command. Are you just trying to satisfy the link_create
+flow of going from attach_type to program type? If that's the only
+reason, I think we can adjust link_create code to handle this more
+flexibly.
+
+I need to think a bit more whether we want BPF_TRACE_FREPLACE at all,
+but if we do, whether we should make it an expected_attach_type for
+BPF_PROG_TYPE_EXT then...
+
+> +
+>         return -EINVAL;
+>  }
+>
+> -#define BPF_LINK_CREATE_LAST_FIELD link_create.iter_info_len
+> +#define BPF_LINK_CREATE_LAST_FIELD link_create.target_btf_id
+>  static int link_create(union bpf_attr *attr)
+>  {
+>         enum bpf_prog_type ptype;
+> @@ -3961,6 +4026,7 @@ static int link_create(union bpf_attr *attr)
+>                 ret =3D cgroup_bpf_link_attach(attr, prog);
+>                 break;
+>         case BPF_PROG_TYPE_TRACING:
+> +       case BPF_PROG_TYPE_EXT:
+>                 ret =3D tracing_bpf_link_attach(attr, prog);
+>                 break;
+>         case BPF_PROG_TYPE_FLOW_DISSECTOR:
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 02f704367014..2dd5e2ad7f31 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -11202,6 +11202,12 @@ int bpf_check_attach_target(struct bpf_verifier_=
+log *log,
+>                 if (!btf_type_is_func_proto(t))
+>                         return -EINVAL;
+>
+> +               if ((prog->aux->tgt_prog_type &&
+> +                    prog->aux->tgt_prog_type !=3D tgt_prog->type) ||
+> +                   (prog->aux->tgt_attach_type &&
+> +                    prog->aux->tgt_attach_type !=3D tgt_prog->expected_a=
+ttach_type))
+> +                       return -EINVAL;
+> +
+>                 if (tgt_prog && conservative)
+>                         t =3D NULL;
+>
+> @@ -11300,6 +11306,9 @@ static int check_attach_btf_id(struct bpf_verifie=
+r_env *env)
+>                 return ret;
+>
+>         if (tgt_prog) {
+> +               prog->aux->tgt_prog_type =3D tgt_prog->type;
+> +               prog->aux->tgt_attach_type =3D tgt_prog->expected_attach_=
+type;
+> +
+>                 if (prog->type =3D=3D BPF_PROG_TYPE_EXT) {
+>                         env->ops =3D bpf_verifier_ops[tgt_prog->type];
+>                         prog->expected_attach_type =3D
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+> index 7dd314176df7..46eaa3024dc3 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -239,6 +239,7 @@ enum bpf_attach_type {
+>         BPF_XDP_CPUMAP,
+>         BPF_SK_LOOKUP,
+>         BPF_XDP,
+> +       BPF_TRACE_FREPLACE,
+>         __MAX_BPF_ATTACH_TYPE
+>  };
+>
+> @@ -633,6 +634,7 @@ union bpf_attr {
+>                 __u32           flags;          /* extra flags */
+>                 __aligned_u64   iter_info;      /* extra bpf_iter_link_in=
+fo */
+>                 __u32           iter_info_len;  /* iter_info length */
+> +               __u32           target_btf_id;  /* btf_id of target to at=
+tach to */
+>         } link_create;
+>
+>         struct { /* struct used by BPF_LINK_UPDATE command */
+>
