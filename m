@@ -2,150 +2,90 @@ Return-Path: <SRS0=dFgW=C2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80C09C43461
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 14:12:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C0FAC43461
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 14:58:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 20180206DB
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 14:12:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DE1DD206DC
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 14:58:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="xq8SGYCh"
+	dkim=pass (2048-bit key) header.d=isovalent-com.20150623.gappssmtp.com header.i=@isovalent-com.20150623.gappssmtp.com header.b="JYxo13TO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727403AbgIQOMd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Sep 2020 10:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
+        id S1727770AbgIQO6K (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Sep 2020 10:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727211AbgIQN55 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Sep 2020 09:57:57 -0400
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14603C061D7C
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 06:57:26 -0700 (PDT)
-Received: by mail-ej1-x641.google.com with SMTP id gr14so3484115ejb.1
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 06:57:26 -0700 (PDT)
+        with ESMTP id S1727612AbgIQO4f (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Sep 2020 10:56:35 -0400
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA161C061353
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 07:56:26 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id x14so2396929wrl.12
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 07:56:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pSSlZZ+MnV5QXAvkjR9T5/pkqeT/NfDS35+qV4B6bxY=;
-        b=xq8SGYChd6ZN8Aq44erpoXz0/3kRxhpdkMZSIkX3gWUwUeuwEV9mufoEAg6FsmsgYq
-         b/BoNG4lqJacAV7dqrjqKRFdm0JYRvcIDm0kaOvcRLiSYaZwwZhzZARUmeFM5Ncj0PIe
-         FEZ+YyG+TZoI6qNYpC0RQTtWrWdXXaAkdumSMZL/thLRh47cV2UidgWozWiKGLDYtTRJ
-         cwmRw+cvdyCwgqjKFcDZYbIrOgLXedc7Fwr0zy0CMPh4SmevtCdXJCwVHqmtovVkdBPK
-         peVF8qy+yesHFf/OEdM5HjdRcRRh0RmBbXL0j1518Lz9iaqacBixwtENnOt9zmtaMsd5
-         z8Lg==
+        d=isovalent-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=5WWJnUiVV8xQIounCSA9TC9B/8xEj+eiqEw7XoNCU+4=;
+        b=JYxo13TO/XEZs3VNeokubUvB9P8CBHzwgRQav+MKHLIsAJI1W7NQ2HSnDdwh5WHGX3
+         vEUbpZsItKIhYbRIcKQJiteSUwzN67aPuxo6ZtPleTRiw9YGAYQFsx3jZD5eXbMzGL5q
+         HuGXvhiMalSFHgQzD7pLhDQhCD2UDdgnAtFMhQ5sHjejA5E5EvX3ApVH1eoGV4BtwMu1
+         4OXUbbXaJ+4PFWJwZXlXUikGyIkBRuHBcBlbyzOrEVp6aSVJ6JAfNdszc8hrJhQJ1XiN
+         jAkT3wjlSoV+rulwXEhF34a0kTEoqng+1x+urJk+qNj7VHJtKTAa9sleZtMqPJ7/6yyI
+         8O3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=pSSlZZ+MnV5QXAvkjR9T5/pkqeT/NfDS35+qV4B6bxY=;
-        b=pPN5kiWIXone2Wq98h9t1ShAC746o31GFSXbxIJTFOUi2g+V4mv3iZqgbB5W/Otbi8
-         noY4d7DPCEDNa2/L74h/OsxdUK4Ig+i69/LNRIZ8abRC90WxGpfXA/bGvkFj8Rv5Skfb
-         EEo0gy65c2okVhGJKJswhkG6GNaCXz0cLEp6SB3AZ3F55f3LVS8nIhdUibexLpdVkyoi
-         WKPnyo3ZQXcwl5PppA8ScpnMq02ZWi14e68kRkfW/aMjmiV/GuEqxNARpffPoxqbqc/T
-         VgGmTbjE6wiUAk7ymhZnSUuOWVngH93miscJq74Ccw/3m5wtYn3E5mapB1MdfXyaV1dG
-         8EQQ==
-X-Gm-Message-State: AOAM531Zy2A8yQPokLZpcoyHcks5U/985l9OP2ps0xSznuHx3HaqiM3c
-        JjO9xZ3w3TAEFzRYQhQffGeSLQ==
-X-Google-Smtp-Source: ABdhPJxRW0504JkwLHfAfome1NFDuXgAji9E1LroxFxjxRe9AN6YEk0vQMwnh2Wr1HJviGb5N+T+Bw==
-X-Received: by 2002:a17:906:1b04:: with SMTP id o4mr32078527ejg.332.1600351042447;
-        Thu, 17 Sep 2020 06:57:22 -0700 (PDT)
-Received: from localhost.localdomain ([89.18.44.40])
-        by smtp.gmail.com with ESMTPSA id k25sm3492ejk.3.2020.09.17.06.57.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 06:57:21 -0700 (PDT)
-From:   Luka Oreskovic <luka.oreskovic@sartura.hr>
-To:     ast@kernel.org, daniel@iogearbox.net
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Luka Oreskovic <luka.oreskovic@sartura.hr>,
-        Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>
-Subject: [PATCH bpf-next] bpf: add support for other map types to bpf_map_lookup_and_delete_elem
-Date:   Thu, 17 Sep 2020 15:57:00 +0200
-Message-Id: <20200917135700.649909-1-luka.oreskovic@sartura.hr>
-X-Mailer: git-send-email 2.26.2
+        bh=5WWJnUiVV8xQIounCSA9TC9B/8xEj+eiqEw7XoNCU+4=;
+        b=Y4rPim0MC/W7bfS4cBIhQ0Od63J/t64CgrvXSiJ3XywdRDyR6ZFBK8NQUGT+tEGY2A
+         y08Y8t4xmT3d05prLuDUccMSY82Gh7E1hZdjO+hRwzXBLHQisUESyaXAgf7LO14g3D8L
+         DOC9mL1ND+9oCEFpopOCGb3kmp85fKXIdV8I23gdtZTLe/FrKWiDe9/eY2yMDXDmKcd0
+         uNAbQFT46Nb+f3OqIDCCwjbLxd7H7KZ0yDKkrp54y4UStz1yRY160N8cGC+Q3uVz7OgG
+         luLOEVILVKvxWWUKaXA478DhbVOCQpySd9TBU36GhIuBH74jf8GuO4QauTXXw2sP0e5i
+         fDSQ==
+X-Gm-Message-State: AOAM530Dt3tHEeCM+Kp5qGI0vXzVaMxmrDOoEuV0NaxkDrjAo9V7V1ZJ
+        W9xtp8Av9c0Q/7yeD2Lw9flFeYEQ8Qj7fcqn
+X-Google-Smtp-Source: ABdhPJxgA3yFQqYbYn5qv/ZjHU66UDfDKgdlyjRQC9IL33sK78Q+HhAZlVM1jcgG288HKnjqL04ESA==
+X-Received: by 2002:adf:c64e:: with SMTP id u14mr31692294wrg.373.1600354584615;
+        Thu, 17 Sep 2020 07:56:24 -0700 (PDT)
+Received: from [192.168.1.12] ([194.35.117.91])
+        by smtp.gmail.com with UTF8SMTPSA id s17sm41233012wrr.40.2020.09.17.07.56.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Sep 2020 07:56:24 -0700 (PDT)
+Subject: Re: [PATCH bpf v1] tools/bpftool: support passing BPFTOOL_VERSION to
+ make
+To:     Tony Ambardar <tony.ambardar@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org
+References: <20200917115833.1235518-1-Tony.Ambardar@gmail.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+Message-ID: <33dd4a10-9b2a-7315-7709-cd8e7c1cd030@isovalent.com>
+Date:   Thu, 17 Sep 2020 15:56:18 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:82.0) Gecko/20100101
+ Thunderbird/82.0a1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200917115833.1235518-1-Tony.Ambardar@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Since this function already exists, it made sense to implement it for
-map types other than stack and queue. This patch adds the necessary parts
-from bpf_map_lookup_elem and bpf_map_delete_elem so it works as expected
-for all map types.
+On 17/09/2020 12:58, Tony Ambardar wrote:
+> This change facilitates out-of-tree builds, packaging, and versioning for
+> test and debug purposes. Defining BPFTOOL_VERSION allows self-contained
+> builds within the tools tree, since it avoids use of the 'kernelversion'
+> target in the top-level makefile, which would otherwise pull in several
+> other includes from outside the tools tree.
+> 
+> Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
 
-Signed-off-by: Luka Oreskovic <luka.oreskovic@sartura.hr>
-CC: Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>
-CC: Luka Perkov <luka.perkov@sartura.hr>
----
- kernel/bpf/syscall.c | 30 ++++++++++++++++++++++++++++--
- 1 file changed, 28 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 2ce32cad5c8e..955de6ca8c45 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1475,6 +1475,9 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
- 	if (CHECK_ATTR(BPF_MAP_LOOKUP_AND_DELETE_ELEM))
- 		return -EINVAL;
- 
-+	if (attr->flags & ~BPF_F_LOCK)
-+		return -EINVAL;
-+
- 	f = fdget(ufd);
- 	map = __bpf_map_get(f);
- 	if (IS_ERR(map))
-@@ -1485,13 +1488,19 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
- 		goto err_put;
- 	}
- 
-+	if ((attr->flags & BPF_F_LOCK) &&
-+	    !map_value_has_spin_lock(map)) {
-+		err = -EINVAL;
-+		goto err_put;
-+	}
-+
- 	key = __bpf_copy_key(ukey, map->key_size);
- 	if (IS_ERR(key)) {
- 		err = PTR_ERR(key);
- 		goto err_put;
- 	}
- 
--	value_size = map->value_size;
-+	value_size = bpf_map_value_size(map);
- 
- 	err = -ENOMEM;
- 	value = kmalloc(value_size, GFP_USER | __GFP_NOWARN);
-@@ -1502,7 +1511,24 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
- 	    map->map_type == BPF_MAP_TYPE_STACK) {
- 		err = map->ops->map_pop_elem(map, value);
- 	} else {
--		err = -ENOTSUPP;
-+		err = bpf_map_copy_value(map, key, value, attr->flags);
-+		if (err)
-+			goto free_value;
-+
-+		if (bpf_map_is_dev_bound(map)) {
-+			err = bpf_map_offload_delete_elem(map, key);
-+		} else if (IS_FD_PROG_ARRAY(map) ||
-+			   map->map_type == BPF_MAP_TYPE_STRUCT_OPS) {
-+			/* These maps require sleepable context */
-+			err = map->ops->map_delete_elem(map, key);
-+		} else {
-+			bpf_disable_instrumentation();
-+			rcu_read_lock();
-+			err = map->ops->map_delete_elem(map, key);
-+			rcu_read_unlock();
-+			bpf_enable_instrumentation();
-+			maybe_wait_bpf_programs(map);
-+		}
- 	}
- 
- 	if (err)
--- 
-2.26.2
-
+Acked-by: Quentin Monnet <quentin@isovalent.com>
