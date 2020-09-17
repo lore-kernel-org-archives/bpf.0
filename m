@@ -5,107 +5,196 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 02C4FC43461
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 17:50:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 94AF0C43461
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 18:07:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 940B420872
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 17:50:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D7DD21D92
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 18:07:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gltpvHHT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bYWRHxOz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726483AbgIQRry (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Sep 2020 13:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
+        id S1726483AbgIQSGi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Sep 2020 14:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726236AbgIQRrv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Sep 2020 13:47:51 -0400
-Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33FAC06174A;
-        Thu, 17 Sep 2020 10:47:42 -0700 (PDT)
-Received: by mail-pj1-x1044.google.com with SMTP id md22so3135864pjb.0;
-        Thu, 17 Sep 2020 10:47:42 -0700 (PDT)
+        with ESMTP id S1726582AbgIQSGf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Sep 2020 14:06:35 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC493C06174A;
+        Thu, 17 Sep 2020 11:06:30 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id x10so2294158ybj.13;
+        Thu, 17 Sep 2020 11:06:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zvTQuLhevp37w7yfIsEU+r4hqA1hR5pcgpJm3L1z8/w=;
-        b=gltpvHHTrIv0uo4znq1dMDMf0xQtZhkZR1MnxRB6KcxfOj9f07jQ+TqX4tqkpeqbmn
-         Qg1wm/K6xK72NXq0soulNVL4HRu5oqvShEyqxnhfNQbWLb+PpjJo7NvhmY+29sC8UqOO
-         T1fbgNLQHZAeldqHIS1guLeuNqjVYtE51Qb70J9/YFlyaKuTFbpKR+btMETRFufRYaZS
-         1EbvxLfSEiu/2lW12RPUDMgrBataq7CAS9d6UvCU1HydReEGAd7j7ypeteuTptCNmMaK
-         hZ1w3jXHSzISRWfjm/ho/yCG+MzqbHtrss0hRNBVGYW+1Syn8K0A1Gntzolzjpxo2m8o
-         Mkiw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=crHNAHVlKQymoKWU9RZhNMhhrAe0GtaAQ+q4H8Ky7gQ=;
+        b=bYWRHxOzfJNJuoZ1Cdwv4Ywrhoy11eW8AFQj+haPXS4aRhaecmpKuVLIH9G6l13+Vb
+         gmulKuPjGUHvyEASzFA5fQQhhqeEUk2NVMcpjmyLJNlqFJ3rKFn2SEuzeSVPemdepQdN
+         BLHeGAKQlqjKTZZChabNjynOkF8qXxSYIr82LfM7Lka/ryteE+ymVIw3upyA3zVfwFP8
+         fUUas3XOnq+/Y98w1aOoFuUB705TAeQsZ/XFS52V7UnZU7hFoz1w7CBK2OJIOSSRxscA
+         99GXOnrF0g81Yeh60ESBofZTJ887ctt7B5Jv60t2zP3yaNkbkWG7JCs8gX0hSvpT7lyc
+         0Rqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zvTQuLhevp37w7yfIsEU+r4hqA1hR5pcgpJm3L1z8/w=;
-        b=OxVZ9o6esZdYtwoSvAHFHmI5ic6JL897To7E+ayumQqiWHYtYUu3KK/f976V6VXR8L
-         l0AVXyDpcgHcLtuk1BHwjKlPBzt93AUxxKtuvnGotReoJlM0lXCCpZl7tUtQydO2Ip2j
-         iU2WKurKEqmqAwrdYA9xvqw31NNgNAFt6/n1tpdde2ejBKrCVsV+UNEBCEt2zMu6PU0X
-         qPXh7UxeExlhFn1JtYcGMV1lDDRoHcyeN6feW8noXBdvmACgc5aekCtSAUquZil9E+an
-         10nXrdhvmPuOjb/OU8cMMoXB0luJffrc8ixOyhuNosz/ApnRv/Pi3sugBdB/AhKtGfjG
-         fiuQ==
-X-Gm-Message-State: AOAM532mD9wsR+VzuLZ0iQcQYLzNek55RXccxeS7Qs/qsnnHhQeuzZjP
-        kANWPxn/zYFEYwq09WiHD88=
-X-Google-Smtp-Source: ABdhPJw0/VxVRqP9HWaijLykqzPAJ47yc4fpsrx/cpHeUcalf8rAVaGrTkR9KjfuLPXaOc2Ahsd/vg==
-X-Received: by 2002:a17:902:d88c:b029:d1:e5ec:5ef5 with SMTP id b12-20020a170902d88cb02900d1e5ec5ef5mr11981837plz.43.1600364861985;
-        Thu, 17 Sep 2020 10:47:41 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:ee50])
-        by smtp.gmail.com with ESMTPSA id a74sm267621pfa.16.2020.09.17.10.47.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 10:47:41 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 10:47:39 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH bpf] bpf: Use hlist_add_head_rcu when linking to
- sk_storage
-Message-ID: <20200917174739.wbwiayb66aemydc5@ast-mbp.dhcp.thefacebook.com>
-References: <20200916200925.1803161-1-kafai@fb.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=crHNAHVlKQymoKWU9RZhNMhhrAe0GtaAQ+q4H8Ky7gQ=;
+        b=somFH133c473myP4eXuZ1/zYeQhZ8Lr5DyTbrFZqv9+/LKlvtbZ00Xf6LWidBpZMeY
+         Mt42nC/F+XqvTocOgrtOlRnpPlS97/fwDbhZ9pN9pAFZKt4DyL6ViFYjOgmadT/q53pn
+         X9DZ+3P8YbbO+dmxPl4fCEyz3p6yFcMVlidIUPBza+PbDL7sMdHunRAiQgaqdW3DP7Vf
+         oEbr3j2q3YVDKFp0H06iBJw2K9iopFZyuya5pbCWZVpn6aH4wTphlv3FcS+koW4wQKHV
+         X8isDP6Te3Kg4FWmK+Bfy7idOg0FC2A7bLCF1RRuxYrAaNpXFtSjxE3aM8cMlWoavAoe
+         n4HQ==
+X-Gm-Message-State: AOAM530uH0TZXyJDJ07DAfwlB0YL1qJ3zX11srtf6T+GtLBKdYcSymJQ
+        UjzJDGsUy7r9rqKBexjaA5ZoBw1IWDlxzn4U5Lc=
+X-Google-Smtp-Source: ABdhPJzlpw3EHAH3wllQAWOWN4kOdf8ElsIcCSpqU2vWXffxtg1acTl1+GovFCEwviHOmq4lD8gt5VmRxkwOWF1MOQw=
+X-Received: by 2002:a25:6644:: with SMTP id z4mr13530911ybm.347.1600365989911;
+ Thu, 17 Sep 2020 11:06:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200916200925.1803161-1-kafai@fb.com>
+References: <160017005691.98230.13648200635390228683.stgit@toke.dk>
+ <160017006242.98230.15812695975228745782.stgit@toke.dk> <CAEf4Bzafmu5w6wjWT_d0B-JaUnm3KOf0Dgp+552iZii2+=3DWg@mail.gmail.com>
+ <CAEf4BzbqW12q_nXvat6=iTvKpy1P+e-r0N+9eY3vgDAZ8rcfLQ@mail.gmail.com> <87tuvwmirx.fsf@toke.dk>
+In-Reply-To: <87tuvwmirx.fsf@toke.dk>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 17 Sep 2020 11:06:18 -0700
+Message-ID: <CAEf4BzZkaViCyJnnJtSVjN2q7aD1SgEOqKKmy5m+1icWd3B72Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 5/8] bpf: Fix context type resolving for
+ extension programs
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Sep 16, 2020 at 01:09:25PM -0700, Martin KaFai Lau wrote:
-> The sk_storage->list will be traversed by rcu reader in parallel.
-> Thus, hlist_add_head_rcu() is needed in __selem_link_sk().  This
-> patch fixes it.
-> 
-> This part of the code has recently been refactored in bpf-next.
-> A separate fix will be provided for the bpf-next tree.
-> 
-> Fixes: 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
-> Signed-off-by: Martin KaFai Lau <kafai@fb.com>
-> ---
->  net/core/bpf_sk_storage.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-> index b988f48153a4..d4d2a56e9d4a 100644
-> --- a/net/core/bpf_sk_storage.c
-> +++ b/net/core/bpf_sk_storage.c
-> @@ -219,7 +219,7 @@ static void __selem_link_sk(struct bpf_sk_storage *sk_storage,
->  			    struct bpf_sk_storage_elem *selem)
->  {
->  	RCU_INIT_POINTER(selem->sk_storage, sk_storage);
-> -	hlist_add_head(&selem->snode, &sk_storage->list);
-> +	hlist_add_head_rcu(&selem->snode, &sk_storage->list);
->  }
+On Thu, Sep 17, 2020 at 10:10 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@red=
+hat.com> wrote:
+>
+> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>
+> > On Wed, Sep 16, 2020 at 12:59 PM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> >>
+> >> On Tue, Sep 15, 2020 at 5:50 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke=
+@redhat.com> wrote:
+> >> >
+> >> > From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> >> >
+> >> > Eelco reported we can't properly access arguments if the tracing
+> >> > program is attached to extension program.
+> >> >
+> >> > Having following program:
+> >> >
+> >> >   SEC("classifier/test_pkt_md_access")
+> >> >   int test_pkt_md_access(struct __sk_buff *skb)
+> >> >
+> >> > with its extension:
+> >> >
+> >> >   SEC("freplace/test_pkt_md_access")
+> >> >   int test_pkt_md_access_new(struct __sk_buff *skb)
+> >> >
+> >> > and tracing that extension with:
+> >> >
+> >> >   SEC("fentry/test_pkt_md_access_new")
+> >> >   int BPF_PROG(fentry, struct sk_buff *skb)
+> >> >
+> >> > It's not possible to access skb argument in the fentry program,
+> >> > with following error from verifier:
+> >> >
+> >> >   ; int BPF_PROG(fentry, struct sk_buff *skb)
+> >> >   0: (79) r1 =3D *(u64 *)(r1 +0)
+> >> >   invalid bpf_context access off=3D0 size=3D8
+> >> >
+> >> > The problem is that btf_ctx_access gets the context type for the
+> >> > traced program, which is in this case the extension.
+> >> >
+> >> > But when we trace extension program, we want to get the context
+> >> > type of the program that the extension is attached to, so we can
+> >> > access the argument properly in the trace program.
+> >> >
+> >> > This version of the patch is tweaked slightly from Jiri's original o=
+ne,
+> >> > since the refactoring in the previous patches means we have to get t=
+he
+> >> > target prog type from the new variable in prog->aux instead of direc=
+tly
+> >> > from the target prog.
+> >> >
+> >> > Reported-by: Eelco Chaudron <echaudro@redhat.com>
+> >> > Suggested-by: Jiri Olsa <jolsa@kernel.org>
+> >> > Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> >> > ---
+> >> >  kernel/bpf/btf.c |    9 ++++++++-
+> >> >  1 file changed, 8 insertions(+), 1 deletion(-)
+> >> >
+> >> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> >> > index 9228af9917a8..55f7b2ba1cbd 100644
+> >> > --- a/kernel/bpf/btf.c
+> >> > +++ b/kernel/bpf/btf.c
+> >> > @@ -3860,7 +3860,14 @@ bool btf_ctx_access(int off, int size, enum b=
+pf_access_type type,
+> >> >
+> >> >         info->reg_type =3D PTR_TO_BTF_ID;
+> >> >         if (tgt_prog) {
+> >> > -               ret =3D btf_translate_to_vmlinux(log, btf, t, tgt_pr=
+og->type, arg);
+> >> > +               enum bpf_prog_type tgt_type;
+> >> > +
+> >> > +               if (tgt_prog->type =3D=3D BPF_PROG_TYPE_EXT)
+> >> > +                       tgt_type =3D tgt_prog->aux->tgt_prog_type;
+> >>
+> >> what if tgt_prog->aux->tgt_prog_type is also BPF_PROG_TYPE_EXT? Should
+> >> this be a loop?
+> >
+> > ok, never mind this specifically. there is an explicit check
+> >
+> > if (tgt_prog->type =3D=3D prog->type) {
+> >     verbose(env, "Cannot recursively attach\n");
+> >     return -EINVAL;
+> > }
+> >
+> > that will prevent this.
+> >
+> > But, I think we still will be able to construct a long chain of
+> > fmod_ret -> freplace -> fmod_ret -> freplace -> and so on ad
+> > infinitum. Can you please construct such a selftest? And then we
+> > should probably fix those checks to also disallow FMOD_RET, in
+> > addition to BPF_TRACE_FENTRY/FEXIT (and someone more familiar with LSM
+> > prog type should check if that can cause any problems).
+>
+> Huh, I thought fmod_ret was supposed to be for kernel functions only?
 
-Applying the same, yet very different from git point of view, patch to
-bpf and bpf-next trees will create a ton of confusion for everyone.
-I prefer to take this fix (in bpf-next form) into bpf-next only and apply
-this fix (in bpf form) to 5.9 and stable after the merge window.
-The code has been around since April 2019 and it wasn't hit in prod,
-so I don't think there is urgency.
-Agree?
+Yeah, I realized that afterwards, but didn't want to ramble on forever :)
+
+> However, I can't really point to anywhere in the code that ensures this,
+> other than check_attach_modify_return(), but I think that will allow a
+> bpf function as long as its name starts with "security_" ?
+
+I think error_injection_list check will disallow anything that's not a
+specially marked kernel function. So we are probably safe as is, even
+though a bit implicitly.
+
+>
+> Is there actually any use case for modify_return being attached to a BPF
+> function (you could just use freplace instead, couldn't you?). Or should
+> we just disallow that entirely (if I'm not missing somewhere it's
+> already blocked)?
+
+No idea, but I think it works as is right now, so I wouldn't touch it.
+
+>
+> -Toke
+>
