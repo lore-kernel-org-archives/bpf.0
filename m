@@ -2,102 +2,114 @@ Return-Path: <SRS0=dFgW=C2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1183AC433E2
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 11:59:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D86BCC43461
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 12:42:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC68F208DB
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 11:59:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8EE43208E4
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 12:42:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AG3mqd+P"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A8x5Qo+I"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbgIQL7r (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Sep 2020 07:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726799AbgIQL7m (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Sep 2020 07:59:42 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2801C06174A;
-        Thu, 17 Sep 2020 04:59:12 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id e4so995562pln.10;
-        Thu, 17 Sep 2020 04:59:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q1DbrMjO4BZTE2w6KtdCZfCvUgYWfaaS/EcGaSNvftk=;
-        b=AG3mqd+PZ3EUP9hCgxSrUGiqdasTPXZq+38FoV3DB6xUgG4DkY517BUrCIFaJ4CeIZ
-         Sd9vc8Jf3YzE2ojKC2hFFHHpX462QsZZp4TcsQHVOzmk4Vdd0o4tMBEelSBC+WhamuCe
-         bpg2a4/2lXxtePK52Tu2f7aDv7unHjGv7y/WrB/PeHiLEC0y0EhCIwnuJcBfPJ/Fr0RU
-         fZ4ENayEZ9XR0pw6NiB1wI0wPM4Ke1A6hBw5P2Bns2LjS63sURDUaoaRfDNWXmTq96hg
-         7pPy35QmhiYrHxuegU4tGnwDiyhCd2V4VGjcA1ldnS38VguNTjlbE2h1XbHZsHURqy7/
-         I5hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=q1DbrMjO4BZTE2w6KtdCZfCvUgYWfaaS/EcGaSNvftk=;
-        b=QMZlj31DtfGHH2VDSdsfXZc6Vti93x0FMJOi0iQhAk9Hc/FI6EWnGJsMd27h8dRQHe
-         e34WNKV8DC6RTIlKtHLiT0uHodhQGa8DIPNLmTXaugIraeLuFbX8I9aFO9D+4TD9/8Bj
-         /30gthF1c6qZOgGLp8jCGQjQz0s/EaNshKD3qxtENVxbk9riB+z0cE4LHo0JBgQkpBLX
-         0VrezcqCJJiu/IZ3m7MkZ1ohHPoEEu9+BE0bd9Yvf4KMw7GbLw7HckL7qb+ObSBkp2mI
-         1nCNV5+Jt6fxoKvTcHZSF2Hd9yg8RwIuL/d4LQHdIHZSnUVCcUrmGiw8HBvVeuiu+8It
-         2rRQ==
-X-Gm-Message-State: AOAM533vZbyaMe0BF+7Djsixz5OgHfyFMlofivCHSWz3bPv7SK7Qxybu
-        r8uClowUGA1QjP7bBUk/XNc=
-X-Google-Smtp-Source: ABdhPJxYoAErNWLu/+EOG22+4+znyLSZAfuYFGEVx8OEJZc2MTtiYOHWwnRhm0kjBZzrsecFnfD2/A==
-X-Received: by 2002:a17:90b:4b0b:: with SMTP id lx11mr8156340pjb.104.1600343952529;
-        Thu, 17 Sep 2020 04:59:12 -0700 (PDT)
-Received: from localhost.localdomain ([2001:470:e92d:10:6ca9:b613:f248:49fa])
-        by smtp.gmail.com with ESMTPSA id w19sm21156376pfq.60.2020.09.17.04.59.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 04:59:12 -0700 (PDT)
-From:   Tony Ambardar <tony.ambardar@gmail.com>
-X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Tony Ambardar <Tony.Ambardar@gmail.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH bpf v1] tools/bpftool: support passing BPFTOOL_VERSION to make
-Date:   Thu, 17 Sep 2020 04:58:33 -0700
-Message-Id: <20200917115833.1235518-1-Tony.Ambardar@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S1727001AbgIQMmJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Sep 2020 08:42:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:38358 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727044AbgIQMkk (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 17 Sep 2020 08:40:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1600346436;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=S7TD+QBtQUFQ5S4QEx+7/eynDF8kS4E6Y348DzqACFw=;
+        b=A8x5Qo+Iz+r5lkTQI9hHyHCpuYB7B+lnWEgK5xgpQsEnnDL80TgiXLr7yM9ZEr08ZDIqNE
+        8xBeUBrqCROdFAKB3fMSDInPCOM99s7DJ9zfgHQDK7OtEw5foWY0OGIMZnIGLBmaW+l2vj
+        fcMyLfYxBEHtYi77W+6B5f6aAhoFH94=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-413-pZ4ItpK6MJ2sq5fcAZ_--g-1; Thu, 17 Sep 2020 08:39:13 -0400
+X-MC-Unique: pZ4ItpK6MJ2sq5fcAZ_--g-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1E5BD109109D;
+        Thu, 17 Sep 2020 12:39:01 +0000 (UTC)
+Received: from carbon (unknown [10.40.208.42])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1A941610F2;
+        Thu, 17 Sep 2020 12:38:47 +0000 (UTC)
+Date:   Thu, 17 Sep 2020 14:38:46 +0200
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Daniel Borkmann <borkmann@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        BPF-dev-list <bpf@vger.kernel.org>
+Cc:     brouer@redhat.com,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Maciej Zenczykowski <maze@google.com>,
+        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shaun Crampton <shaun@tigera.io>,
+        David Miller <davem@davemloft.net>,
+        Marek Majkowski <marek@cloudflare.com>
+Subject: BPF redirect API design issue for BPF-prog MTU feedback?
+Message-ID: <20200917143846.37ce43a0@carbon>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This change facilitates out-of-tree builds, packaging, and versioning for
-test and debug purposes. Defining BPFTOOL_VERSION allows self-contained
-builds within the tools tree, since it avoids use of the 'kernelversion'
-target in the top-level makefile, which would otherwise pull in several
-other includes from outside the tools tree.
 
-Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
----
- tools/bpf/bpftool/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+As you likely know[1] I'm looking into moving the MTU check (for TC-BPF)
+in __bpf_skb_max_len() when e.g. called by bpf_skb_adjust_room(),
+because when redirecting packets to another netdev it is not correct to
+limit the MTU based on the incoming netdev.
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 8462690a039b..4828913703b6 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -25,7 +25,7 @@ endif
- 
- LIBBPF = $(LIBBPF_PATH)libbpf.a
- 
--BPFTOOL_VERSION := $(shell make -rR --no-print-directory -sC ../../.. kernelversion)
-+BPFTOOL_VERSION ?= $(shell make -rR --no-print-directory -sC ../../.. kernelversion)
- 
- $(LIBBPF): FORCE
- 	$(if $(LIBBPF_OUTPUT),@mkdir -p $(LIBBPF_OUTPUT))
+I was looking at doing the MTU check in bpf_redirect() helper, because
+at this point we know the redirect to netdev, and returning an
+indication/error that MTU was exceed, would allow the BPF-prog logic to
+react, e.g. sending ICMP (instead of packet getting silently dropped).
+BUT this is not possible because bpf_redirect(index, flags) helper
+don't provide the packet context-object (so I cannot lookup the packet
+length).
+
+Seeking input:
+
+Should/can we change the bpf_redirect API or create a new helper with
+packet-context?
+
+ Note: We have the same need for the packet context for XDP when
+ redirecting the new multi-buffer packets, as not all destination netdev
+ will support these new multi-buffer packets.
+
+I can of-cause do the MTU checks on kernel-side in skb_do_redirect, but
+then how do people debug this? as packet will basically be silently dropped.
+
+
+
+(Looking at how does BPF-prog logic handle MTU today)
+
+How do bpf_skb_adjust_room() report that the MTU was exceeded?
+Unfortunately it uses a common return code -ENOTSUPP which used for
+multiple cases (include MTU exceeded). Thus, the BPF-prog logic cannot
+use this reliably to know if this is a MTU exceeded event. (Looked
+BPF-prog code and they all simply exit with TC_ACT_SHOT for all error
+codes, cloudflare have the most advanced handling with
+metrics->errors_total_encap_adjust_failed++).
+
+
+[1] https://lore.kernel.org/bpf/159921182827.1260200.9699352760916903781.stgit@firesoul/
 -- 
-2.25.1
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
