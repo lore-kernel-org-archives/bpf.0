@@ -2,293 +2,243 @@ Return-Path: <SRS0=dFgW=C2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ED8AEC43463
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 20:29:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44D4FC43464
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 20:39:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A018F20853
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 20:29:41 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="V8/6kWyN"
+	by mail.kernel.org (Postfix) with ESMTP id DD8D12085B
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 20:39:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1600375196;
+	bh=4KM+0ViDDGL59kEm4u7dBzMtR1TEU6CQ1hNFnYqg/o0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=sEsxMa52oNmpXqpDfU2NVOOpQF27dcrrwl/H3vQtJeNJICL7Y5V+ZmrKv9jR+Bamr
+	 vKX8QdFU/UMX5/a5cj043Wd6pSR/upATCWYD7l6LuVYcZkSg4iOViJK6iru1sQqwYV
+	 /uwMENECzirEFUUlv7NEPAQTrJO/L16qJLQP41+Y=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726333AbgIQU3l (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Sep 2020 16:29:41 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:45553 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726180AbgIQU3k (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 17 Sep 2020 16:29:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600374577;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=clygwoJ1f9sZLqUhcfeUO7K+/N8tqwPrjcsYeSe/dUM=;
-        b=V8/6kWyNKkq/49hz27Jl996MFTiNix0zq8VJw5X13/h7L86DidE6xJ6/Oz5/UnExnZCZ0S
-        kjvlUvOBqt/eWEenxMT0iFuf6o/BSQo2bZ9HHL55nv4MqtrhEOXqFHpMpC4RnIqPb9xIe4
-        eGEhYoEX1pHNtP/qs75XXC7EKB7iBCg=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-483-DjlMOep3PTSLSBzLSqIDdg-1; Thu, 17 Sep 2020 16:29:34 -0400
-X-MC-Unique: DjlMOep3PTSLSBzLSqIDdg-1
-Received: by mail-wr1-f71.google.com with SMTP id 33so1282694wrk.12
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 13:29:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=clygwoJ1f9sZLqUhcfeUO7K+/N8tqwPrjcsYeSe/dUM=;
-        b=OpQNy5w/3XcarsEYhNjFkmxuS3wXY1sc7WyllS1OiKO8rYtyLwjuAySlbnozx31rMF
-         eMaRDWEnnqcmEm/l1q3bYLKSrzh08zv7SPW1cKJEpoEyKRsfZfoFZg+O0y1zTq+cO6aT
-         h1tFdvAwolsAn2CnWxIYPfH/uLGSuerKT60tVHc+l3Zmyn+QH5qMxPZcgwLqrpzpF0Of
-         lZMPNPwo5rv/uw9/IZsQUzE8aNfC8RwG0h1HlMN94RcRrCkURdbSC1MVmBOoz68gVtJs
-         JuJ4sENKVnKIz4aj2XKzczmjSsCq6Vw3WvkOOUVwIgDZul92S2WX1Yuu1ckk9DsbbqGy
-         C06w==
-X-Gm-Message-State: AOAM532GcfFKJNPDkEx07vV6MEjP2Ff2l3nKxR91Zu+rBSTM6s0WQMBe
-        ouFOsv2mdoGE7bUMccu2q095ztW5ysqzi9faHQSFy6vni0droJ0/5/sVCOVG6mXku3ExPSEiCeZ
-        ZXQPHHes6BLas
-X-Received: by 2002:a7b:ce8d:: with SMTP id q13mr11753642wmj.119.1600374572509;
-        Thu, 17 Sep 2020 13:29:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwBSpOX7riKLg/Si5QzhT92aQ9Hr3nupMWyzgzRNELCfBhx9oWChckN3ZbPMUpn44Q8qJWtmg==
-X-Received: by 2002:a7b:ce8d:: with SMTP id q13mr11753601wmj.119.1600374571909;
-        Thu, 17 Sep 2020 13:29:31 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id g14sm1139836wrv.25.2020.09.17.13.29.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 13:29:31 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 75C3A183A90; Thu, 17 Sep 2020 22:20:10 +0200 (CEST)
-Subject: [PATCH bpf-next v6 09/10] selftests/bpf: Adding test for arg
- dereference in extension trace
-From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        id S1726466AbgIQUj4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Sep 2020 16:39:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40942 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726234AbgIQUj4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Sep 2020 16:39:56 -0400
+Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4A8C320838;
+        Thu, 17 Sep 2020 20:39:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600375195;
+        bh=4KM+0ViDDGL59kEm4u7dBzMtR1TEU6CQ1hNFnYqg/o0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oinJ3xJUwiNOarvn45C05PK8IYn9TGzDPInTjKUHZQSKplkprYblyXN5j5+1YbcNo
+         O/6WKcHsGr3Gx8+PMkf8GmKMrupIPYL2tkblG4Aw6toCsY3o9OIDGOS3lWsD5fvPO+
+         DR6M5+rNSBqMfjvY2xUuSfdKimrxpnfUJZVs10oA=
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 616FB400E9; Thu, 17 Sep 2020 17:39:53 -0300 (-03)
+Date:   Thu, 17 Sep 2020 17:39:53 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Date:   Thu, 17 Sep 2020 22:20:10 +0200
-Message-ID: <160037401036.28970.1839298741218803117.stgit@toke.dk>
-In-Reply-To: <160037400056.28970.7647821897296177963.stgit@toke.dk>
-References: <160037400056.28970.7647821897296177963.stgit@toke.dk>
-User-Agent: StGit/0.23
+        KP Singh <kpsingh@chromium.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>,
+        Jin Yao <yao.jin@linux.intel.com>
+Subject: Re: [PATCH v4] perf metricgroup: Fix uncore metric expressions
+Message-ID: <20200917203953.GA1525630@kernel.org>
+References: <20200917190026.GB1426933@kernel.org>
+ <20200917201807.4090224-1-irogers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200917201807.4090224-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jiri Olsa <jolsa@kernel.org>
+Em Thu, Sep 17, 2020 at 01:18:07PM -0700, Ian Rogers escreveu:
+> A metric like DRAM_BW_Use has on SkylakeX events uncore_imc/cas_count_read/
+> and uncore_imc/case_count_write/. These events open 6 events per socket
+> with pmu names of uncore_imc_[0-5]. The current metric setup code in
+> find_evsel_group assumes one ID will map to 1 event to be recorded in
+> metric_events. For events with multiple matches, the first event is
+> recorded in metric_events (avoiding matching >1 event with the same
+> name) and the evlist_used updated so that duplicate events aren't
+> removed when the evlist has unused events removed.
 
-Adding test that setup following program:
+Namhyung, please check if you still Acks this as you provided it for v3.
 
-  SEC("classifier/test_pkt_md_access")
-  int test_pkt_md_access(struct __sk_buff *skb)
+Thanks,
 
-with its extension:
+- Arnaldo
+ 
+> Before this change:
+> $ /tmp/perf/perf stat -M DRAM_BW_Use -a -- sleep 1
+> 
+>  Performance counter stats for 'system wide':
+> 
+>              41.14 MiB  uncore_imc/cas_count_read/
+>      1,002,614,251 ns   duration_time
+> 
+>        1.002614251 seconds time elapsed
+> 
+> After this change:
+> $ /tmp/perf/perf stat -M DRAM_BW_Use -a -- sleep 1
+> 
+>  Performance counter stats for 'system wide':
+> 
+>             157.47 MiB  uncore_imc/cas_count_read/ #     0.00 DRAM_BW_Use
+>             126.97 MiB  uncore_imc/cas_count_write/
+>      1,003,019,728 ns   duration_time
+> 
+> Erroneous duplication introduced in:
+> commit 2440689d62e9 ("perf metricgroup: Remove duped metric group events").
+> 
+> Fixes: ded80bda8bc9 ("perf expr: Migrate expr ids table to a hashmap").
+> Reported-by: Jin Yao <yao.jin@linux.intel.com>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/metricgroup.c | 75 ++++++++++++++++++++++++++---------
+>  1 file changed, 56 insertions(+), 19 deletions(-)
+> 
+> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
+> index ab5030fcfed4..d948a7f910cf 100644
+> --- a/tools/perf/util/metricgroup.c
+> +++ b/tools/perf/util/metricgroup.c
+> @@ -150,6 +150,18 @@ static void expr_ids__exit(struct expr_ids *ids)
+>  		free(ids->id[i].id);
+>  }
+>  
+> +static bool contains_event(struct evsel **metric_events, int num_events,
+> +			const char *event_name)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < num_events; i++) {
+> +		if (!strcmp(metric_events[i]->name, event_name))
+> +			return true;
+> +	}
+> +	return false;
+> +}
+> +
+>  /**
+>   * Find a group of events in perf_evlist that correpond to those from a parsed
+>   * metric expression. Note, as find_evsel_group is called in the same order as
+> @@ -180,7 +192,11 @@ static struct evsel *find_evsel_group(struct evlist *perf_evlist,
+>  	int i = 0, matched_events = 0, events_to_match;
+>  	const int idnum = (int)hashmap__size(&pctx->ids);
+>  
+> -	/* duration_time is grouped separately. */
+> +	/*
+> +	 * duration_time is always grouped separately, when events are grouped
+> +	 * (ie has_constraint is false) then ignore it in the matching loop and
+> +	 * add it to metric_events at the end.
+> +	 */
+>  	if (!has_constraint &&
+>  	    hashmap__find(&pctx->ids, "duration_time", (void **)&val_ptr))
+>  		events_to_match = idnum - 1;
+> @@ -207,23 +223,20 @@ static struct evsel *find_evsel_group(struct evlist *perf_evlist,
+>  				sizeof(struct evsel *) * idnum);
+>  			current_leader = ev->leader;
+>  		}
+> -		if (hashmap__find(&pctx->ids, ev->name, (void **)&val_ptr)) {
+> -			if (has_constraint) {
+> -				/*
+> -				 * Events aren't grouped, ensure the same event
+> -				 * isn't matched from two groups.
+> -				 */
+> -				for (i = 0; i < matched_events; i++) {
+> -					if (!strcmp(ev->name,
+> -						    metric_events[i]->name)) {
+> -						break;
+> -					}
+> -				}
+> -				if (i != matched_events)
+> -					continue;
+> -			}
+> +		/*
+> +		 * Check for duplicate events with the same name. For example,
+> +		 * uncore_imc/cas_count_read/ will turn into 6 events per socket
+> +		 * on skylakex. Only the first such event is placed in
+> +		 * metric_events. If events aren't grouped then this also
+> +		 * ensures that the same event in different sibling groups
+> +		 * aren't both added to metric_events.
+> +		 */
+> +		if (contains_event(metric_events, matched_events, ev->name))
+> +			continue;
+> +		/* Does this event belong to the parse context? */
+> +		if (hashmap__find(&pctx->ids, ev->name, (void **)&val_ptr))
+>  			metric_events[matched_events++] = ev;
+> -		}
+> +
+>  		if (matched_events == events_to_match)
+>  			break;
+>  	}
+> @@ -239,7 +252,7 @@ static struct evsel *find_evsel_group(struct evlist *perf_evlist,
+>  	}
+>  
+>  	if (matched_events != idnum) {
+> -		/* Not whole match */
+> +		/* Not a whole match */
+>  		return NULL;
+>  	}
+>  
+> @@ -247,8 +260,32 @@ static struct evsel *find_evsel_group(struct evlist *perf_evlist,
+>  
+>  	for (i = 0; i < idnum; i++) {
+>  		ev = metric_events[i];
+> -		ev->metric_leader = ev;
+> +		/* Don't free the used events. */
+>  		set_bit(ev->idx, evlist_used);
+> +		/*
+> +		 * The metric leader points to the identically named event in
+> +		 * metric_events.
+> +		 */
+> +		ev->metric_leader = ev;
+> +		/*
+> +		 * Mark two events with identical names in the same group (or
+> +		 * globally) as being in use as uncore events may be duplicated
+> +		 * for each pmu. Set the metric leader of such events to be the
+> +		 * event that appears in metric_events.
+> +		 */
+> +		evlist__for_each_entry_continue(perf_evlist, ev) {
+> +			/*
+> +			 * If events are grouped then the search can terminate
+> +			 * when then group is left.
+> +			 */
+> +			if (!has_constraint &&
+> +			    ev->leader != metric_events[i]->leader)
+> +				break;
+> +			if (!strcmp(metric_events[i]->name, ev->name)) {
+> +				set_bit(ev->idx, evlist_used);
+> +				ev->metric_leader = metric_events[i];
+> +			}
+> +		}
+>  	}
+>  
+>  	return metric_events[0];
+> -- 
+> 2.28.0.618.gf4bc123cb7-goog
+> 
 
-  SEC("freplace/test_pkt_md_access")
-  int test_pkt_md_access_new(struct __sk_buff *skb)
+-- 
 
-and tracing that extension with:
-
-  SEC("fentry/test_pkt_md_access_new")
-  int BPF_PROG(fentry, struct sk_buff *skb)
-
-The test verifies that the tracing program can
-dereference skb argument properly.
-
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- tools/testing/selftests/bpf/prog_tests/trace_ext.c |  111 ++++++++++++++++++++
- tools/testing/selftests/bpf/progs/test_trace_ext.c |   18 +++
- .../selftests/bpf/progs/test_trace_ext_tracing.c   |   25 +++++
- 3 files changed, 154 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/trace_ext.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_trace_ext.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_trace_ext_tracing.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/trace_ext.c b/tools/testing/selftests/bpf/prog_tests/trace_ext.c
-new file mode 100644
-index 000000000000..924441d4362d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/trace_ext.c
-@@ -0,0 +1,111 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+#include <sys/stat.h>
-+#include <linux/sched.h>
-+#include <sys/syscall.h>
-+
-+#include "test_pkt_md_access.skel.h"
-+#include "test_trace_ext.skel.h"
-+#include "test_trace_ext_tracing.skel.h"
-+
-+static __u32 duration;
-+
-+void test_trace_ext(void)
-+{
-+	struct test_pkt_md_access *skel_pkt = NULL;
-+	struct test_trace_ext_tracing *skel_trace = NULL;
-+	struct test_trace_ext_tracing__bss *bss_trace;
-+	struct test_trace_ext *skel_ext = NULL;
-+	struct test_trace_ext__bss *bss_ext;
-+	int err, pkt_fd, ext_fd;
-+	struct bpf_program *prog;
-+	char buf[100];
-+	__u32 retval;
-+	__u64 len;
-+
-+	/* open/load/attach test_pkt_md_access */
-+	skel_pkt = test_pkt_md_access__open_and_load();
-+	if (CHECK(!skel_pkt, "setup", "classifier/test_pkt_md_access open failed\n"))
-+		goto cleanup;
-+
-+	err = test_pkt_md_access__attach(skel_pkt);
-+	if (CHECK(err, "setup", "classifier/test_pkt_md_access attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	prog = skel_pkt->progs.test_pkt_md_access;
-+	pkt_fd = bpf_program__fd(prog);
-+
-+	/* open extension */
-+	skel_ext = test_trace_ext__open();
-+	if (CHECK(!skel_ext, "setup", "freplace/test_pkt_md_access open failed\n"))
-+		goto cleanup;
-+
-+	/* set extension's attach target - test_pkt_md_access  */
-+	prog = skel_ext->progs.test_pkt_md_access_new;
-+	bpf_program__set_attach_target(prog, pkt_fd, "test_pkt_md_access");
-+
-+	/* load/attach extension */
-+	err = test_trace_ext__load(skel_ext);
-+	if (CHECK(err, "setup", "freplace/test_pkt_md_access load failed\n")) {
-+		libbpf_strerror(err, buf, sizeof(buf));
-+		fprintf(stderr, "%s\n", buf);
-+		goto cleanup;
-+	}
-+
-+	err = test_trace_ext__attach(skel_ext);
-+	if (CHECK(err, "setup", "freplace/test_pkt_md_access attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	prog = skel_ext->progs.test_pkt_md_access_new;
-+	ext_fd = bpf_program__fd(prog);
-+
-+	/* open tracing  */
-+	skel_trace = test_trace_ext_tracing__open();
-+	if (CHECK(!skel_trace, "setup", "tracing/test_pkt_md_access_new open failed\n"))
-+		goto cleanup;
-+
-+	/* set tracing's attach target - fentry */
-+	prog = skel_trace->progs.fentry;
-+	bpf_program__set_attach_target(prog, ext_fd, "test_pkt_md_access_new");
-+
-+	/* set tracing's attach target - fexit */
-+	prog = skel_trace->progs.fexit;
-+	bpf_program__set_attach_target(prog, ext_fd, "test_pkt_md_access_new");
-+
-+	/* load/attach tracing */
-+	err = test_trace_ext_tracing__load(skel_trace);
-+	if (CHECK(err, "setup", "tracing/test_pkt_md_access_new load failed\n")) {
-+		libbpf_strerror(err, buf, sizeof(buf));
-+		fprintf(stderr, "%s\n", buf);
-+		goto cleanup;
-+	}
-+
-+	err = test_trace_ext_tracing__attach(skel_trace);
-+	if (CHECK(err, "setup", "tracing/test_pkt_md_access_new attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	/* trigger the test */
-+	err = bpf_prog_test_run(pkt_fd, 1, &pkt_v4, sizeof(pkt_v4),
-+				NULL, NULL, &retval, &duration);
-+	CHECK(err || retval, "run", "err %d errno %d retval %d\n", err, errno, retval);
-+
-+	bss_ext = skel_ext->bss;
-+	bss_trace = skel_trace->bss;
-+
-+	len = bss_ext->ext_called;
-+
-+	CHECK(bss_ext->ext_called == 0,
-+		"check", "failed to trigger freplace/test_pkt_md_access\n");
-+	CHECK(bss_trace->fentry_called != len,
-+		"check", "failed to trigger fentry/test_pkt_md_access_new\n");
-+	CHECK(bss_trace->fexit_called != len,
-+		"check", "failed to trigger fexit/test_pkt_md_access_new\n");
-+
-+cleanup:
-+	test_trace_ext_tracing__destroy(skel_trace);
-+	test_trace_ext__destroy(skel_ext);
-+	test_pkt_md_access__destroy(skel_pkt);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_trace_ext.c b/tools/testing/selftests/bpf/progs/test_trace_ext.c
-new file mode 100644
-index 000000000000..d19a634d0e78
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_trace_ext.c
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Facebook
-+#include <linux/bpf.h>
-+#include <stdbool.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_endian.h>
-+#include <bpf/bpf_tracing.h>
-+
-+__u64 ext_called = 0;
-+
-+SEC("freplace/test_pkt_md_access")
-+int test_pkt_md_access_new(struct __sk_buff *skb)
-+{
-+	ext_called = skb->len;
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_trace_ext_tracing.c b/tools/testing/selftests/bpf/progs/test_trace_ext_tracing.c
-new file mode 100644
-index 000000000000..52f3baf98f20
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_trace_ext_tracing.c
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+__u64 fentry_called = 0;
-+
-+SEC("fentry/test_pkt_md_access_new")
-+int BPF_PROG(fentry, struct sk_buff *skb)
-+{
-+	fentry_called = skb->len;
-+	return 0;
-+}
-+
-+__u64 fexit_called = 0;
-+
-+SEC("fexit/test_pkt_md_access_new")
-+int BPF_PROG(fexit, struct sk_buff *skb)
-+{
-+	fexit_called = skb->len;
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-
+- Arnaldo
