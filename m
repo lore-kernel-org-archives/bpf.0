@@ -2,158 +2,161 @@ Return-Path: <SRS0=dFgW=C2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6E80C433E2
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 18:25:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2C2A8C43461
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 18:34:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 839D121D90
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 18:25:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E27D7206B6
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 18:34:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Vw+n7cYd";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="acaEmm21"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HNVdAl2U"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726405AbgIQSZk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Sep 2020 14:25:40 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:18198 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726381AbgIQSVU (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 17 Sep 2020 14:21:20 -0400
-X-Greylist: delayed 1160 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 14:20:52 EDT
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 08HI088Q001442;
-        Thu, 17 Sep 2020 11:01:10 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=jfiSI0BP6kJ4YMErJK6HEna4zPPbxGZGEtBHY6Y2OE4=;
- b=Vw+n7cYd4WTkNSHqijA7tg3Y8FpJBCboNa/bUyOYiO/8668nrV3kGsYVTet8g57DeoBm
- wmRUq8unzlHqIoUA0Msx21d5C9Yeq26ifYskO/2sgNSQWUslObN99WOu1669U0BxW8Qe
- izlvPnzGFQJ1YTu7sT5BoMI51EZ7IAKo9+U= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 33mc4r86nx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 17 Sep 2020 11:01:09 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 17 Sep 2020 11:01:08 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KRn2YfgNDHVq1zZ60tJ+ESTgCLu1GsNg0yFXDc35lORNhKmKVQEMH1nRFgS3etY0MRh++5/aQ68JMX5WTpr4r1klhik6Ht1pbeLDidXYdZcoSnc68muBEUeEst7OvKSSaLPwblBhtGIZE5LWp2+/4+etRyohbWofdgm7Bapi2+3oqmhNPkYmAlx0gx46efD8SFzY9cXW6xbh0U91p7DLqvBQYF7ROtb6E+yPENouVfx1Wro9SKMckBajUP1IOddDhr5UqTygP2vYHmzrTgMt5JlUTBF+brN1SRUTDJ3wroy0MNkiYmJRUi76Te1kqNhONYPj7li4HGaE0Tyrxbw8+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jfiSI0BP6kJ4YMErJK6HEna4zPPbxGZGEtBHY6Y2OE4=;
- b=dp8jc6IUE3BkEadlGGLSTers9Ci7ysFQ2LFn+mKlHLab8Go91et76FwUp7RoZpmJX40XJShfxWHc32fWoRZIIFpu0QNd7Md+Zk/UYdS8cefZTU/11HyiXZM8FRlduMJfMwRWpp4MntlJFZJfwLLeWS5z56oZbkU87UuozTvl+kZCGClGbpUZcjVlceiiv7PEaBCwC+wjUa/sUo3NLUwVbPIvyrhzDiddgY3dTk3H4nwY2hMFOIPYOwdcG9gBTzypTDvsZyooqqrTlWEQ85iwGoVMQR1KztWprj9ChbY8Qwka3pf3mTu/IMMBRoboy7DAWNQTRQs4A+tEdUn09kPfbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jfiSI0BP6kJ4YMErJK6HEna4zPPbxGZGEtBHY6Y2OE4=;
- b=acaEmm21bfz+qqRvvT1MmbFTv0LXgvLO3s2+MsySzy4ZzLdCb6J/8bijl3cOhBslEhCJsdlF2Y0JvRDIPPJM2sIr3yZ5DwAQqhUzPgg5CXnumJVdf6sxP0ZFGQMTmoxOoLtgaa4Cc+WMah7JQMCu4IOztEGrtZyVwGZUfLYV8Y4=
-Authentication-Results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=fb.com;
-Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
- by BY5PR15MB3716.namprd15.prod.outlook.com (2603:10b6:a03:1b4::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.14; Thu, 17 Sep
- 2020 18:01:07 +0000
-Received: from BY5PR15MB3571.namprd15.prod.outlook.com
- ([fe80::c13c:fca9:5e04:9bfb]) by BY5PR15MB3571.namprd15.prod.outlook.com
- ([fe80::c13c:fca9:5e04:9bfb%3]) with mapi id 15.20.3391.011; Thu, 17 Sep 2020
- 18:01:07 +0000
-Date:   Thu, 17 Sep 2020 11:01:00 -0700
-From:   Martin KaFai Lau <kafai@fb.com>
+        id S1726618AbgIQSeG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Sep 2020 14:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40676 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726599AbgIQSdk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Sep 2020 14:33:40 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFBB0C061221;
+        Thu, 17 Sep 2020 11:33:32 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id o5so3256701qke.12;
+        Thu, 17 Sep 2020 11:33:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=kwyClgVXC2Igl5yTeFKCxrxdDCb1R0CjcYruuMDE9mI=;
+        b=HNVdAl2UQKT6AxPA/uo5+yCr7Ep036pU+X3WFBXP4GCGzjUJ5gmOd0NnNFQwd1k6R3
+         Z+voSqPDxBm7zcyPmygqbnvqmAljIakuYDr/WQcNMMOHT5LHOYmWByQ7PyeTPwyDioT7
+         dePNLO9w/8/N0ofevNB6ppQNqPyvzI+zvRU0bYjI96LFquTFY2/hM6PYma9LPXDVle2l
+         yESEy5As+BWjg2FpUkbzXMw7sV3q+O1FSz38l2g5ZPulDUrT7qV+haIIBtPcMSXkLlLB
+         1Pv5i/9px7XtCUCqdwH5/F4dELuP5EuD34l75LDXRHfCGj5wELOfgZdpISiJgZOpn1Kw
+         QLEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=kwyClgVXC2Igl5yTeFKCxrxdDCb1R0CjcYruuMDE9mI=;
+        b=thBDYVFLMi4FBY2+xCDPCWafzK86D5CTutj712qZ15Ky6Yu9ZJm/kaFG3b+oO5zjy0
+         uZCBxSxtT414ygoJMYFB8frTGj3y6V1YS4Eiz/THNTJXvhTheujBbrCZDHhBaVWN+2aK
+         S/yHiiU4EUXB9qdWZBkqBqRzVWm7tXmvbMoi5bIZUbOFE5lsMcWU3Eh7H4pUISabVHO6
+         7YdOi8wA59PiJGVuBhYSe6xPH4AZeIOmqXhff8GOCM4ZO+4jOzzny1H34OrjUiBKIxRp
+         3gsDCVSxqoeyjeEv8KcS6PwSsxlnY6Fh9VjgwIQCEBSWZ2RlHZdsQ+mCiJ26lnuWm8ao
+         pqbw==
+X-Gm-Message-State: AOAM530JJbXWyHrjDIc6knrVQlrjAi9zCXs4anqeg4UPTt9nHPWe6ROX
+        8UoInxJU+jroa895FxjEdhQ=
+X-Google-Smtp-Source: ABdhPJzUx+EgfpoRkMQrhLmNtotPDwvPX2UuG5vrtwlTd2/gmjdR4jG3V+EDCTeTiXa7AoXqRBgQRQ==
+X-Received: by 2002:a37:a514:: with SMTP id o20mr28202780qke.374.1600367611814;
+        Thu, 17 Sep 2020 11:33:31 -0700 (PDT)
+Received: from leah-Ubuntu ([2601:4c3:200:c230:2ce1:e264:e965:fa9])
+        by smtp.gmail.com with ESMTPSA id g64sm423001qkf.71.2020.09.17.11.33.30
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 17 Sep 2020 11:33:31 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 14:33:29 -0400
+From:   Leah Rumancik <leah.rumancik@gmail.com>
 To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <netdev@vger.kernel.org>
-Subject: Re: [PATCH bpf] bpf: Use hlist_add_head_rcu when linking to
- sk_storage
-Message-ID: <20200917180100.3tm4dcafwqtjtl6n@kafai-mbp>
-References: <20200916200925.1803161-1-kafai@fb.com>
- <20200917174739.wbwiayb66aemydc5@ast-mbp.dhcp.thefacebook.com>
+Cc:     Bob Liu <bob.liu@oracle.com>, bpf <bpf@vger.kernel.org>,
+        linux-block@vger.kernel.org,
+        KJ =?utf-8?Q?=C3=98rbekk?= <orbekk@google.com>,
+        Harshad Shirwadkar <harshads@google.com>,
+        Michal Jaszczyk <jasiu@google.com>, saranyamohan@google.com,
+        Theodore Tso <tytso@google.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: Re: [RFC PATCH 1/4] bpf: add new prog_type BPF_PROG_TYPE_IO_FILTER
+Message-ID: <20200917183328.GA6689@leah-Ubuntu>
+References: <20200812163305.545447-1-leah.rumancik@gmail.com>
+ <20200812163305.545447-2-leah.rumancik@gmail.com>
+ <a0a97488-58c7-1f00-c987-d75e1329159c@oracle.com>
+ <20200817163207.p53guehd7kpxfvat@ast-mbp.dhcp.thefacebook.com>
+ <20200904164605.GB2048@leah-Ubuntu>
+ <CAADnVQK3VVzUHsteMcZ_iBFqQaoUJc5q-Rx9zxtCMw+-OhTHbA@mail.gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200917174739.wbwiayb66aemydc5@ast-mbp.dhcp.thefacebook.com>
-X-ClientProxiedBy: MWHPR1401CA0006.namprd14.prod.outlook.com
- (2603:10b6:301:4b::16) To BY5PR15MB3571.namprd15.prod.outlook.com
- (2603:10b6:a03:1f6::32)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from kafai-mbp (2620:10d:c090:400::5:af24) by MWHPR1401CA0006.namprd14.prod.outlook.com (2603:10b6:301:4b::16) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.13 via Frontend Transport; Thu, 17 Sep 2020 18:01:06 +0000
-X-Originating-IP: [2620:10d:c090:400::5:af24]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8d9e1f01-4771-4ce0-9062-08d85b33a6db
-X-MS-TrafficTypeDiagnostic: BY5PR15MB3716:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BY5PR15MB3716B47D5B766B4E1857ECEFD53E0@BY5PR15MB3716.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:6108;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5bfKuXHrmsKvrdYXbLrPecbFHDywmrh75QcPOcVaofBITKCk85XMIU3lsNy9PWeNiCETw1nJW+QzuAlbM0ilrQJWoDUYDTxlSx6IUWNme19sQcq7fa0u7EBBKVa2933J0ip4SoPR+foTHj5mTMR5cvvcaMFNSj7iwmTgx1jsK7jFwHpI7w/0F8XcheTKfQCQ5iScFXA4Dk4eSOAHUp8gPuD3xwWmTh11dIy5vOOgtmRyYummNTJrXSUdHX9xEai7m2atkDtSgQ/T6Qdw/+OtPT2JP3fZNRIXmQM/WulfBVf4cYSNpD9Zu0OBd1ktOuxVSp35Sax/S1QrnHHFAiFiPA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(39860400002)(136003)(376002)(396003)(346002)(478600001)(16526019)(55016002)(186003)(6916009)(83380400001)(54906003)(6666004)(4326008)(86362001)(316002)(9686003)(1076003)(66556008)(66946007)(66476007)(8936002)(2906002)(33716001)(5660300002)(8676002)(52116002)(6496006);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: 8/slhXGCWdHMYVcx6HSGvtPk7UQz1rowRzI4SoDV9j6vP6XhBJW1in4PRynutaTm6GTzDKehQ/N6wAKI/HHZ5v3sous+o407jAP0ZiAaEdyW4mXP4R9KomlDpM/RdV48Ujo3Z39XPI65vv8Ibk/Sb6X6UJW259F5VLohuRhXEuUjxInZ+p7Si5cpBvQ5xD6e31VJ8d6JI4Hyde6NAmbWnC32T1X6Bwk67ScypF6WPhKez1nCX8wWnjDPZl23hYoUlOUAMYNYtyQMPINWiI/TLJ5f8Gx6B/1xP1UE0SjGsf93Xxalna1AO4wfYhFlyVY6lUd1m+prFwp0+abYufYdeV0jMnVYPux/GRjdd3fqvjiPgWrR7J8IbVScR4HJJy1rX8ass9YAhJyz5Vp79XeZoYJD82Pv6kYM1v37CkdGpG2R0H0Euy5OXO2G3QRV1ECcAKMyUZMdg1zn0t+phAsu5uCzKUFDLHEmaAR1CDAgapBspRFr+efsX6+y41cn5M+lUWZYdl0CL5TtfY1sm7pQwHjCv9233sHqY8UGSus1eV/ZKMlpjZ97Q/C7XvbqfVqeMTmdAlWeeutWIg6lqMJR68VQzeN/LkOsJqG9gTUCjrCPP/wTQtdUQ5QOtotFApngXeY4sgKe6pJ2R7Ape0mLpcCRtSWYuKtOsA/TkpWsopQ=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d9e1f01-4771-4ce0-9062-08d85b33a6db
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Sep 2020 18:01:07.5581
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KJFT4cOelTAEugf6RUrYBtC3WaF4oqL1lPQ0YN+IwtNYp0bxj8I35VRZFpWyh3rS
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR15MB3716
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-17_14:2020-09-16,2020-09-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015 bulkscore=0
- lowpriorityscore=0 suspectscore=1 mlxlogscore=999 spamscore=0
- priorityscore=1501 mlxscore=0 impostorscore=0 malwarescore=0 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009170134
-X-FB-Internal: deliver
+In-Reply-To: <CAADnVQK3VVzUHsteMcZ_iBFqQaoUJc5q-Rx9zxtCMw+-OhTHbA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 10:47:39AM -0700, Alexei Starovoitov wrote:
-> On Wed, Sep 16, 2020 at 01:09:25PM -0700, Martin KaFai Lau wrote:
-> > The sk_storage->list will be traversed by rcu reader in parallel.
-> > Thus, hlist_add_head_rcu() is needed in __selem_link_sk().  This
-> > patch fixes it.
-> > 
-> > This part of the code has recently been refactored in bpf-next.
-> > A separate fix will be provided for the bpf-next tree.
-> > 
-> > Fixes: 6ac99e8f23d4 ("bpf: Introduce bpf sk local storage")
-> > Signed-off-by: Martin KaFai Lau <kafai@fb.com>
-> > ---
-> >  net/core/bpf_sk_storage.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-> > index b988f48153a4..d4d2a56e9d4a 100644
-> > --- a/net/core/bpf_sk_storage.c
-> > +++ b/net/core/bpf_sk_storage.c
-> > @@ -219,7 +219,7 @@ static void __selem_link_sk(struct bpf_sk_storage *sk_storage,
-> >  			    struct bpf_sk_storage_elem *selem)
-> >  {
-> >  	RCU_INIT_POINTER(selem->sk_storage, sk_storage);
-> > -	hlist_add_head(&selem->snode, &sk_storage->list);
-> > +	hlist_add_head_rcu(&selem->snode, &sk_storage->list);
-> >  }
+On Fri, Sep 04, 2020 at 11:50:06AM -0700, Alexei Starovoitov wrote:
+> On Fri, Sep 4, 2020 at 9:46 AM Leah Rumancik <leah.rumancik@gmail.com> wrote:
+> >
+> > On Mon, Aug 17, 2020 at 09:32:07AM -0700, Alexei Starovoitov wrote:
+> > > On Mon, Aug 17, 2020 at 10:18:47PM +0800, Bob Liu wrote:
+> > > > > +
+> > > > > +/* allows IO by default if no programs attached */
+> > > > > +int io_filter_bpf_run(struct bio *bio)
+> > > > > +{
+> > > > > + struct bpf_io_request io_req = {
+> > > > > +         .sector_start = bio->bi_iter.bi_sector,
+> > > > > +         .sector_cnt = bio_sectors(bio),
+> > > > > +         .opf = bio->bi_opf,
+> > > > > + };
+> > > > > +
+> > > > > + return BPF_PROG_RUN_ARRAY_CHECK(bio->bi_disk->progs, &io_req, BPF_PROG_RUN);
+> > > >
+> > > >
+> > > > I think pass "struct bpf_io_request" is not enough, since we may want to do the filter based on
+> > > > some special patterns against the io data.
+> > > >
+> > > > I used to pass "page_to_virt(bio->bi_io_vec->bv_page)" into ebpf program..
+> > >
+> > > Bob,
+> > >
+> > > Just like other bpf uapi structs the bpf_io_request is extensible and
+> > > such pointer can be added later, but I have a different question.
+> > >
+> > > Leah,
+> > >
+> > > Do you really need the arguments to be stable?
+> > > If so 'opf' above is not enough.
+> > > sector_start, sector_cnt are clean from uapi pov,
+> > > but 'opf' exposes kernel internals.
+> > > The patch 2 is doing:
+> > > +int protect_gpt(struct bpf_io_request *io_req)
+> > > +{
+> > > +       /* within GPT and not a read operation */
+> > > +       if (io_req->sector_start < GPT_SECTORS && (io_req->opf & REQ_OP_MASK) != REQ_OP_READ)
+> > > +               return IO_BLOCK;
+> > >
+> > > The way ops are encoded changed quite a bit over the kernel releases.
+> > > First it was REQ_WRITE, then REQ_OP_SHIFT, now REQ_OP_MASK.
+> > > From kernel pov it would be simpler if bpf side didn't impose stability
+> > > requriment on the program arguments. Then the kernel will be free to change
+> > > REG_OP_READ into something else. The progs would break, of course, and would
+> > > have to be adjusted. That's what we've been doing with tools like biosnoop.
+> > > If you're ok with unstable arguments then you wouldn't need to introduce
+> > > new prog type and this patch set.
+> > > You can do this filtering already with should_fail_bio().
+> > > bpf prog can attach to should_fail_bio() and walk all bio arguments
+> > > in unstable way.
+> > > Instead of:
+> > > +       if (io_req->sector_start < GPT_SECTORS && (io_req->opf & REQ_OP_MASK) != REQ_OP_READ)
+> > > you'll write:
+> > >   if (bio->bi_iter.bi_sector < GPT_SECTORS && (bio->bi_opf & REQ_OP_MASK) != REQ_OP_READ)
+> > > It will also work on different kernels because libbpf can adjust field offsets and
+> > > check for type matching via CO-RE facility.
+> > > Will that work for you?
+> >
+> > Alexei,
+> >
+> > I need the arguments to be stable. What would be the best way to go
+> > about this? Pulling selected information from the opf field and defining
+> > my own constants?
 > 
-> Applying the same, yet very different from git point of view, patch to
-> bpf and bpf-next trees will create a ton of confusion for everyone.
-> I prefer to take this fix (in bpf-next form) into bpf-next only and apply
-> this fix (in bpf form) to 5.9 and stable after the merge window.
-> The code has been around since April 2019 and it wasn't hit in prod,
-> so I don't think there is urgency.
-> Agree?
-Yep, agree. 
+> "stable" in what sense? To run on different kernels ?
+> CO-RE already achieves that.
+> I think what I proposed above is "stable" enough based on the description
+> of what you wanted to achieve.
+
+I see, I looked into the stability via CO-RE some more and I believe
+this will work. Thanks for your help.
+
+Leah
