@@ -2,110 +2,102 @@ Return-Path: <SRS0=dFgW=C2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCFDEC43461
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 08:06:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5E4AC2BBD1
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 08:08:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 83AA921D7F
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 08:06:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8156C21D90
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 08:08:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600330012;
-	bh=mYwYOXWHk8m9yb3WuJTI/V6/GmciN+v4xy+Pzj/6yrw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=jBUu+ml6wF75KXADLGrdwQhC3wD8JBZsx/pryW9doHt4C0N1e+VSID5zGr4NrD0EU
-	 93Dg4xsYQQYgycArkMAiEtxrhuy3uR/oiu09ZzuwhSsuipxKyzj7vGPDVX8lMqKQtf
-	 vcKb261rF73i/cC6g/VZuOpl0sJXhOfnVUjDM5Uw=
+	s=default; t=1600330114;
+	bh=2vRvBaqh9EKp9T9C1x2X/Aw5e2zrJra1E4+MhA18gXM=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=TzyO3ko7YsfIRbtCwC0VH5IWxdZiI2SAOs2K/jo1cFibslbmNmWi8t/RPskw0h/MD
+	 DDd9GmTqLTbTAbLpBdbzByn1kZEbCckgPbViasBqrcjiW76S9CNcZ2oCqCRMqSZ9CK
+	 AlzcU4G80PwbjIFTVSoUgvZJZji2qQbZRu6+P2ak=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726402AbgIQIGu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Sep 2020 04:06:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47906 "EHLO mail.kernel.org"
+        id S1726495AbgIQIH5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Sep 2020 04:07:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47894 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726417AbgIQIGh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1726416AbgIQIGh (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 17 Sep 2020 04:06:37 -0400
 Received: from mail.kernel.org (ip5f5ad5d2.dynamic.kabel-deutschland.de [95.90.213.210])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BD22D221E8;
+        by mail.kernel.org (Postfix) with ESMTPSA id BC07920707;
         Thu, 17 Sep 2020 08:04:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1600329870;
-        bh=mYwYOXWHk8m9yb3WuJTI/V6/GmciN+v4xy+Pzj/6yrw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wmhcMPOapbbfMbgpTrJy+WRPRaosnbfTglGznVwZt+kUxXqP2o+VvO5EXbptacD6J
-         mPrcWfom7WQb7eK9NEMfh3/Ot66XLheBK3+ecYyddkRJUMWpQWO5e9izKNPmakk0c9
-         9z0F9ZCADzLLWKZQVAlFcBgv8iQ973wB1aJFDiGo=
+        bh=2vRvBaqh9EKp9T9C1x2X/Aw5e2zrJra1E4+MhA18gXM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JwMinYkF0td1iRhPW6tYFYQK+S7ineNCASogVdgKBrsKxz4mmq+nyP57pilLOicSW
+         mW5kv6Dca7sMxfzTudNRr/uKLQuG5PWfYo/j4P+yvMvZ1mcWh0YwiaUHO0ufDxu8OU
+         dmMBEW7Mj0h6WR3KhpliVNeoCCyqQDWt7g8/f1ZI=
 Received: from mchehab by mail.kernel.org with local (Exim 4.94)
         (envelope-from <mchehab@kernel.org>)
-        id 1kIou4-0051LU-Ai; Thu, 17 Sep 2020 10:04:28 +0200
+        id 1kIou4-0051LO-6j; Thu, 17 Sep 2020 10:04:28 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Alexander Potapenko <glider@google.com>,
         Alexei Starovoitov <ast@kernel.org>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
         Andrii Nakryiko <andriin@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Guoqing Jiang <guoqing.jiang@cloud.ionos.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH 3/3] docs: bpf: ringbuf.rst: fix a broken cross-reference
-Date:   Thu, 17 Sep 2020 10:04:27 +0200
-Message-Id: <442b27cc035ab7f9e5e000f2ac44ce88ea8b16a6.1600328701.git.mchehab+huawei@kernel.org>
+        Song Liu <songliubraving@fb.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        William Kucharski <william.kucharski@oracle.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        kasan-dev@googlegroups.com, netdev@vger.kernel.org
+Subject: [PATCH 0/3] Additional doc warning fixes for issues at next-20200915
+Date:   Thu, 17 Sep 2020 10:04:24 +0200
+Message-Id: <cover.1600328701.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1600328701.git.mchehab+huawei@kernel.org>
-References: <cover.1600328701.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Sphinx warns about a broken cross-reference:
+There are a couple of new warnings introduced at linux-next.
 
-	Documentation/bpf/ringbuf.rst:194: WARNING: Unknown target name: "bench_ringbufs.c".
+This small patch series address them.
 
-It seems that the original idea were to add a reference for this file:
+The complete series addressing (almost) all doc warnings is at:
 
-	tools/testing/selftests/bpf/benchs/bench_ringbufs.c
+	https://git.linuxtv.org/mchehab/experimental.git/log/?h=doc-fixes
 
-However, this won't work as such file is not part of the
-documentation output dir. It could be possible to use
-an extension like interSphinx in order to make external
-references to be pointed to some website (like kernel.org),
-where the file is stored, but currently we don't use it.
+I'll keep rebasing such tree until we get rid of all doc warnings upstream,
+hopefully in time for Kernel 5.10.
 
-It would also be possible to include this file as a
-literal include, placing it inside Documentation/bpf.
+Mauro Carvalho Chehab (3):
+  docs: kasan.rst: add two missing blank lines
+  mm: pagemap.h: fix two kernel-doc markups
+  docs: bpf: ringbuf.rst: fix a broken cross-reference
 
-For now, let's take the simplest approach: just drop
-the "_" markup at the end of the reference. This
-should solve the warning, and it sounds quite obvious
-that the file to see is at the Kernel tree.
+ Documentation/bpf/ringbuf.rst     | 2 +-
+ Documentation/dev-tools/kasan.rst | 2 ++
+ include/linux/pagemap.h           | 8 ++++----
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/bpf/ringbuf.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/bpf/ringbuf.rst b/Documentation/bpf/ringbuf.rst
-index 4d4f3bcb1477..6a615cd62bda 100644
---- a/Documentation/bpf/ringbuf.rst
-+++ b/Documentation/bpf/ringbuf.rst
-@@ -197,7 +197,7 @@ a self-pacing notifications of new data being availability.
- being available after commit only if consumer has already caught up right up to
- the record being committed. If not, consumer still has to catch up and thus
- will see new data anyways without needing an extra poll notification.
--Benchmarks (see tools/testing/selftests/bpf/benchs/bench_ringbufs.c_) show that
-+Benchmarks (see tools/testing/selftests/bpf/benchs/bench_ringbufs.c) show that
- this allows to achieve a very high throughput without having to resort to
- tricks like "notify only every Nth sample", which are necessary with perf
- buffer. For extreme cases, when BPF program wants more manual control of
 -- 
 2.26.2
+
 
