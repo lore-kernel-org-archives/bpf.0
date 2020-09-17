@@ -2,209 +2,143 @@ Return-Path: <SRS0=dFgW=C2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D7BDC43461
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 18:44:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8207DC433E2
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 19:13:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F2E1C21D7B
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 18:44:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31E1420717
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 19:13:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JY6+1AFS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A8v+LFGm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726408AbgIQSo0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Sep 2020 14:44:26 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:58477 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726422AbgIQSoP (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 17 Sep 2020 14:44:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600368245;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pCECRd4lgnaJhz1iERz1/t0h7+gp4yFPcWLx1Dp1rE0=;
-        b=JY6+1AFSna3lVztPBCtzowtI6R8pIoVyE/pdURcfv0rMopH4KJVSvQgyKFWY7mefnrpvJ3
-        hpygwQrR6cNrdkSoajIoBZXUNLMnhTc2WCqnjeaPWLdkjpGaegk7cD4zIAecnXoLaIjrF3
-        +gpjaahrs6wW+av1bRty70GHuzO1GvM=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-249-hdQ3vTORNtS_GhTqENIeRw-1; Thu, 17 Sep 2020 14:44:03 -0400
-X-MC-Unique: hdQ3vTORNtS_GhTqENIeRw-1
-Received: by mail-wm1-f70.google.com with SMTP id m125so1068764wmm.7
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 11:44:03 -0700 (PDT)
+        id S1726430AbgIQTNU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Sep 2020 15:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726473AbgIQTNJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Sep 2020 15:13:09 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19D5C061788
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 12:12:59 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id r7so4768320ejs.11
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 12:12:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3LEPP0iVO4pOzmayuWFbUiTrC/zzrJHdmu9l66uZ3ww=;
+        b=A8v+LFGmLAiO8xRtH9s3ZBA0ErXORvSRkCXdgySdxxbuOJB+chA7rl6b2sM/AI825O
+         Duj98X4AUtCKr3G6eEUT0XjUWGnlWIKxlHKBnAnETBWPH492e2lWXygqMxF2mxj6qp3V
+         29WHJr0FOv9xnowF0TTP/IZx7KBni2v04ANGLmndnlpXSmjQAO/gL+Y93X+C8GxZLcKr
+         QHbPxm+Sy/tBBQyvrA1YiwkhB6EXXh1JJhsIGzjbIYDvesYwtwnYxldcZs7OkNdjeqLG
+         QlfB9h7T6clAyJiCmitV6GggXDkLu4D2bSEUuO04R1kWjvEQ0524+xyPUOqr0N3IKtGS
+         Gmmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=pCECRd4lgnaJhz1iERz1/t0h7+gp4yFPcWLx1Dp1rE0=;
-        b=BCEMnIB1kjxVSvh7gklUYNLoR1pbBRtBq3oNKdv4hvOtnwgBaXyhls/nEs0h45smBl
-         Ykxi2qYlZxWJO01iRX/BrMiN1ujifbh+AGV52MsjbEcXysyJcQa2Qw7zGnKVBfhhppnI
-         1fIg3WVSDrdQjEHOND4yvkuLYowOSna2x/UGwmN8dOLtqKroBJ5kDEDqrurpIL1UKxJ/
-         wCkSQlBR/UrQSU4FedzLsQz/IIXOy68YiIPOrHFz4BXIvA8aRcJroGckQWTfEoDcIt3F
-         qcB5lDmwVfh7h82wyi2J3Pe3RlK9WYZC/rWCobWC1Cm6rKFbAdq6559lW2GcapPkEt1e
-         FeFw==
-X-Gm-Message-State: AOAM531kX7stsY/mBdGTs+H3XiAYlXiodTjoN9r5p4jc8diy0iYmUIm7
-        Ez3HykZn1fSQo6BMI+lh4Y6FDYRP9fXv77k5ak+q4hMgv9ImCst1O9on4Y+pHgMdyzXB84c2nh5
-        jflBcoKhNj76Q
-X-Received: by 2002:a5d:4d01:: with SMTP id z1mr33434316wrt.366.1600368242406;
-        Thu, 17 Sep 2020 11:44:02 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy63uex8dYi+B/9T30ZpHD19gXQ7fN3b8VdW5GsKYcE8aIMdpvCtcYybdCwme+76rvAR3zHgQ==
-X-Received: by 2002:a5d:4d01:: with SMTP id z1mr33434290wrt.366.1600368242149;
-        Thu, 17 Sep 2020 11:44:02 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id b18sm694611wrn.21.2020.09.17.11.44.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 11:44:01 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id E72D4183A90; Thu, 17 Sep 2020 20:44:00 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3LEPP0iVO4pOzmayuWFbUiTrC/zzrJHdmu9l66uZ3ww=;
+        b=qV3UY16ad8UrRHfDxRWsjSt1yFQa+VVm3aaF99O1L17+IZhGHMom8Jme/zRiHCSzB4
+         NyXnJkg46HOuSWKqCgghUoDUSf+SFCx9fpFlAqCpOEbGpC2HLBGwwTAQqTUiQq1A6tj/
+         +rqHFbhMSDxoTROjuOFgvCQw7cfbsvt8DuMsDh1+XQIABvyP96NXV6ooe3NjA90tClXh
+         +APFRhhWM57ClalIBsLautLIo8CvQCKovIyntostHInkIzq7rcrHLz++px1C/T7Ugdz6
+         ELL/NHFArzr8afjBrvNCckEmUMYcLGP5+7ldNkvMwbrxtbXuP1DVHXujLHxH1KciUgH9
+         siVg==
+X-Gm-Message-State: AOAM532KV5NNdG8sL+B8RzdyvBQINhBJ8Y2FHMu/GMUeSOebk1kE69cB
+        kzjE+5aUfipAH+pehpVp3rBFJCOZ2dpJ3S1Ts+vdbw==
+X-Google-Smtp-Source: ABdhPJwQfuJiXhXQahr+dOg2pgt3CLLw7RBQj5IqI09dioBvbhiK8kYARiekAKmguXmiDhUnJ9irhoIyWQ2VuILnUQA=
+X-Received: by 2002:a17:906:4553:: with SMTP id s19mr31491477ejq.475.1600369978174;
+ Thu, 17 Sep 2020 12:12:58 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200916223512.2885524-5-haoluo@google.com> <202009170943.rYEs5XMN%lkp@intel.com>
+In-Reply-To: <202009170943.rYEs5XMN%lkp@intel.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Thu, 17 Sep 2020 12:12:47 -0700
+Message-ID: <CA+khW7iDK+g_W30doEtjse1BSHmB62GcrtmkH3pMk7shymw=XA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/6] bpf: Introduce bpf_per_cpu_ptr()
+To:     kernel test robot <lkp@intel.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kbuild-all@lists.01.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v5 5/8] bpf: Fix context type resolving for
- extension programs
-In-Reply-To: <CAEf4BzZkaViCyJnnJtSVjN2q7aD1SgEOqKKmy5m+1icWd3B72Q@mail.gmail.com>
-References: <160017005691.98230.13648200635390228683.stgit@toke.dk>
- <160017006242.98230.15812695975228745782.stgit@toke.dk>
- <CAEf4Bzafmu5w6wjWT_d0B-JaUnm3KOf0Dgp+552iZii2+=3DWg@mail.gmail.com>
- <CAEf4BzbqW12q_nXvat6=iTvKpy1P+e-r0N+9eY3vgDAZ8rcfLQ@mail.gmail.com>
- <87tuvwmirx.fsf@toke.dk>
- <CAEf4BzZkaViCyJnnJtSVjN2q7aD1SgEOqKKmy5m+1icWd3B72Q@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 17 Sep 2020 20:44:00 +0200
-Message-ID: <87o8m4fdlb.fsf@toke.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        Song Liu <songliubraving@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+I need to cast the pointer to "const void __percpu *" before passing
+into per_cpu_ptr. I will update and resend.
 
-> On Thu, Sep 17, 2020 at 10:10 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@r=
-edhat.com> wrote:
->>
->> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->>
->> > On Wed, Sep 16, 2020 at 12:59 PM Andrii Nakryiko
->> > <andrii.nakryiko@gmail.com> wrote:
->> >>
->> >> On Tue, Sep 15, 2020 at 5:50 PM Toke H=C3=B8iland-J=C3=B8rgensen <tok=
-e@redhat.com> wrote:
->> >> >
->> >> > From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->> >> >
->> >> > Eelco reported we can't properly access arguments if the tracing
->> >> > program is attached to extension program.
->> >> >
->> >> > Having following program:
->> >> >
->> >> >   SEC("classifier/test_pkt_md_access")
->> >> >   int test_pkt_md_access(struct __sk_buff *skb)
->> >> >
->> >> > with its extension:
->> >> >
->> >> >   SEC("freplace/test_pkt_md_access")
->> >> >   int test_pkt_md_access_new(struct __sk_buff *skb)
->> >> >
->> >> > and tracing that extension with:
->> >> >
->> >> >   SEC("fentry/test_pkt_md_access_new")
->> >> >   int BPF_PROG(fentry, struct sk_buff *skb)
->> >> >
->> >> > It's not possible to access skb argument in the fentry program,
->> >> > with following error from verifier:
->> >> >
->> >> >   ; int BPF_PROG(fentry, struct sk_buff *skb)
->> >> >   0: (79) r1 =3D *(u64 *)(r1 +0)
->> >> >   invalid bpf_context access off=3D0 size=3D8
->> >> >
->> >> > The problem is that btf_ctx_access gets the context type for the
->> >> > traced program, which is in this case the extension.
->> >> >
->> >> > But when we trace extension program, we want to get the context
->> >> > type of the program that the extension is attached to, so we can
->> >> > access the argument properly in the trace program.
->> >> >
->> >> > This version of the patch is tweaked slightly from Jiri's original =
-one,
->> >> > since the refactoring in the previous patches means we have to get =
-the
->> >> > target prog type from the new variable in prog->aux instead of dire=
-ctly
->> >> > from the target prog.
->> >> >
->> >> > Reported-by: Eelco Chaudron <echaudro@redhat.com>
->> >> > Suggested-by: Jiri Olsa <jolsa@kernel.org>
->> >> > Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->> >> > ---
->> >> >  kernel/bpf/btf.c |    9 ++++++++-
->> >> >  1 file changed, 8 insertions(+), 1 deletion(-)
->> >> >
->> >> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
->> >> > index 9228af9917a8..55f7b2ba1cbd 100644
->> >> > --- a/kernel/bpf/btf.c
->> >> > +++ b/kernel/bpf/btf.c
->> >> > @@ -3860,7 +3860,14 @@ bool btf_ctx_access(int off, int size, enum =
-bpf_access_type type,
->> >> >
->> >> >         info->reg_type =3D PTR_TO_BTF_ID;
->> >> >         if (tgt_prog) {
->> >> > -               ret =3D btf_translate_to_vmlinux(log, btf, t, tgt_p=
-rog->type, arg);
->> >> > +               enum bpf_prog_type tgt_type;
->> >> > +
->> >> > +               if (tgt_prog->type =3D=3D BPF_PROG_TYPE_EXT)
->> >> > +                       tgt_type =3D tgt_prog->aux->tgt_prog_type;
->> >>
->> >> what if tgt_prog->aux->tgt_prog_type is also BPF_PROG_TYPE_EXT? Should
->> >> this be a loop?
->> >
->> > ok, never mind this specifically. there is an explicit check
->> >
->> > if (tgt_prog->type =3D=3D prog->type) {
->> >     verbose(env, "Cannot recursively attach\n");
->> >     return -EINVAL;
->> > }
->> >
->> > that will prevent this.
->> >
->> > But, I think we still will be able to construct a long chain of
->> > fmod_ret -> freplace -> fmod_ret -> freplace -> and so on ad
->> > infinitum. Can you please construct such a selftest? And then we
->> > should probably fix those checks to also disallow FMOD_RET, in
->> > addition to BPF_TRACE_FENTRY/FEXIT (and someone more familiar with LSM
->> > prog type should check if that can cause any problems).
->>
->> Huh, I thought fmod_ret was supposed to be for kernel functions only?
+On Wed, Sep 16, 2020 at 6:14 PM kernel test robot <lkp@intel.com> wrote:
 >
-> Yeah, I realized that afterwards, but didn't want to ramble on forever :)
+> Hi Hao,
 >
->> However, I can't really point to anywhere in the code that ensures this,
->> other than check_attach_modify_return(), but I think that will allow a
->> bpf function as long as its name starts with "security_" ?
+> Thank you for the patch! Perhaps something to improve:
 >
-> I think error_injection_list check will disallow anything that's not a
-> specially marked kernel function. So we are probably safe as is, even
-> though a bit implicitly.
-
-Got a selftest working now, and no, it seems not. At least attachment
-will succeed if the freplace program has a security_ prefix in its
-function name. So will add a new patch to fix that, and the selftest :)
-
--Toke
-
+> [auto build test WARNING on bpf-next/master]
+>
+> url:    https://github.com/0day-ci/linux/commits/Hao-Luo/bpf-BTF-support-for-ksyms/20200917-064052
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+> config: powerpc-randconfig-s032-20200916 (attached as .config)
+> compiler: powerpc64-linux-gcc (GCC) 9.3.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # apt-get install sparse
+>         # sparse version: v0.6.2-201-g24bdaac6-dirty
+>         # save the attached .config to linux build tree
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-9.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' ARCH=powerpc
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+>
+> sparse warnings: (new ones prefixed by >>)
+>
+> >> kernel/bpf/helpers.c:631:31: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void const [noderef] __percpu *__vpp_verify @@     got void const * @@
+> >> kernel/bpf/helpers.c:631:31: sparse:     expected void const [noderef] __percpu *__vpp_verify
+> >> kernel/bpf/helpers.c:631:31: sparse:     got void const *
+>
+> # https://github.com/0day-ci/linux/commit/3f6ea3c1c73efe466a96ff7499219fe3b03b8f48
+> git remote add linux-review https://github.com/0day-ci/linux
+> git fetch --no-tags linux-review Hao-Luo/bpf-BTF-support-for-ksyms/20200917-064052
+> git checkout 3f6ea3c1c73efe466a96ff7499219fe3b03b8f48
+> vim +631 kernel/bpf/helpers.c
+>
+>    625
+>    626  BPF_CALL_2(bpf_per_cpu_ptr, const void *, ptr, u32, cpu)
+>    627  {
+>    628          if (cpu >= nr_cpu_ids)
+>    629                  return (unsigned long)NULL;
+>    630
+>  > 631          return (unsigned long)per_cpu_ptr(ptr, cpu);
+>    632  }
+>    633
+>    634  const struct bpf_func_proto bpf_per_cpu_ptr_proto = {
+>    635          .func           = bpf_per_cpu_ptr,
+>    636          .gpl_only       = false,
+>    637          .ret_type       = RET_PTR_TO_MEM_OR_BTF_ID_OR_NULL,
+>    638          .arg1_type      = ARG_PTR_TO_PERCPU_BTF_ID,
+>    639          .arg2_type      = ARG_ANYTHING,
+>    640  };
+>    641
+>  > 642  const struct bpf_func_proto bpf_get_current_task_proto __weak;
+>    643  const struct bpf_func_proto bpf_probe_read_user_proto __weak;
+>    644  const struct bpf_func_proto bpf_probe_read_user_str_proto __weak;
+>    645  const struct bpf_func_proto bpf_probe_read_kernel_proto __weak;
+>    646  const struct bpf_func_proto bpf_probe_read_kernel_str_proto __weak;
+>    647
+>
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
