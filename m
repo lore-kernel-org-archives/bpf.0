@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48891C43464
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E4D0FC43465
 	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 20:20:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 03B3F2087D
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 20:20:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B0151208C3
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 20:20:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WsyAUgQz"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Hp0wJHow"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726622AbgIQUUb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Sep 2020 16:20:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:46637 "EHLO
+        id S1726647AbgIQUUQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Sep 2020 16:20:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:33030 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726636AbgIQUUQ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 17 Sep 2020 16:20:16 -0400
+        by vger.kernel.org with ESMTP id S1726603AbgIQUUP (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 17 Sep 2020 16:20:15 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600374014;
+        s=mimecast20190719; t=1600374012;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=w1MWJ4l+l8jrdYUbdu/bktEJZu8N2MwzEVgFIRpCGMY=;
-        b=WsyAUgQz1FbCjHi4yrQHMNNVzdzU6QAzBjm1OKK8dMtZfOIfGXYLreWc9tdmuRffgvR7gW
-        7pE7iPYlpaMJeI507c0vhiIa+BQsrguo3Jlat0twzCK4xPL1Y5o4I70StmcPfVDHk8aKQF
-        rtSphlNf9aD/5T1r1PCp2jZ9NSonFBY=
+        bh=czrdx74rMFUlJADK8+4HGITnQMhx43ZjHfmE/HMj2c0=;
+        b=Hp0wJHowP9vQdMDgZ/OSV0i5EllYC7QRrj2pe6aTQpJlU3IEM/nAMqXorCXzqdVZhdxuRd
+        8bpvyemGf9kKQLl0v8J0HRa+Tta4IAeIlW3VlgSsaD+jjgYCcqaMZRTIVTnWAWnyVn7ZL0
+        hbYOT26D0qj29lFoLcs/4pUu90sLnO8=
 Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
  [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-215-Lf1hEoA5MPm4qtMLxdKL9w-1; Thu, 17 Sep 2020 16:20:12 -0400
-X-MC-Unique: Lf1hEoA5MPm4qtMLxdKL9w-1
-Received: by mail-ed1-f70.google.com with SMTP id x23so1387896eds.5
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 13:20:12 -0700 (PDT)
+ us-mta-166-WoeNYKuRNByRWkpFkWRkQQ-1; Thu, 17 Sep 2020 16:20:11 -0400
+X-MC-Unique: WoeNYKuRNByRWkpFkWRkQQ-1
+Received: by mail-ed1-f70.google.com with SMTP id m88so1395477ede.0
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 13:20:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=w1MWJ4l+l8jrdYUbdu/bktEJZu8N2MwzEVgFIRpCGMY=;
-        b=e6wQq9A6Vqba4IOniiUswzHeqgmKVD4nbnCxJo/HCLXTmQDwu2rXIMNaVbUPvIZoL0
-         HPHk/7QGSMjn6s6HDBlvcLpY0MHT1R/UqHdmAX9828kg0t+u2RFfjyUIOC0aWSGVsfpL
-         umhhV9YqYVIkgyUfeXuELxSazm5cmijEdLG/DRt27JdyQEbLKj4tPZnbCNlt7q6SAsiU
-         hPpewOeOWKNFO3kE9ChRt4lmgtvnc8fTTokvqtv6i+Q/vaXl+dJa11cGHBcDs97qoDsC
-         +uXdxsf1HOHqbxqZYI5MnTwcApIvGqaDLZPzGNVeQ0GFyC82NVSGp4xZQU8gqPAF80rW
-         Jtsg==
-X-Gm-Message-State: AOAM533+qZQ5X5QbJ1wQXd9ok9utrLN501FV7H5ddPSVf5akpnX9Jbbz
-        O+e1LZbqWZiMZOXQ7b/cJzIf3nVSMokz/GhW172nWCsEUT8LrjZiqCxzxKaN1wrRE6/6LEaYaAb
-        ZjlfoQ/AfzSpp
-X-Received: by 2002:aa7:d785:: with SMTP id s5mr34134871edq.154.1600374010481;
-        Thu, 17 Sep 2020 13:20:10 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyX/vpHDCbqcVC0GapcWeGqYybTkA3X+gPE/pUAR7jWSrLh5yXJ14Cb1R1Pn4i595IkFFSY8Q==
-X-Received: by 2002:aa7:d785:: with SMTP id s5mr34134838edq.154.1600374010148;
-        Thu, 17 Sep 2020 13:20:10 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id s7sm633769ejd.103.2020.09.17.13.20.08
+        bh=czrdx74rMFUlJADK8+4HGITnQMhx43ZjHfmE/HMj2c0=;
+        b=IUW5Vzom+b2nNKKXm/hSXrGjtWXskY5TCqe9gLrwk8ctKu1x+wjK2EtjKGKvy0b3IC
+         mH/HJxoKEkH3BELFnHRlqX5+QMDv4Myw2cujrQGou3Ec64FFiH4pAQUDKPLp3K94h7U0
+         39NZj/Qv+e6izfoPAzTRhcyC7N8Vb8t4CNJPAFySeWkaS2XefzXj0zbOC9eHm1d3QMfQ
+         hueMXa4fHymPbY5NxXSeyEoJkgLoVQbSggWNkaV1YuvEkQCQ8FQiejtsnTv0rcPtb40i
+         oB/mrXnB/b40lnm4hytXO21G8tVX/mC/jbNx8/bIA+ieVaY/u6YUf7l2cNsJU2hOHKHj
+         /HaA==
+X-Gm-Message-State: AOAM531MF4DNKQkiT8ePgfwqD6mwixcI00RmeuOAEcbTvLHGOmbDv9xq
+        NHDyDYK11Rmym6Hak0aoRjTg7SwI/FLhBk8VhhrSnCfX7PbdPj7pp4GRBoa2NPH0mynuqBE64bF
+        amgiRE3rD+TZ4
+X-Received: by 2002:a05:6402:b64:: with SMTP id cb4mr34954669edb.25.1600374009591;
+        Thu, 17 Sep 2020 13:20:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzW7DX5l/LtDWYKb3eNbWX+MitbfP4NC1hsPuh5JhMiiDI2TWdrak0NIWw62GPOjvlqV4G4Aw==
+X-Received: by 2002:a05:6402:b64:: with SMTP id cb4mr34954649edb.25.1600374009276;
+        Thu, 17 Sep 2020 13:20:09 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id jo2sm605803ejb.101.2020.09.17.13.20.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 17 Sep 2020 13:20:08 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 40EB4183A92; Thu, 17 Sep 2020 22:20:08 +0200 (CEST)
-Subject: [PATCH bpf-next v6 07/10] libbpf: add support for freplace attachment
- in bpf_link_create
+        id 1E369183A90; Thu, 17 Sep 2020 22:20:06 +0200 (CEST)
+Subject: [PATCH bpf-next v6 05/10] bpf: support attaching freplace programs to
+ multiple attach points
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
@@ -75,8 +75,8 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Eelco Chaudron <echaudro@redhat.com>,
         KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Thu, 17 Sep 2020 22:20:08 +0200
-Message-ID: <160037400818.28970.12434007090101215320.stgit@toke.dk>
+Date:   Thu, 17 Sep 2020 22:20:06 +0200
+Message-ID: <160037400605.28970.12030576233071570541.stgit@toke.dk>
 In-Reply-To: <160037400056.28970.7647821897296177963.stgit@toke.dk>
 References: <160037400056.28970.7647821897296177963.stgit@toke.dk>
 User-Agent: StGit/0.23
@@ -89,143 +89,297 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-This adds support for supplying a target btf ID for the bpf_link_create()
-operation, and adds a new bpf_program__attach_freplace() high-level API for
-attaching freplace functions with a target.
+This enables support for attaching freplace programs to multiple attach
+points. It does this by amending the UAPI for bpf_link_Create with a target
+btf ID that can be used to supply the new attachment point along with the
+target program fd. The target must be compatible with the target that was
+supplied at program load time.
+
+The implementation reuses the checks that were factored out of
+check_attach_btf_id() to ensure compatibility between the BTF types of the
+old and new attachment. If these match, a new bpf_tracing_link will be
+created for the new attach target, allowing multiple attachments to
+co-exist simultaneously.
+
+The code could theoretically support multiple-attach of other types of
+tracing programs as well, but since I don't have a use case for any of
+those, there is no API support for doing so.
 
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/lib/bpf/bpf.c      |    1 +
- tools/lib/bpf/bpf.h      |    3 ++-
- tools/lib/bpf/libbpf.c   |   36 +++++++++++++++++++++++++++++++-----
- tools/lib/bpf/libbpf.h   |    3 +++
- tools/lib/bpf/libbpf.map |    1 +
- 5 files changed, 38 insertions(+), 6 deletions(-)
+ include/linux/bpf.h            |    2 +
+ include/uapi/linux/bpf.h       |    9 +++-
+ kernel/bpf/syscall.c           |  101 ++++++++++++++++++++++++++++++++++------
+ kernel/bpf/verifier.c          |    9 ++++
+ tools/include/uapi/linux/bpf.h |    9 +++-
+ 5 files changed, 110 insertions(+), 20 deletions(-)
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 2baa1308737c..114f57aad607 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -599,6 +599,7 @@ int bpf_link_create(int prog_fd, int target_fd,
- 	attr.link_create.iter_info =
- 		ptr_to_u64(OPTS_GET(opts, iter_info, (void *)0));
- 	attr.link_create.iter_info_len = OPTS_GET(opts, iter_info_len, 0);
-+	attr.link_create.target_btf_id = OPTS_GET(opts, target_btf_id, 0);
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 9dbac21c8091..094156d3dd9d 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -743,6 +743,8 @@ struct bpf_prog_aux {
+ 	struct mutex tgt_mutex; /* protects writing of tgt_* pointers below */
+ 	struct bpf_prog *tgt_prog;
+ 	struct bpf_trampoline *tgt_trampoline;
++	enum bpf_prog_type tgt_prog_type;
++	enum bpf_attach_type tgt_attach_type;
+ 	bool verifier_zext; /* Zero extensions has been inserted by verifier. */
+ 	bool offload_requested;
+ 	bool attach_btf_trace; /* true if attaching to BTF-enabled raw tp */
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index a22812561064..feff1ed49f86 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -632,8 +632,13 @@ union bpf_attr {
+ 		};
+ 		__u32		attach_type;	/* attach type */
+ 		__u32		flags;		/* extra flags */
+-		__aligned_u64	iter_info;	/* extra bpf_iter_link_info */
+-		__u32		iter_info_len;	/* iter_info length */
++		union {
++			__u32		target_btf_id;	/* btf_id of target to attach to */
++			struct {
++				__aligned_u64	iter_info;	/* extra bpf_iter_link_info */
++				__u32		iter_info_len;	/* iter_info length */
++			};
++		};
+ 	} link_create;
  
- 	return sys_bpf(BPF_LINK_CREATE, &attr, sizeof(attr));
- }
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 8c1ac4b42f90..6b8dbe24adc9 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -174,8 +174,9 @@ struct bpf_link_create_opts {
- 	__u32 flags;
- 	union bpf_iter_link_info *iter_info;
- 	__u32 iter_info_len;
-+	__u32 target_btf_id;
+ 	struct { /* struct used by BPF_LINK_UPDATE command */
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 4af35a59d0d9..9d542f1934f2 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4,6 +4,7 @@
+ #include <linux/bpf.h>
+ #include <linux/bpf_trace.h>
+ #include <linux/bpf_lirc.h>
++#include <linux/bpf_verifier.h>
+ #include <linux/btf.h>
+ #include <linux/syscalls.h>
+ #include <linux/slab.h>
+@@ -2555,12 +2556,17 @@ static const struct bpf_link_ops bpf_tracing_link_lops = {
+ 	.fill_link_info = bpf_tracing_link_fill_link_info,
  };
--#define bpf_link_create_opts__last_field iter_info_len
-+#define bpf_link_create_opts__last_field target_btf_id
  
- LIBBPF_API int bpf_link_create(int prog_fd, int target_fd,
- 			       enum bpf_attach_type attach_type,
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 570235dbc922..3b008917e67d 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -9390,9 +9390,11 @@ static struct bpf_link *attach_iter(const struct bpf_sec_def *sec,
+-static int bpf_tracing_prog_attach(struct bpf_prog *prog)
++static int bpf_tracing_prog_attach(struct bpf_prog *prog,
++				   int tgt_prog_fd,
++				   u32 btf_id)
+ {
+ 	struct bpf_link_primer link_primer;
+ 	struct bpf_prog *tgt_prog = NULL;
++	struct bpf_trampoline *tr = NULL;
+ 	struct bpf_tracing_link *link;
+-	struct bpf_trampoline *tr;
++	struct btf_func_model fmodel;
++	u64 key = 0;
++	long addr;
+ 	int err;
+ 
+ 	switch (prog->type) {
+@@ -2589,6 +2595,28 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog)
+ 		goto out_put_prog;
+ 	}
+ 
++	if (!!tgt_prog_fd != !!btf_id) {
++		err = -EINVAL;
++		goto out_put_prog;
++	}
++
++	if (tgt_prog_fd) {
++		/* For now we only allow new targets for BPF_PROG_TYPE_EXT */
++		if (prog->type != BPF_PROG_TYPE_EXT) {
++			err = -EINVAL;
++			goto out_put_prog;
++		}
++
++		tgt_prog = bpf_prog_get(tgt_prog_fd);
++		if (IS_ERR(tgt_prog)) {
++			err = PTR_ERR(tgt_prog);
++			tgt_prog = NULL;
++			goto out_put_prog;
++		}
++
++		key = ((u64)tgt_prog->aux->id) << 32 | btf_id;
++	}
++
+ 	link = kzalloc(sizeof(*link), GFP_USER);
+ 	if (!link) {
+ 		err = -ENOMEM;
+@@ -2600,12 +2628,28 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog)
+ 
+ 	mutex_lock(&prog->aux->tgt_mutex);
+ 
+-	if (!prog->aux->tgt_trampoline) {
++	if (!prog->aux->tgt_trampoline && !tgt_prog) {
+ 		err = -ENOENT;
+ 		goto out_unlock;
+ 	}
+-	tr = prog->aux->tgt_trampoline;
+-	tgt_prog = prog->aux->tgt_prog;
++
++	if (!prog->aux->tgt_trampoline ||
++	    (key && key != prog->aux->tgt_trampoline->key)) {
++
++		err = bpf_check_attach_target(NULL, prog, tgt_prog, btf_id,
++					      &fmodel, &addr, NULL, NULL);
++		if (err)
++			goto out_unlock;
++
++		tr = bpf_trampoline_get(key, (void *)addr, &fmodel);
++		if (!tr) {
++			err = -ENOMEM;
++			goto out_unlock;
++		}
++	} else {
++		tr = prog->aux->tgt_trampoline;
++		tgt_prog = prog->aux->tgt_prog;
++	}
+ 
+ 	err = bpf_link_prime(&link->link, &link_primer);
+ 	if (err)
+@@ -2620,16 +2664,24 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog)
+ 
+ 	link->tgt_prog = tgt_prog;
+ 	link->trampoline = tr;
+-
+-	prog->aux->tgt_prog = NULL;
+-	prog->aux->tgt_trampoline = NULL;
++	if (tr == prog->aux->tgt_trampoline) {
++		/* if we got a new ref from syscall, drop existing one from prog */
++		if (tgt_prog_fd)
++			bpf_prog_put(prog->aux->tgt_prog);
++		prog->aux->tgt_trampoline = NULL;
++		prog->aux->tgt_prog = NULL;
++	}
+ 	mutex_unlock(&prog->aux->tgt_mutex);
+ 
+ 	return bpf_link_settle(&link_primer);
+ out_unlock:
++	if (tr && tr != prog->aux->tgt_trampoline)
++		bpf_trampoline_put(tr);
+ 	mutex_unlock(&prog->aux->tgt_mutex);
+ 	kfree(link);
+ out_put_prog:
++	if (tgt_prog_fd && tgt_prog)
++		bpf_prog_put(tgt_prog);
+ 	bpf_prog_put(prog);
+ 	return err;
+ }
+@@ -2743,7 +2795,7 @@ static int bpf_raw_tracepoint_open(const union bpf_attr *attr)
+ 			tp_name = prog->aux->attach_func_name;
+ 			break;
+ 		}
+-		return bpf_tracing_prog_attach(prog);
++		return bpf_tracing_prog_attach(prog, 0, 0);
+ 	case BPF_PROG_TYPE_RAW_TRACEPOINT:
+ 	case BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE:
+ 		if (strncpy_from_user(buf,
+@@ -3934,6 +3986,16 @@ static int tracing_bpf_link_attach(const union bpf_attr *attr, struct bpf_prog *
+ 	return -EINVAL;
  }
  
- static struct bpf_link *
--bpf_program__attach_fd(struct bpf_program *prog, int target_fd,
-+bpf_program__attach_fd(struct bpf_program *prog, int target_fd, int btf_id,
- 		       const char *target_name)
- {
-+	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts,
-+			    .target_btf_id = btf_id);
- 	enum bpf_attach_type attach_type;
- 	char errmsg[STRERR_BUFSIZE];
- 	struct bpf_link *link;
-@@ -9410,7 +9412,7 @@ bpf_program__attach_fd(struct bpf_program *prog, int target_fd,
- 	link->detach = &bpf_link__detach_fd;
- 
- 	attach_type = bpf_program__get_expected_attach_type(prog);
--	link_fd = bpf_link_create(prog_fd, target_fd, attach_type, NULL);
-+	link_fd = bpf_link_create(prog_fd, target_fd, attach_type, &opts);
- 	if (link_fd < 0) {
- 		link_fd = -errno;
- 		free(link);
-@@ -9426,19 +9428,43 @@ bpf_program__attach_fd(struct bpf_program *prog, int target_fd,
- struct bpf_link *
- bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
- {
--	return bpf_program__attach_fd(prog, cgroup_fd, "cgroup");
-+	return bpf_program__attach_fd(prog, cgroup_fd, 0, "cgroup");
- }
- 
- struct bpf_link *
- bpf_program__attach_netns(struct bpf_program *prog, int netns_fd)
- {
--	return bpf_program__attach_fd(prog, netns_fd, "netns");
-+	return bpf_program__attach_fd(prog, netns_fd, 0, "netns");
- }
- 
- struct bpf_link *bpf_program__attach_xdp(struct bpf_program *prog, int ifindex)
- {
- 	/* target_fd/target_ifindex use the same field in LINK_CREATE */
--	return bpf_program__attach_fd(prog, ifindex, "xdp");
-+	return bpf_program__attach_fd(prog, ifindex, 0, "xdp");
++static int freplace_bpf_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
++{
++	if (attr->link_create.attach_type == prog->expected_attach_type)
++		return bpf_tracing_prog_attach(prog,
++					       attr->link_create.target_fd,
++					       attr->link_create.target_btf_id);
++	return -EINVAL;
++
 +}
 +
-+struct bpf_link *bpf_program__attach_freplace(struct bpf_program *prog,
-+					      int target_fd,
-+					      const char *attach_func_name)
-+{
-+	int btf_id;
+ #define BPF_LINK_CREATE_LAST_FIELD link_create.iter_info_len
+ static int link_create(union bpf_attr *attr)
+ {
+@@ -3944,18 +4006,25 @@ static int link_create(union bpf_attr *attr)
+ 	if (CHECK_ATTR(BPF_LINK_CREATE))
+ 		return -EINVAL;
+ 
+-	ptype = attach_type_to_prog_type(attr->link_create.attach_type);
+-	if (ptype == BPF_PROG_TYPE_UNSPEC)
+-		return -EINVAL;
+-
+-	prog = bpf_prog_get_type(attr->link_create.prog_fd, ptype);
++	prog = bpf_prog_get(attr->link_create.prog_fd);
+ 	if (IS_ERR(prog))
+ 		return PTR_ERR(prog);
+ 
+ 	ret = bpf_prog_attach_check_attach_type(prog,
+ 						attr->link_create.attach_type);
+ 	if (ret)
+-		goto err_out;
++		goto out;
 +
-+	if (!!target_fd != !!attach_func_name || prog->type != BPF_PROG_TYPE_EXT)
-+		return ERR_PTR(-EINVAL);
-+
-+	if (target_fd) {
-+
-+		btf_id = libbpf_find_prog_btf_id(attach_func_name, target_fd);
-+		if (btf_id < 0)
-+			return ERR_PTR(btf_id);
-+
-+		return bpf_program__attach_fd(prog, target_fd, btf_id, "freplace");
-+	} else {
-+		/* no target, so use raw_tracepoint_open for compatibility
-+		 * with old kernels
-+		 */
-+		return bpf_program__attach_trace(prog);
++	if (prog->type == BPF_PROG_TYPE_EXT) {
++		ret = freplace_bpf_link_attach(attr, prog);
++		goto out;
 +	}
- }
++
++	ptype = attach_type_to_prog_type(attr->link_create.attach_type);
++	if (ptype == BPF_PROG_TYPE_UNSPEC) {
++		ret = -EINVAL;
++		goto out;
++	}
  
- struct bpf_link *
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index a750f67a23f6..6909ee81113a 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -261,6 +261,9 @@ LIBBPF_API struct bpf_link *
- bpf_program__attach_netns(struct bpf_program *prog, int netns_fd);
- LIBBPF_API struct bpf_link *
- bpf_program__attach_xdp(struct bpf_program *prog, int ifindex);
-+LIBBPF_API struct bpf_link *
-+bpf_program__attach_freplace(struct bpf_program *prog,
-+			     int target_fd, const char *attach_func_name);
+ 	switch (ptype) {
+ 	case BPF_PROG_TYPE_CGROUP_SKB:
+@@ -3983,7 +4052,7 @@ static int link_create(union bpf_attr *attr)
+ 		ret = -EINVAL;
+ 	}
  
- struct bpf_map;
+-err_out:
++out:
+ 	if (ret < 0)
+ 		bpf_prog_put(prog);
+ 	return ret;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 116f3f275b98..eeb5a4f58516 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11202,6 +11202,12 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
+ 		if (!btf_type_is_func_proto(t))
+ 			return -EINVAL;
  
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 5f054dadf082..b1c537873b23 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -303,6 +303,7 @@ LIBBPF_0.1.0 {
- LIBBPF_0.2.0 {
- 	global:
- 		bpf_prog_bind_map;
-+		bpf_program__attach_freplace;
- 		bpf_program__section_name;
- 		perf_buffer__buffer_cnt;
- 		perf_buffer__buffer_fd;
++		if ((prog->aux->tgt_prog_type &&
++		     prog->aux->tgt_prog_type != tgt_prog->type) ||
++		    (prog->aux->tgt_attach_type &&
++		     prog->aux->tgt_attach_type != tgt_prog->expected_attach_type))
++			return -EINVAL;
++
+ 		if (tgt_prog && conservative)
+ 			t = NULL;
+ 
+@@ -11300,6 +11306,9 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 		return ret;
+ 
+ 	if (tgt_prog) {
++		prog->aux->tgt_prog_type = tgt_prog->type;
++		prog->aux->tgt_attach_type = tgt_prog->expected_attach_type;
++
+ 		if (prog->type == BPF_PROG_TYPE_EXT) {
+ 			env->ops = bpf_verifier_ops[tgt_prog->type];
+ 			prog->expected_attach_type =
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index a22812561064..feff1ed49f86 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -632,8 +632,13 @@ union bpf_attr {
+ 		};
+ 		__u32		attach_type;	/* attach type */
+ 		__u32		flags;		/* extra flags */
+-		__aligned_u64	iter_info;	/* extra bpf_iter_link_info */
+-		__u32		iter_info_len;	/* iter_info length */
++		union {
++			__u32		target_btf_id;	/* btf_id of target to attach to */
++			struct {
++				__aligned_u64	iter_info;	/* extra bpf_iter_link_info */
++				__u32		iter_info_len;	/* iter_info length */
++			};
++		};
+ 	} link_create;
+ 
+ 	struct { /* struct used by BPF_LINK_UPDATE command */
 
