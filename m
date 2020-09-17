@@ -1,94 +1,144 @@
-Return-Path: <SRS0=xxat=CZ=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=dFgW=C2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46D9BC2BB84
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 22:54:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7E4CC43461
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 00:18:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0379E2220B
-	for <bpf@archiver.kernel.org>; Wed, 16 Sep 2020 22:54:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 71FAC221F1
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 00:18:11 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RmJlwLrT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726280AbgIPWyL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Sep 2020 18:54:11 -0400
-Received: from mga17.intel.com ([192.55.52.151]:44500 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726189AbgIPWyI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Sep 2020 18:54:08 -0400
-IronPort-SDR: xvwCmg1K3y503tSASZ3cNDYb7SDp2IhfzTLuAr3oa6W53R9u3NPR/WF7tNm1Lwk4AJXJjTBmOe
- z9RBAXxPDrTg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9746"; a="139578081"
-X-IronPort-AV: E=Sophos;i="5.76,434,1592895600"; 
-   d="scan'208";a="139578081"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2020 14:16:53 -0700
-IronPort-SDR: +wxjJWehNfvaV0n0uLxWum+YAHl//O+zVydigS2KsAhVT2j5rTK+74XcFvTtfhfWt7jfNaMlPM
- lpcW4Z7B1hOQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.76,434,1592895600"; 
-   d="scan'208";a="346369946"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga007.jf.intel.com with ESMTP; 16 Sep 2020 14:16:51 -0700
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     ast@kernel.org, daniel@iogearbox.net
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, bjorn.topel@intel.com,
-        magnus.karlsson@intel.com,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v8 bpf-next 6/7] bpf: allow for tailcalls in BPF subprograms for x64 JIT
-Date:   Wed, 16 Sep 2020 23:10:09 +0200
-Message-Id: <20200916211010.3685-7-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200916211010.3685-1-maciej.fijalkowski@intel.com>
-References: <20200916211010.3685-1-maciej.fijalkowski@intel.com>
+        id S1726065AbgIQASB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Sep 2020 20:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39910 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726009AbgIQASA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Sep 2020 20:18:00 -0400
+X-Greylist: delayed 579 seconds by postgrey-1.27 at vger.kernel.org; Wed, 16 Sep 2020 20:18:00 EDT
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8836EC061788;
+        Wed, 16 Sep 2020 17:08:19 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id t14so278752pgl.10;
+        Wed, 16 Sep 2020 17:08:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Na9A930XnJjifMT8ZHNAvuKYoJPnmdw7X5EjcY4GoqM=;
+        b=RmJlwLrTYhvd51TSGpjqRixx9s+/rFs3rOKnJtMPoG5DNNUh6Z++hIYiRWVMqrHsU0
+         ZlYBR/I4v8f6JQsGCMyLg/tZ98oiVf3aMVGYNIO/XqlrVmbUvPGyeO5YHCnpY7BDZkiJ
+         SBhG7dB+7Ogp5Bf7JyvOK6gRPB78H28J35zqfJYVHsbT4NrJ9Jq4syr+Pw28i2bonZkj
+         nDEKRKolvVvPOjTkZFstsLB4uNumBC+Hjy0jRnnZPMDDxWrSBFtH02UvlNeb2sgNo42Y
+         my+AKtRpfgMx52z5VfePbVNCQga2wAy2jq/TLJarcmwTh66Mx4EvF5I7f67yG2QKnqHa
+         JIHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Na9A930XnJjifMT8ZHNAvuKYoJPnmdw7X5EjcY4GoqM=;
+        b=Xohd0ZHQ/LcK+HmYCP3RiiTsPCJo9dOIs14+/RGPSEbroFlPUzstlBET3+oocT8yk9
+         HIqZX1oKbM4HGc0dPcn5lQBV+9ciqm3RYwEuieM64bEk8Lfz/qbf9pcsa+BeDOuDZU/U
+         1A2luA+lB/kTum60vc2FAIsDNwhkXpp6xu8fB6zlVx/OZqJlODtzG3O0TtX5FWWw7tJW
+         REyEUug1D2OyN7sESmm68095kTlUcjVGxpBUyh8ilNFL//h6KN2lvk6Dbs3Co6Jfco6I
+         rFnEPF/qRv93Ywqm15Xby1TrcNgZ2DUdAp99Cz6c0dU4nxmI/xbFi+Y5xv35YvAvXzzx
+         Irpg==
+X-Gm-Message-State: AOAM533hpYtzkZTx6FXUpbzs9RDEFcZe9IuhkWlBJcbHcFGpTYzee80T
+        wXv+8uLgqC02+1C0aRXXiO4=
+X-Google-Smtp-Source: ABdhPJz1qpB9CoFcw5mzJ0L2g1fQqPftTDPav38YlicRSdcMy4AS+soddUEEi9bBAkBrY8QxF8Cq8w==
+X-Received: by 2002:a65:6888:: with SMTP id e8mr3241834pgt.375.1600301298990;
+        Wed, 16 Sep 2020 17:08:18 -0700 (PDT)
+Received: from localhost.localdomain ([2001:470:e92d:10:68d8:fab6:907:5cf6])
+        by smtp.gmail.com with ESMTPSA id a13sm14300343pfl.184.2020.09.16.17.08.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Sep 2020 17:08:18 -0700 (PDT)
+From:   Tony Ambardar <tony.ambardar@gmail.com>
+X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Tony Ambardar <Tony.Ambardar@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Rosen Penev <rosenp@gmail.com>
+Subject: [PATCH v2] powerpc: fix EDEADLOCK redefinition error in uapi/asm/errno.h
+Date:   Wed, 16 Sep 2020 17:07:57 -0700
+Message-Id: <20200917000757.1232850-1-Tony.Ambardar@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200916074214.995128-1-Tony.Ambardar@gmail.com>
+References: <20200916074214.995128-1-Tony.Ambardar@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Relax verifier's restriction that was meant to forbid tailcall usage
-when subprog count was higher than 1.
+A few archs like powerpc have different errno.h values for macros
+EDEADLOCK and EDEADLK. In code including both libc and linux versions of
+errno.h, this can result in multiple definitions of EDEADLOCK in the
+include chain. Definitions to the same value (e.g. seen with mips) do
+not raise warnings, but on powerpc there are redefinitions changing the
+value, which raise warnings and errors (if using "-Werror").
 
-Also, do not max out the stack depth of program that utilizes tailcalls.
+Guard against these redefinitions to avoid build errors like the following,
+first seen cross-compiling libbpf v5.8.9 for powerpc using GCC 8.4.0 with
+musl 1.1.24:
 
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+  In file included from ../../arch/powerpc/include/uapi/asm/errno.h:5,
+                   from ../../include/linux/err.h:8,
+                   from libbpf.c:29:
+  ../../include/uapi/asm-generic/errno.h:40: error: "EDEADLOCK" redefined [-Werror]
+   #define EDEADLOCK EDEADLK
+
+  In file included from toolchain-powerpc_8540_gcc-8.4.0_musl/include/errno.h:10,
+                   from libbpf.c:26:
+  toolchain-powerpc_8540_gcc-8.4.0_musl/include/bits/errno.h:58: note: this is the location of the previous definition
+   #define EDEADLOCK       58
+
+  cc1: all warnings being treated as errors
+
+Fixes: 95f28190aa01 ("tools include arch: Grab a copy of errno.h for arch's supported by perf")
+Fixes: c3617f72036c ("UAPI: (Scripted) Disintegrate arch/powerpc/include/asm")
+Reported-by: Rosen Penev <rosenp@gmail.com>
+Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
 ---
- kernel/bpf/verifier.c | 4 ++++
- 1 file changed, 4 insertions(+)
+v1 -> v2:
+ * clean up commit description formatting
+---
+ arch/powerpc/include/uapi/asm/errno.h       | 1 +
+ tools/arch/powerpc/include/uapi/asm/errno.h | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 644ee9286ecf..05034cff89ca 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4384,10 +4384,12 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
- 	case BPF_FUNC_tail_call:
- 		if (map->map_type != BPF_MAP_TYPE_PROG_ARRAY)
- 			goto error;
-+#if !defined(CONFIG_X86_64) || !defined(CONFIG_BPF_JIT_ALWAYS_ON)
- 		if (env->subprog_cnt > 1) {
- 			verbose(env, "tail_calls are not allowed in programs with bpf-to-bpf calls\n");
- 			return -EINVAL;
- 		}
-+#endif
- 		break;
- 	case BPF_FUNC_perf_event_read:
- 	case BPF_FUNC_perf_event_output:
-@@ -10633,7 +10635,9 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
- 			 * the program array.
- 			 */
- 			prog->cb_access = 1;
-+#if !defined(CONFIG_X86_64) || !defined(CONFIG_BPF_JIT_ALWAYS_ON)
- 			env->prog->aux->stack_depth = MAX_BPF_STACK;
-+#endif
- 			env->prog->aux->max_pkt_offset = MAX_PACKET_OFF;
+diff --git a/arch/powerpc/include/uapi/asm/errno.h b/arch/powerpc/include/uapi/asm/errno.h
+index cc79856896a1..4ba87de32be0 100644
+--- a/arch/powerpc/include/uapi/asm/errno.h
++++ b/arch/powerpc/include/uapi/asm/errno.h
+@@ -2,6 +2,7 @@
+ #ifndef _ASM_POWERPC_ERRNO_H
+ #define _ASM_POWERPC_ERRNO_H
  
- 			/* mark bpf_tail_call as different opcode to avoid
++#undef	EDEADLOCK
+ #include <asm-generic/errno.h>
+ 
+ #undef	EDEADLOCK
+diff --git a/tools/arch/powerpc/include/uapi/asm/errno.h b/tools/arch/powerpc/include/uapi/asm/errno.h
+index cc79856896a1..4ba87de32be0 100644
+--- a/tools/arch/powerpc/include/uapi/asm/errno.h
++++ b/tools/arch/powerpc/include/uapi/asm/errno.h
+@@ -2,6 +2,7 @@
+ #ifndef _ASM_POWERPC_ERRNO_H
+ #define _ASM_POWERPC_ERRNO_H
+ 
++#undef	EDEADLOCK
+ #include <asm-generic/errno.h>
+ 
+ #undef	EDEADLOCK
 -- 
-2.20.1
+2.25.1
 
