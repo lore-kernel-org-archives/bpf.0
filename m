@@ -2,208 +2,121 @@ Return-Path: <SRS0=dFgW=C2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B8F5C433E2
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 19:15:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C28BFC2BBD1
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 19:55:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 458DD206C9
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 19:15:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600370156;
-	bh=ajBZWptjR+4/DgvjPNb+OHJkTGyVuVOG0g+Y9AOLi4s=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:List-ID:From;
-	b=C4+9duDa9IIs3Xq+PJftnUkfx7iq+3unSPjqNlDCxs42CSvEN9AxpYG4NPYiDx+KL
-	 mWoVtzTgDg63pHaXZar28LxEu8fMGglwL0zhYw0Anhni6UQX08wYhHaxKW0RPKL/eF
-	 WjNehSYOt1fkW/GWLd6seiNqCu44i+N8Hx1xYogI=
+	by mail.kernel.org (Postfix) with ESMTP id 8CEC5235F9
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 19:55:15 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="stLXKjGA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726216AbgIQTNF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Sep 2020 15:13:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35206 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726408AbgIQTMZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Sep 2020 15:12:25 -0400
-Received: from lt-jalone-7480.mtl.com (c-24-6-56-119.hsd1.ca.comcast.net [24.6.56.119])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C2C9820672;
-        Thu, 17 Sep 2020 19:11:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600369895;
-        bh=ajBZWptjR+4/DgvjPNb+OHJkTGyVuVOG0g+Y9AOLi4s=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=J3ikwQQviPGUGhvMSmUxT+I/vZ6dfN5u1UGs4mXkdxms8Sea6tDyTL+diYfE/eSW3
-         5EHHqI6cb5jTx4hSMJJPYq1l+GMmILq1XDs9pivEkoaV+w5lyOX+MTMEQqjbNELusH
-         0bqq4SsTglEFNDhv9nKUKeMOcme49GdAzZbiyjjI=
-Message-ID: <56ccfc21195b19d5b25559aca4cef5c450d0c402.camel@kernel.org>
-Subject: Re: BPF redirect API design issue for BPF-prog MTU feedback?
-From:   Saeed Mahameed <saeed@kernel.org>
-To:     Maciej =?UTF-8?Q?=C5=BBenczykowski?= <maze@google.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     Daniel Borkmann <borkmann@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        BPF-dev-list <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shaun Crampton <shaun@tigera.io>,
-        David Miller <davem@davemloft.net>,
-        Marek Majkowski <marek@cloudflare.com>
-Date:   Thu, 17 Sep 2020 12:11:33 -0700
-In-Reply-To: <CANP3RGcxM-Cno=Qw5Lut9DgmV=1suXqetnybA9RgxmW3KmwivQ@mail.gmail.com>
-References: <20200917143846.37ce43a0@carbon>
-         <CANP3RGcxM-Cno=Qw5Lut9DgmV=1suXqetnybA9RgxmW3KmwivQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-1.fc32) 
+        id S1727792AbgIQO6W (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Sep 2020 10:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727674AbgIQO6M (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Sep 2020 10:58:12 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975A2C06178B;
+        Thu, 17 Sep 2020 07:58:09 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id a22so2274423ljp.13;
+        Thu, 17 Sep 2020 07:58:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Ewdb/5Luu0M1Zlvd5mbxKVbE7mouw/5QSqBvh/Tsm34=;
+        b=stLXKjGAsmeHxLLHNtha9cMqFeZVf4hQkQzUwa8WbmDPPvPuWlFY0mn3aNGLg28Yyz
+         JCxQ32eETI53110Z0gkaQPJ2sXGxcAlD08ywBOuh4+nMSpe6oJSirP/ydLw3h0ID8sWH
+         QlnXXvqTSreZ62s4CrcAx4iT3BHiROSAyD6n+3I2YOybQ+uP9td1SGFezcRaSjb1eSxz
+         2LyTWtlQCHj12S7ENTKAooKtXHRwEkaLnhVRJa4Ja1ZLbJylmOQp+/Kly9wwYhq6WJ40
+         Aeym7wVJTfujkGTXsWAHTT8mCIxQi36mXcz52cs7ewwZgLLcQZqqYoN5HlosnaJjNKAU
+         0FRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Ewdb/5Luu0M1Zlvd5mbxKVbE7mouw/5QSqBvh/Tsm34=;
+        b=E+5eNNwauiQj8JW+55U3xp4CPkxa/8X6RLtE4isohT0sqB3oKDse3DUkm2envrxbCS
+         sUqCQHCGF1tNdqb+R934Pol5C6fXfbsahdaHL66fwXoeN5bArdBkjg3xevzTqL835zPm
+         JRIWTBi6jIG47hVF7jpZAx7rfkHxHXUWYg9K3F0kMl5GPafmhiBAM+zpWeDjkgOSHGdP
+         2KcRbFBuTGIK6kBcRhmw0vQJlQCnYzWSSP9AxRLk0O5SCI9Ie2eEAQyNm6qKmzuS4J1f
+         1ICsSaxO5KowRzupq37g8xeg7/5Xj1HjTTiMQlgk1UYrmevdfL2mgD+RIxkkRMvaShli
+         4TSA==
+X-Gm-Message-State: AOAM530Hbn1ARUK/zHe7tOiNHHU/P2EGn13cQd88RSSEs3YHBAaxt2sK
+        YT/3S8OmE6b1d8W6v8LiIZBfJnhEZR23Ul0G7hQ=
+X-Google-Smtp-Source: ABdhPJwN5AmQBJJ2AO+EFJ66Tw4J2dPtIALeak4KqJXY5jpmOy7HWt6GfFR1+fP1XxI0NpLo5TsZeSAuHlEAZUXa0+E=
+X-Received: by 2002:a2e:808f:: with SMTP id i15mr9643911ljg.51.1600354687981;
+ Thu, 17 Sep 2020 07:58:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1600328701.git.mchehab+huawei@kernel.org> <442b27cc035ab7f9e5e000f2ac44ce88ea8b16a6.1600328701.git.mchehab+huawei@kernel.org>
+In-Reply-To: <442b27cc035ab7f9e5e000f2ac44ce88ea8b16a6.1600328701.git.mchehab+huawei@kernel.org>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 17 Sep 2020 07:57:56 -0700
+Message-ID: <CAADnVQJr+FAnRCtKxpi97qw1aGZe6D9g-VHjjWLfyQbeEZFYAQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] docs: bpf: ringbuf.rst: fix a broken cross-reference
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 2020-09-17 at 05:54 -0700, Maciej Żenczykowski wrote:
-> On Thu, Sep 17, 2020 at 5:39 AM Jesper Dangaard Brouer
-> <brouer@redhat.com> wrote:
-> > 
-> > As you likely know[1] I'm looking into moving the MTU check (for
-> > TC-BPF)
-> > in __bpf_skb_max_len() when e.g. called by bpf_skb_adjust_room(),
-> > because when redirecting packets to another netdev it is not
-> > correct to
-> > limit the MTU based on the incoming netdev.
-> > 
-> > I was looking at doing the MTU check in bpf_redirect() helper,
-> > because
-> > at this point we know the redirect to netdev, and returning an
-> > indication/error that MTU was exceed, would allow the BPF-prog
-> > logic to
-> > react, e.g. sending ICMP (instead of packet getting silently
-> > dropped).
-> > BUT this is not possible because bpf_redirect(index, flags) helper
-> > don't provide the packet context-object (so I cannot lookup the
-> > packet
-> > length).
-> > 
-> > Seeking input:
-> > 
-> > Should/can we change the bpf_redirect API or create a new helper
-> > with
-> > packet-context?
-> > 
-> >  Note: We have the same need for the packet context for XDP when
-> >  redirecting the new multi-buffer packets, as not all destination
-> > netdev
-> >  will support these new multi-buffer packets.
-> > 
-> > I can of-cause do the MTU checks on kernel-side in skb_do_redirect,
-> > but
-> > then how do people debug this? as packet will basically be silently
-> > dropped.
-> > 
-> > 
-> > 
-> > (Looking at how does BPF-prog logic handle MTU today)
-> > 
-> > How do bpf_skb_adjust_room() report that the MTU was exceeded?
-> > Unfortunately it uses a common return code -ENOTSUPP which used for
-> > multiple cases (include MTU exceeded). Thus, the BPF-prog logic
-> > cannot
-> > use this reliably to know if this is a MTU exceeded event. (Looked
-> > BPF-prog code and they all simply exit with TC_ACT_SHOT for all
-> > error
-> > codes, cloudflare have the most advanced handling with
-> > metrics->errors_total_encap_adjust_failed++).
-> > 
-> > 
-> > [1] 
-> > https://lore.kernel.org/bpf/159921182827.1260200.9699352760916903781.stgit@firesoul/
-> > --
-> > Best regards,
-> >   Jesper Dangaard Brouer
-> >   MSc.CS, Principal Kernel Engineer at Red Hat
-> >   LinkedIn: http://www.linkedin.com/in/brouer
-> > 
-> 
-> (a) the current state of the world seems very hard to use correctly,
-> so adding new apis,
-> or even changing existing ones seems ok to me.
-> especially if this just means changing what error code they return
-> 
-> (b) another complexity with bpf_redirect() is you can call it, it can
-> succeed,
-> but then you can not return TC_ACT_REDIRECT from the bpf program,
-> which effectively makes the earlier *successful* bpf_redirect() call
-> an utter no-op.
-> 
-> (bpf_redirect() just determines what a future return TC_ACT_REDIRECT
-> will do)
-> 
-> so if you bpf_redirect to interface with larger mtu, then increase
-> packet size,
+On Thu, Sep 17, 2020 at 1:04 AM Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+>
+> Sphinx warns about a broken cross-reference:
+>
+>         Documentation/bpf/ringbuf.rst:194: WARNING: Unknown target name: "bench_ringbufs.c".
+>
+> It seems that the original idea were to add a reference for this file:
+>
+>         tools/testing/selftests/bpf/benchs/bench_ringbufs.c
+>
+> However, this won't work as such file is not part of the
+> documentation output dir. It could be possible to use
+> an extension like interSphinx in order to make external
+> references to be pointed to some website (like kernel.org),
+> where the file is stored, but currently we don't use it.
+>
+> It would also be possible to include this file as a
+> literal include, placing it inside Documentation/bpf.
+>
+> For now, let's take the simplest approach: just drop
+> the "_" markup at the end of the reference. This
+> should solve the warning, and it sounds quite obvious
+> that the file to see is at the Kernel tree.
+>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+>  Documentation/bpf/ringbuf.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/bpf/ringbuf.rst b/Documentation/bpf/ringbuf.rst
+> index 4d4f3bcb1477..6a615cd62bda 100644
+> --- a/Documentation/bpf/ringbuf.rst
+> +++ b/Documentation/bpf/ringbuf.rst
+> @@ -197,7 +197,7 @@ a self-pacing notifications of new data being availability.
+>  being available after commit only if consumer has already caught up right up to
+>  the record being committed. If not, consumer still has to catch up and thus
+>  will see new data anyways without needing an extra poll notification.
+> -Benchmarks (see tools/testing/selftests/bpf/benchs/bench_ringbufs.c_) show that
+> +Benchmarks (see tools/testing/selftests/bpf/benchs/bench_ringbufs.c) show that
 
-why would you redirect then touch the packet afterwards ? 
-if you have a bad program, then it is a user issue.
-
-> then return TC_ACT_OK, then you potentially end up with excessively
-> large
-> packet egressing through original interface (with small mtu).
-> 
-> My vote would be to return a new distinct error from bpf_redirect()
-> based on then current
-> packet size and interface being redirected to, save this interface
-> mtu
-> somewhere,
-> then in operations that increase packet size check against this saved
-> mtu,
-> for correctness you still have to check mtu after the bpf program is
-> done,
-> but this is then just to deal with braindead bpf code (that calls
-> bpf_redirect and returns TC_ACT_OK, or calls bpf_redirect() multiple
-> times, or something...).
-> 
-
-
-Another solution is to have an exception function defined in the
-BPF_prog, this function by itself is another program that can be
-executed to notify the prog about any exception/err that happened after
-the main BPF_program exited and let the XDP program react by its own
-logic.
-
-example:
-
-BPF_prog:
-    int XDP_main_prog(xdp_buff) {
-        xdp_adjust_head/tail(xdp_buff);
-        return xdp_redirect(ifindex, flags);
-    }
-
-    int XDP_exception(xdp_buff, excption_code) {
-        if (excetption_code == XDP_REDIRECRT_MTU_EXCEEDED) {
-                ICMP_response(xdp_buff);
-                return XDP_TX;
-        }
-        return XDP_DROP;
-    }
-
-
-netdev_driver_xdp_handle():
-   act = bpf_prog_run_xdp(prog, xdp); // Run XDP_main_prog
-   if (act == XDP_REDIRECT)
-       err = xdp_do_redirect(netdev, xdp, prog);
-       if (err) { 
-          // Run XDP_exception() function in the user prog
-          // finds the exception handler of active program
-          act = bpf_prog_run_xdp_exciption(prog, xdp, err);
-          // then handle exception action in the driver
-(XDP_TX/DROP/FORWARD).. 
-       }
-
-of-course a user program will be notified only on the first err .. 
-if it fails on the 2nd time .. just drop..
-
--Saeed.
-
+This fix already landed in bpf and net trees.
+Did you miss it?
