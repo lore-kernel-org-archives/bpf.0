@@ -2,164 +2,150 @@ Return-Path: <SRS0=dFgW=C2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5ABAEC43461
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 13:00:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B051FC43461
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 13:13:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 097F7206CA
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 13:00:17 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="ad65BC6e"
+	by mail.kernel.org (Postfix) with ESMTP id 67C2E21734
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 13:13:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726948AbgIQNAN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Sep 2020 09:00:13 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:30074 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727047AbgIQMw6 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 17 Sep 2020 08:52:58 -0400
-X-Greylist: delayed 2272 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 08:52:54 EDT
-Received: from pps.filterd (m0042983.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08HCB4gd026086;
-        Thu, 17 Sep 2020 05:14:44 -0700
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-00082601.pphosted.com with ESMTP id 33k5pejmh1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Sep 2020 05:14:44 -0700
-Received: from pps.reinject (m0042983.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 08HCE9Cs010240;
-        Thu, 17 Sep 2020 05:14:43 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 33k5p850ys-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 16 Sep 2020 10:56:12 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.173) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 16 Sep 2020 10:56:06 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kl5hYFcGYkXq5qLWgfbmpEZqAQsOdmdYjgFoTXlKZQtHzGLEQIazraZh9Uitcu2ls4n/HPK2xtaRCiDl6YkjXJgBzHdjg+KjvXaBP4wV655RVhsjHSX7tuVa4eLOk2/7m2msOFJ9OK714Nf34xCFt2Qt2GKdsfBrmtax17XrUsd04+Dz+qLickwRdA7IQe2c7lohd3t458sSmFWpltN1nZer2UJleKU6CyjAmeLY7hIulFdNdX3Fq8Tk4PAkT6pF3ct1oiBaQgeF+/25+Rjm5szy7dQqeIiDo9/19AdZH+nFNBKMlWPD/D+OM+a6A/xh+PCl36+vWsP63/l58X/2OQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kQf1yIQ5ic9r7G2x0AuPh4/fLuzBqcQM4p7AR5kYVtI=;
- b=PoeaKVRQ7QJhlpakWbYNEIMADjc5hUayzJy0eqpeiNhYmR+7X7ZB9khUmD6kheJ4ZV9JltUct9w20bjta/fPJA1Cj3XcOVLjJ6Yci2WpDVBKI6EYPyQ2vBqoKWD8z3L3DXwO08ikpvaFR+b+B9wzfZfFockDBY1lJgMgYkT54xGkTqiwulIX7RdI4XG6e6qgkD7fhWqOQYPCtMC3hSNRlLUrsJ+pngV8E97tswDi5AQLpSa+UKLn0Isw+mMmm+zdKss96JcXOKzqK/rgETZg9w92ud440jOi35sBIxiyBStX5WqxbWi7xqUM2XFkN9GokqQaJ6AlazKgW1MSctAYrA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kQf1yIQ5ic9r7G2x0AuPh4/fLuzBqcQM4p7AR5kYVtI=;
- b=ad65BC6ez5t5AEdS5luDfUkO9XBEEM+KPEaUHFOzu6KcD7/RnVNdGD4GD8M7QNUyl6th4dq6rB8vAQybI2k3AEth9BIhvL4dY/IiDrQLUCl3LCObhTLrlzSKWFWLFPsH3rjRm/qGPBxg7LN7hUdnsHVLx81ohEMCEYQBBEWz3ws=
-Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
- by BY5PR15MB3570.namprd15.prod.outlook.com (2603:10b6:a03:1f9::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3370.16; Wed, 16 Sep
- 2020 17:56:01 +0000
-Received: from BY5PR15MB3571.namprd15.prod.outlook.com
- ([fe80::c13c:fca9:5e04:9bfb]) by BY5PR15MB3571.namprd15.prod.outlook.com
- ([fe80::c13c:fca9:5e04:9bfb%3]) with mapi id 15.20.3391.011; Wed, 16 Sep 2020
- 17:56:01 +0000
-Date:   Wed, 16 Sep 2020 10:55:53 -0700
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     Yonghong Song <yhs@fb.com>
-CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Song Liu <songliubraving@fb.com>
-Message-ID: <20200916175553.4fevmxgcv2r6nhiu@kafai-mbp>
-References: <20200916061649.1437414-1-yhs@fb.com>
-In-Reply-To: <20200916061649.1437414-1-yhs@fb.com>
-X-ClientProxiedBy: MWHPR19CA0004.namprd19.prod.outlook.com
- (2603:10b6:300:d4::14) To BY5PR15MB3571.namprd15.prod.outlook.com
- (2603:10b6:a03:1f6::32)
+        id S1727063AbgIQNMz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Sep 2020 09:12:55 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:60191 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726962AbgIQNMx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Sep 2020 09:12:53 -0400
+X-Greylist: delayed 1062 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 09:12:51 EDT
+Received: from mail-oo1-f72.google.com ([209.85.161.72])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <seth.forshee@canonical.com>)
+        id 1kItR7-0003qU-PY
+        for bpf@vger.kernel.org; Thu, 17 Sep 2020 12:54:53 +0000
+Received: by mail-oo1-f72.google.com with SMTP id i1so1082416ood.9
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 05:54:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qvtx1Dw39OYs5aOUHC+fg8agAEsZenZTX5vKZkyOU9s=;
+        b=Q9rhF9hVy2atA/hSUB4qEtPmo2yF6BXmzdUF4D4smWkDkYdSv5t11FZPxvkYRAcgH7
+         +91QU9kA9XS0AH6VCz2q8KBdUdzSW8GTLC2Hy1TViivOL/m3b01bhEz2YUe3SLLUDyaM
+         Scd5YJ8jLA78DjrhPVz2QBlvGLKta0Fhy3BSUCRe/6v+cM4CcPPfDZKa2rz8Qcje7/yM
+         qvpZxIabF9TZoXQcNDf4AxD08i6arQJgdkmBg+tXfNnvnFlDeFlfyfAoR0i/jPXGHiff
+         8Pb8OGBVOgCMmG5hmGrqujuSOGbghqneCxvYTL9fE0h+LzezT6I9EDXFRqoC7950b9rO
+         puYQ==
+X-Gm-Message-State: AOAM533jJDuGrwT6mAy0Eqw9hrTSmAoOSA3NPXqFdi1v+U0kfU12Olsh
+        NjF9q2cTtj/GY374rDnF//BR4vqiL70hDrg8Gf38i+U7CgYTGSpsQunp64gJxlZTM2sSnrnetZG
+        gYrB7CeqTiUW4R4Y0jgjmss0HQT+Khw==
+X-Received: by 2002:aca:843:: with SMTP id 64mr6229924oii.135.1600347292700;
+        Thu, 17 Sep 2020 05:54:52 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwh6KjccBZl5W9X0X9YrClsArM7xybnlSW3VEUFeKIhv9qqHi6wD4If97szIyRO4rGFle9HYQ==
+X-Received: by 2002:aca:843:: with SMTP id 64mr6229907oii.135.1600347292463;
+        Thu, 17 Sep 2020 05:54:52 -0700 (PDT)
+Received: from localhost ([2605:a601:ac0f:820:c48f:8c0b:cb29:e546])
+        by smtp.gmail.com with ESMTPSA id s196sm11797740oih.26.2020.09.17.05.54.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2020 05:54:51 -0700 (PDT)
+Date:   Thu, 17 Sep 2020 07:54:50 -0500
+From:   Seth Forshee <seth.forshee@canonical.com>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: resolve_btfids breaks kernel cross-compilation
+Message-ID: <20200917125450.GC4820@ubuntu-x1>
+References: <20200916194733.GA4820@ubuntu-x1>
+ <20200917080452.GB2411168@krava>
+ <20200917083809.GE2411168@krava>
+ <20200917091406.GF2411168@krava>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from kafai-mbp (2620:10d:c090:400::5:2074) by MWHPR19CA0004.namprd19.prod.outlook.com (2603:10b6:300:d4::14) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3391.11 via Frontend Transport; Wed, 16 Sep 2020 17:56:00 +0000
-X-Originating-IP: [2620:10d:c090:400::5:2074]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4cf2b198-a64c-4b73-744c-08d85a69c5f6
-X-MS-TrafficTypeDiagnostic: BY5PR15MB3570:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BY5PR15MB357004D108CE7D0FE1C53CBFD5210@BY5PR15MB3570.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: syAbxq6ew28isSFxDPxn4DR5iUaoYXCh0bLZYe9ZTZqZkbbRHgi+ZCvZSo9FgJtRCFBrNPAuMaM7gsooIFdrHdqt0WIfmM+tY5EGPRn/mRzgXCuyizO+c6shtRg+R/o4I/zzBsCKzQtiGy7CqaQrAGymB1EOGnAbIKxCPJXNBHWnA4CxWVgMCHOM/hIMFnYW1XBGAG+K91A2u879jQEsoDEUDZ9JEq2/jiZFNhYNyVwn90ARoaF30fg9TXXQC1I4SldurNRZXwfiJ/Q/JruonL1SGZ6+Sgc/a1Qr6JUBpFqv8dtIJNSmLVXUtXIrn6I+8OGMbIcyEpan8h+qXJk/Ug==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(346002)(136003)(396003)(376002)(366004)(186003)(66556008)(16526019)(55016002)(86362001)(54906003)(316002)(8936002)(478600001)(9686003)(6666004)(52116002)(33716001)(1076003)(6496006)(66476007)(6636002)(4326008)(8676002)(83380400001)(2906002)(5660300002)(6862004)(66946007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: cgDiJhWyWUCNPzj+pYpddVUVCVD/JJGtR8Dl+gFhe3vGgQJQQNlsbPWpwKaD+r1xM622YktFAxxePAyu27Xz5BW1aw1ucEmE1XNMIs0kTdqG4zDVGwBh/30MSADUkRGqr4OjqeujduoliXFOWG47djmmYplEAKzG4vl7nTlnNBbGRy3EaJbdQazI5g7A5zw/ioFMJvsJopr7tdK8ZSclzVy2pUM+7fdv+FRZu/VdbmN5tvMM43LWMsMjNwdjVO4p5ZrP8/lDz/k7QFBZ6f7rEt++MYz1DihDHOKnTm9DvjOHVvMsPSzDuRUdlJMEmLvrVDGMGdUz+ztkh20i4lA9wtiEd3scgTfs0W/5mSONZyYyvNiLRI0kVLtkZu9SMHskukaKQf6EjI2Tw3Xd3Qdfbd+bYiNzZvfo81dLxwKhAtaPLhBGld9CWsaXDxAwnbOanBIJ8LckvcTo0ou2LC7xGZXce36kWL3NxuVuuEUbpc9DorvrFTXKb1CmV6FUzq4T5W3phdtFlKtvROoI8Y0JLBcDLacrRaa5wq9M5BChTtdLlqsKltUBWjN6wuZUQoQhMqUskuKqD3L52msB77hadP+DXjARJ9sF/0nurftpeVtVGCJaScq0FCH6xG5/QZV8Lif4zI4aNHZnFyNZpBiCZHnYwMAVGi/aHSp0QMBrSIk=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4cf2b198-a64c-4b73-744c-08d85a69c5f6
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2020 17:56:01.4842
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LDZgQeIYR2WG0IfhtkDKeNoEmOW16E2fB9TuVqZbQLJBA71gTYfGWcoOFFtVsjpl
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR15MB3570
-X-OriginatorOrg: fb.com
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 8bit
 Content-Disposition: inline
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-16_11:2020-09-16,2020-09-16 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- lowpriorityscore=0 suspectscore=2 mlxscore=0 clxscore=1015
- priorityscore=1501 impostorscore=0 spamscore=0 bulkscore=0 phishscore=0
- malwarescore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2009160127
-X-FB-Internal: deliver
-subject: Re: [PATCH bpf-next v3] bpf: using rcu_read_lock for bpf_sk_storage_map iterator
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-17_09:2020-09-16,2020-09-17 signatures=0
+In-Reply-To: <20200917091406.GF2411168@krava>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 11:16:49PM -0700, Yonghong Song wrote:
-[ ... ]
+On Thu, Sep 17, 2020 at 11:14:06AM +0200, Jiri Olsa wrote:
+> On Thu, Sep 17, 2020 at 10:38:12AM +0200, Jiri Olsa wrote:
+> > On Thu, Sep 17, 2020 at 10:04:55AM +0200, Jiri Olsa wrote:
+> > > On Wed, Sep 16, 2020 at 02:47:33PM -0500, Seth Forshee wrote:
+> > > > The requirement to build resolve_btfids whenever CONFIG_DEBUG_INFO_BTF
+> > > > is enabled breaks some cross builds. For example, when building a 64-bit
+> > > > powerpc kernel on amd64 I get:
+> > > > 
+> > > >  Auto-detecting system features:
+> > > >  ...                        libelf: [ [32mon[m  ]
+> > > >  ...                          zlib: [ [32mon[m  ]
+> > > >  ...                           bpf: [ [31mOFF[m ]
+> > > >  
+> > > >  BPF API too old
+> > > >  make[6]: *** [Makefile:295: bpfdep] Error 1
+> > > > 
+> > > > The contents of tools/bpf/resolve_btfids/feature/test-bpf.make.output:
+> > > > 
+> > > >  In file included from /home/sforshee/src/u-k/unstable/tools/arch/powerpc/include/uapi/asm/bitsperlong.h:11,
+> > > >                   from /usr/include/asm-generic/int-ll64.h:12,
+> > > >                   from /usr/include/asm-generic/types.h:7,
+> > > >                   from /usr/include/x86_64-linux-gnu/asm/types.h:1,
+> > > >                   from /home/sforshee/src/u-k/unstable/tools/include/linux/types.h:10,
+> > > >                   from /home/sforshee/src/u-k/unstable/tools/include/uapi/linux/bpf.h:11,
+> > > >                   from test-bpf.c:3:
+> > > >  /home/sforshee/src/u-k/unstable/tools/include/asm-generic/bitsperlong.h:14:2: error: #error Inconsistent word size. Check asm/bitsperlong.h
+> > > >     14 | #error Inconsistent word size. Check asm/bitsperlong.h
+> > > >        |  ^~~~~
+> > > > 
+> > > > This is because tools/arch/powerpc/include/uapi/asm/bitsperlong.h sets
+> > > > __BITS_PER_LONG based on the predefinied compiler macro __powerpc64__,
+> > > > which is not defined by the host compiler. What can we do to get cross
+> > > > builds working again?
+> > > 
+> > > could you please share the command line and setup?
+> > 
+> > I just reproduced.. checking on fix
+> 
+> I still need to check on few things, but patch below should help
 
-> diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-> index 4a86ea34f29e..d43c3d6d0693 100644
-> --- a/net/core/bpf_sk_storage.c
-> +++ b/net/core/bpf_sk_storage.c
-> @@ -678,6 +678,7 @@ struct bpf_iter_seq_sk_storage_map_info {
->  static struct bpf_local_storage_elem *
->  bpf_sk_storage_map_seq_find_next(struct bpf_iter_seq_sk_storage_map_info *info,
->  				 struct bpf_local_storage_elem *prev_selem)
-> +	__acquires(RCU) __releases(RCU)
->  {
->  	struct bpf_local_storage *sk_storage;
->  	struct bpf_local_storage_elem *selem;
-In the while loop earlier in this function, if I read it correctly,
-it is sort of continuing the earlier hlist_for_each_entry_rcu() for the
-same bucket, so the hlist_entry_safe() needs to be changed also.
-Something like this (uncompiled code):
+It does help with the word size problem, thanks.
 
-        while (selem) {
--               selem = hlist_entry_safe(selem->map_node.next,
-+               selem = hlist_entry_safe(rcu_dereference(hlist_next_rcu(&selem->map_node)),
-                                         struct bpf_local_storage_elem, map_node);
-                if (!selem) {
-                        /* not found, unlock and go to the next bucket */
+> we might have a problem for cross builds with different endianity
+> than the host because libbpf does not support reading BTF data
+> with different endianity, and we get:
+> 
+>   BTFIDS  vmlinux
+> libbpf: non-native ELF endianness is not supported
 
-> @@ -701,11 +702,11 @@ bpf_sk_storage_map_seq_find_next(struct bpf_iter_seq_sk_storage_map_info *info,
->  		if (!selem) {
->  			/* not found, unlock and go to the next bucket */
->  			b = &smap->buckets[bucket_id++];
-> -			raw_spin_unlock_bh(&b->lock);
-> +			rcu_read_unlock();
->  			skip_elems = 0;
->  			break;
->  		}
-> -		sk_storage = rcu_dereference_raw(selem->local_storage);
-> +		sk_storage = rcu_dereference(selem->local_storage);
->  		if (sk_storage) {
->  			info->skip_elems = skip_elems + count;
->  			return selem;
+Yes, I see this now when cross building for s390.
+
+Thanks,
+Seth
+
+> 
+> jirka
+> 
+> 
+> ---
+> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+> index a88cd4426398..d3c818b8d8d3 100644
+> --- a/tools/bpf/resolve_btfids/Makefile
+> +++ b/tools/bpf/resolve_btfids/Makefile
+> @@ -1,5 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  include ../../scripts/Makefile.include
+> +include ../../scripts/Makefile.arch
+>  
+>  ifeq ($(srctree),)
+>  srctree := $(patsubst %/,%,$(dir $(CURDIR)))
+> @@ -29,6 +30,7 @@ endif
+>  AR       = $(HOSTAR)
+>  CC       = $(HOSTCC)
+>  LD       = $(HOSTLD)
+> +ARCH     = $(HOSTARCH)
+>  
+>  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+>  
+> 
