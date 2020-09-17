@@ -2,106 +2,110 @@ Return-Path: <SRS0=dFgW=C2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FCE0C433E2
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 07:45:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCFDEC43461
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 08:06:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F145F208DB
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 07:45:22 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance-com.20150623.gappssmtp.com header.i=@bytedance-com.20150623.gappssmtp.com header.b="idh71yNv"
+	by mail.kernel.org (Postfix) with ESMTP id 83AA921D7F
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 08:06:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1600330012;
+	bh=mYwYOXWHk8m9yb3WuJTI/V6/GmciN+v4xy+Pzj/6yrw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=jBUu+ml6wF75KXADLGrdwQhC3wD8JBZsx/pryW9doHt4C0N1e+VSID5zGr4NrD0EU
+	 93Dg4xsYQQYgycArkMAiEtxrhuy3uR/oiu09ZzuwhSsuipxKyzj7vGPDVX8lMqKQtf
+	 vcKb261rF73i/cC6g/VZuOpl0sJXhOfnVUjDM5Uw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726250AbgIQHpU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Sep 2020 03:45:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726309AbgIQHpH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Sep 2020 03:45:07 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDA8C061756
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 00:45:06 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id f1so666956plo.13
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 00:45:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2N3mWH4dWBjYIgMqML5SFtLQn8Wc+WVJixIOAPyOzJA=;
-        b=idh71yNvBVxWLoWXnqR9b8hBq73P+5oYksH6cYCmUxaJLP3zItcAtvxAsAEejSKGD6
-         OOnwMp8FC7fdVZGvrLSajJRiOAdWaiH7Ab3/T8FSAi3AYtwsXOtMe1KxQCTIq2ZfIfOE
-         Bu6qWr+/agn6NHYaPkONMNJXpevY4g5TXNbSapVm1mCRUaBqrcdOoeAe63iXk47IHqRo
-         esN9NiE0x3+j9s4y4bD3NKKQnQofCIUBsNHFaMc0rXJAsC3KUusnfWyD8cadGXUKOuyM
-         ndR0r5mTn+vArVbFj/8G+gS8Lo/xY9SiWnUEgcjoxZzvz76QzjKbgVGVEbm+5jSk/X/h
-         9nbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2N3mWH4dWBjYIgMqML5SFtLQn8Wc+WVJixIOAPyOzJA=;
-        b=EJmfiusH33yiZ9w+vSCXimMrcd6CKl1x423eGmmdqH3m83yNEqGrtMNfoPEBupUQ4Z
-         8CcWsGG7WVUEWpKNI4iAcwijShBADVxN0OXowdxy63MD47FLNQJCY+RTvvsJ5JKrItUg
-         4Aouv3MFCF9vwhmc4ggsta0f5fvkCCwrPbzRB2gaHYDxHQ6mj2kqS1SSMxnAQFOUiK3n
-         tj616B6UZT6esnyNo9nL3y7LQiEP+u+SihKDIMeCjpJq1ooOfASLQkWwzR+RPRMLOlwo
-         aUnBlffmjPCxNpqTkQawbizdbPnrJDo8161NY3vg9oIdQ5eunY89HSdOK3aU+kL2/R95
-         uVHA==
-X-Gm-Message-State: AOAM531YqDXifb9e2nXRxpZC/Gnj90uOFFhB0aFk+mn8O0qIMKH3l3Dz
-        K5yT9Gxa97bgnGB82yS5bOR4dA==
-X-Google-Smtp-Source: ABdhPJwXaMllPXLLBBq/ZdkN+0JpO5r0KMFYX2Af8lAj/0slXE5K3cOn/uUBCY85+zsg2ZmTQcGeuA==
-X-Received: by 2002:a17:90b:20d1:: with SMTP id ju17mr6874545pjb.134.1600328706465;
-        Thu, 17 Sep 2020 00:45:06 -0700 (PDT)
-Received: from bogon.bytedance.net ([103.136.220.66])
-        by smtp.gmail.com with ESMTPSA id v26sm17786351pgo.83.2020.09.17.00.45.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 17 Sep 2020 00:45:05 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
-        john.fastabend@gmail.com, kpsingh@chromium.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [RFC PATCH] bpf: Fix potential call bpf_link_free() in atomic context
-Date:   Thu, 17 Sep 2020 15:44:53 +0800
-Message-Id: <20200917074453.20621-1-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.21.0 (Apple Git-122)
+        id S1726402AbgIQIGu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Sep 2020 04:06:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47906 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726417AbgIQIGh (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Sep 2020 04:06:37 -0400
+Received: from mail.kernel.org (ip5f5ad5d2.dynamic.kabel-deutschland.de [95.90.213.210])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BD22D221E8;
+        Thu, 17 Sep 2020 08:04:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1600329870;
+        bh=mYwYOXWHk8m9yb3WuJTI/V6/GmciN+v4xy+Pzj/6yrw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=wmhcMPOapbbfMbgpTrJy+WRPRaosnbfTglGznVwZt+kUxXqP2o+VvO5EXbptacD6J
+         mPrcWfom7WQb7eK9NEMfh3/Ot66XLheBK3+ecYyddkRJUMWpQWO5e9izKNPmakk0c9
+         9z0F9ZCADzLLWKZQVAlFcBgv8iQ973wB1aJFDiGo=
+Received: from mchehab by mail.kernel.org with local (Exim 4.94)
+        (envelope-from <mchehab@kernel.org>)
+        id 1kIou4-0051LU-Ai; Thu, 17 Sep 2020 10:04:28 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH 3/3] docs: bpf: ringbuf.rst: fix a broken cross-reference
+Date:   Thu, 17 Sep 2020 10:04:27 +0200
+Message-Id: <442b27cc035ab7f9e5e000f2ac44ce88ea8b16a6.1600328701.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1600328701.git.mchehab+huawei@kernel.org>
+References: <cover.1600328701.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The in_atomic macro cannot always detect atomic context. In particular,
-it cannot know about held spinlocks in non-preemptible kernels. Although,
-there is no user call bpf_link_put() with holding spinlock now. Be the
-safe side, we can avoid this in the feature.
+Sphinx warns about a broken cross-reference:
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+	Documentation/bpf/ringbuf.rst:194: WARNING: Unknown target name: "bench_ringbufs.c".
+
+It seems that the original idea were to add a reference for this file:
+
+	tools/testing/selftests/bpf/benchs/bench_ringbufs.c
+
+However, this won't work as such file is not part of the
+documentation output dir. It could be possible to use
+an extension like interSphinx in order to make external
+references to be pointed to some website (like kernel.org),
+where the file is stored, but currently we don't use it.
+
+It would also be possible to include this file as a
+literal include, placing it inside Documentation/bpf.
+
+For now, let's take the simplest approach: just drop
+the "_" markup at the end of the reference. This
+should solve the warning, and it sounds quite obvious
+that the file to see is at the Kernel tree.
+
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- kernel/bpf/syscall.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ Documentation/bpf/ringbuf.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 178c147350f5..6347be0a5c82 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2345,12 +2345,8 @@ void bpf_link_put(struct bpf_link *link)
- 	if (!atomic64_dec_and_test(&link->refcnt))
- 		return;
- 
--	if (in_atomic()) {
--		INIT_WORK(&link->work, bpf_link_put_deferred);
--		schedule_work(&link->work);
--	} else {
--		bpf_link_free(link);
--	}
-+	INIT_WORK(&link->work, bpf_link_put_deferred);
-+	schedule_work(&link->work);
- }
- 
- static int bpf_link_release(struct inode *inode, struct file *filp)
+diff --git a/Documentation/bpf/ringbuf.rst b/Documentation/bpf/ringbuf.rst
+index 4d4f3bcb1477..6a615cd62bda 100644
+--- a/Documentation/bpf/ringbuf.rst
++++ b/Documentation/bpf/ringbuf.rst
+@@ -197,7 +197,7 @@ a self-pacing notifications of new data being availability.
+ being available after commit only if consumer has already caught up right up to
+ the record being committed. If not, consumer still has to catch up and thus
+ will see new data anyways without needing an extra poll notification.
+-Benchmarks (see tools/testing/selftests/bpf/benchs/bench_ringbufs.c_) show that
++Benchmarks (see tools/testing/selftests/bpf/benchs/bench_ringbufs.c) show that
+ this allows to achieve a very high throughput without having to resort to
+ tricks like "notify only every Nth sample", which are necessary with perf
+ buffer. For extreme cases, when BPF program wants more manual control of
 -- 
-2.20.1
+2.26.2
 
