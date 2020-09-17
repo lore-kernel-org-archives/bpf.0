@@ -2,150 +2,146 @@ Return-Path: <SRS0=dFgW=C2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B051FC43461
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 13:13:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3C15C433E2
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 13:56:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 67C2E21734
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 13:13:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A306D20663
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 13:56:32 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bogrH/Lc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727063AbgIQNMz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Sep 2020 09:12:55 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:60191 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726962AbgIQNMx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Sep 2020 09:12:53 -0400
-X-Greylist: delayed 1062 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Sep 2020 09:12:51 EDT
-Received: from mail-oo1-f72.google.com ([209.85.161.72])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <seth.forshee@canonical.com>)
-        id 1kItR7-0003qU-PY
-        for bpf@vger.kernel.org; Thu, 17 Sep 2020 12:54:53 +0000
-Received: by mail-oo1-f72.google.com with SMTP id i1so1082416ood.9
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 05:54:53 -0700 (PDT)
+        id S1727170AbgIQNzu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Sep 2020 09:55:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727124AbgIQNzn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Sep 2020 09:55:43 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0836BC061355;
+        Thu, 17 Sep 2020 06:54:52 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id bg9so1176299plb.2;
+        Thu, 17 Sep 2020 06:54:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=z/K2/i+JXYfZZ5+5bldYLcF42Djb0mZAX58S+kRtJsc=;
+        b=bogrH/LctRcjD61IXqaLFLgVpKP+15hGGQXFU1QPJO7NgISDGzRw5nzT8CIMhDNiTP
+         ms0m5q0u9jD64WUXmiHzpxULDThbLR7ZBw7SiwFrFDib+wI8IQMLWXgD8Miyh8FicD2r
+         Y/Ks2Fla9mIdyxJ2UPyzLc0SzOf26vVpk9FTZO8gAyrgEidVwpvl2G3H0LZOftwTdvx9
+         doeY7DZD+4RaTROc4prYRIdRQ3eJx9ONJ9gf5GUo9W+LdGyEABBo/bwUYKg8R2cPGOuw
+         Qzm9GIbZXexGEbmCGixOj79XM6bYXy4uCCPwqG1pJrnRJk/AWPCav3NWRVKLBm7RxNuP
+         +SXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qvtx1Dw39OYs5aOUHC+fg8agAEsZenZTX5vKZkyOU9s=;
-        b=Q9rhF9hVy2atA/hSUB4qEtPmo2yF6BXmzdUF4D4smWkDkYdSv5t11FZPxvkYRAcgH7
-         +91QU9kA9XS0AH6VCz2q8KBdUdzSW8GTLC2Hy1TViivOL/m3b01bhEz2YUe3SLLUDyaM
-         Scd5YJ8jLA78DjrhPVz2QBlvGLKta0Fhy3BSUCRe/6v+cM4CcPPfDZKa2rz8Qcje7/yM
-         qvpZxIabF9TZoXQcNDf4AxD08i6arQJgdkmBg+tXfNnvnFlDeFlfyfAoR0i/jPXGHiff
-         8Pb8OGBVOgCMmG5hmGrqujuSOGbghqneCxvYTL9fE0h+LzezT6I9EDXFRqoC7950b9rO
-         puYQ==
-X-Gm-Message-State: AOAM533jJDuGrwT6mAy0Eqw9hrTSmAoOSA3NPXqFdi1v+U0kfU12Olsh
-        NjF9q2cTtj/GY374rDnF//BR4vqiL70hDrg8Gf38i+U7CgYTGSpsQunp64gJxlZTM2sSnrnetZG
-        gYrB7CeqTiUW4R4Y0jgjmss0HQT+Khw==
-X-Received: by 2002:aca:843:: with SMTP id 64mr6229924oii.135.1600347292700;
-        Thu, 17 Sep 2020 05:54:52 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwh6KjccBZl5W9X0X9YrClsArM7xybnlSW3VEUFeKIhv9qqHi6wD4If97szIyRO4rGFle9HYQ==
-X-Received: by 2002:aca:843:: with SMTP id 64mr6229907oii.135.1600347292463;
-        Thu, 17 Sep 2020 05:54:52 -0700 (PDT)
-Received: from localhost ([2605:a601:ac0f:820:c48f:8c0b:cb29:e546])
-        by smtp.gmail.com with ESMTPSA id s196sm11797740oih.26.2020.09.17.05.54.51
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=z/K2/i+JXYfZZ5+5bldYLcF42Djb0mZAX58S+kRtJsc=;
+        b=QtzQTtRQ+hmTGHCMWqek4xPfG/ILevmp6C7uHb6mRva3urFs/dTgboN9/JWBgSIH0y
+         FNfKsdgmI3hooziQdR/NdEujOPIL+N81leEYiBoNkqsd9PU3JKCl0oKhbpUzOIpZ9gwb
+         YKaMM+hvUkPf1WE3lWTg2vE7IHixdHffNYnDqVXKOqY6/OmOHHW48ylRe17T37727t7R
+         c4PNmlIjDOtG2r1G/F0C3xnqRPtlcEmyiosrH97ce6NCFRBWVTc4c4TV3gT5UPpE6uBH
+         XhT4kBf3syIr6k3iPCwMvYW/1oH1wbh7vdYllEtn1dIZbLtghXAmZfGyG2QtvMMvnvLU
+         FFiw==
+X-Gm-Message-State: AOAM530HopFXU/vXFoicRYy7uHR/NdpnSXJy+WiJfb7cZVJg3PwzSsOL
+        zWLDxknHNyYpVhoiXj38qi8=
+X-Google-Smtp-Source: ABdhPJxD4C2VPYadg84rIRzWLwt5+D0NW021aBQl3wpvrfSQ6SWd5wfgq05PgBpyp3lINoW2ttqL2w==
+X-Received: by 2002:a17:90a:8c88:: with SMTP id b8mr8528564pjo.118.1600350891625;
+        Thu, 17 Sep 2020 06:54:51 -0700 (PDT)
+Received: from localhost.localdomain ([2001:470:e92d:10:6ca9:b613:f248:49fa])
+        by smtp.gmail.com with ESMTPSA id a12sm17896994pgm.79.2020.09.17.06.54.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2020 05:54:51 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 07:54:50 -0500
-From:   Seth Forshee <seth.forshee@canonical.com>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: resolve_btfids breaks kernel cross-compilation
-Message-ID: <20200917125450.GC4820@ubuntu-x1>
-References: <20200916194733.GA4820@ubuntu-x1>
- <20200917080452.GB2411168@krava>
- <20200917083809.GE2411168@krava>
- <20200917091406.GF2411168@krava>
+        Thu, 17 Sep 2020 06:54:51 -0700 (PDT)
+From:   Tony Ambardar <tony.ambardar@gmail.com>
+X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Tony Ambardar <Tony.Ambardar@gmail.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Stable <stable@vger.kernel.org>,
+        Rosen Penev <rosenp@gmail.com>
+Subject: [PATCH v3] powerpc: fix EDEADLOCK redefinition error in uapi/asm/errno.h
+Date:   Thu, 17 Sep 2020 06:54:37 -0700
+Message-Id: <20200917135437.1238787-1-Tony.Ambardar@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200917000757.1232850-1-Tony.Ambardar@gmail.com>
+References: <20200917000757.1232850-1-Tony.Ambardar@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200917091406.GF2411168@krava>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 11:14:06AM +0200, Jiri Olsa wrote:
-> On Thu, Sep 17, 2020 at 10:38:12AM +0200, Jiri Olsa wrote:
-> > On Thu, Sep 17, 2020 at 10:04:55AM +0200, Jiri Olsa wrote:
-> > > On Wed, Sep 16, 2020 at 02:47:33PM -0500, Seth Forshee wrote:
-> > > > The requirement to build resolve_btfids whenever CONFIG_DEBUG_INFO_BTF
-> > > > is enabled breaks some cross builds. For example, when building a 64-bit
-> > > > powerpc kernel on amd64 I get:
-> > > > 
-> > > >  Auto-detecting system features:
-> > > >  ...                        libelf: [ [32mon[m  ]
-> > > >  ...                          zlib: [ [32mon[m  ]
-> > > >  ...                           bpf: [ [31mOFF[m ]
-> > > >  
-> > > >  BPF API too old
-> > > >  make[6]: *** [Makefile:295: bpfdep] Error 1
-> > > > 
-> > > > The contents of tools/bpf/resolve_btfids/feature/test-bpf.make.output:
-> > > > 
-> > > >  In file included from /home/sforshee/src/u-k/unstable/tools/arch/powerpc/include/uapi/asm/bitsperlong.h:11,
-> > > >                   from /usr/include/asm-generic/int-ll64.h:12,
-> > > >                   from /usr/include/asm-generic/types.h:7,
-> > > >                   from /usr/include/x86_64-linux-gnu/asm/types.h:1,
-> > > >                   from /home/sforshee/src/u-k/unstable/tools/include/linux/types.h:10,
-> > > >                   from /home/sforshee/src/u-k/unstable/tools/include/uapi/linux/bpf.h:11,
-> > > >                   from test-bpf.c:3:
-> > > >  /home/sforshee/src/u-k/unstable/tools/include/asm-generic/bitsperlong.h:14:2: error: #error Inconsistent word size. Check asm/bitsperlong.h
-> > > >     14 | #error Inconsistent word size. Check asm/bitsperlong.h
-> > > >        |  ^~~~~
-> > > > 
-> > > > This is because tools/arch/powerpc/include/uapi/asm/bitsperlong.h sets
-> > > > __BITS_PER_LONG based on the predefinied compiler macro __powerpc64__,
-> > > > which is not defined by the host compiler. What can we do to get cross
-> > > > builds working again?
-> > > 
-> > > could you please share the command line and setup?
-> > 
-> > I just reproduced.. checking on fix
-> 
-> I still need to check on few things, but patch below should help
+A few archs like powerpc have different errno.h values for macros
+EDEADLOCK and EDEADLK. In code including both libc and linux versions of
+errno.h, this can result in multiple definitions of EDEADLOCK in the
+include chain. Definitions to the same value (e.g. seen with mips) do
+not raise warnings, but on powerpc there are redefinitions changing the
+value, which raise warnings and errors (if using "-Werror").
 
-It does help with the word size problem, thanks.
+Guard against these redefinitions to avoid build errors like the following,
+first seen cross-compiling libbpf v5.8.9 for powerpc using GCC 8.4.0 with
+musl 1.1.24:
 
-> we might have a problem for cross builds with different endianity
-> than the host because libbpf does not support reading BTF data
-> with different endianity, and we get:
-> 
->   BTFIDS  vmlinux
-> libbpf: non-native ELF endianness is not supported
+  In file included from ../../arch/powerpc/include/uapi/asm/errno.h:5,
+                   from ../../include/linux/err.h:8,
+                   from libbpf.c:29:
+  ../../include/uapi/asm-generic/errno.h:40: error: "EDEADLOCK" redefined [-Werror]
+   #define EDEADLOCK EDEADLK
 
-Yes, I see this now when cross building for s390.
+  In file included from toolchain-powerpc_8540_gcc-8.4.0_musl/include/errno.h:10,
+                   from libbpf.c:26:
+  toolchain-powerpc_8540_gcc-8.4.0_musl/include/bits/errno.h:58: note: this is the location of the previous definition
+   #define EDEADLOCK       58
 
-Thanks,
-Seth
+  cc1: all warnings being treated as errors
 
-> 
-> jirka
-> 
-> 
-> ---
-> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> index a88cd4426398..d3c818b8d8d3 100644
-> --- a/tools/bpf/resolve_btfids/Makefile
-> +++ b/tools/bpf/resolve_btfids/Makefile
-> @@ -1,5 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  include ../../scripts/Makefile.include
-> +include ../../scripts/Makefile.arch
->  
->  ifeq ($(srctree),)
->  srctree := $(patsubst %/,%,$(dir $(CURDIR)))
-> @@ -29,6 +30,7 @@ endif
->  AR       = $(HOSTAR)
->  CC       = $(HOSTCC)
->  LD       = $(HOSTLD)
-> +ARCH     = $(HOSTARCH)
->  
->  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
->  
-> 
+CC: Stable <stable@vger.kernel.org>
+Reported-by: Rosen Penev <rosenp@gmail.com>
+Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
+---
+v1 -> v2:
+ * clean up commit description formatting
+
+v2 -> v3: (per Michael Ellerman)
+ * drop indeterminate 'Fixes' tags, request stable backports instead 
+---
+ arch/powerpc/include/uapi/asm/errno.h       | 1 +
+ tools/arch/powerpc/include/uapi/asm/errno.h | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/arch/powerpc/include/uapi/asm/errno.h b/arch/powerpc/include/uapi/asm/errno.h
+index cc79856896a1..4ba87de32be0 100644
+--- a/arch/powerpc/include/uapi/asm/errno.h
++++ b/arch/powerpc/include/uapi/asm/errno.h
+@@ -2,6 +2,7 @@
+ #ifndef _ASM_POWERPC_ERRNO_H
+ #define _ASM_POWERPC_ERRNO_H
+ 
++#undef	EDEADLOCK
+ #include <asm-generic/errno.h>
+ 
+ #undef	EDEADLOCK
+diff --git a/tools/arch/powerpc/include/uapi/asm/errno.h b/tools/arch/powerpc/include/uapi/asm/errno.h
+index cc79856896a1..4ba87de32be0 100644
+--- a/tools/arch/powerpc/include/uapi/asm/errno.h
++++ b/tools/arch/powerpc/include/uapi/asm/errno.h
+@@ -2,6 +2,7 @@
+ #ifndef _ASM_POWERPC_ERRNO_H
+ #define _ASM_POWERPC_ERRNO_H
+ 
++#undef	EDEADLOCK
+ #include <asm-generic/errno.h>
+ 
+ #undef	EDEADLOCK
+-- 
+2.25.1
+
