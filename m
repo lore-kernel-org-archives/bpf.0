@@ -2,248 +2,121 @@ Return-Path: <SRS0=dFgW=C2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_INVALID,DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37203C43465
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 20:18:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB646C43465
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 20:20:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EFE4F2087D
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 20:18:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 821FF208C3
+	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 20:20:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=google.com header.i=@google.com header.b="oIqjID0Z"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A/uBSZvl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726419AbgIQUSM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Sep 2020 16:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726379AbgIQUSM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Sep 2020 16:18:12 -0400
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14345C061355
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 13:18:12 -0700 (PDT)
-Received: by mail-qv1-xf49.google.com with SMTP id di5so2259562qvb.13
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 13:18:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=+qn0hmllJB1IjyXqhj19h4c4rALkHNh35RY+rYVLwWk=;
-        b=oIqjID0Z7zC8gUeMsqR+odV/iEANb+zSaRcB7zHOKEFout655BQ6yGH9NaSq7vDeCe
-         cpB4NI3WEDP3KZff3xXN0y3plrwFhTCO/PMXlC/pH7V/u9xJ+7T1gkI6Q38TRQuAvtsx
-         ft90aah+CdQ1SQvjLfxDFdBhkFIMMVCr7L+VvL0IX+uIWCGuzY6ZsDACSxhX8RKWNGuQ
-         HPl2Tn/++qAV+FHB5MOb5mkmBBuxkE6kU57QoM7G3TlG3AcQocWVPAYTreP6hWDyoSu+
-         Q6buY1FkOqQsAvjlTGuO2Rs1wOchEfX0+SodaSwEKyGAdzY2NUwMVP8APBfUyTMpnF3c
-         EzNA==
+        id S1726303AbgIQUUI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Sep 2020 16:20:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:53731 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726328AbgIQUUI (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 17 Sep 2020 16:20:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1600374006;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gXFdiZ0D++Zjq+NMowyYUeopSCqhgf8iuD44JlXgxWA=;
+        b=A/uBSZvlk/QbMTo0aSlHNI3daz4gkg/fMLQgQkvItLHuJte2GnK2BpP7G1RpRV2CTFdzoE
+        MNiD8qtf7lzgA1W7ikeout+WRWsmmrXd+OwfUYY5GJe0tUcZfo0i1fONZ+vp3PY9LIASjs
+        gb9NhysvYIAKsww0N3O1G4MFpPrsHgs=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-328-GejXMsNBNYSB6_815ENZhQ-1; Thu, 17 Sep 2020 16:20:04 -0400
+X-MC-Unique: GejXMsNBNYSB6_815ENZhQ-1
+Received: by mail-ed1-f69.google.com with SMTP id l2so1364993ede.19
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2020 13:20:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=+qn0hmllJB1IjyXqhj19h4c4rALkHNh35RY+rYVLwWk=;
-        b=mE0htvHPJMyet+5y7H+4byrIDIrEHxhxLmw0aR/V+s+b1E6GR52cFVL8r7u5d4UszX
-         p1uJzKIRemeQtI3YgaW2gvHwFwW+tcmdy52hydRE33//3dq7fofX7kQBc0Sy+COmEF1Y
-         9bHOzNzHwb3TcjbuRtqcTB0O3nRX2tLaykph7Vy4t7c3btl/rh4OYcNitHs2XWNKEA8d
-         yEj0teP3IXDA9w/g7AlHX/3fKtdvOHBnojYBsPw9gDjKG1yYI7hPciuAsacYp98c3zuL
-         QBDE9kE82uepd4ecmfv+rgcWrM4/1iKx0leH/GJcKb2I6zu5+YBqK3G7h02/SjOsbIYI
-         kf+A==
-X-Gm-Message-State: AOAM531ASKvjYxD5U/418AVzZesaolBYRBAL2gCQdJAyr7+zSR3cT2JW
-        E0j3GH30BpQ85rJ/g1styY/PJ/OcxQzj
-X-Google-Smtp-Source: ABdhPJxwP13h73YzKi0iuDbLGGJt5UnSuAYRRUGk2Y3OfYFbqNk3PEaFzTqb1Xz8u9hjtGUleTwJVedyVk91
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:2:f693:9fff:fef4:4583])
- (user=irogers job=sendgmr) by 2002:ad4:5387:: with SMTP id
- i7mr13567860qvv.43.1600373890879; Thu, 17 Sep 2020 13:18:10 -0700 (PDT)
-Date:   Thu, 17 Sep 2020 13:18:07 -0700
-In-Reply-To: <20200917190026.GB1426933@kernel.org>
-Message-Id: <20200917201807.4090224-1-irogers@google.com>
-Mime-Version: 1.0
-References: <20200917190026.GB1426933@kernel.org>
-X-Mailer: git-send-email 2.28.0.618.gf4bc123cb7-goog
-Subject: [PATCH v4] perf metricgroup: Fix uncore metric expressions
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=gXFdiZ0D++Zjq+NMowyYUeopSCqhgf8iuD44JlXgxWA=;
+        b=TvQkjggYVJ8EqVsj4ysjqMeg4d3zx9YsAsyMQxBlOcgslDr2lLQWfPVcCulzOFCvzH
+         aZlJBZ3Qvx+CJASGLDWWvMKzhapwInTl13xF/wypKHRoiWjrZsTfZQlfukjOoYVCcX7m
+         LzRz0KlyRlEif6iAR188RSK3CbuOyWK+/8oxe5/OO7l8eCiRaxD8e9umFSmSlug2D2Mg
+         SZQPQvUNBbUfBx+iww5zeJHxRn4HLzGVQTmHtlf6WT7oXshfkHzV8cWlpxis9XKSdH1K
+         PUmIW67gEAwlrqSZEsAQ0PuTC+nNLFOSsFAJgJXsWenKz0u50HdTiVktE9zS4nIvIEc5
+         iU4w==
+X-Gm-Message-State: AOAM531FMu4Dg23ZIgAVJQKKcQCUmGXzSBWBImyiT5yPzJlqFNmuY2Au
+        N3czIlc6hNB9dArP02Ur9C2i6tJKU3Wu4IbqAQPZXACAofri0TocTPyvj/gAJ9tTGMzlidanWmP
+        TJRgml4eDHi/I
+X-Received: by 2002:a05:6402:1641:: with SMTP id s1mr36136306edx.66.1600374003134;
+        Thu, 17 Sep 2020 13:20:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzwQvGC5OLafIbbPZ7FS+bEgBCAbtMZY2r2gfcPqjh8xGhhyM5PAzIIMZgDYDF+CQoG7pCE5A==
+X-Received: by 2002:a05:6402:1641:: with SMTP id s1mr36136269edx.66.1600374002678;
+        Thu, 17 Sep 2020 13:20:02 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id o6sm509313edh.40.2020.09.17.13.20.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2020 13:20:02 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id C153B183A91; Thu, 17 Sep 2020 22:20:01 +0200 (CEST)
+Subject: [PATCH bpf-next v6 01/10] bpf: disallow attaching modify_return
+ tracing functions to other BPF programs
+From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Jiri Olsa <jolsa@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>,
-        Jin Yao <yao.jin@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Date:   Thu, 17 Sep 2020 22:20:01 +0200
+Message-ID: <160037400169.28970.10809160856427167110.stgit@toke.dk>
+In-Reply-To: <160037400056.28970.7647821897296177963.stgit@toke.dk>
+References: <160037400056.28970.7647821897296177963.stgit@toke.dk>
+User-Agent: StGit/0.23
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A metric like DRAM_BW_Use has on SkylakeX events uncore_imc/cas_count_read/
-and uncore_imc/case_count_write/. These events open 6 events per socket
-with pmu names of uncore_imc_[0-5]. The current metric setup code in
-find_evsel_group assumes one ID will map to 1 event to be recorded in
-metric_events. For events with multiple matches, the first event is
-recorded in metric_events (avoiding matching >1 event with the same
-name) and the evlist_used updated so that duplicate events aren't
-removed when the evlist has unused events removed.
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-Before this change:
-$ /tmp/perf/perf stat -M DRAM_BW_Use -a -- sleep 1
+From the checks and commit messages for modify_return, it seems it was
+never the intention that it should be possible to attach a tracing program
+with expected_attach_type == BPF_MODIFY_RETURN to another BPF program.
+However, check_attach_modify_return() will only look at the function name,
+so if the target function starts with "security_", the attach will be
+allowed even for bpf2bpf attachment.
 
- Performance counter stats for 'system wide':
+Fix this oversight by also blocking the modification if a target program is
+supplied.
 
-             41.14 MiB  uncore_imc/cas_count_read/
-     1,002,614,251 ns   duration_time
-
-       1.002614251 seconds time elapsed
-
-After this change:
-$ /tmp/perf/perf stat -M DRAM_BW_Use -a -- sleep 1
-
- Performance counter stats for 'system wide':
-
-            157.47 MiB  uncore_imc/cas_count_read/ #     0.00 DRAM_BW_Use
-            126.97 MiB  uncore_imc/cas_count_write/
-     1,003,019,728 ns   duration_time
-
-Erroneous duplication introduced in:
-commit 2440689d62e9 ("perf metricgroup: Remove duped metric group events").
-
-Fixes: ded80bda8bc9 ("perf expr: Migrate expr ids table to a hashmap").
-Reported-by: Jin Yao <yao.jin@linux.intel.com>
-Signed-off-by: Ian Rogers <irogers@google.com>
+Fixes: 18644cec714a ("bpf: Fix use-after-free in fmod_ret check")
+Fixes: 6ba43b761c41 ("bpf: Attachment verification for BPF_MODIFY_RETURN")
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/perf/util/metricgroup.c | 75 ++++++++++++++++++++++++++---------
- 1 file changed, 56 insertions(+), 19 deletions(-)
+ kernel/bpf/verifier.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index ab5030fcfed4..d948a7f910cf 100644
---- a/tools/perf/util/metricgroup.c
-+++ b/tools/perf/util/metricgroup.c
-@@ -150,6 +150,18 @@ static void expr_ids__exit(struct expr_ids *ids)
- 		free(ids->id[i].id);
- }
- 
-+static bool contains_event(struct evsel **metric_events, int num_events,
-+			const char *event_name)
-+{
-+	int i;
-+
-+	for (i = 0; i < num_events; i++) {
-+		if (!strcmp(metric_events[i]->name, event_name))
-+			return true;
-+	}
-+	return false;
-+}
-+
- /**
-  * Find a group of events in perf_evlist that correpond to those from a parsed
-  * metric expression. Note, as find_evsel_group is called in the same order as
-@@ -180,7 +192,11 @@ static struct evsel *find_evsel_group(struct evlist *perf_evlist,
- 	int i = 0, matched_events = 0, events_to_match;
- 	const int idnum = (int)hashmap__size(&pctx->ids);
- 
--	/* duration_time is grouped separately. */
-+	/*
-+	 * duration_time is always grouped separately, when events are grouped
-+	 * (ie has_constraint is false) then ignore it in the matching loop and
-+	 * add it to metric_events at the end.
-+	 */
- 	if (!has_constraint &&
- 	    hashmap__find(&pctx->ids, "duration_time", (void **)&val_ptr))
- 		events_to_match = idnum - 1;
-@@ -207,23 +223,20 @@ static struct evsel *find_evsel_group(struct evlist *perf_evlist,
- 				sizeof(struct evsel *) * idnum);
- 			current_leader = ev->leader;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 814bc6c1ad16..da9c828a43dc 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11295,7 +11295,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 					prog->aux->attach_func_name);
+ 		} else if (prog->expected_attach_type == BPF_MODIFY_RETURN) {
+ 			ret = check_attach_modify_return(prog, addr);
+-			if (ret)
++			if (ret || tgt_prog)
+ 				verbose(env, "%s() is not modifiable\n",
+ 					prog->aux->attach_func_name);
  		}
--		if (hashmap__find(&pctx->ids, ev->name, (void **)&val_ptr)) {
--			if (has_constraint) {
--				/*
--				 * Events aren't grouped, ensure the same event
--				 * isn't matched from two groups.
--				 */
--				for (i = 0; i < matched_events; i++) {
--					if (!strcmp(ev->name,
--						    metric_events[i]->name)) {
--						break;
--					}
--				}
--				if (i != matched_events)
--					continue;
--			}
-+		/*
-+		 * Check for duplicate events with the same name. For example,
-+		 * uncore_imc/cas_count_read/ will turn into 6 events per socket
-+		 * on skylakex. Only the first such event is placed in
-+		 * metric_events. If events aren't grouped then this also
-+		 * ensures that the same event in different sibling groups
-+		 * aren't both added to metric_events.
-+		 */
-+		if (contains_event(metric_events, matched_events, ev->name))
-+			continue;
-+		/* Does this event belong to the parse context? */
-+		if (hashmap__find(&pctx->ids, ev->name, (void **)&val_ptr))
- 			metric_events[matched_events++] = ev;
--		}
-+
- 		if (matched_events == events_to_match)
- 			break;
- 	}
-@@ -239,7 +252,7 @@ static struct evsel *find_evsel_group(struct evlist *perf_evlist,
- 	}
- 
- 	if (matched_events != idnum) {
--		/* Not whole match */
-+		/* Not a whole match */
- 		return NULL;
- 	}
- 
-@@ -247,8 +260,32 @@ static struct evsel *find_evsel_group(struct evlist *perf_evlist,
- 
- 	for (i = 0; i < idnum; i++) {
- 		ev = metric_events[i];
--		ev->metric_leader = ev;
-+		/* Don't free the used events. */
- 		set_bit(ev->idx, evlist_used);
-+		/*
-+		 * The metric leader points to the identically named event in
-+		 * metric_events.
-+		 */
-+		ev->metric_leader = ev;
-+		/*
-+		 * Mark two events with identical names in the same group (or
-+		 * globally) as being in use as uncore events may be duplicated
-+		 * for each pmu. Set the metric leader of such events to be the
-+		 * event that appears in metric_events.
-+		 */
-+		evlist__for_each_entry_continue(perf_evlist, ev) {
-+			/*
-+			 * If events are grouped then the search can terminate
-+			 * when then group is left.
-+			 */
-+			if (!has_constraint &&
-+			    ev->leader != metric_events[i]->leader)
-+				break;
-+			if (!strcmp(metric_events[i]->name, ev->name)) {
-+				set_bit(ev->idx, evlist_used);
-+				ev->metric_leader = metric_events[i];
-+			}
-+		}
- 	}
- 
- 	return metric_events[0];
--- 
-2.28.0.618.gf4bc123cb7-goog
 
