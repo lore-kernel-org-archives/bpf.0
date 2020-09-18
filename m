@@ -5,51 +5,51 @@ X-Spam-Level:
 X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 219C1C43464
-	for <bpf@archiver.kernel.org>; Fri, 18 Sep 2020 13:37:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AA2CC43467
+	for <bpf@archiver.kernel.org>; Fri, 18 Sep 2020 13:37:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C54E123787
-	for <bpf@archiver.kernel.org>; Fri, 18 Sep 2020 13:37:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 405F52376F
+	for <bpf@archiver.kernel.org>; Fri, 18 Sep 2020 13:37:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="vODJpGb6"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="HG6r9j6c"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726984AbgIRNhA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 18 Sep 2020 09:37:00 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:47670 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726955AbgIRNg6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1726959AbgIRNg6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 18 Sep 2020 09:36:58 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08IDYSXZ098472;
-        Fri, 18 Sep 2020 13:35:51 GMT
+Received: from aserp2120.oracle.com ([141.146.126.78]:43724 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726192AbgIRNg6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 18 Sep 2020 09:36:58 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08IDZ06d150461;
+        Fri, 18 Sep 2020 13:36:08 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=Jwnvdun6nOvSs/xa8REH2cHgb5bDJINQTT5NVPBL0+c=;
- b=vODJpGb6cNhCRnL5qNpLbWIBdABz1y+nZRRIwjtsUj0kOtjyHJDndUQ5Uv2RFY6PJY3I
- nIAqG3h6l/j//e39EDVySzlpOzfRNJq5830nkzkWX/kj8xdXPWfT+Ra+u1y06CFtpvqG
- SV4wwi4uPZdzQy8ve6l6dJ3dHcFhxq0uCutC7zQDva8ltdEJ7NvcDUrxDdJhxueWkYX4
- sLZAxV6xxXvZ2NRyi38UCQt+fvPMLgQYCRHQxz0k3h/YohSNB/i+xrJ8Rav8VDSblxCQ
- ntx4tb3t4HeOj694yEhFP4HxsAiXRS5w4rIqTDDXYPXVlptiaS8wiV2Ux6XmZpJmvFXQ Lw== 
+ bh=szkY3iGmeag5lu7sNlObRYjPNSfXniNi6vqm1qzKLB0=;
+ b=HG6r9j6cPgEP12t1GlmsuLgvSQsxenwDxyJVjMbZpk/JIgIfRO3vb+WXJCUQXaKPumXm
+ 0ihjNojeZehdo8iU2Lsp6daVwpdcwIo+nsLgQ5LTTOCuMZ14hRyOAjsIjkoJpCVRVIpA
+ 3WKdT6XZup4tSVtgm9ZjS/JFyGkOXTatfbFCfugIGviWW/qpO9h/fyUbldVgVJXgRQ1Z
+ dbsqIvlTVkLeI9t5Kjo39UoWSV4FjlIRQ4pUQF64hDN92if7wjVNzmr0j/XJpP+wN64o
+ CvbTaaZD/VvsYjiGNDdYW0IvF1LwsFfe2xlzuqpHWfEaefqrsFvN2inQjXuZhL+5zNGS fA== 
 Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 33j91e0uq3-1
+        by aserp2120.oracle.com with ESMTP id 33gp9mq5un-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 18 Sep 2020 13:35:51 +0000
+        Fri, 18 Sep 2020 13:36:07 +0000
 Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08IDU4rv044136;
-        Fri, 18 Sep 2020 13:35:50 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 33hm36v2hk-1
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08IDa2F5063855;
+        Fri, 18 Sep 2020 13:36:07 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 33hm36v2y9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 18 Sep 2020 13:35:50 +0000
+        Fri, 18 Sep 2020 13:36:06 +0000
 Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08IDZmVd018436;
-        Fri, 18 Sep 2020 13:35:48 GMT
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08IDa41A018592;
+        Fri, 18 Sep 2020 13:36:04 GMT
 Received: from localhost.uk.oracle.com (/10.175.217.104)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 18 Sep 2020 13:35:48 +0000
+        with ESMTP ; Fri, 18 Sep 2020 13:35:55 +0000
 From:   Alan Maguire <alan.maguire@oracle.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com, yhs@fb.com
 Cc:     linux@rasmusvillemoes.dk, andriy.shevchenko@linux.intel.com,
@@ -60,9 +60,9 @@ Cc:     linux@rasmusvillemoes.dk, andriy.shevchenko@linux.intel.com,
         rostedt@goodmis.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         acme@kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v5 bpf-next 3/6] bpf: add bpf_btf_snprintf helper
-Date:   Fri, 18 Sep 2020 14:34:32 +0100
-Message-Id: <1600436075-2961-4-git-send-email-alan.maguire@oracle.com>
+Subject: [PATCH v5 bpf-next 5/6] bpf: add bpf_seq_btf_write helper
+Date:   Fri, 18 Sep 2020 14:34:34 +0100
+Message-Id: <1600436075-2961-6-git-send-email-alan.maguire@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1600436075-2961-1-git-send-email-alan.maguire@oracle.com>
 References: <1600436075-2961-1-git-send-email-alan.maguire@oracle.com>
@@ -70,459 +70,275 @@ X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9747 signatures=6
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 mlxlogscore=999
  malwarescore=0 mlxscore=0 phishscore=0 adultscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009180110
+ definitions=main-2009180111
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9747 signatures=668679
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 impostorscore=0
- priorityscore=1501 malwarescore=0 suspectscore=0 mlxlogscore=999
- clxscore=1015 adultscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009180110
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999
+ adultscore=0 malwarescore=0 clxscore=1015 lowpriorityscore=0 phishscore=0
+ spamscore=0 priorityscore=1501 suspectscore=0 impostorscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009180110
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A helper is added to support tracing kernel type information in BPF
-using the BPF Type Format (BTF).  Its signature is
+A helper is added to allow seq file writing of kernel data
+structures using vmlinux BTF.  Its signature is
 
-long bpf_btf_snprintf(char *str, u32 str_size, struct btf_ptr *ptr,
-		      u32 btf_ptr_size, u64 flags);
+long bpf_seq_btf_write(struct seq_file *m, struct btf_ptr *ptr,
+		       u32 btf_ptr_size, u64 flags);
 
-struct btf_ptr * specifies
+Flags and struct btf_ptr definitions/use are identical to the
+bpf_btf_snprintf helper, and the helper returns 0 on success
+or a negative error value.
 
-- a pointer to the data to be traced;
-- the BTF id of the type of data pointed to; or
-- a string representation of the type of data pointed to
-- a flags field is provided for future use; these flags
-  are not to be confused with the BTF_SNPRINTF_F_* flags
-  below that control how the btf_ptr is displayed; the
-  flags member of the struct btf_ptr may be used to
-  disambiguate types in kernel versus module BTF, etc;
-  the main distinction is the flags relate to the type
-  and information needed in identifying it; not how it
-  is displayed.
-
-For example a BPF program with a struct sk_buff *skb
-could do the following:
-
-	static const char skb_type[] = "struct sk_buff";
-	static struct btf_ptr b = { };
-
-	b.ptr = skb;
-	b.type = skb_type;
-	bpf_btf_snprintf(str, sizeof(str), &b, sizeof(b), 0, 0);
-
-Default output looks like this:
-
-(struct sk_buff){
- .transport_header = (__u16)65535,
- .mac_header = (__u16)65535,
- .end = (sk_buff_data_t)192,
- .head = (unsigned char *)0x000000007524fd8b,
- .data = (unsigned char *)0x000000007524fd8b,
- .truesize = (unsigned int)768,
- .users = (refcount_t){
-  .refs = (atomic_t){
-   .counter = (int)1,
-  },
- },
-}
-
-Flags modifying display are as follows:
-
-- BTF_F_COMPACT:	no formatting around type information
-- BTF_F_NONAME:		no struct/union member names/types
-- BTF_F_PTR_RAW:	show raw (unobfuscated) pointer values;
-			equivalent to %px.
-- BTF_F_ZERO:		show zero-valued struct/union members;
-			they are not displayed by default
-
+Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- include/linux/bpf.h            |  1 +
- include/linux/btf.h            |  9 +++--
- include/uapi/linux/bpf.h       | 68 ++++++++++++++++++++++++++++++++
- kernel/bpf/helpers.c           |  4 ++
- kernel/trace/bpf_trace.c       | 88 ++++++++++++++++++++++++++++++++++++++++++
- scripts/bpf_helpers_doc.py     |  2 +
- tools/include/uapi/linux/bpf.h | 68 ++++++++++++++++++++++++++++++++
- 7 files changed, 236 insertions(+), 4 deletions(-)
+ include/linux/btf.h            |  3 ++
+ include/uapi/linux/bpf.h       | 10 ++++++
+ kernel/bpf/btf.c               | 17 +++++++---
+ kernel/trace/bpf_trace.c       | 75 +++++++++++++++++++++++++++++++++---------
+ tools/include/uapi/linux/bpf.h | 10 ++++++
+ 5 files changed, 96 insertions(+), 19 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index c0ad5d8..9acbd59 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1787,6 +1787,7 @@ static inline int bpf_fd_reuseport_array_update_elem(struct bpf_map *map,
- extern const struct bpf_func_proto bpf_skc_to_tcp_request_sock_proto;
- extern const struct bpf_func_proto bpf_skc_to_udp6_sock_proto;
- extern const struct bpf_func_proto bpf_copy_from_user_proto;
-+extern const struct bpf_func_proto bpf_btf_snprintf_proto;
- 
- const struct bpf_func_proto *bpf_tracing_func_proto(
- 	enum bpf_func_id func_id, const struct bpf_prog *prog);
 diff --git a/include/linux/btf.h b/include/linux/btf.h
-index d0f5d3c..3e5cdc2 100644
+index 3e5cdc2..eed23a4 100644
 --- a/include/linux/btf.h
 +++ b/include/linux/btf.h
-@@ -6,6 +6,7 @@
- 
- #include <linux/types.h>
- #include <uapi/linux/btf.h>
-+#include <uapi/linux/bpf.h>
- 
- #define BTF_TYPE_EMIT(type) ((void)(type *)0)
- 
-@@ -59,10 +60,10 @@ const struct btf_type *btf_type_id_size(const struct btf *btf,
-  *	- BTF_SHOW_UNSAFE: skip use of bpf_probe_read() to safely read
-  *	  data before displaying it.
-  */
--#define BTF_SHOW_COMPACT	(1ULL << 0)
--#define BTF_SHOW_NONAME		(1ULL << 1)
--#define BTF_SHOW_PTR_RAW	(1ULL << 2)
--#define BTF_SHOW_ZERO		(1ULL << 3)
-+#define BTF_SHOW_COMPACT	BTF_F_COMPACT
-+#define BTF_SHOW_NONAME		BTF_F_NONAME
-+#define BTF_SHOW_PTR_RAW	BTF_F_PTR_RAW
-+#define BTF_SHOW_ZERO		BTF_F_ZERO
- #define BTF_SHOW_UNSAFE		(1ULL << 4)
- 
+@@ -69,6 +69,9 @@ const struct btf_type *btf_type_id_size(const struct btf *btf,
  void btf_type_seq_show(const struct btf *btf, u32 type_id, void *obj,
+ 		       struct seq_file *m);
+ 
++int btf_type_seq_show_flags(const struct btf *btf, u32 type_id, void *obj,
++			    struct seq_file *m, u64 flags);
++
+ /*
+  * Copy len bytes of string representation of obj of BTF type_id into buf.
+  *
 diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 7dd3141..9b89b67 100644
+index 9b89b67..c0815f1 100644
 --- a/include/uapi/linux/bpf.h
 +++ b/include/uapi/linux/bpf.h
-@@ -3579,6 +3579,41 @@ struct bpf_stack_build_id {
-  * 		the data in *dst*. This is a wrapper of **copy_from_user**\ ().
-  * 	Return
-  * 		0 on success, or a negative error in case of failure.
+@@ -3614,6 +3614,15 @@ struct bpf_stack_build_id {
+  *		The number of bytes that were written (or would have been
+  *		written if output had to be truncated due to string size),
+  *		or a negative error in cases of failure.
 + *
-+ * long bpf_btf_snprintf(char *str, u32 str_size, struct btf_ptr *ptr, u32 btf_ptr_size, u64 flags)
++ * long bpf_seq_btf_write(struct seq_file *m, struct btf_ptr *ptr, u32 ptr_size, u64 flags)
 + *	Description
-+ *		Use BTF to store a string representation of *ptr*->ptr in *str*,
-+ *		using *ptr*->type name or *ptr*->type_id.  These values should
-+ *		specify the type *ptr*->ptr points to. Traversing that
-+ *		data structure using BTF, the type information and values are
-+ *		stored in the first *str_size* - 1 bytes of *str*.  Safe copy of
-+ *		the pointer data is carried out to avoid kernel crashes during
-+ *		operation.  Smaller types can use string space on the stack;
-+ *		larger programs can use map data to store the string
-+ *		representation.
-+ *
-+ *		The string can be subsequently shared with userspace via
-+ *		bpf_perf_event_output() or ring buffer interfaces.
-+ *		bpf_trace_printk() is to be avoided as it places too small
-+ *		a limit on string size to be useful.
-+ *
-+ *		*flags* is a combination of
-+ *
-+ *		**BTF_F_COMPACT**
-+ *			no formatting around type information
-+ *		**BTF_F_NONAME**
-+ *			no struct/union member names/types
-+ *		**BTF_F_PTR_RAW**
-+ *			show raw (unobfuscated) pointer values;
-+ *			equivalent to printk specifier %px.
-+ *		**BTF_F_ZERO**
-+ *			show zero-valued struct/union members; they
-+ *			are not displayed by default
-+ *
++ *		Use BTF to write to seq_write a string representation of
++ *		*ptr*->ptr, using *ptr*->type name or *ptr*->type_id as per
++ *		bpf_btf_snprintf() above.  *flags* are identical to those
++ *		used for bpf_btf_snprintf.
 + *	Return
-+ *		The number of bytes that were written (or would have been
-+ *		written if output had to be truncated due to string size),
-+ *		or a negative error in cases of failure.
++ *		0 on success or a negative error in case of failure.
   */
  #define __BPF_FUNC_MAPPER(FN)		\
  	FN(unspec),			\
-@@ -3730,6 +3765,7 @@ struct bpf_stack_build_id {
- 	FN(inode_storage_delete),	\
+@@ -3766,6 +3775,7 @@ struct bpf_stack_build_id {
  	FN(d_path),			\
  	FN(copy_from_user),		\
-+	FN(btf_snprintf),		\
+ 	FN(btf_snprintf),		\
++	FN(seq_btf_write),		\
  	/* */
  
  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-@@ -4838,4 +4874,36 @@ struct bpf_sk_lookup {
- 	__u32 local_port;	/* Host byte order */
- };
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 70f5b88..0902464 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -5328,17 +5328,26 @@ static void btf_seq_show(struct btf_show *show, const char *fmt, ...)
+ 	va_end(args);
+ }
  
-+/*
-+ * struct btf_ptr is used for typed pointer representation; the
-+ * additional type string/BTF type id are used to render the pointer
-+ * data as the appropriate type via the bpf_btf_snprintf() helper
-+ * above.  A flags field - potentially to specify additional details
-+ * about the BTF pointer (rather than its mode of display) - is
-+ * present for future use.  Display flags - BTF_F_* - are
-+ * passed to bpf_btf_snprintf separately.
-+ */
-+struct btf_ptr {
-+	void *ptr;
-+	const char *type;
-+	__u32 type_id;
-+	__u32 flags;		/* BTF ptr flags; unused at present. */
-+};
+-void btf_type_seq_show(const struct btf *btf, u32 type_id, void *obj,
+-			struct seq_file *m)
++int btf_type_seq_show_flags(const struct btf *btf, u32 type_id, void *obj,
++			struct seq_file *m, u64 flags)
+ {
+ 	struct btf_show sseq;
+ 
+ 	sseq.target = m;
+ 	sseq.showfn = btf_seq_show;
+-	sseq.flags = BTF_SHOW_NONAME | BTF_SHOW_COMPACT | BTF_SHOW_ZERO |
+-		     BTF_SHOW_UNSAFE;
++	sseq.flags = flags;
+ 
+ 	btf_type_show(btf, type_id, obj, &sseq);
 +
-+/*
-+ * Flags to control bpf_btf_snprintf() behaviour.
-+ *     - BTF_F_COMPACT: no formatting around type information
-+ *     - BTF_F_NONAME: no struct/union member names/types
-+ *     - BTF_F_PTR_RAW: show raw (unobfuscated) pointer values;
-+ *       equivalent to %px.
-+ *     - BTF_F_ZERO: show zero-valued struct/union members; they
-+ *       are not displayed by default
-+ */
-+enum {
-+	BTF_F_COMPACT	=	(1ULL << 0),
-+	BTF_F_NONAME	=	(1ULL << 1),
-+	BTF_F_PTR_RAW	=	(1ULL << 2),
-+	BTF_F_ZERO	=	(1ULL << 3),
-+};
++	return sseq.state.status;
++}
 +
- #endif /* _UAPI__LINUX_BPF_H__ */
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 5cc7425..500ff76 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -683,6 +683,10 @@ static int __bpf_strtoll(const char *buf, size_t buf_len, u64 flags,
- 		if (!perfmon_capable())
- 			return NULL;
- 		return bpf_get_trace_printk_proto();
-+	case BPF_FUNC_btf_snprintf:
-+		if (!perfmon_capable())
-+			return NULL;
-+		return &bpf_btf_snprintf_proto;
- 	case BPF_FUNC_jiffies64:
- 		return &bpf_jiffies64_proto;
- 	default:
++void btf_type_seq_show(const struct btf *btf, u32 type_id, void *obj,
++		       struct seq_file *m)
++{
++	(void) btf_type_seq_show_flags(btf, type_id, obj, m,
++				       BTF_SHOW_NONAME | BTF_SHOW_COMPACT |
++				       BTF_SHOW_ZERO | BTF_SHOW_UNSAFE);
+ }
+ 
+ struct btf_show_snprintf {
 diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index b2a5380..f171e03 100644
+index f171e03..eee36a8 100644
 --- a/kernel/trace/bpf_trace.c
 +++ b/kernel/trace/bpf_trace.c
-@@ -7,6 +7,7 @@
- #include <linux/slab.h>
- #include <linux/bpf.h>
- #include <linux/bpf_perf_event.h>
-+#include <linux/btf.h>
- #include <linux/filter.h>
- #include <linux/uaccess.h>
- #include <linux/ctype.h>
-@@ -16,6 +17,9 @@
- #include <linux/error-injection.h>
- #include <linux/btf_ids.h>
+@@ -71,6 +71,10 @@ static struct bpf_raw_event_map *bpf_get_raw_tracepoint_module(const char *name)
+ u64 bpf_get_stackid(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+ u64 bpf_get_stack(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
  
-+#include <uapi/linux/bpf.h>
-+#include <uapi/linux/btf.h>
++static int bpf_btf_printf_prepare(struct btf_ptr *ptr, u32 btf_ptr_size,
++				  u64 flags, const struct btf **btf,
++				  s32 *btf_id);
 +
- #include <asm/tlb.h>
- 
- #include "trace_probe.h"
-@@ -1144,6 +1148,88 @@ static bool bpf_d_path_allowed(const struct bpf_prog *prog)
- 	.allowed	= bpf_d_path_allowed,
+ /**
+  * trace_call_bpf - invoke BPF program
+  * @call: tracepoint event
+@@ -780,6 +784,30 @@ struct bpf_seq_printf_buf {
+ 	.btf_id		= bpf_seq_write_btf_ids,
  };
  
-+#define BTF_F_ALL	(BTF_F_COMPACT  | BTF_F_NONAME | \
-+			 BTF_F_PTR_RAW | BTF_F_ZERO)
++BPF_CALL_4(bpf_seq_btf_write, struct seq_file *, m, struct btf_ptr *, ptr,
++	   u32, btf_ptr_size, u64, flags)
++{
++	const struct btf *btf;
++	s32 btf_id;
++	int ret;
++
++	ret = bpf_btf_printf_prepare(ptr, btf_ptr_size, flags, &btf, &btf_id);
++	if (ret)
++		return ret;
++
++	return btf_type_seq_show_flags(btf, btf_id, ptr->ptr, m, flags);
++}
++
++static const struct bpf_func_proto bpf_seq_btf_write_proto = {
++	.func		= bpf_seq_btf_write,
++	.gpl_only	= true,
++	.ret_type	= RET_INTEGER,
++	.arg1_type      = ARG_PTR_TO_BTF_ID,
++	.arg2_type	= ARG_PTR_TO_MEM,
++	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
++	.btf_id		= bpf_seq_write_btf_ids,
++};
++
+ static __always_inline int
+ get_map_perf_counter(struct bpf_map *map, u64 flags,
+ 		     u64 *value, u64 *enabled, u64 *running)
+@@ -1151,15 +1179,14 @@ static bool bpf_d_path_allowed(const struct bpf_prog *prog)
+ #define BTF_F_ALL	(BTF_F_COMPACT  | BTF_F_NONAME | \
+ 			 BTF_F_PTR_RAW | BTF_F_ZERO)
+ 
+-BPF_CALL_5(bpf_btf_snprintf, char *, str, u32, str_size, struct btf_ptr *, ptr,
+-	   u32, btf_ptr_size, u64, flags)
++static int bpf_btf_printf_prepare(struct btf_ptr *ptr, u32 btf_ptr_size,
++				  u64 flags, const struct btf **btf,
++				  s32 *btf_id)
+ {
+ 	u8 btf_kind = BTF_KIND_TYPEDEF;
+ 	char type_name[KSYM_NAME_LEN];
+ 	const struct btf_type *t;
+-	const struct btf *btf;
+ 	const char *btf_type;
+-	s32 btf_id;
+ 	int ret;
+ 
+ 	if (unlikely(flags & ~(BTF_F_ALL)))
+@@ -1168,10 +1195,10 @@ static bool bpf_d_path_allowed(const struct bpf_prog *prog)
+ 	if (btf_ptr_size != sizeof(struct btf_ptr))
+ 		return -EINVAL;
+ 
+-	btf = bpf_get_btf_vmlinux();
++	*btf = bpf_get_btf_vmlinux();
+ 
+-	if (IS_ERR_OR_NULL(btf))
+-		return PTR_ERR(btf);
++	if (IS_ERR_OR_NULL(*btf))
++		return PTR_ERR(*btf);
+ 
+ 	if (ptr->type != NULL) {
+ 		ret = copy_from_kernel_nofault(type_name, ptr->type,
+@@ -1201,20 +1228,34 @@ static bool bpf_d_path_allowed(const struct bpf_prog *prog)
+ 		 *
+ 		 * Fall back to BTF_KIND_INT if this fails.
+ 		 */
+-		btf_id = btf_find_by_name_kind(btf, btf_type, btf_kind);
+-		if (btf_id < 0)
+-			btf_id = btf_find_by_name_kind(btf, btf_type,
+-						       BTF_KIND_INT);
++		*btf_id = btf_find_by_name_kind(*btf, btf_type, btf_kind);
++		if (*btf_id < 0)
++			*btf_id = btf_find_by_name_kind(*btf, btf_type,
++							BTF_KIND_INT);
+ 	} else if (ptr->type_id > 0)
+-		btf_id = ptr->type_id;
++		*btf_id = ptr->type_id;
+ 	else
+ 		return -EINVAL;
+ 
+-	if (btf_id > 0)
+-		t = btf_type_by_id(btf, btf_id);
+-	if (btf_id <= 0 || !t)
++	if (*btf_id > 0)
++		t = btf_type_by_id(*btf, *btf_id);
++	if (*btf_id <= 0 || !t)
+ 		return -ENOENT;
+ 
++	return 0;
++}
 +
 +BPF_CALL_5(bpf_btf_snprintf, char *, str, u32, str_size, struct btf_ptr *, ptr,
 +	   u32, btf_ptr_size, u64, flags)
 +{
-+	u8 btf_kind = BTF_KIND_TYPEDEF;
-+	char type_name[KSYM_NAME_LEN];
-+	const struct btf_type *t;
 +	const struct btf *btf;
-+	const char *btf_type;
 +	s32 btf_id;
 +	int ret;
 +
-+	if (unlikely(flags & ~(BTF_F_ALL)))
-+		return -EINVAL;
++	ret = bpf_btf_printf_prepare(ptr, btf_ptr_size, flags, &btf, &btf_id);
++	if (ret)
++		return ret;
 +
-+	if (btf_ptr_size != sizeof(struct btf_ptr))
-+		return -EINVAL;
-+
-+	btf = bpf_get_btf_vmlinux();
-+
-+	if (IS_ERR_OR_NULL(btf))
-+		return PTR_ERR(btf);
-+
-+	if (ptr->type != NULL) {
-+		ret = copy_from_kernel_nofault(type_name, ptr->type,
-+					       sizeof(type_name));
-+		if (ret)
-+			return ret;
-+
-+		btf_type = type_name;
-+
-+		if (strncmp(btf_type, "struct ", strlen("struct ")) == 0) {
-+			btf_kind = BTF_KIND_STRUCT;
-+			btf_type += strlen("struct ");
-+		} else if (strncmp(btf_type, "union ", strlen("union ")) == 0) {
-+			btf_kind = BTF_KIND_UNION;
-+			btf_type += strlen("union ");
-+		} else if (strncmp(btf_type, "enum ", strlen("enum ")) == 0) {
-+			btf_kind = BTF_KIND_ENUM;
-+			btf_type += strlen("enum ");
-+		}
-+
-+		if (strlen(btf_type) == 0)
-+			return -EINVAL;
-+
-+		/* Assume type specified is a typedef as there's not much
-+		 * benefit in specifying int types other than wasting time
-+		 * on BTF lookups; we optimize for the most useful path.
-+		 *
-+		 * Fall back to BTF_KIND_INT if this fails.
-+		 */
-+		btf_id = btf_find_by_name_kind(btf, btf_type, btf_kind);
-+		if (btf_id < 0)
-+			btf_id = btf_find_by_name_kind(btf, btf_type,
-+						       BTF_KIND_INT);
-+	} else if (ptr->type_id > 0)
-+		btf_id = ptr->type_id;
-+	else
-+		return -EINVAL;
-+
-+	if (btf_id > 0)
-+		t = btf_type_by_id(btf, btf_id);
-+	if (btf_id <= 0 || !t)
-+		return -ENOENT;
-+
-+	return btf_type_snprintf_show(btf, btf_id, ptr->ptr, str, str_size,
-+				      flags);
-+}
-+
-+const struct bpf_func_proto bpf_btf_snprintf_proto = {
-+	.func		= bpf_btf_snprintf,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_MEM,
-+	.arg2_type	= ARG_CONST_SIZE,
-+	.arg3_type	= ARG_PTR_TO_MEM,
-+	.arg4_type	= ARG_CONST_SIZE,
-+	.arg5_type	= ARG_ANYTHING,
-+};
-+
- const struct bpf_func_proto *
- bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
-@@ -1230,6 +1316,8 @@ static bool bpf_d_path_allowed(const struct bpf_prog *prog)
- 		return &bpf_get_task_stack_proto;
- 	case BPF_FUNC_copy_from_user:
- 		return prog->aux->sleepable ? &bpf_copy_from_user_proto : NULL;
-+	case BPF_FUNC_btf_snprintf:
-+		return &bpf_btf_snprintf_proto;
+ 	return btf_type_snprintf_show(btf, btf_id, ptr->ptr, str, str_size,
+ 				      flags);
+ }
+@@ -1715,6 +1756,10 @@ static void put_bpf_raw_tp_regs(void)
+ 		return prog->expected_attach_type == BPF_TRACE_ITER ?
+ 		       &bpf_seq_write_proto :
+ 		       NULL;
++	case BPF_FUNC_seq_btf_write:
++		return prog->expected_attach_type == BPF_TRACE_ITER ?
++		       &bpf_seq_btf_write_proto :
++		       NULL;
+ 	case BPF_FUNC_d_path:
+ 		return &bpf_d_path_proto;
  	default:
- 		return NULL;
- 	}
-diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
-index 0838817..7d86fdd 100755
---- a/scripts/bpf_helpers_doc.py
-+++ b/scripts/bpf_helpers_doc.py
-@@ -433,6 +433,7 @@ class PrinterHelpers(Printer):
-             'struct sk_msg_md',
-             'struct xdp_md',
-             'struct path',
-+            'struct btf_ptr',
-     ]
-     known_types = {
-             '...',
-@@ -474,6 +475,7 @@ class PrinterHelpers(Printer):
-             'struct udp6_sock',
-             'struct task_struct',
-             'struct path',
-+            'struct btf_ptr',
-     }
-     mapped_types = {
-             'u8': '__u8',
 diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 7dd3141..9b89b67 100644
+index 9b89b67..c0815f1 100644
 --- a/tools/include/uapi/linux/bpf.h
 +++ b/tools/include/uapi/linux/bpf.h
-@@ -3579,6 +3579,41 @@ struct bpf_stack_build_id {
-  * 		the data in *dst*. This is a wrapper of **copy_from_user**\ ().
-  * 	Return
-  * 		0 on success, or a negative error in case of failure.
+@@ -3614,6 +3614,15 @@ struct bpf_stack_build_id {
+  *		The number of bytes that were written (or would have been
+  *		written if output had to be truncated due to string size),
+  *		or a negative error in cases of failure.
 + *
-+ * long bpf_btf_snprintf(char *str, u32 str_size, struct btf_ptr *ptr, u32 btf_ptr_size, u64 flags)
++ * long bpf_seq_btf_write(struct seq_file *m, struct btf_ptr *ptr, u32 ptr_size, u64 flags)
 + *	Description
-+ *		Use BTF to store a string representation of *ptr*->ptr in *str*,
-+ *		using *ptr*->type name or *ptr*->type_id.  These values should
-+ *		specify the type *ptr*->ptr points to. Traversing that
-+ *		data structure using BTF, the type information and values are
-+ *		stored in the first *str_size* - 1 bytes of *str*.  Safe copy of
-+ *		the pointer data is carried out to avoid kernel crashes during
-+ *		operation.  Smaller types can use string space on the stack;
-+ *		larger programs can use map data to store the string
-+ *		representation.
-+ *
-+ *		The string can be subsequently shared with userspace via
-+ *		bpf_perf_event_output() or ring buffer interfaces.
-+ *		bpf_trace_printk() is to be avoided as it places too small
-+ *		a limit on string size to be useful.
-+ *
-+ *		*flags* is a combination of
-+ *
-+ *		**BTF_F_COMPACT**
-+ *			no formatting around type information
-+ *		**BTF_F_NONAME**
-+ *			no struct/union member names/types
-+ *		**BTF_F_PTR_RAW**
-+ *			show raw (unobfuscated) pointer values;
-+ *			equivalent to printk specifier %px.
-+ *		**BTF_F_ZERO**
-+ *			show zero-valued struct/union members; they
-+ *			are not displayed by default
-+ *
++ *		Use BTF to write to seq_write a string representation of
++ *		*ptr*->ptr, using *ptr*->type name or *ptr*->type_id as per
++ *		bpf_btf_snprintf() above.  *flags* are identical to those
++ *		used for bpf_btf_snprintf.
 + *	Return
-+ *		The number of bytes that were written (or would have been
-+ *		written if output had to be truncated due to string size),
-+ *		or a negative error in cases of failure.
++ *		0 on success or a negative error in case of failure.
   */
  #define __BPF_FUNC_MAPPER(FN)		\
  	FN(unspec),			\
-@@ -3730,6 +3765,7 @@ struct bpf_stack_build_id {
- 	FN(inode_storage_delete),	\
+@@ -3766,6 +3775,7 @@ struct bpf_stack_build_id {
  	FN(d_path),			\
  	FN(copy_from_user),		\
-+	FN(btf_snprintf),		\
+ 	FN(btf_snprintf),		\
++	FN(seq_btf_write),		\
  	/* */
  
  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-@@ -4838,4 +4874,36 @@ struct bpf_sk_lookup {
- 	__u32 local_port;	/* Host byte order */
- };
- 
-+/*
-+ * struct btf_ptr is used for typed pointer representation; the
-+ * additional type string/BTF type id are used to render the pointer
-+ * data as the appropriate type via the bpf_btf_snprintf() helper
-+ * above.  A flags field - potentially to specify additional details
-+ * about the BTF pointer (rather than its mode of display) - is
-+ * present for future use.  Display flags - BTF_F_* - are
-+ * passed to bpf_btf_snprintf separately.
-+ */
-+struct btf_ptr {
-+	void *ptr;
-+	const char *type;
-+	__u32 type_id;
-+	__u32 flags;		/* BTF ptr flags; unused at present. */
-+};
-+
-+/*
-+ * Flags to control bpf_btf_snprintf() behaviour.
-+ *     - BTF_F_COMPACT: no formatting around type information
-+ *     - BTF_F_NONAME: no struct/union member names/types
-+ *     - BTF_F_PTR_RAW: show raw (unobfuscated) pointer values;
-+ *       equivalent to %px.
-+ *     - BTF_F_ZERO: show zero-valued struct/union members; they
-+ *       are not displayed by default
-+ */
-+enum {
-+	BTF_F_COMPACT	=	(1ULL << 0),
-+	BTF_F_NONAME	=	(1ULL << 1),
-+	BTF_F_PTR_RAW	=	(1ULL << 2),
-+	BTF_F_ZERO	=	(1ULL << 3),
-+};
-+
- #endif /* _UAPI__LINUX_BPF_H__ */
 -- 
 1.8.3.1
 
