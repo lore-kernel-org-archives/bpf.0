@@ -1,60 +1,68 @@
-Return-Path: <SRS0=dFgW=C2=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=3o4O=C3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27A6FC43464
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 23:27:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AEA4C43464
+	for <bpf@archiver.kernel.org>; Fri, 18 Sep 2020 01:08:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C825E208E4
-	for <bpf@archiver.kernel.org>; Thu, 17 Sep 2020 23:27:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600385255;
-	bh=TAt15TsSrMGN6mCCoJC+SrYRfG+RQ4dUa+I1Lf1b9dY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=ARO/RoEjxdP9/ICkZ/8Hfu0M9wmWd1FeAzjEiClMnXESFGgcDnICXDZaai1Dliu1v
-	 LyZmWbGM0BwosbXVkhp5Hq5w5TfLPj/cSofNc/FnwWRdpConLUK+x1/0IoCWXfdXDs
-	 3ENpthvWxGGrdHDpxnaIXO+XDwB8fOcSuUtj1n8I=
+	by mail.kernel.org (Postfix) with ESMTP id C31F2208C3
+	for <bpf@archiver.kernel.org>; Fri, 18 Sep 2020 01:08:15 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WEUhEa7o"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725900AbgIQX1f (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Sep 2020 19:27:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57496 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725886AbgIQX1f (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Sep 2020 19:27:35 -0400
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 56CF32137B;
-        Thu, 17 Sep 2020 23:27:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1600385254;
-        bh=TAt15TsSrMGN6mCCoJC+SrYRfG+RQ4dUa+I1Lf1b9dY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=kiadUYoTzFcKjOH9WVAVKJOgGvvR4fUbaUftEQdhTr85mQID74MED8w5xqJLNCrs8
-         +7haqPt5FSuaJJtGA+7grtwAQDhJMdqp+P3BH+F8zbrr/ZJSXmjiWFaM4pvLHeWOtI
-         Z1ElPN0ReQivDHXOImM+/36Z11eC04FC95v1kxlQ=
-Received: by mail-lf1-f50.google.com with SMTP id y17so4053757lfa.8;
-        Thu, 17 Sep 2020 16:27:34 -0700 (PDT)
-X-Gm-Message-State: AOAM533P3HBYe6F8rgizP/shCxFxElsk80aOz3/r+0CBWWr6jnV4FuDl
-        rxplxAO/W8OJe5rG1isbmS7/jmJRSFs7Xq6vZBk=
-X-Google-Smtp-Source: ABdhPJy2LNAUGROp9wcndbIKAKcdFbFpd00XB7SAzGI+Ld3qp7bAnOgBuKJx7+yndvub7hHyU2cmfRmdbsQa+g8CqYA=
-X-Received: by 2002:a19:8907:: with SMTP id l7mr9741246lfd.105.1600385252612;
- Thu, 17 Sep 2020 16:27:32 -0700 (PDT)
+        id S1726097AbgIRBIP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Sep 2020 21:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726007AbgIRBIP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Sep 2020 21:08:15 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D39C06174A;
+        Thu, 17 Sep 2020 18:08:15 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id z25so4791029iol.10;
+        Thu, 17 Sep 2020 18:08:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5w1jmkXLC7ZwZwnPVxI2ivN+2SEzDaz1fMdarp99Kwo=;
+        b=WEUhEa7orWf6PhBUa1v74+0qpiq/4c9HRRr+wRAlV7FU7UarkdO6LbISTTjvpQ5Vuk
+         Uys1J+l0Vl/EDAgseDjRa/swCgMx5CGLegC2NCbdQxc5APtGh+PjXomuxN5qrRr/B7U3
+         IPgyFxwKWroYA9aFlctSU0rmFNQq9gXP/VqNaC2ZeGIOx7ksnSppt/3ZkxVBDbhdORZJ
+         3jyYwsBDxModyirPNvxHOoKR6a9K/uxrQA1dLRB18eJGhA6PE27O58GWmj2QYrk37hfH
+         qOf/jILVDVdUOSAs9OmcPlse1ckVkNeYkJA5ezuYe6DgOx81JW9TF5r+WO0QqyN9wpGl
+         YjUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5w1jmkXLC7ZwZwnPVxI2ivN+2SEzDaz1fMdarp99Kwo=;
+        b=puUsTFapMgN9R7IZ1BTntjekA+sjrDl65YVtolHjbuW5C85pIixhnI+y2Nm9rsHOAY
+         Qrq3WpzcyrI6sDj8mlgEqPeGroO7FEmm5eIw3ytNVqVSclUUSgNq+wH35b2MAjr1sr3n
+         MEhTCfZNApmPHRyrfvqpD+CHZcnu3A06dVo0namGfd/nuVqoL1ZKQL88wniFLJO+wthE
+         NRB7/EFRdFwmgPs3Ag2bNwlEslnwwKh/hk/wagyCclwqRC3kER5bYribKLHbLhufoVxe
+         tvM+uG4kaw5jq6imIAnzOu0eqw2LVa4/Mvi3kOv4i+tmBPgJDcliMPVt86zIkW6bkTua
+         ecfA==
+X-Gm-Message-State: AOAM533OFfqJZK10UwLHEAIcANVePwz9uV2f4vq5G4GxW4LR/y3m8Mr9
+        7y1vIwxinKsneXQoX1abVJB4lfZLnDYva06P7so=
+X-Google-Smtp-Source: ABdhPJylCFqHxDlCTZWyHu0BaOy73iAIDqIuldCUzhR44fNPFG91gkwupqhxOT03KAsUXGBQxk2VdaOrNwNzTL3W6RA=
+X-Received: by 2002:a02:ce8c:: with SMTP id y12mr29409632jaq.53.1600391294416;
+ Thu, 17 Sep 2020 18:08:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200917115833.1235518-1-Tony.Ambardar@gmail.com> <33dd4a10-9b2a-7315-7709-cd8e7c1cd030@isovalent.com>
-In-Reply-To: <33dd4a10-9b2a-7315-7709-cd8e7c1cd030@isovalent.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 17 Sep 2020 16:27:21 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW62F8CkQbrZpg-YEA+qyZ7=ra+aRwMaxEyU6zKBqZRCnQ@mail.gmail.com>
-Message-ID: <CAPhsuW62F8CkQbrZpg-YEA+qyZ7=ra+aRwMaxEyU6zKBqZRCnQ@mail.gmail.com>
+References: <20200917115833.1235518-1-Tony.Ambardar@gmail.com>
+ <33dd4a10-9b2a-7315-7709-cd8e7c1cd030@isovalent.com> <CAPhsuW62F8CkQbrZpg-YEA+qyZ7=ra+aRwMaxEyU6zKBqZRCnQ@mail.gmail.com>
+In-Reply-To: <CAPhsuW62F8CkQbrZpg-YEA+qyZ7=ra+aRwMaxEyU6zKBqZRCnQ@mail.gmail.com>
+From:   Tony Ambardar <tony.ambardar@gmail.com>
+Date:   Thu, 17 Sep 2020 18:08:04 -0700
+Message-ID: <CAPGftE9+xn4y6vY5LH3txVmMZ7k6C+QAdULv6CR5EWAJB54=cg@mail.gmail.com>
 Subject: Re: [PATCH bpf v1] tools/bpftool: support passing BPFTOOL_VERSION to make
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     Tony Ambardar <tony.ambardar@gmail.com>,
+To:     Song Liu <song@kernel.org>
+Cc:     Quentin Monnet <quentin@isovalent.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
@@ -63,17 +71,24 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 17, 2020 at 7:58 AM Quentin Monnet <quentin@isovalent.com> wrote:
+On Thu, 17 Sep 2020 at 16:27, Song Liu <song@kernel.org> wrote:
 >
-> On 17/09/2020 12:58, Tony Ambardar wrote:
-> > This change facilitates out-of-tree builds, packaging, and versioning for
-> > test and debug purposes. Defining BPFTOOL_VERSION allows self-contained
-> > builds within the tools tree, since it avoids use of the 'kernelversion'
-> > target in the top-level makefile, which would otherwise pull in several
-> > other includes from outside the tools tree.
+> On Thu, Sep 17, 2020 at 7:58 AM Quentin Monnet <quentin@isovalent.com> wrote:
 > >
-> > Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
+> > On 17/09/2020 12:58, Tony Ambardar wrote:
+> > > This change facilitates out-of-tree builds, packaging, and versioning for
+> > > test and debug purposes. Defining BPFTOOL_VERSION allows self-contained
+> > > builds within the tools tree, since it avoids use of the 'kernelversion'
+> > > target in the top-level makefile, which would otherwise pull in several
+> > > other includes from outside the tools tree.
+> > >
+> > > Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
+> >
+> > Acked-by: Quentin Monnet <quentin@isovalent.com>
 >
-> Acked-by: Quentin Monnet <quentin@isovalent.com>
+> Acked-by: Song Liu <songliubraving@fb.com>
 
-Acked-by: Song Liu <songliubraving@fb.com>
+I should clarify for those performing stand-alone builds that a few
+items are still required from outside the tools/ tree:
+kernel/bpf/disasm.[ch] and scripts/bpf_helpers_doc.py. Not sure that's
+worth updating the commit description however.
