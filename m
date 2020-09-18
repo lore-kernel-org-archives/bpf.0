@@ -2,194 +2,64 @@ Return-Path: <SRS0=3o4O=C3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E15FC43464
-	for <bpf@archiver.kernel.org>; Fri, 18 Sep 2020 23:06:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E926C43464
+	for <bpf@archiver.kernel.org>; Fri, 18 Sep 2020 23:09:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F2D1221973
-	for <bpf@archiver.kernel.org>; Fri, 18 Sep 2020 23:06:29 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="v1cuLNoX"
+	by mail.kernel.org (Postfix) with ESMTP id 4537621707
+	for <bpf@archiver.kernel.org>; Fri, 18 Sep 2020 23:09:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726126AbgIRXG3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 18 Sep 2020 19:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
+        id S1726097AbgIRXJ3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 18 Sep 2020 19:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726009AbgIRXG2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 18 Sep 2020 19:06:28 -0400
-Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02A3C0613CE
-        for <bpf@vger.kernel.org>; Fri, 18 Sep 2020 16:06:24 -0700 (PDT)
-Received: by mail-io1-xd44.google.com with SMTP id v8so2052988iom.6
-        for <bpf@vger.kernel.org>; Fri, 18 Sep 2020 16:06:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9bNyiqZRy9v9UN6kOHlDSQbOqmNPV8IizTEQRLcyfn0=;
-        b=v1cuLNoXQ+GVGb4l56ge0mP3bK/5G8UVWWN4zIDq0tBYHlT3ihH4H2it9xJZCsv/W7
-         qM0Lb++ZebLGePVpFv1qTco8d0zGgfWRHEKqFRTe+l24ktHnsWPuqTGo/xN7OKThoUu6
-         mFI2nXjrbz0ylzzWeAnSdOhJe5viXOlU/JCGZeVBo44jIzPZJUF3iEmJQrHStMeDazxL
-         gtyzGo2U1jQ/1a/f12uPJZdUoHzXRmyFn8kDJ9L8CijRlHGDqEYrD3FmwYSrRyv+BLZj
-         8JwMRJVCVH2EXnOxgKTko6UdH3tBW41a7jsqVkGzKq94UR7odmcrw3co9AY4nWpdtamJ
-         GB1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9bNyiqZRy9v9UN6kOHlDSQbOqmNPV8IizTEQRLcyfn0=;
-        b=J+4wu85R29/rHJpw5zTzltZpnbBm0/of1ixVZT6CnhPj/VsicO23ydAsJT/IpzRyQx
-         zSjnoqQNMjzWNojkp5icqCUJJ8DglBahy9Ffzt5okbEo4GIIB6TTlm+EIaei6Zi8jfmz
-         vcf1pyQs+ZdZCrKR2SSBFYjZOu28YAiA2Wx7RTt/cw1lr1fXbv2C9KaZBHhvefNIr9Fm
-         Jso524aoRvHe2OmONznIjVkNXxDnoCvi81hi1cRn2KyLnhM0NRTdRzpiocz4LPcoH2AS
-         RMmqB2hPKABBYOIBMUDuiefCyIK3yfeJjYQezMe43rJ3d0hu4ga+oHYxKsCJdiQt0kvO
-         TA6g==
-X-Gm-Message-State: AOAM533YSoyD4yS/VI7fpi/zQykaSwkIGMBlfyCpVivngiZW/rC6t+9A
-        zQZHoE7jm/myhshAZBesoaETKh6f4zRldnJ/4KXsEKC3rMSE9w==
-X-Google-Smtp-Source: ABdhPJwEMLRoquIHfcHeqo6SsUZIdVaVx2GPzrJ7bsG7/HRNsqafMwUOiC7OJ64e00v2okkmvKLar3TyyKgRs3PDpYE=
-X-Received: by 2002:a5e:c017:: with SMTP id u23mr28425394iol.139.1600470383614;
- Fri, 18 Sep 2020 16:06:23 -0700 (PDT)
+        with ESMTP id S1726022AbgIRXJ3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 18 Sep 2020 19:09:29 -0400
+X-Greylist: delayed 73 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Sep 2020 16:09:29 PDT
+Received: from www62.your-server.de (www62.your-server.de [IPv6:2a01:4f8:d0a:276a::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422D5C0613CE
+        for <bpf@vger.kernel.org>; Fri, 18 Sep 2020 16:09:29 -0700 (PDT)
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kJPVN-00050r-Ki; Sat, 19 Sep 2020 01:09:25 +0200
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kJPVN-0000uh-El; Sat, 19 Sep 2020 01:09:25 +0200
+Subject: Re: [PATCH RESEND bpf-next] samples/bpf: Fix test_map_in_map on s390
+To:     Ilya Leoshkevich <iii@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, Song Liu <song@kernel.org>
+References: <20200915115519.3769807-1-iii@linux.ibm.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <3882b942-9a44-d7f4-0c9a-9dbaca648d6c@iogearbox.net>
+Date:   Sat, 19 Sep 2020 01:09:20 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20200917143846.37ce43a0@carbon> <CANP3RGcxM-Cno=Qw5Lut9DgmV=1suXqetnybA9RgxmW3KmwivQ@mail.gmail.com>
- <56ccfc21195b19d5b25559aca4cef5c450d0c402.camel@kernel.org> <20200918120016.7007f437@carbon>
-In-Reply-To: <20200918120016.7007f437@carbon>
-From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date:   Fri, 18 Sep 2020 16:06:13 -0700
-Message-ID: <CANP3RGfUj-KKHHQtbggiZ4V-Xrr_sk+TWyN5FgYUGZS6rOX1yw@mail.gmail.com>
-Subject: Re: BPF redirect API design issue for BPF-prog MTU feedback?
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     Saeed Mahameed <saeed@kernel.org>,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        BPF-dev-list <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Shaun Crampton <shaun@tigera.io>,
-        David Miller <davem@davemloft.net>,
-        Marek Majkowski <marek@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200915115519.3769807-1-iii@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/25932/Fri Sep 18 15:48:08 2020)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> This is a good point.  As bpf_skb_adjust_room() can just be run after
-> bpf_redirect() call, then a MTU check in bpf_redirect() actually
-> doesn't make much sense.  As clever/bad BPF program can then avoid the
-> MTU check anyhow.  This basically means that we have to do the MTU
-> check (again) on kernel side anyhow to catch such clever/bad BPF
-> programs.  (And I don't like wasting cycles on doing the same check two
-> times).
+On 9/15/20 1:55 PM, Ilya Leoshkevich wrote:
+> s390 uses socketcall multiplexer instead of individual socket syscalls.
+> Therefore, "kprobe/" SYSCALL(sys_connect) does not trigger and
+> test_map_in_map fails. Fix by using "kprobe/__sys_connect" instead.
+> 
+> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 
-If you get rid of the check in bpf_redirect() you might as well get
-rid of *all* the checks for excessive mtu in all the helpers that
-adjust packet size one way or another way.  They *all* then become
-useless overhead.
-
-I don't like that.  There may be something the bpf program could do to
-react to the error condition (for example in my case, not modify
-things and just let the core stack deal with things - which will
-probably just generate packet too big icmp error).
-
-btw. right now our forwarding programs first adjust the packet size
-then call bpf_redirect() and almost immediately return what it
-returned.
-
-but this could I think easily be changed to reverse the ordering, so
-we wouldn't increase packet size before the core stack was informed we
-would be forwarding via a different interface.
-
-> If we do the MTU check on the kernel side, then there are no feedback
-> to the program, and how are end-users going to debug this?
-
-What about just adding a net_ratelimited printk in the >mtu but too
-late to return error case?
-This is only useful though if this should never happen unless you do
-something 'evil' in your bpf code.
-(ie. to be useful this requires all the bpf helpers to have correct
-mtu checks in them)
-
-Alternatively a sysctl that would generate icmp error on such a drop?
-Or just always do that anyway?
-
-> Hmm, I don't like wasting cycles on doing the same check multiple times.
-
-I'm not sure this is avoidable without making bpf code error prone...
-
-> In bpf_redirect() we store the netdev we want to redirect to, thus, if
-> bpf_skb_adjust_room() is run after bpf_redirect(), we could also do a
-> MTU check in bpf_skb_adjust_room() based on this netdev. (maybe there
-> are still ways for a BPF-prog to cheat the MTU check?).
-
-Sure but, bpf_redirect() can be from large to small mtu device without
-packet ever being modified.
-bpf_redirect() needs to check mtu in such a case.
-bpf code may decide that if can't redirect then it just wants core
-stack to do something with it (like frag it).
-
-> > Another solution is to have an exception function defined in the
-> > BPF_prog, this function by itself is another program that can be
-> > executed to notify the prog about any exception/err that happened
-> > after the main BPF_program exited and let the XDP program react by
-> > its own logic.
->
-> We are talking about TC-BPF programs here, but the concept and
-> usability issue with bpf_redirect() is the same for XDP.
->
-> If doing the MTU check (and drop) on kernel side, as was thinking about
-> adding a simple tracepoint, for end-users to debug this. It would also
-> allow for attaching a BPF-prog to the tracepoint to get more direct
-> feedback, but it would not allow sending back an ICMP response.
->
-> Your approach of calling a 2nd BPF-prog to deal with exceptions, and
-> allow it to alter the packet and flow "action" is definitely
-> interesting.  What do others think?
->
->
-> > example:
-> >
-> > BPF_prog:
-> >     int XDP_main_prog(xdp_buff) {
-> >         xdp_adjust_head/tail(xdp_buff);
-> >         return xdp_redirect(ifindex, flags);
-> >     }
-> >
-> >     int XDP_exception(xdp_buff, excption_code) {
-> >         if (excetption_code =3D=3D XDP_REDIRECRT_MTU_EXCEEDED) {
-> >                 ICMP_response(xdp_buff);
-> >                 return XDP_TX;
-> >         }
-> >         return XDP_DROP;
-> >     }
-> >
-> >
-> > netdev_driver_xdp_handle():
-> >    act =3D bpf_prog_run_xdp(prog, xdp); // Run XDP_main_prog
-> >    if (act =3D=3D XDP_REDIRECT)
-> >        err =3D xdp_do_redirect(netdev, xdp, prog);
-> >        if (err) {
-> >           // Run XDP_exception() function in the user prog
-> >           // finds the exception handler of active program
-> >           act =3D bpf_prog_run_xdp_exciption(prog, xdp, err);
-> >           // then handle exception action in the driver
-> > (XDP_TX/DROP/FORWARD)..
-> >        }
-> >
-> > of-course a user program will be notified only on the first err ..
-> > if it fails on the 2nd time .. just drop..
->
->
-> --
-> Best regards,
->   Jesper Dangaard Brouer
->   MSc.CS, Principal Kernel Engineer at Red Hat
->   LinkedIn: http://www.linkedin.com/in/brouer
->
-Maciej =C5=BBenczykowski, Kernel Networking Developer @ Google
+Applied, thanks!
