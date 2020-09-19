@@ -2,68 +2,67 @@ Return-Path: <SRS0=xh51=C4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BA38C43464
-	for <bpf@archiver.kernel.org>; Sat, 19 Sep 2020 11:50:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37810C43463
+	for <bpf@archiver.kernel.org>; Sat, 19 Sep 2020 11:50:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5FFBD21707
-	for <bpf@archiver.kernel.org>; Sat, 19 Sep 2020 11:50:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F009621707
+	for <bpf@archiver.kernel.org>; Sat, 19 Sep 2020 11:50:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LVbMZQd1"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aw43kaGl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726400AbgISLuG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 19 Sep 2020 07:50:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:48456 "EHLO
+        id S1726472AbgISLuU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 19 Sep 2020 07:50:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:60623 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726442AbgISLt6 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 19 Sep 2020 07:49:58 -0400
+        by vger.kernel.org with ESMTP id S1726218AbgISLuU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 19 Sep 2020 07:50:20 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600516197;
+        s=mimecast20190719; t=1600516218;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=clygwoJ1f9sZLqUhcfeUO7K+/N8tqwPrjcsYeSe/dUM=;
-        b=LVbMZQd1uT4fAt/sLwpp/Y8hGzn4sVcmyXxFFLcxpL6ZCuFNzSdk3VUr3LoskzKI746R0O
-        DhWi3zugsYNZnWw08k2S0BGjmUh27itMIzPcKxiExHV93OONU/z9IcKTwLu59IN+e9EuoZ
-        Ye69vH7UN12ne8InXK2NZIo9nC36lFA=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-238-vxO_p4O7MsWj85HsXXx2Yw-1; Sat, 19 Sep 2020 07:49:55 -0400
-X-MC-Unique: vxO_p4O7MsWj85HsXXx2Yw-1
-Received: by mail-ej1-f71.google.com with SMTP id lx11so3131924ejb.19
-        for <bpf@vger.kernel.org>; Sat, 19 Sep 2020 04:49:55 -0700 (PDT)
+         content-transfer-encoding:content-transfer-encoding;
+        bh=XZGAyvyNnL5ty8yif+kvPy9+sn608r7RWXoXmzpF3ds=;
+        b=aw43kaGlhqZiqR4NZuBWnqT+RiGIVs9b4uR/mw9G85Lf4yASp0WhafmOV1v3io76/9IK2k
+        lB4oq+ITIg6wyNm0FWTVMX4B7mAPg9CFuUJDcdAuMggTWHDDy5UPtYj0Wr+Ppd3/0by2/7
+        77Jg8zQm2nnsxdWzRPHevUes8JKWECA=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-4-QxC5OIAXNTibXOsceF0mxQ-1; Sat, 19 Sep 2020 07:50:16 -0400
+X-MC-Unique: QxC5OIAXNTibXOsceF0mxQ-1
+Received: by mail-ej1-f70.google.com with SMTP id ml20so3107637ejb.23
+        for <bpf@vger.kernel.org>; Sat, 19 Sep 2020 04:50:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=clygwoJ1f9sZLqUhcfeUO7K+/N8tqwPrjcsYeSe/dUM=;
-        b=gdPUSX4N5uSQJlKwfJ3ZYWmYWgAtWOaKOGqKxlCz8jR19jQGjNfRYOUuolkkgeTqpm
-         V8TwqH9shrNwiCOok7nhN6Q29JFdkFkvJ01sc8OuG4LIk9iLHyrPSslzukHVOvn8ZNj0
-         8M/h0jJfgtiV7bFc8vXUetIrYb+TVaebpRgDidAAMscfNWaWX5I6R/7iHoP4I3gfl9Ph
-         jwtIS3vAOjsHOLP7UdGinZPuPqn9VyHv2Wm7qu4Z/oBMDlMkJqVYjn+eJjyXATabIq+j
-         E2gEk5fd7+KdDBusOWAquB6MuvYPP9XQI5jADkIODS3EhgYHdeA+4PFULW3CEZ/jfC8a
-         BO1Q==
-X-Gm-Message-State: AOAM530/JYbV/d3nwBa9r9qxY81uUj+nmtFntjD59kyh307rx08ezhTq
-        xYUDyyEmWRPBPXl1xFCCmcL2gMlTnu61aOMZ59VizrKFPZw9fyDigCcYBli/bxOWeRqOZOcTeU2
-        18p8WDSTmpniZ
-X-Received: by 2002:a17:906:d93b:: with SMTP id rn27mr3308684ejb.330.1600516194226;
-        Sat, 19 Sep 2020 04:49:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxdd0JRFFg9D+6caaSyKeftmU9TVdiPA/YZeDBn4Ksqp5HQBj6ptkxcVCA2sBPO7z2Q1ZOAaQ==
-X-Received: by 2002:a17:906:d93b:: with SMTP id rn27mr3308659ejb.330.1600516193800;
-        Sat, 19 Sep 2020 04:49:53 -0700 (PDT)
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=XZGAyvyNnL5ty8yif+kvPy9+sn608r7RWXoXmzpF3ds=;
+        b=ASIflN6CP5PW2BtbJcVeUnIoCFpdGDfmGmAUGiKZVKScYum3VzioLl4l4ijpFGBPNe
+         W9HO5MhEHGre+eFsOgzb+M7P1dXl9WbdGc9VCvawcsk8k1qA8o32oQuvs6kxvQsW7FMo
+         4wS6z+FrXqTLaaar+XKi7FH4b7Et8iJy14mzqzOLyeVf2ctXVBuJh4Y2c8ui9wV5C7Hk
+         XKkOMe5Ty7rArUe5qa1O8iSN5X3aSYpF2H1SVRCJo3KraeHQtnC2tQDMbXt5x8Euj0AV
+         bgh/HqA8opvavLNgsbPWijThgiRhs1rRlWMveAKweKxjMBRJPhYHXtwz4bFD9ne6XkXh
+         JdTA==
+X-Gm-Message-State: AOAM532t4MT8gScuelECPNLQN/1DGSfFD2YRAN2KS3J+WyMOjnJGERfc
+        rGJ8e85RFxd/HHOQe0TmSkNpd5+gxi+pRy5NBr1B32pQzxrytbvnJGoE2dwAYN/QPgZTCwa/+3I
+        FXOO00Qho1ZcO
+X-Received: by 2002:a17:906:5f8a:: with SMTP id a10mr39624857eju.502.1600516214514;
+        Sat, 19 Sep 2020 04:50:14 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxnsmusOqS9Ax9Oktp+soo4sH/Pkh62aCadgEJWjZ9XZEEOZs4WzFN37a7iuoKJA9+gkWRkoA==
+X-Received: by 2002:a17:906:5f8a:: with SMTP id a10mr39624827eju.502.1600516213906;
+        Sat, 19 Sep 2020 04:50:13 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id d25sm4115098edq.52.2020.09.19.04.49.53
+        by smtp.gmail.com with ESMTPSA id b6sm4310862eds.46.2020.09.19.04.50.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Sep 2020 04:49:53 -0700 (PDT)
+        Sat, 19 Sep 2020 04:50:13 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id ECD14183A97; Sat, 19 Sep 2020 13:49:52 +0200 (CEST)
-Subject: [PATCH bpf-next v7 09/10] selftests/bpf: Adding test for arg
- dereference in extension trace
+        id E2D38183A90; Sat, 19 Sep 2020 13:49:42 +0200 (CEST)
+Subject: [PATCH bpf-next v7 00/10] bpf: Support multi-attach for freplace
+ programs
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
@@ -75,10 +74,8 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Eelco Chaudron <echaudro@redhat.com>,
         KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Sat, 19 Sep 2020 13:49:52 +0200
-Message-ID: <160051619288.58048.13305745156021965347.stgit@toke.dk>
-In-Reply-To: <160051618267.58048.2336966160671014012.stgit@toke.dk>
-References: <160051618267.58048.2336966160671014012.stgit@toke.dk>
+Date:   Sat, 19 Sep 2020 13:49:42 +0200
+Message-ID: <160051618267.58048.2336966160671014012.stgit@toke.dk>
 User-Agent: StGit/0.23
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -87,208 +84,141 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Jiri Olsa <jolsa@kernel.org>
+This series adds support attaching freplace BPF programs to multiple targets.
+This is needed to support incremental attachment of multiple XDP programs using
+the libxdp dispatcher model.
 
-Adding test that setup following program:
+The first patch fixes an issue that came up in review: The verifier will
+currently allow MODIFY_RETURN tracing functions to attach to other BPF programs,
+even though it is pretty clear from the commit messages introducing the
+functionality that this was not the intention. This patch is included in the
+serise because the subsequent refactoring patches touch the same code.
 
-  SEC("classifier/test_pkt_md_access")
-  int test_pkt_md_access(struct __sk_buff *skb)
+The next three patches are refactoring patches: Patch 2 is a trivial change to
+the logging in the verifier, split out to make the subsequent refactor easier to
+read. Patch 3 refactors check_attach_btf_id() so that the checks on program and
+target compatibility can be reused when attaching to a secondary location.
 
-with its extension:
+Patch 4 moves prog_aux->linked_prog and the trampoline to be embedded in
+bpf_tracing_link on attach, and freed by the link release logic, and introduces
+a mutex to protect the writing of the pointers in prog->aux.
 
-  SEC("freplace/test_pkt_md_access")
-  int test_pkt_md_access_new(struct __sk_buff *skb)
+Based on these refactorings, it becomes pretty straight-forward to support
+multiple-attach for freplace programs (patch 5). This is simply a matter of
+creating a second bpf_tracing_link if a target is supplied. However, for API
+consistency with other types of link attach, this option is added to the
+BPF_LINK_CREATE API instead of extending bpf_raw_tracepoint_open().
 
-and tracing that extension with:
+Patch 6 is a port of Jiri Olsa's patch to support fentry/fexit on freplace
+programs. His approach of getting the target type from the target program
+reference no longer works after we've gotten rid of linked_prog (because the
+bpf_tracing_link reference disappears on attach). Instead, we used the saved
+reference to the target prog type that is also used to verify compatibility on
+secondary freplace attachment.
 
-  SEC("fentry/test_pkt_md_access_new")
-  int BPF_PROG(fentry, struct sk_buff *skb)
+Patches 7 is the accompanying libbpf update, and patches 8-10 are selftests:
+patch 8 tests for the multi-freplace functionality itself, patch 9 is Jiri's
+previous selftest for the fentry-to-freplace fix, and patch 10 is a test for
+the change introduced in patch 1, blocking MODIFY_RETURN functions from
+attaching to other BPF programs.
 
-The test verifies that the tracing program can
-dereference skb argument properly.
+With this series, libxdp and xdp-tools can successfully attach multiple programs
+one at a time. To play with this, use the 'freplace-multi-attach' branch of
+xdp-tools:
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+$ git clone --recurse-submodules --branch freplace-multi-attach https://github.com/xdp-project/xdp-tools
+$ cd xdp-tools/xdp-loader
+$ make
+$ sudo ./xdp-loader load veth0 ../lib/testing/xdp_drop.o
+$ sudo ./xdp-loader load veth0 ../lib/testing/xdp_pass.o
+$ sudo ./xdp-loader status
+
+The series is also available here:
+https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/log/?h=bpf-freplace-multi-attach-alt-07
+
+Changelog:
+
+v7:
+  - Add back missing ptype == prog->type check in link_create()
+  - Use tracing_bpf_link_attach() instead of separate freplace_bpf_link_attach()
+  - Don't break attachment of bpf_iters in libbpf
+
+v6:
+  - Rebase to latest bpf-next
+  - Simplify logic in bpf_tracing_prog_attach()
+  - Don't create a new attach_type for link_create(), disambiguate on prog->type
+    instead
+  - Use raw_tracepoint_open() in libbpf bpf_program__attach_ftrace() if called
+    with NULL target
+  - Switch bpf_program__attach_ftrace() to take function name as parameter
+    instead of btf_id
+  - Add a patch disallowing MODIFY_RETURN programs from attaching to other BPF
+    programs, and an accompanying selftest (patches 1 and 10)
+
+v5:
+  - Fix typo in inline function definition of bpf_trampoline_get()
+  - Don't put bpf_tracing_link in prog->aux, use a mutex to protect tgt_prog and
+    trampoline instead, and move them to the link on attach.
+  - Restore Jiri as author of the last selftest patch
+
+v4:
+  - Cleanup the refactored check_attach_btf_id() to make the logic easier to follow
+  - Fix cleanup paths for bpf_tracing_link
+  - Use xchg() for removing the bpf_tracing_link from prog->aux and restore on (some) failures
+  - Use BPF_LINK_CREATE operation to create link with target instead of extending raw_tracepoint_open
+  - Fold update of tools/ UAPI header into main patch
+  - Update arg dereference patch to use skeletons and set_attach_target()
+
+v3:
+  - Get rid of prog_aux->linked_prog entirely in favour of a bpf_tracing_link
+  - Incorporate Jiri's fix for attaching fentry to freplace programs
+
+v2:
+  - Drop the log arguments from bpf_raw_tracepoint_open
+  - Fix kbot errors
+  - Rebase to latest bpf-next
+
 ---
- tools/testing/selftests/bpf/prog_tests/trace_ext.c |  111 ++++++++++++++++++++
- tools/testing/selftests/bpf/progs/test_trace_ext.c |   18 +++
- .../selftests/bpf/progs/test_trace_ext_tracing.c   |   25 +++++
- 3 files changed, 154 insertions(+)
+
+Jiri Olsa (1):
+      selftests/bpf: Adding test for arg dereference in extension trace
+
+Toke Høiland-Jørgensen (9):
+      bpf: disallow attaching modify_return tracing functions to other BPF programs
+      bpf: change logging calls from verbose() to bpf_log() and use log pointer
+      bpf: verifier: refactor check_attach_btf_id()
+      bpf: move prog->aux->linked_prog and trampoline into bpf_link on attach
+      bpf: support attaching freplace programs to multiple attach points
+      bpf: Fix context type resolving for extension programs
+      libbpf: add support for freplace attachment in bpf_link_create
+      selftests: add test for multiple attachments of freplace program
+      selftests: Add selftest for disallowing modify_return attachment to freplace
+
+
+ include/linux/bpf.h                           |  26 +-
+ include/linux/bpf_verifier.h                  |  14 +-
+ include/uapi/linux/bpf.h                      |   9 +-
+ kernel/bpf/btf.c                              |  21 +-
+ kernel/bpf/core.c                             |   9 +-
+ kernel/bpf/syscall.c                          | 137 ++++++++--
+ kernel/bpf/trampoline.c                       |  32 ++-
+ kernel/bpf/verifier.c                         | 247 ++++++++++--------
+ tools/include/uapi/linux/bpf.h                |   9 +-
+ tools/lib/bpf/bpf.c                           |  18 +-
+ tools/lib/bpf/bpf.h                           |   3 +-
+ tools/lib/bpf/libbpf.c                        |  36 ++-
+ tools/lib/bpf/libbpf.h                        |   3 +
+ tools/lib/bpf/libbpf.map                      |   1 +
+ .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 225 +++++++++++++---
+ .../selftests/bpf/prog_tests/trace_ext.c      | 111 ++++++++
+ .../selftests/bpf/progs/fmod_ret_freplace.c   |  14 +
+ .../bpf/progs/freplace_get_constant.c         |  15 ++
+ .../selftests/bpf/progs/test_trace_ext.c      |  18 ++
+ .../bpf/progs/test_trace_ext_tracing.c        |  25 ++
+ 20 files changed, 777 insertions(+), 196 deletions(-)
  create mode 100644 tools/testing/selftests/bpf/prog_tests/trace_ext.c
+ create mode 100644 tools/testing/selftests/bpf/progs/fmod_ret_freplace.c
+ create mode 100644 tools/testing/selftests/bpf/progs/freplace_get_constant.c
  create mode 100644 tools/testing/selftests/bpf/progs/test_trace_ext.c
  create mode 100644 tools/testing/selftests/bpf/progs/test_trace_ext_tracing.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/trace_ext.c b/tools/testing/selftests/bpf/prog_tests/trace_ext.c
-new file mode 100644
-index 000000000000..924441d4362d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/trace_ext.c
-@@ -0,0 +1,111 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+#include <sys/stat.h>
-+#include <linux/sched.h>
-+#include <sys/syscall.h>
-+
-+#include "test_pkt_md_access.skel.h"
-+#include "test_trace_ext.skel.h"
-+#include "test_trace_ext_tracing.skel.h"
-+
-+static __u32 duration;
-+
-+void test_trace_ext(void)
-+{
-+	struct test_pkt_md_access *skel_pkt = NULL;
-+	struct test_trace_ext_tracing *skel_trace = NULL;
-+	struct test_trace_ext_tracing__bss *bss_trace;
-+	struct test_trace_ext *skel_ext = NULL;
-+	struct test_trace_ext__bss *bss_ext;
-+	int err, pkt_fd, ext_fd;
-+	struct bpf_program *prog;
-+	char buf[100];
-+	__u32 retval;
-+	__u64 len;
-+
-+	/* open/load/attach test_pkt_md_access */
-+	skel_pkt = test_pkt_md_access__open_and_load();
-+	if (CHECK(!skel_pkt, "setup", "classifier/test_pkt_md_access open failed\n"))
-+		goto cleanup;
-+
-+	err = test_pkt_md_access__attach(skel_pkt);
-+	if (CHECK(err, "setup", "classifier/test_pkt_md_access attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	prog = skel_pkt->progs.test_pkt_md_access;
-+	pkt_fd = bpf_program__fd(prog);
-+
-+	/* open extension */
-+	skel_ext = test_trace_ext__open();
-+	if (CHECK(!skel_ext, "setup", "freplace/test_pkt_md_access open failed\n"))
-+		goto cleanup;
-+
-+	/* set extension's attach target - test_pkt_md_access  */
-+	prog = skel_ext->progs.test_pkt_md_access_new;
-+	bpf_program__set_attach_target(prog, pkt_fd, "test_pkt_md_access");
-+
-+	/* load/attach extension */
-+	err = test_trace_ext__load(skel_ext);
-+	if (CHECK(err, "setup", "freplace/test_pkt_md_access load failed\n")) {
-+		libbpf_strerror(err, buf, sizeof(buf));
-+		fprintf(stderr, "%s\n", buf);
-+		goto cleanup;
-+	}
-+
-+	err = test_trace_ext__attach(skel_ext);
-+	if (CHECK(err, "setup", "freplace/test_pkt_md_access attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	prog = skel_ext->progs.test_pkt_md_access_new;
-+	ext_fd = bpf_program__fd(prog);
-+
-+	/* open tracing  */
-+	skel_trace = test_trace_ext_tracing__open();
-+	if (CHECK(!skel_trace, "setup", "tracing/test_pkt_md_access_new open failed\n"))
-+		goto cleanup;
-+
-+	/* set tracing's attach target - fentry */
-+	prog = skel_trace->progs.fentry;
-+	bpf_program__set_attach_target(prog, ext_fd, "test_pkt_md_access_new");
-+
-+	/* set tracing's attach target - fexit */
-+	prog = skel_trace->progs.fexit;
-+	bpf_program__set_attach_target(prog, ext_fd, "test_pkt_md_access_new");
-+
-+	/* load/attach tracing */
-+	err = test_trace_ext_tracing__load(skel_trace);
-+	if (CHECK(err, "setup", "tracing/test_pkt_md_access_new load failed\n")) {
-+		libbpf_strerror(err, buf, sizeof(buf));
-+		fprintf(stderr, "%s\n", buf);
-+		goto cleanup;
-+	}
-+
-+	err = test_trace_ext_tracing__attach(skel_trace);
-+	if (CHECK(err, "setup", "tracing/test_pkt_md_access_new attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	/* trigger the test */
-+	err = bpf_prog_test_run(pkt_fd, 1, &pkt_v4, sizeof(pkt_v4),
-+				NULL, NULL, &retval, &duration);
-+	CHECK(err || retval, "run", "err %d errno %d retval %d\n", err, errno, retval);
-+
-+	bss_ext = skel_ext->bss;
-+	bss_trace = skel_trace->bss;
-+
-+	len = bss_ext->ext_called;
-+
-+	CHECK(bss_ext->ext_called == 0,
-+		"check", "failed to trigger freplace/test_pkt_md_access\n");
-+	CHECK(bss_trace->fentry_called != len,
-+		"check", "failed to trigger fentry/test_pkt_md_access_new\n");
-+	CHECK(bss_trace->fexit_called != len,
-+		"check", "failed to trigger fexit/test_pkt_md_access_new\n");
-+
-+cleanup:
-+	test_trace_ext_tracing__destroy(skel_trace);
-+	test_trace_ext__destroy(skel_ext);
-+	test_pkt_md_access__destroy(skel_pkt);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_trace_ext.c b/tools/testing/selftests/bpf/progs/test_trace_ext.c
-new file mode 100644
-index 000000000000..d19a634d0e78
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_trace_ext.c
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019 Facebook
-+#include <linux/bpf.h>
-+#include <stdbool.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_endian.h>
-+#include <bpf/bpf_tracing.h>
-+
-+__u64 ext_called = 0;
-+
-+SEC("freplace/test_pkt_md_access")
-+int test_pkt_md_access_new(struct __sk_buff *skb)
-+{
-+	ext_called = skb->len;
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/test_trace_ext_tracing.c b/tools/testing/selftests/bpf/progs/test_trace_ext_tracing.c
-new file mode 100644
-index 000000000000..52f3baf98f20
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_trace_ext_tracing.c
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+__u64 fentry_called = 0;
-+
-+SEC("fentry/test_pkt_md_access_new")
-+int BPF_PROG(fentry, struct sk_buff *skb)
-+{
-+	fentry_called = skb->len;
-+	return 0;
-+}
-+
-+__u64 fexit_called = 0;
-+
-+SEC("fexit/test_pkt_md_access_new")
-+int BPF_PROG(fexit, struct sk_buff *skb)
-+{
-+	fexit_called = skb->len;
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
 
