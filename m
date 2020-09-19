@@ -2,245 +2,121 @@ Return-Path: <SRS0=xh51=C4=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BF64C43463
-	for <bpf@archiver.kernel.org>; Sat, 19 Sep 2020 10:14:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ACEFC43463
+	for <bpf@archiver.kernel.org>; Sat, 19 Sep 2020 11:49:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2F7121D42
-	for <bpf@archiver.kernel.org>; Sat, 19 Sep 2020 10:14:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C561A21741
+	for <bpf@archiver.kernel.org>; Sat, 19 Sep 2020 11:49:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NpL+bbSb"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H+X+81/z"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726152AbgISKOP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 19 Sep 2020 06:14:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:20030 "EHLO
+        id S1726159AbgISLtv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 19 Sep 2020 07:49:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:60404 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726041AbgISKOP (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 19 Sep 2020 06:14:15 -0400
+        by vger.kernel.org with ESMTP id S1726112AbgISLtv (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 19 Sep 2020 07:49:51 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600510452;
+        s=mimecast20190719; t=1600516189;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aoVgzN6gz4PMJXa1bdz8RuSOTpnLg5Dub5S3R8LNFpM=;
-        b=NpL+bbSbXy8qpeIl3LTCPaQO2NX7LMHra/DUa/lqaEl9ucHE6lfVl1kdg13y+19MeUjgjB
-        a9PfBi5q0VSKs4YumFrBxj7U34Ynl9TCe0I4d6/bZ84dmhWCZZGLHmMrfJGYcbcadwwfGA
-        A+4xKkRIuj7wfMC3BDQFhOxCQDVNBLI=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-544-ufyi3ttaONitKD7P7Fw8OQ-1; Sat, 19 Sep 2020 06:14:11 -0400
-X-MC-Unique: ufyi3ttaONitKD7P7Fw8OQ-1
-Received: by mail-ej1-f72.google.com with SMTP id r14so3075437ejb.3
-        for <bpf@vger.kernel.org>; Sat, 19 Sep 2020 03:14:10 -0700 (PDT)
+        bh=Ip21qnHHS16Z3f+mJxexKMv0xWUpMEM596sNCwhn4Qs=;
+        b=H+X+81/z2IRlduQjRrBPNdd0c7wV3bSsVYspWlHuyq1yCPmtxaPOrAU27SJyOPko/KwV+J
+        EEFcT52OhJqJUYQw163uEpmOCuONGT63s1vlv9X1HuGWF3+oHAkCZrXkPZv7eA00N2zaKM
+        v3l0s8VnkJC1kg+COxusVgSy0O+tLQs=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-21-gXdePnPoPNWop4fOZy7Vew-1; Sat, 19 Sep 2020 07:49:48 -0400
+X-MC-Unique: gXdePnPoPNWop4fOZy7Vew-1
+Received: by mail-ed1-f69.google.com with SMTP id x23so3272169eds.5
+        for <bpf@vger.kernel.org>; Sat, 19 Sep 2020 04:49:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=aoVgzN6gz4PMJXa1bdz8RuSOTpnLg5Dub5S3R8LNFpM=;
-        b=G2RuTwuisQsnblkfRJKFOnYSMzKnLqzSgS+Vf7etdEIeVwHh4OGStZJpwDeP0/KoYl
-         l4XCyoKgRXj0a8U+u4MwseMsKHGH6qr2b+RKqYgUUBSW9bnQbeAjR5y/XPvK25qaW1uI
-         uJmXcjBvVxw/8f5OHYqhosVv6etigzJHaN0w61EeR3EmrFWzuK+msjYvJ8TrB8cgmMwj
-         5dCtGkD1aF05+Ra8RJnuuDG8b+IK5XfvHuWwxiPE2j/T7tbEOgJoY6e3pc7d0d/2QooV
-         fgvZZ18SLoTdKOQAMtBc2CDRop208n4ouVgQeZ52KZGngrhyrWXPZMbZCyUEl49WgJED
-         nrgQ==
-X-Gm-Message-State: AOAM531tJHfA13r/upZle7dcLZb9HnS4f0JgO1+Lh6vqdh3hAECE28Y1
-        FQNOJyjfEfE3XEWlupJd9hZgPYb4sbVWDPv+zJHsGkE1kfK1vzp4suyrDhFAmIRYixEk0zdOpcw
-        HCl7avviM5X36
-X-Received: by 2002:a50:93e2:: with SMTP id o89mr43022041eda.378.1600510449495;
-        Sat, 19 Sep 2020 03:14:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwdl/PmWIJRkfi1tLx7cqcu5/2QxmFvjALeUEQ4br3jqXc5u2DTCLfvKaJovLbI87ZU+Cx87Q==
-X-Received: by 2002:a50:93e2:: with SMTP id o89mr43022016eda.378.1600510449058;
-        Sat, 19 Sep 2020 03:14:09 -0700 (PDT)
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=Ip21qnHHS16Z3f+mJxexKMv0xWUpMEM596sNCwhn4Qs=;
+        b=RMoCXVXvbekph6oU7A6uvKBPBRY7Qm3joDCCVqcE5U25t0Tk5bsYoCfNOvS5bzwtAe
+         4VbKu6Dzgdqb6rK0AhL3OU5dnJI8OZX6XFKIu1+hV1sLl+hqfscirMPD4pyFuBEcBa2y
+         /eSNCJI+/4QMq+dMEC6wGBIDxV4U+VgXAUt1QBJ0wdttEQCnNc2vK2ETm4SS69HICvEE
+         6gLlP31iZIENjqXyo4IwnBQPZlOcXMiXcj2BCUEVjTBVhkSYcbVptMYJVq2LzJiapqEj
+         7de96xzJXUbEprGND0kfxsOOQ2cT3IaZMk1kF4uNAQLYZ91E78LhxSf81cfQK+Il5EAA
+         dhsg==
+X-Gm-Message-State: AOAM530EwSXYiNO7b1xqWKvJIfMb6v5W8zCLoG6cOeE7qyyb+0SGnKJk
+        jmJta29QSk3LhwCVXCWwarfZ59faiMP/XBVqipDnFcOd80lj355KpXbAZUFcgya4jX5I+aR5rQs
+        5qYVuT2j+Z5kj
+X-Received: by 2002:a50:fe07:: with SMTP id f7mr45183637edt.173.1600516186649;
+        Sat, 19 Sep 2020 04:49:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx3Ujzxo+bmJuNBBCiVLNMDrlem1ZDBFJhLSOaS7snoBtysOe+HYC+esH2+6DLSIdwOx1GMpA==
+X-Received: by 2002:a50:fe07:: with SMTP id f7mr45183618edt.173.1600516186248;
+        Sat, 19 Sep 2020 04:49:46 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id m6sm4124138ejb.85.2020.09.19.03.14.07
+        by smtp.gmail.com with ESMTPSA id a15sm4233428eje.16.2020.09.19.04.49.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Sep 2020 03:14:08 -0700 (PDT)
+        Sat, 19 Sep 2020 04:49:44 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 43F5B183A90; Sat, 19 Sep 2020 12:14:07 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        id 14D30183A91; Sat, 19 Sep 2020 13:49:44 +0200 (CEST)
+Subject: [PATCH bpf-next v7 01/10] bpf: disallow attaching modify_return
+ tracing functions to other BPF programs
+From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         Jiri Olsa <jolsa@redhat.com>,
         Eelco Chaudron <echaudro@redhat.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v6 05/10] bpf: support attaching freplace
- programs to multiple attach points
-In-Reply-To: <CAEf4BzajBMf9btVJLfOYNdEbBHgs1m5o=D5mDcmTV4gPYTf9-w@mail.gmail.com>
-References: <160037400056.28970.7647821897296177963.stgit@toke.dk>
- <160037400605.28970.12030576233071570541.stgit@toke.dk>
- <CAEf4BzajBMf9btVJLfOYNdEbBHgs1m5o=D5mDcmTV4gPYTf9-w@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Sat, 19 Sep 2020 12:14:07 +0200
-Message-ID: <871riyf500.fsf@toke.dk>
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Date:   Sat, 19 Sep 2020 13:49:44 +0200
+Message-ID: <160051618391.58048.12525358750568883938.stgit@toke.dk>
+In-Reply-To: <160051618267.58048.2336966160671014012.stgit@toke.dk>
+References: <160051618267.58048.2336966160671014012.stgit@toke.dk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-> On Thu, Sep 17, 2020 at 1:21 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
-dhat.com> wrote:
->>
->> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->>
->> This enables support for attaching freplace programs to multiple attach
->> points. It does this by amending the UAPI for bpf_link_Create with a tar=
-get
->> btf ID that can be used to supply the new attachment point along with the
->> target program fd. The target must be compatible with the target that was
->> supplied at program load time.
->>
->> The implementation reuses the checks that were factored out of
->> check_attach_btf_id() to ensure compatibility between the BTF types of t=
-he
->> old and new attachment. If these match, a new bpf_tracing_link will be
->> created for the new attach target, allowing multiple attachments to
->> co-exist simultaneously.
->>
->> The code could theoretically support multiple-attach of other types of
->> tracing programs as well, but since I don't have a use case for any of
->> those, there is no API support for doing so.
->>
->> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
->> ---
->
-> You patch set breaks at least bpf_iter tests:
->
-> $ sudo ./test_progs -t bpf_iter
-> ...
-> #4 bpf_iter:FAIL
-> Summary: 0/19 PASSED, 0 SKIPPED, 6 FAILED
->
-> Please check and fix.
+From the checks and commit messages for modify_return, it seems it was
+never the intention that it should be possible to attach a tracing program
+with expected_attach_type == BPF_MODIFY_RETURN to another BPF program.
+However, check_attach_modify_return() will only look at the function name,
+so if the target function starts with "security_", the attach will be
+allowed even for bpf2bpf attachment.
 
-Huh, did notice something was broken, but they didn't when I reverted
-the patch either, so I put it down to just the tests being broken. I'll
-take another look :)
+Fix this oversight by also blocking the modification if a target program is
+supplied.
 
->>  include/linux/bpf.h            |    2 +
->>  include/uapi/linux/bpf.h       |    9 +++-
->>  kernel/bpf/syscall.c           |  101 +++++++++++++++++++++++++++++++++=
-+------
->>  kernel/bpf/verifier.c          |    9 ++++
->>  tools/include/uapi/linux/bpf.h |    9 +++-
->>  5 files changed, 110 insertions(+), 20 deletions(-)
->>
->
-> [...]
->
->> -static int bpf_tracing_prog_attach(struct bpf_prog *prog)
->> +static int bpf_tracing_prog_attach(struct bpf_prog *prog,
->> +                                  int tgt_prog_fd,
->> +                                  u32 btf_id)
->>  {
->>         struct bpf_link_primer link_primer;
->>         struct bpf_prog *tgt_prog =3D NULL;
->> +       struct bpf_trampoline *tr =3D NULL;
->>         struct bpf_tracing_link *link;
->> -       struct bpf_trampoline *tr;
->> +       struct btf_func_model fmodel;
->> +       u64 key =3D 0;
->> +       long addr;
->>         int err;
->>
->>         switch (prog->type) {
->> @@ -2589,6 +2595,28 @@ static int bpf_tracing_prog_attach(struct bpf_pro=
-g *prog)
->
-> bpf_tracing_prog_attach logic looks correct to me now, thanks.
->
->>                 goto out_put_prog;
->>         }
->>
->
-> [...]
->
->> @@ -3934,6 +3986,16 @@ static int tracing_bpf_link_attach(const union bp=
-f_attr *attr, struct bpf_prog *
->>         return -EINVAL;
->>  }
->>
->> +static int freplace_bpf_link_attach(const union bpf_attr *attr, struct =
-bpf_prog *prog)
->
-> Any reason to have this separate from tracing_bpf_link_attach? I'd
-> merge them and do a simple switch inside, based on prog->type. It
-> would also be easier to follow the flow if this expected_attach_type
-> check was first and returned -EINVAL immediately at the top.
+Fixes: 18644cec714a ("bpf: Fix use-after-free in fmod_ret check")
+Fixes: 6ba43b761c41 ("bpf: Attachment verification for BPF_MODIFY_RETURN")
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ kernel/bpf/verifier.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I created a different one function it had to be called at a different
-place; don't mind combining them, though.
-
->> +{
->> +       if (attr->link_create.attach_type =3D=3D prog->expected_attach_t=
-ype)
->> +               return bpf_tracing_prog_attach(prog,
->> +                                              attr->link_create.target_=
-fd,
->> +                                              attr->link_create.target_=
-btf_id);
->> +       return -EINVAL;
->> +
->
-> nit: unnecessary empty line?
->
->> +}
->> +
->>  #define BPF_LINK_CREATE_LAST_FIELD link_create.iter_info_len
->>  static int link_create(union bpf_attr *attr)
->>  {
->> @@ -3944,18 +4006,25 @@ static int link_create(union bpf_attr *attr)
->>         if (CHECK_ATTR(BPF_LINK_CREATE))
->>                 return -EINVAL;
->>
->> -       ptype =3D attach_type_to_prog_type(attr->link_create.attach_type=
-);
->> -       if (ptype =3D=3D BPF_PROG_TYPE_UNSPEC)
->> -               return -EINVAL;
->> -
->> -       prog =3D bpf_prog_get_type(attr->link_create.prog_fd, ptype);
->> +       prog =3D bpf_prog_get(attr->link_create.prog_fd);
->>         if (IS_ERR(prog))
->>                 return PTR_ERR(prog);
->>
->>         ret =3D bpf_prog_attach_check_attach_type(prog,
->>                                                 attr->link_create.attach=
-_type);
->>         if (ret)
->> -               goto err_out;
->> +               goto out;
->> +
->> +       if (prog->type =3D=3D BPF_PROG_TYPE_EXT) {
->> +               ret =3D freplace_bpf_link_attach(attr, prog);
->> +               goto out;
->> +       }
->> +
->> +       ptype =3D attach_type_to_prog_type(attr->link_create.attach_type=
-);
->> +       if (ptype =3D=3D BPF_PROG_TYPE_UNSPEC) {
->> +               ret =3D -EINVAL;
->> +               goto out;
->> +       }
->
-> you seem to be missing a check that prog->type matches ptype,
-> previously implicitly performed by bpf_prog_get_type(), no?
-
-Ah yes, good catch! I played around with different versions of this, and
-guess I forgot to put that check back in for this one...
-
--Toke
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 4161b6c406bc..cb1b0f9fd770 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11442,7 +11442,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 					prog->aux->attach_func_name);
+ 		} else if (prog->expected_attach_type == BPF_MODIFY_RETURN) {
+ 			ret = check_attach_modify_return(prog, addr);
+-			if (ret)
++			if (ret || tgt_prog)
+ 				verbose(env, "%s() is not modifiable\n",
+ 					prog->aux->attach_func_name);
+ 		}
 
