@@ -2,123 +2,167 @@ Return-Path: <SRS0=4c4M=C6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89411C4727D
-	for <bpf@archiver.kernel.org>; Mon, 21 Sep 2020 21:55:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99C31C4727D
+	for <bpf@archiver.kernel.org>; Mon, 21 Sep 2020 22:23:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5665B2388B
-	for <bpf@archiver.kernel.org>; Mon, 21 Sep 2020 21:55:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5964023A63
+	for <bpf@archiver.kernel.org>; Mon, 21 Sep 2020 22:23:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gNstWBmM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="datv3RSU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728516AbgIUVzk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Sep 2020 17:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53916 "EHLO
+        id S1728523AbgIUWXj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Sep 2020 18:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727059AbgIUVzi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Sep 2020 17:55:38 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799CCC0613CF;
-        Mon, 21 Sep 2020 14:55:38 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id a2so11395168ybj.2;
-        Mon, 21 Sep 2020 14:55:38 -0700 (PDT)
+        with ESMTP id S1726457AbgIUWXj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Sep 2020 18:23:39 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC40C061755;
+        Mon, 21 Sep 2020 15:23:39 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id gf14so482330pjb.5;
+        Mon, 21 Sep 2020 15:23:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8grYpU7/gTNyX9FZs93OJvfovBLe0ola3M1YosR1fEo=;
-        b=gNstWBmMpmvyedGTSr3CzDxhzA0CztF0y5rSTkdfErqBb0JZhfwRZgMjp9a0pe063O
-         OzfCmfauvEDw5ex1ULZfkPB9pygoXoK0NToQbZnX98ThiCcSTUbMxQAWtzC1qGmF31pd
-         gYvwYwFtLFmc5BCu2EMmHMrlJgbivEXv5aJQmJgIokLX0V9PVhQalSIW6+H2Hq4b9ZAm
-         3HYqwa8Yqf5hOLk6D2xs3e1MyEufmjU+iM8J62X5t9eMAS6IH10NdfoA/ujBwsOF3BdT
-         OzPOY3KM92RHqrkASm5QDJWib461BbnDIr9aHxdPha2tA+rlTM7Lnsuxcw/lBvU4vwSV
-         h55w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1j5BtrbIEhk+Z7E8WkLPxtpf9YSppEhFPYc8Rq00vxc=;
+        b=datv3RSUPRNmt0lRa/AxFZEU7grLhUY5MpA1Qdz2KNgq6CxAwhQIWgUzhUJb7lOwk0
+         A/zJqdXP0BCJALAcC2FDiWU7vJORvT4pSs6iSwq7Z2TkdczrGEuJm0fj77wePDMxsDMe
+         ykV3/w48auEQFYREWmSJ88HlfSfyOLg04j4THDt/KvCtnQe+d+E0TUme8zJ1L/OkVpPf
+         EbfJBc8+9t/omQHKLXWVlg5FcjWDFi72bb9q7QYjMpv5bXO7X5db9+Tar3u0jfKJ9D6t
+         TBswgJIv499jipAD3K1v8pVShc8col7OIz6jmT8gNRcpOYWutrQKi765h83uJMP8TOJl
+         rSfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8grYpU7/gTNyX9FZs93OJvfovBLe0ola3M1YosR1fEo=;
-        b=JN1lWuHjMPPl7ElsddziqMsAP4hw5UUWfWJiuz5SbpKIW952jep8O/X8fmDsW21oay
-         VHtsqawUEw0dfRUDpSEjn0RJ+Fuah9hao6UGGZoiTW+0y0wbj6N9TltU8HKtYeeeglT0
-         3qQ0GZlKaJgGPq/i5pSXz1UfzPMRGlcTIVh0R1lI6ahOUGJ0fhz5bGTcmaJmU/2kyrPM
-         MqKHuccgiayrMuHIaPzdDYctDmtNYWHr13AmgWzFEaGVgsiI7YYg8nnZ4sK9xIXWlKu1
-         1wB7nvF0Odr7mlTLi0ZP+ZKbr/wV2Y+bcYrERvKJMJ8WMNAug8tbIG3p8owumoB8ewUv
-         HGFg==
-X-Gm-Message-State: AOAM532kG4Xw336R5bHpb1yffBTzM8KbGHbvQ3Q9sj++tnci4tKAmO4z
-        XaPdlCMbOIDbquKDOlZt0HjYf9FIOrANjGnWksZubPylbDk=
-X-Google-Smtp-Source: ABdhPJy4sNrW87qbVpgcSxr/19syLbLrAYGgkUMuTJlM5OkrW2BnbyQg8GoRQ/ngzuQUXFy62J+n/gqwD1CLakFOa7k=
-X-Received: by 2002:a25:9d06:: with SMTP id i6mr2763641ybp.510.1600725337798;
- Mon, 21 Sep 2020 14:55:37 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1j5BtrbIEhk+Z7E8WkLPxtpf9YSppEhFPYc8Rq00vxc=;
+        b=ZzCUk+QVncGVp+JpXEOxvw3Ibcylob1OeHQHurhHQKipvvw637F2gKak/gurMEtgGi
+         eK6UCq5yarqvOYi7ifv58O8c1DcJ5kkWJpnpcr+1nIDHd+YaC6mY2K0gYbeox+24aBIY
+         Hty/zOXqLpqK32ulMeYswCIu3nJcctM2DQ+vED/M7mAUb/f9WSWckS4EXC5RURcVp9fy
+         twT8SxY9CGDrdAdf+9AlDLxL4t5DqkN2aqeNp0dRQV6PUq7tttqFrbc8fX6VoSqJaiRl
+         162NrosAx6AE0PpzD735L6g1QgAdNgx47M50KidCfdfPWEp2fUnjAF/5abVu2us4aEqn
+         dXSQ==
+X-Gm-Message-State: AOAM5333TGMSygX+ujjPTVD3pHGXyyxVS5T4RRianLRMBge3o32XZlAZ
+        L0lrv4RAKz9JPSp5zo7ZYrBZs00b8ac=
+X-Google-Smtp-Source: ABdhPJyOZXMvqHoLU9lqrIvXhytlm9DbiQr+dwgUnhihvchhhLMMOyMHVxlM1qH0ecfOatgpjsxaPQ==
+X-Received: by 2002:a17:90b:164e:: with SMTP id il14mr1181230pjb.5.1600727018797;
+        Mon, 21 Sep 2020 15:23:38 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:b927])
+        by smtp.gmail.com with ESMTPSA id c4sm399006pjq.7.2020.09.21.15.23.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Sep 2020 15:23:38 -0700 (PDT)
+Date:   Mon, 21 Sep 2020 15:23:35 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Lorenz Bauer <lmb@cloudflare.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>
+Subject: Re: [PATCH bpf-next v4 11/11] bpf: use a table to drive helper arg
+ type checks
+Message-ID: <20200921222335.lew7wmyrtuej5mrh@ast-mbp.dhcp.thefacebook.com>
+References: <20200921121227.255763-1-lmb@cloudflare.com>
+ <20200921121227.255763-12-lmb@cloudflare.com>
 MIME-Version: 1.0
-References: <20200918122654.2625699-1-jolsa@kernel.org>
-In-Reply-To: <20200918122654.2625699-1-jolsa@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 21 Sep 2020 14:55:27 -0700
-Message-ID: <CAEf4BzZc6DE85wUTGwE=2FKPuwuuH4480Fh+v63q8J=PRxjgEw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Use --no-fail option if CONFIG_BPF is
- not enabled
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Seth Forshee <seth.forshee@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200921121227.255763-12-lmb@cloudflare.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Sep 18, 2020 at 5:30 AM Jiri Olsa <jolsa@kernel.org> wrote:
->
-> Currently all the resolve_btfids 'users' are under CONFIG_BPF
-> code, so if we have CONFIG_BPF disabled, resolve_btfids will
-> fail, because there's no data to resolve.
->
-> In case CONFIG_BPF is disabled, using resolve_btfids --no-fail
-> option, that makes resolve_btfids leave quietly if there's no
-> data to resolve.
->
-> Fixes: c9a0f3b85e09 ("bpf: Resolve BTF IDs in vmlinux image")
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
+On Mon, Sep 21, 2020 at 01:12:27PM +0100, Lorenz Bauer wrote:
+> +struct bpf_reg_types {
+> +	const enum bpf_reg_type types[10];
+> +};
 
-If no CONFIG_BTF is specified, there is no need to even run
-resolve_btfids. So why not do just that -- run resolve_btfids only
-if both CONFIG_BPF and CONFIG_DEBUG_INFO_BTF are specified?
+any idea on how to make it more robust?
 
+> +
+> +static const struct bpf_reg_types *compatible_reg_types[] = {
+> +	[ARG_PTR_TO_MAP_KEY]		= &map_key_value_types,
+> +	[ARG_PTR_TO_MAP_VALUE]		= &map_key_value_types,
+> +	[ARG_PTR_TO_UNINIT_MAP_VALUE]	= &map_key_value_types,
+> +	[ARG_PTR_TO_MAP_VALUE_OR_NULL]	= &map_key_value_types,
+> +	[ARG_CONST_SIZE]		= &scalar_types,
+> +	[ARG_CONST_SIZE_OR_ZERO]	= &scalar_types,
+> +	[ARG_CONST_ALLOC_SIZE_OR_ZERO]	= &scalar_types,
+> +	[ARG_CONST_MAP_PTR]		= &const_map_ptr_types,
+> +	[ARG_PTR_TO_CTX]		= &context_types,
+> +	[ARG_PTR_TO_CTX_OR_NULL]	= &context_types,
+> +	[ARG_PTR_TO_SOCK_COMMON]	= &sock_types,
+> +	[ARG_PTR_TO_SOCKET]		= &fullsock_types,
+> +	[ARG_PTR_TO_SOCKET_OR_NULL]	= &fullsock_types,
+> +	[ARG_PTR_TO_BTF_ID]		= &btf_ptr_types,
+> +	[ARG_PTR_TO_SPIN_LOCK]		= &spin_lock_types,
+> +	[ARG_PTR_TO_MEM]		= &mem_types,
+> +	[ARG_PTR_TO_MEM_OR_NULL]	= &mem_types,
+> +	[ARG_PTR_TO_UNINIT_MEM]		= &mem_types,
+> +	[ARG_PTR_TO_ALLOC_MEM]		= &alloc_mem_types,
+> +	[ARG_PTR_TO_ALLOC_MEM_OR_NULL]	= &alloc_mem_types,
+> +	[ARG_PTR_TO_INT]		= &int_ptr_types,
+> +	[ARG_PTR_TO_LONG]		= &int_ptr_types,
+> +	[__BPF_ARG_TYPE_MAX]		= NULL,
 
->  scripts/link-vmlinux.sh | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
->
-> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index e6e2d9e5ff48..3173b8cf08cb 100755
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -342,8 +342,13 @@ vmlinux_link vmlinux "${kallsymso}" ${btf_vmlinux_bin_o}
->
->  # fill in BTF IDs
->  if [ -n "${CONFIG_DEBUG_INFO_BTF}" ]; then
-> -info BTFIDS vmlinux
-> -${RESOLVE_BTFIDS} vmlinux
-> +       info BTFIDS vmlinux
-> +       # Let's be more permissive if CONFIG_BPF is disabled
-> +       # and do not fail if there's no data to resolve.
-> +       if [ -z "${CONFIG_BPF}" ]; then
-> +         no_fail=--no-fail
-> +       fi
-> +       ${RESOLVE_BTFIDS} $no_fail vmlinux
->  fi
->
->  if [ -n "${CONFIG_BUILDTIME_TABLE_SORT}" ]; then
-> --
-> 2.26.2
->
+I don't understand what this extra value is for.
+I tried:
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index fc5c901c7542..87b0d5dcc1ff 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -292,7 +292,6 @@ enum bpf_arg_type {
+        ARG_PTR_TO_ALLOC_MEM,   /* pointer to dynamically allocated memory */
+        ARG_PTR_TO_ALLOC_MEM_OR_NULL,   /* pointer to dynamically allocated memory or NULL */
+        ARG_CONST_ALLOC_SIZE_OR_ZERO,   /* number of allocated bytes requested */
+-       __BPF_ARG_TYPE_MAX,
+ };
+
+ /* type of values returned from helper functions */
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 15ab889b0a3f..83faa67858b6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4025,7 +4025,6 @@ static const struct bpf_reg_types *compatible_reg_types[] = {
+        [ARG_PTR_TO_ALLOC_MEM_OR_NULL]  = &alloc_mem_types,
+        [ARG_PTR_TO_INT]                = &int_ptr_types,
+        [ARG_PTR_TO_LONG]               = &int_ptr_types,
+-       [__BPF_ARG_TYPE_MAX]            = NULL,
+ };
+
+and everything is fine as I think it should be.
+
+> +	compatible = compatible_reg_types[arg_type];
+> +	if (!compatible) {
+> +		verbose(env, "verifier internal error: unsupported arg type %d\n", arg_type);
+>  		return -EFAULT;
+>  	}
+
+This check will trigger the same way when somebody adds new ARG_* and doesn't add to the table.
+
+>  
+> +	err = check_reg_type(env, regno, compatible);
+> +	if (err)
+> +		return err;
+> +
+>  	if (type == PTR_TO_BTF_ID) {
+>  		const u32 *btf_id = fn->arg_btf_id[arg];
+>  
+> @@ -4174,10 +4213,6 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+>  	}
+>  
+>  	return err;
+> -err_type:
+> -	verbose(env, "R%d type=%s expected=%s\n", regno,
+> -		reg_type_str[type], reg_type_str[expected_type]);
+> -	return -EACCES;
+
+I'm not a fan of table driven checks. I think one explicit switch statement
+would have been easier to read, but I guess we can convert back to it later if
+table becomes too limiting. The improvement in the verifier output is important
+and justifies this approach.
+
+Applied to bpf-next. Thanks!
