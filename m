@@ -2,140 +2,128 @@ Return-Path: <SRS0=4c4M=C6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24DEFC43464
-	for <bpf@archiver.kernel.org>; Mon, 21 Sep 2020 12:13:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA0F3C43463
+	for <bpf@archiver.kernel.org>; Mon, 21 Sep 2020 12:13:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CF4E520EDD
-	for <bpf@archiver.kernel.org>; Mon, 21 Sep 2020 12:13:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9981B216C4
+	for <bpf@archiver.kernel.org>; Mon, 21 Sep 2020 12:13:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="BeY1St9b"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="In/nYtmF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726367AbgIUMNQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Sep 2020 08:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
+        id S1726652AbgIUMNU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Sep 2020 08:13:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726341AbgIUMNQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Sep 2020 08:13:16 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C2DC061755
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2020 05:13:16 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id y15so12400942wmi.0
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2020 05:13:15 -0700 (PDT)
+        with ESMTP id S1726552AbgIUMNT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Sep 2020 08:13:19 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E56C0613D0
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2020 05:13:18 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id z9so12397874wmk.1
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2020 05:13:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=53WhTmXREjGqlEXM0BLaZc51eAV3CGtA+VHhtiGHfTs=;
-        b=BeY1St9bX8a68dzI8DyEQHNenRoMPJRXDOBWiB1pYCbDQ41MSwnWdfjYvCeWKe6o2a
-         1zmH7Vxes1S506P3pUsHTKChEY7VsxdzNDM1b2D3iphKlpDTIDpC5oA4yd0xt/4xXE09
-         6ohwFM2P2D9tfJRHqN89mdB8I/aKfeLHZerOs=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+Qf5LrUrrFDb7ZG/DC+Ibysm2jzcOs3sVRYjuHbV+04=;
+        b=In/nYtmFwJzMbBug5p7vdYS0mHscrMy/mUPclVvZH7QWrY+KakdP/YsmU2wTir43lv
+         cPPI56SI/FBvhemkEjnGe7L5ZPngZuXznkdyGiXx+QKhsLLGBPi751wNECTe1Jv63fau
+         UBN09GaOJYaBeX2pNbzQMMcyGdKp0J6X1KqdM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=53WhTmXREjGqlEXM0BLaZc51eAV3CGtA+VHhtiGHfTs=;
-        b=AK0hWLaQrgXQeuFz9LBfg38Ki7BLgF6ldA2rRUaakRX/MAFvZ3/pa0xFhMJDZjsxRS
-         3qLS6fuuTFRIBMr3aMjxBouW3rZH0BsV5Eaq+2p45NGrnqZTnTkpsgR2q3hlTKnEKbWr
-         HVUIo3Xrga97B6nZY9RsNCUkEcuwOiCePNvYFVT1YuY9QhTu+l+nwxytMGWpkTeR6jCn
-         sh0lruyDhDgclZ0L5x3GwQ/IGySCgZQI/SIHKiA3aKqIb0UMDoV6eEx5k6uGGDmr5x4h
-         Im6/1JnpQGCj/7b502sitwML0pAC7tx9THDaBvuRszv4GjSTL1eAlcU9aTRecMTC47g3
-         Q50w==
-X-Gm-Message-State: AOAM530GFsUq0pxMWhs77zEupNzsNFDVB+hf2SraobRbSVY9rFvDIvMz
-        gwnb2bxJZSC5LFH8MVGlfX4XvQ==
-X-Google-Smtp-Source: ABdhPJyVYez7NJ5qwpelifySbPRVulkQktg9kr5/8tS8hp90rV6JWtUi0IxOtxfZz6FKb4SfzzVtJA==
-X-Received: by 2002:a05:600c:283:: with SMTP id 3mr30671872wmk.110.1600690394707;
-        Mon, 21 Sep 2020 05:13:14 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+Qf5LrUrrFDb7ZG/DC+Ibysm2jzcOs3sVRYjuHbV+04=;
+        b=EDBCeTmx1/w8ls3D0n2D+0zseMqJ0tkThvBgbtPNYADVmSGMXLUr7Rq31tUzKUxLAw
+         Ew57IwON4TrOOtSmuLAWEtF68His8olSYB3j+cWtW21lMOPiP/Cp6HJPrYcNI9lpebTz
+         HOhmEhHvRtIcewTU0nvo8icJ9R1qIxV9BmAslReR4BNvFnXN+b/A4EMMtAvLoCoxewNq
+         JRyr7lsHoDiV9l+bYzF2W9RCNGNAqa48HgGjKM2ztFx36U2QetqOymbSUxbxtJLHonaT
+         qh9hOW43gsKKE7ddg7yiggqKkay02/NNNAQOtmSaWTBmx3EGNSPGAjz/WLmRwEAzzdp5
+         9Z/Q==
+X-Gm-Message-State: AOAM533zPOCCvHr+Yq2D7Frq0B7wtoAZ0BBlMYIIck1TEY1/4vzb3XIO
+        r4HuC+WDz1WWAEkEoo35qGwKIQ==
+X-Google-Smtp-Source: ABdhPJzynkzl86XscjoKSbryUrk4hodhxiSLWtSLy+3c8NwhJbhOzuStSQNHpNtaeqho7eHUEEWjKg==
+X-Received: by 2002:a1c:6341:: with SMTP id x62mr30056809wmb.70.1600690397457;
+        Mon, 21 Sep 2020 05:13:17 -0700 (PDT)
 Received: from antares.lan (5.4.6.2.d.5.3.3.f.8.1.6.b.2.d.8.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:8d2b:618f:335d:2645])
-        by smtp.gmail.com with ESMTPSA id t15sm18466557wmj.15.2020.09.21.05.13.13
+        by smtp.gmail.com with ESMTPSA id t15sm18466557wmj.15.2020.09.21.05.13.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2020 05:13:13 -0700 (PDT)
+        Mon, 21 Sep 2020 05:13:16 -0700 (PDT)
 From:   Lorenz Bauer <lmb@cloudflare.com>
 To:     ast@kernel.org, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Lorenz Bauer <lmb@cloudflare.com>
-Subject: [PATCH RESEND bpf-next v4 00/11] Make check_func_arg type checks table driven
-Date:   Mon, 21 Sep 2020 13:12:16 +0100
-Message-Id: <20200921121227.255763-1-lmb@cloudflare.com>
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Subject: [PATCH bpf-next v4 02/11] bpf: check scalar or invalid register in check_helper_mem_access
+Date:   Mon, 21 Sep 2020 13:12:18 +0100
+Message-Id: <20200921121227.255763-3-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200921121227.255763-1-lmb@cloudflare.com>
+References: <20200921121227.255763-1-lmb@cloudflare.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-I'm not sure why, but I missed sending the patchset to netdev@ last
-week. I guess that is why it's slipped through the cracks.
+Move the check for a NULL or zero register to check_helper_mem_access. This
+makes check_stack_boundary easier to understand.
 
-Changes in v4:
-- Output the desired type on BTF ID mismatch (Martin)
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+---
+ kernel/bpf/verifier.c | 24 +++++++++++-------------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
 
-Changes in v3:
-- Fix BTF_ID_LIST_SINGLE if BTF is disabled (Martin)
-- Drop incorrect arg_btf_id in bpf_sk_storage.c (Martin)
-- Check for arg_btf_id in check_func_proto (Martin)
-- Drop incorrect PTR_TO_BTF_ID from fullsock_types (Martin)
-- Introduce btf_seq_file_ids in bpf_trace.c to reduce duplication
-
-Changes in v2:
-- Make the series stand alone (Martin)
-- Drop incorrect BTF_SET_START fix (Andrii)
-- Only support a single BTF ID per argument (Martin)
-- Introduce BTF_ID_LIST_SINGLE macro (Andrii)
-- Skip check_ctx_reg iff register is NULL
-- Change output of check_reg_type slightly, to avoid touching tests
-
-Original cover letter:
-
-Currently, check_func_arg has this pretty gnarly if statement that
-compares the valid arg_type with the actualy reg_type. Sprinkled
-in-between are checks for register_is_null, to short circuit these
-tests if we're dealing with a nullable arg_type. There is also some
-code for later bounds / access checking hidden away in there.
-
-This series of patches refactors the function into something like this:
-
-   if (reg_is_null && arg_type_is_nullable)
-     skip type checking
-
-   do type checking, including BTF validation
-
-   do bounds / access checking
-
-The type checking is now table driven, which makes it easy to extend
-the acceptable types. Maybe more importantly, using a table makes it
-easy to provide more helpful verifier output (see the last patch).
-
-Lorenz Bauer (11):
-  btf: make btf_set_contains take a const pointer
-  bpf: check scalar or invalid register in check_helper_mem_access
-  btf: Add BTF_ID_LIST_SINGLE macro
-  bpf: allow specifying a BTF ID per argument in function protos
-  bpf: make BTF pointer type checking generic
-  bpf: make reference tracking generic
-  bpf: make context access check generic
-  bpf: set meta->raw_mode for pointers close to use
-  bpf: check ARG_PTR_TO_SPINLOCK register type in check_func_arg
-  bpf: hoist type checking for nullable arg types
-  bpf: use a table to drive helper arg type checks
-
- include/linux/bpf.h            |  21 +-
- include/linux/btf_ids.h        |   8 +
- kernel/bpf/bpf_inode_storage.c |   8 +-
- kernel/bpf/btf.c               |  15 +-
- kernel/bpf/stackmap.c          |   5 +-
- kernel/bpf/verifier.c          | 338 ++++++++++++++++++---------------
- kernel/trace/bpf_trace.c       |  15 +-
- net/core/bpf_sk_storage.c      |   8 +-
- net/core/filter.c              |  31 +--
- net/ipv4/bpf_tcp_ca.c          |  19 +-
- tools/include/linux/btf_ids.h  |   8 +
- 11 files changed, 239 insertions(+), 237 deletions(-)
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 814bc6c1ad16..c997f81c500b 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3594,18 +3594,6 @@ static int check_stack_boundary(struct bpf_verifier_env *env, int regno,
+ 	struct bpf_func_state *state = func(env, reg);
+ 	int err, min_off, max_off, i, j, slot, spi;
+ 
+-	if (reg->type != PTR_TO_STACK) {
+-		/* Allow zero-byte read from NULL, regardless of pointer type */
+-		if (zero_size_allowed && access_size == 0 &&
+-		    register_is_null(reg))
+-			return 0;
+-
+-		verbose(env, "R%d type=%s expected=%s\n", regno,
+-			reg_type_str[reg->type],
+-			reg_type_str[PTR_TO_STACK]);
+-		return -EACCES;
+-	}
+-
+ 	if (tnum_is_const(reg->var_off)) {
+ 		min_off = max_off = reg->var_off.value + reg->off;
+ 		err = __check_stack_boundary(env, regno, min_off, access_size,
+@@ -3750,9 +3738,19 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
+ 					   access_size, zero_size_allowed,
+ 					   "rdwr",
+ 					   &env->prog->aux->max_rdwr_access);
+-	default: /* scalar_value|ptr_to_stack or invalid ptr */
++	case PTR_TO_STACK:
+ 		return check_stack_boundary(env, regno, access_size,
+ 					    zero_size_allowed, meta);
++	default: /* scalar_value or invalid ptr */
++		/* Allow zero-byte read from NULL, regardless of pointer type */
++		if (zero_size_allowed && access_size == 0 &&
++		    register_is_null(reg))
++			return 0;
++
++		verbose(env, "R%d type=%s expected=%s\n", regno,
++			reg_type_str[reg->type],
++			reg_type_str[PTR_TO_STACK]);
++		return -EACCES;
+ 	}
+ }
+ 
 -- 
 2.25.1
 
