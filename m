@@ -2,125 +2,127 @@ Return-Path: <SRS0=4c4M=C6=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92F4FC43468
-	for <bpf@archiver.kernel.org>; Mon, 21 Sep 2020 15:55:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11642C43466
+	for <bpf@archiver.kernel.org>; Mon, 21 Sep 2020 16:12:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 27B8A235F8
-	for <bpf@archiver.kernel.org>; Mon, 21 Sep 2020 15:55:31 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X6obxRKe"
+	by mail.kernel.org (Postfix) with ESMTP id C131020708
+	for <bpf@archiver.kernel.org>; Mon, 21 Sep 2020 16:12:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727219AbgIUPz3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 21 Sep 2020 11:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726696AbgIUPz3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 21 Sep 2020 11:55:29 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B8AC0613CF
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2020 08:55:28 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id w3so11539074ljo.5
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2020 08:55:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KlAO2f2MCbdMFYmuMR/JVAe3ADfPLwZDOazJ0JPDtY8=;
-        b=X6obxRKeN8mR9RXp9MXChkD/M+vckq63Aq7SzA4AbmwqS/IV5RDlSeQScIvKUx90Yq
-         egE3yRvoKY3/syMLF2edGesVcPB6irZi2K8o1J7gzKQQYLf/KoNbSLvEDwPRQ8Zm/SCT
-         gq5vqLKF0gc7kMWfQqZL8aa0UB2Bz+NsoL8x+711eRc2LRrgrsg/Qn9SIOSuQ9Ca3Re+
-         Gztcy1jkdpujzRW0mt7Jdz3Iu8Kp1XCbeD5DMLzyrhsRRCN2VL1v0le3b5DU/mAV5WTR
-         X02fZxY1HAoBQI19wrg4qUPbFwT29TH7MY4J5mkMhi6z/F/8vW26DM+UxD+2RtSmOaVe
-         uYPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KlAO2f2MCbdMFYmuMR/JVAe3ADfPLwZDOazJ0JPDtY8=;
-        b=ieAxJwTKWcvPh63y0BGYH5iiFJ5HzTlpYyGffOKnJmWyEn/BsF8sCltEiibV5bGwrk
-         +qZDZP4ABGulnBbOZEcQc3tFrpYmXbONfdCr0bGLRIc2OBQ5ytuJSOCHH3c1BFe72P3w
-         2QYrsRVDRSLZevhvQm9zgydLKCSDT+0qs1c6wjrAptk7sRiGI4SPIRoO7iwAeymGGyH4
-         JtVYkwaxxCURoLgF65lZjqa2L8DC2YSdflwASU9YCHDPu1M6pAFeWoaKVcICm8IH3Niy
-         4KMrqc7jxmOSl2aTWS3a17FN72t6/JV5PSHj8WNbbiOT6z7qMoq0T/a1a67Fx3LQEGSD
-         /U/Q==
-X-Gm-Message-State: AOAM5309eHTWGNrFz0/zwaeSr4BDrO0nwzkhqdq9L7o+J1t/oR1shv7o
-        DLQ0mWTYqSH2/XgzwDZWiQHCT+f0UsdNHPiUAofp2A==
-X-Google-Smtp-Source: ABdhPJzAzrg0an3L/O21olXYAkjIkNnbmJ64HN6mgah50aQ3PSN08J/FUDGQvp5j4/fAmKh3qQmu1dRpTCZjQgXqSpU=
-X-Received: by 2002:a2e:7c09:: with SMTP id x9mr116899ljc.192.1600703726805;
- Mon, 21 Sep 2020 08:55:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200921080255.15505-1-zangchunxin@bytedance.com>
-In-Reply-To: <20200921080255.15505-1-zangchunxin@bytedance.com>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Mon, 21 Sep 2020 08:55:15 -0700
-Message-ID: <CALvZod5JpEsmNvbaCMEfRMt83GbeLJk2oM0=siCj+aXEnxYh4Q@mail.gmail.com>
-Subject: Re: [PATCH] mm/memcontrol: Add the drop_cache interface for cgroup v2
-To:     zangchunxin@bytedance.com
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tejun Heo <tj@kernel.org>, Li Zefan <lizefan@huawei.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        id S1726419AbgIUQMc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 21 Sep 2020 12:12:32 -0400
+Received: from mga05.intel.com ([192.55.52.43]:56281 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728201AbgIUQMc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 21 Sep 2020 12:12:32 -0400
+IronPort-SDR: MqHtZHQzCNjjlesA7nhzk4+LuQ2szVY6xef3bCzBYXHvyg/1JypCqdnIxGFurhvwa3FUp/2gUe
+ JuEkSIP1XfDA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9751"; a="245261224"
+X-IronPort-AV: E=Sophos;i="5.77,287,1596524400"; 
+   d="scan'208";a="245261224"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2020 09:12:30 -0700
+IronPort-SDR: PFGD7cxLtx6JSmQh/9xzoRoxUT3dNwg1ZsCx6L//MdStBZ/1a6fjfDJblGVWT2k9Nvg+mJYmQl
+ i+wt/coDa7zA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.77,287,1596524400"; 
+   d="scan'208";a="454105387"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by orsmga004.jf.intel.com with ESMTP; 21 Sep 2020 09:12:28 -0700
+Date:   Mon, 21 Sep 2020 18:05:37 +0200
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, kafai@fb.com,
-        Song Liu <songliubraving@fb.com>, yhs@fb.com, andriin@fb.com,
-        john.fastabend@gmail.com, kpsingh@chromium.org,
-        Cgroups <cgroups@vger.kernel.org>, linux-doc@vger.kernel.org,
-        Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>
+Subject: Re: [PATCH v8 bpf-next 0/7] bpf: tailcalls in BPF subprograms
+Message-ID: <20200921160537.GA31703@ranger.igk.intel.com>
+References: <20200916211010.3685-1-maciej.fijalkowski@intel.com>
+ <CAADnVQLEYHZLeu-d4nV5Px6t+tVtYEgg8AfPE5-GwAS1uizc0w@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQLEYHZLeu-d4nV5Px6t+tVtYEgg8AfPE5-GwAS1uizc0w@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Sep 21, 2020 at 1:05 AM <zangchunxin@bytedance.com> wrote:
->
-> From: Chunxin Zang <zangchunxin@bytedance.com>
->
-> In the cgroup v1, we have 'force_mepty' interface. This is very
-> useful for userspace to actively release memory. But the cgroup
-> v2 does not.
->
-> This patch reuse cgroup v1's function, but have a new name for
-> the interface. Because I think 'drop_cache' may be is easier to
-> understand :)
->
-> Signed-off-by: Chunxin Zang <zangchunxin@bytedance.com>
-> ---
->  Documentation/admin-guide/cgroup-v2.rst | 11 +++++++++++
->  mm/memcontrol.c                         |  5 +++++
->  2 files changed, 16 insertions(+)
->
-> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> index ce3e05e41724..fbff959c8116 100644
-> --- a/Documentation/admin-guide/cgroup-v2.rst
-> +++ b/Documentation/admin-guide/cgroup-v2.rst
-> @@ -1181,6 +1181,17 @@ PAGE_SIZE multiple when read back.
->         high limit is used and monitored properly, this limit's
->         utility is limited to providing the final safety net.
->
-> +  memory.drop_cache
-> +    A write-only single value file which exists on non-root
-> +    cgroups.
-> +
-> +    Provide a mechanism for users to actively trigger memory
-> +    reclaim. The cgroup will be reclaimed and as many pages
-> +    reclaimed as possible.
-> +
-> +    It will broke low boundary. Because it tries to reclaim the
-> +    memory many times, until the memory drops to a certain level.
-> +
+On Thu, Sep 17, 2020 at 08:26:34PM -0700, Alexei Starovoitov wrote:
+> On Wed, Sep 16, 2020 at 2:16 PM Maciej Fijalkowski
+> <maciej.fijalkowski@intel.com> wrote:
+> >
+> > Changelog:
+> >
+> > v7->v8:
+> > - teach bpf_patch_insn_data to adjust insn_idx of tailcall insn
+> > - address case of clearing tail call counter when bpf2bpf with tailcalls
+> >   are mixed
+> > - drop unnecessary checks against cbpf in JIT
+> > - introduce more tailcall_bpf2bpf[X] selftests that are making sure the
+> >   combination of tailcalls with bpf2bpf calls works correctly
+> > - add test cases to test_verifier to make sure logic from
+> >   check_max_stack_depth that limits caller's stack depth down to 256 is
+> >   correct
+> > - move the main patch to appear after the one that limits the caller's
+> >   stack depth so that 'has_tail_call' can be used by 'tail_call_reachable'
+> >   logic
+> 
+> Thanks a lot for your hard work on this set. 5 month effort!
 
-drop_cache is not really force_empty(). What is your use-case? Maybe
-you can use memory.reclaim [1] for your use-case. It is already in
-Andrew's tree.
+Thanks for the whole collaboration! It was quite a ride :)
 
-[1] https://lkml.kernel.org/r/20200909215752.1725525-1-shakeelb@google.com
+> I think it's a huge milestone that will enable cilium, cloudflare, katran to
+> use bpf functions. Removing always_inline will improve performance.
+> Switching to global functions with function-by-function verification
+> will drastically improve program load times.
+> libbpf has full support for subprogram composition and call relocations.
+> Until now these verifier and libbpf features were impossible to use in XDP
+> programs, since most of them use tail_calls.
+> It's great to see all these building blocks finally coming together.
+> 
+> I've applied the set with few changes.
+> In patch 4 I've removed ifdefs and redundant ().
+> In patch 5 removed redundant !tail_call_reachable check.
+> In patch 6 replaced CONFIG_JIT_ALWAYS_ON dependency with
+> jit_requested && IS_ENABLED(CONFIG_X86_64).
+> It's more user friendly.
+> I also added patch 7 that checks that ld_abs and tail_call are only
+> allowed in subprograms that return 'int'.
+
+Thank you for this last touch! I went through patches and I agree with the
+changes.
+
+> I felt that the fix is simple enough, so I just pushed it, since
+> without it the set is not safe. Please review it here:
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=09b28d76eac48e922dc293da1aa2b2b85c32aeee
+
+LGTM.
+
+> I'll address any issues in the followups.
+> Because of the above changes I tweaked patch 8 to increase test coverage
+> with ld_abs and combination of global/static subprogs.
+> Also did s/__attribute__((noinline))/__noinline/.
+> 
+> John and Daniel,
+> I wasn't able to test it on cilium programs.
+> When you have a chance please give it a thorough run.
+> tail_call poke logic is delicate.
+> 
+> Lorenz,
+> if you can test it on cloudflare progs would be awesome.
+> 
+> Thanks a lot everyone!
