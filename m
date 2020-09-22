@@ -2,130 +2,162 @@ Return-Path: <SRS0=pAHC=C7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 158F7C4363D
-	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 07:27:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5919C4363D
+	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 07:27:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ADD1121548
-	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 07:27:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B1D623A1E
+	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 07:27:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hQ0AHYXY"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="SJu6HGOM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729813AbgIVH1K (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Sep 2020 03:27:10 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:18444 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729748AbgIVH1K (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 22 Sep 2020 03:27:10 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08M6wvWm031571
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2020 00:04:12 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=/fx4Yk9egZlmgSZ1F5w/+EHqLwnISXP0lx6/9pDfrjw=;
- b=hQ0AHYXYXnRRpc2NeneU1tYKHKvgEruTlx2oNzt3LowsJO64NWLLgvCrzSZVTpTzmA0j
- OfOyFXTv23vNuCBd8enN6J8cgOu0DXNAl3q5kHlj4SfCs1gGlja+A4It/hWch2YpAsDc
- NcLwkZRpFIFb/3jL3lu0Df3ZdWxA1n2h+kM= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 33p1tjsd3w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2020 00:04:12 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 22 Sep 2020 00:04:11 -0700
-Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 9F87B294641C; Tue, 22 Sep 2020 00:04:09 -0700 (PDT)
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Lorenz Bauer <lmb@cloudflare.com>, <netdev@vger.kernel.org>
-Subject: [PATCH v3 bpf-next 00/11] bpf: Enable bpf_skc_to_* sock casting helper to networking prog type
-Date:   Tue, 22 Sep 2020 00:04:09 -0700
-Message-ID: <20200922070409.1914988-1-kafai@fb.com>
-X-Mailer: git-send-email 2.24.1
+        id S1729970AbgIVH1p (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Sep 2020 03:27:45 -0400
+Received: from mx2.suse.de ([195.135.220.15]:56506 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729748AbgIVH1p (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 22 Sep 2020 03:27:45 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1600759663;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Erw2OosUhNlUjJ/92tw/QfOb1ODXL2vdqOviv1OTGQE=;
+        b=SJu6HGOM7mmekNJl2WAqQ2Z0OqgE18sdv4bZEjSiRqgybbfl14iLBvSa882Sg+JSj+TZhl
+        UMLU1ibKgV/UqhrqCSyTiFlZ8zGyr3CeNw9z6X6gESLPqu69C9fKTiSuSmG4ObY2kuJbYo
+        T6QzgAjoDLcehxHPNXIOeQcatmJPSdI=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 50C8AAA35;
+        Tue, 22 Sep 2020 07:28:20 +0000 (UTC)
+Date:   Tue, 22 Sep 2020 09:27:33 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     zangchunxin@bytedance.com, Johannes Weiner <hannes@cmpxchg.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tejun Heo <tj@kernel.org>, lizefan@huawei.com,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, kafai@fb.com,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        andriin@fb.com, john.fastabend@gmail.com, kpsingh@chromium.org,
+        Cgroups <cgroups@vger.kernel.org>, linux-doc@vger.kernel.org,
+        Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, bpf@vger.kernel.org
+Subject: Re: [PATCH] mm/memcontrol: Add the drop_cache interface for cgroup v2
+Message-ID: <20200922072733.GT12990@dhcp22.suse.cz>
+References: <20200921080255.15505-1-zangchunxin@bytedance.com>
+ <20200921081200.GE12990@dhcp22.suse.cz>
+ <CALOAHbDKvT58UFjxy770VDxO0VWABRYb7GVwgw+NiJp62mB06w@mail.gmail.com>
+ <20200921110505.GH12990@dhcp22.suse.cz>
+ <CALOAHbCDXwjN+WDSGVv+G3ho-YRRPjAAqMJBtyxeGHH6utb5ew@mail.gmail.com>
+ <20200921113646.GJ12990@dhcp22.suse.cz>
+ <CALOAHbCker64WEW9w4oq8=avA6oKf3-Jrn-vOOgkpqkV3g+CYA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-22_05:2020-09-21,2020-09-22 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
- mlxlogscore=697 clxscore=1015 priorityscore=1501 adultscore=0
- malwarescore=0 spamscore=0 lowpriorityscore=0 suspectscore=13
- impostorscore=0 phishscore=0 bulkscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009220056
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALOAHbCker64WEW9w4oq8=avA6oKf3-Jrn-vOOgkpqkV3g+CYA@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This set allows networking prog type to directly read fields from
-the in-kernel socket type, e.g. "struct tcp_sock".
+On Tue 22-09-20 12:20:52, Yafang Shao wrote:
+> On Mon, Sep 21, 2020 at 7:36 PM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Mon 21-09-20 19:23:01, Yafang Shao wrote:
+> > > On Mon, Sep 21, 2020 at 7:05 PM Michal Hocko <mhocko@suse.com> wrote:
+> > > >
+> > > > On Mon 21-09-20 18:55:40, Yafang Shao wrote:
+> > > > > On Mon, Sep 21, 2020 at 4:12 PM Michal Hocko <mhocko@suse.com> wrote:
+> > > > > >
+> > > > > > On Mon 21-09-20 16:02:55, zangchunxin@bytedance.com wrote:
+> > > > > > > From: Chunxin Zang <zangchunxin@bytedance.com>
+> > > > > > >
+> > > > > > > In the cgroup v1, we have 'force_mepty' interface. This is very
+> > > > > > > useful for userspace to actively release memory. But the cgroup
+> > > > > > > v2 does not.
+> > > > > > >
+> > > > > > > This patch reuse cgroup v1's function, but have a new name for
+> > > > > > > the interface. Because I think 'drop_cache' may be is easier to
+> > > > > > > understand :)
+> > > > > >
+> > > > > > This should really explain a usecase. Global drop_caches is a terrible
+> > > > > > interface and it has caused many problems in the past. People have
+> > > > > > learned to use it as a remedy to any problem they might see and cause
+> > > > > > other problems without realizing that. This is the reason why we even
+> > > > > > log each attempt to drop caches.
+> > > > > >
+> > > > > > I would rather not repeat the same mistake on the memcg level unless
+> > > > > > there is a very strong reason for it.
+> > > > > >
+> > > > >
+> > > > > I think we'd better add these comments above the function
+> > > > > mem_cgroup_force_empty() to explain why we don't want to expose this
+> > > > > interface in cgroup2, otherwise people will continue to send this
+> > > > > proposal without any strong reason.
+> > > >
+> > > > I do not mind people sending this proposal.  "V1 used to have an
+> > > > interface, we need it in v2 as well" is not really viable without
+> > > > providing more reasoning on the specific usecase.
+> > > >
+> > > > _Any_ patch should have a proper justification. This is nothing really
+> > > > new to the process and I am wondering why this is coming as a surprise.
+> > > >
+> > >
+> > > Container users always want to drop cache in a specific container,
+> > > because they used to use drop_caches to fix memory pressure issues.
+> >
+> > This is exactly the kind of problems we have seen in the past. There
+> > should be zero reason to addre potential reclaim problems by dropping
+> > page cache on the floor. There is a huge cargo cult about this
+> > procedure and I have seen numerous reports when people complained about
+> > performance afterwards just to learn that the dropped page cache was one
+> > of the resons for that.
+> >
+> > > Although drop_caches can cause some unexpected issues, it could also
+> > > fix some issues.
+> >
+> > "Some issues" is way too general. We really want to learn about those
+> > issues and address them properly.
+> >
+> 
+> One use case in our production environment is that some of our tasks
+> become very latency sensitive from 7am to 10am, so before these tasks
+> become active we will use drop_caches to drop page caches generated by
+> other tasks at night to avoid these tasks triggering direct reclaim.
+>
+> The best way to do it is to fix the latency in direct reclaim, but it
+> will take great effort.
 
-Patch 2 has the details on the use case.
+What is the latency triggered by the memory reclaim? It should be mostly
+a clean page cache right as drop_caches only drops clean pages. Or is
+this more about [id]cache? Do you have any profiles where is the time
+spent?
 
-v3:
-- ARG_PTR_TO_SOCK_COMMON_OR_NULL was attempted in v2.  The _OR_NULL was
-  needed because the PTR_TO_BTF_ID could be NULL but note that a could be=
- NULL
-  PTR_TO_BTF_ID is not a scalar NULL to the verifier.  "_OR_NULL" implici=
-tly
-  gives an expectation that the helper can take a scalar NULL which does
-  not make sense in most (except one) helpers.  Passing scalar NULL
-  should be rejected at the verification time.
+> while drop_caches give us an easier way to achieve the same goal.
 
-  Thus, this patch uses ARG_PTR_TO_BTF_ID_SOCK_COMMON to specify that the
-  helper can take both the btf-id ptr or the legacy PTR_TO_SOCK_COMMON bu=
-t
-  not scalar NULL.  It requires the func_proto to explicitly specify the
-  arg_btf_id such that there is a very clear expectation that the helper
-  can handle a NULL PTR_TO_BTF_ID.
+It papers over real problems and that is my earlier comment about.
 
-v2:
-- Add ARG_PTR_TO_SOCK_COMMON_OR_NULL (Lorenz)
+> IOW, drop_caches give the users an option to achieve their goal before
+> they find a better solution.
 
-Martin KaFai Lau (11):
-  bpf: Move the PTR_TO_BTF_ID check to check_reg_type()
-  bpf: Enable bpf_skc_to_* sock casting helper to networking prog type
-  bpf: Change bpf_sk_release and bpf_sk_*cgroup_id to accept
-    ARG_PTR_TO_BTF_ID_SOCK_COMMON
-  bpf: Change bpf_sk_storage_*() to accept ARG_PTR_TO_BTF_ID_SOCK_COMMON
-  bpf: Change bpf_tcp_*_syncookie to accept
-    ARG_PTR_TO_BTF_ID_SOCK_COMMON
-  bpf: Change bpf_sk_assign to accept ARG_PTR_TO_BTF_ID_SOCK_COMMON
-  bpf: selftest: Add ref_tracking verifier test for bpf_skc casting
-  bpf: selftest: Move sock_fields test into test_progs
-  bpf: selftest: Adapt sock_fields test to use skel and global variables
-  bpf: selftest: Use network_helpers in the sock_fields test
-  bpf: selftest: Use bpf_skc_to_tcp_sock() in the sock_fields test
+You can achieve the same by a different configuration already. You can
+isolate your page cache hungry overnight (likely a backup) workload into
+its own memcg. You can either use an aggressive high limit during the
+run or simply reduce the high/max limit after the work is done.
 
- include/linux/bpf.h                           |   1 +
- include/net/bpf_sk_storage.h                  |   2 -
- include/uapi/linux/bpf.h                      |   1 +
- kernel/bpf/bpf_lsm.c                          |   4 +-
- kernel/bpf/verifier.c                         |  93 ++--
- net/core/bpf_sk_storage.c                     |  31 +-
- net/core/filter.c                             | 112 ++--
- net/ipv4/bpf_tcp_ca.c                         |  23 +-
- tools/include/uapi/linux/bpf.h                |   1 +
- tools/testing/selftests/bpf/Makefile          |   2 +-
- .../selftests/bpf/prog_tests/sock_fields.c    | 361 +++++++++++++
- ..._sock_fields_kern.c =3D> test_sock_fields.c} | 165 +++---
- .../testing/selftests/bpf/test_sock_fields.c  | 482 ------------------
- .../selftests/bpf/verifier/ref_tracking.c     |  47 ++
- 14 files changed, 633 insertions(+), 692 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sock_fields.c
- rename tools/testing/selftests/bpf/progs/{test_sock_fields_kern.c =3D> t=
-est_sock_fields.c} (61%)
- delete mode 100644 tools/testing/selftests/bpf/test_sock_fields.c
+If you cannot isolate that easily then you can lower high limit
+temporarily before your peak workload.
 
---=20
-2.24.1
-
+Really throwing all the page cache away just to prepare for a peak
+workload sounds like a bad idea to me. You are potentially throwing
+data that you have to spend time to refault again.
+-- 
+Michal Hocko
+SUSE Labs
