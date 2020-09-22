@@ -8,48 +8,48 @@ X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B791AC4727D
-	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 07:30:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87636C2D0E2
+	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 07:36:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 696F52084C
-	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 07:30:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2A05C2395B
+	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 07:36:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="W0BytDzu"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="BCDXfcer"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730026AbgIVHas (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Sep 2020 03:30:48 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:30616 "EHLO
+        id S1729751AbgIVHgX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Sep 2020 03:36:23 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:22428 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729634AbgIVHaq (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 22 Sep 2020 03:30:46 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08M70Ssf027093
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2020 00:04:33 -0700
+        by vger.kernel.org with ESMTP id S1729634AbgIVHgX (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 22 Sep 2020 03:36:23 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08M70Sl5027831
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2020 00:04:49 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=b87LFKB9oXD1o+48K/Vts7Vqt8hDS99xVwCbZz5b+rE=;
- b=W0BytDzuLDq/ozYXafnTCLBF92/oq9RPLe96AVYy/8l++A0URtxusLaK/9gOtSSPxZiX
- 3LcTYH2njsSq0y8ZZ6/6sGnHKwMDvF7IyDdqrAlhhWrkjwZNuary9hFY55w2+c3vf/6/
- HUG2NqK7SW+40D1xMhmv5xAZAZSw0Z3/8Po= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 33p1g9sc9u-1
+ bh=Dd/2Hfiqw8Es3nvsXohjRD7d2Fck8HutBWsOamimOIw=;
+ b=BCDXfcermkEukLKW/56Oaplv28efYdJc6sQzfmGRgvjzmzCIEUiSosDloeFg04t2TmAC
+ /e5iXfK7KzY+IUQsSpAq8aZLgpu948DZnMfokQWtsj8hEFr8lMrQwVFOU/bq1NaCQHtF
+ n4/6E4OMYZGZOXPg0sVXixfzMoSF+VU2CuM= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 33p1ft9d72-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2020 00:04:33 -0700
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2020 00:04:49 -0700
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 22 Sep 2020 00:04:31 -0700
+ 15.1.1979.3; Tue, 22 Sep 2020 00:04:49 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 5D778294641C; Tue, 22 Sep 2020 00:04:28 -0700 (PDT)
+        id 1AC2A294641C; Tue, 22 Sep 2020 00:04:47 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Lorenz Bauer <lmb@cloudflare.com>, <netdev@vger.kernel.org>
-Subject: [PATCH v3 bpf-next 03/11] bpf: Change bpf_sk_release and bpf_sk_*cgroup_id to accept ARG_PTR_TO_BTF_ID_SOCK_COMMON
-Date:   Tue, 22 Sep 2020 00:04:28 -0700
-Message-ID: <20200922070428.1917972-1-kafai@fb.com>
+Subject: [PATCH v3 bpf-next 06/11] bpf: Change bpf_sk_assign to accept ARG_PTR_TO_BTF_ID_SOCK_COMMON
+Date:   Tue, 22 Sep 2020 00:04:47 -0700
+Message-ID: <20200922070447.1920932-1-kafai@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200922070409.1914988-1-kafai@fb.com>
 References: <20200922070409.1914988-1-kafai@fb.com>
@@ -59,160 +59,58 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-22_05:2020-09-21,2020-09-22 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- impostorscore=0 malwarescore=0 lowpriorityscore=0 bulkscore=0
- suspectscore=13 clxscore=1015 phishscore=0 mlxlogscore=933 adultscore=0
- priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2009220056
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 mlxscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=881 priorityscore=1501
+ clxscore=1015 spamscore=0 lowpriorityscore=0 bulkscore=0 impostorscore=0
+ suspectscore=13 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009220056
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The previous patch allows the networking bpf prog to use the
-bpf_skc_to_*() helpers to get a PTR_TO_BTF_ID socket pointer,
-e.g. "struct tcp_sock *".  It allows the bpf prog to read all the
-fields of the tcp_sock.
+This patch changes the bpf_sk_assign() to take
+ARG_PTR_TO_BTF_ID_SOCK_COMMON such that they will work with the pointer
+returned by the bpf_skc_to_*() helpers also.
 
-This patch changes the bpf_sk_release() and bpf_sk_*cgroup_id()
-to take ARG_PTR_TO_BTF_ID_SOCK_COMMON such that they will
-work with the pointer returned by the bpf_skc_to_*() helpers
-also.  For example, the following will work:
-
-	sk =3D bpf_skc_lookup_tcp(skb, tuple, tuplen, BPF_F_CURRENT_NETNS, 0);
-	if (!sk)
-		return;
-	tp =3D bpf_skc_to_tcp_sock(sk);
-	if (!tp) {
-		bpf_sk_release(sk);
-		return;
-	}
-	lsndtime =3D tp->lsndtime;
-	/* Pass tp to bpf_sk_release() will also work */
-	bpf_sk_release(tp);
-
-Since PTR_TO_BTF_ID could be NULL, the helper taking
-ARG_PTR_TO_BTF_ID_SOCK_COMMON has to check for NULL at runtime.
-
-A btf_id of "struct sock" may not always mean a fullsock.  Regardless
-the helper's running context may get a non-fullsock or not,
-considering fullsock check/handling is pretty cheap, it is better to
-keep the same verifier expectation on helper that takes ARG_PTR_TO_BTF_ID=
-*
-will be able to handle the minisock situation.  In the bpf_sk_*cgroup_id(=
-)
-case,  it will try to get a fullsock by using sk_to_full_sk() as its
-skb variant bpf_sk"b"_*cgroup_id() has already been doing.
-
-bpf_sk_release can already handle minisock, so nothing special has to
-be done.
+The bpf_sk_lookup_assign() is taking ARG_PTR_TO_SOCKET_"OR_NULL".  Meanin=
+g
+it specifically takes a scalar NULL.  ARG_PTR_TO_BTF_ID_SOCK_COMMON
+does not allow a scalar NULL, so another ARG type is required
+for this purpose and another folllow-up patch can be used if
+there is such need.
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- net/core/filter.c | 33 +++++++++++++++++----------------
- 1 file changed, 17 insertions(+), 16 deletions(-)
+ net/core/filter.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/net/core/filter.c b/net/core/filter.c
-index 54b338de4bb8..532a85894ce0 100644
+index 6ab12d8cdd85..063aba8a81e6 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -4088,18 +4088,17 @@ static inline u64 __bpf_sk_cgroup_id(struct sock =
-*sk)
+@@ -6221,7 +6221,7 @@ static const struct bpf_func_proto bpf_tcp_gen_sync=
+ookie_proto =3D {
+=20
+ BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64,=
+ flags)
  {
- 	struct cgroup *cgrp;
-=20
-+	sk =3D sk_to_full_sk(sk);
-+	if (!sk || !sk_fullsock(sk))
-+		return 0;
-+
- 	cgrp =3D sock_cgroup_ptr(&sk->sk_cgrp_data);
- 	return cgroup_id(cgrp);
- }
-=20
- BPF_CALL_1(bpf_skb_cgroup_id, const struct sk_buff *, skb)
- {
--	struct sock *sk =3D skb_to_full_sk(skb);
--
--	if (!sk || !sk_fullsock(sk))
--		return 0;
--
--	return __bpf_sk_cgroup_id(sk);
-+	return __bpf_sk_cgroup_id(skb->sk);
- }
-=20
- static const struct bpf_func_proto bpf_skb_cgroup_id_proto =3D {
-@@ -4115,6 +4114,10 @@ static inline u64 __bpf_sk_ancestor_cgroup_id(stru=
-ct sock *sk,
- 	struct cgroup *ancestor;
- 	struct cgroup *cgrp;
-=20
-+	sk =3D sk_to_full_sk(sk);
-+	if (!sk || !sk_fullsock(sk))
-+		return 0;
-+
- 	cgrp =3D sock_cgroup_ptr(&sk->sk_cgrp_data);
- 	ancestor =3D cgroup_ancestor(cgrp, ancestor_level);
- 	if (!ancestor)
-@@ -4126,12 +4129,7 @@ static inline u64 __bpf_sk_ancestor_cgroup_id(stru=
-ct sock *sk,
- BPF_CALL_2(bpf_skb_ancestor_cgroup_id, const struct sk_buff *, skb, int,
- 	   ancestor_level)
- {
--	struct sock *sk =3D skb_to_full_sk(skb);
--
--	if (!sk || !sk_fullsock(sk))
--		return 0;
--
--	return __bpf_sk_ancestor_cgroup_id(sk, ancestor_level);
-+	return __bpf_sk_ancestor_cgroup_id(skb->sk, ancestor_level);
- }
-=20
- static const struct bpf_func_proto bpf_skb_ancestor_cgroup_id_proto =3D =
-{
-@@ -4151,7 +4149,8 @@ static const struct bpf_func_proto bpf_sk_cgroup_id=
-_proto =3D {
- 	.func           =3D bpf_sk_cgroup_id,
- 	.gpl_only       =3D false,
- 	.ret_type       =3D RET_INTEGER,
--	.arg1_type      =3D ARG_PTR_TO_SOCKET,
-+	.arg1_type      =3D ARG_PTR_TO_BTF_ID_SOCK_COMMON,
-+	.arg1_btf_id	=3D &btf_sock_ids[BTF_SOCK_TYPE_SOCK_COMMON],
- };
-=20
- BPF_CALL_2(bpf_sk_ancestor_cgroup_id, struct sock *, sk, int, ancestor_l=
-evel)
-@@ -4163,7 +4162,8 @@ static const struct bpf_func_proto bpf_sk_ancestor_=
-cgroup_id_proto =3D {
- 	.func           =3D bpf_sk_ancestor_cgroup_id,
- 	.gpl_only       =3D false,
- 	.ret_type       =3D RET_INTEGER,
--	.arg1_type      =3D ARG_PTR_TO_SOCKET,
-+	.arg1_type      =3D ARG_PTR_TO_BTF_ID_SOCK_COMMON,
-+	.arg1_btf_id	=3D &btf_sock_ids[BTF_SOCK_TYPE_SOCK_COMMON],
- 	.arg2_type      =3D ARG_ANYTHING,
- };
- #endif
-@@ -5696,7 +5696,7 @@ static const struct bpf_func_proto bpf_sk_lookup_ud=
-p_proto =3D {
-=20
- BPF_CALL_1(bpf_sk_release, struct sock *, sk)
- {
--	if (sk_is_refcounted(sk))
-+	if (sk && sk_is_refcounted(sk))
- 		sock_gen_put(sk);
- 	return 0;
- }
-@@ -5705,7 +5705,8 @@ static const struct bpf_func_proto bpf_sk_release_p=
-roto =3D {
- 	.func		=3D bpf_sk_release,
+-	if (flags !=3D 0)
++	if (!sk || flags !=3D 0)
+ 		return -EINVAL;
+ 	if (!skb_at_tc_ingress(skb))
+ 		return -EOPNOTSUPP;
+@@ -6245,7 +6245,8 @@ static const struct bpf_func_proto bpf_sk_assign_pr=
+oto =3D {
  	.gpl_only	=3D false,
  	.ret_type	=3D RET_INTEGER,
--	.arg1_type	=3D ARG_PTR_TO_SOCK_COMMON,
-+	.arg1_type	=3D ARG_PTR_TO_BTF_ID_SOCK_COMMON,
-+	.arg1_btf_id	=3D &btf_sock_ids[BTF_SOCK_TYPE_SOCK_COMMON],
+ 	.arg1_type      =3D ARG_PTR_TO_CTX,
+-	.arg2_type      =3D ARG_PTR_TO_SOCK_COMMON,
++	.arg2_type      =3D ARG_PTR_TO_BTF_ID_SOCK_COMMON,
++	.arg2_btf_id	=3D &btf_sock_ids[BTF_SOCK_TYPE_SOCK_COMMON],
+ 	.arg3_type	=3D ARG_ANYTHING,
  };
 =20
- BPF_CALL_5(bpf_xdp_sk_lookup_udp, struct xdp_buff *, ctx,
 --=20
 2.24.1
 
