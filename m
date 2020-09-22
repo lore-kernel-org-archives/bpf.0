@@ -2,233 +2,130 @@ Return-Path: <SRS0=pAHC=C7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C417C2D0E2
-	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 07:27:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 158F7C4363D
+	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 07:27:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 28D3821924
-	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 07:27:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ADD1121548
+	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 07:27:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="TLUAEPUm"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="hQ0AHYXY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729772AbgIVH1F (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Sep 2020 03:27:05 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:41064 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729748AbgIVH1F (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 22 Sep 2020 03:27:05 -0400
-X-Greylist: delayed 1356 seconds by postgrey-1.27 at vger.kernel.org; Tue, 22 Sep 2020 03:27:04 EDT
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 08M70epA015130
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2020 00:05:17 -0700
+        id S1729813AbgIVH1K (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Sep 2020 03:27:10 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:18444 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729748AbgIVH1K (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 22 Sep 2020 03:27:10 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08M6wvWm031571
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2020 00:04:12 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=Y9WBsu0ZQEInfG22eS2/HVDRYywZidrRy7v8I1MbrjM=;
- b=TLUAEPUmcoEVE45iaYb2YXSwjBM+OSpiwHaoKxMeqUObwxLbuFlx27YTNV990zIVAe6M
- KQl/vtd9w1nCnYuELHqIafztpRxTPfivoi0qQdfSJgHeJl6c7iYtPKgz/QdxLTg2Wwh0
- eCc5UciQu0ls12PFl9w4sd/rTCJ8zwvZz1E= 
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=/fx4Yk9egZlmgSZ1F5w/+EHqLwnISXP0lx6/9pDfrjw=;
+ b=hQ0AHYXYXnRRpc2NeneU1tYKHKvgEruTlx2oNzt3LowsJO64NWLLgvCrzSZVTpTzmA0j
+ OfOyFXTv23vNuCBd8enN6J8cgOu0DXNAl3q5kHlj4SfCs1gGlja+A4It/hWch2YpAsDc
+ NcLwkZRpFIFb/3jL3lu0Df3ZdWxA1n2h+kM= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 33ndfymct6-2
+        by mx0a-00082601.pphosted.com with ESMTP id 33p1tjsd3w-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2020 00:05:17 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2020 00:04:12 -0700
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 22 Sep 2020 00:05:16 -0700
+ 15.1.1979.3; Tue, 22 Sep 2020 00:04:11 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 1A3D8294641C; Tue, 22 Sep 2020 00:05:12 -0700 (PDT)
+        id 9F87B294641C; Tue, 22 Sep 2020 00:04:09 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Lorenz Bauer <lmb@cloudflare.com>, <netdev@vger.kernel.org>
-Subject: [PATCH v3 bpf-next 10/11] bpf: selftest: Use network_helpers in the sock_fields test
-Date:   Tue, 22 Sep 2020 00:05:12 -0700
-Message-ID: <20200922070512.1923268-1-kafai@fb.com>
+Subject: [PATCH v3 bpf-next 00/11] bpf: Enable bpf_skc_to_* sock casting helper to networking prog type
+Date:   Tue, 22 Sep 2020 00:04:09 -0700
+Message-ID: <20200922070409.1914988-1-kafai@fb.com>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200922070409.1914988-1-kafai@fb.com>
-References: <20200922070409.1914988-1-kafai@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-22_05:2020-09-21,2020-09-22 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- suspectscore=15 clxscore=1015 bulkscore=0 spamscore=0 mlxscore=0
- mlxlogscore=999 malwarescore=0 adultscore=0 impostorscore=0
- priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2009220056
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
+ mlxlogscore=697 clxscore=1015 priorityscore=1501 adultscore=0
+ malwarescore=0 spamscore=0 lowpriorityscore=0 suspectscore=13
+ impostorscore=0 phishscore=0 bulkscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009220056
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch uses start_server() and connect_to_fd() from network_helpers.h
-to remove the network testing boiler plate codes.  epoll is no longer
-needed also since the timeout has already been taken care of also.
+This set allows networking prog type to directly read fields from
+the in-kernel socket type, e.g. "struct tcp_sock".
 
-Signed-off-by: Martin KaFai Lau <kafai@fb.com>
----
- .../selftests/bpf/prog_tests/sock_fields.c    | 86 ++-----------------
- 1 file changed, 9 insertions(+), 77 deletions(-)
+Patch 2 has the details on the use case.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_fields.c b/tools=
-/testing/selftests/bpf/prog_tests/sock_fields.c
-index cb6d41bc79a4..23d14e2d0d28 100644
---- a/tools/testing/selftests/bpf/prog_tests/sock_fields.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_fields.c
-@@ -12,7 +12,9 @@
-=20
- #include <bpf/bpf.h>
- #include <bpf/libbpf.h>
-+#include <linux/compiler.h>
-=20
-+#include "network_helpers.h"
- #include "cgroup_helpers.h"
- #include "test_progs.h"
- #include "bpf_rlimit.h"
-@@ -43,13 +45,6 @@ static __u32 duration;
- static __u32 egress_linum_idx =3D EGRESS_LINUM_IDX;
- static __u32 ingress_linum_idx =3D INGRESS_LINUM_IDX;
-=20
--static void init_loopback6(struct sockaddr_in6 *sa6)
--{
--	memset(sa6, 0, sizeof(*sa6));
--	sa6->sin6_family =3D AF_INET6;
--	sa6->sin6_addr =3D in6addr_loopback;
--}
--
- static void print_sk(const struct bpf_sock *sk, const char *prefix)
- {
- 	char src_ip4[24], dst_ip4[24];
-@@ -253,28 +248,14 @@ static int init_sk_storage(int sk_fd, __u32 pkt_out=
-_cnt)
-=20
- static void do_test(void)
- {
--	int listen_fd =3D -1, cli_fd =3D -1, accept_fd =3D -1, epfd, err, i;
--	struct epoll_event ev;
--	socklen_t addrlen;
-+	int listen_fd =3D -1, cli_fd =3D -1, accept_fd =3D -1, err, i;
-+	socklen_t addrlen =3D sizeof(struct sockaddr_in6);
- 	char buf[DATA_LEN];
-=20
--	addrlen =3D sizeof(struct sockaddr_in6);
--	ev.events =3D EPOLLIN;
--
--	epfd =3D epoll_create(1);
--	if (CHECK(epfd =3D=3D -1, "epoll_create()", "epfd:%d errno:%d\n",
--		  epfd, errno))
--		return;
--
- 	/* Prepare listen_fd */
--	listen_fd =3D socket(AF_INET6, SOCK_STREAM | SOCK_NONBLOCK, 0);
--	if (CHECK(listen_fd =3D=3D -1, "socket()", "listen_fd:%d errno:%d\n",
--		  listen_fd, errno))
--		goto done;
--
--	init_loopback6(&srv_sa6);
--	err =3D bind(listen_fd, (struct sockaddr *)&srv_sa6, sizeof(srv_sa6));
--	if (CHECK(err, "bind(listen_fd)", "err:%d errno:%d\n", err, errno))
-+	listen_fd =3D start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
-+	/* start_server() has logged the error details */
-+	if (CHECK_FAIL(listen_fd =3D=3D -1))
- 		goto done;
-=20
- 	err =3D getsockname(listen_fd, (struct sockaddr *)&srv_sa6, &addrlen);
-@@ -283,19 +264,8 @@ static void do_test(void)
- 		goto done;
- 	memcpy(&skel->bss->srv_sa6, &srv_sa6, sizeof(srv_sa6));
-=20
--	err =3D listen(listen_fd, 1);
--	if (CHECK(err, "listen(listen_fd)", "err:%d errno:%d\n", err, errno))
--		goto done;
--
--	/* Prepare cli_fd */
--	cli_fd =3D socket(AF_INET6, SOCK_STREAM | SOCK_NONBLOCK, 0);
--	if (CHECK(cli_fd =3D=3D -1, "socket()", "cli_fd:%d errno:%d\n", cli_fd,
--		  errno))
--		goto done;
--
--	init_loopback6(&cli_sa6);
--	err =3D bind(cli_fd, (struct sockaddr *)&cli_sa6, sizeof(cli_sa6));
--	if (CHECK(err, "bind(cli_fd)", "err:%d errno:%d\n", err, errno))
-+	cli_fd =3D connect_to_fd(listen_fd, 0);
-+	if (CHECK_FAIL(cli_fd =3D=3D -1))
- 		goto done;
-=20
- 	err =3D getsockname(cli_fd, (struct sockaddr *)&cli_sa6, &addrlen);
-@@ -303,41 +273,12 @@ static void do_test(void)
- 		  err, errno))
- 		goto done;
-=20
--	/* Connect from cli_sa6 to srv_sa6 */
--	err =3D connect(cli_fd, (struct sockaddr *)&srv_sa6, addrlen);
--	printf("srv_sa6.sin6_port:%u cli_sa6.sin6_port:%u\n\n",
--	       ntohs(srv_sa6.sin6_port), ntohs(cli_sa6.sin6_port));
--	if (CHECK(err && errno !=3D EINPROGRESS,
--		  "connect(cli_fd)", "err:%d errno:%d\n", err, errno))
--		goto done;
--
--	ev.data.fd =3D listen_fd;
--	err =3D epoll_ctl(epfd, EPOLL_CTL_ADD, listen_fd, &ev);
--	if (CHECK(err, "epoll_ctl(EPOLL_CTL_ADD, listen_fd)",
--		  "err:%d errno:%d\n", err, errno))
--		goto done;
--
--	/* Accept the connection */
--	/* Have some timeout in accept(listen_fd). Just in case. */
--	err =3D epoll_wait(epfd, &ev, 1, 1000);
--	if (CHECK(err !=3D 1 || ev.data.fd !=3D listen_fd,
--		  "epoll_wait(listen_fd)",
--		  "err:%d errno:%d ev.data.fd:%d listen_fd:%d\n",
--		  err, errno, ev.data.fd, listen_fd))
--		goto done;
--
- 	accept_fd =3D accept(listen_fd, NULL, NULL);
- 	if (CHECK(accept_fd =3D=3D -1, "accept(listen_fd)",
- 		  "accept_fd:%d errno:%d\n",
- 		  accept_fd, errno))
- 		goto done;
-=20
--	ev.data.fd =3D cli_fd;
--	err =3D epoll_ctl(epfd, EPOLL_CTL_ADD, cli_fd, &ev);
--	if (CHECK(err, "epoll_ctl(EPOLL_CTL_ADD, cli_fd)",
--		  "err:%d errno:%d\n", err, errno))
--		goto done;
--
- 	if (init_sk_storage(accept_fd, 0xeB9F))
- 		goto done;
-=20
-@@ -350,14 +291,6 @@ static void do_test(void)
- 			  "err:%d errno:%d\n", err, errno))
- 			goto done;
-=20
--		/* Have some timeout in recv(cli_fd). Just in case. */
--		err =3D epoll_wait(epfd, &ev, 1, 1000);
--		if (CHECK(err !=3D 1 || ev.data.fd !=3D cli_fd,
--			  "epoll_wait(cli_fd)",
--			  "err:%d errno:%d ev.data.fd:%d cli_fd:%d\n",
--			  err, errno, ev.data.fd, cli_fd))
--			goto done;
--
- 		err =3D recv(cli_fd, buf, DATA_LEN, 0);
- 		if (CHECK(err !=3D DATA_LEN, "recv(cli_fd)", "err:%d errno:%d\n",
- 			  err, errno))
-@@ -384,7 +317,6 @@ static void do_test(void)
- 		close(cli_fd);
- 	if (listen_fd !=3D -1)
- 		close(listen_fd);
--	close(epfd);
- }
-=20
- void test_sock_fields(void)
+v3:
+- ARG_PTR_TO_SOCK_COMMON_OR_NULL was attempted in v2.  The _OR_NULL was
+  needed because the PTR_TO_BTF_ID could be NULL but note that a could be=
+ NULL
+  PTR_TO_BTF_ID is not a scalar NULL to the verifier.  "_OR_NULL" implici=
+tly
+  gives an expectation that the helper can take a scalar NULL which does
+  not make sense in most (except one) helpers.  Passing scalar NULL
+  should be rejected at the verification time.
+
+  Thus, this patch uses ARG_PTR_TO_BTF_ID_SOCK_COMMON to specify that the
+  helper can take both the btf-id ptr or the legacy PTR_TO_SOCK_COMMON bu=
+t
+  not scalar NULL.  It requires the func_proto to explicitly specify the
+  arg_btf_id such that there is a very clear expectation that the helper
+  can handle a NULL PTR_TO_BTF_ID.
+
+v2:
+- Add ARG_PTR_TO_SOCK_COMMON_OR_NULL (Lorenz)
+
+Martin KaFai Lau (11):
+  bpf: Move the PTR_TO_BTF_ID check to check_reg_type()
+  bpf: Enable bpf_skc_to_* sock casting helper to networking prog type
+  bpf: Change bpf_sk_release and bpf_sk_*cgroup_id to accept
+    ARG_PTR_TO_BTF_ID_SOCK_COMMON
+  bpf: Change bpf_sk_storage_*() to accept ARG_PTR_TO_BTF_ID_SOCK_COMMON
+  bpf: Change bpf_tcp_*_syncookie to accept
+    ARG_PTR_TO_BTF_ID_SOCK_COMMON
+  bpf: Change bpf_sk_assign to accept ARG_PTR_TO_BTF_ID_SOCK_COMMON
+  bpf: selftest: Add ref_tracking verifier test for bpf_skc casting
+  bpf: selftest: Move sock_fields test into test_progs
+  bpf: selftest: Adapt sock_fields test to use skel and global variables
+  bpf: selftest: Use network_helpers in the sock_fields test
+  bpf: selftest: Use bpf_skc_to_tcp_sock() in the sock_fields test
+
+ include/linux/bpf.h                           |   1 +
+ include/net/bpf_sk_storage.h                  |   2 -
+ include/uapi/linux/bpf.h                      |   1 +
+ kernel/bpf/bpf_lsm.c                          |   4 +-
+ kernel/bpf/verifier.c                         |  93 ++--
+ net/core/bpf_sk_storage.c                     |  31 +-
+ net/core/filter.c                             | 112 ++--
+ net/ipv4/bpf_tcp_ca.c                         |  23 +-
+ tools/include/uapi/linux/bpf.h                |   1 +
+ tools/testing/selftests/bpf/Makefile          |   2 +-
+ .../selftests/bpf/prog_tests/sock_fields.c    | 361 +++++++++++++
+ ..._sock_fields_kern.c =3D> test_sock_fields.c} | 165 +++---
+ .../testing/selftests/bpf/test_sock_fields.c  | 482 ------------------
+ .../selftests/bpf/verifier/ref_tracking.c     |  47 ++
+ 14 files changed, 633 insertions(+), 692 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/sock_fields.c
+ rename tools/testing/selftests/bpf/progs/{test_sock_fields_kern.c =3D> t=
+est_sock_fields.c} (61%)
+ delete mode 100644 tools/testing/selftests/bpf/test_sock_fields.c
+
 --=20
 2.24.1
 
