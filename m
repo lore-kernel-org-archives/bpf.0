@@ -7,48 +7,49 @@ X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC1ACC4363D
-	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 07:27:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C417C2D0E2
+	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 07:27:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 84A6521924
-	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 07:27:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 28D3821924
+	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 07:27:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="rl5Rvdr9"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="TLUAEPUm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729762AbgIVH1D (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Sep 2020 03:27:03 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:47396 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729748AbgIVH1D (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 22 Sep 2020 03:27:03 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08M70UsU027167
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2020 00:04:19 -0700
+        id S1729772AbgIVH1F (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Sep 2020 03:27:05 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:41064 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729748AbgIVH1F (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 22 Sep 2020 03:27:05 -0400
+X-Greylist: delayed 1356 seconds by postgrey-1.27 at vger.kernel.org; Tue, 22 Sep 2020 03:27:04 EDT
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 08M70epA015130
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2020 00:05:17 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=gFaCOl60LTE2LFF8vPYboEq2sEfIyKh18sBxLy1kC7s=;
- b=rl5Rvdr9iMONdXGsAdDRMa3DjJzA5HJVYaIFOwAafP2B2cUW9n2D0Yo2975XRP00eDBT
- cOpD+t5EdyOIGXBQrfaqJX9VirXBLkkQto9iV6mCPYuJKZrIl7sI3FOJg61gEHBAYTum
- +F8154htxlfhqVR3/qRA6kC1apAOIAZXzLE= 
+ bh=Y9WBsu0ZQEInfG22eS2/HVDRYywZidrRy7v8I1MbrjM=;
+ b=TLUAEPUmcoEVE45iaYb2YXSwjBM+OSpiwHaoKxMeqUObwxLbuFlx27YTNV990zIVAe6M
+ KQl/vtd9w1nCnYuELHqIafztpRxTPfivoi0qQdfSJgHeJl6c7iYtPKgz/QdxLTg2Wwh0
+ eCc5UciQu0ls12PFl9w4sd/rTCJ8zwvZz1E= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 33p1g9sc9c-1
+        by m0089730.ppops.net with ESMTP id 33ndfymct6-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2020 00:04:19 -0700
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2020 00:05:17 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 22 Sep 2020 00:04:18 -0700
+ 15.1.1979.3; Tue, 22 Sep 2020 00:05:16 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id DAE82294641C; Tue, 22 Sep 2020 00:04:15 -0700 (PDT)
+        id 1A3D8294641C; Tue, 22 Sep 2020 00:05:12 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Lorenz Bauer <lmb@cloudflare.com>, <netdev@vger.kernel.org>
-Subject: [PATCH v3 bpf-next 01/11] bpf: Move the PTR_TO_BTF_ID check to check_reg_type()
-Date:   Tue, 22 Sep 2020 00:04:15 -0700
-Message-ID: <20200922070415.1916194-1-kafai@fb.com>
+Subject: [PATCH v3 bpf-next 10/11] bpf: selftest: Use network_helpers in the sock_fields test
+Date:   Tue, 22 Sep 2020 00:05:12 -0700
+Message-ID: <20200922070512.1923268-1-kafai@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200922070409.1914988-1-kafai@fb.com>
 References: <20200922070409.1914988-1-kafai@fb.com>
@@ -58,151 +59,176 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-22_05:2020-09-21,2020-09-22 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- impostorscore=0 malwarescore=0 lowpriorityscore=0 bulkscore=0
- suspectscore=13 clxscore=1015 phishscore=0 mlxlogscore=873 adultscore=0
- priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ suspectscore=15 clxscore=1015 bulkscore=0 spamscore=0 mlxscore=0
+ mlxlogscore=999 malwarescore=0 adultscore=0 impostorscore=0
+ priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2006250000 definitions=main-2009220056
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-check_reg_type() checks whether a reg can be used as an arg of a
-func_proto.  For PTR_TO_BTF_ID, the check is actually not
-completely done until the reg->btf_id is pointing to a
-kernel struct that is acceptable by the func_proto.
-
-Thus, this patch moves the btf_id check into check_reg_type().
-The compatible_reg_types[] usage is localized in check_reg_type() now.
-
-The "if (!btf_id) verbose(...); " is also removed since it won't happen.
+This patch uses start_server() and connect_to_fd() from network_helpers.h
+to remove the network testing boiler plate codes.  epoll is no longer
+needed also since the timeout has already been taken care of also.
 
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- kernel/bpf/verifier.c | 65 +++++++++++++++++++++++--------------------
- 1 file changed, 35 insertions(+), 30 deletions(-)
+ .../selftests/bpf/prog_tests/sock_fields.c    | 86 ++-----------------
+ 1 file changed, 9 insertions(+), 77 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 15ab889b0a3f..3ce61c412ea0 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4028,20 +4028,29 @@ static const struct bpf_reg_types *compatible_reg=
-_types[] =3D {
- 	[__BPF_ARG_TYPE_MAX]		=3D NULL,
- };
+diff --git a/tools/testing/selftests/bpf/prog_tests/sock_fields.c b/tools=
+/testing/selftests/bpf/prog_tests/sock_fields.c
+index cb6d41bc79a4..23d14e2d0d28 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sock_fields.c
++++ b/tools/testing/selftests/bpf/prog_tests/sock_fields.c
+@@ -12,7 +12,9 @@
 =20
--static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
--			  const struct bpf_reg_types *compatible)
-+static int check_reg_type(struct bpf_verifier_env *env, u32 arg,
-+			  enum bpf_arg_type arg_type,
-+			  const struct bpf_func_proto *fn)
+ #include <bpf/bpf.h>
+ #include <bpf/libbpf.h>
++#include <linux/compiler.h>
+=20
++#include "network_helpers.h"
+ #include "cgroup_helpers.h"
+ #include "test_progs.h"
+ #include "bpf_rlimit.h"
+@@ -43,13 +45,6 @@ static __u32 duration;
+ static __u32 egress_linum_idx =3D EGRESS_LINUM_IDX;
+ static __u32 ingress_linum_idx =3D INGRESS_LINUM_IDX;
+=20
+-static void init_loopback6(struct sockaddr_in6 *sa6)
+-{
+-	memset(sa6, 0, sizeof(*sa6));
+-	sa6->sin6_family =3D AF_INET6;
+-	sa6->sin6_addr =3D in6addr_loopback;
+-}
+-
+ static void print_sk(const struct bpf_sock *sk, const char *prefix)
  {
-+	u32 regno =3D BPF_REG_1 + arg;
- 	struct bpf_reg_state *regs =3D cur_regs(env), *reg =3D &regs[regno];
- 	enum bpf_reg_type expected, type =3D reg->type;
-+	const struct bpf_reg_types *compatible;
- 	int i, j;
+ 	char src_ip4[24], dst_ip4[24];
+@@ -253,28 +248,14 @@ static int init_sk_storage(int sk_fd, __u32 pkt_out=
+_cnt)
 =20
-+	compatible =3D compatible_reg_types[arg_type];
-+	if (!compatible) {
-+		verbose(env, "verifier internal error: unsupported arg type %d\n", arg=
-_type);
-+		return -EFAULT;
-+	}
-+
- 	for (i =3D 0; i < ARRAY_SIZE(compatible->types); i++) {
- 		expected =3D compatible->types[i];
- 		if (expected =3D=3D NOT_INIT)
- 			break;
+ static void do_test(void)
+ {
+-	int listen_fd =3D -1, cli_fd =3D -1, accept_fd =3D -1, epfd, err, i;
+-	struct epoll_event ev;
+-	socklen_t addrlen;
++	int listen_fd =3D -1, cli_fd =3D -1, accept_fd =3D -1, err, i;
++	socklen_t addrlen =3D sizeof(struct sockaddr_in6);
+ 	char buf[DATA_LEN];
 =20
- 		if (type =3D=3D expected)
--			return 0;
-+			goto found;
- 	}
+-	addrlen =3D sizeof(struct sockaddr_in6);
+-	ev.events =3D EPOLLIN;
+-
+-	epfd =3D epoll_create(1);
+-	if (CHECK(epfd =3D=3D -1, "epoll_create()", "epfd:%d errno:%d\n",
+-		  epfd, errno))
+-		return;
+-
+ 	/* Prepare listen_fd */
+-	listen_fd =3D socket(AF_INET6, SOCK_STREAM | SOCK_NONBLOCK, 0);
+-	if (CHECK(listen_fd =3D=3D -1, "socket()", "listen_fd:%d errno:%d\n",
+-		  listen_fd, errno))
+-		goto done;
+-
+-	init_loopback6(&srv_sa6);
+-	err =3D bind(listen_fd, (struct sockaddr *)&srv_sa6, sizeof(srv_sa6));
+-	if (CHECK(err, "bind(listen_fd)", "err:%d errno:%d\n", err, errno))
++	listen_fd =3D start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
++	/* start_server() has logged the error details */
++	if (CHECK_FAIL(listen_fd =3D=3D -1))
+ 		goto done;
 =20
- 	verbose(env, "R%d type=3D%s expected=3D", regno, reg_type_str[type]);
-@@ -4049,6 +4058,27 @@ static int check_reg_type(struct bpf_verifier_env =
-*env, u32 regno,
- 		verbose(env, "%s, ", reg_type_str[compatible->types[j]]);
- 	verbose(env, "%s\n", reg_type_str[compatible->types[j]]);
- 	return -EACCES;
-+
-+found:
-+	if (type =3D=3D PTR_TO_BTF_ID) {
-+		u32 *expected_btf_id =3D fn->arg_btf_id[arg];
-+
-+		if (!btf_struct_ids_match(&env->log, reg->off, reg->btf_id,
-+					  *expected_btf_id)) {
-+			verbose(env, "R%d is of type %s but %s is expected\n",
-+				regno, kernel_type_name(reg->btf_id),
-+				kernel_type_name(*expected_btf_id));
-+			return -EACCES;
-+		}
-+
-+		if (!tnum_is_const(reg->var_off) || reg->var_off.value) {
-+			verbose(env, "R%d is a pointer to in-kernel struct with non-zero offs=
-et\n",
-+				regno);
-+			return -EACCES;
-+		}
-+	}
-+
-+	return 0;
+ 	err =3D getsockname(listen_fd, (struct sockaddr *)&srv_sa6, &addrlen);
+@@ -283,19 +264,8 @@ static void do_test(void)
+ 		goto done;
+ 	memcpy(&skel->bss->srv_sa6, &srv_sa6, sizeof(srv_sa6));
+=20
+-	err =3D listen(listen_fd, 1);
+-	if (CHECK(err, "listen(listen_fd)", "err:%d errno:%d\n", err, errno))
+-		goto done;
+-
+-	/* Prepare cli_fd */
+-	cli_fd =3D socket(AF_INET6, SOCK_STREAM | SOCK_NONBLOCK, 0);
+-	if (CHECK(cli_fd =3D=3D -1, "socket()", "cli_fd:%d errno:%d\n", cli_fd,
+-		  errno))
+-		goto done;
+-
+-	init_loopback6(&cli_sa6);
+-	err =3D bind(cli_fd, (struct sockaddr *)&cli_sa6, sizeof(cli_sa6));
+-	if (CHECK(err, "bind(cli_fd)", "err:%d errno:%d\n", err, errno))
++	cli_fd =3D connect_to_fd(listen_fd, 0);
++	if (CHECK_FAIL(cli_fd =3D=3D -1))
+ 		goto done;
+=20
+ 	err =3D getsockname(cli_fd, (struct sockaddr *)&cli_sa6, &addrlen);
+@@ -303,41 +273,12 @@ static void do_test(void)
+ 		  err, errno))
+ 		goto done;
+=20
+-	/* Connect from cli_sa6 to srv_sa6 */
+-	err =3D connect(cli_fd, (struct sockaddr *)&srv_sa6, addrlen);
+-	printf("srv_sa6.sin6_port:%u cli_sa6.sin6_port:%u\n\n",
+-	       ntohs(srv_sa6.sin6_port), ntohs(cli_sa6.sin6_port));
+-	if (CHECK(err && errno !=3D EINPROGRESS,
+-		  "connect(cli_fd)", "err:%d errno:%d\n", err, errno))
+-		goto done;
+-
+-	ev.data.fd =3D listen_fd;
+-	err =3D epoll_ctl(epfd, EPOLL_CTL_ADD, listen_fd, &ev);
+-	if (CHECK(err, "epoll_ctl(EPOLL_CTL_ADD, listen_fd)",
+-		  "err:%d errno:%d\n", err, errno))
+-		goto done;
+-
+-	/* Accept the connection */
+-	/* Have some timeout in accept(listen_fd). Just in case. */
+-	err =3D epoll_wait(epfd, &ev, 1, 1000);
+-	if (CHECK(err !=3D 1 || ev.data.fd !=3D listen_fd,
+-		  "epoll_wait(listen_fd)",
+-		  "err:%d errno:%d ev.data.fd:%d listen_fd:%d\n",
+-		  err, errno, ev.data.fd, listen_fd))
+-		goto done;
+-
+ 	accept_fd =3D accept(listen_fd, NULL, NULL);
+ 	if (CHECK(accept_fd =3D=3D -1, "accept(listen_fd)",
+ 		  "accept_fd:%d errno:%d\n",
+ 		  accept_fd, errno))
+ 		goto done;
+=20
+-	ev.data.fd =3D cli_fd;
+-	err =3D epoll_ctl(epfd, EPOLL_CTL_ADD, cli_fd, &ev);
+-	if (CHECK(err, "epoll_ctl(EPOLL_CTL_ADD, cli_fd)",
+-		  "err:%d errno:%d\n", err, errno))
+-		goto done;
+-
+ 	if (init_sk_storage(accept_fd, 0xeB9F))
+ 		goto done;
+=20
+@@ -350,14 +291,6 @@ static void do_test(void)
+ 			  "err:%d errno:%d\n", err, errno))
+ 			goto done;
+=20
+-		/* Have some timeout in recv(cli_fd). Just in case. */
+-		err =3D epoll_wait(epfd, &ev, 1, 1000);
+-		if (CHECK(err !=3D 1 || ev.data.fd !=3D cli_fd,
+-			  "epoll_wait(cli_fd)",
+-			  "err:%d errno:%d ev.data.fd:%d cli_fd:%d\n",
+-			  err, errno, ev.data.fd, cli_fd))
+-			goto done;
+-
+ 		err =3D recv(cli_fd, buf, DATA_LEN, 0);
+ 		if (CHECK(err !=3D DATA_LEN, "recv(cli_fd)", "err:%d errno:%d\n",
+ 			  err, errno))
+@@ -384,7 +317,6 @@ static void do_test(void)
+ 		close(cli_fd);
+ 	if (listen_fd !=3D -1)
+ 		close(listen_fd);
+-	close(epfd);
  }
 =20
- static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
-@@ -4058,7 +4088,6 @@ static int check_func_arg(struct bpf_verifier_env *=
-env, u32 arg,
- 	u32 regno =3D BPF_REG_1 + arg;
- 	struct bpf_reg_state *regs =3D cur_regs(env), *reg =3D &regs[regno];
- 	enum bpf_arg_type arg_type =3D fn->arg_type[arg];
--	const struct bpf_reg_types *compatible;
- 	enum bpf_reg_type type =3D reg->type;
- 	int err =3D 0;
-=20
-@@ -4098,35 +4127,11 @@ static int check_func_arg(struct bpf_verifier_env=
- *env, u32 arg,
- 		 */
- 		goto skip_type_check;
-=20
--	compatible =3D compatible_reg_types[arg_type];
--	if (!compatible) {
--		verbose(env, "verifier internal error: unsupported arg type %d\n", arg=
-_type);
--		return -EFAULT;
--	}
--
--	err =3D check_reg_type(env, regno, compatible);
-+	err =3D check_reg_type(env, arg, arg_type, fn);
- 	if (err)
- 		return err;
-=20
--	if (type =3D=3D PTR_TO_BTF_ID) {
--		const u32 *btf_id =3D fn->arg_btf_id[arg];
--
--		if (!btf_id) {
--			verbose(env, "verifier internal error: missing BTF ID\n");
--			return -EFAULT;
--		}
--
--		if (!btf_struct_ids_match(&env->log, reg->off, reg->btf_id, *btf_id)) =
-{
--			verbose(env, "R%d is of type %s but %s is expected\n",
--				regno, kernel_type_name(reg->btf_id), kernel_type_name(*btf_id));
--			return -EACCES;
--		}
--		if (!tnum_is_const(reg->var_off) || reg->var_off.value) {
--			verbose(env, "R%d is a pointer to in-kernel struct with non-zero offs=
-et\n",
--				regno);
--			return -EACCES;
--		}
--	} else if (type =3D=3D PTR_TO_CTX) {
-+	if (type =3D=3D PTR_TO_CTX) {
- 		err =3D check_ctx_reg(env, reg, regno);
- 		if (err < 0)
- 			return err;
+ void test_sock_fields(void)
 --=20
 2.24.1
 
