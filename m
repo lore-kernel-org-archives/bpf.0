@@ -2,265 +2,149 @@ Return-Path: <SRS0=pAHC=C7=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-16.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAF4DC2D0E2
-	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 18:39:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 38FCDC4727C
+	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 18:39:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D6B220756
-	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 18:39:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 037E820756
+	for <bpf@archiver.kernel.org>; Tue, 22 Sep 2020 18:39:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WW3fUS1R"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QM6qkLjf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726746AbgIVSjN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Sep 2020 14:39:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:34555 "EHLO
+        id S1726756AbgIVSjl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Sep 2020 14:39:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:40323 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726706AbgIVSis (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 22 Sep 2020 14:38:48 -0400
+        by vger.kernel.org with ESMTP id S1726629AbgIVSjk (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 22 Sep 2020 14:39:40 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1600799926;
+        s=mimecast20190719; t=1600799979;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=UdWeLaNNOYSzrThwXfahZZYi0128JO9Qu7WeeEKhKXw=;
-        b=WW3fUS1R+PXUGUI9VxjszdEpsGwTjrFrCNZOU0rnRDecxDHACXJIZiv7HKtJFD+N/6WcRj
-        QbHq7y6HZvud6GCmZCNEaM64jPojDRIKqdmKqE7L+xmaLYtmx/jrBxxxpstReqNmLzhoE8
-        2SL/V/QswyUNYb77OfCKJXz72IZwIEY=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-179--8mMoPjHOeuLyhjC4Iwl1Q-1; Tue, 22 Sep 2020 14:38:44 -0400
-X-MC-Unique: -8mMoPjHOeuLyhjC4Iwl1Q-1
-Received: by mail-wr1-f70.google.com with SMTP id a10so7714812wrw.22
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2020 11:38:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=UdWeLaNNOYSzrThwXfahZZYi0128JO9Qu7WeeEKhKXw=;
-        b=cPAKQ5+ZnjZ4T/F5W5KQrJ/HZJHAvvSmO0B1yiXKlz0lcBoqIG7WbYb8xXkfP+X3qy
-         yabN29ZMwf4lJdNZbQpBxIdp+Q6x9TilJCYc5C2GnJnHusPEH947snuc7l48rnhMBI4d
-         0Bu4tJrGzr54Q5IetDtzBn+yeOv0J25IS/mgszlYqnx33GU3HvgEUCWRoppuqWpz1Xvb
-         pOzWl0LGkRrRp6E3kyw7NovHv/3xLoamiCLl+sBzizkZIcmFU4S6/Y74dwztR7T9bufy
-         S/aWmGpRJBnCl3go/HQmQ4qVvibhZrlQInKAUc2Osi3sNN0pLaHfm5R4ngsyty743z67
-         jDHQ==
-X-Gm-Message-State: AOAM531+ieWBa04rQ1edJxDunibqczKEEOOZAWNtx+z7BBkdHESI4lXs
-        IIwiydk2m1qZNw6gxGh6hmmnls08EGaamM1nvyDWWch3/0ZBnd9qOC1SyCDFMihUgCe3XPtIvdw
-        rbAiRDZpgbkWi
-X-Received: by 2002:a1c:e40b:: with SMTP id b11mr2530478wmh.100.1600799923085;
-        Tue, 22 Sep 2020 11:38:43 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw8JabB4hXJBfAd/o5PhXOPdRiLHPUqgeODMWUcLi0f4H+3Oe7wsNxiM7w62Ojbe8W/l657Ng==
-X-Received: by 2002:a1c:e40b:: with SMTP id b11mr2530455wmh.100.1600799922896;
-        Tue, 22 Sep 2020 11:38:42 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id i26sm5907104wmb.17.2020.09.22.11.38.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2020 11:38:42 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 5819D183A90; Tue, 22 Sep 2020 20:38:41 +0200 (CEST)
-Subject: [PATCH bpf-next v8 07/11] libbpf: add support for freplace attachment
- in bpf_link_create
-From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        bh=0ybdXG74ST/H7YVIH/fOBujbQfC+uJlYyh/yfVB4O5s=;
+        b=QM6qkLjfQTmETPspwrczL/AGkBrUFoVdL4ATiZkHNNdFhqMBIodcVtMhYWcnFNX8bnXiU7
+        h0ePFheZB8WHxwYY1OhY3VV7a6nGH90NvJ8FOH/nv/CA0PWC2PkO1RNZ/8U5PpquEiTOl7
+        +8g2ggTlKBGeF9gd0zTZJib1BnJHQ0M=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-182-ICIgBxxAOpGyDiDX5ZiiWA-1; Tue, 22 Sep 2020 14:39:37 -0400
+X-MC-Unique: ICIgBxxAOpGyDiDX5ZiiWA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5E73B1882FA7;
+        Tue, 22 Sep 2020 18:39:35 +0000 (UTC)
+Received: from krava (ovpn-112-28.ams2.redhat.com [10.36.112.28])
+        by smtp.corp.redhat.com (Postfix) with SMTP id DA23178828;
+        Tue, 22 Sep 2020 18:39:32 +0000 (UTC)
+Date:   Tue, 22 Sep 2020 20:39:32 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andriin@fb.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Date:   Tue, 22 Sep 2020 20:38:41 +0200
-Message-ID: <160079992129.8301.9319405264647976548.stgit@toke.dk>
-In-Reply-To: <160079991372.8301.10648588027560707258.stgit@toke.dk>
-References: <160079991372.8301.10648588027560707258.stgit@toke.dk>
-User-Agent: StGit/0.23
+        KP Singh <kpsingh@chromium.org>
+Subject: Re: [PATCHv2 bpf-next] selftests/bpf: Fix stat probe in d_path test
+Message-ID: <20200922183932.GC2718767@krava>
+References: <20200918112338.2618444-1-jolsa@kernel.org>
+ <CAADnVQ+OmqycbKTewWPA9D5upP9Ri-yvS1=GKRN1nQs6AL_YVw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQ+OmqycbKTewWPA9D5upP9Ri-yvS1=GKRN1nQs6AL_YVw@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@redhat.com>
+On Mon, Sep 21, 2020 at 04:32:13PM -0700, Alexei Starovoitov wrote:
+> On Fri, Sep 18, 2020 at 4:23 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > Some kernels builds might inline vfs_getattr call within fstat
+> > syscall code path, so fentry/vfs_getattr trampoline is not called.
+> >
+> > Alexei suggested [1] we should use security_inode_getattr instead,
+> > because it's less likely to get inlined. Using this idea also for
+> > vfs_truncate (replaced with security_path_truncate) and vfs_fallocate
+> > (replaced with security_file_permission).
+> >
+> > Keeping dentry_open and filp_close, because they are in their own
+> > files, so unlikely to be inlined, but in case they are, adding
+> > security_file_open.
+> >
+> > Switching the d_path test stat trampoline to security_inode_getattr.
+> >
+> > Adding flags that indicate trampolines were called and failing
+> > the test if any of them got missed, so it's easier to identify
+> > the issue next time.
+> >
+> > Suggested-by: Alexei Starovoitov <ast@kernel.org>
+> > [1] https://lore.kernel.org/bpf/CAADnVQJ0FchoPqNWm+dEppyij-MOvvEG_trEfyrHdabtcEuZGg@mail.gmail.com/
+> > Fixes: e4d1af4b16f8 ("selftests/bpf: Add test for d_path helper")
+> > Signed-off-by: Jiri Olsa <jolsa@redhat.com>
+> > ---
+> > v2 changes:
+> >   - replaced vfs_* function with security_* in d_path allow list
+> >     vfs_truncate  -> security_path_truncate
+> >     vfs_fallocate -> security_file_permission
+> >     vfs_getattr   -> security_inode_getattr
+> >   - added security_file_open to d_path allow list
+> >   - split verbose output for trampoline flags
+> >
+> >  kernel/trace/bpf_trace.c                        |  7 ++++---
+> >  tools/testing/selftests/bpf/prog_tests/d_path.c | 10 ++++++++++
+> >  tools/testing/selftests/bpf/progs/test_d_path.c |  9 ++++++++-
+> >  3 files changed, 22 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > index b2a5380eb187..e24323d72cac 100644
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> > @@ -1118,10 +1118,11 @@ BPF_CALL_3(bpf_d_path, struct path *, path, char *, buf, u32, sz)
+> >  }
+> >
+> >  BTF_SET_START(btf_allowlist_d_path)
+> > -BTF_ID(func, vfs_truncate)
+> > -BTF_ID(func, vfs_fallocate)
+> > +BTF_ID(func, security_path_truncate)
+> > +BTF_ID(func, security_file_permission)
+> > +BTF_ID(func, security_inode_getattr)
+> > +BTF_ID(func, security_file_open)
+> >  BTF_ID(func, dentry_open)
+> > -BTF_ID(func, vfs_getattr)
+> >  BTF_ID(func, filp_close)
+> >  BTF_SET_END(btf_allowlist_d_path)
+> 
+> bpf CI system flagged the build error:
+> FAILED unresolved symbol security_path_truncate
+> because CONFIG_SECURITY_PATH wasn't set.
+> Which points to the issue with this patch that the above
+> security_* funcs have to be guarded with appropriate #ifdef.
 
-This adds support for supplying a target btf ID for the bpf_link_create()
-operation, and adds a new bpf_program__attach_freplace() high-level API for
-attaching freplace functions with a target.
+ugh, sry
 
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- tools/lib/bpf/bpf.c      |   18 +++++++++++++++---
- tools/lib/bpf/bpf.h      |    3 ++-
- tools/lib/bpf/libbpf.c   |   44 +++++++++++++++++++++++++++++++++++++++-----
- tools/lib/bpf/libbpf.h   |    3 +++
- tools/lib/bpf/libbpf.map |    1 +
- 5 files changed, 60 insertions(+), 9 deletions(-)
+> I don't have a use case for tracing vfs_truncate, but
+> security_path_unlink I would want to do in the future.
+> Unfortunately it's under the same SECURITY_PATH ifdef.
+> So my earlier desire to make it fool proof is not feasible at this point.
+> Adding 'was_probed_func_inlined' check to libbpftrace.a would
+> solve it eventually.
+> For now I think we have to live with this function probing fragility.
+> So I've modified the patch to add these few security_* funcs
+> and kept vfs_* equivalents.
+> Also reworded commit log and applied to bpf-next. Thanks
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=a8a717963fe5ecfd274eb93dd1285ee9428ffca7
+> 
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 2baa1308737c..75f627094790 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -586,19 +586,31 @@ int bpf_link_create(int prog_fd, int target_fd,
- 		    enum bpf_attach_type attach_type,
- 		    const struct bpf_link_create_opts *opts)
- {
-+	__u32 target_btf_id, iter_info_len;
- 	union bpf_attr attr;
- 
- 	if (!OPTS_VALID(opts, bpf_link_create_opts))
- 		return -EINVAL;
- 
-+	iter_info_len = OPTS_GET(opts, iter_info_len, 0);
-+	target_btf_id = OPTS_GET(opts, target_btf_id, 0);
-+
-+	if (iter_info_len && target_btf_id)
-+		return -EINVAL;
-+
- 	memset(&attr, 0, sizeof(attr));
- 	attr.link_create.prog_fd = prog_fd;
- 	attr.link_create.target_fd = target_fd;
- 	attr.link_create.attach_type = attach_type;
- 	attr.link_create.flags = OPTS_GET(opts, flags, 0);
--	attr.link_create.iter_info =
--		ptr_to_u64(OPTS_GET(opts, iter_info, (void *)0));
--	attr.link_create.iter_info_len = OPTS_GET(opts, iter_info_len, 0);
-+
-+	if (iter_info_len) {
-+		attr.link_create.iter_info =
-+			ptr_to_u64(OPTS_GET(opts, iter_info, (void *)0));
-+		attr.link_create.iter_info_len = iter_info_len;
-+	} else if (target_btf_id) {
-+		attr.link_create.target_btf_id = target_btf_id;
-+	}
- 
- 	return sys_bpf(BPF_LINK_CREATE, &attr, sizeof(attr));
- }
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 8c1ac4b42f90..6b8dbe24adc9 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -174,8 +174,9 @@ struct bpf_link_create_opts {
- 	__u32 flags;
- 	union bpf_iter_link_info *iter_info;
- 	__u32 iter_info_len;
-+	__u32 target_btf_id;
- };
--#define bpf_link_create_opts__last_field iter_info_len
-+#define bpf_link_create_opts__last_field target_btf_id
- 
- LIBBPF_API int bpf_link_create(int prog_fd, int target_fd,
- 			       enum bpf_attach_type attach_type,
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 570235dbc922..e9a2ad039e9a 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -9390,9 +9390,11 @@ static struct bpf_link *attach_iter(const struct bpf_sec_def *sec,
- }
- 
- static struct bpf_link *
--bpf_program__attach_fd(struct bpf_program *prog, int target_fd,
-+bpf_program__attach_fd(struct bpf_program *prog, int target_fd, int btf_id,
- 		       const char *target_name)
- {
-+	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts,
-+			    .target_btf_id = btf_id);
- 	enum bpf_attach_type attach_type;
- 	char errmsg[STRERR_BUFSIZE];
- 	struct bpf_link *link;
-@@ -9410,7 +9412,7 @@ bpf_program__attach_fd(struct bpf_program *prog, int target_fd,
- 	link->detach = &bpf_link__detach_fd;
- 
- 	attach_type = bpf_program__get_expected_attach_type(prog);
--	link_fd = bpf_link_create(prog_fd, target_fd, attach_type, NULL);
-+	link_fd = bpf_link_create(prog_fd, target_fd, attach_type, &opts);
- 	if (link_fd < 0) {
- 		link_fd = -errno;
- 		free(link);
-@@ -9426,19 +9428,51 @@ bpf_program__attach_fd(struct bpf_program *prog, int target_fd,
- struct bpf_link *
- bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
- {
--	return bpf_program__attach_fd(prog, cgroup_fd, "cgroup");
-+	return bpf_program__attach_fd(prog, cgroup_fd, 0, "cgroup");
- }
- 
- struct bpf_link *
- bpf_program__attach_netns(struct bpf_program *prog, int netns_fd)
- {
--	return bpf_program__attach_fd(prog, netns_fd, "netns");
-+	return bpf_program__attach_fd(prog, netns_fd, 0, "netns");
- }
- 
- struct bpf_link *bpf_program__attach_xdp(struct bpf_program *prog, int ifindex)
- {
- 	/* target_fd/target_ifindex use the same field in LINK_CREATE */
--	return bpf_program__attach_fd(prog, ifindex, "xdp");
-+	return bpf_program__attach_fd(prog, ifindex, 0, "xdp");
-+}
-+
-+struct bpf_link *bpf_program__attach_freplace(struct bpf_program *prog,
-+					      int target_fd,
-+					      const char *attach_func_name)
-+{
-+	int btf_id;
-+
-+	if (!!target_fd != !!attach_func_name) {
-+		pr_warn("prog '%s': supply none or both of target_fd and attach_func_name\n",
-+			prog->name);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	if (prog->type != BPF_PROG_TYPE_EXT) {
-+		pr_warn("prog '%s': only BPF_PROG_TYPE_EXT can attach as freplace",
-+			prog->name);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	if (target_fd) {
-+		btf_id = libbpf_find_prog_btf_id(attach_func_name, target_fd);
-+		if (btf_id < 0)
-+			return ERR_PTR(btf_id);
-+
-+		return bpf_program__attach_fd(prog, target_fd, btf_id, "freplace");
-+	} else {
-+		/* no target, so use raw_tracepoint_open for compatibility
-+		 * with old kernels
-+		 */
-+		return bpf_program__attach_trace(prog);
-+	}
- }
- 
- struct bpf_link *
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index a750f67a23f6..6909ee81113a 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -261,6 +261,9 @@ LIBBPF_API struct bpf_link *
- bpf_program__attach_netns(struct bpf_program *prog, int netns_fd);
- LIBBPF_API struct bpf_link *
- bpf_program__attach_xdp(struct bpf_program *prog, int ifindex);
-+LIBBPF_API struct bpf_link *
-+bpf_program__attach_freplace(struct bpf_program *prog,
-+			     int target_fd, const char *attach_func_name);
- 
- struct bpf_map;
- 
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 5f054dadf082..b1c537873b23 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -303,6 +303,7 @@ LIBBPF_0.1.0 {
- LIBBPF_0.2.0 {
- 	global:
- 		bpf_prog_bind_map;
-+		bpf_program__attach_freplace;
- 		bpf_program__section_name;
- 		perf_buffer__buffer_cnt;
- 		perf_buffer__buffer_fd;
+ok, looks good, thanks,
+jirka
 
