@@ -2,95 +2,100 @@ Return-Path: <SRS0=NOCw=DA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BDFEC2D0A8
-	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 18:49:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF8CEC4727D
+	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 18:57:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D67FE235FD
-	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 18:49:23 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pxc702TV"
+	by mail.kernel.org (Postfix) with ESMTP id 503DA235FD
+	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 18:57:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1600887470;
+	bh=DqZ2RgInXtfx9htpKU3nx4V9Ftz8U1dHUfcM2MbSaYA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=Y0V52zh9qdK+YtFvz6GuJmbuDyHxhD3v7JZ1ngS+5Vwo8VoAKtupMcAXh62JLcgXE
+	 D7J4fSGc7PK+g+a9k8ecQQ1pOcEqV1Mv5KSF4VCR2e7W/h8dw8FKSExcHulFwa7cav
+	 JSxeukszl63f8o0RBIICKzRBeg8mwPqihy7ladz0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726557AbgIWStX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Sep 2020 14:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45454 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726460AbgIWStX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 23 Sep 2020 14:49:23 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF128C0613CE;
-        Wed, 23 Sep 2020 11:49:22 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id u4so501396ljd.10;
-        Wed, 23 Sep 2020 11:49:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FbK+j42dWRK2s1x0oaQhi9+BRDAcyqnHMQWrUaVkakI=;
-        b=pxc702TVV231b7p2aL4oSu3UqURyE2IucXBJdE0cFp1S9cLk62cjI12AtE9FGhF+xY
-         dAM5vm5GIwLBZZafN/Capt0djv9hzrrfyBv4an1mIowfTj0YNNyBM3DGgqFZWyAJqJu8
-         L8gC9SKYsWuyf1iXkE58PO9qVl0DMP/A3MdP3dV4JMIet8VRwrTupmDJGnZ9D3+7aB/6
-         65kFdhFikXHJiJM3OgLDQ7at/xQ3njRllnV0vKj9vV9FfRDgkrjj71X59owhG5XuvNO5
-         ny4Pf+/WlM4dVRDmwqD6kl9s2SAQGXfJ7BnFxjBRBa5Wt/6F/35YzSw6xJ5kd4LELfE6
-         e8jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FbK+j42dWRK2s1x0oaQhi9+BRDAcyqnHMQWrUaVkakI=;
-        b=pYLhDvcQg8h+t19XRaGPwnMB+Rq9HYITG6FNQk6s/80CgJdUG7VBuyjocKrR3TBOux
-         mSEP9apNwGxKI+dUAIPU9g1AHlJf6WwzNQhY5doTxIS0UVTXj55nfwQCv9kaY/GZzd7N
-         oWTMRfDSxFWoWkUtpO1yNnbFQ8SZfaP+nCpDKCQMWAT8LgGkvzCTcyGm2675LfCveGGq
-         wTFESPTRCOAwFHi20WEuDstvUqqTeZh4dYshjzKJVs/p6/W4Q7UhRZMWe3Q8VpLpxrSc
-         f9uL4k0gi68pXMW6jwaXHyKrxgTCadFjXsxveVcHGXKmLg+cFPrK5OYP5z2E2cDr5t/+
-         lg2Q==
-X-Gm-Message-State: AOAM532IsT4rOfseFqXg7G3u2o4DBePINZ0L+8VhpucUAAcJTAY01QQg
-        rMTNAiScPQy7TFzxF8cp8y7mPJr9nyo1O3biQik=
-X-Google-Smtp-Source: ABdhPJx9ba2vvV0ptXmwQCajVB185yIhjs+5/IVdOR63X4tOvdDDL/i4APGlb0Hyd7AuhWu3FqfAVP4Ofcm7Xsn3bks=
-X-Received: by 2002:a05:651c:cb:: with SMTP id 11mr419441ljr.2.1600886961295;
- Wed, 23 Sep 2020 11:49:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200923160156.80814-1-lmb@cloudflare.com> <CAEf4BzZJQBdW72TRCuW7q0c3kke1Qan59fDzV0DKN_EOAgXGaw@mail.gmail.com>
-In-Reply-To: <CAEf4BzZJQBdW72TRCuW7q0c3kke1Qan59fDzV0DKN_EOAgXGaw@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 23 Sep 2020 11:49:09 -0700
-Message-ID: <CAADnVQ+m+b5GKxk+sw-R+374vQRbQn59MP4g1uKPghnSWt6pVw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: explicitly size compatible_reg_types
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Lorenz Bauer <lmb@cloudflare.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S1726620AbgIWS5u convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 23 Sep 2020 14:57:50 -0400
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:45387 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726460AbgIWS5t (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 23 Sep 2020 14:57:49 -0400
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-344-Cg6JPIpSM66tKcBYPu80Ag-1; Wed, 23 Sep 2020 14:57:44 -0400
+X-MC-Unique: Cg6JPIpSM66tKcBYPu80Ag-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D3280800135;
+        Wed, 23 Sep 2020 18:57:42 +0000 (UTC)
+Received: from krava.redhat.com (ovpn-112-117.ams2.redhat.com [10.36.112.117])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1371F3782;
+        Wed, 23 Sep 2020 18:57:39 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        kernel-team <kernel-team@cloudflare.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Andrii Nakryiko <andriin@fb.com>
+Cc:     Seth Forshee <seth.forshee@canonical.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: [PATCHv3 bpf-next 2/2] tools resolve_btfids: Always force HOSTARCH
+Date:   Wed, 23 Sep 2020 20:57:35 +0200
+Message-Id: <20200923185735.3048198-2-jolsa@kernel.org>
+In-Reply-To: <20200923185735.3048198-1-jolsa@kernel.org>
+References: <20200923185735.3048198-1-jolsa@kernel.org>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Sep 23, 2020 at 9:05 AM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Wed, Sep 23, 2020 at 9:03 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
-> >
-> > Arrays with designated initializers have an implicit length of the highest
-> > initialized value plus one. I used this to ensure that newly added entries
-> > in enum bpf_reg_type get a NULL entry in compatible_reg_types.
-> >
-> > This is difficult to understand since it requires knowledge of the
-> > peculiarities of designated initializers. Use __BPF_ARG_TYPE_MAX to size
-> > the array instead.
-> >
-> > Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-> > Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> > ---
->
-> I like this more as well.
->
-> Acked-by: Andrii Nakryiko <andriin@fb.com>
+Seth reported problem with cross builds, that fail
+on resolve_btfids build, because we are trying to
+build it on cross build arch.
 
-Applied. Thanks
+Fixing this by always forcing the host arch.
+
+Reported-by: Seth Forshee <seth.forshee@canonical.com>
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ tools/bpf/resolve_btfids/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+index a88cd4426398..d3c818b8d8d3 100644
+--- a/tools/bpf/resolve_btfids/Makefile
++++ b/tools/bpf/resolve_btfids/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ include ../../scripts/Makefile.include
++include ../../scripts/Makefile.arch
+ 
+ ifeq ($(srctree),)
+ srctree := $(patsubst %/,%,$(dir $(CURDIR)))
+@@ -29,6 +30,7 @@ endif
+ AR       = $(HOSTAR)
+ CC       = $(HOSTCC)
+ LD       = $(HOSTLD)
++ARCH     = $(HOSTARCH)
+ 
+ OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+ 
+-- 
+2.26.2
+
