@@ -2,75 +2,75 @@ Return-Path: <SRS0=NOCw=DA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26172C2D0A8
-	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 16:08:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3482C2D0A8
+	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 16:09:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC178206B5
-	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 16:08:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A8A02206B5
+	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 16:09:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IrfmCEEF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VAE/OFov"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726130AbgIWQIv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Sep 2020 12:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
+        id S1726859AbgIWQJc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Sep 2020 12:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726732AbgIWQIv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 23 Sep 2020 12:08:51 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CBBC0613CE;
-        Wed, 23 Sep 2020 09:08:50 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id v60so142170ybi.10;
-        Wed, 23 Sep 2020 09:08:50 -0700 (PDT)
+        with ESMTP id S1726537AbgIWQJ3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 23 Sep 2020 12:09:29 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F1EC0613CE;
+        Wed, 23 Sep 2020 09:09:29 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 67so164013ybt.6;
+        Wed, 23 Sep 2020 09:09:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=yZqylZfBJaRy7Aj7DhGeHIodSDWRD2Dwb1QLbio1Mwc=;
-        b=IrfmCEEFxaA3n8vc2fHralCE5dM4TlHQgDNDDNllN7jQ82+440UDOHgiOHJBhe2vAK
-         wejkhW7mn4c1t+X/NADxzowsR8QJcQ0Z61kLv2dx/YR72CasoMjavK/IWPrNkUbejT4i
-         k3cf47kSxNtTRfTagWBVB5Uq9sgm0ao/h2M3JupwNeZQjeFZrnvIpDnmR6DRg82X2Qh/
-         un4lS5RtAZR+DbdmYnZ3fdNZ/dNMF6+xj4IAWIRAB7bHmClUB4fYIrcGh4wiSjXP0OS2
-         xtPXQxpNJ9xJOTKYuAJdB0z2WgBf5gnMfr2g1P5bpi1HO3l4R81lEgsC83VdkbHF3j/z
-         tlNg==
+        bh=o7WnvxJmBRfhtrCbHCwlnuPx6FcGYiuUSlQl7hdJlDM=;
+        b=VAE/OFovGRVsF5o3leexmAjVxOWHNn2l+p+DVjShO8XVmkEBoD/Oq9B2oDSv5jIRU1
+         TaxfX44mqoHVFw1RArxz8x0ipQ4bzOuCRlhqq93omu3gmD5urzNMPY85wZy6rzB1ZPCl
+         XonezG+572WVQZLJS60Lo7V4jGaEY9xCPVWPwSvxvoUwgYA3PbC+T3LhjagnaHyV+Gro
+         b3VOkhJRwReIw0AQ5ewuUiF/B2W65qvDgQ4Cewne0OP8JjyPFFqn4o3Am/Lw9nY4Tkff
+         TxQ6DDXrBcu/ZgswG01P6gI2nZ+2f3Cg9hy3jiVG+KlTDQGT2l2fkd18SPwuCUUIQncz
+         TxSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=yZqylZfBJaRy7Aj7DhGeHIodSDWRD2Dwb1QLbio1Mwc=;
-        b=JVNT8IqSj2Lst064San1Qee4UNCtrk9rEzq2I4Y3qV5kwVptsFtJGuFTKfS1f/UX+z
-         mAtUH2zPg8Qtvw4ChG5yHPGriwUDG+cnQDpWfEUKmwU1yTmViiv7TArlrD3LxJKpZL57
-         xCLIJEaNhuob7i5G4gWBRQQh4RkZ72FmvgkGZ8hjv6eQ3El0ymtVWnHyCScmCLKC52MM
-         8H3oFdueK5zm5y+kB7flY1Lsngfa3g5C/obGYY2PrcWEpzISQnWTglVZI6yoErtkMYQE
-         cW1RaeQaGBSWN5f8zbTca5dKCSi+Byl76cXQOxOVsg8NsMewhnrIWx41XfjgpBb43vJ6
-         lv/g==
-X-Gm-Message-State: AOAM53364ey7uWv7PNWwoR2WgdOOVj5Uw+lxt2ilZIu145sYboCRFXpb
-        HRqSPO0qB+ecil7BSZrEAf+1gU/Mbg6TB2Fqu0Q=
-X-Google-Smtp-Source: ABdhPJwwp3pEXKvAFIcOXTC1fHA25TnTq+suQEfgnlwuNdcaz0D1Xowm0MYm8wA2AViwQf2ct5NCXHr0DiqIAd+WaW0=
-X-Received: by 2002:a25:4446:: with SMTP id r67mr933504yba.459.1600877330201;
- Wed, 23 Sep 2020 09:08:50 -0700 (PDT)
+        bh=o7WnvxJmBRfhtrCbHCwlnuPx6FcGYiuUSlQl7hdJlDM=;
+        b=Pe3LSPv8ihfJmIWnT+glke9EGrc5Z2K2aKPOdrqyUQBh177uwn+PNLS18/jT+PYfpa
+         M2VDbcBQC2KMRziXTTg7UrlW9WjynWFbYw6Dh9PrPCI7at/QS3x12N6duYJiylvjCJFE
+         O51W6LmV0huIpgA6Yl9K/MR4Gct/8m+bQxExYy91eAXEpGykh8avB4InJsBWqwa/B589
+         lBrfDGpMt3HgphIi7Alx1V683pRO6K5U1Vvgfs0fhmjehjKoRJxA9EYGCT8CaWZEjvIr
+         m6my/EzHnbw12d6ChF3MszXUJ8gjyLOVaSjr6+2tCYK/4Ex6C1Mc68GwkMoEUNiATqN0
+         zp0w==
+X-Gm-Message-State: AOAM5321r+qsuOOsfdJzAcJYHJcBiZjtw+xWe6bYgPUSt7CAPrq50Bed
+        a8ZObg8Ln6KNPMAyPNLuoZPoh5DEA28U7xZ/jdU=
+X-Google-Smtp-Source: ABdhPJzF599RIgymjA3gXYO1sdQNLbOAom1Dnk3kV+PnHLqSq55TcT3cTP8WxsmuUChdb8qS+TOsw76dCjGzoEEQEgY=
+X-Received: by 2002:a25:cbc4:: with SMTP id b187mr1064977ybg.260.1600877368732;
+ Wed, 23 Sep 2020 09:09:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200923140459.3029213-1-jolsa@kernel.org> <20200923140459.3029213-2-jolsa@kernel.org>
-In-Reply-To: <20200923140459.3029213-2-jolsa@kernel.org>
+References: <20200923140459.3029213-1-jolsa@kernel.org>
+In-Reply-To: <20200923140459.3029213-1-jolsa@kernel.org>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 23 Sep 2020 09:08:38 -0700
-Message-ID: <CAEf4BzbjmimSnpdKkg9M9NJ2PBttQ2x+5trifzQgJdcSczXR1A@mail.gmail.com>
-Subject: Re: [PATCHv2 bpf-next 2/2] tools resolve_btfids: Always force HOSTARCH
+Date:   Wed, 23 Sep 2020 09:09:17 -0700
+Message-ID: <CAEf4BzZM8UOZ4x_uDtbzMbpmYGcLSo5h-7miPMAd+wDzMuG7Aw@mail.gmail.com>
+Subject: Re: [PATCHv2 bpf-next 1/2] bpf: Use --no-fail option if CONFIG_BPF is
+ not enabled
 To:     Jiri Olsa <jolsa@kernel.org>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andriin@fb.com>,
-        Seth Forshee <seth.forshee@canonical.com>,
         Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
+        KP Singh <kpsingh@chromium.org>,
+        Seth Forshee <seth.forshee@canonical.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
@@ -78,40 +78,19 @@ X-Mailing-List: bpf@vger.kernel.org
 
 On Wed, Sep 23, 2020 at 7:06 AM Jiri Olsa <jolsa@kernel.org> wrote:
 >
-> Seth reported problem with cross builds, that fail
-> on resolve_btfids build, because we are trying to
-> build it on cross build arch.
+> Currently all the resolve_btfids 'users' are under CONFIG_BPF
+> code, so if we have CONFIG_BPF disabled, resolve_btfids will
+> fail, because there's no data to resolve.
 >
-> Fixing this by always forcing the host arch.
+> Disabling resolve_btfids if there's CONFIG_BPF disabled,
+> so we won't fail such builds.
 >
-> Reported-by: Seth Forshee <seth.forshee@canonical.com>
+> Suggested-by: Andrii Nakryiko <andriin@fb.com>
 > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > ---
+> v2 changes:
+>   - disable resolve_btfids completely when CONFIG_BPF is not defined
 
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 
->  tools/bpf/resolve_btfids/Makefile | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> index a88cd4426398..d3c818b8d8d3 100644
-> --- a/tools/bpf/resolve_btfids/Makefile
-> +++ b/tools/bpf/resolve_btfids/Makefile
-> @@ -1,5 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  include ../../scripts/Makefile.include
-> +include ../../scripts/Makefile.arch
->
->  ifeq ($(srctree),)
->  srctree := $(patsubst %/,%,$(dir $(CURDIR)))
-> @@ -29,6 +30,7 @@ endif
->  AR       = $(HOSTAR)
->  CC       = $(HOSTCC)
->  LD       = $(HOSTLD)
-> +ARCH     = $(HOSTARCH)
->
->  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
->
-> --
-> 2.26.2
->
+[...]
