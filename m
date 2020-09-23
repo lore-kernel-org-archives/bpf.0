@@ -8,51 +8,51 @@ X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EE1CC4727E
-	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 23:35:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D8DB8C4363D
+	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 23:35:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E28162067B
-	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 23:35:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9D13B2067B
+	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 23:35:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YImT8s0t"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="CK/yLRWK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726466AbgIWX32 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Sep 2020 19:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        id S1726761AbgIWXf2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Sep 2020 19:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726572AbgIWX32 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1726709AbgIWX32 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 23 Sep 2020 19:29:28 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5789C0613D1
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2020 16:29:27 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id q12so557770plr.12
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2020 16:29:27 -0700 (PDT)
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E7AC0613CE
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2020 16:29:28 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id b17so547698pji.1
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2020 16:29:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=dRM2RxYevz4ZLx42XYlJ4AIQPGby+e+r+LDyrwiMJmY=;
-        b=YImT8s0t4ro5HLSsWUw0wPm9p8M2rMPRr1XMLfBu5tvvY24Y3b7+SScvQCxYa+mKnA
-         hgoYM5/ccPMAXnlw70N83Y9+Cl38QLui9PJIpibXpOgNKL6n5KQ4soHzwx2kGWb3WXCm
-         Jnq0DOeHpwfCyW/oH3OOX/dvAtuDKFlbXMpdQ=
+        bh=Sc3ebczz8rmNH2w8JraN/35ap0kTxnvAQhEv63luYfE=;
+        b=CK/yLRWK/GnklstIhHZjn/0pYYnnQjH99MYWDkAXuYI9+NOqvUU0ANa6rBD+NsWFEz
+         c7QexSPQWD74DI1zL2hhf0A48GuOV9gJ6xUM59jCUCjfUWNr9xxPmzGVjGXG9Ux5vdnC
+         z4nOhOyvGdEr88w/pVmbgsicGvkUkxDZlRCWA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=dRM2RxYevz4ZLx42XYlJ4AIQPGby+e+r+LDyrwiMJmY=;
-        b=ZX4QgkRVpmi2BJXUVOi7pnID1gKKdL8xO1ga6mvofqrWVExv0+Sw1eF33vInlHhT1E
-         Z3Hw12Y64X25TcVFSQFlr9NDKSzLtWUodUcwlSG2jPcSoTM3qGMSxiJbNPN7ElTTMuCe
-         e3ZAunqm33GfpZ336C6sBJQxBljrVTR3VHb3MPWiTOgqc5s/D7iVqB/KqBuosijhA+6b
-         sZmpIwmjjXiV8WvVQ8DxPAdDgBJ6jpUXata759tT2l/TZpfaJrOrFWaLLHFnSwRXnDdy
-         Gm6Hwn0/A2bhSp1OVti7U1zUbVMedphUFpJf3wf3CrpdoHeMuLgTrx7WqF+P/Bn3d+lk
-         6c9A==
-X-Gm-Message-State: AOAM531ut402AgkIgCk1snjF4NxcgN7JwRhD4GjvbJ0RgLKg9yRbpqQU
-        tz2S7MXmbGOntCAuk+yTGhLEvA==
-X-Google-Smtp-Source: ABdhPJxLRLuysYMwMBl98TDjJXH+A1GJK5BYJ/9bxber4JuLQfhK8FiL18o08N5dn4Gk6n7figNXTQ==
-X-Received: by 2002:a17:90a:4046:: with SMTP id k6mr1441778pjg.11.1600903767231;
+        bh=Sc3ebczz8rmNH2w8JraN/35ap0kTxnvAQhEv63luYfE=;
+        b=hvp0L3nDleLi+CVyOP2Wgc17I+Y69HhzGcjBFN2Pljf5Qq+Qo3xto+G5CizSe5VHBV
+         BxiqV/9reqQsJDoc599rsSDokVmtRB3WTBayTi3b6uzn6Ey1FMuRsOjuvI+bV/ixmJdZ
+         yJ6vKHyySsc9S/mWdx9nKTOuYDJMKtuiu3ZII5i0dE+B0R5lYiKsrEDaWlP4ug8flaHJ
+         +iE3wKRtFOPujDAtpiQF7NK23Ut1pWulTSghhEH2PcGEK1lP6qcmoABqe/VoYGrQsWnk
+         7PmC3GTl7U/ZskIxFxIH4u0mQCkLbJt8Oa/DwAPlll+ztTPWy7kKhc4dcuyc/LFwYA/t
+         0sng==
+X-Gm-Message-State: AOAM532FCpoj+ojCrr5/h2A3aUq1J/Wgiig0hDyRh4CUvsDAYiQKebO0
+        4zog/sPGXvSGdsZguotkBv6vpg==
+X-Google-Smtp-Source: ABdhPJyZ7o0DnR5kI8957XIopuSRrBSpPx9KS7ET42fO0J8UuNz+QkuV9tPkvD3v4Fah2MtxvVfhKg==
+X-Received: by 2002:a17:90a:db05:: with SMTP id g5mr1549879pjv.22.1600903767757;
         Wed, 23 Sep 2020 16:29:27 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c186sm828427pga.61.2020.09.23.16.29.26
+        by smtp.gmail.com with ESMTPSA id w185sm724485pfc.36.2020.09.23.16.29.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 23 Sep 2020 16:29:26 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
@@ -73,9 +73,9 @@ Cc:     Kees Cook <keescook@chromium.org>, Jann Horn <jannh@google.com>,
         Tianyin Xu <tyxu@illinois.edu>, bpf@vger.kernel.org,
         containers@lists.linux-foundation.org, linux-api@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/6] x86: Enable seccomp architecture tracking
-Date:   Wed, 23 Sep 2020 16:29:19 -0700
-Message-Id: <20200923232923.3142503-3-keescook@chromium.org>
+Subject: [PATCH 4/6] seccomp: Emulate basic filters for constant action results
+Date:   Wed, 23 Sep 2020 16:29:21 -0700
+Message-Id: <20200923232923.3142503-5-keescook@chromium.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200923232923.3142503-1-keescook@chromium.org>
 References: <20200923232923.3142503-1-keescook@chromium.org>
@@ -85,41 +85,156 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Provide seccomp internals with the details to calculate which syscall
-table the running kernel is expecting to deal with. This allows for
-efficient architecture pinning and paves the way for constant-action
-bitmaps.
+This emulates absolutely the most basic seccomp filters to figure out
+if they will always give the same results for a given arch/nr combo.
 
+Nearly all seccomp filters are built from the following ops:
+
+BPF_LD  | BPF_W    | BPF_ABS
+BPF_JMP | BPF_JEQ  | BPF_K
+BPF_JMP | BPF_JGE  | BPF_K
+BPF_JMP | BPF_JGT  | BPF_K
+BPF_JMP | BPF_JSET | BPF_K
+BPF_JMP | BPF_JA
+BPF_RET | BPF_K
+
+These are now emulated to check for accesses beyond seccomp_data::arch
+or unknown instructions.
+
+Not yet implemented are:
+
+BPF_ALU | BPF_AND (generated by libseccomp and Chrome)
+
+Suggested-by: Jann Horn <jannh@google.com>
+Link: https://lore.kernel.org/lkml/CAG48ez1p=dR_2ikKq=xVxkoGg0fYpTBpkhJSv1w-6BG=76PAvw@mail.gmail.com/
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- arch/x86/include/asm/seccomp.h | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ kernel/seccomp.c  | 82 ++++++++++++++++++++++++++++++++++++++++++++---
+ net/core/filter.c |  3 +-
+ 2 files changed, 79 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/include/asm/seccomp.h b/arch/x86/include/asm/seccomp.h
-index 2bd1338de236..38181e20e1d3 100644
---- a/arch/x86/include/asm/seccomp.h
-+++ b/arch/x86/include/asm/seccomp.h
-@@ -16,6 +16,20 @@
- #define __NR_seccomp_sigreturn_32	__NR_ia32_sigreturn
- #endif
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index 111a238bc532..9921f6f39d12 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -610,7 +610,12 @@ static struct seccomp_filter *seccomp_prepare_filter(struct sock_fprog *fprog)
+ {
+ 	struct seccomp_filter *sfilter;
+ 	int ret;
+-	const bool save_orig = IS_ENABLED(CONFIG_CHECKPOINT_RESTORE);
++	const bool save_orig =
++#if defined(CONFIG_CHECKPOINT_RESTORE) || defined(SECCOMP_ARCH)
++		true;
++#else
++		false;
++#endif
  
-+#ifdef CONFIG_X86_64
-+# define SECCOMP_ARCH					AUDIT_ARCH_X86_64
-+# ifdef CONFIG_COMPAT
-+#  define SECCOMP_ARCH_COMPAT				AUDIT_ARCH_I386
-+# endif
-+# ifdef CONFIG_X86_X32_ABI
-+#  define SECCOMP_MULTIPLEXED_SYSCALL_TABLE_ARCH	AUDIT_ARCH_X86_64
-+#  define SECCOMP_MULTIPLEXED_SYSCALL_TABLE_MASK	__X32_SYSCALL_BIT
-+#  define SECCOMP_MULTIPLEXED_SYSCALL_TABLE_SHIFT	29
-+#endif
-+#else /* !CONFIG_X86_64 */
-+# define SECCOMP_ARCH					AUDIT_ARCH_I386
-+#endif
+ 	if (fprog->len == 0 || fprog->len > BPF_MAXINSNS)
+ 		return ERR_PTR(-EINVAL);
+@@ -690,11 +695,78 @@ static inline bool sd_touched(pte_t *ptep)
+  * This approach could also be used to test for access to sd->arch too,
+  * if we wanted to warn about compat-unsafe filters.
+  */
+-static inline bool seccomp_filter_action_is_constant(struct bpf_prog *prog,
+-						     struct seccomp_data *sd,
+-						     u32 *action)
++static bool seccomp_filter_action_is_constant(struct bpf_prog *prog,
++					      struct seccomp_data *sd,
++					      u32 *action)
+ {
+-	/* No evaluation implementation yet. */
++	struct sock_fprog_kern *fprog = prog->orig_prog;
++	unsigned int insns;
++	unsigned int reg_value = 0;
++	unsigned int pc;
++	bool op_res;
 +
- #include <asm-generic/seccomp.h>
++	if (WARN_ON_ONCE(!fprog))
++		return false;
++
++	insns = bpf_classic_proglen(fprog);
++	for (pc = 0; pc < insns; pc++) {
++		struct sock_filter *insn = &fprog->filter[pc];
++		u16 code = insn->code;
++		u32 k = insn->k;
++
++		switch (code) {
++		case BPF_LD | BPF_W | BPF_ABS:
++			switch (k) {
++			case offsetof(struct seccomp_data, nr):
++				reg_value = sd->nr;
++				break;
++			case offsetof(struct seccomp_data, arch):
++				reg_value = sd->arch;
++				break;
++			default:
++				/* can't optimize (non-constant value load) */
++				return false;
++			}
++			break;
++		case BPF_RET | BPF_K:
++			*action = insn->k;
++			/* success: reached return with constant values only */
++			return true;
++		case BPF_JMP | BPF_JA:
++			pc += insn->k;
++			break;
++		case BPF_JMP | BPF_JEQ | BPF_K:
++		case BPF_JMP | BPF_JGE | BPF_K:
++		case BPF_JMP | BPF_JGT | BPF_K:
++		case BPF_JMP | BPF_JSET | BPF_K:
++			switch (BPF_OP(code)) {
++			case BPF_JEQ:
++				op_res = reg_value == k;
++				break;
++			case BPF_JGE:
++				op_res = reg_value >= k;
++				break;
++			case BPF_JGT:
++				op_res = reg_value > k;
++				break;
++			case BPF_JSET:
++				op_res = !!(reg_value & k);
++				break;
++			default:
++				/* can't optimize (unknown jump) */
++				return false;
++			}
++
++			pc += op_res ? insn->jt : insn->jf;
++			break;
++		default:
++			/* can't optimize (unknown insn) */
++			return false;
++		}
++	}
++
++	/* ran off the end of the filter?! */
++	WARN_ON(1);
+ 	return false;
+ }
  
- #endif /* _ASM_X86_SECCOMP_H */
+diff --git a/net/core/filter.c b/net/core/filter.c
+index b2df52086445..cb1bdb0bfe87 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -1145,7 +1145,7 @@ static int bpf_prog_store_orig_filter(struct bpf_prog *fp,
+ 	return 0;
+ }
+ 
+-static void bpf_release_orig_filter(struct bpf_prog *fp)
++void bpf_release_orig_filter(struct bpf_prog *fp)
+ {
+ 	struct sock_fprog_kern *fprog = fp->orig_prog;
+ 
+@@ -1154,6 +1154,7 @@ static void bpf_release_orig_filter(struct bpf_prog *fp)
+ 		kfree(fprog);
+ 	}
+ }
++EXPORT_SYMBOL_GPL(bpf_release_orig_filter);
+ 
+ static void __bpf_prog_release(struct bpf_prog *prog)
+ {
 -- 
 2.25.1
 
