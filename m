@@ -5,52 +5,51 @@ X-Spam-Level:
 X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F361AC4727E
-	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 15:55:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4096AC2D0A8
+	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 15:55:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 99AA3238D6
-	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 15:55:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F11A8235F7
+	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 15:55:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="SyrP3FJo"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Bl/NHYXO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726752AbgIWPzD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Sep 2020 11:55:03 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:45944 "EHLO
+        id S1726785AbgIWPzI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Sep 2020 11:55:08 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:13518 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726743AbgIWPzA (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 23 Sep 2020 11:55:00 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 08NFesRn021876
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2020 08:54:57 -0700
+        by vger.kernel.org with ESMTP id S1726783AbgIWPzH (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 23 Sep 2020 11:55:07 -0400
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 08NFgcZb008393
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2020 08:55:05 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=qBylmQPCjxivvXxI1ADMP2OhWYUu+Ym2HjmF7+oRcaI=;
- b=SyrP3FJoRzlSRMWhaPkMcB2YNk+mMlXVR94ebfRXNNgjKnFWDO7iXrUmsJmLHu6dgdPc
- b9rlYohEa3mnB47/BWcWpwcFljjD+wYievYVctXy6KaOqDRzYJN+09e9bETalqAi9Wap
- lFrdLVkdveXCMIwI/iwLAmENBuQBS0iKa7c= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 33qsp4vb9x-3
+ bh=bwtr1AnhpZBwAx0sBcMEhD2sP1B2MJ+zwTzUa0uiDaY=;
+ b=Bl/NHYXOHq+I2b2lxjYTgbrhSTVJBJPWieh6Ve4t8g2ueuLzNVzn5JXBiA25rhzLQVmx
+ KHpka4DzDRqyIRaOOzLwPYnsUA5elyF3w08mnZmESSFS6b5CAfktPtDXQNv07AWATFN/
+ GAXxLX+25JXdPW1DiyPATFrgL/Y/JtF808w= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 33qsp7ccam-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2020 08:54:57 -0700
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2020 08:55:05 -0700
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 23 Sep 2020 08:54:54 -0700
+ 15.1.1979.3; Wed, 23 Sep 2020 08:55:04 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 7A8312EC7442; Wed, 23 Sep 2020 08:54:48 -0700 (PDT)
+        id 466F32EC7442; Wed, 23 Sep 2020 08:54:57 -0700 (PDT)
 From:   Andrii Nakryiko <andriin@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
         Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH bpf-next 5/9] libbpf: allow modification of BTF and add btf__add_str API
-Date:   Wed, 23 Sep 2020 08:54:32 -0700
-Message-ID: <20200923155436.2117661-6-andriin@fb.com>
+Subject: [PATCH bpf-next 9/9] selftests/bpf: test BTF writing APIs
+Date:   Wed, 23 Sep 2020 08:54:36 -0700
+Message-ID: <20200923155436.2117661-10-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200923155436.2117661-1-andriin@fb.com>
 References: <20200923155436.2117661-1-andriin@fb.com>
@@ -60,419 +59,309 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-23_12:2020-09-23,2020-09-23 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=25
- spamscore=0 lowpriorityscore=0 impostorscore=0 malwarescore=0
- clxscore=1015 mlxscore=0 mlxlogscore=999 bulkscore=0 adultscore=0
- priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2009230125
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ phishscore=0 adultscore=0 clxscore=1015 priorityscore=1501 spamscore=0
+ mlxlogscore=918 lowpriorityscore=0 bulkscore=0 impostorscore=0 mlxscore=0
+ suspectscore=25 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009230125
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Allow internal BTF representation to switch from default read-only mode, =
-in
-which raw BTF data is a single non-modifiable block of memory with BTF he=
-ader,
-types, and strings layed out sequentially and contiguously in memory, int=
-o
-a writable representation with types and strings data split out into sepa=
-rate
-memory regions, that can be dynamically expanded.
-
-Such writable internal representation is transparent to users of libbpf A=
-PIs,
-but allows to append new types and strings at the end of BTF, which is
-a typical use case when generating BTF programmatically. All the basic
-guarantees of BTF types and strings layout is preserved, i.e., user can g=
-et
-`struct btf_type *` pointer and read it directly. Such btf_type pointers =
-might
-be invalidated if BTF is modified, so some care is required in such mixed
-read/write scenarios.
-
-Switch from read-only to writable configuration happens automatically the
-first time when user attempts to modify BTF by either adding a new type o=
-r new
-string. It is still possible to get raw BTF data, which is a single piece=
- of
-memory that can be persisted in ELF section or into a file as raw BTF. Su=
-ch
-raw data memory is also still owned by BTF and will be freed either when =
-BTF
-object is freed or if another modification to BTF happens, as any modific=
-ation
-invalidates BTF raw representation.
-
-This patch adds the first BTF writing API: btf__add_str(), which allows t=
-o
-add arbitrary strings to BTF string section. All the added strings are
-automatically deduplicated. This is achieved by maintaining an additional
-string lookup index for all unique strings. Such index is built when BTF =
-is
-switched to modifiable mode. If at that time BTF strings section containe=
-d
-duplicate strings, they are not de-duplicated. This is done specifically =
-to
-not modify the existing content of BTF (types, their string offsets, etc)=
-,
-which can cause confusion and is especially important property if there i=
-s
-struct btf_ext associated with struct btf. By following this "imperfect
-deduplication" process, btf_ext is kept consitent and correct. If
-deduplication of strings is necessary, it can be forced by doing BTF
-deduplication, at which point all the strings will be eagerly deduplicate=
-d and
-all string offsets both in struct btf and struct btf_ext will be updated.
+Add selftests testing BTF writer APIs.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- tools/lib/bpf/btf.c      | 230 +++++++++++++++++++++++++++++++++++++--
- tools/lib/bpf/btf.h      |   2 +
- tools/lib/bpf/libbpf.map |   1 +
- 3 files changed, 225 insertions(+), 8 deletions(-)
+ .../selftests/bpf/prog_tests/btf_write.c      | 271 ++++++++++++++++++
+ 1 file changed, 271 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_write.c
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index f5255e2bd222..8c8f15703608 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -44,16 +44,46 @@ struct btf {
- 	 * hdr        |         |
- 	 * types_data-+         |
- 	 * strs_data------------+
-+	 *
-+	 * If BTF data is later modified, e.g., due to types added or
-+	 * removed, BTF deduplication performed, etc, this contiguous
-+	 * representation is broken up into three independently allocated
-+	 * memory regions to be able to modify them independently.
-+	 * raw_data is nulled out at that point, but can be later allocated
-+	 * and cached again if user calls btf__get_raw_data(), at which point
-+	 * raw_data will contain a contiguous copy of header, types, and
-+	 * strings:
-+	 *
-+	 * +----------+  +---------+  +-----------+
-+	 * |  Header  |  |  Types  |  |  Strings  |
-+	 * +----------+  +---------+  +-----------+
-+	 * ^             ^            ^
-+	 * |             |            |
-+	 * hdr           |            |
-+	 * types_data----+            |
-+	 * strs_data------------------+
-+	 *
-+	 *               +----------+---------+-----------+
-+	 *               |  Header  |  Types  |  Strings  |
-+	 * raw_data----->+----------+---------+-----------+
- 	 */
- 	struct btf_header *hdr;
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_write.c b/tools/t=
+esting/selftests/bpf/prog_tests/btf_write.c
+new file mode 100644
+index 000000000000..df6efdc67567
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/btf_write.c
+@@ -0,0 +1,271 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <bpf/btf.h>
 +
- 	void *types_data;
--	void *strs_data;
-+	size_t types_data_cap; /* used size stored in hdr->type_len */
-=20
- 	/* type ID to `struct btf_type *` lookup index */
- 	__u32 *type_offs;
- 	size_t type_offs_cap;
- 	__u32 nr_types;
-=20
-+	void *strs_data;
-+	size_t strs_data_cap; /* used size stored in hdr->str_len */
++#define ASSERT_EQ(actual, expected, name) ({				\
++	typeof(actual) ___act =3D (actual);				\
++	typeof(expected) ___exp =3D (expected);				\
++	bool ___ok =3D ___act =3D=3D ___exp;					\
++	CHECK(!___ok, (name),						\
++	      "unexpected %s: actual %lld !=3D expected %lld\n",		\
++	      (name), (long long)(___act), (long long)(___exp));	\
++	___ok;								\
++})
 +
-+	/* lookup index for each unique string in strings section */
-+	struct hashmap *strs_hash;
-+	/* whether strings are already deduplicated */
-+	bool strs_deduped;
- 	/* BTF object FD, if loaded into kernel */
- 	int fd;
-=20
-@@ -506,6 +536,11 @@ __s32 btf__find_by_name_kind(const struct btf *btf, =
-const char *type_name,
- 	return -ENOENT;
- }
-=20
-+static bool btf_is_modifiable(const struct btf *btf)
-+{
-+	return (void *)btf->hdr !=3D btf->raw_data;
++#define ASSERT_STREQ(actual, expected, name) ({				\
++	const char *___act =3D actual;					\
++	const char *___exp =3D expected;					\
++	bool ___ok =3D strcmp(___act, ___exp) =3D=3D 0;			\
++	CHECK(!___ok, (name),						\
++	      "unexpected %s: actual '%s' !=3D expected '%s'\n",		\
++	      (name), ___act, ___exp);					\
++	___ok;								\
++})
++
++#define ASSERT_OK(res, name) ({						\
++	long long ___res =3D (res);					\
++	bool ___ok =3D ___res =3D=3D 0;					\
++	CHECK(!___ok, (name), "unexpected error: %lld\n", ___res);	\
++	___ok;								\
++})
++
++#define ASSERT_ERR(res, name) ({					\
++	long long ___res =3D (res);					\
++	bool ___ok =3D ___res < 0;					\
++	CHECK(!___ok, (name), "unexpected success: %lld\n", ___res);	\
++	___ok;								\
++})
++
++static int duration =3D 0;
++
++void test_btf_write() {
++	const struct btf_var_secinfo *vi;
++	const struct btf_type *t;
++	const struct btf_member *m;
++	const struct btf_enum *v;
++	const struct btf_param *p;
++	struct btf *btf;
++	int id, err, str_off;
++
++	btf =3D btf__new_empty();
++	if (CHECK(IS_ERR(btf), "new_empty", "failed: %ld\n", PTR_ERR(btf)))
++		return;
++
++	str_off =3D btf__add_str(btf, "int");
++	ASSERT_EQ(str_off, 1, "int_str_off");
++
++	/* BTF_KIND_INT */
++	id =3D btf__append_int(btf, "int", 4,  BTF_INT_SIGNED);
++	ASSERT_EQ(id, 1, "int_id");
++
++	t =3D btf__type_by_id(btf, 1);
++	/* should re-use previously added "int" string */
++	ASSERT_EQ(t->name_off, str_off, "int_name_off");
++	ASSERT_STREQ(btf__str_by_offset(btf, t->name_off), "int", "int_name");
++	ASSERT_EQ(btf_kind(t), BTF_KIND_INT, "int_kind");
++	ASSERT_EQ(t->size, 4, "int_sz");
++	ASSERT_EQ(btf_int_encoding(t), BTF_INT_SIGNED, "int_enc");
++	ASSERT_EQ(btf_int_bits(t), 32, "int_bits");
++
++	/* invalid int size */
++	id =3D btf__append_int(btf, "bad sz int", 7, 0);
++	ASSERT_ERR(id, "int_bad_sz");
++	/* invalid encoding */
++	id =3D btf__append_int(btf, "bad enc int", 4, 123);
++	ASSERT_ERR(id, "int_bad_enc");
++	/* NULL name */
++	id =3D btf__append_int(btf, NULL, 4, 0);
++	ASSERT_ERR(id, "int_bad_null_name");
++	/* empty name */
++	id =3D btf__append_int(btf, "", 4, 0);
++	ASSERT_ERR(id, "int_bad_empty_name");
++
++	/* PTR/CONST/VOLATILE/RESTRICT */
++	id =3D btf__append_ptr(btf, 1);
++	ASSERT_EQ(id, 2, "ptr_id");
++	t =3D btf__type_by_id(btf, 2);
++	ASSERT_EQ(btf_kind(t), BTF_KIND_PTR, "ptr_kind");
++	ASSERT_EQ(t->type, 1, "ptr_type");
++
++	id =3D btf__append_const(btf, 5); /* points forward to restrict */
++	ASSERT_EQ(id, 3, "const_id");
++	t =3D btf__type_by_id(btf, 3);
++	ASSERT_EQ(btf_kind(t), BTF_KIND_CONST, "const_kind");
++	ASSERT_EQ(t->type, 5, "const_type");
++
++	id =3D btf__append_volatile(btf, 3);
++	ASSERT_EQ(id, 4, "volatile_id");
++	t =3D btf__type_by_id(btf, 4);
++	ASSERT_EQ(btf_kind(t), BTF_KIND_VOLATILE, "volatile_kind");
++	ASSERT_EQ(t->type, 3, "volatile_type");
++
++	id =3D btf__append_restrict(btf, 4);
++	ASSERT_EQ(id, 5, "restrict_id");
++	t =3D btf__type_by_id(btf, 5);
++	ASSERT_EQ(btf_kind(t), BTF_KIND_RESTRICT, "restrict_kind");
++	ASSERT_EQ(t->type, 4, "restrict_type");
++
++	/* ARRAY */
++	id =3D btf__append_array(btf, 1, 2, 10); /* int *[10] */
++	ASSERT_EQ(id, 6, "array_id");
++	t =3D btf__type_by_id(btf, 6);
++	ASSERT_EQ(btf_kind(t), BTF_KIND_ARRAY, "array_kind");
++	ASSERT_EQ(btf_array(t)->index_type, 1, "array_index_type");
++	ASSERT_EQ(btf_array(t)->type, 2, "array_elem_type");
++	ASSERT_EQ(btf_array(t)->nelems, 10, "array_nelems");
++
++	/* STRUCT */
++	err =3D btf__append_field(btf, "field", 1, 0, 0);
++	ASSERT_ERR(err, "no_struct_field");
++	id =3D btf__append_struct(btf, "s1", 8);
++	ASSERT_EQ(id, 7, "struct_id");
++	err =3D btf__append_field(btf, "f1", 1, 0, 0);
++	ASSERT_OK(err, "f1_res");
++	err =3D btf__append_field(btf, "f2", 1, 32, 16);
++	ASSERT_OK(err, "f2_res");
++
++	t =3D btf__type_by_id(btf, 7);
++	ASSERT_STREQ(btf__str_by_offset(btf, t->name_off), "s1", "struct_name")=
+;
++	ASSERT_EQ(btf_kind(t), BTF_KIND_STRUCT, "struct_kind");
++	ASSERT_EQ(btf_vlen(t), 2, "struct_vlen");
++	ASSERT_EQ(btf_kflag(t), true, "struct_kflag");
++	ASSERT_EQ(t->size, 8, "struct_sz");
++	m =3D btf_members(t) + 0;
++	ASSERT_STREQ(btf__str_by_offset(btf, m->name_off), "f1", "f1_name");
++	ASSERT_EQ(m->type, 1, "f1_type");
++	ASSERT_EQ(btf_member_bit_offset(t, 0), 0, "f1_bit_off");
++	ASSERT_EQ(btf_member_bitfield_size(t, 0), 0, "f1_bit_sz");
++	m =3D btf_members(t) + 1;
++	ASSERT_STREQ(btf__str_by_offset(btf, m->name_off), "f2", "f2_name");
++	ASSERT_EQ(m->type, 1, "f2_type");
++	ASSERT_EQ(btf_member_bit_offset(t, 1), 32, "f2_bit_off");
++	ASSERT_EQ(btf_member_bitfield_size(t, 1), 16, "f2_bit_sz");
++
++	/* UNION */
++	id =3D btf__append_union(btf, "u1", 8);
++	ASSERT_EQ(id, 8, "union_id");
++
++	/* invalid, non-zero offset */
++	err =3D btf__append_field(btf, "field", 1, 1, 0);
++	ASSERT_ERR(err, "no_struct_field");
++
++	err =3D btf__append_field(btf, "f1", 1, 0, 16);
++	ASSERT_OK(err, "f1_res");
++
++	t =3D btf__type_by_id(btf, 8);
++	ASSERT_STREQ(btf__str_by_offset(btf, t->name_off), "u1", "union_name");
++	ASSERT_EQ(btf_kind(t), BTF_KIND_UNION, "union_kind");
++	ASSERT_EQ(btf_vlen(t), 1, "union_vlen");
++	ASSERT_EQ(btf_kflag(t), true, "union_kflag");
++	ASSERT_EQ(t->size, 8, "union_sz");
++	m =3D btf_members(t) + 0;
++	ASSERT_STREQ(btf__str_by_offset(btf, m->name_off), "f1", "f1_name");
++	ASSERT_EQ(m->type, 1, "f1_type");
++	ASSERT_EQ(btf_member_bit_offset(t, 0), 0, "f1_bit_off");
++	ASSERT_EQ(btf_member_bitfield_size(t, 0), 16, "f1_bit_sz");
++
++	/* ENUM */
++	id =3D btf__append_enum(btf, "e1", 4);
++	ASSERT_EQ(id, 9, "enum_id");
++	err =3D btf__append_enum_value(btf, "v1", 1);
++	ASSERT_OK(err, "v1_res");
++	err =3D btf__append_enum_value(btf, "v2", 2);
++	ASSERT_OK(err, "v2_res");
++
++	t =3D btf__type_by_id(btf, 9);
++	ASSERT_STREQ(btf__str_by_offset(btf, t->name_off), "e1", "enum_name");
++	ASSERT_EQ(btf_kind(t), BTF_KIND_ENUM, "enum_kind");
++	ASSERT_EQ(btf_vlen(t), 2, "enum_vlen");
++	ASSERT_EQ(t->size, 4, "enum_sz");
++	v =3D btf_enum(t) + 0;
++	ASSERT_STREQ(btf__str_by_offset(btf, v->name_off), "v1", "v1_name");
++	ASSERT_EQ(v->val, 1, "v1_val");
++	v =3D btf_enum(t) + 1;
++	ASSERT_STREQ(btf__str_by_offset(btf, v->name_off), "v2", "v2_name");
++	ASSERT_EQ(v->val, 2, "v2_val");
++
++	/* FWDs */
++	id =3D btf__append_fwd(btf, "struct_fwd", BTF_FWD_STRUCT);
++	ASSERT_EQ(id, 10, "struct_fwd_id");
++	t =3D btf__type_by_id(btf, 10);
++	ASSERT_STREQ(btf__str_by_offset(btf, t->name_off), "struct_fwd", "fwd_n=
+ame");
++	ASSERT_EQ(btf_kind(t), BTF_KIND_FWD, "fwd_kind");
++	ASSERT_EQ(btf_kflag(t), 0, "fwd_kflag");
++
++	id =3D btf__append_fwd(btf, "union_fwd", BTF_FWD_UNION);
++	ASSERT_EQ(id, 11, "union_fwd_id");
++	t =3D btf__type_by_id(btf, 11);
++	ASSERT_STREQ(btf__str_by_offset(btf, t->name_off), "union_fwd", "fwd_na=
+me");
++	ASSERT_EQ(btf_kind(t), BTF_KIND_FWD, "fwd_kind");
++	ASSERT_EQ(btf_kflag(t), 1, "fwd_kflag");
++
++	id =3D btf__append_fwd(btf, "enum_fwd", BTF_FWD_ENUM);
++	ASSERT_EQ(id, 12, "enum_fwd_id");
++	t =3D btf__type_by_id(btf, 12);
++	ASSERT_STREQ(btf__str_by_offset(btf, t->name_off), "enum_fwd", "fwd_nam=
+e");
++	ASSERT_EQ(btf_kind(t), BTF_KIND_ENUM, "enum_fwd_kind");
++	ASSERT_EQ(btf_vlen(t), 0, "enum_fwd_kind");
++	ASSERT_EQ(t->size, 4, "enum_fwd_sz");
++
++	/* TYPEDEF */
++	id =3D btf__append_typedef(btf, "typedef1", 1);
++	ASSERT_EQ(id, 13, "typedef_fwd_id");
++	t =3D btf__type_by_id(btf, 13);
++	ASSERT_STREQ(btf__str_by_offset(btf, t->name_off), "typedef1", "typedef=
+_name");
++	ASSERT_EQ(btf_kind(t), BTF_KIND_TYPEDEF, "typedef_kind");
++	ASSERT_EQ(t->type, 1, "typedef_type");
++
++	/* FUNC & FUNC_PROTO */
++	id =3D btf__append_func(btf, "func1", BTF_FUNC_GLOBAL, 15);
++	ASSERT_EQ(id, 14, "func_id");
++	t =3D btf__type_by_id(btf, 14);
++	ASSERT_STREQ(btf__str_by_offset(btf, t->name_off), "func1", "func_name"=
+);
++	ASSERT_EQ(t->type, 15, "func_type");
++	ASSERT_EQ(btf_kind(t), BTF_KIND_FUNC, "func_kind");
++	ASSERT_EQ(btf_vlen(t), BTF_FUNC_GLOBAL, "func_vlen");
++
++	id =3D btf__append_func_proto(btf, 1);
++	ASSERT_EQ(id, 15, "func_proto_id");
++	err =3D btf__append_func_param(btf, "p1", 1);
++	ASSERT_OK(err, "p1_res");
++	err =3D btf__append_func_param(btf, "p2", 2);
++	ASSERT_OK(err, "p2_res");
++
++	t =3D btf__type_by_id(btf, 15);
++	ASSERT_EQ(btf_kind(t), BTF_KIND_FUNC_PROTO, "func_proto_kind");
++	ASSERT_EQ(btf_vlen(t), 2, "func_proto_vlen");
++	ASSERT_EQ(t->type, 1, "func_proto_ret_type");
++	p =3D btf_params(t) + 0;
++	ASSERT_STREQ(btf__str_by_offset(btf, p->name_off), "p1", "p1_name");
++	ASSERT_EQ(p->type, 1, "p1_type");
++	p =3D btf_params(t) + 1;
++	ASSERT_STREQ(btf__str_by_offset(btf, p->name_off), "p2", "p2_name");
++	ASSERT_EQ(p->type, 2, "p2_type");
++
++	/* VAR */
++	id =3D btf__append_var(btf, "var1", BTF_VAR_GLOBAL_ALLOCATED, 1);
++	ASSERT_EQ(id, 16, "var_id");
++	t =3D btf__type_by_id(btf, 16);
++	ASSERT_STREQ(btf__str_by_offset(btf, t->name_off), "var1", "var_name");
++	ASSERT_EQ(btf_kind(t), BTF_KIND_VAR, "var_kind");
++	ASSERT_EQ(t->type, 1, "var_type");
++	ASSERT_EQ(btf_var(t)->linkage, BTF_VAR_GLOBAL_ALLOCATED, "var_type");
++
++	/* DATASECT */
++	id =3D btf__append_datasec(btf, "datasec1", 12);
++	ASSERT_EQ(id, 17, "datasec_id");
++	err =3D btf__append_datasec_var_info(btf, 1, 4, 8);
++	ASSERT_OK(err, "v1_res");
++
++	t =3D btf__type_by_id(btf, 17);
++	ASSERT_STREQ(btf__str_by_offset(btf, t->name_off), "datasec1", "datasec=
+_name");
++	ASSERT_EQ(t->size, 12, "datasec_sz");
++	ASSERT_EQ(btf_kind(t), BTF_KIND_DATASEC, "datasec_kind");
++	ASSERT_EQ(btf_vlen(t), 1, "datasec_vlen");
++	vi =3D btf_var_secinfos(t) + 0;
++	ASSERT_EQ(vi->type, 1, "v1_type");
++	ASSERT_EQ(vi->offset, 4, "v1_off");
++	ASSERT_EQ(vi->size, 8, "v1_sz");
++
++	btf__free(btf);
 +}
-+
- void btf__free(struct btf *btf)
- {
- 	if (IS_ERR_OR_NULL(btf))
-@@ -514,6 +549,17 @@ void btf__free(struct btf *btf)
- 	if (btf->fd >=3D 0)
- 		close(btf->fd);
-=20
-+	if (btf_is_modifiable(btf)) {
-+		/* if BTF was modified after loading, it will have a split
-+		 * in-memory representation for header, types, and strings
-+		 * sections, so we need to free all of them individually. It
-+		 * might still have a cached contiguous raw data present,
-+		 * which will be unconditionally freed below.
-+		 */
-+		free(btf->hdr);
-+		free(btf->types_data);
-+		free(btf->strs_data);
-+	}
- 	free(btf->raw_data);
- 	free(btf->type_offs);
- 	free(btf);
-@@ -922,8 +968,29 @@ void btf__set_fd(struct btf *btf, int fd)
- 	btf->fd =3D fd;
- }
-=20
--const void *btf__get_raw_data(const struct btf *btf, __u32 *size)
-+const void *btf__get_raw_data(const struct btf *btf_ro, __u32 *size)
- {
-+	struct btf *btf =3D (struct btf *)btf_ro;
-+
-+	if (!btf->raw_data) {
-+		struct btf_header *hdr =3D btf->hdr;
-+		void *data;
-+
-+		btf->raw_size =3D hdr->hdr_len + hdr->type_len + hdr->str_len;
-+		btf->raw_data =3D calloc(1, btf->raw_size);
-+		if (!btf->raw_data)
-+			return NULL;
-+		data =3D btf->raw_data;
-+
-+		memcpy(data, hdr, hdr->hdr_len);
-+		data +=3D hdr->hdr_len;
-+
-+		memcpy(data, btf->types_data, hdr->type_len);
-+		data +=3D hdr->type_len;
-+
-+		memcpy(data, btf->strs_data, hdr->str_len);
-+		data +=3D hdr->str_len;
-+	}
- 	*size =3D btf->raw_size;
- 	return btf->raw_data;
- }
-@@ -1071,6 +1138,151 @@ int btf__get_map_kv_tids(const struct btf *btf, c=
-onst char *map_name,
- 	return 0;
- }
-=20
-+static size_t strs_hash_fn(const void *key, void *ctx)
-+{
-+	struct btf *btf =3D ctx;
-+	const char *str =3D btf->strs_data + (long)key;
-+
-+	return str_hash(str);
-+}
-+
-+static bool strs_hash_equal_fn(const void *key1, const void *key2, void =
-*ctx)
-+{
-+	struct btf *btf =3D ctx;
-+	const char *str1 =3D btf->strs_data + (long)key1;
-+	const char *str2 =3D btf->strs_data + (long)key2;
-+
-+	return strcmp(str1, str2) =3D=3D 0;
-+}
-+
-+/* Ensure BTF is ready to be modified (by splitting into a three memory
-+ * regions for header, types, and strings). Also invalidate cached
-+ * raw_data, if any.
-+ */
-+static int btf_ensure_modifiable(struct btf *btf)
-+{
-+	void *hdr, *types, *strs, *strs_end, *s;
-+	struct hashmap *hash =3D NULL;
-+	long off;
-+	int err;
-+
-+	if (btf_is_modifiable(btf)) {
-+		/* any BTF modification invalidates raw_data */
-+		if (btf->raw_data) {
-+			free(btf->raw_data);
-+			btf->raw_data =3D NULL;
-+		}
-+		return 0;
-+	}
-+
-+	/* split raw data into three memory regions */
-+	hdr =3D malloc(btf->hdr->hdr_len);
-+	types =3D malloc(btf->hdr->type_len);
-+	strs =3D malloc(btf->hdr->str_len);
-+	if (!hdr || !types || !strs)
-+		goto err_out;
-+
-+	memcpy(hdr, btf->hdr, btf->hdr->hdr_len);
-+	memcpy(types, btf->types_data, btf->hdr->type_len);
-+	memcpy(strs, btf->strs_data, btf->hdr->str_len);
-+
-+	/* build lookup index for all strings */
-+	hash =3D hashmap__new(strs_hash_fn, strs_hash_equal_fn, btf);
-+	if (IS_ERR(hash)) {
-+		err =3D PTR_ERR(hash);
-+		hash =3D NULL;
-+		goto err_out;
-+	}
-+
-+	strs_end =3D strs + btf->hdr->str_len;
-+	for (off =3D 0, s =3D strs; s < strs_end; off +=3D strlen(s) + 1, s =3D=
- strs + off) {
-+		/* hashmap__add() returns EEXIST if string with the same
-+		 * content already is in the hash map
-+		 */
-+		err =3D hashmap__add(hash, (void *)off, (void *)off);
-+		if (err =3D=3D -EEXIST)
-+			continue; /* duplicate */
-+		if (err)
-+			goto err_out;
-+	}
-+
-+	/* only when everything was successful, update internal state */
-+	btf->hdr =3D hdr;
-+	btf->types_data =3D types;
-+	btf->types_data_cap =3D btf->hdr->type_len;
-+	btf->strs_data =3D strs;
-+	btf->strs_data_cap =3D btf->hdr->str_len;
-+	btf->strs_hash =3D hash;
-+	/* if BTF was created from scratch, all strings are guaranteed to be
-+	 * unique and deduplicated
-+	 */
-+	btf->strs_deduped =3D btf->hdr->str_len <=3D 1;
-+
-+	/* invalidate raw_data representation */
-+	free(btf->raw_data);
-+	btf->raw_data =3D NULL;
-+
-+	return 0;
-+
-+err_out:
-+	hashmap__free(hash);
-+	free(hdr);
-+	free(types);
-+	free(strs);
-+	return -ENOMEM;
-+}
-+
-+static void *btf_add_str_mem(struct btf *btf, size_t add_sz)
-+{
-+	return btf_add_mem(&btf->strs_data, &btf->strs_data_cap, 1,
-+			   btf->hdr->str_len, BTF_MAX_STR_OFFSET, add_sz);
-+}
-+
-+/* Add a string s to the BTF string section.
-+ * Returns:
-+ *   - > 0 offset into string section, on success;
-+ *   - < 0, on error.
-+ */
-+int btf__add_str(struct btf *btf, const char *s)
-+{
-+	long old_off, new_off, len;
-+	void *p;
-+	int err;
-+
-+	if (btf_ensure_modifiable(btf))
-+		return -ENOMEM;
-+
-+	/* Hashmap keys are always offsets within btf->strs_data, so to even
-+	 * look up some string from the "outside", we need to first append it
-+	 * at the end, so that it can be addressed with an offset. Luckily,
-+	 * until btf->hdr->str_len is incremented, that string is just a piece
-+	 * of garbage for the rest of BTF code, so no harm, no foul. On the
-+	 * other hand, if the string is unique, it's already appended and
-+	 * ready to be used, only a simple btf->hdr->str_len increment away.
-+	 */
-+	len =3D strlen(s) + 1;
-+	p =3D btf_add_str_mem(btf, len);
-+	if (!p)
-+		return -ENOMEM;
-+
-+	new_off =3D btf->hdr->str_len;
-+	memcpy(p, s, len);
-+
-+	/* Now attempt to add the string, but only if the string with the same
-+	 * contents doesn't exist already (HASHMAP_ADD strategy). If such
-+	 * string exists, we'll get its offset in old_off (that's old_key).
-+	 */
-+	err =3D hashmap__insert(btf->strs_hash, (void *)new_off, (void *)new_of=
-f,
-+			      HASHMAP_ADD, (const void **)&old_off, NULL);
-+	if (err =3D=3D -EEXIST)
-+		return old_off; /* duplicated string, return existing offset */
-+	if (err)
-+		return err;
-+
-+	btf->hdr->str_len +=3D len; /* new unique string, adjust data length */
-+	return new_off;
-+}
-+
- struct btf_ext_sec_setup_param {
- 	__u32 off;
- 	__u32 len;
-@@ -1537,6 +1749,9 @@ int btf__dedup(struct btf *btf, struct btf_ext *btf=
-_ext,
- 		return -EINVAL;
- 	}
-=20
-+	if (btf_ensure_modifiable(btf))
-+		return -ENOMEM;
-+
- 	err =3D btf_dedup_strings(d);
- 	if (err < 0) {
- 		pr_debug("btf_dedup_strings failed:%d\n", err);
-@@ -1926,6 +2141,9 @@ static int btf_dedup_strings(struct btf_dedup *d)
- 	int i, j, err =3D 0, grp_idx;
- 	bool grp_used;
-=20
-+	if (d->btf->strs_deduped)
-+		return 0;
-+
- 	/* build index of all strings */
- 	while (p < end) {
- 		if (strs.cnt + 1 > strs.cap) {
-@@ -2018,6 +2236,7 @@ static int btf_dedup_strings(struct btf_dedup *d)
- 		goto done;
-=20
- 	d->btf->hdr->str_len =3D end - start;
-+	d->btf->strs_deduped =3D true;
-=20
- done:
- 	free(tmp_strs);
-@@ -3021,12 +3240,7 @@ static int btf_dedup_compact_types(struct btf_dedu=
-p *d)
- 	if (!new_offs)
- 		return -ENOMEM;
- 	d->btf->type_offs =3D new_offs;
--
--	/* make sure string section follows type information without gaps */
--	d->btf->hdr->str_off =3D p - d->btf->types_data;
--	memmove(p, d->btf->strs_data, d->btf->hdr->str_len);
--	d->btf->strs_data =3D p;
--
-+	d->btf->hdr->str_off =3D d->btf->hdr->type_len;
- 	d->btf->raw_size =3D d->btf->hdr->hdr_len + d->btf->hdr->type_len + d->=
-btf->hdr->str_len;
- 	return 0;
- }
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 2a55320d87d0..84cb0502af95 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -72,6 +72,8 @@ LIBBPF_API __u32 btf_ext__line_info_rec_size(const stru=
-ct btf_ext *btf_ext);
-=20
- LIBBPF_API struct btf *libbpf_find_kernel_btf(void);
-=20
-+LIBBPF_API int btf__add_str(struct btf *btf, const char *s);
-+
- struct btf_dedup_opts {
- 	unsigned int dedup_table_size;
- 	bool dont_resolve_fwds;
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 5f054dadf082..b4274c0fdd04 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -304,6 +304,7 @@ LIBBPF_0.2.0 {
- 	global:
- 		bpf_prog_bind_map;
- 		bpf_program__section_name;
-+		btf__add_str;
- 		perf_buffer__buffer_cnt;
- 		perf_buffer__buffer_fd;
- 		perf_buffer__epoll_fd;
 --=20
 2.24.1
 
