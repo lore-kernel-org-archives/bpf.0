@@ -2,198 +2,113 @@ Return-Path: <SRS0=NOCw=DA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,LH_URI_DOM_IN_PATH,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 878EFC2D0A8
-	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 18:17:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 81011C4727E
+	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 18:41:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EFA272220D
-	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 18:17:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 32267208B6
+	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 18:41:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="do8ZmBd8";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="QhnRyVVb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AEj3XFTG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726476AbgIWSRQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Sep 2020 14:17:16 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:44038 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726460AbgIWSRQ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 23 Sep 2020 14:17:16 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 08NIAubq023870;
-        Wed, 23 Sep 2020 11:17:02 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=Umxf5TulBUwA9mY2by2uKxRLeA8sG0eEuT4YtYKBBzk=;
- b=do8ZmBd8HUmwapjaYmm9PhktC4Vtfbwg87CGkDXunUdO2hRKJF51lmO/1V28LYbyNnyz
- jtgBAYKQUJ9x46cjNj/ik/A6RaH3xBvKjkl44Q7I9209djM8IeqZUSSGluczZpgoAhMD
- a2ILEl0gS+ISCJqsXnEDOxaGYbma+qNhHSg= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 33qsp4w6h2-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 23 Sep 2020 11:17:02 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 23 Sep 2020 11:16:59 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TRQNzQh1FphnO8TegaEkqhBSQLmVH67m2kQIUE7oxIUhKk3ACq/Ub05gh2moJiySvW8R/M+fR7dN/m11vDjQp7aHq+83jBqaoaLr0PFCMGGw0hG8lKi11bpyIq0jEL2TjZSW6snM6tB4LNDgtVUwE5itwiVZxj/w7IeH7irXU6onZe9/sTT5fldBi9lP2qzusgDvwlsIINRyN2p4JO+gVYGjz6rsj4MnS7hj68yn084k20BfHBpBt3qUCksH8ND+e/5TWUNVfOMvrX0ixWehV4knm7L2McfPQsVJIRNHfmtM2MtDAQxGUsPyoyclQoiAB3JyzV2xOELzxrC/3jTjOA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Umxf5TulBUwA9mY2by2uKxRLeA8sG0eEuT4YtYKBBzk=;
- b=UNEeytahqOO8/S5UfyEAv9CknwTbXRM9vZmxNrnFGS7USLE+Ojs/cxhjRE0CjEtlpZMCBa6w4H/qDxyTa31vaRkzzxN1p11l82M7/6rNo9ILOSsptgknjcF5As10S5hAAUqOq2HXMM4mUiG1aUHvBVwcB1aq4mm4+gmHn8ND4g7j+8/vXcXK98/3DCcZTV/aZBCbhY5dbJirWp8rFaVdc+d3UQMOhaWR8M5YaLIWcTEYz66EtE3bxAvFBC+O7WymnVo92eIm12e4IG6+2Q1e4/NSesE13k9IqnD8B4XuhxV6ZKIlvI7E9/SjwqeK+7tl0nc499bUG7gaXOiP0MOakw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Umxf5TulBUwA9mY2by2uKxRLeA8sG0eEuT4YtYKBBzk=;
- b=QhnRyVVb6T/JOO9ssfiA2HaDqvDSqHmZ1YDL6+u98AbuM/NWBQA/i7KHyEU74ohRHcU4GZ38IZXQbjtySoTGnOJy/+QbrpxhPva3LTWwQkFYZfF3oa3ZYQkxNC6u0It7qZM9DzR9OrYgzB8BKh95kCcECqm7D0CGfw+k3qD/G4Y=
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
- by BYAPR15MB2648.namprd15.prod.outlook.com (2603:10b6:a03:150::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.20; Wed, 23 Sep
- 2020 18:16:57 +0000
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::8887:dd68:f497:ea42]) by BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::8887:dd68:f497:ea42%3]) with mapi id 15.20.3412.020; Wed, 23 Sep 2020
- 18:16:57 +0000
-Subject: Re: Help testing llvm patch to generate verifier friendly code
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Lorenz Bauer <lmb@cloudflare.com>
-CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        id S1726498AbgIWSlx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Sep 2020 14:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726424AbgIWSlx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 23 Sep 2020 14:41:53 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED9E3C0613CE;
+        Wed, 23 Sep 2020 11:41:52 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id a22so466675ljp.13;
+        Wed, 23 Sep 2020 11:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2k9CV25RrDU0wvIk6G57sGfuXbwloarmNuW7bg4GqKQ=;
+        b=AEj3XFTGvz6XnHZKhyYx0BadXLJ4vh0EvmJJE06/Ecd66MYkHugjIcFdgG1LBy/bDV
+         Q7eMYtmXq6Ile48fVyvoFwitMiOTT0W2tZU0Wxnq+IrSP/LZjUjDClLafXDRJZ1jNaQ+
+         01RnPUUUBw0ravqb19jjk9cbFDWvoQ3BdYRswL4sRnRe1HBgKVqFFx3COIKJTcmnJga8
+         TiukHJPgjEmQXzueDiLmRmCyxkiPou5YyFhYuwZ1PJ6x+nHxjCQ38WKMzXv+BwO1H6P2
+         S0Tm/4R4oRP4HM/GpAvqU5P5WcZmBgKEaeSGjwpX/yX9f0AUL7W8lZ7YEeGMPvJGueEl
+         0zqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2k9CV25RrDU0wvIk6G57sGfuXbwloarmNuW7bg4GqKQ=;
+        b=CrHNco7guSTgEXcRKWA1mSePgQeVmdHSp5iifheZ7o6tft2pnXYyZbiWU60HpohdIa
+         qh7Ojyx4e8rncAqtammXBCdOnfV9dQiqlgElyWI0yfQiL1ze4WS96tRfUFigZFS04Gf0
+         ssFy9aol0TK6PrV/hegnOBwJ2pzWwoUo6F0mf5V09ebChpkxhrGi/SDUAjQhEda7iHjY
+         DNk4b0Oo9MMhqbmllStqCBEMnZGREDoqxm+FVQ3IpvREqtI/OJH5Sv/mKzW/WRdxz4Xs
+         +MGwLf88G/3LXVDgWFOsyAyNqArjpKfLjnh7btxc0sfmxcr0Xa8NEozXL7khZ+UKKFPT
+         ADJg==
+X-Gm-Message-State: AOAM532Pnrj2CgNt1TvXdwLGwlgai3SBGaTzyhrAcy3Khdiceop2oSD+
+        5T+j2K7FRKxMleudBNPsUkLAfVzFPUdUQZD9v9g=
+X-Google-Smtp-Source: ABdhPJwDjxajelXuIroV0hGU/94fezNzAj9XrOoWiRhdrGKWN0zrJrx9q9zd8qWFtuAZCK3hduW7WLe4xOTHNDUZLxE=
+X-Received: by 2002:a2e:9dcb:: with SMTP id x11mr401460ljj.450.1600886511328;
+ Wed, 23 Sep 2020 11:41:51 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200916211010.3685-1-maciej.fijalkowski@intel.com>
+ <CAADnVQLEYHZLeu-d4nV5Px6t+tVtYEgg8AfPE5-GwAS1uizc0w@mail.gmail.com> <CACAyw994v0BFpnGnboVVRCZt62+xjnWqdNDbSqqJHOD6C-cO0g@mail.gmail.com>
+In-Reply-To: <CACAyw994v0BFpnGnboVVRCZt62+xjnWqdNDbSqqJHOD6C-cO0g@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 23 Sep 2020 11:41:40 -0700
+Message-ID: <CAADnVQKXvx7QQXdGHVHtB8HgjR1GLwS0q_5_F7fe+y8brtPVZQ@mail.gmail.com>
+Subject: Re: [PATCH v8 bpf-next 0/7] bpf: tailcalls in BPF subprograms
+To:     Lorenz Bauer <lmb@cloudflare.com>
+Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        John Fastabend <john.fastabend@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andriin@fb.com>
-References: <80d19887-5b77-a442-5207-a2685cdd1f83@fb.com>
- <CACAyw9-zry08xTRGUHCh8VSp0eF9cFQjGiur0jDnA-YMaZ=Niw@mail.gmail.com>
- <CAEf4BzYteTG41ST2dJ+kVdroB8ACQbYf1avBRjZHt+Qzt=o8Zw@mail.gmail.com>
-From:   Yonghong Song <yhs@fb.com>
-Message-ID: <3ef2ad81-15af-0668-c934-31a49f9215e7@fb.com>
-Date:   Wed, 23 Sep 2020 11:16:54 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.12.0
-In-Reply-To: <CAEf4BzYteTG41ST2dJ+kVdroB8ACQbYf1avBRjZHt+Qzt=o8Zw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [2620:10d:c090:400::5:1c16]
-X-ClientProxiedBy: CO1PR15CA0090.namprd15.prod.outlook.com
- (2603:10b6:101:20::34) To BYAPR15MB4088.namprd15.prod.outlook.com
- (2603:10b6:a02:c3::18)
-MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2620:10d:c085:21c1::11fc] (2620:10d:c090:400::5:1c16) by CO1PR15CA0090.namprd15.prod.outlook.com (2603:10b6:101:20::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.22 via Frontend Transport; Wed, 23 Sep 2020 18:16:56 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b6a4a8a5-4bd7-44c9-a952-08d85fecdb8b
-X-MS-TrafficTypeDiagnostic: BYAPR15MB2648:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR15MB2648504E4F24C18BA5C25CB5D3380@BYAPR15MB2648.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:2000;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: AR3CeF3lZ0gRrlICp6NVlEJ7wu6KY/NoOCzxFGQQEbK/1eVG03aw05ynpvwG/YXTZGKj+PXG2yp960AErpq8K6TX1yk20auMAgq/Fx3yrlwaZCWGomJ5jd0W0xNs5o/cjscQY3vCvGcx48tIjoealzUw7RtSbwRW/qwFMudxQmat++azZkdBBHgJpHatkmSvzf5v33fliEzzrBtUsknGzfeFt9cpPeKpSwRW/hdsrEpRdQ2rc86hywPRYk9EPrPI/WgYuIzVfZw3p4X9klX+NSbUcnM79nKI6XSzbEegY8NiOfbwx3H1lmjQZgP+QNm3e2ILEbjyWJjDc5S6OyFL1Mal/NtY0aACDoipkYHT54K+JxR4BD3iM3GTTK8A+7hOxRi8r5NqjhPUQMRc4Hjcsco7ohuByyRCJLAiuO1rnJhMFXHM0iOn85et+7iV6nvqWNpSkitn35QUwHrlWcKD4A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(366004)(346002)(376002)(136003)(396003)(16526019)(86362001)(8676002)(5660300002)(83380400001)(2906002)(66476007)(8936002)(66946007)(31696002)(66556008)(36756003)(53546011)(966005)(31686004)(6486002)(4326008)(52116002)(54906003)(316002)(2616005)(110136005)(186003)(478600001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: A7xGSOdoHh0eY3p87hrgdg1ExaaiRcTCeOCP6z74n9rom5WujKN/SPw4x4IQk0sRFglHwwboS10WOw5UrKC6ogCbpUpccI4+Aoc4/ChpMggr+S0vS8gSbla4Mfdv8sgKhP4f6ELn40Z88XuVXLrRtuuG3BgZskfRXSuTpb/yuKDbiUos4eMQKPcqOsfQ444QLrmiyjlc8PTv0DB7i1ZFt2f5JBOebdbDevLZRZjW5oZ0DL9g+MyaO0h7mDkhWWRQ8kya57R7mjN2bCsGG99CHNeZSBy17lOyBiW3i0xjLFZWvqri+M+ZLd5TRnYDGns8c7OFUmWFpYtQ/OnRT99EEZGKQmsIzMgE9p+REvYPadE/AqyVEvF3PAu26ynQzozb9Njl+3QR6kF4MJORpM6WDyB/+CI4x1EtEp3HBQgxnCCzVwG68HOqXxnC2a5pPt/0VqVWU01uhcvgW9M5YQLfxhFpY3sHH3IJpnpx8k9h249LTM389TprO39pvebzBjEWED8nxtnRd7rWgq97vpi4W1tjMbtDz6rN8mwg7O5A0wNst2KCLb51ZwRnityuNrD9cnWIipPSdngdw9mlXp4COo8AtQEIQ31kReltoc0h7MHV39kHulzWylSBgsAdnLUjsqTShiCpyf38OxUUHW9za67AWbjXdjfcdDqJbVXxY30=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b6a4a8a5-4bd7-44c9-a952-08d85fecdb8b
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Sep 2020 18:16:57.5417
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Zt6Tzfrq3dRpW6kwhgNN1CkTzTy7vFz/GtHdIragIytVtc2aTZu80QnnaD4fa4YU
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2648
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-23_13:2020-09-23,2020-09-23 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- spamscore=0 lowpriorityscore=0 impostorscore=0 malwarescore=0
- clxscore=1015 mlxscore=0 mlxlogscore=999 bulkscore=0 adultscore=0
- priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2009230138
-X-FB-Internal: deliver
+        bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Wed, Sep 23, 2020 at 9:11 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
+>
+> On Fri, 18 Sep 2020 at 04:26, Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> [...]
+> >
+> > Lorenz,
+> > if you can test it on cloudflare progs would be awesome.
+>
+> Our programs all bpf_tail_call from the topmost function, so no calls
+> from subprogs. I stripped out our FORCE_INLINE flag, recompiled and
+> ran our testsuite. cls_redirect.c (also in the kernel selftests) has a
+> test failure that I currently can't explain, but I don't have the time
+> to look at it in detail right now.
 
+selftests's test_cls_redirect.c does not have any tail calls,
+so it's not an interesting target.
+But your internal code relying on tail_call and until today
+you could not use subprograms at all.
+It doesn't matter that you do tail_call out of topmost function.
+The verifier would disallow subprogs, so you were missing
+on lots of new functionality.
+What I'm suggesting to try is to keep your code as-is
+(with tail_call in topmost) and simply remove always_inline.
+Let the compiler decide on better code layout.
+That will improve performance and most likely improve verification time too.
+If you convert some of the subprograms into global functions then
+you will be able to use function-by-function verification which will
+drastically improve verification time.
 
-On 9/23/20 9:21 AM, Andrii Nakryiko wrote:
-> On Wed, Sep 23, 2020 at 9:15 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
->>
->> On Wed, 23 Sep 2020 at 08:17, Yonghong Song <yhs@fb.com> wrote:
->>>
->>> Hi,
->>>
->>> I have spent some time to add additional logic in llvm BPF backend
->>> in order to generate verifier friendly code.
->>>
->>> The first patch is:
->>>     https://urldefense.proofpoint.com/v2/url?u=https-3A__reviews.llvm.org_D87153&d=DwIBaQ&c=5VD0RTtNlTh3ycd41b3MUw&r=DA8e1B5r073vIqRrFz7MRA&m=-_pOOUYXONnvN0eDqgPfyjzi3pU0ZJV-eT7LViel2u0&s=1lUhNqSXg_nXYENMizJLX-GtAxNqKETBdD50CC4wB-U&e=
->>> which moves CORE relocation builtin handling from in late IR
->>> optimization (after inlining and major optimizations)
->>> to in early IR optimization (before inlining and any optimizations).
->>> The reason is to prevent harmful CSEs.
->>>
->>> But this change may change how compiler do optimizations.
->>> The patch can pass bpf selftests in latest bpf-next.
->>> Andrii helped it can also pass bcc/libbpf-tools.
->>>
->>> If your code uses COREs, esp. having a lot of subroutines
->>> and/or loops, it would be good to give a try with new patch
->>> to see whether there are any issues or not. In my case,
->>> for one of our internal applications with lots of subroutines
->>> and loops, inlining all subroutines and unrolling all loops
->>> will cause register spills which cannot be handled by
->>> the verifier, while existing llvm won't have issue.
->>
->> Hi Yonghong,
->>
->> We currently don't use CORE (outside of bcc, etc.), so there isn't
->> much I can test I guess? Please let me know if there is something I
->> can do for your follow up patches.
->>
-> 
-> It would still be good if you could test all three Clang/LLVM patches
-> Yonghong referenced. The latter two are not CO-RE-specific. Thanks!
-
-Right, the first patch (I described here) in 3-patch series
-     Patch 1: https://reviews.llvm.org/D87153
-is related to CORE and will be a noop for program without CORE.
-
-The second and the third patches:
-     Patch 2: https://reviews.llvm.org/D85570
-     Patch 3: https://reviews.llvm.org/D87428
-is not related to CORE and intends to solve some verifier
-failures related to value range. Please see commit message for
-the above two patches.
-
-Agree that it would be still be good to test all of them, esp,
-if you have asm/source workaround, it will be curious to see how many
-those can be removed.
-
-Thanks!
-
-> 
-> And pedantic nit: BCC doesn't use CO-RE, it just does runtime
-> compilation using local kernel headers with exact memory layout of
-> kernel structs.
-> 
->> Best
->> Lorenz
->>
->> --
->> Lorenz Bauer  |  Systems Engineer
->> 6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
->>
->> https://urldefense.proofpoint.com/v2/url?u=http-3A__www.cloudflare.com&d=DwIBaQ&c=5VD0RTtNlTh3ycd41b3MUw&r=DA8e1B5r073vIqRrFz7MRA&m=-_pOOUYXONnvN0eDqgPfyjzi3pU0ZJV-eT7LViel2u0&s=5gNN1mRte8LrjgHn6sz7v6goGzL2lWt4-EaghCAagq0&e=
+Same thing for cilium. Their progs use tail_calls and because of that
+couldn't use subprogs at all.
+I think John was saying that prog load time is important for cilium.
+The answer is to use global functions.
+Now with tail_calls being compatible with subprogs all that is available.
