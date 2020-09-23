@@ -2,124 +2,144 @@ Return-Path: <SRS0=NOCw=DA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2753CC2D0A8
-	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 18:57:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87EB3C2D0A8
+	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 19:26:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CADC9221EF
-	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 18:57:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1600887470;
-	bh=G2delI6KsNPZ5BZPqhkerWB9kV0wE3sKfMgz21IdHsw=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=kq3N1BDBpwhbGXueP9zFoPvhC9ZDrSQbQ6YxTPy0QdnqcTWCT7/ymqYBxD/Wen8Oz
-	 qQ8THnqBkR1Nr+Z8Y9yUs+bAtir1JYsSkrtQjIdI1Td4wcKsfST6zCp+qZQjKJ3NX4
-	 khPizGbq7yN4t8BP16lOMt1QKGbgSSXzmYjptncg=
+	by mail.kernel.org (Postfix) with ESMTP id 23AFA21D92
+	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 19:26:20 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Hdm+Z0AQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbgIWS5u convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 23 Sep 2020 14:57:50 -0400
-Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:47415 "EHLO
-        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726572AbgIWS5u (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 23 Sep 2020 14:57:50 -0400
-X-Greylist: delayed 17557 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Sep 2020 14:57:49 EDT
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-81-m7qyszekNRuf3Cc-lH48mA-1; Wed, 23 Sep 2020 14:57:42 -0400
-X-MC-Unique: m7qyszekNRuf3Cc-lH48mA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A7A63640AE;
-        Wed, 23 Sep 2020 18:57:39 +0000 (UTC)
-Received: from krava.redhat.com (ovpn-112-117.ams2.redhat.com [10.36.112.117])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DA3F33782;
-        Wed, 23 Sep 2020 18:57:36 +0000 (UTC)
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Seth Forshee <seth.forshee@canonical.com>
-Subject: [PATCHv3 bpf-next 1/2] bpf: Check CONFIG_BPF option for resolve_btfids
-Date:   Wed, 23 Sep 2020 20:57:34 +0200
-Message-Id: <20200923185735.3048198-1-jolsa@kernel.org>
+        id S1726498AbgIWT0T (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Sep 2020 15:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726424AbgIWT0T (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 23 Sep 2020 15:26:19 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B71C0613CE
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2020 12:26:19 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id z19so260531pfn.8
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2020 12:26:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=nXAM48zLIdF0YA6ut5vJsreIXLyrnpqRvhnrLrqXYJc=;
+        b=Hdm+Z0AQ2YfXEdqTM/jmmXNuadizpSWELj7b/lSwr3w3mZLQny01AXlIxmcvmz89JX
+         TZ/2xB2j92zPNFDUwR8fZharEUzCJmtl46sYIkw4JWRgQ4ltt1xFIh9QyH7PNQtmowfu
+         yVycTgKDm02BteKPPlI+QSaXmN/Z6gtg/ww+A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nXAM48zLIdF0YA6ut5vJsreIXLyrnpqRvhnrLrqXYJc=;
+        b=Ho646fIgI3/na3cxbwOeV7mDhsC+4tkkCF5VWhovQxgd6JRxKyx/mJEmvI6+p9s2ky
+         BN87lOu3ZhkvnayyoO+fSwrgooqPGZtvbL5GhEFnrWTuuWaIoEkch2jlinlZBxHxfCvM
+         JAyPXKElpsdCH/nRvV7uGHxPHuiHdS96AEW4Du+TPesSm5DlbR+zvQnL3AagmCj5/YyD
+         8t/yUOJu4iMI9vKHLTrauMsfqnCMsnD3rdOHgz3x9E1TDeacqLJIhLwU0E7io2mdRF20
+         PuulrD4yEzVEefDdEaSFKT4dgnG8vnfb2vJWc7fq0QACQ/eVYnbntnVryk/eJ7vTy/9C
+         kcTQ==
+X-Gm-Message-State: AOAM533GU9V8g9HXwa6B9YXQkRkeITMJldNeAVn/DFISsf1f40K8Mp6g
+        Imvz02M9Xpdr55oJbIO0xWZJmQ==
+X-Google-Smtp-Source: ABdhPJyM7dxxYK6y0p1u34cW0GjWXGoONrvCkA8LAJVejzdmZSSDiKSh4T1QlGwsBRZsNpPsK+DKQw==
+X-Received: by 2002:a65:5786:: with SMTP id b6mr1062182pgr.114.1600889178892;
+        Wed, 23 Sep 2020 12:26:18 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f4sm576348pgk.19.2020.09.23.12.26.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2020 12:26:17 -0700 (PDT)
+Date:   Wed, 23 Sep 2020 12:26:17 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     YiFei Zhu <zhuyifei1999@gmail.com>
+Cc:     containers@lists.linux-foundation.org,
+        YiFei Zhu <yifeifz2@illinois.edu>, bpf@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Hubertus Franke <frankeh@us.ibm.com>,
+        Jack Chen <jianyan2@illinois.edu>,
+        Josep Torrellas <torrella@illinois.edu>,
+        Tianyin Xu <tyxu@illinois.edu>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Valentin Rothberg <vrothber@redhat.com>
+Subject: Re: [RFC PATCH seccomp 0/2] seccomp: Add bitmap cache of
+ arg-independent filter results that allow syscalls
+Message-ID: <202009231224.21BCB3BC6@keescook>
+References: <cover.1600661418.git.yifeifz2@illinois.edu>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: kernel.org
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1600661418.git.yifeifz2@illinois.edu>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently all the resolve_btfids 'users' are under CONFIG_BPF
-code, so if we have CONFIG_BPF disabled, resolve_btfids will
-fail, because there's no data to resolve.
+On Mon, Sep 21, 2020 at 12:35:16AM -0500, YiFei Zhu wrote:
+> In the past Kees proposed [2] to have an "add this syscall to the
+> reject bitmask". It is indeed much easier to securely make a reject
+> accelerator to pre-filter syscalls before passing to the BPF
+> filters, considering it could only strengthen the security provided
+> by the filter. However, ultimately, filter rejections are an
+> exceptional / rare case. Here, instead of accelerating what is
+> rejected, we accelerate what is allowed. In order not to compromise
+> the security rules the BPF filters defined, any accept-side
+> accelerator must complement the BPF filters rather than replacing them.
 
-Disabling resolve_btfids if there's CONFIG_BPF disabled,
-so we won't fail such builds.
+Did you see the RFC series for this?
 
-Suggested-by: Andrii Nakryiko <andriin@fb.com>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
-v3 changes:
-  - updated subject, added ack
+https://lore.kernel.org/lkml/20200616074934.1600036-1-keescook@chromium.org/
 
- Makefile                | 4 +++-
- scripts/link-vmlinux.sh | 6 +++---
- 2 files changed, 6 insertions(+), 4 deletions(-)
+> Without cache, seccomp_benchmark:
+>   Current BPF sysctl settings:
+>   net.core.bpf_jit_enable = 1
+>   net.core.bpf_jit_harden = 0
+>   Calibrating sample size for 15 seconds worth of syscalls ...
+>   Benchmarking 23486415 syscalls...
+>   16.079642020 - 1.013345439 = 15066296581 (15.1s)
+>   getpid native: 641 ns
+>   32.080237410 - 16.080763500 = 15999473910 (16.0s)
+>   getpid RET_ALLOW 1 filter: 681 ns
+>   48.609461618 - 32.081296173 = 16528165445 (16.5s)
+>   getpid RET_ALLOW 2 filters: 703 ns
+>   Estimated total seccomp overhead for 1 filter: 40 ns
+>   Estimated total seccomp overhead for 2 filters: 62 ns
+>   Estimated seccomp per-filter overhead: 22 ns
+>   Estimated seccomp entry overhead: 18 ns
+> 
+> With cache:
+>   Current BPF sysctl settings:
+>   net.core.bpf_jit_enable = 1
+>   net.core.bpf_jit_harden = 0
+>   Calibrating sample size for 15 seconds worth of syscalls ...
+>   Benchmarking 23486415 syscalls...
+>   16.059512499 - 1.014108434 = 15045404065 (15.0s)
+>   getpid native: 640 ns
+>   31.651075934 - 16.060637323 = 15590438611 (15.6s)
+>   getpid RET_ALLOW 1 filter: 663 ns
+>   47.367316169 - 31.652302661 = 15715013508 (15.7s)
+>   getpid RET_ALLOW 2 filters: 669 ns
+>   Estimated total seccomp overhead for 1 filter: 23 ns
+>   Estimated total seccomp overhead for 2 filters: 29 ns
+>   Estimated seccomp per-filter overhead: 6 ns
+>   Estimated seccomp entry overhead: 17 ns
+> 
+> Depending on the run estimated seccomp overhead for 2 filters can be
+> less than seccomp overhead for 1 filter, resulting in underflow to
+> estimated seccomp per-filter overhead:
+>   Estimated total seccomp overhead for 1 filter: 27 ns
+>   Estimated total seccomp overhead for 2 filters: 21 ns
+>   Estimated seccomp per-filter overhead: 18446744073709551610 ns
+>   Estimated seccomp entry overhead: 33 ns
 
-diff --git a/Makefile b/Makefile
-index c4470a4e131f..b05682eea2c0 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1084,13 +1084,15 @@ ifdef CONFIG_STACK_VALIDATION
-   endif
- endif
- 
-+ifdef CONFIG_BPF
- ifdef CONFIG_DEBUG_INFO_BTF
-   ifeq ($(has_libelf),1)
-     resolve_btfids_target := tools/bpf/resolve_btfids FORCE
-   else
-     ERROR_RESOLVE_BTFIDS := 1
-   endif
--endif
-+endif # CONFIG_DEBUG_INFO_BTF
-+endif # CONFIG_BPF
- 
- PHONY += prepare0
- 
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index e6e2d9e5ff48..dbde59d343b1 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -341,9 +341,9 @@ fi
- vmlinux_link vmlinux "${kallsymso}" ${btf_vmlinux_bin_o}
- 
- # fill in BTF IDs
--if [ -n "${CONFIG_DEBUG_INFO_BTF}" ]; then
--info BTFIDS vmlinux
--${RESOLVE_BTFIDS} vmlinux
-+if [ -n "${CONFIG_DEBUG_INFO_BTF}" -a -n "${CONFIG_BPF}" ]; then
-+	info BTFIDS vmlinux
-+	${RESOLVE_BTFIDS} vmlinux
- fi
- 
- if [ -n "${CONFIG_BUILDTIME_TABLE_SORT}" ]; then
+Which also includes updated benchmarking:
+
+https://lore.kernel.org/lkml/20200616074934.1600036-6-keescook@chromium.org/
+
 -- 
-2.26.2
-
+Kees Cook
