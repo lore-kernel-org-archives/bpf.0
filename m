@@ -2,115 +2,99 @@ Return-Path: <SRS0=NOCw=DA=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B40FC2D0A8
-	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 09:48:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99A4DC2D0A8
+	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 14:05:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 246E120725
-	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 09:48:04 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="heQpS1w1"
+	by mail.kernel.org (Postfix) with ESMTP id 590632220D
+	for <bpf@archiver.kernel.org>; Wed, 23 Sep 2020 14:05:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1600869918;
+	bh=Cljqi9iR+ywFU+S0W7NotXGLDsVpUqJ5MGGSDUZLaTw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=C2U0J96WZ2p3eFcAK+8ixnpXxF05xp5v2qzbEBcLcsokZ3QuUB8enM2OaIYXVO5Hh
+	 FT05DEoikO+56KNggusLH2JZFVxQ5FOFoChFxeGsc3xdTakcnsi5q2anIimRKEMFdD
+	 KQ7jjaZsiU9P1Pryd/0sri9U5LgRFTKMKoUV5XGM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726381AbgIWJsD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Sep 2020 05:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726178AbgIWJsD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 23 Sep 2020 05:48:03 -0400
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D442C0613CE
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2020 02:48:03 -0700 (PDT)
-Received: by mail-oi1-x242.google.com with SMTP id t76so24381399oif.7
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2020 02:48:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Kp9DB3yJ7n4fOK/Le2BJ41nn7yEKAT/fFpyjwGbKsMI=;
-        b=heQpS1w19H1RTHI6oZ7jzHtWgTjOZyjB+oHEUjaEO5MsegnRy6P9r4NBBf7M8gIuQj
-         ZPazzp642YTXlXdvscMv+G+KCF7OOkrG4g+giPfgeGbgSDGZZSNMSuTJVLdQteUFKWNf
-         nyBo9Yos1kscihElwDTU0Dof82hYkXY6o8l/Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Kp9DB3yJ7n4fOK/Le2BJ41nn7yEKAT/fFpyjwGbKsMI=;
-        b=ojwv31VqmsarVugyoRWbjTNkcZ8lwp49/fT7Ux7h8SnuukEFMyhFrrx3wm4IJfm2Jr
-         56tVhGnKflZju0xM8OGJWXsdfTrL+G+mdzkGY8h/L0H9voQ9qHbtBwrGpgeUc9LSX37+
-         38KCbkwz8MovB0VIT44djbTJg+7sBbr+shq4ivgEnZ1aMWsaW2b9HqYN0AjTSAwGFuTg
-         xAoNIxTA8kVQkm3f5pRrteIgWg7aXkI6glTmgOO1Z4DUx+6Nt+bsXnnDYVMiLvbJnlBh
-         TuoEpCRXhcTOQ+oozhwgIidNxRKDvZ1LXj+3NiNQPepOHgEW8tWp5l6EDIHxC4CeHr8j
-         wwsQ==
-X-Gm-Message-State: AOAM532OSW46AZr+V1dPAS8xEC2+wVz980kIcg+XxAQhAs8dXkQnq+wB
-        y27KK4FP9S8yRadaLMsg9GPe4Y1MLPRt/SsPdeZ8n+gDBpw=
-X-Google-Smtp-Source: ABdhPJw3YAbMdYlUq9nhIyxrwRkQ+KL7befsxSwMfEZS1z9eQAjO1pJpmRqQKw3b6kcjcfvpWgVgYMavizM1/C7F0fM=
-X-Received: by 2002:aca:3087:: with SMTP id w129mr4959586oiw.102.1600854482691;
- Wed, 23 Sep 2020 02:48:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200922070409.1914988-1-kafai@fb.com> <20200922070415.1916194-1-kafai@fb.com>
- <CACAyw9_wEMFuymvUC0fsZVJCH0vsvbD9p=CWTZC1jV2gUiu3KA@mail.gmail.com> <20200922183805.l2fjw462hukiel4n@kafai-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20200922183805.l2fjw462hukiel4n@kafai-mbp.dhcp.thefacebook.com>
-From:   Lorenz Bauer <lmb@cloudflare.com>
-Date:   Wed, 23 Sep 2020 10:47:51 +0100
-Message-ID: <CACAyw9_ZeCVTmF7XxTKEiK3aj47KaJ7Jb8JaTPTU2-XrXRutdw@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 01/11] bpf: Move the PTR_TO_BTF_ID check to check_reg_type()
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        id S1726636AbgIWOFS convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 23 Sep 2020 10:05:18 -0400
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:30832 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726572AbgIWOFQ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 23 Sep 2020 10:05:16 -0400
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-144-bnZt6VK9N82OrVMvDVFZTg-1; Wed, 23 Sep 2020 10:05:11 -0400
+X-MC-Unique: bnZt6VK9N82OrVMvDVFZTg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3A8701007471;
+        Wed, 23 Sep 2020 14:05:09 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.192.120])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4981955777;
+        Wed, 23 Sep 2020 14:05:04 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        Networking <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Andrii Nakryiko <andriin@fb.com>
+Cc:     Seth Forshee <seth.forshee@canonical.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: [PATCHv2 bpf-next 2/2] tools resolve_btfids: Always force HOSTARCH
+Date:   Wed, 23 Sep 2020 16:04:59 +0200
+Message-Id: <20200923140459.3029213-2-jolsa@kernel.org>
+In-Reply-To: <20200923140459.3029213-1-jolsa@kernel.org>
+References: <20200923140459.3029213-1-jolsa@kernel.org>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 22 Sep 2020 at 19:38, Martin KaFai Lau <kafai@fb.com> wrote:
->
-> On Tue, Sep 22, 2020 at 10:56:55AM +0100, Lorenz Bauer wrote:
-> > On Tue, 22 Sep 2020 at 08:04, Martin KaFai Lau <kafai@fb.com> wrote:
-> > >
-> > > check_reg_type() checks whether a reg can be used as an arg of a
-> > > func_proto.  For PTR_TO_BTF_ID, the check is actually not
-> > > completely done until the reg->btf_id is pointing to a
-> > > kernel struct that is acceptable by the func_proto.
-> > >
-> > > Thus, this patch moves the btf_id check into check_reg_type().
-> > > The compatible_reg_types[] usage is localized in check_reg_type() now.
-> > >
-> > > The "if (!btf_id) verbose(...); " is also removed since it won't happen.
-> > >
-> > > Signed-off-by: Martin KaFai Lau <kafai@fb.com>
-> > > ---
-> > >  kernel/bpf/verifier.c | 65 +++++++++++++++++++++++--------------------
-> > >  1 file changed, 35 insertions(+), 30 deletions(-)
-> > >
-> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > index 15ab889b0a3f..3ce61c412ea0 100644
-> > > --- a/kernel/bpf/verifier.c
-> > > +++ b/kernel/bpf/verifier.c
-> > > @@ -4028,20 +4028,29 @@ static const struct bpf_reg_types *compatible_reg_types[] = {
-> > >         [__BPF_ARG_TYPE_MAX]            = NULL,
-> > >  };
-> > >
-> > > -static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
-> > > -                         const struct bpf_reg_types *compatible)
-> > > +static int check_reg_type(struct bpf_verifier_env *env, u32 arg,
-> > > +                         enum bpf_arg_type arg_type,
-> > > +                         const struct bpf_func_proto *fn)
-> Yes. I think that works as good.
->
-> An idea for the mid term, I think this map helper's arg override logic
-> should belong to a new map_ops and this new map_ops can return the whole
-> "fn" instead of overriding on an arg-by-arg base.
+Seth reported problem with cross builds, that fail
+on resolve_btfids build, because we are trying to
+build it on cross build arch.
 
-Yeah, agreed. I've had a similar idea, but no time to implement it yet.
+Fixing this by always forcing the host arch.
 
+Reported-by: Seth Forshee <seth.forshee@canonical.com>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ tools/bpf/resolve_btfids/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+index a88cd4426398..d3c818b8d8d3 100644
+--- a/tools/bpf/resolve_btfids/Makefile
++++ b/tools/bpf/resolve_btfids/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ include ../../scripts/Makefile.include
++include ../../scripts/Makefile.arch
+ 
+ ifeq ($(srctree),)
+ srctree := $(patsubst %/,%,$(dir $(CURDIR)))
+@@ -29,6 +30,7 @@ endif
+ AR       = $(HOSTAR)
+ CC       = $(HOSTCC)
+ LD       = $(HOSTLD)
++ARCH     = $(HOSTARCH)
+ 
+ OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+ 
 -- 
-Lorenz Bauer  |  Systems Engineer
-6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
+2.26.2
 
-www.cloudflare.com
