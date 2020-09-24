@@ -2,145 +2,165 @@ Return-Path: <SRS0=d63n=DB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C9BBBC4363D
-	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 20:09:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE15EC4727E
+	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 20:09:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 711402396E
-	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 20:09:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72D0A2395B
+	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 20:09:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="avbGCQqM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jA7OFjlV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726540AbgIXUIe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Sep 2020 16:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
+        id S1726185AbgIXUJh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Sep 2020 16:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725208AbgIXUId (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 24 Sep 2020 16:08:33 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A06C0613D4
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2020 13:00:37 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id 7so352724pgm.11
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2020 13:00:37 -0700 (PDT)
+        with ESMTP id S1726037AbgIXUJc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 24 Sep 2020 16:09:32 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5542C0613CE;
+        Thu, 24 Sep 2020 13:09:32 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id h9so351757ybm.4;
+        Thu, 24 Sep 2020 13:09:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+MD2QubiwKdZDJzjnc2wAOK3dZyKxhcYOawuWHop+Wo=;
-        b=avbGCQqM983qSOxtkvStgCWx9sRpEeKEGDHd9YWkndoou2/aH5siCielYiOMrMzduL
-         Fe2noZykDUuGZ4LQR9NHfzh+YZq63h5jKJDfKza+jfdwvAziUO2yCVU35rzmrXXSDvW8
-         Up/SO6HKiwkFMBN2H+97Gna9dqtcH5g3Y0HbI=
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7J41NLfAQ7GGWFlQfsQEAm0BJem7+QZ5TkgJ5oKJ9Yw=;
+        b=jA7OFjlVQbEWru2KFbx3QXi3b2CE69ugcLLmLv6kXBTmABuJ7uuEJgyvLJw26wQbG1
+         kdA1PygW1rjOZYUW/02nl1qN5gmXQhsqotYiPhH7eqNpvwQ2CtekAS9n27Jhf2KFMmAI
+         e5Dp+WnkJKcrFYOnj0x4XsySenoPmkSvZ/G2MbNUH0yQAH4KVUmJoyY8RVwdKIcU9D+t
+         +3/FkmsARrmOzPhRT7CqbOohktEIygrA6ONYyOICDEbIwsIqg8jN4GU+yPkQ2lAcy2He
+         fxuHDoid7uSaav1PiR0kto8M2nVzlCUDuNyoTPJXXCcKTY3iVf2Z8vxMlPrtrD0YQqSS
+         caVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+MD2QubiwKdZDJzjnc2wAOK3dZyKxhcYOawuWHop+Wo=;
-        b=a+00wRIKIA0zor61BOXS9/JTWfesoSLiRAVLIATMjQ351WXEfO4Gm4hjPXDrEg0eSn
-         tbYLqDQgXTAZhM57YyjLcKeXItbbcyq622SeUKJDu1sxVDavdSHyPozUFBm72fgN94ni
-         uHJr10SVdYVvzCMw8w3104iovQpnbynj/PprUs4s3VzHSJhMIz5/ij+MCk2iCI0r1XRi
-         AZMGRenIpsZLX5oZ3YUFrDbYu8lOGnktyjD/OPi1DLx3SEOUSSR+LJyq9hG/yWfsdZOz
-         fYL1kWnyXDnZ5PoytyeGKAzK5nQleZq2R6lomEpEuvThq5RDHKFe8I42/E7KUoy4N7R0
-         Mf1w==
-X-Gm-Message-State: AOAM531jt2Ms45HmBNk7afZFuuI/X0Z5+leXo1cPS6W0Lg4zklqtbAjg
-        zJk0cgBkl3E2o9TvqV60bKE+3Q==
-X-Google-Smtp-Source: ABdhPJw+cepPZiirv+WRgNOWJCnEG6K3L6esLxka7Bt1UZlgbovFX+43wYSgm0HkhFGg9/Z7NbQHsw==
-X-Received: by 2002:a63:1464:: with SMTP id 36mr606764pgu.160.1600977636906;
-        Thu, 24 Sep 2020 13:00:36 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c9sm295293pfn.78.2020.09.24.13.00.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2020 13:00:35 -0700 (PDT)
-Date:   Thu, 24 Sep 2020 13:00:34 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Andrea Arcangeli <aarcange@redhat.com>
-Cc:     YiFei Zhu <yifeifz2@illinois.edu>, Jann Horn <jannh@google.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
-        Valentin Rothberg <vrothber@redhat.com>,
-        Hubertus Franke <frankeh@us.ibm.com>,
-        Jack Chen <jianyan2@illinois.edu>,
-        Josep Torrellas <torrella@illinois.edu>,
-        Tianyin Xu <tyxu@illinois.edu>, bpf@vger.kernel.org,
-        containers@lists.linux-foundation.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/6] seccomp: Implement constant action bitmaps
-Message-ID: <202009241253.7D238A4@keescook>
-References: <20200923232923.3142503-1-keescook@chromium.org>
- <20200924185702.GA9225@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7J41NLfAQ7GGWFlQfsQEAm0BJem7+QZ5TkgJ5oKJ9Yw=;
+        b=HWnrQx1zdxhExx958mZC7PAaOehuYRZCl6llnygheVc/gqe/3jlCxct8LBSvS12fV8
+         Zk0IKt7cIdlG1qfDD4hUyLEGDj+ZEV6H2QY336NedxeMzFYhGP5dcWcPe9QwyW5nteru
+         A+zAlQ+aIv9JzdM+Ww4hQZpKgWXiEP+AB+ONLJ9sLCAIcDxE8elCLmcKXQGZbOB4FpAT
+         qPACKUjjgJVXF8jeR2ZqyADp+GeOJ/e8vFegrPKSdrSU6kheLme/6AgcccKGCLEc/g1x
+         njJe6DqGQAl/xwGQRec05P3kuK3qcN0PaaChHjSpWksdkrhK9y8Hm8A4giBnJGsh8zaE
+         eiAA==
+X-Gm-Message-State: AOAM5311x2mLC3CSt3c269AH8G2mMXhNp1j26fgwFqMBCexmKQTm7BLx
+        hkY+oqrkJhEbFmtJjchuifl6E2898Px68htPB1Y=
+X-Google-Smtp-Source: ABdhPJxI8ZqRkLvOx3Uj6iRUIfuQcmxaHU/pH3vAV/2faSzxRfsopM1BBpjUPpzbir4pHbABcsG68EjE0Y9ZeSnI/tE=
+X-Received: by 2002:a25:33c4:: with SMTP id z187mr647390ybz.27.1600978171951;
+ Thu, 24 Sep 2020 13:09:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200924185702.GA9225@redhat.com>
+References: <20200924011951.408313-1-songliubraving@fb.com> <20200924011951.408313-4-songliubraving@fb.com>
+In-Reply-To: <20200924011951.408313-4-songliubraving@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 24 Sep 2020 13:09:21 -0700
+Message-ID: <CAEf4BzYtq3X3kma2Hd-OfkK=D9DeaxhD77dq2V73gj9aOWOrMQ@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 3/3] selftests/bpf: add raw_tp_test_run
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 24, 2020 at 02:57:02PM -0400, Andrea Arcangeli wrote:
-> Hello,
-> 
-> I'm posting this only for the record, feel free to ignore.
-> 
-> On Wed, Sep 23, 2020 at 04:29:17PM -0700, Kees Cook wrote:
-> > rfc: https://lore.kernel.org/lkml/20200616074934.1600036-1-keescook@chromium.org/
-> > alternative: https://lore.kernel.org/containers/cover.1600661418.git.yifeifz2@illinois.edu/
-> > v1:
-> > - rebase to for-next/seccomp
-> > - finish X86_X32 support for both pinning and bitmaps
-> 
-> It's pretty clear the O(1) seccomp filter bitmap was first was
-> proposed by your RFC in June (albeit it was located in the wrong place
-> and is still in the wrong place in v1).
-> 
-> > - replace TLB magic with Jann's emulator
->     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->     
-> That's a pretty fundamental change in v1 compared to your the
-> non-competing TLB magic technique you used in the RFC last June.
-> 
-> The bitmap isn't the clever part of the patch, the bitmap can be
-> reviewed in seconds, the difficult part to implement and to review is
-> how you fill the bitmap and in that respect there's absolutely nothing
-> in common in between the "rfc:" and the "alternative" link.
-> 
-> In June your bitmap-filling engine was this:
-> 
-> https://lore.kernel.org/lkml/20200616074934.1600036-5-keescook@chromium.org/
-> 
-> Then on Sep 21 YiFei Zhu posted his new innovative BPF emulation
-> innovation that obsoleted your TLB magic of June:
-> 
-> https://lists.linuxfoundation.org/pipermail/containers/2020-September/042153.html
-> 
-> And on Sep 23 instead of collaborating and helping YiFei Zhu to
-> improve his BPF emulator, you posted the same technique that looks
-> remarkably similar without giving YiFei Zhu any attribution and you
-> instead attribute the whole idea to Jann Horn:
-> 
-> https://lkml.kernel.org/r/20200923232923.3142503-5-keescook@chromium.org
+On Wed, Sep 23, 2020 at 6:55 PM Song Liu <songliubraving@fb.com> wrote:
+>
+> This test runs test_run for raw_tracepoint program. The test covers ctx
+> input, retval output, and running on correct cpu.
+>
+> Signed-off-by: Song Liu <songliubraving@fb.com>
+> ---
+>  .../bpf/prog_tests/raw_tp_test_run.c          | 79 +++++++++++++++++++
+>  .../bpf/progs/test_raw_tp_test_run.c          | 25 ++++++
+>  2 files changed, 104 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_test_run.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_raw_tp_test_run.c
+>
 
-?? Because it IS literally Jann's code:
-https://lore.kernel.org/lkml/CAG48ez1p=dR_2ikKq=xVxkoGg0fYpTBpkhJSv1w-6BG=76PAvw@mail.gmail.com/
-As the first reply to 20200616074934.1600036-5-keescook@chromium.org. In
-June. Which I agreed was the way to go. In June.
+[...]
 
-And When YiFei Zhu sent their series, I saw they were headed in
-a direction that looked functionally similar, but significantly
-over-engineered, and done without building on the June RFC and its
-discussion. So I raised the priority of putting Jann's code in to the
-RFC, so I could send out an update demonstrating both how small I would
-like the emulator to be, and how to handle things like x32.
+> +       test_attr.ctx_size_in = sizeof(args);
+> +       err = bpf_prog_test_run_xattr(&test_attr);
+> +       CHECK(err < 0, "test_run", "err %d\n", errno);
+> +       CHECK(test_attr.retval != expected_retval, "check_retval",
+> +             "expect 0x%x, got 0x%x\n", expected_retval, test_attr.retval);
+> +
+> +       for (i = 0; i < nr_online; i++)
 
-How, exactly, am I not collaborating? I was literally trying to
-thread-merge and avoid (more) extra work on YiFei Zhu's end.
+nit: this for loop is so multi-line that it deserves {}
 
--- 
-Kees Cook
+> +               if (online[i]) {
+> +                       DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
+> +                               .ctx_in = args,
+> +                               .ctx_size_in = sizeof(args),
+> +                               .flags = BPF_F_TEST_RUN_ON_CPU,
+> +                               .retval = 0,
+> +                               .cpu = i,
+> +                       );
+> +
+> +                       err = bpf_prog_test_run_opts(
+> +                               bpf_program__fd(skel->progs.rename), &opts);
+> +                       CHECK(err < 0, "test_run_opts", "err %d\n", errno);
+> +                       CHECK(skel->data->on_cpu != i, "check_on_cpu",
+> +                             "expect %d got %d\n", i, skel->data->on_cpu);
+> +                       CHECK(opts.retval != expected_retval,
+> +                             "check_retval", "expect 0x%x, got 0x%x\n",
+> +                             expected_retval, opts.retval);
+> +               }
+
+as I mentioned in the first patch, let's have a test specifying
+ridiculous CPU and see if it properly fails and doesn't cause any
+kernel warning
+
+> +cleanup:
+> +       close(comm_fd);
+> +       test_raw_tp_test_run__destroy(skel);
+> +       free(online);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/test_raw_tp_test_run.c b/tools/testing/selftests/bpf/progs/test_raw_tp_test_run.c
+> new file mode 100644
+> index 0000000000000..6b356e003d16c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_raw_tp_test_run.c
+> @@ -0,0 +1,25 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (c) 2020 Facebook */
+> +
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_endian.h>
+
+nit: you don't need bpf_endian.h here, do you?
+
+> +#include <bpf/bpf_tracing.h>
+> +
+> +__u32 count = 0;
+> +__u32 on_cpu = 0xffffffff;
+> +
+> +SEC("raw_tp/task_rename")
+> +int BPF_PROG(rename, struct task_struct *task, char *comm)
+> +{
+> +
+> +       count++;
+> +       if ((__u64) task == 0x1234ULL && (__u64) comm == 0x5678ULL) {
+> +               on_cpu = bpf_get_smp_processor_id();
+> +               return (int)task + (int)comm;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +char _license[] SEC("license") = "GPL";
+> --
+> 2.24.1
+>
