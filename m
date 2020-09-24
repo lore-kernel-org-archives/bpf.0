@@ -2,251 +2,120 @@ Return-Path: <SRS0=d63n=DB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 225FFC4727F
-	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 01:28:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D37CC4363D
+	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 01:38:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C50C421534
-	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 01:28:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 462DF21D7F
+	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 01:38:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="o2IuKA1/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nHvYncvH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726242AbgIXB2a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Sep 2020 21:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50434 "EHLO
+        id S1726037AbgIXBh7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Sep 2020 21:37:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726149AbgIXB2a (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 23 Sep 2020 21:28:30 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F94C0613CE
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2020 18:20:01 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id x18so1480391ila.7
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2020 18:20:01 -0700 (PDT)
+        with ESMTP id S1725208AbgIXBh7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 23 Sep 2020 21:37:59 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859A8C0613CE;
+        Wed, 23 Sep 2020 18:38:13 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id k2so1140802ybp.7;
+        Wed, 23 Sep 2020 18:38:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=TMWuBC4tRmsRpp4tOqDs8M5DMoiKXZzShTqcZzqc5eM=;
-        b=o2IuKA1/+NBH2QcyaxCnlHJ3WW0ycZ2vhiowgChUevwqlMjwxvXE/1W0YaZOeRXEZf
-         yzH+JK37TMpOsFRBQ6ximrz3lCSz3ricrWXF1ce0Z8Fm8Y3wSyiAP2zuFu7Ty9Zo/lr+
-         qvBgKdSaqoup+kgJVhbaUqF8D2g67oJX1quhnPnuvMGlG9O1Rsom4Yd794BSWVzYWt3N
-         Ko3DVagfdUTqIWIEQ4ydDnuZECgPOWRKdRoTtT2q1fbF7ZrNvvRXo0LyIIRm5JQPWuu7
-         EWshhk5r/Sim6J3ZQYN8yVsLqX13/RTB1CyVrgm5H1HuuAnT8QMVKEF3v4zeGZlLyTvk
-         4IRw==
+        bh=SahSrWNUq4rlPLyB42HUuU8snZRgbRV4bsSIoqj8x2Y=;
+        b=nHvYncvHVynZfqJBxKn16vTxw21Kaj9PhKH/GQ59a/mtqSZAbcTnXuD8on24It+pIi
+         igyT9d2ZD0tFuT8z//iO4YWs+bYDPsSFKqgXj3Dfs1xDg/qLxjHGR+aUlwpw8ueynhFx
+         8rEXAlvNwV+KPI8GOtdj87l9NWovm6Srdd3VgPOWK5Es5iNdchnVKG+Ojt4If3xwEtxf
+         NBOSHTHRXPNVWhFn7wRg8/wxTcd6SbgzHutzA5wajsEMjTeAwnPffdmU2SU5w9ByIgdM
+         UZxPjmIkxvOZPJ4OOCJljOiRx1IbsfaGh7Mp0z69f1GStKffpbgMM022TqPHrV3gZ48X
+         VnQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=TMWuBC4tRmsRpp4tOqDs8M5DMoiKXZzShTqcZzqc5eM=;
-        b=TZIhxeLKm5R4N9CEuFin+ef45FvG6rwmQhpdIwrzpNOiW1K+ComwSJpsZInJLYrc8K
-         NhbCoyJhS7PipV7XWYlR8JO+Jkt4Ei+ELt4Pm2cMqwTEGTLh/CzaVryKoYcvk0kSHUSQ
-         2HFj5LQvBvhU1QYQMfqifvQDiFQWi6a7uNHZtQewMCbasOiJ5ETIJzadQHHrbsQzQgsu
-         uiHwRsOi1o7X/Z4lgtJZkZd9b0Zq6EXzAVn8ZM8gfPQRW1/jIIPniSgtdmdNYwV8jbj4
-         LfdNMzUNpluBbkrH5VhOEzDKxXdTcF8866LC3WGizVOKVlXatUbG8AfFH01IWe9yW3g0
-         5VvQ==
-X-Gm-Message-State: AOAM532O/NhxG/KLd+sKqGiXVy8Zx4cs+0GkTHQSnSn1IUfCtJO+0jCg
-        TtkmZhETpPr2s7vizBBb70LlKgUPAXMw17UBc0QCkOFsRrw=
-X-Google-Smtp-Source: ABdhPJxTYLEtSQufGMvGFPH/rXFygkckRxUmLxfSdKUrEqqkRtY7nzaH0Ey8ZYuG4x3ixZC3ijaK++RJOxz6jxEtUbA=
-X-Received: by 2002:a92:1503:: with SMTP id v3mr2074505ilk.56.1600910400137;
- Wed, 23 Sep 2020 18:20:00 -0700 (PDT)
+        bh=SahSrWNUq4rlPLyB42HUuU8snZRgbRV4bsSIoqj8x2Y=;
+        b=iJ7PQDJ1pJldwdsw7jrtyDB8s1I/tqJGyBqcIEUguPGvZpFvBUU9oxkSa4fGrxIfHC
+         73DWEUFHdBphjVeVziYRmwfCa6q8CvcAS8Vlod133bpqQ/fwLJTIIcjgN4IlbyYJmDtK
+         ZljVmX929DGyMFaaLncQp9IIW4eNwOIXKKnyBYAj7dm0K1nRGVpqZ4zVFxCorrR5/YtY
+         Ef1QOSQ6S8WvzlIYhoDzVE2KJ79NaDZBQovzvZSJfa+4gqW+IX+KCC3qSqMvKG9/0GH8
+         jf4ub81TnPJjdwyI7PyiOxONoTnpptaiP5E7bt/PpgsCznYJqBiiczDyCt4dmWEel76g
+         PB8g==
+X-Gm-Message-State: AOAM5339nu4SW0tgCuCb71daTrqvjriquxfSw353qz9+DWUhe7w0/3SI
+        oQzYa+q7rK0A4VEb8hRuuDB/pbMjwPaHP5xx4OE=
+X-Google-Smtp-Source: ABdhPJwsRAgo1FmSZI9osmBNLL0QAoD6c2SzK3OiK2UmtU85ayOw5hW4I5uFzN2e5yhYP6vDzQeE2l+VnuImBYbvkYk=
+X-Received: by 2002:a25:4446:: with SMTP id r67mr3753093yba.459.1600911492522;
+ Wed, 23 Sep 2020 18:38:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200924000326.8913-1-bimmy.pujari@intel.com>
-In-Reply-To: <20200924000326.8913-1-bimmy.pujari@intel.com>
-From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date:   Wed, 23 Sep 2020 18:19:48 -0700
-Message-ID: <CANP3RGf-rDPkf2=YoLEn=jcHyFEDcrNrQO27RdZRCoa_xi8-4Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: Add bpf_ktime_get_real_ns
-To:     bimmy.pujari@intel.com
-Cc:     bpf <bpf@vger.kernel.org>, Linux NetDev <netdev@vger.kernel.org>,
-        mchehab@kernel.org, Alexei Starovoitov <ast@kernel.org>,
+References: <160079991372.8301.10648588027560707258.stgit@toke.dk>
+ <160079992560.8301.11225602391403157558.stgit@toke.dk> <20200924010811.kwrkzdzh6za3w3fz@ast-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20200924010811.kwrkzdzh6za3w3fz@ast-mbp.dhcp.thefacebook.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 23 Sep 2020 18:38:01 -0700
+Message-ID: <CAEf4BzZ8f9osvJ3CD7kL4-SmdH9v_EQ73A9c=oGOBgeTziiFzw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v8 11/11] selftests: Remove fmod_ret from
+ benchmarks and test_overhead
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin Lau <kafai@fb.com>, ashkan.nikravesh@intel.com
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Sep 23, 2020 at 5:03 PM <bimmy.pujari@intel.com> wrote:
+On Wed, Sep 23, 2020 at 6:08 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> From: Bimmy Pujari <bimmy.pujari@intel.com>
+> On Tue, Sep 22, 2020 at 08:38:45PM +0200, Toke H=C3=B8iland-J=C3=B8rgense=
+n wrote:
+> > -const struct bench bench_trig_fmodret =3D {
+> > -     .name =3D "trig-fmodret",
+> > -     .validate =3D trigger_validate,
+> > -     .setup =3D trigger_fmodret_setup,
+> > -     .producer_thread =3D trigger_producer,
+> > -     .consumer_thread =3D trigger_consumer,
+> > -     .measure =3D trigger_measure,
+> > -     .report_progress =3D hits_drops_report_progress,
+> > -     .report_final =3D hits_drops_report_final,
+> > -};
+> > diff --git a/tools/testing/selftests/bpf/progs/trigger_bench.c b/tools/=
+testing/selftests/bpf/progs/trigger_bench.c
+> > index 9a4d09590b3d..1af23ac0c37c 100644
+> > --- a/tools/testing/selftests/bpf/progs/trigger_bench.c
+> > +++ b/tools/testing/selftests/bpf/progs/trigger_bench.c
+> > @@ -45,10 +45,3 @@ int bench_trigger_fentry_sleep(void *ctx)
+> >       __sync_add_and_fetch(&hits, 1);
+> >       return 0;
+> >  }
+> > -
+> > -SEC("fmod_ret/__x64_sys_getpgid")
+> > -int bench_trigger_fmodret(void *ctx)
+> > -{
+> > -     __sync_add_and_fetch(&hits, 1);
+> > -     return -22;
+> > -}
 >
-> The existing bpf helper functions to get timestamp return the time
-> elapsed since system boot. This timestamp is not particularly useful
-> where epoch timestamp is required or more than one server is involved
-> and time sync is required. Instead, you want to use CLOCK_REALTIME,
-> which provides epoch timestamp.
-> Hence add bfp_ktime_get_real_ns() based around CLOCK_REALTIME.
->
-> Signed-off-by: Ashkan Nikravesh <ashkan.nikravesh@intel.com>
-> Signed-off-by: Bimmy Pujari <bimmy.pujari@intel.com>
-> ---
->  drivers/media/rc/bpf-lirc.c    |  2 ++
->  include/linux/bpf.h            |  1 +
->  include/uapi/linux/bpf.h       |  8 ++++++++
->  kernel/bpf/core.c              |  1 +
->  kernel/bpf/helpers.c           | 13 +++++++++++++
->  kernel/trace/bpf_trace.c       |  2 ++
->  tools/include/uapi/linux/bpf.h |  8 ++++++++
->  7 files changed, 35 insertions(+)
->
-> diff --git a/drivers/media/rc/bpf-lirc.c b/drivers/media/rc/bpf-lirc.c
-> index 5bb144435c16..1cae0cfdcbaf 100644
-> --- a/drivers/media/rc/bpf-lirc.c
-> +++ b/drivers/media/rc/bpf-lirc.c
-> @@ -103,6 +103,8 @@ lirc_mode2_func_proto(enum bpf_func_id func_id, const=
- struct bpf_prog *prog)
->                 return &bpf_map_peek_elem_proto;
->         case BPF_FUNC_ktime_get_ns:
->                 return &bpf_ktime_get_ns_proto;
-> +       case BPF_FUNC_ktime_get_real_ns:
-> +               return &bpf_ktime_get_real_ns_proto;
->         case BPF_FUNC_ktime_get_boot_ns:
->                 return &bpf_ktime_get_boot_ns_proto;
->         case BPF_FUNC_tail_call:
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index fc5c901c7542..3179fcc4ef53 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1756,6 +1756,7 @@ extern const struct bpf_func_proto bpf_get_smp_proc=
-essor_id_proto;
->  extern const struct bpf_func_proto bpf_get_numa_node_id_proto;
->  extern const struct bpf_func_proto bpf_tail_call_proto;
->  extern const struct bpf_func_proto bpf_ktime_get_ns_proto;
-> +extern const struct bpf_func_proto bpf_ktime_get_real_ns_proto;
->  extern const struct bpf_func_proto bpf_ktime_get_boot_ns_proto;
->  extern const struct bpf_func_proto bpf_get_current_pid_tgid_proto;
->  extern const struct bpf_func_proto bpf_get_current_uid_gid_proto;
-> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> index a22812561064..198e69a6508d 100644
-> --- a/include/uapi/linux/bpf.h
-> +++ b/include/uapi/linux/bpf.h
-> @@ -3586,6 +3586,13 @@ union bpf_attr {
->   *             the data in *dst*. This is a wrapper of **copy_from_user*=
-*\ ().
->   *     Return
->   *             0 on success, or a negative error in case of failure.
-> + *
-> + * u64 bpf_ktime_get_real_ns(void)
-> + *     Description
-> + *             Return the real time in nanoseconds.
-> + *             See: **clock_gettime**\ (**CLOCK_REALTIME**)
-> + *     Return
-> + *             Current *ktime*.
->   */
->  #define __BPF_FUNC_MAPPER(FN)          \
->         FN(unspec),                     \
-> @@ -3737,6 +3744,7 @@ union bpf_attr {
->         FN(inode_storage_delete),       \
->         FN(d_path),                     \
->         FN(copy_from_user),             \
-> +       FN(ktime_get_real_ns),          \
->         /* */
->
->  /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index c4811b139caa..af38af5ffc8b 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -2207,6 +2207,7 @@ const struct bpf_func_proto bpf_get_prandom_u32_pro=
-to __weak;
->  const struct bpf_func_proto bpf_get_smp_processor_id_proto __weak;
->  const struct bpf_func_proto bpf_get_numa_node_id_proto __weak;
->  const struct bpf_func_proto bpf_ktime_get_ns_proto __weak;
-> +const struct bpf_func_proto bpf_ktime_get_real_ns_proto __weak;
->  const struct bpf_func_proto bpf_ktime_get_boot_ns_proto __weak;
->
->  const struct bpf_func_proto bpf_get_current_pid_tgid_proto __weak;
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 5cc7425ee476..776ff58f969d 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -155,6 +155,17 @@ const struct bpf_func_proto bpf_ktime_get_ns_proto =
-=3D {
->         .ret_type       =3D RET_INTEGER,
->  };
->
-> +BPF_CALL_0(bpf_ktime_get_real_ns)
-> +{
-> +       /* NMI safe access to clock realtime */
-> +       return ktime_get_real_fast_ns();
-> +}
-> +
-> +const struct bpf_func_proto bpf_ktime_get_real_ns_proto =3D {
-> +       .func           =3D bpf_ktime_get_real_ns,
-> +       .gpl_only       =3D true,
+> why are you removing this? There is no problem here.
+> All syscalls are error-injectable.
+> I'm surprised Andrii acked this :(
 
-imho should be false, this is normally accessible to userspace code
-via syscall, no reason why it should be gpl only for bpf
-
-> +       .ret_type       =3D RET_INTEGER,
-> +};
->  BPF_CALL_0(bpf_ktime_get_boot_ns)
->  {
->         /* NMI safe access to clock boottime */
-> @@ -655,6 +666,8 @@ bpf_base_func_proto(enum bpf_func_id func_id)
->                 return &bpf_tail_call_proto;
->         case BPF_FUNC_ktime_get_ns:
->                 return &bpf_ktime_get_ns_proto;
-> +       case BPF_FUNC_ktime_get_real_ns:
-> +               return &bpf_ktime_get_real_ns_proto;
->         case BPF_FUNC_ktime_get_boot_ns:
->                 return &bpf_ktime_get_boot_ns_proto;
->         case BPF_FUNC_ringbuf_output:
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 36508f46a8db..18b644fff0be 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -1165,6 +1165,8 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, co=
-nst struct bpf_prog *prog)
->                 return &bpf_map_peek_elem_proto;
->         case BPF_FUNC_ktime_get_ns:
->                 return &bpf_ktime_get_ns_proto;
-> +       case BPF_FUNC_ktime_get_real_ns:
-> +               return &bpf_ktime_get_real_ns_proto;
->         case BPF_FUNC_ktime_get_boot_ns:
->                 return &bpf_ktime_get_boot_ns_proto;
-
-should probably be here to stay alpha sorted more or less (also
-applies to other places)
-
->         case BPF_FUNC_tail_call:
-> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-> index a22812561064..198e69a6508d 100644
-> --- a/tools/include/uapi/linux/bpf.h
-> +++ b/tools/include/uapi/linux/bpf.h
-> @@ -3586,6 +3586,13 @@ union bpf_attr {
->   *             the data in *dst*. This is a wrapper of **copy_from_user*=
-*\ ().
->   *     Return
->   *             0 on success, or a negative error in case of failure.
-> + *
-> + * u64 bpf_ktime_get_real_ns(void)
-> + *     Description
-> + *             Return the real time in nanoseconds.
-> + *             See: **clock_gettime**\ (**CLOCK_REALTIME**)
-> + *     Return
-> + *             Current *ktime*.
->   */
->  #define __BPF_FUNC_MAPPER(FN)          \
->         FN(unspec),                     \
-> @@ -3737,6 +3744,7 @@ union bpf_attr {
->         FN(inode_storage_delete),       \
->         FN(d_path),                     \
->         FN(copy_from_user),             \
-> +       FN(ktime_get_real_ns),          \
->         /* */
->
->  /* integer value in 'imm' field of BPF_CALL instruction selects which he=
-lper
-> --
-> 2.17.1
->
-Maciej =C5=BBenczykowski, Kernel Networking Developer @ Google
+Andrii didn't know that all syscalls are error-injectable, thanks for
+catching :) after fmod_ret/__set_task_comm I just assumed that I've
+been abusing fmod_ret all this time...
