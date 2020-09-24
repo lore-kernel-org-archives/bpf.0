@@ -2,203 +2,158 @@ Return-Path: <SRS0=d63n=DB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65DD1C4363D
-	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 20:07:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 95529C4363D
+	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 20:07:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DEDC92396E
-	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 20:07:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 412FC2395B
+	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 20:07:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=illinois.edu header.i=@illinois.edu header.b="JtAhWbmh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jkfFyBy5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726262AbgIXUG6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Sep 2020 16:06:58 -0400
-Received: from relays-agent03.techservices.illinois.edu ([192.17.82.70]:39802
-        "EHLO illinois.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726183AbgIXUG6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 24 Sep 2020 16:06:58 -0400
-X-Greylist: delayed 1080 seconds by postgrey-1.27 at vger.kernel.org; Thu, 24 Sep 2020 16:06:57 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=illinois.edu; h=references :
- in-reply-to : from : date : message-id : subject : to : cc : content-type
- : mime-version; s=campusrelays;
- bh=/eDeqaFyUH+t373rLitrTZEIIaPUpbaRV0kHjAm9kjE=;
- b=JtAhWbmh7v/UH98BbWW5+W/NwV77m+uLYAtyxBqBXDaJHYiSyk0B/DyItK0EYH4u8O2K
- TiEabP8aa+GFJkvwrPG3A53rvNBRG6rxp5d/dw50T5rBXBsY5obuanS3Al4AN9Hk+W0f
- XVJMi/1lePj6LCc/O7wbPqjXe5t63RPsfJ5Avh7vqz/uKmC3tqlSE0AY321lvTXr3HvW
- X7GkzwFTtnc/jfKuleexqkuIkRr/csrsVn4zNYHUyHxWIUfVyZ/wBZ3F1Zhz1A78bWtO
- tJIdOa29AH7Ip2SSfmdZR8Rlv5xeHPTSjMCdVzI3uRYXQ9r3W/eQMRTme1xGH7sPPC9G 4w== 
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
-        by relays-agent03.techservices.illinois.edu (8.16.0.42/8.16.0.42) with ESMTPS id 08OJmsGZ013552
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Sep 2020 14:48:55 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F+yC8EeCFtxyT33LaBA5xrq4muwINwrPEhI7p011lFPkPzOz2pdZ4/fcz0vqsXsLqx2tkIi+qVZCoNzVpD5310EIs8LV8raKY/IHgd9V25GF6eXjsaFgDRTC4a9/QNHhJXk20KkZtyiFoJapftMTO1aTGux3/5xqFD2WCKPGPP6C/SjoClZhrSc8lpgCptJSZ4CDlvn0fKvMOpCKOjf5+hvfuK8c4VRa1mpKPn3/NxUHuAAB6FJLnfUqnXAnXC1jSRcSPw1JM5MANlO1FYrxLpGXgc3ahSEPATPNGOcv+phr5v8TyFv+X35Q4wf8FdICa4UJzMDtWBT4IBx72066Nw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/eDeqaFyUH+t373rLitrTZEIIaPUpbaRV0kHjAm9kjE=;
- b=BmMllYT/PJi5942q+qWFgJviAiGRcFZlOGG/Fg+Xi2wT0lHYs8lYarXe2WCML6qVd63OpzHd3hpUWufmFyxK+pmtopxUrvgT6fksD53FbJjMA4m+6CnZpXGdvSnkn8pCqPUO79FthlD64bBnc4RyEAUwydbeTYcXDcxq9dHNJQExwO2XafchK7HkFWO3Utt5s17olLjQ4ryrhC4lxGAEpCMvZ5/sx62Aw9JY8RjsRoTAQBMa7uwQkA7z81rtDrzRVQGo8vmnF4Mz1jgYz8XDMOfhhm+yPnoy12Nq47b6mUd81Kh+Exc5ACE6+9De26fc3p1MBicyzCBDMoiV6nY+Pw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=illinois.edu; dmarc=pass action=none header.from=illinois.edu;
- dkim=pass header.d=illinois.edu; arc=none
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none
- header.from=illinois.edu;
-Received: from DM5PR11MB1692.namprd11.prod.outlook.com (2603:10b6:3:d::23) by
- DM5PR1101MB2185.namprd11.prod.outlook.com (2603:10b6:4:4f::18) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.3412.22; Thu, 24 Sep 2020 19:48:53 +0000
-Received: from DM5PR11MB1692.namprd11.prod.outlook.com
- ([fe80::c0ad:426c:3acd:3913]) by DM5PR11MB1692.namprd11.prod.outlook.com
- ([fe80::c0ad:426c:3acd:3913%6]) with mapi id 15.20.3391.027; Thu, 24 Sep 2020
- 19:48:53 +0000
-X-Gm-Message-State: AOAM532+gsBwskfeU7ofQ7qOKnV981Yczo34XEwOVfMVAi/O6IFM08Qe
-        IDVpGHS0PRvUsGhQCKsu5F1T9+VX/XFnmNQsXa0=
-X-Google-Smtp-Source: ABdhPJyj+Sk/ztigsJ/n9fAvmUST2Rwf4QsW6kca8GDDYtzy07Ixu5L7nWXa2hpO9pt1Tw2ZB25QgUpKG7lcMyu4pPE=
-X-Received: by 2002:a7b:c1d4:: with SMTP id a20mr312371wmj.30.1600976929010;
- Thu, 24 Sep 2020 12:48:49 -0700 (PDT)
-References: <20200923232923.3142503-1-keescook@chromium.org>
- <20200924185702.GA9225@redhat.com> <9dbe8e3bbdad43a1872202ff38c34ca2@DM5PR11MB1692.namprd11.prod.outlook.com>
-In-Reply-To: <9dbe8e3bbdad43a1872202ff38c34ca2@DM5PR11MB1692.namprd11.prod.outlook.com>
-From:   Tianyin Xu <tyxu@illinois.edu>
-Date:   Thu, 24 Sep 2020 14:48:37 -0500
-X-Gmail-Original-Message-ID: <CAGMVDEEtNXWp4xOhC+EMa_Z_1KMQhKQohCKVY=Z70wTuLr5X+g@mail.gmail.com>
-Message-ID: <CAGMVDEEtNXWp4xOhC+EMa_Z_1KMQhKQohCKVY=Z70wTuLr5X+g@mail.gmail.com>
-Subject: Re: [PATCH v1 0/6] seccomp: Implement constant action bitmaps
-To:     Jann Horn <jannh@google.com>
-Cc:     Andrea Arcangeli <aarcange@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Zhu, YiFei" <yifeifz2@illinois.edu>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
-        Valentin Rothberg <vrothber@redhat.com>,
-        Hubertus Franke <frankeh@us.ibm.com>,
-        "Chen, Jianyan" <jianyan2@illinois.edu>,
-        "Torrellas, Josep" <torrella@illinois.edu>,
-        bpf <bpf@vger.kernel.org>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-ClientProxiedBy: AM0P190CA0016.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:208:190::26) To DM5PR11MB1692.namprd11.prod.outlook.com
- (2603:10b6:3:d::23)
+        id S1726183AbgIXUHK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Sep 2020 16:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725208AbgIXUHH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 24 Sep 2020 16:07:07 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6696C0613DB;
+        Thu, 24 Sep 2020 13:07:06 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id 133so319411ybg.11;
+        Thu, 24 Sep 2020 13:07:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hxxs+CqXcjzm9/10GBg9XlC9NqGhBburIqZkxr+CoV8=;
+        b=jkfFyBy5F7W6SajVgcBWXvhYr0siwPrZDyQTul52gwHaJSpDujlWFcyfnTRcxfK7Zl
+         k/ZoFiZn2T77LnBPFYuRlRMSitk7QjurNG5AbvXdd1gt0j6ZJn+PaLUMLcurYeNAo5ZT
+         i8P1udJVPuWUFchTpoYIr8Lj8wtrZBreTJqDCKGl1FzkYHbQ1z3Ni+gWJWovM36i5Slr
+         DoXlZGPsXywGDB/Mum59MY5ilKuyFpw8gLLS4+eZ+9dpOjAxx/EUyRWCF+VAkEQ5CrUY
+         myKYwOVlJexRtJrgZ7+oPTU8rciCSVO4axVcR3Qn+hoXDMctjUeG4kuSm9ubBnvmOrYx
+         gNng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hxxs+CqXcjzm9/10GBg9XlC9NqGhBburIqZkxr+CoV8=;
+        b=M+Hd9T75STE0ikO0E1g5hjFZw264bps0dazpk2zAzyQeVs+r8iEwtWX4Ed42t3dkFB
+         H8t+PR6Ht/tyI8ynqHZluZdWUx2XcnzcGl4Eh49iGPZY9lLzWaOmlQEtmUnakqZ+WtIY
+         rImL0vqF+BwMfl+bsC5bcaMpGPeABuhivKDOSFPw6zZzeRFcydLaxliLVB/v8IggYqj2
+         IpIbH8NPSlA+aut7D5+gd7BniepM5GUvI2UmKdmQJ7ALu4P7kjPS01lUanijOB2itAfN
+         KoHYkVtZIuxBzdJtVwP1ja5jGAh0PmGJXUU1wIKGXyjDrr2nxFnchx+rFzA8moYLCemF
+         URlw==
+X-Gm-Message-State: AOAM533EPQwxI/k2RWfO/SE9Xv7fNgmGOBqGQM5hH1eZo7cHheqsXN1i
+        yyC9Ev0CCDdVeH+rKFJCuHi3ZKI/lfUKpd4HoapUld99+sJHnQ==
+X-Google-Smtp-Source: ABdhPJx/XbdBBOZH2228ESnVTc9FrG455E/cvUwJSbWLsxMkwlh+/YWOCAId8ErvGtmCiTlnRPfrVdBrKwaXRAlzvtA=
+X-Received: by 2002:a25:cbc4:: with SMTP id b187mr704368ybg.260.1600978026182;
+ Thu, 24 Sep 2020 13:07:06 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from mail-wm1-f50.google.com (209.85.128.50) by AM0P190CA0016.EURP190.PROD.OUTLOOK.COM (2603:10a6:208:190::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.22 via Frontend Transport; Thu, 24 Sep 2020 19:48:52 +0000
-Received: by mail-wm1-f50.google.com with SMTP id k18so356230wmj.5;        Thu, 24 Sep 2020 12:48:52 -0700 (PDT)
-X-Gm-Message-State: AOAM532+gsBwskfeU7ofQ7qOKnV981Yczo34XEwOVfMVAi/O6IFM08Qe
-        IDVpGHS0PRvUsGhQCKsu5F1T9+VX/XFnmNQsXa0=
-X-Google-Smtp-Source: ABdhPJyj+Sk/ztigsJ/n9fAvmUST2Rwf4QsW6kca8GDDYtzy07Ixu5L7nWXa2hpO9pt1Tw2ZB25QgUpKG7lcMyu4pPE=
-X-Received: by 2002:a7b:c1d4:: with SMTP id a20mr312371wmj.30.1600976929010;
- Thu, 24 Sep 2020 12:48:49 -0700 (PDT)
-X-Gmail-Original-Message-ID: <CAGMVDEEtNXWp4xOhC+EMa_Z_1KMQhKQohCKVY=Z70wTuLr5X+g@mail.gmail.com>
-X-Originating-IP: [209.85.128.50]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d5f134f5-6a88-4ee2-5d33-08d860c2dd68
-X-MS-TrafficTypeDiagnostic: DM5PR1101MB2185:
-X-Microsoft-Antispam-PRVS: <DM5PR1101MB2185219CC78BF3D85FCB8B9EBB390@DM5PR1101MB2185.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: t4/roYsX17cJquvZAgNYM4mKjXxywrCaPHnqd9CTwwTYHnBNHARkTQ2eCsQqfGv0h8vDhL77U8iTkOH1LQAMrbcVj9Nu/v/gzCSi5H+uUL57zSnUZSMu6YDuHSZd1biZpzLfa7etYsrl6WxF5f3edapBuHvUs1p7VYVSzuXSPmk5GD13phtL5GGOGbK3vww09ruijcNoM23l5wNX1FuCTnBn+63p8FMZoCN6/qoiuR96AP4YH/rSs/EEvfjNuWtgILohlSFRsTiKtqepOtvhMg4jidmqOKjk7wUkEywJX2RX7+5+JF9wPRCOZ0CWtGT0251nyc6KpqU/wYPbJ9UOw7mktt/VRT99SXjgGy1mtHcctfgu05OBQ+QdcuzdsMw6GmT2dXnWZLQt1H/9J5cSsQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1692.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(396003)(346002)(136003)(366004)(39860400002)(55446002)(86362001)(52116002)(786003)(478600001)(2906002)(54906003)(450100002)(6666004)(53546011)(42186006)(186003)(6862004)(26005)(66946007)(83380400001)(8676002)(4326008)(66476007)(5660300002)(316002)(66556008)(9686003)(8936002)(83080400001)(75432002)(966005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: iYsYykG5+Dle0ND1/sU3gu+HJTOyM5foAO6ffyrR0cioequfkIkGvUBNNb095jx17JprqTKet10qzLF48pf/bksco2txPwWXCQNkOP0ivAM1yQmrmF7lymAY3ySgNScgU+iVhLIksR7mHj2d5ncdwv6y90O4dDGCw5wcHv95j4sL24fH9xsmNOQ/hRPOPdoyEbSYv6cHMne2GwgXw3qmr5GHL0fMWMqegNcsrTk+l8mp0bL5Ag7jYuflBmXt6NUo8U/IoVL8zNBtAc+cWcTJI5tz4n+v7iJ3aAaXeKEGS4CLRKBHx6bDt6G7++izeBrZtGagO2TBukjXiT28a61B4sGfsGEw6VGMRoec5u84sDLm8D2hmzZTWXTez+PiP8ImXKxbaBtCCMSaG5Uk+3BNcVhZQSkuIJLgp1psVbS6/E794JhPahAjHNEZCWtTvY+LLodwL3S87qqp773w/EcokEggLj8JRjhV1a0Ua4L6OgLpUe2iyGYwdPL5LR2CLXrGf8D9nHVMEVZNOVJG25IYw3SijtvFLgSrrwGs8PozJVjF5uVsLRGfIFenNXqXWkEr4B2PfSBmqW9O5x/y1F2oBPOMdIRTGREQDlpK14MCV9cpqGLImnMtrvyKflozsr/whlTVyGn8GHEIhYLwho18OQ==
-X-OriginatorOrg: illinois.edu
-X-MS-Exchange-CrossTenant-Network-Message-Id: d5f134f5-6a88-4ee2-5d33-08d860c2dd68
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1692.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2020 19:48:53.3138
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 44467e6f-462c-4ea2-823f-7800de5434e3
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0K53g63T+1GZZhH5+iG9sJxdSZxWkJBDBnLuTfKUYA+QPqXovW3UokamR/GeOOvzgcljmrb21mi0dk+kA7NhFw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1101MB2185
+References: <20200924011951.408313-1-songliubraving@fb.com> <20200924011951.408313-3-songliubraving@fb.com>
+In-Reply-To: <20200924011951.408313-3-songliubraving@fb.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 24 Sep 2020 13:06:55 -0700
+Message-ID: <CAEf4BzZqQ3EA8Po7Jjash3hAjT_e-u2QmfjsQqoC+obZXLakrw@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf-next 2/3] libbpf: support test run of raw
+ tracepoint programs
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Sep 24, 2020 at 2:19 PM Jann Horn <jannh@google.com> wrote:
+On Wed, Sep 23, 2020 at 6:45 PM Song Liu <songliubraving@fb.com> wrote:
 >
-> On Thu, Sep 24, 2020 at 8:57 PM Andrea Arcangeli <aarcange@redhat.com> wrote:
-> >
-> > Hello,
-> >
-> > I'm posting this only for the record, feel free to ignore.
-> >
-> > On Wed, Sep 23, 2020 at 04:29:17PM -0700, Kees Cook wrote:
-> > > rfc: https://lore.kernel.org/lkml/20200616074934.1600036-1-keescook@chromium.org/
-> > > alternative: https://lore.kernel.org/containers/cover.1600661418.git.yifeifz2@illinois.edu/
-> > > v1:
-> > > - rebase to for-next/seccomp
-> > > - finish X86_X32 support for both pinning and bitmaps
-> >
-> > It's pretty clear the O(1) seccomp filter bitmap was first was
-> > proposed by your RFC in June (albeit it was located in the wrong place
-> > and is still in the wrong place in v1).
-> >
-> > > - replace TLB magic with Jann's emulator
-> >     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> >
-> > That's a pretty fundamental change in v1 compared to your the
-> > non-competing TLB magic technique you used in the RFC last June.
-> >
-> > The bitmap isn't the clever part of the patch, the bitmap can be
-> > reviewed in seconds, the difficult part to implement and to review is
-> > how you fill the bitmap and in that respect there's absolutely nothing
-> > in common in between the "rfc:" and the "alternative" link.
-> >
-> > In June your bitmap-filling engine was this:
-> >
-> > https://lore.kernel.org/lkml/20200616074934.1600036-5-keescook@chromium.org/
-> >
-> > Then on Sep 21 YiFei Zhu posted his new innovative BPF emulation
-> > innovation that obsoleted your TLB magic of June:
-> >
-> > https://lists.linuxfoundation.org/pipermail/containers/2020-September/042153.html
-> >
-> > And on Sep 23 instead of collaborating and helping YiFei Zhu to
-> > improve his BPF emulator, you posted the same technique that looks
-> > remarkably similar without giving YiFei Zhu any attribution and you
-> > instead attribute the whole idea to Jann Horn:
-> >
-> > https://lkml.kernel.org/r/20200923232923.3142503-5-keescook@chromium.org
+> Add bpf_prog_test_run_opts() with support of new fields in bpf_attr.test,
+> namely, flags and cpu. Also extend _opts operations to support outputs via
+> opts.
 >
-> You're missing that I did suggest the BPF emulation approach (with
-> code very similar to Kees' current code) back in June:
-> https://lore.kernel.org/lkml/CAG48ez1p=dR_2ikKq=xVxkoGg0fYpTBpkhJSv1w-6BG=76PAvw@mail.gmail.com/
+> Signed-off-by: Song Liu <songliubraving@fb.com>
+> ---
+>  tools/lib/bpf/bpf.c             | 31 +++++++++++++++++++++++++++++++
+>  tools/lib/bpf/bpf.h             | 26 ++++++++++++++++++++++++++
+>  tools/lib/bpf/libbpf.map        |  1 +
+>  tools/lib/bpf/libbpf_internal.h |  5 +++++
+>  4 files changed, 63 insertions(+)
+>
 
-I don't see it's a bad thing that two (or three?) teams come up with
-the same ideas,
-and I'm actually happy that the final solution is largely converging,
-thanks to all the discussions so far.
+[...]
 
-It's better to collaborate and help each other, instead of racing on
-two separate patches,
-and everyone involved should be acknowledged.
+>  static int bpf_obj_get_next_id(__u32 start_id, __u32 *next_id, int cmd)
+>  {
+>         union bpf_attr attr;
+> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+> index 8c1ac4b42f908..4f13ec4323aff 100644
+> --- a/tools/lib/bpf/bpf.h
+> +++ b/tools/lib/bpf/bpf.h
+> @@ -251,6 +251,32 @@ struct bpf_prog_bind_opts {
+>
+>  LIBBPF_API int bpf_prog_bind_map(int prog_fd, int map_fd,
+>                                  const struct bpf_prog_bind_opts *opts);
+> +
+> +struct bpf_test_run_opts {
+> +       size_t sz; /* size of this struct for forward/backward compatibility */
+> +       int repeat;
+> +       const void *data_in;
+> +       __u32 data_size_in;
+> +       void *data_out;      /* optional */
+> +       __u32 data_size_out; /* in: max length of data_out
+> +                             * out: length of data_out
+> +                             */
+> +       __u32 retval;        /* out: return code of the BPF program */
+> +       __u32 duration;      /* out: average per repetition in ns */
+> +       const void *ctx_in; /* optional */
+> +       __u32 ctx_size_in;
+> +       void *ctx_out;      /* optional */
+> +       __u32 ctx_size_out; /* in: max length of ctx_out
+> +                            * out: length of cxt_out
+> +                            */
+> +       __u32 flags;
+> +       __u32 cpu;
+> +};
 
-Not sure if it matters, we actually started working on seccomp cache
-in the end of 2018,
-and our idea is to also support arguments in the cache.
-We still have the paper draft sent to an academic conference at Apr 2019 :)
-Unfortunately, our paper kept being rejected until recently.
-Sadly, as academics, we prioritized papers over upstream.
+lots of holes in there, let's reorder (it doesn't have to match the
+order in bpf_attr):
 
-I'm disclosing these not to dismiss anyone's innovations and hardwork.
-I do really think we should work together to merge the right pieces of code,
-instead of competing or ignoring others' effort.
+      size_t sz; /* size of this struct for forward/backward compatibility */
 
---
-Tianyin Xu
-University of Illinois at Urbana-Champaign
-https://tianyin.github.io/
+      const void *data_in;
+      void *data_out;
+      __u32 data_size_in;
+      __u32 data_size_out;
+
+      const void *ctx_in;
+      void *ctx_out;
+      __u32 ctx_size_in;
+      __u32 ctx_size_out;
+
+      __u32 retval;
+      int repeat;
+      __u32 duration;
+      __u32 flags;
+      __u32 cpu;
+
+?
+
+> +#define bpf_test_run_opts__last_field cpu
+> +
+> +LIBBPF_API int bpf_prog_test_run_opts(int prog_fd,
+> +                                     struct bpf_test_run_opts *opts);
+> +
+>  #ifdef __cplusplus
+>  } /* extern "C" */
+>  #endif
+
+[...]
