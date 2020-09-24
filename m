@@ -2,35 +2,35 @@ Return-Path: <SRS0=d63n=DB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC2F5C4363D
-	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 18:21:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EF163C4727D
+	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 18:21:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AEC312220C
-	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 18:21:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BC4172311B
+	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 18:21:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728758AbgIXSVn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1728764AbgIXSVn (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 24 Sep 2020 14:21:43 -0400
-Received: from www62.your-server.de ([213.133.104.62]:39348 "EHLO
+Received: from www62.your-server.de ([213.133.104.62]:39324 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727753AbgIXSVm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 24 Sep 2020 14:21:42 -0400
+        with ESMTP id S1728704AbgIXSVj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 24 Sep 2020 14:21:39 -0400
 Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1kLVsA-00040c-2K; Thu, 24 Sep 2020 20:21:38 +0200
+        id 1kLVs8-000402-RH; Thu, 24 Sep 2020 20:21:36 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     daniel@iogearbox.net, john.fastabend@gmail.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next 5/6] bpf, selftests: use bpf_tail_call_static where appropriate
-Date:   Thu, 24 Sep 2020 20:21:26 +0200
-Message-Id: <0c8a5df84b2f174412c252ad32734d3545947b31.1600967205.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next 2/6] bpf, net: rework cookie generator as per-cpu one
+Date:   Thu, 24 Sep 2020 20:21:23 +0200
+Message-Id: <d4150caecdbef4205178753772e3bc301e908355.1600967205.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1600967205.git.daniel@iogearbox.net>
 References: <cover.1600967205.git.daniel@iogearbox.net>
@@ -42,274 +42,133 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For those locations where we use an immediate tail call map index use the
-newly added bpf_tail_call_static() helper.
+With its use in BPF the cookie generator can be called very frequently
+in particular when used out of cgroup v2 hooks (e.g. connect / sendmsg)
+and attached to the root cgroup, for example, when used in v1/v2 mixed
+environments. In particular when there's a high churn on sockets in the
+system there can be many parallel requests to the bpf_get_socket_cookie()
+and bpf_get_netns_cookie() helpers which then cause contention on the
+shared atomic counter. As similarly done in f991bd2e1421 ("fs: introduce
+a per-cpu last_ino allocator"), add a small helper library that both can
+then use for the 64 bit counters.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- tools/testing/selftests/bpf/progs/bpf_flow.c  | 12 ++++----
- tools/testing/selftests/bpf/progs/tailcall1.c | 28 +++++++++----------
- tools/testing/selftests/bpf/progs/tailcall2.c | 14 +++++-----
- tools/testing/selftests/bpf/progs/tailcall3.c |  4 +--
- .../selftests/bpf/progs/tailcall_bpf2bpf1.c   |  4 +--
- .../selftests/bpf/progs/tailcall_bpf2bpf2.c   |  6 ++--
- .../selftests/bpf/progs/tailcall_bpf2bpf3.c   |  6 ++--
- .../selftests/bpf/progs/tailcall_bpf2bpf4.c   |  6 ++--
- 8 files changed, 40 insertions(+), 40 deletions(-)
+ include/linux/cookie.h   | 41 ++++++++++++++++++++++++++++++++++++++++
+ net/core/net_namespace.c |  5 +++--
+ net/core/sock_diag.c     |  7 ++++---
+ 3 files changed, 48 insertions(+), 5 deletions(-)
+ create mode 100644 include/linux/cookie.h
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_flow.c b/tools/testing/selftests/bpf/progs/bpf_flow.c
-index de6de9221518..5a65f6b51377 100644
---- a/tools/testing/selftests/bpf/progs/bpf_flow.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_flow.c
-@@ -118,18 +118,18 @@ static __always_inline int parse_eth_proto(struct __sk_buff *skb, __be16 proto)
- 
- 	switch (proto) {
- 	case bpf_htons(ETH_P_IP):
--		bpf_tail_call(skb, &jmp_table, IP);
-+		bpf_tail_call_static(skb, &jmp_table, IP);
- 		break;
- 	case bpf_htons(ETH_P_IPV6):
--		bpf_tail_call(skb, &jmp_table, IPV6);
-+		bpf_tail_call_static(skb, &jmp_table, IPV6);
- 		break;
- 	case bpf_htons(ETH_P_MPLS_MC):
- 	case bpf_htons(ETH_P_MPLS_UC):
--		bpf_tail_call(skb, &jmp_table, MPLS);
-+		bpf_tail_call_static(skb, &jmp_table, MPLS);
- 		break;
- 	case bpf_htons(ETH_P_8021Q):
- 	case bpf_htons(ETH_P_8021AD):
--		bpf_tail_call(skb, &jmp_table, VLAN);
-+		bpf_tail_call_static(skb, &jmp_table, VLAN);
- 		break;
- 	default:
- 		/* Protocol not supported */
-@@ -246,10 +246,10 @@ static __always_inline int parse_ipv6_proto(struct __sk_buff *skb, __u8 nexthdr)
- 	switch (nexthdr) {
- 	case IPPROTO_HOPOPTS:
- 	case IPPROTO_DSTOPTS:
--		bpf_tail_call(skb, &jmp_table, IPV6OP);
-+		bpf_tail_call_static(skb, &jmp_table, IPV6OP);
- 		break;
- 	case IPPROTO_FRAGMENT:
--		bpf_tail_call(skb, &jmp_table, IPV6FR);
-+		bpf_tail_call_static(skb, &jmp_table, IPV6FR);
- 		break;
- 	default:
- 		return parse_ip_proto(skb, nexthdr);
-diff --git a/tools/testing/selftests/bpf/progs/tailcall1.c b/tools/testing/selftests/bpf/progs/tailcall1.c
-index 1f407e65ae52..7115bcefbe8a 100644
---- a/tools/testing/selftests/bpf/progs/tailcall1.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall1.c
-@@ -26,20 +26,20 @@ int entry(struct __sk_buff *skb)
- 	/* Multiple locations to make sure we patch
- 	 * all of them.
- 	 */
--	bpf_tail_call(skb, &jmp_table, 0);
--	bpf_tail_call(skb, &jmp_table, 0);
--	bpf_tail_call(skb, &jmp_table, 0);
--	bpf_tail_call(skb, &jmp_table, 0);
--
--	bpf_tail_call(skb, &jmp_table, 1);
--	bpf_tail_call(skb, &jmp_table, 1);
--	bpf_tail_call(skb, &jmp_table, 1);
--	bpf_tail_call(skb, &jmp_table, 1);
--
--	bpf_tail_call(skb, &jmp_table, 2);
--	bpf_tail_call(skb, &jmp_table, 2);
--	bpf_tail_call(skb, &jmp_table, 2);
--	bpf_tail_call(skb, &jmp_table, 2);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
+diff --git a/include/linux/cookie.h b/include/linux/cookie.h
+new file mode 100644
+index 000000000000..2488203dc004
+--- /dev/null
++++ b/include/linux/cookie.h
+@@ -0,0 +1,41 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __LINUX_COOKIE_H
++#define __LINUX_COOKIE_H
 +
-+	bpf_tail_call_static(skb, &jmp_table, 1);
-+	bpf_tail_call_static(skb, &jmp_table, 1);
-+	bpf_tail_call_static(skb, &jmp_table, 1);
-+	bpf_tail_call_static(skb, &jmp_table, 1);
++#include <linux/atomic.h>
++#include <linux/percpu.h>
 +
-+	bpf_tail_call_static(skb, &jmp_table, 2);
-+	bpf_tail_call_static(skb, &jmp_table, 2);
-+	bpf_tail_call_static(skb, &jmp_table, 2);
-+	bpf_tail_call_static(skb, &jmp_table, 2);
++struct gen_cookie {
++	u64 __percpu	*local_last;
++	atomic64_t	 shared_last ____cacheline_aligned_in_smp;
++};
++
++#define COOKIE_LOCAL_BATCH	4096
++
++#define DEFINE_COOKIE(name)					\
++	static DEFINE_PER_CPU(u64, __##name);			\
++	static struct gen_cookie name = {			\
++		.local_last	= &__##name,			\
++		.shared_last	= ATOMIC64_INIT(0),		\
++	}
++
++static inline u64 gen_cookie_next(struct gen_cookie *gc)
++{
++	u64 *local_last = &get_cpu_var(*gc->local_last);
++	u64 val = *local_last;
++
++	if (__is_defined(CONFIG_SMP) &&
++	    unlikely((val & (COOKIE_LOCAL_BATCH - 1)) == 0)) {
++		s64 next = atomic64_add_return(COOKIE_LOCAL_BATCH,
++					       &gc->shared_last);
++		val = next - COOKIE_LOCAL_BATCH;
++	}
++	val++;
++	if (unlikely(!val))
++		val++;
++	*local_last = val;
++	put_cpu_var(local_last);
++	return val;
++}
++
++#endif /* __LINUX_COOKIE_H */
+diff --git a/net/core/net_namespace.c b/net/core/net_namespace.c
+index dcd61aca343e..cf29ed8950d1 100644
+--- a/net/core/net_namespace.c
++++ b/net/core/net_namespace.c
+@@ -19,6 +19,7 @@
+ #include <linux/net_namespace.h>
+ #include <linux/sched/task.h>
+ #include <linux/uidgid.h>
++#include <linux/cookie.h>
  
- 	return 3;
- }
-diff --git a/tools/testing/selftests/bpf/progs/tailcall2.c b/tools/testing/selftests/bpf/progs/tailcall2.c
-index a093e739cf0e..0431e4fe7efd 100644
---- a/tools/testing/selftests/bpf/progs/tailcall2.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall2.c
-@@ -13,14 +13,14 @@ struct {
- SEC("classifier/0")
- int bpf_func_0(struct __sk_buff *skb)
+ #include <net/sock.h>
+ #include <net/netlink.h>
+@@ -69,7 +70,7 @@ EXPORT_SYMBOL_GPL(pernet_ops_rwsem);
+ 
+ static unsigned int max_gen_ptrs = INITIAL_NET_GEN_PTRS;
+ 
+-static atomic64_t cookie_gen;
++DEFINE_COOKIE(net_cookie);
+ 
+ u64 net_gen_cookie(struct net *net)
  {
--	bpf_tail_call(skb, &jmp_table, 1);
-+	bpf_tail_call_static(skb, &jmp_table, 1);
- 	return 0;
- }
+@@ -78,7 +79,7 @@ u64 net_gen_cookie(struct net *net)
  
- SEC("classifier/1")
- int bpf_func_1(struct __sk_buff *skb)
+ 		if (res)
+ 			return res;
+-		res = atomic64_inc_return(&cookie_gen);
++		res = gen_cookie_next(&net_cookie);
+ 		atomic64_cmpxchg(&net->net_cookie, 0, res);
+ 	}
+ }
+diff --git a/net/core/sock_diag.c b/net/core/sock_diag.c
+index c13ffbd33d8d..4a4180e8dd35 100644
+--- a/net/core/sock_diag.c
++++ b/net/core/sock_diag.c
+@@ -11,7 +11,7 @@
+ #include <linux/tcp.h>
+ #include <linux/workqueue.h>
+ #include <linux/nospec.h>
+-
++#include <linux/cookie.h>
+ #include <linux/inet_diag.h>
+ #include <linux/sock_diag.h>
+ 
+@@ -19,7 +19,8 @@ static const struct sock_diag_handler *sock_diag_handlers[AF_MAX];
+ static int (*inet_rcv_compat)(struct sk_buff *skb, struct nlmsghdr *nlh);
+ static DEFINE_MUTEX(sock_diag_table_mutex);
+ static struct workqueue_struct *broadcast_wq;
+-static atomic64_t cookie_gen;
++
++DEFINE_COOKIE(sock_cookie);
+ 
+ u64 sock_gen_cookie(struct sock *sk)
  {
--	bpf_tail_call(skb, &jmp_table, 2);
-+	bpf_tail_call_static(skb, &jmp_table, 2);
- 	return 1;
+@@ -28,7 +29,7 @@ u64 sock_gen_cookie(struct sock *sk)
+ 
+ 		if (res)
+ 			return res;
+-		res = atomic64_inc_return(&cookie_gen);
++		res = gen_cookie_next(&sock_cookie);
+ 		atomic64_cmpxchg(&sk->sk_cookie, 0, res);
+ 	}
  }
- 
-@@ -33,25 +33,25 @@ int bpf_func_2(struct __sk_buff *skb)
- SEC("classifier/3")
- int bpf_func_3(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 4);
-+	bpf_tail_call_static(skb, &jmp_table, 4);
- 	return 3;
- }
- 
- SEC("classifier/4")
- int bpf_func_4(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 3);
-+	bpf_tail_call_static(skb, &jmp_table, 3);
- 	return 4;
- }
- 
- SEC("classifier")
- int entry(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
- 	/* Check multi-prog update. */
--	bpf_tail_call(skb, &jmp_table, 2);
-+	bpf_tail_call_static(skb, &jmp_table, 2);
- 	/* Check tail call limit. */
--	bpf_tail_call(skb, &jmp_table, 3);
-+	bpf_tail_call_static(skb, &jmp_table, 3);
- 	return 3;
- }
- 
-diff --git a/tools/testing/selftests/bpf/progs/tailcall3.c b/tools/testing/selftests/bpf/progs/tailcall3.c
-index cabda877cf0a..739dc2a51e74 100644
---- a/tools/testing/selftests/bpf/progs/tailcall3.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall3.c
-@@ -16,14 +16,14 @@ SEC("classifier/0")
- int bpf_func_0(struct __sk_buff *skb)
- {
- 	count++;
--	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
- 	return 1;
- }
- 
- SEC("classifier")
- int entry(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
- 	return 0;
- }
- 
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf1.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf1.c
-index b5d9c8e778ae..0103f3dd9f02 100644
---- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf1.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf1.c
-@@ -21,7 +21,7 @@ TAIL_FUNC(1)
- static __noinline
- int subprog_tail(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
- 
- 	return skb->len * 2;
- }
-@@ -29,7 +29,7 @@ int subprog_tail(struct __sk_buff *skb)
- SEC("classifier")
- int entry(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 1);
-+	bpf_tail_call_static(skb, &jmp_table, 1);
- 
- 	return subprog_tail(skb);
- }
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
-index a004ab28ce28..7b1c04183824 100644
---- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
-@@ -14,9 +14,9 @@ static __noinline
- int subprog_tail(struct __sk_buff *skb)
- {
- 	if (load_byte(skb, 0))
--		bpf_tail_call(skb, &jmp_table, 1);
-+		bpf_tail_call_static(skb, &jmp_table, 1);
- 	else
--		bpf_tail_call(skb, &jmp_table, 0);
-+		bpf_tail_call_static(skb, &jmp_table, 0);
- 	return 1;
- }
- 
-@@ -32,7 +32,7 @@ int bpf_func_0(struct __sk_buff *skb)
- SEC("classifier")
- int entry(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
- 
- 	return 0;
- }
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
-index 96dbef2b6b7c..0d5482bea6c9 100644
---- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
-@@ -16,9 +16,9 @@ int subprog_tail2(struct __sk_buff *skb)
- 	volatile char arr[64] = {};
- 
- 	if (load_word(skb, 0) || load_half(skb, 0))
--		bpf_tail_call(skb, &jmp_table, 10);
-+		bpf_tail_call_static(skb, &jmp_table, 10);
- 	else
--		bpf_tail_call(skb, &jmp_table, 1);
-+		bpf_tail_call_static(skb, &jmp_table, 1);
- 
- 	return skb->len;
- }
-@@ -28,7 +28,7 @@ int subprog_tail(struct __sk_buff *skb)
- {
- 	volatile char arr[64] = {};
- 
--	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
- 
- 	return skb->len * 2;
- }
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
-index 98b40a95bc67..9a1b166b7fbe 100644
---- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
-@@ -14,21 +14,21 @@ static volatile int count;
- __noinline
- int subprog_tail_2(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 2);
-+	bpf_tail_call_static(skb, &jmp_table, 2);
- 	return skb->len * 3;
- }
- 
- __noinline
- int subprog_tail_1(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 1);
-+	bpf_tail_call_static(skb, &jmp_table, 1);
- 	return skb->len * 2;
- }
- 
- __noinline
- int subprog_tail(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
- 	return skb->len;
- }
- 
 -- 
 2.21.0
 
