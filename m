@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DBC9DC4727F
-	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 18:21:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EC2F5C4363D
+	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 18:21:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8F3CD23741
-	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 18:21:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AEC312220C
+	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 18:21:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728753AbgIXSVi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Sep 2020 14:21:38 -0400
-Received: from www62.your-server.de ([213.133.104.62]:39316 "EHLO
+        id S1728758AbgIXSVn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Sep 2020 14:21:43 -0400
+Received: from www62.your-server.de ([213.133.104.62]:39348 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728691AbgIXSVi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 24 Sep 2020 14:21:38 -0400
+        with ESMTP id S1727753AbgIXSVm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 24 Sep 2020 14:21:42 -0400
 Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1kLVs8-0003zv-Ej; Thu, 24 Sep 2020 20:21:36 +0200
+        id 1kLVsA-00040c-2K; Thu, 24 Sep 2020 20:21:38 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     daniel@iogearbox.net, john.fastabend@gmail.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next 1/6] bpf: add classid helper only based on skb->sk
-Date:   Thu, 24 Sep 2020 20:21:22 +0200
-Message-Id: <2e761d23d591a9536eaa3ecd4be8d78c99f00964.1600967205.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next 5/6] bpf, selftests: use bpf_tail_call_static where appropriate
+Date:   Thu, 24 Sep 2020 20:21:26 +0200
+Message-Id: <0c8a5df84b2f174412c252ad32734d3545947b31.1600967205.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1600967205.git.daniel@iogearbox.net>
 References: <cover.1600967205.git.daniel@iogearbox.net>
@@ -42,119 +42,274 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Similarly to 5a52ae4e32a6 ("bpf: Allow to retrieve cgroup v1 classid
-from v2 hooks"), add a helper to retrieve cgroup v1 classid solely
-based on the skb->sk, so it can be used as key as part of BPF map
-lookups out of tc from host ns, in particular given the skb->sk is
-retained these days when crossing net ns thanks to 9c4c325252c5
-("skbuff: preserve sock reference when scrubbing the skb."). This
-is similar to bpf_skb_cgroup_id() which implements the same for v2.
-Kubernetes ecosystem is still operating on v1 however, hence net_cls
-needs to be used there until this can be dropped in with the v2
-helper of bpf_skb_cgroup_id().
+For those locations where we use an immediate tail call map index use the
+newly added bpf_tail_call_static() helper.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- include/uapi/linux/bpf.h       | 10 ++++++++++
- net/core/filter.c              | 21 +++++++++++++++++++++
- tools/include/uapi/linux/bpf.h | 10 ++++++++++
- 3 files changed, 41 insertions(+)
+ tools/testing/selftests/bpf/progs/bpf_flow.c  | 12 ++++----
+ tools/testing/selftests/bpf/progs/tailcall1.c | 28 +++++++++----------
+ tools/testing/selftests/bpf/progs/tailcall2.c | 14 +++++-----
+ tools/testing/selftests/bpf/progs/tailcall3.c |  4 +--
+ .../selftests/bpf/progs/tailcall_bpf2bpf1.c   |  4 +--
+ .../selftests/bpf/progs/tailcall_bpf2bpf2.c   |  6 ++--
+ .../selftests/bpf/progs/tailcall_bpf2bpf3.c   |  6 ++--
+ .../selftests/bpf/progs/tailcall_bpf2bpf4.c   |  6 ++--
+ 8 files changed, 40 insertions(+), 40 deletions(-)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index a22812561064..48ecf246d047 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3586,6 +3586,15 @@ union bpf_attr {
-  * 		the data in *dst*. This is a wrapper of **copy_from_user**\ ().
-  * 	Return
-  * 		0 on success, or a negative error in case of failure.
-+ *
-+ * u64 bpf_skb_cgroup_classid(struct sk_buff *skb)
-+ * 	Description
-+ * 		See **bpf_get_cgroup_classid**\ () for the main description.
-+ * 		This helper differs from **bpf_get_cgroup_classid**\ () in that
-+ * 		the cgroup v1 net_cls class is retrieved only from the *skb*'s
-+ * 		associated socket instead of the current process.
-+ * 	Return
-+ * 		The id is returned or 0 in case the id could not be retrieved.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3737,6 +3746,7 @@ union bpf_attr {
- 	FN(inode_storage_delete),	\
- 	FN(d_path),			\
- 	FN(copy_from_user),		\
-+	FN(skb_cgroup_classid),		\
- 	/* */
+diff --git a/tools/testing/selftests/bpf/progs/bpf_flow.c b/tools/testing/selftests/bpf/progs/bpf_flow.c
+index de6de9221518..5a65f6b51377 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_flow.c
++++ b/tools/testing/selftests/bpf/progs/bpf_flow.c
+@@ -118,18 +118,18 @@ static __always_inline int parse_eth_proto(struct __sk_buff *skb, __be16 proto)
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 6014e5f40c58..0f913755bcba 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2704,6 +2704,23 @@ static const struct bpf_func_proto bpf_get_cgroup_classid_curr_proto = {
- 	.gpl_only	= false,
- 	.ret_type	= RET_INTEGER,
- };
+ 	switch (proto) {
+ 	case bpf_htons(ETH_P_IP):
+-		bpf_tail_call(skb, &jmp_table, IP);
++		bpf_tail_call_static(skb, &jmp_table, IP);
+ 		break;
+ 	case bpf_htons(ETH_P_IPV6):
+-		bpf_tail_call(skb, &jmp_table, IPV6);
++		bpf_tail_call_static(skb, &jmp_table, IPV6);
+ 		break;
+ 	case bpf_htons(ETH_P_MPLS_MC):
+ 	case bpf_htons(ETH_P_MPLS_UC):
+-		bpf_tail_call(skb, &jmp_table, MPLS);
++		bpf_tail_call_static(skb, &jmp_table, MPLS);
+ 		break;
+ 	case bpf_htons(ETH_P_8021Q):
+ 	case bpf_htons(ETH_P_8021AD):
+-		bpf_tail_call(skb, &jmp_table, VLAN);
++		bpf_tail_call_static(skb, &jmp_table, VLAN);
+ 		break;
+ 	default:
+ 		/* Protocol not supported */
+@@ -246,10 +246,10 @@ static __always_inline int parse_ipv6_proto(struct __sk_buff *skb, __u8 nexthdr)
+ 	switch (nexthdr) {
+ 	case IPPROTO_HOPOPTS:
+ 	case IPPROTO_DSTOPTS:
+-		bpf_tail_call(skb, &jmp_table, IPV6OP);
++		bpf_tail_call_static(skb, &jmp_table, IPV6OP);
+ 		break;
+ 	case IPPROTO_FRAGMENT:
+-		bpf_tail_call(skb, &jmp_table, IPV6FR);
++		bpf_tail_call_static(skb, &jmp_table, IPV6FR);
+ 		break;
+ 	default:
+ 		return parse_ip_proto(skb, nexthdr);
+diff --git a/tools/testing/selftests/bpf/progs/tailcall1.c b/tools/testing/selftests/bpf/progs/tailcall1.c
+index 1f407e65ae52..7115bcefbe8a 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall1.c
++++ b/tools/testing/selftests/bpf/progs/tailcall1.c
+@@ -26,20 +26,20 @@ int entry(struct __sk_buff *skb)
+ 	/* Multiple locations to make sure we patch
+ 	 * all of them.
+ 	 */
+-	bpf_tail_call(skb, &jmp_table, 0);
+-	bpf_tail_call(skb, &jmp_table, 0);
+-	bpf_tail_call(skb, &jmp_table, 0);
+-	bpf_tail_call(skb, &jmp_table, 0);
+-
+-	bpf_tail_call(skb, &jmp_table, 1);
+-	bpf_tail_call(skb, &jmp_table, 1);
+-	bpf_tail_call(skb, &jmp_table, 1);
+-	bpf_tail_call(skb, &jmp_table, 1);
+-
+-	bpf_tail_call(skb, &jmp_table, 2);
+-	bpf_tail_call(skb, &jmp_table, 2);
+-	bpf_tail_call(skb, &jmp_table, 2);
+-	bpf_tail_call(skb, &jmp_table, 2);
++	bpf_tail_call_static(skb, &jmp_table, 0);
++	bpf_tail_call_static(skb, &jmp_table, 0);
++	bpf_tail_call_static(skb, &jmp_table, 0);
++	bpf_tail_call_static(skb, &jmp_table, 0);
 +
-+BPF_CALL_1(bpf_skb_cgroup_classid, const struct sk_buff *, skb)
-+{
-+	struct sock *sk = skb_to_full_sk(skb);
++	bpf_tail_call_static(skb, &jmp_table, 1);
++	bpf_tail_call_static(skb, &jmp_table, 1);
++	bpf_tail_call_static(skb, &jmp_table, 1);
++	bpf_tail_call_static(skb, &jmp_table, 1);
 +
-+	if (!sk || !sk_fullsock(sk))
-+		return 0;
-+
-+	return sock_cgroup_classid(&sk->sk_cgrp_data);
-+}
-+
-+static const struct bpf_func_proto bpf_skb_cgroup_classid_proto = {
-+	.func		= bpf_skb_cgroup_classid,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_CTX,
-+};
- #endif
++	bpf_tail_call_static(skb, &jmp_table, 2);
++	bpf_tail_call_static(skb, &jmp_table, 2);
++	bpf_tail_call_static(skb, &jmp_table, 2);
++	bpf_tail_call_static(skb, &jmp_table, 2);
  
- BPF_CALL_1(bpf_get_cgroup_classid, const struct sk_buff *, skb)
-@@ -6770,6 +6787,10 @@ tc_cls_act_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 	case BPF_FUNC_skb_get_xfrm_state:
- 		return &bpf_skb_get_xfrm_state_proto;
- #endif
-+#ifdef CONFIG_CGROUP_NET_CLASSID
-+	case BPF_FUNC_skb_cgroup_classid:
-+		return &bpf_skb_cgroup_classid_proto;
-+#endif
- #ifdef CONFIG_SOCK_CGROUP_DATA
- 	case BPF_FUNC_skb_cgroup_id:
- 		return &bpf_skb_cgroup_id_proto;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index a22812561064..48ecf246d047 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3586,6 +3586,15 @@ union bpf_attr {
-  * 		the data in *dst*. This is a wrapper of **copy_from_user**\ ().
-  * 	Return
-  * 		0 on success, or a negative error in case of failure.
-+ *
-+ * u64 bpf_skb_cgroup_classid(struct sk_buff *skb)
-+ * 	Description
-+ * 		See **bpf_get_cgroup_classid**\ () for the main description.
-+ * 		This helper differs from **bpf_get_cgroup_classid**\ () in that
-+ * 		the cgroup v1 net_cls class is retrieved only from the *skb*'s
-+ * 		associated socket instead of the current process.
-+ * 	Return
-+ * 		The id is returned or 0 in case the id could not be retrieved.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3737,6 +3746,7 @@ union bpf_attr {
- 	FN(inode_storage_delete),	\
- 	FN(d_path),			\
- 	FN(copy_from_user),		\
-+	FN(skb_cgroup_classid),		\
- 	/* */
+ 	return 3;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/tailcall2.c b/tools/testing/selftests/bpf/progs/tailcall2.c
+index a093e739cf0e..0431e4fe7efd 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall2.c
++++ b/tools/testing/selftests/bpf/progs/tailcall2.c
+@@ -13,14 +13,14 @@ struct {
+ SEC("classifier/0")
+ int bpf_func_0(struct __sk_buff *skb)
+ {
+-	bpf_tail_call(skb, &jmp_table, 1);
++	bpf_tail_call_static(skb, &jmp_table, 1);
+ 	return 0;
+ }
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+ SEC("classifier/1")
+ int bpf_func_1(struct __sk_buff *skb)
+ {
+-	bpf_tail_call(skb, &jmp_table, 2);
++	bpf_tail_call_static(skb, &jmp_table, 2);
+ 	return 1;
+ }
+ 
+@@ -33,25 +33,25 @@ int bpf_func_2(struct __sk_buff *skb)
+ SEC("classifier/3")
+ int bpf_func_3(struct __sk_buff *skb)
+ {
+-	bpf_tail_call(skb, &jmp_table, 4);
++	bpf_tail_call_static(skb, &jmp_table, 4);
+ 	return 3;
+ }
+ 
+ SEC("classifier/4")
+ int bpf_func_4(struct __sk_buff *skb)
+ {
+-	bpf_tail_call(skb, &jmp_table, 3);
++	bpf_tail_call_static(skb, &jmp_table, 3);
+ 	return 4;
+ }
+ 
+ SEC("classifier")
+ int entry(struct __sk_buff *skb)
+ {
+-	bpf_tail_call(skb, &jmp_table, 0);
++	bpf_tail_call_static(skb, &jmp_table, 0);
+ 	/* Check multi-prog update. */
+-	bpf_tail_call(skb, &jmp_table, 2);
++	bpf_tail_call_static(skb, &jmp_table, 2);
+ 	/* Check tail call limit. */
+-	bpf_tail_call(skb, &jmp_table, 3);
++	bpf_tail_call_static(skb, &jmp_table, 3);
+ 	return 3;
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/tailcall3.c b/tools/testing/selftests/bpf/progs/tailcall3.c
+index cabda877cf0a..739dc2a51e74 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall3.c
++++ b/tools/testing/selftests/bpf/progs/tailcall3.c
+@@ -16,14 +16,14 @@ SEC("classifier/0")
+ int bpf_func_0(struct __sk_buff *skb)
+ {
+ 	count++;
+-	bpf_tail_call(skb, &jmp_table, 0);
++	bpf_tail_call_static(skb, &jmp_table, 0);
+ 	return 1;
+ }
+ 
+ SEC("classifier")
+ int entry(struct __sk_buff *skb)
+ {
+-	bpf_tail_call(skb, &jmp_table, 0);
++	bpf_tail_call_static(skb, &jmp_table, 0);
+ 	return 0;
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf1.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf1.c
+index b5d9c8e778ae..0103f3dd9f02 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf1.c
++++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf1.c
+@@ -21,7 +21,7 @@ TAIL_FUNC(1)
+ static __noinline
+ int subprog_tail(struct __sk_buff *skb)
+ {
+-	bpf_tail_call(skb, &jmp_table, 0);
++	bpf_tail_call_static(skb, &jmp_table, 0);
+ 
+ 	return skb->len * 2;
+ }
+@@ -29,7 +29,7 @@ int subprog_tail(struct __sk_buff *skb)
+ SEC("classifier")
+ int entry(struct __sk_buff *skb)
+ {
+-	bpf_tail_call(skb, &jmp_table, 1);
++	bpf_tail_call_static(skb, &jmp_table, 1);
+ 
+ 	return subprog_tail(skb);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
+index a004ab28ce28..7b1c04183824 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
++++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
+@@ -14,9 +14,9 @@ static __noinline
+ int subprog_tail(struct __sk_buff *skb)
+ {
+ 	if (load_byte(skb, 0))
+-		bpf_tail_call(skb, &jmp_table, 1);
++		bpf_tail_call_static(skb, &jmp_table, 1);
+ 	else
+-		bpf_tail_call(skb, &jmp_table, 0);
++		bpf_tail_call_static(skb, &jmp_table, 0);
+ 	return 1;
+ }
+ 
+@@ -32,7 +32,7 @@ int bpf_func_0(struct __sk_buff *skb)
+ SEC("classifier")
+ int entry(struct __sk_buff *skb)
+ {
+-	bpf_tail_call(skb, &jmp_table, 0);
++	bpf_tail_call_static(skb, &jmp_table, 0);
+ 
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
+index 96dbef2b6b7c..0d5482bea6c9 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
++++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
+@@ -16,9 +16,9 @@ int subprog_tail2(struct __sk_buff *skb)
+ 	volatile char arr[64] = {};
+ 
+ 	if (load_word(skb, 0) || load_half(skb, 0))
+-		bpf_tail_call(skb, &jmp_table, 10);
++		bpf_tail_call_static(skb, &jmp_table, 10);
+ 	else
+-		bpf_tail_call(skb, &jmp_table, 1);
++		bpf_tail_call_static(skb, &jmp_table, 1);
+ 
+ 	return skb->len;
+ }
+@@ -28,7 +28,7 @@ int subprog_tail(struct __sk_buff *skb)
+ {
+ 	volatile char arr[64] = {};
+ 
+-	bpf_tail_call(skb, &jmp_table, 0);
++	bpf_tail_call_static(skb, &jmp_table, 0);
+ 
+ 	return skb->len * 2;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
+index 98b40a95bc67..9a1b166b7fbe 100644
+--- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
++++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
+@@ -14,21 +14,21 @@ static volatile int count;
+ __noinline
+ int subprog_tail_2(struct __sk_buff *skb)
+ {
+-	bpf_tail_call(skb, &jmp_table, 2);
++	bpf_tail_call_static(skb, &jmp_table, 2);
+ 	return skb->len * 3;
+ }
+ 
+ __noinline
+ int subprog_tail_1(struct __sk_buff *skb)
+ {
+-	bpf_tail_call(skb, &jmp_table, 1);
++	bpf_tail_call_static(skb, &jmp_table, 1);
+ 	return skb->len * 2;
+ }
+ 
+ __noinline
+ int subprog_tail(struct __sk_buff *skb)
+ {
+-	bpf_tail_call(skb, &jmp_table, 0);
++	bpf_tail_call_static(skb, &jmp_table, 0);
+ 	return skb->len;
+ }
+ 
 -- 
 2.21.0
 
