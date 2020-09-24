@@ -2,205 +2,109 @@ Return-Path: <SRS0=d63n=DB=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99D04C4363D
-	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 02:06:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34DFEC4363D
+	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 02:19:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4ADE12311E
-	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 02:06:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E76DD2176B
+	for <bpf@archiver.kernel.org>; Thu, 24 Sep 2020 02:19:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="E8B3YDXX"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QziewrNM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726497AbgIXCGZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 23 Sep 2020 22:06:25 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:57782 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725208AbgIXCGY (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 23 Sep 2020 22:06:24 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08O1J4OP009907
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2020 18:20:55 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=450fyJHySCTaxqk3cZbvsaoCgKBYTqdxlZEFVHVqHbc=;
- b=E8B3YDXXcfjCwuh9w7ecn597EgiIZTRzPMApqr+X2PvAmLbH9fsarUP1+T4FtOZJl+D6
- 4WWH6a0ZtqdMUZDs47XpLuegQxt3gWRo7xRuhTIdMctOzy+5rMBmhR5979EBK/0Alo27
- kYa7NMfDMHrzR4sF2bruv9H2PIbfYdJFsEY= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 33qsp4y0wx-16
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2020 18:20:55 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 23 Sep 2020 18:20:08 -0700
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 0C44262E54C3; Wed, 23 Sep 2020 18:20:05 -0700 (PDT)
-From:   Song Liu <songliubraving@fb.com>
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <kernel-team@fb.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <john.fastabend@gmail.com>, <kpsingh@chromium.org>,
-        Song Liu <songliubraving@fb.com>
-Subject: [PATCH v4 bpf-next 3/3] selftests/bpf: add raw_tp_test_run
-Date:   Wed, 23 Sep 2020 18:19:51 -0700
-Message-ID: <20200924011951.408313-4-songliubraving@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200924011951.408313-1-songliubraving@fb.com>
-References: <20200924011951.408313-1-songliubraving@fb.com>
+        id S1726327AbgIXCTN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 23 Sep 2020 22:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726281AbgIXCTN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 23 Sep 2020 22:19:13 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7D6C0613CE;
+        Wed, 23 Sep 2020 19:19:13 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id e23so1729524otk.7;
+        Wed, 23 Sep 2020 19:19:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wDEJhsl4Doe66f24GWnBXVwBWwh1i3I3Xt29k/zmNPc=;
+        b=QziewrNMiwkoK2xtNAy2cdnKBqTjiKavvaW5XgS6o8LzTpLn4TJArJ/95ktolDW+WH
+         U+fgDmQbqks2sGei9Udu32e/JMSG5/VyiKNPzOYVd8wSYQm1b8l8JeNLhlslQ5dcm4O0
+         G/QEe7ByNNQkQE6Nr7FOgHRnW1E+vP1oxyXiOkFe+TyphvA8xDUg+2KZqTxZwGaJsQ/s
+         Y42RfjsQpACciM51xadKG/lCuxqKCjNWRobZsfhf3CC5tCJD31hF5863Dl6btGs626u8
+         qI703LohDFO1qqbkiJwk8VGtA4USaFziUV1enqRmdSF3QjTTlobh7UzpN2qchYkg/6av
+         YIWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wDEJhsl4Doe66f24GWnBXVwBWwh1i3I3Xt29k/zmNPc=;
+        b=fff+CI92/0otJPwF8m6ylYWNcHBRV5WJ0+4Qx4sj7Jew624MAqWOMcyhBDADGZLRIA
+         Nk6G30Wr44tiroWwCAXyMKcPKEvs9aSmddUV1V6Ii5lHp0K9nmXj+B+Xtafov9/1CaKu
+         sfrDhZZCRWkLY9S1cCVDTasqW2ZnydahP4KAHcBj3VmBBb/RBEEz5dBRORElVwPeOF21
+         kdnqdhpO6MHU829Kt7C+mPk6JgcGQngqBauJ/vLhPuFnxINSTX1J/4RdKqhyeGsQNX4J
+         G3cvTj4byTj66gJuXsus+aMHHP+ihH4UC7/rapZs3pcdi+n5s5wWHuQ/56zr//bwIyRL
+         627w==
+X-Gm-Message-State: AOAM530JaG3ZiSSNSzvh9AzqLaCYzfnDOEmuefJk6Pgqn6dDYlDMpEKY
+        uVez7OjhTzVJYFtHD8h63p0=
+X-Google-Smtp-Source: ABdhPJwd0A0Jq8w7Rg+2kKFAH5FRPRgE74e1V40h4IWsgALMcu7vXYQFmpj1fMQbwLuBjaOTM2KPNw==
+X-Received: by 2002:a9d:621a:: with SMTP id g26mr1748958otj.209.1600913952684;
+        Wed, 23 Sep 2020 19:19:12 -0700 (PDT)
+Received: from Davids-MacBook-Pro.local ([2601:282:803:7700:b155:90bc:6427:b416])
+        by smtp.googlemail.com with ESMTPSA id z20sm464787oor.3.2020.09.23.19.19.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Sep 2020 19:19:11 -0700 (PDT)
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Add bpf_ktime_get_real_ns
+To:     =?UTF-8?Q?Maciej_=c5=bbenczykowski?= <maze@google.com>,
+        bimmy.pujari@intel.com
+Cc:     bpf <bpf@vger.kernel.org>, Linux NetDev <netdev@vger.kernel.org>,
+        mchehab@kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin Lau <kafai@fb.com>, ashkan.nikravesh@intel.com
+References: <20200924000326.8913-1-bimmy.pujari@intel.com>
+ <CANP3RGf-rDPkf2=YoLEn=jcHyFEDcrNrQO27RdZRCoa_xi8-4Q@mail.gmail.com>
+From:   David Ahern <dsahern@gmail.com>
+Message-ID: <00f4c72b-37ee-1fbc-21f6-612bbe037036@gmail.com>
+Date:   Wed, 23 Sep 2020 20:19:10 -0600
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-23_19:2020-09-23,2020-09-23 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- spamscore=0 bulkscore=0 impostorscore=0 malwarescore=0 phishscore=0
- clxscore=1015 priorityscore=1501 mlxscore=0 suspectscore=2 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009240007
-X-FB-Internal: deliver
+In-Reply-To: <CANP3RGf-rDPkf2=YoLEn=jcHyFEDcrNrQO27RdZRCoa_xi8-4Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This test runs test_run for raw_tracepoint program. The test covers ctx
-input, retval output, and running on correct cpu.
+On 9/23/20 7:19 PM, Maciej Żenczykowski wrote:
+>> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+>> index 5cc7425ee476..776ff58f969d 100644
+>> --- a/kernel/bpf/helpers.c
+>> +++ b/kernel/bpf/helpers.c
+>> @@ -155,6 +155,17 @@ const struct bpf_func_proto bpf_ktime_get_ns_proto = {
+>>         .ret_type       = RET_INTEGER,
+>>  };
+>>
+>> +BPF_CALL_0(bpf_ktime_get_real_ns)
+>> +{
+>> +       /* NMI safe access to clock realtime */
+>> +       return ktime_get_real_fast_ns();
+>> +}
+>> +
+>> +const struct bpf_func_proto bpf_ktime_get_real_ns_proto = {
+>> +       .func           = bpf_ktime_get_real_ns,
+>> +       .gpl_only       = true,
+> 
+> imho should be false, this is normally accessible to userspace code
+> via syscall, no reason why it should be gpl only for bpf
+> 
 
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- .../bpf/prog_tests/raw_tp_test_run.c          | 79 +++++++++++++++++++
- .../bpf/progs/test_raw_tp_test_run.c          | 25 ++++++
- 2 files changed, 104 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_test_ru=
-n.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_raw_tp_test_ru=
-n.c
+agreed, no reason for the bpf hook to be gpl_only.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_test_run.c b/t=
-ools/testing/selftests/bpf/prog_tests/raw_tp_test_run.c
-new file mode 100644
-index 0000000000000..92282d46cf1db
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/raw_tp_test_run.c
-@@ -0,0 +1,79 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2019 Facebook */
-+#include <test_progs.h>
-+#include <linux/bpf.h>
-+#include "bpf/libbpf_internal.h"
-+#include "test_raw_tp_test_run.skel.h"
-+
-+static int duration;
-+
-+void test_raw_tp_test_run(void)
-+{
-+	struct bpf_prog_test_run_attr test_attr =3D {};
-+	__u64 args[2] =3D {0x1234ULL, 0x5678ULL};
-+	int comm_fd =3D -1, err, nr_online, i;
-+	int expected_retval =3D 0x1234 + 0x5678;
-+	struct test_raw_tp_test_run *skel;
-+	char buf[] =3D "new_name";
-+	bool *online =3D NULL;
-+
-+	err =3D parse_cpu_mask_file("/sys/devices/system/cpu/online", &online,
-+				  &nr_online);
-+	if (CHECK(err, "parse_cpu_mask_file", "err %d\n", err))
-+		return;
-+
-+	skel =3D test_raw_tp_test_run__open_and_load();
-+	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
-+		goto cleanup;
-+
-+	err =3D test_raw_tp_test_run__attach(skel);
-+	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	comm_fd =3D open("/proc/self/comm", O_WRONLY|O_TRUNC);
-+	if (CHECK(comm_fd < 0, "open /proc/self/comm", "err %d\n", errno))
-+		goto cleanup;
-+
-+	err =3D write(comm_fd, buf, sizeof(buf));
-+	CHECK(err < 0, "task rename", "err %d", errno);
-+
-+	CHECK(skel->bss->count =3D=3D 0, "check_count", "didn't increase\n");
-+	CHECK(skel->data->on_cpu !=3D 0xffffffff, "check_on_cpu", "got wrong va=
-lue\n");
-+
-+	test_attr.prog_fd =3D bpf_program__fd(skel->progs.rename);
-+	test_attr.ctx_in =3D args;
-+	test_attr.ctx_size_in =3D sizeof(__u64);
-+
-+	err =3D bpf_prog_test_run_xattr(&test_attr);
-+	CHECK(err =3D=3D 0, "test_run", "should fail for too small ctx\n");
-+
-+	test_attr.ctx_size_in =3D sizeof(args);
-+	err =3D bpf_prog_test_run_xattr(&test_attr);
-+	CHECK(err < 0, "test_run", "err %d\n", errno);
-+	CHECK(test_attr.retval !=3D expected_retval, "check_retval",
-+	      "expect 0x%x, got 0x%x\n", expected_retval, test_attr.retval);
-+
-+	for (i =3D 0; i < nr_online; i++)
-+		if (online[i]) {
-+			DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-+				.ctx_in =3D args,
-+				.ctx_size_in =3D sizeof(args),
-+				.flags =3D BPF_F_TEST_RUN_ON_CPU,
-+				.retval =3D 0,
-+				.cpu =3D i,
-+			);
-+
-+			err =3D bpf_prog_test_run_opts(
-+				bpf_program__fd(skel->progs.rename), &opts);
-+			CHECK(err < 0, "test_run_opts", "err %d\n", errno);
-+			CHECK(skel->data->on_cpu !=3D i, "check_on_cpu",
-+			      "expect %d got %d\n", i, skel->data->on_cpu);
-+			CHECK(opts.retval !=3D expected_retval,
-+			      "check_retval", "expect 0x%x, got 0x%x\n",
-+			      expected_retval, opts.retval);
-+		}
-+cleanup:
-+	close(comm_fd);
-+	test_raw_tp_test_run__destroy(skel);
-+	free(online);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_raw_tp_test_run.c b/t=
-ools/testing/selftests/bpf/progs/test_raw_tp_test_run.c
-new file mode 100644
-index 0000000000000..6b356e003d16c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_raw_tp_test_run.c
-@@ -0,0 +1,25 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_endian.h>
-+#include <bpf/bpf_tracing.h>
-+
-+__u32 count =3D 0;
-+__u32 on_cpu =3D 0xffffffff;
-+
-+SEC("raw_tp/task_rename")
-+int BPF_PROG(rename, struct task_struct *task, char *comm)
-+{
-+
-+	count++;
-+	if ((__u64) task =3D=3D 0x1234ULL && (__u64) comm =3D=3D 0x5678ULL) {
-+		on_cpu =3D bpf_get_smp_processor_id();
-+		return (int)task + (int)comm;
-+	}
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
---=20
-2.24.1
-
+Glad to see the v2 of this patch; I wondered what happened to this helper.
