@@ -8,49 +8,49 @@ X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C1A5C4727F
-	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 20:55:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C969CC4727F
+	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 20:55:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4D49021D42
-	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 20:55:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8D1A82086A
+	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 20:55:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="XJWceLv8"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Olble4Yy"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728646AbgIYUzQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 25 Sep 2020 16:55:16 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:36556 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726980AbgIYUzP (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 25 Sep 2020 16:55:15 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08PKsA7G014836
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 13:55:15 -0700
+        id S1726980AbgIYUzU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 25 Sep 2020 16:55:20 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:6512 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728678AbgIYUzT (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 25 Sep 2020 16:55:19 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08PKroDw018423
+        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 13:55:18 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=9FoxGNmt0l80dPBqmmEMu9amF2HkYuE/ikSDpJSYISc=;
- b=XJWceLv8yoS89g3FR0Il2kj/uR7OmDD39J6Dj+Jaay92VlCQq07yZHzoDgiczr3HMycO
- k8KRnxneUABniDQ5UrGZGybf5SzzC4bqfaq5hI6eiNsjpw03QDyaRIVngWyzKkQeLfm4
- XCxEW4u2/VXHSYMMYzmTqT4wNfPbcBZatfM= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 33qsp69x05-9
+ bh=plmuG3u9RX7b6czZx0ClpnZ/EksMHPGyG3ssljVKwJE=;
+ b=Olble4YyJ3NyTFHHMgL9l59J6RKnfIjbsvXgMx7hiN5XpXtHJcY+NyARU2dLmOJVsn/M
+ sYdyD1yj5smQ7vWBMMSwYRogBZZ4hI66xCtzsj/mxVFsy70ngZHlCeP99dwQ7frouxwW
+ NQT8CdNV+gOsCG/MGcePsHP4poU7OpqVLjM= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 33qsp49ugd-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 13:55:15 -0700
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 13:55:18 -0700
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 25 Sep 2020 13:54:52 -0700
+ 15.1.1979.3; Fri, 25 Sep 2020 13:54:46 -0700
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id F410062E54A2; Fri, 25 Sep 2020 13:54:49 -0700 (PDT)
+        id ACBF962E54A2; Fri, 25 Sep 2020 13:54:39 -0700 (PDT)
 From:   Song Liu <songliubraving@fb.com>
 To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
 CC:     <kernel-team@fb.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <john.fastabend@gmail.com>, <kpsingh@chromium.org>,
         Song Liu <songliubraving@fb.com>,
         Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH v6 bpf-next 3/3] selftests/bpf: add raw_tp_test_run
-Date:   Fri, 25 Sep 2020 13:54:31 -0700
-Message-ID: <20200925205432.1777-4-songliubraving@fb.com>
+Subject: [PATCH v6 bpf-next 1/3] bpf: enable BPF_PROG_TEST_RUN for raw_tracepoint
+Date:   Fri, 25 Sep 2020 13:54:29 -0700
+Message-ID: <20200925205432.1777-2-songliubraving@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200925205432.1777-1-songliubraving@fb.com>
 References: <20200925205432.1777-1-songliubraving@fb.com>
@@ -60,9 +60,9 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-25_19:2020-09-24,2020-09-25 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
- mlxlogscore=999 clxscore=1015 suspectscore=2 impostorscore=0 adultscore=0
- lowpriorityscore=0 bulkscore=0 phishscore=0 spamscore=0 priorityscore=1501
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 adultscore=0
+ lowpriorityscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=999
+ clxscore=1015 phishscore=0 suspectscore=0 spamscore=0 bulkscore=0
  malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2006250000 definitions=main-2009250151
 X-FB-Internal: deliver
@@ -70,155 +70,250 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This test runs test_run for raw_tracepoint program. The test covers ctx
-input, retval output, and running on correct cpu.
+Add .test_run for raw_tracepoint. Also, introduce a new feature that runs
+the target program on a specific CPU. This is achieved by a new flag in
+bpf_attr.test, BPF_F_TEST_RUN_ON_CPU. When this flag is set, the program
+is triggered on cpu with id bpf_attr.test.cpu. This feature is needed for
+BPF programs that handle perf_event and other percpu resources, as the
+program can access these resource locally.
 
+Acked-by: John Fastabend <john.fastabend@gmail.com>
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
- .../bpf/prog_tests/raw_tp_test_run.c          | 96 +++++++++++++++++++
- .../bpf/progs/test_raw_tp_test_run.c          | 24 +++++
- 2 files changed, 120 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_test_ru=
-n.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_raw_tp_test_ru=
-n.c
+ include/linux/bpf.h            |  3 ++
+ include/uapi/linux/bpf.h       |  7 +++
+ kernel/bpf/syscall.c           |  2 +-
+ kernel/trace/bpf_trace.c       |  1 +
+ net/bpf/test_run.c             | 91 ++++++++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h |  7 +++
+ 6 files changed, 110 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_test_run.c b/t=
-ools/testing/selftests/bpf/prog_tests/raw_tp_test_run.c
-new file mode 100644
-index 0000000000000..c5fb191874acf
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/raw_tp_test_run.c
-@@ -0,0 +1,96 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2019 Facebook */
-+#include <test_progs.h>
-+#include <linux/bpf.h>
-+#include "bpf/libbpf_internal.h"
-+#include "test_raw_tp_test_run.skel.h"
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index fc5c901c75421..efa7245ed76e0 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1381,6 +1381,9 @@ int bpf_prog_test_run_tracing(struct bpf_prog *prog=
+,
+ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
+ 				     const union bpf_attr *kattr,
+ 				     union bpf_attr __user *uattr);
++int bpf_prog_test_run_raw_tp(struct bpf_prog *prog,
++			     const union bpf_attr *kattr,
++			     union bpf_attr __user *uattr);
+ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
+ 		    const struct bpf_prog *prog,
+ 		    struct bpf_insn_access_aux *info);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index a22812561064a..05e480f66f475 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -424,6 +424,11 @@ enum {
+  */
+ #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
+=20
++/* Flags for BPF_PROG_TEST_RUN */
 +
-+static int duration;
++/* If set, run the test on the cpu specified by bpf_attr.test.cpu */
++#define BPF_F_TEST_RUN_ON_CPU	(1U << 0)
 +
-+void test_raw_tp_test_run(void)
+ /* type for BPF_ENABLE_STATS */
+ enum bpf_stats_type {
+ 	/* enabled run_time_ns and run_cnt */
+@@ -566,6 +571,8 @@ union bpf_attr {
+ 						 */
+ 		__aligned_u64	ctx_in;
+ 		__aligned_u64	ctx_out;
++		__u32		flags;
++		__u32		cpu;
+ 	} test;
+=20
+ 	struct { /* anonymous struct used by BPF_*_GET_*_ID */
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 2740df19f55e9..3bc2ed2e171be 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2979,7 +2979,7 @@ static int bpf_prog_query(const union bpf_attr *att=
+r,
+ 	}
+ }
+=20
+-#define BPF_PROG_TEST_RUN_LAST_FIELD test.ctx_out
++#define BPF_PROG_TEST_RUN_LAST_FIELD test.cpu
+=20
+ static int bpf_prog_test_run(const union bpf_attr *attr,
+ 			     union bpf_attr __user *uattr)
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 36508f46a8dbf..2834866d379ae 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1678,6 +1678,7 @@ const struct bpf_verifier_ops raw_tracepoint_verifi=
+er_ops =3D {
+ };
+=20
+ const struct bpf_prog_ops raw_tracepoint_prog_ops =3D {
++	.test_run =3D bpf_prog_test_run_raw_tp,
+ };
+=20
+ const struct bpf_verifier_ops tracing_verifier_ops =3D {
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index a66f211726e7c..fde5db93507c4 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -11,6 +11,7 @@
+ #include <net/sock.h>
+ #include <net/tcp.h>
+ #include <linux/error-injection.h>
++#include <linux/smp.h>
+=20
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/bpf_test_run.h>
+@@ -204,6 +205,9 @@ int bpf_prog_test_run_tracing(struct bpf_prog *prog,
+ 	int b =3D 2, err =3D -EFAULT;
+ 	u32 retval =3D 0;
+=20
++	if (kattr->test.flags || kattr->test.cpu)
++		return -EINVAL;
++
+ 	switch (prog->expected_attach_type) {
+ 	case BPF_TRACE_FENTRY:
+ 	case BPF_TRACE_FEXIT:
+@@ -236,6 +240,87 @@ int bpf_prog_test_run_tracing(struct bpf_prog *prog,
+ 	return err;
+ }
+=20
++struct bpf_raw_tp_test_run_info {
++	struct bpf_prog *prog;
++	void *ctx;
++	u32 retval;
++};
++
++static void
++__bpf_prog_test_run_raw_tp(void *data)
 +{
-+	struct bpf_prog_test_run_attr test_attr =3D {};
-+	int comm_fd =3D -1, err, nr_online, i, prog_fd;
-+	__u64 args[2] =3D {0x1234ULL, 0x5678ULL};
-+	int expected_retval =3D 0x1234 + 0x5678;
-+	struct test_raw_tp_test_run *skel;
-+	char buf[] =3D "new_name";
-+	bool *online =3D NULL;
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-+			    .ctx_in =3D args,
-+			    .ctx_size_in =3D sizeof(args),
-+			    .flags =3D BPF_F_TEST_RUN_ON_CPU,
-+		);
++	struct bpf_raw_tp_test_run_info *info =3D data;
 +
-+	err =3D parse_cpu_mask_file("/sys/devices/system/cpu/online", &online,
-+				  &nr_online);
-+	if (CHECK(err, "parse_cpu_mask_file", "err %d\n", err))
-+		return;
-+
-+	skel =3D test_raw_tp_test_run__open_and_load();
-+	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
-+		goto cleanup;
-+
-+	err =3D test_raw_tp_test_run__attach(skel);
-+	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	comm_fd =3D open("/proc/self/comm", O_WRONLY|O_TRUNC);
-+	if (CHECK(comm_fd < 0, "open /proc/self/comm", "err %d\n", errno))
-+		goto cleanup;
-+
-+	err =3D write(comm_fd, buf, sizeof(buf));
-+	CHECK(err < 0, "task rename", "err %d", errno);
-+
-+	CHECK(skel->bss->count =3D=3D 0, "check_count", "didn't increase\n");
-+	CHECK(skel->data->on_cpu !=3D 0xffffffff, "check_on_cpu", "got wrong va=
-lue\n");
-+
-+	prog_fd =3D bpf_program__fd(skel->progs.rename);
-+	test_attr.prog_fd =3D prog_fd;
-+	test_attr.ctx_in =3D args;
-+	test_attr.ctx_size_in =3D sizeof(__u64);
-+
-+	err =3D bpf_prog_test_run_xattr(&test_attr);
-+	CHECK(err =3D=3D 0, "test_run", "should fail for too small ctx\n");
-+
-+	test_attr.ctx_size_in =3D sizeof(args);
-+	err =3D bpf_prog_test_run_xattr(&test_attr);
-+	CHECK(err < 0, "test_run", "err %d\n", errno);
-+	CHECK(test_attr.retval !=3D expected_retval, "check_retval",
-+	      "expect 0x%x, got 0x%x\n", expected_retval, test_attr.retval);
-+
-+	for (i =3D 0; i < nr_online; i++) {
-+		if (!online[i])
-+			continue;
-+
-+		opts.cpu =3D i;
-+		opts.retval =3D 0;
-+		err =3D bpf_prog_test_run_opts(prog_fd, &opts);
-+		CHECK(err < 0, "test_run_opts", "err %d\n", errno);
-+		CHECK(skel->data->on_cpu !=3D i, "check_on_cpu",
-+		      "expect %d got %d\n", i, skel->data->on_cpu);
-+		CHECK(opts.retval !=3D expected_retval,
-+		      "check_retval", "expect 0x%x, got 0x%x\n",
-+		      expected_retval, opts.retval);
-+	}
-+
-+	/* invalid cpu ID should fail with ENXIO */
-+	opts.cpu =3D 0xffffffff;
-+	err =3D bpf_prog_test_run_opts(prog_fd, &opts);
-+	CHECK(err !=3D -1 || errno !=3D ENXIO,
-+	      "test_run_opts_fail",
-+	      "should failed with ENXIO\n");
-+
-+	/* non-zero cpu w/o BPF_F_TEST_RUN_ON_CPU should fail with EINVAL */
-+	opts.cpu =3D 1;
-+	opts.flags =3D 0;
-+	err =3D bpf_prog_test_run_opts(prog_fd, &opts);
-+	CHECK(err !=3D -1 || errno !=3D EINVAL,
-+	      "test_run_opts_fail",
-+	      "should failed with EINVAL\n");
-+
-+cleanup:
-+	close(comm_fd);
-+	test_raw_tp_test_run__destroy(skel);
-+	free(online);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_raw_tp_test_run.c b/t=
-ools/testing/selftests/bpf/progs/test_raw_tp_test_run.c
-new file mode 100644
-index 0000000000000..1521853597d70
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_raw_tp_test_run.c
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+__u32 count =3D 0;
-+__u32 on_cpu =3D 0xffffffff;
-+
-+SEC("raw_tp/task_rename")
-+int BPF_PROG(rename, struct task_struct *task, char *comm)
-+{
-+
-+	count++;
-+	if ((__u64) task =3D=3D 0x1234ULL && (__u64) comm =3D=3D 0x5678ULL) {
-+		on_cpu =3D bpf_get_smp_processor_id();
-+		return (int)task + (int)comm;
-+	}
-+
-+	return 0;
++	rcu_read_lock();
++	migrate_disable();
++	info->retval =3D BPF_PROG_RUN(info->prog, info->ctx);
++	migrate_enable();
++	rcu_read_unlock();
 +}
 +
-+char _license[] SEC("license") =3D "GPL";
++int bpf_prog_test_run_raw_tp(struct bpf_prog *prog,
++			     const union bpf_attr *kattr,
++			     union bpf_attr __user *uattr)
++{
++	void __user *ctx_in =3D u64_to_user_ptr(kattr->test.ctx_in);
++	__u32 ctx_size_in =3D kattr->test.ctx_size_in;
++	struct bpf_raw_tp_test_run_info info;
++	int cpu =3D kattr->test.cpu, err =3D 0;
++
++	/* doesn't support data_in/out, ctx_out, duration, or repeat */
++	if (kattr->test.data_in || kattr->test.data_out ||
++	    kattr->test.ctx_out || kattr->test.duration ||
++	    kattr->test.repeat)
++		return -EINVAL;
++
++	if (ctx_size_in < prog->aux->max_ctx_offset)
++		return -EINVAL;
++
++	if ((kattr->test.flags & BPF_F_TEST_RUN_ON_CPU) =3D=3D 0 && cpu !=3D 0)
++		return -EINVAL;
++
++	if (ctx_size_in) {
++		info.ctx =3D kzalloc(ctx_size_in, GFP_USER);
++		if (!info.ctx)
++			return -ENOMEM;
++		if (copy_from_user(info.ctx, ctx_in, ctx_size_in)) {
++			err =3D -EFAULT;
++			goto out;
++		}
++	} else {
++		info.ctx =3D NULL;
++	}
++
++	info.prog =3D prog;
++
++	if ((kattr->test.flags & BPF_F_TEST_RUN_ON_CPU) =3D=3D 0 ||
++	    cpu =3D=3D smp_processor_id()) {
++		__bpf_prog_test_run_raw_tp(&info);
++	} else {
++		/* smp_call_function_single() also checks cpu_online()
++		 * after csd_lock(). However, since cpu is from user
++		 * space, let's do an extra quick check to filter out
++		 * invalid value before smp_call_function_single().
++		 */
++		if (cpu >=3D nr_cpu_ids || !cpu_online(cpu)) {
++			err =3D -ENXIO;
++			goto out;
++		}
++
++		err =3D smp_call_function_single(cpu, __bpf_prog_test_run_raw_tp,
++					       &info, 1);
++		if (err)
++			goto out;
++	}
++
++	if (copy_to_user(&uattr->test.retval, &info.retval, sizeof(u32)))
++		err =3D -EFAULT;
++
++out:
++	kfree(info.ctx);
++	return err;
++}
++
+ static void *bpf_ctx_init(const union bpf_attr *kattr, u32 max_size)
+ {
+ 	void __user *data_in =3D u64_to_user_ptr(kattr->test.ctx_in);
+@@ -410,6 +495,9 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, cons=
+t union bpf_attr *kattr,
+ 	void *data;
+ 	int ret;
+=20
++	if (kattr->test.flags || kattr->test.cpu)
++		return -EINVAL;
++
+ 	data =3D bpf_test_init(kattr, size, NET_SKB_PAD + NET_IP_ALIGN,
+ 			     SKB_DATA_ALIGN(sizeof(struct skb_shared_info)));
+ 	if (IS_ERR(data))
+@@ -607,6 +695,9 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog =
+*prog,
+ 	if (prog->type !=3D BPF_PROG_TYPE_FLOW_DISSECTOR)
+ 		return -EINVAL;
+=20
++	if (kattr->test.flags || kattr->test.cpu)
++		return -EINVAL;
++
+ 	if (size < ETH_HLEN)
+ 		return -EINVAL;
+=20
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index a22812561064a..05e480f66f475 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -424,6 +424,11 @@ enum {
+  */
+ #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
+=20
++/* Flags for BPF_PROG_TEST_RUN */
++
++/* If set, run the test on the cpu specified by bpf_attr.test.cpu */
++#define BPF_F_TEST_RUN_ON_CPU	(1U << 0)
++
+ /* type for BPF_ENABLE_STATS */
+ enum bpf_stats_type {
+ 	/* enabled run_time_ns and run_cnt */
+@@ -566,6 +571,8 @@ union bpf_attr {
+ 						 */
+ 		__aligned_u64	ctx_in;
+ 		__aligned_u64	ctx_out;
++		__u32		flags;
++		__u32		cpu;
+ 	} test;
+=20
+ 	struct { /* anonymous struct used by BPF_*_GET_*_ID */
 --=20
 2.24.1
 
