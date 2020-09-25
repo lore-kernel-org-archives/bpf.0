@@ -2,165 +2,125 @@ Return-Path: <SRS0=/Hy+=DC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EE488C4727E
-	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 21:08:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D857C4727E
+	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 21:25:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D5D923730
-	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 21:08:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1512F21D7F
+	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 21:25:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=amacapital-net.20150623.gappssmtp.com header.i=@amacapital-net.20150623.gappssmtp.com header.b="wWJDp7DJ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Zy6Uq+Sz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726781AbgIYVIA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 25 Sep 2020 17:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726309AbgIYVIA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 25 Sep 2020 17:08:00 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51DCC0613CE
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 14:07:59 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id s13so503492wmh.4
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 14:07:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=K97X2RHTYq4ARTwka6ZMNlPXc27d+vNcQg3ndyKU7S4=;
-        b=wWJDp7DJ/HSLsogZGC8Djl65CIcLMR4WYa3ADAj6UKKThfriQIIl0AP5YkYOCeZjQg
-         KvWcIpXuUmNNcLIcy0qIPpol6N1nCEXLafFw0RqOTH4dc3O8g1f6JLmWNIBhig9vRNwL
-         DH/d7LjlahlLTw4oUcx+CVrvoJOFZowbGEJCfrBLFxTQxvj+HdwfFKnqKyug0MqleX7P
-         7uIXwrDM/O+qcsf+ArWoYr85x58YYnxGkdVf8ILr8dVNn5HGGWFx/QBUt0YIZYC8ubGb
-         L8zS0WxjNwMO0RbpE7WFpzZIVgW+bBfk06GgnPTlhDZ6qBiWQ2S3l5yLVpSMzXpDOaK7
-         vL8A==
+        id S1729260AbgIYVZI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 25 Sep 2020 17:25:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:54674 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729522AbgIYVZH (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 25 Sep 2020 17:25:07 -0400
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1601069106;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=it5ErVQ9w78IEwPzrMsZouVB/NLpxKqq/aiTiBgHUus=;
+        b=Zy6Uq+Sz4Id5GsjytSeCVKwnx4dlVvOsr7mkdu4lYqvOR/cuQOfjFtVIefXlD/nLlUsBRr
+        KnK0PhVv5vIDDKfKhAv5b+o2Rk4gG8T3ES0+oTfqWUZmWDuyN5iUKf/VzwvlZZcnesew1G
+        WHnbzuE4kNcLGKmP8YTv1dgrSJ3/mWg=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-394--jDVvJvrMv-2b36PuMNDgw-1; Fri, 25 Sep 2020 17:25:04 -0400
+X-MC-Unique: -jDVvJvrMv-2b36PuMNDgw-1
+Received: by mail-wr1-f69.google.com with SMTP id a12so1580271wrg.13
+        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 14:25:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=K97X2RHTYq4ARTwka6ZMNlPXc27d+vNcQg3ndyKU7S4=;
-        b=kHBIn025hj1JkDNYUwa0BTLFsBdP/icUdovSUQ1P/8sniaPqTFhlLuzwcmnwbeij3j
-         cxzcqcsGn0J4mIdjzeYbPXJNxCGijap3lkgONNMVQ5pUqKpml5GkrnTYO/KiK5ucQEAV
-         o3aphG89A3YUg2MngsyI4rGdG3RG9e7Rje46Kb9PF3ePFNd7wn+mlXdDjmC+8tTApNUE
-         ytSEJwe+SaltWJsSfBQxfw4iUCDUKvJV6E6zd2LXdZN6ExGSB8KbTSZ6m05WYEhxfLHy
-         WWT2hMsDhPxAfEpta0XceRmdB2ie43PSIamc5h0kqNCN0GbkKLMNEFmmXU9DZ2kJZl4I
-         gGKw==
-X-Gm-Message-State: AOAM533jQN9935+eKYKYE4dlQtJPLd3t12MdWlpSzQMcN379ZKGoRY++
-        alZbOKpKIdzJ/ZBwLEz6ZNfVoLlfCyXPdZi0KPu61A==
-X-Google-Smtp-Source: ABdhPJybyFObTULGeYsdiwfil6bHB/bVxxQM+SWeMyX++xGCC6MaJ/cX0aYsdELwah2M/FxoIVL6b6QjN4YOeSHoolY=
-X-Received: by 2002:a1c:740c:: with SMTP id p12mr445421wmc.176.1601068078574;
- Fri, 25 Sep 2020 14:07:58 -0700 (PDT)
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=it5ErVQ9w78IEwPzrMsZouVB/NLpxKqq/aiTiBgHUus=;
+        b=lhPb44R6ReENwiyCFezvVYDOrrZR0N6K7fse4TW1qMz7dcV9YoGxzLU5a7BYHakBFL
+         RFt2RB7e3/zJY7Y6V9mRqHxrsrtX5eLtGc8tFpndDCwfQpBKHPwBVLgJ10ZTkqv4I3IM
+         5hj00crziPyirCNNOXwwbA4lXe+D16b1pioIdHzjD2WpRP/EX3l6/EYRnUSnXBzCJn7I
+         JrvZtksTa5n+Zkrtpm7X4mhk3f+m+XM3wCb9CRHuADGx3MmatLOzD8sC4tWJbcLwpJwj
+         5OTYPVuXa0OEBwyOJ4j33ww5yV2ZFNg8TNKx0cgZ9bx5sUXzxsYP8RNa8kZzWWNrM5EC
+         g2Yg==
+X-Gm-Message-State: AOAM531Utm0G/yE3gW/OiZ2YsJ5R3aA+BlC9U78IEd82Xw/XbMz6Nz98
+        6+RY82GNOHzAz1Zxb+VFuPOTrnyZUe/sh82N85wYgSDrVogWSVSkoH2cO39DRAQ6LlSbRfbs8HK
+        MpVibCmNDPt59
+X-Received: by 2002:adf:a3d8:: with SMTP id m24mr6395132wrb.418.1601069103150;
+        Fri, 25 Sep 2020 14:25:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzPId+IZEsxZEWRovMUxoRBAzvDuFPYsRnMS78OlD1ckoyGcyrMSWRp0AJk3IQ3p0TdIrZ7Bg==
+X-Received: by 2002:adf:a3d8:: with SMTP id m24mr6395109wrb.418.1601069102684;
+        Fri, 25 Sep 2020 14:25:02 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id m18sm289873wmg.32.2020.09.25.14.25.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2020 14:25:02 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id B28A4183C5C; Fri, 25 Sep 2020 23:25:00 +0200 (CEST)
+Subject: [PATCH bpf-next v9 01/11] bpf: disallow attaching modify_return
+ tracing functions to other BPF programs
+From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Date:   Fri, 25 Sep 2020 23:25:00 +0200
+Message-ID: <160106910067.27725.5163435783598211744.stgit@toke.dk>
+In-Reply-To: <160106909952.27725.8383447127582216829.stgit@toke.dk>
+References: <160106909952.27725.8383447127582216829.stgit@toke.dk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-References: <202009251223.8E46C831E2@keescook> <2FA23A2E-16B0-4E08-96D5-6D6FE45BBCF6@amacapital.net>
- <202009251332.24CE0C58@keescook>
-In-Reply-To: <202009251332.24CE0C58@keescook>
-From:   Andy Lutomirski <luto@amacapital.net>
-Date:   Fri, 25 Sep 2020 14:07:46 -0700
-Message-ID: <CALCETrU_UpcLhXSG84SA6QkAYe8xXn4AXPKeud-=Adp57u54Mg@mail.gmail.com>
-Subject: Re: [PATCH v2 seccomp 3/6] seccomp/cache: Add "emulator" to check if
- filter is arg-dependent
-To:     Kees Cook <keescook@chromium.org>
-Cc:     YiFei Zhu <zhuyifei1999@gmail.com>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        YiFei Zhu <yifeifz2@illinois.edu>, bpf <bpf@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Hubertus Franke <frankeh@us.ibm.com>,
-        Jack Chen <jianyan2@illinois.edu>,
-        Jann Horn <jannh@google.com>,
-        Josep Torrellas <torrella@illinois.edu>,
-        Tianyin Xu <tyxu@illinois.edu>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Valentin Rothberg <vrothber@redhat.com>,
-        Will Drewry <wad@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 1:37 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Fri, Sep 25, 2020 at 12:51:20PM -0700, Andy Lutomirski wrote:
-> >
-> >
-> > > On Sep 25, 2020, at 12:42 PM, Kees Cook <keescook@chromium.org> wrote=
-:
-> > >
-> > > =EF=BB=BFOn Fri, Sep 25, 2020 at 11:45:05AM -0500, YiFei Zhu wrote:
-> > >> On Thu, Sep 24, 2020 at 10:04 PM YiFei Zhu <zhuyifei1999@gmail.com> =
-wrote:
-> > >>>> Why do the prepare here instead of during attach? (And note that i=
-t
-> > >>>> should not be written to fail.)
-> > >>>
-> > >>> Right.
-> > >>
-> > >> During attach a spinlock (current->sighand->siglock) is held. Do we
-> > >> really want to put the emulator in the "atomic section"?
-> > >
-> > > It's a good point, but I had some other ideas around it that lead to =
-me
-> > > a different conclusion. Here's what I've got in my head:
-> > >
-> > > I don't view filter attach (nor the siglock) as fastpath: the lock is
-> > > rarely contested and the "long time" will only be during filter attac=
-h.
-> > >
-> > > When performing filter emulation, all the syscalls that are already
-> > > marked as "must run filter" on the previous filter can be skipped for
-> > > the new filter, since it cannot change the outcome, which makes the
-> > > emulation step faster.
-> > >
-> > > The previous filter's bitmap isn't "stable" until siglock is held.
-> > >
-> > > If we do the emulation step before siglock, we have to always do full
-> > > evaluation of all syscalls, and then merge the bitmap during attach.
-> > > That means all filters ever attached will take maximal time to perfor=
-m
-> > > emulation.
-> > >
-> > > I prefer the idea of the emulation step taking advantage of the bitma=
-p
-> > > optimization, since the kernel spends less time doing work over the l=
-ife
-> > > of the process tree. It's certainly marginal, but it also lets all th=
-e
-> > > bitmap manipulation stay in one place (as opposed to being split betw=
-een
-> > > "prepare" and "attach").
-> > >
-> > > What do you think?
-> > >
-> > >
-> >
-> > I=E2=80=99m wondering if we should be much much lazier. We could potent=
-ially wait until someone actually tries to do a given syscall before we try=
- to evaluate whether the result is fixed.
->
-> That seems like we'd need to track yet another bitmap of "did we emulate
-> this yet?" And it means the filter isn't really "done" until you run
-> another syscall? eeh, I'm not a fan: it scratches at my desire for
-> determinism. ;) Or maybe my implementation imagination is missing
-> something?
->
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-We'd need at least three states per syscall: unknown, always-allow,
-and need-to-run-filter.
+From the checks and commit messages for modify_return, it seems it was
+never the intention that it should be possible to attach a tracing program
+with expected_attach_type == BPF_MODIFY_RETURN to another BPF program.
+However, check_attach_modify_return() will only look at the function name,
+so if the target function starts with "security_", the attach will be
+allowed even for bpf2bpf attachment.
 
-The downsides are less determinism and a bit of an uglier
-implementation.  The upside is that we don't need to loop over all
-syscalls at load -- instead the time that each operation takes is
-independent of the total number of syscalls on the system.  And we can
-entirely avoid, say, evaluating the x32 case until the task tries an
-x32 syscall.
+Fix this oversight by also blocking the modification if a target program is
+supplied.
 
-I think it's at least worth considering.
+Fixes: 18644cec714a ("bpf: Fix use-after-free in fmod_ret check")
+Fixes: 6ba43b761c41 ("bpf: Attachment verification for BPF_MODIFY_RETURN")
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ kernel/bpf/verifier.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
---Andy
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 42dee5dcbc74..66b6714b3fd7 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11470,6 +11470,11 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 				verbose(env, "%s is not sleepable\n",
+ 					prog->aux->attach_func_name);
+ 		} else if (prog->expected_attach_type == BPF_MODIFY_RETURN) {
++			if (tgt_prog) {
++				verbose(env, "can't modify return codes of BPF programs\n");
++				ret = -EINVAL;
++				goto out;
++			}
+ 			ret = check_attach_modify_return(prog, addr);
+ 			if (ret)
+ 				verbose(env, "%s() is not modifiable\n",
+
