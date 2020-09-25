@@ -5,50 +5,51 @@ X-Spam-Level:
 X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C6D8C4363D
-	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 00:04:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08958C4346E
+	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 00:04:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 22388239D4
-	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 00:04:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 95D3D2396D
+	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 00:04:21 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Ur/l8LkW"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ZifPAYhW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726830AbgIYAEE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Sep 2020 20:04:04 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:12448 "EHLO
+        id S1726762AbgIYAEV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Sep 2020 20:04:21 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:2138 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726700AbgIYAEE (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 24 Sep 2020 20:04:04 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08P03Qsq012156
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2020 17:04:03 -0700
+        by vger.kernel.org with ESMTP id S1726704AbgIYAEV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 24 Sep 2020 20:04:21 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08P01loZ001314
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2020 17:04:20 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=BgiMojMhFXloWdnXigmN42Pwpf5RcSPq0vx4UV8KFkU=;
- b=Ur/l8LkW1YHHGMrweslG5YnUhVHsvSiClHIjRdY4N4b4KSdPDnBbhtac8ZhC1A+mfpJW
- IzE5r/tG/Cbj1EAA3IulZpaLEDC1n9lXFjfP41ygk1X+mMl1AKq2a89nuFlwKq68o2W4
- u4uWL2Fc2CTjmOS80/KmVprCXoi571wFCQ8= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 33qsp54t9n-3
+ bh=ZcVfyDdgAOGZnc2CG5NhswmfJeEqkvWVtC5LDBKg96M=;
+ b=ZifPAYhWVyXJJ5P+Tk2uzOlYmewWxAPMcHQRJX5ShtH8DOUzoJ6bVgEzdd2e+clU6sbY
+ ytojyG7onSMw2UY3wYo9tKNqteFTApw7eJRKve0Bo6qxNS5lAFdIcEDhQwNKjiNEH/rh
+ 1nu8rEcdT1vjC1kfHPVWya4wN4sOgd4l4FY= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 33qsp84n7b-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2020 17:04:03 -0700
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2020 17:04:11 -0700
+Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 24 Sep 2020 17:03:51 -0700
+ 15.1.1979.3; Thu, 24 Sep 2020 17:04:11 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 56ACE2946606; Thu, 24 Sep 2020 17:03:50 -0700 (PDT)
+        id C64D52946606; Thu, 24 Sep 2020 17:04:02 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Lorenz Bauer <lmb@cloudflare.com>, <netdev@vger.kernel.org>
-Subject: [PATCH v4 bpf-next 02/13] bpf: Enable bpf_skc_to_* sock casting helper to networking prog type
-Date:   Thu, 24 Sep 2020 17:03:50 -0700
-Message-ID: <20200925000350.3855720-1-kafai@fb.com>
+Subject: [PATCH v4 bpf-next 04/13] bpf: Change bpf_sk_storage_*() to accept ARG_PTR_TO_BTF_ID_SOCK_COMMON
+Date:   Thu, 24 Sep 2020 17:04:02 -0700
+Message-ID: <20200925000402.3856307-1-kafai@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200925000337.3853598-1-kafai@fb.com>
 References: <20200925000337.3853598-1-kafai@fb.com>
@@ -58,398 +59,213 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-24_18:2020-09-24,2020-09-24 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 adultscore=0
- malwarescore=0 spamscore=0 mlxlogscore=999 suspectscore=1 bulkscore=0
- clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009240174
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ mlxlogscore=999 spamscore=0 adultscore=0 phishscore=0 malwarescore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 suspectscore=38
+ priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2009240174
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There is a constant need to add more fields into the bpf_tcp_sock
-for the bpf programs running at tc, sock_ops...etc.
+This patch changes the bpf_sk_storage_*() to take
+ARG_PTR_TO_BTF_ID_SOCK_COMMON such that they will work with the pointer
+returned by the bpf_skc_to_*() helpers also.
 
-A current workaround could be to use bpf_probe_read_kernel().  However,
-other than making another helper call for reading each field and missing
-CO-RE, it is also not as intuitive to use as directly reading
-"tp->lsndtime" for example.  While already having perfmon cap to do
-bpf_probe_read_kernel(), it will be much easier if the bpf prog can
-directly read from the tcp_sock.
+A micro benchmark has been done on a "cgroup_skb/egress" bpf program
+which does a bpf_sk_storage_get().  It was driven by netperf doing
+a 4096 connected UDP_STREAM test with 64bytes packet.
+The stats from "kernel.bpf_stats_enabled" shows no meaningful difference.
 
-This patch tries to do that by using the existing casting-helpers
-bpf_skc_to_*() whose func_proto returns a btf_id.  For example, the
-func_proto of bpf_skc_to_tcp_sock returns the btf_id of the
-kernel "struct tcp_sock".
+The sk_storage_get_btf_proto, sk_storage_delete_btf_proto,
+btf_sk_storage_get_proto, and btf_sk_storage_delete_proto are
+no longer needed, so they are removed.
 
-These helpers are also added to is_ptr_cast_function().
-It ensures the returning reg (BPF_REF_0) will also carries the ref_obj_id=
-.
-That will keep the ref-tracking works properly.
-
-The bpf_skc_to_* helpers are made available to most of the bpf prog
-types in filter.c. The bpf_skc_to_* helpers will be limited by
-perfmon cap.
-
-This patch adds a ARG_PTR_TO_BTF_ID_SOCK_COMMON.  The helper accepting
-this arg can accept a btf-id-ptr (PTR_TO_BTF_ID + &btf_sock_ids[BTF_SOCK_=
-TYPE_SOCK_COMMON])
-or a legacy-ctx-convert-skc-ptr (PTR_TO_SOCK_COMMON).  The bpf_skc_to_*()
-helpers are changed to take ARG_PTR_TO_BTF_ID_SOCK_COMMON such that
-they will accept pointer obtained from skb->sk.
-
-Instead of specifying both arg_type and arg_btf_id in the same func_proto
-which is how the current ARG_PTR_TO_BTF_ID does, the arg_btf_id of
-the new ARG_PTR_TO_BTF_ID_SOCK_COMMON is specified in the
-compatible_reg_types[] in verifier.c.  The reason is the arg_btf_id is
-always the same.  Discussion in this thread:
-https://lore.kernel.org/bpf/20200922070422.1917351-1-kafai@fb.com/
-
-The ARG_PTR_TO_BTF_ID_ part gives a clear expectation that the helper is
-expecting a PTR_TO_BTF_ID which could be NULL.  This is the same
-behavior as the existing helper taking ARG_PTR_TO_BTF_ID.
-
-The _SOCK_COMMON part means the helper is also expecting the legacy
-SOCK_COMMON pointer.
-
-By excluding the _OR_NULL part, the bpf prog cannot call helper
-with a literal NULL which doesn't make sense in most cases.
-e.g. bpf_skc_to_tcp_sock(NULL) will be rejected.  All PTR_TO_*_OR_NULL
-reg has to do a NULL check first before passing into the helper or else
-the bpf prog will be rejected.  This behavior is nothing new and
-consistent with the current expectation during bpf-prog-load.
-
-[ ARG_PTR_TO_BTF_ID_SOCK_COMMON will be used to replace
-  ARG_PTR_TO_SOCK* of other existing helpers later such that
-  those existing helpers can take the PTR_TO_BTF_ID returned by
-  the bpf_skc_to_*() helpers.
-
-  The only special case is bpf_sk_lookup_assign() which can accept a
-  literal NULL ptr.  It has to be handled specially in another follow
-  up patch if there is a need (e.g. by renaming ARG_PTR_TO_SOCKET_OR_NULL
-  to ARG_PTR_TO_BTF_ID_SOCK_COMMON_OR_NULL). ]
-
-[ When converting the older helpers that take ARG_PTR_TO_SOCK* in
-  the later patch, if the kernel does not support BTF,
-  ARG_PTR_TO_BTF_ID_SOCK_COMMON will behave like ARG_PTR_TO_SOCK_COMMON
-  because no reg->type could have PTR_TO_BTF_ID in this case.
-
-  It is not a concern for the newer-btf-only helper like the bpf_skc_to_*=
-()
-  here though because these helpers must require BTF vmlinux to begin
-  with. ]
-
+Acked-by: Lorenz Bauer <lmb@cloudflare.com>
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- include/linux/bpf.h   |  1 +
- kernel/bpf/verifier.c | 34 +++++++++++++++++++--
- net/core/filter.c     | 69 ++++++++++++++++++++++++++++++-------------
- 3 files changed, 82 insertions(+), 22 deletions(-)
+ include/net/bpf_sk_storage.h   |  2 --
+ include/uapi/linux/bpf.h       |  1 +
+ kernel/bpf/bpf_lsm.c           |  4 ++--
+ net/core/bpf_sk_storage.c      | 29 ++++++-----------------------
+ net/ipv4/bpf_tcp_ca.c          | 23 ++---------------------
+ tools/include/uapi/linux/bpf.h |  1 +
+ 6 files changed, 12 insertions(+), 48 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index fc5c901c7542..d0937f1d2980 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -292,6 +292,7 @@ enum bpf_arg_type {
- 	ARG_PTR_TO_ALLOC_MEM,	/* pointer to dynamically allocated memory */
- 	ARG_PTR_TO_ALLOC_MEM_OR_NULL,	/* pointer to dynamically allocated memor=
-y or NULL */
- 	ARG_CONST_ALLOC_SIZE_OR_ZERO,	/* number of allocated bytes requested */
-+	ARG_PTR_TO_BTF_ID_SOCK_COMMON,	/* pointer to in-kernel sock_common or b=
-pf-mirrored bpf_sock */
- 	__BPF_ARG_TYPE_MAX,
- };
+diff --git a/include/net/bpf_sk_storage.h b/include/net/bpf_sk_storage.h
+index 119f4c9c3a9c..3c516dd07caf 100644
+--- a/include/net/bpf_sk_storage.h
++++ b/include/net/bpf_sk_storage.h
+@@ -20,8 +20,6 @@ void bpf_sk_storage_free(struct sock *sk);
 =20
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 945fa2b4d096..d4ba29fb17a6 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -486,7 +486,12 @@ static bool is_acquire_function(enum bpf_func_id fun=
-c_id,
- static bool is_ptr_cast_function(enum bpf_func_id func_id)
- {
- 	return func_id =3D=3D BPF_FUNC_tcp_sock ||
--		func_id =3D=3D BPF_FUNC_sk_fullsock;
-+		func_id =3D=3D BPF_FUNC_sk_fullsock ||
-+		func_id =3D=3D BPF_FUNC_skc_to_tcp_sock ||
-+		func_id =3D=3D BPF_FUNC_skc_to_tcp6_sock ||
-+		func_id =3D=3D BPF_FUNC_skc_to_udp6_sock ||
-+		func_id =3D=3D BPF_FUNC_skc_to_tcp_timewait_sock ||
-+		func_id =3D=3D BPF_FUNC_skc_to_tcp_request_sock;
- }
+ extern const struct bpf_func_proto bpf_sk_storage_get_proto;
+ extern const struct bpf_func_proto bpf_sk_storage_delete_proto;
+-extern const struct bpf_func_proto sk_storage_get_btf_proto;
+-extern const struct bpf_func_proto sk_storage_delete_btf_proto;
 =20
- /* string representation of 'enum bpf_reg_type' */
-@@ -3953,6 +3958,7 @@ static int resolve_map_arg_type(struct bpf_verifier=
-_env *env,
-=20
- struct bpf_reg_types {
- 	const enum bpf_reg_type types[10];
-+	u32 *btf_id;
- };
-=20
- static const struct bpf_reg_types map_key_value_types =3D {
-@@ -3973,6 +3979,17 @@ static const struct bpf_reg_types sock_types =3D {
- 	},
- };
-=20
-+static const struct bpf_reg_types btf_id_sock_common_types =3D {
-+	.types =3D {
-+		PTR_TO_SOCK_COMMON,
-+		PTR_TO_SOCKET,
-+		PTR_TO_TCP_SOCK,
-+		PTR_TO_XDP_SOCK,
-+		PTR_TO_BTF_ID,
-+	},
-+	.btf_id =3D &btf_sock_ids[BTF_SOCK_TYPE_SOCK_COMMON],
-+};
-+
- static const struct bpf_reg_types mem_types =3D {
- 	.types =3D {
- 		PTR_TO_STACK,
-@@ -4014,6 +4031,7 @@ static const struct bpf_reg_types *compatible_reg_t=
-ypes[__BPF_ARG_TYPE_MAX] =3D {
- 	[ARG_PTR_TO_CTX]		=3D &context_types,
- 	[ARG_PTR_TO_CTX_OR_NULL]	=3D &context_types,
- 	[ARG_PTR_TO_SOCK_COMMON]	=3D &sock_types,
-+	[ARG_PTR_TO_BTF_ID_SOCK_COMMON]	=3D &btf_id_sock_common_types,
- 	[ARG_PTR_TO_SOCKET]		=3D &fullsock_types,
- 	[ARG_PTR_TO_SOCKET_OR_NULL]	=3D &fullsock_types,
- 	[ARG_PTR_TO_BTF_ID]		=3D &btf_ptr_types,
-@@ -4059,6 +4077,14 @@ static int check_reg_type(struct bpf_verifier_env =
-*env, u32 regno,
-=20
- found:
- 	if (type =3D=3D PTR_TO_BTF_ID) {
-+		if (!arg_btf_id) {
-+			if (!compatible->btf_id) {
-+				verbose(env, "verifier internal error: missing arg compatible BTF ID=
-\n");
-+				return -EFAULT;
-+			}
-+			arg_btf_id =3D compatible->btf_id;
-+		}
-+
- 		if (!btf_struct_ids_match(&env->log, reg->off, reg->btf_id,
- 					  *arg_btf_id)) {
- 			verbose(env, "R%d is of type %s but %s is expected\n",
-@@ -4575,10 +4601,14 @@ static bool check_btf_id_ok(const struct bpf_func=
-_proto *fn)
- {
- 	int i;
-=20
--	for (i =3D 0; i < ARRAY_SIZE(fn->arg_type); i++)
-+	for (i =3D 0; i < ARRAY_SIZE(fn->arg_type); i++) {
- 		if (fn->arg_type[i] =3D=3D ARG_PTR_TO_BTF_ID && !fn->arg_btf_id[i])
- 			return false;
-=20
-+		if (fn->arg_type[i] !=3D ARG_PTR_TO_BTF_ID && fn->arg_btf_id[i])
-+			return false;
-+	}
-+
- 	return true;
- }
-=20
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 706f8db0ccf8..6d1864f2bd51 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -77,6 +77,9 @@
- #include <net/transp_v6.h>
- #include <linux/btf_ids.h>
-=20
-+static const struct bpf_func_proto *
-+bpf_sk_base_func_proto(enum bpf_func_id func_id);
-+
- int copy_bpf_fprog_from_user(struct sock_fprog *dst, sockptr_t src, int =
-len)
- {
- 	if (in_compat_syscall()) {
-@@ -6620,7 +6623,7 @@ sock_addr_func_proto(enum bpf_func_id func_id, cons=
-t struct bpf_prog *prog)
- 			return NULL;
- 		}
- 	default:
--		return bpf_base_func_proto(func_id);
-+		return bpf_sk_base_func_proto(func_id);
- 	}
- }
-=20
-@@ -6639,7 +6642,7 @@ sk_filter_func_proto(enum bpf_func_id func_id, cons=
-t struct bpf_prog *prog)
- 	case BPF_FUNC_perf_event_output:
- 		return &bpf_skb_event_output_proto;
- 	default:
--		return bpf_base_func_proto(func_id);
-+		return bpf_sk_base_func_proto(func_id);
- 	}
- }
-=20
-@@ -6800,7 +6803,7 @@ tc_cls_act_func_proto(enum bpf_func_id func_id, con=
-st struct bpf_prog *prog)
- 		return &bpf_sk_assign_proto;
- #endif
- 	default:
--		return bpf_base_func_proto(func_id);
-+		return bpf_sk_base_func_proto(func_id);
- 	}
- }
-=20
-@@ -6841,7 +6844,7 @@ xdp_func_proto(enum bpf_func_id func_id, const stru=
+ struct bpf_local_storage_elem;
+ struct bpf_sk_storage_diag;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index c96a56d9c3be..0ec6dbeb17a5 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -2861,6 +2861,7 @@ union bpf_attr {
+  *		0 on success.
+  *
+  *		**-ENOENT** if the bpf-local-storage cannot be found.
++ *		**-EINVAL** if sk is not a fullsock (e.g. a request_sock).
+  *
+  * long bpf_send_signal(u32 sig)
+  *	Description
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index 9cd1428c7199..78ea8a7bd27f 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -56,9 +56,9 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const stru=
 ct bpf_prog *prog)
- 		return &bpf_tcp_gen_syncookie_proto;
- #endif
+ 	case BPF_FUNC_inode_storage_delete:
+ 		return &bpf_inode_storage_delete_proto;
+ 	case BPF_FUNC_sk_storage_get:
+-		return &sk_storage_get_btf_proto;
++		return &bpf_sk_storage_get_proto;
+ 	case BPF_FUNC_sk_storage_delete:
+-		return &sk_storage_delete_btf_proto;
++		return &bpf_sk_storage_delete_proto;
  	default:
--		return bpf_base_func_proto(func_id);
-+		return bpf_sk_base_func_proto(func_id);
+ 		return tracing_prog_func_proto(func_id, prog);
  	}
- }
+diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+index 838efc682cff..c907f0dc7f87 100644
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -269,7 +269,7 @@ BPF_CALL_4(bpf_sk_storage_get, struct bpf_map *, map,=
+ struct sock *, sk,
+ {
+ 	struct bpf_local_storage_data *sdata;
 =20
-@@ -6883,7 +6886,7 @@ sock_ops_func_proto(enum bpf_func_id func_id, const=
- struct bpf_prog *prog)
- 		return &bpf_tcp_sock_proto;
- #endif /* CONFIG_INET */
- 	default:
--		return bpf_base_func_proto(func_id);
-+		return bpf_sk_base_func_proto(func_id);
- 	}
- }
+-	if (flags > BPF_SK_STORAGE_GET_F_CREATE)
++	if (!sk || !sk_fullsock(sk) || flags > BPF_SK_STORAGE_GET_F_CREATE)
+ 		return (unsigned long)NULL;
 =20
-@@ -6929,7 +6932,7 @@ sk_msg_func_proto(enum bpf_func_id func_id, const s=
-truct bpf_prog *prog)
- 		return &bpf_get_cgroup_classid_curr_proto;
- #endif
- 	default:
--		return bpf_base_func_proto(func_id);
-+		return bpf_sk_base_func_proto(func_id);
- 	}
- }
+ 	sdata =3D sk_storage_lookup(sk, map, true);
+@@ -299,6 +299,9 @@ BPF_CALL_4(bpf_sk_storage_get, struct bpf_map *, map,=
+ struct sock *, sk,
 =20
-@@ -6971,7 +6974,7 @@ sk_skb_func_proto(enum bpf_func_id func_id, const s=
-truct bpf_prog *prog)
- 		return &bpf_skc_lookup_tcp_proto;
- #endif
- 	default:
--		return bpf_base_func_proto(func_id);
-+		return bpf_sk_base_func_proto(func_id);
- 	}
- }
+ BPF_CALL_2(bpf_sk_storage_delete, struct bpf_map *, map, struct sock *, =
+sk)
+ {
++	if (!sk || !sk_fullsock(sk))
++		return -EINVAL;
++
+ 	if (refcount_inc_not_zero(&sk->sk_refcnt)) {
+ 		int err;
 =20
-@@ -6982,7 +6985,7 @@ flow_dissector_func_proto(enum bpf_func_id func_id,=
- const struct bpf_prog *prog)
- 	case BPF_FUNC_skb_load_bytes:
- 		return &bpf_flow_dissector_load_bytes_proto;
- 	default:
--		return bpf_base_func_proto(func_id);
-+		return bpf_sk_base_func_proto(func_id);
- 	}
- }
-=20
-@@ -7009,7 +7012,7 @@ lwt_out_func_proto(enum bpf_func_id func_id, const =
-struct bpf_prog *prog)
- 	case BPF_FUNC_skb_under_cgroup:
- 		return &bpf_skb_under_cgroup_proto;
- 	default:
--		return bpf_base_func_proto(func_id);
-+		return bpf_sk_base_func_proto(func_id);
- 	}
- }
-=20
-@@ -9746,7 +9749,7 @@ sk_lookup_func_proto(enum bpf_func_id func_id, cons=
-t struct bpf_prog *prog)
- 	case BPF_FUNC_sk_release:
- 		return &bpf_sk_release_proto;
- 	default:
--		return bpf_base_func_proto(func_id);
-+		return bpf_sk_base_func_proto(func_id);
- 	}
- }
-=20
-@@ -9913,8 +9916,7 @@ const struct bpf_func_proto bpf_skc_to_tcp6_sock_pr=
+@@ -355,7 +358,7 @@ const struct bpf_func_proto bpf_sk_storage_get_proto =
+=3D {
+ 	.gpl_only	=3D false,
+ 	.ret_type	=3D RET_PTR_TO_MAP_VALUE_OR_NULL,
+ 	.arg1_type	=3D ARG_CONST_MAP_PTR,
+-	.arg2_type	=3D ARG_PTR_TO_SOCKET,
++	.arg2_type	=3D ARG_PTR_TO_BTF_ID_SOCK_COMMON,
+ 	.arg3_type	=3D ARG_PTR_TO_MAP_VALUE_OR_NULL,
+ 	.arg4_type	=3D ARG_ANYTHING,
+ };
+@@ -375,27 +378,7 @@ const struct bpf_func_proto bpf_sk_storage_delete_pr=
 oto =3D {
- 	.func			=3D bpf_skc_to_tcp6_sock,
- 	.gpl_only		=3D false,
- 	.ret_type		=3D RET_PTR_TO_BTF_ID_OR_NULL,
--	.arg1_type		=3D ARG_PTR_TO_BTF_ID,
--	.arg1_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_SOCK_COMMON],
-+	.arg1_type		=3D ARG_PTR_TO_BTF_ID_SOCK_COMMON,
- 	.ret_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_TCP6],
+ 	.gpl_only	=3D false,
+ 	.ret_type	=3D RET_INTEGER,
+ 	.arg1_type	=3D ARG_CONST_MAP_PTR,
+-	.arg2_type	=3D ARG_PTR_TO_SOCKET,
+-};
+-
+-const struct bpf_func_proto sk_storage_get_btf_proto =3D {
+-	.func		=3D bpf_sk_storage_get,
+-	.gpl_only	=3D false,
+-	.ret_type	=3D RET_PTR_TO_MAP_VALUE_OR_NULL,
+-	.arg1_type	=3D ARG_CONST_MAP_PTR,
+-	.arg2_type	=3D ARG_PTR_TO_BTF_ID,
+-	.arg2_btf_id	=3D &btf_sock_ids[BTF_SOCK_TYPE_SOCK],
+-	.arg3_type	=3D ARG_PTR_TO_MAP_VALUE_OR_NULL,
+-	.arg4_type	=3D ARG_ANYTHING,
+-};
+-
+-const struct bpf_func_proto sk_storage_delete_btf_proto =3D {
+-	.func		=3D bpf_sk_storage_delete,
+-	.gpl_only	=3D false,
+-	.ret_type	=3D RET_INTEGER,
+-	.arg1_type	=3D ARG_CONST_MAP_PTR,
+-	.arg2_type	=3D ARG_PTR_TO_BTF_ID,
+-	.arg2_btf_id	=3D &btf_sock_ids[BTF_SOCK_TYPE_SOCK],
++	.arg2_type	=3D ARG_PTR_TO_BTF_ID_SOCK_COMMON,
  };
 =20
-@@ -9930,8 +9932,7 @@ const struct bpf_func_proto bpf_skc_to_tcp_sock_pro=
-to =3D {
- 	.func			=3D bpf_skc_to_tcp_sock,
- 	.gpl_only		=3D false,
- 	.ret_type		=3D RET_PTR_TO_BTF_ID_OR_NULL,
--	.arg1_type		=3D ARG_PTR_TO_BTF_ID,
--	.arg1_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_SOCK_COMMON],
-+	.arg1_type		=3D ARG_PTR_TO_BTF_ID_SOCK_COMMON,
- 	.ret_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_TCP],
- };
+ struct bpf_sk_storage_diag {
+diff --git a/net/ipv4/bpf_tcp_ca.c b/net/ipv4/bpf_tcp_ca.c
+index 74a2ef598c31..618954f82764 100644
+--- a/net/ipv4/bpf_tcp_ca.c
++++ b/net/ipv4/bpf_tcp_ca.c
+@@ -28,22 +28,6 @@ static u32 unsupported_ops[] =3D {
+ static const struct btf_type *tcp_sock_type;
+ static u32 tcp_sock_id, sock_id;
 =20
-@@ -9954,8 +9955,7 @@ const struct bpf_func_proto bpf_skc_to_tcp_timewait=
-_sock_proto =3D {
- 	.func			=3D bpf_skc_to_tcp_timewait_sock,
- 	.gpl_only		=3D false,
- 	.ret_type		=3D RET_PTR_TO_BTF_ID_OR_NULL,
--	.arg1_type		=3D ARG_PTR_TO_BTF_ID,
--	.arg1_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_SOCK_COMMON],
-+	.arg1_type		=3D ARG_PTR_TO_BTF_ID_SOCK_COMMON,
- 	.ret_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_TCP_TW],
- };
+-static struct bpf_func_proto btf_sk_storage_get_proto __read_mostly;
+-static struct bpf_func_proto btf_sk_storage_delete_proto __read_mostly;
+-
+-static void convert_sk_func_proto(struct bpf_func_proto *to, const struc=
+t bpf_func_proto *from)
+-{
+-	int i;
+-
+-	*to =3D *from;
+-	for (i =3D 0; i < ARRAY_SIZE(to->arg_type); i++) {
+-		if (to->arg_type[i] =3D=3D ARG_PTR_TO_SOCKET) {
+-			to->arg_type[i] =3D ARG_PTR_TO_BTF_ID;
+-			to->arg_btf_id[i] =3D &tcp_sock_id;
+-		}
+-	}
+-}
+-
+ static int bpf_tcp_ca_init(struct btf *btf)
+ {
+ 	s32 type_id;
+@@ -59,9 +43,6 @@ static int bpf_tcp_ca_init(struct btf *btf)
+ 	tcp_sock_id =3D type_id;
+ 	tcp_sock_type =3D btf_type_by_id(btf, tcp_sock_id);
 =20
-@@ -9978,8 +9978,7 @@ const struct bpf_func_proto bpf_skc_to_tcp_request_=
-sock_proto =3D {
- 	.func			=3D bpf_skc_to_tcp_request_sock,
- 	.gpl_only		=3D false,
- 	.ret_type		=3D RET_PTR_TO_BTF_ID_OR_NULL,
--	.arg1_type		=3D ARG_PTR_TO_BTF_ID,
--	.arg1_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_SOCK_COMMON],
-+	.arg1_type		=3D ARG_PTR_TO_BTF_ID_SOCK_COMMON,
- 	.ret_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_TCP_REQ],
- };
+-	convert_sk_func_proto(&btf_sk_storage_get_proto, &bpf_sk_storage_get_pr=
+oto);
+-	convert_sk_func_proto(&btf_sk_storage_delete_proto, &bpf_sk_storage_del=
+ete_proto);
+-
+ 	return 0;
+ }
 =20
-@@ -10000,7 +9999,37 @@ const struct bpf_func_proto bpf_skc_to_udp6_sock_=
-proto =3D {
- 	.func			=3D bpf_skc_to_udp6_sock,
- 	.gpl_only		=3D false,
- 	.ret_type		=3D RET_PTR_TO_BTF_ID_OR_NULL,
--	.arg1_type		=3D ARG_PTR_TO_BTF_ID,
--	.arg1_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_SOCK_COMMON],
-+	.arg1_type		=3D ARG_PTR_TO_BTF_ID_SOCK_COMMON,
- 	.ret_btf_id		=3D &btf_sock_ids[BTF_SOCK_TYPE_UDP6],
- };
-+
-+static const struct bpf_func_proto *
-+bpf_sk_base_func_proto(enum bpf_func_id func_id)
-+{
-+	const struct bpf_func_proto *func;
-+
-+	switch (func_id) {
-+	case BPF_FUNC_skc_to_tcp6_sock:
-+		func =3D &bpf_skc_to_tcp6_sock_proto;
-+		break;
-+	case BPF_FUNC_skc_to_tcp_sock:
-+		func =3D &bpf_skc_to_tcp_sock_proto;
-+		break;
-+	case BPF_FUNC_skc_to_tcp_timewait_sock:
-+		func =3D &bpf_skc_to_tcp_timewait_sock_proto;
-+		break;
-+	case BPF_FUNC_skc_to_tcp_request_sock:
-+		func =3D &bpf_skc_to_tcp_request_sock_proto;
-+		break;
-+	case BPF_FUNC_skc_to_udp6_sock:
-+		func =3D &bpf_skc_to_udp6_sock_proto;
-+		break;
-+	default:
-+		return bpf_base_func_proto(func_id);
-+	}
-+
-+	if (!perfmon_capable())
-+		return NULL;
-+
-+	return func;
-+}
+@@ -188,9 +169,9 @@ bpf_tcp_ca_get_func_proto(enum bpf_func_id func_id,
+ 	case BPF_FUNC_tcp_send_ack:
+ 		return &bpf_tcp_send_ack_proto;
+ 	case BPF_FUNC_sk_storage_get:
+-		return &btf_sk_storage_get_proto;
++		return &bpf_sk_storage_get_proto;
+ 	case BPF_FUNC_sk_storage_delete:
+-		return &btf_sk_storage_delete_proto;
++		return &bpf_sk_storage_delete_proto;
+ 	default:
+ 		return bpf_base_func_proto(func_id);
+ 	}
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
+f.h
+index c96a56d9c3be..0ec6dbeb17a5 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -2861,6 +2861,7 @@ union bpf_attr {
+  *		0 on success.
+  *
+  *		**-ENOENT** if the bpf-local-storage cannot be found.
++ *		**-EINVAL** if sk is not a fullsock (e.g. a request_sock).
+  *
+  * long bpf_send_signal(u32 sig)
+  *	Description
 --=20
 2.24.1
 
