@@ -7,48 +7,48 @@ X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7847C4727E
-	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 00:04:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01786C4363D
+	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 00:04:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7D2742396D
-	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 00:04:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9C1722396D
+	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 00:04:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Y1KR0b6y"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="lD4M+EY7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726863AbgIYAEZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 24 Sep 2020 20:04:25 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:10732 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726858AbgIYAEX (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 24 Sep 2020 20:04:23 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08P01loh001314
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2020 17:04:23 -0700
+        id S1726873AbgIYAE0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 24 Sep 2020 20:04:26 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:65426 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726858AbgIYAE0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 24 Sep 2020 20:04:26 -0400
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08P01D8m014676
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2020 17:04:24 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=smNZyPgJA8sF2PGC1SnLR/pUOeMLwmfagtm4spQYGns=;
- b=Y1KR0b6yWNT3qeCsrdhy59PuE2smM94BMpTYkas6ULwd8TyoloxO4PMZTqKqOOZ1n256
- NDM0iW1yrzcd6POoUlJ0AUaJ61tGAbMozwhefZAKteea00lBfGAdw26LRFkF7Dj8G/jZ
- p5w+r6QKvoRAp8OFnXeDKfEO66TuCpfa7TM= 
+ bh=TWKA/362Z4Sfry1/5te0HavQDohYlFdNSVMuX+6GcTA=;
+ b=lD4M+EY705/Anjl4ysnUpwfpHn1suXlQaVAH//ihCrhPr1viZ66+pB6pxuV0UHPToplP
+ spV33aTDfx3CDP6ha0N5Mk0F4I1ELZ8XR+5NiZV2zG3wYb6B2Sn55Kmj3oF8bbXLkhXQ
+ FObmSOFeDY6uLtSwzD8gN1vAf5X7PDgZ01c= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 33qsp84n7b-8
+        by mx0a-00082601.pphosted.com with ESMTP id 33qsp54rc7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2020 17:04:23 -0700
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2020 17:04:24 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 24 Sep 2020 17:04:11 -0700
+ 15.1.1979.3; Thu, 24 Sep 2020 17:04:23 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 0EFA72946606; Thu, 24 Sep 2020 17:04:09 -0700 (PDT)
+        id 876642946606; Thu, 24 Sep 2020 17:04:21 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Lorenz Bauer <lmb@cloudflare.com>, <netdev@vger.kernel.org>
-Subject: [PATCH v4 bpf-next 05/13] bpf: Change bpf_tcp_*_syncookie to accept ARG_PTR_TO_BTF_ID_SOCK_COMMON
-Date:   Thu, 24 Sep 2020 17:04:09 -0700
-Message-ID: <20200925000409.3856725-1-kafai@fb.com>
+Subject: [PATCH v4 bpf-next 07/13] bpf: selftest: Add ref_tracking verifier test for bpf_skc casting
+Date:   Thu, 24 Sep 2020 17:04:21 -0700
+Message-ID: <20200925000421.3857616-1-kafai@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200925000337.3853598-1-kafai@fb.com>
 References: <20200925000337.3853598-1-kafai@fb.com>
@@ -58,125 +58,83 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-24_18:2020-09-24,2020-09-24 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- mlxlogscore=999 spamscore=0 adultscore=0 phishscore=0 malwarescore=0
- lowpriorityscore=0 bulkscore=0 clxscore=1015 suspectscore=13
- priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2009240174
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=830
+ spamscore=0 bulkscore=0 impostorscore=0 malwarescore=0 phishscore=0
+ clxscore=1015 priorityscore=1501 mlxscore=0 suspectscore=13 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009240174
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch changes the bpf_tcp_*_syncookie() to take
-ARG_PTR_TO_BTF_ID_SOCK_COMMON such that they will work with the pointer
-returned by the bpf_skc_to_*() helpers also.
+The patch tests for:
+1. bpf_sk_release() can be called on a tcp_sock btf_id ptr.
 
-Acked-by: Lorenz Bauer <lmb@cloudflare.com>
+2. Ensure the tcp_sock btf_id pointer cannot be used
+   after bpf_sk_release().
+
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- include/uapi/linux/bpf.h       | 4 ++--
- net/core/filter.c              | 8 ++++----
- tools/include/uapi/linux/bpf.h | 4 ++--
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ .../selftests/bpf/verifier/ref_tracking.c     | 47 +++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 0ec6dbeb17a5..69b9e30375bc 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -2692,7 +2692,7 @@ union bpf_attr {
-  *		result is from *reuse*\ **->socks**\ [] using the hash of the
-  *		tuple.
-  *
-- * long bpf_tcp_check_syncookie(struct bpf_sock *sk, void *iph, u32 iph_=
-len, struct tcphdr *th, u32 th_len)
-+ * long bpf_tcp_check_syncookie(void *sk, void *iph, u32 iph_len, struct=
- tcphdr *th, u32 th_len)
-  * 	Description
-  * 		Check whether *iph* and *th* contain a valid SYN cookie ACK for
-  * 		the listening socket in *sk*.
-@@ -2878,7 +2878,7 @@ union bpf_attr {
-  *
-  *		**-EAGAIN** if bpf program can try again.
-  *
-- * s64 bpf_tcp_gen_syncookie(struct bpf_sock *sk, void *iph, u32 iph_len=
-, struct tcphdr *th, u32 th_len)
-+ * s64 bpf_tcp_gen_syncookie(void *sk, void *iph, u32 iph_len, struct tc=
-phdr *th, u32 th_len)
-  *	Description
-  *		Try to issue a SYN cookie for the packet with corresponding
-  *		IP/TCP headers, *iph* and *th*, on the listening socket in *sk*.
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 06d397eeef2a..1d88e9b498eb 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -6086,7 +6086,7 @@ BPF_CALL_5(bpf_tcp_check_syncookie, struct sock *, =
-sk, void *, iph, u32, iph_len
- 	u32 cookie;
- 	int ret;
-=20
--	if (unlikely(th_len < sizeof(*th)))
-+	if (unlikely(!sk || th_len < sizeof(*th)))
- 		return -EINVAL;
-=20
- 	/* sk_listener() allows TCP_NEW_SYN_RECV, which makes no sense here. */
-@@ -6139,7 +6139,7 @@ static const struct bpf_func_proto bpf_tcp_check_sy=
-ncookie_proto =3D {
- 	.gpl_only	=3D true,
- 	.pkt_access	=3D true,
- 	.ret_type	=3D RET_INTEGER,
--	.arg1_type	=3D ARG_PTR_TO_SOCK_COMMON,
-+	.arg1_type	=3D ARG_PTR_TO_BTF_ID_SOCK_COMMON,
- 	.arg2_type	=3D ARG_PTR_TO_MEM,
- 	.arg3_type	=3D ARG_CONST_SIZE,
- 	.arg4_type	=3D ARG_PTR_TO_MEM,
-@@ -6153,7 +6153,7 @@ BPF_CALL_5(bpf_tcp_gen_syncookie, struct sock *, sk=
-, void *, iph, u32, iph_len,
- 	u32 cookie;
- 	u16 mss;
-=20
--	if (unlikely(th_len < sizeof(*th) || th_len !=3D th->doff * 4))
-+	if (unlikely(!sk || th_len < sizeof(*th) || th_len !=3D th->doff * 4))
- 		return -EINVAL;
-=20
- 	if (sk->sk_protocol !=3D IPPROTO_TCP || sk->sk_state !=3D TCP_LISTEN)
-@@ -6208,7 +6208,7 @@ static const struct bpf_func_proto bpf_tcp_gen_sync=
-ookie_proto =3D {
- 	.gpl_only	=3D true, /* __cookie_v*_init_sequence() is GPL */
- 	.pkt_access	=3D true,
- 	.ret_type	=3D RET_INTEGER,
--	.arg1_type	=3D ARG_PTR_TO_SOCK_COMMON,
-+	.arg1_type	=3D ARG_PTR_TO_BTF_ID_SOCK_COMMON,
- 	.arg2_type	=3D ARG_PTR_TO_MEM,
- 	.arg3_type	=3D ARG_CONST_SIZE,
- 	.arg4_type	=3D ARG_PTR_TO_MEM,
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 0ec6dbeb17a5..69b9e30375bc 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -2692,7 +2692,7 @@ union bpf_attr {
-  *		result is from *reuse*\ **->socks**\ [] using the hash of the
-  *		tuple.
-  *
-- * long bpf_tcp_check_syncookie(struct bpf_sock *sk, void *iph, u32 iph_=
-len, struct tcphdr *th, u32 th_len)
-+ * long bpf_tcp_check_syncookie(void *sk, void *iph, u32 iph_len, struct=
- tcphdr *th, u32 th_len)
-  * 	Description
-  * 		Check whether *iph* and *th* contain a valid SYN cookie ACK for
-  * 		the listening socket in *sk*.
-@@ -2878,7 +2878,7 @@ union bpf_attr {
-  *
-  *		**-EAGAIN** if bpf program can try again.
-  *
-- * s64 bpf_tcp_gen_syncookie(struct bpf_sock *sk, void *iph, u32 iph_len=
-, struct tcphdr *th, u32 th_len)
-+ * s64 bpf_tcp_gen_syncookie(void *sk, void *iph, u32 iph_len, struct tc=
-phdr *th, u32 th_len)
-  *	Description
-  *		Try to issue a SYN cookie for the packet with corresponding
-  *		IP/TCP headers, *iph* and *th*, on the listening socket in *sk*.
+diff --git a/tools/testing/selftests/bpf/verifier/ref_tracking.c b/tools/=
+testing/selftests/bpf/verifier/ref_tracking.c
+index 056e0273bf12..006b5bd99c08 100644
+--- a/tools/testing/selftests/bpf/verifier/ref_tracking.c
++++ b/tools/testing/selftests/bpf/verifier/ref_tracking.c
+@@ -854,3 +854,50 @@
+ 	.errstr =3D "Unreleased reference",
+ 	.result =3D REJECT,
+ },
++{
++	"reference tracking: bpf_sk_release(btf_tcp_sock)",
++	.insns =3D {
++	BPF_SK_LOOKUP(sk_lookup_tcp),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
++	BPF_EXIT_INSN(),
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_0),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	BPF_EMIT_CALL(BPF_FUNC_skc_to_tcp_sock),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 3),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
++	BPF_EMIT_CALL(BPF_FUNC_sk_release),
++	BPF_EXIT_INSN(),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	BPF_EMIT_CALL(BPF_FUNC_sk_release),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
++	.result =3D ACCEPT,
++	.result_unpriv =3D REJECT,
++	.errstr_unpriv =3D "unknown func",
++},
++{
++	"reference tracking: use ptr from bpf_skc_to_tcp_sock() after release",
++	.insns =3D {
++	BPF_SK_LOOKUP(sk_lookup_tcp),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 1),
++	BPF_EXIT_INSN(),
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_0),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	BPF_EMIT_CALL(BPF_FUNC_skc_to_tcp_sock),
++	BPF_JMP_IMM(BPF_JNE, BPF_REG_0, 0, 3),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
++	BPF_EMIT_CALL(BPF_FUNC_sk_release),
++	BPF_EXIT_INSN(),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
++	BPF_EMIT_CALL(BPF_FUNC_sk_release),
++	BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_7, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
++	.result =3D REJECT,
++	.errstr =3D "invalid mem access",
++	.result_unpriv =3D REJECT,
++	.errstr_unpriv =3D "unknown func",
++},
 --=20
 2.24.1
 
