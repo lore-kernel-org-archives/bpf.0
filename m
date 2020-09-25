@@ -2,122 +2,197 @@ Return-Path: <SRS0=/Hy+=DC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 373BFC4741F
-	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 20:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47F5AC4727E
+	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 20:54:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F06A82086A
-	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 20:54:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0B85F21D42
+	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 20:54:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="NUc6qep0"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="dk9aEbZ6"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726210AbgIYUyq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 25 Sep 2020 16:54:46 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:48806 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725272AbgIYUyp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 25 Sep 2020 16:54:45 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 08PKqvHD026170
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 13:54:44 -0700
+        id S1726309AbgIYUyt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 25 Sep 2020 16:54:49 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:32500 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725272AbgIYUyt (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 25 Sep 2020 16:54:49 -0400
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08PKpvmC023648
+        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 13:54:49 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=NMnuUTo/+rViCmLQINiUgI6x9ZFI7TS7t+YGGzs0aw4=;
- b=NUc6qep0WVtp8L0lmk4pO+QN23v50/RUIMfm5zi+l5oFz4JYxdULH/2D1HUbN2OHBmEL
- RGKTRk6eVnr4WLxqHQHMwl7FHX1n+lIzW90XfLsZw9eTDJ9Kn3J3Xeek0oo1NdkSOl+a
- fluPpnU7xiapltJ1XbQpowAjMdyL2T/DrGw= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 33sjrqhsg8-1
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=WqwVJQ15qXef5bizheAVJGHf7CkcYkS1/DuR9WoX+Mc=;
+ b=dk9aEbZ66o0efvqnjlN8eJMQAF+KOTaZLQ/OnoU5devczrF/g4wcv7yqrtDzJ0rHldfw
+ DEX5J5yZRs1qWOI7TFDfS0rFGzSUUTcGvI1MrS4fSIGcNZbFpblunX21p3UQiQH6C8NT
+ z4/5QQPJEryeDJQjWtGpGa0HRbjYsTggY48= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 33qsp89kk5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 13:54:44 -0700
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 13:54:48 -0700
+Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 25 Sep 2020 13:54:42 -0700
+ 15.1.1979.3; Fri, 25 Sep 2020 13:54:47 -0700
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 6D64762E54A2; Fri, 25 Sep 2020 13:54:34 -0700 (PDT)
+        id D268F62E54A2; Fri, 25 Sep 2020 13:54:44 -0700 (PDT)
 From:   Song Liu <songliubraving@fb.com>
 To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
 CC:     <kernel-team@fb.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <john.fastabend@gmail.com>, <kpsingh@chromium.org>,
-        Song Liu <songliubraving@fb.com>
-Subject: [PATCH v6 bpf-next 0/3] enable BPF_PROG_TEST_RUN for raw_tp
-Date:   Fri, 25 Sep 2020 13:54:28 -0700
-Message-ID: <20200925205432.1777-1-songliubraving@fb.com>
+        Song Liu <songliubraving@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Subject: [PATCH v6 bpf-next 2/3] libbpf: support test run of raw tracepoint programs
+Date:   Fri, 25 Sep 2020 13:54:30 -0700
+Message-ID: <20200925205432.1777-3-songliubraving@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200925205432.1777-1-songliubraving@fb.com>
+References: <20200925205432.1777-1-songliubraving@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-25_19:2020-09-24,2020-09-25 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0 mlxscore=0
- phishscore=0 bulkscore=0 mlxlogscore=647 priorityscore=1501 adultscore=0
- spamscore=0 malwarescore=0 clxscore=1015 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009250151
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ mlxlogscore=999 spamscore=0 adultscore=0 phishscore=0 malwarescore=0
+ lowpriorityscore=0 bulkscore=0 clxscore=1015 suspectscore=0
+ priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2006250000 definitions=main-2009250150
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This set enables BPF_PROG_TEST_RUN for raw_tracepoint type programs. This
-set also enables running the raw_tp program on a specific CPU. This featu=
-re
-can be used by user space to trigger programs that access percpu resource=
-s,
-e.g. perf_event, percpu variables.
+Add bpf_prog_test_run_opts() with support of new fields in bpf_attr.test,
+namely, flags and cpu. Also extend _opts operations to support outputs vi=
+a
+opts.
 
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Song Liu <songliubraving@fb.com>
 ---
+ tools/lib/bpf/bpf.c             | 31 +++++++++++++++++++++++++++++++
+ tools/lib/bpf/bpf.h             | 26 ++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.map        |  1 +
+ tools/lib/bpf/libbpf_internal.h |  5 +++++
+ 4 files changed, 63 insertions(+)
 
-Changes v5 =3D> v6:
-1. Optimize the selftest. (John, Andrii)
-
-Changes v4 =3D> v5:
-1.Fail test_run with non-zero test.cpu but no BPF_F_TEST_RUN_ON_CPU.
-  (Andrii)
-2. Add extra check for invalid test.cpu value. (Andrii)
-3. Shuffle bpf_test_run_opts to remove holes. (Andrii)
-4. Fixes in selftests. (Andrii)
-
-Changes v3 =3D> v4:
-1. Use cpu+flags instead of cpu_plus. (Andrii)
-2. Rework libbpf support. (Andrii)
-
-Changes v2 =3D> v3:
-1. Fix memory leak in the selftest. (Andrii)
-2. Use __u64 instead of unsigned long long. (Andrii)
-
-Changes v1 =3D> v2:
-1. More checks for retval in the selftest. (John)
-2. Remove unnecessary goto in bpf_prog_test_run_raw_tp. (John)
-
-Song Liu (3):
-  bpf: enable BPF_PROG_TEST_RUN for raw_tracepoint
-  libbpf: support test run of raw tracepoint programs
-  selftests/bpf: add raw_tp_test_run
-
- include/linux/bpf.h                           |  3 +
- include/uapi/linux/bpf.h                      |  7 ++
- kernel/bpf/syscall.c                          |  2 +-
- kernel/trace/bpf_trace.c                      |  1 +
- net/bpf/test_run.c                            | 91 ++++++++++++++++++
- tools/include/uapi/linux/bpf.h                |  7 ++
- tools/lib/bpf/bpf.c                           | 31 ++++++
- tools/lib/bpf/bpf.h                           | 26 +++++
- tools/lib/bpf/libbpf.map                      |  1 +
- tools/lib/bpf/libbpf_internal.h               |  5 +
- .../bpf/prog_tests/raw_tp_test_run.c          | 96 +++++++++++++++++++
- .../bpf/progs/test_raw_tp_test_run.c          | 24 +++++
- 12 files changed, 293 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_test_ru=
-n.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_raw_tp_test_ru=
-n.c
-
---
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 2baa1308737c8..c5a4d8444bf68 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -712,6 +712,37 @@ int bpf_prog_test_run_xattr(struct bpf_prog_test_run=
+_attr *test_attr)
+ 	return ret;
+ }
+=20
++int bpf_prog_test_run_opts(int prog_fd, struct bpf_test_run_opts *opts)
++{
++	union bpf_attr attr;
++	int ret;
++
++	if (!OPTS_VALID(opts, bpf_test_run_opts))
++		return -EINVAL;
++
++	memset(&attr, 0, sizeof(attr));
++	attr.test.prog_fd =3D prog_fd;
++	attr.test.cpu =3D OPTS_GET(opts, cpu, 0);
++	attr.test.flags =3D OPTS_GET(opts, flags, 0);
++	attr.test.repeat =3D OPTS_GET(opts, repeat, 0);
++	attr.test.duration =3D OPTS_GET(opts, duration, 0);
++	attr.test.ctx_size_in =3D OPTS_GET(opts, ctx_size_in, 0);
++	attr.test.ctx_size_out =3D OPTS_GET(opts, ctx_size_out, 0);
++	attr.test.data_size_in =3D OPTS_GET(opts, data_size_in, 0);
++	attr.test.data_size_out =3D OPTS_GET(opts, data_size_out, 0);
++	attr.test.ctx_in =3D ptr_to_u64(OPTS_GET(opts, ctx_in, NULL));
++	attr.test.ctx_out =3D ptr_to_u64(OPTS_GET(opts, ctx_out, NULL));
++	attr.test.data_in =3D ptr_to_u64(OPTS_GET(opts, data_in, NULL));
++	attr.test.data_out =3D ptr_to_u64(OPTS_GET(opts, data_out, NULL));
++
++	ret =3D sys_bpf(BPF_PROG_TEST_RUN, &attr, sizeof(attr));
++	OPTS_SET(opts, data_size_out, attr.test.data_size_out);
++	OPTS_SET(opts, ctx_size_out, attr.test.ctx_size_out);
++	OPTS_SET(opts, duration, attr.test.duration);
++	OPTS_SET(opts, retval, attr.test.retval);
++	return ret;
++}
++
+ static int bpf_obj_get_next_id(__u32 start_id, __u32 *next_id, int cmd)
+ {
+ 	union bpf_attr attr;
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 8c1ac4b42f908..4f3568e55527c 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -251,6 +251,32 @@ struct bpf_prog_bind_opts {
+=20
+ LIBBPF_API int bpf_prog_bind_map(int prog_fd, int map_fd,
+ 				 const struct bpf_prog_bind_opts *opts);
++
++struct bpf_test_run_opts {
++	size_t sz; /* size of this struct for forward/backward compatibility */
++	const void *data_in; /* optional */
++	void *data_out;      /* optional */
++	__u32 data_size_in;
++	__u32 data_size_out; /* in: max length of data_out
++			      * out: length of data_out
++			      */
++	const void *ctx_in; /* optional */
++	void *ctx_out;      /* optional */
++	__u32 ctx_size_in;
++	__u32 ctx_size_out; /* in: max length of ctx_out
++			     * out: length of cxt_out
++			     */
++	__u32 retval;        /* out: return code of the BPF program */
++	int repeat;
++	__u32 duration;      /* out: average per repetition in ns */
++	__u32 flags;
++	__u32 cpu;
++};
++#define bpf_test_run_opts__last_field cpu
++
++LIBBPF_API int bpf_prog_test_run_opts(int prog_fd,
++				      struct bpf_test_run_opts *opts);
++
+ #ifdef __cplusplus
+ } /* extern "C" */
+ #endif
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 5f054dadf0829..0623e7a99b1ec 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -303,6 +303,7 @@ LIBBPF_0.1.0 {
+ LIBBPF_0.2.0 {
+ 	global:
+ 		bpf_prog_bind_map;
++		bpf_prog_test_run_opts;
+ 		bpf_program__section_name;
+ 		perf_buffer__buffer_cnt;
+ 		perf_buffer__buffer_fd;
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
+nal.h
+index 4d1c366fca2ca..d2fff18f4cd12 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -136,6 +136,11 @@ static inline bool libbpf_validate_opts(const char *=
+opts,
+ 	((opts) && opts->sz >=3D offsetofend(typeof(*(opts)), field))
+ #define OPTS_GET(opts, field, fallback_value) \
+ 	(OPTS_HAS(opts, field) ? (opts)->field : fallback_value)
++#define OPTS_SET(opts, field, value)		\
++	do {					\
++		if (OPTS_HAS(opts, field))	\
++			(opts)->field =3D value;	\
++	} while (0)
+=20
+ int parse_cpu_mask_str(const char *s, bool **mask, int *mask_sz);
+ int parse_cpu_mask_file(const char *fcpu, bool **mask, int *mask_sz);
+--=20
 2.24.1
+
