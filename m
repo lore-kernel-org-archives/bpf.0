@@ -8,62 +8,66 @@ X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F06BCC4363D
-	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 09:57:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 591E1C4727F
+	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 09:57:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B4B032087D
-	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 09:57:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 00BD7208A9
+	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 09:57:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Z5Tay6Ec"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="pmXJ4k5C"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728169AbgIYJ5H (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 25 Sep 2020 05:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
+        id S1728090AbgIYJ4u (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 25 Sep 2020 05:56:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728141AbgIYJ4z (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 25 Sep 2020 05:56:55 -0400
+        with ESMTP id S1728079AbgIYJ4s (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 25 Sep 2020 05:56:48 -0400
 Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D871C0613D6
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 02:56:55 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id a9so2609095wmm.2
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 02:56:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55ADBC0613D4
+        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 02:56:48 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id x23so2406533wmi.3
+        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 02:56:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7RJH7pZMCVV5iroyiFLpiFRNTiQn0SSX+69PgDO+op4=;
-        b=Z5Tay6EcQTWazV7dTKt9RehYD/4epP7kRU3Ga/PrUGWrecnu5q/y5u3cYUdQDXeJ9c
-         Tyz/nwhilwMzR4ntbwLfx6EoZ16+hl0EzUT8i/ih1BZiBOcm/WzdG1KAcIMWDxNltI6s
-         e+yJCM3wjpKF1BppOv7Dp6OVp7eTZLCqSO4w8=
+        bh=xM5gUTG5YNhi56jc9AEoov6VfEV/W29OCfIKcalBgOE=;
+        b=pmXJ4k5CiHNWnta5bkfcVqcwRbkCRUCs0cZQoI9Xk3qb53xXqFOhp9aOPfuDoFQh7r
+         EUTyJSKNtjCM0wdTs4Io2ZZAHzFtp3WcczdQr3++3IbXqh6RnJRnT9t9XdN8W0xIRvRT
+         +G+d6KLd6df0Q1tVhfFFXoWDEHfl4V06UMYzc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7RJH7pZMCVV5iroyiFLpiFRNTiQn0SSX+69PgDO+op4=;
-        b=km9lSQrLIkHuaGR3wVR9xnR3rRLa2NSH8VU8uJBadd5VvVdBBQD4cCaI+Gq84pfl5r
-         zWNWHEukvnZy68k+4JmEHW5ashtdnZ9HlnQBwGrPQo3SrydkchyCKzbuaxcLzNOPFXjB
-         o0gCy9mzpdkmF4YEoBf9Lx9G9lhccNPWguZg1HpJedXofjtT7iOB3WOsuwAnKGmKp1dR
-         o7bKbivByvjdV/qly15mIwZD6m01U8UFEREM/oXXQ9FbtbqeSFLZHdtQZFmthkIhjLMD
-         h1+N7K2GXgCHTVFY37rWxQ+ttItL05pPh8JAXn3vIc5hE5YRJVinPkKjcrgQDAxGftFg
-         cgew==
-X-Gm-Message-State: AOAM532f8RuNaBvRC+wu9YduA6wDnxyOJSwh6/U7MdHAYCYltq/2Hnpl
-        RfrUTi7ZNf9Wjv4c8zG/qNbH6A==
-X-Google-Smtp-Source: ABdhPJyXHCb7Koa9bhkkDBnbpeFU8UXjBvkZiVeQ6G92Q1rH+QgQoM9tP3HlGHJwhr+7X2lyLuGuKQ==
-X-Received: by 2002:a7b:cc17:: with SMTP id f23mr2095213wmh.166.1601027813944;
-        Fri, 25 Sep 2020 02:56:53 -0700 (PDT)
+        bh=xM5gUTG5YNhi56jc9AEoov6VfEV/W29OCfIKcalBgOE=;
+        b=SJNWOrqkZLQPOQ/8XR/M6bPboPhsce2GONhziC8GVKQrXIW5Du0lNqO0lE4Y4+JR95
+         5Xgkb6nClKrBHfmQGoRmegZse8i077Mg9rp0Vs48Qk7yDvNVfCtEaDHM5RrsV8F1bgbm
+         ZWGKSbBhiY4/5vNvFJVSSJg4McFKAQkhX53HbFCkUgy8S3Zk88/McFbW/x8cxoeSbCz1
+         sp+OXcXMBGOveQD/oYeBIpodDNxGtojJgbAVQonC85c7t0BBT/wXzCfXM+b7tHcW+f0s
+         riusPe8GtUEBHv/X4t4GFzwZaBrnEq6pebjQ9bEV0jjWk2gT3kbKdTZ+6fVMKQtt7gpD
+         99eA==
+X-Gm-Message-State: AOAM5335QEs67EvsXlW3vwdGkJS55JrxkJhn4XKJ8HRt/7T19V8jo5q+
+        v+CgRNj62mCV0xZmDTBW+8vE1A==
+X-Google-Smtp-Source: ABdhPJwURdG6NAF1pgFm1GTvUOQ5ogglm8gSd79fhyPbv95dBUQs5edWEuP2J1BkOWNUxXmlD4LUng==
+X-Received: by 2002:a7b:c14d:: with SMTP id z13mr2178705wmi.19.1601027806934;
+        Fri, 25 Sep 2020 02:56:46 -0700 (PDT)
 Received: from antares.lan (e.0.c.6.b.e.c.e.a.c.9.7.c.2.1.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:12c:79ca:eceb:6c0e])
-        by smtp.gmail.com with ESMTPSA id l10sm2225084wru.59.2020.09.25.02.56.52
+        by smtp.gmail.com with ESMTPSA id l10sm2225084wru.59.2020.09.25.02.56.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2020 02:56:53 -0700 (PDT)
+        Fri, 25 Sep 2020 02:56:46 -0700 (PDT)
 From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     kernel-team@cloudflare.com, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 4/4] selftest: bpf: Test copying a sockmap and sockhash
-Date:   Fri, 25 Sep 2020 10:56:30 +0100
-Message-Id: <20200925095630.49207-5-lmb@cloudflare.com>
+Subject: [PATCH bpf-next 1/4] bpf: sockmap: enable map_update_elem from bpf_iter
+Date:   Fri, 25 Sep 2020 10:56:27 +0100
+Message-Id: <20200925095630.49207-2-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20200925095630.49207-1-lmb@cloudflare.com>
 References: <20200925095630.49207-1-lmb@cloudflare.com>
@@ -73,108 +77,45 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Since we can now call map_update_elem(sockmap) from bpf_iter context
-it's possible to copy a sockmap or sockhash in the kernel. Add a
-selftest which exercises this.
+Allow passing a pointer to a BTF struct sock_common* when updating
+a sockmap or sockhash. Since BTF pointers can fault and therefore be
+NULL at runtime we need to add an additional !sk check to
+sock_map_update_elem. Doing this allows calling map_update_elem on
+sockmap from bpf_iter context, which uses BTF pointers.
 
 Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 ---
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 14 +++++-----
- .../selftests/bpf/progs/bpf_iter_sockmap.c    | 27 +++++++++++++++----
- 2 files changed, 30 insertions(+), 11 deletions(-)
+ kernel/bpf/verifier.c | 2 +-
+ net/core/sock_map.c   | 3 +++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index e8a4bfb4d9f4..854a508e81ce 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -194,7 +194,7 @@ static void test_sockmap_invalid_update(void)
- 		test_sockmap_invalid_update__destroy(skel);
- }
- 
--static void test_sockmap_iter(enum bpf_map_type map_type)
-+static void test_sockmap_copy(enum bpf_map_type map_type)
- {
- 	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
- 	int err, len, src_fd, iter_fd, duration = 0;
-@@ -242,7 +242,7 @@ static void test_sockmap_iter(enum bpf_map_type map_type)
- 	linfo.map.map_fd = src_fd;
- 	opts.link_info = &linfo;
- 	opts.link_info_len = sizeof(linfo);
--	link = bpf_program__attach_iter(skel->progs.count_elems, &opts);
-+	link = bpf_program__attach_iter(skel->progs.copy, &opts);
- 	if (CHECK(IS_ERR(link), "attach_iter", "attach_iter failed\n"))
- 		goto out;
- 
-@@ -265,6 +265,8 @@ static void test_sockmap_iter(enum bpf_map_type map_type)
- 		  skel->bss->socks, num_sockets))
- 		goto close_iter;
- 
-+	compare_cookies(src, skel->maps.dst);
-+
- close_iter:
- 	close(iter_fd);
- free_link:
-@@ -294,8 +296,8 @@ void test_sockmap_basic(void)
- 		test_sockmap_update(BPF_MAP_TYPE_SOCKHASH);
- 	if (test__start_subtest("sockmap update in unsafe context"))
- 		test_sockmap_invalid_update();
--	if (test__start_subtest("sockmap iter"))
--		test_sockmap_iter(BPF_MAP_TYPE_SOCKMAP);
--	if (test__start_subtest("sockhash iter"))
--		test_sockmap_iter(BPF_MAP_TYPE_SOCKHASH);
-+	if (test__start_subtest("sockmap copy"))
-+		test_sockmap_copy(BPF_MAP_TYPE_SOCKMAP);
-+	if (test__start_subtest("sockhash copy"))
-+		test_sockmap_copy(BPF_MAP_TYPE_SOCKHASH);
- }
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_sockmap.c b/tools/testing/selftests/bpf/progs/bpf_iter_sockmap.c
-index 1af7555f6057..f3af0e30cead 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_sockmap.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_sockmap.c
-@@ -22,21 +22,38 @@ struct {
- 	__type(value, __u64);
- } sockhash SEC(".maps");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKHASH);
-+	__uint(max_entries, 64);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} dst SEC(".maps");
-+
- __u32 elems = 0;
- __u32 socks = 0;
- 
- SEC("iter/sockmap")
--int count_elems(struct bpf_iter__sockmap *ctx)
-+int copy(struct bpf_iter__sockmap *ctx)
- {
- 	struct sock *sk = ctx->sk;
- 	__u32 tmp, *key = ctx->key;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d4ba29fb17a6..5bd0239da8b6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3943,7 +3943,7 @@ static int resolve_map_arg_type(struct bpf_verifier_env *env,
+ 	case BPF_MAP_TYPE_SOCKMAP:
+ 	case BPF_MAP_TYPE_SOCKHASH:
+ 		if (*arg_type == ARG_PTR_TO_MAP_VALUE) {
+-			*arg_type = ARG_PTR_TO_SOCKET;
++			*arg_type = ARG_PTR_TO_BTF_ID_SOCK_COMMON;
+ 		} else {
+ 			verbose(env, "invalid arg_type for sockmap/sockhash\n");
+ 			return -EINVAL;
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index e1f05e3fa1d0..497e7df466d4 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -610,6 +610,9 @@ static int sock_map_update_elem(struct bpf_map *map, void *key,
+ 	struct sock *sk = (struct sock *)value;
  	int ret;
  
--	if (key)
--		elems++;
-+	if (!key)
-+		return 0;
- 
--	if (sk)
-+	elems++;
++	if (unlikely(!sk))
++		return -EINVAL;
 +
-+	/* We need a temporary buffer on the stack, since the verifier doesn't
-+	 * let us use the pointer from the context as an argument to the helper.
-+	 */
-+	tmp = *key;
-+
-+	if (sk) {
- 		socks++;
-+		return bpf_map_update_elem(&dst, &tmp, sk, 0) != 0;
-+	}
+ 	if (!sock_map_sk_is_suitable(sk))
+ 		return -EOPNOTSUPP;
  
--	return 0;
-+	ret = bpf_map_delete_elem(&dst, &tmp);
-+	return ret && ret != -ENOENT;
- }
 -- 
 2.25.1
 
