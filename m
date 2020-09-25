@@ -2,67 +2,68 @@ Return-Path: <SRS0=/Hy+=DC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-5.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43EB8C4727E
-	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 20:36:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CD08C4727E
+	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 20:38:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E48A020838
-	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 20:36:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 03FF520838
+	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 20:38:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dtRToJmy"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="iuXRcgXH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728678AbgIYUdP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 25 Sep 2020 16:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51628 "EHLO
+        id S1727386AbgIYUhL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 25 Sep 2020 16:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728051AbgIYUUy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 25 Sep 2020 16:20:54 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5740FC0613B1
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 12:42:40 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id v14so51765pjd.4
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 12:42:40 -0700 (PDT)
+        with ESMTP id S1727346AbgIYUhK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 25 Sep 2020 16:37:10 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15280C0613D3
+        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 13:37:10 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id l126so4348327pfd.5
+        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 13:37:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=1VTbmlxP/NBx4Wl43Zwmsnljn3SCRy51x1r81CV0BZM=;
-        b=dtRToJmyHTTr67lrP3SrUIoLxJrrKsByqQJ1DZqoALfG2zQF4UhGdYQvTnp8NK+c8D
-         WvYzv4Xi3KqVHy8qs+yI4HHZLz2S644qeifFYle7DzsHYiTpCwSAc5aDg9+Kc2qNouQm
-         4lO83kqhdbxY461s8apYSrnvsCnFPC2jx1V7U=
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=GfC/K5/eyr5f/R6KNnYNTFVKM8gTDhQ8O0T6Bc65g7I=;
+        b=iuXRcgXHEiB9o39H9hbvhItGSIju7sdYkPIXMM1iEESsQCqXomWCjd5+I/Y72J3MmH
+         pE8Ycf2qbqERCla+//BzWiE8E/xZAo9m473D7cg0uxM/yJXGtfUTlhDO2rRmdAOvY+dE
+         v9Kt55YnQOItQGdI3tA4n/0wtmB/7neNsMa94=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=1VTbmlxP/NBx4Wl43Zwmsnljn3SCRy51x1r81CV0BZM=;
-        b=RopbX/oeCO71XWs6Bs2BlJL6CG4KCOZdSgYbksbcsDDVTJhR7TTI0I4t4TIS9cRFVw
-         cT/W+B3koYtG28u7WPdi/wM7zhZn8GyxWo4fqqa3VoYQv9+wC5m453vjIEHBJz8F5jP+
-         /MpF9jYNjBjVgwEzLq8fi/91OzjY4Wg6cKcrcC6JZtMalhxJhMahOv7kXzSA0CTBXnkm
-         WGpaCfbUcvJoZoFkt3BvcnYvhg1MRL2R62GJ+GMbAqgI+Jg8Hi3EWSmQ9wFKTRLXmAeD
-         JZblkwjHNFCRLZDbfYn9Ac+ky2kWVnK1MyZkwdAs/EYf9UA/JOJPcAwe0ITGfJOyuT8I
-         6Jbg==
-X-Gm-Message-State: AOAM5316h3HfY6tW62VgoUsPemw2fM2Bfbt7RkXfsY/gfsoaumWXg66j
-        CxatJoMuy65esyfciLsA0Prrbg==
-X-Google-Smtp-Source: ABdhPJzf8ii6Mz6aePsI1Nr3EqtgEdasIytrUnQQEYjVuc6D6GJRGQUbTLrAOQNeoMvoaFUsDiVHrg==
-X-Received: by 2002:a17:90b:a0a:: with SMTP id gg10mr170348pjb.20.1601062959821;
-        Fri, 25 Sep 2020 12:42:39 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=GfC/K5/eyr5f/R6KNnYNTFVKM8gTDhQ8O0T6Bc65g7I=;
+        b=sJ3oE94UwEPwossnkSMpXKesSJaRzu3YHVRVImoVFL7BqqlDmLs3nGlH9xmHQqgdeQ
+         yE80m815cjFuthprhYuwrmstxO7fikvvugSxUn/9KSJRx+C3mRvMaANAqBE9BZXOZzDS
+         H4VsncyzBNMVj5S1Z1seKAGooaXrBLvzFTFlT8YZYwWzUcobqNBlARZ5+j6E+39UjrdW
+         supBwq35MNydTA5m0rjz9+x34xG9f1xlxO6HSoPlJmBof6IvMxYW9oRomH0Ob2QlmSda
+         HLk3Vp4P7m26OxpelMcN6kfs3x7fJAvq9pKKtSHapgsoMy5K+6J5gfHov2Jjo3hB1aNk
+         Dlgw==
+X-Gm-Message-State: AOAM533UFaZ8lZ+OQouR+wLzMUwqtJ3ZTGyeHQx7OKS22ENMl3Gd+Xhp
+        sRFomVxgrgg0L9seWnTFVaTc7A==
+X-Google-Smtp-Source: ABdhPJx5DRTSBJLZM4R1CgkCB9Vmp/ILkSaDUH73jMRCTvs/2F79SPo4ijjl1Tk1Fd/fHgDAR7Ze3g==
+X-Received: by 2002:aa7:8249:0:b029:142:2501:34db with SMTP id e9-20020aa782490000b0290142250134dbmr982040pfn.52.1601066229568;
+        Fri, 25 Sep 2020 13:37:09 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id kk17sm26681pjb.31.2020.09.25.12.42.38
+        by smtp.gmail.com with ESMTPSA id z8sm3049258pgr.70.2020.09.25.13.37.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Sep 2020 12:42:38 -0700 (PDT)
-Date:   Fri, 25 Sep 2020 12:42:37 -0700
+        Fri, 25 Sep 2020 13:37:08 -0700 (PDT)
+Date:   Fri, 25 Sep 2020 13:37:07 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     YiFei Zhu <zhuyifei1999@gmail.com>
-Cc:     Linux Containers <containers@lists.linux-foundation.org>,
+To:     Andy Lutomirski <luto@amacapital.net>
+Cc:     YiFei Zhu <zhuyifei1999@gmail.com>,
+        Linux Containers <containers@lists.linux-foundation.org>,
         YiFei Zhu <yifeifz2@illinois.edu>, bpf <bpf@vger.kernel.org>,
         kernel list <linux-kernel@vger.kernel.org>,
         Aleksa Sarai <cyphar@cyphar.com>,
         Andrea Arcangeli <aarcange@redhat.com>,
-        Andy Lutomirski <luto@amacapital.net>,
         Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
         Giuseppe Scrivano <gscrivan@redhat.com>,
         Hubertus Franke <frankeh@us.ibm.com>,
@@ -76,55 +77,68 @@ Cc:     Linux Containers <containers@lists.linux-foundation.org>,
         Will Drewry <wad@chromium.org>
 Subject: Re: [PATCH v2 seccomp 3/6] seccomp/cache: Add "emulator" to check if
  filter is arg-dependent
-Message-ID: <202009251223.8E46C831E2@keescook>
-References: <cover.1600951211.git.yifeifz2@illinois.edu>
- <c14518ba563d4c6bb75b9fac63b69cd4c82f9dcc.1600951211.git.yifeifz2@illinois.edu>
- <202009241601.FFC0CF68@keescook>
- <CABqSeARb7GNU9+sVgGzgqqOmpQNpxq1JsMrZJvS2EC05AyfAVw@mail.gmail.com>
- <CABqSeASM9B77QrWRbqRF19N9-m-bm779-7a3qEDa8NumjBsorw@mail.gmail.com>
+Message-ID: <202009251332.24CE0C58@keescook>
+References: <202009251223.8E46C831E2@keescook>
+ <2FA23A2E-16B0-4E08-96D5-6D6FE45BBCF6@amacapital.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CABqSeASM9B77QrWRbqRF19N9-m-bm779-7a3qEDa8NumjBsorw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2FA23A2E-16B0-4E08-96D5-6D6FE45BBCF6@amacapital.net>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Sep 25, 2020 at 11:45:05AM -0500, YiFei Zhu wrote:
-> On Thu, Sep 24, 2020 at 10:04 PM YiFei Zhu <zhuyifei1999@gmail.com> wrote:
-> > > Why do the prepare here instead of during attach? (And note that it
-> > > should not be written to fail.)
-> >
-> > Right.
+On Fri, Sep 25, 2020 at 12:51:20PM -0700, Andy Lutomirski wrote:
 > 
-> During attach a spinlock (current->sighand->siglock) is held. Do we
-> really want to put the emulator in the "atomic section"?
+> 
+> > On Sep 25, 2020, at 12:42 PM, Kees Cook <keescook@chromium.org> wrote:
+> > 
+> > ﻿On Fri, Sep 25, 2020 at 11:45:05AM -0500, YiFei Zhu wrote:
+> >> On Thu, Sep 24, 2020 at 10:04 PM YiFei Zhu <zhuyifei1999@gmail.com> wrote:
+> >>>> Why do the prepare here instead of during attach? (And note that it
+> >>>> should not be written to fail.)
+> >>> 
+> >>> Right.
+> >> 
+> >> During attach a spinlock (current->sighand->siglock) is held. Do we
+> >> really want to put the emulator in the "atomic section"?
+> > 
+> > It's a good point, but I had some other ideas around it that lead to me
+> > a different conclusion. Here's what I've got in my head:
+> > 
+> > I don't view filter attach (nor the siglock) as fastpath: the lock is
+> > rarely contested and the "long time" will only be during filter attach.
+> > 
+> > When performing filter emulation, all the syscalls that are already
+> > marked as "must run filter" on the previous filter can be skipped for
+> > the new filter, since it cannot change the outcome, which makes the
+> > emulation step faster.
+> > 
+> > The previous filter's bitmap isn't "stable" until siglock is held.
+> > 
+> > If we do the emulation step before siglock, we have to always do full
+> > evaluation of all syscalls, and then merge the bitmap during attach.
+> > That means all filters ever attached will take maximal time to perform
+> > emulation.
+> > 
+> > I prefer the idea of the emulation step taking advantage of the bitmap
+> > optimization, since the kernel spends less time doing work over the life
+> > of the process tree. It's certainly marginal, but it also lets all the
+> > bitmap manipulation stay in one place (as opposed to being split between
+> > "prepare" and "attach").
+> > 
+> > What do you think?
+> > 
+> > 
+> 
+> I’m wondering if we should be much much lazier. We could potentially wait until someone actually tries to do a given syscall before we try to evaluate whether the result is fixed.
 
-It's a good point, but I had some other ideas around it that lead to me
-a different conclusion. Here's what I've got in my head:
-
-I don't view filter attach (nor the siglock) as fastpath: the lock is
-rarely contested and the "long time" will only be during filter attach.
-
-When performing filter emulation, all the syscalls that are already
-marked as "must run filter" on the previous filter can be skipped for
-the new filter, since it cannot change the outcome, which makes the
-emulation step faster.
-
-The previous filter's bitmap isn't "stable" until siglock is held.
-
-If we do the emulation step before siglock, we have to always do full
-evaluation of all syscalls, and then merge the bitmap during attach.
-That means all filters ever attached will take maximal time to perform
-emulation.
-
-I prefer the idea of the emulation step taking advantage of the bitmap
-optimization, since the kernel spends less time doing work over the life
-of the process tree. It's certainly marginal, but it also lets all the
-bitmap manipulation stay in one place (as opposed to being split between
-"prepare" and "attach").
-
-What do you think?
+That seems like we'd need to track yet another bitmap of "did we emulate
+this yet?" And it means the filter isn't really "done" until you run
+another syscall? eeh, I'm not a fan: it scratches at my desire for
+determinism. ;) Or maybe my implementation imagination is missing
+something?
 
 -- 
 Kees Cook
