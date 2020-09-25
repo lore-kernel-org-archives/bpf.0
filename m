@@ -2,318 +2,152 @@ Return-Path: <SRS0=/Hy+=DC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C969CC4727F
-	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 20:55:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AABEFC4727E
+	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 20:57:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D1A82086A
-	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 20:55:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 73DD721D7A
+	for <bpf@archiver.kernel.org>; Fri, 25 Sep 2020 20:57:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Olble4Yy"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WIHyxVX/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726980AbgIYUzU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 25 Sep 2020 16:55:20 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:6512 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728678AbgIYUzT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 25 Sep 2020 16:55:19 -0400
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08PKroDw018423
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 13:55:18 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=plmuG3u9RX7b6czZx0ClpnZ/EksMHPGyG3ssljVKwJE=;
- b=Olble4YyJ3NyTFHHMgL9l59J6RKnfIjbsvXgMx7hiN5XpXtHJcY+NyARU2dLmOJVsn/M
- sYdyD1yj5smQ7vWBMMSwYRogBZZ4hI66xCtzsj/mxVFsy70ngZHlCeP99dwQ7frouxwW
- NQT8CdNV+gOsCG/MGcePsHP4poU7OpqVLjM= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 33qsp49ugd-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 13:55:18 -0700
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 25 Sep 2020 13:54:46 -0700
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id ACBF962E54A2; Fri, 25 Sep 2020 13:54:39 -0700 (PDT)
-From:   Song Liu <songliubraving@fb.com>
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <kernel-team@fb.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <john.fastabend@gmail.com>, <kpsingh@chromium.org>,
-        Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH v6 bpf-next 1/3] bpf: enable BPF_PROG_TEST_RUN for raw_tracepoint
-Date:   Fri, 25 Sep 2020 13:54:29 -0700
-Message-ID: <20200925205432.1777-2-songliubraving@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200925205432.1777-1-songliubraving@fb.com>
-References: <20200925205432.1777-1-songliubraving@fb.com>
+        id S1727351AbgIYU5X (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 25 Sep 2020 16:57:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:44329 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726037AbgIYU5U (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 25 Sep 2020 16:57:20 -0400
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1601067438;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EiL2XllvQB2LfKSShysemCAoHS0xuIwlKbztT1dTxBk=;
+        b=WIHyxVX/Rcl/sBQrCd0iER3euh0XNrju9sBD5wNO0VthT1X6r59qSwuJWHr4zXPg7m2Ypa
+        tr9y/4+DwDcjPipp5cGLS3Ip9K8T0YtfRwRXRK/mOUssW8Ep5KX3RAIiBgJHy2pDhI0o/D
+        du+ozlhdcUtDGWfmvSRymHcuHGDiQFU=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-130-2TMCNw1ONkeNg1QB5KaZ4g-1; Fri, 25 Sep 2020 16:57:14 -0400
+X-MC-Unique: 2TMCNw1ONkeNg1QB5KaZ4g-1
+Received: by mail-wm1-f71.google.com with SMTP id 23so110987wmk.8
+        for <bpf@vger.kernel.org>; Fri, 25 Sep 2020 13:57:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=EiL2XllvQB2LfKSShysemCAoHS0xuIwlKbztT1dTxBk=;
+        b=If5bOCXNVH2u8Hkck3N9NI2G9Lj98x6wB7U7zzusfLzPFbhktuYjYq7kpFouRyC864
+         YbB0G0mwTjME4SMDdYmEof52CDs8vyiWy0ubcaUjlr7vmcDwcED7zCaG56v3eL16xkVI
+         t1rwZi5sKVzP9QkVgF0l+crSc56A4z3nCabMOURoofWWz3Nw+VjhFqnBsB3cetW4uDqQ
+         oWBpM34EECCIZoTPSwNkqNlnIcZClab18ekPzZbev7if1QcD2DL610ymJRgQCJxv6+Ki
+         2n9zLiYVVPQMrHt1fTVeQlK5PK+oW+F/v6MqDuy5TC/ws1ppl2M4l7zJzZmhHdybmF6F
+         7+nA==
+X-Gm-Message-State: AOAM532u/pMhVFTZcFIl54u3U5s9gcG9VQCFst1UXLNh4mdqqrMbrWdY
+        y+7DD2ykvjL1Frx/LBb9SQ9nJRqlN+j0TcKtQEB/U6mXD66sUO2+Gtw9VOvxN3WEBqSYEgUyTNb
+        +rI/5h8A+BuHF
+X-Received: by 2002:adf:dbc3:: with SMTP id e3mr6376753wrj.1.1601067433549;
+        Fri, 25 Sep 2020 13:57:13 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyZfFA8ey5Qyk+yQKrYbWllg18SZYqXB51nWXG9iuDFjMRWMmI/xMmHWanoHvg+YD5hac8VxA==
+X-Received: by 2002:adf:dbc3:: with SMTP id e3mr6376726wrj.1.1601067433293;
+        Fri, 25 Sep 2020 13:57:13 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id 92sm4524389wra.19.2020.09.25.13.57.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Sep 2020 13:57:12 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 2E8FC183C5B; Fri, 25 Sep 2020 22:57:12 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v8 04/11] bpf: move prog->aux->linked_prog and
+ trampoline into bpf_link on attach
+In-Reply-To: <CAADnVQLMBKAYsbS4PO87yVrPWJEf9H3qzpsL-p+gFQpcomDw2w@mail.gmail.com>
+References: <160079991372.8301.10648588027560707258.stgit@toke.dk>
+ <160079991808.8301.6462172487971110332.stgit@toke.dk>
+ <20200924001439.qitbu5tmzz55ck4z@ast-mbp.dhcp.thefacebook.com>
+ <87tuvmbztw.fsf@toke.dk>
+ <CAADnVQLMBKAYsbS4PO87yVrPWJEf9H3qzpsL-p+gFQpcomDw2w@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Fri, 25 Sep 2020 22:57:12 +0200
+Message-ID: <878scx60d3.fsf@toke.dk>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-25_19:2020-09-24,2020-09-25 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 adultscore=0
- lowpriorityscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=999
- clxscore=1015 phishscore=0 suspectscore=0 spamscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009250151
-X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add .test_run for raw_tracepoint. Also, introduce a new feature that runs
-the target program on a specific CPU. This is achieved by a new flag in
-bpf_attr.test, BPF_F_TEST_RUN_ON_CPU. When this flag is set, the program
-is triggered on cpu with id bpf_attr.test.cpu. This feature is needed for
-BPF programs that handle perf_event and other percpu resources, as the
-program can access these resource locally.
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- include/linux/bpf.h            |  3 ++
- include/uapi/linux/bpf.h       |  7 +++
- kernel/bpf/syscall.c           |  2 +-
- kernel/trace/bpf_trace.c       |  1 +
- net/bpf/test_run.c             | 91 ++++++++++++++++++++++++++++++++++
- tools/include/uapi/linux/bpf.h |  7 +++
- 6 files changed, 110 insertions(+), 1 deletion(-)
+> On Thu, Sep 24, 2020 at 3:00 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
+dhat.com> wrote:
+>>
+>> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+>>
+>> >> +    struct mutex tgt_mutex; /* protects tgt_* pointers below, *after=
+* prog becomes visible */
+>> >> +    struct bpf_prog *tgt_prog;
+>> >> +    struct bpf_trampoline *tgt_trampoline;
+>> >>      bool verifier_zext; /* Zero extensions has been inserted by veri=
+fier. */
+>> >>      bool offload_requested;
+>> >>      bool attach_btf_trace; /* true if attaching to BTF-enabled raw t=
+p */
+>> > ...
+>> >>  struct bpf_tracing_link {
+>> >>      struct bpf_link link;
+>> >>      enum bpf_attach_type attach_type;
+>> >> +    struct bpf_trampoline *trampoline;
+>> >> +    struct bpf_prog *tgt_prog;
+>> >
+>> > imo it's confusing to have 'tgt_prog' to mean two different things.
+>> > In prog->aux->tgt_prog it means target prog to attach to in the future.
+>> > Whereas here it means the existing prog that was used to attached to.
+>> > They kinda both 'target progs' but would be good to disambiguate.
+>> > May be keep it as 'tgt_prog' here and
+>> > rename to 'dest_prog' and 'dest_trampoline' in prog->aux ?
+>>
+>> I started changing this as you suggested, but I think it actually makes
+>> the code weirder. We'll end up with a lot of 'tgt_prog =3D
+>> prog->aux->dest_prog' assignments in the verifier, unless we also rename
+>> all of the local variables, which I think is just code churn for very
+>> little gain (the existing 'target' meaning is quite clear, I think).
+>
+> you mean "churn" just for this patch. that's fine.
+> But it will make names more accurate for everyone reading it afterwards.
+> Hence I prefer distinct and specific names where possible.
+>
+>> I also think it's quite natural that the target moves; I mean, it's
+>> literally the same pointer being re-assigned from prog->aux to the link.
+>> We could rename the link member to 'attached_tgt_prog' or something like
+>> that, but I'm not sure it helps (and I don't see much of a problem in
+>> the first place).
+>
+> 'attached_tgt_prog' will not be the correct name.
+> There is 'prog' inside the link already. That's 'attached' prog.
+> Not this one. This one is the 'attached_to' prog.
+> But such name would be too long.
+> imo calling it 'dest_prog' in aux is shorter and more obvious.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index fc5c901c75421..efa7245ed76e0 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1381,6 +1381,9 @@ int bpf_prog_test_run_tracing(struct bpf_prog *prog=
-,
- int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 				     const union bpf_attr *kattr,
- 				     union bpf_attr __user *uattr);
-+int bpf_prog_test_run_raw_tp(struct bpf_prog *prog,
-+			     const union bpf_attr *kattr,
-+			     union bpf_attr __user *uattr);
- bool btf_ctx_access(int off, int size, enum bpf_access_type type,
- 		    const struct bpf_prog *prog,
- 		    struct bpf_insn_access_aux *info);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index a22812561064a..05e480f66f475 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -424,6 +424,11 @@ enum {
-  */
- #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
-=20
-+/* Flags for BPF_PROG_TEST_RUN */
-+
-+/* If set, run the test on the cpu specified by bpf_attr.test.cpu */
-+#define BPF_F_TEST_RUN_ON_CPU	(1U << 0)
-+
- /* type for BPF_ENABLE_STATS */
- enum bpf_stats_type {
- 	/* enabled run_time_ns and run_cnt */
-@@ -566,6 +571,8 @@ union bpf_attr {
- 						 */
- 		__aligned_u64	ctx_in;
- 		__aligned_u64	ctx_out;
-+		__u32		flags;
-+		__u32		cpu;
- 	} test;
-=20
- 	struct { /* anonymous struct used by BPF_*_GET_*_ID */
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 2740df19f55e9..3bc2ed2e171be 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2979,7 +2979,7 @@ static int bpf_prog_query(const union bpf_attr *att=
-r,
- 	}
- }
-=20
--#define BPF_PROG_TEST_RUN_LAST_FIELD test.ctx_out
-+#define BPF_PROG_TEST_RUN_LAST_FIELD test.cpu
-=20
- static int bpf_prog_test_run(const union bpf_attr *attr,
- 			     union bpf_attr __user *uattr)
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 36508f46a8dbf..2834866d379ae 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1678,6 +1678,7 @@ const struct bpf_verifier_ops raw_tracepoint_verifi=
-er_ops =3D {
- };
-=20
- const struct bpf_prog_ops raw_tracepoint_prog_ops =3D {
-+	.test_run =3D bpf_prog_test_run_raw_tp,
- };
-=20
- const struct bpf_verifier_ops tracing_verifier_ops =3D {
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index a66f211726e7c..fde5db93507c4 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -11,6 +11,7 @@
- #include <net/sock.h>
- #include <net/tcp.h>
- #include <linux/error-injection.h>
-+#include <linux/smp.h>
-=20
- #define CREATE_TRACE_POINTS
- #include <trace/events/bpf_test_run.h>
-@@ -204,6 +205,9 @@ int bpf_prog_test_run_tracing(struct bpf_prog *prog,
- 	int b =3D 2, err =3D -EFAULT;
- 	u32 retval =3D 0;
-=20
-+	if (kattr->test.flags || kattr->test.cpu)
-+		return -EINVAL;
-+
- 	switch (prog->expected_attach_type) {
- 	case BPF_TRACE_FENTRY:
- 	case BPF_TRACE_FEXIT:
-@@ -236,6 +240,87 @@ int bpf_prog_test_run_tracing(struct bpf_prog *prog,
- 	return err;
- }
-=20
-+struct bpf_raw_tp_test_run_info {
-+	struct bpf_prog *prog;
-+	void *ctx;
-+	u32 retval;
-+};
-+
-+static void
-+__bpf_prog_test_run_raw_tp(void *data)
-+{
-+	struct bpf_raw_tp_test_run_info *info =3D data;
-+
-+	rcu_read_lock();
-+	migrate_disable();
-+	info->retval =3D BPF_PROG_RUN(info->prog, info->ctx);
-+	migrate_enable();
-+	rcu_read_unlock();
-+}
-+
-+int bpf_prog_test_run_raw_tp(struct bpf_prog *prog,
-+			     const union bpf_attr *kattr,
-+			     union bpf_attr __user *uattr)
-+{
-+	void __user *ctx_in =3D u64_to_user_ptr(kattr->test.ctx_in);
-+	__u32 ctx_size_in =3D kattr->test.ctx_size_in;
-+	struct bpf_raw_tp_test_run_info info;
-+	int cpu =3D kattr->test.cpu, err =3D 0;
-+
-+	/* doesn't support data_in/out, ctx_out, duration, or repeat */
-+	if (kattr->test.data_in || kattr->test.data_out ||
-+	    kattr->test.ctx_out || kattr->test.duration ||
-+	    kattr->test.repeat)
-+		return -EINVAL;
-+
-+	if (ctx_size_in < prog->aux->max_ctx_offset)
-+		return -EINVAL;
-+
-+	if ((kattr->test.flags & BPF_F_TEST_RUN_ON_CPU) =3D=3D 0 && cpu !=3D 0)
-+		return -EINVAL;
-+
-+	if (ctx_size_in) {
-+		info.ctx =3D kzalloc(ctx_size_in, GFP_USER);
-+		if (!info.ctx)
-+			return -ENOMEM;
-+		if (copy_from_user(info.ctx, ctx_in, ctx_size_in)) {
-+			err =3D -EFAULT;
-+			goto out;
-+		}
-+	} else {
-+		info.ctx =3D NULL;
-+	}
-+
-+	info.prog =3D prog;
-+
-+	if ((kattr->test.flags & BPF_F_TEST_RUN_ON_CPU) =3D=3D 0 ||
-+	    cpu =3D=3D smp_processor_id()) {
-+		__bpf_prog_test_run_raw_tp(&info);
-+	} else {
-+		/* smp_call_function_single() also checks cpu_online()
-+		 * after csd_lock(). However, since cpu is from user
-+		 * space, let's do an extra quick check to filter out
-+		 * invalid value before smp_call_function_single().
-+		 */
-+		if (cpu >=3D nr_cpu_ids || !cpu_online(cpu)) {
-+			err =3D -ENXIO;
-+			goto out;
-+		}
-+
-+		err =3D smp_call_function_single(cpu, __bpf_prog_test_run_raw_tp,
-+					       &info, 1);
-+		if (err)
-+			goto out;
-+	}
-+
-+	if (copy_to_user(&uattr->test.retval, &info.retval, sizeof(u32)))
-+		err =3D -EFAULT;
-+
-+out:
-+	kfree(info.ctx);
-+	return err;
-+}
-+
- static void *bpf_ctx_init(const union bpf_attr *kattr, u32 max_size)
- {
- 	void __user *data_in =3D u64_to_user_ptr(kattr->test.ctx_in);
-@@ -410,6 +495,9 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, cons=
-t union bpf_attr *kattr,
- 	void *data;
- 	int ret;
-=20
-+	if (kattr->test.flags || kattr->test.cpu)
-+		return -EINVAL;
-+
- 	data =3D bpf_test_init(kattr, size, NET_SKB_PAD + NET_IP_ALIGN,
- 			     SKB_DATA_ALIGN(sizeof(struct skb_shared_info)));
- 	if (IS_ERR(data))
-@@ -607,6 +695,9 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog =
-*prog,
- 	if (prog->type !=3D BPF_PROG_TYPE_FLOW_DISSECTOR)
- 		return -EINVAL;
-=20
-+	if (kattr->test.flags || kattr->test.cpu)
-+		return -EINVAL;
-+
- 	if (size < ETH_HLEN)
- 		return -EINVAL;
-=20
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index a22812561064a..05e480f66f475 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -424,6 +424,11 @@ enum {
-  */
- #define BPF_F_QUERY_EFFECTIVE	(1U << 0)
-=20
-+/* Flags for BPF_PROG_TEST_RUN */
-+
-+/* If set, run the test on the cpu specified by bpf_attr.test.cpu */
-+#define BPF_F_TEST_RUN_ON_CPU	(1U << 0)
-+
- /* type for BPF_ENABLE_STATS */
- enum bpf_stats_type {
- 	/* enabled run_time_ns and run_cnt */
-@@ -566,6 +571,8 @@ union bpf_attr {
- 						 */
- 		__aligned_u64	ctx_in;
- 		__aligned_u64	ctx_out;
-+		__u32		flags;
-+		__u32		cpu;
- 	} test;
-=20
- 	struct { /* anonymous struct used by BPF_*_GET_*_ID */
---=20
-2.24.1
+Meh, don't really see how it helps ('destination' and 'target' are
+literally synonyms). But I don't care enough to bikeshed about it
+either, so I'll just do a search/replace...
+
+-Toke
 
