@@ -2,36 +2,36 @@ Return-Path: <SRS0=5TR3=DF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25E14C4727E
-	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 14:39:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E22EC4741F
+	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 14:39:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC28321941
-	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 14:39:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1EBEC21974
+	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 14:39:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbgI1OjG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Sep 2020 10:39:06 -0400
-Received: from www62.your-server.de ([213.133.104.62]:59224 "EHLO
+        id S1726670AbgI1OjH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Sep 2020 10:39:07 -0400
+Received: from www62.your-server.de ([213.133.104.62]:59242 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726477AbgI1OjG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Sep 2020 10:39:06 -0400
+        with ESMTP id S1726589AbgI1OjH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Sep 2020 10:39:07 -0400
 Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1kMuIw-0002de-Ci; Mon, 28 Sep 2020 16:39:02 +0200
+        id 1kMuIx-0002du-DW; Mon, 28 Sep 2020 16:39:03 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     daniel@iogearbox.net, john.fastabend@gmail.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Eric Dumazet <eric.dumazet@gmail.com>
-Subject: [PATCH bpf-next v2 2/6] bpf, net: rework cookie generator as per-cpu one
-Date:   Mon, 28 Sep 2020 16:38:53 +0200
-Message-Id: <40dc74dd252da5bb4cabd8fb22e26db4aefd565b.1601303057.git.daniel@iogearbox.net>
+        Andrii Nakryiko <andriin@fb.com>
+Subject: [PATCH bpf-next v2 4/6] bpf, libbpf: add bpf_tail_call_static helper for bpf programs
+Date:   Mon, 28 Sep 2020 16:38:55 +0200
+Message-Id: <9c4b6a19ced3e2ee6c6d28f5f3883cc7b2b02400.1601303057.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1601303057.git.daniel@iogearbox.net>
 References: <cover.1601303057.git.daniel@iogearbox.net>
@@ -43,293 +43,85 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With its use in BPF, the cookie generator can be called very frequently
-in particular when used out of cgroup v2 hooks (e.g. connect / sendmsg)
-and attached to the root cgroup, for example, when used in v1/v2 mixed
-environments. In particular, when there's a high churn on sockets in the
-system there can be many parallel requests to the bpf_get_socket_cookie()
-and bpf_get_netns_cookie() helpers which then cause contention on the
-atomic counter.
+Port of tail_call_static() helper function from Cilium's BPF code base [0]
+to libbpf, so others can easily consume it as well. We've been using this
+in production code for some time now. The main idea is that we guarantee
+that the kernel's BPF infrastructure and JIT (here: x86_64) can patch the
+JITed BPF insns with direct jumps instead of having to fall back to using
+expensive retpolines. By using inline asm, we guarantee that the compiler
+won't merge the call from different paths with potentially different
+content of r2/r3.
 
-As similarly done in f991bd2e1421 ("fs: introduce a per-cpu last_ino
-allocator"), add a small helper library that both can use for the 64 bit
-counters. Given this can be called from different contexts, we also need
-to deal with potential nested calls even though in practice they are
-considered extremely rare. One idea as suggested by Eric Dumazet was
-to use a reverse counter for this stiuation since we don't expect 64 bit
-overflows anyways; that way, we can avoid bigger gaps in the 64 bit
-counter space compared to just batch-wise increase. Even on machines
-with small number of cores (e.g. 4) the cookie generation shrinks from
-min/max/med/avg (ns) of 22/50/40/38.9 down to 10/35/14/17.3 when run
-in parallel from multiple CPUs.
+We're also using Cilium's __throw_build_bug() macro (here as: __bpf_unreachable())
+in different places as a neat trick to trigger compilation errors when
+compiler does not remove code at compilation time. This works for the BPF
+back end as it does not implement the __builtin_trap().
+
+  [0] https://github.com/cilium/cilium/commit/f5537c26020d5297b70936c6b7d03a1e412a1035
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Eric Dumazet <eric.dumazet@gmail.com>
+Cc: Andrii Nakryiko <andriin@fb.com>
 ---
- include/linux/cookie.h       | 50 ++++++++++++++++++++++++++++++++++++
- include/linux/sock_diag.h    | 14 +++++++++-
- include/net/net_namespace.h  |  2 +-
- kernel/bpf/reuseport_array.c |  2 +-
- net/core/filter.c            | 10 ++++----
- net/core/net_namespace.c     |  9 ++++---
- net/core/sock_diag.c         |  9 ++++---
- net/core/sock_map.c          |  4 +--
- 8 files changed, 82 insertions(+), 18 deletions(-)
- create mode 100644 include/linux/cookie.h
+ tools/lib/bpf/bpf_helpers.h | 46 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/include/linux/cookie.h b/include/linux/cookie.h
-new file mode 100644
-index 000000000000..18f5561c3e41
---- /dev/null
-+++ b/include/linux/cookie.h
-@@ -0,0 +1,50 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __LINUX_COOKIE_H
-+#define __LINUX_COOKIE_H
-+
-+#include <linux/atomic.h>
-+#include <linux/percpu.h>
-+
-+struct pcpu_gen_cookie {
-+	local_t nesting;
-+	u64 last;
-+} __aligned(16);
-+
-+struct gen_cookie {
-+	struct pcpu_gen_cookie __percpu *local;
-+	atomic64_t forward_last ____cacheline_aligned_in_smp;
-+	atomic64_t reverse_last;
-+};
-+
-+#define COOKIE_LOCAL_BATCH	4096
-+
-+#define DEFINE_COOKIE(name)						\
-+	static DEFINE_PER_CPU(struct pcpu_gen_cookie, __##name);	\
-+	static struct gen_cookie name = {				\
-+		.local		= &__##name,				\
-+		.forward_last	= ATOMIC64_INIT(0),			\
-+		.reverse_last	= ATOMIC64_INIT(0),			\
-+	}
-+
-+static __always_inline u64 gen_cookie_next(struct gen_cookie *gc)
-+{
-+	struct pcpu_gen_cookie *local = this_cpu_ptr(gc->local);
-+	u64 val;
-+
-+	if (likely(local_inc_return(&local->nesting) == 1)) {
-+		val = local->last;
-+		if (__is_defined(CONFIG_SMP) &&
-+		    unlikely((val & (COOKIE_LOCAL_BATCH - 1)) == 0)) {
-+			s64 next = atomic64_add_return(COOKIE_LOCAL_BATCH,
-+						       &gc->forward_last);
-+			val = next - COOKIE_LOCAL_BATCH;
-+		}
-+		local->last = ++val;
-+	} else {
-+		val = atomic64_dec_return(&gc->reverse_last);
-+	}
-+	local_dec(&local->nesting);
-+	return val;
-+}
-+
-+#endif /* __LINUX_COOKIE_H */
-diff --git a/include/linux/sock_diag.h b/include/linux/sock_diag.h
-index 15fe980a27ea..0b9ecd8cf979 100644
---- a/include/linux/sock_diag.h
-+++ b/include/linux/sock_diag.h
-@@ -25,7 +25,19 @@ void sock_diag_unregister(const struct sock_diag_handler *h);
- void sock_diag_register_inet_compat(int (*fn)(struct sk_buff *skb, struct nlmsghdr *nlh));
- void sock_diag_unregister_inet_compat(int (*fn)(struct sk_buff *skb, struct nlmsghdr *nlh));
- 
--u64 sock_gen_cookie(struct sock *sk);
-+u64 __sock_gen_cookie(struct sock *sk);
-+
-+static inline u64 sock_gen_cookie(struct sock *sk)
-+{
-+	u64 cookie;
-+
-+	preempt_disable();
-+	cookie = __sock_gen_cookie(sk);
-+	preempt_enable();
-+
-+	return cookie;
-+}
-+
- int sock_diag_check_cookie(struct sock *sk, const __u32 *cookie);
- void sock_diag_save_cookie(struct sock *sk, __u32 *cookie);
- 
-diff --git a/include/net/net_namespace.h b/include/net/net_namespace.h
-index 2ee5901bec7a..22bc07f4b043 100644
---- a/include/net/net_namespace.h
-+++ b/include/net/net_namespace.h
-@@ -230,7 +230,7 @@ extern struct list_head net_namespace_list;
- struct net *get_net_ns_by_pid(pid_t pid);
- struct net *get_net_ns_by_fd(int fd);
- 
--u64 net_gen_cookie(struct net *net);
-+u64 __net_gen_cookie(struct net *net);
- 
- #ifdef CONFIG_SYSCTL
- void ipx_register_sysctl(void);
-diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
-index 5a2ba1182493..a55cd542f2ce 100644
---- a/kernel/bpf/reuseport_array.c
-+++ b/kernel/bpf/reuseport_array.c
-@@ -191,7 +191,7 @@ int bpf_fd_reuseport_array_lookup_elem(struct bpf_map *map, void *key,
- 	rcu_read_lock();
- 	sk = reuseport_array_lookup_elem(map, key);
- 	if (sk) {
--		*(u64 *)value = sock_gen_cookie(sk);
-+		*(u64 *)value = __sock_gen_cookie(sk);
- 		err = 0;
- 	} else {
- 		err = -ENOENT;
-diff --git a/net/core/filter.c b/net/core/filter.c
-index fa01c697977d..a0776e48dcc9 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4232,7 +4232,7 @@ const struct bpf_func_proto bpf_xdp_output_proto = {
- 
- BPF_CALL_1(bpf_get_socket_cookie, struct sk_buff *, skb)
- {
--	return skb->sk ? sock_gen_cookie(skb->sk) : 0;
-+	return skb->sk ? __sock_gen_cookie(skb->sk) : 0;
- }
- 
- static const struct bpf_func_proto bpf_get_socket_cookie_proto = {
-@@ -4244,7 +4244,7 @@ static const struct bpf_func_proto bpf_get_socket_cookie_proto = {
- 
- BPF_CALL_1(bpf_get_socket_cookie_sock_addr, struct bpf_sock_addr_kern *, ctx)
- {
--	return sock_gen_cookie(ctx->sk);
-+	return __sock_gen_cookie(ctx->sk);
- }
- 
- static const struct bpf_func_proto bpf_get_socket_cookie_sock_addr_proto = {
-@@ -4256,7 +4256,7 @@ static const struct bpf_func_proto bpf_get_socket_cookie_sock_addr_proto = {
- 
- BPF_CALL_1(bpf_get_socket_cookie_sock, struct sock *, ctx)
- {
--	return sock_gen_cookie(ctx);
-+	return __sock_gen_cookie(ctx);
- }
- 
- static const struct bpf_func_proto bpf_get_socket_cookie_sock_proto = {
-@@ -4268,7 +4268,7 @@ static const struct bpf_func_proto bpf_get_socket_cookie_sock_proto = {
- 
- BPF_CALL_1(bpf_get_socket_cookie_sock_ops, struct bpf_sock_ops_kern *, ctx)
- {
--	return sock_gen_cookie(ctx->sk);
-+	return __sock_gen_cookie(ctx->sk);
- }
- 
- static const struct bpf_func_proto bpf_get_socket_cookie_sock_ops_proto = {
-@@ -4281,7 +4281,7 @@ static const struct bpf_func_proto bpf_get_socket_cookie_sock_ops_proto = {
- static u64 __bpf_get_netns_cookie(struct sock *sk)
- {
- #ifdef CONFIG_NET_NS
--	return net_gen_cookie(sk ? sk->sk_net.net : &init_net);
-+	return __net_gen_cookie(sk ? sk->sk_net.net : &init_net);
- #else
- 	return 0;
+diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+index 1106777df00b..107e1cd62075 100644
+--- a/tools/lib/bpf/bpf_helpers.h
++++ b/tools/lib/bpf/bpf_helpers.h
+@@ -53,6 +53,52 @@
+ 	})
  #endif
-diff --git a/net/core/net_namespace.c b/net/core/net_namespace.c
-index 944ab214e5ae..4dd3e0aa0e1f 100644
---- a/net/core/net_namespace.c
-+++ b/net/core/net_namespace.c
-@@ -19,6 +19,7 @@
- #include <linux/net_namespace.h>
- #include <linux/sched/task.h>
- #include <linux/uidgid.h>
-+#include <linux/cookie.h>
  
- #include <net/sock.h>
- #include <net/netlink.h>
-@@ -69,16 +70,16 @@ EXPORT_SYMBOL_GPL(pernet_ops_rwsem);
- 
- static unsigned int max_gen_ptrs = INITIAL_NET_GEN_PTRS;
- 
--static atomic64_t cookie_gen;
-+DEFINE_COOKIE(net_cookie);
- 
--u64 net_gen_cookie(struct net *net)
-+u64 __net_gen_cookie(struct net *net)
- {
- 	while (1) {
- 		u64 res = atomic64_read(&net->net_cookie);
- 
- 		if (res)
- 			return res;
--		res = atomic64_inc_return(&cookie_gen);
-+		res = gen_cookie_next(&net_cookie);
- 		atomic64_cmpxchg(&net->net_cookie, 0, res);
- 	}
- }
-@@ -1101,7 +1102,7 @@ static int __init net_ns_init(void)
- 		panic("Could not allocate generic netns");
- 
- 	rcu_assign_pointer(init_net.gen, ng);
--	net_gen_cookie(&init_net);
-+	__net_gen_cookie(&init_net);
- 
- 	down_write(&pernet_ops_rwsem);
- 	if (setup_net(&init_net, &init_user_ns))
-diff --git a/net/core/sock_diag.c b/net/core/sock_diag.c
-index c13ffbd33d8d..c9c45b935f99 100644
---- a/net/core/sock_diag.c
-+++ b/net/core/sock_diag.c
-@@ -11,7 +11,7 @@
- #include <linux/tcp.h>
- #include <linux/workqueue.h>
- #include <linux/nospec.h>
--
-+#include <linux/cookie.h>
- #include <linux/inet_diag.h>
- #include <linux/sock_diag.h>
- 
-@@ -19,16 +19,17 @@ static const struct sock_diag_handler *sock_diag_handlers[AF_MAX];
- static int (*inet_rcv_compat)(struct sk_buff *skb, struct nlmsghdr *nlh);
- static DEFINE_MUTEX(sock_diag_table_mutex);
- static struct workqueue_struct *broadcast_wq;
--static atomic64_t cookie_gen;
- 
--u64 sock_gen_cookie(struct sock *sk)
-+DEFINE_COOKIE(sock_cookie);
++/*
++ * Helper macro to throw a compilation error if __bpf_unreachable() gets
++ * built into the resulting code. This works given BPF back end does not
++ * implement __builtin_trap(). This is useful to assert that certain paths
++ * of the program code are never used and hence eliminated by the compiler.
++ *
++ * For example, consider a switch statement that covers known cases used by
++ * the program. __bpf_unreachable() can then reside in the default case. If
++ * the program gets extended such that a case is not covered in the switch
++ * statement, then it will throw a build error due to the default case not
++ * being compiled out.
++ */
++#ifndef __bpf_unreachable
++# define __bpf_unreachable()	__builtin_trap()
++#endif
 +
-+u64 __sock_gen_cookie(struct sock *sk)
- {
- 	while (1) {
- 		u64 res = atomic64_read(&sk->sk_cookie);
- 
- 		if (res)
- 			return res;
--		res = atomic64_inc_return(&cookie_gen);
-+		res = gen_cookie_next(&sock_cookie);
- 		atomic64_cmpxchg(&sk->sk_cookie, 0, res);
- 	}
- }
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index e1f05e3fa1d0..257fe8975a99 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -401,7 +401,7 @@ static void *sock_map_lookup_sys(struct bpf_map *map, void *key)
- 	if (!sk)
- 		return ERR_PTR(-ENOENT);
- 
--	sock_gen_cookie(sk);
-+	__sock_gen_cookie(sk);
- 	return &sk->sk_cookie;
- }
- 
-@@ -1206,7 +1206,7 @@ static void *sock_hash_lookup_sys(struct bpf_map *map, void *key)
- 	if (!sk)
- 		return ERR_PTR(-ENOENT);
- 
--	sock_gen_cookie(sk);
-+	__sock_gen_cookie(sk);
- 	return &sk->sk_cookie;
- }
- 
++/*
++ * Helper function to perform a tail call with a constant/immediate map slot.
++ */
++static __always_inline void
++bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
++{
++	if (!__builtin_constant_p(slot))
++		__bpf_unreachable();
++
++	/*
++	 * Provide a hard guarantee that LLVM won't optimize setting r2 (map
++	 * pointer) and r3 (constant map index) from _different paths_ ending
++	 * up at the _same_ call insn as otherwise we won't be able to use the
++	 * jmpq/nopl retpoline-free patching by the x86-64 JIT in the kernel
++	 * given they mismatch. See also d2e4c1e6c294 ("bpf: Constant map key
++	 * tracking for prog array pokes") for details on verifier tracking.
++	 *
++	 * Note on clobber list: we need to stay in-line with BPF calling
++	 * convention, so even if we don't end up using r0, r4, r5, we need
++	 * to mark them as clobber so that LLVM doesn't end up using them
++	 * before / after the call.
++	 */
++	asm volatile("r1 = %[ctx]\n\t"
++		     "r2 = %[map]\n\t"
++		     "r3 = %[slot]\n\t"
++		     "call 12\n\t"
++		     :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
++		     : "r0", "r1", "r2", "r3", "r4", "r5");
++}
++
+ /*
+  * Helper structure used by eBPF C program
+  * to describe BPF map attributes to libbpf loader
 -- 
 2.21.0
 
