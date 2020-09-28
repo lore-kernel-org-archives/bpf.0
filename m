@@ -2,252 +2,224 @@ Return-Path: <SRS0=5TR3=DF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-9.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 239C1C4727F
-	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 11:36:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C51CC47420
+	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 14:13:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C81CB221EC
-	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 11:36:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F7BB21924
+	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 14:13:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="U/mDkhYF"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="0Q8eHlmT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726722AbgI1LgR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Sep 2020 07:36:17 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:49594 "EHLO
+        id S1726630AbgI1ONQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Sep 2020 10:13:16 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:49800 "EHLO
         aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726597AbgI1LgQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Sep 2020 07:36:16 -0400
+        with ESMTP id S1726310AbgI1ONQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Sep 2020 10:13:16 -0400
 Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08SBXanA171303;
-        Mon, 28 Sep 2020 11:35:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=0qtOOms931AGKn/rd3vETm6Tk45asFbF+0vyw3GpG9Y=;
- b=U/mDkhYF8TXsKFls/vfev3pSkBmCPk6bgCdk00k6+chgvqgHIdeDPu6uhrIOtar1ZV7r
- 78i+yz9xA55DRyq9glaKw6prMyNHc/WZYubtUvG/xhNEV2A6tE7xqK9PivpkxYJTl/fX
- Lh8bFNn/ytPwufoAteQcYwctOhjEnp3bGUgxIMJIzAzSRNCyIrTPlRQuBaCgrjBEfc0v
- AMe/hE3OxOw1ayM0GArtHP0BIXimJpWttPSxsQul7HFtLBSY2ZnDXF5TnkbbXOKoElXq
- Z0D/ap8bDkjprR/A4ghAw0PTVujaWJwohz5VZ8yVJqUkGlCSNbKNel83vwQRroRsYlaB qQ== 
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08SE9Vn5065420;
+        Mon, 28 Sep 2020 14:12:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : in-reply-to : message-id : references : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=iQLxmJxSvSJscFRlyFmzx7cDJf4NvJfEUoYeUUEmSq0=;
+ b=0Q8eHlmTxUZwNR4uBoJ/jRA6CQrm4V75pLJYhNynu/mQZ7SGs4IhFb5URe85IyR6NQmn
+ 35FuToHscKSC/Wrpy+Cjtfn2qErrGK9aS1tGZVFCxgz1kIuI/URfiCdcjziZDMx4cPvs
+ bWtFzR8OACZIAELD+dvm8zwZv8E9Tae6R6gW9qPgrI7GZetbXgt7R/ZsudIm+WJov0e3
+ d1+bfs4LXwuaDTCuRpu8JqHUFdKPhp3spBQSdKHT3vLSn03QLYzTG63fLL8D1+pGITz5
+ 64PayZfxn+8mvMsFXTW8ihexhiU35xJ9/oixDix5TdSPsI8KCeRydXcqiGFt+LXwBPqd lg== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 33swkkmf2t-1
+        by aserp2120.oracle.com with ESMTP id 33swkkn9pk-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 28 Sep 2020 11:35:31 +0000
+        Mon, 28 Sep 2020 14:12:24 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08SBUK1V057303;
-        Mon, 28 Sep 2020 11:33:31 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 33tfhw581u-1
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08SEAOmu181612;
+        Mon, 28 Sep 2020 14:12:24 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 33tfhwax0j-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Sep 2020 11:33:30 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08SBXUJD019290;
-        Mon, 28 Sep 2020 11:33:30 GMT
-Received: from localhost.uk.oracle.com (/10.175.167.231)
+        Mon, 28 Sep 2020 14:12:24 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08SECIhV022371;
+        Mon, 28 Sep 2020 14:12:18 GMT
+Received: from dhcp-10-175-172-184.vpn.oracle.com (/10.175.172.184)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 28 Sep 2020 04:33:29 -0700
+        with ESMTP ; Mon, 28 Sep 2020 07:12:18 -0700
+Date:   Mon, 28 Sep 2020 15:12:04 +0100 (IST)
 From:   Alan Maguire <alan.maguire@oracle.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com, yhs@fb.com
-Cc:     linux@rasmusvillemoes.dk, andriy.shevchenko@linux.intel.com,
+X-X-Sender: alan@localhost
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+cc:     Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
+        daniel@iogearbox.net, andriin@fb.com, yhs@fb.com,
+        linux@rasmusvillemoes.dk, andriy.shevchenko@linux.intel.com,
         pmladek@suse.com, kafai@fb.com, songliubraving@fb.com,
         john.fastabend@gmail.com, kpsingh@chromium.org, shuah@kernel.org,
         rdna@fb.com, scott.branden@broadcom.com, quentin@isovalent.com,
         cneirabustos@gmail.com, jakub@cloudflare.com, mingo@redhat.com,
-        rostedt@goodmis.org, acme@kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v7 bpf-next 8/8] selftests/bpf: add test for bpf_seq_printf_btf helper
-Date:   Mon, 28 Sep 2020 12:31:10 +0100
-Message-Id: <1601292670-1616-9-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1601292670-1616-1-git-send-email-alan.maguire@oracle.com>
-References: <1601292670-1616-1-git-send-email-alan.maguire@oracle.com>
+        rostedt@goodmis.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        acme@kernel.org
+Subject: Re: [PATCH v6 bpf-next 6/6] selftests/bpf: add test for bpf_seq_printf_btf
+ helper
+In-Reply-To: <20200925012611.jebtlvcttusk3hbx@ast-mbp.dhcp.thefacebook.com>
+Message-ID: <alpine.LRH.2.21.2009281500220.13299@localhost>
+References: <1600883188-4831-1-git-send-email-alan.maguire@oracle.com> <1600883188-4831-7-git-send-email-alan.maguire@oracle.com> <20200925012611.jebtlvcttusk3hbx@ast-mbp.dhcp.thefacebook.com>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9757 signatures=668680
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999 bulkscore=0
- phishscore=0 malwarescore=0 adultscore=0 suspectscore=2 mlxscore=0
+ phishscore=0 malwarescore=0 adultscore=0 suspectscore=3 mlxscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009280093
+ definitions=main-2009280114
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9757 signatures=668680
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 phishscore=0
- suspectscore=2 mlxlogscore=999 clxscore=1015 priorityscore=1501
+ suspectscore=3 mlxlogscore=999 clxscore=1015 priorityscore=1501
  impostorscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009280094
+ definitions=main-2009280114
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a test verifying iterating over tasks and displaying BTF
-representation of task_struct succeeds.
 
-Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- tools/testing/selftests/bpf/prog_tests/bpf_iter.c  | 74 ++++++++++++++++++++++
- .../selftests/bpf/progs/bpf_iter_task_btf.c        | 50 +++++++++++++++
- 2 files changed, 124 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task_btf.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-index ad9de13..af15630 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -7,6 +7,7 @@
- #include "bpf_iter_task.skel.h"
- #include "bpf_iter_task_stack.skel.h"
- #include "bpf_iter_task_file.skel.h"
-+#include "bpf_iter_task_btf.skel.h"
- #include "bpf_iter_tcp4.skel.h"
- #include "bpf_iter_tcp6.skel.h"
- #include "bpf_iter_udp4.skel.h"
-@@ -167,6 +168,77 @@ static void test_task_file(void)
- 	bpf_iter_task_file__destroy(skel);
- }
+On Thu, 24 Sep 2020, Alexei Starovoitov wrote:
+
+> to whatever number, but printing single task_struct needs ~800 lines and
+> ~18kbytes. Humans can scroll through that much spam, but can we make it less
+> verbose by default somehow?
+> May be not in this patch set, but in the follow up?
+>
+
+One approach that might work would be to devote 4 bits or so of
+flag space to a "maximum depth" specifier; i.e. at depth 1,
+only base types are displayed, no aggregate types like arrays,
+structs and unions.  We've already got depth processing in the
+code to figure out if possibly zeroed nested data needs to be
+displayed, so it should hopefully be a simple follow-up.
+
+One way to express it would be to use "..." to denote field(s)
+were omitted. We could even use the number of "."s to denote
+cases where multiple fields were omitted, giving a visual sense
+of how much data was omitted.  So for example with 
+BTF_F_MAX_DEPTH(1), task_struct looks like this:
+
+(struct task_struct){
+ .state = ()1,
+ .stack = ( *)0x00000000029d1e6f,
+ ...
+ .flags = (unsigned int)4194560,
+ ...
+ .cpu = (unsigned int)36,
+ .wakee_flips = (unsigned int)11,
+ .wakee_flip_decay_ts = (long unsigned int)4294914874,
+ .last_wakee = (struct task_struct *)0x000000006c7dfe6d,
+ .recent_used_cpu = (int)19,
+ .wake_cpu = (int)36,
+ .prio = (int)120,
+ .static_prio = (int)120,
+ .normal_prio = (int)120,
+ .sched_class = (struct sched_class *)0x00000000ad1561e6,
+ ...
+ .exec_start = (u64)674402577156,
+ .sum_exec_runtime = (u64)5009664110,
+ .vruntime = (u64)167038057,
+ .prev_sum_exec_runtime = (u64)5009578167,
+ .nr_migrations = (u64)54,
+ .depth = (int)1,
+ .parent = (struct sched_entity *)0x00000000cba60e7d,
+ .cfs_rq = (struct cfs_rq *)0x0000000014f353ed,
+ ...
  
-+#define TASKBUFSZ		32768
-+
-+static char taskbuf[TASKBUFSZ];
-+
-+static void do_btf_read(struct bpf_iter_task_btf *skel)
-+{
-+	struct bpf_program *prog = skel->progs.dump_task_struct;
-+	struct bpf_iter_task_btf__bss *bss = skel->bss;
-+	int iter_fd = -1, len = 0, bufleft = TASKBUFSZ;
-+	struct bpf_link *link;
-+	char *buf = taskbuf;
-+
-+	link = bpf_program__attach_iter(prog, NULL);
-+	if (CHECK(IS_ERR(link), "attach_iter", "attach_iter failed\n"))
-+		return;
-+
-+	iter_fd = bpf_iter_create(bpf_link__fd(link));
-+	if (CHECK(iter_fd < 0, "create_iter", "create_iter failed\n"))
-+		goto free_link;
-+
-+	do {
-+		len = read(iter_fd, buf, bufleft);
-+		if (len > 0) {
-+			buf += len;
-+			bufleft -= len;
-+		}
-+	} while (len > 0);
-+
-+	if (bss->skip) {
-+		printf("%s:SKIP:no __builtin_btf_type_id\n", __func__);
-+		test__skip();
-+		goto free_link;
-+	}
-+
-+	if (CHECK(len < 0, "read", "read failed: %s\n", strerror(errno)))
-+		goto free_link;
-+
-+	CHECK(strstr(taskbuf, "(struct task_struct)") == NULL,
-+	      "check for btf representation of task_struct in iter data",
-+	      "struct task_struct not found");
-+free_link:
-+	if (iter_fd > 0)
-+		close(iter_fd);
-+	bpf_link__destroy(link);
-+}
-+
-+static void test_task_btf(void)
-+{
-+	struct bpf_iter_task_btf__bss *bss;
-+	struct bpf_iter_task_btf *skel;
-+
-+	skel = bpf_iter_task_btf__open_and_load();
-+	if (CHECK(!skel, "bpf_iter_task_btf__open_and_load",
-+		  "skeleton open_and_load failed\n"))
-+		return;
-+
-+	bss = skel->bss;
-+
-+	do_btf_read(skel);
-+
-+	if (CHECK(bss->tasks == 0, "check if iterated over tasks",
-+		  "no task iteration, did BPF program run?\n"))
-+		goto cleanup;
-+
-+	CHECK(bss->seq_err != 0, "check for unexpected err",
-+	      "bpf_seq_printf_btf returned %ld", bss->seq_err);
-+
-+cleanup:
-+	bpf_iter_task_btf__destroy(skel);
-+}
-+
- static void test_tcp4(void)
- {
- 	struct bpf_iter_tcp4 *skel;
-@@ -957,6 +1029,8 @@ void test_bpf_iter(void)
- 		test_task_stack();
- 	if (test__start_subtest("task_file"))
- 		test_task_file();
-+	if (test__start_subtest("task_btf"))
-+		test_task_btf();
- 	if (test__start_subtest("tcp4"))
- 		test_tcp4();
- 	if (test__start_subtest("tcp6"))
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task_btf.c b/tools/testing/selftests/bpf/progs/bpf_iter_task_btf.c
-new file mode 100644
-index 0000000..a1ddc36
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_task_btf.c
-@@ -0,0 +1,50 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020, Oracle and/or its affiliates. */
-+#include "bpf_iter.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+
-+#include <errno.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+long tasks = 0;
-+long seq_err = 0;
-+bool skip = false;
-+
-+SEC("iter/task")
-+int dump_task_struct(struct bpf_iter__task *ctx)
-+{
-+	struct seq_file *seq = ctx->meta->seq;
-+	struct task_struct *task = ctx->task;
-+	static struct btf_ptr ptr = { };
-+	long ret;
-+
-+#if __has_builtin(__builtin_btf_type_id)
-+	ptr.type_id = bpf_core_type_id_kernel(struct task_struct);
-+	ptr.ptr = task;
-+
-+	if (ctx->meta->seq_num == 0)
-+		BPF_SEQ_PRINTF(seq, "Raw BTF task\n");
-+
-+	ret = bpf_seq_printf_btf(seq, &ptr, sizeof(ptr), 0);
-+	switch (ret) {
-+	case 0:
-+		tasks++;
-+		break;
-+	case -ERANGE:
-+		/* NULL task or task->fs, don't count it as an error. */
-+		break;
-+	case -E2BIG:
-+		return 1;
-+	default:
-+		seq_err = ret;
-+		break;
-+	}
-+#else
-+	skip = true;
-+#endif
-+
-+	return 0;
-+}
--- 
-1.8.3.1
+...etc. What do you think?
 
+> > +SEC("iter/task")
+> > +int dump_task_fs_struct(struct bpf_iter__task *ctx)
+> > +{
+> > +	static const char fs_type[] = "struct fs_struct";
+> > +	struct seq_file *seq = ctx->meta->seq;
+> > +	struct task_struct *task = ctx->task;
+> > +	struct fs_struct *fs = (void *)0;
+> > +	static struct btf_ptr ptr = { };
+> > +	long ret;
+> > +
+> > +	if (task)
+> > +		fs = task->fs;
+> > +
+> > +	ptr.type = fs_type;
+> > +	ptr.ptr = fs;
+> 
+> imo the following is better:
+>        ptr.type_id = __builtin_btf_type_id(*fs, 1);
+>        ptr.ptr = fs;
+> 
+
+I'm still seeing lookup failures using __builtin_btf_type_id(,1) -
+whereas both __builtin_btf_type_id(,0) and Andrii's
+suggestion of bpf_core_type_id_kernel() work. Not sure what's
+going on - pahole is v1.17, clang is
+
+clang version 12.0.0 (/mnt/src/llvm-project/clang 
+7ab7b979d29e1e43701cf690f5cf1903740f50e3)
+
+> > +
+> > +	if (ctx->meta->seq_num == 0)
+> > +		BPF_SEQ_PRINTF(seq, "Raw BTF fs_struct per task\n");
+> > +
+> > +	ret = bpf_seq_printf_btf(seq, &ptr, sizeof(ptr), 0);
+> > +	switch (ret) {
+> > +	case 0:
+> > +		tasks++;
+> > +		break;
+> > +	case -ERANGE:
+> > +		/* NULL task or task->fs, don't count it as an error. */
+> > +		break;
+> > +	default:
+> > +		seq_err = ret;
+> > +		break;
+> > +	}
+> 
+> Please add handling of E2BIG to this switch. Otherwise
+> printing large amount of tiny structs will overflow PAGE_SIZE and E2BIG
+> will be send to user space.
+> Like this:
+> @@ -40,6 +40,8 @@ int dump_task_fs_struct(struct bpf_iter__task *ctx)
+>         case -ERANGE:
+>                 /* NULL task or task->fs, don't count it as an error. */
+>                 break;
+> +       case -E2BIG:
+> +               return 1;
+> 
+
+Done.
+
+> Also please change bpf_seq_read() like this:
+> diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+> index 30833bbf3019..8f10e30ea0b0 100644
+> --- a/kernel/bpf/bpf_iter.c
+> +++ b/kernel/bpf/bpf_iter.c
+> @@ -88,8 +88,8 @@ static ssize_t bpf_seq_read(struct file *file, char __user *buf, size_t size,
+>         mutex_lock(&seq->lock);
+> 
+>         if (!seq->buf) {
+> -               seq->size = PAGE_SIZE;
+> -               seq->buf = kmalloc(seq->size, GFP_KERNEL);
+> +               seq->size = PAGE_SIZE << 3;
+> +               seq->buf = kvmalloc(seq->size, GFP_KERNEL);
+> 
+> So users can print task_struct by default.
+> Hopefully we will figure out how to deal with spam later.
+> 
+
+Thanks for all the help and suggestions! I didn't want to
+attribute the patch bumping seq size in v7 to you without your 
+permission, but it's all your work so if I need to respin let me
+know if you'd like me to fix that. Thanks again!
+
+Alan
