@@ -2,103 +2,175 @@ Return-Path: <SRS0=5TR3=DF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9118C2D0A8
-	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 09:08:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44755C4741F
+	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 09:08:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 86C68221EC
-	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 09:08:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E209222262
+	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 09:08:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="aaYblTnw"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="qZ9Iq9Y7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726465AbgI1JIk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Sep 2020 05:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
+        id S1726722AbgI1JIo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Sep 2020 05:08:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726461AbgI1JIj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Sep 2020 05:08:39 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90229C0613CE
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2020 02:08:39 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id d4so258915wmd.5
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2020 02:08:39 -0700 (PDT)
+        with ESMTP id S1726714AbgI1JIn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Sep 2020 05:08:43 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCD98C0613D3
+        for <bpf@vger.kernel.org>; Mon, 28 Sep 2020 02:08:42 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id l15so3915335wmh.1
+        for <bpf@vger.kernel.org>; Mon, 28 Sep 2020 02:08:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EKVPdZy/sjSkGpbl4mmaWgA3/1wInIBCoopNG3gWUyk=;
-        b=aaYblTnwpHARbTMEbMzlRDkO9zJTdrVxObJrgHKZ30e5zZvd3lQvTR4jA7xKSiPsXP
-         xsbrQvut1WGgZdQD0E0eT54hhJw+DovP57rQhomTRfZo/saaXekvVKEj2QwWMv9TnghG
-         Ffx086TfGM958gRhPOaPxzkhWeBBRuFG27i5Y=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Hgo0C+B4MaRA4y0HWxs83icuwRAx25Hc6vqvCgKEaCI=;
+        b=qZ9Iq9Y7IeU4EBY/MUElVtiiiS0QAMvrZjex6udneQ8xKfu1nUGnGrxo36TYNqocel
+         s7Xx75wFu9HoFkQ9qgxrQNZSYtsgpIHTD+4B7xlCTdzCKjlCF2pqOhvpVwwnvyKY1OMK
+         HOvWmn1FcO8XEBNHoStCb7DNlo82+DQYMIdig=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EKVPdZy/sjSkGpbl4mmaWgA3/1wInIBCoopNG3gWUyk=;
-        b=RpgAw19gQmiMgvxNG6al3N9u4JNGWLtdCxiosHspWc6n7dX9Z0UEO3+kmA/InvIPRC
-         7MXMNF4//wsSja7BLUJl17ZRMJN8xwbvLUqPdUfRMWx4TtuxM2e/Ditoxu1WosaRr/5i
-         HhVyC7U1uV2NhbZoBu29vfYZkD9sJ+73pTU6Tr7SFHg2q3++N6BMq28GKKV3Ic0ax9sx
-         Pi7JeRO1rg8WfAnQ8rr7CuyKbgRJz+lLyGjOqjgZqrtVV130r9AKOdIjm1akL2QEivVV
-         7QkNERR1xwfgXQ6Te2e7WHbBkeTPiRt3u8qX4WqDawrPLioM2T7sivh4rOyfTjLTr+FH
-         NFLQ==
-X-Gm-Message-State: AOAM5322ib/M57FosU6sP7Ync+LB0ZpecjaA4Vg29hsFd8rUUYsUeZHj
-        LcQxQN5Ewe/6F/wA52dUPHgDog==
-X-Google-Smtp-Source: ABdhPJy5h6LN59OS60mMZGMU5YEr1O4Ubdjy8bMmkjK3hyk0W591Z7KG/vI4n8oqrT0qmLVi7ahWtw==
-X-Received: by 2002:a1c:4885:: with SMTP id v127mr583443wma.129.1601284118067;
-        Mon, 28 Sep 2020 02:08:38 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Hgo0C+B4MaRA4y0HWxs83icuwRAx25Hc6vqvCgKEaCI=;
+        b=mk+E4PLGtp7kyg+JGhzDQ965K2NxBhqPDHHAA5uIr3Hcrr5K7mweVg5RjywrQMcayX
+         Aqz1PuqWcInc2blR4d7BL+aOf6PkllX1X16dAQMdu0JUyZp3zGphUD1TZf+3M29GuFcL
+         QCQSgcxzmG0ihBUSI9m5jLg5H2GPmLIZsMlrOUCrCPcxqRig1k52AgJhxtZYkH5UEKiA
+         HTMUUeDTfYn/GVaeHChggf9+d/bfXm95snMNmu5HOBGuDELrIx3J6/ZRxd7l25GUZNL1
+         k667BzDT4j9gz9SiOc11HWOytLVKt51I768tNc8iTwMKNtGvKVAtT/C2YqKJuVoOhjot
+         1pOQ==
+X-Gm-Message-State: AOAM533q+EU2rGgKJ9LgzMYSREfHs2axVD4FlGFbgoAZBePnvt3y1rBl
+        F+DdMeF8E1XPzMVj0/vH45AjRA==
+X-Google-Smtp-Source: ABdhPJzbHz/H1+XuqgkxQKHOtkhghile3YOdp6R63ScPSEZ74n+SR0ma6flELvBAhdaOMv2J3eDG1Q==
+X-Received: by 2002:a7b:cd93:: with SMTP id y19mr561874wmj.112.1601284121348;
+        Mon, 28 Sep 2020 02:08:41 -0700 (PDT)
 Received: from antares.lan (1.f.1.6.a.e.6.5.a.0.3.2.4.7.4.0.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:474:230a:56ea:61f1])
-        by smtp.gmail.com with ESMTPSA id u13sm479631wrm.77.2020.09.28.02.08.36
+        by smtp.gmail.com with ESMTPSA id u13sm479631wrm.77.2020.09.28.02.08.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Sep 2020 02:08:37 -0700 (PDT)
+        Mon, 28 Sep 2020 02:08:40 -0700 (PDT)
 From:   Lorenz Bauer <lmb@cloudflare.com>
-To:     kafai@fb.com, Alexei Starovoitov <ast@kernel.org>,
+To:     kafai@fb.com, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>
 Cc:     kernel-team@cloudflare.com, Lorenz Bauer <lmb@cloudflare.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 0/4] Sockmap copying
-Date:   Mon, 28 Sep 2020 10:08:01 +0100
-Message-Id: <20200928090805.23343-1-lmb@cloudflare.com>
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 2/4] selftests: bpf: Add helper to compare socket cookies
+Date:   Mon, 28 Sep 2020 10:08:03 +0100
+Message-Id: <20200928090805.23343-3-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200928090805.23343-1-lmb@cloudflare.com>
+References: <20200928090805.23343-1-lmb@cloudflare.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Changes in v2:
-- Check sk_fullsock in map_update_elem (Martin)
+We compare socket cookies to ensure that insertion into a sockmap worked.
+Pull this out into a helper function for use in other tests.
 
-Enable calling map_update_elem on sockmaps from bpf_iter context. This
-in turn allows us to copy a sockmap by iterating its elements.
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+---
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 50 +++++++++++++------
+ 1 file changed, 36 insertions(+), 14 deletions(-)
 
-The change itself is tiny, all thanks to the ground work from Martin,
-whose series [1] this patch is based on. I updated the tests to do some
-copying, and also included two cleanups.
-
-I'm sending this out now rather than when Martin's series has landed
-because I hope this can get in before the merge window (potentially)
-closes this weekend.
-
-1: https://lore.kernel.org/bpf/20200925000337.3853598-1-kafai@fb.com/
-
-Lorenz Bauer (4):
-  bpf: sockmap: enable map_update_elem from bpf_iter
-  selftests: bpf: Add helper to compare socket cookies
-  selftests: bpf: remove shared header from sockmap iter test
-  selftest: bpf: Test copying a sockmap and sockhash
-
- kernel/bpf/verifier.c                         |   2 +-
- net/core/sock_map.c                           |   3 +
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 100 +++++++++++-------
- .../selftests/bpf/progs/bpf_iter_sockmap.c    |  32 ++++--
- .../selftests/bpf/progs/bpf_iter_sockmap.h    |   3 -
- 5 files changed, 90 insertions(+), 50 deletions(-)
- delete mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_sockmap.h
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+index 4b7a527e7e82..67d3301bdf81 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+@@ -50,6 +50,37 @@ static int connected_socket_v4(void)
+ 	return -1;
+ }
+ 
++static void compare_cookies(struct bpf_map *src, struct bpf_map *dst)
++{
++	__u32 i, max_entries = bpf_map__max_entries(src);
++	int err, duration, src_fd, dst_fd;
++
++	src_fd = bpf_map__fd(src);
++	dst_fd = bpf_map__fd(dst);
++
++	for (i = 0; i < max_entries; i++) {
++		__u64 src_cookie, dst_cookie;
++
++		err = bpf_map_lookup_elem(src_fd, &i, &src_cookie);
++		if (err && errno == ENOENT) {
++			err = bpf_map_lookup_elem(dst_fd, &i, &dst_cookie);
++			CHECK(!err, "map_lookup_elem(dst)", "element %u not deleted\n", i);
++			CHECK(err && errno != ENOENT, "map_lookup_elem(dst)", "%s\n",
++			      strerror(errno));
++			continue;
++		}
++		if (CHECK(err, "lookup_elem(src)", "%s\n", strerror(errno)))
++			continue;
++
++		err = bpf_map_lookup_elem(dst_fd, &i, &dst_cookie);
++		if (CHECK(err, "lookup_elem(dst)", "%s\n", strerror(errno)))
++			continue;
++
++		CHECK(dst_cookie != src_cookie, "cookie mismatch",
++		      "%llu != %llu (pos %u)\n", dst_cookie, src_cookie, i);
++	}
++}
++
+ /* Create a map, populate it with one socket, and free the map. */
+ static void test_sockmap_create_update_free(enum bpf_map_type map_type)
+ {
+@@ -109,9 +140,9 @@ static void test_skmsg_helpers(enum bpf_map_type map_type)
+ static void test_sockmap_update(enum bpf_map_type map_type)
+ {
+ 	struct bpf_prog_test_run_attr tattr;
+-	int err, prog, src, dst, duration = 0;
++	int err, prog, src, duration = 0;
+ 	struct test_sockmap_update *skel;
+-	__u64 src_cookie, dst_cookie;
++	struct bpf_map *dst_map;
+ 	const __u32 zero = 0;
+ 	char dummy[14] = {0};
+ 	__s64 sk;
+@@ -127,18 +158,14 @@ static void test_sockmap_update(enum bpf_map_type map_type)
+ 	prog = bpf_program__fd(skel->progs.copy_sock_map);
+ 	src = bpf_map__fd(skel->maps.src);
+ 	if (map_type == BPF_MAP_TYPE_SOCKMAP)
+-		dst = bpf_map__fd(skel->maps.dst_sock_map);
++		dst_map = skel->maps.dst_sock_map;
+ 	else
+-		dst = bpf_map__fd(skel->maps.dst_sock_hash);
++		dst_map = skel->maps.dst_sock_hash;
+ 
+ 	err = bpf_map_update_elem(src, &zero, &sk, BPF_NOEXIST);
+ 	if (CHECK(err, "update_elem(src)", "errno=%u\n", errno))
+ 		goto out;
+ 
+-	err = bpf_map_lookup_elem(src, &zero, &src_cookie);
+-	if (CHECK(err, "lookup_elem(src, cookie)", "errno=%u\n", errno))
+-		goto out;
+-
+ 	tattr = (struct bpf_prog_test_run_attr){
+ 		.prog_fd = prog,
+ 		.repeat = 1,
+@@ -151,12 +178,7 @@ static void test_sockmap_update(enum bpf_map_type map_type)
+ 		       "errno=%u retval=%u\n", errno, tattr.retval))
+ 		goto out;
+ 
+-	err = bpf_map_lookup_elem(dst, &zero, &dst_cookie);
+-	if (CHECK(err, "lookup_elem(dst, cookie)", "errno=%u\n", errno))
+-		goto out;
+-
+-	CHECK(dst_cookie != src_cookie, "cookie mismatch", "%llu != %llu\n",
+-	      dst_cookie, src_cookie);
++	compare_cookies(skel->maps.src, dst_map);
+ 
+ out:
+ 	test_sockmap_update__destroy(skel);
 -- 
 2.25.1
 
