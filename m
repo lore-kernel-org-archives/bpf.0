@@ -2,101 +2,133 @@ Return-Path: <SRS0=5TR3=DF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24684C4741F
-	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 11:34:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C8E7DC4741F
+	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 11:34:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CBC56221EC
-	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 11:34:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C0092100A
+	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 11:34:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WGpN7+1H"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="KLBlsajl"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726776AbgI1LeG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Sep 2020 07:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41142 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726578AbgI1LeB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Sep 2020 07:34:01 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC0CC061755
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2020 04:34:01 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id b17so480753pji.1
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2020 04:34:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0FdlCOfUomxaV3oXhqokLgKx58K1pq5fowMywNeXbEY=;
-        b=WGpN7+1HeVQQX1sijwgedsxhacVmoYbTSd7W6c2n1z/jWksenoMpZeRwtXIaXoFygF
-         P2n81Zcp5JyyGfrE0gvBCrZuz4uTUtLJCP/3VU0vYKbySuAK3TcCUDj412QDfnbJE1hj
-         c/NxIqHrVpBRYmkNIqEaShJ76sJOz24YjMrBD6NfRFB8VhT8J1WpJWOi67Byk71j9Ccx
-         FS1u6c/2XFvMw/Lvb3RHGgeoY0iBVEB9VXVJEdukwW8MBZZcGiD91H0Cl/fMG3wXwPPY
-         ZaazT/EHGgzw7W4WiXx/UBB6/IYuEGsYOLfYKukbsITJLM36gfvnVY3DVOFz0WdT1vNx
-         m/cQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0FdlCOfUomxaV3oXhqokLgKx58K1pq5fowMywNeXbEY=;
-        b=bz5wEsPnQ18kvCnqv1cvQBNPaomejeQ+jcUVHW5fABqwT/MmlPcrX1DGDZDFArhJKs
-         Yk95UsIdc7Mlq2N/9L4Z/T3M7EUSFc8ayy4J7kgJBeOMhIWMRCb+PmqoIY5OaWkwqZgv
-         UN986Gj6v88Y67E+8MkiXTvAJmuCbfWv3JVpCwKrK0V4xhAtR5jnY2I6MhPl4f4poOaB
-         +uVbTcLcIvvh1YNq4oZAiKqjVyDJufYFIwpYL9TGxMgqeTLdxSmffWS5U2/IauKPNipv
-         u2Km4BDbXO6f7IMPf+y7i0VxnDucItiFtwjcQnVN6F9fReZqXu1eAd85wi2NEN3C7jfJ
-         Resg==
-X-Gm-Message-State: AOAM530ictHmtaFRZy1/WKGN2tddXcWVQ4K68Vx5F9CX6BMWHo8rx0Do
-        HDZjBGQgK8dKtyEw3KaOFFi7aORAXdrlPYF76DE=
-X-Google-Smtp-Source: ABdhPJyx+wcgIilE/4xNrWvxgkNk8s8XoROstzaWtjgv2de2CmA3o4Wsy3qG1+LV9vzIHl95Vt1/DB8fZct4X+905nY=
-X-Received: by 2002:a17:90a:e207:: with SMTP id a7mr969649pjz.117.1601292840955;
- Mon, 28 Sep 2020 04:34:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200928082344.17110-1-ciara.loftus@intel.com>
-In-Reply-To: <20200928082344.17110-1-ciara.loftus@intel.com>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Mon, 28 Sep 2020 13:33:49 +0200
-Message-ID: <CAJ8uoz0pP3Q0rvXBraRquNvv_Z4hiZTXPV3sCc2P6ieVQGKX7A@mail.gmail.com>
-Subject: Re: [PATCH bpf] xsk: fix a documentation mistake in xsk_queue.h
-To:     Ciara Loftus <ciara.loftus@intel.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726558AbgI1LeJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Sep 2020 07:34:09 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:56238 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726559AbgI1Ldz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Sep 2020 07:33:55 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08SBTxMd110752;
+        Mon, 28 Sep 2020 11:33:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=qKJeAMjM6G/zEtxzVNVaDYjfycFYarZOBBJX/8TJ5W8=;
+ b=KLBlsajl2ByvID6QdiqcTrZ9O/U25dbofWAWaC+SvAJYKeDJAqGCBrlyecRwXKxlRPr3
+ NhOKlxo3+9WbNfKgv2ELjCwNaBM6/T8J5FykNk64GT4BoFRs+hDtZlgP0GZQE3OQkoaW
+ gzskHxxdWzUawBZpdKep3/+sBHMLRIaLDC2IIslWo1xxuatSdJcpAphqUehwgnRWHddj
+ 2Dfaruc2UCKjCS/52wsvq4eOI/2yq22mn9D3Pel+ysQGpH4Eb15cxiF7f0fEHfGMnSyL
+ faLHA1AgReDB6nHnSLlm/ZWbKcUy+VXs+C2dpd1A9eZv2ZsFH5tEn/A0RQPEuXVEtF12 0w== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2130.oracle.com with ESMTP id 33su5amhna-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 28 Sep 2020 11:33:17 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08SBTebf020384;
+        Mon, 28 Sep 2020 11:33:16 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 33tfjuu2xu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Sep 2020 11:33:16 +0000
+Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08SBXErl009444;
+        Mon, 28 Sep 2020 11:33:14 GMT
+Received: from localhost.uk.oracle.com (/10.175.167.231)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 28 Sep 2020 04:33:14 -0700
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com, yhs@fb.com
+Cc:     linux@rasmusvillemoes.dk, andriy.shevchenko@linux.intel.com,
+        pmladek@suse.com, kafai@fb.com, songliubraving@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org, shuah@kernel.org,
+        rdna@fb.com, scott.branden@broadcom.com, quentin@isovalent.com,
+        cneirabustos@gmail.com, jakub@cloudflare.com, mingo@redhat.com,
+        rostedt@goodmis.org, acme@kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v7 bpf-next 6/8] selftests/bpf: fix overflow tests to reflect iter size increase
+Date:   Mon, 28 Sep 2020 12:31:08 +0100
+Message-Id: <1601292670-1616-7-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1601292670-1616-1-git-send-email-alan.maguire@oracle.com>
+References: <1601292670-1616-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9757 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
+ phishscore=0 adultscore=0 bulkscore=0 mlxlogscore=999 suspectscore=2
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009280093
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9757 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=2
+ lowpriorityscore=0 spamscore=0 clxscore=1015 mlxscore=0 impostorscore=0
+ malwarescore=0 phishscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009280093
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Sep 28, 2020 at 10:49 AM Ciara Loftus <ciara.loftus@intel.com> wrote:
->
-> After 'peeking' the ring, the consumer, not the producer, reads the data.
-> Fix this mistake in the comments.
->
-> Fixes: 15d8c9162ced ("xsk: Add function naming comments and reorder functions")
-> Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
-> ---
->  net/xdp/xsk_queue.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-> index bf42cfd74b89..a0bb2f722b3f 100644
-> --- a/net/xdp/xsk_queue.h
-> +++ b/net/xdp/xsk_queue.h
-> @@ -96,7 +96,7 @@ struct xsk_queue {
->   * seen and read by the consumer.
->   *
->   * The consumer peeks into the ring to see if the producer has written
-> - * any new entries. If so, the producer can then read these entries
-> + * any new entries. If so, the consumer can then read these entries
->   * and when it is done reading them release them back to the producer
->   * so that the producer can use these slots to fill in new entries.
->   *
-> --
-> 2.17.1
->
+bpf iter size increase to PAGE_SIZE << 3 means overflow tests assuming
+page size need to be bumped also.
 
-Thank you Ciara.
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ tools/testing/selftests/bpf/prog_tests/bpf_iter.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+index fe1a83b9..ad9de13 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -352,7 +352,7 @@ static void test_overflow(bool test_e2big_overflow, bool ret1)
+ 	struct bpf_map_info map_info = {};
+ 	struct bpf_iter_test_kern4 *skel;
+ 	struct bpf_link *link;
+-	__u32 page_size;
++	__u32 iter_size;
+ 	char *buf;
+ 
+ 	skel = bpf_iter_test_kern4__open();
+@@ -374,19 +374,19 @@ static void test_overflow(bool test_e2big_overflow, bool ret1)
+ 		  "map_creation failed: %s\n", strerror(errno)))
+ 		goto free_map1;
+ 
+-	/* bpf_seq_printf kernel buffer is one page, so one map
++	/* bpf_seq_printf kernel buffer is 8 pages, so one map
+ 	 * bpf_seq_write will mostly fill it, and the other map
+ 	 * will partially fill and then trigger overflow and need
+ 	 * bpf_seq_read restart.
+ 	 */
+-	page_size = sysconf(_SC_PAGE_SIZE);
++	iter_size = sysconf(_SC_PAGE_SIZE) << 3;
+ 
+ 	if (test_e2big_overflow) {
+-		skel->rodata->print_len = (page_size + 8) / 8;
+-		expected_read_len = 2 * (page_size + 8);
++		skel->rodata->print_len = (iter_size + 8) / 8;
++		expected_read_len = 2 * (iter_size + 8);
+ 	} else if (!ret1) {
+-		skel->rodata->print_len = (page_size - 8) / 8;
+-		expected_read_len = 2 * (page_size - 8);
++		skel->rodata->print_len = (iter_size - 8) / 8;
++		expected_read_len = 2 * (iter_size - 8);
+ 	} else {
+ 		skel->rodata->print_len = 1;
+ 		expected_read_len = 2 * 8;
+-- 
+1.8.3.1
+
