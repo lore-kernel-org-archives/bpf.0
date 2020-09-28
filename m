@@ -5,51 +5,51 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 614F7C2D0A8
-	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 11:34:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ED75C2D0A8
+	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 11:35:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 08685221EC
-	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 11:34:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0B108221E8
+	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 11:35:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="To9NJ1dS"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="XpT69atz"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726614AbgI1Lev (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Sep 2020 07:34:51 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:48614 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726465AbgI1Lev (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Sep 2020 07:34:51 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08SBXSWL171212;
-        Mon, 28 Sep 2020 11:33:28 GMT
+        id S1726636AbgI1LfA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Sep 2020 07:35:00 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:45712 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726610AbgI1LfA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Sep 2020 07:35:00 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08SBSx2b088943;
+        Mon, 28 Sep 2020 11:33:04 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=ls5EWukwLTwEEeJB12YgOzvMVsP+dk+LjF2XTI0JFPw=;
- b=To9NJ1dSDnq9L+l5X5syK0JI9VcLP4BI48u9kn3fsZq1cfcesHaMSsg4Ljr/iM3Yut0o
- y08Op+sCSCXb7+6sHLwHwK9aQcB4X2MwdQqRktScs/QWixcf4/EYSnaI23n3MPljiQoT
- b7FXYXWdyhNArKddgyYPWSfnVG0YAxNrYH0B2UpLPDeivGtjU56H2B8nedYWQRpQ+zgc
- qopV2M/5TD7UzD535ZQTbkixLX2hqGDaqgx9tVSwNu6yV5nWv9m95zyL0VBkCyntS9Kp
- j6HGtpGsGzz5OfpCXMz6MYQ3RxxS/GqGlepc444QFlcFutaTuTjFtuq7ven0HVEtJCf5 gw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 33swkkmetj-1
+ bh=gxWK9jPtu08Ovgl3UtIyOEeMIJTkAKlFdQx70NGDyIM=;
+ b=XpT69atz9Wds76E+BAkBxoPt+aG7kNPTlx80QO0l/aHSX9ZCy2AR7f+u3yTweIj0ibl9
+ 989aIYQlEnTSF9+75M46OMfxtKTpKYX+ho8MM0AcKMsAK5BJ/5OC1Wkdm2bm/vTDz2mC
+ sEGUlHB9f/9kHXNK8mVDfokNd50Em+6x7bSCB37uJR7C9+ZPxhsoWfVGJd7D+CWmVABJ
+ gCCELqwAXf1gRGpozG0ELfCcxSNZqvC/YzTPi5BobKKN3vRFhHheZuDSIUwZnutPhV1F
+ hnxCGSUMkIXgCeqUag0ClrH0H2ns8Tvx7TlNm0SctZBQiIV8g6vX11tjN5ojJisVGqx3 Hw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 33sx9mvd40-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 28 Sep 2020 11:33:28 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08SBUffL136931;
-        Mon, 28 Sep 2020 11:33:23 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 33tfdpx811-1
+        Mon, 28 Sep 2020 11:33:04 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08SBULBt057342;
+        Mon, 28 Sep 2020 11:33:03 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 33tfhw57pu-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Sep 2020 11:33:23 +0000
+        Mon, 28 Sep 2020 11:33:03 +0000
 Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 08SBXLWl009554;
-        Mon, 28 Sep 2020 11:33:21 GMT
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08SBX0kL029629;
+        Mon, 28 Sep 2020 11:33:01 GMT
 Received: from localhost.uk.oracle.com (/10.175.167.231)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 28 Sep 2020 04:33:21 -0700
+        with ESMTP ; Mon, 28 Sep 2020 04:32:59 -0700
 From:   Alan Maguire <alan.maguire@oracle.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com, yhs@fb.com
 Cc:     linux@rasmusvillemoes.dk, andriy.shevchenko@linux.intel.com,
@@ -61,200 +61,361 @@ Cc:     linux@rasmusvillemoes.dk, andriy.shevchenko@linux.intel.com,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v7 bpf-next 7/8] bpf: add bpf_seq_printf_btf helper
-Date:   Mon, 28 Sep 2020 12:31:09 +0100
-Message-Id: <1601292670-1616-8-git-send-email-alan.maguire@oracle.com>
+Subject: [PATCH v7 bpf-next 4/8] selftests/bpf: add bpf_snprintf_btf helper tests
+Date:   Mon, 28 Sep 2020 12:31:06 +0100
+Message-Id: <1601292670-1616-5-git-send-email-alan.maguire@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1601292670-1616-1-git-send-email-alan.maguire@oracle.com>
 References: <1601292670-1616-1-git-send-email-alan.maguire@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9757 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
- adultscore=0 malwarescore=0 spamscore=0 mlxscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009280093
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9757 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 phishscore=0
- suspectscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 adultscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999 bulkscore=0
+ phishscore=0 malwarescore=0 adultscore=0 suspectscore=0 mlxscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009280094
+ definitions=main-2009280093
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9757 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+ phishscore=0 mlxscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015
+ spamscore=0 impostorscore=0 malwarescore=0 bulkscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009280093
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A helper is added to allow seq file writing of kernel data
-structures using vmlinux BTF.  Its signature is
+Tests verifying snprintf()ing of various data structures,
+flags combinations using a tp_btf program. Tests are skipped
+if __builtin_btf_type_id is not available to retrieve BTF
+type ids.
 
-long bpf_seq_printf_btf(struct seq_file *m, struct btf_ptr *ptr,
-                        u32 btf_ptr_size, u64 flags);
-
-Flags and struct btf_ptr definitions/use are identical to the
-bpf_snprintf_btf helper, and the helper returns 0 on success
-or a negative error value.
-
-Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- include/linux/btf.h            |  2 ++
- include/uapi/linux/bpf.h       |  9 +++++++++
- kernel/bpf/btf.c               |  4 ++--
- kernel/bpf/core.c              |  1 +
- kernel/trace/bpf_trace.c       | 33 +++++++++++++++++++++++++++++++++
- tools/include/uapi/linux/bpf.h |  9 +++++++++
- 6 files changed, 56 insertions(+), 2 deletions(-)
+ .../selftests/bpf/prog_tests/snprintf_btf.c        |  60 +++++
+ .../selftests/bpf/progs/netif_receive_skb.c        | 249 +++++++++++++++++++++
+ 2 files changed, 309 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/snprintf_btf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/netif_receive_skb.c
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index 3e5cdc2..024e16f 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -68,6 +68,8 @@ const struct btf_type *btf_type_id_size(const struct btf *btf,
- 
- void btf_type_seq_show(const struct btf *btf, u32 type_id, void *obj,
- 		       struct seq_file *m);
-+int btf_type_seq_show_flags(const struct btf *btf, u32 type_id, void *obj,
-+			    struct seq_file *m, u64 flags);
- 
- /*
-  * Copy len bytes of string representation of obj of BTF type_id into buf.
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index fcafe80..82817c4 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3623,6 +3623,14 @@ struct bpf_stack_build_id {
-  *		The number of bytes that were written (or would have been
-  *		written if output had to be truncated due to string size),
-  *		or a negative error in cases of failure.
-+ *
-+ * long bpf_seq_printf_btf(struct seq_file *m, struct btf_ptr *ptr, u32 ptr_size, u64 flags)
-+ *	Description
-+ *		Use BTF to write to seq_write a string representation of
-+ *		*ptr*->ptr, using *ptr*->type_id as per bpf_snprintf_btf().
-+ *		*flags* are identical to those used for bpf_snprintf_btf.
-+ *	Return
-+ *		0 on success or a negative error in case of failure.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3775,6 +3783,7 @@ struct bpf_stack_build_id {
- 	FN(d_path),			\
- 	FN(copy_from_user),		\
- 	FN(snprintf_btf),		\
-+	FN(seq_printf_btf),		\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index be5acf6..99e307a 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -5346,8 +5346,8 @@ static void btf_seq_show(struct btf_show *show, const char *fmt,
- 	seq_vprintf((struct seq_file *)show->target, fmt, args);
- }
- 
--static int btf_type_seq_show_flags(const struct btf *btf, u32 type_id,
--				   void *obj, struct seq_file *m, u64 flags)
-+int btf_type_seq_show_flags(const struct btf *btf, u32 type_id,
-+			    void *obj, struct seq_file *m, u64 flags)
- {
- 	struct btf_show sseq;
- 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 403fb23..c4ba45f 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2217,6 +2217,7 @@ void bpf_user_rnd_init_once(void)
- const struct bpf_func_proto bpf_get_local_storage_proto __weak;
- const struct bpf_func_proto bpf_get_ns_current_pid_tgid_proto __weak;
- const struct bpf_func_proto bpf_snprintf_btf_proto __weak;
-+const struct bpf_func_proto bpf_seq_printf_btf_proto __weak;
- 
- const struct bpf_func_proto * __weak bpf_get_trace_printk_proto(void)
- {
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 983cbd3..6ac254e 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -71,6 +71,10 @@ static struct bpf_raw_event_map *bpf_get_raw_tracepoint_module(const char *name)
- u64 bpf_get_stackid(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- u64 bpf_get_stack(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- 
-+static int bpf_btf_printf_prepare(struct btf_ptr *ptr, u32 btf_ptr_size,
-+				  u64 flags, const struct btf **btf,
-+				  s32 *btf_id);
+diff --git a/tools/testing/selftests/bpf/prog_tests/snprintf_btf.c b/tools/testing/selftests/bpf/prog_tests/snprintf_btf.c
+new file mode 100644
+index 0000000..3a8ecf8
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/snprintf_btf.c
+@@ -0,0 +1,60 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <linux/btf.h>
++#include "netif_receive_skb.skel.h"
 +
- /**
-  * trace_call_bpf - invoke BPF program
-  * @call: tracepoint event
-@@ -776,6 +780,31 @@ struct bpf_seq_printf_buf {
- 	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
- };
- 
-+BPF_CALL_4(bpf_seq_printf_btf, struct seq_file *, m, struct btf_ptr *, ptr,
-+	   u32, btf_ptr_size, u64, flags)
++/* Demonstrate that bpf_snprintf_btf succeeds and that various data types
++ * are formatted correctly.
++ */
++void test_snprintf_btf(void)
 +{
-+	const struct btf *btf;
-+	s32 btf_id;
-+	int ret;
++	struct netif_receive_skb *skel;
++	struct netif_receive_skb__bss *bss;
++	int err, duration = 0;
 +
-+	ret = bpf_btf_printf_prepare(ptr, btf_ptr_size, flags, &btf, &btf_id);
-+	if (ret)
-+		return ret;
++	skel = netif_receive_skb__open();
++	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
++		return;
 +
-+	return btf_type_seq_show_flags(btf, btf_id, ptr->ptr, m, flags);
++	err = netif_receive_skb__load(skel);
++	if (CHECK(err, "skel_load", "failed to load skeleton: %d\n", err))
++		goto cleanup;
++
++	bss = skel->bss;
++
++	err = netif_receive_skb__attach(skel);
++	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
++		goto cleanup;
++
++	/* generate receive event */
++	system("ping -c 1 127.0.0.1 > /dev/null");
++
++	if (bss->skip) {
++		printf("%s:SKIP:no __builtin_btf_type_id\n", __func__);
++		test__skip();
++		goto cleanup;
++	}
++
++	/*
++	 * Make sure netif_receive_skb program was triggered
++	 * and it set expected return values from bpf_trace_printk()s
++	 * and all tests ran.
++	 */
++	if (CHECK(bss->ret <= 0,
++		  "bpf_snprintf_btf: got return value",
++		  "ret <= 0 %ld test %d\n", bss->ret, bss->ran_subtests))
++		goto cleanup;
++
++	if (CHECK(bss->ran_subtests == 0, "check if subtests ran",
++		  "no subtests ran, did BPF program run?"))
++		goto cleanup;
++
++	if (CHECK(bss->num_subtests != bss->ran_subtests,
++		  "check all subtests ran",
++		  "only ran %d of %d tests\n", bss->num_subtests,
++		  bss->ran_subtests))
++		goto cleanup;
++
++cleanup:
++	netif_receive_skb__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.c b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+new file mode 100644
+index 0000000..b873d80
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+@@ -0,0 +1,249 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020, Oracle and/or its affiliates. */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
++
++#include <errno.h>
++
++long ret = 0;
++int num_subtests = 0;
++int ran_subtests = 0;
++bool skip = false;
++
++#define STRSIZE			2048
++#define EXPECTED_STRSIZE	256
++
++#ifndef ARRAY_SIZE
++#define ARRAY_SIZE(x)	(sizeof(x) / sizeof((x)[0]))
++#endif
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, char[STRSIZE]);
++} strdata SEC(".maps");
++
++static int __strncmp(const void *m1, const void *m2, size_t len)
++{
++	const unsigned char *s1 = m1;
++	const unsigned char *s2 = m2;
++	int i, delta = 0;
++
++	for (i = 0; i < len; i++) {
++		delta = s1[i] - s2[i];
++		if (delta || s1[i] == 0 || s2[i] == 0)
++			break;
++	}
++	return delta;
 +}
 +
-+static const struct bpf_func_proto bpf_seq_printf_btf_proto = {
-+	.func		= bpf_seq_printf_btf,
-+	.gpl_only	= true,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_BTF_ID,
-+	.arg1_btf_id	= &btf_seq_file_ids[0],
-+	.arg2_type	= ARG_PTR_TO_MEM,
-+	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
-+	.arg4_type	= ARG_ANYTHING,
-+};
++#if __has_builtin(__builtin_btf_type_id)
++#define	TEST_BTF(_str, _type, _flags, _expected, ...)			\
++	do {								\
++		static const char _expectedval[EXPECTED_STRSIZE] =	\
++							_expected;	\
++		static const char _ptrtype[64] = #_type;		\
++		__u64 _hflags = _flags | BTF_F_COMPACT;			\
++		static _type _ptrdata = __VA_ARGS__;			\
++		static struct btf_ptr _ptr = { };			\
++		int _cmp;						\
++									\
++		++num_subtests;						\
++		if (ret < 0)						\
++			break;						\
++		++ran_subtests;						\
++		_ptr.ptr = &_ptrdata;					\
++		_ptr.type_id = bpf_core_type_id_kernel(_type);		\
++		if (_ptr.type_id <= 0) {				\
++			ret = -EINVAL;					\
++			break;						\
++		}							\
++		ret = bpf_snprintf_btf(_str, STRSIZE,			\
++				       &_ptr, sizeof(_ptr), _hflags);	\
++		if (ret)						\
++			break;						\
++		_cmp = __strncmp(_str, _expectedval, EXPECTED_STRSIZE);	\
++		if (_cmp != 0) {					\
++			bpf_printk("(%d) got %s", _cmp, _str);		\
++			bpf_printk("(%d) expected %s", _cmp,		\
++				   _expectedval);			\
++			ret = -EBADMSG;					\
++			break;						\
++		}							\
++	} while (0)
++#endif
 +
- static __always_inline int
- get_map_perf_counter(struct bpf_map *map, u64 flags,
- 		     u64 *value, u64 *enabled, u64 *running)
-@@ -1695,6 +1724,10 @@ static void put_bpf_raw_tp_regs(void)
- 		return prog->expected_attach_type == BPF_TRACE_ITER ?
- 		       &bpf_seq_write_proto :
- 		       NULL;
-+	case BPF_FUNC_seq_printf_btf:
-+		return prog->expected_attach_type == BPF_TRACE_ITER ?
-+		       &bpf_seq_printf_btf_proto :
-+		       NULL;
- 	case BPF_FUNC_d_path:
- 		return &bpf_d_path_proto;
- 	default:
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index fcafe80..82817c4 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3623,6 +3623,14 @@ struct bpf_stack_build_id {
-  *		The number of bytes that were written (or would have been
-  *		written if output had to be truncated due to string size),
-  *		or a negative error in cases of failure.
-+ *
-+ * long bpf_seq_printf_btf(struct seq_file *m, struct btf_ptr *ptr, u32 ptr_size, u64 flags)
-+ *	Description
-+ *		Use BTF to write to seq_write a string representation of
-+ *		*ptr*->ptr, using *ptr*->type_id as per bpf_snprintf_btf().
-+ *		*flags* are identical to those used for bpf_snprintf_btf.
-+ *	Return
-+ *		0 on success or a negative error in case of failure.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3775,6 +3783,7 @@ struct bpf_stack_build_id {
- 	FN(d_path),			\
- 	FN(copy_from_user),		\
- 	FN(snprintf_btf),		\
-+	FN(seq_printf_btf),		\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
++/* Use where expected data string matches its stringified declaration */
++#define TEST_BTF_C(_str, _type, _flags, ...)				\
++	TEST_BTF(_str, _type, _flags, "(" #_type ")" #__VA_ARGS__,	\
++		 __VA_ARGS__)
++
++/* TRACE_EVENT(netif_receive_skb,
++ *	TP_PROTO(struct sk_buff *skb),
++ */
++SEC("tp_btf/netif_receive_skb")
++int BPF_PROG(trace_netif_receive_skb, struct sk_buff *skb)
++{
++	static __u64 flags[] = { 0, BTF_F_COMPACT, BTF_F_ZERO, BTF_F_PTR_RAW,
++				 BTF_F_NONAME, BTF_F_COMPACT | BTF_F_ZERO |
++				 BTF_F_PTR_RAW | BTF_F_NONAME };
++	static struct btf_ptr p = { };
++	__u32 key = 0;
++	int i, __ret;
++	char *str;
++
++#if __has_builtin(__builtin_btf_type_id)
++	str = bpf_map_lookup_elem(&strdata, &key);
++	if (!str)
++		return 0;
++
++	/* Ensure we can write skb string representation */
++	p.type_id = bpf_core_type_id_kernel(struct sk_buff);
++	p.ptr = skb;
++	for (i = 0; i < ARRAY_SIZE(flags); i++) {
++		++num_subtests;
++		ret = bpf_snprintf_btf(str, STRSIZE, &p, sizeof(p), 0);
++		if (ret < 0)
++			bpf_printk("returned %d when writing skb", ret);
++		++ran_subtests;
++	}
++
++	/* Check invalid ptr value */
++	p.ptr = 0;
++	__ret = bpf_snprintf_btf(str, STRSIZE, &p, sizeof(p), 0);
++	if (__ret >= 0) {
++		bpf_printk("printing NULL should generate error, got (%d)",
++			   __ret);
++		ret = -ERANGE;
++	}
++
++	/* Verify type display for various types. */
++
++	/* simple int */
++	TEST_BTF_C(str, int, 0, 1234);
++	TEST_BTF(str, int, BTF_F_NONAME, "1234", 1234);
++	/* zero value should be printed at toplevel */
++	TEST_BTF(str, int, 0, "(int)0", 0);
++	TEST_BTF(str, int, BTF_F_NONAME, "0", 0);
++	TEST_BTF(str, int, BTF_F_ZERO, "(int)0", 0);
++	TEST_BTF(str, int, BTF_F_NONAME | BTF_F_ZERO, "0", 0);
++	TEST_BTF_C(str, int, 0, -4567);
++	TEST_BTF(str, int, BTF_F_NONAME, "-4567", -4567);
++
++	/* simple char */
++	TEST_BTF_C(str, char, 0, 100);
++	TEST_BTF(str, char, BTF_F_NONAME, "100", 100);
++	/* zero value should be printed at toplevel */
++	TEST_BTF(str, char, 0, "(char)0", 0);
++	TEST_BTF(str, char, BTF_F_NONAME, "0", 0);
++	TEST_BTF(str, char, BTF_F_ZERO, "(char)0", 0);
++	TEST_BTF(str, char, BTF_F_NONAME | BTF_F_ZERO, "0", 0);
++
++	/* simple typedef */
++	TEST_BTF_C(str, uint64_t, 0, 100);
++	TEST_BTF(str, u64, BTF_F_NONAME, "1", 1);
++	/* zero value should be printed at toplevel */
++	TEST_BTF(str, u64, 0, "(u64)0", 0);
++	TEST_BTF(str, u64, BTF_F_NONAME, "0", 0);
++	TEST_BTF(str, u64, BTF_F_ZERO, "(u64)0", 0);
++	TEST_BTF(str, u64, BTF_F_NONAME|BTF_F_ZERO, "0", 0);
++
++	/* typedef struct */
++	TEST_BTF_C(str, atomic_t, 0, {.counter = (int)1,});
++	TEST_BTF(str, atomic_t, BTF_F_NONAME, "{1,}", {.counter = 1,});
++	/* typedef with 0 value should be printed at toplevel */
++	TEST_BTF(str, atomic_t, 0, "(atomic_t){}", {.counter = 0,});
++	TEST_BTF(str, atomic_t, BTF_F_NONAME, "{}", {.counter = 0,});
++	TEST_BTF(str, atomic_t, BTF_F_ZERO, "(atomic_t){.counter = (int)0,}",
++		 {.counter = 0,});
++	TEST_BTF(str, atomic_t, BTF_F_NONAME|BTF_F_ZERO,
++		 "{0,}", {.counter = 0,});
++
++	/* enum where enum value does (and does not) exist */
++	TEST_BTF_C(str, enum bpf_cmd, 0, BPF_MAP_CREATE);
++	TEST_BTF(str, enum bpf_cmd, 0, "(enum bpf_cmd)BPF_MAP_CREATE", 0);
++	TEST_BTF(str, enum bpf_cmd, BTF_F_NONAME, "BPF_MAP_CREATE",
++		 BPF_MAP_CREATE);
++	TEST_BTF(str, enum bpf_cmd, BTF_F_NONAME|BTF_F_ZERO,
++		 "BPF_MAP_CREATE", 0);
++
++	TEST_BTF(str, enum bpf_cmd, BTF_F_ZERO, "(enum bpf_cmd)BPF_MAP_CREATE",
++		 BPF_MAP_CREATE);
++	TEST_BTF(str, enum bpf_cmd, BTF_F_NONAME|BTF_F_ZERO,
++		 "BPF_MAP_CREATE", BPF_MAP_CREATE);
++	TEST_BTF_C(str, enum bpf_cmd, 0, 2000);
++	TEST_BTF(str, enum bpf_cmd, BTF_F_NONAME, "2000", 2000);
++
++	/* simple struct */
++	TEST_BTF_C(str, struct btf_enum, 0,
++		   {.name_off = (__u32)3,.val = (__s32)-1,});
++	TEST_BTF(str, struct btf_enum, BTF_F_NONAME, "{3,-1,}",
++		 { .name_off = 3, .val = -1,});
++	TEST_BTF(str, struct btf_enum, BTF_F_NONAME, "{-1,}",
++		 { .name_off = 0, .val = -1,});
++	TEST_BTF(str, struct btf_enum, BTF_F_NONAME|BTF_F_ZERO, "{0,-1,}",
++		 { .name_off = 0, .val = -1,});
++	/* empty struct should be printed */
++	TEST_BTF(str, struct btf_enum, 0, "(struct btf_enum){}",
++		 { .name_off = 0, .val = 0,});
++	TEST_BTF(str, struct btf_enum, BTF_F_NONAME, "{}",
++		 { .name_off = 0, .val = 0,});
++	TEST_BTF(str, struct btf_enum, BTF_F_ZERO,
++		 "(struct btf_enum){.name_off = (__u32)0,.val = (__s32)0,}",
++		 { .name_off = 0, .val = 0,});
++
++	/* struct with pointers */
++	TEST_BTF(str, struct list_head, BTF_F_PTR_RAW,
++		 "(struct list_head){.next = (struct list_head *)0x0000000000000001,}",
++		 { .next = (struct list_head *)1 });
++	/* NULL pointer should not be displayed */
++	TEST_BTF(str, struct list_head, BTF_F_PTR_RAW,
++		 "(struct list_head){}",
++		 { .next = (struct list_head *)0 });
++
++	/* struct with char array */
++	TEST_BTF(str, struct bpf_prog_info, 0,
++		 "(struct bpf_prog_info){.name = (char[])['f','o','o',],}",
++		 { .name = "foo",});
++	TEST_BTF(str, struct bpf_prog_info, BTF_F_NONAME,
++		 "{['f','o','o',],}",
++		 {.name = "foo",});
++	/* leading null char means do not display string */
++	TEST_BTF(str, struct bpf_prog_info, 0,
++		 "(struct bpf_prog_info){}",
++		 {.name = {'\0', 'f', 'o', 'o'}});
++	/* handle non-printable characters */
++	TEST_BTF(str, struct bpf_prog_info, 0,
++		 "(struct bpf_prog_info){.name = (char[])[1,2,3,],}",
++		 { .name = {1, 2, 3, 0}});
++
++	/* struct with non-char array */
++	TEST_BTF(str, struct __sk_buff, 0,
++		 "(struct __sk_buff){.cb = (__u32[])[1,2,3,4,5,],}",
++		 { .cb = {1, 2, 3, 4, 5,},});
++	TEST_BTF(str, struct __sk_buff, BTF_F_NONAME,
++		 "{[1,2,3,4,5,],}",
++		 { .cb = { 1, 2, 3, 4, 5},});
++	/* For non-char, arrays, show non-zero values only */
++	TEST_BTF(str, struct __sk_buff, 0,
++		 "(struct __sk_buff){.cb = (__u32[])[1,],}",
++		 { .cb = { 0, 0, 1, 0, 0},});
++
++	/* struct with bitfields */
++	TEST_BTF_C(str, struct bpf_insn, 0,
++		   {.code = (__u8)1,.dst_reg = (__u8)0x2,.src_reg = (__u8)0x3,.off = (__s16)4,.imm = (__s32)5,});
++	TEST_BTF(str, struct bpf_insn, BTF_F_NONAME, "{1,0x2,0x3,4,5,}",
++		 {.code = 1, .dst_reg = 0x2, .src_reg = 0x3, .off = 4,
++		  .imm = 5,});
++#else
++	skip = true;
++#endif
++
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 1.8.3.1
 
