@@ -2,87 +2,143 @@ Return-Path: <SRS0=5TR3=DF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D875C2D0A8
-	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 11:25:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98EC4C4741F
+	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 11:33:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 373EC21D95
-	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 11:25:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1601292340;
-	bh=coB7kugviXWgFNAtg+pjbvIM06kqe3qbDxbESPKvT0g=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=AE0EV8B9ycTWJv5drSNgH/B6gRhr6EZtSWVT7Lx4en0sbBaWC7+WefMHw1cLN/dv4
-	 85h2W7YFUJbnQDtks9wIKWlSxKmCrKXqEMh8j+vdefytiNBhfEDxtE8D92OY/ZskTF
-	 QJUt8pbtc27h3IuGtEOyYrNg69WiNKXeplmD5X50=
+	by mail.kernel.org (Postfix) with ESMTP id 427EF22262
+	for <bpf@archiver.kernel.org>; Mon, 28 Sep 2020 11:33:32 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Gluq6xLY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726547AbgI1LZj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Sep 2020 07:25:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38834 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726461AbgI1LZj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 28 Sep 2020 07:25:39 -0400
-Received: from lore-desk.redhat.com (unknown [151.66.98.27])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D6F2021D46;
-        Mon, 28 Sep 2020 11:25:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601292339;
-        bh=coB7kugviXWgFNAtg+pjbvIM06kqe3qbDxbESPKvT0g=;
-        h=From:To:Cc:Subject:Date:From;
-        b=L7Zlfy5GaJ6WYjHrPMv1nXuJjLbfpspr3WrzHhqEr84tMcKMizUSPkqx9U5VN9F2P
-         sYFmTnTl+61bw2IUOXByXyMkvoWy0pHF4+nOLU50LvG5vYdbVm/1RDFwfjDGFiyHmX
-         5eTTRlEDqtPJqxF9xH5t4WAf755p+jEBWKh6exRo=
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        brouer@redhat.com, lorenzo.bianconi@redhat.com
-Subject: [PATCH bpf-next] bpf: cpumap: remove rcpu pointer from cpu_map_build_skb signature
-Date:   Mon, 28 Sep 2020 13:24:57 +0200
-Message-Id: <33cb9b7dc447de3ea6fd6ce713ac41bca8794423.1601292015.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.26.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726595AbgI1Ldb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Sep 2020 07:33:31 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:55764 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726565AbgI1Ldb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Sep 2020 07:33:31 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08SBTxMb110752;
+        Mon, 28 Sep 2020 11:32:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=37Z0JsSoofOsUBt2zOf138my4O9f6xHJT6kyKH4ahLI=;
+ b=Gluq6xLY/0zVVeWbK1C8/dLgDZKG0sWrgGkVk53zgZJbQbH2Crq0HD7Fq1SSCKZDr9SJ
+ aZrzqkXqXbg9RdG0i76QyqnT+yIEN+RFiyv7J4cohdygN5NPYURcv9dyohihdTySb3ws
+ Bw4oeM4bZDjBjNzZg0g//4YSMlAXQ1LbRd9oDq27kbRRBw/FFABATBlVKlWvcEr1W8bY
+ Zmun7t+b7EtrK4eQmSkM4/FbULpTj+HdOxhuEz019/C8W/6ZR1uumoAtKkb7A5xTli71
+ fi3HZeKj86pKnHmFultJHfncz64rAaOwB/5PW4UeNekqujU6UIbgv/HFleaBCBo8QKwr JQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2130.oracle.com with ESMTP id 33su5amhjq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 28 Sep 2020 11:32:37 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08SBUKvv057308;
+        Mon, 28 Sep 2020 11:32:37 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 33tfhw57dr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Sep 2020 11:32:37 +0000
+Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08SBWZxw012783;
+        Mon, 28 Sep 2020 11:32:35 GMT
+Received: from localhost.uk.oracle.com (/10.175.167.231)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 28 Sep 2020 04:32:34 -0700
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com, yhs@fb.com
+Cc:     linux@rasmusvillemoes.dk, andriy.shevchenko@linux.intel.com,
+        pmladek@suse.com, kafai@fb.com, songliubraving@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org, shuah@kernel.org,
+        rdna@fb.com, scott.branden@broadcom.com, quentin@isovalent.com,
+        cneirabustos@gmail.com, jakub@cloudflare.com, mingo@redhat.com,
+        rostedt@goodmis.org, acme@kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v7 bpf-next 1/8] bpf: provide function to get vmlinux BTF information
+Date:   Mon, 28 Sep 2020 12:31:03 +0100
+Message-Id: <1601292670-1616-2-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1601292670-1616-1-git-send-email-alan.maguire@oracle.com>
+References: <1601292670-1616-1-git-send-email-alan.maguire@oracle.com>
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9757 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999 bulkscore=0
+ phishscore=0 malwarescore=0 adultscore=0 suspectscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009280093
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9757 signatures=668680
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
+ lowpriorityscore=0 spamscore=0 clxscore=1015 mlxscore=0 impostorscore=0
+ malwarescore=0 phishscore=0 adultscore=0 bulkscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
+ definitions=main-2009280093
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Get rid of bpf_cpu_map_entry pointer in cpu_map_build_skb routine
-signature since it is no longer needed
+It will be used later for BPF structure display support
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
- kernel/bpf/cpumap.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ include/linux/bpf.h   |  2 ++
+ kernel/bpf/verifier.c | 18 ++++++++++++------
+ 2 files changed, 14 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 7e1a8ad0c32a..c61a23b564aa 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -155,8 +155,7 @@ static void cpu_map_kthread_stop(struct work_struct *work)
- 	kthread_stop(rcpu->kthread);
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 7990232..2eae3f3 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1355,6 +1355,8 @@ int bpf_check(struct bpf_prog **fp, union bpf_attr *attr,
+ 	      union bpf_attr __user *uattr);
+ void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
+ 
++struct btf *bpf_get_btf_vmlinux(void);
++
+ /* Map specifics */
+ struct xdp_buff;
+ struct sk_buff;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index b25ba98..686f6a9 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11517,6 +11517,17 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+ 	}
  }
  
--static struct sk_buff *cpu_map_build_skb(struct bpf_cpu_map_entry *rcpu,
--					 struct xdp_frame *xdpf,
-+static struct sk_buff *cpu_map_build_skb(struct xdp_frame *xdpf,
- 					 struct sk_buff *skb)
++struct btf *bpf_get_btf_vmlinux(void)
++{
++	if (!btf_vmlinux && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
++		mutex_lock(&bpf_verifier_lock);
++		if (!btf_vmlinux)
++			btf_vmlinux = btf_parse_vmlinux();
++		mutex_unlock(&bpf_verifier_lock);
++	}
++	return btf_vmlinux;
++}
++
+ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+ 	      union bpf_attr __user *uattr)
  {
- 	unsigned int hard_start_headroom;
-@@ -365,7 +364,7 @@ static int cpu_map_kthread_run(void *data)
- 			struct sk_buff *skb = skbs[i];
- 			int ret;
+@@ -11550,12 +11561,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+ 	env->ops = bpf_verifier_ops[env->prog->type];
+ 	is_priv = bpf_capable();
  
--			skb = cpu_map_build_skb(rcpu, xdpf, skb);
-+			skb = cpu_map_build_skb(xdpf, skb);
- 			if (!skb) {
- 				xdp_return_frame(xdpf);
- 				continue;
+-	if (!btf_vmlinux && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)) {
+-		mutex_lock(&bpf_verifier_lock);
+-		if (!btf_vmlinux)
+-			btf_vmlinux = btf_parse_vmlinux();
+-		mutex_unlock(&bpf_verifier_lock);
+-	}
++	bpf_get_btf_vmlinux();
+ 
+ 	/* grab the mutex to protect few globals used by verifier */
+ 	if (!is_priv)
 -- 
-2.26.2
+1.8.3.1
 
