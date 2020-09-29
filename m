@@ -2,150 +2,73 @@ Return-Path: <SRS0=PNb+=DG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B54E9C4741F
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 11:43:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D22BC4727F
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:20:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 67F1F206F7
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 11:43:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ECEA72076B
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:20:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1601379798;
-	bh=uPu3azdMyxArLR0MygGlpcIAE+zcq00+IfHIF4qjxpk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ZoVCMY9mBpPB1DtBx6jSRmwf//I5C+YgCvrAm5UMvrtx2K3A8PR1o6huYJiPhKDG7
-	 qixTd7bmBN/1t2ho7zNH8PyMEHs/bjhwHzEzB9FIjYO3TgEVBrDH0naC+8TafarSUU
-	 GwRnEZg9gVCwwJ+1rbZuKEh1UGJwPqDQsEzCxZ48=
+	s=default; t=1601382016;
+	bh=HYxGlk6NQY71ojUKwTQeds4Me6ucmHaf8NpcyRLpkN8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:List-ID:From;
+	b=Z1jNc6gEEK3iArn9GLDIvvfjR1577rmbSh02FVHA2yFbyzSyL/USRoPtAURzzOs3d
+	 rMRemaw2JVOk8J4uLwq0NEZQ/OozcDaglnGtETPzVWinAbM8KXcoJldgHzLmGXfpki
+	 IZLe3lAr8ikdOoGQk2fBw93FIY3hzftYYEkaLR18=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730769AbgI2LnR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Sep 2020 07:43:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41126 "EHLO mail.kernel.org"
+        id S1729884AbgI2MUK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Sep 2020 08:20:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33698 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730764AbgI2LnH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 29 Sep 2020 07:43:07 -0400
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 602DE206E5;
-        Tue, 29 Sep 2020 11:43:06 +0000 (UTC)
+        id S1732467AbgI2MUJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 29 Sep 2020 08:20:09 -0400
+Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601379787;
-        bh=uPu3azdMyxArLR0MygGlpcIAE+zcq00+IfHIF4qjxpk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yGit3C0xSK7ED57Kh/JoL1KHSwZaGqEuzMlt1UNACz04Civ8gM74Xh2U0br7j6qLg
-         YdvioUBCyrCjfsaPjfCFLEZK3sLs2oTvfUDNwAW3DpyvmrU9rxU95bodaOe8ZljzI2
-         RK6j2RhJzW3JGXnBW86ktRnMSOSVFflONzj2WMoc=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ian Rogers <irogers@google.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jin Yao <yao.jin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Song Liu <songliubraving@fb.com>,
-        Stephane Eranian <eranian@google.com>,
-        Vince Weaver <vincent.weaver@maine.edu>,
-        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
-        kp singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 287/388] perf metricgroup: Free metric_events on error
-Date:   Tue, 29 Sep 2020 13:00:18 +0200
-Message-Id: <20200929110024.351116677@linuxfoundation.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20200929110010.467764689@linuxfoundation.org>
-References: <20200929110010.467764689@linuxfoundation.org>
-User-Agent: quilt/0.66
+        s=default; t=1601382008;
+        bh=HYxGlk6NQY71ojUKwTQeds4Me6ucmHaf8NpcyRLpkN8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ZlfWno5wZeUobHPmALGG2z/GOPfdcb4BiT4th2IFIexyso+CfOWSAaCb7YDmBxr7x
+         tIIgYOnILTWEhJlhtLvGrgTFoU4kb7zp9wQSa7PMXNyejnYMr31F+M5bCgpEcsApkd
+         m56OXanmiqE6/aDaNGBInknMh5UcpAyWTk7Y3qPo=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Subject: Re: [bpf-next PATCH] bpf,
+ selftests: Fix cast to smaller integer type 'int' warning in raw_tp
+From:   patchwork-bot+bpf@kernel.org
+Message-Id: <160138200850.26741.8249592517695495561.git-patchwork-notify@kernel.org>
+Date:   Tue, 29 Sep 2020 12:20:08 +0000
+References: <160134424745.11199.13841922833336698133.stgit@john-Precision-5820-Tower>
+In-Reply-To: <160134424745.11199.13841922833336698133.stgit@john-Precision-5820-Tower>
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Ian Rogers <irogers@google.com>
+Hello:
 
-[ Upstream commit a159e2fe89b4d1f9fb54b0ae418b961e239bf617 ]
+This patch was applied to bpf/bpf-next.git (refs/heads/master):
 
-Avoid a simple memory leak.
+On Mon, 28 Sep 2020 18:50:47 -0700 you wrote:
+> Fix warning in bpf selftests,
+> 
+> progs/test_raw_tp_test_run.c:18:10: warning: cast to smaller integer type 'int' from 'struct task_struct *' [-Wpointer-to-int-cast]
+> 
+> Change int type cast to long to fix. Discovered with gcc-9 and llvm-11+
+> where llvm was recent main branch.
+> 
+> [...]
 
-Signed-off-by: Ian Rogers <irogers@google.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Andi Kleen <ak@linux.intel.com>
-Cc: Andrii Nakryiko <andriin@fb.com>
-Cc: Cong Wang <xiyou.wangcong@gmail.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Jin Yao <yao.jin@linux.intel.com>
-Cc: Jiri Olsa <jolsa@redhat.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: John Garry <john.garry@huawei.com>
-Cc: Kajol Jain <kjain@linux.ibm.com>
-Cc: Kan Liang <kan.liang@linux.intel.com>
-Cc: Kim Phillips <kim.phillips@amd.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Martin KaFai Lau <kafai@fb.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Stephane Eranian <eranian@google.com>
-Cc: Vince Weaver <vincent.weaver@maine.edu>
-Cc: Yonghong Song <yhs@fb.com>
-Cc: bpf@vger.kernel.org
-Cc: kp singh <kpsingh@chromium.org>
-Cc: netdev@vger.kernel.org
-Link: http://lore.kernel.org/lkml/20200508053629.210324-10-irogers@google.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/perf/util/metricgroup.c | 3 +++
- 1 file changed, 3 insertions(+)
+Here is the summary with links:
+  - [bpf-next] bpf, selftests: Fix cast to smaller integer type 'int' warning in raw_tp
+    https://git.kernel.org/bpf/bpf-next/c/00e8c44a147a
 
-diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index 940a6e7a68549..7753c3091478a 100644
---- a/tools/perf/util/metricgroup.c
-+++ b/tools/perf/util/metricgroup.c
-@@ -174,6 +174,7 @@ static int metricgroup__setup_events(struct list_head *groups,
- 		if (!evsel) {
- 			pr_debug("Cannot resolve %s: %s\n",
- 					eg->metric_name, eg->metric_expr);
-+			free(metric_events);
- 			continue;
- 		}
- 		for (i = 0; i < eg->idnum; i++)
-@@ -181,11 +182,13 @@ static int metricgroup__setup_events(struct list_head *groups,
- 		me = metricgroup__lookup(metric_events_list, evsel, true);
- 		if (!me) {
- 			ret = -ENOMEM;
-+			free(metric_events);
- 			break;
- 		}
- 		expr = malloc(sizeof(struct metric_expr));
- 		if (!expr) {
- 			ret = -ENOMEM;
-+			free(metric_events);
- 			break;
- 		}
- 		expr->metric_expr = eg->metric_expr;
--- 
-2.25.1
-
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
