@@ -2,234 +2,183 @@ Return-Path: <SRS0=PNb+=DG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB4C2C4741F
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:55:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15A55C4727D
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 14:02:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 713B220708
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:55:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U6xKmQge"
+	by mail.kernel.org (Postfix) with ESMTP id BA1D42145D
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 14:02:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729610AbgI2Mzy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Sep 2020 08:55:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:39697 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729320AbgI2Mzt (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 29 Sep 2020 08:55:49 -0400
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1601384146;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=z0mOWDzsWiiH8Jf3EZHvZUXIwlqc+nZpBB7WoCjGzR0=;
-        b=U6xKmQgeZTOxHma+bXl/tqd03DS/64+7h10aKKPnDHq5TDoTtj9Fv6ps3JyN7izmKmD9Kw
-        uWsFC290E5o/Y8Yyo1vTp5qr0pLm6/VZ07gqyg4/LmShFkLn8GSzfbtrPydx0Vj6BesHrh
-        Tdy+SUsvIa+NuPo0jje2UqfPW4kybrA=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-143-taWEkRhWNUmhL_d4urprPg-1; Tue, 29 Sep 2020 08:55:43 -0400
-X-MC-Unique: taWEkRhWNUmhL_d4urprPg-1
-Received: by mail-ot1-f70.google.com with SMTP id a3so3150133oti.2
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2020 05:55:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=z0mOWDzsWiiH8Jf3EZHvZUXIwlqc+nZpBB7WoCjGzR0=;
-        b=TLMO9fQjADUZb9PzEVOib0MadzTsBWEfSitozhyUJpoh5nOLxBYMYaQNI0JUkShdnR
-         L62aUY1X7kzzPf6sTwjmnA7V3LLx0q4FHEKoTTX5vBA0c3C3bnwk4iqBGTGGoXnM6GmW
-         09IP8W/bFRG9oIBbkrgSZvBt0NF1fSgMJq40T8CT5+ndBBVNIu6oiLkfIZPiNcFi3Pz1
-         iDMt6uBqJHew5zc3M/ToN8qTO2PKSMygVqfknBHGCizlXErf+paozfBT+ZCuF5bt8l62
-         4BtnZi2FGrModjtqw8v/SMsN5O3zfGO6xd8UDFQJnLKbliEGNI5PrIvGnfDNzE50MlAU
-         6yMg==
-X-Gm-Message-State: AOAM531B3jIb+YZpqwK7rr+zDLylJ6ZR/U9MPDcUOmG2p3grbp/hWkUb
-        YTYO0vJsDFrolz4oPhqoxZwgNQ2UUAeRQccdpfMfFE7yuYQo5SYW5qQGRFawt9Za4iAaK5qam7j
-        uVvqB3sOsL+C4
-X-Received: by 2002:aca:4d89:: with SMTP id a131mr2465303oib.69.1601384142689;
-        Tue, 29 Sep 2020 05:55:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJz4l7INAd0F4fimbz0ScQfy2Erv8uNLc1Yx/zCDgGWmyl8VU2tz4FYUNW9aS8knL1nI4w4VzQ==
-X-Received: by 2002:aca:4d89:: with SMTP id a131mr2465285oib.69.1601384142405;
-        Tue, 29 Sep 2020 05:55:42 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id z5sm966850otp.16.2020.09.29.05.55.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2020 05:55:41 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 93FBE183C5B; Tue, 29 Sep 2020 14:45:49 +0200 (CEST)
-Subject: [PATCH bpf-next v10 0/7] bpf: Support multi-attach for freplace
- programs
-From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        id S1730023AbgI2OCO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Sep 2020 10:02:14 -0400
+Received: from www62.your-server.de ([213.133.104.62]:42250 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729073AbgI2OCN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 29 Sep 2020 10:02:13 -0400
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kNGCo-00076i-Ng; Tue, 29 Sep 2020 16:02:10 +0200
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kNGCo-0006Xr-Hi; Tue, 29 Sep 2020 16:02:10 +0200
+Subject: Re: [PATCH bpf-next 1/2] bpf: introduce BPF_F_SHARE_PE for perf event
+ array
+To:     Song Liu <songliubraving@fb.com>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Tue, 29 Sep 2020 14:45:49 +0200
-Message-ID: <160138354947.48470.11523413403103182788.stgit@toke.dk>
-User-Agent: StGit/0.23
+Cc:     kernel-team@fb.com, ast@kernel.org, john.fastabend@gmail.com,
+        kpsingh@chromium.org
+References: <20200929084750.419168-1-songliubraving@fb.com>
+ <20200929084750.419168-2-songliubraving@fb.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <04ba2027-a5ad-d715-ffc8-67f13e40f2d2@iogearbox.net>
+Date:   Tue, 29 Sep 2020 16:02:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200929084750.419168-2-songliubraving@fb.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/25941/Mon Sep 28 15:55:11 2020)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series adds support attaching freplace BPF programs to multiple targets.
-This is needed to support incremental attachment of multiple XDP programs using
-the libxdp dispatcher model.
+On 9/29/20 10:47 AM, Song Liu wrote:
+> Currently, perf event in perf event array is removed from the array when
+> the map fd used to add the event is closed. This behavior makes it
+> difficult to the share perf events with perf event array.
+> 
+> Introduce perf event map that keeps the perf event open with a new flag
+> BPF_F_SHARE_PE. With this flag set, perf events in the array are not
+> removed when the original map fd is closed. Instead, the perf event will
+> stay in the map until 1) it is explicitly removed from the array; or 2)
+> the array is freed.
+> 
+> Signed-off-by: Song Liu <songliubraving@fb.com>
+> ---
+>   include/uapi/linux/bpf.h       |  3 +++
+>   kernel/bpf/arraymap.c          | 31 +++++++++++++++++++++++++++++--
+>   tools/include/uapi/linux/bpf.h |  3 +++
+>   3 files changed, 35 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 82522f05c0213..74f7a09e9d1e3 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -414,6 +414,9 @@ enum {
+>   
+>   /* Enable memory-mapping BPF map */
+>   	BPF_F_MMAPABLE		= (1U << 10),
+> +
+> +/* Share perf_event among processes */
+> +	BPF_F_SHARE_PE		= (1U << 11),
 
-Patch 1 moves prog_aux->linked_prog and the trampoline to be embedded in
-bpf_tracing_link on attach, and freed by the link release logic, and introduces
-a mutex to protect the writing of the pointers in prog->aux.
+nit but given UAPI: maybe name into something more self-descriptive
+like BPF_F_SHAREABLE_EVENT ?
 
-Based on this refactoring (and previously applied patches), it becomes pretty
-straight-forward to support multiple-attach for freplace programs (patch 2).
-This is simply a matter of creating a second bpf_tracing_link if a target is
-supplied. However, for API consistency with other types of link attach, this
-option is added to the BPF_LINK_CREATE API instead of extending
-bpf_raw_tracepoint_open().
+>   };
+>   
+>   /* Flags for BPF_PROG_QUERY. */
+> diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+> index e5fd31268ae02..4938ff183d846 100644
+> --- a/kernel/bpf/arraymap.c
+> +++ b/kernel/bpf/arraymap.c
+> @@ -15,7 +15,7 @@
+>   #include "map_in_map.h"
+>   
+>   #define ARRAY_CREATE_FLAG_MASK \
+> -	(BPF_F_NUMA_NODE | BPF_F_MMAPABLE | BPF_F_ACCESS_MASK)
+> +	(BPF_F_NUMA_NODE | BPF_F_MMAPABLE | BPF_F_ACCESS_MASK | BPF_F_SHARE_PE)
+>   
+>   static void bpf_array_free_percpu(struct bpf_array *array)
+>   {
+> @@ -64,6 +64,10 @@ int array_map_alloc_check(union bpf_attr *attr)
+>   	    attr->map_flags & BPF_F_MMAPABLE)
+>   		return -EINVAL;
+>   
+> +	if (attr->map_type != BPF_MAP_TYPE_PERF_EVENT_ARRAY &&
+> +	    attr->map_flags & BPF_F_SHARE_PE)
+> +		return -EINVAL;
+> +
+>   	if (attr->value_size > KMALLOC_MAX_SIZE)
+>   		/* if value_size is bigger, the user space won't be able to
+>   		 * access the elements.
+> @@ -778,6 +782,26 @@ static int fd_array_map_delete_elem(struct bpf_map *map, void *key)
+>   	}
+>   }
+>   
+> +static void perf_event_fd_array_map_free(struct bpf_map *map)
+> +{
+> +	struct bpf_event_entry *ee;
+> +	struct bpf_array *array;
+> +	int i;
+> +
+> +	if ((map->map_flags & BPF_F_SHARE_PE) == 0) {
+> +		fd_array_map_free(map);
+> +		return;
+> +	}
+> +
+> +	array = container_of(map, struct bpf_array, map);
+> +	for (i = 0; i < array->map.max_entries; i++) {
+> +		ee = READ_ONCE(array->ptrs[i]);
+> +		if (ee)
+> +			fd_array_map_delete_elem(map, &i);
+> +	}
+> +	bpf_map_area_free(array);
 
-Patch 3 is a port of Jiri Olsa's patch to support fentry/fexit on freplace
-programs. His approach of getting the target type from the target program
-reference no longer works after we've gotten rid of linked_prog (because the
-bpf_tracing_link reference disappears on attach). Instead, we used the saved
-reference to the target prog type that is also used to verify compatibility on
-secondary freplace attachment.
+Why not simplify into:
 
-Patch 4 is the accompanying libbpf update, and patches 5-7 are selftests: patch
-5 tests for the multi-freplace functionality itself; patch 6 is Jiri's previous
-selftest for the fentry-to-freplace fix; patch 7 is a test for the change
-introduced in the previously-applied patches, blocking MODIFY_RETURN functions
-from attaching to other BPF programs.
+	if (map->map_flags & BPF_F_SHAREABLE_EVENT)
+		bpf_fd_array_map_clear(map);
+	fd_array_map_free(map);
 
-With this series, libxdp and xdp-tools can successfully attach multiple programs
-one at a time. To play with this, use the 'freplace-multi-attach' branch of
-xdp-tools:
-
-$ git clone --recurse-submodules --branch freplace-multi-attach https://github.com/xdp-project/xdp-tools
-$ cd xdp-tools/xdp-loader
-$ make
-$ sudo ./xdp-loader load veth0 ../lib/testing/xdp_drop.o
-$ sudo ./xdp-loader load veth0 ../lib/testing/xdp_pass.o
-$ sudo ./xdp-loader status
-
-The series is also available here:
-https://git.kernel.org/pub/scm/linux/kernel/git/toke/linux.git/log/?h=bpf-freplace-multi-attach-alt-10
-
-Changelog:
-
-v10:
-  - Dial back the s/tgt_/dst_/ replacement a bit
-  - Fix smatch warning (from ktest robot)
-  - Rebase to bpf-next, drop already-applied patches
-
-v9:
-  - Clarify commit message of patch 3
-  - Add new struct bpf_attach_target_info for returning from
-    bpf_check_attach_target() and passing to bpf_trampoline_get()
-  - Move trampoline key computation into a helper
-  - Make sure we don't break bpffs debug umh
-  - Add some comment blocks explaining the logic flow in
-    bpf_tracing_prog_attach()
-  - s/tgt_/dst_/ in prog->aux, and for local variables using those members
-  - Always drop dst_trampoline and dst_prog from prog->aux on first attach
-  - Don't remove syscall fmod_ret test from selftest benchmarks
-  - Add saved_ prefix to dst_{prog,attach}_type members in prog_aux
-  - Drop prog argument from check_attach_modify_return()
-  - Add comment about possible NULL of tr_link->tgt_prog on link_release()
-
-v8:
-  - Add a separate error message when trying to attach FMOD_REPLACE to tgt_prog
-  - Better error messages in bpf_program__attach_freplace()
-  - Don't lock mutex when setting tgt_* pointers in prog create and verifier
-  - Remove fmod_ret programs from benchmarks in selftests (new patch 11)
-  - Fix a few other nits in selftests
-
-v7:
-  - Add back missing ptype == prog->type check in link_create()
-  - Use tracing_bpf_link_attach() instead of separate freplace_bpf_link_attach()
-  - Don't break attachment of bpf_iters in libbpf (by clobbering link_create.iter_info)
-
-v6:
-  - Rebase to latest bpf-next
-  - Simplify logic in bpf_tracing_prog_attach()
-  - Don't create a new attach_type for link_create(), disambiguate on prog->type
-    instead
-  - Use raw_tracepoint_open() in libbpf bpf_program__attach_ftrace() if called
-    with NULL target
-  - Switch bpf_program__attach_ftrace() to take function name as parameter
-    instead of btf_id
-  - Add a patch disallowing MODIFY_RETURN programs from attaching to other BPF
-    programs, and an accompanying selftest (patches 1 and 10)
-
-v5:
-  - Fix typo in inline function definition of bpf_trampoline_get()
-  - Don't put bpf_tracing_link in prog->aux, use a mutex to protect tgt_prog and
-    trampoline instead, and move them to the link on attach.
-  - Restore Jiri as author of the last selftest patch
-
-v4:
-  - Cleanup the refactored check_attach_btf_id() to make the logic easier to follow
-  - Fix cleanup paths for bpf_tracing_link
-  - Use xchg() for removing the bpf_tracing_link from prog->aux and restore on (some) failures
-  - Use BPF_LINK_CREATE operation to create link with target instead of extending raw_tracepoint_open
-  - Fold update of tools/ UAPI header into main patch
-  - Update arg dereference patch to use skeletons and set_attach_target()
-
-v3:
-  - Get rid of prog_aux->linked_prog entirely in favour of a bpf_tracing_link
-  - Incorporate Jiri's fix for attaching fentry to freplace programs
-
-v2:
-  - Drop the log arguments from bpf_raw_tracepoint_open
-  - Fix kbot errors
-  - Rebase to latest bpf-next
-
----
-
-Jiri Olsa (1):
-      selftests/bpf: Adding test for arg dereference in extension trace
-
-Toke Høiland-Jørgensen (6):
-      bpf: move prog->aux->linked_prog and trampoline into bpf_link on attach
-      bpf: support attaching freplace programs to multiple attach points
-      bpf: Fix context type resolving for extension programs
-      libbpf: add support for freplace attachment in bpf_link_create
-      selftests: add test for multiple attachments of freplace program
-      selftests: Add selftest for disallowing modify_return attachment to freplace
-
-
- include/linux/bpf.h                           |   2 +
- include/uapi/linux/bpf.h                      |   9 +-
- kernel/bpf/btf.c                              |   9 +-
- kernel/bpf/syscall.c                          | 132 +++++++++--
- kernel/bpf/verifier.c                         |  10 +
- tools/include/uapi/linux/bpf.h                |   9 +-
- tools/lib/bpf/bpf.c                           |  18 +-
- tools/lib/bpf/bpf.h                           |   3 +-
- tools/lib/bpf/libbpf.c                        |  44 +++-
- tools/lib/bpf/libbpf.h                        |   3 +
- tools/lib/bpf/libbpf.map                      |   1 +
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 212 +++++++++++++++---
- .../selftests/bpf/prog_tests/trace_ext.c      | 111 +++++++++
- .../selftests/bpf/progs/fmod_ret_freplace.c   |  14 ++
- .../bpf/progs/freplace_get_constant.c         |  15 ++
- .../selftests/bpf/progs/test_trace_ext.c      |  18 ++
- .../bpf/progs/test_trace_ext_tracing.c        |  25 +++
- 17 files changed, 573 insertions(+), 62 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/trace_ext.c
- create mode 100644 tools/testing/selftests/bpf/progs/fmod_ret_freplace.c
- create mode 100644 tools/testing/selftests/bpf/progs/freplace_get_constant.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_trace_ext.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_trace_ext_tracing.c
+> +}
+> +
+>   static void *prog_fd_array_get_ptr(struct bpf_map *map,
+>   				   struct file *map_file, int fd)
+>   {
+> @@ -1134,6 +1158,9 @@ static void perf_event_fd_array_release(struct bpf_map *map,
+>   	struct bpf_event_entry *ee;
+>   	int i;
+>   
+> +	if (map->map_flags & BPF_F_SHARE_PE)
+> +		return;
+> +
+>   	rcu_read_lock();
+>   	for (i = 0; i < array->map.max_entries; i++) {
+>   		ee = READ_ONCE(array->ptrs[i]);
+> @@ -1148,7 +1175,7 @@ const struct bpf_map_ops perf_event_array_map_ops = {
+>   	.map_meta_equal = bpf_map_meta_equal,
+>   	.map_alloc_check = fd_array_map_alloc_check,
+>   	.map_alloc = array_map_alloc,
+> -	.map_free = fd_array_map_free,
+> +	.map_free = perf_event_fd_array_map_free,
+>   	.map_get_next_key = array_map_get_next_key,
+>   	.map_lookup_elem = fd_array_map_lookup_elem,
+>   	.map_delete_elem = fd_array_map_delete_elem,
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> index 82522f05c0213..74f7a09e9d1e3 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -414,6 +414,9 @@ enum {
+>   
+>   /* Enable memory-mapping BPF map */
+>   	BPF_F_MMAPABLE		= (1U << 10),
+> +
+> +/* Share perf_event among processes */
+> +	BPF_F_SHARE_PE		= (1U << 11),
+>   };
+>   
+>   /* Flags for BPF_PROG_QUERY. */
+> 
 
