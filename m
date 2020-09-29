@@ -7,63 +7,63 @@ X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CC0EC4727C
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:46:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 83109C4741F
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:46:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 17AD820848
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:46:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31903208B8
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:46:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iGEEjk02"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BzC7CmSj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728722AbgI2MqU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Sep 2020 08:46:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:50399 "EHLO
+        id S1732336AbgI2MqV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Sep 2020 08:46:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:52028 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387560AbgI2MqI (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 29 Sep 2020 08:46:08 -0400
+        by vger.kernel.org with ESMTP id S2387503AbgI2MqG (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 29 Sep 2020 08:46:06 -0400
 Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1601383566;
+        s=mimecast20190719; t=1601383564;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=cy6ZPhXJszbTKLIbpFC0LFP/CG0LlZYn92V0Xa2ntQc=;
-        b=iGEEjk02n2mZDr89At+mUlzP8HeVPr7W69qF6RQgNgqNYHf0kIGkEvZAoDqvGrh7/d6a8R
-        8FeLxiqqoUc9Qtr6lNMKevHnVR6Y0sdulzuJt5NxLDHxEaM7yh1wUUOfopmosc9/6moMn3
-        tB53Lljz52jVTLggogpKZPpJBlZAfAg=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-573-3BEYbuaAP-qU4I9KFPxB4w-1; Tue, 29 Sep 2020 08:46:04 -0400
-X-MC-Unique: 3BEYbuaAP-qU4I9KFPxB4w-1
-Received: by mail-oo1-f72.google.com with SMTP id t3so2010233ood.7
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2020 05:46:04 -0700 (PDT)
+        bh=nneNQXug1AmXlFY8BQ86fIMPd4vSghG2g/V1b4Wro3s=;
+        b=BzC7CmSjGYdcJLJFa/QoFHm2hp5d+1gE3z50BiXb42ms5NFecYI1W6uR6VJ9M928tj/Gio
+        fOa99W49Fn9KZSO8TWq1uMH2CPIKM0vzer87dngdu74snPZUo9WYCAGthXLZ3rjEQZLc/M
+        Wzs1IjFpGdVhvWkFWnWgCTtC/q+dF8Y=
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
+ [209.85.167.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-68--nnwUkQRMG2FeeFTNcqSrw-1; Tue, 29 Sep 2020 08:46:03 -0400
+X-MC-Unique: -nnwUkQRMG2FeeFTNcqSrw-1
+Received: by mail-oi1-f199.google.com with SMTP id a143so1562658oib.14
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2020 05:46:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=cy6ZPhXJszbTKLIbpFC0LFP/CG0LlZYn92V0Xa2ntQc=;
-        b=tFXNdiCG/bYyVKlVi3KR/W94mi3kzpaeX5MSF05bZktOPMLhFdE1ZxSmC/OzEnnMI5
-         uIwRw6HoLu1GNh0Cnq/uuTStNsaIMHnPp/BDQA9chtfaAh6ttDu6jEtPQohYhEdjDlM0
-         9/N4PeC97FTPz9xtktJiFpEkv5XM7DkyL5Zn2RbEC6mO7/GkIb54KOfM2BFa1FgSftsK
-         +40BwmErCUFpEtmobl4giZjE2uQuYOf0JoZLITFJEHiUjRzpylZYcmjde1RvMdLWkbvL
-         xKtPtn4cvELRo/pZo7cNrEXWJhXEHJNDu/dN48hRkplPFo6ey8+IWaI5qErVBV//0eRo
-         o+3g==
-X-Gm-Message-State: AOAM533gjHdPKANIsnH5wdPpiCBkfYQhy8mI3AyKENiqkqjufGwlT+s7
-        AOG9kU+ACLzBNnmWl9IRfmUlnjdRpt8fqi/KQjG5Ul7om4toqJJLuVdKRbgBaiff9WX4uHHwGhL
-        X2zDo+WVPcpi6
-X-Received: by 2002:aca:1205:: with SMTP id 5mr2533916ois.23.1601383563862;
-        Tue, 29 Sep 2020 05:46:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxD7FcoFOLLMx5CaBp3kCS24dEcC21QDKDehZLIXm2xMgV+B5j7gTZyZXe3KPXdDGfMe0YL8g==
-X-Received: by 2002:aca:1205:: with SMTP id 5mr2533894ois.23.1601383563515;
-        Tue, 29 Sep 2020 05:46:03 -0700 (PDT)
+        bh=nneNQXug1AmXlFY8BQ86fIMPd4vSghG2g/V1b4Wro3s=;
+        b=MnBZGJ8CJv0sEuf7HpeEJ04Ejkg/H8xbjcMlTPNMRxcTh86YAUSSyjEVhZdCR1EAjz
+         I1KhA8ZyXD6cEamprKQsd8zxheMip/YcuocDWKFvUXa2XKzzlhzxovEu8g2ko8PuFzfJ
+         c2YtfCrAAz/Z7ZUSuaRcecdnhpzev0sRkUSSzImfvQxTvVDyjm1cC6hcjCjWjT6WyAx4
+         TJFG5uFhwY1IzyWbvLHQko0pSzHIvA+dyKhq66l0ik4p1tIEjxs9pSaDCNGODojVLh4K
+         +ryHwFvZa2WKFKwpOyvCteQPFZ1A9FwTkO+2r4Tc0pnBFWEVOpxjs/vJRCSZigfkS4wU
+         IEwg==
+X-Gm-Message-State: AOAM530/amw9aoO7uALGpOy0JehW0FSYtV5nQH5loeb8shzzSYPNXntL
+        ShWYV6kaxHzFOv8AIIcaQpmcLVqzb1T0l9wwil/RA7d9j1OYRVe4bOW7HPttqQzG6CaVqjapbFd
+        6/CKuadUbit6v
+X-Received: by 2002:a05:6830:2096:: with SMTP id y22mr2664450otq.158.1601383557049;
+        Tue, 29 Sep 2020 05:45:57 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJztMDEwLpRQfY2JKWPLy52gemqcQHpYHTXQGIijJbdpay5BjjGBDHOS6X6VPep3e844G60xJw==
+X-Received: by 2002:a05:6830:2096:: with SMTP id y22mr2664419otq.158.1601383556699;
+        Tue, 29 Sep 2020 05:45:56 -0700 (PDT)
 Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id d22sm1009717oij.0.2020.09.29.05.45.59
+        by smtp.gmail.com with ESMTPSA id m14sm2860523oov.37.2020.09.29.05.45.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2020 05:46:00 -0700 (PDT)
+        Tue, 29 Sep 2020 05:45:55 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 08552183C61; Tue, 29 Sep 2020 14:45:55 +0200 (CEST)
-Subject: [PATCH bpf-next v10 5/7] selftests: add test for multiple attachments
- of freplace program
+        id D5E67183C5F; Tue, 29 Sep 2020 14:45:52 +0200 (CEST)
+Subject: [PATCH bpf-next v10 3/7] bpf: Fix context type resolving for
+ extension programs
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Alexei Starovoitov <ast@kernel.org>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
@@ -75,8 +75,8 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Eelco Chaudron <echaudro@redhat.com>,
         KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Tue, 29 Sep 2020 14:45:54 +0200
-Message-ID: <160138355497.48470.17568077161540217107.stgit@toke.dk>
+Date:   Tue, 29 Sep 2020 14:45:52 +0200
+Message-ID: <160138355278.48470.17057040257274725638.stgit@toke.dk>
 In-Reply-To: <160138354947.48470.11523413403103182788.stgit@toke.dk>
 References: <160138354947.48470.11523413403103182788.stgit@toke.dk>
 User-Agent: StGit/0.23
@@ -89,286 +89,69 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-This adds a selftest for attaching an freplace program to multiple targets
-simultaneously.
+Eelco reported we can't properly access arguments if the tracing
+program is attached to extension program.
 
+Having following program:
+
+  SEC("classifier/test_pkt_md_access")
+  int test_pkt_md_access(struct __sk_buff *skb)
+
+with its extension:
+
+  SEC("freplace/test_pkt_md_access")
+  int test_pkt_md_access_new(struct __sk_buff *skb)
+
+and tracing that extension with:
+
+  SEC("fentry/test_pkt_md_access_new")
+  int BPF_PROG(fentry, struct sk_buff *skb)
+
+It's not possible to access skb argument in the fentry program,
+with following error from verifier:
+
+  ; int BPF_PROG(fentry, struct sk_buff *skb)
+  0: (79) r1 = *(u64 *)(r1 +0)
+  invalid bpf_context access off=0 size=8
+
+The problem is that btf_ctx_access gets the context type for the
+traced program, which is in this case the extension.
+
+But when we trace extension program, we want to get the context
+type of the program that the extension is attached to, so we can
+access the argument properly in the trace program.
+
+This version of the patch is tweaked slightly from Jiri's original one,
+since the refactoring in the previous patches means we have to get the
+target prog type from the new variable in prog->aux instead of directly
+from the target prog.
+
+Reported-by: Eelco Chaudron <echaudro@redhat.com>
+Suggested-by: Jiri Olsa <jolsa@kernel.org>
 Acked-by: Andrii Nakryiko <andriin@fb.com>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c       |  156 ++++++++++++++++----
- .../selftests/bpf/progs/freplace_get_constant.c    |   15 ++
- 2 files changed, 139 insertions(+), 32 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/freplace_get_constant.c
+ kernel/bpf/btf.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-index eda682727787..2b94e827b2c5 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-@@ -2,36 +2,79 @@
- /* Copyright (c) 2019 Facebook */
- #include <test_progs.h>
- #include <network_helpers.h>
-+#include <bpf/btf.h>
-+
-+typedef int (*test_cb)(struct bpf_object *obj);
-+
-+static int check_data_map(struct bpf_object *obj, int prog_cnt, bool reset)
-+{
-+	struct bpf_map *data_map = NULL, *map;
-+	__u64 *result = NULL;
-+	const int zero = 0;
-+	__u32 duration = 0;
-+	int ret = -1, i;
-+
-+	result = malloc((prog_cnt + 32 /* spare */) * sizeof(__u64));
-+	if (CHECK(!result, "alloc_memory", "failed to alloc memory"))
-+		return -ENOMEM;
-+
-+	bpf_object__for_each_map(map, obj)
-+		if (bpf_map__is_internal(map)) {
-+			data_map = map;
-+			break;
-+		}
-+	if (CHECK(!data_map, "find_data_map", "data map not found\n"))
-+		goto out;
-+
-+	ret = bpf_map_lookup_elem(bpf_map__fd(data_map), &zero, result);
-+	if (CHECK(ret, "get_result",
-+		  "failed to get output data: %d\n", ret))
-+		goto out;
-+
-+	for (i = 0; i < prog_cnt; i++) {
-+		if (CHECK(result[i] != 1, "result",
-+			  "fexit_bpf2bpf result[%d] failed err %llu\n",
-+			  i, result[i]))
-+			goto out;
-+		result[i] = 0;
-+	}
-+	if (reset) {
-+		ret = bpf_map_update_elem(bpf_map__fd(data_map), &zero, result, 0);
-+		if (CHECK(ret, "reset_result", "failed to reset result\n"))
-+			goto out;
-+	}
-+
-+	ret = 0;
-+out:
-+	free(result);
-+	return ret;
-+}
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 05816471bac6..4d0ee7839fdb 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -4582,7 +4582,14 @@ bool btf_ctx_access(int off, int size, enum bpf_access_type type,
  
- static void test_fexit_bpf2bpf_common(const char *obj_file,
- 				      const char *target_obj_file,
- 				      int prog_cnt,
- 				      const char **prog_name,
--				      bool run_prog)
-+				      bool run_prog,
-+				      test_cb cb)
- {
--	struct bpf_object *obj = NULL, *pkt_obj;
--	int err, pkt_fd, i;
--	struct bpf_link **link = NULL;
-+	struct bpf_object *obj = NULL, *tgt_obj;
- 	struct bpf_program **prog = NULL;
-+	struct bpf_link **link = NULL;
- 	__u32 duration = 0, retval;
--	struct bpf_map *data_map;
--	const int zero = 0;
--	__u64 *result = NULL;
-+	int err, tgt_fd, i;
- 
- 	err = bpf_prog_load(target_obj_file, BPF_PROG_TYPE_UNSPEC,
--			    &pkt_obj, &pkt_fd);
-+			    &tgt_obj, &tgt_fd);
- 	if (CHECK(err, "tgt_prog_load", "file %s err %d errno %d\n",
- 		  target_obj_file, err, errno))
- 		return;
- 	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts,
--			    .attach_prog_fd = pkt_fd,
-+			    .attach_prog_fd = tgt_fd,
- 			   );
- 
- 	link = calloc(sizeof(struct bpf_link *), prog_cnt);
- 	prog = calloc(sizeof(struct bpf_program *), prog_cnt);
--	result = malloc((prog_cnt + 32 /* spare */) * sizeof(__u64));
--	if (CHECK(!link || !prog || !result, "alloc_memory",
--		  "failed to alloc memory"))
-+	if (CHECK(!link || !prog, "alloc_memory", "failed to alloc memory"))
- 		goto close_prog;
- 
- 	obj = bpf_object__open_file(obj_file, &opts);
-@@ -53,39 +96,33 @@ static void test_fexit_bpf2bpf_common(const char *obj_file,
- 			goto close_prog;
- 	}
- 
--	if (!run_prog)
--		goto close_prog;
-+	if (cb) {
-+		err = cb(obj);
-+		if (err)
-+			goto close_prog;
-+	}
- 
--	data_map = bpf_object__find_map_by_name(obj, "fexit_bp.bss");
--	if (CHECK(!data_map, "find_data_map", "data map not found\n"))
-+	if (!run_prog)
- 		goto close_prog;
- 
--	err = bpf_prog_test_run(pkt_fd, 1, &pkt_v6, sizeof(pkt_v6),
-+	err = bpf_prog_test_run(tgt_fd, 1, &pkt_v6, sizeof(pkt_v6),
- 				NULL, NULL, &retval, &duration);
- 	CHECK(err || retval, "ipv6",
- 	      "err %d errno %d retval %d duration %d\n",
- 	      err, errno, retval, duration);
- 
--	err = bpf_map_lookup_elem(bpf_map__fd(data_map), &zero, result);
--	if (CHECK(err, "get_result",
--		  "failed to get output data: %d\n", err))
-+	if (check_data_map(obj, prog_cnt, false))
- 		goto close_prog;
- 
--	for (i = 0; i < prog_cnt; i++)
--		if (CHECK(result[i] != 1, "result", "fexit_bpf2bpf failed err %llu\n",
--			  result[i]))
--			goto close_prog;
--
- close_prog:
- 	for (i = 0; i < prog_cnt; i++)
- 		if (!IS_ERR_OR_NULL(link[i]))
- 			bpf_link__destroy(link[i]);
- 	if (!IS_ERR_OR_NULL(obj))
- 		bpf_object__close(obj);
--	bpf_object__close(pkt_obj);
-+	bpf_object__close(tgt_obj);
- 	free(link);
- 	free(prog);
--	free(result);
- }
- 
- static void test_target_no_callees(void)
-@@ -96,7 +133,7 @@ static void test_target_no_callees(void)
- 	test_fexit_bpf2bpf_common("./fexit_bpf2bpf_simple.o",
- 				  "./test_pkt_md_access.o",
- 				  ARRAY_SIZE(prog_name),
--				  prog_name, true);
-+				  prog_name, true, NULL);
- }
- 
- static void test_target_yes_callees(void)
-@@ -110,7 +147,7 @@ static void test_target_yes_callees(void)
- 	test_fexit_bpf2bpf_common("./fexit_bpf2bpf.o",
- 				  "./test_pkt_access.o",
- 				  ARRAY_SIZE(prog_name),
--				  prog_name, true);
-+				  prog_name, true, NULL);
- }
- 
- static void test_func_replace(void)
-@@ -128,7 +165,7 @@ static void test_func_replace(void)
- 	test_fexit_bpf2bpf_common("./fexit_bpf2bpf.o",
- 				  "./test_pkt_access.o",
- 				  ARRAY_SIZE(prog_name),
--				  prog_name, true);
-+				  prog_name, true, NULL);
- }
- 
- static void test_func_replace_verify(void)
-@@ -139,7 +176,60 @@ static void test_func_replace_verify(void)
- 	test_fexit_bpf2bpf_common("./freplace_connect4.o",
- 				  "./connect4_prog.o",
- 				  ARRAY_SIZE(prog_name),
--				  prog_name, false);
-+				  prog_name, false, NULL);
-+}
+ 	info->reg_type = PTR_TO_BTF_ID;
+ 	if (tgt_prog) {
+-		ret = btf_translate_to_vmlinux(log, btf, t, tgt_prog->type, arg);
++		enum bpf_prog_type tgt_type;
 +
-+static int test_second_attach(struct bpf_object *obj)
-+{
-+	const char *prog_name = "freplace/get_constant";
-+	const char *tgt_name = prog_name + 9; /* cut off freplace/ */
-+	const char *tgt_obj_file = "./test_pkt_access.o";
-+	struct bpf_program *prog = NULL;
-+	struct bpf_object *tgt_obj;
-+	__u32 duration = 0, retval;
-+	struct bpf_link *link;
-+	int err = 0, tgt_fd;
++		if (tgt_prog->type == BPF_PROG_TYPE_EXT)
++			tgt_type = tgt_prog->aux->saved_dst_prog_type;
++		else
++			tgt_type = tgt_prog->type;
 +
-+	prog = bpf_object__find_program_by_title(obj, prog_name);
-+	if (CHECK(!prog, "find_prog", "prog %s not found\n", prog_name))
-+		return -ENOENT;
-+
-+	err = bpf_prog_load(tgt_obj_file, BPF_PROG_TYPE_UNSPEC,
-+			    &tgt_obj, &tgt_fd);
-+	if (CHECK(err, "second_prog_load", "file %s err %d errno %d\n",
-+		  tgt_obj_file, err, errno))
-+		return err;
-+
-+	link = bpf_program__attach_freplace(prog, tgt_fd, tgt_name);
-+	if (CHECK(IS_ERR(link), "second_link", "failed to attach second link prog_fd %d tgt_fd %d\n", bpf_program__fd(prog), tgt_fd))
-+		goto out;
-+
-+	err = bpf_prog_test_run(tgt_fd, 1, &pkt_v6, sizeof(pkt_v6),
-+				NULL, NULL, &retval, &duration);
-+	if (CHECK(err || retval, "ipv6",
-+		  "err %d errno %d retval %d duration %d\n",
-+		  err, errno, retval, duration))
-+		goto out;
-+
-+	err = check_data_map(obj, 1, true);
-+	if (err)
-+		goto out;
-+
-+out:
-+	bpf_link__destroy(link);
-+	bpf_object__close(tgt_obj);
-+	return err;
-+}
-+
-+static void test_func_replace_multi(void)
-+{
-+	const char *prog_name[] = {
-+		"freplace/get_constant",
-+	};
-+	test_fexit_bpf2bpf_common("./freplace_get_constant.o",
-+				  "./test_pkt_access.o",
-+				  ARRAY_SIZE(prog_name),
-+				  prog_name, true, test_second_attach);
- }
- 
- static void test_func_sockmap_update(void)
-@@ -150,7 +240,7 @@ static void test_func_sockmap_update(void)
- 	test_fexit_bpf2bpf_common("./freplace_cls_redirect.o",
- 				  "./test_cls_redirect.o",
- 				  ARRAY_SIZE(prog_name),
--				  prog_name, false);
-+				  prog_name, false, NULL);
- }
- 
- static void test_obj_load_failure_common(const char *obj_file,
-@@ -222,4 +312,6 @@ void test_fexit_bpf2bpf(void)
- 		test_func_replace_return_code();
- 	if (test__start_subtest("func_map_prog_compatibility"))
- 		test_func_map_prog_compatibility();
-+	if (test__start_subtest("func_replace_multi"))
-+		test_func_replace_multi();
- }
-diff --git a/tools/testing/selftests/bpf/progs/freplace_get_constant.c b/tools/testing/selftests/bpf/progs/freplace_get_constant.c
-new file mode 100644
-index 000000000000..8f0ecf94e533
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/freplace_get_constant.c
-@@ -0,0 +1,15 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_endian.h>
-+
-+volatile __u64 test_get_constant = 0;
-+SEC("freplace/get_constant")
-+int new_get_constant(long val)
-+{
-+	if (val != 123)
-+		return 0;
-+	test_get_constant = 1;
-+	return test_get_constant; /* original get_constant() returns val - 122 */
-+}
-+char _license[] SEC("license") = "GPL";
++		ret = btf_translate_to_vmlinux(log, btf, t, tgt_type, arg);
+ 		if (ret > 0) {
+ 			info->btf_id = ret;
+ 			return true;
 
