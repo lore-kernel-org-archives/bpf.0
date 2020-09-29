@@ -2,73 +2,150 @@ Return-Path: <SRS0=PNb+=DG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0D57C4741F
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:20:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73568C47425
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:22:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A4F952075F
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:20:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1E32C2076A
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:22:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1601382016;
-	bh=T1w5XrXa2H9LIp7yp9/7COaL1m0xbyEKuPiJJf5RpYc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:List-ID:From;
-	b=QieNb7nuEPt495M5lo/1GBQqlBIYnBQvpuBY/o4R4TUact0bK+Dv1YAEJp+U0VdTH
-	 zZ7kdTit2nsIQFnttbh38uprBTWJ7Zg49iLuJGZAGXM4KuP6aL6aqlNCf3kN2+0X+b
-	 g2veQ3xMhfsIHavUK5N/1OgCjAS22B8g22bIFM2Q=
+	s=default; t=1601382156;
+	bh=1+bDAC057cRqevoqUn1yDT8QoWbfQBjWAA7gtYY30kk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=2sJm6F99R9GfHgW+DSBfAz/SuAX2bhNwcuO2LPEokuVrfcOOIBsXOtk7uQo3pcx26
+	 7J3fX0Tvr/0fPjoSdd3ztyp9HLcq4JJoHledZtOgQM8TNFCWPqXT3/0e9qEksfmS2X
+	 7p1QXM1MCh48D3Uj/SK5muuvD/gqpeZDeyvQRi3Y=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732472AbgI2MUJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Sep 2020 08:20:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33708 "EHLO mail.kernel.org"
+        id S1732383AbgI2MWf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Sep 2020 08:22:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48452 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732468AbgI2MUJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 29 Sep 2020 08:20:09 -0400
-Content-Type: text/plain; charset="utf-8"
+        id S1729797AbgI2LfL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 29 Sep 2020 07:35:11 -0400
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A683323C40;
+        Tue, 29 Sep 2020 11:28:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1601382008;
-        bh=T1w5XrXa2H9LIp7yp9/7COaL1m0xbyEKuPiJJf5RpYc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=vh7zhpPh7tSvLJTje2Oihassq0ugHsS57Vrfut2z5MNvr+N7SvSkm+W3xA6A2IrkF
-         GYqO010rGceL8p/aZG4gGcqqsnj2jq1N4AhhWpCYTthpfdAgaprYJSQ13SYLRYZGMg
-         ADaqofguvRwgbtBdRek3ZhKcHdmgPt5qYGFLA+KA=
+        s=default; t=1601378904;
+        bh=1+bDAC057cRqevoqUn1yDT8QoWbfQBjWAA7gtYY30kk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=eRSGQ1QpMAxoGQ1LejssabvHFZ4GLivTXSNNyV9lfeFY0kJp65KT8mcmgipUTPQTz
+         4o8prcnEwSMZ4uNI/Q2UJkdSm8mMmLaPeIGMptjo/y+wyKFLXF5111nctCE9+q+y00
+         mrMe8ltTjssKdikq8YD26Ke0CEYsPQra7/ygtU3Q=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Ian Rogers <irogers@google.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jin Yao <yao.jin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Song Liu <songliubraving@fb.com>,
+        Stephane Eranian <eranian@google.com>,
+        Vince Weaver <vincent.weaver@maine.edu>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        kp singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 182/245] perf metricgroup: Free metric_events on error
+Date:   Tue, 29 Sep 2020 13:00:33 +0200
+Message-Id: <20200929105955.829907379@linuxfoundation.org>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20200929105946.978650816@linuxfoundation.org>
+References: <20200929105946.978650816@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: cpumap: remove rcpu pointer from
- cpu_map_build_skb signature
-From:   patchwork-bot+bpf@kernel.org
-Message-Id: <160138200860.26741.2323768930219509515.git-patchwork-notify@kernel.org>
-Date:   Tue, 29 Sep 2020 12:20:08 +0000
-References: <33cb9b7dc447de3ea6fd6ce713ac41bca8794423.1601292015.git.lorenzo@kernel.org>
-In-Reply-To: <33cb9b7dc447de3ea6fd6ce713ac41bca8794423.1601292015.git.lorenzo@kernel.org>
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+From: Ian Rogers <irogers@google.com>
 
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
+[ Upstream commit a159e2fe89b4d1f9fb54b0ae418b961e239bf617 ]
 
-On Mon, 28 Sep 2020 13:24:57 +0200 you wrote:
-> Get rid of bpf_cpu_map_entry pointer in cpu_map_build_skb routine
-> signature since it is no longer needed
-> 
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> ---
->  kernel/bpf/cpumap.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+Avoid a simple memory leak.
 
-Here is the summary with links:
-  - [bpf-next] bpf: cpumap: remove rcpu pointer from cpu_map_build_skb signature
-    https://git.kernel.org/bpf/bpf-next/c/efa90b50934c
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andi Kleen <ak@linux.intel.com>
+Cc: Andrii Nakryiko <andriin@fb.com>
+Cc: Cong Wang <xiyou.wangcong@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jin Yao <yao.jin@linux.intel.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: John Garry <john.garry@huawei.com>
+Cc: Kajol Jain <kjain@linux.ibm.com>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Kim Phillips <kim.phillips@amd.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Stephane Eranian <eranian@google.com>
+Cc: Vince Weaver <vincent.weaver@maine.edu>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: bpf@vger.kernel.org
+Cc: kp singh <kpsingh@chromium.org>
+Cc: netdev@vger.kernel.org
+Link: http://lore.kernel.org/lkml/20200508053629.210324-10-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/perf/util/metricgroup.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
+index 8b3dafe3fac3a..6dcc6e1182a54 100644
+--- a/tools/perf/util/metricgroup.c
++++ b/tools/perf/util/metricgroup.c
+@@ -171,6 +171,7 @@ static int metricgroup__setup_events(struct list_head *groups,
+ 		if (!evsel) {
+ 			pr_debug("Cannot resolve %s: %s\n",
+ 					eg->metric_name, eg->metric_expr);
++			free(metric_events);
+ 			continue;
+ 		}
+ 		for (i = 0; i < eg->idnum; i++)
+@@ -178,11 +179,13 @@ static int metricgroup__setup_events(struct list_head *groups,
+ 		me = metricgroup__lookup(metric_events_list, evsel, true);
+ 		if (!me) {
+ 			ret = -ENOMEM;
++			free(metric_events);
+ 			break;
+ 		}
+ 		expr = malloc(sizeof(struct metric_expr));
+ 		if (!expr) {
+ 			ret = -ENOMEM;
++			free(metric_events);
+ 			break;
+ 		}
+ 		expr->metric_expr = eg->metric_expr;
+-- 
+2.25.1
+
 
 
