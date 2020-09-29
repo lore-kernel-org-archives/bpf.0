@@ -2,176 +2,266 @@ Return-Path: <SRS0=PNb+=DG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-10.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 20092C4727F
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:35:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2A13C4727C
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:46:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE86E2076A
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:35:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A6A7208B8
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:46:13 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="h4ktMLC7"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="If0pQJIN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733147AbgI2Mfz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Sep 2020 08:35:55 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:58686 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732825AbgI2Mfx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 29 Sep 2020 08:35:53 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08TCTelQ162405;
-        Tue, 29 Sep 2020 12:35:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : in-reply-to : message-id : references : mime-version :
- content-type; s=corp-2020-01-29;
- bh=XjD5+E/lRfYfuWijGUsC1sO+VMZYXDA0kVQ9CGtozzQ=;
- b=h4ktMLC7TvlTZNgfyQ6iUjidM3jALcN4/T7xAu2TnyTeDBrP7rvbFwskuW3nati7ziZ3
- WrnlX5935ZlG6ZiXTzhVFbvcc0vYtRtlzbz30DFX8myYmxEkk7iKAWRtASt1VgVSPqkX
- HHwDZsaPaNOfWNeRDbld9wJX9SkHVcMeUAcMuPhp9aup+4Veh8j7h5KiUZMyHsnEaq0P
- gPjqFD9LA0OFQAuN1tjQbryIObKZROTnROpDVLl1MbIZbA5mMLfrB9Car4nUh4MhnXFE
- hvXIEQMGNuHRMrxQuPjk8a/SDfuVR8txdGeI2rbqaUyIM5XBeA9HRO3XL9mhIijvomaj lQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 33swkktd5w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 29 Sep 2020 12:35:37 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08TCUPLp004041;
-        Tue, 29 Sep 2020 12:35:37 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by aserp3020.oracle.com with ESMTP id 33tfhxjr7v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 29 Sep 2020 12:35:36 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08TCZZjP024840;
-        Tue, 29 Sep 2020 12:35:35 GMT
-Received: from dhcp-10-175-194-32.vpn.oracle.com (/10.175.194.32)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 29 Sep 2020 05:35:35 -0700
-Date:   Tue, 29 Sep 2020 13:35:26 +0100 (IST)
-From:   Alan Maguire <alan.maguire@oracle.com>
-X-X-Sender: alan@localhost
-To:     =?ISO-8859-15?Q?Toke_H=F8iland-J=F8rgensen?= <toke@redhat.com>
-cc:     daniel@iogearbox.net, ast@fb.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf_iter: don't fail test due to
- missing __builtin_btf_type_id
-In-Reply-To: <20200929123004.46694-1-toke@redhat.com>
-Message-ID: <alpine.LRH.2.21.2009291333310.26076@localhost>
-References: <20200929123004.46694-1-toke@redhat.com>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        id S1728671AbgI2MqM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Sep 2020 08:46:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:46499 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730294AbgI2MqE (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 29 Sep 2020 08:46:04 -0400
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1601383560;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AYjnufP8is+PZDpSpcYj3MIA3sxrhG7nb/FUgzRuevk=;
+        b=If0pQJIN0Va1FMkM0TyOC87hHJtn1kEUPgNCXPBq0W6cV5M4iDdTpQbl7mpkADKHaiBXbK
+        XhFBmGm8AHQS2MWEofIImoP6wIujV3BIaGqjzcFceLsokCo9wG+7GcZpuBJG8+ij+u4eYH
+        o0Bdr1RlEzfwMgvpjOFMT/LHnppVNJg=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-87-MIDs2Rk_NeSDtq_34ISahw-1; Tue, 29 Sep 2020 08:45:59 -0400
+X-MC-Unique: MIDs2Rk_NeSDtq_34ISahw-1
+Received: by mail-oo1-f70.google.com with SMTP id t23so2005856ooc.13
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2020 05:45:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=AYjnufP8is+PZDpSpcYj3MIA3sxrhG7nb/FUgzRuevk=;
+        b=kBHy0e6G5et7el7jdToy4hrkRNpLkHoEZuBTS+YJQa5Yx1+YGbzxPetoSFM3kJy9CL
+         haA7sNuywnVk5jCh9BX6UYsyIQxy9PZ5ovb4arY4A96wNeaqvNvtIs+oD1yV7ROGsEKz
+         5yz4QRkyPJo3sq61dTqiRNEoiXlI/DvgMd79EgyqCoY50kEGkXDZmnRUPT6REewh4/6e
+         ccEjVgatZ+RF9jBqEHaCay70toUJbnD9SrjFzpDmonqRtyLklUJpEAOrmXDTXeDhjAdK
+         31UeER8HJJQkg0KYbu6XVzKp+jqnvIAa6Zc//izQJlliuiqg4IFW2fihvi0S7amI9nDS
+         1Pjg==
+X-Gm-Message-State: AOAM533vE3yCkdJqTsWMWF0gFUXbiJ1PryDenaRytzQkm05iNUdjMXpl
+        Qjs0RZe5P4+Wlj3Q3M7PgskEFA1KF8ZPmY3PrdVlcLv5G47fDbiie0vebnbwECGBLomv6E5qzBt
+        ishvvk0fl1Xze
+X-Received: by 2002:aca:3087:: with SMTP id w129mr2363856oiw.102.1601383558007;
+        Tue, 29 Sep 2020 05:45:58 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzfMI6UWdicXpTfbXfsBehiQkxtLkRdsV4/gHnvUrQzRfL7SCWhLkUaVjWb578vYPggBxT9Uw==
+X-Received: by 2002:aca:3087:: with SMTP id w129mr2363835oiw.102.1601383557767;
+        Tue, 29 Sep 2020 05:45:57 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id a13sm958321oib.35.2020.09.29.05.45.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2020 05:45:55 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id ECC9C183C60; Tue, 29 Sep 2020 14:45:53 +0200 (CEST)
+Subject: [PATCH bpf-next v10 4/7] libbpf: add support for freplace attachment
+ in bpf_link_create
+From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>,
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Date:   Tue, 29 Sep 2020 14:45:53 +0200
+Message-ID: <160138355387.48470.18026176785351166890.stgit@toke.dk>
+In-Reply-To: <160138354947.48470.11523413403103182788.stgit@toke.dk>
+References: <160138354947.48470.11523413403103182788.stgit@toke.dk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1737402268-1601382935=:26076"
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9758 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999 bulkscore=0
- phishscore=0 malwarescore=0 adultscore=0 suspectscore=11 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009290111
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9758 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0 phishscore=0
- suspectscore=11 mlxlogscore=999 clxscore=1015 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 bulkscore=0 spamscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009290111
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
---8323328-1737402268-1601382935=:26076
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+This adds support for supplying a target btf ID for the bpf_link_create()
+operation, and adds a new bpf_program__attach_freplace() high-level API for
+attaching freplace functions with a target.
 
-On Tue, 29 Sep 2020, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+Acked-by: Andrii Nakryiko <andriin@fb.com>
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ tools/lib/bpf/bpf.c      |   18 +++++++++++++++---
+ tools/lib/bpf/bpf.h      |    3 ++-
+ tools/lib/bpf/libbpf.c   |   44 +++++++++++++++++++++++++++++++++++++++-----
+ tools/lib/bpf/libbpf.h   |    3 +++
+ tools/lib/bpf/libbpf.map |    1 +
+ 5 files changed, 60 insertions(+), 9 deletions(-)
 
-> The new test for task iteration in bpf_iter checks (in do_btf_read()) if =
-it
-> should be skipped due to missing __builtin_btf_type_id. However, this
-> 'skip' verdict is not propagated to the caller, so the parent test will
-> still fail. Fix this by also skipping the rest of the parent test if the
-> skip condition was reached.
->=20
-> Fixes: b72091bd4ee4 ("selftests/bpf: Add test for bpf_seq_printf_btf help=
-er")
-> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 70575a37aa14..d27e34133973 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -586,19 +586,31 @@ int bpf_link_create(int prog_fd, int target_fd,
+ 		    enum bpf_attach_type attach_type,
+ 		    const struct bpf_link_create_opts *opts)
+ {
++	__u32 target_btf_id, iter_info_len;
+ 	union bpf_attr attr;
+ 
+ 	if (!OPTS_VALID(opts, bpf_link_create_opts))
+ 		return -EINVAL;
+ 
++	iter_info_len = OPTS_GET(opts, iter_info_len, 0);
++	target_btf_id = OPTS_GET(opts, target_btf_id, 0);
++
++	if (iter_info_len && target_btf_id)
++		return -EINVAL;
++
+ 	memset(&attr, 0, sizeof(attr));
+ 	attr.link_create.prog_fd = prog_fd;
+ 	attr.link_create.target_fd = target_fd;
+ 	attr.link_create.attach_type = attach_type;
+ 	attr.link_create.flags = OPTS_GET(opts, flags, 0);
+-	attr.link_create.iter_info =
+-		ptr_to_u64(OPTS_GET(opts, iter_info, (void *)0));
+-	attr.link_create.iter_info_len = OPTS_GET(opts, iter_info_len, 0);
++
++	if (iter_info_len) {
++		attr.link_create.iter_info =
++			ptr_to_u64(OPTS_GET(opts, iter_info, (void *)0));
++		attr.link_create.iter_info_len = iter_info_len;
++	} else if (target_btf_id) {
++		attr.link_create.target_btf_id = target_btf_id;
++	}
+ 
+ 	return sys_bpf(BPF_LINK_CREATE, &attr, sizeof(attr));
+ }
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 16806810a53c..875dde20d56e 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -174,8 +174,9 @@ struct bpf_link_create_opts {
+ 	__u32 flags;
+ 	union bpf_iter_link_info *iter_info;
+ 	__u32 iter_info_len;
++	__u32 target_btf_id;
+ };
+-#define bpf_link_create_opts__last_field iter_info_len
++#define bpf_link_create_opts__last_field target_btf_id
+ 
+ LIBBPF_API int bpf_link_create(int prog_fd, int target_fd,
+ 			       enum bpf_attach_type attach_type,
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 32dc444224d8..a4f55f8a460d 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9390,9 +9390,11 @@ static struct bpf_link *attach_iter(const struct bpf_sec_def *sec,
+ }
+ 
+ static struct bpf_link *
+-bpf_program__attach_fd(struct bpf_program *prog, int target_fd,
++bpf_program__attach_fd(struct bpf_program *prog, int target_fd, int btf_id,
+ 		       const char *target_name)
+ {
++	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, opts,
++			    .target_btf_id = btf_id);
+ 	enum bpf_attach_type attach_type;
+ 	char errmsg[STRERR_BUFSIZE];
+ 	struct bpf_link *link;
+@@ -9410,7 +9412,7 @@ bpf_program__attach_fd(struct bpf_program *prog, int target_fd,
+ 	link->detach = &bpf_link__detach_fd;
+ 
+ 	attach_type = bpf_program__get_expected_attach_type(prog);
+-	link_fd = bpf_link_create(prog_fd, target_fd, attach_type, NULL);
++	link_fd = bpf_link_create(prog_fd, target_fd, attach_type, &opts);
+ 	if (link_fd < 0) {
+ 		link_fd = -errno;
+ 		free(link);
+@@ -9426,19 +9428,51 @@ bpf_program__attach_fd(struct bpf_program *prog, int target_fd,
+ struct bpf_link *
+ bpf_program__attach_cgroup(struct bpf_program *prog, int cgroup_fd)
+ {
+-	return bpf_program__attach_fd(prog, cgroup_fd, "cgroup");
++	return bpf_program__attach_fd(prog, cgroup_fd, 0, "cgroup");
+ }
+ 
+ struct bpf_link *
+ bpf_program__attach_netns(struct bpf_program *prog, int netns_fd)
+ {
+-	return bpf_program__attach_fd(prog, netns_fd, "netns");
++	return bpf_program__attach_fd(prog, netns_fd, 0, "netns");
+ }
+ 
+ struct bpf_link *bpf_program__attach_xdp(struct bpf_program *prog, int ifindex)
+ {
+ 	/* target_fd/target_ifindex use the same field in LINK_CREATE */
+-	return bpf_program__attach_fd(prog, ifindex, "xdp");
++	return bpf_program__attach_fd(prog, ifindex, 0, "xdp");
++}
++
++struct bpf_link *bpf_program__attach_freplace(struct bpf_program *prog,
++					      int target_fd,
++					      const char *attach_func_name)
++{
++	int btf_id;
++
++	if (!!target_fd != !!attach_func_name) {
++		pr_warn("prog '%s': supply none or both of target_fd and attach_func_name\n",
++			prog->name);
++		return ERR_PTR(-EINVAL);
++	}
++
++	if (prog->type != BPF_PROG_TYPE_EXT) {
++		pr_warn("prog '%s': only BPF_PROG_TYPE_EXT can attach as freplace",
++			prog->name);
++		return ERR_PTR(-EINVAL);
++	}
++
++	if (target_fd) {
++		btf_id = libbpf_find_prog_btf_id(attach_func_name, target_fd);
++		if (btf_id < 0)
++			return ERR_PTR(btf_id);
++
++		return bpf_program__attach_fd(prog, target_fd, btf_id, "freplace");
++	} else {
++		/* no target, so use raw_tracepoint_open for compatibility
++		 * with old kernels
++		 */
++		return bpf_program__attach_trace(prog);
++	}
+ }
+ 
+ struct bpf_link *
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index a750f67a23f6..6909ee81113a 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -261,6 +261,9 @@ LIBBPF_API struct bpf_link *
+ bpf_program__attach_netns(struct bpf_program *prog, int netns_fd);
+ LIBBPF_API struct bpf_link *
+ bpf_program__attach_xdp(struct bpf_program *prog, int ifindex);
++LIBBPF_API struct bpf_link *
++bpf_program__attach_freplace(struct bpf_program *prog,
++			     int target_fd, const char *attach_func_name);
+ 
+ struct bpf_map;
+ 
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 6b10ebad69c6..2d4acc87596c 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -304,6 +304,7 @@ LIBBPF_0.2.0 {
+ 	global:
+ 		bpf_prog_bind_map;
+ 		bpf_prog_test_run_opts;
++		bpf_program__attach_freplace;
+ 		bpf_program__section_name;
+ 		btf__add_array;
+ 		btf__add_const;
 
-Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-
-Thanks for fixing this Toke!
-
-> ---
->  tools/testing/selftests/bpf/prog_tests/bpf_iter.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
->=20
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/te=
-sting/selftests/bpf/prog_tests/bpf_iter.c
-> index af15630a24dd..448885b95eed 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-> @@ -172,17 +172,18 @@ static void test_task_file(void)
-> =20
->  static char taskbuf[TASKBUFSZ];
-> =20
-> -static void do_btf_read(struct bpf_iter_task_btf *skel)
-> +static int do_btf_read(struct bpf_iter_task_btf *skel)
->  {
->  =09struct bpf_program *prog =3D skel->progs.dump_task_struct;
->  =09struct bpf_iter_task_btf__bss *bss =3D skel->bss;
->  =09int iter_fd =3D -1, len =3D 0, bufleft =3D TASKBUFSZ;
->  =09struct bpf_link *link;
->  =09char *buf =3D taskbuf;
-> +=09int ret =3D 0;
-> =20
->  =09link =3D bpf_program__attach_iter(prog, NULL);
->  =09if (CHECK(IS_ERR(link), "attach_iter", "attach_iter failed\n"))
-> -=09=09return;
-> +=09=09return ret;
-> =20
->  =09iter_fd =3D bpf_iter_create(bpf_link__fd(link));
->  =09if (CHECK(iter_fd < 0, "create_iter", "create_iter failed\n"))
-> @@ -198,6 +199,7 @@ static void do_btf_read(struct bpf_iter_task_btf *ske=
-l)
-> =20
->  =09if (bss->skip) {
->  =09=09printf("%s:SKIP:no __builtin_btf_type_id\n", __func__);
-> +=09=09ret =3D 1;
->  =09=09test__skip();
->  =09=09goto free_link;
->  =09}
-> @@ -212,12 +214,14 @@ static void do_btf_read(struct bpf_iter_task_btf *s=
-kel)
->  =09if (iter_fd > 0)
->  =09=09close(iter_fd);
->  =09bpf_link__destroy(link);
-> +=09return ret;
->  }
-> =20
->  static void test_task_btf(void)
->  {
->  =09struct bpf_iter_task_btf__bss *bss;
->  =09struct bpf_iter_task_btf *skel;
-> +=09int ret;
-> =20
->  =09skel =3D bpf_iter_task_btf__open_and_load();
->  =09if (CHECK(!skel, "bpf_iter_task_btf__open_and_load",
-> @@ -226,7 +230,9 @@ static void test_task_btf(void)
-> =20
->  =09bss =3D skel->bss;
-> =20
-> -=09do_btf_read(skel);
-> +=09ret =3D do_btf_read(skel);
-> +=09if (ret)
-> +=09=09goto cleanup;
-> =20
->  =09if (CHECK(bss->tasks =3D=3D 0, "check if iterated over tasks",
->  =09=09  "no task iteration, did BPF program run?\n"))
-> --=20
-> 2.28.0
->=20
->=20
---8323328-1737402268-1601382935=:26076--
