@@ -2,100 +2,119 @@ Return-Path: <SRS0=PNb+=DG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 26BEEC4727C
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:27:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A1C1C4727C
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:31:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C003D20848
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:27:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AE07A20759
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:31:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="WwiMDiuj"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="F0mG7jjj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732738AbgI2M0k (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Sep 2020 08:26:40 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:60670 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729632AbgI2Ldb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 29 Sep 2020 07:33:31 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08TBPP35191277;
-        Tue, 29 Sep 2020 11:33:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=mime-version :
- message-id : date : from : to : cc : subject : content-type :
- content-transfer-encoding; s=corp-2020-01-29;
- bh=Q9XFzQq1ftNd/6nhZwM6OK6igXtWaspUnrZOg4CnAdc=;
- b=WwiMDiujMHZi+Q02nHSZamBamqnCFy26N0CgCXrHQ9265qMvZW/t7VWkbiNnSCK4RPmN
- xw0cF0PftzA/L0X3RXtZdOBqF5pT7cm8LZUDFpb/g62Vdt+7Cl0TqhDqQsebMclFN9I6
- jG81QNhrwDsenDafdVF29LA2OTTlG08Xv1komJoRmsTnZuEgR+2wsmyCBd1e27JXD1nF
- HVo8jxhepx2MFVWpX2F/ZFUEKi5UyRP3GeIkiVh2fv8nPLQnh9DLMR31xd9yrnyr9vU7
- NNicpawhp23xJCxLAPjBqa+/dM9VkpuusB1bpWsZoX/W3jFUrlisBmZtLce28SEQixZ3 Yg== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 33sx9n23jx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 29 Sep 2020 11:33:13 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 08TBTiHT052060;
-        Tue, 29 Sep 2020 11:33:12 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 33tfjwj5ee-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 29 Sep 2020 11:33:12 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 08TBXBwP028097;
-        Tue, 29 Sep 2020 11:33:11 GMT
-Received: from localhost.uk.oracle.com (/10.175.172.184) by default (Oracle
- Beehive Gateway v4.0) with ESMTP ; Tue, 29 Sep 2020 04:32:42 -0700
+        id S1732619AbgI2Mbj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Sep 2020 08:31:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:56923 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732295AbgI2Mam (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 29 Sep 2020 08:30:42 -0400
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1601382641;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=xvzLng++d0GQjJBUi/0nO1Ms1IYQwD4+9R7Ygprni3c=;
+        b=F0mG7jjj1+34SY89PNbwwMRWRVMruW7N5drLiRSmbXgQ04hK46fnQA+mRa00aHfMTP1FsZ
+        ZUL21knQaUgYk9CBlA2Y+9bLfOEYXYvcxqwqXEdE4Di/SEi8Vev+iH5YZWKMm18J1wWnR0
+        dmLZKacuDxQg/1AuUgw7MG8ofsugmJM=
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
+ [209.85.161.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-282-muOCOB04M-CSAK0Aj7sJSg-1; Tue, 29 Sep 2020 08:30:37 -0400
+X-MC-Unique: muOCOB04M-CSAK0Aj7sJSg-1
+Received: by mail-oo1-f71.google.com with SMTP id q189so1974115ooa.18
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2020 05:30:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xvzLng++d0GQjJBUi/0nO1Ms1IYQwD4+9R7Ygprni3c=;
+        b=KGokx3Pec7udPhmB+DBBZ6UfDLkgyRCCYQfWPuN76pO+6WjxdXL6TkMXiJxEq/4sJT
+         xX4jFfSVvxTqkC6fRt/Ze8iUK9oA0VQVdwngARTUDQC/HiB/1cjtFP/meFpoxX4bFD+g
+         4is7o0sVQVIvq2jaUtvq502XmjBX9P5gjZM1qL94HdzqvSA4gDdgAIsNY9f4IgJLoW7S
+         wAY0yQQKyMU+xIxh2TUtVryffaD5vqoyMfQRPNeT1kgBmCXvOMvrVFvuoMHS8HjV7XIn
+         2uqkbBgw+kj+M9tLN5rf70EjrJr+a00fqCLv9i6JPxReh6l6330TIokI3/y9cO3VgLGE
+         bICQ==
+X-Gm-Message-State: AOAM530WobeLs7Ds+hmVEH59iwjjpOKvv3MciFZ0sMrYDEezrdHYPovj
+        fuhrOqHDy2w0maGhvochy3Xd7duoscqKY7XY7gn/BS9Y079UxLBvi0InVxHls1ZQsd3t8ktj/KD
+        wAUW1CxWQKIER
+X-Received: by 2002:aca:bd8a:: with SMTP id n132mr2398098oif.100.1601382636963;
+        Tue, 29 Sep 2020 05:30:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzxtMOVSRmpEJspMGu1B9TMyJUHZE/vqWdRPfqoJwttt3tbdemxQ/MKrn2R6TluIvpwr/UyNw==
+X-Received: by 2002:aca:bd8a:: with SMTP id n132mr2398080oif.100.1601382636497;
+        Tue, 29 Sep 2020 05:30:36 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id k3sm2852115oof.6.2020.09.29.05.30.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Sep 2020 05:30:35 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 6847B183C5B; Tue, 29 Sep 2020 14:30:32 +0200 (CEST)
+From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     daniel@iogearbox.net, ast@fb.com
+Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>
+Subject: [PATCH bpf-next] selftests: Make sure all 'skel' variables are declared static
+Date:   Tue, 29 Sep 2020 14:30:26 +0200
+Message-Id: <20200929123026.46751-1-toke@redhat.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Message-ID: <1601379151-21449-1-git-send-email-alan.maguire@oracle.com>
-Date:   Tue, 29 Sep 2020 04:32:29 -0700 (PDT)
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com
-Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@chromium.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH bpf-next 0/2] selftests/bpf: BTF-based kernel data display
- fixes
-X-Mailer: git-send-email 1.8.3.1
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9758 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
- phishscore=0 adultscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009290103
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9758 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
- phishscore=0 mlxscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015
- spamscore=0 impostorscore=0 malwarescore=0 bulkscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009290102
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Resolve issues in bpf selftests introduced with BTF-based kernel data
-display selftests; these are
+If programs in prog_tests using skeletons declare the 'skel' variable as
+global but not static, that will lead to linker errors on the final link of
+the prog_tests binary due to duplicate symbols. Fix a few instances of this.
 
-- a warning introduced in snprintf_btf.c; and
-- compilation failures with old kernels vmlinux.h
+Fixes: b18c1f0aa477 ("bpf: selftest: Adapt sock_fields test to use skel and global variables")
+Fixes: 9a856cae2217 ("bpf: selftest: Add test_btf_skc_cls_ingress")
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+---
+ tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c | 2 +-
+ tools/testing/selftests/bpf/prog_tests/sock_fields.c         | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Alan Maguire (2):
-  selftests/bpf: fix unused-result warning in snprintf_btf.c
-  selftests/bpf: ensure snprintf_btf/bpf_iter tests compatibility with
-    old vmlinux.h
-
- .../selftests/bpf/prog_tests/snprintf_btf.c        |  2 +-
- tools/testing/selftests/bpf/progs/bpf_iter.h       | 23 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/btf_ptr.h        | 27 ++++++++++++++++++++++
- .../selftests/bpf/progs/netif_receive_skb.c        |  2 +-
- 4 files changed, 52 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/btf_ptr.h
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+index 4ce0e8a25bc5..86ccf37e26b3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_skc_cls_ingress.c
+@@ -16,7 +16,7 @@
+ #include "test_progs.h"
+ #include "test_btf_skc_cls_ingress.skel.h"
+ 
+-struct test_btf_skc_cls_ingress *skel;
++static struct test_btf_skc_cls_ingress *skel;
+ struct sockaddr_in6 srv_sa6;
+ static __u32 duration;
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/sock_fields.c b/tools/testing/selftests/bpf/prog_tests/sock_fields.c
+index 66e83b8fc69d..af87118e748e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sock_fields.c
++++ b/tools/testing/selftests/bpf/prog_tests/sock_fields.c
+@@ -36,7 +36,7 @@ struct bpf_spinlock_cnt {
+ 
+ static struct sockaddr_in6 srv_sa6, cli_sa6;
+ static int sk_pkt_out_cnt10_fd;
+-struct test_sock_fields *skel;
++static struct test_sock_fields *skel;
+ static int sk_pkt_out_cnt_fd;
+ static __u64 parent_cg_id;
+ static __u64 child_cg_id;
 -- 
-1.8.3.1
+2.28.0
 
