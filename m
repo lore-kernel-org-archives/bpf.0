@@ -2,46 +2,48 @@ Return-Path: <SRS0=PNb+=DG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 45B01C47425
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:20:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F0D57C4741F
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:20:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E9B8F20773
+	by mail.kernel.org (Postfix) with ESMTP id A4F952075F
 	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 12:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1601382017;
-	bh=ANsfuM/+BwWGVElXRbF96h6FPeH00yJfEEGLmK7eMa8=;
+	s=default; t=1601382016;
+	bh=T1w5XrXa2H9LIp7yp9/7COaL1m0xbyEKuPiJJf5RpYc=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:List-ID:From;
-	b=sMFOaZe3ILU+BYhG8qHAZmgUi+hR26Um521iVB/QS4SEDwFvBsuu+++rDKlMCV2nw
-	 OJl+Otf8lh5I+cKk+alXKXmUE8kQ13k3IdsS9ClUZc1xYrgP1luNmDsSu9KmaGydEC
-	 60s8+2xS0GwJy5GGs5DDgJDN8HcWN48ZlUr7yqBk=
+	b=QieNb7nuEPt495M5lo/1GBQqlBIYnBQvpuBY/o4R4TUact0bK+Dv1YAEJp+U0VdTH
+	 zZ7kdTit2nsIQFnttbh38uprBTWJ7Zg49iLuJGZAGXM4KuP6aL6aqlNCf3kN2+0X+b
+	 g2veQ3xMhfsIHavUK5N/1OgCjAS22B8g22bIFM2Q=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732468AbgI2MUJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1732472AbgI2MUJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 29 Sep 2020 08:20:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33688 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:33708 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732466AbgI2MUJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1732468AbgI2MUJ (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 29 Sep 2020 08:20:09 -0400
 Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1601382008;
-        bh=ANsfuM/+BwWGVElXRbF96h6FPeH00yJfEEGLmK7eMa8=;
+        bh=T1w5XrXa2H9LIp7yp9/7COaL1m0xbyEKuPiJJf5RpYc=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=E8MPHVezDvcUFwlFuayIgOB6n2JX4UQpuxBS1nuc+6tsKcRHobbKBtJQNOMuxRypQ
-         MtN5CkTFuNDVUK/ymFD06OudD/dspHcgUh2YPHEvJ5ABb45Vu3xSsXAZy8b4nyyUOS
-         9jy5tLTjfy6Rus7jqliUaX+G8I+cvO/hl4dTVe0Y=
+        b=vh7zhpPh7tSvLJTje2Oihassq0ugHsS57Vrfut2z5MNvr+N7SvSkm+W3xA6A2IrkF
+         GYqO010rGceL8p/aZG4gGcqqsnj2jq1N4AhhWpCYTthpfdAgaprYJSQ13SYLRYZGMg
+         ADaqofguvRwgbtBdRek3ZhKcHdmgPt5qYGFLA+KA=
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 bpf-next 0/3] libbpf: BTF writer APIs
+Subject: Re: [PATCH bpf-next] bpf: cpumap: remove rcpu pointer from
+ cpu_map_build_skb signature
 From:   patchwork-bot+bpf@kernel.org
-Message-Id: <160138200845.26741.8137394671987492282.git-patchwork-notify@kernel.org>
+Message-Id: <160138200860.26741.2323768930219509515.git-patchwork-notify@kernel.org>
 Date:   Tue, 29 Sep 2020 12:20:08 +0000
-References: <20200929020533.711288-1-andriin@fb.com>
-In-Reply-To: <20200929020533.711288-1-andriin@fb.com>
-To:     Andrii Nakryiko <andriin@fb.com>
+References: <33cb9b7dc447de3ea6fd6ce713ac41bca8794423.1601292015.git.lorenzo@kernel.org>
+In-Reply-To: <33cb9b7dc447de3ea6fd6ce713ac41bca8794423.1601292015.git.lorenzo@kernel.org>
+To:     Lorenzo Bianconi <lorenzo@kernel.org>
 Cc:     bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
@@ -49,25 +51,20 @@ X-Mailing-List: bpf@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (refs/heads/master):
+This patch was applied to bpf/bpf-next.git (refs/heads/master):
 
-On Mon, 28 Sep 2020 19:05:29 -0700 you wrote:
-> This patch set introduces a new set of BTF APIs to libbpf that allow to
-> conveniently produce BTF types and strings. These APIs will allow libbpf to do
-> more intrusive modifications of program's BTF (by rewriting it, at least as of
-> right now), which is necessary for the upcoming libbpf static linking. But
-> they are complete and generic, so can be adopted by anyone who has a need to
-> produce BTF type information.
+On Mon, 28 Sep 2020 13:24:57 +0200 you wrote:
+> Get rid of bpf_cpu_map_entry pointer in cpu_map_build_skb routine
+> signature since it is no longer needed
 > 
-> [...]
+> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> ---
+>  kernel/bpf/cpumap.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 
 Here is the summary with links:
-  - [v3,bpf-next,1/3] libbpf: add BTF writing APIs
-    https://git.kernel.org/bpf/bpf-next/c/4a3b33f8579a
-  - [v3,bpf-next,2/3] libbpf: add btf__str_by_offset() as a more generic variant of name_by_offset
-    https://git.kernel.org/bpf/bpf-next/c/f86ed050bcee
-  - [v3,bpf-next,3/3] selftests/bpf: test BTF writing APIs
-    https://git.kernel.org/bpf/bpf-next/c/9141f75a3279
+  - [bpf-next] bpf: cpumap: remove rcpu pointer from cpu_map_build_skb signature
+    https://git.kernel.org/bpf/bpf-next/c/efa90b50934c
 
 You are awesome, thank you!
 --
