@@ -2,193 +2,106 @@ Return-Path: <SRS0=PNb+=DG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8842C4727F
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 08:48:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55581C4346E
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 08:51:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5B718206A2
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 08:48:22 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="jWx7A5yx"
+	by mail.kernel.org (Postfix) with ESMTP id ECFF42083B
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 08:51:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727774AbgI2IsV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Sep 2020 04:48:21 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:42590 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725826AbgI2IsV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 29 Sep 2020 04:48:21 -0400
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08T8indt001277
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2020 01:48:20 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=+R97lXwFg5naeDERa3Nxp06DjosuYccCbTRkixjpzwk=;
- b=jWx7A5yxI7pwxL197DHpT1LA9P52/UERynmySILZ97gxEL9IUMfgIMTBk7R5jg7m5mOT
- kPrhaFOjFTyqTObtGHezJg3E7NjoDc1AbxMKX1h1YWWNlEHI7ddA7IZean46jVh3x9/a
- /8/jixYDlSB2OGR4c3cskgq1swA3pROcJVU= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 33tnwnsbmk-8
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2020 01:48:20 -0700
-Received: from intmgw003.08.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 29 Sep 2020 01:48:08 -0700
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 68DF962E5765; Tue, 29 Sep 2020 01:48:00 -0700 (PDT)
-From:   Song Liu <songliubraving@fb.com>
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <kernel-team@fb.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <john.fastabend@gmail.com>, <kpsingh@chromium.org>,
-        Song Liu <songliubraving@fb.com>
-Subject: [PATCH bpf-next 1/2] bpf: introduce BPF_F_SHARE_PE for perf event array
-Date:   Tue, 29 Sep 2020 01:47:49 -0700
-Message-ID: <20200929084750.419168-2-songliubraving@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200929084750.419168-1-songliubraving@fb.com>
-References: <20200929084750.419168-1-songliubraving@fb.com>
+        id S1725786AbgI2IvU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Sep 2020 04:51:20 -0400
+Received: from www62.your-server.de ([213.133.104.62]:55300 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725554AbgI2IvT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 29 Sep 2020 04:51:19 -0400
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kNBLf-00061o-Oa; Tue, 29 Sep 2020 10:50:59 +0200
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kNBLf-0004qV-AC; Tue, 29 Sep 2020 10:50:59 +0200
+Subject: Re: [PATCH v7 bpf-next 4/8] selftests/bpf: add bpf_snprintf_btf
+ helper tests
+To:     Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
+        andriin@fb.com, yhs@fb.com
+Cc:     linux@rasmusvillemoes.dk, andriy.shevchenko@linux.intel.com,
+        pmladek@suse.com, kafai@fb.com, songliubraving@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org, shuah@kernel.org,
+        rdna@fb.com, scott.branden@broadcom.com, quentin@isovalent.com,
+        cneirabustos@gmail.com, jakub@cloudflare.com, mingo@redhat.com,
+        rostedt@goodmis.org, acme@kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <1601292670-1616-1-git-send-email-alan.maguire@oracle.com>
+ <1601292670-1616-5-git-send-email-alan.maguire@oracle.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <30b2a441-9772-1662-ca03-13bfa0b37d46@iogearbox.net>
+Date:   Tue, 29 Sep 2020 10:50:57 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-29_01:2020-09-29,2020-09-29 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- lowpriorityscore=0 mlxlogscore=999 impostorscore=0 bulkscore=0
- adultscore=0 suspectscore=2 malwarescore=0 clxscore=1015
- priorityscore=1501 mlxscore=0 spamscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2006250000
- definitions=main-2009290080
-X-FB-Internal: deliver
+In-Reply-To: <1601292670-1616-5-git-send-email-alan.maguire@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/25941/Mon Sep 28 15:55:11 2020)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, perf event in perf event array is removed from the array when
-the map fd used to add the event is closed. This behavior makes it
-difficult to the share perf events with perf event array.
+On 9/28/20 1:31 PM, Alan Maguire wrote:
+> Tests verifying snprintf()ing of various data structures,
+> flags combinations using a tp_btf program. Tests are skipped
+> if __builtin_btf_type_id is not available to retrieve BTF
+> type ids.
+> 
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+[...]
+> +void test_snprintf_btf(void)
+> +{
+> +	struct netif_receive_skb *skel;
+> +	struct netif_receive_skb__bss *bss;
+> +	int err, duration = 0;
+> +
+> +	skel = netif_receive_skb__open();
+> +	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
+> +		return;
+> +
+> +	err = netif_receive_skb__load(skel);
+> +	if (CHECK(err, "skel_load", "failed to load skeleton: %d\n", err))
+> +		goto cleanup;
+> +
+> +	bss = skel->bss;
+> +
+> +	err = netif_receive_skb__attach(skel);
+> +	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
+> +		goto cleanup;
+> +
+> +	/* generate receive event */
+> +	system("ping -c 1 127.0.0.1 > /dev/null");
 
-Introduce perf event map that keeps the perf event open with a new flag
-BPF_F_SHARE_PE. With this flag set, perf events in the array are not
-removed when the original map fd is closed. Instead, the perf event will
-stay in the map until 1) it is explicitly removed from the array; or 2)
-the array is freed.
+This generates the following new warning when compiling BPF selftests:
 
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- include/uapi/linux/bpf.h       |  3 +++
- kernel/bpf/arraymap.c          | 31 +++++++++++++++++++++++++++++--
- tools/include/uapi/linux/bpf.h |  3 +++
- 3 files changed, 35 insertions(+), 2 deletions(-)
+   [...]
+   EXT-OBJ  [test_progs] cgroup_helpers.o
+   EXT-OBJ  [test_progs] trace_helpers.o
+   EXT-OBJ  [test_progs] network_helpers.o
+   EXT-OBJ  [test_progs] testing_helpers.o
+   TEST-OBJ [test_progs] snprintf_btf.test.o
+/root/bpf-next/tools/testing/selftests/bpf/prog_tests/snprintf_btf.c: In function ‘test_snprintf_btf’:
+/root/bpf-next/tools/testing/selftests/bpf/prog_tests/snprintf_btf.c:30:2: warning: ignoring return value of ‘system’, declared with attribute warn_unused_result [-Wunused-result]
+   system("ping -c 1 127.0.0.1 > /dev/null");
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   [...]
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 82522f05c0213..74f7a09e9d1e3 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -414,6 +414,9 @@ enum {
-=20
- /* Enable memory-mapping BPF map */
- 	BPF_F_MMAPABLE		=3D (1U << 10),
-+
-+/* Share perf_event among processes */
-+	BPF_F_SHARE_PE		=3D (1U << 11),
- };
-=20
- /* Flags for BPF_PROG_QUERY. */
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index e5fd31268ae02..4938ff183d846 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -15,7 +15,7 @@
- #include "map_in_map.h"
-=20
- #define ARRAY_CREATE_FLAG_MASK \
--	(BPF_F_NUMA_NODE | BPF_F_MMAPABLE | BPF_F_ACCESS_MASK)
-+	(BPF_F_NUMA_NODE | BPF_F_MMAPABLE | BPF_F_ACCESS_MASK | BPF_F_SHARE_PE)
-=20
- static void bpf_array_free_percpu(struct bpf_array *array)
- {
-@@ -64,6 +64,10 @@ int array_map_alloc_check(union bpf_attr *attr)
- 	    attr->map_flags & BPF_F_MMAPABLE)
- 		return -EINVAL;
-=20
-+	if (attr->map_type !=3D BPF_MAP_TYPE_PERF_EVENT_ARRAY &&
-+	    attr->map_flags & BPF_F_SHARE_PE)
-+		return -EINVAL;
-+
- 	if (attr->value_size > KMALLOC_MAX_SIZE)
- 		/* if value_size is bigger, the user space won't be able to
- 		 * access the elements.
-@@ -778,6 +782,26 @@ static int fd_array_map_delete_elem(struct bpf_map *=
-map, void *key)
- 	}
- }
-=20
-+static void perf_event_fd_array_map_free(struct bpf_map *map)
-+{
-+	struct bpf_event_entry *ee;
-+	struct bpf_array *array;
-+	int i;
-+
-+	if ((map->map_flags & BPF_F_SHARE_PE) =3D=3D 0) {
-+		fd_array_map_free(map);
-+		return;
-+	}
-+
-+	array =3D container_of(map, struct bpf_array, map);
-+	for (i =3D 0; i < array->map.max_entries; i++) {
-+		ee =3D READ_ONCE(array->ptrs[i]);
-+		if (ee)
-+			fd_array_map_delete_elem(map, &i);
-+	}
-+	bpf_map_area_free(array);
-+}
-+
- static void *prog_fd_array_get_ptr(struct bpf_map *map,
- 				   struct file *map_file, int fd)
- {
-@@ -1134,6 +1158,9 @@ static void perf_event_fd_array_release(struct bpf_=
-map *map,
- 	struct bpf_event_entry *ee;
- 	int i;
-=20
-+	if (map->map_flags & BPF_F_SHARE_PE)
-+		return;
-+
- 	rcu_read_lock();
- 	for (i =3D 0; i < array->map.max_entries; i++) {
- 		ee =3D READ_ONCE(array->ptrs[i]);
-@@ -1148,7 +1175,7 @@ const struct bpf_map_ops perf_event_array_map_ops =3D=
- {
- 	.map_meta_equal =3D bpf_map_meta_equal,
- 	.map_alloc_check =3D fd_array_map_alloc_check,
- 	.map_alloc =3D array_map_alloc,
--	.map_free =3D fd_array_map_free,
-+	.map_free =3D perf_event_fd_array_map_free,
- 	.map_get_next_key =3D array_map_get_next_key,
- 	.map_lookup_elem =3D fd_array_map_lookup_elem,
- 	.map_delete_elem =3D fd_array_map_delete_elem,
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bp=
-f.h
-index 82522f05c0213..74f7a09e9d1e3 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -414,6 +414,9 @@ enum {
-=20
- /* Enable memory-mapping BPF map */
- 	BPF_F_MMAPABLE		=3D (1U << 10),
-+
-+/* Share perf_event among processes */
-+	BPF_F_SHARE_PE		=3D (1U << 11),
- };
-=20
- /* Flags for BPF_PROG_QUERY. */
---=20
-2.24.1
-
+Please fix, thx!
