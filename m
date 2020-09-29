@@ -2,114 +2,86 @@ Return-Path: <SRS0=PNb+=DG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5E07C4346E
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 04:33:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 336B2C4346E
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 04:35:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A00A320BED
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 04:33:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DB661208FE
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 04:35:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="P66/gG0l"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uws9czql"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725468AbgI2EdV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 29 Sep 2020 00:33:21 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:64720 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725283AbgI2EdV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 29 Sep 2020 00:33:21 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08T4VTdB021986
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2020 21:33:20 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=s9mOQrn9uc3YDAJgiuUekVv7lNozplIXsZSePhQQ5cA=;
- b=P66/gG0liIEcyq/zQeynGz+l/KJrWltLD1Qo+/SnjM5GjT66pL2KcyoVVY4ir2Q323zx
- c5tRVLY7WmkIxa4eL8/XNgR0VnPtawC/KSawgobSyIK/TDqjqHt4d+VnU9mpMr6gRX+h
- zPHffr1WOA0QF9ri9iw1seZm+FNPq9ZwJ9E= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 33tn4tgj3y-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2020 21:33:20 -0700
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 28 Sep 2020 21:33:17 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 0C25C2EC774D; Mon, 28 Sep 2020 21:30:53 -0700 (PDT)
-From:   Andrii Nakryiko <andriin@fb.com>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Tony Ambardar <tony.ambardar@gmail.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Luka Perkov <luka.perkov@sartura.hr>
-Subject: [PATCH bpf-next 0/3] libbpf: support loading/storing any BTF endianness
-Date:   Mon, 28 Sep 2020 21:30:43 -0700
-Message-ID: <20200929043046.1324350-1-andriin@fb.com>
-X-Mailer: git-send-email 2.24.1
+        id S1725320AbgI2EfE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 29 Sep 2020 00:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725306AbgI2EfE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 29 Sep 2020 00:35:04 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1567C061755;
+        Mon, 28 Sep 2020 21:35:03 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id b12so3888416lfp.9;
+        Mon, 28 Sep 2020 21:35:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gjeJyyE8PC7GfPzcN4PQWzjypUXN1n7OcjUJtTFiY5U=;
+        b=uws9czqlJkhrE+bsInmIXL24QeIejlQD4BDubD2OrvM6D982Wr0cotIBBg5clCe2jn
+         w1+KF1vwRJ+M6/eBX+N9x+eGe/WJI9GArGiuQjdb77T53zM2ck83vkX18LKzeQLb8C0T
+         W703wbGkL/7OwvAsBvcc5n02SmNa15pVeIP2YHsEYdikhg1FNidMgL4VuYQc2667LW0c
+         QPY7dM43YUwWBhyc1WZBfQgwlJwoSwcDuTjwVwLYRWk6MDwRe0xqzB9Q3mGsmwxUfqpy
+         BxwkpgzuumqHjxoUdTZSAoq5S0oyYMANpFtL3GxivnkQlqMW9XlsJKRjCl0XCkhG2MKx
+         3bnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gjeJyyE8PC7GfPzcN4PQWzjypUXN1n7OcjUJtTFiY5U=;
+        b=OlaBhTBX0pKrKNhmmpzPlQvNqFaeLZVIyFTZ2KOZoGCVlJfKBaqDgOGXzrsij8i7GP
+         B3HKb27rtfSvCd0xyi4Pv561zNf6zG9XRNZlpUssG5Bu4+1ymjrdQVma0TW2j1ck9f+w
+         jF5ET8icuNhju92tHS/YkDZe7UBasJO0D6lVQGkWTBJ3SQbp6m8IcnfaLRxOCiJEOr73
+         lK8MPhIyhvnodU3O/WpwIvmdtSEiPMqhqW3GsGggUDR6kC1lB3zJOjBUCILtUlT+Q+uC
+         o1XYDx5cgNk3ZYVyahKrpSUN9iIQLp+bqyDvTs+PW0hgmIfzdJvGmrBpxKboD5ivRPBa
+         xJ3g==
+X-Gm-Message-State: AOAM5322cM8yZrIkITdmFKX30TZ7Xte1ufKOlM1YtPsj7bIhsahepe/C
+        61b+YArWBQDHvg/O+nTzAXSvVMAEf8pmPuACn1w=
+X-Google-Smtp-Source: ABdhPJxrHjpkXLv75U/Xklioz9uKhO5tQ3M+xRO/iodPJ6qNxkuDd4jcochQ6LJ7Dd+BAiIzNWy1kTPATTwFNWAtAEY=
+X-Received: by 2002:a19:df53:: with SMTP id q19mr471107lfj.119.1601354101576;
+ Mon, 28 Sep 2020 21:35:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-09-29_01:2020-09-28,2020-09-29 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 adultscore=0
- suspectscore=8 bulkscore=0 phishscore=0 lowpriorityscore=0 clxscore=1015
- malwarescore=0 mlxscore=0 mlxlogscore=994 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009290045
-X-FB-Internal: deliver
+References: <160134424745.11199.13841922833336698133.stgit@john-Precision-5820-Tower>
+In-Reply-To: <160134424745.11199.13841922833336698133.stgit@john-Precision-5820-Tower>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 28 Sep 2020 21:34:50 -0700
+Message-ID: <CAADnVQKUmuLU5GDdy7FS-=+no=FhC1u6iCCp6zGnN_X7kAG5uA@mail.gmail.com>
+Subject: Re: [bpf-next PATCH] bpf, selftests: Fix cast to smaller integer type
+ 'int' warning in raw_tp
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support for loading and storing BTF in either little- or big-endian
-integer encodings, regardless of host endianness. This allows users of li=
-bbpf
-to not care about endianness when they don't want to and transparently
-open/load BTF of any endianness. libbpf will preserve original endianness=
- and
-will convert output raw data as necessary back to original endianness, if
-necessary. This allows tools like pahole to be ignorant to such issues du=
-ring
-cross-compilation.
+On Mon, Sep 28, 2020 at 6:51 PM John Fastabend <john.fastabend@gmail.com> wrote:
+>
+> Fix warning in bpf selftests,
+>
+> progs/test_raw_tp_test_run.c:18:10: warning: cast to smaller integer type 'int' from 'struct task_struct *' [-Wpointer-to-int-cast]
+>
+> Change int type cast to long to fix. Discovered with gcc-9 and llvm-11+
+> where llvm was recent main branch.
+>
+> Fixes: 09d8ad16885ee ("selftests/bpf: Add raw_tp_test_run")
+> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 
-While working with BTF data in memory, the endianness is always native to=
- the
-host. Convetion can happen only during btf__get_raw_data() call, and only=
- in
-a raw data copy.
-
-Additionally, it's possible to force output BTF endianness through new
-btf__set_endianness() API. This which allows to create flexible tools doi=
-ng
-arbitrary conversions of BTF endianness, just by relying on libbpf.
-
-Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc: Tony Ambardar <tony.ambardar@gmail.com>
-Cc: Ilya Leoshkevich <iii@linux.ibm.com>
-Cc: Luka Perkov <luka.perkov@sartura.hr>
-
-Andrii Nakryiko (3):
-  selftests/bpf: move and extend ASSERT_xxx() testing macros
-  libbpf: support BTF loading and raw data output in both endianness
-  selftests/bpf: test BTF's handling of endianness
-
- tools/lib/bpf/btf.c                           | 310 ++++++++++++++----
- tools/lib/bpf/btf.h                           |   7 +
- tools/lib/bpf/libbpf.map                      |   2 +
- .../selftests/bpf/prog_tests/btf_endian.c     | 101 ++++++
- .../selftests/bpf/prog_tests/btf_write.c      |  34 --
- tools/testing/selftests/bpf/test_progs.h      |  63 ++++
- 6 files changed, 419 insertions(+), 98 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_endian.c
-
---=20
-2.24.1
-
+Applied. Thanks
