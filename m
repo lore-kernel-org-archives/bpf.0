@@ -2,132 +2,144 @@ Return-Path: <SRS0=PNb+=DG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 863A6C4727E
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 02:05:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 505F6C2D0A8
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 02:05:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 459DA2078B
-	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 02:05:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 12FDD2078B
+	for <bpf@archiver.kernel.org>; Tue, 29 Sep 2020 02:05:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="rX0tl8na"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="QOok148R"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727342AbgI2CFr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 28 Sep 2020 22:05:47 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:34324 "EHLO
+        id S1727348AbgI2CFt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 28 Sep 2020 22:05:49 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:15264 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727325AbgI2CFr (ORCPT
+        by vger.kernel.org with ESMTP id S1726961AbgI2CFr (ORCPT
         <rfc822;bpf@vger.kernel.org>); Mon, 28 Sep 2020 22:05:47 -0400
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08T25jT2024140
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2020 19:05:45 -0700
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08T25aw1001213
+        for <bpf@vger.kernel.org>; Mon, 28 Sep 2020 19:05:47 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=KNxveQPaHGG1pCEoyZRCMLeEvUZuqztPobe7iMtIl6Q=;
- b=rX0tl8naBpm7/bpWhrKQI6x1JLcr9ZmG4mGro6dEYA+j1K/3yCpnlU+cXTwjZuXXb2sG
- aL4sSNNESBK7XQlLYnAD/18JD1ex0jz4Pufhh26Kb+thy5kSKY0YUJF9yG4buEbLkkVo
- XhhRxCcti/WyOJzbjoxzg0vUAUxjUd3DjoY= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=rHWs9nT/CK0CxOtWXUm42JeH+PPBxwpdrUgICApbBoY=;
+ b=QOok148R0h+VytgTQGK2ptI54Hm7x2XiFUKsgwI0uGzYw7dfoZJl4wN4vUKR7S3X3V3k
+ 47TK2JTvNOeoXbaBFOC7GBW0isDQcc/PtkqhDoURePz6YuvgeaDNMTrOOOKbaIx5lvUw
+ AkepqNPoSFehAZiafBdREyM80Tn62CjrrSc= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 33t3cpajy7-3
+        by mx0a-00082601.pphosted.com with ESMTP id 33t35n2m6c-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 28 Sep 2020 19:05:45 -0700
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 28 Sep 2020 19:05:46 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 28 Sep 2020 19:05:37 -0700
+ 15.1.1979.3; Mon, 28 Sep 2020 19:05:46 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 8F6B72EC773C; Mon, 28 Sep 2020 19:05:36 -0700 (PDT)
+        id 0513F2EC773C; Mon, 28 Sep 2020 19:05:40 -0700 (PDT)
 From:   Andrii Nakryiko <andriin@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii.nakryiko@gmail.com>, <kernel-team@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Subject: [PATCH v3 bpf-next 0/3] libbpf: BTF writer APIs
-Date:   Mon, 28 Sep 2020 19:05:29 -0700
-Message-ID: <20200929020533.711288-1-andriin@fb.com>
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: [PATCH v3 bpf-next 2/3] libbpf: add btf__str_by_offset() as a more generic variant of name_by_offset
+Date:   Mon, 28 Sep 2020 19:05:31 -0700
+Message-ID: <20200929020533.711288-3-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20200929020533.711288-1-andriin@fb.com>
+References: <20200929020533.711288-1-andriin@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-29_01:2020-09-28,2020-09-29 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- malwarescore=0 clxscore=1015 impostorscore=0 mlxlogscore=343
- suspectscore=8 priorityscore=1501 lowpriorityscore=0 spamscore=0
- adultscore=0 mlxscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2006250000 definitions=main-2009290019
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=837
+ mlxscore=0 lowpriorityscore=0 suspectscore=8 impostorscore=0
+ malwarescore=0 phishscore=0 clxscore=1015 bulkscore=0 priorityscore=1501
+ spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009290019
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set introduces a new set of BTF APIs to libbpf that allow to
-conveniently produce BTF types and strings. These APIs will allow libbpf =
-to do
-more intrusive modifications of program's BTF (by rewriting it, at least =
-as of
-right now), which is necessary for the upcoming libbpf static linking. Bu=
-t
-they are complete and generic, so can be adopted by anyone who has a need=
- to
-produce BTF type information.
+BTF strings are used not just for names, they can be arbitrary strings us=
+ed
+for CO-RE relocations, line/func infos, etc. Thus "name_by_offset" termin=
+ology
+is too specific and might be misleading. Instead, introduce
+btf__str_by_offset() API which uses generic string terminology.
 
-One such example outside of libbpf is pahole, which was actually converte=
-d to
-these APIs (locally, pending landing of these changes in libbpf) complete=
-ly
-and shows reduction in amount of custom pahole code necessary and brings =
-nice
-savings in memory usage (about 370MB reduction at peak for my kernel
-configuration) and even BTF deduplication times (one second reduction,
-23.7s -> 22.7s). Memory savings are due to avoiding pahole's own copy of
-"uncompressed" raw BTF data. Time reduction comes from faster string
-search and deduplication by relying on hashmap instead of BST used by pah=
-ole's
-own code. Consequently, these APIs are already tested on real-world
-complicated kernel BTF, but there is also pretty extensive selftest doing
-extra validations.
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+---
+ tools/lib/bpf/btf.c      | 7 ++++++-
+ tools/lib/bpf/btf.h      | 1 +
+ tools/lib/bpf/libbpf.map | 1 +
+ 3 files changed, 8 insertions(+), 1 deletion(-)
 
-Selftests in patch #3 add a set of generic ASSERT_{EQ,STREQ,ERR,OK} macro=
-s
-that are useful for writing shorter and less repretitive selftests. I dec=
-ided
-to keep them local to that selftest for now, but if they prove to be usef=
-ul in
-more contexts we should move them to test_progs.h. And few more (e.g.,
-inequality tests) macros are probably necessary to have a more complete s=
-et.
-
-Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-
-v2->v3:
-  - resending original patches #7-9 as patches #1-3 due to merge conflict=
-;
-
-v1->v2:
-  - fixed comments (John);
-  - renamed btf__append_xxx() into btf__add_xxx() (Alexei);
-  - added btf__find_str() in addition to btf__add_str();
-  - btf__new_empty() now sets kernel FD to -1 initially.
-
-Andrii Nakryiko (3):
-  libbpf: add BTF writing APIs
-  libbpf: add btf__str_by_offset() as a more generic variant of
-    name_by_offset
-  selftests/bpf: test BTF writing APIs
-
- tools/lib/bpf/btf.c                           | 796 +++++++++++++++++-
- tools/lib/bpf/btf.h                           |  39 +
- tools/lib/bpf/libbpf.map                      |  20 +
- .../selftests/bpf/prog_tests/btf_write.c      | 278 ++++++
- 4 files changed, 1128 insertions(+), 5 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_write.c
-
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 7533088b2524..2d0b1e12f50e 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -1025,7 +1025,7 @@ const void *btf__get_raw_data(const struct btf *btf=
+_ro, __u32 *size)
+ 	return btf->raw_data;
+ }
+=20
+-const char *btf__name_by_offset(const struct btf *btf, __u32 offset)
++const char *btf__str_by_offset(const struct btf *btf, __u32 offset)
+ {
+ 	if (offset < btf->hdr->str_len)
+ 		return btf->strs_data + offset;
+@@ -1033,6 +1033,11 @@ const char *btf__name_by_offset(const struct btf *=
+btf, __u32 offset)
+ 		return NULL;
+ }
+=20
++const char *btf__name_by_offset(const struct btf *btf, __u32 offset)
++{
++	return btf__str_by_offset(btf, offset);
++}
++
+ int btf__get_from_id(__u32 id, struct btf **btf)
+ {
+ 	struct bpf_btf_info btf_info =3D { 0 };
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index d6629a2e8ebf..f7dec0144c3c 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -49,6 +49,7 @@ LIBBPF_API int btf__fd(const struct btf *btf);
+ LIBBPF_API void btf__set_fd(struct btf *btf, int fd);
+ LIBBPF_API const void *btf__get_raw_data(const struct btf *btf, __u32 *s=
+ize);
+ LIBBPF_API const char *btf__name_by_offset(const struct btf *btf, __u32 =
+offset);
++LIBBPF_API const char *btf__str_by_offset(const struct btf *btf, __u32 o=
+ffset);
+ LIBBPF_API int btf__get_from_id(__u32 id, struct btf **btf);
+ LIBBPF_API int btf__get_map_kv_tids(const struct btf *btf, const char *m=
+ap_name,
+ 				    __u32 expected_key_size,
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 0216ee6fdc2b..6b10ebad69c6 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -327,6 +327,7 @@ LIBBPF_0.2.0 {
+ 		btf__add_volatile;
+ 		btf__find_str;
+ 		btf__new_empty;
++		btf__str_by_offset;
+ 		perf_buffer__buffer_cnt;
+ 		perf_buffer__buffer_fd;
+ 		perf_buffer__epoll_fd;
 --=20
 2.24.1
 
