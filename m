@@ -5,48 +5,49 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EEBE1C4741F
-	for <bpf@archiver.kernel.org>; Wed, 30 Sep 2020 04:28:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A06FFC4742A
+	for <bpf@archiver.kernel.org>; Wed, 30 Sep 2020 04:28:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B5EFE2074B
-	for <bpf@archiver.kernel.org>; Wed, 30 Sep 2020 04:28:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 63C992074B
+	for <bpf@archiver.kernel.org>; Wed, 30 Sep 2020 04:28:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="NnGP/ZSF"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="K906t3Aa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725820AbgI3E2Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Sep 2020 00:28:24 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:62218 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725801AbgI3E2Y (ORCPT
+        id S1725497AbgI3E2Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Sep 2020 00:28:25 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:10058 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725792AbgI3E2Y (ORCPT
         <rfc822;bpf@vger.kernel.org>); Wed, 30 Sep 2020 00:28:24 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08U4Plgs003642
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2020 21:28:23 -0700
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 08U4SJQ9021027
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2020 21:28:20 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=lJ6sBPE2SsRBPj3JEzVDrTLeHkbpgO+46xLL0W7pHkM=;
- b=NnGP/ZSF3lwfxevFOgmTkZA6uax9spD7Ij175LdG446WJsJ+SuRExznsm4fY8BuQexhQ
- YahiRlM13JRtmYMOQRxSuAjtrkWo7g7dyLL+zOlTi2OFebS4+4cTwbmNZwyEfxnFnycb
- lZbfp7lEs9q0T5YEEub0qTnrICR/1CFild8= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 33tn4tpgx9-1
+ bh=mB3s5/FJri5tbAwdBl6FAX2+1wPbtj+OZtFVZQs5FHo=;
+ b=K906t3AaRK3PST3UtAUNZSP7leYBVJPQmiQQUdzKe8g45MLUHSvfGTinW2fzdOi4HSIK
+ nlleChXYpCxlpPhKL8XqSSINaEeDORbnFawP0pE9P+8woR/5runI7cXNnppR+xMFt5pE
+ W1IBJAHSX2HDeiQJHpwZzfVLeFZGM0A5WXM= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 33t3fhh1nv-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 29 Sep 2020 21:28:23 -0700
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 29 Sep 2020 21:28:20 -0700
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 29 Sep 2020 21:28:22 -0700
+ 15.1.1979.3; Tue, 29 Sep 2020 21:28:00 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id BEAB82EC77F1; Tue, 29 Sep 2020 21:28:13 -0700 (PDT)
+        id 8B2BD2EC77F1; Tue, 29 Sep 2020 21:28:00 -0700 (PDT)
 From:   Andrii Nakryiko <andriin@fb.com>
 To:     <dwarves@vger.kernel.org>
 CC:     <bpf@vger.kernel.org>, Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH dwarves 10/11] strings: use BTF's string APIs for strings management
-Date:   Tue, 29 Sep 2020 21:27:41 -0700
-Message-ID: <20200930042742.2525310-11-andriin@fb.com>
+Subject: [PATCH dwarves 04/11] btf_loader: use libbpf to load BTF
+Date:   Tue, 29 Sep 2020 21:27:35 -0700
+Message-ID: <20200930042742.2525310-5-andriin@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200930042742.2525310-1-andriin@fb.com>
 References: <20200930042742.2525310-1-andriin@fb.com>
@@ -56,388 +57,773 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-09-30_01:2020-09-29,2020-09-30 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 adultscore=0
- suspectscore=38 bulkscore=0 phishscore=0 lowpriorityscore=0 clxscore=1015
- malwarescore=0 mlxscore=0 mlxlogscore=999 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2009300032
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ spamscore=0 mlxscore=0 malwarescore=0 bulkscore=0 lowpriorityscore=0
+ phishscore=0 adultscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=999
+ suspectscore=38 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2006250000 definitions=main-2009300033
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Switch strings container to using struct btf and its
-btf__add_str()/btf__find_str() APIs, which do equivalent internal string
-deduplication. This turns out to be a very significantly faster than usin=
-g
-tsearch functions. To satisfy CTF encoding use case, some hacky string si=
-ze
-fetching approach is utilized, as libbpf doesn't provide direct API to ge=
-t
-total string section size and to copy over just strings data section.
-
-BEFORE:
-         22,624.28 msec task-clock                #    1.000 CPUs utilize=
-d
-                85      context-switches          #    0.004 K/sec
-                 3      cpu-migrations            #    0.000 K/sec
-           622,545      page-faults               #    0.028 M/sec
-    68,177,206,387      cycles                    #    3.013 GHz         =
-             (24.99%)
-   114,370,031,619      instructions              #    1.68  insn per cyc=
-le           (25.01%)
-    26,125,001,179      branches                  # 1154.733 M/sec       =
-             (25.01%)
-       458,861,243      branch-misses             #    1.76% of all branc=
-hes          (25.00%)
-    24,533,455,967      L1-dcache-loads           # 1084.386 M/sec       =
-             (25.02%)
-       973,500,214      L1-dcache-load-misses     #    3.97% of all L1-dc=
-ache hits    (25.05%)
-       338,773,561      LLC-loads                 #   14.974 M/sec       =
-             (25.02%)
-        12,651,196      LLC-load-misses           #    3.73% of all LL-ca=
-che hits     (25.00%)
-
-      22.628910615 seconds time elapsed
-
-      21.341063000 seconds user
-       1.283763000 seconds sys
-
-AFTER:
-         18,362.97 msec task-clock                #    1.000 CPUs utilize=
-d
-                37      context-switches          #    0.002 K/sec
-                 0      cpu-migrations            #    0.000 K/sec
-           626,281      page-faults               #    0.034 M/sec
-    52,480,619,000      cycles                    #    2.858 GHz         =
-             (25.00%)
-   104,736,434,384      instructions              #    2.00  insn per cyc=
-le           (25.01%)
-    23,878,428,465      branches                  # 1300.358 M/sec       =
-             (25.01%)
-       252,669,685      branch-misses             #    1.06% of all branc=
-hes          (25.03%)
-    21,829,390,952      L1-dcache-loads           # 1188.772 M/sec       =
-             (25.04%)
-       638,086,339      L1-dcache-load-misses     #    2.92% of all L1-dc=
-ache hits    (25.02%)
-       212,327,435      LLC-loads                 #   11.563 M/sec       =
-             (25.00%)
-        14,578,117      LLC-load-misses           #    6.87% of all LL-ca=
-che hits     (25.00%)
-
-      18.364427347 seconds time elapsed
-
-      16.985494000 seconds user
-       1.377959000 seconds sys
+Switch BTF loading to completely use libbpf's own struct btf and related =
+APIs.
+BTF encoding is still happening with pahole's own code, so these two code
+paths are not sharing anything now. String fetching is happening based on
+whether btfe->strings were set to non-NULL pointer by btf_encoder.
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- ctf_encoder.c |  2 +-
- libctf.c      | 14 ++++----
- libctf.h      |  4 +--
- strings.c     | 91 +++++++++++++++++++--------------------------------
- strings.h     | 32 +++---------------
- 5 files changed, 49 insertions(+), 94 deletions(-)
+ btf_loader.c | 244 +++++++++++++++++++--------------------------------
+ libbtf.c     | 116 +++++-------------------
+ libbtf.h     |  11 +--
+ 3 files changed, 113 insertions(+), 258 deletions(-)
 
-diff --git a/ctf_encoder.c b/ctf_encoder.c
-index 3cb455a33098..b761287d4534 100644
---- a/ctf_encoder.c
-+++ b/ctf_encoder.c
-@@ -248,7 +248,7 @@ int cu__encode_ctf(struct cu *cu, int verbose)
- 	if (cu__cache_symtab(cu) < 0)
- 		goto out_delete;
-=20
--	ctf__set_strings(ctf, &strings->gb);
-+	ctf__set_strings(ctf, strings);
-=20
- 	uint32_t id;
- 	struct tag *pos;
-diff --git a/libctf.c b/libctf.c
-index 424f157c2415..7f375e47e9b2 100644
---- a/libctf.c
-+++ b/libctf.c
-@@ -19,6 +19,7 @@
- #include "ctf.h"
- #include "dutil.h"
- #include "gobuffer.h"
-+#include "strings.h"
-=20
- bool ctf__ignore_symtab_function(const GElf_Sym *sym, const char *sym_na=
-me)
- {
-@@ -284,7 +285,7 @@ int ctf__load_symtab(struct ctf *ctf)
- 	return ctf->symtab =3D=3D NULL ? -1 : 0;
+diff --git a/btf_loader.c b/btf_loader.c
+index 9db76957a7e5..c31ee61060f1 100644
+--- a/btf_loader.c
++++ b/btf_loader.c
+@@ -46,21 +46,17 @@ static void *tag__alloc(const size_t size)
  }
 =20
--void ctf__set_strings(struct ctf *ctf, struct gobuffer *strings)
-+void ctf__set_strings(struct ctf *ctf, struct strings *strings)
+ static int btf_elf__load_ftype(struct btf_elf *btfe, struct ftype *proto=
+, uint32_t tag,
+-			       uint32_t type, uint16_t vlen, struct btf_param *args, uint32_t=
+ id)
++			       const struct btf_type *tp, uint32_t id)
  {
- 	ctf->strings =3D strings;
- }
-@@ -567,7 +568,7 @@ int ctf__encode(struct ctf *ctf, uint8_t flags)
- 	size =3D (gobuffer__size(&ctf->types) +
- 		gobuffer__size(&ctf->objects) +
- 		gobuffer__size(&ctf->funcs) +
--		gobuffer__size(ctf->strings));
-+		strings__size(ctf->strings));
+-	int i;
++	const struct btf_param *param =3D btf_params(tp);
++	int i, vlen =3D btf_vlen(tp);
 =20
- 	ctf->size =3D sizeof(*hdr) + size;
- 	ctf->buf =3D malloc(ctf->size);
-@@ -591,13 +592,13 @@ int ctf__encode(struct ctf *ctf, uint8_t flags)
- 	hdr->ctf_type_off =3D offset;
- 	offset +=3D gobuffer__size(&ctf->types);
- 	hdr->ctf_str_off  =3D offset;
--	hdr->ctf_str_len  =3D gobuffer__size(ctf->strings);
-+	hdr->ctf_str_len  =3D strings__size(ctf->strings);
+ 	proto->tag.tag	=3D tag;
+-	proto->tag.type =3D type;
++	proto->tag.type =3D tp->type;
+ 	INIT_LIST_HEAD(&proto->parms);
 =20
- 	void *payload =3D ctf->buf + sizeof(*hdr);
- 	gobuffer__copy(&ctf->objects, payload + hdr->ctf_object_off);
- 	gobuffer__copy(&ctf->funcs, payload + hdr->ctf_func_off);
- 	gobuffer__copy(&ctf->types, payload + hdr->ctf_type_off);
--	gobuffer__copy(ctf->strings, payload + hdr->ctf_str_off);
-+	strings__copy(ctf->strings, payload + hdr->ctf_str_off);
-=20
- 	*(char *)(ctf->buf + sizeof(*hdr) + hdr->ctf_str_off) =3D '\0';
- 	if (flags & CTF_FLAGS_COMPR) {
-@@ -620,11 +621,10 @@ int ctf__encode(struct ctf *ctf, uint8_t flags)
- 	}
- #if 0
- 	printf("\n\ntypes:\n entries: %d\n size: %u"
--		 "\nstrings:\n entries: %u\n size: %u\ncompressed size: %d\n",
-+		 "\nstrings:\n size: %u\ncompressed size: %d\n",
- 	       ctf->type_index,
- 	       gobuffer__size(&ctf->types),
--	       gobuffer__nr_entries(ctf->strings),
--	       gobuffer__size(ctf->strings), size);
-+	       strings__size(ctf->strings), size);
- #endif
- 	int fd =3D open(ctf->filename, O_RDWR);
- 	if (fd < 0) {
-diff --git a/libctf.h b/libctf.h
-index 071616c72de3..749be8955c52 100644
---- a/libctf.h
-+++ b/libctf.h
-@@ -24,7 +24,7 @@ struct ctf {
- 	struct gobuffer	  objects; /* data/variables */
- 	struct gobuffer	  types;
- 	struct gobuffer	  funcs;
--	struct gobuffer   *strings;
-+	struct strings   *strings;
- 	char		  *filename;
- 	size_t		  size;
- 	int		  swapped;
-@@ -76,7 +76,7 @@ int ctf__add_function(struct ctf *ctf, uint16_t type, u=
-int16_t nr_parms,
-=20
- int ctf__add_object(struct ctf *ctf, uint16_t type);
-=20
--void ctf__set_strings(struct ctf *ctf, struct gobuffer *strings);
-+void ctf__set_strings(struct ctf *ctf, struct strings *strings);
- int  ctf__encode(struct ctf *ctf, uint8_t flags);
-=20
- char *ctf__string(struct ctf *ctf, uint32_t ref);
-diff --git a/strings.c b/strings.c
-index ddb2b1bd85b5..45f8faaeb15d 100644
---- a/strings.c
-+++ b/strings.c
-@@ -15,75 +15,41 @@
- #include <zlib.h>
-=20
- #include "dutil.h"
-+#include "lib/bpf/src/libbpf.h"
-=20
- struct strings *strings__new(void)
- {
- 	struct strings *strs =3D malloc(sizeof(*strs));
-=20
--	if (strs !=3D NULL) {
--		strs->tree =3D NULL;
--		gobuffer__init(&strs->gb);
-+	if (!strs)
-+		return NULL;
-+
-+	strs->btf =3D btf__new_empty();
-+	if (libbpf_get_error(strs->btf)) {
-+		free(strs);
-+		return NULL;
+-	for (i =3D 0; i < vlen; ++i) {
+-		struct btf_param param =3D {
+-		       .name_off =3D btf_elf__get32(btfe, &args[i].name_off),
+-		       .type	 =3D btf_elf__get32(btfe, &args[i].type),
+-		};
+-
+-		if (param.type =3D=3D 0)
++	for (i =3D 0; i < vlen; ++i, param++) {
++		if (param->type =3D=3D 0)
+ 			proto->unspec_parms =3D 1;
+ 		else {
+ 			struct parameter *p =3D tag__alloc(sizeof(*p));
+@@ -68,25 +64,22 @@ static int btf_elf__load_ftype(struct btf_elf *btfe, =
+struct ftype *proto, uint32
+ 			if (p =3D=3D NULL)
+ 				goto out_free_parameters;
+ 			p->tag.tag  =3D DW_TAG_formal_parameter;
+-			p->tag.type =3D param.type;
+-			p->name	    =3D param.name_off;
++			p->tag.type =3D param->type;
++			p->name	    =3D param->name_off;
+ 			ftype__add_parameter(proto, p);
+ 		}
  	}
 =20
- 	return strs;
--
--}
--
--static void do_nothing(void *ptr __unused)
--{
+-	vlen *=3D sizeof(*args);
+ 	cu__add_tag_with_id(btfe->priv, &proto->tag, id);
+=20
+-	return vlen;
++	return 0;
+ out_free_parameters:
+ 	ftype__delete(proto, btfe->priv);
+ 	return -ENOMEM;
  }
 =20
- void strings__delete(struct strings *strs)
+-static int create_new_function(struct btf_elf *btfe, struct btf_type *tp=
+, uint64_t size, uint32_t id)
++static int create_new_function(struct btf_elf *btfe, const struct btf_ty=
+pe *tp, uint32_t id)
  {
- 	if (strs =3D=3D NULL)
- 		return;
--	tdestroy(strs->tree, do_nothing);
--	__gobuffer__delete(&strs->gb);
-+	btf__free(strs->btf);
- 	free(strs);
+-	strings_t name =3D btf_elf__get32(btfe, &tp->name_off);
+-	unsigned int type_id =3D btf_elf__get32(btfe, &tp->type);
+ 	struct function *func =3D tag__alloc(sizeof(*func));
+=20
+ 	if (func =3D=3D NULL)
+@@ -96,8 +89,8 @@ static int create_new_function(struct btf_elf *btfe, st=
+ruct btf_type *tp, uint64
+ 	// but the prototype, the return type is the one in type_id
+ 	func->btf =3D 1;
+ 	func->proto.tag.tag =3D DW_TAG_subprogram;
+-	func->proto.tag.type =3D type_id;
+-	func->name =3D name;
++	func->proto.tag.type =3D tp->type;
++	func->name =3D tp->name_off;
+ 	cu__add_tag_with_id(btfe->priv, &func->proto.tag, id);
+=20
+ 	return 0;
+@@ -165,26 +158,24 @@ static struct variable *variable__new(strings_t nam=
+e, uint32_t linkage)
+ 	return var;
  }
 =20
--static strings_t strings__insert(struct strings *strs, const char *s)
--{
--	return gobuffer__add(&strs->gb, s, strlen(s) + 1);
--}
--
--struct search_key {
--	struct strings *strs;
--	const char *str;
--};
--
--static int strings__compare(const void *a, const void *b)
--{
--	const struct search_key *key =3D a;
--
--	return strcmp(key->str, key->strs->gb.entries + (unsigned long)b);
--}
--
- strings_t strings__add(struct strings *strs, const char *str)
+-static int create_new_base_type(struct btf_elf *btfe, void *ptr, struct =
+btf_type *tp, uint32_t id)
++static int create_new_base_type(struct btf_elf *btfe, const struct btf_t=
+ype *tp, uint32_t id)
  {
--	unsigned long *s;
- 	strings_t index;
--	struct search_key key =3D {
--		.strs =3D strs,
--		.str =3D str,
--	};
-=20
- 	if (str =3D=3D NULL)
- 		return 0;
-=20
--	s =3D tsearch(&key, &strs->tree, strings__compare);
--	if (s !=3D NULL) {
--		if (*(struct search_key **)s =3D=3D (void *)&key) { /* Not found, repl=
-ace with the right key */
--			index =3D strings__insert(strs, str);
--			if (index !=3D 0)
--				*s =3D (unsigned long)index;
--			else {
--				tdelete(&key, &strs->tree, strings__compare);
--				return 0;
--			}
--		} else /* Found! */
--			index =3D *s;
--	} else
-+	index =3D btf__add_str(strs->btf, str);
-+	if (index < 0)
- 		return 0;
-=20
- 	return index;
-@@ -91,21 +57,32 @@ strings_t strings__add(struct strings *strs, const ch=
-ar *str)
-=20
- strings_t strings__find(struct strings *strs, const char *str)
- {
--	strings_t *s;
--	struct search_key key =3D {
--		.strs =3D strs,
--		.str =3D str,
--	};
-+	return btf__find_str(strs->btf, str);
-+}
-=20
--	if (str =3D=3D NULL)
--		return 0;
-+/* a horrible and inefficient hack to get string section size out of BTF=
- */
-+strings_t strings__size(const struct strings *strs)
-+{
-+	const struct btf_header *p;
-+	uint32_t sz;
+-	uint32_t *enc =3D ptr;
+-	uint32_t eval =3D btf_elf__get32(btfe, enc);
+-	uint32_t attrs =3D BTF_INT_ENCODING(eval);
+-	strings_t name =3D btf_elf__get32(btfe, &tp->name_off);
+-	struct base_type *base =3D base_type__new(name, attrs, 0,
+-						BTF_INT_BITS(eval));
++	uint32_t attrs =3D btf_int_encoding(tp);
++	strings_t name =3D tp->name_off;
++	struct base_type *base =3D base_type__new(name, attrs, 0, btf_int_bits(=
+tp));
 +
-+	p =3D btf__get_raw_data(strs->btf, &sz);
-+	if (!p)
-+		return -1;
+ 	if (base =3D=3D NULL)
+ 		return -ENOMEM;
 =20
--	s =3D tfind(&key, &strs->tree, strings__compare);
--	return s ? *s : 0;
-+	return p->str_len;
- }
+ 	base->tag.tag =3D DW_TAG_base_type;
+ 	cu__add_tag_with_id(btfe->priv, &base->tag, id);
 =20
--int strings__cmp(const struct strings *strs, strings_t a, strings_t b)
-+/* similarly horrible hack to copy out string section out of BTF */
-+int strings__copy(const struct strings *strs, void *dst)
- {
--	return a =3D=3D b ? 0 : strcmp(strings__ptr(strs, a),
--				   strings__ptr(strs, b));
-+	const struct btf_header *p;
-+	uint32_t sz;
-+
-+	p =3D btf__get_raw_data(strs->btf, &sz);
-+	if (!p)
-+		return -1;
-+
-+	memcpy(dst, (void *)p + p->str_off, p->str_len);
+-	return sizeof(*enc);
 +	return 0;
  }
-diff --git a/strings.h b/strings.h
-index 01f50efd7adb..522fbf21de0d 100644
---- a/strings.h
-+++ b/strings.h
-@@ -6,13 +6,12 @@
-   Copyright (C) 2008 Arnaldo Carvalho de Melo <acme@redhat.com>
- */
 =20
--#include "gobuffer.h"
-+#include "lib/bpf/src/btf.h"
-=20
- typedef unsigned int strings_t;
-=20
- struct strings {
--	void		*tree;
--	struct gobuffer	gb;
-+	struct btf *btf;
- };
-=20
- struct strings *strings__new(void);
-@@ -21,33 +20,12 @@ void strings__delete(struct strings *strings);
-=20
- strings_t strings__add(struct strings *strings, const char *str);
- strings_t strings__find(struct strings *strings, const char *str);
--
--int strings__cmp(const struct strings *strings, strings_t a, strings_t b=
-);
-+strings_t strings__size(const struct strings *strings);
-+int strings__copy(const struct strings *strings, void *dst);
-=20
- static inline const char *strings__ptr(const struct strings *strings, st=
-rings_t s)
- {
--	return gobuffer__ptr(&strings->gb, s);
--}
--
--static inline const char *strings__entries(const struct strings *strings=
+-static int create_new_array(struct btf_elf *btfe, void *ptr, uint32_t id=
 )
--{
--	return gobuffer__entries(&strings->gb);
--}
--
--static inline unsigned int strings__nr_entries(const struct strings *str=
-ings)
--{
--	return gobuffer__nr_entries(&strings->gb);
--}
--
--static inline strings_t strings__size(const struct strings *strings)
--{
--	return gobuffer__size(&strings->gb);
--}
--
--static inline const char *strings__compress(struct strings *strings,
--					    unsigned int *size)
--{
--	return gobuffer__compress(&strings->gb, size);
-+	return btf__str_by_offset(strings->btf, s);
++static int create_new_array(struct btf_elf *btfe, const struct btf_type =
+*tp, uint32_t id)
+ {
+-	struct btf_array *ap =3D ptr;
++	struct btf_array *ap =3D btf_array(tp);
+ 	struct array_type *array =3D tag__alloc(sizeof(*array));
+=20
+ 	if (array =3D=3D NULL)
+@@ -200,81 +191,67 @@ static int create_new_array(struct btf_elf *btfe, v=
+oid *ptr, uint32_t id)
+ 		return -ENOMEM;
+ 	}
+=20
+-	array->nr_entries[0] =3D btf_elf__get32(btfe, &ap->nelems);
++	array->nr_entries[0] =3D ap->nelems;
+ 	array->tag.tag =3D DW_TAG_array_type;
+-	array->tag.type =3D btf_elf__get32(btfe, &ap->type);
++	array->tag.type =3D ap->type;
+=20
+ 	cu__add_tag_with_id(btfe->priv, &array->tag, id);
+=20
+-	return sizeof(*ap);
++	return 0;
  }
 =20
- #endif /* _STRINGS_H_ */
+-static int create_members(struct btf_elf *btfe, void *ptr, int vlen, str=
+uct type *class,
+-			  bool kflag)
++static int create_members(struct btf_elf *btfe, const struct btf_type *t=
+p,
++			  struct type *class)
+ {
+-	struct btf_member *mp =3D ptr;
+-	int i;
++	struct btf_member *mp =3D btf_members(tp);
++	int i, vlen =3D btf_vlen(tp);
+=20
+ 	for (i =3D 0; i < vlen; i++) {
+ 		struct class_member *member =3D zalloc(sizeof(*member));
+-		uint32_t offset;
+=20
+ 		if (member =3D=3D NULL)
+ 			return -ENOMEM;
+=20
+ 		member->tag.tag    =3D DW_TAG_member;
+-		member->tag.type   =3D btf_elf__get32(btfe, &mp[i].type);
+-		member->name	   =3D btf_elf__get32(btfe, &mp[i].name_off);
+-		offset =3D btf_elf__get32(btfe, &mp[i].offset);
+-		if (kflag) {
+-			member->bit_offset =3D BTF_MEMBER_BIT_OFFSET(offset);
+-			member->bitfield_size =3D BTF_MEMBER_BITFIELD_SIZE(offset);
+-		} else {
+-			member->bit_offset =3D offset;
+-			member->bitfield_size =3D 0;
+-		}
++		member->tag.type   =3D mp[i].type;
++		member->name	   =3D mp[i].name_off;
++		member->bit_offset =3D btf_member_bit_offset(tp, i);
++		member->bitfield_size =3D btf_member_bitfield_size(tp, i);
+ 		member->byte_offset =3D member->bit_offset / 8;
+ 		/* sizes and offsets will be corrected at class__fixup_btf_bitfields *=
+/
+ 		type__add_member(class, member);
+ 	}
+=20
+-	return sizeof(*mp);
++	return 0;
+ }
+=20
+-static int create_new_class(struct btf_elf *btfe, void *ptr, int vlen,
+-			    struct btf_type *tp, uint64_t size, uint32_t id,
+-			    bool kflag)
++static int create_new_class(struct btf_elf *btfe, const struct btf_type =
+*tp, uint32_t id)
+ {
+-	strings_t name =3D btf_elf__get32(btfe, &tp->name_off);
+-	struct class *class =3D class__new(name, size);
+-	int member_size =3D create_members(btfe, ptr, vlen, &class->type, kflag=
+);
++	struct class *class =3D class__new(tp->name_off, tp->size);
++	int member_size =3D create_members(btfe, tp, &class->type);
+=20
+ 	if (member_size < 0)
+ 		goto out_free;
+=20
+ 	cu__add_tag_with_id(btfe->priv, &class->type.namespace.tag, id);
+=20
+-	return (vlen * member_size);
++	return 0;
+ out_free:
+ 	class__delete(class, btfe->priv);
+ 	return -ENOMEM;
+ }
+=20
+-static int create_new_union(struct btf_elf *btfe, void *ptr,
+-			    int vlen, struct btf_type *tp,
+-			    uint64_t size, uint32_t id,
+-			    bool kflag)
++static int create_new_union(struct btf_elf *btfe, const struct btf_type =
+*tp, uint32_t id)
+ {
+-	strings_t name =3D btf_elf__get32(btfe, &tp->name_off);
+-	struct type *un =3D type__new(DW_TAG_union_type, name, size);
+-	int member_size =3D create_members(btfe, ptr, vlen, un, kflag);
++	struct type *un =3D type__new(DW_TAG_union_type, tp->name_off, tp->size=
+);
++	int member_size =3D create_members(btfe, tp, un);
+=20
+ 	if (member_size < 0)
+ 		goto out_free;
+=20
+ 	cu__add_tag_with_id(btfe->priv, &un->namespace.tag, id);
+=20
+-	return (vlen * member_size);
++	return 0;
+ out_free:
+ 	type__delete(un, btfe->priv);
+ 	return -ENOMEM;
+@@ -293,22 +270,20 @@ static struct enumerator *enumerator__new(strings_t=
+ name, uint32_t value)
+ 	return en;
+ }
+=20
+-static int create_new_enumeration(struct btf_elf *btfe, void *ptr,
+-				  int vlen, struct btf_type *tp,
+-				  uint16_t size, uint32_t id)
++static int create_new_enumeration(struct btf_elf *btfe, const struct btf=
+_type *tp, uint32_t id)
+ {
+-	struct btf_enum *ep =3D ptr;
+-	uint16_t i;
++	struct btf_enum *ep =3D btf_enum(tp);
++	uint16_t i, vlen =3D btf_vlen(tp);
+ 	struct type *enumeration =3D type__new(DW_TAG_enumeration_type,
+-					     btf_elf__get32(btfe, &tp->name_off),
+-					     size ? size * 8 : (sizeof(int) * 8));
++					     tp->name_off,
++					     tp->size ? tp->size * 8 : (sizeof(int) * 8));
+=20
+ 	if (enumeration =3D=3D NULL)
+ 		return -ENOMEM;
+=20
+ 	for (i =3D 0; i < vlen; i++) {
+-		strings_t name =3D btf_elf__get32(btfe, &ep[i].name_off);
+-		uint32_t value =3D btf_elf__get32(btfe, (uint32_t *)&ep[i].val);
++		strings_t name =3D ep[i].name_off;
++		uint32_t value =3D ep[i].val;
+ 		struct enumerator *enumerator =3D enumerator__new(name, value);
+=20
+ 		if (enumerator =3D=3D NULL)
+@@ -319,32 +294,25 @@ static int create_new_enumeration(struct btf_elf *b=
+tfe, void *ptr,
+=20
+ 	cu__add_tag_with_id(btfe->priv, &enumeration->namespace.tag, id);
+=20
+-	return (vlen * sizeof(*ep));
++	return 0;
+ out_free:
+ 	enumeration__delete(enumeration, btfe->priv);
+ 	return -ENOMEM;
+ }
+=20
+-static int create_new_subroutine_type(struct btf_elf *btfe, void *ptr,
+-				      int vlen, struct btf_type *tp,
+-				      uint32_t id)
++static int create_new_subroutine_type(struct btf_elf *btfe, const struct=
+ btf_type *tp, uint32_t id)
+ {
+-	struct btf_param *args =3D ptr;
+-	unsigned int type =3D btf_elf__get32(btfe, &tp->type);
+ 	struct ftype *proto =3D tag__alloc(sizeof(*proto));
+=20
+ 	if (proto =3D=3D NULL)
+ 		return -ENOMEM;
+=20
+-	vlen =3D btf_elf__load_ftype(btfe, proto, DW_TAG_subroutine_type, type,=
+ vlen, args, id);
+-	return vlen < 0 ? -ENOMEM : vlen;
++	return btf_elf__load_ftype(btfe, proto, DW_TAG_subroutine_type, tp, id)=
+;
+ }
+=20
+-static int create_new_forward_decl(struct btf_elf *btfe, struct btf_type=
+ *tp,
+-				   uint64_t size, uint32_t id)
++static int create_new_forward_decl(struct btf_elf *btfe, const struct bt=
+f_type *tp, uint32_t id)
+ {
+-	strings_t name =3D btf_elf__get32(btfe, &tp->name_off);
+-	struct class *fwd =3D class__new(name, size);
++	struct class *fwd =3D class__new(tp->name_off, 0);
+=20
+ 	if (fwd =3D=3D NULL)
+ 		return -ENOMEM;
+@@ -353,41 +321,33 @@ static int create_new_forward_decl(struct btf_elf *=
+btfe, struct btf_type *tp,
+ 	return 0;
+ }
+=20
+-static int create_new_typedef(struct btf_elf *btfe, struct btf_type *tp,=
+ uint64_t size, uint32_t id)
++static int create_new_typedef(struct btf_elf *btfe, const struct btf_typ=
+e *tp, uint32_t id)
+ {
+-	strings_t name =3D btf_elf__get32(btfe, &tp->name_off);
+-	unsigned int type_id =3D btf_elf__get32(btfe, &tp->type);
+-	struct type *type =3D type__new(DW_TAG_typedef, name, size);
++	struct type *type =3D type__new(DW_TAG_typedef, tp->name_off, 0);
+=20
+ 	if (type =3D=3D NULL)
+ 		return -ENOMEM;
+=20
+-	type->namespace.tag.type =3D type_id;
++	type->namespace.tag.type =3D tp->type;
+ 	cu__add_tag_with_id(btfe->priv, &type->namespace.tag, id);
+=20
+ 	return 0;
+ }
+=20
+-static int create_new_variable(struct btf_elf *btfe, void *ptr, struct b=
+tf_type *tp,
+-			       uint64_t size, uint32_t id)
++static int create_new_variable(struct btf_elf *btfe, const struct btf_ty=
+pe *tp, uint32_t id)
+ {
+-	strings_t name =3D btf_elf__get32(btfe, &tp->name_off);
+-	unsigned int type_id =3D btf_elf__get32(btfe, &tp->type);
+-	struct btf_var *bvar =3D ptr;
+-	uint32_t linkage =3D btf_elf__get32(btfe, &bvar->linkage);
+-	struct variable *var =3D variable__new(name, linkage);
++	struct btf_var *bvar =3D btf_var(tp);
++	struct variable *var =3D variable__new(tp->name_off, bvar->linkage);
+=20
+ 	if (var =3D=3D NULL)
+ 		return -ENOMEM;
+=20
+-	var->ip.tag.type =3D type_id;
++	var->ip.tag.type =3D tp->type;
+ 	cu__add_tag_with_id(btfe->priv, &var->ip.tag, id);
+-	return sizeof(*bvar);
++	return 0;
+ }
+=20
+-static int create_new_datasec(struct btf_elf *btfe, void *ptr, int vlen,
+-			      struct btf_type *tp, uint64_t size, uint32_t id,
+-			      bool kflag)
++static int create_new_datasec(struct btf_elf *btfe, const struct btf_typ=
+e *tp, uint32_t id)
+ {
+ 	//strings_t name =3D btf_elf__get32(btfe, &tp->name_off);
+=20
+@@ -397,12 +357,11 @@ static int create_new_datasec(struct btf_elf *btfe,=
+ void *ptr, int vlen,
+ 	 * FIXME: this will not be used to reconstruct some original C code,
+ 	 * its about runtime placement of variables so just ignore this for now
+ 	 */
+-	return vlen * sizeof(struct btf_var_secinfo);
++	return 0;
+ }
+=20
+-static int create_new_tag(struct btf_elf *btfe, int type, struct btf_typ=
+e *tp, uint32_t id)
++static int create_new_tag(struct btf_elf *btfe, int type, const struct b=
+tf_type *tp, uint32_t id)
+ {
+-	unsigned int type_id =3D btf_elf__get32(btfe, &tp->type);
+ 	struct tag *tag =3D zalloc(sizeof(*tag));
+=20
+ 	if (tag =3D=3D NULL)
+@@ -419,104 +378,77 @@ static int create_new_tag(struct btf_elf *btfe, in=
+t type, struct btf_type *tp, u
+ 		return 0;
+ 	}
+=20
+-	tag->type =3D type_id;
++	tag->type =3D tp->type;
+ 	cu__add_tag_with_id(btfe->priv, tag, id);
+=20
+ 	return 0;
+ }
+=20
+-void *btf_elf__get_buffer(struct btf_elf *btfe)
+-{
+-	return btfe->data;
+-}
+-
+-size_t btf_elf__get_size(struct btf_elf *btfe)
+-{
+-	return btfe->size;
+-}
+-
+ static int btf_elf__load_types(struct btf_elf *btfe)
+ {
+-	void *btf_buffer =3D btf_elf__get_buffer(btfe);
+-	struct btf_header *hp =3D btf_buffer;
+-	void *btf_contents =3D btf_buffer + sizeof(*hp),
+-	     *type_section =3D (btf_contents + btf_elf__get32(btfe, &hp->type_o=
+ff)),
+-	     *strings_section =3D (btf_contents + btf_elf__get32(btfe, &hp->str=
+_off));
+-	struct btf_type *type_ptr =3D type_section,
+-			*end =3D strings_section;
+-	uint32_t type_index =3D 0x0001;
+-
+-	while (type_ptr < end) {
+-		uint32_t val  =3D btf_elf__get32(btfe, &type_ptr->info);
+-		uint32_t type =3D BTF_INFO_KIND(val);
+-		int	 vlen =3D BTF_INFO_VLEN(val);
+-		void	 *ptr =3D type_ptr;
+-		uint32_t size =3D btf_elf__get32(btfe, &type_ptr->size);
+-		bool     kflag =3D BTF_INFO_KFLAG(val);
+-
+-		ptr +=3D sizeof(struct btf_type);
++	uint32_t type_index;
++	int err;
++
++	for (type_index =3D 1; type_index <=3D btf__get_nr_types(btfe->btf); ty=
+pe_index++) {
++		const struct btf_type *type_ptr =3D btf__type_by_id(btfe->btf, type_in=
+dex);
++		uint32_t type =3D btf_kind(type_ptr);
+=20
+ 		switch (type) {
+ 		case BTF_KIND_INT:
+-			vlen =3D create_new_base_type(btfe, ptr, type_ptr, type_index);
++			err =3D create_new_base_type(btfe, type_ptr, type_index);
+ 			break;
+ 		case BTF_KIND_ARRAY:
+-			vlen =3D create_new_array(btfe, ptr, type_index);
++			err =3D create_new_array(btfe, type_ptr, type_index);
+ 			break;
+ 		case BTF_KIND_STRUCT:
+-			vlen =3D create_new_class(btfe, ptr, vlen, type_ptr, size, type_index=
+, kflag);
++			err =3D create_new_class(btfe, type_ptr, type_index);
+ 			break;
+ 		case BTF_KIND_UNION:
+-			vlen =3D create_new_union(btfe, ptr, vlen, type_ptr, size, type_index=
+, kflag);
++			err =3D create_new_union(btfe, type_ptr, type_index);
+ 			break;
+ 		case BTF_KIND_ENUM:
+-			vlen =3D create_new_enumeration(btfe, ptr, vlen, type_ptr, size, type=
+_index);
++			err =3D create_new_enumeration(btfe, type_ptr, type_index);
+ 			break;
+ 		case BTF_KIND_FWD:
+-			vlen =3D create_new_forward_decl(btfe, type_ptr, size, type_index);
++			err =3D create_new_forward_decl(btfe, type_ptr, type_index);
+ 			break;
+ 		case BTF_KIND_TYPEDEF:
+-			vlen =3D create_new_typedef(btfe, type_ptr, size, type_index);
++			err =3D create_new_typedef(btfe, type_ptr, type_index);
+ 			break;
+ 		case BTF_KIND_VAR:
+-			vlen =3D create_new_variable(btfe, ptr, type_ptr, size, type_index);
++			err =3D create_new_variable(btfe, type_ptr, type_index);
+ 			break;
+ 		case BTF_KIND_DATASEC:
+-			vlen =3D create_new_datasec(btfe, ptr, vlen, type_ptr, size, type_ind=
+ex, kflag);
++			err =3D create_new_datasec(btfe, type_ptr, type_index);
+ 			break;
+ 		case BTF_KIND_VOLATILE:
+ 		case BTF_KIND_PTR:
+ 		case BTF_KIND_CONST:
+ 		case BTF_KIND_RESTRICT:
+-			vlen =3D create_new_tag(btfe, type, type_ptr, type_index);
++			err =3D create_new_tag(btfe, type, type_ptr, type_index);
+ 			break;
+ 		case BTF_KIND_UNKN:
+ 			cu__table_nullify_type_entry(btfe->priv, type_index);
+-			fprintf(stderr, "BTF: idx: %d, off: %zd, Unknown kind %d\n",
+-				type_index, ((void *)type_ptr) - type_section, type);
++			fprintf(stderr, "BTF: idx: %d, Unknown kind %d\n", type_index, type);
+ 			fflush(stderr);
+-			vlen =3D 0;
++			err =3D 0;
+ 			break;
+ 		case BTF_KIND_FUNC_PROTO:
+-			vlen =3D create_new_subroutine_type(btfe, ptr, vlen, type_ptr, type_i=
+ndex);
++			err =3D create_new_subroutine_type(btfe, type_ptr, type_index);
+ 			break;
+ 		case BTF_KIND_FUNC:
+ 			// BTF_KIND_FUNC corresponding to a defined subprogram.
+-			vlen =3D create_new_function(btfe, type_ptr, size, type_index);
++			err =3D create_new_function(btfe, type_ptr, type_index);
+ 			break;
+ 		default:
+-			fprintf(stderr, "BTF: idx: %d, off: %zd, Unknown kind %d\n",
+-				type_index, ((void *)type_ptr) - type_section, type);
++			fprintf(stderr, "BTF: idx: %d, Unknown kind %d\n", type_index, type);
+ 			fflush(stderr);
+-			vlen =3D 0;
++			err =3D 0;
+ 			break;
+ 		}
+=20
+-		if (vlen < 0)
+-			return vlen;
+-
+-		type_ptr =3D ptr + vlen;
+-		type_index++;
++		if (err < 0)
++			return err;
+ 	}
+ 	return 0;
+ }
+diff --git a/libbtf.c b/libbtf.c
+index 7a01ded4e612..02a55dbd7e13 100644
+--- a/libbtf.c
++++ b/libbtf.c
+@@ -62,89 +62,29 @@ static int btf_var_secinfo_cmp(const void *a, const v=
+oid *b)
+ 	return av->offset - bv->offset;
+ }
+=20
+-uint32_t btf_elf__get32(struct btf_elf *btfe, uint32_t *p)
+-{
+-	uint32_t val =3D *p;
+-
+-	if (btfe->swapped)
+-		val =3D ((val >> 24) |
+-		       ((val >> 8) & 0x0000ff00) |
+-		       ((val << 8) & 0x00ff0000) |
+-		       (val << 24));
+-	return val;
+-}
+-
+-static int btf_raw__load(struct btf_elf *btfe)
++static int libbpf_log(enum libbpf_print_level level, const char *format,=
+ va_list args)
+ {
+-        size_t read_cnt;
+-        struct stat st;
+-        void *data;
+-        FILE *fp;
+-
+-        if (stat(btfe->filename, &st))
+-                return -1;
+-
+-        data =3D malloc(st.st_size);
+-        if (!data)
+-                return -1;
+-
+-        fp =3D fopen(btfe->filename, "rb");
+-        if (!fp)
+-                goto cleanup;
+-
+-        read_cnt =3D fread(data, 1, st.st_size, fp);
+-        fclose(fp);
+-        if (read_cnt < st.st_size)
+-                goto cleanup;
+-
+-	btfe->swapped	=3D 0;
+-	btfe->data	=3D data;
+-	btfe->size	=3D read_cnt;
+-	return 0;
+-cleanup:
+-        free(data);
+-        return -1;
++	return vfprintf(stderr, format, args);
+ }
+=20
+ int btf_elf__load(struct btf_elf *btfe)
+ {
+-	if (btfe->raw_btf)
+-		return btf_raw__load(btfe);
+-
+-	int err =3D -ENOTSUP;
+-	GElf_Shdr shdr;
+-	Elf_Scn *sec =3D elf_section_by_name(btfe->elf, &btfe->ehdr, &shdr, ".B=
+TF", NULL);
++	int err;
+=20
+-	if (sec =3D=3D NULL)
+-		return -ESRCH;
+-
+-	Elf_Data *data =3D elf_getdata(sec, NULL);
+-	if (data =3D=3D NULL) {
+-		fprintf(stderr, "%s: cannot get data of BTF section.\n", __func__);
+-		return -1;
+-	}
+-
+-	struct btf_header *hp =3D data->d_buf;
+-	size_t orig_size =3D data->d_size;
+-
+-	if (hp->version !=3D BTF_VERSION)
+-		goto out;
++	libbpf_set_print(libbpf_log);
+=20
+-	err =3D -EINVAL;
+-	if (hp->magic =3D=3D BTF_MAGIC)
+-		btfe->swapped =3D 0;
++	/* free initial empty BTF */
++	btf__free(btfe->btf);
++	if (btfe->raw_btf)
++		btfe->btf =3D btf__parse_raw(btfe->filename);
+ 	else
+-		goto out;
++		btfe->btf =3D btf__parse_elf(btfe->filename, NULL);
+=20
+-	err =3D -ENOMEM;
+-	btfe->data =3D malloc(orig_size);
+-	if (btfe->data !=3D NULL) {
+-		memcpy(btfe->data, hp, orig_size);
+-		btfe->size =3D orig_size;
+-		err =3D 0;
+-	}
+-out:
+-	return err;
++	err =3D libbpf_get_error(btfe->btf);
++	if (err)
++		return err;
++
++	return 0;
+ }
+=20
+=20
+@@ -251,26 +191,17 @@ void btf_elf__delete(struct btf_elf *btfe)
+=20
+ 	__gobuffer__delete(&btfe->types);
+ 	__gobuffer__delete(&btfe->percpu_secinfo);
++	btf__free(btfe->btf);
+ 	free(btfe->filename);
+ 	free(btfe->data);
+ 	free(btfe);
+ }
+=20
+-char *btf_elf__string(struct btf_elf *btfe, uint32_t ref)
++const char *btf_elf__string(struct btf_elf *btfe, uint32_t ref)
+ {
+-	struct btf_header *hp =3D btfe->hdr;
+-	uint32_t off =3D ref;
+-	char *name;
+-
+-	if (off >=3D btf_elf__get32(btfe, &hp->str_len))
+-		return "(ref out-of-bounds)";
+-
+-	if ((off + btf_elf__get32(btfe, &hp->str_off)) >=3D btfe->size)
+-		return "(string table truncated)";
++	const char *s =3D btf__str_by_offset(btfe->btf, ref);
+=20
+-	name =3D ((char *)(hp + 1) + btf_elf__get32(btfe, &hp->str_off) + off);
+-
+-	return name[0] =3D=3D '\0' ? NULL : name;
++	return s && s[0] =3D=3D '\0' ? NULL : s;
+ }
+=20
+ static void *btf_elf__nohdr_data(struct btf_elf *btfe)
+@@ -310,8 +241,10 @@ static const char *btf_elf__name_in_gobuf(const stru=
+ct btf_elf *btfe, uint32_t o
+ {
+ 	if (!offset)
+ 		return "(anon)";
+-	else
++	else if (btfe->strings)
+ 		return &btfe->strings->entries[offset];
++	else
++		return btf__str_by_offset(btfe->btf, offset);
+ }
+=20
+ static const char * btf_elf__int_encoding_str(uint8_t encoding)
+@@ -836,11 +769,6 @@ out:
+ 	return err;
+ }
+=20
+-static int libbpf_log(enum libbpf_print_level level, const char *format,=
+ va_list args)
+-{
+-	return vfprintf(stderr, format, args);
+-}
+-
+ int btf_elf__encode(struct btf_elf *btfe, uint8_t flags)
+ {
+ 	struct btf_header *hdr;
+@@ -886,7 +814,7 @@ int btf_elf__encode(struct btf_elf *btfe, uint8_t fla=
+gs)
+ 		return -1;
+ 	}
+ 	if (btf__dedup(btf, NULL, NULL)) {
+-		fprintf(stderr, "%s: btf__dedup failed!", __func__);
++		fprintf(stderr, "%s: btf__dedup failed!\n", __func__);
+ 		return -1;
+ 	}
+=20
+diff --git a/libbtf.h b/libbtf.h
+index be06480bf854..5f29b427c4fd 100644
+--- a/libbtf.h
++++ b/libbtf.h
+@@ -11,6 +11,7 @@
+=20
+ #include <stdbool.h>
+ #include <stdint.h>
++#include "lib/bpf/src/btf.h"
+=20
+ struct btf_elf {
+ 	union {
+@@ -26,7 +27,6 @@ struct btf_elf {
+ 	struct gobuffer   percpu_secinfo;
+ 	char		  *filename;
+ 	size_t		  size;
+-	int		  swapped;
+ 	int		  in_fd;
+ 	uint8_t		  wordsize;
+ 	bool		  is_big_endian;
+@@ -34,6 +34,7 @@ struct btf_elf {
+ 	uint32_t	  type_index;
+ 	uint32_t	  percpu_shndx;
+ 	uint64_t	  percpu_base_addr;
++	struct btf	  *btf;
+ };
+=20
+ extern uint8_t btf_elf__verbose;
+@@ -70,13 +71,7 @@ int32_t btf_elf__add_datasec_type(struct btf_elf *btfe=
+, const char *section_name
+ void btf_elf__set_strings(struct btf_elf *btf, struct gobuffer *strings)=
+;
+ int  btf_elf__encode(struct btf_elf *btf, uint8_t flags);
+=20
+-char *btf_elf__string(struct btf_elf *btf, uint32_t ref);
++const char *btf_elf__string(struct btf_elf *btf, uint32_t ref);
+ int btf_elf__load(struct btf_elf *btf);
+=20
+-uint32_t btf_elf__get32(struct btf_elf *btf, uint32_t *p);
+-
+-void *btf_elf__get_buffer(struct btf_elf *btf);
+-
+-size_t btf_elf__get_size(struct btf_elf *btf);
+-
+ #endif /* _LIBBTF_H */
 --=20
 2.24.1
 
