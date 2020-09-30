@@ -7,148 +7,86 @@ X-Spam-Status: No, score=-4.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13216C47420
-	for <bpf@archiver.kernel.org>; Wed, 30 Sep 2020 09:28:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 188D5C47420
+	for <bpf@archiver.kernel.org>; Wed, 30 Sep 2020 09:38:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B65FE20754
-	for <bpf@archiver.kernel.org>; Wed, 30 Sep 2020 09:28:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CD31220754
+	for <bpf@archiver.kernel.org>; Wed, 30 Sep 2020 09:38:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Nf+iXt9Q"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="xSNlabK0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728892AbgI3J2r (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Sep 2020 05:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43154 "EHLO
+        id S1728965AbgI3JiG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Sep 2020 05:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725776AbgI3J2q (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Sep 2020 05:28:46 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126A0C0613D0
-        for <bpf@vger.kernel.org>; Wed, 30 Sep 2020 02:28:45 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id n61so1139881ota.10
-        for <bpf@vger.kernel.org>; Wed, 30 Sep 2020 02:28:45 -0700 (PDT)
+        with ESMTP id S1728819AbgI3JiG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Sep 2020 05:38:06 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1D1C0613D2
+        for <bpf@vger.kernel.org>; Wed, 30 Sep 2020 02:38:06 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id m13so1167153otl.9
+        for <bpf@vger.kernel.org>; Wed, 30 Sep 2020 02:38:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=FCLVZ13s2A1DgySuwXRnxGS7cpstquPbJaPgNjBvO64=;
-        b=Nf+iXt9Q+W3wuykljBC0zdhMYnMqxjUojtb8TRh4984evIAub+t9Qi9FyokxlZVkz1
-         JgGp1og7inZFVLDQee/ePVlah3cclhQZicb4KltFZ3hGwtbIsFDjlm1QCDOfy4+Y9eE3
-         CSrLDPdSvfT1RcbZ/GbrmHhOxXlminFXHfhXE=
+         :cc;
+        bh=TfzEw5x0NiRRju3CPhetGru5/pRnoeNXGN+8SqIx2Xg=;
+        b=xSNlabK0wj27CX+1Qcx2VTudu5ZW9FuibpTZ0nWLnP7KiZc1Y26yZKB8Eh31WGDcm6
+         8swxBpO09W7KLsdWCfcJLGpNOa9gUdbATUzXP1GsumP4vcMrlnAxEcLj8eox2M6rO4QT
+         LYOYeyB9ved5GDo1QpgQlQh7SernXIJ3tBNMc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=FCLVZ13s2A1DgySuwXRnxGS7cpstquPbJaPgNjBvO64=;
-        b=tLQv7HqHVGEXPETLRl/S/ZZyViTK+QsgwOlTThrn53h6AIrCNXDHBmwQzDVf+iumCa
-         A4oj68kEIiWnhoo3T4ZqH8tK2SqZM9mboRweWiFILP9ObfGWC5iLb5+Uigx+tDgTITof
-         M0D+0ELEd0/FPAMT+yUqmVApT1I7r5Rs8a3Ix4McBwikaazoZTPyju5/maXRO672e2da
-         LHgj+zwJB5z5fbqMr+KPuWi2rePVRSfk/LtAv68k57bHKIYVxyh+QNLoSKP5InrS/kqH
-         tZfublMsWAzF1zrahDeHv5obw6UyyyrCHt1eU1kxbYUWEs6xMJY7LjMypTEphhDIHaEy
-         sCdw==
-X-Gm-Message-State: AOAM530hYKpyDoAO82C8hi/a0RZW7EW908ZkZFTIv/Bq49zQbWbiro/o
-        Oqi+kLk1Rz9JaHOK4340to07RTlaqeZYhI6uVRrVAQ==
-X-Google-Smtp-Source: ABdhPJySlEuKD+GqJiylXHWVvB1hpaCEqGmXDnomoKNWIy72Tv+613MZTN7zgjkgfOZu3h1OhisP/gWLBIPZs6kr928=
-X-Received: by 2002:a05:6830:12c7:: with SMTP id a7mr1025005otq.334.1601458124389;
- Wed, 30 Sep 2020 02:28:44 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=TfzEw5x0NiRRju3CPhetGru5/pRnoeNXGN+8SqIx2Xg=;
+        b=TPKKVKFbIk4Z2f30WbIdsI31D55srbQ/3SP2WbaqUZxn8LRaIRWJj+tId0ZnGixvgu
+         wakH9ooJh4i7h8B83iGT5iM20ysAqScb2yweatS07h9Rl++tee6AU/7L2hE11h+7BBCG
+         fqZNZ2GXNJRHmi6kj+cm2Mm0YgtWXNRF+FOJrryOvbqPnw6Gna/IjLHq/MC0JyHaDZpE
+         3le5n/ou7w97olBBE5mNmmNxFIzmeNRg9csukWTteCO9q+ba28cMWSpgWWTawZ51K2LA
+         npXRdO2DCc4EzrCBxJiV/rfi57Oxduv8XPsa9Jk7A5hHdecH1sDE68aNyj0YZz86/eck
+         A1Ug==
+X-Gm-Message-State: AOAM531R10nrhZV8QHZuYs5W35qyOBZai86sb5n7PtbxmNWonhJCr2mE
+        YsHQWXEksvSFeUMcRgVEpMOh9DTSwx5PeZoeLf+QdQ==
+X-Google-Smtp-Source: ABdhPJyEFIY605VtSWbEn3ZkRUtaTSsucUs4nlzLVLBbPX+b1HdTLS14fXU+7V2yAvC7hyiex42j1bUzvOLQo1flGe0=
+X-Received: by 2002:a9d:6e90:: with SMTP id a16mr962799otr.132.1601458684868;
+ Wed, 30 Sep 2020 02:38:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200928090805.23343-1-lmb@cloudflare.com> <20200928090805.23343-3-lmb@cloudflare.com>
- <20200929055851.n7fa3os7iu7grni3@kafai-mbp> <CAADnVQLwpWMea1rbFAwvR_k+GzOphaOW-kUGORf90PJ-Ezxm4w@mail.gmail.com>
-In-Reply-To: <CAADnVQLwpWMea1rbFAwvR_k+GzOphaOW-kUGORf90PJ-Ezxm4w@mail.gmail.com>
+References: <20200928090805.23343-1-lmb@cloudflare.com> <20200928090805.23343-5-lmb@cloudflare.com>
+ <20200929060619.psnobg3cz3zbfx6u@kafai-mbp> <CACAyw9-hSfaxfHHMaVMVqBU7MHLoqgPyo55UwQ3w7NKREHcCxw@mail.gmail.com>
+ <20200929172340.hogj6zficvhkpibx@kafai-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20200929172340.hogj6zficvhkpibx@kafai-mbp.dhcp.thefacebook.com>
 From:   Lorenz Bauer <lmb@cloudflare.com>
-Date:   Wed, 30 Sep 2020 10:28:33 +0100
-Message-ID: <CACAyw98WzZGcFnnr7ELvbCziz2axJA_7x2mcoQTf2DYWDYJ=KA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/4] selftests: bpf: Add helper to compare
- socket cookies
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+Date:   Wed, 30 Sep 2020 10:37:53 +0100
+Message-ID: <CACAyw9_wfD39OCKR5zMN4g=GjcYH31Dg7skoyhPVHVTspgvarA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 4/4] selftest: bpf: Test copying a sockmap and sockhash
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         kernel-team <kernel-team@cloudflare.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 29 Sep 2020 at 16:48, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Tue, 29 Sep 2020 at 18:23, Martin KaFai Lau <kafai@fb.com> wrote:
 
 ...
 
-> There was a warning. I noticed it while applying and fixed it up.
-> Lorenz, please upgrade your compiler. This is not the first time such
-> warning has been missed.
+> > Yeah, I think so. We'd need to do something similar to your
+> > sock_common work for PTR_TO_RDONLY_BUF_OR_NULL. The fact that the
+> > pointer is read only makes it a bit more difficult I think. After
+> I thought the key arg should be used as read-only in the map's helper.
+> or there is map type's helper that modifies the key?
 
-I tried reproducing this on latest bpf-next (b0efc216f577997) with gcc
-9.3.0 by removing the initialization of duration:
+I don't know, that's what I meant by more difficult. If map keys are
+always read-only like you say this would be straight forward to do
+(famous last words).
 
-make: Entering directory '/home/lorenz/dev/bpf-next/tools/testing/selftests=
-/bpf'
-  TEST-OBJ [test_progs] sockmap_basic.test.o
-  TEST-HDR [test_progs] tests.h
-  EXT-OBJ  [test_progs] test_progs.o
-  EXT-OBJ  [test_progs] cgroup_helpers.o
-  EXT-OBJ  [test_progs] trace_helpers.o
-  EXT-OBJ  [test_progs] network_helpers.o
-  EXT-OBJ  [test_progs] testing_helpers.o
-  BINARY   test_progs
-make: Leaving directory '/home/lorenz/dev/bpf-next/tools/testing/selftests/=
-bpf'
-
-So, gcc doesn't issue a warning. Jakub did the following little experiment:
-
-jkbs@toad ~/tmp $ cat warning.c
-#include <stdio.h>
-
-int main(void)
-{
-        int duration;
-
-        fprintf(stdout, "%d", duration);
-
-        return 0;
-}
-jkbs@toad ~/tmp $ gcc -Wall -o /dev/null warning.c
-warning.c: In function =E2=80=98main=E2=80=99:
-warning.c:7:2: warning: =E2=80=98duration=E2=80=99 is used uninitialized in=
- this
-function [-Wuninitialized]
-    7 |  fprintf(stdout, "%d", duration);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-The simple case seems to work. However, adding the macro breaks things:
-
-jkbs@toad ~/tmp $ cat warning.c
-#include <stdio.h>
-
-#define _CHECK(duration) \
-        ({                                                      \
-                fprintf(stdout, "%d", duration);                \
-        })
-#define CHECK() _CHECK(duration)
-
-int main(void)
-{
-        int duration;
-
-        CHECK();
-
-        return 0;
-}
-jkbs@toad ~/tmp $ gcc -Wall -o /dev/null warning.c
-jkbs@toad ~/tmp $
-
-Maybe this is https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D18501 ? The
-problem is still there on gcc 10. Compiling test_progs with clang does
-issue a warning FWIW, but it seems like other things break when doing
-that.
-
---
+-- 
 Lorenz Bauer  |  Systems Engineer
 6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
 
