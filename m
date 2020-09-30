@@ -2,184 +2,134 @@ Return-Path: <SRS0=uc+s=DH=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E2575C4363D
-	for <bpf@archiver.kernel.org>; Wed, 30 Sep 2020 23:09:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E45CC4363D
+	for <bpf@archiver.kernel.org>; Wed, 30 Sep 2020 23:14:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 97DBD20759
-	for <bpf@archiver.kernel.org>; Wed, 30 Sep 2020 23:09:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EFD042076A
+	for <bpf@archiver.kernel.org>; Wed, 30 Sep 2020 23:14:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CGRVfmT7"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gm5u2PcQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732012AbgI3XJc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Sep 2020 19:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57208 "EHLO
+        id S1732096AbgI3XM2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Sep 2020 19:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731987AbgI3XJN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Sep 2020 19:09:13 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AE4C061755
-        for <bpf@vger.kernel.org>; Wed, 30 Sep 2020 16:09:13 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id k18so2572861ybh.1
-        for <bpf@vger.kernel.org>; Wed, 30 Sep 2020 16:09:13 -0700 (PDT)
+        with ESMTP id S1732093AbgI3XM1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Sep 2020 19:12:27 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE960C061755
+        for <bpf@vger.kernel.org>; Wed, 30 Sep 2020 16:12:26 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id h23so738191pjv.5
+        for <bpf@vger.kernel.org>; Wed, 30 Sep 2020 16:12:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mep4spQ9FIkTa10pAtvQf/myeFBKJ+f0HlpL7O14te8=;
-        b=CGRVfmT73XupOrbhGbfJQjwVDZgOAxZPGoEsnwXt0LShs/+nZZajJtlRiQTLE4E53B
-         hGnAKjrAMyaCUHdK3GVopBCkFLMD/6i7LBS0cstBnpD8JsXoB0NUjsrWDbzXh9IDQirR
-         DfONg9Aw/Yfjm4eRQXnOWMgctfnegPHezPQGVWcpm2LPdfmPD4flp6JAwTOmE9Itkcdx
-         6NAh/uJ7kthc2KVBEyGuuQ58Ot+LsolhLUMtlCg/O8X4WjkPYfMI0URA8lPh3G/E6sBH
-         I21c4IAZlkooFfgpMKp+L6kftGTMca4E1EKR/h5h1wQVMbMYuxGYZQqABbtitfAfHg24
-         kCmA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GcGfH7kHx9j3QvyhQc4NcbAnPXZ+xitJlnC9m04nhjQ=;
+        b=gm5u2PcQKPEnnJP1IJQaMsMKmuVSqh4mDV+SE3B7HkfYd1s4DfKRJ5JPUSmnYUHwJ8
+         a+XP4WcTYmVhx04y548/+0CYzCszHMJsUlfqTuWHhOFXsePMVlmUXi21FLje4PBXRm98
+         Jo1/sYLM65/hhSixFbPryuAHtryh7BTjsn8Us=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mep4spQ9FIkTa10pAtvQf/myeFBKJ+f0HlpL7O14te8=;
-        b=tjbcBcfIoCjePIRRU1ltmUeMreq9cjytomCHbTzneRTYVDCpUUpjbgzXMg06bJV/FE
-         UNdHfSIacH6PAzCrj0sWQtMr8H41opZmUZRl5KS4+QstwP5Fv+19nY83dleRM8rzTtyj
-         xR9tGGvoAUp+loCT6KiOWiCqElzW+41OqIAJG0v4WxguOy+cHJFW5Gdn7gRtkhLb5MeL
-         2l1l2uQ2AjVRTCK5OfOMKmI2lMDqa2UtIQurPsqV1Qeyh6VfTdSTLPRVN9wV8iBQ6c80
-         zjJxX9EQQGUNfzyvnssGL8RfXDT1nudvSco70+HE+oZPS6QDb9ial3FhGWYROhjpK2Et
-         hN1A==
-X-Gm-Message-State: AOAM530BafeEv7z9Xk7j/pXRiOfAea0qG6RSLxJj9UV1kcjsYOjNUXKG
-        w/aQJ18+xpTwjncs9BiL45NH8XEWMajUeb+vjfF119oMM5TzSw==
-X-Google-Smtp-Source: ABdhPJz0TcI4NuoU/MoYebgHVVHNZO09TNGSJbw4/JZ+9a9rGsniyM9eShB9nuNzEBdSD0sm0wav3iH2w9ByXqyStxg=
-X-Received: by 2002:a25:2596:: with SMTP id l144mr6522642ybl.510.1601507353041;
- Wed, 30 Sep 2020 16:09:13 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GcGfH7kHx9j3QvyhQc4NcbAnPXZ+xitJlnC9m04nhjQ=;
+        b=PB1dfP5pGf5FPWjeNBxtLfaCwIULkBTAOzb9X8yW9HL7yw9R03mHQO/lak/Su7XOOo
+         dNGYeY+lUkCc8vDt9YVHJLnUOWbWHsNMxDwhuur8pQFLuh9Tf1pmDPIR3f05klIm2uXa
+         S1hysSIa8AKppClVeSC9ZjJlQx6xx2OX6BAB1MifaDK4dHn3RbmR/Rdmq+QT54dOYQd3
+         G64RiHGVak5k1bFrIo+dkGTWm7rW8eftI3BA0D9eEjDJPRbu1xqsmBIimVdRRZvWsVFe
+         7vZEuMPnNhG0Aryuy7/FyvAR2tDt7TT6h5y2+38hHxt6tY9Ci3Ki0AbuLJTOROv+iKli
+         CLhw==
+X-Gm-Message-State: AOAM533U0Q4xGC8g70/+kZCVflFaSbbMjj8EE2o9Halzvpr+cEBiLcx6
+        chY5TYDzG3mDpSUoRQG0IiP4Tw==
+X-Google-Smtp-Source: ABdhPJzERV8mYc2Hm3YRyOthOTUpcKBJEFFaKP6HXJWxaQaOtJgHHdz5S1SjWX7xipFAAf48W71nEw==
+X-Received: by 2002:a17:90a:cf13:: with SMTP id h19mr941884pju.88.1601507546488;
+        Wed, 30 Sep 2020 16:12:26 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q15sm1321933pjp.26.2020.09.30.16.12.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Sep 2020 16:12:25 -0700 (PDT)
+Date:   Wed, 30 Sep 2020 16:12:24 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jann Horn <jannh@google.com>
+Cc:     YiFei Zhu <zhuyifei1999@gmail.com>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        YiFei Zhu <yifeifz2@illinois.edu>, bpf <bpf@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        David Laight <David.Laight@aculab.com>,
+        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Hubertus Franke <frankeh@us.ibm.com>,
+        Jack Chen <jianyan2@illinois.edu>,
+        Josep Torrellas <torrella@illinois.edu>,
+        Tianyin Xu <tyxu@illinois.edu>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        Valentin Rothberg <vrothber@redhat.com>,
+        Will Drewry <wad@chromium.org>
+Subject: Re: [PATCH v3 seccomp 5/5] seccomp/cache: Report cache data through
+ /proc/pid/seccomp_cache
+Message-ID: <202009301559.49BEDB79D@keescook>
+References: <cover.1601478774.git.yifeifz2@illinois.edu>
+ <d3d1c05ea0be2b192f480ec52ad64bffbb22dc9d.1601478774.git.yifeifz2@illinois.edu>
+ <CAG48ez0whaSTobwnoJHW+Eyqg5a8H4JCO-KHrgsuNiEg0qbD3w@mail.gmail.com>
 MIME-Version: 1.0
-References: <CA+XBgLU=8PFkP8S32e4gpst0=R4MFv8rZA5KaO+cEPYSnTRYYw@mail.gmail.com>
- <CAEf4BzZvXvb7CsnJZkoNUzb0-o=w-i9-CHecq0O+QcCKpeuUKQ@mail.gmail.com>
- <CA+XBgLWNavRQJy7uRG35RXprHjQ1uaURyB8tj7tE=Mv=EWKO+g@mail.gmail.com>
- <CAEf4Bzb4JrfmENs197d30xU2fnWwu9_1rq-=n9szaWmmxaSckg@mail.gmail.com> <CA+XBgLWa7nWnQNTUdqgBK2E34PH8mUc_wUWR=_iM2Yjr=gxrVw@mail.gmail.com>
-In-Reply-To: <CA+XBgLWa7nWnQNTUdqgBK2E34PH8mUc_wUWR=_iM2Yjr=gxrVw@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 30 Sep 2020 16:09:02 -0700
-Message-ID: <CAEf4BzY1N_yZscKTT81fnexwPgD7XbD0UCyEsa1CUp_giyJwfA@mail.gmail.com>
-Subject: Re: Problems with pointer offsets on ARM32
-To:     Luka Oreskovic <luka.oreskovic@sartura.hr>
-Cc:     bpf <bpf@vger.kernel.org>, Luka Perkov <luka.perkov@sartura.hr>,
-        Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG48ez0whaSTobwnoJHW+Eyqg5a8H4JCO-KHrgsuNiEg0qbD3w@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Sep 15, 2020 at 12:26 AM Luka Oreskovic
-<luka.oreskovic@sartura.hr> wrote:
->
-> On Mon, Sep 14, 2020 at 7:49 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Mon, Sep 14, 2020 at 12:55 AM Luka Oreskovic
-> > <luka.oreskovic@sartura.hr> wrote:
-> > >
-> > > On Fri, Sep 11, 2020 at 8:14 PM Andrii Nakryiko
-> > > <andrii.nakryiko@gmail.com> wrote:
-> > > >
-> > > > On Fri, Sep 11, 2020 at 9:45 AM Luka Oreskovic
-> > > > <luka.oreskovic@sartura.hr> wrote:
-> > > > >
-> > > > > Greetings everyone,
-> > > > >
-> > > > > I have been testing various BPF programs on the ARM32 architecture and
-> > > > > have encountered a strange error.
-> > > > >
-> > > > > When trying to run a simple program that prints out the arguments of
-> > > > > the open syscall,
-> > > > > I found some strange behaviour with the pointer offsets when accessing
-> > > > > the arguments:
-> > > > > The output of llvm-objdump differed from the verifier error dump log.
-> > > > > Notice the differences in lines 0 and 1. Why is the bytecode being
-> > > > > altered at runtime?
-> > > > >
-> > > > > I attached the program, the llvm-objdump result and the verifier dump below.
-> > > > >
-> > > > > Best wishes,
-> > > > > Luka Oreskovic
-> > > > >
-> > > > > BPF program
-> > > > > --------------------------------------------
-> > > > > #include "vmlinux.h"
-> > > > > #include <bpf/bpf_helpers.h>
-> > > > >
-> > > > > SEC("tracepoint/syscalls/sys_enter_open")
-> > > > > int tracepoint__syscalls__sys_enter_open(struct trace_event_raw_sys_enter* ctx)
-> > > > > {
-> > > > >         const char *arg1 = (const char *)ctx->args[0];
-> > > > >         int arg2 = (int)ctx->args[1];
+On Thu, Oct 01, 2020 at 12:00:46AM +0200, Jann Horn wrote:
+> On Wed, Sep 30, 2020 at 5:20 PM YiFei Zhu <zhuyifei1999@gmail.com> wrote:
+> [...]
+> > diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+> [...]
+> > +int proc_pid_seccomp_cache(struct seq_file *m, struct pid_namespace *ns,
+> > +                          struct pid *pid, struct task_struct *task)
+> > +{
+> > +       struct seccomp_filter *f;
+> > +
+> > +       /*
+> > +        * We don't want some sandboxed process know what their seccomp
+> > +        * filters consist of.
+> > +        */
+> > +       if (!file_ns_capable(m->file, &init_user_ns, CAP_SYS_ADMIN))
+> > +               return -EACCES;
+> > +
+> > +       f = READ_ONCE(task->seccomp.filter);
+> > +       if (!f)
+> > +               return 0;
+> 
+> Hmm, this won't work, because the task could be exiting, and seccomp
+> filters are detached in release_task() (using
+> seccomp_filter_release()). And at the moment, seccomp_filter_release()
+> just locklessly NULLs out the tsk->seccomp.filter pointer and drops
+> the reference.
 
-Luka, can you apply the changes below to bpf_core_read.h header and
-read these args using BPF_CORE_READ() macro:
+Oh nice catch. Yeah, this would only happen if it was the only filter
+remaining on a process with no children, etc.
 
-const char *arg1 = (const char *)BPF_CORE_READ(ctx, args[0]);
-int arg2 = BPF_CORE_READ(ctx, args[1]);
+> 
+> The locking here is kind of gross, but basically I think you can
+> change this code to use lock_task_sighand() / unlock_task_sighand()
+> (see the other examples in fs/proc/base.c), and bail out if
+> lock_task_sighand() returns NULL. And in seccomp_filter_release(), add
+> something like this:
+> 
+> /* We are effectively holding the siglock by not having any sighand. */
+> WARN_ON(tsk->sighand != NULL);
 
-I'm curious if that will work (unfortunately I don't have a complete
-enough setup to test this).
+Yeah, good idea.
 
-The patch is as follows (with broken tab<->space conversion, so please
-make changes by hand):
-
-diff --git a/tools/lib/bpf/bpf_core_read.h b/tools/lib/bpf/bpf_core_read.h
-index bbcefb3ff5a5..fee6328d36c0 100644
---- a/tools/lib/bpf/bpf_core_read.h
-+++ b/tools/lib/bpf/bpf_core_read.h
-@@ -261,14 +261,16 @@ enum bpf_enum_value_kind {
- #define ___type(...) typeof(___arrow(__VA_ARGS__))
-
- #define ___read(read_fn, dst, src_type, src, accessor)                     \
--       read_fn((void *)(dst), sizeof(*(dst)), &((src_type)(src))->accessor)
-+       read_fn((void *)(dst),                                              \
-+               bpf_core_field_size(((src_type)(src))->accessor),           \
-+               &((src_type)(src))->accessor)
-
- /* "recursively" read a sequence of inner pointers using local __t var */
- #define ___rd_first(src, a) ___read(bpf_core_read, &__t, ___type(src), src, a);
- #define ___rd_last(...)
-             \
-        ___read(bpf_core_read, &__t,                                        \
-                ___type(___nolast(__VA_ARGS__)), __t, ___last(__VA_ARGS__));
--#define ___rd_p1(...) const void *__t; ___rd_first(__VA_ARGS__)
-+#define ___rd_p1(...) const void *__t = (void *)0; ___rd_first(__VA_ARGS__)
- #define ___rd_p2(...) ___rd_p1(___nolast(__VA_ARGS__)) ___rd_last(__VA_ARGS__)
- #define ___rd_p3(...) ___rd_p2(___nolast(__VA_ARGS__)) ___rd_last(__VA_ARGS__)
- #define ___rd_p4(...) ___rd_p3(___nolast(__VA_ARGS__)) ___rd_last(__VA_ARGS__)
-
-
-
-BTW, this approach should work for reading pointers as well, it would
-be nice if you can test that as well. E.g., something like the
-following:
-
-struct task_struct *t = (void *)bpf_get_current_task();
-int ppid = BPF_CORE_READ(t, group_leader, tgid);
-
-If you try it without the patch above, it should either read garbage
-or zero, but not a valid parent PID (please verify that as well).
-
-I really appreciate your help with testing, thanks!
-
-
-> > > > >
-> > > > >         bpf_printk("Open arg 1: %s\n", arg1);
-> > > > >         bpf_printk("Open arg 2: %d\n", arg2);
-> > > > >
-> > > > >         return 0;
-> > > > > }
-> > > > >
-> > > > > char LICENSE[] SEC("license") = "GPL";
-> > > > >
-> > > > >
-
-[...]
-
->
-> Best wishes,
-> Luka Oreskovic
+-- 
+Kees Cook
