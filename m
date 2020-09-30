@@ -7,30 +7,31 @@ X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFBCEC4727F
-	for <bpf@archiver.kernel.org>; Wed, 30 Sep 2020 15:18:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E901C4727E
+	for <bpf@archiver.kernel.org>; Wed, 30 Sep 2020 15:18:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9FDA120759
+	by mail.kernel.org (Postfix) with ESMTP id D749320789
 	for <bpf@archiver.kernel.org>; Wed, 30 Sep 2020 15:18:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730743AbgI3PSd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 30 Sep 2020 11:18:33 -0400
-Received: from www62.your-server.de ([213.133.104.62]:51250 "EHLO
+        id S1730784AbgI3PSe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 30 Sep 2020 11:18:34 -0400
+Received: from www62.your-server.de ([213.133.104.62]:51240 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730654AbgI3PSb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 30 Sep 2020 11:18:31 -0400
+        with ESMTP id S1730236AbgI3PSa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 30 Sep 2020 11:18:30 -0400
 Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1kNdsA-0002yK-S1; Wed, 30 Sep 2020 17:18:26 +0200
+        id 1kNdsA-0002y3-3T; Wed, 30 Sep 2020 17:18:26 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v4 5/6] bpf, selftests: use bpf_tail_call_static where appropriate
-Date:   Wed, 30 Sep 2020 17:18:19 +0200
-Message-Id: <3cfb2b799a62d22c6e7ae5897c23940bdcc24cbc.1601477936.git.daniel@iogearbox.net>
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        David Ahern <dsahern@kernel.org>
+Subject: [PATCH bpf-next v4 3/6] bpf: add redirect_neigh helper as redirect drop-in
+Date:   Wed, 30 Sep 2020 17:18:17 +0200
+Message-Id: <f207de81629e1724899b73b8112e0013be782d35.1601477936.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <cover.1601477936.git.daniel@iogearbox.net>
 References: <cover.1601477936.git.daniel@iogearbox.net>
@@ -42,319 +43,447 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For those locations where we use an immediate tail call map index use the
-newly added bpf_tail_call_static() helper.
+Add a redirect_neigh() helper as redirect() drop-in replacement
+for the xmit side. Main idea for the helper is to be very similar
+in semantics to the latter just that the skb gets injected into
+the neighboring subsystem in order to let the stack do the work
+it knows best anyway to populate the L2 addresses of the packet
+and then hand over to dev_queue_xmit() as redirect() does.
+
+This solves two bigger items: i) skbs don't need to go up to the
+stack on the host facing veth ingress side for traffic egressing
+the container to achieve the same for populating L2 which also
+has the huge advantage that ii) the skb->sk won't get orphaned in
+ip_rcv_core() when entering the IP routing layer on the host stack.
+
+Given that skb->sk neither gets orphaned when crossing the netns
+as per 9c4c325252c5 ("skbuff: preserve sock reference when scrubbing
+the skb.") the helper can then push the skbs directly to the phys
+device where FQ scheduler can do its work and TCP stack gets proper
+backpressure given we hold on to skb->sk as long as skb is still
+residing in queues.
+
+With the helper used in BPF data path to then push the skb to the
+phys device, I observed a stable/consistent TCP_STREAM improvement
+on veth devices for traffic going container -> host -> host ->
+container from ~10Gbps to ~15Gbps for a single stream in my test
+environment.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Cc: David Ahern <dsahern@kernel.org>
 ---
- samples/bpf/sockex3_kern.c                    | 20 +++++++------
- tools/testing/selftests/bpf/progs/bpf_flow.c  | 12 ++++----
- tools/testing/selftests/bpf/progs/tailcall1.c | 28 +++++++++----------
- tools/testing/selftests/bpf/progs/tailcall2.c | 14 +++++-----
- tools/testing/selftests/bpf/progs/tailcall3.c |  4 +--
- .../selftests/bpf/progs/tailcall_bpf2bpf1.c   |  4 +--
- .../selftests/bpf/progs/tailcall_bpf2bpf2.c   |  6 ++--
- .../selftests/bpf/progs/tailcall_bpf2bpf3.c   |  6 ++--
- .../selftests/bpf/progs/tailcall_bpf2bpf4.c   |  6 ++--
- 9 files changed, 51 insertions(+), 49 deletions(-)
+ include/linux/skbuff.h         |   5 +
+ include/uapi/linux/bpf.h       |  14 ++
+ net/core/filter.c              | 276 +++++++++++++++++++++++++++++++--
+ tools/include/uapi/linux/bpf.h |  14 ++
+ 4 files changed, 294 insertions(+), 15 deletions(-)
 
-diff --git a/samples/bpf/sockex3_kern.c b/samples/bpf/sockex3_kern.c
-index cab9cca0b8eb..8142d02b33e6 100644
---- a/samples/bpf/sockex3_kern.c
-+++ b/samples/bpf/sockex3_kern.c
-@@ -31,28 +31,30 @@ struct {
- #define PARSE_IP 3
- #define PARSE_IPV6 4
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 04a18e01b362..3d0cf3722bb4 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -2548,6 +2548,11 @@ static inline int skb_mac_header_was_set(const struct sk_buff *skb)
+ 	return skb->mac_header != (typeof(skb->mac_header))~0U;
+ }
  
--/* protocol dispatch routine.
-- * It tail-calls next BPF program depending on eth proto
-- * Note, we could have used:
-- * bpf_tail_call(skb, &jmp_table, proto);
-- * but it would need large prog_array
-+/* Protocol dispatch routine. It tail-calls next BPF program depending
-+ * on eth proto. Note, we could have used ...
++static inline void skb_unset_mac_header(struct sk_buff *skb)
++{
++	skb->mac_header = (typeof(skb->mac_header))~0U;
++}
++
+ static inline void skb_reset_mac_header(struct sk_buff *skb)
+ {
+ 	skb->mac_header = skb->data - skb->head;
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 6116a7f54c8f..1f17c6752deb 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -3652,6 +3652,19 @@ union bpf_attr {
+  * 		associated socket instead of the current process.
+  * 	Return
+  * 		The id is returned or 0 in case the id could not be retrieved.
 + *
-+ *   bpf_tail_call(skb, &jmp_table, proto);
-+ *
-+ * ... but it would need large prog_array and cannot be optimised given
-+ * the map key is not static.
++ * long bpf_redirect_neigh(u32 ifindex, u64 flags)
++ * 	Description
++ * 		Redirect the packet to another net device of index *ifindex*
++ * 		and fill in L2 addresses from neighboring subsystem. This helper
++ * 		is somewhat similar to **bpf_redirect**\ (), except that it
++ * 		fills in e.g. MAC addresses based on the L3 information from
++ * 		the packet. This helper is supported for IPv4 and IPv6 protocols.
++ * 		The *flags* argument is reserved and must be 0. The helper is
++ * 		currently only supported for tc BPF program types.
++ * 	Return
++ * 		The helper returns **TC_ACT_REDIRECT** on success or
++ * 		**TC_ACT_SHOT** on error.
   */
- static inline void parse_eth_proto(struct __sk_buff *skb, u32 proto)
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -3806,6 +3819,7 @@ union bpf_attr {
+ 	FN(snprintf_btf),		\
+ 	FN(seq_printf_btf),		\
+ 	FN(skb_cgroup_classid),		\
++	FN(redirect_neigh),		\
+ 	/* */
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+diff --git a/net/core/filter.c b/net/core/filter.c
+index a0776e48dcc9..3fb6adad1957 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2163,13 +2163,233 @@ static int __bpf_redirect(struct sk_buff *skb, struct net_device *dev,
+ 		return __bpf_redirect_no_mac(skb, dev, flags);
+ }
+ 
++#if IS_ENABLED(CONFIG_IPV6)
++static int bpf_out_neigh_v6(struct net *net, struct sk_buff *skb)
++{
++	struct dst_entry *dst = skb_dst(skb);
++	struct net_device *dev = dst->dev;
++	u32 hh_len = LL_RESERVED_SPACE(dev);
++	const struct in6_addr *nexthop;
++	struct neighbour *neigh;
++
++	if (dev_xmit_recursion()) {
++		net_crit_ratelimited("bpf: recursion limit reached on datapath, buggy bpf program?\n");
++		goto out_drop;
++	}
++
++	skb->dev = dev;
++	skb->tstamp = 0;
++
++	if (unlikely(skb_headroom(skb) < hh_len && dev->header_ops)) {
++		struct sk_buff *skb2;
++
++		skb2 = skb_realloc_headroom(skb, hh_len);
++		if (unlikely(!skb2)) {
++			kfree_skb(skb);
++			return -ENOMEM;
++		}
++		if (skb->sk)
++			skb_set_owner_w(skb2, skb->sk);
++		consume_skb(skb);
++		skb = skb2;
++	}
++
++	rcu_read_lock_bh();
++	nexthop = rt6_nexthop(container_of(dst, struct rt6_info, dst),
++			      &ipv6_hdr(skb)->daddr);
++	neigh = ip_neigh_gw6(dev, nexthop);
++	if (likely(!IS_ERR(neigh))) {
++		int ret;
++
++		sock_confirm_neigh(skb, neigh);
++		dev_xmit_recursion_inc();
++		ret = neigh_output(neigh, skb, false);
++		dev_xmit_recursion_dec();
++		rcu_read_unlock_bh();
++		return ret;
++	}
++	rcu_read_unlock_bh();
++	IP6_INC_STATS(dev_net(dst->dev),
++		      ip6_dst_idev(dst), IPSTATS_MIB_OUTNOROUTES);
++out_drop:
++	kfree_skb(skb);
++	return -ENETDOWN;
++}
++
++static int __bpf_redirect_neigh_v6(struct sk_buff *skb, struct net_device *dev)
++{
++	const struct ipv6hdr *ip6h = ipv6_hdr(skb);
++	struct net *net = dev_net(dev);
++	int err, ret = NET_XMIT_DROP;
++	struct dst_entry *dst;
++	struct flowi6 fl6 = {
++		.flowi6_flags	= FLOWI_FLAG_ANYSRC,
++		.flowi6_mark	= skb->mark,
++		.flowlabel	= ip6_flowinfo(ip6h),
++		.flowi6_oif	= dev->ifindex,
++		.flowi6_proto	= ip6h->nexthdr,
++		.daddr		= ip6h->daddr,
++		.saddr		= ip6h->saddr,
++	};
++
++	dst = ipv6_stub->ipv6_dst_lookup_flow(net, NULL, &fl6, NULL);
++	if (IS_ERR(dst))
++		goto out_drop;
++
++	skb_dst_set(skb, dst);
++
++	err = bpf_out_neigh_v6(net, skb);
++	if (unlikely(net_xmit_eval(err)))
++		dev->stats.tx_errors++;
++	else
++		ret = NET_XMIT_SUCCESS;
++	goto out_xmit;
++out_drop:
++	dev->stats.tx_errors++;
++	kfree_skb(skb);
++out_xmit:
++	return ret;
++}
++#else
++static int __bpf_redirect_neigh_v6(struct sk_buff *skb, struct net_device *dev)
++{
++	kfree_skb(skb);
++	return NET_XMIT_DROP;
++}
++#endif /* CONFIG_IPV6 */
++
++#if IS_ENABLED(CONFIG_INET)
++static int bpf_out_neigh_v4(struct net *net, struct sk_buff *skb)
++{
++	struct dst_entry *dst = skb_dst(skb);
++	struct rtable *rt = container_of(dst, struct rtable, dst);
++	struct net_device *dev = dst->dev;
++	u32 hh_len = LL_RESERVED_SPACE(dev);
++	struct neighbour *neigh;
++	bool is_v6gw = false;
++
++	if (dev_xmit_recursion()) {
++		net_crit_ratelimited("bpf: recursion limit reached on datapath, buggy bpf program?\n");
++		goto out_drop;
++	}
++
++	skb->dev = dev;
++	skb->tstamp = 0;
++
++	if (unlikely(skb_headroom(skb) < hh_len && dev->header_ops)) {
++		struct sk_buff *skb2;
++
++		skb2 = skb_realloc_headroom(skb, hh_len);
++		if (unlikely(!skb2)) {
++			kfree_skb(skb);
++			return -ENOMEM;
++		}
++		if (skb->sk)
++			skb_set_owner_w(skb2, skb->sk);
++		consume_skb(skb);
++		skb = skb2;
++	}
++
++	rcu_read_lock_bh();
++	neigh = ip_neigh_for_gw(rt, skb, &is_v6gw);
++	if (likely(!IS_ERR(neigh))) {
++		int ret;
++
++		sock_confirm_neigh(skb, neigh);
++		dev_xmit_recursion_inc();
++		ret = neigh_output(neigh, skb, is_v6gw);
++		dev_xmit_recursion_dec();
++		rcu_read_unlock_bh();
++		return ret;
++	}
++	rcu_read_unlock_bh();
++out_drop:
++	kfree_skb(skb);
++	return -ENETDOWN;
++}
++
++static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev)
++{
++	const struct iphdr *ip4h = ip_hdr(skb);
++	struct net *net = dev_net(dev);
++	int err, ret = NET_XMIT_DROP;
++	struct rtable *rt;
++	struct flowi4 fl4 = {
++		.flowi4_flags	= FLOWI_FLAG_ANYSRC,
++		.flowi4_mark	= skb->mark,
++		.flowi4_tos	= RT_TOS(ip4h->tos),
++		.flowi4_oif	= dev->ifindex,
++		.flowi4_proto	= ip4h->protocol,
++		.daddr		= ip4h->daddr,
++		.saddr		= ip4h->saddr,
++	};
++
++	rt = ip_route_output_flow(net, &fl4, NULL);
++	if (IS_ERR(rt))
++		goto out_drop;
++	if (rt->rt_type != RTN_UNICAST && rt->rt_type != RTN_LOCAL) {
++		ip_rt_put(rt);
++		goto out_drop;
++	}
++
++	skb_dst_set(skb, &rt->dst);
++
++	err = bpf_out_neigh_v4(net, skb);
++	if (unlikely(net_xmit_eval(err)))
++		dev->stats.tx_errors++;
++	else
++		ret = NET_XMIT_SUCCESS;
++	goto out_xmit;
++out_drop:
++	dev->stats.tx_errors++;
++	kfree_skb(skb);
++out_xmit:
++	return ret;
++}
++#else
++static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev)
++{
++	kfree_skb(skb);
++	return NET_XMIT_DROP;
++}
++#endif /* CONFIG_INET */
++
++static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev)
++{
++	struct ethhdr *ethh = eth_hdr(skb);
++
++	if (unlikely(skb->mac_header >= skb->network_header))
++		goto out;
++	bpf_push_mac_rcsum(skb);
++	if (is_multicast_ether_addr(ethh->h_dest))
++		goto out;
++
++	skb_pull(skb, sizeof(*ethh));
++	skb_unset_mac_header(skb);
++	skb_reset_network_header(skb);
++
++	if (skb->protocol == htons(ETH_P_IP))
++		return __bpf_redirect_neigh_v4(skb, dev);
++	else if (skb->protocol == htons(ETH_P_IPV6))
++		return __bpf_redirect_neigh_v6(skb, dev);
++out:
++	kfree_skb(skb);
++	return -ENOTSUPP;
++}
++
++/* Internal, non-exposed redirect flags. */
++enum {
++	BPF_F_NEIGH = (1ULL << 1),
++#define BPF_F_REDIRECT_INTERNAL	(BPF_F_NEIGH)
++};
++
+ BPF_CALL_3(bpf_clone_redirect, struct sk_buff *, skb, u32, ifindex, u64, flags)
  {
- 	switch (proto) {
- 	case ETH_P_8021Q:
- 	case ETH_P_8021AD:
--		bpf_tail_call(skb, &jmp_table, PARSE_VLAN);
-+		bpf_tail_call_static(skb, &jmp_table, PARSE_VLAN);
- 		break;
- 	case ETH_P_MPLS_UC:
- 	case ETH_P_MPLS_MC:
--		bpf_tail_call(skb, &jmp_table, PARSE_MPLS);
-+		bpf_tail_call_static(skb, &jmp_table, PARSE_MPLS);
- 		break;
- 	case ETH_P_IP:
--		bpf_tail_call(skb, &jmp_table, PARSE_IP);
-+		bpf_tail_call_static(skb, &jmp_table, PARSE_IP);
- 		break;
- 	case ETH_P_IPV6:
--		bpf_tail_call(skb, &jmp_table, PARSE_IPV6);
-+		bpf_tail_call_static(skb, &jmp_table, PARSE_IPV6);
- 		break;
+ 	struct net_device *dev;
+ 	struct sk_buff *clone;
+ 	int ret;
+ 
+-	if (unlikely(flags & ~(BPF_F_INGRESS)))
++	if (unlikely(flags & (~(BPF_F_INGRESS) | BPF_F_REDIRECT_INTERNAL)))
+ 		return -EINVAL;
+ 
+ 	dev = dev_get_by_index_rcu(dev_net(skb->dev), ifindex);
+@@ -2206,23 +2426,11 @@ static const struct bpf_func_proto bpf_clone_redirect_proto = {
+ DEFINE_PER_CPU(struct bpf_redirect_info, bpf_redirect_info);
+ EXPORT_PER_CPU_SYMBOL_GPL(bpf_redirect_info);
+ 
+-BPF_CALL_2(bpf_redirect, u32, ifindex, u64, flags)
+-{
+-	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
+-
+-	if (unlikely(flags & ~(BPF_F_INGRESS)))
+-		return TC_ACT_SHOT;
+-
+-	ri->flags = flags;
+-	ri->tgt_index = ifindex;
+-
+-	return TC_ACT_REDIRECT;
+-}
+-
+ int skb_do_redirect(struct sk_buff *skb)
+ {
+ 	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
+ 	struct net_device *dev;
++	u32 flags = ri->flags;
+ 
+ 	dev = dev_get_by_index_rcu(dev_net(skb->dev), ri->tgt_index);
+ 	ri->tgt_index = 0;
+@@ -2231,7 +2439,22 @@ int skb_do_redirect(struct sk_buff *skb)
+ 		return -EINVAL;
  	}
- }
-diff --git a/tools/testing/selftests/bpf/progs/bpf_flow.c b/tools/testing/selftests/bpf/progs/bpf_flow.c
-index de6de9221518..5a65f6b51377 100644
---- a/tools/testing/selftests/bpf/progs/bpf_flow.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_flow.c
-@@ -118,18 +118,18 @@ static __always_inline int parse_eth_proto(struct __sk_buff *skb, __be16 proto)
  
- 	switch (proto) {
- 	case bpf_htons(ETH_P_IP):
--		bpf_tail_call(skb, &jmp_table, IP);
-+		bpf_tail_call_static(skb, &jmp_table, IP);
- 		break;
- 	case bpf_htons(ETH_P_IPV6):
--		bpf_tail_call(skb, &jmp_table, IPV6);
-+		bpf_tail_call_static(skb, &jmp_table, IPV6);
- 		break;
- 	case bpf_htons(ETH_P_MPLS_MC):
- 	case bpf_htons(ETH_P_MPLS_UC):
--		bpf_tail_call(skb, &jmp_table, MPLS);
-+		bpf_tail_call_static(skb, &jmp_table, MPLS);
- 		break;
- 	case bpf_htons(ETH_P_8021Q):
- 	case bpf_htons(ETH_P_8021AD):
--		bpf_tail_call(skb, &jmp_table, VLAN);
-+		bpf_tail_call_static(skb, &jmp_table, VLAN);
- 		break;
- 	default:
- 		/* Protocol not supported */
-@@ -246,10 +246,10 @@ static __always_inline int parse_ipv6_proto(struct __sk_buff *skb, __u8 nexthdr)
- 	switch (nexthdr) {
- 	case IPPROTO_HOPOPTS:
- 	case IPPROTO_DSTOPTS:
--		bpf_tail_call(skb, &jmp_table, IPV6OP);
-+		bpf_tail_call_static(skb, &jmp_table, IPV6OP);
- 		break;
- 	case IPPROTO_FRAGMENT:
--		bpf_tail_call(skb, &jmp_table, IPV6FR);
-+		bpf_tail_call_static(skb, &jmp_table, IPV6FR);
- 		break;
- 	default:
- 		return parse_ip_proto(skb, nexthdr);
-diff --git a/tools/testing/selftests/bpf/progs/tailcall1.c b/tools/testing/selftests/bpf/progs/tailcall1.c
-index 1f407e65ae52..7115bcefbe8a 100644
---- a/tools/testing/selftests/bpf/progs/tailcall1.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall1.c
-@@ -26,20 +26,20 @@ int entry(struct __sk_buff *skb)
- 	/* Multiple locations to make sure we patch
- 	 * all of them.
- 	 */
--	bpf_tail_call(skb, &jmp_table, 0);
--	bpf_tail_call(skb, &jmp_table, 0);
--	bpf_tail_call(skb, &jmp_table, 0);
--	bpf_tail_call(skb, &jmp_table, 0);
--
--	bpf_tail_call(skb, &jmp_table, 1);
--	bpf_tail_call(skb, &jmp_table, 1);
--	bpf_tail_call(skb, &jmp_table, 1);
--	bpf_tail_call(skb, &jmp_table, 1);
--
--	bpf_tail_call(skb, &jmp_table, 2);
--	bpf_tail_call(skb, &jmp_table, 2);
--	bpf_tail_call(skb, &jmp_table, 2);
--	bpf_tail_call(skb, &jmp_table, 2);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
+-	return __bpf_redirect(skb, dev, ri->flags);
++	return flags & BPF_F_NEIGH ?
++	       __bpf_redirect_neigh(skb, dev) :
++	       __bpf_redirect(skb, dev, flags);
++}
 +
-+	bpf_tail_call_static(skb, &jmp_table, 1);
-+	bpf_tail_call_static(skb, &jmp_table, 1);
-+	bpf_tail_call_static(skb, &jmp_table, 1);
-+	bpf_tail_call_static(skb, &jmp_table, 1);
++BPF_CALL_2(bpf_redirect, u32, ifindex, u64, flags)
++{
++	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
 +
-+	bpf_tail_call_static(skb, &jmp_table, 2);
-+	bpf_tail_call_static(skb, &jmp_table, 2);
-+	bpf_tail_call_static(skb, &jmp_table, 2);
-+	bpf_tail_call_static(skb, &jmp_table, 2);
- 
- 	return 3;
++	if (unlikely(flags & (~(BPF_F_INGRESS) | BPF_F_REDIRECT_INTERNAL)))
++		return TC_ACT_SHOT;
++
++	ri->flags = flags;
++	ri->tgt_index = ifindex;
++
++	return TC_ACT_REDIRECT;
  }
-diff --git a/tools/testing/selftests/bpf/progs/tailcall2.c b/tools/testing/selftests/bpf/progs/tailcall2.c
-index a093e739cf0e..0431e4fe7efd 100644
---- a/tools/testing/selftests/bpf/progs/tailcall2.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall2.c
-@@ -13,14 +13,14 @@ struct {
- SEC("classifier/0")
- int bpf_func_0(struct __sk_buff *skb)
+ 
+ static const struct bpf_func_proto bpf_redirect_proto = {
+@@ -2242,6 +2465,27 @@ static const struct bpf_func_proto bpf_redirect_proto = {
+ 	.arg2_type      = ARG_ANYTHING,
+ };
+ 
++BPF_CALL_2(bpf_redirect_neigh, u32, ifindex, u64, flags)
++{
++	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
++
++	if (unlikely(flags))
++		return TC_ACT_SHOT;
++
++	ri->flags = BPF_F_NEIGH;
++	ri->tgt_index = ifindex;
++
++	return TC_ACT_REDIRECT;
++}
++
++static const struct bpf_func_proto bpf_redirect_neigh_proto = {
++	.func		= bpf_redirect_neigh,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++	.arg1_type	= ARG_ANYTHING,
++	.arg2_type	= ARG_ANYTHING,
++};
++
+ BPF_CALL_2(bpf_msg_apply_bytes, struct sk_msg *, msg, u32, bytes)
  {
--	bpf_tail_call(skb, &jmp_table, 1);
-+	bpf_tail_call_static(skb, &jmp_table, 1);
- 	return 0;
- }
+ 	msg->apply_bytes = bytes;
+@@ -6759,6 +7003,8 @@ tc_cls_act_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return bpf_get_skb_set_tunnel_proto(func_id);
+ 	case BPF_FUNC_redirect:
+ 		return &bpf_redirect_proto;
++	case BPF_FUNC_redirect_neigh:
++		return &bpf_redirect_neigh_proto;
+ 	case BPF_FUNC_get_route_realm:
+ 		return &bpf_get_route_realm_proto;
+ 	case BPF_FUNC_get_hash_recalc:
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 6116a7f54c8f..1f17c6752deb 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -3652,6 +3652,19 @@ union bpf_attr {
+  * 		associated socket instead of the current process.
+  * 	Return
+  * 		The id is returned or 0 in case the id could not be retrieved.
++ *
++ * long bpf_redirect_neigh(u32 ifindex, u64 flags)
++ * 	Description
++ * 		Redirect the packet to another net device of index *ifindex*
++ * 		and fill in L2 addresses from neighboring subsystem. This helper
++ * 		is somewhat similar to **bpf_redirect**\ (), except that it
++ * 		fills in e.g. MAC addresses based on the L3 information from
++ * 		the packet. This helper is supported for IPv4 and IPv6 protocols.
++ * 		The *flags* argument is reserved and must be 0. The helper is
++ * 		currently only supported for tc BPF program types.
++ * 	Return
++ * 		The helper returns **TC_ACT_REDIRECT** on success or
++ * 		**TC_ACT_SHOT** on error.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -3806,6 +3819,7 @@ union bpf_attr {
+ 	FN(snprintf_btf),		\
+ 	FN(seq_printf_btf),		\
+ 	FN(skb_cgroup_classid),		\
++	FN(redirect_neigh),		\
+ 	/* */
  
- SEC("classifier/1")
- int bpf_func_1(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 2);
-+	bpf_tail_call_static(skb, &jmp_table, 2);
- 	return 1;
- }
- 
-@@ -33,25 +33,25 @@ int bpf_func_2(struct __sk_buff *skb)
- SEC("classifier/3")
- int bpf_func_3(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 4);
-+	bpf_tail_call_static(skb, &jmp_table, 4);
- 	return 3;
- }
- 
- SEC("classifier/4")
- int bpf_func_4(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 3);
-+	bpf_tail_call_static(skb, &jmp_table, 3);
- 	return 4;
- }
- 
- SEC("classifier")
- int entry(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
- 	/* Check multi-prog update. */
--	bpf_tail_call(skb, &jmp_table, 2);
-+	bpf_tail_call_static(skb, &jmp_table, 2);
- 	/* Check tail call limit. */
--	bpf_tail_call(skb, &jmp_table, 3);
-+	bpf_tail_call_static(skb, &jmp_table, 3);
- 	return 3;
- }
- 
-diff --git a/tools/testing/selftests/bpf/progs/tailcall3.c b/tools/testing/selftests/bpf/progs/tailcall3.c
-index cabda877cf0a..739dc2a51e74 100644
---- a/tools/testing/selftests/bpf/progs/tailcall3.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall3.c
-@@ -16,14 +16,14 @@ SEC("classifier/0")
- int bpf_func_0(struct __sk_buff *skb)
- {
- 	count++;
--	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
- 	return 1;
- }
- 
- SEC("classifier")
- int entry(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
- 	return 0;
- }
- 
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf1.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf1.c
-index b5d9c8e778ae..0103f3dd9f02 100644
---- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf1.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf1.c
-@@ -21,7 +21,7 @@ TAIL_FUNC(1)
- static __noinline
- int subprog_tail(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
- 
- 	return skb->len * 2;
- }
-@@ -29,7 +29,7 @@ int subprog_tail(struct __sk_buff *skb)
- SEC("classifier")
- int entry(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 1);
-+	bpf_tail_call_static(skb, &jmp_table, 1);
- 
- 	return subprog_tail(skb);
- }
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
-index a004ab28ce28..7b1c04183824 100644
---- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf2.c
-@@ -14,9 +14,9 @@ static __noinline
- int subprog_tail(struct __sk_buff *skb)
- {
- 	if (load_byte(skb, 0))
--		bpf_tail_call(skb, &jmp_table, 1);
-+		bpf_tail_call_static(skb, &jmp_table, 1);
- 	else
--		bpf_tail_call(skb, &jmp_table, 0);
-+		bpf_tail_call_static(skb, &jmp_table, 0);
- 	return 1;
- }
- 
-@@ -32,7 +32,7 @@ int bpf_func_0(struct __sk_buff *skb)
- SEC("classifier")
- int entry(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
- 
- 	return 0;
- }
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
-index 96dbef2b6b7c..0d5482bea6c9 100644
---- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
-@@ -16,9 +16,9 @@ int subprog_tail2(struct __sk_buff *skb)
- 	volatile char arr[64] = {};
- 
- 	if (load_word(skb, 0) || load_half(skb, 0))
--		bpf_tail_call(skb, &jmp_table, 10);
-+		bpf_tail_call_static(skb, &jmp_table, 10);
- 	else
--		bpf_tail_call(skb, &jmp_table, 1);
-+		bpf_tail_call_static(skb, &jmp_table, 1);
- 
- 	return skb->len;
- }
-@@ -28,7 +28,7 @@ int subprog_tail(struct __sk_buff *skb)
- {
- 	volatile char arr[64] = {};
- 
--	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
- 
- 	return skb->len * 2;
- }
-diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
-index 98b40a95bc67..9a1b166b7fbe 100644
---- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf4.c
-@@ -14,21 +14,21 @@ static volatile int count;
- __noinline
- int subprog_tail_2(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 2);
-+	bpf_tail_call_static(skb, &jmp_table, 2);
- 	return skb->len * 3;
- }
- 
- __noinline
- int subprog_tail_1(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 1);
-+	bpf_tail_call_static(skb, &jmp_table, 1);
- 	return skb->len * 2;
- }
- 
- __noinline
- int subprog_tail(struct __sk_buff *skb)
- {
--	bpf_tail_call(skb, &jmp_table, 0);
-+	bpf_tail_call_static(skb, &jmp_table, 0);
- 	return skb->len;
- }
- 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
 -- 
 2.21.0
 
