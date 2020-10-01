@@ -2,95 +2,130 @@ Return-Path: <SRS0=66DU=DI=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15C44C4727E
-	for <bpf@archiver.kernel.org>; Thu,  1 Oct 2020 21:11:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3671FC4727E
+	for <bpf@archiver.kernel.org>; Thu,  1 Oct 2020 21:12:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C0C2220754
-	for <bpf@archiver.kernel.org>; Thu,  1 Oct 2020 21:10:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F206320796
+	for <bpf@archiver.kernel.org>; Thu,  1 Oct 2020 21:12:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="phZLfcc1"
+	dkim=pass (1024-bit key) header.d=sargun.me header.i=@sargun.me header.b="tkrBQe3E"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727713AbgJAVIv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 1 Oct 2020 17:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
+        id S1727891AbgJAVHI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 1 Oct 2020 17:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726581AbgJAVIe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 1 Oct 2020 17:08:34 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3161AC0613E2
-        for <bpf@vger.kernel.org>; Thu,  1 Oct 2020 14:08:34 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id p9so10093153ejf.6
-        for <bpf@vger.kernel.org>; Thu, 01 Oct 2020 14:08:34 -0700 (PDT)
+        with ESMTP id S1727244AbgJAVGt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 1 Oct 2020 17:06:49 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20490C0613E2
+        for <bpf@vger.kernel.org>; Thu,  1 Oct 2020 14:06:49 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id i26so10101716ejb.12
+        for <bpf@vger.kernel.org>; Thu, 01 Oct 2020 14:06:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=sargun.me; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9xdqL6cUOxwNImAGbPqaJhmve2+c4zuAd6VkudhDv6E=;
-        b=phZLfcc15Ka79PK3Ed6XBrK4N+ZNchA2bFO86TvVtOc950Psuk0y9/kQKkWgIvDSeN
-         YjyuXO1K1p828Tf5OE/n0pHfpEA5q7Ti5DgUsCXz/b+lrDR3AIwZAZ5aFFmCwZxDQexR
-         yiLOLcKi2SsRwqqdkcZX/NSe/StY1Vj+XY8mTic9gwB2uPErgZO4Or8u5UDVhhrxIPgl
-         kUME/C0aR0S9tpgl96xnwhvLswQrUQ7hxN3ARq1prxVE/GoF1dmHi+a8V7BzMCHVB6Gt
-         1c4gbLgTOkQ/FDI7bEwUfnqk/2GMkmm+DoOLn4VtQnptPaX5XUxk2PTcyV1juD/vL0VF
-         uCIg==
+        bh=GJfQdlSGvnYX8WTWiSSvgRRMTzNs36g2ODPiTwjRAs8=;
+        b=tkrBQe3EU3XlxTk9RswYWhAU4d1iEgcKP+mNKsyk7QnifbEkLUVCT/Bz9HiE4WZDH9
+         kPwoGKUUr+ktBtCxlwk704U4nOoVOcFG4gZqxD8/WNDpZpcxtCXcBKHmqjgCOI2sZjKz
+         RIHBYbLW3UYEy3kwlVU6CHuZOl2ouk0fj2blw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9xdqL6cUOxwNImAGbPqaJhmve2+c4zuAd6VkudhDv6E=;
-        b=nuLVn1tPygKCIXZSHZ0BFLqrjk8YEFLpTHU1rf5qLvrl6stp3Uny5kNb9CScZhr0MP
-         qutb3J2JStxIN4vGkiAkF+G2ay8GhaR4eyd9sPs3hvBEBGYWwO/I0p/XuwDT0j0wNyYJ
-         0K1p5wxaZ0sCUojkhAf3KEnWXX9DZTWppuuUzQ8iy5WWBuXsPpzijhmdC8TyoIDEgwHc
-         CikNgorZcOgxY9k0XFOALupyXYfg0HhMnuih27LW8G90iQYkXLHnqi61bOuVALkJgW3x
-         6Rry7S85wjmPt7FGC6rTagrP0MWqaiHIBBCNUQoNiqSGFpnnjPM6pNUdjOCrw859p3UD
-         Y9LA==
-X-Gm-Message-State: AOAM531lxt6g+NKzmaY0SCncnN6qlDKQit52rKclYRq5+FgAQCHYEcfT
-        NJwcVXGVHTuPKD75cAdo/ot/kN9aptccPX6VC4xBzA==
-X-Google-Smtp-Source: ABdhPJzGyqh4BsNemw68IZ7SVTAL/f1eGkoGoEq0lnwW+GNAxVmMi5sF8Ujp23KKrSIiuA0CtJc5Iz8q63h4ADYqoDo=
-X-Received: by 2002:a17:906:980f:: with SMTP id lm15mr10444403ejb.184.1601586512571;
- Thu, 01 Oct 2020 14:08:32 -0700 (PDT)
+        bh=GJfQdlSGvnYX8WTWiSSvgRRMTzNs36g2ODPiTwjRAs8=;
+        b=oRBT6N4IkTI1bg7EsacDzVOQ2DsH9BIcZmM2w/Mc7858Ikiaq3oCZPBBxlOeXi3UAX
+         uJ50xTCJL5sNusjXnneXqkN/rFGGWeEG8QH6cB3R4dC3zL0r1kBHz1J06c4WqQOlY/Yz
+         ryOjpqEbk1gVGfMhMSWgirpSBi7bbf2LT9WNWQwrrmUc2YKaVkMaxJs/p8UMAd0MlkgS
+         1l63RVQFEgJd81VsE1CcFJrFnoLvx/KTvGctqgZ+bq8iXGARYqD9652Tog/UUnf571QH
+         LBNP/MzH71PoUWqllPYrEGa3ng6iMHxUp5MwG+lB7y3U6txu1OrWjxbKj+BMDxNdrlbz
+         kL4Q==
+X-Gm-Message-State: AOAM531PXopBxNTL+HRz1/bxULIn88pSM6bBDu1dkG28NMzjkU32+CpL
+        lZ63UUKqBpzhHYwXTzF0eFawzBtcE1hcgvpnLcSVhA==
+X-Google-Smtp-Source: ABdhPJwvS6nNR0DvYHDBM04oUTIB+MUropRM/aV9HBVmK+CT5YH4iBVjeeDR8WdQ3dsdp+vdjAc8sF9ARo7WZujAD1Q=
+X-Received: by 2002:a17:906:3e0c:: with SMTP id k12mr10020262eji.189.1601586407475;
+ Thu, 01 Oct 2020 14:06:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1601478774.git.yifeifz2@illinois.edu> <b16456e8dbc378c41b73c00c56854a3c30580833.1601478774.git.yifeifz2@illinois.edu>
- <CAG48ez0Njm0oS+9k-cgUqzyUWXV=cHPope2Xe9vVNPUVZ1PB4w@mail.gmail.com> <CABqSeASwCXaP_vNe1=E3EeWAApFYiB1S5xEb9BdH10b0rn0Q6A@mail.gmail.com>
-In-Reply-To: <CABqSeASwCXaP_vNe1=E3EeWAApFYiB1S5xEb9BdH10b0rn0Q6A@mail.gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 1 Oct 2020 23:08:06 +0200
-Message-ID: <CAG48ez2HSYocuJhR1uo4Ei8x8jPtUkYRYVWPuiJscEJdbckONw@mail.gmail.com>
-Subject: Re: [PATCH v3 seccomp 2/5] seccomp/cache: Add "emulator" to check if
- filter is constant allow
-To:     YiFei Zhu <zhuyifei1999@gmail.com>
-Cc:     Linux Containers <containers@lists.linux-foundation.org>,
-        YiFei Zhu <yifeifz2@illinois.edu>, bpf <bpf@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        David Laight <David.Laight@aculab.com>,
-        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Hubertus Franke <frankeh@us.ibm.com>,
-        Jack Chen <jianyan2@illinois.edu>,
-        Josep Torrellas <torrella@illinois.edu>,
+References: <45f07f17-18b6-d187-0914-6f341fe90857@gmail.com>
+In-Reply-To: <45f07f17-18b6-d187-0914-6f341fe90857@gmail.com>
+From:   Sargun Dhillon <sargun@sargun.me>
+Date:   Thu, 1 Oct 2020 14:06:10 -0700
+Message-ID: <CAMp4zn9XA-z_6UKvWkFh_U2wPRjZF3=QvrXX7EikO5AEovCWBA@mail.gmail.com>
+Subject: Re: For review: seccomp_user_notif(2) manual page
+To:     "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
+Cc:     Tycho Andersen <tycho@tycho.pizza>,
         Kees Cook <keescook@chromium.org>,
-        Tianyin Xu <tyxu@illinois.edu>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Valentin Rothberg <vrothber@redhat.com>,
-        Will Drewry <wad@chromium.org>
+        Christian Brauner <christian@brauner.io>,
+        linux-man <linux-man@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>, Jann Horn <jannh@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Will Drewry <wad@chromium.org>, bpf@vger.kernel.org,
+        Song Liu <songliubraving@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Robert Sesek <rsesek@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Oct 1, 2020 at 1:28 PM YiFei Zhu <zhuyifei1999@gmail.com> wrote:
-> On Wed, Sep 30, 2020 at 5:24 PM Jann Horn <jannh@google.com> wrote:
-> > If you did the architecture enablement for X86 later in the series,
-> > you could move this part over into that patch, that'd be cleaner.
+On Wed, Sep 30, 2020 at 4:07 AM Michael Kerrisk (man-pages)
+<mtk.manpages@gmail.com> wrote:
 >
-> As in, patch 1: bitmap check logic. patch 2: emulator. patch 3: enable for x86?
+> Hi Tycho, Sargun (and all),
+>
+> I knew it would be a big ask, but below is kind of the manual page
+> I was hoping you might write [1] for the seccomp user-space notification
+> mechanism. Since you didn't (and because 5.9 adds various new pieces
+> such as SECCOMP_ADDFD_FLAG_SETFD and SECCOMP_IOCTL_NOTIF_ADDFD
+> that also will need documenting [2]), I did :-). But of course I may
+> have made mistakes...
+>
+> I've shown the rendered version of the page below, and would love
+> to receive review comments from you and others, and acks, etc.
+>
+> There are a few FIXMEs sprinkled into the page, including one
+> that relates to what appears to me to be a misdesign (possibly
+> fixable) in the operation of the SECCOMP_IOCTL_NOTIF_RECV
+> operation. I would be especially interested in feedback on that
+> FIXME, and also of course the other FIXMEs.
+>
+> The page includes an extensive (albeit slightly contrived)
+> example program, and I would be happy also to receive comments
+> on that program.
+>
+> The page source currently sits in a branch (along with the text
+> that you sent me for the seccomp(2) page) at
+> https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/log/?h=seccomp_user_notif
+>
+> Thanks,
+>
+> Michael
+>
+> [1] https://lore.kernel.org/linux-man/2cea5fec-e73e-5749-18af-15c35a4bd23c@gmail.com/#t
+> [2] Sargun, can you prepare something on SECCOMP_ADDFD_FLAG_SETFD
+>     and SECCOMP_IOCTL_NOTIF_ADDFD to be added to this page?
+>
+> ====
+>
+> --
+> Michael Kerrisk
+> Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
+> Linux/UNIX System Programming Training: http://man7.org/training/
 
-Yeah.
+Should we consider the SECCOMP_GET_NOTIF_SIZES dance to be "deprecated" at
+this point, given that the extensible ioctl mechanism works? If we add
+new fields to the
+seccomp datastructures, we would move them from fixed-size ioctls, to
+variable sized
+ioctls that encode the datastructure size / length?
+
+-- This is mostly a question for Kees and Tycho.
