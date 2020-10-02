@@ -2,139 +2,268 @@ Return-Path: <SRS0=svjS=DJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6934C4363D
-	for <bpf@archiver.kernel.org>; Fri,  2 Oct 2020 13:36:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AD64C4363D
+	for <bpf@archiver.kernel.org>; Fri,  2 Oct 2020 14:02:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 973012065D
-	for <bpf@archiver.kernel.org>; Fri,  2 Oct 2020 13:36:41 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zhdkzt9o"
+	by mail.kernel.org (Postfix) with ESMTP id 1384A206DB
+	for <bpf@archiver.kernel.org>; Fri,  2 Oct 2020 14:02:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387836AbgJBNgj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 2 Oct 2020 09:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726090AbgJBNgj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 2 Oct 2020 09:36:39 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE5BC0613D0;
-        Fri,  2 Oct 2020 06:36:39 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id x16so801320pgj.3;
-        Fri, 02 Oct 2020 06:36:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=9abpwhVY5F1y6r9U1G6EegFsxLY2I9VNVQvWHKJ7Pls=;
-        b=Zhdkzt9oY6UHJwCSsbAVuPeNe0P9ao6ZY/ZUprw4RaJxMxQ1XqI1o4a6aIl3JOptii
-         jkQWJaQMt6DyNGOqpr3gebahqu7SDZjE38KSmSc+6vbVdH0miNxrVs30okS1TD/+WohO
-         5k0q5jtI5H7lu/8cvDbaML92qv1nQMQflP62XQlHWS3GxZCiE1YoQGj1775/fdYos/X+
-         RXWEC2R1NJsUSg7pDjlJy2L/Cv3da/WEg3yrHQu+ETyJ+Imtx1xX+j8QhSu1dJJZ357Q
-         1jd1ZThEWWpPIvv1dIwB0gcqzIysbMccYto4BM+WMmM95EoZsHdtiLIpQbyH6B4CBd5b
-         IceA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=9abpwhVY5F1y6r9U1G6EegFsxLY2I9VNVQvWHKJ7Pls=;
-        b=qvT7wUZ+slct1Y2r5zUwRj2LK4LvR+H9/DRWt3Nr2zs6HDR9Mc/aiVR5MSdn2zpNIE
-         reImuO+bF5FimR0HysQR+YSQzUXb+QhGsGO4SU/55bVAUm8aRP/Oq6zl+yA4FgGtT8Ft
-         2piB0cmciJEZa31yhyLsZtacGHmgh1hCQVJNI9EDqdZnfrt2VwQ4L+SZL+W6z82W516z
-         w075YKWJbMEC2CmBrEDW3BhbImDHLHSRuHQ+UxbNwYd+Vh1C7LrVg9ojjL/oRN2NZHvU
-         G2qwpAYADwZdKmMie0ZGodAMLpkegeNo7HZGhVtC0TpoMkvmVhy8vRzsRkcBdbTcOrJc
-         E7Fw==
-X-Gm-Message-State: AOAM5334kRX2THQltlUhis8bNYCQBSqJ7bJZYt0+MQebJd4FAGGoGvE9
-        jYexghzyc/7T+ZEoVFpql6M=
-X-Google-Smtp-Source: ABdhPJx7HyTAx1Bl7iujSOGyJLOJRS6gYHY1GtqCMlnIdnX7uTEl9hs0a7xbaWXoMP5EXVtP80Ob0A==
-X-Received: by 2002:a63:e354:: with SMTP id o20mr2284002pgj.317.1601645799079;
-        Fri, 02 Oct 2020 06:36:39 -0700 (PDT)
-Received: from VM.ger.corp.intel.com (fmdmzpr04-ext.fm.intel.com. [192.55.55.39])
-        by smtp.gmail.com with ESMTPSA id q65sm1666126pga.88.2020.10.02.06.36.36
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 02 Oct 2020 06:36:38 -0700 (PDT)
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org,
-        jonathan.lemon@gmail.com
-Cc:     bpf@vger.kernel.org, ciara.loftus@intel.com
-Subject: [PATCH bpf-next] libbpf: fix compatibility problem in xsk_socket__create
-Date:   Fri,  2 Oct 2020 15:36:27 +0200
-Message-Id: <1601645787-16944-1-git-send-email-magnus.karlsson@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        id S1733260AbgJBOCK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 2 Oct 2020 10:02:10 -0400
+Received: from mga01.intel.com ([192.55.52.88]:44226 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726017AbgJBOCK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 2 Oct 2020 10:02:10 -0400
+IronPort-SDR: Wh1DK2+jDAT6bPrcPsxqQbxW2xBIBKnDN12IUnaiL1omwwd3DKrS9B+QQBX31IhIRTI2Bl7UY9
+ rfo3222cGVDg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9761"; a="181119403"
+X-IronPort-AV: E=Sophos;i="5.77,327,1596524400"; 
+   d="scan'208";a="181119403"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2020 07:02:00 -0700
+IronPort-SDR: PpnjfiwxKg74JDMuUvcKfJpzg4pJtPgp5iD2/+SAqQlu3ieQItUspxeMIAm/UuVE1laSdSQSku
+ ACqqWOledDfA==
+X-IronPort-AV: E=Sophos;i="5.77,327,1596524400"; 
+   d="scan'208";a="508762706"
+Received: from silpixa00399839.ir.intel.com (HELO localhost.localdomain) ([10.237.222.142])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2020 07:01:59 -0700
+From:   Ciara Loftus <ciara.loftus@intel.com>
+To:     bpf@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Ciara Loftus <ciara.loftus@intel.com>
+Subject: [PATCH bpf-next 3/3] samples: bpf: driver interrupt statistics in xdpsock
+Date:   Fri,  2 Oct 2020 13:36:12 +0000
+Message-Id: <20201002133612.31536-3-ciara.loftus@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201002133612.31536-1-ciara.loftus@intel.com>
+References: <20201002133612.31536-1-ciara.loftus@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Magnus Karlsson <magnus.karlsson@intel.com>
+Add an option to count the number of interrupts generated per second and
+total number of interrupts during the lifetime of the application for a
+given interface. This information is extracted from /proc/interrupts. Since
+there is no naming convention across drivers, the user must provide the
+string which is specific to their interface in the /proc/interrupts file on
+the command line.
 
-Fix a compatibility problem when the old XDP_SHARED_UMEM mode is used
-together with the xsk_socket__create() call. In the old XDP_SHARED_UMEM
-mode, only sharing of the same device and queue id was allowed, and in
-this mode, the fill ring and completion ring were shared between the
-AF_XDP sockets. Therfore, it was perfectly fine to call the
-xsk_socket__create() API for each socket and not use the new
-xsk_socket__create_shared() API. This behaviour was ruined by the
-commit introducing XDP_SHARED_UMEM support between different devices
-and/or queue ids. This patch restores the ability to use
-xsk_socket__create in these circumstances so that backward
-compatibility is not broken.
+Usage:
 
-We also make sure that a user that uses the
-xsk_socket__create_shared() api for the first socket in the old
-XDP_SHARED_UMEM mode above, gets and error message if the user tries
-to feed a fill ring or a completion ring that is not the same as the
-ones used for the umem registration. Previously, libbpf would just
-have silently ignored the supplied fill and completion rings and just
-taken them from the umem. Better to provide an error to the user.
+./xdpsock ... -I <irq_str>
 
-Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
-Fixes: 2f6324a3937f ("libbpf: Support shared umems between queues and devices")
+eg. for queue 0 of i40e device eth0:
+
+./xdpsock ... -I i40e-eth0-TxRx-0
+
+Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
 ---
- tools/lib/bpf/xsk.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ samples/bpf/xdpsock_user.c | 120 ++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 119 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
-index 30b4ca5..5b61932 100644
---- a/tools/lib/bpf/xsk.c
-+++ b/tools/lib/bpf/xsk.c
-@@ -705,7 +705,7 @@ int xsk_socket__create_shared(struct xsk_socket **xsk_ptr,
- 	struct xsk_ctx *ctx;
- 	int err, ifindex;
+diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
+index ff119ede4ab1..1149e94ca32f 100644
+--- a/samples/bpf/xdpsock_user.c
++++ b/samples/bpf/xdpsock_user.c
+@@ -11,6 +11,7 @@
+ #include <linux/if_xdp.h>
+ #include <linux/if_ether.h>
+ #include <linux/ip.h>
++#include <linux/limits.h>
+ #include <linux/udp.h>
+ #include <arpa/inet.h>
+ #include <locale.h>
+@@ -80,6 +81,9 @@ static u32 opt_pkt_fill_pattern = 0x12345678;
+ static bool opt_extra_stats;
+ static bool opt_quiet;
+ static bool opt_app_stats;
++static const char *opt_irq_str = "";
++static u32 irq_no;
++static int irqs_at_init = -1;
+ static int opt_poll;
+ static int opt_interval = 1;
+ static u32 opt_xdp_bind_flags = XDP_USE_NEED_WAKEUP;
+@@ -111,6 +115,11 @@ struct xsk_ring_stats {
+ 	unsigned long prev_tx_empty_npkts;
+ };
  
--	if (!umem || !xsk_ptr || !(rx || tx) || !fill || !comp)
-+	if (!umem || !xsk_ptr || !(rx || tx))
- 		return -EFAULT;
++struct xsk_driver_stats {
++	unsigned long intrs;
++	unsigned long prev_intrs;
++};
++
+ struct xsk_app_stats {
+ 	unsigned long rx_empty_polls;
+ 	unsigned long fill_fail_polls;
+@@ -138,6 +147,7 @@ struct xsk_socket_info {
+ 	struct xsk_socket *xsk;
+ 	struct xsk_ring_stats ring_stats;
+ 	struct xsk_app_stats app_stats;
++	struct xsk_driver_stats drv_stats;
+ 	u32 outstanding_tx;
+ };
  
- 	xsk = calloc(1, sizeof(*xsk));
-@@ -735,12 +735,24 @@ int xsk_socket__create_shared(struct xsk_socket **xsk_ptr,
+@@ -243,6 +253,100 @@ static void dump_app_stats(long dt)
+ 	}
+ }
  
- 	ctx = xsk_get_ctx(umem, ifindex, queue_id);
- 	if (!ctx) {
-+		if (!fill || !comp) {
-+			err = -EFAULT;
-+			goto out_socket;
++static bool get_interrupt_number(void)
++{
++	FILE *f_int_proc;
++	char line[4096];
++	bool found = false;
++
++	f_int_proc = fopen("/proc/interrupts", "r");
++	if (f_int_proc == NULL) {
++		printf("Failed to open /proc/interrupts.\n");
++		return found;
++	}
++
++	while (!feof(f_int_proc) && !found) {
++		/* Make sure to read a full line at a time */
++		if (fgets(line, sizeof(line), f_int_proc) == NULL ||
++				line[strlen(line) - 1] != '\n') {
++			printf("Error reading from interrupts file\n");
++			break;
 +		}
 +
- 		ctx = xsk_create_ctx(xsk, umem, ifindex, ifname, queue_id,
- 				     fill, comp);
- 		if (!ctx) {
- 			err = -ENOMEM;
- 			goto out_socket;
- 		}
-+	} else if ((fill && ctx->fill != fill) || (comp && ctx->comp != comp)) {
-+		/* If the xsk_socket__create_shared() api is used for the first socket
-+		 * registration, then make sure the fill and completion rings supplied
-+		 * are the same as the ones used to register the umem. If not, bail out.
-+		 */
-+		err = -EINVAL;
-+		goto out_socket;
- 	}
- 	xsk->ctx = ctx;
++		/* Extract interrupt number from line */
++		if (strstr(line, opt_irq_str) != NULL) {
++			irq_no = atoi(line);
++			found = true;
++			break;
++		}
++	}
++
++	fclose(f_int_proc);
++
++	return found;
++}
++
++static int get_irqs(void)
++{
++	char count_path[PATH_MAX];
++	int total_intrs = -1;
++	FILE *f_count_proc;
++	char line[4096];
++
++	snprintf(count_path, sizeof(count_path),
++		"/sys/kernel/irq/%i/per_cpu_count", irq_no);
++	f_count_proc = fopen(count_path, "r");
++	if (f_count_proc == NULL) {
++		printf("Failed to open %s\n", count_path);
++		return total_intrs;
++	}
++
++	if (fgets(line, sizeof(line), f_count_proc) == NULL ||
++			line[strlen(line) - 1] != '\n') {
++		printf("Error reading from %s\n", count_path);
++	} else {
++		static const char com[2] = ",";
++		char *token;
++
++		total_intrs = 0;
++		token = strtok(line, com);
++		while (token != NULL) {
++			/* sum up interrupts across all cores */
++			total_intrs += atoi(token);
++			token = strtok(NULL, com);
++		}
++	}
++
++	fclose(f_count_proc);
++
++	return total_intrs;
++}
++
++static void dump_driver_stats(long dt)
++{
++	int i;
++
++	for (i = 0; i < num_socks && xsks[i]; i++) {
++		char *fmt = "%-18s %'-14.0f %'-14lu\n";
++		double intrs_ps;
++		int n_ints = get_irqs();
++
++		if (n_ints < 0) {
++			printf("error getting intr info for intr %i\n", irq_no);
++			return;
++		}
++		xsks[i]->drv_stats.intrs = n_ints - irqs_at_init;
++
++		intrs_ps = (xsks[i]->drv_stats.intrs - xsks[i]->drv_stats.prev_intrs) *
++			 1000000000. / dt;
++
++		printf("\n%-18s %-14s %-14s\n", "", "intrs/s", "count");
++		printf(fmt, "irqs", intrs_ps, xsks[i]->drv_stats.intrs);
++
++		xsks[i]->drv_stats.prev_intrs = xsks[i]->drv_stats.intrs;
++	}
++}
++
+ static void dump_stats(void)
+ {
+ 	unsigned long now = get_nsecs();
+@@ -327,6 +431,8 @@ static void dump_stats(void)
  
+ 	if (opt_app_stats)
+ 		dump_app_stats(dt);
++	if (irq_no)
++		dump_driver_stats(dt);
+ }
+ 
+ static bool is_benchmark_done(void)
+@@ -804,6 +910,7 @@ static struct option long_options[] = {
+ 	{"extra-stats", no_argument, 0, 'x'},
+ 	{"quiet", no_argument, 0, 'Q'},
+ 	{"app-stats", no_argument, 0, 'a'},
++	{"irq-string", no_argument, 0, 'I'},
+ 	{0, 0, 0, 0}
+ };
+ 
+@@ -841,6 +948,7 @@ static void usage(const char *prog)
+ 		"  -x, --extra-stats	Display extra statistics.\n"
+ 		"  -Q, --quiet          Do not display any stats.\n"
+ 		"  -a, --app-stats	Display application (syscall) statistics.\n"
++		"  -I, --irq-string	Display driver interrupt statistics for interface associated with irq-string.\n"
+ 		"\n";
+ 	fprintf(stderr, str, prog, XSK_UMEM__DEFAULT_FRAME_SIZE,
+ 		opt_batch_size, MIN_PKT_SIZE, MIN_PKT_SIZE,
+@@ -856,7 +964,7 @@ static void parse_command_line(int argc, char **argv)
+ 	opterr = 0;
+ 
+ 	for (;;) {
+-		c = getopt_long(argc, argv, "Frtli:q:pSNn:czf:muMd:b:C:s:P:xQa",
++		c = getopt_long(argc, argv, "Frtli:q:pSNn:czf:muMd:b:C:s:P:xQaI:",
+ 				long_options, &option_index);
+ 		if (c == -1)
+ 			break;
+@@ -945,6 +1053,16 @@ static void parse_command_line(int argc, char **argv)
+ 			break;
+ 		case 'a':
+ 			opt_app_stats = 1;
++			break;
++		case 'I':
++			opt_irq_str = optarg;
++			if (get_interrupt_number())
++				irqs_at_init = get_irqs();
++			if (irqs_at_init < 0) {
++				fprintf(stderr, "ERROR: Failed to get irqs for %s\n", opt_irq_str);
++				usage(basename(argv[0]));
++			}
++
+ 			break;
+ 		default:
+ 			usage(basename(argv[0]));
 -- 
-2.7.4
+2.17.1
 
