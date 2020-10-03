@@ -2,157 +2,115 @@ Return-Path: <SRS0=nNHG=DK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BEAF8C4363D
-	for <bpf@archiver.kernel.org>; Sat,  3 Oct 2020 08:55:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33D35C4363D
+	for <bpf@archiver.kernel.org>; Sat,  3 Oct 2020 18:43:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E3CC206F8
-	for <bpf@archiver.kernel.org>; Sat,  3 Oct 2020 08:55:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D042420709
+	for <bpf@archiver.kernel.org>; Sat,  3 Oct 2020 18:43:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JOzOz+1I"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NzL8+jxe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725833AbgJCIzc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 3 Oct 2020 04:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725781AbgJCIza (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 3 Oct 2020 04:55:30 -0400
-Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004E1C0613D0;
-        Sat,  3 Oct 2020 01:55:29 -0700 (PDT)
-Received: by mail-pj1-x1042.google.com with SMTP id x2so2427683pjk.0;
-        Sat, 03 Oct 2020 01:55:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=nuGVlYXVa1ADtayePQ599HBG7S1v+QC4V52l2CtSHRg=;
-        b=JOzOz+1IBVA+4o8aa42xbdQQGYjAeZ64RH9FdmpHdTH1XvcxXJ5dYx8eZmYxZdpbIw
-         S8Fb2Qg/KNrAeSeSAbAFEH1jCewTP+JudjXpDmV8HZv/tCl1mLkQg+/khQxtcL0qo8hg
-         EjvB0jSKZbayFrmSqf9IZNIZcsjToo8MDPYahU91ovXJXKLddr/Gse8znhQaRBWx7bPN
-         NA78+EQhLG4P8I/huWAY1A+P3nK3SEV6Mw6DErKhwyTj9A3C5z+T56jC8DAeuOX5PncK
-         J18Cm3ijTnlv4+eihrHkYbFc7NtkCBP4ekJ7VKCFuOMbY+CMFFq2Xa5u5DTLeKu9oEF0
-         2oBA==
+        id S1725845AbgJCSnX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 3 Oct 2020 14:43:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:34043 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725841AbgJCSnW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 3 Oct 2020 14:43:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1601750601;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HWM0RfrM0HZAs25gIGx3NLfFo36RAwB9ram8EBWXtH0=;
+        b=NzL8+jxeAT74Xoye5npss0OvEUdXZQIqDGyUesVHTbcMOakxAgGGW0EhLyybungMtHp5r9
+        n9aO2gLq03wr+xNYAtifB7yTHUJFgmCtRiL94hZqJOldVnZMFhIg0NIys/VRfJKKkGhCcA
+        2urgq237/GVFZlc/1+JvIyldM5ZApXw=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-125-8F7NJxjRNTinWg-VgS12cw-1; Sat, 03 Oct 2020 14:43:19 -0400
+X-MC-Unique: 8F7NJxjRNTinWg-VgS12cw-1
+Received: by mail-wr1-f71.google.com with SMTP id f18so2053993wrv.19
+        for <bpf@vger.kernel.org>; Sat, 03 Oct 2020 11:43:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=nuGVlYXVa1ADtayePQ599HBG7S1v+QC4V52l2CtSHRg=;
-        b=btPkymV8UUnQu2fU8qSHby1lfVtqiOMyQjU8F8j7AzRrKKuqnwP1Jh9Lg3WJkeMcXu
-         A9UoZLSQuT+1vUzAUBVAGz6XN6tnXNa9tZ4jbne070zOpTEzxwVaSm2Pp/3+nkjTN9CF
-         1cLvq1nBhRKcRpvI2ELpND4djQwBDyHHdogbUDPgKnkS2XcxdJtm5gftctyZKtNMCRU4
-         kYciv2ma7A9xvmPuGe0axO/kGJvI7klynl3cMI3NxaPZ/LQhji3D/Yz8dW2iMvSIRarX
-         yIyhnUsDlD/mW4/U4j9F4h5G/E0f2TDdmNJ1lFF7h29XyPQaJiWfI+s+rFtsSbmeBiqv
-         HMAQ==
-X-Gm-Message-State: AOAM532cnojJRxx74NdmYBRkHXU4zOPm2Uu1YMPrCKqmQnTmG1a3axnr
-        RwG3TA/DXk3GPv9JTNViMHVDL4j0081q/w==
-X-Google-Smtp-Source: ABdhPJyuKtdm+fyQDBh92MQpMN97ZInscOQN+Q12U44h7Gs+f0llwwDuwP8WdxXyOuNpkNXTGKyRog==
-X-Received: by 2002:a17:90a:71c3:: with SMTP id m3mr7043719pjs.68.1601715329314;
-        Sat, 03 Oct 2020 01:55:29 -0700 (PDT)
-Received: from localhost.localdomain.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id a15sm4566374pgi.69.2020.10.03.01.55.26
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HWM0RfrM0HZAs25gIGx3NLfFo36RAwB9ram8EBWXtH0=;
+        b=fmjEsvZ+n4XZL2MXNe3ZGtxmyb+vK1gwjjZ6ql8+bF20RI8jbmb0LtNKmbz9GaT28U
+         mj2HFCmg268S4xp0QV0o4p8AcfLCRars4vzELEuWMacsCv2dyQNcia+2tGbVQwpXa17J
+         hG6VM7liX5kRJlq7thq+KCQ1sowChBkfH1G0Y3iYY2POpeJvwcqh3tHbxNk9nGL6dgX7
+         jNjEqP8vv9tU5aOY8MyrLTSJZ3bnBQMlbIE2mdnsWGU9Pqaq7dNWffOkrFnDjUb4AF25
+         D3uo2slnorQZUiTtYvOk3RpuDHPUeSSxcOp7oi6cGvRw+2PqgwObzsMV3rMyVj+VaI2/
+         mJ8A==
+X-Gm-Message-State: AOAM5333GOwSrnCxEpnREhlYzSV/2UV0nrq8H+syrIklS99OkeNIZLt+
+        5FycZkr2Dta0CNw6dGb0Tpigq2hi3jLbwpvIdxndKcQ+YHPXrT/fPUjwHsrH2pi/wZy9ANTCk0w
+        YYj+XhjrT+xAB
+X-Received: by 2002:adf:e852:: with SMTP id d18mr9744697wrn.40.1601750598391;
+        Sat, 03 Oct 2020 11:43:18 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy038Yccnpob9//W8sOr1lm3wbsl6dgaQoAhcFw98vUjFVu1T3n44Gs2WlgxSmLiPyyNgs9bw==
+X-Received: by 2002:adf:e852:: with SMTP id d18mr9744690wrn.40.1601750598224;
+        Sat, 03 Oct 2020 11:43:18 -0700 (PDT)
+Received: from redhat.com (bzq-79-179-71-128.red.bezeqint.net. [79.179.71.128])
+        by smtp.gmail.com with ESMTPSA id z127sm6091271wmc.2.2020.10.03.11.43.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Oct 2020 01:55:28 -0700 (PDT)
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        netdev@vger.kernel.org,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv2 bpf 3/3] selftest/bpf: test pinning map with reused map fd
-Date:   Sat,  3 Oct 2020 16:55:05 +0800
-Message-Id: <20201003085505.3388332-4-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20201003085505.3388332-1-liuhangbin@gmail.com>
-References: <20201002075750.1978298-1-liuhangbin@gmail.com>
- <20201003085505.3388332-1-liuhangbin@gmail.com>
+        Sat, 03 Oct 2020 11:43:17 -0700 (PDT)
+Date:   Sat, 3 Oct 2020 14:43:13 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     David Miller <davem@davemloft.net>
+Cc:     anant.thazhemadam@gmail.com, jasowang@redhat.com, kuba@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [Linux-kernel-mentees][PATCH 0/2] reorder members of structures
+ in virtio_net for optimization
+Message-ID: <20201003144300-mutt-send-email-mst@kernel.org>
+References: <20200930051722.389587-1-anant.thazhemadam@gmail.com>
+ <20201002.190638.1090456279017490485.davem@davemloft.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201002.190638.1090456279017490485.davem@davemloft.net>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This add a test to make sure that we can still pin maps with
-reused map fd.
+On Fri, Oct 02, 2020 at 07:06:38PM -0700, David Miller wrote:
+> From: Anant Thazhemadam <anant.thazhemadam@gmail.com>
+> Date: Wed, 30 Sep 2020 10:47:20 +0530
+> 
+> > The structures virtnet_info and receive_queue have byte holes in 
+> > middle, and their members could do with some rearranging 
+> > (order-of-declaration wise) in order to overcome this.
+> > 
+> > Rearranging the members helps in:
+> >   * elimination the byte holes in the middle of the structures
+> >   * reduce the size of the structure (virtnet_info)
+> >   * have more members stored in one cache line (as opposed to 
+> >     unnecessarily crossing the cacheline boundary and spanning
+> >     different cachelines)
+> > 
+> > The analysis was performed using pahole.
+> > 
+> > These patches may be applied in any order.
+> 
+> What effects do these changes have on performance?
+> 
+> The cache locality for various TX and RX paths could be effected.
+> 
+> I'm not applying these patches without some data on the performance
+> impact.
+> 
+> Thank you.
 
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
----
- .../selftests/bpf/prog_tests/pinning.c        | 46 ++++++++++++++++++-
- 1 file changed, 45 insertions(+), 1 deletion(-)
+Agree wholeheartedly.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/pinning.c b/tools/testing/selftests/bpf/prog_tests/pinning.c
-index 041952524c55..299f99ef92b2 100644
---- a/tools/testing/selftests/bpf/prog_tests/pinning.c
-+++ b/tools/testing/selftests/bpf/prog_tests/pinning.c
-@@ -37,7 +37,7 @@ void test_pinning(void)
- 	struct stat statbuf = {};
- 	struct bpf_object *obj;
- 	struct bpf_map *map;
--	int err;
-+	int err, map_fd;
- 	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts,
- 		.pin_root_path = custpath,
- 	);
-@@ -213,6 +213,50 @@ void test_pinning(void)
- 	if (CHECK(err, "stat custpinpath", "err %d errno %d\n", err, errno))
- 		goto out;
- 
-+	/* remove the custom pin path to re-test it with reuse fd below */
-+	err = unlink(custpinpath);
-+	if (CHECK(err, "unlink custpinpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = rmdir(custpath);
-+	if (CHECK(err, "rmdir custpindir", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	bpf_object__close(obj);
-+
-+	/* test pinning at custom path with reuse fd */
-+	obj = bpf_object__open_file(file, NULL);
-+	if (CHECK_FAIL(libbpf_get_error(obj))) {
-+		obj = NULL;
-+		goto out;
-+	}
-+
-+	map_fd = bpf_create_map(BPF_MAP_TYPE_ARRAY, sizeof(__u32),
-+				sizeof(__u64), 1, 0);
-+	if (CHECK(map_fd < 0, "create pinmap manually", "fd %d\n", map_fd))
-+		goto out;
-+
-+	map = bpf_object__find_map_by_name(obj, "pinmap");
-+	if (CHECK(!map, "find map", "NULL map"))
-+		goto out;
-+
-+	err = bpf_map__reuse_fd(map, map_fd);
-+	if (CHECK(err, "reuse pinmap fd", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_map__set_pin_path(map, custpinpath);
-+	if (CHECK(err, "set pin path", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	err = bpf_object__load(obj);
-+	if (CHECK(err, "custom load", "err %d errno %d\n", err, errno))
-+		goto out;
-+
-+	/* check that pinmap was pinned at the custom path */
-+	err = stat(custpinpath, &statbuf);
-+	if (CHECK(err, "stat custpinpath", "err %d errno %d\n", err, errno))
-+		goto out;
-+
- out:
- 	unlink(pinpath);
- 	unlink(nopinpath);
 -- 
-2.25.4
+MST
 
