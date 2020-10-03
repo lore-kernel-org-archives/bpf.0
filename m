@@ -2,110 +2,86 @@ Return-Path: <SRS0=nNHG=DK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C43FCC4363C
-	for <bpf@archiver.kernel.org>; Sat,  3 Oct 2020 02:19:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62C95C4363C
+	for <bpf@archiver.kernel.org>; Sat,  3 Oct 2020 02:25:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8362720719
-	for <bpf@archiver.kernel.org>; Sat,  3 Oct 2020 02:19:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 011E72074B
+	for <bpf@archiver.kernel.org>; Sat,  3 Oct 2020 02:25:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="VbKlOkYt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ruf6hQHb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725824AbgJCCTM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 2 Oct 2020 22:19:12 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:57874 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725786AbgJCCTJ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 2 Oct 2020 22:19:09 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0932CDmL000965
-        for <bpf@vger.kernel.org>; Fri, 2 Oct 2020 19:19:07 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=facebook;
- bh=UtoBmt7G4vnsx9cntc5KsyzqrpxcBgUDrG3pImKf9lE=;
- b=VbKlOkYt0GKK4WpYyMFL7DDzY7g87hcUW3UQL3+dRaMcwkDnLggrV7BzqiGaypewzDPG
- hAzkw3adao0p/yE4kwr3qr5tNkor1x4wnVRXzhbkTWtWITpw0gtqdlzRBqh0KSkjrCC3
- NZUVJx79vDKAS+IqHaoaSrto0PNQzgVQeS4= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 33w05ndq04-8
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 02 Oct 2020 19:19:07 -0700
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 2 Oct 2020 19:19:05 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id D42493705CBA; Fri,  2 Oct 2020 19:19:04 -0700 (PDT)
-From:   Yonghong Song <yhs@fb.com>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 2/2] samples/bpf: fix a compilation error with fallthrough marking
-Date:   Fri, 2 Oct 2020 19:19:04 -0700
-Message-ID: <20201003021904.1468772-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201003021904.1468678-1-yhs@fb.com>
-References: <20201003021904.1468678-1-yhs@fb.com>
+        id S1725613AbgJCCZP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 2 Oct 2020 22:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725536AbgJCCZP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 2 Oct 2020 22:25:15 -0400
+Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C035AC0613D0;
+        Fri,  2 Oct 2020 19:25:14 -0700 (PDT)
+Received: by mail-lf1-x143.google.com with SMTP id q8so4150992lfb.6;
+        Fri, 02 Oct 2020 19:25:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kyguNtobI9WGxfG7UGTdEWOg7CmimW/i+6rbWemku+M=;
+        b=ruf6hQHbNJRK44HGElMyMcLWnS6gE1a5Bnk3BBiyVcYk0kcVwAcOWdApGrjCFMJhCo
+         D//C8nTa4Z4gpom5pxoxR+Tgv/y/o7DYqn4V9T8gZKceqX51vy219lv+mtqfW5Uj0sLO
+         jz6NGcha5LozfPw4EsOPRRHWP2rtYyrDYUhIqK6FJ4Q0vit/8C/kGwwuFBdx3XqTRb45
+         2f3/a70rivpfqI26BeTVT7nvcn0voNHf78UW8BbAGnMkeSnd6CIAZMr4ri5xjXxRcbn8
+         AJbX6XQlH3/OtpQsPBkiTlwLDlTDlp3QL34hlfvTga2PfFVIfq3slpO+byagUk4+PsMY
+         wsdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kyguNtobI9WGxfG7UGTdEWOg7CmimW/i+6rbWemku+M=;
+        b=r2aI4YypfhFffzj/TKRSxLaXPeO89ASVsVoR103oFBWxabQ0m7a+AeOwX4CJt+KfZJ
+         doiIqWWXfVhqhP0JDKsNqqlEVOOFCpQw5lqLMgaIN08+73hWegQfwRDjdDut1ZvSdg2x
+         X3kjaCRn1uMjcdc9D3CBRih0fTY2NLYpMF6u2BYhRGRYghQ1yN4ZxSABj0DGkNnf6ZRL
+         P1KWyodnhx0iBug3df78lfpkpTEqKoL9EfZYnHAVZeFpgHzgJr0N06yidjbW/hXax0f/
+         /BBc+Yrjyg0DP3XW2xeU+7LwjxcM/7HkO2hY57i4WQdJLpFTufdLr9HPbw89uuUNj65s
+         JEAQ==
+X-Gm-Message-State: AOAM531+j+T6MqTdWx53PJAlJQAQfV/wYSqG8R0SM3H3w5VwQ+FTZUnK
+        00aAwOewQslSGrGu4/xHu1iWUvG7VIVXyM3IekM=
+X-Google-Smtp-Source: ABdhPJz7g9aDzCuLyh8mNm+kG5EO1pjHFuGg81CZhR2tS8bGbXsx1KwFSfF3RsJ4UeEenYrKub9MvlpvJoUMGx9oqlE=
+X-Received: by 2002:a19:8703:: with SMTP id j3mr1951823lfd.477.1601691913168;
+ Fri, 02 Oct 2020 19:25:13 -0700 (PDT)
 MIME-Version: 1.0
+References: <20201003002544.3601440-1-sdf@google.com>
+In-Reply-To: <20201003002544.3601440-1-sdf@google.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 2 Oct 2020 19:25:01 -0700
+Message-ID: <CAADnVQKWw_GOd=hS6dSmXFA5Z252irr3hW45UkSgmjew+-fHRA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: deref map in BPF_PROG_BIND_MAP when it's
+ already used
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-02_14:2020-10-02,2020-10-02 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=8
- priorityscore=1501 mlxlogscore=713 impostorscore=0 spamscore=0 bulkscore=0
- lowpriorityscore=0 clxscore=1015 mlxscore=0 malwarescore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2010030019
-X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Compiling samples/bpf hits an error related to fallthrough marking.
-    ...
-    CC  samples/bpf/hbm.o
-  samples/bpf/hbm.c: In function =E2=80=98main=E2=80=99:
-  samples/bpf/hbm.c:486:4: error: =E2=80=98fallthrough=E2=80=99 undeclare=
-d (first use in this function)
-      fallthrough;
-      ^~~~~~~~~~~
+On Fri, Oct 2, 2020 at 5:25 PM Stanislav Fomichev <sdf@google.com> wrote:
+>
+> We are missing a deref for the case when we are doing BPF_PROG_BIND_MAP
+> on a map that's being already held by the program.
+> There is 'if (ret) bpf_map_put(map)' below which doesn't trigger
+> because we don't consider this an error.
+> Let's add missing bpf_map_put() for this specific condition.
+>
+> Fixes: ef15314aa5de ("bpf: Add BPF_PROG_BIND_MAP syscall")
+> Reported-by: Alexei Starovoitov <ast@kernel.org>
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
 
-The "fallthrough" is not defined under tools/include directory.
-Rather, it is "__fallthrough" is defined in linux/compiler.h.
-Including "linux/compiler.h" and using "__fallthrough" fixed the issue.
-
-Signed-off-by: Yonghong Song <yhs@fb.com>
----
- samples/bpf/hbm.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/samples/bpf/hbm.c b/samples/bpf/hbm.c
-index 4b22ace52f80..ff4c533dfac2 100644
---- a/samples/bpf/hbm.c
-+++ b/samples/bpf/hbm.c
-@@ -40,6 +40,7 @@
- #include <errno.h>
- #include <fcntl.h>
- #include <linux/unistd.h>
-+#include <linux/compiler.h>
-=20
- #include <linux/bpf.h>
- #include <bpf/bpf.h>
-@@ -483,7 +484,7 @@ int main(int argc, char **argv)
- 					"Option -%c requires an argument.\n\n",
- 					optopt);
- 		case 'h':
--			fallthrough;
-+			__fallthrough;
- 		default:
- 			Usage();
- 			return 0;
---=20
-2.24.1
-
+Thanks for the quick fix! Much appreciated.
