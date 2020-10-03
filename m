@@ -2,61 +2,62 @@ Return-Path: <SRS0=nNHG=DK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CBAF0C4727D
-	for <bpf@archiver.kernel.org>; Sat,  3 Oct 2020 08:55:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCF2AC4727D
+	for <bpf@archiver.kernel.org>; Sat,  3 Oct 2020 08:55:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 94DC720754
-	for <bpf@archiver.kernel.org>; Sat,  3 Oct 2020 08:55:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 92AD1206DB
+	for <bpf@archiver.kernel.org>; Sat,  3 Oct 2020 08:55:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q0n7vZOB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jihCVLBJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725791AbgJCIzT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 3 Oct 2020 04:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
+        id S1725825AbgJCIz1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 3 Oct 2020 04:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725782AbgJCIzT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 3 Oct 2020 04:55:19 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C87C0613D0;
-        Sat,  3 Oct 2020 01:55:19 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id t7so2615440pjd.3;
-        Sat, 03 Oct 2020 01:55:19 -0700 (PDT)
+        with ESMTP id S1725824AbgJCIz0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 3 Oct 2020 04:55:26 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB14C0613D0;
+        Sat,  3 Oct 2020 01:55:26 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id k8so3157669pfk.2;
+        Sat, 03 Oct 2020 01:55:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=CoPzDp6vTYT+MKpKb6jQb62M0VDuNLDk+iBziiiNAaU=;
-        b=q0n7vZOBi03DDnwDFuHmwxhdkw2ijkvJPRhYQysAqWoI+CjB7SpQpZm3zcdzNDtreC
-         ifGuJozhaEeqFoaG+SCVdjzGuYjCF6q+915iY8wtdzbGkJVOJmzgUoBse4bkh/vlq+x1
-         ANzqb0J5xYLMti7JdKQTwde8MUwyq2uqHdoWhT634/BJzbb30sgfr+i/HZ2/NPUCxJYc
-         tV/6GciseO4RqSsOKzeERxb6i+DlzHkgNmfwllIGOQKNc6bwyggioRXlHhsKAmCm9Prl
-         5sZAd7SqajHzIkttt9tOhopB9idtl3pIlTf5BB7l1doHJ2cRCJdGMRDBnENeUBYzLAKw
-         Kw9g==
+        bh=S3nfrEarbedDU7+cG2A8GUy+tauzCAIB7UfM/mCIPRU=;
+        b=jihCVLBJ0JkeZQ6J3wFulAsQk7dMrt5K/w1OdRYcbqpNAo6mk2sfa+2fcHpYhkCcCx
+         HROdYUzvJieHD11EsmP2FVmA3giANUYWZ6pmlkXn4eLTQPJkmMHLmFu45C6g/SsABFXR
+         UPE+KGeeKJDMAvyv+uAtJk9CmGxZHtrcooSk583fBMUjf4+zOvC5Qv/m+G+VGRGFIE57
+         23r5UZqu5jpZHfW3PWA7dxVDJ6wi0rURR8ZDhCgeokZlO1V2hcYAGgWWZu89QqvUw+Ea
+         xUeoerhPnaYIo/V9cWHoLzq6hMlT5kcKNH/XAmU7k1ZpYSkkTsCmRL2GUuuU526nVs23
+         FwbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=CoPzDp6vTYT+MKpKb6jQb62M0VDuNLDk+iBziiiNAaU=;
-        b=i3HE295+NmODVRcnY8ym9BbqlRtYHyC64lH6Gvlouw7qjywPSXejzSdUJS83vqgWGs
-         rLFqxGBv7I53PocQlXUJWTU3ECT8fKfEE/Hu7F866jZoyX8o6K7K07g8LTzPJ8r76vii
-         /s4hAUhxDnJqh/8jGHrxkrGwvHfCAAMZPINTT5w9bghq1ZzD+vUUFZva3dxw3mjA1sc6
-         I5UCLAnDbE3OYbw6rfcab/YLJgaod0ljuQ2Hw6SyHCRyr5FGsPuHUGNJ4BrSw7wjs0jd
-         D6hwE8KLRiK/igCT+ohary0oJYkYwT/ZdiRy6Flm+Cn/pSBvmoMK22EpcGU7XS223/U/
-         gh1A==
-X-Gm-Message-State: AOAM533JE54T3MWt1OYaE7uAS+K/xQjDkIGFDra1nQSZb/vh8sN0CSM/
-        CwQlJLqjtzCU2kIF6u6FJ9FggvuHUf5s4w==
-X-Google-Smtp-Source: ABdhPJxSiXd4rW1g4cFuBLSsWA/Vj1R1HEOqwL7KTcewEXL1VuxnhkD7Kel7IogIrfRtuhFXznjkzw==
-X-Received: by 2002:a17:90a:77c1:: with SMTP id e1mr6479786pjs.39.1601715318712;
-        Sat, 03 Oct 2020 01:55:18 -0700 (PDT)
+        bh=S3nfrEarbedDU7+cG2A8GUy+tauzCAIB7UfM/mCIPRU=;
+        b=tNoQm9PP5DRM50Sgsp3qbYlW8MybcsGZjGKPn4w5iRRZ/Phq70Yvi54RuUMebhZUO9
+         +0AY5ErGq7LRyT2vE5soCFWIuPIiJ75lhNDD9XNO/K9B67DNyeq1ScbRzjTOYYlyDoFp
+         i7+QKl8I3D1SAGn3g1k4e+6Eg+Yh7y6E0PVAHeL0T6+Gwd5PECxsVtBWokQTJRjtxK5m
+         qCI5udVwCYrbWtN+qwn48QhScXF29gG8hEk3hqU5bvtfnHx41rBH0D3rAULKIHlomz3p
+         4dz6Urm6kBtq1SgmFDZcNfXJi7iiF9Oz7NR4Hj05AvvBx0PO2p12IY4Q8zfdbaOebwRt
+         4S+g==
+X-Gm-Message-State: AOAM532g2jXSmBjTsUqHMF+Zo2ZbCWLyRFBdWukP3ocqsKHmWC0nXLg3
+        c1e1KK70HyHdINAHdEnqXOLhs9GwJ5bM2A==
+X-Google-Smtp-Source: ABdhPJzl5g7SCdzOiQW0AKBLd54FztTafsaGnDmwHpm4+zy8T/pEFhSPISC70f7HE2KWzniLOcvFTA==
+X-Received: by 2002:a63:f815:: with SMTP id n21mr5942108pgh.410.1601715325776;
+        Sat, 03 Oct 2020 01:55:25 -0700 (PDT)
 Received: from localhost.localdomain.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id a15sm4566374pgi.69.2020.10.03.01.55.15
+        by smtp.gmail.com with ESMTPSA id a15sm4566374pgi.69.2020.10.03.01.55.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Oct 2020 01:55:18 -0700 (PDT)
+        Sat, 03 Oct 2020 01:55:25 -0700 (PDT)
 From:   Hangbin Liu <liuhangbin@gmail.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -67,36 +68,90 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         netdev@vger.kernel.org,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv2 bpf 0/3] Fix pining maps after reuse map fd
-Date:   Sat,  3 Oct 2020 16:55:02 +0800
-Message-Id: <20201003085505.3388332-1-liuhangbin@gmail.com>
+Subject: [PATCHv2 bpf 2/3] libbpf: check if pin_path was set even map fd exist
+Date:   Sat,  3 Oct 2020 16:55:04 +0800
+Message-Id: <20201003085505.3388332-3-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20201002075750.1978298-1-liuhangbin@gmail.com>
+In-Reply-To: <20201003085505.3388332-1-liuhangbin@gmail.com>
 References: <20201002075750.1978298-1-liuhangbin@gmail.com>
+ <20201003085505.3388332-1-liuhangbin@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When a user reuse map fd after creating a map manually and set the
-pin_path, then load the object via libbpf. bpf_object__create_maps()
-will skip pinning map if map fd exist. Fix it by add moving bpf creation
-to else condition and go on checking map pin_path after that.
+Say a user reuse map fd after creating a map manually and set the
+pin_path, then load the object via libbpf.
 
-v2:
-a) close map fd if init map slots failed
-b) add bpf selftest for this scenario
+In libbpf bpf_object__create_maps(), bpf_object__reuse_map() will
+return 0 if there is no pinned map in map->pin_path. Then after
+checking if map fd exist, we should also check if pin_path was set
+and do bpf_map__pin() instead of continue the loop.
 
-Hangbin Liu (3):
-  libbpf: close map fd if init map slots failed
-  libbpf: check if pin_path was set even map fd exist
-  selftest/bpf: test pinning map with reused map fd
+Fix it by creating map if fd not exist and continue checking pin_path
+after that.
 
- tools/lib/bpf/libbpf.c                        | 80 +++++++++++--------
- .../selftests/bpf/prog_tests/pinning.c        | 46 ++++++++++-
- 2 files changed, 91 insertions(+), 35 deletions(-)
+v2: keep if condition with existing order
 
+Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+---
+ tools/lib/bpf/libbpf.c | 37 ++++++++++++++++++-------------------
+ 1 file changed, 18 insertions(+), 19 deletions(-)
+
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index c8b5fe45682d..1fb3fd733b23 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -4245,29 +4245,28 @@ bpf_object__create_maps(struct bpf_object *obj)
+ 		if (map->fd >= 0) {
+ 			pr_debug("map '%s': skipping creation (preset fd=%d)\n",
+ 				 map->name, map->fd);
+-			continue;
+-		}
+-
+-		err = bpf_object__create_map(obj, map);
+-		if (err)
+-			goto err_out;
++		} else {
++			err = bpf_object__create_map(obj, map);
++			if (err)
++				goto err_out;
+ 
+-		pr_debug("map '%s': created successfully, fd=%d\n", map->name,
+-			 map->fd);
++			pr_debug("map '%s': created successfully, fd=%d\n",
++				 map->name, map->fd);
+ 
+-		if (bpf_map__is_internal(map)) {
+-			err = bpf_object__populate_internal_map(obj, map);
+-			if (err < 0) {
+-				zclose(map->fd);
+-				goto err_out;
++			if (bpf_map__is_internal(map)) {
++				err = bpf_object__populate_internal_map(obj, map);
++				if (err < 0) {
++					zclose(map->fd);
++					goto err_out;
++				}
+ 			}
+-		}
+ 
+-		if (map->init_slots_sz) {
+-			err = init_map_slots(map);
+-			if (err < 0) {
+-				zclose(map->fd);
+-				goto err_out;
++			if (map->init_slots_sz) {
++				err = init_map_slots(map);
++				if (err < 0) {
++					zclose(map->fd);
++					goto err_out;
++				}
+ 			}
+ 		}
+ 
 -- 
 2.25.4
 
