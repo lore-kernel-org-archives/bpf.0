@@ -2,108 +2,73 @@ Return-Path: <SRS0=IKg2=DM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C127C4363A
-	for <bpf@archiver.kernel.org>; Mon,  5 Oct 2020 22:45:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CA4BC4363A
+	for <bpf@archiver.kernel.org>; Mon,  5 Oct 2020 22:46:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 36A69206C3
-	for <bpf@archiver.kernel.org>; Mon,  5 Oct 2020 22:45:37 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="X4bv+/PE"
+	by mail.kernel.org (Postfix) with ESMTP id 6165A207BC
+	for <bpf@archiver.kernel.org>; Mon,  5 Oct 2020 22:46:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1601937989;
+	bh=5f4TuVuEVfs/YeAP7NVbMT+uWcaBbdsq5ViAMdSYBYU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:List-ID:From;
+	b=D3LXhqwwg/S9igoc3/zNteBEei1OFDbRrVOA8Lhl682K00PIxVUVBX5LMVXVhshr3
+	 /u9+wsDfaX96eiqCuCme1IEIoLOeGQRjF/M2E2d6KFNddgf/+CY0oErQrC2My3fHEl
+	 Y+kyhdIisBZkSNWBEOYbhUcJ9JUpX9cDdJyUkTbU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725939AbgJEWpg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 5 Oct 2020 18:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725846AbgJEWpg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 5 Oct 2020 18:45:36 -0400
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E6AC0613CE
-        for <bpf@vger.kernel.org>; Mon,  5 Oct 2020 15:45:35 -0700 (PDT)
-Received: by mail-qk1-x749.google.com with SMTP id y77so3015738qkb.8
-        for <bpf@vger.kernel.org>; Mon, 05 Oct 2020 15:45:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=8BKhAkzDrkowGH3g/fxPwDUzO3fDD8T7y6zkrNKC+Ok=;
-        b=X4bv+/PEuZ6mqeDRerTKhN7QEWlck1XKrErbm8VAk3LB9+hvJSVr0XCCVD/xplk/qP
-         XKnFXGydFBrsQwpF1Bj0Qt47VnEms+QNvpmZQuR13tZdTrvkD0zM3MAr4mBjauacit0j
-         2sUkrgkq57Pc9ys5qpk0CHi7WbBFe2aEFKhifHXCNie09kizNzkPssE3CKH4HWYZGGkD
-         y5sO9G/c1B5ukJUqBRYNDVT9uC5VSnnzMTfK7GMeXLipgJxiTeM5eTrYyzNgsPWkWG8g
-         u1reTVYIOd2QLn3PHf/bFOcmaToFyMaueCWKz0h0YgUWZwFa+obiGixPz32SskxYy55D
-         wLLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=8BKhAkzDrkowGH3g/fxPwDUzO3fDD8T7y6zkrNKC+Ok=;
-        b=RrjMn87QbobeASWo7ZW4We2SF0/edGX1FYsC3WhKZ0P2Zk5ySxCNCUnXoLRwmWYDQ+
-         LjaKlGz3lwthSEIiL7LvQARTbwFZTmYR69RQWXh/fhOesj1pmf600B/oSL1iBXDMHCLk
-         H5QR0DuyL8tnTIDly95DJTdGEa4t6n8NzTCm1r7ZN9lbVHr4sCMDnGssumlBvfFJIr8g
-         zb2ERp/tDFQxOAB9SqeS3Bd326UxJvEPmlHCfstPiIDxyedwsrXFvRV8Tv86yPhQtC3R
-         tC2PcTGUo5j2sz62/uLAaAF5uGa9J1l7+8+GuLUdDywIFqUXSxeVV5FBmhiNRPrYahcU
-         2Zkg==
-X-Gm-Message-State: AOAM530TWj2E+nnLT17fEpUkUvNtsE6lXQ+OFXW9XaZR5ErZ1G+RVI71
-        VQD6AshdeSdY0k473OxaDrb/e1bOZl9XFWUfW0B9o0cGURaBHlf9ftRGe348HK0Mij/IhUdYPK5
-        MQ9QDZ1c0VWS2qtUxhQuhRETsLLOiGHYdTk97FhO5u2IR8uUMrcXq1lz+Aw==
-X-Google-Smtp-Source: ABdhPJw5TbsireMyRkoLBkqvTxu//Mh1ELm0jmOIo9VDP0zgEyRALhbtOJamHqL2QOHGepx9H+4+tAOz6sU=
-Sender: "lrizzo via sendgmr" <lrizzo@lrizzo2.svl.corp.google.com>
-X-Received: from lrizzo2.svl.corp.google.com ([2620:15c:2c4:201:7220:84ff:fe09:96d1])
- (user=lrizzo job=sendgmr) by 2002:ad4:58c7:: with SMTP id dh7mr2081173qvb.20.1601937934098;
- Mon, 05 Oct 2020 15:45:34 -0700 (PDT)
-Date:   Mon,  5 Oct 2020 15:45:28 -0700
-Message-Id: <20201005224528.389097-1-lrizzo@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.28.0.806.g8561365e88-goog
-Subject: [PATCH v3] bpf, libbpf: use valid btf in bpf_program__set_attach_target
-From:   Luigi Rizzo <lrizzo@google.com>
-To:     bpf@vger.kernel.org, Eelco Chaudron <echaudro@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, rizzo.unipi@gmail.com,
-        Andrii Nakryiko <andriin@fb.com>
-Cc:     ppenkov@google.com, tommaso.burlon@gmail.com,
-        Luigi Rizzo <lrizzo@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726100AbgJEWq2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 5 Oct 2020 18:46:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58004 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725846AbgJEWq2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 5 Oct 2020 18:46:28 -0400
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1601937988;
+        bh=5f4TuVuEVfs/YeAP7NVbMT+uWcaBbdsq5ViAMdSYBYU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Xivo8p29JKokT88mCMFwcHRcngb1r5YdoCkiU2zb9EDOohblItBB+QaWfosNefXKW
+         MDto8lgIRgzm0JBHzEnZXEpGgvwzzxs3hZY2nhNue+GBhltcoBoZt3g2+4FO+biyWC
+         mzwzx2Wia1NteQ8H90c2/HikJa4fBATubZL8n1os=
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf, doc: Update Andrii's email in MAINTAINERS
+From:   patchwork-bot+bpf@kernel.org
+Message-Id: <160193798826.16948.9063174466220297295.git-patchwork-notify@kernel.org>
+Date:   Mon, 05 Oct 2020 22:46:28 +0000
+References: <20201005223648.2437130-1-andrii@kernel.org>
+In-Reply-To: <20201005223648.2437130-1-andrii@kernel.org>
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf_program__set_attach_target(prog, fd, ...) will always fail when
-fd = 0 (attach to a kernel symbol) because obj->btf_vmlinux is NULL
-and there is no way to set it (at the moment btf_vmlinux is meant
-to be temporary storage for use in bpf_object__load_xattr()).
+Hello:
 
-Fix this by using libbpf_find_vmlinux_btf_id().
+This patch was applied to bpf/bpf-next.git (refs/heads/master):
 
-At some point we may want to opportunistically cache btf_vmlinux
-so it can be reused with multiple programs.
+On Mon, 5 Oct 2020 15:36:48 -0700 you wrote:
+> Update Andrii Nakryiko's reviewer email to kernel.org account. This optimizes
+> email logistics on my side and makes it less likely for me to miss important
+> patches.
+> 
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Luigi Rizzo <lrizzo@google.com>
----
- tools/lib/bpf/libbpf.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Here is the summary with links:
+  - [bpf-next] bpf, doc: Update Andrii's email in MAINTAINERS
+    https://git.kernel.org/bpf/bpf-next/c/dca4121cdc48
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index a4f55f8a460d..33bf102259dd 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -10353,9 +10353,8 @@ int bpf_program__set_attach_target(struct bpf_program *prog,
- 		btf_id = libbpf_find_prog_btf_id(attach_func_name,
- 						 attach_prog_fd);
- 	else
--		btf_id = __find_vmlinux_btf_id(prog->obj->btf_vmlinux,
--					       attach_func_name,
--					       prog->expected_attach_type);
-+		btf_id = libbpf_find_vmlinux_btf_id(attach_func_name,
-+						    prog->expected_attach_type);
- 
- 	if (btf_id < 0)
- 		return btf_id;
--- 
-2.28.0.806.g8561365e88-goog
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
