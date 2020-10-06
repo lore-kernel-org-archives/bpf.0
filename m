@@ -2,91 +2,119 @@ Return-Path: <SRS0=rSwM=DN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 096A9C47095
-	for <bpf@archiver.kernel.org>; Tue,  6 Oct 2020 18:50:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34688C41604
+	for <bpf@archiver.kernel.org>; Tue,  6 Oct 2020 19:05:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B38FE2087E
-	for <bpf@archiver.kernel.org>; Tue,  6 Oct 2020 18:50:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602010209;
-	bh=0XKbMbZ5MvyR9C7xcDSUmo/y8dt1xwmaTrh5izgfWKE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:List-ID:From;
-	b=GnnxVm8tYcY5RqXDF4wVB8D/u4JAlN/1KznEzJ1uJlUCz7l0BQCBjozbigfFLNf6I
-	 EQxCd6JXBdYA9iLrwnuA2SP62eS9WVKdtWq3yaZFb6NHAZOx16EVHtkaWcN+KZKEaD
-	 qaqRxwaPNd+xkfJwdELOBFHlZHE6b5k6A+4lStJ4=
+	by mail.kernel.org (Postfix) with ESMTP id CE3CD2087E
+	for <bpf@archiver.kernel.org>; Tue,  6 Oct 2020 19:05:35 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nCuVvffN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726791AbgJFSuF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 6 Oct 2020 14:50:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42300 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725906AbgJFSuF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 6 Oct 2020 14:50:05 -0400
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602010204;
-        bh=0XKbMbZ5MvyR9C7xcDSUmo/y8dt1xwmaTrh5izgfWKE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=hk5zx+eBXzb97WvjMA+7goetnN+E6uepIQx/UNx4ZMlCXv1kHumVwruu7KtF1zhUk
-         s3VvtNyHgrwAz88LhvAcslyomwdEj4uksuVwZAJd3uGu4f70ymgtCd1Ms88y18fMDm
-         05fWb8pP8TvG4H35DZwVmvBbT1UKME0TZlq6aru4=
+        id S1726893AbgJFTFf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 6 Oct 2020 15:05:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726760AbgJFTFf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 6 Oct 2020 15:05:35 -0400
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4213C061755;
+        Tue,  6 Oct 2020 12:05:34 -0700 (PDT)
+Received: by mail-lf1-x141.google.com with SMTP id u8so16266563lff.1;
+        Tue, 06 Oct 2020 12:05:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dbgm9EPpdn69MOQOGW1NmOkPRWAvrhHZv3YgGUWUYO4=;
+        b=nCuVvffNUqX3JHoJTL9N3FEG+N30Jd67eXqBiN11gRdobkj619iU7qnZfhWN2CSEyh
+         IyJhCzb9gliT0Hm24v2E+9076qVfyt08uSMi6g502CXaooTTt/s/riIq+fnwdt+LvWw0
+         xg3lQ5LM38VN/83InIxsW33CTndDLDt+uLVSrAjiy/Hfbj5tuhMO1vb46/88sGJbPmoQ
+         oLcQokDa8/8s7nHNZYPUE2LqIkKukXI64kI/Bg3Yltk58eNsCaVVZTNWK8AliJwUJCjF
+         znWN2uG/Bfym9eoD6L5xgV4Nl6YUxKrN5p3FXF+KqjJ34pWwSGy2ypFvtUCAWjcmOC3O
+         x2RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dbgm9EPpdn69MOQOGW1NmOkPRWAvrhHZv3YgGUWUYO4=;
+        b=Uzxp3uARMDC6WwQV5yzziD44cjP0oQxNtUcj1kUG2Y0cjCKXpUrPDwViVnD1iAe4lZ
+         zeFtufERoLvtc0vXWGfqsh9p24f93moAEFqpCZ57D49cEBguJ0S47xnfElTdP+cIguR3
+         k+Bzj+aVXM6/kp+62PjQ24nXaP5Nnh70ot6COJbfj4exvcJWxF6YEIgXDyOObbGrswOO
+         Tpv4Xk7IEuPtH0+HO8xMxQ8Qa06yCmz60XxmGuZtc/MqTQMKUbeh+lxwqv7z8ijNEZTT
+         6Ikp1mDECjVCSoLDFPyYW0geUcI02wDrfBq5gGBjaq3YDiR/GC/58g5i7jjPnTauAA01
+         tkFA==
+X-Gm-Message-State: AOAM532jgeylR6abF9/s0LHMjW7elemkIo8gH115puiODQ46NysOzWoD
+        +rtAYa5lxWgere7ximHUHucPJJKbkt2cqNvun4U=
+X-Google-Smtp-Source: ABdhPJwjRtjH65ntww7uSgF852KSTpZTpwRT5o9+a5Afmw3wub9NAuaJ2GJkzguay1vK1/vQdch8KAwchaYlo+9Ohr4=
+X-Received: by 2002:a19:8457:: with SMTP id g84mr890012lfd.500.1602011132919;
+ Tue, 06 Oct 2020 12:05:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 1/2] samples/bpf: change Makefile to cope with
- latest llvm
-From:   patchwork-bot+bpf@kernel.org
-Message-Id: <160201020454.15578.6708342423327646865.git-patchwork-notify@kernel.org>
-Date:   Tue, 06 Oct 2020 18:50:04 +0000
-References: <20201006043427.1891742-1-yhs@fb.com>
-In-Reply-To: <20201006043427.1891742-1-yhs@fb.com>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, kernel-team@fb.com, andriin@fb.com
+References: <20200929235049.2533242-1-haoluo@google.com> <20200929235049.2533242-2-haoluo@google.com>
+In-Reply-To: <20200929235049.2533242-2-haoluo@google.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 6 Oct 2020 12:05:21 -0700
+Message-ID: <CAADnVQKc4m6X62udhpPE3EBBvuOA2ngyWSOKQ7fc-rtqdeQj6w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 1/6] bpf: Introduce pseudo_btf_id
+To:     Hao Luo <haoluo@google.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+On Tue, Sep 29, 2020 at 4:50 PM Hao Luo <haoluo@google.com> wrote:
+>
+> -       ret = replace_map_fd_with_map_ptr(env);
+> -       if (ret < 0)
+> -               goto skip_full_check;
+> -
+>         if (bpf_prog_is_dev_bound(env->prog->aux)) {
+>                 ret = bpf_prog_offload_verifier_prep(env->prog);
+>                 if (ret)
+> @@ -11662,6 +11757,10 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr,
+>         if (ret)
+>                 goto skip_full_check;
+>
+> +       ret = resolve_pseudo_ldimm64(env);
+> +       if (ret < 0)
+> +               goto skip_full_check;
+> +
 
-This series was applied to bpf/bpf-next.git (refs/heads/master):
+Hao,
 
-On Mon, 5 Oct 2020 21:34:26 -0700 you wrote:
-> With latest llvm trunk, bpf programs under samples/bpf
-> directory, if using CORE, may experience the following
-> errors:
-> 
-> LLVM ERROR: Cannot select: intrinsic %llvm.preserve.struct.access.index
-> PLEASE submit a bug report to https://bugs.llvm.org/ and include the crash backtrace.
-> Stack dump:
-> 0.      Program arguments: llc -march=bpf -filetype=obj -o samples/bpf/test_probe_write_user_kern.o
-> 1.      Running pass 'Function Pass Manager' on module '<stdin>'.
-> 2.      Running pass 'BPF DAG->DAG Pattern Instruction Selection' on function '@bpf_prog1'
->  #0 0x000000000183c26c llvm::sys::PrintStackTrace(llvm::raw_ostream&, int)
->     (/data/users/yhs/work/llvm-project/llvm/build.cur/install/bin/llc+0x183c26c)
-> ...
->  #7 0x00000000017c375e (/data/users/yhs/work/llvm-project/llvm/build.cur/install/bin/llc+0x17c375e)
->  #8 0x00000000016a75c5 llvm::SelectionDAGISel::CannotYetSelect(llvm::SDNode*)
->     (/data/users/yhs/work/llvm-project/llvm/build.cur/install/bin/llc+0x16a75c5)
->  #9 0x00000000016ab4f8 llvm::SelectionDAGISel::SelectCodeCommon(llvm::SDNode*, unsigned char const*,
->     unsigned int) (/data/users/yhs/work/llvm-project/llvm/build.cur/install/bin/llc+0x16ab4f8)
-> ...
-> Aborted (core dumped) | llc -march=bpf -filetype=obj -o samples/bpf/test_probe_write_user_kern.o
-> 
-> [...]
+this change broke several tests in test_verifier:
+#21/u empty prog FAIL
+Unexpected error message!
+    EXP: unknown opcode 00
+    RES: last insn is not an exit or jmp
 
-Here is the summary with links:
-  - [bpf-next,v2,1/2] samples/bpf: change Makefile to cope with latest llvm
-    https://git.kernel.org/bpf/bpf-next/c/9618bde489b2
-  - [bpf-next,v2,2/2] samples/bpf: fix a compilation error with fallthrough marking
-    https://git.kernel.org/bpf/bpf-next/c/544d6adf3c3d
+#656/u test5 ld_imm64 FAIL
+Unexpected error message!
+    EXP: invalid bpf_ld_imm64 insn
+    RES: last insn is not an exit or jmp
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+#656/p test5 ld_imm64 FAIL
+Unexpected error message!
+    EXP: invalid bpf_ld_imm64 insn
+    RES: last insn is not an exit or jmp
 
-
+Please send a fix.
+Thanks
