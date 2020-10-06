@@ -2,71 +2,73 @@ Return-Path: <SRS0=rSwM=DN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D51EC41604
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8ABECC4727D
 	for <bpf@archiver.kernel.org>; Tue,  6 Oct 2020 18:50:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B541A2080A
-	for <bpf@archiver.kernel.org>; Tue,  6 Oct 2020 18:50:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 31B9B20897
+	for <bpf@archiver.kernel.org>; Tue,  6 Oct 2020 18:50:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602010205;
-	bh=cLIuGeEAzcI9WmAEPb26o7c5PzKQXL+9/K5uxlTrUC0=;
+	s=default; t=1602010206;
+	bh=cmnoiWOoLar8N5rCSOYNQUh0j1ZlahKgTZzrKQ8osjs=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:List-ID:From;
-	b=OQIiqrJiRkcY+/mtvwjK1eoDgdp6dYJu13OZ2yXz6LBGBMIPS1+sQ6jiH0mX8nx5F
-	 5xjQtANpYdV9ArZaJpQ2z0B6dqOrmONmDBqPZASYAnSLQO2GxT8VVGX/GNms/M4d+y
-	 ccJw6UZMUwigXnUlO2MHf9m3BsBa0GIfOl8nYpZU=
+	b=ShRpJGU5jqB/8s0PxMOrwmgJmW/457Z6teD4+htIA0AZ+MSAZ7IHLla2HKXpcsjvQ
+	 D5dF2GG2V1StGJYV6eoRv0hzEdbMrMCdaMBuqJe7oFex1qI4MnXKYkNaXKj/mvKWem
+	 equgTT+WinSPOanufcOreyXZxPJGDIMysgu8KoyY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726793AbgJFSuF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726852AbgJFSuF (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 6 Oct 2020 14:50:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42310 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:42292 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726791AbgJFSuF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1726760AbgJFSuF (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 6 Oct 2020 14:50:05 -0400
 Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=default; t=1602010204;
-        bh=cLIuGeEAzcI9WmAEPb26o7c5PzKQXL+9/K5uxlTrUC0=;
+        bh=cmnoiWOoLar8N5rCSOYNQUh0j1ZlahKgTZzrKQ8osjs=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=yPjioAbQStx/Q43o/0V8l/cAQ2cRHWF6Kdj6vrEcvpTbmL+xTQXEjZRDi+kpwE426
-         WYvKzd65nmGwfWF5eIVB4wKyn5sYQhVAu9CumFjMzQEVVoqGBjRVnQ22jxwyTTfSzK
-         fPMaW2OLPAXYUGH213LNH5ZhlYO/s+L90UbjztYQ=
+        b=ZDp8utaAFCoByp++vD4hpoel+CVcDDh403iLKYymW8nhNov1+pELu7H9yUUMjbgqW
+         LEHrO6BvNs3OHE0r1Vl+7MJ7BSlFSScfY3zSiqKAu4exr0WJKp67m4yE1dFBM3o3mA
+         CExy5Fp/PghZqZBujhafsocXlYwh87H2KWYgdZrc=
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3] bpf,
- libbpf: use valid btf in bpf_program__set_attach_target
+Subject: Re: [PATCH bpf-next 1/3] samples: bpf: split xdpsock stats into new
+ struct
 From:   patchwork-bot+bpf@kernel.org
-Message-Id: <160201020458.15578.2112471126147703627.git-patchwork-notify@kernel.org>
+Message-Id: <160201020450.15578.15216583134041941419.git-patchwork-notify@kernel.org>
 Date:   Tue, 06 Oct 2020 18:50:04 +0000
-References: <20201005224528.389097-1-lrizzo@google.com>
-In-Reply-To: <20201005224528.389097-1-lrizzo@google.com>
-To:     Luigi Rizzo <lrizzo@google.com>
-Cc:     bpf@vger.kernel.org, echaudro@redhat.com, daniel@iogearbox.net,
-        rizzo.unipi@gmail.com, andriin@fb.com, ppenkov@google.com,
-        tommaso.burlon@gmail.com
+References: <20201002133612.31536-1-ciara.loftus@intel.com>
+In-Reply-To: <20201002133612.31536-1-ciara.loftus@intel.com>
+To:     Ciara Loftus <ciara.loftus@intel.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 Hello:
 
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
+This series was applied to bpf/bpf-next.git (refs/heads/master):
 
-On Mon,  5 Oct 2020 15:45:28 -0700 you wrote:
-> bpf_program__set_attach_target(prog, fd, ...) will always fail when
-> fd = 0 (attach to a kernel symbol) because obj->btf_vmlinux is NULL
-> and there is no way to set it (at the moment btf_vmlinux is meant
-> to be temporary storage for use in bpf_object__load_xattr()).
+On Fri,  2 Oct 2020 13:36:10 +0000 you wrote:
+> New statistics will be added in future commits. In preparation for this,
+> let's split out the existing statistics into their own struct.
 > 
-> Fix this by using libbpf_find_vmlinux_btf_id().
-> 
-> [...]
+> Signed-off-by: Ciara Loftus <ciara.loftus@intel.com>
+> ---
+>  samples/bpf/xdpsock_user.c | 123 +++++++++++++++++++++----------------
+>  1 file changed, 69 insertions(+), 54 deletions(-)
 
 Here is the summary with links:
-  - [v3] bpf, libbpf: use valid btf in bpf_program__set_attach_target
-    https://git.kernel.org/bpf/bpf-next/c/8cee9107e72c
+  - [bpf-next,1/3] samples: bpf: split xdpsock stats into new struct
+    https://git.kernel.org/bpf/bpf-next/c/2e8806f032f5
+  - [bpf-next,2/3] samples: bpf: count syscalls in xdpsock
+    https://git.kernel.org/bpf/bpf-next/c/60dc609dbd54
+  - [bpf-next,3/3] samples: bpf: driver interrupt statistics in xdpsock
+    https://git.kernel.org/bpf/bpf-next/c/67ed375530e2
 
 You are awesome, thank you!
 --
