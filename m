@@ -2,114 +2,126 @@ Return-Path: <SRS0=AFkz=DO=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DD45C4363C
-	for <bpf@archiver.kernel.org>; Wed,  7 Oct 2020 07:54:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 46F04C4363D
+	for <bpf@archiver.kernel.org>; Wed,  7 Oct 2020 11:42:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F1DD72083B
-	for <bpf@archiver.kernel.org>; Wed,  7 Oct 2020 07:54:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DE79C2064E
+	for <bpf@archiver.kernel.org>; Wed,  7 Oct 2020 11:42:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gk1cUM0e"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OsHUIYjt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727566AbgJGHyB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 7 Oct 2020 03:54:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:44739 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726041AbgJGHyB (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 7 Oct 2020 03:54:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602057240;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mA7iF1FIYyYfmzKBPd290C0pBsQJJgx9qGVGQfhXlYg=;
-        b=Gk1cUM0e4BlHyYuWKV5XammU2Ko21cdYS5wqLhB/fEjEHJQp8qARV6D9/sfPa5F0EcZM6u
-        iuHLnWnXTvP9qzm49N0Nk1m2sviRnjGrW+OlRDjJrb9mcjx5qLFQO5KbDJHa9r4MuRMIe/
-        1k1sUYgmT6dgnAqO+nwRZnrbMDIrp0g=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-376-7m-jn1DPNFaXchlK0gB17A-1; Wed, 07 Oct 2020 03:53:58 -0400
-X-MC-Unique: 7m-jn1DPNFaXchlK0gB17A-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 20523802B7E;
-        Wed,  7 Oct 2020 07:53:57 +0000 (UTC)
-Received: from carbon (unknown [10.40.208.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 67FF255770;
-        Wed,  7 Oct 2020 07:53:50 +0000 (UTC)
-Date:   Wed, 7 Oct 2020 09:53:48 +0200
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Maciej =?UTF-8?B?xbtlbmN6eWtvd3NraQ==?= <maze@google.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Linux NetDev <netdev@vger.kernel.org>,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Shaun Crampton <shaun@tigera.io>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Marek Majkowski <marek@cloudflare.com>,
-        John Fastabend <john.fastabend@gmail.com>, brouer@redhat.com
-Subject: Re: [PATCH bpf-next V1 3/6] bpf: add BPF-helper for reading MTU
- from net_device via ifindex
-Message-ID: <20201007095348.4fb25dfc@carbon>
-In-Reply-To: <CANP3RGe3S4eF=xVkQ22o=sxtW991jmNfq-bVtbKQQaszsLNZSA@mail.gmail.com>
-References: <160200013701.719143.12665708317930272219.stgit@firesoul>
-        <160200018165.719143.3249298786187115149.stgit@firesoul>
-        <20201006183302.337a9502@carbon>
-        <20201006181858.6003de94@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <CANP3RGe3S4eF=xVkQ22o=sxtW991jmNfq-bVtbKQQaszsLNZSA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+        id S1727958AbgJGLmk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Oct 2020 07:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726096AbgJGLmk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 7 Oct 2020 07:42:40 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E51C061755;
+        Wed,  7 Oct 2020 04:42:40 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id 144so1188411pfb.4;
+        Wed, 07 Oct 2020 04:42:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=xAQFlFHy7kWTivT3gKpMF/fe7kfqKwykruPRIM+JP+w=;
+        b=OsHUIYjtaje0JVubDFXPk/qDcZ4BUmqedfX1JkvGYUzXo0yKFOMIOpgZUdvqquK2Hs
+         Mbux//Fs5gLRjA9dJdrdrMmy++Q1p7y0cCLY8VO4vG87bTc+UDJbd8++boFzncLZxJOs
+         /sCwzSuqqSlx/5UmYdMb6Att0cDUvesBJjIlsTPGAdJMU1q3WC6/G0Ddqo8gGcahvvFa
+         aU01jStDpTQfAWZIUqQ2lfP2wihabr81FsOMO4o1qfxbqzK+zjXetp0CYrJSmgIYo43a
+         +oAN8tzH2V/rRdiKzrQvb66PuOJbSeqIZqawZ8l2sALr1zvd41fBdrRAdjBtyHRMif+m
+         OIog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=xAQFlFHy7kWTivT3gKpMF/fe7kfqKwykruPRIM+JP+w=;
+        b=jZm03tlvzBLdXYUXUDp4tV9c5J4Y1sLTsyA/iztFCBRfFhbISFN30CraSgrQN12eMz
+         oaYpb7MXwiopfeEyLk6Q+FgsL2aN+/dOqTXrqfsA0pbvnpcVjb4JmG0WlcFOCiZmBJwM
+         tijzbijUWbCZ+VW/0Qh1EfZNip0U8jB8Jn7sYKmEYKwTKayRw6PpZk6mHdggn+ZCobSp
+         2m4AqXg+Vzmd1IAY8APheoGdSNrgf/4tE7sqSChAH4fx4j5sf+AyEzLbJ/q1Nwigfg/+
+         v4UXczaXQQtvSVxswM+zmtz9jIGfmEWJWhW2wNRjUOubGCVEcq8MWuhqBf7moOWF/xmC
+         goAw==
+X-Gm-Message-State: AOAM5332IHXzvQhNEAriUL+GbYzhXzkFCsGrCN20BsJ0UK6w9oc8u2iK
+        HInH/365yeuDWvbmFouU38k=
+X-Google-Smtp-Source: ABdhPJxKR1guD5qhOYd+sluidkIvw5ziHY9+v25uIh2JYZ2bt8OHTxPJvSoq4kl9WFY8R5OwjEe5LQ==
+X-Received: by 2002:a65:4885:: with SMTP id n5mr2781224pgs.63.1602070959551;
+        Wed, 07 Oct 2020 04:42:39 -0700 (PDT)
+Received: from VM.ger.corp.intel.com (fmdmzpr03-ext.fm.intel.com. [192.55.54.38])
+        by smtp.gmail.com with ESMTPSA id x10sm2812259pfc.88.2020.10.07.04.42.36
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 07 Oct 2020 04:42:38 -0700 (PDT)
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
+        daniel@iogearbox.net, netdev@vger.kernel.org,
+        jonathan.lemon@gmail.com
+Cc:     bpf@vger.kernel.org, ciara.loftus@intel.com
+Subject: [PATCH bpf-next v2] libbpf: fix compatibility problem in xsk_socket__create
+Date:   Wed,  7 Oct 2020 13:42:26 +0200
+Message-Id: <1602070946-11154-1-git-send-email-magnus.karlsson@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 6 Oct 2020 18:24:28 -0700
-Maciej =C5=BBenczykowski <maze@google.com> wrote:
+From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-> On Tue, Oct 6, 2020 at 6:19 PM Jakub Kicinski <kuba@kernel.org> wrote:
-> >
-> > On Tue, 6 Oct 2020 18:33:02 +0200 Jesper Dangaard Brouer wrote: =20
-> > > > +static const struct bpf_func_proto bpf_xdp_mtu_lookup_proto =3D {
-> > > > +   .func           =3D bpf_xdp_mtu_lookup,
-> > > > +   .gpl_only       =3D true,
-> > > > +   .ret_type       =3D RET_INTEGER,
-> > > > +   .arg1_type      =3D ARG_PTR_TO_CTX,
-> > > > +   .arg2_type      =3D ARG_ANYTHING,
-> > > > +   .arg3_type      =3D ARG_ANYTHING,
-> > > > +};
-> > > > +
-> > > > + =20
-> >
-> > FWIW
-> >
-> > CHECK: Please don't use multiple blank lines
-> > #112: FILE: net/core/filter.c:5566: =20
->=20
-> FYI: It would be nice to have a similar function to return a device's
-> L2 header size (ie. 14 for ethernet) and/or hwtype.
->=20
-> Also, should this be restricted to gpl only?
+Fix a compatibility problem when the old XDP_SHARED_UMEM mode is used
+together with the xsk_socket__create() call. In the old XDP_SHARED_UMEM
+mode, only sharing of the same device and queue id was allowed, and in
+this mode, the fill ring and completion ring were shared between the
+AF_XDP sockets. Therefore, it was perfectly fine to call the
+xsk_socket__create() API for each socket and not use the new
+xsk_socket__create_shared() API. This behavior was ruined by the
+commit introducing XDP_SHARED_UMEM support between different devices
+and/or queue ids. This patch restores the ability to use
+xsk_socket__create in these circumstances so that backward
+compatibility is not broken.
 
-That is mostly because I copy-pasted it from the fib lookup helper,
-which with good reason is GPL.  I would prefer it to be GPL, but given
-how simple it is I shouldn't.  Maybe I could argue that my new mtu_check
-could be GPL as it does more work.
+Fixes: 2f6324a3937f ("libbpf: Support shared umems between queues and devices")
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+---
+v1->v2:
+* Removed the check for different fill or completion rings entered in
+  xsk_umem__create and xsk_socket__create_shared. The current
+  behavior, that the ones entered in xsk_socket__create_shared
+  supersedes the ones in xsk_umem__create, should be kept. Will
+  document this in a separate patch and show how it can make the
+  application code path easier.
+---
+ tools/lib/bpf/xsk.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-> [I'm not actually sure, I'm actually fed up with non-gpl code atm, and
-> wouldn't be against all bpf code needing to be gpl'ed...]
-
---=20
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
+index 30b4ca5..e3c98c0 100644
+--- a/tools/lib/bpf/xsk.c
++++ b/tools/lib/bpf/xsk.c
+@@ -705,7 +705,7 @@ int xsk_socket__create_shared(struct xsk_socket **xsk_ptr,
+ 	struct xsk_ctx *ctx;
+ 	int err, ifindex;
+ 
+-	if (!umem || !xsk_ptr || !(rx || tx) || !fill || !comp)
++	if (!umem || !xsk_ptr || !(rx || tx))
+ 		return -EFAULT;
+ 
+ 	xsk = calloc(1, sizeof(*xsk));
+@@ -735,6 +735,11 @@ int xsk_socket__create_shared(struct xsk_socket **xsk_ptr,
+ 
+ 	ctx = xsk_get_ctx(umem, ifindex, queue_id);
+ 	if (!ctx) {
++		if (!fill || !comp) {
++			err = -EFAULT;
++			goto out_socket;
++		}
++
+ 		ctx = xsk_create_ctx(xsk, umem, ifindex, ifname, queue_id,
+ 				     fill, comp);
+ 		if (!ctx) {
+-- 
+2.7.4
 
