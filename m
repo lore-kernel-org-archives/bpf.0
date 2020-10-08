@@ -5,49 +5,49 @@ X-Spam-Level:
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C68AC4363A
-	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 23:40:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD457C433E7
+	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 23:40:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2C5DF2224F
-	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 23:40:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 900932224C
+	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 23:40:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602200445;
-	bh=dcH7jsOI9nC9ba8HtNCMIWG39/X0//Anft+FySEM+WA=;
+	s=default; t=1602200447;
+	bh=5MTlsvC/IvEHIONC0ucJPo7SM1qwJ7+sRmIkddH9TvA=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=dIy/BSLEDBDqeshsCGxSrx2FuD9kV/J+8pIYgtKm8kCxrfZnXSXMi3SiRbaXIT5FN
-	 Y8XWWy1PnB8ACAJ8kq+NR56J8ZewfbFs0u4o5hh4nBEszmLN0AhX00jda7acTR6Sio
-	 I2OmlGOmQunqBUAuM9zb2Ln7CqDdGZ+swHqQyDY0=
+	b=sLOxdUyZVL6WTirZTenBpXFQ7vMqxG+ustmla5vGLTMHSfOEwAUyhna2+9BZ1pQVw
+	 NtGoXW9vYKI6a23uU2AzvJ2H5fSMPVkJ2wl20ZC2xG8tb3X0B6ZAQGoQ/ELFuhXh/A
+	 o7/aDiJLpIf5/lcnreBbNL/0ufPgn28131X8lHaA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731066AbgJHXko convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 8 Oct 2020 19:40:44 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:25626 "EHLO
+        id S1731077AbgJHXkr convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 8 Oct 2020 19:40:47 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:9684 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731080AbgJHXko (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 8 Oct 2020 19:40:44 -0400
+        by vger.kernel.org with ESMTP id S1731078AbgJHXkq (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 8 Oct 2020 19:40:46 -0400
 Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 098Nefws027434
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 098NefxB027444
         for <bpf@vger.kernel.org>; Thu, 8 Oct 2020 16:40:43 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 3429ggrw6f-4
+        by mx0a-00082601.pphosted.com with ESMTP id 3429ggrw6s-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Thu, 08 Oct 2020 16:40:43 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 8 Oct 2020 16:40:14 -0700
+ 15.1.1979.3; Thu, 8 Oct 2020 16:40:19 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 2936F2EC7C76; Thu,  8 Oct 2020 16:40:10 -0700 (PDT)
+        id 7C3F82EC7C76; Thu,  8 Oct 2020 16:40:14 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <dwarves@vger.kernel.org>
 CC:     <bpf@vger.kernel.org>, <kernel-team@fb.com>, <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH v2 dwarves 3/8] btf_encoder: fix emitting __ARRAY_SIZE_TYPE__ as index range type
-Date:   Thu, 8 Oct 2020 16:39:55 -0700
-Message-ID: <20201008234000.740660-4-andrii@kernel.org>
+Subject: [PATCH v2 dwarves 5/8] btf_encoder: revamp how per-CPU variables are encoded
+Date:   Thu, 8 Oct 2020 16:39:57 -0700
+Message-ID: <20201008234000.740660-6-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201008234000.740660-1-andrii@kernel.org>
 References: <20201008234000.740660-1-andrii@kernel.org>
@@ -59,7 +59,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-10-08_15:2020-10-08,2020-10-08 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
  priorityscore=1501 bulkscore=0 impostorscore=0 malwarescore=0 mlxscore=0
- adultscore=0 suspectscore=15 lowpriorityscore=0 phishscore=0 spamscore=0
+ adultscore=0 suspectscore=13 lowpriorityscore=0 phishscore=0 spamscore=0
  clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2010080167
 X-FB-Internal: deliver
@@ -69,107 +69,472 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Andrii Nakryiko <andriin@fb.com>
 
-Fix the logic of determining if __ARRAY_SIZE_TYPE__ needs to be emitted.
-Previously, such type could be emitted unnecessarily due to some particular CU
-not having an int type in it. That would happen even if there was no array
-type in that CU. Fix it by keeping track of 'int' type across CUs and only
-emitting __ARRAY_SIZE_TYPE__ if a given CU has array type, but we still
-haven't found 'int' type.
+Right now to encode per-CPU variables in BTF, pahole iterates complete vmlinux
+symbol table for each CU. There are 2500 CUs for a typical kernel image.
+Overall, to encode 287 per-CPU variables pahole spends more than 10% of its CPU
+budget, this is incredibly wasteful.
 
-Testing against vmlinux shows that now there are no __ARRAY_SIZE_TYPE__
-integers emitted.
+This patch revamps how this is done. Now it pre-processes symbol table once
+before any of per-CU processing starts. It remembers each per-CPU variable
+symbol, including its address, size, and name. Then during processing each CU,
+binary search is used to correlate DWARF variable with per-CPU symbols and
+figure out if variable belongs to per-CPU data section. If the match is found,
+BTF_KIND_VAR is emitted and var_secinfo is recorded, just like before. At the
+very end, after all CUs are processed, BTF_KIND_DATASEC is emitted with sorted
+variables.
+
+This change makes per-CPU variables generation overhead pretty negligible and
+returns back about 10% of CPU usage.
+
+Performance counter stats for './pahole -J /home/andriin/linux-build/default/vmlinux':
+
+BEFORE:
+      19.160149000 seconds user
+       1.304873000 seconds sys
+
+         24,114.05 msec task-clock                #    0.999 CPUs utilized
+                83      context-switches          #    0.003 K/sec
+                 0      cpu-migrations            #    0.000 K/sec
+           622,417      page-faults               #    0.026 M/sec
+    72,897,315,125      cycles                    #    3.023 GHz                      (25.02%)
+   127,807,316,959      instructions              #    1.75  insn per cycle           (25.01%)
+    29,087,179,117      branches                  # 1206.234 M/sec                    (25.01%)
+       464,105,921      branch-misses             #    1.60% of all branches          (25.01%)
+    30,252,119,368      L1-dcache-loads           # 1254.543 M/sec                    (25.01%)
+     1,156,336,207      L1-dcache-load-misses     #    3.82% of all L1-dcache hits    (25.05%)
+       343,373,503      LLC-loads                 #   14.240 M/sec                    (25.02%)
+        12,044,977      LLC-load-misses           #    3.51% of all LL-cache hits     (25.01%)
+
+      24.136198321 seconds time elapsed
+
+      22.729693000 seconds user
+       1.384859000 seconds sys
+
+AFTER:
+      16.781455000 seconds user
+       1.343956000 seconds sys
+
+         23,398.77 msec task-clock                #    1.000 CPUs utilized
+                86      context-switches          #    0.004 K/sec
+                 0      cpu-migrations            #    0.000 K/sec
+           622,420      page-faults               #    0.027 M/sec
+    68,395,641,468      cycles                    #    2.923 GHz                      (25.05%)
+   114,241,327,034      instructions              #    1.67  insn per cycle           (25.01%)
+    26,330,711,718      branches                  # 1125.303 M/sec                    (25.01%)
+       465,926,869      branch-misses             #    1.77% of all branches          (25.00%)
+    24,662,984,772      L1-dcache-loads           # 1054.029 M/sec                    (25.00%)
+     1,054,052,064      L1-dcache-load-misses     #    4.27% of all L1-dcache hits    (25.00%)
+       340,970,622      LLC-loads                 #   14.572 M/sec                    (25.00%)
+        16,032,297      LLC-load-misses           #    4.70% of all LL-cache hits     (25.03%)
+
+      23.402259654 seconds time elapsed
+
+      21.916437000 seconds user
+       1.482826000 seconds sys
 
 Signed-off-by: Andrii Nakryiko <andriin@fb.com>
 ---
- btf_encoder.c | 30 +++++++++++++++++++++---------
- 1 file changed, 21 insertions(+), 9 deletions(-)
+ btf_encoder.c | 248 +++++++++++++++++++++++++++++---------------------
+ libbtf.c      |   6 +-
+ libbtf.h      |   1 +
+ 3 files changed, 148 insertions(+), 107 deletions(-)
 
 diff --git a/btf_encoder.c b/btf_encoder.c
-index 6e6bce202438..2e5df03e040f 100644
+index 2e5df03e040f..2a6455be4c52 100644
 --- a/btf_encoder.c
 +++ b/btf_encoder.c
-@@ -147,6 +147,8 @@ static int32_t enumeration_type__encode(struct btf_elf *btfe, struct cu *cu, str
- 	return type_id;
+@@ -17,6 +17,7 @@
+ #include "btf_encoder.h"
+ 
+ #include <ctype.h> /* for isalpha() and isalnum() */
++#include <stdlib.h> /* for qsort() and bsearch() */
+ #include <inttypes.h>
+ 
+ /*
+@@ -53,18 +54,18 @@ static bool btf_name_valid(const char *p)
+ 	return !*p;
  }
  
-+static bool need_index_type;
+-static void dump_invalid_symbol(const char *msg, const char *sym, const char *cu,
++static void dump_invalid_symbol(const char *msg, const char *sym,
+ 				int verbose, bool force)
+ {
+ 	if (force) {
+ 		if (verbose)
+-			fprintf(stderr, "PAHOLE: Warning: %s, ignored (sym: '%s', cu: '%s').\n",
+-				msg, sym, cu);
++			fprintf(stderr, "PAHOLE: Warning: %s, ignored (sym: '%s').\n",
++				msg, sym);
+ 		return;
+ 	}
+ 
+-	fprintf(stderr, "PAHOLE: Error: %s (sym: '%s', cu: '%s').\n", msg, sym, cu);
+-	fprintf(stderr, "PAHOLE: Error: Use '-j' or '--force' to ignore such symbols and force emit the btf.\n");
++	fprintf(stderr, "PAHOLE: Error: %s (sym: '%s').\n", msg, sym);
++	fprintf(stderr, "PAHOLE: Error: Use '--btf_encode_force' to ignore such symbols and force emit the btf.\n");
+ }
+ 
+ extern struct debug_fmt_ops *dwarves__active_loader;
+@@ -202,6 +203,9 @@ int btf_encoder__encode()
+ {
+ 	int err;
+ 
++	if (gobuffer__size(&btfe->percpu_secinfo) != 0)
++		btf_elf__add_datasec_type(btfe, PERCPU_SECTION, &btfe->percpu_secinfo);
 +
- static int tag__encode_btf(struct cu *cu, struct tag *tag, uint32_t core_id, struct btf_elf *btfe,
- 			   uint32_t array_index_id, uint32_t type_id_off)
- {
-@@ -179,6 +181,7 @@ static int tag__encode_btf(struct cu *cu, struct tag *tag, uint32_t core_id, str
- 			return structure_type__encode(btfe, cu, tag, type_id_off);
- 	case DW_TAG_array_type:
- 		/* TODO: Encode one dimension at a time. */
-+		need_index_type = true;
- 		return btf_elf__add_array(btfe, ref_type_id, array_index_id, array_type__nelems(tag));
- 	case DW_TAG_enumeration_type:
- 		return enumeration_type__encode(btfe, cu, tag);
-@@ -193,6 +196,7 @@ static int tag__encode_btf(struct cu *cu, struct tag *tag, uint32_t core_id, str
+ 	err = btf_elf__encode(btfe, 0);
+ 	btf_elf__delete(btfe);
+ 	btfe = NULL;
+@@ -209,24 +213,117 @@ int btf_encoder__encode()
+ 	return err;
+ }
  
- static struct btf_elf *btfe;
- static uint32_t array_index_id;
-+static bool has_index_type;
+-#define HASHADDR__BITS 8
+-#define HASHADDR__SIZE (1UL << HASHADDR__BITS)
+-#define hashaddr__fn(key) hash_64(key, HASHADDR__BITS)
++#define MAX_PERCPU_VAR_CNT 4096
++
++struct var_info {
++	uint64_t addr;
++	uint32_t sz;
++	const char *name;
++};
++
++static struct var_info percpu_vars[MAX_PERCPU_VAR_CNT];
++static int percpu_var_cnt;
++
++static int percpu_var_cmp(const void *_a, const void *_b)
++{
++	const struct var_info *a = _a;
++	const struct var_info *b = _b;
++
++	if (a->addr == b->addr)
++		return 0;
++	return a->addr < b->addr ? -1 : 1;
++}
++
++static bool percpu_var_exists(uint64_t addr, uint32_t *sz, const char **name)
++{
++	const struct var_info *p;
++	struct var_info key = { .addr = addr };
++
++	p = bsearch(&key, percpu_vars, percpu_var_cnt,
++		    sizeof(percpu_vars[0]), percpu_var_cmp);
++
++	if (!p)
++		return false;
++
++	*sz = p->sz;
++	*name = p->name;
++	return true;
++}
  
- int btf_encoder__encode()
+-static struct variable *hashaddr__find_variable(const struct hlist_head hashtable[],
+-						const uint64_t addr)
++static int find_all_percpu_vars(struct btf_elf *btfe)
  {
-@@ -228,7 +232,6 @@ static struct variable *hashaddr__find_variable(const struct hlist_head hashtabl
+-	struct variable *variable;
+-	struct hlist_node *pos;
+-	uint16_t bucket = hashaddr__fn(addr);
+-	const struct hlist_head *head = &hashtable[bucket];
+-
+-	hlist_for_each_entry(variable, pos, head, tool_hnode) {
+-		if (variable->ip.addr == addr)
+-			return variable;
++	uint32_t core_id;
++	GElf_Sym sym;
++
++	/* cache variables' addresses, preparing for searching in symtab. */
++	percpu_var_cnt = 0;
++
++	/* search within symtab for percpu variables */
++	elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
++		const char *sym_name;
++		uint64_t addr;
++		uint32_t size;
++
++		/* compare a symbol's shndx to determine if it's a percpu variable */
++		if (elf_sym__section(&sym) != btfe->percpu_shndx)
++			continue;
++		if (elf_sym__type(&sym) != STT_OBJECT)
++			continue;
++
++		addr = elf_sym__value(&sym);
++		/*
++		 * Store only those symbols that have allocated space in the percpu section.
++		 * This excludes the following three types of symbols:
++		 *
++		 *  1. __ADDRESSABLE(sym), which are forcely emitted as symbols.
++		 *  2. __UNIQUE_ID(prefix), which are introduced to generate unique ids.
++		 *  3. __exitcall(fn), functions which are labeled as exit calls.
++		 *
++		 * In addition, the variables defined using DEFINE_PERCPU_FIRST are
++		 * also not included, which currently includes:
++		 *
++		 *  1. fixed_percpu_data
++		 */
++		if (!addr)
++			continue;
++
++		sym_name = elf_sym__name(&sym, btfe->symtab);
++		if (!btf_name_valid(sym_name)) {
++			dump_invalid_symbol("Found symbol of invalid name when encoding btf",
++					    sym_name, btf_elf__verbose, btf_elf__force);
++			if (btf_elf__force)
++				continue;
++			return -1;
++		}
++		size = elf_sym__size(&sym);
++		if (!size) {
++			dump_invalid_symbol("Found symbol of zero size when encoding btf",
++					    sym_name, btf_elf__verbose, btf_elf__force);
++			if (btf_elf__force)
++				continue;
++			return -1;
++		}
++
++		if (btf_elf__verbose)
++			printf("Found per-CPU symbol '%s' at address 0x%lx\n", sym_name, addr);
++
++		if (percpu_var_cnt == MAX_PERCPU_VAR_CNT) {
++			fprintf(stderr, "Reached the limit of per-CPU variables: %d\n",
++				MAX_PERCPU_VAR_CNT);
++			return -1;
++		}
++		percpu_vars[percpu_var_cnt].addr = addr;
++		percpu_vars[percpu_var_cnt].sz = size;
++		percpu_vars[percpu_var_cnt].name = sym_name;
++		percpu_var_cnt++;
+ 	}
+ 
+-	return NULL;
++	if (percpu_var_cnt)
++		qsort(percpu_vars, percpu_var_cnt, sizeof(percpu_vars[0]), percpu_var_cmp);
++
++	if (btf_elf__verbose)
++		printf("Found %d per-CPU variables!\n", percpu_var_cnt);
++	return 0;
+ }
+ 
  int cu__encode_btf(struct cu *cu, int verbose, bool force,
- 		   bool skip_encoding_vars)
+@@ -234,13 +331,10 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
  {
--	bool add_index_type = false;
  	uint32_t type_id_off;
  	uint32_t core_id;
++	struct variable *var;
  	struct function *fn;
-@@ -254,18 +257,26 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 	struct tag *pos;
+ 	int err = 0;
+-	struct hlist_head hash_addr[HASHADDR__SIZE];
+-	struct variable *var;
+-	bool has_global_var = false;
+-	GElf_Sym sym;
+ 
+ 	if (btfe && strcmp(btfe->filename, cu->filename)) {
+ 		err = btf_encoder__encode();
+@@ -257,6 +351,9 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
  		if (!btfe)
  			return -1;
  
--		/* cu__find_base_type_by_name() takes "type_id_t *id" */
--		type_id_t id;
--		if (!cu__find_base_type_by_name(cu, "int", &id)) {
--			add_index_type = true;
--			id = cu->types_table.nr_entries;
--		}
--		array_index_id = id;
-+		has_index_type = false;
-+		need_index_type = false;
-+		array_index_id = 0;
- 
- 		if (verbose)
- 			printf("File %s:\n", btfe->filename);
++		if (!skip_encoding_vars && find_all_percpu_vars(btfe))
++			goto out;
++
+ 		has_index_type = false;
+ 		need_index_type = false;
+ 		array_index_id = 0;
+@@ -278,6 +375,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
  	}
  
-+	if (!has_index_type) {
-+		/* cu__find_base_type_by_name() takes "type_id_t *id" */
-+		type_id_t id;
-+		if (cu__find_base_type_by_name(cu, "int", &id)) {
-+			has_index_type = true;
-+			array_index_id = id;
-+		} else {
-+			has_index_type = false;
-+			array_index_id = cu->types_table.nr_entries;
-+		}
-+	}
-+
  	btf_elf__verbose = verbose;
++	btf_elf__force = force;
  	type_id_off = btf__get_nr_types(btfe->btf);
  
-@@ -279,12 +290,13 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 	cu__for_each_type(cu, core_id, pos) {
+@@ -325,12 +423,11 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 	if (verbose)
+ 		printf("search cu '%s' for percpu global variables.\n", cu->name);
+ 
+-	/* cache variables' addresses, preparing for searching in symtab. */
+-	for (core_id = 0; core_id < HASHADDR__SIZE; ++core_id)
+-		INIT_HLIST_HEAD(&hash_addr[core_id]);
+-
+ 	cu__for_each_variable(cu, core_id, pos) {
+-		struct hlist_head *head;
++		uint32_t size, type, linkage, offset;
++		const char *name;
++		uint64_t addr;
++		int id;
+ 
+ 		var = tag__variable(pos);
+ 		if (var->declaration && !var->spec)
+@@ -338,89 +435,37 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 		/* percpu variables are allocated in global space */
+ 		if (variable__scope(var) != VSCOPE_GLOBAL && !var->spec)
+ 			continue;
+-		has_global_var = true;
+-		head = &hash_addr[hashaddr__fn(var->ip.addr)];
+-		hlist_add_head(&var->tool_hnode, head);
+-	}
+-	if (!has_global_var) {
+-		if (verbose)
+-			printf("cu has no global variable defined, skip.\n");
+-		goto out;
+-	}
+-
+-	/* search within symtab for percpu variables */
+-	elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
+-		uint32_t linkage, type, size, offset;
+-		int32_t btf_var_id, btf_var_secinfo_id;
+-		uint64_t addr;
+-		const char *sym_name;
+-
+-		/* compare a symbol's shndx to determine if it's a percpu variable */
+-		if (elf_sym__section(&sym) != btfe->percpu_shndx)
+-			continue;
+-		if (elf_sym__type(&sym) != STT_OBJECT)
+-			continue;
+ 
+-		addr = elf_sym__value(&sym);
+-		/*
+-		 * Store only those symbols that have allocated space in the percpu section.
+-		 * This excludes the following three types of symbols:
+-		 *
+-		 *  1. __ADDRESSABLE(sym), which are forcely emitted as symbols.
+-		 *  2. __UNIQUE_ID(prefix), which are introduced to generate unique ids.
+-		 *  3. __exitcall(fn), functions which are labeled as exit calls.
+-		 *
+-		 * In addition, the variables defined using DEFINE_PERCPU_FIRST are
+-		 * also not included, which currently includes:
+-		 *
+-		 *  1. fixed_percpu_data
+-		 */
+-		if (!addr)
+-			continue;
+-		var = hashaddr__find_variable(hash_addr, addr);
+-		if (var == NULL)
+-			continue;
++		/* addr has to be recorded before we follow spec */
++		addr = var->ip.addr;
+ 		if (var->spec)
+ 			var = var->spec;
+ 
+-		sym_name = elf_sym__name(&sym, btfe->symtab);
+-		if (!btf_name_valid(sym_name)) {
+-			dump_invalid_symbol("Found symbol of invalid name when encoding btf",
+-					    sym_name, cu->name, verbose, force);
+-			if (force)
+-				continue;
+-			err = -1;
+-			break;
+-		}
+ 		if (var->ip.tag.type == 0) {
+-			dump_invalid_symbol("Found symbol of void type when encoding btf",
+-					    sym_name, cu->name, verbose, force);
+-			if (force)
+-				continue;
+-			err = -1;
+-			break;
+-		}
+-		type = type_id_off + var->ip.tag.type;
+-		size = elf_sym__size(&sym);
+-		if (!size) {
+-			dump_invalid_symbol("Found symbol of zero size when encoding btf",
+-					    sym_name, cu->name, verbose, force);
++			fprintf(stderr, "error: found variable in CU '%s' that has void type\n",
++				cu->name);
+ 			if (force)
+ 				continue;
+ 			err = -1;
+ 			break;
+ 		}
+ 
+-		if (verbose)
+-			printf("symbol '%s' of address 0x%lx encoded\n",
+-			       sym_name, addr);
++		type = var->ip.tag.type + type_id_off;
++		linkage = var->external ? BTF_VAR_GLOBAL_ALLOCATED : BTF_VAR_STATIC;
++		if (!percpu_var_exists(addr, &size, &name))
++			continue; /* not a per-CPU variable */
++
++		if (btf_elf__verbose) {
++			printf("Variable '%s' from CU '%s' at address 0x%lx encoded\n",
++			       name, cu->name, addr);
++		}
+ 
+ 		/* add a BTF_KIND_VAR in btfe->types */
+-		linkage = var->external ? BTF_VAR_GLOBAL_ALLOCATED : BTF_VAR_STATIC;
+-		btf_var_id = btf_elf__add_var_type(btfe, type, sym_name, linkage);
+-		if (btf_var_id < 0) {
++		id = btf_elf__add_var_type(btfe, type, name, linkage);
++		if (id < 0) {
+ 			err = -1;
+-			printf("error: failed to encode variable '%s'\n", sym_name);
++			fprintf(stderr, "error: failed to encode variable '%s' at addr 0x%lx\n",
++			        name, addr);
+ 			break;
+ 		}
+ 
+@@ -428,13 +473,12 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 		 * add a BTF_VAR_SECINFO in btfe->percpu_secinfo, which will be added into
+ 		 * btfe->types later when we add BTF_VAR_DATASEC.
+ 		 */
+-		type = btf_var_id;
+ 		offset = addr - btfe->percpu_base_addr;
+-		btf_var_secinfo_id = btf_elf__add_var_secinfo(&btfe->percpu_secinfo,
+-							      type, offset, size);
+-		if (btf_var_secinfo_id < 0) {
++		id = btf_elf__add_var_secinfo(&btfe->percpu_secinfo, id, offset, size);
++		if (id < 0) {
+ 			err = -1;
+-			printf("error: failed to encode var secinfo '%s'\n", sym_name);
++			fprintf(stderr, "error: failed to encode section info for variable '%s' at addr 0x%lx\n",
++			        name, addr);
+ 			break;
  		}
  	}
+diff --git a/libbtf.c b/libbtf.c
+index 0467f1f2a596..27aa3e5a986e 100644
+--- a/libbtf.c
++++ b/libbtf.c
+@@ -28,6 +28,7 @@
+ #include "elf_symtab.h"
  
--	if (add_index_type) {
-+	if (need_index_type && !has_index_type) {
- 		struct base_type bt = {};
+ uint8_t btf_elf__verbose;
++uint8_t btf_elf__force;
  
- 		bt.name = 0;
- 		bt.bit_size = 32;
- 		btf_elf__add_base_type(btfe, &bt, "__ARRAY_SIZE_TYPE__");
-+		has_index_type = true;
- 	}
+ static int btf_var_secinfo_cmp(const void *a, const void *b)
+ {
+@@ -62,7 +63,6 @@ int btf_elf__load(struct btf_elf *btfe)
+ 	return 0;
+ }
  
- 	cu__for_each_function(cu, core_id, fn) {
+-
+ struct btf_elf *btf_elf__new(const char *filename, Elf *elf)
+ {
+ 	struct btf_elf *btfe = zalloc(sizeof(*btfe));
+@@ -771,10 +771,6 @@ int btf_elf__encode(struct btf_elf *btfe, uint8_t flags)
+ {
+ 	struct btf *btf = btfe->btf;
+ 
+-	if (gobuffer__size(&btfe->percpu_secinfo) != 0)
+-		btf_elf__add_datasec_type(btfe, PERCPU_SECTION,
+-					  &btfe->percpu_secinfo);
+-
+ 	/* Empty file, nothing to do, so... done! */
+ 	if (btf__get_nr_types(btf) == 0)
+ 		return 0;
+diff --git a/libbtf.h b/libbtf.h
+index 9b3d396da31f..887b5bc55c8e 100644
+--- a/libbtf.h
++++ b/libbtf.h
+@@ -30,6 +30,7 @@ struct btf_elf {
+ };
+ 
+ extern uint8_t btf_elf__verbose;
++extern uint8_t btf_elf__force;
+ #define btf_elf__verbose_log(fmt, ...) { if (btf_elf__verbose) printf(fmt, __VA_ARGS__); }
+ 
+ #define PERCPU_SECTION ".data..percpu"
 -- 
 2.24.1
 
