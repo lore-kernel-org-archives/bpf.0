@@ -2,35 +2,35 @@ Return-Path: <SRS0=0bGE=DP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D8A8C433E7
-	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 21:31:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C61B4C433E7
+	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 21:32:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07E4D22203
-	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 21:31:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7604222203
+	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 21:32:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728202AbgJHVb4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1729410AbgJHVb4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 8 Oct 2020 17:31:56 -0400
-Received: from www62.your-server.de ([213.133.104.62]:46948 "EHLO
+Received: from www62.your-server.de ([213.133.104.62]:46934 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725852AbgJHVby (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Oct 2020 17:31:54 -0400
+        with ESMTP id S1728363AbgJHVbx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Oct 2020 17:31:53 -0400
 Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1kQdVw-0007v1-2N; Thu, 08 Oct 2020 23:31:52 +0200
+        id 1kQdVv-0007uj-4U; Thu, 08 Oct 2020 23:31:51 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     daniel@iogearbox.net, john.fastabend@gmail.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next 4/6] bpf, selftests: add test for different array inner map size
-Date:   Thu,  8 Oct 2020 23:31:46 +0200
-Message-Id: <20201008213148.26848-5-daniel@iogearbox.net>
+Subject: [PATCH bpf-next 2/6] bpf: add redirect_peer helper
+Date:   Thu,  8 Oct 2020 23:31:44 +0200
+Message-Id: <20201008213148.26848-3-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20201008213148.26848-1-daniel@iogearbox.net>
 References: <20201008213148.26848-1-daniel@iogearbox.net>
@@ -42,161 +42,306 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extend the "diff_size" subtest to also include a non-inlined array map variant
-where dynamic inner #elems are possible.
+Add an efficient ingress to ingress netns switch that can be used out of tc BPF
+programs in order to redirect traffic from host ns ingress into a container
+veth device ingress without having to go via CPU backlog queue [0]. For local
+containers this can also be utilized and path via CPU backlog queue only needs
+to be taken once, not twice. On a high level this borrows from ipvlan which does
+similar switch in __netif_receive_skb_core() and then iterates via another_round.
+This helps to reduce latency for mentioned use cases.
+
+Pod to remote pod with redirect(), TCP_RR [1]:
+
+  # percpu_netperf 10.217.1.33
+          RT_LATENCY:         122.450         (per CPU:         122.666         122.401         122.333         122.401 )
+        MEAN_LATENCY:         121.210         (per CPU:         121.100         121.260         121.320         121.160 )
+      STDDEV_LATENCY:         120.040         (per CPU:         119.420         119.910         125.460         115.370 )
+         MIN_LATENCY:          46.500         (per CPU:          47.000          47.000          47.000          45.000 )
+         P50_LATENCY:         118.500         (per CPU:         118.000         119.000         118.000         119.000 )
+         P90_LATENCY:         127.500         (per CPU:         127.000         128.000         127.000         128.000 )
+         P99_LATENCY:         130.750         (per CPU:         131.000         131.000         129.000         132.000 )
+
+    TRANSACTION_RATE:       32666.400         (per CPU:        8152.200        8169.842        8174.439        8169.897 )
+
+Pod to remote pod with redirect_peer(), TCP_RR:
+
+  # percpu_netperf 10.217.1.33
+          RT_LATENCY:          44.449         (per CPU:          43.767          43.127          45.279          45.622 )
+        MEAN_LATENCY:          45.065         (per CPU:          44.030          45.530          45.190          45.510 )
+      STDDEV_LATENCY:          84.823         (per CPU:          66.770          97.290          84.380          90.850 )
+         MIN_LATENCY:          33.500         (per CPU:          33.000          33.000          34.000          34.000 )
+         P50_LATENCY:          43.250         (per CPU:          43.000          43.000          43.000          44.000 )
+         P90_LATENCY:          46.750         (per CPU:          46.000          47.000          47.000          47.000 )
+         P99_LATENCY:          52.750         (per CPU:          51.000          54.000          53.000          53.000 )
+
+    TRANSACTION_RATE:       90039.500         (per CPU:       22848.186       23187.089       22085.077       21919.130 )
+
+  [0] https://linuxplumbersconf.org/event/7/contributions/674/attachments/568/1002/plumbers_2020_cilium_load_balancer.pdf
+  [1] https://github.com/borkmann/netperf_scripts/blob/master/percpu_netperf
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- .../selftests/bpf/prog_tests/btf_map_in_map.c | 39 ++++++++++++-----
- .../selftests/bpf/progs/test_btf_map_in_map.c | 43 +++++++++++++++++++
- 2 files changed, 72 insertions(+), 10 deletions(-)
+ drivers/net/veth.c             |  9 ++++++
+ include/linux/netdevice.h      |  4 +++
+ include/uapi/linux/bpf.h       | 17 +++++++++++
+ net/core/dev.c                 | 15 ++++++++--
+ net/core/filter.c              | 54 +++++++++++++++++++++++++++++-----
+ tools/include/uapi/linux/bpf.h | 17 +++++++++++
+ 6 files changed, 106 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-index 540fea4c91a5..e478bdec73b8 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-@@ -55,10 +55,10 @@ static int kern_sync_rcu(void)
- 
- static void test_lookup_update(void)
- {
--	int err, key = 0, val, i;
-+	int map1_fd, map2_fd, map3_fd, map4_fd, map5_fd, map1_id, map2_id;
-+	int outer_arr_fd, outer_hash_fd, outer_arr_dyn_fd;
- 	struct test_btf_map_in_map *skel;
--	int outer_arr_fd, outer_hash_fd;
--	int fd, map1_fd, map2_fd, map1_id, map2_id;
-+	int err, key = 0, val, i, fd;
- 
- 	skel = test_btf_map_in_map__open_and_load();
- 	if (CHECK(!skel, "skel_open", "failed to open&load skeleton\n"))
-@@ -70,32 +70,45 @@ static void test_lookup_update(void)
- 
- 	map1_fd = bpf_map__fd(skel->maps.inner_map1);
- 	map2_fd = bpf_map__fd(skel->maps.inner_map2);
-+	map3_fd = bpf_map__fd(skel->maps.inner_map3);
-+	map4_fd = bpf_map__fd(skel->maps.inner_map4);
-+	map5_fd = bpf_map__fd(skel->maps.inner_map5);
-+	outer_arr_dyn_fd = bpf_map__fd(skel->maps.outer_arr_dyn);
- 	outer_arr_fd = bpf_map__fd(skel->maps.outer_arr);
- 	outer_hash_fd = bpf_map__fd(skel->maps.outer_hash);
- 
--	/* inner1 = input, inner2 = input + 1 */
--	map1_fd = bpf_map__fd(skel->maps.inner_map1);
-+	/* inner1 = input, inner2 = input + 1, inner3 = input + 2 */
- 	bpf_map_update_elem(outer_arr_fd, &key, &map1_fd, 0);
--	map2_fd = bpf_map__fd(skel->maps.inner_map2);
- 	bpf_map_update_elem(outer_hash_fd, &key, &map2_fd, 0);
-+	bpf_map_update_elem(outer_arr_dyn_fd, &key, &map3_fd, 0);
- 	skel->bss->input = 1;
- 	usleep(1);
--
- 	bpf_map_lookup_elem(map1_fd, &key, &val);
- 	CHECK(val != 1, "inner1", "got %d != exp %d\n", val, 1);
- 	bpf_map_lookup_elem(map2_fd, &key, &val);
- 	CHECK(val != 2, "inner2", "got %d != exp %d\n", val, 2);
-+	bpf_map_lookup_elem(map3_fd, &key, &val);
-+	CHECK(val != 3, "inner3", "got %d != exp %d\n", val, 3);
- 
--	/* inner1 = input + 1, inner2 = input */
-+	/* inner1 = input, inner2 = input + 1, inner4 = input + 2 */
- 	bpf_map_update_elem(outer_arr_fd, &key, &map2_fd, 0);
- 	bpf_map_update_elem(outer_hash_fd, &key, &map1_fd, 0);
-+	bpf_map_update_elem(outer_arr_dyn_fd, &key, &map4_fd, 0);
- 	skel->bss->input = 3;
- 	usleep(1);
--
- 	bpf_map_lookup_elem(map1_fd, &key, &val);
- 	CHECK(val != 4, "inner1", "got %d != exp %d\n", val, 4);
- 	bpf_map_lookup_elem(map2_fd, &key, &val);
- 	CHECK(val != 3, "inner2", "got %d != exp %d\n", val, 3);
-+	bpf_map_lookup_elem(map4_fd, &key, &val);
-+	CHECK(val != 5, "inner4", "got %d != exp %d\n", val, 5);
-+
-+	/* inner5 = input + 2 */
-+	bpf_map_update_elem(outer_arr_dyn_fd, &key, &map5_fd, 0);
-+	skel->bss->input = 5;
-+	usleep(1);
-+	bpf_map_lookup_elem(map5_fd, &key, &val);
-+	CHECK(val != 7, "inner5", "got %d != exp %d\n", val, 7);
- 
- 	for (i = 0; i < 5; i++) {
- 		val = i % 2 ? map1_fd : map2_fd;
-@@ -106,7 +119,13 @@ static void test_lookup_update(void)
- 		}
- 		err = bpf_map_update_elem(outer_arr_fd, &key, &val, 0);
- 		if (CHECK_FAIL(err)) {
--			printf("failed to update hash_of_maps on iter #%d\n", i);
-+			printf("failed to update array_of_maps on iter #%d\n", i);
-+			goto cleanup;
-+		}
-+		val = i % 2 ? map4_fd : map5_fd;
-+		err = bpf_map_update_elem(outer_arr_dyn_fd, &key, &val, 0);
-+		if (CHECK_FAIL(err)) {
-+			printf("failed to update array_of_maps (dyn) on iter #%d\n", i);
- 			goto cleanup;
- 		}
- 	}
-diff --git a/tools/testing/selftests/bpf/progs/test_btf_map_in_map.c b/tools/testing/selftests/bpf/progs/test_btf_map_in_map.c
-index 193fe0198b21..ccad6f9beabd 100644
---- a/tools/testing/selftests/bpf/progs/test_btf_map_in_map.c
-+++ b/tools/testing/selftests/bpf/progs/test_btf_map_in_map.c
-@@ -41,6 +41,43 @@ struct outer_arr {
- 	.values = { (void *)&inner_map1, 0, (void *)&inner_map2 },
- };
- 
-+struct inner_map_sz3 {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(map_flags, BPF_F_NO_INLINE);
-+	__uint(max_entries, 3);
-+	__type(key, int);
-+	__type(value, int);
-+} inner_map3 SEC(".maps"),
-+  inner_map4 SEC(".maps");
-+
-+struct inner_map_sz4 {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(map_flags, BPF_F_NO_INLINE);
-+	__uint(max_entries, 5);
-+	__type(key, int);
-+	__type(value, int);
-+} inner_map5 SEC(".maps");
-+
-+struct outer_arr_dyn {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__uint(max_entries, 3);
-+	__uint(key_size, sizeof(int));
-+	__uint(value_size, sizeof(int));
-+	__array(values, struct {
-+		__uint(type, BPF_MAP_TYPE_ARRAY);
-+		__uint(map_flags, BPF_F_NO_INLINE);
-+		__uint(max_entries, 1);
-+		__type(key, int);
-+		__type(value, int);
-+	});
-+} outer_arr_dyn SEC(".maps") = {
-+	.values = {
-+		[0] = (void *)&inner_map3,
-+		[1] = (void *)&inner_map4,
-+		[2] = (void *)&inner_map5,
-+	},
-+};
-+
- struct outer_hash {
- 	__uint(type, BPF_MAP_TYPE_HASH_OF_MAPS);
- 	__uint(max_entries, 5);
-@@ -101,6 +138,12 @@ int handle__sys_enter(void *ctx)
- 	val = input + 1;
- 	bpf_map_update_elem(inner_map, &key, &val, 0);
- 
-+	inner_map = bpf_map_lookup_elem(&outer_arr_dyn, &key);
-+	if (!inner_map)
-+		return 1;
-+	val = input + 2;
-+	bpf_map_update_elem(inner_map, &key, &val, 0);
-+
- 	return 0;
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 091e5b4ba042..8c737668008a 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -420,6 +420,14 @@ static int veth_select_rxq(struct net_device *dev)
+ 	return smp_processor_id() % dev->real_num_rx_queues;
  }
  
++static struct net_device *veth_peer_dev(struct net_device *dev)
++{
++	struct veth_priv *priv = netdev_priv(dev);
++
++	/* Callers must be under RCU read side. */
++	return rcu_dereference(priv->peer);
++}
++
+ static int veth_xdp_xmit(struct net_device *dev, int n,
+ 			 struct xdp_frame **frames,
+ 			 u32 flags, bool ndo_xmit)
+@@ -1224,6 +1232,7 @@ static const struct net_device_ops veth_netdev_ops = {
+ 	.ndo_set_rx_headroom	= veth_set_rx_headroom,
+ 	.ndo_bpf		= veth_xdp,
+ 	.ndo_xdp_xmit		= veth_ndo_xdp_xmit,
++	.ndo_get_peer_dev	= veth_peer_dev,
+ };
+ 
+ #define VETH_FEATURES (NETIF_F_SG | NETIF_F_FRAGLIST | NETIF_F_HW_CSUM | \
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 28cfa53daf72..0533f86018dd 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -1277,6 +1277,9 @@ struct netdev_net_notifier {
+  * int (*ndo_tunnel_ctl)(struct net_device *dev, struct ip_tunnel_parm *p,
+  *			 int cmd);
+  *	Add, change, delete or get information on an IPv4 tunnel.
++ * struct net_device *(*ndo_get_peer_dev)(struct net_device *dev);
++ *	If a device is paired with a peer device, return the peer instance.
++ *	The caller must be under RCU read context.
+  */
+ struct net_device_ops {
+ 	int			(*ndo_init)(struct net_device *dev);
+@@ -1484,6 +1487,7 @@ struct net_device_ops {
+ 	struct devlink_port *	(*ndo_get_devlink_port)(struct net_device *dev);
+ 	int			(*ndo_tunnel_ctl)(struct net_device *dev,
+ 						  struct ip_tunnel_parm *p, int cmd);
++	struct net_device *	(*ndo_get_peer_dev)(struct net_device *dev);
+ };
+ 
+ /**
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 8e8941535c28..ea8dfbe62c7a 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -3719,6 +3719,22 @@ union bpf_attr {
+  *		never return NULL.
+  *	Return
+  *		A pointer pointing to the kernel percpu variable on this cpu.
++ *
++ * long bpf_redirect_peer(u32 ifindex, u64 flags)
++ * 	Description
++ * 		Redirect the packet to another net device of index *ifindex*.
++ * 		This helper is somewhat similar to **bpf_redirect**\ (), except
++ * 		that the redirection happens to the *ifindex*' peer device and
++ * 		the netns switch takes place from ingress to ingress without
++ * 		going through the CPU's backlog queue.
++ *
++ * 		The *flags* argument is reserved and must be 0. The helper is
++ * 		currently only supported for tc BPF program types at the ingress
++ * 		hook and for veth device types. The peer device must reside in a
++ * 		different network namespace.
++ * 	Return
++ * 		The helper returns **TC_ACT_REDIRECT** on success or
++ * 		**TC_ACT_SHOT** on error.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -3876,6 +3892,7 @@ union bpf_attr {
+ 	FN(redirect_neigh),		\
+ 	FN(bpf_per_cpu_ptr),            \
+ 	FN(bpf_this_cpu_ptr),		\
++	FN(redirect_peer),		\
+ 	/* */
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+diff --git a/net/core/dev.c b/net/core/dev.c
+index 9d55bf5d1a65..7dd015823593 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4930,7 +4930,7 @@ EXPORT_SYMBOL_GPL(br_fdb_test_addr_hook);
+ 
+ static inline struct sk_buff *
+ sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
+-		   struct net_device *orig_dev)
++		   struct net_device *orig_dev, bool *another)
+ {
+ #ifdef CONFIG_NET_CLS_ACT
+ 	struct mini_Qdisc *miniq = rcu_dereference_bh(skb->dev->miniq_ingress);
+@@ -4974,7 +4974,11 @@ sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
+ 		 * redirecting to another netdev
+ 		 */
+ 		__skb_push(skb, skb->mac_len);
+-		skb_do_redirect(skb);
++		if (skb_do_redirect(skb) == -EAGAIN) {
++			__skb_pull(skb, skb->mac_len);
++			*another = true;
++			break;
++		}
+ 		return NULL;
+ 	case TC_ACT_CONSUMED:
+ 		return NULL;
+@@ -5163,7 +5167,12 @@ static int __netif_receive_skb_core(struct sk_buff **pskb, bool pfmemalloc,
+ skip_taps:
+ #ifdef CONFIG_NET_INGRESS
+ 	if (static_branch_unlikely(&ingress_needed_key)) {
+-		skb = sch_handle_ingress(skb, &pt_prev, &ret, orig_dev);
++		bool another = false;
++
++		skb = sch_handle_ingress(skb, &pt_prev, &ret, orig_dev,
++					 &another);
++		if (another)
++			goto another_round;
+ 		if (!skb)
+ 			goto out;
+ 
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 05df73780dd3..0f55df691f8c 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -2380,8 +2380,9 @@ static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev)
+ 
+ /* Internal, non-exposed redirect flags. */
+ enum {
+-	BPF_F_NEIGH = (1ULL << 1),
+-#define BPF_F_REDIRECT_INTERNAL	(BPF_F_NEIGH)
++	BPF_F_NEIGH	= (1ULL << 1),
++	BPF_F_PEER	= (1ULL << 2),
++#define BPF_F_REDIRECT_INTERNAL	(BPF_F_NEIGH | BPF_F_PEER)
+ };
+ 
+ BPF_CALL_3(bpf_clone_redirect, struct sk_buff *, skb, u32, ifindex, u64, flags)
+@@ -2430,19 +2431,35 @@ EXPORT_PER_CPU_SYMBOL_GPL(bpf_redirect_info);
+ int skb_do_redirect(struct sk_buff *skb)
+ {
+ 	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
++	struct net *net = dev_net(skb->dev);
+ 	struct net_device *dev;
+ 	u32 flags = ri->flags;
+ 
+-	dev = dev_get_by_index_rcu(dev_net(skb->dev), ri->tgt_index);
++	dev = dev_get_by_index_rcu(net, ri->tgt_index);
+ 	ri->tgt_index = 0;
+-	if (unlikely(!dev)) {
+-		kfree_skb(skb);
+-		return -EINVAL;
++	ri->flags = 0;
++	if (unlikely(!dev))
++		goto out_drop;
++	if (flags & BPF_F_PEER) {
++		const struct net_device_ops *ops = dev->netdev_ops;
++
++		if (unlikely(!ops->ndo_get_peer_dev ||
++			     !skb_at_tc_ingress(skb)))
++			goto out_drop;
++		dev = ops->ndo_get_peer_dev(dev);
++		if (unlikely(!dev ||
++			     !is_skb_forwardable(dev, skb) ||
++			     net_eq(net, dev_net(dev))))
++			goto out_drop;
++		skb->dev = dev;
++		return -EAGAIN;
+ 	}
+-
+ 	return flags & BPF_F_NEIGH ?
+ 	       __bpf_redirect_neigh(skb, dev) :
+ 	       __bpf_redirect(skb, dev, flags);
++out_drop:
++	kfree_skb(skb);
++	return -EINVAL;
+ }
+ 
+ BPF_CALL_2(bpf_redirect, u32, ifindex, u64, flags)
+@@ -2466,6 +2483,27 @@ static const struct bpf_func_proto bpf_redirect_proto = {
+ 	.arg2_type      = ARG_ANYTHING,
+ };
+ 
++BPF_CALL_2(bpf_redirect_peer, u32, ifindex, u64, flags)
++{
++	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
++
++	if (unlikely(flags))
++		return TC_ACT_SHOT;
++
++	ri->flags = BPF_F_PEER;
++	ri->tgt_index = ifindex;
++
++	return TC_ACT_REDIRECT;
++}
++
++static const struct bpf_func_proto bpf_redirect_peer_proto = {
++	.func           = bpf_redirect_peer,
++	.gpl_only       = false,
++	.ret_type       = RET_INTEGER,
++	.arg1_type      = ARG_ANYTHING,
++	.arg2_type      = ARG_ANYTHING,
++};
++
+ BPF_CALL_2(bpf_redirect_neigh, u32, ifindex, u64, flags)
+ {
+ 	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
+@@ -7049,6 +7087,8 @@ tc_cls_act_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_redirect_proto;
+ 	case BPF_FUNC_redirect_neigh:
+ 		return &bpf_redirect_neigh_proto;
++	case BPF_FUNC_redirect_peer:
++		return &bpf_redirect_peer_proto;
+ 	case BPF_FUNC_get_route_realm:
+ 		return &bpf_get_route_realm_proto;
+ 	case BPF_FUNC_get_hash_recalc:
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 8e8941535c28..ea8dfbe62c7a 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -3719,6 +3719,22 @@ union bpf_attr {
+  *		never return NULL.
+  *	Return
+  *		A pointer pointing to the kernel percpu variable on this cpu.
++ *
++ * long bpf_redirect_peer(u32 ifindex, u64 flags)
++ * 	Description
++ * 		Redirect the packet to another net device of index *ifindex*.
++ * 		This helper is somewhat similar to **bpf_redirect**\ (), except
++ * 		that the redirection happens to the *ifindex*' peer device and
++ * 		the netns switch takes place from ingress to ingress without
++ * 		going through the CPU's backlog queue.
++ *
++ * 		The *flags* argument is reserved and must be 0. The helper is
++ * 		currently only supported for tc BPF program types at the ingress
++ * 		hook and for veth device types. The peer device must reside in a
++ * 		different network namespace.
++ * 	Return
++ * 		The helper returns **TC_ACT_REDIRECT** on success or
++ * 		**TC_ACT_SHOT** on error.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -3876,6 +3892,7 @@ union bpf_attr {
+ 	FN(redirect_neigh),		\
+ 	FN(bpf_per_cpu_ptr),            \
+ 	FN(bpf_this_cpu_ptr),		\
++	FN(redirect_peer),		\
+ 	/* */
+ 
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
 -- 
 2.17.1
 
