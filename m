@@ -7,47 +7,46 @@ X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2912DC04EBE
-	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 14:09:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C1B1C4363A
+	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 14:09:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8F94B21D7A
-	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 14:09:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E0B5D21897
+	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 14:09:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gdBeDt+L"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VMRJ8zTP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730506AbgJHOJ3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Oct 2020 10:09:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:52997 "EHLO
+        id S1730520AbgJHOJn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 8 Oct 2020 10:09:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:60353 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730487AbgJHOJ2 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 8 Oct 2020 10:09:28 -0400
+        by vger.kernel.org with ESMTP id S1730518AbgJHOJj (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 8 Oct 2020 10:09:39 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602166167;
+        s=mimecast20190719; t=1602166177;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6dTbqUjrK5nHaC9UNpKTzqrGr/FcLg1cIVA/PuBqNMQ=;
-        b=gdBeDt+LcSEgdXPqOtq6YN1nVLrFsjmKOWsceaOw3G7soyMpimnVttlHnP6qApbiYUNmKh
-        Z4iWao1ZfVjq8+c+GrvyA7aPKEyL25dhhse73ds8C3EBtoCuTnMhVAzv82vja8moGbB9//
-        XlAuQGrlugqSg4urdcFhGW5zGd0dJDE=
+        bh=32w48iMNGkmD+it7eg91axPb7iDFt5xqhVL3TNeV8g4=;
+        b=VMRJ8zTPtzzzH12RTc67hGLxpA2Sb+5OUbLveOB0DIAEeoEsaXjh9Fs/nf7OtdnIJIsWWp
+        1R49ef8DlShjDzb4owKdCvpCfZrD87FE9r4LRq+UPe8RfzyAAv+B0RvjG0zgKGUJx/dR1Z
+        7rKvZ1u5jDDSonZ8t4C6Iq2cHS8ccDI=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-38-Yk6eGKn8O5Kp6pQHq9mlsw-1; Thu, 08 Oct 2020 10:09:23 -0400
-X-MC-Unique: Yk6eGKn8O5Kp6pQHq9mlsw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+ us-mta-414-zNhDG5Z2O_CA2BDK9_zNpA-1; Thu, 08 Oct 2020 10:09:33 -0400
+X-MC-Unique: zNhDG5Z2O_CA2BDK9_zNpA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9C1801074644;
-        Thu,  8 Oct 2020 14:09:21 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CA0C4804018;
+        Thu,  8 Oct 2020 14:09:31 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A53CA5C1BD;
-        Thu,  8 Oct 2020 14:09:18 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D42CD55768;
+        Thu,  8 Oct 2020 14:09:28 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id B7C7830736C8B;
-        Thu,  8 Oct 2020 16:09:17 +0200 (CEST)
-Subject: [PATCH bpf-next V3 4/6] bpf: make it possible to identify BPF
- redirected SKBs
+        by firesoul.localdomain (Postfix) with ESMTP id E58A730736C8B;
+        Thu,  8 Oct 2020 16:09:27 +0200 (CEST)
+Subject: [PATCH bpf-next V3 6/6] net: inline and splitup is_skb_forwardable
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     bpf@vger.kernel.org
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -57,62 +56,116 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
         John Fastabend <john.fastabend@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>, eyal.birger@gmail.com
-Date:   Thu, 08 Oct 2020 16:09:17 +0200
-Message-ID: <160216615767.882446.7384364280837100311.stgit@firesoul>
+Date:   Thu, 08 Oct 2020 16:09:27 +0200
+Message-ID: <160216616785.882446.3058399056188507434.stgit@firesoul>
 In-Reply-To: <160216609656.882446.16642490462568561112.stgit@firesoul>
 References: <160216609656.882446.16642490462568561112.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This change makes it possible to identify SKBs that have been redirected
-by TC-BPF (cls_act). This is needed for a number of cases.
+The BPF-helper bpf_skb_fib_lookup() use is_skb_forwardable() that
+also checks if net_device is "up", which is unnecessary for this
+helper. This patch splitup is_skb_forwardable() into is_skb_fwd_size_ok()
+such that the helper can use this instead.
 
-(1) For collaborating with driver ifb net_devices.
-(2) For avoiding starting generic-XDP prog on TC ingress redirect.
+This change also cause is_skb_forwardable() to be inlined in the
+existing call sites. Most importantly in dev_forward_skb().
 
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- net/core/dev.c    |    2 ++
- net/sched/Kconfig |    1 +
- 2 files changed, 3 insertions(+)
+ include/linux/netdevice.h |   27 +++++++++++++++++++++++++--
+ net/core/dev.c            |   21 ---------------------
+ net/core/filter.c         |    2 +-
+ 3 files changed, 26 insertions(+), 24 deletions(-)
 
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 58fb7b4869ba..4857c54590b5 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -3862,8 +3862,31 @@ int xdp_umem_query(struct net_device *dev, u16 queue_id);
+ 
+ int __dev_forward_skb(struct net_device *dev, struct sk_buff *skb);
+ int dev_forward_skb(struct net_device *dev, struct sk_buff *skb);
+-bool is_skb_forwardable(const struct net_device *dev,
+-			const struct sk_buff *skb);
++
++static __always_inline bool is_skb_fwd_size_ok(const struct net_device *dev,
++					       const struct sk_buff *skb)
++{
++	const u32 vlan_hdr_len = 4; /* VLAN_HLEN */
++	unsigned int mtu = dev->mtu + dev->hard_header_len + vlan_hdr_len;
++
++	/* Assumes SKB length at L2 */
++	if (likely(skb->len <= mtu))
++		return true;
++
++	/* If TSO is enabled, we don't care about the length as the packet
++	 * could be forwarded without being segmented before.
++	 */
++	return skb_is_gso(skb);
++}
++
++static __always_inline bool is_skb_forwardable(const struct net_device *dev,
++					       const struct sk_buff *skb)
++{
++	if (unlikely(!(dev->flags & IFF_UP)))
++		return false;
++
++	return is_skb_fwd_size_ok(dev, skb);
++}
+ 
+ static __always_inline int ____dev_forward_skb(struct net_device *dev,
+ 					       struct sk_buff *skb,
 diff --git a/net/core/dev.c b/net/core/dev.c
-index 9d55bf5d1a65..b433098896b2 100644
+index 96b455f15872..21b62bda0ef9 100644
 --- a/net/core/dev.c
 +++ b/net/core/dev.c
-@@ -3885,6 +3885,7 @@ sch_handle_egress(struct sk_buff *skb, int *ret, struct net_device *dev)
- 		return NULL;
- 	case TC_ACT_REDIRECT:
- 		/* No need to push/pop skb's mac_header here on egress! */
-+		skb_set_redirected(skb, false);
- 		skb_do_redirect(skb);
- 		*ret = NET_XMIT_SUCCESS;
- 		return NULL;
-@@ -4974,6 +4975,7 @@ sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
- 		 * redirecting to another netdev
- 		 */
- 		__skb_push(skb, skb->mac_len);
-+		skb_set_redirected(skb, true);
- 		skb_do_redirect(skb);
- 		return NULL;
- 	case TC_ACT_CONSUMED:
-diff --git a/net/sched/Kconfig b/net/sched/Kconfig
-index a3b37d88800e..a1bbaa8fd054 100644
---- a/net/sched/Kconfig
-+++ b/net/sched/Kconfig
-@@ -384,6 +384,7 @@ config NET_SCH_INGRESS
- 	depends on NET_CLS_ACT
- 	select NET_INGRESS
- 	select NET_EGRESS
-+	select NET_REDIRECT
- 	help
- 	  Say Y here if you want to use classifiers for incoming and/or outgoing
- 	  packets. This qdisc doesn't do anything else besides running classifiers,
+@@ -2186,27 +2186,6 @@ static inline void net_timestamp_set(struct sk_buff *skb)
+ 			__net_timestamp(SKB);			\
+ 	}							\
+ 
+-bool is_skb_forwardable(const struct net_device *dev, const struct sk_buff *skb)
+-{
+-	unsigned int len;
+-
+-	if (!(dev->flags & IFF_UP))
+-		return false;
+-
+-	len = dev->mtu + dev->hard_header_len + VLAN_HLEN;
+-	if (skb->len <= len)
+-		return true;
+-
+-	/* if TSO is enabled, we don't care about the length as the packet
+-	 * could be forwarded without being segmented before
+-	 */
+-	if (skb_is_gso(skb))
+-		return true;
+-
+-	return false;
+-}
+-EXPORT_SYMBOL_GPL(is_skb_forwardable);
+-
+ int __dev_forward_skb(struct net_device *dev, struct sk_buff *skb)
+ {
+ 	int ret = ____dev_forward_skb(dev, skb, true);
+diff --git a/net/core/filter.c b/net/core/filter.c
+index a8e24092e4f5..14e6b93757d4 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5502,7 +5502,7 @@ BPF_CALL_4(bpf_skb_fib_lookup, struct sk_buff *, skb,
+ 		struct net_device *dev;
+ 
+ 		dev = dev_get_by_index_rcu(net, params->ifindex);
+-		if (!is_skb_forwardable(dev, skb))
++		if (!is_skb_fwd_size_ok(dev, skb))
+ 			rc = BPF_FIB_LKUP_RET_FRAG_NEEDED;
+ 
+ 		params->mtu = dev->mtu; /* union with tot_len */
 
 
