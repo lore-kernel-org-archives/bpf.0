@@ -2,381 +2,290 @@ Return-Path: <SRS0=0bGE=DP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C364DC433E7
-	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 00:10:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EABEEC4363D
+	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 01:34:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 76011207EA
-	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 00:10:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602115855;
-	bh=LWzIv/EbFEXBxLQjcS5NM/48KnH5Gs94FNBP8er7OJI=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=x1XYLxYoteo9XezRq+DDniKwV50aq6v1N1bDPJ/Yw3xzf3Ggdgo5dNY9SBLo3Z0m5
-	 xsVKw4TbxR41bD0OlakdMD1MNx4Zldgk3rhNusRTzPZDoVbnPf0uYRL5aW6r1JjQDS
-	 QYHCHu6kxFJxr9TzFnW7ugIMWP9a5H4lOJRsxH3Q=
+	by mail.kernel.org (Postfix) with ESMTP id 5126820B1F
+	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 01:34:13 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="kjp8piy1";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="a5vdr5zb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727742AbgJHAKz convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 7 Oct 2020 20:10:55 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:17190 "EHLO
+        id S1727645AbgJHBeM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 7 Oct 2020 21:34:12 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:46874 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727261AbgJHAKx (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 7 Oct 2020 20:10:53 -0400
+        by vger.kernel.org with ESMTP id S1726371AbgJHBeM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 7 Oct 2020 21:34:12 -0400
 Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09807wHc002200
-        for <bpf@vger.kernel.org>; Wed, 7 Oct 2020 17:10:51 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0981Y2IZ012584;
+        Wed, 7 Oct 2020 18:34:03 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=dI9P4qe0fiK/F4SNe2hq55etelYggSW/AE4HVzawR5A=;
+ b=kjp8piy1U18ld+pTzKR0CQp+BSq3LFklebd0pB+dhIWd4C2u86qHAPQtBryFin/Z9ihF
+ rFPLQoYgkKt9xNmIusyWg10PRLMF7OenoypeEU4kohZy83elt9q1lEdrF3Znzvur20x1
+ Wt22mIDcjCp3Qqor74aIwU1FRd7kI3j6YrE= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 3418t9mpx9-16
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 07 Oct 2020 17:10:51 -0700
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        by mx0a-00082601.pphosted.com with ESMTP id 3418t9myed-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 07 Oct 2020 18:34:03 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 7 Oct 2020 17:10:38 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 610112EC7C0E; Wed,  7 Oct 2020 17:10:31 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Tony Ambardar <tony.ambardar@gmail.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH v3 bpf-next 2/4] libbpf: support safe subset of load/store instruction resizing with CO-RE
-Date:   Wed, 7 Oct 2020 17:10:22 -0700
-Message-ID: <20201008001025.292064-3-andrii@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201008001025.292064-1-andrii@kernel.org>
-References: <20201008001025.292064-1-andrii@kernel.org>
+ 15.1.1979.3; Wed, 7 Oct 2020 18:33:55 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X3Bdnsm+nCnS4g01P8QcTX47Ps9uxFQ659l1FGYZ8hMb/1lrWC61Mz6e39TDwIcvmzjPGgYTLZAEljz6NqWrh+bEGkbHexvgLYFaAPGre1cSHgpfcuMnmKZcaLiTbv3HInZ2AlfYvX+KJQlYKogVrNujbrPEggS79zN6jnNW9zyitglyZ4fDx2NFfXye3QxrQq7Nn+3O6tzd+WibqJs7jJ/DVT1sPcui2i5anUfyrPMQLQoD6GyAk5HyV1JcBqznY9TFkEXIpCqBIiafN+HWEDJceaxXPwJ70lAISHVDrGIatYQ07/tn4alMeGhdO7qK9ewF47iXUgsZwVw3DE1ahw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Eqfbir8g5n7OGVe8dlIXNAg3V9rv1t9fckv6teB7OAI=;
+ b=er+TQXCWNIyoMLQe2CR+W7SvfS40UiB8/cjfznSBleS7BWqsl/TQRW+A90FhgwKeLhdAltQRzzvwX9CWe0Gy3bdnqLfSB4jYywvZ33DPXkudcTUFT3h/MVs+pxDX1TOHLapuE+p4iQafnGOKGFq5USyte3f2Fwc3P4uKcElK/H5MNg9iYvW9FwvHPo+y2F9t5HwEkh67IN96fksZ28JofnWIQzFbISdc40gmhRhshIu/95XlgebwBrNB+cWXHC4yylLaQU0DuGCqPWwklukYuvQvcdfjnUyuWQR3meN/SFYXs/fpXJ+UwmZNigdj4BILOeYOHPLECEzuMuYudKxVlw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Eqfbir8g5n7OGVe8dlIXNAg3V9rv1t9fckv6teB7OAI=;
+ b=a5vdr5zb1SgKqh8ObUVI8D4kfsWRf32dATOmvJMEDwytY0hfuBkLlsZ/SrdUF9fAsd2AbWjvHek+DSbteeE+wu4VEDRhIlnX86cU0mqf2yCvzUDNV5N0yF9NRsEMeJSL6c/eg+k4t51Ppc4yOBLi3e6Xqw6nZcUeiao9lmuKU3w=
+Authentication-Results: google.com; dkim=none (message not signed)
+ header.d=none;google.com; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB2198.namprd15.prod.outlook.com (2603:10b6:a02:8d::26) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3455.21; Thu, 8 Oct
+ 2020 01:33:54 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::8887:dd68:f497:ea42]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::8887:dd68:f497:ea42%3]) with mapi id 15.20.3455.023; Thu, 8 Oct 2020
+ 01:33:54 +0000
+Subject: Re: libbpf/bpftool inconsistent handling og .data and .bss ?
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Luigi Rizzo <lrizzo@google.com>
+CC:     Luigi Rizzo <rizzo@iet.unipi.it>, bpf <bpf@vger.kernel.org>,
+        Petar Penkov <ppenkov@google.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Stanislav Fomichev <sdf@google.com>
+References: <CA+hQ2+gb_y7TViv13K_JpJTP=yHFqORmY+=6PrO4eAjgrBSitw@mail.gmail.com>
+ <CAEf4BzbjUbYDrMc13-bYBBxicDmuokjLHyRaOVA-1JHD6vVbYg@mail.gmail.com>
+ <CAMOZA0JFYEYmLqAQu=km624nZfY8epPEpmqqsdUigzp+jFsymQ@mail.gmail.com>
+ <CAEf4BzYRiF00B+4=u8r-z+RN3bVWeV_h==4f_JJJZ133PhGAog@mail.gmail.com>
+ <CAMOZA0J1u-DdNk4EDFxeemxNhS8teKYLmEEMPQUcfddaJFGwaw@mail.gmail.com>
+ <CAEf4BzYnC+nBgeZ1uGb+upSwQiHpFK+hOM=fJ7WdUiZ4b1KdcA@mail.gmail.com>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <4f3a9f8b-bb7f-6800-6459-d12439899226@fb.com>
+Date:   Wed, 7 Oct 2020 18:33:50 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.12.1
+In-Reply-To: <CAEf4BzYnC+nBgeZ1uGb+upSwQiHpFK+hOM=fJ7WdUiZ4b1KdcA@mail.gmail.com>
+Content-Language: en-US
+X-Originating-IP: [2620:10d:c090:400::5:20de]
+X-ClientProxiedBy: MWHPR14CA0014.namprd14.prod.outlook.com
+ (2603:10b6:300:ae::24) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:21c1::1224] (2620:10d:c090:400::5:20de) by MWHPR14CA0014.namprd14.prod.outlook.com (2603:10b6:300:ae::24) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3412.20 via Frontend Transport; Thu, 8 Oct 2020 01:33:53 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: aeeb73aa-e9bf-4310-cb79-08d86b2a3780
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2198:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR15MB2198577477DE9B39B1FBB549D30B0@BYAPR15MB2198.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CISGmKPX2kudI/neJVjtwPQN3HHevtboCBr0cER4GEIiHyhRAAPExYDX4+v+12PKSzhX51GdCQYqaRINzks/1l+ptmDSaAJNitc4gSN0jntgg6GbTYOo/0u6TI4KxMPGHCJvuuHZhRk4q1a6SRy6Rc7fHTVkLq3wfeNdLmleAqEWghT5oNSs0HTNzEcrq2l/P5UUDrwzv8nzsU5FFGJmssbvpyaw3XFad8g0mINJ2EbUE31BGMY2xrNcqYWtg8GaeGjOZL3jJoKs03CTpkaExFuFe/S8gTBERAHHJK1K3mqOdmiYGvz7kE5zkDAUvVSbwO4fTm92W+gbiHxJlmwfAeAGbWcJJXas/JdLHJgoBvIZPm2gCvkXsGYee603+wX2qxVkedluJUQFNZ+f6/onjNOdCPk3SnPqcbLXRA9QOUs7LC42OFnOfa0DJ+Jj56UCJNvacTrRr1YsYy4RyfOShjVJHLTt02so5/9yloa1+Js=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(136003)(346002)(376002)(396003)(366004)(2616005)(8676002)(8936002)(83380400001)(31696002)(4326008)(31686004)(83080400001)(6486002)(478600001)(66556008)(316002)(52116002)(66946007)(5660300002)(186003)(36756003)(16526019)(54906003)(2906002)(86362001)(110136005)(966005)(53546011)(66476007)(142923001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: au/3rstcFNi5QZgxlTNerZzMubvvEh8TQwXs75+1DRK57RlFOXrEnrqIJzaaaRo03Ns0X5dlubpSrerMG+F4MtElEMuCqP8erCfSx1v2aCcQkCSOfe69WC1uaDmP3YtQ0z2yWMdxNjhx6dZ5UGQggp56hDuujt7M2Fn1jy7aeJTCkKdotOmXKSWrA/6hoO39vu/Q+lrXHNVJjSeypEUQiSZ0zH691/XB0CDs/1xmKjCe0Om781spbEfZ0DH00l6KZFTrGQxcnXADIlABCZFykhr/M+H16e8FvK3R55Rbnlu3QlVImjHS6hLu/WKd4h9dk6rO+gqsl08tx1lI9K0+CQ8amOktlmb1DVAMthkWfeYGO0OdmAnTW3M/Ttf1I+ldZlX+nrvQNrnj4S9EAhB6TCy/jEO8rsvcTvR7EJPfH1SFQSAi+DxIfKKEibibnwOEKNc1Y9CT4epK0ijZqBDVG2gf+9ifjVSu/nmEBlGPTQ/2w+EE/yUeOyfHVJr9EjGLFnHALBS/OSagwSfEG3Y9URJhiz81Yh9e8GtSniZb7KKAJeSwXW2vCLx36lo+z81cY/5RLUKcAg5GtR/zqJcPHKfmzKX5ngo4dP09dNAv/7hfULoXXKWptnWKe1C5d88SvaBukJluL16i4mpKm1DOCqHYfzF+/lStTinUbb+sg8Q=
+X-MS-Exchange-CrossTenant-Network-Message-Id: aeeb73aa-e9bf-4310-cb79-08d86b2a3780
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Oct 2020 01:33:54.0359
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xTslpjXpCfkiXcn4Iu/h7vO2f616m+qJFKUSxzZzW7PftLlptlzQXuaET+zORG8y
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2198
+X-OriginatorOrg: fb.com
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 1 URL was un-rewritten
 MIME-Version: 1.0
-X-FB-Internal: Safe
-Content-Type: text/plain
-Content-Transfer-Encoding: 8BIT
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-10-07_10:2020-10-07,2020-10-07 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- suspectscore=8 clxscore=1034 adultscore=0 impostorscore=0 mlxscore=0
+ suspectscore=0 clxscore=1015 adultscore=0 impostorscore=0 mlxscore=0
  malwarescore=0 mlxlogscore=999 priorityscore=1501 bulkscore=0 phishscore=0
  lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2006250000 definitions=main-2010070156
+ engine=8.12.0-2006250000 definitions=main-2010080012
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrii Nakryiko <andriin@fb.com>
 
-Add support for patching instructions of the following form:
-  - rX = *(T *)(rY + <off>);
-  - *(T *)(rX + <off>) = rY;
-  - *(T *)(rX + <off>) = <imm>, where T is one of {u8, u16, u32, u64}.
 
-For such instructions, if the actual kernel field recorded in CO-RE relocation
-has a different size than the one recorded locally (e.g., from vmlinux.h),
-then libbpf will adjust T to an appropriate 1-, 2-, 4-, or 8-byte loads.
+On 10/7/20 3:26 PM, Andrii Nakryiko wrote:
+> On Wed, Oct 7, 2020 at 2:29 PM Luigi Rizzo <lrizzo@google.com> wrote:
+>>
+>> On Wed, Oct 7, 2020 at 10:40 PM Andrii Nakryiko
+>> <andrii.nakryiko@gmail.com> wrote:
+>>>
+>>> On Wed, Oct 7, 2020 at 1:31 PM Luigi Rizzo <lrizzo@google.com> wrote:
+>>>>
+>>>> TL;DR; there seems to be a compiler bug with clang-10 and -O2
+>>>> when struct are in .data -- details below.
+>>>>
+>>>> On Wed, Oct 7, 2020 at 8:35 PM Andrii Nakryiko
+>>>> <andrii.nakryiko@gmail.com> wrote:
+>>>>>
+>>>>> On Wed, Oct 7, 2020 at 9:03 AM Luigi Rizzo <rizzo@iet.unipi.it> wrote:
+>>>>>>
+>>>>>> I am experiencing some weirdness in global variables handling
+>>>>>> in bpftool and libbpf, as described below.
+>>>> ...
+>>>>>> 2. .bss overrides from userspace are not seen in bpf at runtime
+>>>>>>
+>>>>>>      In foo_bpf.c I have "int x = 0;"
+>>>>>>      In the userspace program, before foo_bpf__load(), I do
+>>>>>>         obj->bss->x = 1
+>>>>>>      but after attach, the bpf code does not see the change, ie
+>>>>>>          "if (x == 0) { .. } else { .. }"
+>>>>>>      always takes the first branch.
+>>>>>>
+>>>>>>      If I initialize "int x = 2" and then do
+>>>>>>         obj->data->x = 1
+>>>>>>      the update is seen correctly ie
+>>>>>>            "if (x == 2) { .. } else { .. }"
+>>>>>>       takes one or the other depending on whether userspace overrides
+>>>>>>       the value before foo_bpf__load()
+>>>>>
+>>>>> This is quite surprising, given we have explicit selftests validating
+>>>>> that all this works. And it seems to work. Please check
+>>>>> prog_tests/skeleton.c and progs/test_skeleton.c. Can you try running
+>>>>> it and confirm that it works in your setup?
+>>>>
+>>>> Ah, this was non intuitive but obvious in hindsight:
+>>>>
+>>>> .bss is zeroed by the kernel after load(), and since my program
+>>>> changed the value before foo_bpf__load() , the memory was overwritten
+>>>> with 0s. I could confirm this by printing the value after load.
+>>>>
+>>>> If I update obj->data-><something> after __load(),
+>>>> or even after __attach() given that userspace mmaps .bss and .data,
+>>>> everything works as expected both for scalars and structs.
+>>>
+>>> Check prog_tests/skeleton.c again, it sets .data, .bss, and .rodata
+>>> before the load. And checks that those values are preserved after
+>>> load. So .bss, if you initialize it manually, shouldn't zero-out what
+>>> you set.
+>>
+>> Don't know what to say: it is cleared on my laptop 5.7.17
+>>
+>> I printed the values around assignments and calls
+>> (also verified that obj->bss does not change):
+>> Below, x is "uint32_t x = 0" in .bss
+>> struct one { uint32_t a } s = { .a = 2} " in .data
+>> Program output:
+>>
+>> before load, obj->bss is 0x7fb0698b6000
+>> initially x is 0 s.a is 2
+>> // x = 1; s.a = 3
+>> before load x is 1 s.a is 3
+>> after load, obj->bss is 0x7fb0698b6000
+>> after load x is 0 s.a is 3 // note x is cleared, s is left alone
+>> // x = 2; s.a = 4;
+>> after assign x is 2 s.a is 4 variables by 10 every 5ms
+>> // attach, when the program runs (every 5ms) does
+>> // if (s.a == 2 || s.a > 10) { x += 10; s.a += 10}
+>> after attach x is 12 s.a is 12
+>> at runtime count_off is 2382 x is 12
+>> at runtime count_off is 2382 x is 12
+>> ...
+>>
+>> Could it be some security setting ?
+>>
+>>>
+>>>>
+>>>>>>
+>>>>>> 3. .data overrides do not seem to work for non-scalar types
+>>>>>>      In foo_bpf.c I have
+>>>>>>            struct one { int a; }; // type also visible to userspace
+>>>>>>            struct one x { .a = 2 }; // avoid bugs #1 and #2
+>>>>>>      If in userspace I do
+>>>>>>            obj->data->x.a = 1
+>>>>>>      the update is not seen in the kernel, ie
+>>>>>>              "if (x.a == 2) { .. } else { .. }"
+>>>>>>       always takes the first branch
+>>>>>>
+>>>>>
+>>>>> Similarly, the same skeleton selftest tests this situation. So please
+>>>>> check selftests first and report if selftests for some reason don't
+>>>>> work in your case.
+>>>>
+>>>> Actually test_skeleton.c does _not_ test for struct in .data,
+>>>> only in .rodata and .bss
+>>>
+>>> It doesn't matter which section it's in, I meant it's testing struct
+>>> field accesses from at least one of global data sections.
+>>
+>> Right but as the llvm-objdump shows, the compiler is treating
+>> .bss and .data differently, at least for struct reads.
+>>
+>>>
+>>>>
+>>>> There seems to be a compiler error, at least with clang-10 and -O2
+>>>>
+>>>> Note how the struct case the compiler uses '2' as immediate value
+>>>> when reading, whereas in the scalar case it correctly dereferences
+>>>> the pointer to the variable
+>>>
+>>> It would be useful to include your original source code, especially
+>>> the variable declaration parts. I suspect that you declared your
+>>> struct variable as a static variable? In that case Clang will assume
+>>> nothing can change the value and can inline values like 2. So either
+>>> make sure you have a global variable declaration or use `static
+>>> volatile`. See how `const volatile` is used throughout all selftests
+>>> when working with the .rodata section.
+>>
+>> Perhaps the easiest is to see it on godbolt:
+>>
+>> https://godbolt.org/z/Mnx38v
+>>
+> 
+> Thanks for the example. I can also reproduce this locally. It does
+> seem like a Clang/LLVM bug at this point. The generated code makes
+> absolutely no sense to me:
+> 
+> r1 = 100
+> if r1 > 3 goto +5
+> r1 = 3
+> r1 += 111
+> 
+> Something fishy is going on there. I bet Yonghong will quickly figure
+> out what's going on.
 
-In general, such transformation is not always correct and could lead to
-invalid final value being loaded or stored. But two classes of cases are
-always safe:
-  - if both local and target (kernel) types are unsigned integers, but of
-  different sizes, then it's OK to adjust load/store instruction according to
-  the necessary memory size. Zero-extending nature of such instructions and
-  unsignedness make sure that the final value is always correct;
-  - pointer size mismatch between BPF target architecture (which is always
-  64-bit) and 32-bit host kernel architecture can be similarly resolved
-  automatically, because pointer is essentially an unsigned integer. Loading
-  32-bit pointer into 64-bit BPF register with zero extension will leave
-  correct pointer in the register.
+Thanks a lot for the test! This exposed a serious bug in llvm backend
+for load optimization. The original opt pass is implemented in 2017
+with local variables with initializer. Now *more* uses of global 
+variables exposed additional bugs. I have posted a fix at
+    https://reviews.llvm.org/D89021
 
-Both cases are necessary to support CO-RE on 32-bit kernels, as `unsigned
-long` in vmlinux.h generated from 32-bit kernel is 32-bit, but when compiled
-with BPF program for BPF target it will be treated by compiler as 64-bit
-integer. Similarly, pointers in vmlinux.h are 32-bit for kernel, but treated
-as 64-bit values by compiler for BPF target. Both problems are now resolved by
-libbpf for direct memory reads.
-
-But similar transformations are useful in general when kernel fields are
-"resized" from, e.g., unsigned int to unsigned long (or vice versa).
-
-Now, similar transformations for signed integers are not safe to perform as
-they will result in incorrect sign extension of the value. If such situation
-is detected, libbpf will emit helpful message and will poison the instruction.
-Not failing immediately means that it's possible to guard the instruction
-based on kernel version (or other conditions) and make sure it's not
-reachable.
-
-If there is a need to read signed integers that change sizes between different
-kernels, it's possible to use BPF_CORE_READ_BITFIELD() macro, which works both
-with bitfields and non-bitfield integers of any signedness and handles
-sign-extension properly. Also, bpf_core_read() with proper size and/or use of
-bpf_core_field_size() relocation could allow to deal with such complicated
-situations explicitly, if not so conventiently as direct memory reads.
-
-Selftests added in a separate patch in progs/test_core_autosize.c demonstrate
-both direct memory and probed use cases.
-
-BPF_CORE_READ() is not changed and it won't deal with such situations as
-automatically as direct memory reads due to the signedness integer
-limitations, which are much harder to detect and control with compiler macro
-magic. So it's encouraged to utilize direct memory reads as much as possible.
-
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/libbpf.c | 144 ++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 136 insertions(+), 8 deletions(-)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 07d62771472f..032cf0049ddb 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -5040,16 +5040,19 @@ static int bpf_core_spec_match(struct bpf_core_spec *local_spec,
- static int bpf_core_calc_field_relo(const struct bpf_program *prog,
- 				    const struct bpf_core_relo *relo,
- 				    const struct bpf_core_spec *spec,
--				    __u32 *val, bool *validate)
-+				    __u32 *val, __u32 *field_sz, __u32 *type_id,
-+				    bool *validate)
- {
- 	const struct bpf_core_accessor *acc;
- 	const struct btf_type *t;
--	__u32 byte_off, byte_sz, bit_off, bit_sz;
-+	__u32 byte_off, byte_sz, bit_off, bit_sz, field_type_id;
- 	const struct btf_member *m;
- 	const struct btf_type *mt;
- 	bool bitfield;
- 	__s64 sz;
- 
-+	*field_sz = 0;
-+
- 	if (relo->kind == BPF_FIELD_EXISTS) {
- 		*val = spec ? 1 : 0;
- 		return 0;
-@@ -5065,6 +5068,12 @@ static int bpf_core_calc_field_relo(const struct bpf_program *prog,
- 	if (!acc->name) {
- 		if (relo->kind == BPF_FIELD_BYTE_OFFSET) {
- 			*val = spec->bit_offset / 8;
-+			/* remember field size for load/store mem size */
-+			sz = btf__resolve_size(spec->btf, acc->type_id);
-+			if (sz < 0)
-+				return -EINVAL;
-+			*field_sz = sz;
-+			*type_id = acc->type_id;
- 		} else if (relo->kind == BPF_FIELD_BYTE_SIZE) {
- 			sz = btf__resolve_size(spec->btf, acc->type_id);
- 			if (sz < 0)
-@@ -5081,7 +5090,7 @@ static int bpf_core_calc_field_relo(const struct bpf_program *prog,
- 	}
- 
- 	m = btf_members(t) + acc->idx;
--	mt = skip_mods_and_typedefs(spec->btf, m->type, NULL);
-+	mt = skip_mods_and_typedefs(spec->btf, m->type, &field_type_id);
- 	bit_off = spec->bit_offset;
- 	bit_sz = btf_member_bitfield_size(t, acc->idx);
- 
-@@ -5101,7 +5110,7 @@ static int bpf_core_calc_field_relo(const struct bpf_program *prog,
- 			byte_off = bit_off / 8 / byte_sz * byte_sz;
- 		}
- 	} else {
--		sz = btf__resolve_size(spec->btf, m->type);
-+		sz = btf__resolve_size(spec->btf, field_type_id);
- 		if (sz < 0)
- 			return -EINVAL;
- 		byte_sz = sz;
-@@ -5119,6 +5128,10 @@ static int bpf_core_calc_field_relo(const struct bpf_program *prog,
- 	switch (relo->kind) {
- 	case BPF_FIELD_BYTE_OFFSET:
- 		*val = byte_off;
-+		if (!bitfield) {
-+			*field_sz = byte_sz;
-+			*type_id = field_type_id;
-+		}
- 		break;
- 	case BPF_FIELD_BYTE_SIZE:
- 		*val = byte_sz;
-@@ -5219,6 +5232,19 @@ struct bpf_core_relo_res
- 	bool poison;
- 	/* some relocations can't be validated against orig_val */
- 	bool validate;
-+	/* for field byte offset relocations or the forms:
-+	 *     *(T *)(rX + <off>) = rY
-+	 *     rX = *(T *)(rY + <off>),
-+	 * we remember original and resolved field size to adjust direct
-+	 * memory loads of pointers and integers; this is necessary for 32-bit
-+	 * host kernel architectures, but also allows to automatically
-+	 * relocate fields that were resized from, e.g., u32 to u64, etc.
-+	 */
-+	bool fail_memsz_adjust;
-+	__u32 orig_sz;
-+	__u32 orig_type_id;
-+	__u32 new_sz;
-+	__u32 new_type_id;
- };
- 
- /* Calculate original and target relocation values, given local and target
-@@ -5240,10 +5266,56 @@ static int bpf_core_calc_relo(const struct bpf_program *prog,
- 	res->new_val = 0;
- 	res->poison = false;
- 	res->validate = true;
-+	res->fail_memsz_adjust = false;
-+	res->orig_sz = res->new_sz = 0;
-+	res->orig_type_id = res->new_type_id = 0;
- 
- 	if (core_relo_is_field_based(relo->kind)) {
--		err = bpf_core_calc_field_relo(prog, relo, local_spec, &res->orig_val, &res->validate);
--		err = err ?: bpf_core_calc_field_relo(prog, relo, targ_spec, &res->new_val, NULL);
-+		err = bpf_core_calc_field_relo(prog, relo, local_spec,
-+					       &res->orig_val, &res->orig_sz,
-+					       &res->orig_type_id, &res->validate);
-+		err = err ?: bpf_core_calc_field_relo(prog, relo, targ_spec,
-+						      &res->new_val, &res->new_sz,
-+						      &res->new_type_id, NULL);
-+		if (err)
-+			goto done;
-+		/* Validate if it's safe to adjust load/store memory size.
-+		 * Adjustments are performed only if original and new memory
-+		 * sizes differ.
-+		 */
-+		res->fail_memsz_adjust = false;
-+		if (res->orig_sz != res->new_sz) {
-+			const struct btf_type *orig_t, *new_t;
-+
-+			orig_t = btf__type_by_id(local_spec->btf, res->orig_type_id);
-+			new_t = btf__type_by_id(targ_spec->btf, res->new_type_id);
-+
-+			/* There are two use cases in which it's safe to
-+			 * adjust load/store's mem size:
-+			 *   - reading a 32-bit kernel pointer, while on BPF
-+			 *   size pointers are always 64-bit; in this case
-+			 *   it's safe to "downsize" instruction size due to
-+			 *   pointer being treated as unsigned integer with
-+			 *   zero-extended upper 32-bits;
-+			 *   - reading unsigned integers, again due to
-+			 *   zero-extension is preserving the value correctly.
-+			 *
-+			 * In all other cases it's incorrect to attempt to
-+			 * load/store field because read value will be
-+			 * incorrect, so we poison relocated instruction.
-+			 */
-+			if (btf_is_ptr(orig_t) && btf_is_ptr(new_t))
-+				goto done;
-+			if (btf_is_int(orig_t) && btf_is_int(new_t) &&
-+			    btf_int_encoding(orig_t) != BTF_INT_SIGNED &&
-+			    btf_int_encoding(new_t) != BTF_INT_SIGNED)
-+				goto done;
-+
-+			/* mark as invalid mem size adjustment, but this will
-+			 * only be checked for LDX/STX/ST insns
-+			 */
-+			res->fail_memsz_adjust = true;
-+		}
- 	} else if (core_relo_is_type_based(relo->kind)) {
- 		err = bpf_core_calc_type_relo(relo, local_spec, &res->orig_val);
- 		err = err ?: bpf_core_calc_type_relo(relo, targ_spec, &res->new_val);
-@@ -5252,6 +5324,7 @@ static int bpf_core_calc_relo(const struct bpf_program *prog,
- 		err = err ?: bpf_core_calc_enumval_relo(relo, targ_spec, &res->new_val);
- 	}
- 
-+done:
- 	if (err == -EUCLEAN) {
- 		/* EUCLEAN is used to signal instruction poisoning request */
- 		res->poison = true;
-@@ -5291,6 +5364,28 @@ static bool is_ldimm64(struct bpf_insn *insn)
- 	return insn->code == (BPF_LD | BPF_IMM | BPF_DW);
- }
- 
-+static int insn_bpf_size_to_bytes(struct bpf_insn *insn)
-+{
-+	switch (BPF_SIZE(insn->code)) {
-+	case BPF_DW: return 8;
-+	case BPF_W: return 4;
-+	case BPF_H: return 2;
-+	case BPF_B: return 1;
-+	default: return -1;
-+	}
-+}
-+
-+static int insn_bytes_to_bpf_size(__u32 sz)
-+{
-+	switch (sz) {
-+	case 8: return BPF_DW;
-+	case 4: return BPF_W;
-+	case 2: return BPF_H;
-+	case 1: return BPF_B;
-+	default: return -1;
-+	}
-+}
-+
- /*
-  * Patch relocatable BPF instruction.
-  *
-@@ -5300,10 +5395,13 @@ static bool is_ldimm64(struct bpf_insn *insn)
-  * spec, and is checked before patching instruction. If actual insn->imm value
-  * is wrong, bail out with error.
-  *
-- * Currently three kinds of BPF instructions are supported:
-+ * Currently supported classes of BPF instruction are:
-  * 1. rX = <imm> (assignment with immediate operand);
-  * 2. rX += <imm> (arithmetic operations with immediate operand);
-- * 3. rX = <imm64> (load with 64-bit immediate value).
-+ * 3. rX = <imm64> (load with 64-bit immediate value);
-+ * 4. rX = *(T *)(rY + <off>), where T is one of {u8, u16, u32, u64};
-+ * 5. *(T *)(rX + <off>) = rY, where T is one of {u8, u16, u32, u64};
-+ * 6. *(T *)(rX + <off>) = <imm>, where T is one of {u8, u16, u32, u64}.
-  */
- static int bpf_core_patch_insn(struct bpf_program *prog,
- 			       const struct bpf_core_relo *relo,
-@@ -5327,6 +5425,7 @@ static int bpf_core_patch_insn(struct bpf_program *prog,
- 	class = BPF_CLASS(insn->code);
- 
- 	if (res->poison) {
-+poison:
- 		/* poison second part of ldimm64 to avoid confusing error from
- 		 * verifier about "unknown opcode 00"
- 		 */
-@@ -5369,10 +5468,39 @@ static int bpf_core_patch_insn(struct bpf_program *prog,
- 				prog->name, relo_idx, insn_idx, new_val);
- 			return -ERANGE;
- 		}
-+		if (res->fail_memsz_adjust) {
-+			pr_warn("prog '%s': relo #%d: insn #%d (LDX/ST/STX) accesses field incorrectly. "
-+				"Make sure you are accessing pointers, unsigned integers, or fields of matching type and size.\n",
-+				prog->name, relo_idx, insn_idx);
-+			goto poison;
-+		}
-+
- 		orig_val = insn->off;
- 		insn->off = new_val;
- 		pr_debug("prog '%s': relo #%d: patched insn #%d (LDX/ST/STX) off %u -> %u\n",
- 			 prog->name, relo_idx, insn_idx, orig_val, new_val);
-+
-+		if (res->new_sz != res->orig_sz) {
-+			int insn_bytes_sz, insn_bpf_sz;
-+
-+			insn_bytes_sz = insn_bpf_size_to_bytes(insn);
-+			if (insn_bytes_sz != res->orig_sz) {
-+				pr_warn("prog '%s': relo #%d: insn #%d (LDX/ST/STX) unexpected mem size: got %d, exp %u\n",
-+					prog->name, relo_idx, insn_idx, insn_bytes_sz, res->orig_sz);
-+				return -EINVAL;
-+			}
-+
-+			insn_bpf_sz = insn_bytes_to_bpf_size(res->new_sz);
-+			if (insn_bpf_sz < 0) {
-+				pr_warn("prog '%s': relo #%d: insn #%d (LDX/ST/STX) invalid new mem size: %u\n",
-+					prog->name, relo_idx, insn_idx, res->new_sz);
-+				return -EINVAL;
-+			}
-+
-+			insn->code = BPF_MODE(insn->code) | insn_bpf_sz | BPF_CLASS(insn->code);
-+			pr_debug("prog '%s': relo #%d: patched insn #%d (LDX/ST/STX) mem_sz %u -> %u\n",
-+				 prog->name, relo_idx, insn_idx, res->orig_sz, res->new_sz);
-+		}
- 		break;
- 	case BPF_LD: {
- 		__u64 imm;
--- 
-2.24.1
-
+> 
+> BTW, I tried `static volatile` for the variable, marking volatile
+> field a, marking variable as __attribute__((weak)). Nothing really
+> helps, generated code is still weird and inlines constants.
+> 
+>> and how clang gets terribly confused when compiling read access
+>> to the struct_in_data field
+>>
+>> cheers
+>> luigi
