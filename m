@@ -2,53 +2,56 @@ Return-Path: <SRS0=0bGE=DP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1AFAC43467
-	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 00:10:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7CF87C433E7
+	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 00:10:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4B5F2207EA
-	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 00:10:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 13C47207EA
+	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 00:10:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602115836;
-	bh=Zx8NyjaMC/BDM1OGnmsHQh6UBf6DLQhhIK47/34e1Js=;
-	h=From:To:CC:Subject:Date:List-ID:From;
-	b=jTewYZDzKG9ort93C4c0bwg0POAUoSBQFTwqXlyIfJ+ZiPHSVxX42yapsH89JG24s
-	 e+DnBodFlQhgguEDKSJmGn4X4S5c4/fTtZ7i1L2BwVpqZn3lSxv3ZAXNKLYE49uGsP
-	 hc5UDUhpXgYWnLPIHaZSofBaN1G3LwfQTeLICHpM=
+	s=default; t=1602115842;
+	bh=uOg4Fgq2ourwtjRf5wReXbuRY6Ld06iPhkJOKwvoq48=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=UW9tE4kFCmOMmLQLnKeRJr0eSl71ukURlk31U6fv48g/dgH+/ggZ9vtCnIOrOaVUV
+	 MSseeyFaneBW6eGHt3AFzziemBBJho79XIluTYDPUqQaD65wA9tqJ26sRbGjHzSSQ8
+	 wjS0TR/+IWA3SapS8qFZyXn2bDC02CxSDdzeThGo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726956AbgJHAKf convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 7 Oct 2020 20:10:35 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:9174 "EHLO
+        id S1727645AbgJHAKl convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 7 Oct 2020 20:10:41 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:50724 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726129AbgJHAKf (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 7 Oct 2020 20:10:35 -0400
+        by vger.kernel.org with ESMTP id S1726371AbgJHAKi (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 7 Oct 2020 20:10:38 -0400
 Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09804bPs006079
-        for <bpf@vger.kernel.org>; Wed, 7 Oct 2020 17:10:34 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 341gpajfdh-5
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09805CBc007278
+        for <bpf@vger.kernel.org>; Wed, 7 Oct 2020 17:10:37 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 341gpajfdq-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 07 Oct 2020 17:10:34 -0700
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 07 Oct 2020 17:10:37 -0700
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 7 Oct 2020 17:10:33 -0700
+ 15.1.1979.3; Wed, 7 Oct 2020 17:10:36 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id E57D72EC7C0E; Wed,  7 Oct 2020 17:10:26 -0700 (PDT)
+        id 8A5A02EC7C0E; Wed,  7 Oct 2020 17:10:33 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
         Luka Perkov <luka.perkov@sartura.hr>,
-        Tony Ambardar <tony.ambardar@gmail.com>
-Subject: [PATCH v3 bpf-next 0/4] libbpf: auto-resize relocatable LOAD/STORE instructions
-Date:   Wed, 7 Oct 2020 17:10:20 -0700
-Message-ID: <20201008001025.292064-1-andrii@kernel.org>
+        Tony Ambardar <tony.ambardar@gmail.com>,
+        Andrii Nakryiko <andriin@fb.com>
+Subject: [PATCH v3 bpf-next 3/4] libbpf: allow specifying both ELF and raw BTF for CO-RE BTF override
+Date:   Wed, 7 Oct 2020 17:10:23 -0700
+Message-ID: <20201008001025.292064-4-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201008001025.292064-1-andrii@kernel.org>
+References: <20201008001025.292064-1-andrii@kernel.org>
 MIME-Version: 1.0
 X-FB-Internal: Safe
 Content-Type: text/plain
@@ -56,7 +59,7 @@ Content-Transfer-Encoding: 8BIT
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-10-07_10:2020-10-07,2020-10-07 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- suspectscore=8 mlxlogscore=570 adultscore=0 mlxscore=0 impostorscore=0
+ suspectscore=8 mlxlogscore=999 adultscore=0 mlxscore=0 impostorscore=0
  spamscore=0 bulkscore=0 malwarescore=0 priorityscore=1501
  lowpriorityscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2006250000 definitions=main-2010070156
@@ -65,46 +68,30 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Patch set implements logic in libbpf to auto-adjust memory size (1-, 2-, 4-,
-8-bytes) of load/store (LD/ST/STX) instructions which have BPF CO-RE field
-offset relocation associated with it. In practice this means transparent
-handling of 32-bit kernels, both pointer and unsigned integers. Signed
-integers are not relocatable with zero-extending loads/stores, so libbpf
-poisons them and generates a warning. If/when BPF gets support for
-sign-extending loads/stores, it would be possible to automatically relocate
-them as well.
+From: Andrii Nakryiko <andriin@fb.com>
 
-All the details are contained in patch #2 comments and commit message.
-Patch #3 is a simple change in libbpf to make advanced testing with custom BTF
-easier. Patch #4 validates correct uses of auto-resizable loads, as well as
-check that libbpf fails invalid uses. Patch #1 skips CO-RE relocation for
-programs that had bpf_program__set_autoload(prog, false) set on them, reducing
-warnings and noise.
+Use generalized BTF parsing logic, making it possible to parse BTF both from
+ELF file, as well as a raw BTF dump. This makes it easier to write custom
+tests with manually generated BTFs.
 
-v2->v3:
-  - fix copyright (Alexei);
-v1->v2:
-  - more consistent names for instruction mem size convertion routines (Alexei);
-  - extended selftests to use relocatable STX instructions (Alexei);
-  - added a fix for skipping CO-RE relocation for non-loadable programs.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/libbpf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cc: Luka Perkov <luka.perkov@sartura.hr>
-Cc: Tony Ambardar <tony.ambardar@gmail.com>
-
-Andrii Nakryiko (4):
-  libbpf: skip CO-RE relocations for not loaded BPF programs
-  libbpf: support safe subset of load/store instruction resizing with
-    CO-RE
-  libbpf: allow specifying both ELF and raw BTF for CO-RE BTF override
-  selftests/bpf: validate libbpf's auto-sizing of LD/ST/STX instructions
-
- tools/lib/bpf/libbpf.c                        | 151 +++++++++++-
- .../selftests/bpf/prog_tests/core_autosize.c  | 225 ++++++++++++++++++
- .../selftests/bpf/progs/test_core_autosize.c  | 172 +++++++++++++
- 3 files changed, 539 insertions(+), 9 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/core_autosize.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_core_autosize.c
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 032cf0049ddb..105cb8ad1d75 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -5842,7 +5842,7 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
+ 		return 0;
+ 
+ 	if (targ_btf_path)
+-		targ_btf = btf__parse_elf(targ_btf_path, NULL);
++		targ_btf = btf__parse(targ_btf_path, NULL);
+ 	else
+ 		targ_btf = obj->btf_vmlinux;
+ 	if (IS_ERR_OR_NULL(targ_btf)) {
 -- 
 2.24.1
 
