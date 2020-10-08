@@ -5,48 +5,49 @@ X-Spam-Level:
 X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C1B1C4363A
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB443C4363C
 	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 14:09:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E0B5D21897
-	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 14:09:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9B81921D41
+	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 14:09:44 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VMRJ8zTP"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sb9EYBof"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730520AbgJHOJn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1730519AbgJHOJn (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 8 Oct 2020 10:09:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:60353 "EHLO
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:54161 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730518AbgJHOJj (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 8 Oct 2020 10:09:39 -0400
+        by vger.kernel.org with ESMTP id S1730511AbgJHOJd (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 8 Oct 2020 10:09:33 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602166177;
+        s=mimecast20190719; t=1602166172;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=32w48iMNGkmD+it7eg91axPb7iDFt5xqhVL3TNeV8g4=;
-        b=VMRJ8zTPtzzzH12RTc67hGLxpA2Sb+5OUbLveOB0DIAEeoEsaXjh9Fs/nf7OtdnIJIsWWp
-        1R49ef8DlShjDzb4owKdCvpCfZrD87FE9r4LRq+UPe8RfzyAAv+B0RvjG0zgKGUJx/dR1Z
-        7rKvZ1u5jDDSonZ8t4C6Iq2cHS8ccDI=
+        bh=c8MAr+gO5Pb8hieZ2zNwB6Q2C986gSFsUXCfz+LTfMo=;
+        b=Sb9EYBof0hb/1Gm6utPM0tBenmokiZu6BiOZlXId26HdRZzy3VZVRIvEv2DYTnbDYoeYOZ
+        m7QOCh13dLTtJfs2R5MEX+KLYFG+mjL/bOMkR1/OzpDapJd0lW49bd9zcA38j/5ikymetJ
+        23Mx3cJB4J07V5V7BcjAHbdRDIRIXjg=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-414-zNhDG5Z2O_CA2BDK9_zNpA-1; Thu, 08 Oct 2020 10:09:33 -0400
-X-MC-Unique: zNhDG5Z2O_CA2BDK9_zNpA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+ us-mta-334-2wUimDCZPtmFkDnHPv9tEQ-1; Thu, 08 Oct 2020 10:09:28 -0400
+X-MC-Unique: 2wUimDCZPtmFkDnHPv9tEQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CA0C4804018;
-        Thu,  8 Oct 2020 14:09:31 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C6A8080401A;
+        Thu,  8 Oct 2020 14:09:26 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D42CD55768;
-        Thu,  8 Oct 2020 14:09:28 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D81465D9E8;
+        Thu,  8 Oct 2020 14:09:23 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id E58A730736C8B;
-        Thu,  8 Oct 2020 16:09:27 +0200 (CEST)
-Subject: [PATCH bpf-next V3 6/6] net: inline and splitup is_skb_forwardable
+        by firesoul.localdomain (Postfix) with ESMTP id CE60230736C8B;
+        Thu,  8 Oct 2020 16:09:22 +0200 (CEST)
+Subject: [PATCH bpf-next V3 5/6] bpf: drop MTU check when doing TC-BPF
+ redirect to ingress
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     bpf@vger.kernel.org
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -56,116 +57,91 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
         John Fastabend <john.fastabend@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>, eyal.birger@gmail.com
-Date:   Thu, 08 Oct 2020 16:09:27 +0200
-Message-ID: <160216616785.882446.3058399056188507434.stgit@firesoul>
+Date:   Thu, 08 Oct 2020 16:09:22 +0200
+Message-ID: <160216616276.882446.17894852306425732310.stgit@firesoul>
 In-Reply-To: <160216609656.882446.16642490462568561112.stgit@firesoul>
 References: <160216609656.882446.16642490462568561112.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The BPF-helper bpf_skb_fib_lookup() use is_skb_forwardable() that
-also checks if net_device is "up", which is unnecessary for this
-helper. This patch splitup is_skb_forwardable() into is_skb_fwd_size_ok()
-such that the helper can use this instead.
+The use-case for dropping the MTU check when TC-BPF does redirect to
+ingress, is described by Eyal Birger in email[0]. The summary is the
+ability to increase packet size (e.g. with IPv6 headers for NAT64) and
+ingress redirect packet and let normal netstack fragment packet as needed.
 
-This change also cause is_skb_forwardable() to be inlined in the
-existing call sites. Most importantly in dev_forward_skb().
+[0] https://lore.kernel.org/netdev/CAHsH6Gug-hsLGHQ6N0wtixdOa85LDZ3HNRHVd0opR=19Qo4W4Q@mail.gmail.com/
 
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- include/linux/netdevice.h |   27 +++++++++++++++++++++++++--
- net/core/dev.c            |   21 ---------------------
- net/core/filter.c         |    2 +-
- 3 files changed, 26 insertions(+), 24 deletions(-)
+ include/linux/netdevice.h |    5 +++--
+ net/core/dev.c            |    2 +-
+ net/core/filter.c         |   12 ++++++++++--
+ 3 files changed, 14 insertions(+), 5 deletions(-)
 
 diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 58fb7b4869ba..4857c54590b5 100644
+index 28cfa53daf72..58fb7b4869ba 100644
 --- a/include/linux/netdevice.h
 +++ b/include/linux/netdevice.h
-@@ -3862,8 +3862,31 @@ int xdp_umem_query(struct net_device *dev, u16 queue_id);
- 
- int __dev_forward_skb(struct net_device *dev, struct sk_buff *skb);
- int dev_forward_skb(struct net_device *dev, struct sk_buff *skb);
--bool is_skb_forwardable(const struct net_device *dev,
--			const struct sk_buff *skb);
-+
-+static __always_inline bool is_skb_fwd_size_ok(const struct net_device *dev,
-+					       const struct sk_buff *skb)
-+{
-+	const u32 vlan_hdr_len = 4; /* VLAN_HLEN */
-+	unsigned int mtu = dev->mtu + dev->hard_header_len + vlan_hdr_len;
-+
-+	/* Assumes SKB length at L2 */
-+	if (likely(skb->len <= mtu))
-+		return true;
-+
-+	/* If TSO is enabled, we don't care about the length as the packet
-+	 * could be forwarded without being segmented before.
-+	 */
-+	return skb_is_gso(skb);
-+}
-+
-+static __always_inline bool is_skb_forwardable(const struct net_device *dev,
-+					       const struct sk_buff *skb)
-+{
-+	if (unlikely(!(dev->flags & IFF_UP)))
-+		return false;
-+
-+	return is_skb_fwd_size_ok(dev, skb);
-+}
+@@ -3866,10 +3866,11 @@ bool is_skb_forwardable(const struct net_device *dev,
+ 			const struct sk_buff *skb);
  
  static __always_inline int ____dev_forward_skb(struct net_device *dev,
- 					       struct sk_buff *skb,
+-					       struct sk_buff *skb)
++					       struct sk_buff *skb,
++					       const bool mtu_check)
+ {
+ 	if (skb_orphan_frags(skb, GFP_ATOMIC) ||
+-	    unlikely(!is_skb_forwardable(dev, skb))) {
++	    (mtu_check && unlikely(!is_skb_forwardable(dev, skb)))) {
+ 		atomic_long_inc(&dev->rx_dropped);
+ 		kfree_skb(skb);
+ 		return NET_RX_DROP;
 diff --git a/net/core/dev.c b/net/core/dev.c
-index 96b455f15872..21b62bda0ef9 100644
+index b433098896b2..96b455f15872 100644
 --- a/net/core/dev.c
 +++ b/net/core/dev.c
-@@ -2186,27 +2186,6 @@ static inline void net_timestamp_set(struct sk_buff *skb)
- 			__net_timestamp(SKB);			\
- 	}							\
+@@ -2209,7 +2209,7 @@ EXPORT_SYMBOL_GPL(is_skb_forwardable);
  
--bool is_skb_forwardable(const struct net_device *dev, const struct sk_buff *skb)
--{
--	unsigned int len;
--
--	if (!(dev->flags & IFF_UP))
--		return false;
--
--	len = dev->mtu + dev->hard_header_len + VLAN_HLEN;
--	if (skb->len <= len)
--		return true;
--
--	/* if TSO is enabled, we don't care about the length as the packet
--	 * could be forwarded without being segmented before
--	 */
--	if (skb_is_gso(skb))
--		return true;
--
--	return false;
--}
--EXPORT_SYMBOL_GPL(is_skb_forwardable);
--
  int __dev_forward_skb(struct net_device *dev, struct sk_buff *skb)
  {
- 	int ret = ____dev_forward_skb(dev, skb, true);
+-	int ret = ____dev_forward_skb(dev, skb);
++	int ret = ____dev_forward_skb(dev, skb, true);
+ 
+ 	if (likely(!ret)) {
+ 		skb->protocol = eth_type_trans(skb, dev);
 diff --git a/net/core/filter.c b/net/core/filter.c
-index a8e24092e4f5..14e6b93757d4 100644
+index 5986156e700e..a8e24092e4f5 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -5502,7 +5502,7 @@ BPF_CALL_4(bpf_skb_fib_lookup, struct sk_buff *, skb,
- 		struct net_device *dev;
+@@ -2083,13 +2083,21 @@ static const struct bpf_func_proto bpf_csum_level_proto = {
  
- 		dev = dev_get_by_index_rcu(net, params->ifindex);
--		if (!is_skb_forwardable(dev, skb))
-+		if (!is_skb_fwd_size_ok(dev, skb))
- 			rc = BPF_FIB_LKUP_RET_FRAG_NEEDED;
+ static inline int __bpf_rx_skb(struct net_device *dev, struct sk_buff *skb)
+ {
+-	return dev_forward_skb(dev, skb);
++	int ret = ____dev_forward_skb(dev, skb, false);
++
++	if (likely(!ret)) {
++		skb->protocol = eth_type_trans(skb, dev);
++		skb_postpull_rcsum(skb, eth_hdr(skb), ETH_HLEN);
++		ret = netif_rx(skb);
++	}
++
++	return ret;
+ }
  
- 		params->mtu = dev->mtu; /* union with tot_len */
+ static inline int __bpf_rx_skb_no_mac(struct net_device *dev,
+ 				      struct sk_buff *skb)
+ {
+-	int ret = ____dev_forward_skb(dev, skb);
++	int ret = ____dev_forward_skb(dev, skb, false);
+ 
+ 	if (likely(!ret)) {
+ 		skb->dev = dev;
 
 
