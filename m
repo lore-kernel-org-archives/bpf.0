@@ -2,35 +2,35 @@ Return-Path: <SRS0=0bGE=DP=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C61B4C433E7
-	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 21:32:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4334FC43467
+	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 21:32:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7604222203
+	by mail.kernel.org (Postfix) with ESMTP id EE2DF22203
 	for <bpf@archiver.kernel.org>; Thu,  8 Oct 2020 21:32:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729410AbgJHVb4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Oct 2020 17:31:56 -0400
-Received: from www62.your-server.de ([213.133.104.62]:46934 "EHLO
+        id S1728363AbgJHVb7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 8 Oct 2020 17:31:59 -0400
+Received: from www62.your-server.de ([213.133.104.62]:46954 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728363AbgJHVbx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Oct 2020 17:31:53 -0400
+        with ESMTP id S1729317AbgJHVb4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Oct 2020 17:31:56 -0400
 Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1kQdVv-0007uj-4U; Thu, 08 Oct 2020 23:31:51 +0200
+        id 1kQdVw-0007vG-Fw; Thu, 08 Oct 2020 23:31:52 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     daniel@iogearbox.net, john.fastabend@gmail.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next 2/6] bpf: add redirect_peer helper
-Date:   Thu,  8 Oct 2020 23:31:44 +0200
-Message-Id: <20201008213148.26848-3-daniel@iogearbox.net>
+Subject: [PATCH bpf-next 5/6] bpf, selftests: make redirect_neigh test more extensible
+Date:   Thu,  8 Oct 2020 23:31:47 +0200
+Message-Id: <20201008213148.26848-6-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20201008213148.26848-1-daniel@iogearbox.net>
 References: <20201008213148.26848-1-daniel@iogearbox.net>
@@ -42,306 +42,500 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add an efficient ingress to ingress netns switch that can be used out of tc BPF
-programs in order to redirect traffic from host ns ingress into a container
-veth device ingress without having to go via CPU backlog queue [0]. For local
-containers this can also be utilized and path via CPU backlog queue only needs
-to be taken once, not twice. On a high level this borrows from ipvlan which does
-similar switch in __netif_receive_skb_core() and then iterates via another_round.
-This helps to reduce latency for mentioned use cases.
-
-Pod to remote pod with redirect(), TCP_RR [1]:
-
-  # percpu_netperf 10.217.1.33
-          RT_LATENCY:         122.450         (per CPU:         122.666         122.401         122.333         122.401 )
-        MEAN_LATENCY:         121.210         (per CPU:         121.100         121.260         121.320         121.160 )
-      STDDEV_LATENCY:         120.040         (per CPU:         119.420         119.910         125.460         115.370 )
-         MIN_LATENCY:          46.500         (per CPU:          47.000          47.000          47.000          45.000 )
-         P50_LATENCY:         118.500         (per CPU:         118.000         119.000         118.000         119.000 )
-         P90_LATENCY:         127.500         (per CPU:         127.000         128.000         127.000         128.000 )
-         P99_LATENCY:         130.750         (per CPU:         131.000         131.000         129.000         132.000 )
-
-    TRANSACTION_RATE:       32666.400         (per CPU:        8152.200        8169.842        8174.439        8169.897 )
-
-Pod to remote pod with redirect_peer(), TCP_RR:
-
-  # percpu_netperf 10.217.1.33
-          RT_LATENCY:          44.449         (per CPU:          43.767          43.127          45.279          45.622 )
-        MEAN_LATENCY:          45.065         (per CPU:          44.030          45.530          45.190          45.510 )
-      STDDEV_LATENCY:          84.823         (per CPU:          66.770          97.290          84.380          90.850 )
-         MIN_LATENCY:          33.500         (per CPU:          33.000          33.000          34.000          34.000 )
-         P50_LATENCY:          43.250         (per CPU:          43.000          43.000          43.000          44.000 )
-         P90_LATENCY:          46.750         (per CPU:          46.000          47.000          47.000          47.000 )
-         P99_LATENCY:          52.750         (per CPU:          51.000          54.000          53.000          53.000 )
-
-    TRANSACTION_RATE:       90039.500         (per CPU:       22848.186       23187.089       22085.077       21919.130 )
-
-  [0] https://linuxplumbersconf.org/event/7/contributions/674/attachments/568/1002/plumbers_2020_cilium_load_balancer.pdf
-  [1] https://github.com/borkmann/netperf_scripts/blob/master/percpu_netperf
+Rename into test_tc_redirect.sh and move setup and test code into separate
+functions so they can be reused for newly added tests in here. Also remove
+the crude hack to override ifindex inside the object file via xxd and sed
+and just use a simple map instead. Map given iproute2 does not support BTF
+fully and therefore neither global data at this point.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- drivers/net/veth.c             |  9 ++++++
- include/linux/netdevice.h      |  4 +++
- include/uapi/linux/bpf.h       | 17 +++++++++++
- net/core/dev.c                 | 15 ++++++++--
- net/core/filter.c              | 54 +++++++++++++++++++++++++++++-----
- tools/include/uapi/linux/bpf.h | 17 +++++++++++
- 6 files changed, 106 insertions(+), 10 deletions(-)
+ .../selftests/bpf/progs/test_tc_neigh.c       |  40 ++--
+ tools/testing/selftests/bpf/test_tc_neigh.sh  | 168 ---------------
+ .../testing/selftests/bpf/test_tc_redirect.sh | 197 ++++++++++++++++++
+ 3 files changed, 219 insertions(+), 186 deletions(-)
+ delete mode 100755 tools/testing/selftests/bpf/test_tc_neigh.sh
+ create mode 100755 tools/testing/selftests/bpf/test_tc_redirect.sh
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 091e5b4ba042..8c737668008a 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -420,6 +420,14 @@ static int veth_select_rxq(struct net_device *dev)
- 	return smp_processor_id() % dev->real_num_rx_queues;
- }
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_neigh.c b/tools/testing/selftests/bpf/progs/test_tc_neigh.c
+index 889a72c3024f..fe182616b112 100644
+--- a/tools/testing/selftests/bpf/progs/test_tc_neigh.c
++++ b/tools/testing/selftests/bpf/progs/test_tc_neigh.c
+@@ -13,17 +13,10 @@
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_endian.h>
  
-+static struct net_device *veth_peer_dev(struct net_device *dev)
-+{
-+	struct veth_priv *priv = netdev_priv(dev);
-+
-+	/* Callers must be under RCU read side. */
-+	return rcu_dereference(priv->peer);
-+}
-+
- static int veth_xdp_xmit(struct net_device *dev, int n,
- 			 struct xdp_frame **frames,
- 			 u32 flags, bool ndo_xmit)
-@@ -1224,6 +1232,7 @@ static const struct net_device_ops veth_netdev_ops = {
- 	.ndo_set_rx_headroom	= veth_set_rx_headroom,
- 	.ndo_bpf		= veth_xdp,
- 	.ndo_xdp_xmit		= veth_ndo_xdp_xmit,
-+	.ndo_get_peer_dev	= veth_peer_dev,
- };
- 
- #define VETH_FEATURES (NETIF_F_SG | NETIF_F_FRAGLIST | NETIF_F_HW_CSUM | \
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 28cfa53daf72..0533f86018dd 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -1277,6 +1277,9 @@ struct netdev_net_notifier {
-  * int (*ndo_tunnel_ctl)(struct net_device *dev, struct ip_tunnel_parm *p,
-  *			 int cmd);
-  *	Add, change, delete or get information on an IPv4 tunnel.
-+ * struct net_device *(*ndo_get_peer_dev)(struct net_device *dev);
-+ *	If a device is paired with a peer device, return the peer instance.
-+ *	The caller must be under RCU read context.
-  */
- struct net_device_ops {
- 	int			(*ndo_init)(struct net_device *dev);
-@@ -1484,6 +1487,7 @@ struct net_device_ops {
- 	struct devlink_port *	(*ndo_get_devlink_port)(struct net_device *dev);
- 	int			(*ndo_tunnel_ctl)(struct net_device *dev,
- 						  struct ip_tunnel_parm *p, int cmd);
-+	struct net_device *	(*ndo_get_peer_dev)(struct net_device *dev);
- };
- 
- /**
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 8e8941535c28..ea8dfbe62c7a 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3719,6 +3719,22 @@ union bpf_attr {
-  *		never return NULL.
-  *	Return
-  *		A pointer pointing to the kernel percpu variable on this cpu.
-+ *
-+ * long bpf_redirect_peer(u32 ifindex, u64 flags)
-+ * 	Description
-+ * 		Redirect the packet to another net device of index *ifindex*.
-+ * 		This helper is somewhat similar to **bpf_redirect**\ (), except
-+ * 		that the redirection happens to the *ifindex*' peer device and
-+ * 		the netns switch takes place from ingress to ingress without
-+ * 		going through the CPU's backlog queue.
-+ *
-+ * 		The *flags* argument is reserved and must be 0. The helper is
-+ * 		currently only supported for tc BPF program types at the ingress
-+ * 		hook and for veth device types. The peer device must reside in a
-+ * 		different network namespace.
-+ * 	Return
-+ * 		The helper returns **TC_ACT_REDIRECT** on success or
-+ * 		**TC_ACT_SHOT** on error.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3876,6 +3892,7 @@ union bpf_attr {
- 	FN(redirect_neigh),		\
- 	FN(bpf_per_cpu_ptr),            \
- 	FN(bpf_this_cpu_ptr),		\
-+	FN(redirect_peer),		\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 9d55bf5d1a65..7dd015823593 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4930,7 +4930,7 @@ EXPORT_SYMBOL_GPL(br_fdb_test_addr_hook);
- 
- static inline struct sk_buff *
- sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
--		   struct net_device *orig_dev)
-+		   struct net_device *orig_dev, bool *another)
- {
- #ifdef CONFIG_NET_CLS_ACT
- 	struct mini_Qdisc *miniq = rcu_dereference_bh(skb->dev->miniq_ingress);
-@@ -4974,7 +4974,11 @@ sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
- 		 * redirecting to another netdev
- 		 */
- 		__skb_push(skb, skb->mac_len);
--		skb_do_redirect(skb);
-+		if (skb_do_redirect(skb) == -EAGAIN) {
-+			__skb_pull(skb, skb->mac_len);
-+			*another = true;
-+			break;
-+		}
- 		return NULL;
- 	case TC_ACT_CONSUMED:
- 		return NULL;
-@@ -5163,7 +5167,12 @@ static int __netif_receive_skb_core(struct sk_buff **pskb, bool pfmemalloc,
- skip_taps:
- #ifdef CONFIG_NET_INGRESS
- 	if (static_branch_unlikely(&ingress_needed_key)) {
--		skb = sch_handle_ingress(skb, &pt_prev, &ret, orig_dev);
-+		bool another = false;
-+
-+		skb = sch_handle_ingress(skb, &pt_prev, &ret, orig_dev,
-+					 &another);
-+		if (another)
-+			goto another_round;
- 		if (!skb)
- 			goto out;
- 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 05df73780dd3..0f55df691f8c 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2380,8 +2380,9 @@ static int __bpf_redirect_neigh(struct sk_buff *skb, struct net_device *dev)
- 
- /* Internal, non-exposed redirect flags. */
- enum {
--	BPF_F_NEIGH = (1ULL << 1),
--#define BPF_F_REDIRECT_INTERNAL	(BPF_F_NEIGH)
-+	BPF_F_NEIGH	= (1ULL << 1),
-+	BPF_F_PEER	= (1ULL << 2),
-+#define BPF_F_REDIRECT_INTERNAL	(BPF_F_NEIGH | BPF_F_PEER)
- };
- 
- BPF_CALL_3(bpf_clone_redirect, struct sk_buff *, skb, u32, ifindex, u64, flags)
-@@ -2430,19 +2431,35 @@ EXPORT_PER_CPU_SYMBOL_GPL(bpf_redirect_info);
- int skb_do_redirect(struct sk_buff *skb)
- {
- 	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
-+	struct net *net = dev_net(skb->dev);
- 	struct net_device *dev;
- 	u32 flags = ri->flags;
- 
--	dev = dev_get_by_index_rcu(dev_net(skb->dev), ri->tgt_index);
-+	dev = dev_get_by_index_rcu(net, ri->tgt_index);
- 	ri->tgt_index = 0;
--	if (unlikely(!dev)) {
--		kfree_skb(skb);
--		return -EINVAL;
-+	ri->flags = 0;
-+	if (unlikely(!dev))
-+		goto out_drop;
-+	if (flags & BPF_F_PEER) {
-+		const struct net_device_ops *ops = dev->netdev_ops;
-+
-+		if (unlikely(!ops->ndo_get_peer_dev ||
-+			     !skb_at_tc_ingress(skb)))
-+			goto out_drop;
-+		dev = ops->ndo_get_peer_dev(dev);
-+		if (unlikely(!dev ||
-+			     !is_skb_forwardable(dev, skb) ||
-+			     net_eq(net, dev_net(dev))))
-+			goto out_drop;
-+		skb->dev = dev;
-+		return -EAGAIN;
- 	}
+-#ifndef barrier_data
+-# define barrier_data(ptr)	asm volatile("": :"r"(ptr) :"memory")
+-#endif
 -
- 	return flags & BPF_F_NEIGH ?
- 	       __bpf_redirect_neigh(skb, dev) :
- 	       __bpf_redirect(skb, dev, flags);
-+out_drop:
-+	kfree_skb(skb);
-+	return -EINVAL;
- }
+ #ifndef ctx_ptr
+ # define ctx_ptr(field)		(void *)(long)(field)
+ #endif
  
- BPF_CALL_2(bpf_redirect, u32, ifindex, u64, flags)
-@@ -2466,6 +2483,27 @@ static const struct bpf_func_proto bpf_redirect_proto = {
- 	.arg2_type      = ARG_ANYTHING,
- };
+-#define dst_to_src_tmp		0xeeddddeeU
+-#define src_to_dst_tmp		0xeeffffeeU
+-
+ #define ip4_src			0xac100164 /* 172.16.1.100 */
+ #define ip4_dst			0xac100264 /* 172.16.2.100 */
  
-+BPF_CALL_2(bpf_redirect_peer, u32, ifindex, u64, flags)
-+{
-+	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
-+
-+	if (unlikely(flags))
-+		return TC_ACT_SHOT;
-+
-+	ri->flags = BPF_F_PEER;
-+	ri->tgt_index = ifindex;
-+
-+	return TC_ACT_REDIRECT;
-+}
-+
-+static const struct bpf_func_proto bpf_redirect_peer_proto = {
-+	.func           = bpf_redirect_peer,
-+	.gpl_only       = false,
-+	.ret_type       = RET_INTEGER,
-+	.arg1_type      = ARG_ANYTHING,
-+	.arg2_type      = ARG_ANYTHING,
+@@ -39,6 +32,18 @@
+ 				 a.s6_addr32[3] == b.s6_addr32[3])
+ #endif
+ 
++enum {
++	dev_src,
++	dev_dst,
 +};
 +
- BPF_CALL_2(bpf_redirect_neigh, u32, ifindex, u64, flags)
++struct bpf_map_def SEC("maps") ifindex_map = {
++	.type		= BPF_MAP_TYPE_ARRAY,
++	.key_size	= sizeof(int),
++	.value_size	= sizeof(int),
++	.max_entries	= 2,
++};
++
+ static __always_inline bool is_remote_ep_v4(struct __sk_buff *skb,
+ 					    __be32 addr)
  {
- 	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
-@@ -7049,6 +7087,8 @@ tc_cls_act_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_redirect_proto;
- 	case BPF_FUNC_redirect_neigh:
- 		return &bpf_redirect_neigh_proto;
-+	case BPF_FUNC_redirect_peer:
-+		return &bpf_redirect_peer_proto;
- 	case BPF_FUNC_get_route_realm:
- 		return &bpf_get_route_realm_proto;
- 	case BPF_FUNC_get_hash_recalc:
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 8e8941535c28..ea8dfbe62c7a 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3719,6 +3719,22 @@ union bpf_attr {
-  *		never return NULL.
-  *	Return
-  *		A pointer pointing to the kernel percpu variable on this cpu.
-+ *
-+ * long bpf_redirect_peer(u32 ifindex, u64 flags)
-+ * 	Description
-+ * 		Redirect the packet to another net device of index *ifindex*.
-+ * 		This helper is somewhat similar to **bpf_redirect**\ (), except
-+ * 		that the redirection happens to the *ifindex*' peer device and
-+ * 		the netns switch takes place from ingress to ingress without
-+ * 		going through the CPU's backlog queue.
-+ *
-+ * 		The *flags* argument is reserved and must be 0. The helper is
-+ * 		currently only supported for tc BPF program types at the ingress
-+ * 		hook and for veth device types. The peer device must reside in a
-+ * 		different network namespace.
-+ * 	Return
-+ * 		The helper returns **TC_ACT_REDIRECT** on success or
-+ * 		**TC_ACT_SHOT** on error.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3876,6 +3892,7 @@ union bpf_attr {
- 	FN(redirect_neigh),		\
- 	FN(bpf_per_cpu_ptr),            \
- 	FN(bpf_this_cpu_ptr),		\
-+	FN(redirect_peer),		\
- 	/* */
+@@ -73,7 +78,14 @@ static __always_inline bool is_remote_ep_v6(struct __sk_buff *skb,
+ 	return v6_equal(ip6h->daddr, addr);
+ }
  
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+-SEC("chk_neigh") int tc_chk(struct __sk_buff *skb)
++static __always_inline int get_dev_ifindex(int which)
++{
++	int *ifindex = bpf_map_lookup_elem(&ifindex_map, &which);
++
++	return ifindex ? *ifindex : 0;
++}
++
++SEC("chk_egress") int tc_chk(struct __sk_buff *skb)
+ {
+ 	void *data_end = ctx_ptr(skb->data_end);
+ 	void *data = ctx_ptr(skb->data);
+@@ -87,7 +99,6 @@ SEC("chk_neigh") int tc_chk(struct __sk_buff *skb)
+ 
+ SEC("dst_ingress") int tc_dst(struct __sk_buff *skb)
+ {
+-	int idx = dst_to_src_tmp;
+ 	__u8 zero[ETH_ALEN * 2];
+ 	bool redirect = false;
+ 
+@@ -103,19 +114,15 @@ SEC("dst_ingress") int tc_dst(struct __sk_buff *skb)
+ 	if (!redirect)
+ 		return TC_ACT_OK;
+ 
+-	barrier_data(&idx);
+-	idx = bpf_ntohl(idx);
+-
+ 	__builtin_memset(&zero, 0, sizeof(zero));
+ 	if (bpf_skb_store_bytes(skb, 0, &zero, sizeof(zero), 0) < 0)
+ 		return TC_ACT_SHOT;
+ 
+-	return bpf_redirect_neigh(idx, 0);
++	return bpf_redirect_neigh(get_dev_ifindex(dev_src), 0);
+ }
+ 
+ SEC("src_ingress") int tc_src(struct __sk_buff *skb)
+ {
+-	int idx = src_to_dst_tmp;
+ 	__u8 zero[ETH_ALEN * 2];
+ 	bool redirect = false;
+ 
+@@ -131,14 +138,11 @@ SEC("src_ingress") int tc_src(struct __sk_buff *skb)
+ 	if (!redirect)
+ 		return TC_ACT_OK;
+ 
+-	barrier_data(&idx);
+-	idx = bpf_ntohl(idx);
+-
+ 	__builtin_memset(&zero, 0, sizeof(zero));
+ 	if (bpf_skb_store_bytes(skb, 0, &zero, sizeof(zero), 0) < 0)
+ 		return TC_ACT_SHOT;
+ 
+-	return bpf_redirect_neigh(idx, 0);
++	return bpf_redirect_neigh(get_dev_ifindex(dev_dst), 0);
+ }
+ 
+ char __license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/test_tc_neigh.sh b/tools/testing/selftests/bpf/test_tc_neigh.sh
+deleted file mode 100755
+index 31d8c3df8b24..000000000000
+--- a/tools/testing/selftests/bpf/test_tc_neigh.sh
++++ /dev/null
+@@ -1,168 +0,0 @@
+-#!/bin/bash
+-# SPDX-License-Identifier: GPL-2.0
+-#
+-# This test sets up 3 netns (src <-> fwd <-> dst). There is no direct veth link
+-# between src and dst. The netns fwd has veth links to each src and dst. The
+-# client is in src and server in dst. The test installs a TC BPF program to each
+-# host facing veth in fwd which calls into bpf_redirect_peer() to perform the
+-# neigh addr population and redirect; it also installs a dropper prog on the
+-# egress side to drop skbs if neigh addrs were not populated.
+-
+-if [[ $EUID -ne 0 ]]; then
+-	echo "This script must be run as root"
+-	echo "FAIL"
+-	exit 1
+-fi
+-
+-# check that nc, dd, ping, ping6 and timeout are present
+-command -v nc >/dev/null 2>&1 || \
+-	{ echo >&2 "nc is not available"; exit 1; }
+-command -v dd >/dev/null 2>&1 || \
+-	{ echo >&2 "dd is not available"; exit 1; }
+-command -v timeout >/dev/null 2>&1 || \
+-	{ echo >&2 "timeout is not available"; exit 1; }
+-command -v ping >/dev/null 2>&1 || \
+-	{ echo >&2 "ping is not available"; exit 1; }
+-command -v ping6 >/dev/null 2>&1 || \
+-	{ echo >&2 "ping6 is not available"; exit 1; }
+-
+-readonly GREEN='\033[0;92m'
+-readonly RED='\033[0;31m'
+-readonly NC='\033[0m' # No Color
+-
+-readonly PING_ARG="-c 3 -w 10 -q"
+-
+-readonly TIMEOUT=10
+-
+-readonly NS_SRC="ns-src-$(mktemp -u XXXXXX)"
+-readonly NS_FWD="ns-fwd-$(mktemp -u XXXXXX)"
+-readonly NS_DST="ns-dst-$(mktemp -u XXXXXX)"
+-
+-readonly IP4_SRC="172.16.1.100"
+-readonly IP4_DST="172.16.2.100"
+-
+-readonly IP6_SRC="::1:dead:beef:cafe"
+-readonly IP6_DST="::2:dead:beef:cafe"
+-
+-readonly IP4_SLL="169.254.0.1"
+-readonly IP4_DLL="169.254.0.2"
+-readonly IP4_NET="169.254.0.0"
+-
+-cleanup()
+-{
+-	ip netns del ${NS_SRC}
+-	ip netns del ${NS_FWD}
+-	ip netns del ${NS_DST}
+-}
+-
+-trap cleanup EXIT
+-
+-set -e
+-
+-ip netns add "${NS_SRC}"
+-ip netns add "${NS_FWD}"
+-ip netns add "${NS_DST}"
+-
+-ip link add veth_src type veth peer name veth_src_fwd
+-ip link add veth_dst type veth peer name veth_dst_fwd
+-
+-ip link set veth_src netns ${NS_SRC}
+-ip link set veth_src_fwd netns ${NS_FWD}
+-
+-ip link set veth_dst netns ${NS_DST}
+-ip link set veth_dst_fwd netns ${NS_FWD}
+-
+-ip -netns ${NS_SRC} addr add ${IP4_SRC}/32 dev veth_src
+-ip -netns ${NS_DST} addr add ${IP4_DST}/32 dev veth_dst
+-
+-# The fwd netns automatically get a v6 LL address / routes, but also needs v4
+-# one in order to start ARP probing. IP4_NET route is added to the endpoints
+-# so that the ARP processing will reply.
+-
+-ip -netns ${NS_FWD} addr add ${IP4_SLL}/32 dev veth_src_fwd
+-ip -netns ${NS_FWD} addr add ${IP4_DLL}/32 dev veth_dst_fwd
+-
+-ip -netns ${NS_SRC} addr add ${IP6_SRC}/128 dev veth_src nodad
+-ip -netns ${NS_DST} addr add ${IP6_DST}/128 dev veth_dst nodad
+-
+-ip -netns ${NS_SRC} link set dev veth_src up
+-ip -netns ${NS_FWD} link set dev veth_src_fwd up
+-
+-ip -netns ${NS_DST} link set dev veth_dst up
+-ip -netns ${NS_FWD} link set dev veth_dst_fwd up
+-
+-ip -netns ${NS_SRC} route add ${IP4_DST}/32 dev veth_src scope global
+-ip -netns ${NS_SRC} route add ${IP4_NET}/16 dev veth_src scope global
+-ip -netns ${NS_FWD} route add ${IP4_SRC}/32 dev veth_src_fwd scope global
+-
+-ip -netns ${NS_SRC} route add ${IP6_DST}/128 dev veth_src scope global
+-ip -netns ${NS_FWD} route add ${IP6_SRC}/128 dev veth_src_fwd scope global
+-
+-ip -netns ${NS_DST} route add ${IP4_SRC}/32 dev veth_dst scope global
+-ip -netns ${NS_DST} route add ${IP4_NET}/16 dev veth_dst scope global
+-ip -netns ${NS_FWD} route add ${IP4_DST}/32 dev veth_dst_fwd scope global
+-
+-ip -netns ${NS_DST} route add ${IP6_SRC}/128 dev veth_dst scope global
+-ip -netns ${NS_FWD} route add ${IP6_DST}/128 dev veth_dst_fwd scope global
+-
+-fmac_src=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_src_fwd/address)
+-fmac_dst=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_dst_fwd/address)
+-
+-ip -netns ${NS_SRC} neigh add ${IP4_DST} dev veth_src lladdr $fmac_src
+-ip -netns ${NS_DST} neigh add ${IP4_SRC} dev veth_dst lladdr $fmac_dst
+-
+-ip -netns ${NS_SRC} neigh add ${IP6_DST} dev veth_src lladdr $fmac_src
+-ip -netns ${NS_DST} neigh add ${IP6_SRC} dev veth_dst lladdr $fmac_dst
+-
+-veth_dst=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_dst_fwd/ifindex | awk '{printf "%08x\n", $1}')
+-veth_src=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_src_fwd/ifindex | awk '{printf "%08x\n", $1}')
+-
+-xxd -p < test_tc_neigh.o   | sed "s/eeddddee/$veth_src/g" | xxd -r -p > test_tc_neigh.x.o
+-xxd -p < test_tc_neigh.x.o | sed "s/eeffffee/$veth_dst/g" | xxd -r -p > test_tc_neigh.y.o
+-
+-ip netns exec ${NS_FWD} tc qdisc add dev veth_src_fwd clsact
+-ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd ingress bpf da obj test_tc_neigh.y.o sec src_ingress
+-ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd egress  bpf da obj test_tc_neigh.y.o sec chk_neigh
+-
+-ip netns exec ${NS_FWD} tc qdisc add dev veth_dst_fwd clsact
+-ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd ingress bpf da obj test_tc_neigh.y.o sec dst_ingress
+-ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd egress  bpf da obj test_tc_neigh.y.o sec chk_neigh
+-
+-rm -f test_tc_neigh.x.o test_tc_neigh.y.o
+-
+-ip netns exec ${NS_DST} bash -c "nc -4 -l -p 9004 &"
+-ip netns exec ${NS_DST} bash -c "nc -6 -l -p 9006 &"
+-
+-set +e
+-
+-TEST="TCPv4 connectivity test"
+-ip netns exec ${NS_SRC} bash -c "timeout ${TIMEOUT} dd if=/dev/zero bs=1000 count=100 > /dev/tcp/${IP4_DST}/9004"
+-if [ $? -ne 0 ]; then
+-	echo -e "${TEST}: ${RED}FAIL${NC}"
+-	exit 1
+-fi
+-echo -e "${TEST}: ${GREEN}PASS${NC}"
+-
+-TEST="TCPv6 connectivity test"
+-ip netns exec ${NS_SRC} bash -c "timeout ${TIMEOUT} dd if=/dev/zero bs=1000 count=100 > /dev/tcp/${IP6_DST}/9006"
+-if [ $? -ne 0 ]; then
+-	echo -e "${TEST}: ${RED}FAIL${NC}"
+-	exit 1
+-fi
+-echo -e "${TEST}: ${GREEN}PASS${NC}"
+-
+-TEST="ICMPv4 connectivity test"
+-ip netns exec ${NS_SRC} ping  $PING_ARG ${IP4_DST}
+-if [ $? -ne 0 ]; then
+-	echo -e "${TEST}: ${RED}FAIL${NC}"
+-	exit 1
+-fi
+-echo -e "${TEST}: ${GREEN}PASS${NC}"
+-
+-TEST="ICMPv6 connectivity test"
+-ip netns exec ${NS_SRC} ping6 $PING_ARG ${IP6_DST}
+-if [ $? -ne 0 ]; then
+-	echo -e "${TEST}: ${RED}FAIL${NC}"
+-	exit 1
+-fi
+-echo -e "${TEST}: ${GREEN}PASS${NC}"
+diff --git a/tools/testing/selftests/bpf/test_tc_redirect.sh b/tools/testing/selftests/bpf/test_tc_redirect.sh
+new file mode 100755
+index 000000000000..6ad441405132
+--- /dev/null
++++ b/tools/testing/selftests/bpf/test_tc_redirect.sh
+@@ -0,0 +1,197 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# This test sets up 3 netns (src <-> fwd <-> dst). There is no direct veth link
++# between src and dst. The netns fwd has veth links to each src and dst. The
++# client is in src and server in dst. The test installs a TC BPF program to each
++# host facing veth in fwd which calls into bpf_redirect_peer() to perform the
++# neigh addr population and redirect; it also installs a dropper prog on the
++# egress side to drop skbs if neigh addrs were not populated.
++
++if [[ $EUID -ne 0 ]]; then
++	echo "This script must be run as root"
++	echo "FAIL"
++	exit 1
++fi
++
++# check that needed tools are present
++command -v nc >/dev/null 2>&1 || \
++	{ echo >&2 "nc is not available"; exit 1; }
++command -v dd >/dev/null 2>&1 || \
++	{ echo >&2 "dd is not available"; exit 1; }
++command -v timeout >/dev/null 2>&1 || \
++	{ echo >&2 "timeout is not available"; exit 1; }
++command -v ping >/dev/null 2>&1 || \
++	{ echo >&2 "ping is not available"; exit 1; }
++command -v ping6 >/dev/null 2>&1 || \
++	{ echo >&2 "ping6 is not available"; exit 1; }
++command -v perl >/dev/null 2>&1 || \
++	{ echo >&2 "perl is not available"; exit 1; }
++command -v jq >/dev/null 2>&1 || \
++	{ echo >&2 "jq is not available"; exit 1; }
++command -v bpftool >/dev/null 2>&1 || \
++	{ echo >&2 "bpftool is not available"; exit 1; }
++
++readonly GREEN='\033[0;92m'
++readonly RED='\033[0;31m'
++readonly NC='\033[0m' # No Color
++
++readonly PING_ARG="-c 3 -w 10 -q"
++
++readonly TIMEOUT=10
++
++readonly NS_SRC="ns-src-$(mktemp -u XXXXXX)"
++readonly NS_FWD="ns-fwd-$(mktemp -u XXXXXX)"
++readonly NS_DST="ns-dst-$(mktemp -u XXXXXX)"
++
++readonly IP4_SRC="172.16.1.100"
++readonly IP4_DST="172.16.2.100"
++
++readonly IP6_SRC="::1:dead:beef:cafe"
++readonly IP6_DST="::2:dead:beef:cafe"
++
++readonly IP4_SLL="169.254.0.1"
++readonly IP4_DLL="169.254.0.2"
++readonly IP4_NET="169.254.0.0"
++
++netns_cleanup()
++{
++	ip netns del ${NS_SRC}
++	ip netns del ${NS_FWD}
++	ip netns del ${NS_DST}
++}
++
++netns_setup()
++{
++	ip netns add "${NS_SRC}"
++	ip netns add "${NS_FWD}"
++	ip netns add "${NS_DST}"
++
++	ip link add veth_src type veth peer name veth_src_fwd
++	ip link add veth_dst type veth peer name veth_dst_fwd
++
++	ip link set veth_src netns ${NS_SRC}
++	ip link set veth_src_fwd netns ${NS_FWD}
++
++	ip link set veth_dst netns ${NS_DST}
++	ip link set veth_dst_fwd netns ${NS_FWD}
++
++	ip -netns ${NS_SRC} addr add ${IP4_SRC}/32 dev veth_src
++	ip -netns ${NS_DST} addr add ${IP4_DST}/32 dev veth_dst
++
++	# The fwd netns automatically get a v6 LL address / routes, but also
++	# needs v4 one in order to start ARP probing. IP4_NET route is added
++	# to the endpoints so that the ARP processing will reply.
++
++	ip -netns ${NS_FWD} addr add ${IP4_SLL}/32 dev veth_src_fwd
++	ip -netns ${NS_FWD} addr add ${IP4_DLL}/32 dev veth_dst_fwd
++
++	ip -netns ${NS_SRC} addr add ${IP6_SRC}/128 dev veth_src nodad
++	ip -netns ${NS_DST} addr add ${IP6_DST}/128 dev veth_dst nodad
++
++	ip -netns ${NS_SRC} link set dev veth_src up
++	ip -netns ${NS_FWD} link set dev veth_src_fwd up
++
++	ip -netns ${NS_DST} link set dev veth_dst up
++	ip -netns ${NS_FWD} link set dev veth_dst_fwd up
++
++	ip -netns ${NS_SRC} route add ${IP4_DST}/32 dev veth_src scope global
++	ip -netns ${NS_SRC} route add ${IP4_NET}/16 dev veth_src scope global
++	ip -netns ${NS_FWD} route add ${IP4_SRC}/32 dev veth_src_fwd scope global
++
++	ip -netns ${NS_SRC} route add ${IP6_DST}/128 dev veth_src scope global
++	ip -netns ${NS_FWD} route add ${IP6_SRC}/128 dev veth_src_fwd scope global
++
++	ip -netns ${NS_DST} route add ${IP4_SRC}/32 dev veth_dst scope global
++	ip -netns ${NS_DST} route add ${IP4_NET}/16 dev veth_dst scope global
++	ip -netns ${NS_FWD} route add ${IP4_DST}/32 dev veth_dst_fwd scope global
++
++	ip -netns ${NS_DST} route add ${IP6_SRC}/128 dev veth_dst scope global
++	ip -netns ${NS_FWD} route add ${IP6_DST}/128 dev veth_dst_fwd scope global
++
++	fmac_src=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_src_fwd/address)
++	fmac_dst=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_dst_fwd/address)
++
++	ip -netns ${NS_SRC} neigh add ${IP4_DST} dev veth_src lladdr $fmac_src
++	ip -netns ${NS_DST} neigh add ${IP4_SRC} dev veth_dst lladdr $fmac_dst
++
++	ip -netns ${NS_SRC} neigh add ${IP6_DST} dev veth_src lladdr $fmac_src
++	ip -netns ${NS_DST} neigh add ${IP6_SRC} dev veth_dst lladdr $fmac_dst
++}
++
++netns_test_connectivity()
++{
++	set +e
++
++	ip netns exec ${NS_DST} bash -c "nc -4 -l -p 9004 &"
++	ip netns exec ${NS_DST} bash -c "nc -6 -l -p 9006 &"
++
++	TEST="TCPv4 connectivity test"
++	ip netns exec ${NS_SRC} bash -c "timeout ${TIMEOUT} dd if=/dev/zero bs=1000 count=100 > /dev/tcp/${IP4_DST}/9004"
++	if [ $? -ne 0 ]; then
++		echo -e "${TEST}: ${RED}FAIL${NC}"
++		exit 1
++	fi
++	echo -e "${TEST}: ${GREEN}PASS${NC}"
++
++	TEST="TCPv6 connectivity test"
++	ip netns exec ${NS_SRC} bash -c "timeout ${TIMEOUT} dd if=/dev/zero bs=1000 count=100 > /dev/tcp/${IP6_DST}/9006"
++	if [ $? -ne 0 ]; then
++		echo -e "${TEST}: ${RED}FAIL${NC}"
++		exit 1
++	fi
++	echo -e "${TEST}: ${GREEN}PASS${NC}"
++
++	TEST="ICMPv4 connectivity test"
++	ip netns exec ${NS_SRC} ping  $PING_ARG ${IP4_DST}
++	if [ $? -ne 0 ]; then
++		echo -e "${TEST}: ${RED}FAIL${NC}"
++		exit 1
++	fi
++	echo -e "${TEST}: ${GREEN}PASS${NC}"
++
++	TEST="ICMPv6 connectivity test"
++	ip netns exec ${NS_SRC} ping6 $PING_ARG ${IP6_DST}
++	if [ $? -ne 0 ]; then
++		echo -e "${TEST}: ${RED}FAIL${NC}"
++		exit 1
++	fi
++	echo -e "${TEST}: ${GREEN}PASS${NC}"
++
++	set -e
++}
++
++hex_mem_str()
++{
++	perl -e 'print join(" ", unpack("(H2)8", pack("L", @ARGV)))' $1
++}
++
++netns_setup_neigh()
++{
++	ip netns exec ${NS_FWD} tc qdisc add dev veth_src_fwd clsact
++	ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd ingress bpf da obj test_tc_neigh.o sec src_ingress
++	ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd egress  bpf da obj test_tc_neigh.o sec chk_egress
++
++	ip netns exec ${NS_FWD} tc qdisc add dev veth_dst_fwd clsact
++	ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd ingress bpf da obj test_tc_neigh.o sec dst_ingress
++	ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd egress  bpf da obj test_tc_neigh.o sec chk_egress
++
++	veth_src=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_src_fwd/ifindex)
++	veth_dst=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_dst_fwd/ifindex)
++
++	progs=$(ip netns exec ${NS_FWD} bpftool net --json | jq -r '.[] | .tc | map(.id) | .[]')
++	for prog in $progs; do
++		map=$(bpftool prog show id $prog --json | jq -r '.map_ids | .? | .[]')
++		if [ ! -z "$map" ]; then
++			bpftool map update id $map key hex $(hex_mem_str 0) value hex $(hex_mem_str $veth_src)
++			bpftool map update id $map key hex $(hex_mem_str 1) value hex $(hex_mem_str $veth_dst)
++		fi
++	done
++}
++
++trap netns_cleanup EXIT
++set -e
++
++netns_setup
++netns_setup_neigh
++netns_test_connectivity
 -- 
 2.17.1
 
