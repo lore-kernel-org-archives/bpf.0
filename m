@@ -2,65 +2,65 @@ Return-Path: <SRS0=vDm1=DQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1ED0C433E7
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 21:37:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8918BC433E7
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 21:46:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 75347221FD
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 21:37:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 430D222251
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 21:46:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HY0u+kX5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VeVHFmly"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388160AbgJIVbl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 17:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34362 "EHLO
+        id S2390791AbgJIVp2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 17:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391619AbgJIVaz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Oct 2020 17:30:55 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8F52C0613D5
-        for <bpf@vger.kernel.org>; Fri,  9 Oct 2020 14:30:54 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id p13so10901882edi.7
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2020 14:30:54 -0700 (PDT)
+        with ESMTP id S2389116AbgJIVp2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 17:45:28 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42577C0613D5
+        for <bpf@vger.kernel.org>; Fri,  9 Oct 2020 14:45:28 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id lw21so15197299ejb.6
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2020 14:45:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=CSRAHb/axz17M+0sWNwy+ixadRZAMXlB5z5CiZ4OuV8=;
-        b=HY0u+kX5HLC2Qd/hrbktWnWpqOSCxBXT3upvUFDtjn+PQwxihMAxO7b17zrilGpniu
-         Z/H4JmecauoImC4n6z/XuMGPe9m/fKvi3HUsIaSIN5Vh0h9oJizzFej6p8VupLfSBpv1
-         1DxoGx28bnw9wjP3qaVpNc+QqlJxc/NVthbUpnHP6rzn4hxdW9x4BmvgBCkwRxaV4uG3
-         TvIrmUEl3tqjzHanRb36NzEAD3F/TD94mNKCpByd9hMTqtXQEnSbVMIkAALhyvoRTHJD
-         dVE++0gF0w5nI42UG8NH4b76H/O3FzWMQwcPWdDfcJxiVuoQxs7pfn6hdE4zvJQarNUM
-         +JGg==
+        bh=M3QASBM0PyBqWV4qYi2/juWl30Ro5T5ehsILkUh0Mms=;
+        b=VeVHFmlydw44XMQ0jlUmjz9257sBoMcSb5kNBMm+/I8yNF1mq+Isl0FguqOpyiZKE/
+         Y+aPx4AUvkVLLePrLlaTWIQ31nAAC9X4APGGLo3mVwcz+Vy9L7qQXJU9USVA/1alpFOc
+         igtne+lu0FvEXxR4DTncx4DdoY4ADZqHTALlTUsbGyugfoOvGSc2sMtuIop4N0/FZhQQ
+         esRZ6kzNRqnZ5zg27AN3U6lj8G19zmAlHXNVazZJ+AbThUZjti1lfTGrMftco6w+V00D
+         yQ7y3Ce6BYhi1fynlsr0e4dzvttbb8ZD+yXjcskUQwKBwsX8dRJR8UY+UiO3wVY/Xywj
+         xSRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=CSRAHb/axz17M+0sWNwy+ixadRZAMXlB5z5CiZ4OuV8=;
-        b=bi5tK5llcjeZSqXhzxzDY2Jwj4o9NW9Aa1YQaoXCQfI1ZAyQpL75BHEcclw9luwZMN
-         +yaFep082jFjfByxWSdGbu/nEPWRAY5cvr+kCX7587osE7eFaHU/Z1cQ+DM5MaKHxmNo
-         WAUS3iiJI4nlAJAHoMFF+X1YlZslxr4W3I+zENgeBn9dLYtqq6LUsbvUJXm2HdYRC1WW
-         TTfZuFL28W3SUOGDKKngln1w869KO0T1VP0ermm/be2zUkHme2ivZpLCT3y4IKPbnXcm
-         Vuv1WH4dodjxtK/+yz9bn42Su0hbuH56M6KdepEbv4QguHalG8wy8D5QfEHzlAzGgc78
-         ZI3A==
-X-Gm-Message-State: AOAM533thunIkU5S1I5YbSDJn7nqCZ+oCwX3l72YPT+QxJinot8hWP/Q
-        JpH8RTud8fafrgQngJYAoE7PXDpYg6eSrO2FrrwN9lMZv28=
-X-Google-Smtp-Source: ABdhPJwkUG0xCEADMm4ps+nqQrIgOFcSR9FQBEPfpbKQHQBKUjESr+d/BbjnWhkO3OcRNdTt+3fk/bliCilbZoaGIB8=
-X-Received: by 2002:a05:6402:32f:: with SMTP id q15mr1339366edw.230.1602279053404;
- Fri, 09 Oct 2020 14:30:53 -0700 (PDT)
+        bh=M3QASBM0PyBqWV4qYi2/juWl30Ro5T5ehsILkUh0Mms=;
+        b=tkr+oKcx07LEY0ZXYP+huoppwJrWWQAcoMQDXDVqPRF6A4roVYN2cGuv7nHDS7xyWT
+         HvNFCo0L9/kvhhzOhIvcQH0iE/RHhbcUCjw4akv/ip94Wi9rRwCxwY7/bGO8yb6h1mDS
+         JBIb/98AGAqGSi4+7i5yq3ieHGZRxleVZR6GSPhcgvBbbydyH0Uz1klaLbaCU2QJqhlQ
+         fyPBkxIhhC6dOO4NF03TZNrFFVgLflpj9NzP75t+yptotCkFssTMZQz4GDEZQ2blA0Lp
+         Yjmu9Ln31dQBXXG80mnN+x/szp4SAgQ9DMPUfHNIA5lylnKE4ec1ug8PsOzgCCUc4Tb+
+         MsXA==
+X-Gm-Message-State: AOAM532utI52FaA9In7uj+YM71FeBBEPr8FYXG0eULJue9dmU14gvewS
+        NiAUmRlGfZ12FeLbFUDr8BOzvc8vPoJT70M1xRGBvw==
+X-Google-Smtp-Source: ABdhPJztbhpbmafO850DZApEDfDuxUWnWBQzmSIKVH0rtmX0BAQpAcxDEIMOsnGY2/dfOkAseQk1kA6/YYaTTgip9Yc=
+X-Received: by 2002:a17:906:394:: with SMTP id b20mr15967989eja.513.1602279926518;
+ Fri, 09 Oct 2020 14:45:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1602263422.git.yifeifz2@illinois.edu> <896cd9de97318d20c25edb1297db8c65e1cfdf84.1602263422.git.yifeifz2@illinois.edu>
-In-Reply-To: <896cd9de97318d20c25edb1297db8c65e1cfdf84.1602263422.git.yifeifz2@illinois.edu>
+References: <cover.1602263422.git.yifeifz2@illinois.edu> <c2077b8a86c6d82d611007d81ce81d32f718ec59.1602263422.git.yifeifz2@illinois.edu>
+In-Reply-To: <c2077b8a86c6d82d611007d81ce81d32f718ec59.1602263422.git.yifeifz2@illinois.edu>
 From:   Jann Horn <jannh@google.com>
-Date:   Fri, 9 Oct 2020 23:30:27 +0200
-Message-ID: <CAG48ez3KEp2BNcDatRu1V0G-H7hUCF66HJ0BPf0uqTnK3toY4Q@mail.gmail.com>
-Subject: Re: [PATCH v4 seccomp 1/5] seccomp/cache: Lookup syscall allowlist
- bitmap for fast path
+Date:   Fri, 9 Oct 2020 23:45:00 +0200
+Message-ID: <CAG48ez1zQkoFMpFaxnL-xmzdkJZ+KN-CcEnyvB6ZpPCfwb4=bg@mail.gmail.com>
+Subject: Re: [PATCH v4 seccomp 5/5] seccomp/cache: Report cache data through /proc/pid/seccomp_cache
 To:     YiFei Zhu <zhuyifei1999@gmail.com>
 Cc:     Linux Containers <containers@lists.linux-foundation.org>,
         YiFei Zhu <yifeifz2@illinois.edu>, bpf <bpf@vger.kernel.org>,
@@ -86,39 +86,92 @@ List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 On Fri, Oct 9, 2020 at 7:15 PM YiFei Zhu <zhuyifei1999@gmail.com> wrote:
-> The overhead of running Seccomp filters has been part of some past
-> discussions [1][2][3]. Oftentimes, the filters have a large number
-> of instructions that check syscall numbers one by one and jump based
-> on that. Some users chain BPF filters which further enlarge the
-> overhead. A recent work [6] comprehensively measures the Seccomp
-> overhead and shows that the overhead is non-negligible and has a
-> non-trivial impact on application performance.
+> Currently the kernel does not provide an infrastructure to translate
+> architecture numbers to a human-readable name. Translating syscall
+> numbers to syscall names is possible through FTRACE_SYSCALL
+> infrastructure but it does not provide support for compat syscalls.
 >
-> We observed some common filters, such as docker's [4] or
-> systemd's [5], will make most decisions based only on the syscall
-> numbers, and as past discussions considered, a bitmap where each bit
-> represents a syscall makes most sense for these filters.
+> This will create a file for each PID as /proc/pid/seccomp_cache.
+> The file will be empty when no seccomp filters are loaded, or be
+> in the format of:
+> <arch name> <decimal syscall number> <ALLOW | FILTER>
+> where ALLOW means the cache is guaranteed to allow the syscall,
+> and filter means the cache will pass the syscall to the BPF filter.
 >
-> The fast (common) path for seccomp should be that the filter permits
-> the syscall to pass through, and failing seccomp is expected to be
-> an exceptional case; it is not expected for userspace to call a
-> denylisted syscall over and over.
+> For the docker default profile on x86_64 it looks like:
+> x86_64 0 ALLOW
+> x86_64 1 ALLOW
+> x86_64 2 ALLOW
+> x86_64 3 ALLOW
+> [...]
+> x86_64 132 ALLOW
+> x86_64 133 ALLOW
+> x86_64 134 FILTER
+> x86_64 135 FILTER
+> x86_64 136 FILTER
+> x86_64 137 ALLOW
+> x86_64 138 ALLOW
+> x86_64 139 FILTER
+> x86_64 140 ALLOW
+> x86_64 141 ALLOW
+> [...]
 >
-> When it can be concluded that an allow must occur for the given
-> architecture and syscall pair (this determination is introduced in
-> the next commit), seccomp will immediately allow the syscall,
-> bypassing further BPF execution.
+> This file is guarded by CONFIG_SECCOMP_CACHE_DEBUG with a default
+> of N because I think certain users of seccomp might not want the
+> application to know which syscalls are definitely usable. For
+> the same reason, it is also guarded by CAP_SYS_ADMIN.
 >
-> Each architecture number has its own bitmap. The architecture
-> number in seccomp_data is checked against the defined architecture
-> number constant before proceeding to test the bit against the
-> bitmap with the syscall number as the index of the bit in the
-> bitmap, and if the bit is set, seccomp returns allow. The bitmaps
-> are all clear in this patch and will be initialized in the next
-> commit.
-[...]
-> Co-developed-by: Dimitrios Skarlatos <dskarlat@cs.cmu.edu>
-> Signed-off-by: Dimitrios Skarlatos <dskarlat@cs.cmu.edu>
+> Suggested-by: Jann Horn <jannh@google.com>
+> Link: https://lore.kernel.org/lkml/CAG48ez3Ofqp4crXGksLmZY6=fGrF_tWyUCg7PBkAetvbbOPeOA@mail.gmail.com/
 > Signed-off-by: YiFei Zhu <yifeifz2@illinois.edu>
+[...]
+> diff --git a/arch/Kconfig b/arch/Kconfig
+[...]
+> +config SECCOMP_CACHE_DEBUG
+> +       bool "Show seccomp filter cache status in /proc/pid/seccomp_cache"
+> +       depends on SECCOMP
+> +       depends on SECCOMP_FILTER
+> +       depends on PROC_FS
+> +       help
+> +         This is enables /proc/pid/seccomp_cache interface to monitor
 
-Reviewed-by: Jann Horn <jannh@google.com>
+nit: s/This is enables/This enables the/
+
+> +         seccomp cache data. The file format is subject to change. Reading
+> +         the file requires CAP_SYS_ADMIN.
+> +
+> +         This option is for debugging only. Enabling present the risk that
+
+nit: *presents
+
+> +         an adversary may be able to infer the seccomp filter logic.
+
+[...]
+> +int proc_pid_seccomp_cache(struct seq_file *m, struct pid_namespace *ns,
+> +                          struct pid *pid, struct task_struct *task)
+> +{
+> +       struct seccomp_filter *f;
+> +       unsigned long flags;
+> +
+> +       /*
+> +        * We don't want some sandboxed process know what their seccomp
+
+s/know/to know/
+
+> +        * filters consist of.
+> +        */
+> +       if (!file_ns_capable(m->file, &init_user_ns, CAP_SYS_ADMIN))
+> +               return -EACCES;
+> +
+> +       if (!lock_task_sighand(task, &flags))
+> +               return 0;
+
+maybe return -ESRCH here so that userspace can distinguish between an
+exiting process and a process with no filters?
+
+> +       f = READ_ONCE(task->seccomp.filter);
+> +       if (!f) {
+> +               unlock_task_sighand(task, &flags);
+> +               return 0;
+> +       }
+[...]
