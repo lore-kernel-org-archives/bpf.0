@@ -2,117 +2,124 @@ Return-Path: <SRS0=vDm1=DQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B091DC43457
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 18:42:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3C165C433E7
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 18:42:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5EE59222B9
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 18:42:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D371122284
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 18:42:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Q4iUp5+n"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XgkhwKKg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731572AbgJISmU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 14:42:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:41233 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727737AbgJISmT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 9 Oct 2020 14:42:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602268938;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j/QOCkmnSN60NLNZzGXIUnDSHiaUJlDv+sgUSKbTTlc=;
-        b=Q4iUp5+n97rE4TxAerrX5PJ15aLgrVgSD0C81N0RcgB7fNNnk+KCP8cM4uynyKc9KrvP3Y
-        INWgHittMDTWlGQZAFBY09dv9kreId+UaYgJLmYyTya0bO+takqCVexyL4DTd8T/eI68Xe
-        S1AzXdxMUuwZ+vs0TJj+Pk0AY+E12bg=
-Received: from mail-vs1-f70.google.com (mail-vs1-f70.google.com
- [209.85.217.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-121-vSxXDJZ-NceK24DnsJTKNQ-1; Fri, 09 Oct 2020 14:42:15 -0400
-X-MC-Unique: vSxXDJZ-NceK24DnsJTKNQ-1
-Received: by mail-vs1-f70.google.com with SMTP id v203so1459740vsv.8
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2020 11:42:15 -0700 (PDT)
+        id S1732471AbgJISmx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 14:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732380AbgJISmx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 14:42:53 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8FFC0613D2;
+        Fri,  9 Oct 2020 11:42:51 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id j76so7983483ybg.3;
+        Fri, 09 Oct 2020 11:42:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vHehwStZSh5i29OSgM53P0n9THKydgJyemP9HqZKMOg=;
+        b=XgkhwKKgqt3qpiImVm8XVPpJE9JwANX6cXZDzDvsQJDbMH9NwE3bl5HCsRR9sSPeEa
+         lef0ntlPYXT+rN6qKqr6ltPpX4V7MbNwFkx9zKt0iXo5BD8Z5UYVaq4ugedq2dscOOdz
+         VQlGfzmoRqV/Bs1VMETrU6K9vsRcqDeHgBgEsMsdLsbMkYXE31IL3is/6ktTuQpviXCl
+         9get5r50JOU/uK/kqeHN++p046EVx+2afeqLFxtg63ixa6iXRG7H1vyy1kOUEHr6nNG9
+         xZfxI2dyttYWwNxvF0oknp9Iqgo1fjhP6aFboav4YAk9nuZuHQWvV9G95sjqBWdKzoXX
+         dVSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=j/QOCkmnSN60NLNZzGXIUnDSHiaUJlDv+sgUSKbTTlc=;
-        b=Xn18Dylv9P3Hg0EdL0FX2KWOjWN/rniv8Y5Nlsf2xwL2kqAhiaTQ8gO2Esky3+DjDu
-         ErcEhZPuu7jydtqfCvMMrfAsVoaGvxfomo6MogP5nUiB5mnFqyw+hak4EG+5L6xILZP8
-         k2eBzIE8jdsL/Z/MT9zfsAtMi/WUb1D9kFYE6sFt1BtlJ1BxejXPC7dpm0G7QG1FZ7uB
-         5doPg9C5rwoRtVG8XtRNPc0uiLa7QgyEpM+jQ11jIqJiUJmFKhv3xihx0WFeZbcNwRLO
-         4xidKeB5gHY07DrckdrN9qf+ntJ3MgZCE79Rea79Wy6toOzBNZVIw5eHvDNkvBJqGuoh
-         0NhQ==
-X-Gm-Message-State: AOAM533GK+efdQluPnqlrE6wCkjabtZEEygN3LhLnrGK0E/TQLE6ZTaG
-        Uz0DavhUmbnc92G1KvGevcunhtESGau/hIuX95L+tlqp1jxFnqdChWrphgkNLNP5gZ8gTwjFy2b
-        Yzfzf9RAlcZVU
-X-Received: by 2002:a05:6102:9cd:: with SMTP id g13mr9279748vsi.44.1602268934925;
-        Fri, 09 Oct 2020 11:42:14 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwtDbskbMOrPHyCRlSH7KdeoQmVqkFNAKTzB/kCt5yfOLg+3nT+pjvny3KKWiLKl4R4yiSxqQ==
-X-Received: by 2002:a05:6102:9cd:: with SMTP id g13mr9279735vsi.44.1602268934599;
-        Fri, 09 Oct 2020 11:42:14 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id a195sm1264285vka.42.2020.10.09.11.42.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2020 11:42:13 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id ADCF01837DC; Fri,  9 Oct 2020 20:42:10 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     David Ahern <dsahern@gmail.com>, daniel@iogearbox.net, ast@fb.com
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        David Ahern <dsahern@gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf_fib_lookup: optionally skip neighbour
- lookup
-In-Reply-To: <0a463800-a663-3fd3-2e1a-eac5526ed691@gmail.com>
-References: <20201009101356.129228-1-toke@redhat.com>
- <0a463800-a663-3fd3-2e1a-eac5526ed691@gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Fri, 09 Oct 2020 20:42:10 +0200
-Message-ID: <87v9fjckcd.fsf@toke.dk>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vHehwStZSh5i29OSgM53P0n9THKydgJyemP9HqZKMOg=;
+        b=K/1a9B9xtH1LWjzJRNJWRDq5hAQQxsjAmLMEcmk6HPZ64g3t+CBwzITLt3T02N4UtZ
+         YuAeOx3os+3KHS1x0zx9EFroTgYbJpDz0az98aHGiCIE7zmaKAtg2YTv9oDopog2zAbh
+         9rEgScthgeUAPtZnDAoBG9tOo4OA3V22NKKuII1dcnTgswNqS19Qhbzn//qJs84fPGjJ
+         RPKnCaEQTXX09w77/r5qYP7fuc6x9Ru66iWpQevTW41rMFYvzMEYiYly2dAJZobu/IJy
+         Un6J/3V+wR8MICZBbOrPVboB0hNmv9t1xdggsOE25jfQAARdOjN0Qkx0mQoJva+aYCER
+         BlaQ==
+X-Gm-Message-State: AOAM5329OtJ8OuQIcywJQuiackc8CF2JflJ11KpOGG2Mrtr5gDuFdEsJ
+        4uMcgeKMBjgPjMia8sEFBRB6nwuMXfWFaoF89yA=
+X-Google-Smtp-Source: ABdhPJxZZmudMrkApxKvaZDIpkfkM6NPJHwagdz88LFzqSS9TURXqYQFOZquY6Iuu15hG5xMX5TdPBJR1mCYbxN4OxQ=
+X-Received: by 2002:a25:b0d:: with SMTP id 13mr10720009ybl.347.1602268971024;
+ Fri, 09 Oct 2020 11:42:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <cover.1602252399.git.daniel@iogearbox.net> <48cbc4e24968da275d13bd8797fe32986938f398.1602252399.git.daniel@iogearbox.net>
+ <CAEf4BzYVgs0vicVJTeT5yVSrOg=ArJ=BkEoA8KrwdQ8AVQ23Sg@mail.gmail.com> <99c67c05-700e-8f54-7fea-2daa6d19ec9e@iogearbox.net>
+In-Reply-To: <99c67c05-700e-8f54-7fea-2daa6d19ec9e@iogearbox.net>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 9 Oct 2020 11:42:40 -0700
+Message-ID: <CAEf4Bzb+p8Kum8aX-t7Zzm9VQADZZf=JU0CcqUUTT7Uut_uxzA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/6] bpf: allow for map-in-map with dynamic
+ inner array map entries
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        john fastabend <john.fastabend@gmail.com>,
+        Yonghong Song <yhs@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-David Ahern <dsahern@gmail.com> writes:
-
-> On 10/9/20 3:13 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
->> The bpf_fib_lookup() helper performs a neighbour lookup for the destinat=
-ion
->> IP and returns BPF_FIB_LKUP_NO_NEIGH if this fails, with the expectation
->> that the BPF program will pass the packet up the stack in this case.
->> However, with the addition of bpf_redirect_neigh() that can be used inst=
-ead
->> to perform the neighbour lookup, at the cost of a bit of duplicated work.
->>=20
->> For that we still need the target ifindex, and since bpf_fib_lookup()
->> already has that at the time it performs the neighbour lookup, there is
->> really no reason why it can't just return it in any case. So let's just
->> always return the ifindex, and also add a flag that lets the caller turn
->> off the neighbour lookup entirely in bpf_fib_lookup().
+On Fri, Oct 9, 2020 at 11:35 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
 >
-> seems really odd to do the fib lookup only to skip the neighbor lookup
-> and defer to a second helper to do a second fib lookup and send out.
+> On 10/9/20 7:42 PM, Andrii Nakryiko wrote:
+> > On Fri, Oct 9, 2020 at 7:13 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+> [...]
+> >>   static int percpu_array_map_btf_id;
+> >>   const struct bpf_map_ops percpu_array_map_ops = {
+> >>          .map_meta_equal = bpf_map_meta_equal,
+> >> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> >> index 1110ecd7d1f3..519bf867f065 100644
+> >> --- a/kernel/bpf/syscall.c
+> >> +++ b/kernel/bpf/syscall.c
+> >> @@ -111,7 +111,8 @@ static struct bpf_map *find_and_alloc_map(union bpf_attr *attr)
+> >>          ops = bpf_map_types[type];
+> >>          if (!ops)
+> >>                  return ERR_PTR(-EINVAL);
+> >> -
+> >> +       if (ops->map_swap_ops)
+> >> +               ops = ops->map_swap_ops(attr);
+> >
+> > I'm afraid that this can cause quite a lot of confusion down the road.
+> >
+> > Wouldn't designating -EOPNOTSUPP return code from map_gen_lookup() and
+> > not inlining in that case as if map_gen_lookup() wasn't even defined
+> > be a much smaller and more local (semantically) change that achieves
+> > exactly the same thing? Doesn't seem like switching from u32 to int
+> > for return value would be a big inconvenience for existing
+> > implementations of inlining callbacks, right?
 >
-> The better back-to-back calls is to return the ifindex and gateway on
-> successful fib lookup regardless of valid neighbor. If the call to
-> bpf_redirect_neigh is needed, it can have a flag to skip the fib lookup
-> and just redirect to the given nexthop address + ifindex. ie.,
-> bpf_redirect_neigh only does neighbor handling in this case.
+> I was originally thinking about it, but then decided not to take this path,
+> for example the ops->map_gen_lookup() patching code has sanity checks for
+> the u32 return code on whether we patched 0 or too many instructions, so
 
-Hmm, yeah, I guess it would make sense to cache and reuse the lookup -
-maybe stick it in bpf_redirect_info()? However, given the imminent
-opening of the merge window, I don't see this landing before then. So
-I'm going to respin this patch with just the original change to always
-return the ifindex, then we can revisit the flags/reuse of the fib
-lookup later.
+Right, we won't ever need to patch >2 billion instructions, so making
+the return value int shouldn't be a problem. As for not catching
+accidental patched insn == -EOPNOTSUPP, I don't think that's a real
+concern, is it? All the other negative value would trigger loud error.
 
--Toke
+> if there is anything funky going on in one of the map_gen_lookup() that
+> we'd get a negative code, for example, I don't want to just skip and not
+> have the verifier bark loudly with "bpf verifier is misconfigured", also
+> didn't want to make the logic inside fixup_bpf_calls() even more complex,
+> so the patch here felt simpler & more straight forward to me.
 
+It's not straightforward in the same way as class inheritance and
+overriding methods is not straightforward to follow in general.
+Swapping out entire sets of operations is super confusing, IMO.
+
+>
+> Thanks,
+> Daniel
