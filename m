@@ -2,137 +2,133 @@ Return-Path: <SRS0=vDm1=DQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72342C433E7
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 18:39:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B4B00C433E7
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 18:41:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 197BC222B9
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 18:39:24 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eatqDnlX"
+	by mail.kernel.org (Postfix) with ESMTP id 6822B222B9
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 18:41:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730965AbgJISjX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 14:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35892 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730773AbgJISjX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Oct 2020 14:39:23 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63274C0613D2
-        for <bpf@vger.kernel.org>; Fri,  9 Oct 2020 11:39:23 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id c3so7992856ybl.0
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2020 11:39:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=HiG3p+lctJx5RBOH7Hq1XzlaHJPJF6nNcCCdyAfHbN0=;
-        b=eatqDnlXR7g3P0ptDHiMCr0Cuj3Sg8f2eoTawwEzIN3erJ2IlXIdt+oy6RlrDiAexV
-         S8zDZtuUqEc45OOmkVTMoWco83wVYBi6vIaBDIINz8lxRkUX9cAaD+9DWTvJM2QBiiHE
-         jgw51zyOMtvxbT2gP04td30QbRuDCsRLo3T1m3w86BuIJaHYytNomauqCh4Ieu2wApQT
-         Wr/M6KeCYNWMgtdtHwW09sSIs31w8xKMcDcuKk9Nxd4GktyV/l11B5bF2tLuoJVkbldA
-         D7103waiQY972Kju+flHBCeL2yvWE2ZxjvSHjPGxUALIzIaioiRKL2c46BSG61wjb1qr
-         K3Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=HiG3p+lctJx5RBOH7Hq1XzlaHJPJF6nNcCCdyAfHbN0=;
-        b=AZ1oHkPvMNjnUokGgC2g4tLtfI//fENwxQ2BDYiO+tEPE8KgejRxaLhuvMKyo9zR+3
-         qNCgMfAcLTmfutBs3CqoeArumiIRGc45jURvKAwdMHelwyzGIY+c/t5Ii7BQJ7gSzxud
-         ocDb+/ED+UUCS7VWN5SmIn6V97HTjyM+kP76ingiig3svKHtTpcntKAODoBtBWU2We6V
-         Zbt1dsgImtkiTfoBkZYWeFS6QdEPaHBqdHQnKBVR6Mgw9q/xlDT10/fjIq1ZiRjmgcr5
-         PB05NgjyNcNiX96dNYTGrfmfqi7ewpEwRM/1bIHv7GVuQL+wGRLUne1tP89CHiK4snXs
-         J8tg==
-X-Gm-Message-State: AOAM530e1lkNGUu2KWx0LVYflqCAULjFq0pCIN0CUSddop7JvGANspCS
-        V7sQaHSrgK1uup2uvEU8PHcjKUqN5QXMSx1OHbDtVfgwXTc=
-X-Google-Smtp-Source: ABdhPJxZasunHfmKJFhjlAOKl//IMoDsTUCNwdx+jSrwwHTrbrzs2msoerb9jnZApaumGNOlvjI0mov4Nk8ld8Ig+bk=
-X-Received: by 2002:a25:2a4b:: with SMTP id q72mr12943221ybq.27.1602268762663;
- Fri, 09 Oct 2020 11:39:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAMy7=ZUk08w5Gc2Z-EKi4JFtuUCaZYmE4yzhJjrExXpYKR4L8w@mail.gmail.com>
- <a8abb367-ccad-2ee4-8c5e-ce3da7c4915d@iogearbox.net> <CAMy7=ZXjna6q53h0uuar58fmAMi026w7u=ciVjTQXK2OHiOPJg@mail.gmail.com>
- <fadd5bd2-ed87-7e6b-d4bd-a802eb9ef6f8@iogearbox.net> <CAMy7=ZV5pZzzs_vuqn1eqEe9tBjgmQHT=hv0CXhgxYrjO_8wZg@mail.gmail.com>
- <e385d737-1a4b-a1b6-9a2e-23a71d2ca1b7@iogearbox.net> <CAMy7=ZW6B+aHN-3dAf7-=kK8WpMZ0NmEmeVh67jVPrjsryx9sQ@mail.gmail.com>
-In-Reply-To: <CAMy7=ZW6B+aHN-3dAf7-=kK8WpMZ0NmEmeVh67jVPrjsryx9sQ@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 9 Oct 2020 11:39:11 -0700
-Message-ID: <CAEf4BzYJQ_RZgy8YCPxfF+QEkx9W+jeu-3O3CX+vEqTFtOT2Fw@mail.gmail.com>
+        id S1728317AbgJISlU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 14:41:20 -0400
+Received: from www62.your-server.de ([213.133.104.62]:47396 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727737AbgJISlU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 14:41:20 -0400
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kQxKP-0006ye-4I; Fri, 09 Oct 2020 20:41:17 +0200
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kQxKO-0004fF-VU; Fri, 09 Oct 2020 20:41:17 +0200
 Subject: Re: libbpf error: unknown register name 'r0' in asm
-To:     Yaniv Agman <yanivagman@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Yaniv Agman <yanivagman@gmail.com>, bpf <bpf@vger.kernel.org>,
         Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <CAMy7=ZUk08w5Gc2Z-EKi4JFtuUCaZYmE4yzhJjrExXpYKR4L8w@mail.gmail.com>
+ <a8abb367-ccad-2ee4-8c5e-ce3da7c4915d@iogearbox.net>
+ <CAMy7=ZXjna6q53h0uuar58fmAMi026w7u=ciVjTQXK2OHiOPJg@mail.gmail.com>
+ <fadd5bd2-ed87-7e6b-d4bd-a802eb9ef6f8@iogearbox.net>
+ <CAMy7=ZV5pZzzs_vuqn1eqEe9tBjgmQHT=hv0CXhgxYrjO_8wZg@mail.gmail.com>
+ <e385d737-1a4b-a1b6-9a2e-23a71d2ca1b7@iogearbox.net>
+ <CAEf4Bza4KFJ_j7vmg-x_Zinp0PUM-zmWYHMq_y+2zWmX485sBQ@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <ece9975d-717c-a868-be51-c97aeae8e011@iogearbox.net>
+Date:   Fri, 9 Oct 2020 20:41:16 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <CAEf4Bza4KFJ_j7vmg-x_Zinp0PUM-zmWYHMq_y+2zWmX485sBQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/25952/Fri Oct  9 15:52:40 2020)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Oct 9, 2020 at 11:33 AM Yaniv Agman <yanivagman@gmail.com> wrote:
->
-> =E2=80=AB=D7=91=D7=AA=D7=90=D7=A8=D7=99=D7=9A =D7=99=D7=95=D7=9D =D7=95=
-=D7=B3, 9 =D7=91=D7=90=D7=95=D7=A7=D7=B3 2020 =D7=91-21:21 =D7=9E=D7=90=D7=
-=AA =E2=80=AADaniel Borkmann=E2=80=AC=E2=80=8F
-> <=E2=80=AAdaniel@iogearbox.net=E2=80=AC=E2=80=8F>:=E2=80=AC
-> >
-> > On 10/9/20 8:09 PM, Yaniv Agman wrote:
-> > > =E2=80=AB=D7=91=D7=AA=D7=90=D7=A8=D7=99=D7=9A =D7=99=D7=95=D7=9D =D7=
-=95=D7=B3, 9 =D7=91=D7=90=D7=95=D7=A7=D7=B3 2020 =D7=91-20:39 =D7=9E=D7=90=
-=D7=AA =E2=80=AADaniel Borkmann=E2=80=AC=E2=80=8F
-> > > <=E2=80=AAdaniel@iogearbox.net=E2=80=AC=E2=80=8F>:=E2=80=AC
-> > >>
-> > >> On 10/9/20 6:56 PM, Yaniv Agman wrote:
-> > >>> =E2=80=AB=D7=91=D7=AA=D7=90=D7=A8=D7=99=D7=9A =D7=99=D7=95=D7=9D =
-=D7=95=D7=B3, 9 =D7=91=D7=90=D7=95=D7=A7=D7=B3 2020 =D7=91-19:27 =D7=9E=D7=
-=90=D7=AA =E2=80=AADaniel Borkmann=E2=80=AC=E2=80=8F
-> > >>> <=E2=80=AAdaniel@iogearbox.net=E2=80=AC=E2=80=8F>:=E2=80=AC
-> > >>>>
-> > >>>> [ Cc +Yonghong ]
-> > >>>>
-> > >>>> On 10/9/20 6:05 PM, Yaniv Agman wrote:
-> > >>>>> Pulling the latest changes of libbpf and compiling my application=
- with it,
-> > >>>>> I see the following error:
-> > >>>>>
-> > >>>>> ../libbpf/src//root/usr/include/bpf/bpf_helpers.h:99:10: error:
-> > >>>>> unknown register name 'r0' in asm
-> > >>>>>                         : "r0", "r1", "r2", "r3", "r4", "r5");
-> > >>>>>
-> > >>>>> The commit which introduced this change is:
-> > >>>>> 80c7838600d39891f274e2f7508b95a75e4227c1
-> > >>>>>
-> > >>>>> I'm not sure if I'm doing something wrong (missing include?), or =
-this
-> > >>>>> is a genuine error
-> > >>>>
-> > >>>> Seems like your clang/llvm version might be too old.
-> > >>>
-> > >>> I'm using clang 10.0.1
-> > >>
-> > >> Ah, okay, I see. Would this diff do the trick for you?
-> > >
-> > > Yes! Now it compiles without any problems!
-> >
-> > Great, thx, I'll cook proper fix and check with clang6 as Yonghong ment=
-ioned.
-> >
->
-> Thanks!
-> Does this happen because I'm first compiling using "emit-llvm" and
-> then using llc?
+On 10/9/20 8:35 PM, Andrii Nakryiko wrote:
+> On Fri, Oct 9, 2020 at 11:21 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>> On 10/9/20 8:09 PM, Yaniv Agman wrote:
+>>> ‫בתאריך יום ו׳, 9 באוק׳ 2020 ב-20:39 מאת ‪Daniel Borkmann‬‏
+>>> <‪daniel@iogearbox.net‬‏>:‬
+>>>>
+>>>> On 10/9/20 6:56 PM, Yaniv Agman wrote:
+>>>>> ‫בתאריך יום ו׳, 9 באוק׳ 2020 ב-19:27 מאת ‪Daniel Borkmann‬‏
+>>>>> <‪daniel@iogearbox.net‬‏>:‬
+>>>>>>
+>>>>>> [ Cc +Yonghong ]
+>>>>>>
+>>>>>> On 10/9/20 6:05 PM, Yaniv Agman wrote:
+>>>>>>> Pulling the latest changes of libbpf and compiling my application with it,
+>>>>>>> I see the following error:
+>>>>>>>
+>>>>>>> ../libbpf/src//root/usr/include/bpf/bpf_helpers.h:99:10: error:
+>>>>>>> unknown register name 'r0' in asm
+>>>>>>>                          : "r0", "r1", "r2", "r3", "r4", "r5");
+>>>>>>>
+>>>>>>> The commit which introduced this change is:
+>>>>>>> 80c7838600d39891f274e2f7508b95a75e4227c1
+>>>>>>>
+>>>>>>> I'm not sure if I'm doing something wrong (missing include?), or this
+>>>>>>> is a genuine error
+>>>>>>
+>>>>>> Seems like your clang/llvm version might be too old.
+>>>>>
+>>>>> I'm using clang 10.0.1
+>>>>
+>>>> Ah, okay, I see. Would this diff do the trick for you?
+>>>
+>>> Yes! Now it compiles without any problems!
+>>
+>> Great, thx, I'll cook proper fix and check with clang6 as Yonghong mentioned.
+> 
+> Am I the only one confused here?... Yonghong said it should be
+> supported as early as clang 6, Yaniv is using Clang 10 and is still
+> getting this error. Let's figure out what's the problem before adding
+> unnecessary checks.
+> 
+> I think it's not the clang_major check that helped, rather __bpf__
+> check. So please hold off on the fix, let's get to the bottom of this
+> first.
 
-So this must be the reason, but I'll wait for Yonghong to confirm.
+I don't see confusion here (maybe other than which minimal clang/llvm version
+libbpf should support). If we do `#if __clang_major__ >= 6 && defined(__bpf__)`
+for the final patch, then this means that user passed clang -target bpf and
+the min supported version for inline assembly was there, otherwise we fall back
+to bpf_tail_call. In Yaniv's case, he probably had native target with -emit-llvm
+and then used llc invocation.
 
-> I wish I could use bpf target directly, but I'm then having problems
-> with includes of asm code (like pt_regs and other stuff)
+>>>> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+>>>> index 2bdb7d6dbad2..31e356831fcf 100644
+>>>> --- a/tools/lib/bpf/bpf_helpers.h
+>>>> +++ b/tools/lib/bpf/bpf_helpers.h
+>>>> @@ -72,6 +72,7 @@
+>>>>     /*
+>>>>      * Helper function to perform a tail call with a constant/immediate map slot.
+>>>>      */
+>>>> +#if __clang_major__ >= 10 && defined(__bpf__)
+>>>>     static __always_inline void
+>>>>     bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+>>>>     {
+>>>> @@ -98,6 +99,9 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+>>>>                        :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
+>>>>                        : "r0", "r1", "r2", "r3", "r4", "r5");
+>>>>     }
+>>>> +#else
+>>>> +# define bpf_tail_call_static  bpf_tail_call
+>>>> +#endif /* __clang_major__ >= 10 && __bpf__ */
+>>>>
+>>>>     /*
+>>>>      * Helper structure used by eBPF C program
+>>
 
-Are you developing for a 32-bit platform? Or what exactly is the
-problem? I've been trying to solve problems for 32-bit arches recently
-by making libbpf smarter, that relies on CO-RE though. Is CO-RE an
-option for you?
-
-[...]
