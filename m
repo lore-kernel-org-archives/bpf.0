@@ -2,298 +2,105 @@ Return-Path: <SRS0=vDm1=DQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BB52C433DF
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:43:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D7D6C433DF
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:49:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0DA1022277
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:43:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0C40222261
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:49:25 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mTs3JpJY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729274AbgJIUnH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 16:43:07 -0400
-Received: from www62.your-server.de ([213.133.104.62]:39476 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388554AbgJIUm6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Oct 2020 16:42:58 -0400
-Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1kQzE1-00084y-UW; Fri, 09 Oct 2020 22:42:50 +0200
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     ast@kernel.org
-Cc:     daniel@iogearbox.net, john.fastabend@gmail.com, yhs@fb.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Subject: [PATCH bpf-next v3 3/6] bpf: allow for map-in-map with dynamic inner array map entries
-Date:   Fri,  9 Oct 2020 22:42:42 +0200
-Message-Id: <20201009204245.27905-4-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20201009204245.27905-1-daniel@iogearbox.net>
-References: <20201009204245.27905-1-daniel@iogearbox.net>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/25952/Fri Oct  9 15:52:40 2020)
+        id S1733168AbgJIUtY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 16:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727311AbgJIUtY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 16:49:24 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D46C0613D2;
+        Fri,  9 Oct 2020 13:49:24 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id k6so11565608ior.2;
+        Fri, 09 Oct 2020 13:49:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=l6E4B46e2XeP9h+qJ2Ghhmtiv8oTVWyHQipTgIS48gY=;
+        b=mTs3JpJYvoM31Wsn0xENzCmbYma6XACEtukcUiHp2VAdCVorpafI11+3nrJOK9/lRT
+         V34st9fKO3/pGPJEsvOwlnZ10ipwCKYC0I6lmfAkeJdcGf5reNLq4SHHQVzdZdcHyqZ7
+         Lw3n0mvhAX7S9XGA291PmHSF6HSlLS+H+BvNavlX/vPGyrPC8e6BMNPyjLaCgiPgFUBN
+         gg4MClPzy7mlvz7TeOoT1AinBuwYJ58eZCWwJ71d4Oa5HlUkMzBOUv9ijLu/+PVkxgxi
+         pHSb0tUgjwWsnnj+8cHWkMyivNQrOxvqF1NVL0USIJkkavlKLG0ncNwXsjsWOubp9K6Y
+         awIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=l6E4B46e2XeP9h+qJ2Ghhmtiv8oTVWyHQipTgIS48gY=;
+        b=MezBC6/9dieQ5245/ERgLvNiP5R1xrvfTdVxnMI+YGGNU7jgukXkhR2qLiIAKl9ndv
+         uQ5MIYHyUQdWBlahWyKsu8xSk5JctQKZ/UKubIilpWhc6hFeiW4XqISP14TiYjJCGcCs
+         kixrpATCA2+M4Dy2wRpDEHYEk5TuZeCvyHlmH0CsM1Wj52kTH73u8blrUdq84sA/vDXB
+         ADSHrWDpcrBKNCfBAdQRM+I9xnXfEgnBy4GW2SQqVQdXJSKVwxRgL59M9Sp3zDthCRm/
+         mKb7WNRLbK8adI7tubkTpFG80/bWJqyYMOpFbxyVqMEEb+lQuOx82Vy2VxEWs8b8V8Gb
+         cPkQ==
+X-Gm-Message-State: AOAM531RXcYc5DL6RGJf+sw4NGuB7l84P/FQsJUCP2hDQxZoci1U+sE3
+        iynBZcDBw5PQ1h9/xyrcq4s=
+X-Google-Smtp-Source: ABdhPJz0mDjWI9cLGZI1APL1SkK/C90ahx8YNdOQKSadUt03k1qQAZbFQ4v0iJX2QgAk2JhI5vXHPw==
+X-Received: by 2002:a5d:9e4e:: with SMTP id i14mr10583360ioi.22.1602276563613;
+        Fri, 09 Oct 2020 13:49:23 -0700 (PDT)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id z20sm3941046ior.2.2020.10.09.13.49.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2020 13:49:22 -0700 (PDT)
+Date:   Fri, 09 Oct 2020 13:49:14 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        maze@google.com, lmb@cloudflare.com, shaun@tigera.io,
+        Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
+        John Fastabend <john.fastabend@gmail.com>,
+        eyal.birger@gmail.com
+Message-ID: <5f80ccca63d9_ed74208f8@john-XPS-13-9370.notmuch>
+In-Reply-To: <20201009093319.6140b322@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <160216609656.882446.16642490462568561112.stgit@firesoul>
+ <20201009093319.6140b322@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Subject: Re: [PATCH bpf-next V3 0/6] bpf: New approach for BPF MTU handling
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Recent work in f4d05259213f ("bpf: Add map_meta_equal map ops") and 134fede4eecf
-("bpf: Relax max_entries check for most of the inner map types") added support
-for dynamic inner max elements for most map-in-map types. Exceptions were maps
-like array or prog array where the map_gen_lookup() callback uses the maps'
-max_entries field as a constant when emitting instructions.
+Jakub Kicinski wrote:
+> On Thu, 08 Oct 2020 16:08:57 +0200 Jesper Dangaard Brouer wrote:
+> > V3: Drop enforcement of MTU in net-core, leave it to drivers
+> 
+> Sorry for being late to the discussion.
+> 
+> I absolutely disagree. We had cases in the past where HW would lock up
+> if it was sent a frame with bad geometry.
+> 
+> We will not be sprinkling validation checks across the drivers because
+> some reconfiguration path may occasionally yield a bad packet, or it's
+> hard to do something right with BPF.
 
-We recently implemented Maglev consistent hashing into Cilium's load balancer
-which uses map-in-map with an outer map being hash and inner being array holding
-the Maglev backend table for each service. This has been designed this way in
-order to reduce overall memory consumption given the outer hash map allows to
-avoid preallocating a large, flat memory area for all services. Also, the
-number of service mappings is not always known a-priori.
+This is a driver bug then. As it stands today drivers may get hit with
+skb with MTU greater than set MTU as best I can tell. Generally I
+expect drivers use MTU to configure RX buffers not sure how it is going
+to be used on TX side? Any examples? I just poked around through the
+driver source to see and seems to confirm its primarily for RX side
+configuration with some drivers throwing the event down to the firmware
+for something that I can't see in the code?
 
-The use case for dynamic inner array map entries is to further reduce memory
-overhead, for example, some services might just have a small number of back
-ends while others could have a large number. Right now the Maglev backend table
-for small and large number of backends would need to have the same inner array
-map entries which adds a lot of unneeded overhead.
-
-Dynamic inner array map entries can be realized by avoiding the inlined code
-generation for their lookup. The lookup will still be efficient since it will
-be calling into array_map_lookup_elem() directly and thus avoiding retpoline.
-The patch adds a BPF_F_NO_INLINE flag to map creation which therefore skips
-inline code generation and relaxes array_map_meta_equal() check to ignore both
-maps' max_entries.
-
-Example code generation where inner map is dynamic sized array:
-
-  # bpftool p d x i 125
-  int handle__sys_enter(void * ctx):
-  ; int handle__sys_enter(void *ctx)
-     0: (b4) w1 = 0
-  ; int key = 0;
-     1: (63) *(u32 *)(r10 -4) = r1
-     2: (bf) r2 = r10
-  ;
-     3: (07) r2 += -4
-  ; inner_map = bpf_map_lookup_elem(&outer_arr_dyn, &key);
-     4: (18) r1 = map[id:468]
-     6: (07) r1 += 272
-     7: (61) r0 = *(u32 *)(r2 +0)
-     8: (35) if r0 >= 0x3 goto pc+5
-     9: (67) r0 <<= 3
-    10: (0f) r0 += r1
-    11: (79) r0 = *(u64 *)(r0 +0)
-    12: (15) if r0 == 0x0 goto pc+1
-    13: (05) goto pc+1
-    14: (b7) r0 = 0
-    15: (b4) w6 = -1
-  ; if (!inner_map)
-    16: (15) if r0 == 0x0 goto pc+6
-    17: (bf) r2 = r10
-  ;
-    18: (07) r2 += -4
-  ; val = bpf_map_lookup_elem(inner_map, &key);
-    19: (bf) r1 = r0                               | No inlining but instead
-    20: (85) call array_map_lookup_elem#149280     | call to array_map_lookup_elem()
-  ; return val ? *val : -1;                        | for inner array lookup.
-    21: (15) if r0 == 0x0 goto pc+1
-  ; return val ? *val : -1;
-    22: (61) r6 = *(u32 *)(r0 +0)
-  ; }
-    23: (bc) w0 = w6
-    24: (95) exit
-
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
----
- include/linux/bpf.h            |  2 +-
- include/uapi/linux/bpf.h       |  5 +++++
- kernel/bpf/arraymap.c          | 17 +++++++++++------
- kernel/bpf/hashtab.c           |  6 +++---
- kernel/bpf/verifier.c          |  4 +++-
- net/xdp/xskmap.c               |  2 +-
- tools/include/uapi/linux/bpf.h |  5 +++++
- 7 files changed, 29 insertions(+), 12 deletions(-)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index dc63eeed4fd9..2b16bf48aab6 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -82,7 +82,7 @@ struct bpf_map_ops {
- 	void *(*map_fd_get_ptr)(struct bpf_map *map, struct file *map_file,
- 				int fd);
- 	void (*map_fd_put_ptr)(void *ptr);
--	u32 (*map_gen_lookup)(struct bpf_map *map, struct bpf_insn *insn_buf);
-+	int (*map_gen_lookup)(struct bpf_map *map, struct bpf_insn *insn_buf);
- 	u32 (*map_fd_sys_lookup_elem)(void *ptr);
- 	void (*map_seq_show_elem)(struct bpf_map *map, void *key,
- 				  struct seq_file *m);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index b97bc5abb3b8..593963e40956 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -435,6 +435,11 @@ enum {
- 
- /* Share perf_event among processes */
- 	BPF_F_PRESERVE_ELEMS	= (1U << 11),
-+
-+/* Do not inline (array) map lookups so the array map can be used for
-+ * map in map with dynamic max entries.
-+ */
-+	BPF_F_NO_INLINE		= (1U << 12),
- };
- 
- /* Flags for BPF_PROG_QUERY. */
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index bd777dd6f967..f37f46099733 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -16,7 +16,7 @@
- 
- #define ARRAY_CREATE_FLAG_MASK \
- 	(BPF_F_NUMA_NODE | BPF_F_MMAPABLE | BPF_F_ACCESS_MASK | \
--	 BPF_F_PRESERVE_ELEMS)
-+	 BPF_F_PRESERVE_ELEMS | BPF_F_NO_INLINE)
- 
- static void bpf_array_free_percpu(struct bpf_array *array)
- {
-@@ -62,7 +62,7 @@ int array_map_alloc_check(union bpf_attr *attr)
- 		return -EINVAL;
- 
- 	if (attr->map_type != BPF_MAP_TYPE_ARRAY &&
--	    attr->map_flags & BPF_F_MMAPABLE)
-+	    attr->map_flags & (BPF_F_MMAPABLE | BPF_F_NO_INLINE))
- 		return -EINVAL;
- 
- 	if (attr->map_type != BPF_MAP_TYPE_PERF_EVENT_ARRAY &&
-@@ -214,7 +214,7 @@ static int array_map_direct_value_meta(const struct bpf_map *map, u64 imm,
- }
- 
- /* emit BPF instructions equivalent to C code of array_map_lookup_elem() */
--static u32 array_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
-+static int array_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
- {
- 	struct bpf_array *array = container_of(map, struct bpf_array, map);
- 	struct bpf_insn *insn = insn_buf;
-@@ -223,6 +223,9 @@ static u32 array_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
- 	const int map_ptr = BPF_REG_1;
- 	const int index = BPF_REG_2;
- 
-+	if (map->map_flags & BPF_F_NO_INLINE)
-+		return -EOPNOTSUPP;
-+
- 	*insn++ = BPF_ALU64_IMM(BPF_ADD, map_ptr, offsetof(struct bpf_array, value));
- 	*insn++ = BPF_LDX_MEM(BPF_W, ret, index, 0);
- 	if (!map->bypass_spec_v1) {
-@@ -496,8 +499,10 @@ static int array_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
- static bool array_map_meta_equal(const struct bpf_map *meta0,
- 				 const struct bpf_map *meta1)
- {
--	return meta0->max_entries == meta1->max_entries &&
--		bpf_map_meta_equal(meta0, meta1);
-+	if (!bpf_map_meta_equal(meta0, meta1))
-+		return false;
-+	return meta0->map_flags & BPF_F_NO_INLINE ? true :
-+	       meta0->max_entries == meta1->max_entries;
- }
- 
- struct bpf_iter_seq_array_map_info {
-@@ -1251,7 +1256,7 @@ static void *array_of_map_lookup_elem(struct bpf_map *map, void *key)
- 	return READ_ONCE(*inner_map);
- }
- 
--static u32 array_of_map_gen_lookup(struct bpf_map *map,
-+static int array_of_map_gen_lookup(struct bpf_map *map,
- 				   struct bpf_insn *insn_buf)
- {
- 	struct bpf_array *array = container_of(map, struct bpf_array, map);
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 3395cf140d22..1815e97d4c9c 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -612,7 +612,7 @@ static void *htab_map_lookup_elem(struct bpf_map *map, void *key)
-  * bpf_prog
-  *   __htab_map_lookup_elem
-  */
--static u32 htab_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
-+static int htab_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
- {
- 	struct bpf_insn *insn = insn_buf;
- 	const int ret = BPF_REG_0;
-@@ -651,7 +651,7 @@ static void *htab_lru_map_lookup_elem_sys(struct bpf_map *map, void *key)
- 	return __htab_lru_map_lookup_elem(map, key, false);
- }
- 
--static u32 htab_lru_map_gen_lookup(struct bpf_map *map,
-+static int htab_lru_map_gen_lookup(struct bpf_map *map,
- 				   struct bpf_insn *insn_buf)
- {
- 	struct bpf_insn *insn = insn_buf;
-@@ -2070,7 +2070,7 @@ static void *htab_of_map_lookup_elem(struct bpf_map *map, void *key)
- 	return READ_ONCE(*inner_map);
- }
- 
--static u32 htab_of_map_gen_lookup(struct bpf_map *map,
-+static int htab_of_map_gen_lookup(struct bpf_map *map,
- 				  struct bpf_insn *insn_buf)
- {
- 	struct bpf_insn *insn = insn_buf;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 62b804651a48..4ef3584320dc 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -10985,6 +10985,8 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
- 			if (insn->imm == BPF_FUNC_map_lookup_elem &&
- 			    ops->map_gen_lookup) {
- 				cnt = ops->map_gen_lookup(map_ptr, insn_buf);
-+				if (cnt == -EOPNOTSUPP)
-+					goto patch_map_ops_generic;
- 				if (cnt == 0 || cnt >= ARRAY_SIZE(insn_buf)) {
- 					verbose(env, "bpf verifier is misconfigured\n");
- 					return -EINVAL;
-@@ -11015,7 +11017,7 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
- 				     (int (*)(struct bpf_map *map, void *value))NULL));
- 			BUILD_BUG_ON(!__same_type(ops->map_peek_elem,
- 				     (int (*)(struct bpf_map *map, void *value))NULL));
--
-+patch_map_ops_generic:
- 			switch (insn->imm) {
- 			case BPF_FUNC_map_lookup_elem:
- 				insn->imm = BPF_CAST_CALL(ops->map_lookup_elem) -
-diff --git a/net/xdp/xskmap.c b/net/xdp/xskmap.c
-index 0c5df593bc56..49da2b8ace8b 100644
---- a/net/xdp/xskmap.c
-+++ b/net/xdp/xskmap.c
-@@ -132,7 +132,7 @@ static int xsk_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
- 	return 0;
- }
- 
--static u32 xsk_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
-+static int xsk_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
- {
- 	const int ret = BPF_REG_0, mp = BPF_REG_1, index = BPF_REG_2;
- 	struct bpf_insn *insn = insn_buf;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index b97bc5abb3b8..593963e40956 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -435,6 +435,11 @@ enum {
- 
- /* Share perf_event among processes */
- 	BPF_F_PRESERVE_ELEMS	= (1U << 11),
-+
-+/* Do not inline (array) map lookups so the array map can be used for
-+ * map in map with dynamic max entries.
-+ */
-+	BPF_F_NO_INLINE		= (1U << 12),
- };
- 
- /* Flags for BPF_PROG_QUERY. */
--- 
-2.17.1
-
+I'm not suggestiong sprinkling validation checks across the drivers.
+I'm suggesting if the drivers hang we fix them.
