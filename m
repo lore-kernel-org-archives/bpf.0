@@ -7,30 +7,31 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4D7AC433E7
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:43:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BB52C433DF
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:43:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9298C22277
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:43:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0DA1022277
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:43:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390859AbgJIUnB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 16:43:01 -0400
-Received: from www62.your-server.de ([213.133.104.62]:39486 "EHLO
+        id S1729274AbgJIUnH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 16:43:07 -0400
+Received: from www62.your-server.de ([213.133.104.62]:39476 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390510AbgJIUmy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Oct 2020 16:42:54 -0400
+        with ESMTP id S2388554AbgJIUm6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 16:42:58 -0400
 Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1kQzE2-00085H-Qi; Fri, 09 Oct 2020 22:42:50 +0200
+        id 1kQzE1-00084y-UW; Fri, 09 Oct 2020 22:42:50 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     daniel@iogearbox.net, john.fastabend@gmail.com, yhs@fb.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 5/6] bpf, selftests: make redirect_neigh test more extensible
-Date:   Fri,  9 Oct 2020 22:42:44 +0200
-Message-Id: <20201009204245.27905-6-daniel@iogearbox.net>
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Subject: [PATCH bpf-next v3 3/6] bpf: allow for map-in-map with dynamic inner array map entries
+Date:   Fri,  9 Oct 2020 22:42:42 +0200
+Message-Id: <20201009204245.27905-4-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20201009204245.27905-1-daniel@iogearbox.net>
 References: <20201009204245.27905-1-daniel@iogearbox.net>
@@ -42,501 +43,257 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Rename into test_tc_redirect.sh and move setup and test code into separate
-functions so they can be reused for newly added tests in here. Also remove
-the crude hack to override ifindex inside the object file via xxd and sed
-and just use a simple map instead. Map given iproute2 does not support BTF
-fully and therefore neither global data at this point.
+Recent work in f4d05259213f ("bpf: Add map_meta_equal map ops") and 134fede4eecf
+("bpf: Relax max_entries check for most of the inner map types") added support
+for dynamic inner max elements for most map-in-map types. Exceptions were maps
+like array or prog array where the map_gen_lookup() callback uses the maps'
+max_entries field as a constant when emitting instructions.
+
+We recently implemented Maglev consistent hashing into Cilium's load balancer
+which uses map-in-map with an outer map being hash and inner being array holding
+the Maglev backend table for each service. This has been designed this way in
+order to reduce overall memory consumption given the outer hash map allows to
+avoid preallocating a large, flat memory area for all services. Also, the
+number of service mappings is not always known a-priori.
+
+The use case for dynamic inner array map entries is to further reduce memory
+overhead, for example, some services might just have a small number of back
+ends while others could have a large number. Right now the Maglev backend table
+for small and large number of backends would need to have the same inner array
+map entries which adds a lot of unneeded overhead.
+
+Dynamic inner array map entries can be realized by avoiding the inlined code
+generation for their lookup. The lookup will still be efficient since it will
+be calling into array_map_lookup_elem() directly and thus avoiding retpoline.
+The patch adds a BPF_F_NO_INLINE flag to map creation which therefore skips
+inline code generation and relaxes array_map_meta_equal() check to ignore both
+maps' max_entries.
+
+Example code generation where inner map is dynamic sized array:
+
+  # bpftool p d x i 125
+  int handle__sys_enter(void * ctx):
+  ; int handle__sys_enter(void *ctx)
+     0: (b4) w1 = 0
+  ; int key = 0;
+     1: (63) *(u32 *)(r10 -4) = r1
+     2: (bf) r2 = r10
+  ;
+     3: (07) r2 += -4
+  ; inner_map = bpf_map_lookup_elem(&outer_arr_dyn, &key);
+     4: (18) r1 = map[id:468]
+     6: (07) r1 += 272
+     7: (61) r0 = *(u32 *)(r2 +0)
+     8: (35) if r0 >= 0x3 goto pc+5
+     9: (67) r0 <<= 3
+    10: (0f) r0 += r1
+    11: (79) r0 = *(u64 *)(r0 +0)
+    12: (15) if r0 == 0x0 goto pc+1
+    13: (05) goto pc+1
+    14: (b7) r0 = 0
+    15: (b4) w6 = -1
+  ; if (!inner_map)
+    16: (15) if r0 == 0x0 goto pc+6
+    17: (bf) r2 = r10
+  ;
+    18: (07) r2 += -4
+  ; val = bpf_map_lookup_elem(inner_map, &key);
+    19: (bf) r1 = r0                               | No inlining but instead
+    20: (85) call array_map_lookup_elem#149280     | call to array_map_lookup_elem()
+  ; return val ? *val : -1;                        | for inner array lookup.
+    21: (15) if r0 == 0x0 goto pc+1
+  ; return val ? *val : -1;
+    22: (61) r6 = *(u32 *)(r0 +0)
+  ; }
+    23: (bc) w0 = w6
+    24: (95) exit
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Yonghong Song <yhs@fb.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 ---
- .../selftests/bpf/progs/test_tc_neigh.c       |  40 ++--
- tools/testing/selftests/bpf/test_tc_neigh.sh  | 168 ---------------
- .../testing/selftests/bpf/test_tc_redirect.sh | 197 ++++++++++++++++++
- 3 files changed, 219 insertions(+), 186 deletions(-)
- delete mode 100755 tools/testing/selftests/bpf/test_tc_neigh.sh
- create mode 100755 tools/testing/selftests/bpf/test_tc_redirect.sh
+ include/linux/bpf.h            |  2 +-
+ include/uapi/linux/bpf.h       |  5 +++++
+ kernel/bpf/arraymap.c          | 17 +++++++++++------
+ kernel/bpf/hashtab.c           |  6 +++---
+ kernel/bpf/verifier.c          |  4 +++-
+ net/xdp/xskmap.c               |  2 +-
+ tools/include/uapi/linux/bpf.h |  5 +++++
+ 7 files changed, 29 insertions(+), 12 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_tc_neigh.c b/tools/testing/selftests/bpf/progs/test_tc_neigh.c
-index 889a72c3024f..fe182616b112 100644
---- a/tools/testing/selftests/bpf/progs/test_tc_neigh.c
-+++ b/tools/testing/selftests/bpf/progs/test_tc_neigh.c
-@@ -13,17 +13,10 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_endian.h>
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index dc63eeed4fd9..2b16bf48aab6 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -82,7 +82,7 @@ struct bpf_map_ops {
+ 	void *(*map_fd_get_ptr)(struct bpf_map *map, struct file *map_file,
+ 				int fd);
+ 	void (*map_fd_put_ptr)(void *ptr);
+-	u32 (*map_gen_lookup)(struct bpf_map *map, struct bpf_insn *insn_buf);
++	int (*map_gen_lookup)(struct bpf_map *map, struct bpf_insn *insn_buf);
+ 	u32 (*map_fd_sys_lookup_elem)(void *ptr);
+ 	void (*map_seq_show_elem)(struct bpf_map *map, void *key,
+ 				  struct seq_file *m);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index b97bc5abb3b8..593963e40956 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -435,6 +435,11 @@ enum {
  
--#ifndef barrier_data
--# define barrier_data(ptr)	asm volatile("": :"r"(ptr) :"memory")
--#endif
--
- #ifndef ctx_ptr
- # define ctx_ptr(field)		(void *)(long)(field)
- #endif
- 
--#define dst_to_src_tmp		0xeeddddeeU
--#define src_to_dst_tmp		0xeeffffeeU
--
- #define ip4_src			0xac100164 /* 172.16.1.100 */
- #define ip4_dst			0xac100264 /* 172.16.2.100 */
- 
-@@ -39,6 +32,18 @@
- 				 a.s6_addr32[3] == b.s6_addr32[3])
- #endif
- 
-+enum {
-+	dev_src,
-+	dev_dst,
-+};
+ /* Share perf_event among processes */
+ 	BPF_F_PRESERVE_ELEMS	= (1U << 11),
 +
-+struct bpf_map_def SEC("maps") ifindex_map = {
-+	.type		= BPF_MAP_TYPE_ARRAY,
-+	.key_size	= sizeof(int),
-+	.value_size	= sizeof(int),
-+	.max_entries	= 2,
-+};
-+
- static __always_inline bool is_remote_ep_v4(struct __sk_buff *skb,
- 					    __be32 addr)
++/* Do not inline (array) map lookups so the array map can be used for
++ * map in map with dynamic max entries.
++ */
++	BPF_F_NO_INLINE		= (1U << 12),
+ };
+ 
+ /* Flags for BPF_PROG_QUERY. */
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index bd777dd6f967..f37f46099733 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -16,7 +16,7 @@
+ 
+ #define ARRAY_CREATE_FLAG_MASK \
+ 	(BPF_F_NUMA_NODE | BPF_F_MMAPABLE | BPF_F_ACCESS_MASK | \
+-	 BPF_F_PRESERVE_ELEMS)
++	 BPF_F_PRESERVE_ELEMS | BPF_F_NO_INLINE)
+ 
+ static void bpf_array_free_percpu(struct bpf_array *array)
  {
-@@ -73,7 +78,14 @@ static __always_inline bool is_remote_ep_v6(struct __sk_buff *skb,
- 	return v6_equal(ip6h->daddr, addr);
+@@ -62,7 +62,7 @@ int array_map_alloc_check(union bpf_attr *attr)
+ 		return -EINVAL;
+ 
+ 	if (attr->map_type != BPF_MAP_TYPE_ARRAY &&
+-	    attr->map_flags & BPF_F_MMAPABLE)
++	    attr->map_flags & (BPF_F_MMAPABLE | BPF_F_NO_INLINE))
+ 		return -EINVAL;
+ 
+ 	if (attr->map_type != BPF_MAP_TYPE_PERF_EVENT_ARRAY &&
+@@ -214,7 +214,7 @@ static int array_map_direct_value_meta(const struct bpf_map *map, u64 imm,
  }
  
--SEC("chk_neigh") int tc_chk(struct __sk_buff *skb)
-+static __always_inline int get_dev_ifindex(int which)
-+{
-+	int *ifindex = bpf_map_lookup_elem(&ifindex_map, &which);
-+
-+	return ifindex ? *ifindex : 0;
-+}
-+
-+SEC("chk_egress") int tc_chk(struct __sk_buff *skb)
+ /* emit BPF instructions equivalent to C code of array_map_lookup_elem() */
+-static u32 array_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
++static int array_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
  {
- 	void *data_end = ctx_ptr(skb->data_end);
- 	void *data = ctx_ptr(skb->data);
-@@ -87,7 +99,6 @@ SEC("chk_neigh") int tc_chk(struct __sk_buff *skb)
+ 	struct bpf_array *array = container_of(map, struct bpf_array, map);
+ 	struct bpf_insn *insn = insn_buf;
+@@ -223,6 +223,9 @@ static u32 array_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
+ 	const int map_ptr = BPF_REG_1;
+ 	const int index = BPF_REG_2;
  
- SEC("dst_ingress") int tc_dst(struct __sk_buff *skb)
++	if (map->map_flags & BPF_F_NO_INLINE)
++		return -EOPNOTSUPP;
++
+ 	*insn++ = BPF_ALU64_IMM(BPF_ADD, map_ptr, offsetof(struct bpf_array, value));
+ 	*insn++ = BPF_LDX_MEM(BPF_W, ret, index, 0);
+ 	if (!map->bypass_spec_v1) {
+@@ -496,8 +499,10 @@ static int array_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
+ static bool array_map_meta_equal(const struct bpf_map *meta0,
+ 				 const struct bpf_map *meta1)
  {
--	int idx = dst_to_src_tmp;
- 	__u8 zero[ETH_ALEN * 2];
- 	bool redirect = false;
- 
-@@ -103,19 +114,15 @@ SEC("dst_ingress") int tc_dst(struct __sk_buff *skb)
- 	if (!redirect)
- 		return TC_ACT_OK;
- 
--	barrier_data(&idx);
--	idx = bpf_ntohl(idx);
--
- 	__builtin_memset(&zero, 0, sizeof(zero));
- 	if (bpf_skb_store_bytes(skb, 0, &zero, sizeof(zero), 0) < 0)
- 		return TC_ACT_SHOT;
- 
--	return bpf_redirect_neigh(idx, 0);
-+	return bpf_redirect_neigh(get_dev_ifindex(dev_src), 0);
+-	return meta0->max_entries == meta1->max_entries &&
+-		bpf_map_meta_equal(meta0, meta1);
++	if (!bpf_map_meta_equal(meta0, meta1))
++		return false;
++	return meta0->map_flags & BPF_F_NO_INLINE ? true :
++	       meta0->max_entries == meta1->max_entries;
  }
  
- SEC("src_ingress") int tc_src(struct __sk_buff *skb)
- {
--	int idx = src_to_dst_tmp;
- 	__u8 zero[ETH_ALEN * 2];
- 	bool redirect = false;
- 
-@@ -131,14 +138,11 @@ SEC("src_ingress") int tc_src(struct __sk_buff *skb)
- 	if (!redirect)
- 		return TC_ACT_OK;
- 
--	barrier_data(&idx);
--	idx = bpf_ntohl(idx);
--
- 	__builtin_memset(&zero, 0, sizeof(zero));
- 	if (bpf_skb_store_bytes(skb, 0, &zero, sizeof(zero), 0) < 0)
- 		return TC_ACT_SHOT;
- 
--	return bpf_redirect_neigh(idx, 0);
-+	return bpf_redirect_neigh(get_dev_ifindex(dev_dst), 0);
+ struct bpf_iter_seq_array_map_info {
+@@ -1251,7 +1256,7 @@ static void *array_of_map_lookup_elem(struct bpf_map *map, void *key)
+ 	return READ_ONCE(*inner_map);
  }
  
- char __license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_tc_neigh.sh b/tools/testing/selftests/bpf/test_tc_neigh.sh
-deleted file mode 100755
-index 31d8c3df8b24..000000000000
---- a/tools/testing/selftests/bpf/test_tc_neigh.sh
-+++ /dev/null
-@@ -1,168 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--#
--# This test sets up 3 netns (src <-> fwd <-> dst). There is no direct veth link
--# between src and dst. The netns fwd has veth links to each src and dst. The
--# client is in src and server in dst. The test installs a TC BPF program to each
--# host facing veth in fwd which calls into bpf_redirect_peer() to perform the
--# neigh addr population and redirect; it also installs a dropper prog on the
--# egress side to drop skbs if neigh addrs were not populated.
+-static u32 array_of_map_gen_lookup(struct bpf_map *map,
++static int array_of_map_gen_lookup(struct bpf_map *map,
+ 				   struct bpf_insn *insn_buf)
+ {
+ 	struct bpf_array *array = container_of(map, struct bpf_array, map);
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 3395cf140d22..1815e97d4c9c 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -612,7 +612,7 @@ static void *htab_map_lookup_elem(struct bpf_map *map, void *key)
+  * bpf_prog
+  *   __htab_map_lookup_elem
+  */
+-static u32 htab_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
++static int htab_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
+ {
+ 	struct bpf_insn *insn = insn_buf;
+ 	const int ret = BPF_REG_0;
+@@ -651,7 +651,7 @@ static void *htab_lru_map_lookup_elem_sys(struct bpf_map *map, void *key)
+ 	return __htab_lru_map_lookup_elem(map, key, false);
+ }
+ 
+-static u32 htab_lru_map_gen_lookup(struct bpf_map *map,
++static int htab_lru_map_gen_lookup(struct bpf_map *map,
+ 				   struct bpf_insn *insn_buf)
+ {
+ 	struct bpf_insn *insn = insn_buf;
+@@ -2070,7 +2070,7 @@ static void *htab_of_map_lookup_elem(struct bpf_map *map, void *key)
+ 	return READ_ONCE(*inner_map);
+ }
+ 
+-static u32 htab_of_map_gen_lookup(struct bpf_map *map,
++static int htab_of_map_gen_lookup(struct bpf_map *map,
+ 				  struct bpf_insn *insn_buf)
+ {
+ 	struct bpf_insn *insn = insn_buf;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 62b804651a48..4ef3584320dc 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10985,6 +10985,8 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
+ 			if (insn->imm == BPF_FUNC_map_lookup_elem &&
+ 			    ops->map_gen_lookup) {
+ 				cnt = ops->map_gen_lookup(map_ptr, insn_buf);
++				if (cnt == -EOPNOTSUPP)
++					goto patch_map_ops_generic;
+ 				if (cnt == 0 || cnt >= ARRAY_SIZE(insn_buf)) {
+ 					verbose(env, "bpf verifier is misconfigured\n");
+ 					return -EINVAL;
+@@ -11015,7 +11017,7 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
+ 				     (int (*)(struct bpf_map *map, void *value))NULL));
+ 			BUILD_BUG_ON(!__same_type(ops->map_peek_elem,
+ 				     (int (*)(struct bpf_map *map, void *value))NULL));
 -
--if [[ $EUID -ne 0 ]]; then
--	echo "This script must be run as root"
--	echo "FAIL"
--	exit 1
--fi
--
--# check that nc, dd, ping, ping6 and timeout are present
--command -v nc >/dev/null 2>&1 || \
--	{ echo >&2 "nc is not available"; exit 1; }
--command -v dd >/dev/null 2>&1 || \
--	{ echo >&2 "dd is not available"; exit 1; }
--command -v timeout >/dev/null 2>&1 || \
--	{ echo >&2 "timeout is not available"; exit 1; }
--command -v ping >/dev/null 2>&1 || \
--	{ echo >&2 "ping is not available"; exit 1; }
--command -v ping6 >/dev/null 2>&1 || \
--	{ echo >&2 "ping6 is not available"; exit 1; }
--
--readonly GREEN='\033[0;92m'
--readonly RED='\033[0;31m'
--readonly NC='\033[0m' # No Color
--
--readonly PING_ARG="-c 3 -w 10 -q"
--
--readonly TIMEOUT=10
--
--readonly NS_SRC="ns-src-$(mktemp -u XXXXXX)"
--readonly NS_FWD="ns-fwd-$(mktemp -u XXXXXX)"
--readonly NS_DST="ns-dst-$(mktemp -u XXXXXX)"
--
--readonly IP4_SRC="172.16.1.100"
--readonly IP4_DST="172.16.2.100"
--
--readonly IP6_SRC="::1:dead:beef:cafe"
--readonly IP6_DST="::2:dead:beef:cafe"
--
--readonly IP4_SLL="169.254.0.1"
--readonly IP4_DLL="169.254.0.2"
--readonly IP4_NET="169.254.0.0"
--
--cleanup()
--{
--	ip netns del ${NS_SRC}
--	ip netns del ${NS_FWD}
--	ip netns del ${NS_DST}
--}
--
--trap cleanup EXIT
--
--set -e
--
--ip netns add "${NS_SRC}"
--ip netns add "${NS_FWD}"
--ip netns add "${NS_DST}"
--
--ip link add veth_src type veth peer name veth_src_fwd
--ip link add veth_dst type veth peer name veth_dst_fwd
--
--ip link set veth_src netns ${NS_SRC}
--ip link set veth_src_fwd netns ${NS_FWD}
--
--ip link set veth_dst netns ${NS_DST}
--ip link set veth_dst_fwd netns ${NS_FWD}
--
--ip -netns ${NS_SRC} addr add ${IP4_SRC}/32 dev veth_src
--ip -netns ${NS_DST} addr add ${IP4_DST}/32 dev veth_dst
--
--# The fwd netns automatically get a v6 LL address / routes, but also needs v4
--# one in order to start ARP probing. IP4_NET route is added to the endpoints
--# so that the ARP processing will reply.
--
--ip -netns ${NS_FWD} addr add ${IP4_SLL}/32 dev veth_src_fwd
--ip -netns ${NS_FWD} addr add ${IP4_DLL}/32 dev veth_dst_fwd
--
--ip -netns ${NS_SRC} addr add ${IP6_SRC}/128 dev veth_src nodad
--ip -netns ${NS_DST} addr add ${IP6_DST}/128 dev veth_dst nodad
--
--ip -netns ${NS_SRC} link set dev veth_src up
--ip -netns ${NS_FWD} link set dev veth_src_fwd up
--
--ip -netns ${NS_DST} link set dev veth_dst up
--ip -netns ${NS_FWD} link set dev veth_dst_fwd up
--
--ip -netns ${NS_SRC} route add ${IP4_DST}/32 dev veth_src scope global
--ip -netns ${NS_SRC} route add ${IP4_NET}/16 dev veth_src scope global
--ip -netns ${NS_FWD} route add ${IP4_SRC}/32 dev veth_src_fwd scope global
--
--ip -netns ${NS_SRC} route add ${IP6_DST}/128 dev veth_src scope global
--ip -netns ${NS_FWD} route add ${IP6_SRC}/128 dev veth_src_fwd scope global
--
--ip -netns ${NS_DST} route add ${IP4_SRC}/32 dev veth_dst scope global
--ip -netns ${NS_DST} route add ${IP4_NET}/16 dev veth_dst scope global
--ip -netns ${NS_FWD} route add ${IP4_DST}/32 dev veth_dst_fwd scope global
--
--ip -netns ${NS_DST} route add ${IP6_SRC}/128 dev veth_dst scope global
--ip -netns ${NS_FWD} route add ${IP6_DST}/128 dev veth_dst_fwd scope global
--
--fmac_src=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_src_fwd/address)
--fmac_dst=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_dst_fwd/address)
--
--ip -netns ${NS_SRC} neigh add ${IP4_DST} dev veth_src lladdr $fmac_src
--ip -netns ${NS_DST} neigh add ${IP4_SRC} dev veth_dst lladdr $fmac_dst
--
--ip -netns ${NS_SRC} neigh add ${IP6_DST} dev veth_src lladdr $fmac_src
--ip -netns ${NS_DST} neigh add ${IP6_SRC} dev veth_dst lladdr $fmac_dst
--
--veth_dst=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_dst_fwd/ifindex | awk '{printf "%08x\n", $1}')
--veth_src=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_src_fwd/ifindex | awk '{printf "%08x\n", $1}')
--
--xxd -p < test_tc_neigh.o   | sed "s/eeddddee/$veth_src/g" | xxd -r -p > test_tc_neigh.x.o
--xxd -p < test_tc_neigh.x.o | sed "s/eeffffee/$veth_dst/g" | xxd -r -p > test_tc_neigh.y.o
--
--ip netns exec ${NS_FWD} tc qdisc add dev veth_src_fwd clsact
--ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd ingress bpf da obj test_tc_neigh.y.o sec src_ingress
--ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd egress  bpf da obj test_tc_neigh.y.o sec chk_neigh
--
--ip netns exec ${NS_FWD} tc qdisc add dev veth_dst_fwd clsact
--ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd ingress bpf da obj test_tc_neigh.y.o sec dst_ingress
--ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd egress  bpf da obj test_tc_neigh.y.o sec chk_neigh
--
--rm -f test_tc_neigh.x.o test_tc_neigh.y.o
--
--ip netns exec ${NS_DST} bash -c "nc -4 -l -p 9004 &"
--ip netns exec ${NS_DST} bash -c "nc -6 -l -p 9006 &"
--
--set +e
--
--TEST="TCPv4 connectivity test"
--ip netns exec ${NS_SRC} bash -c "timeout ${TIMEOUT} dd if=/dev/zero bs=1000 count=100 > /dev/tcp/${IP4_DST}/9004"
--if [ $? -ne 0 ]; then
--	echo -e "${TEST}: ${RED}FAIL${NC}"
--	exit 1
--fi
--echo -e "${TEST}: ${GREEN}PASS${NC}"
--
--TEST="TCPv6 connectivity test"
--ip netns exec ${NS_SRC} bash -c "timeout ${TIMEOUT} dd if=/dev/zero bs=1000 count=100 > /dev/tcp/${IP6_DST}/9006"
--if [ $? -ne 0 ]; then
--	echo -e "${TEST}: ${RED}FAIL${NC}"
--	exit 1
--fi
--echo -e "${TEST}: ${GREEN}PASS${NC}"
--
--TEST="ICMPv4 connectivity test"
--ip netns exec ${NS_SRC} ping  $PING_ARG ${IP4_DST}
--if [ $? -ne 0 ]; then
--	echo -e "${TEST}: ${RED}FAIL${NC}"
--	exit 1
--fi
--echo -e "${TEST}: ${GREEN}PASS${NC}"
--
--TEST="ICMPv6 connectivity test"
--ip netns exec ${NS_SRC} ping6 $PING_ARG ${IP6_DST}
--if [ $? -ne 0 ]; then
--	echo -e "${TEST}: ${RED}FAIL${NC}"
--	exit 1
--fi
--echo -e "${TEST}: ${GREEN}PASS${NC}"
-diff --git a/tools/testing/selftests/bpf/test_tc_redirect.sh b/tools/testing/selftests/bpf/test_tc_redirect.sh
-new file mode 100755
-index 000000000000..6ad441405132
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_tc_redirect.sh
-@@ -0,0 +1,197 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# This test sets up 3 netns (src <-> fwd <-> dst). There is no direct veth link
-+# between src and dst. The netns fwd has veth links to each src and dst. The
-+# client is in src and server in dst. The test installs a TC BPF program to each
-+# host facing veth in fwd which calls into bpf_redirect_peer() to perform the
-+# neigh addr population and redirect; it also installs a dropper prog on the
-+# egress side to drop skbs if neigh addrs were not populated.
++patch_map_ops_generic:
+ 			switch (insn->imm) {
+ 			case BPF_FUNC_map_lookup_elem:
+ 				insn->imm = BPF_CAST_CALL(ops->map_lookup_elem) -
+diff --git a/net/xdp/xskmap.c b/net/xdp/xskmap.c
+index 0c5df593bc56..49da2b8ace8b 100644
+--- a/net/xdp/xskmap.c
++++ b/net/xdp/xskmap.c
+@@ -132,7 +132,7 @@ static int xsk_map_get_next_key(struct bpf_map *map, void *key, void *next_key)
+ 	return 0;
+ }
+ 
+-static u32 xsk_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
++static int xsk_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
+ {
+ 	const int ret = BPF_REG_0, mp = BPF_REG_1, index = BPF_REG_2;
+ 	struct bpf_insn *insn = insn_buf;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index b97bc5abb3b8..593963e40956 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -435,6 +435,11 @@ enum {
+ 
+ /* Share perf_event among processes */
+ 	BPF_F_PRESERVE_ELEMS	= (1U << 11),
 +
-+if [[ $EUID -ne 0 ]]; then
-+	echo "This script must be run as root"
-+	echo "FAIL"
-+	exit 1
-+fi
-+
-+# check that needed tools are present
-+command -v nc >/dev/null 2>&1 || \
-+	{ echo >&2 "nc is not available"; exit 1; }
-+command -v dd >/dev/null 2>&1 || \
-+	{ echo >&2 "dd is not available"; exit 1; }
-+command -v timeout >/dev/null 2>&1 || \
-+	{ echo >&2 "timeout is not available"; exit 1; }
-+command -v ping >/dev/null 2>&1 || \
-+	{ echo >&2 "ping is not available"; exit 1; }
-+command -v ping6 >/dev/null 2>&1 || \
-+	{ echo >&2 "ping6 is not available"; exit 1; }
-+command -v perl >/dev/null 2>&1 || \
-+	{ echo >&2 "perl is not available"; exit 1; }
-+command -v jq >/dev/null 2>&1 || \
-+	{ echo >&2 "jq is not available"; exit 1; }
-+command -v bpftool >/dev/null 2>&1 || \
-+	{ echo >&2 "bpftool is not available"; exit 1; }
-+
-+readonly GREEN='\033[0;92m'
-+readonly RED='\033[0;31m'
-+readonly NC='\033[0m' # No Color
-+
-+readonly PING_ARG="-c 3 -w 10 -q"
-+
-+readonly TIMEOUT=10
-+
-+readonly NS_SRC="ns-src-$(mktemp -u XXXXXX)"
-+readonly NS_FWD="ns-fwd-$(mktemp -u XXXXXX)"
-+readonly NS_DST="ns-dst-$(mktemp -u XXXXXX)"
-+
-+readonly IP4_SRC="172.16.1.100"
-+readonly IP4_DST="172.16.2.100"
-+
-+readonly IP6_SRC="::1:dead:beef:cafe"
-+readonly IP6_DST="::2:dead:beef:cafe"
-+
-+readonly IP4_SLL="169.254.0.1"
-+readonly IP4_DLL="169.254.0.2"
-+readonly IP4_NET="169.254.0.0"
-+
-+netns_cleanup()
-+{
-+	ip netns del ${NS_SRC}
-+	ip netns del ${NS_FWD}
-+	ip netns del ${NS_DST}
-+}
-+
-+netns_setup()
-+{
-+	ip netns add "${NS_SRC}"
-+	ip netns add "${NS_FWD}"
-+	ip netns add "${NS_DST}"
-+
-+	ip link add veth_src type veth peer name veth_src_fwd
-+	ip link add veth_dst type veth peer name veth_dst_fwd
-+
-+	ip link set veth_src netns ${NS_SRC}
-+	ip link set veth_src_fwd netns ${NS_FWD}
-+
-+	ip link set veth_dst netns ${NS_DST}
-+	ip link set veth_dst_fwd netns ${NS_FWD}
-+
-+	ip -netns ${NS_SRC} addr add ${IP4_SRC}/32 dev veth_src
-+	ip -netns ${NS_DST} addr add ${IP4_DST}/32 dev veth_dst
-+
-+	# The fwd netns automatically get a v6 LL address / routes, but also
-+	# needs v4 one in order to start ARP probing. IP4_NET route is added
-+	# to the endpoints so that the ARP processing will reply.
-+
-+	ip -netns ${NS_FWD} addr add ${IP4_SLL}/32 dev veth_src_fwd
-+	ip -netns ${NS_FWD} addr add ${IP4_DLL}/32 dev veth_dst_fwd
-+
-+	ip -netns ${NS_SRC} addr add ${IP6_SRC}/128 dev veth_src nodad
-+	ip -netns ${NS_DST} addr add ${IP6_DST}/128 dev veth_dst nodad
-+
-+	ip -netns ${NS_SRC} link set dev veth_src up
-+	ip -netns ${NS_FWD} link set dev veth_src_fwd up
-+
-+	ip -netns ${NS_DST} link set dev veth_dst up
-+	ip -netns ${NS_FWD} link set dev veth_dst_fwd up
-+
-+	ip -netns ${NS_SRC} route add ${IP4_DST}/32 dev veth_src scope global
-+	ip -netns ${NS_SRC} route add ${IP4_NET}/16 dev veth_src scope global
-+	ip -netns ${NS_FWD} route add ${IP4_SRC}/32 dev veth_src_fwd scope global
-+
-+	ip -netns ${NS_SRC} route add ${IP6_DST}/128 dev veth_src scope global
-+	ip -netns ${NS_FWD} route add ${IP6_SRC}/128 dev veth_src_fwd scope global
-+
-+	ip -netns ${NS_DST} route add ${IP4_SRC}/32 dev veth_dst scope global
-+	ip -netns ${NS_DST} route add ${IP4_NET}/16 dev veth_dst scope global
-+	ip -netns ${NS_FWD} route add ${IP4_DST}/32 dev veth_dst_fwd scope global
-+
-+	ip -netns ${NS_DST} route add ${IP6_SRC}/128 dev veth_dst scope global
-+	ip -netns ${NS_FWD} route add ${IP6_DST}/128 dev veth_dst_fwd scope global
-+
-+	fmac_src=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_src_fwd/address)
-+	fmac_dst=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_dst_fwd/address)
-+
-+	ip -netns ${NS_SRC} neigh add ${IP4_DST} dev veth_src lladdr $fmac_src
-+	ip -netns ${NS_DST} neigh add ${IP4_SRC} dev veth_dst lladdr $fmac_dst
-+
-+	ip -netns ${NS_SRC} neigh add ${IP6_DST} dev veth_src lladdr $fmac_src
-+	ip -netns ${NS_DST} neigh add ${IP6_SRC} dev veth_dst lladdr $fmac_dst
-+}
-+
-+netns_test_connectivity()
-+{
-+	set +e
-+
-+	ip netns exec ${NS_DST} bash -c "nc -4 -l -p 9004 &"
-+	ip netns exec ${NS_DST} bash -c "nc -6 -l -p 9006 &"
-+
-+	TEST="TCPv4 connectivity test"
-+	ip netns exec ${NS_SRC} bash -c "timeout ${TIMEOUT} dd if=/dev/zero bs=1000 count=100 > /dev/tcp/${IP4_DST}/9004"
-+	if [ $? -ne 0 ]; then
-+		echo -e "${TEST}: ${RED}FAIL${NC}"
-+		exit 1
-+	fi
-+	echo -e "${TEST}: ${GREEN}PASS${NC}"
-+
-+	TEST="TCPv6 connectivity test"
-+	ip netns exec ${NS_SRC} bash -c "timeout ${TIMEOUT} dd if=/dev/zero bs=1000 count=100 > /dev/tcp/${IP6_DST}/9006"
-+	if [ $? -ne 0 ]; then
-+		echo -e "${TEST}: ${RED}FAIL${NC}"
-+		exit 1
-+	fi
-+	echo -e "${TEST}: ${GREEN}PASS${NC}"
-+
-+	TEST="ICMPv4 connectivity test"
-+	ip netns exec ${NS_SRC} ping  $PING_ARG ${IP4_DST}
-+	if [ $? -ne 0 ]; then
-+		echo -e "${TEST}: ${RED}FAIL${NC}"
-+		exit 1
-+	fi
-+	echo -e "${TEST}: ${GREEN}PASS${NC}"
-+
-+	TEST="ICMPv6 connectivity test"
-+	ip netns exec ${NS_SRC} ping6 $PING_ARG ${IP6_DST}
-+	if [ $? -ne 0 ]; then
-+		echo -e "${TEST}: ${RED}FAIL${NC}"
-+		exit 1
-+	fi
-+	echo -e "${TEST}: ${GREEN}PASS${NC}"
-+
-+	set -e
-+}
-+
-+hex_mem_str()
-+{
-+	perl -e 'print join(" ", unpack("(H2)8", pack("L", @ARGV)))' $1
-+}
-+
-+netns_setup_neigh()
-+{
-+	ip netns exec ${NS_FWD} tc qdisc add dev veth_src_fwd clsact
-+	ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd ingress bpf da obj test_tc_neigh.o sec src_ingress
-+	ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd egress  bpf da obj test_tc_neigh.o sec chk_egress
-+
-+	ip netns exec ${NS_FWD} tc qdisc add dev veth_dst_fwd clsact
-+	ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd ingress bpf da obj test_tc_neigh.o sec dst_ingress
-+	ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd egress  bpf da obj test_tc_neigh.o sec chk_egress
-+
-+	veth_src=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_src_fwd/ifindex)
-+	veth_dst=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_dst_fwd/ifindex)
-+
-+	progs=$(ip netns exec ${NS_FWD} bpftool net --json | jq -r '.[] | .tc | map(.id) | .[]')
-+	for prog in $progs; do
-+		map=$(bpftool prog show id $prog --json | jq -r '.map_ids | .? | .[]')
-+		if [ ! -z "$map" ]; then
-+			bpftool map update id $map key hex $(hex_mem_str 0) value hex $(hex_mem_str $veth_src)
-+			bpftool map update id $map key hex $(hex_mem_str 1) value hex $(hex_mem_str $veth_dst)
-+		fi
-+	done
-+}
-+
-+trap netns_cleanup EXIT
-+set -e
-+
-+netns_setup
-+netns_setup_neigh
-+netns_test_connectivity
++/* Do not inline (array) map lookups so the array map can be used for
++ * map in map with dynamic max entries.
++ */
++	BPF_F_NO_INLINE		= (1U << 12),
+ };
+ 
+ /* Flags for BPF_PROG_QUERY. */
 -- 
 2.17.1
 
