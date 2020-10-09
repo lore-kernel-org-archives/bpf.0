@@ -2,69 +2,131 @@ Return-Path: <SRS0=vDm1=DQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.5 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03171C433DF
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 16:47:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC039C43467
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 16:57:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BDFBE2227F
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 16:47:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7F82D22280
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 16:57:12 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jdEr/kxT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389870AbgJIQrs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 12:47:48 -0400
-Received: from www62.your-server.de ([213.133.104.62]:56524 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389431AbgJIQrs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Oct 2020 12:47:48 -0400
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1kQvYY-00055y-Kr; Fri, 09 Oct 2020 18:47:46 +0200
-Received: from [178.196.57.75] (helo=pc-9.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1kQvYY-0002ZS-BB; Fri, 09 Oct 2020 18:47:46 +0200
-Subject: Re: [PATCH bpf-next V3 4/6] bpf: make it possible to identify BPF
- redirected SKBs
-To:     Jesper Dangaard Brouer <brouer@redhat.com>, bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, Daniel Borkmann <borkmann@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        maze@google.com, lmb@cloudflare.com, shaun@tigera.io,
-        Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>, eyal.birger@gmail.com
-References: <160216609656.882446.16642490462568561112.stgit@firesoul>
- <160216615767.882446.7384364280837100311.stgit@firesoul>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <40d7af61-6840-5473-79d7-ea935f6889f4@iogearbox.net>
-Date:   Fri, 9 Oct 2020 18:47:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S2389479AbgJIQ5L (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 12:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389334AbgJIQ5L (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 12:57:11 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30ECC0613D2
+        for <bpf@vger.kernel.org>; Fri,  9 Oct 2020 09:57:09 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id c22so14115225ejx.0
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2020 09:57:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=PUwdEIAQx9fh2/XuXe5+sZ6jgB+87H5H6MmkLMEvx+M=;
+        b=jdEr/kxTeS/9SpuXRGsTf+/lahJaQpFIUYjscG+5fhth5up1dEfqHJAe53hyd3OIdH
+         aqhAyoo+wCFdigoBJUkFz0fz2R2IcgRDGnpuG5rx28wzsNvY5lbUn8SPB/qzupUqcEkh
+         uT4MOVuaB9Z89O9MPZJIKCT+8Eo9TgMYoZugOEGbOZ9l/90/0Us17pvs2iiKLTunzhNu
+         I41XxLIxwmf3wmvvSkvRFqCL4ppvVzUDR6oWd596ewxin+KpNS+mAfb9f4eUW4aHPVas
+         KS9qlcnTMQH+DtL6wE7fVQFrgkQBwu4W7l860dIGNgzGS9nKyuv5I1CmOUAjHxBSx0En
+         U4Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PUwdEIAQx9fh2/XuXe5+sZ6jgB+87H5H6MmkLMEvx+M=;
+        b=LQqQ5AI2yLM66P4yTUaUlnj3sVWHfYYQOFEun30KSLDh40V6xgSkCDyq9t1ouhNtsr
+         DPPwRURcH/cPZihtcbiN04gziIrawonF2hnLJ5nZQLoXEFzoBuyPUnlxDL5O6uuUo8Yf
+         xzxsHHL45xSOvXCHGJ4+7bw3iCbckDrh5cXvjbr0r/Rqt/c/Gs7PqGICCnEbUm6b4olw
+         YlkdCZB80f+psneFctjmfD//KUWVKpzGZjbHhHYjVeH2e3Yv8OJurDLudrEWuqkl6qwP
+         OMYce6JYT1zY0gAlEXxOZuqd96htHT/+X1VcGm14WnN3LR48XFpHoGS3/OmcTb2JkZ6E
+         SqKA==
+X-Gm-Message-State: AOAM530xwHi4DHrjS3pmSWn5DUnZiHf7hKNCQ5QHuOufTsL0oYG74HtG
+        q3j53VA4K1g804XjmHbiigIa5P4aXEhSh9OxYRI=
+X-Google-Smtp-Source: ABdhPJwUoxsKnLh0EQ5vupg4iHRVAk8oAGlIXupOnT7ftIC1QxvFfO6Ou/KQF1BM4wkPviLUhTc3lO+CdbJeD4hqcJo=
+X-Received: by 2002:a17:906:6d89:: with SMTP id h9mr14743123ejt.152.1602262628474;
+ Fri, 09 Oct 2020 09:57:08 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <160216615767.882446.7384364280837100311.stgit@firesoul>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/25952/Fri Oct  9 15:52:40 2020)
+References: <CAMy7=ZUk08w5Gc2Z-EKi4JFtuUCaZYmE4yzhJjrExXpYKR4L8w@mail.gmail.com>
+ <a8abb367-ccad-2ee4-8c5e-ce3da7c4915d@iogearbox.net>
+In-Reply-To: <a8abb367-ccad-2ee4-8c5e-ce3da7c4915d@iogearbox.net>
+From:   Yaniv Agman <yanivagman@gmail.com>
+Date:   Fri, 9 Oct 2020 19:56:57 +0300
+Message-ID: <CAMy7=ZXjna6q53h0uuar58fmAMi026w7u=ciVjTQXK2OHiOPJg@mail.gmail.com>
+Subject: Re: libbpf error: unknown register name 'r0' in asm
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf <bpf@vger.kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 10/8/20 4:09 PM, Jesper Dangaard Brouer wrote:
-> This change makes it possible to identify SKBs that have been redirected
-> by TC-BPF (cls_act). This is needed for a number of cases.
-> 
-> (1) For collaborating with driver ifb net_devices.
-> (2) For avoiding starting generic-XDP prog on TC ingress redirect.
-> 
-> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+=E2=80=AB=D7=91=D7=AA=D7=90=D7=A8=D7=99=D7=9A =D7=99=D7=95=D7=9D =D7=95=D7=
+=B3, 9 =D7=91=D7=90=D7=95=D7=A7=D7=B3 2020 =D7=91-19:27 =D7=9E=D7=90=D7=AA =
+=E2=80=AADaniel Borkmann=E2=80=AC=E2=80=8F
+<=E2=80=AAdaniel@iogearbox.net=E2=80=AC=E2=80=8F>:=E2=80=AC
+>
+> [ Cc +Yonghong ]
+>
+> On 10/9/20 6:05 PM, Yaniv Agman wrote:
+> > Pulling the latest changes of libbpf and compiling my application with =
+it,
+> > I see the following error:
+> >
+> > ../libbpf/src//root/usr/include/bpf/bpf_helpers.h:99:10: error:
+> > unknown register name 'r0' in asm
+> >                       : "r0", "r1", "r2", "r3", "r4", "r5");
+> >
+> > The commit which introduced this change is:
+> > 80c7838600d39891f274e2f7508b95a75e4227c1
+> >
+> > I'm not sure if I'm doing something wrong (missing include?), or this
+> > is a genuine error
+>
+> Seems like your clang/llvm version might be too old.
 
-Not sure if anyone actually cares about ifb devices, but my worry is that the
-generic XDP vs tc interaction has been as-is for quite some time so this change
-in behavior could break in the wild.
+I'm using clang 10.0.1
+
+>
+> Yonghong, do you happen to know from which version onwards there is prope=
+r support
+> for bpf inline asm? We could potentially wrap this around like this:
+>
+> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> index 2bdb7d6dbad2..0d6abc91bfc6 100644
+> --- a/tools/lib/bpf/bpf_helpers.h
+> +++ b/tools/lib/bpf/bpf_helpers.h
+> @@ -72,6 +72,7 @@
+>   /*
+>    * Helper function to perform a tail call with a constant/immediate map=
+ slot.
+>    */
+> +#if __clang_major__ >=3D 10
+>   static __always_inline void
+>   bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+>   {
+> @@ -98,6 +99,7 @@ bpf_tail_call_static(void *ctx, const void *map, const =
+__u32 slot)
+>                       :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
+>                       : "r0", "r1", "r2", "r3", "r4", "r5");
+>   }
+> +#endif /* __clang_major__ >=3D 10 */
+>
+>   /*
+>    * Helper structure used by eBPF C program
+>
+>
+>
+> > Yaniv
+> >
+>
