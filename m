@@ -2,192 +2,104 @@ Return-Path: <SRS0=vDm1=DQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46390C43457
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 18:38:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3F35FC43467
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 18:38:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DA3D3222B9
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 18:38:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E99C1222B9
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 18:38:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nfOwx/p1"
+	dkim=pass (2048-bit key) header.d=sartura-hr.20150623.gappssmtp.com header.i=@sartura-hr.20150623.gappssmtp.com header.b="rAN4+pUD"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730797AbgJISiR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 14:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
+        id S1732362AbgJISiS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 14:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730763AbgJISiI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Oct 2020 14:38:08 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EFD3C0613D2;
-        Fri,  9 Oct 2020 11:38:08 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id u19so11118631ion.3;
-        Fri, 09 Oct 2020 11:38:08 -0700 (PDT)
+        with ESMTP id S1729285AbgJIShj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 14:37:39 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D823C0613D2
+        for <bpf@vger.kernel.org>; Fri,  9 Oct 2020 11:37:39 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 184so11703314lfd.6
+        for <bpf@vger.kernel.org>; Fri, 09 Oct 2020 11:37:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:date:message-id:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=PWLTwN4CpghStBRl2aJ9sg/Q1cHv19C1w9Szy0Ser+Y=;
-        b=nfOwx/p1otqgvR3E+N6H79n2XaOfuKt4BFtIqs8dJW/Vjcv48EAz1lQm33rCRxAHt3
-         C9BCIchvyj/Folr2/UIyyciPrPAXAPe0vsvYgwDvzlZWo4MDBTPtcHLnKnhCeJOGVY/H
-         WmxsB+b/3e1gnXiJbYrgWwiH2KwqlvGigkXKvG/wN6Q9ZQ1MwW0t+1WX0UhwAyp5ZC1x
-         Ank+lbKhrQjswp8dgoaKhTUmzYqoXdXFRuqfOWcBdsNFnbgj9ac6ungGaCjm0950D03m
-         VLlKOiq5N7tlQxM3/z/JFy2S3sH1hPRQPs4Gm2Xu4B6p/MCx76mEeZGN7Xhv2I09yk94
-         +10g==
+        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=JEAJS2w+4KuBNp3zCUiqRhXzeXnyyIkU5Lrtk2hhL8s=;
+        b=rAN4+pUDguYwVGD0xde+OgKdmSRkmO/htBp+qFlVZW3Nn0auvMpveHDuc1coD8cF5f
+         trVkM6ScSiDXxVNbe3QXOhS/BSrMMNtdk9k9FJjrJPo9HqwiTOClnWKZU/AvI/RthBkX
+         6lEXIquaQex/+pidvo9m4AVQzmdtIpwKW/qpM1S3kMQFzl1y1Sq98pHnZvourdJvgsAJ
+         WLBLSCkWdjYA5lZxE9Nx8hDON3eza+ifYvPnpQAhDpoSSOAVOrUKeaGdkBNwjolkzJUr
+         lzwprZu6Zsax/f+YNUbWyJ1QRdtT3TyfdSSvTzn46mW1BoTwSqhlfvxM/RmblDFNv3W2
+         nTGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=PWLTwN4CpghStBRl2aJ9sg/Q1cHv19C1w9Szy0Ser+Y=;
-        b=D7/ynt7sAOuSDE4t54fd4klm6ktvLUGvFBCaCa/oj9kKoMI7e0NllOw1fYTHdC0yFo
-         fRukBsGsh/vswHZr5P1IOEXfCtuEOBqt4dFfrmR5Grygel2MFbazfArChoAwMWFZ5SQ9
-         22vDZm6wDIW6hwZRNyLC4ggrRdAUUKlwBCQV8UVU3nqzPHofHWeR9bP4lgbdgXT2/9ZY
-         ycG3PYOeoxhE1Z2dtcRIpiHXJlth9nNw1voM3T1FJJLepIlj/UPLU+bGFGoZNIq4wPZq
-         g1GqGamRVvTGfdALdaQ5B8isISFbolGHQlAKgF0s+Q4BA79Ev6h9CQqT/CfaYNm/3/yk
-         qWsw==
-X-Gm-Message-State: AOAM5334/Pwe7+cGlOoe/w/TnqOd4MtbeU6mqILm+wChCFWuxV2tI7P1
-        QvoGs/1dMXmbl91HBkGILoI=
-X-Google-Smtp-Source: ABdhPJzarwCdy4BwQzuRsBCYFGhbe6xbH9MY2oQwyf6TV+5QGsImzcC9UYYnFzWf7oipbFMHKgxtDg==
-X-Received: by 2002:a05:6638:1508:: with SMTP id b8mr11627467jat.25.1602268687698;
-        Fri, 09 Oct 2020 11:38:07 -0700 (PDT)
-Received: from [127.0.1.1] ([184.63.162.180])
-        by smtp.gmail.com with ESMTPSA id g8sm1624916ilc.39.2020.10.09.11.37.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2020 11:38:07 -0700 (PDT)
-Subject: [bpf-next PATCH v3 6/6] bpf,
- sockmap: Add memory accounting so skbs on ingress lists are visible
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     john.fastabend@gmail.com, alexei.starovoitov@gmail.com,
-        daniel@iogearbox.net
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, jakub@cloudflare.com,
-        lmb@cloudflare.com
-Date:   Fri, 09 Oct 2020 11:37:55 -0700
-Message-ID: <160226867513.5692.10579573214635925960.stgit@john-Precision-5820-Tower>
-In-Reply-To: <160226839426.5692.13107801574043388675.stgit@john-Precision-5820-Tower>
-References: <160226839426.5692.13107801574043388675.stgit@john-Precision-5820-Tower>
-User-Agent: StGit/0.17.1-dirty
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=JEAJS2w+4KuBNp3zCUiqRhXzeXnyyIkU5Lrtk2hhL8s=;
+        b=PPd3vMrpPD04GZzdn/B94EsexKWHwtg8uCjKD2xDPFHHP4+fKpW1CpkiV1LXa29MMe
+         rZIUM/foIrCuhMWWFN1P86pX67z3x7oug/5R5OSUCUjLVaB1NPCt7r5kF5WuurGZH4x3
+         8nthoTesAAHIMh7GKQjri1Qx5lXBy9hcv54jkDOaG+hoIoM4PhB6ehAT4ojcL5Vp+FvU
+         QAgpn+UtWo1ifM8f85+OIQCcay2/7rmhNbeY3XmWZXjKXWG3DYZEo3+sGyNLgA3M+K0P
+         nKqPyAhXzHe/k783JBtt8aDqCPdFBMOepp2HQFhmMfsObCH7GQ2I1r1vFGeQ9FcO6SPy
+         4ZTw==
+X-Gm-Message-State: AOAM532QN4i9R5bvtaFQl1kxgx+CUm+nUCtGHbPcEPKVDOPx5cIyprsc
+        vm1UAGVYmFxjwnCjT1gVsIAb+rt9gn/JTEtQAEgF9JP26OHVLIBa
+X-Google-Smtp-Source: ABdhPJxefqCebjxbBMPNf9zSpnn3mzdoiZs3jvGjP1wg2kyyrvaFSsQE3k5FQIdNPqvh7AVQr6Iy3f9PaGcTllzp9OY=
+X-Received: by 2002:a05:6512:31d2:: with SMTP id j18mr5079204lfe.316.1602268657337;
+ Fri, 09 Oct 2020 11:37:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+From:   Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>
+Date:   Fri, 9 Oct 2020 20:40:01 +0200
+Message-ID: <CAOjtDRXzkwG84UCUVw0J_WmRt585OhOSjuWbdenYFNFinsSG0Q@mail.gmail.com>
+Subject: Running JITed and interpreted programs simultaneously
+To:     bpf <bpf@vger.kernel.org>
+Cc:     Luka Perkov <luka.perkov@sartura.hr>,
+        David Marcinkovic <david.marcinkovic@sartura.hr>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move skb->sk assignment out of sk_psock_bpf_run() and into individual
-callers. Then we can use proper skb_set_owner_r() call to assign a
-sk to a skb. This improves things by also charging the truesize against
-the sockets sk_rmem_alloc counter. With this done we get some accounting
-in place to ensure the memory associated with skbs on the workqueue are
-still being accounted for somewhere. Finally, by using skb_set_owner_r
-the destructor is setup so we can just let the normal skb_kfree logic
-recover the memory. Combined with previous patch dropping skb_orphan()
-we now can recover from memory pressure and maintain accounting.
+It would be great to hear if anyone has any thoughts on running a set
+of BPF programs JITed while other programs are run by the interpreter.
 
-Note, we will charge the skbs against their originating socket even
-if being redirected into another socket. Once the skb completes the
-redirect op the kfree_skb will give the memory back. This is important
-because if we charged the socket we are redirecting to (like it was
-done before this series) the sock_writeable() test could fail because
-of the skb trying to be sent is already charged against the socket.
+Something like that would be useful on 32-bit architectures, as the
+JIT compiler there doesn't support some instructions, primarily
+instructions that work with 64-bit data. As far as I can tell, it is
+unlikely that support will be coming soon as it is a general issue for
+all 32-bit architectures. Atomic operations like BPF_XADD look
+especially problematic regarding support on 32 bit platforms. From
+what I managed to see such a conclusion appeared in a few patches
+where support for 32-bit JITs was added, for example [0].
+That results in some programs being runnable with BPF JIT enabled, and
+some failing during load time, but running successfully without JIT on
+32-bit platforms.
 
-Also TLS case is special. Here we wait until we have decided not to
-simply PASS the packet up the stack. In the case where we PASS the
-packet up the stack we already have an skb which is accounted for on
-the TLS socket context.
+The only way to run some programs with JIT and some without, that
+seems possible right now, is to manually change
+/proc/sys/net/core/bpf_jit_enable every time a program is loaded.
+Although I've managed to do that and it seems to be working, it seems
+pretty hacky and looks like it could cause race conditions if multiple
+programs were loaded, especially by independent loaders.
 
-For the parser case we continue to just set/clear skb->sk this is
-because the skb being used here may be combined with other skbs or
-turned into multiple skbs depending on the parser logic. For example
-the parser could request a payload length greater than skb->len so
-that the strparser needs to collect multiple skbs. At any rate
-the final result will be handled in the strparser recv callback.
+At first glance it seems that if something like this was to be added
+to a loader, it would have to either somehow be aware of other BPF
+programs being loaded or possibly implement some sort of locking
+mechanism which also seems hacky. From what I understand, doing it in
+the kernel looks even less promising as bpf_jit_enable is a system
+wide setting, and I imagine that changing it to work on a per program
+basis would pretty much require a rework of the current design, so
+that looks even less promising.
 
-Fixes: 604326b41a6fb ("bpf, sockmap: convert to generic sk_msg interface")
-Signed-off-by: John Fastabend <john.fastabend@gmail.com>
----
- net/core/skmsg.c |   31 +++++++++++++++----------------
- 1 file changed, 15 insertions(+), 16 deletions(-)
+It looks like the best option right now is to just run everything in
+interpreted mode, but I want to make sure that I am not missing
+something. If someone has tried doing something similar, it would be
+great to know about that.
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 3e78f2a80747..881a5b290946 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -684,20 +684,8 @@ EXPORT_SYMBOL_GPL(sk_psock_msg_verdict);
- static int sk_psock_bpf_run(struct sk_psock *psock, struct bpf_prog *prog,
- 			    struct sk_buff *skb)
- {
--	int ret;
--
--	/* strparser clones the skb before handing it to a upper layer,
--	 * meaning we have the same data, but sk is NULL. We do want an
--	 * sk pointer though when we run the BPF program. So we set it
--	 * here and then NULL it to ensure we don't trigger a BUG_ON()
--	 * in skb/sk operations later if kfree_skb is called with a
--	 * valid skb->sk pointer and no destructor assigned.
--	 */
--	skb->sk = psock->sk;
- 	bpf_compute_data_end_sk_skb(skb);
--	ret = bpf_prog_run_pin_on_cpu(prog, skb);
--	skb->sk = NULL;
--	return ret;
-+	return bpf_prog_run_pin_on_cpu(prog, skb);
- }
- 
- static struct sk_psock *sk_psock_from_strp(struct strparser *strp)
-@@ -736,10 +724,11 @@ static void sk_psock_skb_redirect(struct sk_buff *skb)
- 	schedule_work(&psock_other->work);
- }
- 
--static void sk_psock_tls_verdict_apply(struct sk_buff *skb, int verdict)
-+static void sk_psock_tls_verdict_apply(struct sk_buff *skb, struct sock *sk, int verdict)
- {
- 	switch (verdict) {
- 	case __SK_REDIRECT:
-+		skb_set_owner_r(skb, sk);
- 		sk_psock_skb_redirect(skb);
- 		break;
- 	case __SK_PASS:
-@@ -757,11 +746,17 @@ int sk_psock_tls_strp_read(struct sk_psock *psock, struct sk_buff *skb)
- 	rcu_read_lock();
- 	prog = READ_ONCE(psock->progs.skb_verdict);
- 	if (likely(prog)) {
-+		/* We skip full set_owner_r here because if we do a SK_PASS
-+		 * or SK_DROP we can skip skb memory accounting and use the
-+		 * TLS context.
-+		 */
-+		skb->sk = psock->sk;
- 		tcp_skb_bpf_redirect_clear(skb);
- 		ret = sk_psock_bpf_run(psock, prog, skb);
- 		ret = sk_psock_map_verd(ret, tcp_skb_bpf_redirect_fetch(skb));
-+		skb->sk = NULL;
- 	}
--	sk_psock_tls_verdict_apply(skb, ret);
-+	sk_psock_tls_verdict_apply(skb, psock->sk, ret);
- 	rcu_read_unlock();
- 	return ret;
- }
-@@ -823,6 +818,7 @@ static void sk_psock_strp_read(struct strparser *strp, struct sk_buff *skb)
- 		kfree_skb(skb);
- 		goto out;
- 	}
-+	skb_set_owner_r(skb, sk);
- 	prog = READ_ONCE(psock->progs.skb_verdict);
- 	if (likely(prog)) {
- 		tcp_skb_bpf_redirect_clear(skb);
-@@ -847,8 +843,11 @@ static int sk_psock_strp_parse(struct strparser *strp, struct sk_buff *skb)
- 
- 	rcu_read_lock();
- 	prog = READ_ONCE(psock->progs.skb_parser);
--	if (likely(prog))
-+	if (likely(prog)) {
-+		skb->sk = psock->sk;
- 		ret = sk_psock_bpf_run(psock, prog, skb);
-+		skb->sk = NULL;
-+	}
- 	rcu_read_unlock();
- 	return ret;
- }
+Thanks,
+Juraj Vijtiuk
 
+[0] https://lore.kernel.org/netdev/20200305050207.4159-3-luke.r.nels@gmail.com/
