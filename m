@@ -5,65 +5,65 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 909D5C4363A
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 01:12:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15D68C433E7
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 01:12:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B78222258
+	by mail.kernel.org (Postfix) with ESMTP id B39D822258
 	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 01:12:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RZ6dkBkd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pfH8mHhj"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729256AbgJIBMx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 8 Oct 2020 21:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43224 "EHLO
+        id S1729726AbgJIBMw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 8 Oct 2020 21:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725997AbgJIBMr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 8 Oct 2020 21:12:47 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D6EC0613D2;
-        Thu,  8 Oct 2020 18:12:47 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id h2so3631165pll.11;
-        Thu, 08 Oct 2020 18:12:47 -0700 (PDT)
+        with ESMTP id S1729598AbgJIBMv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 8 Oct 2020 21:12:51 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6FBC0613D5;
+        Thu,  8 Oct 2020 18:12:51 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id q123so5463294pfb.0;
+        Thu, 08 Oct 2020 18:12:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=oWSvJ+rWKZMheuz0pqnRW7O1PJlBra3FOC/0Erku6ZM=;
-        b=RZ6dkBkd3wtLIHnrI/e6sEOjJZsUOjkIRJ2bErt/Y0WZ30BHj0qXcjexvwiUDHSGtG
-         IfmmF3PdVoGTXgwB6wbXHbccbA+3M/5Rs6oF19BJymb/8HzblLVJ7CZNXe6OGHwNRbpu
-         tCBR5Qvw9LIFJdkBed7nuOxKob7i8x/zA6FfxIUh1ShhqlCWU2ajHKlne6CuXBLEY9ML
-         mcssadg5QfDgeMDRIkE67aimqFavnGNtNMoEErekfR7FeTAm19x0Y5uSs+fYf/vKLVl1
-         zSdM0OuSfBHC6A3Ixuv4+3BHNvGGPvULtwchqBiUXjXyweCvyNhsysrjdeDuyiPzhftH
-         nZdg==
+        bh=vDpdwGTb8iUWFZjaTWPEQf/T2hOZ8LtQp7hjPN2NHiQ=;
+        b=pfH8mHhjC8nXeLruxzef1xLxah5dLlAuhLDIms8OnVwWvgNMPU3IygPNEpIo2VoCSC
+         StGRZ3SaVrr8ZZq5pVVaFYrDjZVPAOloEtSej1bcbm8zTINikKdvwklZwaPih8CIMb3e
+         yEVlbmdj3R0mLcIvGLMzzLlP9DO72AGOvPm9+0Dep1peUOlDcJ13QVauUMgzc+Fji660
+         GBAcW4nWZfswhC0VH3EPcOcTJGTb/n4QiVZ0860/6L9V1AONpACBBQeQgVELxkmCVXIl
+         HdqtVcBXG95Odw/Brf723UO23j86Eg5yFYwaVeNzVzACJHB/DJdiBalkN8m/35Ha6lwD
+         UJDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=oWSvJ+rWKZMheuz0pqnRW7O1PJlBra3FOC/0Erku6ZM=;
-        b=q+ZCQeQhzzCt98C4ZVYaZt374u0efUa8fxZvjRyyghVcbcKgdNAu8GYLB/a3m+q7HR
-         zneQ8g4jJz3qygFmjSw27F2XstzymRPIruyki4Wd365V4mEZ30lEtGHyvgiGjGUtySMK
-         DeZNyeCIT1a+yRNEsLWezk54iTTmO5kXeAoGmdAWUu3AoBTt2/Ku83aZq/JYOm0RIgbw
-         xpv1ElDKkxTG3Fz8mIyXKbOCnjXxe7q0c7v5aGFtvOGnGSdJ9l6bEDLKodyAQo/y92sE
-         RE0MygbD2zph2kEKtj44LJrR75tiiAG58RU2gcTZ8eCf+hgm4+fnY2xa26hAMpN5wJbe
-         1/OA==
-X-Gm-Message-State: AOAM5327/lbNq0kOZp52Nfb+64f9jbi5QphofPZjsXxBazUxKcKpbOY1
-        AcaReNEHQ0Gn858g5Sxze0U=
-X-Google-Smtp-Source: ABdhPJwbVYbVR1WrQ7qrqZT+uK81zxFPpHvsm9D2khcxhL2AfrAhsfwr8F8jWkA6U72MUeovV+wh+w==
-X-Received: by 2002:a17:902:7286:b029:d4:bb66:3f10 with SMTP id d6-20020a1709027286b02900d4bb663f10mr3281217pll.52.1602205967202;
-        Thu, 08 Oct 2020 18:12:47 -0700 (PDT)
+        bh=vDpdwGTb8iUWFZjaTWPEQf/T2hOZ8LtQp7hjPN2NHiQ=;
+        b=Q97z5hPQskjS8ZrIXjYaciPXF/0HxgjsB6moViOnH5X6jtP4sKGVKs4qUpieRz/FMA
+         sDgpdQuL4buKmzlSryY3N/ZiPjnVLXHZCYV4+g0shXvAOsR4ajQcxH+RcEstRKr3XyvK
+         qOP7Qbf9jDfntflaUy3uL/UdVFwo2LlfF9BN0AA3QDwbo6x5U94ffqYu6cCl/WuncJ7S
+         RGljNqccNw1bXyOo5QPW5gwvsm90GvImLD2blg6eXoSDZCmeo8cTyVAbI+B5UDFmWH2x
+         LJzmkSpb+kb91fpb2NWgSCnujrZ70ha63n2p98fKVIYyPPBS8+g3fG9sJrOB+TCZYnBC
+         hk4g==
+X-Gm-Message-State: AOAM5311jpX7mVCGBjilwgWd7fQ7mlWYuVQWZN+7Y69c1WoIdES8PkOu
+        E3y1fk806NJZeldt25i6UJM=
+X-Google-Smtp-Source: ABdhPJx86lMG41mxFJU/GJQ/kaTTAW3ruixNjqEnqP4kb6cgfZ3Wkar2xPGwr2Ew+IqYroy/BETo6A==
+X-Received: by 2002:a17:90a:ff06:: with SMTP id ce6mr1734175pjb.38.1602205970718;
+        Thu, 08 Oct 2020 18:12:50 -0700 (PDT)
 Received: from ast-mbp.thefacebook.com ([163.114.132.7])
-        by smtp.gmail.com with ESMTPSA id k15sm8275822pfp.217.2020.10.08.18.12.45
+        by smtp.gmail.com with ESMTPSA id k15sm8275822pfp.217.2020.10.08.18.12.49
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 08 Oct 2020 18:12:46 -0700 (PDT)
+        Thu, 08 Oct 2020 18:12:49 -0700 (PDT)
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To:     davem@davemloft.net
 Cc:     daniel@iogearbox.net, john.fastabend@gmail.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com
-Subject: [PATCH v2 bpf-next 2/4] bpf: Track spill/fill of bounded scalars.
-Date:   Thu,  8 Oct 2020 18:12:38 -0700
-Message-Id: <20201009011240.48506-3-alexei.starovoitov@gmail.com>
+Subject: [PATCH v2 bpf-next 4/4] selftests/bpf: Asm tests for the verifier regalloc tracking.
+Date:   Thu,  8 Oct 2020 18:12:40 -0700
+Message-Id: <20201009011240.48506-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.13.5
 In-Reply-To: <20201009011240.48506-1-alexei.starovoitov@gmail.com>
 References: <20201009011240.48506-1-alexei.starovoitov@gmail.com>
@@ -71,59 +71,266 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Yonghong Song <yhs@fb.com>
+From: Alexei Starovoitov <ast@kernel.org>
 
-Under register pressure the llvm may spill registers with bounds into the stack.
-The verifier has to track them through spill/fill otherwise many kinds of bound
-errors will be seen. The spill/fill of induction variables was already
-happening. This patch extends this logic from tracking spill/fill of a constant
-into any bounded register. There is no need to track spill/fill of unbounded,
-since no new information will be retrieved from the stack during register fill.
+Add asm tests for register allocator tracking logic.
 
-Though extra stack difference could cause state pruning to be less effective, no
-adverse affects were seen from this patch on selftests and on cilium programs.
-
-Signed-off-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Acked-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/bpf/verifier.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ .../testing/selftests/bpf/verifier/regalloc.c | 243 ++++++++++++++++++
+ 1 file changed, 243 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/verifier/regalloc.c
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ba96f7e9bbc0..f3e36eade3d4 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2227,6 +2227,20 @@ static bool register_is_const(struct bpf_reg_state *reg)
- 	return reg->type == SCALAR_VALUE && tnum_is_const(reg->var_off);
- }
- 
-+static bool __is_scalar_unbounded(struct bpf_reg_state *reg)
+diff --git a/tools/testing/selftests/bpf/verifier/regalloc.c b/tools/testing/selftests/bpf/verifier/regalloc.c
+new file mode 100644
+index 000000000000..ac71b824f97a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/verifier/regalloc.c
+@@ -0,0 +1,243 @@
 +{
-+	return tnum_is_unknown(reg->var_off) &&
-+	       reg->smin_value == S64_MIN && reg->smax_value == S64_MAX &&
-+	       reg->umin_value == 0 && reg->umax_value == U64_MAX &&
-+	       reg->s32_min_value == S32_MIN && reg->s32_max_value == S32_MAX &&
-+	       reg->u32_min_value == 0 && reg->u32_max_value == U32_MAX;
-+}
-+
-+static bool register_is_bounded(struct bpf_reg_state *reg)
++	"regalloc basic",
++	.insns = {
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 8),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
++	BPF_JMP_IMM(BPF_JSGT, BPF_REG_0, 20, 4),
++	BPF_JMP_IMM(BPF_JSLT, BPF_REG_2, 0, 3),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_7, BPF_REG_0),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_7, BPF_REG_2),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_7, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_hash_48b = { 4 },
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
 +{
-+	return reg->type == SCALAR_VALUE && !__is_scalar_unbounded(reg);
-+}
-+
- static bool __is_pointer_value(bool allow_ptr_leaks,
- 			       const struct bpf_reg_state *reg)
- {
-@@ -2278,7 +2292,7 @@ static int check_stack_write(struct bpf_verifier_env *env,
- 	if (value_regno >= 0)
- 		reg = &cur->regs[value_regno];
- 
--	if (reg && size == BPF_REG_SIZE && register_is_const(reg) &&
-+	if (reg && size == BPF_REG_SIZE && register_is_bounded(reg) &&
- 	    !register_is_null(reg) && env->bpf_capable) {
- 		if (dst_reg != BPF_REG_FP) {
- 			/* The backtracking logic can only recognize explicit
++	"regalloc negative",
++	.insns = {
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 8),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
++	BPF_JMP_IMM(BPF_JSGT, BPF_REG_0, 24, 4),
++	BPF_JMP_IMM(BPF_JSLT, BPF_REG_2, 0, 3),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_7, BPF_REG_0),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_7, BPF_REG_2),
++	BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_7, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_hash_48b = { 4 },
++	.result = REJECT,
++	.errstr = "invalid access to map value, value_size=48 off=48 size=1",
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
++{
++	"regalloc src_reg mark",
++	.insns = {
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 9),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
++	BPF_JMP_IMM(BPF_JSGT, BPF_REG_0, 20, 5),
++	BPF_MOV64_IMM(BPF_REG_3, 0),
++	BPF_JMP_REG(BPF_JSGE, BPF_REG_3, BPF_REG_2, 3),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_7, BPF_REG_0),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_7, BPF_REG_2),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_7, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_hash_48b = { 4 },
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
++{
++	"regalloc src_reg negative",
++	.insns = {
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 9),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
++	BPF_JMP_IMM(BPF_JSGT, BPF_REG_0, 22, 5),
++	BPF_MOV64_IMM(BPF_REG_3, 0),
++	BPF_JMP_REG(BPF_JSGE, BPF_REG_3, BPF_REG_2, 3),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_7, BPF_REG_0),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_7, BPF_REG_2),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_7, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_hash_48b = { 4 },
++	.result = REJECT,
++	.errstr = "invalid access to map value, value_size=48 off=44 size=8",
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
++{
++	"regalloc and spill",
++	.insns = {
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 11),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
++	BPF_JMP_IMM(BPF_JSGT, BPF_REG_0, 20, 7),
++	/* r0 has upper bound that should propagate into r2 */
++	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_2, -8), /* spill r2 */
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_MOV64_IMM(BPF_REG_2, 0), /* clear r0 and r2 */
++	BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_10, -8), /* fill r3 */
++	BPF_JMP_REG(BPF_JSGE, BPF_REG_0, BPF_REG_3, 2),
++	/* r3 has lower and upper bounds */
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_7, BPF_REG_3),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_7, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_hash_48b = { 4 },
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
++{
++	"regalloc and spill negative",
++	.insns = {
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 11),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
++	BPF_JMP_IMM(BPF_JSGT, BPF_REG_0, 48, 7),
++	/* r0 has upper bound that should propagate into r2 */
++	BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_2, -8), /* spill r2 */
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_MOV64_IMM(BPF_REG_2, 0), /* clear r0 and r2 */
++	BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_10, -8), /* fill r3 */
++	BPF_JMP_REG(BPF_JSGE, BPF_REG_0, BPF_REG_3, 2),
++	/* r3 has lower and upper bounds */
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_7, BPF_REG_3),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_7, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_hash_48b = { 4 },
++	.result = REJECT,
++	.errstr = "invalid access to map value, value_size=48 off=48 size=8",
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
++{
++	"regalloc three regs",
++	.insns = {
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 10),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
++	BPF_MOV64_REG(BPF_REG_4, BPF_REG_2),
++	BPF_JMP_IMM(BPF_JSGT, BPF_REG_0, 12, 5),
++	BPF_JMP_IMM(BPF_JSLT, BPF_REG_2, 0, 4),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_7, BPF_REG_0),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_7, BPF_REG_2),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_7, BPF_REG_4),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_7, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_hash_48b = { 4 },
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
++{
++	"regalloc after call",
++	.insns = {
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 10),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_8, BPF_REG_0),
++	BPF_MOV64_REG(BPF_REG_9, BPF_REG_0),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 6),
++	BPF_JMP_IMM(BPF_JSGT, BPF_REG_8, 20, 4),
++	BPF_JMP_IMM(BPF_JSLT, BPF_REG_9, 0, 3),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_7, BPF_REG_8),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_7, BPF_REG_9),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_7, 0),
++	BPF_EXIT_INSN(),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_hash_48b = { 4 },
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
++{
++	"regalloc in callee",
++	.insns = {
++	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
++	BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -8),
++	BPF_LD_MAP_FD(BPF_REG_1, 0),
++	BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
++	BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 6),
++	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
++	BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32),
++	BPF_MOV64_REG(BPF_REG_1, BPF_REG_0),
++	BPF_MOV64_REG(BPF_REG_2, BPF_REG_0),
++	BPF_MOV64_REG(BPF_REG_3, BPF_REG_7),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 1, 0, 1),
++	BPF_EXIT_INSN(),
++	BPF_JMP_IMM(BPF_JSGT, BPF_REG_1, 20, 5),
++	BPF_JMP_IMM(BPF_JSLT, BPF_REG_2, 0, 4),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_3, BPF_REG_1),
++	BPF_ALU64_REG(BPF_ADD, BPF_REG_3, BPF_REG_2),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_3, 0),
++	BPF_EXIT_INSN(),
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.fixup_map_hash_48b = { 4 },
++	.result = ACCEPT,
++	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
++},
 -- 
 2.23.0
 
