@@ -2,177 +2,122 @@ Return-Path: <SRS0=vDm1=DQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47681C433DF
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 21:33:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA0FBC433E7
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 21:35:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00E6C21D6C
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 21:33:29 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZG7/cR3D"
+	by mail.kernel.org (Postfix) with ESMTP id B520B22247
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 21:35:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1602279346;
+	bh=af4HYKUXjfzQEnpRkoqrLOtb/VuZgD2GaaA85DESAB8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=uCzwO/uEgnYkNwNr79W1LH3hIH/q1QJhy84+hVCeXexwjCHXTDIR/yRlyozS9oHST
+	 0Q8W+zPyrhhoCmYkKD4AqfOOeenVeKAnfVLLjZHUeF1819WxyayiZkSdlFfT1u/WKA
+	 Xuuumsnt5ErHsGHc+AIJdp2+5jOb6G69hXsSlg68=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391639AbgJIVbl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 17:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391457AbgJIVas (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Oct 2020 17:30:48 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFF3C0613D5
-        for <bpf@vger.kernel.org>; Fri,  9 Oct 2020 14:30:46 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id h24so15125107ejg.9
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2020 14:30:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pbFcqf/DjvQ4JWXqdwx2qoDcjZm2i9Wcon6pZeNDz5o=;
-        b=ZG7/cR3DKUuQ/RPLGoR9GRiVD5sFiQY9qmvwtKGyjQ7dUx6cRoXQxPJrsofVX4GvT8
-         +bHrvlkc1QdE5fUuR+B4/jEqIhD96HiZRW7ovaFsuN3fEZ+QZA4WfW7Zoh4Ks3/JQ0EC
-         foiF78nQ6mvg4w1M98iFAIEqKbJDxwbcU0l389avKqsHHsxkP1F73Y3V7TTlMKHaLOCS
-         Dm4YqX7AZSogV5VQASZlZfU5CJKMZXVuwmHApTvWmqpz+YKzBi4/BWNPCESa5p7ZbAdQ
-         xYthw3ucPw0eXtEwmhEb7cEy71fk2ZQJ7DXR2iGsteCPu+HY7ggdx/mX75DxDqxJz9QQ
-         OIUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pbFcqf/DjvQ4JWXqdwx2qoDcjZm2i9Wcon6pZeNDz5o=;
-        b=RCYN8/IuE8nR0OHi6IBpADHS3a03Df0VpfOM7POZ1/nJwXXsWBeOBS5t4NfCCdM3gu
-         TYTDQigwpugU8y1+dVtxsQRESc7Nd5RmJ1fKmJGdFArXbLOsWjoV2RlLB2GwvD3HCbSM
-         J/aSAfSfpxF7DgL2bsNUa+hpolxFeE7If6UzM3Coib5vbZd7lUmjW5XpUfb/xP7t/gl0
-         HpvLE6ORiOhtEWKWmDxLSLdW7PevSZp5HKe7DdWXxhdDv+RYDMl+mG+VpC58hccVbzQ8
-         bQOJf6bTNd9ZAgXuAF7kj+C2XDHB1s0yvjWqadL/haeWoaggddhTgkqYmej448gDFaZl
-         uc7w==
-X-Gm-Message-State: AOAM533tyr+vdTEMHLm/CRPDIIGCXSM22Qk0PMsUL4qNVuP8eCkf0Vo4
-        J/E+kd+3fGyBLZ2JuUdFBAIDBJbwehS/6gH/ePO6xw==
-X-Google-Smtp-Source: ABdhPJyVuDxjo0a1CY6IfHFSG0IBKbx7nRGluOc+6dUadBRHkjJq4TYQS4jlWBBOaj1ul7WftAzGnhhHBZG2FVIDTO8=
-X-Received: by 2002:a17:906:86c3:: with SMTP id j3mr16811843ejy.493.1602279044763;
- Fri, 09 Oct 2020 14:30:44 -0700 (PDT)
+        id S2387704AbgJIVfR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 17:35:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42006 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388587AbgJIVei (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 17:34:38 -0400
+Received: from sol.localdomain (172-10-235-113.lightspeed.sntcca.sbcglobal.net [172.10.235.113])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 44F7C21D6C;
+        Fri,  9 Oct 2020 21:34:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602279277;
+        bh=af4HYKUXjfzQEnpRkoqrLOtb/VuZgD2GaaA85DESAB8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mAKgXcy5CifgRYN2i2C2c94+Jg5oLVaoZk49jTIFxseeqdMtEOOqP5cL66hXhKNTI
+         eNSQDBkgqgAc1Wd7XIXje+joGiBVI4yatMIDb1+kpBlSLeGvwRiFFGcw+A+0IeryZM
+         wi38bfOOqpr1rBlahq6SJoGGKG4xvvKCLXOhXA9s=
+Date:   Fri, 9 Oct 2020 14:34:34 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     ira.weiny@intel.com
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, linux-aio@kvack.org,
+        linux-efi@vger.kernel.org, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        target-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, samba-technical@lists.samba.org,
+        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-rdma@vger.kernel.org,
+        x86@kernel.org, amd-gfx@lists.freedesktop.org,
+        linux-afs@lists.infradead.org, cluster-devel@redhat.com,
+        linux-cachefs@redhat.com, intel-wired-lan@lists.osuosl.org,
+        xen-devel@lists.xenproject.org, linux-ext4@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>, ecryptfs@vger.kernel.org,
+        linux-um@lists.infradead.org, intel-gfx@lists.freedesktop.org,
+        linux-erofs@lists.ozlabs.org, reiserfs-devel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-bcache@vger.kernel.org,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        io-uring@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net, netdev@vger.kernel.org,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH RFC PKS/PMEM 22/58] fs/f2fs: Utilize new kmap_thread()
+Message-ID: <20201009213434.GA839@sol.localdomain>
+References: <20201009195033.3208459-1-ira.weiny@intel.com>
+ <20201009195033.3208459-23-ira.weiny@intel.com>
 MIME-Version: 1.0
-References: <cover.1602263422.git.yifeifz2@illinois.edu> <1a40458d081ce0d5423eb0282210055496e28774.1602263422.git.yifeifz2@illinois.edu>
-In-Reply-To: <1a40458d081ce0d5423eb0282210055496e28774.1602263422.git.yifeifz2@illinois.edu>
-From:   Jann Horn <jannh@google.com>
-Date:   Fri, 9 Oct 2020 23:30:18 +0200
-Message-ID: <CAG48ez1eUfjNPVKeYbk28On9WOaDBysR-=7sYDM-Q=nCzwXcDA@mail.gmail.com>
-Subject: Re: [PATCH v4 seccomp 2/5] seccomp/cache: Add "emulator" to check if
- filter is constant allow
-To:     YiFei Zhu <zhuyifei1999@gmail.com>
-Cc:     Linux Containers <containers@lists.linux-foundation.org>,
-        YiFei Zhu <yifeifz2@illinois.edu>, bpf <bpf@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        David Laight <David.Laight@aculab.com>,
-        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Hubertus Franke <frankeh@us.ibm.com>,
-        Jack Chen <jianyan2@illinois.edu>,
-        Josep Torrellas <torrella@illinois.edu>,
-        Kees Cook <keescook@chromium.org>,
-        Tianyin Xu <tyxu@illinois.edu>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Valentin Rothberg <vrothber@redhat.com>,
-        Will Drewry <wad@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201009195033.3208459-23-ira.weiny@intel.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Oct 9, 2020 at 7:15 PM YiFei Zhu <zhuyifei1999@gmail.com> wrote:
->
-> From: YiFei Zhu <yifeifz2@illinois.edu>
->
-> SECCOMP_CACHE will only operate on syscalls that do not access
-> any syscall arguments or instruction pointer. To facilitate
-> this we need a static analyser to know whether a filter will
-> return allow regardless of syscall arguments for a given
-> architecture number / syscall number pair. This is implemented
-> here with a pseudo-emulator, and stored in a per-filter bitmap.
->
-> In order to build this bitmap at filter attach time, each filter is
-> emulated for every syscall (under each possible architecture), and
-> checked for any accesses of struct seccomp_data that are not the "arch"
-> nor "nr" (syscall) members. If only "arch" and "nr" are examined, and
-> the program returns allow, then we can be sure that the filter must
-> return allow independent from syscall arguments.
->
-> Nearly all seccomp filters are built from these cBPF instructions:
->
-> BPF_LD  | BPF_W    | BPF_ABS
-> BPF_JMP | BPF_JEQ  | BPF_K
-> BPF_JMP | BPF_JGE  | BPF_K
-> BPF_JMP | BPF_JGT  | BPF_K
-> BPF_JMP | BPF_JSET | BPF_K
-> BPF_JMP | BPF_JA
-> BPF_RET | BPF_K
-> BPF_ALU | BPF_AND  | BPF_K
->
-> Each of these instructions are emulated. Any weirdness or loading
-> from a syscall argument will cause the emulator to bail.
->
-> The emulation is also halted if it reaches a return. In that case,
-> if it returns an SECCOMP_RET_ALLOW, the syscall is marked as good.
->
-> Emulator structure and comments are from Kees [1] and Jann [2].
->
-> Emulation is done at attach time. If a filter depends on more
-> filters, and if the dependee does not guarantee to allow the
-> syscall, then we skip the emulation of this syscall.
->
-> [1] https://lore.kernel.org/lkml/20200923232923.3142503-5-keescook@chromium.org/
-> [2] https://lore.kernel.org/lkml/CAG48ez1p=dR_2ikKq=xVxkoGg0fYpTBpkhJSv1w-6BG=76PAvw@mail.gmail.com/
-[...]
-> @@ -682,6 +693,150 @@ seccomp_prepare_user_filter(const char __user *user_filter)
->         return filter;
+On Fri, Oct 09, 2020 at 12:49:57PM -0700, ira.weiny@intel.com wrote:
+> From: Ira Weiny <ira.weiny@intel.com>
+> 
+> The kmap() calls in this FS are localized to a single thread.  To avoid
+> the over head of global PKRS updates use the new kmap_thread() call.
+> 
+> Cc: Jaegeuk Kim <jaegeuk@kernel.org>
+> Cc: Chao Yu <chao@kernel.org>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> ---
+>  fs/f2fs/f2fs.h | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index d9e52a7f3702..ff72a45a577e 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -2410,12 +2410,12 @@ static inline struct page *f2fs_pagecache_get_page(
+>  
+>  static inline void f2fs_copy_page(struct page *src, struct page *dst)
+>  {
+> -	char *src_kaddr = kmap(src);
+> -	char *dst_kaddr = kmap(dst);
+> +	char *src_kaddr = kmap_thread(src);
+> +	char *dst_kaddr = kmap_thread(dst);
+>  
+>  	memcpy(dst_kaddr, src_kaddr, PAGE_SIZE);
+> -	kunmap(dst);
+> -	kunmap(src);
+> +	kunmap_thread(dst);
+> +	kunmap_thread(src);
 >  }
->
-> +#ifdef SECCOMP_ARCH_NATIVE
-> +/**
-> + * seccomp_is_const_allow - check if filter is constant allow with given data
-> + * @fprog: The BPF programs
-> + * @sd: The seccomp data to check against, only syscall number are arch
-> + *      number are considered constant.
 
-nit: s/syscall number are arch number/syscall number and arch number/
+Wouldn't it make more sense to switch cases like this to kmap_atomic()?
+The pages are only mapped to do a memcpy(), then they're immediately unmapped.
 
-> + */
-> +static bool seccomp_is_const_allow(struct sock_fprog_kern *fprog,
-> +                                  struct seccomp_data *sd)
-> +{
-> +       unsigned int insns;
-> +       unsigned int reg_value = 0;
-> +       unsigned int pc;
-> +       bool op_res;
-> +
-> +       if (WARN_ON_ONCE(!fprog))
-> +               return false;
-> +
-> +       insns = bpf_classic_proglen(fprog);
-
-bpf_classic_proglen() is defined as:
-
-#define bpf_classic_proglen(fprog) (fprog->len * sizeof(fprog->filter[0]))
-
-so this is wrong - what you want is the number of instructions in the
-program, what you actually have is the size of the program in bytes.
-Please instead check for `pc < fprog->len` in the loop condition.
-
-> +       for (pc = 0; pc < insns; pc++) {
-> +               struct sock_filter *insn = &fprog->filter[pc];
-> +               u16 code = insn->code;
-> +               u32 k = insn->k;
-[...]
-
-> +       }
-> +
-> +       /* ran off the end of the filter?! */
-> +       WARN_ON(1);
-> +       return false;
-> +}
+- Eric
