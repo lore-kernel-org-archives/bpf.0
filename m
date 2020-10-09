@@ -7,33 +7,33 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D509EC83011
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 19:57:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A68A2C83026
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 19:57:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2915C225A9
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 19:57:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8583520691
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 19:57:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389332AbgJITxp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 15:53:45 -0400
-Received: from mga18.intel.com ([134.134.136.126]:42487 "EHLO mga18.intel.com"
+        id S1731953AbgJIT50 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 15:57:26 -0400
+Received: from mga12.intel.com ([192.55.52.136]:29334 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391153AbgJITxm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Oct 2020 15:53:42 -0400
-IronPort-SDR: BgWZnFJZdvaz1CZmvfS/7De+hsUMEUJdT4/u/BWCM6C97yea5FfZV7v30SZ47vZG/wo8aIdnwg
- re/Nlv5BC3sA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9769"; a="153363823"
+        id S2391149AbgJITxg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 15:53:36 -0400
+IronPort-SDR: pgLxEXDdwlbiZXzBeT4ttrQBELII+3B5k1Ohhm5Voa/aT/zXiJVCv3SzCNFZeRFoxNhz6/kSzp
+ U8bGcVHkZDFg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9769"; a="144851045"
 X-IronPort-AV: E=Sophos;i="5.77,355,1596524400"; 
-   d="scan'208";a="153363823"
+   d="scan'208";a="144851045"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 12:53:41 -0700
-IronPort-SDR: t/zSGeR++7wfj+VtFM7nhfyp5h0blfdWqDlNHnP/5jl48Bm08GFuTiLpDu6MwkEQ7bZpMY8SQr
- l7ztZVCdgy3g==
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 12:53:35 -0700
+IronPort-SDR: 1BDjhBWRiZHjmax0H5jHPL9Ee2R7VPzFxt4XNyUZ5d5LafdvLgy40B0wtQFVU3AX2TCQgDyRso
+ HhmDRI33qIDA==
 X-IronPort-AV: E=Sophos;i="5.77,355,1596524400"; 
-   d="scan'208";a="419537249"
+   d="scan'208";a="345148602"
 Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 12:53:40 -0700
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 12:53:34 -0700
 From:   ira.weiny@intel.com
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -41,8 +41,10 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
         Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>
 Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
@@ -67,9 +69,9 @@ Cc:     Ira Weiny <ira.weiny@intel.com>,
         drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
         xen-devel@lists.xenproject.org, linux-cachefs@redhat.com,
         samba-technical@lists.samba.org, intel-wired-lan@lists.osuosl.org
-Subject: [PATCH RFC PKS/PMEM 49/58] drivers/misc: Utilize new kmap_thread()
-Date:   Fri,  9 Oct 2020 12:50:24 -0700
-Message-Id: <20201009195033.3208459-50-ira.weiny@intel.com>
+Subject: [PATCH RFC PKS/PMEM 47/58] drivers/mtd: Utilize new kmap_thread()
+Date:   Fri,  9 Oct 2020 12:50:22 -0700
+Message-Id: <20201009195033.3208459-48-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.28.0.rc0.12.gb6a658bd00c9
 In-Reply-To: <20201009195033.3208459-1-ira.weiny@intel.com>
 References: <20201009195033.3208459-1-ira.weiny@intel.com>
@@ -84,64 +86,54 @@ From: Ira Weiny <ira.weiny@intel.com>
 These kmap() calls are localized to a single thread.  To avoid the over
 head of global PKRS updates use the new kmap_thread() call.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Vignesh Raghavendra <vigneshr@ti.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 ---
- drivers/misc/vmw_vmci/vmci_queue_pair.c | 12 ++++++------
+ drivers/mtd/mtd_blkdevs.c | 12 ++++++------
  1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/misc/vmw_vmci/vmci_queue_pair.c b/drivers/misc/vmw_vmci/vmci_queue_pair.c
-index 8531ae781195..f308abb8ad03 100644
---- a/drivers/misc/vmw_vmci/vmci_queue_pair.c
-+++ b/drivers/misc/vmw_vmci/vmci_queue_pair.c
-@@ -343,7 +343,7 @@ static int qp_memcpy_to_queue_iter(struct vmci_queue *queue,
- 		size_t to_copy;
- 
- 		if (kernel_if->host)
--			va = kmap(kernel_if->u.h.page[page_index]);
-+			va = kmap_thread(kernel_if->u.h.page[page_index]);
- 		else
- 			va = kernel_if->u.g.vas[page_index + 1];
- 			/* Skip header. */
-@@ -357,12 +357,12 @@ static int qp_memcpy_to_queue_iter(struct vmci_queue *queue,
- 		if (!copy_from_iter_full((u8 *)va + page_offset, to_copy,
- 					 from)) {
- 			if (kernel_if->host)
--				kunmap(kernel_if->u.h.page[page_index]);
-+				kunmap_thread(kernel_if->u.h.page[page_index]);
- 			return VMCI_ERROR_INVALID_ARGS;
+diff --git a/drivers/mtd/mtd_blkdevs.c b/drivers/mtd/mtd_blkdevs.c
+index 0c05f77f9b21..4b18998273fa 100644
+--- a/drivers/mtd/mtd_blkdevs.c
++++ b/drivers/mtd/mtd_blkdevs.c
+@@ -88,14 +88,14 @@ static blk_status_t do_blktrans_request(struct mtd_blktrans_ops *tr,
+ 			return BLK_STS_IOERR;
+ 		return BLK_STS_OK;
+ 	case REQ_OP_READ:
+-		buf = kmap(bio_page(req->bio)) + bio_offset(req->bio);
++		buf = kmap_thread(bio_page(req->bio)) + bio_offset(req->bio);
+ 		for (; nsect > 0; nsect--, block++, buf += tr->blksize) {
+ 			if (tr->readsect(dev, block, buf)) {
+-				kunmap(bio_page(req->bio));
++				kunmap_thread(bio_page(req->bio));
+ 				return BLK_STS_IOERR;
+ 			}
  		}
- 		bytes_copied += to_copy;
- 		if (kernel_if->host)
--			kunmap(kernel_if->u.h.page[page_index]);
-+			kunmap_thread(kernel_if->u.h.page[page_index]);
- 	}
+-		kunmap(bio_page(req->bio));
++		kunmap_thread(bio_page(req->bio));
+ 		rq_flush_dcache_pages(req);
+ 		return BLK_STS_OK;
+ 	case REQ_OP_WRITE:
+@@ -103,14 +103,14 @@ static blk_status_t do_blktrans_request(struct mtd_blktrans_ops *tr,
+ 			return BLK_STS_IOERR;
  
- 	return VMCI_SUCCESS;
-@@ -391,7 +391,7 @@ static int qp_memcpy_from_queue_iter(struct iov_iter *to,
- 		int err;
- 
- 		if (kernel_if->host)
--			va = kmap(kernel_if->u.h.page[page_index]);
-+			va = kmap_thread(kernel_if->u.h.page[page_index]);
- 		else
- 			va = kernel_if->u.g.vas[page_index + 1];
- 			/* Skip header. */
-@@ -405,12 +405,12 @@ static int qp_memcpy_from_queue_iter(struct iov_iter *to,
- 		err = copy_to_iter((u8 *)va + page_offset, to_copy, to);
- 		if (err != to_copy) {
- 			if (kernel_if->host)
--				kunmap(kernel_if->u.h.page[page_index]);
-+				kunmap_thread(kernel_if->u.h.page[page_index]);
- 			return VMCI_ERROR_INVALID_ARGS;
+ 		rq_flush_dcache_pages(req);
+-		buf = kmap(bio_page(req->bio)) + bio_offset(req->bio);
++		buf = kmap_thread(bio_page(req->bio)) + bio_offset(req->bio);
+ 		for (; nsect > 0; nsect--, block++, buf += tr->blksize) {
+ 			if (tr->writesect(dev, block, buf)) {
+-				kunmap(bio_page(req->bio));
++				kunmap_thread(bio_page(req->bio));
+ 				return BLK_STS_IOERR;
+ 			}
  		}
- 		bytes_copied += to_copy;
- 		if (kernel_if->host)
--			kunmap(kernel_if->u.h.page[page_index]);
-+			kunmap_thread(kernel_if->u.h.page[page_index]);
- 	}
- 
- 	return VMCI_SUCCESS;
+-		kunmap(bio_page(req->bio));
++		kunmap_thread(bio_page(req->bio));
+ 		return BLK_STS_OK;
+ 	default:
+ 		return BLK_STS_IOERR;
 -- 
 2.28.0.rc0.12.gb6a658bd00c9
 
