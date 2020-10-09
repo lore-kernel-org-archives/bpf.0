@@ -2,541 +2,168 @@ Return-Path: <SRS0=vDm1=DQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BCBC0C43457
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 14:10:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1DCAC433E7
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 14:53:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7DD65222BA
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 14:10:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A051B222BA
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 14:53:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1602255227;
+	bh=DQLk9PN+dno5Fhjh4xfRjPofKWTcubzhYk45CbiUU+w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=fN5+5nniUt+kFehn2C1OfzoxfHNl6BTCKNp62J4eeY7wJoEga66XsyC0j/M9KDDn0
+	 b8RB44QRgWFKxC53+YMp3oSgyYEWG7TLdyxWYcgMHEUECCgXKAgP0j5vs8QQpJIO+1
+	 WQwYFEGPuwGcQoQPdEdCFxtXTFya+NuTf/Xf9YnE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388571AbgJIOKk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 10:10:40 -0400
-Received: from www62.your-server.de ([213.133.104.62]:56768 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733205AbgJIOK0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Oct 2020 10:10:26 -0400
-Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1kQt6E-0000UI-F6; Fri, 09 Oct 2020 16:10:22 +0200
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     ast@kernel.org
-Cc:     daniel@iogearbox.net, john.fastabend@gmail.com, yhs@fb.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 5/6] bpf, selftests: make redirect_neigh test more extensible
-Date:   Fri,  9 Oct 2020 16:10:14 +0200
-Message-Id: <6933afb64a3fdf44182c7767cf3d22c01f18363f.1602252399.git.daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <cover.1602252399.git.daniel@iogearbox.net>
-References: <cover.1602252399.git.daniel@iogearbox.net>
+        id S2388208AbgJIOxr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 10:53:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33678 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732056AbgJIOxr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 10:53:47 -0400
+Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BCBA422260;
+        Fri,  9 Oct 2020 14:53:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602255226;
+        bh=DQLk9PN+dno5Fhjh4xfRjPofKWTcubzhYk45CbiUU+w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JpAT3YyJvZyji3Zdb1So24yyOBXaY6kJsq5yNKiUDeg0IoQjaH4fNq3YlzyWRzm5h
+         zjNcN0AbF9fPlGWlNsv3egGI+9FxHXGjIJPFc+4duTZuInS21ycl+IPL4ug/NoWdbr
+         8Odv07o92vvcXEhhqN1iVEqnuITcgnA22qQkfiE8=
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 69215403AC; Fri,  9 Oct 2020 11:53:43 -0300 (-03)
+Date:   Fri, 9 Oct 2020 11:53:43 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com,
+        ast@kernel.org, Andrii Nakryiko <andriin@fb.com>
+Subject: Re: [PATCH v2 dwarves 1/8] btf_loader: use libbpf to load BTF
+Message-ID: <20201009145343.GA322246@kernel.org>
+References: <20201008234000.740660-1-andrii@kernel.org>
+ <20201008234000.740660-2-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/25951/Thu Oct  8 15:53:03 2020)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201008234000.740660-2-andrii@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Rename into test_tc_redirect.sh and move setup and test code into separate
-functions so they can be reused for newly added tests in here. Also remove
-the crude hack to override ifindex inside the object file via xxd and sed
-and just use a simple map instead. Map given iproute2 does not support BTF
-fully and therefore neither global data at this point.
+Em Thu, Oct 08, 2020 at 04:39:53PM -0700, Andrii Nakryiko escreveu:
+> From: Andrii Nakryiko <andriin@fb.com>
+> 
+> Switch BTF loading to completely use libbpf's own struct btf and related APIs.
+> BTF encoding is still happening with pahole's own code, so these two code
+> paths are not sharing anything now. String fetching is happening based on
+> whether btfe->strings were set to non-NULL pointer by btf_encoder.
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Yonghong Song <yhs@fb.com>
----
- .../selftests/bpf/progs/test_tc_neigh.c       |  40 ++--
- tools/testing/selftests/bpf/test_tc_neigh.sh  | 168 ---------------
- .../testing/selftests/bpf/test_tc_redirect.sh | 197 ++++++++++++++++++
- 3 files changed, 219 insertions(+), 186 deletions(-)
- delete mode 100755 tools/testing/selftests/bpf/test_tc_neigh.sh
- create mode 100755 tools/testing/selftests/bpf/test_tc_redirect.sh
+While testing this one I noticed a problem, but it isn't caused by this
+particular patch:
 
-diff --git a/tools/testing/selftests/bpf/progs/test_tc_neigh.c b/tools/testing/selftests/bpf/progs/test_tc_neigh.c
-index 889a72c3024f..fe182616b112 100644
---- a/tools/testing/selftests/bpf/progs/test_tc_neigh.c
-+++ b/tools/testing/selftests/bpf/progs/test_tc_neigh.c
-@@ -13,17 +13,10 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_endian.h>
- 
--#ifndef barrier_data
--# define barrier_data(ptr)	asm volatile("": :"r"(ptr) :"memory")
--#endif
--
- #ifndef ctx_ptr
- # define ctx_ptr(field)		(void *)(long)(field)
- #endif
- 
--#define dst_to_src_tmp		0xeeddddeeU
--#define src_to_dst_tmp		0xeeffffeeU
--
- #define ip4_src			0xac100164 /* 172.16.1.100 */
- #define ip4_dst			0xac100264 /* 172.16.2.100 */
- 
-@@ -39,6 +32,18 @@
- 				 a.s6_addr32[3] == b.s6_addr32[3])
- #endif
- 
-+enum {
-+	dev_src,
-+	dev_dst,
-+};
-+
-+struct bpf_map_def SEC("maps") ifindex_map = {
-+	.type		= BPF_MAP_TYPE_ARRAY,
-+	.key_size	= sizeof(int),
-+	.value_size	= sizeof(int),
-+	.max_entries	= 2,
-+};
-+
- static __always_inline bool is_remote_ep_v4(struct __sk_buff *skb,
- 					    __be32 addr)
- {
-@@ -73,7 +78,14 @@ static __always_inline bool is_remote_ep_v6(struct __sk_buff *skb,
- 	return v6_equal(ip6h->daddr, addr);
- }
- 
--SEC("chk_neigh") int tc_chk(struct __sk_buff *skb)
-+static __always_inline int get_dev_ifindex(int which)
-+{
-+	int *ifindex = bpf_map_lookup_elem(&ifindex_map, &which);
-+
-+	return ifindex ? *ifindex : 0;
-+}
-+
-+SEC("chk_egress") int tc_chk(struct __sk_buff *skb)
- {
- 	void *data_end = ctx_ptr(skb->data_end);
- 	void *data = ctx_ptr(skb->data);
-@@ -87,7 +99,6 @@ SEC("chk_neigh") int tc_chk(struct __sk_buff *skb)
- 
- SEC("dst_ingress") int tc_dst(struct __sk_buff *skb)
- {
--	int idx = dst_to_src_tmp;
- 	__u8 zero[ETH_ALEN * 2];
- 	bool redirect = false;
- 
-@@ -103,19 +114,15 @@ SEC("dst_ingress") int tc_dst(struct __sk_buff *skb)
- 	if (!redirect)
- 		return TC_ACT_OK;
- 
--	barrier_data(&idx);
--	idx = bpf_ntohl(idx);
--
- 	__builtin_memset(&zero, 0, sizeof(zero));
- 	if (bpf_skb_store_bytes(skb, 0, &zero, sizeof(zero), 0) < 0)
- 		return TC_ACT_SHOT;
- 
--	return bpf_redirect_neigh(idx, 0);
-+	return bpf_redirect_neigh(get_dev_ifindex(dev_src), 0);
- }
- 
- SEC("src_ingress") int tc_src(struct __sk_buff *skb)
- {
--	int idx = src_to_dst_tmp;
- 	__u8 zero[ETH_ALEN * 2];
- 	bool redirect = false;
- 
-@@ -131,14 +138,11 @@ SEC("src_ingress") int tc_src(struct __sk_buff *skb)
- 	if (!redirect)
- 		return TC_ACT_OK;
- 
--	barrier_data(&idx);
--	idx = bpf_ntohl(idx);
--
- 	__builtin_memset(&zero, 0, sizeof(zero));
- 	if (bpf_skb_store_bytes(skb, 0, &zero, sizeof(zero), 0) < 0)
- 		return TC_ACT_SHOT;
- 
--	return bpf_redirect_neigh(idx, 0);
-+	return bpf_redirect_neigh(get_dev_ifindex(dev_dst), 0);
- }
- 
- char __license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_tc_neigh.sh b/tools/testing/selftests/bpf/test_tc_neigh.sh
-deleted file mode 100755
-index 31d8c3df8b24..000000000000
---- a/tools/testing/selftests/bpf/test_tc_neigh.sh
-+++ /dev/null
-@@ -1,168 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--#
--# This test sets up 3 netns (src <-> fwd <-> dst). There is no direct veth link
--# between src and dst. The netns fwd has veth links to each src and dst. The
--# client is in src and server in dst. The test installs a TC BPF program to each
--# host facing veth in fwd which calls into bpf_redirect_peer() to perform the
--# neigh addr population and redirect; it also installs a dropper prog on the
--# egress side to drop skbs if neigh addrs were not populated.
--
--if [[ $EUID -ne 0 ]]; then
--	echo "This script must be run as root"
--	echo "FAIL"
--	exit 1
--fi
--
--# check that nc, dd, ping, ping6 and timeout are present
--command -v nc >/dev/null 2>&1 || \
--	{ echo >&2 "nc is not available"; exit 1; }
--command -v dd >/dev/null 2>&1 || \
--	{ echo >&2 "dd is not available"; exit 1; }
--command -v timeout >/dev/null 2>&1 || \
--	{ echo >&2 "timeout is not available"; exit 1; }
--command -v ping >/dev/null 2>&1 || \
--	{ echo >&2 "ping is not available"; exit 1; }
--command -v ping6 >/dev/null 2>&1 || \
--	{ echo >&2 "ping6 is not available"; exit 1; }
--
--readonly GREEN='\033[0;92m'
--readonly RED='\033[0;31m'
--readonly NC='\033[0m' # No Color
--
--readonly PING_ARG="-c 3 -w 10 -q"
--
--readonly TIMEOUT=10
--
--readonly NS_SRC="ns-src-$(mktemp -u XXXXXX)"
--readonly NS_FWD="ns-fwd-$(mktemp -u XXXXXX)"
--readonly NS_DST="ns-dst-$(mktemp -u XXXXXX)"
--
--readonly IP4_SRC="172.16.1.100"
--readonly IP4_DST="172.16.2.100"
--
--readonly IP6_SRC="::1:dead:beef:cafe"
--readonly IP6_DST="::2:dead:beef:cafe"
--
--readonly IP4_SLL="169.254.0.1"
--readonly IP4_DLL="169.254.0.2"
--readonly IP4_NET="169.254.0.0"
--
--cleanup()
--{
--	ip netns del ${NS_SRC}
--	ip netns del ${NS_FWD}
--	ip netns del ${NS_DST}
--}
--
--trap cleanup EXIT
--
--set -e
--
--ip netns add "${NS_SRC}"
--ip netns add "${NS_FWD}"
--ip netns add "${NS_DST}"
--
--ip link add veth_src type veth peer name veth_src_fwd
--ip link add veth_dst type veth peer name veth_dst_fwd
--
--ip link set veth_src netns ${NS_SRC}
--ip link set veth_src_fwd netns ${NS_FWD}
--
--ip link set veth_dst netns ${NS_DST}
--ip link set veth_dst_fwd netns ${NS_FWD}
--
--ip -netns ${NS_SRC} addr add ${IP4_SRC}/32 dev veth_src
--ip -netns ${NS_DST} addr add ${IP4_DST}/32 dev veth_dst
--
--# The fwd netns automatically get a v6 LL address / routes, but also needs v4
--# one in order to start ARP probing. IP4_NET route is added to the endpoints
--# so that the ARP processing will reply.
--
--ip -netns ${NS_FWD} addr add ${IP4_SLL}/32 dev veth_src_fwd
--ip -netns ${NS_FWD} addr add ${IP4_DLL}/32 dev veth_dst_fwd
--
--ip -netns ${NS_SRC} addr add ${IP6_SRC}/128 dev veth_src nodad
--ip -netns ${NS_DST} addr add ${IP6_DST}/128 dev veth_dst nodad
--
--ip -netns ${NS_SRC} link set dev veth_src up
--ip -netns ${NS_FWD} link set dev veth_src_fwd up
--
--ip -netns ${NS_DST} link set dev veth_dst up
--ip -netns ${NS_FWD} link set dev veth_dst_fwd up
--
--ip -netns ${NS_SRC} route add ${IP4_DST}/32 dev veth_src scope global
--ip -netns ${NS_SRC} route add ${IP4_NET}/16 dev veth_src scope global
--ip -netns ${NS_FWD} route add ${IP4_SRC}/32 dev veth_src_fwd scope global
--
--ip -netns ${NS_SRC} route add ${IP6_DST}/128 dev veth_src scope global
--ip -netns ${NS_FWD} route add ${IP6_SRC}/128 dev veth_src_fwd scope global
--
--ip -netns ${NS_DST} route add ${IP4_SRC}/32 dev veth_dst scope global
--ip -netns ${NS_DST} route add ${IP4_NET}/16 dev veth_dst scope global
--ip -netns ${NS_FWD} route add ${IP4_DST}/32 dev veth_dst_fwd scope global
--
--ip -netns ${NS_DST} route add ${IP6_SRC}/128 dev veth_dst scope global
--ip -netns ${NS_FWD} route add ${IP6_DST}/128 dev veth_dst_fwd scope global
--
--fmac_src=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_src_fwd/address)
--fmac_dst=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_dst_fwd/address)
--
--ip -netns ${NS_SRC} neigh add ${IP4_DST} dev veth_src lladdr $fmac_src
--ip -netns ${NS_DST} neigh add ${IP4_SRC} dev veth_dst lladdr $fmac_dst
--
--ip -netns ${NS_SRC} neigh add ${IP6_DST} dev veth_src lladdr $fmac_src
--ip -netns ${NS_DST} neigh add ${IP6_SRC} dev veth_dst lladdr $fmac_dst
--
--veth_dst=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_dst_fwd/ifindex | awk '{printf "%08x\n", $1}')
--veth_src=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_src_fwd/ifindex | awk '{printf "%08x\n", $1}')
--
--xxd -p < test_tc_neigh.o   | sed "s/eeddddee/$veth_src/g" | xxd -r -p > test_tc_neigh.x.o
--xxd -p < test_tc_neigh.x.o | sed "s/eeffffee/$veth_dst/g" | xxd -r -p > test_tc_neigh.y.o
--
--ip netns exec ${NS_FWD} tc qdisc add dev veth_src_fwd clsact
--ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd ingress bpf da obj test_tc_neigh.y.o sec src_ingress
--ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd egress  bpf da obj test_tc_neigh.y.o sec chk_neigh
--
--ip netns exec ${NS_FWD} tc qdisc add dev veth_dst_fwd clsact
--ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd ingress bpf da obj test_tc_neigh.y.o sec dst_ingress
--ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd egress  bpf da obj test_tc_neigh.y.o sec chk_neigh
--
--rm -f test_tc_neigh.x.o test_tc_neigh.y.o
--
--ip netns exec ${NS_DST} bash -c "nc -4 -l -p 9004 &"
--ip netns exec ${NS_DST} bash -c "nc -6 -l -p 9006 &"
--
--set +e
--
--TEST="TCPv4 connectivity test"
--ip netns exec ${NS_SRC} bash -c "timeout ${TIMEOUT} dd if=/dev/zero bs=1000 count=100 > /dev/tcp/${IP4_DST}/9004"
--if [ $? -ne 0 ]; then
--	echo -e "${TEST}: ${RED}FAIL${NC}"
--	exit 1
--fi
--echo -e "${TEST}: ${GREEN}PASS${NC}"
--
--TEST="TCPv6 connectivity test"
--ip netns exec ${NS_SRC} bash -c "timeout ${TIMEOUT} dd if=/dev/zero bs=1000 count=100 > /dev/tcp/${IP6_DST}/9006"
--if [ $? -ne 0 ]; then
--	echo -e "${TEST}: ${RED}FAIL${NC}"
--	exit 1
--fi
--echo -e "${TEST}: ${GREEN}PASS${NC}"
--
--TEST="ICMPv4 connectivity test"
--ip netns exec ${NS_SRC} ping  $PING_ARG ${IP4_DST}
--if [ $? -ne 0 ]; then
--	echo -e "${TEST}: ${RED}FAIL${NC}"
--	exit 1
--fi
--echo -e "${TEST}: ${GREEN}PASS${NC}"
--
--TEST="ICMPv6 connectivity test"
--ip netns exec ${NS_SRC} ping6 $PING_ARG ${IP6_DST}
--if [ $? -ne 0 ]; then
--	echo -e "${TEST}: ${RED}FAIL${NC}"
--	exit 1
--fi
--echo -e "${TEST}: ${GREEN}PASS${NC}"
-diff --git a/tools/testing/selftests/bpf/test_tc_redirect.sh b/tools/testing/selftests/bpf/test_tc_redirect.sh
-new file mode 100755
-index 000000000000..6ad441405132
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_tc_redirect.sh
-@@ -0,0 +1,197 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# This test sets up 3 netns (src <-> fwd <-> dst). There is no direct veth link
-+# between src and dst. The netns fwd has veth links to each src and dst. The
-+# client is in src and server in dst. The test installs a TC BPF program to each
-+# host facing veth in fwd which calls into bpf_redirect_peer() to perform the
-+# neigh addr population and redirect; it also installs a dropper prog on the
-+# egress side to drop skbs if neigh addrs were not populated.
-+
-+if [[ $EUID -ne 0 ]]; then
-+	echo "This script must be run as root"
-+	echo "FAIL"
-+	exit 1
-+fi
-+
-+# check that needed tools are present
-+command -v nc >/dev/null 2>&1 || \
-+	{ echo >&2 "nc is not available"; exit 1; }
-+command -v dd >/dev/null 2>&1 || \
-+	{ echo >&2 "dd is not available"; exit 1; }
-+command -v timeout >/dev/null 2>&1 || \
-+	{ echo >&2 "timeout is not available"; exit 1; }
-+command -v ping >/dev/null 2>&1 || \
-+	{ echo >&2 "ping is not available"; exit 1; }
-+command -v ping6 >/dev/null 2>&1 || \
-+	{ echo >&2 "ping6 is not available"; exit 1; }
-+command -v perl >/dev/null 2>&1 || \
-+	{ echo >&2 "perl is not available"; exit 1; }
-+command -v jq >/dev/null 2>&1 || \
-+	{ echo >&2 "jq is not available"; exit 1; }
-+command -v bpftool >/dev/null 2>&1 || \
-+	{ echo >&2 "bpftool is not available"; exit 1; }
-+
-+readonly GREEN='\033[0;92m'
-+readonly RED='\033[0;31m'
-+readonly NC='\033[0m' # No Color
-+
-+readonly PING_ARG="-c 3 -w 10 -q"
-+
-+readonly TIMEOUT=10
-+
-+readonly NS_SRC="ns-src-$(mktemp -u XXXXXX)"
-+readonly NS_FWD="ns-fwd-$(mktemp -u XXXXXX)"
-+readonly NS_DST="ns-dst-$(mktemp -u XXXXXX)"
-+
-+readonly IP4_SRC="172.16.1.100"
-+readonly IP4_DST="172.16.2.100"
-+
-+readonly IP6_SRC="::1:dead:beef:cafe"
-+readonly IP6_DST="::2:dead:beef:cafe"
-+
-+readonly IP4_SLL="169.254.0.1"
-+readonly IP4_DLL="169.254.0.2"
-+readonly IP4_NET="169.254.0.0"
-+
-+netns_cleanup()
-+{
-+	ip netns del ${NS_SRC}
-+	ip netns del ${NS_FWD}
-+	ip netns del ${NS_DST}
-+}
-+
-+netns_setup()
-+{
-+	ip netns add "${NS_SRC}"
-+	ip netns add "${NS_FWD}"
-+	ip netns add "${NS_DST}"
-+
-+	ip link add veth_src type veth peer name veth_src_fwd
-+	ip link add veth_dst type veth peer name veth_dst_fwd
-+
-+	ip link set veth_src netns ${NS_SRC}
-+	ip link set veth_src_fwd netns ${NS_FWD}
-+
-+	ip link set veth_dst netns ${NS_DST}
-+	ip link set veth_dst_fwd netns ${NS_FWD}
-+
-+	ip -netns ${NS_SRC} addr add ${IP4_SRC}/32 dev veth_src
-+	ip -netns ${NS_DST} addr add ${IP4_DST}/32 dev veth_dst
-+
-+	# The fwd netns automatically get a v6 LL address / routes, but also
-+	# needs v4 one in order to start ARP probing. IP4_NET route is added
-+	# to the endpoints so that the ARP processing will reply.
-+
-+	ip -netns ${NS_FWD} addr add ${IP4_SLL}/32 dev veth_src_fwd
-+	ip -netns ${NS_FWD} addr add ${IP4_DLL}/32 dev veth_dst_fwd
-+
-+	ip -netns ${NS_SRC} addr add ${IP6_SRC}/128 dev veth_src nodad
-+	ip -netns ${NS_DST} addr add ${IP6_DST}/128 dev veth_dst nodad
-+
-+	ip -netns ${NS_SRC} link set dev veth_src up
-+	ip -netns ${NS_FWD} link set dev veth_src_fwd up
-+
-+	ip -netns ${NS_DST} link set dev veth_dst up
-+	ip -netns ${NS_FWD} link set dev veth_dst_fwd up
-+
-+	ip -netns ${NS_SRC} route add ${IP4_DST}/32 dev veth_src scope global
-+	ip -netns ${NS_SRC} route add ${IP4_NET}/16 dev veth_src scope global
-+	ip -netns ${NS_FWD} route add ${IP4_SRC}/32 dev veth_src_fwd scope global
-+
-+	ip -netns ${NS_SRC} route add ${IP6_DST}/128 dev veth_src scope global
-+	ip -netns ${NS_FWD} route add ${IP6_SRC}/128 dev veth_src_fwd scope global
-+
-+	ip -netns ${NS_DST} route add ${IP4_SRC}/32 dev veth_dst scope global
-+	ip -netns ${NS_DST} route add ${IP4_NET}/16 dev veth_dst scope global
-+	ip -netns ${NS_FWD} route add ${IP4_DST}/32 dev veth_dst_fwd scope global
-+
-+	ip -netns ${NS_DST} route add ${IP6_SRC}/128 dev veth_dst scope global
-+	ip -netns ${NS_FWD} route add ${IP6_DST}/128 dev veth_dst_fwd scope global
-+
-+	fmac_src=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_src_fwd/address)
-+	fmac_dst=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_dst_fwd/address)
-+
-+	ip -netns ${NS_SRC} neigh add ${IP4_DST} dev veth_src lladdr $fmac_src
-+	ip -netns ${NS_DST} neigh add ${IP4_SRC} dev veth_dst lladdr $fmac_dst
-+
-+	ip -netns ${NS_SRC} neigh add ${IP6_DST} dev veth_src lladdr $fmac_src
-+	ip -netns ${NS_DST} neigh add ${IP6_SRC} dev veth_dst lladdr $fmac_dst
-+}
-+
-+netns_test_connectivity()
-+{
-+	set +e
-+
-+	ip netns exec ${NS_DST} bash -c "nc -4 -l -p 9004 &"
-+	ip netns exec ${NS_DST} bash -c "nc -6 -l -p 9006 &"
-+
-+	TEST="TCPv4 connectivity test"
-+	ip netns exec ${NS_SRC} bash -c "timeout ${TIMEOUT} dd if=/dev/zero bs=1000 count=100 > /dev/tcp/${IP4_DST}/9004"
-+	if [ $? -ne 0 ]; then
-+		echo -e "${TEST}: ${RED}FAIL${NC}"
-+		exit 1
-+	fi
-+	echo -e "${TEST}: ${GREEN}PASS${NC}"
-+
-+	TEST="TCPv6 connectivity test"
-+	ip netns exec ${NS_SRC} bash -c "timeout ${TIMEOUT} dd if=/dev/zero bs=1000 count=100 > /dev/tcp/${IP6_DST}/9006"
-+	if [ $? -ne 0 ]; then
-+		echo -e "${TEST}: ${RED}FAIL${NC}"
-+		exit 1
-+	fi
-+	echo -e "${TEST}: ${GREEN}PASS${NC}"
-+
-+	TEST="ICMPv4 connectivity test"
-+	ip netns exec ${NS_SRC} ping  $PING_ARG ${IP4_DST}
-+	if [ $? -ne 0 ]; then
-+		echo -e "${TEST}: ${RED}FAIL${NC}"
-+		exit 1
-+	fi
-+	echo -e "${TEST}: ${GREEN}PASS${NC}"
-+
-+	TEST="ICMPv6 connectivity test"
-+	ip netns exec ${NS_SRC} ping6 $PING_ARG ${IP6_DST}
-+	if [ $? -ne 0 ]; then
-+		echo -e "${TEST}: ${RED}FAIL${NC}"
-+		exit 1
-+	fi
-+	echo -e "${TEST}: ${GREEN}PASS${NC}"
-+
-+	set -e
-+}
-+
-+hex_mem_str()
-+{
-+	perl -e 'print join(" ", unpack("(H2)8", pack("L", @ARGV)))' $1
-+}
-+
-+netns_setup_neigh()
-+{
-+	ip netns exec ${NS_FWD} tc qdisc add dev veth_src_fwd clsact
-+	ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd ingress bpf da obj test_tc_neigh.o sec src_ingress
-+	ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd egress  bpf da obj test_tc_neigh.o sec chk_egress
-+
-+	ip netns exec ${NS_FWD} tc qdisc add dev veth_dst_fwd clsact
-+	ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd ingress bpf da obj test_tc_neigh.o sec dst_ingress
-+	ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd egress  bpf da obj test_tc_neigh.o sec chk_egress
-+
-+	veth_src=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_src_fwd/ifindex)
-+	veth_dst=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_dst_fwd/ifindex)
-+
-+	progs=$(ip netns exec ${NS_FWD} bpftool net --json | jq -r '.[] | .tc | map(.id) | .[]')
-+	for prog in $progs; do
-+		map=$(bpftool prog show id $prog --json | jq -r '.map_ids | .? | .[]')
-+		if [ ! -z "$map" ]; then
-+			bpftool map update id $map key hex $(hex_mem_str 0) value hex $(hex_mem_str $veth_src)
-+			bpftool map update id $map key hex $(hex_mem_str 1) value hex $(hex_mem_str $veth_dst)
-+		fi
-+	done
-+}
-+
-+trap netns_cleanup EXIT
-+set -e
-+
-+netns_setup
-+netns_setup_neigh
-+netns_test_connectivity
--- 
-2.21.0
+[acme@five pahole]$ cp ~/git/build/v5.9-rc6+/net/ipv4/tcp_ipv4.o .
+[acme@five pahole]$ readelf -SW tcp_ipv4.o | grep BTF
+[acme@five pahole]$ pahole -J tcp_ipv4.o
+[acme@five pahole]$ readelf -SW tcp_ipv4.o | grep BTF
+  [105] .BTF              PROGBITS        0000000000000000 0fbb3c 03f697 00      0   0  1
+[acme@five pahole]$ ./btfdiff tcp_ipv4.o
+--- /tmp/btfdiff.dwarf.BDAvGi	2020-10-09 11:41:45.161509391 -0300
++++ /tmp/btfdiff.btf.p81icw	2020-10-09 11:41:45.177509720 -0300
+@@ -4056,7 +4056,7 @@ struct tcp_congestion_ops {
+ 	u32                        (*min_tso_segs)(struct sock *); /*    96     8 */
+ 	u32                        (*sndbuf_expand)(struct sock *); /*   104     8 */
+ 	void                       (*cong_control)(struct sock *, const struct rate_sample  *); /*   112     8 */
+-	size_t                     (*get_info)(struct sock *, u32, int *, union tcp_cc_info *); /*   120     8 */
++	size_t                     (*get_info)(struct sock *, u32, int *, struct tcp_cc_info *); /*   120     8 */
+ 	/* --- cacheline 2 boundary (128 bytes) --- */
+ 	char                       name[16];             /*   128    16 */
+ 	struct module *            owner;                /*   144     8 */
+[acme@five pahole]$ git log --oneline -5
+ef4f971a9cf745fc (HEAD) dwarf_loader: Conditionally define DW_AT_alignment
+cc3f9dce3378280f pahole: Implement --packed
+08f49262f474370a man-pages: Fix 'coimbine' typo
+fdc639188cb514e4 (tag: v1.18) dwarves: Prep v1.18
+70c3e669709b6351 spec: Set the build type to 'Release'
+[acme@five pahole]$
 
+And looking at the source code it is a union:
+
+include/net/tcp.h
+
+        size_t (*get_info)(struct sock *sk, u32 ext, int *attr,
+                           union tcp_cc_info *info);
+
+
+So this tcp_cc_info isn't available in DWARF and thus isn't available in
+the resulting BTF:
+
+[acme@five pahole]$ pahole -F dwarf -C tcp_cc_info tcp_ipv4.o
+pahole: type 'tcp_cc_info' not found
+[acme@five pahole]$ pahole -F btf -C tcp_cc_info tcp_ipv4.o
+pahole: type 'tcp_cc_info' not found
+[acme@five pahole]$
+
+
+If you look at /sys/kernel/btf/vmlinux it is there:
+
+[acme@five pahole]$ pahole tcp_cc_info
+union tcp_cc_info {
+	struct tcpvegas_info       vegas;              /*     0    16 */
+	struct tcp_dctcp_info      dctcp;              /*     0    16 */
+	struct tcp_bbr_info        bbr;                /*     0    20 */
+};
+[acme@five pahole]$
+
+I.e. when encoding vmlinux we're good and for the BTF use case so far
+this is thus not a problem, will continue processing your patches and
+then later try to figure this out.
+
+For completeness when looking at tcp_congestion_ops using
+/sys/kernel/btf/vmlinux, all is ok:
+
+[acme@five pahole]$ pahole tcp_congestion_ops
+struct tcp_congestion_ops {
+	struct list_head           list;                 /*     0    16 */
+	u32                        key;                  /*    16     4 */
+	u32                        flags;                /*    20     4 */
+	void                       (*init)(struct sock *); /*    24     8 */
+	void                       (*release)(struct sock *); /*    32     8 */
+	u32                        (*ssthresh)(struct sock *); /*    40     8 */
+	void                       (*cong_avoid)(struct sock *, u32, u32); /*    48     8 */
+	void                       (*set_state)(struct sock *, u8); /*    56     8 */
+	/* --- cacheline 1 boundary (64 bytes) --- */
+	void                       (*cwnd_event)(struct sock *, enum tcp_ca_event); /*    64     8 */
+	void                       (*in_ack_event)(struct sock *, u32); /*    72     8 */
+	u32                        (*undo_cwnd)(struct sock *); /*    80     8 */
+	void                       (*pkts_acked)(struct sock *, const struct ack_sample  *); /*    88     8 */
+	u32                        (*min_tso_segs)(struct sock *); /*    96     8 */
+	u32                        (*sndbuf_expand)(struct sock *); /*   104     8 */
+	void                       (*cong_control)(struct sock *, const struct rate_sample  *); /*   112     8 */
+	size_t                     (*get_info)(struct sock *, u32, int *, union tcp_cc_info *); /*   120     8 */
+	/* --- cacheline 2 boundary (128 bytes) --- */
+	char                       name[16];             /*   128    16 */
+	struct module *            owner;                /*   144     8 */
+
+	/* size: 152, cachelines: 3, members: 18 */
+	/* last cacheline: 24 bytes */
+};
+[acme@five pahole]$
+
+And a btfdiff on vmlinux also shows BTF and DWARF produce the same
+results:
+
+[acme@five pahole]$ cp ~/git/build/bpf-next-v5.9.0-rc8+/vmlinux .
+[acme@five pahole]$ readelf -SW vmlinux  | grep BTF
+  [24] .BTF              PROGBITS        ffffffff82494ac0 1694ac0 340207 00   A  0   0  1
+  [25] .BTF_ids          PROGBITS        ffffffff827d4cc8 19d4cc8 0000a4 00   A  0   0  1
+[acme@five pahole]$ ./btfdiff vmlinux
+[acme@five pahole]$
+
+- Arnaldo
