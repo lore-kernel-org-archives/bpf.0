@@ -2,69 +2,73 @@ Return-Path: <SRS0=vDm1=DQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A81FBC433DF
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 18:36:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CD0FC433DF
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 18:37:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 54F13222B9
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 18:36:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0867D222B9
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 18:37:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WmCkRtF/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OAtH2fZa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732585AbgJISgR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 14:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35390 "EHLO
+        id S1730090AbgJIShO (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 14:37:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731643AbgJISgM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Oct 2020 14:36:12 -0400
-Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 569EEC0613D2;
-        Fri,  9 Oct 2020 11:36:11 -0700 (PDT)
-Received: by mail-io1-xd42.google.com with SMTP id l8so11036389ioh.11;
-        Fri, 09 Oct 2020 11:36:11 -0700 (PDT)
+        with ESMTP id S1730660AbgJIShL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 14:37:11 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44998C0613D2;
+        Fri,  9 Oct 2020 11:37:11 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id l8so11039266ioh.11;
+        Fri, 09 Oct 2020 11:37:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:from:to:cc:date:message-id:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=LxGXnht7XM0f6Lg4juMi6AxmK12FOvrzP0jaYwfGoXs=;
-        b=WmCkRtF/KDdhWmebGvaBbCvnOAadAWP2H+4466n01VlOUzD2ZGixgVDy12v/t/IZmy
-         KH0iCL1aHPsvd5fKgs2yKvmT0TIw7oZuBQD9TDmPoo1MLUemjQzOS1PmPthGhqXyni1J
-         K0a47T47Hx5lci2VwGGjnuvGVdSFrRIqIWOJMGq8LBGcaRMvOS4Xh5wShVVpA9AfahSk
-         XZMyLXunAHgUhbF3WL+k/fQmQHugWA1rM8eYsIVcDjlz7sYkgTI81UhHbR702HTAyKOw
-         fHPsp6kiTqM4n5erC8I3IPrj2f7bdyhgiHjfwIVCqDqlv8cdHxoxMlWy9GONgA+b/5Yl
-         5rdA==
+        h=subject:from:to:cc:date:message-id:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=4G6r6URW9FykMvUhJ39nieM0iVhRm4HwhOKU1HTrCTM=;
+        b=OAtH2fZawxdfViRetetKOrBvPK4Dl80F6ldjO2RIvbT33Pxk6ggv+tespKTrDRcY5u
+         OyVx+gU0mocGi3SAWCraSQteQgc5cLoHYlf6vGtGEgfIBUIXztpnFYdMcbF1qDn88hL/
+         QN9w0vqLGCGDD3zP72ybu3brha2ujLC4eCx8vkzjZ44BBM40Pbq/zMr1v4+R2vHI6hCo
+         SKzBfjOL5NqqCg4VlhQryjrs4NtGZRIkCo0vtDqRYrNZovlHGmcABj3mryKUT+EMeoIb
+         uiMkCiXtzGCifJNoeQTuCmYJl1C18cm1fQB53bGGWkl6/tmTkmvP+D4UE+I0cQZH/ebS
+         Cd/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=LxGXnht7XM0f6Lg4juMi6AxmK12FOvrzP0jaYwfGoXs=;
-        b=N1bx/Pd5zfbxhZEUpEY+054uf/Vceb49SNjdEd16cSZH3zuTPCn6XxpZ0vwfbzlLLe
-         y/Y3QEPXSsAXd1IayGRSMjFUAuwNJdWm7/YwECogxYumMiOCwv6XoALllSLPHYNKAOI8
-         8Us4lea+XmWL7I6Hevw8cxWDDM7tkIXln8FEC4q6FX9WYmKDilo3KUPOanGHPHs/o/q5
-         wyM2g07XJQFbR7dUwMq3KbwqtDJNkcG3q7iIgZOwik9AFFZH4lbC9ZlUXFtAvs8edB1C
-         KTOxb6X0KITwnfuqfc6c9xm26UovyEBDQ8qPb13Vwymkrt3moDAcePxE9NJwgDP1sQ7l
-         KU8Q==
-X-Gm-Message-State: AOAM5303soN5qxx5APBTYTRUC3hsbBbIChO+gBNFgZm730Jd24/rRjK0
-        ZBIj+2yeCkrBXHqS/UpvnQM=
-X-Google-Smtp-Source: ABdhPJxXdrhcb7+pl7bfO/nRgINvDOo5lxZJtfAf7MbIDFin6FaN2kbwKl+o9zgqXOr5sghX5CZdGw==
-X-Received: by 2002:a05:6602:14c8:: with SMTP id b8mr10040399iow.170.1602268570660;
-        Fri, 09 Oct 2020 11:36:10 -0700 (PDT)
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=4G6r6URW9FykMvUhJ39nieM0iVhRm4HwhOKU1HTrCTM=;
+        b=uUjTHiyH+VWdu32Rk+Dktcf0QVwo+bptiE5XpPGxKWIBMHAXCYi1reD42j/uR4eKKV
+         pN22mkpCDjUBRnYLX7y64daphBSinpMvwVshmGMxnVxgM3KayYceQYe//vrHruBm3ePO
+         dxCkm1K0wnoTClPv1sh7DP6Dic06veQNNghepy3YU0PZ7jl3/n+v9V9IXuJYc2UPXLzl
+         kG2O1HQlHEq/SRDhBQRiV3gMVV3NB/7DvUr2Kc961iMmjiGVLtu9OA7C3hnjUnuIQF1Z
+         xDk/lV2KeozpHvJcY8raAOvWDkZPDFoiiwOdrr0x6hhzJsAvclcCQYmoADNzCNntPvnH
+         f4BQ==
+X-Gm-Message-State: AOAM53316xSr17rN2AuScvqvRmH5XnQhI7TvhOWUMvNTKNxREVy3Xm+D
+        mgcVCc1sAlYqXQ94qR/E5c4akvWUAt9Ilg==
+X-Google-Smtp-Source: ABdhPJzkicdBFXu3L0UhQ9gPkls6GWkrUA3tvWT0d9A0nxJwAxLSOSG2bDSTq/5Q7QEUXDJgXITU5g==
+X-Received: by 2002:a5e:9613:: with SMTP id a19mr10045968ioq.116.1602268630618;
+        Fri, 09 Oct 2020 11:37:10 -0700 (PDT)
 Received: from [127.0.1.1] ([184.63.162.180])
-        by smtp.gmail.com with ESMTPSA id z200sm3827979iof.47.2020.10.09.11.36.02
+        by smtp.gmail.com with ESMTPSA id g8sm1623906ilc.39.2020.10.09.11.37.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2020 11:36:10 -0700 (PDT)
-Subject: [bpf-next PATCH v2 0/6] sockmap/sk_skb program memory acct fixes
+        Fri, 09 Oct 2020 11:37:09 -0700 (PDT)
+Subject: [bpf-next PATCH v3 3/6] bpf,
+ sockmap: remove skb_set_owner_w wmem will be taken later from
+ sendpage
 From:   John Fastabend <john.fastabend@gmail.com>
 To:     john.fastabend@gmail.com, alexei.starovoitov@gmail.com,
         daniel@iogearbox.net
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, jakub@cloudflare.com,
         lmb@cloudflare.com
-Date:   Fri, 09 Oct 2020 11:35:53 -0700
-Message-ID: <160226839426.5692.13107801574043388675.stgit@john-Precision-5820-Tower>
+Date:   Fri, 09 Oct 2020 11:36:57 -0700
+Message-ID: <160226861708.5692.17964237936462425136.stgit@john-Precision-5820-Tower>
+In-Reply-To: <160226839426.5692.13107801574043388675.stgit@john-Precision-5820-Tower>
+References: <160226839426.5692.13107801574043388675.stgit@john-Precision-5820-Tower>
 User-Agent: StGit/0.17.1-dirty
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -73,77 +77,38 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Users of sockmap and skmsg trying to build proxys and other tools
-have pointed out to me the error handling can be problematic. If
-the proxy is under-provisioned and/or the BPF admin does not have
-the ability to update/modify memory provisions on the sockets
-its possible data may be dropped. For some things we have retries
-so everything works out OK, but for most things this is likely
-not great. And things go bad.
+The skb_set_owner_w is unnecessary here. The sendpage call will create a
+fresh skb and set the owner correctly from workqueue. Its also not entirely
+harmless because it consumes cycles, but also impacts resource accounting
+by increasing sk_wmem_alloc. This is charging the socket we are going to
+send to for the skb, but we will put it on the workqueue for some time
+before this happens so we are artifically inflating sk_wmem_alloc for
+this period. Further, we don't know how many skbs will be used to send the
+packet or how it will be broken up when sent over the new socket so
+charging it with one big sum is also not correct when the workqueue may
+break it up if facing memory pressure. Seeing we don't know how/when
+this is going to be sent drop the early accounting.
 
-The original design dropped memory accounting on the receive
-socket as early as possible. We did this early in sk_skb
-handling and then charged it to the redirect socket immediately
-after running the BPF program.
+A later patch will do proper accounting charged on receive socket for
+the case where skbs get enqueued on the workqueue.
 
-But, this design caused a fundamental problem. Namely, what should we do
-if we redirect to a socket that has already reached its socket memory
-limits. For proxy use cases the network admin can tune memory limits.
-But, in general we punted on this problem and told folks to simply make
-your memory limits high enough to handle your workload. This is not a
-really good answer. When deploying into environments where we expect this
-to be transparent its no longer the case because we need to tune params.
-In fact its really only viable in cases where we have fine grained
-control over the application. For example a proxy redirecting from an
-ingress socket to an egress socket. The result is I get bug
-reports because its surprising for one, but more importantly also breaks
-some use cases. So lets fix it.
-
-This series cleans up the different cases so that in many common
-modes, such as passing packet up to receive socket, we can simply
-use the underlying assumption that the TCP stack already has done
-memory accounting.
-
-Next instead of trying to do memory accounting against the socket
-we plan to redirect into we keep memory accounting on the receive
-socket until the skb can be put on the redirect socket. This means
-if we do an egress redirect to a socket and sock_writable() returns
-EAGAIN we can requeue the skb on the workqueue and try again. The
-same scenario plays out for ingress. If the skb can not be put on
-the receive queue of the redirect socket than we simply requeue and
-retry. In both cases memory is still accounted for against the
-receiving socket.
-
-This also handles head of line blocking. With the above scheme the
-skb is on a queue associated with the socket it will be sent/recv'd
-on, but the memory accounting is against the received socket. This
-means the receive socket can advance to the next skb and avoid head
-of line blocking. At least until its receive memory on the socket
-runs out. This will put some maximum size on the amount of data any
-socket can enqueue giving us bounds on the skb lists so they can't grow
-indefinitely.
-
-Overall I think this is a win. Tested with test_sockmap.
-
-These are fixes, but I tagged it for bpf-next considering we are
-at -rc8.
-
-v1->v2: Fix uninitialized/unused variables (kernel test robot)
-v2->v3: fix typo in patch2 err=0 needs to be <0 so use err=-EIO
-
+Fixes: 604326b41a6fb ("bpf, sockmap: convert to generic sk_msg interface")
+Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 ---
+ net/core/skmsg.c |    2 --
+ 1 file changed, 2 deletions(-)
 
-John Fastabend (6):
-      bpf, sockmap: skb verdict SK_PASS to self already checked rmem limits
-      bpf, sockmap: On receive programs try to fast track SK_PASS ingress
-      bpf, sockmap: remove skb_set_owner_w wmem will be taken later from sendpage
-      bpf, sockmap: remove dropped data on errors in redirect case
-      bpf, sockmap: Remove skb_orphan and let normal skb_kfree do cleanup
-      bpf, sockmap: Add memory accounting so skbs on ingress lists are visible
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index 4b160d97b7f9..7389d5d7e7f8 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -728,8 +728,6 @@ static void sk_psock_skb_redirect(struct sk_buff *skb)
+ 	    (ingress &&
+ 	     atomic_read(&sk_other->sk_rmem_alloc) <=
+ 	     sk_other->sk_rcvbuf)) {
+-		if (!ingress)
+-			skb_set_owner_w(skb, sk_other);
+ 		skb_queue_tail(&psock_other->ingress_skb, skb);
+ 		schedule_work(&psock_other->work);
+ 	} else {
 
-
- net/core/skmsg.c |   83 +++++++++++++++++++++++++++++-------------------------
- 1 file changed, 45 insertions(+), 38 deletions(-)
-
---
-Signature
