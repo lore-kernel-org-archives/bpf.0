@@ -2,206 +2,96 @@ Return-Path: <SRS0=vDm1=DQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65265C43467
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:08:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DE360C433E7
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:08:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1ED4A2053B
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:08:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7C13F20659
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:08:25 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oeu8a+jw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730978AbgJIUHa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 16:07:30 -0400
-Received: from mga06.intel.com ([134.134.136.31]:1621 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403959AbgJITvm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Oct 2020 15:51:42 -0400
-IronPort-SDR: OvUdnTIo53H2AyyTnYh4FWnAgUT0vb6jIYBsFTvfZM4VsCqvxXdHL/PCZfQ+hdONhRPcaXWgsk
- GWtbV+Ff7Znw==
-X-IronPort-AV: E=McAfee;i="6000,8403,9769"; a="227178845"
-X-IronPort-AV: E=Sophos;i="5.77,355,1596524400"; 
-   d="scan'208";a="227178845"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 12:51:39 -0700
-IronPort-SDR: 6nDyG/rNIU8VCp7PRxt8N7VM6Ts7FaR6Cq3BMAOPdzxAbIieQhQY1hWISzmf8TSYIGXE2cP/wS
- 1DDas2UbMNkw==
-X-IronPort-AV: E=Sophos;i="5.77,355,1596524400"; 
-   d="scan'208";a="345147432"
-Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 12:51:37 -0700
-From:   ira.weiny@intel.com
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Ira Weiny <ira.weiny@intel.com>, Steve French <sfrench@samba.org>,
-        x86@kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kvm@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        kexec@lists.infradead.org, linux-bcache@vger.kernel.org,
-        linux-mtd@lists.infradead.org, devel@driverdev.osuosl.org,
-        linux-efi@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-aio@kvack.org,
-        io-uring@vger.kernel.org, linux-erofs@lists.ozlabs.org,
-        linux-um@lists.infradead.org, linux-ntfs-dev@lists.sourceforge.net,
-        reiserfs-devel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-nilfs@vger.kernel.org, cluster-devel@redhat.com,
-        ecryptfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-afs@lists.infradead.org,
-        linux-rdma@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-cachefs@redhat.com,
-        samba-technical@lists.samba.org, intel-wired-lan@lists.osuosl.org
-Subject: [PATCH RFC PKS/PMEM 14/58] fs/cifs: Utilize new kmap_thread()
-Date:   Fri,  9 Oct 2020 12:49:49 -0700
-Message-Id: <20201009195033.3208459-15-ira.weiny@intel.com>
-X-Mailer: git-send-email 2.28.0.rc0.12.gb6a658bd00c9
-In-Reply-To: <20201009195033.3208459-1-ira.weiny@intel.com>
-References: <20201009195033.3208459-1-ira.weiny@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S2391517AbgJIUIY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 16:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391698AbgJIUHl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 16:07:41 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D44ACC0613DD;
+        Fri,  9 Oct 2020 13:06:31 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id l16so10278500ilt.13;
+        Fri, 09 Oct 2020 13:06:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=YZkhJ3zLL3unnY2khtCvmLdTmx+8lDPbcz5UWxUwniw=;
+        b=Oeu8a+jw3ev7MAOvRVTpbMfI9veQqql0gprJSq2RkA+bfwldDqEq7Kpr21KGexB0so
+         ElFlJygzUTm8KocSFdKxd2ATb4ldsgkaDmjsoyxoxHMQH36vrbxxFlIme8Zi7zSavTXY
+         xG6u/lssUUYomhVDpTBYi9W7RuSLK9ri67OnMMnYhwd9ududQtz5hEKchvxsraK46JuJ
+         +7MALPirq2CsWwmyTXSWCzl9/O1WkDHCKM5LLLts94PjkxwfSefuPMlu+NnKe938TtRD
+         A0wiB47Tbup+Tnbo74YR7eYnnWWHODBxOONVFLGw5400MU6sZEz243QfqT9C7EX/oTrP
+         eBKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=YZkhJ3zLL3unnY2khtCvmLdTmx+8lDPbcz5UWxUwniw=;
+        b=eTElh+D17XRLfN65XL5yQnEWv6GrUJ0V28sN898n0Fm2UiQUGsRhC1ttmvI/lfzG2m
+         4iVjhmF+zJhQt/eqQZmDLxitBmHsTTo2gAXOgjS0t1pEvhqiyD/a2n+mxzfwTaoSqqlN
+         zl3tLWY/DakqDhMUirtd8N4734YKUc7m2T4XsdjZ+PAmtKscN8HZZ9yKczDfDaYdaQVP
+         ceCDqxI7+NsWfMD/+1B5eNxjqjimHA3aHLKBmlncdMUmry88GQGDZObRnxsaj4NoN55/
+         QI/moXPA0upTbpjtPn5DWwtZPVRGziUwJ5k8afDkVCg/thB5jOYc1IL/dVBQImZOVuwq
+         hqBA==
+X-Gm-Message-State: AOAM531deZ7BTKck+qm7Dj9w2htrOLE+WXzaybBRZ5ioTSm83DgGrPIf
+        Iwo9dzkZIQahpWnvyBaZ18A=
+X-Google-Smtp-Source: ABdhPJzR9dLH1fWQ6sFv99rqMEKbzjNJKrSR4muSdwWnGbyEMpd8lRnEuu8dQf/dH2mokFvh9ha0ig==
+X-Received: by 2002:a92:ddcb:: with SMTP id d11mr12268425ilr.228.1602273991264;
+        Fri, 09 Oct 2020 13:06:31 -0700 (PDT)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id c9sm2035612iow.1.2020.10.09.13.06.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2020 13:06:30 -0700 (PDT)
+Date:   Fri, 09 Oct 2020 13:06:22 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        davem@davemloft.net
+Cc:     daniel@iogearbox.net, john.fastabend@gmail.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org, kernel-team@fb.com
+Message-ID: <5f80c2be10b0d_ed742081f@john-XPS-13-9370.notmuch>
+In-Reply-To: <20201009011240.48506-5-alexei.starovoitov@gmail.com>
+References: <20201009011240.48506-1-alexei.starovoitov@gmail.com>
+ <20201009011240.48506-5-alexei.starovoitov@gmail.com>
+Subject: RE: [PATCH v2 bpf-next 4/4] selftests/bpf: Asm tests for the verifier
+ regalloc tracking.
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Ira Weiny <ira.weiny@intel.com>
+Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+> Add asm tests for register allocator tracking logic.
+> 
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  .../testing/selftests/bpf/verifier/regalloc.c | 243 ++++++++++++++++++
+>  1 file changed, 243 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/verifier/regalloc.c
+> 
 
-The kmap() calls in this FS are localized to a single thread.  To avoid
-the over head of global PKRS updates use the new kmap_thread() call.
+I'm writing some extra tests now for a few things so I'll probably also add
+some to track the bounds for non-const through stack spill today or
+monday.
 
-Cc: Steve French <sfrench@samba.org>
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
----
- fs/cifs/cifsencrypt.c |  6 +++---
- fs/cifs/file.c        | 16 ++++++++--------
- fs/cifs/smb2ops.c     |  8 ++++----
- 3 files changed, 15 insertions(+), 15 deletions(-)
-
-diff --git a/fs/cifs/cifsencrypt.c b/fs/cifs/cifsencrypt.c
-index 9daa256f69d4..2f8232d01a56 100644
---- a/fs/cifs/cifsencrypt.c
-+++ b/fs/cifs/cifsencrypt.c
-@@ -82,17 +82,17 @@ int __cifs_calc_signature(struct smb_rqst *rqst,
- 
- 		rqst_page_get_length(rqst, i, &len, &offset);
- 
--		kaddr = (char *) kmap(rqst->rq_pages[i]) + offset;
-+		kaddr = (char *) kmap_thread(rqst->rq_pages[i]) + offset;
- 
- 		rc = crypto_shash_update(shash, kaddr, len);
- 		if (rc) {
- 			cifs_dbg(VFS, "%s: Could not update with payload\n",
- 				 __func__);
--			kunmap(rqst->rq_pages[i]);
-+			kunmap_thread(rqst->rq_pages[i]);
- 			return rc;
- 		}
- 
--		kunmap(rqst->rq_pages[i]);
-+		kunmap_thread(rqst->rq_pages[i]);
- 	}
- 
- 	rc = crypto_shash_final(shash, signature);
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index be46fab4c96d..6db2caab8852 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -2145,17 +2145,17 @@ static int cifs_partialpagewrite(struct page *page, unsigned from, unsigned to)
- 	inode = page->mapping->host;
- 
- 	offset += (loff_t)from;
--	write_data = kmap(page);
-+	write_data = kmap_thread(page);
- 	write_data += from;
- 
- 	if ((to > PAGE_SIZE) || (from > to)) {
--		kunmap(page);
-+		kunmap_thread(page);
- 		return -EIO;
- 	}
- 
- 	/* racing with truncate? */
- 	if (offset > mapping->host->i_size) {
--		kunmap(page);
-+		kunmap_thread(page);
- 		return 0; /* don't care */
- 	}
- 
-@@ -2183,7 +2183,7 @@ static int cifs_partialpagewrite(struct page *page, unsigned from, unsigned to)
- 			rc = -EIO;
- 	}
- 
--	kunmap(page);
-+	kunmap_thread(page);
- 	return rc;
- }
- 
-@@ -2559,10 +2559,10 @@ static int cifs_write_end(struct file *file, struct address_space *mapping,
- 		   known which we might as well	leverage */
- 		/* BB check if anything else missing out of ppw
- 		   such as updating last write time */
--		page_data = kmap(page);
-+		page_data = kmap_thread(page);
- 		rc = cifs_write(cfile, pid, page_data + offset, copied, &pos);
- 		/* if (rc < 0) should we set writebehind rc? */
--		kunmap(page);
-+		kunmap_thread(page);
- 
- 		free_xid(xid);
- 	} else {
-@@ -4511,7 +4511,7 @@ static int cifs_readpage_worker(struct file *file, struct page *page,
- 	if (rc == 0)
- 		goto read_complete;
- 
--	read_data = kmap(page);
-+	read_data = kmap_thread(page);
- 	/* for reads over a certain size could initiate async read ahead */
- 
- 	rc = cifs_read(file, read_data, PAGE_SIZE, poffset);
-@@ -4540,7 +4540,7 @@ static int cifs_readpage_worker(struct file *file, struct page *page,
- 	rc = 0;
- 
- io_error:
--	kunmap(page);
-+	kunmap_thread(page);
- 	unlock_page(page);
- 
- read_complete:
-diff --git a/fs/cifs/smb2ops.c b/fs/cifs/smb2ops.c
-index 32f90dc82c84..a3e7ebab38b6 100644
---- a/fs/cifs/smb2ops.c
-+++ b/fs/cifs/smb2ops.c
-@@ -4068,12 +4068,12 @@ smb3_init_transform_rq(struct TCP_Server_Info *server, int num_rqst,
- 
- 			rqst_page_get_length(&new_rq[i], j, &len, &offset);
- 
--			dst = (char *) kmap(new_rq[i].rq_pages[j]) + offset;
--			src = (char *) kmap(old_rq[i - 1].rq_pages[j]) + offset;
-+			dst = (char *) kmap_thread(new_rq[i].rq_pages[j]) + offset;
-+			src = (char *) kmap_thread(old_rq[i - 1].rq_pages[j]) + offset;
- 
- 			memcpy(dst, src, len);
--			kunmap(new_rq[i].rq_pages[j]);
--			kunmap(old_rq[i - 1].rq_pages[j]);
-+			kunmap_thread(new_rq[i].rq_pages[j]);
-+			kunmap_thread(old_rq[i - 1].rq_pages[j]);
- 		}
- 	}
- 
--- 
-2.28.0.rc0.12.gb6a658bd00c9
-
+Acked-by: John Fastabend <john.fastabend@gmail.com>
