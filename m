@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5965C433DF
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:42:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7201C43467
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:43:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC89B22282
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:42:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD4FA22277
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:43:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390595AbgJIUmx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 16:42:53 -0400
-Received: from www62.your-server.de ([213.133.104.62]:39478 "EHLO
+        id S2390785AbgJIUm6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 16:42:58 -0400
+Received: from www62.your-server.de ([213.133.104.62]:39494 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729587AbgJIUmw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Oct 2020 16:42:52 -0400
+        with ESMTP id S2390511AbgJIUmx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 16:42:53 -0400
 Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1kQzE2-000854-D1; Fri, 09 Oct 2020 22:42:50 +0200
+        id 1kQzE3-00085Q-8S; Fri, 09 Oct 2020 22:42:51 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     daniel@iogearbox.net, john.fastabend@gmail.com, yhs@fb.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v3 4/6] bpf, selftests: add test for different array inner map size
-Date:   Fri,  9 Oct 2020 22:42:43 +0200
-Message-Id: <20201009204245.27905-5-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v3 6/6] bpf, selftests: add redirect_peer selftest
+Date:   Fri,  9 Oct 2020 22:42:45 +0200
+Message-Id: <20201009204245.27905-7-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20201009204245.27905-1-daniel@iogearbox.net>
 References: <20201009204245.27905-1-daniel@iogearbox.net>
@@ -42,162 +42,119 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extend the "diff_size" subtest to also include a non-inlined array map variant
-where dynamic inner #elems are possible.
+Extend the test_tc_redirect test and add a small test that exercises the new
+redirect_peer() helper for the IPv4 and IPv6 case.
 
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Yonghong Song <yhs@fb.com>
 ---
- .../selftests/bpf/prog_tests/btf_map_in_map.c | 39 ++++++++++++-----
- .../selftests/bpf/progs/test_btf_map_in_map.c | 43 +++++++++++++++++++
- 2 files changed, 72 insertions(+), 10 deletions(-)
+ .../selftests/bpf/progs/test_tc_peer.c        | 45 +++++++++++++++++++
+ .../testing/selftests/bpf/test_tc_redirect.sh | 25 +++++++----
+ 2 files changed, 61 insertions(+), 9 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_tc_peer.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-index 540fea4c91a5..76ebe4c250f1 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-@@ -55,10 +55,10 @@ static int kern_sync_rcu(void)
- 
- static void test_lookup_update(void)
- {
--	int err, key = 0, val, i;
-+	int map1_fd, map2_fd, map3_fd, map4_fd, map5_fd, map1_id, map2_id;
-+	int outer_arr_fd, outer_hash_fd, outer_arr_dyn_fd;
- 	struct test_btf_map_in_map *skel;
--	int outer_arr_fd, outer_hash_fd;
--	int fd, map1_fd, map2_fd, map1_id, map2_id;
-+	int err, key = 0, val, i, fd;
- 
- 	skel = test_btf_map_in_map__open_and_load();
- 	if (CHECK(!skel, "skel_open", "failed to open&load skeleton\n"))
-@@ -70,32 +70,45 @@ static void test_lookup_update(void)
- 
- 	map1_fd = bpf_map__fd(skel->maps.inner_map1);
- 	map2_fd = bpf_map__fd(skel->maps.inner_map2);
-+	map3_fd = bpf_map__fd(skel->maps.inner_map3);
-+	map4_fd = bpf_map__fd(skel->maps.inner_map4);
-+	map5_fd = bpf_map__fd(skel->maps.inner_map5);
-+	outer_arr_dyn_fd = bpf_map__fd(skel->maps.outer_arr_dyn);
- 	outer_arr_fd = bpf_map__fd(skel->maps.outer_arr);
- 	outer_hash_fd = bpf_map__fd(skel->maps.outer_hash);
- 
--	/* inner1 = input, inner2 = input + 1 */
--	map1_fd = bpf_map__fd(skel->maps.inner_map1);
-+	/* inner1 = input, inner2 = input + 1, inner3 = input + 2 */
- 	bpf_map_update_elem(outer_arr_fd, &key, &map1_fd, 0);
--	map2_fd = bpf_map__fd(skel->maps.inner_map2);
- 	bpf_map_update_elem(outer_hash_fd, &key, &map2_fd, 0);
-+	bpf_map_update_elem(outer_arr_dyn_fd, &key, &map3_fd, 0);
- 	skel->bss->input = 1;
- 	usleep(1);
--
- 	bpf_map_lookup_elem(map1_fd, &key, &val);
- 	CHECK(val != 1, "inner1", "got %d != exp %d\n", val, 1);
- 	bpf_map_lookup_elem(map2_fd, &key, &val);
- 	CHECK(val != 2, "inner2", "got %d != exp %d\n", val, 2);
-+	bpf_map_lookup_elem(map3_fd, &key, &val);
-+	CHECK(val != 3, "inner3", "got %d != exp %d\n", val, 3);
- 
--	/* inner1 = input + 1, inner2 = input */
-+	/* inner2 = input, inner1 = input + 1, inner4 = input + 2 */
- 	bpf_map_update_elem(outer_arr_fd, &key, &map2_fd, 0);
- 	bpf_map_update_elem(outer_hash_fd, &key, &map1_fd, 0);
-+	bpf_map_update_elem(outer_arr_dyn_fd, &key, &map4_fd, 0);
- 	skel->bss->input = 3;
- 	usleep(1);
--
- 	bpf_map_lookup_elem(map1_fd, &key, &val);
- 	CHECK(val != 4, "inner1", "got %d != exp %d\n", val, 4);
- 	bpf_map_lookup_elem(map2_fd, &key, &val);
- 	CHECK(val != 3, "inner2", "got %d != exp %d\n", val, 3);
-+	bpf_map_lookup_elem(map4_fd, &key, &val);
-+	CHECK(val != 5, "inner4", "got %d != exp %d\n", val, 5);
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_peer.c b/tools/testing/selftests/bpf/progs/test_tc_peer.c
+new file mode 100644
+index 000000000000..fc84a7685aa2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_tc_peer.c
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <stdint.h>
++#include <stdbool.h>
 +
-+	/* inner5 = input + 2 */
-+	bpf_map_update_elem(outer_arr_dyn_fd, &key, &map5_fd, 0);
-+	skel->bss->input = 5;
-+	usleep(1);
-+	bpf_map_lookup_elem(map5_fd, &key, &val);
-+	CHECK(val != 7, "inner5", "got %d != exp %d\n", val, 7);
- 
- 	for (i = 0; i < 5; i++) {
- 		val = i % 2 ? map1_fd : map2_fd;
-@@ -106,7 +119,13 @@ static void test_lookup_update(void)
- 		}
- 		err = bpf_map_update_elem(outer_arr_fd, &key, &val, 0);
- 		if (CHECK_FAIL(err)) {
--			printf("failed to update hash_of_maps on iter #%d\n", i);
-+			printf("failed to update array_of_maps on iter #%d\n", i);
-+			goto cleanup;
-+		}
-+		val = i % 2 ? map4_fd : map5_fd;
-+		err = bpf_map_update_elem(outer_arr_dyn_fd, &key, &val, 0);
-+		if (CHECK_FAIL(err)) {
-+			printf("failed to update array_of_maps (dyn) on iter #%d\n", i);
- 			goto cleanup;
- 		}
- 	}
-diff --git a/tools/testing/selftests/bpf/progs/test_btf_map_in_map.c b/tools/testing/selftests/bpf/progs/test_btf_map_in_map.c
-index 193fe0198b21..ccad6f9beabd 100644
---- a/tools/testing/selftests/bpf/progs/test_btf_map_in_map.c
-+++ b/tools/testing/selftests/bpf/progs/test_btf_map_in_map.c
-@@ -41,6 +41,43 @@ struct outer_arr {
- 	.values = { (void *)&inner_map1, 0, (void *)&inner_map2 },
- };
- 
-+struct inner_map_sz3 {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(map_flags, BPF_F_NO_INLINE);
-+	__uint(max_entries, 3);
-+	__type(key, int);
-+	__type(value, int);
-+} inner_map3 SEC(".maps"),
-+  inner_map4 SEC(".maps");
++#include <linux/bpf.h>
++#include <linux/stddef.h>
++#include <linux/pkt_cls.h>
 +
-+struct inner_map_sz4 {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(map_flags, BPF_F_NO_INLINE);
-+	__uint(max_entries, 5);
-+	__type(key, int);
-+	__type(value, int);
-+} inner_map5 SEC(".maps");
++#include <bpf/bpf_helpers.h>
 +
-+struct outer_arr_dyn {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__uint(max_entries, 3);
-+	__uint(key_size, sizeof(int));
-+	__uint(value_size, sizeof(int));
-+	__array(values, struct {
-+		__uint(type, BPF_MAP_TYPE_ARRAY);
-+		__uint(map_flags, BPF_F_NO_INLINE);
-+		__uint(max_entries, 1);
-+		__type(key, int);
-+		__type(value, int);
-+	});
-+} outer_arr_dyn SEC(".maps") = {
-+	.values = {
-+		[0] = (void *)&inner_map3,
-+		[1] = (void *)&inner_map4,
-+		[2] = (void *)&inner_map5,
-+	},
++enum {
++	dev_src,
++	dev_dst,
 +};
 +
- struct outer_hash {
- 	__uint(type, BPF_MAP_TYPE_HASH_OF_MAPS);
- 	__uint(max_entries, 5);
-@@ -101,6 +138,12 @@ int handle__sys_enter(void *ctx)
- 	val = input + 1;
- 	bpf_map_update_elem(inner_map, &key, &val, 0);
- 
-+	inner_map = bpf_map_lookup_elem(&outer_arr_dyn, &key);
-+	if (!inner_map)
-+		return 1;
-+	val = input + 2;
-+	bpf_map_update_elem(inner_map, &key, &val, 0);
++struct bpf_map_def SEC("maps") ifindex_map = {
++	.type		= BPF_MAP_TYPE_ARRAY,
++	.key_size	= sizeof(int),
++	.value_size	= sizeof(int),
++	.max_entries	= 2,
++};
 +
- 	return 0;
++static __always_inline int get_dev_ifindex(int which)
++{
++	int *ifindex = bpf_map_lookup_elem(&ifindex_map, &which);
++
++	return ifindex ? *ifindex : 0;
++}
++
++SEC("chk_egress") int tc_chk(struct __sk_buff *skb)
++{
++	return TC_ACT_SHOT;
++}
++
++SEC("dst_ingress") int tc_dst(struct __sk_buff *skb)
++{
++	return bpf_redirect_peer(get_dev_ifindex(dev_src), 0);
++}
++
++SEC("src_ingress") int tc_src(struct __sk_buff *skb)
++{
++	return bpf_redirect_peer(get_dev_ifindex(dev_dst), 0);
++}
++
++char __license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/test_tc_redirect.sh b/tools/testing/selftests/bpf/test_tc_redirect.sh
+index 6ad441405132..6d7482562140 100755
+--- a/tools/testing/selftests/bpf/test_tc_redirect.sh
++++ b/tools/testing/selftests/bpf/test_tc_redirect.sh
+@@ -4,9 +4,10 @@
+ # This test sets up 3 netns (src <-> fwd <-> dst). There is no direct veth link
+ # between src and dst. The netns fwd has veth links to each src and dst. The
+ # client is in src and server in dst. The test installs a TC BPF program to each
+-# host facing veth in fwd which calls into bpf_redirect_peer() to perform the
+-# neigh addr population and redirect; it also installs a dropper prog on the
+-# egress side to drop skbs if neigh addrs were not populated.
++# host facing veth in fwd which calls into i) bpf_redirect_neigh() to perform the
++# neigh addr population and redirect or ii) bpf_redirect_peer() for namespace
++# switch from ingress side; it also installs a checker prog on the egress side
++# to drop unexpected traffic.
+ 
+ if [[ $EUID -ne 0 ]]; then
+ 	echo "This script must be run as root"
+@@ -166,15 +167,17 @@ hex_mem_str()
+ 	perl -e 'print join(" ", unpack("(H2)8", pack("L", @ARGV)))' $1
  }
  
+-netns_setup_neigh()
++netns_setup_bpf()
+ {
++	local obj=$1
++
+ 	ip netns exec ${NS_FWD} tc qdisc add dev veth_src_fwd clsact
+-	ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd ingress bpf da obj test_tc_neigh.o sec src_ingress
+-	ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd egress  bpf da obj test_tc_neigh.o sec chk_egress
++	ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd ingress bpf da obj $obj sec src_ingress
++	ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd egress  bpf da obj $obj sec chk_egress
+ 
+ 	ip netns exec ${NS_FWD} tc qdisc add dev veth_dst_fwd clsact
+-	ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd ingress bpf da obj test_tc_neigh.o sec dst_ingress
+-	ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd egress  bpf da obj test_tc_neigh.o sec chk_egress
++	ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd ingress bpf da obj $obj sec dst_ingress
++	ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd egress  bpf da obj $obj sec chk_egress
+ 
+ 	veth_src=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_src_fwd/ifindex)
+ 	veth_dst=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_dst_fwd/ifindex)
+@@ -193,5 +196,9 @@ trap netns_cleanup EXIT
+ set -e
+ 
+ netns_setup
+-netns_setup_neigh
++netns_setup_bpf test_tc_neigh.o
++netns_test_connectivity
++netns_cleanup
++netns_setup
++netns_setup_bpf test_tc_peer.o
+ netns_test_connectivity
 -- 
 2.17.1
 
