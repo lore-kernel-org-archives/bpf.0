@@ -7,41 +7,42 @@ X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FEE1C433DF
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:03:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF317C4363D
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:03:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B14E22284
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:03:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6AD6B222BA
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 20:03:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389186AbgJITwv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 15:52:51 -0400
-Received: from mga06.intel.com ([134.134.136.31]:1664 "EHLO mga06.intel.com"
+        id S2388055AbgJIUDS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 16:03:18 -0400
+Received: from mga17.intel.com ([192.55.52.151]:34046 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403996AbgJITvy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Oct 2020 15:51:54 -0400
-IronPort-SDR: dx2C651xObHLbB3ebXZq7O3vvDLCkCp7YyEriat/+Fn1vQtkkOifEieLP9BqvQO5TVmymYi7WM
- okOGmreQGHCQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9769"; a="227178891"
+        id S2389118AbgJITwr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 15:52:47 -0400
+IronPort-SDR: HCJqdmCgpU6pXG1LsAwcTZbp9UGZICOvUpbuOIRNLSKkgIBl4bErNnLIrbSn24FVu1Q3zQC/2Q
+ 2KazPDmPpjUQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9769"; a="145397499"
 X-IronPort-AV: E=Sophos;i="5.77,355,1596524400"; 
-   d="scan'208";a="227178891"
+   d="scan'208";a="145397499"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 12:51:47 -0700
-IronPort-SDR: vdHXKYZiEWUJ0fN4OExd2VqdiXE9aYdlaLF6p7mD2X3g24JwvvcNWIkVlfM1uW7/GA3kn+ap6+
- Rex2Wyxl2AaA==
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 12:52:45 -0700
+IronPort-SDR: A7QVfEYpWd+zukvvJSzSDlmpc6UtcI1VTl49mnWle7o9+shZWHPb4ayBrZUheEhKcyM4kHv/QX
+ ai2WmfcpOoFA==
 X-IronPort-AV: E=Sophos;i="5.77,355,1596524400"; 
-   d="scan'208";a="298531066"
+   d="scan'208";a="389237190"
 Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 12:51:47 -0700
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 12:52:43 -0700
 From:   ira.weiny@intel.com
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>, x86@kernel.org,
+Cc:     Ira Weiny <ira.weiny@intel.com>, Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>, x86@kernel.org,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Dan Williams <dan.j.williams@intel.com>,
         Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
@@ -67,9 +68,9 @@ Cc:     Ira Weiny <ira.weiny@intel.com>,
         drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
         xen-devel@lists.xenproject.org, linux-cachefs@redhat.com,
         samba-technical@lists.samba.org, intel-wired-lan@lists.osuosl.org
-Subject: [PATCH RFC PKS/PMEM 17/58] fs/nilfs2: Utilize new kmap_thread()
-Date:   Fri,  9 Oct 2020 12:49:52 -0700
-Message-Id: <20201009195033.3208459-18-ira.weiny@intel.com>
+Subject: [PATCH RFC PKS/PMEM 32/58] fs/hostfs: Utilize new kmap_thread()
+Date:   Fri,  9 Oct 2020 12:50:07 -0700
+Message-Id: <20201009195033.3208459-33-ira.weiny@intel.com>
 X-Mailer: git-send-email 2.28.0.rc0.12.gb6a658bd00c9
 In-Reply-To: <20201009195033.3208459-1-ira.weiny@intel.com>
 References: <20201009195033.3208459-1-ira.weiny@intel.com>
@@ -84,154 +85,66 @@ From: Ira Weiny <ira.weiny@intel.com>
 The kmap() calls in this FS are localized to a single thread.  To avoid
 the over head of global PKRS updates use the new kmap_thread() call.
 
-Cc: Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Cc: Jeff Dike <jdike@addtoit.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
 Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 ---
- fs/nilfs2/alloc.c  | 34 +++++++++++++++++-----------------
- fs/nilfs2/cpfile.c |  4 ++--
- 2 files changed, 19 insertions(+), 19 deletions(-)
+ fs/hostfs/hostfs_kern.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/fs/nilfs2/alloc.c b/fs/nilfs2/alloc.c
-index adf3bb0a8048..2aa4c34094ef 100644
---- a/fs/nilfs2/alloc.c
-+++ b/fs/nilfs2/alloc.c
-@@ -524,7 +524,7 @@ int nilfs_palloc_prepare_alloc_entry(struct inode *inode,
- 		ret = nilfs_palloc_get_desc_block(inode, group, 1, &desc_bh);
- 		if (ret < 0)
- 			return ret;
--		desc_kaddr = kmap(desc_bh->b_page);
-+		desc_kaddr = kmap_thread(desc_bh->b_page);
- 		desc = nilfs_palloc_block_get_group_desc(
- 			inode, group, desc_bh, desc_kaddr);
- 		n = nilfs_palloc_rest_groups_in_desc_block(inode, group,
-@@ -536,7 +536,7 @@ int nilfs_palloc_prepare_alloc_entry(struct inode *inode,
- 					inode, group, 1, &bitmap_bh);
- 				if (ret < 0)
- 					goto out_desc;
--				bitmap_kaddr = kmap(bitmap_bh->b_page);
-+				bitmap_kaddr = kmap_thread(bitmap_bh->b_page);
- 				bitmap = bitmap_kaddr + bh_offset(bitmap_bh);
- 				pos = nilfs_palloc_find_available_slot(
- 					bitmap, group_offset,
-@@ -547,21 +547,21 @@ int nilfs_palloc_prepare_alloc_entry(struct inode *inode,
- 						desc, lock, -1);
- 					req->pr_entry_nr =
- 						entries_per_group * group + pos;
--					kunmap(desc_bh->b_page);
--					kunmap(bitmap_bh->b_page);
-+					kunmap_thread(desc_bh->b_page);
-+					kunmap_thread(bitmap_bh->b_page);
+diff --git a/fs/hostfs/hostfs_kern.c b/fs/hostfs/hostfs_kern.c
+index c070c0d8e3e9..608efd0f83cb 100644
+--- a/fs/hostfs/hostfs_kern.c
++++ b/fs/hostfs/hostfs_kern.c
+@@ -409,7 +409,7 @@ static int hostfs_writepage(struct page *page, struct writeback_control *wbc)
+ 	if (page->index >= end_index)
+ 		count = inode->i_size & (PAGE_SIZE-1);
  
- 					req->pr_desc_bh = desc_bh;
- 					req->pr_bitmap_bh = bitmap_bh;
- 					return 0;
- 				}
--				kunmap(bitmap_bh->b_page);
-+				kunmap_thread(bitmap_bh->b_page);
- 				brelse(bitmap_bh);
- 			}
+-	buffer = kmap(page);
++	buffer = kmap_thread(page);
  
- 			group_offset = 0;
- 		}
+ 	err = write_file(HOSTFS_I(inode)->fd, &base, buffer, count);
+ 	if (err != count) {
+@@ -425,7 +425,7 @@ static int hostfs_writepage(struct page *page, struct writeback_control *wbc)
+ 	err = 0;
  
--		kunmap(desc_bh->b_page);
-+		kunmap_thread(desc_bh->b_page);
- 		brelse(desc_bh);
- 	}
+  out:
+-	kunmap(page);
++	kunmap_thread(page);
  
-@@ -569,7 +569,7 @@ int nilfs_palloc_prepare_alloc_entry(struct inode *inode,
- 	return -ENOSPC;
+ 	unlock_page(page);
+ 	return err;
+@@ -437,7 +437,7 @@ static int hostfs_readpage(struct file *file, struct page *page)
+ 	loff_t start = page_offset(page);
+ 	int bytes_read, ret = 0;
  
-  out_desc:
--	kunmap(desc_bh->b_page);
-+	kunmap_thread(desc_bh->b_page);
- 	brelse(desc_bh);
+-	buffer = kmap(page);
++	buffer = kmap_thread(page);
+ 	bytes_read = read_file(FILE_HOSTFS_I(file)->fd, &start, buffer,
+ 			PAGE_SIZE);
+ 	if (bytes_read < 0) {
+@@ -454,7 +454,7 @@ static int hostfs_readpage(struct file *file, struct page *page)
+ 
+  out:
+ 	flush_dcache_page(page);
+-	kunmap(page);
++	kunmap_thread(page);
+ 	unlock_page(page);
  	return ret;
  }
-@@ -605,10 +605,10 @@ void nilfs_palloc_commit_free_entry(struct inode *inode,
- 	spinlock_t *lock;
+@@ -480,9 +480,9 @@ static int hostfs_write_end(struct file *file, struct address_space *mapping,
+ 	unsigned from = pos & (PAGE_SIZE - 1);
+ 	int err;
  
- 	group = nilfs_palloc_group(inode, req->pr_entry_nr, &group_offset);
--	desc_kaddr = kmap(req->pr_desc_bh->b_page);
-+	desc_kaddr = kmap_thread(req->pr_desc_bh->b_page);
- 	desc = nilfs_palloc_block_get_group_desc(inode, group,
- 						 req->pr_desc_bh, desc_kaddr);
--	bitmap_kaddr = kmap(req->pr_bitmap_bh->b_page);
-+	bitmap_kaddr = kmap_thread(req->pr_bitmap_bh->b_page);
- 	bitmap = bitmap_kaddr + bh_offset(req->pr_bitmap_bh);
- 	lock = nilfs_mdt_bgl_lock(inode, group);
+-	buffer = kmap(page);
++	buffer = kmap_thread(page);
+ 	err = write_file(FILE_HOSTFS_I(file)->fd, &pos, buffer + from, copied);
+-	kunmap(page);
++	kunmap_thread(page);
  
-@@ -620,8 +620,8 @@ void nilfs_palloc_commit_free_entry(struct inode *inode,
- 	else
- 		nilfs_palloc_group_desc_add_entries(desc, lock, 1);
- 
--	kunmap(req->pr_bitmap_bh->b_page);
--	kunmap(req->pr_desc_bh->b_page);
-+	kunmap_thread(req->pr_bitmap_bh->b_page);
-+	kunmap_thread(req->pr_desc_bh->b_page);
- 
- 	mark_buffer_dirty(req->pr_desc_bh);
- 	mark_buffer_dirty(req->pr_bitmap_bh);
-@@ -646,10 +646,10 @@ void nilfs_palloc_abort_alloc_entry(struct inode *inode,
- 	spinlock_t *lock;
- 
- 	group = nilfs_palloc_group(inode, req->pr_entry_nr, &group_offset);
--	desc_kaddr = kmap(req->pr_desc_bh->b_page);
-+	desc_kaddr = kmap_thread(req->pr_desc_bh->b_page);
- 	desc = nilfs_palloc_block_get_group_desc(inode, group,
- 						 req->pr_desc_bh, desc_kaddr);
--	bitmap_kaddr = kmap(req->pr_bitmap_bh->b_page);
-+	bitmap_kaddr = kmap_thread(req->pr_bitmap_bh->b_page);
- 	bitmap = bitmap_kaddr + bh_offset(req->pr_bitmap_bh);
- 	lock = nilfs_mdt_bgl_lock(inode, group);
- 
-@@ -661,8 +661,8 @@ void nilfs_palloc_abort_alloc_entry(struct inode *inode,
- 	else
- 		nilfs_palloc_group_desc_add_entries(desc, lock, 1);
- 
--	kunmap(req->pr_bitmap_bh->b_page);
--	kunmap(req->pr_desc_bh->b_page);
-+	kunmap_thread(req->pr_bitmap_bh->b_page);
-+	kunmap_thread(req->pr_desc_bh->b_page);
- 
- 	brelse(req->pr_bitmap_bh);
- 	brelse(req->pr_desc_bh);
-@@ -754,7 +754,7 @@ int nilfs_palloc_freev(struct inode *inode, __u64 *entry_nrs, size_t nitems)
- 		/* Get the first entry number of the group */
- 		group_min_nr = (__u64)group * epg;
- 
--		bitmap_kaddr = kmap(bitmap_bh->b_page);
-+		bitmap_kaddr = kmap_thread(bitmap_bh->b_page);
- 		bitmap = bitmap_kaddr + bh_offset(bitmap_bh);
- 		lock = nilfs_mdt_bgl_lock(inode, group);
- 
-@@ -800,7 +800,7 @@ int nilfs_palloc_freev(struct inode *inode, __u64 *entry_nrs, size_t nitems)
- 			entry_start = rounddown(group_offset, epb);
- 		} while (true);
- 
--		kunmap(bitmap_bh->b_page);
-+		kunmap_thread(bitmap_bh->b_page);
- 		mark_buffer_dirty(bitmap_bh);
- 		brelse(bitmap_bh);
- 
-diff --git a/fs/nilfs2/cpfile.c b/fs/nilfs2/cpfile.c
-index 86d4d850d130..402ab8bfce29 100644
---- a/fs/nilfs2/cpfile.c
-+++ b/fs/nilfs2/cpfile.c
-@@ -235,11 +235,11 @@ int nilfs_cpfile_get_checkpoint(struct inode *cpfile,
- 	ret = nilfs_cpfile_get_checkpoint_block(cpfile, cno, create, &cp_bh);
- 	if (ret < 0)
- 		goto out_header;
--	kaddr = kmap(cp_bh->b_page);
-+	kaddr = kmap_thread(cp_bh->b_page);
- 	cp = nilfs_cpfile_block_get_checkpoint(cpfile, cno, cp_bh, kaddr);
- 	if (nilfs_checkpoint_invalid(cp)) {
- 		if (!create) {
--			kunmap(cp_bh->b_page);
-+			kunmap_thread(cp_bh->b_page);
- 			brelse(cp_bh);
- 			ret = -ENOENT;
- 			goto out_header;
+ 	if (!PageUptodate(page) && err == PAGE_SIZE)
+ 		SetPageUptodate(page);
 -- 
 2.28.0.rc0.12.gb6a658bd00c9
 
