@@ -2,130 +2,102 @@ Return-Path: <SRS0=vDm1=DQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-8.5 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DBF1C433E7
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34D85C433DF
 	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 17:40:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C019522282
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 17:40:12 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OvglK0ql"
+	by mail.kernel.org (Postfix) with ESMTP id 075FE222C3
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 17:40:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733043AbgJIRQ2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 13:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731546AbgJIRPh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Oct 2020 13:15:37 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB88FC0613D5;
-        Fri,  9 Oct 2020 10:15:36 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id n6so10788224ioc.12;
-        Fri, 09 Oct 2020 10:15:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6QWwJmFq8+B51i1Dnz1FEveL5hiUIq3knnDImjqdYNQ=;
-        b=OvglK0ql2T5Rj2i89d2RG31J78gpJ11Kt+B8r5vsiTrs+HEDZgIUJGR2hEDVJ9czqq
-         AsrD9LLA31F/wV30sQ22To8RML0HHtbcU3W/qrggGVSqI7sjxvzkJfgkwNoKUftieHZT
-         e7onGJZm3lTHaEtUNcjUePx0wrarPZMx/aTfNeS/Rg/VzUJH++9s6FSuySVjLYGEz71P
-         jtDJ+s2JYvwqsBhW0FY46isRatRVLjmQi4ZokfWKagzVeNSkAmREQy1UwutWhkvZPhxU
-         2NIq2fE4uCBQxYJL0d0sJkT1n08/0tmul2VeF92SVDtXGybyRgk7mcYeeldfQy8VfdP8
-         aYlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6QWwJmFq8+B51i1Dnz1FEveL5hiUIq3knnDImjqdYNQ=;
-        b=NE0+Ol2AI/yP21py/YeBMt5dNbY8MeoHzh26+IPiDaGtx0WRxkAVItoaTMAb/VorA8
-         JcPUtZt+wezpoEkz/hnZ2wOi2J28WXtU27XWfCQO++WemjEjc2ABMvWx6vi4KVgy4SuJ
-         etulvRw9MI4x2IjDInm9+jovfRnHYPiP6Dk9pOpVtexvzACdhntOC1VsDp4WiVfq93z7
-         8m1AgNBNV5IRIvxjU0J//pudu3FQDVIVScPiR2uSRw7MAvieFRLcXHIy3qP5TV3HZkWO
-         O/xVzlvht5N6qOUy16X8EzNsgBXqAJzsOuNyKl520Ivg3Xzle/XGH3MvLLXjvRpkjWQ/
-         Om5Q==
-X-Gm-Message-State: AOAM5336K09nXQMqWF26PEHazSMM4Nc8PVbcaIy09bdb7HzaYtFb6j3N
-        qWGse2Lcd1zVK3y7UCOLOtg=
-X-Google-Smtp-Source: ABdhPJxoslx7HpNUVVcX2E2QarHbz/ANgA1kszpMKfOEp/x3H7i7qPRq/i/SzlUct3hiYaLvVG3nMw==
-X-Received: by 2002:a02:c611:: with SMTP id i17mr11902592jan.28.1602263736233;
-        Fri, 09 Oct 2020 10:15:36 -0700 (PDT)
-Received: from localhost.localdomain (host-173-230-99-154.tnkngak.clients.pavlovmedia.com. [173.230.99.154])
-        by smtp.gmail.com with ESMTPSA id c2sm3762830iot.52.2020.10.09.10.15.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2020 10:15:35 -0700 (PDT)
-From:   YiFei Zhu <zhuyifei1999@gmail.com>
-To:     containers@lists.linux-foundation.org
-Cc:     YiFei Zhu <yifeifz2@illinois.edu>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        David Laight <David.Laight@aculab.com>,
-        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Hubertus Franke <frankeh@us.ibm.com>,
-        Jack Chen <jianyan2@illinois.edu>,
-        Jann Horn <jannh@google.com>,
-        Josep Torrellas <torrella@illinois.edu>,
-        Kees Cook <keescook@chromium.org>,
-        Tianyin Xu <tyxu@illinois.edu>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Valentin Rothberg <vrothber@redhat.com>,
-        Will Drewry <wad@chromium.org>
-Subject: [PATCH v4 seccomp 3/5] x86: Enable seccomp architecture tracking
-Date:   Fri,  9 Oct 2020 12:14:31 -0500
-Message-Id: <122e3e70cf775e461ebdfadb5fbb4b6813cca3dd.1602263422.git.yifeifz2@illinois.edu>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <cover.1602263422.git.yifeifz2@illinois.edu>
-References: <cover.1602263422.git.yifeifz2@illinois.edu>
+        id S1729223AbgJIRjT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 13:39:19 -0400
+Received: from www62.your-server.de ([213.133.104.62]:36024 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733177AbgJIRjH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 13:39:07 -0400
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kQwMD-0000gW-Gs; Fri, 09 Oct 2020 19:39:05 +0200
+Received: from [178.196.57.75] (helo=pc-9.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kQwMD-000NOD-BX; Fri, 09 Oct 2020 19:39:05 +0200
+Subject: Re: libbpf error: unknown register name 'r0' in asm
+To:     Yaniv Agman <yanivagman@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Yonghong Song <yhs@fb.com>
+References: <CAMy7=ZUk08w5Gc2Z-EKi4JFtuUCaZYmE4yzhJjrExXpYKR4L8w@mail.gmail.com>
+ <a8abb367-ccad-2ee4-8c5e-ce3da7c4915d@iogearbox.net>
+ <CAMy7=ZXjna6q53h0uuar58fmAMi026w7u=ciVjTQXK2OHiOPJg@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <fadd5bd2-ed87-7e6b-d4bd-a802eb9ef6f8@iogearbox.net>
+Date:   Fri, 9 Oct 2020 19:39:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
+In-Reply-To: <CAMy7=ZXjna6q53h0uuar58fmAMi026w7u=ciVjTQXK2OHiOPJg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/25952/Fri Oct  9 15:52:40 2020)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+On 10/9/20 6:56 PM, Yaniv Agman wrote:
+> ‫בתאריך יום ו׳, 9 באוק׳ 2020 ב-19:27 מאת ‪Daniel Borkmann‬‏
+> <‪daniel@iogearbox.net‬‏>:‬
+>>
+>> [ Cc +Yonghong ]
+>>
+>> On 10/9/20 6:05 PM, Yaniv Agman wrote:
+>>> Pulling the latest changes of libbpf and compiling my application with it,
+>>> I see the following error:
+>>>
+>>> ../libbpf/src//root/usr/include/bpf/bpf_helpers.h:99:10: error:
+>>> unknown register name 'r0' in asm
+>>>                        : "r0", "r1", "r2", "r3", "r4", "r5");
+>>>
+>>> The commit which introduced this change is:
+>>> 80c7838600d39891f274e2f7508b95a75e4227c1
+>>>
+>>> I'm not sure if I'm doing something wrong (missing include?), or this
+>>> is a genuine error
+>>
+>> Seems like your clang/llvm version might be too old.
+> 
+> I'm using clang 10.0.1
 
-Provide seccomp internals with the details to calculate which syscall
-table the running kernel is expecting to deal with. This allows for
-efficient architecture pinning and paves the way for constant-action
-bitmaps.
+Ah, okay, I see. Would this diff do the trick for you?
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Co-developed-by: YiFei Zhu <yifeifz2@illinois.edu>
-Signed-off-by: YiFei Zhu <yifeifz2@illinois.edu>
----
- arch/x86/include/asm/seccomp.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+index 2bdb7d6dbad2..31e356831fcf 100644
+--- a/tools/lib/bpf/bpf_helpers.h
++++ b/tools/lib/bpf/bpf_helpers.h
+@@ -72,6 +72,7 @@
+  /*
+   * Helper function to perform a tail call with a constant/immediate map slot.
+   */
++#if __clang_major__ >= 10 && defined(__bpf__)
+  static __always_inline void
+  bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+  {
+@@ -98,6 +99,9 @@ bpf_tail_call_static(void *ctx, const void *map, const __u32 slot)
+  		     :: [ctx]"r"(ctx), [map]"r"(map), [slot]"i"(slot)
+  		     : "r0", "r1", "r2", "r3", "r4", "r5");
+  }
++#else
++# define bpf_tail_call_static	bpf_tail_call
++#endif /* __clang_major__ >= 10 && __bpf__ */
 
-diff --git a/arch/x86/include/asm/seccomp.h b/arch/x86/include/asm/seccomp.h
-index 2bd1338de236..03365af6165d 100644
---- a/arch/x86/include/asm/seccomp.h
-+++ b/arch/x86/include/asm/seccomp.h
-@@ -16,6 +16,18 @@
- #define __NR_seccomp_sigreturn_32	__NR_ia32_sigreturn
- #endif
- 
-+#ifdef CONFIG_X86_64
-+# define SECCOMP_ARCH_NATIVE		AUDIT_ARCH_X86_64
-+# define SECCOMP_ARCH_NATIVE_NR		NR_syscalls
-+# ifdef CONFIG_COMPAT
-+#  define SECCOMP_ARCH_COMPAT		AUDIT_ARCH_I386
-+#  define SECCOMP_ARCH_COMPAT_NR	IA32_NR_syscalls
-+# endif
-+#else /* !CONFIG_X86_64 */
-+# define SECCOMP_ARCH_NATIVE		AUDIT_ARCH_I386
-+# define SECCOMP_ARCH_NATIVE_NR	        NR_syscalls
-+#endif
-+
- #include <asm-generic/seccomp.h>
- 
- #endif /* _ASM_X86_SECCOMP_H */
--- 
-2.28.0
-
+  /*
+   * Helper structure used by eBPF C program
