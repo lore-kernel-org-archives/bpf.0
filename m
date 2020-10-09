@@ -2,183 +2,134 @@ Return-Path: <SRS0=vDm1=DQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9448CC83BA6
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 19:56:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AED4BC43467
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 19:56:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 61B5722B48
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 19:56:27 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dmujTgDS"
+	by mail.kernel.org (Postfix) with ESMTP id 8537722B48
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 19:56:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387769AbgJITzi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 15:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390962AbgJITx6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Oct 2020 15:53:58 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DDBC0613D2
-        for <bpf@vger.kernel.org>; Fri,  9 Oct 2020 12:53:58 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id h9so8120147ybm.4
-        for <bpf@vger.kernel.org>; Fri, 09 Oct 2020 12:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=9hrhhQq0TGvVEuCaQjlYPROV9f7jjnGTug3ix+D8ERM=;
-        b=dmujTgDSqPgDZR3Y8GBYQ2rsVMkEMmYj/vJbD2snPJVopEqXey/v2DY/b4ZjzLSgVk
-         /MkkhK+6o/3SHCwiPcn9N7ORNfl9DYLHoTPou6pGWBVLFGLJA8uzprSH0zZWq+nlLWZ0
-         gfi+Sq4eMpDcNi6QdR5SECUstXDCJEDtvT8Gwc6rCjfXIDcdk4xwdsBhtQYEKrHlc7mh
-         Ahq5LS2WleyWP5cyBvJY+vwKFUPFkxGIcOKb5wJHzigbrOooLTKPzhiKRIU4oKffR0lZ
-         /8H4l92xhg6EhEE0YxIXe3w1jK8sG209SFSE7vNUJ9W6CwDWGNloBrxS+TsLC5W7UEVm
-         fzVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9hrhhQq0TGvVEuCaQjlYPROV9f7jjnGTug3ix+D8ERM=;
-        b=mwm5l2naDEOT0kGm/Em9fF0gydpn0i4Ul1bV5vZFMa1RZtznJk2URvaagM/CTW5ccY
-         KN4Axrm3eWmJmf9BbucTRF+59RBfRVtBL4KjRIK/OOkULNxCP5nNMS9haVotIee3dRHP
-         re61NcErmLNGaZJcmokyJuCKX/om9ZT6Im48tDSZi3rR4Lbhjdxl4ACTaulSJE5OcgKU
-         L//e3xbGIRW9FKKPzyUmb7SaKt8YES02O8HiNr5we7WDUE1kzU3+odQ4EY9hm+7RLeDC
-         VXiJBrRRqVcWdCei6EtnMKE7IEd20JzxFNL/6Pu0gGjBpguI6XTdsiQDyr4ceT6Fshah
-         o6sQ==
-X-Gm-Message-State: AOAM532VlIztvmCWkJn+B5ZRwXf1p2BZZWNjVc/UgO4v0YS9Me8cTiC0
-        dXvzkC3LYgN26zjt3jaxMJOBvPiWme8TBG3Irro=
-X-Google-Smtp-Source: ABdhPJzTupNyCpotIbxl++ljdq4IKKt3HeiECiEDP0/79kDSsY0dvtczGHPOgZl6hpwv2aJHNzGf/O1cXATsb0f+lZ4=
-X-Received: by 2002:a25:8541:: with SMTP id f1mr17868249ybn.230.1602273237716;
- Fri, 09 Oct 2020 12:53:57 -0700 (PDT)
+        id S2388008AbgJIT4a (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 15:56:30 -0400
+Received: from mga01.intel.com ([192.55.52.88]:3799 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391193AbgJITxu (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 15:53:50 -0400
+IronPort-SDR: MvNEL5UE1YZMf2FFryOugVO1MjMPvxhOr9+ZaSGMEz70R+AZvmLzfRjcHaH4uHG4JrQCtBf6H0
+ UOe6thpPlnjQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9769"; a="182976499"
+X-IronPort-AV: E=Sophos;i="5.77,355,1596524400"; 
+   d="scan'208";a="182976499"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 12:53:48 -0700
+IronPort-SDR: hSLATPILKZexzU9UbulfkIo/q3wPUuwdHpgGfd67f9RjOUrzIM+GeKhbZtX4gmiSR0zMVEA6Pm
+ bSqmX2bz2skQ==
+X-IronPort-AV: E=Sophos;i="5.77,355,1596524400"; 
+   d="scan'208";a="529054109"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2020 12:53:46 -0700
+From:   ira.weiny@intel.com
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Eric Biederman <ebiederm@xmission.com>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        kexec@lists.infradead.org, linux-bcache@vger.kernel.org,
+        linux-mtd@lists.infradead.org, devel@driverdev.osuosl.org,
+        linux-efi@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-aio@kvack.org,
+        io-uring@vger.kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-um@lists.infradead.org, linux-ntfs-dev@lists.sourceforge.net,
+        reiserfs-devel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-nilfs@vger.kernel.org, cluster-devel@redhat.com,
+        ecryptfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-rdma@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        drbd-dev@lists.linbit.com, linux-block@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-cachefs@redhat.com,
+        samba-technical@lists.samba.org, intel-wired-lan@lists.osuosl.org
+Subject: [PATCH RFC PKS/PMEM 51/58] kernel: Utilize new kmap_thread()
+Date:   Fri,  9 Oct 2020 12:50:26 -0700
+Message-Id: <20201009195033.3208459-52-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.28.0.rc0.12.gb6a658bd00c9
+In-Reply-To: <20201009195033.3208459-1-ira.weiny@intel.com>
+References: <20201009195033.3208459-1-ira.weiny@intel.com>
 MIME-Version: 1.0
-References: <CAMy7=ZUk08w5Gc2Z-EKi4JFtuUCaZYmE4yzhJjrExXpYKR4L8w@mail.gmail.com>
- <a8abb367-ccad-2ee4-8c5e-ce3da7c4915d@iogearbox.net> <CAMy7=ZXjna6q53h0uuar58fmAMi026w7u=ciVjTQXK2OHiOPJg@mail.gmail.com>
- <fadd5bd2-ed87-7e6b-d4bd-a802eb9ef6f8@iogearbox.net> <CAMy7=ZV5pZzzs_vuqn1eqEe9tBjgmQHT=hv0CXhgxYrjO_8wZg@mail.gmail.com>
- <e385d737-1a4b-a1b6-9a2e-23a71d2ca1b7@iogearbox.net> <CAMy7=ZW6B+aHN-3dAf7-=kK8WpMZ0NmEmeVh67jVPrjsryx9sQ@mail.gmail.com>
- <CAEf4BzYJQ_RZgy8YCPxfF+QEkx9W+jeu-3O3CX+vEqTFtOT2Fw@mail.gmail.com> <CAMy7=ZWhAzJP5m3QW0gHe4rVFoETT=zhCcyVeKBuTcO=ttC=MA@mail.gmail.com>
-In-Reply-To: <CAMy7=ZWhAzJP5m3QW0gHe4rVFoETT=zhCcyVeKBuTcO=ttC=MA@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 9 Oct 2020 12:53:46 -0700
-Message-ID: <CAEf4Bzbm7D+ygkoCCoTy8OR0krVWosS_o13Gv4Xd2jhOSC5a7Q@mail.gmail.com>
-Subject: Re: libbpf error: unknown register name 'r0' in asm
-To:     Yaniv Agman <yanivagman@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
-        Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Oct 9, 2020 at 12:32 PM Yaniv Agman <yanivagman@gmail.com> wrote:
->
-> =E2=80=AB=D7=91=D7=AA=D7=90=D7=A8=D7=99=D7=9A =D7=99=D7=95=D7=9D =D7=95=
-=D7=B3, 9 =D7=91=D7=90=D7=95=D7=A7=D7=B3 2020 =D7=91-21:39 =D7=9E=D7=90=D7=
-=AA =E2=80=AAAndrii Nakryiko=E2=80=AC=E2=80=8F
-> <=E2=80=AAandrii.nakryiko@gmail.com=E2=80=AC=E2=80=8F>:=E2=80=AC
-> >
-> > On Fri, Oct 9, 2020 at 11:33 AM Yaniv Agman <yanivagman@gmail.com> wrot=
-e:
-> > >
-> > > =E2=80=AB=D7=91=D7=AA=D7=90=D7=A8=D7=99=D7=9A =D7=99=D7=95=D7=9D =D7=
-=95=D7=B3, 9 =D7=91=D7=90=D7=95=D7=A7=D7=B3 2020 =D7=91-21:21 =D7=9E=D7=90=
-=D7=AA =E2=80=AADaniel Borkmann=E2=80=AC=E2=80=8F
-> > > <=E2=80=AAdaniel@iogearbox.net=E2=80=AC=E2=80=8F>:=E2=80=AC
-> > > >
-> > > > On 10/9/20 8:09 PM, Yaniv Agman wrote:
-> > > > > =E2=80=AB=D7=91=D7=AA=D7=90=D7=A8=D7=99=D7=9A =D7=99=D7=95=D7=9D =
-=D7=95=D7=B3, 9 =D7=91=D7=90=D7=95=D7=A7=D7=B3 2020 =D7=91-20:39 =D7=9E=D7=
-=90=D7=AA =E2=80=AADaniel Borkmann=E2=80=AC=E2=80=8F
-> > > > > <=E2=80=AAdaniel@iogearbox.net=E2=80=AC=E2=80=8F>:=E2=80=AC
-> > > > >>
-> > > > >> On 10/9/20 6:56 PM, Yaniv Agman wrote:
-> > > > >>> =E2=80=AB=D7=91=D7=AA=D7=90=D7=A8=D7=99=D7=9A =D7=99=D7=95=D7=
-=9D =D7=95=D7=B3, 9 =D7=91=D7=90=D7=95=D7=A7=D7=B3 2020 =D7=91-19:27 =D7=9E=
-=D7=90=D7=AA =E2=80=AADaniel Borkmann=E2=80=AC=E2=80=8F
-> > > > >>> <=E2=80=AAdaniel@iogearbox.net=E2=80=AC=E2=80=8F>:=E2=80=AC
-> > > > >>>>
-> > > > >>>> [ Cc +Yonghong ]
-> > > > >>>>
-> > > > >>>> On 10/9/20 6:05 PM, Yaniv Agman wrote:
-> > > > >>>>> Pulling the latest changes of libbpf and compiling my applica=
-tion with it,
-> > > > >>>>> I see the following error:
-> > > > >>>>>
-> > > > >>>>> ../libbpf/src//root/usr/include/bpf/bpf_helpers.h:99:10: erro=
-r:
-> > > > >>>>> unknown register name 'r0' in asm
-> > > > >>>>>                         : "r0", "r1", "r2", "r3", "r4", "r5")=
-;
-> > > > >>>>>
-> > > > >>>>> The commit which introduced this change is:
-> > > > >>>>> 80c7838600d39891f274e2f7508b95a75e4227c1
-> > > > >>>>>
-> > > > >>>>> I'm not sure if I'm doing something wrong (missing include?),=
- or this
-> > > > >>>>> is a genuine error
-> > > > >>>>
-> > > > >>>> Seems like your clang/llvm version might be too old.
-> > > > >>>
-> > > > >>> I'm using clang 10.0.1
-> > > > >>
-> > > > >> Ah, okay, I see. Would this diff do the trick for you?
-> > > > >
-> > > > > Yes! Now it compiles without any problems!
-> > > >
-> > > > Great, thx, I'll cook proper fix and check with clang6 as Yonghong =
-mentioned.
-> > > >
-> > >
-> > > Thanks!
-> > > Does this happen because I'm first compiling using "emit-llvm" and
-> > > then using llc?
-> >
-> > So this must be the reason, but I'll wait for Yonghong to confirm.
-> >
-> > > I wish I could use bpf target directly, but I'm then having problems
-> > > with includes of asm code (like pt_regs and other stuff)
-> >
-> > Are you developing for a 32-bit platform? Or what exactly is the
-> > problem? I've been trying to solve problems for 32-bit arches recently
-> > by making libbpf smarter, that relies on CO-RE though. Is CO-RE an
-> > option for you?
-> >
->
-> Examples for the errors I'm getting:
-> /lib/modules/4.14.199-1-MANJARO/build/arch/x86/include/asm/atomic.h:177:9=
-:
-> error: invalid output constraint '+q' in asm
->         return xadd(&v->counter, i);
->                ^
-> /lib/modules/4.14.199-1-MANJARO/build/arch/x86/include/asm/cmpxchg.h:234:=
-25:
-> note: expanded from macro 'xadd'
-> #define xadd(ptr, inc)          __xadd((ptr), (inc), LOCK_PREFIX)
-> ...
->
-> From What I understood, this is a known issue for tracing programs
-> (like the one I'm developing)
+From: Ira Weiny <ira.weiny@intel.com>
 
-We do have a bunch of selftests that use pt_regs and include, say,
-linux/ptrace.h header. I wonder why we are not seeing these problems.
-Selftests, btw, are also built with -emit-llvm and then piping output
-to llc.
+This kmap() call is localized to a single thread.  To avoid the over
+head of global PKRS updates use the new kmap_thread() call.
 
-So.. there must be something else going on. It's hard to guess like
-this without seeing the code, but maybe -D__TARGET_ARCH_$(SRCARCH)
-during compilation could help, just as an idea.
+Cc: Eric Biederman <ebiederm@xmission.com>
+Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+---
+ kernel/kexec_core.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> Unfortunately, CO-RE is not (yet) an option.
-> I'm currently making the move from bcc to libbpf, and our application
-> needs to support kernel 4.14, and work on all environments.
+diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+index c19c0dad1ebe..272a9920c0d6 100644
+--- a/kernel/kexec_core.c
++++ b/kernel/kexec_core.c
+@@ -815,7 +815,7 @@ static int kimage_load_normal_segment(struct kimage *image,
+ 		if (result < 0)
+ 			goto out;
+ 
+-		ptr = kmap(page);
++		ptr = kmap_thread(page);
+ 		/* Start with a clear page */
+ 		clear_page(ptr);
+ 		ptr += maddr & ~PAGE_MASK;
+@@ -828,7 +828,7 @@ static int kimage_load_normal_segment(struct kimage *image,
+ 			memcpy(ptr, kbuf, uchunk);
+ 		else
+ 			result = copy_from_user(ptr, buf, uchunk);
+-		kunmap(page);
++		kunmap_thread(page);
+ 		if (result) {
+ 			result = -EFAULT;
+ 			goto out;
+@@ -879,7 +879,7 @@ static int kimage_load_crash_segment(struct kimage *image,
+ 			goto out;
+ 		}
+ 		arch_kexec_post_alloc_pages(page_address(page), 1, 0);
+-		ptr = kmap(page);
++		ptr = kmap_thread(page);
+ 		ptr += maddr & ~PAGE_MASK;
+ 		mchunk = min_t(size_t, mbytes,
+ 				PAGE_SIZE - (maddr & ~PAGE_MASK));
+@@ -895,7 +895,7 @@ static int kimage_load_crash_segment(struct kimage *image,
+ 		else
+ 			result = copy_from_user(ptr, buf, uchunk);
+ 		kexec_flush_icache_page(page);
+-		kunmap(page);
++		kunmap_thread(page);
+ 		arch_kexec_pre_free_pages(page_address(page), 1);
+ 		if (result) {
+ 			result = -EFAULT;
+-- 
+2.28.0.rc0.12.gb6a658bd00c9
 
-Kernel version is not a big problem, it's vmlinux BTF availability
-that could be a problem. vmlinux BTF can be added into any version of
-kernel with pahole -J, post factum, but that assumes you have some
-control over how kernels are built and distributed, of course.
-
->
-> > [...]
