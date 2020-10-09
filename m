@@ -2,35 +2,38 @@ Return-Path: <SRS0=vDm1=DQ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E899C433DF
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 14:10:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B119CC433E7
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 14:10:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4C43A222BA
-	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 14:10:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 784CF222B9
+	for <bpf@archiver.kernel.org>; Fri,  9 Oct 2020 14:10:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733303AbgJIOKX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 9 Oct 2020 10:10:23 -0400
-Received: from www62.your-server.de ([213.133.104.62]:56744 "EHLO
+        id S2387749AbgJIOKe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 9 Oct 2020 10:10:34 -0400
+Received: from www62.your-server.de ([213.133.104.62]:56764 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726471AbgJIOKX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 9 Oct 2020 10:10:23 -0400
+        with ESMTP id S1733180AbgJIOKY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 9 Oct 2020 10:10:24 -0400
 Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1kQt6C-0000Th-AA; Fri, 09 Oct 2020 16:10:20 +0200
+        id 1kQt6E-0000UB-0I; Fri, 09 Oct 2020 16:10:22 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     daniel@iogearbox.net, john.fastabend@gmail.com, yhs@fb.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 0/6] Follow-up BPF helper improvements
-Date:   Fri,  9 Oct 2020 16:10:09 +0200
-Message-Id: <cover.1602252399.git.daniel@iogearbox.net>
+Subject: [PATCH bpf-next v2 4/6] bpf, selftests: add test for different array inner map size
+Date:   Fri,  9 Oct 2020 16:10:13 +0200
+Message-Id: <4a0154b201d89ef71614aab3a8507d723b4f0864.1602252399.git.daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <cover.1602252399.git.daniel@iogearbox.net>
+References: <cover.1602252399.git.daniel@iogearbox.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
@@ -39,49 +42,162 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series addresses most of the feedback [0] that was to be followed
-up from the last series, that is, UAPI helper comment improvements and
-getting rid of the ifindex obj file hacks in the selftest by using a
-BPF map instead. The __sk_buff data/data_end pointer work, I'm planning
-to do in a later round as well as the mem*() BPF improvements we have
-in Cilium for libbpf. Next, the series adds two features, i) a helper
-called redirect_peer() to improve latency on netns switch, and ii) to
-allow map in map with dynamic inner array map sizes. Selftests for each
-are added as well. For details, please check individual patches, thanks!
+Extend the "diff_size" subtest to also include a non-inlined array map variant
+where dynamic inner #elems are possible.
 
-  [0] https://lore.kernel.org/bpf/cover.1601477936.git.daniel@iogearbox.net/
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Yonghong Song <yhs@fb.com>
+---
+ .../selftests/bpf/prog_tests/btf_map_in_map.c | 39 ++++++++++++-----
+ .../selftests/bpf/progs/test_btf_map_in_map.c | 43 +++++++++++++++++++
+ 2 files changed, 72 insertions(+), 10 deletions(-)
 
-v1 -> v2:
-  - Fixed selftest comment wrt inner1/inner2 value (Yonghong)
-
-Daniel Borkmann (6):
-  bpf: improve bpf_redirect_neigh helper description
-  bpf: add redirect_peer helper
-  bpf: allow for map-in-map with dynamic inner array map entries
-  bpf, selftests: add test for different array inner map size
-  bpf, selftests: make redirect_neigh test more extensible
-  bpf, selftests: add redirect_peer selftest
-
- drivers/net/veth.c                            |   9 +
- include/linux/bpf.h                           |   1 +
- include/linux/netdevice.h                     |   4 +
- include/uapi/linux/bpf.h                      |  32 ++-
- kernel/bpf/arraymap.c                         |  40 +++-
- kernel/bpf/syscall.c                          |   3 +-
- net/core/dev.c                                |  15 +-
- net/core/filter.c                             |  54 ++++-
- tools/include/uapi/linux/bpf.h                |  32 ++-
- .../selftests/bpf/prog_tests/btf_map_in_map.c |  39 +++-
- .../selftests/bpf/progs/test_btf_map_in_map.c |  43 ++++
- .../selftests/bpf/progs/test_tc_neigh.c       |  40 ++--
- .../selftests/bpf/progs/test_tc_peer.c        |  45 ++++
- tools/testing/selftests/bpf/test_tc_neigh.sh  | 168 ---------------
- .../testing/selftests/bpf/test_tc_redirect.sh | 204 ++++++++++++++++++
- 15 files changed, 514 insertions(+), 215 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_tc_peer.c
- delete mode 100755 tools/testing/selftests/bpf/test_tc_neigh.sh
- create mode 100755 tools/testing/selftests/bpf/test_tc_redirect.sh
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
+index 540fea4c91a5..76ebe4c250f1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
+@@ -55,10 +55,10 @@ static int kern_sync_rcu(void)
+ 
+ static void test_lookup_update(void)
+ {
+-	int err, key = 0, val, i;
++	int map1_fd, map2_fd, map3_fd, map4_fd, map5_fd, map1_id, map2_id;
++	int outer_arr_fd, outer_hash_fd, outer_arr_dyn_fd;
+ 	struct test_btf_map_in_map *skel;
+-	int outer_arr_fd, outer_hash_fd;
+-	int fd, map1_fd, map2_fd, map1_id, map2_id;
++	int err, key = 0, val, i, fd;
+ 
+ 	skel = test_btf_map_in_map__open_and_load();
+ 	if (CHECK(!skel, "skel_open", "failed to open&load skeleton\n"))
+@@ -70,32 +70,45 @@ static void test_lookup_update(void)
+ 
+ 	map1_fd = bpf_map__fd(skel->maps.inner_map1);
+ 	map2_fd = bpf_map__fd(skel->maps.inner_map2);
++	map3_fd = bpf_map__fd(skel->maps.inner_map3);
++	map4_fd = bpf_map__fd(skel->maps.inner_map4);
++	map5_fd = bpf_map__fd(skel->maps.inner_map5);
++	outer_arr_dyn_fd = bpf_map__fd(skel->maps.outer_arr_dyn);
+ 	outer_arr_fd = bpf_map__fd(skel->maps.outer_arr);
+ 	outer_hash_fd = bpf_map__fd(skel->maps.outer_hash);
+ 
+-	/* inner1 = input, inner2 = input + 1 */
+-	map1_fd = bpf_map__fd(skel->maps.inner_map1);
++	/* inner1 = input, inner2 = input + 1, inner3 = input + 2 */
+ 	bpf_map_update_elem(outer_arr_fd, &key, &map1_fd, 0);
+-	map2_fd = bpf_map__fd(skel->maps.inner_map2);
+ 	bpf_map_update_elem(outer_hash_fd, &key, &map2_fd, 0);
++	bpf_map_update_elem(outer_arr_dyn_fd, &key, &map3_fd, 0);
+ 	skel->bss->input = 1;
+ 	usleep(1);
+-
+ 	bpf_map_lookup_elem(map1_fd, &key, &val);
+ 	CHECK(val != 1, "inner1", "got %d != exp %d\n", val, 1);
+ 	bpf_map_lookup_elem(map2_fd, &key, &val);
+ 	CHECK(val != 2, "inner2", "got %d != exp %d\n", val, 2);
++	bpf_map_lookup_elem(map3_fd, &key, &val);
++	CHECK(val != 3, "inner3", "got %d != exp %d\n", val, 3);
+ 
+-	/* inner1 = input + 1, inner2 = input */
++	/* inner2 = input, inner1 = input + 1, inner4 = input + 2 */
+ 	bpf_map_update_elem(outer_arr_fd, &key, &map2_fd, 0);
+ 	bpf_map_update_elem(outer_hash_fd, &key, &map1_fd, 0);
++	bpf_map_update_elem(outer_arr_dyn_fd, &key, &map4_fd, 0);
+ 	skel->bss->input = 3;
+ 	usleep(1);
+-
+ 	bpf_map_lookup_elem(map1_fd, &key, &val);
+ 	CHECK(val != 4, "inner1", "got %d != exp %d\n", val, 4);
+ 	bpf_map_lookup_elem(map2_fd, &key, &val);
+ 	CHECK(val != 3, "inner2", "got %d != exp %d\n", val, 3);
++	bpf_map_lookup_elem(map4_fd, &key, &val);
++	CHECK(val != 5, "inner4", "got %d != exp %d\n", val, 5);
++
++	/* inner5 = input + 2 */
++	bpf_map_update_elem(outer_arr_dyn_fd, &key, &map5_fd, 0);
++	skel->bss->input = 5;
++	usleep(1);
++	bpf_map_lookup_elem(map5_fd, &key, &val);
++	CHECK(val != 7, "inner5", "got %d != exp %d\n", val, 7);
+ 
+ 	for (i = 0; i < 5; i++) {
+ 		val = i % 2 ? map1_fd : map2_fd;
+@@ -106,7 +119,13 @@ static void test_lookup_update(void)
+ 		}
+ 		err = bpf_map_update_elem(outer_arr_fd, &key, &val, 0);
+ 		if (CHECK_FAIL(err)) {
+-			printf("failed to update hash_of_maps on iter #%d\n", i);
++			printf("failed to update array_of_maps on iter #%d\n", i);
++			goto cleanup;
++		}
++		val = i % 2 ? map4_fd : map5_fd;
++		err = bpf_map_update_elem(outer_arr_dyn_fd, &key, &val, 0);
++		if (CHECK_FAIL(err)) {
++			printf("failed to update array_of_maps (dyn) on iter #%d\n", i);
+ 			goto cleanup;
+ 		}
+ 	}
+diff --git a/tools/testing/selftests/bpf/progs/test_btf_map_in_map.c b/tools/testing/selftests/bpf/progs/test_btf_map_in_map.c
+index 193fe0198b21..ccad6f9beabd 100644
+--- a/tools/testing/selftests/bpf/progs/test_btf_map_in_map.c
++++ b/tools/testing/selftests/bpf/progs/test_btf_map_in_map.c
+@@ -41,6 +41,43 @@ struct outer_arr {
+ 	.values = { (void *)&inner_map1, 0, (void *)&inner_map2 },
+ };
+ 
++struct inner_map_sz3 {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(map_flags, BPF_F_NO_INLINE);
++	__uint(max_entries, 3);
++	__type(key, int);
++	__type(value, int);
++} inner_map3 SEC(".maps"),
++  inner_map4 SEC(".maps");
++
++struct inner_map_sz4 {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(map_flags, BPF_F_NO_INLINE);
++	__uint(max_entries, 5);
++	__type(key, int);
++	__type(value, int);
++} inner_map5 SEC(".maps");
++
++struct outer_arr_dyn {
++	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
++	__uint(max_entries, 3);
++	__uint(key_size, sizeof(int));
++	__uint(value_size, sizeof(int));
++	__array(values, struct {
++		__uint(type, BPF_MAP_TYPE_ARRAY);
++		__uint(map_flags, BPF_F_NO_INLINE);
++		__uint(max_entries, 1);
++		__type(key, int);
++		__type(value, int);
++	});
++} outer_arr_dyn SEC(".maps") = {
++	.values = {
++		[0] = (void *)&inner_map3,
++		[1] = (void *)&inner_map4,
++		[2] = (void *)&inner_map5,
++	},
++};
++
+ struct outer_hash {
+ 	__uint(type, BPF_MAP_TYPE_HASH_OF_MAPS);
+ 	__uint(max_entries, 5);
+@@ -101,6 +138,12 @@ int handle__sys_enter(void *ctx)
+ 	val = input + 1;
+ 	bpf_map_update_elem(inner_map, &key, &val, 0);
+ 
++	inner_map = bpf_map_lookup_elem(&outer_arr_dyn, &key);
++	if (!inner_map)
++		return 1;
++	val = input + 2;
++	bpf_map_update_elem(inner_map, &key, &val, 0);
++
+ 	return 0;
+ }
+ 
 -- 
 2.21.0
 
