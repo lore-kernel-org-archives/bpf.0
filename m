@@ -2,383 +2,129 @@ Return-Path: <SRS0=llPw=DR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43FD2C433DF
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 22:55:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 75F6CC433DF
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 22:55:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0635520795
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 22:55:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3DE652075E
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 22:55:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="t0KhpzJm"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c5/0YHA3"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728966AbgJJWzB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 10 Oct 2020 18:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59746 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729402AbgJJSo1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 10 Oct 2020 14:44:27 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86A8C08EC3F;
-        Sat, 10 Oct 2020 11:17:46 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id f19so9725507pfj.11;
-        Sat, 10 Oct 2020 11:17:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7XtdEIP/yMYueLEMBvBgxI2I7uijB3xDVdLEjuFSqs8=;
-        b=t0KhpzJme8IfqBHzeXM6ksIyb+FttavxhX6wR36lAa7OIMmlhAU9+FEop6R9vu9r++
-         sdTQrWFmFV8O95uWIFTh6bScOn9h5OGOS7BTvsXRsPVoOw9mlYVZJKbbi0ePXLSj1RZD
-         BXecQ6FJxbWpNqZ+OfdwHkIf+G4mTwzZZNkAGut7+daw34Nf4U3eDrNdA9K+/uz9q9/H
-         ZazfCiP3AxWby3qu8Ug4+6nJebnYG5P50VKQ2pX6azwCLc6mJ7QMqOtBhKIyEcYh9bdM
-         1DeIvXmLiPIFfNXMwcafPHT43of3FsvbkV9xaHfpNHG7W7HLJEX9/xASdNEKp03TpEP3
-         Le4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7XtdEIP/yMYueLEMBvBgxI2I7uijB3xDVdLEjuFSqs8=;
-        b=WBX+hUlMPPyY2NuVI9c8FStyZWCUeMGdJPa2ZHLw9OaaGGJmWHhDWLcF7FLNkAu4K9
-         DRybiUt70Ohb768RbqfFEBOJ3fORuJFgTkKKj0padhRJAeS71cE13eCjLruJW3qPiYKO
-         4Rw6Fq7jfYGvd0kk+cDDvO4KjyzZ11mWvsEcJ1XNoxysMaHOUkQDB23Q7Hwu4gi3ZmHF
-         P+d3NpP6tVrfcg7hsRblXMUE3CeFGXGAx6xs2ANLWXia9JtfmkSNtMsmImWHPsJN1ngq
-         HYcu0qpQwsdnefzsyjDKjV/oXClMYZwkAwS7LFPpM/ZZy7DWue84mwAfIix0ttCMsZ6n
-         S1lA==
-X-Gm-Message-State: AOAM532/FAP7Vj4/w5bBgAx09XhUT7gRM27wALI5F8UrQAojo4dCNvKS
-        WiYpBqQt4BL4Cbm0tMg/Ng==
-X-Google-Smtp-Source: ABdhPJxHLascyH/l2C7lPRnkHuT7P1wX3vuG7sq+GKqN5tOApQDbTJ8ODaXQbwosOBbW00862A4TFQ==
-X-Received: by 2002:a17:90b:309:: with SMTP id ay9mr11077438pjb.39.1602353866398;
-        Sat, 10 Oct 2020 11:17:46 -0700 (PDT)
-Received: from localhost.localdomain ([182.209.58.45])
-        by smtp.gmail.com with ESMTPSA id q65sm14974615pfq.219.2020.10.10.11.17.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Oct 2020 11:17:45 -0700 (PDT)
-From:   "Daniel T. Lee" <danieltimlee@gmail.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Xdp <xdp-newbies@vger.kernel.org>
-Subject: [PATCH bpf-next v2 1/3] samples: bpf: Refactor xdp_monitor with libbpf
-Date:   Sun, 11 Oct 2020 03:17:32 +0900
-Message-Id: <20201010181734.1109-2-danieltimlee@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201010181734.1109-1-danieltimlee@gmail.com>
-References: <20201010181734.1109-1-danieltimlee@gmail.com>
+        id S1730950AbgJJWzE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 10 Oct 2020 18:55:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:25386 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731275AbgJJTFd (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 10 Oct 2020 15:05:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1602356702;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BJR2aQjPR9hLNkF0eFDNd9lu/f6IXZPxNCZ5aSJuSME=;
+        b=c5/0YHA3XJ9ioaccuh96pU37rmqWgneAOZpTcH7YWoRY0l5a7sLs45XXoNdTib3dGsG3uq
+        WU/vj0HPKxkXIQ6C7FBD//kqMjkWxikSClHfU87BrOzCBxqJUG1kPUHeIpMceozUMuUP4n
+        E7ZVHQOoYjvqog68rXjYgkb2ouZfFuY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-1-jh3cyaJbOZKEwxle1RHQbQ-1; Sat, 10 Oct 2020 07:09:48 -0400
+X-MC-Unique: jh3cyaJbOZKEwxle1RHQbQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D9AF4186DD26;
+        Sat, 10 Oct 2020 11:09:46 +0000 (UTC)
+Received: from carbon (unknown [10.40.208.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 371485D9FC;
+        Sat, 10 Oct 2020 11:09:39 +0000 (UTC)
+Date:   Sat, 10 Oct 2020 13:09:38 +0200
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Maciej =?UTF-8?B?xbtlbmN6eWtvd3NraQ==?= <maze@google.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
+        Linux NetDev <netdev@vger.kernel.org>,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Shaun Crampton <shaun@tigera.io>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Marek Majkowski <marek@cloudflare.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eyal Birger <eyal.birger@gmail.com>, brouer@redhat.com
+Subject: Re: [PATCH bpf-next V3 4/6] bpf: make it possible to identify BPF
+ redirected SKBs
+Message-ID: <20201010130938.138c80d9@carbon>
+In-Reply-To: <CANP3RGesHkCNTWsWDoU2uJsFjZ4dgnEpp+F-iEmhb9U0-rcT_w@mail.gmail.com>
+References: <160216609656.882446.16642490462568561112.stgit@firesoul>
+        <160216615767.882446.7384364280837100311.stgit@firesoul>
+        <40d7af61-6840-5473-79d7-ea935f6889f4@iogearbox.net>
+        <CANP3RGesHkCNTWsWDoU2uJsFjZ4dgnEpp+F-iEmhb9U0-rcT_w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To avoid confusion caused by the increasing fragmentation of the BPF
-Loader program, this commit would like to change to the libbpf loader
-instead of using the bpf_load.
+On Fri, 9 Oct 2020 11:33:33 -0700
+Maciej =C5=BBenczykowski <maze@google.com> wrote:
 
-Thanks to libbpf's bpf_link interface, managing the tracepoint BPF
-program is much easier. bpf_program__attach_tracepoint manages the
-enable of tracepoint event and attach of BPF programs to it with a
-single interface bpf_link, so there is no need to manage event_fd and
-prog_fd separately.
+> > > This change makes it possible to identify SKBs that have been redirec=
+ted
+> > > by TC-BPF (cls_act). This is needed for a number of cases.
+> > >
+> > > (1) For collaborating with driver ifb net_devices.
+> > > (2) For avoiding starting generic-XDP prog on TC ingress redirect.
+> > >
+> > > Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com> =20
+> >
+> > Not sure if anyone actually cares about ifb devices, but my worry is th=
+at the
+> > generic XDP vs tc interaction has been as-is for quite some time so thi=
+s change
+> > in behavior could break in the wild. =20
 
-This commit refactors xdp_monitor with using this libbpf API, and the
-bpf_load is removed and migrated to libbpf.
+No, I believe this happened as recent at kernel v5.2, when Stephen
+Hemminger changed this in commit 458bf2f224f0 ("net: core: support XDP
+generic on stacked devices.").  And for the record I think that
+patch/change was a mistake, as people should not use generic-XDP for
+these kind of stacked devices (they should really use TC-BPF as that is
+the right tool for the job).
 
-Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
 
----
-Changes in v2:
- - added cleanup logic for bpf_link and bpf_object
- - split increment into seperate satement
- - refactor pointer array initialization
+> I'm not at all sure of the interactions/implications here.
+> But I do have a request to enable ifb on Android for ingress rate
+> limiting and separately we're trying to make XDP work...
+> So we might at some point end up with cellular interfaces with xdp
+> ebpf (redirect for forwarding/nat/tethering) + ifb + tc ebpf (for
+> device local stuff).
 
- samples/bpf/Makefile           |   2 +-
- samples/bpf/xdp_monitor_user.c | 159 +++++++++++++++++++++++++--------
- 2 files changed, 121 insertions(+), 40 deletions(-)
+To me I was very surprised when I discovered tc-redirect didn't work
+with ifb driver.  And it sounds like you have an actual use-case for
+this on Android.
 
-diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 4f1ed0e3cf9f..0cee2aa8970f 100644
---- a/samples/bpf/Makefile
-+++ b/samples/bpf/Makefile
-@@ -99,7 +99,7 @@ per_socket_stats_example-objs := cookie_uid_helper_example.o
- xdp_redirect-objs := xdp_redirect_user.o
- xdp_redirect_map-objs := xdp_redirect_map_user.o
- xdp_redirect_cpu-objs := bpf_load.o xdp_redirect_cpu_user.o
--xdp_monitor-objs := bpf_load.o xdp_monitor_user.o
-+xdp_monitor-objs := xdp_monitor_user.o
- xdp_rxq_info-objs := xdp_rxq_info_user.o
- syscall_tp-objs := syscall_tp_user.o
- cpustat-objs := cpustat_user.o
-diff --git a/samples/bpf/xdp_monitor_user.c b/samples/bpf/xdp_monitor_user.c
-index ef53b93db573..03d0a182913f 100644
---- a/samples/bpf/xdp_monitor_user.c
-+++ b/samples/bpf/xdp_monitor_user.c
-@@ -26,12 +26,37 @@ static const char *__doc_err_only__=
- #include <net/if.h>
- #include <time.h>
- 
-+#include <signal.h>
- #include <bpf/bpf.h>
--#include "bpf_load.h"
-+#include <bpf/libbpf.h>
- #include "bpf_util.h"
- 
-+enum map_type {
-+	REDIRECT_ERR_CNT,
-+	EXCEPTION_CNT,
-+	CPUMAP_ENQUEUE_CNT,
-+	CPUMAP_KTHREAD_CNT,
-+	DEVMAP_XMIT_CNT,
-+};
-+
-+static const char *const map_type_strings[] = {
-+	[REDIRECT_ERR_CNT] = "redirect_err_cnt",
-+	[EXCEPTION_CNT] = "exception_cnt",
-+	[CPUMAP_ENQUEUE_CNT] = "cpumap_enqueue_cnt",
-+	[CPUMAP_KTHREAD_CNT] = "cpumap_kthread_cnt",
-+	[DEVMAP_XMIT_CNT] = "devmap_xmit_cnt",
-+};
-+
-+#define NUM_MAP 5
-+#define NUM_TP 8
-+
-+static int tp_cnt;
-+static int map_cnt;
- static int verbose = 1;
- static bool debug = false;
-+struct bpf_map *map_data[NUM_MAP] = {};
-+struct bpf_link *tp_links[NUM_TP] = {};
-+struct bpf_object *obj;
- 
- static const struct option long_options[] = {
- 	{"help",	no_argument,		NULL, 'h' },
-@@ -41,6 +66,16 @@ static const struct option long_options[] = {
- 	{0, 0, NULL,  0 }
- };
- 
-+static void int_exit(int sig)
-+{
-+	/* Detach tracepoints */
-+	while (tp_cnt)
-+		bpf_link__destroy(tp_links[--tp_cnt]);
-+
-+	bpf_object__close(obj);
-+	exit(0);
-+}
-+
- /* C standard specifies two constants, EXIT_SUCCESS(0) and EXIT_FAILURE(1) */
- #define EXIT_FAIL_MEM	5
- 
-@@ -483,23 +518,23 @@ static bool stats_collect(struct stats_record *rec)
- 	 * this can happen by someone running perf-record -e
- 	 */
- 
--	fd = map_data[0].fd; /* map0: redirect_err_cnt */
-+	fd = bpf_map__fd(map_data[REDIRECT_ERR_CNT]);
- 	for (i = 0; i < REDIR_RES_MAX; i++)
- 		map_collect_record_u64(fd, i, &rec->xdp_redirect[i]);
- 
--	fd = map_data[1].fd; /* map1: exception_cnt */
-+	fd = bpf_map__fd(map_data[EXCEPTION_CNT]);
- 	for (i = 0; i < XDP_ACTION_MAX; i++) {
- 		map_collect_record_u64(fd, i, &rec->xdp_exception[i]);
- 	}
- 
--	fd = map_data[2].fd; /* map2: cpumap_enqueue_cnt */
-+	fd = bpf_map__fd(map_data[CPUMAP_ENQUEUE_CNT]);
- 	for (i = 0; i < MAX_CPUS; i++)
- 		map_collect_record(fd, i, &rec->xdp_cpumap_enqueue[i]);
- 
--	fd = map_data[3].fd; /* map3: cpumap_kthread_cnt */
-+	fd = bpf_map__fd(map_data[CPUMAP_KTHREAD_CNT]);
- 	map_collect_record(fd, 0, &rec->xdp_cpumap_kthread);
- 
--	fd = map_data[4].fd; /* map4: devmap_xmit_cnt */
-+	fd = bpf_map__fd(map_data[DEVMAP_XMIT_CNT]);
- 	map_collect_record(fd, 0, &rec->xdp_devmap_xmit);
- 
- 	return true;
-@@ -598,8 +633,8 @@ static void stats_poll(int interval, bool err_only)
- 
- 	/* TODO Need more advanced stats on error types */
- 	if (verbose) {
--		printf(" - Stats map0: %s\n", map_data[0].name);
--		printf(" - Stats map1: %s\n", map_data[1].name);
-+		printf(" - Stats map0: %s\n", bpf_map__name(map_data[0]));
-+		printf(" - Stats map1: %s\n", bpf_map__name(map_data[1]));
- 		printf("\n");
- 	}
- 	fflush(stdout);
-@@ -618,44 +653,51 @@ static void stats_poll(int interval, bool err_only)
- 
- static void print_bpf_prog_info(void)
- {
--	int i;
-+	struct bpf_program *prog;
-+	struct bpf_map *map;
-+	int i = 0;
- 
- 	/* Prog info */
--	printf("Loaded BPF prog have %d bpf program(s)\n", prog_cnt);
--	for (i = 0; i < prog_cnt; i++) {
--		printf(" - prog_fd[%d] = fd(%d)\n", i, prog_fd[i]);
-+	printf("Loaded BPF prog have %d bpf program(s)\n", tp_cnt);
-+	bpf_object__for_each_program(prog, obj) {
-+		printf(" - prog_fd[%d] = fd(%d)\n", i, bpf_program__fd(prog));
-+		i++;
- 	}
- 
-+	i = 0;
- 	/* Maps info */
--	printf("Loaded BPF prog have %d map(s)\n", map_data_count);
--	for (i = 0; i < map_data_count; i++) {
--		char *name = map_data[i].name;
--		int fd     = map_data[i].fd;
-+	printf("Loaded BPF prog have %d map(s)\n", map_cnt);
-+	bpf_object__for_each_map(map, obj) {
-+		const char *name = bpf_map__name(map);
-+		int fd		 = bpf_map__fd(map);
- 
- 		printf(" - map_data[%d] = fd(%d) name:%s\n", i, fd, name);
-+		i++;
- 	}
- 
- 	/* Event info */
--	printf("Searching for (max:%d) event file descriptor(s)\n", prog_cnt);
--	for (i = 0; i < prog_cnt; i++) {
--		if (event_fd[i] != -1)
--			printf(" - event_fd[%d] = fd(%d)\n", i, event_fd[i]);
-+	printf("Searching for (max:%d) event file descriptor(s)\n", tp_cnt);
-+	for (i = 0; i < tp_cnt; i++) {
-+		int fd = bpf_link__fd(tp_links[i]);
-+
-+		if (fd != -1)
-+			printf(" - event_fd[%d] = fd(%d)\n", i, fd);
- 	}
- }
- 
- int main(int argc, char **argv)
- {
- 	struct rlimit r = {RLIM_INFINITY, RLIM_INFINITY};
-+	struct bpf_program *prog;
- 	int longindex = 0, opt;
--	int ret = EXIT_SUCCESS;
--	char bpf_obj_file[256];
-+	int ret = EXIT_FAILURE;
-+	enum map_type type;
-+	char filename[256];
- 
- 	/* Default settings: */
- 	bool errors_only = true;
- 	int interval = 2;
- 
--	snprintf(bpf_obj_file, sizeof(bpf_obj_file), "%s_kern.o", argv[0]);
--
- 	/* Parse commands line args */
- 	while ((opt = getopt_long(argc, argv, "hDSs:",
- 				  long_options, &longindex)) != -1) {
-@@ -672,40 +714,79 @@ int main(int argc, char **argv)
- 		case 'h':
- 		default:
- 			usage(argv);
--			return EXIT_FAILURE;
-+			return ret;
- 		}
- 	}
- 
-+	snprintf(filename, sizeof(filename), "%s_kern.o", argv[0]);
- 	if (setrlimit(RLIMIT_MEMLOCK, &r)) {
- 		perror("setrlimit(RLIMIT_MEMLOCK)");
--		return EXIT_FAILURE;
-+		return ret;
- 	}
- 
--	if (load_bpf_file(bpf_obj_file)) {
--		printf("ERROR - bpf_log_buf: %s", bpf_log_buf);
--		return EXIT_FAILURE;
-+	/* Remove tracepoint program when program is interrupted or killed */
-+	signal(SIGINT, int_exit);
-+	signal(SIGTERM, int_exit);
-+
-+	obj = bpf_object__open_file(filename, NULL);
-+	if (libbpf_get_error(obj)) {
-+		printf("ERROR: opening BPF object file failed\n");
-+		obj = NULL;
-+		goto cleanup;
-+	}
-+
-+	/* load BPF program */
-+	if (bpf_object__load(obj)) {
-+		printf("ERROR: loading BPF object file failed\n");
-+		goto cleanup;
-+	}
-+
-+	for (type = 0; type < NUM_MAP; type++) {
-+		map_data[type] =
-+			bpf_object__find_map_by_name(obj, map_type_strings[type]);
-+
-+		if (libbpf_get_error(map_data[type])) {
-+			printf("ERROR: finding a map in obj file failed\n");
-+			goto cleanup;
-+		}
-+		map_cnt++;
- 	}
--	if (!prog_fd[0]) {
--		printf("ERROR - load_bpf_file: %s\n", strerror(errno));
--		return EXIT_FAILURE;
-+
-+	bpf_object__for_each_program(prog, obj) {
-+		tp_links[tp_cnt] = bpf_program__attach(prog);
-+		if (libbpf_get_error(tp_links[tp_cnt])) {
-+			printf("ERROR: bpf_program__attach failed\n");
-+			tp_links[tp_cnt] = NULL;
-+			goto cleanup;
-+		}
-+		tp_cnt++;
- 	}
- 
- 	if (debug) {
- 		print_bpf_prog_info();
- 	}
- 
--	/* Unload/stop tracepoint event by closing fd's */
-+	/* Unload/stop tracepoint event by closing bpf_link's */
- 	if (errors_only) {
--		/* The prog_fd[i] and event_fd[i] depend on the
--		 * order the functions was defined in _kern.c
-+		/* The bpf_link[i] depend on the order of
-+		 * the functions was defined in _kern.c
- 		 */
--		close(event_fd[2]); /* tracepoint/xdp/xdp_redirect */
--		close(prog_fd[2]);  /* func: trace_xdp_redirect */
--		close(event_fd[3]); /* tracepoint/xdp/xdp_redirect_map */
--		close(prog_fd[3]);  /* func: trace_xdp_redirect_map */
-+		bpf_link__destroy(tp_links[2]);	/* tracepoint/xdp/xdp_redirect */
-+		tp_links[2] = NULL;
-+
-+		bpf_link__destroy(tp_links[3]);	/* tracepoint/xdp/xdp_redirect_map */
-+		tp_links[3] = NULL;
- 	}
- 
- 	stats_poll(interval, errors_only);
- 
-+	ret = EXIT_SUCCESS;
-+
-+cleanup:
-+	/* Detach tracepoints */
-+	while (tp_cnt)
-+		bpf_link__destroy(tp_links[--tp_cnt]);
-+
-+	bpf_object__close(obj);
- 	return ret;
- }
--- 
-2.25.1
+> But this is still all very vague and 'ideas only' level.
+> (and in general I think I'd like to get rid of the redirect in tc
+> ebpf, and leave only xlat64 translation for to-the-device traffic in
+> there, so maybe there's no problem anyway??)
+
+I know it sounds strange coming from me "Mr.XDP", but I actaully think
+that in many cases you will be better off with using TC-BPF.
+Especially on Android, as it will be very hard to get native-XDP
+implemented in all these different drivers. (And you don't want to use
+generic-XDP, because there is a high chance it causes a reallocation of
+the SKB, which is a huge performance hit).
+
+--=20
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
