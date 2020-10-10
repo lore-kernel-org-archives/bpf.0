@@ -2,95 +2,100 @@ Return-Path: <SRS0=llPw=DR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6293AC433DF
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:14:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CF10C433E7
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:40:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 21BB32078B
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:14:08 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nRqb4ZE0"
+	by mail.kernel.org (Postfix) with ESMTP id DDBAC20709
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:40:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389010AbgJJWzM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 10 Oct 2020 18:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731589AbgJJTyJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 10 Oct 2020 15:54:09 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5552BC05BD0F;
-        Sat, 10 Oct 2020 06:26:29 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id x13so6730193pfa.9;
-        Sat, 10 Oct 2020 06:26:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bVFCs8xXG3UZzqj41Vd+QbKEjQvzFTw086//8JQkmAk=;
-        b=nRqb4ZE058ecg0wB9M928Xcs3pdAmmYenHmHIKwtKIeDBkj22u265jtqAy+oGUqTuP
-         3Kbtl4e9BhdhDhLaIKfzGQmiDJ8fyWCLLoVOHFAs7/Pq7T+C36pd8cHKZlwBFA3qG4sj
-         i6qhyFyFCo6wA+30BWi4e3TqjdPphXZ5bEb+GGtWhrP+9adNgfvwcF8q5v0Bs/5qU2Fj
-         F6lZwCXDnXRBt18iSeRVgmmLm8WKb4d3WaJq60FL2G6W9xhs49E0qR8Pv3V9NGNnFjnK
-         CRfPAGtZ0lJ/fQ9SXWWGbPSaoIDJRq9tVGbgJ8OFLdz4GCUrvQQELdFrYIWPdhJg3T6r
-         isyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bVFCs8xXG3UZzqj41Vd+QbKEjQvzFTw086//8JQkmAk=;
-        b=dmVYu1eGmaSNM4SxB9avI/op8LObx9M70kByOZRwn1eyHDzydF8POfbO8aeJuteUW2
-         KeuE7ptTuj2pAXddZaN9+BlfZ7ejfdyQvMKfxmBWkGvPjm404RQ75QolYIYk/UcNUT26
-         hMARH+UDP2xlF8VpliewIduy4GngqAXJoJnTlTyfQRGbG4LHDzD7WD7aHvLyMpNQZ5l4
-         vX8xKXk+coldejvgaTOBNtMoibP6kcKgwPKZaBdlfCsY8H8IcX2+TPlNRTiNMeNA8oPJ
-         k4TtNfLtks5W1udSJGDPj7K3ZtacJPxlmAVu6ci6f1Ij7v3aQdYD099Jpenm1ACZT08K
-         xY4w==
-X-Gm-Message-State: AOAM5305xjxWyMfVPs6G/GGG3zzrkH4U6eOR4im8fIzB09vnyu+jR/py
-        djbZ/kuhYNSYqHoaJJG/Lkc89HFH/W5YkDWlUkQ=
-X-Google-Smtp-Source: ABdhPJxJZH4rfHRGX8OWQzzQRKi6l0cfQ8gJdZhGHNFZtth6oqmXK/1KFPFUYgnj0yT0dLv9Ky3MZHKlrHUdMvDhlFM=
-X-Received: by 2002:a62:750a:0:b029:152:4d07:aec6 with SMTP id
- q10-20020a62750a0000b02901524d07aec6mr16211235pfc.48.1602336387840; Sat, 10
- Oct 2020 06:26:27 -0700 (PDT)
+        id S1727481AbgJJXkK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 10 Oct 2020 19:40:10 -0400
+Received: from www62.your-server.de ([213.133.104.62]:55530 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726989AbgJJXkK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 10 Oct 2020 19:40:10 -0400
+Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kROT9-0008Gv-Ph; Sun, 11 Oct 2020 01:40:07 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     ast@kernel.org
+Cc:     daniel@iogearbox.net, john.fastabend@gmail.com, yhs@fb.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next v6 0/6] Follow-up BPF helper improvements
+Date:   Sun, 11 Oct 2020 01:40:00 +0200
+Message-Id: <20201010234006.7075-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-References: <cover.1602263422.git.yifeifz2@illinois.edu> <c2077b8a86c6d82d611007d81ce81d32f718ec59.1602263422.git.yifeifz2@illinois.edu>
- <202010091613.B671C86@keescook>
-In-Reply-To: <202010091613.B671C86@keescook>
-From:   YiFei Zhu <zhuyifei1999@gmail.com>
-Date:   Sat, 10 Oct 2020 08:26:16 -0500
-Message-ID: <CABqSeARZWBQrLkzd3ozF16ghkADQqcN4rUoJS2MKkd=73g4nVA@mail.gmail.com>
-Subject: Re: [PATCH v4 seccomp 5/5] seccomp/cache: Report cache data through /proc/pid/seccomp_cache
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Linux Containers <containers@lists.linux-foundation.org>,
-        YiFei Zhu <yifeifz2@illinois.edu>, bpf <bpf@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        David Laight <David.Laight@aculab.com>,
-        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Hubertus Franke <frankeh@us.ibm.com>,
-        Jack Chen <jianyan2@illinois.edu>,
-        Jann Horn <jannh@google.com>,
-        Josep Torrellas <torrella@illinois.edu>,
-        Tianyin Xu <tyxu@illinois.edu>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Valentin Rothberg <vrothber@redhat.com>,
-        Will Drewry <wad@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/25953/Sat Oct 10 15:55:36 2020)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Oct 9, 2020 at 6:14 PM Kees Cook <keescook@chromium.org> wrote:
-> HAVE_ARCH_SECCOMP_CACHE isn't used any more. I think this was left over
-> from before.
+This series addresses most of the feedback [0] that was to be followed
+up from the last series, that is, UAPI helper comment improvements and
+getting rid of the ifindex obj file hacks in the selftest by using a
+BPF map instead. The __sk_buff data/data_end pointer work, I'm planning
+to do in a later round as well as the mem*() BPF improvements we have
+in Cilium for libbpf. Next, the series adds two features, i) a helper
+called redirect_peer() to improve latency on netns switch, and ii) to
+allow map in map with dynamic inner array map sizes. Selftests for each
+are added as well. For details, please check individual patches, thanks!
 
-Oh, I was meant to add this to the dependencies of
-SECCOMP_CACHE_DEBUG. Is this something that would make sense?
+  [0] https://lore.kernel.org/bpf/cover.1601477936.git.daniel@iogearbox.net/
 
-YiFei Zhu
+v5 -> v6:
+  - Going with Andrii's suggestion to make the misconfigured verifier
+    test more robust, and only probe on -EOPNOTSUPP (Andrii)
+v4 -> v5:
+  - Replace cnt == -EOPNOTSUPP check with cnt < 0; I've used < 0
+    here as I think it's useful to keep the existing cnt == 0 ||
+    cnt >= ARRAY_SIZE(insn_buf) for error detection (Andrii)
+v3 -> v4:
+  - Rename new array map flag to BPF_F_INNER_MAP (Alexei)
+v2 -> v3:
+  - Remove tab that slipped into uapi helper desc (Jakub)
+  - Rework map in map for array to error from map_gen_lookup (Andrii)
+v1 -> v2:
+  - Fixed selftest comment wrt inner1/inner2 value (Yonghong)
+
+Daniel Borkmann (6):
+  bpf: improve bpf_redirect_neigh helper description
+  bpf: add redirect_peer helper
+  bpf: allow for map-in-map with dynamic inner array map entries
+  bpf, selftests: add test for different array inner map size
+  bpf, selftests: make redirect_neigh test more extensible
+  bpf, selftests: add redirect_peer selftest
+
+ drivers/net/veth.c                            |   9 +
+ include/linux/bpf.h                           |   2 +-
+ include/linux/netdevice.h                     |   4 +
+ include/uapi/linux/bpf.h                      |  30 ++-
+ kernel/bpf/arraymap.c                         |  17 +-
+ kernel/bpf/hashtab.c                          |   6 +-
+ kernel/bpf/verifier.c                         |   6 +-
+ net/core/dev.c                                |  15 +-
+ net/core/filter.c                             |  54 ++++-
+ net/xdp/xskmap.c                              |   2 +-
+ tools/include/uapi/linux/bpf.h                |  30 ++-
+ .../selftests/bpf/prog_tests/btf_map_in_map.c |  39 +++-
+ .../selftests/bpf/progs/test_btf_map_in_map.c |  43 ++++
+ .../selftests/bpf/progs/test_tc_neigh.c       |  40 ++--
+ .../selftests/bpf/progs/test_tc_peer.c        |  45 ++++
+ tools/testing/selftests/bpf/test_tc_neigh.sh  | 168 ---------------
+ .../testing/selftests/bpf/test_tc_redirect.sh | 204 ++++++++++++++++++
+ 17 files changed, 489 insertions(+), 225 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_tc_peer.c
+ delete mode 100755 tools/testing/selftests/bpf/test_tc_neigh.sh
+ create mode 100755 tools/testing/selftests/bpf/test_tc_redirect.sh
+
+-- 
+2.17.1
+
