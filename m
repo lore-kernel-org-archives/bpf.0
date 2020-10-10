@@ -2,35 +2,38 @@ Return-Path: <SRS0=llPw=DR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B96A3C433E7
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:13:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56433C433DF
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:13:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8C00E2078B
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:13:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24B2A20760
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:13:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389053AbgJJWzP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S2389038AbgJJWzP (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Sat, 10 Oct 2020 18:55:15 -0400
-Received: from www62.your-server.de ([213.133.104.62]:58586 "EHLO
+Received: from www62.your-server.de ([213.133.104.62]:58618 "EHLO
         www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388219AbgJJUy5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S2388228AbgJJUy5 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Sat, 10 Oct 2020 16:54:57 -0400
 Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
         by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
         (Exim 4.89_1)
         (envelope-from <daniel@iogearbox.net>)
-        id 1kRLtD-0003Ql-QK; Sat, 10 Oct 2020 22:54:51 +0200
+        id 1kRLtG-0003RX-D9; Sat, 10 Oct 2020 22:54:54 +0200
 From:   Daniel Borkmann <daniel@iogearbox.net>
 To:     ast@kernel.org
 Cc:     daniel@iogearbox.net, john.fastabend@gmail.com, yhs@fb.com,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v5 0/6] Follow-up BPF helper improvements
-Date:   Sat, 10 Oct 2020 22:54:41 +0200
-Message-Id: <20201010205447.5610-1-daniel@iogearbox.net>
+Subject: [PATCH bpf-next v5 6/6] bpf, selftests: add redirect_peer selftest
+Date:   Sat, 10 Oct 2020 22:54:47 +0200
+Message-Id: <20201010205447.5610-7-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20201010205447.5610-1-daniel@iogearbox.net>
+References: <20201010205447.5610-1-daniel@iogearbox.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Authenticated-Sender: daniel@iogearbox.net
@@ -39,60 +42,119 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series addresses most of the feedback [0] that was to be followed
-up from the last series, that is, UAPI helper comment improvements and
-getting rid of the ifindex obj file hacks in the selftest by using a
-BPF map instead. The __sk_buff data/data_end pointer work, I'm planning
-to do in a later round as well as the mem*() BPF improvements we have
-in Cilium for libbpf. Next, the series adds two features, i) a helper
-called redirect_peer() to improve latency on netns switch, and ii) to
-allow map in map with dynamic inner array map sizes. Selftests for each
-are added as well. For details, please check individual patches, thanks!
+Extend the test_tc_redirect test and add a small test that exercises the new
+redirect_peer() helper for the IPv4 and IPv6 case.
 
-  [0] https://lore.kernel.org/bpf/cover.1601477936.git.daniel@iogearbox.net/
-
-v4 -> v5:
-  - Replace cnt == -EOPNOTSUPP check with cnt < 0; I've used < 0
-    here as I think it's useful to keep the existing cnt == 0 ||
-    cnt >= ARRAY_SIZE(insn_buf) for error detection (Andrii)
-v3 -> v4:
-  - Rename new array map flag to BPF_F_INNER_MAP (Alexei)
-v2 -> v3:
-  - Remove tab that slipped into uapi helper desc (Jakub)
-  - Rework map in map for array to error from map_gen_lookup (Andrii)
-v1 -> v2:
-  - Fixed selftest comment wrt inner1/inner2 value (Yonghong)
-
-Daniel Borkmann (6):
-  bpf: improve bpf_redirect_neigh helper description
-  bpf: add redirect_peer helper
-  bpf: allow for map-in-map with dynamic inner array map entries
-  bpf, selftests: add test for different array inner map size
-  bpf, selftests: make redirect_neigh test more extensible
-  bpf, selftests: add redirect_peer selftest
-
- drivers/net/veth.c                            |   9 +
- include/linux/bpf.h                           |   2 +-
- include/linux/netdevice.h                     |   4 +
- include/uapi/linux/bpf.h                      |  30 ++-
- kernel/bpf/arraymap.c                         |  17 +-
- kernel/bpf/hashtab.c                          |   6 +-
- kernel/bpf/verifier.c                         |   4 +-
- net/core/dev.c                                |  15 +-
- net/core/filter.c                             |  54 ++++-
- net/xdp/xskmap.c                              |   2 +-
- tools/include/uapi/linux/bpf.h                |  30 ++-
- .../selftests/bpf/prog_tests/btf_map_in_map.c |  39 +++-
- .../selftests/bpf/progs/test_btf_map_in_map.c |  43 ++++
- .../selftests/bpf/progs/test_tc_neigh.c       |  40 ++--
- .../selftests/bpf/progs/test_tc_peer.c        |  45 ++++
- tools/testing/selftests/bpf/test_tc_neigh.sh  | 168 ---------------
- .../testing/selftests/bpf/test_tc_redirect.sh | 204 ++++++++++++++++++
- 17 files changed, 488 insertions(+), 224 deletions(-)
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+---
+ .../selftests/bpf/progs/test_tc_peer.c        | 45 +++++++++++++++++++
+ .../testing/selftests/bpf/test_tc_redirect.sh | 25 +++++++----
+ 2 files changed, 61 insertions(+), 9 deletions(-)
  create mode 100644 tools/testing/selftests/bpf/progs/test_tc_peer.c
- delete mode 100755 tools/testing/selftests/bpf/test_tc_neigh.sh
- create mode 100755 tools/testing/selftests/bpf/test_tc_redirect.sh
 
+diff --git a/tools/testing/selftests/bpf/progs/test_tc_peer.c b/tools/testing/selftests/bpf/progs/test_tc_peer.c
+new file mode 100644
+index 000000000000..fc84a7685aa2
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_tc_peer.c
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <stdint.h>
++#include <stdbool.h>
++
++#include <linux/bpf.h>
++#include <linux/stddef.h>
++#include <linux/pkt_cls.h>
++
++#include <bpf/bpf_helpers.h>
++
++enum {
++	dev_src,
++	dev_dst,
++};
++
++struct bpf_map_def SEC("maps") ifindex_map = {
++	.type		= BPF_MAP_TYPE_ARRAY,
++	.key_size	= sizeof(int),
++	.value_size	= sizeof(int),
++	.max_entries	= 2,
++};
++
++static __always_inline int get_dev_ifindex(int which)
++{
++	int *ifindex = bpf_map_lookup_elem(&ifindex_map, &which);
++
++	return ifindex ? *ifindex : 0;
++}
++
++SEC("chk_egress") int tc_chk(struct __sk_buff *skb)
++{
++	return TC_ACT_SHOT;
++}
++
++SEC("dst_ingress") int tc_dst(struct __sk_buff *skb)
++{
++	return bpf_redirect_peer(get_dev_ifindex(dev_src), 0);
++}
++
++SEC("src_ingress") int tc_src(struct __sk_buff *skb)
++{
++	return bpf_redirect_peer(get_dev_ifindex(dev_dst), 0);
++}
++
++char __license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/test_tc_redirect.sh b/tools/testing/selftests/bpf/test_tc_redirect.sh
+index 6ad441405132..6d7482562140 100755
+--- a/tools/testing/selftests/bpf/test_tc_redirect.sh
++++ b/tools/testing/selftests/bpf/test_tc_redirect.sh
+@@ -4,9 +4,10 @@
+ # This test sets up 3 netns (src <-> fwd <-> dst). There is no direct veth link
+ # between src and dst. The netns fwd has veth links to each src and dst. The
+ # client is in src and server in dst. The test installs a TC BPF program to each
+-# host facing veth in fwd which calls into bpf_redirect_peer() to perform the
+-# neigh addr population and redirect; it also installs a dropper prog on the
+-# egress side to drop skbs if neigh addrs were not populated.
++# host facing veth in fwd which calls into i) bpf_redirect_neigh() to perform the
++# neigh addr population and redirect or ii) bpf_redirect_peer() for namespace
++# switch from ingress side; it also installs a checker prog on the egress side
++# to drop unexpected traffic.
+ 
+ if [[ $EUID -ne 0 ]]; then
+ 	echo "This script must be run as root"
+@@ -166,15 +167,17 @@ hex_mem_str()
+ 	perl -e 'print join(" ", unpack("(H2)8", pack("L", @ARGV)))' $1
+ }
+ 
+-netns_setup_neigh()
++netns_setup_bpf()
+ {
++	local obj=$1
++
+ 	ip netns exec ${NS_FWD} tc qdisc add dev veth_src_fwd clsact
+-	ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd ingress bpf da obj test_tc_neigh.o sec src_ingress
+-	ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd egress  bpf da obj test_tc_neigh.o sec chk_egress
++	ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd ingress bpf da obj $obj sec src_ingress
++	ip netns exec ${NS_FWD} tc filter add dev veth_src_fwd egress  bpf da obj $obj sec chk_egress
+ 
+ 	ip netns exec ${NS_FWD} tc qdisc add dev veth_dst_fwd clsact
+-	ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd ingress bpf da obj test_tc_neigh.o sec dst_ingress
+-	ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd egress  bpf da obj test_tc_neigh.o sec chk_egress
++	ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd ingress bpf da obj $obj sec dst_ingress
++	ip netns exec ${NS_FWD} tc filter add dev veth_dst_fwd egress  bpf da obj $obj sec chk_egress
+ 
+ 	veth_src=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_src_fwd/ifindex)
+ 	veth_dst=$(ip netns exec ${NS_FWD} cat /sys/class/net/veth_dst_fwd/ifindex)
+@@ -193,5 +196,9 @@ trap netns_cleanup EXIT
+ set -e
+ 
+ netns_setup
+-netns_setup_neigh
++netns_setup_bpf test_tc_neigh.o
++netns_test_connectivity
++netns_cleanup
++netns_setup
++netns_setup_bpf test_tc_peer.o
+ netns_test_connectivity
 -- 
 2.17.1
 
