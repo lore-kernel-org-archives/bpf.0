@@ -2,98 +2,121 @@ Return-Path: <SRS0=llPw=DR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECCFFC433DF
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 22:55:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 24E5EC43467
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 22:55:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B742420795
+	by mail.kernel.org (Postfix) with ESMTP id DFA6C2080C
 	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 22:55:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tBVG9hXE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gx+VUSI0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388991AbgJJWzM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 10 Oct 2020 18:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
+        id S2388148AbgJJWzL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 10 Oct 2020 18:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731152AbgJJTxK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 10 Oct 2020 15:53:10 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F32C0613AA
-        for <bpf@vger.kernel.org>; Sat, 10 Oct 2020 03:50:21 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id t20so5706944edr.11
-        for <bpf@vger.kernel.org>; Sat, 10 Oct 2020 03:50:21 -0700 (PDT)
+        with ESMTP id S1730697AbgJJTwD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 10 Oct 2020 15:52:03 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27770C0613E4;
+        Sat, 10 Oct 2020 03:44:27 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id b19so5799085pld.0;
+        Sat, 10 Oct 2020 03:44:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=HC/gkB6iSKF4+yEdzyyM5VASOzrvfoYkCSUnVQ8RBKU=;
-        b=tBVG9hXEgAoU/QAs22SWkvWV59bjbaejX8CxE5IoMlc0PzBxTyjbt8GJtOdpMuRIb8
-         LOc2emYuchLsr4mqQXDZjM3FCF5V9B6qk2Nq9HADbt1FjFlUsbMfK195krPEFUK9T+oK
-         0QXmjjpVW3z4BGQ6C57sFLgtbevM4DlCDqKZ5kj2ms1sU6ZpyFJwjUzMGqidil8y2Uy7
-         FndkOucPWI6zOv0m3BYrJ6YlZJBNGWvl9MvgTjHnFfsHeWEtdpC3EtghgkgGazTilCFa
-         LZQ+Wa5xey5aWvGvQkyG8YGlL4RCWWgc4+wnqmTJRpXUL3zYJgv+TB0WvuU3z/6Iw63g
-         m+zw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hZvt0PA/C7uHoXPjIYLi9RxOX2L92HAoDtLQvnBgMdY=;
+        b=gx+VUSI01RH/8oATHGuLB8KhQEqs+3sIQfQcIyqY/xiTaO1SLBc3RbYR2xjei3taxS
+         x+Dba9FI5K64RXJirW3XGdMMXxhDlTV1URuGroGNXUysthIzc8GPlmoznk3JlT3r19/2
+         NcbquZVL+5eLw23eGxHzQIf3jdiI/UL8cdmHPTRMoaxrR3jbdnvo60GWE1XHSSp1qrgV
+         iQxeMnmqe0BAuc4ySnUG+KeaEaeL48L7kvJpGNU+s7R3IBVFCcvAUOoMI2xCpcmc79Mr
+         lb0pNE+eC3m8R6Vqjvvukkz70WeFrXJe8MlOFLf4NvyPpa73IihPoy4Y7KaP7kqSud/k
+         hKpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=HC/gkB6iSKF4+yEdzyyM5VASOzrvfoYkCSUnVQ8RBKU=;
-        b=TfIxf5dcNkBnWLLwzHzdyjs0/ncyFApsrH0Z+eZdeOdofxY+LNxHFLrVmY/TSJnhx5
-         6Hg7b/cWJg2KgevWIhh5deS2usfo1DDOYf+bVS8KbUccbfu/YW10OhTf+qY7SvcqX5z9
-         w2Jnwy0PPYYOMIO5K6M11r1DtiGgAbnhNNkjraA4aLnHDhw0cosdeIe1PZGHPqDO8VpX
-         NT0nI0YlDL7MKhtg7+FYB0X/ceEaU2509fojGWWGMfCMj41S1pdqvT6kCLEga1S6NTj9
-         Ylv01TT5Ep2n0r8S2ujURpxJlBUzrt1sIQMqcuik0RskVQXcLkPHkRCmSHB2wpVTW7IN
-         FRnw==
-X-Gm-Message-State: AOAM530E0MSOdjbUAsJ9+EaxCF+lh5Uo6j/sDTviQK7ZIOsydh2qTnSy
-        /rM3j3I6WytSEzSLdFPpQYSEtPgP33CDUcjki08ihK7Aig==
-X-Google-Smtp-Source: ABdhPJwc2V+HdmPm1gDuFTqNbYxh4tz2DHtmCMj6YlZNMri92UFr8G/wq64F1bIA0yC7AjUbsEncpJxFPMbfbG8+sOo=
-X-Received: by 2002:a50:cbc7:: with SMTP id l7mr3904049edi.148.1602327019472;
- Sat, 10 Oct 2020 03:50:19 -0700 (PDT)
-MIME-Version: 1.0
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hZvt0PA/C7uHoXPjIYLi9RxOX2L92HAoDtLQvnBgMdY=;
+        b=tc4eKdUxDoMN+btGGChmqlvp1eHmbRtbchxM0TZnbwjUeSNo6306W5tR0GuqoVAVq6
+         M67DHAkMR2K2WynNWngZ5ueyLxDZyqy7jG3QTNX90lx5sYie64nbjdgW52sDRtAQeil+
+         EsqmpMytknzWC79Sh/dSb18Y9GmHNE4cQmp/tPaeY/Gw0grG+019W8RUpjonHRBtajyc
+         7CQKJPY6oeTkyvYMRYZSPSyc/6LiE6OqU8i3uBU2ruH2EI5/x4Ib7/Jcty++Gw7kCPw3
+         R497hhQlR7b5CROU381KraLVsQRBxowxyRVQ2DLCYbq7t+QUv7OJhOsbVKOmEzjW3mJ/
+         1mBw==
+X-Gm-Message-State: AOAM533j06PDjuxpcycnzmRgtEY4A1oMePEVpl+KUC1MO7w8xILzmYD0
+        YOQam+hnPD0Q78YBAvnsow==
+X-Google-Smtp-Source: ABdhPJyIFrQQ23bjGeX89Yr7HqDtbljUSmGUMAiA8YJaH6LMTSgWmOUNCVw8FFOUuJyTy8VO29HdRw==
+X-Received: by 2002:a17:902:868d:b029:d3:9c6b:9e05 with SMTP id g13-20020a170902868db02900d39c6b9e05mr15510223plo.51.1602326666458;
+        Sat, 10 Oct 2020 03:44:26 -0700 (PDT)
+Received: from localhost.localdomain ([182.209.58.45])
+        by smtp.gmail.com with ESMTPSA id n127sm13307286pfn.155.2020.10.10.03.44.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Oct 2020 03:44:25 -0700 (PDT)
 From:   "Daniel T. Lee" <danieltimlee@gmail.com>
-Date:   Sat, 10 Oct 2020 19:50:03 +0900
-Message-ID: <CAEKGpzh70f06iMQdR3B1LF3hMwHnB=x92fvfV8+smQObvKBF_w@mail.gmail.com>
-Subject: Where can I find the map's BTF type key/value specification?
-To:     bpf <bpf@vger.kernel.org>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+To:     Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andriin@fb.com>,
-        Martin Lau <kafai@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Xdp <xdp-newbies@vger.kernel.org>
+Subject: [PATCH bpf-next v2 0/3] samples: bpf: Refactor XDP programs with libbpf
+Date:   Sat, 10 Oct 2020 19:44:13 +0900
+Message-Id: <20201010104416.1421-1-danieltimlee@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-I'm looking for how BTF type definition '__type(key, int)' is being changed
-to '__uint(key_size, sizeof(int))'. (Not exactly "changed" but wonder how
-it can be considered the same)
+To avoid confusion caused by the increasing fragmentation of the BPF
+Loader program, this commit would like to convert the previous bpf_load
+loader with the libbpf loader.
 
-    __uint(type, BPF_MAP_TYPE_ARRAY);
-    __type(key, int);          => __uint(key_size, sizeof(int))
-    __type(value, u32);    => __uint(value_size, sizeof(u32))
-    __uint(max_entries, 2);
+Thanks to libbpf's bpf_link interface, managing the tracepoint BPF
+program is much easier. bpf_program__attach_tracepoint manages the
+enable of tracepoint event and attach of BPF programs to it with a
+single interface bpf_link, so there is no need to manage event_fd and
+prog_fd separately.
 
-Whether the specific map type supports BTF or not can be inferred from
-the file in kernel/bpf/*map.c and by checking each MAP type's
-bpf_map_ops .map_check_btf pointer is initialized as map_check_no_btf.
+And due to addition of generic bpf_program__attach() to libbpf, it is
+now possible to attach BPF programs with __attach() instead of
+explicitly calling __attach_<type>().
 
-But how can I figure out that specific types of map support BTF types for
-key/value? And how can I determine how this BTF key/value type is
-converted?
+This patchset refactors xdp_monitor with using this libbpf API, and the
+bpf_load is removed and migrated to libbpf. Also, attach_tracepoint()
+is replaced with the generic __attach() method in xdp_redirect_cpu.
+Moreover, maps in kern program have been converted to BTF-defined map.
 
-I am aware that BTF information is created in the form of a compact
-type by using pahole to deduplicate repeated types, strings information
-from DWARF information. However, looking at the *btf or pahole file
-in dwarves repository, it seemed that it was not responsible for the
-conversion of the BTF key/value.
+---
+Changes in v2:
+ - added cleanup logic for bpf_link and bpf_object in xdp_monitor
+ - program section match with bpf_program__is_<type> instead of strncmp
+ - revert BTF key/val type to default of BPF_MAP_TYPE_PERF_EVENT_ARRAY
+ - split increment into seperate satement
+ - refactor pointer array initialization
+ - error code cleanup
 
-The remaining guess is that LLVM's BPF target compiler is responsible
-for this, or it's probably somewhere in the kernel, but I'm not sure
-where it is.
+Daniel T. Lee (3):
+  samples: bpf: Refactor xdp_monitor with libbpf
+  samples: bpf: Replace attach_tracepoint() to attach() in
+    xdp_redirect_cpu
+  samples: bpf: refactor XDP kern program maps with BTF-defined map
 
---
-Best,
-Daniel T. Lee
+ samples/bpf/Makefile                |   4 +-
+ samples/bpf/xdp_monitor_kern.c      |  60 +++++------
+ samples/bpf/xdp_monitor_user.c      | 159 +++++++++++++++++++++-------
+ samples/bpf/xdp_redirect_cpu_user.c | 153 +++++++++++++-------------
+ samples/bpf/xdp_sample_pkts_kern.c  |  14 ++-
+ samples/bpf/xdp_sample_pkts_user.c  |   1 -
+ 6 files changed, 230 insertions(+), 161 deletions(-)
+
+-- 
+2.25.1
+
