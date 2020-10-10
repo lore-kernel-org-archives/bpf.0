@@ -2,165 +2,187 @@ Return-Path: <SRS0=llPw=DR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73162C433DF
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:11:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CCA5FC433DF
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:13:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3EA0B20760
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:11:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 842A820760
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:13:06 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JFEzbmdQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="shDLVtvT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729082AbgJJXLa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 10 Oct 2020 19:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44166 "EHLO
+        id S2389077AbgJJWzR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 10 Oct 2020 18:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726473AbgJJXLT (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 10 Oct 2020 19:11:19 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479E3C0613D0
-        for <bpf@vger.kernel.org>; Sat, 10 Oct 2020 16:11:18 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id h6so10271903ybi.11
-        for <bpf@vger.kernel.org>; Sat, 10 Oct 2020 16:11:18 -0700 (PDT)
+        with ESMTP id S1730730AbgJJWCr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 10 Oct 2020 18:02:47 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0510FC0613D0;
+        Sat, 10 Oct 2020 15:02:46 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id h9so10226070ybm.4;
+        Sat, 10 Oct 2020 15:02:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=JRNHFyGRzfLbPL19jphhyoqUbLjJItaO8qvViF4olUs=;
-        b=JFEzbmdQp4N1tumBBNRoHwBIEJmcveQSIjsD+fx6N77UHSgGGcm//W54J/6HlhWOP4
-         RrCx4cj5s/36DPgZKe/J15YLiI8m/rn0VpUoiirlM5MhsVyvG2hXbYKXiv6sNN2f8Z6o
-         An+4oPt9Df2t2qbwqaG71KR2CoWc96aztdsjeHrNNMZu13a4kMhfusHNV58BMpxmGSK8
-         7AJgipLm/z5po0FJ19tGikWc3U+K77wJ1TXg3I4wyRC81h3+JL2+Zf8MC87ywEIVwIKm
-         RYlGeSbZbuR9cUmWlel+iDEtjvQlNkB0WhET34RoMteaWHswrKv8J4NX23K/lh7Da4Bo
-         fYRA==
+        bh=BPBONxxyc/ex5OHILvYzv0JlzTpLWw2xP7v4ZASALFI=;
+        b=shDLVtvTK/uzL9IyUrcof7dNKQDBT6+FnW+xaBA4W6SykTAgqiYi+B1L2c/Ed2DFWd
+         oE+MJvl2OHWEPAwGIw83yFJD0BEc76TkdZPxjkE35QLDqh2/YAUqRT/CKFG/vmUcMi9m
+         4Anmj7zJ36m+jD0kha5wxLexJzG3wuz0Q3jDRTFKbRZP/BBhKTsT6nYOramAvvN7pD1g
+         W+a64oK3pEwVbBx4T1O/frK3WFutv/roj0sW/gTUDpryqNZZ2eI7aiGI4HPbWEUJY4Tb
+         ALUlO6AKymjLSiobcUDuEhoW0bstjw7U4LzMlAJgCPoX8GvlHBonqx+Ymc3nVVDAmESd
+         E1ZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JRNHFyGRzfLbPL19jphhyoqUbLjJItaO8qvViF4olUs=;
-        b=fOvJH7bQ1j6g+AXJIVf7lPnd5Npq6vr1oiHIk5BpHig92M51gtf5cjpWB4pIJx5PY1
-         072vGVBGwH16hrRlHePALuMulrXFpzfbTPoyxzNKp0mRmxqqkIbeRR1OsARmok2sexGS
-         AvLqIC7byedoG8qNlEXZ718dGIe1KK/QMor2Ha2B3s3cUxXaXvLrRtwvVXKvtRWdQ7ni
-         xjyjDVzGRCh0eEVmbCM1Pda7e/9h9aZbGDbJMZQ9ZslykGuDuI0cFvVxQ41e0eo5HKra
-         tFVyI8z5TBsnE+tPBDNqx9BFTzbTVLdP+O3l2fAHDD3ekigXwnj95qU+5vBdoZJVvPBt
-         v7Dg==
-X-Gm-Message-State: AOAM531JSw751lciUOCZTtdOTpsOF+tx3aemZ3idAdL2tvEEC8Kn7+uc
-        oss/WR4eweREAIvzsBGGim/753lC9sVdtR5wWCDWkvX71NThCg==
-X-Google-Smtp-Source: ABdhPJzE4D7wQLYSEi6TUX7PW6CB8EnptVzoainvkU56jx2YUxhEk2cSC8yjQ8ziz7JOSM0Bnkbu0SLzDyH/sSobSWE=
-X-Received: by 2002:a25:2d41:: with SMTP id s1mr24264164ybe.459.1602371477402;
- Sat, 10 Oct 2020 16:11:17 -0700 (PDT)
+        bh=BPBONxxyc/ex5OHILvYzv0JlzTpLWw2xP7v4ZASALFI=;
+        b=iikqMDLJ+NhD9mvRoLjcJpDx67+j67rWw6jTFrZEZSwl6U/D4cLl3vo2UiLOdQeS0c
+         Icgzn0krwb7KfPsgTC4xIWZ/QON/pXYEfDLYb6IBUqX3wvCIrox7hcvblHh0ksYFZAsC
+         yqpvZdGtwZMhKx+YQwwVWH9JH9zof1BE4W8PM91p7+FnYEWKpn/Ophks1jPq9nag23O6
+         c9+EJeBDwRjNu9UB6lBXU8zOTYpRBpUc8W3cJ7FzpnUAjRPljijLV4xhirpscNcaaihD
+         uP3VITynkHCnKAk+phIcyhm9t1gzY/+C6TFm53wFINr0wPCbKvEb6UPyzFdNudZr8o5h
+         pQ5g==
+X-Gm-Message-State: AOAM530/8tDM7K8RniHpApiN7sCSLf4cUM4oAXTKhLDU4ZX8wYMZegfE
+        StwdqFBjyQpoVEi66GVPjCxQ6Lo+p5X4zlt268E=
+X-Google-Smtp-Source: ABdhPJwwQ9QUbTlJgjeiZSkxW8PdW93J3Wb9f/3iZbRIxvAzSn9EWnlckNJl3xPOIrpfYvrZWfEoWLEWtIJJvksiFyE=
+X-Received: by 2002:a25:2a4b:: with SMTP id q72mr18181406ybq.27.1602367366106;
+ Sat, 10 Oct 2020 15:02:46 -0700 (PDT)
 MIME-Version: 1.0
-References: <CA+hQ2+gb_y7TViv13K_JpJTP=yHFqORmY+=6PrO4eAjgrBSitw@mail.gmail.com>
- <CAEf4BzbjUbYDrMc13-bYBBxicDmuokjLHyRaOVA-1JHD6vVbYg@mail.gmail.com>
- <CAMOZA0JFYEYmLqAQu=km624nZfY8epPEpmqqsdUigzp+jFsymQ@mail.gmail.com>
- <CAEf4BzYRiF00B+4=u8r-z+RN3bVWeV_h==4f_JJJZ133PhGAog@mail.gmail.com>
- <CAMOZA0J1u-DdNk4EDFxeemxNhS8teKYLmEEMPQUcfddaJFGwaw@mail.gmail.com> <CAMOZA0LrxjP5dco35NRZeFpMZd7QhuGfvr_aqnZR3nAon_n8ng@mail.gmail.com>
-In-Reply-To: <CAMOZA0LrxjP5dco35NRZeFpMZd7QhuGfvr_aqnZR3nAon_n8ng@mail.gmail.com>
+References: <20201010205447.5610-1-daniel@iogearbox.net> <20201010205447.5610-4-daniel@iogearbox.net>
+In-Reply-To: <20201010205447.5610-4-daniel@iogearbox.net>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Sat, 10 Oct 2020 16:11:05 -0700
-Message-ID: <CAEf4BzbnubBZwi3OVPkFigm-jMS_BV7yFLSwQwfGS09iwyhV5Q@mail.gmail.com>
-Subject: Re: libbpf/bpftool inconsistent handling og .data and .bss ?
-To:     Luigi Rizzo <lrizzo@google.com>
-Cc:     Luigi Rizzo <rizzo@iet.unipi.it>, bpf <bpf@vger.kernel.org>,
-        Petar Penkov <ppenkov@google.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Stanislav Fomichev <sdf@google.com>
+Date:   Sat, 10 Oct 2020 15:02:35 -0700
+Message-ID: <CAEf4BzZjDVqH3feow2Jzp--+akegVp5yrDdMyzB6EiD6U2ddDQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 3/6] bpf: allow for map-in-map with dynamic
+ inner array map entries
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        john fastabend <john.fastabend@gmail.com>,
+        Yonghong Song <yhs@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Oct 10, 2020 at 3:49 PM Luigi Rizzo <lrizzo@google.com> wrote:
+On Sat, Oct 10, 2020 at 1:54 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
 >
-> Coming back to .bss handling:
+> Recent work in f4d05259213f ("bpf: Add map_meta_equal map ops") and 134fede4eecf
+> ("bpf: Relax max_entries check for most of the inner map types") added support
+> for dynamic inner max elements for most map-in-map types. Exceptions were maps
+> like array or prog array where the map_gen_lookup() callback uses the maps'
+> max_entries field as a constant when emitting instructions.
 >
-> On Wed, Oct 7, 2020 at 11:29 PM Luigi Rizzo <lrizzo@google.com> wrote:
-> >
-> > On Wed, Oct 7, 2020 at 10:40 PM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Wed, Oct 7, 2020 at 1:31 PM Luigi Rizzo <lrizzo@google.com> wrote:
-> > > >
-> > > > TL;DR; there seems to be a compiler bug with clang-10 and -O2
-> > > > when struct are in .data -- details below.
-> > > >
-> > > > On Wed, Oct 7, 2020 at 8:35 PM Andrii Nakryiko
-> > > > <andrii.nakryiko@gmail.com> wrote:
-> > > > >
-> > > > > On Wed, Oct 7, 2020 at 9:03 AM Luigi Rizzo <rizzo@iet.unipi.it> wrote:
-> > > > ...
-> > > > > > 2. .bss overrides from userspace are not seen in bpf at runtime
-> ...
-> > > > >
-> > > > > This is quite surprising, given we have explicit selftests validating
-> > > > > that all this works. And it seems to work. Please check
-> > > > > prog_tests/skeleton.c and progs/test_skeleton.c. Can you try running
-> > > > > it and confirm that it works in your setup?
-> > > >
-> > > > Ah, this was non intuitive but obvious in hindsight:
-> > > >
-> > > > .bss is zeroed by the kernel after load(), and since my program
-> > > > changed the value before foo_bpf__load() , the memory was overwritten
-> > > > with 0s. I could confirm this by printing the value after load.
-> > > >
-> > > > If I update obj->data-><something> after __load(),
-> > > > or even after __attach() given that userspace mmaps .bss and .data,
-> > > > everything works as expected both for scalars and structs.
-> > >
-> > > Check prog_tests/skeleton.c again, it sets .data, .bss, and .rodata
-> > > before the load. And checks that those values are preserved after
-> > > load. So .bss, if you initialize it manually, shouldn't zero-out what
-> > > you set.
+> We recently implemented Maglev consistent hashing into Cilium's load balancer
+> which uses map-in-map with an outer map being hash and inner being array holding
+> the Maglev backend table for each service. This has been designed this way in
+> order to reduce overall memory consumption given the outer hash map allows to
+> avoid preallocating a large, flat memory area for all services. Also, the
+> number of service mappings is not always known a-priori.
 >
-> strace reveals that the .bss is initially created as anonymous memory:
+> The use case for dynamic inner array map entries is to further reduce memory
+> overhead, for example, some services might just have a small number of back
+> ends while others could have a large number. Right now the Maglev backend table
+> for small and large number of backends would need to have the same inner array
+> map entries which adds a lot of unneeded overhead.
 >
->   mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANONYMOUS, -1,
-> 0) = 0x7fd074a5f000
->   write(2, "after open bss is at 0x7fd074a5f"..., 36after open bss is
-> at 0x7fd074a5f000) = 36
+> Dynamic inner array map entries can be realized by avoiding the inlined code
+> generation for their lookup. The lookup will still be efficient since it will
+> be calling into array_map_lookup_elem() directly and thus avoiding retpoline.
+> The patch adds a BPF_F_INNER_MAP flag to map creation which therefore skips
+> inline code generation and relaxes array_map_meta_equal() check to ignore both
+> maps' max_entries. This also still allows to have faster lookups for map-in-map
+> when BPF_F_INNER_MAP is not specified and hence dynamic max_entries not needed.
 >
-> and then remapped after the map has been created:
->   bpf(BPF_MAP_CREATE, {map_type=BPF_MAP_TYPE_ARRAY, key_size=4,
-> value_size=144,  max_entries=1, map_flags=0x400 /* BPF_F_??? */,
-> inner_map_fd=0, map_name="hstats_b.bss", map_ifindex=0, ...}, 120) = 6
->   ...
->   mmap(0x7fd074a5f000, 4096, PROT_READ|PROT_WRITE,
-> MAP_SHARED|MAP_FIXED, 6, 0) = 0x7fd074a5f000
+> Example code generation where inner map is dynamic sized array:
 >
-> so the original content is gone.
-
-not exactly, all of .bss, .rodata, .data and .kconfig are first
-mmap()'ed as anonymous memory. I've modified test_skeleton.c to
-increase .bss size to 8192 bytes size to distinguish it from other
-maps:
-
-1. mmap() anonymous memory (just allocating memory that would keep
-initial values that you set with skel->bss->my_var = 123):
-
-mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANONYMOUS, -1,
-0) = 0x7fb3b406f000
-
-2. use that anonymous memory with initialized variables to update map
-contents during bpf_object's load:
-
-bpf(BPF_MAP_UPDATE_ELEM, {map_fd=7, key=0x7ffdab521d50,
-value=0x7fb3b406f000, flags=BPF_ANY}, 120) = 0
-
-3. now re-mmap() it with MAP_FIXED, so the same memory address is
-pointing to ARRAY's content in the kernel. Because of
-BPF_MAP_UPDATE_ELEM above, contents should be identical:
-
-mmap(0x7fb3b406f000, 8192, PROT_READ|PROT_WRITE, MAP_SHARED|MAP_FIXED,
-7, 0) = 0x7fb3b406f000
-
-4. later we are done with it:
-
-munmap(0x7fb3b406f000, 8192)            = 0
-
+>   # bpftool p d x i 125
+>   int handle__sys_enter(void * ctx):
+>   ; int handle__sys_enter(void *ctx)
+>      0: (b4) w1 = 0
+>   ; int key = 0;
+>      1: (63) *(u32 *)(r10 -4) = r1
+>      2: (bf) r2 = r10
+>   ;
+>      3: (07) r2 += -4
+>   ; inner_map = bpf_map_lookup_elem(&outer_arr_dyn, &key);
+>      4: (18) r1 = map[id:468]
+>      6: (07) r1 += 272
+>      7: (61) r0 = *(u32 *)(r2 +0)
+>      8: (35) if r0 >= 0x3 goto pc+5
+>      9: (67) r0 <<= 3
+>     10: (0f) r0 += r1
+>     11: (79) r0 = *(u64 *)(r0 +0)
+>     12: (15) if r0 == 0x0 goto pc+1
+>     13: (05) goto pc+1
+>     14: (b7) r0 = 0
+>     15: (b4) w6 = -1
+>   ; if (!inner_map)
+>     16: (15) if r0 == 0x0 goto pc+6
+>     17: (bf) r2 = r10
+>   ;
+>     18: (07) r2 += -4
+>   ; val = bpf_map_lookup_elem(inner_map, &key);
+>     19: (bf) r1 = r0                               | No inlining but instead
+>     20: (85) call array_map_lookup_elem#149280     | call to array_map_lookup_elem()
+>   ; return val ? *val : -1;                        | for inner array lookup.
+>     21: (15) if r0 == 0x0 goto pc+1
+>   ; return val ? *val : -1;
+>     22: (61) r6 = *(u32 *)(r0 +0)
+>   ; }
+>     23: (bc) w0 = w6
+>     24: (95) exit
 >
-> cheers
-> luigi
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> ---
+>  include/linux/bpf.h            |  2 +-
+>  include/uapi/linux/bpf.h       |  3 +++
+>  kernel/bpf/arraymap.c          | 17 +++++++++++------
+>  kernel/bpf/hashtab.c           |  6 +++---
+>  kernel/bpf/verifier.c          |  4 +++-
+>  net/xdp/xskmap.c               |  2 +-
+>  tools/include/uapi/linux/bpf.h |  3 +++
+>  7 files changed, 25 insertions(+), 12 deletions(-)
+>
+
+[...]
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index f3e36eade3d4..d578875df1ad 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -11049,6 +11049,8 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
+>                         if (insn->imm == BPF_FUNC_map_lookup_elem &&
+>                             ops->map_gen_lookup) {
+>                                 cnt = ops->map_gen_lookup(map_ptr, insn_buf);
+> +                               if (cnt < 0)
+> +                                       goto patch_map_ops_generic;
+
+but now any reported error will be silently skipped. The logic should be:
+
+if (cnt == -EOPNOTSUPP)
+    goto patch_map_ops_generic;
+if (cnt <= 0 || cnt >= ARRAY_SIZE(insn_buf))
+    verbose(env, "bpf verifier is misconfigured\n");
+
+This way only -EOPNOTSUPP is silently skipped, all other cases where
+error is returned, cnt == 0, or cnt is too big would be reported as
+error.
+
+>                                 if (cnt == 0 || cnt >= ARRAY_SIZE(insn_buf)) {
+>                                         verbose(env, "bpf verifier is misconfigured\n");
+>                                         return -EINVAL;
+> @@ -11079,7 +11081,7 @@ static int fixup_bpf_calls(struct bpf_verifier_env *env)
+>                                      (int (*)(struct bpf_map *map, void *value))NULL));
+>                         BUILD_BUG_ON(!__same_type(ops->map_peek_elem,
+>                                      (int (*)(struct bpf_map *map, void *value))NULL));
+
+[...]
