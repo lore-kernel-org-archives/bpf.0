@@ -2,142 +2,230 @@ Return-Path: <SRS0=llPw=DR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 97480C4363A
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:13:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09A16C433E7
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:13:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5BF002078B
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:13:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C870F2078B
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:13:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QLOPe1HN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M9pS6rTM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389019AbgJJWzN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 10 Oct 2020 18:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
+        id S2388998AbgJJWzM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 10 Oct 2020 18:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731526AbgJJTyP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 10 Oct 2020 15:54:15 -0400
-Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1126C0613E1;
-        Sat, 10 Oct 2020 03:41:57 -0700 (PDT)
-Received: by mail-ej1-x643.google.com with SMTP id h24so16657620ejg.9;
-        Sat, 10 Oct 2020 03:41:57 -0700 (PDT)
+        with ESMTP id S1731156AbgJJTxc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 10 Oct 2020 15:53:32 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADADEC0613E9;
+        Sat, 10 Oct 2020 03:44:35 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id r10so9445586pgb.10;
+        Sat, 10 Oct 2020 03:44:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Q0R9T/xjTYd8YM1YuxiZqhLetAqKvDe7d2GoM9PR4T0=;
-        b=QLOPe1HNq4PEN+NYyq7WP9uqLahgeN1ZUq4Dy1Z5YB2717pWaU116qSqtBP5gWtwuX
-         iXm2mmdyj7BtZ83XwyBCsct0JfWKT2HdKa/W7J62k+YxrfNi2csKsgO1uHZpetuE/ADt
-         trFRpuz+GhuY+/DBqFeVjrs2lLCbh4vC9zI14W2HmFlBD2dzLXZAYuO3xOc8TLZrEoh3
-         XLhI7T/3q3kTv4XcyxRw4xQ0XGJl3+eA05NFuu33bXbmfwJjiOTozgctGXzDUExd7mZh
-         DLHvXuEf6b50uTVioTINBLS9DR7eNU21Z1Tp9pFbvGs3K1jmBGLhzzRjEfYu1PjuXeJ4
-         dAJw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=OW/gvTkGu86YgUxpgjSRkvij/4SXXCYc66hmNhRMo9c=;
+        b=M9pS6rTM1X7ZbozVAyUbVptpUuFZja+wxg1FAAFiNGIPOgYiJ2oAxXZnt2IkdFDNJ7
+         jroi/IdoVe/D7PnxhxDFfxYFZ4EEDqRd5/znbKJBziBGG7oIVHg61tPmASDKa9Bj76DO
+         c2V8q1edLGoe7D6q+XwMNtdb3RqBuIWaRpliAl9BVfbWs3cLF2GKx6CXXh2edoe9z7nq
+         p/DQY+YjI7MRRy/ZyyBbu2V84T15iGEx8fLTlQjiwqr5WJnuA1Rsls8GxfcCVxgEqwgC
+         xNcLpjUI38WKDxrUK5cCLsM4PSBz6Giq+2isLuP1X7gVc2GDi4xZxUJfYcgBDFKoexVr
+         4Ofg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Q0R9T/xjTYd8YM1YuxiZqhLetAqKvDe7d2GoM9PR4T0=;
-        b=KZnD/0XfIhfUQ7f+vN60F4GQym4cOVo5y1HVFlUq5yPPsvItlfSQrfHQk6M1lyssLJ
-         oiIrGQBvu7ffWfQ7tcUTblzJl49parD8/TMySPvj/MDOqSz6Ci5tuLCO6lflGFKMkCa5
-         CmtV2e98kx7gnDLO4AAr4eJmOKaLiUU12opQ3nIWq9VeXGchqntrYVHztAwWcuCYNVN7
-         uNY66iqfbrhBzvJNzQXBsHlDsnJW0Ny0AVNAeTimjRqrx80iyA7GuUPqVwpAljwQsFwy
-         HwOVVlvmH4h3kdh1uiQRQpay2q18s1EIiy7MTP5mVwBbkTYrHyRRX/Hox7RbUGSANofY
-         TsbA==
-X-Gm-Message-State: AOAM532ES8O3Fpki6VHlp+ygkkib2iSQxfyGupcrE9DXwl6yiKC7epmv
-        w5FdZYC/ZdC+ZZhbG7CiC5rRd/Y2w4Br4y23IA==
-X-Google-Smtp-Source: ABdhPJxKQoe78oDHWUDRuuqNUY3mYbvskdCUa+EYsPSOxWECTTDGnY31Y9b1FI8blNFliUzOHoPf0wwesiMAmREOV28=
-X-Received: by 2002:a17:906:f89:: with SMTP id q9mr18365181ejj.337.1602326516525;
- Sat, 10 Oct 2020 03:41:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201009160353.1529-1-danieltimlee@gmail.com> <CAEf4BzZJgsd3OkcgULc7_Hxhg_ZcSmp+XT0e--8EMkz9_+5Qxg@mail.gmail.com>
-In-Reply-To: <CAEf4BzZJgsd3OkcgULc7_Hxhg_ZcSmp+XT0e--8EMkz9_+5Qxg@mail.gmail.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=OW/gvTkGu86YgUxpgjSRkvij/4SXXCYc66hmNhRMo9c=;
+        b=HUkChbTYxeETOvF/MYhoio/L2Ifo5LmDd4zfXu6qjZRqGmjsTpgf/D89l1Y50SPLAG
+         j3dfy8vlcd8S8OwPwoPk/bygnVbF0eiDgSH+fhdv5Wdo7tJ5HlfCtxGIQGRdIqHhpXMC
+         1ol/51VrOHM+VM6eLfFoH5vajXuTHk6gdFCCPRkeRD4+fXLvGw9zT70f6NhfJcgjr4+K
+         FiPcPID+deTLFVUGNFG6mzQy4Qo3b5bff/0yvCtZznMclt4UYmo/PWtBInNeyxdAm+gb
+         TOJcKx7iEKY0QQ+SFzPpP/0BLuhD1L6S6RdvOo2Iufx/U5e87eirwKmh8maLi8vyrGxt
+         dr9Q==
+X-Gm-Message-State: AOAM532p1lE76QmgkSGzSqJo4KfrRSXUcsphrR5q5aQuKjkaURKuR4RD
+        0zs6BH1kzKBO1ISiG166+g==
+X-Google-Smtp-Source: ABdhPJz5PouSMzjUmLdPt/A9VyQIZcy2uxlPkVOAqVFDrmdP0lfAaW2x/EjDVn1y72EApuQGCpYhyA==
+X-Received: by 2002:a17:90a:448a:: with SMTP id t10mr9889016pjg.19.1602326675251;
+        Sat, 10 Oct 2020 03:44:35 -0700 (PDT)
+Received: from localhost.localdomain ([182.209.58.45])
+        by smtp.gmail.com with ESMTPSA id n127sm13307286pfn.155.2020.10.10.03.44.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Oct 2020 03:44:34 -0700 (PDT)
 From:   "Daniel T. Lee" <danieltimlee@gmail.com>
-Date:   Sat, 10 Oct 2020 19:41:40 +0900
-Message-ID: <CAEKGpzjakqueq9B8eziCB1iv24j3Qs+YDqZBtbO6GSqJoOUBEA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/3] samples: bpf: Refactor XDP programs with libbpf
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+To:     Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
         Xdp <xdp-newbies@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: [PATCH bpf-next v2 3/3] samples: bpf: refactor XDP kern program maps with BTF-defined map
+Date:   Sat, 10 Oct 2020 19:44:16 +0900
+Message-Id: <20201010104416.1421-4-danieltimlee@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201010104416.1421-1-danieltimlee@gmail.com>
+References: <20201010104416.1421-1-danieltimlee@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Oct 10, 2020 at 3:30 AM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Fri, Oct 9, 2020 at 9:04 AM Daniel T. Lee <danieltimlee@gmail.com> wrote:
-> >
-> > To avoid confusion caused by the increasing fragmentation of the BPF
-> > Loader program, this commit would like to convert the previous bpf_load
-> > loader with the libbpf loader.
-> >
-> > Thanks to libbpf's bpf_link interface, managing the tracepoint BPF
-> > program is much easier. bpf_program__attach_tracepoint manages the
-> > enable of tracepoint event and attach of BPF programs to it with a
-> > single interface bpf_link, so there is no need to manage event_fd and
-> > prog_fd separately.
-> >
-> > And due to addition of generic bpf_program__attach() to libbpf, it is
-> > now possible to attach BPF programs with __attach() instead of
-> > explicitly calling __attach_<type>().
-> >
-> > This patchset refactors xdp_monitor with using this libbpf API, and the
-> > bpf_load is removed and migrated to libbpf. Also, attach_tracepoint()
-> > is replaced with the generic __attach() method in xdp_redirect_cpu.
-> > Moreover, maps in kern program have been converted to BTF-defined map.
-> >
-> > Daniel T. Lee (3):
-> >   samples: bpf: Refactor xdp_monitor with libbpf
-> >   samples: bpf: Replace attach_tracepoint() to attach() in
-> >     xdp_redirect_cpu
-> >   samples: bpf: refactor XDP kern program maps with BTF-defined map
-> >
-> >  samples/bpf/Makefile                |   4 +-
-> >  samples/bpf/xdp_monitor_kern.c      |  60 ++++++------
-> >  samples/bpf/xdp_monitor_user.c      | 144 +++++++++++++++++++++-------
-> >  samples/bpf/xdp_redirect_cpu_user.c | 138 +++++++++++++-------------
-> >  samples/bpf/xdp_sample_pkts_kern.c  |  14 ++-
-> >  samples/bpf/xdp_sample_pkts_user.c  |   1 -
-> >  6 files changed, 211 insertions(+), 150 deletions(-)
-> >
-> > --
-> > 2.25.1
-> >
->
-> Thanks for this clean up, Daniel! It's great! I left a few nits here
-> and there in the appropriate patches.
->
-> There still seem to be a bunch of users of bpf_load.c, which would be
-> nice to get rid of completely. But before you go do that, consider
-> integrating BPF skeleton into samples/bpf Makefile. That way instead
-> of all those look ups of maps/programs by name, you'd be writing a
-> straightforward skel->maps.my_map and similar short and non-failing
-> code. This should make the overall time spent on conversion much
-> smaller (and more pleasant, IMO).
->
-> You've dealt with a lot of samples/bpf reworking, so it should be too
-> hard for you to figure out the best way to do this, but check
-> selftests/bpf's Makefile, if you need some ideas. Or just ask for
-> help. Thanks!
+Most of the samples were converted to use the new BTF-defined MAP as
+they moved to libbpf, but some of the samples were missing.
 
-Thanks for the great feedback!
+Instead of using the previous BPF MAP definition, this commit refactors
+xdp_monitor and xdp_sample_pkts_kern MAP definition with the new
+BTF-defined MAP format.
 
-Thank you for letting me know about the BPF features that I can apply.
-Currently, I'm not familiar with the BPF skeleton yet, but I'll take a good
-look at the BPF skeleton to apply it in a more advanced form.
+Also, this commit removes the max_entries attribute at PERF_EVENT_ARRAY
+map type. The libbpf's bpf_object__create_map() will automatically
+set max_entries to the maximum configured number of CPUs on the host.
 
-Thank you for your time and effort for the review.
+Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
 
+---
+Changes in v2:
+ - revert BTF key/val type to default of BPF_MAP_TYPE_PERF_EVENT_ARRAY
+
+ samples/bpf/xdp_monitor_kern.c     | 60 +++++++++++++++---------------
+ samples/bpf/xdp_sample_pkts_kern.c | 14 +++----
+ samples/bpf/xdp_sample_pkts_user.c |  1 -
+ 3 files changed, 36 insertions(+), 39 deletions(-)
+
+diff --git a/samples/bpf/xdp_monitor_kern.c b/samples/bpf/xdp_monitor_kern.c
+index 3d33cca2d48a..5c955b812c47 100644
+--- a/samples/bpf/xdp_monitor_kern.c
++++ b/samples/bpf/xdp_monitor_kern.c
+@@ -6,21 +6,21 @@
+ #include <uapi/linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ 
+-struct bpf_map_def SEC("maps") redirect_err_cnt = {
+-	.type = BPF_MAP_TYPE_PERCPU_ARRAY,
+-	.key_size = sizeof(u32),
+-	.value_size = sizeof(u64),
+-	.max_entries = 2,
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
++	__type(key, u32);
++	__type(value, u64);
++	__uint(max_entries, 2);
+ 	/* TODO: have entries for all possible errno's */
+-};
++} redirect_err_cnt SEC(".maps");
+ 
+ #define XDP_UNKNOWN	XDP_REDIRECT + 1
+-struct bpf_map_def SEC("maps") exception_cnt = {
+-	.type		= BPF_MAP_TYPE_PERCPU_ARRAY,
+-	.key_size	= sizeof(u32),
+-	.value_size	= sizeof(u64),
+-	.max_entries	= XDP_UNKNOWN + 1,
+-};
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
++	__type(key, u32);
++	__type(value, u64);
++	__uint(max_entries, XDP_UNKNOWN + 1);
++} exception_cnt SEC(".maps");
+ 
+ /* Tracepoint format: /sys/kernel/debug/tracing/events/xdp/xdp_redirect/format
+  * Code in:                kernel/include/trace/events/xdp.h
+@@ -129,19 +129,19 @@ struct datarec {
+ };
+ #define MAX_CPUS 64
+ 
+-struct bpf_map_def SEC("maps") cpumap_enqueue_cnt = {
+-	.type		= BPF_MAP_TYPE_PERCPU_ARRAY,
+-	.key_size	= sizeof(u32),
+-	.value_size	= sizeof(struct datarec),
+-	.max_entries	= MAX_CPUS,
+-};
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
++	__type(key, u32);
++	__type(value, struct datarec);
++	__uint(max_entries, MAX_CPUS);
++} cpumap_enqueue_cnt SEC(".maps");
+ 
+-struct bpf_map_def SEC("maps") cpumap_kthread_cnt = {
+-	.type		= BPF_MAP_TYPE_PERCPU_ARRAY,
+-	.key_size	= sizeof(u32),
+-	.value_size	= sizeof(struct datarec),
+-	.max_entries	= 1,
+-};
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
++	__type(key, u32);
++	__type(value, struct datarec);
++	__uint(max_entries, 1);
++} cpumap_kthread_cnt SEC(".maps");
+ 
+ /* Tracepoint: /sys/kernel/debug/tracing/events/xdp/xdp_cpumap_enqueue/format
+  * Code in:         kernel/include/trace/events/xdp.h
+@@ -210,12 +210,12 @@ int trace_xdp_cpumap_kthread(struct cpumap_kthread_ctx *ctx)
+ 	return 0;
+ }
+ 
+-struct bpf_map_def SEC("maps") devmap_xmit_cnt = {
+-	.type		= BPF_MAP_TYPE_PERCPU_ARRAY,
+-	.key_size	= sizeof(u32),
+-	.value_size	= sizeof(struct datarec),
+-	.max_entries	= 1,
+-};
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
++	__type(key, u32);
++	__type(value, struct datarec);
++	__uint(max_entries, 1);
++} devmap_xmit_cnt SEC(".maps");
+ 
+ /* Tracepoint: /sys/kernel/debug/tracing/events/xdp/xdp_devmap_xmit/format
+  * Code in:         kernel/include/trace/events/xdp.h
+diff --git a/samples/bpf/xdp_sample_pkts_kern.c b/samples/bpf/xdp_sample_pkts_kern.c
+index 33377289e2a8..9cf76b340dd7 100644
+--- a/samples/bpf/xdp_sample_pkts_kern.c
++++ b/samples/bpf/xdp_sample_pkts_kern.c
+@@ -5,14 +5,12 @@
+ #include <bpf/bpf_helpers.h>
+ 
+ #define SAMPLE_SIZE 64ul
+-#define MAX_CPUS 128
+-
+-struct bpf_map_def SEC("maps") my_map = {
+-	.type = BPF_MAP_TYPE_PERF_EVENT_ARRAY,
+-	.key_size = sizeof(int),
+-	.value_size = sizeof(u32),
+-	.max_entries = MAX_CPUS,
+-};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
++	__uint(key_size, sizeof(int));
++	__uint(value_size, sizeof(u32));
++} my_map SEC(".maps");
+ 
+ SEC("xdp_sample")
+ int xdp_sample_prog(struct xdp_md *ctx)
+diff --git a/samples/bpf/xdp_sample_pkts_user.c b/samples/bpf/xdp_sample_pkts_user.c
+index 991ef6f0880b..4b2a300c750c 100644
+--- a/samples/bpf/xdp_sample_pkts_user.c
++++ b/samples/bpf/xdp_sample_pkts_user.c
+@@ -18,7 +18,6 @@
+ 
+ #include "perf-sys.h"
+ 
+-#define MAX_CPUS 128
+ static int if_idx;
+ static char *if_name;
+ static __u32 xdp_flags = XDP_FLAGS_UPDATE_IF_NOEXIST;
 -- 
-Best,
-Daniel T. Lee
+2.25.1
+
