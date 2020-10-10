@@ -4,147 +4,138 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFE4CC433E7
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 22:55:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB000C433DF
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 22:55:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8A03F20795
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 22:55:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 89B6520795
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 22:55:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jNbjyF6T"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VothtTXv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731070AbgJJWzF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 10 Oct 2020 18:55:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:43932 "EHLO
+        id S1731102AbgJJWzG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 10 Oct 2020 18:55:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:58490 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731390AbgJJTTJ (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 10 Oct 2020 15:19:09 -0400
+        by vger.kernel.org with ESMTP id S1731494AbgJJTaR (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 10 Oct 2020 15:30:17 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602357547;
+        s=mimecast20190719; t=1602358216;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=I7EtWAFY7JZkjFe439jiLJXYfP9d4SSV/XXrbixkMTA=;
-        b=jNbjyF6TJlTszsq644bbP6OX6kMihnXVfJI1WIlzUdVXsLYDZu69cVkt2ng7DmSKSls9zE
-        fSRCcGsADjfppD4jTMrgaAslpIJlwa2pkds7HEUMweGjKW57j7eycbbYNZBcBfP0pQtYho
-        NYJI91stUGtOI/veu40q7umk8MID50g=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-593-Ffj3lfbLPXOs70okA44FCg-1; Sat, 10 Oct 2020 09:42:29 -0400
-X-MC-Unique: Ffj3lfbLPXOs70okA44FCg-1
-Received: by mail-ed1-f69.google.com with SMTP id ay19so4586963edb.23
-        for <bpf@vger.kernel.org>; Sat, 10 Oct 2020 06:42:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=I7EtWAFY7JZkjFe439jiLJXYfP9d4SSV/XXrbixkMTA=;
-        b=DZfaZ8tGertaYdsAkuO1+JMPMyOSaEOxD/842UxjX86Gbk2Me4EeXmFpYfa+VFmaxo
-         WU4xpWKN9jYFKmpij1hUr875pW01vdDJX6FYApSee+GpEf2ohb6vCxXpX69ZtsEANX4e
-         fJlS6hv4gC/GVbue2vHibPNviirHUqVbx0YyQARF+Qh3ZhpRJdHscXn7hMqCU7JiKey7
-         2TMGxp0EDK2x0FYjVPUw9IrqZ1v8pB4bwv61Xkvyw+92jKqxYUHg41q3HQ0VPlY8ehPA
-         g1yzLtZWA0cwpGw27zxQxmZyfPSRUg6e3Lko3eZGBnncco9jyNzsdIE7fcjARD8vnU0b
-         ELzA==
-X-Gm-Message-State: AOAM532L0ReRYzfJ6fWTwyicb4Xc+2As+6F0IzcQFL24FcKgCz5an2X2
-        ufQa6ImWX2ME6H33zmr+7hGe0R/lg7SCI0JLPWsWZzOiaq5ITFryx18yCejBzp7H/8zLQDm/vta
-        Pww1IbEO/GMeo
-X-Received: by 2002:a50:9e82:: with SMTP id a2mr4434355edf.117.1602337348406;
-        Sat, 10 Oct 2020 06:42:28 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwRFYyKJ+aPffjXFZCfi9lvWRyUVm5adDV3YDqMCJh+hWfnSgr49bo7ImHn8OwBSsA1PPA7+A==
-X-Received: by 2002:a50:9e82:: with SMTP id a2mr4434330edf.117.1602337348029;
-        Sat, 10 Oct 2020 06:42:28 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id me12sm7940575ejb.108.2020.10.10.06.42.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Oct 2020 06:42:27 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 65D3B1837E5; Sat, 10 Oct 2020 15:42:26 +0200 (CEST)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        David Ahern <dsahern@gmail.com>, ast@fb.com
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2] bpf_fib_lookup: optionally skip neighbour
- lookup
-In-Reply-To: <50fc3fee-13b2-11d1-f5b1-e0d8669cd655@iogearbox.net>
-References: <20201009101356.129228-1-toke@redhat.com>
- <0a463800-a663-3fd3-2e1a-eac5526ed691@gmail.com> <87v9fjckcd.fsf@toke.dk>
- <4972626e-c86d-8715-0565-20bed680227c@gmail.com>
- <50fc3fee-13b2-11d1-f5b1-e0d8669cd655@iogearbox.net>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Sat, 10 Oct 2020 15:42:26 +0200
-Message-ID: <87v9fitcxp.fsf@toke.dk>
+        bh=w7stP7LFVG0hVv7TWg9unP2pHtrMNI2Rj9dU9V+EZSU=;
+        b=VothtTXvMOXyjY1CjMxbn1HhjgGacFNkCF8xRFVFJrbBConvw8LULEg3OnB5+yXdP2Mpy5
+        37lXDl1xiIusZXzQ54pliBngdj56uGOttJx/Fm3shqMvyXU693SDSH8et2aR8fCmtVRJt+
+        yZzlmles6Mrx/bSedj2OWXD4OdMSZUI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-365-nkhd_MdrPlKMVnMXaRClXw-1; Sat, 10 Oct 2020 06:44:12 -0400
+X-MC-Unique: nkhd_MdrPlKMVnMXaRClXw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8F5121868425;
+        Sat, 10 Oct 2020 10:44:10 +0000 (UTC)
+Received: from carbon (unknown [10.40.208.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 15B2E50B44;
+        Sat, 10 Oct 2020 10:44:03 +0000 (UTC)
+Date:   Sat, 10 Oct 2020 12:44:02 +0200
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Daniel Borkmann <borkmann@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        maze@google.com, lmb@cloudflare.com, shaun@tigera.io,
+        Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
+        eyal.birger@gmail.com, brouer@redhat.com
+Subject: Re: [PATCH bpf-next V3 0/6] bpf: New approach for BPF MTU handling
+Message-ID: <20201010124402.606f2d37@carbon>
+In-Reply-To: <20201009160010.4b299ac3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <160216609656.882446.16642490462568561112.stgit@firesoul>
+        <20201009093319.6140b322@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <5f80ccca63d9_ed74208f8@john-XPS-13-9370.notmuch>
+        <20201009160010.4b299ac3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Daniel Borkmann <daniel@iogearbox.net> writes:
+On Fri, 9 Oct 2020 16:00:10 -0700
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-> On 10/9/20 11:28 PM, David Ahern wrote:
->> On 10/9/20 11:42 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
->>> David Ahern <dsahern@gmail.com> writes:
->>>> On 10/9/20 3:13 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
->>>>> The bpf_fib_lookup() helper performs a neighbour lookup for the desti=
-nation
->>>>> IP and returns BPF_FIB_LKUP_NO_NEIGH if this fails, with the expectat=
-ion
->>>>> that the BPF program will pass the packet up the stack in this case.
->>>>> However, with the addition of bpf_redirect_neigh() that can be used i=
-nstead
->>>>> to perform the neighbour lookup, at the cost of a bit of duplicated w=
-ork.
->>>>>
->>>>> For that we still need the target ifindex, and since bpf_fib_lookup()
->>>>> already has that at the time it performs the neighbour lookup, there =
-is
->>>>> really no reason why it can't just return it in any case. So let's ju=
-st
->>>>> always return the ifindex, and also add a flag that lets the caller t=
-urn
->>>>> off the neighbour lookup entirely in bpf_fib_lookup().
->>>>
->>>> seems really odd to do the fib lookup only to skip the neighbor lookup
->>>> and defer to a second helper to do a second fib lookup and send out.
->>>>
->>>> The better back-to-back calls is to return the ifindex and gateway on
->>>> successful fib lookup regardless of valid neighbor. If the call to
->>>> bpf_redirect_neigh is needed, it can have a flag to skip the fib lookup
->>>> and just redirect to the given nexthop address + ifindex. ie.,
->>>> bpf_redirect_neigh only does neighbor handling in this case.
->>>
->>> Hmm, yeah, I guess it would make sense to cache and reuse the lookup -
->>> maybe stick it in bpf_redirect_info()? However, given the imminent
->>=20
->> That is not needed.
->>=20
->>> opening of the merge window, I don't see this landing before then. So
->>> I'm going to respin this patch with just the original change to always
->>> return the ifindex, then we can revisit the flags/reuse of the fib
->>> lookup later.
->>=20
->> What I am suggesting is a change in API to bpf_redirect_neigh which
->> should be done now, before the merge window, before it comes a locked
->> API. Right now, bpf_redirect_neigh does a lookup to get the nexthop. It
->> should take the gateway as an input argument. If set, then the lookup is
->> not done - only the neighbor redirect.
->
-> Sounds like a reasonable extension, agree. API freeze is not merge win, b=
-ut
-> final v5.10 tag in this case as it always has been. In case it's not in t=
-ime,
-> we can simply just move flags to arg3 and add a reserved param as arg2 wh=
-ich
-> must be zero (and thus indicate to perform the lookup as-is). Later we co=
-uld
-> extend to pass params similar as in fib_lookup helper for the gw.
+> On Fri, 09 Oct 2020 13:49:14 -0700 John Fastabend wrote:
+> > Jakub Kicinski wrote:  
+> > > On Thu, 08 Oct 2020 16:08:57 +0200 Jesper Dangaard Brouer wrote:    
+> > > > V3: Drop enforcement of MTU in net-core, leave it to drivers    
+> > > 
+> > > Sorry for being late to the discussion.
+> > > 
+> > > I absolutely disagree. We had cases in the past where HW would lock up
+> > > if it was sent a frame with bad geometry.
 
-Right, I can take a look at this next week. Feel free to merge (v3 of)
-this patch now, that change will be needed in any case I think...
+I agree with Jakub here.  I do find it risky not to do these MTU check
+in net-core.
 
--Toke
+> > > We will not be sprinkling validation checks across the drivers because
+> > > some reconfiguration path may occasionally yield a bad packet, or it's
+> > > hard to do something right with BPF.    
+> > 
+> > This is a driver bug then. As it stands today drivers may get hit with
+> > skb with MTU greater than set MTU as best I can tell.  
+> 
+> You're talking about taking it from "maybe this can happen, but will
+> still be at most jumbo" to "it's going to be very easy to trigger and
+> length may be > MAX_U16".
+
+It is interesting that a misbehaving BPF program can easily trigger this.
+Next week, I will looking writing such a BPF-prog and then test it on
+the hardware I have avail in my testlab.
+
+
+> > Generally I expect drivers use MTU to configure RX buffers not sure
+> > how it is going to be used on TX side? Any examples? I just poked
+> > around through the driver source to see and seems to confirm its
+> > primarily for RX side configuration with some drivers throwing the
+> > event down to the firmware for something that I can't see in the code?  
+> 
+> Right, but that could just be because nobody expects to get over sized
+> frames from the stack.
+> 
+> We actively encourage drivers to remove paranoid checks. It's really
+> not going to be a great experience for driver authors where they need
+> to consult a list of things they should and shouldn't check.
+> 
+> If we want to do this, the driver interface must most definitely say 
+> MRU and not MTU.
+
+What is MRU?
+
+ 
+> > I'm not suggestiong sprinkling validation checks across the drivers.
+> > I'm suggesting if the drivers hang we fix them.  
+> 
+> We both know the level of testing drivers get, it's unlikely this will
+> be validated. It's packet of death waiting to happen. 
+> 
+> And all this for what? Saving 2 cycles on a branch that will almost
+> never be taken?
+
+I do think it is risky not to do this simple MTU check in net-core.  I
+also believe the overhead is very very low.  Hint, I'm basically just
+moving the MTU check from one place to another.  (And last patch in
+patchset is an optimization that inlines and save cycles when doing
+these kind of MTU checks).
+
+-- 
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
