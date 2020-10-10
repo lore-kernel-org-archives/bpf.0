@@ -2,202 +2,142 @@ Return-Path: <SRS0=llPw=DR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E62B8C43467
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:13:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97480C4363A
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:13:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6FBA2078B
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:13:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5BF002078B
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 23:13:13 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QLOPe1HN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389027AbgJJWzO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 10 Oct 2020 18:55:14 -0400
-Received: from www62.your-server.de ([213.133.104.62]:58606 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388224AbgJJUy5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 10 Oct 2020 16:54:57 -0400
-Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1kRLtF-0003RH-Ie; Sat, 10 Oct 2020 22:54:53 +0200
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     ast@kernel.org
-Cc:     daniel@iogearbox.net, john.fastabend@gmail.com, yhs@fb.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v5 4/6] bpf, selftests: add test for different array inner map size
-Date:   Sat, 10 Oct 2020 22:54:45 +0200
-Message-Id: <20201010205447.5610-5-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20201010205447.5610-1-daniel@iogearbox.net>
-References: <20201010205447.5610-1-daniel@iogearbox.net>
+        id S2389019AbgJJWzN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 10 Oct 2020 18:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731526AbgJJTyP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 10 Oct 2020 15:54:15 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1126C0613E1;
+        Sat, 10 Oct 2020 03:41:57 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id h24so16657620ejg.9;
+        Sat, 10 Oct 2020 03:41:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Q0R9T/xjTYd8YM1YuxiZqhLetAqKvDe7d2GoM9PR4T0=;
+        b=QLOPe1HNq4PEN+NYyq7WP9uqLahgeN1ZUq4Dy1Z5YB2717pWaU116qSqtBP5gWtwuX
+         iXm2mmdyj7BtZ83XwyBCsct0JfWKT2HdKa/W7J62k+YxrfNi2csKsgO1uHZpetuE/ADt
+         trFRpuz+GhuY+/DBqFeVjrs2lLCbh4vC9zI14W2HmFlBD2dzLXZAYuO3xOc8TLZrEoh3
+         XLhI7T/3q3kTv4XcyxRw4xQ0XGJl3+eA05NFuu33bXbmfwJjiOTozgctGXzDUExd7mZh
+         DLHvXuEf6b50uTVioTINBLS9DR7eNU21Z1Tp9pFbvGs3K1jmBGLhzzRjEfYu1PjuXeJ4
+         dAJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Q0R9T/xjTYd8YM1YuxiZqhLetAqKvDe7d2GoM9PR4T0=;
+        b=KZnD/0XfIhfUQ7f+vN60F4GQym4cOVo5y1HVFlUq5yPPsvItlfSQrfHQk6M1lyssLJ
+         oiIrGQBvu7ffWfQ7tcUTblzJl49parD8/TMySPvj/MDOqSz6Ci5tuLCO6lflGFKMkCa5
+         CmtV2e98kx7gnDLO4AAr4eJmOKaLiUU12opQ3nIWq9VeXGchqntrYVHztAwWcuCYNVN7
+         uNY66iqfbrhBzvJNzQXBsHlDsnJW0Ny0AVNAeTimjRqrx80iyA7GuUPqVwpAljwQsFwy
+         HwOVVlvmH4h3kdh1uiQRQpay2q18s1EIiy7MTP5mVwBbkTYrHyRRX/Hox7RbUGSANofY
+         TsbA==
+X-Gm-Message-State: AOAM532ES8O3Fpki6VHlp+ygkkib2iSQxfyGupcrE9DXwl6yiKC7epmv
+        w5FdZYC/ZdC+ZZhbG7CiC5rRd/Y2w4Br4y23IA==
+X-Google-Smtp-Source: ABdhPJxKQoe78oDHWUDRuuqNUY3mYbvskdCUa+EYsPSOxWECTTDGnY31Y9b1FI8blNFliUzOHoPf0wwesiMAmREOV28=
+X-Received: by 2002:a17:906:f89:: with SMTP id q9mr18365181ejj.337.1602326516525;
+ Sat, 10 Oct 2020 03:41:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/25953/Sat Oct 10 15:55:36 2020)
+References: <20201009160353.1529-1-danieltimlee@gmail.com> <CAEf4BzZJgsd3OkcgULc7_Hxhg_ZcSmp+XT0e--8EMkz9_+5Qxg@mail.gmail.com>
+In-Reply-To: <CAEf4BzZJgsd3OkcgULc7_Hxhg_ZcSmp+XT0e--8EMkz9_+5Qxg@mail.gmail.com>
+From:   "Daniel T. Lee" <danieltimlee@gmail.com>
+Date:   Sat, 10 Oct 2020 19:41:40 +0900
+Message-ID: <CAEKGpzjakqueq9B8eziCB1iv24j3Qs+YDqZBtbO6GSqJoOUBEA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/3] samples: bpf: Refactor XDP programs with libbpf
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Xdp <xdp-newbies@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Extend the "diff_size" subtest to also include a non-inlined array map variant
-where dynamic inner #elems are possible.
+On Sat, Oct 10, 2020 at 3:30 AM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Fri, Oct 9, 2020 at 9:04 AM Daniel T. Lee <danieltimlee@gmail.com> wrote:
+> >
+> > To avoid confusion caused by the increasing fragmentation of the BPF
+> > Loader program, this commit would like to convert the previous bpf_load
+> > loader with the libbpf loader.
+> >
+> > Thanks to libbpf's bpf_link interface, managing the tracepoint BPF
+> > program is much easier. bpf_program__attach_tracepoint manages the
+> > enable of tracepoint event and attach of BPF programs to it with a
+> > single interface bpf_link, so there is no need to manage event_fd and
+> > prog_fd separately.
+> >
+> > And due to addition of generic bpf_program__attach() to libbpf, it is
+> > now possible to attach BPF programs with __attach() instead of
+> > explicitly calling __attach_<type>().
+> >
+> > This patchset refactors xdp_monitor with using this libbpf API, and the
+> > bpf_load is removed and migrated to libbpf. Also, attach_tracepoint()
+> > is replaced with the generic __attach() method in xdp_redirect_cpu.
+> > Moreover, maps in kern program have been converted to BTF-defined map.
+> >
+> > Daniel T. Lee (3):
+> >   samples: bpf: Refactor xdp_monitor with libbpf
+> >   samples: bpf: Replace attach_tracepoint() to attach() in
+> >     xdp_redirect_cpu
+> >   samples: bpf: refactor XDP kern program maps with BTF-defined map
+> >
+> >  samples/bpf/Makefile                |   4 +-
+> >  samples/bpf/xdp_monitor_kern.c      |  60 ++++++------
+> >  samples/bpf/xdp_monitor_user.c      | 144 +++++++++++++++++++++-------
+> >  samples/bpf/xdp_redirect_cpu_user.c | 138 +++++++++++++-------------
+> >  samples/bpf/xdp_sample_pkts_kern.c  |  14 ++-
+> >  samples/bpf/xdp_sample_pkts_user.c  |   1 -
+> >  6 files changed, 211 insertions(+), 150 deletions(-)
+> >
+> > --
+> > 2.25.1
+> >
+>
+> Thanks for this clean up, Daniel! It's great! I left a few nits here
+> and there in the appropriate patches.
+>
+> There still seem to be a bunch of users of bpf_load.c, which would be
+> nice to get rid of completely. But before you go do that, consider
+> integrating BPF skeleton into samples/bpf Makefile. That way instead
+> of all those look ups of maps/programs by name, you'd be writing a
+> straightforward skel->maps.my_map and similar short and non-failing
+> code. This should make the overall time spent on conversion much
+> smaller (and more pleasant, IMO).
+>
+> You've dealt with a lot of samples/bpf reworking, so it should be too
+> hard for you to figure out the best way to do this, but check
+> selftests/bpf's Makefile, if you need some ideas. Or just ask for
+> help. Thanks!
 
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Acked-by: Yonghong Song <yhs@fb.com>
----
- .../selftests/bpf/prog_tests/btf_map_in_map.c | 39 ++++++++++++-----
- .../selftests/bpf/progs/test_btf_map_in_map.c | 43 +++++++++++++++++++
- 2 files changed, 72 insertions(+), 10 deletions(-)
+Thanks for the great feedback!
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-index 540fea4c91a5..76ebe4c250f1 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-@@ -55,10 +55,10 @@ static int kern_sync_rcu(void)
- 
- static void test_lookup_update(void)
- {
--	int err, key = 0, val, i;
-+	int map1_fd, map2_fd, map3_fd, map4_fd, map5_fd, map1_id, map2_id;
-+	int outer_arr_fd, outer_hash_fd, outer_arr_dyn_fd;
- 	struct test_btf_map_in_map *skel;
--	int outer_arr_fd, outer_hash_fd;
--	int fd, map1_fd, map2_fd, map1_id, map2_id;
-+	int err, key = 0, val, i, fd;
- 
- 	skel = test_btf_map_in_map__open_and_load();
- 	if (CHECK(!skel, "skel_open", "failed to open&load skeleton\n"))
-@@ -70,32 +70,45 @@ static void test_lookup_update(void)
- 
- 	map1_fd = bpf_map__fd(skel->maps.inner_map1);
- 	map2_fd = bpf_map__fd(skel->maps.inner_map2);
-+	map3_fd = bpf_map__fd(skel->maps.inner_map3);
-+	map4_fd = bpf_map__fd(skel->maps.inner_map4);
-+	map5_fd = bpf_map__fd(skel->maps.inner_map5);
-+	outer_arr_dyn_fd = bpf_map__fd(skel->maps.outer_arr_dyn);
- 	outer_arr_fd = bpf_map__fd(skel->maps.outer_arr);
- 	outer_hash_fd = bpf_map__fd(skel->maps.outer_hash);
- 
--	/* inner1 = input, inner2 = input + 1 */
--	map1_fd = bpf_map__fd(skel->maps.inner_map1);
-+	/* inner1 = input, inner2 = input + 1, inner3 = input + 2 */
- 	bpf_map_update_elem(outer_arr_fd, &key, &map1_fd, 0);
--	map2_fd = bpf_map__fd(skel->maps.inner_map2);
- 	bpf_map_update_elem(outer_hash_fd, &key, &map2_fd, 0);
-+	bpf_map_update_elem(outer_arr_dyn_fd, &key, &map3_fd, 0);
- 	skel->bss->input = 1;
- 	usleep(1);
--
- 	bpf_map_lookup_elem(map1_fd, &key, &val);
- 	CHECK(val != 1, "inner1", "got %d != exp %d\n", val, 1);
- 	bpf_map_lookup_elem(map2_fd, &key, &val);
- 	CHECK(val != 2, "inner2", "got %d != exp %d\n", val, 2);
-+	bpf_map_lookup_elem(map3_fd, &key, &val);
-+	CHECK(val != 3, "inner3", "got %d != exp %d\n", val, 3);
- 
--	/* inner1 = input + 1, inner2 = input */
-+	/* inner2 = input, inner1 = input + 1, inner4 = input + 2 */
- 	bpf_map_update_elem(outer_arr_fd, &key, &map2_fd, 0);
- 	bpf_map_update_elem(outer_hash_fd, &key, &map1_fd, 0);
-+	bpf_map_update_elem(outer_arr_dyn_fd, &key, &map4_fd, 0);
- 	skel->bss->input = 3;
- 	usleep(1);
--
- 	bpf_map_lookup_elem(map1_fd, &key, &val);
- 	CHECK(val != 4, "inner1", "got %d != exp %d\n", val, 4);
- 	bpf_map_lookup_elem(map2_fd, &key, &val);
- 	CHECK(val != 3, "inner2", "got %d != exp %d\n", val, 3);
-+	bpf_map_lookup_elem(map4_fd, &key, &val);
-+	CHECK(val != 5, "inner4", "got %d != exp %d\n", val, 5);
-+
-+	/* inner5 = input + 2 */
-+	bpf_map_update_elem(outer_arr_dyn_fd, &key, &map5_fd, 0);
-+	skel->bss->input = 5;
-+	usleep(1);
-+	bpf_map_lookup_elem(map5_fd, &key, &val);
-+	CHECK(val != 7, "inner5", "got %d != exp %d\n", val, 7);
- 
- 	for (i = 0; i < 5; i++) {
- 		val = i % 2 ? map1_fd : map2_fd;
-@@ -106,7 +119,13 @@ static void test_lookup_update(void)
- 		}
- 		err = bpf_map_update_elem(outer_arr_fd, &key, &val, 0);
- 		if (CHECK_FAIL(err)) {
--			printf("failed to update hash_of_maps on iter #%d\n", i);
-+			printf("failed to update array_of_maps on iter #%d\n", i);
-+			goto cleanup;
-+		}
-+		val = i % 2 ? map4_fd : map5_fd;
-+		err = bpf_map_update_elem(outer_arr_dyn_fd, &key, &val, 0);
-+		if (CHECK_FAIL(err)) {
-+			printf("failed to update array_of_maps (dyn) on iter #%d\n", i);
- 			goto cleanup;
- 		}
- 	}
-diff --git a/tools/testing/selftests/bpf/progs/test_btf_map_in_map.c b/tools/testing/selftests/bpf/progs/test_btf_map_in_map.c
-index 193fe0198b21..c1e0c8c7c55f 100644
---- a/tools/testing/selftests/bpf/progs/test_btf_map_in_map.c
-+++ b/tools/testing/selftests/bpf/progs/test_btf_map_in_map.c
-@@ -41,6 +41,43 @@ struct outer_arr {
- 	.values = { (void *)&inner_map1, 0, (void *)&inner_map2 },
- };
- 
-+struct inner_map_sz3 {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(map_flags, BPF_F_INNER_MAP);
-+	__uint(max_entries, 3);
-+	__type(key, int);
-+	__type(value, int);
-+} inner_map3 SEC(".maps"),
-+  inner_map4 SEC(".maps");
-+
-+struct inner_map_sz4 {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(map_flags, BPF_F_INNER_MAP);
-+	__uint(max_entries, 5);
-+	__type(key, int);
-+	__type(value, int);
-+} inner_map5 SEC(".maps");
-+
-+struct outer_arr_dyn {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__uint(max_entries, 3);
-+	__uint(key_size, sizeof(int));
-+	__uint(value_size, sizeof(int));
-+	__array(values, struct {
-+		__uint(type, BPF_MAP_TYPE_ARRAY);
-+		__uint(map_flags, BPF_F_INNER_MAP);
-+		__uint(max_entries, 1);
-+		__type(key, int);
-+		__type(value, int);
-+	});
-+} outer_arr_dyn SEC(".maps") = {
-+	.values = {
-+		[0] = (void *)&inner_map3,
-+		[1] = (void *)&inner_map4,
-+		[2] = (void *)&inner_map5,
-+	},
-+};
-+
- struct outer_hash {
- 	__uint(type, BPF_MAP_TYPE_HASH_OF_MAPS);
- 	__uint(max_entries, 5);
-@@ -101,6 +138,12 @@ int handle__sys_enter(void *ctx)
- 	val = input + 1;
- 	bpf_map_update_elem(inner_map, &key, &val, 0);
- 
-+	inner_map = bpf_map_lookup_elem(&outer_arr_dyn, &key);
-+	if (!inner_map)
-+		return 1;
-+	val = input + 2;
-+	bpf_map_update_elem(inner_map, &key, &val, 0);
-+
- 	return 0;
- }
- 
+Thank you for letting me know about the BPF features that I can apply.
+Currently, I'm not familiar with the BPF skeleton yet, but I'll take a good
+look at the BPF skeleton to apply it in a more advanced form.
+
+Thank you for your time and effort for the review.
+
 -- 
-2.17.1
-
+Best,
+Daniel T. Lee
