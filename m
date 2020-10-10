@@ -2,129 +2,149 @@ Return-Path: <SRS0=llPw=DR=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=no
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75F6CC433DF
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 22:55:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFE4CC433E7
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 22:55:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3DE652075E
-	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 22:55:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A03F20795
+	for <bpf@archiver.kernel.org>; Sat, 10 Oct 2020 22:55:07 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c5/0YHA3"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jNbjyF6T"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730950AbgJJWzE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 10 Oct 2020 18:55:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:25386 "EHLO
+        id S1731070AbgJJWzF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 10 Oct 2020 18:55:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:43932 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731275AbgJJTFd (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 10 Oct 2020 15:05:33 -0400
+        by vger.kernel.org with ESMTP id S1731390AbgJJTTJ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Sat, 10 Oct 2020 15:19:09 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1602356702;
+        s=mimecast20190719; t=1602357547;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BJR2aQjPR9hLNkF0eFDNd9lu/f6IXZPxNCZ5aSJuSME=;
-        b=c5/0YHA3XJ9ioaccuh96pU37rmqWgneAOZpTcH7YWoRY0l5a7sLs45XXoNdTib3dGsG3uq
-        WU/vj0HPKxkXIQ6C7FBD//kqMjkWxikSClHfU87BrOzCBxqJUG1kPUHeIpMceozUMuUP4n
-        E7ZVHQOoYjvqog68rXjYgkb2ouZfFuY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-1-jh3cyaJbOZKEwxle1RHQbQ-1; Sat, 10 Oct 2020 07:09:48 -0400
-X-MC-Unique: jh3cyaJbOZKEwxle1RHQbQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D9AF4186DD26;
-        Sat, 10 Oct 2020 11:09:46 +0000 (UTC)
-Received: from carbon (unknown [10.40.208.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 371485D9FC;
-        Sat, 10 Oct 2020 11:09:39 +0000 (UTC)
-Date:   Sat, 10 Oct 2020 13:09:38 +0200
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Maciej =?UTF-8?B?xbtlbmN6eWtvd3NraQ==?= <maze@google.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>,
-        Linux NetDev <netdev@vger.kernel.org>,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Shaun Crampton <shaun@tigera.io>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Marek Majkowski <marek@cloudflare.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eyal Birger <eyal.birger@gmail.com>, brouer@redhat.com
-Subject: Re: [PATCH bpf-next V3 4/6] bpf: make it possible to identify BPF
- redirected SKBs
-Message-ID: <20201010130938.138c80d9@carbon>
-In-Reply-To: <CANP3RGesHkCNTWsWDoU2uJsFjZ4dgnEpp+F-iEmhb9U0-rcT_w@mail.gmail.com>
-References: <160216609656.882446.16642490462568561112.stgit@firesoul>
-        <160216615767.882446.7384364280837100311.stgit@firesoul>
-        <40d7af61-6840-5473-79d7-ea935f6889f4@iogearbox.net>
-        <CANP3RGesHkCNTWsWDoU2uJsFjZ4dgnEpp+F-iEmhb9U0-rcT_w@mail.gmail.com>
+        bh=I7EtWAFY7JZkjFe439jiLJXYfP9d4SSV/XXrbixkMTA=;
+        b=jNbjyF6TJlTszsq644bbP6OX6kMihnXVfJI1WIlzUdVXsLYDZu69cVkt2ng7DmSKSls9zE
+        fSRCcGsADjfppD4jTMrgaAslpIJlwa2pkds7HEUMweGjKW57j7eycbbYNZBcBfP0pQtYho
+        NYJI91stUGtOI/veu40q7umk8MID50g=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-593-Ffj3lfbLPXOs70okA44FCg-1; Sat, 10 Oct 2020 09:42:29 -0400
+X-MC-Unique: Ffj3lfbLPXOs70okA44FCg-1
+Received: by mail-ed1-f69.google.com with SMTP id ay19so4586963edb.23
+        for <bpf@vger.kernel.org>; Sat, 10 Oct 2020 06:42:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=I7EtWAFY7JZkjFe439jiLJXYfP9d4SSV/XXrbixkMTA=;
+        b=DZfaZ8tGertaYdsAkuO1+JMPMyOSaEOxD/842UxjX86Gbk2Me4EeXmFpYfa+VFmaxo
+         WU4xpWKN9jYFKmpij1hUr875pW01vdDJX6FYApSee+GpEf2ohb6vCxXpX69ZtsEANX4e
+         fJlS6hv4gC/GVbue2vHibPNviirHUqVbx0YyQARF+Qh3ZhpRJdHscXn7hMqCU7JiKey7
+         2TMGxp0EDK2x0FYjVPUw9IrqZ1v8pB4bwv61Xkvyw+92jKqxYUHg41q3HQ0VPlY8ehPA
+         g1yzLtZWA0cwpGw27zxQxmZyfPSRUg6e3Lko3eZGBnncco9jyNzsdIE7fcjARD8vnU0b
+         ELzA==
+X-Gm-Message-State: AOAM532L0ReRYzfJ6fWTwyicb4Xc+2As+6F0IzcQFL24FcKgCz5an2X2
+        ufQa6ImWX2ME6H33zmr+7hGe0R/lg7SCI0JLPWsWZzOiaq5ITFryx18yCejBzp7H/8zLQDm/vta
+        Pww1IbEO/GMeo
+X-Received: by 2002:a50:9e82:: with SMTP id a2mr4434355edf.117.1602337348406;
+        Sat, 10 Oct 2020 06:42:28 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwRFYyKJ+aPffjXFZCfi9lvWRyUVm5adDV3YDqMCJh+hWfnSgr49bo7ImHn8OwBSsA1PPA7+A==
+X-Received: by 2002:a50:9e82:: with SMTP id a2mr4434330edf.117.1602337348029;
+        Sat, 10 Oct 2020 06:42:28 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id me12sm7940575ejb.108.2020.10.10.06.42.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Oct 2020 06:42:27 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 65D3B1837E5; Sat, 10 Oct 2020 15:42:26 +0200 (CEST)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        David Ahern <dsahern@gmail.com>, ast@fb.com
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2] bpf_fib_lookup: optionally skip neighbour
+ lookup
+In-Reply-To: <50fc3fee-13b2-11d1-f5b1-e0d8669cd655@iogearbox.net>
+References: <20201009101356.129228-1-toke@redhat.com>
+ <0a463800-a663-3fd3-2e1a-eac5526ed691@gmail.com> <87v9fjckcd.fsf@toke.dk>
+ <4972626e-c86d-8715-0565-20bed680227c@gmail.com>
+ <50fc3fee-13b2-11d1-f5b1-e0d8669cd655@iogearbox.net>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Sat, 10 Oct 2020 15:42:26 +0200
+Message-ID: <87v9fitcxp.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 9 Oct 2020 11:33:33 -0700
-Maciej =C5=BBenczykowski <maze@google.com> wrote:
+Daniel Borkmann <daniel@iogearbox.net> writes:
 
-> > > This change makes it possible to identify SKBs that have been redirec=
-ted
-> > > by TC-BPF (cls_act). This is needed for a number of cases.
-> > >
-> > > (1) For collaborating with driver ifb net_devices.
-> > > (2) For avoiding starting generic-XDP prog on TC ingress redirect.
-> > >
-> > > Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com> =20
-> >
-> > Not sure if anyone actually cares about ifb devices, but my worry is th=
-at the
-> > generic XDP vs tc interaction has been as-is for quite some time so thi=
-s change
-> > in behavior could break in the wild. =20
+> On 10/9/20 11:28 PM, David Ahern wrote:
+>> On 10/9/20 11:42 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>>> David Ahern <dsahern@gmail.com> writes:
+>>>> On 10/9/20 3:13 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>>>>> The bpf_fib_lookup() helper performs a neighbour lookup for the desti=
+nation
+>>>>> IP and returns BPF_FIB_LKUP_NO_NEIGH if this fails, with the expectat=
+ion
+>>>>> that the BPF program will pass the packet up the stack in this case.
+>>>>> However, with the addition of bpf_redirect_neigh() that can be used i=
+nstead
+>>>>> to perform the neighbour lookup, at the cost of a bit of duplicated w=
+ork.
+>>>>>
+>>>>> For that we still need the target ifindex, and since bpf_fib_lookup()
+>>>>> already has that at the time it performs the neighbour lookup, there =
+is
+>>>>> really no reason why it can't just return it in any case. So let's ju=
+st
+>>>>> always return the ifindex, and also add a flag that lets the caller t=
+urn
+>>>>> off the neighbour lookup entirely in bpf_fib_lookup().
+>>>>
+>>>> seems really odd to do the fib lookup only to skip the neighbor lookup
+>>>> and defer to a second helper to do a second fib lookup and send out.
+>>>>
+>>>> The better back-to-back calls is to return the ifindex and gateway on
+>>>> successful fib lookup regardless of valid neighbor. If the call to
+>>>> bpf_redirect_neigh is needed, it can have a flag to skip the fib lookup
+>>>> and just redirect to the given nexthop address + ifindex. ie.,
+>>>> bpf_redirect_neigh only does neighbor handling in this case.
+>>>
+>>> Hmm, yeah, I guess it would make sense to cache and reuse the lookup -
+>>> maybe stick it in bpf_redirect_info()? However, given the imminent
+>>=20
+>> That is not needed.
+>>=20
+>>> opening of the merge window, I don't see this landing before then. So
+>>> I'm going to respin this patch with just the original change to always
+>>> return the ifindex, then we can revisit the flags/reuse of the fib
+>>> lookup later.
+>>=20
+>> What I am suggesting is a change in API to bpf_redirect_neigh which
+>> should be done now, before the merge window, before it comes a locked
+>> API. Right now, bpf_redirect_neigh does a lookup to get the nexthop. It
+>> should take the gateway as an input argument. If set, then the lookup is
+>> not done - only the neighbor redirect.
+>
+> Sounds like a reasonable extension, agree. API freeze is not merge win, b=
+ut
+> final v5.10 tag in this case as it always has been. In case it's not in t=
+ime,
+> we can simply just move flags to arg3 and add a reserved param as arg2 wh=
+ich
+> must be zero (and thus indicate to perform the lookup as-is). Later we co=
+uld
+> extend to pass params similar as in fib_lookup helper for the gw.
 
-No, I believe this happened as recent at kernel v5.2, when Stephen
-Hemminger changed this in commit 458bf2f224f0 ("net: core: support XDP
-generic on stacked devices.").  And for the record I think that
-patch/change was a mistake, as people should not use generic-XDP for
-these kind of stacked devices (they should really use TC-BPF as that is
-the right tool for the job).
+Right, I can take a look at this next week. Feel free to merge (v3 of)
+this patch now, that change will be needed in any case I think...
 
-
-> I'm not at all sure of the interactions/implications here.
-> But I do have a request to enable ifb on Android for ingress rate
-> limiting and separately we're trying to make XDP work...
-> So we might at some point end up with cellular interfaces with xdp
-> ebpf (redirect for forwarding/nat/tethering) + ifb + tc ebpf (for
-> device local stuff).
-
-To me I was very surprised when I discovered tc-redirect didn't work
-with ifb driver.  And it sounds like you have an actual use-case for
-this on Android.
-
-> But this is still all very vague and 'ideas only' level.
-> (and in general I think I'd like to get rid of the redirect in tc
-> ebpf, and leave only xlat64 translation for to-the-device traffic in
-> there, so maybe there's no problem anyway??)
-
-I know it sounds strange coming from me "Mr.XDP", but I actaully think
-that in many cases you will be better off with using TC-BPF.
-Especially on Android, as it will be very hard to get native-XDP
-implemented in all these different drivers. (And you don't want to use
-generic-XDP, because there is a high chance it causes a reallocation of
-the SKB, which is a huge performance hit).
-
---=20
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+-Toke
 
