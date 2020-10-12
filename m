@@ -2,66 +2,64 @@ Return-Path: <SRS0=+vlE=DT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-14.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F19DCC433DF
-	for <bpf@archiver.kernel.org>; Mon, 12 Oct 2020 06:46:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36F10C433E7
+	for <bpf@archiver.kernel.org>; Mon, 12 Oct 2020 06:55:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E733206FB
-	for <bpf@archiver.kernel.org>; Mon, 12 Oct 2020 06:46:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C33A0208B6
+	for <bpf@archiver.kernel.org>; Mon, 12 Oct 2020 06:55:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="liJEn3P8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O+439ox2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726130AbgJLGoN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Oct 2020 02:44:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51354 "EHLO
+        id S1726448AbgJLGu3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Oct 2020 02:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725941AbgJLGnU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Oct 2020 02:43:20 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE47C0613D0
-        for <bpf@vger.kernel.org>; Sun, 11 Oct 2020 23:43:18 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id dt13so21615175ejb.12
-        for <bpf@vger.kernel.org>; Sun, 11 Oct 2020 23:43:18 -0700 (PDT)
+        with ESMTP id S1726434AbgJLGuZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Oct 2020 02:50:25 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8A3C0613D0
+        for <bpf@vger.kernel.org>; Sun, 11 Oct 2020 23:50:24 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id ce10so21646747ejc.5
+        for <bpf@vger.kernel.org>; Sun, 11 Oct 2020 23:50:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8L82QjxMFG+r7QSsdjzTxfz9BqpiVnaUpK+324xJ45o=;
-        b=liJEn3P8GhTC9buz4u9pgXW2jZr7I9OZqGoH9rI6dOu/SvvD+mgE2tMDI/XC8+UyEa
-         hkRR2uD0cJ3mxMZQwctrmWg6mIC/iBQIHjYQkAe/7TE3UoNtaU9H280J2Jlc1756UknI
-         6CrZmT9ZxNGkPJncUXIO0tIyvokI7yydua6P/beBqwQ2PddwXuLQnhJ0g5sNDtEwrz94
-         4vlCC4C0QnujNTx1CIx8/jDcfCZyohwTZePfYMDYQpSCyOKl12t3iOAnIHnMmOU9Muz8
-         HmeEpOwTDkslb4i6FqVRfZZ0Yp9vKV+KTVJTsqEwFCvDWpg5M/taMPJ1xppOvFG87pH7
-         MFAA==
+        bh=vioP1tNDAwc//TCk7A/UlbXm8YsyMW81aBUSwcUWM5M=;
+        b=O+439ox2/Jk704Wg3CCUuHHBA7dCtS4tZf+rbJq812ZTK0+aViDD/HY0/QxPd0NQUF
+         ngHa2P6lniSz1x39IKz9kkJx3LLfC44s2/JJskJsdLcsascUYtB8fvFbW2NUKmgYpA5Q
+         qL9WLDhxkbA2zZxRNrznWAIqkL2ei6gdtH+l382VbGUXGyDlZfX1JuQlmj8y4p6Pv7Ya
+         PCb7RLzFG3YZKtxf36SIr0kXRSp+EPs53UzJcQpDQjjPS1FfrR29JMJjOQ8qQg6Vn8KF
+         8bEv0NFsREh+8yHvWjRy47WCNFi88C5LcrjZPuN4J2StRjzSrBdFLJaQj2bNrzV9tws4
+         /EJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8L82QjxMFG+r7QSsdjzTxfz9BqpiVnaUpK+324xJ45o=;
-        b=PaooIZrj7JZGpXaxF9JbQtpnzG461wfJNSSxkHzax+JUTGT/x40xYUa/GAKmoO7MBv
-         8WuzSdBgshYtmANYfjkbBwBQ/Giy0F6tlvOgc37UsPeTHnxRi8FoqNL2CoCfWkBF8a5t
-         ucFxPrawenRprPx8cVAQqAINIyF0S6+VaI2EyptfXx6Ml9xhbrTyh4glcjOy0Ql0NpSj
-         JKJbjc46624jJ518Jsq5mvHrZ/Q9AvpBDQVf43Qj6xxmCy/7ZkhgWq6NfKZx4+Oyei9T
-         U9B7SsrnFeMDp3hY3hmQzCiTKuFMFFNRLMRKDf1RB34zvR/IwW4c5OCZalVEHhuM0Gml
-         Jt5A==
-X-Gm-Message-State: AOAM533F9agWMkapQ1NjMELmVqk9AeIjIldBay3/+WmtSE7Fy92IPEha
-        l7d41JAh47ZrHhVpPL0cwIeXVnHTEsQOEJ/SAAD7fADBEmg=
-X-Google-Smtp-Source: ABdhPJx1VUYEvitmxLWOydKL99dOpXcnBPMRcX+FVk/fF9o/nqN8xeAbbK0V+dWHQlFYCOYOHNrS5SDijBDnSR1H8x4=
-X-Received: by 2002:a17:906:86c3:: with SMTP id j3mr27448642ejy.493.1602484997186;
- Sun, 11 Oct 2020 23:43:17 -0700 (PDT)
+        bh=vioP1tNDAwc//TCk7A/UlbXm8YsyMW81aBUSwcUWM5M=;
+        b=MsKxARejZ6FKnIxB7RgOiAQlqv3FvT8mrzSsSnJC05YV48hu7v0FjpkbP8u8pO5Ke1
+         v+vykt6PVW9Z4d0QZHRmmxYIX+0kYKbpXso3F9Aq6SQc5VZ5auyoa3FH/B758B/1le/W
+         f36riZynRl/MqrKg5my/RSbkuQT2pSJZbeFpAx+cnFHe6iEqah3RnXsGtZYIalUuaF7f
+         wVshhrk0V0On0N/7nL2pV3p5nwv/K2ZjvJfh4ZjyVaiWWpH/uh8w+Ms9rpMwcjDDWzFn
+         mV8PEDESJjmGe/S9DalNioqm8r6GiLhoocyB+viCE+gFBxjybFui0KVegQlfA2IG/KHG
+         tA9A==
+X-Gm-Message-State: AOAM530hTBKXCsyHwREYNSk5gdn+/Vej/Q4QFKT4oE6HE25sj92LMEsJ
+        SKuUlJSxQuL3aD9DBvPPRjHE16Xnw6iWe8TZpG1A2g==
+X-Google-Smtp-Source: ABdhPJzYaWjiwBqQdkgZXF5RmmS6lKqELWb+eu4uskyaPAI9Y5OYW6sBjC5cuQA2JEIpD6mhLt5FrKCkzBDIlZmzlPM=
+X-Received: by 2002:a17:906:c0d1:: with SMTP id bn17mr15283227ejb.114.1602485422519;
+ Sun, 11 Oct 2020 23:50:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1602431034.git.yifeifz2@illinois.edu> <10f91a367ec4fcdea7fc3f086de3f5f13a4a7436.1602431034.git.yifeifz2@illinois.edu>
-In-Reply-To: <10f91a367ec4fcdea7fc3f086de3f5f13a4a7436.1602431034.git.yifeifz2@illinois.edu>
+References: <cover.1602431034.git.yifeifz2@illinois.edu> <4706b0ff81f28b498c9012fd3517fe88319e7c42.1602431034.git.yifeifz2@illinois.edu>
+In-Reply-To: <4706b0ff81f28b498c9012fd3517fe88319e7c42.1602431034.git.yifeifz2@illinois.edu>
 From:   Jann Horn <jannh@google.com>
-Date:   Mon, 12 Oct 2020 08:42:50 +0200
-Message-ID: <CAG48ez0fcG=+tpzqNNKvK=+NS25z4zTN55sUhECRGAfBrjhuQQ@mail.gmail.com>
-Subject: Re: [PATCH v5 seccomp 1/5] seccomp/cache: Lookup syscall allowlist
- bitmap for fast path
+Date:   Mon, 12 Oct 2020 08:49:56 +0200
+Message-ID: <CAG48ez2rutKsgpvYeN+TqmhkJe4U7Sxr0oqyrjhUQaePGZg4uA@mail.gmail.com>
+Subject: Re: [PATCH v5 seccomp 5/5] seccomp/cache: Report cache data through /proc/pid/seccomp_cache
 To:     YiFei Zhu <zhuyifei1999@gmail.com>
 Cc:     Linux Containers <containers@lists.linux-foundation.org>,
         YiFei Zhu <yifeifz2@illinois.edu>, bpf <bpf@vger.kernel.org>,
@@ -87,51 +85,43 @@ List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 On Sun, Oct 11, 2020 at 5:48 PM YiFei Zhu <zhuyifei1999@gmail.com> wrote:
-> The overhead of running Seccomp filters has been part of some past
-> discussions [1][2][3]. Oftentimes, the filters have a large number
-> of instructions that check syscall numbers one by one and jump based
-> on that. Some users chain BPF filters which further enlarge the
-> overhead. A recent work [6] comprehensively measures the Seccomp
-> overhead and shows that the overhead is non-negligible and has a
-> non-trivial impact on application performance.
+> Currently the kernel does not provide an infrastructure to translate
+> architecture numbers to a human-readable name. Translating syscall
+> numbers to syscall names is possible through FTRACE_SYSCALL
+> infrastructure but it does not provide support for compat syscalls.
 >
-> We observed some common filters, such as docker's [4] or
-> systemd's [5], will make most decisions based only on the syscall
-> numbers, and as past discussions considered, a bitmap where each bit
-> represents a syscall makes most sense for these filters.
+> This will create a file for each PID as /proc/pid/seccomp_cache.
+> The file will be empty when no seccomp filters are loaded, or be
+> in the format of:
+> <arch name> <decimal syscall number> <ALLOW | FILTER>
+> where ALLOW means the cache is guaranteed to allow the syscall,
+> and filter means the cache will pass the syscall to the BPF filter.
 >
-> The fast (common) path for seccomp should be that the filter permits
-> the syscall to pass through, and failing seccomp is expected to be
-> an exceptional case; it is not expected for userspace to call a
-> denylisted syscall over and over.
+> For the docker default profile on x86_64 it looks like:
+> x86_64 0 ALLOW
+> x86_64 1 ALLOW
+> x86_64 2 ALLOW
+> x86_64 3 ALLOW
+> [...]
+> x86_64 132 ALLOW
+> x86_64 133 ALLOW
+> x86_64 134 FILTER
+> x86_64 135 FILTER
+> x86_64 136 FILTER
+> x86_64 137 ALLOW
+> x86_64 138 ALLOW
+> x86_64 139 FILTER
+> x86_64 140 ALLOW
+> x86_64 141 ALLOW
+> [...]
 >
-> When it can be concluded that an allow must occur for the given
-> architecture and syscall pair (this determination is introduced in
-> the next commit), seccomp will immediately allow the syscall,
-> bypassing further BPF execution.
+> This file is guarded by CONFIG_SECCOMP_CACHE_DEBUG with a default
+> of N because I think certain users of seccomp might not want the
+> application to know which syscalls are definitely usable. For
+> the same reason, it is also guarded by CAP_SYS_ADMIN.
 >
-> Each architecture number has its own bitmap. The architecture
-> number in seccomp_data is checked against the defined architecture
-> number constant before proceeding to test the bit against the
-> bitmap with the syscall number as the index of the bit in the
-> bitmap, and if the bit is set, seccomp returns allow. The bitmaps
-> are all clear in this patch and will be initialized in the next
-> commit.
->
-> When only one architecture exists, the check against architecture
-> number is skipped, suggested by Kees Cook [7].
->
-> [1] https://lore.kernel.org/linux-security-module/c22a6c3cefc2412cad00ae14c1371711@huawei.com/T/
-> [2] https://lore.kernel.org/lkml/202005181120.971232B7B@keescook/T/
-> [3] https://github.com/seccomp/libseccomp/issues/116
-> [4] https://github.com/moby/moby/blob/ae0ef82b90356ac613f329a8ef5ee42ca923417d/profiles/seccomp/default.json
-> [5] https://github.com/systemd/systemd/blob/6743a1caf4037f03dc51a1277855018e4ab61957/src/shared/seccomp-util.c#L270
-> [6] Draco: Architectural and Operating System Support for System Call Security
->     https://tianyin.github.io/pub/draco.pdf, MICRO-53, Oct. 2020
-> [7] https://lore.kernel.org/bpf/202010091614.8BB0EB64@keescook/
->
-> Co-developed-by: Dimitrios Skarlatos <dskarlat@cs.cmu.edu>
-> Signed-off-by: Dimitrios Skarlatos <dskarlat@cs.cmu.edu>
+> Suggested-by: Jann Horn <jannh@google.com>
+> Link: https://lore.kernel.org/lkml/CAG48ez3Ofqp4crXGksLmZY6=fGrF_tWyUCg7PBkAetvbbOPeOA@mail.gmail.com/
 > Signed-off-by: YiFei Zhu <yifeifz2@illinois.edu>
 
 Reviewed-by: Jann Horn <jannh@google.com>
