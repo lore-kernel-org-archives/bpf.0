@@ -2,133 +2,164 @@ Return-Path: <SRS0=+vlE=DT=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F21EDC433DF
-	for <bpf@archiver.kernel.org>; Mon, 12 Oct 2020 06:56:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C27A5C433DF
+	for <bpf@archiver.kernel.org>; Mon, 12 Oct 2020 06:56:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 96F1E206FB
-	for <bpf@archiver.kernel.org>; Mon, 12 Oct 2020 06:56:16 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TeTWSCEs"
+	by mail.kernel.org (Postfix) with ESMTP id 7C43A206FB
+	for <bpf@archiver.kernel.org>; Mon, 12 Oct 2020 06:56:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726332AbgJLGqy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 12 Oct 2020 02:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51878 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726130AbgJLGqo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 12 Oct 2020 02:46:44 -0400
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3FAC0613D0
-        for <bpf@vger.kernel.org>; Sun, 11 Oct 2020 23:46:43 -0700 (PDT)
-Received: by mail-ed1-x542.google.com with SMTP id l16so15745311eds.3
-        for <bpf@vger.kernel.org>; Sun, 11 Oct 2020 23:46:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0oV/+pj7Fnm5nZaRHqpOkjT78UAULW7d63AGoeM3lX8=;
-        b=TeTWSCEsBYqyE/x1ZaeOkH0jWJEzqZ7ade7Tm1kFTgH31HzCcN0hNCHh62tJU51HXo
-         oT1/7SjvVBjHHxKmo/6ioy411q0Lew2Z791SIXZMxKBXgleoTXwKqXOyNNnLsGMHo9d0
-         +cTV7LNmhJPh1s7mUi2rqebsCXVI4yUVkSL/drzsPeODDm3sQVnnb5dbXYyhw3hhx/wm
-         iS3jYetCXUTdyqg4zYSARhPFq28CXyB+zKkODklGDX6GJO4KkCIAFinOTcE+cmXsNi6Q
-         4vs8+0YDkbjqMfOplYJWskfn3CRqo227oSBgHHSaMH6yj8m+JXb+qAeT40KP8PiAX0mW
-         HpOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0oV/+pj7Fnm5nZaRHqpOkjT78UAULW7d63AGoeM3lX8=;
-        b=hC9OZHLxcBNN//h5NeozLwQ6IV5yHNI4w3JJcz2k4DTDMJOpH/MSpOQhZH3btQUMCm
-         yxmYZa1jz5keNbFlEBSgr9zK4x8+grhPljWW786sLhoXDGxcd2n0PnoV0gL/c3jMB89c
-         JoVFRGHhDiZZCADAJGRQywo4fAtGzSRU88tG86OLpyofeenbuwG/JSPgfYrs2dO2A6W0
-         luv0+8RiGzFbEOawX+heG9plebJSyB2KcS/sxQ5JBUJ1bQtSsR0Hkucnc1j6AVo4hcZC
-         iqoAuHBNOjXU5dUUfu7hsvthpg0VQ2GEeGtwiQp35quRrB9CjgFyNQ3wgWKVbAxgXOMd
-         A3Pg==
-X-Gm-Message-State: AOAM5302HSUupfdPuakTU/sDFH6+HgW5Ed+E9ZWkaZxUHXetS/o6Fqhv
-        pYIddw5WwcGwO1Tx2yCUHILKwPLMU+Eu2l0m4aE3QA==
-X-Google-Smtp-Source: ABdhPJwAYFpyF8+D8cV7oXd3QE1aJOiN6i4bqWNX+WYEUPOZPTqnJ6SQkcBzssolp/os/9ZENLm83qg/oBxbASgSqn4=
-X-Received: by 2002:aa7:d349:: with SMTP id m9mr12421814edr.51.1602485201449;
- Sun, 11 Oct 2020 23:46:41 -0700 (PDT)
+        id S1726434AbgJLG4p (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 12 Oct 2020 02:56:45 -0400
+Received: from mga11.intel.com ([192.55.52.93]:8586 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726123AbgJLG4p (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 12 Oct 2020 02:56:45 -0400
+IronPort-SDR: KdOQg+ZBqIiV/ltrco9eP5XufL+zHKA8feyxTD5Z0KzKXfiHluIayIhHF5kMMjoAONeEwr8w70
+ b6av5HCblNFg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9771"; a="162232222"
+X-IronPort-AV: E=Sophos;i="5.77,366,1596524400"; 
+   d="scan'208";a="162232222"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2020 23:56:37 -0700
+IronPort-SDR: DSpSIoZKV7KPLq4zxFvBA+ZLKNkpgmuUQCwMmUi8wsqk6OFxxWBKXoVpyUUZRY9EN2DChpPczf
+ 4EPhWIQlBVGQ==
+X-IronPort-AV: E=Sophos;i="5.77,366,1596524400"; 
+   d="scan'208";a="529842687"
+Received: from iweiny-desk2.sc.intel.com (HELO localhost) ([10.3.52.147])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2020 23:56:35 -0700
+Date:   Sun, 11 Oct 2020 23:56:35 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, linux-aio@kvack.org,
+        linux-efi@vger.kernel.org, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        target-devel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, samba-technical@lists.samba.org,
+        ceph-devel@vger.kernel.org, drbd-dev@lists.linbit.com,
+        devel@driverdev.osuosl.org, linux-cifs@vger.kernel.org,
+        linux-nilfs@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-rdma@vger.kernel.org,
+        x86@kernel.org, amd-gfx@lists.freedesktop.org,
+        linux-afs@lists.infradead.org, cluster-devel@redhat.com,
+        linux-cachefs@redhat.com, intel-wired-lan@lists.osuosl.org,
+        xen-devel@lists.xenproject.org, linux-ext4@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>, ecryptfs@vger.kernel.org,
+        linux-um@lists.infradead.org, intel-gfx@lists.freedesktop.org,
+        linux-erofs@lists.ozlabs.org, reiserfs-devel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-bcache@vger.kernel.org,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        io-uring@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-ntfs-dev@lists.sourceforge.net, netdev@vger.kernel.org,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH RFC PKS/PMEM 22/58] fs/f2fs: Utilize new kmap_thread()
+Message-ID: <20201012065635.GB2046448@iweiny-DESK2.sc.intel.com>
+References: <20201009195033.3208459-1-ira.weiny@intel.com>
+ <20201009195033.3208459-23-ira.weiny@intel.com>
+ <20201009213434.GA839@sol.localdomain>
+ <20201010003954.GW20115@casper.infradead.org>
+ <20201010013036.GD1122@sol.localdomain>
 MIME-Version: 1.0
-References: <cover.1602431034.git.yifeifz2@illinois.edu> <71c7be2db5ee08905f41c3be5c1ad6e2601ce88f.1602431034.git.yifeifz2@illinois.edu>
-In-Reply-To: <71c7be2db5ee08905f41c3be5c1ad6e2601ce88f.1602431034.git.yifeifz2@illinois.edu>
-From:   Jann Horn <jannh@google.com>
-Date:   Mon, 12 Oct 2020 08:46:15 +0200
-Message-ID: <CAG48ez0waTA3+Bs9UWx4HSx3Pktq-6K-z67hmcTV0Fr-NYGdMw@mail.gmail.com>
-Subject: Re: [PATCH v5 seccomp 2/5] seccomp/cache: Add "emulator" to check if
- filter is constant allow
-To:     YiFei Zhu <zhuyifei1999@gmail.com>
-Cc:     Linux Containers <containers@lists.linux-foundation.org>,
-        YiFei Zhu <yifeifz2@illinois.edu>, bpf <bpf@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        David Laight <David.Laight@aculab.com>,
-        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Hubertus Franke <frankeh@us.ibm.com>,
-        Jack Chen <jianyan2@illinois.edu>,
-        Josep Torrellas <torrella@illinois.edu>,
-        Kees Cook <keescook@chromium.org>,
-        Tianyin Xu <tyxu@illinois.edu>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Valentin Rothberg <vrothber@redhat.com>,
-        Will Drewry <wad@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201010013036.GD1122@sol.localdomain>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, Oct 11, 2020 at 5:48 PM YiFei Zhu <zhuyifei1999@gmail.com> wrote:
-> SECCOMP_CACHE will only operate on syscalls that do not access
-> any syscall arguments or instruction pointer. To facilitate
-> this we need a static analyser to know whether a filter will
-> return allow regardless of syscall arguments for a given
-> architecture number / syscall number pair. This is implemented
-> here with a pseudo-emulator, and stored in a per-filter bitmap.
->
-> In order to build this bitmap at filter attach time, each filter is
-> emulated for every syscall (under each possible architecture), and
-> checked for any accesses of struct seccomp_data that are not the "arch"
-> nor "nr" (syscall) members. If only "arch" and "nr" are examined, and
-> the program returns allow, then we can be sure that the filter must
-> return allow independent from syscall arguments.
->
-> Nearly all seccomp filters are built from these cBPF instructions:
->
-> BPF_LD  | BPF_W    | BPF_ABS
-> BPF_JMP | BPF_JEQ  | BPF_K
-> BPF_JMP | BPF_JGE  | BPF_K
-> BPF_JMP | BPF_JGT  | BPF_K
-> BPF_JMP | BPF_JSET | BPF_K
-> BPF_JMP | BPF_JA
-> BPF_RET | BPF_K
-> BPF_ALU | BPF_AND  | BPF_K
->
-> Each of these instructions are emulated. Any weirdness or loading
-> from a syscall argument will cause the emulator to bail.
->
-> The emulation is also halted if it reaches a return. In that case,
-> if it returns an SECCOMP_RET_ALLOW, the syscall is marked as good.
->
-> Emulator structure and comments are from Kees [1] and Jann [2].
->
-> Emulation is done at attach time. If a filter depends on more
-> filters, and if the dependee does not guarantee to allow the
-> syscall, then we skip the emulation of this syscall.
->
-> [1] https://lore.kernel.org/lkml/20200923232923.3142503-5-keescook@chromium.org/
-> [2] https://lore.kernel.org/lkml/CAG48ez1p=dR_2ikKq=xVxkoGg0fYpTBpkhJSv1w-6BG=76PAvw@mail.gmail.com/
->
-> Suggested-by: Jann Horn <jannh@google.com>
-> Co-developed-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: YiFei Zhu <yifeifz2@illinois.edu>
+On Fri, Oct 09, 2020 at 06:30:36PM -0700, Eric Biggers wrote:
+> On Sat, Oct 10, 2020 at 01:39:54AM +0100, Matthew Wilcox wrote:
+> > On Fri, Oct 09, 2020 at 02:34:34PM -0700, Eric Biggers wrote:
+> > > On Fri, Oct 09, 2020 at 12:49:57PM -0700, ira.weiny@intel.com wrote:
+> > > > The kmap() calls in this FS are localized to a single thread.  To avoid
+> > > > the over head of global PKRS updates use the new kmap_thread() call.
+> > > >
+> > > > @@ -2410,12 +2410,12 @@ static inline struct page *f2fs_pagecache_get_page(
+> > > >  
+> > > >  static inline void f2fs_copy_page(struct page *src, struct page *dst)
+> > > >  {
+> > > > -	char *src_kaddr = kmap(src);
+> > > > -	char *dst_kaddr = kmap(dst);
+> > > > +	char *src_kaddr = kmap_thread(src);
+> > > > +	char *dst_kaddr = kmap_thread(dst);
+> > > >  
+> > > >  	memcpy(dst_kaddr, src_kaddr, PAGE_SIZE);
+> > > > -	kunmap(dst);
+> > > > -	kunmap(src);
+> > > > +	kunmap_thread(dst);
+> > > > +	kunmap_thread(src);
+> > > >  }
+> > > 
+> > > Wouldn't it make more sense to switch cases like this to kmap_atomic()?
+> > > The pages are only mapped to do a memcpy(), then they're immediately unmapped.
+> > 
+> > Maybe you missed the earlier thread from Thomas trying to do something
+> > similar for rather different reasons ...
+> > 
+> > https://lore.kernel.org/lkml/20200919091751.011116649@linutronix.de/
+> 
+> I did miss it.  I'm not subscribed to any of the mailing lists it was sent to.
+> 
+> Anyway, it shouldn't matter.  Patchsets should be standalone, and not require
+> reading random prior threads on linux-kernel to understand.
 
-Reviewed-by: Jann Horn <jannh@google.com>
+Sorry, but I did not think that the discussion above was directly related.  If
+I'm not mistaken, Thomas' work was directed at relaxing kmap_atomic() into
+kmap_thread() calls.  While interesting, it is not the point of this series.  I
+want to restrict kmap() callers into kmap_thread().
+
+For this series it was considered to change the kmap_thread() call sites to
+kmap_atomic().  But like I said in the cover letter kmap_atomic() is not the
+same semantic.  It is too strict.  Perhaps I should have expanded that
+explanation.
+
+> 
+> And I still don't really understand.  After this patchset, there is still code
+> nearly identical to the above (doing a temporary mapping just for a memcpy) that
+> would still be using kmap_atomic().
+
+I don't understand.  You mean there would be other call sites calling:
+
+kmap_atomic()
+memcpy()
+kunmap_atomic()
+
+?
+
+> Is the idea that later, such code will be
+> converted to use kmap_thread() instead?  If not, why use one over the other?
+ 
+
+The reason for the new call is that with PKS added behind kmap we have 3 levels
+of mapping we want.
+
+global kmap (can span threads and sleep)
+'thread' kmap (can sleep but not span threads)
+'atomic' kmap (can't sleep nor span threads [by definition])
+
+As Matthew said perhaps 'global kmaps' may be best changed to vmaps?  I just
+don't know the details of every call site.
+
+And since I don't know the call site details if there are kmap_thread() calls
+which are better off as kmap_atomic() calls I think it is worth converting
+them.  But I made the assumption that kmap users would already be calling
+kmap_atomic() if they could (because it is more efficient).
+
+Ira
