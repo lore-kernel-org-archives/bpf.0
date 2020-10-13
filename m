@@ -2,242 +2,126 @@ Return-Path: <SRS0=xWwI=DV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CFF8DC433DF
-	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 09:24:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37DC2C43467
+	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 09:24:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74935206E5
-	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 09:24:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BAD57206DD
+	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 09:24:14 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k2L4SEZE"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h7OqxXGK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728655AbgJNJYL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Oct 2020 05:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39926 "EHLO
+        id S1728794AbgJNJYM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Oct 2020 05:24:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731103AbgJNJU5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1729779AbgJNJU5 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 14 Oct 2020 05:20:57 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343BEC0613B2;
-        Tue, 13 Oct 2020 14:56:24 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id c3so960694ybl.0;
-        Tue, 13 Oct 2020 14:56:24 -0700 (PDT)
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACC4C08EC68
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2020 16:54:31 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id t18so3017205ilo.12
+        for <bpf@vger.kernel.org>; Tue, 13 Oct 2020 16:54:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3srl/cIIgDrdXLp/zbv78C5Fc414aniZHGOaeUr9AnI=;
-        b=k2L4SEZEfHDRirOEZZnI1rdeggzljt1zXv4YNShr01co4HRTZjbG9uHrFUA968f3bT
-         GCB/gFBdFlSjPV9Re0dS4iz0F5b1vs2hJXibKVnTKYpKjsdJoJzvijvIeIO3hEufV/Dn
-         uku0l9fUmXoUzKmVMtbJ5LKQ9sNpSZu9CZv8NYi5KGYEOwwr6aYyHUC0CmGBV3pWIJ1k
-         IuU6X3bHkrTEsfwXWt0harQ9QHhr4p2UDqOEvloYk7HOm8ygNNlcEX/C/cGPymwxd4zW
-         VU2xoLWGzr/Uv1hlN2PwWuMFMRhANasSAOytra9o13fov34YUnGkPy7iz+v+HZ55ZxIg
-         gU2A==
+        bh=sjm3u8JC4Xlbusb+qeX/5Jk8X4D9CpxdIUDG8wfTrLc=;
+        b=h7OqxXGKwj4Mo4JA7yrTBWbdI8dnRHqApiqXyHTpTe991zpKHZkEHCEWyHDvG1qik+
+         CxqFaq8V2zp0IIB8Vz1ST135NAoNU5tXd0fqOWAmNisCCPUzBWpFweo0bkm6PY0OfKLl
+         9nr5NggqtKFcmLjBEAumVHZ0wFXUnFWNE80roOle4AdU+7WLrd0yYeJwlH1gwjc8HaVR
+         4UI6u/hgDaDFrVDnhQnEUAb1LLth6/fHwpenUGo2z+to58CwMJ1kLvCJTwZud0xRXiQi
+         +CtWLyhj1h3AOHapWt+ge6Jyt+9mGVuB4vUTqHQ9220EAh94pga7svTjw/F94Z1iMAZ9
+         ysZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3srl/cIIgDrdXLp/zbv78C5Fc414aniZHGOaeUr9AnI=;
-        b=V6YEW/sXznM6ZsVXao0BLTLIeRyHf0wCA7NVdY+EEh7BbU7Dth+PsuT/5IHqhSBUfl
-         1GENNhb1fuvRpqHB0nCmoqy8PmNF/UvVCo8yn4bDYysxgsuzzByWem812zCZEp1RYVYU
-         7fvUJn+UQ6fojls9xonkDhzYqXoIbnnGcTe0tYQoT0w5oFFWiaPqcPdMIiG5L47VZb7y
-         YFViu3XG8ALZ11pwR6HyNl/2cK55ds2xcQ3FYHGOw20hz2s9xVls7qwURAKDIoQkBmSL
-         Mev4hZRzqx2jd7gxH24tEj6kxKxqGQyTnjW6Oj/LjpIcTw/k744jGn8Z+5ThZ3HFbCjk
-         vSuQ==
-X-Gm-Message-State: AOAM530RE3R41pOAyJUPxerlx1k602cOXcrrvX1ZtWPxA0lnzLS9VKmG
-        cFUuDuyWoVyWEdV+oRJkFGOAMGhBK4GDWWQlcTQpk6mnhhI=
-X-Google-Smtp-Source: ABdhPJzWy/1g2k56AhRnwZ3+lqezHCoHFqVPRObay3gPHalmD1dC3N1gi0WhFFNYQtUnVyS8XeoY2vOxBH3ysM8K1JE=
-X-Received: by 2002:a25:b0d:: with SMTP id 13mr2958476ybl.347.1602626183316;
- Tue, 13 Oct 2020 14:56:23 -0700 (PDT)
+        bh=sjm3u8JC4Xlbusb+qeX/5Jk8X4D9CpxdIUDG8wfTrLc=;
+        b=jQr6ewSR2S1e2JHifgOkzo29xryxD8DFDp8QOjhjypFSG78zxL/isQ8+hCE6kdy+nj
+         oPplp42j7mmCW34/btJ1/j6liJUuVUIg3MsOzrZOmV3w8XxwpLNOD5M6oVnJdHLVoVCL
+         WgGMU/X6+H8Bowov8hQg+6ORvu5U3+XrODwHu7txOtPYc2qnVkRmWa0T1+eec4ZzVVNt
+         cZLV+bC2VhYOTZSzK3XA24dbkwkY18Yaupvshw2lb7utj+zsT8xZOS/DFW430Wp4sXeJ
+         lazWEM3ep6FPyiMIJmQRkkuGtbaGvfF+ZXpG75pDlsFoxg93KTfRPujMHOvZ6bJCMGJN
+         uApA==
+X-Gm-Message-State: AOAM533Wm+vnIJpInJasaKUX2gRil6L0zFSddfdML+HBVhZv1VS0wHYg
+        7PL9KbXhdH6o0lWF8pWvqNmdkB4SJwDRfEZmAO3Fyw==
+X-Google-Smtp-Source: ABdhPJz8qdgbvWOw8zzy1DuQLasgWgEutPD6COUd/uTLi2C5S0MzLmxZtdhCOAHYVnQWeAnrM4Jg1hq+7EDgKgW3Udo=
+X-Received: by 2002:a05:6e02:11a8:: with SMTP id 8mr619039ilj.145.1602633270384;
+ Tue, 13 Oct 2020 16:54:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201009011240.48506-1-alexei.starovoitov@gmail.com>
- <20201009011240.48506-4-alexei.starovoitov@gmail.com> <20201013195622.GB1305928@krava>
- <CAADnVQLYSk0YgK7_dUSF-5Rau10vOdDgosVhE9xmEr1dp+=2vg@mail.gmail.com>
-In-Reply-To: <CAADnVQLYSk0YgK7_dUSF-5Rau10vOdDgosVhE9xmEr1dp+=2vg@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 13 Oct 2020 14:56:12 -0700
-Message-ID: <CAEf4BzbWO3fgWxAWQw4Pee=F7=UqU+N6LtKYV7V9ZZrfkPZ3gw@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 3/4] selftests/bpf: Add profiler test
+References: <160216609656.882446.16642490462568561112.stgit@firesoul>
+ <20201009093319.6140b322@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <5f80ccca63d9_ed74208f8@john-XPS-13-9370.notmuch> <20201009160010.4b299ac3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20201010124402.606f2d37@carbon> <20201010093212.374d1e68@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20201013224009.77d6f746@carbon> <20201013160726.367e3871@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20201013233734.6z3uyrlr43s7etay@ast-mbp>
+In-Reply-To: <20201013233734.6z3uyrlr43s7etay@ast-mbp>
+From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Date:   Tue, 13 Oct 2020 16:54:18 -0700
+Message-ID: <CANP3RGdPWxf-TFypoxb0uMtKBy2nVAkzCmbhwjzjKDi8ZguEbg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next V3 0/6] bpf: New approach for BPF MTU handling
 To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Andrii Nakryiko <andrii@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>
+        bpf <bpf@vger.kernel.org>, Linux NetDev <netdev@vger.kernel.org>,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Shaun Crampton <shaun@tigera.io>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Marek Majkowski <marek@cloudflare.com>,
+        Eyal Birger <eyal.birger@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 2:03 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+> how about we set __bpf_skb_max_len() to jumbo like 8k and be done with it.
+
+8k is still far too small.  A lot of places do 9K or 16K jumbo frames.
+You'd need at least a full 16K for it to be real jumbo compatible.
+
+That said, if we're ever willing to ignore device mtu, then I see no
+reason why an 8K or 16K or 32K limit is any better than 64K.
+(which is at least max IP packet size compatible [let's ignore ipv6
+jumbograms as not realistic])
+
+If something in the firmware/driver fails at 64K it'll probably fail
+at 8K as well.
+Since the 'bad' hardware is most likely old and only ~1500 (or 1
+pagesize) capable anyway...
+
+In practice driver limitations maybe more around the number of pages
+or sg sections, then rather on the max packet size anyway...
+so failures may depend on individual skb layout...
+
+And as a reminder there are interfaces (like lo) that default to 64K mtu.
+(and I have veth setups with 64K mtu as well)
+
+btw. our GCE folks tell us they occasionally see (and now discard)
+>mtu packets from Linux VMs (using the virtio-net driver),
+we've not had time to debug this (the VMs in question have some pretty
+funky routing and for privacy reason I've not been able to get actual
+dumps of the problematic frames), but gut feeling is >mtu packets
+occasionally leak into the drivers (probably from the tcp stack).
+
+> I guess some badly written driver/fw may still hang with <= 8k skb
+> that bpf redirected from one netdev with mtu=jumbo to another
+> netdev with mtu=1500, but then it's really a job of the driver/fw
+> to deal with it cleanly.
 >
-> On Tue, Oct 13, 2020 at 12:56 PM Jiri Olsa <jolsa@redhat.com> wrote:
-> >
-> > On Thu, Oct 08, 2020 at 06:12:39PM -0700, Alexei Starovoitov wrote:
-> >
-> > SNIP
-> >
-> > > +
-> > > +#ifdef UNROLL
-> > > +#pragma unroll
-> > > +#endif
-> > > +     for (int i = 0; i < MAX_CGROUPS_PATH_DEPTH; i++) {
-> > > +             filepart_length =
-> > > +                     bpf_probe_read_str(payload, MAX_PATH, BPF_CORE_READ(cgroup_node, name));
-> > > +             if (!cgroup_node)
-> > > +                     return payload;
-> > > +             if (cgroup_node == cgroup_root_node)
-> > > +                     *root_pos = payload - payload_start;
-> > > +             if (filepart_length <= MAX_PATH) {
-> > > +                     barrier_var(filepart_length);
-> > > +                     payload += filepart_length;
-> > > +             }
-> > > +             cgroup_node = BPF_CORE_READ(cgroup_node, parent);
-> > > +     }
-> > > +     return payload;
-> > > +}
-> > > +
-> > > +static ino_t get_inode_from_kernfs(struct kernfs_node* node)
-> > > +{
-> > > +     struct kernfs_node___52* node52 = (void*)node;
-> > > +
-> > > +     if (bpf_core_field_exists(node52->id.ino)) {
-> > > +             barrier_var(node52);
-> > > +             return BPF_CORE_READ(node52, id.ino);
-> > > +     } else {
-> > > +             barrier_var(node);
-> > > +             return (u64)BPF_CORE_READ(node, id);
-> > > +     }
-> > > +}
-> > > +
-> > > +int pids_cgrp_id = 1;
-> >
-> >
-> > hi,
-> > I'm getting compilation failure with this:
-> >
-> >           CLNG-LLC [test_maps] profiler2.o
-> >         In file included from progs/profiler2.c:6:
-> >         progs/profiler.inc.h:246:5: error: redefinition of 'pids_cgrp_id' as different kind of symbol
-> >         int pids_cgrp_id = 1;
-> >             ^
-> >         /home/jolsa/linux-qemu/tools/testing/selftests/bpf/tools/include/vmlinux.h:14531:2: note: previous definition is here
-> >                 pids_cgrp_id = 11,
->
-> Interesting.
-> You probably have CONFIG_CGROUP_PIDS in your .config?
-> I don't and bpf CI doesn't have it either, so this issue wasn't spotted earlier.
->
-> I can hard code 11, of course, but
-> but maybe Andrii has a cool way to use co-re to deal with this?
-
-Cool or not, but we do have a way to deal with it. :)
-
-> I think
-> "extern bool CONFIG_CGROUP_PIDS __kconfig"
-> won't work.
-> A good opportunity to try to use bpf_core_enum_value_exists() ?
-
-There are fews parts here.
-
-First, we can't rely that vmlinux.h has pids_cgrp_id enum defined, so
-we need to define our own. But in such a way that it doesn't collide
-with enum cgroup_subsys_id in vmlinux.h. ___suffix for the rescue
-here:
-
-enum cgroup_subsys_id___local {
-    pids_cgrp_id___local = 1, /* anything but zero */
-};
-
-If value is zero, built-in will complain. Need to check with Yonghong
-on why that is. For all things CO-RE, ___local suffix is going to be
-ignored.
-
-Second, detecting if the kernel even has this pids_cgrp_id defined.
-That could be done with __kconfig as you mentioned, actually (but need
-__weak as well). But one can also use bpf_core_enum_value_exists as
-well. So it's either:
-
-extern bool CONFIG_CGROUP_PIDS __kconfig __weak;
-
-...
-
-if (ENABLE_CGROUP_V1_RESOLVER && CONFIG_CGROUP_PIDS) {
-   ...
-}
-
-
-Or a bit more verbose way with relos:
-
-if (ENABLE_CGROUP_V1_RESOLVER &&
-    bpf_core_enum_value_exists(enum cgroup_subsys_id___local,
-pids_cgrp_id___local)) {
-   ...
-}
-
-Third, actually getting the value of enum. This one would be
-impossible without CO-RE reloc, but that's exactly what
-bpf_core_enum_value() exists for:
-
-
-int cgrp_id = bpf_core_enum_value(enum cgroup_subsys_id___local,
-pids_cgrp_id___local);
-
-
-I'd go with Kconfig + bpf_core_enum_value(), as it's shorter and
-nicer. This compiles and works with my Kconfig, but I haven't checked
-with CONFIG_CGROUP_PIDS defined.
-
-
-diff --git a/tools/testing/selftests/bpf/progs/profiler.inc.h
-b/tools/testing/selftests/bpf/progs/profiler.inc.h
-index 00578311a423..79b8d2860a5c 100644
---- a/tools/testing/selftests/bpf/progs/profiler.inc.h
-+++ b/tools/testing/selftests/bpf/progs/profiler.inc.h
-@@ -243,7 +243,11 @@ static ino_t get_inode_from_kernfs(struct
-kernfs_node* node)
-        }
- }
-
--int pids_cgrp_id = 1;
-+extern bool CONFIG_CGROUP_PIDS __kconfig __weak;
-+
-+enum cgroup_subsys_id___local {
-+       pids_cgrp_id___local = 1, /* anything but zero */
-+};
-
- static INLINE void* populate_cgroup_info(struct cgroup_data_t* cgroup_data,
-                                         struct task_struct* task,
-@@ -253,7 +257,9 @@ static INLINE void* populate_cgroup_info(struct
-cgroup_data_t* cgroup_data,
-                BPF_CORE_READ(task, nsproxy, cgroup_ns, root_cset,
-dfl_cgrp, kn);
-        struct kernfs_node* proc_kernfs = BPF_CORE_READ(task, cgroups,
-dfl_cgrp, kn);
-
--       if (ENABLE_CGROUP_V1_RESOLVER) {
-+       if (ENABLE_CGROUP_V1_RESOLVER && CONFIG_CGROUP_PIDS) {
-+               int cgrp_id = bpf_core_enum_value(enum
-cgroup_subsys_id___local, pids_cgrp_id___local);
-+
- #ifdef UNROLL
- #pragma unroll
- #endif
-@@ -262,7 +268,7 @@ static INLINE void* populate_cgroup_info(struct
-cgroup_data_t* cgroup_data,
-                                BPF_CORE_READ(task, cgroups, subsys[i]);
-                        if (subsys != NULL) {
-                                int subsys_id = BPF_CORE_READ(subsys, ss, id);
--                               if (subsys_id == pids_cgrp_id) {
-+                               if (subsys_id == cgrp_id) {
-                                        proc_kernfs =
-BPF_CORE_READ(subsys, cgroup, kn);
-                                        root_kernfs =
-BPF_CORE_READ(subsys, ss, root, kf_root, kn);
-                                        break;
+> I think checking skb->tx_dev->mtu for every xmited packet is not great.
+> For typical load balancer it would be good to have MRU 1500 and MTU 15xx.
+> Especially if it's internet facing. Just to drop all known big
+> packets in hw via MRU check.
+> But the stack doesn't have MRU vs MTU distinction and XDP_TX doesn't
+> adhere to MTU. xdp_data_hard_end is the limit.
+> So xdp already allows growing the packet beyond MTU.
+> I think upgrading artificial limit in __bpf_skb_max_len() to 8k will
+> keep it safe enough for all practical cases and will avoid unnecessary
+> checks and complexity in xmit path.
