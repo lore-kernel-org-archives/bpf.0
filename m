@@ -2,91 +2,116 @@ Return-Path: <SRS0=xWwI=DV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 34FF5C43467
-	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 09:23:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 82346C43467
+	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 09:23:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CB94E206E5
-	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 09:23:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 346F5206E5
+	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 09:23:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="wzFripj/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QD9qsaix"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728428AbgJNJXQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Oct 2020 05:23:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
+        id S1727154AbgJNJXw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Oct 2020 05:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730260AbgJNJXN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Oct 2020 05:23:13 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E62C061755
-        for <bpf@vger.kernel.org>; Wed, 14 Oct 2020 02:20:42 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id u8so3858687ejg.1
-        for <bpf@vger.kernel.org>; Wed, 14 Oct 2020 02:20:42 -0700 (PDT)
+        with ESMTP id S1731200AbgJNJWl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Oct 2020 05:22:41 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590B1C08EADA;
+        Tue, 13 Oct 2020 16:37:39 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id w21so822298pfc.7;
+        Tue, 13 Oct 2020 16:37:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=references:user-agent:from:to:cc:subject:in-reply-to:date
-         :message-id:mime-version;
-        bh=/WnbvhyGcptPPBaNZxdAo4mg51wxanwUK78khnzdGus=;
-        b=wzFripj/9LraAMEmzYAkjL1sotjg/tzxIUOn+3rAhgYLrFGhBppxP58Fj8lJk3Gn6f
-         QxLE5MOpTScSC67rQ7Y+wNjc6xZaYQ9QPsCqwz0rO1XIwgM+0wXdDQlLbNfLAo/aDtwN
-         8hhmK9wr8/zE8x05W8XeZ6xBYiKnxtZ9qgrbM=
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jzAjauBIxv54hR0gUghWcQqHfup2oOYjNtE0ULbiSJk=;
+        b=QD9qsaix6m/6vNFJMOAIixheqRSIsThKSiUBvn+N6BI7aCMSgtNWCxWiYxnH7qtjbk
+         naoz90ULi9g/TItYGJ3zdZvbjf1+euF+omswBpqeDSJuJAJtilq/4Orz0JQn63SfdPUJ
+         ed9eNoCse7kbuk1uCO7dWZ6MEq84YPqFjVoYhkjVvR7Rda+W5ikBsqP4qrCw2lYsrJqL
+         BwDddIdeWNgNOINWJiPf2KFoTp9NN9snw4IUhXrNi+JikkYIhEVnCCjo0VYjzBT4PZ73
+         RaMtlxYatzAFIJ3PtdobecpKzbJJiZpMR9/d9TkiabxKfWBCIoh1ceWYMUX1wF/9rpEx
+         zWDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject
-         :in-reply-to:date:message-id:mime-version;
-        bh=/WnbvhyGcptPPBaNZxdAo4mg51wxanwUK78khnzdGus=;
-        b=JwVBzpuH8vOaBY1gvjgF2/8D0uvp28iw3NTJbZpArscXVs+V/778GxUlFC2uWmC32S
-         iqO0fAQhefb5QCvm9pt4/6KEWxMnAwpc4v8Q70Y3xPv3yq3AYIj5sIIrJV/8zgfzn6WN
-         mr3SOD2wLvn9KdRcVr3xmIo1UGTMgJIHFWQ4FwopdU9xiTgQ/XumMiI5jj2F4QWfEOs7
-         0q9l2dOJm800tiiHqxo0pcsXbbf1b2/E2iSveyKTcU8cYq3++NstQAot5JuLcrq45XAu
-         enLZOtevLoK3WRs8Ww0fDFW4g12bVJTnI3Lff7hICSJfWi5gn/73QNajoJ0kdiWPkGKN
-         Ue0w==
-X-Gm-Message-State: AOAM530dHQ8mc09GTDwPanRKnZUOfMN91wK4skSVqXBEFh3eY9GdrbYL
-        yaDBoau4EsbQ+bOWDSRLshMksQ==
-X-Google-Smtp-Source: ABdhPJxUvxlmotUTKMITZb02Wylkh1sw157EQWmBLNMnqJxc/0hczSTt/IE/DTObQL8sz0hci2Atmg==
-X-Received: by 2002:a17:906:c015:: with SMTP id e21mr4156437ejz.432.1602667241168;
-        Wed, 14 Oct 2020 02:20:41 -0700 (PDT)
-Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
-        by smtp.gmail.com with ESMTPSA id bw25sm1326231ejb.119.2020.10.14.02.20.40
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=jzAjauBIxv54hR0gUghWcQqHfup2oOYjNtE0ULbiSJk=;
+        b=gBX8Wz/TcbzbtAmsYtPoYFUN3r8p24VoGN+zbIe8O0/A+OgEdsigWr0zWPbj2+AKGA
+         Qi0GvDX84veluCB3toxdbe/DGSycP2XUzc474BQYEKCdzyEQBX7qBCwgsj+j36gnVDcf
+         djY4cCXAjoN+nKKnbRRwsXr90XbvX9SMs/v5lO8qjS7Hv33em/DumKct7zCEPHoHIqWS
+         1fXapBGUgjHTs9GO6OD6l1Tv8RIQYV9I+zv+RQ/eEzu8lj/V8Io8nCFnK+Vo9m9ud7ow
+         nUyohOCAWJmpijJzJRau4wCSc6QP7daAU7ZPwQ3neihuD9T0ks7gAUKeAV/muJ29pFHi
+         e8ZA==
+X-Gm-Message-State: AOAM533LE0e4898NwE/GrVloafAlTXP/MekR656sz2uYW/iuUPDNS4dc
+        2QokTYURD4TKI2g89N7KaJc=
+X-Google-Smtp-Source: ABdhPJxhxdLi34aEK91TOXf1Y6Ix/+BdLBXTaSKtGWdcMSXu7EXtjkk+J9i0BmqN9+UeyO0Osmk3JQ==
+X-Received: by 2002:aa7:8509:0:b029:156:32b4:ab97 with SMTP id v9-20020aa785090000b029015632b4ab97mr1907940pfn.54.1602632258739;
+        Tue, 13 Oct 2020 16:37:38 -0700 (PDT)
+Received: from ast-mbp ([2620:10d:c090:400::5:e7d1])
+        by smtp.gmail.com with ESMTPSA id hg15sm349533pjb.39.2020.10.13.16.37.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Oct 2020 02:20:40 -0700 (PDT)
-References: <20201012170952.60750-1-alex.dewar90@gmail.com>
-User-agent: mu4e 1.1.0; emacs 26.3
-From:   Jakub Sitnicki <jakub@cloudflare.com>
-To:     Alex Dewar <alex.dewar90@gmail.com>
-Cc:     John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: sockmap: Don't call bpf_prog_put() on NULL pointer
-In-reply-to: <20201012170952.60750-1-alex.dewar90@gmail.com>
-Date:   Wed, 14 Oct 2020 11:20:39 +0200
-Message-ID: <878sc9qi3c.fsf@cloudflare.com>
+        Tue, 13 Oct 2020 16:37:37 -0700 (PDT)
+Date:   Tue, 13 Oct 2020 16:37:34 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, Daniel Borkmann <borkmann@iogearbox.net>,
+        maze@google.com, lmb@cloudflare.com, shaun@tigera.io,
+        Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
+        eyal.birger@gmail.com
+Subject: Re: [PATCH bpf-next V3 0/6] bpf: New approach for BPF MTU handling
+Message-ID: <20201013233734.6z3uyrlr43s7etay@ast-mbp>
+References: <160216609656.882446.16642490462568561112.stgit@firesoul>
+ <20201009093319.6140b322@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <5f80ccca63d9_ed74208f8@john-XPS-13-9370.notmuch>
+ <20201009160010.4b299ac3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20201010124402.606f2d37@carbon>
+ <20201010093212.374d1e68@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20201013224009.77d6f746@carbon>
+ <20201013160726.367e3871@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201013160726.367e3871@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 07:09 PM CEST, Alex Dewar wrote:
-> If bpf_prog_inc_not_zero() fails for skb_parser, then bpf_prog_put() is
-> called unconditionally on skb_verdict, even though it may be NULL. Fix
-> and tidy up error path.
->
-> Addresses-Coverity-ID: 1497799: Null pointer dereferences (FORWARD_NULL)
-> Fixes: 743df8b7749f ("bpf, sockmap: Check skb_verdict and skb_parser programs explicitly")
-> Signed-off-by: Alex Dewar <alex.dewar90@gmail.com>
-> ---
+On Tue, Oct 13, 2020 at 04:07:26PM -0700, Jakub Kicinski wrote:
+> On Tue, 13 Oct 2020 22:40:09 +0200 Jesper Dangaard Brouer wrote:
+> > > FWIW I took a quick swing at testing it with the HW I have and it did
+> > > exactly what hardware should do. The TX unit entered an error state 
+> > > and then the driver detected that and reset it a few seconds later.  
+> > 
+> > The drivers (i40e, mlx5, ixgbe) I tested with didn't entered an error
+> > state, when getting packets exceeding the MTU.  I didn't go much above
+> > 4K, so maybe I didn't trigger those cases.
+> 
+> You probably need to go above 16k to get out of the acceptable jumbo
+> frame size. I tested ixgbe by converting TSO frames to large TCP frames,
+> at low probability.
 
-Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
+how about we set __bpf_skb_max_len() to jumbo like 8k and be done with it.
+
+I guess some badly written driver/fw may still hang with <= 8k skb
+that bpf redirected from one netdev with mtu=jumbo to another
+netdev with mtu=1500, but then it's really a job of the driver/fw
+to deal with it cleanly.
+
+I think checking skb->tx_dev->mtu for every xmited packet is not great.
+For typical load balancer it would be good to have MRU 1500 and MTU 15xx.
+Especially if it's internet facing. Just to drop all known big
+packets in hw via MRU check.
+But the stack doesn't have MRU vs MTU distinction and XDP_TX doesn't
+adhere to MTU. xdp_data_hard_end is the limit.
+So xdp already allows growing the packet beyond MTU.
+I think upgrading artificial limit in __bpf_skb_max_len() to 8k will
+keep it safe enough for all practical cases and will avoid unnecessary
+checks and complexity in xmit path.
