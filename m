@@ -2,126 +2,101 @@ Return-Path: <SRS0=xWwI=DV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D98FC2D0A2
-	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 09:20:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4E94C43457
+	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 09:22:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C53AC20B1F
-	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 09:20:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4749B20B1F
+	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 09:22:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QA9CFN/B"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BNC+HtRV"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730352AbgJNJUB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Oct 2020 05:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
+        id S1729988AbgJNJWS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Oct 2020 05:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730512AbgJNJTm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Oct 2020 05:19:42 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B9DC0613B7
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2020 15:05:14 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id a4so906228ybq.13
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2020 15:05:14 -0700 (PDT)
+        with ESMTP id S1731144AbgJNJVw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Oct 2020 05:21:52 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61609C0613B4;
+        Tue, 13 Oct 2020 14:59:12 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id h6so908522ybi.11;
+        Tue, 13 Oct 2020 14:59:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=HtM86A5oGlkCWxqd8nSfr0h9tyf3tkyyqBku5Y8YMAg=;
-        b=QA9CFN/BEmBHYh38C9BvfwprlQuXXwaBlur7ZOcLF/ha4WiE09fx3K+xSnaoi7fRL/
-         FGkEVbGsdV0b5YWlxODaAC/Lrjo/7eFanR4f6s8Cx+ZiR3UV8ZENYHM8sNBlRWq6Lkql
-         2CZDOlldLz6mC9OSdnt2Jexnmhgh5WlmZUhoRhB35+acRKVXW4L0LXgHrowUi4ZEsw7G
-         0NDTjGi08tfOA0PyJ6E828Q/lm8mrfJIq+71ndCcb4Lc7oqVx3LMB6STlc2mRovqxkNE
-         EOOtp9xg4SLuAtzE42BBWUvWZwNlcAn4Zk4EwQjFnhfnHH+rKItGMc+WjI3sebyFMYsK
-         gi0A==
+        bh=VRRma4QG3RpD3m+KVfyIAn86lByO9d2UMJBpO63DxTI=;
+        b=BNC+HtRVwGwOu7By4Lr9k59i/iQgasSemzSgLKfB6hjxMPjh7dKBEpTOmc7/pj6b3W
+         6Nd2pEjhvSD9+MlelhDFBidieGLIKHp0fmaxSNDTYbHoP5gGFenNKiv15cLmaqIgdDA6
+         gClTXfSozfyEop/pog/t9sYW9Cb4iIdzTqCRgw04AYodY2YO1WXgW/Rey4JjTP0l/7KR
+         5lrWP4b3vZ89IrUBg4ey5bfMsvRop5d4xhYv7uYeGidoVXuxH8meNnCNLwphAQqpprds
+         vT77jAmdtbR6sRaMSDeCBrTKi01R6TKavgxnQ9PHvnkcCHv6f2EQvf7XY2uwlLpa7HdQ
+         jXbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HtM86A5oGlkCWxqd8nSfr0h9tyf3tkyyqBku5Y8YMAg=;
-        b=hYdof3PU+itXpOqIa2TM5MGGULgdJ7BFYcRWEhdQDLdJX4hofoIJCXyDuZXO+ODYe8
-         rKg/ehRqobAzD6lqFq3ODHw7rCozzukKCvY8RYy3SDO2f3KcdDL2cjN4H9O141JaJqYc
-         JoEV5Gkwli4OdE+VFC0IfC0hoFeeN+IKiS/i4GyyCOAz3Lg2hgBGkg6P+ciZEdJ2TBrI
-         y70IlaHhhSFbuT65Bol1EqRpoCh7BnafmOYNwLOBfVZXEP4qPny03kq/H9No9TK79gzs
-         5XT3VoJBR0qF+81a8/Sm3VKteTEJCIx+qspBGlS7PZuVF/lVOJe0bZz5tdr/cYn4cVaV
-         SSnA==
-X-Gm-Message-State: AOAM530/ou5uplOLTEr3dTeCsk5tNfoPSwMEkoicY6osAhdxpQBkAc6k
-        Yman4PdF9T3ERVuhpgGD0H6ATsfpnYhRdEQhvJAf46sR4pU=
-X-Google-Smtp-Source: ABdhPJwSYnaqHoqBj2Wl0ZxqaxZ/3gz7LmvEWGxrEFZBB773/nHOGv51qn1tOKDvbOsTgfcE2vGbhNHBCpxYB4nsDwg=
-X-Received: by 2002:a25:5f08:: with SMTP id t8mr2919617ybb.260.1602626713322;
- Tue, 13 Oct 2020 15:05:13 -0700 (PDT)
+        bh=VRRma4QG3RpD3m+KVfyIAn86lByO9d2UMJBpO63DxTI=;
+        b=oPmwMWa8lnCeKiJIHziL3Zw3zmMI3ILJHoLB0H+y/loua5UogPTinchRqB9xq3nTim
+         zhSS35OxMdlaVW1JqL62nTSHdlSusTqrUrfwKy/y6b2eyzf+eFb9xp0ypnfb8K2luKnf
+         HyL/RxqZlzHEmXYPHFyAJQo4/r9asGAI/Z5X58q3CEdBtIJthe/yzH5spcpaZepu6J3n
+         QSWiFRDQS3GkFs2QsrKPzVpikvteaBalzZWllsLoTDhKa414rVf28QPozVinyVkPZMdn
+         gtO4a7XJwDOLVpt/aPUk3yAR+ZDz3e1jTIJKSBSLi611664XAUujEHHmMghLs1GethGN
+         PkjQ==
+X-Gm-Message-State: AOAM531WsfjLZPonyPA+V1dNXRF976jKehHFaTZ0jNBQoy1J9SjdBgpb
+        M9LQeAhkeDUa60F5xhj6bRLl7QpaXXmU2kThKb2QIIvJtpg=
+X-Google-Smtp-Source: ABdhPJw7+CRp3FkUL12dvYfJIGv04RKrS1K04TJYYe6IrveNHSanyH+O0iF4G9VNil7Nfq5BH2firwTmkFUz7se4xGI=
+X-Received: by 2002:a25:2687:: with SMTP id m129mr2687368ybm.425.1602626351620;
+ Tue, 13 Oct 2020 14:59:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAOjtDRXzkwG84UCUVw0J_WmRt585OhOSjuWbdenYFNFinsSG0Q@mail.gmail.com>
-In-Reply-To: <CAOjtDRXzkwG84UCUVw0J_WmRt585OhOSjuWbdenYFNFinsSG0Q@mail.gmail.com>
+References: <20201012234940.1707941-1-kafai@fb.com>
+In-Reply-To: <20201012234940.1707941-1-kafai@fb.com>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 13 Oct 2020 15:05:02 -0700
-Message-ID: <CAEf4BzazaFZQHLcNARGWn4TTJJTQPdBVbskg+bJGp-dds-t1xw@mail.gmail.com>
-Subject: Re: Running JITed and interpreted programs simultaneously
-To:     Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>
-Cc:     bpf <bpf@vger.kernel.org>, Luka Perkov <luka.perkov@sartura.hr>,
-        David Marcinkovic <david.marcinkovic@sartura.hr>
+Date:   Tue, 13 Oct 2020 14:59:00 -0700
+Message-ID: <CAEf4BzbFoFryfELodTeQPQdC_hR5o9rxCXwNd4y4Tu-xZyV-9A@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: selftest: Fix flaky tcp_hdr_options test when
+ adding addr to lo
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>,
+        Networking <netdev@vger.kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Oct 9, 2020 at 12:58 PM Juraj Vijtiuk <juraj.vijtiuk@sartura.hr> wrote:
+On Tue, Oct 13, 2020 at 4:13 AM Martin KaFai Lau <kafai@fb.com> wrote:
 >
-> It would be great to hear if anyone has any thoughts on running a set
-> of BPF programs JITed while other programs are run by the interpreter.
+> The tcp_hdr_options test adds a "::eB9F" addr to the lo dev.
+> However, this non loopback address will have a race on ipv6 dad
+> which may lead to EADDRNOTAVAIL error from time to time.
 >
-> Something like that would be useful on 32-bit architectures, as the
-> JIT compiler there doesn't support some instructions, primarily
-> instructions that work with 64-bit data. As far as I can tell, it is
-> unlikely that support will be coming soon as it is a general issue for
-> all 32-bit architectures. Atomic operations like BPF_XADD look
-> especially problematic regarding support on 32 bit platforms. From
-> what I managed to see such a conclusion appeared in a few patches
-> where support for 32-bit JITs was added, for example [0].
-> That results in some programs being runnable with BPF JIT enabled, and
-> some failing during load time, but running successfully without JIT on
-> 32-bit platforms.
+> Even nodad is used in the iproute2 command, there is still a race in
+> when the route will be added.  This will then lead to ENETUNREACH from
+> time to time.
 >
-> The only way to run some programs with JIT and some without, that
-> seems possible right now, is to manually change
-> /proc/sys/net/core/bpf_jit_enable every time a program is loaded.
-> Although I've managed to do that and it seems to be working, it seems
-> pretty hacky and looks like it could cause race conditions if multiple
-> programs were loaded, especially by independent loaders.
+> To avoid the above, this patch uses the default loopback address "::1"
+> to do the test.
+>
+> Fixes: ad2f8eb0095e ("bpf: selftests: Tcp header options")
+> Reported-by: Andrii Nakryiko <andriin@fb.com>
+> Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+> ---
 
-I agree, the global file is not flexible enough and can cause problems
-in production environment.
+Less shelling out is always good :)
 
-I don't see any reason why we shouldn't allow to decide interpreted vs
-jitted mode per program during BPF_PROG_LOAD.
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
-See kernel/bpf/core.c, bpf_prog's jit_requested field determines
-whether a program is going to be jitted or not. It should be trivial
-to allow overriding that during BPF_PROG_LOAD command.
+>  .../bpf/prog_tests/tcp_hdr_options.c          | 26 +------------------
+>  .../bpf/progs/test_misc_tcp_hdr_options.c     |  2 +-
+>  2 files changed, 2 insertions(+), 26 deletions(-)
+>
 
-We can probably also generalize this to allow to "force-jit" or
-"force-interpret" by users, which would fail if kernel didn't support
-requested mode.
-
->
-> At first glance it seems that if something like this was to be added
-> to a loader, it would have to either somehow be aware of other BPF
-> programs being loaded or possibly implement some sort of locking
-> mechanism which also seems hacky. From what I understand, doing it in
-> the kernel looks even less promising as bpf_jit_enable is a system
-> wide setting, and I imagine that changing it to work on a per program
-> basis would pretty much require a rework of the current design, so
-> that looks even less promising.
->
-> It looks like the best option right now is to just run everything in
-> interpreted mode, but I want to make sure that I am not missing
-> something. If someone has tried doing something similar, it would be
-> great to know about that.
->
-> Thanks,
-> Juraj Vijtiuk
->
-> [0] https://lore.kernel.org/netdev/20200305050207.4159-3-luke.r.nels@gmail.com/
+[...]
