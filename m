@@ -2,111 +2,177 @@ Return-Path: <SRS0=xWwI=DV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 36B69C433DF
-	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 04:36:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BF89C2D0A3
+	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 08:20:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E273F2222C
-	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 04:36:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 05A6F212CC
+	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 08:19:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="aFeEuhWh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GGZEfs1d"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730017AbgJNEgy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Oct 2020 00:36:54 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:19812 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729995AbgJNEgy (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 14 Oct 2020 00:36:54 -0400
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09E4ZM1l011016
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2020 21:36:53 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type :
- content-transfer-encoding; s=facebook;
- bh=sl7Keq768JmYFP2QGaRO4xIW+BR0M1wIdYM0fJxUwXE=;
- b=aFeEuhWhXweCDqnRWk9q5mMw5Vmj7Wl/9zKjNPKtt9umKDdv39fEYy/lbgZn/c7lwg6B
- HgI8eZsGZ7MbNSz77b/+gTlrR64rbsTiSsuRO4Gpz69W9NxJPMLIbI/FPcGHHkXejHZj
- iakMx35SwnAUPpUWBjDsFHZK7a/e/Kc6WxI= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 345ff5k721-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 13 Oct 2020 21:36:53 -0700
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 13 Oct 2020 21:36:52 -0700
-Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 662C862E1AE9; Tue, 13 Oct 2020 21:36:41 -0700 (PDT)
-From:   Song Liu <songliubraving@fb.com>
-To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
-CC:     <kernel-team@fb.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <john.fastabend@gmail.com>, <kpsingh@chromium.org>,
-        Song Liu <songliubraving@fb.com>
-Subject: [PATCH bpf-next] selftests/bpf: fix compilation error in progs/profiler.inc.h
-Date:   Tue, 13 Oct 2020 21:36:38 -0700
-Message-ID: <20201014043638.3770558-1-songliubraving@fb.com>
-X-Mailer: git-send-email 2.24.1
+        id S1729064AbgJNITj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Oct 2020 04:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728946AbgJNITe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Oct 2020 04:19:34 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910A7C051133;
+        Wed, 14 Oct 2020 01:10:51 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id e23so1395177wme.2;
+        Wed, 14 Oct 2020 01:10:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=qc0X0ueFIug2eGcCkUWiSsZWwEmCO9v7Zz71O8TUyKM=;
+        b=GGZEfs1dcXE+rh/hnCbHJsLLjIIU7I2vGVWw1fn6bcMxg9sO1CkxP0Ps0H0vesVIJH
+         vcQwoI0qu+VDa5d8J9I0KNaif2TZYHWZ5qTJ/TScF3XhB9SFGcCJCy6iUCqTmj+o9JM7
+         MwrbK6ORdi2MeDnP7Hcl7nnSdz5RsorhulznRlB4vRTlk39j8KpwR/vyZseJ2cTBM6Q9
+         eAIMIk3lQlmb+CMfUoqk234RBvpQa4gxjjQjQPPiRAoK0ecaV/NTMgdNHpMHAdN5/B4V
+         1331vz+K8WGSiGcLVXnscvis57+DiqK8K9T0WfA8C+ZKwDM1MM8C7wA06tpblZq18BCR
+         XBPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=qc0X0ueFIug2eGcCkUWiSsZWwEmCO9v7Zz71O8TUyKM=;
+        b=XJGH41rWuUPXrlNMOOCoibj6XpyOeY9zlL6GSZQGwxFBUJHHBCndYNgVOZ5GJZrBSs
+         /+G9UQDO3O5GlzmpQi6roNLXSccDpTNN5yq6ZcfGipMsN/3RV1QMhBh+sIvvu7f7freg
+         MB9CuqGOuS/GAPxhGwbzvdVcn0pqEN0HHfvFc4igC7omo5f342rajZnSc/Hz8FeqjoRQ
+         Z14qesFcxQJFXuDpUl+872A0HhXjc3pFKe11Hofs89rEPvGD1/yAJ4kihg8G2QVDWATA
+         PH05+faONbSXbuLZ+1cKWss6Fxw4QSor7md96R5oO47xSqul4RbUEw9pyPnvM0tVQzq5
+         2CPg==
+X-Gm-Message-State: AOAM5301domGUCo578n6JulCHZ/PZQyuU5K7sMwTPxQhG+oJheMhdUPA
+        VgLXYpM0moGVtF1Mqp0u60E=
+X-Google-Smtp-Source: ABdhPJwhCHCouzh8PJqucNZwvw+b2q8Z7MV7MiNRhOtSLcZK+MB/vqLLSJDLcCWq6MUAgwWJZ6HMcw==
+X-Received: by 2002:a05:600c:2189:: with SMTP id e9mr2102016wme.153.1602663049207;
+        Wed, 14 Oct 2020 01:10:49 -0700 (PDT)
+Received: from [192.168.8.147] ([37.167.96.60])
+        by smtp.gmail.com with ESMTPSA id l3sm2399496wmg.32.2020.10.14.01.10.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Oct 2020 01:10:48 -0700 (PDT)
+Subject: Re: [PATCH net v2] net: fix pos incrementment in ipv6_route_seq_next
+To:     Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
+        Vasily Averin <vvs@virtuozzo.com>,
+        Andrii Nakryiko <andriin@fb.com>
+References: <20201013183121.1988411-1-yhs@fb.com>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <f1a37830-f86a-57ba-aba8-7b15e91d0481@gmail.com>
+Date:   Wed, 14 Oct 2020 10:10:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.0
 MIME-Version: 1.0
-X-FB-Internal: Safe
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
- definitions=2020-10-14_02:2020-10-14,2020-10-14 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- malwarescore=0 suspectscore=0 bulkscore=0 mlxscore=0 spamscore=0
- impostorscore=0 priorityscore=1501 phishscore=0 adultscore=0
- mlxlogscore=999 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2010140031
-X-FB-Internal: deliver
+In-Reply-To: <20201013183121.1988411-1-yhs@fb.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fix the following error when compiling selftests/bpf
 
-progs/profiler.inc.h:246:5: error: redefinition of 'pids_cgrp_id' as diff=
-erent kind of symbol
 
-pids_cgrp_id is used in cgroup code, and included in vmlinux.h. Fix the
-error by renaming pids_cgrp_id as pids_cgroup_id.
+On 10/13/20 8:31 PM, Yonghong Song wrote:
+> Commit 4fc427e05158 ("ipv6_route_seq_next should increase position index")
+> tried to fix the issue where seq_file pos is not increased
+> if a NULL element is returned with seq_ops->next(). See bug
+>   https://bugzilla.kernel.org/show_bug.cgi?id=206283
+> The commit effectively does:
+>   - increase pos for all seq_ops->start()
+>   - increase pos for all seq_ops->next()
+> 
+> For ipv6_route, increasing pos for all seq_ops->next() is correct.
+> But increasing pos for seq_ops->start() is not correct
+> since pos is used to determine how many items to skip during
+> seq_ops->start():
+>   iter->skip = *pos;
+> seq_ops->start() just fetches the *current* pos item.
+> The item can be skipped only after seq_ops->show() which essentially
+> is the beginning of seq_ops->next().
+> 
+> For example, I have 7 ipv6 route entries,
+>   root@arch-fb-vm1:~/net-next dd if=/proc/net/ipv6_route bs=4096
+>   00000000000000000000000000000000 40 00000000000000000000000000000000 00 00000000000000000000000000000000 00000400 00000001 00000000 00000001     eth0
+>   fe800000000000000000000000000000 40 00000000000000000000000000000000 00 00000000000000000000000000000000 00000100 00000001 00000000 00000001     eth0
+>   00000000000000000000000000000000 00 00000000000000000000000000000000 00 00000000000000000000000000000000 ffffffff 00000001 00000000 00200200       lo
+>   00000000000000000000000000000001 80 00000000000000000000000000000000 00 00000000000000000000000000000000 00000000 00000003 00000000 80200001       lo
+>   fe800000000000002050e3fffebd3be8 80 00000000000000000000000000000000 00 00000000000000000000000000000000 00000000 00000002 00000000 80200001     eth0
+>   ff000000000000000000000000000000 08 00000000000000000000000000000000 00 00000000000000000000000000000000 00000100 00000004 00000000 00000001     eth0
+>   00000000000000000000000000000000 00 00000000000000000000000000000000 00 00000000000000000000000000000000 ffffffff 00000001 00000000 00200200       lo
+>   0+1 records in
+>   0+1 records out
+>   1050 bytes (1.0 kB, 1.0 KiB) copied, 0.00707908 s, 148 kB/s
+>   root@arch-fb-vm1:~/net-next
+> 
+> In the above, I specify buffer size 4096, so all records can be returned
+> to user space with a single trip to the kernel.
+> 
+> If I use buffer size 128, since each record size is 149, internally
+> kernel seq_read() will read 149 into its internal buffer and return the data
+> to user space in two read() syscalls. Then user read() syscall will trigger
+> next seq_ops->start(). Since the current implementation increased pos even
+> for seq_ops->start(), it will skip record #2, #4 and #6, assuming the first
+> record is #1.
+> 
+>   root@arch-fb-vm1:~/net-next dd if=/proc/net/ipv6_route bs=128
+>   00000000000000000000000000000000 40 00000000000000000000000000000000 00 00000000000000000000000000000000 00000400 00000001 00000000 00000001     eth0
+>   00000000000000000000000000000000 00 00000000000000000000000000000000 00 00000000000000000000000000000000 ffffffff 00000001 00000000 00200200       lo
+>   fe800000000000002050e3fffebd3be8 80 00000000000000000000000000000000 00 00000000000000000000000000000000 00000000 00000002 00000000 80200001     eth0
+>   00000000000000000000000000000000 00 00000000000000000000000000000000 00 00000000000000000000000000000000 ffffffff 00000001 00000000 00200200       lo
+> 4+1 records in
+> 4+1 records out
+> 600 bytes copied, 0.00127758 s, 470 kB/s
+> 
+> To fix the problem, create a fake pos pointer so seq_ops->start()
+> won't actually increase seq_file pos. With this fix, the
+> above `dd` command with `bs=128` will show correct result.
+> 
+> Fixes: 4fc427e05158 ("ipv6_route_seq_next should increase position index")
+> Cc: Vasily Averin <vvs@virtuozzo.com>
+> Cc: Andrii Nakryiko <andriin@fb.com>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Suggested-by: Vasily Averin <vvs@virtuozzo.com>
+> Signed-off-by: Yonghong Song <yhs@fb.com>
+> ---
+>  net/ipv6/ip6_fib.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> Changelog:
+>  v1 -> v2:
+>   - instead of push increment of *pos in ipv6_route_seq_next() for
+>     seq_ops->next() only. Add a face pos pointer in seq_ops->start()
+>     and use it when calling ipv6_route_seq_next().
+> 
+> diff --git a/net/ipv6/ip6_fib.c b/net/ipv6/ip6_fib.c
+> index 141c0a4c569a..e633b2b7deda 100644
+> --- a/net/ipv6/ip6_fib.c
+> +++ b/net/ipv6/ip6_fib.c
+> @@ -2622,8 +2622,10 @@ static void *ipv6_route_seq_start(struct seq_file *seq, loff_t *pos)
+>  	iter->skip = *pos;
+>  
+>  	if (iter->tbl) {
+> +		loff_t p;
 
-Fixes: 03d4d13fab3f ("selftests/bpf: Add profiler test")
-Signed-off-by: Song Liu <songliubraving@fb.com>
----
- tools/testing/selftests/bpf/progs/profiler.inc.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Please init this, otherwise I can guarantee syzbot will be not happy.
 
-diff --git a/tools/testing/selftests/bpf/progs/profiler.inc.h b/tools/tes=
-ting/selftests/bpf/progs/profiler.inc.h
-index 00578311a4233..b554c1e40b9fb 100644
---- a/tools/testing/selftests/bpf/progs/profiler.inc.h
-+++ b/tools/testing/selftests/bpf/progs/profiler.inc.h
-@@ -243,7 +243,7 @@ static ino_t get_inode_from_kernfs(struct kernfs_node=
-* node)
- 	}
- }
-=20
--int pids_cgrp_id =3D 1;
-+int pids_cgroup_id =3D 1;
-=20
- static INLINE void* populate_cgroup_info(struct cgroup_data_t* cgroup_da=
-ta,
- 					 struct task_struct* task,
-@@ -262,7 +262,7 @@ static INLINE void* populate_cgroup_info(struct cgrou=
-p_data_t* cgroup_data,
- 				BPF_CORE_READ(task, cgroups, subsys[i]);
- 			if (subsys !=3D NULL) {
- 				int subsys_id =3D BPF_CORE_READ(subsys, ss, id);
--				if (subsys_id =3D=3D pids_cgrp_id) {
-+				if (subsys_id =3D=3D pids_cgroup_id) {
- 					proc_kernfs =3D BPF_CORE_READ(subsys, cgroup, kn);
- 					root_kernfs =3D BPF_CORE_READ(subsys, ss, root, kf_root, kn);
- 					break;
---=20
-2.24.1
+                p = *pos;
 
+> +
+>  		ipv6_route_seq_setup_walk(iter, net);
+> -		return ipv6_route_seq_next(seq, NULL, pos);
+> +		return ipv6_route_seq_next(seq, NULL, &p);
+>  	} else {
+>  		return NULL;
+>  	}
+> 
