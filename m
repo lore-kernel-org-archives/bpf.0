@@ -2,155 +2,97 @@ Return-Path: <SRS0=xWwI=DV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C814BC433DF
-	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 08:20:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27A63C433DF
+	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 08:46:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6089420BED
-	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 08:20:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C6ABB221EB
+	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 08:46:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cmNE/jD7"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="m2WQrD/h"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729208AbgJNIT7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Oct 2020 04:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
+        id S1729850AbgJNIqR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Oct 2020 04:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729021AbgJNITg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Oct 2020 04:19:36 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC607C041E72;
-        Tue, 13 Oct 2020 21:40:40 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id l15so829001wmh.1;
-        Tue, 13 Oct 2020 21:40:40 -0700 (PDT)
+        with ESMTP id S1728655AbgJNIqR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Oct 2020 04:46:17 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81A6C051113
+        for <bpf@vger.kernel.org>; Wed, 14 Oct 2020 01:46:16 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id m20so2321537ljj.5
+        for <bpf@vger.kernel.org>; Wed, 14 Oct 2020 01:46:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=cc:subject:to:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=ePLsU1bdkJB4g+ijegYS+YZS8jNr19HgFUEeDCk3fzc=;
-        b=cmNE/jD7DOye2TOzxQuV4PDYobqxn1oClxVW2ooNBNH2m4IqaSydPrSSYaE08ZKg41
-         1rujSTUhVqvG9wyzOSipSeQ6fQhUHQQKqrDL2dcS+J7IJK/oAQoLJQd/DyoCjexRR49U
-         JeZRo9oOXjltwQyIKzcahz97cpAv76Mw8/oLI0U/ebF/xhz3gRfZ3bQ6dXG/pMRGIJhU
-         5PT3+NherQaYcx+xZRW197NNzDvaU1Fp8CbthviPh+GQxkRCxJVUZQJkq7i+21PMcOTP
-         1CreIEO8fb5v7sbUuxk8c5b4OnWyPzlKQeTAAr/Bso9hBBvGE1Hj5gKQH8BsACVBzFDe
-         sHbw==
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=WZzAvEzx83nvmn1jnQ1JsHRh7Bwi7GkshJQjuaqNhd8=;
+        b=m2WQrD/hdTD5LjbHDAwGuoYOIGT0qzS7Rh2cRUH6c+z59FC5L21sfBT+CFxcdFn3rm
+         yeIaHgqk+FbRNeIpMhUpqb0rxxrLN9Jp4j8eHxTKDq6naLPsInM3Rq8eMvRTuUBxL4uP
+         2hRzm12E82CCk8DrGd4TgC2L4Kao7gMIGdvCA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:cc:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ePLsU1bdkJB4g+ijegYS+YZS8jNr19HgFUEeDCk3fzc=;
-        b=rC/04KbiTaJ2y0em7zJE7UIZ9tdqC0eXfUeqvGFbsNG9Ox24lc2YqDnd9iYhbvZ/d0
-         R0YDAeuaH5iMyh/0+Lb9AUIrY0UqepqIJ/6D8yNMS9pBdS+5+US0oNetcV2qltmfeL/L
-         EhNbPcbB+jkxD2bd5zkLBWy1+VXZloqccRktwUa9Rwv+rl3lHvTiS/pK41bMHZ+UrdIM
-         wEnZ6W5AB2vtQbNhJpwdlFjGEYEi9g/4oETG0P9BHLgP0G8svRs7+qv+ubpkq9CpXoXY
-         M6vuwHQzp+luY4saQkFmfOhmf8w4CmQ2bFN2NlF0VVhNl8ylR0B6prN84Ii3ZhBbMhWh
-         Z/QQ==
-X-Gm-Message-State: AOAM5328CqCyTKD0qGTGA3ffQgpEh0WkWffKsT8Bj9Jk23Ey6F6o4DmK
-        IKI/zKSPGQ3LJPXNmyipaio=
-X-Google-Smtp-Source: ABdhPJy4ORXNMf8bxAsICCzIRlJSAI1SsU+l/svl536z0jTzmcGeSYTrB8eiui5z2m7KNYGayMb+WQ==
-X-Received: by 2002:a05:600c:210f:: with SMTP id u15mr1494200wml.53.1602650439436;
-        Tue, 13 Oct 2020 21:40:39 -0700 (PDT)
-Received: from [192.168.1.10] (static-176-175-73-29.ftth.abo.bbox.fr. [176.175.73.29])
-        by smtp.gmail.com with ESMTPSA id o6sm2726672wrm.69.2020.10.13.21.40.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Oct 2020 21:40:38 -0700 (PDT)
-Cc:     mtk.manpages@gmail.com, Sargun Dhillon <sargun@sargun.me>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <christian@brauner.io>,
-        linux-man <linux-man@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>, Jann Horn <jannh@google.com>,
-        Alexei Starovoitov <ast@kernel.org>, wad@chromium.org,
-        bpf@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=WZzAvEzx83nvmn1jnQ1JsHRh7Bwi7GkshJQjuaqNhd8=;
+        b=UFm4l9owfwAfWvvIwtr1OtdXTXwM1A3PEt3Lz92Uj31kMjEMCyWM8BM1K5dnW45Lcq
+         yuQtVHXuyor5qvTV1bpJCEBHnZqNtJssQX9Q86QRuZ/sSe3YsL2xoxHWwC7p1/8F8p8L
+         QUUWBrmUfwcrfCQBJHy80S49D310+ENBQdKNZ8BgVOb6pZ0c18zVvFqzg/K4Muqe7vBW
+         lhZ6zpHIE2eqa36qF/C2gGJicX7b0Sp6I81AX0EdoOnxsvWvk/laFEi80z9WV9A/ISaT
+         xuAoHZ8ktWgelJ3BcPFurjoVE/GEd+9Z2+xCzhBWv3L2BE8GqL5Hvef48OJOZtUl304Q
+         FtBA==
+X-Gm-Message-State: AOAM532OjGfN0bg9+sOywN+/H+Xfc/RYdB1L4CtJXUVIeS/YVWAyBaPG
+        S4VOwtgjIK/puoeyChI3ENVCcA==
+X-Google-Smtp-Source: ABdhPJwNpOAovNBhBYsFFDCiT34RRRcmevp3KQV8NZfuMYOl1uJJgvCOlNTAqwDR86oS5iVlVzy8sQ==
+X-Received: by 2002:a2e:9d93:: with SMTP id c19mr1525646ljj.32.1602665175249;
+        Wed, 14 Oct 2020 01:46:15 -0700 (PDT)
+Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
+        by smtp.gmail.com with ESMTPSA id l188sm890871lfd.127.2020.10.14.01.46.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2020 01:46:14 -0700 (PDT)
+References: <20201012091850.67452-1-lmb@cloudflare.com>
+User-agent: mu4e 1.1.0; emacs 26.3
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Lorenz Bauer <lmb@cloudflare.com>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Robert Sesek <rsesek@google.com>
-Subject: Re: For review: seccomp_user_notif(2) manual page
-To:     Tycho Andersen <tycho@tycho.pizza>
-References: <45f07f17-18b6-d187-0914-6f341fe90857@gmail.com>
- <20200930150330.GC284424@cisco>
- <8bcd956f-58d2-d2f0-ca7c-0a30f3fcd5b8@gmail.com>
- <20200930230327.GA1260245@cisco>
- <8f20d586-9609-ef83-c85a-272e37e684d8@gmail.com>
-From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Message-ID: <7a4497ad-e595-f328-e0e1-9577dfdbd895@gmail.com>
-Date:   Wed, 14 Oct 2020 06:40:35 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.11.0
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Yonghong Song <yhs@fb.com>, kernel-team@cloudflare.com,
+        kernel test robot <lkp@intel.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf] bpf: sockmap: add locking annotations to iterator
+In-reply-to: <20201012091850.67452-1-lmb@cloudflare.com>
+Date:   Wed, 14 Oct 2020 10:46:13 +0200
+Message-ID: <87a6wpqjoq.fsf@cloudflare.com>
 MIME-Version: 1.0
-In-Reply-To: <8f20d586-9609-ef83-c85a-272e37e684d8@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Tycho,
+On Mon, Oct 12, 2020 at 11:18 AM CEST, Lorenz Bauer wrote:
+> The sparse checker currently outputs the following warnings:
+>
+>     include/linux/rcupdate.h:632:9: sparse: sparse: context imbalance in 'sock_hash_seq_start' - wrong count at exit
+>     include/linux/rcupdate.h:632:9: sparse: sparse: context imbalance in 'sock_map_seq_start' - wrong count at exit
+>
+> Add the necessary __acquires and __release annotations to make the
+> iterator locking schema palatable to sparse. Also add __must_hold
+> for good measure.
+>
+> The kernel codebase uses both __acquires(rcu) and __acquires(RCU).
+> I couldn't find any guidance which one is preferred, so I used
+> what is easier to type out.
+>
+> Fixes: 0365351524d7 ("net: Allow iterating sockmap and sockhash")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+> ---
 
-Ping on the question below!
-
-Thanks,
-
-Michael
-
-On 10/1/20 9:45 AM, Michael Kerrisk (man-pages) wrote:
-> On 10/1/20 1:03 AM, Tycho Andersen wrote:
->> On Wed, Sep 30, 2020 at 10:34:51PM +0200, Michael Kerrisk (man-pages) wrote:
->>> Hi Tycho,
->>>
->>> Thanks for taking time to look at the page!
->>>
->>> On 9/30/20 5:03 PM, Tycho Andersen wrote:
->>>> On Wed, Sep 30, 2020 at 01:07:38PM +0200, Michael Kerrisk (man-pages) wrote:
-> 
-> [...]
-> 
->>>>>        ┌─────────────────────────────────────────────────────┐
->>>>>        │FIXME                                                │
->>>>>        ├─────────────────────────────────────────────────────┤
->>>>>        │Interestingly, after the event  had  been  received, │
->>>>>        │the  file descriptor indicates as writable (verified │
->>>>>        │from the source code and by experiment). How is this │
->>>>>        │useful?                                              │
->>>>
->>>> You're saying it should just do EPOLLOUT and not EPOLLWRNORM? Seems
->>>> reasonable.
->>>
->>> No, I'm saying something more fundamental: why is the FD indicating as
->>> writable? Can you write something to it? If yes, what? If not, then
->>> why do these APIs want to say that the FD is writable?
->>
->> You can't via read(2) or write(2), but conceptually NOTIFY_RECV and
->> NOTIFY_SEND are reading and writing events from the fd. I don't know
->> that much about the poll interface though -- is it possible to
->> indicate "here's a pseudo-read event"? It didn't look like it, so I
->> just (ab-)used POLLIN and POLLOUT, but probably that's wrong.
-> 
-> I think the POLLIN thing is fine.
-> 
-> So, I think maybe I now understand what you intended with setting
-> POLLOUT: the notification has been received ("read") and now the
-> FD can be used to NOTIFY_SEND ("write") a response. Right?
-> 
-> If that's correct, I don't have a problem with it. I just wonder:
-> is it useful? IOW: are there situations where the process doing the
-> NOTIFY_SEND might want to test for POLLOUT because the it doesn't
-> know whether a NOTIFY_RECV has occurred? 
-> 
-> Thanks,
-> 
-> Michael
-> 
-
-
--- 
-Michael Kerrisk
-Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
-Linux/UNIX System Programming Training: http://man7.org/training/
+Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
