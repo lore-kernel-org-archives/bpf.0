@@ -1,4 +1,4 @@
-Return-Path: <SRS0=YunE=DU=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=xWwI=DV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
@@ -6,72 +6,154 @@ X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
 	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8A4F3C433DF
-	for <bpf@archiver.kernel.org>; Tue, 13 Oct 2020 23:07:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DD8EC433DF
+	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 00:21:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 445CB22227
-	for <bpf@archiver.kernel.org>; Tue, 13 Oct 2020 23:07:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EFB0D2078A
+	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 00:21:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1602630449;
-	bh=6joR4pBGRAg5tGFdOrvMWsG0Um6ZshpuEjCr1yc/Zjg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=Mz1RPtLpP3drFZ84gF9OGzrfJ1HQfm0Y0NXVkiKy6i05416EKGk5YznfioEGxcAQB
-	 B0mf9aDf2Jqd8uyV3bEdxKy+w1qaI47KPfzDs4al+CXdSK5+dTQI4cnY11ul3LGqdj
-	 icJ+lOSw3nQZ6qDI3JZTROWXBCmjepM0D3dwToyE=
+	s=default; t=1602634915;
+	bh=bP1yfZHeH57zBg9sGmXWqcmVDf3HXI8UxNucqglGNQg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=L8d/36haLu6Je930g5p63wHdpgaf/V8haPm64IJRP7EOEGX5u8LKrQXdfFhnA3voP
+	 /5V4qhWc1rl1TVp0tHj95b6RPXZqDjSK6Mbe1JSvcRSKzeMBoqnLFKy1/VnmuBYAgr
+	 78+cIlytJaUGMdHmkldmHGkjRkC2lHDWl+MHfJcE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727624AbgJMXH2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 13 Oct 2020 19:07:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43104 "EHLO mail.kernel.org"
+        id S1730370AbgJNAVy (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 13 Oct 2020 20:21:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50354 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726894AbgJMXH2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 13 Oct 2020 19:07:28 -0400
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727122AbgJNAVy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 13 Oct 2020 20:21:54 -0400
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F269221D40;
-        Tue, 13 Oct 2020 23:07:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C700D208B3;
+        Wed, 14 Oct 2020 00:21:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1602630448;
-        bh=6joR4pBGRAg5tGFdOrvMWsG0Um6ZshpuEjCr1yc/Zjg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TvnttRJ/o1Zmv8zeGxaP4lDi2sFd2n1jkkTJIH9M8Xq+s4AHvV5MN1QwjxyYnYeFh
-         HcgF4B352hXO/cPFTaR24HiYISNWNLwUMERio+CcJ6rJspKTFy3WWxSFqFqS741rY5
-         cJ8ijgw085W4QiWIm5OmuUK45VotDGZLpeo53rHg=
-Date:   Tue, 13 Oct 2020 16:07:26 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, Daniel Borkmann <borkmann@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        maze@google.com, lmb@cloudflare.com, shaun@tigera.io,
-        Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
-        eyal.birger@gmail.com
-Subject: Re: [PATCH bpf-next V3 0/6] bpf: New approach for BPF MTU handling
-Message-ID: <20201013160726.367e3871@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201013224009.77d6f746@carbon>
-References: <160216609656.882446.16642490462568561112.stgit@firesoul>
-        <20201009093319.6140b322@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <5f80ccca63d9_ed74208f8@john-XPS-13-9370.notmuch>
-        <20201009160010.4b299ac3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20201010124402.606f2d37@carbon>
-        <20201010093212.374d1e68@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20201013224009.77d6f746@carbon>
+        s=default; t=1602634913;
+        bh=bP1yfZHeH57zBg9sGmXWqcmVDf3HXI8UxNucqglGNQg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WXpyHBxZyCrV6q9Rv5dWxwxu0QEUpULHsg3e6c7cludk3S1MW+QLxoTiES0L0niTh
+         5xRGesdVdF7mB0LzYELWJbgiPm2JnvXfQqNfz/+sxsiW3S8mv+aLuGeb2OIIbEzml2
+         tDONfRuhdkFBE8czcxSmxR6htR1fKCfB8+CTNhV8=
+Received: by mail-lf1-f42.google.com with SMTP id 184so1723948lfd.6;
+        Tue, 13 Oct 2020 17:21:52 -0700 (PDT)
+X-Gm-Message-State: AOAM532qD39MmoTjnPHdydHsJGFFrpyXQ09SzxB4F71hS4TS3ZB2jD7x
+        6ML0Qm/wnSJSqGh1R16rSBsIKACo5Tw92GOZwg4=
+X-Google-Smtp-Source: ABdhPJz0YkSPqe+QT0XawZxpDHMRYw4ObhNOnTcJ9nTvzDfl4Q/UmNJ0VBKX8OJyTm8nlcjY/4Csw3kdkopUsuTEicA=
+X-Received: by 2002:a05:6512:2029:: with SMTP id s9mr503639lfs.273.1602634910979;
+ Tue, 13 Oct 2020 17:21:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20201009011240.48506-1-alexei.starovoitov@gmail.com>
+ <20201009011240.48506-4-alexei.starovoitov@gmail.com> <20201013195622.GB1305928@krava>
+In-Reply-To: <20201013195622.GB1305928@krava>
+From:   Song Liu <song@kernel.org>
+Date:   Tue, 13 Oct 2020 17:21:39 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4ZnYmfSGAXibVEZVA79opyWxRnw2-m7VfsQngi9NLBBg@mail.gmail.com>
+Message-ID: <CAPhsuW4ZnYmfSGAXibVEZVA79opyWxRnw2-m7VfsQngi9NLBBg@mail.gmail.com>
+Subject: Re: [PATCH v2 bpf-next 3/4] selftests/bpf: Add profiler test
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 13 Oct 2020 22:40:09 +0200 Jesper Dangaard Brouer wrote:
-> > FWIW I took a quick swing at testing it with the HW I have and it did
-> > exactly what hardware should do. The TX unit entered an error state 
-> > and then the driver detected that and reset it a few seconds later.  
-> 
-> The drivers (i40e, mlx5, ixgbe) I tested with didn't entered an error
-> state, when getting packets exceeding the MTU.  I didn't go much above
-> 4K, so maybe I didn't trigger those cases.
+On Tue, Oct 13, 2020 at 12:57 PM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> On Thu, Oct 08, 2020 at 06:12:39PM -0700, Alexei Starovoitov wrote:
+>
+> SNIP
+>
+> > +
+> > +#ifdef UNROLL
+> > +#pragma unroll
+> > +#endif
+> > +     for (int i = 0; i < MAX_CGROUPS_PATH_DEPTH; i++) {
+> > +             filepart_length =
+> > +                     bpf_probe_read_str(payload, MAX_PATH, BPF_CORE_READ(cgroup_node, name));
+> > +             if (!cgroup_node)
+> > +                     return payload;
+> > +             if (cgroup_node == cgroup_root_node)
+> > +                     *root_pos = payload - payload_start;
+> > +             if (filepart_length <= MAX_PATH) {
+> > +                     barrier_var(filepart_length);
+> > +                     payload += filepart_length;
+> > +             }
+> > +             cgroup_node = BPF_CORE_READ(cgroup_node, parent);
+> > +     }
+> > +     return payload;
+> > +}
+> > +
+> > +static ino_t get_inode_from_kernfs(struct kernfs_node* node)
+> > +{
+> > +     struct kernfs_node___52* node52 = (void*)node;
+> > +
+> > +     if (bpf_core_field_exists(node52->id.ino)) {
+> > +             barrier_var(node52);
+> > +             return BPF_CORE_READ(node52, id.ino);
+> > +     } else {
+> > +             barrier_var(node);
+> > +             return (u64)BPF_CORE_READ(node, id);
+> > +     }
+> > +}
+> > +
+> > +int pids_cgrp_id = 1;
+>
+>
+> hi,
+> I'm getting compilation failure with this:
+>
+>           CLNG-LLC [test_maps] profiler2.o
+>         In file included from progs/profiler2.c:6:
+>         progs/profiler.inc.h:246:5: error: redefinition of 'pids_cgrp_id' as different kind of symbol
+>         int pids_cgrp_id = 1;
+>             ^
+>         /home/jolsa/linux-qemu/tools/testing/selftests/bpf/tools/include/vmlinux.h:14531:2: note: previous definition is here
+>                 pids_cgrp_id = 11,
+>                 ^
+>         1 error generated.
+>         /opt/clang/bin/llc: error: /opt/clang/bin/llc: <stdin>:1:1: error: expected top-level entity
+>         BPF obj compilation failed
+>         ^
+>         make: *** [Makefile:396: /home/jolsa/linux-qemu/tools/testing/selftests/bpf/profiler2.o] Error 1
 
-You probably need to go above 16k to get out of the acceptable jumbo
-frame size. I tested ixgbe by converting TSO frames to large TCP frames,
-at low probability.
+I got the same error with some .config. We should fix it with something below.
+
+I will send official patch soon.
+
+Thanks,
+Song
+
+diff --git i/tools/testing/selftests/bpf/progs/profiler.inc.h
+w/tools/testing/selftests/bpf/progs/profiler.inc.h
+index 00578311a4233..54f594efccbca 100644
+--- i/tools/testing/selftests/bpf/progs/profiler.inc.h
++++ w/tools/testing/selftests/bpf/progs/profiler.inc.h
+@@ -243,7 +243,7 @@ static ino_t get_inode_from_kernfs(struct kernfs_node* node)
+        }
+ }
+
+-int pids_cgrp_id = 1;
++int pids_cgrp_id_ = 1;
+
+ static INLINE void* populate_cgroup_info(struct cgroup_data_t* cgroup_data,
+                                         struct task_struct* task,
+@@ -262,7 +262,7 @@ static INLINE void* populate_cgroup_info(struct
+cgroup_data_t* cgroup_data,
+                                BPF_CORE_READ(task, cgroups, subsys[i]);
+                        if (subsys != NULL) {
+                                int subsys_id = BPF_CORE_READ(subsys, ss, id);
+-                               if (subsys_id == pids_cgrp_id) {
++                               if (subsys_id == pids_cgrp_id_) {
+                                        proc_kernfs =
+BPF_CORE_READ(subsys, cgroup, kn);
+                                        root_kernfs =
+BPF_CORE_READ(subsys, ss, root, kf_root, kn);
+                                        break;
