@@ -2,101 +2,91 @@ Return-Path: <SRS0=xWwI=DV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A4E94C43457
-	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 09:22:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 34FF5C43467
+	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 09:23:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4749B20B1F
-	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 09:22:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB94E206E5
+	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 09:23:25 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BNC+HtRV"
+	dkim=pass (1024-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="wzFripj/"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729988AbgJNJWS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Oct 2020 05:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39952 "EHLO
+        id S1728428AbgJNJXQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Oct 2020 05:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731144AbgJNJVw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Oct 2020 05:21:52 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61609C0613B4;
-        Tue, 13 Oct 2020 14:59:12 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id h6so908522ybi.11;
-        Tue, 13 Oct 2020 14:59:12 -0700 (PDT)
+        with ESMTP id S1730260AbgJNJXN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Oct 2020 05:23:13 -0400
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E62C061755
+        for <bpf@vger.kernel.org>; Wed, 14 Oct 2020 02:20:42 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id u8so3858687ejg.1
+        for <bpf@vger.kernel.org>; Wed, 14 Oct 2020 02:20:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VRRma4QG3RpD3m+KVfyIAn86lByO9d2UMJBpO63DxTI=;
-        b=BNC+HtRVwGwOu7By4Lr9k59i/iQgasSemzSgLKfB6hjxMPjh7dKBEpTOmc7/pj6b3W
-         6Nd2pEjhvSD9+MlelhDFBidieGLIKHp0fmaxSNDTYbHoP5gGFenNKiv15cLmaqIgdDA6
-         gClTXfSozfyEop/pog/t9sYW9Cb4iIdzTqCRgw04AYodY2YO1WXgW/Rey4JjTP0l/7KR
-         5lrWP4b3vZ89IrUBg4ey5bfMsvRop5d4xhYv7uYeGidoVXuxH8meNnCNLwphAQqpprds
-         vT77jAmdtbR6sRaMSDeCBrTKi01R6TKavgxnQ9PHvnkcCHv6f2EQvf7XY2uwlLpa7HdQ
-         jXbQ==
+        d=cloudflare.com; s=google;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:date
+         :message-id:mime-version;
+        bh=/WnbvhyGcptPPBaNZxdAo4mg51wxanwUK78khnzdGus=;
+        b=wzFripj/9LraAMEmzYAkjL1sotjg/tzxIUOn+3rAhgYLrFGhBppxP58Fj8lJk3Gn6f
+         QxLE5MOpTScSC67rQ7Y+wNjc6xZaYQ9QPsCqwz0rO1XIwgM+0wXdDQlLbNfLAo/aDtwN
+         8hhmK9wr8/zE8x05W8XeZ6xBYiKnxtZ9qgrbM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VRRma4QG3RpD3m+KVfyIAn86lByO9d2UMJBpO63DxTI=;
-        b=oPmwMWa8lnCeKiJIHziL3Zw3zmMI3ILJHoLB0H+y/loua5UogPTinchRqB9xq3nTim
-         zhSS35OxMdlaVW1JqL62nTSHdlSusTqrUrfwKy/y6b2eyzf+eFb9xp0ypnfb8K2luKnf
-         HyL/RxqZlzHEmXYPHFyAJQo4/r9asGAI/Z5X58q3CEdBtIJthe/yzH5spcpaZepu6J3n
-         QSWiFRDQS3GkFs2QsrKPzVpikvteaBalzZWllsLoTDhKa414rVf28QPozVinyVkPZMdn
-         gtO4a7XJwDOLVpt/aPUk3yAR+ZDz3e1jTIJKSBSLi611664XAUujEHHmMghLs1GethGN
-         PkjQ==
-X-Gm-Message-State: AOAM531WsfjLZPonyPA+V1dNXRF976jKehHFaTZ0jNBQoy1J9SjdBgpb
-        M9LQeAhkeDUa60F5xhj6bRLl7QpaXXmU2kThKb2QIIvJtpg=
-X-Google-Smtp-Source: ABdhPJw7+CRp3FkUL12dvYfJIGv04RKrS1K04TJYYe6IrveNHSanyH+O0iF4G9VNil7Nfq5BH2firwTmkFUz7se4xGI=
-X-Received: by 2002:a25:2687:: with SMTP id m129mr2687368ybm.425.1602626351620;
- Tue, 13 Oct 2020 14:59:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201012234940.1707941-1-kafai@fb.com>
-In-Reply-To: <20201012234940.1707941-1-kafai@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 13 Oct 2020 14:59:00 -0700
-Message-ID: <CAEf4BzbFoFryfELodTeQPQdC_hR5o9rxCXwNd4y4Tu-xZyV-9A@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: selftest: Fix flaky tcp_hdr_options test when
- adding addr to lo
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:date:message-id:mime-version;
+        bh=/WnbvhyGcptPPBaNZxdAo4mg51wxanwUK78khnzdGus=;
+        b=JwVBzpuH8vOaBY1gvjgF2/8D0uvp28iw3NTJbZpArscXVs+V/778GxUlFC2uWmC32S
+         iqO0fAQhefb5QCvm9pt4/6KEWxMnAwpc4v8Q70Y3xPv3yq3AYIj5sIIrJV/8zgfzn6WN
+         mr3SOD2wLvn9KdRcVr3xmIo1UGTMgJIHFWQ4FwopdU9xiTgQ/XumMiI5jj2F4QWfEOs7
+         0q9l2dOJm800tiiHqxo0pcsXbbf1b2/E2iSveyKTcU8cYq3++NstQAot5JuLcrq45XAu
+         enLZOtevLoK3WRs8Ww0fDFW4g12bVJTnI3Lff7hICSJfWi5gn/73QNajoJ0kdiWPkGKN
+         Ue0w==
+X-Gm-Message-State: AOAM530dHQ8mc09GTDwPanRKnZUOfMN91wK4skSVqXBEFh3eY9GdrbYL
+        yaDBoau4EsbQ+bOWDSRLshMksQ==
+X-Google-Smtp-Source: ABdhPJxUvxlmotUTKMITZb02Wylkh1sw157EQWmBLNMnqJxc/0hczSTt/IE/DTObQL8sz0hci2Atmg==
+X-Received: by 2002:a17:906:c015:: with SMTP id e21mr4156437ejz.432.1602667241168;
+        Wed, 14 Oct 2020 02:20:41 -0700 (PDT)
+Received: from cloudflare.com ([2a02:a310:c262:aa00:b35e:8938:2c2a:ba8b])
+        by smtp.gmail.com with ESMTPSA id bw25sm1326231ejb.119.2020.10.14.02.20.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Oct 2020 02:20:40 -0700 (PDT)
+References: <20201012170952.60750-1-alex.dewar90@gmail.com>
+User-agent: mu4e 1.1.0; emacs 26.3
+From:   Jakub Sitnicki <jakub@cloudflare.com>
+To:     Alex Dewar <alex.dewar90@gmail.com>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        Networking <netdev@vger.kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        Lorenz Bauer <lmb@cloudflare.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: sockmap: Don't call bpf_prog_put() on NULL pointer
+In-reply-to: <20201012170952.60750-1-alex.dewar90@gmail.com>
+Date:   Wed, 14 Oct 2020 11:20:39 +0200
+Message-ID: <878sc9qi3c.fsf@cloudflare.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 13, 2020 at 4:13 AM Martin KaFai Lau <kafai@fb.com> wrote:
+On Mon, Oct 12, 2020 at 07:09 PM CEST, Alex Dewar wrote:
+> If bpf_prog_inc_not_zero() fails for skb_parser, then bpf_prog_put() is
+> called unconditionally on skb_verdict, even though it may be NULL. Fix
+> and tidy up error path.
 >
-> The tcp_hdr_options test adds a "::eB9F" addr to the lo dev.
-> However, this non loopback address will have a race on ipv6 dad
-> which may lead to EADDRNOTAVAIL error from time to time.
->
-> Even nodad is used in the iproute2 command, there is still a race in
-> when the route will be added.  This will then lead to ENETUNREACH from
-> time to time.
->
-> To avoid the above, this patch uses the default loopback address "::1"
-> to do the test.
->
-> Fixes: ad2f8eb0095e ("bpf: selftests: Tcp header options")
-> Reported-by: Andrii Nakryiko <andriin@fb.com>
-> Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+> Addresses-Coverity-ID: 1497799: Null pointer dereferences (FORWARD_NULL)
+> Fixes: 743df8b7749f ("bpf, sockmap: Check skb_verdict and skb_parser programs explicitly")
+> Signed-off-by: Alex Dewar <alex.dewar90@gmail.com>
 > ---
 
-Less shelling out is always good :)
-
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-
->  .../bpf/prog_tests/tcp_hdr_options.c          | 26 +------------------
->  .../bpf/progs/test_misc_tcp_hdr_options.c     |  2 +-
->  2 files changed, 2 insertions(+), 26 deletions(-)
->
-
-[...]
+Acked-by: Jakub Sitnicki <jakub@cloudflare.com>
