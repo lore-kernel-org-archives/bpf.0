@@ -2,177 +2,155 @@ Return-Path: <SRS0=xWwI=DV=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BF89C2D0A3
-	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 08:20:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C814BC433DF
+	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 08:20:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 05A6F212CC
-	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 08:19:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6089420BED
+	for <bpf@archiver.kernel.org>; Wed, 14 Oct 2020 08:20:57 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GGZEfs1d"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cmNE/jD7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729064AbgJNITj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 14 Oct 2020 04:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
+        id S1729208AbgJNIT7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 14 Oct 2020 04:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728946AbgJNITe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 14 Oct 2020 04:19:34 -0400
+        with ESMTP id S1729021AbgJNITg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 14 Oct 2020 04:19:36 -0400
 Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910A7C051133;
-        Wed, 14 Oct 2020 01:10:51 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id e23so1395177wme.2;
-        Wed, 14 Oct 2020 01:10:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC607C041E72;
+        Tue, 13 Oct 2020 21:40:40 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id l15so829001wmh.1;
+        Tue, 13 Oct 2020 21:40:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
+        h=cc:subject:to:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qc0X0ueFIug2eGcCkUWiSsZWwEmCO9v7Zz71O8TUyKM=;
-        b=GGZEfs1dcXE+rh/hnCbHJsLLjIIU7I2vGVWw1fn6bcMxg9sO1CkxP0Ps0H0vesVIJH
-         vcQwoI0qu+VDa5d8J9I0KNaif2TZYHWZ5qTJ/TScF3XhB9SFGcCJCy6iUCqTmj+o9JM7
-         MwrbK6ORdi2MeDnP7Hcl7nnSdz5RsorhulznRlB4vRTlk39j8KpwR/vyZseJ2cTBM6Q9
-         eAIMIk3lQlmb+CMfUoqk234RBvpQa4gxjjQjQPPiRAoK0ecaV/NTMgdNHpMHAdN5/B4V
-         1331vz+K8WGSiGcLVXnscvis57+DiqK8K9T0WfA8C+ZKwDM1MM8C7wA06tpblZq18BCR
-         XBPw==
+        bh=ePLsU1bdkJB4g+ijegYS+YZS8jNr19HgFUEeDCk3fzc=;
+        b=cmNE/jD7DOye2TOzxQuV4PDYobqxn1oClxVW2ooNBNH2m4IqaSydPrSSYaE08ZKg41
+         1rujSTUhVqvG9wyzOSipSeQ6fQhUHQQKqrDL2dcS+J7IJK/oAQoLJQd/DyoCjexRR49U
+         JeZRo9oOXjltwQyIKzcahz97cpAv76Mw8/oLI0U/ebF/xhz3gRfZ3bQ6dXG/pMRGIJhU
+         5PT3+NherQaYcx+xZRW197NNzDvaU1Fp8CbthviPh+GQxkRCxJVUZQJkq7i+21PMcOTP
+         1CreIEO8fb5v7sbUuxk8c5b4OnWyPzlKQeTAAr/Bso9hBBvGE1Hj5gKQH8BsACVBzFDe
+         sHbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:cc:subject:to:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=qc0X0ueFIug2eGcCkUWiSsZWwEmCO9v7Zz71O8TUyKM=;
-        b=XJGH41rWuUPXrlNMOOCoibj6XpyOeY9zlL6GSZQGwxFBUJHHBCndYNgVOZ5GJZrBSs
-         /+G9UQDO3O5GlzmpQi6roNLXSccDpTNN5yq6ZcfGipMsN/3RV1QMhBh+sIvvu7f7freg
-         MB9CuqGOuS/GAPxhGwbzvdVcn0pqEN0HHfvFc4igC7omo5f342rajZnSc/Hz8FeqjoRQ
-         Z14qesFcxQJFXuDpUl+872A0HhXjc3pFKe11Hofs89rEPvGD1/yAJ4kihg8G2QVDWATA
-         PH05+faONbSXbuLZ+1cKWss6Fxw4QSor7md96R5oO47xSqul4RbUEw9pyPnvM0tVQzq5
-         2CPg==
-X-Gm-Message-State: AOAM5301domGUCo578n6JulCHZ/PZQyuU5K7sMwTPxQhG+oJheMhdUPA
-        VgLXYpM0moGVtF1Mqp0u60E=
-X-Google-Smtp-Source: ABdhPJwhCHCouzh8PJqucNZwvw+b2q8Z7MV7MiNRhOtSLcZK+MB/vqLLSJDLcCWq6MUAgwWJZ6HMcw==
-X-Received: by 2002:a05:600c:2189:: with SMTP id e9mr2102016wme.153.1602663049207;
-        Wed, 14 Oct 2020 01:10:49 -0700 (PDT)
-Received: from [192.168.8.147] ([37.167.96.60])
-        by smtp.gmail.com with ESMTPSA id l3sm2399496wmg.32.2020.10.14.01.10.47
+        bh=ePLsU1bdkJB4g+ijegYS+YZS8jNr19HgFUEeDCk3fzc=;
+        b=rC/04KbiTaJ2y0em7zJE7UIZ9tdqC0eXfUeqvGFbsNG9Ox24lc2YqDnd9iYhbvZ/d0
+         R0YDAeuaH5iMyh/0+Lb9AUIrY0UqepqIJ/6D8yNMS9pBdS+5+US0oNetcV2qltmfeL/L
+         EhNbPcbB+jkxD2bd5zkLBWy1+VXZloqccRktwUa9Rwv+rl3lHvTiS/pK41bMHZ+UrdIM
+         wEnZ6W5AB2vtQbNhJpwdlFjGEYEi9g/4oETG0P9BHLgP0G8svRs7+qv+ubpkq9CpXoXY
+         M6vuwHQzp+luY4saQkFmfOhmf8w4CmQ2bFN2NlF0VVhNl8ylR0B6prN84Ii3ZhBbMhWh
+         Z/QQ==
+X-Gm-Message-State: AOAM5328CqCyTKD0qGTGA3ffQgpEh0WkWffKsT8Bj9Jk23Ey6F6o4DmK
+        IKI/zKSPGQ3LJPXNmyipaio=
+X-Google-Smtp-Source: ABdhPJy4ORXNMf8bxAsICCzIRlJSAI1SsU+l/svl536z0jTzmcGeSYTrB8eiui5z2m7KNYGayMb+WQ==
+X-Received: by 2002:a05:600c:210f:: with SMTP id u15mr1494200wml.53.1602650439436;
+        Tue, 13 Oct 2020 21:40:39 -0700 (PDT)
+Received: from [192.168.1.10] (static-176-175-73-29.ftth.abo.bbox.fr. [176.175.73.29])
+        by smtp.gmail.com with ESMTPSA id o6sm2726672wrm.69.2020.10.13.21.40.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Oct 2020 01:10:48 -0700 (PDT)
-Subject: Re: [PATCH net v2] net: fix pos incrementment in ipv6_route_seq_next
-To:     Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com,
-        Vasily Averin <vvs@virtuozzo.com>,
-        Andrii Nakryiko <andriin@fb.com>
-References: <20201013183121.1988411-1-yhs@fb.com>
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-Message-ID: <f1a37830-f86a-57ba-aba8-7b15e91d0481@gmail.com>
-Date:   Wed, 14 Oct 2020 10:10:47 +0200
+        Tue, 13 Oct 2020 21:40:38 -0700 (PDT)
+Cc:     mtk.manpages@gmail.com, Sargun Dhillon <sargun@sargun.me>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <christian@brauner.io>,
+        linux-man <linux-man@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>, Jann Horn <jannh@google.com>,
+        Alexei Starovoitov <ast@kernel.org>, wad@chromium.org,
+        bpf@vger.kernel.org, Song Liu <songliubraving@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Robert Sesek <rsesek@google.com>
+Subject: Re: For review: seccomp_user_notif(2) manual page
+To:     Tycho Andersen <tycho@tycho.pizza>
+References: <45f07f17-18b6-d187-0914-6f341fe90857@gmail.com>
+ <20200930150330.GC284424@cisco>
+ <8bcd956f-58d2-d2f0-ca7c-0a30f3fcd5b8@gmail.com>
+ <20200930230327.GA1260245@cisco>
+ <8f20d586-9609-ef83-c85a-272e37e684d8@gmail.com>
+From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
+Message-ID: <7a4497ad-e595-f328-e0e1-9577dfdbd895@gmail.com>
+Date:   Wed, 14 Oct 2020 06:40:35 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.0
+ Thunderbird/68.11.0
 MIME-Version: 1.0
-In-Reply-To: <20201013183121.1988411-1-yhs@fb.com>
+In-Reply-To: <8f20d586-9609-ef83-c85a-272e37e684d8@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+Hi Tycho,
+
+Ping on the question below!
+
+Thanks,
+
+Michael
+
+On 10/1/20 9:45 AM, Michael Kerrisk (man-pages) wrote:
+> On 10/1/20 1:03 AM, Tycho Andersen wrote:
+>> On Wed, Sep 30, 2020 at 10:34:51PM +0200, Michael Kerrisk (man-pages) wrote:
+>>> Hi Tycho,
+>>>
+>>> Thanks for taking time to look at the page!
+>>>
+>>> On 9/30/20 5:03 PM, Tycho Andersen wrote:
+>>>> On Wed, Sep 30, 2020 at 01:07:38PM +0200, Michael Kerrisk (man-pages) wrote:
+> 
+> [...]
+> 
+>>>>>        ┌─────────────────────────────────────────────────────┐
+>>>>>        │FIXME                                                │
+>>>>>        ├─────────────────────────────────────────────────────┤
+>>>>>        │Interestingly, after the event  had  been  received, │
+>>>>>        │the  file descriptor indicates as writable (verified │
+>>>>>        │from the source code and by experiment). How is this │
+>>>>>        │useful?                                              │
+>>>>
+>>>> You're saying it should just do EPOLLOUT and not EPOLLWRNORM? Seems
+>>>> reasonable.
+>>>
+>>> No, I'm saying something more fundamental: why is the FD indicating as
+>>> writable? Can you write something to it? If yes, what? If not, then
+>>> why do these APIs want to say that the FD is writable?
+>>
+>> You can't via read(2) or write(2), but conceptually NOTIFY_RECV and
+>> NOTIFY_SEND are reading and writing events from the fd. I don't know
+>> that much about the poll interface though -- is it possible to
+>> indicate "here's a pseudo-read event"? It didn't look like it, so I
+>> just (ab-)used POLLIN and POLLOUT, but probably that's wrong.
+> 
+> I think the POLLIN thing is fine.
+> 
+> So, I think maybe I now understand what you intended with setting
+> POLLOUT: the notification has been received ("read") and now the
+> FD can be used to NOTIFY_SEND ("write") a response. Right?
+> 
+> If that's correct, I don't have a problem with it. I just wonder:
+> is it useful? IOW: are there situations where the process doing the
+> NOTIFY_SEND might want to test for POLLOUT because the it doesn't
+> know whether a NOTIFY_RECV has occurred? 
+> 
+> Thanks,
+> 
+> Michael
+> 
 
 
-On 10/13/20 8:31 PM, Yonghong Song wrote:
-> Commit 4fc427e05158 ("ipv6_route_seq_next should increase position index")
-> tried to fix the issue where seq_file pos is not increased
-> if a NULL element is returned with seq_ops->next(). See bug
->   https://bugzilla.kernel.org/show_bug.cgi?id=206283
-> The commit effectively does:
->   - increase pos for all seq_ops->start()
->   - increase pos for all seq_ops->next()
-> 
-> For ipv6_route, increasing pos for all seq_ops->next() is correct.
-> But increasing pos for seq_ops->start() is not correct
-> since pos is used to determine how many items to skip during
-> seq_ops->start():
->   iter->skip = *pos;
-> seq_ops->start() just fetches the *current* pos item.
-> The item can be skipped only after seq_ops->show() which essentially
-> is the beginning of seq_ops->next().
-> 
-> For example, I have 7 ipv6 route entries,
->   root@arch-fb-vm1:~/net-next dd if=/proc/net/ipv6_route bs=4096
->   00000000000000000000000000000000 40 00000000000000000000000000000000 00 00000000000000000000000000000000 00000400 00000001 00000000 00000001     eth0
->   fe800000000000000000000000000000 40 00000000000000000000000000000000 00 00000000000000000000000000000000 00000100 00000001 00000000 00000001     eth0
->   00000000000000000000000000000000 00 00000000000000000000000000000000 00 00000000000000000000000000000000 ffffffff 00000001 00000000 00200200       lo
->   00000000000000000000000000000001 80 00000000000000000000000000000000 00 00000000000000000000000000000000 00000000 00000003 00000000 80200001       lo
->   fe800000000000002050e3fffebd3be8 80 00000000000000000000000000000000 00 00000000000000000000000000000000 00000000 00000002 00000000 80200001     eth0
->   ff000000000000000000000000000000 08 00000000000000000000000000000000 00 00000000000000000000000000000000 00000100 00000004 00000000 00000001     eth0
->   00000000000000000000000000000000 00 00000000000000000000000000000000 00 00000000000000000000000000000000 ffffffff 00000001 00000000 00200200       lo
->   0+1 records in
->   0+1 records out
->   1050 bytes (1.0 kB, 1.0 KiB) copied, 0.00707908 s, 148 kB/s
->   root@arch-fb-vm1:~/net-next
-> 
-> In the above, I specify buffer size 4096, so all records can be returned
-> to user space with a single trip to the kernel.
-> 
-> If I use buffer size 128, since each record size is 149, internally
-> kernel seq_read() will read 149 into its internal buffer and return the data
-> to user space in two read() syscalls. Then user read() syscall will trigger
-> next seq_ops->start(). Since the current implementation increased pos even
-> for seq_ops->start(), it will skip record #2, #4 and #6, assuming the first
-> record is #1.
-> 
->   root@arch-fb-vm1:~/net-next dd if=/proc/net/ipv6_route bs=128
->   00000000000000000000000000000000 40 00000000000000000000000000000000 00 00000000000000000000000000000000 00000400 00000001 00000000 00000001     eth0
->   00000000000000000000000000000000 00 00000000000000000000000000000000 00 00000000000000000000000000000000 ffffffff 00000001 00000000 00200200       lo
->   fe800000000000002050e3fffebd3be8 80 00000000000000000000000000000000 00 00000000000000000000000000000000 00000000 00000002 00000000 80200001     eth0
->   00000000000000000000000000000000 00 00000000000000000000000000000000 00 00000000000000000000000000000000 ffffffff 00000001 00000000 00200200       lo
-> 4+1 records in
-> 4+1 records out
-> 600 bytes copied, 0.00127758 s, 470 kB/s
-> 
-> To fix the problem, create a fake pos pointer so seq_ops->start()
-> won't actually increase seq_file pos. With this fix, the
-> above `dd` command with `bs=128` will show correct result.
-> 
-> Fixes: 4fc427e05158 ("ipv6_route_seq_next should increase position index")
-> Cc: Vasily Averin <vvs@virtuozzo.com>
-> Cc: Andrii Nakryiko <andriin@fb.com>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Suggested-by: Vasily Averin <vvs@virtuozzo.com>
-> Signed-off-by: Yonghong Song <yhs@fb.com>
-> ---
->  net/ipv6/ip6_fib.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> Changelog:
->  v1 -> v2:
->   - instead of push increment of *pos in ipv6_route_seq_next() for
->     seq_ops->next() only. Add a face pos pointer in seq_ops->start()
->     and use it when calling ipv6_route_seq_next().
-> 
-> diff --git a/net/ipv6/ip6_fib.c b/net/ipv6/ip6_fib.c
-> index 141c0a4c569a..e633b2b7deda 100644
-> --- a/net/ipv6/ip6_fib.c
-> +++ b/net/ipv6/ip6_fib.c
-> @@ -2622,8 +2622,10 @@ static void *ipv6_route_seq_start(struct seq_file *seq, loff_t *pos)
->  	iter->skip = *pos;
->  
->  	if (iter->tbl) {
-> +		loff_t p;
-
-Please init this, otherwise I can guarantee syzbot will be not happy.
-
-                p = *pos;
-
-> +
->  		ipv6_route_seq_setup_walk(iter, net);
-> -		return ipv6_route_seq_next(seq, NULL, pos);
-> +		return ipv6_route_seq_next(seq, NULL, &p);
->  	} else {
->  		return NULL;
->  	}
-> 
+-- 
+Michael Kerrisk
+Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
+Linux/UNIX System Programming Training: http://man7.org/training/
