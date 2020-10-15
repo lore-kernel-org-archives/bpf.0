@@ -2,102 +2,90 @@ Return-Path: <SRS0=kPz0=DW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B09AC43457
-	for <bpf@archiver.kernel.org>; Thu, 15 Oct 2020 19:16:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1C41C433DF
+	for <bpf@archiver.kernel.org>; Thu, 15 Oct 2020 19:26:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1B97120678
-	for <bpf@archiver.kernel.org>; Thu, 15 Oct 2020 19:16:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A780206B5
+	for <bpf@archiver.kernel.org>; Thu, 15 Oct 2020 19:26:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1602789988;
+	bh=kSAb21hpwT1aCd33FktRvAwhXCN3mQbWCGEF448daDc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=WCGewfiDFcNyd1fMa0G0X4vL2PAyU5Ef6xV9duczmlzhnbe3ioOyu750R7qzxzCxQ
+	 vapTJVzE6LwC7HwU89EAOj6Dwy0yWnonDhxR0SI/Td7VUD4cWmJq+R1Y2gfg4g7SMo
+	 9OQ1rODDV5DrIV7XJoKQrWNn7luZFj3GPS6g/HK4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389838AbgJOTQD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Oct 2020 15:16:03 -0400
-Received: from www62.your-server.de ([213.133.104.62]:47514 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389812AbgJOTQD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Oct 2020 15:16:03 -0400
-Received: from 75.57.196.178.dynamic.wline.res.cust.swisscom.ch ([178.196.57.75] helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1kT8jA-0002CN-MN; Thu, 15 Oct 2020 21:15:52 +0200
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     davem@davemloft.net
-Cc:     kuba@kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: pull-request: bpf-next 2020-10-15
-Date:   Thu, 15 Oct 2020 21:15:52 +0200
-Message-Id: <20201015191552.12435-1-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+        id S2391495AbgJOT02 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Oct 2020 15:26:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57904 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391493AbgJOT01 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Oct 2020 15:26:27 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 55A6E206B2;
+        Thu, 15 Oct 2020 19:26:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602789987;
+        bh=kSAb21hpwT1aCd33FktRvAwhXCN3mQbWCGEF448daDc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=wYvXM3LElR+nLi1kXzzt1Tv+vEGEi1aXzwdWs0VVuZZzD3RNjbYz2UMGJYzUXyv3r
+         gw4QEVcwBRxGSZVUTDcmIP46vi6LluzwtL42/+pAGgIxZYqM5x5J6d4ve3EPkX2lYP
+         znJ7jfAWL4rllyd+QOGYMa+/9iTgJRpC5rn9wIis=
+Date:   Thu, 15 Oct 2020 12:26:24 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     YueHaibing <yuehaibing@huawei.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] bpfilter: Fix build error with CONFIG_BPFILTER_UMH
+Message-ID: <20201015122624.0ca7b58c@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <CAADnVQLVvd_2zJTQJ7m=322H7M7NdTFfFE7f800XA=9HXVY28Q@mail.gmail.com>
+References: <20201014091749.25488-1-yuehaibing@huawei.com>
+        <20201015093748.587a72b5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <CAADnVQKJ=iDMiJpELmuATsdf2vxGJ=Y9r+vjJG6m4BDRNPmP3g@mail.gmail.com>
+        <20201015115643.3a4d4820@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <CAADnVQLVvd_2zJTQJ7m=322H7M7NdTFfFE7f800XA=9HXVY28Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/25958/Thu Oct 15 15:56:23 2020)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi David, hi Jakub,
+On Thu, 15 Oct 2020 12:03:14 -0700 Alexei Starovoitov wrote:
+> On Thu, Oct 15, 2020 at 11:56 AM Jakub Kicinski <kuba@kernel.org> wrote:
+> > How so? It's using in-tree headers instead of system ones.
+> > Many samples seem to be doing the same thing.  
+> 
+> There is no such thing as "usr/include" in the kernel build and source trees.
 
-The following pull-request contains BPF *fixes* for your *net-next* tree.
+Hm. I thought bpfilter somehow depends on make headers. But it doesn't
+seem to. Reverting now.
 
-We've added 4 non-merge commits during the last 3 day(s) which contain
-a total of 5 files changed, 70 insertions(+), 46 deletions(-).
+> > > Also please don't take bpf patches.  
+> >
+> > You had it marked it as netdev in your patchwork :/  
+> 
+> It was delegated automatically by the patchwork system.
+> I didn't have time to reassign, but you should have known better
+> when you saw 'bpfilter' in the subject.
 
-The main changes are:
+The previous committers for bpfilter are almost all Dave, so I checked
+your patchwork to make sure and it was netdev...
 
-1) Fix register equivalence tracking in verifier, from Alexei Starovoitov.
-
-2) Fix sockmap error path to not call bpf_prog_put() with NULL, from Alex Dewar.
-
-3) Fix sockmap to add locking annotations to iterator, from Lorenz Bauer.
-
-4) Fix tcp_hdr_options test to use loopback address, from Martin KaFai Lau.
-
-Please consider pulling these changes from:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git
-
-Thanks a lot!
-
-Also thanks to reporters, reviewers and testers of commits in this pull-request:
-
-Andrii Nakryiko, Jakub Sitnicki, John Fastabend, kernel test robot, 
-Yonghong Song
-
-----------------------------------------------------------------
-
-The following changes since commit ccdf7fae3afaeaf0e5dd03311b86ffa56adf85ae:
-
-  Merge git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next (2020-10-12 16:16:50 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git 
-
-for you to fetch changes up to 83c11c17553c0fca217105c17444c4ef5ab2403f:
-
-  net, sockmap: Don't call bpf_prog_put() on NULL pointer (2020-10-15 21:05:23 +0200)
-
-----------------------------------------------------------------
-Alex Dewar (1):
-      net, sockmap: Don't call bpf_prog_put() on NULL pointer
-
-Alexei Starovoitov (1):
-      bpf: Fix register equivalence tracking.
-
-Lorenz Bauer (1):
-      bpf, sockmap: Add locking annotations to iterator
-
-Martin KaFai Lau (1):
-      bpf, selftest: Fix flaky tcp_hdr_options test when adding addr to lo
-
- kernel/bpf/verifier.c                              | 38 ++++++++++++++--------
- net/core/sock_map.c                                | 24 ++++++++++----
- .../selftests/bpf/prog_tests/tcp_hdr_options.c     | 26 +--------------
- .../bpf/progs/test_misc_tcp_hdr_options.c          |  2 +-
- tools/testing/selftests/bpf/verifier/regalloc.c    | 26 +++++++++++++++
- 5 files changed, 70 insertions(+), 46 deletions(-)
+I'll do better next time :)
