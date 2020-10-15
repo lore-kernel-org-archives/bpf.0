@@ -2,658 +2,1208 @@ Return-Path: <SRS0=kPz0=DW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3266C433DF
-	for <bpf@archiver.kernel.org>; Thu, 15 Oct 2020 20:37:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74C59C433E7
+	for <bpf@archiver.kernel.org>; Thu, 15 Oct 2020 22:31:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1797D2074A
-	for <bpf@archiver.kernel.org>; Thu, 15 Oct 2020 20:37:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E98322076A
+	for <bpf@archiver.kernel.org>; Thu, 15 Oct 2020 22:31:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KkZ4ssUi"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HQM8zh/G"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392297AbgJOUdM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Oct 2020 16:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57240 "EHLO
+        id S1731453AbgJOWbd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Oct 2020 18:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392294AbgJOUdK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Oct 2020 16:33:10 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93804C0613D3
-        for <bpf@vger.kernel.org>; Thu, 15 Oct 2020 13:33:09 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id p15so171087ljj.8
-        for <bpf@vger.kernel.org>; Thu, 15 Oct 2020 13:33:09 -0700 (PDT)
+        with ESMTP id S1731449AbgJOWb1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Oct 2020 18:31:27 -0400
+Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6620DC0613D3
+        for <bpf@vger.kernel.org>; Thu, 15 Oct 2020 15:31:27 -0700 (PDT)
+Received: by mail-qk1-x749.google.com with SMTP id v190so242951qki.21
+        for <bpf@vger.kernel.org>; Thu, 15 Oct 2020 15:31:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=KlXh5rzDcwhJ0eG7Khk7VZ8Gw+aY5r4xoS2Zvo351jY=;
-        b=KkZ4ssUiTctJvOODroIELOqJGrweV67+xSDHTgd2dhFEq+/iOm0IR4I/TGmIzva0qn
-         h296f1tHQQh5Iwo8v/mJbVgB5GcsMK/4jnuslyUT6XxG4YipzgEUmcfJO2VLaUWhJBIC
-         1AxbwUsM/43Pg7zcebTN2CDzozsEiQAN5u1HNjQltoifBg8moFKhKOX3Jttn+2A9scO3
-         Ig/MsDVFHx6bi7LB/9yWJB/awEVeyTkrL241EqILhAk0M9InQ/dfIJMVg2yFVNV9glFk
-         vl4GRusE9v++Dj4+Xvep6XLXhshzN7lTcyZuWamQHTR4/6dH2sr9KluTx58fTZWeje80
-         oSVw==
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=xDcHFm5C5LaVbpBSbF7t41bU7OMuOWdwB9ljXUqHmAg=;
+        b=HQM8zh/GtTnX+24A3oZ/ZNF86sH6V41e7Yu6Nup8IFZ03siXEWIe2+cJSm3JMP9JVL
+         IRQuV3dYLfLYemDT1TeSDCzN/OzjM+x4CRDbJqTnfY2O0xz+B1R44o7xSIdPbdgqW9oi
+         JCCNd6s40EUGou+wQ6Cz1BSg7ddRqFqquXl9y4jXH0+hBP1JT3NH/pRGUFovvCcqOhef
+         rXfyt53Pn7usj9u9KfkqzLVrtnipaEipRHsGo1y+Gb8gOGVN9f87iQv9byZQ1ty9S8xM
+         iehJlK9NyhIjybX8Zok83P9wq2aNdHbtz4vclNokDjcnKDzPD50LQLrBloN83jDSuDuF
+         hETg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=KlXh5rzDcwhJ0eG7Khk7VZ8Gw+aY5r4xoS2Zvo351jY=;
-        b=RPi4yALkpF1HQP5r9dXxVlp6AE+q3oJJUdACsgj6cdFhW40IzkdaAxhFxWMq7G8U28
-         DDzDIZpjzrOJBZqdVrHKwOgnCr2bKwBjSND6+C4KlJ6BG15GTFHfWK+sm0lmKBRVX+gZ
-         xRvcc4Bbktv2b+zpyDtqpXnt6IWpodDrVVT/RBcGxRRD1+9Qf1C/fuFc5jEt15eOjQbl
-         rLNl4HcSqCpLpDdwc7LbNBgZYtAEx2nKw4VmXGq9YoKyj9Cwg5xyTE98ZW81XgpncJ1Z
-         4O9Mj46KXpVVxEZQfLmKz2hAC1iS+/UbS77rQIvPy5cTsM+cQOMsQ6Xu1tlbSCh38VHg
-         QWiw==
-X-Gm-Message-State: AOAM531iLRKApeQI+Cjuw/7cQ6kGLB5Wh84Z8WjzErY1NIohsBh2BDhS
-        YUYF4e5JFtNBnXgWsRFz/3GqJYqoBetEs/CKH50rOA==
-X-Google-Smtp-Source: ABdhPJyXC1djtRqQcpQpJNk8DlL1UstJBHC1hopewfptBSJdsB3WRm8+75Zqr+3t/3jIPBy1FB/9bY0U0e9cEIH+DeM=
-X-Received: by 2002:a2e:9f13:: with SMTP id u19mr186827ljk.160.1602793987466;
- Thu, 15 Oct 2020 13:33:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <45f07f17-18b6-d187-0914-6f341fe90857@gmail.com>
- <CAG48ez3aqLs_-xgU0bThOLqRiiDWGObxcg-X9iFe6D5RDnLVJg@mail.gmail.com> <5647b94a-4693-dad0-6e0d-ed178b495d65@gmail.com>
-In-Reply-To: <5647b94a-4693-dad0-6e0d-ed178b495d65@gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 15 Oct 2020 22:32:40 +0200
-Message-ID: <CAG48ez1PtJPQLrQ54P+uuuxbt6mri9wcP=1m1wgVuMWOSDMazg@mail.gmail.com>
-Subject: Re: For review: seccomp_user_notif(2) manual page
-To:     "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Cc:     Tycho Andersen <tycho@tycho.pizza>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <christian@brauner.io>,
-        linux-man <linux-man@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Will Drewry <wad@chromium.org>, bpf <bpf@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>,
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=xDcHFm5C5LaVbpBSbF7t41bU7OMuOWdwB9ljXUqHmAg=;
+        b=A8M1CaCmfXo1l0wykLE1fYl0T1IPMzIAcoV3+dkeJSmdna9efsToLA03txfwD0TdMk
+         nsUB8Vcyb9/e1qW01erg3/oIl/UJvyxLaPE5SXQSysLzOEZCWk7je6YDKQ5yn1P7mX6V
+         HqpDRVwlkAcruSymiXpXFtuWZyTUE1NzpCrozdTCWjI9EhGcmFZXxIdz1lqxxxqsNd0o
+         fChqusfhuBVRLMLOuD9NeH8bQlb5rxwXd+Yu3wVkx1Si83Xu5WAW6WhQWX/PIyPXRV+k
+         O1AkLLTMjaXCAnWtLpq0YKdR7OaEE0r9796sccbSi5aSzUwCh2DOhohewn4xtpyAhsaU
+         AJRg==
+X-Gm-Message-State: AOAM532W6n2ppUrpzIcnG9iIH/4On6mGZSRZKnJDrzkmdXiISAeIro2A
+        MVzjefgiqnzFVPGaUbdrAhqU5j7m+lHa
+X-Google-Smtp-Source: ABdhPJy5z8GdaKotKdrORelIp20rFyl3xi9oaBSPuD7rZgTTj1gT/C4VD6FYs2X4xGURsrJOT4GdL1yHWOKT
+Sender: "irogers via sendgmr" <irogers@irogers.svl.corp.google.com>
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:2:f693:9fff:fef4:4583])
+ (user=irogers job=sendgmr) by 2002:ad4:4eaf:: with SMTP id
+ ed15mr1138618qvb.40.1602801086475; Thu, 15 Oct 2020 15:31:26 -0700 (PDT)
+Date:   Thu, 15 Oct 2020 15:31:19 -0700
+In-Reply-To: <20201015223119.1712121-1-irogers@google.com>
+Message-Id: <20201015223119.1712121-2-irogers@google.com>
+Mime-Version: 1.0
+References: <20201015223119.1712121-1-irogers@google.com>
+X-Mailer: git-send-email 2.29.0.rc1.297.gfa9743e501-goog
+Subject: [PATCH 2/2] tools/include: Add rtnetlink.h, id_addr.h and neighbour.h
+From:   Ian Rogers <irogers@google.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Robert Sesek <rsesek@google.com>
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Igor Russkikh <irusskikh@marvell.com>,
+        Mark Starovoytov <mstarovoitov@marvell.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Antoine Tenart <antoine.tenart@bootlin.com>,
+        "=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?=" <toke@redhat.com>,
+        Nikolay Aleksandrov <nikolay@cumulusnetworks.com>,
+        Roopa Prabhu <roopa@cumulusnetworks.com>,
+        Jiri Pirko <jiri@mellanox.com>,
+        Vlad Buslov <vladbu@mellanox.com>,
+        Ido Schimmel <idosch@mellanox.com>,
+        Alexandre Cassen <acassen@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Oct 15, 2020 at 1:24 PM Michael Kerrisk (man-pages)
-<mtk.manpages@gmail.com> wrote:
-> On 9/30/20 5:53 PM, Jann Horn wrote:
-> > On Wed, Sep 30, 2020 at 1:07 PM Michael Kerrisk (man-pages)
-> > <mtk.manpages@gmail.com> wrote:
-> >> I knew it would be a big ask, but below is kind of the manual page
-> >> I was hoping you might write [1] for the seccomp user-space notificati=
-on
-> >> mechanism. Since you didn't (and because 5.9 adds various new pieces
-> >> such as SECCOMP_ADDFD_FLAG_SETFD and SECCOMP_IOCTL_NOTIF_ADDFD
-> >> that also will need documenting [2]), I did :-). But of course I may
-> >> have made mistakes...
-[...]
-> >>        3. The supervisor process will receive notification events on t=
-he
-> >>           listening  file  descriptor.   These  events  are  returned =
-as
-> >>           structures of type seccomp_notif.  Because this structure  a=
-nd
-> >>           its  size may evolve over kernel versions, the supervisor mu=
-st
-> >>           first determine the size of  this  structure  using  the  se=
-c=E2=80=90
-> >>           comp(2)  SECCOMP_GET_NOTIF_SIZES  operation,  which  returns=
- a
-> >>           structure of type seccomp_notif_sizes.  The  supervisor  all=
-o=E2=80=90
-> >>           cates a buffer of size seccomp_notif_sizes.seccomp_notif byt=
-es
-> >>           to receive notification events.   In  addition,the  supervis=
-or
-> >>           allocates  another  buffer  of  size  seccomp_notif_sizes.se=
-c=E2=80=90
-> >>           comp_notif_resp  bytes  for  the  response  (a   struct   se=
-c=E2=80=90
-> >>           comp_notif_resp  structure) that it will provide to the kern=
-el
-> >>           (and thus the target process).
-> >>
-> >>        4. The target process then performs its workload, which  includ=
-es
-> >>           system  calls  that  will be controlled by the seccomp filte=
-r.
-> >>           Whenever one of these system calls causes the filter to retu=
-rn
-> >>           the  SECCOMP_RET_USER_NOTIF  action value, the kernel does n=
-ot
-> >>           execute the system call;  instead,  execution  of  the  targ=
-et
-> >>           process is temporarily blocked inside the kernel and a notif=
-i=E2=80=90
-> >
-> > where "blocked" refers to the interruptible, restartable kind - if the
-> > child receives a signal with an SA_RESTART signal handler in the
-> > meantime, it'll leave the syscall, go through the signal handler, then
-> > restart the syscall again and send the same request to the supervisor
-> > again. so the supervisor may see duplicate syscalls.
->
-> So, I partially demonstrated what you describe here, for two example
-> system calls (epoll_wait() and pause()). But I could not exactly
-> demonstrate things as I understand you to be describing them. (So,
-> I'm not sure whether I have not understood you correctly, or
-> if things are not exactly as you describe them.)
->
-> Here's a scenario (A) that I tested:
->
-> 1. Target installs seccomp filters for a blocking syscall
->    (epoll_wait() or pause(), both of which should never restart,
->    regardless of SA_RESTART)
-> 2. Target installs SIGINT handler with SA_RESTART
-> 3. Supervisor is sleeping (i.e., is not blocked in
->    SECCOMP_IOCTL_NOTIF_RECV operation).
-> 4. Target makes a blocking system call (epoll_wait() or pause()).
-> 5. SIGINT gets delivered to target; handler gets called;
->    ***and syscall gets restarted by the kernel***
->
-> That last should never happen, of course, and is a result of the
-> combination of both the user-notify filter and the SA_RESTART flag.
-> If one or other is not present, then the system call is not
-> restarted.
->
-> So, as you note below, the UAPI gets broken a little.
->
-> However, from your description above I had understood that
-> something like the following scenario (B) could occur:
->
-> 1. Target installs seccomp filters for a blocking syscall
->    (epoll_wait() or pause(), both of which should never restart,
->    regardless of SA_RESTART)
-> 2. Target installs SIGINT handler with SA_RESTART
-> 3. Supervisor performs SECCOMP_IOCTL_NOTIF_RECV operation (which
->    blocks).
-> 4. Target makes a blocking system call (epoll_wait() or pause()).
-> 5. Supervisor gets seccomp user-space notification (i.e.,
->    SECCOMP_IOCTL_NOTIF_RECV ioctl() returns
-> 6. SIGINT gets delivered to target; handler gets called;
->    and syscall gets restarted by the kernel
-> 7. Supervisor performs another SECCOMP_IOCTL_NOTIF_RECV operation
->    which gets another notification for the restarted system call.
->
-> However, I don't observe such behavior. In step 6, the syscall
-> does not get restarted by the kernel, but instead returns -1/EINTR.
-> Perhaps I have misconstructed my experiment in the second case, or
-> perhaps I've misunderstood what you meant, or is it possibly the
-> case that things are not quite as you said?
+tools/lib/bpf/netlink.c depends on rtnetlink.h and netlink.h (via
+nlattr.h). Older versions of rtnetlink.h and netlink.h can cause
+duplicate conflicting definitions to occur, as things like header guards
+don't agree. To avoid these mismatches add rtnetlink.h, if_addr.h and
+neighbour.h to tools/include with the standard difference check.
 
-user@vm:~/test/seccomp-notify-interrupt$ cat seccomp-notify-interrupt.c
-#define _GNU_SOURCE
-#include <stdio.h>
-#include <signal.h>
-#include <err.h>
-#include <errno.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sched.h>
-#include <stddef.h>
-#include <limits.h>
-#include <sys/mman.h>
-#include <sys/syscall.h>
-#include <sys/prctl.h>
-#include <linux/seccomp.h>
-#include <linux/filter.h>
-#include <linux/futex.h>
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/include/uapi/linux/if_addr.h   |  72 +++
+ tools/include/uapi/linux/neighbour.h | 199 +++++++
+ tools/include/uapi/linux/rtnetlink.h | 787 +++++++++++++++++++++++++++
+ tools/lib/bpf/Makefile               |   9 +
+ 4 files changed, 1067 insertions(+)
+ create mode 100644 tools/include/uapi/linux/if_addr.h
+ create mode 100644 tools/include/uapi/linux/neighbour.h
+ create mode 100644 tools/include/uapi/linux/rtnetlink.h
 
-struct {
-  int seccomp_fd;
-} *shared;
+diff --git a/tools/include/uapi/linux/if_addr.h b/tools/include/uapi/linux/if_addr.h
+new file mode 100644
+index 000000000000..dfcf3ce0097f
+--- /dev/null
++++ b/tools/include/uapi/linux/if_addr.h
+@@ -0,0 +1,72 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++#ifndef __LINUX_IF_ADDR_H
++#define __LINUX_IF_ADDR_H
++
++#include <linux/types.h>
++#include <linux/netlink.h>
++
++struct ifaddrmsg {
++	__u8		ifa_family;
++	__u8		ifa_prefixlen;	/* The prefix length		*/
++	__u8		ifa_flags;	/* Flags			*/
++	__u8		ifa_scope;	/* Address scope		*/
++	__u32		ifa_index;	/* Link index			*/
++};
++
++/*
++ * Important comment:
++ * IFA_ADDRESS is prefix address, rather than local interface address.
++ * It makes no difference for normally configured broadcast interfaces,
++ * but for point-to-point IFA_ADDRESS is DESTINATION address,
++ * local address is supplied in IFA_LOCAL attribute.
++ *
++ * IFA_FLAGS is a u32 attribute that extends the u8 field ifa_flags.
++ * If present, the value from struct ifaddrmsg will be ignored.
++ */
++enum {
++	IFA_UNSPEC,
++	IFA_ADDRESS,
++	IFA_LOCAL,
++	IFA_LABEL,
++	IFA_BROADCAST,
++	IFA_ANYCAST,
++	IFA_CACHEINFO,
++	IFA_MULTICAST,
++	IFA_FLAGS,
++	IFA_RT_PRIORITY,  /* u32, priority/metric for prefix route */
++	IFA_TARGET_NETNSID,
++	__IFA_MAX,
++};
++
++#define IFA_MAX (__IFA_MAX - 1)
++
++/* ifa_flags */
++#define IFA_F_SECONDARY		0x01
++#define IFA_F_TEMPORARY		IFA_F_SECONDARY
++
++#define	IFA_F_NODAD		0x02
++#define IFA_F_OPTIMISTIC	0x04
++#define IFA_F_DADFAILED		0x08
++#define	IFA_F_HOMEADDRESS	0x10
++#define IFA_F_DEPRECATED	0x20
++#define IFA_F_TENTATIVE		0x40
++#define IFA_F_PERMANENT		0x80
++#define IFA_F_MANAGETEMPADDR	0x100
++#define IFA_F_NOPREFIXROUTE	0x200
++#define IFA_F_MCAUTOJOIN	0x400
++#define IFA_F_STABLE_PRIVACY	0x800
++
++struct ifa_cacheinfo {
++	__u32	ifa_prefered;
++	__u32	ifa_valid;
++	__u32	cstamp; /* created timestamp, hundredths of seconds */
++	__u32	tstamp; /* updated timestamp, hundredths of seconds */
++};
++
++/* backwards compatibility for userspace */
++#ifndef __KERNEL__
++#define IFA_RTA(r)  ((struct rtattr*)(((char*)(r)) + NLMSG_ALIGN(sizeof(struct ifaddrmsg))))
++#define IFA_PAYLOAD(n) NLMSG_PAYLOAD(n,sizeof(struct ifaddrmsg))
++#endif
++
++#endif
+diff --git a/tools/include/uapi/linux/neighbour.h b/tools/include/uapi/linux/neighbour.h
+new file mode 100644
+index 000000000000..dc8b72201f6c
+--- /dev/null
++++ b/tools/include/uapi/linux/neighbour.h
+@@ -0,0 +1,199 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++#ifndef __LINUX_NEIGHBOUR_H
++#define __LINUX_NEIGHBOUR_H
++
++#include <linux/types.h>
++#include <linux/netlink.h>
++
++struct ndmsg {
++	__u8		ndm_family;
++	__u8		ndm_pad1;
++	__u16		ndm_pad2;
++	__s32		ndm_ifindex;
++	__u16		ndm_state;
++	__u8		ndm_flags;
++	__u8		ndm_type;
++};
++
++enum {
++	NDA_UNSPEC,
++	NDA_DST,
++	NDA_LLADDR,
++	NDA_CACHEINFO,
++	NDA_PROBES,
++	NDA_VLAN,
++	NDA_PORT,
++	NDA_VNI,
++	NDA_IFINDEX,
++	NDA_MASTER,
++	NDA_LINK_NETNSID,
++	NDA_SRC_VNI,
++	NDA_PROTOCOL,  /* Originator of entry */
++	NDA_NH_ID,
++	NDA_FDB_EXT_ATTRS,
++	__NDA_MAX
++};
++
++#define NDA_MAX (__NDA_MAX - 1)
++
++/*
++ *	Neighbor Cache Entry Flags
++ */
++
++#define NTF_USE		0x01
++#define NTF_SELF	0x02
++#define NTF_MASTER	0x04
++#define NTF_PROXY	0x08	/* == ATF_PUBL */
++#define NTF_EXT_LEARNED	0x10
++#define NTF_OFFLOADED   0x20
++#define NTF_STICKY	0x40
++#define NTF_ROUTER	0x80
++
++/*
++ *	Neighbor Cache Entry States.
++ */
++
++#define NUD_INCOMPLETE	0x01
++#define NUD_REACHABLE	0x02
++#define NUD_STALE	0x04
++#define NUD_DELAY	0x08
++#define NUD_PROBE	0x10
++#define NUD_FAILED	0x20
++
++/* Dummy states */
++#define NUD_NOARP	0x40
++#define NUD_PERMANENT	0x80
++#define NUD_NONE	0x00
++
++/* NUD_NOARP & NUD_PERMANENT are pseudostates, they never change
++   and make no address resolution or NUD.
++   NUD_PERMANENT also cannot be deleted by garbage collectors.
++ */
++
++struct nda_cacheinfo {
++	__u32		ndm_confirmed;
++	__u32		ndm_used;
++	__u32		ndm_updated;
++	__u32		ndm_refcnt;
++};
++
++/*****************************************************************
++ *		Neighbour tables specific messages.
++ *
++ * To retrieve the neighbour tables send RTM_GETNEIGHTBL with the
++ * NLM_F_DUMP flag set. Every neighbour table configuration is
++ * spread over multiple messages to avoid running into message
++ * size limits on systems with many interfaces. The first message
++ * in the sequence transports all not device specific data such as
++ * statistics, configuration, and the default parameter set.
++ * This message is followed by 0..n messages carrying device
++ * specific parameter sets.
++ * Although the ordering should be sufficient, NDTA_NAME can be
++ * used to identify sequences. The initial message can be identified
++ * by checking for NDTA_CONFIG. The device specific messages do
++ * not contain this TLV but have NDTPA_IFINDEX set to the
++ * corresponding interface index.
++ *
++ * To change neighbour table attributes, send RTM_SETNEIGHTBL
++ * with NDTA_NAME set. Changeable attribute include NDTA_THRESH[1-3],
++ * NDTA_GC_INTERVAL, and all TLVs in NDTA_PARMS unless marked
++ * otherwise. Device specific parameter sets can be changed by
++ * setting NDTPA_IFINDEX to the interface index of the corresponding
++ * device.
++ ****/
++
++struct ndt_stats {
++	__u64		ndts_allocs;
++	__u64		ndts_destroys;
++	__u64		ndts_hash_grows;
++	__u64		ndts_res_failed;
++	__u64		ndts_lookups;
++	__u64		ndts_hits;
++	__u64		ndts_rcv_probes_mcast;
++	__u64		ndts_rcv_probes_ucast;
++	__u64		ndts_periodic_gc_runs;
++	__u64		ndts_forced_gc_runs;
++	__u64		ndts_table_fulls;
++};
++
++enum {
++	NDTPA_UNSPEC,
++	NDTPA_IFINDEX,			/* u32, unchangeable */
++	NDTPA_REFCNT,			/* u32, read-only */
++	NDTPA_REACHABLE_TIME,		/* u64, read-only, msecs */
++	NDTPA_BASE_REACHABLE_TIME,	/* u64, msecs */
++	NDTPA_RETRANS_TIME,		/* u64, msecs */
++	NDTPA_GC_STALETIME,		/* u64, msecs */
++	NDTPA_DELAY_PROBE_TIME,		/* u64, msecs */
++	NDTPA_QUEUE_LEN,		/* u32 */
++	NDTPA_APP_PROBES,		/* u32 */
++	NDTPA_UCAST_PROBES,		/* u32 */
++	NDTPA_MCAST_PROBES,		/* u32 */
++	NDTPA_ANYCAST_DELAY,		/* u64, msecs */
++	NDTPA_PROXY_DELAY,		/* u64, msecs */
++	NDTPA_PROXY_QLEN,		/* u32 */
++	NDTPA_LOCKTIME,			/* u64, msecs */
++	NDTPA_QUEUE_LENBYTES,		/* u32 */
++	NDTPA_MCAST_REPROBES,		/* u32 */
++	NDTPA_PAD,
++	__NDTPA_MAX
++};
++#define NDTPA_MAX (__NDTPA_MAX - 1)
++
++struct ndtmsg {
++	__u8		ndtm_family;
++	__u8		ndtm_pad1;
++	__u16		ndtm_pad2;
++};
++
++struct ndt_config {
++	__u16		ndtc_key_len;
++	__u16		ndtc_entry_size;
++	__u32		ndtc_entries;
++	__u32		ndtc_last_flush;	/* delta to now in msecs */
++	__u32		ndtc_last_rand;		/* delta to now in msecs */
++	__u32		ndtc_hash_rnd;
++	__u32		ndtc_hash_mask;
++	__u32		ndtc_hash_chain_gc;
++	__u32		ndtc_proxy_qlen;
++};
++
++enum {
++	NDTA_UNSPEC,
++	NDTA_NAME,			/* char *, unchangeable */
++	NDTA_THRESH1,			/* u32 */
++	NDTA_THRESH2,			/* u32 */
++	NDTA_THRESH3,			/* u32 */
++	NDTA_CONFIG,			/* struct ndt_config, read-only */
++	NDTA_PARMS,			/* nested TLV NDTPA_* */
++	NDTA_STATS,			/* struct ndt_stats, read-only */
++	NDTA_GC_INTERVAL,		/* u64, msecs */
++	NDTA_PAD,
++	__NDTA_MAX
++};
++#define NDTA_MAX (__NDTA_MAX - 1)
++
++ /* FDB activity notification bits used in NFEA_ACTIVITY_NOTIFY:
++  * - FDB_NOTIFY_BIT - notify on activity/expire for any entry
++  * - FDB_NOTIFY_INACTIVE_BIT - mark as inactive to avoid multiple notifications
++  */
++enum {
++	FDB_NOTIFY_BIT		= (1 << 0),
++	FDB_NOTIFY_INACTIVE_BIT	= (1 << 1)
++};
++
++/* embedded into NDA_FDB_EXT_ATTRS:
++ * [NDA_FDB_EXT_ATTRS] = {
++ *     [NFEA_ACTIVITY_NOTIFY]
++ *     ...
++ * }
++ */
++enum {
++	NFEA_UNSPEC,
++	NFEA_ACTIVITY_NOTIFY,
++	NFEA_DONT_REFRESH,
++	__NFEA_MAX
++};
++#define NFEA_MAX (__NFEA_MAX - 1)
++
++#endif
+diff --git a/tools/include/uapi/linux/rtnetlink.h b/tools/include/uapi/linux/rtnetlink.h
+new file mode 100644
+index 000000000000..9b814c92de12
+--- /dev/null
++++ b/tools/include/uapi/linux/rtnetlink.h
+@@ -0,0 +1,787 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++#ifndef _UAPI__LINUX_RTNETLINK_H
++#define _UAPI__LINUX_RTNETLINK_H
++
++#include <linux/types.h>
++#include <linux/netlink.h>
++#include <linux/if_link.h>
++#include <linux/if_addr.h>
++#include <linux/neighbour.h>
++
++/* rtnetlink families. Values up to 127 are reserved for real address
++ * families, values above 128 may be used arbitrarily.
++ */
++#define RTNL_FAMILY_IPMR		128
++#define RTNL_FAMILY_IP6MR		129
++#define RTNL_FAMILY_MAX			129
++
++/****
++ *		Routing/neighbour discovery messages.
++ ****/
++
++/* Types of messages */
++
++enum {
++	RTM_BASE	= 16,
++#define RTM_BASE	RTM_BASE
++
++	RTM_NEWLINK	= 16,
++#define RTM_NEWLINK	RTM_NEWLINK
++	RTM_DELLINK,
++#define RTM_DELLINK	RTM_DELLINK
++	RTM_GETLINK,
++#define RTM_GETLINK	RTM_GETLINK
++	RTM_SETLINK,
++#define RTM_SETLINK	RTM_SETLINK
++
++	RTM_NEWADDR	= 20,
++#define RTM_NEWADDR	RTM_NEWADDR
++	RTM_DELADDR,
++#define RTM_DELADDR	RTM_DELADDR
++	RTM_GETADDR,
++#define RTM_GETADDR	RTM_GETADDR
++
++	RTM_NEWROUTE	= 24,
++#define RTM_NEWROUTE	RTM_NEWROUTE
++	RTM_DELROUTE,
++#define RTM_DELROUTE	RTM_DELROUTE
++	RTM_GETROUTE,
++#define RTM_GETROUTE	RTM_GETROUTE
++
++	RTM_NEWNEIGH	= 28,
++#define RTM_NEWNEIGH	RTM_NEWNEIGH
++	RTM_DELNEIGH,
++#define RTM_DELNEIGH	RTM_DELNEIGH
++	RTM_GETNEIGH,
++#define RTM_GETNEIGH	RTM_GETNEIGH
++
++	RTM_NEWRULE	= 32,
++#define RTM_NEWRULE	RTM_NEWRULE
++	RTM_DELRULE,
++#define RTM_DELRULE	RTM_DELRULE
++	RTM_GETRULE,
++#define RTM_GETRULE	RTM_GETRULE
++
++	RTM_NEWQDISC	= 36,
++#define RTM_NEWQDISC	RTM_NEWQDISC
++	RTM_DELQDISC,
++#define RTM_DELQDISC	RTM_DELQDISC
++	RTM_GETQDISC,
++#define RTM_GETQDISC	RTM_GETQDISC
++
++	RTM_NEWTCLASS	= 40,
++#define RTM_NEWTCLASS	RTM_NEWTCLASS
++	RTM_DELTCLASS,
++#define RTM_DELTCLASS	RTM_DELTCLASS
++	RTM_GETTCLASS,
++#define RTM_GETTCLASS	RTM_GETTCLASS
++
++	RTM_NEWTFILTER	= 44,
++#define RTM_NEWTFILTER	RTM_NEWTFILTER
++	RTM_DELTFILTER,
++#define RTM_DELTFILTER	RTM_DELTFILTER
++	RTM_GETTFILTER,
++#define RTM_GETTFILTER	RTM_GETTFILTER
++
++	RTM_NEWACTION	= 48,
++#define RTM_NEWACTION   RTM_NEWACTION
++	RTM_DELACTION,
++#define RTM_DELACTION   RTM_DELACTION
++	RTM_GETACTION,
++#define RTM_GETACTION   RTM_GETACTION
++
++	RTM_NEWPREFIX	= 52,
++#define RTM_NEWPREFIX	RTM_NEWPREFIX
++
++	RTM_GETMULTICAST = 58,
++#define RTM_GETMULTICAST RTM_GETMULTICAST
++
++	RTM_GETANYCAST	= 62,
++#define RTM_GETANYCAST	RTM_GETANYCAST
++
++	RTM_NEWNEIGHTBL	= 64,
++#define RTM_NEWNEIGHTBL	RTM_NEWNEIGHTBL
++	RTM_GETNEIGHTBL	= 66,
++#define RTM_GETNEIGHTBL	RTM_GETNEIGHTBL
++	RTM_SETNEIGHTBL,
++#define RTM_SETNEIGHTBL	RTM_SETNEIGHTBL
++
++	RTM_NEWNDUSEROPT = 68,
++#define RTM_NEWNDUSEROPT RTM_NEWNDUSEROPT
++
++	RTM_NEWADDRLABEL = 72,
++#define RTM_NEWADDRLABEL RTM_NEWADDRLABEL
++	RTM_DELADDRLABEL,
++#define RTM_DELADDRLABEL RTM_DELADDRLABEL
++	RTM_GETADDRLABEL,
++#define RTM_GETADDRLABEL RTM_GETADDRLABEL
++
++	RTM_GETDCB = 78,
++#define RTM_GETDCB RTM_GETDCB
++	RTM_SETDCB,
++#define RTM_SETDCB RTM_SETDCB
++
++	RTM_NEWNETCONF = 80,
++#define RTM_NEWNETCONF RTM_NEWNETCONF
++	RTM_DELNETCONF,
++#define RTM_DELNETCONF RTM_DELNETCONF
++	RTM_GETNETCONF = 82,
++#define RTM_GETNETCONF RTM_GETNETCONF
++
++	RTM_NEWMDB = 84,
++#define RTM_NEWMDB RTM_NEWMDB
++	RTM_DELMDB = 85,
++#define RTM_DELMDB RTM_DELMDB
++	RTM_GETMDB = 86,
++#define RTM_GETMDB RTM_GETMDB
++
++	RTM_NEWNSID = 88,
++#define RTM_NEWNSID RTM_NEWNSID
++	RTM_DELNSID = 89,
++#define RTM_DELNSID RTM_DELNSID
++	RTM_GETNSID = 90,
++#define RTM_GETNSID RTM_GETNSID
++
++	RTM_NEWSTATS = 92,
++#define RTM_NEWSTATS RTM_NEWSTATS
++	RTM_GETSTATS = 94,
++#define RTM_GETSTATS RTM_GETSTATS
++
++	RTM_NEWCACHEREPORT = 96,
++#define RTM_NEWCACHEREPORT RTM_NEWCACHEREPORT
++
++	RTM_NEWCHAIN = 100,
++#define RTM_NEWCHAIN RTM_NEWCHAIN
++	RTM_DELCHAIN,
++#define RTM_DELCHAIN RTM_DELCHAIN
++	RTM_GETCHAIN,
++#define RTM_GETCHAIN RTM_GETCHAIN
++
++	RTM_NEWNEXTHOP = 104,
++#define RTM_NEWNEXTHOP	RTM_NEWNEXTHOP
++	RTM_DELNEXTHOP,
++#define RTM_DELNEXTHOP	RTM_DELNEXTHOP
++	RTM_GETNEXTHOP,
++#define RTM_GETNEXTHOP	RTM_GETNEXTHOP
++
++	RTM_NEWLINKPROP = 108,
++#define RTM_NEWLINKPROP	RTM_NEWLINKPROP
++	RTM_DELLINKPROP,
++#define RTM_DELLINKPROP	RTM_DELLINKPROP
++	RTM_GETLINKPROP,
++#define RTM_GETLINKPROP	RTM_GETLINKPROP
++
++	RTM_NEWVLAN = 112,
++#define RTM_NEWNVLAN	RTM_NEWVLAN
++	RTM_DELVLAN,
++#define RTM_DELVLAN	RTM_DELVLAN
++	RTM_GETVLAN,
++#define RTM_GETVLAN	RTM_GETVLAN
++
++	__RTM_MAX,
++#define RTM_MAX		(((__RTM_MAX + 3) & ~3) - 1)
++};
++
++#define RTM_NR_MSGTYPES	(RTM_MAX + 1 - RTM_BASE)
++#define RTM_NR_FAMILIES	(RTM_NR_MSGTYPES >> 2)
++#define RTM_FAM(cmd)	(((cmd) - RTM_BASE) >> 2)
++
++/* 
++   Generic structure for encapsulation of optional route information.
++   It is reminiscent of sockaddr, but with sa_family replaced
++   with attribute type.
++ */
++
++struct rtattr {
++	unsigned short	rta_len;
++	unsigned short	rta_type;
++};
++
++/* Macros to handle rtattributes */
++
++#define RTA_ALIGNTO	4U
++#define RTA_ALIGN(len) ( ((len)+RTA_ALIGNTO-1) & ~(RTA_ALIGNTO-1) )
++#define RTA_OK(rta,len) ((len) >= (int)sizeof(struct rtattr) && \
++			 (rta)->rta_len >= sizeof(struct rtattr) && \
++			 (rta)->rta_len <= (len))
++#define RTA_NEXT(rta,attrlen)	((attrlen) -= RTA_ALIGN((rta)->rta_len), \
++				 (struct rtattr*)(((char*)(rta)) + RTA_ALIGN((rta)->rta_len)))
++#define RTA_LENGTH(len)	(RTA_ALIGN(sizeof(struct rtattr)) + (len))
++#define RTA_SPACE(len)	RTA_ALIGN(RTA_LENGTH(len))
++#define RTA_DATA(rta)   ((void*)(((char*)(rta)) + RTA_LENGTH(0)))
++#define RTA_PAYLOAD(rta) ((int)((rta)->rta_len) - RTA_LENGTH(0))
++
++
++
++
++/******************************************************************************
++ *		Definitions used in routing table administration.
++ ****/
++
++struct rtmsg {
++	unsigned char		rtm_family;
++	unsigned char		rtm_dst_len;
++	unsigned char		rtm_src_len;
++	unsigned char		rtm_tos;
++
++	unsigned char		rtm_table;	/* Routing table id */
++	unsigned char		rtm_protocol;	/* Routing protocol; see below	*/
++	unsigned char		rtm_scope;	/* See below */	
++	unsigned char		rtm_type;	/* See below	*/
++
++	unsigned		rtm_flags;
++};
++
++/* rtm_type */
++
++enum {
++	RTN_UNSPEC,
++	RTN_UNICAST,		/* Gateway or direct route	*/
++	RTN_LOCAL,		/* Accept locally		*/
++	RTN_BROADCAST,		/* Accept locally as broadcast,
++				   send as broadcast */
++	RTN_ANYCAST,		/* Accept locally as broadcast,
++				   but send as unicast */
++	RTN_MULTICAST,		/* Multicast route		*/
++	RTN_BLACKHOLE,		/* Drop				*/
++	RTN_UNREACHABLE,	/* Destination is unreachable   */
++	RTN_PROHIBIT,		/* Administratively prohibited	*/
++	RTN_THROW,		/* Not in this table		*/
++	RTN_NAT,		/* Translate this address	*/
++	RTN_XRESOLVE,		/* Use external resolver	*/
++	__RTN_MAX
++};
++
++#define RTN_MAX (__RTN_MAX - 1)
++
++
++/* rtm_protocol */
++
++#define RTPROT_UNSPEC		0
++#define RTPROT_REDIRECT		1	/* Route installed by ICMP redirects;
++					   not used by current IPv4 */
++#define RTPROT_KERNEL		2	/* Route installed by kernel		*/
++#define RTPROT_BOOT		3	/* Route installed during boot		*/
++#define RTPROT_STATIC		4	/* Route installed by administrator	*/
++
++/* Values of protocol >= RTPROT_STATIC are not interpreted by kernel;
++   they are just passed from user and back as is.
++   It will be used by hypothetical multiple routing daemons.
++   Note that protocol values should be standardized in order to
++   avoid conflicts.
++ */
++
++#define RTPROT_GATED		8	/* Apparently, GateD */
++#define RTPROT_RA		9	/* RDISC/ND router advertisements */
++#define RTPROT_MRT		10	/* Merit MRT */
++#define RTPROT_ZEBRA		11	/* Zebra */
++#define RTPROT_BIRD		12	/* BIRD */
++#define RTPROT_DNROUTED		13	/* DECnet routing daemon */
++#define RTPROT_XORP		14	/* XORP */
++#define RTPROT_NTK		15	/* Netsukuku */
++#define RTPROT_DHCP		16	/* DHCP client */
++#define RTPROT_MROUTED		17	/* Multicast daemon */
++#define RTPROT_KEEPALIVED	18	/* Keepalived daemon */
++#define RTPROT_BABEL		42	/* Babel daemon */
++#define RTPROT_BGP		186	/* BGP Routes */
++#define RTPROT_ISIS		187	/* ISIS Routes */
++#define RTPROT_OSPF		188	/* OSPF Routes */
++#define RTPROT_RIP		189	/* RIP Routes */
++#define RTPROT_EIGRP		192	/* EIGRP Routes */
++
++/* rtm_scope
++
++   Really it is not scope, but sort of distance to the destination.
++   NOWHERE are reserved for not existing destinations, HOST is our
++   local addresses, LINK are destinations, located on directly attached
++   link and UNIVERSE is everywhere in the Universe.
++
++   Intermediate values are also possible f.e. interior routes
++   could be assigned a value between UNIVERSE and LINK.
++*/
++
++enum rt_scope_t {
++	RT_SCOPE_UNIVERSE=0,
++/* User defined values  */
++	RT_SCOPE_SITE=200,
++	RT_SCOPE_LINK=253,
++	RT_SCOPE_HOST=254,
++	RT_SCOPE_NOWHERE=255
++};
++
++/* rtm_flags */
++
++#define RTM_F_NOTIFY		0x100	/* Notify user of route change	*/
++#define RTM_F_CLONED		0x200	/* This route is cloned		*/
++#define RTM_F_EQUALIZE		0x400	/* Multipath equalizer: NI	*/
++#define RTM_F_PREFIX		0x800	/* Prefix addresses		*/
++#define RTM_F_LOOKUP_TABLE	0x1000	/* set rtm_table to FIB lookup result */
++#define RTM_F_FIB_MATCH	        0x2000	/* return full fib lookup match */
++#define RTM_F_OFFLOAD		0x4000	/* route is offloaded */
++#define RTM_F_TRAP		0x8000	/* route is trapping packets */
++
++/* Reserved table identifiers */
++
++enum rt_class_t {
++	RT_TABLE_UNSPEC=0,
++/* User defined values */
++	RT_TABLE_COMPAT=252,
++	RT_TABLE_DEFAULT=253,
++	RT_TABLE_MAIN=254,
++	RT_TABLE_LOCAL=255,
++	RT_TABLE_MAX=0xFFFFFFFF
++};
++
++
++/* Routing message attributes */
++
++enum rtattr_type_t {
++	RTA_UNSPEC,
++	RTA_DST,
++	RTA_SRC,
++	RTA_IIF,
++	RTA_OIF,
++	RTA_GATEWAY,
++	RTA_PRIORITY,
++	RTA_PREFSRC,
++	RTA_METRICS,
++	RTA_MULTIPATH,
++	RTA_PROTOINFO, /* no longer used */
++	RTA_FLOW,
++	RTA_CACHEINFO,
++	RTA_SESSION, /* no longer used */
++	RTA_MP_ALGO, /* no longer used */
++	RTA_TABLE,
++	RTA_MARK,
++	RTA_MFC_STATS,
++	RTA_VIA,
++	RTA_NEWDST,
++	RTA_PREF,
++	RTA_ENCAP_TYPE,
++	RTA_ENCAP,
++	RTA_EXPIRES,
++	RTA_PAD,
++	RTA_UID,
++	RTA_TTL_PROPAGATE,
++	RTA_IP_PROTO,
++	RTA_SPORT,
++	RTA_DPORT,
++	RTA_NH_ID,
++	__RTA_MAX
++};
++
++#define RTA_MAX (__RTA_MAX - 1)
++
++#define RTM_RTA(r)  ((struct rtattr*)(((char*)(r)) + NLMSG_ALIGN(sizeof(struct rtmsg))))
++#define RTM_PAYLOAD(n) NLMSG_PAYLOAD(n,sizeof(struct rtmsg))
++
++/* RTM_MULTIPATH --- array of struct rtnexthop.
++ *
++ * "struct rtnexthop" describes all necessary nexthop information,
++ * i.e. parameters of path to a destination via this nexthop.
++ *
++ * At the moment it is impossible to set different prefsrc, mtu, window
++ * and rtt for different paths from multipath.
++ */
++
++struct rtnexthop {
++	unsigned short		rtnh_len;
++	unsigned char		rtnh_flags;
++	unsigned char		rtnh_hops;
++	int			rtnh_ifindex;
++};
++
++/* rtnh_flags */
++
++#define RTNH_F_DEAD		1	/* Nexthop is dead (used by multipath)	*/
++#define RTNH_F_PERVASIVE	2	/* Do recursive gateway lookup	*/
++#define RTNH_F_ONLINK		4	/* Gateway is forced on link	*/
++#define RTNH_F_OFFLOAD		8	/* offloaded route */
++#define RTNH_F_LINKDOWN		16	/* carrier-down on nexthop */
++#define RTNH_F_UNRESOLVED	32	/* The entry is unresolved (ipmr) */
++
++#define RTNH_COMPARE_MASK	(RTNH_F_DEAD | RTNH_F_LINKDOWN | RTNH_F_OFFLOAD)
++
++/* Macros to handle hexthops */
++
++#define RTNH_ALIGNTO	4
++#define RTNH_ALIGN(len) ( ((len)+RTNH_ALIGNTO-1) & ~(RTNH_ALIGNTO-1) )
++#define RTNH_OK(rtnh,len) ((rtnh)->rtnh_len >= sizeof(struct rtnexthop) && \
++			   ((int)(rtnh)->rtnh_len) <= (len))
++#define RTNH_NEXT(rtnh)	((struct rtnexthop*)(((char*)(rtnh)) + RTNH_ALIGN((rtnh)->rtnh_len)))
++#define RTNH_LENGTH(len) (RTNH_ALIGN(sizeof(struct rtnexthop)) + (len))
++#define RTNH_SPACE(len)	RTNH_ALIGN(RTNH_LENGTH(len))
++#define RTNH_DATA(rtnh)   ((struct rtattr*)(((char*)(rtnh)) + RTNH_LENGTH(0)))
++
++/* RTA_VIA */
++struct rtvia {
++	__kernel_sa_family_t	rtvia_family;
++	__u8			rtvia_addr[0];
++};
++
++/* RTM_CACHEINFO */
++
++struct rta_cacheinfo {
++	__u32	rta_clntref;
++	__u32	rta_lastuse;
++	__s32	rta_expires;
++	__u32	rta_error;
++	__u32	rta_used;
++
++#define RTNETLINK_HAVE_PEERINFO 1
++	__u32	rta_id;
++	__u32	rta_ts;
++	__u32	rta_tsage;
++};
++
++/* RTM_METRICS --- array of struct rtattr with types of RTAX_* */
++
++enum {
++	RTAX_UNSPEC,
++#define RTAX_UNSPEC RTAX_UNSPEC
++	RTAX_LOCK,
++#define RTAX_LOCK RTAX_LOCK
++	RTAX_MTU,
++#define RTAX_MTU RTAX_MTU
++	RTAX_WINDOW,
++#define RTAX_WINDOW RTAX_WINDOW
++	RTAX_RTT,
++#define RTAX_RTT RTAX_RTT
++	RTAX_RTTVAR,
++#define RTAX_RTTVAR RTAX_RTTVAR
++	RTAX_SSTHRESH,
++#define RTAX_SSTHRESH RTAX_SSTHRESH
++	RTAX_CWND,
++#define RTAX_CWND RTAX_CWND
++	RTAX_ADVMSS,
++#define RTAX_ADVMSS RTAX_ADVMSS
++	RTAX_REORDERING,
++#define RTAX_REORDERING RTAX_REORDERING
++	RTAX_HOPLIMIT,
++#define RTAX_HOPLIMIT RTAX_HOPLIMIT
++	RTAX_INITCWND,
++#define RTAX_INITCWND RTAX_INITCWND
++	RTAX_FEATURES,
++#define RTAX_FEATURES RTAX_FEATURES
++	RTAX_RTO_MIN,
++#define RTAX_RTO_MIN RTAX_RTO_MIN
++	RTAX_INITRWND,
++#define RTAX_INITRWND RTAX_INITRWND
++	RTAX_QUICKACK,
++#define RTAX_QUICKACK RTAX_QUICKACK
++	RTAX_CC_ALGO,
++#define RTAX_CC_ALGO RTAX_CC_ALGO
++	RTAX_FASTOPEN_NO_COOKIE,
++#define RTAX_FASTOPEN_NO_COOKIE RTAX_FASTOPEN_NO_COOKIE
++	__RTAX_MAX
++};
++
++#define RTAX_MAX (__RTAX_MAX - 1)
++
++#define RTAX_FEATURE_ECN	(1 << 0)
++#define RTAX_FEATURE_SACK	(1 << 1)
++#define RTAX_FEATURE_TIMESTAMP	(1 << 2)
++#define RTAX_FEATURE_ALLFRAG	(1 << 3)
++
++#define RTAX_FEATURE_MASK	(RTAX_FEATURE_ECN | RTAX_FEATURE_SACK | \
++				 RTAX_FEATURE_TIMESTAMP | RTAX_FEATURE_ALLFRAG)
++
++struct rta_session {
++	__u8	proto;
++	__u8	pad1;
++	__u16	pad2;
++
++	union {
++		struct {
++			__u16	sport;
++			__u16	dport;
++		} ports;
++
++		struct {
++			__u8	type;
++			__u8	code;
++			__u16	ident;
++		} icmpt;
++
++		__u32		spi;
++	} u;
++};
++
++struct rta_mfc_stats {
++	__u64	mfcs_packets;
++	__u64	mfcs_bytes;
++	__u64	mfcs_wrong_if;
++};
++
++/****
++ *		General form of address family dependent message.
++ ****/
++
++struct rtgenmsg {
++	unsigned char		rtgen_family;
++};
++
++/*****************************************************************
++ *		Link layer specific messages.
++ ****/
++
++/* struct ifinfomsg
++ * passes link level specific information, not dependent
++ * on network protocol.
++ */
++
++struct ifinfomsg {
++	unsigned char	ifi_family;
++	unsigned char	__ifi_pad;
++	unsigned short	ifi_type;		/* ARPHRD_* */
++	int		ifi_index;		/* Link index	*/
++	unsigned	ifi_flags;		/* IFF_* flags	*/
++	unsigned	ifi_change;		/* IFF_* change mask */
++};
++
++/********************************************************************
++ *		prefix information 
++ ****/
++
++struct prefixmsg {
++	unsigned char	prefix_family;
++	unsigned char	prefix_pad1;
++	unsigned short	prefix_pad2;
++	int		prefix_ifindex;
++	unsigned char	prefix_type;
++	unsigned char	prefix_len;
++	unsigned char	prefix_flags;
++	unsigned char	prefix_pad3;
++};
++
++enum 
++{
++	PREFIX_UNSPEC,
++	PREFIX_ADDRESS,
++	PREFIX_CACHEINFO,
++	__PREFIX_MAX
++};
++
++#define PREFIX_MAX	(__PREFIX_MAX - 1)
++
++struct prefix_cacheinfo {
++	__u32	preferred_time;
++	__u32	valid_time;
++};
++
++
++/*****************************************************************
++ *		Traffic control messages.
++ ****/
++
++struct tcmsg {
++	unsigned char	tcm_family;
++	unsigned char	tcm__pad1;
++	unsigned short	tcm__pad2;
++	int		tcm_ifindex;
++	__u32		tcm_handle;
++	__u32		tcm_parent;
++/* tcm_block_index is used instead of tcm_parent
++ * in case tcm_ifindex == TCM_IFINDEX_MAGIC_BLOCK
++ */
++#define tcm_block_index tcm_parent
++	__u32		tcm_info;
++};
++
++/* For manipulation of filters in shared block, tcm_ifindex is set to
++ * TCM_IFINDEX_MAGIC_BLOCK, and tcm_parent is aliased to tcm_block_index
++ * which is the block index.
++ */
++#define TCM_IFINDEX_MAGIC_BLOCK (0xFFFFFFFFU)
++
++enum {
++	TCA_UNSPEC,
++	TCA_KIND,
++	TCA_OPTIONS,
++	TCA_STATS,
++	TCA_XSTATS,
++	TCA_RATE,
++	TCA_FCNT,
++	TCA_STATS2,
++	TCA_STAB,
++	TCA_PAD,
++	TCA_DUMP_INVISIBLE,
++	TCA_CHAIN,
++	TCA_HW_OFFLOAD,
++	TCA_INGRESS_BLOCK,
++	TCA_EGRESS_BLOCK,
++	TCA_DUMP_FLAGS,
++	__TCA_MAX
++};
++
++#define TCA_MAX (__TCA_MAX - 1)
++
++#define TCA_DUMP_FLAGS_TERSE (1 << 0) /* Means that in dump user gets only basic
++				       * data necessary to identify the objects
++				       * (handle, cookie, etc.) and stats.
++				       */
++
++#define TCA_RTA(r)  ((struct rtattr*)(((char*)(r)) + NLMSG_ALIGN(sizeof(struct tcmsg))))
++#define TCA_PAYLOAD(n) NLMSG_PAYLOAD(n,sizeof(struct tcmsg))
++
++/********************************************************************
++ *		Neighbor Discovery userland options
++ ****/
++
++struct nduseroptmsg {
++	unsigned char	nduseropt_family;
++	unsigned char	nduseropt_pad1;
++	unsigned short	nduseropt_opts_len;	/* Total length of options */
++	int		nduseropt_ifindex;
++	__u8		nduseropt_icmp_type;
++	__u8		nduseropt_icmp_code;
++	unsigned short	nduseropt_pad2;
++	unsigned int	nduseropt_pad3;
++	/* Followed by one or more ND options */
++};
++
++enum {
++	NDUSEROPT_UNSPEC,
++	NDUSEROPT_SRCADDR,
++	__NDUSEROPT_MAX
++};
++
++#define NDUSEROPT_MAX	(__NDUSEROPT_MAX - 1)
++
++#ifndef __KERNEL__
++/* RTnetlink multicast groups - backwards compatibility for userspace */
++#define RTMGRP_LINK		1
++#define RTMGRP_NOTIFY		2
++#define RTMGRP_NEIGH		4
++#define RTMGRP_TC		8
++
++#define RTMGRP_IPV4_IFADDR	0x10
++#define RTMGRP_IPV4_MROUTE	0x20
++#define RTMGRP_IPV4_ROUTE	0x40
++#define RTMGRP_IPV4_RULE	0x80
++
++#define RTMGRP_IPV6_IFADDR	0x100
++#define RTMGRP_IPV6_MROUTE	0x200
++#define RTMGRP_IPV6_ROUTE	0x400
++#define RTMGRP_IPV6_IFINFO	0x800
++
++#define RTMGRP_DECnet_IFADDR    0x1000
++#define RTMGRP_DECnet_ROUTE     0x4000
++
++#define RTMGRP_IPV6_PREFIX	0x20000
++#endif
++
++/* RTnetlink multicast groups */
++enum rtnetlink_groups {
++	RTNLGRP_NONE,
++#define RTNLGRP_NONE		RTNLGRP_NONE
++	RTNLGRP_LINK,
++#define RTNLGRP_LINK		RTNLGRP_LINK
++	RTNLGRP_NOTIFY,
++#define RTNLGRP_NOTIFY		RTNLGRP_NOTIFY
++	RTNLGRP_NEIGH,
++#define RTNLGRP_NEIGH		RTNLGRP_NEIGH
++	RTNLGRP_TC,
++#define RTNLGRP_TC		RTNLGRP_TC
++	RTNLGRP_IPV4_IFADDR,
++#define RTNLGRP_IPV4_IFADDR	RTNLGRP_IPV4_IFADDR
++	RTNLGRP_IPV4_MROUTE,
++#define	RTNLGRP_IPV4_MROUTE	RTNLGRP_IPV4_MROUTE
++	RTNLGRP_IPV4_ROUTE,
++#define RTNLGRP_IPV4_ROUTE	RTNLGRP_IPV4_ROUTE
++	RTNLGRP_IPV4_RULE,
++#define RTNLGRP_IPV4_RULE	RTNLGRP_IPV4_RULE
++	RTNLGRP_IPV6_IFADDR,
++#define RTNLGRP_IPV6_IFADDR	RTNLGRP_IPV6_IFADDR
++	RTNLGRP_IPV6_MROUTE,
++#define RTNLGRP_IPV6_MROUTE	RTNLGRP_IPV6_MROUTE
++	RTNLGRP_IPV6_ROUTE,
++#define RTNLGRP_IPV6_ROUTE	RTNLGRP_IPV6_ROUTE
++	RTNLGRP_IPV6_IFINFO,
++#define RTNLGRP_IPV6_IFINFO	RTNLGRP_IPV6_IFINFO
++	RTNLGRP_DECnet_IFADDR,
++#define RTNLGRP_DECnet_IFADDR	RTNLGRP_DECnet_IFADDR
++	RTNLGRP_NOP2,
++	RTNLGRP_DECnet_ROUTE,
++#define RTNLGRP_DECnet_ROUTE	RTNLGRP_DECnet_ROUTE
++	RTNLGRP_DECnet_RULE,
++#define RTNLGRP_DECnet_RULE	RTNLGRP_DECnet_RULE
++	RTNLGRP_NOP4,
++	RTNLGRP_IPV6_PREFIX,
++#define RTNLGRP_IPV6_PREFIX	RTNLGRP_IPV6_PREFIX
++	RTNLGRP_IPV6_RULE,
++#define RTNLGRP_IPV6_RULE	RTNLGRP_IPV6_RULE
++	RTNLGRP_ND_USEROPT,
++#define RTNLGRP_ND_USEROPT	RTNLGRP_ND_USEROPT
++	RTNLGRP_PHONET_IFADDR,
++#define RTNLGRP_PHONET_IFADDR	RTNLGRP_PHONET_IFADDR
++	RTNLGRP_PHONET_ROUTE,
++#define RTNLGRP_PHONET_ROUTE	RTNLGRP_PHONET_ROUTE
++	RTNLGRP_DCB,
++#define RTNLGRP_DCB		RTNLGRP_DCB
++	RTNLGRP_IPV4_NETCONF,
++#define RTNLGRP_IPV4_NETCONF	RTNLGRP_IPV4_NETCONF
++	RTNLGRP_IPV6_NETCONF,
++#define RTNLGRP_IPV6_NETCONF	RTNLGRP_IPV6_NETCONF
++	RTNLGRP_MDB,
++#define RTNLGRP_MDB		RTNLGRP_MDB
++	RTNLGRP_MPLS_ROUTE,
++#define RTNLGRP_MPLS_ROUTE	RTNLGRP_MPLS_ROUTE
++	RTNLGRP_NSID,
++#define RTNLGRP_NSID		RTNLGRP_NSID
++	RTNLGRP_MPLS_NETCONF,
++#define RTNLGRP_MPLS_NETCONF	RTNLGRP_MPLS_NETCONF
++	RTNLGRP_IPV4_MROUTE_R,
++#define RTNLGRP_IPV4_MROUTE_R	RTNLGRP_IPV4_MROUTE_R
++	RTNLGRP_IPV6_MROUTE_R,
++#define RTNLGRP_IPV6_MROUTE_R	RTNLGRP_IPV6_MROUTE_R
++	RTNLGRP_NEXTHOP,
++#define RTNLGRP_NEXTHOP		RTNLGRP_NEXTHOP
++	RTNLGRP_BRVLAN,
++#define RTNLGRP_BRVLAN		RTNLGRP_BRVLAN
++	__RTNLGRP_MAX
++};
++#define RTNLGRP_MAX	(__RTNLGRP_MAX - 1)
++
++/* TC action piece */
++struct tcamsg {
++	unsigned char	tca_family;
++	unsigned char	tca__pad1;
++	unsigned short	tca__pad2;
++};
++
++enum {
++	TCA_ROOT_UNSPEC,
++	TCA_ROOT_TAB,
++#define TCA_ACT_TAB TCA_ROOT_TAB
++#define TCAA_MAX TCA_ROOT_TAB
++	TCA_ROOT_FLAGS,
++	TCA_ROOT_COUNT,
++	TCA_ROOT_TIME_DELTA, /* in msecs */
++	__TCA_ROOT_MAX,
++#define	TCA_ROOT_MAX (__TCA_ROOT_MAX - 1)
++};
++
++#define TA_RTA(r)  ((struct rtattr*)(((char*)(r)) + NLMSG_ALIGN(sizeof(struct tcamsg))))
++#define TA_PAYLOAD(n) NLMSG_PAYLOAD(n,sizeof(struct tcamsg))
++/* tcamsg flags stored in attribute TCA_ROOT_FLAGS
++ *
++ * TCA_FLAG_LARGE_DUMP_ON user->kernel to request for larger than TCA_ACT_MAX_PRIO
++ * actions in a dump. All dump responses will contain the number of actions
++ * being dumped stored in for user app's consumption in TCA_ROOT_COUNT
++ *
++ */
++#define TCA_FLAG_LARGE_DUMP_ON		(1 << 0)
++
++/* New extended info filters for IFLA_EXT_MASK */
++#define RTEXT_FILTER_VF		(1 << 0)
++#define RTEXT_FILTER_BRVLAN	(1 << 1)
++#define RTEXT_FILTER_BRVLAN_COMPRESSED	(1 << 2)
++#define	RTEXT_FILTER_SKIP_STATS	(1 << 3)
++#define RTEXT_FILTER_MRP	(1 << 4)
++
++/* End of information exported to user level */
++
++
++
++#endif /* _UAPI__LINUX_RTNETLINK_H */
+diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+index 5f9abed3e226..95d4f0294bbb 100644
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@ -172,6 +172,15 @@ $(BPF_IN_SHARED): force elfdep zdep bpfdep $(BPF_HELPER_DEFS)
+ 	@(test -f ../../include/uapi/linux/if_xdp.h -a -f ../../../include/uapi/linux/if_xdp.h && ( \
+ 	(diff -B ../../include/uapi/linux/if_xdp.h ../../../include/uapi/linux/if_xdp.h >/dev/null) || \
+ 	echo "Warning: Kernel ABI header at 'tools/include/uapi/linux/if_xdp.h' differs from latest version at 'include/uapi/linux/if_xdp.h'" >&2 )) || true
++	@(test -f ../../include/uapi/linux/rtnetlink.h -a -f ../../../include/uapi/linux/rtnetlink.h && ( \
++	(diff -B ../../include/uapi/linux/rtnetlink.h ../../../include/uapi/linux/rtnetlink.h >/dev/null) || \
++	echo "Warning: Kernel ABI header at 'tools/include/uapi/linux/rtnetlink.h' differs from latest version at 'include/uapi/linux/rtnetlink.h'" >&2 )) || true
++	@(test -f ../../include/uapi/linux/if_addr.h -a -f ../../../include/uapi/linux/if_addr.h && ( \
++	(diff -B ../../include/uapi/linux/if_addr.h ../../../include/uapi/linux/if_addr.h >/dev/null) || \
++	echo "Warning: Kernel ABI header at 'tools/include/uapi/linux/if_addr.h' differs from latest version at 'include/uapi/linux/if_addr.h'" >&2 )) || true
++	@(test -f ../../include/uapi/linux/neighbour.h -a -f ../../../include/uapi/linux/neighbour.h && ( \
++	(diff -B ../../include/uapi/linux/neighbour.h ../../../include/uapi/linux/neighbour.h >/dev/null) || \
++	echo "Warning: Kernel ABI header at 'tools/include/uapi/linux/neighbour.h' differs from latest version at 'include/uapi/linux/neighbour.h'" >&2 )) || true
+ 	$(Q)$(MAKE) $(build)=libbpf OUTPUT=$(SHARED_OBJDIR) CFLAGS="$(CFLAGS) $(SHLIB_FLAGS)"
+ 
+ $(BPF_IN_STATIC): force elfdep zdep bpfdep $(BPF_HELPER_DEFS)
+-- 
+2.29.0.rc1.297.gfa9743e501-goog
 
-static void handle_signal(int sig, siginfo_t *info, void *uctx) {
-  printf("signal handler invoked\n");
-}
-
-int main(void) {
-  setbuf(stdout, NULL);
-
-  shared =3D mmap(NULL, 0x1000, PROT_READ|PROT_WRITE,
-                MAP_ANONYMOUS|MAP_SHARED, -1, 0);
-  if (shared =3D=3D MAP_FAILED)
-    err(1, "mmap");
-  shared->seccomp_fd =3D -1;
-
-  /* glibc's clone() wrapper doesn't support fork()-style usage */
-  pid_t child =3D syscall(__NR_clone, CLONE_FILES|SIGCHLD,
-                        NULL, NULL, NULL, 0);
-  if (child =3D=3D -1) err(1, "clone");
-  if (child =3D=3D 0) {
-    /* don't outlive the parent */
-    prctl(PR_SET_PDEATHSIG, SIGKILL);
-    if (getppid() =3D=3D 1) exit(0);
-
-    prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-    struct sock_filter insns[] =3D {
-      BPF_STMT(BPF_LD|BPF_W|BPF_ABS, offsetof(struct seccomp_data, nr)),
-      BPF_JUMP(BPF_JMP|BPF_JEQ|BPF_K, __NR_pause, 0, 1),
-      BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_USER_NOTIF),
-      BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ALLOW)
-    };
-    struct sock_fprog prog =3D {
-      .len =3D sizeof(insns)/sizeof(insns[0]),
-      .filter =3D insns
-    };
-    int seccomp_ret =3D syscall(__NR_seccomp, SECCOMP_SET_MODE_FILTER,
-                              SECCOMP_FILTER_FLAG_NEW_LISTENER, &prog);
-    if (seccomp_ret < 0)
-      err(1, "install");
-    printf("installed seccomp: fd %d\n", seccomp_ret);
-
-    __atomic_store(&shared->seccomp_fd, &seccomp_ret, __ATOMIC_RELEASE);
-    int futex_ret =3D syscall(__NR_futex, &shared->seccomp_fd, FUTEX_WAKE,
-                            INT_MAX, NULL, NULL, 0);
-    printf("woke %d waiters\n", futex_ret);
-
-    struct sigaction act =3D {
-      .sa_sigaction =3D handle_signal,
-      .sa_flags =3D SA_RESTART|SA_SIGINFO
-    };
-    if (sigaction(SIGUSR1, &act, NULL))
-      err(1, "sigaction");
-
-    pause();
-    perror("pause returned");
-    exit(0);
-  }
-
-  int futex_ret =3D syscall(__NR_futex, &shared->seccomp_fd, FUTEX_WAIT,
-                          -1, NULL, NULL, 0);
-  if (futex_ret =3D=3D -1 && errno !=3D EAGAIN)
-    err(1, "futex wait");
-  int fd =3D __atomic_load_n(&shared->seccomp_fd, __ATOMIC_ACQUIRE);
-  printf("child installed seccomp fd %d\n", fd);
-
-  sleep(1);
-  printf("going to send SIGUSR1...\n");
-  kill(child, SIGUSR1);
-  sleep(1);
-
-  exit(0);
-}
-user@vm:~/test/seccomp-notify-interrupt$ gcc -o
-seccomp-notify-interrupt seccomp-notify-interrupt.c -Wall
-user@vm:~/test/seccomp-notify-interrupt$ strace -f
-./seccomp-notify-interrupt >/dev/null
-execve("./seccomp-notify-interrupt", ["./seccomp-notify-interrupt"],
-0x7ffcb31a0d08 /* 42 vars */) =3D 0
-brk(NULL)                               =3D 0x5565864b2000
-access("/etc/ld.so.preload", R_OK)      =3D -1 ENOENT (No such file or dire=
-ctory)
-openat(AT_FDCWD, "/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) =3D 3
-fstat(3, {st_mode=3DS_IFREG|0644, st_size=3D89296, ...}) =3D 0
-mmap(NULL, 89296, PROT_READ, MAP_PRIVATE, 3, 0) =3D 0x7f7e688e7000
-close(3)                                =3D 0
-openat(AT_FDCWD, "/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) =3D=
- 3
-read(3, "\177ELF\2\1\1\3\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\260A\2\0\0\0\0\0"..=
-.,
-832) =3D 832
-fstat(3, {st_mode=3DS_IFREG|0755, st_size=3D1824496, ...}) =3D 0
-mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1,
-0) =3D 0x7f7e688e5000
-mmap(NULL, 1837056, PROT_READ, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) =3D 0x7f7e6=
-8724000
-mprotect(0x7f7e68746000, 1658880, PROT_NONE) =3D 0
-mmap(0x7f7e68746000, 1343488, PROT_READ|PROT_EXEC,
-MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x22000) =3D 0x7f7e68746000
-mmap(0x7f7e6888e000, 311296, PROT_READ,
-MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x16a000) =3D 0x7f7e6888e000
-mmap(0x7f7e688db000, 24576, PROT_READ|PROT_WRITE,
-MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1b6000) =3D 0x7f7e688db000
-mmap(0x7f7e688e1000, 14336, PROT_READ|PROT_WRITE,
-MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) =3D 0x7f7e688e1000
-close(3)                                =3D 0
-arch_prctl(ARCH_SET_FS, 0x7f7e688e6500) =3D 0
-mprotect(0x7f7e688db000, 16384, PROT_READ) =3D 0
-mprotect(0x556585183000, 4096, PROT_READ) =3D 0
-mprotect(0x7f7e68924000, 4096, PROT_READ) =3D 0
-munmap(0x7f7e688e7000, 89296)           =3D 0
-mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED|MAP_ANONYMOUS, -1,
-0) =3D 0x7f7e688fc000
-clone(child_stack=3DNULL, flags=3DCLONE_FILES|SIGCHLD) =3D 2558
-futex(0x7f7e688fc000, FUTEX_WAIT, 4294967295, NULLstrace: Process 2558 atta=
-ched
- <unfinished ...>
-[pid  2558] prctl(PR_SET_PDEATHSIG, SIGKILL) =3D 0
-[pid  2558] getppid()                   =3D 2557
-[pid  2558] prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0) =3D 0
-[pid  2558] seccomp(SECCOMP_SET_MODE_FILTER, 0x8 /*
-SECCOMP_FILTER_FLAG_??? */, {len=3D4, filter=3D0x7ffdf7cc9b50}) =3D 3
-[pid  2558] write(1, "installed seccomp: fd 3\n", 24) =3D 24
-[pid  2558] futex(0x7f7e688fc000, FUTEX_WAKE, 2147483647 <unfinished ...>
-[pid  2557] <... futex resumed> )       =3D 0
-[pid  2558] <... futex resumed> )       =3D 1
-[pid  2558] write(1, "woke 1 waiters\n", 15) =3D 15
-[pid  2557] write(1, "child installed seccomp fd 3\n", 29) =3D 29
-[pid  2558] rt_sigaction(SIGUSR1, {sa_handler=3D0x556585181215,
-sa_mask=3D[], sa_flags=3DSA_RESTORER|SA_RESTART|SA_SIGINFO,
-sa_restorer=3D0x7f7e6875b840}, NULL, 8) =3D 0
-[pid  2557] nanosleep({tv_sec=3D1, tv_nsec=3D0},  <unfinished ...>
-[pid  2558] pause( <unfinished ...>
-[pid  2557] <... nanosleep resumed> 0x7ffdf7cc9b10) =3D 0
-[pid  2557] write(1, "going to send SIGUSR1...", 24) =3D 24
-[pid  2557] write(1, "\n", 1)           =3D 1
-[pid  2557] kill(2558, SIGUSR1)         =3D 0
-[pid  2557] nanosleep({tv_sec=3D1, tv_nsec=3D0},  <unfinished ...>
-[pid  2558] <... pause resumed> )       =3D ? ERESTARTSYS (To be
-restarted if SA_RESTART is set)
-[pid  2558] --- SIGUSR1 {si_signo=3DSIGUSR1, si_code=3DSI_USER,
-si_pid=3D2557, si_uid=3D1000} ---
-[pid  2558] write(1, "signal handler invoked", 22) =3D 22
-[pid  2558] write(1, "\n", 1)           =3D 1
-[pid  2558] rt_sigreturn({mask=3D[]})     =3D 34
-[pid  2558] pause( <unfinished ...>
-[pid  2557] <... nanosleep resumed> 0x7ffdf7cc9b10) =3D 0
-[pid  2557] exit_group(0)               =3D ?
-[pid  2557] +++ exited with 0 +++
-<... pause resumed>)                    =3D ?
-+++ killed by SIGKILL +++
-user@vm:~/test/seccomp-notify-interrupt$
-
-
-[...]
-> >>           event  is  available.
-> >
-> > Maybe we should note here that you can use the multi-fd-polling APIs
-> > (select/poll/epoll) instead, and that if the notification goes away
-> > before you call SECCOMP_IOCTL_NOTIF_RECV, the ioctl will return
-> > -ENOENT instead of blocking, and therefore as long as nobody else
-> > reads from the same fd, you can assume that after the fd reports as
-> > readable, you can call SECCOMP_IOCTL_NOTIF_RECV once without blocking.
->
-> I'd rather not add this info in the overview section, which is
-> already longer than I would like. But I did add some details
-> in NOTES:
->
-> [[
->        The file descriptor returned when seccomp(2) is employed with  the
->        SECCOMP_FILTER_FLAG_NEW_LISTENER   flag  can  be  monitored  using
->        poll(2), epoll(7), and select(2).  When a notification is pending,
->        these  interfaces  indicate  that the file descriptor is readable.
->        Following    such    an    indication,    a    subsequent     SEC=
-=E2=80=90
->        COMP_IOCTL_NOTIF_RECV  ioctl(2)  will  not block, returning either
->        information about a notification or else failing  with  the  error
->        EINTR  if  the  target  process has been killed by a signal or its
->        system call has been interrupted by a signal handler.
-> ]]
->
-> Okay?
-
-Sounds good.
-
-[...]
-> >>           bilities to perform the mount operation.
-> >>
-> >>        8. The supervisor then sends a response to the notification.  T=
-he
-> >>           information  in  this  response  is used by the kernel to co=
-n=E2=80=90
-> >>           struct a return value for the target process's system call a=
-nd
-> >>           provide a value that will be assigned to the errno variable =
-of
-> >>           the target process.
-> >>
-> >>           The  response  is  sent  using  the   SECCOMP_IOCTL_NOTIF_RE=
-CV
-> >>           ioctl(2)   operation,   which  is  used  to  transmit  a  se=
-c=E2=80=90
-> >>           comp_notif_resp  structure  to  the  kernel.   This  structu=
-re
-> >>           includes  a  cookie  value that the supervisor obtained in t=
-he
-> >>           seccomp_notif    structure    returned     by     the     SE=
-C=E2=80=90
-> >>           COMP_IOCTL_NOTIF_RECV operation.  This cookie value allows t=
-he
-> >>           kernel to associate the response with the target process.
-> >
-> > (unless if the target thread entered a signal handler or was killed in
-> > the meantime)
->
-> Yes, but I think I have this adequately covered in the errors described
-> later in the page for SECCOMP_IOCTL_NOTIF_RECV. (I have now added the
-> target-process-terminated case to the orror text.)
->
->               ENOENT The blocked system  call  in  the  target  has  been
->                      interrupted  by  a  signal  handler  or  the  target
->                      process has terminated.
->
-> Is that sufficient?
-
-Ah, right.
-
-[...]
-> >>               ENOENT The  target  process  was killed by a signal as t=
-he
-> >>                      notification information was being generated.
-> >
-> > Not just killed, interruption with a signal handler has the same effect=
-.
->
-> Ah yes! Thanks. I added that as well.
->
-> [[
->               ENOENT The target thread was killed  by  a  signal  as  the
->                      notification information was being generated, or the
->                      target's (blocked) system call was interrupted by  a
->                      signal handler.
-> ]]
->
-> Okay?
-
-Yeah, sounds good.
-
-[...]
-> >>               In the above scenario, the risk is that the supervisor m=
-ay
-> >>               try to access the memory of a process other than the  ta=
-r=E2=80=90
-> >>               get.   This  race  can be avoided by following the call =
-to
-> >>               open with a SECCOMP_IOCTL_NOTIF_ID_VALID operation to ve=
-r=E2=80=90
-> >>               ify  that  the  process that generated the notification =
-is
-> >>               still alive.  (Note that  if  the  target  process  subs=
-e=E2=80=90
-> >>               quently  terminates, its PID won't be reused because the=
-re
-> >
-> > That's wrong, the PID can be reused, but the /proc/$pid directory is
-> > internally not associated with the numeric PID, but, conceptually
-> > speaking, with a specific incarnation of the PID, or something like
-> > that. (Actually, it is associated with the "struct pid", which is not
-> > reused, instead of the numeric PID.)
->
-> Thanks. I simplified the last sentence of the paragraph:
->
->               In  the above scenario, the risk is that the supervisor may
->               try to access the memory of a process other than  the  tar=
-=E2=80=90
->               get.   This  race  can  be avoided by following the call to
->               open(2) with a  SECCOMP_IOCTL_NOTIF_ID_VALID  operation  to
->               verify  that the process that generated the notification is
->               still alive.  (Note that if the target terminates after the
->               latter  step, a subsequent read(2) from the file descriptor
->               will return 0, indicating end of file.)
->
-> I think that's probably enough detail.
-
-Maybe make that "may return 0" instead of "will return 0" - reading
-from /proc/$pid/mem can only return 0 in the following cases AFAICS:
-
-1. task->mm was already gone at open() time
-2. mm->mm_users has dropped to zero (the mm only has lazytlb users;
-   page tables and VMAs are being blown away or have been blown away)
-3. the syscall was called with length 0
-
-When a process has gone away, normally mm->mm_users will drop to zero,
-but someone else could theoretically still be holding a reference to
-the mm (e.g. someone else in the middle of accessing /proc/$pid/mem).
-(Such references should normally not be very long-lived though.)
-
-Additionally, in the unlikely case that the OOM killer just chomped
-through the page tables of the target process, I think the read will
-return -EIO (same error as if the address was simply unmapped) if the
-address is within a non-shared mapping. (Maybe that's something procfs
-could do better...)
-
-[...]
-> >> NOTES
-> >>        The file descriptor returned when seccomp(2) is employed with t=
-he
-> >>        SECCOMP_FILTER_FLAG_NEW_LISTENER  flag  can  be  monitored  usi=
-ng
-> >>        poll(2), epoll(7), and select(2).  When a notification  is  pen=
-d=E2=80=90
-> >>        ing,  these interfaces indicate that the file descriptor is rea=
-d=E2=80=90
-> >>        able.
-> >
-> > We should probably also point out somewhere that, as
-> > include/uapi/linux/seccomp.h says:
-> >
-> >  * Similar precautions should be applied when stacking SECCOMP_RET_USER=
-_NOTIF
-> >  * or SECCOMP_RET_TRACE. For SECCOMP_RET_USER_NOTIF filters acting on t=
-he
-> >  * same syscall, the most recently added filter takes precedence. This =
-means
-> >  * that the new SECCOMP_RET_USER_NOTIF filter can override any
-> >  * SECCOMP_IOCTL_NOTIF_SEND from earlier filters, essentially allowing =
-all
->
-> My takeaway from Chritian's comments is that this comment in the kernel
-> source is partially wrong, since it is not possible to install multiple
-> filters with SECCOMP_RET_USER_NOTIF, right?
-
-Yeah. (Well, AFAICS technically, you can add more filters that return
-SECCOMP_RET_USER_NOTIF, but when a filter returns that without having
-a notifier fd attached, seccomp blocks the syscall with -ENOSYS; it
-won't use the notifier fd attached to a different filter in the
-chain.)
-
-> >  * such filtered syscalls to be executed by sending the response
-> >  * SECCOMP_USER_NOTIF_FLAG_CONTINUE. Note that SECCOMP_RET_TRACE can eq=
-ually
-> >  * be overriden by SECCOMP_USER_NOTIF_FLAG_CONTINUE.
-> >
-> > In other words, from a security perspective, you must assume that the
-> > target process can bypass any SECCOMP_RET_USER_NOTIF (or
-> > SECCOMP_RET_TRACE) filters unless it is completely prohibited from
-> > calling seccomp().
->
-> Drawing on text from Chrstian's comment in seccomp.h and Kees's mail,
-> I added the following in NOTES:
->
->    Design goals; use of SECCOMP_USER_NOTIF_FLAG_CONTINUE
->        The intent of the user-space notification feature is to allow sys=
-=E2=80=90
->        tem calls to be performed on behalf of the target.   The  target's
->        system  call should either be handled by the supervisor or allowed
->        to continue normally in the kernel (where standard security  poli=
-=E2=80=90
->        cies will be applied).
->
->        Note well: this mechanism must not be used to make security policy
->        decisions about the system call, which would be  inherently  race-
->        prone for reasons described next.
->
->        The  SECCOMP_USER_NOTIF_FLAG_CONTINUE  flag must be used with cau=
-=E2=80=90
->        tion.  If set by the supervisor, the  target's  system  call  will
->        continue.   However,  there  is  a time-of-check, time-of-use race
->        here, since an attacker could exploit the interval of  time  where
->        the  target  is  blocked  waiting on the "continue" response to do
->        things such as rewriting the system call arguments.
->
->        Note furthermore that a user-space notifier can be bypassed if the
->        existing  filters  allow  the  use  of  seccomp(2)  or prctl(2) to
->        install a filter that returns an action value with a higher prece=
-=E2=80=90
->        dence than SECCOMP_RET_USER_NOTIF (see seccomp(2)).
->
->        It  should  thus  be  absolutely clear that the seccomp user-space
->        notification mechanism can not be used  to  implement  a  security
->        policy!   It  should  only  ever be used in scenarios where a more
->        privileged process supervises the system calls of a lesser  privi=
-=E2=80=90
->        leged  target  to get around kernel-enforced security restrictions
->        when the supervisor deems this safe.  In other words, in order  to
->        continue a system call, the supervisor should be sure that another
->        security mechanism or the kernel itself  will  sufficiently  block
->        the  system  call  if  its  arguments  are  rewritten to something
->        unsafe.
->
-> Seem okay?
-
-Yeah, sounds good.
-
-[...]
-> >>            if (s =3D=3D 0) {
-> >>                fprintf(stderr, "\tS: read() of /proc/PID/mem "
-> >>                        "returned 0 (EOF)\n");
-> >>                exit(EXIT_FAILURE);
-> >>            }
-> >>
-> >>            if (close(procMemFd) =3D=3D -1)
-> >>                errExit("close-/proc/PID/mem");
-> >
-> > We should probably make sure here that the value we read is actually
-> > NUL-terminated?
->
-> So, I was curious about that point also. But, (why) are we not
-> guaranteed that it will be NUL-terminated?
-
-Because it's random memory filled by another process, which we don't
-necessarily trust. While seccomp notifiers aren't usable for applying
-*extra* security restrictions, the supervisor will still often be more
-privileged than the supervised process.
-
-[...]
-> >>            /* Discover the sizes of the structures that are used to re=
-ceive
-> >>               notifications and send notification responses, and alloc=
-ate
-> >>               buffers of those sizes. */
-> >>
-> >>            if (seccomp(SECCOMP_GET_NOTIF_SIZES, 0, &sizes) =3D=3D -1)
-> >>                errExit("\tS: seccomp-SECCOMP_GET_NOTIF_SIZES");
-> >>
-> >>            struct seccomp_notif *req =3D malloc(sizes.seccomp_notif);
-> >>            if (req =3D=3D NULL)
-> >>                errExit("\tS: malloc");
-> >>
-> >>            struct seccomp_notif_resp *resp =3D malloc(sizes.seccomp_no=
-tif_resp);
-> >
-> > This should probably do something like max(sizes.seccomp_notif_resp,
-> > sizeof(struct seccomp_notif_resp)) in case the program was built
-> > against new UAPI headers that make struct seccomp_notif_resp big, but
-> > is running under an old kernel where that struct is still smaller?
->
-> I'm confused. Why? I mean, if the running kernel says that it expects
-> a buffer of a certain size, and we allocate a buffer of that size,
-> what's the problem?
-
-Because in userspace, we cast the result of malloc() to a "struct
-seccomp_notif_resp *". If the kernel tells us that it expects a size
-smaller than sizeof(struct seccomp_notif_resp), then we end up with a
-pointer to a struct that consists partly of allocated memory, partly
-of out-of-bounds memory, which is generally a bad idea - I'm not sure
-whether the C standard permits that. And if userspace then e.g.
-decides to access some member of that struct that is beyond what the
-kernel thinks is the struct size, we get actual OOB memory accesses.
