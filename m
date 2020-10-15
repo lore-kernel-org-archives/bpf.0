@@ -2,65 +2,45 @@ Return-Path: <SRS0=kPz0=DW=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 66B53C433DF
-	for <bpf@archiver.kernel.org>; Thu, 15 Oct 2020 18:53:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFCAFC433E7
+	for <bpf@archiver.kernel.org>; Thu, 15 Oct 2020 18:56:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 12FB522255
-	for <bpf@archiver.kernel.org>; Thu, 15 Oct 2020 18:53:33 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eOe65PlC"
+	by mail.kernel.org (Postfix) with ESMTP id 97E0C21527
+	for <bpf@archiver.kernel.org>; Thu, 15 Oct 2020 18:56:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1602788210;
+	bh=h9H7MfGkVZEtGRU8G3mXGwKdxB+rvRRijM3a/AJ1TF0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=qquXrtMOcN2Tlg688khXl36O0d3Zowgd0jqUqK6XrxVXfeYlVB5NPDB2tNYuNZpP7
+	 uHqMpQtRJYRHNGpSOleG7b3zbPAk3neEbuJRiYyGFUNzvTgimwCdFJVHhXHjHkvSlR
+	 7FwIrsnIdb2whAUhhlYsPGadLo9yqEbJRom+hgqI=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391069AbgJOSxW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 15 Oct 2020 14:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391065AbgJOSxW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 15 Oct 2020 14:53:22 -0400
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC0EC061755;
-        Thu, 15 Oct 2020 11:53:21 -0700 (PDT)
-Received: by mail-lj1-x241.google.com with SMTP id f21so4218251ljh.7;
-        Thu, 15 Oct 2020 11:53:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cCCE4YtFTVJq/2VDGFn6Aptk+OGDPex4RVpqANY0ajc=;
-        b=eOe65PlCHYMlKyLKE79QtpMiCnRCGzMfDhTlnuTXa3H6yASakhYUZzKdgS7quLTmr7
-         +LzLFH0sVg+A7dl+B7QH30Qal6DNSnBaLP1NFvF6okphNxdvpD8grAtKqPSBj8+ziAnm
-         tXXryoWVNq2YMr3nwqgGwhLIb+B9N2JrjSapo3J4C+fb1OW/vSBPjBVuTJ9jA39uAEfP
-         0e02tiBLTlzMRJuywWzbU6TPPfKj2wFW2hibwcU4qXMx3UQ6JsXeHrt8ftwWe0wO7VHM
-         xxPHSNUurTX4iX68sOBEIy5B/Ocelnj4IarlZhbutkAfn8aFGCdbSK7YuMFsDu8iUV2t
-         RDFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cCCE4YtFTVJq/2VDGFn6Aptk+OGDPex4RVpqANY0ajc=;
-        b=ImkE5J/J8zbpr4rffVsxDXyqvIldd/l9GIuelQmiQjudqL5Nwj1MFj+6I3TdK08KTS
-         yyGUBoQCzDNOXf9noVOPxTkBXuvUxqsN8soKu2Yo+ZP42w3agd6ib00kESkvZTU6RiQU
-         hBxgjtDHZkAPKafpjM2wujWMSfyAUnUNs/Ij8Xd+kLkpatXt7UIX7pqqoRl3SwrXWNKE
-         vG0ZJrJg7vHAXp+FrDQRokb+Y9iFziae/+w49L7XFQchrz3VbJolYvqtFbPmas3QlUvU
-         2FwW79JgTngMPIyUGu2rC3MUQfkIgsQ4EZyPrA9GaeylL48XlpFct8qXpXhiDJqF03ky
-         /Inw==
-X-Gm-Message-State: AOAM5301zRW0KrEPZC1GFax4Id7pgk/ReScMs2q8Q9A4+KM+PCD1HTtd
-        Fsntcw/oKvus+2KTlDBg6hbkY/F4edyIAEq2vtE=
-X-Google-Smtp-Source: ABdhPJxnj+CpCo+jWWUGnPD/LssgI2suQ52wVLqo0qvlncvNzhCqO8GhZL4RmjkihtMJC9zkc/uQxQgGS8d8ruApKoQ=
-X-Received: by 2002:a2e:a162:: with SMTP id u2mr55026ljl.283.1602788000220;
- Thu, 15 Oct 2020 11:53:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201014091749.25488-1-yuehaibing@huawei.com> <20201015093748.587a72b5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201015093748.587a72b5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 15 Oct 2020 11:53:08 -0700
-Message-ID: <CAADnVQKJ=iDMiJpELmuATsdf2vxGJ=Y9r+vjJG6m4BDRNPmP3g@mail.gmail.com>
-Subject: Re: [PATCH] bpfilter: Fix build error with CONFIG_BPFILTER_UMH
-To:     Jakub Kicinski <kuba@kernel.org>
+        id S2391238AbgJOS4u (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 15 Oct 2020 14:56:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45722 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391214AbgJOS4s (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 15 Oct 2020 14:56:48 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E5A2D22203;
+        Thu, 15 Oct 2020 18:56:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1602788207;
+        bh=h9H7MfGkVZEtGRU8G3mXGwKdxB+rvRRijM3a/AJ1TF0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Gny40sOvk+IJG+h0WMba5SeHcPxvb/n+QcR/fC5gh9A+4V6BqvbfCGfrJUBtGRZFp
+         sLhqar70zwGwu3+pNMWW+yMb7KdME2S5ZFiquOsS82g4E2JNqPu9g/bhsSXjuNGO1v
+         9azo058IoVy8sFBmz1zNA4/2xX3SOYw184D/ARRQ=
+Date:   Thu, 15 Oct 2020 11:56:43 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Cc:     YueHaibing <yuehaibing@huawei.com>,
         "David S. Miller" <davem@davemloft.net>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -73,30 +53,44 @@ Cc:     YueHaibing <yuehaibing@huawei.com>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Network Development <netdev@vger.kernel.org>,
         bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] bpfilter: Fix build error with CONFIG_BPFILTER_UMH
+Message-ID: <20201015115643.3a4d4820@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <CAADnVQKJ=iDMiJpELmuATsdf2vxGJ=Y9r+vjJG6m4BDRNPmP3g@mail.gmail.com>
+References: <20201014091749.25488-1-yuehaibing@huawei.com>
+        <20201015093748.587a72b5@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <CAADnVQKJ=iDMiJpELmuATsdf2vxGJ=Y9r+vjJG6m4BDRNPmP3g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Oct 15, 2020 at 9:37 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Wed, 14 Oct 2020 17:17:49 +0800 YueHaibing wrote:
-> > IF CONFIG_BPFILTER_UMH is set, building fails:
+On Thu, 15 Oct 2020 11:53:08 -0700 Alexei Starovoitov wrote:
+> On Thu, Oct 15, 2020 at 9:37 AM Jakub Kicinski <kuba@kernel.org> wrote:
+> > On Wed, 14 Oct 2020 17:17:49 +0800 YueHaibing wrote:  
+> > > IF CONFIG_BPFILTER_UMH is set, building fails:
+> > >
+> > > In file included from /usr/include/sys/socket.h:33:0,
+> > >                  from net/bpfilter/main.c:6:
+> > > /usr/include/bits/socket.h:390:10: fatal error: asm/socket.h: No such file or directory
+> > >  #include <asm/socket.h>
+> > >           ^~~~~~~~~~~~~~
+> > > compilation terminated.
+> > > scripts/Makefile.userprogs:43: recipe for target 'net/bpfilter/main.o' failed
+> > > make[2]: *** [net/bpfilter/main.o] Error 1
+> > >
+> > > Add missing include path to fix this.
+> > >
+> > > Signed-off-by: YueHaibing <yuehaibing@huawei.com>  
 > >
-> > In file included from /usr/include/sys/socket.h:33:0,
-> >                  from net/bpfilter/main.c:6:
-> > /usr/include/bits/socket.h:390:10: fatal error: asm/socket.h: No such file or directory
-> >  #include <asm/socket.h>
-> >           ^~~~~~~~~~~~~~
-> > compilation terminated.
-> > scripts/Makefile.userprogs:43: recipe for target 'net/bpfilter/main.o' failed
-> > make[2]: *** [net/bpfilter/main.o] Error 1
-> >
-> > Add missing include path to fix this.
-> >
-> > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
->
-> Applied, thank you!
+> > Applied, thank you!  
+> 
+> Please revert. The patch makes no sense.
 
-Please revert. The patch makes no sense.
-Also please don't take bpf patches.
+How so? It's using in-tree headers instead of system ones.
+Many samples seem to be doing the same thing.
+
+> Also please don't take bpf patches.
+
+You had it marked it as netdev in your patchwork :/
