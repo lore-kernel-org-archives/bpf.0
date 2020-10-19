@@ -7,49 +7,49 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D9AF7C433E7
-	for <bpf@archiver.kernel.org>; Mon, 19 Oct 2020 19:42:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD9E4C43467
+	for <bpf@archiver.kernel.org>; Mon, 19 Oct 2020 19:42:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 710B122365
-	for <bpf@archiver.kernel.org>; Mon, 19 Oct 2020 19:42:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 80EB522365
+	for <bpf@archiver.kernel.org>; Mon, 19 Oct 2020 19:42:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ccffgv+F"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="p5UT42tS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731095AbgJSTmZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 19 Oct 2020 15:42:25 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:16884 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731090AbgJSTmY (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 19 Oct 2020 15:42:24 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09JJfxDe032551
-        for <bpf@vger.kernel.org>; Mon, 19 Oct 2020 12:42:24 -0700
+        id S1731214AbgJSTmd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 19 Oct 2020 15:42:33 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:9430 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731272AbgJSTmb (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 19 Oct 2020 15:42:31 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09JJchjK025241
+        for <bpf@vger.kernel.org>; Mon, 19 Oct 2020 12:42:29 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-type : content-transfer-encoding; s=facebook;
- bh=ys6gWfOq1d44sbwUOmaO+IHnwyjaoWpQqi+nWnx1jgk=;
- b=ccffgv+Fra8XierfZqm+LXF06e+2VUvvinCEMhtKOpugYen86m+kADi3GMtalrroIxHm
- rj5G+gktiKGh5hQ7642sld9e/yohen/FS9NDkoiWrNGrqXGxYxYgiDPCRliJaWHxA5YN
- 3iPYGVONgRHnLFYpcFWWqI9FaV3I1vvEfIo= 
+ bh=nRTRnVV23/hgDHMf8uKxDVRGLfawh+dD8m9mZng5Yl0=;
+ b=p5UT42tSYyLpLJUnGcQU7XjNlzgsJOioIsysFr2KYGCHH4h4ENUGz4iNyyasFq+zoK3D
+ m2n7rM4jkNvhHNYbC6gARZp/RQWWurxs4NrJrCuEocEIimjrAXq6BpLnZsWMonoIZI9i
+ yAMSubyFAykR6kZr4QPzwnkQsPQfMrIkers= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 348gp3xmb8-1
+        by mx0a-00082601.pphosted.com with ESMTP id 347xef9dq4-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 19 Oct 2020 12:42:24 -0700
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 19 Oct 2020 12:42:29 -0700
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 19 Oct 2020 12:42:22 -0700
+ 15.1.1979.3; Mon, 19 Oct 2020 12:42:27 -0700
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 3081C2946269; Mon, 19 Oct 2020 12:42:19 -0700 (PDT)
+        id E51DB2946269; Mon, 19 Oct 2020 12:42:12 -0700 (PDT)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Hao Luo <haoluo@google.com>, <kernel-team@fb.com>,
         <netdev@vger.kernel.org>, Yonghong Song <yhs@fb.com>
-Subject: [PATCH bpf 2/3] bpf: selftest: Ensure the return value of bpf_skc_to helpers must be checked
-Date:   Mon, 19 Oct 2020 12:42:19 -0700
-Message-ID: <20201019194219.1051314-1-kafai@fb.com>
+Subject: [PATCH bpf 1/3] bpf: Enforce id generation for all may-be-null register type
+Date:   Mon, 19 Oct 2020 12:42:12 -0700
+Message-ID: <20201019194212.1050855-1-kafai@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201019194206.1050591-1-kafai@fb.com>
 References: <20201019194206.1050591-1-kafai@fb.com>
@@ -59,78 +59,110 @@ Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
  definitions=2020-10-19_10:2020-10-16,2020-10-19 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 clxscore=1015
- suspectscore=13 adultscore=0 priorityscore=1501 bulkscore=0
- impostorscore=0 malwarescore=0 spamscore=0 lowpriorityscore=0 phishscore=0
- mlxlogscore=790 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010190132
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
+ lowpriorityscore=0 suspectscore=13 bulkscore=0 mlxlogscore=872
+ clxscore=1015 mlxscore=0 malwarescore=0 priorityscore=1501 spamscore=0
+ adultscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2010190132
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch tests:
+The commit af7ec1383361 ("bpf: Add bpf_skc_to_tcp6_sock() helper")
+introduces RET_PTR_TO_BTF_ID_OR_NULL and
+the commit eaa6bcb71ef6 ("bpf: Introduce bpf_per_cpu_ptr()")
+introduces RET_PTR_TO_MEM_OR_BTF_ID_OR_NULL.
+Note that for RET_PTR_TO_MEM_OR_BTF_ID_OR_NULL, the reg0->type
+could become PTR_TO_MEM_OR_NULL which is not covered by
+BPF_PROBE_MEM.
 
-int bpf_cls(struct __sk_buff *skb)
-{
-	/* REG_6: sk
-	 * REG_7: tp
-	 * REG_8: req_sk
-	 */
+The BPF_REG_0 will then hold a _OR_NULL pointer type. This _OR_NULL
+pointer type requires the bpf program to explicitly do a NULL check first=
+.
+After NULL check, the verifier will mark all registers having
+the same reg->id as safe to use.  However, the reg->id
+is not set for those new _OR_NULL return types.  One of the ways
+that may be wrong is, checking NULL for one btf_id typed pointer will
+end up validating all other btf_id typed pointers because
+all of them have id =3D=3D 0.  The later tests will exercise
+this path.
 
-	sk =3D skb->sk;
-	if (!sk)
-		return 0;
+To fix it and also avoid similar issue in the future, this patch
+moves the id generation logic out of each individual RET type
+test in check_helper_call().  Instead, it does one
+reg_type_may_be_null() test and then do the id generation
+if needed.
 
-	tp =3D bpf_skc_to_tcp_sock(sk);
-	req_sk =3D bpf_skc_to_tcp_request_sock(sk);
-	if (!req_sk)
-		return 0;
+This patch also adds a WARN_ON_ONCE in mark_ptr_or_null_reg()
+to catch future breakage.
 
-	/* !tp has not been tested, so verifier should reject. */
-	return *(__u8 *)tp;
-}
+The _OR_NULL pointer usage in the bpf_iter_reg.ctx_arg_info is
+fine because it just happens that the existing id generation after
+check_ctx_access() has covered it.  It is also using the
+reg_type_may_be_null() to decide if id generation is needed or not.
 
+Fixes: af7ec1383361 ("bpf: Add bpf_skc_to_tcp6_sock() helper")
+Fixes: eaa6bcb71ef6 ("bpf: Introduce bpf_per_cpu_ptr()")
+Cc: Yonghong Song <yhs@fb.com>
+Cc: Hao Luo <haoluo@google.com>
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- tools/testing/selftests/bpf/verifier/sock.c | 25 +++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ kernel/bpf/verifier.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/verifier/sock.c b/tools/testing/=
-selftests/bpf/verifier/sock.c
-index b1aac2641498..ce13ece08d51 100644
---- a/tools/testing/selftests/bpf/verifier/sock.c
-+++ b/tools/testing/selftests/bpf/verifier/sock.c
-@@ -631,3 +631,28 @@
- 	.prog_type =3D BPF_PROG_TYPE_SK_REUSEPORT,
- 	.result =3D ACCEPT,
- },
-+{
-+	"mark null check on return value of bpf_skc_to helpers",
-+	.insns =3D {
-+	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, offsetof(struct __sk_buff, sk=
-)),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
-+	BPF_EMIT_CALL(BPF_FUNC_skc_to_tcp_sock),
-+	BPF_MOV64_REG(BPF_REG_7, BPF_REG_0),
-+	BPF_MOV64_REG(BPF_REG_1, BPF_REG_6),
-+	BPF_EMIT_CALL(BPF_FUNC_skc_to_tcp_request_sock),
-+	BPF_MOV64_REG(BPF_REG_8, BPF_REG_0),
-+	BPF_JMP_IMM(BPF_JNE, BPF_REG_8, 0, 2),
-+	BPF_MOV64_IMM(BPF_REG_0, 0),
-+	BPF_EXIT_INSN(),
-+	BPF_LDX_MEM(BPF_B, BPF_REG_0, BPF_REG_7, 0),
-+	BPF_EXIT_INSN(),
-+	},
-+	.prog_type =3D BPF_PROG_TYPE_SCHED_CLS,
-+	.result =3D REJECT,
-+	.errstr =3D "invalid mem access",
-+	.result_unpriv =3D REJECT,
-+	.errstr_unpriv =3D "unknown func",
-+},
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 39d7f44e7c92..6200519582a6 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5133,24 +5133,19 @@ static int check_helper_call(struct bpf_verifier_=
+env *env, int func_id, int insn
+ 				regs[BPF_REG_0].id =3D ++env->id_gen;
+ 		} else {
+ 			regs[BPF_REG_0].type =3D PTR_TO_MAP_VALUE_OR_NULL;
+-			regs[BPF_REG_0].id =3D ++env->id_gen;
+ 		}
+ 	} else if (fn->ret_type =3D=3D RET_PTR_TO_SOCKET_OR_NULL) {
+ 		mark_reg_known_zero(env, regs, BPF_REG_0);
+ 		regs[BPF_REG_0].type =3D PTR_TO_SOCKET_OR_NULL;
+-		regs[BPF_REG_0].id =3D ++env->id_gen;
+ 	} else if (fn->ret_type =3D=3D RET_PTR_TO_SOCK_COMMON_OR_NULL) {
+ 		mark_reg_known_zero(env, regs, BPF_REG_0);
+ 		regs[BPF_REG_0].type =3D PTR_TO_SOCK_COMMON_OR_NULL;
+-		regs[BPF_REG_0].id =3D ++env->id_gen;
+ 	} else if (fn->ret_type =3D=3D RET_PTR_TO_TCP_SOCK_OR_NULL) {
+ 		mark_reg_known_zero(env, regs, BPF_REG_0);
+ 		regs[BPF_REG_0].type =3D PTR_TO_TCP_SOCK_OR_NULL;
+-		regs[BPF_REG_0].id =3D ++env->id_gen;
+ 	} else if (fn->ret_type =3D=3D RET_PTR_TO_ALLOC_MEM_OR_NULL) {
+ 		mark_reg_known_zero(env, regs, BPF_REG_0);
+ 		regs[BPF_REG_0].type =3D PTR_TO_MEM_OR_NULL;
+-		regs[BPF_REG_0].id =3D ++env->id_gen;
+ 		regs[BPF_REG_0].mem_size =3D meta.mem_size;
+ 	} else if (fn->ret_type =3D=3D RET_PTR_TO_MEM_OR_BTF_ID_OR_NULL ||
+ 		   fn->ret_type =3D=3D RET_PTR_TO_MEM_OR_BTF_ID) {
+@@ -5199,6 +5194,9 @@ static int check_helper_call(struct bpf_verifier_en=
+v *env, int func_id, int insn
+ 		return -EINVAL;
+ 	}
+=20
++	if (reg_type_may_be_null(regs[BPF_REG_0].type))
++		regs[BPF_REG_0].id =3D ++env->id_gen;
++
+ 	if (is_ptr_cast_function(func_id)) {
+ 		/* For release_reference() */
+ 		regs[BPF_REG_0].ref_obj_id =3D meta.ref_obj_id;
+@@ -7212,7 +7210,8 @@ static void mark_ptr_or_null_reg(struct bpf_func_st=
+ate *state,
+ 				 struct bpf_reg_state *reg, u32 id,
+ 				 bool is_null)
+ {
+-	if (reg_type_may_be_null(reg->type) && reg->id =3D=3D id) {
++	if (reg_type_may_be_null(reg->type) && reg->id =3D=3D id &&
++	    !WARN_ON_ONCE(!reg->id)) {
+ 		/* Old offset (both fixed and variable parts) should
+ 		 * have been known-zero, because we don't allow pointer
+ 		 * arithmetic on pointers that might be NULL.
 --=20
 2.24.1
 
