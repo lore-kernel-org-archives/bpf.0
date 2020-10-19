@@ -2,149 +2,221 @@ Return-Path: <SRS0=px7A=D2=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EEBDC4363A
-	for <bpf@archiver.kernel.org>; Mon, 19 Oct 2020 19:42:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C0461C433DF
+	for <bpf@archiver.kernel.org>; Mon, 19 Oct 2020 19:44:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D3C6122314
-	for <bpf@archiver.kernel.org>; Mon, 19 Oct 2020 19:42:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3FED5222EA
+	for <bpf@archiver.kernel.org>; Mon, 19 Oct 2020 19:44:46 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vqIoQqfP"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ISs6FC65"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731275AbgJSTmo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 19 Oct 2020 15:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731241AbgJSTm3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 19 Oct 2020 15:42:29 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088E7C0613DE
-        for <bpf@vger.kernel.org>; Mon, 19 Oct 2020 12:42:28 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id t18so337967plo.1
-        for <bpf@vger.kernel.org>; Mon, 19 Oct 2020 12:42:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=no6WOfZDuAXhTDfVia9Vunkz4L7BthY0F8m0jo4//vs=;
-        b=vqIoQqfPtCUD7ceHGEmbvFqqUZd/9dE0IpLQQ4p4nyONBXQMSFxBG5OzgCaJfT8eu8
-         Ez0DMwUntzcU9c2WJzs/WqMvxG3bzlj0mstlcz+E4fW0gt02sZNjrL1HdU6SHVwmCE5R
-         WFeHYzJRJuPZspqj8YJ2wlUmUN4Mc8MNrI6kLekCJ8yejCepkvkgEUeb7TbpDze1NnEh
-         TP2SjhqdakZDUedR00qYjd62k5W2m7FgfHIpcuS/rhjqMGxVL3Apppn+UDRO/ftdIfoh
-         duvoKavmXDacw9mysFV+xdp1Tg4QxCPiDxNSeCeZyO+34Y2S1kYSdX61NJzSKhmGsX5T
-         HLpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=no6WOfZDuAXhTDfVia9Vunkz4L7BthY0F8m0jo4//vs=;
-        b=M/mbnZXvaV5HRAjgvqYURSQbP5rxbNn4rDRxJCFetMFXp7tOn1Y2TpgHYhdz2ykApq
-         mXufCwJpRTNDsDOSJZjs5jDx5nl8F2HGC1I3a8fATnkZ62VKBqGcdMWQjFt1ZVuWE8mg
-         RWS3VxaJ3pimvuHP7AGrfbgOVaC3Nq7TO/SIAVV4KItVOumnEXNL+qRsFPvuHkHSb6Z4
-         Ja5WeeQR5tjN2A/ZhLBB4YLfGNLAL7uL7adeuyrYRRD4F2s9uCBes0YEQ86FsNs9Kvk2
-         tGYx3OVo5syvte8zKrGJAclz518J+9PfoDqyBAArOTamaq3gCMnfxA+LTru1IMKlbFv+
-         aFdQ==
-X-Gm-Message-State: AOAM532PJs5YM/NDj+m3qHhsyGshEjUpaDd3Hsfkmgewtx+WGTeksVEG
-        ZnwbH3QDVGOC9OXZWDynhLBosRuFW/R9nTJumxD+dw==
-X-Google-Smtp-Source: ABdhPJxy4K+2uRaBuhFTeTSlHPetqrP1uAAP7dKvm6UBZz10SCa23PJUxb54E5JJmlle9J/y892Qp+TTrKvO4GeNXIk=
-X-Received: by 2002:a17:90a:ee87:: with SMTP id i7mr921476pjz.25.1603136546933;
- Mon, 19 Oct 2020 12:42:26 -0700 (PDT)
+        id S1731330AbgJSTnl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 19 Oct 2020 15:43:41 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:49046 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731327AbgJSTnJ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 19 Oct 2020 15:43:09 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09JJdqUx007110
+        for <bpf@vger.kernel.org>; Mon, 19 Oct 2020 12:43:08 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=facebook;
+ bh=MUFhgiqSi4z/uq5lpatzFCpQXq7FaX8srFh8v1wLOdc=;
+ b=ISs6FC658dhy6Uw/+6eM1YvRKcyxVktLto/d5SJdS0u9UTEOmzsHJYxnRcuSSq+1uMAp
+ pgPuErsXQWpnkWEwtbQlS7mxJF/chRdTyW3sDRXMXb9Tj+mb2pYK0ydaBa7OPjqH5hD7
+ GKLnmr5Se/i2kJBGNd8OLHA/f95smntutco= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 348gvnpp8n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 19 Oct 2020 12:43:08 -0700
+Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Mon, 19 Oct 2020 12:42:30 -0700
+Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
+        id 69F142946269; Mon, 19 Oct 2020 12:42:25 -0700 (PDT)
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>, <kernel-team@fb.com>,
+        <netdev@vger.kernel.org>, Yonghong Song <yhs@fb.com>
+Subject: [PATCH bpf 3/3] bpf: selftest: Ensure the return value of the bpf_per_cpu_ptr() must be checked
+Date:   Mon, 19 Oct 2020 12:42:25 -0700
+Message-ID: <20201019194225.1051596-1-kafai@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201019194206.1050591-1-kafai@fb.com>
+References: <20201019194206.1050591-1-kafai@fb.com>
 MIME-Version: 1.0
-References: <20201017160928.12698-1-trix@redhat.com> <20201018054332.GB593954@kroah.com>
-In-Reply-To: <20201018054332.GB593954@kroah.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 19 Oct 2020 12:42:15 -0700
-Message-ID: <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
-Subject: Re: [RFC] treewide: cleanup unreachable breaks
-To:     Tom Rix <trix@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-edac@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-power@fi.rohmeurope.com, linux-gpio@vger.kernel.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        nouveau@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, linux-iio@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        industrypack-devel@lists.sourceforge.net,
-        linux-media@vger.kernel.org, MPT-FusionLinux.pdl@broadcom.com,
-        linux-scsi@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-can@vger.kernel.org,
-        Network Development <netdev@vger.kernel.org>,
-        intel-wired-lan@lists.osuosl.org, ath10k@lists.infradead.org,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com, linux-nfc@lists.01.org,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-pci@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, patches@opensource.cirrus.com,
-        storagedev@microchip.com, devel@driverdev.osuosl.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net,
-        linux-watchdog@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        bpf <bpf@vger.kernel.org>, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        clang-built-linux <clang-built-linux@googlegroups.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        George Burgess <gbiv@google.com>
-Content-Type: text/plain; charset="UTF-8"
+X-FB-Internal: Safe
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.235,18.0.687
+ definitions=2020-10-19_10:2020-10-16,2020-10-19 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 impostorscore=0 suspectscore=38 phishscore=0
+ mlxlogscore=754 malwarescore=0 bulkscore=0 adultscore=0 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010190132
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Oct 17, 2020 at 10:43 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Sat, Oct 17, 2020 at 09:09:28AM -0700, trix@redhat.com wrote:
-> > From: Tom Rix <trix@redhat.com>
-> >
-> > This is a upcoming change to clean up a new warning treewide.
-> > I am wondering if the change could be one mega patch (see below) or
-> > normal patch per file about 100 patches or somewhere half way by collecting
-> > early acks.
->
-> Please break it up into one-patch-per-subsystem, like normal, and get it
-> merged that way.
->
-> Sending us a patch, without even a diffstat to review, isn't going to
-> get you very far...
+This patch tests all pointers returned by bpf_per_cpu_ptr() must be
+tested for NULL first before it can be accessed.
 
-Tom,
-If you're able to automate this cleanup, I suggest checking in a
-script that can be run on a directory.  Then for each subsystem you
-can say in your commit "I ran scripts/fix_whatever.py on this subdir."
- Then others can help you drive the tree wide cleanup.  Then we can
-enable -Wunreachable-code-break either by default, or W=2 right now
-might be a good idea.
+This patch adds a subtest "null_check", so it moves the ".data..percpu"
+existence check to the very beginning and before doing any subtest.
 
-Ah, George (gbiv@, cc'ed), did an analysis recently of
-`-Wunreachable-code-loop-increment`, `-Wunreachable-code-break`, and
-`-Wunreachable-code-return` for Android userspace.  From the review:
-```
-Spoilers: of these, it seems useful to turn on
--Wunreachable-code-loop-increment and -Wunreachable-code-return by
-default for Android
-...
-While these conventions about always having break arguably became
-obsolete when we enabled -Wfallthrough, my sample turned up zero
-potential bugs caught by this warning, and we'd need to put a lot of
-effort into getting a clean tree. So this warning doesn't seem to be
-worth it.
-```
-Looks like there's an order of magnitude of `-Wunreachable-code-break`
-than the other two.
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
+ .../selftests/bpf/prog_tests/ksyms_btf.c      | 57 +++++++++++++------
+ .../bpf/progs/test_ksyms_btf_null_check.c     | 31 ++++++++++
+ 2 files changed, 70 insertions(+), 18 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_ksyms_btf_null=
+_check.c
 
-We probably should add all 3 to W=2 builds (wrapped in cc-option).
-I've filed https://github.com/ClangBuiltLinux/linux/issues/1180 to
-follow up on.
--- 
-Thanks,
-~Nick Desaulniers
+diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c b/tools/t=
+esting/selftests/bpf/prog_tests/ksyms_btf.c
+index 28e26bd3e0ca..b58b775d19f3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/ksyms_btf.c
+@@ -5,18 +5,17 @@
+ #include <bpf/libbpf.h>
+ #include <bpf/btf.h>
+ #include "test_ksyms_btf.skel.h"
++#include "test_ksyms_btf_null_check.skel.h"
+=20
+ static int duration;
+=20
+-void test_ksyms_btf(void)
++static void test_basic(void)
+ {
+ 	__u64 runqueues_addr, bpf_prog_active_addr;
+ 	__u32 this_rq_cpu;
+ 	int this_bpf_prog_active;
+ 	struct test_ksyms_btf *skel =3D NULL;
+ 	struct test_ksyms_btf__data *data;
+-	struct btf *btf;
+-	int percpu_datasec;
+ 	int err;
+=20
+ 	err =3D kallsyms_find("runqueues", &runqueues_addr);
+@@ -31,20 +30,6 @@ void test_ksyms_btf(void)
+ 	if (CHECK(err =3D=3D -ENOENT, "ksym_find", "symbol 'bpf_prog_active' no=
+t found\n"))
+ 		return;
+=20
+-	btf =3D libbpf_find_kernel_btf();
+-	if (CHECK(IS_ERR(btf), "btf_exists", "failed to load kernel BTF: %ld\n"=
+,
+-		  PTR_ERR(btf)))
+-		return;
+-
+-	percpu_datasec =3D btf__find_by_name_kind(btf, ".data..percpu",
+-						BTF_KIND_DATASEC);
+-	if (percpu_datasec < 0) {
+-		printf("%s:SKIP:no PERCPU DATASEC in kernel btf\n",
+-		       __func__);
+-		test__skip();
+-		goto cleanup;
+-	}
+-
+ 	skel =3D test_ksyms_btf__open_and_load();
+ 	if (CHECK(!skel, "skel_open", "failed to open and load skeleton\n"))
+ 		goto cleanup;
+@@ -83,6 +68,42 @@ void test_ksyms_btf(void)
+ 	      data->out__bpf_prog_active);
+=20
+ cleanup:
+-	btf__free(btf);
+ 	test_ksyms_btf__destroy(skel);
+ }
++
++static void test_null_check(void)
++{
++	struct test_ksyms_btf_null_check *skel;
++
++	skel =3D test_ksyms_btf_null_check__open_and_load();
++	CHECK(skel, "skel_open", "unexpected load of a prog missing null check\=
+n");
++
++	test_ksyms_btf_null_check__destroy(skel);
++}
++
++void test_ksyms_btf(void)
++{
++	int percpu_datasec;
++	struct btf *btf;
++
++	btf =3D libbpf_find_kernel_btf();
++	if (CHECK(IS_ERR(btf), "btf_exists", "failed to load kernel BTF: %ld\n"=
+,
++		  PTR_ERR(btf)))
++		return;
++
++	percpu_datasec =3D btf__find_by_name_kind(btf, ".data..percpu",
++						BTF_KIND_DATASEC);
++	btf__free(btf);
++	if (percpu_datasec < 0) {
++		printf("%s:SKIP:no PERCPU DATASEC in kernel btf\n",
++		       __func__);
++		test__skip();
++		return;
++	}
++
++	if (test__start_subtest("basic"))
++		test_basic();
++
++	if (test__start_subtest("null_check"))
++		test_null_check();
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_ksyms_btf_null_check.=
+c b/tools/testing/selftests/bpf/progs/test_ksyms_btf_null_check.c
+new file mode 100644
+index 000000000000..8bc8f7c637bc
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_ksyms_btf_null_check.c
+@@ -0,0 +1,31 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++
++#include "vmlinux.h"
++
++#include <bpf/bpf_helpers.h>
++
++extern const struct rq runqueues __ksym; /* struct type global var. */
++extern const int bpf_prog_active __ksym; /* int type global var. */
++
++SEC("raw_tp/sys_enter")
++int handler(const void *ctx)
++{
++	struct rq *rq;
++	int *active;
++	__u32 cpu;
++
++	cpu =3D bpf_get_smp_processor_id();
++	rq =3D (struct rq *)bpf_per_cpu_ptr(&runqueues, cpu);
++	active =3D (int *)bpf_per_cpu_ptr(&bpf_prog_active, cpu);
++	if (active) {
++		/* READ_ONCE */
++		*(volatile int *)active;
++		/* !rq has not been tested, so verifier should reject. */
++		*(volatile int *)(&rq->cpu);
++	}
++
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
+--=20
+2.24.1
+
