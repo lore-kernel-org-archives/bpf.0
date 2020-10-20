@@ -2,292 +2,158 @@ Return-Path: <SRS0=ZEGR=D3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-8.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62160C433DF
-	for <bpf@archiver.kernel.org>; Tue, 20 Oct 2020 06:13:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EEB3FC388F2
+	for <bpf@archiver.kernel.org>; Tue, 20 Oct 2020 08:49:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ED7AF223C6
-	for <bpf@archiver.kernel.org>; Tue, 20 Oct 2020 06:13:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 901D4223C6
+	for <bpf@archiver.kernel.org>; Tue, 20 Oct 2020 08:49:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UJEy37No"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="q8gn83IP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391971AbgJTGNY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Oct 2020 02:13:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:50308 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2391967AbgJTGNX (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 20 Oct 2020 02:13:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603174401;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wAhzmxdGMaPH2K6G8brb+MS2EAJ7Xgyblnfd/oBjiTQ=;
-        b=UJEy37NokQZjk5LEqW6MWCWWKwsNLZodQgGjNwGRePUschscRQPK4Bcj81Auz5LXQtsQYe
-        6YlBRRc0OIvFNVZ02a6ffumv9aMBctvlDOfwdJL+C3fuF27vLDP08+VnFsGg4WWz99BKTb
-        YsoW+iHcQWrU7Q0qxXqPBVB8Oi2QoqA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-408-n0i3K6bjMdWt8pKIgMOSHA-1; Tue, 20 Oct 2020 02:13:19 -0400
-X-MC-Unique: n0i3K6bjMdWt8pKIgMOSHA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C3F0B57051;
-        Tue, 20 Oct 2020 06:13:16 +0000 (UTC)
-Received: from [10.72.13.171] (ovpn-13-171.pek2.redhat.com [10.72.13.171])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EE2BD60BF3;
-        Tue, 20 Oct 2020 06:13:07 +0000 (UTC)
-Subject: Re: [PATCH net v2] Revert "virtio-net: ethtool configurable RXCSUM"
-To:     "Michael S. Tsirkin" <mst@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     Tonghao Zhang <xiangxia.m.yue@gmail.com>,
-        Willem de Bruijn <willemb@google.com>,
-        kernel test robot <lkp@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-References: <20201018103122.454967-1-mst@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Message-ID: <a061697d-844d-bb98-7009-69760fe9918c@redhat.com>
-Date:   Tue, 20 Oct 2020 14:13:06 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20201018103122.454967-1-mst@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+        id S2392116AbgJTItG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Oct 2020 04:49:06 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:41530 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389490AbgJTItF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Oct 2020 04:49:05 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09K8i7rI188082;
+        Tue, 20 Oct 2020 08:48:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : message-id :
+ content-type : mime-version : subject : date : in-reply-to : cc : to :
+ references; s=corp-2020-01-29;
+ bh=UBSvDuZX45rcdCwz1yIzvCzCqfd2joSCizhea4x+Xao=;
+ b=q8gn83IPPWdFm1HT3taLhd9DUF/VTUU+yXtsd8f9nD6wriupB19ul4FsqzWGdtIZMcde
+ GW+G9oeRVHaGmJfZ8muagtVwvuWLE6AywXuhak+OXkSgdFP6EIR2H2OqKDUhR7yIW2Vz
+ zpamQMFlTWRfwdWHBA7I0p8HYGgPlEg7NOi5pNpKeOCI5/Zqu82RI3DyvlSb3YeNhNvu
+ 1nAbi2LxPOnr/RtC4QoVHdNGHfdCdQB+x9xvmqx+BqjtbEr8lrxt1aMjIali/bjhTn7W
+ dzqjxrXdOv4FjsFo2kwRKNjQX5RScYby9/qqSUitUFXIKeMy4YBvXYVTZYkhax1TMfnU 0w== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 347s8msmp0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 20 Oct 2020 08:48:12 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 09K8is45150623;
+        Tue, 20 Oct 2020 08:48:12 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3030.oracle.com with ESMTP id 348ahw07cp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 20 Oct 2020 08:48:12 +0000
+Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 09K8mAEe159753;
+        Tue, 20 Oct 2020 08:48:10 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 348ahw07bh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Oct 2020 08:48:10 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 09K8lvTX021447;
+        Tue, 20 Oct 2020 08:47:58 GMT
+Received: from [10.175.164.120] (/10.175.164.120)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 20 Oct 2020 01:47:57 -0700
+From:   John Haxby <john.haxby@oracle.com>
+Message-Id: <27A23102-A7F5-48C5-8972-48CE4C283C6E@oracle.com>
+Content-Type: multipart/signed;
+        boundary="Apple-Mail=_9F9749E9-79EA-41AB-B516-003ECE07BEE3";
+        protocol="application/pgp-signature";
+        micalg=pgp-sha256
+Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.120.23.2.4\))
+Subject: Re: [Ocfs2-devel] [RFC] treewide: cleanup unreachable breaks
+Date:   Tue, 20 Oct 2020 09:47:45 +0100
+In-Reply-To: <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+Cc:     Tom Rix <trix@redhat.com>, alsa-devel@alsa-project.org,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        linux-iio@vger.kernel.org, nouveau@lists.freedesktop.org,
+        storagedev@microchip.com,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        virtualization@lists.linux-foundation.org,
+        keyrings@vger.kernel.org, linux-mtd@lists.infradead.org,
+        ath10k@lists.infradead.org, MPT-FusionLinux.pdl@broadcom.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        usb-storage@lists.one-eyed-alien.net,
+        linux-watchdog@vger.kernel.org, devel@driverdev.osuosl.org,
+        linux-samsung-soc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        linux-acpi@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-pci@vger.kernel.org, spice-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-nfc@lists.01.org, linux-pm@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-gpio@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-amlogic@lists.infradead.org,
+        openipmi-developer@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org,
+        linux-integrity@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-edac@vger.kernel.org, George Burgess <gbiv@google.com>,
+        Network Development <netdev@vger.kernel.org>,
+        linux-usb@vger.kernel.org,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>, patches@opensource.cirrus.com,
+        bpf <bpf@vger.kernel.org>, ocfs2-devel@oss.oracle.com,
+        linux-power@fi.rohmeurope.com
+To:     Nick Desaulniers <ndesaulniers@google.com>
+References: <20201017160928.12698-1-trix@redhat.com>
+ <20201018054332.GB593954@kroah.com>
+ <CAKwvOdkR_Ttfo7_JKUiZFVqr=Uh=4b05KCPCSuzwk=zaWtA2_Q@mail.gmail.com>
+X-Mailer: Apple Mail (2.3608.120.23.2.4)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9779 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 suspectscore=0
+ lowpriorityscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0
+ phishscore=0 clxscore=1011 bulkscore=0 impostorscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010200059
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 
-On 2020/10/20 上午1:32, Michael S. Tsirkin wrote:
-> This reverts commit 3618ad2a7c0e78e4258386394d5d5f92a3dbccf8.
->
-> When the device does not have a control vq (e.g. when using a
-> version of QEMU based on upstream v0.10 or older, or when specifying
-> ctrl_vq=off,ctrl_rx=off,ctrl_vlan=off,ctrl_rx_extra=off,ctrl_mac_addr=off
-> for the device on the QEMU command line), that commit causes a crash:
->
-> [   72.229171] kernel BUG at drivers/net/virtio_net.c:1667!
-> [   72.230266] invalid opcode: 0000 [#1] PREEMPT SMP
-> [   72.231172] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.9.0-rc8-02934-g3618ad2a7c0e7 #1
-> [   72.231172] EIP: virtnet_send_command+0x120/0x140
-> [   72.231172] Code: 00 0f 94 c0 8b 7d f0 65 33 3d 14 00 00 00 75 1c 8d 65 f4 5b 5e 5f 5d c3 66 90 be 01 00 00 00 e9 6e ff ff ff 8d b6 00
-> +00 00 00 <0f> 0b e8 d9 bb 82 00 eb 17 8d b4 26 00 00 00 00 8d b4 26 00 00 00
-> [   72.231172] EAX: 0000000d EBX: f72895c0 ECX: 00000017 EDX: 00000011
-> [   72.231172] ESI: f7197800 EDI: ed69bd00 EBP: ed69bcf4 ESP: ed69bc98
-> [   72.231172] DS: 007b ES: 007b FS: 00d8 GS: 00e0 SS: 0068 EFLAGS: 00010246
-> [   72.231172] CR0: 80050033 CR2: 00000000 CR3: 02c84000 CR4: 000406f0
-> [   72.231172] Call Trace:
-> [   72.231172]  ? __virt_addr_valid+0x45/0x60
-> [   72.231172]  ? ___cache_free+0x51f/0x760
-> [   72.231172]  ? kobject_uevent_env+0xf4/0x560
-> [   72.231172]  virtnet_set_guest_offloads+0x4d/0x80
-> [   72.231172]  virtnet_set_features+0x85/0x120
-> [   72.231172]  ? virtnet_set_guest_offloads+0x80/0x80
-> [   72.231172]  __netdev_update_features+0x27a/0x8e0
-> [   72.231172]  ? kobject_uevent+0xa/0x20
-> [   72.231172]  ? netdev_register_kobject+0x12c/0x160
-> [   72.231172]  register_netdevice+0x4fe/0x740
-> [   72.231172]  register_netdev+0x1c/0x40
-> [   72.231172]  virtnet_probe+0x728/0xb60
-> [   72.231172]  ? _raw_spin_unlock+0x1d/0x40
-> [   72.231172]  ? virtio_vdpa_get_status+0x1c/0x20
-> [   72.231172]  virtio_dev_probe+0x1c6/0x271
-> [   72.231172]  really_probe+0x195/0x2e0
-> [   72.231172]  driver_probe_device+0x26/0x60
-> [   72.231172]  device_driver_attach+0x49/0x60
-> [   72.231172]  __driver_attach+0x46/0xc0
-> [   72.231172]  ? device_driver_attach+0x60/0x60
-> [   72.231172]  bus_add_driver+0x197/0x1c0
-> [   72.231172]  driver_register+0x66/0xc0
-> [   72.231172]  register_virtio_driver+0x1b/0x40
-> [   72.231172]  virtio_net_driver_init+0x61/0x86
-> [   72.231172]  ? veth_init+0x14/0x14
-> [   72.231172]  do_one_initcall+0x76/0x2e4
-> [   72.231172]  ? rdinit_setup+0x2a/0x2a
-> [   72.231172]  do_initcalls+0xb2/0xd5
-> [   72.231172]  kernel_init_freeable+0x14f/0x179
-> [   72.231172]  ? rest_init+0x100/0x100
-> [   72.231172]  kernel_init+0xd/0xe0
-> [   72.231172]  ret_from_fork+0x1c/0x30
-> [   72.231172] Modules linked in:
-> [   72.269563] ---[ end trace a6ebc4afea0e6cb1 ]---
->
-> The reason is that virtnet_set_features now calls virtnet_set_guest_offloads
-> unconditionally, it used to only call it when there is something
-> to configure.
->
-> If device does not have a control vq, everything breaks.
->
-> Looking at this some more, I noticed that it's not really checking the
-> hardware too much. E.g.
->
->          if ((dev->features ^ features) & NETIF_F_LRO) {
->                  if (features & NETIF_F_LRO)
->                          offloads |= GUEST_OFFLOAD_LRO_MASK &
->                                      vi->guest_offloads_capable;
->                  else
->                          offloads &= ~GUEST_OFFLOAD_LRO_MASK;
->          }
->
-> and
->
->                                  (1ULL << VIRTIO_NET_F_GUEST_TSO6) | \
->                                  (1ULL << VIRTIO_NET_F_GUEST_ECN)  | \
->                                  (1ULL << VIRTIO_NET_F_GUEST_UFO))
->
-> But there's no guarantee that e.g. VIRTIO_NET_F_GUEST_TSO6 is set.
->
-> If it isn't command should not send it.
->
-> Further
->
-> static int virtnet_set_features(struct net_device *dev,
->                                  netdev_features_t features)
-> {
->          struct virtnet_info *vi = netdev_priv(dev);
->          u64 offloads = vi->guest_offloads;
->
-> seems wrong since guest_offloads is zero initialized,
+--Apple-Mail=_9F9749E9-79EA-41AB-B516-003ECE07BEE3
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain;
+	charset=us-ascii
 
 
-I'm not sure I get here.
 
-Did you mean vi->guest_offloads?
+> On 19 Oct 2020, at 20:42, Nick Desaulniers <ndesaulniers@google.com> =
+wrote:
+>=20
+> We probably should add all 3 to W=3D2 builds (wrapped in cc-option).
+> I've filed https://github.com/ClangBuiltLinux/linux/issues/1180 to
+> follow up on.
 
-We initialize it during probe
+It looks as though the URL mangling has been fixed.   If anyone sees =
+that specific URL mangled, please let me know.
 
-     for (i = 0; i < ARRAY_SIZE(guest_offloads); i++)
-         if (virtio_has_feature(vi->vdev, guest_offloads[i]))
-             set_bit(guest_offloads[i], &vi->guest_offloads);
+jch
 
+--Apple-Mail=_9F9749E9-79EA-41AB-B516-003ECE07BEE3
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+	filename=signature.asc
+Content-Type: application/pgp-signature;
+	name=signature.asc
+Content-Description: Message signed with OpenPGP
 
-> it does not reflect the state after reset which comes from
-> the features.
->
-> Revert the original commit for now.
->
-> Cc: Tonghao Zhang <xiangxia.m.yue@gmail.com>
-> Cc: Willem de Bruijn <willemb@google.com>
-> Fixes: 3618ad2a7c0e7 ("virtio-net: ethtool configurable RXCSUM")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> ---
->
-> changes from v1:
-> 	- clarify how to reproduce the bug in the log
->
->
->   drivers/net/virtio_net.c | 50 +++++++++++-----------------------------
->   1 file changed, 13 insertions(+), 37 deletions(-)
->
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index d2d2c4a53cf2..21b71148c532 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -68,8 +68,6 @@ static const unsigned long guest_offloads[] = {
->   				(1ULL << VIRTIO_NET_F_GUEST_ECN)  | \
->   				(1ULL << VIRTIO_NET_F_GUEST_UFO))
->   
-> -#define GUEST_OFFLOAD_CSUM_MASK (1ULL << VIRTIO_NET_F_GUEST_CSUM)
-> -
->   struct virtnet_stat_desc {
->   	char desc[ETH_GSTRING_LEN];
->   	size_t offset;
-> @@ -2524,48 +2522,29 @@ static int virtnet_get_phys_port_name(struct net_device *dev, char *buf,
->   	return 0;
->   }
->   
-> -static netdev_features_t virtnet_fix_features(struct net_device *netdev,
-> -					      netdev_features_t features)
-> -{
-> -	/* If Rx checksum is disabled, LRO should also be disabled. */
-> -	if (!(features & NETIF_F_RXCSUM))
-> -		features &= ~NETIF_F_LRO;
-> -
-> -	return features;
-> -}
-> -
->   static int virtnet_set_features(struct net_device *dev,
->   				netdev_features_t features)
->   {
->   	struct virtnet_info *vi = netdev_priv(dev);
-> -	u64 offloads = vi->guest_offloads;
-> +	u64 offloads;
->   	int err;
->   
-> -	/* Don't allow configuration while XDP is active. */
-> -	if (vi->xdp_queue_pairs)
-> -		return -EBUSY;
-> -
->   	if ((dev->features ^ features) & NETIF_F_LRO) {
-> +		if (vi->xdp_queue_pairs)
-> +			return -EBUSY;
-> +
->   		if (features & NETIF_F_LRO)
-> -			offloads |= GUEST_OFFLOAD_LRO_MASK &
-> -				    vi->guest_offloads_capable;
-> +			offloads = vi->guest_offloads_capable;
->   		else
-> -			offloads &= ~GUEST_OFFLOAD_LRO_MASK;
-> +			offloads = vi->guest_offloads_capable &
-> +				   ~GUEST_OFFLOAD_LRO_MASK;
-> +
-> +		err = virtnet_set_guest_offloads(vi, offloads);
-> +		if (err)
-> +			return err;
-> +		vi->guest_offloads = offloads;
->   	}
->   
-> -	if ((dev->features ^ features) & NETIF_F_RXCSUM) {
-> -		if (features & NETIF_F_RXCSUM)
-> -			offloads |= GUEST_OFFLOAD_CSUM_MASK &
-> -				    vi->guest_offloads_capable;
-> -		else
-> -			offloads &= ~GUEST_OFFLOAD_CSUM_MASK;
-> -	}
-> -
-> -	err = virtnet_set_guest_offloads(vi, offloads);
-> -	if (err)
-> -		return err;
-> -
-> -	vi->guest_offloads = offloads;
->   	return 0;
->   }
->   
-> @@ -2584,7 +2563,6 @@ static const struct net_device_ops virtnet_netdev = {
->   	.ndo_features_check	= passthru_features_check,
->   	.ndo_get_phys_port_name	= virtnet_get_phys_port_name,
->   	.ndo_set_features	= virtnet_set_features,
-> -	.ndo_fix_features	= virtnet_fix_features,
->   };
->   
->   static void virtnet_config_changed_work(struct work_struct *work)
-> @@ -3035,10 +3013,8 @@ static int virtnet_probe(struct virtio_device *vdev)
->   	if (virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO4) ||
->   	    virtio_has_feature(vdev, VIRTIO_NET_F_GUEST_TSO6))
->   		dev->features |= NETIF_F_LRO;
-> -	if (virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS)) {
-> -		dev->hw_features |= NETIF_F_RXCSUM;
-> +	if (virtio_has_feature(vdev, VIRTIO_NET_F_CTRL_GUEST_OFFLOADS))
->   		dev->hw_features |= NETIF_F_LRO;
-> -	}
->   
->   	dev->vlan_features = dev->features;
->   
+-----BEGIN PGP SIGNATURE-----
+Comment: GPGTools - http://gpgtools.org
 
+iHUEAREIAB0WIQT+pxvb11CFWUkNSOVFC7t+lC+jyAUCX46kMQAKCRBFC7t+lC+j
+yBKiAP90JVXdPzuAwtRGkROpw1eVCo7wCaZ5nOa8Oo0sN6gC9gD/S0eGTqQhmg+n
+sXPJxPYqQsg09qmS6k/HX+AP5Oz2AMo=
+=xx66
+-----END PGP SIGNATURE-----
+
+--Apple-Mail=_9F9749E9-79EA-41AB-B516-003ECE07BEE3--
