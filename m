@@ -2,104 +2,94 @@ Return-Path: <SRS0=ZEGR=D3=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AEFB1C4363A
-	for <bpf@archiver.kernel.org>; Tue, 20 Oct 2020 15:08:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 54AACC4363A
+	for <bpf@archiver.kernel.org>; Tue, 20 Oct 2020 16:30:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 502C822247
-	for <bpf@archiver.kernel.org>; Tue, 20 Oct 2020 15:08:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D992A2224A
+	for <bpf@archiver.kernel.org>; Tue, 20 Oct 2020 16:30:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603211406;
+	bh=u1Mu2Aqlff3ZslWlQIwsq52KeBi0gaw5NKY34rdxnxY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
+	b=SqKD2SQ0aBOxB9XLEZFuVLubF2t/GOEZ/mvOEb3l5EIbQ/E8JkRFC9JR06tCS4uCh
+	 eB/q1MoHoxIe5XfXBYleCehZHKW4TkQbBXkYDR1XxBPzKgwrDS6oCOOnXXc2XeW+Y6
+	 GeBqaz65jK1xgwYq/tmFcuzqyAiAFHI7K6r4hxxc=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731577AbgJTPIq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 20 Oct 2020 11:08:46 -0400
-Received: from www62.your-server.de ([213.133.104.62]:57264 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731500AbgJTPIq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 20 Oct 2020 11:08:46 -0400
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1kUtFi-0001ad-Hn; Tue, 20 Oct 2020 17:08:42 +0200
-Received: from [178.196.57.75] (helo=pc-9.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1kUtFi-00011m-DE; Tue, 20 Oct 2020 17:08:42 +0200
+        id S2394681AbgJTQaG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 20 Oct 2020 12:30:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44408 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2394647AbgJTQaF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 20 Oct 2020 12:30:05 -0400
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0CAAF22250;
+        Tue, 20 Oct 2020 16:30:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603211405;
+        bh=u1Mu2Aqlff3ZslWlQIwsq52KeBi0gaw5NKY34rdxnxY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=llTD4CRol6fK8UZ/IJd3r39qEix1bW/waSRgnUmr3ixmNTYIKLn0MotGodoNxirgS
+         npRttKYuVTZA3xWPDgDr7XhsScAOByjtT2yh9iG4d0lfla9h01Z6xsaa83qivk39Sd
+         zJ1Nvq0yqJt6mLM5HkbohaarbecdhIDQkPaeZiT8=
+Date:   Tue, 20 Oct 2020 09:30:03 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
 Subject: Re: [PATCH bpf v2 1/3] bpf_redirect_neigh: Support supplying the
  nexthop as a helper parameter
-To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
-Cc:     David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-References: <160319106111.15822.18417665895694986295.stgit@toke.dk>
- <160319106221.15822.2629789706666194966.stgit@toke.dk>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <d6967cfe-fd0e-268a-5526-dd03f0e476e6@iogearbox.net>
-Date:   Tue, 20 Oct 2020 17:08:42 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
+Message-ID: <20201020093003.6e1c7fdb@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 In-Reply-To: <160319106221.15822.2629789706666194966.stgit@toke.dk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/25963/Tue Oct 20 16:00:29 2020)
+References: <160319106111.15822.18417665895694986295.stgit@toke.dk>
+        <160319106221.15822.2629789706666194966.stgit@toke.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 10/20/20 12:51 PM, Toke Høiland-Jørgensen wrote:
-> From: Toke Høiland-Jørgensen <toke@redhat.com>
-[...]
->   BPF_CALL_3(bpf_clone_redirect, struct sk_buff *, skb, u32, ifindex, u64, flags)
-> @@ -2455,8 +2487,8 @@ int skb_do_redirect(struct sk_buff *skb)
->   		return -EAGAIN;
->   	}
->   	return flags & BPF_F_NEIGH ?
-> -	       __bpf_redirect_neigh(skb, dev) :
-> -	       __bpf_redirect(skb, dev, flags);
-> +		__bpf_redirect_neigh(skb, dev, flags & BPF_F_NEXTHOP ? &ri->nh : NULL) :
-> +		__bpf_redirect(skb, dev, flags);
->   out_drop:
->   	kfree_skb(skb);
->   	return -EINVAL;
-> @@ -2504,16 +2536,25 @@ static const struct bpf_func_proto bpf_redirect_peer_proto = {
->   	.arg2_type      = ARG_ANYTHING,
->   };
->   
-> -BPF_CALL_2(bpf_redirect_neigh, u32, ifindex, u64, flags)
-> +BPF_CALL_4(bpf_redirect_neigh, u32, ifindex, struct bpf_redir_neigh *, params,
-> +	   int, plen, u64, flags)
->   {
->   	struct bpf_redirect_info *ri = this_cpu_ptr(&bpf_redirect_info);
->   
-> -	if (unlikely(flags))
-> +	if (unlikely((plen && plen < sizeof(*params)) || flags))
-> +		return TC_ACT_SHOT;
-> +
-> +	if (unlikely(plen && (params->unused[0] || params->unused[1] ||
-> +			      params->unused[2])))
+On Tue, 20 Oct 2020 12:51:02 +0200 Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+> diff --git a/include/linux/filter.h b/include/linux/filter.h
+> index 20fc24c9779a..ba9de7188cd0 100644
+> --- a/include/linux/filter.h
+> +++ b/include/linux/filter.h
+> @@ -607,12 +607,21 @@ struct bpf_skb_data_end {
+>  	void *data_end;
+>  };
+> =20
+> +struct bpf_nh_params {
+> +	u8 nh_family;
+> +	union {
+> +		__u32 ipv4_nh;
+> +		struct in6_addr ipv6_nh;
+> +	};
+> +};
 
-small nit: maybe fold this into the prior check that already tests non-zero plen
+> @@ -4906,6 +4910,18 @@ struct bpf_fib_lookup {
+>  	__u8	dmac[6];     /* ETH_ALEN */
+>  };
+> =20
+> +struct bpf_redir_neigh {
+> +	/* network family for lookup (AF_INET, AF_INET6) */
+> +	__u8 nh_family;
+> +	 /* avoid hole in struct - must be set to 0 */
+> +	__u8 unused[3];
+> +	/* network address of nexthop; skips fib lookup to find gateway */
+> +	union {
+> +		__be32		ipv4_nh;
+> +		__u32		ipv6_nh[4];  /* in6_addr; network order */
+> +	};
+> +};
 
-if (unlikely((plen && (plen < sizeof(*params) ||
-                        (params->unused[0] | params->unused[1] |
-                         params->unused[2]))) || flags))
-         return TC_ACT_SHOT;
-
->   		return TC_ACT_SHOT;
->   
-> -	ri->flags = BPF_F_NEIGH;
-> +	ri->flags = BPF_F_NEIGH | (plen ? BPF_F_NEXTHOP : 0);
->   	ri->tgt_index = ifindex;
->   
-> +	BUILD_BUG_ON(sizeof(struct bpf_redir_neigh) != sizeof(struct bpf_nh_params));
-> +	if (plen)
-> +		memcpy(&ri->nh, params, sizeof(ri->nh));
-> +
->   	return TC_ACT_REDIRECT;
->   }
->   
+Isn't this backward? The hole could be named in the internal structure.
+This is a bit of a gray area, but if you name this hole in uAPI and
+programs start referring to it you will never be able to reuse it.
+So you may as well not require it to be zeroed..
