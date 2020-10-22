@@ -2,67 +2,61 @@ Return-Path: <SRS0=V6te=D5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92E8AC388F7
-	for <bpf@archiver.kernel.org>; Thu, 22 Oct 2020 20:53:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A319C388F9
+	for <bpf@archiver.kernel.org>; Thu, 22 Oct 2020 22:34:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2AF2F20BED
-	for <bpf@archiver.kernel.org>; Thu, 22 Oct 2020 20:53:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 04E7324655
+	for <bpf@archiver.kernel.org>; Thu, 22 Oct 2020 22:34:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d6+CBZng"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bIdceANe"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S371987AbgJVUwf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 22 Oct 2020 16:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
+        id S2900959AbgJVWd3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 22 Oct 2020 18:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S371979AbgJVUwe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 22 Oct 2020 16:52:34 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E49CC0613CE;
-        Thu, 22 Oct 2020 13:52:34 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id n16so1711798pgv.13;
-        Thu, 22 Oct 2020 13:52:34 -0700 (PDT)
+        with ESMTP id S2895132AbgJVWcf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 22 Oct 2020 18:32:35 -0400
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29AB8C0613CF
+        for <bpf@vger.kernel.org>; Thu, 22 Oct 2020 15:32:34 -0700 (PDT)
+Received: by mail-pl1-x642.google.com with SMTP id 1so1735416ple.2
+        for <bpf@vger.kernel.org>; Thu, 22 Oct 2020 15:32:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ag5R8ANFXiIKHrZi3CpUKkJaLv+KTVPp7lGufqkGA/Q=;
-        b=d6+CBZngB4ab2gx0rcr80/mUgsqGHrDfBj1/ysacUwotFwRiXDdiFVeXasFIZHuxHV
-         1x42nCvwwG6yQagKIIf1tCqN7+6tPyMBG1vriokW70nyWmsc8sMnME4tilAanNACPt9O
-         UzNtsCl8lGUuz9Im9a2MYKC37+MOa7tXY3edPXllbkN0hCEGFSQJnOVjVtVIAq/+HJLn
-         puZeL7mEq755h14QQNrKiJO3EdeJ0uF64975sPV2JD6dBoaXPh5ct0LHO4hygeT08KGT
-         jSXmP5u+fSJpVAIRfAuEVSd0XPlAxR+NDLBHr9Bh1K2r/SHLCD+LPnn7xcu4RCGkQK5K
-         2CnQ==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WP7MQH1ssAvDqFVXPY7V60qwcY9Im9dBsz5m4rL+ry8=;
+        b=bIdceANej9lvuMPIaaLVFAdg2WqmqLlyNevfjw/ZimJhZx7nxKRHwJNp8tRnvP/ZX5
+         C7E2p+hF/bFjvlQn97TfVSBWGRz53q2S8l2zRujVs8nBmbydDrs0P99KtLU2wmGowHSg
+         8zkarDzOOeyc/ekBsYRaTSB22cjwUsXuLoCWo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ag5R8ANFXiIKHrZi3CpUKkJaLv+KTVPp7lGufqkGA/Q=;
-        b=O7JKExU18i8h5t8FeQ8pekLfr5vW2QMhyLht6agAp/FCfedQiX1tERjHcDGH5Vl1ms
-         /iDDBfd3SqQblaN2Me8KYjcPG3XgwZmnGrAY/la8HnDP9kFFa+Z1dIs8kMtajVgqIZgs
-         ElPdcFs0WEME/jCuw8+lnIXiSnragfrTIAK0zjPBdewhsCMA2KA5csWfSgCfy+ZDZeKQ
-         LpWqMFIGS2pTEKqZ8cNCKciTgjGfwDFJnLxiZrkmRghycAhexEvTMnf1N9bZifJFUNeu
-         Wn0OYyz7gsfzhs3ZAQkqmwzVtp+jMdPYwQRKihIeJNNurB7kKUg03SxWx0oMnElk9Vjp
-         GGHA==
-X-Gm-Message-State: AOAM530BAvB8+L1wcG2mL/k74EuzqT7M8tz1WYF57kwpaMaK7bW/YGnL
-        iVCOHIX5+ZW5q2+oLYt/iDvvBX2Pi1z4WfvaMzc=
-X-Google-Smtp-Source: ABdhPJx+dBEdcJ+BztG+kLdnt+vX7FpE4LlJQH01ipc7IDV0pS9xsoGFMHkw/BUBCjO1GOwzT0IU3w3pZk202vhKcQg=
-X-Received: by 2002:a17:90a:f184:: with SMTP id bv4mr3823913pjb.1.1603399952372;
- Thu, 22 Oct 2020 13:52:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1602263422.git.yifeifz2@illinois.edu> <c2077b8a86c6d82d611007d81ce81d32f718ec59.1602263422.git.yifeifz2@illinois.edu>
- <202010091613.B671C86@keescook> <CABqSeARZWBQrLkzd3ozF16ghkADQqcN4rUoJS2MKkd=73g4nVA@mail.gmail.com>
- <202010121556.1110776B83@keescook> <CABqSeAT2-vNVUrXSWiGp=cXCvz8LbOrTBo1GbSZP2Z+CKdegJA@mail.gmail.com>
-In-Reply-To: <CABqSeAT2-vNVUrXSWiGp=cXCvz8LbOrTBo1GbSZP2Z+CKdegJA@mail.gmail.com>
-From:   YiFei Zhu <zhuyifei1999@gmail.com>
-Date:   Thu, 22 Oct 2020 15:52:20 -0500
-Message-ID: <CABqSeASc-3n_LXpYhb+PYkeAOsfSjih4qLMZ5t=q5yckv3w0nQ@mail.gmail.com>
-Subject: Re: [PATCH v4 seccomp 5/5] seccomp/cache: Report cache data through /proc/pid/seccomp_cache
-To:     Kees Cook <keescook@chromium.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WP7MQH1ssAvDqFVXPY7V60qwcY9Im9dBsz5m4rL+ry8=;
+        b=qBu4FBS1R5+OC6HEPWXk3DCskk30+LDDf/XjWrc17SYLP4mPLqLuNuWtt4PkFkpzbC
+         34vxsz/uJRc2e51S9dlY/AoFMNDAgya+/Nvd4rUAqIkrvjEvBIfGZLfD3rTdeE6hCvDL
+         tEdo/jSjTqFcDNyy4KY4GWaaDyLlRan+tn1HaloAjcgoscM2Tynp5IhxfgV3cJh09EjK
+         wKiwGKRlYnfJlZdm2PNeEnWa3qbt85lZbtErjEyGgaOc1liU62q09DULhhP4G1unGoGY
+         An83sAN69KXAhmQEuwv9XgC1a4LCO/lfBEYQeJFXvLPcBFoiyV7zEfm8j67tya9GfZmS
+         XHCA==
+X-Gm-Message-State: AOAM531GT9m6rajoINOAUmEGzXq/2IQ+YRAIcL1ZJ5dbsd7EBIrqHB23
+        Js91c4Raesv4zAwI50vy+bvKQw==
+X-Google-Smtp-Source: ABdhPJx9pRKL66H6CiwdaLL0xcN1gIQVhntB/+tpFfDzpc1b3GAd8xuM23vsryV1EPMtKne4pmJn8A==
+X-Received: by 2002:a17:902:ee52:b029:d5:dd2d:df92 with SMTP id 18-20020a170902ee52b02900d5dd2ddf92mr4667294plo.37.1603405953445;
+        Thu, 22 Oct 2020 15:32:33 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u65sm3394821pfc.11.2020.10.22.15.32.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Oct 2020 15:32:32 -0700 (PDT)
+Date:   Thu, 22 Oct 2020 15:32:31 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     YiFei Zhu <zhuyifei1999@gmail.com>
 Cc:     Linux Containers <containers@lists.linux-foundation.org>,
         YiFei Zhu <yifeifz2@illinois.edu>, bpf <bpf@vger.kernel.org>,
         kernel list <linux-kernel@vger.kernel.org>,
@@ -81,26 +75,62 @@ Cc:     Linux Containers <containers@lists.linux-foundation.org>,
         Tycho Andersen <tycho@tycho.pizza>,
         Valentin Rothberg <vrothber@redhat.com>,
         Will Drewry <wad@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v4 seccomp 5/5] seccomp/cache: Report cache data through
+ /proc/pid/seccomp_cache
+Message-ID: <202010221520.44C5A7833E@keescook>
+References: <cover.1602263422.git.yifeifz2@illinois.edu>
+ <c2077b8a86c6d82d611007d81ce81d32f718ec59.1602263422.git.yifeifz2@illinois.edu>
+ <202010091613.B671C86@keescook>
+ <CABqSeARZWBQrLkzd3ozF16ghkADQqcN4rUoJS2MKkd=73g4nVA@mail.gmail.com>
+ <202010121556.1110776B83@keescook>
+ <CABqSeAT2-vNVUrXSWiGp=cXCvz8LbOrTBo1GbSZP2Z+CKdegJA@mail.gmail.com>
+ <CABqSeASc-3n_LXpYhb+PYkeAOsfSjih4qLMZ5t=q5yckv3w0nQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABqSeASc-3n_LXpYhb+PYkeAOsfSjih4qLMZ5t=q5yckv3w0nQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Oct 12, 2020 at 7:31 PM YiFei Zhu <zhuyifei1999@gmail.com> wrote:
->
-> On Mon, Oct 12, 2020 at 5:57 PM Kees Cook <keescook@chromium.org> wrote:
-> > I think it's fine to just have this "dangle" with a help text update of
-> > "if seccomp action caching is supported by the architecture, provide the
-> > /proc/$pid ..."
->
-> I think it would be weird if someone sees this help text and wonder...
-> "hmm does my architecture support seccomp action caching" and without
-> a clear pointer to how seccomp action cache works, goes and compiles
-> the kernel with this config option on for the purpose of knowing if
-> their arch supports it... Or, is it a common practice in the kernel to
-> leave dangling configs?
+On Thu, Oct 22, 2020 at 03:52:20PM -0500, YiFei Zhu wrote:
+> On Mon, Oct 12, 2020 at 7:31 PM YiFei Zhu <zhuyifei1999@gmail.com> wrote:
+> >
+> > On Mon, Oct 12, 2020 at 5:57 PM Kees Cook <keescook@chromium.org> wrote:
+> > > I think it's fine to just have this "dangle" with a help text update of
+> > > "if seccomp action caching is supported by the architecture, provide the
+> > > /proc/$pid ..."
+> >
+> > I think it would be weird if someone sees this help text and wonder...
+> > "hmm does my architecture support seccomp action caching" and without
+> > a clear pointer to how seccomp action cache works, goes and compiles
+> > the kernel with this config option on for the purpose of knowing if
+> > their arch supports it... Or, is it a common practice in the kernel to
+> > leave dangling configs?
+> 
+> Bump, in case this question was missed.
 
-Bump, in case this question was missed. I don't really want to miss
-the 5.10 merge window...
+I've been going back and forth on this, and I think what I've settled
+on is I'd like to avoid new CONFIG dependencies just for this feature.
+Instead, how about we just fill in SECCOMP_NATIVE and SECCOMP_COMPAT
+for all the HAVE_ARCH_SECCOMP_FILTER architectures, and then the
+cache reporting can be cleanly tied to CONFIG_SECCOMP_FILTER? It
+should be relatively simple to extract those details and make
+SECCOMP_ARCH_{NATIVE,COMPAT}_NAME part of the per-arch enabling patches?
 
-YiFei Zhu
+> I don't really want to miss the 5.10 merge window...
+
+Sorry, the 5.10 merge window is already closed for stuff that hasn't
+already been in -next. Most subsystem maintainers (myself included)
+don't take new features into their trees between roughly N-rc6 and
+(N+1)-rc1. My plan is to put this in my -next tree after -rc1 is released
+(expected to be Oct 25th).
+
+I'd still like to get more specific workload performance numbers too.
+The microbenchmark is nice, but getting things like build times under
+docker's default seccomp filter, etc would be lovely. I've almost gotten
+there, but my benchmarks are still really noisy and CPU isolation
+continues to frustrate me. :)
+
+-- 
+Kees Cook
