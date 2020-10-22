@@ -7,37 +7,37 @@ X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09E2AC388F2
-	for <bpf@archiver.kernel.org>; Thu, 22 Oct 2020 08:22:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3B00C388F2
+	for <bpf@archiver.kernel.org>; Thu, 22 Oct 2020 08:22:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA74D223FB
-	for <bpf@archiver.kernel.org>; Thu, 22 Oct 2020 08:22:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72BAC2065D
+	for <bpf@archiver.kernel.org>; Thu, 22 Oct 2020 08:22:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603354941;
-	bh=HRHVeHm8EpP37GI46+MSU0/lBSTcf0YuK3WnUgZZqq0=;
+	s=default; t=1603354948;
+	bh=grrujud9EHPu2ij7pJxYCd0l9+KzN+YRkFGQSDx/LVk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=lmI6wnLO8yjbf9Puak6DtTVZ5MuLQgwjNlWWGDPwHyI2ihVoYVDxWhlrgNnZ2gG1V
-	 nbZSAStdKIUX0TwayyOvvnrMfuMTpJIqPaXINPtvLI6cQqR2PXKK3whnJQRF6pGEaL
-	 RT7d0BI7T+1bRBpMV2PQxG6d0cnmwIIVF638bV9o=
+	b=R2BeQY5EDdVVshqrF9OMNAGwgL2Wnsg/slFP0evzF4otD52De2UWYEc1jagY8hKk+
+	 DzYWgqSG4hCKZL68xRX+6gYrUUsWdeN/W9EKbXPd+DMgLwH6G4D/ayLjCDACzZs+oZ
+	 muvJiIr5PTJLeEputlBw1zKz7weIARAzHieA9pyY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2895257AbgJVIWV convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 22 Oct 2020 04:22:21 -0400
-Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:57355 "EHLO
+        id S2895284AbgJVIW1 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 22 Oct 2020 04:22:27 -0400
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:47619 "EHLO
         us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2895254AbgJVIWU (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 22 Oct 2020 04:22:20 -0400
+        by vger.kernel.org with ESMTP id S2895275AbgJVIW1 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 22 Oct 2020 04:22:27 -0400
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-459-6hIyeFD-Niup_JfvA99kwg-1; Thu, 22 Oct 2020 04:22:13 -0400
-X-MC-Unique: 6hIyeFD-Niup_JfvA99kwg-1
+ us-mta-144-O96xkGQbMumUIQ-GyHKVXQ-1; Thu, 22 Oct 2020 04:22:20 -0400
+X-MC-Unique: O96xkGQbMumUIQ-GyHKVXQ-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 06B6B186DD37;
-        Thu, 22 Oct 2020 08:22:11 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0AB57186DD31;
+        Thu, 22 Oct 2020 08:22:18 +0000 (UTC)
 Received: from krava.redhat.com (unknown [10.40.195.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D6C5C60BFA;
-        Thu, 22 Oct 2020 08:22:07 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CE75C60BFA;
+        Thu, 22 Oct 2020 08:22:14 +0000 (UTC)
 From:   Jiri Olsa <jolsa@kernel.org>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -51,9 +51,9 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Jesper Brouer <jbrouer@redhat.com>,
         =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         Viktor Malik <vmalik@redhat.com>
-Subject: [RFC bpf-next 06/16] ftrace: Add unregister_ftrace_direct_ips function
-Date:   Thu, 22 Oct 2020 10:21:28 +0200
-Message-Id: <20201022082138.2322434-7-jolsa@kernel.org>
+Subject: [RFC bpf-next 08/16] bpf: Use delayed link free in bpf_link_put
+Date:   Thu, 22 Oct 2020 10:21:30 +0200
+Message-Id: <20201022082138.2322434-9-jolsa@kernel.org>
 In-Reply-To: <20201022082138.2322434-1-jolsa@kernel.org>
 References: <20201022082138.2322434-1-jolsa@kernel.org>
 MIME-Version: 1.0
@@ -68,98 +68,59 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adding unregister_ftrace_direct_ips function that allows
-to unregister array of ip addresses and trampolines for
-direct filter. the interface is:
+Moving bpf_link_free call into delayed processing so we don't
+need to wait for it when releasing the link.
 
-  int unregister_ftrace_direct_ips(unsigned long *ips,
-                                   unsigned long *addrs,
-                                   int count);
+For example bpf_tracing_link_release could take considerable
+amount of time in bpf_trampoline_put function due to
+synchronize_rcu_tasks call.
 
-It wil be used in following patches to unregister bpf
-trampolines in batch mode.
+It speeds up bpftrace release time in following example:
+
+Before:
+
+ Performance counter stats for './src/bpftrace -ve kfunc:__x64_sys_s*
+    { printf("test\n"); } i:ms:10 { printf("exit\n"); exit();}' (5 runs):
+
+     3,290,457,628      cycles:k                                 ( +-  0.27% )
+       933,581,973      cycles:u                                 ( +-  0.20% )
+
+             50.25 +- 4.79 seconds time elapsed  ( +-  9.53% )
+
+After:
+
+ Performance counter stats for './src/bpftrace -ve kfunc:__x64_sys_s*
+    { printf("test\n"); } i:ms:10 { printf("exit\n"); exit();}' (5 runs):
+
+     2,535,458,767      cycles:k                                 ( +-  0.55% )
+       940,046,382      cycles:u                                 ( +-  0.27% )
+
+             33.60 +- 3.27 seconds time elapsed  ( +-  9.73% )
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- include/linux/ftrace.h |  2 ++
- kernel/trace/ftrace.c  | 51 ++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 53 insertions(+)
+ kernel/bpf/syscall.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 9ed52755667a..24525473043e 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -293,6 +293,8 @@ int ftrace_modify_direct_caller(struct ftrace_func_entry *entry,
- unsigned long ftrace_find_rec_direct(unsigned long ip);
- int register_ftrace_direct_ips(unsigned long *ips, unsigned long *addrs,
- 			       int count);
-+int unregister_ftrace_direct_ips(unsigned long *ips, unsigned long *addrs,
-+				 int count);
- #else
- # define ftrace_direct_func_count 0
- static inline int register_ftrace_direct(unsigned long ip, unsigned long addr)
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 770bcd1a245a..15a13e6c1f31 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -5374,6 +5374,57 @@ int unregister_ftrace_direct(unsigned long ip, unsigned long addr)
- }
- EXPORT_SYMBOL_GPL(unregister_ftrace_direct);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 1110ecd7d1f3..61ef29f9177d 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2346,12 +2346,8 @@ void bpf_link_put(struct bpf_link *link)
+ 	if (!atomic64_dec_and_test(&link->refcnt))
+ 		return;
  
-+int unregister_ftrace_direct_ips(unsigned long *ips, unsigned long *addrs,
-+				 int count)
-+{
-+	struct ftrace_direct_func *direct;
-+	struct ftrace_func_entry *entry;
-+	int i, del = 0, ret = -ENODEV;
-+
-+	mutex_lock(&direct_mutex);
-+
-+	for (i = 0; i < count; i++) {
-+		entry = find_direct_entry(&ips[i], NULL);
-+		if (!entry)
-+			goto out_unlock;
-+		del++;
-+	}
-+
-+	if (direct_functions->count - del == 0)
-+		unregister_ftrace_function(&direct_ops);
-+
-+	ret = ftrace_set_filter_ips(&direct_ops, ips, count, 1);
-+
-+	WARN_ON(ret);
-+
-+	for (i = 0; i < count; i++) {
-+		entry = __ftrace_lookup_ip(direct_functions, ips[i]);
-+		if (WARN_ON(!entry))
-+			continue;
-+
-+		remove_hash_entry(direct_functions, entry);
-+
-+		direct = ftrace_find_direct_func(addrs[i]);
-+		if (!WARN_ON(!direct)) {
-+			/* This is the good path (see the ! before WARN) */
-+			direct->count--;
-+			WARN_ON(direct->count < 0);
-+			if (!direct->count) {
-+				list_del_rcu(&direct->next);
-+				synchronize_rcu_tasks();
-+				kfree(direct);
-+				kfree(entry);
-+				ftrace_direct_func_count--;
-+			}
-+		}
-+	}
-+ out_unlock:
-+	mutex_unlock(&direct_mutex);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(unregister_ftrace_direct_ips);
-+
- static struct ftrace_ops stub_ops = {
- 	.func		= ftrace_stub,
- };
+-	if (in_atomic()) {
+-		INIT_WORK(&link->work, bpf_link_put_deferred);
+-		schedule_work(&link->work);
+-	} else {
+-		bpf_link_free(link);
+-	}
++	INIT_WORK(&link->work, bpf_link_put_deferred);
++	schedule_work(&link->work);
+ }
+ 
+ static int bpf_link_release(struct inode *inode, struct file *filp)
 -- 
 2.26.2
 
