@@ -2,99 +2,79 @@ Return-Path: <SRS0=V6te=D5=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 284FEC4363A
-	for <bpf@archiver.kernel.org>; Thu, 22 Oct 2020 09:48:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07AB7C388F2
+	for <bpf@archiver.kernel.org>; Thu, 22 Oct 2020 13:35:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AE5DC223FB
-	for <bpf@archiver.kernel.org>; Thu, 22 Oct 2020 09:48:09 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LCq3qDfe"
+	by mail.kernel.org (Postfix) with ESMTP id 9ACA224178
+	for <bpf@archiver.kernel.org>; Thu, 22 Oct 2020 13:35:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2895247AbgJVJsJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 22 Oct 2020 05:48:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:36154 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2509920AbgJVJsI (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 22 Oct 2020 05:48:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603360086;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9XQkLZVZQx4DjBArygkCNODq84ypuNcvahgE7zZrd14=;
-        b=LCq3qDfeBxv1MHOIlnzSjVCsU82YLE/EImLEFLn19bDnkB+BrGRInWRkhbZC1oWLJ4/4eU
-        rF6ia1EL/Rp0p+eY+TKuimeYDyFdBRYUWa8wKQ9kCwIbUlV3VPsbBjthUZujKShqlE0iUV
-        /o7RcIyra/Y0uudQ8NYaA7xdzWsVi7Y=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-559-yE851czBOIOUzGIEnaaPHQ-1; Thu, 22 Oct 2020 05:48:02 -0400
-X-MC-Unique: yE851czBOIOUzGIEnaaPHQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S2900123AbgJVNfP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 22 Oct 2020 09:35:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55874 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726257AbgJVNfP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 22 Oct 2020 09:35:15 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1C12A186DD29;
-        Thu, 22 Oct 2020 09:48:01 +0000 (UTC)
-Received: from krava (unknown [10.40.195.55])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 23F3E19C4F;
-        Thu, 22 Oct 2020 09:47:58 +0000 (UTC)
-Date:   Thu, 22 Oct 2020 11:47:58 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     davem@davemloft.net, daniel@iogearbox.net,
-        john.fastabend@gmail.com, jolsa@kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH bpf-next 0/3] bpf: Pointers beyond packet end.
-Message-ID: <20201022094758.GC2318292@krava>
-References: <20201021182015.39000-1-alexei.starovoitov@gmail.com>
+        by mail.kernel.org (Postfix) with ESMTPSA id C46B720BED;
+        Thu, 22 Oct 2020 13:35:12 +0000 (UTC)
+Date:   Thu, 22 Oct 2020 09:35:10 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
+        Jesper Brouer <jbrouer@redhat.com>,
+        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>,
+        Viktor Malik <vmalik@redhat.com>
+Subject: Re: [RFC bpf-next 00/16] bpf: Speed up trampoline attach
+Message-ID: <20201022093510.37e8941f@gandalf.local.home>
+In-Reply-To: <20201022082138.2322434-1-jolsa@kernel.org>
+References: <20201022082138.2322434-1-jolsa@kernel.org>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201021182015.39000-1-alexei.starovoitov@gmail.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Oct 21, 2020 at 11:20:12AM -0700, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> In some cases LLVM uses the knowledge that branch is taken to optimze the code
-> which causes the verifier to reject valid programs.
-> Teach the verifier to recognize that
-> r1 = skb->data;
-> r1 += 10;
-> r2 = skb->data_end;
-> if (r1 > r2) {
->   here r1 points beyond packet_end and subsequent
->   if (r1 > r2) // always evaluates to "true".
-> }
-> 
-> Alexei Starovoitov (3):
->   bpf: Support for pointers beyond pkt_end.
->   selftests/bpf: Add skb_pkt_end test
->   selftests/bpf: Add asm tests for pkt vs pkt_end comparison.
+On Thu, 22 Oct 2020 10:21:22 +0200
+Jiri Olsa <jolsa@kernel.org> wrote:
 
-Tested-by: Jiri Olsa <jolsa@redhat.com>
-
-thanks,
-jirka
-
+> hi,
+> this patchset tries to speed up the attach time for trampolines
+> and make bpftrace faster for wildcard use cases like:
 > 
->  include/linux/bpf_verifier.h                  |   2 +-
->  kernel/bpf/verifier.c                         | 131 +++++++++++++++---
->  .../bpf/prog_tests/test_skb_pkt_end.c         |  41 ++++++
->  .../testing/selftests/bpf/progs/skb_pkt_end.c |  54 ++++++++
->  .../testing/selftests/bpf/verifier/ctx_skb.c  |  42 ++++++
->  5 files changed, 247 insertions(+), 23 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/test_skb_pkt_end.c
->  create mode 100644 tools/testing/selftests/bpf/progs/skb_pkt_end.c
+>   # bpftrace -ve "kfunc:__x64_sys_s* { printf("test\n"); }"
 > 
-> -- 
-> 2.23.0
-> 
+> Profiles show mostly ftrace backend, because we add trampoline
+> functions one by one and ftrace direct function registering is
+> quite expensive. Thus main change in this patchset is to allow
+> batch attach and use just single ftrace call to attach or detach
+> multiple ips/trampolines.
 
+The issue I have with this change is that the purpose of the direct
+trampoline was to give bpf access to the parameters of a function as if it
+was called directly. That is, it could see the parameters of a function
+quickly. I even made the direct function work if it wanted to also trace
+the return code.
+
+What the direct calls is NOT, is a generic tracing function tracer. If that
+is required, then bpftrace should be registering itself with ftrace.
+If you are attaching to a set of functions, where it becomes obvious that
+its not being used to access specific parameters, then that's an abuse of
+the direct calls.
+
+We already have one generic function tracer, we don't need another.
+
+-- Steve
