@@ -1,166 +1,96 @@
-Return-Path: <SRS0=6uvD=EB=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=pSPe=EC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EA73FC2D0A3
-	for <bpf@archiver.kernel.org>; Mon, 26 Oct 2020 23:36:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 585F5C2D0A3
+	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 00:04:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9D77320809
-	for <bpf@archiver.kernel.org>; Mon, 26 Oct 2020 23:36:42 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LuPu/vWJ"
+	by mail.kernel.org (Postfix) with ESMTP id 09F1C20791
+	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 00:04:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603757044;
+	bh=xXQCAi1UanTxXmdmTXNwci+zWfS1jsM/sBq4Gzk2pFY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=TtmF+KmgWdJiZXLNzp+OO02c1XNwSPvqJJyHnnQ39iiQWsxEgY3EKZ8gI9uiokk6L
+	 n3xLpfuDYXh7CzB/Ek7kMqmeVgwkaKH5q3dUj0HS4Nm4w+SnPw4gsXzxXxRd99n91U
+	 xpzuJ4vuADHaw1DPoQh87og3HjmwaWNmvpfkju20=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407170AbgJZXgm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 26 Oct 2020 19:36:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:48550 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2407157AbgJZXgm (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 26 Oct 2020 19:36:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603755400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Aw1C3SX8MwtokG3KPK8WvRy0mlIpK2ccLFmN/0ezULg=;
-        b=LuPu/vWJoVRodXSP2LApmJA1HMsye1Ho26Z4ELMx7fmFpTkvhpRY2MgkZ5SDp0KCELkroh
-        k0I6RRlCFPzf0oKYSFa4Ng6VpveQGTc7r2RDLP5s+3/uB9sP/RLfp8/J5Si0C36X0hWRpu
-        W4BQ25pykD+iAKh3lFqFOHcq7V48yo0=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-549-Srn8kJOEOqywgHF0unrXHQ-1; Mon, 26 Oct 2020 19:36:38 -0400
-X-MC-Unique: Srn8kJOEOqywgHF0unrXHQ-1
-Received: by mail-io1-f70.google.com with SMTP id k13so6981192iok.12
-        for <bpf@vger.kernel.org>; Mon, 26 Oct 2020 16:36:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Aw1C3SX8MwtokG3KPK8WvRy0mlIpK2ccLFmN/0ezULg=;
-        b=aUzw8wHxTC+M44RHAOEUb8rlU2/dX0p/0UMaG5ck5gQLyK+tt8kNPzLZJGJyLrUzur
-         3JBmb7lDO0Wb6Fa1JI248PX3oSCujJOtQRUvzd/jayzWLxFOrxKjDdNrkf1tRqw9Oc++
-         ECzR03YDkyduWKSqWdGgi8bkZD9dOF8Wc8eBUjY97GcPIqqK1nihzrEpuy+JFfgaN9ZC
-         U1lqCU3FqXA6y+Iu+eWckYK2Rzm4mQOt4D8dCC9XwN/MimnbUAVNNz13Gz2elLUzeQ1i
-         PYhRUC6hNikmGeo7GsCn+pyZhm0noulgPDKHZ9S5TwlDYLzlidU9gNZlFvsz4pkMfOGz
-         INmA==
-X-Gm-Message-State: AOAM5312GJw0YIwnFZUmcuqA4pky9eMULNR3bKbJARsgLVVEnfaJ/g9X
-        Wu9Mdwa4acOBy2rwx5QQm8qBMlXZ4j+IOCrNf6GUjFCX7hT5SuZZy4CEzfap94z2CfL+L5KJKHC
-        jmzHucqzvB6V4
-X-Received: by 2002:a92:8742:: with SMTP id d2mr12988629ilm.153.1603755397711;
-        Mon, 26 Oct 2020 16:36:37 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwHqQK3o+vUOW+FCj6F4hqe/Yu+gQQs5ZAQqnqHW1/7nCVMTu8A7UdbzysD2E6mDne9pR90vw==
-X-Received: by 2002:a92:8742:: with SMTP id d2mr12988618ilm.153.1603755397381;
-        Mon, 26 Oct 2020 16:36:37 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id g9sm3457470iob.1.2020.10.26.16.36.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Oct 2020 16:36:36 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id CEE31181CED; Tue, 27 Oct 2020 00:36:34 +0100 (CET)
-From:   =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     daniel@iogearbox.net, ast@fb.com
-Cc:     =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org, brouer@redhat.com
-Subject: [PATCH bpf] samples/bpf: Set rlimit for memlock to infinity in all samples
-Date:   Tue, 27 Oct 2020 00:36:23 +0100
-Message-Id: <20201026233623.91728-1-toke@redhat.com>
-X-Mailer: git-send-email 2.29.0
+        id S1729174AbgJ0AEC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Oct 2020 20:04:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35182 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2411017AbgJZX4A (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 26 Oct 2020 19:56:00 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 326CA22202;
+        Mon, 26 Oct 2020 23:55:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603756559;
+        bh=xXQCAi1UanTxXmdmTXNwci+zWfS1jsM/sBq4Gzk2pFY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BlGwyHU8vUZjhbt0rqJ/G4w4PQpxbbbS60VrFztXa30uOsO2aCw+M4StsHT3giiLt
+         AwCF0AFygKj0kYhJFWoqoefZDvj9w8auNW8AgMXM1rdW6aZyBhxyU5KKSKoFyk205D
+         +jMPl3/BP3cuYluMs/UloOptjyv0QLOOGUkDm0eI=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 35/80] samples/bpf: Fix possible deadlock in xdpsock
+Date:   Mon, 26 Oct 2020 19:54:31 -0400
+Message-Id: <20201026235516.1025100-35-sashal@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201026235516.1025100-1-sashal@kernel.org>
+References: <20201026235516.1025100-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The memlock rlimit is a notorious source of failure for BPF programs. Most
-of the samples just set it to infinity, but a few used a lower limit. The
-problem with unconditionally setting a lower limit is that this will also
-override the limit if the system-wide setting is *higher* than the limit
-being set, which can lead to failures on systems that lock a lot of memory,
-but set 'ulimit -l' to unlimited before running a sample.
+From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-One fix for this is to only conditionally set the limit if the current
-limit is lower, but it is simpler to just unify all the samples and have
-them all set the limit to infinity.
+[ Upstream commit 5a2a0dd88f0f267ac5953acd81050ae43a82201f ]
 
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Fix a possible deadlock in the l2fwd application in xdpsock that can
+occur when there is no space in the Tx ring. There are two ways to get
+the kernel to consume entries in the Tx ring: calling sendto() to make
+it send packets and freeing entries from the completion ring, as the
+kernel will not send a packet if there is no space for it to add a
+completion entry in the completion ring. The Tx loop in l2fwd only
+used to call sendto(). This patches adds cleaning the completion ring
+in that loop.
+
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/1599726666-8431-3-git-send-email-magnus.karlsson@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- samples/bpf/task_fd_query_user.c    | 2 +-
- samples/bpf/tracex2_user.c          | 2 +-
- samples/bpf/tracex3_user.c          | 2 +-
- samples/bpf/xdp_redirect_cpu_user.c | 2 +-
- samples/bpf/xdp_rxq_info_user.c     | 2 +-
- 5 files changed, 5 insertions(+), 5 deletions(-)
+ samples/bpf/xdpsock_user.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/samples/bpf/task_fd_query_user.c b/samples/bpf/task_fd_query_user.c
-index 4a74531dc403..b68bd2f8fdc9 100644
---- a/samples/bpf/task_fd_query_user.c
-+++ b/samples/bpf/task_fd_query_user.c
-@@ -290,7 +290,7 @@ static int test_debug_fs_uprobe(char *binary_path, long offset, bool is_return)
- 
- int main(int argc, char **argv)
- {
--	struct rlimit r = {1024*1024, RLIM_INFINITY};
-+	struct rlimit r = {RLIM_INFINITY, RLIM_INFINITY};
- 	extern char __executable_start;
- 	char filename[256], buf[256];
- 	__u64 uprobe_file_offset;
-diff --git a/samples/bpf/tracex2_user.c b/samples/bpf/tracex2_user.c
-index 3e36b3e4e3ef..3d6eab711d23 100644
---- a/samples/bpf/tracex2_user.c
-+++ b/samples/bpf/tracex2_user.c
-@@ -116,7 +116,7 @@ static void int_exit(int sig)
- 
- int main(int ac, char **argv)
- {
--	struct rlimit r = {1024*1024, RLIM_INFINITY};
-+	struct rlimit r = {RLIM_INFINITY, RLIM_INFINITY};
- 	long key, next_key, value;
- 	struct bpf_link *links[2];
- 	struct bpf_program *prog;
-diff --git a/samples/bpf/tracex3_user.c b/samples/bpf/tracex3_user.c
-index 70e987775c15..83e0fecbb01a 100644
---- a/samples/bpf/tracex3_user.c
-+++ b/samples/bpf/tracex3_user.c
-@@ -107,7 +107,7 @@ static void print_hist(int fd)
- 
- int main(int ac, char **argv)
- {
--	struct rlimit r = {1024*1024, RLIM_INFINITY};
-+	struct rlimit r = {RLIM_INFINITY, RLIM_INFINITY};
- 	struct bpf_link *links[2];
- 	struct bpf_program *prog;
- 	struct bpf_object *obj;
-diff --git a/samples/bpf/xdp_redirect_cpu_user.c b/samples/bpf/xdp_redirect_cpu_user.c
-index 6fb8dbde62c5..f78cb18319aa 100644
---- a/samples/bpf/xdp_redirect_cpu_user.c
-+++ b/samples/bpf/xdp_redirect_cpu_user.c
-@@ -765,7 +765,7 @@ static int load_cpumap_prog(char *file_name, char *prog_name,
- 
- int main(int argc, char **argv)
- {
--	struct rlimit r = {10 * 1024 * 1024, RLIM_INFINITY};
-+	struct rlimit r = {RLIM_INFINITY, RLIM_INFINITY};
- 	char *prog_name = "xdp_cpu_map5_lb_hash_ip_pairs";
- 	char *mprog_filename = "xdp_redirect_kern.o";
- 	char *redir_interface = NULL, *redir_map = NULL;
-diff --git a/samples/bpf/xdp_rxq_info_user.c b/samples/bpf/xdp_rxq_info_user.c
-index caa4e7ffcfc7..93fa1bc54f13 100644
---- a/samples/bpf/xdp_rxq_info_user.c
-+++ b/samples/bpf/xdp_rxq_info_user.c
-@@ -450,7 +450,7 @@ static void stats_poll(int interval, int action, __u32 cfg_opt)
- int main(int argc, char **argv)
- {
- 	__u32 cfg_options= NO_TOUCH ; /* Default: Don't touch packet memory */
--	struct rlimit r = {10 * 1024 * 1024, RLIM_INFINITY};
-+	struct rlimit r = {RLIM_INFINITY, RLIM_INFINITY};
- 	struct bpf_prog_load_attr prog_load_attr = {
- 		.prog_type	= BPF_PROG_TYPE_XDP,
- 	};
+diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
+index df011ac334022..79d1005ff2ee3 100644
+--- a/samples/bpf/xdpsock_user.c
++++ b/samples/bpf/xdpsock_user.c
+@@ -677,6 +677,7 @@ static void l2fwd(struct xsk_socket_info *xsk, struct pollfd *fds)
+ 	while (ret != rcvd) {
+ 		if (ret < 0)
+ 			exit_with_error(-ret);
++		complete_tx_l2fwd(xsk, fds);
+ 		if (xsk_ring_prod__needs_wakeup(&xsk->tx))
+ 			kick_tx(xsk);
+ 		ret = xsk_ring_prod__reserve(&xsk->tx, rcvd, &idx_tx);
 -- 
-2.29.0
+2.25.1
 
