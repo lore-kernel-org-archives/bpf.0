@@ -7,49 +7,49 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A063FC4363A
-	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 00:21:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA390C4363A
+	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 00:26:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 70B6120708
-	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 00:21:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A76DD207DE
+	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 00:26:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603758086;
-	bh=G3kHGiJ0JFFbiwJJgYNWGLgRs+nYMiXmevdZJzjgM9E=;
+	s=default; t=1603758373;
+	bh=lBTaitZwC3DCh27k3l38N89/0TU95O7CiRGAQNlNUdc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ampUhaz5WaotBYr0kB27tcXNZQ6yrElUPijsr43Rc5HjLm4G0LNJTZ1wrk8ZsA2+T
-	 hJ18r8bQyknCeRDpTNh5n/O+GCAqpP/doBTTOpS0NF4aMQmw0FZjXDOKX7JaVONZnC
-	 NiMjyow3gWIWJQwqp2EthB25rlDdIRNvbkjBjGUc=
+	b=qMkD5P9rdP2kkzMuppKcCM8Z1hhsrUi6L1fC4+cMAvBg1c3SRHK6DcfS4zCEdsGH3
+	 dxpwuWMUM5nj/A4r1rxsgCHJ85jUBbL2aUk2AT4FahEsEqCLzTO9wJXDXzRcd55Sfk
+	 630lPa9MNjmCfBkcJNTC5SH56lpNEMF2bxdU4e68=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437298AbgJ0AVU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 26 Oct 2020 20:21:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34892 "EHLO mail.kernel.org"
+        id S2409979AbgJZXxL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 26 Oct 2020 19:53:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57060 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2411006AbgJZXz5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 26 Oct 2020 19:55:57 -0400
+        id S2409972AbgJZXxL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 26 Oct 2020 19:53:11 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 63C7420B1F;
-        Mon, 26 Oct 2020 23:55:55 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EDFB22151B;
+        Mon, 26 Oct 2020 23:53:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603756556;
-        bh=G3kHGiJ0JFFbiwJJgYNWGLgRs+nYMiXmevdZJzjgM9E=;
+        s=default; t=1603756389;
+        bh=lBTaitZwC3DCh27k3l38N89/0TU95O7CiRGAQNlNUdc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l1x/CFUHO1NOQU75MLr0WUIy4a0+ZnH+JkePJ8oxsGAPmhVbgEOav8E0laliP7AUl
-         HtIqcmec2UqWkatl4iYt43dIZJ66FXlg0y9mnrWrjXmqCRUFYA1zUrIMjuw92ZMRpe
-         Kfk3SRZedwjazYPkzqU9AOmj6xEDvDqZl1WCAZfY=
+        b=hc2MqyvQma7Eyi++QFkJAQZsDg3fwR9BqWh7ms7fxzVR/qDTvKnusOfDlJW6JwmRV
+         kscV9c2kFR++8Am3Y6SSXg6BIXhTEMKnTXgLG9+m7pIiMON6UsNjN+nEm+Y/2vXfqC
+         4ZRI+nCOP0L8qFlGmo6HNtfNjWgrCzUxz6+n3A8s=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andriin@fb.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 5.4 32/80] bpf: Permit map_ptr arithmetic with opcode add and offset 0
-Date:   Mon, 26 Oct 2020 19:54:28 -0400
-Message-Id: <20201026235516.1025100-32-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.8 052/132] bpf: Permit map_ptr arithmetic with opcode add and offset 0
+Date:   Mon, 26 Oct 2020 19:50:44 -0400
+Message-Id: <20201026235205.1023962-52-sashal@kernel.org>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201026235516.1025100-1-sashal@kernel.org>
-References: <20201026235516.1025100-1-sashal@kernel.org>
+In-Reply-To: <20201026235205.1023962-1-sashal@kernel.org>
+References: <20201026235205.1023962-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -155,10 +155,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ae27dd77a73cb..bd0a5ead2af0c 100644
+index 89b07db146763..2b318db54bf39 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -4398,6 +4398,10 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
+@@ -5042,6 +5042,10 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
  			dst, reg_type_str[ptr_reg->type]);
  		return -EACCES;
  	case CONST_PTR_TO_MAP:
