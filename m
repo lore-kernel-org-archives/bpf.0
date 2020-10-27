@@ -2,173 +2,323 @@ Return-Path: <SRS0=pSPe=EC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 40A92C4363A
-	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 17:01:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14DBDC388F9
+	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 17:03:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B2F2C221F8
-	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 17:01:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B58AF221F8
+	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 17:03:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Tat9mVBK";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="GXIBmMzw"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fNC63Afm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1814984AbgJ0RBE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Oct 2020 13:01:04 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:3989 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1814978AbgJ0RBC (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 27 Oct 2020 13:01:02 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 09RGwxFc028996;
-        Tue, 27 Oct 2020 10:00:47 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type :
- content-transfer-encoding : in-reply-to : mime-version; s=facebook;
- bh=pe2jzqEzr8r2D/1h/D0pOCO0M3ybkSpcpSUC6M0jssI=;
- b=Tat9mVBKVyo6cGxWrno/Rns93Rd5AnDkHb3MLNnutchGCKPkPO2Oa7p+8ntdXtnwdG7l
- 6G5Ty4hKjMwistbZn8BtR9vDD8y/uTEI94Eq1d3eLsJrj6ANb1ZYP9K7wj60z/B2NCvz
- o7HiEy6xx2eYdsOWTJK2JUM2NsPz5DaNB5o= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 34cfxn7y4b-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 27 Oct 2020 10:00:47 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 27 Oct 2020 10:00:42 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XM8vcR/hskPouIuR7qJTtp9eHXf9u+8gvHvW8OwocZDtUUg7U8yoHVrWWc+5CXZ8Pyc+xQ8WE2LCNrmqTf4an9IxCFDQk8Q92wihOAuXcG6mFMcfMEXF3M/pBHUkAbXpZkpIc5KdUksvKdrNoMQKHOXpXcraKrLPVOJ4HX+7zNOyk28Y9rQZ6VSmWJ3tImDKXACuNxfMECLeloxNPoBaOUD+E5DSnQ+4TI2xiJaXVdyDvGr8B9csDXne82YmkMVr6zDbA4bOZGmFHbeaU1Tdn+6fWvr0nyE7/zRXfdoGcAcbOhAQbklPBgXg2wk1iPJHhnx44MRvRwQKOY6ZgSfgHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RHwsRREaRjivNbbwMtu55sqfPOAOv1j85F4BYQ8wIsI=;
- b=L8bb+o455KnMrOHMgtHULlkL8d2MqHhOSzcJKCckseKZD7/VZrySH+yD6CXZrVc789MNwFDQCjcq/uew2mciPkm1WynNa7DLEOuNNReFdV0rfJ+6onjU+ugA5f0vcNMbPqNF/tWRKzjDuimOLPlNpdoDIaaLAF0M3Mac9c1lfjkdUL5qSgCS4j9rVvzrlGfncsO5YDbrmwf9Fw4JKdDil+i6pvp0vm1lyRhhc5hje+AovfJz0Y7jX0A1YFe8f0DlR8r/NlUz4oh6M52uqgCZ9jad8p4iq/21fp6q9FsqyBn8NoJn4pHuw1n+kvDNTcCNLTY0HZIMAh5Zi4aH9Ds9/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RHwsRREaRjivNbbwMtu55sqfPOAOv1j85F4BYQ8wIsI=;
- b=GXIBmMzwJyd46XnUeESO3PVr3kCo398bH2cItDCycTiy7FfhsS/0c1GJHHdIpJXfFqDMfklxGPlGZ8vCT6En4CWkIpgYkHIBzENBwPnvu5NWFHIHv4Ex1TwqYBkK4ono57oRp0ITXfTERam+J8UVdaypOomcmi6cjRFeq7p4SQw=
-Authentication-Results: redhat.com; dkim=none (message not signed)
- header.d=none;redhat.com; dmarc=none action=none header.from=fb.com;
-Received: from BYAPR15MB4136.namprd15.prod.outlook.com (2603:10b6:a03:96::24)
- by BYAPR15MB2936.namprd15.prod.outlook.com (2603:10b6:a03:f9::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.28; Tue, 27 Oct
- 2020 17:00:40 +0000
-Received: from BYAPR15MB4136.namprd15.prod.outlook.com
- ([fe80::d834:4987:4916:70f2]) by BYAPR15MB4136.namprd15.prod.outlook.com
- ([fe80::d834:4987:4916:70f2%5]) with mapi id 15.20.3477.028; Tue, 27 Oct 2020
- 17:00:40 +0000
-Date:   Tue, 27 Oct 2020 10:00:35 -0700
-From:   Roman Gushchin <guro@fb.com>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-CC:     Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        <daniel@iogearbox.net>, <ast@fb.com>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <kernel-team@fb.com>
-Subject: Re: [PATCH bpf] samples/bpf: Set rlimit for memlock to infinity in
- all samples
-Message-ID: <20201027170035.GA725724@carbon.dhcp.thefacebook.com>
-References: <20201026233623.91728-1-toke@redhat.com>
- <20201027081440.756cd175@carbon>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201027081440.756cd175@carbon>
-X-Originating-IP: [2620:10d:c090:400::4:a17b]
-X-ClientProxiedBy: MW3PR06CA0022.namprd06.prod.outlook.com
- (2603:10b6:303:2a::27) To BYAPR15MB4136.namprd15.prod.outlook.com
- (2603:10b6:a03:96::24)
+        id S1815653AbgJ0RDt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Oct 2020 13:03:49 -0400
+Received: from mail-ej1-f68.google.com ([209.85.218.68]:38518 "EHLO
+        mail-ej1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1815601AbgJ0RD3 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Oct 2020 13:03:29 -0400
+Received: by mail-ej1-f68.google.com with SMTP id ce10so3286755ejc.5
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2020 10:03:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=zqoXqcvWMBPlSXei6ErKneHNqWSBzP4hmrekRQ6svS4=;
+        b=fNC63AfmPG0NHSC10dqVBDM3uNBAK7TLW/sS92s88m9ODkLb7LoaR1nMCuOxljKY7X
+         Y8HE/wk09eqFUi0pA3cKfLDBR/VnyBJTrsaXsjz/qXnNf4QYxpME3VOj/V9xgDJs1T5c
+         IKfIe/4YDTENuVSvUp382qThDt8UYKSivd5c0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=zqoXqcvWMBPlSXei6ErKneHNqWSBzP4hmrekRQ6svS4=;
+        b=PR3rLz5zohX/Acc5N6sq5YF1gsdrmTEHDMcyxoQdie8zrAScDLQasSRpIHmfBxw7Gq
+         sc4mbjeCzpqpdZWBuNYno+ESNSIoLc4FB2PF3fLE2bnAakYzRcuKMOS2lbbSJJc61GXs
+         IH9S//F+Iu+dxfRi1YcqNPy29qX6Wqf1AbCjqhJInZUHgOJ+cNoZKW3HXE4MhWcJxyZQ
+         iJSdRpNlrZ10bTtoYjlef9oFOtnTOqBtOYS8g48jQiAUxe4O9TkAOUyeGABNcR+si7yl
+         BAtqRB9Pxgh79s7shc1g2MSj6KUMYZX+3GWvq/wMcNzkao9NY1CYHfniZMOZXc1qnkXF
+         qK0A==
+X-Gm-Message-State: AOAM532bc+Ohkc07JCPNtAmJOkjs7tML45pPL1JzWr1pDu51KMNPiZL2
+        G+bNkVs/G9iHgDGJLX7SAPIfQw==
+X-Google-Smtp-Source: ABdhPJweX2pvG1phfMHU46cZlbs0xKBIkvFY94ledyRve6QiU1K71Z0TNZ24x399+8NW2RXCU5n3OA==
+X-Received: by 2002:a17:906:23f2:: with SMTP id j18mr3290276ejg.526.1603818206443;
+        Tue, 27 Oct 2020 10:03:26 -0700 (PDT)
+Received: from kpsingh.zrh.corp.google.com ([81.6.44.51])
+        by smtp.gmail.com with ESMTPSA id ba6sm1315006edb.61.2020.10.27.10.03.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2020 10:03:25 -0700 (PDT)
+From:   KP Singh <kpsingh@chromium.org>
+To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
+        Hao Luo <haoluo@google.com>
+Subject: [PATCH bpf-next 5/5] bpf: Add tests for task_local_storage
+Date:   Tue, 27 Oct 2020 18:03:17 +0100
+Message-Id: <20201027170317.2011119-6-kpsingh@chromium.org>
+X-Mailer: git-send-email 2.29.0.rc2.309.g374f81d7ae-goog
+In-Reply-To: <20201027170317.2011119-1-kpsingh@chromium.org>
+References: <20201027170317.2011119-1-kpsingh@chromium.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from carbon.dhcp.thefacebook.com (2620:10d:c090:400::4:a17b) by MW3PR06CA0022.namprd06.prod.outlook.com (2603:10b6:303:2a::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.24 via Frontend Transport; Tue, 27 Oct 2020 17:00:39 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 13ac3269-16fa-47b5-51f5-08d87a99d589
-X-MS-TrafficTypeDiagnostic: BYAPR15MB2936:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR15MB29368AB16E8D500E16D5A9B9BE160@BYAPR15MB2936.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cMAMJHAwxhn/0zNa1ulQT8Wf1bRqomVtoRhV5OXBBusw9COXOwXzJ7oGtoh2UJMygdu7Thq9HFxuHul2d3/QjGmf45rSoVrTII+TOT3qDsiwHCgKfTEkLuwbqki2hi+rqP1xr3V6I4nzEGpH6UviAnq2T6mcLTiB3PSv2TqfOluMulB5gqrLIKZuXUqEdy45VViUKQdwaxhnsZeyPSVmBbl/kRbvj59bLbF+xGEWguOt+nJtgF5cCToeXT+e7TZRmxOORE6NfLpJCPYRMSP1gtaZxU2bxeRUCZhCCgDAHEZAZHhpq4qE+sCnT9dLwWP2zopMlBQK8WkV5vefrBOrvA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4136.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(376002)(366004)(136003)(346002)(396003)(6666004)(6506007)(86362001)(9686003)(83380400001)(316002)(5660300002)(66574015)(52116002)(7696005)(33656002)(2906002)(1076003)(66946007)(4326008)(8676002)(478600001)(66556008)(66476007)(8936002)(55016002)(186003)(16526019)(6916009);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: I6rVWBdwGWiKz2LEfYry/t4lRJLE7EoXZEYklaidC4V73qaAuinmg+VQ4J7tuVAeHXX5nHhFgiPk040sCeNWoANOF76Xrr4sXKHXzNSLRrb1BkmAgLaD7QzN7SLwPkKHc2M3M6speDjlJ82ieL/v2j5sArrSC1E+NbCTK8pupweVw1uYEcJNkx9+1U3SIYVpx10nZqyKQl3XivNaHTsFyz0QlMKjAP1hbcK+HHOBeOWhErVF3eUJeny9vN3L9HX4MVvQa9JXyoCUyNb6skLlDM2VOYTAYXSwn8mPTGXEEq8YnhEHWaJXEWgfoFuX7xn3NKcwJTXgOK0G3yEq4M9ITefEEK8+WXlIrAAigo08hudnCn+2hcRf9BjVB4Cbshjc30+B+fEu3IYBRf3Xsk+v8RcXrcsHPICXM3/Ja4zA1qJL4r2IcPWo5Oi+n8mdHImz4gEDJHak8QAON2yiFM6/m1PnSVX28aVj8RpsLZh3IKCC/5tp2H7nmBc2OapoiJ9wIh4JZhG54szAsYEnxaro/lko/HxhcxMhxlvLK1bAVv0zy81n9EIAcMH/88MjEN1RdvV90BqS8+jDBjwzgAOH94mR0gLe2Lj1VrOo19oZJD5K+6dTQYJiGEQpxsvOmwHcvkIo2iEE3RmKI4b/tdGjIARYS2InxcpJGshmCA3bQaP71Q3ZVBoJ5kEnnOvoFNaZ
-X-MS-Exchange-CrossTenant-Network-Message-Id: 13ac3269-16fa-47b5-51f5-08d87a99d589
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4136.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2020 17:00:40.6555
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: x//0Qn6MceMLWF3Z7hPDxmBeRM2dALjKgw4VpWcBVH0nAHg337oJuEv3EbQwEsrE
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2936
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-10-27_10:2020-10-26,2020-10-27 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- suspectscore=1 malwarescore=0 priorityscore=1501 spamscore=0 mlxscore=0
- clxscore=1011 phishscore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010270102
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 08:14:40AM +0100, Jesper Dangaard Brouer wrote:
-> On Tue, 27 Oct 2020 00:36:23 +0100
-> Toke Høiland-Jørgensen <toke@redhat.com> wrote:
-> 
-> > The memlock rlimit is a notorious source of failure for BPF programs. Most
-> > of the samples just set it to infinity, but a few used a lower limit. The
-> > problem with unconditionally setting a lower limit is that this will also
-> > override the limit if the system-wide setting is *higher* than the limit
-> > being set, which can lead to failures on systems that lock a lot of memory,
-> > but set 'ulimit -l' to unlimited before running a sample.
-> > 
-> > One fix for this is to only conditionally set the limit if the current
-> > limit is lower, but it is simpler to just unify all the samples and have
-> > them all set the limit to infinity.
-> > 
-> > Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
-> 
-> This change basically disable the memlock rlimit system. And this
-> disable method is becoming standard in more and more BPF programs.
-> IMHO using the system-wide memlock rlimit doesn't make sense for BPF.
+From: KP Singh <kpsingh@google.com>
 
-Hi Jesper,
+The test implements a simple MAC policy which denies an executable
+from unlinking itself. The LSM program bprm_committed_creds sets a
+task_local_storage with a pointer to the inode. This is then used to
+detect if the task is trying to unlink itself in the inode_unlink LSM
+hook.
 
-+1
+The test copies /bin/rm to /tmp and executes it in a child thread with
+the intention of deleting itself. A successful test should prevent the
+the running executable from deleting itself.
 
-> 
-> I'm still ACKing the patch, as this seems the only way forward, to
-> ignore and in-practice not use the memlock rlimit.
-> 
-> Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
-> 
-> 
-> I saw some patches on the list (from Facebook) with a new system for
-> policy limiting memory usage per BPF program or was it mem-cgroup, but
-> I don't think that was ever merged... I would really like to see
-> something replace (and remove) this memlock rlimit dependency. Anyone
-> knows what happened to that effort?
+The temporary file is cleaned up later in the test.
 
-I'm working on it.
+Signed-off-by: KP Singh <kpsingh@google.com>
+---
+ .../bpf/prog_tests/test_local_storage.c       | 89 ++++++++++++++++---
+ .../selftests/bpf/progs/local_storage.c       | 44 +++++++--
+ 2 files changed, 116 insertions(+), 17 deletions(-)
 
-It required some heavy changes on the mm side: accounting of the percpu memory,
-which required a framework for accounting of arbitrary non page-sized objects,
-support of accounting from an interrupt context and some manipulations with
-page flags in order to allow accounted vmallocs to be mapped to userspace.
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_local_storage.c b/tools/testing/selftests/bpf/prog_tests/test_local_storage.c
+index 91cd6f357246..0e41b27f3471 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_local_storage.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_local_storage.c
+@@ -4,30 +4,83 @@
+  * Copyright (C) 2020 Google LLC.
+  */
+ 
++#define _GNU_SOURCE
++
++#include <asm-generic/errno-base.h>
++#include <unistd.h>
++#include <sys/stat.h>
+ #include <test_progs.h>
+ #include <linux/limits.h>
+ 
+ #include "local_storage.skel.h"
+ #include "network_helpers.h"
+ 
+-int create_and_unlink_file(void)
++/* Copies an rm binary to a temp file. dest is a mkstemp template */
++int copy_rm(char *dest)
+ {
+-	char fname[PATH_MAX] = "/tmp/fileXXXXXX";
+-	int fd;
++	int ret, fd_in, fd_out;
++	struct stat stat;
++
++	fd_in = open("/bin/rm", O_RDONLY);
++	if (fd_in < 0)
++		return fd_in;
++
++	fd_out = mkstemp(dest);
++	if (fd_out < 0)
++		return fd_out;
+ 
+-	fd = mkstemp(fname);
+-	if (fd < 0)
+-		return fd;
++	ret = fstat(fd_in, &stat);
++	if (ret == -1)
++		return errno;
+ 
+-	close(fd);
+-	unlink(fname);
++	ret = copy_file_range(fd_in, NULL, fd_out, NULL, stat.st_size, 0);
++	if (ret == -1)
++		return errno;
++
++	/* Set executable permission on the copied file */
++	ret = chmod(dest, 0100);
++	if (ret == -1)
++		return errno;
++
++	close(fd_in);
++	close(fd_out);
+ 	return 0;
+ }
++/* Fork and exec the provided rm binary and return the exit code of the
++ * forked process and its pid.
++ */
++int run_self_unlink(int *monitored_pid, const char *rm_path)
++{
++	int child_pid, child_status, ret;
++	int null_fd;
++
++	child_pid = fork();
++	if (child_pid == 0) {
++		null_fd = open("/dev/null", O_WRONLY);
++		dup2(null_fd, STDOUT_FILENO);
++		dup2(null_fd, STDERR_FILENO);
++		close(null_fd);
++
++		*monitored_pid = getpid();
++		/* Use the copied /usr/bin/rm to delete itself
++		 * /tmp/copy_of_rm /tmp/copy_of_rm.
++		 */
++		ret = execlp(rm_path, rm_path, rm_path, NULL);
++		if (ret)
++			exit(errno);
++	} else if (child_pid > 0) {
++		waitpid(child_pid, &child_status, 0);
++		return WEXITSTATUS(child_status);
++	}
++
++	return -EINVAL;
++}
+ 
+ void test_test_local_storage(void)
+ {
+ 	struct local_storage *skel = NULL;
+ 	int err, duration = 0, serv_sk = -1;
++	char tmp_exec_path[PATH_MAX] = "/tmp/copy_of_rmXXXXXX";
+ 
+ 	skel = local_storage__open_and_load();
+ 	if (CHECK(!skel, "skel_load", "lsm skeleton failed\n"))
+@@ -37,10 +90,26 @@ void test_test_local_storage(void)
+ 	if (CHECK(err, "attach", "lsm attach failed: %d\n", err))
+ 		goto close_prog;
+ 
++	err = copy_rm(tmp_exec_path);
++	if (CHECK(err < 0, "copy_executable", "err %d errno %d\n", err, errno))
++		goto close_prog;
++
++	/* Sets skel->bss->monitored_pid to the pid of the forked child
++	 * forks a child process that executes tmp_exec_path and tries to
++	 * unlink its executable. This operation should be denied by the loaded
++	 * LSM program.
++	 */
++	err = run_self_unlink(&skel->bss->monitored_pid, tmp_exec_path);
++	if (CHECK(err != EPERM, "run_self_unlink", "err %d want EPERM\n", err))
++		goto close_prog;
++
++	/* Set the process being monitored to be the current process */
+ 	skel->bss->monitored_pid = getpid();
+ 
+-	err = create_and_unlink_file();
+-	if (CHECK(err < 0, "exec_cmd", "err %d errno %d\n", err, errno))
++	/* Remove the temporary created executable */
++	err = unlink(tmp_exec_path);
++	if (CHECK(err != 0, "unlink", "unable to unlink %s: %d", tmp_exec_path,
++		  errno))
+ 		goto close_prog;
+ 
+ 	CHECK(skel->data->inode_storage_result != 0, "inode_storage_result",
+diff --git a/tools/testing/selftests/bpf/progs/local_storage.c b/tools/testing/selftests/bpf/progs/local_storage.c
+index 5acf9203a69a..eb280cd0c416 100644
+--- a/tools/testing/selftests/bpf/progs/local_storage.c
++++ b/tools/testing/selftests/bpf/progs/local_storage.c
+@@ -17,7 +17,8 @@ int monitored_pid = 0;
+ int inode_storage_result = -1;
+ int sk_storage_result = -1;
+ 
+-struct dummy_storage {
++struct local_storage {
++	struct inode *exec_inode;
+ 	__u32 value;
+ };
+ 
+@@ -25,26 +26,40 @@ struct {
+ 	__uint(type, BPF_MAP_TYPE_INODE_STORAGE);
+ 	__uint(map_flags, BPF_F_NO_PREALLOC);
+ 	__type(key, int);
+-	__type(value, struct dummy_storage);
++	__type(value, struct local_storage);
+ } inode_storage_map SEC(".maps");
+ 
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
+ 	__uint(map_flags, BPF_F_NO_PREALLOC | BPF_F_CLONE);
+ 	__type(key, int);
+-	__type(value, struct dummy_storage);
++	__type(value, struct local_storage);
+ } sk_storage_map SEC(".maps");
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_TASK_STORAGE);
++	__uint(map_flags, BPF_F_NO_PREALLOC | BPF_F_CLONE);
++	__type(key, int);
++	__type(value, struct local_storage);
++} task_storage_map SEC(".maps");
++
+ SEC("lsm/inode_unlink")
+ int BPF_PROG(unlink_hook, struct inode *dir, struct dentry *victim)
+ {
+ 	__u32 pid = bpf_get_current_pid_tgid() >> 32;
+-	struct dummy_storage *storage;
++	struct local_storage *storage;
+ 	int err;
+ 
+ 	if (pid != monitored_pid)
+ 		return 0;
+ 
++	storage = bpf_task_storage_get(&task_storage_map,
++				       bpf_get_current_task_btf(), 0, 0);
++
++	/* Don't let an executable delete itself */
++	if (storage && storage->exec_inode == victim->d_inode)
++		return -EPERM;
++
+ 	storage = bpf_inode_storage_get(&inode_storage_map, victim->d_inode, 0,
+ 				     BPF_SK_STORAGE_GET_F_CREATE);
+ 	if (!storage)
+@@ -65,7 +80,7 @@ int BPF_PROG(socket_bind, struct socket *sock, struct sockaddr *address,
+ 	     int addrlen)
+ {
+ 	__u32 pid = bpf_get_current_pid_tgid() >> 32;
+-	struct dummy_storage *storage;
++	struct local_storage *storage;
+ 	int err;
+ 
+ 	if (pid != monitored_pid)
+@@ -91,7 +106,7 @@ int BPF_PROG(socket_post_create, struct socket *sock, int family, int type,
+ 	     int protocol, int kern)
+ {
+ 	__u32 pid = bpf_get_current_pid_tgid() >> 32;
+-	struct dummy_storage *storage;
++	struct local_storage *storage;
+ 
+ 	if (pid != monitored_pid)
+ 		return 0;
+@@ -110,7 +125,7 @@ SEC("lsm/file_open")
+ int BPF_PROG(file_open, struct file *file)
+ {
+ 	__u32 pid = bpf_get_current_pid_tgid() >> 32;
+-	struct dummy_storage *storage;
++	struct local_storage *storage;
+ 
+ 	if (pid != monitored_pid)
+ 		return 0;
+@@ -126,3 +141,18 @@ int BPF_PROG(file_open, struct file *file)
+ 	storage->value = DUMMY_STORAGE_VALUE;
+ 	return 0;
+ }
++
++/* This uses the local storage to remember the inode of the binary that a
++ * process was originally executing.
++ */
++SEC("lsm/bprm_committed_creds")
++void BPF_PROG(exec, struct linux_binprm *bprm)
++{
++	struct local_storage *storage;
++
++	storage = bpf_task_storage_get(&task_storage_map,
++				       bpf_get_current_task_btf(), 0,
++				       BPF_LOCAL_STORAGE_GET_F_CREATE);
++	if (storage)
++		storage->exec_inode = bprm->file->f_inode;
++}
+-- 
+2.29.0.rc2.309.g374f81d7ae-goog
 
-It's mostly done with the last part expected to reach linux-next in few days.
-Then I'll rebase and repost the bpf part.
-
-Thanks!
