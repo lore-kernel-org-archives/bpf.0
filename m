@@ -2,59 +2,66 @@ Return-Path: <SRS0=pSPe=EC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 262E9C4363A
-	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 22:23:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCF8EC4363A
+	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 22:38:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B9FC5221FB
-	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 22:23:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603837434;
-	bh=Cc+90dgAQa5qCqT7yhr5+fNXcD/lqcWVm7Ov6RIsF+E=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=L8tzdFMVZWskm0BChusWgObFsX5Q5kOYjD4U0JLdpec2kTYn0MAAoQgF+AS70SVIM
-	 2vm58xzXoHd8tcJTX4NJObyS/SZrHcxNXNQ9vonP+WC3irWDtcBF05VK47ShxBg5qJ
-	 l4dF6ZQwcasZVmYb1b2o4zhd1S2pi+R/OqRSlwDo=
+	by mail.kernel.org (Postfix) with ESMTP id 765D2221FB
+	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 22:38:19 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="otD0MCq4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505760AbgJ0WXy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Oct 2020 18:23:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49310 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2505747AbgJ0WXy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Oct 2020 18:23:54 -0400
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 48278221FB;
-        Tue, 27 Oct 2020 22:23:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603837433;
-        bh=Cc+90dgAQa5qCqT7yhr5+fNXcD/lqcWVm7Ov6RIsF+E=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=vp30La2lUQBdT+96S72S0Dz1GBdL4xWzRgVCDUUYiqM/K1v5/g9Nnn/y8+SrzYwQg
-         h75xpYI33IvDxYnn9rJtAMoYxl0HX+x4vO0D92tKl80Ffkjq93h0t7Dd8Cud+CGbTQ
-         66CRxjf9li3sgA29EGFpvFJiJpiA8eroc6IiQMh8=
-Received: by mail-ot1-f42.google.com with SMTP id n15so2568853otl.8;
-        Tue, 27 Oct 2020 15:23:53 -0700 (PDT)
-X-Gm-Message-State: AOAM53155J3qiMXis/tlwYxqv5IK0Ms8lOLFqVgF6GiTbVIYG4U6HHAH
-        4nT3qBkHtkGOXsKRxbeqFsrImCdUrYlRw0TLWww=
-X-Google-Smtp-Source: ABdhPJziJpHQvbpPWWIsVOva0M9OAmaLmP58/5ARQiTSJz3RHLSs0wa1cHQ4AJnrxEt8YQdaEuEp0Vm2ExMSe83AUT8=
-X-Received: by 2002:a05:6830:4028:: with SMTP id i8mr2946472ots.90.1603837432594;
- Tue, 27 Oct 2020 15:23:52 -0700 (PDT)
+        id S2506760AbgJ0WiS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Oct 2020 18:38:18 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:44310 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2410088AbgJ0WiS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Oct 2020 18:38:18 -0400
+Received: by mail-pg1-f193.google.com with SMTP id o3so1603802pgr.11
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2020 15:38:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=q9O+TmXhlnfP5R6O9DpvzK2ercmawtIkUjzbxe45Iwg=;
+        b=otD0MCq45wssDlOXzQwczNbnAOzRVOtZq8ghq/C9+xy1YHDSsCKD90mb3q8OLOqT04
+         AWo+bHszx+5HStkJxvJhg262Oqr0seRMbRPO2PwP29amCUZyYV6nax37AcvcQDidjX7k
+         BoSPvpE0Go7t2cGoWmLGxZhAL195kZI4C8kSw6TZJsqHFC8MhcuKrPBQNyrgrfaeCY6f
+         gWlRsRRvcroD3aYV82K9WS4hqzO3eDXAGVsUZ8YrybzSHF3qoqgYhZuSyvXSrp6Lh+1U
+         ZIDUyXA0G3vT/1CkBNC7OodyLxOIBILUbnGwO70M3ujrcyA9spiw7g3ZCl6CzSshSTEv
+         szCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=q9O+TmXhlnfP5R6O9DpvzK2ercmawtIkUjzbxe45Iwg=;
+        b=PMK1t6SiyQ3Ia6pFDd/8Ncf6IIuINRrKaJUUMmpUV/vsSQq6HQzPqyerwrIlyQstYb
+         3EYwP/K4kF2GqVHnPvqvIv2zWlQEapHna8ehx4KhKZ01mXXIkZoXNmlcmPyZGjZhnKc9
+         J1Mz0JrYmi+qkQe34DykCzOPcLjb1fuPaQQrLoio5KPOD+0N0RfPlUDHjSLSJw+6Lhkx
+         gtK+mpmd093hv4FH+bqFNW/aUwkzn7iZ8SkPbQ9NXVbn4dLkwvR8h5WhmrjozCXar+oP
+         cxPzvCS9/p1lFTasSL0cpqErlaHtMgeCF8vZDBJ1lUTLvMhDwlu/nmY5R9OrNlr8uPEM
+         JssA==
+X-Gm-Message-State: AOAM5301rLZ3yzg2OuEOzBMAD/eB05Y85cfSHMH7h2CAw8aIWquD4sOl
+        PI4x1gFuGmlk1FYfNHsTq0KCbfL5WiLyD+96+eKgHg==
+X-Google-Smtp-Source: ABdhPJzP7j1Lbj4WSsoUKb2lWQx7WDgPStbwHlqaHM9gPztwgyJ4hgczG3OAoGh39yapaieXK2OogSBg7OE6lsO67Tk=
+X-Received: by 2002:a62:2905:0:b029:15b:57ef:3356 with SMTP id
+ p5-20020a6229050000b029015b57ef3356mr3561178pfp.36.1603838297314; Tue, 27 Oct
+ 2020 15:38:17 -0700 (PDT)
 MIME-Version: 1.0
 References: <20201027205723.12514-1-ardb@kernel.org> <CAKwvOdmSaVcgq2eKRjRL+_StdFNG2QnNe3nGCs2PWfH=HceadA@mail.gmail.com>
- <CAMj1kXHb8Fe9fqpj4-90ccEMB+NJ6cbuuog-2Vuo7tr7VjZaTA@mail.gmail.com> <CAKwvOdnfkZXJdZkKO6qT53j6nH4HF=CcpUZcr7XOqdnQLSShmw@mail.gmail.com>
-In-Reply-To: <CAKwvOdnfkZXJdZkKO6qT53j6nH4HF=CcpUZcr7XOqdnQLSShmw@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Tue, 27 Oct 2020 23:23:41 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXGFWr5FSiO79VYEYhB2eCpDP5vyTJmdskxrKWnUz-GP-w@mail.gmail.com>
-Message-ID: <CAMj1kXGFWr5FSiO79VYEYhB2eCpDP5vyTJmdskxrKWnUz-GP-w@mail.gmail.com>
+ <CAMj1kXHb8Fe9fqpj4-90ccEMB+NJ6cbuuog-2Vuo7tr7VjZaTA@mail.gmail.com>
+ <CAKwvOdnfkZXJdZkKO6qT53j6nH4HF=CcpUZcr7XOqdnQLSShmw@mail.gmail.com> <CAMj1kXGFWr5FSiO79VYEYhB2eCpDP5vyTJmdskxrKWnUz-GP-w@mail.gmail.com>
+In-Reply-To: <CAMj1kXGFWr5FSiO79VYEYhB2eCpDP5vyTJmdskxrKWnUz-GP-w@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 27 Oct 2020 15:38:06 -0700
+Message-ID: <CAKwvOdmcuSce_R_4=BmewPm_3t75_dkDan7YMXF_cb39mQEDyw@mail.gmail.com>
 Subject: Re: [PATCH] bpf: don't rely on GCC __attribute__((optimize)) to
  disable GCSE
-To:     Nick Desaulniers <ndesaulniers@google.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
 Cc:     LKML <linux-kernel@vger.kernel.org>,
         Network Development <netdev@vger.kernel.org>,
         bpf <bpf@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
@@ -72,35 +79,45 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 27 Oct 2020 at 23:03, Nick Desaulniers <ndesaulniers@google.com> wrote:
+On Tue, Oct 27, 2020 at 3:23 PM Ard Biesheuvel <ardb@kernel.org> wrote:
 >
-> On Tue, Oct 27, 2020 at 2:50 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> On Tue, 27 Oct 2020 at 23:03, Nick Desaulniers <ndesaulniers@google.com> wrote:
 > >
-> > On Tue, 27 Oct 2020 at 22:20, Nick Desaulniers <ndesaulniers@google.com> wrote:
+> > On Tue, Oct 27, 2020 at 2:50 PM Ard Biesheuvel <ardb@kernel.org> wrote:
 > > >
-> > > On Tue, Oct 27, 2020 at 1:57 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > On Tue, 27 Oct 2020 at 22:20, Nick Desaulniers <ndesaulniers@google.com> wrote:
 > > > >
-> > > > diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-> > > > index 6e390d58a9f8..ac3fa37a84f9 100644
-> > > > --- a/include/linux/compiler_types.h
-> > > > +++ b/include/linux/compiler_types.h
-> > > > @@ -247,10 +247,6 @@ struct ftrace_likely_data {
-> > > >  #define asm_inline asm
-> > > >  #endif
+> > > > On Tue, Oct 27, 2020 at 1:57 PM Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > >
+> > > > > diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+> > > > > index 6e390d58a9f8..ac3fa37a84f9 100644
+> > > > > --- a/include/linux/compiler_types.h
+> > > > > +++ b/include/linux/compiler_types.h
+> > > > > @@ -247,10 +247,6 @@ struct ftrace_likely_data {
+> > > > >  #define asm_inline asm
+> > > > >  #endif
+> > > > >
+> > > > > -#ifndef __no_fgcse
+> > > > > -# define __no_fgcse
+> > > > > -#endif
+> > > > > -
+> > > > Finally, this is going to disable GCSE for the whole translation unit,
+> > > > which may be overkill.   Previously it was isolated to one function
+> > > > definition.  You could lower the definition of the preprocessor define
+> > > > into kernel/bpf/core.c to keep its use isolated as far as possible.
 > > > >
-> > > > -#ifndef __no_fgcse
-> > > > -# define __no_fgcse
-> > > > -#endif
-> > > > -
-> > > Finally, this is going to disable GCSE for the whole translation unit,
-> > > which may be overkill.   Previously it was isolated to one function
-> > > definition.  You could lower the definition of the preprocessor define
-> > > into kernel/bpf/core.c to keep its use isolated as far as possible.
 > > >
+> > > Which preprocessor define?
 > >
-> > Which preprocessor define?
+> > __no_fgcse
+> >
 >
-> __no_fgcse
->
+> But we can't use that, that is the whole point of this patch.
 
-But we can't use that, that is the whole point of this patch.
+Ah, right because the attribute drops other command line flags...ok,
+then -fno-gcse the whole translation unit it is then.
+
+Still need to avoid new warnings with clang though.
+-- 
+Thanks,
+~Nick Desaulniers
