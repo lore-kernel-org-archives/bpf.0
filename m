@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06DBFC4363A
-	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 19:04:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 31F6BC388F9
+	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 19:04:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A433D21527
-	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 19:04:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E2B6721527
+	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 19:04:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603825475;
-	bh=2T02Rnj9JSqlSyqTOWwETG3CNvYOciUI7owaOFmtoLQ=;
+	s=default; t=1603825481;
+	bh=lSoZLpecrlVBCYUDmnUAWFbOwM83846UqIsq0uKlo/A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=KuYabLuUx47iQ93fHjKRQi1bY+/vj2u8EEE0zsahHM22npYeT6CPhbiX0cPz0k9Ca
-	 Y0ifkHtolXzvOOJSnYW7Og1gRyReijsNYVAGYInGOD+pQ6oEWEpoyN86U2IK/RVdei
-	 D+iTw8nODdkvaI7+m88orSmp2i3Ewwza/OCxcfJo=
+	b=kS9Bzj26dBXDduYvu2Cy8yNS4ct9T1XYfYU6zBBwd7oRbHiLpeL3nlqscSikPc1ER
+	 3BhfgLL/nvIvdrh5J+7prR5yvLzZUI+FkCSSSU4OHxVUKWHfieW+gPmRCrnEoJPELf
+	 HH0LL/n94d+kvoqU5HeeoVhgml+duUTL7pFRDQIM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502334AbgJ0TEd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Oct 2020 15:04:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41938 "EHLO mail.kernel.org"
+        id S2502069AbgJ0TEZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Oct 2020 15:04:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41894 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1829318AbgJ0TE3 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Oct 2020 15:04:29 -0400
+        id S1829306AbgJ0TEY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Oct 2020 15:04:24 -0400
 Received: from lore-desk.redhat.com (unknown [151.66.125.178])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3999621556;
-        Tue, 27 Oct 2020 19:04:27 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5AFA621D24;
+        Tue, 27 Oct 2020 19:04:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603825468;
-        bh=2T02Rnj9JSqlSyqTOWwETG3CNvYOciUI7owaOFmtoLQ=;
+        s=default; t=1603825463;
+        bh=lSoZLpecrlVBCYUDmnUAWFbOwM83846UqIsq0uKlo/A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rEtW5g+IUThlIqRGApCs0iXqcJCjOcxYseqMI5kv9F9H59QkeeX0za/LJmNrrAgez
-         nO6Vr0oIspau/fYc9MrhD5qjpT73H88aujwxlHA+FeNiSLNgjKgSoYOOfe8IEVEaje
-         15xHExSANIUvx+ojW577MxlOBU4uI/NkQP8usbx8=
+        b=L5o3yOdmmGukNXT4OHCf9Jn2J/eqzSOi1W9OxjlJvUDJdhb4N2CWoWcWBZ0O0ZAQn
+         /83bymjfinaZJka/HxPPAHK7qzESi1EupIz0LX5+0KdBMJZ2wedyOjR1XV1E8Jud63
+         gkQ/nPgdVN2j92r9yEuujzJyG+7uSlUvd8CGvmWc=
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, lorenzo.bianconi@redhat.com,
         davem@davemloft.net, kuba@kernel.org, brouer@redhat.com,
         ilias.apalodimas@linaro.org
-Subject: [PATCH net-next 4/4] net: mlx5: add xdp tx return bulking support
-Date:   Tue, 27 Oct 2020 20:04:10 +0100
-Message-Id: <3fb334388ac7af755e1f03abb76a0a6335a90ff6.1603824486.git.lorenzo@kernel.org>
+Subject: [PATCH net-next 2/4] net: page_pool: add bulk support for ptr_ring
+Date:   Tue, 27 Oct 2020 20:04:08 +0100
+Message-Id: <cd58ca966fbe11cabbd6160decea6ce748ebce9f.1603824486.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1603824486.git.lorenzo@kernel.org>
 References: <cover.1603824486.git.lorenzo@kernel.org>
@@ -55,48 +55,140 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Convert mlx5 driver to xdp_return_frame_bulk APIs.
+Introduce the capability to batch page_pool ptr_ring refill since it is
+usually run inside the driver NAPI tx completion loop.
 
-XDP_REDIRECT (upstream codepath): 8.5Mpps
-XDP_REDIRECT (upstream codepath + bulking APIs): 10.1Mpps
-
+Suggested-by: Jesper Dangaard Brouer <brouer@redhat.com>
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ include/net/page_pool.h | 26 ++++++++++++++++++++++++++
+ net/core/page_pool.c    | 33 +++++++++++++++++++++++++++++++++
+ net/core/xdp.c          |  9 ++-------
+ 3 files changed, 61 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-index ae90d533a350..5fdfbf390d5c 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-@@ -369,8 +369,10 @@ static void mlx5e_free_xdpsq_desc(struct mlx5e_xdpsq *sq,
- 				  bool recycle)
+diff --git a/include/net/page_pool.h b/include/net/page_pool.h
+index 81d7773f96cd..b5b195305346 100644
+--- a/include/net/page_pool.h
++++ b/include/net/page_pool.h
+@@ -152,6 +152,8 @@ struct page_pool *page_pool_create(const struct page_pool_params *params);
+ void page_pool_destroy(struct page_pool *pool);
+ void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *));
+ void page_pool_release_page(struct page_pool *pool, struct page *page);
++void page_pool_put_page_bulk(struct page_pool *pool, void **data,
++			     int count);
+ #else
+ static inline void page_pool_destroy(struct page_pool *pool)
  {
- 	struct mlx5e_xdp_info_fifo *xdpi_fifo = &sq->db.xdpi_fifo;
-+	struct xdp_frame_bulk bq;
- 	u16 i;
- 
-+	bq.xa = NULL;
- 	for (i = 0; i < wi->num_pkts; i++) {
- 		struct mlx5e_xdp_info xdpi = mlx5e_xdpi_fifo_pop(xdpi_fifo);
- 
-@@ -379,7 +381,7 @@ static void mlx5e_free_xdpsq_desc(struct mlx5e_xdpsq *sq,
- 			/* XDP_TX from the XSK RQ and XDP_REDIRECT */
- 			dma_unmap_single(sq->pdev, xdpi.frame.dma_addr,
- 					 xdpi.frame.xdpf->len, DMA_TO_DEVICE);
--			xdp_return_frame(xdpi.frame.xdpf);
-+			xdp_return_frame_bulk(xdpi.frame.xdpf, &bq);
- 			break;
- 		case MLX5E_XDP_XMIT_MODE_PAGE:
- 			/* XDP_TX from the regular RQ */
-@@ -393,6 +395,7 @@ static void mlx5e_free_xdpsq_desc(struct mlx5e_xdpsq *sq,
- 			WARN_ON_ONCE(true);
- 		}
- 	}
-+	xdp_flush_frame_bulk(&bq);
+@@ -165,6 +167,11 @@ static inline void page_pool_release_page(struct page_pool *pool,
+ 					  struct page *page)
+ {
  }
++
++static inline void page_pool_put_page_bulk(struct page_pool *pool, void **data,
++					   int count)
++{
++}
+ #endif
  
- bool mlx5e_poll_xdpsq_cq(struct mlx5e_cq *cq)
+ void page_pool_put_page(struct page_pool *pool, struct page *page,
+@@ -215,4 +222,23 @@ static inline void page_pool_nid_changed(struct page_pool *pool, int new_nid)
+ 	if (unlikely(pool->p.nid != new_nid))
+ 		page_pool_update_nid(pool, new_nid);
+ }
++
++static inline void page_pool_ring_lock(struct page_pool *pool)
++	__acquires(&pool->ring.producer_lock)
++{
++	if (in_serving_softirq())
++		spin_lock(&pool->ring.producer_lock);
++	else
++		spin_lock_bh(&pool->ring.producer_lock);
++}
++
++static inline void page_pool_ring_unlock(struct page_pool *pool)
++	__releases(&pool->ring.producer_lock)
++{
++	if (in_serving_softirq())
++		spin_unlock(&pool->ring.producer_lock);
++	else
++		spin_unlock_bh(&pool->ring.producer_lock);
++}
++
+ #endif /* _NET_PAGE_POOL_H */
+diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+index ef98372facf6..84fb21f8865e 100644
+--- a/net/core/page_pool.c
++++ b/net/core/page_pool.c
+@@ -11,6 +11,8 @@
+ #include <linux/device.h>
+ 
+ #include <net/page_pool.h>
++#include <net/xdp.h>
++
+ #include <linux/dma-direction.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/page-flags.h>
+@@ -408,6 +410,37 @@ void page_pool_put_page(struct page_pool *pool, struct page *page,
+ }
+ EXPORT_SYMBOL(page_pool_put_page);
+ 
++void page_pool_put_page_bulk(struct page_pool *pool, void **data,
++			     int count)
++{
++	struct page *page_ring[XDP_BULK_QUEUE_SIZE];
++	int i, len = 0;
++
++	for (i = 0; i < count; i++) {
++		struct page *page = virt_to_head_page(data[i]);
++
++		if (unlikely(page_ref_count(page) != 1 ||
++			     !pool_page_reusable(pool, page))) {
++			page_pool_release_page(pool, page);
++			put_page(page);
++			continue;
++		}
++
++		if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
++			page_pool_dma_sync_for_device(pool, page, -1);
++
++		page_ring[len++] = page;
++	}
++
++	page_pool_ring_lock(pool);
++	for (i = 0; i < len; i++) {
++		if (__ptr_ring_produce(&pool->ring, page_ring[i]))
++			page_pool_return_page(pool, page_ring[i]);
++	}
++	page_pool_ring_unlock(pool);
++}
++EXPORT_SYMBOL(page_pool_put_page_bulk);
++
+ static void page_pool_empty_ring(struct page_pool *pool)
+ {
+ 	struct page *page;
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 93eabd789246..9f9a8d14df38 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -383,16 +383,11 @@ EXPORT_SYMBOL_GPL(xdp_return_frame_rx_napi);
+ void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq)
+ {
+ 	struct xdp_mem_allocator *xa = bq->xa;
+-	int i;
+ 
+-	if (unlikely(!xa))
++	if (unlikely(!xa || !bq->count))
+ 		return;
+ 
+-	for (i = 0; i < bq->count; i++) {
+-		struct page *page = virt_to_head_page(bq->q[i]);
+-
+-		page_pool_put_full_page(xa->page_pool, page, false);
+-	}
++	page_pool_put_page_bulk(xa->page_pool, bq->q, bq->count);
+ 	bq->count = 0;
+ }
+ EXPORT_SYMBOL_GPL(xdp_flush_frame_bulk);
 -- 
 2.26.2
 
