@@ -2,193 +2,101 @@ Return-Path: <SRS0=pSPe=EC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31F6BC388F9
-	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 19:04:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5CB0DC4363A
+	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 19:11:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2B6721527
-	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 19:04:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603825481;
-	bh=lSoZLpecrlVBCYUDmnUAWFbOwM83846UqIsq0uKlo/A=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=kS9Bzj26dBXDduYvu2Cy8yNS4ct9T1XYfYU6zBBwd7oRbHiLpeL3nlqscSikPc1ER
-	 3BhfgLL/nvIvdrh5J+7prR5yvLzZUI+FkCSSSU4OHxVUKWHfieW+gPmRCrnEoJPELf
-	 HH0LL/n94d+kvoqU5HeeoVhgml+duUTL7pFRDQIM=
+	by mail.kernel.org (Postfix) with ESMTP id DB84B21556
+	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 19:10:59 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TDpYEM9j"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502069AbgJ0TEZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Oct 2020 15:04:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41894 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1829306AbgJ0TEY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Oct 2020 15:04:24 -0400
-Received: from lore-desk.redhat.com (unknown [151.66.125.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5AFA621D24;
-        Tue, 27 Oct 2020 19:04:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603825463;
-        bh=lSoZLpecrlVBCYUDmnUAWFbOwM83846UqIsq0uKlo/A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L5o3yOdmmGukNXT4OHCf9Jn2J/eqzSOi1W9OxjlJvUDJdhb4N2CWoWcWBZ0O0ZAQn
-         /83bymjfinaZJka/HxPPAHK7qzESi1EupIz0LX5+0KdBMJZ2wedyOjR1XV1E8Jud63
-         gkQ/nPgdVN2j92r9yEuujzJyG+7uSlUvd8CGvmWc=
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, lorenzo.bianconi@redhat.com,
-        davem@davemloft.net, kuba@kernel.org, brouer@redhat.com,
-        ilias.apalodimas@linaro.org
-Subject: [PATCH net-next 2/4] net: page_pool: add bulk support for ptr_ring
-Date:   Tue, 27 Oct 2020 20:04:08 +0100
-Message-Id: <cd58ca966fbe11cabbd6160decea6ce748ebce9f.1603824486.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1603824486.git.lorenzo@kernel.org>
-References: <cover.1603824486.git.lorenzo@kernel.org>
+        id S1829426AbgJ0TJK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Oct 2020 15:09:10 -0400
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:51824 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1762525AbgJ0TJJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Oct 2020 15:09:09 -0400
+Received: by mail-pj1-f68.google.com with SMTP id a17so1276966pju.1;
+        Tue, 27 Oct 2020 12:09:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vhFHGlRt/TibQfkAL2EZLq+3HRZ+VxPAD9HYXcgWC/k=;
+        b=TDpYEM9j0VTG9y1sK6+P54LMevQ/wxvF5jiUXCKKLZ1FxRRYMYefcVyVQfAc+Om1PS
+         ZEe1VRZkmhk0ir6O43G95oBAO2XD+Bq4fVBpHzkVRZw+UriLY30a/R4X0pDFtk1z5MUB
+         yLaicL/Mrjl46F0+UFymiiwaSisHRYKw813Q0Kd47cc1WgZhvOJbmIZ6w6cxJxiecpuq
+         hwk7hhJezQPq9VDBZdwaoEdHe5L3Ab5JZ4CMwJDp3CVt6wOQRLayWvn4DBgp1j2xyiIA
+         Nfr8NKXzTh5ilnJ2tvCD46vw2NdTRtKMK/iutofss4RYEab+Vx7Vu0QT/YxkCzMOQAZw
+         APGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vhFHGlRt/TibQfkAL2EZLq+3HRZ+VxPAD9HYXcgWC/k=;
+        b=S50P8F9V+chxT2NTgSsOOjn0hbJKehYtwcu38QQlOTafvwPZoOGGRidaMudPB6O4cw
+         qe9JVcYA7OJ0oOXyU7vlzOGgWDPCG5PDXzIzWD9wDmVl/v13f1nHl/CJthGJUrB7B949
+         CVFp00/xswSfWPB5lktOp3uvm/Mcus/YmdQ7uUDs15u8RyaGg8AlaKGrjgKkTgXCFj3f
+         J3VmhTbE9l8cz3WLkoA/SupBAIewbZeco9P9M8AE7oe1Yv+bepDxdU4I4bqyaCRgzVac
+         mw1Z6GdGYgdk2jwLXaLXayPrY1IBvecwwMjmWn4s+jYKTKaDwVx4OWCtppadRznKAw2E
+         DGug==
+X-Gm-Message-State: AOAM531XDIOQlohjO+o5YT2qzSv1m+pf+bOLFEYYZDWaQFYXtsTBdbIO
+        e/e8T2koRSw9Bj5PTOUM+WRgU/SfN4z47Pz4Wiw=
+X-Google-Smtp-Source: ABdhPJxT3MVZFdXRiktZytixxJYH/g52Rzd4ej1B/B/6AaacDeKHj7pSvVmudEo7lSKi4TSWV3mmIU7KhXAqNfkE9GM=
+X-Received: by 2002:a17:902:6803:b029:d2:42a6:312 with SMTP id
+ h3-20020a1709026803b02900d242a60312mr3734880plk.24.1603825748736; Tue, 27 Oct
+ 2020 12:09:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1600951211.git.yifeifz2@illinois.edu> <9ede6ef35c847e58d61e476c6a39540520066613.1600951211.git.yifeifz2@illinois.edu>
+ <CAMuHMdXTLKr6pvoE+JAdn_P5kVxL6gx8PJ8mqfXcS+SF+pRbkQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdXTLKr6pvoE+JAdn_P5kVxL6gx8PJ8mqfXcS+SF+pRbkQ@mail.gmail.com>
+From:   YiFei Zhu <zhuyifei1999@gmail.com>
+Date:   Tue, 27 Oct 2020 14:08:56 -0500
+Message-ID: <CABqSeAQvZNF4ynayT1XjEm4eP2H-ee46zBwmVRRD1-ZpohqG4w@mail.gmail.com>
+Subject: Re: [PATCH v2 seccomp 1/6] seccomp: Move config option SECCOMP to arch/Kconfig
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux Containers <containers@lists.linux-foundation.org>,
+        YiFei Zhu <yifeifz2@illinois.edu>, bpf <bpf@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Hubertus Franke <frankeh@us.ibm.com>,
+        Jack Chen <jianyan2@illinois.edu>,
+        Jann Horn <jannh@google.com>,
+        Josep Torrellas <torrella@illinois.edu>,
+        Kees Cook <keescook@chromium.org>,
+        Tianyin Xu <tyxu@illinois.edu>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        Valentin Rothberg <vrothber@redhat.com>,
+        Will Drewry <wad@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce the capability to batch page_pool ptr_ring refill since it is
-usually run inside the driver NAPI tx completion loop.
+On Tue, Oct 27, 2020 at 4:52 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> Please tell me why SECCOMP is special, and deserves to default to be
+> enabled.  Is it really that critical, given only 13.5 (half of sparc
+> ;-) out of 24
+> architectures implement support for it?
 
-Suggested-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- include/net/page_pool.h | 26 ++++++++++++++++++++++++++
- net/core/page_pool.c    | 33 +++++++++++++++++++++++++++++++++
- net/core/xdp.c          |  9 ++-------
- 3 files changed, 61 insertions(+), 7 deletions(-)
+Good point. My thought process is that quite a few system software are
+reliant on seccomp for enforcing policies -- systemd, docker, and
+other sandboxing tools like browsers and firejail, so when I moved
+this to the non-perarch section, it at least has to be default for
+x86. Granted, I'm not super familiar with other architectures, so you
+are probably right that those that did not have it on by default
+should be kept off by default; many of them could be for embedded
+devices. What's the best way to do this? Set it as default N in
+Kconfig and add CONFIG_SECCOMP=y in each arch's defconfig?
 
-diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-index 81d7773f96cd..b5b195305346 100644
---- a/include/net/page_pool.h
-+++ b/include/net/page_pool.h
-@@ -152,6 +152,8 @@ struct page_pool *page_pool_create(const struct page_pool_params *params);
- void page_pool_destroy(struct page_pool *pool);
- void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *));
- void page_pool_release_page(struct page_pool *pool, struct page *page);
-+void page_pool_put_page_bulk(struct page_pool *pool, void **data,
-+			     int count);
- #else
- static inline void page_pool_destroy(struct page_pool *pool)
- {
-@@ -165,6 +167,11 @@ static inline void page_pool_release_page(struct page_pool *pool,
- 					  struct page *page)
- {
- }
-+
-+static inline void page_pool_put_page_bulk(struct page_pool *pool, void **data,
-+					   int count)
-+{
-+}
- #endif
- 
- void page_pool_put_page(struct page_pool *pool, struct page *page,
-@@ -215,4 +222,23 @@ static inline void page_pool_nid_changed(struct page_pool *pool, int new_nid)
- 	if (unlikely(pool->p.nid != new_nid))
- 		page_pool_update_nid(pool, new_nid);
- }
-+
-+static inline void page_pool_ring_lock(struct page_pool *pool)
-+	__acquires(&pool->ring.producer_lock)
-+{
-+	if (in_serving_softirq())
-+		spin_lock(&pool->ring.producer_lock);
-+	else
-+		spin_lock_bh(&pool->ring.producer_lock);
-+}
-+
-+static inline void page_pool_ring_unlock(struct page_pool *pool)
-+	__releases(&pool->ring.producer_lock)
-+{
-+	if (in_serving_softirq())
-+		spin_unlock(&pool->ring.producer_lock);
-+	else
-+		spin_unlock_bh(&pool->ring.producer_lock);
-+}
-+
- #endif /* _NET_PAGE_POOL_H */
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index ef98372facf6..84fb21f8865e 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -11,6 +11,8 @@
- #include <linux/device.h>
- 
- #include <net/page_pool.h>
-+#include <net/xdp.h>
-+
- #include <linux/dma-direction.h>
- #include <linux/dma-mapping.h>
- #include <linux/page-flags.h>
-@@ -408,6 +410,37 @@ void page_pool_put_page(struct page_pool *pool, struct page *page,
- }
- EXPORT_SYMBOL(page_pool_put_page);
- 
-+void page_pool_put_page_bulk(struct page_pool *pool, void **data,
-+			     int count)
-+{
-+	struct page *page_ring[XDP_BULK_QUEUE_SIZE];
-+	int i, len = 0;
-+
-+	for (i = 0; i < count; i++) {
-+		struct page *page = virt_to_head_page(data[i]);
-+
-+		if (unlikely(page_ref_count(page) != 1 ||
-+			     !pool_page_reusable(pool, page))) {
-+			page_pool_release_page(pool, page);
-+			put_page(page);
-+			continue;
-+		}
-+
-+		if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
-+			page_pool_dma_sync_for_device(pool, page, -1);
-+
-+		page_ring[len++] = page;
-+	}
-+
-+	page_pool_ring_lock(pool);
-+	for (i = 0; i < len; i++) {
-+		if (__ptr_ring_produce(&pool->ring, page_ring[i]))
-+			page_pool_return_page(pool, page_ring[i]);
-+	}
-+	page_pool_ring_unlock(pool);
-+}
-+EXPORT_SYMBOL(page_pool_put_page_bulk);
-+
- static void page_pool_empty_ring(struct page_pool *pool)
- {
- 	struct page *page;
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 93eabd789246..9f9a8d14df38 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -383,16 +383,11 @@ EXPORT_SYMBOL_GPL(xdp_return_frame_rx_napi);
- void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq)
- {
- 	struct xdp_mem_allocator *xa = bq->xa;
--	int i;
- 
--	if (unlikely(!xa))
-+	if (unlikely(!xa || !bq->count))
- 		return;
- 
--	for (i = 0; i < bq->count; i++) {
--		struct page *page = virt_to_head_page(bq->q[i]);
--
--		page_pool_put_full_page(xa->page_pool, page, false);
--	}
-+	page_pool_put_page_bulk(xa->page_pool, bq->q, bq->count);
- 	bq->count = 0;
- }
- EXPORT_SYMBOL_GPL(xdp_flush_frame_bulk);
--- 
-2.26.2
-
+YiFei Zhu
