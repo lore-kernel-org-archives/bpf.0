@@ -1,141 +1,134 @@
-Return-Path: <SRS0=pSPe=EC=vger.kernel.org=bpf-owner@kernel.org>
+Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.4 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 343F0C4363A
-	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 23:04:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD1CAC388F9
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 01:49:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EE99A22202
-	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 23:04:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7331A22258
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 01:49:19 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wOFqmJWQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1832660AbgJ0XEc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Oct 2020 19:04:32 -0400
-Received: from www62.your-server.de ([213.133.104.62]:38368 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1832658AbgJ0XEc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Oct 2020 19:04:32 -0400
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1kXY0w-0002mG-Dd; Wed, 28 Oct 2020 00:04:26 +0100
-Received: from [178.196.57.75] (helo=pc-9.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1kXY0w-000MGw-4i; Wed, 28 Oct 2020 00:04:26 +0100
-Subject: Re: [PATCH] bpf: don't rely on GCC __attribute__((optimize)) to
- disable GCSE
-To:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Kees Cook <keescook@chromium.org>
-References: <20201027205723.12514-1-ardb@kernel.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <72f0dd64-9f65-cbd0-873a-684540912847@iogearbox.net>
-Date:   Wed, 28 Oct 2020 00:04:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1725847AbgJ1BiT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Oct 2020 21:38:19 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:45753 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1833061AbgJ0XzD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Oct 2020 19:55:03 -0400
+Received: by mail-ed1-f67.google.com with SMTP id dg9so3252130edb.12
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2020 16:55:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KltW5WB7nh9FObbMtAxJQyGKMUmzgBf2jMpmw0XbnqA=;
+        b=wOFqmJWQKCHXYXtesyDb2GRVCsde5sIaS6tCQxPY0hkqe7wvf95wmM/WdkfKOwTX6L
+         ldhdtlxJjsKasB3nt/LcLTPi1FAUPZlMkAMejBWZVY13mnKfkeBAXaKaFnUA+XGVYZ+u
+         4TUWKyfRXM4t7C4q/JrA7rxhaFYKqEah5dCPmuqeIUN15oEcipcEUD49yLsZPHHSKCq1
+         rVPcffanWjK0iP1C0wntSlJjxgG8Urjx2RdKvLQm2/dGgTwOYkYmrxOmGM7OGFUo+ydK
+         k6M/6JFSDWrDsgfYH5MBSOHsKs9bAZIOM5sv7i9rGNVFvAMr94IRU9SgJT73cr9QfIyp
+         gp3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KltW5WB7nh9FObbMtAxJQyGKMUmzgBf2jMpmw0XbnqA=;
+        b=Gm0D3f97Lx45zHuFLeyKxPvrGVbjmGWJKf5XfS+5QRhSSywsoZPdrVEQ1BpqMvY8Ke
+         YiYQRxa6EHd470Olm5mn/SI7vEn37q+KDpQy7P8xhnEGjAFhp1nUtS5BQYSokajYKMeI
+         JGF3WTkjogX+Py09ut1W+M7ETjwrK7xCymQqNPbPlnzW7W7/lpxn0BGVVnSU5MUuk5K/
+         /A8Hv6AInoeqBmFHTZQdKr1tbe52/NnS2HguecplbBwV33AvKnGAcoVZxKK/gHSED0g7
+         Pu4AaUdGFQgDLn/507bUfj5LETcRdPYTViV2SQm7btKyfOXA0z8xWBUjCU8Wu6sMX+an
+         NAzA==
+X-Gm-Message-State: AOAM531IeJ7cFSZK15WpTrKBptgosxDp1+Ca5W3ylc+v2/F76FsLBhMW
+        WAhW7WrJKgA3P4IMcG+FzWClVJ7QmEfTdzwKVV1mmg==
+X-Google-Smtp-Source: ABdhPJxcK6X5g6DskaxzCUWkXWbt0gzFPeJD/e4ZpL4bZzpV5QJmaXtQt+UlTDMbM5AxxWsViaU8yLjULq+7hHa1Ek4=
+X-Received: by 2002:a50:eb8e:: with SMTP id y14mr5055957edr.285.1603842900302;
+ Tue, 27 Oct 2020 16:55:00 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20201027205723.12514-1-ardb@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/25970/Tue Oct 27 13:18:55 2020)
+References: <20201026223617.2868431-1-jolsa@kernel.org> <20201026223617.2868431-2-jolsa@kernel.org>
+ <CAEf4Bzan6=Jjfez17=S55Zu9EQTF_J2dg2DST4v+CfENm8cbUQ@mail.gmail.com>
+In-Reply-To: <CAEf4Bzan6=Jjfez17=S55Zu9EQTF_J2dg2DST4v+CfENm8cbUQ@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Tue, 27 Oct 2020 16:54:49 -0700
+Message-ID: <CA+khW7hriWpy9-V9WgdMEv_5814_bzxrZ6we8=525ecanXUjSg@mail.gmail.com>
+Subject: Re: [PATCH 1/3] btf_encoder: Move find_all_percpu_vars in generic
+ config function
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        "Frank Ch. Eigler" <fche@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 10/27/20 9:57 PM, Ard Biesheuvel wrote:
-> Commit 3193c0836f203 ("bpf: Disable GCC -fgcse optimization for
-> ___bpf_prog_run()") introduced a __no_fgcse macro that expands to a
-> function scope __attribute__((optimize("-fno-gcse"))), to disable a
-> GCC specific optimization that was causing trouble on x86 builds, and
-> was not expected to have any positive effect in the first place.
-> 
-> However, as the GCC manual documents, __attribute__((optimize))
-> is not for production use, and results in all other optimization
-> options to be forgotten for the function in question. This can
-> cause all kinds of trouble, but in one particular reported case,
+Agree with Andrii. The function name 'config' is too generic and
+'config_per_var' is confusing to me. But the rest looked good. Thanks
+for taking a look at this.
 
-Looks like there are couple more as well aside from __no_fgcse, are you
-also planning to fix them?
+Hao
 
-   arch/powerpc/kernel/setup.h:14:#define __nostackprotector __attribute__((__optimize__("no-stack-protector")))
-   tools/include/linux/compiler-gcc.h:37:#define __no_tail_call	__attribute__((optimize("no-optimize-sibling-calls")))
 
-> it causes -fno-asynchronous-unwind-tables to be disregarded,
-> resulting in .eh_frame info to be emitted for the function
-> inadvertently.
-
-Would have been useful to add a pointer to the original discussion with
-Link tag.
-
-Link: https://lore.kernel.org/lkml/CAMuHMdUg0WJHEcq6to0-eODpXPOywLot6UD2=GFHpzoj_hCoBQ@mail.gmail.com/
-
-> This reverts commit 3193c0836f203, and instead, it disables the -fgcse
-> optimization for the entire source file, but only when building for
-> X86.
-> 
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Arvind Sankar <nivedita@alum.mit.edu>
-> Cc: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Fixes: 3193c0836f203 ("bpf: Disable GCC -fgcse optimization for ___bpf_prog_run()")
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-[...]
-> diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-> index bdc8cd1b6767..02b58f44c479 100644
-> --- a/kernel/bpf/Makefile
-> +++ b/kernel/bpf/Makefile
-> @@ -1,6 +1,8 @@
->   # SPDX-License-Identifier: GPL-2.0
->   obj-y := core.o
-> -CFLAGS_core.o += $(call cc-disable-warning, override-init)
-> +# ___bpf_prog_run() needs GCSE disabled on x86; see 3193c0836f203 for details
-> +cflags-core-$(CONFIG_X86) := -fno-gcse
-> +CFLAGS_core.o += $(call cc-disable-warning, override-init) $(cflags-core-y)
-
-Also, this needs to be guarded behind !CONFIG_RETPOLINE and !CONFIG_BPF_JIT_ALWAYS_ON
-in particular the latter since only in this case interpreter is compiled in ... most
-distros have the CONFIG_BPF_JIT_ALWAYS_ON set these days for x86.
-
-Do you have an analysis for the commit log on what else this penalizes in core.c if
-it's now for the entire translation unit?
-
->   obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o bpf_iter.o map_iter.o task_iter.o prog_iter.o
->   obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> index 9268d77898b7..55454d2278b1 100644
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
-> @@ -1369,7 +1369,7 @@ u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
->    *
->    * Decode and execute eBPF instructions.
->    */
-> -static u64 __no_fgcse ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
-> +static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
->   {
->   #define BPF_INSN_2_LBL(x, y)    [BPF_##x | BPF_##y] = &&x##_##y
->   #define BPF_INSN_3_LBL(x, y, z) [BPF_##x | BPF_##y | BPF_##z] = &&x##_##y##_##z
-> 
-
+On Tue, Oct 27, 2020 at 4:12 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Mon, Oct 26, 2020 at 5:07 PM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > Moving find_all_percpu_vars under generic onfig function
+> > that walks over symbols and calls config_percpu_var.
+> >
+> > We will add another config function that needs to go
+> > through all the symbols, so it's better they go through
+> > them just once.
+> >
+> > There's no functional change intended.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  btf_encoder.c | 126 ++++++++++++++++++++++++++------------------------
+> >  1 file changed, 66 insertions(+), 60 deletions(-)
+> >
+> > diff --git a/btf_encoder.c b/btf_encoder.c
+> > index 2a6455be4c52..2dd26c904039 100644
+> > --- a/btf_encoder.c
+> > +++ b/btf_encoder.c
+> > @@ -250,7 +250,64 @@ static bool percpu_var_exists(uint64_t addr, uint32_t *sz, const char **name)
+> >         return true;
+> >  }
+> >
+> > -static int find_all_percpu_vars(struct btf_elf *btfe)
+> > +static int config_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
+>
+> I find the "config" name completely misleading. How about
+> "collect_percpu_var" or something along those lines?
+>
+> > +{
+> > +       const char *sym_name;
+> > +       uint64_t addr;
+> > +       uint32_t size;
+> > +
+>
+> [...]
+>
+> > +}
+> > +
+> > +static int config(struct btf_elf *btfe, bool do_percpu_vars)
+>
+> same here, config is generic and misrepresenting what we are doing
+> here. E.g., collect_symbols would probably be more clear.
+>
+> >  {
+> >         uint32_t core_id;
+> >         GElf_Sym sym;
+>
+> [...]
