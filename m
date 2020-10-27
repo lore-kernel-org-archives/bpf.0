@@ -2,76 +2,189 @@ Return-Path: <SRS0=pSPe=EC=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9DCD4C388F9
-	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 19:04:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5DAF9C55179
+	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 19:04:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6412F2223C
-	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 19:04:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D0FD21D7B
+	for <bpf@archiver.kernel.org>; Tue, 27 Oct 2020 19:04:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603825459;
-	bh=4YHS7RKLjKKZj9G4Gq4OrnoIaC2pHgPE5X/FD5oclsU=;
-	h=From:To:Cc:Subject:Date:List-ID:From;
-	b=Tni8RBPYMEiO6XyhlRTYfaKsT7XGMjjLqEfunCUHApUGCO812V6foyAvqhMZ1TfIq
-	 JcHZ5FhFM6kWVak6ZfzrViSiOjPNheNshtjc/HJSjF9As1qmLTphNAeekORdMh0nhJ
-	 8uyMVj5aQiMkfFXRyWtEwruehZj1o1ik4H3aAxHg=
+	s=default; t=1603825464;
+	bh=3kPUBW3Z65xw9KZDG7WCBMPjdP8XVy7PKBgHAtt0ups=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=e2C9boQNYh/nO5tI9vt1ZG690WvspvGhyie2PCUgN/o4Z/Aadul1FLATtJKS69DAi
+	 AJy/bCTdIquKEDE+8ohX/tF8DdrPZmHcmEW/M+fk6iBprwMcB+KJWU6ZyoCSYmwiq4
+	 a0CQhgUiNGKfxg/RfF3I2YWuqmljPPn/bgbr/hkU=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1829294AbgJ0TET (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Oct 2020 15:04:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41778 "EHLO mail.kernel.org"
+        id S1829286AbgJ0TEW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 27 Oct 2020 15:04:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41828 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1829286AbgJ0TES (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Oct 2020 15:04:18 -0400
+        id S2502069AbgJ0TEV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 27 Oct 2020 15:04:21 -0400
 Received: from lore-desk.redhat.com (unknown [151.66.125.178])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9745A206D4;
-        Tue, 27 Oct 2020 19:04:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 541CE21D41;
+        Tue, 27 Oct 2020 19:04:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603825458;
-        bh=4YHS7RKLjKKZj9G4Gq4OrnoIaC2pHgPE5X/FD5oclsU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KApTiYSxPNpZt+KlNqyFajHh6ORcIEPen6L6uBazik39JsRzpidM//OY32KS4gYst
-         Cpa7EcXIPP+sEp7Y+N4vcgnbhl+yfy7Cyxz6eV3GA/SFNSfmYmr/LVtzhWU8eJudZs
-         v02JGRefCifLF53gyGAU+61GchQS28zuhx1UQffs=
+        s=default; t=1603825460;
+        bh=3kPUBW3Z65xw9KZDG7WCBMPjdP8XVy7PKBgHAtt0ups=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=anNXQyp+K7sbVEqrQoatkq0eqR2BqW1yrLzKml8alSfaHPOyVL7S8o7ntxZLabIRh
+         JOaV7g0kRY7ZLbFVoZdH2JeJ/EXvD5h4jJk/2hTYUUQG57uUrPDfksSD6Mam8nJiHa
+         2xTL7irgtM1uMN/O6prF+n3O5vdSfhhMiwrlPVtE=
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, lorenzo.bianconi@redhat.com,
         davem@davemloft.net, kuba@kernel.org, brouer@redhat.com,
         ilias.apalodimas@linaro.org
-Subject: [PATCH net-next 0/4] xdp: introduce bulking for page_pool tx return path
-Date:   Tue, 27 Oct 2020 20:04:06 +0100
-Message-Id: <cover.1603824486.git.lorenzo@kernel.org>
+Subject: [PATCH net-next 1/4] net: xdp: introduce bulking for xdp tx return path
+Date:   Tue, 27 Oct 2020 20:04:07 +0100
+Message-Id: <7495b5ac96b0fd2bf5ab79b12e01bf0ee0fff803.1603824486.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1603824486.git.lorenzo@kernel.org>
+References: <cover.1603824486.git.lorenzo@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-xdp_return_frame and page_pool_put_page are usually run inside the driver
-NAPI tx completion loop so it is possible batch them.
 Introduce bulking capability in xdp tx return path (XDP_REDIRECT).
-Convert mvneta, mvpp2 and mlx5 drivers to xdp_return_frame_bulk APIs.
+xdp_return_frame is usually run inside the driver NAPI tx completion
+loop so it is possible batch it.
+Current implementation considers only page_pool memory model.
+Convert mvneta driver to xdp_return_frame_bulk APIs.
 
-Lorenzo Bianconi (4):
-  net: xdp: introduce bulking for xdp tx return path
-  net: page_pool: add bulk support for ptr_ring
-  net: mvpp2: add xdp tx return bulking support
-  net: mlx5: add xdp tx return bulking support
+Suggested-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+---
+ drivers/net/ethernet/marvell/mvneta.c |  5 ++-
+ include/net/xdp.h                     |  9 +++++
+ net/core/xdp.c                        | 51 +++++++++++++++++++++++++++
+ 3 files changed, 64 insertions(+), 1 deletion(-)
 
- drivers/net/ethernet/marvell/mvneta.c         |  5 +-
- .../net/ethernet/marvell/mvpp2/mvpp2_main.c   |  5 +-
- .../net/ethernet/mellanox/mlx5/core/en/xdp.c  |  5 +-
- include/net/page_pool.h                       | 26 +++++++++++
- include/net/xdp.h                             |  9 ++++
- net/core/page_pool.c                          | 33 +++++++++++++
- net/core/xdp.c                                | 46 +++++++++++++++++++
- 7 files changed, 126 insertions(+), 3 deletions(-)
-
+diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
+index 54b0bf574c05..43ab8a73900e 100644
+--- a/drivers/net/ethernet/marvell/mvneta.c
++++ b/drivers/net/ethernet/marvell/mvneta.c
+@@ -1834,8 +1834,10 @@ static void mvneta_txq_bufs_free(struct mvneta_port *pp,
+ 				 struct netdev_queue *nq, bool napi)
+ {
+ 	unsigned int bytes_compl = 0, pkts_compl = 0;
++	struct xdp_frame_bulk bq;
+ 	int i;
+ 
++	bq.xa = NULL;
+ 	for (i = 0; i < num; i++) {
+ 		struct mvneta_tx_buf *buf = &txq->buf[txq->txq_get_index];
+ 		struct mvneta_tx_desc *tx_desc = txq->descs +
+@@ -1857,9 +1859,10 @@ static void mvneta_txq_bufs_free(struct mvneta_port *pp,
+ 			if (napi && buf->type == MVNETA_TYPE_XDP_TX)
+ 				xdp_return_frame_rx_napi(buf->xdpf);
+ 			else
+-				xdp_return_frame(buf->xdpf);
++				xdp_return_frame_bulk(buf->xdpf, &bq);
+ 		}
+ 	}
++	xdp_flush_frame_bulk(&bq);
+ 
+ 	netdev_tx_completed_queue(nq, pkts_compl, bytes_compl);
+ }
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 3814fb631d52..9567110845ef 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -104,6 +104,12 @@ struct xdp_frame {
+ 	struct net_device *dev_rx; /* used by cpumap */
+ };
+ 
++#define XDP_BULK_QUEUE_SIZE	16
++struct xdp_frame_bulk {
++	void *q[XDP_BULK_QUEUE_SIZE];
++	int count;
++	void *xa;
++};
+ 
+ static inline struct skb_shared_info *
+ xdp_get_shared_info_from_frame(struct xdp_frame *frame)
+@@ -194,6 +200,9 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct xdp_buff *xdp)
+ void xdp_return_frame(struct xdp_frame *xdpf);
+ void xdp_return_frame_rx_napi(struct xdp_frame *xdpf);
+ void xdp_return_buff(struct xdp_buff *xdp);
++void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq);
++void xdp_return_frame_bulk(struct xdp_frame *xdpf,
++			   struct xdp_frame_bulk *bq);
+ 
+ /* When sending xdp_frame into the network stack, then there is no
+  * return point callback, which is needed to release e.g. DMA-mapping
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 48aba933a5a8..93eabd789246 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -380,6 +380,57 @@ void xdp_return_frame_rx_napi(struct xdp_frame *xdpf)
+ }
+ EXPORT_SYMBOL_GPL(xdp_return_frame_rx_napi);
+ 
++void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq)
++{
++	struct xdp_mem_allocator *xa = bq->xa;
++	int i;
++
++	if (unlikely(!xa))
++		return;
++
++	for (i = 0; i < bq->count; i++) {
++		struct page *page = virt_to_head_page(bq->q[i]);
++
++		page_pool_put_full_page(xa->page_pool, page, false);
++	}
++	bq->count = 0;
++}
++EXPORT_SYMBOL_GPL(xdp_flush_frame_bulk);
++
++void xdp_return_frame_bulk(struct xdp_frame *xdpf,
++			   struct xdp_frame_bulk *bq)
++{
++	struct xdp_mem_info *mem = &xdpf->mem;
++	struct xdp_mem_allocator *xa, *nxa;
++
++	if (mem->type != MEM_TYPE_PAGE_POOL) {
++		__xdp_return(xdpf->data, &xdpf->mem, false);
++		return;
++	}
++
++	rcu_read_lock();
++
++	xa = bq->xa;
++	if (unlikely(!xa || mem->id != xa->mem.id)) {
++		nxa = rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params);
++		if (unlikely(!xa)) {
++			bq->count = 0;
++			bq->xa = nxa;
++			xa = nxa;
++		}
++	}
++
++	if (mem->id != xa->mem.id || bq->count == XDP_BULK_QUEUE_SIZE)
++		xdp_flush_frame_bulk(bq);
++
++	bq->q[bq->count++] = xdpf->data;
++	if (mem->id != xa->mem.id)
++		bq->xa = nxa;
++
++	rcu_read_unlock();
++}
++EXPORT_SYMBOL_GPL(xdp_return_frame_bulk);
++
+ void xdp_return_buff(struct xdp_buff *xdp)
+ {
+ 	__xdp_return(xdp->data, &xdp->rxq->mem, true);
 -- 
 2.26.2
 
