@@ -4,157 +4,231 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F28FC388F7
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:15:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96AD5C56201
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:22:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3FEAC24724
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:15:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4DF0B206E3
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:22:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603923354;
-	bh=vvm+dDR1TBLimZsVuME5YCze/EoMOBpVD9l1Wkt4Ktg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=P4ror0s0tKJOR5qxNZxYHNybxrTzeCGex2sugqhyNUNRQSEwy/wIHTM2D8aekqwfV
-	 K1e0N9EiiOO06uD7ZH3RlpwXZ3ivSmnUhXbmCaVTYso5SXvkgqgOwwYdEW++KfwanE
-	 QkF5qTh/SL4WbgA6JDBtWolBolVNmVmNrXBsIsME=
+	s=default; t=1603923754;
+	bh=nKhGK3Y1PvrhhiSe3Be8yClivksH9012Cv34ky/cpVA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=iBsD68o/p/9tztbsO/LWdaAjGc1vAXR4luZJuTRFvdmXsJWAjZSTn59bDHJrHF3xV
+	 zwkmR3/LQbQ0IIxYxSOrfelEzaleffIrlMDSApA7o+3YvUHimMOkAju8lvGymNNkC/
+	 ppBXF89I0afRo19ULgMkixwUqdwS+OxvQ0+gK3cY=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731282AbgJ1WPq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 18:15:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58902 "EHLO mail.kernel.org"
+        id S1731813AbgJ1WWd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:22:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36826 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731289AbgJ1WPR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:15:17 -0400
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1732591AbgJ1WWZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:22:25 -0400
+Received: from localhost (unknown [151.66.125.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6B52E2473C;
-        Wed, 28 Oct 2020 22:15:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 52073246C9;
+        Wed, 28 Oct 2020 11:43:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603923316;
-        bh=vvm+dDR1TBLimZsVuME5YCze/EoMOBpVD9l1Wkt4Ktg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ignJE81aH1LW8cteo0/3vLElB+WT1ecGITOWDy8huwVa8co4XSC8g5DTdJ/i09Mkk
-         qsd30lbvvs2WEmnQj2ek/wy6PAdMed7LzTkMI576vUTDyaE3u6cMTbRqijI5krztfg
-         Hw7Rfd2DSIEFz2COdGJlDGTGlZ0mpOeksxyJQ+vg=
-Received: by mail-oi1-f181.google.com with SMTP id f7so1216819oib.4;
-        Wed, 28 Oct 2020 15:15:16 -0700 (PDT)
-X-Gm-Message-State: AOAM530+NUu7TO9DDzQm31DIZVTKKDhZMsFtwXl49+UWneqyNWM0qijX
-        rCYAaeAEJdOJcsQ+64n3pGf/R/jbp83AwrFePRs=
-X-Google-Smtp-Source: ABdhPJwp/eocLDe/IVsGjl8wIP+xANWWIacnhJnnO2+RP/wb0BMBYD3r+o5Hzof6CK43TUVUe9ysmxHybgIpuRxOldg=
-X-Received: by 2002:aca:5c82:: with SMTP id q124mr832187oib.33.1603923315629;
- Wed, 28 Oct 2020 15:15:15 -0700 (PDT)
+        s=default; t=1603885387;
+        bh=nKhGK3Y1PvrhhiSe3Be8yClivksH9012Cv34ky/cpVA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wdmDG2GBTHwcpjOYYPQlmtSoRWfd50tBPDiYqSTyEG8ZBZFUEwBRMTQ3rTFGzIVw7
+         TrxDpE9d39D0+CpnsZbXlVM7jloJDthzgV0Paj8J7WAQh5QVzuthtgTf4ZRC72bP0h
+         yw4v9U6pp8Nj9gx75pBwszf0d72yVKUsi0K5jG8Q=
+Date:   Wed, 28 Oct 2020 12:43:01 +0100
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
+        ilias.apalodimas@linaro.org
+Subject: Re: [PATCH net-next 1/4] net: xdp: introduce bulking for xdp tx
+ return path
+Message-ID: <20201028114301.GC5386@lore-desk>
+References: <cover.1603824486.git.lorenzo@kernel.org>
+ <7495b5ac96b0fd2bf5ab79b12e01bf0ee0fff803.1603824486.git.lorenzo@kernel.org>
+ <20201028123419.27e1ac54@carbon>
 MIME-Version: 1.0
-References: <20201028171506.15682-1-ardb@kernel.org> <20201028171506.15682-2-ardb@kernel.org>
- <20201028213903.fvdjydadqt6tx765@ast-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20201028213903.fvdjydadqt6tx765@ast-mbp.dhcp.thefacebook.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 28 Oct 2020 23:15:04 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXFHcM-Jb+MwsLtB4NMUmMyAGGLeNGNLC9vTATot3NJLrA@mail.gmail.com>
-Message-ID: <CAMj1kXFHcM-Jb+MwsLtB4NMUmMyAGGLeNGNLC9vTATot3NJLrA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] bpf: don't rely on GCC __attribute__((optimize))
- to disable GCSE
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <netdev@vger.kernel.org>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <bpf@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="f0KYrhQ4vYSV2aJu"
+Content-Disposition: inline
+In-Reply-To: <20201028123419.27e1ac54@carbon>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 28 Oct 2020 at 22:39, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Oct 28, 2020 at 06:15:05PM +0100, Ard Biesheuvel wrote:
-> > Commit 3193c0836 ("bpf: Disable GCC -fgcse optimization for
-> > ___bpf_prog_run()") introduced a __no_fgcse macro that expands to a
-> > function scope __attribute__((optimize("-fno-gcse"))), to disable a
-> > GCC specific optimization that was causing trouble on x86 builds, and
-> > was not expected to have any positive effect in the first place.
-> >
-> > However, as the GCC manual documents, __attribute__((optimize))
-> > is not for production use, and results in all other optimization
-> > options to be forgotten for the function in question. This can
-> > cause all kinds of trouble, but in one particular reported case,
-> > it causes -fno-asynchronous-unwind-tables to be disregarded,
-> > resulting in .eh_frame info to be emitted for the function.
-> >
-> > This reverts commit 3193c0836, and instead, it disables the -fgcse
-> > optimization for the entire source file, but only when building for
-> > X86 using GCC with CONFIG_BPF_JIT_ALWAYS_ON disabled. Note that the
-> > original commit states that CONFIG_RETPOLINE=n triggers the issue,
-> > whereas CONFIG_RETPOLINE=y performs better without the optimization,
-> > so it is kept disabled in both cases.
-> >
-> > Fixes: 3193c0836 ("bpf: Disable GCC -fgcse optimization for ___bpf_prog_run()")
-> > Link: https://lore.kernel.org/lkml/CAMuHMdUg0WJHEcq6to0-eODpXPOywLot6UD2=GFHpzoj_hCoBQ@mail.gmail.com/
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+
+--f0KYrhQ4vYSV2aJu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+> On Tue, 27 Oct 2020 20:04:07 +0100
+> Lorenzo Bianconi <lorenzo@kernel.org> wrote:
+>=20
+> > Introduce bulking capability in xdp tx return path (XDP_REDIRECT).
+> > xdp_return_frame is usually run inside the driver NAPI tx completion
+> > loop so it is possible batch it.
+> > Current implementation considers only page_pool memory model.
+> > Convert mvneta driver to xdp_return_frame_bulk APIs.
+> >=20
+> > Suggested-by: Jesper Dangaard Brouer <brouer@redhat.com>
+
+Hi Jesper,
+
+thx for the review.
+
+>=20
+> I think you/we have to explain better in this commit message, what the
+> idea/concept behind this bulk return is.  Or even explain this as a
+> comment above "xdp_return_frame_bulk".
+>=20
+> Maybe add/append text to commit below:
+>=20
+> The bulk API introduced is a defer and flush API, that will defer
+> the return if the xdp_mem_allocator object is the same, identified
+> via the mem.id field (xdp_mem_info).  Thus, the flush operation will
+> operate on the same xdp_mem_allocator object.
+>=20
+> The bulk queue size of 16 is no coincident.  This is connected to how
+> XDP redirect will bulk xmit (upto 16) frames. Thus, the idea is for the
+> API to find these boundaries (via mem.id match), which is optimal for
+> both the I-cache and D-cache for the memory allocator code and object.
+>=20
+> The data structure (xdp_frame_bulk) used for deferred elements is
+> stored/allocated on the function call-stack, which allows lockfree
+> access.
+
+ack, I will add it in v2
+
+>=20
+>=20
+> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 > > ---
-> >  include/linux/compiler-gcc.h   | 2 --
-> >  include/linux/compiler_types.h | 4 ----
-> >  kernel/bpf/Makefile            | 6 +++++-
-> >  kernel/bpf/core.c              | 2 +-
-> >  4 files changed, 6 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-> > index d1e3c6896b71..5deb37024574 100644
-> > --- a/include/linux/compiler-gcc.h
-> > +++ b/include/linux/compiler-gcc.h
-> > @@ -175,5 +175,3 @@
-> >  #else
-> >  #define __diag_GCC_8(s)
-> >  #endif
-> > -
-> > -#define __no_fgcse __attribute__((optimize("-fno-gcse")))
->
-> See my reply in the other thread.
-> I prefer
-> -#define __no_fgcse __attribute__((optimize("-fno-gcse")))
-> +#define __no_fgcse __attribute__((optimize("-fno-gcse,-fno-omit-frame-pointer")))
->
-> Potentially with -fno-asynchronous-unwind-tables.
->
+> [...]
+> > diff --git a/include/net/xdp.h b/include/net/xdp.h
+> > index 3814fb631d52..9567110845ef 100644
+> > --- a/include/net/xdp.h
+> > +++ b/include/net/xdp.h
+> > @@ -104,6 +104,12 @@ struct xdp_frame {
+> >  	struct net_device *dev_rx; /* used by cpumap */
+> >  };
+> > =20
+> > +#define XDP_BULK_QUEUE_SIZE	16
+>=20
+> Maybe "#define DEV_MAP_BULK_SIZE 16" should be def to
+> XDP_BULK_QUEUE_SIZE, to express the described connection.
 
-So how would that work? arm64 has the following:
+ack, I guess we can fix it in a following patch
 
-KBUILD_CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables
+>=20
+> > +struct xdp_frame_bulk {
+> > +	void *q[XDP_BULK_QUEUE_SIZE];
+> > +	int count;
+> > +	void *xa;
+>=20
+> Just a hunch (not benchmarked), but I think it will be more optimal to
+> place 'count' and '*xa' above the '*q' array.  (It might not matter at
+> all, as we cannot control the start alignment, when this is on the
+> stack.)
 
-ifeq ($(CONFIG_SHADOW_CALL_STACK), y)
-KBUILD_CFLAGS += -ffixed-x18
-endif
+ack. I will fix in v2.
 
-and it adds -fpatchable-function-entry=2 for compilers that support
-it, but only when CONFIG_FTRACE is enabled.
+>=20
+> > +};
+> [...]
+>=20
+> > diff --git a/net/core/xdp.c b/net/core/xdp.c
+> > index 48aba933a5a8..93eabd789246 100644
+> > --- a/net/core/xdp.c
+> > +++ b/net/core/xdp.c
+> > @@ -380,6 +380,57 @@ void xdp_return_frame_rx_napi(struct xdp_frame *xd=
+pf)
+> >  }
+> >  EXPORT_SYMBOL_GPL(xdp_return_frame_rx_napi);
+> > =20
+> > +void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq)
+> > +{
+> > +	struct xdp_mem_allocator *xa =3D bq->xa;
+> > +	int i;
+> > +
+> > +	if (unlikely(!xa))
+> > +		return;
+> > +
+> > +	for (i =3D 0; i < bq->count; i++) {
+> > +		struct page *page =3D virt_to_head_page(bq->q[i]);
+> > +
+> > +		page_pool_put_full_page(xa->page_pool, page, false);
+> > +	}
+> > +	bq->count =3D 0;
+> > +}
+> > +EXPORT_SYMBOL_GPL(xdp_flush_frame_bulk);
+> > +
+>=20
+> Wondering if we should have a comment that explains the intent and idea
+> behind this function?
+>=20
+> /* Defers return when frame belongs to same mem.id as previous frame */
+>=20
 
-Also, as Nick pointed out, -fno-gcse does not work on Clang.
+ack.
 
-Every architecture will have a different set of requirements here. And
-there is no way of knowing which -f options are disregarded when you
-use the function attribute.
+Regards,
+Lorenzo
 
-So how on earth are you going to #define __no-fgcse correctly for
-every configuration imaginable?
+> > +void xdp_return_frame_bulk(struct xdp_frame *xdpf,
+> > +			   struct xdp_frame_bulk *bq)
+> > +{
+> > +	struct xdp_mem_info *mem =3D &xdpf->mem;
+> > +	struct xdp_mem_allocator *xa, *nxa;
+> > +
+> > +	if (mem->type !=3D MEM_TYPE_PAGE_POOL) {
+> > +		__xdp_return(xdpf->data, &xdpf->mem, false);
+> > +		return;
+> > +	}
+> > +
+> > +	rcu_read_lock();
+> > +
+> > +	xa =3D bq->xa;
+> > +	if (unlikely(!xa || mem->id !=3D xa->mem.id)) {
+> > +		nxa =3D rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params);
+> > +		if (unlikely(!xa)) {
+> > +			bq->count =3D 0;
+> > +			bq->xa =3D nxa;
+> > +			xa =3D nxa;
+> > +		}
+> > +	}
+> > +
+> > +	if (mem->id !=3D xa->mem.id || bq->count =3D=3D XDP_BULK_QUEUE_SIZE)
+> > +		xdp_flush_frame_bulk(bq);
+> > +
+> > +	bq->q[bq->count++] =3D xdpf->data;
+> > +	if (mem->id !=3D xa->mem.id)
+> > +		bq->xa =3D nxa;
+> > +
+> > +	rcu_read_unlock();
+> > +}
+> > +EXPORT_SYMBOL_GPL(xdp_return_frame_bulk);
+>=20
+>=20
+> --=20
+> Best regards,
+>   Jesper Dangaard Brouer
+>   MSc.CS, Principal Kernel Engineer at Red Hat
+>   LinkedIn: http://www.linkedin.com/in/brouer
+>=20
 
-> __attribute__((optimize("")) is not as broken as you're claiming to be.
-> It has quirky gcc internal logic, but it's still widely used
-> in many software projects.
+--f0KYrhQ4vYSV2aJu
+Content-Type: application/pgp-signature; name="signature.asc"
 
-So it's fine because it is only a little bit broken? I'm sorry, but
-that makes no sense whatsoever.
+-----BEGIN PGP SIGNATURE-----
 
-If you insist on sticking with this broken construct, can you please
-make it GCC/x86-only at least?
+iHUEABYIAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCX5lZQwAKCRA6cBh0uS2t
+rGghAQCsjyWtmmXoycnxIZMORxYbKSaJyXko6AQRy3qh9aoQrQD+JsCSh0fl0EwU
+WBK8b10ukrS2m2shhuMKdnt5EeEM4wc=
+=yZRU
+-----END PGP SIGNATURE-----
+
+--f0KYrhQ4vYSV2aJu--
