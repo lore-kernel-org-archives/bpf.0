@@ -2,154 +2,207 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 003A7C4363A
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:23:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10325C388F7
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:24:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9CB9C207BC
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:23:25 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q9pVa6xI"
+	by mail.kernel.org (Postfix) with ESMTP id B7609207CD
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:24:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603927440;
+	bh=HIIG0lPxqF7DonwHh336RcBqXuSM/AWZr5Tt//apNiA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=PlKosOeodmGbyhZlV5YNm7DSKSZdGtKDB1Kme5+4XWG4JyUU0g5ZEVxRJyLvB0UIH
+	 Eo8Rbxvh/40+VcK9/IGxt8C/wtJYvGHYHQEHjIjoXxdeV74+md/+yABcNVfNZmeLG7
+	 nOzcrrt0sF8oAiiyzr/mJgC0AWH4N6arKjA67vI0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390116AbgJ1XXX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 19:23:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389991AbgJ1XWm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 19:22:42 -0400
-Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792FCC0613CF;
-        Wed, 28 Oct 2020 16:22:42 -0700 (PDT)
-Received: by mail-oi1-x241.google.com with SMTP id u127so1362844oib.6;
-        Wed, 28 Oct 2020 16:22:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Y6HWVZiVbe0DlTeVilFZZF5KBmHXDNnXyxJw5KGNE18=;
-        b=Q9pVa6xIH+HoZ+K1VGiQHxhDmSJCKl7x7+ZbKUN+1xgaFlZPQuHBPSYv5HYuTA0sjG
-         LaBrJYUGQdfYPMrxeuLTCcoLcIdvfoyLKCgD7ctg9GhjENImdx+SP4vUIz3jxNzJax00
-         KzTrt0WGUUcaVDXm2LnN12lN30pJptzbO0zN4RL/FSLHYsv/H9aUFTnj4kX35RAW+xzI
-         2kQ0qioK0hLQ7eZDqfUs3BDOnpbhE3mkNc//l4MlMpMe0/e86tfXaORAtZ5ZT7v/WJUH
-         LxhfRoWvRFmbHww3nS6kAmBDTl5Gc5meNz4ZAo/GWNGbR/0ivPMwYTrnoTIqxcUZ4uSV
-         mC1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Y6HWVZiVbe0DlTeVilFZZF5KBmHXDNnXyxJw5KGNE18=;
-        b=m6/kUnJ+AqPYQ2ZgncTLXYzEX4RI5WDWSbx3AgseD8/+BpOuscxi11of5Sspi257tu
-         CK3vWN5f/oVwoxALf8ZRjWGKmFdtq2f0J6KrmKUY5qUrx23ubr08qOUCPtNr9/8Vj9kt
-         ueixVsZGaqVJAAdrWITbKsWSPmxVZ3nhxS3UTuQnxWnACfsBhR5pzbAZ6DD0Ih1CNotj
-         g5EMRlyzWvDZvv8RcKpfCWnihZNbAm9L8ERp/Rzx6UD8xf9JxQ92njTe85Phez/vkrdR
-         RxoOajhXwYzzNAbNXw2ZQZge77TTgEn2SxEUNMOoHA2Z/U0CfUYuMuSDEdOkunpvl3LS
-         PlhQ==
-X-Gm-Message-State: AOAM533LBdxZ1OEswZhCUIri2oAQ9CIQM6hV7df9JBgMLYDCbQqs2TAV
-        b9BJp4ONtDrvD6rrPk2JurIPW0gKuClv8eiW
-X-Google-Smtp-Source: ABdhPJyLrY/Dmb/oakRjXGVfkc2hQL0ea2nhABJdqF8y6eKgUaX7nxSXT40wSwQ545JBnNZK8RbSXQ==
-X-Received: by 2002:a17:90b:204:: with SMTP id fy4mr7400019pjb.156.1603892127374;
-        Wed, 28 Oct 2020 06:35:27 -0700 (PDT)
-Received: from btopel-mobl.ger.intel.com ([192.55.55.43])
-        by smtp.gmail.com with ESMTPSA id q14sm5935393pjp.43.2020.10.28.06.35.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 06:35:26 -0700 (PDT)
-From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
-        maciej.fijalkowski@intel.com, sridhar.samudrala@intel.com,
-        jesse.brandeburg@intel.com, qi.z.zhang@intel.com, kuba@kernel.org,
-        edumazet@google.com, intel-wired-lan@lists.osuosl.org,
-        jonathan.lemon@gmail.com
-Subject: [RFC PATCH bpf-next 4/9] xsk: check need wakeup flag in sendmsg()
-Date:   Wed, 28 Oct 2020 14:34:32 +0100
-Message-Id: <20201028133437.212503-5-bjorn.topel@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201028133437.212503-1-bjorn.topel@gmail.com>
-References: <20201028133437.212503-1-bjorn.topel@gmail.com>
+        id S2390321AbgJ1XX7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 19:23:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44718 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726920AbgJ1XLF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 19:11:05 -0400
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8F1F020790;
+        Wed, 28 Oct 2020 23:11:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603926664;
+        bh=HIIG0lPxqF7DonwHh336RcBqXuSM/AWZr5Tt//apNiA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qVoofgNk5Belh9Elgc53iNh5kG9OQnRkUUTqEXkIRoln57oky/CShOJSJuVUrNlJb
+         fINLgGwM/qg6qUnkK9cxX3JT+Fhfx3XKal1vglkIrVakyPy83bscpoJLhUHjf3bFNF
+         Rf5866qjwSSIjgWCK5P4oN2Z94HlYa+FI0K3tavI=
+Received: by mail-oi1-f182.google.com with SMTP id y186so1356291oia.3;
+        Wed, 28 Oct 2020 16:11:04 -0700 (PDT)
+X-Gm-Message-State: AOAM533VId1svEBqbDmyJ/F2aztwpwgqHHYxCf0GaWxz+SLSPF/4/t/n
+        qipkxpA9Zn+j/ynMFAgO/DjMeasYV2cvo6vf7OU=
+X-Google-Smtp-Source: ABdhPJy9zA4pQrccnT0p7DWN1xD057PNvpnSnzUrxVpAqmiDcix7Nd0dyZM3HCv4XsbNNmdlJCUkg1JV8NY2sJSrnq4=
+X-Received: by 2002:aca:d64f:: with SMTP id n76mr1006347oig.174.1603926663755;
+ Wed, 28 Oct 2020 16:11:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20201028171506.15682-1-ardb@kernel.org> <20201028171506.15682-2-ardb@kernel.org>
+ <20201028213903.fvdjydadqt6tx765@ast-mbp.dhcp.thefacebook.com>
+ <CAMj1kXFHcM-Jb+MwsLtB4NMUmMyAGGLeNGNLC9vTATot3NJLrA@mail.gmail.com> <20201028225919.6ydy3m2u4p7x3to7@ast-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20201028225919.6ydy3m2u4p7x3to7@ast-mbp.dhcp.thefacebook.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 29 Oct 2020 00:10:52 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXG8PmvO6bLhGXPWtzKMnAsip2WDa-qdrd+kFfr30sd8-A@mail.gmail.com>
+Message-ID: <CAMj1kXG8PmvO6bLhGXPWtzKMnAsip2WDa-qdrd+kFfr30sd8-A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] bpf: don't rely on GCC __attribute__((optimize))
+ to disable GCSE
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <bpf@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+On Wed, 28 Oct 2020 at 23:59, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Oct 28, 2020 at 11:15:04PM +0100, Ard Biesheuvel wrote:
+> > On Wed, 28 Oct 2020 at 22:39, Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Wed, Oct 28, 2020 at 06:15:05PM +0100, Ard Biesheuvel wrote:
+> > > > Commit 3193c0836 ("bpf: Disable GCC -fgcse optimization for
+> > > > ___bpf_prog_run()") introduced a __no_fgcse macro that expands to a
+> > > > function scope __attribute__((optimize("-fno-gcse"))), to disable a
+> > > > GCC specific optimization that was causing trouble on x86 builds, and
+> > > > was not expected to have any positive effect in the first place.
+> > > >
+> > > > However, as the GCC manual documents, __attribute__((optimize))
+> > > > is not for production use, and results in all other optimization
+> > > > options to be forgotten for the function in question. This can
+> > > > cause all kinds of trouble, but in one particular reported case,
+> > > > it causes -fno-asynchronous-unwind-tables to be disregarded,
+> > > > resulting in .eh_frame info to be emitted for the function.
+> > > >
+> > > > This reverts commit 3193c0836, and instead, it disables the -fgcse
+> > > > optimization for the entire source file, but only when building for
+> > > > X86 using GCC with CONFIG_BPF_JIT_ALWAYS_ON disabled. Note that the
+> > > > original commit states that CONFIG_RETPOLINE=n triggers the issue,
+> > > > whereas CONFIG_RETPOLINE=y performs better without the optimization,
+> > > > so it is kept disabled in both cases.
+> > > >
+> > > > Fixes: 3193c0836 ("bpf: Disable GCC -fgcse optimization for ___bpf_prog_run()")
+> > > > Link: https://lore.kernel.org/lkml/CAMuHMdUg0WJHEcq6to0-eODpXPOywLot6UD2=GFHpzoj_hCoBQ@mail.gmail.com/
+> > > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > > > ---
+> > > >  include/linux/compiler-gcc.h   | 2 --
+> > > >  include/linux/compiler_types.h | 4 ----
+> > > >  kernel/bpf/Makefile            | 6 +++++-
+> > > >  kernel/bpf/core.c              | 2 +-
+> > > >  4 files changed, 6 insertions(+), 8 deletions(-)
+> > > >
+> > > > diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+> > > > index d1e3c6896b71..5deb37024574 100644
+> > > > --- a/include/linux/compiler-gcc.h
+> > > > +++ b/include/linux/compiler-gcc.h
+> > > > @@ -175,5 +175,3 @@
+> > > >  #else
+> > > >  #define __diag_GCC_8(s)
+> > > >  #endif
+> > > > -
+> > > > -#define __no_fgcse __attribute__((optimize("-fno-gcse")))
+> > >
+> > > See my reply in the other thread.
+> > > I prefer
+> > > -#define __no_fgcse __attribute__((optimize("-fno-gcse")))
+> > > +#define __no_fgcse __attribute__((optimize("-fno-gcse,-fno-omit-frame-pointer")))
+> > >
+> > > Potentially with -fno-asynchronous-unwind-tables.
+> > >
+> >
+> > So how would that work? arm64 has the following:
+> >
+> > KBUILD_CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables
+> >
+> > ifeq ($(CONFIG_SHADOW_CALL_STACK), y)
+> > KBUILD_CFLAGS += -ffixed-x18
+> > endif
+> >
+> > and it adds -fpatchable-function-entry=2 for compilers that support
+> > it, but only when CONFIG_FTRACE is enabled.
+>
+> I think you're assuming that GCC drops all flags when it sees __attribute__((optimize)).
+> That's not the case.
+>
 
-Add a check for need wake up in sendmsg(), so that if a user calls
-sendmsg() when no wakeup is needed, do not trigger a wakeup.
+So which flags does it drop, and which doesn't it drop? Is that
+documented somewhere? Is that the same for all versions of GCC?
 
-To simplify the need wakeup check in the syscall, unconditionally
-enable the need wakeup flag for Tx. This has a side-effect for poll();
-If poll() is called for a socket without enabled need wakeup, a Tx
-wakeup is unconditionally performed.
+> > Also, as Nick pointed out, -fno-gcse does not work on Clang.
+>
+> yes and what's the point?
+> #define __no_fgcse is GCC only. clang doesn't need this workaround.
+>
 
-The wakeup matrix for AF_XDP now looks like:
+Ah ok, that's at least something.
 
-need wakeup | poll()                 | sendmsg()           | recvmsg()
-------------+------------------------+---------------------+---------------------
-disabled    | wake Tx                | wake Tx             | nop
-enabled     | check flag; wake Tx/Rx | check flag; wake Tx | check flag; wake Rx
+> > Every architecture will have a different set of requirements here. And
+> > there is no way of knowing which -f options are disregarded when you
+> > use the function attribute.
+> >
+> > So how on earth are you going to #define __no-fgcse correctly for
+> > every configuration imaginable?
+> >
+> > > __attribute__((optimize("")) is not as broken as you're claiming to be.
+> > > It has quirky gcc internal logic, but it's still widely used
+> > > in many software projects.
+> >
+> > So it's fine because it is only a little bit broken? I'm sorry, but
+> > that makes no sense whatsoever.
+> >
+> > If you insist on sticking with this broken construct, can you please
+> > make it GCC/x86-only at least?
+>
+> I'm totally fine with making
+> #define __no_fgcse __attribute__((optimize("-fno-gcse,-fno-omit-frame-pointer")))
+> to be gcc+x86 only.
+> I'd like to get rid of it, but objtool is not smart enough to understand
+> generated asm without it.
 
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
----
- net/xdp/xsk.c           |  6 +++++-
- net/xdp/xsk_buff_pool.c | 13 ++++++-------
- 2 files changed, 11 insertions(+), 8 deletions(-)
+I'll defer to the x86 folks to make the final call here, but I would
+be perfectly happy doing
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 17d51d1a5752..2e5b9f27c7a3 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -465,13 +465,17 @@ static int xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
- 	bool need_wait = !(m->msg_flags & MSG_DONTWAIT);
- 	struct sock *sk = sock->sk;
- 	struct xdp_sock *xs = xdp_sk(sk);
-+	struct xsk_buff_pool *pool;
- 
- 	if (unlikely(!xsk_is_bound(xs)))
- 		return -ENXIO;
- 	if (unlikely(need_wait))
- 		return -EOPNOTSUPP;
- 
--	return __xsk_sendmsg(sk);
-+	pool = xs->pool;
-+	if (pool->cached_need_wakeup & XDP_WAKEUP_TX)
-+		return __xsk_sendmsg(sk);
-+	return 0;
- }
- 
- static int xsk_recvmsg(struct socket *sock, struct msghdr *m, size_t len, int flags)
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index 64c9e55d4d4e..a4acb5e9576f 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -144,14 +144,13 @@ static int __xp_assign_dev(struct xsk_buff_pool *pool,
- 	if (err)
- 		return err;
- 
--	if (flags & XDP_USE_NEED_WAKEUP) {
-+	if (flags & XDP_USE_NEED_WAKEUP)
- 		pool->uses_need_wakeup = true;
--		/* Tx needs to be explicitly woken up the first time.
--		 * Also for supporting drivers that do not implement this
--		 * feature. They will always have to call sendto().
--		 */
--		pool->cached_need_wakeup = XDP_WAKEUP_TX;
--	}
-+	/* Tx needs to be explicitly woken up the first time.  Also
-+	 * for supporting drivers that do not implement this
-+	 * feature. They will always have to call sendto() or poll().
-+	 */
-+	pool->cached_need_wakeup = XDP_WAKEUP_TX;
- 
- 	dev_hold(netdev);
- 
--- 
-2.27.0
+index d1e3c6896b71..68ddb91fbcc6 100644
+--- a/include/linux/compiler-gcc.h
++++ b/include/linux/compiler-gcc.h
+@@ -176,4 +176,6 @@
+ #define __diag_GCC_8(s)
+ #endif
 
++#ifdef CONFIG_X86
+ #define __no_fgcse __attribute__((optimize("-fno-gcse")))
++#endif
+
+and end the conversation here, because I honestly cannot wrap my head
+around the fact that you are willing to work around an x86 specific
+objtool shortcoming by arbitrarily disabling some GCC optimization for
+all architectures, using a construct that may or may not affect other
+compiler settings in unpredictable ways, where the compiler is being
+used to compile a BPF language runtime for executing BPF programs
+inside the kernel.
+
+What on earth could go wrong?
