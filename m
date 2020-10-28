@@ -2,131 +2,132 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3BE3C388F7
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:41:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 23DA3C4363A
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:46:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 61D5D20878
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:41:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 935E52072E
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:46:27 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="noS8dvS1"
+	dkim=pass (1024-bit key) header.d=sargun.me header.i=@sargun.me header.b="OH+AqmBT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389070AbgJ1Wk7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 18:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
+        id S1730754AbgJ1Woo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730725AbgJ1Wk6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:40:58 -0400
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D610C0613CF;
-        Wed, 28 Oct 2020 15:40:58 -0700 (PDT)
-Received: by mail-yb1-xb42.google.com with SMTP id b138so542324yba.5;
-        Wed, 28 Oct 2020 15:40:58 -0700 (PDT)
+        with ESMTP id S2389157AbgJ1WmP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:42:15 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667ADC0613CF
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 15:42:14 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id p93so1163349edd.7
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 15:42:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=sargun.me; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=jg45dpTkIStnq7FH8sB1G6csIoi0LJaAOaqWI/KVCvI=;
-        b=noS8dvS1P9698Fp6wHJWJPKA+/s9WfOrs3eI0eKM7tXYQIY+jDH6Ivu06+vFjdr6tR
-         m82s7srotwXwMAhUpxBzkw9o/OMYtJra6MkONeYOdQZMK8DZ5nh9f0DuuUpXSzx9xjC/
-         Is5X+0B55s4egZElRcBoYkhwSx5z+lbt43kRaGUeEyTJqn0EmwZZyr79GyLfJXIJZxyx
-         mDGGiIO+maiihAloxafvli/rpUTQy8IoP/1sn9Hk4DEK+WFy0R4/7jpVFFzRfotzH8sR
-         45ToxSia4MLemgUbQ9+HCYWdSwPzcwEC5U97K78w1YtRk5q3bBSM8687/prdUbe6YM1c
-         rzsw==
+        bh=qt8DJxbLetO1WoXKcxRo5toKKtnSgKB5eVlWB58cOkk=;
+        b=OH+AqmBT9Kdmi64IsMGc8MSNykUCembPpixPv4zzBrzrPu4ucwFsORVaHkMGcfPA4r
+         8uCQVHV+8Wyli+9AttwM7qpv4f4tNC2hdEunrUWLLkSkWs0PWOUCa+n8YKIabHg6GLd7
+         hiwxshPZf7ZvPf+4dweotp+Ny/sGKfx7EeycI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jg45dpTkIStnq7FH8sB1G6csIoi0LJaAOaqWI/KVCvI=;
-        b=bNP0xXFHnzBit1JPYBlxKg1ev4E86bZ0uwAQeCaNgXE2lzN81q1T3oA3rSnJVr0/Hf
-         lLlJZpX+0rwBwJlSEbhtO/9YXS42useXwywouY2N/6lqypr+XaHZPnh0KWmz9vAgs9rI
-         5TCic22NNSVYMSkJ5b3gr+YjB2Abs264l/pDdP5pp2OjBw0eTC9U4oO7ryY0budz4a2E
-         gKUAKyQCbWAXaUXQWfyDjNZe9abAhnaS6zpNpAnyQ+YyZpEWH8fxvCD0NWYzu3keLe5M
-         nkHNSh9WQ+L9lLX+5g9QkxY45eC47rutejmM50+XLONjyuNE2N9fk6zYW23ZatQ2P/kk
-         HfAw==
-X-Gm-Message-State: AOAM532UOVWIJ6bUXLP1SxN9a2QHnwq9wCy0ZvpOIjuL1tWLJ5j+GXpC
-        6wOigaEvulvjtLuRJ5yMPCzA6y2R22Y7VsY1qYQ=
-X-Google-Smtp-Source: ABdhPJzjR9v72td9M8NZQP+eitD1eMiz3OsKtziYoQQJVouthGxKy6BQyiXpmiZ9+bPbeYxIQSPgdVC+fQkcTwS6lm4=
-X-Received: by 2002:a25:c001:: with SMTP id c1mr1976005ybf.27.1603924857840;
- Wed, 28 Oct 2020 15:40:57 -0700 (PDT)
+        bh=qt8DJxbLetO1WoXKcxRo5toKKtnSgKB5eVlWB58cOkk=;
+        b=mUoOJcyQqG8Cid2e2bSwf6XK84NWzEzd4sakUN4hbPMcZAUzyGKzTf5YULbuG0jp6j
+         +FJ/kxKlo+b5EtqviaxvIw9nQ8Knw0xfO03LfxmgibPYLrm8tp+QKbaGVLxox3FPPn+t
+         01JqlN+NhMTtdlWIbtfbOE8LRiqZRKU6zqoMps/EdPyFCZ8mX7gziKzHOtFBetHrf5sN
+         +HcKOdH5wIcdJROnChxrGpXNHdpAuNnVSKSSyoxe6FktoRAR4bKkkSB8byhs16h7nJaX
+         847oO+9RSXl0+FGtQ3AHF0g5twpWLEY7xmZX2izVayXySnGh4GW3u9zcSeDzg5LMvWTl
+         wYpw==
+X-Gm-Message-State: AOAM533pkY1lkkNmWsu2UA3MZBvrCyn9rRflmn8xCJ8DPd2W+6LVSUWd
+        xHGTzKL8V7d/D/eFA9Wxs+0kBAUtx+GeftZCWcE1KGil9vs3acwm
+X-Google-Smtp-Source: ABdhPJwxL/cNreEkGxZEeBkLMJW+nXtxbWJBnh3oGKara0Jkz/gJF9pPGAqnIO/XhWtV5NKiBIa/b6QweHKnigrOa6I=
+X-Received: by 2002:a50:fb06:: with SMTP id d6mr6238984edq.312.1603866735356;
+ Tue, 27 Oct 2020 23:32:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20201022082138.2322434-1-jolsa@kernel.org> <20201022082138.2322434-8-jolsa@kernel.org>
- <20201028182534.GS2900849@krava>
-In-Reply-To: <20201028182534.GS2900849@krava>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 28 Oct 2020 15:40:46 -0700
-Message-ID: <CAEf4BzarrQLrh4PXZvMmrL8KpBTjB65V9+jxn0os-Yd2jN2aYQ@mail.gmail.com>
-Subject: Re: [RFC bpf-next 07/16] kallsyms: Use rb tree for kallsyms name search
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+References: <45f07f17-18b6-d187-0914-6f341fe90857@gmail.com>
+ <20200930150330.GC284424@cisco> <8bcd956f-58d2-d2f0-ca7c-0a30f3fcd5b8@gmail.com>
+ <20200930230327.GA1260245@cisco> <CAG48ez1VOUEHVQyo-2+uO7J+-jN5rh7=KmrMJiPaFjwCbKR1Sg@mail.gmail.com>
+ <20200930232456.GB1260245@cisco> <CAG48ez2xn+_KznEztJ-eVTsTzkbf9CVgPqaAk7TpRNAqbdaRoA@mail.gmail.com>
+ <CAG48ez3kpEDO1x_HfvOM2R9M78Ach9O_4+Pjs-vLLfqvZL+13A@mail.gmail.com>
+ <656a37b5-75e3-0ded-6ba8-3bb57b537b24@gmail.com> <CAG48ez2Uy8=Tz9k1hcr0suLPHjbJi1qUviSGzDQ-XWEGsdNU+A@mail.gmail.com>
+ <e2643168-b5d5-4d8c-947a-7895bcabc268@gmail.com> <CAG48ez2Nb95ae+XwZPYRju1KO-Ps_4R6QxN6ioUhOy2Uok=uAg@mail.gmail.com>
+In-Reply-To: <CAG48ez2Nb95ae+XwZPYRju1KO-Ps_4R6QxN6ioUhOy2Uok=uAg@mail.gmail.com>
+From:   Sargun Dhillon <sargun@sargun.me>
+Date:   Tue, 27 Oct 2020 23:31:39 -0700
+Message-ID: <CAMp4zn_Qt2MYuoLojn5ikRkr-J5yGimirjevoAvorK5wfzrBHg@mail.gmail.com>
+Subject: Re: For review: seccomp_user_notif(2) manual page
+To:     Jann Horn <jannh@google.com>
+Cc:     "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <christian@brauner.io>,
+        linux-man <linux-man@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Will Drewry <wad@chromium.org>, bpf <bpf@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jesper Brouer <jbrouer@redhat.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Viktor Malik <vmalik@redhat.com>
+        Andy Lutomirski <luto@amacapital.net>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Robert Sesek <rsesek@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Oct 28, 2020 at 3:29 PM Jiri Olsa <jolsa@redhat.com> wrote:
+On Tue, Oct 27, 2020 at 3:28 AM Jann Horn <jannh@google.com> wrote:
 >
-> On Thu, Oct 22, 2020 at 10:21:29AM +0200, Jiri Olsa wrote:
-> > The kallsyms_expand_symbol function showed in several bpf related
-> > profiles, because it's doing linear search.
+> On Tue, Oct 27, 2020 at 7:14 AM Michael Kerrisk (man-pages)
+> <mtk.manpages@gmail.com> wrote:
+> > On 10/26/20 4:54 PM, Jann Horn wrote:
+> > > I'm a bit on the fence now on whether non-blocking mode should use
+> > > ENOTCONN or not... I guess if we returned ENOENT even when there are
+> > > no more listeners, you'd have to disambiguate through the poll()
+> > > revents, which would be kinda ugly?
 > >
-> > Before:
-> >
-> >  Performance counter stats for './src/bpftrace -ve kfunc:__x64_sys_s* \
-> >    { printf("test\n"); } i:ms:10 { printf("exit\n"); exit();}' (5 runs):
-> >
-> >      2,535,458,767      cycles:k                         ( +-  0.55% )
-> >        940,046,382      cycles:u                         ( +-  0.27% )
-> >
-> >              33.60 +- 3.27 seconds time elapsed  ( +-  9.73% )
-> >
-> > Loading all the vmlinux symbols in rbtree and and switch to rbtree
-> > search in kallsyms_lookup_name function to save few cycles and time.
-> >
-> > After:
-> >
-> >  Performance counter stats for './src/bpftrace -ve kfunc:__x64_sys_s* \
-> >    { printf("test\n"); } i:ms:10 { printf("exit\n"); exit();}' (5 runs):
-> >
-> >      2,199,433,771      cycles:k                         ( +-  0.55% )
-> >        936,105,469      cycles:u                         ( +-  0.37% )
-> >
-> >              26.48 +- 3.57 seconds time elapsed  ( +- 13.49% )
-> >
-> > Each symbol takes 160 bytes, so for my .config I've got about 18 MBs
-> > used for 115285 symbols.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > I must confess, I'm not quite clear on which two cases you
+> > are trying to distinguish. Can you elaborate?
 >
-> FYI there's init_kprobes dependency on kallsyms_lookup_name in early
-> init call, so this won't work as it is :-\ will address this in v2
+> Let's say someone writes a program whose responsibilities are just to
+> handle seccomp events and to listen on some other fd for commands. And
+> this is implemented with an event loop. Then once all the target
+> processes are gone (including zombie reaping), we'll start getting
+> EPOLLERR.
 >
-> also I'll switch to sorted array and bsearch, because kallsyms is not
-> dynamically updated
+> If NOTIF_RECV starts returning -ENOTCONN at this point, the event loop
+> can just call into the seccomp logic without any arguments; it can
+> just call NOTIF_RECV one more time, see the -ENOTCONN, and terminate.
+> The downside is that there's one more error code userspace has to
+> special-case.
+> This would be more consistent with what we'd be doing in the blocking case.
+>
+> If NOTIF_RECV keeps returning -ENOENT, the event loop has to also tell
+> the seccomp logic what the revents are.
+>
+> I guess it probably doesn't really matter much.
 
-what about kernel modules then?
+So, in practice, if you're emulating a blocking syscall (such as open,
+perf_event_open, or any of a number of other syscalls), you probably
+have to do it on a separate thread in the supervisor because you want
+to continue to be able to receive new notifications if any other process
+generates a seccomp notification event that you need to handle.
 
->
-> jirka
->
-> > ---
-> >  kernel/kallsyms.c | 95 ++++++++++++++++++++++++++++++++++++++++++-----
-> >  1 file changed, 86 insertions(+), 9 deletions(-)
-> >
+In addition to that, some of these syscalls are preemptible, so you need
+to poll SECCOMP_IOCTL_NOTIF_ID_VALID to make sure that the program
+under supervision hasn't left the syscall.
 
-[...]
+If we're to implement a mechanism that makes the seccomp ioctl receive
+non-blocking, it would be valuable to address this problem as well (getting
+a notification when the supervisor is processing a syscall and needs to
+preempt it). In the best case, this can be a minor inconvenience, and
+in the worst case this can result in weird errors where you're keeping
+resources open that the container expects to be closed.
