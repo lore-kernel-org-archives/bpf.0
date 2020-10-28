@@ -2,100 +2,106 @@ Return-Path: <SRS0=L8C4=EE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FCB5C55179
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:13:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 51009C4363A
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:22:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 17A0420809
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:13:55 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vciGCxCg"
+	by mail.kernel.org (Postfix) with ESMTP id F21B4205F4
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:22:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603934562;
+	bh=FsmcOn0XxpUX5de9S0UmGY+4ZGOqbW4cCRPICKIXKI4=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=xznJJ8vBeDyQXamjxX1paa5/qiGp4R+J0qdZpAmfWivLAtkEhLdxwNCDxSSOeMGcs
+	 J05Oe4l6zcft0Vnm3zcVkp0Am8d1JbGQU9ZU6LR11RnEff6BGLv7UmbnpoHr7ttKRn
+	 yi8t4Rip65MPwOM32No2kAAk8VN0OBcWHJDY94bw=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389329AbgJ2BMM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 21:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404298AbgJ2BMI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 21:12:08 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5828FC0613D1
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 18:12:08 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id a7so1177155lfk.9
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 18:12:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2+uYu86LDWGsnC4W37LGE2qpMcN2MpffcV3JWIw2MFQ=;
-        b=vciGCxCgV8AP2QARHScqr2zKoGS/+nJtrToSziCQ8d8h1NRdDiev7b4FY2OwCqgP1d
-         pQbxRv3nm4M5jbQFhB27QEFUsCLY1i6eh1m09u0GR/aIZBCnQqfxLzxjTF3jSSNq63Ix
-         7tc/61a9Eg7G4x1Q2ubkcaETyM84zF0DBSoX0Z35kXIp9RaUo5oEwdbRcGo1NCv5ThrS
-         xv91Ll0nIZQR9E4a8eCFWpzRS93StI1OfrXVYHm3aQtiSQCjRfQnJM7yFQeATQ7e3KqK
-         nI1O4QIZNutVL1kAoz9zNnzUTHY2AP0CtWCW2iHkQa6Wv2OlTNpHsTkIDscq6Ww8Qb6w
-         b/Cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2+uYu86LDWGsnC4W37LGE2qpMcN2MpffcV3JWIw2MFQ=;
-        b=QUtemM5prYG+pJaW3UTcfaBJCu2U6xdKp4jrwG8hw7HWpTiXqkKVyWFkYWhzN1wv7w
-         gncCiB7IkFvuyIHtdumrE1BZhi/btc+cq65+YnMdWAq0KSda/E9x1qinMdtp0fA2Uvyu
-         +/KYzDw++rX3m/ua1RVVM98RhMtKWs89W8azV2Ap8Kuvryrnf4YNwXAJoVGIPVvNah+X
-         dV4d8erAvmOFREDnV/frZmiXWYuDMUtN4sNogVKrz+GVWQsVoQW6DwtgHPoubxm9Lhs2
-         TrV50t959C4gzuWLdwns+DlWrr5WIpBsgZCrLmv6zKldb9vTi6eJROKGA6Y7YDVyZmli
-         yQPA==
-X-Gm-Message-State: AOAM533Wz0cuT092TYSBXotE1y3c5KCemJaWxAQji1lQc8ePBZp/6EkA
-        yj5t680VN8vpG4sjcGPWoBTxzUhF+oxcfa7hBoRf2g==
-X-Google-Smtp-Source: ABdhPJzzc/J1JBJXAToRCeQHDdOVsoNE6U9yTJzDUPWdlDCEb1Uk4v5ySj0pBCeZjS4xxD+zSOrd96XH4omhzWIDEkE=
-X-Received: by 2002:a19:83c1:: with SMTP id f184mr559337lfd.97.1603933926604;
- Wed, 28 Oct 2020 18:12:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <45f07f17-18b6-d187-0914-6f341fe90857@gmail.com>
- <20200930150330.GC284424@cisco> <8bcd956f-58d2-d2f0-ca7c-0a30f3fcd5b8@gmail.com>
- <20200930230327.GA1260245@cisco> <CAG48ez1VOUEHVQyo-2+uO7J+-jN5rh7=KmrMJiPaFjwCbKR1Sg@mail.gmail.com>
- <20200930232456.GB1260245@cisco> <CAG48ez2xn+_KznEztJ-eVTsTzkbf9CVgPqaAk7TpRNAqbdaRoA@mail.gmail.com>
- <202010251725.2BD96926E3@keescook> <CAG48ez2b-fnsp8YAR=H5uRMT4bBTid_hyU4m6KavHxDko1Efog@mail.gmail.com>
- <CAG48ez2OWhpH3HHUJSrAmokJ8=SVwKrmQMSw0gEbTJmKE4myCw@mail.gmail.com> <202010281553.A72E162A7@keescook>
-In-Reply-To: <202010281553.A72E162A7@keescook>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 29 Oct 2020 02:11:39 +0100
-Message-ID: <CAG48ez0FS49ki=RfO_nrSnwH32g9oRS73OSUOhz6tVh+YwCNLg@mail.gmail.com>
-Subject: Re: For review: seccomp_user_notif(2) manual page
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Tycho Andersen <tycho@tycho.pizza>,
-        "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Christian Brauner <christian@brauner.io>,
-        linux-man <linux-man@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
+        id S1728305AbgJ1WEu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:04:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50704 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729508AbgJ1WCX (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:02:23 -0400
+Received: from e123331-lin.nice.arm.com (lfbn-nic-1-188-42.w2-15.abo.wanadoo.fr [2.15.37.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CA850247F5;
+        Wed, 28 Oct 2020 17:15:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603905313;
+        bh=FsmcOn0XxpUX5de9S0UmGY+4ZGOqbW4cCRPICKIXKI4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NF6yHpW3jDsvWT6SJd9HhXl7b6oqz9sIEwd04rVK4NSy14dPU/rkmGH6SIv1YrILN
+         2gNIEFCQsug2/rZ1HaJlj57elsl5UcgBaYU4petFMPCGb7JZOhmYkhIDcuqzQ06lzI
+         B+TZ0wVcZ2fGIg/Q7v0lAo6dKYN2geM0EFiiH28c=
+From:   Ard Biesheuvel <ardb@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Alexei Starovoitov <ast@kernel.org>,
-        Will Drewry <wad@chromium.org>, bpf <bpf@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Robert Sesek <rsesek@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Peter Zijlstra <peterz@infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH v2 0/2] get rid of GCC __attribute__((optimize)) for BPF
+Date:   Wed, 28 Oct 2020 18:15:04 +0100
+Message-Id: <20201028171506.15682-1-ardb@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Oct 28, 2020 at 11:56 PM Kees Cook <keescook@chromium.org> wrote:
-> On Mon, Oct 26, 2020 at 11:31:01AM +0100, Jann Horn wrote:
-> > Or I guess we could also just set O_NONBLOCK on the fd by default?
-> > Since the one existing user is eventloop-based...
->
-> I thought about that initially, but it rubs me the wrong way: it
-> violates least-surprise for me. File descriptors are expected to be
-> default-blocking. It *is* a special fd, though, so maybe it could work.
-> The only case I can think of it would break would be ioctl-loop case
-> that is already buggy in that it didn't handle non-zero returns?
+This is a followup to [0]:
+[PATCH] bpf: don't rely on GCC __attribute__((optimize)) to disable GCSE[0]
 
-We don't have any actual users that use the API that way outside of
-the kernel's selftest/sample code, right?
+Changes since v1:
+- only use -fno-gcse when CONFIG_BPF_JIT_ALWAYS_ON=y and CONFIG_CC_IS_GCC=y
+  (but ignore CONFIG_RETPOLINE since we want to avoid GCSE in all cases)
+- to avoid potential impact of disabling GCSE on other code, put the
+  interpreter in a separate file (patch #2)
+
+Note that patch #1 is intended for backporting, as function scope GCC
+optimization attributes are really quite broken.
+
+I don't have a strong opinion on whether the interpreter code should be
+split off or not, but it looks like it can be done fairly painlessly,
+so it is probably a good idea to do it anyway.
+
+[0] https://lore.kernel.org/bpf/20201027205723.12514-1-ardb@kernel.org/
+
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Arvind Sankar <nivedita@alum.mit.edu>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Kees Cook <keescook@chromium.org>
+
+Ard Biesheuvel (2):
+  bpf: don't rely on GCC __attribute__((optimize)) to disable GCSE
+  bpf: move interpreter into separate source file
+
+ include/linux/compiler-gcc.h   |   2 -
+ include/linux/compiler_types.h |   4 -
+ include/linux/filter.h         |   1 +
+ kernel/bpf/Makefile            |   7 +-
+ kernel/bpf/core.c              | 567 ------------------
+ kernel/bpf/interp.c            | 601 ++++++++++++++++++++
+ 6 files changed, 607 insertions(+), 575 deletions(-)
+ create mode 100644 kernel/bpf/interp.c
+
+-- 
+2.17.1
+
