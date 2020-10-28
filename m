@@ -2,257 +2,138 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F185C55179
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 21:40:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37844C55179
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 21:40:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AFBD5246AB
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 21:40:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D361A246AB
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 21:40:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="co5mwPz4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZrFkjw61"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725809AbgJ1VkT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 17:40:19 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:28736 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727180AbgJ1Vj4 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 28 Oct 2020 17:39:56 -0400
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 09S6AYmp023114
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2020 23:10:56 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=U6BoXiWMHGAsm1rlC5G8Hk5JeD1n0A1ivodTLVeGgpU=;
- b=co5mwPz4yk4YgWVuxB5ibUrKqrc6sRh+gkKrXuLoa77IranYoYOSG5u77b2tTfQM2zCg
- Gq60M75kZ7Z7QN+IwVJ2pQuhXk6MW+MiLRJ6shSD6UCpvzyRr0raLlghsZt1Nc5uRRNf
- Ff0ykf5vQweJxBsfzT0rdFdT2ATQE8e5ZHY= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 34ejk25e5p-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2020 23:10:56 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 27 Oct 2020 23:10:55 -0700
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 679FF37059B3; Tue, 27 Oct 2020 23:10:54 -0700 (PDT)
-From:   Yonghong Song <yhs@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: [PATCH bpf-next] bpf: permit cond_resched for some iterators
-Date:   Tue, 27 Oct 2020 23:10:54 -0700
-Message-ID: <20201028061054.1411116-1-yhs@fb.com>
-X-Mailer: git-send-email 2.24.1
+        id S1727137AbgJ1Vjp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 17:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727124AbgJ1VjW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 17:39:22 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3420AC0613CF;
+        Wed, 28 Oct 2020 14:39:22 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id 133so526181pfx.11;
+        Wed, 28 Oct 2020 14:39:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZiMASukYVoE0kgKw+YgZ0gSNXM/yi/Ajkhcho3m/4b4=;
+        b=ZrFkjw61/lM/NZxmVVDYl7Nb0B8gjjb/Yo9gSZlNlQYIbJhBjUgXPIaFBlCsnhsTtq
+         vVgM1Q9Zpw4a1uQCya5QKM8GhgtptugScRq563jCGImuebJGTFCoMTrgMxCZ/+abweZM
+         d/4nsCSQ97xaxSDCxKWfFavVHgpRnxysYaQ0EgUK1sZiBWFIK7+MS15MKBjUGIjMpIdX
+         oQWhXNcjc60To/A30mBEJVfVSV1TUrHwytf6ZlR1OEKIymfcObPUKfyzFjgp+uW6bR7g
+         7qT/K9Yn5+hEe+par2iArOofUJj2mXvJiMFM9h8+v7W9tmsEaTXh2EXxGLxyHH6SZhP3
+         9/MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZiMASukYVoE0kgKw+YgZ0gSNXM/yi/Ajkhcho3m/4b4=;
+        b=sb+xpY9u1EdMsySpM136b/T0D6X8k1uS44qaMaxD8FALiHIfVMs05TziC/XkoIxDmt
+         o7QzonRzZy2f1WTZAVVLWTeIvr7cXs82M6eqNtjalRFBiYmY2/bchSfEMFAPiacMld1+
+         tTNR5yHPXBt5NRyhLLzsQG6AUtyEFpcJVirR+NnOnU3ENYc0mRiY+uTtoMmIHDHaFe4R
+         bVu8QCvn/i05d9DW+OlySyP/WagPA//HdyNaoyRPFK6MnZ9QOo0EUe4Amjr3pBkULMqJ
+         H8BqLIqXYZBmdxyWr/K52qJZM9NGs5KcLD0XI4ckiZqhm9MSj5rdZ5jJkFqECmGBEpA5
+         ZJtQ==
+X-Gm-Message-State: AOAM530JT0t7Qx571wonTTGsIf8bEzPhEDFuL2GxYOj3VMOkv+lXjQZo
+        iV4S0Dta6JXX4DRqaLnlmAY=
+X-Google-Smtp-Source: ABdhPJx+/5NAcZguIVKdlG2lweqIkHIfZXBdnl5vRIeXYI89zsnQHqvQg5XGjrA/II5db5RhSHV+sg==
+X-Received: by 2002:a63:f502:: with SMTP id w2mr1197043pgh.186.1603921161712;
+        Wed, 28 Oct 2020 14:39:21 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::4:1c8])
+        by smtp.gmail.com with ESMTPSA id z20sm526757pfk.199.2020.10.28.14.39.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2020 14:39:20 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 14:39:03 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, arnd@arndb.de,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v2 1/2] bpf: don't rely on GCC __attribute__((optimize))
+ to disable GCSE
+Message-ID: <20201028213903.fvdjydadqt6tx765@ast-mbp.dhcp.thefacebook.com>
+References: <20201028171506.15682-1-ardb@kernel.org>
+ <20201028171506.15682-2-ardb@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-10-28_01:2020-10-26,2020-10-28 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 clxscore=1015
- phishscore=0 suspectscore=13 adultscore=0 bulkscore=0 impostorscore=0
- mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010280039
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201028171506.15682-2-ardb@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Commit e679654a704e ("bpf: Fix a rcu_sched stall issue with
-bpf task/task_file iterator") tries to fix rcu stalls warning
-which is caused by bpf task_file iterator when running
-"bpftool prog".
+On Wed, Oct 28, 2020 at 06:15:05PM +0100, Ard Biesheuvel wrote:
+> Commit 3193c0836 ("bpf: Disable GCC -fgcse optimization for
+> ___bpf_prog_run()") introduced a __no_fgcse macro that expands to a
+> function scope __attribute__((optimize("-fno-gcse"))), to disable a
+> GCC specific optimization that was causing trouble on x86 builds, and
+> was not expected to have any positive effect in the first place.
+> 
+> However, as the GCC manual documents, __attribute__((optimize))
+> is not for production use, and results in all other optimization
+> options to be forgotten for the function in question. This can
+> cause all kinds of trouble, but in one particular reported case,
+> it causes -fno-asynchronous-unwind-tables to be disregarded,
+> resulting in .eh_frame info to be emitted for the function.
+> 
+> This reverts commit 3193c0836, and instead, it disables the -fgcse
+> optimization for the entire source file, but only when building for
+> X86 using GCC with CONFIG_BPF_JIT_ALWAYS_ON disabled. Note that the
+> original commit states that CONFIG_RETPOLINE=n triggers the issue,
+> whereas CONFIG_RETPOLINE=y performs better without the optimization,
+> so it is kept disabled in both cases.
+> 
+> Fixes: 3193c0836 ("bpf: Disable GCC -fgcse optimization for ___bpf_prog_run()")
+> Link: https://lore.kernel.org/lkml/CAMuHMdUg0WJHEcq6to0-eODpXPOywLot6UD2=GFHpzoj_hCoBQ@mail.gmail.com/
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  include/linux/compiler-gcc.h   | 2 --
+>  include/linux/compiler_types.h | 4 ----
+>  kernel/bpf/Makefile            | 6 +++++-
+>  kernel/bpf/core.c              | 2 +-
+>  4 files changed, 6 insertions(+), 8 deletions(-)
+> 
+> diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+> index d1e3c6896b71..5deb37024574 100644
+> --- a/include/linux/compiler-gcc.h
+> +++ b/include/linux/compiler-gcc.h
+> @@ -175,5 +175,3 @@
+>  #else
+>  #define __diag_GCC_8(s)
+>  #endif
+> -
+> -#define __no_fgcse __attribute__((optimize("-fno-gcse")))
 
-      rcu: INFO: rcu_sched self-detected stall on CPU
-      rcu: \x097-....: (20999 ticks this GP) idle=3D302/1/0x4000000000000=
-000 softirq=3D1508852/1508852 fqs=3D4913
-      \x09(t=3D21031 jiffies g=3D2534773 q=3D179750)
-      NMI backtrace for cpu 7
-      CPU: 7 PID: 184195 Comm: bpftool Kdump: loaded Tainted: G        W =
-        5.8.0-00004-g68bfc7f8c1b4 #6
-      Hardware name: Quanta Twin Lakes MP/Twin Lakes Passive MP, BIOS F09=
-_3A17 05/03/2019
-      Call Trace:
-      <IRQ>
-      dump_stack+0x57/0x70
-      nmi_cpu_backtrace.cold+0x14/0x53
-      ? lapic_can_unplug_cpu.cold+0x39/0x39
-      nmi_trigger_cpumask_backtrace+0xb7/0xc7
-      rcu_dump_cpu_stacks+0xa2/0xd0
-      rcu_sched_clock_irq.cold+0x1ff/0x3d9
-      ? tick_nohz_handler+0x100/0x100
-      update_process_times+0x5b/0x90
-      tick_sched_timer+0x5e/0xf0
-      __hrtimer_run_queues+0x12a/0x2a0
-      hrtimer_interrupt+0x10e/0x280
-      __sysvec_apic_timer_interrupt+0x51/0xe0
-      asm_call_on_stack+0xf/0x20
-      </IRQ>
-      sysvec_apic_timer_interrupt+0x6f/0x80
-      ...
-      task_file_seq_next+0x52/0xa0
-      bpf_seq_read+0xb9/0x320
-      vfs_read+0x9d/0x180
-      ksys_read+0x5f/0xe0
-      do_syscall_64+0x38/0x60
-      entry_SYSCALL_64_after_hwframe+0x44/0xa9
+See my reply in the other thread.
+I prefer
+-#define __no_fgcse __attribute__((optimize("-fno-gcse")))
++#define __no_fgcse __attribute__((optimize("-fno-gcse,-fno-omit-frame-pointer")))
 
-The fix is to limit the number of bpf program runs to be
-one million. This fixed the program in most cases. But
-we also found under heavy load, which can increase the wallclock
-time for bpf_seq_read(), the warning may still be possible.
+Potentially with -fno-asynchronous-unwind-tables.
 
-For example, calling bpf_delay() in the "while" loop of
-bpf_seq_read(), which will introduce artificial delay,
-the warning will show up in my qemu run.
-
-  static unsigned q;
-  volatile unsigned *p =3D &q;
-  volatile unsigned long long ll;
-  static void bpf_delay(void)
-  {
-         int i, j;
-
-         for (i =3D 0; i < 10000; i++)
-                 for (j =3D 0; j < 10000; j++)
-                         ll +=3D *p;
-  }
-
-There are two ways to fix this issue. One is to reduce the above
-one million threshold to say 100,000 and hopefully rcu warning will
-not show up any more. Another is to introduce a target feature
-which enables bpf_seq_read() calling cond_resched().
-
-This patch took second approach as the first approach may cause
-more -EAGAIN failures for read() syscalls. Note that not all bpf_iter
-targets can permit cond_resched() in bpf_seq_read() as some, e.g.,
-netlink seq iterator, rcu read lock critical section spans through
-seq_ops->next() -> seq_ops->show() -> seq_ops->next().
-
-For the kernel code with the above hack, "bpftool p" roughly takes
-38 seconds to finish on my VM with 184 bpf program runs.
-Using the following command, I am able to collect the number of
-context switches:
-   perf stat -e context-switches -- ./bpftool p >& log
-Without this patch,
-   69      context-switches
-With this patch,
-   75      context-switches
-This patch added additional 6 context switches, roughly every 6 seconds
-to reschedule, to avoid lengthy no-rescheduling which may cause the
-above RCU warnings.
-
-Signed-off-by: Yonghong Song <yhs@fb.com>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
----
- include/linux/bpf.h    |  5 +++++
- kernel/bpf/bpf_iter.c  | 14 ++++++++++++++
- kernel/bpf/task_iter.c |  2 ++
- 3 files changed, 21 insertions(+)
-
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 2b16bf48aab6..2fffd30e13ac 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1294,6 +1294,10 @@ typedef void (*bpf_iter_show_fdinfo_t) (const stru=
-ct bpf_iter_aux_info *aux,
- typedef int (*bpf_iter_fill_link_info_t)(const struct bpf_iter_aux_info =
-*aux,
- 					 struct bpf_link_info *info);
-=20
-+enum bpf_iter_feature {
-+	BPF_ITER_RESCHED	=3D BIT(0),
-+};
-+
- #define BPF_ITER_CTX_ARG_MAX 2
- struct bpf_iter_reg {
- 	const char *target;
-@@ -1302,6 +1306,7 @@ struct bpf_iter_reg {
- 	bpf_iter_show_fdinfo_t show_fdinfo;
- 	bpf_iter_fill_link_info_t fill_link_info;
- 	u32 ctx_arg_info_size;
-+	u32 feature;
- 	struct bpf_ctx_arg_aux ctx_arg_info[BPF_ITER_CTX_ARG_MAX];
- 	const struct bpf_iter_seq_info *seq_info;
- };
-diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
-index 8f10e30ea0b0..5454161407f1 100644
---- a/kernel/bpf/bpf_iter.c
-+++ b/kernel/bpf/bpf_iter.c
-@@ -67,6 +67,15 @@ static void bpf_iter_done_stop(struct seq_file *seq)
- 	iter_priv->done_stop =3D true;
- }
-=20
-+static bool bpf_iter_support_resched(struct seq_file *seq)
-+{
-+	struct bpf_iter_priv_data *iter_priv;
-+
-+	iter_priv =3D container_of(seq->private, struct bpf_iter_priv_data,
-+				 target_private);
-+	return iter_priv->tinfo->reg_info->feature & BPF_ITER_RESCHED;
-+}
-+
- /* maximum visited objects before bailing out */
- #define MAX_ITER_OBJECTS	1000000
-=20
-@@ -83,6 +92,7 @@ static ssize_t bpf_seq_read(struct file *file, char __u=
-ser *buf, size_t size,
- 	struct seq_file *seq =3D file->private_data;
- 	size_t n, offs, copied =3D 0;
- 	int err =3D 0, num_objs =3D 0;
-+	bool can_resched;
- 	void *p;
-=20
- 	mutex_lock(&seq->lock);
-@@ -135,6 +145,7 @@ static ssize_t bpf_seq_read(struct file *file, char _=
-_user *buf, size_t size,
- 		goto done;
- 	}
-=20
-+	can_resched =3D bpf_iter_support_resched(seq);
- 	while (1) {
- 		loff_t pos =3D seq->index;
-=20
-@@ -180,6 +191,9 @@ static ssize_t bpf_seq_read(struct file *file, char _=
-_user *buf, size_t size,
- 			}
- 			break;
- 		}
-+
-+		if (can_resched)
-+			cond_resched();
- 	}
- stop:
- 	offs =3D seq->count;
-diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-index 5b6af30bfbcd..1fdb2fc196cd 100644
---- a/kernel/bpf/task_iter.c
-+++ b/kernel/bpf/task_iter.c
-@@ -337,6 +337,7 @@ static const struct bpf_iter_seq_info task_seq_info =3D=
- {
-=20
- static struct bpf_iter_reg task_reg_info =3D {
- 	.target			=3D "task",
-+	.feature		=3D BPF_ITER_RESCHED,
- 	.ctx_arg_info_size	=3D 1,
- 	.ctx_arg_info		=3D {
- 		{ offsetof(struct bpf_iter__task, task),
-@@ -354,6 +355,7 @@ static const struct bpf_iter_seq_info task_file_seq_i=
-nfo =3D {
-=20
- static struct bpf_iter_reg task_file_reg_info =3D {
- 	.target			=3D "task_file",
-+	.feature		=3D BPF_ITER_RESCHED,
- 	.ctx_arg_info_size	=3D 2,
- 	.ctx_arg_info		=3D {
- 		{ offsetof(struct bpf_iter__task_file, task),
---=20
-2.24.1
-
+__attribute__((optimize("")) is not as broken as you're claiming to be.
+It has quirky gcc internal logic, but it's still widely used
+in many software projects.
