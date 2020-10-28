@@ -2,119 +2,127 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 83E4DC4363A
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:12:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 27A42C4363A
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:14:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C00D20EDD
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:12:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D00282475F
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:13:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WH5XdK6W"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Qr2glRpN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730796AbgJ1WMO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 18:12:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52568 "EHLO
+        id S1731141AbgJ1WN6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730790AbgJ1WMM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:12:12 -0400
-Received: from mail-ot1-x342.google.com (mail-ot1-x342.google.com [IPv6:2607:f8b0:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C85BC0613CF;
-        Wed, 28 Oct 2020 15:12:11 -0700 (PDT)
-Received: by mail-ot1-x342.google.com with SMTP id n15so578222otl.8;
-        Wed, 28 Oct 2020 15:12:11 -0700 (PDT)
+        with ESMTP id S1731161AbgJ1WN5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:13:57 -0400
+Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63162C0613CF
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 15:13:57 -0700 (PDT)
+Received: by mail-ej1-x641.google.com with SMTP id z5so1093012ejw.7
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 15:13:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ziWzHtHDKEUCQdSi3YfjA8tMbkauNIh8Kw71IC6e0PI=;
-        b=WH5XdK6Wqo1HCo4aaY86BUZaEL7tM3sr2gD6MykRYYHobBzsJlsUGM/EmJFizQ2Bql
-         vqO0DRg2E28K+0rjgZsNSvk0rYw39XyVbQ2Cw6nLTCYr15qMqlZ2zmO1Kl/5/UkeD/Pq
-         xrT/1hfltkeXQK24NIxIORFDP3O5b0GP4cH8olAZMFcRIpVzrUfKDcKhNgX8wwucX8IL
-         BVJSoZqw+Ijdm8BN98Hr5xvT+eZavCuQUsVwCN+iftSVPHIPsxVXWUehGtSBHO3JIp8G
-         9DlJQvwxVqovibhsfFGsdJpXgV/pxu9vb4a/AOyS8kL62M0W/L8wdbiPPCQ55Jv2wQGY
-         CwTg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gg/EaFLk9AbLnAJGafga7GK4mhL0MiGRMckcdbCQP44=;
+        b=Qr2glRpNJyYB1wEgmcO7j2dDJ0YYTC0HcATnft1fXy5hzdCT9TQV4nCCI5OmohzHYv
+         jaZsfV337DR46W0TcI+Ok2P7UbclJCCLHCYsNP0QvCCKLn/V/WvwaUZjw3L5oZL2EjBi
+         v4nH/d2otzmLKkyCW2PR8A+POOTuPl8rQfuM6hnRNPWADs/fiO6wnMVUf9vl3Oae0FKV
+         h6F0cvRNBGXfGSgq5uMiyeEihAN4ya5qkYIPxEHMIRZJmXEw7wPZ9fxIAEk1gCRDFAd6
+         JGrbQOV+P9Hob0cwIJ40R4mhbi+F9uFI7T4au5rVbiVvNe9qrK6UQaqdAQQEf5epN2L2
+         ZwTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ziWzHtHDKEUCQdSi3YfjA8tMbkauNIh8Kw71IC6e0PI=;
-        b=tktL8x96Omq+thF85itGXVUm7yFPad9XT56EYtKEbWE+MCg0oMkOgFtJZdSvTMDRTW
-         13ojagYpZdXi6DfMDjPIUhxYiGBXWsR8pZ4vYtaOC3mjewggBjCOHoAdY33tkNMXTREI
-         GcuXqphh3ArdIaJqme3dGvwWwgyhXlxESZeFzMFnNCobavcaxKPPwr7W8MaRfpzjoQDi
-         4yC49PYy9kBbvrhKwgP57HpNJp3FDwwgthoDB4SU1DgKDufrki/GMT71Zklhpy7LRRtl
-         KWk+SzbGteTkwdq/vQ427ahyVjOvKl4axhxfawPDiRYQWseC5AzJ0vFDCC6D91L0DJTy
-         UVcw==
-X-Gm-Message-State: AOAM532Uv8zxDX/NaGRflGK5ho6kr16/sLMPCJO1AUrldYkjAdWg+Zhz
-        g5EuyBxf1OmEnIrxAMiVr5r8p/Bqw/esiQLUg/bCQ1eOAgISNg==
-X-Google-Smtp-Source: ABdhPJw1U7gofXrY1jn3ur63ecWI7ajwv2Ydl4fSaB6M/40eNqnmI16qo0SSlVhpKFIIe9jugUdtincmL9nj5mT2JRA=
-X-Received: by 2002:a25:bdc7:: with SMTP id g7mr8137389ybk.260.1603856432876;
- Tue, 27 Oct 2020 20:40:32 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gg/EaFLk9AbLnAJGafga7GK4mhL0MiGRMckcdbCQP44=;
+        b=O6FsTvp/KM7SFLIfUcUuNSH+EEQ2W8FcT3licRLRlSZHfhaWcPv15+I6X/+LXYo4P9
+         5BtF8TBsXrAUAvi0zHNKXh7IgJ/Ebnqc9fTcGpMS59mCIRz5/IUNTpDuZTqPolGhW8JZ
+         NonA6RPYbpkOadjyXqO55WjEP7IqBzRYCaLj3EoyRbiCJ6gsJp+00gfVbNWzfeiqejFn
+         aHJRxddj5HY+kOMjrcpBFX/Hb1eMS+nTKGJTNAvgBMmTr3wY67UT0CTXBS2X68pE8622
+         F8lO8HCaGRRDPgbOiL3en0S8/rsvTSGQqc0srGgk9p9CifVEMB0Zt6X4PExZL88wlrtN
+         fcKQ==
+X-Gm-Message-State: AOAM5300+CmNJzjN1/d2hL/q21g/hV/D9Mpv/gIOzRn+Djh9cg4G+0+M
+        y7sQOG7eLl/yM0eTMJ6vTtWCfWHReLUVWA==
+X-Google-Smtp-Source: ABdhPJzOLRnn/gCi+t8WLxcqYMWXmzddvrpIa1d39PECWp4w0aND7XCXyZ2rwAZ+CV3hzmJVN62Okg==
+X-Received: by 2002:adf:f643:: with SMTP id x3mr8622889wrp.180.1603882796063;
+        Wed, 28 Oct 2020 03:59:56 -0700 (PDT)
+Received: from apalos.home (athedsl-246545.home.otenet.gr. [85.73.10.175])
+        by smtp.gmail.com with ESMTPSA id b5sm6287867wrs.97.2020.10.28.03.59.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2020 03:59:55 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 12:59:51 +0200
+From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
+To:     Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
+        brouer@redhat.com
+Subject: Re: [PATCH net-next 1/4] net: xdp: introduce bulking for xdp tx
+ return path
+Message-ID: <20201028105951.GA52697@apalos.home>
+References: <cover.1603824486.git.lorenzo@kernel.org>
+ <7495b5ac96b0fd2bf5ab79b12e01bf0ee0fff803.1603824486.git.lorenzo@kernel.org>
+ <20201028092734.GA51291@apalos.home>
+ <20201028102304.GA5386@lore-desk>
 MIME-Version: 1.0
-References: <20201027233646.3434896-1-irogers@google.com>
-In-Reply-To: <20201027233646.3434896-1-irogers@google.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 27 Oct 2020 20:40:21 -0700
-Message-ID: <CAEf4BzZm+-pHwnkaaP4+kPJPmsG=0vTKFU4M+At890JsivfZeA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] tools, bpftool: Avoid array index warnings.
-To:     Ian Rogers <irogers@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Michal Rostecki <mrostecki@opensuse.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201028102304.GA5386@lore-desk>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 4:37 PM Ian Rogers <irogers@google.com> wrote:
->
-> The bpf_caps array is shorter without CAP_BPF, avoid out of bounds reads
-> if this isn't defined. Working around this avoids -Wno-array-bounds with
-> clang.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
+On Wed, Oct 28, 2020 at 11:23:04AM +0100, Lorenzo Bianconi wrote:
+> > Hi Lorenzo,
+> 
+> Hi Ilias,
+> 
+> thx for the review.
+> 
+> > 
+> > On Tue, Oct 27, 2020 at 08:04:07PM +0100, Lorenzo Bianconi wrote:
+> 
+> [...]
+> 
+> > > +void xdp_return_frame_bulk(struct xdp_frame *xdpf,
+> > > +			   struct xdp_frame_bulk *bq)
+> > > +{
+> > > +	struct xdp_mem_info *mem = &xdpf->mem;
+> > > +	struct xdp_mem_allocator *xa, *nxa;
+> > > +
+> > > +	if (mem->type != MEM_TYPE_PAGE_POOL) {
+> > > +		__xdp_return(xdpf->data, &xdpf->mem, false);
+> > > +		return;
+> > > +	}
+> > > +
+> > > +	rcu_read_lock();
+> > > +
+> > > +	xa = bq->xa;
+> > > +	if (unlikely(!xa || mem->id != xa->mem.id)) {
+> > 
+> > Why is this marked as unlikely? The driver passes it as NULL. Should unlikely be
+> > checked on both xa and the comparison?
+> 
+> xa is NULL only for the first xdp_frame in the burst while it is set for
+> subsequent ones. Do you think it is better to remove it?
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Ah correct, missed the general context of the driver this runs in.
 
->  tools/bpf/bpftool/feature.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
-> index a43a6f10b564..359960a8f1de 100644
-> --- a/tools/bpf/bpftool/feature.c
-> +++ b/tools/bpf/bpftool/feature.c
-> @@ -843,9 +843,14 @@ static int handle_perms(void)
->                 else
->                         p_err("missing %s%s%s%s%s%s%s%srequired for full feature probing; run as root or use 'unprivileged'",
->                               capability_msg(bpf_caps, 0),
-> +#ifdef CAP_BPF
->                               capability_msg(bpf_caps, 1),
->                               capability_msg(bpf_caps, 2),
-> -                             capability_msg(bpf_caps, 3));
-> +                             capability_msg(bpf_caps, 3)
-> +#else
-> +                               "", "", "", "", "", ""
-> +#endif /* CAP_BPF */
-> +                               );
->                 goto exit_free;
->         }
->
-> --
-> 2.29.0.rc2.309.g374f81d7ae-goog
->
+> 
+> > 
+> > > +		nxa = rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params);
+> > 
+> > Is there a chance nxa can be NULL?
+> 
+> I do not think so since the page_pool is not destroyed while there are
+> in-flight pages, right?
+
+I think so but I am not 100% sure. I'll apply the patch and have a closer look
+
+Cheers
+/Ilias
