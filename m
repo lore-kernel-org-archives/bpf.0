@@ -2,124 +2,176 @@ Return-Path: <SRS0=L8C4=EE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D94BC4363A
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 15BFAC55179
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:00:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E419D20796
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B9E10207DE
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:00:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603933190;
-	bh=9n9YUeIl8Mgtt6bacWFCB+SpPjU7fAOJUqdC1I9KN9Q=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=BtPHd0gksQH+felGgjaKKdC0OND2C+83weNY3zDjKSeRrX7VhM1Gh+ejEUi3ckgfX
-	 g2Trsvrg1O1kNQvHu7+quAlAdX0PLwU53J+lCSmn6zSyncPx8vBuPlp9qjLwPuw6Ch
-	 I/aGPahaLDwfAU5KIpvh+0MSmWsbzWghzlebaJYI=
+	s=default; t=1603933211;
+	bh=WgbuHj01IFnS0Vj48OP8wcJkPWzOiL5aoOn7vv03c4g=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=YKaZ/wzxvyLnmgDv9A3XmLBu6T4HPgBJgYgiGKPjJpetJmIIpZIJpKbR9ELPcnrn0
+	 rCQWRK2eqOmSiIy9t5tnXwgLL49ma6QXCU+cQjpqXaC/zoljdo/zgtYsCeReMKWU9c
+	 1Aq54m7GtClgGbVGwi2YyXw/tThugehqFxMTize8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403901AbgJ2A7p convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 28 Oct 2020 20:59:45 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:24330 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2403950AbgJ2A7i (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 28 Oct 2020 20:59:38 -0400
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09T0od9B004473
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:38 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 34esepr272-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:38 -0700
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 28 Oct 2020 17:59:31 -0700
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 83D372EC875F; Wed, 28 Oct 2020 17:59:26 -0700 (PDT)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 09/11] libbpf: accomodate DWARF/compiler bug with duplicated identical arrays
-Date:   Wed, 28 Oct 2020 17:59:00 -0700
-Message-ID: <20201029005902.1706310-10-andrii@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201029005902.1706310-1-andrii@kernel.org>
-References: <20201029005902.1706310-1-andrii@kernel.org>
+        id S2403861AbgJ2BAL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 21:00:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60510 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731537AbgJ1WR2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:17:28 -0400
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2607724179;
+        Wed, 28 Oct 2020 06:52:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603867920;
+        bh=WgbuHj01IFnS0Vj48OP8wcJkPWzOiL5aoOn7vv03c4g=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NNPg4GyiaHS1i8YK/6d3Ckx2fUsPyrZolq6BMElDKh7cfUVDosbIfW12QK+vL+3Kd
+         90FAjPPv8CPN34Y3SeKxY2aVd6D401txJox5nWy0s9v4LQw9oZxF+IfPGDLt/Bay4+
+         AyYYXe5PX3WYPdt0X23xtq825ajjbyl79Fcus1aM=
+Received: by mail-oi1-f175.google.com with SMTP id w191so3973402oif.2;
+        Tue, 27 Oct 2020 23:52:00 -0700 (PDT)
+X-Gm-Message-State: AOAM533YKS/WyiUjXcVLHyXR1N37RwJoMua/A4hLKMkR2t7ASPACcoud
+        A6HYGkJtYxyCgtPkwDREsi55ZfE7ZswPqRRPt80=
+X-Google-Smtp-Source: ABdhPJx18X7t9J9cXdTUMq84QR/n+hVe8dOJJQwyEFKevqTuSiKhUkSBkkuw1zKDDRcq6nyTSf58ymou8trpmtyBC9s=
+X-Received: by 2002:aca:5c82:: with SMTP id q124mr4120751oib.33.1603867919159;
+ Tue, 27 Oct 2020 23:51:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-10-28_09:2020-10-28,2020-10-28 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- bulkscore=0 mlxlogscore=626 clxscore=1034 priorityscore=1501
- suspectscore=8 phishscore=0 adultscore=0 malwarescore=0 spamscore=0
- mlxscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010290001
-X-FB-Internal: deliver
+References: <20201027205723.12514-1-ardb@kernel.org> <72f0dd64-9f65-cbd0-873a-684540912847@iogearbox.net>
+In-Reply-To: <72f0dd64-9f65-cbd0-873a-684540912847@iogearbox.net>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 28 Oct 2020 07:51:47 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXG=B-2BAwj1HmMjQpdL5N0WUaoMXGrH_DXvkEZ6gyndaQ@mail.gmail.com>
+Message-ID: <CAMj1kXG=B-2BAwj1HmMjQpdL5N0WUaoMXGrH_DXvkEZ6gyndaQ@mail.gmail.com>
+Subject: Re: [PATCH] bpf: don't rely on GCC __attribute__((optimize)) to
+ disable GCSE
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <bpf@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In some cases compiler seems to generate distinct DWARF types for identical
-arrays within the same CU. That seems like a bug, but it's already out there
-and breaks type graph equivalence checks, so accommodate it anyway by checking
-for identical arrays, regardless of their type ID.
+On Wed, 28 Oct 2020 at 00:04, Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 10/27/20 9:57 PM, Ard Biesheuvel wrote:
+> > Commit 3193c0836f203 ("bpf: Disable GCC -fgcse optimization for
+> > ___bpf_prog_run()") introduced a __no_fgcse macro that expands to a
+> > function scope __attribute__((optimize("-fno-gcse"))), to disable a
+> > GCC specific optimization that was causing trouble on x86 builds, and
+> > was not expected to have any positive effect in the first place.
+> >
+> > However, as the GCC manual documents, __attribute__((optimize))
+> > is not for production use, and results in all other optimization
+> > options to be forgotten for the function in question. This can
+> > cause all kinds of trouble, but in one particular reported case,
+>
+> Looks like there are couple more as well aside from __no_fgcse, are you
+> also planning to fix them?
+>
+>    arch/powerpc/kernel/setup.h:14:#define __nostackprotector __attribute__((__optimize__("no-stack-protector")))
+>    tools/include/linux/compiler-gcc.h:37:#define __no_tail_call __attribute__((optimize("no-optimize-sibling-calls")))
+>
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/btf.c | 27 +++++++++++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
+No, but we can notify the respective maintainers.
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index c760a5809d4d..4643b0482686 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -3786,6 +3786,19 @@ static inline __u16 btf_fwd_kind(struct btf_type *t)
- 	return btf_kflag(t) ? BTF_KIND_UNION : BTF_KIND_STRUCT;
- }
- 
-+/* Check if given two types are identical ARRAY definitions */
-+static int btf_dedup_identical_arrays(struct btf_dedup *d, __u32 id1, __u32 id2)
-+{
-+	struct btf_type *t1, *t2;
-+
-+	t1 = btf_type_by_id(d->btf, id1);
-+	t2 = btf_type_by_id(d->btf, id2);
-+	if (!btf_is_array(t1) || !btf_is_array(t2))
-+		return 0;
-+
-+	return btf_equal_array(t1, t2);
-+}
-+
- /*
-  * Check equivalence of BTF type graph formed by candidate struct/union (we'll
-  * call it "candidate graph" in this description for brevity) to a type graph
-@@ -3896,8 +3909,18 @@ static int btf_dedup_is_equiv(struct btf_dedup *d, __u32 cand_id,
- 	canon_id = resolve_fwd_id(d, canon_id);
- 
- 	hypot_type_id = d->hypot_map[canon_id];
--	if (hypot_type_id <= BTF_MAX_NR_TYPES)
--		return hypot_type_id == cand_id;
-+	if (hypot_type_id <= BTF_MAX_NR_TYPES) {
-+		/* In some cases compiler will generate different DWARF types
-+		 * for *identical* array type definitions and use them for
-+		 * different fields within the *same* struct. This breaks type
-+		 * equivalence check, which makes an assumption that candidate
-+		 * types sub-graph has a consistent and deduped-by-compiler
-+		 * types within a single CU. So work around that by explicitly
-+		 * allowing identical array types here.
-+		 */
-+		return hypot_type_id == cand_id ||
-+		       btf_dedup_identical_arrays(d, hypot_type_id, cand_id);
-+	}
- 
- 	if (btf_dedup_hypot_map_add(d, canon_id, cand_id))
- 		return -ENOMEM;
--- 
-2.24.1
+> > it causes -fno-asynchronous-unwind-tables to be disregarded,
+> > resulting in .eh_frame info to be emitted for the function
+> > inadvertently.
+>
+> Would have been useful to add a pointer to the original discussion with
+> Link tag.
+>
+> Link: https://lore.kernel.org/lkml/CAMuHMdUg0WJHEcq6to0-eODpXPOywLot6UD2=GFHpzoj_hCoBQ@mail.gmail.com/
+>
 
+Agreed.
+
+> > This reverts commit 3193c0836f203, and instead, it disables the -fgcse
+> > optimization for the entire source file, but only when building for
+> > X86.
+> >
+> > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > Cc: Arvind Sankar <nivedita@alum.mit.edu>
+> > Cc: Randy Dunlap <rdunlap@infradead.org>
+> > Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Alexei Starovoitov <ast@kernel.org>
+> > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Cc: Kees Cook <keescook@chromium.org>
+> > Fixes: 3193c0836f203 ("bpf: Disable GCC -fgcse optimization for ___bpf_prog_run()")
+> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> [...]
+> > diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+> > index bdc8cd1b6767..02b58f44c479 100644
+> > --- a/kernel/bpf/Makefile
+> > +++ b/kernel/bpf/Makefile
+> > @@ -1,6 +1,8 @@
+> >   # SPDX-License-Identifier: GPL-2.0
+> >   obj-y := core.o
+> > -CFLAGS_core.o += $(call cc-disable-warning, override-init)
+> > +# ___bpf_prog_run() needs GCSE disabled on x86; see 3193c0836f203 for details
+> > +cflags-core-$(CONFIG_X86) := -fno-gcse
+> > +CFLAGS_core.o += $(call cc-disable-warning, override-init) $(cflags-core-y)
+>
+> Also, this needs to be guarded behind !CONFIG_RETPOLINE and !CONFIG_BPF_JIT_ALWAYS_ON
+> in particular the latter since only in this case interpreter is compiled in ... most
+> distros have the CONFIG_BPF_JIT_ALWAYS_ON set these days for x86.
+>
+
+Is that a new requirement? Because before this patch, -fno-gcse was
+applied unconditionally.
+
+> Do you have an analysis for the commit log on what else this penalizes in core.c if
+> it's now for the entire translation unit?
+>
+
+No, I simply observed the regression this caused on non-x86
+architectures, and proposed a way to fix it.
+
+Do you have any concerns in particular regarding other things in
+core.c? Would you prefer ___bpf_prog_run() to be moved into a separate
+.c file?
+
+
+> >   obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o bpf_iter.o map_iter.o task_iter.o prog_iter.o
+> >   obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o
+> > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> > index 9268d77898b7..55454d2278b1 100644
+> > --- a/kernel/bpf/core.c
+> > +++ b/kernel/bpf/core.c
+> > @@ -1369,7 +1369,7 @@ u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
+> >    *
+> >    * Decode and execute eBPF instructions.
+> >    */
+> > -static u64 __no_fgcse ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
+> > +static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
+> >   {
+> >   #define BPF_INSN_2_LBL(x, y)    [BPF_##x | BPF_##y] = &&x##_##y
+> >   #define BPF_INSN_3_LBL(x, y, z) [BPF_##x | BPF_##y | BPF_##z] = &&x##_##y##_##z
+> >
+>
