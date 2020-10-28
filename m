@@ -2,176 +2,154 @@ Return-Path: <SRS0=L8C4=EE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15BFAC55179
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:00:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D7CE9C388F7
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:00:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B9E10207DE
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:00:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B76A20791
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:00:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603933211;
-	bh=WgbuHj01IFnS0Vj48OP8wcJkPWzOiL5aoOn7vv03c4g=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=YKaZ/wzxvyLnmgDv9A3XmLBu6T4HPgBJgYgiGKPjJpetJmIIpZIJpKbR9ELPcnrn0
-	 rCQWRK2eqOmSiIy9t5tnXwgLL49ma6QXCU+cQjpqXaC/zoljdo/zgtYsCeReMKWU9c
-	 1Aq54m7GtClgGbVGwi2YyXw/tThugehqFxMTize8=
+	s=default; t=1603933258;
+	bh=LHjCMNQkmVeEHd6wwd8+DjShKT2zXHi8BR7YSgjJMdg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=XF2y0fsbH9oL5yVsSk+bjroxbyWefKuvW+wCAjGLHm9mMfTyr7Ns20iJqU9leVn62
+	 26crVyYyGn32h3GazSzgp0uF9S4HbqxNWAHpSpVhvZLQJlMBwxXmJKuVPQXVPPfeOo
+	 Y+kdWEWxVV4pFx2tXVqckdgqu9Fil/J/ktjzPJ58=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403861AbgJ2BAL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 21:00:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60510 "EHLO mail.kernel.org"
+        id S1730379AbgJ2BAq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 21:00:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60532 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731537AbgJ1WR2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1731535AbgJ1WR2 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Wed, 28 Oct 2020 18:17:28 -0400
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from localhost (unknown [151.66.125.178])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2607724179;
-        Wed, 28 Oct 2020 06:52:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CE750246AC;
+        Wed, 28 Oct 2020 10:23:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603867920;
-        bh=WgbuHj01IFnS0Vj48OP8wcJkPWzOiL5aoOn7vv03c4g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NNPg4GyiaHS1i8YK/6d3Ckx2fUsPyrZolq6BMElDKh7cfUVDosbIfW12QK+vL+3Kd
-         90FAjPPv8CPN34Y3SeKxY2aVd6D401txJox5nWy0s9v4LQw9oZxF+IfPGDLt/Bay4+
-         AyYYXe5PX3WYPdt0X23xtq825ajjbyl79Fcus1aM=
-Received: by mail-oi1-f175.google.com with SMTP id w191so3973402oif.2;
-        Tue, 27 Oct 2020 23:52:00 -0700 (PDT)
-X-Gm-Message-State: AOAM533YKS/WyiUjXcVLHyXR1N37RwJoMua/A4hLKMkR2t7ASPACcoud
-        A6HYGkJtYxyCgtPkwDREsi55ZfE7ZswPqRRPt80=
-X-Google-Smtp-Source: ABdhPJx18X7t9J9cXdTUMq84QR/n+hVe8dOJJQwyEFKevqTuSiKhUkSBkkuw1zKDDRcq6nyTSf58ymou8trpmtyBC9s=
-X-Received: by 2002:aca:5c82:: with SMTP id q124mr4120751oib.33.1603867919159;
- Tue, 27 Oct 2020 23:51:59 -0700 (PDT)
+        s=default; t=1603880589;
+        bh=LHjCMNQkmVeEHd6wwd8+DjShKT2zXHi8BR7YSgjJMdg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oLybIgtmbVfZ7cx3bKznpm60tpLbIQOHU4iKEoFzC0RPglh+SX5tb0+vBX3rLxO4R
+         tlD5KTqpEwlcwUaxTNSKDTdQjO7TC+yLqj4Gjq0g9bO1VbX65eDy7liFeAat1NaU2G
+         fp20/7i2jcCgCM/pA+b3O4YmLhxUIUIsDgnFbKzA=
+Date:   Wed, 28 Oct 2020 11:23:04 +0100
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
+        brouer@redhat.com
+Subject: Re: [PATCH net-next 1/4] net: xdp: introduce bulking for xdp tx
+ return path
+Message-ID: <20201028102304.GA5386@lore-desk>
+References: <cover.1603824486.git.lorenzo@kernel.org>
+ <7495b5ac96b0fd2bf5ab79b12e01bf0ee0fff803.1603824486.git.lorenzo@kernel.org>
+ <20201028092734.GA51291@apalos.home>
 MIME-Version: 1.0
-References: <20201027205723.12514-1-ardb@kernel.org> <72f0dd64-9f65-cbd0-873a-684540912847@iogearbox.net>
-In-Reply-To: <72f0dd64-9f65-cbd0-873a-684540912847@iogearbox.net>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 28 Oct 2020 07:51:47 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXG=B-2BAwj1HmMjQpdL5N0WUaoMXGrH_DXvkEZ6gyndaQ@mail.gmail.com>
-Message-ID: <CAMj1kXG=B-2BAwj1HmMjQpdL5N0WUaoMXGrH_DXvkEZ6gyndaQ@mail.gmail.com>
-Subject: Re: [PATCH] bpf: don't rely on GCC __attribute__((optimize)) to
- disable GCSE
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <netdev@vger.kernel.org>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <bpf@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="SUOF0GtieIMvvwua"
+Content-Disposition: inline
+In-Reply-To: <20201028092734.GA51291@apalos.home>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 28 Oct 2020 at 00:04, Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> On 10/27/20 9:57 PM, Ard Biesheuvel wrote:
-> > Commit 3193c0836f203 ("bpf: Disable GCC -fgcse optimization for
-> > ___bpf_prog_run()") introduced a __no_fgcse macro that expands to a
-> > function scope __attribute__((optimize("-fno-gcse"))), to disable a
-> > GCC specific optimization that was causing trouble on x86 builds, and
-> > was not expected to have any positive effect in the first place.
-> >
-> > However, as the GCC manual documents, __attribute__((optimize))
-> > is not for production use, and results in all other optimization
-> > options to be forgotten for the function in question. This can
-> > cause all kinds of trouble, but in one particular reported case,
->
-> Looks like there are couple more as well aside from __no_fgcse, are you
-> also planning to fix them?
->
->    arch/powerpc/kernel/setup.h:14:#define __nostackprotector __attribute__((__optimize__("no-stack-protector")))
->    tools/include/linux/compiler-gcc.h:37:#define __no_tail_call __attribute__((optimize("no-optimize-sibling-calls")))
->
 
-No, but we can notify the respective maintainers.
+--SUOF0GtieIMvvwua
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > it causes -fno-asynchronous-unwind-tables to be disregarded,
-> > resulting in .eh_frame info to be emitted for the function
-> > inadvertently.
->
-> Would have been useful to add a pointer to the original discussion with
-> Link tag.
->
-> Link: https://lore.kernel.org/lkml/CAMuHMdUg0WJHEcq6to0-eODpXPOywLot6UD2=GFHpzoj_hCoBQ@mail.gmail.com/
->
+> Hi Lorenzo,
 
-Agreed.
+Hi Ilias,
 
-> > This reverts commit 3193c0836f203, and instead, it disables the -fgcse
-> > optimization for the entire source file, but only when building for
-> > X86.
-> >
-> > Cc: Nick Desaulniers <ndesaulniers@google.com>
-> > Cc: Arvind Sankar <nivedita@alum.mit.edu>
-> > Cc: Randy Dunlap <rdunlap@infradead.org>
-> > Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Alexei Starovoitov <ast@kernel.org>
-> > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Fixes: 3193c0836f203 ("bpf: Disable GCC -fgcse optimization for ___bpf_prog_run()")
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> [...]
-> > diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-> > index bdc8cd1b6767..02b58f44c479 100644
-> > --- a/kernel/bpf/Makefile
-> > +++ b/kernel/bpf/Makefile
-> > @@ -1,6 +1,8 @@
-> >   # SPDX-License-Identifier: GPL-2.0
-> >   obj-y := core.o
-> > -CFLAGS_core.o += $(call cc-disable-warning, override-init)
-> > +# ___bpf_prog_run() needs GCSE disabled on x86; see 3193c0836f203 for details
-> > +cflags-core-$(CONFIG_X86) := -fno-gcse
-> > +CFLAGS_core.o += $(call cc-disable-warning, override-init) $(cflags-core-y)
->
-> Also, this needs to be guarded behind !CONFIG_RETPOLINE and !CONFIG_BPF_JIT_ALWAYS_ON
-> in particular the latter since only in this case interpreter is compiled in ... most
-> distros have the CONFIG_BPF_JIT_ALWAYS_ON set these days for x86.
->
+thx for the review.
 
-Is that a new requirement? Because before this patch, -fno-gcse was
-applied unconditionally.
+>=20
+> On Tue, Oct 27, 2020 at 08:04:07PM +0100, Lorenzo Bianconi wrote:
 
-> Do you have an analysis for the commit log on what else this penalizes in core.c if
-> it's now for the entire translation unit?
->
+[...]
 
-No, I simply observed the regression this caused on non-x86
-architectures, and proposed a way to fix it.
+> > +void xdp_return_frame_bulk(struct xdp_frame *xdpf,
+> > +			   struct xdp_frame_bulk *bq)
+> > +{
+> > +	struct xdp_mem_info *mem =3D &xdpf->mem;
+> > +	struct xdp_mem_allocator *xa, *nxa;
+> > +
+> > +	if (mem->type !=3D MEM_TYPE_PAGE_POOL) {
+> > +		__xdp_return(xdpf->data, &xdpf->mem, false);
+> > +		return;
+> > +	}
+> > +
+> > +	rcu_read_lock();
+> > +
+> > +	xa =3D bq->xa;
+> > +	if (unlikely(!xa || mem->id !=3D xa->mem.id)) {
+>=20
+> Why is this marked as unlikely? The driver passes it as NULL. Should unli=
+kely be
+> checked on both xa and the comparison?
 
-Do you have any concerns in particular regarding other things in
-core.c? Would you prefer ___bpf_prog_run() to be moved into a separate
-.c file?
+xa is NULL only for the first xdp_frame in the burst while it is set for
+subsequent ones. Do you think it is better to remove it?
 
+>=20
+> > +		nxa =3D rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params);
+>=20
+> Is there a chance nxa can be NULL?
 
-> >   obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o bpf_iter.o map_iter.o task_iter.o prog_iter.o
-> >   obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o
-> > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> > index 9268d77898b7..55454d2278b1 100644
-> > --- a/kernel/bpf/core.c
-> > +++ b/kernel/bpf/core.c
-> > @@ -1369,7 +1369,7 @@ u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-> >    *
-> >    * Decode and execute eBPF instructions.
-> >    */
-> > -static u64 __no_fgcse ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
-> > +static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
-> >   {
-> >   #define BPF_INSN_2_LBL(x, y)    [BPF_##x | BPF_##y] = &&x##_##y
-> >   #define BPF_INSN_3_LBL(x, y, z) [BPF_##x | BPF_##y | BPF_##z] = &&x##_##y##_##z
-> >
->
+I do not think so since the page_pool is not destroyed while there are
+in-flight pages, right?
+
+Regards,
+Lorenzo
+
+>=20
+> > +		if (unlikely(!xa)) {
+>=20
+> Same here, driver passes it as NULL
+>=20
+> > +			bq->count =3D 0;
+> > +			bq->xa =3D nxa;
+> > +			xa =3D nxa;
+> > +		}
+> > +	}
+> > +
+> > +	if (mem->id !=3D xa->mem.id || bq->count =3D=3D XDP_BULK_QUEUE_SIZE)
+> > +		xdp_flush_frame_bulk(bq);
+> > +
+> > +	bq->q[bq->count++] =3D xdpf->data;
+> > +	if (mem->id !=3D xa->mem.id)
+> > +		bq->xa =3D nxa;
+> > +
+> > +	rcu_read_unlock();
+> > +}
+> > +EXPORT_SYMBOL_GPL(xdp_return_frame_bulk);
+> > +
+> >  void xdp_return_buff(struct xdp_buff *xdp)
+> >  {
+> >  	__xdp_return(xdp->data, &xdp->rxq->mem, true);
+> > --=20
+> > 2.26.2
+> >=20
+>=20
+> Cheers
+> /Ilias
+
+--SUOF0GtieIMvvwua
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCX5lGhQAKCRA6cBh0uS2t
+rCdwAP9lundd0CwaHHOP4WPJZz88jktnZuR8tHAcoWij1YPhyQEAz8OkB7i0xCfM
+9w97tcDtfWtJvQXMomnd/F+WGYJMcg0=
+=cLii
+-----END PGP SIGNATURE-----
+
+--SUOF0GtieIMvvwua--
