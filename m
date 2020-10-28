@@ -2,154 +2,124 @@ Return-Path: <SRS0=L8C4=EE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7CE9C388F7
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:00:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FDE8C55179
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:11:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3B76A20791
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:00:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603933258;
-	bh=LHjCMNQkmVeEHd6wwd8+DjShKT2zXHi8BR7YSgjJMdg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=XF2y0fsbH9oL5yVsSk+bjroxbyWefKuvW+wCAjGLHm9mMfTyr7Ns20iJqU9leVn62
-	 26crVyYyGn32h3GazSzgp0uF9S4HbqxNWAHpSpVhvZLQJlMBwxXmJKuVPQXVPPfeOo
-	 Y+kdWEWxVV4pFx2tXVqckdgqu9Fil/J/ktjzPJ58=
+	by mail.kernel.org (Postfix) with ESMTP id D754720714
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:11:48 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ThThPoDI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730379AbgJ2BAq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 21:00:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60532 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731535AbgJ1WR2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:17:28 -0400
-Received: from localhost (unknown [151.66.125.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CE750246AC;
-        Wed, 28 Oct 2020 10:23:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603880589;
-        bh=LHjCMNQkmVeEHd6wwd8+DjShKT2zXHi8BR7YSgjJMdg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oLybIgtmbVfZ7cx3bKznpm60tpLbIQOHU4iKEoFzC0RPglh+SX5tb0+vBX3rLxO4R
-         tlD5KTqpEwlcwUaxTNSKDTdQjO7TC+yLqj4Gjq0g9bO1VbX65eDy7liFeAat1NaU2G
-         fp20/7i2jcCgCM/pA+b3O4YmLhxUIUIsDgnFbKzA=
-Date:   Wed, 28 Oct 2020 11:23:04 +0100
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        brouer@redhat.com
-Subject: Re: [PATCH net-next 1/4] net: xdp: introduce bulking for xdp tx
- return path
-Message-ID: <20201028102304.GA5386@lore-desk>
-References: <cover.1603824486.git.lorenzo@kernel.org>
- <7495b5ac96b0fd2bf5ab79b12e01bf0ee0fff803.1603824486.git.lorenzo@kernel.org>
- <20201028092734.GA51291@apalos.home>
+        id S1729583AbgJ1WFN (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729966AbgJ1WFM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:05:12 -0400
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EB2C0613D1;
+        Wed, 28 Oct 2020 15:05:12 -0700 (PDT)
+Received: by mail-vs1-xe43.google.com with SMTP id w25so409733vsk.9;
+        Wed, 28 Oct 2020 15:05:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=sBa77MmCFN0T1+VtUx1HDnNMT2/Xv5NhXqq896ClIPA=;
+        b=ThThPoDIPRt59MZkfI1qQFRnAS2OlQaGLzpGPN2cxTSQfDtCdz08ENqwNG9U8jzOSq
+         s34Q276RHnCcq8eK/nTv0czP0MtEL51wsFyO+l0/EF/aZx+dKou4D7B6eVgK94JVOkJy
+         gNfNJgZzXGP//V7CiqZ3l8ybUm24uPVJ0zBOsk3MEzh+BQ/TucW/kMC61IEEHLyMgwnz
+         6TaxNwP8l906lqpO77tS0TEDJFzAltKegGSigo6TgM+iVrTnY7ITYI4zxmNp2cKEmth2
+         8o4dgHKzSDhquPjaHN+aQt5e/yANa4V1Nlnmnor+iDQiKXFMgUOhuOG8XxBJGAdtrER9
+         PYdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=sBa77MmCFN0T1+VtUx1HDnNMT2/Xv5NhXqq896ClIPA=;
+        b=CpanmAL7sESG0s+5JOewhFV3rblxzAaHakFJx7sD3yAuJQj50LYmJsEr50r8ID3Kor
+         +wMVb3xQRm5P4ST60RnF83fnRwVaZ/TTy00x8QP6mGCEdSZytCCyxSROha3uiOwf4FP8
+         EyZrLbidrcpQNdR+TWnarUpjvSt0aHTIixD6n2d29jBDJY3x40Ks8ZTM+s3WBq6xQHy9
+         2oUjMJMM+enQan+OXcYUe/4ag2w7wVU4MlHjQsvyJMrkbXRq4eFCs2avtixKEFFDmqud
+         83ywZiI9f0j1MWAwWY3PSW9DqEa3CDGK689U2PJTnxkATzaxYB5r2IufkbhT3UPwTh1Y
+         DTsw==
+X-Gm-Message-State: AOAM530JWLoBBhpQBvGrbdA9cMJVxWaWL/vfmGl7Qegzoanmt5VeeZuK
+        XTiHrxZOTNkFqI252gaa5k7iL5rjk/Bho8E7
+X-Google-Smtp-Source: ABdhPJx1sVLTojg+U9YZMBvRLhAg0GBPcu5nq1fPysti/X+d+Gmy//kTyoSjwtScwRHBrv8BGUyEYA==
+X-Received: by 2002:a62:ea0c:0:b029:164:3789:547b with SMTP id t12-20020a62ea0c0000b02901643789547bmr7074341pfh.27.1603892133273;
+        Wed, 28 Oct 2020 06:35:33 -0700 (PDT)
+Received: from btopel-mobl.ger.intel.com ([192.55.55.43])
+        by smtp.gmail.com with ESMTPSA id q14sm5935393pjp.43.2020.10.28.06.35.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2020 06:35:32 -0700 (PDT)
+From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
+        maciej.fijalkowski@intel.com, sridhar.samudrala@intel.com,
+        jesse.brandeburg@intel.com, qi.z.zhang@intel.com, kuba@kernel.org,
+        edumazet@google.com, intel-wired-lan@lists.osuosl.org,
+        jonathan.lemon@gmail.com
+Subject: [RFC PATCH bpf-next 5/9] xsk: add busy-poll support for {recv,send}msg()
+Date:   Wed, 28 Oct 2020 14:34:33 +0100
+Message-Id: <20201028133437.212503-6-bjorn.topel@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201028133437.212503-1-bjorn.topel@gmail.com>
+References: <20201028133437.212503-1-bjorn.topel@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="SUOF0GtieIMvvwua"
-Content-Disposition: inline
-In-Reply-To: <20201028092734.GA51291@apalos.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+From: Björn Töpel <bjorn.topel@intel.com>
 
---SUOF0GtieIMvvwua
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Wire-up XDP socket busy-poll support for recvmsg() and sendmsg().
 
-> Hi Lorenzo,
+Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+---
+ net/xdp/xsk.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Hi Ilias,
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 2e5b9f27c7a3..da649b4f377c 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -23,6 +23,7 @@
+ #include <linux/netdevice.h>
+ #include <linux/rculist.h>
+ #include <net/xdp_sock_drv.h>
++#include <net/busy_poll.h>
+ #include <net/xdp.h>
+ 
+ #include "xsk_queue.h"
+@@ -472,6 +473,9 @@ static int xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
+ 	if (unlikely(need_wait))
+ 		return -EOPNOTSUPP;
+ 
++	if (sk_can_busy_loop(sk))
++		sk_busy_loop(sk, 1); /* only support non-blocking sockets */
++
+ 	pool = xs->pool;
+ 	if (pool->cached_need_wakeup & XDP_WAKEUP_TX)
+ 		return __xsk_sendmsg(sk);
+@@ -493,6 +497,9 @@ static int xsk_recvmsg(struct socket *sock, struct msghdr *m, size_t len, int fl
+ 	if (unlikely(need_wait))
+ 		return -EOPNOTSUPP;
+ 
++	if (sk_can_busy_loop(sk))
++		sk_busy_loop(sk, 1); /* only support non-blocking sockets */
++
+ 	if (xs->pool->cached_need_wakeup & XDP_WAKEUP_RX && xs->zc)
+ 		return xsk_wakeup(xs, XDP_WAKEUP_RX);
+ 	return 0;
+-- 
+2.27.0
 
-thx for the review.
-
->=20
-> On Tue, Oct 27, 2020 at 08:04:07PM +0100, Lorenzo Bianconi wrote:
-
-[...]
-
-> > +void xdp_return_frame_bulk(struct xdp_frame *xdpf,
-> > +			   struct xdp_frame_bulk *bq)
-> > +{
-> > +	struct xdp_mem_info *mem =3D &xdpf->mem;
-> > +	struct xdp_mem_allocator *xa, *nxa;
-> > +
-> > +	if (mem->type !=3D MEM_TYPE_PAGE_POOL) {
-> > +		__xdp_return(xdpf->data, &xdpf->mem, false);
-> > +		return;
-> > +	}
-> > +
-> > +	rcu_read_lock();
-> > +
-> > +	xa =3D bq->xa;
-> > +	if (unlikely(!xa || mem->id !=3D xa->mem.id)) {
->=20
-> Why is this marked as unlikely? The driver passes it as NULL. Should unli=
-kely be
-> checked on both xa and the comparison?
-
-xa is NULL only for the first xdp_frame in the burst while it is set for
-subsequent ones. Do you think it is better to remove it?
-
->=20
-> > +		nxa =3D rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params);
->=20
-> Is there a chance nxa can be NULL?
-
-I do not think so since the page_pool is not destroyed while there are
-in-flight pages, right?
-
-Regards,
-Lorenzo
-
->=20
-> > +		if (unlikely(!xa)) {
->=20
-> Same here, driver passes it as NULL
->=20
-> > +			bq->count =3D 0;
-> > +			bq->xa =3D nxa;
-> > +			xa =3D nxa;
-> > +		}
-> > +	}
-> > +
-> > +	if (mem->id !=3D xa->mem.id || bq->count =3D=3D XDP_BULK_QUEUE_SIZE)
-> > +		xdp_flush_frame_bulk(bq);
-> > +
-> > +	bq->q[bq->count++] =3D xdpf->data;
-> > +	if (mem->id !=3D xa->mem.id)
-> > +		bq->xa =3D nxa;
-> > +
-> > +	rcu_read_unlock();
-> > +}
-> > +EXPORT_SYMBOL_GPL(xdp_return_frame_bulk);
-> > +
-> >  void xdp_return_buff(struct xdp_buff *xdp)
-> >  {
-> >  	__xdp_return(xdp->data, &xdp->rxq->mem, true);
-> > --=20
-> > 2.26.2
-> >=20
->=20
-> Cheers
-> /Ilias
-
---SUOF0GtieIMvvwua
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCX5lGhQAKCRA6cBh0uS2t
-rCdwAP9lundd0CwaHHOP4WPJZz88jktnZuR8tHAcoWij1YPhyQEAz8OkB7i0xCfM
-9w97tcDtfWtJvQXMomnd/F+WGYJMcg0=
-=cLii
------END PGP SIGNATURE-----
-
---SUOF0GtieIMvvwua--
