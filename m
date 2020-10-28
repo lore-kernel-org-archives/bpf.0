@@ -2,207 +2,164 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 10325C388F7
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:24:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0311C55179
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:24:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B7609207CD
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:24:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603927440;
-	bh=HIIG0lPxqF7DonwHh336RcBqXuSM/AWZr5Tt//apNiA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=PlKosOeodmGbyhZlV5YNm7DSKSZdGtKDB1Kme5+4XWG4JyUU0g5ZEVxRJyLvB0UIH
-	 Eo8Rbxvh/40+VcK9/IGxt8C/wtJYvGHYHQEHjIjoXxdeV74+md/+yABcNVfNZmeLG7
-	 nOzcrrt0sF8oAiiyzr/mJgC0AWH4N6arKjA67vI0=
+	by mail.kernel.org (Postfix) with ESMTP id 84B38207CD
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:24:12 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n8Vc74Uq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390321AbgJ1XX7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 19:23:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44718 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726920AbgJ1XLF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 19:11:05 -0400
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8F1F020790;
-        Wed, 28 Oct 2020 23:11:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603926664;
-        bh=HIIG0lPxqF7DonwHh336RcBqXuSM/AWZr5Tt//apNiA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qVoofgNk5Belh9Elgc53iNh5kG9OQnRkUUTqEXkIRoln57oky/CShOJSJuVUrNlJb
-         fINLgGwM/qg6qUnkK9cxX3JT+Fhfx3XKal1vglkIrVakyPy83bscpoJLhUHjf3bFNF
-         Rf5866qjwSSIjgWCK5P4oN2Z94HlYa+FI0K3tavI=
-Received: by mail-oi1-f182.google.com with SMTP id y186so1356291oia.3;
-        Wed, 28 Oct 2020 16:11:04 -0700 (PDT)
-X-Gm-Message-State: AOAM533VId1svEBqbDmyJ/F2aztwpwgqHHYxCf0GaWxz+SLSPF/4/t/n
-        qipkxpA9Zn+j/ynMFAgO/DjMeasYV2cvo6vf7OU=
-X-Google-Smtp-Source: ABdhPJy9zA4pQrccnT0p7DWN1xD057PNvpnSnzUrxVpAqmiDcix7Nd0dyZM3HCv4XsbNNmdlJCUkg1JV8NY2sJSrnq4=
-X-Received: by 2002:aca:d64f:: with SMTP id n76mr1006347oig.174.1603926663755;
- Wed, 28 Oct 2020 16:11:03 -0700 (PDT)
+        id S2390329AbgJ1XYA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 19:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729360AbgJ1XKw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 19:10:52 -0400
+Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D98C0613CF;
+        Wed, 28 Oct 2020 16:10:52 -0700 (PDT)
+Received: by mail-qv1-xf44.google.com with SMTP id s1so595240qvm.13;
+        Wed, 28 Oct 2020 16:10:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:date:message-id:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=cRfSQUYS268mMkMdpuJD7g3guRW6OCmdfQPtqkCWnpU=;
+        b=n8Vc74UqdI/YeHoTm62iXVn0PvblfBRU+46Q82PQqHCs6re5G9TnYx334jGiMJPUM9
+         rQee7dOBddbSgBcsT0O1LxuHrmerrQyrJw/l/sjjk6xmmNa7wXDq2La7mtBu2osVP9ZU
+         4XOG+Wr/RamzEhycvjJ1THDTWP37yiQEqUdNQSpKF53J+bw8Pq1qA6fEpUS9tkG2vWqT
+         t3ow+IcC57WRO0L0dPTTZTt2Iw5i62+/7kfa422czopXy2WivOQlmTZBG5p9pH1kUwBy
+         OpI+9FHeVGvRAIQ5Avhr9G8UfRfikYXn7AHc54jtXppTPjTeqxBn+Jx2Zwy4XrQny7Hi
+         tbJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=cRfSQUYS268mMkMdpuJD7g3guRW6OCmdfQPtqkCWnpU=;
+        b=Q1bD7uHMmBv4ItzYsSz19W4vsueqgLI9Gz2jZOLZr7r5ncbXuNv9O/V/ink8zVLaOI
+         FdbThO6YXEyVjPxR/EaBPvdcJdlNrZ4ppNNcu4tmEdyXiFXvgvN+qOOOKFyGiM1HBsf2
+         NINtRj871tcg33CyOgDn20u6xRqSvnsR+/tudad3L4L7Mon12oWThbLrpT9rfZ3gQKY2
+         NWx+3/xYMw9Z50rIKG3AY0APU4m0rHVBsFPrLtqPLFWD9ECNMkqqmOfOHwTs1jIbD/my
+         PclvwTsFcn6FJVnlsNUeP0PMCSaM47Rx99B232G1ghF3Mdfcmlt1c2bEVRgxNNF/Wx4m
+         e4lQ==
+X-Gm-Message-State: AOAM533IKAEyRsYIJhmwotLfzlnlAeoqz+18FrZlni0Ln1i2gptd1qSD
+        oJbeA2CHASiHeScuyxkyDic0JR2Ity26ew==
+X-Google-Smtp-Source: ABdhPJzMkPwhmgHMRvZPZwx03cinaxgWHj1FYsMWP41zZeQipwbZNpH8nvMN/gwhK+wzIR8geQOGuQ==
+X-Received: by 2002:a05:6214:d42:: with SMTP id 2mr5666442qvr.29.1603849650218;
+        Tue, 27 Oct 2020 18:47:30 -0700 (PDT)
+Received: from localhost.localdomain ([2001:470:b:9c3:9e5c:8eff:fe4f:f2d0])
+        by smtp.gmail.com with ESMTPSA id x6sm2120649qti.77.2020.10.27.18.47.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Oct 2020 18:47:29 -0700 (PDT)
+Subject: [bpf-next PATCH 4/4] selftests/bpf: Migrate tcpbpf_user.c to use BPF
+ skeleton
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
+        john.fastabend@gmail.com, kernel-team@fb.com,
+        netdev@vger.kernel.org, edumazet@google.com, brakmo@fb.com,
+        alexanderduyck@fb.com
+Date:   Tue, 27 Oct 2020 18:47:28 -0700
+Message-ID: <160384964803.698509.11020605670605638967.stgit@localhost.localdomain>
+In-Reply-To: <160384954046.698509.132709669068189999.stgit@localhost.localdomain>
+References: <160384954046.698509.132709669068189999.stgit@localhost.localdomain>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-References: <20201028171506.15682-1-ardb@kernel.org> <20201028171506.15682-2-ardb@kernel.org>
- <20201028213903.fvdjydadqt6tx765@ast-mbp.dhcp.thefacebook.com>
- <CAMj1kXFHcM-Jb+MwsLtB4NMUmMyAGGLeNGNLC9vTATot3NJLrA@mail.gmail.com> <20201028225919.6ydy3m2u4p7x3to7@ast-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20201028225919.6ydy3m2u4p7x3to7@ast-mbp.dhcp.thefacebook.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 29 Oct 2020 00:10:52 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXG8PmvO6bLhGXPWtzKMnAsip2WDa-qdrd+kFfr30sd8-A@mail.gmail.com>
-Message-ID: <CAMj1kXG8PmvO6bLhGXPWtzKMnAsip2WDa-qdrd+kFfr30sd8-A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] bpf: don't rely on GCC __attribute__((optimize))
- to disable GCSE
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <netdev@vger.kernel.org>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <bpf@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 28 Oct 2020 at 23:59, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Wed, Oct 28, 2020 at 11:15:04PM +0100, Ard Biesheuvel wrote:
-> > On Wed, 28 Oct 2020 at 22:39, Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Wed, Oct 28, 2020 at 06:15:05PM +0100, Ard Biesheuvel wrote:
-> > > > Commit 3193c0836 ("bpf: Disable GCC -fgcse optimization for
-> > > > ___bpf_prog_run()") introduced a __no_fgcse macro that expands to a
-> > > > function scope __attribute__((optimize("-fno-gcse"))), to disable a
-> > > > GCC specific optimization that was causing trouble on x86 builds, and
-> > > > was not expected to have any positive effect in the first place.
-> > > >
-> > > > However, as the GCC manual documents, __attribute__((optimize))
-> > > > is not for production use, and results in all other optimization
-> > > > options to be forgotten for the function in question. This can
-> > > > cause all kinds of trouble, but in one particular reported case,
-> > > > it causes -fno-asynchronous-unwind-tables to be disregarded,
-> > > > resulting in .eh_frame info to be emitted for the function.
-> > > >
-> > > > This reverts commit 3193c0836, and instead, it disables the -fgcse
-> > > > optimization for the entire source file, but only when building for
-> > > > X86 using GCC with CONFIG_BPF_JIT_ALWAYS_ON disabled. Note that the
-> > > > original commit states that CONFIG_RETPOLINE=n triggers the issue,
-> > > > whereas CONFIG_RETPOLINE=y performs better without the optimization,
-> > > > so it is kept disabled in both cases.
-> > > >
-> > > > Fixes: 3193c0836 ("bpf: Disable GCC -fgcse optimization for ___bpf_prog_run()")
-> > > > Link: https://lore.kernel.org/lkml/CAMuHMdUg0WJHEcq6to0-eODpXPOywLot6UD2=GFHpzoj_hCoBQ@mail.gmail.com/
-> > > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > > > ---
-> > > >  include/linux/compiler-gcc.h   | 2 --
-> > > >  include/linux/compiler_types.h | 4 ----
-> > > >  kernel/bpf/Makefile            | 6 +++++-
-> > > >  kernel/bpf/core.c              | 2 +-
-> > > >  4 files changed, 6 insertions(+), 8 deletions(-)
-> > > >
-> > > > diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-> > > > index d1e3c6896b71..5deb37024574 100644
-> > > > --- a/include/linux/compiler-gcc.h
-> > > > +++ b/include/linux/compiler-gcc.h
-> > > > @@ -175,5 +175,3 @@
-> > > >  #else
-> > > >  #define __diag_GCC_8(s)
-> > > >  #endif
-> > > > -
-> > > > -#define __no_fgcse __attribute__((optimize("-fno-gcse")))
-> > >
-> > > See my reply in the other thread.
-> > > I prefer
-> > > -#define __no_fgcse __attribute__((optimize("-fno-gcse")))
-> > > +#define __no_fgcse __attribute__((optimize("-fno-gcse,-fno-omit-frame-pointer")))
-> > >
-> > > Potentially with -fno-asynchronous-unwind-tables.
-> > >
-> >
-> > So how would that work? arm64 has the following:
-> >
-> > KBUILD_CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables
-> >
-> > ifeq ($(CONFIG_SHADOW_CALL_STACK), y)
-> > KBUILD_CFLAGS += -ffixed-x18
-> > endif
-> >
-> > and it adds -fpatchable-function-entry=2 for compilers that support
-> > it, but only when CONFIG_FTRACE is enabled.
->
-> I think you're assuming that GCC drops all flags when it sees __attribute__((optimize)).
-> That's not the case.
->
+From: Alexander Duyck <alexanderduyck@fb.com>
 
-So which flags does it drop, and which doesn't it drop? Is that
-documented somewhere? Is that the same for all versions of GCC?
+Update tcpbpf_user.c to make use of the BPF skeleton. Doing this we can
+simplify test_tcpbpf_user and reduce the overhead involved in setting up
+the test.
 
-> > Also, as Nick pointed out, -fno-gcse does not work on Clang.
->
-> yes and what's the point?
-> #define __no_fgcse is GCC only. clang doesn't need this workaround.
->
+Signed-off-by: Alexander Duyck <alexanderduyck@fb.com>
+---
+ .../testing/selftests/bpf/prog_tests/tcpbpf_user.c |   48 +++++++++-----------
+ 1 file changed, 21 insertions(+), 27 deletions(-)
 
-Ah ok, that's at least something.
+diff --git a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c b/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
+index 4e1190894e1e..7e92c37976ac 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
++++ b/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
+@@ -5,6 +5,7 @@
+ 
+ #include "test_tcpbpf.h"
+ #include "cgroup_helpers.h"
++#include "test_tcpbpf_kern.skel.h"
+ 
+ #define LO_ADDR6 "::1"
+ #define CG_NAME "/tcpbpf-user-test"
+@@ -162,39 +163,32 @@ static void run_test(int map_fd, int sock_map_fd)
+ 
+ void test_tcpbpf_user(void)
+ {
+-	const char *file = "test_tcpbpf_kern.o";
+-	int prog_fd, map_fd, sock_map_fd;
+-	struct bpf_object *obj;
++	struct test_tcpbpf_kern *skel;
++	int map_fd, sock_map_fd;
++	struct bpf_link *link;
+ 	int cg_fd = -1;
+-	int rv;
+-
+-	cg_fd = cgroup_setup_and_join(CG_NAME);
+-	if (CHECK_FAIL(cg_fd < 0))
+-		goto err;
+ 
+-	if (CHECK_FAIL(bpf_prog_load(file, BPF_PROG_TYPE_SOCK_OPS, &obj, &prog_fd))) {
+-		fprintf(stderr, "FAILED: load_bpf_file failed for: %s\n", file);
+-		goto err;
+-	}
++	skel = test_tcpbpf_kern__open_and_load();
++	if (CHECK(!skel, "open and load skel", "failed"))
++		return;
+ 
+-	rv = bpf_prog_attach(prog_fd, cg_fd, BPF_CGROUP_SOCK_OPS, 0);
+-	if (CHECK_FAIL(rv)) {
+-		fprintf(stderr, "FAILED: bpf_prog_attach: %d (%s)\n",
+-		       errno, strerror(errno));
+-		goto err;
+-	}
++	cg_fd = test__join_cgroup(CG_NAME);
++	if (CHECK_FAIL(cg_fd < 0))
++		goto cleanup_skel;
+ 
+-	map_fd = bpf_find_map(__func__, obj, "global_map");
+-	if (CHECK_FAIL(map_fd < 0))
+-		goto err;
++	map_fd = bpf_map__fd(skel->maps.global_map);
++	sock_map_fd = bpf_map__fd(skel->maps.sockopt_results);
+ 
+-	sock_map_fd = bpf_find_map(__func__, obj, "sockopt_results");
+-	if (CHECK_FAIL(sock_map_fd < 0))
+-		goto err;
++	link = bpf_program__attach_cgroup(skel->progs.bpf_testcb, cg_fd);
++	if (CHECK(IS_ERR(link), "attach_cgroup(estab)", "err: %ld\n",
++		  PTR_ERR(link)))
++		goto cleanup_namespace;
+ 
+ 	run_test(map_fd, sock_map_fd);
+-err:
+-	bpf_prog_detach(cg_fd, BPF_CGROUP_SOCK_OPS);
++
++	bpf_link__destroy(link);
++cleanup_namespace:
+ 	close(cg_fd);
+-	cleanup_cgroup_environment();
++cleanup_skel:
++	test_tcpbpf_kern__destroy(skel);
+ }
 
-> > Every architecture will have a different set of requirements here. And
-> > there is no way of knowing which -f options are disregarded when you
-> > use the function attribute.
-> >
-> > So how on earth are you going to #define __no-fgcse correctly for
-> > every configuration imaginable?
-> >
-> > > __attribute__((optimize("")) is not as broken as you're claiming to be.
-> > > It has quirky gcc internal logic, but it's still widely used
-> > > in many software projects.
-> >
-> > So it's fine because it is only a little bit broken? I'm sorry, but
-> > that makes no sense whatsoever.
-> >
-> > If you insist on sticking with this broken construct, can you please
-> > make it GCC/x86-only at least?
->
-> I'm totally fine with making
-> #define __no_fgcse __attribute__((optimize("-fno-gcse,-fno-omit-frame-pointer")))
-> to be gcc+x86 only.
-> I'd like to get rid of it, but objtool is not smart enough to understand
-> generated asm without it.
 
-I'll defer to the x86 folks to make the final call here, but I would
-be perfectly happy doing
-
-index d1e3c6896b71..68ddb91fbcc6 100644
---- a/include/linux/compiler-gcc.h
-+++ b/include/linux/compiler-gcc.h
-@@ -176,4 +176,6 @@
- #define __diag_GCC_8(s)
- #endif
-
-+#ifdef CONFIG_X86
- #define __no_fgcse __attribute__((optimize("-fno-gcse")))
-+#endif
-
-and end the conversation here, because I honestly cannot wrap my head
-around the fact that you are willing to work around an x86 specific
-objtool shortcoming by arbitrarily disabling some GCC optimization for
-all architectures, using a construct that may or may not affect other
-compiler settings in unpredictable ways, where the compiler is being
-used to compile a BPF language runtime for executing BPF programs
-inside the kernel.
-
-What on earth could go wrong?
