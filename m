@@ -2,131 +2,150 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A2E1C55179
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 21:56:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F50DC55179
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:02:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BA80E24759
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 21:56:43 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DdrTWbJk"
+	by mail.kernel.org (Postfix) with ESMTP id E882820EDD
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:02:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603922562;
+	bh=09phZTWmPiU017OVb0I9AGdf0nGRpJdaUisznwA8rFE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=X6NJywJkMSvjQgxgRBsqtCLb5pCOeDekhpVRZGG0eHfWc26lWexuSm3srDBeVtduq
+	 e5n6FxAQ5xiX3UmECaFPSHBylMZhwP0y0PTFAOAEVc5ZmApfwdlRsA9bZ8kbDfreZe
+	 WXy8OLqGCQNtN40Jdc21/EZKJsR7rAkk98YilHO0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728634AbgJ1V4m (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 17:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728633AbgJ1V4l (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 17:56:41 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76264C0613D3;
-        Wed, 28 Oct 2020 14:56:41 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id t22so286221plr.9;
-        Wed, 28 Oct 2020 14:56:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Q0deFER1y5zH2dnb8wEA8nqaA8hp/wl10D8xfdso/0c=;
-        b=DdrTWbJkBqbLsnyefrkAsK0JQLW/j43ySTRFlT2YhIuPRzBZoxzes9lqvDs1XYFr1M
-         Qbk4xZlfYZjxMzPuXICnNi2vFpZRdooS41ZoW34Vzsl5B04oJhvVQYsqzJAwQ5jt9u48
-         EXd6jeJQu1m7TlIJPVAMq/FtTexBsc3tW7GMwPBkeuQDseOzpfqHbuvhHZ4O8Nbo8Gad
-         YtscQbM9tVl7GPxX8T3xMaio3LEU+VIt0CjSYReAqTPSClw2CEOaVVaWzTRl0Yq2DdV5
-         326CaoG+9BUMVeMRGS2T833z/ZEChB98wm/Agz0jaoP9TM5xLUycjnBaNQBB/fp5mTxf
-         CbdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Q0deFER1y5zH2dnb8wEA8nqaA8hp/wl10D8xfdso/0c=;
-        b=nruYa54BnPsJuEFAFBEHvA4CJE3DCGg4jt3paxysKL1iJPcxwz3+30TlE/q+RhIKjR
-         wRwhFXMNigqw2ioZ0OKI1/dRH2yCrXym8owv5P/xfxJ/3BTpkPaJyyYyIGAE+pzSCe70
-         lNZ4MYG17Ja6hhVDQKGYzswZ+Z5NCthHyJcRS7I7JwBCfozpU9loMtWppxZ6uG2Nzc+e
-         7YELJZdbSgvuX4pJt2KoIDS8zDXZUAnY09PZ9TKpLdwF65UkXqJcoW9yjaOMNZXrhjnI
-         uOpMQRLMBqCFaj9NBOdz9K3LIScjF37lH3NjS8YGvxOmW8rpoWKfg3G7K+/Bli2AS24M
-         J1Kg==
-X-Gm-Message-State: AOAM532Y+oyZ2jBwPBqdaY9zH6nVPOiFpDFC9zKHF1OhBVGQXp+b457M
-        kLTocn11h+pXKbDugoevnj3+lVuy2HfUAQ==
-X-Google-Smtp-Source: ABdhPJymJjE2L2a9NUrMrih2ODObIj/y609DDc4WIfVc9enlv0bVkzgNhyftNNcqrAdIECpWfAE/bQ==
-X-Received: by 2002:aa7:8055:0:b029:15f:cbe9:1aad with SMTP id y21-20020aa780550000b029015fcbe91aadmr1173932pfm.71.1603920238453;
-        Wed, 28 Oct 2020 14:23:58 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::4:1c8])
-        by smtp.gmail.com with ESMTPSA id x26sm514837pfn.178.2020.10.28.14.23.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 14:23:57 -0700 (PDT)
-Date:   Wed, 28 Oct 2020 14:23:50 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Michael Jeanson <mjeanson@efficios.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
+        id S1729524AbgJ1WC3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:02:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50730 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729512AbgJ1WCY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:02:24 -0400
+Received: from e123331-lin.nice.arm.com (lfbn-nic-1-188-42.w2-15.abo.wanadoo.fr [2.15.37.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4693D247FC;
+        Wed, 28 Oct 2020 17:15:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603905317;
+        bh=09phZTWmPiU017OVb0I9AGdf0nGRpJdaUisznwA8rFE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SzhzaduvGQhnnQYFgwb52JDBHh3+ug90qZrxGFJGWQCM6lPNWMTHRifXXXtMs/v2Q
+         zxNhne+WYa1DRL0xtHYkvDE0PcFjgU/OFrJFWRajRqSaTQhvTFd0PJWHJpUnu310IL
+         T4i0vL8mexPWBhTWWF4yOI11+ZNi9tvcZhk5lGBw=
+From:   Ard Biesheuvel <ardb@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Alexei Starovoitov <ast@kernel.org>,
-        Yonghong Song <yhs@fb.com>, paulmck <paulmck@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, acme <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Joel Fernandes, Google" <joel@joelfernandes.org>,
-        bpf <bpf@vger.kernel.org>
-Subject: Re: [RFC PATCH 1/6] tracing: introduce sleepable tracepoints
-Message-ID: <20201028212350.jj4mbnbk6hdcbymo@ast-mbp.dhcp.thefacebook.com>
-References: <20201023195352.26269-1-mjeanson@efficios.com>
- <20201023195352.26269-2-mjeanson@efficios.com>
- <20201026224301.gi4bakmj3pov5zyu@ast-mbp.dhcp.thefacebook.com>
- <1631556114.38532.1603805828748.JavaMail.zimbra@efficios.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1631556114.38532.1603805828748.JavaMail.zimbra@efficios.com>
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH v2 1/2] bpf: don't rely on GCC __attribute__((optimize)) to disable GCSE
+Date:   Wed, 28 Oct 2020 18:15:05 +0100
+Message-Id: <20201028171506.15682-2-ardb@kernel.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20201028171506.15682-1-ardb@kernel.org>
+References: <20201028171506.15682-1-ardb@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 09:37:08AM -0400, Mathieu Desnoyers wrote:
-> 
-> ----- On Oct 26, 2020, at 6:43 PM, Alexei Starovoitov alexei.starovoitov@gmail.com wrote:
-> 
-> > On Fri, Oct 23, 2020 at 03:53:47PM -0400, Michael Jeanson wrote:
-> >> -#define __DO_TRACE(tp, proto, args, cond, rcuidle)			\
-> >> +#define __DO_TRACE(tp, proto, args, cond, rcuidle, tp_flags)		\
-> >>  	do {								\
-> >>  		struct tracepoint_func *it_func_ptr;			\
-> >>  		void *it_func;						\
-> >>  		void *__data;						\
-> >>  		int __maybe_unused __idx = 0;				\
-> >> +		bool maysleep = (tp_flags) & TRACEPOINT_MAYSLEEP;	\
-> >>  									\
-> >>  		if (!(cond))						\
-> >>  			return;						\
-> >> @@ -170,8 +178,13 @@ static inline struct tracepoint
-> >> *tracepoint_ptr_deref(tracepoint_ptr_t *p)
-> >>  		/* srcu can't be used from NMI */			\
-> >>  		WARN_ON_ONCE(rcuidle && in_nmi());			\
-> >>  									\
-> >> -		/* keep srcu and sched-rcu usage consistent */		\
-> >> -		preempt_disable_notrace();				\
-> >> +		if (maysleep) {						\
-> >> +			might_sleep();					\
-> > 
-> > The main purpose of the patch set is to access user memory in tracepoints,
-> > right?
-> 
-> Yes, exactly.
-> 
-> > In such case I suggest to use stronger might_fault() here.
-> > We used might_sleep() in sleepable bpf and it wasn't enough to catch
-> > a combination where sleepable hook was invoked while mm->mmap_lock was
-> > taken which may cause a deadlock.
-> 
-> Good point! We will do that for the next round.
-> 
-> By the way, we named this "sleepable" tracepoint (with flag TRACEPOINT_MAYSLEEP),
-> but we are open to a better name. Would TRACEPOINT_MAYFAULT be more descriptive ?
-> (a "faultable" tracepoint sounds weird though)
+Commit 3193c0836 ("bpf: Disable GCC -fgcse optimization for
+___bpf_prog_run()") introduced a __no_fgcse macro that expands to a
+function scope __attribute__((optimize("-fno-gcse"))), to disable a
+GCC specific optimization that was causing trouble on x86 builds, and
+was not expected to have any positive effect in the first place.
 
-bpf kept 'sleepable' as a name. 'faultable' is too misleading.
+However, as the GCC manual documents, __attribute__((optimize))
+is not for production use, and results in all other optimization
+options to be forgotten for the function in question. This can
+cause all kinds of trouble, but in one particular reported case,
+it causes -fno-asynchronous-unwind-tables to be disregarded,
+resulting in .eh_frame info to be emitted for the function.
+
+This reverts commit 3193c0836, and instead, it disables the -fgcse
+optimization for the entire source file, but only when building for
+X86 using GCC with CONFIG_BPF_JIT_ALWAYS_ON disabled. Note that the
+original commit states that CONFIG_RETPOLINE=n triggers the issue,
+whereas CONFIG_RETPOLINE=y performs better without the optimization,
+so it is kept disabled in both cases.
+
+Fixes: 3193c0836 ("bpf: Disable GCC -fgcse optimization for ___bpf_prog_run()")
+Link: https://lore.kernel.org/lkml/CAMuHMdUg0WJHEcq6to0-eODpXPOywLot6UD2=GFHpzoj_hCoBQ@mail.gmail.com/
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+---
+ include/linux/compiler-gcc.h   | 2 --
+ include/linux/compiler_types.h | 4 ----
+ kernel/bpf/Makefile            | 6 +++++-
+ kernel/bpf/core.c              | 2 +-
+ 4 files changed, 6 insertions(+), 8 deletions(-)
+
+diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+index d1e3c6896b71..5deb37024574 100644
+--- a/include/linux/compiler-gcc.h
++++ b/include/linux/compiler-gcc.h
+@@ -175,5 +175,3 @@
+ #else
+ #define __diag_GCC_8(s)
+ #endif
+-
+-#define __no_fgcse __attribute__((optimize("-fno-gcse")))
+diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
+index 6e390d58a9f8..ac3fa37a84f9 100644
+--- a/include/linux/compiler_types.h
++++ b/include/linux/compiler_types.h
+@@ -247,10 +247,6 @@ struct ftrace_likely_data {
+ #define asm_inline asm
+ #endif
+ 
+-#ifndef __no_fgcse
+-# define __no_fgcse
+-#endif
+-
+ /* Are two types/vars the same type (ignoring qualifiers)? */
+ #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+ 
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index bdc8cd1b6767..c1b9f71ee6aa 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -1,6 +1,10 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-y := core.o
+-CFLAGS_core.o += $(call cc-disable-warning, override-init)
++ifneq ($(CONFIG_BPF_JIT_ALWAYS_ON),y)
++# ___bpf_prog_run() needs GCSE disabled on x86; see 3193c0836f203 for details
++cflags-nogcse-$(CONFIG_X86)$(CONFIG_CC_IS_GCC) := -fno-gcse
++endif
++CFLAGS_core.o += $(call cc-disable-warning, override-init) $(cflags-nogcse-yy)
+ 
+ obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o bpf_iter.o map_iter.o task_iter.o prog_iter.o
+ obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 9268d77898b7..55454d2278b1 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1369,7 +1369,7 @@ u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
+  *
+  * Decode and execute eBPF instructions.
+  */
+-static u64 __no_fgcse ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
++static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
+ {
+ #define BPF_INSN_2_LBL(x, y)    [BPF_##x | BPF_##y] = &&x##_##y
+ #define BPF_INSN_3_LBL(x, y, z) [BPF_##x | BPF_##y | BPF_##z] = &&x##_##y##_##z
+-- 
+2.17.1
+
