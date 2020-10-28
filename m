@@ -2,119 +2,102 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.6 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+X-Spam-Status: No, score=-9.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 74C79C4363A
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:48:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F118C55179
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:50:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C4D320757
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:48:10 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BTS8ESXB"
+	by mail.kernel.org (Postfix) with ESMTP id D90B420754
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603925407;
+	bh=YkIvDKPErt3NvCXUo0fvJk/pdkjkI5dN3QZ8rVeGMDU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:List-ID:From;
+	b=vBDGgtVk2t4kbLcdv+UGUZqghuWYo+FXDt5IgskapTHyiKYoNhT6aovsBW1iEJYaL
+	 ebZPLMaen1XLt7Io7aBu0T4O7SDALi/aG4NxPnwcSvI4aKOynmj8hQHvF5YuFF1GUP
+	 88c6V+lrBsfVSE71mwBpwf+BhMX8LxLrpwFblG20=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389409AbgJ1WsJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 18:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58700 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731686AbgJ1Wrs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:47:48 -0400
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6179C0613CF;
-        Wed, 28 Oct 2020 15:47:47 -0700 (PDT)
-Received: by mail-yb1-xb44.google.com with SMTP id 67so550914ybt.6;
-        Wed, 28 Oct 2020 15:47:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vwgoW2TPGpunI0aTLkl3qoIbx10c+NJTmbd9MrFLM2s=;
-        b=BTS8ESXBVadVHh9DO6P1aepyoWRkgvynflePGKFZrpygvM78c+SRChm5u5kVUWLt0C
-         Ok2tgz6O0L43blytuad6d8HF3tyNs4jtsSQgJ+Xng1YmxtMqBB+1Gr2JhK7QLEfPI+qQ
-         ywCNDX4CR6AMGTWbW6yq96Bf2CM4xv/KV+tqeHIX+bht6SOEZU+7R3DYZzqBZ7Y5lnp9
-         3u4AeXWUm6aTdH/L8gByTlZcLNQAe5/qwwcP2Kx9N12Ymm5KmeKObBTYBpppVmrwHIaf
-         oP5Cl3SgLOmdLHVpP7YsXt3TdNNOfjxLHg79J10Z0nZMyzL/ax+IRa4R8w/cgmUiTZJz
-         mp1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vwgoW2TPGpunI0aTLkl3qoIbx10c+NJTmbd9MrFLM2s=;
-        b=XgRsCCafQyN3rne3OERXJKQt1kMI2+UuikGfoR/USzDA2v6xM1ou8OeuUf3HEyq656
-         L2QwhbybUXcWEnAAQi5C1SirEQT7EPIj9r63eDAdBlNSdijdVWo3siCRahr3iogoamuq
-         RKyXs4PSLvJmgxb/lRbeG6fOTb6pjWx6goKzGuDo7wkURd6cnrcqDIOLm/xiy2/MCb6P
-         qNy0gfObfVWVejrmGMRAcnM/9hn4vBnNV37lVZltPO+Unc5en7Iz15Aexfr6GqWcpqjc
-         DGpNMP1VWyCw8ZXTzdAAXyd+HFVibW8K9CIWkUmQKxMCRVOxaCG7fK9/2s7jTVDXa5T/
-         kUhA==
-X-Gm-Message-State: AOAM530QcSMLr/KQlF3JGLf+/IWG/CMkN5Hghi7I5wasYTE4QcUFzkHa
-        f79NSW8ucyGbsURlQsjXBLvpEz3gXOSX8xAcA6KixRoLQ3IDQK8W
-X-Google-Smtp-Source: ABdhPJxy/Ur2hDT/68wIG/Irz6OXDxV8Fmp4IUEF6IrTWOr+be7a0paoRJwfUOS9N26GzD7nzDbiiTy5tZijSDy+m8A=
-X-Received: by 2002:a25:c7c6:: with SMTP id w189mr7830598ybe.403.1603856490277;
- Tue, 27 Oct 2020 20:41:30 -0700 (PDT)
+        id S2389540AbgJ1WuG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:50:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60250 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389530AbgJ1WuF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:50:05 -0400
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603925404;
+        bh=YkIvDKPErt3NvCXUo0fvJk/pdkjkI5dN3QZ8rVeGMDU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=GGt4d08MLbClyJrEjlzzv+OFpRxQLZy65gEG7uBbRKJdYklCpEXWT9mqCuqitsH11
+         ZGVE6VZukrjY6BsBV0qX8JSHjoyCX4w34jsg1SRH4YS3kh+ULLSznAsW9IPBVbGPS9
+         xuUyHNPrjzHXCdyiatJiafTbs3aqdCNbfH8tFcrA=
 MIME-Version: 1.0
-References: <20201027233646.3434896-1-irogers@google.com> <20201027233646.3434896-2-irogers@google.com>
-In-Reply-To: <20201027233646.3434896-2-irogers@google.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 27 Oct 2020 20:41:19 -0700
-Message-ID: <CAEf4BzbeJqCq_OHrBQWHoXtALPSHZ7hY2OHL59BuvCcfF1nrpQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] tools, bpftool: Remove two unused variables.
-To:     Ian Rogers <irogers@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Michal Rostecki <mrostecki@opensuse.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next] bpf: permit cond_resched for some iterators
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <160392540439.15061.11814721370459886312.git-patchwork-notify@kernel.org>
+Date:   Wed, 28 Oct 2020 22:50:04 +0000
+References: <20201028061054.1411116-1-yhs@fb.com>
+In-Reply-To: <20201028061054.1411116-1-yhs@fb.com>
+To:     Yonghong Song <yhs@fb.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kernel-team@fb.com, andrii@kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 4:37 PM Ian Rogers <irogers@google.com> wrote:
->
-> Avoid an unused variable warning.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
+Hello:
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+This patch was applied to bpf/bpf-next.git (refs/heads/master):
 
->  tools/bpf/bpftool/skeleton/profiler.bpf.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/bpf/bpftool/skeleton/profiler.bpf.c b/tools/bpf/bpftool/skeleton/profiler.bpf.c
-> index 4e3512f700c0..ce5b65e07ab1 100644
-> --- a/tools/bpf/bpftool/skeleton/profiler.bpf.c
-> +++ b/tools/bpf/bpftool/skeleton/profiler.bpf.c
-> @@ -70,7 +70,7 @@ int BPF_PROG(fentry_XXX)
->  static inline void
->  fexit_update_maps(u32 id, struct bpf_perf_event_value *after)
->  {
-> -       struct bpf_perf_event_value *before, diff, *accum;
-> +       struct bpf_perf_event_value *before, diff;
->
->         before = bpf_map_lookup_elem(&fentry_readings, &id);
->         /* only account samples with a valid fentry_reading */
-> @@ -95,7 +95,7 @@ int BPF_PROG(fexit_XXX)
->  {
->         struct bpf_perf_event_value readings[MAX_NUM_MATRICS];
->         u32 cpu = bpf_get_smp_processor_id();
-> -       u32 i, one = 1, zero = 0;
-> +       u32 i, zero = 0;
->         int err;
->         u64 *count;
->
-> --
-> 2.29.0.rc2.309.g374f81d7ae-goog
->
+On Tue, 27 Oct 2020 23:10:54 -0700 you wrote:
+> Commit e679654a704e ("bpf: Fix a rcu_sched stall issue with
+> bpf task/task_file iterator") tries to fix rcu stalls warning
+> which is caused by bpf task_file iterator when running
+> "bpftool prog".
+> 
+>       rcu: INFO: rcu_sched self-detected stall on CPU
+>       rcu: \x097-....: (20999 ticks this GP) idle=302/1/0x4000000000000000 softirq=1508852/1508852 fqs=4913
+>       \x09(t=21031 jiffies g=2534773 q=179750)
+>       NMI backtrace for cpu 7
+>       CPU: 7 PID: 184195 Comm: bpftool Kdump: loaded Tainted: G        W         5.8.0-00004-g68bfc7f8c1b4 #6
+>       Hardware name: Quanta Twin Lakes MP/Twin Lakes Passive MP, BIOS F09_3A17 05/03/2019
+>       Call Trace:
+>       <IRQ>
+>       dump_stack+0x57/0x70
+>       nmi_cpu_backtrace.cold+0x14/0x53
+>       ? lapic_can_unplug_cpu.cold+0x39/0x39
+>       nmi_trigger_cpumask_backtrace+0xb7/0xc7
+>       rcu_dump_cpu_stacks+0xa2/0xd0
+>       rcu_sched_clock_irq.cold+0x1ff/0x3d9
+>       ? tick_nohz_handler+0x100/0x100
+>       update_process_times+0x5b/0x90
+>       tick_sched_timer+0x5e/0xf0
+>       __hrtimer_run_queues+0x12a/0x2a0
+>       hrtimer_interrupt+0x10e/0x280
+>       __sysvec_apic_timer_interrupt+0x51/0xe0
+>       asm_call_on_stack+0xf/0x20
+>       </IRQ>
+>       sysvec_apic_timer_interrupt+0x6f/0x80
+>       ...
+>       task_file_seq_next+0x52/0xa0
+>       bpf_seq_read+0xb9/0x320
+>       vfs_read+0x9d/0x180
+>       ksys_read+0x5f/0xe0
+>       do_syscall_64+0x38/0x60
+>       entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next] bpf: permit cond_resched for some iterators
+    https://git.kernel.org/bpf/bpf-next/c/cf83b2d2e2b6
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
