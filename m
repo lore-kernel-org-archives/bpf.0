@@ -2,109 +2,131 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09559C388F7
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:38:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C3BE3C388F7
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:41:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8D9A02076A
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:38:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 61D5D20878
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:41:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E8ql5xGf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="noS8dvS1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388953AbgJ1Wil (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 18:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
+        id S2389070AbgJ1Wk7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388951AbgJ1Wib (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:38:31 -0400
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F609C0613CF;
-        Wed, 28 Oct 2020 15:38:31 -0700 (PDT)
-Received: by mail-oi1-x243.google.com with SMTP id x203so1236078oia.10;
-        Wed, 28 Oct 2020 15:38:31 -0700 (PDT)
+        with ESMTP id S1730725AbgJ1Wk6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:40:58 -0400
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D610C0613CF;
+        Wed, 28 Oct 2020 15:40:58 -0700 (PDT)
+Received: by mail-yb1-xb42.google.com with SMTP id b138so542324yba.5;
+        Wed, 28 Oct 2020 15:40:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=oRd9D9KAGEvSUVDHFx51Z3pe4W3JS4rlMi+zj5tnu1o=;
-        b=E8ql5xGfRHpoTKr5i0U4XM9uzxC6u2e9Cg3/yWktFZDdSuRO6Udnjb7bA3rCe9EnUG
-         8cIQMmKu7BUC4a0CJ8oFGmBVSKHR0QRNlTOVJQG4a4IhAJW2NHV1grRhMQUmzccVLcC9
-         onsJs2Ihyxv3p5mJNwmpmmsx9jMdvIbYUgH1mvLb2cogBg8iLX58dBUz+r82kCKHVvnb
-         XumzNtq+C05tnupu1y3h8jPs/EIisyHYrMzfPJ+h0052DweivHzgByZDQi8JNFRKysny
-         FHHfLpjyjztIKOBRKGcDOuk6qtN2e+9lTmDCOG764V61f0M6J7B3i0hqr0ttd07PAhbv
-         8LMg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jg45dpTkIStnq7FH8sB1G6csIoi0LJaAOaqWI/KVCvI=;
+        b=noS8dvS1P9698Fp6wHJWJPKA+/s9WfOrs3eI0eKM7tXYQIY+jDH6Ivu06+vFjdr6tR
+         m82s7srotwXwMAhUpxBzkw9o/OMYtJra6MkONeYOdQZMK8DZ5nh9f0DuuUpXSzx9xjC/
+         Is5X+0B55s4egZElRcBoYkhwSx5z+lbt43kRaGUeEyTJqn0EmwZZyr79GyLfJXIJZxyx
+         mDGGiIO+maiihAloxafvli/rpUTQy8IoP/1sn9Hk4DEK+WFy0R4/7jpVFFzRfotzH8sR
+         45ToxSia4MLemgUbQ9+HCYWdSwPzcwEC5U97K78w1YtRk5q3bBSM8687/prdUbe6YM1c
+         rzsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=oRd9D9KAGEvSUVDHFx51Z3pe4W3JS4rlMi+zj5tnu1o=;
-        b=qVh3tAo0s2weUv26rBSWrKJXKFS0KIK9QXJgu1sEQfRg1Bza+gJ84GIh/kbsx9oJfS
-         KUCxWJ3YanUEC9HYtMVe8AV6pYcnOQAz3FrmJJB6Hf8hCp/K/QWbHOVGdr867XFuap7y
-         kZFGBvgkcOztNEinfs8yNY0eS6yHuHcGKt4nLGfh61z8cqb2y1K+KNKe/Zq5k8xHzuGR
-         D8bRk/5yu7xLBwveJoYl4wQ8WRqtQU4XMng7bdSon/H0mGu0DJmZax3OgU8WQhFUptI/
-         fH/UJNS263LLUWdJI5Ao59mRAaxsWkh56YFtyd6gM7DXu3NV4g6zghFzfzzm4RqwU/qz
-         i2Iw==
-X-Gm-Message-State: AOAM532XU2g56jSzPmCWHxYCKFfObNFTVl2No6024+DUU8jfLpj1GPjb
-        Z2g+nDf2afvUXgo/5QNUAjIRvVhyeNlFYbj8
-X-Google-Smtp-Source: ABdhPJw08anLcn91mXmmfsPzN+W5dpD39hXzuhPgRbUE4/T21wkwPxdeaE55dA/3l8zuJN2Sj8xr2A==
-X-Received: by 2002:a17:90b:23c2:: with SMTP id md2mr2718827pjb.205.1603892156901;
-        Wed, 28 Oct 2020 06:35:56 -0700 (PDT)
-Received: from btopel-mobl.ger.intel.com ([192.55.55.43])
-        by smtp.gmail.com with ESMTPSA id q14sm5935393pjp.43.2020.10.28.06.35.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 06:35:56 -0700 (PDT)
-From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
-        maciej.fijalkowski@intel.com, sridhar.samudrala@intel.com,
-        jesse.brandeburg@intel.com, qi.z.zhang@intel.com, kuba@kernel.org,
-        edumazet@google.com, intel-wired-lan@lists.osuosl.org,
-        jonathan.lemon@gmail.com
-Subject: [RFC PATCH bpf-next 9/9] samples/bpf: add option to set the busy-poll budget
-Date:   Wed, 28 Oct 2020 14:34:37 +0100
-Message-Id: <20201028133437.212503-10-bjorn.topel@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201028133437.212503-1-bjorn.topel@gmail.com>
-References: <20201028133437.212503-1-bjorn.topel@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jg45dpTkIStnq7FH8sB1G6csIoi0LJaAOaqWI/KVCvI=;
+        b=bNP0xXFHnzBit1JPYBlxKg1ev4E86bZ0uwAQeCaNgXE2lzN81q1T3oA3rSnJVr0/Hf
+         lLlJZpX+0rwBwJlSEbhtO/9YXS42useXwywouY2N/6lqypr+XaHZPnh0KWmz9vAgs9rI
+         5TCic22NNSVYMSkJ5b3gr+YjB2Abs264l/pDdP5pp2OjBw0eTC9U4oO7ryY0budz4a2E
+         gKUAKyQCbWAXaUXQWfyDjNZe9abAhnaS6zpNpAnyQ+YyZpEWH8fxvCD0NWYzu3keLe5M
+         nkHNSh9WQ+L9lLX+5g9QkxY45eC47rutejmM50+XLONjyuNE2N9fk6zYW23ZatQ2P/kk
+         HfAw==
+X-Gm-Message-State: AOAM532UOVWIJ6bUXLP1SxN9a2QHnwq9wCy0ZvpOIjuL1tWLJ5j+GXpC
+        6wOigaEvulvjtLuRJ5yMPCzA6y2R22Y7VsY1qYQ=
+X-Google-Smtp-Source: ABdhPJzjR9v72td9M8NZQP+eitD1eMiz3OsKtziYoQQJVouthGxKy6BQyiXpmiZ9+bPbeYxIQSPgdVC+fQkcTwS6lm4=
+X-Received: by 2002:a25:c001:: with SMTP id c1mr1976005ybf.27.1603924857840;
+ Wed, 28 Oct 2020 15:40:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20201022082138.2322434-1-jolsa@kernel.org> <20201022082138.2322434-8-jolsa@kernel.org>
+ <20201028182534.GS2900849@krava>
+In-Reply-To: <20201028182534.GS2900849@krava>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 28 Oct 2020 15:40:46 -0700
+Message-ID: <CAEf4BzarrQLrh4PXZvMmrL8KpBTjB65V9+jxn0os-Yd2jN2aYQ@mail.gmail.com>
+Subject: Re: [RFC bpf-next 07/16] kallsyms: Use rb tree for kallsyms name search
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jesper Brouer <jbrouer@redhat.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Viktor Malik <vmalik@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+On Wed, Oct 28, 2020 at 3:29 PM Jiri Olsa <jolsa@redhat.com> wrote:
+>
+> On Thu, Oct 22, 2020 at 10:21:29AM +0200, Jiri Olsa wrote:
+> > The kallsyms_expand_symbol function showed in several bpf related
+> > profiles, because it's doing linear search.
+> >
+> > Before:
+> >
+> >  Performance counter stats for './src/bpftrace -ve kfunc:__x64_sys_s* \
+> >    { printf("test\n"); } i:ms:10 { printf("exit\n"); exit();}' (5 runs):
+> >
+> >      2,535,458,767      cycles:k                         ( +-  0.55% )
+> >        940,046,382      cycles:u                         ( +-  0.27% )
+> >
+> >              33.60 +- 3.27 seconds time elapsed  ( +-  9.73% )
+> >
+> > Loading all the vmlinux symbols in rbtree and and switch to rbtree
+> > search in kallsyms_lookup_name function to save few cycles and time.
+> >
+> > After:
+> >
+> >  Performance counter stats for './src/bpftrace -ve kfunc:__x64_sys_s* \
+> >    { printf("test\n"); } i:ms:10 { printf("exit\n"); exit();}' (5 runs):
+> >
+> >      2,199,433,771      cycles:k                         ( +-  0.55% )
+> >        936,105,469      cycles:u                         ( +-  0.37% )
+> >
+> >              26.48 +- 3.57 seconds time elapsed  ( +- 13.49% )
+> >
+> > Each symbol takes 160 bytes, so for my .config I've got about 18 MBs
+> > used for 115285 symbols.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+>
+> FYI there's init_kprobes dependency on kallsyms_lookup_name in early
+> init call, so this won't work as it is :-\ will address this in v2
+>
+> also I'll switch to sorted array and bsearch, because kallsyms is not
+> dynamically updated
 
-Support for the SO_BUSY_POLL_BUDGET setsockopt, via the batching
-option ('b').
+what about kernel modules then?
 
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
----
- samples/bpf/xdpsock_user.c | 5 +++++
- 1 file changed, 5 insertions(+)
+>
+> jirka
+>
+> > ---
+> >  kernel/kallsyms.c | 95 ++++++++++++++++++++++++++++++++++++++++++-----
+> >  1 file changed, 86 insertions(+), 9 deletions(-)
+> >
 
-diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
-index 7ef2c01a1094..948faada96d5 100644
---- a/samples/bpf/xdpsock_user.c
-+++ b/samples/bpf/xdpsock_user.c
-@@ -1482,6 +1482,11 @@ static void apply_setsockopt(struct xsk_socket_info *xsk)
- 	if (setsockopt(xsk_socket__fd(xsk->xsk), SOL_SOCKET, SO_BUSY_POLL,
- 		       (void *)&sock_opt, sizeof(sock_opt)) < 0)
- 		exit_with_error(errno);
-+
-+	sock_opt = opt_batch_size;
-+	if (setsockopt(xsk_socket__fd(xsk->xsk), SOL_SOCKET, SO_BUSY_POLL_BUDGET,
-+		       (void *)&sock_opt, sizeof(sock_opt)) < 0)
-+		exit_with_error(errno);
- }
- 
- int main(int argc, char **argv)
--- 
-2.27.0
-
+[...]
