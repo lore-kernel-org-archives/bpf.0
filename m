@@ -2,220 +2,184 @@ Return-Path: <SRS0=L8C4=EE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51A9CC56201
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:54:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BCD67C55179
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:54:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0B11320790
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:54:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6D8CE20790
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:54:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603932869;
+	bh=iyMPTZ3GxyHvk1KlwYCEmQBg3X4EoRIw9xSI5rtwW64=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=osFvzl6xlp7uhgxUSIJwy278hLOtBGrvSAZFopJP4AAlXnmIagSXySMdjUMr35csH
+	 1Og8+Y7cKbrgZwlRgGEWFvxoh/lrGOukv/n/VpbaTqTJJHEjfaT/LTqiIbQRFvaAX4
+	 xstPgDiVOQkWdlb3DfwL6JJbqKrsK1h6ICCf4fno=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732294AbgJ1WTH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 18:19:07 -0400
-Received: from mx.der-flo.net ([193.160.39.236]:46468 "EHLO mx.der-flo.net"
+        id S1732287AbgJ1WTG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:19:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60514 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731992AbgJ1WS2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:18:28 -0400
-Received: by mx.der-flo.net (Postfix, from userid 110)
-        id 1D0BD442F2; Wed, 28 Oct 2020 21:11:00 +0100 (CET)
-Received: from localhost (unknown [IPv6:2a02:1203:ecb0:3930:146b:10e2:afb5:be30])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1731774AbgJ1WRp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:17:45 -0400
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mx.der-flo.net (Postfix) with ESMTPSA id 9680B442EB;
-        Wed, 28 Oct 2020 21:10:31 +0100 (CET)
-From:   Florian Lehner <dev@der-flo.net>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        john.fastabend@gmail.com, Florian Lehner <dev@der-flo.net>
-Subject: [PATCH bpf-next v4] bpf: Lift hashtab key_size limit
-Date:   Wed, 28 Oct 2020 21:09:52 +0100
-Message-Id: <20201028200952.7869-1-dev@der-flo.net>
-X-Mailer: git-send-email 2.26.2
+        by mail.kernel.org (Postfix) with ESMTPSA id EFAE824170;
+        Wed, 28 Oct 2020 06:59:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603868400;
+        bh=iyMPTZ3GxyHvk1KlwYCEmQBg3X4EoRIw9xSI5rtwW64=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=oQS18L4xAGewXXbzKl4vYYSzrEadw2LOoltBGf+t6E7DPdQzRlFbFoSDLEtk3fzdu
+         vC3O1vQZ9uleugiVTIlaYclflyNXO9oDoI1ja157Ft68sqTtzbcO5vRFaUcHTDjO69
+         GCs1v7KNyAKnWkR+MCz/7d4ZZlw25T1/d9JAb1bY=
+Received: by mail-oi1-f170.google.com with SMTP id j7so3949779oie.12;
+        Tue, 27 Oct 2020 23:59:59 -0700 (PDT)
+X-Gm-Message-State: AOAM531k5AVZ/MNM/OBRFEoojWiNRKQ0TJvljwyXtmoj2YSo1NVXcC2e
+        7NLnvun+zt9y6UQWWra10w3rm6FmUVWPPwZ8o68=
+X-Google-Smtp-Source: ABdhPJzkWslzr5KVOXdJabALKtzPnsyIL25Pb4KZLkMHwGbfvsfx1D8rrAo8DJg62nRjlh1TWDmt9wyz36AN4RuspQ0=
+X-Received: by 2002:aca:d64f:: with SMTP id n76mr4474933oig.174.1603868399031;
+ Tue, 27 Oct 2020 23:59:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201027205723.12514-1-ardb@kernel.org> <72f0dd64-9f65-cbd0-873a-684540912847@iogearbox.net>
+ <CAMj1kXG=B-2BAwj1HmMjQpdL5N0WUaoMXGrH_DXvkEZ6gyndaQ@mail.gmail.com>
+In-Reply-To: <CAMj1kXG=B-2BAwj1HmMjQpdL5N0WUaoMXGrH_DXvkEZ6gyndaQ@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 28 Oct 2020 07:59:48 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGiot6JKtmfCkphPvMcpckq-CiUSZGnmdXdsnhWd5NW-g@mail.gmail.com>
+Message-ID: <CAMj1kXGiot6JKtmfCkphPvMcpckq-CiUSZGnmdXdsnhWd5NW-g@mail.gmail.com>
+Subject: Re: [PATCH] bpf: don't rely on GCC __attribute__((optimize)) to
+ disable GCSE
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <bpf@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently key_size of hashtab is limited to MAX_BPF_STACK.
-As the key of hashtab can also be a value from a per cpu map it can be
-larger than MAX_BPF_STACK.
+On Wed, 28 Oct 2020 at 07:51, Ard Biesheuvel <ardb@kernel.org> wrote:
+>
+> On Wed, 28 Oct 2020 at 00:04, Daniel Borkmann <daniel@iogearbox.net> wrote:
+> >
+> > On 10/27/20 9:57 PM, Ard Biesheuvel wrote:
+> > > Commit 3193c0836f203 ("bpf: Disable GCC -fgcse optimization for
+> > > ___bpf_prog_run()") introduced a __no_fgcse macro that expands to a
+> > > function scope __attribute__((optimize("-fno-gcse"))), to disable a
+> > > GCC specific optimization that was causing trouble on x86 builds, and
+> > > was not expected to have any positive effect in the first place.
+> > >
+> > > However, as the GCC manual documents, __attribute__((optimize))
+> > > is not for production use, and results in all other optimization
+> > > options to be forgotten for the function in question. This can
+> > > cause all kinds of trouble, but in one particular reported case,
+> >
+> > Looks like there are couple more as well aside from __no_fgcse, are you
+> > also planning to fix them?
+> >
+> >    arch/powerpc/kernel/setup.h:14:#define __nostackprotector __attribute__((__optimize__("no-stack-protector")))
+> >    tools/include/linux/compiler-gcc.h:37:#define __no_tail_call __attribute__((optimize("no-optimize-sibling-calls")))
+> >
+>
+> No, but we can notify the respective maintainers.
+>
+> > > it causes -fno-asynchronous-unwind-tables to be disregarded,
+> > > resulting in .eh_frame info to be emitted for the function
+> > > inadvertently.
+> >
+> > Would have been useful to add a pointer to the original discussion with
+> > Link tag.
+> >
+> > Link: https://lore.kernel.org/lkml/CAMuHMdUg0WJHEcq6to0-eODpXPOywLot6UD2=GFHpzoj_hCoBQ@mail.gmail.com/
+> >
+>
+> Agreed.
+>
+> > > This reverts commit 3193c0836f203, and instead, it disables the -fgcse
+> > > optimization for the entire source file, but only when building for
+> > > X86.
+> > >
+> > > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > > Cc: Arvind Sankar <nivedita@alum.mit.edu>
+> > > Cc: Randy Dunlap <rdunlap@infradead.org>
+> > > Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+> > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > Cc: Alexei Starovoitov <ast@kernel.org>
+> > > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > > Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > > Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > Cc: Kees Cook <keescook@chromium.org>
+> > > Fixes: 3193c0836f203 ("bpf: Disable GCC -fgcse optimization for ___bpf_prog_run()")
+> > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > [...]
+> > > diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+> > > index bdc8cd1b6767..02b58f44c479 100644
+> > > --- a/kernel/bpf/Makefile
+> > > +++ b/kernel/bpf/Makefile
+> > > @@ -1,6 +1,8 @@
+> > >   # SPDX-License-Identifier: GPL-2.0
+> > >   obj-y := core.o
+> > > -CFLAGS_core.o += $(call cc-disable-warning, override-init)
+> > > +# ___bpf_prog_run() needs GCSE disabled on x86; see 3193c0836f203 for details
+> > > +cflags-core-$(CONFIG_X86) := -fno-gcse
+> > > +CFLAGS_core.o += $(call cc-disable-warning, override-init) $(cflags-core-y)
+> >
+> > Also, this needs to be guarded behind !CONFIG_RETPOLINE and !CONFIG_BPF_JIT_ALWAYS_ON
+> > in particular the latter since only in this case interpreter is compiled in ... most
+> > distros have the CONFIG_BPF_JIT_ALWAYS_ON set these days for x86.
+> >
+>
+> Is that a new requirement? Because before this patch, -fno-gcse was
+> applied unconditionally.
+>
 
-The use-case for this patch originates to implement allow/disallow
-lists for files and file paths. The maximum length of file paths is
-defined by PATH_MAX with 4096 chars including nul.
-This limit exceeds MAX_BPF_STACK.
+Ah never mind. You are saying ___bpf_prog_run() does not even exist if
+CONFIG_BPF_JIT_ALWAYS_ON=y, right?
 
-Changelog:
 
-v4:
- - Utilize BPF skeleton in tests
- - Rebase
-
-v3:
- - Rebase
-
-v2:
- - Add a test for bpf side
-
-Signed-off-by: Florian Lehner <dev@der-flo.net>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
----
- kernel/bpf/hashtab.c                          | 16 ++-----
- .../selftests/bpf/prog_tests/hash_large_key.c | 43 +++++++++++++++++
- .../selftests/bpf/progs/test_hash_large_key.c | 46 +++++++++++++++++++
- tools/testing/selftests/bpf/test_maps.c       |  3 +-
- 4 files changed, 96 insertions(+), 12 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/hash_large_key.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_hash_large_key.c
-
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index 1815e97d4c9c..fff7cd05b9e3 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -390,17 +390,11 @@ static int htab_map_alloc_check(union bpf_attr *attr)
- 	    attr->value_size == 0)
- 		return -EINVAL;
- 
--	if (attr->key_size > MAX_BPF_STACK)
--		/* eBPF programs initialize keys on stack, so they cannot be
--		 * larger than max stack size
--		 */
--		return -E2BIG;
--
--	if (attr->value_size >= KMALLOC_MAX_SIZE -
--	    MAX_BPF_STACK - sizeof(struct htab_elem))
--		/* if value_size is bigger, the user space won't be able to
--		 * access the elements via bpf syscall. This check also makes
--		 * sure that the elem_size doesn't overflow and it's
-+	if ((u64)(attr->key_size + attr->value_size) >= KMALLOC_MAX_SIZE -
-+	   sizeof(struct htab_elem))
-+		/* if key_size + value_size is bigger, the user space won't be
-+		 * able to access the elements via bpf syscall. This check
-+		 * also makes sure that the elem_size doesn't overflow and it's
- 		 * kmalloc-able later in htab_map_update_elem()
- 		 */
- 		return -E2BIG;
-diff --git a/tools/testing/selftests/bpf/prog_tests/hash_large_key.c b/tools/testing/selftests/bpf/prog_tests/hash_large_key.c
-new file mode 100644
-index 000000000000..34684c0fc76d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/hash_large_key.c
-@@ -0,0 +1,43 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include "test_hash_large_key.skel.h"
-+
-+void test_hash_large_key(void)
-+{
-+	int err, value = 21, duration = 0, hash_map_fd;
-+	struct test_hash_large_key *skel;
-+
-+	struct bigelement {
-+		int a;
-+		char b[4096];
-+		long long c;
-+	} key;
-+	bzero(&key, sizeof(key));
-+
-+	skel = test_hash_large_key__open_and_load();
-+	if (CHECK(!skel, "skel_open_and_load", "skeleton open/load failed\n"))
-+		return;
-+
-+	hash_map_fd = bpf_map__fd(skel->maps.hash_map);
-+	if (CHECK(hash_map_fd < 0, "bpf_map__fd", "failed\n"))
-+		goto cleanup;
-+
-+	err = test_hash_large_key__attach(skel);
-+	if (CHECK(err, "attach_raw_tp", "err %d\n", err))
-+		goto cleanup;
-+
-+	err = bpf_map_update_elem(hash_map_fd, &key, &value, BPF_ANY);
-+	if (CHECK(err, "bpf_map_update_elem", "errno=%d\n", errno))
-+		goto cleanup;
-+
-+	key.c = 1;
-+	err = bpf_map_lookup_elem(hash_map_fd, &key, &value);
-+	if (CHECK(err, "bpf_map_lookup_elem", "errno=%d\n", errno))
-+		goto cleanup;
-+
-+	CHECK_FAIL(value != 42);
-+
-+cleanup:
-+	test_hash_large_key__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_hash_large_key.c b/tools/testing/selftests/bpf/progs/test_hash_large_key.c
-new file mode 100644
-index 000000000000..dfee6db260eb
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_hash_large_key.c
-@@ -0,0 +1,46 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 2);
-+	__type(key, struct bigelement);
-+	__type(value, __u32);
-+} hash_map SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct bigelement);
-+} key_map SEC(".maps");
-+
-+struct bigelement {
-+	int a;
-+	char b[4096];
-+	long long c;
-+};
-+
-+SEC("raw_tracepoint/sys_enter")
-+int bpf_hash_large_key_test(void *ctx)
-+{
-+	int zero = 0, err = 1, value = 42;
-+	struct bigelement *key;
-+
-+	key = bpf_map_lookup_elem(&key_map, &zero);
-+	if (!key)
-+		goto err;
-+
-+	key->c = 1;
-+	if (bpf_map_update_elem(&hash_map, key, &value, BPF_ANY))
-+		goto err;
-+
-+	err = 0;
-+err:
-+	return err;
-+}
-+
-diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index 0d92ebcb335d..0ad3e6305ff0 100644
---- a/tools/testing/selftests/bpf/test_maps.c
-+++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -1223,9 +1223,10 @@ static void test_map_in_map(void)
- 
- static void test_map_large(void)
- {
-+
- 	struct bigkey {
- 		int a;
--		char b[116];
-+		char b[4096];
- 		long long c;
- 	} key;
- 	int fd, i, value;
--- 
-2.26.2
-
+> > Do you have an analysis for the commit log on what else this penalizes in core.c if
+> > it's now for the entire translation unit?
+> >
+>
+> No, I simply observed the regression this caused on non-x86
+> architectures, and proposed a way to fix it.
+>
+> Do you have any concerns in particular regarding other things in
+> core.c? Would you prefer ___bpf_prog_run() to be moved into a separate
+> .c file?
+>
+>
+> > >   obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o bpf_iter.o map_iter.o task_iter.o prog_iter.o
+> > >   obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o
+> > > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> > > index 9268d77898b7..55454d2278b1 100644
+> > > --- a/kernel/bpf/core.c
+> > > +++ b/kernel/bpf/core.c
+> > > @@ -1369,7 +1369,7 @@ u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
+> > >    *
+> > >    * Decode and execute eBPF instructions.
+> > >    */
+> > > -static u64 __no_fgcse ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
+> > > +static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
+> > >   {
+> > >   #define BPF_INSN_2_LBL(x, y)    [BPF_##x | BPF_##y] = &&x##_##y
+> > >   #define BPF_INSN_3_LBL(x, y, z) [BPF_##x | BPF_##y | BPF_##z] = &&x##_##y##_##z
+> > >
+> >
