@@ -2,243 +2,170 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C5378C388F7
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:27:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AB0AC55179
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:28:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 74B5920704
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:27:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B750020724
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:28:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Dp9R0z6j"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M0QDX0c4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733242AbgJ1W1V (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 18:27:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:35055 "EHLO
+        id S2387400AbgJ1W1m (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:27:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:25953 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1733228AbgJ1W1S (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 28 Oct 2020 18:27:18 -0400
+        by vger.kernel.org with ESMTP id S1733289AbgJ1W1d (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 28 Oct 2020 18:27:33 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603924036;
+        s=mimecast20190719; t=1603924051;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AvhIM0ZTutEsCzTPCsR2z619Aqyf5G1DMNl8HJokJSU=;
-        b=Dp9R0z6jX+R8RKkEOp0brMhgw7OHK+bgw8bNU7L1hYzuT0i4UO2C1GMYYiwN4pij9CuWYK
-        3COPMFr23GISPzL6bZlEfbtVmZGtg9/NrHt7ejSHE4JK7SaZ2cTL+khy68gaSplJ8VDd1L
-        o41H2K72B9EhySTIDGKa2sZwH9Z66S8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-159-SlB6xF8XMY2TThljNqF-Mg-1; Wed, 28 Oct 2020 14:25:58 -0400
-X-MC-Unique: SlB6xF8XMY2TThljNqF-Mg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9A13DCF986;
-        Wed, 28 Oct 2020 18:25:55 +0000 (UTC)
-Received: from krava (unknown [10.40.192.64])
-        by smtp.corp.redhat.com (Postfix) with SMTP id BBB6360C04;
-        Wed, 28 Oct 2020 18:25:35 +0000 (UTC)
-Date:   Wed, 28 Oct 2020 19:25:34 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        bh=B3C3SM+mTODeDpoZqXrRuy+dLn2cT9haezbBAbLVhV4=;
+        b=M0QDX0c40fx9XLvhMyS1nM60RvSyg/9MAXcv41EvRmRIF71mAB5DDDhfMNcmDmmLp/3b9e
+        yHQAD11vyl2smESUB8tXy7l3QZ7Km8izlKqJXt9rUjU+t0IV3zhT/PU+a65hU7oQDrn4GL
+        A5vUfWwd/Fa+eL6Q1Q+2yBfDg0/oI2c=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-596-pIcrX6XWPAKByTth5vXWJw-1; Wed, 28 Oct 2020 09:25:52 -0400
+X-MC-Unique: pIcrX6XWPAKByTth5vXWJw-1
+Received: by mail-pj1-f72.google.com with SMTP id bp7so2585762pjb.1
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 06:25:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=B3C3SM+mTODeDpoZqXrRuy+dLn2cT9haezbBAbLVhV4=;
+        b=hIMKNFIFjtaA57Yn5cWpDYrFsQzoIFyCV7NNFyQK+sdktSG2q6bQUzYp9jhe2V2Ya/
+         Cqc1ZMkVRoW3CO3uokwW7/xsBaodIZHWT/zxd/uAT6eauqYhPqxYQawr51tl88qf8SiK
+         0WDsrp58oUphk1ImEzsNZjlTFxHy2NAca/U0NfsNK5y6oCnm7bqEOBDxJ45pP8Zcjj41
+         UiIFTrwK24hEPKxaKELVNWI2JTDK7DL57UKjVFIl+AtaKrnZoO59GAkwtke2FzOqlnGG
+         KCBfCTyPofxuFTQW7fUGZpRzd1flqvqXTvPV8d/SXVPozy5ai5axbpQT+BDTHrbObZR5
+         a3/g==
+X-Gm-Message-State: AOAM533UorCG7M1ehkgbuJdCNQqDn7PHyGu7pTNg8ZgXbUvp5O12WZL7
+        VVkdHmBGTS+kCQIJchyYrFMtNq+NpBuwlt9+OEKfTSKxDNtR3I+JWnQk4wqSijcKyCqBb3hF1LW
+        WXnhET2hNn7Q=
+X-Received: by 2002:a63:e34e:: with SMTP id o14mr2981916pgj.346.1603891549936;
+        Wed, 28 Oct 2020 06:25:49 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJw/PK76b2eGaNlxeNSUA51cw16WWFm9l0JQrjl8/wv7GEAT2h/MGYx3BNITB72kZx5M/I/8XQ==
+X-Received: by 2002:a63:e34e:: with SMTP id o14mr2981886pgj.346.1603891549718;
+        Wed, 28 Oct 2020 06:25:49 -0700 (PDT)
+Received: from localhost.localdomain.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id z20sm6055521pfk.199.2020.10.28.06.25.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2020 06:25:49 -0700 (PDT)
+From:   Hangbin Liu <haliu@redhat.com>
+To:     Stephen Hemminger <stephen@networkplumber.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jesper Brouer <jbrouer@redhat.com>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        Viktor Malik <vmalik@redhat.com>
-Subject: Re: [RFC bpf-next 07/16] kallsyms: Use rb tree for kallsyms name
- search
-Message-ID: <20201028182534.GS2900849@krava>
-References: <20201022082138.2322434-1-jolsa@kernel.org>
- <20201022082138.2322434-8-jolsa@kernel.org>
+        David Ahern <dsahern@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>, David Miller <davem@davemloft.net>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Jiri Benc <jbenc@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Hangbin Liu <haliu@redhat.com>
+Subject: [PATCHv2 iproute2-next 1/5] configure: add check_libbpf() for later libbpf support
+Date:   Wed, 28 Oct 2020 21:25:25 +0800
+Message-Id: <20201028132529.3763875-2-haliu@redhat.com>
+X-Mailer: git-send-email 2.25.4
+In-Reply-To: <20201028132529.3763875-1-haliu@redhat.com>
+References: <20201023033855.3894509-1-haliu@redhat.com>
+ <20201028132529.3763875-1-haliu@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201022082138.2322434-8-jolsa@kernel.org>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Oct 22, 2020 at 10:21:29AM +0200, Jiri Olsa wrote:
-> The kallsyms_expand_symbol function showed in several bpf related
-> profiles, because it's doing linear search.
-> 
-> Before:
-> 
->  Performance counter stats for './src/bpftrace -ve kfunc:__x64_sys_s* \
->    { printf("test\n"); } i:ms:10 { printf("exit\n"); exit();}' (5 runs):
-> 
->      2,535,458,767      cycles:k                         ( +-  0.55% )
->        940,046,382      cycles:u                         ( +-  0.27% )
-> 
->              33.60 +- 3.27 seconds time elapsed  ( +-  9.73% )
-> 
-> Loading all the vmlinux symbols in rbtree and and switch to rbtree
-> search in kallsyms_lookup_name function to save few cycles and time.
-> 
-> After:
-> 
->  Performance counter stats for './src/bpftrace -ve kfunc:__x64_sys_s* \
->    { printf("test\n"); } i:ms:10 { printf("exit\n"); exit();}' (5 runs):
-> 
->      2,199,433,771      cycles:k                         ( +-  0.55% )
->        936,105,469      cycles:u                         ( +-  0.37% )
-> 
->              26.48 +- 3.57 seconds time elapsed  ( +- 13.49% )
-> 
-> Each symbol takes 160 bytes, so for my .config I've got about 18 MBs
-> used for 115285 symbols.
-> 
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+This patch adds a check to see if we support libbpf. By default the
+system libbpf will be used, but static linking against a custom libbpf
+version can be achieved by passing LIBBPF_DIR to configure. FORCE_LIBBPF
+can be set to force configure to abort if no suitable libbpf is found,
+which is useful for automatic packaging that wants to enforce the
+dependency.
 
-FYI there's init_kprobes dependency on kallsyms_lookup_name in early
-init call, so this won't work as it is :-\ will address this in v2
+Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
+Signed-off-by: Hangbin Liu <haliu@redhat.com>
+---
+ configure | 48 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-also I'll switch to sorted array and bsearch, because kallsyms is not
-dynamically updated
-
-jirka
-
-> ---
->  kernel/kallsyms.c | 95 ++++++++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 86 insertions(+), 9 deletions(-)
-> 
-> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> index 4fb15fa96734..107c8284170e 100644
-> --- a/kernel/kallsyms.c
-> +++ b/kernel/kallsyms.c
-> @@ -50,6 +50,36 @@ extern const u16 kallsyms_token_index[] __weak;
->  
->  extern const unsigned int kallsyms_markers[] __weak;
->  
-> +static struct kmem_cache *symbol_cachep;
-> +
-> +struct symbol {
-> +	char		name[KSYM_NAME_LEN];
-> +	unsigned long	addr;
-> +	struct rb_node	rb_node;
-> +};
-> +
-> +static struct rb_root symbols_root = RB_ROOT;
-> +
-> +static struct symbol *find_symbol(const char *name)
-> +{
-> +	struct symbol *sym;
-> +	struct rb_node *n;
-> +	int err;
-> +
-> +	n = symbols_root.rb_node;
-> +	while (n) {
-> +		sym = rb_entry(n, struct symbol, rb_node);
-> +		err = strcmp(name, sym->name);
-> +		if (err < 0)
-> +			n = n->rb_left;
-> +		else if (err > 0)
-> +			n = n->rb_right;
-> +		else
-> +			return sym;
-> +	}
-> +	return NULL;
-> +}
-> +
->  /*
->   * Expand a compressed symbol data into the resulting uncompressed string,
->   * if uncompressed string is too long (>= maxlen), it will be truncated,
-> @@ -164,16 +194,12 @@ static unsigned long kallsyms_sym_address(int idx)
->  /* Lookup the address for this symbol. Returns 0 if not found. */
->  unsigned long kallsyms_lookup_name(const char *name)
->  {
-> -	char namebuf[KSYM_NAME_LEN];
-> -	unsigned long i;
-> -	unsigned int off;
-> +	struct symbol *sym;
->  
-> -	for (i = 0, off = 0; i < kallsyms_num_syms; i++) {
-> -		off = kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
-> +	sym = find_symbol(name);
-> +	if (sym)
-> +		return sym->addr;
->  
-> -		if (strcmp(namebuf, name) == 0)
-> -			return kallsyms_sym_address(i);
-> -	}
->  	return module_kallsyms_lookup_name(name);
->  }
->  
-> @@ -743,9 +769,60 @@ static const struct proc_ops kallsyms_proc_ops = {
->  	.proc_release	= seq_release_private,
->  };
->  
-> +static bool __init add_symbol(struct symbol *new)
-> +{
-> +	struct rb_node *parent = NULL;
-> +	struct rb_node **p;
-> +	struct symbol *sym;
-> +	int err;
-> +
-> +	p = &symbols_root.rb_node;
-> +
-> +	while (*p != NULL) {
-> +		parent = *p;
-> +		sym = rb_entry(parent, struct symbol, rb_node);
-> +		err = strcmp(new->name, sym->name);
-> +		if (err < 0)
-> +			p = &(*p)->rb_left;
-> +		else if (err > 0)
-> +			p = &(*p)->rb_right;
-> +		else
-> +			return false;
-> +	}
-> +
-> +	rb_link_node(&new->rb_node, parent, p);
-> +	rb_insert_color(&new->rb_node, &symbols_root);
-> +	return true;
-> +}
-> +
-> +static int __init kallsyms_name_search_init(void)
-> +{
-> +	bool sym_added = true;
-> +	struct symbol *sym;
-> +	unsigned int off;
-> +	unsigned long i;
-> +
-> +	symbol_cachep = KMEM_CACHE(symbol, SLAB_PANIC|SLAB_ACCOUNT);
-> +
-> +	for (i = 0, off = 0; i < kallsyms_num_syms; i++) {
-> +		if (sym_added) {
-> +			sym = kmem_cache_alloc(symbol_cachep, GFP_KERNEL);
-> +			if (!sym)
-> +				return -ENOMEM;
-> +		}
-> +		off = kallsyms_expand_symbol(off, sym->name, ARRAY_SIZE(sym->name));
-> +		sym->addr = kallsyms_sym_address(i);
-> +		sym_added = add_symbol(sym);
-> +	}
-> +
-> +	if (!sym_added)
-> +		kmem_cache_free(symbol_cachep, sym);
-> +	return 0;
-> +}
-> +
->  static int __init kallsyms_init(void)
->  {
->  	proc_create("kallsyms", 0444, NULL, &kallsyms_proc_ops);
-> -	return 0;
-> +	return kallsyms_name_search_init();
->  }
->  device_initcall(kallsyms_init);
-> -- 
-> 2.26.2
-> 
+diff --git a/configure b/configure
+index 307912aa..77f475d9 100755
+--- a/configure
++++ b/configure
+@@ -240,6 +240,51 @@ check_elf()
+     fi
+ }
+ 
++check_libbpf()
++{
++    if ${PKG_CONFIG} libbpf --exists || [ -n "$LIBBPF_DIR" ] ; then
++
++        if [ -n "$LIBBPF_DIR" ]; then
++            LIBBPF_CFLAGS="-I${LIBBPF_DIR}/include -L${LIBBPF_DIR}/lib64"
++            LIBBPF_LDLIBS="${LIBBPF_DIR}/lib64/libbpf.a -lz -lelf"
++        else
++            LIBBPF_CFLAGS=$(${PKG_CONFIG} libbpf --cflags)
++            LIBBPF_LDLIBS=$(${PKG_CONFIG} libbpf --libs)
++        fi
++
++        cat >$TMPDIR/libbpftest.c <<EOF
++#include <bpf/libbpf.h>
++int main(int argc, char **argv) {
++    void *ptr;
++    DECLARE_LIBBPF_OPTS(bpf_object_open_opts, opts, .relaxed_maps = true, .pin_root_path = "/path");
++    (void) bpf_object__open_file("file", &opts);
++    (void) bpf_map__name(ptr);
++    (void) bpf_map__ifindex(ptr);
++    (void) bpf_map__reuse_fd(ptr, 0);
++    (void) bpf_map__pin(ptr, "/path");
++    return 0;
++}
++EOF
++
++        if $CC -o $TMPDIR/libbpftest $TMPDIR/libbpftest.c $LIBBPF_CFLAGS -lbpf 2>&1; then
++            echo "HAVE_LIBBPF:=y" >>$CONFIG
++            echo 'CFLAGS += -DHAVE_LIBBPF ' $LIBBPF_CFLAGS >> $CONFIG
++            echo 'LDLIBS += ' $LIBBPF_LDLIBS >>$CONFIG
++            echo "yes"
++            return 0
++        fi
++    fi
++
++    echo "no"
++
++    # if set FORCE_LIBBPF but no libbpf support, just exist the config
++    # process to make sure we don't build without libbpf.
++    if [ -n "$FORCE_LIBBPF" ]; then
++	    echo "FORCE_LIBBPF set, but couldn't find a usable libbpf"
++	    exit 1
++    fi
++}
++
+ check_selinux()
+ # SELinux is a compile time option in the ss utility
+ {
+@@ -385,6 +430,9 @@ check_setns
+ echo -n "SELinux support: "
+ check_selinux
+ 
++echo -n "libbpf support: "
++check_libbpf
++
+ echo -n "ELF support: "
+ check_elf
+ 
+-- 
+2.25.4
 
