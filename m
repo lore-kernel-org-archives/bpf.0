@@ -2,186 +2,311 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAECFC4363A
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:00:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A7F0C388F7
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:00:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6B70020757
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:00:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B90A820757
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:00:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hV/Z2rqp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PLrzjJzw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387782AbgJ1XAC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 19:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60644 "EHLO
+        id S2389935AbgJ1XAS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 19:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731854AbgJ1W70 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:59:26 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD04C0613CF;
-        Wed, 28 Oct 2020 15:59:26 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id r10so733500pgb.10;
-        Wed, 28 Oct 2020 15:59:26 -0700 (PDT)
+        with ESMTP id S2387732AbgJ1XAR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 19:00:17 -0400
+Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A59FC0613CF;
+        Wed, 28 Oct 2020 16:00:17 -0700 (PDT)
+Received: by mail-vs1-xe44.google.com with SMTP id w25so475554vsk.9;
+        Wed, 28 Oct 2020 16:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qnI8nWNHxXfz/36ET+4hZk5JXm++Qwhi5Ah20jjyj2o=;
-        b=hV/Z2rqpW5/VZLyfKsj2Vk2Ds7oKV6R9pla5olRvc5RTDoG5/rGjkoUbNVNU7/xIbg
-         ou2gfoHRB39OMjQ6D9AnuaLT3YMQWts9HEX5k8IdVlB8tWTCah1i3qHKq9YQFq60G1sj
-         iDvuqiauiEIzJMKEunSgqpWxa6P1SWxNENV4OPIAiCvoFdcg9KD54hj1H6kBS8D1iPu6
-         vzgTtRWRcuHgv6fcNtQgvaejsIRhCozBcwFyeFdyBerKQXTi/zKXmLf6YWGFuZDyRwgE
-         5s53J9YYHAsxPhqHEYK3PhUsq7pfxMmkcb9ewrDC0cdKFGcBuJHGHfBgIA70IQq+JlmQ
-         PpHg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ctARgd5IeefW/xDEFZzb1NY2kFiOmkaVN6jb4VQWnGY=;
+        b=PLrzjJzwRFNojRi8jy55qv7BTPweCnOMSMk+Ol7VV2YvxManvupJmNNvMgGaujesOZ
+         HRKRAOl+mxj3YnZ1ORrIZ/62yhyrBDRiCG2LY7JDf8SihsNrdcO7MEyYbLjD6QRO7AQq
+         KziySVPDyskFCbXY+X7qwOPqVg3ynAcZ0BVimmg8nNPHdhsLd43olWNA3v6ck4SAoi+z
+         DLby4KSb1LwgcE0o4KQ0uoRMVr6HYDGGlnwu9aCOB+kbpDf+dvw1bhCJ9lwoMmI6cvEf
+         JTCF7m0Myf6inaqlKyjLHDjIB0Yg6MHpB4KzY5NcXF+++ScoO9twHW+C9WziI5d9mSse
+         60Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qnI8nWNHxXfz/36ET+4hZk5JXm++Qwhi5Ah20jjyj2o=;
-        b=AsB6knSCdSrKIJ/Zy9Gkgpt2t9Kzgab6tSIrnNexxv9m0C0J98ZQTS2T3E/AcDGXM9
-         v30DoOdkT4OOAAWn8pBJinEqPnF2JDvUcGNiQ98MFpFqXUerdKfyO0TGuqMsmsD2ooES
-         O4bK+c3XMYCgcgyY1RqUOeIE/lXBoW+HxB0bDgzdSsS8PCgOlvCAAR7FnKXZS27fcviZ
-         0vfjsgTAX97ZVDho2CMElks3orq8KljyZhZxmwMwbbKuGQw2jk/1mUyXSeiXlHt7/479
-         imYEWCEMom68Z3mhzcWYIT5FCsGQA4EYsq1dONJygO5zyrgBZTz6JvoO0k5/h9w1wVIm
-         ddDw==
-X-Gm-Message-State: AOAM530Qg1QEWaxZ8faGNKbNJdXT5ohVA7hp4KrOziKf4bn8LESEvf2x
-        E5skC1LttojwKWUk9g41MGs=
-X-Google-Smtp-Source: ABdhPJxb1pj/t22ch7rMjU86YmShVsQt9WxMBA837//MBQUyk8n9HbsoNTEppCMJr2PK4KUyuo9M1Q==
-X-Received: by 2002:a63:481d:: with SMTP id v29mr1401896pga.448.1603925965757;
-        Wed, 28 Oct 2020 15:59:25 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::4:1c8])
-        by smtp.gmail.com with ESMTPSA id nm11sm470323pjb.24.2020.10.28.15.59.23
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ctARgd5IeefW/xDEFZzb1NY2kFiOmkaVN6jb4VQWnGY=;
+        b=a+VvTThXg2ZUmRRwZhcRin6rCwPINlVHxVJYjWl3P0YxF2FSXSYNYYXRPXZ33clMlh
+         q5xW+irohfhXrf3IcX0x7lQu2hlnOP7p8De8CZSVU/UefkF/JHzLTXmfbzrGOqid1CTY
+         /38+QRBggND2vm1NM2gSlP4KQAgYm94XzE4/xAvBPl7lmAnLH6j277TZuz6zqYWHH6xv
+         K+iD5ONxsVf13tzMf+P+fI8T2CpPxzcf46uUaMLNdLk0Nkzedm4llgbE6xxvrZJw6ZPh
+         GoBijnlv9ezQzEVoO81eKvLmPG9eHHyvYEnuLXNiuI26pNlx7Z9CvZCdrWc12DBQO109
+         7Ixg==
+X-Gm-Message-State: AOAM530dBSVHcEtFOIwOMfuR0nj52mvo+xSYV4T8vxHw9uvvJGh8sBaC
+        foVhFaTsfn2o6VLCRkBq1hhqHi+I/e7tr+i/
+X-Google-Smtp-Source: ABdhPJy4JsZnLSuXFGGfGf5z9wYwEIBbyRNvXY0p7TXn6SDylWXjbgKrQDAWfIugPhofnBPsR2d//A==
+X-Received: by 2002:a62:7a8f:0:b029:163:d0b3:ac18 with SMTP id v137-20020a627a8f0000b0290163d0b3ac18mr7777212pfc.9.1603892115932;
+        Wed, 28 Oct 2020 06:35:15 -0700 (PDT)
+Received: from btopel-mobl.ger.intel.com ([192.55.55.43])
+        by smtp.gmail.com with ESMTPSA id q14sm5935393pjp.43.2020.10.28.06.35.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 15:59:25 -0700 (PDT)
-Date:   Wed, 28 Oct 2020 15:59:19 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <netdev@vger.kernel.org>,
-        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
-        <bpf@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH v2 1/2] bpf: don't rely on GCC __attribute__((optimize))
- to disable GCSE
-Message-ID: <20201028225919.6ydy3m2u4p7x3to7@ast-mbp.dhcp.thefacebook.com>
-References: <20201028171506.15682-1-ardb@kernel.org>
- <20201028171506.15682-2-ardb@kernel.org>
- <20201028213903.fvdjydadqt6tx765@ast-mbp.dhcp.thefacebook.com>
- <CAMj1kXFHcM-Jb+MwsLtB4NMUmMyAGGLeNGNLC9vTATot3NJLrA@mail.gmail.com>
+        Wed, 28 Oct 2020 06:35:15 -0700 (PDT)
+From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
+        maciej.fijalkowski@intel.com, sridhar.samudrala@intel.com,
+        jesse.brandeburg@intel.com, qi.z.zhang@intel.com, kuba@kernel.org,
+        edumazet@google.com, intel-wired-lan@lists.osuosl.org,
+        jonathan.lemon@gmail.com
+Subject: [RFC PATCH bpf-next 2/9] net: add SO_BUSY_POLL_BUDGET socket option
+Date:   Wed, 28 Oct 2020 14:34:30 +0100
+Message-Id: <20201028133437.212503-3-bjorn.topel@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201028133437.212503-1-bjorn.topel@gmail.com>
+References: <20201028133437.212503-1-bjorn.topel@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXFHcM-Jb+MwsLtB4NMUmMyAGGLeNGNLC9vTATot3NJLrA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Oct 28, 2020 at 11:15:04PM +0100, Ard Biesheuvel wrote:
-> On Wed, 28 Oct 2020 at 22:39, Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Wed, Oct 28, 2020 at 06:15:05PM +0100, Ard Biesheuvel wrote:
-> > > Commit 3193c0836 ("bpf: Disable GCC -fgcse optimization for
-> > > ___bpf_prog_run()") introduced a __no_fgcse macro that expands to a
-> > > function scope __attribute__((optimize("-fno-gcse"))), to disable a
-> > > GCC specific optimization that was causing trouble on x86 builds, and
-> > > was not expected to have any positive effect in the first place.
-> > >
-> > > However, as the GCC manual documents, __attribute__((optimize))
-> > > is not for production use, and results in all other optimization
-> > > options to be forgotten for the function in question. This can
-> > > cause all kinds of trouble, but in one particular reported case,
-> > > it causes -fno-asynchronous-unwind-tables to be disregarded,
-> > > resulting in .eh_frame info to be emitted for the function.
-> > >
-> > > This reverts commit 3193c0836, and instead, it disables the -fgcse
-> > > optimization for the entire source file, but only when building for
-> > > X86 using GCC with CONFIG_BPF_JIT_ALWAYS_ON disabled. Note that the
-> > > original commit states that CONFIG_RETPOLINE=n triggers the issue,
-> > > whereas CONFIG_RETPOLINE=y performs better without the optimization,
-> > > so it is kept disabled in both cases.
-> > >
-> > > Fixes: 3193c0836 ("bpf: Disable GCC -fgcse optimization for ___bpf_prog_run()")
-> > > Link: https://lore.kernel.org/lkml/CAMuHMdUg0WJHEcq6to0-eODpXPOywLot6UD2=GFHpzoj_hCoBQ@mail.gmail.com/
-> > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > > ---
-> > >  include/linux/compiler-gcc.h   | 2 --
-> > >  include/linux/compiler_types.h | 4 ----
-> > >  kernel/bpf/Makefile            | 6 +++++-
-> > >  kernel/bpf/core.c              | 2 +-
-> > >  4 files changed, 6 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
-> > > index d1e3c6896b71..5deb37024574 100644
-> > > --- a/include/linux/compiler-gcc.h
-> > > +++ b/include/linux/compiler-gcc.h
-> > > @@ -175,5 +175,3 @@
-> > >  #else
-> > >  #define __diag_GCC_8(s)
-> > >  #endif
-> > > -
-> > > -#define __no_fgcse __attribute__((optimize("-fno-gcse")))
-> >
-> > See my reply in the other thread.
-> > I prefer
-> > -#define __no_fgcse __attribute__((optimize("-fno-gcse")))
-> > +#define __no_fgcse __attribute__((optimize("-fno-gcse,-fno-omit-frame-pointer")))
-> >
-> > Potentially with -fno-asynchronous-unwind-tables.
-> >
-> 
-> So how would that work? arm64 has the following:
-> 
-> KBUILD_CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables
-> 
-> ifeq ($(CONFIG_SHADOW_CALL_STACK), y)
-> KBUILD_CFLAGS += -ffixed-x18
-> endif
-> 
-> and it adds -fpatchable-function-entry=2 for compilers that support
-> it, but only when CONFIG_FTRACE is enabled.
+From: Björn Töpel <bjorn.topel@intel.com>
 
-I think you're assuming that GCC drops all flags when it sees __attribute__((optimize)).
-That's not the case.
+This option lets a user set a per socket NAPI budget for
+busy-polling. If the options is not set, it will use the default of 8.
 
-> Also, as Nick pointed out, -fno-gcse does not work on Clang.
+Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+---
+ arch/alpha/include/uapi/asm/socket.h  |  1 +
+ arch/mips/include/uapi/asm/socket.h   |  1 +
+ arch/parisc/include/uapi/asm/socket.h |  1 +
+ arch/sparc/include/uapi/asm/socket.h  |  1 +
+ fs/eventpoll.c                        |  3 ++-
+ include/net/busy_poll.h               |  6 ++++--
+ include/net/sock.h                    |  1 +
+ include/uapi/asm-generic/socket.h     |  1 +
+ net/core/dev.c                        | 20 +++++++++-----------
+ net/core/sock.c                       | 10 ++++++++++
+ 10 files changed, 31 insertions(+), 14 deletions(-)
 
-yes and what's the point?
-#define __no_fgcse is GCC only. clang doesn't need this workaround.
+diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
+index 0f776668fb09..4ea972b7b711 100644
+--- a/arch/alpha/include/uapi/asm/socket.h
++++ b/arch/alpha/include/uapi/asm/socket.h
+@@ -125,6 +125,7 @@
+ #define SO_DETACH_REUSEPORT_BPF 68
+ 
+ #define SO_BIAS_BUSY_POLL	69
++#define SO_BUSY_POLL_BUDGET	70
+ 
+ #if !defined(__KERNEL__)
+ 
+diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
+index d23984731504..13eaffbfbe50 100644
+--- a/arch/mips/include/uapi/asm/socket.h
++++ b/arch/mips/include/uapi/asm/socket.h
+@@ -136,6 +136,7 @@
+ #define SO_DETACH_REUSEPORT_BPF 68
+ 
+ #define SO_BIAS_BUSY_POLL	69
++#define SO_BUSY_POLL_BUDGET	70
+ 
+ #if !defined(__KERNEL__)
+ 
+diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
+index 49469713ed2a..036e42dac6b3 100644
+--- a/arch/parisc/include/uapi/asm/socket.h
++++ b/arch/parisc/include/uapi/asm/socket.h
+@@ -117,6 +117,7 @@
+ #define SO_DETACH_REUSEPORT_BPF 0x4042
+ 
+ #define SO_BIAS_BUSY_POLL	0x4043
++#define SO_BUSY_POLL_BUDGET	0x4044
+ 
+ #if !defined(__KERNEL__)
+ 
+diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
+index 009aba6f7a54..bc482dc93bd4 100644
+--- a/arch/sparc/include/uapi/asm/socket.h
++++ b/arch/sparc/include/uapi/asm/socket.h
+@@ -118,6 +118,7 @@
+ #define SO_DETACH_REUSEPORT_BPF  0x0047
+ 
+ #define SO_BIAS_BUSY_POLL	 0x0048
++#define SO_BUSY_POLL_BUDGET	 0x0049
+ 
+ #if !defined(__KERNEL__)
+ 
+diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+index 4df61129566d..fa00a0640264 100644
+--- a/fs/eventpoll.c
++++ b/fs/eventpoll.c
+@@ -397,7 +397,8 @@ static void ep_busy_loop(struct eventpoll *ep, int nonblock)
+ 	unsigned int napi_id = READ_ONCE(ep->napi_id);
+ 
+ 	if ((napi_id >= MIN_NAPI_ID) && net_busy_loop_on())
+-		napi_busy_loop(napi_id, nonblock ? NULL : ep_busy_loop_end, ep);
++		napi_busy_loop(napi_id, nonblock ? NULL : ep_busy_loop_end, ep,
++			       BUSY_POLL_BUDGET);
+ }
+ 
+ static inline void ep_reset_busy_poll_napi_id(struct eventpoll *ep)
+diff --git a/include/net/busy_poll.h b/include/net/busy_poll.h
+index 9738923ed17b..c6c413d3824d 100644
+--- a/include/net/busy_poll.h
++++ b/include/net/busy_poll.h
+@@ -25,6 +25,7 @@
+ 
+ /* Biased busy-poll watchdog timeout in ms */
+ #define BIASED_BUSY_POLL_TIMEOUT 200
++#define BUSY_POLL_BUDGET 8
+ 
+ #ifdef CONFIG_NET_RX_BUSY_POLL
+ 
+@@ -46,7 +47,7 @@ bool sk_busy_loop_end(void *p, unsigned long start_time);
+ 
+ void napi_busy_loop(unsigned int napi_id,
+ 		    bool (*loop_end)(void *, unsigned long),
+-		    void *loop_end_arg);
++		    void *loop_end_arg, u16 budget);
+ 
+ #else /* CONFIG_NET_RX_BUSY_POLL */
+ static inline unsigned long net_busy_loop_on(void)
+@@ -119,7 +120,8 @@ static inline void sk_busy_loop(struct sock *sk, int nonblock)
+ 
+ 	if (napi_id >= MIN_NAPI_ID) {
+ 		__sk_bias_busy_poll(sk, napi_id);
+-		napi_busy_loop(napi_id, nonblock ? NULL : sk_busy_loop_end, sk);
++		napi_busy_loop(napi_id, nonblock ? NULL : sk_busy_loop_end, sk,
++			       sk->sk_busy_poll_budget ?: BUSY_POLL_BUDGET);
+ 	}
+ #endif
+ }
+diff --git a/include/net/sock.h b/include/net/sock.h
+index cf71834fb601..3caf53b6bd71 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -481,6 +481,7 @@ struct sock {
+ 	kuid_t			sk_uid;
+ #ifdef CONFIG_NET_RX_BUSY_POLL
+ 	u8			sk_bias_busy_poll;
++	u16			sk_busy_poll_budget;
+ #endif
+ 	struct pid		*sk_peer_pid;
+ 	const struct cred	*sk_peer_cred;
+diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
+index 8a2b37ccd9d5..9dc1f35fe77f 100644
+--- a/include/uapi/asm-generic/socket.h
++++ b/include/uapi/asm-generic/socket.h
+@@ -120,6 +120,7 @@
+ #define SO_DETACH_REUSEPORT_BPF 68
+ 
+ #define SO_BIAS_BUSY_POLL	69
++#define SO_BUSY_POLL_BUDGET	70
+ 
+ #if !defined(__KERNEL__)
+ 
+diff --git a/net/core/dev.c b/net/core/dev.c
+index a29e4c4a35f6..b34520acaa7f 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -6496,9 +6496,7 @@ static struct napi_struct *napi_by_id(unsigned int napi_id)
+ 
+ #if defined(CONFIG_NET_RX_BUSY_POLL)
+ 
+-#define BUSY_POLL_BUDGET 8
+-
+-static void busy_poll_stop(struct napi_struct *napi, void *have_poll_lock)
++static void busy_poll_stop(struct napi_struct *napi, void *have_poll_lock, u16 budget)
+ {
+ 	int rc;
+ 
+@@ -6530,14 +6528,14 @@ static void busy_poll_stop(struct napi_struct *napi, void *have_poll_lock)
+ 	/* All we really want here is to re-enable device interrupts.
+ 	 * Ideally, a new ndo_busy_poll_stop() could avoid another round.
+ 	 */
+-	rc = napi->poll(napi, BUSY_POLL_BUDGET);
++	rc = napi->poll(napi, budget);
+ 	/* We can't gro_normal_list() here, because napi->poll() might have
+ 	 * rearmed the napi (napi_complete_done()) in which case it could
+ 	 * already be running on another CPU.
+ 	 */
+-	trace_napi_poll(napi, rc, BUSY_POLL_BUDGET);
++	trace_napi_poll(napi, rc, budget);
+ 	netpoll_poll_unlock(have_poll_lock);
+-	if (rc == BUSY_POLL_BUDGET) {
++	if (rc == budget) {
+ 		/* As the whole budget was spent, we still own the napi so can
+ 		 * safely handle the rx_list.
+ 		 */
+@@ -6549,7 +6547,7 @@ static void busy_poll_stop(struct napi_struct *napi, void *have_poll_lock)
+ 
+ void napi_busy_loop(unsigned int napi_id,
+ 		    bool (*loop_end)(void *, unsigned long),
+-		    void *loop_end_arg)
++		    void *loop_end_arg, u16 budget)
+ {
+ 	unsigned long start_time = loop_end ? busy_loop_current_time() : 0;
+ 	int (*napi_poll)(struct napi_struct *napi, int budget);
+@@ -6591,8 +6589,8 @@ void napi_busy_loop(unsigned int napi_id,
+ 					      HRTIMER_MODE_REL_PINNED);
+ 			}
+ 		}
+-		work = napi_poll(napi, BUSY_POLL_BUDGET);
+-		trace_napi_poll(napi, work, BUSY_POLL_BUDGET);
++		work = napi_poll(napi, budget);
++		trace_napi_poll(napi, work, budget);
+ 		gro_normal_list(napi);
+ count:
+ 		if (work > 0)
+@@ -6605,7 +6603,7 @@ void napi_busy_loop(unsigned int napi_id,
+ 
+ 		if (unlikely(need_resched())) {
+ 			if (napi_poll)
+-				busy_poll_stop(napi, have_poll_lock);
++				busy_poll_stop(napi, have_poll_lock, budget);
+ 			preempt_enable();
+ 			rcu_read_unlock();
+ 			cond_resched();
+@@ -6616,7 +6614,7 @@ void napi_busy_loop(unsigned int napi_id,
+ 		cpu_relax();
+ 	}
+ 	if (napi_poll)
+-		busy_poll_stop(napi, have_poll_lock);
++		busy_poll_stop(napi, have_poll_lock, budget);
+ 	preempt_enable();
+ out:
+ 	rcu_read_unlock();
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 686eb5549b79..799125de4add 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -1165,6 +1165,16 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
+ 		else
+ 			sk->sk_bias_busy_poll = valbool;
+ 		break;
++	case SO_BUSY_POLL_BUDGET:
++		if ((val > sk->sk_busy_poll_budget) && !capable(CAP_NET_ADMIN))
++			ret = -EPERM;
++		else {
++			if (val < 0)
++				ret = -EINVAL;
++			else
++				sk->sk_busy_poll_budget = val;
++		}
++		break;
+ #endif
+ 
+ 	case SO_MAX_PACING_RATE:
+-- 
+2.27.0
 
-> Every architecture will have a different set of requirements here. And
-> there is no way of knowing which -f options are disregarded when you
-> use the function attribute.
-> 
-> So how on earth are you going to #define __no-fgcse correctly for
-> every configuration imaginable?
-> 
-> > __attribute__((optimize("")) is not as broken as you're claiming to be.
-> > It has quirky gcc internal logic, but it's still widely used
-> > in many software projects.
-> 
-> So it's fine because it is only a little bit broken? I'm sorry, but
-> that makes no sense whatsoever.
-> 
-> If you insist on sticking with this broken construct, can you please
-> make it GCC/x86-only at least?
-
-I'm totally fine with making
-#define __no_fgcse __attribute__((optimize("-fno-gcse,-fno-omit-frame-pointer")))
-to be gcc+x86 only.
-I'd like to get rid of it, but objtool is not smart enough to understand
-generated asm without it.
