@@ -2,110 +2,140 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3F66C56201
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 21:42:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 681E7C55179
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 21:45:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 845A920E65
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 21:42:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 005062473C
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 21:45:15 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G7ns8Zoc"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="q4p0Xili";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="TxXn50Ig"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726107AbgJ1VmY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 17:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47322 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726060AbgJ1VmV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 17:42:21 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A1F1C0613CF;
-        Wed, 28 Oct 2020 14:42:21 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id ev17so545217qvb.3;
-        Wed, 28 Oct 2020 14:42:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PaBzC30HOBjtiicG4b94s8rB0FZ//7C+5qGGQBot4JU=;
-        b=G7ns8ZocQtdrC3VvjvNb65BbakAUXQIP4hqAkOGtj9f9xUxhSjqo+9G4Sk56HbkyVB
-         M0gYDzfe4MG2GjmEwm6EU+g/WQAGdZdtuFLtjG/VzTDqfBRqgfjOFRiOReqYmvqK/7PJ
-         CNIUg1RztQi3+VAhZpj8KNKpJaidtjy5/uxLZOlvzhCg6Wujffbz0GW3I4rO5zXPvkA+
-         xiOKywlh9ZTy0l1xSgFmSvQGs4aOSVVaXzF8p/I7jXbteu6RyBZ+DzOFjo1Id86X+K3C
-         qOpop4LIWfN9RhfdloSHpUDi1whPE5K1b8sfug4H37sVbZn2rBdkTWFdRewtzcQicyes
-         q+iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PaBzC30HOBjtiicG4b94s8rB0FZ//7C+5qGGQBot4JU=;
-        b=VF8cj+ZDhPMfw1Dy42plnix7k2Nz48/RuRWGYwNUBvHYCR7fkp1ItgDHa2cfxwdpkb
-         TXErS0fCB/wmrnpd0AGLkSSpSN44CjBlPazDouovhCAKbzKCD5klyQyZzOkTj1VHejoL
-         /ZQfxnZwpXDkyZknGDlMgqm5o+aS47lfqJMcAHbpSo7nlieGb3/W+bCqrjhOAbt7hnb5
-         MfRLhC/x0WJkZcLxgulQE5bDFgErVJMkBVYfb6WiVfFzMFzMsKCexdEE3x9jcFHuTsB2
-         skyXO+6ufQfj5SifFKF8cjrypIBCoC5Q3vID8XtKUW+wpRsX3SdgzQSOw4GJkEKV3VNb
-         JMzw==
-X-Gm-Message-State: AOAM532o7gOBqHOpUhn5e9QbBnq6WzSFuTAuIE2j83DdNwFYyQ4wrFf/
-        CpPRW1a7+QGn3YFRKDDc+u4PEjrQwsUt7Q==
-X-Google-Smtp-Source: ABdhPJy5XpztrCTp8VUvsv7HKU1FXPy9ndgvwBuDUDOupJzjeP2IIp0AscOZUG9p373OZp7VyCYpxw==
-X-Received: by 2002:aa7:95a6:0:b029:155:336c:3494 with SMTP id a6-20020aa795a60000b0290155336c3494mr1132721pfk.17.1603919833214;
-        Wed, 28 Oct 2020 14:17:13 -0700 (PDT)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::4:1c8])
-        by smtp.gmail.com with ESMTPSA id q189sm492911pfc.94.2020.10.28.14.17.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 14:17:12 -0700 (PDT)
-Date:   Wed, 28 Oct 2020 14:17:06 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Hangbin Liu <haliu@redhat.com>
-Cc:     Stephen Hemminger <stephen@networkplumber.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Ahern <dsahern@gmail.com>,
+        id S1727147AbgJ1VpJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 17:45:09 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:14000 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726259AbgJ1VpD (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 28 Oct 2020 17:45:03 -0400
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09S1NG5o010394;
+        Tue, 27 Oct 2020 18:28:21 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=WsM+lcS2bLEBZmF9n0F/D+H0IWH4imIpvFtzJ+gdvrs=;
+ b=q4p0Xili46tdFzr/Na3UOG9qXjnu3se+e+w9tehlMdiYbBACdrNcr91LfiOXpLL7mdpV
+ XdJ5qSrl4wQt9JrvyYHkjbVlKO3nUbPPLOclidEBCV8yNOzZbDlID5Rs+N0kIpMZZS/l
+ oE13cBj0l/0+LrCfAjxZJCM8tJ21WnI8C1U= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 34d4hpq0fu-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 27 Oct 2020 18:28:21 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 27 Oct 2020 18:27:23 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Nq31DN9l1ZnCa3wrXHtLj7jtnsTYzlzIHgKrZAgmforHCQ3GU8WQMX4C5whybTdkudd+vSOZmAEij5/Vqj3wqzTJoixFAk8yCfUGcUAjqEzJ90pioDioIfN7t/twPRr8A/eduz9+FtExDpd8mMpJSizSoQbpjryJ19plDy7aVYNKxXLStZP+CgZTlLCoLjgsfzh8lCxc9f+V4B28fqYvQMSjunxNswkeHAf2iZrwhlMUP/WATKf2gb+s5X08SnzpQe1ODIY+XsmPG2FmOdsG5xyctGzhy+OysGGxYkr2J8MxEwlrBNDArwGAO8K/FWWITgIaDi9yIpWR6qqbyv3KYQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WsM+lcS2bLEBZmF9n0F/D+H0IWH4imIpvFtzJ+gdvrs=;
+ b=mBQ7hGzsKHw/sWd8cmkCYvdfDnOKRtU5nImVSEUL3SUxMhjlw+5OE2ip2Dz3VgXj/Elcg+MiheYbkEh+nzJbmAU5MbNc9e2/vVKQWhamx6BecS3/3wfIssJEGo9K14cwPI2Atj+1RSuI0Ythk+r/9lLxmmdJ3WWF4ssDDv6Xw+a/uv3hduwpLOPmwTfEzZ5QUwrBEGqpHcAMAfeD/f5Z3PlmwpqeWDbYhtpPw2QTEapaBkyKtNvxHvm6ZuI6QcQ9sjSTaKiEJstYO9GTVxnLvV64WvQTLh9NuX/P9kp6kBxTf4PamFDs6Jr0JSW7aLjiQoBXZxvE+aNoAR9fdDR64Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WsM+lcS2bLEBZmF9n0F/D+H0IWH4imIpvFtzJ+gdvrs=;
+ b=TxXn50IgOMkTccqGXGYRNYiX98gp8NVPXhWR0Bc402FMoHSPy82zfjGQsd5D2+pmdnx8ZwTYGNhBIv3uKXwKf+NlK243qx/iE8k07sFaub6HzW3/2V4onBnEiCqjyxWLFJ693W/zFd3bxwdbMMBD0skmCcQOgFu0EpDEpbTLeCM=
+Authentication-Results: chromium.org; dkim=none (message not signed)
+ header.d=none;chromium.org; dmarc=none action=none header.from=fb.com;
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
+ by BYAPR15MB3512.namprd15.prod.outlook.com (2603:10b6:a03:10a::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3477.20; Wed, 28 Oct
+ 2020 01:27:21 +0000
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::c13c:fca9:5e04:9bfb]) by BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::c13c:fca9:5e04:9bfb%3]) with mapi id 15.20.3477.028; Wed, 28 Oct 2020
+ 01:27:21 +0000
+Date:   Tue, 27 Oct 2020 18:27:15 -0700
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     KP Singh <kpsingh@chromium.org>
+CC:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Miller <davem@davemloft.net>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Jiri Benc <jbenc@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: Re: [PATCHv2 iproute2-next 0/5] iproute2: add libbpf support
-Message-ID: <20201028211706.zahkpijmf5zdtrbi@ast-mbp.dhcp.thefacebook.com>
-References: <20201023033855.3894509-1-haliu@redhat.com>
- <20201028132529.3763875-1-haliu@redhat.com>
-MIME-Version: 1.0
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
+        Hao Luo <haoluo@google.com>
+Subject: Re: [PATCH bpf-next 2/5] bpf: Implement get_current_task_btf and
+ RET_PTR_TO_BTF_ID
+Message-ID: <20201028012715.z57277wl45odspbs@kafai-mbp>
+References: <20201027170317.2011119-1-kpsingh@chromium.org>
+ <20201027170317.2011119-3-kpsingh@chromium.org>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20201028132529.3763875-1-haliu@redhat.com>
+In-Reply-To: <20201027170317.2011119-3-kpsingh@chromium.org>
+X-Originating-IP: [2620:10d:c090:400::4:9723]
+X-ClientProxiedBy: MWHPR15CA0055.namprd15.prod.outlook.com
+ (2603:10b6:301:4c::17) To BY5PR15MB3571.namprd15.prod.outlook.com
+ (2603:10b6:a03:1f6::32)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from kafai-mbp (2620:10d:c090:400::4:9723) by MWHPR15CA0055.namprd15.prod.outlook.com (2603:10b6:301:4c::17) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18 via Frontend Transport; Wed, 28 Oct 2020 01:27:20 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c7674bc1-facc-4ddc-e628-08d87ae09df7
+X-MS-TrafficTypeDiagnostic: BYAPR15MB3512:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB3512C5FE4F5BD7BE447EDF74D5170@BYAPR15MB3512.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kyoAe7KJqRa5zad4lAQywB8kxhensHrd5gLK7i0F1DAZ5paVmYc5eGCAkACRVw44wTXMBcT5vIS14a+8AGypLstAgUMpAhh7QT0Sbh9QYawm0xTCLXJUnD/KRqYX8fUhaY8KIqfAH00vCj2qHhZGgjIUcv8qQBl2MpzGGh6CienYDNx537gBy307WFo2WO8shsFzR8W+v5xrzSNE8dXY/QWuul7GwcL9W/mvwq5J/iuTGCmErzKk/BqrGYa3OO8z1EX1n9RTihDXWejB1LQUxdClHh4+5bFZoQ99rC3gYLJ8P2xJZOAwqkFDRdo4L25T
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(346002)(366004)(376002)(39860400002)(396003)(6666004)(316002)(8676002)(66476007)(66556008)(9686003)(5660300002)(66946007)(86362001)(2906002)(4326008)(16526019)(8936002)(4744005)(1076003)(6496006)(33716001)(6916009)(186003)(52116002)(478600001)(54906003)(83380400001)(55016002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: ZFRud/GvEWsAn0EGpsHV7RYpONi3eD68EFcUkMNZ3qnPTY95Ho5N9PF05drJMTbM2qdQfE2w3+N8WVzOtz4mDEVbFClyqj9zHJ097w0BUZaBAGo+B1DvCs1EDunCtXt/QsYSSShRjXL96lsm6QioygcqhQ/nfQt7il/tiOOMeJu9vACM46Jkb7pi3KbCTYEJNERor1CYA+zHQ52BZByakrYNKGMwLSsvESP2JeEOzUF3dZZyRL8BTPML9EmeQVGjJ4y0JgSSm70G2XEcKnW8vwlCni9vLScCHAZrKsDwtZLwjkwj955Eufp4ipso2sr4OarqLNktIJP/5BLJ1wcPv2iSDOZG2WERP9kfEE3K0zeJePCZxHqdjUAw48eo7rigCLjhlk5OHUx3bQLz/7M7lpI0jl11vkA1Fy9tghrGFvMkSZVO2CTTo3hRl94plMDxdDkbm+qGxzkWIdg/TEveaCQlCEV2sNR4bXFI3QUIg4Z+I66pdT3JDv+uuIWXmcuOWXcQbw6WZx5vIdljpp7sGLAcXty7SsoOM73PR0n7LX0Fh96ALr2D5iToAz35ebVQ83H0L2X0fsJnNfXqUzR94dBu8uDXGej36Mazvg+08UGPiV4o9N1/bZHegjWJKlF4U5gbLUICeRr/lLSv5hdA2E2OGlK2r2toEuQDNM9PL1LQ1dQI4/aBXrEMxgKynwpH
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7674bc1-facc-4ddc-e628-08d87ae09df7
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2020 01:27:21.6706
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yS+/F8kG9htwIKjn8DtoJpblw60YLqbwLekZJlJzxbjZ9W08y35lksOSaP/DJTfZ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3512
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-10-27_17:2020-10-26,2020-10-27 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0 mlxscore=0
+ suspectscore=1 impostorscore=0 adultscore=0 priorityscore=1501
+ clxscore=1015 mlxlogscore=993 phishscore=0 lowpriorityscore=0 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010280004
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Oct 28, 2020 at 09:25:24PM +0800, Hangbin Liu wrote:
-> This series converts iproute2 to use libbpf for loading and attaching
-> BPF programs when it is available. This means that iproute2 will
-> correctly process BTF information and support the new-style BTF-defined
-> maps, while keeping compatibility with the old internal map definition
-> syntax.
-> 
-> This is achieved by checking for libbpf at './configure' time, and using
-> it if available. By default the system libbpf will be used, but static
-> linking against a custom libbpf version can be achieved by passing
-> LIBBPF_DIR to configure. FORCE_LIBBPF can be set to force configure to
-> abort if no suitable libbpf is found (useful for automatic packaging
-> that wants to enforce the dependency).
-> 
-> The old iproute2 bpf code is kept and will be used if no suitable libbpf
-> is available. When using libbpf, wrapper code ensures that iproute2 will
-> still understand the old map definition format, including populating
-> map-in-map and tail call maps before load.
-> 
-> The examples in bpf/examples are kept, and a separate set of examples
-> are added with BTF-based map definitions for those examples where this
-> is possible (libbpf doesn't currently support declaratively populating
-> tail call maps).
+On Tue, Oct 27, 2020 at 06:03:14PM +0100, KP Singh wrote:
+[ ... ]
 
-Awesome to see this work continue! Thank you.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index b0790876694f..eb0aef85fc11 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -493,7 +493,8 @@ static bool is_ptr_cast_function(enum bpf_func_id func_id)
+>  		func_id == BPF_FUNC_skc_to_tcp6_sock ||
+>  		func_id == BPF_FUNC_skc_to_udp6_sock ||
+>  		func_id == BPF_FUNC_skc_to_tcp_timewait_sock ||
+> -		func_id == BPF_FUNC_skc_to_tcp_request_sock;
+> +		func_id == BPF_FUNC_skc_to_tcp_request_sock ||
+> +		func_id == BPF_FUNC_get_current_task_btf;
+This change is not needed.  The helper does not take any
+argument or do any type casting.
+
