@@ -2,1307 +2,226 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BDBE5C4363A
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:02:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 59B44C56202
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:07:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5977120EDD
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:02:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603922568;
-	bh=Id1CoooLkQIG6aaDVBs3GXbLYU7CsAhw17UGJ0Qqpdc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=k3deCBZd1tl1Uc+HrB/9xSckQ2umL5ju7sqSyihYRmQTCeMhSVTe3mi+TqM2B1D6D
-	 TuQ7XVx6/Yx4LGUn9tGNMWR3DNsuI790xVxnj5gVmYGhgncbZjdYNszn8rjO9XmLv9
-	 6YUiKsFJzk84fLB8q0tvrWpRBtVemKmmcXiRoDkI=
+	by mail.kernel.org (Postfix) with ESMTP id 05ADF2473C
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:07:57 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UeGIUCYf"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729518AbgJ1WC3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 18:02:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50728 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729511AbgJ1WCZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:02:25 -0400
-Received: from e123331-lin.nice.arm.com (lfbn-nic-1-188-42.w2-15.abo.wanadoo.fr [2.15.37.42])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BD4C224800;
-        Wed, 28 Oct 2020 17:15:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603905320;
-        bh=Id1CoooLkQIG6aaDVBs3GXbLYU7CsAhw17UGJ0Qqpdc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TclSE7LJDqdLP0/8CH9JVyTRZ1b9IScciLRD/lDExb/STHWmSiwLUxStlTihpgiRv
-         8ivTljK5RW0HGuXdbnHNhP8arv80E08F5icL+T7ZybRTA+kngqsIw9usiSTsJUZSzQ
-         VkesGyuP2HqmK8QeSSSmh0BdKioZOU/6OzFR1CCk=
-From:   Ard Biesheuvel <ardb@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Arvind Sankar <nivedita@alum.mit.edu>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH v2 2/2] bpf: move interpreter into separate source file
-Date:   Wed, 28 Oct 2020 18:15:06 +0100
-Message-Id: <20201028171506.15682-3-ardb@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20201028171506.15682-1-ardb@kernel.org>
-References: <20201028171506.15682-1-ardb@kernel.org>
+        id S1730011AbgJ1WH4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730322AbgJ1WHx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:07:53 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F180C0613D1
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 15:07:52 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id k18so690959wmj.5
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 15:07:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3343xBR6Dh8ReqfCLw87tn1NRZEnZI2QE0JKqvpe3RQ=;
+        b=UeGIUCYf4rMMvGrBFcfgqoeNyTLPK74/k2cpwpIKm1lI6HnZFLbu5AbAmBinLPJyR6
+         netuM+8vftn2IsJGrQ96qtdRUNT71tjGrij2fhuVL3lsXxELreIwA/VtpgjbY76O+Q71
+         LOQJwNPsqK1L0+RpGf9PcgsjKQF/g1IU5uE6L92K8bREKCvZ3limjOxNKsvsL6Rv0Ggj
+         b+SsguMqzNsnQy9VAyajs0kfL6rTuK91IiwPErOUNIwqtPS5PDj+9AxChl+AgzylZysI
+         bMGqKovsK/i4MEcHEtO+jiTcPnZN8dGVccHntm/hznTqQo5nqgYhNn/jXwOfrpwr7gx0
+         WL3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3343xBR6Dh8ReqfCLw87tn1NRZEnZI2QE0JKqvpe3RQ=;
+        b=dPB29EbyXmKkDix+nVQWgTTzw2ibvNYy+Q486lLUliGXVv+5nWG5ef/nNhZO+LGVy+
+         vn0mcCW6t5bM1Cs1HukcKh7+2oow7Qg5dxHs5k1Fx7puiHf02KRYgo/HT00M1P6+Jw6s
+         iUWKVPV9D83ebID+4yQ2Z/QgPUZmZiwt7ICOszm1Skn/Rmr9iqXZ33aLUZdeolnbk4GV
+         e3cYXYgEUFBCv/K/dvlBkG8SBwd1ruMJp7qvyYzpx7vj/bwUjhOoR6B4sqHpJgIUB2a5
+         dHaI50q7lEejsHdo/4V+7LZQtecnJLT37r5gUnKUMCa3YgOeNYZO8BfD0PpooAB+GK4Z
+         MrlQ==
+X-Gm-Message-State: AOAM530sOcDaxAJnGGkWf6kvY83fsSYCmaYgGldPGuEax7gm+C4LrUGc
+        O4BrVOEr3g36HOY17+ODzA0t5fIWpmX5mg==
+X-Google-Smtp-Source: ABdhPJwRmPZ19EMONpRJ9E2HxVwN/78IR48z/vUl35sS6mMnJKvxqelK2haM2QP6Ghu6uFetH9OYxQ==
+X-Received: by 2002:a1c:9dcc:: with SMTP id g195mr6853796wme.113.1603877258354;
+        Wed, 28 Oct 2020 02:27:38 -0700 (PDT)
+Received: from apalos.home (athedsl-246545.home.otenet.gr. [85.73.10.175])
+        by smtp.gmail.com with ESMTPSA id 4sm5971871wrp.58.2020.10.28.02.27.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2020 02:27:37 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 11:27:34 +0200
+From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
+To:     Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
+        brouer@redhat.com
+Subject: Re: [PATCH net-next 1/4] net: xdp: introduce bulking for xdp tx
+ return path
+Message-ID: <20201028092734.GA51291@apalos.home>
+References: <cover.1603824486.git.lorenzo@kernel.org>
+ <7495b5ac96b0fd2bf5ab79b12e01bf0ee0fff803.1603824486.git.lorenzo@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7495b5ac96b0fd2bf5ab79b12e01bf0ee0fff803.1603824486.git.lorenzo@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-To reduce the impact of disabling certain compiler optimizations that
-are only needed for the interpreter, move it into its own source file,
-and apply the compiler command line override only to this file.
+Hi Lorenzo,
 
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
- include/linux/filter.h |   1 +
- kernel/bpf/Makefile    |   7 +-
- kernel/bpf/core.c      | 567 ------------------
- kernel/bpf/interp.c    | 601 ++++++++++++++++++++
- 4 files changed, 605 insertions(+), 571 deletions(-)
+On Tue, Oct 27, 2020 at 08:04:07PM +0100, Lorenzo Bianconi wrote:
+> Introduce bulking capability in xdp tx return path (XDP_REDIRECT).
+> xdp_return_frame is usually run inside the driver NAPI tx completion
+> loop so it is possible batch it.
+> Current implementation considers only page_pool memory model.
+> Convert mvneta driver to xdp_return_frame_bulk APIs.
+> 
+> Suggested-by: Jesper Dangaard Brouer <brouer@redhat.com>
+> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> ---
+>  drivers/net/ethernet/marvell/mvneta.c |  5 ++-
+>  include/net/xdp.h                     |  9 +++++
+>  net/core/xdp.c                        | 51 +++++++++++++++++++++++++++
+>  3 files changed, 64 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
+> index 54b0bf574c05..43ab8a73900e 100644
+> --- a/drivers/net/ethernet/marvell/mvneta.c
+> +++ b/drivers/net/ethernet/marvell/mvneta.c
+> @@ -1834,8 +1834,10 @@ static void mvneta_txq_bufs_free(struct mvneta_port *pp,
+>  				 struct netdev_queue *nq, bool napi)
+>  {
+>  	unsigned int bytes_compl = 0, pkts_compl = 0;
+> +	struct xdp_frame_bulk bq;
+>  	int i;
+>  
+> +	bq.xa = NULL;
+>  	for (i = 0; i < num; i++) {
+>  		struct mvneta_tx_buf *buf = &txq->buf[txq->txq_get_index];
+>  		struct mvneta_tx_desc *tx_desc = txq->descs +
+> @@ -1857,9 +1859,10 @@ static void mvneta_txq_bufs_free(struct mvneta_port *pp,
+>  			if (napi && buf->type == MVNETA_TYPE_XDP_TX)
+>  				xdp_return_frame_rx_napi(buf->xdpf);
+>  			else
+> -				xdp_return_frame(buf->xdpf);
+> +				xdp_return_frame_bulk(buf->xdpf, &bq);
+>  		}
+>  	}
+> +	xdp_flush_frame_bulk(&bq);
+>  
+>  	netdev_tx_completed_queue(nq, pkts_compl, bytes_compl);
+>  }
+> diff --git a/include/net/xdp.h b/include/net/xdp.h
+> index 3814fb631d52..9567110845ef 100644
+> --- a/include/net/xdp.h
+> +++ b/include/net/xdp.h
+> @@ -104,6 +104,12 @@ struct xdp_frame {
+>  	struct net_device *dev_rx; /* used by cpumap */
+>  };
+>  
+> +#define XDP_BULK_QUEUE_SIZE	16
+> +struct xdp_frame_bulk {
+> +	void *q[XDP_BULK_QUEUE_SIZE];
+> +	int count;
+> +	void *xa;
+> +};
+>  
+>  static inline struct skb_shared_info *
+>  xdp_get_shared_info_from_frame(struct xdp_frame *frame)
+> @@ -194,6 +200,9 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct xdp_buff *xdp)
+>  void xdp_return_frame(struct xdp_frame *xdpf);
+>  void xdp_return_frame_rx_napi(struct xdp_frame *xdpf);
+>  void xdp_return_buff(struct xdp_buff *xdp);
+> +void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq);
+> +void xdp_return_frame_bulk(struct xdp_frame *xdpf,
+> +			   struct xdp_frame_bulk *bq);
+>  
+>  /* When sending xdp_frame into the network stack, then there is no
+>   * return point callback, which is needed to release e.g. DMA-mapping
+> diff --git a/net/core/xdp.c b/net/core/xdp.c
+> index 48aba933a5a8..93eabd789246 100644
+> --- a/net/core/xdp.c
+> +++ b/net/core/xdp.c
+> @@ -380,6 +380,57 @@ void xdp_return_frame_rx_napi(struct xdp_frame *xdpf)
+>  }
+>  EXPORT_SYMBOL_GPL(xdp_return_frame_rx_napi);
+>  
+> +void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq)
+> +{
+> +	struct xdp_mem_allocator *xa = bq->xa;
+> +	int i;
+> +
+> +	if (unlikely(!xa))
+> +		return;
+> +
+> +	for (i = 0; i < bq->count; i++) {
+> +		struct page *page = virt_to_head_page(bq->q[i]);
+> +
+> +		page_pool_put_full_page(xa->page_pool, page, false);
+> +	}
+> +	bq->count = 0;
+> +}
+> +EXPORT_SYMBOL_GPL(xdp_flush_frame_bulk);
+> +
+> +void xdp_return_frame_bulk(struct xdp_frame *xdpf,
+> +			   struct xdp_frame_bulk *bq)
+> +{
+> +	struct xdp_mem_info *mem = &xdpf->mem;
+> +	struct xdp_mem_allocator *xa, *nxa;
+> +
+> +	if (mem->type != MEM_TYPE_PAGE_POOL) {
+> +		__xdp_return(xdpf->data, &xdpf->mem, false);
+> +		return;
+> +	}
+> +
+> +	rcu_read_lock();
+> +
+> +	xa = bq->xa;
+> +	if (unlikely(!xa || mem->id != xa->mem.id)) {
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 72d62cbc1578..5e027cddcbea 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -841,6 +841,7 @@ static inline int sk_filter(struct sock *sk, struct sk_buff *skb)
- }
- 
- struct bpf_prog *bpf_prog_select_runtime(struct bpf_prog *fp, int *err);
-+void bpf_prog_select_func(struct bpf_prog *fp);
- void bpf_prog_free(struct bpf_prog *fp);
- 
- bool bpf_opcode_in_insntable(u8 code);
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index c1b9f71ee6aa..a1573be0d94b 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -1,10 +1,9 @@
- # SPDX-License-Identifier: GPL-2.0
--obj-y := core.o
--ifneq ($(CONFIG_BPF_JIT_ALWAYS_ON),y)
-+obj-y := core.o interp.o
-+
- # ___bpf_prog_run() needs GCSE disabled on x86; see 3193c0836f203 for details
- cflags-nogcse-$(CONFIG_X86)$(CONFIG_CC_IS_GCC) := -fno-gcse
--endif
--CFLAGS_core.o += $(call cc-disable-warning, override-init) $(cflags-nogcse-yy)
-+CFLAGS_interp.o += $(call cc-disable-warning, override-init) $(cflags-nogcse-yy)
- 
- obj-$(CONFIG_BPF_SYSCALL) += syscall.o verifier.o inode.o helpers.o tnum.o bpf_iter.o map_iter.o task_iter.o prog_iter.o
- obj-$(CONFIG_BPF_SYSCALL) += hashtab.o arraymap.o percpu_freelist.o bpf_lru_list.o lpm_trie.o map_in_map.o
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 55454d2278b1..81d874b85240 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -34,28 +34,6 @@
- #include <linux/log2.h>
- #include <asm/unaligned.h>
- 
--/* Registers */
--#define BPF_R0	regs[BPF_REG_0]
--#define BPF_R1	regs[BPF_REG_1]
--#define BPF_R2	regs[BPF_REG_2]
--#define BPF_R3	regs[BPF_REG_3]
--#define BPF_R4	regs[BPF_REG_4]
--#define BPF_R5	regs[BPF_REG_5]
--#define BPF_R6	regs[BPF_REG_6]
--#define BPF_R7	regs[BPF_REG_7]
--#define BPF_R8	regs[BPF_REG_8]
--#define BPF_R9	regs[BPF_REG_9]
--#define BPF_R10	regs[BPF_REG_10]
--
--/* Named registers */
--#define DST	regs[insn->dst_reg]
--#define SRC	regs[insn->src_reg]
--#define FP	regs[BPF_REG_FP]
--#define AX	regs[BPF_REG_AX]
--#define ARG1	regs[BPF_REG_ARG1]
--#define CTX	regs[BPF_REG_CTX]
--#define IMM	insn->imm
--
- /* No hurry in this branch
-  *
-  * Exported for the bpf jit load helper.
-@@ -1196,540 +1174,6 @@ noinline u64 __bpf_call_base(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5)
- }
- EXPORT_SYMBOL_GPL(__bpf_call_base);
- 
--/* All UAPI available opcodes. */
--#define BPF_INSN_MAP(INSN_2, INSN_3)		\
--	/* 32 bit ALU operations. */		\
--	/*   Register based. */			\
--	INSN_3(ALU, ADD,  X),			\
--	INSN_3(ALU, SUB,  X),			\
--	INSN_3(ALU, AND,  X),			\
--	INSN_3(ALU, OR,   X),			\
--	INSN_3(ALU, LSH,  X),			\
--	INSN_3(ALU, RSH,  X),			\
--	INSN_3(ALU, XOR,  X),			\
--	INSN_3(ALU, MUL,  X),			\
--	INSN_3(ALU, MOV,  X),			\
--	INSN_3(ALU, ARSH, X),			\
--	INSN_3(ALU, DIV,  X),			\
--	INSN_3(ALU, MOD,  X),			\
--	INSN_2(ALU, NEG),			\
--	INSN_3(ALU, END, TO_BE),		\
--	INSN_3(ALU, END, TO_LE),		\
--	/*   Immediate based. */		\
--	INSN_3(ALU, ADD,  K),			\
--	INSN_3(ALU, SUB,  K),			\
--	INSN_3(ALU, AND,  K),			\
--	INSN_3(ALU, OR,   K),			\
--	INSN_3(ALU, LSH,  K),			\
--	INSN_3(ALU, RSH,  K),			\
--	INSN_3(ALU, XOR,  K),			\
--	INSN_3(ALU, MUL,  K),			\
--	INSN_3(ALU, MOV,  K),			\
--	INSN_3(ALU, ARSH, K),			\
--	INSN_3(ALU, DIV,  K),			\
--	INSN_3(ALU, MOD,  K),			\
--	/* 64 bit ALU operations. */		\
--	/*   Register based. */			\
--	INSN_3(ALU64, ADD,  X),			\
--	INSN_3(ALU64, SUB,  X),			\
--	INSN_3(ALU64, AND,  X),			\
--	INSN_3(ALU64, OR,   X),			\
--	INSN_3(ALU64, LSH,  X),			\
--	INSN_3(ALU64, RSH,  X),			\
--	INSN_3(ALU64, XOR,  X),			\
--	INSN_3(ALU64, MUL,  X),			\
--	INSN_3(ALU64, MOV,  X),			\
--	INSN_3(ALU64, ARSH, X),			\
--	INSN_3(ALU64, DIV,  X),			\
--	INSN_3(ALU64, MOD,  X),			\
--	INSN_2(ALU64, NEG),			\
--	/*   Immediate based. */		\
--	INSN_3(ALU64, ADD,  K),			\
--	INSN_3(ALU64, SUB,  K),			\
--	INSN_3(ALU64, AND,  K),			\
--	INSN_3(ALU64, OR,   K),			\
--	INSN_3(ALU64, LSH,  K),			\
--	INSN_3(ALU64, RSH,  K),			\
--	INSN_3(ALU64, XOR,  K),			\
--	INSN_3(ALU64, MUL,  K),			\
--	INSN_3(ALU64, MOV,  K),			\
--	INSN_3(ALU64, ARSH, K),			\
--	INSN_3(ALU64, DIV,  K),			\
--	INSN_3(ALU64, MOD,  K),			\
--	/* Call instruction. */			\
--	INSN_2(JMP, CALL),			\
--	/* Exit instruction. */			\
--	INSN_2(JMP, EXIT),			\
--	/* 32-bit Jump instructions. */		\
--	/*   Register based. */			\
--	INSN_3(JMP32, JEQ,  X),			\
--	INSN_3(JMP32, JNE,  X),			\
--	INSN_3(JMP32, JGT,  X),			\
--	INSN_3(JMP32, JLT,  X),			\
--	INSN_3(JMP32, JGE,  X),			\
--	INSN_3(JMP32, JLE,  X),			\
--	INSN_3(JMP32, JSGT, X),			\
--	INSN_3(JMP32, JSLT, X),			\
--	INSN_3(JMP32, JSGE, X),			\
--	INSN_3(JMP32, JSLE, X),			\
--	INSN_3(JMP32, JSET, X),			\
--	/*   Immediate based. */		\
--	INSN_3(JMP32, JEQ,  K),			\
--	INSN_3(JMP32, JNE,  K),			\
--	INSN_3(JMP32, JGT,  K),			\
--	INSN_3(JMP32, JLT,  K),			\
--	INSN_3(JMP32, JGE,  K),			\
--	INSN_3(JMP32, JLE,  K),			\
--	INSN_3(JMP32, JSGT, K),			\
--	INSN_3(JMP32, JSLT, K),			\
--	INSN_3(JMP32, JSGE, K),			\
--	INSN_3(JMP32, JSLE, K),			\
--	INSN_3(JMP32, JSET, K),			\
--	/* Jump instructions. */		\
--	/*   Register based. */			\
--	INSN_3(JMP, JEQ,  X),			\
--	INSN_3(JMP, JNE,  X),			\
--	INSN_3(JMP, JGT,  X),			\
--	INSN_3(JMP, JLT,  X),			\
--	INSN_3(JMP, JGE,  X),			\
--	INSN_3(JMP, JLE,  X),			\
--	INSN_3(JMP, JSGT, X),			\
--	INSN_3(JMP, JSLT, X),			\
--	INSN_3(JMP, JSGE, X),			\
--	INSN_3(JMP, JSLE, X),			\
--	INSN_3(JMP, JSET, X),			\
--	/*   Immediate based. */		\
--	INSN_3(JMP, JEQ,  K),			\
--	INSN_3(JMP, JNE,  K),			\
--	INSN_3(JMP, JGT,  K),			\
--	INSN_3(JMP, JLT,  K),			\
--	INSN_3(JMP, JGE,  K),			\
--	INSN_3(JMP, JLE,  K),			\
--	INSN_3(JMP, JSGT, K),			\
--	INSN_3(JMP, JSLT, K),			\
--	INSN_3(JMP, JSGE, K),			\
--	INSN_3(JMP, JSLE, K),			\
--	INSN_3(JMP, JSET, K),			\
--	INSN_2(JMP, JA),			\
--	/* Store instructions. */		\
--	/*   Register based. */			\
--	INSN_3(STX, MEM,  B),			\
--	INSN_3(STX, MEM,  H),			\
--	INSN_3(STX, MEM,  W),			\
--	INSN_3(STX, MEM,  DW),			\
--	INSN_3(STX, XADD, W),			\
--	INSN_3(STX, XADD, DW),			\
--	/*   Immediate based. */		\
--	INSN_3(ST, MEM, B),			\
--	INSN_3(ST, MEM, H),			\
--	INSN_3(ST, MEM, W),			\
--	INSN_3(ST, MEM, DW),			\
--	/* Load instructions. */		\
--	/*   Register based. */			\
--	INSN_3(LDX, MEM, B),			\
--	INSN_3(LDX, MEM, H),			\
--	INSN_3(LDX, MEM, W),			\
--	INSN_3(LDX, MEM, DW),			\
--	/*   Immediate based. */		\
--	INSN_3(LD, IMM, DW)
--
--bool bpf_opcode_in_insntable(u8 code)
--{
--#define BPF_INSN_2_TBL(x, y)    [BPF_##x | BPF_##y] = true
--#define BPF_INSN_3_TBL(x, y, z) [BPF_##x | BPF_##y | BPF_##z] = true
--	static const bool public_insntable[256] = {
--		[0 ... 255] = false,
--		/* Now overwrite non-defaults ... */
--		BPF_INSN_MAP(BPF_INSN_2_TBL, BPF_INSN_3_TBL),
--		/* UAPI exposed, but rewritten opcodes. cBPF carry-over. */
--		[BPF_LD | BPF_ABS | BPF_B] = true,
--		[BPF_LD | BPF_ABS | BPF_H] = true,
--		[BPF_LD | BPF_ABS | BPF_W] = true,
--		[BPF_LD | BPF_IND | BPF_B] = true,
--		[BPF_LD | BPF_IND | BPF_H] = true,
--		[BPF_LD | BPF_IND | BPF_W] = true,
--	};
--#undef BPF_INSN_3_TBL
--#undef BPF_INSN_2_TBL
--	return public_insntable[code];
--}
--
--#ifndef CONFIG_BPF_JIT_ALWAYS_ON
--u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
--{
--	memset(dst, 0, size);
--	return -EFAULT;
--}
--
--/**
-- *	__bpf_prog_run - run eBPF program on a given context
-- *	@regs: is the array of MAX_BPF_EXT_REG eBPF pseudo-registers
-- *	@insn: is the array of eBPF instructions
-- *	@stack: is the eBPF storage stack
-- *
-- * Decode and execute eBPF instructions.
-- */
--static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
--{
--#define BPF_INSN_2_LBL(x, y)    [BPF_##x | BPF_##y] = &&x##_##y
--#define BPF_INSN_3_LBL(x, y, z) [BPF_##x | BPF_##y | BPF_##z] = &&x##_##y##_##z
--	static const void * const jumptable[256] __annotate_jump_table = {
--		[0 ... 255] = &&default_label,
--		/* Now overwrite non-defaults ... */
--		BPF_INSN_MAP(BPF_INSN_2_LBL, BPF_INSN_3_LBL),
--		/* Non-UAPI available opcodes. */
--		[BPF_JMP | BPF_CALL_ARGS] = &&JMP_CALL_ARGS,
--		[BPF_JMP | BPF_TAIL_CALL] = &&JMP_TAIL_CALL,
--		[BPF_LDX | BPF_PROBE_MEM | BPF_B] = &&LDX_PROBE_MEM_B,
--		[BPF_LDX | BPF_PROBE_MEM | BPF_H] = &&LDX_PROBE_MEM_H,
--		[BPF_LDX | BPF_PROBE_MEM | BPF_W] = &&LDX_PROBE_MEM_W,
--		[BPF_LDX | BPF_PROBE_MEM | BPF_DW] = &&LDX_PROBE_MEM_DW,
--	};
--#undef BPF_INSN_3_LBL
--#undef BPF_INSN_2_LBL
--	u32 tail_call_cnt = 0;
--
--#define CONT	 ({ insn++; goto select_insn; })
--#define CONT_JMP ({ insn++; goto select_insn; })
--
--select_insn:
--	goto *jumptable[insn->code];
--
--	/* ALU */
--#define ALU(OPCODE, OP)			\
--	ALU64_##OPCODE##_X:		\
--		DST = DST OP SRC;	\
--		CONT;			\
--	ALU_##OPCODE##_X:		\
--		DST = (u32) DST OP (u32) SRC;	\
--		CONT;			\
--	ALU64_##OPCODE##_K:		\
--		DST = DST OP IMM;		\
--		CONT;			\
--	ALU_##OPCODE##_K:		\
--		DST = (u32) DST OP (u32) IMM;	\
--		CONT;
--
--	ALU(ADD,  +)
--	ALU(SUB,  -)
--	ALU(AND,  &)
--	ALU(OR,   |)
--	ALU(LSH, <<)
--	ALU(RSH, >>)
--	ALU(XOR,  ^)
--	ALU(MUL,  *)
--#undef ALU
--	ALU_NEG:
--		DST = (u32) -DST;
--		CONT;
--	ALU64_NEG:
--		DST = -DST;
--		CONT;
--	ALU_MOV_X:
--		DST = (u32) SRC;
--		CONT;
--	ALU_MOV_K:
--		DST = (u32) IMM;
--		CONT;
--	ALU64_MOV_X:
--		DST = SRC;
--		CONT;
--	ALU64_MOV_K:
--		DST = IMM;
--		CONT;
--	LD_IMM_DW:
--		DST = (u64) (u32) insn[0].imm | ((u64) (u32) insn[1].imm) << 32;
--		insn++;
--		CONT;
--	ALU_ARSH_X:
--		DST = (u64) (u32) (((s32) DST) >> SRC);
--		CONT;
--	ALU_ARSH_K:
--		DST = (u64) (u32) (((s32) DST) >> IMM);
--		CONT;
--	ALU64_ARSH_X:
--		(*(s64 *) &DST) >>= SRC;
--		CONT;
--	ALU64_ARSH_K:
--		(*(s64 *) &DST) >>= IMM;
--		CONT;
--	ALU64_MOD_X:
--		div64_u64_rem(DST, SRC, &AX);
--		DST = AX;
--		CONT;
--	ALU_MOD_X:
--		AX = (u32) DST;
--		DST = do_div(AX, (u32) SRC);
--		CONT;
--	ALU64_MOD_K:
--		div64_u64_rem(DST, IMM, &AX);
--		DST = AX;
--		CONT;
--	ALU_MOD_K:
--		AX = (u32) DST;
--		DST = do_div(AX, (u32) IMM);
--		CONT;
--	ALU64_DIV_X:
--		DST = div64_u64(DST, SRC);
--		CONT;
--	ALU_DIV_X:
--		AX = (u32) DST;
--		do_div(AX, (u32) SRC);
--		DST = (u32) AX;
--		CONT;
--	ALU64_DIV_K:
--		DST = div64_u64(DST, IMM);
--		CONT;
--	ALU_DIV_K:
--		AX = (u32) DST;
--		do_div(AX, (u32) IMM);
--		DST = (u32) AX;
--		CONT;
--	ALU_END_TO_BE:
--		switch (IMM) {
--		case 16:
--			DST = (__force u16) cpu_to_be16(DST);
--			break;
--		case 32:
--			DST = (__force u32) cpu_to_be32(DST);
--			break;
--		case 64:
--			DST = (__force u64) cpu_to_be64(DST);
--			break;
--		}
--		CONT;
--	ALU_END_TO_LE:
--		switch (IMM) {
--		case 16:
--			DST = (__force u16) cpu_to_le16(DST);
--			break;
--		case 32:
--			DST = (__force u32) cpu_to_le32(DST);
--			break;
--		case 64:
--			DST = (__force u64) cpu_to_le64(DST);
--			break;
--		}
--		CONT;
--
--	/* CALL */
--	JMP_CALL:
--		/* Function call scratches BPF_R1-BPF_R5 registers,
--		 * preserves BPF_R6-BPF_R9, and stores return value
--		 * into BPF_R0.
--		 */
--		BPF_R0 = (__bpf_call_base + insn->imm)(BPF_R1, BPF_R2, BPF_R3,
--						       BPF_R4, BPF_R5);
--		CONT;
--
--	JMP_CALL_ARGS:
--		BPF_R0 = (__bpf_call_base_args + insn->imm)(BPF_R1, BPF_R2,
--							    BPF_R3, BPF_R4,
--							    BPF_R5,
--							    insn + insn->off + 1);
--		CONT;
--
--	JMP_TAIL_CALL: {
--		struct bpf_map *map = (struct bpf_map *) (unsigned long) BPF_R2;
--		struct bpf_array *array = container_of(map, struct bpf_array, map);
--		struct bpf_prog *prog;
--		u32 index = BPF_R3;
--
--		if (unlikely(index >= array->map.max_entries))
--			goto out;
--		if (unlikely(tail_call_cnt > MAX_TAIL_CALL_CNT))
--			goto out;
--
--		tail_call_cnt++;
--
--		prog = READ_ONCE(array->ptrs[index]);
--		if (!prog)
--			goto out;
--
--		/* ARG1 at this point is guaranteed to point to CTX from
--		 * the verifier side due to the fact that the tail call is
--		 * handled like a helper, that is, bpf_tail_call_proto,
--		 * where arg1_type is ARG_PTR_TO_CTX.
--		 */
--		insn = prog->insnsi;
--		goto select_insn;
--out:
--		CONT;
--	}
--	JMP_JA:
--		insn += insn->off;
--		CONT;
--	JMP_EXIT:
--		return BPF_R0;
--	/* JMP */
--#define COND_JMP(SIGN, OPCODE, CMP_OP)				\
--	JMP_##OPCODE##_X:					\
--		if ((SIGN##64) DST CMP_OP (SIGN##64) SRC) {	\
--			insn += insn->off;			\
--			CONT_JMP;				\
--		}						\
--		CONT;						\
--	JMP32_##OPCODE##_X:					\
--		if ((SIGN##32) DST CMP_OP (SIGN##32) SRC) {	\
--			insn += insn->off;			\
--			CONT_JMP;				\
--		}						\
--		CONT;						\
--	JMP_##OPCODE##_K:					\
--		if ((SIGN##64) DST CMP_OP (SIGN##64) IMM) {	\
--			insn += insn->off;			\
--			CONT_JMP;				\
--		}						\
--		CONT;						\
--	JMP32_##OPCODE##_K:					\
--		if ((SIGN##32) DST CMP_OP (SIGN##32) IMM) {	\
--			insn += insn->off;			\
--			CONT_JMP;				\
--		}						\
--		CONT;
--	COND_JMP(u, JEQ, ==)
--	COND_JMP(u, JNE, !=)
--	COND_JMP(u, JGT, >)
--	COND_JMP(u, JLT, <)
--	COND_JMP(u, JGE, >=)
--	COND_JMP(u, JLE, <=)
--	COND_JMP(u, JSET, &)
--	COND_JMP(s, JSGT, >)
--	COND_JMP(s, JSLT, <)
--	COND_JMP(s, JSGE, >=)
--	COND_JMP(s, JSLE, <=)
--#undef COND_JMP
--	/* STX and ST and LDX*/
--#define LDST(SIZEOP, SIZE)						\
--	STX_MEM_##SIZEOP:						\
--		*(SIZE *)(unsigned long) (DST + insn->off) = SRC;	\
--		CONT;							\
--	ST_MEM_##SIZEOP:						\
--		*(SIZE *)(unsigned long) (DST + insn->off) = IMM;	\
--		CONT;							\
--	LDX_MEM_##SIZEOP:						\
--		DST = *(SIZE *)(unsigned long) (SRC + insn->off);	\
--		CONT;
--
--	LDST(B,   u8)
--	LDST(H,  u16)
--	LDST(W,  u32)
--	LDST(DW, u64)
--#undef LDST
--#define LDX_PROBE(SIZEOP, SIZE)							\
--	LDX_PROBE_MEM_##SIZEOP:							\
--		bpf_probe_read_kernel(&DST, SIZE, (const void *)(long) (SRC + insn->off));	\
--		CONT;
--	LDX_PROBE(B,  1)
--	LDX_PROBE(H,  2)
--	LDX_PROBE(W,  4)
--	LDX_PROBE(DW, 8)
--#undef LDX_PROBE
--
--	STX_XADD_W: /* lock xadd *(u32 *)(dst_reg + off16) += src_reg */
--		atomic_add((u32) SRC, (atomic_t *)(unsigned long)
--			   (DST + insn->off));
--		CONT;
--	STX_XADD_DW: /* lock xadd *(u64 *)(dst_reg + off16) += src_reg */
--		atomic64_add((u64) SRC, (atomic64_t *)(unsigned long)
--			     (DST + insn->off));
--		CONT;
--
--	default_label:
--		/* If we ever reach this, we have a bug somewhere. Die hard here
--		 * instead of just returning 0; we could be somewhere in a subprog,
--		 * so execution could continue otherwise which we do /not/ want.
--		 *
--		 * Note, verifier whitelists all opcodes in bpf_opcode_in_insntable().
--		 */
--		pr_warn("BPF interpreter: unknown opcode %02x\n", insn->code);
--		BUG_ON(1);
--		return 0;
--}
--
--#define PROG_NAME(stack_size) __bpf_prog_run##stack_size
--#define DEFINE_BPF_PROG_RUN(stack_size) \
--static unsigned int PROG_NAME(stack_size)(const void *ctx, const struct bpf_insn *insn) \
--{ \
--	u64 stack[stack_size / sizeof(u64)]; \
--	u64 regs[MAX_BPF_EXT_REG]; \
--\
--	FP = (u64) (unsigned long) &stack[ARRAY_SIZE(stack)]; \
--	ARG1 = (u64) (unsigned long) ctx; \
--	return ___bpf_prog_run(regs, insn, stack); \
--}
--
--#define PROG_NAME_ARGS(stack_size) __bpf_prog_run_args##stack_size
--#define DEFINE_BPF_PROG_RUN_ARGS(stack_size) \
--static u64 PROG_NAME_ARGS(stack_size)(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5, \
--				      const struct bpf_insn *insn) \
--{ \
--	u64 stack[stack_size / sizeof(u64)]; \
--	u64 regs[MAX_BPF_EXT_REG]; \
--\
--	FP = (u64) (unsigned long) &stack[ARRAY_SIZE(stack)]; \
--	BPF_R1 = r1; \
--	BPF_R2 = r2; \
--	BPF_R3 = r3; \
--	BPF_R4 = r4; \
--	BPF_R5 = r5; \
--	return ___bpf_prog_run(regs, insn, stack); \
--}
--
--#define EVAL1(FN, X) FN(X)
--#define EVAL2(FN, X, Y...) FN(X) EVAL1(FN, Y)
--#define EVAL3(FN, X, Y...) FN(X) EVAL2(FN, Y)
--#define EVAL4(FN, X, Y...) FN(X) EVAL3(FN, Y)
--#define EVAL5(FN, X, Y...) FN(X) EVAL4(FN, Y)
--#define EVAL6(FN, X, Y...) FN(X) EVAL5(FN, Y)
--
--EVAL6(DEFINE_BPF_PROG_RUN, 32, 64, 96, 128, 160, 192);
--EVAL6(DEFINE_BPF_PROG_RUN, 224, 256, 288, 320, 352, 384);
--EVAL4(DEFINE_BPF_PROG_RUN, 416, 448, 480, 512);
--
--EVAL6(DEFINE_BPF_PROG_RUN_ARGS, 32, 64, 96, 128, 160, 192);
--EVAL6(DEFINE_BPF_PROG_RUN_ARGS, 224, 256, 288, 320, 352, 384);
--EVAL4(DEFINE_BPF_PROG_RUN_ARGS, 416, 448, 480, 512);
--
--#define PROG_NAME_LIST(stack_size) PROG_NAME(stack_size),
--
--static unsigned int (*interpreters[])(const void *ctx,
--				      const struct bpf_insn *insn) = {
--EVAL6(PROG_NAME_LIST, 32, 64, 96, 128, 160, 192)
--EVAL6(PROG_NAME_LIST, 224, 256, 288, 320, 352, 384)
--EVAL4(PROG_NAME_LIST, 416, 448, 480, 512)
--};
--#undef PROG_NAME_LIST
--#define PROG_NAME_LIST(stack_size) PROG_NAME_ARGS(stack_size),
--static u64 (*interpreters_args[])(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5,
--				  const struct bpf_insn *insn) = {
--EVAL6(PROG_NAME_LIST, 32, 64, 96, 128, 160, 192)
--EVAL6(PROG_NAME_LIST, 224, 256, 288, 320, 352, 384)
--EVAL4(PROG_NAME_LIST, 416, 448, 480, 512)
--};
--#undef PROG_NAME_LIST
--
--void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
--{
--	stack_depth = max_t(u32, stack_depth, 1);
--	insn->off = (s16) insn->imm;
--	insn->imm = interpreters_args[(round_up(stack_depth, 32) / 32) - 1] -
--		__bpf_call_base_args;
--	insn->code = BPF_JMP | BPF_CALL_ARGS;
--}
--
--#else
--static unsigned int __bpf_prog_ret0_warn(const void *ctx,
--					 const struct bpf_insn *insn)
--{
--	/* If this handler ever gets executed, then BPF_JIT_ALWAYS_ON
--	 * is not working properly, so warn about it!
--	 */
--	WARN_ON_ONCE(1);
--	return 0;
--}
--#endif
--
- bool bpf_prog_array_compatible(struct bpf_array *array,
- 			       const struct bpf_prog *fp)
- {
-@@ -1774,17 +1218,6 @@ static int bpf_check_tail_call(const struct bpf_prog *fp)
- 	return ret;
- }
- 
--static void bpf_prog_select_func(struct bpf_prog *fp)
--{
--#ifndef CONFIG_BPF_JIT_ALWAYS_ON
--	u32 stack_depth = max_t(u32, fp->aux->stack_depth, 1);
--
--	fp->bpf_func = interpreters[(round_up(stack_depth, 32) / 32) - 1];
--#else
--	fp->bpf_func = __bpf_prog_ret0_warn;
--#endif
--}
--
- /**
-  *	bpf_prog_select_runtime - select exec runtime for BPF program
-  *	@fp: bpf_prog populated with internal BPF program
-diff --git a/kernel/bpf/interp.c b/kernel/bpf/interp.c
-new file mode 100644
-index 000000000000..793ab5b2d62b
---- /dev/null
-+++ b/kernel/bpf/interp.c
-@@ -0,0 +1,601 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Linux Socket Filter - Kernel level socket filtering
-+ *
-+ * Based on the design of the Berkeley Packet Filter. The new
-+ * internal format has been designed by PLUMgrid:
-+ *
-+ *	Copyright (c) 2011 - 2014 PLUMgrid, http://plumgrid.com
-+ *
-+ * Authors:
-+ *
-+ *	Jay Schulist <jschlst@samba.org>
-+ *	Alexei Starovoitov <ast@plumgrid.com>
-+ *	Daniel Borkmann <dborkman@redhat.com>
-+ *
-+ * Andi Kleen - Fix a few bad bugs and races.
-+ * Kris Katterjohn - Added many additional checks in bpf_check_classic()
-+ */
-+
-+#include <uapi/linux/btf.h>
-+#include <linux/filter.h>
-+#include <linux/skbuff.h>
-+#include <linux/vmalloc.h>
-+#include <linux/random.h>
-+#include <linux/moduleloader.h>
-+#include <linux/bpf.h>
-+#include <linux/btf.h>
-+#include <linux/objtool.h>
-+#include <linux/rbtree_latch.h>
-+#include <linux/kallsyms.h>
-+#include <linux/rcupdate.h>
-+#include <linux/perf_event.h>
-+#include <linux/extable.h>
-+#include <linux/log2.h>
-+#include <asm/unaligned.h>
-+
-+/* Registers */
-+#define BPF_R0	regs[BPF_REG_0]
-+#define BPF_R1	regs[BPF_REG_1]
-+#define BPF_R2	regs[BPF_REG_2]
-+#define BPF_R3	regs[BPF_REG_3]
-+#define BPF_R4	regs[BPF_REG_4]
-+#define BPF_R5	regs[BPF_REG_5]
-+#define BPF_R6	regs[BPF_REG_6]
-+#define BPF_R7	regs[BPF_REG_7]
-+#define BPF_R8	regs[BPF_REG_8]
-+#define BPF_R9	regs[BPF_REG_9]
-+#define BPF_R10	regs[BPF_REG_10]
-+
-+/* Named registers */
-+#define DST	regs[insn->dst_reg]
-+#define SRC	regs[insn->src_reg]
-+#define FP	regs[BPF_REG_FP]
-+#define AX	regs[BPF_REG_AX]
-+#define ARG1	regs[BPF_REG_ARG1]
-+#define CTX	regs[BPF_REG_CTX]
-+#define IMM	insn->imm
-+
-+/* All UAPI available opcodes. */
-+#define BPF_INSN_MAP(INSN_2, INSN_3)		\
-+	/* 32 bit ALU operations. */		\
-+	/*   Register based. */			\
-+	INSN_3(ALU, ADD,  X),			\
-+	INSN_3(ALU, SUB,  X),			\
-+	INSN_3(ALU, AND,  X),			\
-+	INSN_3(ALU, OR,   X),			\
-+	INSN_3(ALU, LSH,  X),			\
-+	INSN_3(ALU, RSH,  X),			\
-+	INSN_3(ALU, XOR,  X),			\
-+	INSN_3(ALU, MUL,  X),			\
-+	INSN_3(ALU, MOV,  X),			\
-+	INSN_3(ALU, ARSH, X),			\
-+	INSN_3(ALU, DIV,  X),			\
-+	INSN_3(ALU, MOD,  X),			\
-+	INSN_2(ALU, NEG),			\
-+	INSN_3(ALU, END, TO_BE),		\
-+	INSN_3(ALU, END, TO_LE),		\
-+	/*   Immediate based. */		\
-+	INSN_3(ALU, ADD,  K),			\
-+	INSN_3(ALU, SUB,  K),			\
-+	INSN_3(ALU, AND,  K),			\
-+	INSN_3(ALU, OR,   K),			\
-+	INSN_3(ALU, LSH,  K),			\
-+	INSN_3(ALU, RSH,  K),			\
-+	INSN_3(ALU, XOR,  K),			\
-+	INSN_3(ALU, MUL,  K),			\
-+	INSN_3(ALU, MOV,  K),			\
-+	INSN_3(ALU, ARSH, K),			\
-+	INSN_3(ALU, DIV,  K),			\
-+	INSN_3(ALU, MOD,  K),			\
-+	/* 64 bit ALU operations. */		\
-+	/*   Register based. */			\
-+	INSN_3(ALU64, ADD,  X),			\
-+	INSN_3(ALU64, SUB,  X),			\
-+	INSN_3(ALU64, AND,  X),			\
-+	INSN_3(ALU64, OR,   X),			\
-+	INSN_3(ALU64, LSH,  X),			\
-+	INSN_3(ALU64, RSH,  X),			\
-+	INSN_3(ALU64, XOR,  X),			\
-+	INSN_3(ALU64, MUL,  X),			\
-+	INSN_3(ALU64, MOV,  X),			\
-+	INSN_3(ALU64, ARSH, X),			\
-+	INSN_3(ALU64, DIV,  X),			\
-+	INSN_3(ALU64, MOD,  X),			\
-+	INSN_2(ALU64, NEG),			\
-+	/*   Immediate based. */		\
-+	INSN_3(ALU64, ADD,  K),			\
-+	INSN_3(ALU64, SUB,  K),			\
-+	INSN_3(ALU64, AND,  K),			\
-+	INSN_3(ALU64, OR,   K),			\
-+	INSN_3(ALU64, LSH,  K),			\
-+	INSN_3(ALU64, RSH,  K),			\
-+	INSN_3(ALU64, XOR,  K),			\
-+	INSN_3(ALU64, MUL,  K),			\
-+	INSN_3(ALU64, MOV,  K),			\
-+	INSN_3(ALU64, ARSH, K),			\
-+	INSN_3(ALU64, DIV,  K),			\
-+	INSN_3(ALU64, MOD,  K),			\
-+	/* Call instruction. */			\
-+	INSN_2(JMP, CALL),			\
-+	/* Exit instruction. */			\
-+	INSN_2(JMP, EXIT),			\
-+	/* 32-bit Jump instructions. */		\
-+	/*   Register based. */			\
-+	INSN_3(JMP32, JEQ,  X),			\
-+	INSN_3(JMP32, JNE,  X),			\
-+	INSN_3(JMP32, JGT,  X),			\
-+	INSN_3(JMP32, JLT,  X),			\
-+	INSN_3(JMP32, JGE,  X),			\
-+	INSN_3(JMP32, JLE,  X),			\
-+	INSN_3(JMP32, JSGT, X),			\
-+	INSN_3(JMP32, JSLT, X),			\
-+	INSN_3(JMP32, JSGE, X),			\
-+	INSN_3(JMP32, JSLE, X),			\
-+	INSN_3(JMP32, JSET, X),			\
-+	/*   Immediate based. */		\
-+	INSN_3(JMP32, JEQ,  K),			\
-+	INSN_3(JMP32, JNE,  K),			\
-+	INSN_3(JMP32, JGT,  K),			\
-+	INSN_3(JMP32, JLT,  K),			\
-+	INSN_3(JMP32, JGE,  K),			\
-+	INSN_3(JMP32, JLE,  K),			\
-+	INSN_3(JMP32, JSGT, K),			\
-+	INSN_3(JMP32, JSLT, K),			\
-+	INSN_3(JMP32, JSGE, K),			\
-+	INSN_3(JMP32, JSLE, K),			\
-+	INSN_3(JMP32, JSET, K),			\
-+	/* Jump instructions. */		\
-+	/*   Register based. */			\
-+	INSN_3(JMP, JEQ,  X),			\
-+	INSN_3(JMP, JNE,  X),			\
-+	INSN_3(JMP, JGT,  X),			\
-+	INSN_3(JMP, JLT,  X),			\
-+	INSN_3(JMP, JGE,  X),			\
-+	INSN_3(JMP, JLE,  X),			\
-+	INSN_3(JMP, JSGT, X),			\
-+	INSN_3(JMP, JSLT, X),			\
-+	INSN_3(JMP, JSGE, X),			\
-+	INSN_3(JMP, JSLE, X),			\
-+	INSN_3(JMP, JSET, X),			\
-+	/*   Immediate based. */		\
-+	INSN_3(JMP, JEQ,  K),			\
-+	INSN_3(JMP, JNE,  K),			\
-+	INSN_3(JMP, JGT,  K),			\
-+	INSN_3(JMP, JLT,  K),			\
-+	INSN_3(JMP, JGE,  K),			\
-+	INSN_3(JMP, JLE,  K),			\
-+	INSN_3(JMP, JSGT, K),			\
-+	INSN_3(JMP, JSLT, K),			\
-+	INSN_3(JMP, JSGE, K),			\
-+	INSN_3(JMP, JSLE, K),			\
-+	INSN_3(JMP, JSET, K),			\
-+	INSN_2(JMP, JA),			\
-+	/* Store instructions. */		\
-+	/*   Register based. */			\
-+	INSN_3(STX, MEM,  B),			\
-+	INSN_3(STX, MEM,  H),			\
-+	INSN_3(STX, MEM,  W),			\
-+	INSN_3(STX, MEM,  DW),			\
-+	INSN_3(STX, XADD, W),			\
-+	INSN_3(STX, XADD, DW),			\
-+	/*   Immediate based. */		\
-+	INSN_3(ST, MEM, B),			\
-+	INSN_3(ST, MEM, H),			\
-+	INSN_3(ST, MEM, W),			\
-+	INSN_3(ST, MEM, DW),			\
-+	/* Load instructions. */		\
-+	/*   Register based. */			\
-+	INSN_3(LDX, MEM, B),			\
-+	INSN_3(LDX, MEM, H),			\
-+	INSN_3(LDX, MEM, W),			\
-+	INSN_3(LDX, MEM, DW),			\
-+	/*   Immediate based. */		\
-+	INSN_3(LD, IMM, DW)
-+
-+bool bpf_opcode_in_insntable(u8 code)
-+{
-+#define BPF_INSN_2_TBL(x, y)    [BPF_##x | BPF_##y] = true
-+#define BPF_INSN_3_TBL(x, y, z) [BPF_##x | BPF_##y | BPF_##z] = true
-+	static const bool public_insntable[256] = {
-+		[0 ... 255] = false,
-+		/* Now overwrite non-defaults ... */
-+		BPF_INSN_MAP(BPF_INSN_2_TBL, BPF_INSN_3_TBL),
-+		/* UAPI exposed, but rewritten opcodes. cBPF carry-over. */
-+		[BPF_LD | BPF_ABS | BPF_B] = true,
-+		[BPF_LD | BPF_ABS | BPF_H] = true,
-+		[BPF_LD | BPF_ABS | BPF_W] = true,
-+		[BPF_LD | BPF_IND | BPF_B] = true,
-+		[BPF_LD | BPF_IND | BPF_H] = true,
-+		[BPF_LD | BPF_IND | BPF_W] = true,
-+	};
-+#undef BPF_INSN_3_TBL
-+#undef BPF_INSN_2_TBL
-+	return public_insntable[code];
-+}
-+
-+#ifndef CONFIG_BPF_JIT_ALWAYS_ON
-+u64 __weak bpf_probe_read_kernel(void *dst, u32 size, const void *unsafe_ptr)
-+{
-+	memset(dst, 0, size);
-+	return -EFAULT;
-+}
-+
-+/**
-+ *	__bpf_prog_run - run eBPF program on a given context
-+ *	@regs: is the array of MAX_BPF_EXT_REG eBPF pseudo-registers
-+ *	@insn: is the array of eBPF instructions
-+ *	@stack: is the eBPF storage stack
-+ *
-+ * Decode and execute eBPF instructions.
-+ */
-+static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
-+{
-+#define BPF_INSN_2_LBL(x, y)    [BPF_##x | BPF_##y] = &&x##_##y
-+#define BPF_INSN_3_LBL(x, y, z) [BPF_##x | BPF_##y | BPF_##z] = &&x##_##y##_##z
-+	static const void * const jumptable[256] __annotate_jump_table = {
-+		[0 ... 255] = &&default_label,
-+		/* Now overwrite non-defaults ... */
-+		BPF_INSN_MAP(BPF_INSN_2_LBL, BPF_INSN_3_LBL),
-+		/* Non-UAPI available opcodes. */
-+		[BPF_JMP | BPF_CALL_ARGS] = &&JMP_CALL_ARGS,
-+		[BPF_JMP | BPF_TAIL_CALL] = &&JMP_TAIL_CALL,
-+		[BPF_LDX | BPF_PROBE_MEM | BPF_B] = &&LDX_PROBE_MEM_B,
-+		[BPF_LDX | BPF_PROBE_MEM | BPF_H] = &&LDX_PROBE_MEM_H,
-+		[BPF_LDX | BPF_PROBE_MEM | BPF_W] = &&LDX_PROBE_MEM_W,
-+		[BPF_LDX | BPF_PROBE_MEM | BPF_DW] = &&LDX_PROBE_MEM_DW,
-+	};
-+#undef BPF_INSN_3_LBL
-+#undef BPF_INSN_2_LBL
-+	u32 tail_call_cnt = 0;
-+
-+#define CONT	 ({ insn++; goto select_insn; })
-+#define CONT_JMP ({ insn++; goto select_insn; })
-+
-+select_insn:
-+	goto *jumptable[insn->code];
-+
-+	/* ALU */
-+#define ALU(OPCODE, OP)			\
-+	ALU64_##OPCODE##_X:		\
-+		DST = DST OP SRC;	\
-+		CONT;			\
-+	ALU_##OPCODE##_X:		\
-+		DST = (u32) DST OP (u32) SRC;	\
-+		CONT;			\
-+	ALU64_##OPCODE##_K:		\
-+		DST = DST OP IMM;		\
-+		CONT;			\
-+	ALU_##OPCODE##_K:		\
-+		DST = (u32) DST OP (u32) IMM;	\
-+		CONT;
-+
-+	ALU(ADD,  +)
-+	ALU(SUB,  -)
-+	ALU(AND,  &)
-+	ALU(OR,   |)
-+	ALU(LSH, <<)
-+	ALU(RSH, >>)
-+	ALU(XOR,  ^)
-+	ALU(MUL,  *)
-+#undef ALU
-+	ALU_NEG:
-+		DST = (u32) -DST;
-+		CONT;
-+	ALU64_NEG:
-+		DST = -DST;
-+		CONT;
-+	ALU_MOV_X:
-+		DST = (u32) SRC;
-+		CONT;
-+	ALU_MOV_K:
-+		DST = (u32) IMM;
-+		CONT;
-+	ALU64_MOV_X:
-+		DST = SRC;
-+		CONT;
-+	ALU64_MOV_K:
-+		DST = IMM;
-+		CONT;
-+	LD_IMM_DW:
-+		DST = (u64) (u32) insn[0].imm | ((u64) (u32) insn[1].imm) << 32;
-+		insn++;
-+		CONT;
-+	ALU_ARSH_X:
-+		DST = (u64) (u32) (((s32) DST) >> SRC);
-+		CONT;
-+	ALU_ARSH_K:
-+		DST = (u64) (u32) (((s32) DST) >> IMM);
-+		CONT;
-+	ALU64_ARSH_X:
-+		(*(s64 *) &DST) >>= SRC;
-+		CONT;
-+	ALU64_ARSH_K:
-+		(*(s64 *) &DST) >>= IMM;
-+		CONT;
-+	ALU64_MOD_X:
-+		div64_u64_rem(DST, SRC, &AX);
-+		DST = AX;
-+		CONT;
-+	ALU_MOD_X:
-+		AX = (u32) DST;
-+		DST = do_div(AX, (u32) SRC);
-+		CONT;
-+	ALU64_MOD_K:
-+		div64_u64_rem(DST, IMM, &AX);
-+		DST = AX;
-+		CONT;
-+	ALU_MOD_K:
-+		AX = (u32) DST;
-+		DST = do_div(AX, (u32) IMM);
-+		CONT;
-+	ALU64_DIV_X:
-+		DST = div64_u64(DST, SRC);
-+		CONT;
-+	ALU_DIV_X:
-+		AX = (u32) DST;
-+		do_div(AX, (u32) SRC);
-+		DST = (u32) AX;
-+		CONT;
-+	ALU64_DIV_K:
-+		DST = div64_u64(DST, IMM);
-+		CONT;
-+	ALU_DIV_K:
-+		AX = (u32) DST;
-+		do_div(AX, (u32) IMM);
-+		DST = (u32) AX;
-+		CONT;
-+	ALU_END_TO_BE:
-+		switch (IMM) {
-+		case 16:
-+			DST = (__force u16) cpu_to_be16(DST);
-+			break;
-+		case 32:
-+			DST = (__force u32) cpu_to_be32(DST);
-+			break;
-+		case 64:
-+			DST = (__force u64) cpu_to_be64(DST);
-+			break;
-+		}
-+		CONT;
-+	ALU_END_TO_LE:
-+		switch (IMM) {
-+		case 16:
-+			DST = (__force u16) cpu_to_le16(DST);
-+			break;
-+		case 32:
-+			DST = (__force u32) cpu_to_le32(DST);
-+			break;
-+		case 64:
-+			DST = (__force u64) cpu_to_le64(DST);
-+			break;
-+		}
-+		CONT;
-+
-+	/* CALL */
-+	JMP_CALL:
-+		/* Function call scratches BPF_R1-BPF_R5 registers,
-+		 * preserves BPF_R6-BPF_R9, and stores return value
-+		 * into BPF_R0.
-+		 */
-+		BPF_R0 = (__bpf_call_base + insn->imm)(BPF_R1, BPF_R2, BPF_R3,
-+						       BPF_R4, BPF_R5);
-+		CONT;
-+
-+	JMP_CALL_ARGS:
-+		BPF_R0 = (__bpf_call_base_args + insn->imm)(BPF_R1, BPF_R2,
-+							    BPF_R3, BPF_R4,
-+							    BPF_R5,
-+							    insn + insn->off + 1);
-+		CONT;
-+
-+	JMP_TAIL_CALL: {
-+		struct bpf_map *map = (struct bpf_map *) (unsigned long) BPF_R2;
-+		struct bpf_array *array = container_of(map, struct bpf_array, map);
-+		struct bpf_prog *prog;
-+		u32 index = BPF_R3;
-+
-+		if (unlikely(index >= array->map.max_entries))
-+			goto out;
-+		if (unlikely(tail_call_cnt > MAX_TAIL_CALL_CNT))
-+			goto out;
-+
-+		tail_call_cnt++;
-+
-+		prog = READ_ONCE(array->ptrs[index]);
-+		if (!prog)
-+			goto out;
-+
-+		/* ARG1 at this point is guaranteed to point to CTX from
-+		 * the verifier side due to the fact that the tail call is
-+		 * handled like a helper, that is, bpf_tail_call_proto,
-+		 * where arg1_type is ARG_PTR_TO_CTX.
-+		 */
-+		insn = prog->insnsi;
-+		goto select_insn;
-+out:
-+		CONT;
-+	}
-+	JMP_JA:
-+		insn += insn->off;
-+		CONT;
-+	JMP_EXIT:
-+		return BPF_R0;
-+	/* JMP */
-+#define COND_JMP(SIGN, OPCODE, CMP_OP)				\
-+	JMP_##OPCODE##_X:					\
-+		if ((SIGN##64) DST CMP_OP (SIGN##64) SRC) {	\
-+			insn += insn->off;			\
-+			CONT_JMP;				\
-+		}						\
-+		CONT;						\
-+	JMP32_##OPCODE##_X:					\
-+		if ((SIGN##32) DST CMP_OP (SIGN##32) SRC) {	\
-+			insn += insn->off;			\
-+			CONT_JMP;				\
-+		}						\
-+		CONT;						\
-+	JMP_##OPCODE##_K:					\
-+		if ((SIGN##64) DST CMP_OP (SIGN##64) IMM) {	\
-+			insn += insn->off;			\
-+			CONT_JMP;				\
-+		}						\
-+		CONT;						\
-+	JMP32_##OPCODE##_K:					\
-+		if ((SIGN##32) DST CMP_OP (SIGN##32) IMM) {	\
-+			insn += insn->off;			\
-+			CONT_JMP;				\
-+		}						\
-+		CONT;
-+	COND_JMP(u, JEQ, ==)
-+	COND_JMP(u, JNE, !=)
-+	COND_JMP(u, JGT, >)
-+	COND_JMP(u, JLT, <)
-+	COND_JMP(u, JGE, >=)
-+	COND_JMP(u, JLE, <=)
-+	COND_JMP(u, JSET, &)
-+	COND_JMP(s, JSGT, >)
-+	COND_JMP(s, JSLT, <)
-+	COND_JMP(s, JSGE, >=)
-+	COND_JMP(s, JSLE, <=)
-+#undef COND_JMP
-+	/* STX and ST and LDX*/
-+#define LDST(SIZEOP, SIZE)						\
-+	STX_MEM_##SIZEOP:						\
-+		*(SIZE *)(unsigned long) (DST + insn->off) = SRC;	\
-+		CONT;							\
-+	ST_MEM_##SIZEOP:						\
-+		*(SIZE *)(unsigned long) (DST + insn->off) = IMM;	\
-+		CONT;							\
-+	LDX_MEM_##SIZEOP:						\
-+		DST = *(SIZE *)(unsigned long) (SRC + insn->off);	\
-+		CONT;
-+
-+	LDST(B,   u8)
-+	LDST(H,  u16)
-+	LDST(W,  u32)
-+	LDST(DW, u64)
-+#undef LDST
-+#define LDX_PROBE(SIZEOP, SIZE)							\
-+	LDX_PROBE_MEM_##SIZEOP:							\
-+		bpf_probe_read_kernel(&DST, SIZE, (const void *)(long) (SRC + insn->off));	\
-+		CONT;
-+	LDX_PROBE(B,  1)
-+	LDX_PROBE(H,  2)
-+	LDX_PROBE(W,  4)
-+	LDX_PROBE(DW, 8)
-+#undef LDX_PROBE
-+
-+	STX_XADD_W: /* lock xadd *(u32 *)(dst_reg + off16) += src_reg */
-+		atomic_add((u32) SRC, (atomic_t *)(unsigned long)
-+			   (DST + insn->off));
-+		CONT;
-+	STX_XADD_DW: /* lock xadd *(u64 *)(dst_reg + off16) += src_reg */
-+		atomic64_add((u64) SRC, (atomic64_t *)(unsigned long)
-+			     (DST + insn->off));
-+		CONT;
-+
-+	default_label:
-+		/* If we ever reach this, we have a bug somewhere. Die hard here
-+		 * instead of just returning 0; we could be somewhere in a subprog,
-+		 * so execution could continue otherwise which we do /not/ want.
-+		 *
-+		 * Note, verifier whitelists all opcodes in bpf_opcode_in_insntable().
-+		 */
-+		pr_warn("BPF interpreter: unknown opcode %02x\n", insn->code);
-+		BUG_ON(1);
-+		return 0;
-+}
-+
-+#define PROG_NAME(stack_size) __bpf_prog_run##stack_size
-+#define DEFINE_BPF_PROG_RUN(stack_size) \
-+static unsigned int PROG_NAME(stack_size)(const void *ctx, const struct bpf_insn *insn) \
-+{ \
-+	u64 stack[stack_size / sizeof(u64)]; \
-+	u64 regs[MAX_BPF_EXT_REG]; \
-+\
-+	FP = (u64) (unsigned long) &stack[ARRAY_SIZE(stack)]; \
-+	ARG1 = (u64) (unsigned long) ctx; \
-+	return ___bpf_prog_run(regs, insn, stack); \
-+}
-+
-+#define PROG_NAME_ARGS(stack_size) __bpf_prog_run_args##stack_size
-+#define DEFINE_BPF_PROG_RUN_ARGS(stack_size) \
-+static u64 PROG_NAME_ARGS(stack_size)(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5, \
-+				      const struct bpf_insn *insn) \
-+{ \
-+	u64 stack[stack_size / sizeof(u64)]; \
-+	u64 regs[MAX_BPF_EXT_REG]; \
-+\
-+	FP = (u64) (unsigned long) &stack[ARRAY_SIZE(stack)]; \
-+	BPF_R1 = r1; \
-+	BPF_R2 = r2; \
-+	BPF_R3 = r3; \
-+	BPF_R4 = r4; \
-+	BPF_R5 = r5; \
-+	return ___bpf_prog_run(regs, insn, stack); \
-+}
-+
-+#define EVAL1(FN, X) FN(X)
-+#define EVAL2(FN, X, Y...) FN(X) EVAL1(FN, Y)
-+#define EVAL3(FN, X, Y...) FN(X) EVAL2(FN, Y)
-+#define EVAL4(FN, X, Y...) FN(X) EVAL3(FN, Y)
-+#define EVAL5(FN, X, Y...) FN(X) EVAL4(FN, Y)
-+#define EVAL6(FN, X, Y...) FN(X) EVAL5(FN, Y)
-+
-+EVAL6(DEFINE_BPF_PROG_RUN, 32, 64, 96, 128, 160, 192);
-+EVAL6(DEFINE_BPF_PROG_RUN, 224, 256, 288, 320, 352, 384);
-+EVAL4(DEFINE_BPF_PROG_RUN, 416, 448, 480, 512);
-+
-+EVAL6(DEFINE_BPF_PROG_RUN_ARGS, 32, 64, 96, 128, 160, 192);
-+EVAL6(DEFINE_BPF_PROG_RUN_ARGS, 224, 256, 288, 320, 352, 384);
-+EVAL4(DEFINE_BPF_PROG_RUN_ARGS, 416, 448, 480, 512);
-+
-+#define PROG_NAME_LIST(stack_size) PROG_NAME(stack_size),
-+
-+static unsigned int (*interpreters[])(const void *ctx,
-+				      const struct bpf_insn *insn) = {
-+EVAL6(PROG_NAME_LIST, 32, 64, 96, 128, 160, 192)
-+EVAL6(PROG_NAME_LIST, 224, 256, 288, 320, 352, 384)
-+EVAL4(PROG_NAME_LIST, 416, 448, 480, 512)
-+};
-+#undef PROG_NAME_LIST
-+#define PROG_NAME_LIST(stack_size) PROG_NAME_ARGS(stack_size),
-+static u64 (*interpreters_args[])(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5,
-+				  const struct bpf_insn *insn) = {
-+EVAL6(PROG_NAME_LIST, 32, 64, 96, 128, 160, 192)
-+EVAL6(PROG_NAME_LIST, 224, 256, 288, 320, 352, 384)
-+EVAL4(PROG_NAME_LIST, 416, 448, 480, 512)
-+};
-+#undef PROG_NAME_LIST
-+
-+void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth)
-+{
-+	stack_depth = max_t(u32, stack_depth, 1);
-+	insn->off = (s16) insn->imm;
-+	insn->imm = interpreters_args[(round_up(stack_depth, 32) / 32) - 1] -
-+		__bpf_call_base_args;
-+	insn->code = BPF_JMP | BPF_CALL_ARGS;
-+}
-+#else
-+static unsigned int __bpf_prog_ret0_warn(const void *ctx,
-+					 const struct bpf_insn *insn)
-+{
-+	/* If this handler ever gets executed, then BPF_JIT_ALWAYS_ON
-+	 * is not working properly, so warn about it!
-+	 */
-+	WARN_ON_ONCE(1);
-+	return 0;
-+}
-+#endif
-+
-+void bpf_prog_select_func(struct bpf_prog *fp)
-+{
-+#ifndef CONFIG_BPF_JIT_ALWAYS_ON
-+	u32 stack_depth = max_t(u32, fp->aux->stack_depth, 1);
-+
-+	fp->bpf_func = interpreters[(round_up(stack_depth, 32) / 32) - 1];
-+#else
-+	fp->bpf_func = __bpf_prog_ret0_warn;
-+#endif
-+}
--- 
-2.17.1
+Why is this marked as unlikely? The driver passes it as NULL. Should unlikely be
+checked on both xa and the comparison?
 
+> +		nxa = rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params);
+
+Is there a chance nxa can be NULL?
+
+> +		if (unlikely(!xa)) {
+
+Same here, driver passes it as NULL
+
+> +			bq->count = 0;
+> +			bq->xa = nxa;
+> +			xa = nxa;
+> +		}
+> +	}
+> +
+> +	if (mem->id != xa->mem.id || bq->count == XDP_BULK_QUEUE_SIZE)
+> +		xdp_flush_frame_bulk(bq);
+> +
+> +	bq->q[bq->count++] = xdpf->data;
+> +	if (mem->id != xa->mem.id)
+> +		bq->xa = nxa;
+> +
+> +	rcu_read_unlock();
+> +}
+> +EXPORT_SYMBOL_GPL(xdp_return_frame_bulk);
+> +
+>  void xdp_return_buff(struct xdp_buff *xdp)
+>  {
+>  	__xdp_return(xdp->data, &xdp->rxq->mem, true);
+> -- 
+> 2.26.2
+> 
+
+Cheers
+/Ilias
