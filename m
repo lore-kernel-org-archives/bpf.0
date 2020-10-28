@@ -2,200 +2,257 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 81025C388F9
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 01:50:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F185C55179
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 21:40:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 24D0022281
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 01:50:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AFBD5246AB
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 21:40:31 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="jq2lkcWd"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="co5mwPz4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725867AbgJ1BiT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 27 Oct 2020 21:38:19 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:42851 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1833076AbgJ1AGw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 27 Oct 2020 20:06:52 -0400
-Received: by mail-pf1-f195.google.com with SMTP id x13so1866821pfa.9
-        for <bpf@vger.kernel.org>; Tue, 27 Oct 2020 17:06:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SkTc2vk73nmebVshjgjHKREV7i/15yy96aB46LsoBJM=;
-        b=jq2lkcWdmOTv8Lyx6yvybZKderM4WXlS2x5SBBIvdhQC/Hadg0P/Asbj5KmjCOTFJW
-         b/5r/M8+iPrJTWUBXb1TpZz1FSZE9Wh3YyzP9ty15mnJxMgQl+mm7WMRmhYiQZc1bFhD
-         kE4RwvzkUp3hEXlMoBodJdAcAXdxgbK7pYOyo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SkTc2vk73nmebVshjgjHKREV7i/15yy96aB46LsoBJM=;
-        b=cZADaEbNkJv6DfuOmNl+2DjFEN2hk6TxsJaziYbJBeafYBBYvDS4gvfJzPG5tC68Dp
-         dhyuAPQ1+TS9YCNOytWjzO5e/0hqQGjvD/0YfGRHtSKkS2qOzhSCtE0euAlf7aX6LLD2
-         fgsitMdf9go3hbsLBxkQz6xXUmA260sQkYBtFF83gziSsAU4KQgstRbS5TqMvE060mYC
-         xBolbYVPR0lQFw4wXa01bKr8/dbNFTMaWx9S0+6iXftRvJIt/EdWjLWFN0JWKZwZCcDJ
-         o46ZRRwav5ZkpeIEGApbje9YMfxsNM5foBENN5y+8C5p8ih3+X9inFKF0Sj/qEkv3/+G
-         QmIQ==
-X-Gm-Message-State: AOAM533G9qeVbT6si45QeXt/W58oep6zpxAdPOTAeiRrhj5HeHFWkGYm
-        OCWdBJYtHWugHc/NHCDxcoVbXA==
-X-Google-Smtp-Source: ABdhPJwkntKG+LnH43OBYo1mCeJ2Eb7oSC1DQiZMoYaqhPnztVbnQQPjzDgbtBZac+mXdy1h1HBdYQ==
-X-Received: by 2002:aa7:9ad7:0:b029:160:948:44a6 with SMTP id x23-20020aa79ad70000b0290160094844a6mr4533190pfp.25.1603843611476;
-        Tue, 27 Oct 2020 17:06:51 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 21sm3688285pfw.36.2020.10.27.17.06.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Oct 2020 17:06:50 -0700 (PDT)
-Date:   Tue, 27 Oct 2020 17:06:49 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     YiFei Zhu <zhuyifei1999@gmail.com>,
-        containers@lists.linux-foundation.org,
-        YiFei Zhu <yifeifz2@illinois.edu>, bpf <bpf@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Hubertus Franke <frankeh@us.ibm.com>,
-        Jack Chen <jianyan2@illinois.edu>,
-        Jann Horn <jannh@google.com>,
-        Josep Torrellas <torrella@illinois.edu>,
-        Tianyin Xu <tyxu@illinois.edu>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Valentin Rothberg <vrothber@redhat.com>,
-        Will Drewry <wad@chromium.org>
-Subject: Re: [PATCH v2 seccomp 1/6] seccomp: Move config option SECCOMP to
- arch/Kconfig
-Message-ID: <202010271653.B6D7D6B@keescook>
-References: <cover.1600951211.git.yifeifz2@illinois.edu>
- <9ede6ef35c847e58d61e476c6a39540520066613.1600951211.git.yifeifz2@illinois.edu>
- <CAMuHMdXTLKr6pvoE+JAdn_P5kVxL6gx8PJ8mqfXcS+SF+pRbkQ@mail.gmail.com>
+        id S1725809AbgJ1VkT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 17:40:19 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:28736 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727180AbgJ1Vj4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 28 Oct 2020 17:39:56 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 09S6AYmp023114
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2020 23:10:56 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=U6BoXiWMHGAsm1rlC5G8Hk5JeD1n0A1ivodTLVeGgpU=;
+ b=co5mwPz4yk4YgWVuxB5ibUrKqrc6sRh+gkKrXuLoa77IranYoYOSG5u77b2tTfQM2zCg
+ Gq60M75kZ7Z7QN+IwVJ2pQuhXk6MW+MiLRJ6shSD6UCpvzyRr0raLlghsZt1Nc5uRRNf
+ Ff0ykf5vQweJxBsfzT0rdFdT2ATQE8e5ZHY= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 34ejk25e5p-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 27 Oct 2020 23:10:56 -0700
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 27 Oct 2020 23:10:55 -0700
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 679FF37059B3; Tue, 27 Oct 2020 23:10:54 -0700 (PDT)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH bpf-next] bpf: permit cond_resched for some iterators
+Date:   Tue, 27 Oct 2020 23:10:54 -0700
+Message-ID: <20201028061054.1411116-1-yhs@fb.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdXTLKr6pvoE+JAdn_P5kVxL6gx8PJ8mqfXcS+SF+pRbkQ@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-10-28_01:2020-10-26,2020-10-28 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 clxscore=1015
+ phishscore=0 suspectscore=13 adultscore=0 bulkscore=0 impostorscore=0
+ mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010280039
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Oct 27, 2020 at 10:52:39AM +0100, Geert Uytterhoeven wrote:
-> Hi Yifei,
-> 
-> On Thu, Sep 24, 2020 at 2:48 PM YiFei Zhu <zhuyifei1999@gmail.com> wrote:
-> > From: YiFei Zhu <yifeifz2@illinois.edu>
-> >
-> > In order to make adding configurable features into seccomp
-> > easier, it's better to have the options at one single location,
-> > considering easpecially that the bulk of seccomp code is
-> > arch-independent. An quick look also show that many SECCOMP
-> > descriptions are outdated; they talk about /proc rather than
-> > prctl.
-> >
-> > As a result of moving the config option and keeping it default
-> > on, architectures arm, arm64, csky, riscv, sh, and xtensa
-> > did not have SECCOMP on by default prior to this and SECCOMP will
-> > be default in this change.
-> >
-> > Architectures microblaze, mips, powerpc, s390, sh, and sparc
-> > have an outdated depend on PROC_FS and this dependency is removed
-> > in this change.
-> >
-> > Suggested-by: Jann Horn <jannh@google.com>
-> > Link: https://lore.kernel.org/lkml/CAG48ez1YWz9cnp08UZgeieYRhHdqh-ch7aNwc4JRBnGyrmgfMg@mail.gmail.com/
-> > Signed-off-by: YiFei Zhu <yifeifz2@illinois.edu>
-> 
-> Thanks for your patch. which is now commit 282a181b1a0d66de ("seccomp:
-> Move config option SECCOMP to arch/Kconfig") in v5.10-rc1.
-> 
-> > --- a/arch/Kconfig
-> > +++ b/arch/Kconfig
-> > @@ -458,6 +462,23 @@ config HAVE_ARCH_SECCOMP_FILTER
-> >             results in the system call being skipped immediately.
-> >           - seccomp syscall wired up
-> >
-> > +config SECCOMP
-> > +       def_bool y
-> > +       depends on HAVE_ARCH_SECCOMP
-> > +       prompt "Enable seccomp to safely compute untrusted bytecode"
-> > +       help
-> > +         This kernel feature is useful for number crunching applications
-> > +         that may need to compute untrusted bytecode during their
-> > +         execution. By using pipes or other transports made available to
-> > +         the process as file descriptors supporting the read/write
-> > +         syscalls, it's possible to isolate those applications in
-> > +         their own address space using seccomp. Once seccomp is
-> > +         enabled via prctl(PR_SET_SECCOMP), it cannot be disabled
-> > +         and the task is only allowed to execute a few safe syscalls
-> > +         defined by each seccomp mode.
-> > +
-> > +         If unsure, say Y. Only embedded should say N here.
-> > +
-> 
-> Please tell me why SECCOMP is special, and deserves to default to be
-> enabled.  Is it really that critical, given only 13.5 (half of sparc
-> ;-) out of 24
-> architectures implement support for it?
+Commit e679654a704e ("bpf: Fix a rcu_sched stall issue with
+bpf task/task_file iterator") tries to fix rcu stalls warning
+which is caused by bpf task_file iterator when running
+"bpftool prog".
 
-That's an excellent point; I missed this in my review as I saw several
-Kconfig already marked "def_bool y" but failed to note it wasn't _all_
-of them. Okay, checking before this patch, these had them effectively
-enabled:
+      rcu: INFO: rcu_sched self-detected stall on CPU
+      rcu: \x097-....: (20999 ticks this GP) idle=3D302/1/0x4000000000000=
+000 softirq=3D1508852/1508852 fqs=3D4913
+      \x09(t=3D21031 jiffies g=3D2534773 q=3D179750)
+      NMI backtrace for cpu 7
+      CPU: 7 PID: 184195 Comm: bpftool Kdump: loaded Tainted: G        W =
+        5.8.0-00004-g68bfc7f8c1b4 #6
+      Hardware name: Quanta Twin Lakes MP/Twin Lakes Passive MP, BIOS F09=
+_3A17 05/03/2019
+      Call Trace:
+      <IRQ>
+      dump_stack+0x57/0x70
+      nmi_cpu_backtrace.cold+0x14/0x53
+      ? lapic_can_unplug_cpu.cold+0x39/0x39
+      nmi_trigger_cpumask_backtrace+0xb7/0xc7
+      rcu_dump_cpu_stacks+0xa2/0xd0
+      rcu_sched_clock_irq.cold+0x1ff/0x3d9
+      ? tick_nohz_handler+0x100/0x100
+      update_process_times+0x5b/0x90
+      tick_sched_timer+0x5e/0xf0
+      __hrtimer_run_queues+0x12a/0x2a0
+      hrtimer_interrupt+0x10e/0x280
+      __sysvec_apic_timer_interrupt+0x51/0xe0
+      asm_call_on_stack+0xf/0x20
+      </IRQ>
+      sysvec_apic_timer_interrupt+0x6f/0x80
+      ...
+      task_file_seq_next+0x52/0xa0
+      bpf_seq_read+0xb9/0x320
+      vfs_read+0x9d/0x180
+      ksys_read+0x5f/0xe0
+      do_syscall_64+0x38/0x60
+      entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-via Kconfig:
+The fix is to limit the number of bpf program runs to be
+one million. This fixed the program in most cases. But
+we also found under heavy load, which can increase the wallclock
+time for bpf_seq_read(), the warning may still be possible.
 
-parisc
-s390
-um
-x86
+For example, calling bpf_delay() in the "while" loop of
+bpf_seq_read(), which will introduce artificial delay,
+the warning will show up in my qemu run.
 
-via defconfig, roughly speaking:
+  static unsigned q;
+  volatile unsigned *p =3D &q;
+  volatile unsigned long long ll;
+  static void bpf_delay(void)
+  {
+         int i, j;
 
-arm
-arm64
-sh
+         for (i =3D 0; i < 10000; i++)
+                 for (j =3D 0; j < 10000; j++)
+                         ll +=3D *p;
+  }
 
-How about making the default depend on HAVE_ARCH_SECCOMP_FILTER?
+There are two ways to fix this issue. One is to reduce the above
+one million threshold to say 100,000 and hopefully rcu warning will
+not show up any more. Another is to introduce a target feature
+which enables bpf_seq_read() calling cond_resched().
 
-These have SECCOMP_FILTER support:
+This patch took second approach as the first approach may cause
+more -EAGAIN failures for read() syscalls. Note that not all bpf_iter
+targets can permit cond_resched() in bpf_seq_read() as some, e.g.,
+netlink seq iterator, rcu read lock critical section spans through
+seq_ops->next() -> seq_ops->show() -> seq_ops->next().
 
-arch/arm/Kconfig:       select HAVE_ARCH_SECCOMP_FILTER if AEABI && !OABI_COMPAT
-arch/arm64/Kconfig:     select HAVE_ARCH_SECCOMP_FILTER
-arch/csky/Kconfig:      select HAVE_ARCH_SECCOMP_FILTER
-arch/mips/Kconfig:      select HAVE_ARCH_SECCOMP_FILTER
-arch/parisc/Kconfig:    select HAVE_ARCH_SECCOMP_FILTER
-arch/powerpc/Kconfig:   select HAVE_ARCH_SECCOMP_FILTER
-arch/riscv/Kconfig:     select HAVE_ARCH_SECCOMP_FILTER
-arch/s390/Kconfig:      select HAVE_ARCH_SECCOMP_FILTER
-arch/sh/Kconfig:        select HAVE_ARCH_SECCOMP_FILTER
-arch/um/Kconfig:        select HAVE_ARCH_SECCOMP_FILTER
-arch/x86/Kconfig:       select HAVE_ARCH_SECCOMP_FILTER
-arch/xtensa/Kconfig:    select HAVE_ARCH_SECCOMP_FILTER
+For the kernel code with the above hack, "bpftool p" roughly takes
+38 seconds to finish on my VM with 184 bpf program runs.
+Using the following command, I am able to collect the number of
+context switches:
+   perf stat -e context-switches -- ./bpftool p >& log
+Without this patch,
+   69      context-switches
+With this patch,
+   75      context-switches
+This patch added additional 6 context switches, roughly every 6 seconds
+to reschedule, to avoid lengthy no-rescheduling which may cause the
+above RCU warnings.
 
-So the "new" promotions would be:
+Signed-off-by: Yonghong Song <yhs@fb.com>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ include/linux/bpf.h    |  5 +++++
+ kernel/bpf/bpf_iter.c  | 14 ++++++++++++++
+ kernel/bpf/task_iter.c |  2 ++
+ 3 files changed, 21 insertions(+)
 
-csky
-mips
-powerpc
-riscv
-xtensa
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 2b16bf48aab6..2fffd30e13ac 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1294,6 +1294,10 @@ typedef void (*bpf_iter_show_fdinfo_t) (const stru=
+ct bpf_iter_aux_info *aux,
+ typedef int (*bpf_iter_fill_link_info_t)(const struct bpf_iter_aux_info =
+*aux,
+ 					 struct bpf_link_info *info);
+=20
++enum bpf_iter_feature {
++	BPF_ITER_RESCHED	=3D BIT(0),
++};
++
+ #define BPF_ITER_CTX_ARG_MAX 2
+ struct bpf_iter_reg {
+ 	const char *target;
+@@ -1302,6 +1306,7 @@ struct bpf_iter_reg {
+ 	bpf_iter_show_fdinfo_t show_fdinfo;
+ 	bpf_iter_fill_link_info_t fill_link_info;
+ 	u32 ctx_arg_info_size;
++	u32 feature;
+ 	struct bpf_ctx_arg_aux ctx_arg_info[BPF_ITER_CTX_ARG_MAX];
+ 	const struct bpf_iter_seq_info *seq_info;
+ };
+diff --git a/kernel/bpf/bpf_iter.c b/kernel/bpf/bpf_iter.c
+index 8f10e30ea0b0..5454161407f1 100644
+--- a/kernel/bpf/bpf_iter.c
++++ b/kernel/bpf/bpf_iter.c
+@@ -67,6 +67,15 @@ static void bpf_iter_done_stop(struct seq_file *seq)
+ 	iter_priv->done_stop =3D true;
+ }
+=20
++static bool bpf_iter_support_resched(struct seq_file *seq)
++{
++	struct bpf_iter_priv_data *iter_priv;
++
++	iter_priv =3D container_of(seq->private, struct bpf_iter_priv_data,
++				 target_private);
++	return iter_priv->tinfo->reg_info->feature & BPF_ITER_RESCHED;
++}
++
+ /* maximum visited objects before bailing out */
+ #define MAX_ITER_OBJECTS	1000000
+=20
+@@ -83,6 +92,7 @@ static ssize_t bpf_seq_read(struct file *file, char __u=
+ser *buf, size_t size,
+ 	struct seq_file *seq =3D file->private_data;
+ 	size_t n, offs, copied =3D 0;
+ 	int err =3D 0, num_objs =3D 0;
++	bool can_resched;
+ 	void *p;
+=20
+ 	mutex_lock(&seq->lock);
+@@ -135,6 +145,7 @@ static ssize_t bpf_seq_read(struct file *file, char _=
+_user *buf, size_t size,
+ 		goto done;
+ 	}
+=20
++	can_resched =3D bpf_iter_support_resched(seq);
+ 	while (1) {
+ 		loff_t pos =3D seq->index;
+=20
+@@ -180,6 +191,9 @@ static ssize_t bpf_seq_read(struct file *file, char _=
+_user *buf, size_t size,
+ 			}
+ 			break;
+ 		}
++
++		if (can_resched)
++			cond_resched();
+ 	}
+ stop:
+ 	offs =3D seq->count;
+diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
+index 5b6af30bfbcd..1fdb2fc196cd 100644
+--- a/kernel/bpf/task_iter.c
++++ b/kernel/bpf/task_iter.c
+@@ -337,6 +337,7 @@ static const struct bpf_iter_seq_info task_seq_info =3D=
+ {
+=20
+ static struct bpf_iter_reg task_reg_info =3D {
+ 	.target			=3D "task",
++	.feature		=3D BPF_ITER_RESCHED,
+ 	.ctx_arg_info_size	=3D 1,
+ 	.ctx_arg_info		=3D {
+ 		{ offsetof(struct bpf_iter__task, task),
+@@ -354,6 +355,7 @@ static const struct bpf_iter_seq_info task_file_seq_i=
+nfo =3D {
+=20
+ static struct bpf_iter_reg task_file_reg_info =3D {
+ 	.target			=3D "task_file",
++	.feature		=3D BPF_ITER_RESCHED,
+ 	.ctx_arg_info_size	=3D 2,
+ 	.ctx_arg_info		=3D {
+ 		{ offsetof(struct bpf_iter__task_file, task),
+--=20
+2.24.1
 
-Which would leave only these two:
-
-arch/microblaze/Kconfig:        select HAVE_ARCH_SECCOMP
-arch/sparc/Kconfig:     select HAVE_ARCH_SECCOMP if SPARC64
-
-At this point, given the ubiquity of seccomp usage (e.g. systemd), I
-guess it's not unreasonable to make it def_bool y?
-
-I'm open to suggestions!
-
--- 
-Kees Cook
