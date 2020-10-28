@@ -2,195 +2,243 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A1F8C4363A
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:27:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5378C388F7
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:27:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E76D020719
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:27:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 74B5920704
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 22:27:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Re/6/Xlr"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Dp9R0z6j"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733131AbgJ1W0z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 18:26:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:36082 "EHLO
+        id S1733242AbgJ1W1V (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:27:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:35055 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1733125AbgJ1W0y (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 28 Oct 2020 18:26:54 -0400
+        by vger.kernel.org with ESMTP id S1733228AbgJ1W1S (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 28 Oct 2020 18:27:18 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1603924012;
+        s=mimecast20190719; t=1603924036;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=es+GSQz2MU3igYX62Y5g10wVw6Q1DpGz8rOsY1uqmXw=;
-        b=Re/6/XlrZRj93MntOmALcTDwMX533hhyfUzXAs8xAC42bpe3u3fwg0nLZCTr1xFiRl/cJU
-        00AfMYWOm76xj3Klcdh6y5pJmlS1Hb3ALTt24wemmJJ3eXdoohaFnfO0j03v+9KrqqbiUV
-        H0JU8p7majimyKHums3gbRs7DKdNEEc=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-548-MzUwXL1sNDekfmgA2oYfXQ-1; Wed, 28 Oct 2020 09:26:08 -0400
-X-MC-Unique: MzUwXL1sNDekfmgA2oYfXQ-1
-Received: by mail-pl1-f200.google.com with SMTP id g10so2741312plq.16
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 06:26:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=es+GSQz2MU3igYX62Y5g10wVw6Q1DpGz8rOsY1uqmXw=;
-        b=Ba0R4rhzgoiKSqrN2d5RaZQF3JVW2qHJ+vLi9o7ql3o52zvWhRptQglwv3FzMf96A/
-         axA/xU07I9cO4a0D8QoozWoPmAUEnyDmXVgWC/Zv5SVRx+qsnn16L/cckHF1BmmqYp08
-         ADDZMnjNYUgLMu6adh+sBG0FQ4V5uiQnJRPt0euewjcVZGEBqBFJCamNOzvOyroKxk7R
-         j63Ed8Zn+3Hs3EAFazSqFOp3WIukgNa/awwCyV+WNgnJMQ1Wq4PU9U6uNHl9WIpTQUmU
-         xhWJ9orQGzV3Da7T7Hq/O4568K4v0YtVVCdgoaxG9uRHeKfS1qvVJRMUdZPBnWx4g8tT
-         NEPA==
-X-Gm-Message-State: AOAM5339Ki3gEgenhFI5cjuzhKz7fkUJ5I+/GbHkKVjVa7+tNxjhuV+J
-        1hG85CZrHcjO7/crARBVRvAfFvIQMBU1QcfqnZYy9SlcRP/0JVEFFvESUavtO1Sd0FAe+iq17lT
-        5rI+iazukexE=
-X-Received: by 2002:a17:90a:9915:: with SMTP id b21mr6534169pjp.150.1603891565369;
-        Wed, 28 Oct 2020 06:26:05 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyUw0Pkq0DIqvJq4VFz3ut/XDSbHFEjwYOCuzD+bn6xuTCSLhTt2BMBkdSzkPHIyHvLPeS1wQ==
-X-Received: by 2002:a17:90a:9915:: with SMTP id b21mr6534145pjp.150.1603891565142;
-        Wed, 28 Oct 2020 06:26:05 -0700 (PDT)
-Received: from localhost.localdomain.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id z20sm6055521pfk.199.2020.10.28.06.26.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 06:26:04 -0700 (PDT)
-From:   Hangbin Liu <haliu@redhat.com>
-To:     Stephen Hemminger <stephen@networkplumber.org>,
+        bh=AvhIM0ZTutEsCzTPCsR2z619Aqyf5G1DMNl8HJokJSU=;
+        b=Dp9R0z6jX+R8RKkEOp0brMhgw7OHK+bgw8bNU7L1hYzuT0i4UO2C1GMYYiwN4pij9CuWYK
+        3COPMFr23GISPzL6bZlEfbtVmZGtg9/NrHt7ejSHE4JK7SaZ2cTL+khy68gaSplJ8VDd1L
+        o41H2K72B9EhySTIDGKa2sZwH9Z66S8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-159-SlB6xF8XMY2TThljNqF-Mg-1; Wed, 28 Oct 2020 14:25:58 -0400
+X-MC-Unique: SlB6xF8XMY2TThljNqF-Mg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9A13DCF986;
+        Wed, 28 Oct 2020 18:25:55 +0000 (UTC)
+Received: from krava (unknown [10.40.192.64])
+        by smtp.corp.redhat.com (Postfix) with SMTP id BBB6360C04;
+        Wed, 28 Oct 2020 18:25:35 +0000 (UTC)
+Date:   Wed, 28 Oct 2020 19:25:34 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        David Ahern <dsahern@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>
-Cc:     Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>, David Miller <davem@davemloft.net>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Jiri Benc <jbenc@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Hangbin Liu <haliu@redhat.com>
-Subject: [PATCHv2 iproute2-next 4/5] examples/bpf: move struct bpf_elf_map defined maps to legacy folder
-Date:   Wed, 28 Oct 2020 21:25:28 +0800
-Message-Id: <20201028132529.3763875-5-haliu@redhat.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20201028132529.3763875-1-haliu@redhat.com>
-References: <20201023033855.3894509-1-haliu@redhat.com>
- <20201028132529.3763875-1-haliu@redhat.com>
+        Andrii Nakryiko <andriin@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>, Daniel Xu <dxu@dxuuu.xyz>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jesper Brouer <jbrouer@redhat.com>,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+        Viktor Malik <vmalik@redhat.com>
+Subject: Re: [RFC bpf-next 07/16] kallsyms: Use rb tree for kallsyms name
+ search
+Message-ID: <20201028182534.GS2900849@krava>
+References: <20201022082138.2322434-1-jolsa@kernel.org>
+ <20201022082138.2322434-8-jolsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201022082138.2322434-8-jolsa@kernel.org>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Signed-off-by: Hangbin Liu <haliu@redhat.com>
----
- examples/bpf/README                        | 14 +++++++++-----
- examples/bpf/{ => legacy}/bpf_cyclic.c     |  2 +-
- examples/bpf/{ => legacy}/bpf_graft.c      |  2 +-
- examples/bpf/{ => legacy}/bpf_map_in_map.c |  2 +-
- examples/bpf/{ => legacy}/bpf_shared.c     |  2 +-
- examples/bpf/{ => legacy}/bpf_tailcall.c   |  2 +-
- 6 files changed, 14 insertions(+), 10 deletions(-)
- rename examples/bpf/{ => legacy}/bpf_cyclic.c (95%)
- rename examples/bpf/{ => legacy}/bpf_graft.c (97%)
- rename examples/bpf/{ => legacy}/bpf_map_in_map.c (96%)
- rename examples/bpf/{ => legacy}/bpf_shared.c (97%)
- rename examples/bpf/{ => legacy}/bpf_tailcall.c (98%)
+On Thu, Oct 22, 2020 at 10:21:29AM +0200, Jiri Olsa wrote:
+> The kallsyms_expand_symbol function showed in several bpf related
+> profiles, because it's doing linear search.
+> 
+> Before:
+> 
+>  Performance counter stats for './src/bpftrace -ve kfunc:__x64_sys_s* \
+>    { printf("test\n"); } i:ms:10 { printf("exit\n"); exit();}' (5 runs):
+> 
+>      2,535,458,767      cycles:k                         ( +-  0.55% )
+>        940,046,382      cycles:u                         ( +-  0.27% )
+> 
+>              33.60 +- 3.27 seconds time elapsed  ( +-  9.73% )
+> 
+> Loading all the vmlinux symbols in rbtree and and switch to rbtree
+> search in kallsyms_lookup_name function to save few cycles and time.
+> 
+> After:
+> 
+>  Performance counter stats for './src/bpftrace -ve kfunc:__x64_sys_s* \
+>    { printf("test\n"); } i:ms:10 { printf("exit\n"); exit();}' (5 runs):
+> 
+>      2,199,433,771      cycles:k                         ( +-  0.55% )
+>        936,105,469      cycles:u                         ( +-  0.37% )
+> 
+>              26.48 +- 3.57 seconds time elapsed  ( +- 13.49% )
+> 
+> Each symbol takes 160 bytes, so for my .config I've got about 18 MBs
+> used for 115285 symbols.
+> 
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
-diff --git a/examples/bpf/README b/examples/bpf/README
-index 1bbdda3f..732bcc83 100644
---- a/examples/bpf/README
-+++ b/examples/bpf/README
-@@ -1,8 +1,12 @@
- eBPF toy code examples (running in kernel) to familiarize yourself
- with syntax and features:
- 
-- - bpf_shared.c		-> Ingress/egress map sharing example
-- - bpf_tailcall.c	-> Using tail call chains
-- - bpf_cyclic.c		-> Simple cycle as tail calls
-- - bpf_graft.c		-> Demo on altering runtime behaviour
-- - bpf_map_in_map.c     -> Using map in map example
-+ - legacy/bpf_shared.c		-> Ingress/egress map sharing example
-+ - legacy/bpf_tailcall.c	-> Using tail call chains
-+ - legacy/bpf_cyclic.c		-> Simple cycle as tail calls
-+ - legacy/bpf_graft.c		-> Demo on altering runtime behaviour
-+ - legacy/bpf_map_in_map.c	-> Using map in map example
-+
-+Note: Users should use new BTF way to defined the maps, the examples
-+in legacy folder which is using struct bpf_elf_map defined maps is not
-+recommanded.
-diff --git a/examples/bpf/bpf_cyclic.c b/examples/bpf/legacy/bpf_cyclic.c
-similarity index 95%
-rename from examples/bpf/bpf_cyclic.c
-rename to examples/bpf/legacy/bpf_cyclic.c
-index 11d1c061..33590730 100644
---- a/examples/bpf/bpf_cyclic.c
-+++ b/examples/bpf/legacy/bpf_cyclic.c
-@@ -1,4 +1,4 @@
--#include "../../include/bpf_api.h"
-+#include "../../../include/bpf_api.h"
- 
- /* Cyclic dependency example to test the kernel's runtime upper
-  * bound on loops. Also demonstrates on how to use direct-actions,
-diff --git a/examples/bpf/bpf_graft.c b/examples/bpf/legacy/bpf_graft.c
-similarity index 97%
-rename from examples/bpf/bpf_graft.c
-rename to examples/bpf/legacy/bpf_graft.c
-index 07113d4a..f4c920cc 100644
---- a/examples/bpf/bpf_graft.c
-+++ b/examples/bpf/legacy/bpf_graft.c
-@@ -1,4 +1,4 @@
--#include "../../include/bpf_api.h"
-+#include "../../../include/bpf_api.h"
- 
- /* This example demonstrates how classifier run-time behaviour
-  * can be altered with tail calls. We start out with an empty
-diff --git a/examples/bpf/bpf_map_in_map.c b/examples/bpf/legacy/bpf_map_in_map.c
-similarity index 96%
-rename from examples/bpf/bpf_map_in_map.c
-rename to examples/bpf/legacy/bpf_map_in_map.c
-index ff0e623a..575f8812 100644
---- a/examples/bpf/bpf_map_in_map.c
-+++ b/examples/bpf/legacy/bpf_map_in_map.c
-@@ -1,4 +1,4 @@
--#include "../../include/bpf_api.h"
-+#include "../../../include/bpf_api.h"
- 
- #define MAP_INNER_ID	42
- 
-diff --git a/examples/bpf/bpf_shared.c b/examples/bpf/legacy/bpf_shared.c
-similarity index 97%
-rename from examples/bpf/bpf_shared.c
-rename to examples/bpf/legacy/bpf_shared.c
-index 21fe6f1e..05b2b9ef 100644
---- a/examples/bpf/bpf_shared.c
-+++ b/examples/bpf/legacy/bpf_shared.c
-@@ -1,4 +1,4 @@
--#include "../../include/bpf_api.h"
-+#include "../../../include/bpf_api.h"
- 
- /* Minimal, stand-alone toy map pinning example:
-  *
-diff --git a/examples/bpf/bpf_tailcall.c b/examples/bpf/legacy/bpf_tailcall.c
-similarity index 98%
-rename from examples/bpf/bpf_tailcall.c
-rename to examples/bpf/legacy/bpf_tailcall.c
-index 161eb606..8ebc554c 100644
---- a/examples/bpf/bpf_tailcall.c
-+++ b/examples/bpf/legacy/bpf_tailcall.c
-@@ -1,5 +1,5 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--#include "../../include/bpf_api.h"
-+#include "../../../include/bpf_api.h"
- 
- #define ENTRY_INIT	3
- #define ENTRY_0		0
--- 
-2.25.4
+FYI there's init_kprobes dependency on kallsyms_lookup_name in early
+init call, so this won't work as it is :-\ will address this in v2
+
+also I'll switch to sorted array and bsearch, because kallsyms is not
+dynamically updated
+
+jirka
+
+> ---
+>  kernel/kallsyms.c | 95 ++++++++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 86 insertions(+), 9 deletions(-)
+> 
+> diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> index 4fb15fa96734..107c8284170e 100644
+> --- a/kernel/kallsyms.c
+> +++ b/kernel/kallsyms.c
+> @@ -50,6 +50,36 @@ extern const u16 kallsyms_token_index[] __weak;
+>  
+>  extern const unsigned int kallsyms_markers[] __weak;
+>  
+> +static struct kmem_cache *symbol_cachep;
+> +
+> +struct symbol {
+> +	char		name[KSYM_NAME_LEN];
+> +	unsigned long	addr;
+> +	struct rb_node	rb_node;
+> +};
+> +
+> +static struct rb_root symbols_root = RB_ROOT;
+> +
+> +static struct symbol *find_symbol(const char *name)
+> +{
+> +	struct symbol *sym;
+> +	struct rb_node *n;
+> +	int err;
+> +
+> +	n = symbols_root.rb_node;
+> +	while (n) {
+> +		sym = rb_entry(n, struct symbol, rb_node);
+> +		err = strcmp(name, sym->name);
+> +		if (err < 0)
+> +			n = n->rb_left;
+> +		else if (err > 0)
+> +			n = n->rb_right;
+> +		else
+> +			return sym;
+> +	}
+> +	return NULL;
+> +}
+> +
+>  /*
+>   * Expand a compressed symbol data into the resulting uncompressed string,
+>   * if uncompressed string is too long (>= maxlen), it will be truncated,
+> @@ -164,16 +194,12 @@ static unsigned long kallsyms_sym_address(int idx)
+>  /* Lookup the address for this symbol. Returns 0 if not found. */
+>  unsigned long kallsyms_lookup_name(const char *name)
+>  {
+> -	char namebuf[KSYM_NAME_LEN];
+> -	unsigned long i;
+> -	unsigned int off;
+> +	struct symbol *sym;
+>  
+> -	for (i = 0, off = 0; i < kallsyms_num_syms; i++) {
+> -		off = kallsyms_expand_symbol(off, namebuf, ARRAY_SIZE(namebuf));
+> +	sym = find_symbol(name);
+> +	if (sym)
+> +		return sym->addr;
+>  
+> -		if (strcmp(namebuf, name) == 0)
+> -			return kallsyms_sym_address(i);
+> -	}
+>  	return module_kallsyms_lookup_name(name);
+>  }
+>  
+> @@ -743,9 +769,60 @@ static const struct proc_ops kallsyms_proc_ops = {
+>  	.proc_release	= seq_release_private,
+>  };
+>  
+> +static bool __init add_symbol(struct symbol *new)
+> +{
+> +	struct rb_node *parent = NULL;
+> +	struct rb_node **p;
+> +	struct symbol *sym;
+> +	int err;
+> +
+> +	p = &symbols_root.rb_node;
+> +
+> +	while (*p != NULL) {
+> +		parent = *p;
+> +		sym = rb_entry(parent, struct symbol, rb_node);
+> +		err = strcmp(new->name, sym->name);
+> +		if (err < 0)
+> +			p = &(*p)->rb_left;
+> +		else if (err > 0)
+> +			p = &(*p)->rb_right;
+> +		else
+> +			return false;
+> +	}
+> +
+> +	rb_link_node(&new->rb_node, parent, p);
+> +	rb_insert_color(&new->rb_node, &symbols_root);
+> +	return true;
+> +}
+> +
+> +static int __init kallsyms_name_search_init(void)
+> +{
+> +	bool sym_added = true;
+> +	struct symbol *sym;
+> +	unsigned int off;
+> +	unsigned long i;
+> +
+> +	symbol_cachep = KMEM_CACHE(symbol, SLAB_PANIC|SLAB_ACCOUNT);
+> +
+> +	for (i = 0, off = 0; i < kallsyms_num_syms; i++) {
+> +		if (sym_added) {
+> +			sym = kmem_cache_alloc(symbol_cachep, GFP_KERNEL);
+> +			if (!sym)
+> +				return -ENOMEM;
+> +		}
+> +		off = kallsyms_expand_symbol(off, sym->name, ARRAY_SIZE(sym->name));
+> +		sym->addr = kallsyms_sym_address(i);
+> +		sym_added = add_symbol(sym);
+> +	}
+> +
+> +	if (!sym_added)
+> +		kmem_cache_free(symbol_cachep, sym);
+> +	return 0;
+> +}
+> +
+>  static int __init kallsyms_init(void)
+>  {
+>  	proc_create("kallsyms", 0444, NULL, &kallsyms_proc_ops);
+> -	return 0;
+> +	return kallsyms_name_search_init();
+>  }
+>  device_initcall(kallsyms_init);
+> -- 
+> 2.26.2
+> 
 
