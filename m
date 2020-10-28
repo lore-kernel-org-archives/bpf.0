@@ -2,135 +2,131 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76E98C388F7
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 21:56:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A2E1C55179
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 21:56:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0B7DE2473C
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 21:56:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA80E24759
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 21:56:43 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ubmf2eZy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DdrTWbJk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728630AbgJ1V41 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 17:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
+        id S1728634AbgJ1V4m (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 17:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728579AbgJ1V4V (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 17:56:21 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A078DC0613CF
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 14:56:21 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id f140so468953ybg.3
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 14:56:21 -0700 (PDT)
+        with ESMTP id S1728633AbgJ1V4l (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 17:56:41 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76264C0613D3;
+        Wed, 28 Oct 2020 14:56:41 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id t22so286221plr.9;
+        Wed, 28 Oct 2020 14:56:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KIXncuFosDmNuagEHN2zwyu/wOeGXdyt4dzPpt73h8M=;
-        b=Ubmf2eZynOalf+/hLUy20G/Gp/mrI4LO2j/Vz0L7eQZW7D93wVHok0UGN1lI3uKXIO
-         qaFmL+txCoqAVQyxb7Bx7y9CapEeEvFr3qBcEigDc8WOhB7ixdQPS5pa3ywj20aCqPRI
-         UTNmiOaanNA1SeEnGynhEIJ4W0RMO2mIOS4KQeObRSpLaxSTZYOkzjsenaOmHKoQbinF
-         s2FRonyW3DGEj4c95BoDdugo1+yLYdEYNmVlhJA55FRtf8kRbm7kosh5MqbXooZ2KgZ1
-         IJhUk3VoowQ4kYwH2/t0C5JnFCNStZLySawRBXpodXLcs0V4XlqyGp+D08m03//cWrIZ
-         2hiw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Q0deFER1y5zH2dnb8wEA8nqaA8hp/wl10D8xfdso/0c=;
+        b=DdrTWbJkBqbLsnyefrkAsK0JQLW/j43ySTRFlT2YhIuPRzBZoxzes9lqvDs1XYFr1M
+         Qbk4xZlfYZjxMzPuXICnNi2vFpZRdooS41ZoW34Vzsl5B04oJhvVQYsqzJAwQ5jt9u48
+         EXd6jeJQu1m7TlIJPVAMq/FtTexBsc3tW7GMwPBkeuQDseOzpfqHbuvhHZ4O8Nbo8Gad
+         YtscQbM9tVl7GPxX8T3xMaio3LEU+VIt0CjSYReAqTPSClw2CEOaVVaWzTRl0Yq2DdV5
+         326CaoG+9BUMVeMRGS2T833z/ZEChB98wm/Agz0jaoP9TM5xLUycjnBaNQBB/fp5mTxf
+         CbdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KIXncuFosDmNuagEHN2zwyu/wOeGXdyt4dzPpt73h8M=;
-        b=t8emaSFiNnFzBqWB4YvsSe26oJ5RmHThdW0mdaa9heqxhX7IZufDDaAJ2qK/br6s3x
-         /bH8Q1jMpXROQtw5HPoW843oi3m5tVCWpag7ShfqoLZzDKkgSyqf7/HHS9x9WOEXZMxD
-         Ghx8XmL0y0p99a+pQXVOLGIMEhE8XXYjOiy7EyVibOsxgzDmqRO4CMLF40rfPlIy/LKX
-         +HXXCVlqZ+R4YP2gTqX8mVHXbtfNMKM3wHGKlcS9ee/t+rrGsv9X2bM7sh74UDVR32v+
-         1OgnrPnZcJIvNZVHNd/IJa/h7hUbL/bop9HNgq+Vj8bm2sLM+PaUFQ3zltrLI9fkJYnv
-         Ep7A==
-X-Gm-Message-State: AOAM5318PK2l4n0AJK2HHYDL7JXE3Y9Lud+KHQWmnqZHrDD1G0eZHJBX
-        X+UfnMoS+6Irnc9HpE3wGAwcULI3C685XF/ioak=
-X-Google-Smtp-Source: ABdhPJx1h4+tlQni0Welj4xcnVA9W/FIsAMhL3meM0zhwyxYT8vz+tu7OpDycbPD/9zTiv+INpoWcYMS/G+g0eNar3o=
-X-Received: by 2002:a25:25c2:: with SMTP id l185mr1712029ybl.230.1603922180897;
- Wed, 28 Oct 2020 14:56:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201028203853.2412751-1-dan@kernelim.com>
-In-Reply-To: <20201028203853.2412751-1-dan@kernelim.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 28 Oct 2020 14:56:09 -0700
-Message-ID: <CAEf4BzZxabLCaNj0E5UEcnrEY25ujSLOzTbYRXneJy2HrY64JA@mail.gmail.com>
-Subject: Re: [PATCH] btf: Expose kernel BTF only to tasks with CAP_PERFMON
-To:     Dan Aloni <dan@kernelim.com>, bpf <bpf@vger.kernel.org>
-Cc:     security@kernel.org, Liran Alon <liran@amazon.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Q0deFER1y5zH2dnb8wEA8nqaA8hp/wl10D8xfdso/0c=;
+        b=nruYa54BnPsJuEFAFBEHvA4CJE3DCGg4jt3paxysKL1iJPcxwz3+30TlE/q+RhIKjR
+         wRwhFXMNigqw2ioZ0OKI1/dRH2yCrXym8owv5P/xfxJ/3BTpkPaJyyYyIGAE+pzSCe70
+         lNZ4MYG17Ja6hhVDQKGYzswZ+Z5NCthHyJcRS7I7JwBCfozpU9loMtWppxZ6uG2Nzc+e
+         7YELJZdbSgvuX4pJt2KoIDS8zDXZUAnY09PZ9TKpLdwF65UkXqJcoW9yjaOMNZXrhjnI
+         uOpMQRLMBqCFaj9NBOdz9K3LIScjF37lH3NjS8YGvxOmW8rpoWKfg3G7K+/Bli2AS24M
+         J1Kg==
+X-Gm-Message-State: AOAM532Y+oyZ2jBwPBqdaY9zH6nVPOiFpDFC9zKHF1OhBVGQXp+b457M
+        kLTocn11h+pXKbDugoevnj3+lVuy2HfUAQ==
+X-Google-Smtp-Source: ABdhPJymJjE2L2a9NUrMrih2ODObIj/y609DDc4WIfVc9enlv0bVkzgNhyftNNcqrAdIECpWfAE/bQ==
+X-Received: by 2002:aa7:8055:0:b029:15f:cbe9:1aad with SMTP id y21-20020aa780550000b029015fcbe91aadmr1173932pfm.71.1603920238453;
+        Wed, 28 Oct 2020 14:23:58 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::4:1c8])
+        by smtp.gmail.com with ESMTPSA id x26sm514837pfn.178.2020.10.28.14.23.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2020 14:23:57 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 14:23:50 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Michael Jeanson <mjeanson@efficios.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+        Yonghong Song <yhs@fb.com>, paulmck <paulmck@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, acme <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Joel Fernandes, Google" <joel@joelfernandes.org>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: [RFC PATCH 1/6] tracing: introduce sleepable tracepoints
+Message-ID: <20201028212350.jj4mbnbk6hdcbymo@ast-mbp.dhcp.thefacebook.com>
+References: <20201023195352.26269-1-mjeanson@efficios.com>
+ <20201023195352.26269-2-mjeanson@efficios.com>
+ <20201026224301.gi4bakmj3pov5zyu@ast-mbp.dhcp.thefacebook.com>
+ <1631556114.38532.1603805828748.JavaMail.zimbra@efficios.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1631556114.38532.1603805828748.JavaMail.zimbra@efficios.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-+ bpf@vger.kernel.org
+On Tue, Oct 27, 2020 at 09:37:08AM -0400, Mathieu Desnoyers wrote:
+> 
+> ----- On Oct 26, 2020, at 6:43 PM, Alexei Starovoitov alexei.starovoitov@gmail.com wrote:
+> 
+> > On Fri, Oct 23, 2020 at 03:53:47PM -0400, Michael Jeanson wrote:
+> >> -#define __DO_TRACE(tp, proto, args, cond, rcuidle)			\
+> >> +#define __DO_TRACE(tp, proto, args, cond, rcuidle, tp_flags)		\
+> >>  	do {								\
+> >>  		struct tracepoint_func *it_func_ptr;			\
+> >>  		void *it_func;						\
+> >>  		void *__data;						\
+> >>  		int __maybe_unused __idx = 0;				\
+> >> +		bool maysleep = (tp_flags) & TRACEPOINT_MAYSLEEP;	\
+> >>  									\
+> >>  		if (!(cond))						\
+> >>  			return;						\
+> >> @@ -170,8 +178,13 @@ static inline struct tracepoint
+> >> *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+> >>  		/* srcu can't be used from NMI */			\
+> >>  		WARN_ON_ONCE(rcuidle && in_nmi());			\
+> >>  									\
+> >> -		/* keep srcu and sched-rcu usage consistent */		\
+> >> -		preempt_disable_notrace();				\
+> >> +		if (maysleep) {						\
+> >> +			might_sleep();					\
+> > 
+> > The main purpose of the patch set is to access user memory in tracepoints,
+> > right?
+> 
+> Yes, exactly.
+> 
+> > In such case I suggest to use stronger might_fault() here.
+> > We used might_sleep() in sleepable bpf and it wasn't enough to catch
+> > a combination where sleepable hook was invoked while mm->mmap_lock was
+> > taken which may cause a deadlock.
+> 
+> Good point! We will do that for the next round.
+> 
+> By the way, we named this "sleepable" tracepoint (with flag TRACEPOINT_MAYSLEEP),
+> but we are open to a better name. Would TRACEPOINT_MAYFAULT be more descriptive ?
+> (a "faultable" tracepoint sounds weird though)
 
-On Wed, Oct 28, 2020 at 1:40 PM Dan Aloni <dan@kernelim.com> wrote:
->
-> Commit 341dfcf8d78e ("btf: expose BTF info through sysfs") added a sysfs
-> file that exposes to userspace kernel BTF information which allows
-> userspace to deduce the structure layout of all kernel internal
-> structures.
->
-> This file is currently accessible to unprivileged users, without
-> requiring any special capability. Given that knowledge on kernel
-> structure layout is useful for dynamically building local privilege
-> escalation exploit in userspace, access to this file should be
-> restricted.
-
-So is /proc/config.gz, which is also very helpful in understanding
-what exactly is there in the kernel. So seems to be
-/boot/vmlinux-$(uname -r), which has exactly the same BTF data and
-more.
-
-Guarding /sys/kernel/bpf/vmlinux behind CAP_PERFMON would break a lot
-of users relying on BTF availability to build their BPF applications.
-We shouldn't expect developers to build their applications under root.
-But that's what this patch is trying to do.
-
->
-> Fixes: 341dfcf8d78e ("btf: expose BTF info through sysfs")
-> Co-developed-by: Liran Alon <liran@amazon.com>
-> Signed-off-by: Liran Alon <liran@amazon.com>
-> Signed-off-by: Dan Aloni <dan@kernelim.com>
-> ---
->  kernel/bpf/sysfs_btf.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/kernel/bpf/sysfs_btf.c b/kernel/bpf/sysfs_btf.c
-> index 11b3380887fa..c985d42dfa49 100644
-> --- a/kernel/bpf/sysfs_btf.c
-> +++ b/kernel/bpf/sysfs_btf.c
-> @@ -7,6 +7,7 @@
->  #include <linux/kobject.h>
->  #include <linux/init.h>
->  #include <linux/sysfs.h>
-> +#include <linux/capability.h>
->
->  /* See scripts/link-vmlinux.sh, gen_btf() func for details */
->  extern char __weak __start_BTF[];
-> @@ -17,6 +18,9 @@ btf_vmlinux_read(struct file *file, struct kobject *kobj,
->                  struct bin_attribute *bin_attr,
->                  char *buf, loff_t off, size_t len)
->  {
-> +       if (!perfmon_capable())
-> +               return -EACCES;
-> +
->         memcpy(buf, __start_BTF + off, len);
->         return len;
->  }
-> --
-> 2.26.2
->
+bpf kept 'sleepable' as a name. 'faultable' is too misleading.
