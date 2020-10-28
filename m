@@ -2,508 +2,129 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2AE6AC56202
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:26:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6DCBCC4363A
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:32:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B2491207BC
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:26:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 002B5207CD
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:32:54 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Un01M6pT"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bBaojgDC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390358AbgJ1XZ4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 19:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36802 "EHLO
+        id S1732864AbgJ1WxI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 18:53:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387571AbgJ1XZy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 19:25:54 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B53C0613CF;
-        Wed, 28 Oct 2020 16:25:54 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id q25so1388569ioh.4;
-        Wed, 28 Oct 2020 16:25:54 -0700 (PDT)
+        with ESMTP id S2389676AbgJ1WxH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 18:53:07 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30653C0613D2
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 15:53:07 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id o3so716251pgr.11
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 15:53:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EldFY16BxtvGb7fdIx/6iAPYxXdUeuIFxuwoe4Wvm20=;
-        b=Un01M6pTcPg2IQ37QqHcx4HvGjenSIcRcZf/MDO0H3x1cUi1d9LRajo2owOwlRSI2N
-         ItnuwaqNPqFNkHa7CxUCHpcYEmNPWDAKKuYV+smsBYW6HgoenTxT4Qe6KrGKrYJ7njxm
-         q7rrcjthGmokAlsUWE2Qm6KMVs3vbt9HwaN89Lv4SyqK+zKDlLHNr235pcUKKKGvtTXz
-         3KsORgfCo7G/iisyJjrNVGfK1qiwBER0ahyx76HOJUs0xK7FAmm+TkDr2t7PQhWvEw7M
-         ImWPFkwqa8SnVqGHr04KUrtHv0TwWf+QxQgX5OtHVwDTLLXYgrTw1mLcQDwsZWg4EVFl
-         uRxA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=0Xy/2zadYFsZw40LFEtdOiEBtCWDHEhIZKqPxiXGDgo=;
+        b=bBaojgDCytTeCZe09Aniv5ZCo9/1FqsTT/3OVeHNHiQoo0VRsUJwEEF+dAKR8keSyL
+         yRWbSBM9isY011JSCr6qCTcRwh2CYocjn/3k5iQI8Ss/5A/CGKTOriZdbyXDN2ys6BHT
+         tIbkFOOYefNeoQ0CJz/hUYR7ERPfwa7Bx6B6I=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EldFY16BxtvGb7fdIx/6iAPYxXdUeuIFxuwoe4Wvm20=;
-        b=lT0Z+80bShyb1+vEjVUNNX3KnrKFz2i6uOu70XuxBlrz/oB2jPWaDljd9DWKwhVflm
-         dLqhoGhujVi0mzjxiVyhVjXH2C9KQMtdA+ESAvbTs4+qm+hQsShJ0NxI6Icp5OByNG16
-         miWsCrgruBsl5hB8QXgMurPNtcWfzh0EPy/wtbMphPASO2kUTqkTcItFstHbcT81IL8H
-         Hufs0z5PGsXttrSWVyOl7E0XGpfTtLaEmspphiyK6ZrkgND/0ZeBk7vbn7VrMgVRZpgs
-         hq+41jQIALLWhbXtFenKz0Rre3VkW1peaxxPTB39fRanI8wPuLTXIl9z5eyTPADny4M9
-         spkA==
-X-Gm-Message-State: AOAM530g7BRt3okXWjKXeP22ItSuJp+VUD/Fcm8r1f0tyH7hKwJcRoAx
-        yk3usPlcILLBG6XXA2UJZjxE3p4QXpyBz3pY
-X-Google-Smtp-Source: ABdhPJy+S90MJjSHPYTZmqtsGVHrfsyandTfzipF3FoHF4WnOPbv3h+YZpedav1EFBmxNIjyaP6ayQ==
-X-Received: by 2002:a63:530c:: with SMTP id h12mr6684388pgb.424.1603892109532;
-        Wed, 28 Oct 2020 06:35:09 -0700 (PDT)
-Received: from btopel-mobl.ger.intel.com ([192.55.55.43])
-        by smtp.gmail.com with ESMTPSA id q14sm5935393pjp.43.2020.10.28.06.35.03
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=0Xy/2zadYFsZw40LFEtdOiEBtCWDHEhIZKqPxiXGDgo=;
+        b=KQUr9r0m7tpEHRGMHvybCdS4GIyoftrkNU/SXx+RKt9ljhl9DJbm4NCZYBCAwS43Ho
+         16J9TaJuZpJLh4iwVeBfOjRLBfuJ/pUaGvzW0fMWJH85T1aie+FZi9qdAWjhcY30dV9Q
+         p9yzSecBAkZ/s36UESkSn9B1ykMxxgKopGKXC5769gzBuGfEkEbiBdxK3K7lLc3AXtXk
+         LZrG8XPUnqhu52WAjnRZAND4Ahws+B+1MBDSilB9qAhrGFWNghFLorgPOdqzFyPEyOtF
+         uD3cbHtzJok1imVsSCF7oWnVItxQXoNsWkcmaUG54r8bRDqDhFSrDOhEJOL3NTBFfDLS
+         gsqg==
+X-Gm-Message-State: AOAM531qh8889EKlXBIJCJJFLkSlu0ozQcqKgbgbfBdPRTBLEKAQ91rA
+        k4EB2SK5c1kShKQxsJD0iTzrxA==
+X-Google-Smtp-Source: ABdhPJzNUPngBSBllGfVxFqpThpHmKtVDwZBWHpI1tUv5u0YsP97zuSXYttLoLqCl2FU2MQmSaZy8A==
+X-Received: by 2002:a17:90b:90d:: with SMTP id bo13mr1086316pjb.111.1603925586677;
+        Wed, 28 Oct 2020 15:53:06 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id l7sm465074pja.11.2020.10.28.15.53.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 06:35:08 -0700 (PDT)
-From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
-        maciej.fijalkowski@intel.com, sridhar.samudrala@intel.com,
-        jesse.brandeburg@intel.com, qi.z.zhang@intel.com, kuba@kernel.org,
-        edumazet@google.com, intel-wired-lan@lists.osuosl.org,
-        jonathan.lemon@gmail.com
-Subject: [RFC PATCH bpf-next 1/9] net: introduce biased busy-polling
-Date:   Wed, 28 Oct 2020 14:34:29 +0100
-Message-Id: <20201028133437.212503-2-bjorn.topel@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201028133437.212503-1-bjorn.topel@gmail.com>
-References: <20201028133437.212503-1-bjorn.topel@gmail.com>
+        Wed, 28 Oct 2020 15:53:05 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 15:53:04 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jann Horn <jannh@google.com>
+Cc:     Tycho Andersen <tycho@tycho.pizza>,
+        "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Christian Brauner <christian@brauner.io>,
+        linux-man <linux-man@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Will Drewry <wad@chromium.org>, bpf <bpf@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Robert Sesek <rsesek@google.com>
+Subject: Re: For review: seccomp_user_notif(2) manual page
+Message-ID: <202010281548.CCA92731F@keescook>
+References: <45f07f17-18b6-d187-0914-6f341fe90857@gmail.com>
+ <20200930150330.GC284424@cisco>
+ <8bcd956f-58d2-d2f0-ca7c-0a30f3fcd5b8@gmail.com>
+ <20200930230327.GA1260245@cisco>
+ <CAG48ez1VOUEHVQyo-2+uO7J+-jN5rh7=KmrMJiPaFjwCbKR1Sg@mail.gmail.com>
+ <20200930232456.GB1260245@cisco>
+ <CAG48ez2xn+_KznEztJ-eVTsTzkbf9CVgPqaAk7TpRNAqbdaRoA@mail.gmail.com>
+ <202010251725.2BD96926E3@keescook>
+ <CAG48ez2b-fnsp8YAR=H5uRMT4bBTid_hyU4m6KavHxDko1Efog@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG48ez2b-fnsp8YAR=H5uRMT4bBTid_hyU4m6KavHxDko1Efog@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+On Mon, Oct 26, 2020 at 10:51:02AM +0100, Jann Horn wrote:
+> The problem is the scenario where a process is interrupted while it's
+> waiting for the supervisor to reply.
+> 
+> Consider the following scenario (with supervisor "S" and target "T"; S
+> wants to wait for events on two file descriptors seccomp_fd and
+> other_fd):
+> 
+> S: starts poll() to wait for events on seccomp_fd and other_fd
+> T: performs a syscall that's filtered with RET_USER_NOTIF
+> S: poll() returns and signals readiness of seccomp_fd
+> T: receives signal SIGUSR1
+> T: syscall aborts, enters signal handler
+> T: signal handler blocks on unfiltered syscall (e.g. write())
+> S: starts SECCOMP_IOCTL_NOTIF_RECV
+> S: blocks because no syscalls are pending
 
-This change adds a new NAPI mode, called biased busy-polling, which is
-an extension to the existing busy-polling mode. The new mode is
-enabled on the socket layer, where a socket setting this option
-"promisies" to busy-poll the NAPI context via a system call. When this
-mode is enabled, the NAPI context will operate in a mode with
-interrupts disabled. The kernel monitors that the busy-polling promise
-is fulfilled by an internal watchdog. If the socket fail/stop
-performing the busy-polling, the mode will be disabled. The watchdog
-is currently 200 ms.
+Oooh, yes, ew. Thanks for the illustration.
 
-Biased busy-polling follows the same mechanism as the existing
-busy-poll; The napi_id is reported to the socket via the skbuff. Later
-commits will extend napi_id reporting to XDP, in order to work
-correctly with XDP sockets.
+Thinking about this from userspace's least-surprise view, I would expect
+the "recv" to stay "queued", in the sense we'd see this:
 
-Let us walk through a flow of execution:
+S: starts poll() to wait for events on seccomp_fd and other_fd
+T: performs a syscall that's filtered with RET_USER_NOTIF
+S: poll() returns and signals readiness of seccomp_fd
+T: receives signal SIGUSR1
+T: syscall aborts, enters signal handler
+T: signal handler blocks on unfiltered syscall (e.g. write())
+S: starts SECCOMP_IOCTL_NOTIF_RECV
+S: gets (stale) seccomp_notif from seccomp_fd
+S: sends seccomp_notif_resp, receives ENOENT (or some better errno?)
 
-1. A socket sets the new SO_BIAS_BUSY_POLL socket option to true. The
-   socket now shows an intent of doing busy-polling. No data has been
-   received to the socket, so the napi_id of the socket is still 0
-   (non-valid). As usual for busy-polling, the SO_BUSY_POLL option
-   also has to be non-zero for biased busy-polling.
+This is not at all how things are designed internally right now, but
+that behavior would work, yes?
 
-2. Data is received on the socket changing the napi_id to non-zero.
-
-3. The socket does a system call that has the busy-polling logic wired
-   up, e.g. recvfrom() for UDP sockets. The NAPI context is now marked
-   as biased busy-poll. The kernel watchdog is armed. If the NAPI
-   context is already running, it will try to finish as soon as
-   possible and move to busy-polling. If the NAPI context is not
-   running, it will execute the NAPI poll function for the
-   corresponding napi_id.
-
-4. Goto 3, or wait until the watchdog timeout.
-
-Given the nature of busy-polling, this mode only make sense for
-non-blocking sockets.
-
-When the NAPI context is in biased busy-polling mode, it will not
-allow a NAPI to be scheduled using the
-napi_schedule_prep()/napi_scheduleXXX() combo.
-
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
----
- arch/alpha/include/uapi/asm/socket.h  |  2 +
- arch/mips/include/uapi/asm/socket.h   |  2 +
- arch/parisc/include/uapi/asm/socket.h |  2 +
- arch/sparc/include/uapi/asm/socket.h  |  2 +
- include/linux/netdevice.h             | 33 +++++-----
- include/net/busy_poll.h               | 17 ++++-
- include/net/sock.h                    |  3 +
- include/uapi/asm-generic/socket.h     |  2 +
- net/core/dev.c                        | 89 +++++++++++++++++++++++++--
- net/core/sock.c                       |  9 +++
- 10 files changed, 140 insertions(+), 21 deletions(-)
-
-diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
-index de6c4df61082..0f776668fb09 100644
---- a/arch/alpha/include/uapi/asm/socket.h
-+++ b/arch/alpha/include/uapi/asm/socket.h
-@@ -124,6 +124,8 @@
- 
- #define SO_DETACH_REUSEPORT_BPF 68
- 
-+#define SO_BIAS_BUSY_POLL	69
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
-index d0a9ed2ca2d6..d23984731504 100644
---- a/arch/mips/include/uapi/asm/socket.h
-+++ b/arch/mips/include/uapi/asm/socket.h
-@@ -135,6 +135,8 @@
- 
- #define SO_DETACH_REUSEPORT_BPF 68
- 
-+#define SO_BIAS_BUSY_POLL	69
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
-index 10173c32195e..49469713ed2a 100644
---- a/arch/parisc/include/uapi/asm/socket.h
-+++ b/arch/parisc/include/uapi/asm/socket.h
-@@ -116,6 +116,8 @@
- 
- #define SO_DETACH_REUSEPORT_BPF 0x4042
- 
-+#define SO_BIAS_BUSY_POLL	0x4043
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64
-diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
-index 8029b681fc7c..009aba6f7a54 100644
---- a/arch/sparc/include/uapi/asm/socket.h
-+++ b/arch/sparc/include/uapi/asm/socket.h
-@@ -117,6 +117,8 @@
- 
- #define SO_DETACH_REUSEPORT_BPF  0x0047
- 
-+#define SO_BIAS_BUSY_POLL	 0x0048
-+
- #if !defined(__KERNEL__)
- 
- 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 964b494b0e8d..9bdc84d3d6b8 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -344,29 +344,32 @@ struct napi_struct {
- 	struct list_head	rx_list; /* Pending GRO_NORMAL skbs */
- 	int			rx_count; /* length of rx_list */
- 	struct hrtimer		timer;
-+	struct hrtimer		bp_watchdog;
- 	struct list_head	dev_list;
- 	struct hlist_node	napi_hash_node;
- 	unsigned int		napi_id;
- };
- 
- enum {
--	NAPI_STATE_SCHED,	/* Poll is scheduled */
--	NAPI_STATE_MISSED,	/* reschedule a napi */
--	NAPI_STATE_DISABLE,	/* Disable pending */
--	NAPI_STATE_NPSVC,	/* Netpoll - don't dequeue from poll_list */
--	NAPI_STATE_LISTED,	/* NAPI added to system lists */
--	NAPI_STATE_NO_BUSY_POLL,/* Do not add in napi_hash, no busy polling */
--	NAPI_STATE_IN_BUSY_POLL,/* sk_busy_loop() owns this NAPI */
-+	NAPI_STATE_SCHED,		/* Poll is scheduled */
-+	NAPI_STATE_MISSED,		/* reschedule a napi */
-+	NAPI_STATE_DISABLE,		/* Disable pending */
-+	NAPI_STATE_NPSVC,		/* Netpoll - don't dequeue from poll_list */
-+	NAPI_STATE_LISTED,		/* NAPI added to system lists */
-+	NAPI_STATE_NO_BUSY_POLL,	/* Do not add in napi_hash, no busy polling */
-+	NAPI_STATE_IN_BUSY_POLL,	/* sk_busy_loop() owns this NAPI */
-+	NAPI_STATE_BIAS_BUSY_POLL,	/* biased busy-polling */
- };
- 
- enum {
--	NAPIF_STATE_SCHED	 = BIT(NAPI_STATE_SCHED),
--	NAPIF_STATE_MISSED	 = BIT(NAPI_STATE_MISSED),
--	NAPIF_STATE_DISABLE	 = BIT(NAPI_STATE_DISABLE),
--	NAPIF_STATE_NPSVC	 = BIT(NAPI_STATE_NPSVC),
--	NAPIF_STATE_LISTED	 = BIT(NAPI_STATE_LISTED),
--	NAPIF_STATE_NO_BUSY_POLL = BIT(NAPI_STATE_NO_BUSY_POLL),
--	NAPIF_STATE_IN_BUSY_POLL = BIT(NAPI_STATE_IN_BUSY_POLL),
-+	NAPIF_STATE_SCHED	   = BIT(NAPI_STATE_SCHED),
-+	NAPIF_STATE_MISSED	   = BIT(NAPI_STATE_MISSED),
-+	NAPIF_STATE_DISABLE	   = BIT(NAPI_STATE_DISABLE),
-+	NAPIF_STATE_NPSVC	   = BIT(NAPI_STATE_NPSVC),
-+	NAPIF_STATE_LISTED	   = BIT(NAPI_STATE_LISTED),
-+	NAPIF_STATE_NO_BUSY_POLL   = BIT(NAPI_STATE_NO_BUSY_POLL),
-+	NAPIF_STATE_IN_BUSY_POLL   = BIT(NAPI_STATE_IN_BUSY_POLL),
-+	NAPIF_STATE_BIAS_BUSY_POLL = BIT(NAPI_STATE_BIAS_BUSY_POLL),
- };
- 
- enum gro_result {
-@@ -555,6 +558,8 @@ static inline bool napi_if_scheduled_mark_missed(struct napi_struct *n)
- 	return true;
- }
- 
-+void napi_bias_busy_poll(unsigned int napi_id);
-+
- enum netdev_queue_state_t {
- 	__QUEUE_STATE_DRV_XOFF,
- 	__QUEUE_STATE_STACK_XOFF,
-diff --git a/include/net/busy_poll.h b/include/net/busy_poll.h
-index b001fa91c14e..9738923ed17b 100644
---- a/include/net/busy_poll.h
-+++ b/include/net/busy_poll.h
-@@ -23,6 +23,9 @@
-  */
- #define MIN_NAPI_ID ((unsigned int)(NR_CPUS + 1))
- 
-+/* Biased busy-poll watchdog timeout in ms */
-+#define BIASED_BUSY_POLL_TIMEOUT 200
-+
- #ifdef CONFIG_NET_RX_BUSY_POLL
- 
- struct napi_struct;
-@@ -99,13 +102,25 @@ static inline bool sk_busy_loop_timeout(struct sock *sk,
- 	return true;
- }
- 
-+#ifdef CONFIG_NET_RX_BUSY_POLL
-+static inline void __sk_bias_busy_poll(struct sock *sk, unsigned int napi_id)
-+{
-+	if (likely(!READ_ONCE(sk->sk_bias_busy_poll)))
-+		return;
-+
-+	napi_bias_busy_poll(napi_id);
-+}
-+#endif
-+
- static inline void sk_busy_loop(struct sock *sk, int nonblock)
- {
- #ifdef CONFIG_NET_RX_BUSY_POLL
- 	unsigned int napi_id = READ_ONCE(sk->sk_napi_id);
- 
--	if (napi_id >= MIN_NAPI_ID)
-+	if (napi_id >= MIN_NAPI_ID) {
-+		__sk_bias_busy_poll(sk, napi_id);
- 		napi_busy_loop(napi_id, nonblock ? NULL : sk_busy_loop_end, sk);
-+	}
- #endif
- }
- 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index a5c6ae78df77..cf71834fb601 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -479,6 +479,9 @@ struct sock {
- 	u32			sk_ack_backlog;
- 	u32			sk_max_ack_backlog;
- 	kuid_t			sk_uid;
-+#ifdef CONFIG_NET_RX_BUSY_POLL
-+	u8			sk_bias_busy_poll;
-+#endif
- 	struct pid		*sk_peer_pid;
- 	const struct cred	*sk_peer_cred;
- 	long			sk_rcvtimeo;
-diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
-index 77f7c1638eb1..8a2b37ccd9d5 100644
---- a/include/uapi/asm-generic/socket.h
-+++ b/include/uapi/asm-generic/socket.h
-@@ -119,6 +119,8 @@
- 
- #define SO_DETACH_REUSEPORT_BPF 68
- 
-+#define SO_BIAS_BUSY_POLL	69
-+
- #if !defined(__KERNEL__)
- 
- #if __BITS_PER_LONG == 64 || (defined(__x86_64__) && defined(__ILP32__))
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 9499a414d67e..a29e4c4a35f6 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -6378,6 +6378,9 @@ bool napi_schedule_prep(struct napi_struct *n)
- 		val = READ_ONCE(n->state);
- 		if (unlikely(val & NAPIF_STATE_DISABLE))
- 			return false;
-+		if (unlikely(val & NAPIF_STATE_BIAS_BUSY_POLL))
-+			return false;
-+
- 		new = val | NAPIF_STATE_SCHED;
- 
- 		/* Sets STATE_MISSED bit if STATE_SCHED was already set
-@@ -6458,12 +6461,14 @@ bool napi_complete_done(struct napi_struct *n, int work_done)
- 
- 		/* If STATE_MISSED was set, leave STATE_SCHED set,
- 		 * because we will call napi->poll() one more time.
--		 * This C code was suggested by Alexander Duyck to help gcc.
- 		 */
--		new |= (val & NAPIF_STATE_MISSED) / NAPIF_STATE_MISSED *
--						    NAPIF_STATE_SCHED;
-+		if (val & NAPIF_STATE_MISSED && !(val & NAPIF_STATE_BIAS_BUSY_POLL))
-+			new |= NAPIF_STATE_SCHED;
- 	} while (cmpxchg(&n->state, val, new) != val);
- 
-+	if (unlikely(val & NAPIF_STATE_BIAS_BUSY_POLL))
-+		return false;
-+
- 	if (unlikely(val & NAPIF_STATE_MISSED)) {
- 		__napi_schedule(n);
- 		return false;
-@@ -6497,6 +6502,20 @@ static void busy_poll_stop(struct napi_struct *napi, void *have_poll_lock)
- {
- 	int rc;
- 
-+	clear_bit(NAPI_STATE_IN_BUSY_POLL, &napi->state);
-+
-+	local_bh_disable();
-+	/* If we're biased towards busy poll, clear the sched flags,
-+	 * so that we can enter again.
-+	 */
-+	if (READ_ONCE(napi->state) & NAPIF_STATE_BIAS_BUSY_POLL) {
-+		netpoll_poll_unlock(have_poll_lock);
-+		napi_complete(napi);
-+		__kfree_skb_flush();
-+		local_bh_enable();
-+		return;
-+	}
-+
- 	/* Busy polling means there is a high chance device driver hard irq
- 	 * could not grab NAPI_STATE_SCHED, and that NAPI_STATE_MISSED was
- 	 * set in napi_schedule_prep().
-@@ -6507,9 +6526,6 @@ static void busy_poll_stop(struct napi_struct *napi, void *have_poll_lock)
- 	 * to perform these two clear_bit()
- 	 */
- 	clear_bit(NAPI_STATE_MISSED, &napi->state);
--	clear_bit(NAPI_STATE_IN_BUSY_POLL, &napi->state);
--
--	local_bh_disable();
- 
- 	/* All we really want here is to re-enable device interrupts.
- 	 * Ideally, a new ndo_busy_poll_stop() could avoid another round.
-@@ -6569,6 +6585,11 @@ void napi_busy_loop(unsigned int napi_id,
- 				goto count;
- 			have_poll_lock = netpoll_poll_lock(napi);
- 			napi_poll = napi->poll;
-+			if (val & NAPIF_STATE_BIAS_BUSY_POLL) {
-+				hrtimer_start(&napi->bp_watchdog,
-+					      ms_to_ktime(BIASED_BUSY_POLL_TIMEOUT),
-+					      HRTIMER_MODE_REL_PINNED);
-+			}
- 		}
- 		work = napi_poll(napi, BUSY_POLL_BUDGET);
- 		trace_napi_poll(napi, work, BUSY_POLL_BUDGET);
-@@ -6652,6 +6673,53 @@ static enum hrtimer_restart napi_watchdog(struct hrtimer *timer)
- 	return HRTIMER_NORESTART;
- }
- 
-+static enum hrtimer_restart napi_biased_busy_poll_watchdog(struct hrtimer *timer)
-+{
-+	struct napi_struct *napi;
-+	unsigned long val, new;
-+
-+	napi = container_of(timer, struct napi_struct, bp_watchdog);
-+
-+	do {
-+		val = READ_ONCE(napi->state);
-+		if (WARN_ON_ONCE(!(val & NAPIF_STATE_BIAS_BUSY_POLL)))
-+			return HRTIMER_NORESTART;
-+
-+		new = val & ~NAPIF_STATE_BIAS_BUSY_POLL;
-+	} while (cmpxchg(&napi->state, val, new) != val);
-+
-+	if (!napi_disable_pending(napi) &&
-+	    !test_and_set_bit(NAPI_STATE_SCHED, &napi->state))
-+		__napi_schedule_irqoff(napi);
-+
-+	return HRTIMER_NORESTART;
-+}
-+
-+void napi_bias_busy_poll(unsigned int napi_id)
-+{
-+#ifdef CONFIG_NET_RX_BUSY_POLL
-+	struct napi_struct *napi;
-+	unsigned long val, new;
-+
-+	napi = napi_by_id(napi_id);
-+	if (!napi)
-+		return;
-+
-+	do {
-+		val = READ_ONCE(napi->state);
-+		if (val & NAPIF_STATE_BIAS_BUSY_POLL)
-+			return;
-+
-+		new = val | NAPIF_STATE_BIAS_BUSY_POLL;
-+	} while (cmpxchg(&napi->state, val, new) != val);
-+
-+	hrtimer_start(&napi->bp_watchdog, ms_to_ktime(BIASED_BUSY_POLL_TIMEOUT),
-+		      HRTIMER_MODE_REL_PINNED);
-+#endif
-+}
-+EXPORT_SYMBOL(napi_bias_busy_poll);
-+
-+
- static void init_gro_hash(struct napi_struct *napi)
- {
- 	int i;
-@@ -6673,6 +6741,8 @@ void netif_napi_add(struct net_device *dev, struct napi_struct *napi,
- 	INIT_HLIST_NODE(&napi->napi_hash_node);
- 	hrtimer_init(&napi->timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_PINNED);
- 	napi->timer.function = napi_watchdog;
-+	hrtimer_init(&napi->bp_watchdog, CLOCK_MONOTONIC, HRTIMER_MODE_REL_PINNED);
-+	napi->bp_watchdog.function = napi_biased_busy_poll_watchdog;
- 	init_gro_hash(napi);
- 	napi->skb = NULL;
- 	INIT_LIST_HEAD(&napi->rx_list);
-@@ -6704,7 +6774,9 @@ void napi_disable(struct napi_struct *n)
- 		msleep(1);
- 
- 	hrtimer_cancel(&n->timer);
-+	hrtimer_cancel(&n->bp_watchdog);
- 
-+	clear_bit(NAPI_STATE_BIAS_BUSY_POLL, &n->state);
- 	clear_bit(NAPI_STATE_DISABLE, &n->state);
- }
- EXPORT_SYMBOL(napi_disable);
-@@ -6767,6 +6839,11 @@ static int napi_poll(struct napi_struct *n, struct list_head *repoll)
- 	if (likely(work < weight))
- 		goto out_unlock;
- 
-+	if (unlikely(n->state & NAPIF_STATE_BIAS_BUSY_POLL)) {
-+		napi_complete(n);
-+		goto out_unlock;
-+	}
-+
- 	/* Drivers must not modify the NAPI state if they
- 	 * consume the entire weight.  In such cases this code
- 	 * still "owns" the NAPI instance and therefore can
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 727ea1cc633c..686eb5549b79 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1159,6 +1159,12 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
- 				sk->sk_ll_usec = val;
- 		}
- 		break;
-+	case SO_BIAS_BUSY_POLL:
-+		if (valbool && !capable(CAP_NET_ADMIN))
-+			ret = -EPERM;
-+		else
-+			sk->sk_bias_busy_poll = valbool;
-+		break;
- #endif
- 
- 	case SO_MAX_PACING_RATE:
-@@ -1523,6 +1529,9 @@ int sock_getsockopt(struct socket *sock, int level, int optname,
- 	case SO_BUSY_POLL:
- 		v.val = sk->sk_ll_usec;
- 		break;
-+	case SO_BIAS_BUSY_POLL:
-+		v.val = sk->sk_bias_busy_poll;
-+		break;
- #endif
- 
- 	case SO_MAX_PACING_RATE:
 -- 
-2.27.0
-
+Kees Cook
