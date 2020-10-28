@@ -2,233 +2,230 @@ Return-Path: <SRS0=zDaf=ED=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-	DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C0856C4363A
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:16:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8CB9AC4363A
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:21:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 491CD20790
-	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:16:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 38C9C20791
+	for <bpf@archiver.kernel.org>; Wed, 28 Oct 2020 23:21:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H5YOV56m"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CmyBrQOh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730736AbgJ1XOj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 19:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34948 "EHLO
+        id S1730715AbgJ1XU6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 19:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730263AbgJ1XOi (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 19:14:38 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D906CC0613CF
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 16:14:37 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id r127so891646lff.12
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 16:14:37 -0700 (PDT)
+        with ESMTP id S1728755AbgJ1XUG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 19:20:06 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60C5C0613CF;
+        Wed, 28 Oct 2020 16:20:05 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id y14so718520pfp.13;
+        Wed, 28 Oct 2020 16:20:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3x1J6W9vn4AlBy0J+3iWpQphgvbJmpzzrQwvBAhJ5JY=;
-        b=H5YOV56mWdrmRcNSYhYkyVGRVelyp884El1qTLvbyotZOVYWlE0S2TqMhOhjL6n2ch
-         hYepJsMW6DoUzb8YXpj1/53uYmuxIxjFeb9UIPO7H847cY/zUd+B95xRYC8abTwVg5jm
-         x2OvzSeLhg0cwBybfAOGOQkV9XsVK/EyXyPMIBLzpa7CriuNb4y/5MSTqXycJNEwyf7U
-         SbmKYNolTVUxKScdyvBcdVUUEuvv0vjyYC0CvDhhixiiQpYS72LFuyPeH/5dmcXEJ31S
-         EpjATCAZzGC6XhqWkunhwtYbRrPhe9P3g6+a2MtKcXcm0oRdVJAKptHqdy1+wmSA7WzC
-         cmGQ==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QpR8TC1oMS/pyz+0lkIsbuGK0UvTAps68WiPoj0vOkk=;
+        b=CmyBrQOhx5K9RZRU8QdkydCNb90kVH2wAJ4cGpJW/jLxYvwxepACFkf0/yG9+1xdhh
+         WXRH4eVAVEAE03U3AFTOQ1zz5qRihal2i5eCpJI1RlqycaRhohiRpcolkziMfDbT4W2b
+         SXHJ9egryYky8g6t7w8+uXML+Y9x0YyLp2a6pkwdFy5p4MQwhE/uWK7qEo1bHkugIiBr
+         3vuvMqbWY9r3CQ+gvI2GBt2BWcy0URSCjmw3J97MRC3K/ZSAbR+EdY8g5svCYUbXu2a5
+         2CCqdmXb/vUlKBUZuedByF0RFaTTYg/KEGMUO4pmn4XM3PhZyZXY+xwn+K+cF96qK/oe
+         QrFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3x1J6W9vn4AlBy0J+3iWpQphgvbJmpzzrQwvBAhJ5JY=;
-        b=OLAwbK1Z7gneRo8tpvjMyp5Jn1VfEQo9FGmIHBBdAU/3BQYbbp/wQ51Vew+mzKsPht
-         9pXgMAlrzaM/P4ql/zN/oZtQW8jYfWLvjMvMDvaRmZdgogh2aPjLOVtpurq0/YR800Jf
-         gvh/5Kcuz1THSNCwLu3opFPrLrRHYwWtM2X5XchSBODizpJ0BD2IVQHW7V8NA8B0QRkY
-         UoeB26YQuYmmsOqOm8r20+X76GCZdMzYZhj1P0Q6IRYgbsADljbT48n5LQdepjbKkLLv
-         xUnvMBoXbOgCPHz6v6h23t9ICW6JScAq8sjVzry6Sy6+T0Puy4JM3hf9INxIC9r53WAZ
-         zv2w==
-X-Gm-Message-State: AOAM532jI49g+DKeTN1BxgpPZJS1PaWs0GnHUOmatBNQ68YDeX3FFV4J
-        U73GhWlos9LOmDPJp8n4oJL8VSWAR/tH5jw4nADfcrLrUkU=
-X-Google-Smtp-Source: ABdhPJzXyWf93KJh7MTLqIEgWm5WWtY3xIdQEISBeUAts5iSL2Ft2btJ2NGIV9KN2npe84xs50rLGPRWAR7QOM6SYJk=
-X-Received: by 2002:a2e:9a17:: with SMTP id o23mr3146050lji.242.1603877726248;
- Wed, 28 Oct 2020 02:35:26 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QpR8TC1oMS/pyz+0lkIsbuGK0UvTAps68WiPoj0vOkk=;
+        b=UxlLPMml7hpp0NXdW6DA+9ydfjtS84muAVrPaSb6NZiDBqNoUwWd7Fgd3Z7w5Ae5ye
+         mzirb9BcOM5cTEtd4at852AceF20RR/54ziTESxziXFoYCIghvRcRXzLFHk5WzXueGBa
+         X9TgXiCTz2lLK+BIhzXkwrzdQp2xc/NI0m96zuz4ULIVsE0auKVwyMB/B4P9B4M9ex9/
+         QdJ4MHRMx4+JC35DH3NpwNyrYIInz+u5NpeP+aSUTZxhQYR+23rCkeIvofjrZshPmczP
+         n9ONVOnko73ZKdtxebuINRSU7TLvD3O6QdjMqDRYJmVWtPgGedTL65gNp5HW5yQAuZUb
+         BSYw==
+X-Gm-Message-State: AOAM530+Kqb8FlNDUxHONm5Oph0xFxKypRAEE+f1M0MK9bS9ILPk8w9V
+        Q58O6cf0uYp9e6WwWgHAhTo=
+X-Google-Smtp-Source: ABdhPJzdbwYGvpax5ZHTsqKT+DkN7U38pm+keRWCcL1dfxhaILbRn0/0WdEqd9EtvIyLNfitkPiOig==
+X-Received: by 2002:a62:8c81:0:b029:164:3789:5478 with SMTP id m123-20020a628c810000b029016437895478mr1302967pfd.44.1603927205364;
+        Wed, 28 Oct 2020 16:20:05 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::4:1c8])
+        by smtp.gmail.com with ESMTPSA id 3sm675785pfv.92.2020.10.28.16.20.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2020 16:20:04 -0700 (PDT)
+Date:   Wed, 28 Oct 2020 16:20:01 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF JIT for MIPS (32-BIT AND 64-BIT)" 
+        <bpf@vger.kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH v2 1/2] bpf: don't rely on GCC __attribute__((optimize))
+ to disable GCSE
+Message-ID: <20201028232001.pp7erdwft7oyt2xm@ast-mbp.dhcp.thefacebook.com>
+References: <20201028171506.15682-1-ardb@kernel.org>
+ <20201028171506.15682-2-ardb@kernel.org>
+ <20201028213903.fvdjydadqt6tx765@ast-mbp.dhcp.thefacebook.com>
+ <CAMj1kXFHcM-Jb+MwsLtB4NMUmMyAGGLeNGNLC9vTATot3NJLrA@mail.gmail.com>
+ <20201028225919.6ydy3m2u4p7x3to7@ast-mbp.dhcp.thefacebook.com>
+ <CAMj1kXG8PmvO6bLhGXPWtzKMnAsip2WDa-qdrd+kFfr30sd8-A@mail.gmail.com>
 MIME-Version: 1.0
-References: <cover.1600951211.git.yifeifz2@illinois.edu> <9ede6ef35c847e58d61e476c6a39540520066613.1600951211.git.yifeifz2@illinois.edu>
- <CAMuHMdXTLKr6pvoE+JAdn_P5kVxL6gx8PJ8mqfXcS+SF+pRbkQ@mail.gmail.com>
- <202010271653.B6D7D6B@keescook> <CAMuHMdX-y+ButCt=CH+Ao=RtO_eGz0DaTJupwuHNa7=Xi_AGoQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdX-y+ButCt=CH+Ao=RtO_eGz0DaTJupwuHNa7=Xi_AGoQ@mail.gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Wed, 28 Oct 2020 10:34:59 +0100
-Message-ID: <CAG48ez0+yqVg9mUu_ZnouxsdEHgKeMELyeHn2hbYHUNA=29O5A@mail.gmail.com>
-Subject: Re: [PATCH v2 seccomp 1/6] seccomp: Move config option SECCOMP to arch/Kconfig
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        YiFei Zhu <zhuyifei1999@gmail.com>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        YiFei Zhu <yifeifz2@illinois.edu>, bpf <bpf@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Hubertus Franke <frankeh@us.ibm.com>,
-        Jack Chen <jianyan2@illinois.edu>,
-        Josep Torrellas <torrella@illinois.edu>,
-        Tianyin Xu <tyxu@illinois.edu>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Valentin Rothberg <vrothber@redhat.com>,
-        Will Drewry <wad@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXG8PmvO6bLhGXPWtzKMnAsip2WDa-qdrd+kFfr30sd8-A@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Oct 28, 2020 at 9:19 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Wed, Oct 28, 2020 at 1:06 AM Kees Cook <keescook@chromium.org> wrote:
-> > On Tue, Oct 27, 2020 at 10:52:39AM +0100, Geert Uytterhoeven wrote:
-> > > On Thu, Sep 24, 2020 at 2:48 PM YiFei Zhu <zhuyifei1999@gmail.com> wrote:
-> > > > From: YiFei Zhu <yifeifz2@illinois.edu>
+On Thu, Oct 29, 2020 at 12:10:52AM +0100, Ard Biesheuvel wrote:
+> On Wed, 28 Oct 2020 at 23:59, Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Wed, Oct 28, 2020 at 11:15:04PM +0100, Ard Biesheuvel wrote:
+> > > On Wed, 28 Oct 2020 at 22:39, Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
 > > > >
-> > > > In order to make adding configurable features into seccomp
-> > > > easier, it's better to have the options at one single location,
-> > > > considering easpecially that the bulk of seccomp code is
-> > > > arch-independent. An quick look also show that many SECCOMP
-> > > > descriptions are outdated; they talk about /proc rather than
-> > > > prctl.
+> > > > On Wed, Oct 28, 2020 at 06:15:05PM +0100, Ard Biesheuvel wrote:
+> > > > > Commit 3193c0836 ("bpf: Disable GCC -fgcse optimization for
+> > > > > ___bpf_prog_run()") introduced a __no_fgcse macro that expands to a
+> > > > > function scope __attribute__((optimize("-fno-gcse"))), to disable a
+> > > > > GCC specific optimization that was causing trouble on x86 builds, and
+> > > > > was not expected to have any positive effect in the first place.
+> > > > >
+> > > > > However, as the GCC manual documents, __attribute__((optimize))
+> > > > > is not for production use, and results in all other optimization
+> > > > > options to be forgotten for the function in question. This can
+> > > > > cause all kinds of trouble, but in one particular reported case,
+> > > > > it causes -fno-asynchronous-unwind-tables to be disregarded,
+> > > > > resulting in .eh_frame info to be emitted for the function.
+> > > > >
+> > > > > This reverts commit 3193c0836, and instead, it disables the -fgcse
+> > > > > optimization for the entire source file, but only when building for
+> > > > > X86 using GCC with CONFIG_BPF_JIT_ALWAYS_ON disabled. Note that the
+> > > > > original commit states that CONFIG_RETPOLINE=n triggers the issue,
+> > > > > whereas CONFIG_RETPOLINE=y performs better without the optimization,
+> > > > > so it is kept disabled in both cases.
+> > > > >
+> > > > > Fixes: 3193c0836 ("bpf: Disable GCC -fgcse optimization for ___bpf_prog_run()")
+> > > > > Link: https://lore.kernel.org/lkml/CAMuHMdUg0WJHEcq6to0-eODpXPOywLot6UD2=GFHpzoj_hCoBQ@mail.gmail.com/
+> > > > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > > > > ---
+> > > > >  include/linux/compiler-gcc.h   | 2 --
+> > > > >  include/linux/compiler_types.h | 4 ----
+> > > > >  kernel/bpf/Makefile            | 6 +++++-
+> > > > >  kernel/bpf/core.c              | 2 +-
+> > > > >  4 files changed, 6 insertions(+), 8 deletions(-)
+> > > > >
+> > > > > diff --git a/include/linux/compiler-gcc.h b/include/linux/compiler-gcc.h
+> > > > > index d1e3c6896b71..5deb37024574 100644
+> > > > > --- a/include/linux/compiler-gcc.h
+> > > > > +++ b/include/linux/compiler-gcc.h
+> > > > > @@ -175,5 +175,3 @@
+> > > > >  #else
+> > > > >  #define __diag_GCC_8(s)
+> > > > >  #endif
+> > > > > -
+> > > > > -#define __no_fgcse __attribute__((optimize("-fno-gcse")))
 > > > >
-> > > > As a result of moving the config option and keeping it default
-> > > > on, architectures arm, arm64, csky, riscv, sh, and xtensa
-> > > > did not have SECCOMP on by default prior to this and SECCOMP will
-> > > > be default in this change.
+> > > > See my reply in the other thread.
+> > > > I prefer
+> > > > -#define __no_fgcse __attribute__((optimize("-fno-gcse")))
+> > > > +#define __no_fgcse __attribute__((optimize("-fno-gcse,-fno-omit-frame-pointer")))
 > > > >
-> > > > Architectures microblaze, mips, powerpc, s390, sh, and sparc
-> > > > have an outdated depend on PROC_FS and this dependency is removed
-> > > > in this change.
+> > > > Potentially with -fno-asynchronous-unwind-tables.
 > > > >
-> > > > Suggested-by: Jann Horn <jannh@google.com>
-> > > > Link: https://lore.kernel.org/lkml/CAG48ez1YWz9cnp08UZgeieYRhHdqh-ch7aNwc4JRBnGyrmgfMg@mail.gmail.com/
-> > > > Signed-off-by: YiFei Zhu <yifeifz2@illinois.edu>
 > > >
-> > > Thanks for your patch. which is now commit 282a181b1a0d66de ("seccomp:
-> > > Move config option SECCOMP to arch/Kconfig") in v5.10-rc1.
+> > > So how would that work? arm64 has the following:
 > > >
-> > > > --- a/arch/Kconfig
-> > > > +++ b/arch/Kconfig
-> > > > @@ -458,6 +462,23 @@ config HAVE_ARCH_SECCOMP_FILTER
-> > > >             results in the system call being skipped immediately.
-> > > >           - seccomp syscall wired up
-> > > >
-> > > > +config SECCOMP
-> > > > +       def_bool y
-> > > > +       depends on HAVE_ARCH_SECCOMP
-> > > > +       prompt "Enable seccomp to safely compute untrusted bytecode"
-> > > > +       help
-> > > > +         This kernel feature is useful for number crunching applications
-> > > > +         that may need to compute untrusted bytecode during their
-> > > > +         execution. By using pipes or other transports made available to
-> > > > +         the process as file descriptors supporting the read/write
-> > > > +         syscalls, it's possible to isolate those applications in
-> > > > +         their own address space using seccomp. Once seccomp is
-> > > > +         enabled via prctl(PR_SET_SECCOMP), it cannot be disabled
-> > > > +         and the task is only allowed to execute a few safe syscalls
-> > > > +         defined by each seccomp mode.
-> > > > +
-> > > > +         If unsure, say Y. Only embedded should say N here.
-> > > > +
+> > > KBUILD_CFLAGS += -fno-asynchronous-unwind-tables -fno-unwind-tables
 > > >
-> > > Please tell me why SECCOMP is special, and deserves to default to be
-> > > enabled.  Is it really that critical, given only 13.5 (half of sparc
-> > > ;-) out of 24
-> > > architectures implement support for it?
+> > > ifeq ($(CONFIG_SHADOW_CALL_STACK), y)
+> > > KBUILD_CFLAGS += -ffixed-x18
+> > > endif
+> > >
+> > > and it adds -fpatchable-function-entry=2 for compilers that support
+> > > it, but only when CONFIG_FTRACE is enabled.
 > >
-> > That's an excellent point; I missed this in my review as I saw several
-> > Kconfig already marked "def_bool y" but failed to note it wasn't _all_
-> > of them. Okay, checking before this patch, these had them effectively
-> > enabled:
+> > I think you're assuming that GCC drops all flags when it sees __attribute__((optimize)).
+> > That's not the case.
 > >
-> > via Kconfig:
+> 
+> So which flags does it drop, and which doesn't it drop? Is that
+> documented somewhere? Is that the same for all versions of GCC?
+> 
+> > > Also, as Nick pointed out, -fno-gcse does not work on Clang.
 > >
-> > parisc
-> > s390
-> > um
-> > x86
->
-> Mostly "server" and "desktop" platforms.
->
-> > via defconfig, roughly speaking:
+> > yes and what's the point?
+> > #define __no_fgcse is GCC only. clang doesn't need this workaround.
 > >
-> > arm
-> > arm64
-> > sh
->
-> Note that these defconfigs are example configs, not meant for production.
-> E.g. arm/multi_v7_defconfig and arm64/defconfig enable about everything
-> for compile coverage.
->
-> > How about making the default depend on HAVE_ARCH_SECCOMP_FILTER?
+> 
+> Ah ok, that's at least something.
+> 
+> > > Every architecture will have a different set of requirements here. And
+> > > there is no way of knowing which -f options are disregarded when you
+> > > use the function attribute.
+> > >
+> > > So how on earth are you going to #define __no-fgcse correctly for
+> > > every configuration imaginable?
+> > >
+> > > > __attribute__((optimize("")) is not as broken as you're claiming to be.
+> > > > It has quirky gcc internal logic, but it's still widely used
+> > > > in many software projects.
+> > >
+> > > So it's fine because it is only a little bit broken? I'm sorry, but
+> > > that makes no sense whatsoever.
+> > >
+> > > If you insist on sticking with this broken construct, can you please
+> > > make it GCC/x86-only at least?
 > >
-> > These have SECCOMP_FILTER support:
-> >
-> > arch/arm/Kconfig:       select HAVE_ARCH_SECCOMP_FILTER if AEABI && !OABI_COMPAT
-> > arch/arm64/Kconfig:     select HAVE_ARCH_SECCOMP_FILTER
-> > arch/csky/Kconfig:      select HAVE_ARCH_SECCOMP_FILTER
-> > arch/mips/Kconfig:      select HAVE_ARCH_SECCOMP_FILTER
-> > arch/parisc/Kconfig:    select HAVE_ARCH_SECCOMP_FILTER
-> > arch/powerpc/Kconfig:   select HAVE_ARCH_SECCOMP_FILTER
-> > arch/riscv/Kconfig:     select HAVE_ARCH_SECCOMP_FILTER
-> > arch/s390/Kconfig:      select HAVE_ARCH_SECCOMP_FILTER
-> > arch/sh/Kconfig:        select HAVE_ARCH_SECCOMP_FILTER
-> > arch/um/Kconfig:        select HAVE_ARCH_SECCOMP_FILTER
-> > arch/x86/Kconfig:       select HAVE_ARCH_SECCOMP_FILTER
-> > arch/xtensa/Kconfig:    select HAVE_ARCH_SECCOMP_FILTER
-> >
-> > So the "new" promotions would be:
-> >
-> > csky
-> > mips
-> > powerpc
-> > riscv
-> > xtensa
-> >
-> > Which would leave only these two:
-> >
-> > arch/microblaze/Kconfig:        select HAVE_ARCH_SECCOMP
-> > arch/sparc/Kconfig:     select HAVE_ARCH_SECCOMP if SPARC64
-> >
-> > At this point, given the ubiquity of seccomp usage (e.g. systemd), I
-> > guess it's not unreasonable to make it def_bool y?
->
-> Having support does not necessarily imply you want it enabled.
-> If systemd needs it (does it? I have Debian nfsroots with systemd,
-> without SECCOMP), you can enable it in the defconfig.
-> "Default y" is for things you cannot do without, unless you know
-> better.
->
-> Bloat-o-meter says enabling SECCOMP consumes only ca. 8 KiB
-> (on arm32), so perhaps "default y if !EXPERT"?
+> > I'm totally fine with making
+> > #define __no_fgcse __attribute__((optimize("-fno-gcse,-fno-omit-frame-pointer")))
+> > to be gcc+x86 only.
+> > I'd like to get rid of it, but objtool is not smart enough to understand
+> > generated asm without it.
+> 
+> I'll defer to the x86 folks to make the final call here, but I would
+> be perfectly happy doing
+> 
+> index d1e3c6896b71..68ddb91fbcc6 100644
+> --- a/include/linux/compiler-gcc.h
+> +++ b/include/linux/compiler-gcc.h
+> @@ -176,4 +176,6 @@
+>  #define __diag_GCC_8(s)
+>  #endif
+> 
+> +#ifdef CONFIG_X86
+>  #define __no_fgcse __attribute__((optimize("-fno-gcse")))
+> +#endif
 
-Gating a *default* on EXPERT seems weird to me. Isn't EXPERT normally
-used to gate whether things are configurable at all (using "if
-EXPERT")?
+If you're going to submit this patch could you please add
+,-fno-omit-frame-pointer
+to the above as well?
 
-I think that at least on systems with MMU, SECCOMP should default to
-y, independent of what EXPERT is set to. When SECCOMP is disabled,
-various pieces of software will have to (potentially invisibly to the
-user) degrade their belts-and-suspenders security measures. For
-example, as far as I understand, systemd has support for using seccomp
-to restrict what services can do (and uses that for some of its
-built-in services), but skips those steps with a log message if you
-don't have SECCOMP. Perhaps more importantly, the same thing happens
-in OpenSSH's ssh_sandbox_child() function - it generates a debug
-message, then continues on.
+> and end the conversation here, because I honestly cannot wrap my head
+> around the fact that you are willing to work around an x86 specific
+> objtool shortcoming by arbitrarily disabling some GCC optimization for
+> all architectures, using a construct that may or may not affect other
+> compiler settings in unpredictable ways, where the compiler is being
+> used to compile a BPF language runtime for executing BPF programs
+> inside the kernel.
+> 
+> What on earth could go wrong?
 
-If someone does manage to find an OpenSSH pre-auth remote code
-execution bug in a few years, I think we very much wouldn't want to be
-in a situation where that can be used to compromise a bunch of routers
-just because SECCOMP wasn't in the default config, or because it was
-invisibly disabled when the router vendor enabled EXPERT so that they
-can get rid of io_uring support.
+Frankly I'm move worried that -Os will generate incorrect code.
+All compilers have bugs. Kernel has bugs. What can go wrong?
