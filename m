@@ -2,137 +2,185 @@ Return-Path: <SRS0=L8C4=EE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 47CD0C4363A
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 02:34:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B325EC388F7
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 02:38:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E5A152076A
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 02:34:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 695A42076A
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 02:38:29 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tOTX7t2O"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="morPS1rK"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391327AbgJ2CeM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 22:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38344 "EHLO
+        id S1726886AbgJ2CiV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 22:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729940AbgJ2Cdp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 22:33:45 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21467C0613CF;
-        Wed, 28 Oct 2020 19:33:45 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id z5so1831414iob.1;
-        Wed, 28 Oct 2020 19:33:45 -0700 (PDT)
+        with ESMTP id S1729588AbgJ2Cgi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 22:36:38 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21470C0613CF;
+        Wed, 28 Oct 2020 19:36:38 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id o70so955518ybc.1;
+        Wed, 28 Oct 2020 19:36:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6GytV/YfZqiq2s9nqgfVb891weslak10f/ixf3YW0ZE=;
-        b=tOTX7t2OIuZH3UnQFep/TOZBB00cBS/IWDotGJGlh0t/UEMZfTdbfHV1569JAZg06I
-         R88JxH9OWlL0jGvRZqxUBONLlRyDJjg7ZR71RfK0Bw7bggQhbubKBt45WvFQ6IsnFaI5
-         p8OBvxk9k7ao+werHg67+vw9y/AbBW6hNN6zT4fjgqNMdQdgqa9XRpxqbRjPtydqgmK0
-         5d9iAHTNGYtNi79KGkv6CPhuYkHw1l0fqeRSMp12oFkxLKZM+wz7qbbmIFLVdXz123Xm
-         CrH8OfmehgUtsvjlpvFtSo88ZJCw6l2yK5an0ANhSRvb3ZwJdL1j4uVRYcU3YcsrO4SQ
-         yaYg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TXhexRQYTJZaX12a+CEFo2ey4jNoNUVcsefrRM8fqb0=;
+        b=morPS1rKmVmwcJZK82tUO/cgv+bWnRoUD5LCKu12VeiyBhwMyYiT/k2BdwrrcmjGhz
+         +U/8lLskiF+AixIQCvnaIJwagnQfnsYSksvdg+sIBAqZibtRcx5sG3f8+qS5vURHY51j
+         aQqoTCAtfVLBjuT4TFVf7uXd2TSEzMkNFCXFqaOza7rUkpK0eAJhIDCLLQE6+MjhOf7V
+         qI4a/tjFFMZqcXlisvTW4ezQ2bPW0GHFDWuubqcYHZjG/NWcBrT1ysyFxjdo2SxVNA4J
+         xvB+LG+6ZVnQztxOkr7CpWdPhI6eamK6eBMiFrDICMyHAGH+V4al5u3LjmSJ8Xopoa3R
+         h0/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6GytV/YfZqiq2s9nqgfVb891weslak10f/ixf3YW0ZE=;
-        b=rcJr0YkL4THhZPYlQvqBfXZaZZ3Krx9Gq3oFLZxK/LW1qeaAvnftyQmjH/g6U+i/gH
-         VMOR6/UtG0wjfX0tH1BHABlHBcHqWk2Y8oCH5pVWi26Rp+wv+gUcWqcia70FvpMxW/VB
-         COvq+ccL7SKI6kxh9zSxtBIkPUYOrnCLu8PusWQqNObkZivE3lhcYhqHiEGvMXERYHiA
-         zRgyyuEuHJXI+Nq+4TXvah546K47M860IrW5cGuG2EGy3DZVdWv71Ha7DV1bEt7OanUH
-         RWwNiVir9BL4QX05FTgx/Y8exQ4nWVbNQmcZVRMybMXWSqv93MHXjf/Xu3wqnie82C9C
-         ojrg==
-X-Gm-Message-State: AOAM533JEhj4drukd5249hOGLZUI1FaLJwOesmx0/KuJcCflJNQwG829
-        X318I8ZbXE47lUFnqmZe3sA=
-X-Google-Smtp-Source: ABdhPJx6pHJr5RkSB7hHl65PFO3eVLmalsEfN019T1FytM0+LEJaP74JtpGFu6rRHe+Os3eR4dc7tg==
-X-Received: by 2002:a05:6638:10ea:: with SMTP id g10mr1885135jae.9.1603938824510;
-        Wed, 28 Oct 2020 19:33:44 -0700 (PDT)
-Received: from Davids-MacBook-Pro.local ([2601:282:803:7700:e1b0:db06:9a2d:91c5])
-        by smtp.googlemail.com with ESMTPSA id v85sm1365404ilk.50.2020.10.28.19.33.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Oct 2020 19:33:44 -0700 (PDT)
-Subject: Re: [PATCHv2 iproute2-next 0/5] iproute2: add libbpf support
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Hangbin Liu <haliu@redhat.com>
-Cc:     Stephen Hemminger <stephen@networkplumber.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Miller <davem@davemloft.net>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Jiri Benc <jbenc@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
-References: <20201023033855.3894509-1-haliu@redhat.com>
- <20201028132529.3763875-1-haliu@redhat.com>
- <7babcccb-2b31-f9bf-16ea-6312e449b928@gmail.com>
- <20201029020637.GM2408@dhcp-12-153.nay.redhat.com>
- <CAEf4BzZR4MqQJCD4kzFsbhpfmp4RB7SHcP5AbAiqzqK7to2u+g@mail.gmail.com>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <b17e7428-dd99-09f8-7254-c61d25a0c797@gmail.com>
-Date:   Wed, 28 Oct 2020 20:33:43 -0600
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.12.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TXhexRQYTJZaX12a+CEFo2ey4jNoNUVcsefrRM8fqb0=;
+        b=Gks9vYFqW9J4soza1oF2BTmk1fv36SCDLNDKZdVZDRXe3MaJa2Alzw3LAa92J1AojC
+         fOrTe4z92m3/M8y1lWuwrvWn1TNJlupf20wVa0/j3hnC88TtjTLNzOf+OqE8u8I4vUIy
+         jeh74DcJeUfDB4mx0EOECYmwqHkOsUxPRBAUpdsMWrTvexwEtafqVZUjUBFoLACBAoez
+         ZJB108GHeuzfmRXm1WSid4nBqRrDx9V/s6c+G3NOviyxQ6AC376sewqvZO6ifxrHBZBl
+         RX/wnXtVI0MPRUotpiAYcOIhhJNHEEPjV+65mdFmKuhDOtMV3dIRmqaB+fVPq+GzA0PY
+         SDnA==
+X-Gm-Message-State: AOAM5333VdCOPLAtylg8exLxV+zUSVweBvYacvmaw7US0hpo8vOZKiee
+        3fypZebWN2Yr5KBYUiZq3cYphc72dTIbSUmk8hM=
+X-Google-Smtp-Source: ABdhPJwtHZSw9Q6Sx8ODeo4QZeyM/3Jcz311so7MhMZni52xhelWxjqGEyNMkL1bEjcuiEGd92sshWoquuR8cYhkvvw=
+X-Received: by 2002:a25:bdc7:: with SMTP id g7mr3207159ybk.260.1603938997408;
+ Wed, 28 Oct 2020 19:36:37 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzZR4MqQJCD4kzFsbhpfmp4RB7SHcP5AbAiqzqK7to2u+g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20201028200952.7869-1-dev@der-flo.net>
+In-Reply-To: <20201028200952.7869-1-dev@der-flo.net>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 28 Oct 2020 19:36:26 -0700
+Message-ID: <CAEf4BzZbtdgK-6y1cX6U2_sV9T6QHO=fAj2j0L_CtuqW0DZ1Rw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4] bpf: Lift hashtab key_size limit
+To:     Florian Lehner <dev@der-flo.net>
+Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        john fastabend <john.fastabend@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 10/28/20 8:27 PM, Andrii Nakryiko wrote:
-> On Wed, Oct 28, 2020 at 7:06 PM Hangbin Liu <haliu@redhat.com> wrote:
->>
->> On Wed, Oct 28, 2020 at 05:02:34PM -0600, David Ahern wrote:
->>> fails to compile on Ubuntu 20.10:
->>>
->>> root@u2010-sfo3:~/iproute2.git# ./configure
->>> TC schedulers
->>>  ATM  yes
->>>  IPT  using xtables
->>>  IPSET  yes
->>>
->>> iptables modules directory: /usr/lib/x86_64-linux-gnu/xtables
->>> libc has setns: yes
->>> SELinux support: yes
->>> libbpf support: yes
->>> ELF support: yes
->>> libmnl support: yes
->>> Berkeley DB: no
->>> need for strlcpy: yes
->>> libcap support: yes
->>>
->>> root@u2010-sfo3:~/iproute2.git# make clean
->>>
->>> root@u2010-sfo3:~/iproute2.git# make -j 4
->>> ...
->>> /usr/bin/ld: ../lib/libutil.a(bpf_libbpf.o): in function `load_bpf_object':
->>> bpf_libbpf.c:(.text+0x3cb): undefined reference to
->>> `bpf_program__section_name'
->>> /usr/bin/ld: bpf_libbpf.c:(.text+0x438): undefined reference to
->>> `bpf_program__section_name'
->>> /usr/bin/ld: bpf_libbpf.c:(.text+0x716): undefined reference to
->>> `bpf_program__section_name'
->>> collect2: error: ld returned 1 exit status
->>> make[1]: *** [Makefile:27: ip] Error 1
->>> make[1]: *** Waiting for unfinished jobs....
->>> make: *** [Makefile:64: all] Error 2
->>
->> You need to update libbpf to latest version.
-> 
-> Why not using libbpf from submodule?
-> 
+On Wed, Oct 28, 2020 at 3:21 PM Florian Lehner <dev@der-flo.net> wrote:
+>
+> Currently key_size of hashtab is limited to MAX_BPF_STACK.
+> As the key of hashtab can also be a value from a per cpu map it can be
+> larger than MAX_BPF_STACK.
+>
+> The use-case for this patch originates to implement allow/disallow
+> lists for files and file paths. The maximum length of file paths is
+> defined by PATH_MAX with 4096 chars including nul.
+> This limit exceeds MAX_BPF_STACK.
+>
+> Changelog:
+>
+> v4:
+>  - Utilize BPF skeleton in tests
+>  - Rebase
+>
+> v3:
+>  - Rebase
+>
+> v2:
+>  - Add a test for bpf side
+>
+> Signed-off-by: Florian Lehner <dev@der-flo.net>
+> Acked-by: John Fastabend <john.fastabend@gmail.com>
+> ---
+>  kernel/bpf/hashtab.c                          | 16 ++-----
+>  .../selftests/bpf/prog_tests/hash_large_key.c | 43 +++++++++++++++++
+>  .../selftests/bpf/progs/test_hash_large_key.c | 46 +++++++++++++++++++
+>  tools/testing/selftests/bpf/test_maps.c       |  3 +-
+>  4 files changed, 96 insertions(+), 12 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/hash_large_key.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_hash_large_key.c
+>
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index 1815e97d4c9c..fff7cd05b9e3 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -390,17 +390,11 @@ static int htab_map_alloc_check(union bpf_attr *attr)
+>             attr->value_size == 0)
+>                 return -EINVAL;
+>
+> -       if (attr->key_size > MAX_BPF_STACK)
+> -               /* eBPF programs initialize keys on stack, so they cannot be
+> -                * larger than max stack size
+> -                */
+> -               return -E2BIG;
+> -
+> -       if (attr->value_size >= KMALLOC_MAX_SIZE -
+> -           MAX_BPF_STACK - sizeof(struct htab_elem))
+> -               /* if value_size is bigger, the user space won't be able to
+> -                * access the elements via bpf syscall. This check also makes
+> -                * sure that the elem_size doesn't overflow and it's
+> +       if ((u64)(attr->key_size + attr->value_size) >= KMALLOC_MAX_SIZE -
 
-no. iproute2 does not bring in libmnl, libc, ... a submodules. libbpf is
-not special. OS versions provide it and it needs to co-exist with packages.
+this will add both as u32, then will cast overflown result to u64.
+Instead just do:
+
+if ((u64)attr->key_size + attr->value_size >= ....)
+
+> +          sizeof(struct htab_elem))
+> +               /* if key_size + value_size is bigger, the user space won't be
+> +                * able to access the elements via bpf syscall. This check
+> +                * also makes sure that the elem_size doesn't overflow and it's
+>                  * kmalloc-able later in htab_map_update_elem()
+>                  */
+>                 return -E2BIG;
+
+[...]
+
+> +
+> +SEC("raw_tracepoint/sys_enter")
+> +int bpf_hash_large_key_test(void *ctx)
+> +{
+> +       int zero = 0, err = 1, value = 42;
+> +       struct bigelement *key;
+> +
+> +       key = bpf_map_lookup_elem(&key_map, &zero);
+> +       if (!key)
+> +               goto err;
+> +
+> +       key->c = 1;
+> +       if (bpf_map_update_elem(&hash_map, key, &value, BPF_ANY))
+> +               goto err;
+> +
+> +       err = 0;
+> +err:
+> +       return err;
+
+return value from raw_tracepoint doesn't really communicate error, you
+might as well just return 0 always
+
+> +}
+> +
+> diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
+> index 0d92ebcb335d..0ad3e6305ff0 100644
+> --- a/tools/testing/selftests/bpf/test_maps.c
+> +++ b/tools/testing/selftests/bpf/test_maps.c
+> @@ -1223,9 +1223,10 @@ static void test_map_in_map(void)
+>
+>  static void test_map_large(void)
+>  {
+> +
+>         struct bigkey {
+>                 int a;
+> -               char b[116];
+> +               char b[4096];
+>                 long long c;
+>         } key;
+>         int fd, i, value;
+> --
+> 2.26.2
+>
