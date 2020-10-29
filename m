@@ -2,195 +2,85 @@ Return-Path: <SRS0=L8C4=EE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62359C5517A
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 19:29:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3345BC2D0A3
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 19:29:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 03EF3204FD
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 19:29:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CDED520796
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 19:29:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603999778;
-	bh=XIGNh9RCMZMoSFJCaUx1N0X6ggZzBFfOMi7+ATIW1OI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=VsSmg1SxD3qniBj47yEvPPY/342+zGESW56EhsI1uhgSS0EDY8sYm+H0+jZdMVwuX
-	 VitmYZ+Sc916Xm/2LfSkzH2G9887/edcCxGjwgnXi9S+lGJqJRP0pm6bzR/tb+oeYV
-	 9tKHFB6SqWrOEK1HN8nCV+OaVZfkWaTChI0W6mrE=
+	s=default; t=1603999787;
+	bh=oAprieKuw4Y/NSNpSPIW2/x4vRSmn30JSRz7wRBT+/E=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=aKp70rApyNJIfnd6pFgEFk6XdnxEVtDODEBRAZsGzyookXHbwit/VnExN9dzpSLTg
+	 T623cGGiNTxJ2BC/mryC3fD+m50+zmI0q411tUZUyv1JwUWssi2SykdL8m5zOa9125
+	 gycKMV8PXtOm/A7oRuVrB8yAacHaUBfMw7TC8b+Q=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726228AbgJ2T3g (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Oct 2020 15:29:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51484 "EHLO mail.kernel.org"
+        id S1726237AbgJ2T3l (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Oct 2020 15:29:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51442 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726237AbgJ2T3d (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 29 Oct 2020 15:29:33 -0400
+        id S1726226AbgJ2T3c (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 29 Oct 2020 15:29:32 -0400
 Received: from lore-desk.redhat.com (unknown [151.66.29.159])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D0BA1207BC;
-        Thu, 29 Oct 2020 19:29:01 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9B8DC204FD;
+        Thu, 29 Oct 2020 19:28:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603999743;
-        bh=XIGNh9RCMZMoSFJCaUx1N0X6ggZzBFfOMi7+ATIW1OI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uNlhj1vOkEk1pI2N/akCCFwRbWKccNHlXneajwYs1xRv0fpd5XWdlxLClVrDKAcsP
-         CN+FAkeQTbkdy32mEE/1KOKCJFhImeZ3WaKXvwL+AaCuYIh0l5F/Izr9S8MKD/iXuD
-         qT5t+gGDZAHPAEviNEERVE7dHqmmiEG30IcKcpr4=
+        s=default; t=1603999737;
+        bh=oAprieKuw4Y/NSNpSPIW2/x4vRSmn30JSRz7wRBT+/E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YCoi2EfUy+4BzvW2/+iao4LP8fxxc5EMX4LKu0cNDseM9akHcAoZmHPn7fW3Z+2fo
+         rD6qFGU6xqs5v7A9V01oLRAmCvYgudGqPSfb5ehjq6dgQ4P2yarUiya6yPWVIe6Qkr
+         taFmZ46/oiCF3PYWGiBevVOz0oeWpZoUxb20+GT8=
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, lorenzo.bianconi@redhat.com,
         davem@davemloft.net, kuba@kernel.org, brouer@redhat.com,
         ilias.apalodimas@linaro.org
-Subject: [PATCH v2 net-next 2/4] net: page_pool: add bulk support for ptr_ring
-Date:   Thu, 29 Oct 2020 20:28:45 +0100
-Message-Id: <4b9fc5361326428cb16791d5e064869bebdaef84.1603998519.git.lorenzo@kernel.org>
+Subject: [PATCH v2 net-next 0/4] xdp: introduce bulking for page_pool tx return path
+Date:   Thu, 29 Oct 2020 20:28:43 +0100
+Message-Id: <cover.1603998519.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1603998519.git.lorenzo@kernel.org>
-References: <cover.1603998519.git.lorenzo@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce the capability to batch page_pool ptr_ring refill since it is
-usually run inside the driver NAPI tx completion loop.
+XDP bulk APIs introduce a defer/flush mechanism to return
+pages belonging to the same xdp_mem_allocator object
+(identified via the mem.id field) in bulk to optimize
+I-cache and D-cache since xdp_return_frame is usually run
+inside the driver NAPI tx completion loop.
+Convert mvneta, mvpp2 and mlx5 drivers to xdp_return_frame_bulk APIs.
 
-Suggested-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- include/net/page_pool.h | 26 ++++++++++++++++++++++++++
- net/core/page_pool.c    | 35 +++++++++++++++++++++++++++++++++++
- net/core/xdp.c          |  9 ++-------
- 3 files changed, 63 insertions(+), 7 deletions(-)
+Changes since v1:
+- improve comments
+- rework xdp_return_frame_bulk routine logic
+- move count and xa fields at the beginning of xdp_frame_bulk struct
+- invert logic in page_pool_put_page_bulk for loop
 
-diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-index 81d7773f96cd..b5b195305346 100644
---- a/include/net/page_pool.h
-+++ b/include/net/page_pool.h
-@@ -152,6 +152,8 @@ struct page_pool *page_pool_create(const struct page_pool_params *params);
- void page_pool_destroy(struct page_pool *pool);
- void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *));
- void page_pool_release_page(struct page_pool *pool, struct page *page);
-+void page_pool_put_page_bulk(struct page_pool *pool, void **data,
-+			     int count);
- #else
- static inline void page_pool_destroy(struct page_pool *pool)
- {
-@@ -165,6 +167,11 @@ static inline void page_pool_release_page(struct page_pool *pool,
- 					  struct page *page)
- {
- }
-+
-+static inline void page_pool_put_page_bulk(struct page_pool *pool, void **data,
-+					   int count)
-+{
-+}
- #endif
- 
- void page_pool_put_page(struct page_pool *pool, struct page *page,
-@@ -215,4 +222,23 @@ static inline void page_pool_nid_changed(struct page_pool *pool, int new_nid)
- 	if (unlikely(pool->p.nid != new_nid))
- 		page_pool_update_nid(pool, new_nid);
- }
-+
-+static inline void page_pool_ring_lock(struct page_pool *pool)
-+	__acquires(&pool->ring.producer_lock)
-+{
-+	if (in_serving_softirq())
-+		spin_lock(&pool->ring.producer_lock);
-+	else
-+		spin_lock_bh(&pool->ring.producer_lock);
-+}
-+
-+static inline void page_pool_ring_unlock(struct page_pool *pool)
-+	__releases(&pool->ring.producer_lock)
-+{
-+	if (in_serving_softirq())
-+		spin_unlock(&pool->ring.producer_lock);
-+	else
-+		spin_unlock_bh(&pool->ring.producer_lock);
-+}
-+
- #endif /* _NET_PAGE_POOL_H */
-diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-index ef98372facf6..236c5ed3aa66 100644
---- a/net/core/page_pool.c
-+++ b/net/core/page_pool.c
-@@ -11,6 +11,8 @@
- #include <linux/device.h>
- 
- #include <net/page_pool.h>
-+#include <net/xdp.h>
-+
- #include <linux/dma-direction.h>
- #include <linux/dma-mapping.h>
- #include <linux/page-flags.h>
-@@ -408,6 +410,39 @@ void page_pool_put_page(struct page_pool *pool, struct page *page,
- }
- EXPORT_SYMBOL(page_pool_put_page);
- 
-+void page_pool_put_page_bulk(struct page_pool *pool, void **data,
-+			     int count)
-+{
-+	int i, len = 0;
-+
-+	for (i = 0; i < count; i++) {
-+		struct page *page = virt_to_head_page(data[i]);
-+
-+		if (likely(page_ref_count(page) == 1 &&
-+			   pool_page_reusable(pool, page))) {
-+			if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
-+				page_pool_dma_sync_for_device(pool, page, -1);
-+
-+			/* bulk pages for ptr_ring cache */
-+			data[len++] = page;
-+		} else {
-+			page_pool_release_page(pool, page);
-+			put_page(page);
-+		}
-+	}
-+
-+	/* Grab the producer spinlock for concurrent access to
-+	 * ptr_ring page_pool cache
-+	 */
-+	page_pool_ring_lock(pool);
-+	for (i = 0; i < len; i++) {
-+		if (__ptr_ring_produce(&pool->ring, data[i]))
-+			page_pool_return_page(pool, data[i]);
-+	}
-+	page_pool_ring_unlock(pool);
-+}
-+EXPORT_SYMBOL(page_pool_put_page_bulk);
-+
- static void page_pool_empty_ring(struct page_pool *pool)
- {
- 	struct page *page;
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 66ac275a0360..ff7c801bd40c 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -393,16 +393,11 @@ EXPORT_SYMBOL_GPL(xdp_return_frame_rx_napi);
- void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq)
- {
- 	struct xdp_mem_allocator *xa = bq->xa;
--	int i;
- 
--	if (unlikely(!xa))
-+	if (unlikely(!xa || !bq->count))
- 		return;
- 
--	for (i = 0; i < bq->count; i++) {
--		struct page *page = virt_to_head_page(bq->q[i]);
--
--		page_pool_put_full_page(xa->page_pool, page, false);
--	}
-+	page_pool_put_page_bulk(xa->page_pool, bq->q, bq->count);
- 	bq->count = 0;
- }
- EXPORT_SYMBOL_GPL(xdp_flush_frame_bulk);
+Lorenzo Bianconi (4):
+  net: xdp: introduce bulking for xdp tx return path
+  net: page_pool: add bulk support for ptr_ring
+  net: mvpp2: add xdp tx return bulking support
+  net: mlx5: add xdp tx return bulking support
+
+ drivers/net/ethernet/marvell/mvneta.c         |  5 +-
+ .../net/ethernet/marvell/mvpp2/mvpp2_main.c   |  5 +-
+ .../net/ethernet/mellanox/mlx5/core/en/xdp.c  |  5 +-
+ include/net/page_pool.h                       | 26 +++++++++
+ include/net/xdp.h                             |  9 +++
+ net/core/page_pool.c                          | 35 ++++++++++++
+ net/core/xdp.c                                | 56 +++++++++++++++++++
+ 7 files changed, 138 insertions(+), 3 deletions(-)
+
 -- 
 2.26.2
 
