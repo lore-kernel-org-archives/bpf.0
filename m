@@ -2,235 +2,206 @@ Return-Path: <SRS0=L8C4=EE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF741C2D0A3
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 19:16:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E46ECC2D0A3
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 19:29:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3F6672075E
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 19:16:39 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i9kfCzOC"
+	by mail.kernel.org (Postfix) with ESMTP id 78FD3204FD
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 19:29:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1603999777;
+	bh=hDcWHAUde8Bu87cgNacUqUx/ZD7dajh8GlULMuqpcQ4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=QrRCCVxi8GGbgClryUe/hC8195jG+3LJqPKg05jGyBXSOxAAQRsf6I2n25f5Ihcbc
+	 JXXJOnGVTAhAa8saHfHF5njk+KBoycFai0OJOTh+7Afu67p+N0g7+psw3PGvRwxwP5
+	 neMtLdteyWQh8E5AkKhKj5+ciyU5yPFw2616OZnQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725857AbgJ2TO4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Oct 2020 15:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725763AbgJ2TOz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 29 Oct 2020 15:14:55 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE8EC0613D4;
-        Thu, 29 Oct 2020 12:14:55 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id 13so876329wmf.0;
-        Thu, 29 Oct 2020 12:14:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=cc:subject:to:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=tzpyO8iGd6ISqQqB76LQ2KRMJcjgxpyukpb6ZzZ/qvE=;
-        b=i9kfCzOCGtS9KMw8oYc1qSbcxpwLdGZowXhT3dMtToGHcRX1ULk0IvYdInIlb3jvV8
-         b+HMFAFpqgF/Ydf8YxHBhQFpUV6UDvanpuV13RBYXwiAzP7VoFPK9fuxLSZpsb8+Marf
-         Ambv+Tz1gSb0pUjlxS9Sf1mdlZzZ53zzIb1hAQPBa0EvJwqZyZSwTg/6c/YcHahKHyyy
-         39pN8cJSg3j8WRIRoYT+p7CSI41bzBeVjq4PuCbPwrlsSKkiSF1k+xUi/e781l3h6R8x
-         lZGwor4THZFGSuv/Qly+7OOhiGXWJD5TlKHXhEYv8sfuZzTjQd8VNQsqEyn3Qmb/wDgn
-         /0Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:cc:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=tzpyO8iGd6ISqQqB76LQ2KRMJcjgxpyukpb6ZzZ/qvE=;
-        b=VVzECyZ87c/S2pj6iMhIjR6CBCtPiAUwMMkuMSc/kdJAN4evv5WELe6ds0YeNanA8c
-         zE7GYxvo79ERUqBMNI8hnpOtCSZOkFGXV37E1HfcJQ+8NP9750/45f1tLlxLx64HILQa
-         ZmEIe67We3WFnYveARk6Kaaaw/I4xyUxgWc0mu4fbu574bxBJUB8cLaNeCxpSTiJExhC
-         VFxAVoeePDB7KqVvlEans5ikfuaNGT5KZlbbNYposp/icO0ZaXyb+mnOIHP8x7vt4ND1
-         YuLkiCt6UgXpThUrKrPRHJY6TR8LbSUiNnoDTCiHcLNCn0NgOyF5x6iBsLFu00y+tRRd
-         jFIw==
-X-Gm-Message-State: AOAM5305tMxY/8+rY1GJxkBdTx4yedP23Spj3778PlOD+7vC/5g/W4yx
-        l9vtrg0kBT+XR1EecV+CZg0=
-X-Google-Smtp-Source: ABdhPJyMDfgiSIKtY0aILPTyTuQphrwaTfKpj58BkdDWPukoZrBGtNtR5YqHCMlsAzRuOSAyoLrlhA==
-X-Received: by 2002:a1c:e4c1:: with SMTP id b184mr689291wmh.73.1603998894166;
-        Thu, 29 Oct 2020 12:14:54 -0700 (PDT)
-Received: from ?IPv6:2001:a61:245a:d801:2e74:88ad:ef9:5218? ([2001:a61:245a:d801:2e74:88ad:ef9:5218])
-        by smtp.gmail.com with ESMTPSA id u195sm1433563wmu.18.2020.10.29.12.14.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Oct 2020 12:14:52 -0700 (PDT)
-Cc:     mtk.manpages@gmail.com, Tycho Andersen <tycho@tycho.pizza>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Christian Brauner <christian@brauner.io>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Song Liu <songliubraving@fb.com>,
-        Robert Sesek <rsesek@google.com>,
-        Containers <containers@lists.linux-foundation.org>,
-        linux-man <linux-man@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Will Drewry <wad@chromium.org>, bpf <bpf@vger.kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>
-Subject: Re: For review: seccomp_user_notif(2) manual page [v2]
-To:     Jann Horn <jannh@google.com>, Kees Cook <keescook@chromium.org>
-References: <63598b4f-6ce3-5a11-4552-cdfe308f68e4@gmail.com>
- <CAG48ez0fBE6AJfWh0in=WKkgt98y=KjAen=SQPyTYtvsUbF1yA@mail.gmail.com>
-From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Message-ID: <93cfdc79-4c48-bceb-3620-4c63e9f4822e@gmail.com>
-Date:   Thu, 29 Oct 2020 20:14:51 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.1
+        id S1726358AbgJ2T3d (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Oct 2020 15:29:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51456 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726228AbgJ2T3c (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 29 Oct 2020 15:29:32 -0400
+Received: from lore-desk.redhat.com (unknown [151.66.29.159])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 822CE20796;
+        Thu, 29 Oct 2020 19:28:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1603999740;
+        bh=hDcWHAUde8Bu87cgNacUqUx/ZD7dajh8GlULMuqpcQ4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=yw3LQAUthmqZsTA7pLD/bIe2K3tvKJfif4IPZzQAhsL2OPgx7APXxiG6uxl3RulbB
+         f0ptTNHXbPYkewUPMWbSxZPzRwZhDDr7BdwffoHKBD7Hmnpj29PWRp6VRaYK65Djn8
+         W/z4jSHrgdXGABqSk5cAlZIWp59XTW0DdHffQ4sE=
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, lorenzo.bianconi@redhat.com,
+        davem@davemloft.net, kuba@kernel.org, brouer@redhat.com,
+        ilias.apalodimas@linaro.org
+Subject: [PATCH v2 net-next 1/4] net: xdp: introduce bulking for xdp tx return path
+Date:   Thu, 29 Oct 2020 20:28:44 +0100
+Message-Id: <aaf417930ccfdd57ee3a7339e2fff59b8ad50409.1603998519.git.lorenzo@kernel.org>
+X-Mailer: git-send-email 2.26.2
+In-Reply-To: <cover.1603998519.git.lorenzo@kernel.org>
+References: <cover.1603998519.git.lorenzo@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAG48ez0fBE6AJfWh0in=WKkgt98y=KjAen=SQPyTYtvsUbF1yA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello Jann,
+XDP bulk APIs introduce a defer/flush mechanism to return
+pages belonging to the same xdp_mem_allocator object
+(identified via the mem.id field) in bulk to optimize
+I-cache and D-cache since xdp_return_frame is usually run
+inside the driver NAPI tx completion loop.
+The bulk queue size is set to 16 to be aligned to how
+XDP_REDIRECT bulking works. The bulk is flushed when
+it is full or when mem.id changes.
+xdp_frame_bulk is usually stored/allocated on the function
+call-stack to avoid locking penalties.
+Current implementation considers only page_pool memory model.
+Convert mvneta driver to xdp_return_frame_bulk APIs.
 
-On 10/29/20 2:42 AM, Jann Horn wrote:
-> On Mon, Oct 26, 2020 at 10:55 AM Michael Kerrisk (man-pages)
-> <mtk.manpages@gmail.com> wrote:
->>        static bool
->>        getTargetPathname(struct seccomp_notif *req, int notifyFd,
->>                          char *path, size_t len)
->>        {
->>            char procMemPath[PATH_MAX];
->>
->>            snprintf(procMemPath, sizeof(procMemPath), "/proc/%d/mem", req->pid);
->>
->>            int procMemFd = open(procMemPath, O_RDONLY);
->>            if (procMemFd == -1)
->>                errExit("\tS: open");
->>
->>            /* Check that the process whose info we are accessing is still alive.
->>               If the SECCOMP_IOCTL_NOTIF_ID_VALID operation (performed
->>               in checkNotificationIdIsValid()) succeeds, we know that the
->>               /proc/PID/mem file descriptor that we opened corresponds to the
->>               process for which we received a notification. If that process
->>               subsequently terminates, then read() on that file descriptor
->>               will return 0 (EOF). */
->>
->>            checkNotificationIdIsValid(notifyFd, req->id);
->>
->>            /* Read bytes at the location containing the pathname argument
->>               (i.e., the first argument) of the mkdir(2) call */
->>
->>            ssize_t nread = pread(procMemFd, path, len, req->data.args[0]);
->>            if (nread == -1)
->>                errExit("pread");
-> 
-> As discussed at
-> <https://lore.kernel.org/r/CAG48ez0m4Y24ZBZCh+Tf4ORMm9_q4n7VOzpGjwGF7_Fe8EQH=Q@mail.gmail.com>,
-> we need to re-check checkNotificationIdIsValid() after reading remote
-> memory but before using the read value in any way. Otherwise, the
-> syscall could in the meantime get interrupted by a signal handler, the
-> signal handler could return, and then the function that performed the
-> syscall could free() allocations or return (thereby freeing buffers on
-> the stack).
-> 
-> In essence, this pread() is (unavoidably) a potential use-after-free
-> read; and to make that not have any security impact, we need to check
-> whether UAF read occurred before using the read value. This should
-> probably be called out elsewhere in the manpage, too...
-> 
-> Now, of course, **reading** is the easy case. The difficult case is if
-> we have to **write** to the remote process... because then we can't
-> play games like that. If we write data to a freed pointer, we're
-> screwed, that's it. (And for somewhat unrelated bonus fun, consider
-> that /proc/$pid/mem is originally intended for process debugging,
-> including installing breakpoints, and will therefore happily write
-> over "readonly" private mappings, such as typical mappings of
-> executable code.)
-> 
-> So, uuuuh... I guess if anyone wants to actually write memory back to
-> the target process, we'd better come up with some dedicated API for
-> that, using an ioctl on the seccomp fd that magically freezes the
-> target process inside the syscall while writing to its memory, or
-> something like that? And until then, the manpage should have a big fat
-> warning that writing to the target's memory is simply not possible
-> (safely).
+Suggested-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+---
+ drivers/net/ethernet/marvell/mvneta.c |  5 ++-
+ include/net/xdp.h                     |  9 ++++
+ net/core/xdp.c                        | 61 +++++++++++++++++++++++++++
+ 3 files changed, 74 insertions(+), 1 deletion(-)
 
-Thank you for your very clear explanation! It turned out to be 
-trivially easy to demonstrate this issue with a slightly modified
-version of my program.
-
-As well as the change to the code example that I already mentioned
-my reply of a few hours ago, I've added the following text to the 
-page:
-
-   Caveats regarding the use of /proc/[tid]/mem
-       The discussion above noted the need to use the
-       SECCOMP_IOCTL_NOTIF_ID_VALID ioctl(2) when opening the
-       /proc/[tid]/mem file of the target to avoid the possibility of
-       accessing the memory of the wrong process in the event that the
-       target terminates and its ID is recycled by another (unrelated)
-       thread.  However, the use of this ioctl(2) operation is also
-       necessary in other situations, as explained in the following
-       pargraphs.
-
-       Consider the following scenario, where the supervisor tries to
-       read the pathname argument of a target's blocked mount(2) system
-       call:
-
-       • From one of its functions (func()), the target calls mount(2),
-         which triggers a user-space notification and causes the target
-         to block.
-
-       • The supervisor receives the notification, opens
-         /proc/[tid]/mem, and (successfully) performs the
-         SECCOMP_IOCTL_NOTIF_ID_VALID check.
-
-       • The target receives a signal, which causes the mount(2) to
-         abort.
-
-       • The signal handler executes in the target, and returns.
-
-       • Upon return from the handler, the execution of func() resumes,
-         and it returns (and perhaps other functions are called,
-         overwriting the memory that had been used for the stack frame
-         of func()).
-
-       • Using the address provided in the notification information, the
-         supervisor reads from the target's memory location that used to
-         contain the pathname.
-
-       • The supervisor now calls mount(2) with some arbitrary bytes
-         obtained in the previous step.
-
-       The conclusion from the above scenario is this: since the
-       target's blocked system call may be interrupted by a signal
-       handler, the supervisor must be written to expect that the target
-       may abandon its system call at any time; in such an event, any
-       information that the supervisor obtained from the target's memory
-       must be considered invalid.
-
-       To prevent such scenarios, every read from the target's memory
-       must be separated from use of the bytes so obtained by a
-       SECCOMP_IOCTL_NOTIF_ID_VALID check.  In the above example, the
-       check would be placed between the two final steps.  An example of
-       such a check is shown in EXAMPLES.
-
-       Following on from the above, it should be clear that a write by
-       the supervisor into the target's memory can never be considered
-       safe.
-
-Seem okay?
-
-By the way, is there any analogous kind of issue concerning
-pidfd_getfd()? I'm thinking not, but I wonder if I've missed
-something.
-
-Cheers,
-
-Michael
-
+diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
+index 54b0bf574c05..43ab8a73900e 100644
+--- a/drivers/net/ethernet/marvell/mvneta.c
++++ b/drivers/net/ethernet/marvell/mvneta.c
+@@ -1834,8 +1834,10 @@ static void mvneta_txq_bufs_free(struct mvneta_port *pp,
+ 				 struct netdev_queue *nq, bool napi)
+ {
+ 	unsigned int bytes_compl = 0, pkts_compl = 0;
++	struct xdp_frame_bulk bq;
+ 	int i;
+ 
++	bq.xa = NULL;
+ 	for (i = 0; i < num; i++) {
+ 		struct mvneta_tx_buf *buf = &txq->buf[txq->txq_get_index];
+ 		struct mvneta_tx_desc *tx_desc = txq->descs +
+@@ -1857,9 +1859,10 @@ static void mvneta_txq_bufs_free(struct mvneta_port *pp,
+ 			if (napi && buf->type == MVNETA_TYPE_XDP_TX)
+ 				xdp_return_frame_rx_napi(buf->xdpf);
+ 			else
+-				xdp_return_frame(buf->xdpf);
++				xdp_return_frame_bulk(buf->xdpf, &bq);
+ 		}
+ 	}
++	xdp_flush_frame_bulk(&bq);
+ 
+ 	netdev_tx_completed_queue(nq, pkts_compl, bytes_compl);
+ }
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 3814fb631d52..a1f48a73e6df 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -104,6 +104,12 @@ struct xdp_frame {
+ 	struct net_device *dev_rx; /* used by cpumap */
+ };
+ 
++#define XDP_BULK_QUEUE_SIZE	16
++struct xdp_frame_bulk {
++	int count;
++	void *xa;
++	void *q[XDP_BULK_QUEUE_SIZE];
++};
+ 
+ static inline struct skb_shared_info *
+ xdp_get_shared_info_from_frame(struct xdp_frame *frame)
+@@ -194,6 +200,9 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct xdp_buff *xdp)
+ void xdp_return_frame(struct xdp_frame *xdpf);
+ void xdp_return_frame_rx_napi(struct xdp_frame *xdpf);
+ void xdp_return_buff(struct xdp_buff *xdp);
++void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq);
++void xdp_return_frame_bulk(struct xdp_frame *xdpf,
++			   struct xdp_frame_bulk *bq);
+ 
+ /* When sending xdp_frame into the network stack, then there is no
+  * return point callback, which is needed to release e.g. DMA-mapping
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 48aba933a5a8..66ac275a0360 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -380,6 +380,67 @@ void xdp_return_frame_rx_napi(struct xdp_frame *xdpf)
+ }
+ EXPORT_SYMBOL_GPL(xdp_return_frame_rx_napi);
+ 
++/* XDP bulk APIs introduce a defer/flush mechanism to return
++ * pages belonging to the same xdp_mem_allocator object
++ * (identified via the mem.id field) in bulk to optimize
++ * I-cache and D-cache.
++ * The bulk queue size is set to 16 to be aligned to how
++ * XDP_REDIRECT bulking works. The bulk is flushed when
++ * it is full or when mem.id changes.
++ * xdp_frame_bulk is usually stored/allocated on the function
++ * call-stack to avoid locking penalties.
++ */
++void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq)
++{
++	struct xdp_mem_allocator *xa = bq->xa;
++	int i;
++
++	if (unlikely(!xa))
++		return;
++
++	for (i = 0; i < bq->count; i++) {
++		struct page *page = virt_to_head_page(bq->q[i]);
++
++		page_pool_put_full_page(xa->page_pool, page, false);
++	}
++	bq->count = 0;
++}
++EXPORT_SYMBOL_GPL(xdp_flush_frame_bulk);
++
++void xdp_return_frame_bulk(struct xdp_frame *xdpf,
++			   struct xdp_frame_bulk *bq)
++{
++	struct xdp_mem_info *mem = &xdpf->mem;
++	struct xdp_mem_allocator *xa;
++
++	if (mem->type != MEM_TYPE_PAGE_POOL) {
++		__xdp_return(xdpf->data, &xdpf->mem, false);
++		return;
++	}
++
++	rcu_read_lock();
++
++	xa = bq->xa;
++	if (unlikely(!xa)) {
++		xa = rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params);
++		bq->count = 0;
++		bq->xa = xa;
++	}
++
++	if (bq->count == XDP_BULK_QUEUE_SIZE)
++		xdp_flush_frame_bulk(bq);
++
++	if (mem->id != xa->mem.id) {
++		xdp_flush_frame_bulk(bq);
++		bq->xa = rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params);
++	}
++
++	bq->q[bq->count++] = xdpf->data;
++
++	rcu_read_unlock();
++}
++EXPORT_SYMBOL_GPL(xdp_return_frame_bulk);
++
+ void xdp_return_buff(struct xdp_buff *xdp)
+ {
+ 	__xdp_return(xdp->data, &xdp->rxq->mem, true);
 -- 
-Michael Kerrisk
-Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
-Linux/UNIX System Programming Training: http://man7.org/training/
+2.26.2
+
