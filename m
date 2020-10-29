@@ -2,147 +2,104 @@ Return-Path: <SRS0=L8C4=EE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 86B3EC55179
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 07:44:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AB33DC55179
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 07:44:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 220A3214DB
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 07:44:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 49C40218AC
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 07:44:50 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sz3ZR9ET"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="VixOnPxN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730025AbgJ2Hjv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Oct 2020 03:39:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727842AbgJ2HYy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 29 Oct 2020 03:24:54 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3554AC0613D6;
-        Wed, 28 Oct 2020 19:51:03 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id c129so939391yba.8;
-        Wed, 28 Oct 2020 19:51:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pFNTNQYbRyOv5NmpjKO5OIDkrgD4q/4HyFQbZpD9rio=;
-        b=Sz3ZR9ETd2kV4vxHW3jXQvbFLBr+/gNd8lV4FkSGC8RQACO3bRIqVuJyqeqCF3w0Zu
-         diFYbTQJwT5/x9Tj8qO+qWlVy1iMBrWF6LCV+54pm11ww8siqo/F216uszvvTdxpv+UF
-         i7pYyT8qkJGPwEG5sKAIi0hDe/hxWcYaKs1rfJ/JQNEFu7YihXOmLJtvLoe1IfnUR5Zm
-         9mIReXtEjB5QAtLn4uGKmUCX83pc0/mNxTvmeBoV0Yr4brgMPi51H+2gnUuv0xDxvDTZ
-         gL11sW1ciW+fYidRsNmeVypZUACQFcj950Usl8Tj1C8hywMeic8KyYigDpIVMFZR/b0D
-         N+lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pFNTNQYbRyOv5NmpjKO5OIDkrgD4q/4HyFQbZpD9rio=;
-        b=bPbF8ENVQ7Fgc7yljSv6MYbAYzRiVL2zHcUILyaVub5RihAjtXwkDr30TacbekSY9f
-         cLCoxRjcfRMsa96ovIc8MmcFzlZ+vWiQzSK4z0Nq1FaBkSMwv42hWrxFrt/k1kC9JliV
-         3SWRGhgg5tbk7y3K18r87eDS4vLH2iaVbiughr9iTMnmgcryFxMFs75muHWblmnRimiJ
-         CqWeYNPGsWSXJToX6UbyE1+P4NRFjUyWsxidLaDh1BlxZgxVK/hYPiw1cwyM8wauxC9e
-         5TcFxqiGq5GzNX+z7k4TKLZxhCyGMjyw97M6cLbhAWTFMjw+7LzWJHFwtM/DaTiTb7Ul
-         AgUw==
-X-Gm-Message-State: AOAM53188jEHpk1y+U0SX7F6Eg/bHFeCW5cbnw6W9zaXAm1MbpihiSji
-        op5PzExFuhLvm7r0zWTZSLasU9ncTDTPYI+q/q8=
-X-Google-Smtp-Source: ABdhPJzNjJWkIUjdzJJFAiK/Djvk8G351SdeQVAcdMClEbbFFEmkOxxD14nzc/iZg96DlvalpxCnyrKtP+wUdZ6QhDU=
-X-Received: by 2002:a25:c7c6:: with SMTP id w189mr3129912ybe.403.1603939862400;
- Wed, 28 Oct 2020 19:51:02 -0700 (PDT)
+        id S1729831AbgJ2Hos (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Oct 2020 03:44:48 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:12144 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730064AbgJ2Hos (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 29 Oct 2020 03:44:48 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09T7Iw9e013466
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2020 00:19:59 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=JLzH51fIRRW8lUnrE08RZYYgZ99JFA8voFiaOqr+L40=;
+ b=VixOnPxNVqbzZ+bkoBfyYrRYj3kp6whmAW7iQSDmjd4PHPKGyVGeVYWhhelKSL68jRca
+ cScaiLap22uCVm7wE7HKzLy1YpAdREyXajJ8BY7q+g3b+eqHKz3ysFmQmJQzFdOpnhwx
+ Dfd5196OgwsE2UNZDdq8RH9tWWe3vhVST2s= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 34egnfcnh1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2020 00:19:59 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 29 Oct 2020 00:19:58 -0700
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id 4E1A362E580C; Thu, 29 Oct 2020 00:19:46 -0700 (PDT)
+From:   Song Liu <songliubraving@fb.com>
+To:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>
+CC:     <kernel-team@fb.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <john.fastabend@gmail.com>, <kpsingh@chromium.org>,
+        Song Liu <songliubraving@fb.com>
+Subject: [PATCH bpf-next 0/2] bpf: safeguard hashtab locking in NMI context
+Date:   Thu, 29 Oct 2020 00:19:23 -0700
+Message-ID: <20201029071925.3103400-1-songliubraving@fb.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-References: <20201023033855.3894509-1-haliu@redhat.com> <20201028132529.3763875-1-haliu@redhat.com>
- <7babcccb-2b31-f9bf-16ea-6312e449b928@gmail.com> <20201029020637.GM2408@dhcp-12-153.nay.redhat.com>
- <CAEf4BzZR4MqQJCD4kzFsbhpfmp4RB7SHcP5AbAiqzqK7to2u+g@mail.gmail.com> <20201028193438.21f1c9b0@hermes.local>
-In-Reply-To: <20201028193438.21f1c9b0@hermes.local>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 28 Oct 2020 19:50:51 -0700
-Message-ID: <CAEf4BzY1gz2fR0DXOYgbheDArdYhWA66YRFuy=xMRveHTx=VVQ@mail.gmail.com>
-Subject: Re: [PATCHv2 iproute2-next 0/5] iproute2: add libbpf support
-To:     Stephen Hemminger <stephen@networkplumber.org>
-Cc:     Hangbin Liu <haliu@redhat.com>, David Ahern <dsahern@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Miller <davem@davemloft.net>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Jiri Benc <jbenc@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-10-29_03:2020-10-29,2020-10-29 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=454
+ mlxscore=0 suspectscore=0 phishscore=0 impostorscore=0 malwarescore=0
+ bulkscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2010290051
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Oct 28, 2020 at 7:34 PM Stephen Hemminger
-<stephen@networkplumber.org> wrote:
->
-> On Wed, 28 Oct 2020 19:27:20 -0700
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
->
-> > On Wed, Oct 28, 2020 at 7:06 PM Hangbin Liu <haliu@redhat.com> wrote:
-> > >
-> > > On Wed, Oct 28, 2020 at 05:02:34PM -0600, David Ahern wrote:
-> > > > fails to compile on Ubuntu 20.10:
-> > > >
-> > > > root@u2010-sfo3:~/iproute2.git# ./configure
-> > > > TC schedulers
-> > > >  ATM  yes
-> > > >  IPT  using xtables
-> > > >  IPSET  yes
-> > > >
-> > > > iptables modules directory: /usr/lib/x86_64-linux-gnu/xtables
-> > > > libc has setns: yes
-> > > > SELinux support: yes
-> > > > libbpf support: yes
-> > > > ELF support: yes
-> > > > libmnl support: yes
-> > > > Berkeley DB: no
-> > > > need for strlcpy: yes
-> > > > libcap support: yes
-> > > >
-> > > > root@u2010-sfo3:~/iproute2.git# make clean
-> > > >
-> > > > root@u2010-sfo3:~/iproute2.git# make -j 4
-> > > > ...
-> > > > /usr/bin/ld: ../lib/libutil.a(bpf_libbpf.o): in function `load_bpf_object':
-> > > > bpf_libbpf.c:(.text+0x3cb): undefined reference to
-> > > > `bpf_program__section_name'
-> > > > /usr/bin/ld: bpf_libbpf.c:(.text+0x438): undefined reference to
-> > > > `bpf_program__section_name'
-> > > > /usr/bin/ld: bpf_libbpf.c:(.text+0x716): undefined reference to
-> > > > `bpf_program__section_name'
-> > > > collect2: error: ld returned 1 exit status
-> > > > make[1]: *** [Makefile:27: ip] Error 1
-> > > > make[1]: *** Waiting for unfinished jobs....
-> > > > make: *** [Makefile:64: all] Error 2
-> > >
-> > > You need to update libbpf to latest version.
-> >
-> > Why not using libbpf from submodule?
->
-> Because it makes it harder for people downloading tarballs and distributions.
+LOCKDEP NMI warning highlighted potential deadlock of hashtab in NMI
+context:
 
-Genuinely curious, making harder how exactly? When packaging sources
-as a tarball you'd check out submodules before packaging, right?
+[   74.828971] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[   74.828972] WARNING: inconsistent lock state
+[   74.828973] 5.9.0-rc8+ #275 Not tainted
+[   74.828974] --------------------------------
+[   74.828975] inconsistent {INITIAL USE} -> {IN-NMI} usage.
+[   74.828976] taskset/1174 [HC2[2]:SC0[0]:HE0:SE1] takes:
+[...]
+[   74.828999]  Possible unsafe locking scenario:
+[   74.828999]
+[   74.829000]        CPU0
+[   74.829001]        ----
+[   74.829001]   lock(&htab->buckets[i].raw_lock);
+[   74.829003]   <Interrupt>
+[   74.829004]     lock(&htab->buckets[i].raw_lock);
 
-> Iproute2 has worked well by being standalone.
+Please refer to patch 1/2 for full trace.
 
-Again, maybe I'm missing something, but what makes it not a
-standalone, if it is using a submodule? Pahole, for instance, is using
-libbpf through submodule and just bypasses all the problems with
-detection of features and library availability. I haven't heard anyone
-complaining about it made working with pahole harder in any way.
+This warning is a false alert, as "INITIAL USE" and "IN-NMI" in the tests
+are from different hashtab. On the other hand, in theory, it is possible
+to deadlock when a hashtab is access from both non-NMI and NMI context.
+Patch 1/2 fixes this false alert by assigning separate lockdep class to
+each hashtab. Patch 2/2 introduces map_locked counters, which is similar =
+to
+bpf_prog_active counter, to avoid hashtab deadlock in NMI context.
 
->
-> Want to merge libbpf into iproute2??
+Song Liu (2):
+  bpf: use separate lockdep class for each hashtab
+  bpf: Avoid hashtab deadlock with map_locked
 
-No... How did you come to this conclusion?..
+ kernel/bpf/hashtab.c | 126 +++++++++++++++++++++++++++++++------------
+ 1 file changed, 92 insertions(+), 34 deletions(-)
 
->
->
+--
+2.24.1
