@@ -2,50 +2,53 @@ Return-Path: <SRS0=L8C4=EE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2042EC56201
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74D22C388F7
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE0A020791
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2DD9520791
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603933152;
-	bh=DbcOZ9OuTDDiGbj9v8jZTqWirL3K1ojkqlzvnjIF+u0=;
-	h=From:To:CC:Subject:Date:List-ID:From;
-	b=Jcu1/nXivHrDzmrXLzCWKDfag1B/sJRGZe2CJdQK+/83HkOzbnCgEDjFZSnvVP205
-	 nOBrUbQCiHpLl54I70JZvhFNGlEYRg/v1FKMVptY7D9LnCmpcCO+Gi4W8TdGzfUXV6
-	 uuZu21nYjs2ZXRtPhvaT76zjRtDKjPJTEes+Sfm4=
+	s=default; t=1603933158;
+	bh=UBeO73d83y3nXPtih4A6V+wu83HbWP+S0MgsOv3yqYw=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=ON7LqRnBjtfVBdTpkuTBJy9348qQYEWJqGm88vV4eUdp39ieDaIPp/55lK0f0IA/C
+	 5YzvRfbQ/Ijev0glp0yJXsDr9YVG0pFqNq0OiwrUC1opSiy0jh+z5+I4FZmRwm2qEL
+	 ruPLiQnhJoRLeWXmIeNEQhmeK4tyVYxVMPy0SYmE=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729293AbgJ2A7M convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 28 Oct 2020 20:59:12 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:19792 "EHLO
+        id S2403890AbgJ2A7R convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 28 Oct 2020 20:59:17 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37472 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728476AbgJ2A7L (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 28 Oct 2020 20:59:11 -0400
+        by vger.kernel.org with ESMTP id S1731577AbgJ2A7P (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 28 Oct 2020 20:59:15 -0400
 Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09T0odHx004439
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:11 -0700
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09T0ocC0004417
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:14 -0700
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 34esepr26d-2
+        by mx0a-00082601.pphosted.com with ESMTP id 34esepr26j-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:11 -0700
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:14 -0700
+Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 28 Oct 2020 17:59:09 -0700
+ 15.1.1979.3; Wed, 28 Oct 2020 17:59:12 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 0C4AE2EC875F; Wed, 28 Oct 2020 17:59:06 -0700 (PDT)
+        id 56C0B2EC875F; Wed, 28 Oct 2020 17:59:11 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 00/11] libbpf: split BTF support
-Date:   Wed, 28 Oct 2020 17:58:51 -0700
-Message-ID: <20201029005902.1706310-1-andrii@kernel.org>
+Subject: [PATCH bpf-next 02/11] selftest/bpf: relax btf_dedup test checks
+Date:   Wed, 28 Oct 2020 17:58:53 -0700
+Message-ID: <20201029005902.1706310-3-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201029005902.1706310-1-andrii@kernel.org>
+References: <20201029005902.1706310-1-andrii@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
@@ -53,7 +56,7 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-10-28_09:2020-10-28,2020-10-28 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- bulkscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
+ bulkscore=0 mlxlogscore=865 clxscore=1034 priorityscore=1501
  suspectscore=8 phishscore=0 adultscore=0 malwarescore=0 spamscore=0
  mlxscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2010290001
@@ -62,76 +65,88 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set adds support for generating and deduplicating split BTF. This
-is an enhancement to the BTF, which allows to designate one BTF as the "base
-BTF" (e.g., vmlinux BTF), and one or more other BTFs as "split BTF" (e.g.,
-kernel module BTF), which are building upon and extending base BTF with extra
-types and strings.
+Remove the requirement of a strictly exact string section contents. This used
+to be true when string deduplication was done through sorting, but with string
+dedup done through hash table, it's no longer true. So relax test harness to
+relax strings checks and, consequently, type checks, which now don't have to
+have exactly the same string offsets.
 
-Once loaded, split BTF appears as a single unified BTF superset of base BTF,
-with continuous and transparent numbering scheme. This allows all the existing
-users of BTF to work correctly and stay agnostic to the base/split BTFs
-composition.  The only difference is in how to instantiate split BTF: it
-requires base BTF to be alread instantiated and passed to btf__new_xxx_split()
-or btf__parse_xxx_split() "constructors" explicitly.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/prog_tests/btf.c | 34 +++++++++++---------
+ 1 file changed, 19 insertions(+), 15 deletions(-)
 
-This split approach is necessary if we are to have a reasonably-sized kernel
-module BTFs. By deduping each kernel module's BTF individually, resulting
-module BTFs contain copies of a lot of kernel types that are already present
-in vmlinux BTF. Even those single copies result in a big BTF size bloat. On my
-kernel configuration with 700 modules built, non-split BTF approach results in
-115MBs of BTFs across all modules. With split BTF deduplication approach,
-total size is down to 5.2MBs total, which is on part with vmlinux BTF (at
-around 4MBs). This seems reasonable and practical. As to why we'd need kernel
-module BTFs, that should be pretty obvious to anyone using BPF at this point,
-as it allows all the BTF-powered features to be used with kernel modules:
-tp_btf, fentry/fexit/fmod_ret, lsm, bpf_iter, etc.
-
-This patch set is a pre-requisite to adding split BTF support to pahole, which
-is a prerequisite to integrating split BTF into the Linux kernel build setup
-to generate BTF for kernel modules. The latter will come as a follow-up patch
-series once this series makes it to the libbpf and pahole makes use of it.
-
-Patch #4 introduces necessary basic support for split BTF into libbpf APIs.
-Patch #8 implements minimal changes to BTF dedup algorithm to allow
-deduplicating split BTFs. Patch #11 adds extra -B flag to bpftool to allow to
-specify the path to base BTF for cases when one wants to dump or inspect split
-BTF. All the rest are refactorings, clean ups, bug fixes and selftests.
-
-Andrii Nakryiko (11):
-  libbpf: factor out common operations in BTF writing APIs
-  selftest/bpf: relax btf_dedup test checks
-  libbpf: unify and speed up BTF string deduplication
-  libbpf: implement basic split BTF support
-  selftests/bpf: add split BTF basic test
-  selftests/bpf: add checking of raw type dump in BTF writer APIs
-    selftests
-  libbpf: fix BTF data layout checks and allow empty BTF
-  libbpf: support BTF dedup of split BTFs
-  libbpf: accomodate DWARF/compiler bug with duplicated identical arrays
-  selftests/bpf: add split BTF dedup selftests
-  tools/bpftool: add bpftool support for split BTF
-
- tools/bpf/bpftool/btf.c                       |   9 +-
- tools/bpf/bpftool/main.c                      |  15 +-
- tools/bpf/bpftool/main.h                      |   1 +
- tools/lib/bpf/btf.c                           | 814 ++++++++++--------
- tools/lib/bpf/btf.h                           |   8 +
- tools/lib/bpf/libbpf.map                      |   9 +
- tools/testing/selftests/bpf/Makefile          |   2 +-
- tools/testing/selftests/bpf/btf_helpers.c     | 259 ++++++
- tools/testing/selftests/bpf/btf_helpers.h     |  19 +
- tools/testing/selftests/bpf/prog_tests/btf.c  |  34 +-
- .../bpf/prog_tests/btf_dedup_split.c          | 326 +++++++
- .../selftests/bpf/prog_tests/btf_split.c      |  99 +++
- .../selftests/bpf/prog_tests/btf_write.c      |  48 +-
- tools/testing/selftests/bpf/test_progs.h      |  11 +
- 14 files changed, 1294 insertions(+), 360 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/btf_helpers.c
- create mode 100644 tools/testing/selftests/bpf/btf_helpers.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_split.c
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
+index 93162484c2ca..2ccc23b2a36f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -6652,7 +6652,7 @@ static void do_test_dedup(unsigned int test_num)
+ 	const void *test_btf_data, *expect_btf_data;
+ 	const char *ret_test_next_str, *ret_expect_next_str;
+ 	const char *test_strs, *expect_strs;
+-	const char *test_str_cur, *test_str_end;
++	const char *test_str_cur;
+ 	const char *expect_str_cur, *expect_str_end;
+ 	unsigned int raw_btf_size;
+ 	void *raw_btf;
+@@ -6719,12 +6719,18 @@ static void do_test_dedup(unsigned int test_num)
+ 		goto done;
+ 	}
+ 
+-	test_str_cur = test_strs;
+-	test_str_end = test_strs + test_hdr->str_len;
+ 	expect_str_cur = expect_strs;
+ 	expect_str_end = expect_strs + expect_hdr->str_len;
+-	while (test_str_cur < test_str_end && expect_str_cur < expect_str_end) {
++	while (expect_str_cur < expect_str_end) {
+ 		size_t test_len, expect_len;
++		int off;
++
++		off = btf__find_str(test_btf, expect_str_cur);
++		if (CHECK(off < 0, "exp str '%s' not found: %d\n", expect_str_cur, off)) {
++			err = -1;
++			goto done;
++		}
++		test_str_cur = btf__str_by_offset(test_btf, off);
+ 
+ 		test_len = strlen(test_str_cur);
+ 		expect_len = strlen(expect_str_cur);
+@@ -6741,15 +6747,8 @@ static void do_test_dedup(unsigned int test_num)
+ 			err = -1;
+ 			goto done;
+ 		}
+-		test_str_cur += test_len + 1;
+ 		expect_str_cur += expect_len + 1;
+ 	}
+-	if (CHECK(test_str_cur != test_str_end,
+-		  "test_str_cur:%p != test_str_end:%p",
+-		  test_str_cur, test_str_end)) {
+-		err = -1;
+-		goto done;
+-	}
+ 
+ 	test_nr_types = btf__get_nr_types(test_btf);
+ 	expect_nr_types = btf__get_nr_types(expect_btf);
+@@ -6775,10 +6774,15 @@ static void do_test_dedup(unsigned int test_num)
+ 			err = -1;
+ 			goto done;
+ 		}
+-		if (CHECK(memcmp((void *)test_type,
+-				 (void *)expect_type,
+-				 test_size),
+-			  "type #%d: contents differ", i)) {
++		if (CHECK(btf_kind(test_type) != btf_kind(expect_type),
++			  "type %d kind: exp %d != got %u\n",
++			  i, btf_kind(expect_type), btf_kind(test_type))) {
++			err = -1;
++			goto done;
++		}
++		if (CHECK(test_type->info != expect_type->info,
++			  "type %d info: exp %d != got %u\n",
++			  i, expect_type->info, test_type->info)) {
+ 			err = -1;
+ 			goto done;
+ 		}
 -- 
 2.24.1
 
