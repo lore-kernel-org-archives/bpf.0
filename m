@@ -2,143 +2,136 @@ Return-Path: <SRS0=L8C4=EE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4257CC388F7
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:58:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2042EC56201
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E98B120791
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:58:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BE0A020791
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603933124;
-	bh=rRhHb1cGnsed2BR+Y4InE6K8DeepWbAjIelkEdsaKiw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
-	b=IFdKNtk+kuL2CZvZsIzDV7oVmPK+cap4P+e7sH4pIRWkZFJ+cLGKiQrxjjFXkJrV3
-	 R92qp/FQpVVWpakSOJxjhD1hMSdTNi1w7dfFQRv6QBTeDav9oiYt+etAfNpCXxTnPB
-	 38mOVvV79H7ErfELcddSmpYYOje1yaKgos1Or498=
+	s=default; t=1603933152;
+	bh=DbcOZ9OuTDDiGbj9v8jZTqWirL3K1ojkqlzvnjIF+u0=;
+	h=From:To:CC:Subject:Date:List-ID:From;
+	b=Jcu1/nXivHrDzmrXLzCWKDfag1B/sJRGZe2CJdQK+/83HkOzbnCgEDjFZSnvVP205
+	 nOBrUbQCiHpLl54I70JZvhFNGlEYRg/v1FKMVptY7D9LnCmpcCO+Gi4W8TdGzfUXV6
+	 uuZu21nYjs2ZXRtPhvaT76zjRtDKjPJTEes+Sfm4=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731587AbgJ2A61 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 20:58:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60512 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731578AbgJ1WRc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:17:32 -0400
-Received: from localhost (unknown [151.66.125.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DE59D246C1;
-        Wed, 28 Oct 2020 11:28:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1603884523;
-        bh=rRhHb1cGnsed2BR+Y4InE6K8DeepWbAjIelkEdsaKiw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=h4DSxb199kwPN8SHw6J26PRr26zZqLSJVPEWTKtP3JlLCzcUCLWBeAyfY3i0buu1p
-         J9R5KqiJgW17tATUIWoEjqiXyxT/OsWH6VdXw9wtcUPSWQ5JYNByCWZhl8dtciggKg
-         4L3us3QIeT6jENAp/T6vtJiguPx8bqSiaXmj66a8=
-Date:   Wed, 28 Oct 2020 12:28:38 +0100
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     Ilias Apalodimas <ilias.apalodimas@linaro.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        brouer@redhat.com
-Subject: Re: [PATCH net-next 1/4] net: xdp: introduce bulking for xdp tx
- return path
-Message-ID: <20201028112838.GB5386@lore-desk>
-References: <cover.1603824486.git.lorenzo@kernel.org>
- <7495b5ac96b0fd2bf5ab79b12e01bf0ee0fff803.1603824486.git.lorenzo@kernel.org>
- <20201028092734.GA51291@apalos.home>
- <20201028102304.GA5386@lore-desk>
- <20201028105951.GA52697@apalos.home>
+        id S1729293AbgJ2A7M convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 28 Oct 2020 20:59:12 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:19792 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728476AbgJ2A7L (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 28 Oct 2020 20:59:11 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09T0odHx004439
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:11 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 34esepr26d-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:11 -0700
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 28 Oct 2020 17:59:09 -0700
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 0C4AE2EC875F; Wed, 28 Oct 2020 17:59:06 -0700 (PDT)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 00/11] libbpf: split BTF support
+Date:   Wed, 28 Oct 2020 17:58:51 -0700
+Message-ID: <20201029005902.1706310-1-andrii@kernel.org>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="nVMJ2NtxeReIH9PS"
-Content-Disposition: inline
-In-Reply-To: <20201028105951.GA52697@apalos.home>
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-10-28_09:2020-10-28,2020-10-28 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ bulkscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
+ suspectscore=8 phishscore=0 adultscore=0 malwarescore=0 spamscore=0
+ mlxscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010290001
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+This patch set adds support for generating and deduplicating split BTF. This
+is an enhancement to the BTF, which allows to designate one BTF as the "base
+BTF" (e.g., vmlinux BTF), and one or more other BTFs as "split BTF" (e.g.,
+kernel module BTF), which are building upon and extending base BTF with extra
+types and strings.
 
---nVMJ2NtxeReIH9PS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Once loaded, split BTF appears as a single unified BTF superset of base BTF,
+with continuous and transparent numbering scheme. This allows all the existing
+users of BTF to work correctly and stay agnostic to the base/split BTFs
+composition.  The only difference is in how to instantiate split BTF: it
+requires base BTF to be alread instantiated and passed to btf__new_xxx_split()
+or btf__parse_xxx_split() "constructors" explicitly.
 
-> On Wed, Oct 28, 2020 at 11:23:04AM +0100, Lorenzo Bianconi wrote:
-> > > Hi Lorenzo,
-> >=20
-> > Hi Ilias,
-> >=20
-> > thx for the review.
-> >=20
-> > >=20
-> > > On Tue, Oct 27, 2020 at 08:04:07PM +0100, Lorenzo Bianconi wrote:
-> >=20
-> > [...]
-> >=20
-> > > > +void xdp_return_frame_bulk(struct xdp_frame *xdpf,
-> > > > +			   struct xdp_frame_bulk *bq)
-> > > > +{
-> > > > +	struct xdp_mem_info *mem =3D &xdpf->mem;
-> > > > +	struct xdp_mem_allocator *xa, *nxa;
-> > > > +
-> > > > +	if (mem->type !=3D MEM_TYPE_PAGE_POOL) {
-> > > > +		__xdp_return(xdpf->data, &xdpf->mem, false);
-> > > > +		return;
-> > > > +	}
-> > > > +
-> > > > +	rcu_read_lock();
-> > > > +
-> > > > +	xa =3D bq->xa;
-> > > > +	if (unlikely(!xa || mem->id !=3D xa->mem.id)) {
-> > >=20
-> > > Why is this marked as unlikely? The driver passes it as NULL. Should =
-unlikely be
-> > > checked on both xa and the comparison?
-> >=20
-> > xa is NULL only for the first xdp_frame in the burst while it is set for
-> > subsequent ones. Do you think it is better to remove it?
->=20
-> Ah correct, missed the general context of the driver this runs in.
->=20
-> >=20
-> > >=20
-> > > > +		nxa =3D rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params=
-);
-> > >=20
-> > > Is there a chance nxa can be NULL?
-> >=20
-> > I do not think so since the page_pool is not destroyed while there are
-> > in-flight pages, right?
->=20
-> I think so but I am not 100% sure. I'll apply the patch and have a closer=
- look
+This split approach is necessary if we are to have a reasonably-sized kernel
+module BTFs. By deduping each kernel module's BTF individually, resulting
+module BTFs contain copies of a lot of kernel types that are already present
+in vmlinux BTF. Even those single copies result in a big BTF size bloat. On my
+kernel configuration with 700 modules built, non-split BTF approach results in
+115MBs of BTFs across all modules. With split BTF deduplication approach,
+total size is down to 5.2MBs total, which is on part with vmlinux BTF (at
+around 4MBs). This seems reasonable and practical. As to why we'd need kernel
+module BTFs, that should be pretty obvious to anyone using BPF at this point,
+as it allows all the BTF-powered features to be used with kernel modules:
+tp_btf, fentry/fexit/fmod_ret, lsm, bpf_iter, etc.
 
-ack, thx. I converted socionext driver to bulking APIs but I have not poste=
-d the
-patch since I have not been able to test it. The code is available here:
+This patch set is a pre-requisite to adding split BTF support to pahole, which
+is a prerequisite to integrating split BTF into the Linux kernel build setup
+to generate BTF for kernel modules. The latter will come as a follow-up patch
+series once this series makes it to the libbpf and pahole makes use of it.
 
-https://github.com/LorenzoBianconi/net-next/commit/88c2995bca051fa38860acf7=
-b915c90768460d37
+Patch #4 introduces necessary basic support for split BTF into libbpf APIs.
+Patch #8 implements minimal changes to BTF dedup algorithm to allow
+deduplicating split BTFs. Patch #11 adds extra -B flag to bpftool to allow to
+specify the path to base BTF for cases when one wants to dump or inspect split
+BTF. All the rest are refactorings, clean ups, bug fixes and selftests.
 
-Regards,
-Lorenzo
+Andrii Nakryiko (11):
+  libbpf: factor out common operations in BTF writing APIs
+  selftest/bpf: relax btf_dedup test checks
+  libbpf: unify and speed up BTF string deduplication
+  libbpf: implement basic split BTF support
+  selftests/bpf: add split BTF basic test
+  selftests/bpf: add checking of raw type dump in BTF writer APIs
+    selftests
+  libbpf: fix BTF data layout checks and allow empty BTF
+  libbpf: support BTF dedup of split BTFs
+  libbpf: accomodate DWARF/compiler bug with duplicated identical arrays
+  selftests/bpf: add split BTF dedup selftests
+  tools/bpftool: add bpftool support for split BTF
 
->=20
-> Cheers
-> /Ilias
+ tools/bpf/bpftool/btf.c                       |   9 +-
+ tools/bpf/bpftool/main.c                      |  15 +-
+ tools/bpf/bpftool/main.h                      |   1 +
+ tools/lib/bpf/btf.c                           | 814 ++++++++++--------
+ tools/lib/bpf/btf.h                           |   8 +
+ tools/lib/bpf/libbpf.map                      |   9 +
+ tools/testing/selftests/bpf/Makefile          |   2 +-
+ tools/testing/selftests/bpf/btf_helpers.c     | 259 ++++++
+ tools/testing/selftests/bpf/btf_helpers.h     |  19 +
+ tools/testing/selftests/bpf/prog_tests/btf.c  |  34 +-
+ .../bpf/prog_tests/btf_dedup_split.c          | 326 +++++++
+ .../selftests/bpf/prog_tests/btf_split.c      |  99 +++
+ .../selftests/bpf/prog_tests/btf_write.c      |  48 +-
+ tools/testing/selftests/bpf/test_progs.h      |  11 +
+ 14 files changed, 1294 insertions(+), 360 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/btf_helpers.c
+ create mode 100644 tools/testing/selftests/bpf/btf_helpers.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_split.c
 
---nVMJ2NtxeReIH9PS
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.24.1
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCX5lV5AAKCRA6cBh0uS2t
-rAqLAQDMdRNYycb1gb2fvqRSOVrq1x9V3c1MGdLTunRdtBBHwQEA8z0tzWLToD/C
-CL0Tl3lSgtQf2jqDs4TO4T+rfrPsBAg=
-=Z1r6
------END PGP SIGNATURE-----
-
---nVMJ2NtxeReIH9PS--
