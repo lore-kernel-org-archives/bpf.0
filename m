@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8280AC4363A
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6308C388F7
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 35D0C20796
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6390B20790
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603933177;
-	bh=uJanjlnJo6Fvbz2hP/lz7/3daOg7+HrvTjIwvC6rO84=;
+	s=default; t=1603933179;
+	bh=TKTx4CMcrG//2UjIuZuEH+TXOw73xBBzKDgVrrXAqCw=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=ZSh/OvL4VqfPmSNrswh50UNAB7MMVR2Ln6vHFbTd6D09ndnS1YLDLeT5hhUQZrKbD
-	 L+AKJcZGv8f0JWf4VlKW+o/aEzf4K4XHsu/eGV2f5cYqWAzyJVqxf92VYKIkNFeQ5X
-	 Jjqy++IRcoPixs/P0eO5JDj8TuLjk9MDNcSmEXes=
+	b=2Nm9csAWm+ZuJyKcy+XBipPduFiVygYea96cf9U1RysGfugIi4K3UsxZjTAaGvcOy
+	 ohp7HCrCcJp68OdjarjTWR+WtnuVMitGHr8Aa9wIsWb5ScktmUoOnwHMVi8K/nHbrS
+	 D/56WJGPbZ/JvMSzMm4sQ820n+39eeSiEoiet4aM=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403944AbgJ2A7g convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 28 Oct 2020 20:59:36 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:35288 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2403920AbgJ2A72 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 28 Oct 2020 20:59:28 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09T0oaek008421
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:28 -0700
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 34f7a6mb9b-4
+        id S2403946AbgJ2A7h convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 28 Oct 2020 20:59:37 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:12570 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2403942AbgJ2A7g (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 28 Oct 2020 20:59:36 -0400
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 09T0ob5M021314
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:35 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net with ESMTP id 34ejk2arnr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:28 -0700
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:35 -0700
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 28 Oct 2020 17:59:25 -0700
+ 15.1.1979.3; Wed, 28 Oct 2020 17:59:33 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id DA3932EC875F; Wed, 28 Oct 2020 17:59:17 -0700 (PDT)
+        id DA1922EC875F; Wed, 28 Oct 2020 17:59:30 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 05/11] selftests/bpf: add split BTF basic test
-Date:   Wed, 28 Oct 2020 17:58:56 -0700
-Message-ID: <20201029005902.1706310-6-andrii@kernel.org>
+Subject: [PATCH bpf-next 11/11] tools/bpftool: add bpftool support for split BTF
+Date:   Wed, 28 Oct 2020 17:59:02 -0700
+Message-ID: <20201029005902.1706310-12-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201029005902.1706310-1-andrii@kernel.org>
 References: <20201029005902.1706310-1-andrii@kernel.org>
@@ -55,153 +55,134 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-10-28_09:2020-10-28,2020-10-28 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=25
- bulkscore=0 phishscore=0 mlxscore=0 adultscore=0 mlxlogscore=793
- spamscore=0 malwarescore=0 lowpriorityscore=0 impostorscore=0
- clxscore=1015 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2010290001
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 clxscore=1015
+ phishscore=0 suspectscore=25 adultscore=0 bulkscore=0 impostorscore=0
+ mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2010290001
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add selftest validating ability to programmatically generate and then dump
-split BTF.
+Add ability to work with split BTF by providing extra -B flag, which allows to
+specify the path to the base BTF file.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../selftests/bpf/prog_tests/btf_split.c      | 99 +++++++++++++++++++
- tools/testing/selftests/bpf/test_progs.h      | 11 +++
- 2 files changed, 110 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_split.c
+ tools/bpf/bpftool/btf.c  |  9 ++++++---
+ tools/bpf/bpftool/main.c | 15 ++++++++++++++-
+ tools/bpf/bpftool/main.h |  1 +
+ 3 files changed, 21 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_split.c b/tools/testing/selftests/bpf/prog_tests/btf_split.c
-new file mode 100644
-index 000000000000..b032577cded5
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_split.c
-@@ -0,0 +1,99 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+#include <test_progs.h>
-+#include <bpf/btf.h>
-+
-+static char *dump_buf;
-+static size_t dump_buf_sz;
-+static FILE *dump_buf_file;
-+
-+static void btf_dump_printf(void *ctx, const char *fmt, va_list args)
-+{
-+	vfprintf(ctx, fmt, args);
-+}
-+
-+void test_btf_split() {
-+	struct btf_dump_opts opts;
-+	struct btf_dump *d = NULL;
-+	const struct btf_type *t;
-+	struct btf *btf1, *btf2 = NULL;
-+	int str_off, i, err;
-+
-+	btf1 = btf__new_empty();
-+	if (!ASSERT_OK_PTR(btf1, "empty_main_btf"))
-+		return;
-+
-+	btf__set_pointer_size(btf1, 8); /* enforce 64-bit arch */
-+
-+	btf__add_int(btf1, "int", 4, BTF_INT_SIGNED);	/* [1] int */
-+	btf__add_ptr(btf1, 1);				/* [2] ptr to int */
-+
-+	btf__add_struct(btf1, "s1", 4);			/* [3] struct s1 { */
-+	btf__add_field(btf1, "f1", 1, 0, 0);		/*      int f1; */
-+							/* } */
-+
-+	btf2 = btf__new_empty_split(btf1);
-+	if (!ASSERT_OK_PTR(btf2, "empty_split_btf"))
-+		goto cleanup;
-+
-+	/* pointer size should be "inherited" from main BTF */
-+	ASSERT_EQ(btf__pointer_size(btf2), 8, "inherit_ptr_sz");
-+
-+	str_off = btf__find_str(btf2, "int");
-+	ASSERT_NEQ(str_off, -ENOENT, "str_int_missing");
-+
-+	t = btf__type_by_id(btf2, 1);
-+	if (!ASSERT_OK_PTR(t, "int_type"))
-+		goto cleanup;
-+	ASSERT_EQ(btf_is_int(t), true, "int_kind");
-+	ASSERT_STREQ(btf__str_by_offset(btf2, t->name_off), "int", "int_name");
-+
-+	btf__add_struct(btf2, "s2", 16);		/* [4] struct s2 {	*/
-+	btf__add_field(btf2, "f1", 3, 0, 0);		/*      struct s1 f1;	*/
-+	btf__add_field(btf2, "f2", 1, 32, 0);		/*      int f2;		*/
-+	btf__add_field(btf2, "f3", 2, 64, 0);		/*      int *f3;	*/
-+							/* } */
-+
-+	t = btf__type_by_id(btf1, 4);
-+	ASSERT_NULL(t, "split_type_in_main");
-+
-+	t = btf__type_by_id(btf2, 4);
-+	if (!ASSERT_OK_PTR(t, "split_struct_type"))
-+		goto cleanup;
-+	ASSERT_EQ(btf_is_struct(t), true, "split_struct_kind");
-+	ASSERT_EQ(btf_vlen(t), 3, "split_struct_vlen");
-+	ASSERT_STREQ(btf__str_by_offset(btf2, t->name_off), "s2", "split_struct_name");
-+
-+	/* BTF-to-C dump of split BTF */
-+	dump_buf_file = open_memstream(&dump_buf, &dump_buf_sz);
-+	if (!ASSERT_OK_PTR(dump_buf_file, "dump_memstream"))
-+		return;
-+	opts.ctx = dump_buf_file;
-+	d = btf_dump__new(btf2, NULL, &opts, btf_dump_printf);
-+	if (!ASSERT_OK_PTR(d, "btf_dump__new"))
-+		goto cleanup;
-+	for (i = 1; i <= btf__get_nr_types(btf2); i++) {
-+		err = btf_dump__dump_type(d, i);
-+		ASSERT_OK(err, "dump_type_ok");
-+	}
-+	fflush(dump_buf_file);
-+	dump_buf[dump_buf_sz] = 0; /* some libc implementations don't do this */
-+	ASSERT_STREQ(dump_buf,
-+"struct s1 {\n"
-+"	int f1;\n"
-+"};\n"
-+"\n"
-+"struct s2 {\n"
-+"	struct s1 f1;\n"
-+"	int f2;\n"
-+"	int *f3;\n"
-+"};\n\n", "c_dump");
-+
-+cleanup:
-+	if (dump_buf_file)
-+		fclose(dump_buf_file);
-+	free(dump_buf);
-+	btf_dump__free(d);
-+	btf__free(btf1);
-+	btf__free(btf2);
-+}
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-index 238f5f61189e..d6b14853f3bc 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -141,6 +141,17 @@ extern int test__join_cgroup(const char *path);
- 	___ok;								\
- })
+diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+index 8ab142ff5eac..c96b56e8e3a4 100644
+--- a/tools/bpf/bpftool/btf.c
++++ b/tools/bpf/bpftool/btf.c
+@@ -358,8 +358,12 @@ static int dump_btf_raw(const struct btf *btf,
+ 		}
+ 	} else {
+ 		int cnt = btf__get_nr_types(btf);
++		int start_id = 1;
  
-+#define ASSERT_NEQ(actual, expected, name) ({				\
-+	static int duration = 0;					\
-+	typeof(actual) ___act = (actual);				\
-+	typeof(expected) ___exp = (expected);				\
-+	bool ___ok = ___act != ___exp;					\
-+	CHECK(!___ok, (name),						\
-+	      "unexpected %s: actual %lld == expected %lld\n",		\
-+	      (name), (long long)(___act), (long long)(___exp));	\
-+	___ok;								\
-+})
+-		for (i = 1; i <= cnt; i++) {
++		if (base_btf)
++			start_id = btf__get_nr_types(base_btf) + 1;
 +
- #define ASSERT_STREQ(actual, expected, name) ({				\
- 	static int duration = 0;					\
- 	const char *___act = actual;					\
++		for (i = start_id; i <= cnt; i++) {
+ 			t = btf__type_by_id(btf, i);
+ 			dump_btf_type(btf, i, t);
+ 		}
+@@ -438,7 +442,6 @@ static int do_dump(int argc, char **argv)
+ 		return -1;
+ 	}
+ 	src = GET_ARG();
+-
+ 	if (is_prefix(src, "map")) {
+ 		struct bpf_map_info info = {};
+ 		__u32 len = sizeof(info);
+@@ -499,7 +502,7 @@ static int do_dump(int argc, char **argv)
+ 		}
+ 		NEXT_ARG();
+ 	} else if (is_prefix(src, "file")) {
+-		btf = btf__parse(*argv, NULL);
++		btf = btf__parse_split(*argv, base_btf);
+ 		if (IS_ERR(btf)) {
+ 			err = -PTR_ERR(btf);
+ 			btf = NULL;
+diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+index 682daaa49e6a..b86f450e6fce 100644
+--- a/tools/bpf/bpftool/main.c
++++ b/tools/bpf/bpftool/main.c
+@@ -11,6 +11,7 @@
+ 
+ #include <bpf/bpf.h>
+ #include <bpf/libbpf.h>
++#include <bpf/btf.h>
+ 
+ #include "main.h"
+ 
+@@ -28,6 +29,7 @@ bool show_pinned;
+ bool block_mount;
+ bool verifier_logs;
+ bool relaxed_maps;
++struct btf *base_btf;
+ struct pinned_obj_table prog_table;
+ struct pinned_obj_table map_table;
+ struct pinned_obj_table link_table;
+@@ -391,6 +393,7 @@ int main(int argc, char **argv)
+ 		{ "mapcompat",	no_argument,	NULL,	'm' },
+ 		{ "nomount",	no_argument,	NULL,	'n' },
+ 		{ "debug",	no_argument,	NULL,	'd' },
++		{ "base-btf",	required_argument, NULL, 'B' },
+ 		{ 0 }
+ 	};
+ 	int opt, ret;
+@@ -407,7 +410,7 @@ int main(int argc, char **argv)
+ 	hash_init(link_table.table);
+ 
+ 	opterr = 0;
+-	while ((opt = getopt_long(argc, argv, "Vhpjfmnd",
++	while ((opt = getopt_long(argc, argv, "VhpjfmndB:",
+ 				  options, NULL)) >= 0) {
+ 		switch (opt) {
+ 		case 'V':
+@@ -441,6 +444,15 @@ int main(int argc, char **argv)
+ 			libbpf_set_print(print_all_levels);
+ 			verifier_logs = true;
+ 			break;
++		case 'B':
++			base_btf = btf__parse(optarg, NULL);
++			if (libbpf_get_error(base_btf)) {
++				p_err("failed to parse base BTF at '%s': %ld\n",
++				      optarg, libbpf_get_error(base_btf));
++				base_btf = NULL;
++				return -1;
++			}
++			break;
+ 		default:
+ 			p_err("unrecognized option '%s'", argv[optind - 1]);
+ 			if (json_output)
+@@ -465,6 +477,7 @@ int main(int argc, char **argv)
+ 		delete_pinned_obj_table(&map_table);
+ 		delete_pinned_obj_table(&link_table);
+ 	}
++	btf__free(base_btf);
+ 
+ 	return ret;
+ }
+diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
+index c46e52137b87..76e91641262b 100644
+--- a/tools/bpf/bpftool/main.h
++++ b/tools/bpf/bpftool/main.h
+@@ -90,6 +90,7 @@ extern bool show_pids;
+ extern bool block_mount;
+ extern bool verifier_logs;
+ extern bool relaxed_maps;
++extern struct btf *base_btf;
+ extern struct pinned_obj_table prog_table;
+ extern struct pinned_obj_table map_table;
+ extern struct pinned_obj_table link_table;
 -- 
 2.24.1
 
