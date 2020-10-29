@@ -2,224 +2,137 @@ Return-Path: <SRS0=L8C4=EE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69DC3C2D0A3
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 07:26:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D764FC2D0A3
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 07:37:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 12FFA21D24
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 07:26:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E741218AC
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 07:37:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wd3BV9e7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MQQ9pRPm"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728447AbgJ2H0j (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Oct 2020 03:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
+        id S1728101AbgJ2Hf2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Oct 2020 03:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728274AbgJ2HY7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 29 Oct 2020 03:24:59 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E11C08EA7B
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2020 00:08:52 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id s9so1538838wro.8
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2020 00:08:52 -0700 (PDT)
+        with ESMTP id S1728055AbgJ2HY4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 29 Oct 2020 03:24:56 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE7EC0613D4;
+        Wed, 28 Oct 2020 19:46:49 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id h196so949979ybg.4;
+        Wed, 28 Oct 2020 19:46:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=90tbSpftzM+wEfef3WTFwlNnTYj4eB/xYx32SzM4xzY=;
-        b=wd3BV9e7/tLO+tTEwJuHf0XowRZux2zcVXGkWnmWxHKaABtDBZbBMJhMsBXsKICwMx
-         feRmzUDOoP0VZUDY99ZbnIjrSxCy+Riwq/xzNFtM7X2XAq2Yb1anaoxGJn6QS6mN15v0
-         JmQcbx1RGPZiOK4c8hrNPxtuEJCUWZTwh3eAzk4W/EuTvDWz6NBcF7c7YKJ7PlM0jdeM
-         2vPUx96xM+HmpSsvTeBqzpr8r6oOIiHOIxW6Iqw3WBL9LiHoYvEtAPsRIHMn6GdK1n6t
-         S0CpK9gIHMs+PBsQnGcmfh73bQhw1WkpHWQTBlz9Qwdy/pHtNpv8PRTJOX/Kg3agTT6q
-         msPQ==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fABtmEv4epg3sR+yL6QGcoJXHUHo9G2azV/Jbl517G8=;
+        b=MQQ9pRPma+JuxAjBmR7Gor4oqCqHPKcmoRPHH4Kpvucj9Wje3Cq4fF/91i3PYER7bg
+         9VIkXxBnQYzM5Z7AQVOoHgK9GmNFHCE/FkgzLcEIBHA58OPKRnr7nAyuuSDjPOGPHPFO
+         oKamzZuuMx2VvVxSw3veS5/FyHxgJB++9np66FAEtnIwTDhy+03Y9v6jKzTf32NdmO2F
+         Kke+iJQWIP4HIZAHbxk0bG99dDHZKg1NwCp+gSrFpphvfnKAFRuBCMw5C6qiZa6GUSIe
+         FXedfx0GfNYQRP1nx7jxDdrZ3ofnsAGN3Xwm1nmDc0WRMCzbGOPKtRPlTc1PybVYb4Qk
+         isdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=90tbSpftzM+wEfef3WTFwlNnTYj4eB/xYx32SzM4xzY=;
-        b=FW1Lg5DQ1jr2se3M44SXiI85P0CXdrSRLG2iRcj9aEYBQF5jTSgcZ67+Ivj/EAt+dN
-         Nz+6IC1gxl9aLDGe5TELzxydwbXFMgm9A+gqJK6nWBG0i76USfUylqSiJgTFHMQIxoUg
-         ZYbjOmhrJMDNki/YcNBMSHcIBPLA2plzHmUSvdUj6A99Sgvt4bGOiQcanZpU3MX0XReL
-         toTu6OaOqiYREnIZ8XEAflAVDveDB9lOsxSg/bqezG9Ow/nqW/Pq8F+CqqUzbaXtEvdn
-         ugu6Wta0g7mzU0buoL4a9etpPxfJ7IbqDCqPzTCLoGR49jtpF0bOQDPR8KIbqg2y1Iaz
-         i3nA==
-X-Gm-Message-State: AOAM530UtuGyUXX7BMwg2ZkXMK8PZ7qoDlPBEZj9hdaqjz9k9XFsAvsM
-        5EErPUrPWKLftQZ0DG/2KEyBiA==
-X-Google-Smtp-Source: ABdhPJyULY90N+uT8BWJ9LyldpfhK6Uh03XxkLYsulvOCfzFhpQstR0+n+ZnQDwSI9v/6zo0UOUO6Q==
-X-Received: by 2002:a5d:6506:: with SMTP id x6mr3826155wru.71.1603955331470;
-        Thu, 29 Oct 2020 00:08:51 -0700 (PDT)
-Received: from apalos.home (athedsl-246545.home.otenet.gr. [85.73.10.175])
-        by smtp.gmail.com with ESMTPSA id i33sm3324230wri.79.2020.10.29.00.08.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2020 00:08:51 -0700 (PDT)
-Date:   Thu, 29 Oct 2020 09:08:48 +0200
-From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        brouer@redhat.com
-Subject: Re: [PATCH net-next 2/4] net: page_pool: add bulk support for
- ptr_ring
-Message-ID: <20201029070848.GA61336@apalos.home>
-References: <cover.1603824486.git.lorenzo@kernel.org>
- <cd58ca966fbe11cabbd6160decea6ce748ebce9f.1603824486.git.lorenzo@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fABtmEv4epg3sR+yL6QGcoJXHUHo9G2azV/Jbl517G8=;
+        b=ncA9dNFLRONaHiUZ7iNr8XDf/893yZRxpNQyLXUJWCnZ2ZgpQyNnVt1zfVwLUJAYBv
+         STrlIPY8s71GnCkxYXUtW0f5qToiq1+cy27JbWk9Muf2//XchdFfyqaUgCEM7I1egDa5
+         3xNm6mT7zaQV4n2Uts8ZMLvQogEuI9kys7dZYkVqUg1kZs2pxqg6rLfW+b/iC2Dc00mT
+         vT4hE7XOXsy+OJPFAgm/AzHR7CtseYoSsu2lUDhKRVKfc6N843kP+7x5mBADff4pImNA
+         CxMtj8OIJKEmvvWK1Q4QawFjafklPx5FNs3GiRWac8gVl68qGOPwFCqXqAudH+e10U/W
+         kScQ==
+X-Gm-Message-State: AOAM532hM1p/6ed/HUfb7xSzXCiI9oDKrmeSbN5RlgOOxu7DOh0r1WCU
+        lBhUVb1dyx8JYCdiNRR6YQBQP6ioW5juAYvtgQM=
+X-Google-Smtp-Source: ABdhPJxnXLGTM5MpZq+oFYWhzCvrNSw1tMMRNaXrk0zKK9jtDdlQbwb59XmaAmJiKG4qsQDVQU3y0VjFo/9Yy5uMOJA=
+X-Received: by 2002:a25:c7c6:: with SMTP id w189mr3113487ybe.403.1603939609041;
+ Wed, 28 Oct 2020 19:46:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cd58ca966fbe11cabbd6160decea6ce748ebce9f.1603824486.git.lorenzo@kernel.org>
+References: <20201023033855.3894509-1-haliu@redhat.com> <20201028132529.3763875-1-haliu@redhat.com>
+ <7babcccb-2b31-f9bf-16ea-6312e449b928@gmail.com> <20201029020637.GM2408@dhcp-12-153.nay.redhat.com>
+ <CAEf4BzZR4MqQJCD4kzFsbhpfmp4RB7SHcP5AbAiqzqK7to2u+g@mail.gmail.com> <b17e7428-dd99-09f8-7254-c61d25a0c797@gmail.com>
+In-Reply-To: <b17e7428-dd99-09f8-7254-c61d25a0c797@gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 28 Oct 2020 19:46:38 -0700
+Message-ID: <CAEf4BzacgsZiXQJPM=j_cKW=3pF8Kwx=JvY9FjMgvJ1HzfyVAA@mail.gmail.com>
+Subject: Re: [PATCHv2 iproute2-next 0/5] iproute2: add libbpf support
+To:     David Ahern <dsahern@gmail.com>
+Cc:     Hangbin Liu <haliu@redhat.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        David Miller <davem@davemloft.net>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Jiri Benc <jbenc@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Lorenzo, 
+On Wed, Oct 28, 2020 at 7:33 PM David Ahern <dsahern@gmail.com> wrote:
+>
+> On 10/28/20 8:27 PM, Andrii Nakryiko wrote:
+> > On Wed, Oct 28, 2020 at 7:06 PM Hangbin Liu <haliu@redhat.com> wrote:
+> >>
+> >> On Wed, Oct 28, 2020 at 05:02:34PM -0600, David Ahern wrote:
+> >>> fails to compile on Ubuntu 20.10:
+> >>>
+> >>> root@u2010-sfo3:~/iproute2.git# ./configure
+> >>> TC schedulers
+> >>>  ATM  yes
+> >>>  IPT  using xtables
+> >>>  IPSET  yes
+> >>>
+> >>> iptables modules directory: /usr/lib/x86_64-linux-gnu/xtables
+> >>> libc has setns: yes
+> >>> SELinux support: yes
+> >>> libbpf support: yes
+> >>> ELF support: yes
+> >>> libmnl support: yes
+> >>> Berkeley DB: no
+> >>> need for strlcpy: yes
+> >>> libcap support: yes
+> >>>
+> >>> root@u2010-sfo3:~/iproute2.git# make clean
+> >>>
+> >>> root@u2010-sfo3:~/iproute2.git# make -j 4
+> >>> ...
+> >>> /usr/bin/ld: ../lib/libutil.a(bpf_libbpf.o): in function `load_bpf_object':
+> >>> bpf_libbpf.c:(.text+0x3cb): undefined reference to
+> >>> `bpf_program__section_name'
+> >>> /usr/bin/ld: bpf_libbpf.c:(.text+0x438): undefined reference to
+> >>> `bpf_program__section_name'
+> >>> /usr/bin/ld: bpf_libbpf.c:(.text+0x716): undefined reference to
+> >>> `bpf_program__section_name'
+> >>> collect2: error: ld returned 1 exit status
+> >>> make[1]: *** [Makefile:27: ip] Error 1
+> >>> make[1]: *** Waiting for unfinished jobs....
+> >>> make: *** [Makefile:64: all] Error 2
+> >>
+> >> You need to update libbpf to latest version.
+> >
+> > Why not using libbpf from submodule?
+> >
+>
+> no. iproute2 does not bring in libmnl, libc, ... a submodules. libbpf is
+> not special. OS versions provide it and it needs to co-exist with packages.
 
-On Tue, Oct 27, 2020 at 08:04:08PM +0100, Lorenzo Bianconi wrote:
-> Introduce the capability to batch page_pool ptr_ring refill since it is
-> usually run inside the driver NAPI tx completion loop.
-> 
-> Suggested-by: Jesper Dangaard Brouer <brouer@redhat.com>
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> ---
->  include/net/page_pool.h | 26 ++++++++++++++++++++++++++
->  net/core/page_pool.c    | 33 +++++++++++++++++++++++++++++++++
->  net/core/xdp.c          |  9 ++-------
->  3 files changed, 61 insertions(+), 7 deletions(-)
-> 
-> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-> index 81d7773f96cd..b5b195305346 100644
-> --- a/include/net/page_pool.h
-> +++ b/include/net/page_pool.h
-> @@ -152,6 +152,8 @@ struct page_pool *page_pool_create(const struct page_pool_params *params);
->  void page_pool_destroy(struct page_pool *pool);
->  void page_pool_use_xdp_mem(struct page_pool *pool, void (*disconnect)(void *));
->  void page_pool_release_page(struct page_pool *pool, struct page *page);
-> +void page_pool_put_page_bulk(struct page_pool *pool, void **data,
-> +			     int count);
->  #else
->  static inline void page_pool_destroy(struct page_pool *pool)
->  {
-> @@ -165,6 +167,11 @@ static inline void page_pool_release_page(struct page_pool *pool,
->  					  struct page *page)
->  {
->  }
-> +
-> +static inline void page_pool_put_page_bulk(struct page_pool *pool, void **data,
-> +					   int count)
-> +{
-> +}
->  #endif
->  
->  void page_pool_put_page(struct page_pool *pool, struct page *page,
-> @@ -215,4 +222,23 @@ static inline void page_pool_nid_changed(struct page_pool *pool, int new_nid)
->  	if (unlikely(pool->p.nid != new_nid))
->  		page_pool_update_nid(pool, new_nid);
->  }
-> +
-> +static inline void page_pool_ring_lock(struct page_pool *pool)
-> +	__acquires(&pool->ring.producer_lock)
-> +{
-> +	if (in_serving_softirq())
-> +		spin_lock(&pool->ring.producer_lock);
-> +	else
-> +		spin_lock_bh(&pool->ring.producer_lock);
-> +}
-> +
-> +static inline void page_pool_ring_unlock(struct page_pool *pool)
-> +	__releases(&pool->ring.producer_lock)
-> +{
-> +	if (in_serving_softirq())
-> +		spin_unlock(&pool->ring.producer_lock);
-> +	else
-> +		spin_unlock_bh(&pool->ring.producer_lock);
-> +}
-> +
->  #endif /* _NET_PAGE_POOL_H */
-> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
-> index ef98372facf6..84fb21f8865e 100644
-> --- a/net/core/page_pool.c
-> +++ b/net/core/page_pool.c
-> @@ -11,6 +11,8 @@
->  #include <linux/device.h>
->  
->  #include <net/page_pool.h>
-> +#include <net/xdp.h>
-> +
->  #include <linux/dma-direction.h>
->  #include <linux/dma-mapping.h>
->  #include <linux/page-flags.h>
-> @@ -408,6 +410,37 @@ void page_pool_put_page(struct page_pool *pool, struct page *page,
->  }
->  EXPORT_SYMBOL(page_pool_put_page);
->  
-> +void page_pool_put_page_bulk(struct page_pool *pool, void **data,
-> +			     int count)
-> +{
-> +	struct page *page_ring[XDP_BULK_QUEUE_SIZE];
-> +	int i, len = 0;
-> +
-> +	for (i = 0; i < count; i++) {
-> +		struct page *page = virt_to_head_page(data[i]);
-> +
-> +		if (unlikely(page_ref_count(page) != 1 ||
-> +			     !pool_page_reusable(pool, page))) {
-> +			page_pool_release_page(pool, page);
+Not saying libbpf is special, but libbpf is a fast moving target right
+now, so it's pragmatic to have it as submodule, because if you'd like
+to use some latest functionality, you won't have to add all the
+conditional compilation shenanigans to detect every single new API
+you'd like to use from libbpf. And libbpf is pretty small to not worry
+about saving memory through a shared library.
 
-Mind switching this similarly to how page_pool_put_page() is using it?
-unlikely -> likely and remove the !
-
-> +			put_page(page);
-> +			continue;
-> +		}
-> +
-> +		if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
-> +			page_pool_dma_sync_for_device(pool, page, -1);
-> +
-> +		page_ring[len++] = page;
-> +	}
-> +
-> +	page_pool_ring_lock(pool);
-> +	for (i = 0; i < len; i++) {
-> +		if (__ptr_ring_produce(&pool->ring, page_ring[i]))
-> +			page_pool_return_page(pool, page_ring[i]);
-> +	}
-> +	page_pool_ring_unlock(pool);
-> +}
-> +EXPORT_SYMBOL(page_pool_put_page_bulk);
-> +
->  static void page_pool_empty_ring(struct page_pool *pool)
->  {
->  	struct page *page;
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> index 93eabd789246..9f9a8d14df38 100644
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-> @@ -383,16 +383,11 @@ EXPORT_SYMBOL_GPL(xdp_return_frame_rx_napi);
->  void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq)
->  {
->  	struct xdp_mem_allocator *xa = bq->xa;
-> -	int i;
->  
-> -	if (unlikely(!xa))
-> +	if (unlikely(!xa || !bq->count))
->  		return;
->  
-> -	for (i = 0; i < bq->count; i++) {
-> -		struct page *page = virt_to_head_page(bq->q[i]);
-> -
-> -		page_pool_put_full_page(xa->page_pool, page, false);
-> -	}
-> +	page_pool_put_page_bulk(xa->page_pool, bq->q, bq->count);
->  	bq->count = 0;
->  }
->  EXPORT_SYMBOL_GPL(xdp_flush_frame_bulk);
-> -- 
-> 2.26.2
-> 
-
-Cheers
-/Ilias
+But it's up to you guys, of course.
