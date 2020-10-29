@@ -2,170 +2,128 @@ Return-Path: <SRS0=L8C4=EE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.3 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3F75C4363A
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 02:14:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 71711C5517A
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 02:28:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6BA2A20720
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 02:14:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0796020738
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 02:28:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=sargun.me header.i=@sargun.me header.b="tF7de7mb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FlGEB0LT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388290AbgJ2CMn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 22:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46258 "EHLO
+        id S1732848AbgJ2C2B (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 22:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726803AbgJ1VgS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 17:36:18 -0400
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DFEC0613D2
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 14:36:16 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id h24so952661ejg.9
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 14:36:16 -0700 (PDT)
+        with ESMTP id S1732825AbgJ2C1c (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 22:27:32 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 713C8C0613D1;
+        Wed, 28 Oct 2020 19:27:32 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id i186so894698ybc.11;
+        Wed, 28 Oct 2020 19:27:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sargun.me; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1KKfnGnBEdd12X89nwYRLUfbpvsSCoekdcU0DHREQhE=;
-        b=tF7de7mbM6VeEXWhVjMrNC5cvKMpl0WDoIIp7fDbiFMyA9PP4g3gTmf4LaBzwarT14
-         4HlQUlmQiDgdPcyNEbZCIirlXnui4R0jL648Tx95iRiVKLtDrIrgQ3s56LWy8BP1Jh4m
-         e5D2GJEtVeWX660AowCOJZdoycU2F+72CGe2Y=
+        bh=b9BOAnMXMoVPK4YONayTBt7vqZItsUD5u5uhV9sIfiI=;
+        b=FlGEB0LTTPM4gZS86lNMm1Fc30sNdacUX6shfO+qwnZA0Jz+Zh3WXZmKY2cxSG7XpP
+         A2NNzYYmRjXM5LcQypfBzYgzTSDGWLwSsUU3Jy6hpYCrzTUIGHffr6nqDwdqB6n98G1W
+         NSp7IxpPD6BitsmDe7y+BN90LFBgXCNANNnaxA8fhyyoltN24+jjd/IbPJr2zY1xbUB/
+         Uw4EgyZmxUViFlQTaKptVdWw+ZNPBv+Gy7SWX2NPlCdvwyGS9LK2LLRYewN2BfM2XWwf
+         sqnaBteTpBkeBl4liyyq6T8MdtMihgLYKPxCU5S6lK6Vc52haHktdgjQsPTzNuXlu+Xi
+         pmSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1KKfnGnBEdd12X89nwYRLUfbpvsSCoekdcU0DHREQhE=;
-        b=bZN/EcylUO8s38kDM7j54jGUoZ8wVlsfBaN3XBOjBLI7+oVvS6MJHCFn8v9ZsKBlXC
-         HP9Kw1iDesg/QE93mHd5J9vqvTnCT4ZKxBUKiX4HeizHn5QWGEzk2f1e9VP1vIevf8Gi
-         x/kAA3SsB+cacOTnWMFgXDImh0EkuMRnAsWPtclLPQYP5ExEqWWzWxwatnieaFbh3CUO
-         8M7++GxY9jYLaVgBsoGQRhHwItslbEVvV4NJ31WFSkN32eTGaxS3NZna+Yibhczc0c0a
-         lrCKgMBnoivUwKm4f7cwAfMFLnhAMtrlQUfLB08Qi9+NAWYtbb38Zq4prKEimtiOEogT
-         Y6Pw==
-X-Gm-Message-State: AOAM532VuMxuiP6gGIQQ9u7/Cv9o+pMklSS/YwOOts6Uj92wMKLEjDnM
-        tUwvcgtMyWE7hA4VRV61XjU+5G6qkXFpwMKdaEQYfkG63za+kOFn
-X-Google-Smtp-Source: ABdhPJxusKQfLH7ldNK0ZejYey8JceBXqtdks06+e2oAEK1AFi5yniwjLl5sysSu+nsrzKiTHTK4yg881qNZWDn/8tc=
-X-Received: by 2002:a17:906:bc42:: with SMTP id s2mr173094ejv.251.1603907070187;
- Wed, 28 Oct 2020 10:44:30 -0700 (PDT)
+        bh=b9BOAnMXMoVPK4YONayTBt7vqZItsUD5u5uhV9sIfiI=;
+        b=HWV9q0CmFxIQTc97B053vZ6SMDGGzvjeM2Db5r/IHarEAEvKErpib48NQ9F89Ug+RE
+         8ZdaG+CWG2ir3BlJgGD6WU+E4PGiy4efVQOaHmpdwUQqTOzbZOsKFR3u4Ju+VTJX5KWn
+         3e05BsBMzfjvJcZXrqLQwffEWpZH1QY9p7GETNfo0U6bu/LMkDuHlVSjqZu3+wqr+AGD
+         aqA5kKkknkWPQBQec42NgGZBVTL3vnJbWP8TYCb7mzMtMMU+lyf6FCM0GrGH/tNNJ/YI
+         dZl2BYWz1RloAbxHP2D6x9SgLM5Wpjo+9iTv9KZYSgAMFm/YpVKleHmlQOX8yDylS9Bp
+         T2XA==
+X-Gm-Message-State: AOAM530f/k/F8+AhMxZYbbp61VuQlDsO7q1EbC0rV0ZOcKiXYtwb0l11
+        +9oFixOu0BJcORr/9C1Ab4J7oeumZCQJS1pEZ9I=
+X-Google-Smtp-Source: ABdhPJxhGtV3S29KlyIGapKNKUXB3jYo/wYK3U/CETHFe/x6wevLSF4vrBGS4iZg9auYULOohzrgtng+0q+/g+YnEeI=
+X-Received: by 2002:a25:c001:: with SMTP id c1mr2879701ybf.27.1603938451449;
+ Wed, 28 Oct 2020 19:27:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <45f07f17-18b6-d187-0914-6f341fe90857@gmail.com>
- <20200930150330.GC284424@cisco> <8bcd956f-58d2-d2f0-ca7c-0a30f3fcd5b8@gmail.com>
- <20200930230327.GA1260245@cisco> <CAG48ez1VOUEHVQyo-2+uO7J+-jN5rh7=KmrMJiPaFjwCbKR1Sg@mail.gmail.com>
- <20200930232456.GB1260245@cisco> <CAG48ez2xn+_KznEztJ-eVTsTzkbf9CVgPqaAk7TpRNAqbdaRoA@mail.gmail.com>
- <CAG48ez3kpEDO1x_HfvOM2R9M78Ach9O_4+Pjs-vLLfqvZL+13A@mail.gmail.com>
- <656a37b5-75e3-0ded-6ba8-3bb57b537b24@gmail.com> <CAG48ez2Uy8=Tz9k1hcr0suLPHjbJi1qUviSGzDQ-XWEGsdNU+A@mail.gmail.com>
- <e2643168-b5d5-4d8c-947a-7895bcabc268@gmail.com> <CAG48ez2Nb95ae+XwZPYRju1KO-Ps_4R6QxN6ioUhOy2Uok=uAg@mail.gmail.com>
- <CAMp4zn_Qt2MYuoLojn5ikRkr-J5yGimirjevoAvorK5wfzrBHg@mail.gmail.com> <CAG48ez1drOxgcpuKHiJc+khwmLvqoXfK4yBt9_KHPGQipDf6NQ@mail.gmail.com>
-In-Reply-To: <CAG48ez1drOxgcpuKHiJc+khwmLvqoXfK4yBt9_KHPGQipDf6NQ@mail.gmail.com>
-From:   Sargun Dhillon <sargun@sargun.me>
-Date:   Wed, 28 Oct 2020 10:43:54 -0700
-Message-ID: <CAMp4zn9O-a3_wzO1RLr8uujdS+fGYTC0+b=MRQK9TihLToU--w@mail.gmail.com>
-Subject: Re: For review: seccomp_user_notif(2) manual page
-To:     Jann Horn <jannh@google.com>
-Cc:     "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Kees Cook <keescook@chromium.org>,
-        Christian Brauner <christian@brauner.io>,
-        linux-man <linux-man@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Will Drewry <wad@chromium.org>, bpf <bpf@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>,
+References: <20201023033855.3894509-1-haliu@redhat.com> <20201028132529.3763875-1-haliu@redhat.com>
+ <7babcccb-2b31-f9bf-16ea-6312e449b928@gmail.com> <20201029020637.GM2408@dhcp-12-153.nay.redhat.com>
+In-Reply-To: <20201029020637.GM2408@dhcp-12-153.nay.redhat.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 28 Oct 2020 19:27:20 -0700
+Message-ID: <CAEf4BzZR4MqQJCD4kzFsbhpfmp4RB7SHcP5AbAiqzqK7to2u+g@mail.gmail.com>
+Subject: Re: [PATCHv2 iproute2-next 0/5] iproute2: add libbpf support
+To:     Hangbin Liu <haliu@redhat.com>
+Cc:     David Ahern <dsahern@gmail.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Robert Sesek <rsesek@google.com>
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        David Miller <davem@davemloft.net>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Jiri Benc <jbenc@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Oct 28, 2020 at 2:43 AM Jann Horn <jannh@google.com> wrote:
+On Wed, Oct 28, 2020 at 7:06 PM Hangbin Liu <haliu@redhat.com> wrote:
 >
-> On Wed, Oct 28, 2020 at 7:32 AM Sargun Dhillon <sargun@sargun.me> wrote:
-> > On Tue, Oct 27, 2020 at 3:28 AM Jann Horn <jannh@google.com> wrote:
-> > > On Tue, Oct 27, 2020 at 7:14 AM Michael Kerrisk (man-pages)
-> > > <mtk.manpages@gmail.com> wrote:
-> > > > On 10/26/20 4:54 PM, Jann Horn wrote:
-> > > > > I'm a bit on the fence now on whether non-blocking mode should use
-> > > > > ENOTCONN or not... I guess if we returned ENOENT even when there are
-> > > > > no more listeners, you'd have to disambiguate through the poll()
-> > > > > revents, which would be kinda ugly?
-> > > >
-> > > > I must confess, I'm not quite clear on which two cases you
-> > > > are trying to distinguish. Can you elaborate?
-> > >
-> > > Let's say someone writes a program whose responsibilities are just to
-> > > handle seccomp events and to listen on some other fd for commands. And
-> > > this is implemented with an event loop. Then once all the target
-> > > processes are gone (including zombie reaping), we'll start getting
-> > > EPOLLERR.
-> > >
-> > > If NOTIF_RECV starts returning -ENOTCONN at this point, the event loop
-> > > can just call into the seccomp logic without any arguments; it can
-> > > just call NOTIF_RECV one more time, see the -ENOTCONN, and terminate.
-> > > The downside is that there's one more error code userspace has to
-> > > special-case.
-> > > This would be more consistent with what we'd be doing in the blocking case.
-> > >
-> > > If NOTIF_RECV keeps returning -ENOENT, the event loop has to also tell
-> > > the seccomp logic what the revents are.
-> > >
-> > > I guess it probably doesn't really matter much.
+> On Wed, Oct 28, 2020 at 05:02:34PM -0600, David Ahern wrote:
+> > fails to compile on Ubuntu 20.10:
 > >
-> > So, in practice, if you're emulating a blocking syscall (such as open,
-> > perf_event_open, or any of a number of other syscalls), you probably
-> > have to do it on a separate thread in the supervisor because you want
-> > to continue to be able to receive new notifications if any other process
-> > generates a seccomp notification event that you need to handle.
+> > root@u2010-sfo3:~/iproute2.git# ./configure
+> > TC schedulers
+> >  ATM  yes
+> >  IPT  using xtables
+> >  IPSET  yes
 > >
-> > In addition to that, some of these syscalls are preemptible, so you need
-> > to poll SECCOMP_IOCTL_NOTIF_ID_VALID to make sure that the program
-> > under supervision hasn't left the syscall.
+> > iptables modules directory: /usr/lib/x86_64-linux-gnu/xtables
+> > libc has setns: yes
+> > SELinux support: yes
+> > libbpf support: yes
+> > ELF support: yes
+> > libmnl support: yes
+> > Berkeley DB: no
+> > need for strlcpy: yes
+> > libcap support: yes
 > >
-> > If we're to implement a mechanism that makes the seccomp ioctl receive
-> > non-blocking, it would be valuable to address this problem as well (getting
-> > a notification when the supervisor is processing a syscall and needs to
-> > preempt it). In the best case, this can be a minor inconvenience, and
-> > in the worst case this can result in weird errors where you're keeping
-> > resources open that the container expects to be closed.
+> > root@u2010-sfo3:~/iproute2.git# make clean
+> >
+> > root@u2010-sfo3:~/iproute2.git# make -j 4
+> > ...
+> > /usr/bin/ld: ../lib/libutil.a(bpf_libbpf.o): in function `load_bpf_object':
+> > bpf_libbpf.c:(.text+0x3cb): undefined reference to
+> > `bpf_program__section_name'
+> > /usr/bin/ld: bpf_libbpf.c:(.text+0x438): undefined reference to
+> > `bpf_program__section_name'
+> > /usr/bin/ld: bpf_libbpf.c:(.text+0x716): undefined reference to
+> > `bpf_program__section_name'
+> > collect2: error: ld returned 1 exit status
+> > make[1]: *** [Makefile:27: ip] Error 1
+> > make[1]: *** Waiting for unfinished jobs....
+> > make: *** [Makefile:64: all] Error 2
 >
-> Does "a notification" mean signals? Or would you want to have a second
-> thread in userspace that poll()s for cancellation events on the
-> seccomp fd and then somehow takes care of interrupting the first
-> thread, or something like that?
+> You need to update libbpf to latest version.
 
-I would be reluctant to be prescriptive in that it be a signal. Right
-now, it's implemented
-as a second thread in userspace that does a ioctl(...) and checks if
-the notification
-is valid / alive, and does what's required if the notification has
-died (interrupting
-the first thread).
+Why not using libbpf from submodule?
 
 >
-> Either way, I think your proposal goes beyond the scope of patching
-> the existing weirdness, and should be a separate patch.
-
-I agree it should be a separate patch, but I think that it'd be nice if there
-was a way to do something like:
-* opt-in to getting another message after receiving the notification
-  that indicates the program has left the syscall
-* when you do the RECV, you can specify a flag or some such asking
-  that you get signaled / notified about the program leaving the syscall
-* a multiplexed receive that can say if an existing notification in progress
-  has left the valid state.
-
----
-The reason I bring this up as part of this current thread / discussion is that
-I think that they may be related in terms of how we want the behaviour to act.
-
-I would love to hear how people think this should work, or better suggestions
-than the second thread approach above, or the alternative approach of
-polling all the notifications in progress on some interval [and relying on
-epoll timeout to trigger that interval].
+> But this also remind me that I need to add bpf_program__section_name() to
+> configure checking. I will see if I missed other functions' checking.
+>
+> Thanks
+> Hangbin
+>
