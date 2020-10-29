@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 62CD2C55179
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 07:26:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69DC3C2D0A3
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 07:26:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F06FC21D24
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 07:26:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 12FFA21D24
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 07:26:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WffDFACh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wd3BV9e7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728360AbgJ2H0a (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Oct 2020 03:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
+        id S1728447AbgJ2H0j (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Oct 2020 03:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728393AbgJ2HZb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 29 Oct 2020 03:25:31 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4E4C0613D1
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2020 00:25:30 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id k10so260181wrw.13
-        for <bpf@vger.kernel.org>; Thu, 29 Oct 2020 00:25:30 -0700 (PDT)
+        with ESMTP id S1728274AbgJ2HY7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 29 Oct 2020 03:24:59 -0400
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E11C08EA7B
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2020 00:08:52 -0700 (PDT)
+Received: by mail-wr1-x444.google.com with SMTP id s9so1538838wro.8
+        for <bpf@vger.kernel.org>; Thu, 29 Oct 2020 00:08:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=p8arlK+Beb7st/ApIAXUziRhCdd+hqTNC9oSIz8cS/I=;
-        b=WffDFAChY1XXoEF3z34JPg4coRv0He3mCxXSe+x93smaO8DYgPYX1sBPD8QqewKjO0
-         kZezQVvr5A9rs7Upj4uhPVT7yEmG0a4ssEIssLqs9DBm4UogHUcztadqA8GQbOUhRBGK
-         5v3kQB8qwskjkAW+LmNNj2UfmOISlZ7ijrXhnSmOG6LWCLAjQiB1JwR28STZmZrFrMYW
-         JfIgvMpWZk7MAMOdgfbPg52ijybF2phR5qZZH5G4NC7rPXjURlGfvAmgKTxpsGwPUnl/
-         AL/BM8M9vNepXNe5A5jfz+u/c2jH773EvinrQ75hn99ihJAvnvSu2qpPmg3A2sbsI3VE
-         exPA==
+        bh=90tbSpftzM+wEfef3WTFwlNnTYj4eB/xYx32SzM4xzY=;
+        b=wd3BV9e7/tLO+tTEwJuHf0XowRZux2zcVXGkWnmWxHKaABtDBZbBMJhMsBXsKICwMx
+         feRmzUDOoP0VZUDY99ZbnIjrSxCy+Riwq/xzNFtM7X2XAq2Yb1anaoxGJn6QS6mN15v0
+         JmQcbx1RGPZiOK4c8hrNPxtuEJCUWZTwh3eAzk4W/EuTvDWz6NBcF7c7YKJ7PlM0jdeM
+         2vPUx96xM+HmpSsvTeBqzpr8r6oOIiHOIxW6Iqw3WBL9LiHoYvEtAPsRIHMn6GdK1n6t
+         S0CpK9gIHMs+PBsQnGcmfh73bQhw1WkpHWQTBlz9Qwdy/pHtNpv8PRTJOX/Kg3agTT6q
+         msPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=p8arlK+Beb7st/ApIAXUziRhCdd+hqTNC9oSIz8cS/I=;
-        b=pHvLSdAHS21D7Au/L5XVJeKuSNHe0WFToBXdSsFJa1W7OP5fd5j0WedMhhY7H0hs4j
-         QyfBidHBChb3ER7seLtC7eWTRKmKBu6EuOYA3wiKPbNO0GrnLh8CP/h6Na1gsvG2sS/E
-         HMnEr9gh20Kj1BGcOFnjNMvweJTpxWZmJHLPeQci6HqY8Sm9m9dMLr2PI96HyywbVMS+
-         vbvDTFYWc/uRWd9QoozWB/3rNyksMPGXnsqiivveMzMspsNnXDOKfda94sozWlatvMUV
-         zr0BLoArF4zFDjUh0W2E2cvVRg8Fh51X8JavXnd9maHEZohOp6PpEWRR2QyroSnl7vVe
-         yAvg==
-X-Gm-Message-State: AOAM532cmNnZJ9zo4aztmAlYLyv/R0Odj2q/4VDvGfBoZSLHYg+HnNP1
-        J6tU7unsPZIyD60bTRDUM1V6ug==
-X-Google-Smtp-Source: ABdhPJxqMd6WvmNSmRkmWqlg/+S0Y9J+TXBN1OpZIQJ3wfwzn9XG7HaXykO1KxU76QzI/Jy1lqODJw==
-X-Received: by 2002:adf:fe8b:: with SMTP id l11mr3860128wrr.9.1603956328906;
-        Thu, 29 Oct 2020 00:25:28 -0700 (PDT)
+        bh=90tbSpftzM+wEfef3WTFwlNnTYj4eB/xYx32SzM4xzY=;
+        b=FW1Lg5DQ1jr2se3M44SXiI85P0CXdrSRLG2iRcj9aEYBQF5jTSgcZ67+Ivj/EAt+dN
+         Nz+6IC1gxl9aLDGe5TELzxydwbXFMgm9A+gqJK6nWBG0i76USfUylqSiJgTFHMQIxoUg
+         ZYbjOmhrJMDNki/YcNBMSHcIBPLA2plzHmUSvdUj6A99Sgvt4bGOiQcanZpU3MX0XReL
+         toTu6OaOqiYREnIZ8XEAflAVDveDB9lOsxSg/bqezG9Ow/nqW/Pq8F+CqqUzbaXtEvdn
+         ugu6Wta0g7mzU0buoL4a9etpPxfJ7IbqDCqPzTCLoGR49jtpF0bOQDPR8KIbqg2y1Iaz
+         i3nA==
+X-Gm-Message-State: AOAM530UtuGyUXX7BMwg2ZkXMK8PZ7qoDlPBEZj9hdaqjz9k9XFsAvsM
+        5EErPUrPWKLftQZ0DG/2KEyBiA==
+X-Google-Smtp-Source: ABdhPJyULY90N+uT8BWJ9LyldpfhK6Uh03XxkLYsulvOCfzFhpQstR0+n+ZnQDwSI9v/6zo0UOUO6Q==
+X-Received: by 2002:a5d:6506:: with SMTP id x6mr3826155wru.71.1603955331470;
+        Thu, 29 Oct 2020 00:08:51 -0700 (PDT)
 Received: from apalos.home (athedsl-246545.home.otenet.gr. [85.73.10.175])
-        by smtp.gmail.com with ESMTPSA id t199sm2733227wmt.46.2020.10.29.00.25.27
+        by smtp.gmail.com with ESMTPSA id i33sm3324230wri.79.2020.10.29.00.08.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Oct 2020 00:25:28 -0700 (PDT)
-Date:   Thu, 29 Oct 2020 09:25:26 +0200
+        Thu, 29 Oct 2020 00:08:51 -0700 (PDT)
+Date:   Thu, 29 Oct 2020 09:08:48 +0200
 From:   Ilias Apalodimas <ilias.apalodimas@linaro.org>
 To:     Lorenzo Bianconi <lorenzo@kernel.org>
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
@@ -65,7 +65,7 @@ Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         brouer@redhat.com
 Subject: Re: [PATCH net-next 2/4] net: page_pool: add bulk support for
  ptr_ring
-Message-ID: <20201029072526.GA61828@apalos.home>
+Message-ID: <20201029070848.GA61336@apalos.home>
 References: <cover.1603824486.git.lorenzo@kernel.org>
  <cd58ca966fbe11cabbd6160decea6ce748ebce9f.1603824486.git.lorenzo@kernel.org>
 MIME-Version: 1.0
@@ -75,6 +75,8 @@ In-Reply-To: <cd58ca966fbe11cabbd6160decea6ce748ebce9f.1603824486.git.lorenzo@ke
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
+
+Hi Lorenzo, 
 
 On Tue, Oct 27, 2020 at 08:04:08PM +0100, Lorenzo Bianconi wrote:
 > Introduce the capability to batch page_pool ptr_ring refill since it is
@@ -166,6 +168,10 @@ On Tue, Oct 27, 2020 at 08:04:08PM +0100, Lorenzo Bianconi wrote:
 > +		if (unlikely(page_ref_count(page) != 1 ||
 > +			     !pool_page_reusable(pool, page))) {
 > +			page_pool_release_page(pool, page);
+
+Mind switching this similarly to how page_pool_put_page() is using it?
+unlikely -> likely and remove the !
+
 > +			put_page(page);
 > +			continue;
 > +		}
@@ -180,10 +186,6 @@ On Tue, Oct 27, 2020 at 08:04:08PM +0100, Lorenzo Bianconi wrote:
 > +	for (i = 0; i < len; i++) {
 > +		if (__ptr_ring_produce(&pool->ring, page_ring[i]))
 > +			page_pool_return_page(pool, page_ring[i]);
-
-Can we add a comment here on why the explicit spinlock needs to protect 
-page_pool_return_page() as well instead of just using ptr_ring_produce()?
-
 > +	}
 > +	page_pool_ring_unlock(pool);
 > +}
@@ -219,5 +221,5 @@ page_pool_return_page() as well instead of just using ptr_ring_produce()?
 > 2.26.2
 > 
 
-Thanks
+Cheers
 /Ilias
