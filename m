@@ -7,45 +7,45 @@ X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECB6CC388F7
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B51C1C55179
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 906DA20791
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 682B320796
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603933183;
-	bh=qhDsiWZHoSzSDc3DTeOfXy2nD07cCnIFfXxJiN3CrZw=;
+	s=default; t=1603933184;
+	bh=LHVZhwA0oIqMX7NaNTqAWIRrgP6j3K4JCHzcYzKjHqg=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=F8W26qOSLet2LAZlfnay2pTxFbZpWllLeoVXnVBEJAge7fGRgB2ha6/ivfhfcmTeM
-	 9PCgvuFkCpt2Eeu/2J9gp6zodgqL1pXh4swEjKM6nrfG3XQyVdXhohe1AMkVZvW41W
-	 DX9fvGnzohFlIp5byRAPyHLqX82QUhYNRbFu68f0=
+	b=D3hzcAqPEhQVXmtx7nkD0DPKmfdn5Upu4TXx7BidMAINXxcx9iArkMoNRfkHPQDx5
+	 0AQYBkDisB33o1Rl1btdDTcvzAZYA3DG9eXwwxmzsb2hYWTupIMa6B7AqkIiANlYmD
+	 XvGrllZJJBGmdQRzMcyt5xsR/Set/qA1TKqKqHuo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725804AbgJ2A7m convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 28 Oct 2020 20:59:42 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:62024 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2403901AbgJ2A71 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 28 Oct 2020 20:59:27 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 09T0obnC027157
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:25 -0700
+        id S2403961AbgJ2A7l convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 28 Oct 2020 20:59:41 -0400
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:64378 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725804AbgJ2A7e (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 28 Oct 2020 20:59:34 -0400
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09T0oaig009786
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:32 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 34f0jn5y35-4
+        by mx0a-00082601.pphosted.com with ESMTP id 34egnfb946-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:25 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:32 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 28 Oct 2020 17:59:23 -0700
+ 15.1.1979.3; Wed, 28 Oct 2020 17:59:30 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id B072C2EC875F; Wed, 28 Oct 2020 17:59:15 -0700 (PDT)
+        id B19D52EC875F; Wed, 28 Oct 2020 17:59:28 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 04/11] libbpf: implement basic split BTF support
-Date:   Wed, 28 Oct 2020 17:58:55 -0700
-Message-ID: <20201029005902.1706310-5-andrii@kernel.org>
+Subject: [PATCH bpf-next 10/11] selftests/bpf: add split BTF dedup selftests
+Date:   Wed, 28 Oct 2020 17:59:01 -0700
+Message-ID: <20201029005902.1706310-11-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201029005902.1706310-1-andrii@kernel.org>
 References: <20201029005902.1706310-1-andrii@kernel.org>
@@ -55,525 +55,451 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-10-28_09:2020-10-28,2020-10-28 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- adultscore=0 lowpriorityscore=0 bulkscore=0 mlxlogscore=999 phishscore=0
- priorityscore=1501 mlxscore=0 impostorscore=0 malwarescore=0
- suspectscore=25 spamscore=0 classifier=spam adjust=0 reason=mlx
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=987
+ mlxscore=0 suspectscore=25 phishscore=0 impostorscore=0 malwarescore=0
+ bulkscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015
+ priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2009150000 definitions=main-2010290001
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Support split BTF operation, in which one BTF (base BTF) provides basic set of
-types and strings, while another one (split BTF) builds on top of base's types
-and strings and adds its own new types and strings. From API standpoint, the
-fact that the split BTF is built on top of the base BTF is transparent.
-
-Type numeration is transparent. If the base BTF had last type ID #N, then all
-types in the split BTF start at type ID N+1. Any type in split BTF can
-reference base BTF types, but not vice versa. Programmatically construction of
-a split BTF on top of a base BTF is supported: one can create an empty split
-BTF with btf__new_empty_split() and pass base BTF as an input, or pass raw
-binary data to btf__new_split(), or use btf__parse_xxx_split() variants to get
-initial set of split types/strings from the ELF file with .BTF section.
-
-String offsets are similarly transparent and are a logical continuation of
-base BTF's strings. When building BTF programmatically and adding a new string
-(explicitly with btf__add_str() or implicitly through appending new
-types/members), string-to-be-added would first be looked up from the base
-BTF's string section and re-used if it's there. If not, it will be looked up
-and/or added to the split BTF string section. Similarly to type IDs, types in
-split BTF can refer to strings from base BTF absolutely transparently (but not
-vice versa, of course, because base BTF doesn't "know" about existence of
-split BTF).
-
-Internal type index is slightly adjusted to be zero-indexed, ignoring a fake
-[0] VOID type. This allows to handle split/base BTF type lookups transparently
-by using btf->start_id type ID offset, which is always 1 for base/non-split
-BTF and equals btf__get_nr_types(base_btf) + 1 for the split BTF.
-
-BTF deduplication is not yet supported for split BTF and support for it will
-be added in separate patch.
+Add selftests validating BTF deduplication for split BTF case. Add a helper
+macro that allows to validate entire BTF with raw BTF dump, not just
+type-by-type. This saves tons of code and complexity.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/btf.c      | 205 ++++++++++++++++++++++++++++++---------
- tools/lib/bpf/btf.h      |   8 ++
- tools/lib/bpf/libbpf.map |   9 ++
- 3 files changed, 175 insertions(+), 47 deletions(-)
+ tools/testing/selftests/bpf/btf_helpers.c     |  59 ++++
+ tools/testing/selftests/bpf/btf_helpers.h     |   7 +
+ .../bpf/prog_tests/btf_dedup_split.c          | 326 ++++++++++++++++++
+ 3 files changed, 392 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index db9331fea672..20c64a8441a8 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -78,10 +78,32 @@ struct btf {
- 	void *types_data;
- 	size_t types_data_cap; /* used size stored in hdr->type_len */
+diff --git a/tools/testing/selftests/bpf/btf_helpers.c b/tools/testing/selftests/bpf/btf_helpers.c
+index abc3f6c04cfc..48f90490f922 100644
+--- a/tools/testing/selftests/bpf/btf_helpers.c
++++ b/tools/testing/selftests/bpf/btf_helpers.c
+@@ -3,6 +3,8 @@
+ #include <stdio.h>
+ #include <errno.h>
+ #include <bpf/btf.h>
++#include <bpf/libbpf.h>
++#include "test_progs.h"
  
--	/* type ID to `struct btf_type *` lookup index */
-+	/* type ID to `struct btf_type *` lookup index
-+	 * type_offs[0] corresponds to the first non-VOID type:
-+	 *   - for base BTF it's type [1];
-+	 *   - for split BTF it's the first non-base BTF type.
-+	 */
- 	__u32 *type_offs;
- 	size_t type_offs_cap;
-+	/* number of types in this BTF instance:
-+	 *   - doesn't include special [0] void type;
-+	 *   - for split BTF counts number of types added on top of base BTF.
-+	 */
- 	__u32 nr_types;
-+	/* if not NULL, points to the base BTF on top of which the current
-+	 * split BTF is based
-+	 */
-+	struct btf *base_btf;
-+	/* BTF type ID of the first type in this BTF instance:
-+	 *   - for base BTF it's equal to 1;
-+	 *   - for split BTF it's equal to biggest type ID of base BTF plus 1.
-+	 */
-+	int start_id;
-+	/* logical string offset of this BTF instance:
-+	 *   - for base BTF it's equal to 0;
-+	 *   - for split BTF it's equal to total size of base BTF's string section size.
-+	 */
-+	int start_str_off;
+ static const char * const btf_kind_str_mapping[] = {
+ 	[BTF_KIND_UNKN]		= "UNKNOWN",
+@@ -198,3 +200,60 @@ const char *btf_type_raw_dump(const struct btf *btf, int type_id)
  
- 	void *strs_data;
- 	size_t strs_data_cap; /* used size stored in hdr->str_len */
-@@ -176,7 +198,7 @@ static int btf_add_type_idx_entry(struct btf *btf, __u32 type_off)
- 	__u32 *p;
- 
- 	p = btf_add_mem((void **)&btf->type_offs, &btf->type_offs_cap, sizeof(__u32),
--			btf->nr_types + 1, BTF_MAX_NR_TYPES, 1);
-+			btf->nr_types, BTF_MAX_NR_TYPES, 1);
- 	if (!p)
- 		return -ENOMEM;
- 
-@@ -252,12 +274,20 @@ static int btf_parse_str_sec(struct btf *btf)
- 	const char *start = btf->strs_data;
- 	const char *end = start + btf->hdr->str_len;
- 
--	if (!hdr->str_len || hdr->str_len - 1 > BTF_MAX_STR_OFFSET ||
--	    start[0] || end[-1]) {
--		pr_debug("Invalid BTF string section\n");
--		return -EINVAL;
-+	if (btf->base_btf) {
-+		if (hdr->str_len == 0)
-+			return 0;
-+		if (hdr->str_len - 1 > BTF_MAX_STR_OFFSET || end[-1]) {
-+			pr_debug("Invalid BTF string section\n");
-+			return -EINVAL;
+ 	return buf;
+ }
++
++int btf_validate_raw(struct btf *btf, int nr_types, const char *exp_types[])
++{
++	int i;
++	bool ok = true;
++
++	ASSERT_EQ(btf__get_nr_types(btf), nr_types, "btf_nr_types");
++
++	for (i = 1; i <= nr_types; i++) {
++		if (!ASSERT_STREQ(btf_type_raw_dump(btf, i), exp_types[i - 1], "raw_dump"))
++			ok = false;
++	}
++
++	return ok;
++}
++
++static void btf_dump_printf(void *ctx, const char *fmt, va_list args)
++{
++	vfprintf(ctx, fmt, args);
++}
++
++/* Print BTF-to-C dump into a local buffer and return string pointer back.
++ * Buffer *will* be overwritten by subsequent btf_type_raw_dump() calls
++ */
++const char *btf_type_c_dump(const struct btf *btf)
++{
++	static char buf[16 * 1024];
++	FILE *buf_file;
++	struct btf_dump *d = NULL;
++	struct btf_dump_opts opts = {};
++	int err, i;
++
++	buf_file = fmemopen(buf, sizeof(buf) - 1, "w");
++	if (!buf_file) {
++		fprintf(stderr, "Failed to open memstream: %d\n", errno);
++		return NULL;
++	}
++
++	opts.ctx = buf_file;
++	d = btf_dump__new(btf, NULL, &opts, btf_dump_printf);
++	if (libbpf_get_error(d)) {
++		fprintf(stderr, "Failed to create btf_dump instance: %ld\n", libbpf_get_error(d));
++		return NULL;
++	}
++
++	for (i = 1; i <= btf__get_nr_types(btf); i++) {
++		err = btf_dump__dump_type(d, i);
++		if (err) {
++			fprintf(stderr, "Failed to dump type [%d]: %d\n", i, err);
++			return NULL;
 +		}
-+	} else {
-+		if (!hdr->str_len || hdr->str_len - 1 > BTF_MAX_STR_OFFSET ||
-+		    start[0] || end[-1]) {
-+			pr_debug("Invalid BTF string section\n");
-+			return -EINVAL;
-+		}
- 	}
--
- 	return 0;
- }
- 
-@@ -372,19 +402,9 @@ static int btf_parse_type_sec(struct btf *btf)
- 	struct btf_header *hdr = btf->hdr;
- 	void *next_type = btf->types_data;
- 	void *end_type = next_type + hdr->type_len;
--	int err, i = 0, type_size;
--
--	/* VOID (type_id == 0) is specially handled by btf__get_type_by_id(),
--	 * so ensure we can never properly use its offset from index by
--	 * setting it to a large value
--	 */
--	err = btf_add_type_idx_entry(btf, UINT_MAX);
--	if (err)
--		return err;
-+	int err, type_size;
- 
- 	while (next_type + sizeof(struct btf_type) <= end_type) {
--		i++;
--
- 		if (btf->swapped_endian)
- 			btf_bswap_type_base(next_type);
- 
-@@ -392,7 +412,7 @@ static int btf_parse_type_sec(struct btf *btf)
- 		if (type_size < 0)
- 			return type_size;
- 		if (next_type + type_size > end_type) {
--			pr_warn("BTF type [%d] is malformed\n", i);
-+			pr_warn("BTF type [%d] is malformed\n", btf->start_id + btf->nr_types);
- 			return -EINVAL;
- 		}
- 
-@@ -417,7 +437,7 @@ static int btf_parse_type_sec(struct btf *btf)
- 
- __u32 btf__get_nr_types(const struct btf *btf)
- {
--	return btf->nr_types;
-+	return btf->start_id + btf->nr_types - 1;
- }
- 
- /* internal helper returning non-const pointer to a type */
-@@ -425,13 +445,14 @@ static struct btf_type *btf_type_by_id(struct btf *btf, __u32 type_id)
- {
- 	if (type_id == 0)
- 		return &btf_void;
--
--	return btf->types_data + btf->type_offs[type_id];
-+	if (type_id < btf->start_id)
-+		return btf_type_by_id(btf->base_btf, type_id);
-+	return btf->types_data + btf->type_offs[type_id - btf->start_id];
- }
- 
- const struct btf_type *btf__type_by_id(const struct btf *btf, __u32 type_id)
- {
--	if (type_id > btf->nr_types)
-+	if (type_id >= btf->start_id + btf->nr_types)
- 		return NULL;
- 	return btf_type_by_id((struct btf *)btf, type_id);
- }
-@@ -440,9 +461,13 @@ static int determine_ptr_size(const struct btf *btf)
- {
- 	const struct btf_type *t;
- 	const char *name;
--	int i;
-+	int i, n;
- 
--	for (i = 1; i <= btf->nr_types; i++) {
-+	if (btf->base_btf && btf->base_btf->ptr_sz > 0)
-+		return btf->base_btf->ptr_sz;
-+
-+	n = btf__get_nr_types(btf);
-+	for (i = 1; i <= n; i++) {
- 		t = btf__type_by_id(btf, i);
- 		if (!btf_is_int(t))
- 			continue;
-@@ -725,7 +750,7 @@ void btf__free(struct btf *btf)
- 	free(btf);
- }
- 
--struct btf *btf__new_empty(void)
-+static struct btf *btf_new_empty(struct btf *base_btf)
- {
- 	struct btf *btf;
- 
-@@ -733,12 +758,21 @@ struct btf *btf__new_empty(void)
- 	if (!btf)
- 		return ERR_PTR(-ENOMEM);
- 
-+	btf->nr_types = 0;
-+	btf->start_id = 1;
-+	btf->start_str_off = 0;
- 	btf->fd = -1;
- 	btf->ptr_sz = sizeof(void *);
- 	btf->swapped_endian = false;
- 
-+	if (base_btf) {
-+		btf->base_btf = base_btf;
-+		btf->start_id = btf__get_nr_types(base_btf) + 1;
-+		btf->start_str_off = base_btf->hdr->str_len;
 +	}
 +
- 	/* +1 for empty string at offset 0 */
--	btf->raw_size = sizeof(struct btf_header) + 1;
-+	btf->raw_size = sizeof(struct btf_header) + (base_btf ? 0 : 1);
- 	btf->raw_data = calloc(1, btf->raw_size);
- 	if (!btf->raw_data) {
- 		free(btf);
-@@ -752,12 +786,22 @@ struct btf *btf__new_empty(void)
++	fflush(buf_file);
++	fclose(buf_file);
++	return buf;
++}
+diff --git a/tools/testing/selftests/bpf/btf_helpers.h b/tools/testing/selftests/bpf/btf_helpers.h
+index 2c9ce1b61dc9..295c0137d9bd 100644
+--- a/tools/testing/selftests/bpf/btf_helpers.h
++++ b/tools/testing/selftests/bpf/btf_helpers.h
+@@ -8,5 +8,12 @@
  
- 	btf->types_data = btf->raw_data + btf->hdr->hdr_len;
- 	btf->strs_data = btf->raw_data + btf->hdr->hdr_len;
--	btf->hdr->str_len = 1; /* empty string at offset 0 */
-+	btf->hdr->str_len = base_btf ? 0 : 1; /* empty string at offset 0 */
+ int fprintf_btf_type_raw(FILE *out, const struct btf *btf, __u32 id);
+ const char *btf_type_raw_dump(const struct btf *btf, int type_id);
++int btf_validate_raw(struct btf *btf, int nr_types, const char *exp_types[]);
  
- 	return btf;
- }
- 
--struct btf *btf__new(const void *data, __u32 size)
-+struct btf *btf__new_empty(void)
-+{
-+	return btf_new_empty(NULL);
++#define VALIDATE_RAW_BTF(btf, raw_types...)				\
++	btf_validate_raw(btf,						\
++			 sizeof((const char *[]){raw_types})/sizeof(void *),\
++			 (const char *[]){raw_types})
++
++const char *btf_type_c_dump(const struct btf *btf);
+ #endif
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c b/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
+new file mode 100644
+index 000000000000..097370a41b60
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
+@@ -0,0 +1,326 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#include <test_progs.h>
++#include <bpf/btf.h>
++#include "btf_helpers.h"
++
++
++static void test_split_simple() {
++	const struct btf_type *t;
++	struct btf *btf1, *btf2 = NULL;
++	int str_off, err;
++
++	btf1 = btf__new_empty();
++	if (!ASSERT_OK_PTR(btf1, "empty_main_btf"))
++		return;
++
++	btf__set_pointer_size(btf1, 8); /* enforce 64-bit arch */
++
++	btf__add_int(btf1, "int", 4, BTF_INT_SIGNED);	/* [1] int */
++	btf__add_ptr(btf1, 1);				/* [2] ptr to int */
++	btf__add_struct(btf1, "s1", 4);			/* [3] struct s1 { */
++	btf__add_field(btf1, "f1", 1, 0, 0);		/*      int f1; */
++							/* } */
++
++	VALIDATE_RAW_BTF(
++		btf1,
++		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[2] PTR '(anon)' type_id=1",
++		"[3] STRUCT 's1' size=4 vlen=1\n"
++		"\t'f1' type_id=1 bits_offset=0");
++
++	ASSERT_STREQ(btf_type_c_dump(btf1), "\
++struct s1 {\n\
++	int f1;\n\
++};\n\n", "c_dump");
++
++	btf2 = btf__new_empty_split(btf1);
++	if (!ASSERT_OK_PTR(btf2, "empty_split_btf"))
++		goto cleanup;
++
++	/* pointer size should be "inherited" from main BTF */
++	ASSERT_EQ(btf__pointer_size(btf2), 8, "inherit_ptr_sz");
++
++	str_off = btf__find_str(btf2, "int");
++	ASSERT_NEQ(str_off, -ENOENT, "str_int_missing");
++
++	t = btf__type_by_id(btf2, 1);
++	if (!ASSERT_OK_PTR(t, "int_type"))
++		goto cleanup;
++	ASSERT_EQ(btf_is_int(t), true, "int_kind");
++	ASSERT_STREQ(btf__str_by_offset(btf2, t->name_off), "int", "int_name");
++
++	btf__add_struct(btf2, "s2", 16);		/* [4] struct s2 {	*/
++	btf__add_field(btf2, "f1", 6, 0, 0);		/*      struct s1 f1;	*/
++	btf__add_field(btf2, "f2", 5, 32, 0);		/*      int f2;		*/
++	btf__add_field(btf2, "f3", 2, 64, 0);		/*      int *f3;	*/
++							/* } */
++
++	/* duplicated int */
++	btf__add_int(btf2, "int", 4, BTF_INT_SIGNED);	/* [5] int */
++
++	/* duplicated struct s1 */
++	btf__add_struct(btf2, "s1", 4);			/* [6] struct s1 { */
++	btf__add_field(btf2, "f1", 5, 0, 0);		/*      int f1; */
++							/* } */
++
++	VALIDATE_RAW_BTF(
++		btf2,
++		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[2] PTR '(anon)' type_id=1",
++		"[3] STRUCT 's1' size=4 vlen=1\n"
++		"\t'f1' type_id=1 bits_offset=0",
++		"[4] STRUCT 's2' size=16 vlen=3\n"
++		"\t'f1' type_id=6 bits_offset=0\n"
++		"\t'f2' type_id=5 bits_offset=32\n"
++		"\t'f3' type_id=2 bits_offset=64",
++		"[5] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[6] STRUCT 's1' size=4 vlen=1\n"
++		"\t'f1' type_id=5 bits_offset=0");
++
++	ASSERT_STREQ(btf_type_c_dump(btf2), "\
++struct s1 {\n\
++	int f1;\n\
++};\n\
++\n\
++struct s1___2 {\n\
++	int f1;\n\
++};\n\
++\n\
++struct s2 {\n\
++	struct s1___2 f1;\n\
++	int f2;\n\
++	int *f3;\n\
++};\n\n", "c_dump");
++
++	err = btf__dedup(btf2, NULL, NULL);
++	if (!ASSERT_OK(err, "btf_dedup"))
++		goto cleanup;
++
++	VALIDATE_RAW_BTF(
++		btf2,
++		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[2] PTR '(anon)' type_id=1",
++		"[3] STRUCT 's1' size=4 vlen=1\n"
++		"\t'f1' type_id=1 bits_offset=0",
++		"[4] STRUCT 's2' size=16 vlen=3\n"
++		"\t'f1' type_id=3 bits_offset=0\n"
++		"\t'f2' type_id=1 bits_offset=32\n"
++		"\t'f3' type_id=2 bits_offset=64");
++
++	ASSERT_STREQ(btf_type_c_dump(btf2), "\
++struct s1 {\n\
++	int f1;\n\
++};\n\
++\n\
++struct s2 {\n\
++	struct s1 f1;\n\
++	int f2;\n\
++	int *f3;\n\
++};\n\n", "c_dump");
++
++cleanup:
++	btf__free(btf2);
++	btf__free(btf1);
 +}
 +
-+struct btf *btf__new_empty_split(struct btf *base_btf)
-+{
-+	return btf_new_empty(base_btf);
++static void test_split_fwd_resolve() {
++	struct btf *btf1, *btf2 = NULL;
++	int err;
++
++	btf1 = btf__new_empty();
++	if (!ASSERT_OK_PTR(btf1, "empty_main_btf"))
++		return;
++
++	btf__set_pointer_size(btf1, 8); /* enforce 64-bit arch */
++
++	btf__add_int(btf1, "int", 4, BTF_INT_SIGNED);	/* [1] int */
++	btf__add_ptr(btf1, 4);				/* [2] ptr to struct s1 */
++	btf__add_ptr(btf1, 5);				/* [3] ptr to struct s2 */
++	btf__add_struct(btf1, "s1", 16);		/* [4] struct s1 { */
++	btf__add_field(btf1, "f1", 2, 0, 0);		/*      struct s1 *f1; */
++	btf__add_field(btf1, "f2", 3, 64, 0);		/*      struct s2 *f2; */
++							/* } */
++	btf__add_struct(btf1, "s2", 4);			/* [5] struct s2 { */
++	btf__add_field(btf1, "f1", 1, 0, 0);		/*      int f1; */
++							/* } */
++
++	VALIDATE_RAW_BTF(
++		btf1,
++		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[2] PTR '(anon)' type_id=4",
++		"[3] PTR '(anon)' type_id=5",
++		"[4] STRUCT 's1' size=16 vlen=2\n"
++		"\t'f1' type_id=2 bits_offset=0\n"
++		"\t'f2' type_id=3 bits_offset=64",
++		"[5] STRUCT 's2' size=4 vlen=1\n"
++		"\t'f1' type_id=1 bits_offset=0");
++
++	btf2 = btf__new_empty_split(btf1);
++	if (!ASSERT_OK_PTR(btf2, "empty_split_btf"))
++		goto cleanup;
++
++	btf__add_int(btf2, "int", 4, BTF_INT_SIGNED);	/* [6] int */
++	btf__add_ptr(btf2, 10);				/* [7] ptr to struct s1 */
++	btf__add_fwd(btf2, "s2", BTF_FWD_STRUCT);	/* [8] fwd for struct s2 */
++	btf__add_ptr(btf2, 8);				/* [9] ptr to fwd struct s2 */
++	btf__add_struct(btf2, "s1", 16);		/* [10] struct s1 { */
++	btf__add_field(btf2, "f1", 7, 0, 0);		/*      struct s1 *f1; */
++	btf__add_field(btf2, "f2", 9, 64, 0);		/*      struct s2 *f2; */
++							/* } */
++
++	VALIDATE_RAW_BTF(
++		btf2,
++		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[2] PTR '(anon)' type_id=4",
++		"[3] PTR '(anon)' type_id=5",
++		"[4] STRUCT 's1' size=16 vlen=2\n"
++		"\t'f1' type_id=2 bits_offset=0\n"
++		"\t'f2' type_id=3 bits_offset=64",
++		"[5] STRUCT 's2' size=4 vlen=1\n"
++		"\t'f1' type_id=1 bits_offset=0",
++		"[6] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[7] PTR '(anon)' type_id=10",
++		"[8] FWD 's2' fwd_kind=struct",
++		"[9] PTR '(anon)' type_id=8",
++		"[10] STRUCT 's1' size=16 vlen=2\n"
++		"\t'f1' type_id=7 bits_offset=0\n"
++		"\t'f2' type_id=9 bits_offset=64");
++
++	err = btf__dedup(btf2, NULL, NULL);
++	if (!ASSERT_OK(err, "btf_dedup"))
++		goto cleanup;
++
++	VALIDATE_RAW_BTF(
++		btf2,
++		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[2] PTR '(anon)' type_id=4",
++		"[3] PTR '(anon)' type_id=5",
++		"[4] STRUCT 's1' size=16 vlen=2\n"
++		"\t'f1' type_id=2 bits_offset=0\n"
++		"\t'f2' type_id=3 bits_offset=64",
++		"[5] STRUCT 's2' size=4 vlen=1\n"
++		"\t'f1' type_id=1 bits_offset=0");
++
++cleanup:
++	btf__free(btf2);
++	btf__free(btf1);
 +}
 +
-+static struct btf *btf_new(const void *data, __u32 size, struct btf *base_btf)
- {
- 	struct btf *btf;
- 	int err;
-@@ -766,6 +810,16 @@ struct btf *btf__new(const void *data, __u32 size)
- 	if (!btf)
- 		return ERR_PTR(-ENOMEM);
- 
-+	btf->nr_types = 0;
-+	btf->start_id = 1;
-+	btf->start_str_off = 0;
++static void test_split_struct_duped() {
++	struct btf *btf1, *btf2 = NULL;
++	int err;
 +
-+	if (base_btf) {
-+		btf->base_btf = base_btf;
-+		btf->start_id = btf__get_nr_types(base_btf) + 1;
-+		btf->start_str_off = base_btf->hdr->str_len;
-+	}
++	btf1 = btf__new_empty();
++	if (!ASSERT_OK_PTR(btf1, "empty_main_btf"))
++		return;
 +
- 	btf->raw_data = malloc(size);
- 	if (!btf->raw_data) {
- 		err = -ENOMEM;
-@@ -798,7 +852,13 @@ struct btf *btf__new(const void *data, __u32 size)
- 	return btf;
- }
- 
--struct btf *btf__parse_elf(const char *path, struct btf_ext **btf_ext)
-+struct btf *btf__new(const void *data, __u32 size)
-+{
-+	return btf_new(data, size, NULL);
++	btf__set_pointer_size(btf1, 8); /* enforce 64-bit arch */
++
++	btf__add_int(btf1, "int", 4, BTF_INT_SIGNED);	/* [1] int */
++	btf__add_ptr(btf1, 5);				/* [2] ptr to struct s1 */
++	btf__add_fwd(btf1, "s2", BTF_FWD_STRUCT);	/* [3] fwd for struct s2 */
++	btf__add_ptr(btf1, 3);				/* [4] ptr to fwd struct s2 */
++	btf__add_struct(btf1, "s1", 16);		/* [5] struct s1 { */
++	btf__add_field(btf1, "f1", 2, 0, 0);		/*      struct s1 *f1; */
++	btf__add_field(btf1, "f2", 4, 64, 0);		/*      struct s2 *f2; */
++							/* } */
++
++	VALIDATE_RAW_BTF(
++		btf1,
++		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[2] PTR '(anon)' type_id=5",
++		"[3] FWD 's2' fwd_kind=struct",
++		"[4] PTR '(anon)' type_id=3",
++		"[5] STRUCT 's1' size=16 vlen=2\n"
++		"\t'f1' type_id=2 bits_offset=0\n"
++		"\t'f2' type_id=4 bits_offset=64");
++
++	btf2 = btf__new_empty_split(btf1);
++	if (!ASSERT_OK_PTR(btf2, "empty_split_btf"))
++		goto cleanup;
++
++	btf__add_int(btf2, "int", 4, BTF_INT_SIGNED);	/* [6] int */
++	btf__add_ptr(btf2, 10);				/* [7] ptr to struct s1 */
++	btf__add_fwd(btf2, "s2", BTF_FWD_STRUCT);	/* [8] fwd for struct s2 */
++	btf__add_ptr(btf2, 11);				/* [9] ptr to struct s2 */
++	btf__add_struct(btf2, "s1", 16);		/* [10] struct s1 { */
++	btf__add_field(btf2, "f1", 7, 0, 0);		/*      struct s1 *f1; */
++	btf__add_field(btf2, "f2", 9, 64, 0);		/*      struct s2 *f2; */
++							/* } */
++	btf__add_struct(btf2, "s2", 40);		/* [11] struct s2 {	*/
++	btf__add_field(btf2, "f1", 7, 0, 0);		/*      struct s1 *f1;	*/
++	btf__add_field(btf2, "f2", 9, 64, 0);		/*      struct s2 *f2;	*/
++	btf__add_field(btf2, "f3", 6, 128, 0);		/*      int f3;		*/
++	btf__add_field(btf2, "f4", 10, 192, 0);		/*      struct s1 f4;	*/
++							/* } */
++	btf__add_ptr(btf2, 8);				/* [12] ptr to fwd struct s2 */
++	btf__add_struct(btf2, "s3", 8);			/* [13] struct s3 { */
++	btf__add_field(btf2, "f1", 12, 0, 0);		/*      struct s2 *f1; (fwd) */
++							/* } */
++
++	VALIDATE_RAW_BTF(
++		btf2,
++		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[2] PTR '(anon)' type_id=5",
++		"[3] FWD 's2' fwd_kind=struct",
++		"[4] PTR '(anon)' type_id=3",
++		"[5] STRUCT 's1' size=16 vlen=2\n"
++		"\t'f1' type_id=2 bits_offset=0\n"
++		"\t'f2' type_id=4 bits_offset=64",
++		"[6] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[7] PTR '(anon)' type_id=10",
++		"[8] FWD 's2' fwd_kind=struct",
++		"[9] PTR '(anon)' type_id=11",
++		"[10] STRUCT 's1' size=16 vlen=2\n"
++		"\t'f1' type_id=7 bits_offset=0\n"
++		"\t'f2' type_id=9 bits_offset=64",
++		"[11] STRUCT 's2' size=40 vlen=4\n"
++		"\t'f1' type_id=7 bits_offset=0\n"
++		"\t'f2' type_id=9 bits_offset=64\n"
++		"\t'f3' type_id=6 bits_offset=128\n"
++		"\t'f4' type_id=10 bits_offset=192",
++		"[12] PTR '(anon)' type_id=8",
++		"[13] STRUCT 's3' size=8 vlen=1\n"
++		"\t'f1' type_id=12 bits_offset=0");
++
++	err = btf__dedup(btf2, NULL, NULL);
++	if (!ASSERT_OK(err, "btf_dedup"))
++		goto cleanup;
++
++	VALIDATE_RAW_BTF(
++		btf2,
++		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
++		"[2] PTR '(anon)' type_id=5",
++		"[3] FWD 's2' fwd_kind=struct",
++		"[4] PTR '(anon)' type_id=3",
++		"[5] STRUCT 's1' size=16 vlen=2\n"
++		"\t'f1' type_id=2 bits_offset=0\n"
++		"\t'f2' type_id=4 bits_offset=64",
++		"[6] PTR '(anon)' type_id=8",
++		"[7] PTR '(anon)' type_id=9",
++		"[8] STRUCT 's1' size=16 vlen=2\n"
++		"\t'f1' type_id=6 bits_offset=0\n"
++		"\t'f2' type_id=7 bits_offset=64",
++		"[9] STRUCT 's2' size=40 vlen=4\n"
++		"\t'f1' type_id=6 bits_offset=0\n"
++		"\t'f2' type_id=7 bits_offset=64\n"
++		"\t'f3' type_id=1 bits_offset=128\n"
++		"\t'f4' type_id=8 bits_offset=192",
++		"[10] STRUCT 's3' size=8 vlen=1\n"
++		"\t'f1' type_id=7 bits_offset=0");
++
++cleanup:
++	btf__free(btf2);
++	btf__free(btf1);
 +}
 +
-+static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
-+				 struct btf_ext **btf_ext)
- {
- 	Elf_Data *btf_data = NULL, *btf_ext_data = NULL;
- 	int err = 0, fd = -1, idx = 0;
-@@ -876,7 +936,7 @@ struct btf *btf__parse_elf(const char *path, struct btf_ext **btf_ext)
- 		err = -ENOENT;
- 		goto done;
- 	}
--	btf = btf__new(btf_data->d_buf, btf_data->d_size);
-+	btf = btf_new(btf_data->d_buf, btf_data->d_size, base_btf);
- 	if (IS_ERR(btf))
- 		goto done;
- 
-@@ -921,7 +981,17 @@ struct btf *btf__parse_elf(const char *path, struct btf_ext **btf_ext)
- 	return btf;
- }
- 
--struct btf *btf__parse_raw(const char *path)
-+struct btf *btf__parse_elf(const char *path, struct btf_ext **btf_ext)
++void test_btf_dedup_split()
 +{
-+	return btf_parse_elf(path, NULL, btf_ext);
++	if (test__start_subtest("split_simple"))
++		test_split_simple();
++	if (test__start_subtest("split_struct_duped"))
++		test_split_struct_duped();
++	if (test__start_subtest("split_fwd_resolve"))
++		test_split_fwd_resolve();
 +}
-+
-+struct btf *btf__parse_elf_split(const char *path, struct btf *base_btf)
-+{
-+	return btf_parse_elf(path, base_btf, NULL);
-+}
-+
-+static struct btf *btf_parse_raw(const char *path, struct btf *base_btf)
- {
- 	struct btf *btf = NULL;
- 	void *data = NULL;
-@@ -975,7 +1045,7 @@ struct btf *btf__parse_raw(const char *path)
- 	}
- 
- 	/* finally parse BTF data */
--	btf = btf__new(data, sz);
-+	btf = btf_new(data, sz, base_btf);
- 
- err_out:
- 	free(data);
-@@ -984,18 +1054,38 @@ struct btf *btf__parse_raw(const char *path)
- 	return err ? ERR_PTR(err) : btf;
- }
- 
--struct btf *btf__parse(const char *path, struct btf_ext **btf_ext)
-+struct btf *btf__parse_raw(const char *path)
-+{
-+	return btf_parse_raw(path, NULL);
-+}
-+
-+struct btf *btf__parse_raw_split(const char *path, struct btf *base_btf)
-+{
-+	return btf_parse_raw(path, base_btf);
-+}
-+
-+static struct btf *btf_parse(const char *path, struct btf *base_btf, struct btf_ext **btf_ext)
- {
- 	struct btf *btf;
- 
- 	if (btf_ext)
- 		*btf_ext = NULL;
- 
--	btf = btf__parse_raw(path);
-+	btf = btf_parse_raw(path, base_btf);
- 	if (!IS_ERR(btf) || PTR_ERR(btf) != -EPROTO)
- 		return btf;
- 
--	return btf__parse_elf(path, btf_ext);
-+	return btf_parse_elf(path, base_btf, btf_ext);
-+}
-+
-+struct btf *btf__parse(const char *path, struct btf_ext **btf_ext)
-+{
-+	return btf_parse(path, NULL, btf_ext);
-+}
-+
-+struct btf *btf__parse_split(const char *path, struct btf *base_btf)
-+{
-+	return btf_parse(path, base_btf, NULL);
- }
- 
- static int compare_vsi_off(const void *_a, const void *_b)
-@@ -1179,8 +1269,8 @@ static void *btf_get_raw_data(const struct btf *btf, __u32 *size, bool swap_endi
- 
- 	memcpy(p, btf->types_data, hdr->type_len);
- 	if (swap_endian) {
--		for (i = 1; i <= btf->nr_types; i++) {
--			t = p  + btf->type_offs[i];
-+		for (i = 0; i < btf->nr_types; i++) {
-+			t = p + btf->type_offs[i];
- 			/* btf_bswap_type_rest() relies on native t->info, so
- 			 * we swap base type info after we swapped all the
- 			 * additional information
-@@ -1223,8 +1313,10 @@ const void *btf__get_raw_data(const struct btf *btf_ro, __u32 *size)
- 
- const char *btf__str_by_offset(const struct btf *btf, __u32 offset)
- {
--	if (offset < btf->hdr->str_len)
--		return btf->strs_data + offset;
-+	if (offset < btf->start_str_off)
-+		return btf__str_by_offset(btf->base_btf, offset);
-+	else if (offset - btf->start_str_off < btf->hdr->str_len)
-+		return btf->strs_data + (offset - btf->start_str_off);
- 	else
- 		return NULL;
- }
-@@ -1461,7 +1553,10 @@ static int btf_ensure_modifiable(struct btf *btf)
- 	/* if BTF was created from scratch, all strings are guaranteed to be
- 	 * unique and deduplicated
- 	 */
--	btf->strs_deduped = btf->hdr->str_len <= 1;
-+	if (btf->hdr->str_len == 0)
-+		btf->strs_deduped = true;
-+	if (!btf->base_btf && btf->hdr->str_len == 1)
-+		btf->strs_deduped = true;
- 
- 	/* invalidate raw_data representation */
- 	btf_invalidate_raw_data(btf);
-@@ -1493,6 +1588,14 @@ int btf__find_str(struct btf *btf, const char *s)
- 	long old_off, new_off, len;
- 	void *p;
- 
-+	if (btf->base_btf) {
-+		int ret;
-+
-+		ret = btf__find_str(btf->base_btf, s);
-+		if (ret != -ENOENT)
-+			return ret;
-+	}
-+
- 	/* BTF needs to be in a modifiable state to build string lookup index */
- 	if (btf_ensure_modifiable(btf))
- 		return -ENOMEM;
-@@ -1507,7 +1610,7 @@ int btf__find_str(struct btf *btf, const char *s)
- 	memcpy(p, s, len);
- 
- 	if (hashmap__find(btf->strs_hash, (void *)new_off, (void **)&old_off))
--		return old_off;
-+		return btf->start_str_off + old_off;
- 
- 	return -ENOENT;
- }
-@@ -1523,6 +1626,14 @@ int btf__add_str(struct btf *btf, const char *s)
- 	void *p;
- 	int err;
- 
-+	if (btf->base_btf) {
-+		int ret;
-+
-+		ret = btf__find_str(btf->base_btf, s);
-+		if (ret != -ENOENT)
-+			return ret;
-+	}
-+
- 	if (btf_ensure_modifiable(btf))
- 		return -ENOMEM;
- 
-@@ -1549,12 +1660,12 @@ int btf__add_str(struct btf *btf, const char *s)
- 	err = hashmap__insert(btf->strs_hash, (void *)new_off, (void *)new_off,
- 			      HASHMAP_ADD, (const void **)&old_off, NULL);
- 	if (err == -EEXIST)
--		return old_off; /* duplicated string, return existing offset */
-+		return btf->start_str_off + old_off; /* duplicated string, return existing offset */
- 	if (err)
- 		return err;
- 
- 	btf->hdr->str_len += len; /* new unique string, adjust data length */
--	return new_off;
-+	return btf->start_str_off + new_off;
- }
- 
- static void *btf_add_type_mem(struct btf *btf, size_t add_sz)
-@@ -1584,7 +1695,7 @@ static int btf_commit_type(struct btf *btf, int data_sz)
- 	btf->hdr->type_len += data_sz;
- 	btf->hdr->str_off += data_sz;
- 	btf->nr_types++;
--	return btf->nr_types;
-+	return btf->start_id + btf->nr_types - 1;
- }
- 
- /*
-@@ -4167,14 +4278,14 @@ static int btf_dedup_compact_types(struct btf_dedup *d)
- 
- 		memmove(p, btf__type_by_id(d->btf, i), len);
- 		d->hypot_map[i] = next_type_id;
--		d->btf->type_offs[next_type_id] = p - d->btf->types_data;
-+		d->btf->type_offs[next_type_id - 1] = p - d->btf->types_data;
- 		p += len;
- 		next_type_id++;
- 	}
- 
- 	/* shrink struct btf's internal types index and update btf_header */
- 	d->btf->nr_types = next_type_id - 1;
--	d->btf->type_offs_cap = d->btf->nr_types + 1;
-+	d->btf->type_offs_cap = d->btf->nr_types;
- 	d->btf->hdr->type_len = p - d->btf->types_data;
- 	new_offs = libbpf_reallocarray(d->btf->type_offs, d->btf->type_offs_cap,
- 				       sizeof(*new_offs));
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 57247240a20a..1093f6fe6800 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -31,11 +31,19 @@ enum btf_endianness {
- };
- 
- LIBBPF_API void btf__free(struct btf *btf);
-+
- LIBBPF_API struct btf *btf__new(const void *data, __u32 size);
-+LIBBPF_API struct btf *btf__new_split(const void *data, __u32 size, struct btf *base_btf);
- LIBBPF_API struct btf *btf__new_empty(void);
-+LIBBPF_API struct btf *btf__new_empty_split(struct btf *base_btf);
-+
- LIBBPF_API struct btf *btf__parse(const char *path, struct btf_ext **btf_ext);
-+LIBBPF_API struct btf *btf__parse_split(const char *path, struct btf *base_btf);
- LIBBPF_API struct btf *btf__parse_elf(const char *path, struct btf_ext **btf_ext);
-+LIBBPF_API struct btf *btf__parse_elf_split(const char *path, struct btf *base_btf);
- LIBBPF_API struct btf *btf__parse_raw(const char *path);
-+LIBBPF_API struct btf *btf__parse_raw_split(const char *path, struct btf *base_btf);
-+
- LIBBPF_API int btf__finalize_data(struct bpf_object *obj, struct btf *btf);
- LIBBPF_API int btf__load(struct btf *btf);
- LIBBPF_API __s32 btf__find_by_name(const struct btf *btf,
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 4ebfadf45b47..29ff4807b909 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -337,3 +337,12 @@ LIBBPF_0.2.0 {
- 		perf_buffer__consume_buffer;
- 		xsk_socket__create_shared;
- } LIBBPF_0.1.0;
-+
-+LIBBPF_0.3.0 {
-+	global:
-+		btf__parse_elf_split;
-+		btf__parse_raw_split;
-+		btf__parse_split;
-+		btf__new_empty_split;
-+		btf__new_split;
-+} LIBBPF_0.2.0;
 -- 
 2.24.1
 
