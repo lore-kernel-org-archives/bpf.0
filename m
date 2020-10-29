@@ -2,124 +2,100 @@ Return-Path: <SRS0=L8C4=EE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4FDE8C55179
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:11:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6FCB5C55179
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:13:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D754720714
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:11:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 17A0420809
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 01:13:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ThThPoDI"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vciGCxCg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729583AbgJ1WFN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 28 Oct 2020 18:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51334 "EHLO
+        id S2389329AbgJ2BMM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 28 Oct 2020 21:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729966AbgJ1WFM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 28 Oct 2020 18:05:12 -0400
-Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EB2C0613D1;
-        Wed, 28 Oct 2020 15:05:12 -0700 (PDT)
-Received: by mail-vs1-xe43.google.com with SMTP id w25so409733vsk.9;
-        Wed, 28 Oct 2020 15:05:12 -0700 (PDT)
+        with ESMTP id S2404298AbgJ2BMI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 28 Oct 2020 21:12:08 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5828FC0613D1
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 18:12:08 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id a7so1177155lfk.9
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 18:12:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=sBa77MmCFN0T1+VtUx1HDnNMT2/Xv5NhXqq896ClIPA=;
-        b=ThThPoDIPRt59MZkfI1qQFRnAS2OlQaGLzpGPN2cxTSQfDtCdz08ENqwNG9U8jzOSq
-         s34Q276RHnCcq8eK/nTv0czP0MtEL51wsFyO+l0/EF/aZx+dKou4D7B6eVgK94JVOkJy
-         gNfNJgZzXGP//V7CiqZ3l8ybUm24uPVJ0zBOsk3MEzh+BQ/TucW/kMC61IEEHLyMgwnz
-         6TaxNwP8l906lqpO77tS0TEDJFzAltKegGSigo6TgM+iVrTnY7ITYI4zxmNp2cKEmth2
-         8o4dgHKzSDhquPjaHN+aQt5e/yANa4V1Nlnmnor+iDQiKXFMgUOhuOG8XxBJGAdtrER9
-         PYdA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=2+uYu86LDWGsnC4W37LGE2qpMcN2MpffcV3JWIw2MFQ=;
+        b=vciGCxCgV8AP2QARHScqr2zKoGS/+nJtrToSziCQ8d8h1NRdDiev7b4FY2OwCqgP1d
+         pQbxRv3nm4M5jbQFhB27QEFUsCLY1i6eh1m09u0GR/aIZBCnQqfxLzxjTF3jSSNq63Ix
+         7tc/61a9Eg7G4x1Q2ubkcaETyM84zF0DBSoX0Z35kXIp9RaUo5oEwdbRcGo1NCv5ThrS
+         xv91Ll0nIZQR9E4a8eCFWpzRS93StI1OfrXVYHm3aQtiSQCjRfQnJM7yFQeATQ7e3KqK
+         nI1O4QIZNutVL1kAoz9zNnzUTHY2AP0CtWCW2iHkQa6Wv2OlTNpHsTkIDscq6Ww8Qb6w
+         b/Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=sBa77MmCFN0T1+VtUx1HDnNMT2/Xv5NhXqq896ClIPA=;
-        b=CpanmAL7sESG0s+5JOewhFV3rblxzAaHakFJx7sD3yAuJQj50LYmJsEr50r8ID3Kor
-         +wMVb3xQRm5P4ST60RnF83fnRwVaZ/TTy00x8QP6mGCEdSZytCCyxSROha3uiOwf4FP8
-         EyZrLbidrcpQNdR+TWnarUpjvSt0aHTIixD6n2d29jBDJY3x40Ks8ZTM+s3WBq6xQHy9
-         2oUjMJMM+enQan+OXcYUe/4ag2w7wVU4MlHjQsvyJMrkbXRq4eFCs2avtixKEFFDmqud
-         83ywZiI9f0j1MWAwWY3PSW9DqEa3CDGK689U2PJTnxkATzaxYB5r2IufkbhT3UPwTh1Y
-         DTsw==
-X-Gm-Message-State: AOAM530JWLoBBhpQBvGrbdA9cMJVxWaWL/vfmGl7Qegzoanmt5VeeZuK
-        XTiHrxZOTNkFqI252gaa5k7iL5rjk/Bho8E7
-X-Google-Smtp-Source: ABdhPJx1sVLTojg+U9YZMBvRLhAg0GBPcu5nq1fPysti/X+d+Gmy//kTyoSjwtScwRHBrv8BGUyEYA==
-X-Received: by 2002:a62:ea0c:0:b029:164:3789:547b with SMTP id t12-20020a62ea0c0000b02901643789547bmr7074341pfh.27.1603892133273;
-        Wed, 28 Oct 2020 06:35:33 -0700 (PDT)
-Received: from btopel-mobl.ger.intel.com ([192.55.55.43])
-        by smtp.gmail.com with ESMTPSA id q14sm5935393pjp.43.2020.10.28.06.35.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Oct 2020 06:35:32 -0700 (PDT)
-From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
-        maciej.fijalkowski@intel.com, sridhar.samudrala@intel.com,
-        jesse.brandeburg@intel.com, qi.z.zhang@intel.com, kuba@kernel.org,
-        edumazet@google.com, intel-wired-lan@lists.osuosl.org,
-        jonathan.lemon@gmail.com
-Subject: [RFC PATCH bpf-next 5/9] xsk: add busy-poll support for {recv,send}msg()
-Date:   Wed, 28 Oct 2020 14:34:33 +0100
-Message-Id: <20201028133437.212503-6-bjorn.topel@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201028133437.212503-1-bjorn.topel@gmail.com>
-References: <20201028133437.212503-1-bjorn.topel@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2+uYu86LDWGsnC4W37LGE2qpMcN2MpffcV3JWIw2MFQ=;
+        b=QUtemM5prYG+pJaW3UTcfaBJCu2U6xdKp4jrwG8hw7HWpTiXqkKVyWFkYWhzN1wv7w
+         gncCiB7IkFvuyIHtdumrE1BZhi/btc+cq65+YnMdWAq0KSda/E9x1qinMdtp0fA2Uvyu
+         +/KYzDw++rX3m/ua1RVVM98RhMtKWs89W8azV2Ap8Kuvryrnf4YNwXAJoVGIPVvNah+X
+         dV4d8erAvmOFREDnV/frZmiXWYuDMUtN4sNogVKrz+GVWQsVoQW6DwtgHPoubxm9Lhs2
+         TrV50t959C4gzuWLdwns+DlWrr5WIpBsgZCrLmv6zKldb9vTi6eJROKGA6Y7YDVyZmli
+         yQPA==
+X-Gm-Message-State: AOAM533Wz0cuT092TYSBXotE1y3c5KCemJaWxAQji1lQc8ePBZp/6EkA
+        yj5t680VN8vpG4sjcGPWoBTxzUhF+oxcfa7hBoRf2g==
+X-Google-Smtp-Source: ABdhPJzzc/J1JBJXAToRCeQHDdOVsoNE6U9yTJzDUPWdlDCEb1Uk4v5ySj0pBCeZjS4xxD+zSOrd96XH4omhzWIDEkE=
+X-Received: by 2002:a19:83c1:: with SMTP id f184mr559337lfd.97.1603933926604;
+ Wed, 28 Oct 2020 18:12:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <45f07f17-18b6-d187-0914-6f341fe90857@gmail.com>
+ <20200930150330.GC284424@cisco> <8bcd956f-58d2-d2f0-ca7c-0a30f3fcd5b8@gmail.com>
+ <20200930230327.GA1260245@cisco> <CAG48ez1VOUEHVQyo-2+uO7J+-jN5rh7=KmrMJiPaFjwCbKR1Sg@mail.gmail.com>
+ <20200930232456.GB1260245@cisco> <CAG48ez2xn+_KznEztJ-eVTsTzkbf9CVgPqaAk7TpRNAqbdaRoA@mail.gmail.com>
+ <202010251725.2BD96926E3@keescook> <CAG48ez2b-fnsp8YAR=H5uRMT4bBTid_hyU4m6KavHxDko1Efog@mail.gmail.com>
+ <CAG48ez2OWhpH3HHUJSrAmokJ8=SVwKrmQMSw0gEbTJmKE4myCw@mail.gmail.com> <202010281553.A72E162A7@keescook>
+In-Reply-To: <202010281553.A72E162A7@keescook>
+From:   Jann Horn <jannh@google.com>
+Date:   Thu, 29 Oct 2020 02:11:39 +0100
+Message-ID: <CAG48ez0FS49ki=RfO_nrSnwH32g9oRS73OSUOhz6tVh+YwCNLg@mail.gmail.com>
+Subject: Re: For review: seccomp_user_notif(2) manual page
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Tycho Andersen <tycho@tycho.pizza>,
+        "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Christian Brauner <christian@brauner.io>,
+        linux-man <linux-man@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Will Drewry <wad@chromium.org>, bpf <bpf@vger.kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Robert Sesek <rsesek@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+On Wed, Oct 28, 2020 at 11:56 PM Kees Cook <keescook@chromium.org> wrote:
+> On Mon, Oct 26, 2020 at 11:31:01AM +0100, Jann Horn wrote:
+> > Or I guess we could also just set O_NONBLOCK on the fd by default?
+> > Since the one existing user is eventloop-based...
+>
+> I thought about that initially, but it rubs me the wrong way: it
+> violates least-surprise for me. File descriptors are expected to be
+> default-blocking. It *is* a special fd, though, so maybe it could work.
+> The only case I can think of it would break would be ioctl-loop case
+> that is already buggy in that it didn't handle non-zero returns?
 
-Wire-up XDP socket busy-poll support for recvmsg() and sendmsg().
-
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
----
- net/xdp/xsk.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 2e5b9f27c7a3..da649b4f377c 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -23,6 +23,7 @@
- #include <linux/netdevice.h>
- #include <linux/rculist.h>
- #include <net/xdp_sock_drv.h>
-+#include <net/busy_poll.h>
- #include <net/xdp.h>
- 
- #include "xsk_queue.h"
-@@ -472,6 +473,9 @@ static int xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
- 	if (unlikely(need_wait))
- 		return -EOPNOTSUPP;
- 
-+	if (sk_can_busy_loop(sk))
-+		sk_busy_loop(sk, 1); /* only support non-blocking sockets */
-+
- 	pool = xs->pool;
- 	if (pool->cached_need_wakeup & XDP_WAKEUP_TX)
- 		return __xsk_sendmsg(sk);
-@@ -493,6 +497,9 @@ static int xsk_recvmsg(struct socket *sock, struct msghdr *m, size_t len, int fl
- 	if (unlikely(need_wait))
- 		return -EOPNOTSUPP;
- 
-+	if (sk_can_busy_loop(sk))
-+		sk_busy_loop(sk, 1); /* only support non-blocking sockets */
-+
- 	if (xs->pool->cached_need_wakeup & XDP_WAKEUP_RX && xs->zc)
- 		return xsk_wakeup(xs, XDP_WAKEUP_RX);
- 	return 0;
--- 
-2.27.0
-
+We don't have any actual users that use the API that way outside of
+the kernel's selftest/sample code, right?
