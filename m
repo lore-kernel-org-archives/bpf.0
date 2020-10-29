@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB096C388F7
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D4DDC5517A
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7CECA20796
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1464C20790
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 00:59:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1603933167;
-	bh=0K819i8z5mX9zoECtcQDJEKNEFwmzU684G962UqsgNE=;
+	s=default; t=1603933169;
+	bh=uRvd8T0gMY8EO51g4WeO5GG9AEudFkdPBSYa75Covpc=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=TpZhYxKi1Dnbf234zUFi466TPWwXSrBkYKalBSVGs0AKL3LJlRC/NfAcADdjwWDiG
-	 ZX3UAwuTGIMOxf2KT8sAoaWS7vrEJ8+OPux8obaQy/63T5VLsoRxygDXC97dMXSpVN
-	 EscqiGdsCSt3MoP3l+9lG/S9MrRq6X+Ulv6FaODM=
+	b=eSeXB7A4Z6sGv8PONY0QeAjdiDJVgQPyZu9Ucs59/ySTuJdXoGFQmWu7jiyQMM9AV
+	 yCgFQ2zrhptD2m+DYVQWZaQrvpcSh0KsrYUGLX+RWGNfWauWWcI6a96UIxM8EZvQ9L
+	 RDX+EM+oYnVyLpHXdDhNyCAtn7SO6W/zB4uvLYTs=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403915AbgJ2A70 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 28 Oct 2020 20:59:26 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:7366 "EHLO
+        id S2403917AbgJ2A71 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 28 Oct 2020 20:59:27 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:15854 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725804AbgJ2A70 (ORCPT
+        by vger.kernel.org with ESMTP id S2403912AbgJ2A70 (ORCPT
         <rfc822;bpf@vger.kernel.org>); Wed, 28 Oct 2020 20:59:26 -0400
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09T0odIZ016567
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:24 -0700
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 09T0oc6q007186
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:26 -0700
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 34exqppayy-1
+        by mx0a-00082601.pphosted.com with ESMTP id 34f0qbwtmd-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:24 -0700
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 17:59:26 -0700
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 28 Oct 2020 17:59:23 -0700
+ 15.1.1979.3; Wed, 28 Oct 2020 17:59:25 -0700
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 7DF012EC875F; Wed, 28 Oct 2020 17:59:13 -0700 (PDT)
+        id 355862EC875F; Wed, 28 Oct 2020 17:59:22 -0700 (PDT)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH bpf-next 03/11] libbpf: unify and speed up BTF string deduplication
-Date:   Wed, 28 Oct 2020 17:58:54 -0700
-Message-ID: <20201029005902.1706310-4-andrii@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 07/11] libbpf: fix BTF data layout checks and allow empty BTF
+Date:   Wed, 28 Oct 2020 17:58:58 -0700
+Message-ID: <20201029005902.1706310-8-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201029005902.1706310-1-andrii@kernel.org>
 References: <20201029005902.1706310-1-andrii@kernel.org>
@@ -56,370 +55,65 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-10-28_09:2020-10-28,2020-10-28 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 spamscore=0
- adultscore=0 impostorscore=0 mlxlogscore=602 suspectscore=25 clxscore=1034
- priorityscore=1501 malwarescore=0 lowpriorityscore=0 phishscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2010290001
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 bulkscore=0
+ spamscore=0 priorityscore=1501 clxscore=1034 lowpriorityscore=0 mlxscore=0
+ suspectscore=8 malwarescore=0 adultscore=0 mlxlogscore=999 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2010290001
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrii Nakryiko <andriin@fb.com>
+Make data section layout checks stricter, disallowing overlap of types and
+strings data.
 
-Revamp BTF dedup's string deduplication to match the approach of writable BTF
-string management. This allows to transfer deduplicated strings index back to
-BTF object after deduplication without expensive extra memory copying and hash
-map re-construction. It also simplifies the code and speeds it up, because
-hashmap-based string deduplication is faster than sort + unique approach.
+Additionally, allow BTFs with no type data. There is nothing inherently wrong
+with having BTF with no types (put potentially with some strings). This could
+be a situation with kernel module BTFs, if module doesn't introduce any new
+type information.
 
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
+Also fix invalid offset alignment check for btf->hdr->type_off.
+
+Fixes: 8a138aed4a80 ("bpf: btf: Add BTF support to libbpf")
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/btf.c | 265 +++++++++++++++++---------------------------
- 1 file changed, 99 insertions(+), 166 deletions(-)
+ tools/lib/bpf/btf.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
 diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 89fecfe5cb2b..db9331fea672 100644
+index 20c64a8441a8..9b0ef71a03d0 100644
 --- a/tools/lib/bpf/btf.c
 +++ b/tools/lib/bpf/btf.c
-@@ -90,6 +90,14 @@ struct btf {
- 	struct hashmap *strs_hash;
- 	/* whether strings are already deduplicated */
- 	bool strs_deduped;
-+	/* extra indirection layer to make strings hashmap work with stable
-+	 * string offsets and ability to transparently choose between
-+	 * btf->strs_data or btf_dedup->strs_data as a source of strings.
-+	 * This is used for BTF strings dedup to transfer deduplicated strings
-+	 * data back to struct btf without re-building strings index.
-+	 */
-+	void **strs_data_ptr;
-+
- 	/* BTF object FD, if loaded into kernel */
- 	int fd;
- 
-@@ -1363,17 +1371,19 @@ int btf__get_map_kv_tids(const struct btf *btf, const char *map_name,
- 
- static size_t strs_hash_fn(const void *key, void *ctx)
- {
--	struct btf *btf = ctx;
--	const char *str = btf->strs_data + (long)key;
-+	const char ***strs_data_ptr = ctx;
-+	const char *strs = **strs_data_ptr;
-+	const char *str = strs + (long)key;
- 
- 	return str_hash(str);
- }
- 
- static bool strs_hash_equal_fn(const void *key1, const void *key2, void *ctx)
- {
--	struct btf *btf = ctx;
--	const char *str1 = btf->strs_data + (long)key1;
--	const char *str2 = btf->strs_data + (long)key2;
-+	const char ***strs_data_ptr = ctx;
-+	const char *strs = **strs_data_ptr;
-+	const char *str1 = strs + (long)key1;
-+	const char *str2 = strs + (long)key2;
- 
- 	return strcmp(str1, str2) == 0;
- }
-@@ -1418,8 +1428,11 @@ static int btf_ensure_modifiable(struct btf *btf)
- 	memcpy(types, btf->types_data, btf->hdr->type_len);
- 	memcpy(strs, btf->strs_data, btf->hdr->str_len);
- 
-+	/* make hashmap below use btf->strs_data as a source of strings */
-+	btf->strs_data_ptr = &btf->strs_data;
-+
- 	/* build lookup index for all strings */
--	hash = hashmap__new(strs_hash_fn, strs_hash_equal_fn, btf);
-+	hash = hashmap__new(strs_hash_fn, strs_hash_equal_fn, &btf->strs_data_ptr);
- 	if (IS_ERR(hash)) {
- 		err = PTR_ERR(hash);
- 		hash = NULL;
-@@ -2824,19 +2837,11 @@ struct btf_dedup {
- 	size_t hypot_cap;
- 	/* Various option modifying behavior of algorithm */
- 	struct btf_dedup_opts opts;
--};
--
--struct btf_str_ptr {
--	const char *str;
--	__u32 new_off;
--	bool used;
--};
--
--struct btf_str_ptrs {
--	struct btf_str_ptr *ptrs;
--	const char *data;
--	__u32 cnt;
--	__u32 cap;
-+	/* temporary strings deduplication state */
-+	void *strs_data;
-+	size_t strs_cap;
-+	size_t strs_len;
-+	struct hashmap* strs_hash;
- };
- 
- static long hash_combine(long h, long value)
-@@ -3063,64 +3068,41 @@ static int btf_for_each_str_off(struct btf_dedup *d, str_off_fn_t fn, void *ctx)
- 	return 0;
- }
- 
--static int str_sort_by_content(const void *a1, const void *a2)
--{
--	const struct btf_str_ptr *p1 = a1;
--	const struct btf_str_ptr *p2 = a2;
--
--	return strcmp(p1->str, p2->str);
--}
--
--static int str_sort_by_offset(const void *a1, const void *a2)
--{
--	const struct btf_str_ptr *p1 = a1;
--	const struct btf_str_ptr *p2 = a2;
--
--	if (p1->str != p2->str)
--		return p1->str < p2->str ? -1 : 1;
--	return 0;
--}
--
--static int btf_dedup_str_ptr_cmp(const void *str_ptr, const void *pelem)
--{
--	const struct btf_str_ptr *p = pelem;
--
--	if (str_ptr != p->str)
--		return (const char *)str_ptr < p->str ? -1 : 1;
--	return 0;
--}
--
--static int btf_str_mark_as_used(__u32 *str_off_ptr, void *ctx)
-+static int strs_dedup_remap_str_off(__u32 *str_off_ptr, void *ctx)
- {
--	struct btf_str_ptrs *strs;
--	struct btf_str_ptr *s;
-+	struct btf_dedup *d = ctx;
-+	long old_off, new_off, len;
-+	const char *s;
-+	void *p;
-+	int err;
- 
- 	if (*str_off_ptr == 0)
- 		return 0;
- 
--	strs = ctx;
--	s = bsearch(strs->data + *str_off_ptr, strs->ptrs, strs->cnt,
--		    sizeof(struct btf_str_ptr), btf_dedup_str_ptr_cmp);
--	if (!s)
--		return -EINVAL;
--	s->used = true;
--	return 0;
--}
-+	s = btf__str_by_offset(d->btf, *str_off_ptr);
-+	len = strlen(s) + 1;
- 
--static int btf_str_remap_offset(__u32 *str_off_ptr, void *ctx)
--{
--	struct btf_str_ptrs *strs;
--	struct btf_str_ptr *s;
-+	new_off = d->strs_len;
-+	p = btf_add_mem(&d->strs_data, &d->strs_cap, 1, new_off, BTF_MAX_STR_OFFSET, len);
-+	if (!p)
-+		return -ENOMEM;
- 
--	if (*str_off_ptr == 0)
--		return 0;
-+	memcpy(p, s, len);
- 
--	strs = ctx;
--	s = bsearch(strs->data + *str_off_ptr, strs->ptrs, strs->cnt,
--		    sizeof(struct btf_str_ptr), btf_dedup_str_ptr_cmp);
--	if (!s)
--		return -EINVAL;
--	*str_off_ptr = s->new_off;
-+	/* Now attempt to add the string, but only if the string with the same
-+	 * contents doesn't exist already (HASHMAP_ADD strategy). If such
-+	 * string exists, we'll get its offset in old_off (that's old_key).
-+	 */
-+	err = hashmap__insert(d->strs_hash, (void *)new_off, (void *)new_off,
-+			      HASHMAP_ADD, (const void **)&old_off, NULL);
-+	if (err == -EEXIST) {
-+		*str_off_ptr = old_off;
-+	} else if (err) {
-+		return err;
-+	} else {
-+		*str_off_ptr = new_off;
-+		d->strs_len += len;
-+	}
- 	return 0;
- }
- 
-@@ -3137,118 +3119,69 @@ static int btf_str_remap_offset(__u32 *str_off_ptr, void *ctx)
-  */
- static int btf_dedup_strings(struct btf_dedup *d)
- {
--	char *start = d->btf->strs_data;
--	char *end = start + d->btf->hdr->str_len;
--	char *p = start, *tmp_strs = NULL;
--	struct btf_str_ptrs strs = {
--		.cnt = 0,
--		.cap = 0,
--		.ptrs = NULL,
--		.data = start,
--	};
--	int i, j, err = 0, grp_idx;
--	bool grp_used;
-+	char *s;
-+	int err;
- 
- 	if (d->btf->strs_deduped)
- 		return 0;
- 
--	/* build index of all strings */
--	while (p < end) {
--		if (strs.cnt + 1 > strs.cap) {
--			struct btf_str_ptr *new_ptrs;
--
--			strs.cap += max(strs.cnt / 2, 16U);
--			new_ptrs = libbpf_reallocarray(strs.ptrs, strs.cap, sizeof(strs.ptrs[0]));
--			if (!new_ptrs) {
--				err = -ENOMEM;
--				goto done;
--			}
--			strs.ptrs = new_ptrs;
--		}
--
--		strs.ptrs[strs.cnt].str = p;
--		strs.ptrs[strs.cnt].used = false;
--
--		p += strlen(p) + 1;
--		strs.cnt++;
--	}
--
--	/* temporary storage for deduplicated strings */
--	tmp_strs = malloc(d->btf->hdr->str_len);
--	if (!tmp_strs) {
--		err = -ENOMEM;
--		goto done;
--	}
--
--	/* mark all used strings */
--	strs.ptrs[0].used = true;
--	err = btf_for_each_str_off(d, btf_str_mark_as_used, &strs);
--	if (err)
--		goto done;
--
--	/* sort strings by context, so that we can identify duplicates */
--	qsort(strs.ptrs, strs.cnt, sizeof(strs.ptrs[0]), str_sort_by_content);
-+	s = btf_add_mem(&d->strs_data, &d->strs_cap, 1, d->strs_len, BTF_MAX_STR_OFFSET, 1);
-+	if (!s)
-+		return -ENOMEM;
-+	/* initial empty string */
-+	s[0] = 0;
-+	d->strs_len = 1;
- 
--	/*
--	 * iterate groups of equal strings and if any instance in a group was
--	 * referenced, emit single instance and remember new offset
-+	/* temporarily switch to use btf_dedup's strs_data for strings for hash
-+	 * functions; later we'll just transfer hashmap to struct btf as is,
-+	 * along the strs_data
- 	 */
--	p = tmp_strs;
--	grp_idx = 0;
--	grp_used = strs.ptrs[0].used;
--	/* iterate past end to avoid code duplication after loop */
--	for (i = 1; i <= strs.cnt; i++) {
--		/*
--		 * when i == strs.cnt, we want to skip string comparison and go
--		 * straight to handling last group of strings (otherwise we'd
--		 * need to handle last group after the loop w/ duplicated code)
--		 */
--		if (i < strs.cnt &&
--		    !strcmp(strs.ptrs[i].str, strs.ptrs[grp_idx].str)) {
--			grp_used = grp_used || strs.ptrs[i].used;
--			continue;
--		}
-+	d->btf->strs_data_ptr = &d->strs_data;
- 
--		/*
--		 * this check would have been required after the loop to handle
--		 * last group of strings, but due to <= condition in a loop
--		 * we avoid that duplication
--		 */
--		if (grp_used) {
--			int new_off = p - tmp_strs;
--			__u32 len = strlen(strs.ptrs[grp_idx].str);
--
--			memmove(p, strs.ptrs[grp_idx].str, len + 1);
--			for (j = grp_idx; j < i; j++)
--				strs.ptrs[j].new_off = new_off;
--			p += len + 1;
--		}
--
--		if (i < strs.cnt) {
--			grp_idx = i;
--			grp_used = strs.ptrs[i].used;
--		}
-+	d->strs_hash = hashmap__new(strs_hash_fn, strs_hash_equal_fn, &d->btf->strs_data_ptr);
-+	if (IS_ERR(d->strs_hash)) {
-+		err = PTR_ERR(d->strs_hash);
-+		d->strs_hash = NULL;
-+		goto err_out;
+@@ -245,22 +245,18 @@ static int btf_parse_hdr(struct btf *btf)
+ 		return -EINVAL;
  	}
  
--	/* replace original strings with deduped ones */
--	d->btf->hdr->str_len = p - tmp_strs;
--	memmove(start, tmp_strs, d->btf->hdr->str_len);
--	end = start + d->btf->hdr->str_len;
+-	if (meta_left < hdr->type_off) {
+-		pr_debug("Invalid BTF type section offset:%u\n", hdr->type_off);
++	if (meta_left < hdr->str_off + hdr->str_len) {
++		pr_debug("Invalid BTF total size:%u\n", btf->raw_size);
+ 		return -EINVAL;
+ 	}
+ 
+-	if (meta_left < hdr->str_off) {
+-		pr_debug("Invalid BTF string section offset:%u\n", hdr->str_off);
++	if (hdr->type_off + hdr->type_len > hdr->str_off) {
++		pr_debug("Invalid BTF data sections layout: type data at %u + %u, strings data at %u + %u\n",
++			 hdr->type_off, hdr->type_len, hdr->str_off, hdr->str_len);
+ 		return -EINVAL;
+ 	}
+ 
+-	if (hdr->type_off >= hdr->str_off) {
+-		pr_debug("BTF type section offset >= string section offset. No type?\n");
+-		return -EINVAL;
+-	}
 -
--	/* restore original order for further binary search lookups */
--	qsort(strs.ptrs, strs.cnt, sizeof(strs.ptrs[0]), str_sort_by_offset);
-+	/* insert empty string; we won't be looking it up during strings
-+	 * dedup, but it's good to have it for generic BTF string lookups
-+	 */
-+	err = hashmap__insert(d->strs_hash, (void *)0, (void *)0,
-+			      HASHMAP_ADD, NULL, NULL);
-+	if (err)
-+		goto err_out;
- 
- 	/* remap string offsets */
--	err = btf_for_each_str_off(d, btf_str_remap_offset, &strs);
-+	err = btf_for_each_str_off(d, strs_dedup_remap_str_off, d);
- 	if (err)
--		goto done;
-+		goto err_out;
- 
--	d->btf->hdr->str_len = end - start;
-+	/* replace BTF string data and hash with deduped ones */
-+	free(d->btf->strs_data);
-+	hashmap__free(d->btf->strs_hash);
-+	d->btf->strs_data = d->strs_data;
-+	d->btf->strs_data_cap = d->strs_cap;
-+	d->btf->hdr->str_len = d->strs_len;
-+	d->btf->strs_hash = d->strs_hash;
-+	/* now point strs_data_ptr back to btf->strs_data */
-+	d->btf->strs_data_ptr = &d->btf->strs_data;
-+
-+	d->strs_data = d->strs_hash = NULL;
-+	d->strs_len = d->strs_cap = 0;
- 	d->btf->strs_deduped = true;
-+	return 0;
-+
-+err_out:
-+	free(d->strs_data);
-+	hashmap__free(d->strs_hash);
-+	d->strs_data = d->strs_hash = NULL;
-+	d->strs_len = d->strs_cap = 0;
-+
-+	/* restore strings pointer for existing d->btf->strs_hash back */
-+	d->btf->strs_data_ptr = &d->strs_data;
- 
--done:
--	free(tmp_strs);
--	free(strs.ptrs);
- 	return err;
- }
- 
+-	if (hdr->type_off & 0x02) {
++	if (hdr->type_off % 4) {
+ 		pr_debug("BTF type section is not aligned to 4 bytes\n");
+ 		return -EINVAL;
+ 	}
 -- 
 2.24.1
 
