@@ -2,123 +2,126 @@ Return-Path: <SRS0=L8C4=EE=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C6EACC55178
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 07:44:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 04A12C2D0A3
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 07:47:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6BC6B214DB
-	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 07:44:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A778F2151B
+	for <bpf@archiver.kernel.org>; Thu, 29 Oct 2020 07:47:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vCF7BqYv"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Cedj5/Dr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729783AbgJ2Hjq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 29 Oct 2020 03:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726874AbgJ2HYu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 29 Oct 2020 03:24:50 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF6DC0613A6
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 21:26:34 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id l2so1652797lfk.0
-        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 21:26:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5bZHSqby9xc03fv8b/uQtgTC0sysq05Jdo5tS6hC7Bk=;
-        b=vCF7BqYvpPENaZQ1ij18cOuBn3mjiDl59S9e8pNu4I8MoMuZo8/ftg0Y9yOuESZN09
-         VBw04wGTblOlqn6/d//nxST8d02fERV2k+Yqvoj5KIf/bU8IslsX99d6mIRXJv1H9eZ7
-         dPdYqdkXenA5Mtf/Ci6Vn4NPk9RQpMYT+WOlqRhTU68ApcUfhfJDbQ4ydF1Vj8SKnJb5
-         kYkD7iFe2dzDG5UlFj7yPh8AaapCSTfLe8HSbb08Qh60EKjEcTHQBTCNu6MPXVwS2U+e
-         ddO/4+yG92LPOzOsogodfabgmFl0yPhga3RhQIlJ6Ulkl1MZebH5vSSbg1KnGyrTMNXW
-         E67w==
+        id S2387575AbgJ2HrI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 29 Oct 2020 03:47:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:25515 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1733226AbgJ2HrE (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 29 Oct 2020 03:47:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1603957622;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=E54pnSxqIHTNRMHY8e73O1yEsZObem3++NJwfwkL3+A=;
+        b=Cedj5/Dr/lUIBEA329iRlMY+oiCvYFOrUHGC5LypfpvvKRQLQFdNL7euCvML3kJiOHlbOG
+        sX2yp2GmjT3JubdNI3Qtw2ZJi0uchF7d31SxypajXfDknEy6FAHW7/xs1sqzu+kw4OJXDh
+        bj03GZUKZGbqBM47Tfd5kEYCa9xkwGk=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-343-5LfKF3W0MSGp54PUrVA4HA-1; Wed, 28 Oct 2020 22:45:20 -0400
+X-MC-Unique: 5LfKF3W0MSGp54PUrVA4HA-1
+Received: by mail-pg1-f198.google.com with SMTP id 19so977804pgq.18
+        for <bpf@vger.kernel.org>; Wed, 28 Oct 2020 19:45:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5bZHSqby9xc03fv8b/uQtgTC0sysq05Jdo5tS6hC7Bk=;
-        b=mYTvB2nydXHattuyH3J8LUUXJyR7kRGttdmnWlscBl+tHAa3JN4+igJrn+GD8RroH/
-         sjFCPgBwdx5FWCmCVIpjkQKCgI0Z4TFLJlKpec6QEB0NRDItBdNGd5797P07XZl5nFWu
-         n/Qsoqy32Cq3lXsOI10xPSQePdw3UYNcMtCR7dFcDDSi+iT5xAgykV2e32JyNYA4dB+h
-         2R/OjGyE3z5NDktrAFMoMIurOakUx6o2lx9dACh/xZKqOW+oqZ1RRYudQsdN59X6Qkck
-         iZM6xkcTlHTJfbAYQ1UHpUmdk6rkpimfNGJjomTxi73rhD5aqcth6XyNGviHDn3fUJ2T
-         sP9g==
-X-Gm-Message-State: AOAM533Pz1z2+XZHstT/w6aN6qXvey+id0BMiitrOWkkvNrie2CTBUMN
-        18NlEWmU8SsP9rcm2wUJ6u0C+lHtuFBFohmsHXP5AQ==
-X-Google-Smtp-Source: ABdhPJzKHFLrtcctmkuqmI3RamhnK2a1wmI/Y3U/6ijUcRKMrl5Xg1LaPRSJKCqbjtr8CcoK5kQQWSIr/nf0z+LrQ9A=
-X-Received: by 2002:a19:c357:: with SMTP id t84mr773624lff.34.1603945592793;
- Wed, 28 Oct 2020 21:26:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <45f07f17-18b6-d187-0914-6f341fe90857@gmail.com>
- <20200930150330.GC284424@cisco> <8bcd956f-58d2-d2f0-ca7c-0a30f3fcd5b8@gmail.com>
- <20200930230327.GA1260245@cisco> <CAG48ez1VOUEHVQyo-2+uO7J+-jN5rh7=KmrMJiPaFjwCbKR1Sg@mail.gmail.com>
- <20200930232456.GB1260245@cisco> <CAG48ez2xn+_KznEztJ-eVTsTzkbf9CVgPqaAk7TpRNAqbdaRoA@mail.gmail.com>
- <202010251725.2BD96926E3@keescook> <CAG48ez2b-fnsp8YAR=H5uRMT4bBTid_hyU4m6KavHxDko1Efog@mail.gmail.com>
- <CAG48ez2OWhpH3HHUJSrAmokJ8=SVwKrmQMSw0gEbTJmKE4myCw@mail.gmail.com> <20201029021348.GB25673@cisco>
-In-Reply-To: <20201029021348.GB25673@cisco>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 29 Oct 2020 05:26:05 +0100
-Message-ID: <CAG48ez2=8RBh_2D=WRKta4n3jvfTpD90j8DA-uOFAm86fKjSzw@mail.gmail.com>
-Subject: Re: For review: seccomp_user_notif(2) manual page
-To:     Tycho Andersen <tycho@tycho.pizza>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Christian Brauner <christian@brauner.io>,
-        linux-man <linux-man@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Will Drewry <wad@chromium.org>, bpf <bpf@vger.kernel.org>,
-        Song Liu <songliubraving@fb.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=E54pnSxqIHTNRMHY8e73O1yEsZObem3++NJwfwkL3+A=;
+        b=nJEwSF8uUkzPxHJWVHkx2fySl2d/84I+y1gIVDqRpvNZ0/2R+BZVN/oiu/MwlvgOjd
+         C65hOYHmqCD+WJIY69fEWfrtGLvRZHuIRUBY/B239562JjkGC/FVAlNGNH688iCUVvqX
+         0/aA+X/NFQ5R1ppT8WQn9zgs0BAHW4Jl+W+sJ+YaVLMxW0nXJ342lT5CinXnRVf9oxh1
+         rnVhdUf3aTncz7DkX1RJsv+b+rc/GrsZ+6132gQr2KGfPEe6Je7SQWJfMqJ8KjsAn9Q7
+         rSD0KSWd8YP0sQLCNMkhGdd3g0SZyT2xfymJ2g6boqlUfLToVkcyoAFmqtAlBqqX6Clm
+         96nQ==
+X-Gm-Message-State: AOAM533Dpsi0UTSVy+phv+ZDLon0pbzrCYtjd8jsZi7BQD2b2xJLSsvU
+        WwkLoKg+wGtxV58/58kZ+C3A2Sp8Sg6A9aKSpdUWdY3rJZFGEyrhEUr5YKx6mFT7yT9mcKLANcn
+        VcVynBBvYQrk=
+X-Received: by 2002:a17:90a:498d:: with SMTP id d13mr2003986pjh.86.1603939519095;
+        Wed, 28 Oct 2020 19:45:19 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzdaVPQ2CJKYuYOgKJmzIf1UCAj+FXrBrCc2ewXMYmo9Fgwj6Z3nDDfY+MOItezGGROoAztsg==
+X-Received: by 2002:a17:90a:498d:: with SMTP id d13mr2003968pjh.86.1603939518825;
+        Wed, 28 Oct 2020 19:45:18 -0700 (PDT)
+Received: from dhcp-12-153.nay.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id y22sm944732pfr.62.2020.10.28.19.45.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Oct 2020 19:45:18 -0700 (PDT)
+Date:   Thu, 29 Oct 2020 10:45:06 +0800
+From:   Hangbin Liu <haliu@redhat.com>
+To:     David Ahern <dsahern@gmail.com>
+Cc:     Stephen Hemminger <stephen@networkplumber.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Robert Sesek <rsesek@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        David Miller <davem@davemloft.net>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Jiri Benc <jbenc@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Subject: Re: [PATCHv2 iproute2-next 0/5] iproute2: add libbpf support
+Message-ID: <20201029024506.GN2408@dhcp-12-153.nay.redhat.com>
+References: <20201023033855.3894509-1-haliu@redhat.com>
+ <20201028132529.3763875-1-haliu@redhat.com>
+ <7babcccb-2b31-f9bf-16ea-6312e449b928@gmail.com>
+ <20201029020637.GM2408@dhcp-12-153.nay.redhat.com>
+ <7a412e24-0846-bffe-d533-3407d06d83c4@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7a412e24-0846-bffe-d533-3407d06d83c4@gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Oct 29, 2020 at 3:13 AM Tycho Andersen <tycho@tycho.pizza> wrote:
-> > > Consider the following scenario (with supervisor "S" and target "T"; S
-> > > wants to wait for events on two file descriptors seccomp_fd and
-> > > other_fd):
-> > >
-> > > S: starts poll() to wait for events on seccomp_fd and other_fd
-> > > T: performs a syscall that's filtered with RET_USER_NOTIF
-> > > S: poll() returns and signals readiness of seccomp_fd
-> > > T: receives signal SIGUSR1
-> > > T: syscall aborts, enters signal handler
-> > > T: signal handler blocks on unfiltered syscall (e.g. write())
-> > > S: starts SECCOMP_IOCTL_NOTIF_RECV
-> > > S: blocks because no syscalls are pending
-> > >
-> > > Depending on what other_fd is, this could in a worst case even lead to
-> > > a deadlock (if e.g. the signal handler wants to write to stdout, but
-> > > the stdout fd is hooked up to other_fd in the supervisor, but the
-> > > supervisor can't consume the data written because it's stuck in
-> > > seccomp handling).
-> > >
-> > > So we have to ensure that when existing code (like that crun code you
-> > > linked to) triggers this case, SECCOMP_IOCTL_NOTIF_RECV returns
-> > > immediately instead of blocking.
-> >
-> > Or I guess we could also just set O_NONBLOCK on the fd by default?
-> > Since the one existing user is eventloop-based...
->
-> I feel like it's ok to return an error from the RECV ioctl() if
-> there's never going to be any more events on the fd; was there
-> something fundamentally wrong with your patch here:
-> https://lore.kernel.org/bpf/CAG48ez2xn+_KznEztJ-eVTsTzkbf9CVgPqaAk7TpRNAqbdaRoA@mail.gmail.com/
-> ?
+On Wed, Oct 28, 2020 at 08:20:55PM -0600, David Ahern wrote:
+> >> root@u2010-sfo3:~/iproute2.git# make -j 4
+> >> ...
+> >> /usr/bin/ld: ../lib/libutil.a(bpf_libbpf.o): in function `load_bpf_object':
+> >> bpf_libbpf.c:(.text+0x3cb): undefined reference to
+> >> `bpf_program__section_name'
+> >> /usr/bin/ld: bpf_libbpf.c:(.text+0x438): undefined reference to
+> >> `bpf_program__section_name'
+> >> /usr/bin/ld: bpf_libbpf.c:(.text+0x716): undefined reference to
+> >> `bpf_program__section_name'
+> >> collect2: error: ld returned 1 exit status
+> >> make[1]: *** [Makefile:27: ip] Error 1
+> >> make[1]: *** Waiting for unfinished jobs....
+> >> make: *** [Makefile:64: all] Error 2
+> > 
+> > You need to update libbpf to latest version.
+> 
+> nope. you need to be able to handle this. Ubuntu 20.10 was just
+> released, and it has a version of libbpf. If you are going to integrate
+> libbpf into other packages like iproute2, it needs to just work with
+> that version.
 
-No, I have a new version of that about 80% done and hope to send it
-out soonish. (There's some stuff around tests that I still need to
-cobble together).
+OK, I can replace bpf_program__section_name by bpf_program__title().
+> 
+> > 
+> > But this also remind me that I need to add bpf_program__section_name() to
+> > configure checking. I will see if I missed other functions' checking.
+> 
+> This is going to be an on-going problem. iproute2 should work with
+> whatever version of libbpf is installed on that system.
+
+I will make it works on Ubuntu 20.10, but with whatever version of libbpf?
+That looks hard, especially with old libbpf.
+
+Thanks
+Hangbin
+
