@@ -2,119 +2,86 @@ Return-Path: <SRS0=hyEm=EF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CA2D3C4363A
-	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 13:02:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20854C4363A
+	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 14:35:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3886A20825
-	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 13:02:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AEAED221FF
+	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 14:35:41 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=szeredi.hu header.i=@szeredi.hu header.b="c/0np4r5"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MB0XzSiB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726564AbgJ3NCf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 30 Oct 2020 09:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726560AbgJ3NCf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 30 Oct 2020 09:02:35 -0400
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11B3C0613D5
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2020 06:02:34 -0700 (PDT)
-Received: by mail-vk1-xa30.google.com with SMTP id m3so1427825vki.12
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2020 06:02:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hfUp6uvT0mNo9qOvWz4kadVZif4hwG0EcrIPidc71AU=;
-        b=c/0np4r5fnnReVFjWkDWXo8hF0To3ovSOoxgoL/QWs9VxL86iqjKdadij03d378/T5
-         B7rjoCbR258EwTEX+UW+6QMPF65hDWZsco0RfSUG9stFDcsd6ZZkDH+4oFGIQiro7Wrf
-         /VUafL5CtS83KydlI6lpgD86QMrk86JITh21I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hfUp6uvT0mNo9qOvWz4kadVZif4hwG0EcrIPidc71AU=;
-        b=bFgkkaslS3RJa5GtnNQ0dVR7DtFVWX4rStdwLFRgAnBYQ1o34oGWkm6TzBt7oyztCi
-         mYph5dvGVZIOZVBUTKvjVJeSXB6s0YtyNyq/WfZ/SIMMg4w1kkoJ3FnY6/bWqO0IGxIr
-         YrCNMbqLQjCTnUGbMGbFUItoRgxu4uc6anu9MPe2EHm+J6/+Ey77A51wXGtBIAH0gTSu
-         k9D0Xn3VKj5zTq/AhCrbRvx7/NDaSGidGoVR195DZpbGYghF8QtJxox9TTzroAE1XIyZ
-         eU3Eh9o31LP+YqLgPqXEiWPkaS48or38H+DjeqUp9k11UUnjwpoTCaE0WeIR+tkX3nhZ
-         405g==
-X-Gm-Message-State: AOAM532tFvg8ZRpdyPk3uoxY3G1CtKz6W6L7WULBk5hP83moCdTtQgBD
-        ZsYRVAxlHNNU+r7Z7i3qRzmwr1lVqQlNQOYoJRbCyA==
-X-Google-Smtp-Source: ABdhPJxPa9+zamc48OrPbKG+5+YeIbGDLouPEl6taVV7SKI2yGqJZrMzqI/DHpB0Je2VEJI3rTxbB6w6g9+fXjI8Kns=
-X-Received: by 2002:a1f:23d0:: with SMTP id j199mr6640364vkj.11.1604062953264;
- Fri, 30 Oct 2020 06:02:33 -0700 (PDT)
+        id S1726645AbgJ3Ofl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 30 Oct 2020 10:35:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:43117 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726101AbgJ3Ofl (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 30 Oct 2020 10:35:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1604068540;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G/uUf4x5jmqoio45UotElBXDDV5Ef+L5uB7zqE76nAQ=;
+        b=MB0XzSiBOcao3Sih8lkm5XbwS007u17qZwCLlEDIcuS9P4PFL9MxUBq2gzRoiWhTuo1hIm
+        EB29BQ2y4xKnhwiT3+6t/keBkqvN6RdoCnJ0pBTCtGvnxGXCIDME/EBl9vI3H0MVaE8gFg
+        4H3GilbMCbfVHzHSsPBLPjJRsu/kdno=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-21-EDFthimKOPGHh7oFb3zDAg-1; Fri, 30 Oct 2020 10:35:34 -0400
+X-MC-Unique: EDFthimKOPGHh7oFb3zDAg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B1F788F62C6;
+        Fri, 30 Oct 2020 14:35:32 +0000 (UTC)
+Received: from carbon (unknown [10.36.110.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E76921002C01;
+        Fri, 30 Oct 2020 14:35:22 +0000 (UTC)
+Date:   Fri, 30 Oct 2020 15:35:21 +0100
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     kbuild@lists.01.org, bpf@vger.kernel.org, lkp@intel.com,
+        kbuild-all@lists.01.org, netdev@vger.kernel.org,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        maze@google.com, lmb@cloudflare.com, shaun@tigera.io,
+        Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
+        brouer@redhat.com
+Subject: Re: [PATCH bpf-next V4 2/5] bpf: bpf_fib_lookup return MTU value as
+ output when looked up
+Message-ID: <20201030153521.727bfb80@carbon>
+In-Reply-To: <20201028124942.GE1042@kadam>
+References: <160381601522.1435097.11103677488984953095.stgit@firesoul>
+        <20201028124942.GE1042@kadam>
 MIME-Version: 1.0
-References: <0000000000008caae305ab9a5318@google.com> <000000000000a726a405ada4b6cf@google.com>
- <CAFqZXNvQcjp201ahjLBhYJJCuYqZrYLGDA-wE3hXiJpRNgbTKg@mail.gmail.com>
-In-Reply-To: <CAFqZXNvQcjp201ahjLBhYJJCuYqZrYLGDA-wE3hXiJpRNgbTKg@mail.gmail.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Fri, 30 Oct 2020 14:02:22 +0100
-Message-ID: <CAJfpegtzQB09ind8tkYzaiu6ODJvhMKj3myxVS75vbjTcOxU8g@mail.gmail.com>
-Subject: Re: general protection fault in security_inode_getattr
-To:     Ondrej Mosnacek <omosnace@redhat.com>
-Cc:     syzbot <syzbot+f07cc9be8d1d226947ed@syzkaller.appspotmail.com>,
-        andriin@fb.com, Alexei Starovoitov <ast@kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        James Morris <jmorris@namei.org>, john.fastabend@gmail.com,
-        kafai@fb.com, KP Singh <kpsingh@chromium.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        network dev <netdev@vger.kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Song Liu <songliubraving@fb.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>, yhs@fb.com,
-        linux-fsdevel@vger.kernel.org,
-        overlayfs <linux-unionfs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Aug 24, 2020 at 11:00 PM Ondrej Mosnacek <omosnace@redhat.com> wrote:
->
-> On Mon, Aug 24, 2020 at 9:37 PM syzbot
-> <syzbot+f07cc9be8d1d226947ed@syzkaller.appspotmail.com> wrote:
-> > syzbot has found a reproducer for the following issue on:
->
-> Looping in fsdevel and OverlayFS maintainers, as this seems to be
-> FS/OverlayFS related...
+On Wed, 28 Oct 2020 15:49:42 +0300
+Dan Carpenter <dan.carpenter@oracle.com> wrote:
 
-Hmm, the oopsing code is always something like:
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> 
+> New smatch warnings:
+> net/core/filter.c:5395 bpf_ipv4_fib_lookup() error: uninitialized symbol 'mtu'.
 
-All code
-========
-   0: 1b fe                sbb    %esi,%edi
-   2: 49 8d 5e 08          lea    0x8(%r14),%rbx
-   6: 48 89 d8              mov    %rbx,%rax
-   9: 48 c1 e8 03          shr    $0x3,%rax
-   d: 42 80 3c 38 00        cmpb   $0x0,(%rax,%r15,1)
-  12: 74 08                je     0x1c
-  14: 48 89 df              mov    %rbx,%rdi
-  17: e8 bc b4 5b fe        callq  0xfffffffffe5bb4d8
-  1c: 48 8b 1b              mov    (%rbx),%rbx
-  1f: 48 83 c3 68          add    $0x68,%rbx
-  23: 48 89 d8              mov    %rbx,%rax
-  26: 48 c1 e8 03          shr    $0x3,%rax
-  2a:* 42 80 3c 38 00        cmpb   $0x0,(%rax,%r15,1) <-- trapping instruction
-  2f: 74 08                je     0x39
-  31: 48 89 df              mov    %rbx,%rdi
-  34: e8 9f b4 5b fe        callq  0xfffffffffe5bb4d8
-  39: 48 8b 1b              mov    (%rbx),%rbx
-  3c: 48 83 c3 0c          add    $0xc,%rbx
+I will fix and send V5.
 
+-- 
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
-And that looks (to me) like the unrolled loop in call_int_hook().  I
-don't see how that could be related to overlayfs, though it's
-definitely interesting why it only triggers from
-overlay->vfs_getattr()->security_inode_getattr()...
-
-Thanks,
-Miklos
