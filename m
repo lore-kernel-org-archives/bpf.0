@@ -2,169 +2,113 @@ Return-Path: <SRS0=hyEm=EF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 684B8C5517A
-	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 19:22:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53D42C55178
+	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 19:24:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 178FA2222F
-	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 19:22:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DC0DC20739
+	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 19:24:34 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=szeredi.hu header.i=@szeredi.hu header.b="SuJtxiwk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MVXHtPRo"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727524AbgJ3TW2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 30 Oct 2020 15:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
+        id S1727307AbgJ3TYe (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 30 Oct 2020 15:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727641AbgJ3TVy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 30 Oct 2020 15:21:54 -0400
-Received: from mail-vk1-xa42.google.com (mail-vk1-xa42.google.com [IPv6:2607:f8b0:4864:20::a42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC35C0613D8
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2020 12:21:54 -0700 (PDT)
-Received: by mail-vk1-xa42.google.com with SMTP id u202so1694192vkb.4
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2020 12:21:54 -0700 (PDT)
+        with ESMTP id S1726625AbgJ3TYb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 30 Oct 2020 15:24:31 -0400
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C58C0613CF;
+        Fri, 30 Oct 2020 12:24:30 -0700 (PDT)
+Received: by mail-oo1-xc34.google.com with SMTP id j41so1843330oof.12;
+        Fri, 30 Oct 2020 12:24:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8I5vCt7sQpLxqO9fFZglUpeymmnJZb+1HjzCHkxiFnI=;
-        b=SuJtxiwkoB6tT6rUkiqexK55I2Znto0HzbzoxVsqOK/P6c9gFQuP6oaZkgRXt529ZU
-         a+bJWmyqi0+flho90rhtlkwHEs/7it0kmTdVLD/LJTnan7DMQe7EUfH5HwKopELvdr6c
-         zUX1a7CTPjVwz/VH/TBiLoorR+ZXggEpvShSQ=
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=nsaXaT+4r0OxSMEFB6ln4viCGb+YY29jtbW9XqB3Z9c=;
+        b=MVXHtPRoo+4YT9iWaoW2FeGC+Rsk2VquzaGbyURIWOxzBxapJwVSBl8A6oXCXTxqTl
+         6FtEr+OxSkDFrnJVkxSE87/bwmMAS5L4hVXmZKfiZioE1RWvKMCpt9xHDT8y4hxSF/Gv
+         +YNQcAdn6qgHMWyDOu9XJwibNJp9S5YTlX3IWgP3ZpOF1sYMfEIA4no3PqDMzeXts1Iu
+         CxpyAcEz8O8EGGglU1KkT/dzNfwPdxOm80/vonvaN7Z2fcaNo5+MsXBJNRk/2tSeDogy
+         xRDaDI8svb7Sy99YmyGCxhg3DEG4uQMg15uEPBNFhYUmP4yZp3t+6nTk0QuAcV+Ifb0f
+         E+bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8I5vCt7sQpLxqO9fFZglUpeymmnJZb+1HjzCHkxiFnI=;
-        b=ktuKjKULBlYbJI0p3lH+AnmcJ01s/nZpthDR0OuurRw39t2+7LXIBY+RyK0eJCTKpQ
-         JnmHGbQ9E1lIVgfbhtrKZNN9tO2s0uu9mW55kblkcsu+D8w4wYHbToMmQJe8MCW8RCTN
-         RbjioMampoCEkbcpsCwjt23UuK9lw0xNqe76X2FVsJalI6LAJXdXcUfowrj0GiN18dZw
-         tZ2wybJ1ovsyEQE68GkKASPCmSsbC0BjhIiQS0cLyvB52mDs/a7OR/2JD2e4a1SqwIrP
-         AkI9pHnR8hJ7lWhTS6UqfrCZ58t4m32y9rCXhCRFXUHzeZ3efeCFkSzV7h0TTTNz9Pe0
-         fOng==
-X-Gm-Message-State: AOAM532+orIehXGmSsKBeWQd/i5EWjeU8rmzPEhnEzM4GIpZR7fbC09b
-        vswCbXODcXBXIXCwREt6IBfZjKrz6722Prt8r2XjtQ==
-X-Google-Smtp-Source: ABdhPJxhGLBaazY1X0XxdFRD1fbdQdiuFWbQMhMjddSkpPS+9nVoe7eHxNfL0vqo7pYecWi6tpSi1Itb0ThaHuhtKN4=
-X-Received: by 2002:a1f:23d0:: with SMTP id j199mr8477163vkj.11.1604085713313;
- Fri, 30 Oct 2020 12:21:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <0000000000008caae305ab9a5318@google.com> <000000000000a726a405ada4b6cf@google.com>
- <CAFqZXNvQcjp201ahjLBhYJJCuYqZrYLGDA-wE3hXiJpRNgbTKg@mail.gmail.com>
- <CAJfpegtzQB09ind8tkYzaiu6ODJvhMKj3myxVS75vbjTcOxU8g@mail.gmail.com> <CACT4Y+Yyxdju4FR-E3bc5ERM6xhecnos6mkJR5==xS+RS_DUuw@mail.gmail.com>
-In-Reply-To: <CACT4Y+Yyxdju4FR-E3bc5ERM6xhecnos6mkJR5==xS+RS_DUuw@mail.gmail.com>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Fri, 30 Oct 2020 20:21:42 +0100
-Message-ID: <CAJfpegsAabASuHYtoi_DoooV1vM7Evfrd8ESZDDTx2oXHiR6cw@mail.gmail.com>
-Subject: Re: general protection fault in security_inode_getattr
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Ondrej Mosnacek <omosnace@redhat.com>,
-        syzbot <syzbot+f07cc9be8d1d226947ed@syzkaller.appspotmail.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        James Morris <jmorris@namei.org>,
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=nsaXaT+4r0OxSMEFB6ln4viCGb+YY29jtbW9XqB3Z9c=;
+        b=aQDGQ120ebcA9JqrnFoQf+q7f+vCpfOiYWZvEj/wzr6VhbkFWi8paVUnLdEhnR0qGO
+         U3UcZfmZpD7IEazsECdF/Hb1CYthw8ngbfuWK8T4ETZHTxy+i7TmeDABEAh9juhQdzwK
+         hvQSC5MDoIbNQKMa/zrppcJpobvpcKlIBP1Di0FgZ5uS9Vo1tQHx0RyNge7ibbOVqIGJ
+         ZwVFGXzubSmCI8v2XYQkfnO4DKd4miDnvuwJJwePqNOqlG8xC+xWucJ8wjWyIu537Lq/
+         wp6+ZebuKxtdZUNJQLkBdqFkwOJfohQF9k116v/ohFSiG0wvSYtuTuq/xYag7oNy17eD
+         0W+w==
+X-Gm-Message-State: AOAM532Y1sRx5ktHq3O1PMOtbk9zSRKtm1P9/j1NSFLke1GIcZN8FnF+
+        sQnFNcik4+8fRXSj1MwUzcf+3qymQx4p4Q==
+X-Google-Smtp-Source: ABdhPJyAVoMMFTK8y0GcmqDkM8YGJHdrnHcu9iZraGUdq8McAsBrMLlsaQbxZWz5du6f+4hk7uPBzA==
+X-Received: by 2002:a4a:83d7:: with SMTP id r23mr3089232oog.5.1604085869833;
+        Fri, 30 Oct 2020 12:24:29 -0700 (PDT)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id d26sm1500158otp.3.2020.10.30.12.24.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2020 12:24:29 -0700 (PDT)
+Date:   Fri, 30 Oct 2020 12:24:21 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>, bpf@vger.kernel.org
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        maze@google.com, lmb@cloudflare.com, shaun@tigera.io,
+        Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
         John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        network dev <netdev@vger.kernel.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Song Liu <songliubraving@fb.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Yonghong Song <yhs@fb.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        overlayfs <linux-unionfs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Jakub Kicinski <kuba@kernel.org>, eyal.birger@gmail.com
+Message-ID: <5f9c6865b0e4e_16d42081b@john-XPS-13-9370.notmuch>
+In-Reply-To: <160381601014.1435097.12501509708690649646.stgit@firesoul>
+References: <160381592923.1435097.2008820753108719855.stgit@firesoul>
+ <160381601014.1435097.12501509708690649646.stgit@firesoul>
+Subject: RE: [PATCH bpf-next V4 1/5] bpf: Remove MTU check in
+ __bpf_skb_max_len
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Oct 30, 2020 at 7:42 PM Dmitry Vyukov <dvyukov@google.com> wrote:
->
-> On Fri, Oct 30, 2020 at 2:02 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
-> >
-> > On Mon, Aug 24, 2020 at 11:00 PM Ondrej Mosnacek <omosnace@redhat.com> wrote:
-> > >
-> > > On Mon, Aug 24, 2020 at 9:37 PM syzbot
-> > > <syzbot+f07cc9be8d1d226947ed@syzkaller.appspotmail.com> wrote:
-> > > > syzbot has found a reproducer for the following issue on:
-> > >
-> > > Looping in fsdevel and OverlayFS maintainers, as this seems to be
-> > > FS/OverlayFS related...
-> >
-> > Hmm, the oopsing code is always something like:
-> >
-> > All code
-> > ========
-> >    0: 1b fe                sbb    %esi,%edi
-> >    2: 49 8d 5e 08          lea    0x8(%r14),%rbx
-> >    6: 48 89 d8              mov    %rbx,%rax
-> >    9: 48 c1 e8 03          shr    $0x3,%rax
-> >    d: 42 80 3c 38 00        cmpb   $0x0,(%rax,%r15,1)
-> >   12: 74 08                je     0x1c
-> >   14: 48 89 df              mov    %rbx,%rdi
-> >   17: e8 bc b4 5b fe        callq  0xfffffffffe5bb4d8
-> >   1c: 48 8b 1b              mov    (%rbx),%rbx
-> >   1f: 48 83 c3 68          add    $0x68,%rbx
-> >   23: 48 89 d8              mov    %rbx,%rax
-> >   26: 48 c1 e8 03          shr    $0x3,%rax
-> >   2a:* 42 80 3c 38 00        cmpb   $0x0,(%rax,%r15,1) <-- trapping instruction
-> >   2f: 74 08                je     0x39
-> >   31: 48 89 df              mov    %rbx,%rdi
-> >   34: e8 9f b4 5b fe        callq  0xfffffffffe5bb4d8
-> >   39: 48 8b 1b              mov    (%rbx),%rbx
-> >   3c: 48 83 c3 0c          add    $0xc,%rbx
-> >
-> >
-> > And that looks (to me) like the unrolled loop in call_int_hook().  I
-> > don't see how that could be related to overlayfs, though it's
-> > definitely interesting why it only triggers from
-> > overlay->vfs_getattr()->security_inode_getattr()...
->
->
-> >   26: 48 c1 e8 03          shr    $0x3,%rax
-> >   2a:* 42 80 3c 38 00        cmpb   $0x0,(%rax,%r15,1) <-- trapping instruction
->
->
-> This access is part of KASAN check. But the original address kernel
-> tries to access is NULL, so it's not an issue with KASAN.
->
-> The line is this:
->
-> int security_inode_getattr(const struct path *path)
-> {
->     if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
->         return 0;
->
-> So it's either path is NULL, or something in d_backing_inode
-> dereferences NULL path->dentry.
->
-> The reproducer does involve overlayfs:
->
-> mkdir(&(0x7f0000000240)='./file1\x00', 0x0)
-> mkdir(&(0x7f0000000300)='./bus\x00', 0x0)
-> r0 = creat(&(0x7f00000000c0)='./bus/file1\x00', 0x0)
-> mkdir(&(0x7f0000000080)='./file0\x00', 0x0)
-> mount$overlay(0x400002, &(0x7f0000000000)='./bus\x00',
-> &(0x7f0000000100)='overlay\x00', 0x0,
-> &(0x7f00000003c0)=ANY=[@ANYBLOB='upperdir=./file1,lowerdir=./bus,workdir=./file0,metacopy=on'])
-> link(&(0x7f0000000200)='./bus/file1\x00', &(0x7f00000002c0)='./bus/file0\x00')
-> write$RDMA_USER_CM_CMD_RESOLVE_ADDR(r0, 0x0, 0x0)
-> acct(&(0x7f0000000040)='./bus/file0\x00')
->
-> Though, it may be overlayfs-related, or it may be a generic bug that
-> requires a tricky reproducer and the only reproducer syzbot come up
-> with happened to involve overlayfs.
-> But there are 4 reproducers on syzbot dashboard and all of them
-> involve overlayfs and they are somewhat different. So my bet would be
-> on overlayfs.
+Jesper Dangaard Brouer wrote:
+> Multiple BPF-helpers that can manipulate/increase the size of the SKB uses
+> __bpf_skb_max_len() as the max-length. This function limit size against
+> the current net_device MTU (skb->dev->mtu).
+> 
+> When a BPF-prog grow the packet size, then it should not be limited to the
+> MTU. The MTU is a transmit limitation, and software receiving this packet
+> should be allowed to increase the size. Further more, current MTU check in
+> __bpf_skb_max_len uses the MTU from ingress/current net_device, which in
+> case of redirects uses the wrong net_device.
+> 
+> Patch V4 keeps a sanity max limit of SKB_MAX_ALLOC (16KiB). The real limit
+> is elsewhere in the system. Jesper's testing[1] showed it was not possible
+> to exceed 8KiB when expanding the SKB size via BPF-helper. The limiting
+> factor is the define KMALLOC_MAX_CACHE_SIZE which is 8192 for
+> SLUB-allocator (CONFIG_SLUB) in-case PAGE_SIZE is 4096. This define is
+> in-effect due to this being called from softirq context see code
+> __gfp_pfmemalloc_flags() and __do_kmalloc_node(). Jakub's testing showed
+> that frames above 16KiB can cause NICs to reset (but not crash). Keep this
+> sanity limit at this level as memory layer can differ based on kernel
+> config.
+> 
+> [1] https://github.com/xdp-project/bpf-examples/tree/master/MTU-tests
+> 
+> V3: replace __bpf_skb_max_len() with define and use IPv6 max MTU size.
+> 
+> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+> ---
 
-Seems there's no C reproducer, though.   Can this be reproduced
-without KASAN obfuscating the oops?
-
-Thanks,
-Miklos
+Acked-by: John Fastabend <john.fastabend@gmail.com>
