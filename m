@@ -2,167 +2,106 @@ Return-Path: <SRS0=hyEm=EF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2779C388F9
-	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 20:36:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A5F39C388F9
+	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 22:30:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 917C520797
-	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 20:36:30 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZOuYFIir"
+	by mail.kernel.org (Postfix) with ESMTP id 3BF9D221EB
+	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 22:30:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1604097033;
+	bh=1SEtV+7K6WPgubjmBr0YXBpynUzAYHX6x8Trau0hjY0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=JrnMp9Hjyn4AOXfbIhrjPU6jJdtgF1G4di+aE8wlKegqx7GFUMbRkWfeOMNhafPJF
+	 qjonAIch9YZy8jR3D6dSC9k9iU18d0u0aldPs/LVcLFC1zd4lEearnLNA/FB5x8Yk1
+	 3keTCfKR4MgFHIZo8vpSeOCS9GTY3ZDLqPs+Il+w=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727558AbgJ3UgW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 30 Oct 2020 16:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727535AbgJ3UgP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 30 Oct 2020 16:36:15 -0400
-Received: from mail-oo1-xc42.google.com (mail-oo1-xc42.google.com [IPv6:2607:f8b0:4864:20::c42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4A8C0613CF;
-        Fri, 30 Oct 2020 13:36:15 -0700 (PDT)
-Received: by mail-oo1-xc42.google.com with SMTP id l26so1888315oop.9;
-        Fri, 30 Oct 2020 13:36:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=ihg3mhJojtwO7pwU24A1IQ80IyOv+3PcZVgNS7+kyNQ=;
-        b=ZOuYFIirYbVtmTcomhC8JrIM/xZIHsmrUhC5miDAKiUGHU0DZNw3SoZNCYMhzyqS6o
-         qAt6rioZjfOE/vEQ+bPenCtGcfe8cxRrGS6xbspGWTMzQHduNMdLrNuGOARwcMuZX2GX
-         dDY58/W8dLcHbLfR81C0P82gZQDLoC6aeP/W3N7zfyj/FR0AjrLCVQm8TfXr97XwyOVs
-         px79vtOFWWP0emFCOLTzB/mNx7je6diPqTWlhREdOd/9BJtQCwMtkfcIoElSpbRGBh0X
-         xxqzkrCjEgGOPKO76cVvwdGRG70Bm1NnRyL3iqJMfEQ1UOPTaLxWBF6nTZKCbUQY6Ywr
-         1mjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=ihg3mhJojtwO7pwU24A1IQ80IyOv+3PcZVgNS7+kyNQ=;
-        b=CsMLbWGgMtfy9qV7f0VOz3RVv94ekPGZDwBPIiZkTbsKFMQ86wkl+1BderbRGNzksJ
-         z5+evxO+qTiD23e6U7566KbDBrPfaojlpsfW2u+7GiYoDm5W1ucWtSGGA6zMlIu4vwM1
-         yN8Q3MRntfXmlXDmZO5J5sybxZ9qRp8Msb5ulgWFR/he03JRuqE6pMNwJwT+RIlbU3vT
-         KgvCFOQ2ixko9iN4lhiuyQUaYEoCyb6+mk7z9WBjQP23BwTFBgCoR4OhGrFGnaJR1T/R
-         AOfpLJc1llMCBikGrXP29L/svYlG1kJetupYNEgeqhZ5qNwJKgFHBKEHWEWJOZ/9E5vu
-         bLGg==
-X-Gm-Message-State: AOAM530FNQIelLKp8qm4VoBllocrLCtZvWcRMiUD7w6nE0lswE9Z6hbS
-        KygpFrE4bXW5hngtTGj2ltwzWpR57kRglQ==
-X-Google-Smtp-Source: ABdhPJx/0VqE4OOxeSkRkcbYdqrTTzlC8OrjQFBeSqVvQ+NHLPGYt/y4tVgOyVSlhhS+79ed4khWsg==
-X-Received: by 2002:a4a:5182:: with SMTP id s124mr3298150ooa.88.1604090174670;
-        Fri, 30 Oct 2020 13:36:14 -0700 (PDT)
-Received: from localhost ([184.63.162.180])
-        by smtp.gmail.com with ESMTPSA id s27sm1570253otg.80.2020.10.30.13.36.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2020 13:36:14 -0700 (PDT)
-Date:   Fri, 30 Oct 2020 13:36:05 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>, bpf@vger.kernel.org
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        maze@google.com, lmb@cloudflare.com, shaun@tigera.io,
-        Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>, eyal.birger@gmail.com
-Message-ID: <5f9c7935c6991_16d420838@john-XPS-13-9370.notmuch>
-In-Reply-To: <160407666748.1525159.1515139110258948831.stgit@firesoul>
-References: <160407661383.1525159.12855559773280533146.stgit@firesoul>
- <160407666748.1525159.1515139110258948831.stgit@firesoul>
-Subject: RE: [PATCH bpf-next V5 4/5] bpf: drop MTU check when doing TC-BPF
- redirect to ingress
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        id S1725909AbgJ3Wac (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 30 Oct 2020 18:30:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35538 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725780AbgJ3Wac (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 30 Oct 2020 18:30:32 -0400
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 76F05221EB;
+        Fri, 30 Oct 2020 22:30:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604097031;
+        bh=1SEtV+7K6WPgubjmBr0YXBpynUzAYHX6x8Trau0hjY0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PFkdvN/uN9mwQJ+RX4cJkafCuiraa/ClnR4xIV6pv4X4aAUln6IbnhWR2rPiG2PDf
+         KyTty//Nrb1jVh5HpeLzwv0nhZocvCGg3o5cX5yUNPQDyNnQHEkcgyDMG6AzXLqvQe
+         6u+IQ7D9/fQB+tyWNDpK7Q4vM3YuHL5MCA9tm+4k=
+Received: by mail-lf1-f50.google.com with SMTP id b1so9777512lfp.11;
+        Fri, 30 Oct 2020 15:30:31 -0700 (PDT)
+X-Gm-Message-State: AOAM531x6jSz/5sMJsbjMb1lnuUNT9Cfc1YKRqkWcpZoxL5oelc+dw9N
+        bIfegCmU7xitDZ567+Z8XoB4asuE5pCiMXWrPFg=
+X-Google-Smtp-Source: ABdhPJzBOsmHcOgFpWu50Y+0W3w/cW4Zma33T1uq8r0sgrEgI4b1bnx7rbJvjFkshhwvSIx7y56JXfOI4P5gcm8EXCE=
+X-Received: by 2002:a19:c703:: with SMTP id x3mr1653157lff.105.1604097029626;
+ Fri, 30 Oct 2020 15:30:29 -0700 (PDT)
+MIME-Version: 1.0
+References: <20201029005902.1706310-1-andrii@kernel.org> <20201029005902.1706310-3-andrii@kernel.org>
+ <CAPhsuW6DxoRjBPJEgwzEtmVt-Uunw-MAmAF2tgh-ksjcKuJ4Bw@mail.gmail.com> <CAEf4Bzaj6mfLPtMbXBNJ9Z2E4AKS8W4vcYG6OGuO_XftAqKBeQ@mail.gmail.com>
+In-Reply-To: <CAEf4Bzaj6mfLPtMbXBNJ9Z2E4AKS8W4vcYG6OGuO_XftAqKBeQ@mail.gmail.com>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 30 Oct 2020 15:30:18 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5yKwo47uhpJVqGNvQBDw2w7adkZYfW9nk9Uk0RKRC-og@mail.gmail.com>
+Message-ID: <CAPhsuW5yKwo47uhpJVqGNvQBDw2w7adkZYfW9nk9Uk0RKRC-og@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 02/11] selftest/bpf: relax btf_dedup test checks
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <kernel-team@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Jesper Dangaard Brouer wrote:
-> The use-case for dropping the MTU check when TC-BPF does redirect to
-> ingress, is described by Eyal Birger in email[0]. The summary is the
-> ability to increase packet size (e.g. with IPv6 headers for NAT64) and
-> ingress redirect packet and let normal netstack fragment packet as needed.
-> 
-> [0] https://lore.kernel.org/netdev/CAHsH6Gug-hsLGHQ6N0wtixdOa85LDZ3HNRHVd0opR=19Qo4W4Q@mail.gmail.com/
-> 
-> V4:
->  - Keep net_device "up" (IFF_UP) check.
->  - Adjustment to handle bpf_redirect_peer() helper
-> 
-> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-> ---
->  include/linux/netdevice.h |   31 +++++++++++++++++++++++++++++--
->  net/core/dev.c            |   19 ++-----------------
->  net/core/filter.c         |   14 +++++++++++---
->  3 files changed, 42 insertions(+), 22 deletions(-)
-> 
-> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> index 964b494b0e8d..bd02ddab8dfe 100644
-> --- a/include/linux/netdevice.h
-> +++ b/include/linux/netdevice.h
-> @@ -3891,11 +3891,38 @@ int dev_forward_skb(struct net_device *dev, struct sk_buff *skb);
->  bool is_skb_forwardable(const struct net_device *dev,
->  			const struct sk_buff *skb);
->  
-> +static __always_inline bool __is_skb_forwardable(const struct net_device *dev,
-> +						 const struct sk_buff *skb,
-> +						 const bool check_mtu)
+On Fri, Oct 30, 2020 at 11:45 AM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+[...]
+> > > @@ -6775,10 +6774,15 @@ static void do_test_dedup(unsigned int test_num)
+> > >                         err = -1;
+> > >                         goto done;
+> > >                 }
+> > > -               if (CHECK(memcmp((void *)test_type,
+> > > -                                (void *)expect_type,
+> > > -                                test_size),
+> > > -                         "type #%d: contents differ", i)) {
+> >
+> > I guess test_size and expect_size are not needed anymore?
+>
+> hm.. they are used just one check above, still needed
 
-It looks like if check_mtu=false then this is just an interface up check.
-Can we leave is_skb_forwardable logic alone and just change the spots where
-this is called with false to something with a name that describes the check,
-such as is_dev_up(dev). I think it will make this change smaller and the
-code easier to read. Did I miss something?
+Hmm... I don't know what happened to me back then.. Please ignore.
 
-> +{
-> +	const u32 vlan_hdr_len = 4; /* VLAN_HLEN */
-> +	unsigned int len;
-> +
-> +	if (!(dev->flags & IFF_UP))
-> +		return false;
-> +
-> +	if (!check_mtu)
-> +		return true;
-> +
-> +	len = dev->mtu + dev->hard_header_len + vlan_hdr_len;
-> +	if (skb->len <= len)
-> +		return true;
-> +
-> +	/* if TSO is enabled, we don't care about the length as the packet
-> +	 * could be forwarded without being segmented before
-> +	 */
-> +	if (skb_is_gso(skb))
-> +		return true;
-> +
-> +	return false;
-> +}
-> +
->  static __always_inline int ____dev_forward_skb(struct net_device *dev,
-> -					       struct sk_buff *skb)
-> +					       struct sk_buff *skb,
-> +					       const bool check_mtu)
->  {
+>
+> >
+> > > +               if (CHECK(btf_kind(test_type) != btf_kind(expect_type),
+> > > +                         "type %d kind: exp %d != got %u\n",
+> > > +                         i, btf_kind(expect_type), btf_kind(test_type))) {
+> > > +                       err = -1;
+> > > +                       goto done;
+> > > +               }
+> > > +               if (CHECK(test_type->info != expect_type->info,
+> > > +                         "type %d info: exp %d != got %u\n",
+> > > +                         i, expect_type->info, test_type->info)) {
+> >
+> > btf_kind() returns part of ->info, so we only need the second check, no?
+>
+> technically yes, but when kind mismatches, figuring that out from raw
+> info field is quite painful, so having a better, more targeted check
+> is still good.
 
-I guess you will get some duplication here if you have a dev_forward_skb()
-and a dev_forward_skb_nocheck() or something. Take it or leave it. I know
-I've added my share of bool swivel bits like this, but better to avoid
-it if possible IMO.
+Fair enough. We can have a more clear check.
 
-Other than style aspects it looks correct to me.
-
->  	if (skb_orphan_frags(skb, GFP_ATOMIC) ||
-> -	    unlikely(!is_skb_forwardable(dev, skb))) {
-> +	    unlikely(!__is_skb_forwardable(dev, skb, check_mtu))) {
->  		atomic_long_inc(&dev->rx_dropped);
->  		kfree_skb(skb);
->  		return NET_RX_DROP;
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 9499a414d67e..445ccf92c149 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -2188,28 +2188,13 @@ static inline void net_timestamp_set(struct sk_buff *skb)
->  
+Thanks,
+Song
