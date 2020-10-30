@@ -2,109 +2,169 @@ Return-Path: <SRS0=hyEm=EF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.5 required=3.0 tests=BAYES_00,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5B15C00A89
-	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 19:16:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 684B8C5517A
+	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 19:22:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 71D782072C
-	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 19:16:53 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 178FA2222F
+	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 19:22:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bLZMTp89"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=szeredi.hu header.i=@szeredi.hu header.b="SuJtxiwk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727323AbgJ3TQt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 30 Oct 2020 15:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51658 "EHLO
+        id S1727524AbgJ3TW2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 30 Oct 2020 15:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726693AbgJ3TQj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 30 Oct 2020 15:16:39 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650EFC0613CF
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2020 12:16:39 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id i18so1820445ots.0
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2020 12:16:39 -0700 (PDT)
+        with ESMTP id S1727641AbgJ3TVy (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 30 Oct 2020 15:21:54 -0400
+Received: from mail-vk1-xa42.google.com (mail-vk1-xa42.google.com [IPv6:2607:f8b0:4864:20::a42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC35C0613D8
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2020 12:21:54 -0700 (PDT)
+Received: by mail-vk1-xa42.google.com with SMTP id u202so1694192vkb.4
+        for <bpf@vger.kernel.org>; Fri, 30 Oct 2020 12:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=ETmLqyudWdwsXw7h+1qB3Egpb5agg4/veOj74MbPzAA=;
-        b=bLZMTp89K92g3jDGpV4wE/NzKncR1zk5Lpxv3s2LZ3qRvCNXZSs3duuYCfdEHfLrCF
-         To3xmw3TdtC63CbdyNHYYqsyOBcr0tXNeSnR8xgJFjuGmWglqrr4wSsnl61KYwLBAFaD
-         iLC+40Grovjv7ZBWOC37qkxBXflrRKdoyQercXHoVoItM3Nu1nIOtjBi76o0DdpP1xR2
-         VpknLT3fkWweECDSGt0Jrx4U4EelQaqkoJdlaN0WWKWBtd1OAHgDknBfXzc/DBTRkNZx
-         9PpvqgrFwEsuDZw5awIfrlic/xBbMLwZ9E9xK/D9JYZ0X7+GOXogt35U20YGkyxS4OTm
-         w86Q==
+        d=szeredi.hu; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8I5vCt7sQpLxqO9fFZglUpeymmnJZb+1HjzCHkxiFnI=;
+        b=SuJtxiwkoB6tT6rUkiqexK55I2Znto0HzbzoxVsqOK/P6c9gFQuP6oaZkgRXt529ZU
+         a+bJWmyqi0+flho90rhtlkwHEs/7it0kmTdVLD/LJTnan7DMQe7EUfH5HwKopELvdr6c
+         zUX1a7CTPjVwz/VH/TBiLoorR+ZXggEpvShSQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=ETmLqyudWdwsXw7h+1qB3Egpb5agg4/veOj74MbPzAA=;
-        b=VVV43r26FkkDGgv+i258wOtuGPBLCbqCFr7iPVJDinYtSHeHHo4cfeRS5/o7xTPNl8
-         lZIRANwaaCAdtLoRZNZJC5DIQxxgJO4NzWbNHBNr3AB2QDEG0cpU/Spb9GmHymFtJcQ5
-         i5dznPWU/IP/Z40zkn6kIfkAtyZTFXmt+BHfQn4geprBmzJWHMhGQoKn5HQLLpoUN/q8
-         PWf4UiYlBKOQlXZWBR1ieCA/+6SfH8KoJFnmQIDy8MroqggiSx+NmY6FpsRH7CiRdo2M
-         oJPjEeG9dvwbPYYX12Vi+Inn3IzUzqN6uTzB29faTxVr1q6WGATGvl4i17oA+7/A40Sr
-         xyjQ==
-X-Gm-Message-State: AOAM530shHrFGAJxj0zSJQdqvPSjkKiM01kGOhRVYvxs6SHPALpZplMw
-        NnkwJolJFTg3icTEGwJic/k=
-X-Google-Smtp-Source: ABdhPJzloQyHiSuNiVouJPVgly645hTwmVFa1eBRnUURPIk1jH8iyd8lcAJ4566CVZ3Kthrec2GCag==
-X-Received: by 2002:a9d:eca:: with SMTP id 68mr2666323otj.141.1604085398877;
-        Fri, 30 Oct 2020 12:16:38 -0700 (PDT)
-Received: from localhost ([184.63.162.180])
-        by smtp.gmail.com with ESMTPSA id h7sm1543300oop.40.2020.10.30.12.16.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Oct 2020 12:16:38 -0700 (PDT)
-Date:   Fri, 30 Oct 2020 12:16:29 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Kevin Sheldrake <Kevin.Sheldrake@microsoft.com>
-Cc:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        KP Singh <kpsingh@google.com>
-Message-ID: <5f9c668d9a55a_16d420895@john-XPS-13-9370.notmuch>
-In-Reply-To: <CAEf4Bza-KX7C5ghXSVs30R_xkKtqjDwM8snH2B2A_VCAxSim2g@mail.gmail.com>
-References: <VI1PR8303MB008003C9E3B937033A593C47FB150@VI1PR8303MB0080.EURPRD83.prod.outlook.com>
- <CAEf4Bza-KX7C5ghXSVs30R_xkKtqjDwM8snH2B2A_VCAxSim2g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: update verifier to stop perf ring buffer
- corruption
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8I5vCt7sQpLxqO9fFZglUpeymmnJZb+1HjzCHkxiFnI=;
+        b=ktuKjKULBlYbJI0p3lH+AnmcJ01s/nZpthDR0OuurRw39t2+7LXIBY+RyK0eJCTKpQ
+         JnmHGbQ9E1lIVgfbhtrKZNN9tO2s0uu9mW55kblkcsu+D8w4wYHbToMmQJe8MCW8RCTN
+         RbjioMampoCEkbcpsCwjt23UuK9lw0xNqe76X2FVsJalI6LAJXdXcUfowrj0GiN18dZw
+         tZ2wybJ1ovsyEQE68GkKASPCmSsbC0BjhIiQS0cLyvB52mDs/a7OR/2JD2e4a1SqwIrP
+         AkI9pHnR8hJ7lWhTS6UqfrCZ58t4m32y9rCXhCRFXUHzeZ3efeCFkSzV7h0TTTNz9Pe0
+         fOng==
+X-Gm-Message-State: AOAM532+orIehXGmSsKBeWQd/i5EWjeU8rmzPEhnEzM4GIpZR7fbC09b
+        vswCbXODcXBXIXCwREt6IBfZjKrz6722Prt8r2XjtQ==
+X-Google-Smtp-Source: ABdhPJxhGLBaazY1X0XxdFRD1fbdQdiuFWbQMhMjddSkpPS+9nVoe7eHxNfL0vqo7pYecWi6tpSi1Itb0ThaHuhtKN4=
+X-Received: by 2002:a1f:23d0:: with SMTP id j199mr8477163vkj.11.1604085713313;
+ Fri, 30 Oct 2020 12:21:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <0000000000008caae305ab9a5318@google.com> <000000000000a726a405ada4b6cf@google.com>
+ <CAFqZXNvQcjp201ahjLBhYJJCuYqZrYLGDA-wE3hXiJpRNgbTKg@mail.gmail.com>
+ <CAJfpegtzQB09ind8tkYzaiu6ODJvhMKj3myxVS75vbjTcOxU8g@mail.gmail.com> <CACT4Y+Yyxdju4FR-E3bc5ERM6xhecnos6mkJR5==xS+RS_DUuw@mail.gmail.com>
+In-Reply-To: <CACT4Y+Yyxdju4FR-E3bc5ERM6xhecnos6mkJR5==xS+RS_DUuw@mail.gmail.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Fri, 30 Oct 2020 20:21:42 +0100
+Message-ID: <CAJfpegsAabASuHYtoi_DoooV1vM7Evfrd8ESZDDTx2oXHiR6cw@mail.gmail.com>
+Subject: Re: general protection fault in security_inode_getattr
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Ondrej Mosnacek <omosnace@redhat.com>,
+        syzbot <syzbot+f07cc9be8d1d226947ed@syzkaller.appspotmail.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        James Morris <jmorris@namei.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        network dev <netdev@vger.kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Song Liu <songliubraving@fb.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Yonghong Song <yhs@fb.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        overlayfs <linux-unionfs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Andrii Nakryiko wrote:
-> On Fri, Oct 30, 2020 at 5:08 AM Kevin Sheldrake
-> <Kevin.Sheldrake@microsoft.com> wrote:
+On Fri, Oct 30, 2020 at 7:42 PM Dmitry Vyukov <dvyukov@google.com> wrote:
+>
+> On Fri, Oct 30, 2020 at 2:02 PM Miklos Szeredi <miklos@szeredi.hu> wrote:
 > >
-> > As discussed, bpf_perf_event_output() takes a u64 for the sample size parameter but the perf ring buffer uses a u16 internally.  This results in overlapping samples where the total sample size (including header/padding) exceeds 64K, and prevents samples from being submitted when the total sample size ==  64K.
+> > On Mon, Aug 24, 2020 at 11:00 PM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+> > >
+> > > On Mon, Aug 24, 2020 at 9:37 PM syzbot
+> > > <syzbot+f07cc9be8d1d226947ed@syzkaller.appspotmail.com> wrote:
+> > > > syzbot has found a reproducer for the following issue on:
+> > >
+> > > Looping in fsdevel and OverlayFS maintainers, as this seems to be
+> > > FS/OverlayFS related...
+> >
+> > Hmm, the oopsing code is always something like:
+> >
+> > All code
+> > ========
+> >    0: 1b fe                sbb    %esi,%edi
+> >    2: 49 8d 5e 08          lea    0x8(%r14),%rbx
+> >    6: 48 89 d8              mov    %rbx,%rax
+> >    9: 48 c1 e8 03          shr    $0x3,%rax
+> >    d: 42 80 3c 38 00        cmpb   $0x0,(%rax,%r15,1)
+> >   12: 74 08                je     0x1c
+> >   14: 48 89 df              mov    %rbx,%rdi
+> >   17: e8 bc b4 5b fe        callq  0xfffffffffe5bb4d8
+> >   1c: 48 8b 1b              mov    (%rbx),%rbx
+> >   1f: 48 83 c3 68          add    $0x68,%rbx
+> >   23: 48 89 d8              mov    %rbx,%rax
+> >   26: 48 c1 e8 03          shr    $0x3,%rax
+> >   2a:* 42 80 3c 38 00        cmpb   $0x0,(%rax,%r15,1) <-- trapping instruction
+> >   2f: 74 08                je     0x39
+> >   31: 48 89 df              mov    %rbx,%rdi
+> >   34: e8 9f b4 5b fe        callq  0xfffffffffe5bb4d8
+> >   39: 48 8b 1b              mov    (%rbx),%rbx
+> >   3c: 48 83 c3 0c          add    $0xc,%rbx
+> >
+> >
+> > And that looks (to me) like the unrolled loop in call_int_hook().  I
+> > don't see how that could be related to overlayfs, though it's
+> > definitely interesting why it only triggers from
+> > overlay->vfs_getattr()->security_inode_getattr()...
+>
+>
+> >   26: 48 c1 e8 03          shr    $0x3,%rax
+> >   2a:* 42 80 3c 38 00        cmpb   $0x0,(%rax,%r15,1) <-- trapping instruction
+>
+>
+> This access is part of KASAN check. But the original address kernel
+> tries to access is NULL, so it's not an issue with KASAN.
+>
+> The line is this:
+>
+> int security_inode_getattr(const struct path *path)
+> {
+>     if (unlikely(IS_PRIVATE(d_backing_inode(path->dentry))))
+>         return 0;
+>
+> So it's either path is NULL, or something in d_backing_inode
+> dereferences NULL path->dentry.
+>
+> The reproducer does involve overlayfs:
+>
+> mkdir(&(0x7f0000000240)='./file1\x00', 0x0)
+> mkdir(&(0x7f0000000300)='./bus\x00', 0x0)
+> r0 = creat(&(0x7f00000000c0)='./bus/file1\x00', 0x0)
+> mkdir(&(0x7f0000000080)='./file0\x00', 0x0)
+> mount$overlay(0x400002, &(0x7f0000000000)='./bus\x00',
+> &(0x7f0000000100)='overlay\x00', 0x0,
+> &(0x7f00000003c0)=ANY=[@ANYBLOB='upperdir=./file1,lowerdir=./bus,workdir=./file0,metacopy=on'])
+> link(&(0x7f0000000200)='./bus/file1\x00', &(0x7f00000002c0)='./bus/file0\x00')
+> write$RDMA_USER_CM_CMD_RESOLVE_ADDR(r0, 0x0, 0x0)
+> acct(&(0x7f0000000040)='./bus/file0\x00')
+>
+> Though, it may be overlayfs-related, or it may be a generic bug that
+> requires a tricky reproducer and the only reproducer syzbot come up
+> with happened to involve overlayfs.
+> But there are 4 reproducers on syzbot dashboard and all of them
+> involve overlayfs and they are somewhat different. So my bet would be
+> on overlayfs.
 
-[...]
+Seems there's no C reproducer, though.   Can this be reproduced
+without KASAN obfuscating the oops?
 
-> >Also I don't know what the size reduction of -24 relates to (it doesn't match any header struct I've found) but it was found through experimentation.
-> 
-> So -24 should have been a clue that something fishy is going on. Look
-> at perf_prepare_sample() in kernel/events/core.c. header->size (which
-> is u16) contains the entire size of the data in the perf event. This
-> includes raw data that you send with bpf_perf_event_output(), but it
-> can also have tons of other stuff (e.g., call stacks, LBR data, etc).
-> What gets added to the perf sample depends on how the perf event was
-> configured in the first place. And it happens automatically on each
-> perf event output.
-> 
-> So, all that means that there could be no reliable static check in the
-> verifier which would prevent the corruption. It has to be checked by
-> perf_prepare_sample() in runtime based on the actual size of the
-> sample. We can do an extra check in verifier, but I wouldn't bother
-> because it's never going to be 100% correct.
-
-Please don't add the check in the verifier if its not 100% correct. I
-think that will confuse readers and make it appear "safe" when it is
-not. Even if you add a big warning comment there it will make the error
-case harder to hit. So lets just solve it as Andrii notes. My $.02
-
-Thanks.
+Thanks,
+Miklos
