@@ -2,97 +2,130 @@ Return-Path: <SRS0=hyEm=EF=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F572C00A89
-	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 19:26:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 767A6C55178
+	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 19:40:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EA85920739
-	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 19:26:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 09F8B206CB
+	for <bpf@archiver.kernel.org>; Fri, 30 Oct 2020 19:40:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pzahXt25"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MaVONzX2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727707AbgJ3TYt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 30 Oct 2020 15:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
+        id S1727230AbgJ3Tkp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 30 Oct 2020 15:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727719AbgJ3TYq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 30 Oct 2020 15:24:46 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943BDC0613D5
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2020 12:24:46 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id a7so9255277lfk.9
-        for <bpf@vger.kernel.org>; Fri, 30 Oct 2020 12:24:46 -0700 (PDT)
+        with ESMTP id S1726607AbgJ3Tkb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 30 Oct 2020 15:40:31 -0400
+Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD31C0613D2;
+        Fri, 30 Oct 2020 12:40:31 -0700 (PDT)
+Received: by mail-ot1-x341.google.com with SMTP id i18so1883662ots.0;
+        Fri, 30 Oct 2020 12:40:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=abdnn1aLwrD2IENap20k3wTn5YnXWcerHLaxedFloWs=;
-        b=pzahXt25ftmIlECCNdzBGRH9RP5/phCMd9ilpAa5PAECfwsYXVeY0DSmhD68iGqYPZ
-         NgFp0fW27VDKAarsqPlRaGlDExh1uKLxViCss4yRzvI0RvdJuDbwJxy3MiMSmrfb2lf4
-         UJ2l0E7MBLpT4mf1Qo8a800BcMFWbk7E/vIBURoS1zMqzZ+7LaGEnRa+g52I2Zgq2Lfp
-         SBsGeG66UACfIfh/Sl158f5JmueCza5B/WvSzkUGttF3AIC6g9r95SY04P6DGjd1/r46
-         DB4290ojIyQbmI7tBjqYsDYz5YrvWM8H4kzPAdEe7ShWGdTqNylA35SI7lZ3gCugE0Uv
-         QABA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=gWR7GXD+A3nP28R5gy8PB5/5HzBDjhKdxtj8DfG8v9A=;
+        b=MaVONzX2Vr0YbQ4kLdGl7/G4kZ4+9hNtKVTpNYqC3m6wUQjmZOvcittmYyiD5Jenbm
+         xtH/JlMowgfrIZNq0VuWVrc3Y6qZYdEfQMRGlx4V2NnwzV2t5c1Mn69hihlW0MEOhYz/
+         zZ7ivYZ89HEdPyfh5ZoivWK4YfhdUoYmfQKQF7Q9f1zl6B+imegjzk8ltzFd2GHr0rAu
+         T6SVfR4U6f27yHT2UPq5kUtUmeGnHhhtPSerXnOM7RfBZosOl9OweD4tvn5DSZ2JSzDt
+         W6iXQoByiRffLZDP0EF9hqFXZehZyGRhFIzKectWRdWE4zyfMTIfD++rRNhuy+NmWO/o
+         1AuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=abdnn1aLwrD2IENap20k3wTn5YnXWcerHLaxedFloWs=;
-        b=j9JzFwEobRpzBDZI2u/PyH/6kz0izXaso4R6FxUptds2G4RNK/T/wOPKOrdJvydQ7i
-         rfTIeucFZte/vWzDYQHh+gdAxuaNdy/lkF/iPRN3QEA/G2e1efaOob6shoA+9hgpMUOd
-         GGFNdweZaPHvzvGcFreYcdjZ7c67FeeD4V5nWdiGnDq8+yGZ+IOfqKvB1CmuOaTJkknM
-         a0oq/M1D/D8AGWDApMbBXDRlbw0upxvnlYQPoh/2Gl0WOstY/C0UbkR7goIBb6hEYAzp
-         OauY6DlmHpYPjmH0txMnfFTZNn1a595cD5ffopL9vOA/6Cqg/mH2bqzTB39wyuL2Q8nK
-         xV8A==
-X-Gm-Message-State: AOAM533UUvRJV2CafAVKxu/XvjP2SgrWV5qziuHL12RFDFUqywSc8rfx
-        M6WTN+SjHhGlzRHQI9a4/xRRn96dlmCioE0OzfXXBw==
-X-Google-Smtp-Source: ABdhPJztV7eDIdpjXuwWdsQQHK9/EMBt9Y0h0rMl3PMT3/K3SOLSbQwh6j3ZsZyUYuUwItLlGKBUIS59RQSVLDYi5zo=
-X-Received: by 2002:a05:6512:1182:: with SMTP id g2mr1454663lfr.198.1604085884817;
- Fri, 30 Oct 2020 12:24:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <63598b4f-6ce3-5a11-4552-cdfe308f68e4@gmail.com>
- <20201029152609.k3urvzjocf3s7uml@gmail.com> <91b74ce1-de95-2b92-c62e-e2715d6071d3@gmail.com>
-In-Reply-To: <91b74ce1-de95-2b92-c62e-e2715d6071d3@gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Fri, 30 Oct 2020 20:24:18 +0100
-Message-ID: <CAG48ez0TZrwBoEi4d6n+FUN19hq6Pc+DOGNrRb-zHDSZVm9kfw@mail.gmail.com>
-Subject: Re: For review: seccomp_user_notif(2) manual page [v2]
-To:     "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Cc:     Christian Brauner <christian.brauner@canonical.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Song Liu <songliubraving@fb.com>,
-        Will Drewry <wad@chromium.org>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-man <linux-man@vger.kernel.org>,
-        Robert Sesek <rsesek@google.com>,
-        Containers <containers@lists.linux-foundation.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Christian Brauner <christian@brauner.io>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=gWR7GXD+A3nP28R5gy8PB5/5HzBDjhKdxtj8DfG8v9A=;
+        b=J1zUZY6So76Fa3IHaV8d2IyuBE449R9o6VDe7e8qc48pRlvCpHmKjcip9YFnF7TF9O
+         hD9X7p0HbiI2mqfg7E/B9g2wVsQvhMSv5fzBkOT5KbetjtKiuDV0NiUA1aULk+g3TT5s
+         O7aaKTyyCfMGu5oxVqQOWkD7KGIYC7a844UUTWAOb2e4qn8KvkR5Wr+X5JDs0hVTCQtG
+         vXoPgEm0rQyoq53SN6BwY6RcfWhtrcW3+NUWNBoRDhA4Y2FOCeiicPIdVtWZFvFlSoa3
+         9v0J42nf7rUqxF7No7/2j+yUfxkPwba4vJTkPTeCi3Tzfd58v6oDAwlfrk3e2KG+cq4V
+         4d7g==
+X-Gm-Message-State: AOAM530u7NcgaAu/MFjkozrQnpc3aHuNgzqhvGK1ofa356pAiYZdp899
+        5kkTtYppTflYhFJ7eQw78As=
+X-Google-Smtp-Source: ABdhPJwaklQ8F1QAciRpc0Xw4LnbAkaVfau8CjsfSVvlTGHx3elUFOtlGTDf9GkyiwQ9QjOtKzWfcg==
+X-Received: by 2002:a05:6830:19e1:: with SMTP id t1mr3067313ott.196.1604086830584;
+        Fri, 30 Oct 2020 12:40:30 -0700 (PDT)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id w79sm368344oia.28.2020.10.30.12.40.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Oct 2020 12:40:29 -0700 (PDT)
+Date:   Fri, 30 Oct 2020 12:40:21 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>, bpf@vger.kernel.org
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        maze@google.com, lmb@cloudflare.com, shaun@tigera.io,
+        Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>, eyal.birger@gmail.com
+Message-ID: <5f9c6c259dfe5_16d420817@john-XPS-13-9370.notmuch>
+In-Reply-To: <160407665728.1525159.18300199766779492971.stgit@firesoul>
+References: <160407661383.1525159.12855559773280533146.stgit@firesoul>
+ <160407665728.1525159.18300199766779492971.stgit@firesoul>
+Subject: RE: [PATCH bpf-next V5 2/5] bpf: bpf_fib_lookup return MTU value as
+ output when looked up
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Oct 29, 2020 at 8:53 PM Michael Kerrisk (man-pages)
-<mtk.manpages@gmail.com> wrote:
-> On 10/29/20 4:26 PM, Christian Brauner wrote:
-> > I like this manpage. I think this is the most comprehensive explanation
-> > of any seccomp feature
->
-> Thanks (at least, I think so...)
->
-> > and somewhat understandable.
->       ^^^^^^^^
->
-> (... but I'm not sure ;-).)
+Jesper Dangaard Brouer wrote:
+> The BPF-helpers for FIB lookup (bpf_xdp_fib_lookup and bpf_skb_fib_lookup)
+> can perform MTU check and return BPF_FIB_LKUP_RET_FRAG_NEEDED.  The BPF-prog
+> don't know the MTU value that caused this rejection.
+> 
+> If the BPF-prog wants to implement PMTU (Path MTU Discovery) (rfc1191) it
+> need to know this MTU value for the ICMP packet.
+> 
+> Patch change lookup and result struct bpf_fib_lookup, to contain this MTU
+> value as output via a union with 'tot_len' as this is the value used for
+> the MTU lookup.
+> 
+> V5:
+>  - Fixed uninit value spotted by Dan Carpenter.
+>  - Name struct output member mtu_result
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+> ---
+>  include/uapi/linux/bpf.h       |   11 +++++++++--
+>  net/core/filter.c              |   22 +++++++++++++++-------
+>  tools/include/uapi/linux/bpf.h |   11 +++++++++--
+>  3 files changed, 33 insertions(+), 11 deletions(-)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index e6ceac3f7d62..01b2b17c645a 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -2219,6 +2219,9 @@ union bpf_attr {
+>   *		* > 0 one of **BPF_FIB_LKUP_RET_** codes explaining why the
+>   *		  packet is not forwarded or needs assist from full stack
+>   *
+> + *		If lookup fails with BPF_FIB_LKUP_RET_FRAG_NEEDED, then the MTU
+> + *		was exceeded and result params->mtu contains the MTU.
+> + *
 
-Relevant: http://tinefetz.net/files/gimgs/78_78_17.jpg
+Do we need to hide this behind a flag? It seems otherwise you might confuse
+users. I imagine on error we could reuse the params arg, but now we changed
+the tot_len value underneath them?
+
+>   * long bpf_sock_hash_update(struct bpf_sock_ops *skops, struct bpf_map *map, void *key, u64 flags)
+>   *	Description
+>   *		Add an entry to, or update a sockhash *map* referencing sockets.
+> @@ -4872,9 +4875,13 @@ struct bpf_fib_lookup {
+>  	__be16	sport;
+>  	__be16	dport;
