@@ -2,126 +2,233 @@ Return-Path: <SRS0=K04J=EG=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A9C02C00A89
-	for <bpf@archiver.kernel.org>; Sat, 31 Oct 2020 00:02:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 618A8C388F7
+	for <bpf@archiver.kernel.org>; Sat, 31 Oct 2020 08:33:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5942B221EB
-	for <bpf@archiver.kernel.org>; Sat, 31 Oct 2020 00:02:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604102576;
-	bh=XcayW/yJcfpBZonnL860+1oal+jGF2JlNLnO8iX0Adg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=Xk2aJH9Qz6BAjZxXE54Wg+5e47I3aFMT4/ekFwoewhT3DQp4lrkLqzCQo4QduGmmP
-	 rSdhCHXQGDD7autgtCH9zBKXebsvnGB68bjkv9CbJ2F7Onltm1dQAfgIZueAott1CS
-	 awIZ8D7OeH7k1BA4du3Cs/1JHtZvJkot72qRJJ80=
+	by mail.kernel.org (Postfix) with ESMTP id 178132076D
+	for <bpf@archiver.kernel.org>; Sat, 31 Oct 2020 08:33:36 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nkyMxNml"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725536AbgJaACz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 30 Oct 2020 20:02:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60668 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725806AbgJaACz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 30 Oct 2020 20:02:55 -0400
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 08FD822245;
-        Sat, 31 Oct 2020 00:02:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604102574;
-        bh=XcayW/yJcfpBZonnL860+1oal+jGF2JlNLnO8iX0Adg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Gf4UuXuAvIBbtl18fjaZNvFv65PQhSxdu5jKSG5abh4Kc1iVeYGsAvEbcd7zTA+vs
-         rckw14QUGGSDXcwPvj4Wd2XMLw+1nd4Yn/uLpQPm9YSKyO18THJi1pPtrZsGJCj9jj
-         UjaNr7iKuIasSVZEJL+J6IWmDUG6zS6DnA1JjAGA=
-Received: by mail-lf1-f43.google.com with SMTP id l28so9990729lfp.10;
-        Fri, 30 Oct 2020 17:02:53 -0700 (PDT)
-X-Gm-Message-State: AOAM531hk0EVOpO0YwKYmLs2tTWztjFPR/boh30sNSLMsuDHlTmhjaVM
-        c647WHPLEnpP4bIQ/YmxIrJCqsUfabtN7qV+5Z4=
-X-Google-Smtp-Source: ABdhPJyMlt+0q1vF2Zy8DUufSjl9eV6bNPhC3X8kZTVnObP+T1whIr7MqwR62B3BcC0HoEIpJ9Yz1rQdL/NL4eOJAEo=
-X-Received: by 2002:a19:804d:: with SMTP id b74mr1837998lfd.55.1604102572217;
- Fri, 30 Oct 2020 17:02:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <20201027170317.2011119-1-kpsingh@chromium.org>
- <20201027170317.2011119-2-kpsingh@chromium.org> <CAPhsuW6yFbWLGZwpCE4whUm_ncJG4Fr7kf75XeqYLRWG8PvnWQ@mail.gmail.com>
- <CACYkzJ7kbq0Nq71fJCkHSwEmJfKFKOsvRZos_tT64N1f-aT4-A@mail.gmail.com>
-In-Reply-To: <CACYkzJ7kbq0Nq71fJCkHSwEmJfKFKOsvRZos_tT64N1f-aT4-A@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 30 Oct 2020 17:02:41 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4z4b83AeTB_MUWzVWcZxvQ+hdbN9riL77t4j9uBfDdGA@mail.gmail.com>
-Message-ID: <CAPhsuW4z4b83AeTB_MUWzVWcZxvQ+hdbN9riL77t4j9uBfDdGA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/5] bpf: Implement task local storage
-To:     KP Singh <kpsingh@chromium.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        id S1726397AbgJaIby (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 31 Oct 2020 04:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726355AbgJaIbx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 31 Oct 2020 04:31:53 -0400
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD30C0613D5;
+        Sat, 31 Oct 2020 01:31:52 -0700 (PDT)
+Received: by mail-wm1-x343.google.com with SMTP id k21so4792730wmi.1;
+        Sat, 31 Oct 2020 01:31:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=cc:subject:to:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=gwESmo+bSPSmTJDiKLpcaTLVBvMkudbYKi/iPkEZuo8=;
+        b=nkyMxNmlnja8d0utNiobAlC4APn36Pl708MmnUPDMdFITVDcTP0XnCiIKIoA9yzYaU
+         wXdw6yDDz4ty8XvOekZa1GvefK8dZWlMygC4GqGlxg/oQgsGuTak+dYWNQcAYNgx/Ba9
+         EoMNa6AjxR7UucvurifKIpJABa8QxBHbigOF5Iw+9ENXAFbDHLBGMavfXDh5ckqy+zzo
+         vdrYs91S5MTyLvzq9EJ1c8CkntthSXWkhqqojnBJiPYU0B7OkNsK3SiVzFaN0mf3BTP8
+         Nti50Bb9ju841uiOilMhCEhjU05s6oDIDuhx1uDOk9Abq0HyhiS6LqkWPm7DnBasEEFm
+         0PdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:cc:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=gwESmo+bSPSmTJDiKLpcaTLVBvMkudbYKi/iPkEZuo8=;
+        b=ZFEwG/UO2dHW2CmCb+kBEcWbMs4mEFR2vdLXMXLxP5OuEZFVaEFQSUdyT3wn149yBO
+         EG7JPv8QlrRMy7oL0lOHNPxmwiquqLAPuD1/eB8GnKR+6d2NopEdI64VXP6EYZIgMVjn
+         /lzKXrg6Nl54rBRfKu8GUEUev0FUuybCw2iQ/710qPAKYi9ocSepaQU+YAd+hEa7qyhx
+         c4TcgdEpInNhXPMjAKhvsToLyN2KhkGgujEvEOz8pzSfKY6yzGTumvf31n9OaumyL+mh
+         jZKxGQaAHA+4koydqzdQVtZeWnZj3G8z8kVBmQmFIk3cNmboWd7iLsAXct+3UkoSz4I1
+         Exlg==
+X-Gm-Message-State: AOAM531s0VgRtFwumfeukNA/yChB+HcE5wXcJOOHyb6tiO7vxc44YLyA
+        V9IAiov0WdjWunWKbtAvW136LF5qaQI=
+X-Google-Smtp-Source: ABdhPJzI04cLpRhHAbCXpntnIa72kZwXW3SoQdziwX2vZGAsDt8H5Ev+5h0mLvDdEjRUbGa4wcdOtw==
+X-Received: by 2002:a1c:8087:: with SMTP id b129mr7036629wmd.10.1604133111490;
+        Sat, 31 Oct 2020 01:31:51 -0700 (PDT)
+Received: from ?IPv6:2001:a61:245a:d801:2e74:88ad:ef9:5218? ([2001:a61:245a:d801:2e74:88ad:ef9:5218])
+        by smtp.gmail.com with ESMTPSA id t12sm14001675wrm.25.2020.10.31.01.31.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 31 Oct 2020 01:31:50 -0700 (PDT)
+Cc:     mtk.manpages@gmail.com, Kees Cook <keescook@chromium.org>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Christian Brauner <christian@brauner.io>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
-        Hao Luo <haoluo@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Song Liu <songliubraving@fb.com>,
+        Robert Sesek <rsesek@google.com>,
+        Containers <containers@lists.linux-foundation.org>,
+        linux-man <linux-man@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Will Drewry <wad@chromium.org>, bpf <bpf@vger.kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>
+Subject: Re: For review: seccomp_user_notif(2) manual page [v2]
+To:     Jann Horn <jannh@google.com>
+References: <63598b4f-6ce3-5a11-4552-cdfe308f68e4@gmail.com>
+ <CAG48ez0fBE6AJfWh0in=WKkgt98y=KjAen=SQPyTYtvsUbF1yA@mail.gmail.com>
+ <0de41eb1-e1fd-85da-61b7-fac4e3006726@gmail.com>
+ <CAG48ez3qKg-ReY4R=S_thQ6tOzv2ZHV=xW5qBxpqs0iSjH_oFQ@mail.gmail.com>
+From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
+Message-ID: <9f9b8b86-6e49-17ef-e414-82e489b0b99a@gmail.com>
+Date:   Sat, 31 Oct 2020 09:31:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
+MIME-Version: 1.0
+In-Reply-To: <CAG48ez3qKg-ReY4R=S_thQ6tOzv2ZHV=xW5qBxpqs0iSjH_oFQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Oct 30, 2020 at 4:07 AM KP Singh <kpsingh@chromium.org> wrote:
->
-> "
->
-> On Fri, Oct 30, 2020 at 12:28 AM Song Liu <song@kernel.org> wrote:
-> >
-> > On Wed, Oct 28, 2020 at 9:17 AM KP Singh <kpsingh@chromium.org> wrote:
-> > >
-> > > From: KP Singh <kpsingh@google.com>
-> > >
-> > > Similar to bpf_local_storage for sockets and inodes add local storage
-> > > for task_struct.
-> > >
-> > > The life-cycle of storage is managed with the life-cycle of the
-> > > task_struct.  i.e. the storage is destroyed along with the owning task
-> > > with a callback to the bpf_task_storage_free from the task_free LSM
-> > > hook.
-> >
-> > It looks like task local storage is tightly coupled to LSM. As we discussed,
-> > it will be great to use task local storage in tracing programs. Would you
-> > like to enable it from the beginning? Alternatively, I guess we can also do
-> > follow-up patches.
-> >
->
-> I would prefer if we do it in follow-up patches.
->
-> > >
-> > > The BPF LSM allocates an __rcu pointer to the bpf_local_storage in
-> > > the security blob which are now stackable and can co-exist with other
-> > > LSMs.
-> > >
-> > > The userspace map operations can be done by using a pid fd as a key
-> > > passed to the lookup, update and delete operations.
-> >
-> > While testing task local storage, I noticed a limitation of pid fd:
-> >
-> > /* Currently, the process identified by
-> >  * @pid must be a thread-group leader. This restriction currently exists
-> >  * for all aspects of pidfds including pidfd creation (CLONE_PIDFD cannot
-> >  * be used with CLONE_THREAD) and pidfd polling (only supports thread group
-> >  * leaders).
-> >  */
-> >
-> > This could be a problem for some use cases. How about we try to remove
-> > this restriction (maybe with a new flag to pidfd_open) as part of this set?
->
-> I would appreciate it if we could also do this in a follow-up patch.
->
-> I do see that there is a comment in fork.c:
->
->     "CLONE_THREAD is blocked until someone really needs it."
->
-> But I don't understand the requirements well enough and would thus prefer
-> to do this in a follow-up series.
+On 10/30/20 8:14 PM, Jann Horn wrote:
+> On Thu, Oct 29, 2020 at 3:19 PM Michael Kerrisk (man-pages)
+> <mtk.manpages@gmail.com> wrote:
+>> On 10/29/20 2:42 AM, Jann Horn wrote:
+>>> On Mon, Oct 26, 2020 at 10:55 AM Michael Kerrisk (man-pages)
+>>> <mtk.manpages@gmail.com> wrote:
+>>>>        static bool
+>>>>        getTargetPathname(struct seccomp_notif *req, int notifyFd,
+>>>>                          char *path, size_t len)
+>>>>        {
+>>>>            char procMemPath[PATH_MAX];
+>>>>
+>>>>            snprintf(procMemPath, sizeof(procMemPath), "/proc/%d/mem", req->pid);
+>>>>
+>>>>            int procMemFd = open(procMemPath, O_RDONLY);
+>>>>            if (procMemFd == -1)
+>>>>                errExit("\tS: open");
+>>>>
+>>>>            /* Check that the process whose info we are accessing is still alive.
+>>>>               If the SECCOMP_IOCTL_NOTIF_ID_VALID operation (performed
+>>>>               in checkNotificationIdIsValid()) succeeds, we know that the
+>>>>               /proc/PID/mem file descriptor that we opened corresponds to the
+>>>>               process for which we received a notification. If that process
+>>>>               subsequently terminates, then read() on that file descriptor
+>>>>               will return 0 (EOF). */
+>>>>
+>>>>            checkNotificationIdIsValid(notifyFd, req->id);
+>>>>
+>>>>            /* Read bytes at the location containing the pathname argument
+>>>>               (i.e., the first argument) of the mkdir(2) call */
+>>>>
+>>>>            ssize_t nread = pread(procMemFd, path, len, req->data.args[0]);
+>>>>            if (nread == -1)
+>>>>                errExit("pread");
+>>>
+>>> As discussed at
+>>> <https://lore.kernel.org/r/CAG48ez0m4Y24ZBZCh+Tf4ORMm9_q4n7VOzpGjwGF7_Fe8EQH=Q@mail.gmail.com>,
+>>> we need to re-check checkNotificationIdIsValid() after reading remote
+>>> memory but before using the read value in any way. Otherwise, the
+>>> syscall could in the meantime get interrupted by a signal handler, the
+>>> signal handler could return, and then the function that performed the
+>>> syscall could free() allocations or return (thereby freeing buffers on
+>>> the stack).
+>>>
+>>> In essence, this pread() is (unavoidably) a potential use-after-free
+>>> read; and to make that not have any security impact, we need to check
+>>> whether UAF read occurred before using the read value. This should
+>>> probably be called out elsewhere in the manpage, too...
+>>
+>> Thanks very much for pointing me at this!
+>>
+>> So, I want to conform that the fix to the code is as simple as
+>> adding a check following the pread() call, something like:
+>>
+>> [[
+>>      ssize_t nread = pread(procMemFd, path, len, req->data.args[argNum]);
+>>      if (nread == -1)
+>>         errExit("Supervisor: pread");
+>>
+>>      if (nread == 0) {
+>>         fprintf(stderr, "\tS: pread() of /proc/PID/mem "
+>>                 "returned 0 (EOF)\n");
+>>         exit(EXIT_FAILURE);
+>>      }
+>>
+>>      if (close(procMemFd) == -1)
+>>         errExit("Supervisor: close-/proc/PID/mem");
+>>
+>> +    /* Once again check that the notification ID is still valid. The
+>> +       case we are particularly concerned about here is that just
+>> +       before we fetched the pathname, the target's blocked system
+>> +       call was interrupted by a signal handler, and after the handler
+>> +       returned, the target carried on execution (past the interrupted
+>> +       system call). In that case, we have no guarantees about what we
+>> +       are reading, since the target's memory may have been arbitrarily
+>> +       changed by subsequent operations. */
+>> +
+>> +    if (!notificationIdIsValid(notifyFd, req->id, "post-open"))
+>> +        return false;
+>> +
+>>      /* We have no guarantees about what was in the memory of the target
+>>         process. We therefore treat the buffer returned by pread() as
+>>         untrusted input. The buffer should be terminated by a null byte;
+>>         if not, then we will trigger an error for the target process. */
+>>
+>>      if (strnlen(path, nread) < nread)
+>>          return true;
+>> ]]
+> 
+> Yeah, that should do the job. 
 
-Sounds good. Let's work on these in follow-up patches.
+Thanks.
+
+> With the caveat that a cancelled syscall
+> could've also led to the memory being munmap()ed, so the nread==0 case
+> could also happen legitimately - so you might want to move this check
+> up above the nread==0 (mm went away) and nread==-1 (mm still exists,
+> but read from address failed, errno EIO) checks if the error message
+> shouldn't appear spuriously.
+
+In any case, I've been refactoring (simplifying) that code a little.
+I haven't so far rearranged the order of the checks, but I already
+log message for the nread==0 case. (Instead, there will eventually
+be an error when the response is sent.)
+
+I also haven't exactly tested the scenario you describe in the
+seccomp unotify scenario, but I think the above is not correct. Here 
+are two scenarios I did test, simply with mmap() and /proc/PID/mem
+(no seccomp involved): 
+
+Scenario 1:
+A creates a mapping at address X
+B opens /proc/A/mem and and lseeks on resulting FD to offset X
+A terminates
+B reads from FD ==> read() returns 0 (EOF)
+
+Scenario 2:
+A creates a mapping at address X
+B opens /proc/A/mem and and lseeks on resulting FD to offset X
+A unmaps mapping at address X
+B reads from FD ==> read() returns -1 / EIO.
+
+That last scenario seems to contradict what you say, since I
+think you meant that in this case read() should return 0 in
+that case. Have I misunderstood you?
 
 Thanks,
-Song
+
+Michael
+
+
+
+
+
+-- 
+Michael Kerrisk
+Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
+Linux/UNIX System Programming Training: http://man7.org/training/
