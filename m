@@ -2,173 +2,168 @@ Return-Path: <SRS0=gkZj=EJ=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B66ACC2D0A3
-	for <bpf@archiver.kernel.org>; Tue,  3 Nov 2020 21:23:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 678CBC388F9
+	for <bpf@archiver.kernel.org>; Tue,  3 Nov 2020 21:36:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 792B7206B5
-	for <bpf@archiver.kernel.org>; Tue,  3 Nov 2020 21:23:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 231382064C
+	for <bpf@archiver.kernel.org>; Tue,  3 Nov 2020 21:36:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tqKpwE9c"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ft15CtGh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387797AbgKCVXZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Nov 2020 16:23:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52708 "EHLO
+        id S1731499AbgKCVgR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Nov 2020 16:36:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733243AbgKCVEf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 3 Nov 2020 16:04:35 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C11EC0613D1;
-        Tue,  3 Nov 2020 13:04:35 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id b3so15410552pfo.2;
-        Tue, 03 Nov 2020 13:04:35 -0800 (PST)
+        with ESMTP id S1732773AbgKCVfO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 3 Nov 2020 16:35:14 -0500
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4AEC0613D1;
+        Tue,  3 Nov 2020 13:35:14 -0800 (PST)
+Received: by mail-qk1-x744.google.com with SMTP id x20so16721630qkn.1;
+        Tue, 03 Nov 2020 13:35:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wrUBzqixMNGges3Fm8LEqTkGr+7Sx/OVd1FP+l0kdS0=;
-        b=tqKpwE9c1XvzM26lsALNljg7czgItn9B2SFh1tA3jWE/ITdxfbUKdt+lGHvc4AqZJG
-         DZ38w2G0ZCOMhepTm9Eowqe4LBfWPO8ILx0Ol+dgIFIwxdAiNzD1wA/i8yt6fsVNOptw
-         SaiYvqBnxP3BX8+Vb8wu9Rwugz6FWLSJfUcENjTtu4V78jIYi59xfrDLTeLYUuG5oxAl
-         NTgLN9RaB/G1pfPbVdSsuGof6GiB/WaIyBDaEjrF7Ha1Z98pSiyS5oXgB6h/IXv9HV1w
-         sOAJhdJr5OPTpCg0tsq/C68T5BgQKFWAUoPDQTzUaXS7gzIxvEKvR4YiROniyFWZyWC3
-         0Sag==
+        h=subject:from:to:cc:date:message-id:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=o5G8Jb+LPfgEOmZTDFgJ/ZdqODvld3Xzcpw0P0t3ARY=;
+        b=ft15CtGhs13oFVW6h1V9efPx3qTHRLijdFn06XC5z9mqnvbwQyAyjtKF5WVFLF5aD/
+         oi6ML1KFFgRnjSdx0cFNjgMUS+WlHuuM4un2OLzW2ssncsnvnyTvpodxUn+5K4WowFtG
+         W/VdwopOnAPLRYSJI3GvbjG9u3tlsX9CmYCGmxnPTjed1F0bfENwMbqJ4pv5cLa2KpLP
+         MYmY2mv8neXsKupeJfTrS5NIHHVyuE60ambuJbskEAriUuUim4awz6zdSBQaY9AL3Yaq
+         vfUm36S2GHaYLHynp+bGlqRdIUg1RUrwSM3bMYzcl292IcsVIF1SDG+ZnF1NBlW6lUR0
+         V0lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wrUBzqixMNGges3Fm8LEqTkGr+7Sx/OVd1FP+l0kdS0=;
-        b=KKka7vYkgz51er8sxIwdP/omGh2lMRt2rA287qwg/ZKH6SFHlbKWoiRXQE1Eko7UCc
-         6Su3w8jPaA8ibD4dZmA6BJfyp8wS3RSuhixDq7O0DrYa2W1okn2bULfsaMeGksyDBzS3
-         VhnCTAarnbQW6aL9PAeGRTyZku0PDuH8okCutJ/lNahW3zD3Qy/3/5LPzYZkSI8r1yBf
-         u5+Y1ozbb8N5RMbneZzU9CTiJ4BnKUoE/6RLpQb80a9K2uFr/SMKZllJpqNvTxS7aeHd
-         l+Hm4KeZmzZIIcT0EiSF+YMhiFpSu8ox/eSCu0f3nMX4Grfd6lvUacQZWEdCELn27UC4
-         Chnw==
-X-Gm-Message-State: AOAM533oYeYM94Bmvw5QjUsKRv4ATMTAX0N8uUUcsbjv1nx0wtL0i5K+
-        LflLpOEpiiaiC1nZkpWi0Cc=
-X-Google-Smtp-Source: ABdhPJwKd9ujaje9lKYp2d86AtKj6fAx/PpwqjE7Ypjdq7qZld+7Ol6iwwjneB60m1H6WrfRfHbdnA==
-X-Received: by 2002:a17:90b:f85:: with SMTP id ft5mr1161462pjb.86.1604437474559;
-        Tue, 03 Nov 2020 13:04:34 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:4055])
-        by smtp.gmail.com with ESMTPSA id y22sm29035pfr.62.2020.11.03.13.04.29
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=o5G8Jb+LPfgEOmZTDFgJ/ZdqODvld3Xzcpw0P0t3ARY=;
+        b=cARo1eA3EiFtRVe6mnLIvKGcdzcucZHSQ/5gPfxFsSAQsmoXr812ruBQwGOsOk9mZd
+         wwn0OloysIzwp0p92YSBS3lBal7KI136FNtcFF+ABzX4vaRTHyOsX1qz4PlARpCncetb
+         Sr87hxeXG50THjYTAEwFemVastI0IacPO/VARaNwmoMX9i+LS45Kx32CUVmST2w1tcVX
+         6Y957NHZO34cB9gt6RmZf8pwhfBBDhB68wEfdyyCnBhHJO9Q/iOcvACViV6hBa7ClzLi
+         W2Dg/ePLnUiRKPgEbo+XUA9LV2ijc02cq7hucE7baKpo8YCMPrwC+s0LYajoZG4FoUdd
+         VNdw==
+X-Gm-Message-State: AOAM533FTgGqU1yfh3rNkKJxqL0wummH52o1mutEhQYISME8JrUEwuNn
+        Q+kH9xd1KP1hvG+1TwCsoYY=
+X-Google-Smtp-Source: ABdhPJz97+XGaigkjYANl3AVu1Mmm38hA5iFL75Qq1mn7uxxtRFC0DUDIoCPw1V4EuCsurtCgCp3Gg==
+X-Received: by 2002:a37:de02:: with SMTP id h2mr19789669qkj.99.1604439313840;
+        Tue, 03 Nov 2020 13:35:13 -0800 (PST)
+Received: from localhost.localdomain ([2001:470:b:9c3:9e5c:8eff:fe4f:f2d0])
+        by smtp.gmail.com with ESMTPSA id b14sm11729383qkn.123.2020.11.03.13.35.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Nov 2020 13:04:33 -0800 (PST)
-Date:   Tue, 3 Nov 2020 13:04:18 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Kenny Ho <y2kenny@gmail.com>
-Cc:     Kenny Ho <Kenny.Ho@amd.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-        "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>
-Subject: Re: [RFC] Add BPF_PROG_TYPE_CGROUP_IOCTL
-Message-ID: <20201103210418.q7hddyl7rvdplike@ast-mbp.dhcp.thefacebook.com>
-References: <20201007152355.2446741-1-Kenny.Ho@amd.com>
- <CAOWid-d=a1Q3R92s7GrzxWhXx7_dc8NQvQg7i7RYTVv3+jHxkQ@mail.gmail.com>
- <20201103053244.khibmr66p7lhv7ge@ast-mbp.dhcp.thefacebook.com>
- <CAOWid-eQSPru0nm8+Xo3r6C0pJGq+5r8mzM8BL2dgNn2c9mt2Q@mail.gmail.com>
- <CAADnVQKuoZDB-Xga5STHdGSxvSP=B6jQ40kLdpL1u+J98bv65A@mail.gmail.com>
- <CAOWid-czZphRz6Y-H3OcObKCH=bLLC3=bOZaSB-6YBE56+Qzrg@mail.gmail.com>
+        Tue, 03 Nov 2020 13:35:13 -0800 (PST)
+Subject: [bpf-next PATCH v3 4/5] selftests/bpf: Migrate tcpbpf_user.c to use
+ BPF skeleton
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
+        john.fastabend@gmail.com, kernel-team@fb.com,
+        netdev@vger.kernel.org, edumazet@google.com, brakmo@fb.com,
+        andrii.nakryiko@gmail.com, alexanderduyck@fb.com
+Date:   Tue, 03 Nov 2020 13:35:11 -0800
+Message-ID: <160443931155.1086697.17869006617113525162.stgit@localhost.localdomain>
+In-Reply-To: <160443914296.1086697.4231574770375103169.stgit@localhost.localdomain>
+References: <160443914296.1086697.4231574770375103169.stgit@localhost.localdomain>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOWid-czZphRz6Y-H3OcObKCH=bLLC3=bOZaSB-6YBE56+Qzrg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Nov 03, 2020 at 02:19:22PM -0500, Kenny Ho wrote:
-> On Tue, Nov 3, 2020 at 12:43 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> > On Mon, Nov 2, 2020 at 9:39 PM Kenny Ho <y2kenny@gmail.com> wrote:
-> > pls don't top post.
-> My apology.
-> 
-> > > Cgroup awareness is desired because the intent
-> > > is to use this for resource management as well (potentially along with
-> > > other cgroup controlled resources.)  I will dig into bpf_lsm and learn
-> > > more about it.
-> >
-> > Also consider that bpf_lsm hooks have a way to get cgroup-id without
-> > being explicitly scoped. So the bpf program can be made cgroup aware.
-> > It's just not as convenient as attaching a prog to cgroup+hook at once.
-> > For prototyping the existing bpf_lsm facility should be enough.
-> > So please try to follow this route and please share more details about
-> > the use case.
-> 
-> Ok.  I will take a look and see if that is sufficient.  My
-> understanding of bpf-cgroup is that it not only makes attaching prog
-> to cgroup easier but it also facilitates hierarchical calling of
-> attached progs which might be useful if users wants to manage gpu
-> resources with bpf cgroup along with other cgroup resources (like
-> cpu/mem/io, etc.)
+From: Alexander Duyck <alexanderduyck@fb.com>
 
-Right. Hierarchical cgroup-bpf logic cannot be replicated inside
-the program. If you're relying on cgv2 hierarchy to containerize
-applications then what I suggested earlier won't work indeed.
+Update tcpbpf_user.c to make use of the BPF skeleton. Doing this we can
+simplify test_tcpbpf_user and reduce the overhead involved in setting up
+the test.
 
-> About the use case.  The high level motivation here is to provide the
-> ability to subdivide/share a GPU via cgroups/containers in a way that
-> is similar to other resources like CPU and memory.  Users have been
-> requesting this type of functionality because GPU compute can get
-> expensive and they want to maximize the utilization to get the most
-> bang for their bucks.  A traditional way to do this is via
-> SRIOV/virtualization but that often means time sharing the GPU as a
-> whole unit.  That is useful for some applications but not others due
-> to the flushing and added latency.  We also have a study that
-> identified various GPU compute application types.  These types can
-> benefit from more asymmetrical/granular sharing of the GPU (for
-> example some applications are compute bound while others can be memory
-> bound that can benefit from having more VRAM.)
-> 
-> I have been trying to add a cgroup subsystem for the drm subsystem for
-> this purpose but I ran into two challenges.  First, the composition of
-> a GPU and how some of the subcomponents (like VRAM or shader
-> engines/compute units) can be shared are very much vendor specific so
-> we are unable to arrive at a common interface across all vendors.
-> Because of this and the variety of places a GPU can go into
-> (smartphone, PC, server, HPC), there is also no agreement on how
-> exactly a GPU should be shared.  The best way forward appears to
-> simply provide hooks for users to define how and what they want to
-> share via a bpf program.
+In addition we can clean up the remaining bits such as the one remaining
+CHECK_FAIL at the end of test_tcpbpf_user so that the function only makes
+use of CHECK as needed.
 
-Thank you for sharing the details. It certainly helps.
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Alexander Duyck <alexanderduyck@fb.com>
+---
+ .../testing/selftests/bpf/prog_tests/tcpbpf_user.c |   41 +++++++-------------
+ 1 file changed, 14 insertions(+), 27 deletions(-)
 
-> From what I can tell so far (I am still learning), there are multiple
-> pieces that need to fall in place for bpf-cgroup to work for this use
-> case.  First there is resource limit enforcement, which is the
-> motivation for this RFC (I will look into bpf_lsm as the path
-> forward.)  I have also been thinking about instrumenting the drm
-> subsystem with a new BPF program type and have various attach types
-> across the drm subsystem but I am not sure if this is allowed (this
-> one is more for resource usage monitoring.)  Another thing I have been
-> considering is to have the gpu driver provide bpf helper functions for
-> bpf programs to modify drm driver internals.  That was the reason I
-> asked about the potential of BTF support for kernel modules a couple
-> of months ago (and Andrii Nakryiko mentioned that it is being worked
-> on.)
+diff --git a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c b/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
+index 22c359871af6..bef81648797a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
++++ b/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
+@@ -3,6 +3,7 @@
+ #include <network_helpers.h>
+ 
+ #include "test_tcpbpf.h"
++#include "test_tcpbpf_kern.skel.h"
+ 
+ #define LO_ADDR6 "::1"
+ #define CG_NAME "/tcpbpf-user-test"
+@@ -130,44 +131,30 @@ static void run_test(int map_fd, int sock_map_fd)
+ 
+ void test_tcpbpf_user(void)
+ {
+-	const char *file = "test_tcpbpf_kern.o";
+-	int prog_fd, map_fd, sock_map_fd;
+-	int error = EXIT_FAILURE;
+-	struct bpf_object *obj;
++	struct test_tcpbpf_kern *skel;
++	int map_fd, sock_map_fd;
+ 	int cg_fd = -1;
+-	int rv;
+ 
+-	cg_fd = test__join_cgroup(CG_NAME);
+-	if (cg_fd < 0)
+-		goto err;
+-
+-	if (bpf_prog_load(file, BPF_PROG_TYPE_SOCK_OPS, &obj, &prog_fd)) {
+-		printf("FAILED: load_bpf_file failed for: %s\n", file);
+-		goto err;
+-	}
++	skel = test_tcpbpf_kern__open_and_load();
++	if (CHECK(!skel, "open and load skel", "failed"))
++		return;
+ 
+-	rv = bpf_prog_attach(prog_fd, cg_fd, BPF_CGROUP_SOCK_OPS, 0);
+-	if (rv) {
+-		printf("FAILED: bpf_prog_attach: %d (%s)\n",
+-		       error, strerror(errno));
++	cg_fd = test__join_cgroup(CG_NAME);
++	if (CHECK(cg_fd < 0, "test__join_cgroup(" CG_NAME ")",
++		  "cg_fd:%d errno:%d", cg_fd, errno))
+ 		goto err;
+-	}
+ 
+-	map_fd = bpf_find_map(__func__, obj, "global_map");
+-	if (map_fd < 0)
+-		goto err;
++	map_fd = bpf_map__fd(skel->maps.global_map);
++	sock_map_fd = bpf_map__fd(skel->maps.sockopt_results);
+ 
+-	sock_map_fd = bpf_find_map(__func__, obj, "sockopt_results");
+-	if (sock_map_fd < 0)
++	skel->links.bpf_testcb = bpf_program__attach_cgroup(skel->progs.bpf_testcb, cg_fd);
++	if (!ASSERT_OK_PTR(skel->links.bpf_testcb, "attach_cgroup(bpf_testcb)"))
+ 		goto err;
+ 
+ 	run_test(map_fd, sock_map_fd);
+ 
+-	error = 0;
+ err:
+-	bpf_prog_detach(cg_fd, BPF_CGROUP_SOCK_OPS);
+ 	if (cg_fd != -1)
+ 		close(cg_fd);
+-
+-	CHECK_FAIL(error);
++	test_tcpbpf_kern__destroy(skel);
+ }
 
-Sounds like either bpf_lsm needs to be made aware of cgv2 (which would
-be a great thing to have regardless) or cgroup-bpf needs a drm/gpu specific hook.
-I think generic ioctl hook is too broad for this use case.
-I suspect drm/gpu internal state would be easier to access inside
-bpf program if the hook is next to gpu/drm. At ioctl level there is 'file'.
-It's probably too abstract for the things you want to do.
-Like how VRAM/shader/etc can be accessed through file?
-Probably possible through a bunch of lookups and dereferences, but
-if the hook is custom to GPU that info is likely readily available.
-Then such cgroup-bpf check would be suitable in execution paths where
-ioctl-based hook would be too slow.
+
