@@ -2,95 +2,151 @@ Return-Path: <SRS0=nPxa=EK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5F1EC2D0A3
-	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 22:54:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08558C2D0A3
+	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 23:06:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4012C20867
-	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 22:54:23 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="OY98b6mI"
+	by mail.kernel.org (Postfix) with ESMTP id A5D5520786
+	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 23:06:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728342AbgKDWyW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Nov 2020 17:54:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40142 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728301AbgKDWyW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Nov 2020 17:54:22 -0500
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F4DC0613CF
-        for <bpf@vger.kernel.org>; Wed,  4 Nov 2020 14:54:22 -0800 (PST)
-Received: by mail-lj1-x242.google.com with SMTP id 23so191280ljv.7
-        for <bpf@vger.kernel.org>; Wed, 04 Nov 2020 14:54:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+JfSC8vfkextKI0CTxdreiJW8D06AVfpIQrednxXpok=;
-        b=OY98b6mIcEkijtWQ3mppvCqE+6cW+WWP+NPcK56NFRgXflP8MdM9tH/VMR8CSHnlw7
-         ZfUbR/6L6toEG0xoduVm4SnsF55sExHnpQp9r40JSzsP/AwR3oJrxMxjwytOADuq1qM9
-         hqccqfLtSS895CkgKBr5+iHFM1Vx8gPUdMN1c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+JfSC8vfkextKI0CTxdreiJW8D06AVfpIQrednxXpok=;
-        b=JYQmYB3M7tys7dqE8WV2HRJakc73Ay1o54wy0QR5oF8KYrLPKi5HdspNkNkI4hf4IB
-         lBJc1oAAzQkto1ESm4c/7OKOZuASiz6s+mDRbJ6oV1rnYpDqod+cGIlCGoZW2bSZ084Q
-         qdq6K6WvXAzW7Gzp5YjTZPukWa4ki4L2SQNnoJ2jccgHEZ/o5UzgQqE7uZtWIc/OLdi2
-         /Lbo2KwCxHLHaxObZ3hkRvyhKtui+oe1bnOvp+3jmSzGNyAH1VN2Xk9nISukmPsxb4GB
-         lf3M1uLIpG6pNPfuHJdvzEKx/E3rcp1jg/OyhGFcb6wbkteTFjZ4nbC5xdylAwTWipon
-         ZyWA==
-X-Gm-Message-State: AOAM531EkHsg1sHlx4WiTEU+UAf+D8pZmDguntdoZTAS/PiwGZ/L7G7r
-        TBScOQLe+F1+pR9xASRtidCWpysilF34fQ+uOgHe+g==
-X-Google-Smtp-Source: ABdhPJzM25O+m3zcGcPdBWCey9N4TZDrHf083uNAky6PYnYnVMOWY1awerwvELTCyOIRPfZfZyZMHbTO3u0JEPish9o=
-X-Received: by 2002:a2e:97ce:: with SMTP id m14mr75379ljj.49.1604530460480;
- Wed, 04 Nov 2020 14:54:20 -0800 (PST)
-MIME-Version: 1.0
-References: <20201104164453.74390-1-kpsingh@chromium.org> <20201104164453.74390-2-kpsingh@chromium.org>
- <20201104221526.dv6qfpfp5lk2t7zw@kafai-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20201104221526.dv6qfpfp5lk2t7zw@kafai-mbp.dhcp.thefacebook.com>
-From:   KP Singh <kpsingh@chromium.org>
-Date:   Wed, 4 Nov 2020 23:54:09 +0100
-Message-ID: <CACYkzJ6t12AORyTzAP_P3bZG-_K_01h7DVaUmYTWCd-8U-8-bQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/9] bpf: Implement task local storage
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Song Liu <songliubraving@fb.com>,
+        id S1728784AbgKDXGG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Nov 2020 18:06:06 -0500
+Received: from dispatch1-us1.ppe-hosted.com ([148.163.129.52]:55764 "EHLO
+        dispatch1-us1.ppe-hosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728301AbgKDXGG (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 4 Nov 2020 18:06:06 -0500
+Received: from dispatch1-us1.ppe-hosted.com (localhost.localdomain [127.0.0.1])
+        by dispatch1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id B6C54A33D9
+        for <bpf@vger.kernel.org>; Wed,  4 Nov 2020 23:05:56 +0000 (UTC)
+Received: from mx1-us1.ppe-hosted.com (unknown [10.7.65.61])
+        by dispatch1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id EA0C2600BD;
+        Wed,  4 Nov 2020 23:05:55 +0000 (UTC)
+Received: from us4-mdac16-23.ut7.mdlocal (unknown [10.7.65.247])
+        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id E66188009E;
+        Wed,  4 Nov 2020 23:05:55 +0000 (UTC)
+X-Virus-Scanned: Proofpoint Essentials engine
+Received: from mx1-us1.ppe-hosted.com (unknown [10.7.65.90])
+        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id 6628B8006A;
+        Wed,  4 Nov 2020 23:05:55 +0000 (UTC)
+Received: from webmail.solarflare.com (uk.solarflare.com [193.34.186.16])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id F03729C005E;
+        Wed,  4 Nov 2020 23:05:54 +0000 (UTC)
+Received: from [10.17.20.203] (10.17.20.203) by ukex01.SolarFlarecom.com
+ (10.17.10.4) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 4 Nov 2020
+ 23:05:44 +0000
+Subject: Re: [PATCHv3 iproute2-next 0/5] iproute2: add libbpf support
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     Hangbin Liu <haliu@redhat.com>, David Ahern <dsahern@gmail.com>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
         Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
-        Hao Luo <haoluo@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Martin KaFai Lau <kafai@fb.com>,
+        "Song Liu" <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        David Miller <davem@davemloft.net>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Jiri Benc <jbenc@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
+References: <20201028132529.3763875-1-haliu@redhat.com>
+ <20201029151146.3810859-1-haliu@redhat.com>
+ <646cdfd9-5d6a-730d-7b46-f2b13f9e9a41@gmail.com>
+ <CAEf4BzYupkUqfgRx62uq3gk86dHTfB00ZtLS7eyW0kKzBGxmKQ@mail.gmail.com>
+ <edf565cf-f75e-87a1-157b-39af6ea84f76@iogearbox.net>
+ <3306d19c-346d-fcbc-bd48-f141db26a2aa@gmail.com>
+ <CAADnVQ+EWmmjec08Y6JZGnan=H8=X60LVtwjtvjO5C6M-jcfpg@mail.gmail.com>
+ <71af5d23-2303-d507-39b5-833dd6ea6a10@gmail.com>
+ <20201103225554.pjyuuhdklj5idk3u@ast-mbp.dhcp.thefacebook.com>
+ <20201104021730.GK2408@dhcp-12-153.nay.redhat.com>
+ <20201104031145.nmtggnzomfee4fma@ast-mbp.dhcp.thefacebook.com>
+ <bb04a01a-8a96-7a6a-c77e-28ee63983d9a@solarflare.com>
+ <CAADnVQKu7usDXbwwcjKChcs0NU3oP0deBsGGEavR_RuPkht74g@mail.gmail.com>
+From:   Edward Cree <ecree@solarflare.com>
+Message-ID: <07f149f6-f8ac-96b9-350d-b289ef16d82f@solarflare.com>
+Date:   Wed, 4 Nov 2020 23:05:41 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
+MIME-Version: 1.0
+In-Reply-To: <CAADnVQKu7usDXbwwcjKChcs0NU3oP0deBsGGEavR_RuPkht74g@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Language: en-GB
+X-Originating-IP: [10.17.20.203]
+X-ClientProxiedBy: ocex03.SolarFlarecom.com (10.20.40.36) To
+ ukex01.SolarFlarecom.com (10.17.10.4)
+X-TM-AS-Product-Ver: SMEX-12.5.0.1300-8.6.1012-25766.003
+X-TM-AS-Result: No-1.515600-8.000000-10
+X-TMASE-MatchedRID: Jm7Yxmmj9OnmLzc6AOD8DfHkpkyUphL9WDtrCb/B2hARGC0rW8q1Xa2k
+        qu8N8Z6gjbUqhuP4DgE/a3iI4EhF3zy85MOgqDd3GctYiGlVjB/ahA35D/bWBFp3Ei6xxmePXvb
+        V/VnUv0qcdgImt2fnOLC8HNjVMLYUFOKk4UrUPgXmXEF3MwNZbn2K69afcnwqVWQnHKxp38ihcU
+        SGWPyoCQPfHajKM2sCBaafuX8ZUps1mB4DwaTV1qOknopQLzTu8qeI5MA2SKR727cs+BZZRrcwZ
+        LpPFTtAaOBJAM+wLRw4LxgJSVfCdYFLOlyz97WhNDrSVZCgbSumUoJ5iJZBr7EtLGRAe3PGesS+
+        g/Zq0C76DxBeqeXlOqqWalXMgUb91zJTsMOHLjrnVHXBUzVvZNBQpvv5cj0gJJjt/ngrkz8k1mQ
+        4C5BObp6fbj1zw/ix2CZ7T0FVcRTFVSBMr2cm9MzSKGx9g8xhywXStpqWmJZ7eGs179ltWZ5wam
+        ltgCNJm+k82PC+tGTRMuzjTM1Wt8RBLZ5x+SkXngIgpj8eDcByZ8zcONpAscRB0bsfrpPIcSqbx
+        BgG0w7KpO6qO1dZZL39VMPFRmMT0r4EyuzY7XFNEE+ml4S71fDzwTlmVMdjuO8r3cBqcThWu9cr
+        rsVGVRk8KNSxhtI48LUy05gu3pDUNewp4E2/TgSpmVYGQlZ3sxk1kV1Ja8fhIo573pBCBw==
+X-TM-AS-User-Approved-Sender: Yes
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--1.515600-8.000000
+X-TMASE-Version: SMEX-12.5.0.1300-8.6.1012-25766.003
+X-MDID: 1604531155-b2pbJnnWe2I2
+X-PPE-DISP: 1604531155;b2pbJnnWe2I2
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> > +     WARN_ON_ONCE(!rcu_read_lock_held());
-> > +     task = pid_task(pid, PIDTYPE_PID);
-> > +     if (!task) {
-> > +             err = -ENOENT;
-> > +             goto out;
-> > +     }
-> > +
-> > +     sdata = bpf_local_storage_update(
-> > +             task, (struct bpf_local_storage_map *)map, value, map_flags);
-> It seems the task is protected by rcu here and the task may be going away.
-> Is it ok?
->
-> or the following comment in the later "BPF_CALL_4(bpf_task_storage_get, ...)"
-> is no longer valid?
->         /* This helper must only called from where the task is guaranteed
->          * to have a refcount and cannot be freed.
->          */
+On 04/11/2020 22:10, Alexei Starovoitov wrote:
+> On Wed, Nov 4, 2020 at 1:16 PM Edward Cree <ecree@solarflare.com> wrote:
+>> On 04/11/2020 03:11, Alexei Starovoitov wrote:
+>>> The user will do 'tc -V'. Does version mean anything from bpf loading pov?
+>>> It's not. The user will do "ldd `which tc`" and then what?
+>> Is it beyond the wit of man for 'tc -V' to output somethingabout
+>>  libbpf version?
+>> Other libraries seem to solve these problems all the time, I
+>>  haven't seen anyone explain what makes libbpf so special that it
+>>  has to be different.
+> slow vger? Please see Daniel and Andrii detailed explanations.
+Nah, I've seen that subthread(vger is fine).  I felt that subthread
+ was missing this point about -V which is why I replied where it was
+ brought up.
+Daniel and Andrii have only explained why users will want to have an
+ up-to-date libbpf, they (and you) haven't connected it to any
+ argument about why static linking is the way to achieve that.
+> libbpf is not your traditional library.
+This has only been asserted, not explained.
+I'm fully willing to entertain the possibility that libbpf is indeed
+ special.  But if you want to win people over, you'll need to
+ explain *why* it's special.
+"Look at bfd and think why" is not enough, be more explicit.
 
-I reworded this (and the other similar comment) as:
+AIUI the API between iproute2 and libbpf isn't changing, all that's
+ happening is that libbpf is gaining new capabilities in things that
+ are totally transparent to iproute2 (e.g. BTF fixups).  So the
+ reasonable thing for users to expect is "I need new BPF features,
+ I'll upgrade my libbpf", and with dynamic linking that works fine
+ whether they upgrade iproute2 too or not.
+This narrative is, on the face of it, just as plausible as "I'm
+ getting an error from iproute2, I'll upgrade that".  And if distros
+ decide that that's a common enough mistake to matter, then they can
+ make the newer iproute2 package depend on a newer libbpf package,
+ and apt or yum or whatever will automagically DTRT.
+Whereas if you tightly couple them from the start, distros can't
+ then go the other way if it turns out you made the wrong choice.
+ (What if someone can't use the latest iproute2 release because it
+ has a regression bug that breaks their use-case, but they need the
+ latest libbpf for one of your shiny new features?)
 
-/* This helper must only be called from places where the lifetime of the task
-* is guaranteed. Either by being refcounted or by being protected
-* by an RCU read-side critical section.
-*/
+Don't get me wrong, I'd love a world in which static linking was the
+ norm and we all rebuilt our binaries locally every time we upgraded
+ a piece.  But that's not the world we live in, and consistency
+ *within* a distro matters too...
+
+-ed
