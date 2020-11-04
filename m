@@ -2,69 +2,68 @@ Return-Path: <SRS0=nPxa=EK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15DCDC2D0A3
-	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 16:45:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7FB1C2D0A3
+	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 16:45:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B6CAB206DB
-	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 16:45:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5F950206ED
+	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 16:45:24 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="UR/q/Nn1"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="NGLM86TG"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731292AbgKDQpI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Nov 2020 11:45:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
+        id S1731252AbgKDQpR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Nov 2020 11:45:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731281AbgKDQpH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Nov 2020 11:45:07 -0500
+        with ESMTP id S1731294AbgKDQpI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Nov 2020 11:45:08 -0500
 Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706BFC040201
-        for <bpf@vger.kernel.org>; Wed,  4 Nov 2020 08:45:06 -0800 (PST)
-Received: by mail-ej1-x642.google.com with SMTP id oq3so28844300ejb.7
-        for <bpf@vger.kernel.org>; Wed, 04 Nov 2020 08:45:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E68C061A4A
+        for <bpf@vger.kernel.org>; Wed,  4 Nov 2020 08:45:08 -0800 (PST)
+Received: by mail-ej1-x642.google.com with SMTP id w13so17199550eju.13
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2020 08:45:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=kutD/q+xVupSFcvYOVJRfZWueeRA7xbNvILSb9eee7Q=;
-        b=UR/q/Nn1X/y65cTeJfdgWYcCtSKQyBLclIjrztWUIvvPunynakU3O6KgHQNspU42Ck
-         owF7m5lCaKXa/Vscp/JlS7bbQZlqobpKty25OyiAAJ/TjZTCgSnR23XCE2vSFrsZFLzs
-         0S+5Z+3zYW0Cua6bsQQbtq1IswVI4BU6spRCY=
+        bh=thk0dsFzxKUTJg2wIhday9Zx1B4NcEyIkuylRVdGgcw=;
+        b=NGLM86TG3ew60zP6WbLEJY7uGdhXZ9lUSsMDVB7el2JvmIyX9hqobGAp3SaRzQ2N4l
+         MYOTav4soBanSqatdv/UMbxfN5DZRTCC/aMozzOcdVEo9h5ZTjCVL2pU5WUzK7M1oIN9
+         grVF5LN92QrwA0GbJa33y7ImE8bAsBKLxU1CQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=kutD/q+xVupSFcvYOVJRfZWueeRA7xbNvILSb9eee7Q=;
-        b=BrWVUYF1OOweET5CKZ7scJVaMepK6AtYGJYK59vfgFrpuE8oHnYJtkv9k4oWVvP5mC
-         LnJpllA0dmcv21rHweYSIIRSBjZYPAHw5fWgUQIp+vUzBDR6Z9xEnDVExKfzGpNvuaeq
-         eVsKIfa8nu5qvMCN3DMOCGdSSZbsfJ/h6LvzU1A4syweFvWq0t9s4YaD0ZcEmjJmRNB7
-         ghGyqeva3ktQeum+LreUQFFCALW7I0lOVqPdeuxZDaCweXo+T38kdk5EbMrlBOxDh7bk
-         NC81ihzDb9x9IjwetY7SLjyftsRzec9Xtapn1QveZJF8eEpizeDMBMM4CIBjZuP5fAP/
-         VATQ==
-X-Gm-Message-State: AOAM531I1qMQ8YV70+wVSVdS/NiKgI36vsOCWnpq6l17EAFpU4oW5RbJ
-        NosNgIW1UJp3YiZFKJxa6Xcxwg==
-X-Google-Smtp-Source: ABdhPJyRDdmq7NWXYAFlGH/uNx7rCU+Nk5gt4kpw6GcPQW7WBnSgC9XU+K7b8rZFJVarcBuNWnXjBQ==
-X-Received: by 2002:a17:906:1643:: with SMTP id n3mr25456761ejd.459.1604508305184;
-        Wed, 04 Nov 2020 08:45:05 -0800 (PST)
+        bh=thk0dsFzxKUTJg2wIhday9Zx1B4NcEyIkuylRVdGgcw=;
+        b=nbDamDwo5KQ2/PIpgsF5P14edgAZapEI7I/Q8pQqc1k4SxsXIAebXOMPqzp34W+0Ke
+         hQqPUt73ZpQ8ntT8loK+gf+QLXNb2x6HlRXdlJh0L3ZsbeLeEQTOInXtV85GNgF7GdXX
+         h1Vy/VmYE+SJi40VZcvzzfzp6MJi9uesBJM4FG7n7awhialrWr4J/v2X20AVNHdqTHRD
+         kvcWfaKinCeasK0sMydLOAcLCThi2xNpEM3Y1xe7xg92X0RNv0bGYeDZuSnayhrlyqYW
+         gtCcUFfRn5611Y7itEm3IH7oG+Eg45NxFUcakR4bkarKg31ivoALc6Edz/rMVz9DLll6
+         6Odg==
+X-Gm-Message-State: AOAM530hq1bXEQZ8FLzQxkyF4KWEt5fZRiv1/bC6+OWE1Kbis2SFQt8i
+        QddZsyLW2ewD/xWi9mNtUWbWdyFl/EjSvmN0
+X-Google-Smtp-Source: ABdhPJxFbVmZEmH1aQ4Y7bnw5PfXhhXQjkeU50nmpu9mwvltAGMH1dqAapFxHNJVy5h3/USnN1pzZg==
+X-Received: by 2002:a17:906:c186:: with SMTP id g6mr24580689ejz.465.1604508307179;
+        Wed, 04 Nov 2020 08:45:07 -0800 (PST)
 Received: from kpsingh.zrh.corp.google.com ([81.6.44.51])
-        by smtp.gmail.com with ESMTPSA id g20sm1283551ejz.88.2020.11.04.08.45.04
+        by smtp.gmail.com with ESMTPSA id g20sm1283551ejz.88.2020.11.04.08.45.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 08:45:04 -0800 (PST)
+        Wed, 04 Nov 2020 08:45:06 -0800 (PST)
 From:   KP Singh <kpsingh@chromium.org>
 To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Song Liu <songliubraving@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
-        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
-        Hao Luo <haoluo@google.com>
-Subject: [PATCH bpf-next v3 7/9] bpf: Update selftests for local_storage to use vmlinux.h
-Date:   Wed,  4 Nov 2020 17:44:51 +0100
-Message-Id: <20201104164453.74390-8-kpsingh@chromium.org>
+        Song Liu <songliubraving@fb.com>, Paul Turner <pjt@google.com>,
+        Jann Horn <jannh@google.com>, Hao Luo <haoluo@google.com>
+Subject: [PATCH bpf-next v3 9/9] bpf: Exercise syscall operations for inode and sk storage
+Date:   Wed,  4 Nov 2020 17:44:53 +0100
+Message-Id: <20201104164453.74390-10-kpsingh@chromium.org>
 X-Mailer: git-send-email 2.29.1.341.ge80a0c044ae-goog
 In-Reply-To: <20201104164453.74390-1-kpsingh@chromium.org>
 References: <20201104164453.74390-1-kpsingh@chromium.org>
@@ -76,54 +75,62 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: KP Singh <kpsingh@google.com>
 
-With the fixing of BTF pruning of embedded types being fixed, the test
-can be simplified to use vmlinux.h
+Use the check_syscall_operations added for task_local_storage to
+exercise syscall operations for other local storage maps:
 
-Acked-by: Song Liu <songliubraving@fb.com>
+* Check the absence of an element for the given fd.
+* Create a new element, retrieve and compare its value.
+* Delete the element and check again for absence.
+
 Signed-off-by: KP Singh <kpsingh@google.com>
 ---
- .../selftests/bpf/progs/local_storage.c       | 20 +------------------
- 1 file changed, 1 insertion(+), 19 deletions(-)
+ .../bpf/prog_tests/test_local_storage.c         | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/local_storage.c b/tools/testing/selftests/bpf/progs/local_storage.c
-index 09529e33be98..ef3822bc7542 100644
---- a/tools/testing/selftests/bpf/progs/local_storage.c
-+++ b/tools/testing/selftests/bpf/progs/local_storage.c
-@@ -4,9 +4,8 @@
-  * Copyright 2020 Google LLC.
-  */
- 
-+#include "vmlinux.h"
- #include <errno.h>
--#include <linux/bpf.h>
--#include <stdbool.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- 
-@@ -36,23 +35,6 @@ struct {
- 	__type(value, struct dummy_storage);
- } sk_storage_map SEC(".maps");
- 
--/* TODO Use vmlinux.h once BTF pruning for embedded types is fixed.
-- */
--struct sock {} __attribute__((preserve_access_index));
--struct sockaddr {} __attribute__((preserve_access_index));
--struct socket {
--	struct sock *sk;
--} __attribute__((preserve_access_index));
--
--struct inode {} __attribute__((preserve_access_index));
--struct dentry {
--	struct inode *d_inode;
--} __attribute__((preserve_access_index));
--struct file {
--	struct inode *f_inode;
--} __attribute__((preserve_access_index));
--
--
- SEC("lsm/inode_unlink")
- int BPF_PROG(unlink_hook, struct inode *dir, struct dentry *victim)
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_local_storage.c b/tools/testing/selftests/bpf/prog_tests/test_local_storage.c
+index feba23f8848b..48c9237f1314 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_local_storage.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_local_storage.c
+@@ -145,7 +145,7 @@ bool check_syscall_operations(int map_fd, int obj_fd)
+ void test_test_local_storage(void)
  {
+ 	char tmp_exec_path[PATH_MAX] = "/tmp/copy_of_rmXXXXXX";
+-	int err, serv_sk = -1, task_fd = -1;
++	int err, serv_sk = -1, task_fd = -1, rm_fd = -1;
+ 	struct local_storage *skel = NULL;
+ 
+ 	skel = local_storage__open_and_load();
+@@ -169,6 +169,15 @@ void test_test_local_storage(void)
+ 	if (CHECK(err < 0, "copy_rm", "err %d errno %d\n", err, errno))
+ 		goto close_prog;
+ 
++	rm_fd = open(tmp_exec_path, O_RDONLY);
++	if (CHECK(rm_fd < 0, "open", "failed to open %s err:%d, errno:%d",
++		  tmp_exec_path, rm_fd, errno))
++		goto close_prog;
++
++	if (!check_syscall_operations(bpf_map__fd(skel->maps.inode_storage_map),
++				      rm_fd))
++		goto close_prog;
++
+ 	/* Sets skel->bss->monitored_pid to the pid of the forked child
+ 	 * forks a child process that executes tmp_exec_path and tries to
+ 	 * unlink its executable. This operation should be denied by the loaded
+@@ -197,9 +206,13 @@ void test_test_local_storage(void)
+ 	CHECK(skel->data->sk_storage_result != 0, "sk_storage_result",
+ 	      "sk_local_storage not set\n");
+ 
+-	close(serv_sk);
++	if (!check_syscall_operations(bpf_map__fd(skel->maps.sk_storage_map),
++				      serv_sk))
++		goto close_prog;
+ 
+ close_prog:
++	close(serv_sk);
++	close(rm_fd);
+ 	close(task_fd);
+ 	local_storage__destroy(skel);
+ }
 -- 
 2.29.1.341.ge80a0c044ae-goog
 
