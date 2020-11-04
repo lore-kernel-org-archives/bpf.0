@@ -2,103 +2,106 @@ Return-Path: <SRS0=nPxa=EK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1823BC2D0A3
-	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 21:16:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47B41C4741F
+	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 21:59:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B689A2087C
-	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 21:16:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EDB8F20825
+	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 21:59:07 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hQw0LPgh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727379AbgKDVQN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Nov 2020 16:16:13 -0500
-Received: from dispatch1-us1.ppe-hosted.com ([148.163.129.52]:53602 "EHLO
-        dispatch1-us1.ppe-hosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726152AbgKDVQM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 4 Nov 2020 16:16:12 -0500
-Received: from mx1-us1.ppe-hosted.com (unknown [10.7.65.61])
-        by dispatch1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 0AAB56007D;
-        Wed,  4 Nov 2020 21:16:12 +0000 (UTC)
-Received: from us4-mdac16-43.ut7.mdlocal (unknown [10.7.64.26])
-        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 07C0D800B0;
-        Wed,  4 Nov 2020 21:16:12 +0000 (UTC)
-X-Virus-Scanned: Proofpoint Essentials engine
-Received: from mx1-us1.ppe-hosted.com (unknown [10.7.65.90])
-        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id 77D1280082;
-        Wed,  4 Nov 2020 21:16:11 +0000 (UTC)
-Received: from webmail.solarflare.com (uk.solarflare.com [193.34.186.16])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        id S1732059AbgKDV7H (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Nov 2020 16:59:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:23264 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731945AbgKDV5d (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 4 Nov 2020 16:57:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1604527052;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=E5IqHrH37CcWuZxfcN+Bbgnd4Rr8d3Jv0MOGStlqrgg=;
+        b=hQw0LPghyHfJauDpLS5QuqzvgD5E4LvwUOCfc0I74UQo3RK9aK+zyxu6G4vPb++AebgjDd
+        PIU5hoX41qDBQ409NeaGHZwEh/xg3CLqmCETqkpTYOLplzTgAjQGVGivB7kTIFbLhMwDKW
+        R++6Uzikf0dRU+FObbufd+ne0xWTPc0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-14-ZvviV608OBCMdFNMZgxWIg-1; Wed, 04 Nov 2020 16:57:28 -0500
+X-MC-Unique: ZvviV608OBCMdFNMZgxWIg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id D942E9C005F;
-        Wed,  4 Nov 2020 21:16:10 +0000 (UTC)
-Received: from [10.17.20.203] (10.17.20.203) by ukex01.SolarFlarecom.com
- (10.17.10.4) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 4 Nov 2020
- 21:16:00 +0000
-Subject: Re: [PATCHv3 iproute2-next 0/5] iproute2: add libbpf support
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Hangbin Liu <haliu@redhat.com>
-CC:     David Ahern <dsahern@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Martin KaFai Lau" <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Miller <davem@davemloft.net>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Jiri Benc <jbenc@redhat.com>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9B1FD184214D;
+        Wed,  4 Nov 2020 21:57:26 +0000 (UTC)
+Received: from krava (unknown [10.40.192.71])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 4BD326266E;
+        Wed,  4 Nov 2020 21:57:24 +0000 (UTC)
+Date:   Wed, 4 Nov 2020 22:57:23 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Song Liu <songliubraving@fb.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
-References: <20201028132529.3763875-1-haliu@redhat.com>
- <20201029151146.3810859-1-haliu@redhat.com>
- <646cdfd9-5d6a-730d-7b46-f2b13f9e9a41@gmail.com>
- <CAEf4BzYupkUqfgRx62uq3gk86dHTfB00ZtLS7eyW0kKzBGxmKQ@mail.gmail.com>
- <edf565cf-f75e-87a1-157b-39af6ea84f76@iogearbox.net>
- <3306d19c-346d-fcbc-bd48-f141db26a2aa@gmail.com>
- <CAADnVQ+EWmmjec08Y6JZGnan=H8=X60LVtwjtvjO5C6M-jcfpg@mail.gmail.com>
- <71af5d23-2303-d507-39b5-833dd6ea6a10@gmail.com>
- <20201103225554.pjyuuhdklj5idk3u@ast-mbp.dhcp.thefacebook.com>
- <20201104021730.GK2408@dhcp-12-153.nay.redhat.com>
- <20201104031145.nmtggnzomfee4fma@ast-mbp.dhcp.thefacebook.com>
-From:   Edward Cree <ecree@solarflare.com>
-Message-ID: <bb04a01a-8a96-7a6a-c77e-28ee63983d9a@solarflare.com>
-Date:   Wed, 4 Nov 2020 21:15:56 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        "David S. Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Kernel Team <Kernel-team@fb.com>
+Subject: Re: [PATCH v2 bpf-next 3/4] selftests/bpf: Add profiler test
+Message-ID: <20201104215723.GL3861143@krava>
+References: <20201009011240.48506-1-alexei.starovoitov@gmail.com>
+ <20201009011240.48506-4-alexei.starovoitov@gmail.com>
+ <20201013195622.GB1305928@krava>
+ <CAADnVQLYSk0YgK7_dUSF-5Rau10vOdDgosVhE9xmEr1dp+=2vg@mail.gmail.com>
+ <CAEf4BzbWO3fgWxAWQw4Pee=F7=UqU+N6LtKYV7V9ZZrfkPZ3gw@mail.gmail.com>
+ <561A9F0C-BDAE-406A-8B93-011ECAB22B1C@fb.com>
+ <20201104164215.GH3861143@krava>
+ <CAEf4BzacV0TpXSk4giLKmLBCvARH-Jpgp6Pa5br2wHO3_A2-9w@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20201104031145.nmtggnzomfee4fma@ast-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Content-Language: en-GB
-X-Originating-IP: [10.17.20.203]
-X-ClientProxiedBy: ocex03.SolarFlarecom.com (10.20.40.36) To
- ukex01.SolarFlarecom.com (10.17.10.4)
-X-TM-AS-Product-Ver: SMEX-12.5.0.1300-8.6.1012-25766.003
-X-TM-AS-Result: No-2.907200-8.000000-10
-X-TMASE-MatchedRID: fgYTp5XatxbmLzc6AOD8DfHkpkyUphL9ffXpER5TkJGfU46p0ASzaB2x
-        y09wV0IjxkZvHPhWAryQNn3qLQygcwBeuT9ROxL1naJwCyoIjbzydGTzcdHw7psoi2XrUn/JIq9
-        5DjCZh0zLOq+UXtqwWAtuKBGekqUpbGVEmIfjf3sHljKReaQYdJAA96KDAFX2Yp9BDB3Z5hHYvt
-        AzrYyDHT0aAd9xlsgbUdNvZjjOj9C63BPMcrcQuXeYWV2RaAfD+kkf6HhPsBc=
-X-TM-AS-User-Approved-Sender: Yes
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--2.907200-8.000000
-X-TMASE-Version: SMEX-12.5.0.1300-8.6.1012-25766.003
-X-MDID: 1604524572-1ahBbnotrzbL
-X-PPE-DISP: 1604524572;1ahBbnotrzbL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzacV0TpXSk4giLKmLBCvARH-Jpgp6Pa5br2wHO3_A2-9w@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 04/11/2020 03:11, Alexei Starovoitov wrote:
-> The user will do 'tc -V'. Does version mean anything from bpf loading pov?
-> It's not. The user will do "ldd `which tc`" and then what?
-Is it beyond the wit of man for 'tc -V' to output somethingabout
- libbpf version?
-Other libraries seem to solve these problems all the time, I
- haven't seen anyone explain what makes libbpf so special that it
- has to be different.
+On Wed, Nov 04, 2020 at 12:50:25PM -0800, Andrii Nakryiko wrote:
+> On Wed, Nov 4, 2020 at 8:46 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> >
+> > On Thu, Oct 15, 2020 at 06:09:14AM +0000, Song Liu wrote:
+> > >
+> > >
+> > > > On Oct 13, 2020, at 2:56 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > [...]
+> > >
+> > > >
+> > > > I'd go with Kconfig + bpf_core_enum_value(), as it's shorter and
+> > > > nicer. This compiles and works with my Kconfig, but I haven't checked
+> > > > with CONFIG_CGROUP_PIDS defined.
+> > >
+> > > Tested with CONFIG_CGROUP_PIDS, it looks good.
+> > >
+> > > Tested-by: Song Liu <songliubraving@fb.com>
+> >
+> > hi,
+> > I still need to apply my workaround to compile tests,
+> > so I wonder this fell through cracks
+> 
+> 
+> The fix was already applied ([0]). Do you still see issues?
+> 
+>   [0] https://patchwork.kernel.org/project/netdevbpf/patch/20201022202739.3667367-1-andrii@kernel.org/
 
--ed
+nope, it's working now, I was on the wrong branch, sry for noise
+
+thanks,
+jirka
+
