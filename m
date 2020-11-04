@@ -2,163 +2,154 @@ Return-Path: <SRS0=nPxa=EK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 13AF8C2D0A3
-	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 08:52:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF277C2D0A3
+	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 09:07:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A1839216C4
-	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 08:52:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 37A1922404
+	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 09:07:37 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BjJCyAtK"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Vy0ifnFN"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726225AbgKDIwH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Nov 2020 03:52:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:35230 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725946AbgKDIwG (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 4 Nov 2020 03:52:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604479924;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xEUt5EUH16YvaUhu9JLMer/1MWLivZjYY/q1IODAmqs=;
-        b=BjJCyAtK6Pk4VFJY3kALAeNEr3HoRW5WpXvmecYpipVB21usXFtFBCdWu3YYDU1cnS8RgT
-        fvNiPhR8sTi7rkVj4qHNVYw9xhloZ182D7hyk/tsoupgBKhfTR2PBMRjsMT6lzQha1Ta7T
-        rRBXzx7mEpQc/9SnxUxPDobrBUHngWA=
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
- [209.85.214.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-263-PCqslXHaMxK_T4H6GXQJoA-1; Wed, 04 Nov 2020 03:52:03 -0500
-X-MC-Unique: PCqslXHaMxK_T4H6GXQJoA-1
-Received: by mail-pl1-f200.google.com with SMTP id z11so12632528pln.0
-        for <bpf@vger.kernel.org>; Wed, 04 Nov 2020 00:52:03 -0800 (PST)
+        id S1728975AbgKDJGh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Nov 2020 04:06:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728941AbgKDJGf (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Nov 2020 04:06:35 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC90C0401C3
+        for <bpf@vger.kernel.org>; Wed,  4 Nov 2020 01:06:35 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id c18so1616670wme.2
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2020 01:06:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kRmJDRZK6hYnZwsJWtSyII6GRFG28FGG7WVn2jtoat0=;
+        b=Vy0ifnFNZsdam2EYQqrtqEkqnpo+nDE+vtZ1Exog/zDTxcDNqjIjGsjIU1pi4kN3El
+         WJb+mUgrcdzGRp3ibB8ikQUE/nHlWxpqRKWFVzAojniHotRo1+HOdbKPDVdxQrzIx6sR
+         o5bH/KMSqaIrUmQaZkvfPrv1gFxI//c+XLeUSm9xVA3kwk7Z26qKNIX1zX0RkPnJ08Uu
+         3N/AsWZ+Jl5bU+SZ4vt/SsxAgf4VmWQbEcGIUXSUX2VSwqItVn590AY7hkgF110FhA9z
+         j+QBoryGrshn3GGWS2c27qqPt497aXTtIabvKKAeyhw/gsk+3P4aFPmg5/JE0C/2HE/p
+         rbiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=xEUt5EUH16YvaUhu9JLMer/1MWLivZjYY/q1IODAmqs=;
-        b=umgOvGPqrtDxTVFQ028fPbF+cKX8w3F7IiawAalCkPoygYhYBcp5rVZjZiul8irb2V
-         9B6wf2O0VTtWTzijXADanbzfiuwT+zKnxgB81A+uoUy02DVajPB9IKt0LDVf0vSrMJpG
-         u8I9gHlbj91VtXLpEssJRggfs5cEfHsH6jwhAskjK42urAYrh6ODsy3jVj95hwWyYZga
-         wWOeXsf9T/d9qh6DxGeYy5ZVkJP1X3aku1JFTyEj0qZvqL9itjN+YnB22nydkZVmsply
-         Rn7AtcRZ8fv9s4C+rrpKMolRCo6CDU9p2/mlVtkFHo7UqBkaN1fgzv4wHRlX2nKynNOL
-         NEbw==
-X-Gm-Message-State: AOAM532BZJkbOUr4KlyfPT7ecXqmu42QNVluYdMdse/ltNBLC9to84+w
-        2SpL1KnLOba6aRWL/BWZWp6Rly488MkvaiCReLgNPifdaE0I0zfuL3WV/MjpsuAsfTyH8/qjVZ1
-        1JUMMlcZJPxk=
-X-Received: by 2002:a17:90b:1642:: with SMTP id il2mr2678193pjb.81.1604479922129;
-        Wed, 04 Nov 2020 00:52:02 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxCQhWYERz6hxQnPPSTbwhK08O8t2kDESGcVJbn64vjo7BnJ8Ci65snM49uwBfRwT/tIVeA9g==
-X-Received: by 2002:a17:90b:1642:: with SMTP id il2mr2678176pjb.81.1604479921809;
-        Wed, 04 Nov 2020 00:52:01 -0800 (PST)
-Received: from dhcp-12-153.nay.redhat.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id nh24sm1511767pjb.44.2020.11.04.00.51.57
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kRmJDRZK6hYnZwsJWtSyII6GRFG28FGG7WVn2jtoat0=;
+        b=qOwUhliF4Mid0Mm7x1zzCjrOcxs//+jI7AJBRnck16ymrrea8hlkrurLdVnJNBb2DQ
+         QdRlsyyXtr0l1N2lPeilDNSzoTQR0HiF268HjHyzxD8BUNTCRZR0L35uaLZ+D2bxDaHR
+         jsGR6Id/IVTcmUzboE1qkYzwv/Od8u93uy0AkF1taESfp7VLZ4EPBrd0JuEPOWktb7HZ
+         18D8mDtSDvdmhUW6HfkYK5iftcsQYkCfH7RBfGmxb3fk6Uv4dk+AoBHE35JxBM+CT7J/
+         MNpjJ1mw1iWdaBq3rbhHhpgIlRpYzpbYEYsFqveh9dKRY+m3UEVYCpWTKqpmpGfYnYUF
+         7izw==
+X-Gm-Message-State: AOAM533+gIZWxgxN3dYu+EJnZdnSOplmKb9c3n//BljqzUJabj7lU/HH
+        cMUVJ8FKDEIX3ODwEClbJujOgQ==
+X-Google-Smtp-Source: ABdhPJwqi0yB/+B9/s0ULCABSavH/6P6SV0tchgnVRlqqMJnN0CKjV/Hb1Yj3pHPlBIYEvJ5zSVeQA==
+X-Received: by 2002:a1c:1dc1:: with SMTP id d184mr3360241wmd.169.1604480793874;
+        Wed, 04 Nov 2020 01:06:33 -0800 (PST)
+Received: from dell.default ([91.110.221.242])
+        by smtp.gmail.com with ESMTPSA id e25sm1607823wrc.76.2020.11.04.01.06.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 00:52:01 -0800 (PST)
-Date:   Wed, 4 Nov 2020 16:51:49 +0800
-From:   Hangbin Liu <haliu@redhat.com>
-To:     David Ahern <dsahern@gmail.com>
-Cc:     Stephen Hemminger <stephen@networkplumber.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        Wed, 04 Nov 2020 01:06:33 -0800 (PST)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     davem@davemloft.net, kuba@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Miller <davem@davemloft.net>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Jiri Benc <jbenc@redhat.com>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Subject: Re: [PATCHv3 iproute2-next 1/5] configure: add check_libbpf() for
- later libbpf support
-Message-ID: <20201104085149.GQ2408@dhcp-12-153.nay.redhat.com>
-References: <20201028132529.3763875-1-haliu@redhat.com>
- <20201029151146.3810859-1-haliu@redhat.com>
- <20201029151146.3810859-2-haliu@redhat.com>
- <78c5df29-bf06-0b60-d914-bdab3d65b198@gmail.com>
- <20201103055419.GI2408@dhcp-12-153.nay.redhat.com>
- <e3368c04-2887-3daf-8be8-8717960e9a18@gmail.com>
+        KP Singh <kpsingh@chromium.org>,
+        xen-devel@lists.xenproject.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH 08/12] net: xen-netfront: Demote non-kernel-doc headers to standard comment blocks
+Date:   Wed,  4 Nov 2020 09:06:06 +0000
+Message-Id: <20201104090610.1446616-9-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201104090610.1446616-1-lee.jones@linaro.org>
+References: <20201104090610.1446616-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e3368c04-2887-3daf-8be8-8717960e9a18@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Nov 03, 2020 at 10:32:37AM -0700, David Ahern wrote:
-> configure scripts usually allow you to control options directly,
-> overriding the autoprobe.
+Fixes the following W=1 kernel build warning(s):
 
-What do you think of the follow update? It's a little rough and only controls
-libbpf.
+ drivers/net/xen-netfront.c: In function ‘store_rxbuf’:
+ drivers/net/xen-netfront.c:2416:16: warning: variable ‘target’ set but not used [-Wunused-but-set-variable]
+ drivers/net/xen-netfront.c:1592: warning: Function parameter or member 'dev' not described in 'netfront_probe'
+ drivers/net/xen-netfront.c:1592: warning: Function parameter or member 'id' not described in 'netfront_probe'
+ drivers/net/xen-netfront.c:1669: warning: Function parameter or member 'dev' not described in 'netfront_resume'
+ drivers/net/xen-netfront.c:2313: warning: Function parameter or member 'dev' not described in 'netback_changed'
+ drivers/net/xen-netfront.c:2313: warning: Function parameter or member 'backend_state' not described in 'netback_changed'
 
-$ git diff
-diff --git a/configure b/configure
-index 711bb69c..be35c024 100755
---- a/configure
-+++ b/configure
-@@ -442,6 +442,35 @@ endif
- EOF
+Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Cc: Juergen Gross <jgross@suse.com>
+Cc: Stefano Stabellini <sstabellini@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: KP Singh <kpsingh@chromium.org>
+Cc: xen-devel@lists.xenproject.org
+Cc: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ drivers/net/xen-netfront.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/xen-netfront.c b/drivers/net/xen-netfront.c
+index 920cac4385bf7..93740ef4cf1b4 100644
+--- a/drivers/net/xen-netfront.c
++++ b/drivers/net/xen-netfront.c
+@@ -1582,7 +1582,7 @@ static struct net_device *xennet_create_dev(struct xenbus_device *dev)
+ 	return ERR_PTR(err);
  }
-
-+usage()
-+{
-+       cat <<EOF
-+Usage: $0 [OPTIONS]
-+  -h | --help                  Show this usage info
-+  --no-libbpf                  build the package without libbpf
-+  --libbpf-dir=DIR             build the package with self defined libbpf dir
-+EOF
-+       exit $1
-+}
-+
-+while true; do
-+       case "$1" in
-+               --libbpf-dir)
-+                       LIBBPF_DIR="$2"
-+                       shift 2 ;;
-+               --no-libbpf)
-+                       NO_LIBBPF_CHECK=1
-+                       shift ;;
-+               -h | --help)
-+                       usage 0 ;;
-+               "")
-+                       break ;;
-+               *)
-+                       usage 1 ;;
-+       esac
-+done
-+
-+
- echo "# Generated config based on" $INCLUDE >$CONFIG
- quiet_config >> $CONFIG
-
-@@ -476,8 +505,10 @@ check_setns
- echo -n "SELinux support: "
- check_selinux
-
--echo -n "libbpf support: "
--check_libbpf
-+if [ -z $NO_LIBBPF_CHECK ]; then
-+       echo -n "libbpf support: "
-+       check_libbpf
-+fi
-
- echo -n "ELF support: "
- check_elf
-
-
-$ ./configure -h
-Usage: ./configure [OPTIONS]
-  -h | --help                   Show this usage info
-  --no-libbpf                   build the package without libbpf
-  --libbpf-dir=DIR              build the package with self defined libbpf dir
-
-Thanks
-Hangbin
+ 
+-/**
++/*
+  * Entry point to this code when a new device is created.  Allocate the basic
+  * structures and the ring buffers for communication with the backend, and
+  * inform the backend of the appropriate details for those.
+@@ -1659,7 +1659,7 @@ static void xennet_disconnect_backend(struct netfront_info *info)
+ 	}
+ }
+ 
+-/**
++/*
+  * We are reconnecting to the backend, due to a suspend/resume, or a backend
+  * driver restart.  We tear down our netif structure and recreate it, but
+  * leave the device-layer structures intact so that this is transparent to the
+@@ -2305,7 +2305,7 @@ static int xennet_connect(struct net_device *dev)
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * Callback received when the backend's state changes.
+  */
+ static void netback_changed(struct xenbus_device *dev,
+-- 
+2.25.1
 
