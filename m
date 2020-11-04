@@ -2,147 +2,148 @@ Return-Path: <SRS0=nPxa=EK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 426D9C2D0A3
-	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 00:18:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9F102C2D0A3
+	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 00:22:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 022A3223C6
-	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 00:18:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 47CF8223C7
+	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 00:22:01 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Q1lQXRu4";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="UseAhyvH"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="FcsMlyAv";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="QwpdgYbc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729130AbgKDAQs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 3 Nov 2020 19:16:48 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:62792 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729189AbgKDAQ3 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 3 Nov 2020 19:16:29 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0A409mUI021715;
-        Tue, 3 Nov 2020 16:16:14 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=veT8MI+8efOCwQlqNFrfqzeu7yq8IKP4YK+lQDCiqK0=;
- b=Q1lQXRu40+xX5LOO0uadpoPfDWG5/wsaJ62e2rzcBO9KacuFrYVFSjvZjJb+13duW/F0
- XmNmMM+Kqi8rju9FPqIJ+RlQWNH5G1cSm4Qrlljo2Vuc7FO0ZH65tVtbWFlZ+a23IltX
- 9FGPEEgDqydtmSszKFuHvCUie4GNvB0fU3I= 
+        id S1729130AbgKDAWA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 3 Nov 2020 19:22:00 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:35530 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729869AbgKDAUo (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 3 Nov 2020 19:20:44 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A408N43014338;
+        Tue, 3 Nov 2020 16:20:29 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=18s34da/ueGMFmi6/dpc+F3M40J9kevbe0COjHYj5HA=;
+ b=FcsMlyAvYQq9t122xDzt/g2Y6E2PIGnOs+p5iTV4UrjfeeSKauFjBpePCsopBplyQVmu
+ tvPhMLXo6mlE07UBumNWLrnvoqxaGXB1ZIHwvO4NsecSPVnJBYtAFto7LlC/FBthVovH
+ lSwvugmxm12UH6bTHTkeZ4oEbIvFQZMavZw= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 34k9k3b92w-2
+        by mx0a-00082601.pphosted.com with ESMTP id 34hr6p6wq6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 03 Nov 2020 16:16:14 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.175) with Microsoft SMTP Server
+        Tue, 03 Nov 2020 16:20:28 -0800
+Received: from NAM02-CY1-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.172) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 3 Nov 2020 16:16:12 -0800
+ 15.1.1979.3; Tue, 3 Nov 2020 16:20:27 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GHuQYZ+t5PKrdzVLa3lcanwwpDTn5OKWPjRkypcX3K6IkoOLc8mV/klFaRrOKZL+WtjnLd/YIA+sH6UqCZBAHtIXi32zEsFybDIEnrdi6lcfHM8VFz/CVclztQ80iPlq6cCNJ7TvI+pme54HEWFMtoCyemIL0uZVFbRQeUSyEmsjy9DOC2z3ilGMW9OIu+CKBVBN6aPdeF6Jwgy7htTXs/d9fRdinDhRDvUcVdxcpgBoQZTD2exuJbBv3p68UC6jyEFTv4qLcT3jswtknAoPnANULpkHdT+PHQwl/5UbPQ1xYNBi87RUD6XIHKnsblUFu0hjY00drTcEFSYdZ/G2lQ==
+ b=cfalobBvaUsmEQcOksUpehfsWwZ0d5TMM4GURSAzflEj9Lmq6poMFspiG2wc+DfVWaDOihBSezYEsrqJU7T584VmYyJz6by3UKLldkx0EmkyqcyE9QsSDk3BjMK/0yhYG1Tn9QgaUtTrTf0HBuNJ7hXGMgURzX1YwVF5L7ZtoYfFFuIhVg+CoX/RPuYTvz05A1oRgrs73HjCPgUVrAO0m83HXe5/AMFv76klqYReVNsLxTbnK43jxDeV0ghGE7o4/XNm8AkIshBenQCL+3YLnJMI5cfTswwVsgXtLZECbL1LxwfaRwycFtCMs0xhkgVwtQA8L8MDYcEn0eDZA+vPig==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=veT8MI+8efOCwQlqNFrfqzeu7yq8IKP4YK+lQDCiqK0=;
- b=NINKb+1EtaBMFId6tF67HanIs21NZe8UvgN0mghXYqlfezo5OuZPnF9LU6WpAzisy6aQzPmjUfYfMXFgX1cwsPNSJlBJmSU4A8Ge7une4X12SXdob8QLNPXFPfAmR+DZm7eFiNMnEhr7eAHs4LhCrf7sYKkzBFQKcFBkDXDUb0OsjTiPKplFfMHEh5JRANiXjW0eJTS5pgNYc5dhz25zLt4TKhYGU1kp+jYyUSJPtmRaPiXuSlooUTiOhrduC/4yp6E5YoqbG2MN8bqvWxFBvJrcdoCh/tBLfl06QhRBH4WfJWlsTlWXWCG5f0T4oyueUDegnvF5PTvWOsMdA49hbA==
+ bh=18s34da/ueGMFmi6/dpc+F3M40J9kevbe0COjHYj5HA=;
+ b=jIO2kvRV8UmqFnLEGG0Pzf9qdoCPmO/zZ2CHNnvjr7S9QLcRpU06yzsEsKiRUVq2R5n4x3VTIxSs3PgpFjUAJwC0LecmYhufWUE5FBaROh3eXg9r3dwlONZPsAVNQ2EbboCvdLU356zvCDFoyczpbl5VBwQZotpSkVEOQpUkKLpbJgkQoiS+3VtzzVwqfrfzwwsi1FrhcZ4vjObcaci9Jx4oKzSztriPQme80y6iUEfEfTEN4H/m2tjguSeiJgzuai7WuJB1ZNLWfMVO9d+tQxv1fdm+s9bYhOg6jQrj/ZC599hpmmQZAncFlgMxKF3lJ/oZidlCa/mzNqmW8eEArA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
  header.d=fb.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
  s=selector2-fb-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=veT8MI+8efOCwQlqNFrfqzeu7yq8IKP4YK+lQDCiqK0=;
- b=UseAhyvHHMrXTmUH3gjklSFZPAgw1zAyCZLGIoVu1Zb3jsRZ3CQVK8BqEgam/KgkW+E3UU0oIkDpuvTNiU8sURvcPPkhh30iViAIHVXoQn79/TtwWS9pv6w5VQ5EAXB4eVPjJGng8rgWfxxqcyedRLJdp7NTASD7BemfLqNsXFk=
-Received: from BYAPR15MB2999.namprd15.prod.outlook.com (2603:10b6:a03:fa::12)
- by BY5PR15MB3668.namprd15.prod.outlook.com (2603:10b6:a03:1fb::19) with
+ bh=18s34da/ueGMFmi6/dpc+F3M40J9kevbe0COjHYj5HA=;
+ b=QwpdgYbcpQ11M/m0XH0tijNXY/6uhHtj4jDF2LImMIn3KA3offWKoRkaMpnaBWUW5y78x2lvZb/OyjMg2da4Tl94FUoLeql5pLmAIh/jA3kzA1UWK0nGzVrVfu4+UYDWOmPrGQAc6JJDkGzm7G1yXA+T8GlAoXSvTuXN1LbPF/Y=
+Authentication-Results: gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=none action=none header.from=fb.com;
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
+ by BYAPR15MB3464.namprd15.prod.outlook.com (2603:10b6:a03:10a::33) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.29; Wed, 4 Nov
- 2020 00:16:09 +0000
-Received: from BYAPR15MB2999.namprd15.prod.outlook.com
- ([fe80::7d77:205b:bbc4:4c70]) by BYAPR15MB2999.namprd15.prod.outlook.com
- ([fe80::7d77:205b:bbc4:4c70%6]) with mapi id 15.20.3499.030; Wed, 4 Nov 2020
- 00:16:09 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     KP Singh <kpsingh@chromium.org>
-CC:     open list <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin Lau <kafai@fb.com>, Paul Turner <pjt@google.com>,
-        Jann Horn <jannh@google.com>, Hao Luo <haoluo@google.com>
-Subject: Re: [PATCH bpf-next v2 5/8] bpf: Fix tests for local_storage
-Thread-Topic: [PATCH bpf-next v2 5/8] bpf: Fix tests for local_storage
-Thread-Index: AQHWsfZ082vaN8mf0ECvThQ8GY66Gqm3G3UA
-Date:   Wed, 4 Nov 2020 00:16:09 +0000
-Message-ID: <565276E0-C7AB-4C8B-B82B-DF2720B8B350@fb.com>
-References: <20201103153132.2717326-1-kpsingh@chromium.org>
- <20201103153132.2717326-6-kpsingh@chromium.org>
-In-Reply-To: <20201103153132.2717326-6-kpsingh@chromium.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3608.120.23.2.4)
-authentication-results: chromium.org; dkim=none (message not signed)
- header.d=none;chromium.org; dmarc=none action=none header.from=fb.com;
-x-originating-ip: [2620:10d:c090:400::5:ca49]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f8f62376-f8a5-4784-9c53-08d88056d4c8
-x-ms-traffictypediagnostic: BY5PR15MB3668:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BY5PR15MB36688C530D73250F92A8438EB3EF0@BY5PR15MB3668.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-oob-tlc-oobclassifiers: OLM:2512;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Owz8O+yJGEGR4BYFhS8jPVMycD6u8Fwaz0+ztprGrysf+LHo/gN4R8ByAYA2nT28HdWz435yQp2zXjxYf7Jm+PMK5Wyow08p8coxZ1X7itAYHbngSNjZHLjNrcfrMiHnKE/QzyjZ4u39wEiIjEZU3wXgbwKnkkNkCXv8Z7IR3/njon9uo8aIp6LKjnH96H7vZAWFj4Zgs7WHKQcnIm5DJQbqrfQTbTMURDgz4AA+Reh0msehV/sSTEPNsv/rDdI6P+aQiTm2+CQ9m41M/bDe/LFtRS+9xfNzuXe607cbnFcavmuXdjqjl1tboadAYEitsw3iaI4mREENRNlbIKRQZQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB2999.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(376002)(39850400004)(396003)(366004)(136003)(86362001)(4326008)(83380400001)(8676002)(316002)(8936002)(5660300002)(76116006)(2906002)(478600001)(91956017)(71200400001)(4744005)(54906003)(53546011)(6512007)(33656002)(6486002)(186003)(66476007)(66946007)(66446008)(64756008)(66556008)(2616005)(36756003)(6506007)(6916009);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: 58o+NhZ160TxO/+998lD+Pe3MkWa7XUAxh1covMJEawFrVaVbrFZQ4mdBRtzXNa6BPVSKShc6eTyIX9h+r1WOwLJeMxZZqNxPLaUHaKkHjYXjnFy/SIFJQSxEUkYGe9Ph4VPr1uh1uhHjweZ0ntAYZDsVYXVCQ1q7OWlHTlpSU1TXlTjkwhlxE0N6aZtH3OXkqT9BpUyOEoWHaf1tDZ0ItUmvqGxthKNLX+qwi7L9RHBaiW/dSCfvxbjbIYlItPL/q3FZh6zSs/lB3omxha8LeXb+mMahyraXLre/B4v5kVfEFcwOVCHQJaw3ou1ZLspyyywcaE8dThhRoB9BjEITp8g75WoLMK1iN/GTsZ9S0bJCj8hQhyNX1DpRKLmmbx6OTr2b5jkJVyvnfudkfyad6OtkajX7/y14GY7XCA5UcKJXoqb69R+EZkSv520PjwkwRTAwyK63Pp17Xz26W2F3jFqVhqGuEoWws6WAEMaNiokYWOnmNlbJAPotUMEByIhrxhLLRg7mZySVb7E8VmP8+7LiEnbZ6oEcXL3ZotM31rBKCLE9XF31KI/y2epicAAa/h24KqdLSrJMxbBvuGtVVaHBnDv3Ixyl+9c7rdlE2sA9XNpgA3e2BYQ01HCsU0tVAJ2Mzlm7Hj+wBUx4/0cEVXjVeR9h0ghpJL0/wltmtru+FBhJy/MzFKoFzuHFGti
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <195B982E3CFC254396E577217AC1C3D4@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18; Wed, 4 Nov
+ 2020 00:20:22 +0000
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::bc1d:484f:cb1f:78ee]) by BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::bc1d:484f:cb1f:78ee%4]) with mapi id 15.20.3499.032; Wed, 4 Nov 2020
+ 00:20:22 +0000
+Date:   Tue, 3 Nov 2020 16:20:14 -0800
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     Alexander Duyck <alexander.duyck@gmail.com>
+CC:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <john.fastabend@gmail.com>, <kernel-team@fb.com>,
+        <netdev@vger.kernel.org>, <edumazet@google.com>, <brakmo@fb.com>,
+        <andrii.nakryiko@gmail.com>, <alexanderduyck@fb.com>
+Subject: Re: [bpf-next PATCH v3 0/5] selftests/bpf: Migrate test_tcpbpf_user
+ to be a part of test_progs framework
+Message-ID: <20201104002014.tohvmzsxr2hhxjkt@kafai-mbp.dhcp.thefacebook.com>
+References: <160443914296.1086697.4231574770375103169.stgit@localhost.localdomain>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <160443914296.1086697.4231574770375103169.stgit@localhost.localdomain>
+X-Originating-IP: [2620:10d:c090:400::5:1da0]
+X-ClientProxiedBy: CO2PR18CA0053.namprd18.prod.outlook.com
+ (2603:10b6:104:2::21) To BY5PR15MB3571.namprd15.prod.outlook.com
+ (2603:10b6:a03:1f6::32)
 MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from kafai-mbp.dhcp.thefacebook.com (2620:10d:c090:400::5:1da0) by CO2PR18CA0053.namprd18.prod.outlook.com (2603:10b6:104:2::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3499.18 via Frontend Transport; Wed, 4 Nov 2020 00:20:20 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e63d13f4-bd2a-44bb-8e68-08d880576adf
+X-MS-TrafficTypeDiagnostic: BYAPR15MB3464:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR15MB34645A25C4EC86B5A6529ED9D5EF0@BYAPR15MB3464.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zBFs8wWiJODu/x+249UssHO5dFUQ+ET+txMAL7O96wagWwtII00TeIPFFpdx7H9YmaMSscbIvCDp3MbxvUs31u9JKBCEknpE6No6O0AGU9jV0QloUgD6XahEKcOPT4/47hXOSyfnvVZ2bKVILYkOYUViH88X5gF4Lq9LSdyMqlGO6ngY9Zxbqo27C0lPmxOeAt8JL59tbEWHeGQUN/yxKV58Z+VchB1/Ji3olx66l0n9fhlVJEXQAFeG5GbSW8a/sL3qp3QLPHDN2f1eVNvbavEIwNd/kmImdI06oMqDTMz3I5fKSRfnsYQjRH6WydHBLUXLHSNchuEbs2+4OZ2VMA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(366004)(136003)(396003)(376002)(346002)(316002)(8936002)(5660300002)(6666004)(16526019)(478600001)(55016002)(1076003)(9686003)(186003)(6916009)(2906002)(83380400001)(66556008)(66946007)(66476007)(86362001)(7696005)(8676002)(6506007)(52116002)(4326008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: V2wmmQKPfZo5Fuwdn/RGmptP3xu4D36Gz5wCbKcLpS6F27DwlaIPr88A0ODomagy1j62vmDRptou1vbsyrjHDz7w8X5NasQBlAXbV7p2VPLdReWI//nvL9mOuAvfAFzNbAVoJhcQy7DeuE7mWCbrnh9MokqXHSb7zuVgR5SXVxeSUtX0YYT5Y2KhB3FvkqHOyOC5XkKYqKVLKQCaQ9RShnslFq7TTITHLwCp+Aq/7zMFE3LPYN2SuFaTJ/FXGgM4l+wFIZjgho3HzvOarkReCGl7oxCzsKr5U8yMS46bW+pO2XWZRoav/ZOLUTYcI5YBnBd/VPQxp4w0k609paVwL1c/dLIcV2AsF3JAoE/r9Prc9DpU/M+gaxubHCJCn+nYjSKSBfGdogH93AOkBJ02vQY1fNSJNAwjIQrpbzg6zPsFVdRJLIlhPEHhUhpNSvsI/NrjlOdP8hLEnQvRmNOP5XUIEnUU4/9/74cl+usNOLjhlKFkc1fFN71Lg2jaWb+vlxiaAdH4lv87hAYW1DnvxiQS0jBseMwri+uqvd1O5BbmMu1xcbKRAoqJkPzULhI0WanRe9x78J8agV9eHvxHvm23fXzdkhmqfpO0qCZvmNOCeYl2vW1qV6d2CHxycum5iQp5MwzOJojF8m2upvCe+1tZiU+Y6uE0z/Ev9efLGTc=
+X-MS-Exchange-CrossTenant-Network-Message-Id: e63d13f4-bd2a-44bb-8e68-08d880576adf
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB2999.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8f62376-f8a5-4784-9c53-08d88056d4c8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Nov 2020 00:16:09.7435
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2020 00:20:22.1008
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Vlx5k3ezbMTQJzI3/yREADYNeg1BIl1xqa9+yqab096i4b9L0jvJTSK3gG5P0r22j3NtpBJrwNExl0mtvzTcbg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR15MB3668
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KUUrJKDhKdnTRLYr/06VvBszp+wGV0uB1e+a5hMNxN8zGR9HxHTRCTjPqdgBwKj1
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3464
 X-OriginatorOrg: fb.com
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-03_17:2020-11-03,2020-11-03 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- mlxlogscore=809 lowpriorityscore=0 bulkscore=0 priorityscore=1501
- adultscore=0 malwarescore=0 clxscore=1015 suspectscore=0 spamscore=0
- impostorscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ phishscore=0 clxscore=1015 lowpriorityscore=0 adultscore=0 mlxscore=0
+ bulkscore=0 suspectscore=1 mlxlogscore=928 spamscore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2011040000
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
-
-> On Nov 3, 2020, at 7:31 AM, KP Singh <kpsingh@chromium.org> wrote:
->=20
-> From: KP Singh <kpsingh@google.com>
->=20
-> The {inode,sk}_storage_result checking if the correct value was retrieved
-> was being clobbered unconditionally by the return value of the
-> bpf_{inode,sk}_storage_delete call.
->=20
-> Also, consistently use the newly added BPF_LOCAL_STORAGE_GET_F_CREATE
-> flag.
->=20
-> Fixes: cd324d7abb3d ("bpf: Add selftests for local_storage")
-> Signed-off-by: KP Singh <kpsingh@google.com>
-
-Acked-by: Song Liu <songliubraving@fb.com>
-
-[...]
-
+On Tue, Nov 03, 2020 at 01:34:40PM -0800, Alexander Duyck wrote:
+> Move the test functionality from test_tcpbpf_user into the test_progs 
+> framework so that it will be run any time the test_progs framework is run.
+> This will help to prevent future test escapes as the individual tests, such
+> as test_tcpbpf_user, are less likely to be run by developers and CI
+> tests.
+> 
+> As a part of moving it over the series goes through and updates the code to 
+> make use of the existing APIs included in the test_progs framework. This is
+> meant to simplify and streamline the test code and avoid duplication of
+> effort. 
+> 
+> v2: Dropped test_tcpbpf_user from .gitignore
+>     Replaced CHECK_FAIL calls with CHECK calls
+>     Minimized changes in patch 1 when moving the file
+>     Updated stg mail command line to display renames in submission
+>     Added shutdown logic to end of run_test function to guarantee close
+>     Added patch that replaces the two maps with use of global variables
+> v3: Left err at -1 while we are performing send/recv calls w/ data
+>     Drop extra labels from test_tcpbpf_user in favor of keeping err label
+>     Dropped redundant zero init for tcpbpf_globals result and key
+>     Dropped replacing of "printf(" with "fprintf(stderr, "
+>     Fixed error in use of ASSERT_OK_PTR which was skipping of run_test
+>     Replaced "{ 0 }" with "{}" in init of global in test_tcpbpf_kern.c
+>     Added "Acked-by" from Martin KaiFai Lau and Andrii Nakryiko
+Acked-by: Martin KaFai Lau <kafai@fb.com>
