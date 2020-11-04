@@ -2,142 +2,145 @@ Return-Path: <SRS0=nPxa=EK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C708FC388F9
-	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 16:45:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8314AC388F9
+	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 16:46:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 75A22206DB
-	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 16:45:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 39C89206ED
+	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 16:46:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="aq1AgWsH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FHbImQZ1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731358AbgKDQpp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Nov 2020 11:45:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731040AbgKDQpC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Nov 2020 11:45:02 -0500
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com [IPv6:2a00:1450:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA92C0613D3
-        for <bpf@vger.kernel.org>; Wed,  4 Nov 2020 08:45:02 -0800 (PST)
-Received: by mail-ej1-x641.google.com with SMTP id dk16so30087036ejb.12
-        for <bpf@vger.kernel.org>; Wed, 04 Nov 2020 08:45:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=aFN4S6xNJ1smJ8e1NKpWimVp/f5smo2slL3MYnYJ44M=;
-        b=aq1AgWsHuEK2LL5LiIxMWz/tOdaBhOf1zSEnvhgop/vwPnlZ9N4Kv8ajKmwhoP7V6u
-         9nydpxdXR/mnXQqIkBCi+MKWMGFMKr0pF/x8iWhcqogJSNg4+VFxBqYRF25VcG0AD9Ol
-         62XNVkGrYK8xcbFa57ugioZp/Y+nRlxITy6O0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aFN4S6xNJ1smJ8e1NKpWimVp/f5smo2slL3MYnYJ44M=;
-        b=LVmJIFdH7rwtbprlkKLmYkODDB+T+FtA/SIuN+0nfb57uCS4hF1kG4yRFQ68bscYnN
-         EaykMo9rhN5+q7+WoHXeNx5FEv2AOz5c0NgxoI4AecxQGzJCYxh6at8V5/rcVlCFcYKc
-         NVieKRfcwJ27J2jIFwZ4lgUhj6A0NHJ3ZxilPYSd45XORHY/Udv4ThTaLuKC3IkulRqe
-         HW1/inkF2HklP05p4U5ZsCdyOi4yEC4KvPAYqwar/848zzham7HOF6uhdTzBHIkS5nnk
-         PoZReqdevVcfy+Bd0DOnW9vDIKLv6k4sBsWj+MxhaheHOCksARm2Rfso/CQtUnPAWImn
-         Uy9g==
-X-Gm-Message-State: AOAM5338ebtpE9B+0MoBH39wH0cHkz3iX+i7HNEpnBX9Dzr2OKVAzSnG
-        Rq2p1qwl5nu0fba+aVqVpvVfMw==
-X-Google-Smtp-Source: ABdhPJyOy8TW5lCcqNnuSSMk4t5XSjKyTvl+7oFa4QBsO+GPCztlYP4qYRAXjFR/tluFutaKPkeiaA==
-X-Received: by 2002:a17:906:1fc9:: with SMTP id e9mr19033037ejt.319.1604508300821;
-        Wed, 04 Nov 2020 08:45:00 -0800 (PST)
-Received: from kpsingh.zrh.corp.google.com ([81.6.44.51])
-        by smtp.gmail.com with ESMTPSA id g20sm1283551ejz.88.2020.11.04.08.44.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Nov 2020 08:45:00 -0800 (PST)
-From:   KP Singh <kpsingh@chromium.org>
-To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+        id S1731365AbgKDQqE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Nov 2020 11:46:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:60608 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730154AbgKDQqE (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 4 Nov 2020 11:46:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1604508362;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1cW8DZx44Ft/UJKyMxnwWKu5EBpXA6JwZoQX8qWDLTE=;
+        b=FHbImQZ1Ywb0LLFfA9fBhjAhUaQp89l/VbJIBgc4o9lKjGfvz9y04z0eTHaElprYT+u4Ci
+        ifIXsSUHU9BV87PnaSftKF3GNc17sSXAQq67gjd821E4dpj2PnVp63tSBtmjoMDPm3GXk6
+        5LDdns/2TzFos8G66w5jsHN8R+Xw0qI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-235-4dMxcShON1yrcemzc-s_bg-1; Wed, 04 Nov 2020 11:45:58 -0500
+X-MC-Unique: 4dMxcShON1yrcemzc-s_bg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 120106D243;
+        Wed,  4 Nov 2020 16:45:57 +0000 (UTC)
+Received: from krava (unknown [10.40.192.118])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 58FF955784;
+        Wed,  4 Nov 2020 16:45:54 +0000 (UTC)
+Date:   Wed, 4 Nov 2020 17:45:53 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     Song Liu <songliubraving@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
-        Hao Luo <haoluo@google.com>
-Subject: [PATCH bpf-next v3 3/9] bpftool: Add support for task local storage
-Date:   Wed,  4 Nov 2020 17:44:47 +0100
-Message-Id: <20201104164453.74390-4-kpsingh@chromium.org>
-X-Mailer: git-send-email 2.29.1.341.ge80a0c044ae-goog
-In-Reply-To: <20201104164453.74390-1-kpsingh@chromium.org>
-References: <20201104164453.74390-1-kpsingh@chromium.org>
+        John Fastabend <john.fastabend@gmail.com>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Kernel Team <Kernel-team@fb.com>
+Subject: Re: [PATCH v2 bpf-next 3/4] selftests/bpf: Add profiler test
+Message-ID: <20201104164215.GH3861143@krava>
+References: <20201009011240.48506-1-alexei.starovoitov@gmail.com>
+ <20201009011240.48506-4-alexei.starovoitov@gmail.com>
+ <20201013195622.GB1305928@krava>
+ <CAADnVQLYSk0YgK7_dUSF-5Rau10vOdDgosVhE9xmEr1dp+=2vg@mail.gmail.com>
+ <CAEf4BzbWO3fgWxAWQw4Pee=F7=UqU+N6LtKYV7V9ZZrfkPZ3gw@mail.gmail.com>
+ <561A9F0C-BDAE-406A-8B93-011ECAB22B1C@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <561A9F0C-BDAE-406A-8B93-011ECAB22B1C@fb.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: KP Singh <kpsingh@google.com>
+On Thu, Oct 15, 2020 at 06:09:14AM +0000, Song Liu wrote:
+> 
+> 
+> > On Oct 13, 2020, at 2:56 PM, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> 
+> [...]
+> 
+> > 
+> > I'd go with Kconfig + bpf_core_enum_value(), as it's shorter and
+> > nicer. This compiles and works with my Kconfig, but I haven't checked
+> > with CONFIG_CGROUP_PIDS defined.
+> 
+> Tested with CONFIG_CGROUP_PIDS, it looks good. 
+> 
+> Tested-by: Song Liu <songliubraving@fb.com>
 
-Updates the binary to handle the BPF_MAP_TYPE_TASK_STORAGE as
-"task_storage" for printing and parsing. Also updates the documentation
-and bash completion
+hi,
+I still need to apply my workaround to compile tests,
+so I wonder this fell through cracks
 
-Acked-by: Song Liu <songliubraving@fb.com>
-Signed-off-by: KP Singh <kpsingh@google.com>
----
- tools/bpf/bpftool/Documentation/bpftool-map.rst | 3 ++-
- tools/bpf/bpftool/bash-completion/bpftool       | 2 +-
- tools/bpf/bpftool/map.c                         | 4 +++-
- 3 files changed, 6 insertions(+), 3 deletions(-)
+thanks,
+jirka
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-index dade10cdf295..3d52256ba75f 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-@@ -50,7 +50,8 @@ MAP COMMANDS
- |		| **lru_percpu_hash** | **lpm_trie** | **array_of_maps** | **hash_of_maps**
- |		| **devmap** | **devmap_hash** | **sockmap** | **cpumap** | **xskmap** | **sockhash**
- |		| **cgroup_storage** | **reuseport_sockarray** | **percpu_cgroup_storage**
--|		| **queue** | **stack** | **sk_storage** | **struct_ops** | **ringbuf** | **inode_storage** }
-+|		| **queue** | **stack** | **sk_storage** | **struct_ops** | **ringbuf** | **inode_storage**
-+		| **task_storage** }
- 
- DESCRIPTION
- ===========
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index 3f1da30c4da6..fdffbc64c65c 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -705,7 +705,7 @@ _bpftool()
-                                 hash_of_maps devmap devmap_hash sockmap cpumap \
-                                 xskmap sockhash cgroup_storage reuseport_sockarray \
-                                 percpu_cgroup_storage queue stack sk_storage \
--                                struct_ops inode_storage' -- \
-+                                struct_ops inode_storage task_storage' -- \
-                                                    "$cur" ) )
-                             return 0
-                             ;;
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index a7efbd84fbcc..b400364ee054 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -51,6 +51,7 @@ const char * const map_type_name[] = {
- 	[BPF_MAP_TYPE_STRUCT_OPS]		= "struct_ops",
- 	[BPF_MAP_TYPE_RINGBUF]			= "ringbuf",
- 	[BPF_MAP_TYPE_INODE_STORAGE]		= "inode_storage",
-+	[BPF_MAP_TYPE_TASK_STORAGE]		= "task_storage",
- };
- 
- const size_t map_type_name_size = ARRAY_SIZE(map_type_name);
-@@ -1464,7 +1465,8 @@ static int do_help(int argc, char **argv)
- 		"                 lru_percpu_hash | lpm_trie | array_of_maps | hash_of_maps |\n"
- 		"                 devmap | devmap_hash | sockmap | cpumap | xskmap | sockhash |\n"
- 		"                 cgroup_storage | reuseport_sockarray | percpu_cgroup_storage |\n"
--		"                 queue | stack | sk_storage | struct_ops | ringbuf | inode_storage }\n"
-+		"                 queue | stack | sk_storage | struct_ops | ringbuf | inode_storage |\n"
-+		"		  task_storage }\n"
- 		"       " HELP_SPEC_OPTIONS "\n"
- 		"",
- 		bin_name, argv[-2]);
--- 
-2.29.1.341.ge80a0c044ae-goog
+> 
+> > 
+> > 
+> > diff --git a/tools/testing/selftests/bpf/progs/profiler.inc.h
+> > b/tools/testing/selftests/bpf/progs/profiler.inc.h
+> > index 00578311a423..79b8d2860a5c 100644
+> > --- a/tools/testing/selftests/bpf/progs/profiler.inc.h
+> > +++ b/tools/testing/selftests/bpf/progs/profiler.inc.h
+> > @@ -243,7 +243,11 @@ static ino_t get_inode_from_kernfs(struct
+> > kernfs_node* node)
+> >        }
+> > }
+> > 
+> > -int pids_cgrp_id = 1;
+> > +extern bool CONFIG_CGROUP_PIDS __kconfig __weak;
+> > +
+> > +enum cgroup_subsys_id___local {
+> > +       pids_cgrp_id___local = 1, /* anything but zero */
+> > +};
+> > 
+> > static INLINE void* populate_cgroup_info(struct cgroup_data_t* cgroup_data,
+> >                                         struct task_struct* task,
+> > @@ -253,7 +257,9 @@ static INLINE void* populate_cgroup_info(struct
+> > cgroup_data_t* cgroup_data,
+> >                BPF_CORE_READ(task, nsproxy, cgroup_ns, root_cset,
+> > dfl_cgrp, kn);
+> >        struct kernfs_node* proc_kernfs = BPF_CORE_READ(task, cgroups,
+> > dfl_cgrp, kn);
+> > 
+> > -       if (ENABLE_CGROUP_V1_RESOLVER) {
+> > +       if (ENABLE_CGROUP_V1_RESOLVER && CONFIG_CGROUP_PIDS) {
+> > +               int cgrp_id = bpf_core_enum_value(enum
+> > cgroup_subsys_id___local, pids_cgrp_id___local);
+> > +
+> > #ifdef UNROLL
+> > #pragma unroll
+> > #endif
+> > @@ -262,7 +268,7 @@ static INLINE void* populate_cgroup_info(struct
+> > cgroup_data_t* cgroup_data,
+> >                                BPF_CORE_READ(task, cgroups, subsys[i]);
+> >                        if (subsys != NULL) {
+> >                                int subsys_id = BPF_CORE_READ(subsys, ss, id);
+> > -                               if (subsys_id == pids_cgrp_id) {
+> > +                               if (subsys_id == cgrp_id) {
+> >                                        proc_kernfs =
+> > BPF_CORE_READ(subsys, cgroup, kn);
+> >                                        root_kernfs =
+> > BPF_CORE_READ(subsys, ss, root, kf_root, kn);
+> >                                        break;
+> 
 
