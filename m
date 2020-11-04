@@ -2,323 +2,447 @@ Return-Path: <SRS0=nPxa=EK=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.4 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C3DFEC2D0A3
-	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 22:00:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 218D5C4741F
+	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 22:00:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5DD8F20795
-	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 22:00:52 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JHF7WZzW"
+	by mail.kernel.org (Postfix) with ESMTP id BE05F20867
+	for <bpf@archiver.kernel.org>; Wed,  4 Nov 2020 22:00:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1604527254;
+	bh=sI77nl+l0CQHYOhFcxiVHZYsqKEkbATlIjsfEGNofUg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=ziOQIP4WS7/sTLYtORWNQqLQJecBzMCvBuL6MT5JPLK7YK0JQ8tOOB6udLSvLzR25
+	 tCX4pSr5FK7HLUm8AG/Wr94ftXPI8kDkSaPw+/ZIndLyZypURub9KQ5RvT7/EjjRep
+	 V667uEHhGFAG3u6OA/ijWZw83k3tTfQj9lgpvJOA=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731945AbgKDV7H (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Nov 2020 16:59:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:29060 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728416AbgKDV5R (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 4 Nov 2020 16:57:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1604527034;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-        bh=xLd9UIzjawre+4pDsoByOIIICry9R8qSsVwWyLpC9EE=;
-        b=JHF7WZzWvV4DAbSDDbivY4HZ18ou+C+DVZOGRlHPwt0fyj2MH2xsi3UOAVN8EwnUW8bU/s
-        Q8g9CeZvVVPaNMF3NVUBnvjv+ucdliggR0svFrpqNFxPr1GEDEMKywZWPOvvq6fcFn7Frm
-        YclhVOSVPkgTCsNTMzvCaMcFZttU/Eg=
+        id S1732169AbgKDWAw convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 4 Nov 2020 17:00:52 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:31252 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732147AbgKDV7p (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 4 Nov 2020 16:59:45 -0500
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-324-tl20Fq8cNliFsTh3atdMzA-1; Wed, 04 Nov 2020 16:57:11 -0500
-X-MC-Unique: tl20Fq8cNliFsTh3atdMzA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+ us-mta-472-AX4qbdulMl-VYbNWM4wnGg-1; Wed, 04 Nov 2020 16:59:38 -0500
+X-MC-Unique: AX4qbdulMl-VYbNWM4wnGg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E3C51803652;
-        Wed,  4 Nov 2020 21:57:06 +0000 (UTC)
-Received: from mail (ovpn-116-241.rdu2.redhat.com [10.10.116.241])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 59A125578B;
-        Wed,  4 Nov 2020 21:57:03 +0000 (UTC)
-Date:   Wed, 4 Nov 2020 16:57:02 -0500
-From:   Andrea Arcangeli <aarcange@redhat.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     YiFei Zhu <zhuyifei1999@gmail.com>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        YiFei Zhu <yifeifz2@illinois.edu>, bpf <bpf@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        David Laight <David.Laight@aculab.com>,
-        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Hubertus Franke <frankeh@us.ibm.com>,
-        Jack Chen <jianyan2@illinois.edu>,
-        Jann Horn <jannh@google.com>,
-        Josep Torrellas <torrella@illinois.edu>,
-        Tianyin Xu <tyxu@illinois.edu>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Valentin Rothberg <vrothber@redhat.com>,
-        Will Drewry <wad@chromium.org>, Jiri Kosina <jikos@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>
-Subject: RFC: default to spec_store_bypass_disable=prctl spectre_v2_user=prctl
-Message-ID: <20201104215702.GG24993@redhat.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B5CD61882FAA;
+        Wed,  4 Nov 2020 21:59:36 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.192.71])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 98D6E1002C03;
+        Wed,  4 Nov 2020 21:59:34 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>,
+        "Frank Ch. Eigler" <fche@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
+Subject: [PATCH 3/3] btf_encoder: Change functions check due to broken dwarf
+Date:   Wed,  4 Nov 2020 22:59:23 +0100
+Message-Id: <20201104215923.4000229-4-jolsa@kernel.org>
+In-Reply-To: <20201104215923.4000229-1-jolsa@kernel.org>
+References: <20201104215923.4000229-1-jolsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.14.7 (2020-08-29)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+We need to generate just single BTF instance for the
+function, while DWARF data contains multiple instances
+of DW_TAG_subprogram tag.
 
-[ Given the CC list and your mention of spectre_v2_user=prctl is spot
-  on to show the badness... I spawned a new thread to suggest another
-  thing related to seccomp that I've been intending to suggest for
-  a while ]
+Unfortunately we can no longer rely on DW_AT_declaration
+tag (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97060)
 
-On Tue, Nov 03, 2020 at 04:29:38PM -0800, Kees Cook wrote:
-> I assume this is from Indirect Branch Prediction Barrier (IBPB) and
-> Single Threaded Indirect Branch Prediction (STIBP) (which get enabled
-> for threads under seccomp by default).
-> 
-> Try booting with "spectre_v2_user=prctl"
+Instead we apply following checks:
+  - argument names are defined for the function
+  - there's symbol and address defined for the function
+  - function is generated only once
 
-We need to change the kernel default to
-"spec_store_bypass_disable=prctl spectre_v2_user=prctl".
+Also because we want to follow kernel's ftrace traceable
+functions, this patchset is adding extra check that the
+function is one of the ftrace's functions.
 
-I've been recommending to everyone to use
-"spec_store_bypass_disable=prctl spectre_v2_user=prctl" for a while
-now. I already recommend to Yifei too a few months ago when he first
-found out of the huge seccomp regression when he upgraded his codebase
-to the upstream kernel with both STIBP/SSBD enabled in seccomp jails.
+All ftrace functions addresses are stored in vmlinux
+binary within symbols:
+  __start_mcount_loc
+  __stop_mcount_loc
 
-Here's below a tentative RFC, the code is actually trivial, if you
-could help reviewing/improving the commit header it would be great.
+During object preparation code we read those addresses,
+sort them and use them as filter for all detected dwarf
+functions.
 
-Thanks,
-Andrea
+We also filter out functions within .init section, ftrace
+is doing that in runtime. At the same time we keep functions
+from .init.bpf.preserve_type, because they are needed in BTF.
 
-From 3f7adb783262dc7f4e71cdbf07b4ef9f6b8d3ed9 Mon Sep 17 00:00:00 2001
-From: Andrea Arcangeli <aarcange@redhat.com>
-Date: Wed, 4 Nov 2020 15:20:33 -0500
-Subject: [PATCH 1/1] x86: change default to spec_store_bypass_disable=prctl
- spectre_v2_user=prctl
+I can still see several differences to ftrace functions in
+/sys/kernel/debug/tracing/available_filter_functions file:
 
-Switch the kernel default of SSBD and STIBP to the ones with
-CONFIG_SECCOMP=n (i.e. spec_store_bypass_disable=prctl
-spectre_v2_user=prctl) even if CONFIG_SECCOMP=y.
+  - available_filter_functions includes modules
+  - available_filter_functions includes functions like:
+      __acpi_match_device.part.0.constprop.0
+      acpi_ns_check_sorted_list.constprop.0
+      acpi_os_unmap_generic_address.part.0
+      acpiphp_check_bridge.part.0
 
-Several motivations listed below:
+    which are not part of dwarf data
+  - BTF includes multiple functions like:
+      __clk_register_clkdev
+      clk_register_clkdev
 
-- If SMT is enabled the seccomp jail can still attack the rest of the
-  system even with spectre_v2_user=seccomp by using MDS-HT (except on
-  XEON PHI where MDS can be tamed with SMT left enabled, but that's a
-  special case). Setting STIBP become a very expensive window dressing
-  after MDS-HT was discovered.
+    which share same code so they appear just as single function
+    in available_filter_functions, but dwarf keeps track of both
+    of them
 
-- The seccomp jail cannot attack the kernel with spectre-v2-HT
-  regardless (even if STIBP is not set), but with MDS-HT the seccomp
-  jail can attack the kernel too.
+With this change I'm getting 38353 BTF functions, which
+when added above functions to consideration gives same
+amount of functions in available_filter_functions.
 
-- With spec_store_bypass_disable=prctl the seccomp jail can attack the
-  other userland (guest or host mode) using spectre-v2-HT, but the
-  userland attack is already mitigated by both ASLR and pid namespaces
-  for host userland and through virt isolation with libkrun or
-  kata. (if something if somebody is worried about spectre-v2-HT it's
-  best to mount proc with hidepid=2,gid=proc on workstations where not
-  all apps may run under container runtimes, rather than slowing down
-  all seccomp jails, but the best is to add pid namespaces to the
-  seccomp jail). As opposed MDS-HT is not mitigated and the seccomp
-  jail can still attack all other host and guest userland if SMT is
-  enabled even with spec_store_bypass_disable=seccomp.
+The patch still keeps the original function filter condition
+(that uses current fn->declaration check) in case the object
+does not contain *_mcount_loc symbol -> object is not vmlinux.
 
-- If full security is required then MDS-HT must also be mitigated with
-  nosmt and then spectre_v2_user=prctl and spectre_v2_user=seccomp
-  would become identical.
-
-- Setting spectre_v2_user=seccomp is overall lower priority than to
-  setting javascript.options.wasm false in about:config to protect
-  against remote wasm MDS-HT, instead of worrying about Spectre-v2-HT
-  and STIBP which again is already statistically well mitigated by
-  other means in userland and it's fully mitigated in kernel with
-  retpolines (unlike the wasm assist call with MDS-HT).
-
-- SSBD is needed to prevent reading the JIT memory and the primary
-  user being the OpenJDK. However the primary user of SSBD wouldn't be
-  covered by spec_store_bypass_disable=seccomp because it doesn't use
-  seccomp and the primary user also explicitly declined to set
-  PR_SET_SPECULATION_CTRL+PR_SPEC_STORE_BYPASS despite it easily
-  could. In fact it would need to set it only when the sandboxing
-  mechanism is enabled for javaws applets, but it still declined it by
-  declaring security within the same user address space as an
-  untenable objective for their JIT, even in the sandboxing case where
-  performance would be a lesser concern (for the record: I kind of
-  disagree in not setting PR_SPEC_STORE_BYPASS in the sandbox case and
-  I prefer to run javaws through a wrapper that sets
-  PR_SPEC_STORE_BYPASS if I need). In turn it can be inferred that
-  even if the primary user of SSBD would use seccomp, they would
-  invoke it with SECCOMP_FILTER_FLAG_SPEC_ALLOW by now.
-
-- runc/crun already set SECCOMP_FILTER_FLAG_SPEC_ALLOW by default, k8s
-  and podman have a default json seccomp allowlist that cannot be
-  slowed down, so for the #1 seccomp user this change is already a
-  noop.
-
-- systemd/sshd or other apps that use seccomp, if they really need
-  STIBP or SSBD, they need to explicitly set the
-  PR_SET_SPECULATION_CTRL by now. The stibp/ssbd seccomp blind
-  catch-all approach was done probably initially with a wishful
-  thinking objective to pretend to have a peace of mind that it could
-  magically fix it all. That was wishful thinking before MDS-HT was
-  discovered, but after MDS-HT has been discovered it become just
-  window dressing.
-
-- For qemu "-sandbox" seccomp jail it wouldn't make sense to set STIBP
-  or SSBD. SSBD doesn't help with KVM because there's no JIT (if it's
-  needed with TCG it should be an opt-in with
-  PR_SET_SPECULATION_CTRL+PR_SPEC_STORE_BYPASS and it shouldn't
-  slowdown KVM for nothing). For qemu+KVM STIBP would be even more
-  window dressing than it is for all other apps, because in the
-  qemu+KVM case there's not only the MDS attack to worry about with
-  SMT enabled. Even after disabling SMT, there's still a theoretical
-  spectre-v2 attack possible within the same thread context from guest
-  mode to host ring3 that the host kernel retpoline mitigation has no
-  theoretical chance to mitigate. On some kernels a
-  ibrs-always/ibrs-retpoline opt-in model is provided that will
-  enabled IBRS in the qemu host ring3 userland which fixes this
-  theoretical concern. Only after enabling IBRS in the host userland
-  it would then make sense to proceed and worry about STIBP and an
-  attack on the other host userland, but then again SMT would need to
-  be disabled for full security anyway, so that would render STIBP
-  again a noop.
-
-- last but not the least: the lack of "spec_store_bypass_disable=prctl
-  spectre_v2_user=prctl" means the moment a guest boots and
-  sshd/systemd runs, the guest kernel will write to SPEC_CTRL MSR
-  which will make the guest vmexit forever slower, forcing KVM to
-  issue a very slow rdmsr instruction at every vmexit. So the end
-  result is that SPEC_CTRL MSR is only available in GCE. Most other
-  public cloud providers don't expose SPEC_CTRL, which means that not
-  only STIBP/SSBD isn't available, but IBPB isn't available either
-  (which would cause no overhead to the guest or the hypervisor
-  because it's write only and requires no reading during vmexit). So
-  the current default already net loss in security (missing IBPB)
-  which means most public cloud providers cannot achieve a fully
-  secure guest with nosmt (and nosmt is enough to fully mitigate
-  MDS-HT). It also means GCE and is unfairly penalized in performance
-  because it provides the option to enable full security in the guest
-  as an opt-in (i.e. nosmt and IBPB). So this change will allow all
-  cloud providers to expose SPEC_CTRL without incurring into any
-  hypervisor slowdown and at the same time it will remove the unfair
-  penalization of GCE performance for doing the right thing and it'll
-  allow to get full security with nosmt with IBPB being available (and
-  STIBP becoming meaningless).
-
-Example to put things in prospective: the STIBP enabled in seccomp has
-never been about protecting apps using seccomp like sshd from an
-attack from a malicious userland, but to the contrary it has always
-been about protecting the system from an attack from sshd, after a
-successful remote network exploit against sshd. In fact initially it
-wasn't obvious STIBP would work both ways (STIBP was about preventing
-the task that runs with STIBP to be attacked with spectre-v2-HT, but
-accidentally in the STIBP case it also prevents the attack in the
-other direction). In the hypothetical case that sshd has been remotely
-exploited the last concern should be STIBP being set, because it'll be
-still possible to obtain info even from the kernel by using MDS if
-nosmt wasn't set (and if it was set, STIBP is a noop in the first
-place). As opposed kernel cannot leak anything with spectre-v2 HT
-because of retpolines and the userland is mitigated by ASLR already
-and ideally PID namespaces too. If something it'd be worth checking if
-sshd run the seccomp thread under pid namespaces too if available in
-the running kernel. SSBD also would be a noop for sshd, since sshd
-uses no JIT. If sshd prefers to keep doing the STIBP window dressing
-exercise, it still can even after this change of defaults by opting-in
-with PR_SPEC_STORE_BYPASS.
-
-Ultimately setting SSBD and STIBP by default for all seccomp jails is
-a bad sweet spot and bad default with more cons than pros that end up
-reducing security in the public cloud (by giving an huge incentive to
-not expose SPEC_CTRL which would be needed to get full security with
-IBPB after setting nosmt in the guest) and by excessively hurting
-performance to more secure apps using seccomp that end up having to
-opt out with SECCOMP_FILTER_FLAG_SPEC_ALLOW.
-
-The following is the verified result of the new default with SMT
-enabled:
-
-(gdb) print spectre_v2_user_stibp
-$1 = SPECTRE_V2_USER_PRCTL
-(gdb) print spectre_v2_user_ibpb
-$2 = SPECTRE_V2_USER_PRCTL
-(gdb) print ssb_mode
-$3 = SPEC_STORE_BYPASS_PRCTL
-
-Signed-off-by: Andrea Arcangeli <aarcange@redhat.com>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- Documentation/admin-guide/kernel-parameters.txt | 5 ++---
- arch/x86/kernel/cpu/bugs.c                      | 4 ++--
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ btf_encoder.c | 261 +++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 259 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 526d65d8573a..105401a3582f 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -4980,8 +4980,7 @@
- 			auto    - Kernel selects the mitigation depending on
- 				  the available CPU features and vulnerability.
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 1866bb16a8ba..df89b4467e4c 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -26,6 +26,174 @@
+  */
+ #define KSYM_NAME_LEN 128
  
--			Default mitigation:
--			If CONFIG_SECCOMP=y then "seccomp", otherwise "prctl"
-+			Default mitigation: "prctl"
++struct symbols {
++	unsigned long start;
++	unsigned long stop;
++	unsigned long init_begin;
++	unsigned long init_end;
++	unsigned long init_bpf_begin;
++	unsigned long init_bpf_end;
++	unsigned long start_section;
++};
++
++struct elf_function {
++	const char	*name;
++	unsigned long	 addr;
++	bool		 generated;
++};
++
++static struct elf_function *functions;
++static int functions_alloc;
++static int functions_cnt;
++static int functions_valid;
++
++static int functions_cmp(const void *_a, const void *_b)
++{
++	const struct elf_function *a = _a;
++	const struct elf_function *b = _b;
++
++	return strcmp(a->name, b->name);
++}
++
++static void delete_functions(void)
++{
++	free(functions);
++	functions_alloc = functions_cnt = functions_valid = 0;
++}
++
++#ifndef max
++#define max(x, y) ((x) < (y) ? (y) : (x))
++#endif
++
++static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
++{
++	struct elf_function *new;
++
++	if (elf_sym__type(sym) != STT_FUNC)
++		return 0;
++	if (!elf_sym__value(sym))
++		return 0;
++
++	if (functions_cnt == functions_alloc) {
++		functions_alloc = max(1000, functions_alloc * 3 / 2);
++		new = realloc(functions, functions_alloc * sizeof(*functions));
++		if (!new) {
++			delete_functions();
++			return -1;
++		}
++		functions = new;
++	}
++
++	functions[functions_cnt].name = elf_sym__name(sym, btfe->symtab);
++	functions[functions_cnt].addr = elf_sym__value(sym);
++	functions[functions_cnt].generated = false;
++	functions_cnt++;
++	return 0;
++}
++
++static int addrs_cmp(const void *_a, const void *_b)
++{
++	const unsigned long *a = _a;
++	const unsigned long *b = _b;
++
++	if (*a == *b)
++		return 0;
++	return *a < *b ? -1 : 1;
++}
++
++static bool is_init(struct symbols *ms, unsigned long addr)
++{
++	return addr >= ms->init_begin && addr < ms->init_end;
++}
++
++static bool is_bpf_init(struct symbols *ms, unsigned long addr)
++{
++	return addr >= ms->init_bpf_begin && addr < ms->init_bpf_end;
++}
++
++static int filter_functions(struct btf_elf *btfe, struct symbols *ms)
++{
++	unsigned long *addrs, count, offset, i;
++	Elf_Data *data;
++	GElf_Shdr shdr;
++	Elf_Scn *sec;
++
++	/*
++	 * Find mcount addressed marked by __start_mcount_loc
++	 * and __stop_mcount_loc symbols and load them into
++	 * sorted array.
++	 */
++	sec = elf_getscn(btfe->elf, ms->start_section);
++	if (!sec || !gelf_getshdr(sec, &shdr)) {
++		fprintf(stderr, "Failed to get section(%lu) header.\n",
++			ms->start_section);
++		return -1;
++	}
++
++	offset = ms->start - shdr.sh_addr;
++	count  = (ms->stop - ms->start) / 8;
++
++	data = elf_getdata(sec, 0);
++	if (!data) {
++		fprintf(stderr, "Failed to get section(%lu) data.\n",
++			ms->start_section);
++		return -1;
++	}
++
++	addrs = malloc(count * sizeof(addrs[0]));
++	if (!addrs) {
++		fprintf(stderr, "Failed to allocate memory for ftrace addresses.\n");
++		return -1;
++	}
++
++	memcpy(addrs, data->d_buf + offset, count * sizeof(addrs[0]));
++	qsort(addrs, count, sizeof(addrs[0]), addrs_cmp);
++
++	/*
++	 * Let's got through all collected functions and filter
++	 * out those that are not in ftrace and init code.
++	 */
++	for (i = 0; i < functions_cnt; i++) {
++		struct elf_function *func = &functions[i];
++
++		/*
++		 * Do not enable .init section functions,
++		 * but keep .init.bpf.preserve_type functions.
++		 */
++		if (is_init(ms, func->addr) && !is_bpf_init(ms, func->addr))
++			continue;
++
++		/* Make sure function is within ftrace addresses. */
++		if (bsearch(&func->addr, addrs, count, sizeof(addrs[0]), addrs_cmp)) {
++			/*
++			 * We iterate over sorted array, so we can easily skip
++			 * not valid item and move following valid field into
++			 * its place, and still keep the 'new' array sorted.
++			 */
++			if (i != functions_valid)
++				functions[functions_valid] = functions[i];
++			functions_valid++;
++		}
++	}
++
++	free(addrs);
++	return 0;
++}
++
++static bool should_generate_function(const struct btf_elf *btfe, const char *name)
++{
++	struct elf_function *p;
++	struct elf_function key = { .name = name };
++
++	p = bsearch(&key, functions, functions_valid,
++		    sizeof(functions[0]), functions_cmp);
++	if (!p || p->generated)
++		return false;
++
++	p->generated = true;
++	return true;
++}
++
+ static bool btf_name_char_ok(char c, bool first)
+ {
+ 	if (c == '_' || c == '.')
+@@ -207,6 +375,7 @@ int btf_encoder__encode()
+ 		btf_elf__add_datasec_type(btfe, PERCPU_SECTION, &btfe->percpu_secinfo);
  
- 			Not specifying this option is equivalent to
- 			spectre_v2_user=auto.
-@@ -5025,7 +5024,7 @@
- 				  will disable SSB unless they explicitly opt out.
+ 	err = btf_elf__encode(btfe, 0);
++	delete_functions();
+ 	btf_elf__delete(btfe);
+ 	btfe = NULL;
  
- 			Default mitigations:
--			X86:	If CONFIG_SECCOMP=y "seccomp", otherwise "prctl"
-+			X86:	"prctl"
+@@ -308,8 +477,45 @@ static int collect_percpu_var(struct btf_elf *btfe, GElf_Sym *sym)
+ 	return 0;
+ }
  
- 			On powerpc the options are:
++static void collect_symbol(GElf_Sym *sym, struct symbols *ms)
++{
++	if (!ms->start &&
++	    !strcmp("__start_mcount_loc", elf_sym__name(sym, btfe->symtab))) {
++		ms->start = sym->st_value;
++		ms->start_section = sym->st_shndx;
++	}
++
++	if (!ms->stop &&
++	    !strcmp("__stop_mcount_loc", elf_sym__name(sym, btfe->symtab)))
++		ms->stop = sym->st_value;
++
++	if (!ms->init_begin &&
++	    !strcmp("__init_begin", elf_sym__name(sym, btfe->symtab)))
++		ms->init_begin = sym->st_value;
++
++	if (!ms->init_end &&
++	    !strcmp("__init_end", elf_sym__name(sym, btfe->symtab)))
++		ms->init_end = sym->st_value;
++
++	if (!ms->init_bpf_begin &&
++	    !strcmp("__init_bpf_preserve_type_begin", elf_sym__name(sym, btfe->symtab)))
++		ms->init_bpf_begin = sym->st_value;
++
++	if (!ms->init_bpf_end &&
++	    !strcmp("__init_bpf_preserve_type_end", elf_sym__name(sym, btfe->symtab)))
++		ms->init_bpf_end = sym->st_value;
++}
++
++static int has_all_symbols(struct symbols *ms)
++{
++	return ms->start && ms->stop &&
++	       ms->init_begin && ms->init_end &&
++	       ms->init_bpf_begin && ms->init_bpf_end;
++}
++
+ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
+ {
++	struct symbols ms = { };
+ 	uint32_t core_id;
+ 	GElf_Sym sym;
  
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index d3f0db463f96..5ec39397fe9c 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -721,11 +721,11 @@ spectre_v2_user_select_mitigation(enum spectre_v2_mitigation_cmd v2_cmd)
- 	case SPECTRE_V2_USER_CMD_FORCE:
- 		mode = SPECTRE_V2_USER_STRICT;
- 		break;
-+	case SPECTRE_V2_USER_CMD_AUTO:
- 	case SPECTRE_V2_USER_CMD_PRCTL:
- 	case SPECTRE_V2_USER_CMD_PRCTL_IBPB:
- 		mode = SPECTRE_V2_USER_PRCTL;
- 		break;
--	case SPECTRE_V2_USER_CMD_AUTO:
- 	case SPECTRE_V2_USER_CMD_SECCOMP:
- 	case SPECTRE_V2_USER_CMD_SECCOMP_IBPB:
- 		if (IS_ENABLED(CONFIG_SECCOMP))
-@@ -1132,7 +1132,6 @@ static enum ssb_mitigation __init __ssb_select_mitigation(void)
- 		return mode;
+@@ -320,6 +526,9 @@ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
+ 	elf_symtab__for_each_symbol(btfe->symtab, core_id, sym) {
+ 		if (collect_percpu_vars && collect_percpu_var(btfe, &sym))
+ 			return -1;
++		if (collect_function(btfe, &sym))
++			return -1;
++		collect_symbol(&sym, &ms);
+ 	}
  
- 	switch (cmd) {
--	case SPEC_STORE_BYPASS_CMD_AUTO:
- 	case SPEC_STORE_BYPASS_CMD_SECCOMP:
- 		/*
- 		 * Choose prctl+seccomp as the default mode if seccomp is
-@@ -1146,6 +1145,7 @@ static enum ssb_mitigation __init __ssb_select_mitigation(void)
- 	case SPEC_STORE_BYPASS_CMD_ON:
- 		mode = SPEC_STORE_BYPASS_DISABLE;
- 		break;
-+	case SPEC_STORE_BYPASS_CMD_AUTO:
- 	case SPEC_STORE_BYPASS_CMD_PRCTL:
- 		mode = SPEC_STORE_BYPASS_PRCTL;
- 		break;
+ 	if (collect_percpu_vars) {
+@@ -329,9 +538,36 @@ static int collect_symbols(struct btf_elf *btfe, bool collect_percpu_vars)
+ 		if (btf_elf__verbose)
+ 			printf("Found %d per-CPU variables!\n", percpu_var_cnt);
+ 	}
++
++	if (functions_cnt && has_all_symbols(&ms)) {
++		qsort(functions, functions_cnt, sizeof(functions[0]), functions_cmp);
++		if (filter_functions(btfe, &ms)) {
++			fprintf(stderr, "Failed to filter dwarf functions\n");
++			return -1;
++		}
++		if (btf_elf__verbose)
++			printf("Found %d functions!\n", functions_valid);
++	} else {
++		if (btf_elf__verbose)
++			printf("vmlinux not detected, falling back to dwarf data\n");
++	}
++
+ 	return 0;
+ }
+ 
++static bool has_arg_names(struct cu *cu, struct ftype *ftype)
++{
++	struct parameter *param;
++	const char *name;
++
++	ftype__for_each_parameter(ftype, param) {
++		name = dwarves__active_loader->strings__ptr(cu, param->name);
++		if (name == NULL)
++			return false;
++	}
++	return true;
++}
++
+ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 		   bool skip_encoding_vars)
+ {
+@@ -407,8 +643,28 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 		int btf_fnproto_id, btf_fn_id;
+ 		const char *name;
+ 
+-		if (fn->declaration || !fn->external)
+-			continue;
++		/*
++		 * The functions_valid != 0 means we parsed all necessary
++		 * kernel symbols and we are using ftrace location filter
++		 * for functions. If it's not available keep the current
++		 * dwarf declaration check.
++		 */
++		if (functions_valid) {
++			/*
++			 * We check following conditions:
++			 *   - argument names are defined
++			 *   - there's symbol and address defined for the function
++			 *   - function address belongs to ftrace locations
++			 *   - function is generated only once
++			 */
++			if (!has_arg_names(cu, &fn->proto))
++				continue;
++			if (!should_generate_function(btfe, function__name(fn, cu)))
++				continue;
++		} else {
++			if (fn->declaration || !fn->external)
++				continue;
++		}
+ 
+ 		btf_fnproto_id = btf_elf__add_func_proto(btfe, cu, &fn->proto, type_id_off);
+ 		name = dwarves__active_loader->strings__ptr(cu, fn->name);
+@@ -492,6 +748,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 
+ out:
+ 	if (err) {
++		delete_functions();
+ 		btf_elf__delete(btfe);
+ 		btfe = NULL;
+ 	}
+-- 
+2.26.2
 
