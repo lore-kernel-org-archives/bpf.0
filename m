@@ -2,84 +2,147 @@ Return-Path: <SRS0=NbGg=EL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BA93C388F7
-	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 22:57:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF4FFC388F7
+	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 22:58:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E222C20782
-	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 22:57:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604617035;
-	bh=4HiUMXFfTMWojhcYABhByqsUoN31oPzYLU2VOxm5slc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=QqH2en/B7320jEW0gADpdjzECwLf2iSEQ30j2IoA+xkilm1BSThkQNXIQ8jVE3ZXq
-	 Cm0yoobgumLxmYiP22vnuczyamXAeWmAplEHZSBzSSr83rj4gzZghvZrWGXr59RFon
-	 bhnt6Rh4Ctx+i7KSuhEOz8XtZEz+iEnJxAsIVCBQ=
+	by mail.kernel.org (Postfix) with ESMTP id 40CF72071A
+	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 22:58:34 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="k+zEluKd"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731899AbgKEW5P (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 5 Nov 2020 17:57:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57364 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731694AbgKEW5P (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 5 Nov 2020 17:57:15 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 45F2E20719;
-        Thu,  5 Nov 2020 22:57:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604617034;
-        bh=4HiUMXFfTMWojhcYABhByqsUoN31oPzYLU2VOxm5slc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kGASsWQxXe3caLLm/7vBWyqdqt8vB+YGs/iklalrGZY17PjESICpdi2+Ovy0wd5XA
-         /Sx89fXIpP89yBg7H2BfL6qe1cWjTugPCWPWbrIo6YDgnQTmxuNapVP1XMwnxgsP1o
-         kfst2YRAXM5dBv64fqz636++qSHj/37CuS31rDww=
-Date:   Thu, 5 Nov 2020 14:57:13 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Benc <jbenc@redhat.com>, Andrii Nakryiko <andriin@fb.com>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
+        id S1732200AbgKEW6d (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 5 Nov 2020 17:58:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731899AbgKEW6d (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 5 Nov 2020 17:58:33 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA165C0613D3
+        for <bpf@vger.kernel.org>; Thu,  5 Nov 2020 14:58:32 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id n18so3609396wrs.5
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2020 14:58:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6Qkos45I7JBc99J3NgQI9X1LqhcBblXueuCbnD5Pdqg=;
+        b=k+zEluKdNybMDZtlS4A6ctNGgTFjuhkY2YgtaboNnhKRvt13Remia9aEaiMPknMPsG
+         L/j1Sr7skQplkNWmyAhvsR5wp0J1sEdVaHJSxWzT8OApd/ADMOX+BTfA1oG07wDSJbLt
+         ZtA3KDB03hAcPe0c1Q3k8sI0sr4h/lAbzoB5Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6Qkos45I7JBc99J3NgQI9X1LqhcBblXueuCbnD5Pdqg=;
+        b=RiLjpvAH8elVcDzGs1oKA8KFcqkDtzDgafEYvtIbvropkO3DPECx3byfoztXkBG7bh
+         MBzLPm3HGpW6wvDNX4wvieknSZNtt5a/ROHjeGQfUwQ9j/ZROxgMC+5wOm33OuwSeoy8
+         b3Rvk8kW9+kgIpWiiQH5zqrHLt0FiSOBjhCrbkytOgnvErNbx6j9IhivDU7IIJ4FhvvZ
+         GyAYaQrp26YkBTolHKksZaWHo8Bk0cZ9XYlnpjASR72qB43tlgtGUmPWagZ08inFXG7S
+         CdAqxjMPKdVYudfWVM8QXVC6h6slo1FDSgdvOI3bwm4+WMCV391oN0xwn2uq2pMz3WR4
+         7UAg==
+X-Gm-Message-State: AOAM533XrD1uvaV2xXLn16x2RWEut8pYg6TgmsLBq/EITw1qQBe9PtBp
+        ONyLS5CfBfcXdpjx9KAoYweQbXRE/tGjVJg1
+X-Google-Smtp-Source: ABdhPJxJFa5cjZi4YJ9R9pFeSs06ZU/ffoGxkCQa1v29df5UT1LUcNNpHyavQye7D0uH3eRpDFseyA==
+X-Received: by 2002:a5d:4e10:: with SMTP id p16mr5635129wrt.191.1604617111379;
+        Thu, 05 Nov 2020 14:58:31 -0800 (PST)
+Received: from kpsingh.c.googlers.com.com (203.75.199.104.bc.googleusercontent.com. [104.199.75.203])
+        by smtp.gmail.com with ESMTPSA id f19sm3977366wml.21.2020.11.05.14.58.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Nov 2020 14:58:30 -0800 (PST)
+From:   KP Singh <kpsingh@chromium.org>
+To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc:     Song Liu <songliubraving@fb.com>, Martin KaFai Lau <kafai@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Subject: Re: [PATCH v3 bpf-next] bpf: make verifier log more relevant by
- default
-Message-ID: <20201105145713.10af539e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <CAEf4BzZgXO1Uv49cGQ6PMoe6gXiF8obJr9uKBTeE2MzzHEr=PA@mail.gmail.com>
-References: <20200423195850.1259827-1-andriin@fb.com>
-        <20201105170202.5bb47fef@redhat.com>
-        <CAEf4Bzb7r-9TEAnQC3gwiwX52JJJuoRd_ZHrkGviiuFKvy8qJg@mail.gmail.com>
-        <20201105135338.316e1677@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <CAEf4BzZgXO1Uv49cGQ6PMoe6gXiF8obJr9uKBTeE2MzzHEr=PA@mail.gmail.com>
+        Paul Turner <pjt@google.com>, Jann Horn <jannh@google.com>,
+        Hao Luo <haoluo@google.com>
+Subject: [PATCH bpf-next v5 1/9] bpf: Allow LSM programs to use bpf spin locks
+Date:   Thu,  5 Nov 2020 22:58:19 +0000
+Message-Id: <20201105225827.2619773-2-kpsingh@chromium.org>
+X-Mailer: git-send-email 2.29.1.341.ge80a0c044ae-goog
+In-Reply-To: <20201105225827.2619773-1-kpsingh@chromium.org>
+References: <20201105225827.2619773-1-kpsingh@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 5 Nov 2020 14:41:12 -0800 Andrii Nakryiko wrote:
-> On Thu, Nov 5, 2020 at 1:53 PM Jakub Kicinski <kuba@kernel.org> wrote:
-> > On Thu, 5 Nov 2020 13:22:12 -0800 Andrii Nakryiko wrote:  
-> > > Should we just drop check_verifier_log() checks?  
-> >
-> > Drivers only print error messages when something goes wrong, so the
-> > messages are high priority. IIUC this change was just supposed to
-> > decrease verbosity, right?  
-> 
-> Seems like check_verifier_log() in test_offline.py is only called for
-> successful cases. This patch truncates parts of the verifier log that
-> correspond to successfully validated code paths, so that in case if
-> verification fails, only relevant parts are left. So for completely
-> successful verification the log will be almost empty, with only final
-> stats available.
+From: KP Singh <kpsingh@google.com>
 
-If you're saying the driver message would still be there if
-verification or translation failed that's perfectly fine, we 
-can definitely adjust the test. But some check that driver 
-message reporting is working is needed, don't just remove it.
+Usage of spin locks was not allowed for tracing programs due to
+insufficient preemption checks. The verifier does not currently prevent
+LSM programs from using spin locks, but the helpers are not exposed
+via bpf_lsm_func_proto.
 
-Sorry, don't have cycles to look closely :(
+Based on the discussion in [1], non-sleepable LSM programs should be
+able to use bpf_spin_{lock, unlock}.
+
+Sleepable LSM programs can be preempted which means that allowng spin
+locks will need more work (disabling preemption and the verifier
+ensuring that no sleepable helpers are called when a spin lock is held).
+
+[1]: https://lore.kernel.org/bpf/20201103153132.2717326-1-kpsingh@chromium.org/T/#md601a053229287659071600d3483523f752cd2fb
+
+Acked-by: Song Liu <songliubraving@fb.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+Signed-off-by: KP Singh <kpsingh@google.com>
+---
+ kernel/bpf/bpf_lsm.c  |  4 ++++
+ kernel/bpf/verifier.c | 20 +++++++++++++++-----
+ 2 files changed, 19 insertions(+), 5 deletions(-)
+
+diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+index 78ea8a7bd27f..cd8a617f2109 100644
+--- a/kernel/bpf/bpf_lsm.c
++++ b/kernel/bpf/bpf_lsm.c
+@@ -59,6 +59,10 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_sk_storage_get_proto;
+ 	case BPF_FUNC_sk_storage_delete:
+ 		return &bpf_sk_storage_delete_proto;
++	case BPF_FUNC_spin_lock:
++		return &bpf_spin_lock_proto;
++	case BPF_FUNC_spin_unlock:
++		return &bpf_spin_unlock_proto;
+ 	default:
+ 		return tracing_prog_func_proto(func_id, prog);
+ 	}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 6200519582a6..f863aa84d0a2 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9719,11 +9719,21 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
+ 		verbose(env, "trace type programs with run-time allocated hash maps are unsafe. Switch to preallocated hash maps.\n");
+ 	}
+ 
+-	if ((is_tracing_prog_type(prog_type) ||
+-	     prog_type == BPF_PROG_TYPE_SOCKET_FILTER) &&
+-	    map_value_has_spin_lock(map)) {
+-		verbose(env, "tracing progs cannot use bpf_spin_lock yet\n");
+-		return -EINVAL;
++	if (map_value_has_spin_lock(map)) {
++		if (prog_type == BPF_PROG_TYPE_SOCKET_FILTER) {
++			verbose(env, "socket filter progs cannot use bpf_spin_lock yet\n");
++			return -EINVAL;
++		}
++
++		if (is_tracing_prog_type(prog_type)) {
++			verbose(env, "tracing progs cannot use bpf_spin_lock yet\n");
++			return -EINVAL;
++		}
++
++		if (prog->aux->sleepable) {
++			verbose(env, "sleepable progs cannot use bpf_spin_lock yet\n");
++			return -EINVAL;
++		}
+ 	}
+ 
+ 	if ((bpf_prog_is_dev_bound(prog->aux) || bpf_map_is_dev_bound(map)) &&
+-- 
+2.29.1.341.ge80a0c044ae-goog
+
