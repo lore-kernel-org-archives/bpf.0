@@ -4,503 +4,360 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 847E2C4741F
-	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 04:34:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EDE38C4741F
+	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 04:40:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2DFB02083B
-	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 04:34:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8A7EA2083B
+	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 04:40:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604550885;
-	bh=z6pqi1IRZRwNxMLjmM9H3sHeVywwNBujzmnhXZCocus=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=W6sjnrCAGhixMcE6S8U/IFMVCmbQrr3l2wgzmytdyf7vXjx90JW/9mFe+Z7Lil6x1
-	 +B1pLLX9jOemqDXsWs1lxnkHspysNFBKUfs3QfW7dlJK8eLT3uXuM865/LYNqlP+lo
-	 PgrQ9IljyNyKKmSRMgWXrFUoTaxRvc7qOS5SOiNA=
+	s=default; t=1604551210;
+	bh=fHW4Y4UVp4RZK6YrmsnzQyu0KqY1UR69AtT+3kx6+K0=;
+	h=From:To:CC:Subject:Date:List-ID:From;
+	b=JoRaIWNu4XebT0OvogJjM7MGv0a1kB8xVu24PlNW4LzclgBEG8kRPf1vqEByq+DNq
+	 njmhM3Lm5uUsIMP4/r9jxadn23wCXVCTmrcsM0mij7CudiJ/LQp6bLNS6PKuaa7Oo2
+	 OlmhnjT2SnOVjzHSbuArc5WDVVOQpmUGb6/FiWCo=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731519AbgKEEeo convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 4 Nov 2020 23:34:44 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:21364 "EHLO
+        id S1726307AbgKEEkK convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 4 Nov 2020 23:40:10 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:64936 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731711AbgKEEen (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 4 Nov 2020 23:34:43 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A54YdeI031547
-        for <bpf@vger.kernel.org>; Wed, 4 Nov 2020 20:34:40 -0800
+        by vger.kernel.org with ESMTP id S1726214AbgKEEkK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 4 Nov 2020 23:40:10 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A54Y0AF003268
+        for <bpf@vger.kernel.org>; Wed, 4 Nov 2020 20:40:08 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 34m5r5h4ur-3
+        by mx0a-00082601.pphosted.com with ESMTP id 34kf5c7rtr-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 04 Nov 2020 20:34:40 -0800
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2020 20:40:08 -0800
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 4 Nov 2020 20:34:33 -0800
+ 15.1.1979.3; Wed, 4 Nov 2020 20:40:04 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 97D652EC8E04; Wed,  4 Nov 2020 20:34:25 -0800 (PST)
+        id A346E2EC8E08; Wed,  4 Nov 2020 20:39:52 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Song Liu <songliubraving@fb.com>
-Subject: [PATCH v2 bpf-next 10/11] selftests/bpf: add split BTF dedup selftests
-Date:   Wed, 4 Nov 2020 20:34:00 -0800
-Message-ID: <20201105043402.2530976-11-andrii@kernel.org>
+To:     <dwarves@vger.kernel.org>, <acme@kernel.org>, <bpf@vger.kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [RFC PATCH dwarves] btf: add support for split BTF loading and encoding
+Date:   Wed, 4 Nov 2020 20:39:36 -0800
+Message-ID: <20201105043936.2555804-1-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201105043402.2530976-1-andrii@kernel.org>
-References: <20201105043402.2530976-1-andrii@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-05_01:2020-11-05,2020-11-05 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 adultscore=0
- malwarescore=0 phishscore=0 bulkscore=0 lowpriorityscore=0
- priorityscore=1501 mlxlogscore=999 suspectscore=25 clxscore=1015
- spamscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2011050033
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 spamscore=0
+ clxscore=1015 phishscore=0 impostorscore=0 mlxscore=0 mlxlogscore=999
+ suspectscore=0 priorityscore=1501 malwarescore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011050033
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add selftests validating BTF deduplication for split BTF case. Add a helper
-macro that allows to validate entire BTF with raw BTF dump, not just
-type-by-type. This saves tons of code and complexity.
+Add support for generating split BTF, in which there is a designated base
+BTF, containing a base set of types, and a split BTF, which extends main BTF
+with extra types, that can reference types and strings from the main BTF.
 
-Acked-by: Song Liu <songliubraving@fb.com>
+This is going to be used to generate compact BTFs for kernel modules, with
+vmlinux BTF being a main BTF, which all kernel modules are based off of.
+
+These changes rely on patch set [0] to be present in libbpf submodule.
+
+  [0] https://patchwork.kernel.org/project/netdevbpf/list/?series=377859&state=*
+
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/testing/selftests/bpf/btf_helpers.c     |  59 ++++
- tools/testing/selftests/bpf/btf_helpers.h     |   7 +
- .../bpf/prog_tests/btf_dedup_split.c          | 325 ++++++++++++++++++
- 3 files changed, 391 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
 
-diff --git a/tools/testing/selftests/bpf/btf_helpers.c b/tools/testing/selftests/bpf/btf_helpers.c
-index abc3f6c04cfc..48f90490f922 100644
---- a/tools/testing/selftests/bpf/btf_helpers.c
-+++ b/tools/testing/selftests/bpf/btf_helpers.c
-@@ -3,6 +3,8 @@
- #include <stdio.h>
- #include <errno.h>
- #include <bpf/btf.h>
-+#include <bpf/libbpf.h>
-+#include "test_progs.h"
+This is posted before libbpf changes landed to show end-to-end how kernel
+module BTFs are going to be integrated into the kernel. Once libbpf split BTF
+support lands, I'll sync it into Github repo and will post a proper v1.
+
+ btf_encoder.c | 15 ++++++++-------
+ btf_loader.c  |  2 +-
+ libbtf.c      | 43 +++++++++++++++++++++++++++----------------
+ libbtf.h      |  4 +++-
+ pahole.c      | 23 +++++++++++++++++++++++
+ 5 files changed, 62 insertions(+), 25 deletions(-)
+
+diff --git a/btf_encoder.c b/btf_encoder.c
+index 4c92908beab2..d67e29b9cbee 100644
+--- a/btf_encoder.c
++++ b/btf_encoder.c
+@@ -12,6 +12,7 @@
+ #include "dwarves.h"
+ #include "libbtf.h"
+ #include "lib/bpf/include/uapi/linux/btf.h"
++#include "lib/bpf/src/libbpf.h"
+ #include "hash.h"
+ #include "elf_symtab.h"
+ #include "btf_encoder.h"
+@@ -343,7 +344,7 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 	}
  
- static const char * const btf_kind_str_mapping[] = {
- 	[BTF_KIND_UNKN]		= "UNKNOWN",
-@@ -198,3 +200,60 @@ const char *btf_type_raw_dump(const struct btf *btf, int type_id)
+ 	if (!btfe) {
+-		btfe = btf_elf__new(cu->filename, cu->elf);
++		btfe = btf_elf__new(cu->filename, cu->elf, base_btf);
+ 		if (!btfe)
+ 			return -1;
  
- 	return buf;
+@@ -358,22 +359,22 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+ 			printf("File %s:\n", btfe->filename);
+ 	}
+ 
++	btf_elf__verbose = verbose;
++	btf_elf__force = force;
++	type_id_off = btf__get_nr_types(btfe->btf);
++
+ 	if (!has_index_type) {
+ 		/* cu__find_base_type_by_name() takes "type_id_t *id" */
+ 		type_id_t id;
+ 		if (cu__find_base_type_by_name(cu, "int", &id)) {
+ 			has_index_type = true;
+-			array_index_id = id;
++			array_index_id = type_id_off + id;
+ 		} else {
+ 			has_index_type = false;
+-			array_index_id = cu->types_table.nr_entries;
++			array_index_id = type_id_off + cu->types_table.nr_entries;
+ 		}
+ 	}
+ 
+-	btf_elf__verbose = verbose;
+-	btf_elf__force = force;
+-	type_id_off = btf__get_nr_types(btfe->btf);
+-
+ 	cu__for_each_type(cu, core_id, pos) {
+ 		int32_t btf_type_id = tag__encode_btf(cu, pos, core_id, btfe, array_index_id, type_id_off);
+ 
+diff --git a/btf_loader.c b/btf_loader.c
+index 6ea207ea65b4..ec286f413f36 100644
+--- a/btf_loader.c
++++ b/btf_loader.c
+@@ -534,7 +534,7 @@ struct debug_fmt_ops btf_elf__ops;
+ int btf_elf__load_file(struct cus *cus, struct conf_load *conf, const char *filename)
+ {
+ 	int err;
+-	struct btf_elf *btfe = btf_elf__new(filename, NULL);
++	struct btf_elf *btfe = btf_elf__new(filename, NULL, base_btf);
+ 
+ 	if (btfe == NULL)
+ 		return -1;
+diff --git a/libbtf.c b/libbtf.c
+index babf4fe8cd9e..3c52aa0d482b 100644
+--- a/libbtf.c
++++ b/libbtf.c
+@@ -27,6 +27,7 @@
+ #include "dwarves.h"
+ #include "elf_symtab.h"
+ 
++struct btf *base_btf;
+ uint8_t btf_elf__verbose;
+ uint8_t btf_elf__force;
+ 
+@@ -52,9 +53,9 @@ int btf_elf__load(struct btf_elf *btfe)
+ 	/* free initial empty BTF */
+ 	btf__free(btfe->btf);
+ 	if (btfe->raw_btf)
+-		btfe->btf = btf__parse_raw(btfe->filename);
++		btfe->btf = btf__parse_raw_split(btfe->filename, btfe->base_btf);
+ 	else
+-		btfe->btf = btf__parse_elf(btfe->filename, NULL);
++		btfe->btf = btf__parse_elf_split(btfe->filename, btfe->base_btf);
+ 
+ 	err = libbpf_get_error(btfe->btf);
+ 	if (err)
+@@ -63,7 +64,7 @@ int btf_elf__load(struct btf_elf *btfe)
+ 	return 0;
  }
+ 
+-struct btf_elf *btf_elf__new(const char *filename, Elf *elf)
++struct btf_elf *btf_elf__new(const char *filename, Elf *elf, struct btf *base_btf)
+ {
+ 	struct btf_elf *btfe = zalloc(sizeof(*btfe));
+ 	GElf_Shdr shdr;
+@@ -77,7 +78,8 @@ struct btf_elf *btf_elf__new(const char *filename, Elf *elf)
+ 	if (btfe->filename == NULL)
+ 		goto errout;
+ 
+-	btfe->btf = btf__new_empty();
++	btfe->base_btf = base_btf;
++	btfe->btf = btf__new_empty_split(base_btf);
+ 	if (libbpf_get_error(btfe->btf)) {
+ 		fprintf(stderr, "%s: failed to create empty BTF.\n", __func__);
+ 		goto errout;
+@@ -679,11 +681,11 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+ {
+ 	GElf_Shdr shdr_mem, *shdr;
+ 	GElf_Ehdr ehdr_mem, *ehdr;
+-	Elf_Data *btf_elf = NULL;
++	Elf_Data *btf_data = NULL;
+ 	Elf_Scn *scn = NULL;
+ 	Elf *elf = NULL;
+-	const void *btf_data;
+-	uint32_t btf_size;
++	const void *raw_btf_data;
++	uint32_t raw_btf_size;
+ 	int fd, err = -1;
+ 	size_t strndx;
+ 
+@@ -735,18 +737,18 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+ 			continue;
+ 		char *secname = elf_strptr(elf, strndx, shdr->sh_name);
+ 		if (strcmp(secname, ".BTF") == 0) {
+-			btf_elf = elf_getdata(scn, btf_elf);
++			btf_data = elf_getdata(scn, btf_data);
+ 			break;
+ 		}
+ 	}
+ 
+-	btf_data = btf__get_raw_data(btf, &btf_size);
++	raw_btf_data = btf__get_raw_data(btf, &raw_btf_size);
+ 
+-	if (btf_elf) {
++	if (btf_data) {
+ 		/* Exisiting .BTF section found */
+-		btf_elf->d_buf = (void *)btf_data;
+-		btf_elf->d_size = btf_size;
+-		elf_flagdata(btf_elf, ELF_C_SET, ELF_F_DIRTY);
++		btf_data->d_buf = (void *)raw_btf_data;
++		btf_data->d_size = raw_btf_size;
++		elf_flagdata(btf_data, ELF_C_SET, ELF_F_DIRTY);
+ 
+ 		if (elf_update(elf, ELF_C_NULL) >= 0 &&
+ 		    elf_update(elf, ELF_C_WRITE) >= 0)
+@@ -770,12 +772,21 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+ 			goto out;
+ 		}
+ 
++		if (write(fd, raw_btf_data, raw_btf_size) != raw_btf_size) {
++			fprintf(stderr, "%s: write of %d bytes to '%s' failed: %d!\n",
++				__func__, raw_btf_size, tmp_fn, errno);
++			goto out;
++		}
 +
-+int btf_validate_raw(struct btf *btf, int nr_types, const char *exp_types[])
-+{
-+	int i;
-+	bool ok = true;
-+
-+	ASSERT_EQ(btf__get_nr_types(btf), nr_types, "btf_nr_types");
-+
-+	for (i = 1; i <= nr_types; i++) {
-+		if (!ASSERT_STREQ(btf_type_raw_dump(btf, i), exp_types[i - 1], "raw_dump"))
-+			ok = false;
-+	}
-+
-+	return ok;
-+}
-+
-+static void btf_dump_printf(void *ctx, const char *fmt, va_list args)
-+{
-+	vfprintf(ctx, fmt, args);
-+}
-+
-+/* Print BTF-to-C dump into a local buffer and return string pointer back.
-+ * Buffer *will* be overwritten by subsequent btf_type_raw_dump() calls
-+ */
-+const char *btf_type_c_dump(const struct btf *btf)
-+{
-+	static char buf[16 * 1024];
-+	FILE *buf_file;
-+	struct btf_dump *d = NULL;
-+	struct btf_dump_opts opts = {};
-+	int err, i;
-+
-+	buf_file = fmemopen(buf, sizeof(buf) - 1, "w");
-+	if (!buf_file) {
-+		fprintf(stderr, "Failed to open memstream: %d\n", errno);
-+		return NULL;
-+	}
-+
-+	opts.ctx = buf_file;
-+	d = btf_dump__new(btf, NULL, &opts, btf_dump_printf);
-+	if (libbpf_get_error(d)) {
-+		fprintf(stderr, "Failed to create btf_dump instance: %ld\n", libbpf_get_error(d));
-+		return NULL;
-+	}
-+
-+	for (i = 1; i <= btf__get_nr_types(btf); i++) {
-+		err = btf_dump__dump_type(d, i);
-+		if (err) {
-+			fprintf(stderr, "Failed to dump type [%d]: %d\n", i, err);
-+			return NULL;
+ 		snprintf(cmd, sizeof(cmd), "%s --add-section .BTF=%s %s",
+ 			 llvm_objcopy, tmp_fn, filename);
++		if (system(cmd)) {
++			fprintf(stderr, "%s: failed to add .BTF section to '%s': %d!\n",
++				__func__, tmp_fn, errno);
++			goto out;
++		}
+ 
+-		if (write(fd, btf_data, btf_size) == btf_size && !system(cmd))
+-			err = 0;
+-
++		err = 0;
+ 		unlink(tmp_fn);
+ 	}
+ 
+diff --git a/libbtf.h b/libbtf.h
+index 887b5bc55c8e..71f6cecbea93 100644
+--- a/libbtf.h
++++ b/libbtf.h
+@@ -27,8 +27,10 @@ struct btf_elf {
+ 	uint32_t	  percpu_shndx;
+ 	uint64_t	  percpu_base_addr;
+ 	struct btf	  *btf;
++	struct btf	  *base_btf;
+ };
+ 
++extern struct btf *base_btf;
+ extern uint8_t btf_elf__verbose;
+ extern uint8_t btf_elf__force;
+ #define btf_elf__verbose_log(fmt, ...) { if (btf_elf__verbose) printf(fmt, __VA_ARGS__); }
+@@ -39,7 +41,7 @@ struct cu;
+ struct base_type;
+ struct ftype;
+ 
+-struct btf_elf *btf_elf__new(const char *filename, Elf *elf);
++struct btf_elf *btf_elf__new(const char *filename, Elf *elf, struct btf *base_btf);
+ void btf_elf__delete(struct btf_elf *btf);
+ 
+ int32_t btf_elf__add_base_type(struct btf_elf *btf, const struct base_type *bt,
+diff --git a/pahole.c b/pahole.c
+index bd9b993777ee..d18092c1212c 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -22,12 +22,15 @@
+ #include "dutil.h"
+ #include "ctf_encoder.h"
+ #include "btf_encoder.h"
++#include "libbtf.h"
++#include "lib/bpf/src/libbpf.h"
+ 
+ static bool btf_encode;
+ static bool ctf_encode;
+ static bool first_obj_only;
+ static bool skip_encoding_btf_vars;
+ static bool btf_encode_force;
++static const char *base_btf_file;
+ 
+ static uint8_t class__include_anonymous;
+ static uint8_t class__include_nested_anonymous;
+@@ -820,6 +823,7 @@ ARGP_PROGRAM_VERSION_HOOK_DEF = dwarves_print_version;
+ #define ARGP_skip_encoding_btf_vars 317
+ #define ARGP_btf_encode_force	   318
+ #define ARGP_just_packed_structs   319
++#define ARGP_btf_base		   320
+ 
+ static const struct argp_option pahole__options[] = {
+ 	{
+@@ -1093,6 +1097,12 @@ static const struct argp_option pahole__options[] = {
+ 		.key  = ARGP_hex_fmt,
+ 		.doc  = "Print offsets and sizes in hexadecimal",
+ 	},
++	{
++		.name = "btf_base",
++		.key  = ARGP_btf_base,
++		.arg  = "SIZE",
++		.doc  = "Path to the base BTF file",
++	},
+ 	{
+ 		.name = "btf_encode",
+ 		.key  = 'J',
+@@ -1234,6 +1244,9 @@ static error_t pahole__options_parser(int key, char *arg,
+ 		skip_encoding_btf_vars = true;		break;
+ 	case ARGP_btf_encode_force:
+ 		btf_encode_force = true;		break;
++	case ARGP_btf_base:
++		base_btf_file = arg;
++		break;
+ 	default:
+ 		return ARGP_ERR_UNKNOWN;
+ 	}
+@@ -2682,6 +2695,15 @@ int main(int argc, char *argv[])
+ 		goto out;
+ 	}
+ 
++	if (base_btf_file) {
++		base_btf = btf__parse(base_btf_file, NULL);
++		if (libbpf_get_error(base_btf)) {
++			fprintf(stderr, "Failed to parse base BTF '%s': %ld\n",
++				base_btf_file, libbpf_get_error(base_btf));
++			goto out;
 +		}
 +	}
 +
-+	fflush(buf_file);
-+	fclose(buf_file);
-+	return buf;
-+}
-diff --git a/tools/testing/selftests/bpf/btf_helpers.h b/tools/testing/selftests/bpf/btf_helpers.h
-index 2c9ce1b61dc9..295c0137d9bd 100644
---- a/tools/testing/selftests/bpf/btf_helpers.h
-+++ b/tools/testing/selftests/bpf/btf_helpers.h
-@@ -8,5 +8,12 @@
- 
- int fprintf_btf_type_raw(FILE *out, const struct btf *btf, __u32 id);
- const char *btf_type_raw_dump(const struct btf *btf, int type_id);
-+int btf_validate_raw(struct btf *btf, int nr_types, const char *exp_types[]);
- 
-+#define VALIDATE_RAW_BTF(btf, raw_types...)				\
-+	btf_validate_raw(btf,						\
-+			 sizeof((const char *[]){raw_types})/sizeof(void *),\
-+			 (const char *[]){raw_types})
-+
-+const char *btf_type_c_dump(const struct btf *btf);
+ 	struct cus *cus = cus__new();
+ 	if (cus == NULL) {
+ 		fputs("pahole: insufficient memory\n", stderr);
+@@ -2766,6 +2788,7 @@ out_cus_delete:
+ #ifdef DEBUG_CHECK_LEAKS
+ 	cus__delete(cus);
+ 	structures__delete();
++	btf__free(base_btf);
  #endif
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c b/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
-new file mode 100644
-index 000000000000..64554fd33547
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_dedup_split.c
-@@ -0,0 +1,325 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+#include <test_progs.h>
-+#include <bpf/btf.h>
-+#include "btf_helpers.h"
-+
-+static void test_split_simple() {
-+	const struct btf_type *t;
-+	struct btf *btf1, *btf2;
-+	int str_off, err;
-+
-+	btf1 = btf__new_empty();
-+	if (!ASSERT_OK_PTR(btf1, "empty_main_btf"))
-+		return;
-+
-+	btf__set_pointer_size(btf1, 8); /* enforce 64-bit arch */
-+
-+	btf__add_int(btf1, "int", 4, BTF_INT_SIGNED);	/* [1] int */
-+	btf__add_ptr(btf1, 1);				/* [2] ptr to int */
-+	btf__add_struct(btf1, "s1", 4);			/* [3] struct s1 { */
-+	btf__add_field(btf1, "f1", 1, 0, 0);		/*      int f1; */
-+							/* } */
-+
-+	VALIDATE_RAW_BTF(
-+		btf1,
-+		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[2] PTR '(anon)' type_id=1",
-+		"[3] STRUCT 's1' size=4 vlen=1\n"
-+		"\t'f1' type_id=1 bits_offset=0");
-+
-+	ASSERT_STREQ(btf_type_c_dump(btf1), "\
-+struct s1 {\n\
-+	int f1;\n\
-+};\n\n", "c_dump");
-+
-+	btf2 = btf__new_empty_split(btf1);
-+	if (!ASSERT_OK_PTR(btf2, "empty_split_btf"))
-+		goto cleanup;
-+
-+	/* pointer size should be "inherited" from main BTF */
-+	ASSERT_EQ(btf__pointer_size(btf2), 8, "inherit_ptr_sz");
-+
-+	str_off = btf__find_str(btf2, "int");
-+	ASSERT_NEQ(str_off, -ENOENT, "str_int_missing");
-+
-+	t = btf__type_by_id(btf2, 1);
-+	if (!ASSERT_OK_PTR(t, "int_type"))
-+		goto cleanup;
-+	ASSERT_EQ(btf_is_int(t), true, "int_kind");
-+	ASSERT_STREQ(btf__str_by_offset(btf2, t->name_off), "int", "int_name");
-+
-+	btf__add_struct(btf2, "s2", 16);		/* [4] struct s2 {	*/
-+	btf__add_field(btf2, "f1", 6, 0, 0);		/*      struct s1 f1;	*/
-+	btf__add_field(btf2, "f2", 5, 32, 0);		/*      int f2;		*/
-+	btf__add_field(btf2, "f3", 2, 64, 0);		/*      int *f3;	*/
-+							/* } */
-+
-+	/* duplicated int */
-+	btf__add_int(btf2, "int", 4, BTF_INT_SIGNED);	/* [5] int */
-+
-+	/* duplicated struct s1 */
-+	btf__add_struct(btf2, "s1", 4);			/* [6] struct s1 { */
-+	btf__add_field(btf2, "f1", 5, 0, 0);		/*      int f1; */
-+							/* } */
-+
-+	VALIDATE_RAW_BTF(
-+		btf2,
-+		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[2] PTR '(anon)' type_id=1",
-+		"[3] STRUCT 's1' size=4 vlen=1\n"
-+		"\t'f1' type_id=1 bits_offset=0",
-+		"[4] STRUCT 's2' size=16 vlen=3\n"
-+		"\t'f1' type_id=6 bits_offset=0\n"
-+		"\t'f2' type_id=5 bits_offset=32\n"
-+		"\t'f3' type_id=2 bits_offset=64",
-+		"[5] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[6] STRUCT 's1' size=4 vlen=1\n"
-+		"\t'f1' type_id=5 bits_offset=0");
-+
-+	ASSERT_STREQ(btf_type_c_dump(btf2), "\
-+struct s1 {\n\
-+	int f1;\n\
-+};\n\
-+\n\
-+struct s1___2 {\n\
-+	int f1;\n\
-+};\n\
-+\n\
-+struct s2 {\n\
-+	struct s1___2 f1;\n\
-+	int f2;\n\
-+	int *f3;\n\
-+};\n\n", "c_dump");
-+
-+	err = btf__dedup(btf2, NULL, NULL);
-+	if (!ASSERT_OK(err, "btf_dedup"))
-+		goto cleanup;
-+
-+	VALIDATE_RAW_BTF(
-+		btf2,
-+		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[2] PTR '(anon)' type_id=1",
-+		"[3] STRUCT 's1' size=4 vlen=1\n"
-+		"\t'f1' type_id=1 bits_offset=0",
-+		"[4] STRUCT 's2' size=16 vlen=3\n"
-+		"\t'f1' type_id=3 bits_offset=0\n"
-+		"\t'f2' type_id=1 bits_offset=32\n"
-+		"\t'f3' type_id=2 bits_offset=64");
-+
-+	ASSERT_STREQ(btf_type_c_dump(btf2), "\
-+struct s1 {\n\
-+	int f1;\n\
-+};\n\
-+\n\
-+struct s2 {\n\
-+	struct s1 f1;\n\
-+	int f2;\n\
-+	int *f3;\n\
-+};\n\n", "c_dump");
-+
-+cleanup:
-+	btf__free(btf2);
-+	btf__free(btf1);
-+}
-+
-+static void test_split_fwd_resolve() {
-+	struct btf *btf1, *btf2;
-+	int err;
-+
-+	btf1 = btf__new_empty();
-+	if (!ASSERT_OK_PTR(btf1, "empty_main_btf"))
-+		return;
-+
-+	btf__set_pointer_size(btf1, 8); /* enforce 64-bit arch */
-+
-+	btf__add_int(btf1, "int", 4, BTF_INT_SIGNED);	/* [1] int */
-+	btf__add_ptr(btf1, 4);				/* [2] ptr to struct s1 */
-+	btf__add_ptr(btf1, 5);				/* [3] ptr to struct s2 */
-+	btf__add_struct(btf1, "s1", 16);		/* [4] struct s1 { */
-+	btf__add_field(btf1, "f1", 2, 0, 0);		/*      struct s1 *f1; */
-+	btf__add_field(btf1, "f2", 3, 64, 0);		/*      struct s2 *f2; */
-+							/* } */
-+	btf__add_struct(btf1, "s2", 4);			/* [5] struct s2 { */
-+	btf__add_field(btf1, "f1", 1, 0, 0);		/*      int f1; */
-+							/* } */
-+
-+	VALIDATE_RAW_BTF(
-+		btf1,
-+		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[2] PTR '(anon)' type_id=4",
-+		"[3] PTR '(anon)' type_id=5",
-+		"[4] STRUCT 's1' size=16 vlen=2\n"
-+		"\t'f1' type_id=2 bits_offset=0\n"
-+		"\t'f2' type_id=3 bits_offset=64",
-+		"[5] STRUCT 's2' size=4 vlen=1\n"
-+		"\t'f1' type_id=1 bits_offset=0");
-+
-+	btf2 = btf__new_empty_split(btf1);
-+	if (!ASSERT_OK_PTR(btf2, "empty_split_btf"))
-+		goto cleanup;
-+
-+	btf__add_int(btf2, "int", 4, BTF_INT_SIGNED);	/* [6] int */
-+	btf__add_ptr(btf2, 10);				/* [7] ptr to struct s1 */
-+	btf__add_fwd(btf2, "s2", BTF_FWD_STRUCT);	/* [8] fwd for struct s2 */
-+	btf__add_ptr(btf2, 8);				/* [9] ptr to fwd struct s2 */
-+	btf__add_struct(btf2, "s1", 16);		/* [10] struct s1 { */
-+	btf__add_field(btf2, "f1", 7, 0, 0);		/*      struct s1 *f1; */
-+	btf__add_field(btf2, "f2", 9, 64, 0);		/*      struct s2 *f2; */
-+							/* } */
-+
-+	VALIDATE_RAW_BTF(
-+		btf2,
-+		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[2] PTR '(anon)' type_id=4",
-+		"[3] PTR '(anon)' type_id=5",
-+		"[4] STRUCT 's1' size=16 vlen=2\n"
-+		"\t'f1' type_id=2 bits_offset=0\n"
-+		"\t'f2' type_id=3 bits_offset=64",
-+		"[5] STRUCT 's2' size=4 vlen=1\n"
-+		"\t'f1' type_id=1 bits_offset=0",
-+		"[6] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[7] PTR '(anon)' type_id=10",
-+		"[8] FWD 's2' fwd_kind=struct",
-+		"[9] PTR '(anon)' type_id=8",
-+		"[10] STRUCT 's1' size=16 vlen=2\n"
-+		"\t'f1' type_id=7 bits_offset=0\n"
-+		"\t'f2' type_id=9 bits_offset=64");
-+
-+	err = btf__dedup(btf2, NULL, NULL);
-+	if (!ASSERT_OK(err, "btf_dedup"))
-+		goto cleanup;
-+
-+	VALIDATE_RAW_BTF(
-+		btf2,
-+		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[2] PTR '(anon)' type_id=4",
-+		"[3] PTR '(anon)' type_id=5",
-+		"[4] STRUCT 's1' size=16 vlen=2\n"
-+		"\t'f1' type_id=2 bits_offset=0\n"
-+		"\t'f2' type_id=3 bits_offset=64",
-+		"[5] STRUCT 's2' size=4 vlen=1\n"
-+		"\t'f1' type_id=1 bits_offset=0");
-+
-+cleanup:
-+	btf__free(btf2);
-+	btf__free(btf1);
-+}
-+
-+static void test_split_struct_duped() {
-+	struct btf *btf1, *btf2;
-+	int err;
-+
-+	btf1 = btf__new_empty();
-+	if (!ASSERT_OK_PTR(btf1, "empty_main_btf"))
-+		return;
-+
-+	btf__set_pointer_size(btf1, 8); /* enforce 64-bit arch */
-+
-+	btf__add_int(btf1, "int", 4, BTF_INT_SIGNED);	/* [1] int */
-+	btf__add_ptr(btf1, 5);				/* [2] ptr to struct s1 */
-+	btf__add_fwd(btf1, "s2", BTF_FWD_STRUCT);	/* [3] fwd for struct s2 */
-+	btf__add_ptr(btf1, 3);				/* [4] ptr to fwd struct s2 */
-+	btf__add_struct(btf1, "s1", 16);		/* [5] struct s1 { */
-+	btf__add_field(btf1, "f1", 2, 0, 0);		/*      struct s1 *f1; */
-+	btf__add_field(btf1, "f2", 4, 64, 0);		/*      struct s2 *f2; */
-+							/* } */
-+
-+	VALIDATE_RAW_BTF(
-+		btf1,
-+		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[2] PTR '(anon)' type_id=5",
-+		"[3] FWD 's2' fwd_kind=struct",
-+		"[4] PTR '(anon)' type_id=3",
-+		"[5] STRUCT 's1' size=16 vlen=2\n"
-+		"\t'f1' type_id=2 bits_offset=0\n"
-+		"\t'f2' type_id=4 bits_offset=64");
-+
-+	btf2 = btf__new_empty_split(btf1);
-+	if (!ASSERT_OK_PTR(btf2, "empty_split_btf"))
-+		goto cleanup;
-+
-+	btf__add_int(btf2, "int", 4, BTF_INT_SIGNED);	/* [6] int */
-+	btf__add_ptr(btf2, 10);				/* [7] ptr to struct s1 */
-+	btf__add_fwd(btf2, "s2", BTF_FWD_STRUCT);	/* [8] fwd for struct s2 */
-+	btf__add_ptr(btf2, 11);				/* [9] ptr to struct s2 */
-+	btf__add_struct(btf2, "s1", 16);		/* [10] struct s1 { */
-+	btf__add_field(btf2, "f1", 7, 0, 0);		/*      struct s1 *f1; */
-+	btf__add_field(btf2, "f2", 9, 64, 0);		/*      struct s2 *f2; */
-+							/* } */
-+	btf__add_struct(btf2, "s2", 40);		/* [11] struct s2 {	*/
-+	btf__add_field(btf2, "f1", 7, 0, 0);		/*      struct s1 *f1;	*/
-+	btf__add_field(btf2, "f2", 9, 64, 0);		/*      struct s2 *f2;	*/
-+	btf__add_field(btf2, "f3", 6, 128, 0);		/*      int f3;		*/
-+	btf__add_field(btf2, "f4", 10, 192, 0);		/*      struct s1 f4;	*/
-+							/* } */
-+	btf__add_ptr(btf2, 8);				/* [12] ptr to fwd struct s2 */
-+	btf__add_struct(btf2, "s3", 8);			/* [13] struct s3 { */
-+	btf__add_field(btf2, "f1", 12, 0, 0);		/*      struct s2 *f1; (fwd) */
-+							/* } */
-+
-+	VALIDATE_RAW_BTF(
-+		btf2,
-+		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[2] PTR '(anon)' type_id=5",
-+		"[3] FWD 's2' fwd_kind=struct",
-+		"[4] PTR '(anon)' type_id=3",
-+		"[5] STRUCT 's1' size=16 vlen=2\n"
-+		"\t'f1' type_id=2 bits_offset=0\n"
-+		"\t'f2' type_id=4 bits_offset=64",
-+		"[6] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[7] PTR '(anon)' type_id=10",
-+		"[8] FWD 's2' fwd_kind=struct",
-+		"[9] PTR '(anon)' type_id=11",
-+		"[10] STRUCT 's1' size=16 vlen=2\n"
-+		"\t'f1' type_id=7 bits_offset=0\n"
-+		"\t'f2' type_id=9 bits_offset=64",
-+		"[11] STRUCT 's2' size=40 vlen=4\n"
-+		"\t'f1' type_id=7 bits_offset=0\n"
-+		"\t'f2' type_id=9 bits_offset=64\n"
-+		"\t'f3' type_id=6 bits_offset=128\n"
-+		"\t'f4' type_id=10 bits_offset=192",
-+		"[12] PTR '(anon)' type_id=8",
-+		"[13] STRUCT 's3' size=8 vlen=1\n"
-+		"\t'f1' type_id=12 bits_offset=0");
-+
-+	err = btf__dedup(btf2, NULL, NULL);
-+	if (!ASSERT_OK(err, "btf_dedup"))
-+		goto cleanup;
-+
-+	VALIDATE_RAW_BTF(
-+		btf2,
-+		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[2] PTR '(anon)' type_id=5",
-+		"[3] FWD 's2' fwd_kind=struct",
-+		"[4] PTR '(anon)' type_id=3",
-+		"[5] STRUCT 's1' size=16 vlen=2\n"
-+		"\t'f1' type_id=2 bits_offset=0\n"
-+		"\t'f2' type_id=4 bits_offset=64",
-+		"[6] PTR '(anon)' type_id=8",
-+		"[7] PTR '(anon)' type_id=9",
-+		"[8] STRUCT 's1' size=16 vlen=2\n"
-+		"\t'f1' type_id=6 bits_offset=0\n"
-+		"\t'f2' type_id=7 bits_offset=64",
-+		"[9] STRUCT 's2' size=40 vlen=4\n"
-+		"\t'f1' type_id=6 bits_offset=0\n"
-+		"\t'f2' type_id=7 bits_offset=64\n"
-+		"\t'f3' type_id=1 bits_offset=128\n"
-+		"\t'f4' type_id=8 bits_offset=192",
-+		"[10] STRUCT 's3' size=8 vlen=1\n"
-+		"\t'f1' type_id=7 bits_offset=0");
-+
-+cleanup:
-+	btf__free(btf2);
-+	btf__free(btf1);
-+}
-+
-+void test_btf_dedup_split()
-+{
-+	if (test__start_subtest("split_simple"))
-+		test_split_simple();
-+	if (test__start_subtest("split_struct_duped"))
-+		test_split_struct_duped();
-+	if (test__start_subtest("split_fwd_resolve"))
-+		test_split_fwd_resolve();
-+}
+ out_dwarves_exit:
+ #ifdef DEBUG_CHECK_LEAKS
 -- 
 2.24.1
 
