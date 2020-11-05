@@ -4,142 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C31EC2D0A3
-	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 02:25:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5A8E5C2D0A3
+	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 02:26:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0844C20739
-	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 02:25:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CA8DA20780
+	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 02:26:08 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="ZM6mzI9A";
-	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cBR9FtTc"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="AlohzBKg";
+	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RhHsiIyJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730099AbgKECZB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Nov 2020 21:25:01 -0500
-Received: from out3-smtp.messagingengine.com ([66.111.4.27]:53059 "EHLO
+        id S1732357AbgKEC0I (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Nov 2020 21:26:08 -0500
+Received: from out3-smtp.messagingengine.com ([66.111.4.27]:34633 "EHLO
         out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727986AbgKECZB (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 4 Nov 2020 21:25:01 -0500
+        by vger.kernel.org with ESMTP id S1727986AbgKEC0I (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 4 Nov 2020 21:26:08 -0500
 Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2FDF05C0109;
-        Wed,  4 Nov 2020 21:25:00 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 04 Nov 2020 21:25:00 -0500
+        by mailout.nyi.internal (Postfix) with ESMTP id E44BE5C006F;
+        Wed,  4 Nov 2020 21:26:06 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 04 Nov 2020 21:26:06 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
-        mime-version:content-transfer-encoding:content-type:cc:subject
-        :from:to:date:message-id:in-reply-to; s=fm1; bh=6C+S5ismEnJ8FFZV
-        0Bvx1CEwW13OCruBU+1cltV7kqk=; b=ZM6mzI9AoFRe3b/0TTjids5+5MrZYVLG
-        M6qpZirzLpEuNbH4zJoqRuKVLYmZDddkqR3m2IJecT6zFXZDNvsvcyP5RDpoTzDt
-        elqEQRWJCmvZDW1p9vokhnwHljvKFNqQHs9MjuRPWiBNDqRBsbfbvWFUtv3Yzmmz
-        5QPcxV4jZkjkyvKI+qvoMgpLUmvJr0Syx9DTG2uj0yyGJ0ayJdBgp499u9JT/8TQ
-        kMVsPtQvCBdAkAfXxJNyptbM8RAuHHtfbgyIPQsHx1LHKeBeOwRboHUm4W62ycPQ
-        ahCqe5iqAjqB7b6uDUeaHphc1KcLlY/I/QRpi+8IWx+0ayLb/X0zHQ==
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm1; bh=hgGjVTTMyQ2M6dgmkNIb7vTvWh
+        zzwCqkk8tLANTN3tM=; b=AlohzBKgqvEmuR9NLV0Hma4CpSlClNx5iXiZI+OLFn
+        kh+qKtOXCZdqu+0FZnS0MUHhHS5OLtWzr0dNgzyoru33ynZoCY1aTAbN2je7TGaW
+        HQO24PU3V4Wdc4SN4KPenjLs5Ll8IpapCaWKJ/9cNdKEYKNO858HSh2DGpFdDaHS
+        MTgZEmm8pm4K3ICEKrR+DXDlMIGhUYhZ3Ltd0KdBUVvJHiU9F566GoDZ03gIMVZa
+        bXJXr+Bo8YQTCwuwE5b+oQlip2YtZcC0pl91C0TCIx+qgpmo86AFnlFp615gF4X8
+        hVgk7FjE94MexrzdKN9NUusQrgEw4o+61aku8kECMt8w==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=6C+S5ismEnJ8FFZV0Bvx1CEwW13OCruBU+1cltV7kqk=; b=cBR9FtTc
-        Yazuyf0thz9G9EQ06GIRnibOoBnOijV+EbCxVvi9Y4yo9FHu1TsvhpA7PjziRvri
-        yH41Qz3n5QDXj25txC8S+mTXUs9L98kA6QmpEQRY8EB2N/a55Otj30CMMu53SFAy
-        XRELBmxbWA7D/v5w/iR8oGeTymvcGBGjxQ8XO3d0G/zwUA1rixbvPlqOFNhJEqn2
-        qsqnPsqiOTx8QUiLBBUSf0uqce82Tz/hQvEZ8W74fn8xuc1Uw4O+h3t7eSAXDFmO
-        4sP5d7N9ZEAbEXbYpQFvxeyy/n1qktKB69Pi7FEVfOnDkAXuRV5PqeGgmC3ctFju
-        7B6l6myxcLreow==
-X-ME-Sender: <xms:e2KjX91K74K6gd134BG_xSA4-fON3XvUyvMx7nP723UdyOiAZ4LoCg>
-    <xme:e2KjX0GK165wNWoYuBDJiJr44Fc41S9XlxT7eHXJL6RjQ5FGT6C3mmflYm__aFksI
-    BuctxcQnMtye8xRIw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddtiedggeeiucetufdoteggodetrfdotf
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=hgGjVTTMyQ2M6dgmk
+        NIb7vTvWhzzwCqkk8tLANTN3tM=; b=RhHsiIyJ9qOEOLktr13mM5HdaJubYEfDd
+        ik6tvR8l+Ytp7xuNg7ZIo7ePAPYveMd+THe8TnTg4vCOZsiOvkkectqYNnLfT0/X
+        iWrldAuLR75Dn/f3IM/zt2iXVMPATBj6nOClxd6dZ1lty9kYckfj9wwT7qBNP0kB
+        bi68z2HPcGpcwQ9wonnrkV5fo/kp2cNkPaWOqqQscpiIwjgI7qRNMy6M13GFlh0c
+        EpJWndK86Hspj9JkyaGmrxSK7umgKJW0AN+0OztRS3yrLBSNaQ3PpsibPo1J49pk
+        TqhtnevexoBkyyvvTHV0/5UeB3QnkELhD9esjfo20jGdxDdTongWQ==
+X-ME-Sender: <xms:vmKjX5KCk4FWNUJtCH2OuqbWXAGsnWRHkXX8NfYN0hBnlYqY96mXYQ>
+    <xme:vmKjX1Lgq_VxVh4kZkzyV03_NvZoNXGAeBoZmFeAUyEt57pMO7ZEvy7s79JTn6hhB
+    bhz-eAxWSe1JkD7Cw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddtiedggeejucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdljedtmdenucfjughrpegggfgtuffhvfffkfgjsehtqhertddttdej
-    necuhfhrohhmpedfffgrnhhivghlucgiuhdfuceougiguhesugiguhhuuhdrgiihiieqne
-    cuggftrfgrthhtvghrnhepjeefhfdufeefhfejvdevhfehudeltdeujeevudegvdejvdej
-    leejgfegtdejjeevnecukfhppeeiledrudekuddruddthedrieegnecuvehluhhsthgvrh
-    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiih
-    ii
-X-ME-Proxy: <xmx:e2KjX96bSOHpBKoo3vuSSXr4r-CgOTaqWe5lSTxpjMlHcYJkPr1exQ>
-    <xmx:e2KjX609f6GBMxZNM0p0CRkZmfhS8OubGlW8gtHz_I7h_CVW7xM7Zg>
-    <xmx:e2KjXwF1VjLuL9A4dguSexvbsgggujvgM3GGNvwWNtIgmiyT6k6UoQ>
-    <xmx:fGKjX0DSMgRfnFaR99bc0sEmXhqSlYpLwOhQG0hHRo_pUvz9AAa6rA>
-Received: from localhost (c-69-181-105-64.hsd1.ca.comcast.net [69.181.105.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 8F4443064684;
-        Wed,  4 Nov 2020 21:24:58 -0500 (EST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Cc:     <kernel-team@fb.com>, <mhiramat@kernel.org>
-Subject: Re: [PATCH bpf-next] lib/strncpy_from_user.c: Don't overcopy bytes
- after NUL terminator
-From:   "Daniel Xu" <dxu@dxuuu.xyz>
-To:     "Daniel Borkmann" <daniel@iogearbox.net>, <bpf@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <ast@kernel.org>
-Date:   Wed, 04 Nov 2020 18:21:57 -0800
-Message-Id: <C6UYZS8KPY7V.23QPWOJX7R50T@maharaja>
-In-Reply-To: <7d1a34fa-2475-0958-37fe-ed416249bc4b@iogearbox.net>
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
+    fufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihu
+    segugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeeifffgledvffeitdeljedvte
+    effeeivdefheeiveevjeduieeigfetieevieffffenucfkphepieelrddukedurddutdeh
+    rdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:vmKjXxuHsORsa5aGCtNMKfYZS1DUYG9PvsXG3Ok4YU094ug0dN_0VQ>
+    <xmx:vmKjX6Y0UzQgtHRWFDw0iWl8WkBgwXeF8lKrBAArpZMbFJ7tcwQVgA>
+    <xmx:vmKjXwZTBsJ2znBnaPYreuuia1ly4hJj58e18WiwVgf9I8CNkptbLg>
+    <xmx:vmKjX4EbfaT7lEdBvHOhKRTvHpEcmNlG8R84YNF1FeIXU_YyJDDhWA>
+Received: from localhost.localdomain (c-69-181-105-64.hsd1.ca.comcast.net [69.181.105.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 130F33280222;
+        Wed,  4 Nov 2020 21:26:06 -0500 (EST)
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, kernel-team@fb.com
+Subject: [PATCH bpf v2 0/2] Fix bpf_probe_read_user_str() overcopying
+Date:   Wed,  4 Nov 2020 18:25:36 -0800
+Message-Id: <cover.1604542786.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.28.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed Nov 4, 2020 at 2:36 PM PST, Daniel Borkmann wrote:
-> On 11/4/20 9:18 PM, Daniel Xu wrote:
-> > On Wed Nov 4, 2020 at 8:24 AM PST, Daniel Borkmann wrote:
-> >> On 11/4/20 3:29 AM, Daniel Xu wrote:
-> >>> do_strncpy_from_user() may copy some extra bytes after the NUL
-> >>> terminator into the destination buffer. This usually does not matter =
-for
-> >>> normal string operations. However, when BPF programs key BPF maps wit=
-h
-> >>> strings, this matters a lot.
-> >>>
-> >>> A BPF program may read strings from user memory by calling the
-> >>> bpf_probe_read_user_str() helper which eventually calls
-> >>> do_strncpy_from_user(). The program can then key a map with the
-> >>> resulting string. BPF map keys are fixed-width and string-agnostic,
-> >>> meaning that map keys are treated as a set of bytes.
-> >>>
-> >>> The issue is when do_strncpy_from_user() overcopies bytes after the N=
-UL
-> >>> terminator, it can result in seemingly identical strings occupying
-> >>> multiple slots in a BPF map. This behavior is subtle and totally
-> >>> unexpected by the user.
-> >>>
-> >>> This commit uses the proper word-at-a-time APIs to avoid overcopying.
-> >>>
-> >>> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> >>
-> >> It looks like this is a regression from the recent refactoring of the
-> >> mem probing
-> >> util functions?
-> >=20
-> > I think it was like this from the beginning, at 6ae08ae3dea2 ("bpf: Add
-> > probe_read_{user, kernel} and probe_read_{user, kernel}_str helpers").
-> > The old bpf_probe_read_str() used the kernel's byte-by-byte copying
-> > routine. bpf_probe_read_user_str() started using strncpy_from_user()
-> > which has been doing the long-sized strides since ~2012 or earlier.
-> >=20
-> > I tried to build and test the kernel at that commit but it seems my
-> > compiler is too new to build that old code. Bunch of build failures.
-> >=20
-> > I assume the refactor you're referring to is 8d92db5c04d1 ("bpf: rework
-> > the compat kernel probe handling").
->
-> Ah I see, it was just reusing 3d7081822f7f ("uaccess: Add non-pagefault
-> user-space
-> read functions"). Potentially it might be safer choice to just rework
-> the
-> strncpy_from_user_nofault() to mimic strncpy_from_kernel_nofault() in
-> that
-> regard?
+6ae08ae3dea2 ("bpf: Add probe_read_{user, kernel} and probe_read_{user,
+kernel}_str helpers") introduced a subtle bug where
+bpf_probe_read_user_str() would potentially copy a few extra bytes after
+the NUL terminator.
 
-I'm a little reluctant to do that b/c it would introduce less efficient,
-duplicated code. The word-at-a-time API already has the zero_bytemask()
-API so it's clear that it was designed to handle this issue -- we're not
-really hacking anything here.
+This issue is particularly nefarious when strings are used as map keys,
+as seemingly identical strings can occupy multiple entries in a map.
 
-I'll send out a V2 with the selftest shortly. Happy to change things
-after that.
+This patchset fixes the issue and introduces a selftest to prevent
+future regressions.
 
-Thanks,
-Daniel
+Daniel Xu (2):
+  lib/strncpy_from_user.c: Don't overcopy bytes after NUL terminator
+  selftest/bpf: Test bpf_probe_read_user_str() strips trailing bytes
+    after NUL
+
+ lib/strncpy_from_user.c                       |  9 ++-
+ .../bpf/prog_tests/probe_read_user_str.c      | 60 +++++++++++++++++++
+ .../bpf/progs/test_probe_read_user_str.c      | 34 +++++++++++
+ 3 files changed, 101 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/probe_read_user_str.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_probe_read_user_str.c
+
+-- 
+2.28.0
+
