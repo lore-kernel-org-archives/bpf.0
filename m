@@ -2,85 +2,97 @@ Return-Path: <SRS0=NbGg=EL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7B8D8C55178
-	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 16:59:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3613C55179
+	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 17:57:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 25FFF20756
-	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 16:59:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8745A20867
+	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 17:57:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604595578;
-	bh=WPfKbYRANsaYY5+y24dfY+e9RC7MfQyTqEBf6L+3aEU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:List-ID:From;
-	b=DziM0HiCA68axoG/W9h48WWYPgnz+dQLegtpVrQGZBxAWVvKGZ4OVvmA9SgOBXzdx
-	 6DApNSnlO4HLB1hD6vElkV6MOZSKrePifTJQgpTMwLcG2njaWTfh3WckBoU7fQWnBv
-	 B6rYIqX9Y8eUoxDYwmGwKlOYCyNmjg/1cCfkRnmE=
+	s=default; t=1604599070;
+	bh=U0DJ+fGoceNGEJQ8jALWaiQGwxbXijhBlc1CwbmDS0U=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
+	b=d5lGj0Dxe4KYKb93IDQmMmcfTkOr2IwRHX8FuruumIfOQ9Z6PJvQ/ao0IL0JT0ceG
+	 a+X9qwlgIlQ1KfnUqwSDkkq3yVvi4ir7T8GskoR/z7fflafCsJAs0rWL8cuncX7JkK
+	 rCVapJwOOqvnQ/ELJrKaMPWdbzNinkx/b6XoSK3U=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731602AbgKEQ6X (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 5 Nov 2020 11:58:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52452 "EHLO mail.kernel.org"
+        id S1731453AbgKER5p (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 5 Nov 2020 12:57:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38482 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730862AbgKEQ6U (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 5 Nov 2020 11:58:20 -0500
-Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726214AbgKER5o (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 5 Nov 2020 12:57:44 -0500
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5683A2073A;
-        Thu,  5 Nov 2020 16:58:19 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A60FA20936;
+        Thu,  5 Nov 2020 17:57:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604595500;
-        bh=WPfKbYRANsaYY5+y24dfY+e9RC7MfQyTqEBf6L+3aEU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZH2FZ7NzGwDzL2Er6PUXZVBDRy83tC97s/FO6GPnUd/nmdTIXGPib4KGpPYhAEB6t
-         qegoWzpJgUEUXW7lz3lnfMtK3ZPE0ZVOhz8xiBliQeK8B08zvX4+6gK4u2WQvj4MgQ
-         wB/htahwttIct/GH6qQWrodaV+WODv+klzsRNeRM=
-Date:   Thu, 5 Nov 2020 08:58:18 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, ast@fb.com, daniel@iogearbox.net,
-        kernel-team@fb.com, Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [RFC PATCH bpf-next 4/5] bpf: load and verify kernel module
- BTFs
-Message-ID: <20201105085818.4f20f3ed@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201105164616.GA1201462@kroah.com>
-References: <20201105045140.2589346-1-andrii@kernel.org>
-        <20201105045140.2589346-5-andrii@kernel.org>
-        <20201105083925.68433e51@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20201105164616.GA1201462@kroah.com>
+        s=default; t=1604599064;
+        bh=U0DJ+fGoceNGEJQ8jALWaiQGwxbXijhBlc1CwbmDS0U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=vkjsbF4wwfPfyPLkBD097pMiSMmx06nIQQR56owlkYXAoR22BJhzF0G6aSH9C9uAb
+         ZnjWQps3ZaeilFVrJrevvftEvHSuITj/YQQpya6/H8+K0oDDo4SlFS3Q5M7o02r2cy
+         dtYHCzQjePLcdhiN3icYfl6QCm9HinImNTiMgsMM=
+Received: by mail-lf1-f42.google.com with SMTP id l28so3554534lfp.10;
+        Thu, 05 Nov 2020 09:57:43 -0800 (PST)
+X-Gm-Message-State: AOAM531fl5GKph0Aeb9hNOHB338azOyq6ProkgHiA0C5EI8cXccAo8Ll
+        0nFeyxIiPHtRuuUWcYjKNhpklOFamB4cNH6B+p4=
+X-Google-Smtp-Source: ABdhPJwjk5DLpTdQOjI0YutL4jwBKuBWCpRo0UR7+oxL8TdnZtrsndy2HKXNfC176dQG94laITaxaHbci3r4wFjBLlo=
+X-Received: by 2002:a05:6512:3156:: with SMTP id s22mr1364509lfi.273.1604599061868;
+ Thu, 05 Nov 2020 09:57:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20201105115230.296657-1-lmb@cloudflare.com>
+In-Reply-To: <20201105115230.296657-1-lmb@cloudflare.com>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 5 Nov 2020 09:57:30 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW45MMnHHSpAKXB9iOrHxujiO_DroBmqEsRYXq6sKVso8g@mail.gmail.com>
+Message-ID: <CAPhsuW45MMnHHSpAKXB9iOrHxujiO_DroBmqEsRYXq6sKVso8g@mail.gmail.com>
+Subject: Re: [PATCH bpf] tools/bpftool: fix attaching flow dissector
+To:     Lorenz Bauer <lmb@cloudflare.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        kernel-team@cloudflare.com, Jiri Benc <jbenc@redhat.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 5 Nov 2020 17:46:16 +0100 Greg Kroah-Hartman wrote:
-> On Thu, Nov 05, 2020 at 08:39:25AM -0800, Jakub Kicinski wrote:
-> > On Wed, 4 Nov 2020 20:51:39 -0800 Andrii Nakryiko wrote:  
-> > > Add kernel module listener that will load/validate and unload module BTF.
-> > > Module BTFs gets ID generated for them, which makes it possible to iterate
-> > > them with existing BTF iteration API. They are given their respective module's
-> > > names, which will get reported through GET_OBJ_INFO API. They are also marked
-> > > as in-kernel BTFs for tooling to distinguish them from user-provided BTFs.
-> > > 
-> > > Also, similarly to vmlinux BTF, kernel module BTFs are exposed through
-> > > sysfs as /sys/kernel/btf/<module-name>. This is convenient for user-space
-> > > tools to inspect module BTF contents and dump their types with existing tools:  
-> > 
-> > Is there any precedent for creating per-module files under a new
-> > sysfs directory structure? My intuition would be that these files 
-> > belong under /sys/module/  
-> 
-> Ick, why?  What's wrong with them under btf?  The module core code
-> "owns" the /sys/modules/ tree.  If you want others to mess with that, 
-> it will get tricky.
+On Thu, Nov 5, 2020 at 3:54 AM Lorenz Bauer <lmb@cloudflare.com> wrote:
+>
+> My earlier patch to reject non-zero arguments to flow dissector attach
+> broke attaching via bpftool. Instead of 0 it uses -1 for target_fd.
+> Fix this by passing a zero argument when attaching the flow dissector.
+>
+> Fixes: 1b514239e859 ("bpf: flow_dissector: Check value of unused flags to BPF_PROG_ATTACH")
+> Reported-by: Jiri Benc <jbenc@redhat.com>
+> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 
-It's debug info, that's where I would look for it. 
+Acked-by: Song Liu <songliubraving@fb.com>
 
-Clearly I'd be wrong to do so :)
+> ---
+>  tools/bpf/bpftool/prog.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> index d942c1e3372c..acdb2c245f0a 100644
+> --- a/tools/bpf/bpftool/prog.c
+> +++ b/tools/bpf/bpftool/prog.c
+> @@ -940,7 +940,7 @@ static int parse_attach_detach_args(int argc, char **argv, int *progfd,
+>         }
+>
+>         if (*attach_type == BPF_FLOW_DISSECTOR) {
+> -               *mapfd = -1;
+> +               *mapfd = 0;
+>                 return 0;
+>         }
+>
+> --
+> 2.25.1
+>
