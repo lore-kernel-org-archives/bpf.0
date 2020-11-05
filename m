@@ -2,94 +2,99 @@ Return-Path: <SRS0=NbGg=EL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E875C388F9
-	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 01:02:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3205BC2D0A3
+	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 02:22:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2AA8721734
-	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 01:02:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604538125;
-	bh=Fyt70K6DM1SjmE8rtlroW00nv5i8Ug1BoLrDi0c8C1I=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:List-ID:From;
-	b=ijVUiZaOxVZIMc9FM18Vem9+YrLBUOt1lfxNPAvJpZG2/8VDn0MbkWh00cGUCoRDh
-	 /rnqOihgNLipPi/621nSVBolsCIELFMk7h1jpjYqArH+CnYciOJb0yYGhGql1/CXWZ
-	 fuvDCoCMjH0j2n1sBJkQkLLJB64aDrr3tzIBx+ZI=
+	by mail.kernel.org (Postfix) with ESMTP id B797120782
+	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 02:22:58 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lJQGK9Gn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731510AbgKEBCE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Nov 2020 20:02:04 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54470 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731246AbgKEBCE (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Nov 2020 20:02:04 -0500
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8EF9A20867;
-        Thu,  5 Nov 2020 01:02:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1604538123;
-        bh=Fyt70K6DM1SjmE8rtlroW00nv5i8Ug1BoLrDi0c8C1I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pzPFT/jVTF5y3KBulJZP4uUwLEzN+HMEygp5iWQ6F6q7Jf/FR56UeIO322MoW/dwp
-         xDLJdcUtcrS2bSvKKPPqtP8DolfWOCvayew/YPiaeVfUS8LCnfJcrVm80NIRH1FpxY
-         +g3HduPbtp9v+mtO/az1yBojNE0xQ/CZ85P71c44=
-Received: by mail-lf1-f44.google.com with SMTP id h6so387105lfj.3;
-        Wed, 04 Nov 2020 17:02:03 -0800 (PST)
-X-Gm-Message-State: AOAM5327u84RLbxZU1GBSfAgfuQnfSBIipCtBhVi5i5V/5FBePhhAl21
-        U7wShHXGPodeXNWGZ+WWUXf/oYCrLpDZndvUZCA=
-X-Google-Smtp-Source: ABdhPJxRjxUAjnGSi9aVA/O6g5cLBuxvB4FZT4tQu0egxbhVeI9SYYgwTo/aAw3/La1pxqpiCNVmom2H6wdPxlcv0tc=
-X-Received: by 2002:a05:6512:3156:: with SMTP id s22mr96237lfi.273.1604538121789;
- Wed, 04 Nov 2020 17:02:01 -0800 (PST)
+        id S1727098AbgKECW6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 4 Nov 2020 21:22:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726777AbgKECW5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 4 Nov 2020 21:22:57 -0500
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1228C0613CF;
+        Wed,  4 Nov 2020 18:22:57 -0800 (PST)
+Received: by mail-yb1-xb43.google.com with SMTP id c129so656893yba.8;
+        Wed, 04 Nov 2020 18:22:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g/cUsKBy9aLzWUWC4mZ7IACQUgXjiEVgWxOTM1gmtNM=;
+        b=lJQGK9GnG7+J1uANBdbm8uKpq19z1gyaLw66X3197v/Eh+m5OlnLslNEYbVlu8g8CK
+         ZZCnFYLl5Bg0lLnvaFFI1+OYo7uzQVhzaiqM6sHwmLyZ9/KoO3qTEUZkhQcgB9KRfnN8
+         eBdIre3o2wwrMhl29bF+4M29TxDUhxpZKGuUz1EFvsuPhwlVpdYE7NaiLIrNBLmW+yRK
+         fjVq88UCPkLDlKQXQfSHgItIJYak4Ljuwd4tMTACe9e6YmQ9YE7US7DwHu4bArcX5+a6
+         j4txsOjCj/2V7wFzO1I6TLS6nAiHUfJ8LxaIomR58GCxyFdn5cWMEb+SRFCpj8rQMXas
+         48/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g/cUsKBy9aLzWUWC4mZ7IACQUgXjiEVgWxOTM1gmtNM=;
+        b=USs2oOA9l7cEf+ri2zh9DSD1gmsqOqfElq/Ejj58i8cXVX0sLHvKrDtVE/MLi3M315
+         o4N+czi150b9VGEtTPOirkdfTBROSfJY+5fodMwVdHKkwxOvHhY/EMURLnRBcj04vXAf
+         AcLWLKdMLUdXngufmCIXF7h6GobF/Ladpw28q1Svv3wqAzu8KAqe09g+GjvFztuLR07N
+         iVICTM3oTbvQxlofnHY/dhRAuyw3nFmjhRDRh1Qp96vucnc0aVem+eCkqbPGzCWaRo4w
+         cGk+ELS6VfNGiTtPc9WroIqEOjNZHsuypf5wkBD6ntcoeEUdgxuOBoJqJC6Vm8t7xool
+         zlZw==
+X-Gm-Message-State: AOAM531WjYji2XwWqpgZ68Ks8VrKmeEF/6e3HgIkblf7xktxkrhOqbBX
+        ei+/q99uJri5O/Vf4PSXLbfGCx6YJkLln/myPlY=
+X-Google-Smtp-Source: ABdhPJzNhaZ8T0cY5P/wh86IVEQo+Ph/kiGxD5Z+mYUIy/qaoPMQYrjpqQBI12hm6aFBmXdv28Ug9NWJ3cexImZ50Do=
+X-Received: by 2002:a25:bf89:: with SMTP id l9mr709494ybk.22.1604542976980;
+ Wed, 04 Nov 2020 18:22:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20201104215923.4000229-1-jolsa@kernel.org> <20201104215923.4000229-2-jolsa@kernel.org>
-In-Reply-To: <20201104215923.4000229-2-jolsa@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Wed, 4 Nov 2020 17:01:50 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW70S8HmoRFtgzc=r_pBF16kp+E20iaW6awO8TuSfGgYig@mail.gmail.com>
-Message-ID: <CAPhsuW70S8HmoRFtgzc=r_pBF16kp+E20iaW6awO8TuSfGgYig@mail.gmail.com>
-Subject: Re: [PATCH 1/3] bpf: Move iterator functions into special init section
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Yonghong Song <yhs@fb.com>, dwarves@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>, Hao Luo <haoluo@google.com>,
-        "Frank Ch. Eigler" <fche@redhat.com>,
-        Mark Wielaard <mjw@redhat.com>
+References: <20201104191052.390657-1-ndesaulniers@google.com>
+In-Reply-To: <20201104191052.390657-1-ndesaulniers@google.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Thu, 5 Nov 2020 03:22:46 +0100
+Message-ID: <CANiq72m9xX78==qAyu5dKPv-26tPh=ia4xORivvpvwbtoENSqQ@mail.gmail.com>
+Subject: Re: [PATCH] compiler-clang: remove version check for BPF Tracing
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Nov 4, 2020 at 2:02 PM Jiri Olsa <jolsa@kernel.org> wrote:
+On Wed, Nov 4, 2020 at 8:11 PM Nick Desaulniers <ndesaulniers@google.com> wrote:
 >
-> With upcoming changes to pahole, that change the way how and
-> which kernel functions are stored in BTF data, we need a way
-> to recognize iterator functions.
->
-> Iterator functions need to be in BTF data, but have no real
-> body and are currently placed in .init.text section, so they
-> are freed after kernel init and are filtered out of BTF data
-> because of that.
->
-> The solution is to place these functions under new section:
->   .init.bpf.preserve_type
->
-> And add 2 new symbols to mark that area:
->   __init_bpf_preserve_type_begin
->   __init_bpf_preserve_type_end
->
-> The code in pahole responsible for picking up the functions will
-> be able to recognize functions from this section and add them to
-> the BTF data and filter out all other .init.text functions.
->
-> Suggested-by: Yonghong Song <yhs@fb.com>
-> Signed-off-by: Jiri Olsa <jolsa@redhat.com>
+> bpftrace parses the kernel headers and uses Clang under the hood. Remove
+> the version check when __BPF_TRACING__ is defined (as bpftrace does) so
+> that this tool can continue to parse kernel headers, even with older
+> clang sources.
 
-Acked-by: Song Liu <songliubraving@fb.com>
+Acked-by: Miguel Ojeda <ojeda@kernel.org>
 
-[...]
+Cheers,
+Miguel
