@@ -2,161 +2,157 @@ Return-Path: <SRS0=NbGg=EL=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0434C00A89
-	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 03:48:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9E1E9C00A89
+	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 04:34:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 443152072E
-	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 03:48:38 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cc+4+3Nr"
+	by mail.kernel.org (Postfix) with ESMTP id 3A0112083B
+	for <bpf@archiver.kernel.org>; Thu,  5 Nov 2020 04:34:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1604550852;
+	bh=g6uyTCKpHqfndY2Crys18LHXO1mlKuIXBsDf138fvCQ=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=uZplYZlj/Fgo1R8WDS9gcXcwaj07Gy892Q0F4mhalgzoQ+oqPnogWp191uhK9iBjJ
+	 LvP7cFhxIs6zm1n1XOe3nrO1wf/zZ3hk9H+Plp/DYekQXK+9FZMMCWVmf7dt+vOZ7n
+	 RZAGvohMJugkJekUGo2HWvecVdvkgiMYnmepr3p0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388717AbgKEDsi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 4 Nov 2020 22:48:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388670AbgKEDsf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 4 Nov 2020 22:48:35 -0500
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84689C0613CF;
-        Wed,  4 Nov 2020 19:48:35 -0800 (PST)
-Received: by mail-io1-xd43.google.com with SMTP id j12so415313iow.0;
-        Wed, 04 Nov 2020 19:48:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zU4o/Vz/jeSjdyJy2A21CMrZyLkZu8yOx/H+G2wHTdc=;
-        b=Cc+4+3Nry85BqsIZjrlLbXJjopgkClUH0XNo4UAHtONrfMvHoqk0Ke8rFBXZUfdEkM
-         1mG+YXiNpRJUBK6OrvaE7+POHwi26+4G27OQQDUzLY0ru82+7Kjfc/03/APvhmaNB6Ix
-         ycWUco6ldzhRb1JoD2Xl0pZQWKhKGAkkFGnP7Kk6ms84K4cJwFhJVnMgK3XR7NqxutiC
-         gPYsDJNhkVCNMvk8nkn3m0ldSAmoej48HB3nOo7l5aWPW8gT4MTP1JZ665HEe5235xg5
-         ThS2aizKBl9ei4FpxYwLEqC25nBoyjZZ45EQF/F9A661JS+kj8tmxHXz8Dp8PwN91/kn
-         lEng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zU4o/Vz/jeSjdyJy2A21CMrZyLkZu8yOx/H+G2wHTdc=;
-        b=bQOjzLLfIRM3edJrBi4q7Bo0rH56RVp8pGhZgX+0J5xiy54Ot8gpxXdVsISX4yrh9y
-         vVdbIwfTrcLy5YMVNPM7W6JHWG4ZlztVYI4swNJPwqAFPJCKLZGD1sUX2q+gp7pmIouG
-         FWsc7mXKzRnuLSYlBMfIg5Y2g5uZ/F0aj2QQaeWviPcZ+tztymYywx0uwxH7THHi+UPA
-         P7AVWMzXPeWEmW7QC+67G/If+a4BKEJQGr7JVQXU5Q0wDrHkXnvKhuda6yKI4uFvco1M
-         YyGbhkGDnmASwpUuDkk1lPrxhOezYT8AfrXWwdcoa/LEb2mAbCPnnDJatlanTGHKG5mY
-         e8TA==
-X-Gm-Message-State: AOAM532EvnRfwl/RyRni6XYSg2vFyZODAASA5mArooxAiXdbtwzOUdTa
-        Iac3qnd7oUVj8/EgB1MQf4M=
-X-Google-Smtp-Source: ABdhPJzB6Cv89hAt0Kq68a1+gDz4Ekbjl69lPl05kP/NBRjPeQcW/soBUypuRI/+QJ2keC5ryNUOxg==
-X-Received: by 2002:a6b:911:: with SMTP id t17mr426548ioi.197.1604548114992;
-        Wed, 04 Nov 2020 19:48:34 -0800 (PST)
-Received: from Davids-MacBook-Pro.local ([2601:282:803:7700:6dfd:4f87:68ce:497b])
-        by smtp.googlemail.com with ESMTPSA id p83sm222221iod.49.2020.11.04.19.48.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Nov 2020 19:48:34 -0800 (PST)
-Subject: Re: [PATCHv3 iproute2-next 0/5] iproute2: add libbpf support
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Hangbin Liu <haliu@redhat.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Miller <davem@davemloft.net>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Jiri Benc <jbenc@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>
-References: <20201028132529.3763875-1-haliu@redhat.com>
- <20201029151146.3810859-1-haliu@redhat.com>
- <646cdfd9-5d6a-730d-7b46-f2b13f9e9a41@gmail.com>
- <CAEf4BzYupkUqfgRx62uq3gk86dHTfB00ZtLS7eyW0kKzBGxmKQ@mail.gmail.com>
- <edf565cf-f75e-87a1-157b-39af6ea84f76@iogearbox.net>
- <3306d19c-346d-fcbc-bd48-f141db26a2aa@gmail.com>
- <CAADnVQ+EWmmjec08Y6JZGnan=H8=X60LVtwjtvjO5C6M-jcfpg@mail.gmail.com>
- <71af5d23-2303-d507-39b5-833dd6ea6a10@gmail.com>
- <20201103225554.pjyuuhdklj5idk3u@ast-mbp.dhcp.thefacebook.com>
- <20201104021730.GK2408@dhcp-12-153.nay.redhat.com>
- <20201104031145.nmtggnzomfee4fma@ast-mbp.dhcp.thefacebook.com>
- <2e8ba0be-51bf-9060-e1f7-2148fbaf0f1d@iogearbox.net> <87zh3xv04o.fsf@toke.dk>
- <5de7eb11-010b-e66e-c72d-07ece638c25e@iogearbox.net>
- <20201104111708.0595e2a3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <CAEf4BzY2pAaEmv_x_nGQC83373ZWUuNv-wcYRye+vfZ3Fa2qbw@mail.gmail.com>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <dba0723f-fd55-5dd6-dccc-4e0a649c860e@gmail.com>
-Date:   Wed, 4 Nov 2020 20:48:31 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.4.0
+        id S1728679AbgKEEeL convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 4 Nov 2020 23:34:11 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:17322 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727711AbgKEEeK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 4 Nov 2020 23:34:10 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A54U3QE003681
+        for <bpf@vger.kernel.org>; Wed, 4 Nov 2020 20:34:10 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 34m5rf93t2-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 04 Nov 2020 20:34:10 -0800
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 4 Nov 2020 20:34:08 -0800
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 101D82EC8E04; Wed,  4 Nov 2020 20:34:08 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH v2 bpf-next 02/11] selftest/bpf: relax btf_dedup test checks
+Date:   Wed, 4 Nov 2020 20:33:52 -0800
+Message-ID: <20201105043402.2530976-3-andrii@kernel.org>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201105043402.2530976-1-andrii@kernel.org>
+References: <20201105043402.2530976-1-andrii@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAEf4BzY2pAaEmv_x_nGQC83373ZWUuNv-wcYRye+vfZ3Fa2qbw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-05_01:2020-11-05,2020-11-05 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1034
+ malwarescore=0 impostorscore=0 phishscore=0 bulkscore=0 suspectscore=8
+ mlxlogscore=872 lowpriorityscore=0 adultscore=0 mlxscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011050032
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 11/4/20 1:43 PM, Andrii Nakryiko wrote:
-> 
-> What users writing BPF programs can expect from iproute2 in terms of
-> available BPF features is what matters. And by not enforcing a
-> specific minimal libbpf version, iproute2 version doesn't matter all
-> that much, because libbpf version that iproute2 ends up linking
-> against might be very old.
-> 
-> There was a lot of talk about API stability and backwards
-> compatibility. Libbpf has had a stable API and ABI for at least 1.5
-> years now and is very conscious about that when adding or extending
-> new APIs. That's not even a factor in me arguing for submodules. I'll
-> give a few specific examples of libbpf API not changing at all, but
-> how end user experience gets tremendously better.
-> 
-> Some of the most important APIs of libbpf are, arguably,
-> bpf_object__open() and bpf_object__load(). They accept a BPF ELF file,
-> do some preprocessing and in the end load BPF instructions into the
-> kernel for verification. But while API doesn't change across libbpf
-> versions, BPF-side code features supported changes quite a lot.
-> 
-> 1. BTF sanitization. Newer versions of clang would emit a richer set
-> of BTF type information. Old kernels might not support BTF at all (but
-> otherwise would work just fine), or might not support some specific
-> newer additions to BTF. If someone was to use the latest Clang, but
-> outdated libbpf and old kernel, they would have a bad time, because
-> their BPF program would fail due to the kernel being strict about BTF.
-> But new libbpf would "sanitize" BTF, according to supported features
-> of the kernel, or just drop BTF altogether, if the kernel is that old.
-> 
+Remove the requirement of a strictly exact string section contents. This used
+to be true when string deduplication was done through sorting, but with string
+dedup done through hash table, it's no longer true. So relax test harness to
+relax strings checks and, consequently, type checks, which now don't have to
+have exactly the same string offsets.
 
-In my experience, compilers are the least likely change in a typical
-Linux development environment. BPF should not be forcing new versions
-(see me last response).
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/prog_tests/btf.c | 40 ++++++++++++--------
+ 1 file changed, 25 insertions(+), 15 deletions(-)
 
-> 
-> 2. bpf_probe_read_user() falling back to bpf_probe_read(). Newer
-> kernels warn if a BPF application isn't using a proper _kernel() or
-> _user() variant of bpf_probe_read(), and eventually will just stop
-> supporting generic bpf_probe_read(). So what this means is that end
-> users would need to compile to variants of their BPF application, one
-> for older kernels with bpf_probe_read(), another with
-> bpf_probe_read_kernel()/bpf_probe_read_user(). That's a massive pain
-> in the butt. But newer libbpf versions provide a completely
-> transparent fallback from _user()/_kernel() variants to generic one,
-> if the kernel doesn't support new variants. So the instruction to
-> users becomes simple: always use
-> bpf_probe_read_user()/bpf_probe_read_kernel().
-> 
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
+index 93162484c2ca..8ae97e2a4b9d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -6652,7 +6652,7 @@ static void do_test_dedup(unsigned int test_num)
+ 	const void *test_btf_data, *expect_btf_data;
+ 	const char *ret_test_next_str, *ret_expect_next_str;
+ 	const char *test_strs, *expect_strs;
+-	const char *test_str_cur, *test_str_end;
++	const char *test_str_cur;
+ 	const char *expect_str_cur, *expect_str_end;
+ 	unsigned int raw_btf_size;
+ 	void *raw_btf;
+@@ -6719,12 +6719,18 @@ static void do_test_dedup(unsigned int test_num)
+ 		goto done;
+ 	}
+ 
+-	test_str_cur = test_strs;
+-	test_str_end = test_strs + test_hdr->str_len;
+ 	expect_str_cur = expect_strs;
+ 	expect_str_end = expect_strs + expect_hdr->str_len;
+-	while (test_str_cur < test_str_end && expect_str_cur < expect_str_end) {
++	while (expect_str_cur < expect_str_end) {
+ 		size_t test_len, expect_len;
++		int off;
++
++		off = btf__find_str(test_btf, expect_str_cur);
++		if (CHECK(off < 0, "exp str '%s' not found: %d\n", expect_str_cur, off)) {
++			err = -1;
++			goto done;
++		}
++		test_str_cur = btf__str_by_offset(test_btf, off);
+ 
+ 		test_len = strlen(test_str_cur);
+ 		expect_len = strlen(expect_str_cur);
+@@ -6741,15 +6747,8 @@ static void do_test_dedup(unsigned int test_num)
+ 			err = -1;
+ 			goto done;
+ 		}
+-		test_str_cur += test_len + 1;
+ 		expect_str_cur += expect_len + 1;
+ 	}
+-	if (CHECK(test_str_cur != test_str_end,
+-		  "test_str_cur:%p != test_str_end:%p",
+-		  test_str_cur, test_str_end)) {
+-		err = -1;
+-		goto done;
+-	}
+ 
+ 	test_nr_types = btf__get_nr_types(test_btf);
+ 	expect_nr_types = btf__get_nr_types(expect_btf);
+@@ -6775,10 +6774,21 @@ static void do_test_dedup(unsigned int test_num)
+ 			err = -1;
+ 			goto done;
+ 		}
+-		if (CHECK(memcmp((void *)test_type,
+-				 (void *)expect_type,
+-				 test_size),
+-			  "type #%d: contents differ", i)) {
++		if (CHECK(btf_kind(test_type) != btf_kind(expect_type),
++			  "type %d kind: exp %d != got %u\n",
++			  i, btf_kind(expect_type), btf_kind(test_type))) {
++			err = -1;
++			goto done;
++		}
++		if (CHECK(test_type->info != expect_type->info,
++			  "type %d info: exp %d != got %u\n",
++			  i, expect_type->info, test_type->info)) {
++			err = -1;
++			goto done;
++		}
++		if (CHECK(test_type->size != expect_type->size,
++			  "type %d size/type: exp %d != got %u\n",
++			  i, expect_type->size, test_type->size)) {
+ 			err = -1;
+ 			goto done;
+ 		}
+-- 
+2.24.1
 
-I vaguely recall a thread about having BPF system call return user
-friendly messages, but that was shot down. I take this example to mean
-the solution is to have libbpf handle the quirks and various changes
-which means that now libbpf takes on burden - the need for constant
-updates to handle quirks. extack has been very successful at making
-networking configuration mistakes more user friendly. Other kernel
-features should be using the same kind of extension.
