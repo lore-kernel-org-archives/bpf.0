@@ -2,130 +2,125 @@ Return-Path: <SRS0=kVCt=EM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BB3E3C2D0A3
-	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 21:50:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1364BC55178
+	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 22:08:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7339A2078B
-	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 21:50:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AB03920882
+	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 22:08:05 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="RvIN8vxi"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728823AbgKFVuf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 6 Nov 2020 16:50:35 -0500
-Received: from smtprelay0176.hostedemail.com ([216.40.44.176]:38860 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728771AbgKFVuN (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 6 Nov 2020 16:50:13 -0500
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay06.hostedemail.com (Postfix) with ESMTP id 4980E1800F08D;
-        Fri,  6 Nov 2020 21:50:11 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-HE-Tag: rod14_3b0fb74272d5
-X-Filterd-Recvd-Size: 3501
-Received: from XPS-9350.home (unknown [47.151.133.149])
-        (Authenticated sender: joe@perches.com)
-        by omf13.hostedemail.com (Postfix) with ESMTPA;
-        Fri,  6 Nov 2020 21:50:09 +0000 (UTC)
-Message-ID: <d1cefb17a0a915fdabe7a80d14895ff3d85970c1.camel@perches.com>
-Subject: Re: [PATCH] libbpf: Remove unnecessary conversion to bool
-From:   Joe Perches <joe@perches.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>, xiakaixu1987@gmail.com
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Kaixu Xia <kaixuxia@tencent.com>
-Date:   Fri, 06 Nov 2020 13:50:08 -0800
-In-Reply-To: <CAEf4BzZQ6=-h3g1duXFwDLr92z7nE6ajv8Rz_Zv=qx=-F3sRVA@mail.gmail.com>
-References: <1604646759-785-1-git-send-email-kaixuxia@tencent.com>
-         <CAEf4BzZQ6=-h3g1duXFwDLr92z7nE6ajv8Rz_Zv=qx=-F3sRVA@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
+        id S1728575AbgKFWIE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 6 Nov 2020 17:08:04 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:20358 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728768AbgKFWIE (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 6 Nov 2020 17:08:04 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A6M6T5T004388
+        for <bpf@vger.kernel.org>; Fri, 6 Nov 2020 14:08:04 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=RmBJ8S46rf+DVnvL0Ry/WB6ygJwed88F78Syox24VYw=;
+ b=RvIN8vxi4Xy+Fz2J5MLDAua97rGhiT6X6PY3UGIc4RctKCFRqQEKUT+CKreAQRbTxVNW
+ lTAAH5Tu/NDPN/4ozhbYVINPel+TMC9mWymdk3uPd9Pg8wD2HT6KlkUwNGWPDiyY5ZBz
+ ZPOCc3QjNHVMF8lFyqSNOJueCDMmPXvn8SQ= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 34m5rfm2mj-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 06 Nov 2020 14:08:03 -0800
+Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 6 Nov 2020 14:08:02 -0800
+Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
+        id 437A629463F7; Fri,  6 Nov 2020 14:07:57 -0800 (PST)
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        <netdev@vger.kernel.org>
+Subject: [PATCH bpf-next 1/3] bpf: Folding omem_charge() into sk_storage_charge()
+Date:   Fri, 6 Nov 2020 14:07:57 -0800
+Message-ID: <20201106220757.3950302-1-kafai@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201106220750.3949423-1-kafai@fb.com>
+References: <20201106220750.3949423-1-kafai@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-06_06:2020-11-05,2020-11-06 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ malwarescore=0 impostorscore=0 phishscore=0 bulkscore=0 suspectscore=13
+ mlxlogscore=760 lowpriorityscore=0 adultscore=0 mlxscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011060152
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 2020-11-06 at 13:32 -0800, Andrii Nakryiko wrote:
-> On Thu, Nov 5, 2020 at 11:12 PM <xiakaixu1987@gmail.com> wrote:
-> > Fix following warning from coccinelle:
-> > ./tools/lib/bpf/libbpf.c:1478:43-48: WARNING: conversion to bool not needed here
-[]
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-[]
-> > @@ -1475,7 +1475,7 @@ static int set_kcfg_value_tri(struct extern_desc *ext, void *ext_val,
-> >                                 ext->name, value);
-> >                         return -EINVAL;
-> >                 }
-> > -               *(bool *)ext_val = value == 'y' ? true : false;
-> > +               *(bool *)ext_val = value == 'y';
-> 
-> I actually did this intentionally. x = y == z; pattern looked too
-> obscure to my taste, tbh.
+sk_storage_charge() is the only user of omem_charge().
+This patch simplifies it by folding omem_charge() into
+sk_storage_charge().
 
-It's certainly a question of taste and obviously there is nothing
-wrong with yours.
-
-Maybe adding parentheses makes the below look less obscure to you?
-
-	x = (y == z);
-
-My taste would run to something like:
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- tools/lib/bpf/libbpf.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
+ net/core/bpf_sk_storage.c | 23 ++++++++++-------------
+ 1 file changed, 10 insertions(+), 13 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 313034117070..5d9c9c8d50c9 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -1469,25 +1469,34 @@ static int set_kcfg_value_tri(struct extern_desc *ext, void *ext_val,
- 			      char value)
+diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+index c907f0dc7f87..001eac65e40f 100644
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -15,18 +15,6 @@
+=20
+ DEFINE_BPF_STORAGE_CACHE(sk_cache);
+=20
+-static int omem_charge(struct sock *sk, unsigned int size)
+-{
+-	/* same check as in sock_kmalloc() */
+-	if (size <=3D sysctl_optmem_max &&
+-	    atomic_read(&sk->sk_omem_alloc) + size < sysctl_optmem_max) {
+-		atomic_add(size, &sk->sk_omem_alloc);
+-		return 0;
+-	}
+-
+-	return -ENOMEM;
+-}
+-
+ static struct bpf_local_storage_data *
+ sk_storage_lookup(struct sock *sk, struct bpf_map *map, bool cacheit_loc=
+kit)
  {
- 	switch (ext->kcfg.type) {
--	case KCFG_BOOL:
-+	case KCFG_BOOL: {
-+		bool *p = ext_val;
+@@ -316,7 +304,16 @@ BPF_CALL_2(bpf_sk_storage_delete, struct bpf_map *, =
+map, struct sock *, sk)
+ static int sk_storage_charge(struct bpf_local_storage_map *smap,
+ 			     void *owner, u32 size)
+ {
+-	return omem_charge(owner, size);
++	struct sock *sk =3D (struct sock *)owner;
 +
- 		if (value == 'm') {
- 			pr_warn("extern (kcfg) %s=%c should be tristate or char\n",
- 				ext->name, value);
- 			return -EINVAL;
- 		}
--		*(bool *)ext_val = value == 'y' ? true : false;
-+		*p = (value == 'y');
- 		break;
--	case KCFG_TRISTATE:
++	/* same check as in sock_kmalloc() */
++	if (size <=3D sysctl_optmem_max &&
++	    atomic_read(&sk->sk_omem_alloc) + size < sysctl_optmem_max) {
++		atomic_add(size, &sk->sk_omem_alloc);
++		return 0;
 +	}
-+	case KCFG_TRISTATE: {
-+		enum libbpf_tristate *p = ext_val;
 +
- 		if (value == 'y')
--			*(enum libbpf_tristate *)ext_val = TRI_YES;
-+			*p = TRI_YES;
- 		else if (value == 'm')
--			*(enum libbpf_tristate *)ext_val = TRI_MODULE;
-+			*p = TRI_MODULE;
- 		else /* value == 'n' */
--			*(enum libbpf_tristate *)ext_val = TRI_NO;
-+			*p = TRI_NO;
- 		break;
--	case KCFG_CHAR:
--		*(char *)ext_val = value;
-+	}
-+	case KCFG_CHAR: {
-+		char *p = ext_val;
-+
-+		*p = value;
- 		break;
-+	}
- 	case KCFG_UNKNOWN:
- 	case KCFG_INT:
- 	case KCFG_CHAR_ARR:
++	return -ENOMEM;
+ }
+=20
+ static void sk_storage_uncharge(struct bpf_local_storage_map *smap,
+--=20
+2.24.1
 
