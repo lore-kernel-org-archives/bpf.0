@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 16762C2D0A3
-	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 05:54:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A28F4C4741F
+	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 05:54:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA85420936
-	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 05:54:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2B5AA2222A
+	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 05:54:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604642078;
-	bh=VUspCSh/5NKRFd8iTqcfClKnNnFByl1/SVRKJDl9a64=;
+	s=default; t=1604642081;
+	bh=P63I745K2YwbdRQToOXZRB3cqsnQ63rKsFllETY+TwE=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=hEbYYAGp2af9Q0K5kWEv/Yrs8GA6uKnkkrVHsMz0WfQ1GTokFfF+f0nxXj4xf88kl
-	 L3zQ2lghmkhsvmkYhNKuNY0jAITlEL+oBwV+8nzLIvKbZhJ5rWSvExBK83Lw/LT8w9
-	 /MZJoJ0iKKRpaJpCWIghAWvvWVpmeAhBcVNayPjY=
+	b=RFe1l3pJQJmFLLAQ0LjqTL8viPAWfU39UQdmbT+klo/a1ZUaFCHzdE790SiI1M1GD
+	 ped2hlM3jcSfGHKZGLhRMBh5adxBrSaLRYLRqvI3DoDudVIU8bkg2Bd1PZtLnelmLm
+	 0P1A8msmw7fpfz2XcmXa4zE4ux2qNsxNJDYab0TQ=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726273AbgKFFyi convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 6 Nov 2020 00:54:38 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:4092 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725828AbgKFFyh (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 6 Nov 2020 00:54:37 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A65cfp9006934
-        for <bpf@vger.kernel.org>; Thu, 5 Nov 2020 21:54:37 -0800
+        id S1726126AbgKFFyk convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 6 Nov 2020 00:54:40 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63548 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725828AbgKFFyj (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 6 Nov 2020 00:54:39 -0500
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0A65dkKQ029158
+        for <bpf@vger.kernel.org>; Thu, 5 Nov 2020 21:54:38 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 34mr9ba99n-1
+        by m0089730.ppops.net with ESMTP id 34m5r17wet-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Thu, 05 Nov 2020 21:54:37 -0800
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1979.3; Thu, 5 Nov 2020 21:54:36 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id C2A1B2EC8EFE; Thu,  5 Nov 2020 21:51:40 -0800 (PST)
+        id 14E992EC8EFA; Thu,  5 Nov 2020 21:51:32 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
@@ -47,9 +47,9 @@ CC:     <kernel-team@fb.com>, <linux-kernel@vger.kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH bpf-next 5/5] tools/bpftool: add support for in-kernel and named BTF in `btf show`
-Date:   Thu, 5 Nov 2020 21:51:10 -0800
-Message-ID: <20201106055111.3972047-6-andrii@kernel.org>
+Subject: [PATCH bpf-next 1/5] bpf: add in-kernel split BTF support
+Date:   Thu, 5 Nov 2020 21:51:06 -0800
+Message-ID: <20201106055111.3972047-2-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201106055111.3972047-1-andrii@kernel.org>
 References: <20201106055111.3972047-1-andrii@kernel.org>
@@ -59,151 +59,439 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-06_01:2020-11-05,2020-11-06 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- phishscore=0 clxscore=1034 lowpriorityscore=0 mlxlogscore=999
- suspectscore=9 mlxscore=0 priorityscore=1501 impostorscore=0 bulkscore=0
- adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 bulkscore=0
+ malwarescore=0 phishscore=0 mlxscore=0 clxscore=1015 impostorscore=0
+ suspectscore=8 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2011060039
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Display vmlinux BTF name and kernel module names when listing available BTFs
-on the system.
+Adjust in-kernel BTF implementation to support a split BTF mode of operation.
+Changes are mostly mirroring libbpf split BTF changes, with the exception of
+start_id being 0 for in-kernel implementation due to simpler read-only mode.
 
-In human-readable output mode, module BTFs are reported with "name
-[module-name]", while vmlinux BTF will be reported as "name [vmlinux]".
-Square brackets are added by bpftool and follow kernel convention when
-displaying modules in human-readable text outputs.
+Otherwise, for split BTF logic, most of the logic of jumping to base BTF,
+where necessary, is encapsulated in few helper functions. Type numbering and
+string offset in a split BTF are logically continuing where base BTF ends, so
+most of the high-level logic is kept without changes.
 
-[vmuser@archvm bpf]$ sudo ../../../bpf/bpftool/bpftool btf s
-1: name [vmlinux]  size 4082281B
-6: size 2365B  prog_ids 8,6  map_ids 3
-7: name [button]  size 46895B
-8: name [pcspkr]  size 42328B
-9: name [serio_raw]  size 39375B
-10: name [floppy]  size 57185B
-11: name [i2c_core]  size 76186B
-12: name [crc32c_intel]  size 16036B
-13: name [i2c_piix4]  size 50497B
-14: name [irqbypass]  size 14124B
-15: name [kvm]  size 197985B
-16: name [kvm_intel]  size 123564B
-17: name [cryptd]  size 42466B
-18: name [crypto_simd]  size 17187B
-19: name [glue_helper]  size 39205B
-20: name [aesni_intel]  size 41034B
-25: size 36150B
-        pids bpftool(2519)
-
-In JSON mode, two fields (boolean "kernel" and string "name") are reported for
-each BTF object. vmlinux BTF is reported with name "vmlinux" (kernel itself
-returns and empty name for vmlinux BTF).
-
-[vmuser@archvm bpf]$ sudo ../../../bpf/bpftool/bpftool btf s -jp
-[{
-        "id": 1,
-        "size": 4082281,
-        "prog_ids": [],
-        "map_ids": [],
-        "kernel": true,
-        "name": "vmlinux"
-    },{
-        "id": 6,
-        "size": 2365,
-        "prog_ids": [8,6
-        ],
-        "map_ids": [3
-        ],
-        "kernel": false
-    },{
-        "id": 7,
-        "size": 46895,
-        "prog_ids": [],
-        "map_ids": [],
-        "kernel": true,
-        "name": "button"
-    },{
-
-...
+Type verification and size resolution is only doing an added resolution of new
+split BTF types and relies on already cached size and type resolution results
+in the base BTF.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/bpf/bpftool/btf.c | 28 +++++++++++++++++++++++++++-
- 1 file changed, 27 insertions(+), 1 deletion(-)
+ kernel/bpf/btf.c | 182 +++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 130 insertions(+), 52 deletions(-)
 
-diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-index c96b56e8e3a4..ed5e97157241 100644
---- a/tools/bpf/bpftool/btf.c
-+++ b/tools/bpf/bpftool/btf.c
-@@ -742,9 +742,14 @@ show_btf_plain(struct bpf_btf_info *info, int fd,
- 	       struct btf_attach_table *btf_map_table)
- {
- 	struct btf_attach_point *obj;
-+	const char *name = u64_to_ptr(info->name);
- 	int n;
- 
- 	printf("%u: ", info->id);
-+	if (info->kernel_btf)
-+		printf("name [%s]  ", name);
-+	else if (name && name[0])
-+		printf("name %s  ", name);
- 	printf("size %uB", info->btf_size);
- 
- 	n = 0;
-@@ -771,6 +776,7 @@ show_btf_json(struct bpf_btf_info *info, int fd,
- 	      struct btf_attach_table *btf_map_table)
- {
- 	struct btf_attach_point *obj;
-+	const char *name = u64_to_ptr(info->name);
- 
- 	jsonw_start_object(json_wtr);	/* btf object */
- 	jsonw_uint_field(json_wtr, "id", info->id);
-@@ -796,6 +802,11 @@ show_btf_json(struct bpf_btf_info *info, int fd,
- 
- 	emit_obj_refs_json(&refs_table, info->id, json_wtr); /* pids */
- 
-+	jsonw_bool_field(json_wtr, "kernel", info->kernel_btf);
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index ed7d02e8bc93..f61944a3873b 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -204,12 +204,17 @@ struct btf {
+ 	const char *strings;
+ 	void *nohdr_data;
+ 	struct btf_header hdr;
+-	u32 nr_types;
++	u32 nr_types; /* includes VOID for base BTF */
+ 	u32 types_size;
+ 	u32 data_size;
+ 	refcount_t refcnt;
+ 	u32 id;
+ 	struct rcu_head rcu;
 +
-+	if (name && name[0])
-+		jsonw_string_field(json_wtr, "name", name);
-+
- 	jsonw_end_object(json_wtr);	/* btf object */
++	/* split BTF support */
++	struct btf *base_btf;
++	u32 start_id; /* first type ID in this BTF (0 for base BTF) */
++	u32 start_str_off; /* first string offset (0 for base BTF) */
+ };
+ 
+ enum verifier_phase {
+@@ -450,14 +455,27 @@ static bool btf_type_is_datasec(const struct btf_type *t)
+ 	return BTF_INFO_KIND(t->info) == BTF_KIND_DATASEC;
  }
  
-@@ -803,15 +814,30 @@ static int
- show_btf(int fd, struct btf_attach_table *btf_prog_table,
- 	 struct btf_attach_table *btf_map_table)
- {
--	struct bpf_btf_info info = {};
-+	struct bpf_btf_info info;
- 	__u32 len = sizeof(info);
-+	char name[64];
- 	int err;
- 
-+	memset(&info, 0, sizeof(info));
- 	err = bpf_obj_get_info_by_fd(fd, &info, &len);
- 	if (err) {
- 		p_err("can't get BTF object info: %s", strerror(errno));
- 		return -1;
- 	}
-+	/* if kernel support emitting BTF object name, pass name pointer */
-+	if (info.name_len) {
-+		memset(&info, 0, sizeof(info));
-+		info.name_len = sizeof(name);
-+		info.name = ptr_to_u64(name);
-+		len = sizeof(info);
++static u32 btf_nr_types_total(const struct btf *btf)
++{
++	u32 total = 0;
 +
-+		err = bpf_obj_get_info_by_fd(fd, &info, &len);
-+		if (err) {
-+			p_err("can't get BTF object info: %s", strerror(errno));
-+			return -1;
-+		}
++	while (btf) {
++		total += btf->nr_types;
++		btf = btf->base_btf;
++	}
++
++	return total;
++}
++
+ s32 btf_find_by_name_kind(const struct btf *btf, const char *name, u8 kind)
+ {
+ 	const struct btf_type *t;
+ 	const char *tname;
+-	u32 i;
++	u32 i, total;
+ 
+-	for (i = 1; i <= btf->nr_types; i++) {
+-		t = btf->types[i];
++	total = btf_nr_types_total(btf);
++	for (i = 1; i < total; i++) {
++		t = btf_type_by_id(btf, i);
+ 		if (BTF_INFO_KIND(t->info) != kind)
+ 			continue;
+ 
+@@ -600,8 +618,15 @@ static const struct btf_kind_operations *btf_type_ops(const struct btf_type *t)
+ 
+ static bool btf_name_offset_valid(const struct btf *btf, u32 offset)
+ {
+-	return BTF_STR_OFFSET_VALID(offset) &&
+-		offset < btf->hdr.str_len;
++	if (!BTF_STR_OFFSET_VALID(offset))
++		return false;
++again:
++	if (offset < btf->start_str_off) {
++		btf = btf->base_btf;
++		goto again;
++	}
++	offset -= btf->start_str_off;
++	return offset < btf->hdr.str_len;
+ }
+ 
+ static bool __btf_name_char_ok(char c, bool first, bool dot_ok)
+@@ -615,10 +640,25 @@ static bool __btf_name_char_ok(char c, bool first, bool dot_ok)
+ 	return true;
+ }
+ 
++static const char *btf_str_by_offset(const struct btf *btf, u32 offset)
++{
++again:
++	if (offset < btf->start_str_off) {
++		btf = btf->base_btf;
++		goto again;
++	}
++
++	offset -= btf->start_str_off;
++	if (offset < btf->hdr.str_len)
++		return &btf->strings[offset];
++
++	return NULL;
++}
++
+ static bool __btf_name_valid(const struct btf *btf, u32 offset, bool dot_ok)
+ {
+ 	/* offset must be valid */
+-	const char *src = &btf->strings[offset];
++	const char *src = btf_str_by_offset(btf, offset);
+ 	const char *src_limit;
+ 
+ 	if (!__btf_name_char_ok(*src, true, dot_ok))
+@@ -651,27 +691,31 @@ static bool btf_name_valid_section(const struct btf *btf, u32 offset)
+ 
+ static const char *__btf_name_by_offset(const struct btf *btf, u32 offset)
+ {
++	const char *name;
++
+ 	if (!offset)
+ 		return "(anon)";
+-	else if (offset < btf->hdr.str_len)
+-		return &btf->strings[offset];
+-	else
+-		return "(invalid-name-offset)";
++
++	name = btf_str_by_offset(btf, offset);
++	return name ?: "(invalid-name-offset)";
+ }
+ 
+ const char *btf_name_by_offset(const struct btf *btf, u32 offset)
+ {
+-	if (offset < btf->hdr.str_len)
+-		return &btf->strings[offset];
+-
+-	return NULL;
++	return btf_str_by_offset(btf, offset);
+ }
+ 
+ const struct btf_type *btf_type_by_id(const struct btf *btf, u32 type_id)
+ {
+-	if (type_id > btf->nr_types)
+-		return NULL;
++again:
++	if (type_id < btf->start_id) {
++		btf = btf->base_btf;
++		goto again;
 +	}
  
- 	if (json_output)
- 		show_btf_json(&info, fd, btf_prog_table, btf_map_table);
++	type_id -= btf->start_id;
++	if (type_id >= btf->nr_types)
++		return NULL;
+ 	return btf->types[type_id];
+ }
+ 
+@@ -1391,17 +1435,13 @@ static int btf_add_type(struct btf_verifier_env *env, struct btf_type *t)
+ {
+ 	struct btf *btf = env->btf;
+ 
+-	/* < 2 because +1 for btf_void which is always in btf->types[0].
+-	 * btf_void is not accounted in btf->nr_types because btf_void
+-	 * does not come from the BTF file.
+-	 */
+-	if (btf->types_size - btf->nr_types < 2) {
++	if (btf->types_size == btf->nr_types) {
+ 		/* Expand 'types' array */
+ 
+ 		struct btf_type **new_types;
+ 		u32 expand_by, new_size;
+ 
+-		if (btf->types_size == BTF_MAX_TYPE) {
++		if (btf->start_id + btf->types_size == BTF_MAX_TYPE) {
+ 			btf_verifier_log(env, "Exceeded max num of types");
+ 			return -E2BIG;
+ 		}
+@@ -1415,18 +1455,23 @@ static int btf_add_type(struct btf_verifier_env *env, struct btf_type *t)
+ 		if (!new_types)
+ 			return -ENOMEM;
+ 
+-		if (btf->nr_types == 0)
+-			new_types[0] = &btf_void;
+-		else
++		if (btf->nr_types == 0) {
++			if (!btf->base_btf) {
++				/* lazily init VOID type */
++				new_types[0] = &btf_void;
++				btf->nr_types++;
++			}
++		} else {
+ 			memcpy(new_types, btf->types,
+-			       sizeof(*btf->types) * (btf->nr_types + 1));
++			       sizeof(*btf->types) * btf->nr_types);
++		}
+ 
+ 		kvfree(btf->types);
+ 		btf->types = new_types;
+ 		btf->types_size = new_size;
+ 	}
+ 
+-	btf->types[++(btf->nr_types)] = t;
++	btf->types[btf->nr_types++] = t;
+ 
+ 	return 0;
+ }
+@@ -1499,18 +1544,17 @@ static int env_resolve_init(struct btf_verifier_env *env)
+ 	u32 *resolved_ids = NULL;
+ 	u8 *visit_states = NULL;
+ 
+-	/* +1 for btf_void */
+-	resolved_sizes = kvcalloc(nr_types + 1, sizeof(*resolved_sizes),
++	resolved_sizes = kvcalloc(nr_types, sizeof(*resolved_sizes),
+ 				  GFP_KERNEL | __GFP_NOWARN);
+ 	if (!resolved_sizes)
+ 		goto nomem;
+ 
+-	resolved_ids = kvcalloc(nr_types + 1, sizeof(*resolved_ids),
++	resolved_ids = kvcalloc(nr_types, sizeof(*resolved_ids),
+ 				GFP_KERNEL | __GFP_NOWARN);
+ 	if (!resolved_ids)
+ 		goto nomem;
+ 
+-	visit_states = kvcalloc(nr_types + 1, sizeof(*visit_states),
++	visit_states = kvcalloc(nr_types, sizeof(*visit_states),
+ 				GFP_KERNEL | __GFP_NOWARN);
+ 	if (!visit_states)
+ 		goto nomem;
+@@ -1562,21 +1606,27 @@ static bool env_type_is_resolve_sink(const struct btf_verifier_env *env,
+ static bool env_type_is_resolved(const struct btf_verifier_env *env,
+ 				 u32 type_id)
+ {
+-	return env->visit_states[type_id] == RESOLVED;
++	/* base BTF types should be resolved by now */
++	if (type_id < env->btf->start_id)
++		return true;
++
++	return env->visit_states[type_id - env->btf->start_id] == RESOLVED;
+ }
+ 
+ static int env_stack_push(struct btf_verifier_env *env,
+ 			  const struct btf_type *t, u32 type_id)
+ {
++	const struct btf *btf = env->btf;
+ 	struct resolve_vertex *v;
+ 
+ 	if (env->top_stack == MAX_RESOLVE_DEPTH)
+ 		return -E2BIG;
+ 
+-	if (env->visit_states[type_id] != NOT_VISITED)
++	if (type_id < btf->start_id
++	    || env->visit_states[type_id - btf->start_id] != NOT_VISITED)
+ 		return -EEXIST;
+ 
+-	env->visit_states[type_id] = VISITED;
++	env->visit_states[type_id - btf->start_id] = VISITED;
+ 
+ 	v = &env->stack[env->top_stack++];
+ 	v->t = t;
+@@ -1606,6 +1656,7 @@ static void env_stack_pop_resolved(struct btf_verifier_env *env,
+ 	u32 type_id = env->stack[--(env->top_stack)].type_id;
+ 	struct btf *btf = env->btf;
+ 
++	type_id -= btf->start_id; /* adjust to local type id */
+ 	btf->resolved_sizes[type_id] = resolved_size;
+ 	btf->resolved_ids[type_id] = resolved_type_id;
+ 	env->visit_states[type_id] = RESOLVED;
+@@ -1710,14 +1761,34 @@ btf_resolve_size(const struct btf *btf, const struct btf_type *type,
+ 	return __btf_resolve_size(btf, type, type_size, NULL, NULL, NULL, NULL);
+ }
+ 
++static u32 btf_resolved_type_id(const struct btf *btf, u32 type_id)
++{
++again:
++	if (type_id < btf->start_id) {
++		btf = btf->base_btf;
++		goto again;
++	}
++	return btf->resolved_ids[type_id - btf->start_id];
++}
++
+ /* The input param "type_id" must point to a needs_resolve type */
+ static const struct btf_type *btf_type_id_resolve(const struct btf *btf,
+ 						  u32 *type_id)
+ {
+-	*type_id = btf->resolved_ids[*type_id];
++	*type_id = btf_resolved_type_id(btf, *type_id);
+ 	return btf_type_by_id(btf, *type_id);
+ }
+ 
++static u32 btf_resolved_type_size(const struct btf *btf, u32 type_id)
++{
++again:
++	if (type_id < btf->start_id) {
++		btf = btf->base_btf;
++		goto again;
++	}
++	return btf->resolved_sizes[type_id - btf->start_id];
++}
++
+ const struct btf_type *btf_type_id_size(const struct btf *btf,
+ 					u32 *type_id, u32 *ret_size)
+ {
+@@ -1732,7 +1803,7 @@ const struct btf_type *btf_type_id_size(const struct btf *btf,
+ 	if (btf_type_has_size(size_type)) {
+ 		size = size_type->size;
+ 	} else if (btf_type_is_array(size_type)) {
+-		size = btf->resolved_sizes[size_type_id];
++		size = btf_resolved_type_size(btf, size_type_id);
+ 	} else if (btf_type_is_ptr(size_type)) {
+ 		size = sizeof(void *);
+ 	} else {
+@@ -1740,14 +1811,14 @@ const struct btf_type *btf_type_id_size(const struct btf *btf,
+ 				 !btf_type_is_var(size_type)))
+ 			return NULL;
+ 
+-		size_type_id = btf->resolved_ids[size_type_id];
++		size_type_id = btf_resolved_type_id(btf, size_type_id);
+ 		size_type = btf_type_by_id(btf, size_type_id);
+ 		if (btf_type_nosize_or_null(size_type))
+ 			return NULL;
+ 		else if (btf_type_has_size(size_type))
+ 			size = size_type->size;
+ 		else if (btf_type_is_array(size_type))
+-			size = btf->resolved_sizes[size_type_id];
++			size = btf_resolved_type_size(btf, size_type_id);
+ 		else if (btf_type_is_ptr(size_type))
+ 			size = sizeof(void *);
+ 		else
+@@ -3799,7 +3870,7 @@ static int btf_check_all_metas(struct btf_verifier_env *env)
+ 	cur = btf->nohdr_data + hdr->type_off;
+ 	end = cur + hdr->type_len;
+ 
+-	env->log_type_id = 1;
++	env->log_type_id = btf->base_btf ? btf->start_id : 1;
+ 	while (cur < end) {
+ 		struct btf_type *t = cur;
+ 		s32 meta_size;
+@@ -3826,8 +3897,8 @@ static bool btf_resolve_valid(struct btf_verifier_env *env,
+ 		return false;
+ 
+ 	if (btf_type_is_struct(t) || btf_type_is_datasec(t))
+-		return !btf->resolved_ids[type_id] &&
+-		       !btf->resolved_sizes[type_id];
++		return !btf_resolved_type_id(btf, type_id) &&
++		       !btf_resolved_type_size(btf, type_id);
+ 
+ 	if (btf_type_is_modifier(t) || btf_type_is_ptr(t) ||
+ 	    btf_type_is_var(t)) {
+@@ -3847,7 +3918,7 @@ static bool btf_resolve_valid(struct btf_verifier_env *env,
+ 		elem_type = btf_type_id_size(btf, &elem_type_id, &elem_size);
+ 		return elem_type && !btf_type_is_modifier(elem_type) &&
+ 			(array->nelems * elem_size ==
+-			 btf->resolved_sizes[type_id]);
++			 btf_resolved_type_size(btf, type_id));
+ 	}
+ 
+ 	return false;
+@@ -3889,7 +3960,8 @@ static int btf_resolve(struct btf_verifier_env *env,
+ static int btf_check_all_types(struct btf_verifier_env *env)
+ {
+ 	struct btf *btf = env->btf;
+-	u32 type_id;
++	const struct btf_type *t;
++	u32 type_id, i;
+ 	int err;
+ 
+ 	err = env_resolve_init(env);
+@@ -3897,8 +3969,9 @@ static int btf_check_all_types(struct btf_verifier_env *env)
+ 		return err;
+ 
+ 	env->phase++;
+-	for (type_id = 1; type_id <= btf->nr_types; type_id++) {
+-		const struct btf_type *t = btf_type_by_id(btf, type_id);
++	for (i = btf->base_btf ? 0 : 1; i < btf->nr_types; i++) {
++		type_id = btf->start_id + i;
++		t = btf_type_by_id(btf, type_id);
+ 
+ 		env->log_type_id = type_id;
+ 		if (btf_type_needs_resolve(t) &&
+@@ -3935,7 +4008,7 @@ static int btf_parse_type_sec(struct btf_verifier_env *env)
+ 		return -EINVAL;
+ 	}
+ 
+-	if (!hdr->type_len) {
++	if (!env->btf->base_btf && !hdr->type_len) {
+ 		btf_verifier_log(env, "No type found");
+ 		return -EINVAL;
+ 	}
+@@ -3962,13 +4035,18 @@ static int btf_parse_str_sec(struct btf_verifier_env *env)
+ 		return -EINVAL;
+ 	}
+ 
+-	if (!hdr->str_len || hdr->str_len - 1 > BTF_MAX_NAME_OFFSET ||
+-	    start[0] || end[-1]) {
++	btf->strings = start;
++
++	if (btf->base_btf && !hdr->str_len)
++		return 0;
++	if (!hdr->str_len || hdr->str_len - 1 > BTF_MAX_NAME_OFFSET || end[-1]) {
++		btf_verifier_log(env, "Invalid string section");
++		return -EINVAL;
++	}
++	if (!btf->base_btf && start[0]) {
+ 		btf_verifier_log(env, "Invalid string section");
+ 		return -EINVAL;
+ 	}
+-
+-	btf->strings = start;
+ 
+ 	return 0;
+ }
+@@ -4909,7 +4987,7 @@ static int __get_type_size(struct btf *btf, u32 btf_id,
+ 	while (t && btf_type_is_modifier(t))
+ 		t = btf_type_by_id(btf, t->type);
+ 	if (!t) {
+-		*bad_type = btf->types[0];
++		*bad_type = btf_type_by_id(btf, 0);
+ 		return -EINVAL;
+ 	}
+ 	if (btf_type_is_ptr(t))
 -- 
 2.24.1
 
