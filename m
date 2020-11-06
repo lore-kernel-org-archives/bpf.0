@@ -2,43 +2,43 @@ Return-Path: <SRS0=kVCt=EM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5009AC2D0A3
-	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 05:53:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE88CC2D0A3
+	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 05:54:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2618206A1
-	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 05:53:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72F3F206A1
+	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 05:54:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604642015;
-	bh=H/jDDhD/xUAHGc7Spbs1iASWrIwn9TnaDVVLXqq8eMY=;
-	h=From:To:CC:Subject:Date:List-ID:From;
-	b=173uU0S7M8vlAEwOm/fTjp75eMLxhKRqRZkEkMweIi2HhRhIdLgfZm+B+B08CZcpQ
-	 A6PeF8f97hN7QBDSV8DtbR9xQIRpAIIAsYsMw4FC25hzJQKyyYi0YoVd/evmAt4zh2
-	 ONVJH/rst9PwUzGGt30f+FwWOzxy8eon/M/mF+Zw=
+	s=default; t=1604642075;
+	bh=secu7cH43uQJoqGIelU5HwXhJS6G1KfpN7qLUW0Q8ho=;
+	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
+	b=s5w0XdFpXc+8Ft7N12WhzRdZAUkkaD/Mso5LA8LywlemRXuUPNieLIxQfG2OFyZhr
+	 2NLW3GKc2sEzAWYEauquq355apmgSs4eCVQ7Fv4TPW4VwQYYnri/2goeONpJlKLL1Q
+	 cYtQrOcec67drgQ0mM7k+25TSjqjfu9NB8dHDPs8=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725837AbgKFFxf convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 6 Nov 2020 00:53:35 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:62330 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725440AbgKFFxf (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 6 Nov 2020 00:53:35 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A65e8Bj029867
-        for <bpf@vger.kernel.org>; Thu, 5 Nov 2020 21:53:34 -0800
+        id S1725776AbgKFFye convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 6 Nov 2020 00:54:34 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:64182 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726273AbgKFFye (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 6 Nov 2020 00:54:34 -0500
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0A65cakU024874
+        for <bpf@vger.kernel.org>; Thu, 5 Nov 2020 21:54:33 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 34mx9p8h59-3
+        by m0001303.ppops.net with ESMTP id 34mek35th9-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2020 21:53:34 -0800
-Received: from intmgw003.08.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 05 Nov 2020 21:54:33 -0800
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 5 Nov 2020 21:53:31 -0800
+ 15.1.1979.3; Thu, 5 Nov 2020 21:54:30 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id DA7EE2EC8EF9; Thu,  5 Nov 2020 21:51:29 -0800 (PST)
+        id 3EC6B2EC8EFB; Thu,  5 Nov 2020 21:51:34 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
@@ -47,77 +47,155 @@ CC:     <kernel-team@fb.com>, <linux-kernel@vger.kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH bpf-next 0/5] Integrate kernel module BTF support
-Date:   Thu, 5 Nov 2020 21:51:05 -0800
-Message-ID: <20201106055111.3972047-1-andrii@kernel.org>
+Subject: [PATCH bpf-next 2/5] bpf: assign ID to vmlinux BTF and return extra info for BTF in GET_OBJ_INFO
+Date:   Thu, 5 Nov 2020 21:51:07 -0800
+Message-ID: <20201106055111.3972047-3-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201106055111.3972047-1-andrii@kernel.org>
+References: <20201106055111.3972047-1-andrii@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-06_01:2020-11-05,2020-11-06 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- phishscore=0 spamscore=0 malwarescore=0 impostorscore=0 mlxscore=0
- mlxlogscore=999 suspectscore=0 clxscore=1015 adultscore=0
- priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ phishscore=0 mlxscore=0 adultscore=0 clxscore=1015 spamscore=0
+ priorityscore=1501 suspectscore=75 bulkscore=0 mlxlogscore=690
+ lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2009150000 definitions=main-2011060039
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set adds BTF generation for kernel modules using a compact split
-BTF approach. Respective patches have all the details.
+Allocate ID for vmlinux BTF. This makes it visible when iterating over all BTF
+objects in the system. To allow distinguishing vmlinux BTF (and later kernel
+module BTF) from user-provided BTFs, expose extra kernel_btf flag, as well as
+BTF name ("vmlinux" for vmlinux BTF, will equal to module's name for module
+BTF).  We might want to later allow specifying BTF name for user-provided BTFs
+as well, if that makes sense. But currently this is reserved only for
+in-kernel BTFs.
 
-Kernel module BTFs rely on pahole's split BTF support, which is added in [0]
-and will be available starting from v1.19. Support for it is detected
-automatically during kernel build time.
+Having in-kernel BTFs exposed IDs will allow to extend BPF APIs that require
+in-kernel BTF type with ability to specify BTF types from kernel modules, not
+just vmlinux BTF. This will be implemented in a follow up patch set for
+fentry/fexit/fmod_ret/lsm/etc.
 
-This patch set implements in-kernel support for split BTF loading and
-validation. It also extends GET_OBJ_INFO API for BTFs to return BTF's module
-name and a flag whether BTF itself is in-kernel or user-provided. vmlinux BTF
-is also exposed to user-space through the same BTF object iteration APIs.
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ include/uapi/linux/bpf.h       |  3 +++
+ kernel/bpf/btf.c               | 39 ++++++++++++++++++++++++++++++++--
+ tools/include/uapi/linux/bpf.h |  3 +++
+ 3 files changed, 43 insertions(+), 2 deletions(-)
 
-Follow up patch set will utilize the fact that vmlinux and module BTFs now
-have associated ID to provide ability to attach BPF fentry/fexit/etc programs
-to functions defined in kernel modules.
-
-bpftool is also extended to show module/vmlinux BTF's name.
-
-  [0] https://patchwork.kernel.org/project/netdevbpf/list/?series=378699&state=*
-
-rfc->v1:
-  - CONFIG_DEBUG_INFO_BTF_MODULES is derived automatically (Alexei);
-  - vmlinux BTF now has explicit "vmlinux" name (Alexei);
-  - added sysfs ABI documentation for /sys/kernel/btf/<module> (Greg).
-
-Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Andrii Nakryiko (5):
-  bpf: add in-kernel split BTF support
-  bpf: assign ID to vmlinux BTF and return extra info for BTF in
-    GET_OBJ_INFO
-  kbuild: build kernel module BTFs if BTF is enabled and pahole supports
-    it
-  bpf: load and verify kernel module BTFs
-  tools/bpftool: add support for in-kernel and named BTF in `btf show`
-
- Documentation/ABI/testing/sysfs-kernel-btf |   8 +
- include/linux/bpf.h                        |   2 +
- include/linux/module.h                     |   4 +
- include/uapi/linux/bpf.h                   |   3 +
- kernel/bpf/btf.c                           | 412 ++++++++++++++++++---
- kernel/bpf/sysfs_btf.c                     |   2 +-
- kernel/module.c                            |  32 ++
- lib/Kconfig.debug                          |   9 +
- scripts/Makefile.modfinal                  |  20 +-
- tools/bpf/bpftool/btf.c                    |  28 +-
- tools/include/uapi/linux/bpf.h             |   3 +
- 11 files changed, 466 insertions(+), 57 deletions(-)
-
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index e6ceac3f7d62..7955b144f267 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4418,6 +4418,9 @@ struct bpf_btf_info {
+ 	__aligned_u64 btf;
+ 	__u32 btf_size;
+ 	__u32 id;
++	__aligned_u64 name;
++	__u32 name_len;
++	__u32 kernel_btf;
+ } __attribute__((aligned(8)));
+ 
+ struct bpf_link_info {
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index f61944a3873b..09f1483934d2 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -215,6 +215,8 @@ struct btf {
+ 	struct btf *base_btf;
+ 	u32 start_id; /* first type ID in this BTF (0 for base BTF) */
+ 	u32 start_str_off; /* first string offset (0 for base BTF) */
++	char name[MODULE_NAME_LEN];
++	bool kernel_btf;
+ };
+ 
+ enum verifier_phase {
+@@ -4441,6 +4443,8 @@ struct btf *btf_parse_vmlinux(void)
+ 
+ 	btf->data = __start_BTF;
+ 	btf->data_size = __stop_BTF - __start_BTF;
++	btf->kernel_btf = true;
++	snprintf(btf->name, sizeof(btf->name), "vmlinux");
+ 
+ 	err = btf_parse_hdr(env);
+ 	if (err)
+@@ -4466,8 +4470,13 @@ struct btf *btf_parse_vmlinux(void)
+ 
+ 	bpf_struct_ops_init(btf, log);
+ 
+-	btf_verifier_env_free(env);
+ 	refcount_set(&btf->refcnt, 1);
++
++	err = btf_alloc_id(btf);
++	if (err)
++		goto errout;
++
++	btf_verifier_env_free(env);
+ 	return btf;
+ 
+ errout:
+@@ -5565,7 +5574,8 @@ int btf_get_info_by_fd(const struct btf *btf,
+ 	struct bpf_btf_info info;
+ 	u32 info_copy, btf_copy;
+ 	void __user *ubtf;
+-	u32 uinfo_len;
++	char __user *uname;
++	u32 uinfo_len, uname_len, name_len;
+ 
+ 	uinfo = u64_to_user_ptr(attr->info.info);
+ 	uinfo_len = attr->info.info_len;
+@@ -5582,6 +5592,31 @@ int btf_get_info_by_fd(const struct btf *btf,
+ 		return -EFAULT;
+ 	info.btf_size = btf->data_size;
+ 
++	info.kernel_btf = btf->kernel_btf;
++
++	uname = u64_to_user_ptr(info.name);
++	uname_len = info.name_len;
++	if (!uname ^ !uname_len)
++		return -EINVAL;
++
++	name_len = strlen(btf->name);
++	info.name_len = name_len;
++
++	if (uname) {
++		if (uname_len >= name_len + 1) {
++			if (copy_to_user(uname, btf->name, name_len + 1))
++				return -EFAULT;
++		} else {
++			char zero = '\0';
++
++			if (copy_to_user(uname, btf->name, uname_len - 1))
++				return -EFAULT;
++			if (put_user(zero, uname + uname_len - 1))
++				return -EFAULT;
++			return -ENOSPC;
++		}
++	}
++
+ 	if (copy_to_user(uinfo, &info, info_copy) ||
+ 	    put_user(info_copy, &uattr->info.info_len))
+ 		return -EFAULT;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index e6ceac3f7d62..7955b144f267 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -4418,6 +4418,9 @@ struct bpf_btf_info {
+ 	__aligned_u64 btf;
+ 	__u32 btf_size;
+ 	__u32 id;
++	__aligned_u64 name;
++	__u32 name_len;
++	__u32 kernel_btf;
+ } __attribute__((aligned(8)));
+ 
+ struct bpf_link_info {
 -- 
 2.24.1
 
