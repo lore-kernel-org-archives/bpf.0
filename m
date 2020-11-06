@@ -2,82 +2,74 @@ Return-Path: <SRS0=kVCt=EM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D471C4741F
-	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 05:26:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC148C2D0A3
+	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 05:43:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 153F2208C3
-	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 05:26:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604640369;
-	bh=YuNxCAhU5igq8xtKY8dIWLWTO3xu3TgDcdvZWSExVVs=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=Tq3uDjBaVYmazhGLjavQHDjHSt31uN73TOoJ6efpbLe6ZWjPlkSzXKz6ooVbZea2u
-	 +PJ6klyb+kN97lIlQYbihIDAZwCS9BJGDAEoZRTStisVqT+LUWnmBo7j629KJzTJbP
-	 vh9nRu9i03kHbs0l88S4UYn/7wgBSnKS9+u423uo=
+	by mail.kernel.org (Postfix) with ESMTP id 470AD20867
+	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 05:43:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbgKFF0I convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 6 Nov 2020 00:26:08 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:58640 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726125AbgKFF0I (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 6 Nov 2020 00:26:08 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A65Q6LW008311
-        for <bpf@vger.kernel.org>; Thu, 5 Nov 2020 21:26:07 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 34m81m75au-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2020 21:26:07 -0800
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 5 Nov 2020 21:26:05 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id D3EEE2EC8EF6; Thu,  5 Nov 2020 21:25:57 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <dwarves@vger.kernel.org>, <acme@kernel.org>, <bpf@vger.kernel.org>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH dwarves 3/4] libbpf: update libbpf submodlue reference to latest master
-Date:   Thu, 5 Nov 2020 21:25:48 -0800
-Message-ID: <20201106052549.3782099-4-andrii@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201106052549.3782099-1-andrii@kernel.org>
-References: <20201106052549.3782099-1-andrii@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-06_01:2020-11-05,2020-11-06 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- adultscore=0 mlxlogscore=778 lowpriorityscore=0 clxscore=1034 mlxscore=0
- bulkscore=0 impostorscore=0 phishscore=0 spamscore=0 suspectscore=8
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011060037
-X-FB-Internal: deliver
+        id S1725842AbgKFFn5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 6 Nov 2020 00:43:57 -0500
+Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:55759 "EHLO
+        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725776AbgKFFn5 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 6 Nov 2020 00:43:57 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=alex.shi@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0UEOghrS_1604641433;
+Received: from aliy80.localdomain(mailfrom:alex.shi@linux.alibaba.com fp:SMTPD_---0UEOghrS_1604641433)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 06 Nov 2020 13:43:54 +0800
+From:   Alex Shi <alex.shi@linux.alibaba.com>
+To:     davem@davemloft.net
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] net/xdp: remove unused macro REG_STATE_NEW
+Date:   Fri,  6 Nov 2020 13:43:51 +0800
+Message-Id: <1604641431-6295-1-git-send-email-alex.shi@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Pull in latest libbpf changes, containing split BTF APIs.
+To tame gcc warning on it:
+net/core/xdp.c:20:0: warning: macro "REG_STATE_NEW" is not used
+[-Wunused-macros]
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Alex Shi <alex.shi@linux.alibaba.com>
+Cc: "David S. Miller" <davem@davemloft.net> 
+Cc: Jakub Kicinski <kuba@kernel.org> 
+Cc: Alexei Starovoitov <ast@kernel.org> 
+Cc: Daniel Borkmann <daniel@iogearbox.net> 
+Cc: Jesper Dangaard Brouer <hawk@kernel.org> 
+Cc: John Fastabend <john.fastabend@gmail.com> 
+Cc: netdev@vger.kernel.org 
+Cc: bpf@vger.kernel.org 
+Cc: linux-kernel@vger.kernel.org 
 ---
- lib/bpf | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/core/xdp.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/lib/bpf b/lib/bpf
-index ff797cc905d9..5af3d86b5a2c 160000
---- a/lib/bpf
-+++ b/lib/bpf
-@@ -1 +1 @@
--Subproject commit ff797cc905d9c5fe9acab92d2da127342b20f80f
-+Subproject commit 5af3d86b5a2c5fecdc3ab83822d083edd32b4396
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 48aba933a5a8..3d88aab19c89 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -19,7 +19,6 @@
+ #include <trace/events/xdp.h>
+ #include <net/xdp_sock_drv.h>
+ 
+-#define REG_STATE_NEW		0x0
+ #define REG_STATE_REGISTERED	0x1
+ #define REG_STATE_UNREGISTERED	0x2
+ #define REG_STATE_UNUSED	0x3
 -- 
-2.24.1
+1.8.3.1
 
