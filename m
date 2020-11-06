@@ -2,213 +2,331 @@ Return-Path: <SRS0=kVCt=EM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24153C2D0A3
-	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 05:57:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A549C2D0A3
+	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 06:44:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BAC8E208B8
-	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 05:57:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 378DF208C3
+	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 06:44:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=default; t=1604642260;
-	bh=CCLFgJH42RO/3C5K+UI28F20KLF9Gux7kZNrR1mGWG8=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References:List-ID:From;
-	b=nwsrcaGU1fH9VHtic/krjyN+sTthhzghsqpkmsM78UHMPMJOWsun2JOzHT3y90wyV
-	 BG+yo+VGw1jyk+f+dxz05LKqoYJqMUwoLjD6ukBw4MvVpqWA8G0Y5NDNS6ZFfRmqP6
-	 RX7V9jKGl/ShBtUM63IU31/uNPrMMDbAJRtgX0xI=
+	s=default; t=1604645048;
+	bh=5IGSjBH7HAl45aU+KNIibXuTyAFDfpYcmKSrFXFQ8+Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:List-ID:From;
+	b=Ow2gfiKjR3fItTcsEUCp9nJkXJ95GEY5C3kPTc3nhRnT0YposqwgmbVy9PznmkGTN
+	 tbc0ON64vsd0+Jn6w9AUTIKnxZhBDwrhoQkR+RBvixVCuP+grQ5yxDjXZFrtXV8LWH
+	 co4TYoM0WDRWguxDjYTjRgDKVuPZMg2KTHovtG70=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725776AbgKFF5k convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 6 Nov 2020 00:57:40 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63006 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725440AbgKFF5k (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 6 Nov 2020 00:57:40 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A65e8rX029855
-        for <bpf@vger.kernel.org>; Thu, 5 Nov 2020 21:57:38 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 34mx9p8hn8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 05 Nov 2020 21:57:38 -0800
-Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 5 Nov 2020 21:57:38 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 690EC2EC8EFC; Thu,  5 Nov 2020 21:51:36 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <kernel-team@fb.com>, <linux-kernel@vger.kernel.org>,
-        <rafael@kernel.org>, <jeyu@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>
-Subject: [PATCH bpf-next 3/5] kbuild: build kernel module BTFs if BTF is enabled and pahole supports it
-Date:   Thu, 5 Nov 2020 21:51:08 -0800
-Message-ID: <20201106055111.3972047-4-andrii@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201106055111.3972047-1-andrii@kernel.org>
+        id S1726397AbgKFGoH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 6 Nov 2020 01:44:07 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38292 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726174AbgKFGoF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 6 Nov 2020 01:44:05 -0500
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8303F206B2;
+        Fri,  6 Nov 2020 06:44:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1604645042;
+        bh=5IGSjBH7HAl45aU+KNIibXuTyAFDfpYcmKSrFXFQ8+Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oKGzLAxgla3D4MsWG+C3Ncg3qm3pkgV0AQaARY78ra1q91bCYmDZgdw4NfZYbUNhC
+         dOl5tsMTzCiIo9mlcRUFk1zlIVYEjZzNCI7bRvnV4ugOYIJlpmyWta8yxnDQTodyFh
+         SsEShOcziiFd4WICIlJ2LN+wwrGp5o2m1GrGmVSw=
+Date:   Fri, 6 Nov 2020 07:43:58 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
+        daniel@iogearbox.net, kernel-team@fb.com,
+        linux-kernel@vger.kernel.org, rafael@kernel.org, jeyu@kernel.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>
+Subject: Re: [PATCH bpf-next 4/5] bpf: load and verify kernel module BTFs
+Message-ID: <20201106064358.GA697514@kroah.com>
 References: <20201106055111.3972047-1-andrii@kernel.org>
+ <20201106055111.3972047-5-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-06_01:2020-11-05,2020-11-06 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- phishscore=0 spamscore=0 malwarescore=0 impostorscore=0 mlxscore=0
- mlxlogscore=999 suspectscore=9 clxscore=1015 adultscore=0
- priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2011060039
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201106055111.3972047-5-andrii@kernel.org>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Detect if pahole supports split BTF generation, and generate BTF for each
-selected kernel module, if it does. This is exposed to Makefiles and C code as
-CONFIG_DEBUG_INFO_BTF_MODULES flag.
+On Thu, Nov 05, 2020 at 09:51:09PM -0800, Andrii Nakryiko wrote:
+> Add kernel module listener that will load/validate and unload module BTF.
+> Module BTFs gets ID generated for them, which makes it possible to iterate
+> them with existing BTF iteration API. They are given their respective module's
+> names, which will get reported through GET_OBJ_INFO API. They are also marked
+> as in-kernel BTFs for tooling to distinguish them from user-provided BTFs.
+> 
+> Also, similarly to vmlinux BTF, kernel module BTFs are exposed through
+> sysfs as /sys/kernel/btf/<module-name>. This is convenient for user-space
+> tools to inspect module BTF contents and dump their types with existing tools:
+> 
+> [vmuser@archvm bpf]$ ls -la /sys/kernel/btf
+> total 0
+> drwxr-xr-x  2 root root       0 Nov  4 19:46 .
+> drwxr-xr-x 13 root root       0 Nov  4 19:46 ..
+> 
+> ...
+> 
+> -r--r--r--  1 root root     888 Nov  4 19:46 irqbypass
+> -r--r--r--  1 root root  100225 Nov  4 19:46 kvm
+> -r--r--r--  1 root root   35401 Nov  4 19:46 kvm_intel
+> -r--r--r--  1 root root     120 Nov  4 19:46 pcspkr
+> -r--r--r--  1 root root     399 Nov  4 19:46 serio_raw
+> -r--r--r--  1 root root 4094095 Nov  4 19:46 vmlinux
+> 
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  Documentation/ABI/testing/sysfs-kernel-btf |   8 +
+>  include/linux/bpf.h                        |   2 +
+>  include/linux/module.h                     |   4 +
+>  kernel/bpf/btf.c                           | 193 +++++++++++++++++++++
+>  kernel/bpf/sysfs_btf.c                     |   2 +-
+>  kernel/module.c                            |  32 ++++
+>  6 files changed, 240 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-kernel-btf b/Documentation/ABI/testing/sysfs-kernel-btf
+> index 2c9744b2cd59..fe96efdc9b6c 100644
+> --- a/Documentation/ABI/testing/sysfs-kernel-btf
+> +++ b/Documentation/ABI/testing/sysfs-kernel-btf
+> @@ -15,3 +15,11 @@ Description:
+>  		information with description of all internal kernel types. See
+>  		Documentation/bpf/btf.rst for detailed description of format
+>  		itself.
+> +
+> +What:		/sys/kernel/btf/<module-name>
+> +Date:		Nov 2020
+> +KernelVersion:	5.11
+> +Contact:	bpf@vger.kernel.org
+> +Description:
+> +		Read-only binary attribute exposing kernel module's BTF type
+> +		information as an add-on to the kernel's BTF (/sys/kernel/btf/vmlinux).
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 2fffd30e13ac..3cb89cd7177b 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -36,9 +36,11 @@ struct seq_operations;
+>  struct bpf_iter_aux_info;
+>  struct bpf_local_storage;
+>  struct bpf_local_storage_map;
+> +struct kobject;
+>  
+>  extern struct idr btf_idr;
+>  extern spinlock_t btf_idr_lock;
+> +extern struct kobject *btf_kobj;
+>  
+>  typedef int (*bpf_iter_init_seq_priv_t)(void *private_data,
+>  					struct bpf_iter_aux_info *aux);
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index a29187f7c360..20fce258ffba 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -475,6 +475,10 @@ struct module {
+>  	unsigned int num_bpf_raw_events;
+>  	struct bpf_raw_event_map *bpf_raw_events;
+>  #endif
+> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+> +	unsigned int btf_data_size;
+> +	void *btf_data;
+> +#endif
+>  #ifdef CONFIG_JUMP_LABEL
+>  	struct jump_entry *jump_entries;
+>  	unsigned int num_jump_entries;
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 09f1483934d2..fe639ffae361 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -23,6 +23,8 @@
+>  #include <linux/perf_event.h>
+>  #include <linux/bsearch.h>
+>  #include <linux/btf_ids.h>
+> +#include <linux/kobject.h>
+> +#include <linux/sysfs.h>
+>  #include <net/sock.h>
+>  
+>  /* BTF (BPF Type Format) is the meta data format which describes
+> @@ -4488,6 +4490,75 @@ struct btf *btf_parse_vmlinux(void)
+>  	return ERR_PTR(err);
+>  }
+>  
+> +static struct btf *btf_parse_module(const char *module_name, const void *data, unsigned int data_size)
+> +{
+> +	struct btf_verifier_env *env = NULL;
+> +	struct bpf_verifier_log *log;
+> +	struct btf *btf = NULL, *base_btf;
+> +	int err;
+> +
+> +	base_btf = bpf_get_btf_vmlinux();
+> +	if (IS_ERR(base_btf))
+> +		return base_btf;
+> +	if (!base_btf)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	env = kzalloc(sizeof(*env), GFP_KERNEL | __GFP_NOWARN);
+> +	if (!env)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	log = &env->log;
+> +	log->level = BPF_LOG_KERNEL;
+> +
+> +	btf = kzalloc(sizeof(*btf), GFP_KERNEL | __GFP_NOWARN);
+> +	if (!btf) {
+> +		err = -ENOMEM;
+> +		goto errout;
+> +	}
+> +	env->btf = btf;
+> +
+> +	btf->base_btf = base_btf;
+> +	btf->start_id = base_btf->nr_types;
+> +	btf->start_str_off = base_btf->hdr.str_len;
+> +	btf->kernel_btf = true;
+> +	snprintf(btf->name, sizeof(btf->name), "%s", module_name);
+> +
+> +	btf->data = kvmalloc(data_size, GFP_KERNEL | __GFP_NOWARN);
+> +	if (!btf->data) {
+> +		err = -ENOMEM;
+> +		goto errout;
+> +	}
+> +	memcpy(btf->data, data, data_size);
+> +	btf->data_size = data_size;
+> +
+> +	err = btf_parse_hdr(env);
+> +	if (err)
+> +		goto errout;
+> +
+> +	btf->nohdr_data = btf->data + btf->hdr.hdr_len;
+> +
+> +	err = btf_parse_str_sec(env);
+> +	if (err)
+> +		goto errout;
+> +
+> +	err = btf_check_all_metas(env);
+> +	if (err)
+> +		goto errout;
+> +
+> +	btf_verifier_env_free(env);
+> +	refcount_set(&btf->refcnt, 1);
+> +	return btf;
+> +
+> +errout:
+> +	btf_verifier_env_free(env);
+> +	if (btf) {
+> +		kvfree(btf->data);
+> +		kvfree(btf->types);
+> +		kfree(btf);
+> +	}
+> +	return ERR_PTR(err);
+> +}
+> +
+>  struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog)
+>  {
+>  	struct bpf_prog *tgt_prog = prog->aux->dst_prog;
+> @@ -5661,3 +5732,125 @@ bool btf_id_set_contains(const struct btf_id_set *set, u32 id)
+>  {
+>  	return bsearch(&id, set->ids, set->cnt, sizeof(u32), btf_id_cmp_func) != NULL;
+>  }
+> +
+> +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+> +struct btf_module {
+> +	struct list_head list;
+> +	struct module *module;
+> +	struct btf *btf;
+> +	struct bin_attribute *sysfs_attr;
+> +};
+> +
+> +static LIST_HEAD(btf_modules);
+> +static DEFINE_MUTEX(btf_module_mutex);
+> +
+> +static ssize_t
+> +btf_module_read(struct file *file, struct kobject *kobj,
+> +		struct bin_attribute *bin_attr,
+> +		char *buf, loff_t off, size_t len)
+> +{
+> +	const struct btf *btf = bin_attr->private;
+> +
+> +	memcpy(buf, btf->data + off, len);
+> +	return len;
+> +}
+> +
+> +static int btf_module_notify(struct notifier_block *nb, unsigned long op,
+> +			     void *module)
+> +{
+> +	struct btf_module *btf_mod, *tmp;
+> +	struct module *mod = module;
+> +	struct btf *btf;
+> +	int err = 0;
+> +
+> +	if (mod->btf_data_size == 0 ||
+> +	    (op != MODULE_STATE_COMING && op != MODULE_STATE_GOING))
+> +		goto out;
+> +
+> +	switch (op) {
+> +	case MODULE_STATE_COMING:
+> +		btf_mod = kzalloc(sizeof(*btf_mod), GFP_KERNEL);
+> +		if (!btf_mod) {
+> +			err = -ENOMEM;
+> +			goto out;
+> +		}
+> +		btf = btf_parse_module(mod->name, mod->btf_data, mod->btf_data_size);
+> +		if (IS_ERR(btf)) {
+> +			kfree(btf_mod);
+> +			err = PTR_ERR(btf);
+> +			goto out;
+> +		}
+> +		err = btf_alloc_id(btf);
+> +		if (err) {
+> +			btf_free(btf);
+> +			kfree(btf_mod);
+> +			goto out;
+> +		}
+> +
+> +		mutex_lock(&btf_module_mutex);
+> +		btf_mod->module = module;
+> +		btf_mod->btf = btf;
+> +		list_add(&btf_mod->list, &btf_modules);
+> +		mutex_unlock(&btf_module_mutex);
+> +
+> +		if (IS_ENABLED(CONFIG_SYSFS)) {
+> +			struct bin_attribute *attr;
+> +
+> +			attr = kzalloc(sizeof(*attr), GFP_KERNEL);
+> +			if (!attr) {
+> +				WARN(1, "failed to register module [%s] BTF in sysfs\n", mod->name);
 
-Kernel module BTF has to be re-generated if either vmlinux's BTF changes or
-module's .ko changes. To achieve that, I needed a helper similar to
-if_changed, but that would allow to filter out vmlinux from the list of
-updated dependencies for .ko building. I've put it next to the only place that
-uses and needs it, but it might be a better idea to just add it along the
-other if_changed variants into scripts/Kbuild.include.
+kzalloc() will print errors on its own, no need to do this again.  Also,
+for systems with panic-on-warn, you just crashed them, not nice :(
 
-Each kernel module's BTF deduplication is pretty fast, as it does only
-incremental BTF deduplication on top of already deduplicated vmlinux BTF. To
-show the added build time, I've first ran make only just built kernel (to
-establish the baseline) and then forced only BTF re-generation, without
-regenerating .ko files. The build was performed with -j60 parallelization on
-56-core machine. The final time also includes bzImage building, so it's not
-a pure BTF overhead.
+> +				goto out;
+> +			}
+> +
+> +			attr->attr.name = btf->name;
+> +			attr->attr.mode = 0444;
+> +			attr->size = btf->data_size;
+> +			attr->private = btf;
+> +			attr->read = btf_module_read;
+> +
+> +			err = sysfs_create_bin_file(btf_kobj, attr);
 
-$ time make -j60
-...
-make -j60  27.65s user 10.96s system 782% cpu 4.933 total
-$ touch ~/linux-build/default/vmlinux && time make -j60
-...
-make -j60  123.69s user 27.85s system 1566% cpu 9.675 total
+You forgot to call sysfs_bin_attr_init() to initialize your binary sysfs
+attribute.  You'll only notice if you turn lockdep on.
 
-So 4.6 seconds real time, with noticeable part spent in compressed vmlinux and
-bzImage building.
 
-To show size savings, I've built my kernel configuration with about 700 kernel
-modules with full BTF per each kernel module (without deduplicating against
-vmlinux) and with split BTF against deduplicated vmlinux (approach in this
-patch). Below are top 10 modules with biggest BTF sizes. And total size of BTF
-data across all kernel modules.
+> +			if (err) {
+> +				kfree(attr);
+> +				WARN(1, "failed to register module [%s] BTF in sysfs: %d\n",
+> +				     mod->name, err);
 
-It shows that split BTF "compresses" 115MB down to 5MB total. And the biggest
-kernel modules get a downsize from 500-570KB down to 200-300KB.
+Again, just report the error and move on, don't crash systems.
 
-FULL BTF
-========
+Other than these minor things, looks good to me, nice work!
 
-$ for f in $(find . -name '*.ko'); do size -A -d $f | grep BTF | awk '{print $2}'; done | awk '{ s += $1 } END { print s }'
-115710691
+thanks,
 
-$ for f in $(find . -name '*.ko'); do printf "%s %d\n" $f $(size -A -d $f | grep BTF | awk '{print $2}'); done | sort -nr -k2 | head -n10
-./drivers/gpu/drm/i915/i915.ko 570570
-./drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko 520240
-./drivers/gpu/drm/radeon/radeon.ko 503849
-./drivers/infiniband/hw/mlx5/mlx5_ib.ko 491777
-./fs/xfs/xfs.ko 411544
-./drivers/net/ethernet/intel/i40e/i40e.ko 403904
-./drivers/net/ethernet/broadcom/bnx2x/bnx2x.ko 398754
-./drivers/infiniband/core/ib_core.ko 397224
-./fs/cifs/cifs.ko 386249
-./fs/nfsd/nfsd.ko 379738
-
-SPLIT BTF
-=========
-
-$ for f in $(find . -name '*.ko'); do size -A -d $f | grep BTF | awk '{print $2}'; done | awk '{ s += $1 } END { print s }'
-5194047
-
-$ for f in $(find . -name '*.ko'); do printf "%s %d\n" $f $(size -A -d $f | grep BTF | awk '{print $2}'); done | sort -nr -k2 | head -n10
-./drivers/gpu/drm/i915/i915.ko 293206
-./drivers/gpu/drm/radeon/radeon.ko 282103
-./fs/xfs/xfs.ko 222150
-./drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko 198503
-./drivers/infiniband/hw/mlx5/mlx5_ib.ko 198356
-./drivers/net/ethernet/broadcom/bnx2x/bnx2x.ko 113444
-./fs/cifs/cifs.ko 109379
-./arch/x86/kvm/kvm.ko 100225
-./drivers/gpu/drm/drm.ko 94827
-./drivers/infiniband/core/ib_core.ko 91188
-
-Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- lib/Kconfig.debug         |  9 +++++++++
- scripts/Makefile.modfinal | 20 ++++++++++++++++++--
- 2 files changed, 27 insertions(+), 2 deletions(-)
-
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index d7a7bc3b6098..1e78faaf20a5 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -274,6 +274,15 @@ config DEBUG_INFO_BTF
- 	  Turning this on expects presence of pahole tool, which will convert
- 	  DWARF type info into equivalent deduplicated BTF type info.
- 
-+config PAHOLE_HAS_SPLIT_BTF
-+	def_bool $(success, test `$(PAHOLE) --version | sed -E 's/v([0-9]+)\.([0-9]+)/\1\2/'` -ge "119")
-+
-+config DEBUG_INFO_BTF_MODULES
-+	def_bool y
-+	depends on DEBUG_INFO_BTF && MODULES && PAHOLE_HAS_SPLIT_BTF
-+	help
-+	  Generate compact split BTF type information for kernel modules.
-+
- config GDB_SCRIPTS
- 	bool "Provide GDB scripts for kernel debugging"
- 	help
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index ae01baf96f4e..02b892421f7a 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -6,6 +6,7 @@
- PHONY := __modfinal
- __modfinal:
- 
-+include include/config/auto.conf
- include $(srctree)/scripts/Kbuild.include
- 
- # for c_flags
-@@ -36,8 +37,23 @@ quiet_cmd_ld_ko_o = LD [M]  $@
- 		-T scripts/module.lds -o $@ $(filter %.o, $^);		\
- 	$(if $(ARCH_POSTLINK), $(MAKE) -f $(ARCH_POSTLINK) $@, true)
- 
--$(modules): %.ko: %.o %.mod.o scripts/module.lds FORCE
--	+$(call if_changed,ld_ko_o)
-+quiet_cmd_btf_ko = BTF [M] $@
-+      cmd_btf_ko = LLVM_OBJCOPY=$(OBJCOPY) $(PAHOLE) -J --btf_base vmlinux $@
-+
-+# Same as newer-prereqs, but allows to exclude specified extra dependencies
-+newer_prereqs_except = $(filter-out $(PHONY) $(1),$?)
-+
-+# Same as if_changed, but allows to exclude specified extra dependencies
-+if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
-+	$(cmd);                                                              \
-+	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
-+
-+# Re-generate module BTFs if either module's .ko or vmlinux changed
-+$(modules): %.ko: %.o %.mod.o scripts/module.lds vmlinux FORCE
-+	+$(call if_changed_except,ld_ko_o,vmlinux)
-+ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+	+$(if $(newer-prereqs),$(call cmd,btf_ko))
-+endif
- 
- targets += $(modules) $(modules:.ko=.mod.o)
- 
--- 
-2.24.1
-
+greg k-h
