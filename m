@@ -2,181 +2,108 @@ Return-Path: <SRS0=kVCt=EM=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PULL_REQUEST,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2D796C388F9
-	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 22:22:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D51DC55178
+	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 22:25:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC270206F9
-	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 22:22:31 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T3UScf7/"
+	by mail.kernel.org (Postfix) with ESMTP id A31C8206F9
+	for <bpf@archiver.kernel.org>; Fri,  6 Nov 2020 22:25:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=default; t=1604701527;
+	bh=I73ZrT37HDnrjljWnll65t/Qsa2uBRE/Obd92cnS/0o=;
+	h=From:To:Cc:Subject:Date:List-ID:From;
+	b=rvl5YD5Box31Y83otFiEbXxOHdvk4wRqpTF2CaQ5R0UCHHbKB2dc3pBm1No4mmmuA
+	 nCubiFJ/BxIATpWImhFGknA1BuWOHuLOvzlYKjz/LFlMW076eOQmk+i6EfvxWQObHD
+	 a5RY5vHa+KaWUChf7dB57oLjHUup5shV/R3/N8D0=
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729121AbgKFWW2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 6 Nov 2020 17:22:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728831AbgKFWSC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 6 Nov 2020 17:18:02 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F09BC0613CF;
-        Fri,  6 Nov 2020 14:18:02 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id x15so488393pll.2;
-        Fri, 06 Nov 2020 14:18:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Mt112lJeAhAZTLqtAccHSXk5WvwfNz95X0eDuczcqC4=;
-        b=T3UScf7/XuIq0a/vqGgOXyRwbQHUcwRFhJTzoaReWAOXJBPSifycuq8Mv8tpfO19Jo
-         2BzYJej+zTw/Va5H1UCPajZaee0h4ErEFZnjRwDYjHm4aXa+Iwt8Cz9YiGt0pvplavfY
-         Ym8yAoHCpEHL9jemPJo97C5r1X9WUvyVI8WUy9Uh+TaboqKQ2NU9YiRR2q42bZBWsmxZ
-         axW7TGE8dh3BYkT+AJmjl/6IQ+FZcwblOtY0719CIepFVlzF0AUrxaLG19VvjkLxOW6S
-         /VTseg8eJ8kBQcpSQ6gpq5tE8tWcsTXuxI8r+RR7btOpk/V7dW8AeXECZniT8RBgaLg5
-         vVFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Mt112lJeAhAZTLqtAccHSXk5WvwfNz95X0eDuczcqC4=;
-        b=tJTqZE6NyQZWSN25Uji96iFUyrpmJOhiHjOqPlOfv+SfWeHQcnY6csISKHqcEI9JHA
-         qSZx6qTcqNnF6iXUHbVfjfhhbSITJIA+DDfIU4Mg8kEAI3G29HJZaynLMENEA0Icfq6U
-         b4Y3UPTbkurEXEQyha9jxyk3B9qu8YS5Uw/khBpWoj4lRbmkB6LzoDX+VBZayS5fXIbT
-         wjelJIRXNGY5BY1Ic6gM2UUL5GjSC7k1P2TTdxtUAI13biPA0OpZ7NQlcsuWa1VVFAik
-         nqZV/6rd3AzWVNOGEncWsRJSbKppSDrTk20xkRgwJzW3vF1SPnzTdVOzi1D4jbB5uFXH
-         azWA==
-X-Gm-Message-State: AOAM530jgAPTBSNf2NI8UMM0U4TIOZiKzuN1kbVpUWtQ5ntucYYihNhS
-        wHChnubgZXZhLv4ZNxoNMDvqjTEY3DI=
-X-Google-Smtp-Source: ABdhPJw9PBmMlLQnB8KXRTOoO629GuMv9aNh418vMYP0H/vCQHm5d1v7F4iNyPyoRSnzO6gH2kKAhQ==
-X-Received: by 2002:a17:902:8209:b029:d6:d2c9:1db5 with SMTP id x9-20020a1709028209b02900d6d2c91db5mr3330007pln.54.1604701081650;
-        Fri, 06 Nov 2020 14:18:01 -0800 (PST)
-Received: from ast-mbp.thefacebook.com ([163.114.132.7])
-        by smtp.gmail.com with ESMTPSA id v23sm3546739pjh.46.2020.11.06.14.18.00
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 06 Nov 2020 14:18:00 -0800 (PST)
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     davem@davemloft.net
-Cc:     daniel@iogearbox.net, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@fb.com
-Subject: pull-request: bpf 2020-11-06
-Date:   Fri,  6 Nov 2020 14:17:59 -0800
-Message-Id: <20201106221759.24143-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.13.5
+        id S1728031AbgKFWZ1 convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 6 Nov 2020 17:25:27 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:36674 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728365AbgKFWZ1 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 6 Nov 2020 17:25:27 -0500
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-256-Q_SoPDJHOBqUc9-tpeBnnQ-1; Fri, 06 Nov 2020 17:25:22 -0500
+X-MC-Unique: Q_SoPDJHOBqUc9-tpeBnnQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 832B080364C;
+        Fri,  6 Nov 2020 22:25:19 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.192.10])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 133BE5578B;
+        Fri,  6 Nov 2020 22:25:12 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     dwarves@vger.kernel.org, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>,
+        "Frank Ch. Eigler" <fche@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
+Subject: [PATCHv4 0/3] pahole/kernel: Workaround dwarf bug for function encoding
+Date:   Fri,  6 Nov 2020 23:25:09 +0100
+Message-Id: <20201106222512.52454-1-jolsa@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi David,
+hi,
+because of gcc bug [1] we can no longer rely on DW_AT_declaration
+attribute to filter out declarations and end up with just
+one copy of the function in the BTF data.
 
-The following pull-request contains BPF updates for your *net* tree.
+It seems this bug is not easy to fix, but regardless if the
+it's coming soon, it's probably good idea not to depend so
+much only on dwarf data and make some extra checks.
 
-We've added 15 non-merge commits during the last 14 day(s) which contain
-a total of 25 files changed, 346 insertions(+), 49 deletions(-).
+Thus for function encoding we are now doing following checks:
+  - argument names are defined for the function
+  - there's symbol and address defined for the function
+  - function address belongs to ftrace locations (new in v2)
+  - function is generated only once
 
-The main changes are:
+v4 changes:
+  - added acks
+  - renames and change functions_valid to be local var [Andrii]
+  - fixed error path (return err) of collect_symbols
 
-1) Pre-allocated per-cpu hashmap needs to zero-fill reused element, from David.
+v3 changes:
+  - added Hao's ack for patch 1
+  - fixed realloc memory leak [Andrii]
+  - fixed addrs_cmp function [Andrii]
+  - removed SET_SYMBOL macro [Andrii]
+  - fixed the 'valid' function logic
+  - added .init.bpf.preserve_type check
+  - added iterator functions to new kernel section
+    .init.bpf.preserve_type [Yonghong]
 
-2) Tighten bpf_lsm function check, from KP.
+v2 changes:
+  - add check ensuring functions belong to ftrace's mcount
+    locations, this way we ensure to have in BTF only
+    functions available for ftrace - patch 2 changelog
+    describes all details
+  - use collect* function names [Andrii]
+  - use conventional size increase in realloc [Andrii]
+  - drop elf_sym__is_function check
+  - drop patch 3, it's not needed, because we follow ftrace
+    locations
 
-3) Fix bpftool attaching to flow dissector, from Lorenz.
+thanks,
+jirka
 
-4) Use -fno-gcse for the whole kernel/bpf/core.c instead of function attribute, from Ard.
 
-Please consider pulling these changes from:
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=97060
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
-
-Thanks a lot!
-
-Also thanks to reporters, reviewers and testers of commits in this pull-request:
-
-Andrii Nakryiko, Björn Töpel, Geert Uytterhoeven, Jesper Dangaard 
-Brouer, Jiri Benc, kernel test robot, Matthieu Baerts, Nick Desaulniers, 
-Randy Dunlap, Song Liu, Tobias Klauser, Toke Høiland-Jørgensen
-
-----------------------------------------------------------------
-
-The following changes since commit 435ccfa894e35e3d4a1799e6ac030e48a7b69ef5:
-
-  tcp: Prevent low rmem stalls with SO_RCVLOWAT. (2020-10-23 19:11:20 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git 
-
-for you to fetch changes up to 6f64e477830000746c1f992050fbd45c03c89429:
-
-  bpf: Update verification logic for LSM programs (2020-11-06 13:15:21 -0800)
-
-----------------------------------------------------------------
-Andrii Nakryiko (2):
-      selftest/bpf: Fix profiler test using CO-RE relocation for enums
-      bpf: Add struct bpf_redir_neigh forward declaration to BPF helper defs
-
-Ard Biesheuvel (1):
-      bpf: Don't rely on GCC __attribute__((optimize)) to disable GCSE
-
-Arnd Bergmann (1):
-      bpf: Fix -Wshadow warnings
-
-David Verbeiren (1):
-      bpf: Zero-fill re-used per-cpu map element
-
-Ian Rogers (3):
-      tools, bpftool: Avoid array index warnings.
-      tools, bpftool: Remove two unused variables.
-      libbpf, hashmap: Fix undefined behavior in hash_bits
-
-KP Singh (1):
-      bpf: Update verification logic for LSM programs
-
-Lorenz Bauer (1):
-      tools/bpftool: Fix attaching flow dissector
-
-Magnus Karlsson (3):
-      xsk: Fix possible memory leak at socket close
-      libbpf: Fix null dereference in xsk_socket__delete
-      libbpf: Fix possible use after free in xsk_socket__delete
-
-Randy Dunlap (1):
-      bpf: BPF_PRELOAD depends on BPF_SYSCALL
-
-Toke Høiland-Jørgensen (1):
-      samples/bpf: Set rlimit for memlock to infinity in all samples
-
- include/linux/compiler-gcc.h                      |   2 -
- include/linux/compiler_types.h                    |   4 -
- include/linux/filter.h                            |  22 +--
- include/net/xsk_buff_pool.h                       |   2 +-
- kernel/bpf/Makefile                               |   6 +-
- kernel/bpf/bpf_lsm.c                              |  10 +-
- kernel/bpf/core.c                                 |   2 +-
- kernel/bpf/hashtab.c                              |  30 ++-
- kernel/bpf/preload/Kconfig                        |   1 +
- net/xdp/xsk.c                                     |   3 +-
- net/xdp/xsk_buff_pool.c                           |   7 +-
- samples/bpf/task_fd_query_user.c                  |   2 +-
- samples/bpf/tracex2_user.c                        |   2 +-
- samples/bpf/tracex3_user.c                        |   2 +-
- samples/bpf/xdp_redirect_cpu_user.c               |   2 +-
- samples/bpf/xdp_rxq_info_user.c                   |   2 +-
- scripts/bpf_helpers_doc.py                        |   1 +
- tools/bpf/bpftool/feature.c                       |   7 +-
- tools/bpf/bpftool/prog.c                          |   2 +-
- tools/bpf/bpftool/skeleton/profiler.bpf.c         |   4 +-
- tools/lib/bpf/hashmap.h                           |  15 +-
- tools/lib/bpf/xsk.c                               |   9 +-
- tools/testing/selftests/bpf/prog_tests/map_init.c | 214 ++++++++++++++++++++++
- tools/testing/selftests/bpf/progs/profiler.inc.h  |  11 +-
- tools/testing/selftests/bpf/progs/test_map_init.c |  33 ++++
- 25 files changed, 346 insertions(+), 49 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/map_init.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_map_init.c
