@@ -2,30 +2,28 @@ Return-Path: <SRS0=hNvk=EN=vger.kernel.org=bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE1F8C388F9
-	for <bpf@archiver.kernel.org>; Sat,  7 Nov 2020 07:45:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C751C4741F
+	for <bpf@archiver.kernel.org>; Sat,  7 Nov 2020 08:11:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8926A20715
-	for <bpf@archiver.kernel.org>; Sat,  7 Nov 2020 07:45:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 72F4420872
+	for <bpf@archiver.kernel.org>; Sat,  7 Nov 2020 08:11:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727242AbgKGHpy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 7 Nov 2020 02:45:54 -0500
-Received: from m176115.mail.qiye.163.com ([59.111.176.115]:24315 "EHLO
+        id S1727861AbgKGIK7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 7 Nov 2020 03:10:59 -0500
+Received: from m176115.mail.qiye.163.com ([59.111.176.115]:36550 "EHLO
         m176115.mail.qiye.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725985AbgKGHpy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 7 Nov 2020 02:45:54 -0500
+        with ESMTP id S1727738AbgKGIK7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 7 Nov 2020 03:10:59 -0500
 Received: from vivo-HP-ProDesk-680-G4-PCI-MT.vivo.xyz (unknown [58.251.74.231])
-        by m176115.mail.qiye.163.com (Hmail) with ESMTPA id B1DC16662F7;
-        Sat,  7 Nov 2020 15:45:49 +0800 (CST)
+        by m176115.mail.qiye.163.com (Hmail) with ESMTPA id 064C5665C31;
+        Sat,  7 Nov 2020 16:10:55 +0800 (CST)
 From:   Wang Qing <wangqing@vivo.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
@@ -34,42 +32,40 @@ To:     Steven Rostedt <rostedt@goodmis.org>,
         KP Singh <kpsingh@chromium.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Wang Qing <wangqing@vivo.com>
-Subject: [PATCH v3 bpf] trace: bpf: Fix passing zero to PTR_ERR()
-Date:   Sat,  7 Nov 2020 15:45:44 +0800
-Message-Id: <1604735144-686-1-git-send-email-wangqing@vivo.com>
+Subject: [PATCH] bpf: remove duplicate include
+Date:   Sat,  7 Nov 2020 16:10:50 +0800
+Message-Id: <1604736650-11197-1-git-send-email-wangqing@vivo.com>
 X-Mailer: git-send-email 2.7.4
 X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgYFAkeWUFZS1VLWVdZKFlBSE83V1ktWUFJV1kPCR
-        oVCBIfWUFZGR8eGBkZT05IGEgaVkpNS09MSE5KTktJQkpVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
+        oVCBIfWUFZHktKSR0fGR5OQx1OVkpNS09MSE1NTk1NTEtVEwETFhoSFyQUDg9ZV1kWGg8SFR0UWU
         FZT0tIVUpKS0hKQ1VLWQY+
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nzo6Vjo6HD8YHRwTNTkSCyJK
-        TQowCUJVSlVKTUtPTEhOSk5LTUJIVTMWGhIXVQwaFRwKEhUcOw0SDRRVGBQWRVlXWRILWUFZTkNV
-        SU5KVUxPVUlISllXWQgBWUFJS05PNwY+
-X-HM-Tid: 0a75a1ab28649373kuwsb1dc16662f7
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MQw6Pgw6TD8qIxwdNSkfVhcM
+        Tx0KFEtVSlVKTUtPTEhNTU5MSktPVTMWGhIXVQwaFRwKEhUcOw0SDRRVGBQWRVlXWRILWUFZTkNV
+        SU5KVUxPVUlISllXWQgBWUFKTElCNwY+
+X-HM-Tid: 0a75a1c224b79373kuws064c5665c31
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There is a bug when passing zero to PTR_ERR() and return.
-Fix smatch err.
+Remove duplicate header which is included twice.
 
 Signed-off-by: Wang Qing <wangqing@vivo.com>
 ---
- kernel/trace/bpf_trace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/bpf/btf.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 4517c8b..5113fd4
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1198,7 +1198,7 @@ static int bpf_btf_printf_prepare(struct btf_ptr *ptr, u32 btf_ptr_size,
- 	*btf = bpf_get_btf_vmlinux();
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index ed7d02e..6324de8
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -22,7 +22,6 @@
+ #include <linux/skmsg.h>
+ #include <linux/perf_event.h>
+ #include <linux/bsearch.h>
+-#include <linux/btf_ids.h>
+ #include <net/sock.h>
  
- 	if (IS_ERR_OR_NULL(*btf))
--		return PTR_ERR(*btf);
-+		return IS_ERR(*btf) ? PTR_ERR(*btf) : -EINVAL;
- 
- 	if (ptr->type_id > 0)
- 		*btf_id = ptr->type_id;
+ /* BTF (BPF Type Format) is the meta data format which describes
 -- 
 2.7.4
 
