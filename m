@@ -2,205 +2,197 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76814C2D0A3
-	for <bpf@archiver.kernel.org>; Mon,  9 Nov 2020 21:06:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9642CC5517A
+	for <bpf@archiver.kernel.org>; Mon,  9 Nov 2020 21:06:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 343C520809
-	for <bpf@archiver.kernel.org>; Mon,  9 Nov 2020 21:06:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5934B20789
+	for <bpf@archiver.kernel.org>; Mon,  9 Nov 2020 21:06:47 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wo1VeJrA"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729878AbgKIVGe convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 9 Nov 2020 16:06:34 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:23008 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729499AbgKIVGe (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 9 Nov 2020 16:06:34 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0A9KiYiM009164
-        for <bpf@vger.kernel.org>; Mon, 9 Nov 2020 13:06:33 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 34pcmj6tmk-8
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2020 13:06:33 -0800
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 9 Nov 2020 13:06:27 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 57BD42EC924E; Mon,  9 Nov 2020 13:00:32 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <kernel-team@fb.com>, <linux-kernel@vger.kernel.org>,
-        <rafael@kernel.org>, <jeyu@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>
-Subject: [PATCH v3 bpf-next 3/5] kbuild: build kernel module BTFs if BTF is enabled and pahole supports it
-Date:   Mon, 9 Nov 2020 13:00:22 -0800
-Message-ID: <20201109210024.2024572-4-andrii@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201109210024.2024572-1-andrii@kernel.org>
-References: <20201109210024.2024572-1-andrii@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-09_13:2020-11-05,2020-11-09 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- lowpriorityscore=0 adultscore=0 impostorscore=0 spamscore=0
- priorityscore=1501 mlxscore=0 suspectscore=9 clxscore=1015 phishscore=0
- mlxlogscore=999 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2011090138
-X-FB-Internal: deliver
+        id S1730596AbgKIVGo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 9 Nov 2020 16:06:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730437AbgKIVGn (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 9 Nov 2020 16:06:43 -0500
+Received: from mail-oi1-x244.google.com (mail-oi1-x244.google.com [IPv6:2607:f8b0:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D10C0613CF;
+        Mon,  9 Nov 2020 13:06:42 -0800 (PST)
+Received: by mail-oi1-x244.google.com with SMTP id t143so11749527oif.10;
+        Mon, 09 Nov 2020 13:06:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=dmc2tE6MNDnQkrAgLG+0UnVegaJqmlcObysEf4HngsI=;
+        b=Wo1VeJrAeAAX6gx4xgSl4SOH8CJaYeSzGYj7yNnJdr6yD4/1WCxV4H9HFLLHLQ9WOD
+         tUaeiezWOeooiao738i3iadYQbR255vDks/Cr7dqSMf2HOacIT4nkhnvhh9pePlQOnhQ
+         saMwG68s+p1bdIe/r7tXePiemG9EenlA75mY2iB5Xeb6eqZoLU8zz/BHT0W1SfakAn/6
+         B989pcaP7IrKsdDhhgaIZaL6kZU70F93bolO97nxFXPsAoK76B+vE6PwElalPuN4e1qM
+         KZlillnFv6ih1EfpG7InxICocQwuFqMTSZCSLlkU3S4mtL6W+J9U9Gq/HpK/2Oh1aJ7t
+         mBUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=dmc2tE6MNDnQkrAgLG+0UnVegaJqmlcObysEf4HngsI=;
+        b=dH9NyY/17azcOx+0dTlHM5jTy36biwZ1XI1EPZtMLsWhLNlg/ENrr39pzPHfLW+412
+         c1tbRrfDmhfJWlJ74/h/AxwCnTvABDLnsfl4K9Lv2A7eHusKs5eTxjwC80uoonOBeFEL
+         ei2RaqnQh9o25p00yk5DK9a5J01SpKI6PnIFg0Oe1hvVL0kGJCtcTpjNvkdlppNsV/vf
+         XjveZE2AeWOHrFdlPx5J9RapT6jWd6R35h49fzKDQbOUMOasTlskuq+0cM/2Qpn+xzMT
+         0+gI+avBykTAGOQS4ZOyzXaWfMu2H5IPBPiY04NpsuoOwBhsQzdwkMho3F/Vpk7uXUvg
+         N6NQ==
+X-Gm-Message-State: AOAM531HPuMaUczGzw6u87lGzL+ALYKM83noD1FMazuPxQIsX0gXaNsA
+        ygal/IU4QUGDMn20B1eYTio=
+X-Google-Smtp-Source: ABdhPJxbAP00slh6Z0LNatYLx6zk7RfhQGZtpim9Zoj76yeShFv+JSlzuJlng5H8YXkJG373unLR8w==
+X-Received: by 2002:a05:6808:649:: with SMTP id z9mr689859oih.132.1604956002273;
+        Mon, 09 Nov 2020 13:06:42 -0800 (PST)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id n62sm2776180ota.74.2020.11.09.13.06.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Nov 2020 13:06:41 -0800 (PST)
+Date:   Mon, 09 Nov 2020 13:06:33 -0800
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>,
+        magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
+        daniel@iogearbox.net, netdev@vger.kernel.org,
+        jonathan.lemon@gmail.com
+Cc:     maciejromanfijalkowski@gmail.com, intel-wired-lan@lists.osuosl.org,
+        bpf@vger.kernel.org
+Message-ID: <5fa9af59a5f89_8c0e208b1@john-XPS-13-9370.notmuch>
+In-Reply-To: <1604498942-24274-6-git-send-email-magnus.karlsson@gmail.com>
+References: <1604498942-24274-1-git-send-email-magnus.karlsson@gmail.com>
+ <1604498942-24274-6-git-send-email-magnus.karlsson@gmail.com>
+Subject: RE: [Intel-wired-lan] [PATCH bpf-next 5/6] xsk: introduce batched Tx
+ descriptor interfaces
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Detect if pahole supports split BTF generation, and generate BTF for each
-selected kernel module, if it does. This is exposed to Makefiles and C code as
-CONFIG_DEBUG_INFO_BTF_MODULES flag.
+Magnus Karlsson wrote:
+> From: Magnus Karlsson <magnus.karlsson@intel.com>
+> 
+> Introduce batched descriptor interfaces in the xsk core code for the
+> Tx path to be used in the driver to write a code path with higher
+> performance. This interface will be used by the i40e driver in the
+> next patch. Though other drivers would likely benefit from this new
+> interface too.
+> 
+> Note that batching is only implemented for the common case when
+> there is only one socket bound to the same device and queue id. When
+> this is not the case, we fall back to the old non-batched version of
+> the function.
+> 
+> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+> ---
+>  include/net/xdp_sock_drv.h |  7 ++++
+>  net/xdp/xsk.c              | 43 ++++++++++++++++++++++
+>  net/xdp/xsk_queue.h        | 89 +++++++++++++++++++++++++++++++++++++++-------
+>  3 files changed, 126 insertions(+), 13 deletions(-)
+> 
+> diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
+> index 5b1ee8a..4e295541 100644
+> --- a/include/net/xdp_sock_drv.h
+> +++ b/include/net/xdp_sock_drv.h
+> @@ -13,6 +13,7 @@
+>  
+>  void xsk_tx_completed(struct xsk_buff_pool *pool, u32 nb_entries);
+>  bool xsk_tx_peek_desc(struct xsk_buff_pool *pool, struct xdp_desc *desc);
+> +u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *desc, u32 max);
+>  void xsk_tx_release(struct xsk_buff_pool *pool);
+>  struct xsk_buff_pool *xsk_get_pool_from_qid(struct net_device *dev,
+>  					    u16 queue_id);
+> @@ -128,6 +129,12 @@ static inline bool xsk_tx_peek_desc(struct xsk_buff_pool *pool,
+>  	return false;
+>  }
+>  
+> +static inline u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *desc,
+> +						 u32 max)
+> +{
+> +	return 0;
+> +}
+> +
+>  static inline void xsk_tx_release(struct xsk_buff_pool *pool)
+>  {
+>  }
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index b71a32e..dd75b5f 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -332,6 +332,49 @@ bool xsk_tx_peek_desc(struct xsk_buff_pool *pool, struct xdp_desc *desc)
+>  }
+>  EXPORT_SYMBOL(xsk_tx_peek_desc);
+>  
+> +u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *descs,
+> +				   u32 max_entries)
+> +{
+> +	struct xdp_sock *xs;
+> +	u32 nb_pkts;
+> +
+> +	rcu_read_lock();
+> +	if (!list_is_singular(&pool->xsk_tx_list)) {
+> +		/* Fallback to the non-batched version */
+> +		rcu_read_unlock();
+> +		return xsk_tx_peek_desc(pool, &descs[0]) ? 1 : 0;
+> +	}
+> +
+> +	xs = list_first_or_null_rcu(&pool->xsk_tx_list, struct xdp_sock, tx_list);
 
-Kernel module BTF has to be re-generated if either vmlinux's BTF changes or
-module's .ko changes. To achieve that, I needed a helper similar to
-if_changed, but that would allow to filter out vmlinux from the list of
-updated dependencies for .ko building. I've put it next to the only place that
-uses and needs it, but it might be a better idea to just add it along the
-other if_changed variants into scripts/Kbuild.include.
+I'm not seeing how we avoid the null check here? Can you add a comment on why this
+is safe? I see the bind/unbind routines is it possible to unbind while this is
+running or do we have some locking here.
 
-Each kernel module's BTF deduplication is pretty fast, as it does only
-incremental BTF deduplication on top of already deduplicated vmlinux BTF. To
-show the added build time, I've first ran make only just built kernel (to
-establish the baseline) and then forced only BTF re-generation, without
-regenerating .ko files. The build was performed with -j60 parallelization on
-56-core machine. The final time also includes bzImage building, so it's not
-a pure BTF overhead.
+> +
+> +	nb_pkts = xskq_cons_peek_desc_batch(xs->tx, descs, pool, max_entries);
+> +	if (!nb_pkts) {
+> +		xs->tx->queue_empty_descs++;
+> +		goto out;
+> +	}
+> +
+> +	/* This is the backpressure mechanism for the Tx path. Try to
+> +	 * reserve space in the completion queue for all packets, but
+> +	 * if there are fewer slots available, just process that many
+> +	 * packets. This avoids having to implement any buffering in
+> +	 * the Tx path.
+> +	 */
+> +	nb_pkts = xskq_prod_reserve_addr_batch(pool->cq, descs, nb_pkts);
+> +	if (!nb_pkts)
+> +		goto out;
+> +
+> +	xskq_cons_release_n(xs->tx, nb_pkts);
+> +	__xskq_cons_release(xs->tx);
+> +	xs->sk.sk_write_space(&xs->sk);
 
-$ time make -j60
-...
-make -j60  27.65s user 10.96s system 782% cpu 4.933 total
-$ touch ~/linux-build/default/vmlinux && time make -j60
-...
-make -j60  123.69s user 27.85s system 1566% cpu 9.675 total
+Can you move the out label here? Looks like nb_pkts = 0 in all cases
+where goto out is used.
 
-So 4.6 seconds real time, with noticeable part spent in compressed vmlinux and
-bzImage building.
+> +	rcu_read_unlock();
+> +	return nb_pkts;
+> +
+> +out:
+> +	rcu_read_unlock();
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL(xsk_tx_peek_release_desc_batch);
+> +
+>  static int xsk_wakeup(struct xdp_sock *xs, u8 flags)
+>  {
+>  	struct net_device *dev = xs->dev;
 
-To show size savings, I've built my kernel configuration with about 700 kernel
-modules with full BTF per each kernel module (without deduplicating against
-vmlinux) and with split BTF against deduplicated vmlinux (approach in this
-patch). Below are top 10 modules with biggest BTF sizes. And total size of BTF
-data across all kernel modules.
+[...]
 
-It shows that split BTF "compresses" 115MB down to 5MB total. And the biggest
-kernel modules get a downsize from 500-570KB down to 200-300KB.
+Other than above question LGTM.
 
-FULL BTF
-========
-
-$ for f in $(find . -name '*.ko'); do size -A -d $f | grep BTF | awk '{print $2}'; done | awk '{ s += $1 } END { print s }'
-115710691
-
-$ for f in $(find . -name '*.ko'); do printf "%s %d\n" $f $(size -A -d $f | grep BTF | awk '{print $2}'); done | sort -nr -k2 | head -n10
-./drivers/gpu/drm/i915/i915.ko 570570
-./drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko 520240
-./drivers/gpu/drm/radeon/radeon.ko 503849
-./drivers/infiniband/hw/mlx5/mlx5_ib.ko 491777
-./fs/xfs/xfs.ko 411544
-./drivers/net/ethernet/intel/i40e/i40e.ko 403904
-./drivers/net/ethernet/broadcom/bnx2x/bnx2x.ko 398754
-./drivers/infiniband/core/ib_core.ko 397224
-./fs/cifs/cifs.ko 386249
-./fs/nfsd/nfsd.ko 379738
-
-SPLIT BTF
-=========
-
-$ for f in $(find . -name '*.ko'); do size -A -d $f | grep BTF | awk '{print $2}'; done | awk '{ s += $1 } END { print s }'
-5194047
-
-$ for f in $(find . -name '*.ko'); do printf "%s %d\n" $f $(size -A -d $f | grep BTF | awk '{print $2}'); done | sort -nr -k2 | head -n10
-./drivers/gpu/drm/i915/i915.ko 293206
-./drivers/gpu/drm/radeon/radeon.ko 282103
-./fs/xfs/xfs.ko 222150
-./drivers/net/ethernet/mellanox/mlx5/core/mlx5_core.ko 198503
-./drivers/infiniband/hw/mlx5/mlx5_ib.ko 198356
-./drivers/net/ethernet/broadcom/bnx2x/bnx2x.ko 113444
-./fs/cifs/cifs.ko 109379
-./arch/x86/kvm/kvm.ko 100225
-./drivers/gpu/drm/drm.ko 94827
-./drivers/infiniband/core/ib_core.ko 91188
-
-Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- lib/Kconfig.debug         |  9 +++++++++
- scripts/Makefile.modfinal | 20 ++++++++++++++++++--
- 2 files changed, 27 insertions(+), 2 deletions(-)
-
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index d7a7bc3b6098..1e78faaf20a5 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -274,6 +274,15 @@ config DEBUG_INFO_BTF
- 	  Turning this on expects presence of pahole tool, which will convert
- 	  DWARF type info into equivalent deduplicated BTF type info.
- 
-+config PAHOLE_HAS_SPLIT_BTF
-+	def_bool $(success, test `$(PAHOLE) --version | sed -E 's/v([0-9]+)\.([0-9]+)/\1\2/'` -ge "119")
-+
-+config DEBUG_INFO_BTF_MODULES
-+	def_bool y
-+	depends on DEBUG_INFO_BTF && MODULES && PAHOLE_HAS_SPLIT_BTF
-+	help
-+	  Generate compact split BTF type information for kernel modules.
-+
- config GDB_SCRIPTS
- 	bool "Provide GDB scripts for kernel debugging"
- 	help
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index ae01baf96f4e..02b892421f7a 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -6,6 +6,7 @@
- PHONY := __modfinal
- __modfinal:
- 
-+include include/config/auto.conf
- include $(srctree)/scripts/Kbuild.include
- 
- # for c_flags
-@@ -36,8 +37,23 @@ quiet_cmd_ld_ko_o = LD [M]  $@
- 		-T scripts/module.lds -o $@ $(filter %.o, $^);		\
- 	$(if $(ARCH_POSTLINK), $(MAKE) -f $(ARCH_POSTLINK) $@, true)
- 
--$(modules): %.ko: %.o %.mod.o scripts/module.lds FORCE
--	+$(call if_changed,ld_ko_o)
-+quiet_cmd_btf_ko = BTF [M] $@
-+      cmd_btf_ko = LLVM_OBJCOPY=$(OBJCOPY) $(PAHOLE) -J --btf_base vmlinux $@
-+
-+# Same as newer-prereqs, but allows to exclude specified extra dependencies
-+newer_prereqs_except = $(filter-out $(PHONY) $(1),$?)
-+
-+# Same as if_changed, but allows to exclude specified extra dependencies
-+if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
-+	$(cmd);                                                              \
-+	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
-+
-+# Re-generate module BTFs if either module's .ko or vmlinux changed
-+$(modules): %.ko: %.o %.mod.o scripts/module.lds vmlinux FORCE
-+	+$(call if_changed_except,ld_ko_o,vmlinux)
-+ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+	+$(if $(newer-prereqs),$(call cmd,btf_ko))
-+endif
- 
- targets += $(modules) $(modules:.ko=.mod.o)
- 
--- 
-2.24.1
-
+Thanks,
+John
