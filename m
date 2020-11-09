@@ -2,35 +2,35 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.0 required=3.0 tests=BAYES_00,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFA8EC2D0A3
-	for <bpf@archiver.kernel.org>; Mon,  9 Nov 2020 21:02:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EFD96C55ABD
+	for <bpf@archiver.kernel.org>; Mon,  9 Nov 2020 21:03:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A0CD92074F
-	for <bpf@archiver.kernel.org>; Mon,  9 Nov 2020 21:02:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B744C2074F
+	for <bpf@archiver.kernel.org>; Mon,  9 Nov 2020 21:03:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725946AbgKIVCc convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 9 Nov 2020 16:02:32 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36744 "EHLO
+        id S1730206AbgKIVDd convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Mon, 9 Nov 2020 16:03:33 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:24862 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727070AbgKIVCc (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 9 Nov 2020 16:02:32 -0500
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0A9KlJZN015758
-        for <bpf@vger.kernel.org>; Mon, 9 Nov 2020 13:02:31 -0800
+        by vger.kernel.org with ESMTP id S1727070AbgKIVDd (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 9 Nov 2020 16:03:33 -0500
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0A9KkElh012723
+        for <bpf@vger.kernel.org>; Mon, 9 Nov 2020 13:03:30 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 34nr4psw09-3
+        by m0089730.ppops.net with ESMTP id 34nqy29ydx-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2020 13:02:30 -0800
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2020 13:03:30 -0800
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 9 Nov 2020 13:02:28 -0800
+ 15.1.1979.3; Mon, 9 Nov 2020 13:03:29 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id DB9BE2EC924B; Mon,  9 Nov 2020 13:00:25 -0800 (PST)
+        id 804A92EC924F; Mon,  9 Nov 2020 13:00:34 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
@@ -39,83 +39,389 @@ CC:     <kernel-team@fb.com>, <linux-kernel@vger.kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v3 bpf-next 0/5] Integrate kernel module BTF support
-Date:   Mon, 9 Nov 2020 13:00:19 -0800
-Message-ID: <20201109210024.2024572-1-andrii@kernel.org>
+Subject: [PATCH v3 bpf-next 4/5] bpf: load and verify kernel module BTFs
+Date:   Mon, 9 Nov 2020 13:00:23 -0800
+Message-ID: <20201109210024.2024572-5-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201109210024.2024572-1-andrii@kernel.org>
+References: <20201109210024.2024572-1-andrii@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
-Content-Transfer-Encoding: 8BIT
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-09_13:2020-11-05,2020-11-09 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- malwarescore=0 mlxlogscore=999 spamscore=0 suspectscore=0 mlxscore=0
- bulkscore=0 phishscore=0 clxscore=1015 impostorscore=0 adultscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ mlxlogscore=999 phishscore=0 mlxscore=0 malwarescore=0 spamscore=0
+ bulkscore=0 impostorscore=0 suspectscore=29 clxscore=1015 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2011090138
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch set adds BTF generation for kernel modules using a compact split
-BTF approach. Respective patches have all the details.
+Add kernel module listener that will load/validate and unload module BTF.
+Module BTFs gets ID generated for them, which makes it possible to iterate
+them with existing BTF iteration API. They are given their respective module's
+names, which will get reported through GET_OBJ_INFO API. They are also marked
+as in-kernel BTFs for tooling to distinguish them from user-provided BTFs.
 
-Kernel module BTFs rely on pahole's split BTF support, which is added in [0]
-and will be available starting from v1.19. Support for it is detected
-automatically during kernel build time.
+Also, similarly to vmlinux BTF, kernel module BTFs are exposed through
+sysfs as /sys/kernel/btf/<module-name>. This is convenient for user-space
+tools to inspect module BTF contents and dump their types with existing tools:
 
-This patch set implements in-kernel support for split BTF loading and
-validation. It also extends GET_OBJ_INFO API for BTFs to return BTF's module
-name and a flag whether BTF itself is in-kernel or user-provided. vmlinux BTF
-is also exposed to user-space through the same BTF object iteration APIs.
+[vmuser@archvm bpf]$ ls -la /sys/kernel/btf
+total 0
+drwxr-xr-x  2 root root       0 Nov  4 19:46 .
+drwxr-xr-x 13 root root       0 Nov  4 19:46 ..
 
-Follow up patch set will utilize the fact that vmlinux and module BTFs now
-have associated ID to provide ability to attach BPF fentry/fexit/etc programs
-to functions defined in kernel modules.
+...
 
-bpftool is also extended to show module/vmlinux BTF's name.
+-r--r--r--  1 root root     888 Nov  4 19:46 irqbypass
+-r--r--r--  1 root root  100225 Nov  4 19:46 kvm
+-r--r--r--  1 root root   35401 Nov  4 19:46 kvm_intel
+-r--r--r--  1 root root     120 Nov  4 19:46 pcspkr
+-r--r--r--  1 root root     399 Nov  4 19:46 serio_raw
+-r--r--r--  1 root root 4094095 Nov  4 19:46 vmlinux
 
-  [0] https://patchwork.kernel.org/project/netdevbpf/list/?series=378699&state=*
-
-v2->v3:
-  - get rid of unnecessary gotos (Song);
-v2->v1:
-  - drop WARNs, add fewer pr_warn()'s instead (Greg);
-  - properly initialize sysfs binary attribute structure (Greg);
-  - add __maybe_unused to any_section_objs, used conditionally by module BTF;
-rfc->v1:
-  - CONFIG_DEBUG_INFO_BTF_MODULES is derived automatically (Alexei);
-  - vmlinux BTF now has explicit "vmlinux" name (Alexei);
-  - added sysfs ABI documentation for /sys/kernel/btf/<module> (Greg).
-
-Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Andrii Nakryiko (5):
-  bpf: add in-kernel split BTF support
-  bpf: assign ID to vmlinux BTF and return extra info for BTF in
-    GET_OBJ_INFO
-  kbuild: build kernel module BTFs if BTF is enabled and pahole supports
-    it
-  bpf: load and verify kernel module BTFs
-  tools/bpftool: add support for in-kernel and named BTF in `btf show`
-
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
  Documentation/ABI/testing/sysfs-kernel-btf |   8 +
  include/linux/bpf.h                        |   2 +
  include/linux/module.h                     |   4 +
- include/uapi/linux/bpf.h                   |   3 +
- kernel/bpf/btf.c                           | 402 ++++++++++++++++++---
+ kernel/bpf/btf.c                           | 194 +++++++++++++++++++++
  kernel/bpf/sysfs_btf.c                     |   2 +-
- kernel/module.c                            |  32 ++
- lib/Kconfig.debug                          |   9 +
- scripts/Makefile.modfinal                  |  20 +-
- tools/bpf/bpftool/btf.c                    |  28 +-
- tools/include/uapi/linux/bpf.h             |   3 +
- 11 files changed, 456 insertions(+), 57 deletions(-)
+ kernel/module.c                            |  32 ++++
+ 6 files changed, 241 insertions(+), 1 deletion(-)
 
+diff --git a/Documentation/ABI/testing/sysfs-kernel-btf b/Documentation/ABI/testing/sysfs-kernel-btf
+index 2c9744b2cd59..fe96efdc9b6c 100644
+--- a/Documentation/ABI/testing/sysfs-kernel-btf
++++ b/Documentation/ABI/testing/sysfs-kernel-btf
+@@ -15,3 +15,11 @@ Description:
+ 		information with description of all internal kernel types. See
+ 		Documentation/bpf/btf.rst for detailed description of format
+ 		itself.
++
++What:		/sys/kernel/btf/<module-name>
++Date:		Nov 2020
++KernelVersion:	5.11
++Contact:	bpf@vger.kernel.org
++Description:
++		Read-only binary attribute exposing kernel module's BTF type
++		information as an add-on to the kernel's BTF (/sys/kernel/btf/vmlinux).
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 73d5381a5d5c..581b2a2e78eb 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -36,9 +36,11 @@ struct seq_operations;
+ struct bpf_iter_aux_info;
+ struct bpf_local_storage;
+ struct bpf_local_storage_map;
++struct kobject;
+ 
+ extern struct idr btf_idr;
+ extern spinlock_t btf_idr_lock;
++extern struct kobject *btf_kobj;
+ 
+ typedef int (*bpf_iter_init_seq_priv_t)(void *private_data,
+ 					struct bpf_iter_aux_info *aux);
+diff --git a/include/linux/module.h b/include/linux/module.h
+index a29187f7c360..20fce258ffba 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -475,6 +475,10 @@ struct module {
+ 	unsigned int num_bpf_raw_events;
+ 	struct bpf_raw_event_map *bpf_raw_events;
+ #endif
++#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
++	unsigned int btf_data_size;
++	void *btf_data;
++#endif
+ #ifdef CONFIG_JUMP_LABEL
+ 	struct jump_entry *jump_entries;
+ 	unsigned int num_jump_entries;
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 663c3fb4e614..ad2348e95ac7 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -23,6 +23,8 @@
+ #include <linux/perf_event.h>
+ #include <linux/bsearch.h>
+ #include <linux/btf_ids.h>
++#include <linux/kobject.h>
++#include <linux/sysfs.h>
+ #include <net/sock.h>
+ 
+ /* BTF (BPF Type Format) is the meta data format which describes
+@@ -4477,6 +4479,75 @@ struct btf *btf_parse_vmlinux(void)
+ 	return ERR_PTR(err);
+ }
+ 
++static struct btf *btf_parse_module(const char *module_name, const void *data, unsigned int data_size)
++{
++	struct btf_verifier_env *env = NULL;
++	struct bpf_verifier_log *log;
++	struct btf *btf = NULL, *base_btf;
++	int err;
++
++	base_btf = bpf_get_btf_vmlinux();
++	if (IS_ERR(base_btf))
++		return base_btf;
++	if (!base_btf)
++		return ERR_PTR(-EINVAL);
++
++	env = kzalloc(sizeof(*env), GFP_KERNEL | __GFP_NOWARN);
++	if (!env)
++		return ERR_PTR(-ENOMEM);
++
++	log = &env->log;
++	log->level = BPF_LOG_KERNEL;
++
++	btf = kzalloc(sizeof(*btf), GFP_KERNEL | __GFP_NOWARN);
++	if (!btf) {
++		err = -ENOMEM;
++		goto errout;
++	}
++	env->btf = btf;
++
++	btf->base_btf = base_btf;
++	btf->start_id = base_btf->nr_types;
++	btf->start_str_off = base_btf->hdr.str_len;
++	btf->kernel_btf = true;
++	snprintf(btf->name, sizeof(btf->name), "%s", module_name);
++
++	btf->data = kvmalloc(data_size, GFP_KERNEL | __GFP_NOWARN);
++	if (!btf->data) {
++		err = -ENOMEM;
++		goto errout;
++	}
++	memcpy(btf->data, data, data_size);
++	btf->data_size = data_size;
++
++	err = btf_parse_hdr(env);
++	if (err)
++		goto errout;
++
++	btf->nohdr_data = btf->data + btf->hdr.hdr_len;
++
++	err = btf_parse_str_sec(env);
++	if (err)
++		goto errout;
++
++	err = btf_check_all_metas(env);
++	if (err)
++		goto errout;
++
++	btf_verifier_env_free(env);
++	refcount_set(&btf->refcnt, 1);
++	return btf;
++
++errout:
++	btf_verifier_env_free(env);
++	if (btf) {
++		kvfree(btf->data);
++		kvfree(btf->types);
++		kfree(btf);
++	}
++	return ERR_PTR(err);
++}
++
+ struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog)
+ {
+ 	struct bpf_prog *tgt_prog = prog->aux->dst_prog;
+@@ -5650,3 +5721,126 @@ bool btf_id_set_contains(const struct btf_id_set *set, u32 id)
+ {
+ 	return bsearch(&id, set->ids, set->cnt, sizeof(u32), btf_id_cmp_func) != NULL;
+ }
++
++#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
++struct btf_module {
++	struct list_head list;
++	struct module *module;
++	struct btf *btf;
++	struct bin_attribute *sysfs_attr;
++};
++
++static LIST_HEAD(btf_modules);
++static DEFINE_MUTEX(btf_module_mutex);
++
++static ssize_t
++btf_module_read(struct file *file, struct kobject *kobj,
++		struct bin_attribute *bin_attr,
++		char *buf, loff_t off, size_t len)
++{
++	const struct btf *btf = bin_attr->private;
++
++	memcpy(buf, btf->data + off, len);
++	return len;
++}
++
++static int btf_module_notify(struct notifier_block *nb, unsigned long op,
++			     void *module)
++{
++	struct btf_module *btf_mod, *tmp;
++	struct module *mod = module;
++	struct btf *btf;
++	int err = 0;
++
++	if (mod->btf_data_size == 0 ||
++	    (op != MODULE_STATE_COMING && op != MODULE_STATE_GOING))
++		goto out;
++
++	switch (op) {
++	case MODULE_STATE_COMING:
++		btf_mod = kzalloc(sizeof(*btf_mod), GFP_KERNEL);
++		if (!btf_mod) {
++			err = -ENOMEM;
++			goto out;
++		}
++		btf = btf_parse_module(mod->name, mod->btf_data, mod->btf_data_size);
++		if (IS_ERR(btf)) {
++			pr_warn("failed to validate module [%s] BTF: %ld\n",
++				mod->name, PTR_ERR(btf));
++			kfree(btf_mod);
++			err = PTR_ERR(btf);
++			goto out;
++		}
++		err = btf_alloc_id(btf);
++		if (err) {
++			btf_free(btf);
++			kfree(btf_mod);
++			goto out;
++		}
++
++		mutex_lock(&btf_module_mutex);
++		btf_mod->module = module;
++		btf_mod->btf = btf;
++		list_add(&btf_mod->list, &btf_modules);
++		mutex_unlock(&btf_module_mutex);
++
++		if (IS_ENABLED(CONFIG_SYSFS)) {
++			struct bin_attribute *attr;
++
++			attr = kzalloc(sizeof(*attr), GFP_KERNEL);
++			if (!attr)
++				goto out;
++
++			sysfs_bin_attr_init(attr);
++			attr->attr.name = btf->name;
++			attr->attr.mode = 0444;
++			attr->size = btf->data_size;
++			attr->private = btf;
++			attr->read = btf_module_read;
++
++			err = sysfs_create_bin_file(btf_kobj, attr);
++			if (err) {
++				pr_warn("failed to register module [%s] BTF in sysfs: %d\n",
++					mod->name, err);
++				kfree(attr);
++				err = 0;
++				goto out;
++			}
++
++			btf_mod->sysfs_attr = attr;
++		}
++
++		break;
++	case MODULE_STATE_GOING:
++		mutex_lock(&btf_module_mutex);
++		list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
++			if (btf_mod->module != module)
++				continue;
++
++			list_del(&btf_mod->list);
++			if (btf_mod->sysfs_attr)
++				sysfs_remove_bin_file(btf_kobj, btf_mod->sysfs_attr);
++			btf_put(btf_mod->btf);
++			kfree(btf_mod->sysfs_attr);
++			kfree(btf_mod);
++			break;
++		}
++		mutex_unlock(&btf_module_mutex);
++		break;
++	}
++out:
++	return notifier_from_errno(err);
++}
++
++static struct notifier_block btf_module_nb = {
++	.notifier_call = btf_module_notify,
++};
++
++static int __init btf_module_init(void)
++{
++	register_module_notifier(&btf_module_nb);
++	return 0;
++}
++
++fs_initcall(btf_module_init);
++#endif /* CONFIG_DEBUG_INFO_BTF_MODULES */
+diff --git a/kernel/bpf/sysfs_btf.c b/kernel/bpf/sysfs_btf.c
+index 11b3380887fa..ef6911aee3bb 100644
+--- a/kernel/bpf/sysfs_btf.c
++++ b/kernel/bpf/sysfs_btf.c
+@@ -26,7 +26,7 @@ static struct bin_attribute bin_attr_btf_vmlinux __ro_after_init = {
+ 	.read = btf_vmlinux_read,
+ };
+ 
+-static struct kobject *btf_kobj;
++struct kobject *btf_kobj;
+ 
+ static int __init btf_vmlinux_init(void)
+ {
+diff --git a/kernel/module.c b/kernel/module.c
+index a4fa44a652a7..f2996b02ab2e 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -380,6 +380,35 @@ static void *section_objs(const struct load_info *info,
+ 	return (void *)info->sechdrs[sec].sh_addr;
+ }
+ 
++/* Find a module section: 0 means not found. Ignores SHF_ALLOC flag. */
++static unsigned int find_any_sec(const struct load_info *info, const char *name)
++{
++	unsigned int i;
++
++	for (i = 1; i < info->hdr->e_shnum; i++) {
++		Elf_Shdr *shdr = &info->sechdrs[i];
++		if (strcmp(info->secstrings + shdr->sh_name, name) == 0)
++			return i;
++	}
++	return 0;
++}
++
++/*
++ * Find a module section, or NULL. Fill in number of "objects" in section.
++ * Ignores SHF_ALLOC flag.
++ */
++static __maybe_unused void *any_section_objs(const struct load_info *info,
++					     const char *name,
++					     size_t object_size,
++					     unsigned int *num)
++{
++	unsigned int sec = find_any_sec(info, name);
++
++	/* Section 0 has sh_addr 0 and sh_size 0. */
++	*num = info->sechdrs[sec].sh_size / object_size;
++	return (void *)info->sechdrs[sec].sh_addr;
++}
++
+ /* Provided by the linker */
+ extern const struct kernel_symbol __start___ksymtab[];
+ extern const struct kernel_symbol __stop___ksymtab[];
+@@ -3250,6 +3279,9 @@ static int find_module_sections(struct module *mod, struct load_info *info)
+ 					   sizeof(*mod->bpf_raw_events),
+ 					   &mod->num_bpf_raw_events);
+ #endif
++#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
++	mod->btf_data = any_section_objs(info, ".BTF", 1, &mod->btf_data_size);
++#endif
+ #ifdef CONFIG_JUMP_LABEL
+ 	mod->jump_entries = section_objs(info, "__jump_table",
+ 					sizeof(*mod->jump_entries),
 -- 
 2.24.1
 
