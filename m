@@ -3,34 +3,34 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EFD96C55ABD
-	for <bpf@archiver.kernel.org>; Mon,  9 Nov 2020 21:03:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 231FCC56201
+	for <bpf@archiver.kernel.org>; Mon,  9 Nov 2020 21:03:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B744C2074F
-	for <bpf@archiver.kernel.org>; Mon,  9 Nov 2020 21:03:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DA03F204EF
+	for <bpf@archiver.kernel.org>; Mon,  9 Nov 2020 21:03:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730206AbgKIVDd convert rfc822-to-8bit (ORCPT
+        id S1729697AbgKIVDd convert rfc822-to-8bit (ORCPT
         <rfc822;bpf@archiver.kernel.org>); Mon, 9 Nov 2020 16:03:33 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:24862 "EHLO
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:33702 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727070AbgKIVDd (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 9 Nov 2020 16:03:33 -0500
+        by vger.kernel.org with ESMTP id S1729452AbgKIVDc (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 9 Nov 2020 16:03:32 -0500
 Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0A9KkElh012723
-        for <bpf@vger.kernel.org>; Mon, 9 Nov 2020 13:03:30 -0800
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0A9Kkhbe015188
+        for <bpf@vger.kernel.org>; Mon, 9 Nov 2020 13:03:31 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 34nqy29ydx-2
+        by m0089730.ppops.net with ESMTP id 34nqy29ydw-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 09 Nov 2020 13:03:30 -0800
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 09 Nov 2020 13:03:31 -0800
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 9 Nov 2020 13:03:29 -0800
+ 15.1.1979.3; Mon, 9 Nov 2020 13:03:28 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 804A92EC924F; Mon,  9 Nov 2020 13:00:34 -0800 (PST)
+        id 009182EC924C; Mon,  9 Nov 2020 13:00:27 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
@@ -39,9 +39,9 @@ CC:     <kernel-team@fb.com>, <linux-kernel@vger.kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Arnaldo Carvalho de Melo <acme@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v3 bpf-next 4/5] bpf: load and verify kernel module BTFs
-Date:   Mon, 9 Nov 2020 13:00:23 -0800
-Message-ID: <20201109210024.2024572-5-andrii@kernel.org>
+Subject: [PATCH v3 bpf-next 1/5] bpf: add in-kernel split BTF support
+Date:   Mon, 9 Nov 2020 13:00:20 -0800
+Message-ID: <20201109210024.2024572-2-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201109210024.2024572-1-andrii@kernel.org>
 References: <20201109210024.2024572-1-andrii@kernel.org>
@@ -53,7 +53,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-09_13:2020-11-05,2020-11-09 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
  mlxlogscore=999 phishscore=0 mlxscore=0 malwarescore=0 spamscore=0
- bulkscore=0 impostorscore=0 suspectscore=29 clxscore=1015 adultscore=0
+ bulkscore=0 impostorscore=0 suspectscore=8 clxscore=1015 adultscore=0
  lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2011090138
 X-FB-Internal: deliver
@@ -61,367 +61,418 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add kernel module listener that will load/validate and unload module BTF.
-Module BTFs gets ID generated for them, which makes it possible to iterate
-them with existing BTF iteration API. They are given their respective module's
-names, which will get reported through GET_OBJ_INFO API. They are also marked
-as in-kernel BTFs for tooling to distinguish them from user-provided BTFs.
+Adjust in-kernel BTF implementation to support a split BTF mode of operation.
+Changes are mostly mirroring libbpf split BTF changes, with the exception of
+start_id being 0 for in-kernel implementation due to simpler read-only mode.
 
-Also, similarly to vmlinux BTF, kernel module BTFs are exposed through
-sysfs as /sys/kernel/btf/<module-name>. This is convenient for user-space
-tools to inspect module BTF contents and dump their types with existing tools:
+Otherwise, for split BTF logic, most of the logic of jumping to base BTF,
+where necessary, is encapsulated in few helper functions. Type numbering and
+string offset in a split BTF are logically continuing where base BTF ends, so
+most of the high-level logic is kept without changes.
 
-[vmuser@archvm bpf]$ ls -la /sys/kernel/btf
-total 0
-drwxr-xr-x  2 root root       0 Nov  4 19:46 .
-drwxr-xr-x 13 root root       0 Nov  4 19:46 ..
+Type verification and size resolution is only doing an added resolution of new
+split BTF types and relies on already cached size and type resolution results
+in the base BTF.
 
-...
-
--r--r--r--  1 root root     888 Nov  4 19:46 irqbypass
--r--r--r--  1 root root  100225 Nov  4 19:46 kvm
--r--r--r--  1 root root   35401 Nov  4 19:46 kvm_intel
--r--r--r--  1 root root     120 Nov  4 19:46 pcspkr
--r--r--r--  1 root root     399 Nov  4 19:46 serio_raw
--r--r--r--  1 root root 4094095 Nov  4 19:46 vmlinux
-
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- Documentation/ABI/testing/sysfs-kernel-btf |   8 +
- include/linux/bpf.h                        |   2 +
- include/linux/module.h                     |   4 +
- kernel/bpf/btf.c                           | 194 +++++++++++++++++++++
- kernel/bpf/sysfs_btf.c                     |   2 +-
- kernel/module.c                            |  32 ++++
- 6 files changed, 241 insertions(+), 1 deletion(-)
+ kernel/bpf/btf.c | 171 +++++++++++++++++++++++++++++++++--------------
+ 1 file changed, 119 insertions(+), 52 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-kernel-btf b/Documentation/ABI/testing/sysfs-kernel-btf
-index 2c9744b2cd59..fe96efdc9b6c 100644
---- a/Documentation/ABI/testing/sysfs-kernel-btf
-+++ b/Documentation/ABI/testing/sysfs-kernel-btf
-@@ -15,3 +15,11 @@ Description:
- 		information with description of all internal kernel types. See
- 		Documentation/bpf/btf.rst for detailed description of format
- 		itself.
-+
-+What:		/sys/kernel/btf/<module-name>
-+Date:		Nov 2020
-+KernelVersion:	5.11
-+Contact:	bpf@vger.kernel.org
-+Description:
-+		Read-only binary attribute exposing kernel module's BTF type
-+		information as an add-on to the kernel's BTF (/sys/kernel/btf/vmlinux).
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 73d5381a5d5c..581b2a2e78eb 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -36,9 +36,11 @@ struct seq_operations;
- struct bpf_iter_aux_info;
- struct bpf_local_storage;
- struct bpf_local_storage_map;
-+struct kobject;
- 
- extern struct idr btf_idr;
- extern spinlock_t btf_idr_lock;
-+extern struct kobject *btf_kobj;
- 
- typedef int (*bpf_iter_init_seq_priv_t)(void *private_data,
- 					struct bpf_iter_aux_info *aux);
-diff --git a/include/linux/module.h b/include/linux/module.h
-index a29187f7c360..20fce258ffba 100644
---- a/include/linux/module.h
-+++ b/include/linux/module.h
-@@ -475,6 +475,10 @@ struct module {
- 	unsigned int num_bpf_raw_events;
- 	struct bpf_raw_event_map *bpf_raw_events;
- #endif
-+#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+	unsigned int btf_data_size;
-+	void *btf_data;
-+#endif
- #ifdef CONFIG_JUMP_LABEL
- 	struct jump_entry *jump_entries;
- 	unsigned int num_jump_entries;
 diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 663c3fb4e614..ad2348e95ac7 100644
+index ed7d02e8bc93..894ee33f4c84 100644
 --- a/kernel/bpf/btf.c
 +++ b/kernel/bpf/btf.c
-@@ -23,6 +23,8 @@
- #include <linux/perf_event.h>
- #include <linux/bsearch.h>
- #include <linux/btf_ids.h>
-+#include <linux/kobject.h>
-+#include <linux/sysfs.h>
- #include <net/sock.h>
- 
- /* BTF (BPF Type Format) is the meta data format which describes
-@@ -4477,6 +4479,75 @@ struct btf *btf_parse_vmlinux(void)
- 	return ERR_PTR(err);
- }
- 
-+static struct btf *btf_parse_module(const char *module_name, const void *data, unsigned int data_size)
-+{
-+	struct btf_verifier_env *env = NULL;
-+	struct bpf_verifier_log *log;
-+	struct btf *btf = NULL, *base_btf;
-+	int err;
+@@ -204,12 +204,17 @@ struct btf {
+ 	const char *strings;
+ 	void *nohdr_data;
+ 	struct btf_header hdr;
+-	u32 nr_types;
++	u32 nr_types; /* includes VOID for base BTF */
+ 	u32 types_size;
+ 	u32 data_size;
+ 	refcount_t refcnt;
+ 	u32 id;
+ 	struct rcu_head rcu;
 +
-+	base_btf = bpf_get_btf_vmlinux();
-+	if (IS_ERR(base_btf))
-+		return base_btf;
-+	if (!base_btf)
-+		return ERR_PTR(-EINVAL);
-+
-+	env = kzalloc(sizeof(*env), GFP_KERNEL | __GFP_NOWARN);
-+	if (!env)
-+		return ERR_PTR(-ENOMEM);
-+
-+	log = &env->log;
-+	log->level = BPF_LOG_KERNEL;
-+
-+	btf = kzalloc(sizeof(*btf), GFP_KERNEL | __GFP_NOWARN);
-+	if (!btf) {
-+		err = -ENOMEM;
-+		goto errout;
-+	}
-+	env->btf = btf;
-+
-+	btf->base_btf = base_btf;
-+	btf->start_id = base_btf->nr_types;
-+	btf->start_str_off = base_btf->hdr.str_len;
-+	btf->kernel_btf = true;
-+	snprintf(btf->name, sizeof(btf->name), "%s", module_name);
-+
-+	btf->data = kvmalloc(data_size, GFP_KERNEL | __GFP_NOWARN);
-+	if (!btf->data) {
-+		err = -ENOMEM;
-+		goto errout;
-+	}
-+	memcpy(btf->data, data, data_size);
-+	btf->data_size = data_size;
-+
-+	err = btf_parse_hdr(env);
-+	if (err)
-+		goto errout;
-+
-+	btf->nohdr_data = btf->data + btf->hdr.hdr_len;
-+
-+	err = btf_parse_str_sec(env);
-+	if (err)
-+		goto errout;
-+
-+	err = btf_check_all_metas(env);
-+	if (err)
-+		goto errout;
-+
-+	btf_verifier_env_free(env);
-+	refcount_set(&btf->refcnt, 1);
-+	return btf;
-+
-+errout:
-+	btf_verifier_env_free(env);
-+	if (btf) {
-+		kvfree(btf->data);
-+		kvfree(btf->types);
-+		kfree(btf);
-+	}
-+	return ERR_PTR(err);
-+}
-+
- struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog)
- {
- 	struct bpf_prog *tgt_prog = prog->aux->dst_prog;
-@@ -5650,3 +5721,126 @@ bool btf_id_set_contains(const struct btf_id_set *set, u32 id)
- {
- 	return bsearch(&id, set->ids, set->cnt, sizeof(u32), btf_id_cmp_func) != NULL;
- }
-+
-+#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+struct btf_module {
-+	struct list_head list;
-+	struct module *module;
-+	struct btf *btf;
-+	struct bin_attribute *sysfs_attr;
-+};
-+
-+static LIST_HEAD(btf_modules);
-+static DEFINE_MUTEX(btf_module_mutex);
-+
-+static ssize_t
-+btf_module_read(struct file *file, struct kobject *kobj,
-+		struct bin_attribute *bin_attr,
-+		char *buf, loff_t off, size_t len)
-+{
-+	const struct btf *btf = bin_attr->private;
-+
-+	memcpy(buf, btf->data + off, len);
-+	return len;
-+}
-+
-+static int btf_module_notify(struct notifier_block *nb, unsigned long op,
-+			     void *module)
-+{
-+	struct btf_module *btf_mod, *tmp;
-+	struct module *mod = module;
-+	struct btf *btf;
-+	int err = 0;
-+
-+	if (mod->btf_data_size == 0 ||
-+	    (op != MODULE_STATE_COMING && op != MODULE_STATE_GOING))
-+		goto out;
-+
-+	switch (op) {
-+	case MODULE_STATE_COMING:
-+		btf_mod = kzalloc(sizeof(*btf_mod), GFP_KERNEL);
-+		if (!btf_mod) {
-+			err = -ENOMEM;
-+			goto out;
-+		}
-+		btf = btf_parse_module(mod->name, mod->btf_data, mod->btf_data_size);
-+		if (IS_ERR(btf)) {
-+			pr_warn("failed to validate module [%s] BTF: %ld\n",
-+				mod->name, PTR_ERR(btf));
-+			kfree(btf_mod);
-+			err = PTR_ERR(btf);
-+			goto out;
-+		}
-+		err = btf_alloc_id(btf);
-+		if (err) {
-+			btf_free(btf);
-+			kfree(btf_mod);
-+			goto out;
-+		}
-+
-+		mutex_lock(&btf_module_mutex);
-+		btf_mod->module = module;
-+		btf_mod->btf = btf;
-+		list_add(&btf_mod->list, &btf_modules);
-+		mutex_unlock(&btf_module_mutex);
-+
-+		if (IS_ENABLED(CONFIG_SYSFS)) {
-+			struct bin_attribute *attr;
-+
-+			attr = kzalloc(sizeof(*attr), GFP_KERNEL);
-+			if (!attr)
-+				goto out;
-+
-+			sysfs_bin_attr_init(attr);
-+			attr->attr.name = btf->name;
-+			attr->attr.mode = 0444;
-+			attr->size = btf->data_size;
-+			attr->private = btf;
-+			attr->read = btf_module_read;
-+
-+			err = sysfs_create_bin_file(btf_kobj, attr);
-+			if (err) {
-+				pr_warn("failed to register module [%s] BTF in sysfs: %d\n",
-+					mod->name, err);
-+				kfree(attr);
-+				err = 0;
-+				goto out;
-+			}
-+
-+			btf_mod->sysfs_attr = attr;
-+		}
-+
-+		break;
-+	case MODULE_STATE_GOING:
-+		mutex_lock(&btf_module_mutex);
-+		list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
-+			if (btf_mod->module != module)
-+				continue;
-+
-+			list_del(&btf_mod->list);
-+			if (btf_mod->sysfs_attr)
-+				sysfs_remove_bin_file(btf_kobj, btf_mod->sysfs_attr);
-+			btf_put(btf_mod->btf);
-+			kfree(btf_mod->sysfs_attr);
-+			kfree(btf_mod);
-+			break;
-+		}
-+		mutex_unlock(&btf_module_mutex);
-+		break;
-+	}
-+out:
-+	return notifier_from_errno(err);
-+}
-+
-+static struct notifier_block btf_module_nb = {
-+	.notifier_call = btf_module_notify,
-+};
-+
-+static int __init btf_module_init(void)
-+{
-+	register_module_notifier(&btf_module_nb);
-+	return 0;
-+}
-+
-+fs_initcall(btf_module_init);
-+#endif /* CONFIG_DEBUG_INFO_BTF_MODULES */
-diff --git a/kernel/bpf/sysfs_btf.c b/kernel/bpf/sysfs_btf.c
-index 11b3380887fa..ef6911aee3bb 100644
---- a/kernel/bpf/sysfs_btf.c
-+++ b/kernel/bpf/sysfs_btf.c
-@@ -26,7 +26,7 @@ static struct bin_attribute bin_attr_btf_vmlinux __ro_after_init = {
- 	.read = btf_vmlinux_read,
++	/* split BTF support */
++	struct btf *base_btf;
++	u32 start_id; /* first type ID in this BTF (0 for base BTF) */
++	u32 start_str_off; /* first string offset (0 for base BTF) */
  };
  
--static struct kobject *btf_kobj;
-+struct kobject *btf_kobj;
- 
- static int __init btf_vmlinux_init(void)
- {
-diff --git a/kernel/module.c b/kernel/module.c
-index a4fa44a652a7..f2996b02ab2e 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -380,6 +380,35 @@ static void *section_objs(const struct load_info *info,
- 	return (void *)info->sechdrs[sec].sh_addr;
+ enum verifier_phase {
+@@ -450,14 +455,27 @@ static bool btf_type_is_datasec(const struct btf_type *t)
+ 	return BTF_INFO_KIND(t->info) == BTF_KIND_DATASEC;
  }
  
-+/* Find a module section: 0 means not found. Ignores SHF_ALLOC flag. */
-+static unsigned int find_any_sec(const struct load_info *info, const char *name)
++static u32 btf_nr_types_total(const struct btf *btf)
 +{
-+	unsigned int i;
++	u32 total = 0;
 +
-+	for (i = 1; i < info->hdr->e_shnum; i++) {
-+		Elf_Shdr *shdr = &info->sechdrs[i];
-+		if (strcmp(info->secstrings + shdr->sh_name, name) == 0)
-+			return i;
++	while (btf) {
++		total += btf->nr_types;
++		btf = btf->base_btf;
 +	}
-+	return 0;
++
++	return total;
 +}
 +
-+/*
-+ * Find a module section, or NULL. Fill in number of "objects" in section.
-+ * Ignores SHF_ALLOC flag.
-+ */
-+static __maybe_unused void *any_section_objs(const struct load_info *info,
-+					     const char *name,
-+					     size_t object_size,
-+					     unsigned int *num)
+ s32 btf_find_by_name_kind(const struct btf *btf, const char *name, u8 kind)
+ {
+ 	const struct btf_type *t;
+ 	const char *tname;
+-	u32 i;
++	u32 i, total;
+ 
+-	for (i = 1; i <= btf->nr_types; i++) {
+-		t = btf->types[i];
++	total = btf_nr_types_total(btf);
++	for (i = 1; i < total; i++) {
++		t = btf_type_by_id(btf, i);
+ 		if (BTF_INFO_KIND(t->info) != kind)
+ 			continue;
+ 
+@@ -600,8 +618,14 @@ static const struct btf_kind_operations *btf_type_ops(const struct btf_type *t)
+ 
+ static bool btf_name_offset_valid(const struct btf *btf, u32 offset)
+ {
+-	return BTF_STR_OFFSET_VALID(offset) &&
+-		offset < btf->hdr.str_len;
++	if (!BTF_STR_OFFSET_VALID(offset))
++		return false;
++
++	while (offset < btf->start_str_off)
++		btf = btf->base_btf;
++
++	offset -= btf->start_str_off;
++	return offset < btf->hdr.str_len;
+ }
+ 
+ static bool __btf_name_char_ok(char c, bool first, bool dot_ok)
+@@ -615,10 +639,22 @@ static bool __btf_name_char_ok(char c, bool first, bool dot_ok)
+ 	return true;
+ }
+ 
++static const char *btf_str_by_offset(const struct btf *btf, u32 offset)
 +{
-+	unsigned int sec = find_any_sec(info, name);
++	while (offset < btf->start_str_off)
++		btf = btf->base_btf;
 +
-+	/* Section 0 has sh_addr 0 and sh_size 0. */
-+	*num = info->sechdrs[sec].sh_size / object_size;
-+	return (void *)info->sechdrs[sec].sh_addr;
++	offset -= btf->start_str_off;
++	if (offset < btf->hdr.str_len)
++		return &btf->strings[offset];
++
++	return NULL;
 +}
 +
- /* Provided by the linker */
- extern const struct kernel_symbol __start___ksymtab[];
- extern const struct kernel_symbol __stop___ksymtab[];
-@@ -3250,6 +3279,9 @@ static int find_module_sections(struct module *mod, struct load_info *info)
- 					   sizeof(*mod->bpf_raw_events),
- 					   &mod->num_bpf_raw_events);
- #endif
-+#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+	mod->btf_data = any_section_objs(info, ".BTF", 1, &mod->btf_data_size);
-+#endif
- #ifdef CONFIG_JUMP_LABEL
- 	mod->jump_entries = section_objs(info, "__jump_table",
- 					sizeof(*mod->jump_entries),
+ static bool __btf_name_valid(const struct btf *btf, u32 offset, bool dot_ok)
+ {
+ 	/* offset must be valid */
+-	const char *src = &btf->strings[offset];
++	const char *src = btf_str_by_offset(btf, offset);
+ 	const char *src_limit;
+ 
+ 	if (!__btf_name_char_ok(*src, true, dot_ok))
+@@ -651,27 +687,28 @@ static bool btf_name_valid_section(const struct btf *btf, u32 offset)
+ 
+ static const char *__btf_name_by_offset(const struct btf *btf, u32 offset)
+ {
++	const char *name;
++
+ 	if (!offset)
+ 		return "(anon)";
+-	else if (offset < btf->hdr.str_len)
+-		return &btf->strings[offset];
+-	else
+-		return "(invalid-name-offset)";
++
++	name = btf_str_by_offset(btf, offset);
++	return name ?: "(invalid-name-offset)";
+ }
+ 
+ const char *btf_name_by_offset(const struct btf *btf, u32 offset)
+ {
+-	if (offset < btf->hdr.str_len)
+-		return &btf->strings[offset];
+-
+-	return NULL;
++	return btf_str_by_offset(btf, offset);
+ }
+ 
+ const struct btf_type *btf_type_by_id(const struct btf *btf, u32 type_id)
+ {
+-	if (type_id > btf->nr_types)
+-		return NULL;
++	while (type_id < btf->start_id)
++		btf = btf->base_btf;
+ 
++	type_id -= btf->start_id;
++	if (type_id >= btf->nr_types)
++		return NULL;
+ 	return btf->types[type_id];
+ }
+ 
+@@ -1391,17 +1428,13 @@ static int btf_add_type(struct btf_verifier_env *env, struct btf_type *t)
+ {
+ 	struct btf *btf = env->btf;
+ 
+-	/* < 2 because +1 for btf_void which is always in btf->types[0].
+-	 * btf_void is not accounted in btf->nr_types because btf_void
+-	 * does not come from the BTF file.
+-	 */
+-	if (btf->types_size - btf->nr_types < 2) {
++	if (btf->types_size == btf->nr_types) {
+ 		/* Expand 'types' array */
+ 
+ 		struct btf_type **new_types;
+ 		u32 expand_by, new_size;
+ 
+-		if (btf->types_size == BTF_MAX_TYPE) {
++		if (btf->start_id + btf->types_size == BTF_MAX_TYPE) {
+ 			btf_verifier_log(env, "Exceeded max num of types");
+ 			return -E2BIG;
+ 		}
+@@ -1415,18 +1448,23 @@ static int btf_add_type(struct btf_verifier_env *env, struct btf_type *t)
+ 		if (!new_types)
+ 			return -ENOMEM;
+ 
+-		if (btf->nr_types == 0)
+-			new_types[0] = &btf_void;
+-		else
++		if (btf->nr_types == 0) {
++			if (!btf->base_btf) {
++				/* lazily init VOID type */
++				new_types[0] = &btf_void;
++				btf->nr_types++;
++			}
++		} else {
+ 			memcpy(new_types, btf->types,
+-			       sizeof(*btf->types) * (btf->nr_types + 1));
++			       sizeof(*btf->types) * btf->nr_types);
++		}
+ 
+ 		kvfree(btf->types);
+ 		btf->types = new_types;
+ 		btf->types_size = new_size;
+ 	}
+ 
+-	btf->types[++(btf->nr_types)] = t;
++	btf->types[btf->nr_types++] = t;
+ 
+ 	return 0;
+ }
+@@ -1499,18 +1537,17 @@ static int env_resolve_init(struct btf_verifier_env *env)
+ 	u32 *resolved_ids = NULL;
+ 	u8 *visit_states = NULL;
+ 
+-	/* +1 for btf_void */
+-	resolved_sizes = kvcalloc(nr_types + 1, sizeof(*resolved_sizes),
++	resolved_sizes = kvcalloc(nr_types, sizeof(*resolved_sizes),
+ 				  GFP_KERNEL | __GFP_NOWARN);
+ 	if (!resolved_sizes)
+ 		goto nomem;
+ 
+-	resolved_ids = kvcalloc(nr_types + 1, sizeof(*resolved_ids),
++	resolved_ids = kvcalloc(nr_types, sizeof(*resolved_ids),
+ 				GFP_KERNEL | __GFP_NOWARN);
+ 	if (!resolved_ids)
+ 		goto nomem;
+ 
+-	visit_states = kvcalloc(nr_types + 1, sizeof(*visit_states),
++	visit_states = kvcalloc(nr_types, sizeof(*visit_states),
+ 				GFP_KERNEL | __GFP_NOWARN);
+ 	if (!visit_states)
+ 		goto nomem;
+@@ -1562,21 +1599,27 @@ static bool env_type_is_resolve_sink(const struct btf_verifier_env *env,
+ static bool env_type_is_resolved(const struct btf_verifier_env *env,
+ 				 u32 type_id)
+ {
+-	return env->visit_states[type_id] == RESOLVED;
++	/* base BTF types should be resolved by now */
++	if (type_id < env->btf->start_id)
++		return true;
++
++	return env->visit_states[type_id - env->btf->start_id] == RESOLVED;
+ }
+ 
+ static int env_stack_push(struct btf_verifier_env *env,
+ 			  const struct btf_type *t, u32 type_id)
+ {
++	const struct btf *btf = env->btf;
+ 	struct resolve_vertex *v;
+ 
+ 	if (env->top_stack == MAX_RESOLVE_DEPTH)
+ 		return -E2BIG;
+ 
+-	if (env->visit_states[type_id] != NOT_VISITED)
++	if (type_id < btf->start_id
++	    || env->visit_states[type_id - btf->start_id] != NOT_VISITED)
+ 		return -EEXIST;
+ 
+-	env->visit_states[type_id] = VISITED;
++	env->visit_states[type_id - btf->start_id] = VISITED;
+ 
+ 	v = &env->stack[env->top_stack++];
+ 	v->t = t;
+@@ -1606,6 +1649,7 @@ static void env_stack_pop_resolved(struct btf_verifier_env *env,
+ 	u32 type_id = env->stack[--(env->top_stack)].type_id;
+ 	struct btf *btf = env->btf;
+ 
++	type_id -= btf->start_id; /* adjust to local type id */
+ 	btf->resolved_sizes[type_id] = resolved_size;
+ 	btf->resolved_ids[type_id] = resolved_type_id;
+ 	env->visit_states[type_id] = RESOLVED;
+@@ -1710,14 +1754,30 @@ btf_resolve_size(const struct btf *btf, const struct btf_type *type,
+ 	return __btf_resolve_size(btf, type, type_size, NULL, NULL, NULL, NULL);
+ }
+ 
++static u32 btf_resolved_type_id(const struct btf *btf, u32 type_id)
++{
++	while (type_id < btf->start_id)
++		btf = btf->base_btf;
++
++	return btf->resolved_ids[type_id - btf->start_id];
++}
++
+ /* The input param "type_id" must point to a needs_resolve type */
+ static const struct btf_type *btf_type_id_resolve(const struct btf *btf,
+ 						  u32 *type_id)
+ {
+-	*type_id = btf->resolved_ids[*type_id];
++	*type_id = btf_resolved_type_id(btf, *type_id);
+ 	return btf_type_by_id(btf, *type_id);
+ }
+ 
++static u32 btf_resolved_type_size(const struct btf *btf, u32 type_id)
++{
++	while (type_id < btf->start_id)
++		btf = btf->base_btf;
++
++	return btf->resolved_sizes[type_id - btf->start_id];
++}
++
+ const struct btf_type *btf_type_id_size(const struct btf *btf,
+ 					u32 *type_id, u32 *ret_size)
+ {
+@@ -1732,7 +1792,7 @@ const struct btf_type *btf_type_id_size(const struct btf *btf,
+ 	if (btf_type_has_size(size_type)) {
+ 		size = size_type->size;
+ 	} else if (btf_type_is_array(size_type)) {
+-		size = btf->resolved_sizes[size_type_id];
++		size = btf_resolved_type_size(btf, size_type_id);
+ 	} else if (btf_type_is_ptr(size_type)) {
+ 		size = sizeof(void *);
+ 	} else {
+@@ -1740,14 +1800,14 @@ const struct btf_type *btf_type_id_size(const struct btf *btf,
+ 				 !btf_type_is_var(size_type)))
+ 			return NULL;
+ 
+-		size_type_id = btf->resolved_ids[size_type_id];
++		size_type_id = btf_resolved_type_id(btf, size_type_id);
+ 		size_type = btf_type_by_id(btf, size_type_id);
+ 		if (btf_type_nosize_or_null(size_type))
+ 			return NULL;
+ 		else if (btf_type_has_size(size_type))
+ 			size = size_type->size;
+ 		else if (btf_type_is_array(size_type))
+-			size = btf->resolved_sizes[size_type_id];
++			size = btf_resolved_type_size(btf, size_type_id);
+ 		else if (btf_type_is_ptr(size_type))
+ 			size = sizeof(void *);
+ 		else
+@@ -3799,7 +3859,7 @@ static int btf_check_all_metas(struct btf_verifier_env *env)
+ 	cur = btf->nohdr_data + hdr->type_off;
+ 	end = cur + hdr->type_len;
+ 
+-	env->log_type_id = 1;
++	env->log_type_id = btf->base_btf ? btf->start_id : 1;
+ 	while (cur < end) {
+ 		struct btf_type *t = cur;
+ 		s32 meta_size;
+@@ -3826,8 +3886,8 @@ static bool btf_resolve_valid(struct btf_verifier_env *env,
+ 		return false;
+ 
+ 	if (btf_type_is_struct(t) || btf_type_is_datasec(t))
+-		return !btf->resolved_ids[type_id] &&
+-		       !btf->resolved_sizes[type_id];
++		return !btf_resolved_type_id(btf, type_id) &&
++		       !btf_resolved_type_size(btf, type_id);
+ 
+ 	if (btf_type_is_modifier(t) || btf_type_is_ptr(t) ||
+ 	    btf_type_is_var(t)) {
+@@ -3847,7 +3907,7 @@ static bool btf_resolve_valid(struct btf_verifier_env *env,
+ 		elem_type = btf_type_id_size(btf, &elem_type_id, &elem_size);
+ 		return elem_type && !btf_type_is_modifier(elem_type) &&
+ 			(array->nelems * elem_size ==
+-			 btf->resolved_sizes[type_id]);
++			 btf_resolved_type_size(btf, type_id));
+ 	}
+ 
+ 	return false;
+@@ -3889,7 +3949,8 @@ static int btf_resolve(struct btf_verifier_env *env,
+ static int btf_check_all_types(struct btf_verifier_env *env)
+ {
+ 	struct btf *btf = env->btf;
+-	u32 type_id;
++	const struct btf_type *t;
++	u32 type_id, i;
+ 	int err;
+ 
+ 	err = env_resolve_init(env);
+@@ -3897,8 +3958,9 @@ static int btf_check_all_types(struct btf_verifier_env *env)
+ 		return err;
+ 
+ 	env->phase++;
+-	for (type_id = 1; type_id <= btf->nr_types; type_id++) {
+-		const struct btf_type *t = btf_type_by_id(btf, type_id);
++	for (i = btf->base_btf ? 0 : 1; i < btf->nr_types; i++) {
++		type_id = btf->start_id + i;
++		t = btf_type_by_id(btf, type_id);
+ 
+ 		env->log_type_id = type_id;
+ 		if (btf_type_needs_resolve(t) &&
+@@ -3935,7 +3997,7 @@ static int btf_parse_type_sec(struct btf_verifier_env *env)
+ 		return -EINVAL;
+ 	}
+ 
+-	if (!hdr->type_len) {
++	if (!env->btf->base_btf && !hdr->type_len) {
+ 		btf_verifier_log(env, "No type found");
+ 		return -EINVAL;
+ 	}
+@@ -3962,13 +4024,18 @@ static int btf_parse_str_sec(struct btf_verifier_env *env)
+ 		return -EINVAL;
+ 	}
+ 
+-	if (!hdr->str_len || hdr->str_len - 1 > BTF_MAX_NAME_OFFSET ||
+-	    start[0] || end[-1]) {
++	btf->strings = start;
++
++	if (btf->base_btf && !hdr->str_len)
++		return 0;
++	if (!hdr->str_len || hdr->str_len - 1 > BTF_MAX_NAME_OFFSET || end[-1]) {
++		btf_verifier_log(env, "Invalid string section");
++		return -EINVAL;
++	}
++	if (!btf->base_btf && start[0]) {
+ 		btf_verifier_log(env, "Invalid string section");
+ 		return -EINVAL;
+ 	}
+-
+-	btf->strings = start;
+ 
+ 	return 0;
+ }
+@@ -4909,7 +4976,7 @@ static int __get_type_size(struct btf *btf, u32 btf_id,
+ 	while (t && btf_type_is_modifier(t))
+ 		t = btf_type_by_id(btf, t->type);
+ 	if (!t) {
+-		*bad_type = btf->types[0];
++		*bad_type = btf_type_by_id(btf, 0);
+ 		return -EINVAL;
+ 	}
+ 	if (btf_type_is_ptr(t))
 -- 
 2.24.1
 
