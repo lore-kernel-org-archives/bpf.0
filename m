@@ -7,65 +7,65 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 649BDC55ABD
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BC26FC5517A
 	for <bpf@archiver.kernel.org>; Tue, 10 Nov 2020 16:43:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0B674205CB
-	for <bpf@archiver.kernel.org>; Tue, 10 Nov 2020 16:43:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6548C20809
+	for <bpf@archiver.kernel.org>; Tue, 10 Nov 2020 16:43:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lRvu9QeD"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="D1c6u/Q7"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730432AbgKJQnr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Nov 2020 11:43:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53518 "EHLO
+        id S1730473AbgKJQns (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Nov 2020 11:43:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730299AbgKJQnq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Nov 2020 11:43:46 -0500
+        with ESMTP id S1730108AbgKJQnr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Nov 2020 11:43:47 -0500
 Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C599C0613CF
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2020 08:43:45 -0800 (PST)
-Received: by mail-wr1-x443.google.com with SMTP id r17so9473568wrw.1
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2020 08:43:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7BFC0613CF
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2020 08:43:47 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id k2so10014285wrx.2
+        for <bpf@vger.kernel.org>; Tue, 10 Nov 2020 08:43:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=TyxsQyLla1zclispG+4axUyIMnk5XI6pp50Xi/hRHCg=;
-        b=lRvu9QeDUXvFCpJx6aJDdw5xyVT4J992cOM4YPW2ZCQ0qWixjkRccsTG2ZebUB1oxW
-         V7ZMw1sKC+Vpx1dGAdYEnrexKIcP0fDyWxjpeMj0wyfZHbdVi8ui2Ia0LKT+83yz7Ice
-         1eJvMHYP/iBrApt/tFTqWWOtlXat6RhEJNRr0jJgGGYQr+2qKf3ps9uZ26BlgriEwJj6
-         1tPftHBExXomBI5Tdq95gv4TEzy3UUn7aoTkkwq5TnNiKQHoaWFv39caLiGh380VNuVB
-         dsjgC4qlLS7bcyWX6awbBrPsVdOcll0pxlQyYWKCe/HH34n9dzNQct+NsX2uHmfR7NHe
-         RyHg==
+        bh=QKZ4+2eyEb4R1RRmvhM/k0lBeo2ErDz99RkSgDH/CpM=;
+        b=D1c6u/Q7Uivtn1YqumM/Mx5XpBbog/Tpl2dysPAcY7xtJNaZELtI+Fg8rDqBQeqLAZ
+         Zmx/rT9ingEjcqrtwdsPU+gkpgQRhEj3cb+Anqw0uD/22n1IheDiQw0wxxLLNJWKcWI9
+         A0+OKDJ7LTVFqm2MYJwK0he6BLNY9Y8RleEbIxA/62zX/glci4sfSaXOXRCL1OA/MDMI
+         xXsFpt30V9kg6VUN3P2EWkINQ+S/hCQUCd1mkB3/OWIEgUKaN2nZzrUFdEiqLIJU4FCz
+         TFv/ZcXUJfPAaN8rJM89d638wzCxFPginIKs1fxgC9GvKe8cyF76vLeta/09WEBROeWk
+         aNBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=TyxsQyLla1zclispG+4axUyIMnk5XI6pp50Xi/hRHCg=;
-        b=QcqA7snscOcyBnwLXvtCfv7rlSUAHR2tYSf8ZKY95Kgi4e7tQMG9q+9MJW3z1IrqP7
-         +Xw/pBcYjgCJIN23bGLfoRR6NhaDW+1DghXedh+TUkDQ/mMxAvyDfWiCUcMH4pFM0ZLY
-         twvJcZVlMmfycfkvz3ZprtzeWr4AcwT9EIOra4ebuyDIe2Dc8uzAw0S9m4MyoNvs8rVl
-         iYdKEgjt8gEFz/egwZYeG1OqGi43I72p/y+04K34r4ebdD+SdV487MX+IcDh+6bUJBTq
-         yh6dmtApi96Q3SJFp754Nn8zeW+DDw2AuABqQuJqZDaB8cM9GEYW22OBg2u2a1LbIEap
-         CK5w==
-X-Gm-Message-State: AOAM531S82Wv6XtgIBUXiq2qIGvzV+u5EQzKOVen0vk2ktc9qkPbxtP0
-        Ldc+lD3K6JTOkR3NERVCGv48SA==
-X-Google-Smtp-Source: ABdhPJzYQi3SiNNG6uhpQ32ZgSPvA4i+S4zQ2Y7aG43xODiLADxgdushkfONnwJl1oDyvbQHSHTM7A==
-X-Received: by 2002:adf:c143:: with SMTP id w3mr24702098wre.62.1605026623908;
-        Tue, 10 Nov 2020 08:43:43 -0800 (PST)
+        bh=QKZ4+2eyEb4R1RRmvhM/k0lBeo2ErDz99RkSgDH/CpM=;
+        b=H79VngsnBlhCcqZn2zDIN4LRs+8NbIYXDIzC34KJi/RVb85CONR76HFP/Qn7VyfNLp
+         xo9Zt54yu1n9v8611I9v22Pip40HCycgbUgazBoLrB7XabgRe0stS4AaGEphlxFp25c9
+         odKb3NWO0hltB7/8oMX1f/RPZy2abGjR5+TRBtvfy6BAB+AxfY9dttj1XK2XhAT/YmkT
+         ws3ssrln1DH8EVy3Q+i0/WFIsB1GJK5zpXyPHqrHduDu3lvLeeWRb8mXBrT8hhERTvn+
+         ISnhJfA1N3zBqnK1rIkn6+LFUyV2R6pvS9GXnqNCvBIbaib/GzaKiiyTxVnUO8p85aev
+         kQbg==
+X-Gm-Message-State: AOAM531nFlTPNkNjhO2O+jFyh0CoiLbRSEFxFgurxkxMFRy1oj3vvFAH
+        EmvohMafHEmOQbvBhDQK/s8q1A==
+X-Google-Smtp-Source: ABdhPJwIo2ZPFRCBHa/r8BrH6Q0b5zggNR7iQI+uIpmQqCkhmMYKmHzCeSNGlZpJD8Y0DIgPjRIlng==
+X-Received: by 2002:a5d:4a07:: with SMTP id m7mr23698904wrq.316.1605026626076;
+        Tue, 10 Nov 2020 08:43:46 -0800 (PST)
 Received: from localhost.localdomain ([2001:1715:4e26:a7e0:116c:c27a:3e7f:5eaf])
-        by smtp.gmail.com with ESMTPSA id n123sm3272268wmn.38.2020.11.10.08.43.42
+        by smtp.gmail.com with ESMTPSA id n123sm3272268wmn.38.2020.11.10.08.43.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Nov 2020 08:43:43 -0800 (PST)
+        Tue, 10 Nov 2020 08:43:45 -0800 (PST)
 From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
 To:     ast@kernel.org, daniel@iogearbox.net
 Cc:     bpf@vger.kernel.org, kafai@fb.com, songliubraving@fb.com,
         yhs@fb.com, andriin@fb.com, john.fastabend@gmail.com,
         kpsingh@chromium.org,
         Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH bpf-next v3 2/7] tools/bpftool: Force clean of out-of-tree build
-Date:   Tue, 10 Nov 2020 17:43:06 +0100
-Message-Id: <20201110164310.2600671-3-jean-philippe@linaro.org>
+Subject: [PATCH bpf-next v3 4/7] tools/runqslower: Use Makefile.include
+Date:   Tue, 10 Nov 2020 17:43:08 +0100
+Message-Id: <20201110164310.2600671-5-jean-philippe@linaro.org>
 X-Mailer: git-send-email 2.29.1
 In-Reply-To: <20201110164310.2600671-1-jean-philippe@linaro.org>
 References: <20201110164310.2600671-1-jean-philippe@linaro.org>
@@ -75,45 +75,89 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Cleaning a partial build can fail if the output directory for libbpf
-wasn't created:
-
-$ make -C tools/bpf/bpftool O=/tmp/bpf clean
-/bin/sh: line 0: cd: /tmp/bpf/libbpf/: No such file or directory
-tools/scripts/Makefile.include:17: *** output directory "/tmp/bpf/libbpf/" does not exist.  Stop.
-make: *** [Makefile:36: /tmp/bpf/libbpf/libbpf.a-clean] Error 2
-
-As a result make never gets around to clearing the leftover objects. Add
-the libbpf output directory as clean dependency to ensure clean always
-succeeds (similarly to the "descend" macro). The directory is later
-removed by the clean recipe.
+Makefile.include defines variables such as OUTPUT and CC for out-of-tree
+build and cross-build. Include it into the runqslower Makefile and use
+its $(QUIET*) helpers.
 
 Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 ---
- tools/bpf/bpftool/Makefile | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ tools/bpf/runqslower/Makefile | 24 +++++++++---------------
+ 1 file changed, 9 insertions(+), 15 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index f60e6ad3a1df..1358c093b812 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -27,11 +27,13 @@ LIBBPF = $(LIBBPF_PATH)libbpf.a
- 
- BPFTOOL_VERSION ?= $(shell make -rR --no-print-directory -sC ../../.. kernelversion)
- 
--$(LIBBPF): FORCE
--	$(if $(LIBBPF_OUTPUT),@mkdir -p $(LIBBPF_OUTPUT))
-+$(LIBBPF_OUTPUT):
-+	$(QUIET_MKDIR)mkdir -p $@
+diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
+index fb1337d69868..bcc4a7396713 100644
+--- a/tools/bpf/runqslower/Makefile
++++ b/tools/bpf/runqslower/Makefile
+@@ -1,4 +1,6 @@
+ # SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
++include ../../scripts/Makefile.include
 +
-+$(LIBBPF): FORCE | $(LIBBPF_OUTPUT)
- 	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_OUTPUT) $(LIBBPF_OUTPUT)libbpf.a
+ OUTPUT := .output
+ CLANG ?= clang
+ LLC ?= llc
+@@ -21,10 +23,8 @@ VMLINUX_BTF_PATH := $(or $(VMLINUX_BTF),$(firstword			       \
+ abs_out := $(abspath $(OUTPUT))
+ ifeq ($(V),1)
+ Q =
+-msg =
+ else
+ Q = @
+-msg = @printf '  %-8s %s%s\n' "$(1)" "$(notdir $(2))" "$(if $(3), $(3))";
+ MAKEFLAGS += --no-print-directory
+ submake_extras := feature_display=0
+ endif
+@@ -37,12 +37,11 @@ all: runqslower
+ runqslower: $(OUTPUT)/runqslower
  
--$(LIBBPF)-clean:
-+$(LIBBPF)-clean: $(LIBBPF_OUTPUT)
- 	$(call QUIET_CLEAN, libbpf)
- 	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_OUTPUT) clean >/dev/null
+ clean:
+-	$(call msg,CLEAN)
++	$(call QUIET_CLEAN, runqslower)
+ 	$(Q)rm -rf $(OUTPUT) runqslower
  
+ $(OUTPUT)/runqslower: $(OUTPUT)/runqslower.o $(BPFOBJ)
+-	$(call msg,BINARY,$@)
+-	$(Q)$(CC) $(CFLAGS) $^ -lelf -lz -o $@
++	$(QUIET_LINK)$(CC) $(CFLAGS) $^ -lelf -lz -o $@
+ 
+ $(OUTPUT)/runqslower.o: runqslower.h $(OUTPUT)/runqslower.skel.h	      \
+ 			$(OUTPUT)/runqslower.bpf.o
+@@ -50,31 +49,26 @@ $(OUTPUT)/runqslower.o: runqslower.h $(OUTPUT)/runqslower.skel.h	      \
+ $(OUTPUT)/runqslower.bpf.o: $(OUTPUT)/vmlinux.h runqslower.h
+ 
+ $(OUTPUT)/%.skel.h: $(OUTPUT)/%.bpf.o | $(BPFTOOL)
+-	$(call msg,GEN-SKEL,$@)
+-	$(Q)$(BPFTOOL) gen skeleton $< > $@
++	$(QUIET_GEN)$(BPFTOOL) gen skeleton $< > $@
+ 
+ $(OUTPUT)/%.bpf.o: %.bpf.c $(BPFOBJ) | $(OUTPUT)
+-	$(call msg,BPF,$@)
+-	$(Q)$(CLANG) -g -O2 -target bpf $(INCLUDES)			      \
++	$(QUIET_GEN)$(CLANG) -g -O2 -target bpf $(INCLUDES)		      \
+ 		 -c $(filter %.c,$^) -o $@ &&				      \
+ 	$(LLVM_STRIP) -g $@
+ 
+ $(OUTPUT)/%.o: %.c | $(OUTPUT)
+-	$(call msg,CC,$@)
+-	$(Q)$(CC) $(CFLAGS) $(INCLUDES) -c $(filter %.c,$^) -o $@
++	$(QUIET_CC)$(CC) $(CFLAGS) $(INCLUDES) -c $(filter %.c,$^) -o $@
+ 
+ $(OUTPUT):
+-	$(call msg,MKDIR,$@)
+-	$(Q)mkdir -p $(OUTPUT)
++	$(QUIET_MKDIR)mkdir -p $(OUTPUT)
+ 
+ $(OUTPUT)/vmlinux.h: $(VMLINUX_BTF_PATH) | $(OUTPUT) $(BPFTOOL)
+-	$(call msg,GEN,$@)
+ 	$(Q)if [ ! -e "$(VMLINUX_BTF_PATH)" ] ; then \
+ 		echo "Couldn't find kernel BTF; set VMLINUX_BTF to"	       \
+ 			"specify its location." >&2;			       \
+ 		exit 1;\
+ 	fi
+-	$(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF_PATH) format c > $@
++	$(QUIET_GEN)$(BPFTOOL) btf dump file $(VMLINUX_BTF_PATH) format c > $@
+ 
+ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(OUTPUT)
+ 	$(Q)$(MAKE) $(submake_extras) -C $(LIBBPF_SRC)			       \
 -- 
 2.29.1
 
