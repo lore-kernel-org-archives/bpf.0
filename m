@@ -2,100 +2,154 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60DD8C388F7
-	for <bpf@archiver.kernel.org>; Tue, 10 Nov 2020 15:38:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BD5FC5517A
+	for <bpf@archiver.kernel.org>; Tue, 10 Nov 2020 15:40:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0EBC720797
-	for <bpf@archiver.kernel.org>; Tue, 10 Nov 2020 15:38:35 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="X89BvV6E"
+	by mail.kernel.org (Postfix) with ESMTP id C2F7121741
+	for <bpf@archiver.kernel.org>; Tue, 10 Nov 2020 15:40:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732543AbgKJPia (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 10 Nov 2020 10:38:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35868 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730511AbgKJPi2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 10 Nov 2020 10:38:28 -0500
-Received: from lore-desk.redhat.com (unknown [151.66.8.153])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1731105AbgKJPkk convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 10 Nov 2020 10:40:40 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:25922 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731108AbgKJPka (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 10 Nov 2020 10:40:30 -0500
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-575-3yjYcJAqPwG8xhiQ9uBrsQ-1; Tue, 10 Nov 2020 10:40:22 -0500
+X-MC-Unique: 3yjYcJAqPwG8xhiQ9uBrsQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 091212068D;
-        Tue, 10 Nov 2020 15:38:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605022707;
-        bh=4gnREmuwSa2XungGUD/o8nxhAxK6wXA9b7cFmNq7Mss=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X89BvV6E07wqZD05WNT/S5k0Ft6NnYbr4LvpkoDwfzmBxz5Zctt6qgc6O4nNQ9bQV
-         sHQgMsWWqaSVhPOTva8taUl/W1TN8YammBSjo5BdJD+xS0eKK1FcLUM9ClneNyeaBi
-         r1TA8GJJIElmRMeT5PLf5DGjMU95kycOU0ncIgUA=
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        lorenzo.bianconi@redhat.com, brouer@redhat.com,
-        ilias.apalodimas@linaro.org
-Subject: [PATCH v5 net-nex 4/5] net: mvpp2: add xdp tx return bulking support
-Date:   Tue, 10 Nov 2020 16:37:59 +0100
-Message-Id: <46c77bc9ae56f7dd5c9ae047b78ed54ac9e3b42a.1605020963.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1605020963.git.lorenzo@kernel.org>
-References: <cover.1605020963.git.lorenzo@kernel.org>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AE416800688;
+        Tue, 10 Nov 2020 15:40:20 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.194.170])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2C9065D9D2;
+        Tue, 10 Nov 2020 15:40:18 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Yonghong Song <yhs@fb.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: [PATCHv6 bpf] bpf: Move iterator functions into special init section
+Date:   Tue, 10 Nov 2020 16:40:17 +0100
+Message-Id: <20201110154017.482352-1-jolsa@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Convert mvpp2 driver to xdp_return_frame_bulk APIs.
+With upcoming changes to pahole, that change the way how and
+which kernel functions are stored in BTF data, we need a way
+to recognize iterator functions.
 
-XDP_REDIRECT (upstream codepath): 1.79Mpps
-XDP_REDIRECT (upstream codepath + bulking APIs): 1.93Mpps
+Iterator functions need to be in BTF data, but have no real
+body and are currently placed in .init.text section, so they
+are freed after kernel init and are filtered out of BTF data
+because of that.
 
-Tested-by: Matteo Croce <mcroce@microsoft.com>
-Co-developed-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+The solution is to place these functions under new section:
+  .init.bpf.preserve_type
+
+And add 2 new symbols to mark that area:
+  __init_bpf_preserve_type_begin
+  __init_bpf_preserve_type_end
+
+The code in pahole responsible for picking up the functions will
+be able to recognize functions from this section and add them to
+the BTF data and filter out all other .init.text functions.
+
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Suggested-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Jiri Olsa <jolsa@redhat.com>
 ---
- drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+v6 changes:
+  - simplify the change and add comment to bpf.h header based
+    on David's suggestion and remove the init.h change
+  - removing acks, because of the new changes
 
-diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-index f6616c8933ca..3069e192d773 100644
---- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-+++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-@@ -2440,8 +2440,13 @@ static void mvpp2_txq_bufs_free(struct mvpp2_port *port,
- 				struct mvpp2_tx_queue *txq,
- 				struct mvpp2_txq_pcpu *txq_pcpu, int num)
- {
-+	struct xdp_frame_bulk bq;
- 	int i;
- 
-+	xdp_frame_bulk_init(&bq);
-+
-+	rcu_read_lock(); /* need for xdp_return_frame_bulk */
-+
- 	for (i = 0; i < num; i++) {
- 		struct mvpp2_txq_pcpu_buf *tx_buf =
- 			txq_pcpu->buffs + txq_pcpu->txq_get_index;
-@@ -2454,10 +2459,13 @@ static void mvpp2_txq_bufs_free(struct mvpp2_port *port,
- 			dev_kfree_skb_any(tx_buf->skb);
- 		else if (tx_buf->type == MVPP2_TYPE_XDP_TX ||
- 			 tx_buf->type == MVPP2_TYPE_XDP_NDO)
--			xdp_return_frame(tx_buf->xdpf);
-+			xdp_return_frame_bulk(tx_buf->xdpf, &bq);
- 
- 		mvpp2_txq_inc_get(txq_pcpu);
+ include/asm-generic/vmlinux.lds.h | 16 +++++++++++++++-
+ include/linux/bpf.h               | 12 +++++++++++-
+ 2 files changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+index b2b3d81b1535..f91029b3443b 100644
+--- a/include/asm-generic/vmlinux.lds.h
++++ b/include/asm-generic/vmlinux.lds.h
+@@ -685,8 +685,21 @@
+ 	.BTF_ids : AT(ADDR(.BTF_ids) - LOAD_OFFSET) {			\
+ 		*(.BTF_ids)						\
  	}
-+	xdp_flush_frame_bulk(&bq);
 +
-+	rcu_read_unlock();
- }
++/*
++ * .init.bpf.preserve_type
++ *
++ * This section store special BPF function and marks them
++ * with begin/end symbols pair for the sake of pahole tool.
++ */
++#define INIT_BPF_PRESERVE_TYPE						\
++	__init_bpf_preserve_type_begin = .;                             \
++	*(.init.bpf.preserve_type)                                      \
++	__init_bpf_preserve_type_end = .;				\
++	MEM_DISCARD(init.bpf.preserve_type)
+ #else
+ #define BTF
++#define INIT_BPF_PRESERVE_TYPE
+ #endif
  
- static inline struct mvpp2_rx_queue *mvpp2_get_rx_queue(struct mvpp2_port *port,
+ /*
+@@ -741,7 +754,8 @@
+ #define INIT_TEXT							\
+ 	*(.init.text .init.text.*)					\
+ 	*(.text.startup)						\
+-	MEM_DISCARD(init.text*)
++	MEM_DISCARD(init.text*)						\
++	INIT_BPF_PRESERVE_TYPE
+ 
+ #define EXIT_DATA							\
+ 	*(.exit.data .exit.data.*)					\
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 2b16bf48aab6..1739a92516ed 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1276,10 +1276,20 @@ struct bpf_link *bpf_link_get_from_fd(u32 ufd);
+ int bpf_obj_pin_user(u32 ufd, const char __user *pathname);
+ int bpf_obj_get_user(const char __user *pathname, int flags);
+ 
++/* In case we generate BTF data, we need to group all iterator
++ * functions into special init section, so pahole can track them.
++ * Otherwise pure __init section is enough.
++ */
++#ifdef CONFIG_DEBUG_INFO_BTF
++#define __init_bpf_preserve_type __section(".init.bpf.preserve_type")
++#else
++#define __init_bpf_preserve_type __init
++#endif
++
+ #define BPF_ITER_FUNC_PREFIX "bpf_iter_"
+ #define DEFINE_BPF_ITER_FUNC(target, args...)			\
+ 	extern int bpf_iter_ ## target(args);			\
+-	int __init bpf_iter_ ## target(args) { return 0; }
++	int __init_bpf_preserve_type bpf_iter_ ## target(args) { return 0; }
+ 
+ struct bpf_iter_aux_info {
+ 	struct bpf_map *map;
 -- 
 2.26.2
 
