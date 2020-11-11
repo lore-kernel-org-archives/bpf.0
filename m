@@ -2,285 +2,115 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-8.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C15CC56202
-	for <bpf@archiver.kernel.org>; Wed, 11 Nov 2020 22:43:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF772C388F9
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 01:32:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C0682151B
-	for <bpf@archiver.kernel.org>; Wed, 11 Nov 2020 22:43:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5C2CC20791
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 01:32:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p34Op9HF"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="vQitJ22q";
+	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Q6UYuzcx"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726970AbgKKWnu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 11 Nov 2020 17:43:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54032 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726203AbgKKWlr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 11 Nov 2020 17:41:47 -0500
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86A7C061A49;
-        Wed, 11 Nov 2020 14:33:22 -0800 (PST)
-Received: by mail-yb1-xb41.google.com with SMTP id 2so3380802ybc.12;
-        Wed, 11 Nov 2020 14:33:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jb6xUdM/LpLTOZW3X6Y/EQoOSxyDYWTFF9RUv5ehhQc=;
-        b=p34Op9HFcRQsnxzbh8yb2CoYD5PqYuC+xPR2mMEdiqtfycl3LNLgaDHlsGJBMPdi1i
-         qedhV+M06rsAVltBjVvYhZa4n/G4RMppuniLEdn3fJ1Gn2wnQFsxnom00F/4HgS5QOo5
-         4GXHczs28xP+UdPxcszmtwHNRfSN1mR739pU5jcRcHdEmxUVXYQ3IJBOoZ1Q8kJMD4WV
-         SRJXqdCjUZt9hHu8jkm1tJOrdqO/2NLWWKRdbPojkoLy48lIU6zxCOYNdRiLkXMGtIAP
-         6l0qY7jBzV4LGD0S7gajgv+lHi7vx7+dv9gsi3JmAx8927vz+QGDA+goMXTQxYXo+3aH
-         Gcaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jb6xUdM/LpLTOZW3X6Y/EQoOSxyDYWTFF9RUv5ehhQc=;
-        b=hVT/aay0otzXWKTbOxAtIsXiE1/kNWsxV5tqMD5LdkbSgJ33GkfsfgfoNWWCIWPrFh
-         KhsqlfukfFwh8TENqT4j+zMqYt4d0vz/3iq+mrVg3zJ6VU8e6BYNCG3R/2jm5+D9AEpE
-         yc3pOIp05PIbQGow0/kUo9jVuK5OJyCMqfK4J87wKgVg4krr786vPrYyp3o6d8NKuaqw
-         x3OBFGrLlXx1NUuoVNiKCM7akqYz3+sp9KQgzDCkIqhWV/w3WNnUCuxnYZpSwW6LQxn2
-         Ce1/c2qo1UK82o66vK8le9A7BCHz5Q42Rd8cSDYd+bXzj4vCEB2eRKk3foZasUcorXAc
-         WZjg==
-X-Gm-Message-State: AOAM532ORtwEEypMUf6+XTSEcQw4k5ARCL/mCmli4/t2BBvntck75nxV
-        RhtnaQjywTybC6dq0Frp6gmKUegNU3Xy7kHnOqQ=
-X-Google-Smtp-Source: ABdhPJxO+/rL8mVU+Ph54MK8e/eD8ubsUrU9U5z7jQkl+OHsJ4insUUpxNUVgtexUMsxELTg9+3vvMyugNzOi55d+CI=
-X-Received: by 2002:a25:df8e:: with SMTP id w136mr10098441ybg.230.1605134002053;
- Wed, 11 Nov 2020 14:33:22 -0800 (PST)
-MIME-Version: 1.0
-References: <20201110210342.146242-1-me@ubique.spb.ru> <CAEf4BzZQSJZMRRvfzHUE+dhyMdP2BTkeXaVyrNymFbepymvj5Q@mail.gmail.com>
- <20201111103826.GA198626@dbanschikov-fedora-PC0VG1WZ.DHCP.thefacebook.com>
-In-Reply-To: <20201111103826.GA198626@dbanschikov-fedora-PC0VG1WZ.DHCP.thefacebook.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 11 Nov 2020 14:33:11 -0800
-Message-ID: <CAEf4Bzasys6pG5uKHTUJCi1Tw0+N2_8mvx=ia9uFD90ECrNq4w@mail.gmail.com>
-Subject: Re: [PATCH] bpf: relax return code check for subprograms
-To:     Dmitrii Banshchikov <me@ubique.spb.ru>
-Cc:     bpf <bpf@vger.kernel.org>, Kernel Team <kernel-team@fb.com>,
-        Andrey Ignatov <rdna@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Networking <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1728220AbgKLBcC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 11 Nov 2020 20:32:02 -0500
+Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:58531 "EHLO
+        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727035AbgKKWo4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 11 Nov 2020 17:44:56 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 0C255953;
+        Wed, 11 Nov 2020 17:44:53 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 11 Nov 2020 17:44:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
+        mime-version:content-transfer-encoding:content-type:from:to:cc
+        :subject:date:message-id:in-reply-to; s=fm2; bh=UJhI0Jwd4ebO9DiK
+        T8gR7UB5jh1vkIQ9vDaGY4SHBqw=; b=vQitJ22qA12PE2xaTRHybhEyAvUo9B6F
+        A4HP+0Xsmrof300UnTjpUMhJXLhXFvouE/g7hBJU+dqlnbcQ32CJcOtXNEu3dscL
+        T0A9e1j6RPn5utRVTMF0sGVXhtS/GbBgoK1W8YQuuZA3X0cJ5xf+F+x+q9oN7W0u
+        MLFRjvruCsR1AN5lo+6BRFNrPbsMFidLGD36yy/dtkMPD/n6YhO4wugy3mEoblkN
+        yt3tkeJDzxuv/O5R8JHglCmCEfCsSMemrtMEEqS5EPhNd80DR5B2htNcFySva1rC
+        PUi/OnT3KPbnZeyN+27SekCIdDE0+nvsV2nDwvQc4fDfjqbtFMWMCQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; bh=UJhI0Jwd4ebO9DiKT8gR7UB5jh1vkIQ9vDaGY4SHBqw=; b=Q6UYuzcx
+        J8D4Gqu1SCh5maOmvhUf2MyhXF0FA1YdehqC0BK68EJAxClzGpBvMeuBNXqWn/wA
+        3f+OEEkateqqBc6zSuTxOsusj5miAD+5/NIs5qA+p6hApRppyXCvliANKmfRw27f
+        k+DSXh9CqgrD9dvXotmz+J849wBx7937+tM8N08FIVVjxIZmzfCbtlFbTb8Ew8MG
+        Bwa+CT7vH0F5CxbIHMceRTg7MsTDJBzQHXnFj/QXiVvNzz+XzDekjse11+LSZhYu
+        2McQQuWETzA3nHo6lmGCE0jAXJolI7kLoXm4dlLZtK/4oylVe22enyr6wHxtUUhR
+        cxK266REE72awA==
+X-ME-Sender: <xms:ZWmsX-uZDxNuDA56SPRrwf6sYv64VGf6SAajjov6t4SKhCgfhafPtA>
+    <xme:ZWmsXzfHhxgj_TrJghsCA75-bIBFZSiLtv1Ar3otQVpfrYcC0fxwvNbfGC2bcN5S5
+    rq4hI2A2MvM3xIwWw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddvuddgtddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdlvdefmdenucfjughrpegggfgthffvufffkfgjsehtqhertddttdej
+    necuhfhrohhmpedfffgrnhhivghlucgiuhdfuceougiguhesugiguhhuuhdrgiihiieqne
+    cuggftrfgrthhtvghrnhepgeejffduieffgeduveeuvdffieehgfdtueduieelfedvgeeu
+    gfeludejteelueelnecuffhomhgrihhnpehgihhthhhusgdrtghomhdpkhgvrhhnvghlrd
+    horhhgnecukfhppeeiledrudekuddruddthedrieegnecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:ZWmsX5yU374o0QGalsfHLNXK25YXe0OJKK2P8KU3r0ZDMkIq_WWsSg>
+    <xmx:ZWmsX5PaabFWwcYfxESMwQhu9rQ1fk8PSgMggGXpvdmURcjmGLYcbg>
+    <xmx:ZWmsX-_mOdqp2gq_ilTrCeaZiCIIOn91h1nKPT1C3TpQtgczBhAB-Q>
+    <xmx:ZWmsX-xPE4CrMbPf8sM_GWLQRClgkr2XnYL8zfe7jqvvopn0Cj4fvw>
+Received: from localhost (c-69-181-105-64.hsd1.ca.comcast.net [69.181.105.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 493FC3280068;
+        Wed, 11 Nov 2020 17:44:52 -0500 (EST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+From:   "Daniel Xu" <dxu@dxuuu.xyz>
+To:     "Daniel Borkmann" <daniel@iogearbox.net>,
+        "kernel test robot" <oliver.sang@intel.com>
+Cc:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ast@kernel.org>, <songliubraving@fb.com>, <kernel-team@fb.com>,
+        "0day robot" <lkp@intel.com>, <lkp@lists.01.org>
+Subject: Re: [selftest/bpf] b83590ee1a: BUG:KASAN:slab-out-of-bounds_in_l
+Date:   Wed, 11 Nov 2020 14:43:31 -0800
+Message-Id: <C70SQCX55VG2.195MNJP5XSCJ9@maharaja>
+In-Reply-To: <8f040468-f45f-d272-af37-b7e634aeefa9@iogearbox.net>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 2:38 AM Dmitrii Banshchikov <me@ubique.spb.ru> wrote:
->
-> On Tue, Nov 10, 2020 at 08:47:13PM -0800, Andrii Nakryiko wrote:
-> > On Tue, Nov 10, 2020 at 1:03 PM Dmitrii Banshchikov <me@ubique.spb.ru> wrote:
-> > >
-> > > Currently verifier enforces return code checks for subprograms in the
-> > > same manner as it does for program entry points. This prevents returning
-> > > arbitrary scalar values from subprograms. Scalar type of returned values
-> > > is checked by btf_prepare_func_args() and hence it should be safe to
-> > > allow only scalars for now. Relax return code checks for subprograms and
-> > > allow any correct scalar values.
-> > >
-> > > Signed-off-by: Dmitrii Banshchikov <me@ubique.spb.ru>
-> > > Fixes: 51c39bb1d5d10 (bpf: Introduce function-by-function verification)
-> > > ---
-> >
-> > Please make sure that your subject has [PATCH bpf-next], if it's
-> > targeted against bpf-next tree.
-> >
-> > >  kernel/bpf/verifier.c                         | 26 ++++++++++++++-----
-> > >  .../bpf/prog_tests/test_global_funcs.c        |  1 +
-> > >  .../selftests/bpf/progs/test_global_func8.c   | 25 ++++++++++++++++++
-> > >  3 files changed, 45 insertions(+), 7 deletions(-)
-> > >  create mode 100644 tools/testing/selftests/bpf/progs/test_global_func8.c
-> > >
-> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > index 10da26e55130..c108b19e1fad 100644
-> > > --- a/kernel/bpf/verifier.c
-> > > +++ b/kernel/bpf/verifier.c
-> > > @@ -7791,7 +7791,7 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
-> > >         return 0;
-> > >  }
-> > >
-> > > -static int check_return_code(struct bpf_verifier_env *env)
-> > > +static int check_return_code(struct bpf_verifier_env *env, bool is_subprog)
-> > >  {
-> > >         struct tnum enforce_attach_type_range = tnum_unknown;
-> > >         const struct bpf_prog *prog = env->prog;
-> > > @@ -7801,10 +7801,12 @@ static int check_return_code(struct bpf_verifier_env *env)
-> > >         int err;
-> > >
-> > >         /* LSM and struct_ops func-ptr's return type could be "void" */
-> > > -       if ((prog_type == BPF_PROG_TYPE_STRUCT_OPS ||
-> > > -            prog_type == BPF_PROG_TYPE_LSM) &&
-> > > -           !prog->aux->attach_func_proto->type)
-> > > -               return 0;
-> > > +       if (!is_subprog) {
-> >
-> > I think just adding `!is_subprog` && to existing if is cleaner and
-> > more succinct.
-> >
-> > > +               if ((prog_type == BPF_PROG_TYPE_STRUCT_OPS ||
-> > > +                    prog_type == BPF_PROG_TYPE_LSM) &&
-> > > +                   !prog->aux->attach_func_proto->type)
-> > > +                       return 0;
-> > > +       }
-> > >
-> > >         /* eBPF calling convetion is such that R0 is used
-> > >          * to return the value from eBPF program.
-> > > @@ -7821,6 +7823,16 @@ static int check_return_code(struct bpf_verifier_env *env)
-> > >                 return -EACCES;
-> > >         }
-> > >
-> > > +       reg = cur_regs(env) + BPF_REG_0;
-> > > +       if (is_subprog) {
-> > > +               if (reg->type != SCALAR_VALUE) {
-> > > +                       verbose(env, "At subprogram exit the register R0 is not a scalar value (%s)\n",
-> > > +                               reg_type_str[reg->type]);
-> > > +                       return -EINVAL;
-> > > +               }
-> > > +               return 0;
-> > > +       }
-> > > +
-> >
-> > It's not clear why reg->type != SCALAR_VALUE check is done after
-> > prog_type-specific check. Is there any valid case where we'd allow
-> > non-scalar return? Maybe Alexei can chime in here.
-> >
-> > If not, then I'd just move the existing SCALAR_VALUE check below up
-> > here, unconditionally for subprog and non-subprog. And then just exit
-> > after that, if we are processing a subprog.
->
-> As comment says BPF_PROG_TYPE_STRUCT_OPS and BPF_PROG_TYPE_LSM
-> progs may return void. Hence we want allow this only for
-> entry points and not for subprograms as btf_prepare_func_args()
-> guarantees that subprogram return value has SCALAR type.
->
-> Beside that there are other cases when SCALAR type is not
-> enforced for return value: e.g. BPF_PROG_TYPE_TRACING with
-> BPF_MODIFY_RETURN expected attach type.
+Hi Daniel,
 
-I'm surprised we allow returning FP or map_value pointers or something
-like that, regardless of program type. Which is why I raised this
-question. But that's a separate topic, let's punt it.
+On Mon Nov 9, 2020 at 8:54 AM PST, Daniel Borkmann wrote:
+> Hi Daniel,
+>
+> On 11/9/20 3:54 PM, kernel test robot wrote:
+> > Greeting,
+> >=20
+> > FYI, we noticed the following commit (built with gcc-9):
+> >=20
+> > commit: b83590ee1add052518603bae607b0524632b7793 ("[PATCH bpf v3 2/2] s=
+elftest/bpf: Test bpf_probe_read_user_str() strips trailing bytes after NUL=
+")
+> > url: https://github.com/0day-ci/linux/commits/Daniel-Xu/Fix-bpf_probe_r=
+ead_user_str-overcopying/20201106-033210
+> > base: https://git.kernel.org/cgit/linux/kernel/git/bpf/bpf.git master
+>
+> I've tossed them from the tree for now as it looks like these are adding
+> regressions
+> for regular strncpy_from_user() calls, please take a look.
+>
+> Thanks!
 
->
-> >
-> > >         switch (prog_type) {
-> > >         case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
-> > >                 if (env->prog->expected_attach_type == BPF_CGROUP_UDP4_RECVMSG ||
-> > > @@ -7874,7 +7886,6 @@ static int check_return_code(struct bpf_verifier_env *env)
-> > >                 return 0;
-> > >         }
-> > >
-> > > -       reg = cur_regs(env) + BPF_REG_0;
-> > >         if (reg->type != SCALAR_VALUE) {
-> > >                 verbose(env, "At program exit the register R0 is not a known value (%s)\n",
-> > >                         reg_type_str[reg->type]);
-> > > @@ -9266,6 +9277,7 @@ static int do_check(struct bpf_verifier_env *env)
-> > >         int insn_cnt = env->prog->len;
-> > >         bool do_print_state = false;
-> > >         int prev_insn_idx = -1;
-> > > +       const bool is_subprog = env->cur_state->frame[0]->subprogno;
-> >
-> > this can probably be done inside check_return_code(), no?
->
-> No.
-> Frame stack may be empty when check_return_code() is called.
+Sorry about the KASAN issue.
 
-How can that happen? check_reg_arg() in check_return_code() relies on
-having a frame available. So does cur_regs() function, also used
-there. What am I missing?
+I spent a day reproing. The kasan warnings seem a bit misleading but I
+think I have a fix. I'll put a v5 shortly. I'll see if any of the bots
+find errors on it.
 
->
->
-> >
-> > >
-> > >         for (;;) {
-> > >                 struct bpf_insn *insn;
-> > > @@ -9530,7 +9542,7 @@ static int do_check(struct bpf_verifier_env *env)
-> > >                                 if (err)
-> > >                                         return err;
-> > >
-> > > -                               err = check_return_code(env);
-> > > +                               err = check_return_code(env, is_subprog);
-> > >                                 if (err)
-> > >                                         return err;
-> > >  process_bpf_exit:
-> > > diff --git a/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c b/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
-> > > index 193002b14d7f..32e4348b714b 100644
-> > > --- a/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
-> > > +++ b/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
-> > > @@ -60,6 +60,7 @@ void test_test_global_funcs(void)
-> > >                 { "test_global_func5.o" , "expected pointer to ctx, but got PTR" },
-> > >                 { "test_global_func6.o" , "modified ctx ptr R2" },
-> > >                 { "test_global_func7.o" , "foo() doesn't return scalar" },
-> > > +               { "test_global_func8.o" },
-> > >         };
-> > >         libbpf_print_fn_t old_print_fn = NULL;
-> > >         int err, i, duration = 0;
-> > > diff --git a/tools/testing/selftests/bpf/progs/test_global_func8.c b/tools/testing/selftests/bpf/progs/test_global_func8.c
-> > > new file mode 100644
-> > > index 000000000000..1e9a87f30b7c
-> > > --- /dev/null
-> > > +++ b/tools/testing/selftests/bpf/progs/test_global_func8.c
-> > > @@ -0,0 +1,25 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/* Copyright (c) 2020 Facebook */
-> > > +#include <stddef.h>
-> > > +#include <linux/bpf.h>
-> > > +#include <bpf/bpf_helpers.h>
-> > > +
-> > > +__attribute__ ((noinline))
-> >
-> > nit: use __noinline, it's defined in bpf_helpers.h
-> >
-> > > +int bar(struct __sk_buff *skb)
-> > > +{
-> > > +       return bpf_get_prandom_u32();
-> > > +}
-> > > +
-> > > +static __always_inline int foo(struct __sk_buff *skb)
-> >
-> > foo is not essential, just inline it in test_cls below
-> >
-> > > +{
-> > > +       if (!bar(skb))
-> > > +               return 0;
-> > > +
-> > > +       return 1;
-> > > +}
-> > > +
-> > > +SEC("cgroup_skb/ingress")
-> > > +int test_cls(struct __sk_buff *skb)
-> > > +{
-> > > +       return foo(skb);
-> > > +}
-> >
-> > I also wonder what happens if __noinline function has return type
-> > void? Do you mind adding another BPF program that uses non-inline
-> > global void function? We might need to handle that case in the
-> > verifier explicitly.
->
-> btf_prepare_func_args() guarantees that a subprogram may have only
-> SCALAR return type.
-
-Right, I didn't know about this, thanks. We might want to lift that
-restriction eventually.
-
->
-> >
-> >
-> > > --
-> > > 2.24.1
-> > >
+Thanks,
+Daniel
