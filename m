@@ -2,91 +2,137 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A51DC388F9
-	for <bpf@archiver.kernel.org>; Wed, 11 Nov 2020 04:07:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D0108C388F9
+	for <bpf@archiver.kernel.org>; Wed, 11 Nov 2020 04:14:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CE6E420678
-	for <bpf@archiver.kernel.org>; Wed, 11 Nov 2020 04:07:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 77AA421741
+	for <bpf@archiver.kernel.org>; Wed, 11 Nov 2020 04:14:50 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="afZuz/fE"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725870AbgKKEHA convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 10 Nov 2020 23:07:00 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:56450 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725849AbgKKEG7 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 10 Nov 2020 23:06:59 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AB3xGrJ014899
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2020 20:06:58 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 34qye8jvkk-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 10 Nov 2020 20:06:58 -0800
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 10 Nov 2020 20:06:57 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 6880A2EC9377; Tue, 10 Nov 2020 20:06:51 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH bpf-next] bpf: compile out btf_parse_module() if module BTF is not enabled
-Date:   Tue, 10 Nov 2020 20:06:45 -0800
-Message-ID: <20201111040645.903494-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.24.1
+        id S1725903AbgKKEOp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 10 Nov 2020 23:14:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48470 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725870AbgKKEOp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 10 Nov 2020 23:14:45 -0500
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CC1C0613D1;
+        Tue, 10 Nov 2020 20:14:43 -0800 (PST)
+Received: by mail-yb1-xb41.google.com with SMTP id k65so699348ybk.5;
+        Tue, 10 Nov 2020 20:14:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JGIhTX1iYBMgF744IBDkziq2Q7vA4MuCaT2yYSxn/kE=;
+        b=afZuz/fEsATObkVGZ+Bdyj20ctN1tN/V4gTs0dyEazHIIuQ6jPQzez7wr+WEz4atmY
+         +t0QsgNpbbUk0dWgGOuxHImRYr1Ru4MuhwuWSEwpsrYIILV023mM+AtPfiwJmwM+tFCi
+         7nw72CGuZt0KbRRLPXbfVVBDBHQfkawlN9iqzLo7evCak50NXx7qaLKvSBZtalFdr27G
+         eBFMj9kFdWKt8tyIMbjVJYtHvmWJMkIpFLnQjEA862KPJbaPOFnjpXUuq506qmAj1kEF
+         h/512GNHzzcdeqad+yRCkIfWXJRyPk42b1+XMrQ2rcO95xWJV6zOCiYsdnIQDkxeE5lB
+         QbgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JGIhTX1iYBMgF744IBDkziq2Q7vA4MuCaT2yYSxn/kE=;
+        b=I9cozBk7F5/sDL8Kj5K/sw2ZQOKTsBMX0kT/8izceLWaJOgs26YVPBaqUgE6XSeUad
+         J3EURnYqNY/U1FCmdduvrLZYmL1BsBj/nqbuOzMDZvOfhQKMD1Ry80Nfxu9LqhiMw4sK
+         GO7bABE4xa1IjCgoVfN1OrT8AVMTBML5AG82wNZ+wofST82wAHAK6dVB83z9Ji4VCK9e
+         IaHdVYqy7GM0h9g3uqq3GvHyu1bRuuuM0osnGuYEXsD6VUrcUxi7u6iYhqB7y9d7joFx
+         YbKYCJRmG+6CN0kmQoTQpbmj7+d/GBdP3dJ5dTL5grXFoJ7N2O0CTX1jIcnD2g/FHlna
+         F3SA==
+X-Gm-Message-State: AOAM530Ta9F8WHTyz2pKJPfsA5WzFgw1SY3yJ07dauOf0r72wvAyydHj
+        t/SExBfM3BVBjJuMgreMLHCZBHYHJcG3iF7Qv3I=
+X-Google-Smtp-Source: ABdhPJxet7rQw0y6nxIveHE7CF+nZHHpGRcztGpne0cnSSXMkm5i1vlorbi4e29hi04uoltOpCouFuJQaEP8UfOxQco=
+X-Received: by 2002:a25:e701:: with SMTP id e1mr6632254ybh.510.1605068083120;
+ Tue, 10 Nov 2020 20:14:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-11_01:2020-11-10,2020-11-11 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- mlxlogscore=999 clxscore=1015 priorityscore=1501 mlxscore=0 adultscore=0
- phishscore=0 suspectscore=8 malwarescore=0 spamscore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011110018
-X-FB-Internal: deliver
+References: <1605063541-25424-1-git-send-email-kaixuxia@tencent.com>
+In-Reply-To: <1605063541-25424-1-git-send-email-kaixuxia@tencent.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 10 Nov 2020 20:14:32 -0800
+Message-ID: <CAEf4BzZY2-at9-wprCy58hAnQyBLRzK8mYSHyJht3iceFGKX9w@mail.gmail.com>
+Subject: Re: [PATCH v2] bpf: Fix unsigned 'datasec_id' compared with zero in check_pseudo_btf_id
+To:     xiakaixu1987@gmail.com
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Kaixu Xia <kaixuxia@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Make sure btf_parse_module() is compiled out if module BTFs are not enabled.
+On Tue, Nov 10, 2020 at 6:59 PM <xiakaixu1987@gmail.com> wrote:
+>
+> From: Kaixu Xia <kaixuxia@tencent.com>
+>
+> The unsigned variable datasec_id is assigned a return value from the call
+> to check_pseudo_btf_id(), which may return negative error code.
+>
+> Fixes coccicheck warning:
+>
+> ./kernel/bpf/verifier.c:9616:5-15: WARNING: Unsigned expression compared with zero: datasec_id > 0
+>
+> Reported-by: Tosk Robot <tencent_os_robot@tencent.com>
+> Signed-off-by: Kaixu Xia <kaixuxia@tencent.com>
+> ---
+> v2:
+>  -split out datasec_id definition into a separate line.
+>
+>  kernel/bpf/verifier.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 6200519582a6..3fea4fc04e94 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9572,7 +9572,8 @@ static int check_pseudo_btf_id(struct bpf_verifier_env *env,
+>                                struct bpf_insn *insn,
+>                                struct bpf_insn_aux_data *aux)
+>  {
+> -       u32 datasec_id, type, id = insn->imm;
+> +       s32 datasec_id;
+> +       u32 type, id = insn->imm;
+>         const struct btf_var_secinfo *vsi;
+>         const struct btf_type *datasec;
+>         const struct btf_type *t;
+> --
+> 2.20.0
+>
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Fixes: 36e68442d1af ("bpf: Load and verify kernel module BTFs")
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- kernel/bpf/btf.c | 4 ++++
- 1 file changed, 4 insertions(+)
+It would look a bit cleaner if you did it this way:
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 0f1fd2669d69..6b2d508b33d4 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -4478,6 +4478,8 @@ struct btf *btf_parse_vmlinux(void)
- 	return ERR_PTR(err);
- }
- 
-+#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+
- static struct btf *btf_parse_module(const char *module_name, const void *data, unsigned int data_size)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 10da26e55130..f674b1403637 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9585,12 +9585,13 @@ static int check_pseudo_btf_id(struct
+bpf_verifier_env *env,
+                               struct bpf_insn *insn,
+                               struct bpf_insn_aux_data *aux)
  {
- 	struct btf_verifier_env *env = NULL;
-@@ -4547,6 +4549,8 @@ static struct btf *btf_parse_module(const char *module_name, const void *data, u
- 	return ERR_PTR(err);
- }
- 
-+#endif /* CONFIG_DEBUG_INFO_BTF_MODULES */
-+
- struct btf *bpf_prog_get_target_btf(const struct bpf_prog *prog)
- {
- 	struct bpf_prog *tgt_prog = prog->aux->dst_prog;
--- 
-2.24.1
-
+-       u32 datasec_id, type, id = insn->imm;
+        const struct btf_var_secinfo *vsi;
+        const struct btf_type *datasec;
+        const struct btf_type *t;
+        const char *sym_name;
+        bool percpu = false;
++       u32 type, id = insn->imm;
++       s32 datasec_id;
+        u64 addr;
+        int i;
