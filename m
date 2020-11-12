@@ -2,109 +2,133 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05953C2D0A3
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 09:13:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A065AC2D0A3
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 11:42:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8EE00216FD
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 09:13:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3BBA72222A
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 11:42:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Sj+Svp1y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PqWAOovk"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726969AbgKLJNL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Nov 2020 04:13:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
+        id S1727869AbgKLLmP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Nov 2020 06:42:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725995AbgKLJNL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 Nov 2020 04:13:11 -0500
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FC8C0613D1
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 01:13:11 -0800 (PST)
-Received: by mail-wm1-x341.google.com with SMTP id a65so4788324wme.1
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 01:13:11 -0800 (PST)
+        with ESMTP id S1728184AbgKLLl0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Nov 2020 06:41:26 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00C99C0613D1;
+        Thu, 12 Nov 2020 03:41:26 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id w14so4279376pfd.7;
+        Thu, 12 Nov 2020 03:41:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=MMWvNM2NKod6RH0DDPnwOY4cTCe7IjFnchx3Ae0804Y=;
-        b=Sj+Svp1yoLQ2iUoh0GrPBV/dZOTWBU7Y4oxJQcNYgm69y92cdOLxBsYA2X2D2x3ZQ/
-         PkpXOPfRs9aU3J1YcvbSwgxWxoZ/q8WNxcnzJSjm6yzgtX3hoTuxYBP8A3ULCbMrbDt1
-         IinrWuXm/PPwKWXellmHSI0I/n9F7ppeuJpWal+pmtIkqP1F67ouswqxf1dlu303nFdL
-         PWBD2epxT0Mpj72HZtSQILSR/EDDKrLZcNiQbndpUQ9ww8Nq2pTLrr9/QRTEuL3VhKUd
-         th+5d7E6qkD4meL8WpH/duGRjoNUD1nRyz/d7wk5LsiwvpEDFdr22qvVV3R6EMWGZXMS
-         gJng==
+        bh=p+7zqDEUsInVWiiKbv2mU/avNMxBK0HvJzz4eBBZxRg=;
+        b=PqWAOovk2sbOSLyqp3MndWVByj8dXqw5jmHdXY4t1K0YdH7mlmNwQ7p2mJqOl61mNm
+         APbyqGP/F9W0eAn3QScLKpoeNOklbfJscYkh7x+Jn+gizX9XoOxDNvjMklH787D7Y7tc
+         tDpCYM/7c97inoIajWfKhn1cOU4YMJCJnmgJSK9bzLIuKpNFTD/iEVcbh8Xuz3Z176tf
+         w3jVqVQ3ef5/RLkRNYgtEJAJ1OgOEASphiU/ltfjN/u06G8HBZk2aOaMPFPfut9RgX/q
+         h5UtTN3h5FgvKzwukwnUOIX8m0SotZmLHdg7D7HgjcbQwPrML0tu5J/EmNdRKAQU99vH
+         oobA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=MMWvNM2NKod6RH0DDPnwOY4cTCe7IjFnchx3Ae0804Y=;
-        b=FPF1p2Siq4dHURTn8RDHghRGuI7Wc1AcxHUA6xFMO+DR/fAHfI038t8QzJBu2xZbwy
-         ab5+BrQYhUAXOnIWGm+mkhVXgHIRK4Zs+MZiCJ7UqnjhtqfWI7giiUqqKDfYmSVxNBVD
-         djLCwyQjOa3iw2KemwVcboUaXWZPkksTc6P5mH4CPzFYlNBKB5jN4LNM9I36kq7e4NvW
-         mCVd+tdc0pbDLuYNCHAY5PDiw+dPE3zCldSiJdd5VwPMA3uBtTxIjph7tkkPRqdUVWaf
-         gvPYP4XZnngiQM5aAvCMu+g6nXPQd6jdkeZwLi2+FB7tU9yAMYNzNm/UuIv+qdUlDAta
-         4ieg==
-X-Gm-Message-State: AOAM532breSTLpY4a1BCw8RQ4oTc10ZtW8tSay+MJ5aHQ1q6CmJmS/KB
-        19iS734MSvbUDjvEfwPGEny/7A==
-X-Google-Smtp-Source: ABdhPJz62MxTExtiTz1EKqcvrEUYLtyxElcPDk9VEvpXa7GJKc6fCb8EGfSgRvTN35+V82ePDMjLog==
-X-Received: by 2002:a1c:f20d:: with SMTP id s13mr8952292wmc.156.1605172389896;
-        Thu, 12 Nov 2020 01:13:09 -0800 (PST)
-Received: from localhost.localdomain ([2001:1715:4e26:a7e0:116c:c27a:3e7f:5eaf])
-        by smtp.gmail.com with ESMTPSA id p4sm5945118wrm.51.2020.11.12.01.13.08
+        bh=p+7zqDEUsInVWiiKbv2mU/avNMxBK0HvJzz4eBBZxRg=;
+        b=mkoOlwa7MZDLm6MKLSoQARA/JKFWSnhJs4bGhaRSvWRp6+JU48abQuefm7QJeRHiNB
+         DB7YNJQjqJWMTrNrTE8LBnH6uwaWay0cePajW+MCdIG3crqfn0XAYIv+1vR0DKUqVrdw
+         Qn+FhAsnvuuCf82bKNleoZMkbUWjBxJKfWRxntFCbSF8d6TRuq5+7yTVzbSeH+kKRg87
+         jm8GxAXPpbdd4KCUeUe+1BeGBsKYx0+nj2V+JlyXSVEqOFgEyYjC4eCILaTtTdGA24fv
+         t5H701hzZDu2LXc+VLMRHiDav4QwSBSMWMEZnMCnF3CeHnmWc23t6EJgq4B+uK7GuNOg
+         XTUQ==
+X-Gm-Message-State: AOAM533QMW7xy5fl/IuRQsh+xt7gVwrzWlIuaik3L1oqXgxkiEBtlvl4
+        uIncYWhJw7lCKfu2yyNINwt6/kZfFVnqQA==
+X-Google-Smtp-Source: ABdhPJySR8Nb3lqQoX7/ng9AYuz1ZP54Oorn9hNSI0+hRLCCIXYYpr/gvlAeng/Qr5dHi0FqrKEOvg==
+X-Received: by 2002:a63:fc1c:: with SMTP id j28mr24487449pgi.95.1605181285000;
+        Thu, 12 Nov 2020 03:41:25 -0800 (PST)
+Received: from btopel-mobl.ger.intel.com (fmdmzpr03-ext.fm.intel.com. [192.55.54.38])
+        by smtp.gmail.com with ESMTPSA id y8sm6161629pfe.33.2020.11.12.03.41.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2020 01:13:09 -0800 (PST)
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     andrii@kernel.org
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@chromium.org,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH bpf-next 2/2] tools/bpf: Always run the *-clean recipes
-Date:   Thu, 12 Nov 2020 10:10:52 +0100
-Message-Id: <20201112091049.3159055-2-jean-philippe@linaro.org>
-X-Mailer: git-send-email 2.29.1
-In-Reply-To: <20201112091049.3159055-1-jean-philippe@linaro.org>
-References: <20201112091049.3159055-1-jean-philippe@linaro.org>
+        Thu, 12 Nov 2020 03:41:23 -0800 (PST)
+From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
+        maciej.fijalkowski@intel.com, sridhar.samudrala@intel.com,
+        jesse.brandeburg@intel.com, qi.z.zhang@intel.com, kuba@kernel.org,
+        edumazet@google.com, jonathan.lemon@gmail.com, maximmi@nvidia.com
+Subject: [PATCH bpf-next 3/9] xsk: add support for recvmsg()
+Date:   Thu, 12 Nov 2020 12:40:35 +0100
+Message-Id: <20201112114041.131998-4-bjorn.topel@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201112114041.131998-1-bjorn.topel@gmail.com>
+References: <20201112114041.131998-1-bjorn.topel@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Make $(LIBBPF)-clean and $(LIBBPF_BOOTSTRAP)-clean .PHONY targets, in
-case those files exist. And keep consistency within the Makefile by
-making the directory dependencies order-only.
+From: Björn Töpel <bjorn.topel@intel.com>
 
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
----
-See https://lore.kernel.org/bpf/CAEf4BzZqiFeLVYq-X7Z7cypRYSgLFw3dr=-EEoyzWaDJVFfzug@mail.gmail.com/
----
- tools/bpf/bpftool/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Add support for non-blocking recvmsg() to XDP sockets. Previously,
+only sendmsg() was supported by XDP socket. Now, for symmetry and the
+upcoming busy-polling support, recvmsg() is added.
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 804ade95929f..f897cb5fb12d 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -44,11 +44,11 @@ $(LIBBPF_BOOTSTRAP): FORCE | $(LIBBPF_BOOTSTRAP_OUTPUT)
- 	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_BOOTSTRAP_OUTPUT) \
- 		ARCH= CC=$(HOSTCC) LD=$(HOSTLD) $@
+Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+---
+ net/xdp/xsk.c | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index b71a32eeae65..17d51d1a5752 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -474,6 +474,26 @@ static int xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
+ 	return __xsk_sendmsg(sk);
+ }
  
--$(LIBBPF)-clean: $(LIBBPF_OUTPUT)
-+$(LIBBPF)-clean: FORCE | $(LIBBPF_OUTPUT)
- 	$(call QUIET_CLEAN, libbpf)
- 	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_OUTPUT) clean >/dev/null
- 
--$(LIBBPF_BOOTSTRAP)-clean: $(LIBBPF_BOOTSTRAP_OUTPUT)
-+$(LIBBPF_BOOTSTRAP)-clean: FORCE | $(LIBBPF_BOOTSTRAP_OUTPUT)
- 	$(call QUIET_CLEAN, libbpf-bootstrap)
- 	$(Q)$(MAKE) -C $(BPF_DIR) OUTPUT=$(LIBBPF_BOOTSTRAP_OUTPUT) clean >/dev/null
- 
++static int xsk_recvmsg(struct socket *sock, struct msghdr *m, size_t len, int flags)
++{
++	bool need_wait = !(flags & MSG_DONTWAIT);
++	struct sock *sk = sock->sk;
++	struct xdp_sock *xs = xdp_sk(sk);
++
++	if (unlikely(!(xs->dev->flags & IFF_UP)))
++		return -ENETDOWN;
++	if (unlikely(!xs->rx))
++		return -ENOBUFS;
++	if (unlikely(!xsk_is_bound(xs)))
++		return -ENXIO;
++	if (unlikely(need_wait))
++		return -EOPNOTSUPP;
++
++	if (xs->pool->cached_need_wakeup & XDP_WAKEUP_RX && xs->zc)
++		return xsk_wakeup(xs, XDP_WAKEUP_RX);
++	return 0;
++}
++
+ static __poll_t xsk_poll(struct file *file, struct socket *sock,
+ 			     struct poll_table_struct *wait)
+ {
+@@ -1134,7 +1154,7 @@ static const struct proto_ops xsk_proto_ops = {
+ 	.setsockopt	= xsk_setsockopt,
+ 	.getsockopt	= xsk_getsockopt,
+ 	.sendmsg	= xsk_sendmsg,
+-	.recvmsg	= sock_no_recvmsg,
++	.recvmsg	= xsk_recvmsg,
+ 	.mmap		= xsk_mmap,
+ 	.sendpage	= sock_no_sendpage,
+ };
 -- 
-2.29.1
+2.27.0
 
