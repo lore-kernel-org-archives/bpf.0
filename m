@@ -8,40 +8,40 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4695AC5519F
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:37:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86731C2D0E4
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:37:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EF8AD22227
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:37:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3EF3120825
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:37:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="G8SA88/S"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="rU5oSeeZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727733AbgKLWhl (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Nov 2020 17:37:41 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:29746 "EHLO
+        id S1726391AbgKLWhz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Nov 2020 17:37:55 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:63542 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727558AbgKLWgb (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 12 Nov 2020 17:36:31 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0ACMNnp4025159
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 14:36:30 -0800
+        by vger.kernel.org with ESMTP id S1726275AbgKLWg3 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 12 Nov 2020 17:36:29 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0ACMP2XJ014161
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 14:36:29 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=UcQLkGzmCCzxtZnn+cvMyPMDVngBz1PvcNY/9AFbCeE=;
- b=G8SA88/SHms5gIuADun0Jp+xwvYTMpUac+eZ6mvNfXDpMX2l60S0ziVo6G9HtkBPPDXS
- fSZPv4ev00dZdbxq1w5hxCUFLwLiUJKRqPKddZ2rl5ZRn/6KpRiRbBRhOJQW4QAmhnWw
- TL8yj+4MvG1bWyP4YUK04a/KbcKZ/5RG3CU= 
+ bh=wD+NVx56YELtcSrWQbdTPkvWMrsvSTQmAm2aG4+C/0c=;
+ b=rU5oSeeZas3N3McTegrElta2lgLrBYhtRFuOioBWJc++hHg6WwIxvx4SE0wzxhSfr8TU
+ EsBOtCSf1jz7ucffGtA2YJhHmtaYKbNYpNRrbYX0YjBcZSfIEeY21mJfSrb7CjxqZ2v5
+ 87+0DMbxfxbYtHdKmMKFhsvG5DQ1ym4P50w= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 34s7getq7y-14
+        by mx0a-00082601.pphosted.com with ESMTP id 34r5vnd2p9-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 14:36:30 -0800
-Received: from intmgw002.06.prn3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 14:36:28 -0800
+Received: from intmgw002.06.prn3.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 12 Nov 2020 14:36:28 -0800
+ 15.1.1979.3; Thu, 12 Nov 2020 14:36:27 -0800
 Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
-        id 4438CA7D229; Thu, 12 Nov 2020 14:16:01 -0800 (PST)
+        id 0D8B0A7D1FF; Thu, 12 Nov 2020 14:16:01 -0800 (PST)
 From:   Roman Gushchin <guro@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
@@ -50,9 +50,9 @@ CC:     Alexei Starovoitov <ast@kernel.org>,
         Shakeel Butt <shakeelb@google.com>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
         Roman Gushchin <guro@fb.com>, Song Liu <songliubraving@fb.com>
-Subject: [PATCH bpf-next v5 24/34] bpf: eliminate rlimit-based memory accounting for lpm_trie maps
-Date:   Thu, 12 Nov 2020 14:15:33 -0800
-Message-ID: <20201112221543.3621014-25-guro@fb.com>
+Subject: [PATCH bpf-next v5 13/34] bpf: memcg-based memory accounting for lpm_trie maps
+Date:   Thu, 12 Nov 2020 14:15:22 -0800
+Message-ID: <20201112221543.3621014-14-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201112221543.3621014-1-guro@fb.com>
 References: <20201112221543.3621014-1-guro@fb.com>
@@ -62,61 +62,50 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-12_14:2020-11-12,2020-11-12 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
- mlxlogscore=697 adultscore=0 lowpriorityscore=0 priorityscore=1501
- suspectscore=38 impostorscore=0 malwarescore=0 phishscore=0 clxscore=1015
- spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011120127
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ priorityscore=1501 spamscore=0 mlxlogscore=774 suspectscore=13
+ phishscore=0 mlxscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0
+ clxscore=1015 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2011120127
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Do not use rlimit-based memory accounting for lpm_trie maps.
-It has been replaced with the memcg-based memory accounting.
+Include lpm trie and lpm trie node objects into the memcg-based memory
+accounting.
 
 Signed-off-by: Roman Gushchin <guro@fb.com>
 Acked-by: Song Liu <songliubraving@fb.com>
 ---
- kernel/bpf/lpm_trie.c | 13 -------------
- 1 file changed, 13 deletions(-)
+ kernel/bpf/lpm_trie.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index c9ebfb009955..4eaa48096bef 100644
+index 00e32f2ec3e6..c9ebfb009955 100644
 --- a/kernel/bpf/lpm_trie.c
 +++ b/kernel/bpf/lpm_trie.c
-@@ -540,8 +540,6 @@ static int trie_delete_elem(struct bpf_map *map, void=
- *_key)
- static struct bpf_map *trie_alloc(union bpf_attr *attr)
- {
- 	struct lpm_trie *trie;
--	u64 cost =3D sizeof(*trie), cost_per_node;
--	int ret;
+@@ -282,7 +282,7 @@ static struct lpm_trie_node *lpm_trie_node_alloc(cons=
+t struct lpm_trie *trie,
+ 	if (value)
+ 		size +=3D trie->map.value_size;
 =20
- 	if (!bpf_capable())
- 		return ERR_PTR(-EPERM);
-@@ -567,20 +565,9 @@ static struct bpf_map *trie_alloc(union bpf_attr *at=
-tr)
- 			  offsetof(struct bpf_lpm_trie_key, data);
- 	trie->max_prefixlen =3D trie->data_size * 8;
+-	node =3D kmalloc_node(size, GFP_ATOMIC | __GFP_NOWARN,
++	node =3D kmalloc_node(size, GFP_ATOMIC | __GFP_NOWARN | __GFP_ACCOUNT,
+ 			    trie->map.numa_node);
+ 	if (!node)
+ 		return NULL;
+@@ -557,7 +557,7 @@ static struct bpf_map *trie_alloc(union bpf_attr *att=
+r)
+ 	    attr->value_size > LPM_VAL_SIZE_MAX)
+ 		return ERR_PTR(-EINVAL);
 =20
--	cost_per_node =3D sizeof(struct lpm_trie_node) +
--			attr->value_size + trie->data_size;
--	cost +=3D (u64) attr->max_entries * cost_per_node;
--
--	ret =3D bpf_map_charge_init(&trie->map.memory, cost);
--	if (ret)
--		goto out_err;
--
- 	spin_lock_init(&trie->lock);
+-	trie =3D kzalloc(sizeof(*trie), GFP_USER | __GFP_NOWARN);
++	trie =3D kzalloc(sizeof(*trie), GFP_USER | __GFP_NOWARN | __GFP_ACCOUNT=
+);
+ 	if (!trie)
+ 		return ERR_PTR(-ENOMEM);
 =20
- 	return &trie->map;
--out_err:
--	kfree(trie);
--	return ERR_PTR(ret);
- }
-=20
- static void trie_free(struct bpf_map *map)
 --=20
 2.26.2
 
