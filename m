@@ -2,131 +2,140 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 769A0C56202
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8C76C63697
 	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:37:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 27FF72223F
+	by mail.kernel.org (Postfix) with ESMTP id 97B8A22246
 	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:37:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f/bzZU57"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="loWeWcW4"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727448AbgKLWhS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1727796AbgKLWhS (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 12 Nov 2020 17:37:18 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:22401 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727796AbgKLWgf (ORCPT
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:8238 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726157AbgKLWgf (ORCPT
         <rfc822;bpf@vger.kernel.org>); Thu, 12 Nov 2020 17:36:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605220593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XhgHn2WJtZkLF+ApGVLkt0XduVBcSMTHxp7BqhQwEiI=;
-        b=f/bzZU57CajRBXsk7gDkfhI7QcXO6yMiOP/vFDlToE+4UzOTexVdHztAAOyqO7RsTa4mat
-        o2sK4kEXuhgmZ/Oi9+hxXzLwUdoQOUySj4eqZHGCUQMcyH/8bFvnhc3sQ2fV8zPl0yoagy
-        eV7kgFx+Zap5N4iH5qmyKE1T71QF6DA=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-57-r1qUbudFODe-NuL-p8nwAg-1; Thu, 12 Nov 2020 17:36:31 -0500
-X-MC-Unique: r1qUbudFODe-NuL-p8nwAg-1
-Received: by mail-wr1-f72.google.com with SMTP id d8so2683471wrr.10
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 14:36:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=XhgHn2WJtZkLF+ApGVLkt0XduVBcSMTHxp7BqhQwEiI=;
-        b=aoAfRuFSU9geLdCfbR5/5KxPfVmXgrk+2WM8tM5vDphAJCmWJZ+bs6R6r4ZpzU9KVz
-         X6pQj5rp+9q1P9GRGBWl9bgCpEh6NXYzZMv9GFQAeBRJ0e2aRU/C/2oet7pKhF6wizSE
-         otSPvkA4J11tvzfh3HNNXgWIvgCKDbS59SEDO/8zMzeHKxMdb+C1YGGHV8gDrFZQeopa
-         6UHcWcSWRuFwWQtNBZKmbijG1J2rX/+GYud6oId5mBajU+S4cJJOLehAAmyEosXDLmpa
-         6eExBdNrgXKd7SWZRTP0IHjzN9CWA+8jaoH2P0+vgG9LHxR0434Qy40oYpR3yQWTQjZW
-         fEHQ==
-X-Gm-Message-State: AOAM532jbNzu8I0SiK5DANFgLCTHc9DaE/UDiPe8c0mY0UVBkLaBXMm1
-        iu/Hddiu5oO4ruMUO+mlajwTTvinKK4MhI+RETABh8SZYEL6aR3Z76UwGwNIyKwynVPHaJoIoNv
-        C/UFyBycxSOi5
-X-Received: by 2002:a5d:5643:: with SMTP id j3mr2011644wrw.43.1605220589955;
-        Thu, 12 Nov 2020 14:36:29 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw5B1dz4Y5fMvfHGo7//UMwx0YvrMv+zb6yd42EN8mu+BvkRseRV5thcGxkng82q5Gf+Ffp3w==
-X-Received: by 2002:a5d:5643:: with SMTP id j3mr2011535wrw.43.1605220588373;
-        Thu, 12 Nov 2020 14:36:28 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id f13sm3157112wrq.78.2020.11.12.14.36.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2020 14:36:27 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id EDE5A1833E9; Thu, 12 Nov 2020 23:36:25 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        David Ahern <dsahern@gmail.com>
-Cc:     Stephen Hemminger <stephen@networkplumber.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jiri Benc <jbenc@redhat.com>,
-        Edward Cree <ecree@solarflare.com>,
-        Hangbin Liu <haliu@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Miller <davem@davemloft.net>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCHv3 iproute2-next 0/5] iproute2: add libbpf support
-In-Reply-To: <321a2728-7a43-4a48-fe97-dab45b76e6fb@iogearbox.net>
-References: <CAADnVQKu7usDXbwwcjKChcs0NU3oP0deBsGGEavR_RuPkht74g@mail.gmail.com>
- <07f149f6-f8ac-96b9-350d-b289ef16d82f@solarflare.com>
- <CAEf4BzaSfutBt3McEPjmu_FyxyzJa_xVGfhP_7v0oGuqG_HBEw@mail.gmail.com>
- <20201106094425.5cc49609@redhat.com>
- <CAEf4Bzb2fuZ+Mxq21HEUKcOEba=rYZHc+1FTQD98=MPxwj8R3g@mail.gmail.com>
- <CAADnVQ+S7fusZ6RgXBKJL7aCtt3jpNmCnCkcXd0fLayu+Rw_6Q@mail.gmail.com>
- <20201106152537.53737086@hermes.local>
- <45d88ca7-b22a-a117-5743-b965ccd0db35@gmail.com>
- <20201109014515.rxz3uppztndbt33k@ast-mbp>
- <14c9e6da-e764-2e2c-bbbb-bc95992ed258@gmail.com>
- <20201111004749.r37tqrhskrcxjhhx@ast-mbp> <874klwcg1p.fsf@toke.dk>
- <321a2728-7a43-4a48-fe97-dab45b76e6fb@iogearbox.net>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 12 Nov 2020 23:36:25 +0100
-Message-ID: <871rgy8aom.fsf@toke.dk>
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0ACMOArQ007594
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 14:36:34 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=M6nI7BN0unMH8lLVYY0WWTngfpCmQVxP1GeXrD6hnIE=;
+ b=loWeWcW4EwJRAl2fC600EHzYjE2RjOQwzeIAQI+K9LXWCTA/UtE3kGt8suBZQ+5U5MC0
+ y0ZHPk8ZoG2aSaZ1t8my7CUWAe4fj5EAPcFZzEBqEBY/WpFIB3aBzaPijCczGpk75rTu
+ /EHWyDCvh2WD8lWTM3TEqAdt+IOYWd8+dRM= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 34rva9drhy-13
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 14:36:34 -0800
+Received: from intmgw003.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 12 Nov 2020 14:36:31 -0800
+Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
+        id 5C721A7D23C; Thu, 12 Nov 2020 14:16:01 -0800 (PST)
+From:   Roman Gushchin <guro@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        <netdev@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
+        Roman Gushchin <guro@fb.com>, Song Liu <songliubraving@fb.com>
+Subject: [PATCH bpf-next v5 29/34] bpf: eliminate rlimit-based memory accounting for stackmap maps
+Date:   Thu, 12 Nov 2020 14:15:38 -0800
+Message-ID: <20201112221543.3621014-30-guro@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201112221543.3621014-1-guro@fb.com>
+References: <20201112221543.3621014-1-guro@fb.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
 Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-12_14:2020-11-12,2020-11-12 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=745
+ malwarescore=0 clxscore=1015 spamscore=0 priorityscore=1501
+ suspectscore=38 phishscore=0 adultscore=0 impostorscore=0 bulkscore=0
+ mlxscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2011120127
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Daniel Borkmann <daniel@iogearbox.net> writes:
+Do not use rlimit-based memory accounting for stackmap maps.
+It has been replaced with the memcg-based memory accounting.
 
->> Besides, for the entire history of BPF support in iproute2 so far, the
->> benefit has come from all the features that libbpf has just started
->> automatically supporting on load (BTF, etc), so users would have
->> benefited from automatic library updates had it *not* been vendored in.
->
-> Not really. What you imply here is that we're living in a perfect
-> world and that all distros follow suite and i) add libbpf dependency
-> to their official iproute2 package, ii) upgrade iproute2 package along
-> with new kernel releases and iii) upgrade libbpf along with it so that
-> users are able to develop BPF programs against the feature set that
-> the kernel offers (as intended). These are a lot of moving parts to
-> get right, and as I pointed out earlier in the conversation, it took
-> major distros 2 years to get their act together to officially include
-> bpftool as a package - I'm not making this up, and this sort of pace
-> is simply not sustainable. It's also not clear whether distros will
-> get point iii) correct.
+Signed-off-by: Roman Gushchin <guro@fb.com>
+Acked-by: Song Liu <songliubraving@fb.com>
+---
+ kernel/bpf/stackmap.c | 16 +++-------------
+ 1 file changed, 3 insertions(+), 13 deletions(-)
 
-I totally get that you've been frustrated with the distro adoption and
-packaging of BPF-related tools. And rightfully so. I just don't think
-that the answer to this is to try to work around distros, but rather to
-work with them to get things right.
-
-I'm quite happy to take a shot at getting a cross-distro effort going in
-this space; really, having well-supported BPF tooling ought to be in
-everyone's interest!
-
--Toke
+diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+index 06065fa27124..3325add8e629 100644
+--- a/kernel/bpf/stackmap.c
++++ b/kernel/bpf/stackmap.c
+@@ -90,7 +90,6 @@ static struct bpf_map *stack_map_alloc(union bpf_attr *=
+attr)
+ {
+ 	u32 value_size =3D attr->value_size;
+ 	struct bpf_stack_map *smap;
+-	struct bpf_map_memory mem;
+ 	u64 cost, n_buckets;
+ 	int err;
+=20
+@@ -119,15 +118,9 @@ static struct bpf_map *stack_map_alloc(union bpf_att=
+r *attr)
+=20
+ 	cost =3D n_buckets * sizeof(struct stack_map_bucket *) + sizeof(*smap);
+ 	cost +=3D n_buckets * (value_size + sizeof(struct stack_map_bucket));
+-	err =3D bpf_map_charge_init(&mem, cost);
+-	if (err)
+-		return ERR_PTR(err);
+-
+ 	smap =3D bpf_map_area_alloc(cost, bpf_map_attr_numa_node(attr));
+-	if (!smap) {
+-		bpf_map_charge_finish(&mem);
++	if (!smap)
+ 		return ERR_PTR(-ENOMEM);
+-	}
+=20
+ 	bpf_map_init_from_attr(&smap->map, attr);
+ 	smap->map.value_size =3D value_size;
+@@ -135,20 +128,17 @@ static struct bpf_map *stack_map_alloc(union bpf_at=
+tr *attr)
+=20
+ 	err =3D get_callchain_buffers(sysctl_perf_event_max_stack);
+ 	if (err)
+-		goto free_charge;
++		goto free_smap;
+=20
+ 	err =3D prealloc_elems_and_freelist(smap);
+ 	if (err)
+ 		goto put_buffers;
+=20
+-	bpf_map_charge_move(&smap->map.memory, &mem);
+-
+ 	return &smap->map;
+=20
+ put_buffers:
+ 	put_callchain_buffers();
+-free_charge:
+-	bpf_map_charge_finish(&mem);
++free_smap:
+ 	bpf_map_area_free(smap);
+ 	return ERR_PTR(err);
+ }
+--=20
+2.26.2
 
