@@ -2,108 +2,129 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFAF2C56201
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 01:51:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 35C08C388F9
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 01:51:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 681E42068E
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 01:51:22 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dJFMPfX2"
+	by mail.kernel.org (Postfix) with ESMTP id DC5C0206CA
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 01:51:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728314AbgKLBcN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 11 Nov 2020 20:32:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728176AbgKLBBl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 11 Nov 2020 20:01:41 -0500
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B114EC0613D6
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2020 17:01:40 -0800 (PST)
-Received: by mail-lj1-x242.google.com with SMTP id y16so4209185ljk.1
-        for <bpf@vger.kernel.org>; Wed, 11 Nov 2020 17:01:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vj0T9jCxvL9rbvqFxOX6yy1sKsEXWVTpaVdI8wUxbqQ=;
-        b=dJFMPfX272QV6ESoGr0BE2Q1Z4A2wgZDODphLfdmXAKGlI1KURMxjYxuywbI/ZElF3
-         1PIb1ELFnoYmkLNVkM0IQSsrWfRzneV+iq6GiY8yToXDnBVM1lLEvJ8YliZOVlX/ly4A
-         QY7kk91jQ1ihQrLQNvJxZ2sclM7O64PFyFZwo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vj0T9jCxvL9rbvqFxOX6yy1sKsEXWVTpaVdI8wUxbqQ=;
-        b=OBNmHVvstfG8Ps6y/zthe9ftxx/94lGBvxnXvTWzpPTdLkvryPv+LXxGAmc8fYHnPz
-         3bURtrIhsqrcqT1bVppfPzCJQBio0PAv3+/NUhtEYevZgbz0dYlkEEmElhrlU1TWtAxv
-         r4S91SFDEWEIE8gpzwJdYLrkXUcvVHndP8Pz3MJMUkQtbhTl+mBOuwaqjzXJzI+Dvysa
-         EwzNwaCGuh4x++KYWKyym1PpPb4SHWkKFKiIaDb9AdhzvkToQiTTTj/qXUTy0WRrSIy9
-         6CMm59DoXZBV7PKILWsRoLYPpqdsuC5nMfFIdTKh6ee66ACh9yfT06PCMCtesUuPNHcM
-         ZmLw==
-X-Gm-Message-State: AOAM533fcNnqIL3BjvAKdiPMNErLHyToCnXgSN+6epWn8Aw/oJxkkCqo
-        xo6jJwVE7+hkbg77DuM5f8xZCAUZst82d9nhNU6EKA==
-X-Google-Smtp-Source: ABdhPJzmNCkYHPo9pNcHfEG79wIs4dcKeol0ZqLte7SnWm62D5av7SPF4ODgtR5h5w8u7F6sA7p0mFTIX5U8OO6r30c=
-X-Received: by 2002:a2e:85c6:: with SMTP id h6mr1511433ljj.110.1605142899143;
- Wed, 11 Nov 2020 17:01:39 -0800 (PST)
+        id S1728302AbgKLBcK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 11 Nov 2020 20:32:10 -0500
+Received: from www62.your-server.de ([213.133.104.62]:55022 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728052AbgKLAWe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 11 Nov 2020 19:22:34 -0500
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kd0Ni-0007ZF-Ab; Thu, 12 Nov 2020 01:22:30 +0100
+Received: from [85.7.101.30] (helo=pc-9.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kd0Ni-000QHX-5J; Thu, 12 Nov 2020 01:22:30 +0100
+Subject: Re: [bpf PATCH 3/5] bpf, sockmap: Avoid returning unneeded EAGAIN
+ when redirecting to self
+To:     John Fastabend <john.fastabend@gmail.com>, ast@kernel.org,
+        jakub@cloudflare.com
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org
+References: <160477770483.608263.6057216691957042088.stgit@john-XPS-13-9370>
+ <160477791482.608263.14389359214124051944.stgit@john-XPS-13-9370>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <a49096e0-6cc7-7741-a283-27c8629da80f@iogearbox.net>
+Date:   Thu, 12 Nov 2020 01:22:29 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20201112001919.2028357-1-kafai@fb.com>
-In-Reply-To: <20201112001919.2028357-1-kafai@fb.com>
-From:   KP Singh <kpsingh@chromium.org>
-Date:   Thu, 12 Nov 2020 02:01:28 +0100
-Message-ID: <CACYkzJ7RTsZz3tRxCgMrh0WNu-RZJQWQ+H4+KKbV=Bz=T0SCbA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Fix NULL dereference in bpf_task_storage
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>, Roman Gushchin <guro@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <160477791482.608263.14389359214124051944.stgit@john-XPS-13-9370>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/25985/Wed Nov 11 14:18:01 2020)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Nov 12, 2020 at 1:19 AM Martin KaFai Lau <kafai@fb.com> wrote:
->
-> In bpf_pid_task_storage_update_elem(), it missed to
-> test the !task_storage_ptr(task) which then could trigger a NULL
-> pointer exception in bpf_local_storage_update().
->
-> Fixes: 4cf1bc1f1045 ("bpf: Implement task local storage")
-> Tested-by: Roman Gushchin <guro@fb.com>
-> Cc: KP Singh <kpsingh@chromium.org>
-> Signed-off-by: Martin KaFai Lau <kafai@fb.com>
-
-Acked-by: KP Singh <kpsingh@google.com>
-
-Thanks for fixing this!  I had it in v1 and while actioning:
-
-  https://lore.kernel.org/bpf/20201028011321.4yu62347lfzisxwy@kafai-mbp
-
-I inadvertently removed it from bpf_pid_task_storage_update_elem too.
-
-
-
+On 11/7/20 8:38 PM, John Fastabend wrote:
+> If a socket redirects to itself and it is under memory pressure it is
+> possible to get a socket stuck so that recv() returns EAGAIN and the
+> socket can not advance for some time. This happens because when
+> redirecting a skb to the same socket we received the skb on we first
+> check if it is OK to enqueue the skb on the receiving socket by checking
+> memory limits. But, if the skb is itself the object holding the memory
+> needed to enqueue the skb we will keep retrying from kernel side
+> and always fail with EAGAIN. Then userspace will get a recv() EAGAIN
+> error if there are no skbs in the psock ingress queue. This will continue
+> until either some skbs get kfree'd causing the memory pressure to
+> reduce far enough that we can enqueue the pending packet or the
+> socket is destroyed. In some cases its possible to get a socket
+> stuck for a noticable amount of time if the socket is only receiving
+> skbs from sk_skb verdict programs. To reproduce I make the socket
+> memory limits ridiculously low so sockets are always under memory
+> pressure. More often though if under memory pressure it looks like
+> a spurious EAGAIN error on user space side causing userspace to retry
+> and typically enough has moved on the memory side that it works.
+> 
+> To fix skip memory checks and skb_orphan if receiving on the same
+> sock as already assigned.
+> 
+> For SK_PASS cases this is easy, its always the same socket so we
+> can just omit the orphan/set_owner pair.
+> 
+> For backlog cases we need to check skb->sk and decide if the orphan
+> and set_owner pair are needed.
+> 
+> Fixes: 51199405f9672 ("bpf: skb_verdict, support SK_PASS on RX BPF path")
+> Signed-off-by: John Fastabend <john.fastabend@gmail.com>
 > ---
->  kernel/bpf/bpf_task_storage.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/bpf_task_storage.c b/kernel/bpf/bpf_task_storage.c
-> index 39a45fba4fb0..4ef1959a78f2 100644
-> --- a/kernel/bpf/bpf_task_storage.c
-> +++ b/kernel/bpf/bpf_task_storage.c
-> @@ -150,7 +150,7 @@ static int bpf_pid_task_storage_update_elem(struct bpf_map *map, void *key,
->          */
->         WARN_ON_ONCE(!rcu_read_lock_held());
->         task = pid_task(pid, PIDTYPE_PID);
-> -       if (!task) {
-> +       if (!task || !task_storage_ptr(task)) {
->                 err = -ENOENT;
->                 goto out;
->         }
-> --
-> 2.24.1
->
+>   net/core/skmsg.c |   72 ++++++++++++++++++++++++++++++++++++++++--------------
+>   1 file changed, 53 insertions(+), 19 deletions(-)
+> 
+> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> index fe44280c033e..580252e532da 100644
+> --- a/net/core/skmsg.c
+> +++ b/net/core/skmsg.c
+> @@ -399,38 +399,38 @@ int sk_msg_memcopy_from_iter(struct sock *sk, struct iov_iter *from,
+>   }
+>   EXPORT_SYMBOL_GPL(sk_msg_memcopy_from_iter);
+>   
+> -static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb)
+> +static struct sk_msg *sk_psock_create_ingress_msg(struct sock *sk,
+> +						  struct sk_buff *skb)
+>   {
+> -	struct sock *sk = psock->sk;
+> -	int copied = 0, num_sge;
+>   	struct sk_msg *msg;
+>   
+>   	if (atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf)
+> -		return -EAGAIN;
+> +		return NULL;
+> +
+> +	if (!sk_rmem_schedule(sk, skb, skb->len))
+
+Isn't accounting always truesize based, thus we should fix & convert all skb->len
+to skb->truesize ?
+
+> +		return NULL;
+>   
+>   	msg = kzalloc(sizeof(*msg), __GFP_NOWARN | GFP_ATOMIC);
+>   	if (unlikely(!msg))
+> -		return -EAGAIN;
+> -	if (!sk_rmem_schedule(sk, skb, skb->len)) {
+> -		kfree(msg);
+> -		return -EAGAIN;
+> -	}
+> +		return NULL;
+>   
+>   	sk_msg_init(msg);
+> -	num_sge = skb_to_sgvec(skb, msg->sg.data, 0, skb->len);
+> +	return msg;
+> +}
+> +
