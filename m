@@ -2,156 +2,112 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EF79C5519F
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:41:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72D2CC2D0E4
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:54:19 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 32BB32068D
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:41:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C70CF20A8B
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:54:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ZDxS4PiC"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="PpFzMzXH";
+	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ee0TLRkp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725999AbgKLWlc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Nov 2020 17:41:32 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:5680 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725973AbgKLWlc (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 12 Nov 2020 17:41:32 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0ACMdr4R031339
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 14:41:31 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=qdqw2vIRlP2yIbod8BHIh3XnNn0ZSs325Y5RG0+0/sU=;
- b=ZDxS4PiCSqwJP1HC8hlAILqAfzFNUFaN5QGFuHHNkdP+ZRLrUWfaHka0w8VgP4SjW9yn
- Z4NNzWrt5cFapTCpiV0LcdJ75fAdax/bbiiJCTmgUba9vubqRSDZE5NSeZKAiWTfWauw
- 4fk1xMyv+L/hyXZWa4RjBIMNFc8pe54euwo= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 34s7crjr29-6
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 14:41:31 -0800
-Received: from intmgw004.06.prn3.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 12 Nov 2020 14:41:28 -0800
-Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
-        id 52C76A7D234; Thu, 12 Nov 2020 14:16:01 -0800 (PST)
-From:   Roman Gushchin <guro@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        <netdev@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
-        Roman Gushchin <guro@fb.com>, Song Liu <songliubraving@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>
-Subject: [PATCH bpf-next v5 27/34] bpf: eliminate rlimit-based memory accounting for bpf ringbuffer
-Date:   Thu, 12 Nov 2020 14:15:36 -0800
-Message-ID: <20201112221543.3621014-28-guro@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201112221543.3621014-1-guro@fb.com>
-References: <20201112221543.3621014-1-guro@fb.com>
-MIME-Version: 1.0
+        id S1726102AbgKLWyS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Nov 2020 17:54:18 -0500
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:40959 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725973AbgKLWyS (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 12 Nov 2020 17:54:18 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 38F103BA;
+        Thu, 12 Nov 2020 17:54:17 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Thu, 12 Nov 2020 17:54:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
+        mime-version:content-transfer-encoding:content-type:cc:to
+        :subject:from:date:message-id; s=fm2; bh=hR/B1/mksMg4nf29wakGk+i
+        VZrvBuyXfFOqVP/Ac498=; b=PpFzMzXHxp5c6435BPLh0Op1Z51473xLnoz/1D4
+        PBzKXLL1Trl/iGVvSS5hQQhbohhoNbjP8WrhMQDwSkOb6IkWc5nSrSC+w2olGuG0
+        p684008oVCResM6N2owZJ6AQaEfREjD0HTKhe0ADsHz47hfc4mCBHdcgQsqa9JxL
+        jags1GBklYdLwgDCn1ikmc7/NaWejeKDQB5ZkieowKoTgBDb1r89CRzAdeIRug2f
+        wFy46wHhTJitMf5xo5mLJqU1s+qcbo5avNVjcG6kQ9JhB/xqt5xOYw9NNWviPsXd
+        d6gNNYlVTqFb/uhD3mQawNCA3QNwMfALnPo1saeGR8UBqBA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:message-id:mime-version:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=hR/B1/
+        mksMg4nf29wakGk+iVZrvBuyXfFOqVP/Ac498=; b=ee0TLRkp2fG616K+S4BtkY
+        QE2gR2tMJSRWl+4CaUwucfcT+GnwlwzpNF7wlSLq6aKVvzHNuLA5BMw9xXfWiSSP
+        UgZdGSqJloZs0mNuEBBB4bbCTzlOD6NvB0xguyi/ElSs1bK47O2xFezLPBxbdLO/
+        otbXwIdMv8rwVZ7vqxlJdMPQAiC4Qg1SflhlW/6ppfXJm1gOu/82pv93FqX0v1Hx
+        jza7fwyTffAlejbtqDMmXTt2tdlTK/g+bX0IYzdv1alqNQLJUpNtu0QwM3QF/NsN
+        HKuyA1usrr6nx1dAGiMGF6/KbtKAl0Yx0gIzFIzJY9qG9tsuN/0njyL8mZpAr5aA
+        ==
+X-ME-Sender: <xms:GL2tX90c3a_7ME0QM9eV6Ai4uYVITNRql1e05Te9901r8TV2JkiGvg>
+    <xme:GL2tX0H0xRI1ereI4-MApVha0hemKRvkvhpemUkt9OlPopMEQh3rWFL0zUIN91OmX
+    XPKTSKkPioQEl5mQw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddvgedgtdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpegggf
+    gtvffuhfffkfesthhqredttddtjeenucfhrhhomhepfdffrghnihgvlhcuighufdcuoegu
+    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeeiffehfeekgfeitdehff
+    euhfekgeelfeduueejveegueejtefhteetuefhgefhteenucfkphepieelrddukedurddu
+    tdehrdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:GL2tX969B1mYIn12uTA-THcyXSuOPXFfQKeWB8ALsW_RJyAZtbnz_w>
+    <xmx:GL2tX623bK4F6iUKKtagNsJw5ic5aZPXrSJoINjF8-QuFCT9F2_IPQ>
+    <xmx:GL2tXwFnD4d7qoSmua42oGF7h01WyxBCLKMMSoIhtEEibbJCSq9JZg>
+    <xmx:GL2tX1Tz5Th8EgmiqeUzw5EDxLDKHkafgk3ZT3AtJWqMZ_9G9wNEVw>
+Received: from localhost (c-69-181-105-64.hsd1.ca.comcast.net [69.181.105.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id EBBF5328005E;
+        Thu, 12 Nov 2020 17:54:15 -0500 (EST)
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-12_14:2020-11-12,2020-11-12 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
- mlxlogscore=717 clxscore=1015 impostorscore=0 priorityscore=1501
- malwarescore=0 adultscore=0 suspectscore=38 lowpriorityscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011120128
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=UTF-8
+Cc:     <yhs@fb.com>, <cneirabustos@gmail.com>, <ebiederm@xmission.com>,
+        <blez@fb.com>
+To:     <bpf@vger.kernel.org>
+Subject: Extending bpf_get_ns_current_pid_tgid()
+From:   "Daniel Xu" <dxu@dxuuu.xyz>
+Date:   Thu, 12 Nov 2020 14:20:35 -0800
+Message-Id: <C71MVCBQMCPF.1CCKLFRTGYD0D@maharaja>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Do not use rlimit-based memory accounting for bpf ringbuffer.
-It has been replaced with the memcg-based memory accounting.
+Hi,
 
-bpf_ringbuf_alloc() can't return anything except ERR_PTR(-ENOMEM)
-and a valid pointer, so to simplify the code make it return NULL
-in the first case. This allows to drop a couple of lines in
-ringbuf_map_alloc() and also makes it look similar to other memory
-allocating function like kmalloc().
+I'm looking at the current implementation of
+bpf_get_ns_current_pid_tgid() and the helper seems to be a bit overly
+restricting to me. Specifically the following line:
 
-Signed-off-by: Roman Gushchin <guro@fb.com>
-Acked-by: Song Liu <songliubraving@fb.com>
-Acked-by: Andrii Nakryiko <andriin@fb.com>
----
- kernel/bpf/ringbuf.c | 24 ++++--------------------
- 1 file changed, 4 insertions(+), 20 deletions(-)
+    if (!ns_match(&pidns->ns, (dev_t)dev, ino))
+            goto clear;
 
-diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-index ee5f55d9276e..c8892b58501e 100644
---- a/kernel/bpf/ringbuf.c
-+++ b/kernel/bpf/ringbuf.c
-@@ -48,7 +48,6 @@ struct bpf_ringbuf {
-=20
- struct bpf_ringbuf_map {
- 	struct bpf_map map;
--	struct bpf_map_memory memory;
- 	struct bpf_ringbuf *rb;
- };
-=20
-@@ -135,7 +134,7 @@ static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t d=
-ata_sz, int numa_node)
-=20
- 	rb =3D bpf_ringbuf_area_alloc(data_sz, numa_node);
- 	if (!rb)
--		return ERR_PTR(-ENOMEM);
-+		return NULL;
-=20
- 	spin_lock_init(&rb->spinlock);
- 	init_waitqueue_head(&rb->waitq);
-@@ -151,8 +150,6 @@ static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t d=
-ata_sz, int numa_node)
- static struct bpf_map *ringbuf_map_alloc(union bpf_attr *attr)
- {
- 	struct bpf_ringbuf_map *rb_map;
--	u64 cost;
--	int err;
-=20
- 	if (attr->map_flags & ~RINGBUF_CREATE_FLAG_MASK)
- 		return ERR_PTR(-EINVAL);
-@@ -174,26 +171,13 @@ static struct bpf_map *ringbuf_map_alloc(union bpf_=
-attr *attr)
-=20
- 	bpf_map_init_from_attr(&rb_map->map, attr);
-=20
--	cost =3D sizeof(struct bpf_ringbuf_map) +
--	       sizeof(struct bpf_ringbuf) +
--	       attr->max_entries;
--	err =3D bpf_map_charge_init(&rb_map->map.memory, cost);
--	if (err)
--		goto err_free_map;
--
- 	rb_map->rb =3D bpf_ringbuf_alloc(attr->max_entries, rb_map->map.numa_no=
-de);
--	if (IS_ERR(rb_map->rb)) {
--		err =3D PTR_ERR(rb_map->rb);
--		goto err_uncharge;
-+	if (!rb_map->rb) {
-+		kfree(rb_map);
-+		return ERR_PTR(-ENOMEM);
- 	}
-=20
- 	return &rb_map->map;
--
--err_uncharge:
--	bpf_map_charge_finish(&rb_map->map.memory);
--err_free_map:
--	kfree(rb_map);
--	return ERR_PTR(err);
- }
-=20
- static void bpf_ringbuf_free(struct bpf_ringbuf *rb)
---=20
-2.26.2
+Why bail if the inode # does not match? IIUC from the old discussions,
+it was b/c in the future pidns files might belong to different devices.
+It's not clear to me (possibly b/c I'm missing something) why the inode
+has to match as well.
 
+Would it be possible to instead have the helper return the pid/tgid of
+the current task as viewed _from_ the `dev`/`ino` pidns? If the current
+task is hidden from the `dev`/`ino` pidns, then return -ENOENT. The use
+case is for bpftrace symbolize stacks when run inside a container. For
+example:
+
+    (in-container)# bpftrace -e 'profile:hz:99 { print(ustack) }'
+
+This currently does not work b/c bpftrace will generate a prog that gets
+the root pidns pid, pack it with the stackid, and pass it up to
+userspace. But b/c bpftrace is running inside the container, the root
+pidns pid is invalid and symbolization fails.
+
+What would be nice is if bpftrace could generate a prog that gets the
+current pid as viewed from bpftrace's pidns. Then symbolization would
+work.
+
+Thanks,
+Daniel
