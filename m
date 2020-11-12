@@ -2,100 +2,228 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
-	autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DE1DC2D0E4
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 21:13:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5607AC388F7
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 21:13:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DE8B021D91
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 21:12:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E606D216C4
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 21:13:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="OxOUw1eZ"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="YwyOQdZI"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727189AbgKLVM7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Nov 2020 16:12:59 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:39094 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726337AbgKLVM7 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 12 Nov 2020 16:12:59 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0ACL1g2c017372
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 13:12:58 -0800
+        id S1727212AbgKLVNK (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Nov 2020 16:13:10 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:36180 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726473AbgKLVNK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 12 Nov 2020 16:13:10 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0ACL1glI032123
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 13:13:09 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=3TxQl2Ty/QLplzdhLjMNcbakijcLZV5aaOyIRDAPopo=;
- b=OxOUw1eZxFKZ5XkOZlU7o7ag9pmZrItZ08qsgUW1RDxoodWkvRlVJZK41VuDpMSlsudn
- H7pmHKS9gwaWUqGLmIZ8/oM/foHZ1kXX7t66+/GPiMrYZ8+gpe9GLUc50OTFBcCSuwmk
- Dy1VPmWlv8bpLkXQY6AkACKPBa6SfAUcX5I= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 34r4sh5243-2
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=J5r/PsCFBvk/+XqCSFwom2kfsQElkG5kuFU4C6pTSpU=;
+ b=YwyOQdZICdTJdq0y6CRRk2SglGbofcxw58TI0lE11RTZTi0K+ZWrOu5iY/PyvsQ4UND4
+ GFn6qNJQXUfidBPBvVO+E6oaSN8KHmcmmVWRImV1Px1hWuvVZk/IVugtrzUNyhHOUDo/
+ rrGGVQdtjmoWL2jtYIdstcGLSKbh2Zy4vGg= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 34rf8sssn3-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 13:12:58 -0800
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 13:13:09 -0800
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 12 Nov 2020 13:12:55 -0800
+ 15.1.1979.3; Thu, 12 Nov 2020 13:13:08 -0800
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 1286B29469C4; Thu, 12 Nov 2020 13:12:55 -0800 (PST)
+        id 918ED29469C4; Thu, 12 Nov 2020 13:13:07 -0800 (PST)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         <netdev@vger.kernel.org>
-Subject: [PATCH v2 bpf-next 0/4] bpf: Enable bpf_sk_storage for FENTRY/FEXIT/RAW_TP
-Date:   Thu, 12 Nov 2020 13:12:55 -0800
-Message-ID: <20201112211255.2585961-1-kafai@fb.com>
+Subject: [PATCH v2 bpf-next 2/4] bpf: Rename some functions in bpf_sk_storage
+Date:   Thu, 12 Nov 2020 13:13:07 -0800
+Message-ID: <20201112211307.2587021-1-kafai@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201112211255.2585961-1-kafai@fb.com>
+References: <20201112211255.2585961-1-kafai@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-12_12:2020-11-12,2020-11-12 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- adultscore=0 clxscore=1015 suspectscore=13 bulkscore=0 mlxlogscore=411
- priorityscore=1501 lowpriorityscore=0 mlxscore=0 phishscore=0 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0 mlxscore=0
+ clxscore=1015 priorityscore=1501 mlxlogscore=527 adultscore=0
+ impostorscore=0 suspectscore=38 phishscore=0 lowpriorityscore=0
+ spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2011120123
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This set is to allow the FENTRY/FEXIT/RAW_TP tracing program to use
-bpf_sk_storage.  The first two patches are a cleanup.  The last patch is
-tests.  Patch 3 has the required kernel changes to
-enable bpf_sk_storage for FENTRY/FEXIT/RAW_TP.
+Rename some of the functions currently prefixed with sk_storage
+to bpf_sk_storage.  That will make the next patch have fewer
+prefix check and also bring the bpf_sk_storage.c to a more
+consistent function naming.
 
-Please see individual patch for details.
+Signed-off-by: Martin KaFai Lau <kafai@fb.com>
+---
+ net/core/bpf_sk_storage.c | 38 +++++++++++++++++++-------------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
-v2:
-- Rename some of the function prefix from sk_storage to bpf_sk_storage
-- Use prefix check instead of substr check
-
-Martin KaFai Lau (4):
-  bpf: Folding omem_charge() into sk_storage_charge()
-  bpf: Rename some functions in bpf_sk_storage
-  bpf: Allow using bpf_sk_storage in FENTRY/FEXIT/RAW_TP
-  bpf: selftest: Use bpf_sk_storage in FENTRY/FEXIT/RAW_TP
-
- include/net/bpf_sk_storage.h                  |   2 +
- kernel/trace/bpf_trace.c                      |   5 +
- net/core/bpf_sk_storage.c                     | 135 +++++++++++++-----
- .../bpf/prog_tests/sk_storage_tracing.c       | 135 ++++++++++++++++++
- .../bpf/progs/test_sk_storage_trace_itself.c  |  29 ++++
- .../bpf/progs/test_sk_storage_tracing.c       |  95 ++++++++++++
- 6 files changed, 369 insertions(+), 32 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/sk_storage_tra=
-cing.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_sk_storage_tra=
-ce_itself.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_sk_storage_tra=
-cing.c
-
+diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+index 001eac65e40f..fd416678f236 100644
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -16,7 +16,7 @@
+ DEFINE_BPF_STORAGE_CACHE(sk_cache);
+=20
+ static struct bpf_local_storage_data *
+-sk_storage_lookup(struct sock *sk, struct bpf_map *map, bool cacheit_loc=
+kit)
++bpf_sk_storage_lookup(struct sock *sk, struct bpf_map *map, bool cacheit=
+_lockit)
+ {
+ 	struct bpf_local_storage *sk_storage;
+ 	struct bpf_local_storage_map *smap;
+@@ -29,11 +29,11 @@ sk_storage_lookup(struct sock *sk, struct bpf_map *ma=
+p, bool cacheit_lockit)
+ 	return bpf_local_storage_lookup(sk_storage, smap, cacheit_lockit);
+ }
+=20
+-static int sk_storage_delete(struct sock *sk, struct bpf_map *map)
++static int bpf_sk_storage_del(struct sock *sk, struct bpf_map *map)
+ {
+ 	struct bpf_local_storage_data *sdata;
+=20
+-	sdata =3D sk_storage_lookup(sk, map, false);
++	sdata =3D bpf_sk_storage_lookup(sk, map, false);
+ 	if (!sdata)
+ 		return -ENOENT;
+=20
+@@ -82,7 +82,7 @@ void bpf_sk_storage_free(struct sock *sk)
+ 		kfree_rcu(sk_storage, rcu);
+ }
+=20
+-static void sk_storage_map_free(struct bpf_map *map)
++static void bpf_sk_storage_map_free(struct bpf_map *map)
+ {
+ 	struct bpf_local_storage_map *smap;
+=20
+@@ -91,7 +91,7 @@ static void sk_storage_map_free(struct bpf_map *map)
+ 	bpf_local_storage_map_free(smap);
+ }
+=20
+-static struct bpf_map *sk_storage_map_alloc(union bpf_attr *attr)
++static struct bpf_map *bpf_sk_storage_map_alloc(union bpf_attr *attr)
+ {
+ 	struct bpf_local_storage_map *smap;
+=20
+@@ -118,7 +118,7 @@ static void *bpf_fd_sk_storage_lookup_elem(struct bpf=
+_map *map, void *key)
+ 	fd =3D *(int *)key;
+ 	sock =3D sockfd_lookup(fd, &err);
+ 	if (sock) {
+-		sdata =3D sk_storage_lookup(sock->sk, map, true);
++		sdata =3D bpf_sk_storage_lookup(sock->sk, map, true);
+ 		sockfd_put(sock);
+ 		return sdata ? sdata->data : NULL;
+ 	}
+@@ -154,7 +154,7 @@ static int bpf_fd_sk_storage_delete_elem(struct bpf_m=
+ap *map, void *key)
+ 	fd =3D *(int *)key;
+ 	sock =3D sockfd_lookup(fd, &err);
+ 	if (sock) {
+-		err =3D sk_storage_delete(sock->sk, map);
++		err =3D bpf_sk_storage_del(sock->sk, map);
+ 		sockfd_put(sock);
+ 		return err;
+ 	}
+@@ -260,7 +260,7 @@ BPF_CALL_4(bpf_sk_storage_get, struct bpf_map *, map,=
+ struct sock *, sk,
+ 	if (!sk || !sk_fullsock(sk) || flags > BPF_SK_STORAGE_GET_F_CREATE)
+ 		return (unsigned long)NULL;
+=20
+-	sdata =3D sk_storage_lookup(sk, map, true);
++	sdata =3D bpf_sk_storage_lookup(sk, map, true);
+ 	if (sdata)
+ 		return (unsigned long)sdata->data;
+=20
+@@ -293,7 +293,7 @@ BPF_CALL_2(bpf_sk_storage_delete, struct bpf_map *, m=
+ap, struct sock *, sk)
+ 	if (refcount_inc_not_zero(&sk->sk_refcnt)) {
+ 		int err;
+=20
+-		err =3D sk_storage_delete(sk, map);
++		err =3D bpf_sk_storage_del(sk, map);
+ 		sock_put(sk);
+ 		return err;
+ 	}
+@@ -301,8 +301,8 @@ BPF_CALL_2(bpf_sk_storage_delete, struct bpf_map *, m=
+ap, struct sock *, sk)
+ 	return -ENOENT;
+ }
+=20
+-static int sk_storage_charge(struct bpf_local_storage_map *smap,
+-			     void *owner, u32 size)
++static int bpf_sk_storage_charge(struct bpf_local_storage_map *smap,
++				 void *owner, u32 size)
+ {
+ 	struct sock *sk =3D (struct sock *)owner;
+=20
+@@ -316,8 +316,8 @@ static int sk_storage_charge(struct bpf_local_storage=
+_map *smap,
+ 	return -ENOMEM;
+ }
+=20
+-static void sk_storage_uncharge(struct bpf_local_storage_map *smap,
+-				void *owner, u32 size)
++static void bpf_sk_storage_uncharge(struct bpf_local_storage_map *smap,
++				    void *owner, u32 size)
+ {
+ 	struct sock *sk =3D owner;
+=20
+@@ -325,7 +325,7 @@ static void sk_storage_uncharge(struct bpf_local_stor=
+age_map *smap,
+ }
+=20
+ static struct bpf_local_storage __rcu **
+-sk_storage_ptr(void *owner)
++bpf_sk_storage_ptr(void *owner)
+ {
+ 	struct sock *sk =3D owner;
+=20
+@@ -336,8 +336,8 @@ static int sk_storage_map_btf_id;
+ const struct bpf_map_ops sk_storage_map_ops =3D {
+ 	.map_meta_equal =3D bpf_map_meta_equal,
+ 	.map_alloc_check =3D bpf_local_storage_map_alloc_check,
+-	.map_alloc =3D sk_storage_map_alloc,
+-	.map_free =3D sk_storage_map_free,
++	.map_alloc =3D bpf_sk_storage_map_alloc,
++	.map_free =3D bpf_sk_storage_map_free,
+ 	.map_get_next_key =3D notsupp_get_next_key,
+ 	.map_lookup_elem =3D bpf_fd_sk_storage_lookup_elem,
+ 	.map_update_elem =3D bpf_fd_sk_storage_update_elem,
+@@ -345,9 +345,9 @@ const struct bpf_map_ops sk_storage_map_ops =3D {
+ 	.map_check_btf =3D bpf_local_storage_map_check_btf,
+ 	.map_btf_name =3D "bpf_local_storage_map",
+ 	.map_btf_id =3D &sk_storage_map_btf_id,
+-	.map_local_storage_charge =3D sk_storage_charge,
+-	.map_local_storage_uncharge =3D sk_storage_uncharge,
+-	.map_owner_storage_ptr =3D sk_storage_ptr,
++	.map_local_storage_charge =3D bpf_sk_storage_charge,
++	.map_local_storage_uncharge =3D bpf_sk_storage_uncharge,
++	.map_owner_storage_ptr =3D bpf_sk_storage_ptr,
+ };
+=20
+ const struct bpf_func_proto bpf_sk_storage_get_proto =3D {
 --=20
 2.24.1
 
