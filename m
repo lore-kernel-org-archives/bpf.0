@@ -2,112 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 72D2CC2D0E4
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:54:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 67F23C56202
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:56:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C70CF20A8B
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:54:18 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E3F320872
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:56:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="PpFzMzXH";
-	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ee0TLRkp"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="TtZxDNxU"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726102AbgKLWyS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Nov 2020 17:54:18 -0500
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:40959 "EHLO
-        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725973AbgKLWyS (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 12 Nov 2020 17:54:18 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 38F103BA;
-        Thu, 12 Nov 2020 17:54:17 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 12 Nov 2020 17:54:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
-        mime-version:content-transfer-encoding:content-type:cc:to
-        :subject:from:date:message-id; s=fm2; bh=hR/B1/mksMg4nf29wakGk+i
-        VZrvBuyXfFOqVP/Ac498=; b=PpFzMzXHxp5c6435BPLh0Op1Z51473xLnoz/1D4
-        PBzKXLL1Trl/iGVvSS5hQQhbohhoNbjP8WrhMQDwSkOb6IkWc5nSrSC+w2olGuG0
-        p684008oVCResM6N2owZJ6AQaEfREjD0HTKhe0ADsHz47hfc4mCBHdcgQsqa9JxL
-        jags1GBklYdLwgDCn1ikmc7/NaWejeKDQB5ZkieowKoTgBDb1r89CRzAdeIRug2f
-        wFy46wHhTJitMf5xo5mLJqU1s+qcbo5avNVjcG6kQ9JhB/xqt5xOYw9NNWviPsXd
-        d6gNNYlVTqFb/uhD3mQawNCA3QNwMfALnPo1saeGR8UBqBA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:message-id:mime-version:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=hR/B1/
-        mksMg4nf29wakGk+iVZrvBuyXfFOqVP/Ac498=; b=ee0TLRkp2fG616K+S4BtkY
-        QE2gR2tMJSRWl+4CaUwucfcT+GnwlwzpNF7wlSLq6aKVvzHNuLA5BMw9xXfWiSSP
-        UgZdGSqJloZs0mNuEBBB4bbCTzlOD6NvB0xguyi/ElSs1bK47O2xFezLPBxbdLO/
-        otbXwIdMv8rwVZ7vqxlJdMPQAiC4Qg1SflhlW/6ppfXJm1gOu/82pv93FqX0v1Hx
-        jza7fwyTffAlejbtqDMmXTt2tdlTK/g+bX0IYzdv1alqNQLJUpNtu0QwM3QF/NsN
-        HKuyA1usrr6nx1dAGiMGF6/KbtKAl0Yx0gIzFIzJY9qG9tsuN/0njyL8mZpAr5aA
-        ==
-X-ME-Sender: <xms:GL2tX90c3a_7ME0QM9eV6Ai4uYVITNRql1e05Te9901r8TV2JkiGvg>
-    <xme:GL2tX0H0xRI1ereI4-MApVha0hemKRvkvhpemUkt9OlPopMEQh3rWFL0zUIN91OmX
-    XPKTSKkPioQEl5mQw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedruddvgedgtdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpegggf
-    gtvffuhfffkfesthhqredttddtjeenucfhrhhomhepfdffrghnihgvlhcuighufdcuoegu
-    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeeiffehfeekgfeitdehff
-    euhfekgeelfeduueejveegueejtefhteetuefhgefhteenucfkphepieelrddukedurddu
-    tdehrdeigeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:GL2tX969B1mYIn12uTA-THcyXSuOPXFfQKeWB8ALsW_RJyAZtbnz_w>
-    <xmx:GL2tX623bK4F6iUKKtagNsJw5ic5aZPXrSJoINjF8-QuFCT9F2_IPQ>
-    <xmx:GL2tXwFnD4d7qoSmua42oGF7h01WyxBCLKMMSoIhtEEibbJCSq9JZg>
-    <xmx:GL2tX1Tz5Th8EgmiqeUzw5EDxLDKHkafgk3ZT3AtJWqMZ_9G9wNEVw>
-Received: from localhost (c-69-181-105-64.hsd1.ca.comcast.net [69.181.105.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA id EBBF5328005E;
-        Thu, 12 Nov 2020 17:54:15 -0500 (EST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Cc:     <yhs@fb.com>, <cneirabustos@gmail.com>, <ebiederm@xmission.com>,
-        <blez@fb.com>
-To:     <bpf@vger.kernel.org>
-Subject: Extending bpf_get_ns_current_pid_tgid()
-From:   "Daniel Xu" <dxu@dxuuu.xyz>
-Date:   Thu, 12 Nov 2020 14:20:35 -0800
-Message-Id: <C71MVCBQMCPF.1CCKLFRTGYD0D@maharaja>
+        id S1725999AbgKLW4k (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Nov 2020 17:56:40 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:54803 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725971AbgKLW4k (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Nov 2020 17:56:40 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4CXH5v1Fwnz9sTK;
+        Fri, 13 Nov 2020 09:56:35 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1605221797;
+        bh=0pX8nIOtoAq1+7rtL+5P/hevnEzjcuHkAft2GGDIhU4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TtZxDNxU3z13HHyrf9s7gIXP64XILbwfku2j6lu9Yz/+0RStgSOOkuE5zLVnLd7//
+         osYHC21sPr93DlxYd+KSQxcprkxpUEFDaBW2At2SnyQOrwER4ADZO/u16Z2r+/n4pq
+         rDAISKtek7yPOFQHROyBMC1j0YixDhldNvZnRRmpS8CwPjxNo6vC4TLmKeTXD88gJb
+         083c7iWAf+hN3/+5QuP6FkPAbAvwS9KKkBo5Jqw3HjbiCq4JrYF5Mu1PEUv6VTFGD6
+         025fGiGXUMJgSfWTdAQgQ1Y4gmY4yFz+dyyMQ/LfrX2GE7/v9USxiL52emb+RgtFQ5
+         xRovR5gFq//0Q==
+Date:   Fri, 13 Nov 2020 09:56:32 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Roman Gushchin <guro@fb.com>
+Cc:     <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        <netdev@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH bpf-next v5 01/34] mm: memcontrol: use helpers to read
+ page's memcg data
+Message-ID: <20201113095632.489e66e2@canb.auug.org.au>
+In-Reply-To: <20201112221543.3621014-2-guro@fb.com>
+References: <20201112221543.3621014-1-guro@fb.com>
+        <20201112221543.3621014-2-guro@fb.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/=IuuajhLUc48=qI8wDqPnmd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+--Sig_/=IuuajhLUc48=qI8wDqPnmd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I'm looking at the current implementation of
-bpf_get_ns_current_pid_tgid() and the helper seems to be a bit overly
-restricting to me. Specifically the following line:
+Hi Roman,
 
-    if (!ns_match(&pidns->ns, (dev_t)dev, ino))
-            goto clear;
+On Thu, 12 Nov 2020 14:15:10 -0800 Roman Gushchin <guro@fb.com> wrote:
+>
+> Patch series "mm: allow mapping accounted kernel pages to userspace", v6.
+>=20
+> Currently a non-slab kernel page which has been charged to a memory cgroup
+> can't be mapped to userspace.  The underlying reason is simple: PageKmemcg
+> flag is defined as a page type (like buddy, offline, etc), so it takes a
+> bit from a page->mapped counter.  Pages with a type set can't be mapped to
+> userspace.
+>
+.....
+>=20
+> To make sure nobody uses a direct access, struct page's
+> mem_cgroup/obj_cgroups is converted to unsigned long memcg_data.
+>=20
+> Link: https://lkml.kernel.org/r/20201027001657.3398190-1-guro@fb.com
+> Link: https://lkml.kernel.org/r/20201027001657.3398190-2-guro@fb.com
+> Signed-off-by: Roman Gushchin <guro@fb.com>
+> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> Reviewed-by: Shakeel Butt <shakeelb@google.com>
+> Acked-by: Michal Hocko <mhocko@suse.com>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-Why bail if the inode # does not match? IIUC from the old discussions,
-it was b/c in the future pidns files might belong to different devices.
-It's not clear to me (possibly b/c I'm missing something) why the inode
-has to match as well.
+What is going on here?  You are taking patches from linux-next and
+submitting them to another maintainer?  Why?
 
-Would it be possible to instead have the helper return the pid/tgid of
-the current task as viewed _from_ the `dev`/`ino` pidns? If the current
-task is hidden from the `dev`/`ino` pidns, then return -ENOENT. The use
-case is for bpftrace symbolize stacks when run inside a container. For
-example:
+You should not do that from Andrew's tree as it changes/rebases every
+so often ... and you should not have my SOB on there as it is only
+there because that patch is in linux-next i.e. I in the submission
+chain to linux-next - if the patch is to go via some other tree, then
+my SOB should not be there.  (The same may be true for Andrew's SOB.)
+In general you cannot add someone else's SOB to one of your patch
+submissions.
 
-    (in-container)# bpftrace -e 'profile:hz:99 { print(ustack) }'
+--=20
+Cheers,
+Stephen Rothwell
 
-This currently does not work b/c bpftrace will generate a prog that gets
-the root pidns pid, pack it with the stackid, and pass it up to
-userspace. But b/c bpftrace is running inside the container, the root
-pidns pid is invalid and symbolization fails.
+--Sig_/=IuuajhLUc48=qI8wDqPnmd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-What would be nice is if bpftrace could generate a prog that gets the
-current pid as viewed from bpftrace's pidns. Then symbolization would
-work.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Daniel
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl+tvaAACgkQAVBC80lX
+0GyiWwf+OVKz0JM8eCLNsSIf5uoCARVabzFp0O+8xY8jd7RPiDORD97UcrS0d7TE
+XHjO6q1llUGgw7KB+aZCr09pPIIvgF949tWY9yheehC7F/QhJkOFCMRHsxpJ77gT
+43aaHmTKSGMmd53qmu0+Ycz3htyhVRHcgYVp5ely2e761NKf6l89A6HsnkGdRn8v
+uJ61wv/o3pZeLxeXydX8k+ouOkG2M9zvkSRNYiz/JPb8PnrGqJReWdV5Gxq2nsCP
+pzrDBGtFGk+pMMa+t0pu0ml22WaMf7e2WHUmzKAng8DIApAsl/sbSDtpuv80Lpgf
+R/rwGpiYVyy1IIXB+CTXEjBOJsKpFg==
+=C+xA
+-----END PGP SIGNATURE-----
+
+--Sig_/=IuuajhLUc48=qI8wDqPnmd--
