@@ -2,154 +2,117 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E9BAEC56202
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 01:32:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 841C8C61DD8
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 01:51:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 91D9F2076E
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 01:32:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2ECFC2068E
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 01:51:23 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mIC6jicw"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="ig2W3ZFC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728273AbgKLBcF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 11 Nov 2020 20:32:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727194AbgKKWqp (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 11 Nov 2020 17:46:45 -0500
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B2CC040208;
-        Wed, 11 Nov 2020 14:37:53 -0800 (PST)
-Received: by mail-yb1-xb44.google.com with SMTP id o71so3116040ybc.2;
-        Wed, 11 Nov 2020 14:37:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=N5VYtEHc8PJh6B9Pxwlx+Xskau4NMSgJa2pe+N/+0hQ=;
-        b=mIC6jicwNMDMYFiuiMuBACCgPbD4hSINY8bHnJF3OU19jk/QMCYS7pM4BqBYavjA0W
-         pHxyF+5JWJ8hwLLq8P+ss5fOJeI9XR3Ao4i+1Qehu4nmX3b2R4SR6OlZatgHcBT+Z1MD
-         gAhYz1nodwBBFDlSTR5wkXAbX3s2h30wOkMt0Nl3Gx5gN0WuFqgPKmdajV5Fqp5EkdKL
-         DbkVkXX2DJ82y3plY4hdjt4ShFcoj1g7LOgV7GjgWklZ0FHTLCtzaDaFqkMlvVsFwSKF
-         Cam5QJUDpkf0ccxOJVmYz5OL0RQ4cnwrBEG8pgOLj+kmKXOEy1qW9ZMcrkguIMBBkY95
-         YbjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N5VYtEHc8PJh6B9Pxwlx+Xskau4NMSgJa2pe+N/+0hQ=;
-        b=WgQ+XSsYE2loy5eJGekzcKizIxnNM0HHKr9TlsT4HbEGtLLMPhFLh8FtVSVSNx2/cu
-         3QbVq5XwDGglodZVtn27r5EVXlOPtEFvhkwMEsk+sQ6POun/tuZUwSqFcGi6KKgThoPo
-         HbyEkFD4gGCXZUgCRM3JXcDpwi0SVDt1qS5ZGGcR2M43uGr91HSwfeRXvOOPtZyMkrwH
-         9NHmUZFdxOLGAcrm91VlWaJig9NCSuLZ7ZcEV0Z+8QscmTZ/eSCzL028Wez30jByJIM6
-         04uJx/HX6e/5ax/I2bApE1kDm5afAmqvaAl/F1eUx3Mcz82Jg1cPNwUr51NQcTKcL7kA
-         PVLA==
-X-Gm-Message-State: AOAM533FnOHm0GxSX+6EvwB6TYOdna3KBFNimIEFubyJzQLcuJEOZbJ4
-        0XItsjKKwKx9LrLoEJl2fQuc6oLRUI1z3N9lXgk=
-X-Google-Smtp-Source: ABdhPJzceVMSitP9WEByfMfPlKfV3tIMI46eRigsyjAZap2rw9WtaR+Alr/UeVY1x+3FV4YmkQ5rHafJEb0fbziZqJQ=
-X-Received: by 2002:a25:e701:: with SMTP id e1mr12067008ybh.510.1605134272385;
- Wed, 11 Nov 2020 14:37:52 -0800 (PST)
+        id S1728307AbgKLBcM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 11 Nov 2020 20:32:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39130 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728104AbgKLAhi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 11 Nov 2020 19:37:38 -0500
+Received: from quaco.ghostprotocols.net (unknown [179.97.37.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 93F0A205CB;
+        Thu, 12 Nov 2020 00:36:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605141377;
+        bh=DOk7cRTHZcbOlKVbRDvxMzJo/3Y4kVTkoZ+PTgYoh3Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ig2W3ZFCr2btoWO85apExmU4ulkGa9Mf3rczwlg471zRVQQkqo003tOnYbVwwkgez
+         YGIsxroBwZTt9P/LqurIxs8aYv4yCGqHQj+F4oNg9RMfVu8bZvllGuWUu2q0kPylqt
+         O13PxFJqP+5jbQsMzD3PKh6uZ8+87QBF11AI7NZ8=
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5A796411D1; Wed, 11 Nov 2020 21:36:15 -0300 (-03)
+Date:   Wed, 11 Nov 2020 21:36:15 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>, dwarves@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>,
+        "Frank Ch. Eigler" <fche@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
+Subject: Re: [PATCH 3/3] btf_encoder: Change functions check due to broken
+ dwarf
+Message-ID: <20201112003615.GH380127@kernel.org>
+References: <20201106222512.52454-1-jolsa@kernel.org>
+ <20201106222512.52454-4-jolsa@kernel.org>
+ <CAEf4BzZqFos1N-cnyAc6nL-=fHFJYn1tf9vNUewfsmSUyK4rQQ@mail.gmail.com>
+ <20201111201929.GB619201@krava>
+ <20201111203130.GC619201@krava>
+ <CAEf4BzZ089_ECxY_tFBMUc5c-rwtD9Mw8n7anUsdgpzgoipsPg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20201111135425.56533-1-wanghai38@huawei.com> <6a589c0b-e2fb-5766-542b-62f40b16253a@iogearbox.net>
-In-Reply-To: <6a589c0b-e2fb-5766-542b-62f40b16253a@iogearbox.net>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 11 Nov 2020 14:37:41 -0800
-Message-ID: <CAEf4BzZ_Fhzg=f437fS0rZANk5ZDAfTv_T3f9Hm6LCLO23pm-g@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf] tools: bpftool: Add missing close before bpftool
- net attach exit
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Wang Hai <wanghai38@huawei.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Michal Rostecki <mrostecki@opensuse.org>,
-        Alexei Starovoitov <ast@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        KP Singh <kpsingh@chromium.org>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        "Daniel T. Lee" <danieltimlee@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZ089_ECxY_tFBMUc5c-rwtD9Mw8n7anUsdgpzgoipsPg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Nov 11, 2020 at 1:24 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> On 11/11/20 2:54 PM, Wang Hai wrote:
-> > progfd is created by prog_parse_fd(), before 'bpftool net attach' exit,
-> > it should be closed.
-> >
-> > Fixes: 04949ccc273e ("tools: bpftool: add net attach command to attach XDP on interface")
-> > Signed-off-by: Wang Hai <wanghai38@huawei.com>
-> > ---
-> > v2->v3: add 'err = 0' before successful return
-> > v1->v2: use cleanup tag instead of repeated closes
-> >   tools/bpf/bpftool/net.c | 18 +++++++++++-------
-> >   1 file changed, 11 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/tools/bpf/bpftool/net.c b/tools/bpf/bpftool/net.c
-> > index 910e7bac6e9e..f927392271cc 100644
-> > --- a/tools/bpf/bpftool/net.c
-> > +++ b/tools/bpf/bpftool/net.c
-> > @@ -578,8 +578,8 @@ static int do_attach(int argc, char **argv)
-> >
-> >       ifindex = net_parse_dev(&argc, &argv);
-> >       if (ifindex < 1) {
-> > -             close(progfd);
-> > -             return -EINVAL;
-> > +             err = -EINVAL;
-> > +             goto cleanup;
-> >       }
-> >
-> >       if (argc) {
-> > @@ -587,8 +587,8 @@ static int do_attach(int argc, char **argv)
-> >                       overwrite = true;
-> >               } else {
-> >                       p_err("expected 'overwrite', got: '%s'?", *argv);
-> > -                     close(progfd);
-> > -                     return -EINVAL;
-> > +                     err = -EINVAL;
-> > +                     goto cleanup;
-> >               }
-> >       }
-> >
-> > @@ -597,16 +597,20 @@ static int do_attach(int argc, char **argv)
-> >               err = do_attach_detach_xdp(progfd, attach_type, ifindex,
-> >                                          overwrite);
-> >
-> > -     if (err < 0) {
-> > +     if (err) {
-> >               p_err("interface %s attach failed: %s",
-> >                     attach_type_strings[attach_type], strerror(-err));
-> > -             return err;
-> > +             goto cleanup;
-> >       }
-> >
-> >       if (json_output)
-> >               jsonw_null(json_wtr);
-> >
-> > -     return 0;
-> > +     err = 0;
->
-> Why is the 'err = 0' still needed here given we test for err != 0 earlier?
-> Would just remove it, otherwise looks good.
+Em Wed, Nov 11, 2020 at 12:36:55PM -0800, Andrii Nakryiko escreveu:
+> On Wed, Nov 11, 2020 at 12:31 PM Jiri Olsa <jolsa@redhat.com> wrote:
+> > On Wed, Nov 11, 2020 at 09:19:29PM +0100, Jiri Olsa wrote:
+> > > On Wed, Nov 11, 2020 at 11:59:20AM -0800, Andrii Nakryiko wrote:
+> > > SNIP
 
-This patch was already applied. Wang, can you please follow up with
-another patch to address Daniel's feedback?
+> > > > > +       if (!fl->init_bpf_begin &&
+> > > > > +           !strcmp("__init_bpf_preserve_type_begin", elf_sym__name(sym, btfe->symtab)))
+> > > > > +               fl->init_bpf_begin = sym->st_value;
+> > > > > +
+> > > > > +       if (!fl->init_bpf_end &&
+> > > > > +           !strcmp("__init_bpf_preserve_type_end", elf_sym__name(sym, btfe->symtab)))
+> > > > > +               fl->init_bpf_end = sym->st_value;
+> > > > > +}
+> > > > > +
+> > > > > +static int has_all_symbols(struct funcs_layout *fl)
+> > > > > +{
+> > > > > +       return fl->mcount_start && fl->mcount_stop &&
+> > > > > +              fl->init_begin && fl->init_end &&
+> > > > > +              fl->init_bpf_begin && fl->init_bpf_end;
 
->
-> > +cleanup:
-> > +     close(progfd);
-> > +     return err;
-> >   }
-> >
-> >   static int do_detach(int argc, char **argv)
-> >
->
+> > > > See below for what seems to be the root cause for the immediate problem.
+
+> > > > But me, Alexei and Daniel had a discussion offline, and we concluded
+> > > > that this special bpf_preserve_init section is probably not the right
+> > > > approach overall. We should roll back the bpf patch and instead adjust
+> > > > pahole's approach. I think we should just drop the __init check and
+> > > > include all the __init functions into BTF. There could be cases where
+> > > > we'd need to attach BPF programs to __init functions (e.g., bpf_lsm
+> > > > security cases), so having BTFs for those FUNCs are necessary as well.
+> > > > Ftrace currently disallows that, but it's only because no user-space
+> > > > application has a way to attach probes early enough. This might change
+> > > > in the future, so there is no need to invent special mechanisms now
+> > > > for bpf_iter function preservation. Let's just include all __init
+> > > > functions in BTF. Can you please do that change and check how much
+> > > > more functions we get in BTF? Thanks!
+
+> > > sure, not problem to keep all init functions, will give you the count
+
+> > with pahole change below (on top of current master) and kernel
+> > without the special init section, I'm getting over ~2000 functions
+> > more on my .config:
+
+> >   $ bpftool btf dump file ./vmlinux | grep 'FUNC ' | wc -l
+> >   41505
+> >   $ bpftool btf dump file /sys/kernel/btf/vmlinux | grep 'FUNC ' | wc -l
+> >   39256
+
+> That's a very small percentage increase, let's just do this.
+
+Agreed, if that is the only difference, no point in complicating things
+as before, we end up with unforeseen trouble as we noticed.
+
+- Arnaldo
