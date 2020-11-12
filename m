@@ -2,58 +2,58 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	USER_AGENT_GIT autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1C2A0C2D0E4
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 20:03:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BF362C388F7
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 20:03:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AC03E2085B
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 20:03:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B8B92224F
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 20:03:53 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PxCDajPY"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dhQ8kJuh"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726787AbgKLUDu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Nov 2020 15:03:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54738 "EHLO
+        id S1727083AbgKLUDw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Nov 2020 15:03:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726702AbgKLUDu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 Nov 2020 15:03:50 -0500
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB808C0613D1
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 12:03:49 -0800 (PST)
-Received: by mail-wr1-x444.google.com with SMTP id p8so7342524wrx.5
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 12:03:49 -0800 (PST)
+        with ESMTP id S1726702AbgKLUDv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Nov 2020 15:03:51 -0500
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480FDC0613D1
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 12:03:51 -0800 (PST)
+Received: by mail-wm1-x342.google.com with SMTP id p22so6320748wmg.3
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 12:03:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fDF5l0n3msRGgGGH1jpdrBrGSoTCWyYhlZaMIFoRHNY=;
-        b=PxCDajPYS+KMhHly7PQAn7plJ/zYAleZ+YiSv2SUa754kwXS/aJGSZwC+TDW/rdQCv
-         q05aiakbtJAtUYBPNycY+A3kwd12STIpUnbMkxkd610OR0mCJ1l6idQrSXY6s2PhrXN5
-         fsux1Ln24Wq+x9r5mJm65U+rSJc8QKcVLJNGM=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6XvDI+wpjgB/udB/U6ZUMsnDIItG6AuNAvWmNdWpIRQ=;
+        b=dhQ8kJuhFZGAfKx5/P+68g0YfqOiER21XLOeWatvwbhmto4adSSdyxnwL1DDPhMlOU
+         jeq7QSlfEXzfxE+Jj+6gdGWgCiVUQycpZMHORgHjxrlk9cl9n/ORjyIBQAhdyKJdyuqH
+         ljuRpjXPLvpjERXK/VH700QO4WPw5J/RgXpTs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fDF5l0n3msRGgGGH1jpdrBrGSoTCWyYhlZaMIFoRHNY=;
-        b=I2eCX76gSXExjQzdxmof4/WQQFzCn4KEjDU8pbtOjxr0w/u6E3zFR8CTy4uKGAmXvV
-         /RJtzQMgLYXUIn/X3JaxT0Ze2EAIFFVkxeekfm/mPtsMgjqY6ReLeMn2xrkn1zVb14OY
-         SDOYxpcJ+qLSLpBASz3wxmeaIWkNepmbwosSag1jDA3b6u5izyfIYwVatj7/OTsO2fI5
-         Xx3aYcxC74HR9gB5yt/jYPDLBWCrTHR+v/xhEcMcptagpEPEVMULOn//+9RbqF9f6bn3
-         MHtGyxRFAMKX3NxhEWmt8opGCe525jZDn/9WZ9pm4OetIQfLRE4Hw9HMhWD4+ZldUkr4
-         RCOQ==
-X-Gm-Message-State: AOAM532j6wU5WtlSPfgfarE46BtToAazLj47p8+z5GTvmpROxpqivWqi
-        8m8loD7K3He9Ho1v0+s4fZT3Tw==
-X-Google-Smtp-Source: ABdhPJwVb+LsMJ0DjHqzXuECZpfn2+MFgdWWTcckzcS+fCFdEmaOUz+OteWD+70e25ksjgaZahkqBw==
-X-Received: by 2002:adf:de85:: with SMTP id w5mr1476604wrl.90.1605211428534;
-        Thu, 12 Nov 2020 12:03:48 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6XvDI+wpjgB/udB/U6ZUMsnDIItG6AuNAvWmNdWpIRQ=;
+        b=NUtSMw1jUYmHzdayW6yKkU1tMjONZIuRL7fgFdCKcT7YPrBHqz9SS55ibc1H5MhmQ0
+         oN5jpuywrnBJgSgLg6u35q9J2rdxG2pEs0tJVsqpV0+Pk6K100CVYafqzhWPQfmDFwms
+         NOenVHvc7FAwAQ91CiSKRsu0bwjcxmecWxUXUQyTbkD3h34RGLJVwVD63AJJzJfBOr1N
+         RmEENliB+GstBIB4UhHasM4SFGr3R6MXjaaeX6CCeTE2+7q71Wu0LHGbuTeLczIsMGC1
+         V5ht9aORjYJiaCwbzW/86PrX2gg9LmPIM/vOxJEUz0vwRyD1ttzSlx5gu4GKA8WpuegA
+         XOuw==
+X-Gm-Message-State: AOAM5335ksNSdinsx1Jy8PER2JlFUwWZMEf0gth2qn4CwHYovpqOZrUB
+        nLTwxJrj/t0S/C2ZDebGdYdmmQ==
+X-Google-Smtp-Source: ABdhPJwrX54iWcDGKz0HeNvEQPqmgSDXxgBOwoPc4cdWoBVBRrjzZ09+sWbLY+RQBALjcPD4mURyRQ==
+X-Received: by 2002:a1c:1906:: with SMTP id 6mr1249717wmz.87.1605211429993;
+        Thu, 12 Nov 2020 12:03:49 -0800 (PST)
 Received: from kpsingh.c.googlers.com.com (203.75.199.104.bc.googleusercontent.com. [104.199.75.203])
-        by smtp.gmail.com with ESMTPSA id f5sm8488472wrg.32.2020.11.12.12.03.47
+        by smtp.gmail.com with ESMTPSA id f5sm8488472wrg.32.2020.11.12.12.03.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2020 12:03:48 -0800 (PST)
+        Thu, 12 Nov 2020 12:03:49 -0800 (PST)
 From:   KP Singh <kpsingh@chromium.org>
 To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -63,10 +63,12 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Hao Luo <haoluo@google.com>,
         Florent Revest <revest@chromium.org>,
         Brendan Jackman <jackmanb@chromium.org>
-Subject: [PATCH bpf-next v2 0/2] Sleepable LSM Hooks
-Date:   Thu, 12 Nov 2020 20:03:44 +0000
-Message-Id: <20201112200346.404864-1-kpsingh@chromium.org>
+Subject: [PATCH bpf-next v2 2/2] bpf: Expose bpf_d_path helper to sleepable LSM hooks
+Date:   Thu, 12 Nov 2020 20:03:46 +0000
+Message-Id: <20201112200346.404864-3-kpsingh@chromium.org>
 X-Mailer: git-send-email 2.29.2.222.g5d2a92d10f8-goog
+In-Reply-To: <20201112200346.404864-1-kpsingh@chromium.org>
+References: <20201112200346.404864-1-kpsingh@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -75,21 +77,44 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: KP Singh <kpsingh@google.com>
 
-# v1 -> v2
+Sleepable hooks are never called from an NMI/interrupt context, so it is
+safe to use the bpf_d_path helper in LSM programs attaching to these
+hooks.
 
-  * Fixed typos and formatting errors.
-  * Added Andrii's ack.
+The helper is not restricted to sleepable programs and merely uses the
+list of sleeable hooks as the initial subset of LSM hooks where it can
+be used.
 
-KP Singh (2):
-  bpf: Augment the set of sleepable LSM hooks
-  bpf: Expose bpf_d_path helper to sleepable LSM hooks
+Signed-off-by: KP Singh <kpsingh@google.com>
+---
+ kernel/trace/bpf_trace.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
- include/linux/bpf_lsm.h  |   7 +++
- kernel/bpf/bpf_lsm.c     | 121 +++++++++++++++++++++++++++++++++++++++
- kernel/bpf/verifier.c    |  16 +-----
- kernel/trace/bpf_trace.c |   7 ++-
- 4 files changed, 135 insertions(+), 16 deletions(-)
-
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index e4515b0f62a8..eab1af02c90d 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -16,6 +16,7 @@
+ #include <linux/syscalls.h>
+ #include <linux/error-injection.h>
+ #include <linux/btf_ids.h>
++#include <linux/bpf_lsm.h>
+ 
+ #include <uapi/linux/bpf.h>
+ #include <uapi/linux/btf.h>
+@@ -1178,7 +1179,11 @@ BTF_SET_END(btf_allowlist_d_path)
+ 
+ static bool bpf_d_path_allowed(const struct bpf_prog *prog)
+ {
+-	return btf_id_set_contains(&btf_allowlist_d_path, prog->aux->attach_btf_id);
++	if (prog->type == BPF_PROG_TYPE_LSM)
++		return bpf_lsm_is_sleepable_hook(prog->aux->attach_btf_id);
++
++	return btf_id_set_contains(&btf_allowlist_d_path,
++				   prog->aux->attach_btf_id);
+ }
+ 
+ BTF_ID_LIST_SINGLE(bpf_d_path_btf_ids, struct, path)
 -- 
 2.29.2.222.g5d2a92d10f8-goog
 
