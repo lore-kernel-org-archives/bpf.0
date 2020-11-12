@@ -2,174 +2,300 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 50A95C2D0E4
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 21:58:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53898C2D0E4
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:16:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C49DC216FD
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 21:58:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D89CF22227
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:16:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="GcrBqNfN";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="aEdEm58h"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="QeO9KQu8"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727293AbgKLV6M (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Nov 2020 16:58:12 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:9618 "EHLO
+        id S1727352AbgKLWQE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Nov 2020 17:16:04 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:27236 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727043AbgKLV6M (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 12 Nov 2020 16:58:12 -0500
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0ACLeTiZ032665;
-        Thu, 12 Nov 2020 13:57:54 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=c+E1JedCwp7N9WoJn/4EwT0c+ZK6cM9euIzgddcDWBU=;
- b=GcrBqNfNG6tbQ0wq9zVYc3RXJuX01wnigc6+eIpNphfNM7/nR3ESR5jhh2tC2VbWnnon
- pYsSMseEf1fQaPA88kPO3WD9pFmTZgGfPuk6qXdKMUKoAWtPjZOy+tVC061a0VU4fgfa
- 2TXozrz2kjIttUiUP8saaxdrVC7mMV5WCa0= 
+        by vger.kernel.org with ESMTP id S1727249AbgKLWQE (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 12 Nov 2020 17:16:04 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0ACMBJiN013518
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 14:16:03 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=7uzhk17n4QpogwpKk1SOusxxl7O/PzbHTgMLMiHq61w=;
+ b=QeO9KQu8l7PXiew3JpL00Rg1wcc80rgSdKIMVj9k3L+Ntnshrvzs3x+Q5isiOf7spI6D
+ Tdo5NUVJ+4bG0MmSbrvBfojj1cVoqmesP/EQvU0iFIIwnNgo7mzvt/kU9azY4Bpz8ILz
+ MgQc/eExJgJ0SwzcnoaLIxp70Jq0FzJWwww= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 34r695ms9s-6
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 12 Nov 2020 13:57:53 -0800
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.198) with Microsoft SMTP Server
+        by mx0a-00082601.pphosted.com with ESMTP id 34s7dstj6v-5
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 14:16:03 -0800
+Received: from intmgw002.06.prn3.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 12 Nov 2020 13:57:51 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QIFwau6DjDe/m7ZACAJYKyiljl7g+U/Tzif2WYIamgcX2doXsaLOClesjdYTV7CVyLUM1L8o8TxsibahGFwzX+XcOMEQP46BwcgvtMXzT4kixO6aXkBkgixEA9NJIRr3RiF/dIyEtyfMTLEZTS0kE5odhCViUowcVgHRVXMLzEFCzVqs1J55pENdqP+X2elguideuSZO7Pmvy3ZG2PamXUF3de2+dwP+avqIwW6tn2FAwpwtfM+wObADDB06uQ3fqHz8255JFCoosQznshg1BGxXWYKLErvqxkVIhYXshJCnTtk+BMK/W7JuMX1wFZpOG0LNLxmwLJIJnRDY4/X9lA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c+E1JedCwp7N9WoJn/4EwT0c+ZK6cM9euIzgddcDWBU=;
- b=bMcA5LmpaVdy7uZLkHwoSzZq+pw9Ta14U5L1BlBTsq8xNbiA4VQoZC2OmStaPRULTFeqYoZlWKRXyFtthBmP9EzLt3G4+i6k3zx87NJ1JOCoWqT1Aco0yQzB6s8w3Mk5cljEhxHoP4GG+qmUNqDwHOODSPuqPKSJe907GgN43F6mEeyOrM23lC4Bax2Lr8AxrTTT3s0IaFqunwg6YSWDJ8VDcb9+F7ddCUKpm3CUWsdbi4X6oMrn1BDZlIKRqv/iun5XvBEGH5omJMgPBIvX2Vvgto5GWvf5QQwDe2GK5zA04K2JeAxXDH9/JVOz1/sfxL7EpwoF/dtB5LIeTAZ10g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c+E1JedCwp7N9WoJn/4EwT0c+ZK6cM9euIzgddcDWBU=;
- b=aEdEm58h6f3NSDSxQr4SIlNa1+qefpl6W7szFZK0nUNY6IMcZfhB3rhmTu9nDctqb1e9TNawdkKbqJKI5rVuRauNINImzB7IA514UnjhcB5xP8OIDc3Ta2RvrF4rFbH6b7oEtEnWHtQf/EDqbRhxmOFPZ8NIzrutBwUkUIJjzKw=
-Authentication-Results: chromium.org; dkim=none (message not signed)
- header.d=none;chromium.org; dmarc=none action=none header.from=fb.com;
-Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
- by BYAPR15MB2773.namprd15.prod.outlook.com (2603:10b6:a03:150::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.23; Thu, 12 Nov
- 2020 21:57:50 +0000
-Received: from BY5PR15MB3571.namprd15.prod.outlook.com
- ([fe80::bc1d:484f:cb1f:78ee]) by BY5PR15MB3571.namprd15.prod.outlook.com
- ([fe80::bc1d:484f:cb1f:78ee%4]) with mapi id 15.20.3541.025; Thu, 12 Nov 2020
- 21:57:50 +0000
-Date:   Thu, 12 Nov 2020 13:57:42 -0800
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     Florent Revest <revest@chromium.org>
-CC:     <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-        <yhs@fb.com>, <andrii@kernel.org>, <kpsingh@chromium.org>,
-        <jackmanb@chromium.org>, <linux-kernel@vger.kernel.org>,
-        Florent Revest <revest@google.com>
-Subject: Re: [PATCH] bpf: Expose bpf_sk_storage_* to iterator programs
-Message-ID: <20201112215742.mzznj7py3fmnl5ia@kafai-mbp>
-References: <20201112200914.2726327-1-revest@chromium.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201112200914.2726327-1-revest@chromium.org>
-X-Originating-IP: [2620:10d:c090:400::5:b515]
-X-ClientProxiedBy: MWHPR13CA0005.namprd13.prod.outlook.com
- (2603:10b6:300:16::15) To BY5PR15MB3571.namprd15.prod.outlook.com
- (2603:10b6:a03:1f6::32)
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from kafai-mbp (2620:10d:c090:400::5:b515) by MWHPR13CA0005.namprd13.prod.outlook.com (2603:10b6:300:16::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3564.21 via Frontend Transport; Thu, 12 Nov 2020 21:57:49 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: fc3298fd-ee56-4f3e-7b4f-08d88755ff99
-X-MS-TrafficTypeDiagnostic: BYAPR15MB2773:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BYAPR15MB27730F5FA6EDB74DDDE07F78D5E70@BYAPR15MB2773.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UNOHBi58c5Hdyu2TD6kualrUFDinAx/F8qSxa1b700tmL1JE/PnP+gk4xk8Th5v925uYF89aer/ow3cfCYhJ4IHftSJlUHriI/LpG3N4i6I6q3jmra+emHT+ISDZQYKudnGxMjjqXybSFyjl/cLzX6kI2BdNc7zzTFxsK3SLumX/L2bY4tTSOfCzqB4jxHRRqHeqXGGOG9nGwK3wsvzfiyfrUHkDJ1GvojTMfpZXLKYMyQX3q3mO8Aqld5mTXn0bTehcl2oL0DagSaf8R1FMst6SIF+hAVBIzMw1WqoS6JjUZQKzjUFzkMwIBDs9TRdBpTkeDRc5kN1D8RCV/F6/bJawTTNyScely4y4QN3fJyQUEJFPRTDwkdxKkNNCJ06d8b2IrE4LXuvEV0CyItE2WA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(346002)(396003)(39860400002)(366004)(136003)(66476007)(5660300002)(66556008)(16526019)(52116002)(33716001)(316002)(186003)(966005)(8676002)(55016002)(6496006)(66946007)(2906002)(6916009)(478600001)(6666004)(83380400001)(86362001)(4326008)(9686003)(8936002)(1076003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: IIkYqmZWiVL3DvVCQa54sdHRtCTQjTuL5YHvC4/hTgiAgAxmGqKaFuNMnSsWZ9qvV4vO/tH5e5dj2wyRr+V+3PacK/G4HMYVzY+ZbwowP6aZleSTiZsxLmdIYoN4lVDqboHii/gnrzrsO4gu199hQvONXkdywo4krDFz5TtJKj8v+wY1vtD0SAV/47skUitIdkeI6baQMrblGaz1km8Hcnbd1vlhjQ0E3DyPo6ahqA4Z0rKe9tneN3QoOEfrvfzAqi3W5YtOHDC3AyMd/k142MpoBytOrMGfQbp8TA7Q00oy+vRQkalOWaPfKtT6rA0mqzArZ/Whj6f5ZPtFYchckbXWw1ixHkioRjxKOPLKBXz7pUIZ2dTLsV2URdCcqg8qKqrdHdJU2IlYThWAdrJccpVvdEdO6JTdfWAmxE5MKaFXTVNe9Ya+PX7ofYcNFhTTWaQQtxFkxKtXuBvEym4mKIqfqm1Z1q3dEq8SvR+Am4aZuuQjwdvjw/Iistx4MzP8DRaiUM8tbzGI4ZYHCKU+fgWN2ZK5RQEueD7mn8aX3MIrmQa1y7bZbiny2+hB9JZByaUMWcX29gFIbSlItVsUy0DsF7gC0Tz9wNYMjX7tSG8nOOyNzi9J8kQqhPygcGopZwBwGC1lipMC6Kn/i9Qp8JXBetmh4BeQk4kQ6GVxZVfv8wV2HxFZR+EHSpcUcd+FWh3e+h9addr6kBtspNdgw6YottKM38SvQVSM2J6ghRk9VcBY8B1jOXr0sJttR2EWHp7/+jdc3dGAnYIws0t1guJ9orB0FtJw1QGSZHeyQUbJCNAbUR5UtSBetaT8yupU8Q/kcZZxi5+xNgIfi2FUJvl+Zuc3fjwoQyL2GeMecoh/f9Qt2kHViukIyF5P5g0L9urEEniORSokcfEfYhzgR1LZakK+15TeP9ysh15EQi0=
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc3298fd-ee56-4f3e-7b4f-08d88755ff99
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2020 21:57:50.7131
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: W3EMn0ky8fD2A145U60KXjlWtiYLmtPzdF3oh+2ZyOmljWO9lY4hZXFw7cAEHjmX
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2773
-X-OriginatorOrg: fb.com
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+ 15.1.1979.3; Thu, 12 Nov 2020 14:16:01 -0800
+Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
+        id 6C157A7D246; Thu, 12 Nov 2020 14:16:01 -0800 (PST)
+From:   Roman Gushchin <guro@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        <netdev@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
+        Roman Gushchin <guro@fb.com>
+Subject: [PATCH bpf-next v5 32/34] bpf: eliminate rlimit-based memory accounting infra for bpf maps
+Date:   Thu, 12 Nov 2020 14:15:41 -0800
+Message-ID: <20201112221543.3621014-33-guro@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201112221543.3621014-1-guro@fb.com>
+References: <20201112221543.3621014-1-guro@fb.com>
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-12_13:2020-11-12,2020-11-12 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- priorityscore=1501 phishscore=0 mlxlogscore=999 malwarescore=0
- adultscore=0 clxscore=1011 bulkscore=0 impostorscore=0 suspectscore=0
- spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011120125
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ malwarescore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=999
+ bulkscore=0 phishscore=0 suspectscore=38 spamscore=0 clxscore=1015
+ mlxscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011120126
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Nov 12, 2020 at 09:09:14PM +0100, Florent Revest wrote:
-> From: Florent Revest <revest@google.com>
-> 
-> Iterators are currently used to expose kernel information to userspace
-> over fast procfs-like files but iterators could also be used to
-> initialize local storage. For example, the task_file iterator could be
-> used to store associations between processes and sockets.
-> 
-> This exposes the socket local storage helpers to all iterators. Martin
-> Kafai checked that this was safe to call these helpers from the
-> sk_storage_map iterators.
-> 
-> Signed-off-by: Florent Revest <revest@google.com>
-> ---
->  kernel/trace/bpf_trace.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index e4515b0f62a8..3530120fa280 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -17,6 +17,8 @@
->  #include <linux/error-injection.h>
->  #include <linux/btf_ids.h>
->  
-> +#include <net/bpf_sk_storage.h>
-> +
->  #include <uapi/linux/bpf.h>
->  #include <uapi/linux/btf.h>
->  
-> @@ -1750,6 +1752,14 @@ tracing_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
->  		       NULL;
->  	case BPF_FUNC_d_path:
->  		return &bpf_d_path_proto;
-> +	case BPF_FUNC_sk_storage_get:
-> +		return prog->expected_attach_type == BPF_TRACE_ITER ?
-> +		       &bpf_sk_storage_get_proto :
-> +		       NULL;
-> +	case BPF_FUNC_sk_storage_delete:
-> +		return prog->expected_attach_type == BPF_TRACE_ITER ?
-> +		       &bpf_sk_storage_delete_proto :
-> +		       NULL;
-Test(s) is needed.  e.g. iterating a bpf_sk_storage_map and also
-calling bpf_sk_storage_get/delete.
+Remove rlimit-based accounting infrastructure code, which is not used
+anymore.
 
-I would expect to see another test/example
-showing how it works end-to-end to solve the problem you have in hand.
-This patch probably belongs to a longer series.
+Signed-off-by: Roman Gushchin <guro@fb.com>
+---
+ include/linux/bpf.h                           | 12 ----
+ kernel/bpf/syscall.c                          | 64 +------------------
+ .../selftests/bpf/progs/bpf_iter_bpf_map.c    |  2 +-
+ .../selftests/bpf/progs/map_ptr_kern.c        |  7 --
+ 4 files changed, 3 insertions(+), 82 deletions(-)
 
-BTW, I am also enabling bpf_sk_storage_(get|delete) for FENTRY/FEXIT/RAW_TP
-but I think the conflict should be manageable.
-https://patchwork.ozlabs.org/project/netdev/patch/20201112211313.2587383-1-kafai@fb.com/
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 1d6e7b125877..6f1ef8a1e25f 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -136,11 +136,6 @@ struct bpf_map_ops {
+ 	const struct bpf_iter_seq_info *iter_seq_info;
+ };
+=20
+-struct bpf_map_memory {
+-	u32 pages;
+-	struct user_struct *user;
+-};
+-
+ struct bpf_map {
+ 	/* The first two cachelines with read-mostly members of which some
+ 	 * are also accessed in fast-path (e.g. ops, max_entries).
+@@ -161,7 +156,6 @@ struct bpf_map {
+ 	u32 btf_key_type_id;
+ 	u32 btf_value_type_id;
+ 	struct btf *btf;
+-	struct bpf_map_memory memory;
+ #ifdef CONFIG_MEMCG_KMEM
+ 	struct mem_cgroup *memcg;
+ #endif
+@@ -1222,12 +1216,6 @@ void bpf_map_inc_with_uref(struct bpf_map *map);
+ struct bpf_map * __must_check bpf_map_inc_not_zero(struct bpf_map *map);
+ void bpf_map_put_with_uref(struct bpf_map *map);
+ void bpf_map_put(struct bpf_map *map);
+-int bpf_map_charge_memlock(struct bpf_map *map, u32 pages);
+-void bpf_map_uncharge_memlock(struct bpf_map *map, u32 pages);
+-int bpf_map_charge_init(struct bpf_map_memory *mem, u64 size);
+-void bpf_map_charge_finish(struct bpf_map_memory *mem);
+-void bpf_map_charge_move(struct bpf_map_memory *dst,
+-			 struct bpf_map_memory *src);
+ void *bpf_map_area_alloc(u64 size, int numa_node);
+ void *bpf_map_area_mmapable_alloc(u64 size, int numa_node);
+ void bpf_map_area_free(void *base);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index fcadf953989f..9f41edbae3f8 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -359,60 +359,6 @@ static void bpf_uncharge_memlock(struct user_struct =
+*user, u32 pages)
+ 		atomic_long_sub(pages, &user->locked_vm);
+ }
+=20
+-int bpf_map_charge_init(struct bpf_map_memory *mem, u64 size)
+-{
+-	u32 pages =3D round_up(size, PAGE_SIZE) >> PAGE_SHIFT;
+-	struct user_struct *user;
+-	int ret;
+-
+-	if (size >=3D U32_MAX - PAGE_SIZE)
+-		return -E2BIG;
+-
+-	user =3D get_current_user();
+-	ret =3D bpf_charge_memlock(user, pages);
+-	if (ret) {
+-		free_uid(user);
+-		return ret;
+-	}
+-
+-	mem->pages =3D pages;
+-	mem->user =3D user;
+-
+-	return 0;
+-}
+-
+-void bpf_map_charge_finish(struct bpf_map_memory *mem)
+-{
+-	bpf_uncharge_memlock(mem->user, mem->pages);
+-	free_uid(mem->user);
+-}
+-
+-void bpf_map_charge_move(struct bpf_map_memory *dst,
+-			 struct bpf_map_memory *src)
+-{
+-	*dst =3D *src;
+-
+-	/* Make sure src will not be used for the redundant uncharging. */
+-	memset(src, 0, sizeof(struct bpf_map_memory));
+-}
+-
+-int bpf_map_charge_memlock(struct bpf_map *map, u32 pages)
+-{
+-	int ret;
+-
+-	ret =3D bpf_charge_memlock(map->memory.user, pages);
+-	if (ret)
+-		return ret;
+-	map->memory.pages +=3D pages;
+-	return ret;
+-}
+-
+-void bpf_map_uncharge_memlock(struct bpf_map *map, u32 pages)
+-{
+-	bpf_uncharge_memlock(map->memory.user, pages);
+-	map->memory.pages -=3D pages;
+-}
+-
+ static int bpf_map_alloc_id(struct bpf_map *map)
+ {
+ 	int id;
+@@ -482,14 +428,11 @@ static void bpf_map_release_memcg(struct bpf_map *m=
+ap)
+ static void bpf_map_free_deferred(struct work_struct *work)
+ {
+ 	struct bpf_map *map =3D container_of(work, struct bpf_map, work);
+-	struct bpf_map_memory mem;
+=20
+-	bpf_map_charge_move(&mem, &map->memory);
+ 	security_bpf_map_free(map);
+ 	bpf_map_release_memcg(map);
+ 	/* implementation dependent freeing */
+ 	map->ops->map_free(map);
+-	bpf_map_charge_finish(&mem);
+ }
+=20
+ static void bpf_map_put_uref(struct bpf_map *map)
+@@ -568,7 +511,7 @@ static void bpf_map_show_fdinfo(struct seq_file *m, s=
+truct file *filp)
+ 		   "value_size:\t%u\n"
+ 		   "max_entries:\t%u\n"
+ 		   "map_flags:\t%#x\n"
+-		   "memlock:\t%llu\n"
++		   "memlock:\t%llu\n" /* deprecated */
+ 		   "map_id:\t%u\n"
+ 		   "frozen:\t%u\n",
+ 		   map->map_type,
+@@ -576,7 +519,7 @@ static void bpf_map_show_fdinfo(struct seq_file *m, s=
+truct file *filp)
+ 		   map->value_size,
+ 		   map->max_entries,
+ 		   map->map_flags,
+-		   map->memory.pages * 1ULL << PAGE_SHIFT,
++		   0LLU,
+ 		   map->id,
+ 		   READ_ONCE(map->frozen));
+ 	if (type) {
+@@ -819,7 +762,6 @@ static int map_check_btf(struct bpf_map *map, const s=
+truct btf *btf,
+ static int map_create(union bpf_attr *attr)
+ {
+ 	int numa_node =3D bpf_map_attr_numa_node(attr);
+-	struct bpf_map_memory mem;
+ 	struct bpf_map *map;
+ 	int f_flags;
+ 	int err;
+@@ -918,9 +860,7 @@ static int map_create(union bpf_attr *attr)
+ 	security_bpf_map_free(map);
+ free_map:
+ 	btf_put(map->btf);
+-	bpf_map_charge_move(&mem, &map->memory);
+ 	map->ops->map_free(map);
+-	bpf_map_charge_finish(&mem);
+ 	return err;
+ }
+=20
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c b/tools=
+/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
+index 08651b23edba..b83b5d2e17dc 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
+@@ -23,6 +23,6 @@ int dump_bpf_map(struct bpf_iter__bpf_map *ctx)
+=20
+ 	BPF_SEQ_PRINTF(seq, "%8u %8ld %8ld %10lu\n", map->id, map->refcnt.count=
+er,
+ 		       map->usercnt.counter,
+-		       map->memory.user->locked_vm.counter);
++		       0LLU);
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/tes=
+ting/selftests/bpf/progs/map_ptr_kern.c
+index c325405751e2..d8850bc6a9f1 100644
+--- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
++++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+@@ -26,17 +26,12 @@ __u32 g_line =3D 0;
+ 		return 0;	\
+ })
+=20
+-struct bpf_map_memory {
+-	__u32 pages;
+-} __attribute__((preserve_access_index));
+-
+ struct bpf_map {
+ 	enum bpf_map_type map_type;
+ 	__u32 key_size;
+ 	__u32 value_size;
+ 	__u32 max_entries;
+ 	__u32 id;
+-	struct bpf_map_memory memory;
+ } __attribute__((preserve_access_index));
+=20
+ static inline int check_bpf_map_fields(struct bpf_map *map, __u32 key_si=
+ze,
+@@ -47,7 +42,6 @@ static inline int check_bpf_map_fields(struct bpf_map *=
+map, __u32 key_size,
+ 	VERIFY(map->value_size =3D=3D value_size);
+ 	VERIFY(map->max_entries =3D=3D max_entries);
+ 	VERIFY(map->id > 0);
+-	VERIFY(map->memory.pages > 0);
+=20
+ 	return 1;
+ }
+@@ -60,7 +54,6 @@ static inline int check_bpf_map_ptr(struct bpf_map *ind=
+irect,
+ 	VERIFY(indirect->value_size =3D=3D direct->value_size);
+ 	VERIFY(indirect->max_entries =3D=3D direct->max_entries);
+ 	VERIFY(indirect->id =3D=3D direct->id);
+-	VERIFY(indirect->memory.pages =3D=3D direct->memory.pages);
+=20
+ 	return 1;
+ }
+--=20
+2.26.2
+
