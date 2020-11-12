@@ -2,54 +2,54 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3EED1C2D0E4
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 21:13:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4947DC5519F
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 21:13:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D39DE22227
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 21:13:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DD332216FD
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 21:13:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fipcR2zb"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="dB1U/68t"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727208AbgKLVNh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Nov 2020 16:13:37 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:64966 "EHLO
+        id S1727279AbgKLVNj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Nov 2020 16:13:39 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33144 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727236AbgKLVNh (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 12 Nov 2020 16:13:37 -0500
+        by vger.kernel.org with ESMTP id S1727236AbgKLVNj (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 12 Nov 2020 16:13:39 -0500
 Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0ACL1eVs025396
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 13:13:36 -0800
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0ACL1eVw025396
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 13:13:38 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=nsXZ17kaEJBN2aGu20NyWfRc/rJwXe+m3bC2GZFPpIM=;
- b=fipcR2zblFO7Iq4uV1V/dbDhgTkXZ2b3gCcJMtNnfdeR0quNLT2CXjRwlbZrKAEiH93p
- bRRaIPseytP1654h7IkZxgko8BMA0vSb/1Ju5ciitN4q+6heiVHE+O7+R35Mq2CvfEji
- WlOYpSYKWXuAUcF3kBBXvsTuhdUEr6H+DrQ= 
+ bh=4Pkd3lybjZrd+kVwUXNRCqAAvs8XiDzCOrlrsgPu7Ss=;
+ b=dB1U/68t5B09dQcVgGMoAegyF5K9lpEq9/quGswEkKNEVM8GUlKs+dZf9j06lXZvkNDQ
+ rS+ryA1dK3FFxquHau5yt+KQ89IIXbIA3LsWfQZHotTMwKAqbSIX+FgDsYrn88fSdNgG
+ MTyY3n2kCvpsjji+3cD3GazqGjrBHxOF6/4= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 34r5vncnkv-2
+        by mx0a-00082601.pphosted.com with ESMTP id 34r5vncnkv-6
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 13:13:36 -0800
+        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 13:13:38 -0800
 Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 12 Nov 2020 13:13:08 -0800
+ 15.1.1979.3; Thu, 12 Nov 2020 13:13:24 -0800
 Received: by devbig005.ftw2.facebook.com (Postfix, from userid 6611)
-        id 50A5829469C4; Thu, 12 Nov 2020 13:13:01 -0800 (PST)
+        id 10F9029469C4; Thu, 12 Nov 2020 13:13:20 -0800 (PST)
 From:   Martin KaFai Lau <kafai@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
-        <netdev@vger.kernel.org>, Song Liu <songliubraving@fb.com>
-Subject: [PATCH v2 bpf-next 1/4] bpf: Folding omem_charge() into sk_storage_charge()
-Date:   Thu, 12 Nov 2020 13:13:01 -0800
-Message-ID: <20201112211301.2586255-1-kafai@fb.com>
+        <netdev@vger.kernel.org>
+Subject: [PATCH v2 bpf-next 4/4] bpf: selftest: Use bpf_sk_storage in FENTRY/FEXIT/RAW_TP
+Date:   Thu, 12 Nov 2020 13:13:20 -0800
+Message-ID: <20201112211320.2587537-1-kafai@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201112211255.2585961-1-kafai@fb.com>
 References: <20201112211255.2585961-1-kafai@fb.com>
@@ -60,7 +60,7 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-12_12:2020-11-12,2020-11-12 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
- priorityscore=1501 spamscore=0 mlxlogscore=790 suspectscore=13
+ priorityscore=1501 spamscore=0 mlxlogscore=816 suspectscore=43
  phishscore=0 mlxscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0
  clxscore=1015 impostorscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2009150000 definitions=main-2011120123
@@ -69,59 +69,310 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-sk_storage_charge() is the only user of omem_charge().
-This patch simplifies it by folding omem_charge() into
-sk_storage_charge().
+This patch tests storing the task's related info into the
+bpf_sk_storage by fentry/fexit tracing at listen, accept,
+and connect.  It also tests the raw_tp at inet_sock_set_state.
 
-Acked-by: Song Liu <songliubraving@fb.com>
+A negative test is done by tracing the bpf_sk_storage_free()
+and using bpf_sk_storage_get() at the same time.  It ensures
+this bpf program cannot load.
+
 Signed-off-by: Martin KaFai Lau <kafai@fb.com>
 ---
- net/core/bpf_sk_storage.c | 23 ++++++++++-------------
- 1 file changed, 10 insertions(+), 13 deletions(-)
+ .../bpf/prog_tests/sk_storage_tracing.c       | 135 ++++++++++++++++++
+ .../bpf/progs/test_sk_storage_trace_itself.c  |  29 ++++
+ .../bpf/progs/test_sk_storage_tracing.c       |  95 ++++++++++++
+ 3 files changed, 259 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/sk_storage_tra=
+cing.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sk_storage_tra=
+ce_itself.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_sk_storage_tra=
+cing.c
 
-diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-index c907f0dc7f87..001eac65e40f 100644
---- a/net/core/bpf_sk_storage.c
-+++ b/net/core/bpf_sk_storage.c
-@@ -15,18 +15,6 @@
-=20
- DEFINE_BPF_STORAGE_CACHE(sk_cache);
-=20
--static int omem_charge(struct sock *sk, unsigned int size)
--{
--	/* same check as in sock_kmalloc() */
--	if (size <=3D sysctl_optmem_max &&
--	    atomic_read(&sk->sk_omem_alloc) + size < sysctl_optmem_max) {
--		atomic_add(size, &sk->sk_omem_alloc);
--		return 0;
--	}
--
--	return -ENOMEM;
--}
--
- static struct bpf_local_storage_data *
- sk_storage_lookup(struct sock *sk, struct bpf_map *map, bool cacheit_loc=
-kit)
- {
-@@ -316,7 +304,16 @@ BPF_CALL_2(bpf_sk_storage_delete, struct bpf_map *, =
-map, struct sock *, sk)
- static int sk_storage_charge(struct bpf_local_storage_map *smap,
- 			     void *owner, u32 size)
- {
--	return omem_charge(owner, size);
-+	struct sock *sk =3D (struct sock *)owner;
+diff --git a/tools/testing/selftests/bpf/prog_tests/sk_storage_tracing.c =
+b/tools/testing/selftests/bpf/prog_tests/sk_storage_tracing.c
+new file mode 100644
+index 000000000000..2b392590e8ca
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/sk_storage_tracing.c
+@@ -0,0 +1,135 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
 +
-+	/* same check as in sock_kmalloc() */
-+	if (size <=3D sysctl_optmem_max &&
-+	    atomic_read(&sk->sk_omem_alloc) + size < sysctl_optmem_max) {
-+		atomic_add(size, &sk->sk_omem_alloc);
-+		return 0;
++#include <sys/types.h>
++#include <bpf/bpf.h>
++#include <bpf/libbpf.h>
++#include "test_progs.h"
++#include "network_helpers.h"
++#include "test_sk_storage_trace_itself.skel.h"
++#include "test_sk_storage_tracing.skel.h"
++
++#define LO_ADDR6 "::1"
++#define TEST_COMM "test_progs"
++
++struct sk_stg {
++	__u32 pid;
++	__u32 last_notclose_state;
++	char comm[16];
++};
++
++static struct test_sk_storage_tracing *skel;
++static __u32 duration;
++static pid_t my_pid;
++
++static int check_sk_stg(int sk_fd, __u32 expected_state)
++{
++	struct sk_stg sk_stg;
++	int err;
++
++	err =3D bpf_map_lookup_elem(bpf_map__fd(skel->maps.sk_stg_map), &sk_fd,
++				  &sk_stg);
++	if (!ASSERT_OK(err, "map_lookup(sk_stg_map)"))
++		return -1;
++
++	if (!ASSERT_EQ(sk_stg.last_notclose_state, expected_state,
++		       "last_notclose_state"))
++		return -1;
++
++	if (!ASSERT_EQ(sk_stg.pid, my_pid, "pid"))
++		return -1;
++
++	if (!ASSERT_STREQ(sk_stg.comm, skel->bss->task_comm, "task_comm"))
++		return -1;
++
++	return 0;
++}
++
++static void do_test(void)
++{
++	int listen_fd =3D -1, passive_fd =3D -1, active_fd =3D -1, value =3D 1,=
+ err;
++	char abyte;
++
++	listen_fd =3D start_server(AF_INET6, SOCK_STREAM, LO_ADDR6, 0, 0);
++	if (CHECK(listen_fd =3D=3D -1, "start_server",
++		  "listen_fd:%d errno:%d\n", listen_fd, errno))
++		return;
++
++	active_fd =3D connect_to_fd(listen_fd, 0);
++	if (CHECK(active_fd =3D=3D -1, "connect_to_fd", "active_fd:%d errno:%d\=
+n",
++		  active_fd, errno))
++		goto out;
++
++	err =3D bpf_map_update_elem(bpf_map__fd(skel->maps.del_sk_stg_map),
++				  &active_fd, &value, 0);
++	if (!ASSERT_OK(err, "map_update(del_sk_stg_map)"))
++		goto out;
++
++	passive_fd =3D accept(listen_fd, NULL, 0);
++	if (CHECK(passive_fd =3D=3D -1, "accept", "passive_fd:%d errno:%d\n",
++		  passive_fd, errno))
++		goto out;
++
++	shutdown(active_fd, SHUT_WR);
++	err =3D read(passive_fd, &abyte, 1);
++	if (!ASSERT_OK(err, "read(passive_fd)"))
++		goto out;
++
++	shutdown(passive_fd, SHUT_WR);
++	err =3D read(active_fd, &abyte, 1);
++	if (!ASSERT_OK(err, "read(active_fd)"))
++		goto out;
++
++	err =3D bpf_map_lookup_elem(bpf_map__fd(skel->maps.del_sk_stg_map),
++				  &active_fd, &value);
++	if (!ASSERT_ERR(err, "map_lookup(del_sk_stg_map)"))
++		goto out;
++
++	err =3D check_sk_stg(listen_fd, BPF_TCP_LISTEN);
++	if (!ASSERT_OK(err, "listen_fd sk_stg"))
++		goto out;
++
++	err =3D check_sk_stg(active_fd, BPF_TCP_FIN_WAIT2);
++	if (!ASSERT_OK(err, "active_fd sk_stg"))
++		goto out;
++
++	err =3D check_sk_stg(passive_fd, BPF_TCP_LAST_ACK);
++	ASSERT_OK(err, "passive_fd sk_stg");
++
++out:
++	if (active_fd !=3D -1)
++		close(active_fd);
++	if (passive_fd !=3D -1)
++		close(passive_fd);
++	if (listen_fd !=3D -1)
++		close(listen_fd);
++}
++
++void test_sk_storage_tracing(void)
++{
++	struct test_sk_storage_trace_itself *skel_itself;
++	int err;
++
++	my_pid =3D getpid();
++
++	skel_itself =3D test_sk_storage_trace_itself__open_and_load();
++
++	if (!ASSERT_NULL(skel_itself, "test_sk_storage_trace_itself")) {
++		test_sk_storage_trace_itself__destroy(skel_itself);
++		return;
 +	}
 +
-+	return -ENOMEM;
- }
-=20
- static void sk_storage_uncharge(struct bpf_local_storage_map *smap,
++	skel =3D test_sk_storage_tracing__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "test_sk_storage_tracing"))
++		return;
++
++	err =3D test_sk_storage_tracing__attach(skel);
++	if (!ASSERT_OK(err, "test_sk_storage_tracing__attach")) {
++		test_sk_storage_tracing__destroy(skel);
++		return;
++	}
++
++	do_test();
++
++	test_sk_storage_tracing__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_sk_storage_trace_itse=
+lf.c b/tools/testing/selftests/bpf/progs/test_sk_storage_trace_itself.c
+new file mode 100644
+index 000000000000..59ef72d02a61
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sk_storage_trace_itself.c
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++
++#include <vmlinux.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, int);
++	__type(value, int);
++} sk_stg_map SEC(".maps");
++
++SEC("fentry/bpf_sk_storage_free")
++int BPF_PROG(trace_bpf_sk_storage_free, struct sock *sk)
++{
++	int *value;
++
++	value =3D bpf_sk_storage_get(&sk_stg_map, sk, 0,
++				   BPF_SK_STORAGE_GET_F_CREATE);
++
++	if (value)
++		*value =3D 1;
++
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/test_sk_storage_tracing.c =
+b/tools/testing/selftests/bpf/progs/test_sk_storage_tracing.c
+new file mode 100644
+index 000000000000..8e94e5c080aa
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sk_storage_tracing.c
+@@ -0,0 +1,95 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++
++#include <vmlinux.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
++#include <bpf/bpf_helpers.h>
++
++struct sk_stg {
++	__u32 pid;
++	__u32 last_notclose_state;
++	char comm[16];
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, int);
++	__type(value, struct sk_stg);
++} sk_stg_map SEC(".maps");
++
++/* Testing delete */
++struct {
++	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, int);
++	__type(value, int);
++} del_sk_stg_map SEC(".maps");
++
++char task_comm[16] =3D "";
++
++SEC("tp_btf/inet_sock_set_state")
++int BPF_PROG(trace_inet_sock_set_state, struct sock *sk, int oldstate,
++	     int newstate)
++{
++	struct sk_stg *stg;
++
++	if (newstate =3D=3D BPF_TCP_CLOSE)
++		return 0;
++
++	stg =3D bpf_sk_storage_get(&sk_stg_map, sk, 0,
++				 BPF_SK_STORAGE_GET_F_CREATE);
++	if (!stg)
++		return 0;
++
++	stg->last_notclose_state =3D newstate;
++
++	bpf_sk_storage_delete(&del_sk_stg_map, sk);
++
++	return 0;
++}
++
++static void set_task_info(struct sock *sk)
++{
++	struct task_struct *task;
++	struct sk_stg *stg;
++
++	stg =3D bpf_sk_storage_get(&sk_stg_map, sk, 0,
++				 BPF_SK_STORAGE_GET_F_CREATE);
++	if (!stg)
++		return;
++
++	stg->pid =3D bpf_get_current_pid_tgid();
++
++	task =3D (struct task_struct *)bpf_get_current_task();
++	bpf_core_read_str(&stg->comm, sizeof(stg->comm), &task->comm);
++	bpf_core_read_str(&task_comm, sizeof(task_comm), &task->comm);
++}
++
++SEC("fentry/inet_csk_listen_start")
++int BPF_PROG(trace_inet_csk_listen_start, struct sock *sk, int backlog)
++{
++	set_task_info(sk);
++
++	return 0;
++}
++
++SEC("fentry/tcp_connect")
++int BPF_PROG(trace_tcp_connect, struct sock *sk)
++{
++	set_task_info(sk);
++
++	return 0;
++}
++
++SEC("fexit/inet_csk_accept")
++int BPF_PROG(inet_csk_accept, struct sock *sk, int flags, int *err, bool=
+ kern,
++	     struct sock *accepted_sk)
++{
++	set_task_info(accepted_sk);
++
++	return 0;
++}
++
++char _license[] SEC("license") =3D "GPL";
 --=20
 2.24.1
 
