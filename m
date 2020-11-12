@@ -2,114 +2,155 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 234D4C5519F
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:31:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 44608C2D0E4
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:35:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C413B2085B
-	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:31:42 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fCEt7fKP"
+	by mail.kernel.org (Postfix) with ESMTP id 025FF2085B
+	for <bpf@archiver.kernel.org>; Thu, 12 Nov 2020 22:35:56 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727010AbgKLWbm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Nov 2020 17:31:42 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:53132 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726322AbgKLWbl (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 12 Nov 2020 17:31:41 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0ACMLOwl032353
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 14:31:41 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=fShRlN12PteWYDnw3TVdgXGeGVHnDgFpbsGeNZoyKzs=;
- b=fCEt7fKPQVDe8hHtrw9ZFY5iJcleXAWQ1VAzsLt4faNvbClDOzkbsITHuUNCb1TctNTA
- L3vzKlIsLUHy7BFtifsY5yVx3X4ZKbaEF6Ku2s2dmNuTIoYJatdVIrVJTJQAkAYr61fe
- VmnwQ/7PoZPZ5m3JCDD7brdv7nYESt+KqWU= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 34s7dstmk1-7
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 14:31:41 -0800
-Received: from intmgw001.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 12 Nov 2020 14:31:37 -0800
-Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
-        id E44CAA7D1E7; Thu, 12 Nov 2020 14:16:00 -0800 (PST)
-From:   Roman Gushchin <guro@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        <netdev@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <kernel-team@fb.com>,
-        Roman Gushchin <guro@fb.com>, Song Liu <songliubraving@fb.com>
-Subject: [PATCH bpf-next v5 08/34] bpf: refine memcg-based memory accounting for arraymap maps
-Date:   Thu, 12 Nov 2020 14:15:17 -0800
-Message-ID: <20201112221543.3621014-9-guro@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201112221543.3621014-1-guro@fb.com>
-References: <20201112221543.3621014-1-guro@fb.com>
+        id S1727347AbgKLWf4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Nov 2020 17:35:56 -0500
+Received: from www62.your-server.de ([213.133.104.62]:38464 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726543AbgKLWf4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Nov 2020 17:35:56 -0500
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kdLC5-0004Xd-Hw; Thu, 12 Nov 2020 23:35:53 +0100
+Received: from [85.7.101.30] (helo=pc-9.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kdLC5-0008M8-AO; Thu, 12 Nov 2020 23:35:53 +0100
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Augment the set of sleepable LSM
+ hooks
+To:     KP Singh <kpsingh@chromium.org>, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Jann Horn <jannh@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>
+References: <20201112200346.404864-1-kpsingh@chromium.org>
+ <20201112200346.404864-2-kpsingh@chromium.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <5d22e146-0dd1-2054-c718-fa76f8dfa7b9@iogearbox.net>
+Date:   Thu, 12 Nov 2020 23:35:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-12_14:2020-11-12,2020-11-12 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
- malwarescore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=908
- bulkscore=0 phishscore=0 suspectscore=38 spamscore=0 clxscore=1015
- mlxscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011120127
-X-FB-Internal: deliver
+In-Reply-To: <20201112200346.404864-2-kpsingh@chromium.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/25986/Thu Nov 12 14:18:25 2020)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Include percpu arrays and auxiliary data into the memcg-based memory
-accounting.
+On 11/12/20 9:03 PM, KP Singh wrote:
+> From: KP Singh <kpsingh@google.com>
+> 
+> Update the set of sleepable hooks with the ones that do not trigger
+> a warning with might_fault() when exercised with the correct kernel
+> config options enabled, i.e.
+> 
+> 	DEBUG_ATOMIC_SLEEP=y
+> 	LOCKDEP=y
+> 	PROVE_LOCKING=y
+> 
+> This means that a sleepable LSM eBPF program can be attached to these
+> LSM hooks. A new helper method bpf_lsm_is_sleepable_hook is added and
+> the set is maintained locally in bpf_lsm.c
+> 
+> A comment is added about the list of LSM hooks that have been observed
+> to be called from softirqs, atomic contexts, or the ones that can
+> trigger pagefaults and thus should not be added to this list.
+> 
+[...]
+>   
+> +/* The set of hooks which are called without pagefaults disabled and are allowed
+> + * to "sleep" and thus can be used for sleeable BPF programs.
+> + *
+> + * There are some hooks which have been observed to be called from a
+> + * non-sleepable context and should not be added to this set:
+> + *
+> + *  bpf_lsm_bpf_prog_free_security
+> + *  bpf_lsm_capable
+> + *  bpf_lsm_cred_free
+> + *  bpf_lsm_d_instantiate
+> + *  bpf_lsm_file_alloc_security
+> + *  bpf_lsm_file_mprotect
+> + *  bpf_lsm_file_send_sigiotask
+> + *  bpf_lsm_inet_conn_request
+> + *  bpf_lsm_inet_csk_clone
+> + *  bpf_lsm_inode_alloc_security
+> + *  bpf_lsm_inode_follow_link
+> + *  bpf_lsm_inode_permission
+> + *  bpf_lsm_key_permission
+> + *  bpf_lsm_locked_down
+> + *  bpf_lsm_mmap_addr
+> + *  bpf_lsm_perf_event_read
+> + *  bpf_lsm_ptrace_access_check
+> + *  bpf_lsm_req_classify_flow
+> + *  bpf_lsm_sb_free_security
+> + *  bpf_lsm_sk_alloc_security
+> + *  bpf_lsm_sk_clone_security
+> + *  bpf_lsm_sk_free_security
+> + *  bpf_lsm_sk_getsecid
+> + *  bpf_lsm_socket_sock_rcv_skb
+> + *  bpf_lsm_sock_graft
+> + *  bpf_lsm_task_free
+> + *  bpf_lsm_task_getioprio
+> + *  bpf_lsm_task_getscheduler
+> + *  bpf_lsm_task_kill
+> + *  bpf_lsm_task_setioprio
+> + *  bpf_lsm_task_setnice
+> + *  bpf_lsm_task_setpgid
+> + *  bpf_lsm_task_setrlimit
+> + *  bpf_lsm_unix_may_send
+> + *  bpf_lsm_unix_stream_connect
+> + *  bpf_lsm_vm_enough_memory
+> + */
 
-Signed-off-by: Roman Gushchin <guro@fb.com>
-Acked-by: Song Liu <songliubraving@fb.com>
----
- kernel/bpf/arraymap.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I think this is very useful info. I was wondering whether it would make sense
+to annotate these more closely to the code so there's less chance this info
+becomes stale? Maybe something like below, not sure ... issue is if you would
+just place a cant_sleep() in there it might be wrong since this should just
+document that it can be invoked from non-sleepable context but it might not
+have to.
 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index c6c81eceb68f..92b650123c22 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -30,12 +30,12 @@ static void bpf_array_free_percpu(struct bpf_array *a=
-rray)
-=20
- static int bpf_array_alloc_percpu(struct bpf_array *array)
- {
-+	const gfp_t gfp =3D GFP_USER | __GFP_NOWARN | __GFP_ACCOUNT;
- 	void __percpu *ptr;
- 	int i;
-=20
- 	for (i =3D 0; i < array->map.max_entries; i++) {
--		ptr =3D __alloc_percpu_gfp(array->elem_size, 8,
--					 GFP_USER | __GFP_NOWARN);
-+		ptr =3D __alloc_percpu_gfp(array->elem_size, 8, gfp);
- 		if (!ptr) {
- 			bpf_array_free_percpu(array);
- 			return -ENOMEM;
-@@ -1018,7 +1018,7 @@ static struct bpf_map *prog_array_map_alloc(union b=
-pf_attr *attr)
- 	struct bpf_array_aux *aux;
- 	struct bpf_map *map;
-=20
--	aux =3D kzalloc(sizeof(*aux), GFP_KERNEL);
-+	aux =3D kzalloc(sizeof(*aux), GFP_KERNEL_ACCOUNT);
- 	if (!aux)
- 		return ERR_PTR(-ENOMEM);
-=20
---=20
-2.26.2
+diff --git a/security/security.c b/security/security.c
+index a28045dc9e7f..7899bf32cdaa 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -94,6 +94,11 @@ static __initdata bool debug;
+                         pr_info(__VA_ARGS__);                   \
+         } while (0)
 
++/*
++ * Placeholder for now to document that hook implementation cannot sleep
++ * since it could potentially be called from non-sleepable context, too.
++ */
++#define hook_cant_sleep()              do { } while (0)
++
+  static bool __init is_enabled(struct lsm_info *lsm)
+  {
+         if (!lsm->enabled)
+@@ -2522,6 +2527,7 @@ void security_bpf_map_free(struct bpf_map *map)
+  }
+  void security_bpf_prog_free(struct bpf_prog_aux *aux)
+  {
++       hook_cant_sleep();
+         call_void_hook(bpf_prog_free_security, aux);
+  }
+  #endif /* CONFIG_BPF_SYSCALL */
