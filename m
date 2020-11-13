@@ -2,102 +2,98 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 95057C5519F
-	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 03:05:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4DD41C2D0E4
+	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 03:18:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 36818221E9
-	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 03:05:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CE40B21D46
+	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 03:18:28 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uykun2xa"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rr+0OHmn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726024AbgKMDFA (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Nov 2020 22:05:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725965AbgKMDFA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 Nov 2020 22:05:00 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C2EC0613D1;
-        Thu, 12 Nov 2020 19:05:00 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id x15so5079999pfm.9;
-        Thu, 12 Nov 2020 19:05:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=J3xxlo0J7OEQ31x58M9zvwm+GKsy+33IUbEliZsTWrs=;
-        b=Uykun2xa0ICp1fXGTHcbokQvuKH2nSIViYf1ItzAqP4kpZOI/jHohqmYYQTPVbheBO
-         7M9rDA2UXDIUPxpm/Qnhz3nN/Ut3l8mWreU0z6JP4lBP9LBhgB6YZAmWTTI6Wac7Xqb4
-         pn/BeOV5KXxe0/cUmRWLKaHnNhpT2PzOzcXF5jRERV1PSDGoCvKeMmnqTfHeDvxTidoc
-         4NyulzTSKQgqwLmpSR2ie4fQxpL1xOzaweegv8ayneja963BHqMlglvsTLD66FybEZK5
-         5kKAzipqwNLSZ1N9wUp/FmjHfsqbzU2kgyVQAhlBPhsDXvxJ0U8Ycm99YnrS3fCOfBse
-         ZYLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=J3xxlo0J7OEQ31x58M9zvwm+GKsy+33IUbEliZsTWrs=;
-        b=j3fixrZCl+jE7X/kRObE6e3FqdGSIGUSlHk+Pi52N6e/3g515T3eH8+b+a6BaTf5v5
-         zGH7T9rylQWeBo9Ni1lGDwBAsHyeF/oYLiBs8zxp5ZqDSxL7nabHqbWIB0eGUTfjoqkE
-         OM6Fd5y9jKaYgYIk/WUsHSYDO9tuue3WwWPACT9v2JWpJqVJFcnsMMHZRxXZ3KIbk6Yq
-         ChyC6q5Srak82eeDhtcdtan3yxvAjHdxghX5oyeyMGTXA90Sgt4g14MQiR0IUmHq17gK
-         Z+e6dsHjDBkQcwTLbTXlX75xn5qSfDoAcUYaEsm9ilfvNP4uLm1qHuvpvI8LLdao/GLE
-         A1vw==
-X-Gm-Message-State: AOAM531JqzUenjv8W431KKzve41Q5Dya84CbVS/mczfiTG4CkQHrhy6W
-        sK2XK8EJGpMdRp3CescpX4I=
-X-Google-Smtp-Source: ABdhPJzMdJtLxZWjzkxjYFM+noXSnpWOIMV32Ng3PHbPRSaMSKsTIj/0HxBg3Meb0gCU6wO7fiyd6g==
-X-Received: by 2002:aa7:9190:0:b029:18b:6556:1e62 with SMTP id x16-20020aa791900000b029018b65561e62mr207259pfa.62.1605236699666;
-        Thu, 12 Nov 2020 19:04:59 -0800 (PST)
-Received: from ast-mbp ([2620:10d:c090:400::5:a370])
-        by smtp.gmail.com with ESMTPSA id 21sm8083426pfw.105.2020.11.12.19.04.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2020 19:04:58 -0800 (PST)
-Date:   Thu, 12 Nov 2020 19:04:56 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Roman Gushchin <guro@fb.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, bpf@vger.kernel.org,
+        id S1726007AbgKMDS2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Nov 2020 22:18:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59182 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725965AbgKMDS2 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Nov 2020 22:18:28 -0500
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5117720A8B;
+        Fri, 13 Nov 2020 03:18:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605237507;
+        bh=MaaBG4tccxbaQ9aA0t1wzQvpBf1+T4mhBfx53VS77+M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Rr+0OHmnci8Dg534Baejpue8Nb3PJ+kZfcIki+m1P0ulo2cK245KXG5af4kDeYI7E
+         63I88cgNJzpJGs5tYUUQ/mSQmZZB+VpGgHX5kESj+06yqhE+PIqdd+Q22Vn1/jzIcG
+         sIM2UwrmeQ3MyOeHvJCSJEofPX70zpcdRjTLQuYc=
+Date:   Thu, 12 Nov 2020 19:18:25 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Roman Gushchin <guro@fb.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>, bpf@vger.kernel.org,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
         Andrii Nakryiko <andrii@kernel.org>,
         Shakeel Butt <shakeelb@google.com>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, kernel-team@fb.com,
         Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>
+        Michal Hocko <mhocko@suse.com>
 Subject: Re: [PATCH bpf-next v5 01/34] mm: memcontrol: use helpers to read
  page's memcg data
-Message-ID: <20201113030456.drdswcndp65zmt2u@ast-mbp>
+Message-Id: <20201112191825.1a7c3e0d50cc5e375a4e887c@linux-foundation.org>
+In-Reply-To: <20201113030456.drdswcndp65zmt2u@ast-mbp>
 References: <20201112221543.3621014-1-guro@fb.com>
- <20201112221543.3621014-2-guro@fb.com>
- <20201113095632.489e66e2@canb.auug.org.au>
- <20201113002610.GB2934489@carbon.dhcp.thefacebook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201113002610.GB2934489@carbon.dhcp.thefacebook.com>
+        <20201112221543.3621014-2-guro@fb.com>
+        <20201113095632.489e66e2@canb.auug.org.au>
+        <20201113002610.GB2934489@carbon.dhcp.thefacebook.com>
+        <20201113030456.drdswcndp65zmt2u@ast-mbp>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Nov 12, 2020 at 04:26:10PM -0800, Roman Gushchin wrote:
-> 
-> These patches are not intended to be merged through the bpf tree.
-> They are included into the patchset to make bpf selftests pass and for
-> informational purposes.
-> It's written in the cover letter.
-...
-> Maybe I had to just list their titles in the cover letter. Idk what's
-> the best option for such cross-subsystem dependencies.
+On Thu, 12 Nov 2020 19:04:56 -0800 Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-We had several situations in the past releases where dependent patches
-were merged into multiple trees. For that to happen cleanly from git pov
-one of the maintainers need to create a stable branch/tag and let other
-maintainers pull that branch into different trees. This way the sha-s
-stay the same and no conflicts arise during the merge window.
-In this case sounds like the first 4 patches are in mm tree already.
-Is there a branch/tag I can pull to get the first 4 into bpf-next?
+> On Thu, Nov 12, 2020 at 04:26:10PM -0800, Roman Gushchin wrote:
+> > 
+> > These patches are not intended to be merged through the bpf tree.
+> > They are included into the patchset to make bpf selftests pass and for
+> > informational purposes.
+> > It's written in the cover letter.
+> ...
+> > Maybe I had to just list their titles in the cover letter. Idk what's
+> > the best option for such cross-subsystem dependencies.
+> 
+> We had several situations in the past releases where dependent patches
+> were merged into multiple trees. For that to happen cleanly from git pov
+> one of the maintainers need to create a stable branch/tag and let other
+> maintainers pull that branch into different trees. This way the sha-s
+> stay the same and no conflicts arise during the merge window.
+> In this case sounds like the first 4 patches are in mm tree already.
+> Is there a branch/tag I can pull to get the first 4 into bpf-next?
+
+Not really, at present.  This is largely by design, although it does cause
+this problem once or twice a year.
+
+These four patches:
+
+mm-memcontrol-use-helpers-to-read-pages-memcg-data.patch
+mm-memcontrol-slab-use-helpers-to-access-slab-pages-memcg_data.patch
+mm-introduce-page-memcg-flags.patch
+mm-convert-page-kmemcg-type-to-a-page-memcg-flag.patch
+
+are sufficiently reviewed - please pull them into the bpf tree when
+convenient.  Once they hit linux-next, I'll drop the -mm copies and the
+bpf tree maintainers will then be responsible for whether & when they
+get upstream.  
+
