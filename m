@@ -2,53 +2,54 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=no autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 014DDC61DD8
-	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 18:11:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA4B4C63697
+	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 18:11:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AF0A52223F
-	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 18:11:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 951432053B
+	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 18:11:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="z5Ps6zwB"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="mbqg/AO5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726276AbgKMSLR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726411AbgKMSLT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 13 Nov 2020 13:11:19 -0500
+Received: from aserp2130.oracle.com ([141.146.126.79]:54522 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726268AbgKMSLR (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 13 Nov 2020 13:11:17 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:34466 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725959AbgKMSLR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 13 Nov 2020 13:11:17 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0ADI5Qsm057509;
-        Fri, 13 Nov 2020 18:10:22 GMT
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0ADI438J173191;
+        Fri, 13 Nov 2020 18:10:27 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2020-01-29;
- bh=9orNLX1ll2a3EKw4293msaHhsYY0khsm/1CVXyi7QAQ=;
- b=z5Ps6zwBmOair4Lh91yRIYhxbPAiihkAjknhoPHMDMSErirXw0q/+o9diyFX7juZHV8Y
- yXaCJTDs8kGURpSKASo/8hW0hCzcd6776/BB6jvA3hKJBsNiz3hN56uW0/pUDx3fzfK7
- XVzhtn7jkwrQiX6FY/DxfVtURRUsKa1zufkwPNGU6aYFNM0Clbu0rRnazL4DxUzBx96I
- SwSP1hkBCd6LB1w0kYyS33vtdkL6ISbE9+Qck6cZWwUWUn29OHuUFSFnsWQrAhiyQrXN
- LZX/kkZkBXqf8xCLaT2pus3ZKpqCur9KOPp+qwyMDFEiNn//b7Pk5n7t5T9+rFCkRz0s dA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 34p72f1taa-1
+ subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
+ bh=aIg6ncmRmCzTXwkJO/u9W1OVqILkc+nE/6r1jBCCrAo=;
+ b=mbqg/AO5mYnmBbkhKNtTdomGBZ8nrEXw13bhb7d/notA3foDwhu6Adl/aCn7RztzZ3Pz
+ zKWKHTo+SLDAEEsDff/1ujfXc3UDqds6oaf/AETSJv5bb0j56OXVRfTpkoWp6vd4HM+j
+ UmiXDgQ3ZqdeFhBWI3iwdbLzeBw0CK2BTeLQKXUNfWRuOi0IsH4DUwZio31ejMMXFc6L
+ kRauO8gb2eoOZVEAndfnbiwJUQm9vGEXQFGFCjrMKoE7HNyvi3oP0D+r5+CmMq4jvbfY
+ Kdhi24qcCBbwWPUkbxiEymkhEwurQ326AAUzHPJpS8/alP9UD6Wk0TOL/hSNlcWFmZpG qw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2130.oracle.com with ESMTP id 34nh3bbuc5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 13 Nov 2020 18:10:22 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0ADI5NtO055651;
-        Fri, 13 Nov 2020 18:10:21 GMT
+        Fri, 13 Nov 2020 18:10:27 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0ADI6Km1117766;
+        Fri, 13 Nov 2020 18:10:27 GMT
 Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 34p55tgdjq-1
+        by userp3030.oracle.com with ESMTP id 34rtku1w5w-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 13 Nov 2020 18:10:21 +0000
+        Fri, 13 Nov 2020 18:10:26 +0000
 Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0ADIAKv6021478;
-        Fri, 13 Nov 2020 18:10:20 GMT
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0ADIAPSi021491;
+        Fri, 13 Nov 2020 18:10:25 GMT
 Received: from localhost.uk.oracle.com (/10.175.203.107)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 13 Nov 2020 10:10:19 -0800
+        with ESMTP ; Fri, 13 Nov 2020 10:10:25 -0800
 From:   Alan Maguire <alan.maguire@oracle.com>
 To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
@@ -57,64 +58,63 @@ Cc:     kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
         jolsa@kernel.org, quentin@isovalent.com,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [RFC bpf-next 0/3] bpf: support module BTF in btf display helpers
-Date:   Fri, 13 Nov 2020 18:10:10 +0000
-Message-Id: <1605291013-22575-1-git-send-email-alan.maguire@oracle.com>
+Subject: [RFC bpf-next 2/3] libbpf: bpf__find_by_name[_kind] should use btf__get_nr_types()
+Date:   Fri, 13 Nov 2020 18:10:12 +0000
+Message-Id: <1605291013-22575-3-git-send-email-alan.maguire@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1605291013-22575-1-git-send-email-alan.maguire@oracle.com>
+References: <1605291013-22575-1-git-send-email-alan.maguire@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9804 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 phishscore=0
- mlxlogscore=999 mlxscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 phishscore=0
+ suspectscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2011130117
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9804 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxlogscore=999 mlxscore=0
- malwarescore=0 suspectscore=0 lowpriorityscore=0 adultscore=0 phishscore=0
- priorityscore=1501 spamscore=0 impostorscore=0 clxscore=1011
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 priorityscore=1501
+ clxscore=1015 malwarescore=0 mlxscore=0 spamscore=0 suspectscore=0
+ mlxlogscore=999 impostorscore=0 phishscore=0 adultscore=0 bulkscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
  definitions=main-2011130117
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series aims to add support to bpf_snprintf_btf() and 
-bpf_seq_printf_btf() allowing them to store string representations
-of module-specific types, as well as the kernel-specific ones
-they currently support.
+When operating on split BTF, btf__find_by_name[_kind] will not
+iterate over all types since they use btf->nr_types to show
+the number of types to iterate over.  For split BTF this is
+the number of types _on top of base BTF_, so it will
+underestimate the number of types to iterate over, especially
+for vmlinux + module BTF, where the latter is much smaller.
 
-Patch 1 adds an additional field "const char *module" to
-"struct btf_ptr", allowing the specification of a module
-name along with a data pointer, BTF id, etc.  It is then 
-used to look up module BTF, rather than the default
-vmlinux BTF.
+Use btf__get_nr_types() instead.
 
-Patch 2 makes a small fix to libbpf to allow 
-btf__type_by_name[_kind] to work with split BTF.  Without
-this fix, type lookup of a module-specific type id will fail
-in patch 3.
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+---
+ tools/lib/bpf/btf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Patch 3 is a selftest that uses veth (when built as a
-module) and a kprobe to display both a module-specific 
-and kernel-specific type; both are arguments to veth_stats_rx().
-
-Alan Maguire (3):
-  bpf: add module support to btf display helpers
-  libbpf: bpf__find_by_name[_kind] should use btf__get_nr_types()
-  selftests/bpf: verify module-specific types can be shown via
-    bpf_snprintf_btf
-
- include/linux/btf.h                                |  8 ++
- include/uapi/linux/bpf.h                           |  5 +-
- kernel/bpf/btf.c                                   | 18 ++++
- kernel/trace/bpf_trace.c                           | 42 +++++++---
- tools/include/uapi/linux/bpf.h                     |  5 +-
- tools/lib/bpf/btf.c                                |  4 +-
- .../selftests/bpf/prog_tests/snprintf_btf_mod.c    | 96 ++++++++++++++++++++++
- tools/testing/selftests/bpf/progs/btf_ptr.h        |  1 +
- tools/testing/selftests/bpf/progs/veth_stats_rx.c  | 73 ++++++++++++++++
- 9 files changed, 238 insertions(+), 14 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/snprintf_btf_mod.c
- create mode 100644 tools/testing/selftests/bpf/progs/veth_stats_rx.c
-
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 2d0d064..0fccf4b 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -679,7 +679,7 @@ __s32 btf__find_by_name(const struct btf *btf, const char *type_name)
+ 	if (!strcmp(type_name, "void"))
+ 		return 0;
+ 
+-	for (i = 1; i <= btf->nr_types; i++) {
++	for (i = 1; i <= btf__get_nr_types(btf); i++) {
+ 		const struct btf_type *t = btf__type_by_id(btf, i);
+ 		const char *name = btf__name_by_offset(btf, t->name_off);
+ 
+@@ -698,7 +698,7 @@ __s32 btf__find_by_name_kind(const struct btf *btf, const char *type_name,
+ 	if (kind == BTF_KIND_UNKN || !strcmp(type_name, "void"))
+ 		return 0;
+ 
+-	for (i = 1; i <= btf->nr_types; i++) {
++	for (i = 1; i <= btf__get_nr_types(btf); i++) {
+ 		const struct btf_type *t = btf__type_by_id(btf, i);
+ 		const char *name;
+ 
 -- 
 1.8.3.1
 
