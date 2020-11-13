@@ -2,205 +2,119 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65042C388F7
-	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 00:27:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 800ADC56202
+	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 00:30:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DAF3C221E9
-	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 00:27:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1853C2222F
+	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 00:30:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="IEv+okrB";
-	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="Kz7TBwP/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zx4Varju"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726005AbgKMA1K (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Nov 2020 19:27:10 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:13238 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725929AbgKMA1K (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 12 Nov 2020 19:27:10 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AD0GdUf008250;
-        Thu, 12 Nov 2020 16:27:07 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
- references : from : message-id : date : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=QFDVK8+cvVjzaOR/m4UODdt1hWETX2E6qvRvnwlZgzk=;
- b=IEv+okrBSenDMjITm2xxKWXfJLTVxCqFXjGYHJEhgLR5QDB1jz5jYynZJeFFEv+E+jqm
- sE0G8K7jgYmrE+aS3PLNgzoH5wVToKtr7seEDXCEBeZbv6CJRX6ZYHr2pUvOmshBfNo9
- INllMSWB1+X7rkAGt/HO8H3rqCKvQIgG1hM= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 34s7crk6q9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 12 Nov 2020 16:27:07 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.199) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 12 Nov 2020 16:27:05 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UhE38umFVVs99ch+LqcJtJkbxC0dWUGVbNs/oqMtSToxnP6eZeImAFfuRpctpOUFZIbc26SoyJ5AeMJ5JyzGOc0RRmLwbllWRAKwzcZkB2RlmIHeTX7gYj32FJyoWHuETAdlLQbZiGMNt1Jbqyp05y6jqrliQA209lIyJUKQsJQepVl9rrMExY5eCgKj/EoU8Jajri87zFDNUSN9ofxz0ohD8w98Gi3qqhh0gx/f0c4u8tGfOCppXEKLX7lASju+mz6IucGIR1YG1Hq9tQ/tmLLnHDOcs290Kv08lWXQYZgmiNpbId1/O1yKuzfb0zc6Vqn/8PdvImlH3uOLD+R/2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QFDVK8+cvVjzaOR/m4UODdt1hWETX2E6qvRvnwlZgzk=;
- b=eTYnujegrNimCoQxCdnGDSOAggWhxIi1YQteu7oDkiIt56Md7lg4HPKsksidpVqixh9gUwuf4zx9o268DRh2WsrbSyYoqhlNjPogLn7ySfgX8I6FyBZfubf4CXCr70ezyNtYaz5reTjAW2xi/1A3zL6t3F/QCE3yhGTC+2HT/TAWaU3FeaJvw7q4TMC/xe8eRLr35COjSThZ/9axSNIl1J+6YQ7Fv9bqVfAUG/8wcvJhiG6spLpmUDpeC+RtgTIdEIm/wfgb0rB+S2Kw4XVbPN5Dt97FAuTX184jZbjfTvEewghJw7Eigo4mgQAQeVqXHlAZfJQRJj+IC3e9IM8eTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QFDVK8+cvVjzaOR/m4UODdt1hWETX2E6qvRvnwlZgzk=;
- b=Kz7TBwP/cIFpNwxWRfcs74kwE92jLlkxRN3ILDvpO7hPqp7RJia2R0IAcmr1SUjTw97cssEI9IlDxwtWQjYAogwGZ61WYSJuiucSbB/EZEmIYgxnfoIwMZ3y/A0/i7rJClrWk+uqRjFwfKqBOza3ypsy/BBiOCBM+r7dWxQbFsM=
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
- by BY5PR15MB3618.namprd15.prod.outlook.com (2603:10b6:a03:1b0::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.24; Fri, 13 Nov
- 2020 00:27:04 +0000
-Received: from BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::8887:dd68:f497:ea42]) by BYAPR15MB4088.namprd15.prod.outlook.com
- ([fe80::8887:dd68:f497:ea42%3]) with mapi id 15.20.3541.025; Fri, 13 Nov 2020
- 00:27:04 +0000
-Subject: Re: Extending bpf_get_ns_current_pid_tgid()
-To:     Daniel Xu <dxu@dxuuu.xyz>, <bpf@vger.kernel.org>
-CC:     <cneirabustos@gmail.com>, <ebiederm@xmission.com>, <blez@fb.com>
-References: <C71MVCBQMCPF.1CCKLFRTGYD0D@maharaja>
-From:   Yonghong Song <yhs@fb.com>
-Message-ID: <3fb902d7-a88c-f9ed-03f0-460f7bd552fa@fb.com>
-Date:   Thu, 12 Nov 2020 16:27:02 -0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.4.2
-In-Reply-To: <C71MVCBQMCPF.1CCKLFRTGYD0D@maharaja>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [2620:10d:c090:400::5:3ef]
-X-ClientProxiedBy: MWHPR22CA0056.namprd22.prod.outlook.com
- (2603:10b6:300:12a::18) To BYAPR15MB4088.namprd15.prod.outlook.com
- (2603:10b6:a02:c3::18)
+        id S1726005AbgKMAay (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Nov 2020 19:30:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725894AbgKMAay (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Nov 2020 19:30:54 -0500
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330ABC0613D1;
+        Thu, 12 Nov 2020 16:30:54 -0800 (PST)
+Received: by mail-yb1-xb41.google.com with SMTP id 10so7103526ybx.9;
+        Thu, 12 Nov 2020 16:30:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fuEYzdlLXwaY8ZetRyzFSP/5EN+gEqSQFl5ccS3Ot6w=;
+        b=Zx4VarjuAVk1QiiT2ixgEqdgQASRi8ZbWl5g/0lDgW1+vuvO7Z2YWt7FtL3MMjh4Ad
+         usJI2grYkrMJoTmthuDL4V6R7yXmaVL9IfPbhQaXBkkmYZUjLDoBj0y+qF4M467722eL
+         TDPLFP+Ptv8Q4DfH5fLWtGdxyxR9cu3ZGMjOE9uzxf2V8G5f62MQYgZAnO4qeFkCZQXM
+         fShefqfcrd7lhSgaADtUjb/JowZ4Z/VIcbHh3VoE6spUjD+DOhLCIdoZW6x598FMSXBE
+         PEtBOJbjt623DHeO7kvSecBpk2ouUdXx1NKHiFN73WjMye6LeMYXeZeM4AYDxAFNQhfO
+         UZHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fuEYzdlLXwaY8ZetRyzFSP/5EN+gEqSQFl5ccS3Ot6w=;
+        b=TRCmkQuEl+aevuIofn0sGvVpZ2sI1XzlaI7tz3hbs18HAE8Ux6JWBInfmoP70GHL31
+         kD00cml09UTTqfa/G6r6hb0DAsOiNAdhnLaPfSYIsLk9i5EgaY0JjwFHv1aSFZS8TldY
+         8RpTWByyo9/bu6sRpvEJ8Jn2mroKpzkz9eLkWdbnlj3CxxYr2sUM2vbJIF7U8JL6R0My
+         ZUJicLpfNTBuATaY6TaKrNiTfTe/O/OoBaDQHomiwUNtXIgRIAB4vW40W1HU9jyOmMam
+         kEi2GUBCmsYLUzk0znrRzSKnkeHhLQS+Y0mCEqbafB3wN7zFmuFEVOYxKnYuGZVfryoN
+         bJ2w==
+X-Gm-Message-State: AOAM5320TPE2gcmhXDgG9CcUH0P/FSC7E9JhttAKk9HAMoENo6X+sC4i
+        xYlt1FgGdgeBaDlFvXIftFAhiMawBwiBZi2G/1Y=
+X-Google-Smtp-Source: ABdhPJyPKEZK5IApihWoOlVl3wUuT1x/a/eJ2eK3QxlJfJ8DfyRj1iiCOw3menx7LGc9xrqGnbr80CcpQrncfv7G5QE=
+X-Received: by 2002:a25:3d7:: with SMTP id 206mr3444781ybd.27.1605227452989;
+ Thu, 12 Nov 2020 16:30:52 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2620:10d:c085:21e1::11f6] (2620:10d:c090:400::5:3ef) by MWHPR22CA0056.namprd22.prod.outlook.com (2603:10b6:300:12a::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3541.21 via Frontend Transport; Fri, 13 Nov 2020 00:27:04 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d9c2bb30-9e87-49fa-e876-08d8876ad8b4
-X-MS-TrafficTypeDiagnostic: BY5PR15MB3618:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BY5PR15MB3618B25D2C3F812BCBDF92EDD3E60@BY5PR15MB3618.namprd15.prod.outlook.com>
-X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gd6wkE1k8vtxJp2ycCHIrMBaiRTZG5dh5M4dcW4NZlgfmJuc6VtV6uevDKAX27G89EdnIfurpawylgwdZKHCUWWw6RHI0oqmNDU/qTb0HPsQhlYLlKZm5qs9DP5+Mc2LqXasXOlDFsEu0bm6RIWvp/JCHIUBo2ATgSkXR07nAQfLSHnwIUAsziVqLcxS2+6DD5gNFIVTdjXOp7IbzxicJx1Z/YQ+EI4n6dHRyncBGZL6ij9FdB35AAmqF0XEUBxkdjSecLdoTK6GEKc5O8tFnTWmpthUOHk66eYNDWtN2Rc1nzVvdFpL9IMWNH6noQuLbtcdxUSK0v1KiBXne5dot+Dm1DcKISIjuX15Bb72ZUweqClLJfI6kRMmEw1uTPQv
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(39860400002)(376002)(396003)(346002)(366004)(53546011)(316002)(31696002)(31686004)(8936002)(66476007)(4326008)(2906002)(6486002)(86362001)(66946007)(16526019)(36756003)(66556008)(478600001)(2616005)(8676002)(52116002)(7116003)(5660300002)(186003)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: 5STgtvKzCRGlgTgIwDbLhvY1ji1CWwsMeXwiIHqLbEI93+rnQoCatJBhqNVy2m9WN1NMs+sxZWR6g3kDTMyeI8bB/mC3oYLJoB6RTPtBN/EYxyIgBRcJyA04WnJedOAzYAc3ZwW3iQs1fBAJTXENj32E/FvUdAIPu2/1u9IdbTf39VtieRze7N0e8xxhqO06bVb5ALFoDnLMLwuEzV+Qjl6t/NZG3D4fsmHqsMZqD0avD75mdbWfBAEoPDfzSbc/FxlViqR5osXy/jso/8ZCedc+D47JdOO4cFJGCAnEUlfvScK1OAVx6rxn8oDUsYJ48XN03WFhL9FoUHyOVbTYTRpNC2+YXXb9hKuvq2Zj5xGWLmJG2kytNFQTh+t3LBJh0ud3fAp39hqbkLSZAWlPfWfXp+RiONbukZTVMrRKtNL2lHl/Y/gJ1yz+tC+O3CgBd/5YOLnEQlzUou1xaq4X+fwhrpw/8hoCL8J3n5hhljrQqZYwQaDbzSXva0jTsWn/SU6jD2uV7XeYpHGItEZCSN3UfN+9IZxEeDfXDw/8EHUzLdQTedPzEfqbyg9FsqyWTA2UAD6a10QKyOGzoOOMYNQv2BeLD0K9NEWe541FWhTibAxo8y5h0RhryjqBRPpq2BFlPisdg6ewVnu7EMyqp8NkzFXVjkuWm3h6qVRvweBYyndZ4RIJq0v6irG6JLacZtR/q8AuOygx2HUE0mF5bBriwqTMTbe9eeMEhELo+BNgfSw9RBLoJTmjXb5WCwxFpkh+l7mdKS9O0nps1vsxSrMsOVEVqsbQA2lQ+nd6vBwDHZnSaBuE5Fc6bFamEyW33b+iDFesLLzf2S4cyl0d1JUBFNbzjKQd4eI2ee8U8zx8gd6qAwWK+OhuHQLoOZJE1B6xRatTVjuqROV6Zx+TRQ3py4ayHZDylklMUQheFWU=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d9c2bb30-9e87-49fa-e876-08d8876ad8b4
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2020 00:27:04.7291
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: j+Ns0AlsWmdbgX0+9SA6dXEOZ3qlU4VVfHK5LoUdfm/zncsUsmna2FY83J9+/uoG
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR15MB3618
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-12_16:2020-11-12,2020-11-12 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 phishscore=0
- mlxlogscore=999 clxscore=1011 impostorscore=0 priorityscore=1501
- malwarescore=0 adultscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011130000
-X-FB-Internal: deliver
+References: <20201112150506.705430-1-jolsa@kernel.org> <20201112150506.705430-4-jolsa@kernel.org>
+ <CAEf4BzbhojeSdASwt4y4XEtgAF1caYx=-AuwzWJZv7qKgzkroA@mail.gmail.com>
+ <20201112211413.GA733055@krava> <CAEf4BzbePw8gksT0MH=hwp4Pv1EV1-MOeiwfoFVR64XWFccTHw@mail.gmail.com>
+ <CAADnVQKUYFE0vE3XZB0FPNMxw_+BNpOLJ37QJ+CxLbssDPHFdw@mail.gmail.com>
+In-Reply-To: <CAADnVQKUYFE0vE3XZB0FPNMxw_+BNpOLJ37QJ+CxLbssDPHFdw@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 12 Nov 2020 16:30:42 -0800
+Message-ID: <CAEf4BzZhRPVf=qVU7vVrtVaJzvBmsWL3hHYySKczMrrO-1Xotw@mail.gmail.com>
+Subject: Re: [RFC/PATCH 3/3] btf_encoder: Func generation fix
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Thu, Nov 12, 2020 at 4:19 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu, Nov 12, 2020 at 4:08 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > So I looked at your vmlinux image. I think we should just keep
+> > everything mostly as it it right now (without changes in this patch),
+> > but add just two simple checks:
+> >
+> > 1. Skip if fn->declaration (ignore correctly marked func declarations)
+> > 2. Skip if DW_AT_inline: 1 (ignore inlined functions).
+> >
+> > I'd keep the named arguments check as is, I think it's helpful. 1)
+> > will skip stuff that's explicitly marked as declaration. 2) inline
+> > check will partially mitigate dropping of fn->external check (and we
+> > can't really attach to inlined functions).
+>
+> I thought DW_AT_inline is an indication that the function was marked "inline"
+> in C code. That doesn't mean that the function was actually inlined.
+> So I don't think pahole should check that bit.
 
+According to DWARF spec, there are 4 possible values:
 
-On 11/12/20 2:20 PM, Daniel Xu wrote:
-> Hi,
-> 
-> I'm looking at the current implementation of
-> bpf_get_ns_current_pid_tgid() and the helper seems to be a bit overly
-> restricting to me. Specifically the following line:
-> 
->      if (!ns_match(&pidns->ns, (dev_t)dev, ino))
->              goto clear;
-> 
-> Why bail if the inode # does not match? IIUC from the old discussions,
-> it was b/c in the future pidns files might belong to different devices.
-> It's not clear to me (possibly b/c I'm missing something) why the inode
-> has to match as well.
+DW_INL_not_inlined = 0            Not declared inline nor inlined by
+the compiler
+DW_INL_inlined = 1                Not declared inline but inlined by
+the compiler
+DW_INL_declared_not_inlined = 2   Declared inline but not inlined by
+the compiler
+DW_INL_declared_inlined = 3       Declared inline and inlined by the compiler
 
-Yes, pidns file might belong to different devices in theory so we need
-to match dev as well.
+So DW_INL_inlined is supposed to be added to functions that are not
+marked inline, but were nevertheless inlined. I saw this for one of
+vfs_getattr entries in DWARF, which clearly is not marked inline.
 
-The inode number needs to match so we can ensure user indeed wants to
-get the *current pidns* tgid/pid.
+But also that DWARF entry had proper args with names, so it would work
+fine as well. I don't know, with DWARF it's always some guessing game.
+Let's leave DW_AT_inline alone for now.
 
-(dev, ino) input expressed user intention. Without this, in no-process
-context, it will be hard to interpret the results.
-
-> 
-> Would it be possible to instead have the helper return the pid/tgid of
-> the current task as viewed _from_ the `dev`/`ino` pidns? If the current
-> task is hidden from the `dev`/`ino` pidns, then return -ENOENT. The use
-> case is for bpftrace symbolize stacks when run inside a container. For
-> example:
-> 
->      (in-container)# bpftrace -e 'profile:hz:99 { print(ustack) }'
-
-I think you try to propose something like below:
-   - user provides dev/ino
-   - the helper will try to go through all pidns'es (not just active
-     one), if any match pidns match, returns tgid/pid in that pidns,
-     otherwise, returns -ENOENT.
-
-The current helper is
-    bpf_get_ns_current_pid_tgid
-you want
-    bpf_get_ns_pid_tgid
-
-I think it is possible, you need to check
-    pid->numbers[pid_level].ns
-for all pid levels. You need to get a reference count for the namespace
-to ensure valid result.
-
-This may work for root inode, but for container inode, it may have 
-issues. For example,
-   container 1: create, inode 2
-   container 1 removed
-   container 2: create, inode 2
-If you use inode 2, depending on timing you may accidentally targetting
-wrong container.
-
-I think you can workaround the issue without this helper. See below.
-
-> 
-> This currently does not work b/c bpftrace will generate a prog that gets
-> the root pidns pid, pack it with the stackid, and pass it up to
-> userspace. But b/c bpftrace is running inside the container, the root
-> pidns pid is invalid and symbolization fails.
-
-bpftrace can generate a program takes dev/inode as input parameters in
-map. The bpftrace will supply dev/inode value, by query the current 
-system/container, and then run the program.
-
-> 
-> What would be nice is if bpftrace could generate a prog that gets the
-> current pid as viewed from bpftrace's pidns. Then symbolization would
-> work.
-
-Despite the above workaround, what you really need is although it is 
-running on container, you want to get stack trace interpreted with
-root pid/tgid for symbolization purpose? But you can already achieve
-this with bpf_get_pid_tgid()?
-
-> 
-> Thanks,
-> Daniel
-> 
+Important part is skipping declarations (when they are marked as
+such), though I'm not claiming it will solve the problem completely...
+:)
