@@ -2,152 +2,142 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-6.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,
 	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E1E6C5519F
-	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 00:35:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4818C2D0E4
+	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 00:35:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE8DA21D79
-	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 00:35:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7079121D79
+	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 00:35:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=networkplumber-org.20150623.gappssmtp.com header.i=@networkplumber-org.20150623.gappssmtp.com header.b="NsOc7bKu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="POY2Oddu"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725965AbgKMAfH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 12 Nov 2020 19:35:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40544 "EHLO
+        id S1726055AbgKMAf6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 12 Nov 2020 19:35:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725894AbgKMAfF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 12 Nov 2020 19:35:05 -0500
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33F0C0613D1
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 16:35:05 -0800 (PST)
-Received: by mail-pf1-x432.google.com with SMTP id x15so4792351pfm.9
-        for <bpf@vger.kernel.org>; Thu, 12 Nov 2020 16:35:05 -0800 (PST)
+        with ESMTP id S1726005AbgKMAf5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 12 Nov 2020 19:35:57 -0500
+Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0759C0613D1;
+        Thu, 12 Nov 2020 16:35:57 -0800 (PST)
+Received: by mail-oi1-x243.google.com with SMTP id m13so8554800oih.8;
+        Thu, 12 Nov 2020 16:35:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
          :mime-version:content-transfer-encoding;
-        bh=QAgM9zSxSYveUCOf/9t8xsp7ka6K5j+jjbPInpgBIqA=;
-        b=NsOc7bKutoFtdS7Qt/K8dNsBrXWCzKDDLopQxrExVTiGbhMdAMW+Uz39ccazr1SVkt
-         8tjLVKxpcwa509G7MoQX345tM2AHYvZ2rKUGWcpcOX5qB+RhJYYBZzfl4zdhT3X2aSEF
-         YBkXslumlmow50jN3QuFQczsRscj8Uynbch6Cs8oVDCNo9l79bOu8whCT6UXzj58dlJZ
-         N9WZmA2N0oLkO0ZcKiU/GYthUOM5c1507W4sPxRJ8D4uhRuI408KGOGNsmzlt2ZeETMc
-         uhS/z1JoDYv6LRrfSYvn8sjJZ8nlzkKfDe7CXvLdY0zFtFlytaxeoY/mo1fXf9FaOtAG
-         wlzg==
+        bh=M09YuAwcxqngOc9N6q/ZmK7f0Y/KZ5s7+kpoHEp5wGI=;
+        b=POY2Oddubg91zxNwhJpr4cXVjkTMdxnmF3ZPpnnAaazrTBInktkrzJo6E8rKuxTkob
+         yzw1ww8Y6ZQIbIKZM9OJlEYN2adoOoeV7MRPRsaeERNPAnMFh1YTrS/2L5cIzfyj1doL
+         Kr4mMvTCmNc061KZ6kjVPerf0CImGkqVXY7+bMyCjTtzAuryMxDRh+cUBKz8TfHEpNUc
+         jrkBnkEzKauDrsRFKZu669TxXTY6pZcweSJTv7dKyCwXIaJnFnuq0y1ILA8EZ6Aj4rcF
+         oWIV8iGNcMLgUTHRSOcJHFiLCVFFF1tRRSg0tyTCxuCpZz8SYkukf4zcizBVYkDTyOCb
+         Jd/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=QAgM9zSxSYveUCOf/9t8xsp7ka6K5j+jjbPInpgBIqA=;
-        b=XkITHkaRDjbpaGoX2msQNcHOSo/PwIK5DC6QcppjqAMGZ4mpNJtaaGdzxcxhsC6VNn
-         GD04cJIaNkwps8krkbc7lc2KLEbSHm+uSqesmVKYOR00Gx6Djej5rjIreq8D5vKoiNd5
-         r6Eu9e9DsRF2tIJE0BXECd1OsnaJUP3Fl6VIuKpz7119S5+lfYdr6NprkQrmksLgG41q
-         Pl3S4Qce/Lliveno7txeLzAp2S8l4az02UQ/3VNA019TNjFSdWq1HvnFHVp2ipBuyxAQ
-         H6RlmKjmfcZ4FSx8yOAEKrm66teDu3ujU+tB1RzKHDc5arEk1MwoZ0rXTaBZSftf80Zr
-         Tbpw==
-X-Gm-Message-State: AOAM531/Vrfm/pSK1ZxI0Wa7+PAo8dUDnKKjspR7DYmxYnrXG+qiixKC
-        GIizfMJ6vdUOZjtxuRhFvzkfoA==
-X-Google-Smtp-Source: ABdhPJzluyUQ+S3aVtMeaLoqx0xjWMJHmK27cQczPs/T1e9p2y+zpaPIMk+Jvlbb4KNcK9CwuMzl2A==
-X-Received: by 2002:a63:887:: with SMTP id 129mr1628022pgi.81.1605227705235;
-        Thu, 12 Nov 2020 16:35:05 -0800 (PST)
-Received: from hermes.local (204-195-22-127.wavecable.com. [204.195.22.127])
-        by smtp.gmail.com with ESMTPSA id m66sm8176440pfm.54.2020.11.12.16.35.04
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=M09YuAwcxqngOc9N6q/ZmK7f0Y/KZ5s7+kpoHEp5wGI=;
+        b=j56op1UcXRtmkJNGgLsURRjhYckU1hJ2acqPRYW9dWVMb8l71ZuAyvb0CRsw0i/CFM
+         zBqOmWULa7j5GRaYpvkWq2JFa/xGQWvyB6Wa4YAHXCQeSyVDHhHjTSOjI/DlBd0F3anM
+         chNh5V34UrVsEbzuz4Vuiz8ud4wJC4+aQ4i4Q5ZvEFNbB6xDWuJR1bbPz8LEeDzQePzr
+         LB9bJhAnufj9SMlmZJTkmx4jO7Z0t1cuELFAxfbgupJ8mW5/8J8PM830aseUMnm3Iz3k
+         FttS4nS2+0sZdzqv/0ohAp3O9epoiWN0IDdEjJqr5d+1eo1IYHxToVQP6rG5NPh5GdJv
+         YZwg==
+X-Gm-Message-State: AOAM532Pre+sSOFDSanC+nbaT/3tMXmyzrpmBMDBEkco6hLsOuheNjpl
+        rLyDcuS0/t09CPIsotMdAvPOgVkZOr1qOw==
+X-Google-Smtp-Source: ABdhPJzvW0T0oGjtL5L/s3CMxZMbZVCLJrJe5Jma4FioMUEpuWytfDKTOs2r3olO975j9h1cRtykRw==
+X-Received: by 2002:aca:4a0d:: with SMTP id x13mr287131oia.155.1605227757080;
+        Thu, 12 Nov 2020 16:35:57 -0800 (PST)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id z10sm1688859otp.0.2020.11.12.16.35.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Nov 2020 16:35:04 -0800 (PST)
-Date:   Thu, 12 Nov 2020 16:04:37 -0800
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        David Ahern <dsahern@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Jiri Benc <jbenc@redhat.com>,
-        Edward Cree <ecree@solarflare.com>,
-        Hangbin Liu <haliu@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Miller <davem@davemloft.net>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: Re: [PATCHv3 iproute2-next 0/5] iproute2: add libbpf support
-Message-ID: <20201112160437.64c36022@hermes.local>
-In-Reply-To: <da82603a-cea9-7036-9d9a-4e1174cfa7c0@iogearbox.net>
-References: <CAADnVQKu7usDXbwwcjKChcs0NU3oP0deBsGGEavR_RuPkht74g@mail.gmail.com>
-        <07f149f6-f8ac-96b9-350d-b289ef16d82f@solarflare.com>
-        <CAEf4BzaSfutBt3McEPjmu_FyxyzJa_xVGfhP_7v0oGuqG_HBEw@mail.gmail.com>
-        <20201106094425.5cc49609@redhat.com>
-        <CAEf4Bzb2fuZ+Mxq21HEUKcOEba=rYZHc+1FTQD98=MPxwj8R3g@mail.gmail.com>
-        <CAADnVQ+S7fusZ6RgXBKJL7aCtt3jpNmCnCkcXd0fLayu+Rw_6Q@mail.gmail.com>
-        <20201106152537.53737086@hermes.local>
-        <45d88ca7-b22a-a117-5743-b965ccd0db35@gmail.com>
-        <20201109014515.rxz3uppztndbt33k@ast-mbp>
-        <14c9e6da-e764-2e2c-bbbb-bc95992ed258@gmail.com>
-        <20201111004749.r37tqrhskrcxjhhx@ast-mbp>
-        <874klwcg1p.fsf@toke.dk>
-        <321a2728-7a43-4a48-fe97-dab45b76e6fb@iogearbox.net>
-        <871rgy8aom.fsf@toke.dk>
-        <da82603a-cea9-7036-9d9a-4e1174cfa7c0@iogearbox.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+        Thu, 12 Nov 2020 16:35:56 -0800 (PST)
+Date:   Thu, 12 Nov 2020 16:35:50 -0800
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     davem@davemloft.net, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@fb.com
+Message-ID: <5fadd4e6281_2784420869@john-XPS-13-9370.notmuch>
+In-Reply-To: <20201112235934.gkydiegea4nhin3x@ast-mbp>
+References: <20201111031213.25109-1-alexei.starovoitov@gmail.com>
+ <20201111031213.25109-2-alexei.starovoitov@gmail.com>
+ <5fad89fb649af_2a612088e@john-XPS-13-9370.notmuch>
+ <20201112235934.gkydiegea4nhin3x@ast-mbp>
+Subject: Re: [PATCH v2 bpf-next 1/3] bpf: Support for pointers beyond pkt_end.
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, 13 Nov 2020 00:20:52 +0100
-Daniel Borkmann <daniel@iogearbox.net> wrote:
+Alexei Starovoitov wrote:
+> On Thu, Nov 12, 2020 at 11:16:11AM -0800, John Fastabend wrote:
+> > Alexei Starovoitov wrote:
+> > > From: Alexei Starovoitov <ast@kernel.org>
+> > > 
+> > > This patch adds the verifier support to recognize inlined branch conditions.
+> > > The LLVM knows that the branch evaluates to the same value, but the verifier
+> > > couldn't track it. Hence causing valid programs to be rejected.
+> > > The potential LLVM workaround: https://reviews.llvm.org/D87428
+> > > can have undesired side effects, since LLVM doesn't know that
+> > > skb->data/data_end are being compared. LLVM has to introduce extra boolean
+> > > variable and use inline_asm trick to force easier for the verifier assembly.
+> > > 
+> > > Instead teach the verifier to recognize that
+> > > r1 = skb->data;
+> > > r1 += 10;
+> > > r2 = skb->data_end;
+> > > if (r1 > r2) {
+> > >   here r1 points beyond packet_end and
+> > >   subsequent
+> > >   if (r1 > r2) // always evaluates to "true".
+> > > }
+> > > 
+> > > Tested-by: Jiri Olsa <jolsa@redhat.com>
+> > > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> > > ---
+> > >  include/linux/bpf_verifier.h |   2 +-
+> > >  kernel/bpf/verifier.c        | 129 +++++++++++++++++++++++++++++------
+> > >  2 files changed, 108 insertions(+), 23 deletions(-)
+> > > 
+> > 
+> > Thanks, we can remove another set of inline asm logic.
+> 
+> Awesome! Please contribute your C examples to selftests when possible.
 
-> On 11/12/20 11:36 PM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> > Daniel Borkmann <daniel@iogearbox.net> writes:
-> >  =20
-> >>> Besides, for the entire history of BPF support in iproute2 so far, the
-> >>> benefit has come from all the features that libbpf has just started
-> >>> automatically supporting on load (BTF, etc), so users would have
-> >>> benefited from automatic library updates had it *not* been vendored i=
-n. =20
-> >>
-> >> Not really. What you imply here is that we're living in a perfect
-> >> world and that all distros follow suite and i) add libbpf dependency
-> >> to their official iproute2 package, ii) upgrade iproute2 package along
-> >> with new kernel releases and iii) upgrade libbpf along with it so that
-> >> users are able to develop BPF programs against the feature set that
-> >> the kernel offers (as intended). These are a lot of moving parts to
-> >> get right, and as I pointed out earlier in the conversation, it took
-> >> major distros 2 years to get their act together to officially include
-> >> bpftool as a package - I'm not making this up, and this sort of pace
-> >> is simply not sustainable. It's also not clear whether distros will
-> >> get point iii) correct. =20
-> >=20
-> > I totally get that you've been frustrated with the distro adoption and
-> > packaging of BPF-related tools. And rightfully so. I just don't think
-> > that the answer to this is to try to work around distros, but rather to
-> > work with them to get things right.
-> >=20
-> > I'm quite happy to take a shot at getting a cross-distro effort going in
-> > this space; really, having well-supported BPF tooling ought to be in
-> > everyone's interest! =20
->=20
-> Thanks, yes, that is worth a push either way! There is still a long tail
-> of distros that are not considered major and until they all catch up with
-> points i)-iii) it might take a much longer time until this becomes really
-> ubiquitous with iproute2 for users of the libbpf loader. Its that this
-> frustrating user experience could be avoided altogether. iproute2 is
-> shipped and run also on small / embedded devices hence it tries to have
-> external dependencies reduced to a bare minimum (well, except that libmnl
-> detour, but it's not a mandatory dependency). If I were a user and would
-> rely on the loader for my progs to be installed I'd probably end up
-> compiling my own version of iproute2 linked with libbpf to move forward
-> instead of being blocked on distro to catch up, but its an additional
-> hassle for shipping SW instead of just having it all pre-installed when
-> built-in given it otherwise comes with the base distro already. But then
-> my question is what is planned here as deprecation process for the built-=
-in
-> lib/bpf.c code? I presume we'll remove it eventually to move on?
+Sure will do, its just some mundane header parsing iirc.
 
-Perf has a similar problem and it made it into most distributions because i=
-t is
-a valuable tool. Maybe there is some lessons learned that could apply here.
+> 
+> > Acked-by: John Fastabend <john.fastabend@gmail.com>
+> >  
+> > >  	if (pred >= 0) {
+> > > @@ -7517,7 +7601,8 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
+> > >  		 */
+> > >  		if (!__is_pointer_value(false, dst_reg))
+> > >  			err = mark_chain_precision(env, insn->dst_reg);
+> > > -		if (BPF_SRC(insn->code) == BPF_X && !err)
+> > > +		if (BPF_SRC(insn->code) == BPF_X && !err &&
+> > > +		    !__is_pointer_value(false, src_reg))
+> > 
+> > This could have been more specific with !type_is_pkt_pointer() correct? I
+> > think its fine as is though.
+> 
+> I actually meant to use __is_pointer_value() here for two reasons:
+> 1. to match dst_reg check just few lines above.
+
+Agree.
+
+> 2. mark_chain_precision() is for scalars only. If in the future
+>   is_*_branch_taken() will support other kinds of pointers the more
+>   precise !type_is_pkt_pointer() check would need to be modified.
+>   That would be unnecessary code churn.
+
+Agree.
