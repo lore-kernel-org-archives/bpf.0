@@ -2,106 +2,119 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E7A28C4742C
-	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 12:03:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6014C56202
+	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 12:03:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B962622240
-	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 12:03:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 83D9922240
+	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 12:03:58 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LQlxVlKr"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726736AbgKMMC7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 13 Nov 2020 07:02:59 -0500
-Received: from szxga06-in.huawei.com ([45.249.212.32]:7497 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726858AbgKMLte (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 13 Nov 2020 06:49:34 -0500
-Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4CXcDv0HKVzhlBS;
-        Fri, 13 Nov 2020 19:48:47 +0800 (CST)
-Received: from huawei.com (10.175.113.133) by DGGEMS409-HUB.china.huawei.com
- (10.3.19.209) with Microsoft SMTP Server id 14.3.487.0; Fri, 13 Nov 2020
- 19:48:50 +0800
-From:   Wang Hai <wanghai38@huawei.com>
-To:     <daniel@iogearbox.net>, <andrii.nakryiko@gmail.com>,
-        <mrostecki@opensuse.org>, <john.fastabend@gmail.com>
-CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 bpf] tools: bpftool: Add missing close before bpftool net attach exit
-Date:   Fri, 13 Nov 2020 19:51:52 +0800
-Message-ID: <20201113115152.53178-1-wanghai38@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726921AbgKMMDq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 13 Nov 2020 07:03:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726808AbgKMLmd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 13 Nov 2020 06:42:33 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9811BC0617A6;
+        Fri, 13 Nov 2020 03:34:21 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id 33so9415345wrl.7;
+        Fri, 13 Nov 2020 03:34:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=GMSoaYGH0pA9Jq20ijPobnsXJLhxhfT0yN3dukQKp6A=;
+        b=LQlxVlKrvCkLWpBdDs/58N3IpmTopAyTws9kNHZKVjci2aBi1KeRGvBuLX3Spgfi5e
+         zpsWdcAR5ty1QGG1399GotlpH1BqS5IYBsNKJDMIjqQQXunfMczgQrn1490UCWHS6P4d
+         3OwmNxDiFuwYS8ZGX/dAzL/8PBFBlsS1pGuHYAbKe0jDT8JvUG2RmWO2ShVciJ/YK/ql
+         ANmrM28vnx9onF4QRkv0o6w6p2+JYDrxbAYPfFE5B+X6ddFHhbkdMUiVKcZ4po1o8Td2
+         W3oocH6cjfpeFTp63SmGwJuwj6OHv7l+Rh9OSMNDqwkjTEOq1sgE8ugKM0f4F6lKBAFF
+         Xm+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GMSoaYGH0pA9Jq20ijPobnsXJLhxhfT0yN3dukQKp6A=;
+        b=NXL/d17CWz4UNPlCI0yqbGkA0xLhecFmQE+HEwQerFpKk1cqcL6jYRhz3BOXnT+p06
+         ZxG6Dz9wT2/Gw0wedGlJL2VegjWC9tLl2kc6fz0PmTSf+i7GOr6PhPDCff3Ejrv6BmxX
+         ZESc7W7KQjbUc9Hv+/bLJ/hnwf0Hjt79vYNJ2lpyE3NN8c9Z5ReuuhmLBPXmUUyhEQqN
+         r9rqJKGYmdUATOGMRmNP+wIjhnemQu8wb0z2QuNiZLnULTSH8exlvhZGl6+7C6y7NkhW
+         Up3WHUUt8bZ8AWzsFKLdXAsv7yZQh+wGy1mr5UGm/eX/0t6Xb6fYpgOJplr9oZY5lfRi
+         7GtQ==
+X-Gm-Message-State: AOAM530Fe/gtf9NO4trdsOyXg9Kj8o3RE0rZtMyElKUGe7SGSxiRznZ6
+        uKxPb0SxaXobvcjWGmIxvDU=
+X-Google-Smtp-Source: ABdhPJyzAQ2D5zO01xFQdEApfeD/HaEk9Rw5kL9gKvfUGhUiYT0F9Hi4TU3agolrFc6X50eVsg9zgg==
+X-Received: by 2002:adf:cf0b:: with SMTP id o11mr2844517wrj.162.1605267260409;
+        Fri, 13 Nov 2020 03:34:20 -0800 (PST)
+Received: from [192.168.8.114] ([37.167.2.65])
+        by smtp.gmail.com with ESMTPSA id g23sm9865657wmh.21.2020.11.13.03.34.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Nov 2020 03:34:19 -0800 (PST)
+Subject: Re: csum_partial() on different archs (selftest/bpf)
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Cc:     Tom Herbert <tom@herbertland.com>,
+        Anders Roxell <anders.roxell@gmail.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+References: <CAJ+HfNiQbOcqCLxFUP2FMm5QrLXUUaj852Fxe3hn_2JNiucn6g@mail.gmail.com>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <e23c63dd-5f90-c273-615f-d5d67991529c@gmail.com>
+Date:   Fri, 13 Nov 2020 12:34:17 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.113.133]
-X-CFilter-Loop: Reflected
+In-Reply-To: <CAJ+HfNiQbOcqCLxFUP2FMm5QrLXUUaj852Fxe3hn_2JNiucn6g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-progfd is created by prog_parse_fd(), before 'bpftool net attach' exit,
-it should be closed.
 
-Fixes: 04949ccc273e ("tools: bpftool: add net attach command to attach XDP on interface")
-Signed-off-by: Wang Hai <wanghai38@huawei.com>
----
-v3->v4: delete 'err = 0'
-v2->v3: add 'err = 0' before successful return
-v1->v2: use cleanup tag instead of repeated closes 
- tools/bpf/bpftool/net.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/tools/bpf/bpftool/net.c b/tools/bpf/bpftool/net.c
-index 910e7bac6e9e..b27b3ee9f2aa 100644
---- a/tools/bpf/bpftool/net.c
-+++ b/tools/bpf/bpftool/net.c
-@@ -578,8 +578,8 @@ static int do_attach(int argc, char **argv)
- 
- 	ifindex = net_parse_dev(&argc, &argv);
- 	if (ifindex < 1) {
--		close(progfd);
--		return -EINVAL;
-+		err = -EINVAL;
-+		goto cleanup;
- 	}
- 
- 	if (argc) {
-@@ -587,8 +587,8 @@ static int do_attach(int argc, char **argv)
- 			overwrite = true;
- 		} else {
- 			p_err("expected 'overwrite', got: '%s'?", *argv);
--			close(progfd);
--			return -EINVAL;
-+			err = -EINVAL;
-+			goto cleanup;
- 		}
- 	}
- 
-@@ -597,16 +597,18 @@ static int do_attach(int argc, char **argv)
- 		err = do_attach_detach_xdp(progfd, attach_type, ifindex,
- 					   overwrite);
- 
--	if (err < 0) {
-+	if (err) {
- 		p_err("interface %s attach failed: %s",
- 		      attach_type_strings[attach_type], strerror(-err));
--		return err;
-+		goto cleanup;
- 	}
- 
- 	if (json_output)
- 		jsonw_null(json_wtr);
- 
--	return 0;
-+cleanup:
-+	close(progfd);
-+	return err;
- }
- 
- static int do_detach(int argc, char **argv)
--- 
-2.17.1
+On 11/13/20 11:36 AM, Björn Töpel wrote:
+> I was running the selftest/bpf on riscv, and had a closer look at one
+> of the failing cases:
+> 
+>   #14/p valid read map access into a read-only array 2 FAIL retval
+> 65507 != -29 (run 1/1)
+> 
+> The test does a csum_partial() call via a BPF helper. riscv uses the
+> generic implementation. arm64 uses the generic csum_partial() and fail
+> in the same way [1]. arm (32-bit) has a arch specfic implementation,
+> and fail in another way (FAIL retval 131042 != -29) [2].
+> 
+> I mimicked the test case in a userland program, comparing the generic
+> csum_partial() to the x86 implementation [3], and the generic and x86
+> implementation does yield a different result.
+> 
+> x86     :    -29 : 0xffffffe3
+> generic :  65507 : 0x0000ffe3
+> arm     : 131042 : 0x0001ffe2
+> 
+> Who is correct? :-) It would be nice to get rid of this failed case...
+> 
 
+There are all the same value :), they all fold to u16  0xFFE3
+
+Maybe the test needs a fix, there is a missing folding.
+
+> 
+> Thanks,
+> Björn
+> 
+> 
+> [1] https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20201112/testrun/3430401/suite/kselftest/test/bpf.test_verifier/log
+> [2] https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v5.10-rc3-207-g585e5b17b92d/testrun/3432361/suite/kselftest/test/bpf.test_verifier/log
+> [3] https://gist.github.com/bjoto/dc22d593aa3ac63c2c90632de5ed82e0
+> 
