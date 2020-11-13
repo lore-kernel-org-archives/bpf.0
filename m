@@ -4,43 +4,43 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E62C1C388F7
-	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 12:02:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 97511C56202
+	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 12:03:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B040E2224C
-	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 12:02:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5B7472224C
+	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 12:03:00 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="uYw5vP43"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="zJLfCwBc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726537AbgKMMC7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726749AbgKMMC7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 13 Nov 2020 07:02:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36184 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:35962 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726440AbgKMLtj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 13 Nov 2020 06:49:39 -0500
+        id S1726853AbgKMLte (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 13 Nov 2020 06:49:34 -0500
 Received: from lore-desk.redhat.com (unknown [151.66.8.153])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 00B6E22252;
-        Fri, 13 Nov 2020 11:48:55 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 37F8322240;
+        Fri, 13 Nov 2020 11:48:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605268137;
-        bh=7vidf0SlS48p/Hy8BncMAPy+SJSBQDWTO1SODglJwEk=;
+        s=default; t=1605268126;
+        bh=UWielLYv/edECihcwlk+zw3lTDGnPV4D8p89gUmU3l4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uYw5vP43UMeXPJaDfXVmsXEMwYh41v6hOhZlsnBxqZ3NzIGTp/rXMuHsfmpFRaZKl
-         NdAbL9Ynioh33W68X44x1KDNNJsaFw80Ha3/oJuFvZfoLw8WRNeFQevAuSzmZ8KOJd
-         lac+I7ighUd43CAbsyp8/QACWl200Yf284gespZs=
+        b=zJLfCwBclF68UEr4haTuriTFaOyJVbTVGBBf4XdRiCQZyCliEq+tKu/BAn8zx0i12
+         tIv2DaWx7NFjGaT+wzBmiQ0lkr9SfabH//dI3BrZGbmESLic6VxMkchai2W0QQgpp+
+         lf5RIEe33jlwfQRwxAE0FWk8dJrcJmXngOFqjrIo=
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, lorenzo.bianconi@redhat.com,
         davem@davemloft.net, kuba@kernel.org, brouer@redhat.com,
         ilias.apalodimas@linaro.org, john.fastabend@gmail.com
-Subject: [PATCH v6 net-nex 5/5] net: mlx5: add xdp tx return bulking support
-Date:   Fri, 13 Nov 2020 12:48:32 +0100
-Message-Id: <250460319fd868b7b5668fc1deca74dd42813a90.1605267335.git.lorenzo@kernel.org>
+Subject: [PATCH v6 net-nex 1/5] net: xdp: introduce bulking for xdp tx return path
+Date:   Fri, 13 Nov 2020 12:48:28 +0100
+Message-Id: <e190c03eac71b20c8407ae0fc2c399eda7835f49.1605267335.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <cover.1605267335.git.lorenzo@kernel.org>
 References: <cover.1605267335.git.lorenzo@kernel.org>
@@ -50,104 +50,138 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Convert mlx5 driver to xdp_return_frame_bulk APIs.
+XDP bulk APIs introduce a defer/flush mechanism to return
+pages belonging to the same xdp_mem_allocator object
+(identified via the mem.id field) in bulk to optimize
+I-cache and D-cache since xdp_return_frame is usually run
+inside the driver NAPI tx completion loop.
+The bulk queue size is set to 16 to be aligned to how
+XDP_REDIRECT bulking works. The bulk is flushed when
+it is full or when mem.id changes.
+xdp_frame_bulk is usually stored/allocated on the function
+call-stack to avoid locking penalties.
+Current implementation considers only page_pool memory model.
 
-XDP_REDIRECT (upstream codepath): 8.9Mpps
-XDP_REDIRECT (upstream codepath + bulking APIs): 10.2Mpps
-
-Tested-by: Jesper Dangaard Brouer <brouer@redhat.com>
+Suggested-by: Jesper Dangaard Brouer <brouer@redhat.com>
 Co-developed-by: Jesper Dangaard Brouer <brouer@redhat.com>
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- .../net/ethernet/mellanox/mlx5/core/en/xdp.c  | 22 +++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
+ include/net/xdp.h | 17 +++++++++++++-
+ net/core/xdp.c    | 59 +++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 75 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-index ae90d533a350..2e3e78b0f333 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-@@ -366,7 +366,8 @@ mlx5e_xmit_xdp_frame(struct mlx5e_xdpsq *sq, struct mlx5e_xmit_data *xdptxd,
- static void mlx5e_free_xdpsq_desc(struct mlx5e_xdpsq *sq,
- 				  struct mlx5e_xdp_wqe_info *wi,
- 				  u32 *xsk_frames,
--				  bool recycle)
-+				  bool recycle,
-+				  struct xdp_frame_bulk *bq)
- {
- 	struct mlx5e_xdp_info_fifo *xdpi_fifo = &sq->db.xdpi_fifo;
- 	u16 i;
-@@ -379,7 +380,7 @@ static void mlx5e_free_xdpsq_desc(struct mlx5e_xdpsq *sq,
- 			/* XDP_TX from the XSK RQ and XDP_REDIRECT */
- 			dma_unmap_single(sq->pdev, xdpi.frame.dma_addr,
- 					 xdpi.frame.xdpf->len, DMA_TO_DEVICE);
--			xdp_return_frame(xdpi.frame.xdpf);
-+			xdp_return_frame_bulk(xdpi.frame.xdpf, bq);
- 			break;
- 		case MLX5E_XDP_XMIT_MODE_PAGE:
- 			/* XDP_TX from the regular RQ */
-@@ -397,12 +398,15 @@ static void mlx5e_free_xdpsq_desc(struct mlx5e_xdpsq *sq,
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 3814fb631d52..7d48b2ae217a 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -104,6 +104,18 @@ struct xdp_frame {
+ 	struct net_device *dev_rx; /* used by cpumap */
+ };
  
- bool mlx5e_poll_xdpsq_cq(struct mlx5e_cq *cq)
- {
-+	struct xdp_frame_bulk bq;
- 	struct mlx5e_xdpsq *sq;
- 	struct mlx5_cqe64 *cqe;
- 	u32 xsk_frames = 0;
- 	u16 sqcc;
- 	int i;
- 
-+	xdp_frame_bulk_init(&bq);
++#define XDP_BULK_QUEUE_SIZE	16
++struct xdp_frame_bulk {
++	int count;
++	void *xa;
++	void *q[XDP_BULK_QUEUE_SIZE];
++};
 +
- 	sq = container_of(cq, struct mlx5e_xdpsq, cq);
++static __always_inline void xdp_frame_bulk_init(struct xdp_frame_bulk *bq)
++{
++	/* bq->count will be zero'ed when bq->xa gets updated */
++	bq->xa = NULL;
++}
  
- 	if (unlikely(!test_bit(MLX5E_SQ_STATE_ENABLED, &sq->state)))
-@@ -434,7 +438,7 @@ bool mlx5e_poll_xdpsq_cq(struct mlx5e_cq *cq)
+ static inline struct skb_shared_info *
+ xdp_get_shared_info_from_frame(struct xdp_frame *frame)
+@@ -194,6 +206,9 @@ struct xdp_frame *xdp_convert_buff_to_frame(struct xdp_buff *xdp)
+ void xdp_return_frame(struct xdp_frame *xdpf);
+ void xdp_return_frame_rx_napi(struct xdp_frame *xdpf);
+ void xdp_return_buff(struct xdp_buff *xdp);
++void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq);
++void xdp_return_frame_bulk(struct xdp_frame *xdpf,
++			   struct xdp_frame_bulk *bq);
  
- 			sqcc += wi->num_wqebbs;
+ /* When sending xdp_frame into the network stack, then there is no
+  * return point callback, which is needed to release e.g. DMA-mapping
+@@ -245,6 +260,6 @@ bool xdp_attachment_flags_ok(struct xdp_attachment_info *info,
+ void xdp_attachment_setup(struct xdp_attachment_info *info,
+ 			  struct netdev_bpf *bpf);
  
--			mlx5e_free_xdpsq_desc(sq, wi, &xsk_frames, true);
-+			mlx5e_free_xdpsq_desc(sq, wi, &xsk_frames, true, &bq);
- 		} while (!last_wqe);
+-#define DEV_MAP_BULK_SIZE 16
++#define DEV_MAP_BULK_SIZE XDP_BULK_QUEUE_SIZE
  
- 		if (unlikely(get_cqe_opcode(cqe) != MLX5_CQE_REQ)) {
-@@ -447,6 +451,8 @@ bool mlx5e_poll_xdpsq_cq(struct mlx5e_cq *cq)
- 		}
- 	} while ((++i < MLX5E_TX_CQ_POLL_BUDGET) && (cqe = mlx5_cqwq_get_cqe(&cq->wq)));
- 
-+	xdp_flush_frame_bulk(&bq);
-+
- 	if (xsk_frames)
- 		xsk_tx_completed(sq->xsk_pool, xsk_frames);
- 
-@@ -463,8 +469,13 @@ bool mlx5e_poll_xdpsq_cq(struct mlx5e_cq *cq)
- 
- void mlx5e_free_xdpsq_descs(struct mlx5e_xdpsq *sq)
- {
-+	struct xdp_frame_bulk bq;
- 	u32 xsk_frames = 0;
- 
-+	xdp_frame_bulk_init(&bq);
-+
-+	rcu_read_lock(); /* need for xdp_return_frame_bulk */
-+
- 	while (sq->cc != sq->pc) {
- 		struct mlx5e_xdp_wqe_info *wi;
- 		u16 ci;
-@@ -474,9 +485,12 @@ void mlx5e_free_xdpsq_descs(struct mlx5e_xdpsq *sq)
- 
- 		sq->cc += wi->num_wqebbs;
- 
--		mlx5e_free_xdpsq_desc(sq, wi, &xsk_frames, false);
-+		mlx5e_free_xdpsq_desc(sq, wi, &xsk_frames, false, &bq);
- 	}
- 
-+	xdp_flush_frame_bulk(&bq);
-+	rcu_read_unlock();
-+
- 	if (xsk_frames)
- 		xsk_tx_completed(sq->xsk_pool, xsk_frames);
+ #endif /* __LINUX_NET_XDP_H__ */
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 48aba933a5a8..bbaee7fdd44f 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -380,6 +380,65 @@ void xdp_return_frame_rx_napi(struct xdp_frame *xdpf)
  }
+ EXPORT_SYMBOL_GPL(xdp_return_frame_rx_napi);
+ 
++/* XDP bulk APIs introduce a defer/flush mechanism to return
++ * pages belonging to the same xdp_mem_allocator object
++ * (identified via the mem.id field) in bulk to optimize
++ * I-cache and D-cache.
++ * The bulk queue size is set to 16 to be aligned to how
++ * XDP_REDIRECT bulking works. The bulk is flushed when
++ * it is full or when mem.id changes.
++ * xdp_frame_bulk is usually stored/allocated on the function
++ * call-stack to avoid locking penalties.
++ */
++void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq)
++{
++	struct xdp_mem_allocator *xa = bq->xa;
++	int i;
++
++	if (unlikely(!xa))
++		return;
++
++	for (i = 0; i < bq->count; i++) {
++		struct page *page = virt_to_head_page(bq->q[i]);
++
++		page_pool_put_full_page(xa->page_pool, page, false);
++	}
++	/* bq->xa is not cleared to save lookup, if mem.id same in next bulk */
++	bq->count = 0;
++}
++EXPORT_SYMBOL_GPL(xdp_flush_frame_bulk);
++
++/* Must be called with rcu_read_lock held */
++void xdp_return_frame_bulk(struct xdp_frame *xdpf,
++			   struct xdp_frame_bulk *bq)
++{
++	struct xdp_mem_info *mem = &xdpf->mem;
++	struct xdp_mem_allocator *xa;
++
++	if (mem->type != MEM_TYPE_PAGE_POOL) {
++		__xdp_return(xdpf->data, &xdpf->mem, false);
++		return;
++	}
++
++	xa = bq->xa;
++	if (unlikely(!xa)) {
++		xa = rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params);
++		bq->count = 0;
++		bq->xa = xa;
++	}
++
++	if (bq->count == XDP_BULK_QUEUE_SIZE)
++		xdp_flush_frame_bulk(bq);
++
++	if (unlikely(mem->id != xa->mem.id)) {
++		xdp_flush_frame_bulk(bq);
++		bq->xa = rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params);
++	}
++
++	bq->q[bq->count++] = xdpf->data;
++}
++EXPORT_SYMBOL_GPL(xdp_return_frame_bulk);
++
+ void xdp_return_buff(struct xdp_buff *xdp)
+ {
+ 	__xdp_return(xdp->data, &xdp->rxq->mem, true);
 -- 
 2.26.2
 
