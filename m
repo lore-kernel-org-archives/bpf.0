@@ -2,98 +2,106 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6804C388F7
-	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 12:03:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7A28C4742C
+	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 12:03:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A24BF22250
-	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 12:03:18 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="fkU6zbuI"
+	by mail.kernel.org (Postfix) with ESMTP id B962622240
+	for <bpf@archiver.kernel.org>; Fri, 13 Nov 2020 12:03:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726758AbgKMMC7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1726736AbgKMMC7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 13 Nov 2020 07:02:59 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36014 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726854AbgKMLtd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 13 Nov 2020 06:49:33 -0500
-Received: from lore-desk.redhat.com (unknown [151.66.8.153])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AF2202224F;
-        Fri, 13 Nov 2020 11:48:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605268132;
-        bh=X/652KcX1ghKM3MixANJqmPxus5xOB2yI+S3x9cOI5M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fkU6zbuIpGTyIkwTi7dtxtDKxfL/4q6FOobtFHCc9SzMBtRYUSAe2ydN0bzyCuntv
-         k/X0wTWWph/aq9D3Gw2UD0jYqUl3LfROOHuflKpfKE2CY00NOn/VUzQh4fqFdALvpz
-         qaYkALjAOGi4zP10aU1SibIkvM/FS0agA8jul8sk=
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, lorenzo.bianconi@redhat.com,
-        davem@davemloft.net, kuba@kernel.org, brouer@redhat.com,
-        ilias.apalodimas@linaro.org, john.fastabend@gmail.com
-Subject: [PATCH v6 net-nex 3/5] net: mvneta: add xdp tx return bulking support
-Date:   Fri, 13 Nov 2020 12:48:30 +0100
-Message-Id: <9af8014006d022fc0fec78cdaa71beb56999750d.1605267335.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <cover.1605267335.git.lorenzo@kernel.org>
-References: <cover.1605267335.git.lorenzo@kernel.org>
+Received: from szxga06-in.huawei.com ([45.249.212.32]:7497 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726858AbgKMLte (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 13 Nov 2020 06:49:34 -0500
+Received: from DGGEMS409-HUB.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4CXcDv0HKVzhlBS;
+        Fri, 13 Nov 2020 19:48:47 +0800 (CST)
+Received: from huawei.com (10.175.113.133) by DGGEMS409-HUB.china.huawei.com
+ (10.3.19.209) with Microsoft SMTP Server id 14.3.487.0; Fri, 13 Nov 2020
+ 19:48:50 +0800
+From:   Wang Hai <wanghai38@huawei.com>
+To:     <daniel@iogearbox.net>, <andrii.nakryiko@gmail.com>,
+        <mrostecki@opensuse.org>, <john.fastabend@gmail.com>
+CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 bpf] tools: bpftool: Add missing close before bpftool net attach exit
+Date:   Fri, 13 Nov 2020 19:51:52 +0800
+Message-ID: <20201113115152.53178-1-wanghai38@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.175.113.133]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Convert mvneta driver to xdp_return_frame_bulk APIs.
+progfd is created by prog_parse_fd(), before 'bpftool net attach' exit,
+it should be closed.
 
-XDP_REDIRECT (upstream codepath): 275Kpps
-XDP_REDIRECT (upstream codepath + bulking APIs): 284Kpps
-
-Co-developed-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+Fixes: 04949ccc273e ("tools: bpftool: add net attach command to attach XDP on interface")
+Signed-off-by: Wang Hai <wanghai38@huawei.com>
 ---
- drivers/net/ethernet/marvell/mvneta.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+v3->v4: delete 'err = 0'
+v2->v3: add 'err = 0' before successful return
+v1->v2: use cleanup tag instead of repeated closes 
+ tools/bpf/bpftool/net.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-index 54b0bf574c05..183530ed4d1d 100644
---- a/drivers/net/ethernet/marvell/mvneta.c
-+++ b/drivers/net/ethernet/marvell/mvneta.c
-@@ -1834,8 +1834,13 @@ static void mvneta_txq_bufs_free(struct mvneta_port *pp,
- 				 struct netdev_queue *nq, bool napi)
- {
- 	unsigned int bytes_compl = 0, pkts_compl = 0;
-+	struct xdp_frame_bulk bq;
- 	int i;
+diff --git a/tools/bpf/bpftool/net.c b/tools/bpf/bpftool/net.c
+index 910e7bac6e9e..b27b3ee9f2aa 100644
+--- a/tools/bpf/bpftool/net.c
++++ b/tools/bpf/bpftool/net.c
+@@ -578,8 +578,8 @@ static int do_attach(int argc, char **argv)
  
-+	xdp_frame_bulk_init(&bq);
-+
-+	rcu_read_lock(); /* need for xdp_return_frame_bulk */
-+
- 	for (i = 0; i < num; i++) {
- 		struct mvneta_tx_buf *buf = &txq->buf[txq->txq_get_index];
- 		struct mvneta_tx_desc *tx_desc = txq->descs +
-@@ -1857,9 +1862,12 @@ static void mvneta_txq_bufs_free(struct mvneta_port *pp,
- 			if (napi && buf->type == MVNETA_TYPE_XDP_TX)
- 				xdp_return_frame_rx_napi(buf->xdpf);
- 			else
--				xdp_return_frame(buf->xdpf);
-+				xdp_return_frame_bulk(buf->xdpf, &bq);
+ 	ifindex = net_parse_dev(&argc, &argv);
+ 	if (ifindex < 1) {
+-		close(progfd);
+-		return -EINVAL;
++		err = -EINVAL;
++		goto cleanup;
+ 	}
+ 
+ 	if (argc) {
+@@ -587,8 +587,8 @@ static int do_attach(int argc, char **argv)
+ 			overwrite = true;
+ 		} else {
+ 			p_err("expected 'overwrite', got: '%s'?", *argv);
+-			close(progfd);
+-			return -EINVAL;
++			err = -EINVAL;
++			goto cleanup;
  		}
  	}
-+	xdp_flush_frame_bulk(&bq);
-+
-+	rcu_read_unlock();
  
- 	netdev_tx_completed_queue(nq, pkts_compl, bytes_compl);
+@@ -597,16 +597,18 @@ static int do_attach(int argc, char **argv)
+ 		err = do_attach_detach_xdp(progfd, attach_type, ifindex,
+ 					   overwrite);
+ 
+-	if (err < 0) {
++	if (err) {
+ 		p_err("interface %s attach failed: %s",
+ 		      attach_type_strings[attach_type], strerror(-err));
+-		return err;
++		goto cleanup;
+ 	}
+ 
+ 	if (json_output)
+ 		jsonw_null(json_wtr);
+ 
+-	return 0;
++cleanup:
++	close(progfd);
++	return err;
  }
+ 
+ static int do_detach(int argc, char **argv)
 -- 
-2.26.2
+2.17.1
 
