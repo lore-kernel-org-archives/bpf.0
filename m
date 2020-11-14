@@ -2,88 +2,78 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-9.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BD07C6379D
-	for <bpf@archiver.kernel.org>; Sat, 14 Nov 2020 18:51:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0339CC61DD8
+	for <bpf@archiver.kernel.org>; Sat, 14 Nov 2020 19:40:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 29A2D22265
-	for <bpf@archiver.kernel.org>; Sat, 14 Nov 2020 18:51:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B9380223B0
+	for <bpf@archiver.kernel.org>; Sat, 14 Nov 2020 19:40:20 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="L5QUK3Hn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726319AbgKNSuy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Sat, 14 Nov 2020 13:50:54 -0500
-Received: from mx.der-flo.net ([193.160.39.236]:51822 "EHLO mx.der-flo.net"
+        id S1726273AbgKNTkL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 14 Nov 2020 14:40:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55434 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726255AbgKNSuy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Sat, 14 Nov 2020 13:50:54 -0500
-Received: by mx.der-flo.net (Postfix, from userid 110)
-        id 884C8439A7; Sat, 14 Nov 2020 19:50:49 +0100 (CET)
-Received: from localhost (unknown [IPv6:2a02:1203:ecb0:3930:1751:4157:4d75:a5e2])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726112AbgKNTkL (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 14 Nov 2020 14:40:11 -0500
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (c-67-180-217-166.hsd1.ca.comcast.net [67.180.217.166])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx.der-flo.net (Postfix) with ESMTPSA id B7D00413E7;
-        Sat, 14 Nov 2020 19:49:36 +0100 (CET)
-Date:   Sat, 14 Nov 2020 19:49:31 +0100
-From:   Florian Lehner <dev@der-flo.net>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     acme@kernel.org, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net,
-        john.fastabend@gmail.com, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, netdev@vger.kernel.org, peterz@infradead.org
-Subject: Re: [PATCH bpf,perf]] bpf,perf: return EOPNOTSUPP for attaching bpf
- handler on PERF_COUNT_SW_DUMMY
-Message-ID: <20201114184931.GA2747@der-flo.net>
-References: <20201114135126.29462-1-dev@der-flo.net>
- <CAADnVQL4zBmS5Yo3skoA32YjFXz5qu0q9LuJ5Z-61EGwZzgD6Q@mail.gmail.com>
+        by mail.kernel.org (Postfix) with ESMTPSA id E1FAB2227F;
+        Sat, 14 Nov 2020 19:40:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605382811;
+        bh=ZxkmxCx0SVsZgVAhUbboaa+H7Wcy87kxAeGppg51J1U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=L5QUK3HnMWWfCppQVDJUwkIjqaj+fcIuhcAj/lNj1Rz143yigyJN/N5xEk1AF9Tkh
+         ruK96lFnHLjN8zBu4Ax2SFYqJJZQ8F1+QSyU7Ki7Frt3iW+mTEqxWx0oKAg/Ozi1aZ
+         BUeJvlOG04ZtzgWr7jKb/hcI5830j3jj9UOb3ZLU=
+Date:   Sat, 14 Nov 2020 11:40:10 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     davem@davemloft.net, ast@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: pull-request: bpf-next 2020-11-14
+Message-ID: <20201114114010.1b37c427@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20201114020819.29584-1-daniel@iogearbox.net>
+References: <20201114020819.29584-1-daniel@iogearbox.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAADnVQL4zBmS5Yo3skoA32YjFXz5qu0q9LuJ5Z-61EGwZzgD6Q@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Nov 14, 2020 at 08:07:29AM -0800, Alexei Starovoitov wrote:
-> On Sat, Nov 14, 2020 at 5:53 AM Florian Lehner <dev@der-flo.net> wrote:
-> >
-> > At the moment it is not possible to attach a bpf handler to a perf event
-> > of type PERF_TYPE_SOFTWARE with a configuration of PERF_COUNT_SW_DUMMY.
+On Sat, 14 Nov 2020 03:08:19 +0100 Daniel Borkmann wrote:
+> 1) Add BTF generation for kernel modules and extend BTF infra in kernel
+>    e.g. support for split BTF loading and validation, from Andrii Nakryiko.
 > 
-> It is possible or it is not possible?
+> 2) Support for pointers beyond pkt_end to recognize LLVM generated patterns
+>    on inlined branch conditions, from Alexei Starovoitov.
 > 
-> Such "commit log as an abstract statement" patches are a mystery to a reader.
-> Please explain what problem you're trying to solve and how it's being addressed.
-
-Perf events of type software/dummy are just placeholder events and don't
-require a counting event. So attaching the bpf handler to the
-overflow_handler of this event does not trigger the execution of the bpf
-handler.
-So the idea of this fix was to indicate to the user that attaching a bpf
-handler to such a perf event is not (yet) supported.
-
-> > Signed-off-by: Florian Lehner <dev@der-flo.net>
-> > ---
-> >  kernel/events/core.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/kernel/events/core.c b/kernel/events/core.c
-> > index da467e1dd49a..4e8846b7ceda 100644
-> > --- a/kernel/events/core.c
-> > +++ b/kernel/events/core.c
-> > @@ -9668,6 +9668,10 @@ static int perf_event_set_bpf_handler(struct perf_event *event, u32 prog_fd)
-> >         if (event->prog)
-> >                 return -EEXIST;
-> >
-> > +       if (event->attr.type == PERF_TYPE_SOFTWARE &&
-> > +           event->attr.config == PERF_COUNT_SW_DUMMY)
-> > +               return -EOPNOTSUPP;
+> 3) Implements bpf_local_storage for task_struct for BPF LSM, from KP Singh.
 > 
-> Is it a fix or a feature?
-> If it is a fix please add 'Fixes:' tag.
+> 4) Enable FENTRY/FEXIT/RAW_TP tracing program to use the bpf_sk_storage
+>    infra, from Martin KaFai Lau.
+> 
+> 5) Add XDP bulk APIs that introduce a defer/flush mechanism to optimize the
+>    XDP_REDIRECT path, from Lorenzo Bianconi.
+> 
+> 6) Fix a potential (although rather theoretical) deadlock of hashtab in NMI
+>    context, from Song Liu.
+> 
+> 7) Fixes for cross and out-of-tree build of bpftool and runqslower allowing build
+>    for different target archs on same source tree, from Jean-Philippe Brucker.
+> 
+> 8) Fix error path in htab_map_alloc() triggered from syzbot, from Eric Dumazet.
+> 
+> 9) Move functionality from test_tcpbpf_user into the test_progs framework so it
+>    can run in BPF CI, from Alexander Duyck.
+> 
+> 10) Lift hashtab key_size limit to be larger than MAX_BPF_STACK, from Florian Lehner.
 
-I was not sure how to address it and so I have chosen PATCH. As bpf
-handlers are still not executed on such events, I also would not call it
-a feature.
+Pulled, thank you!
