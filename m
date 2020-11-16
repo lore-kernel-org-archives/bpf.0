@@ -8,56 +8,56 @@ X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C5E5C83019
-	for <bpf@archiver.kernel.org>; Mon, 16 Nov 2020 12:37:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E1F37C83017
+	for <bpf@archiver.kernel.org>; Mon, 16 Nov 2020 12:37:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0F6BA22265
-	for <bpf@archiver.kernel.org>; Mon, 16 Nov 2020 12:37:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A49B22265
+	for <bpf@archiver.kernel.org>; Mon, 16 Nov 2020 12:37:38 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PP2rU74M"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TxibjckW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729505AbgKPLF2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Nov 2020 06:05:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41128 "EHLO
+        id S1729464AbgKPLFW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Nov 2020 06:05:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726353AbgKPLF2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 Nov 2020 06:05:28 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30237C0613CF;
-        Mon, 16 Nov 2020 03:05:28 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id q28so2375993pgk.1;
-        Mon, 16 Nov 2020 03:05:28 -0800 (PST)
+        with ESMTP id S1729404AbgKPLFW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 16 Nov 2020 06:05:22 -0500
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16112C0613CF;
+        Mon, 16 Nov 2020 03:05:22 -0800 (PST)
+Received: by mail-pf1-x442.google.com with SMTP id c20so13769687pfr.8;
+        Mon, 16 Nov 2020 03:05:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=SMuIIzNyAeXu64StgjlhI6xMtW/RAUIa0LLgxB8HnhI=;
-        b=PP2rU74MUkheao3IWVTC4xC7KRp3QuPf8DtUdYaTQog5H9dZBRZqcPjNiFZdog3aqZ
-         +03xjPZ4+/FLt7Jx7Mr57XSWb9IZu6/2wylhPu1Xwz4zj1i6UhgT234b06aJVklNeKVQ
-         bJp7VHdEJI5Jq5vsvZqjnDR7wPiqbgfvTLMbxA1wTffg/p8/FasrJnYrZwfY8yKOND1+
-         tggUzxC2R5cvatR/SJyxO3lrHml0zbzbhRNf0q5TFBtt8FPLYtVSR3E246oego4K7IH4
-         JjQwp0ozM1FGEPW/SdCHTLniHpXJvJvHZ7cU/AOBNfMlL8MW6DzPskhuah4ZZosQ5N5Q
-         IIog==
+        bh=pjXiaJJaFcfh/d5Hg7T1ivvJjPLwr7C0xxhr2qpyt5M=;
+        b=TxibjckWGbjY8SYhBeJQTP9jRNRWmLaHXy3WiLYZMoKsWtFTaiOEbi2U/tjRihOzJd
+         S8uR13wh5262bitKBLyood/O2erkKBs2hgh++0hTE0NoiR4yfQMjvAJ9bO+Stt70qSlu
+         L6KiOUev//TgrLSp+6n9Y+mThRp7LZvoy1RxCFyyjiu90YAJvZhdmHO7g8hzm5jL8FkP
+         OAoVQAkXe68SwoyXqkH0fLDF7NUolWXPA2jWb0rlHjuMrvrKGHQ1PzvIJZQUOpBN0Eo4
+         6EaCytury4h95gb/6Aw5/cQb43LHXQJ43zTCpGSCTjpM9e5RIj4lyT11lVoBR+K54jo6
+         XzWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=SMuIIzNyAeXu64StgjlhI6xMtW/RAUIa0LLgxB8HnhI=;
-        b=S8J8pPblOqaipHuxcsue6rwWphDtTQyjQOBpHQWvu9Vqo3esMRIg/RTfLv9+44EQqA
-         ByiZncxZhWYIh5c9sijUHIr10qv8nGxTcQ2qbU24bsmsqWJb0ZBEMTpBA51TG5iAN9Z0
-         qFoB+VT2IRYXdCzvTCbUSPUhZ+klnkL597CGIrXbnuTv3urIEpivCWsDdQ9FU//lyf9r
-         byy88vVF52JnievCDAJAugsUsJecZfm8NMucLDj1DsXFt5BtZj+F/FpwxJvkFi8MPFYZ
-         cPG12iL+ZxQa7OXlK3DjEdZBtUEoJJn8EdysO1zlstYmrgSFFq1PNpUgdf/eenqO724v
-         bU+Q==
-X-Gm-Message-State: AOAM532c0c9Q0f3l46Jk9yqiYrU2dG3omdqX0r/fXNIsjAZppGocvBNL
-        UGkDXittrh72JtIwcFZc80Hl9vr5yCG/CeO/
-X-Google-Smtp-Source: ABdhPJx6nRwoGVGcQ4Mi5KLOZtiecZmlqBTD86Y0GGXLskcxlYy7APUm3ckrlS1C/xRAoYAeO0tCKw==
-X-Received: by 2002:a62:2c16:0:b029:15d:8d2:2e6d with SMTP id s22-20020a622c160000b029015d08d22e6dmr13589884pfs.52.1605524727205;
-        Mon, 16 Nov 2020 03:05:27 -0800 (PST)
+        bh=pjXiaJJaFcfh/d5Hg7T1ivvJjPLwr7C0xxhr2qpyt5M=;
+        b=iqHPUqMx4FEjU8OtgNcmZN2vllAmWcn3iMcZHTItX0VkSxiel/0tvq7NXgdJctP75b
+         kwI/oFiSmaWDFNMrBJgwum8CNyXfS3RJH+73k1qXolQ2sLZmcfNyva97piAZPyiUwWYS
+         CZ5BOgy3KYJjnhF/Xl5xse7aEo2blzUEG2UtGXXkr7DrgTrgZp77TimfUqC6rqyre9XU
+         oCFdgwEUBKUoOijdH6KbSKQwuYgQQVsYin8kffGgaM3BXwl71sCy2B69GsdQC1XAClkp
+         ISR88qjXAybKgcpEu29Q/WhcQH3VtTwZqOMbtW4FIpbxUqHpi/9KzO5AY15eXM4cJG7i
+         tEBw==
+X-Gm-Message-State: AOAM531xeOr5b6wnZGSLWhVdE6ZOQwUGqx2HCNL+vPIK3JoqeX8aE4Sy
+        uRCbnPIE6WewYe67noUym8HYZcQdxvOHzS3x
+X-Google-Smtp-Source: ABdhPJylAdysM0x2u41w3apgW6ngd8Y8smO/eXvuI3GFD1NvnYcsM2LsXQu/TvC19MBUHDUUlz0mNA==
+X-Received: by 2002:a63:1514:: with SMTP id v20mr8787957pgl.203.1605524720732;
+        Mon, 16 Nov 2020 03:05:20 -0800 (PST)
 Received: from btopel-mobl.ger.intel.com ([192.55.55.41])
-        by smtp.gmail.com with ESMTPSA id a23sm15752890pgv.35.2020.11.16.03.05.21
+        by smtp.gmail.com with ESMTPSA id a23sm15752890pgv.35.2020.11.16.03.05.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2020 03:05:26 -0800 (PST)
+        Mon, 16 Nov 2020 03:05:19 -0800 (PST)
 From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
@@ -65,9 +65,9 @@ Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
         maciej.fijalkowski@intel.com, sridhar.samudrala@intel.com,
         jesse.brandeburg@intel.com, qi.z.zhang@intel.com, kuba@kernel.org,
         edumazet@google.com, jonathan.lemon@gmail.com, maximmi@nvidia.com
-Subject: [PATCH bpf-next v2 08/10] samples/bpf: use recvfrom() in xdpsock/l2fwd
-Date:   Mon, 16 Nov 2020 12:04:14 +0100
-Message-Id: <20201116110416.10719-9-bjorn.topel@gmail.com>
+Subject: [PATCH bpf-next v2 07/10] samples/bpf: use recvfrom() in xdpsock/rxdrop
+Date:   Mon, 16 Nov 2020 12:04:13 +0100
+Message-Id: <20201116110416.10719-8-bjorn.topel@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201116110416.10719-1-bjorn.topel@gmail.com>
 References: <20201116110416.10719-1-bjorn.topel@gmail.com>
@@ -80,52 +80,27 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Björn Töpel <bjorn.topel@intel.com>
 
-Start using recvfrom() the l2fwd scenario, instead of poll() which is
-more expensive and need additional knobs for busy-polling.
+Start using recvfrom() the rxdrop scenario.
 
 Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
 ---
- samples/bpf/xdpsock_user.c | 25 +++++++++++--------------
- 1 file changed, 11 insertions(+), 14 deletions(-)
+ samples/bpf/xdpsock_user.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
-index 96d0b6482ac4..bc4ef3ac9dfb 100644
+index 1149e94ca32f..96d0b6482ac4 100644
 --- a/samples/bpf/xdpsock_user.c
 +++ b/samples/bpf/xdpsock_user.c
-@@ -1098,8 +1098,7 @@ static void kick_tx(struct xsk_socket_info *xsk)
- 	exit_with_error(errno);
+@@ -1172,7 +1172,7 @@ static inline void complete_tx_only(struct xsk_socket_info *xsk,
+ 	}
  }
  
--static inline void complete_tx_l2fwd(struct xsk_socket_info *xsk,
--				     struct pollfd *fds)
-+static inline void complete_tx_l2fwd(struct xsk_socket_info *xsk)
- {
- 	struct xsk_umem_info *umem = xsk->umem;
- 	u32 idx_cq = 0, idx_fq = 0;
-@@ -1134,7 +1133,7 @@ static inline void complete_tx_l2fwd(struct xsk_socket_info *xsk,
- 				exit_with_error(-ret);
- 			if (xsk_ring_prod__needs_wakeup(&umem->fq)) {
- 				xsk->app_stats.fill_fail_polls++;
--				ret = poll(fds, num_socks, opt_timeout);
-+				recvfrom(xsk_socket__fd(xsk->xsk), NULL, 0, MSG_DONTWAIT, NULL, NULL);
- 			}
- 			ret = xsk_ring_prod__reserve(&umem->fq, rcvd, &idx_fq);
- 		}
-@@ -1332,19 +1331,19 @@ static void tx_only_all(void)
- 		complete_tx_only_all();
- }
- 
--static void l2fwd(struct xsk_socket_info *xsk, struct pollfd *fds)
-+static void l2fwd(struct xsk_socket_info *xsk)
+-static void rx_drop(struct xsk_socket_info *xsk, struct pollfd *fds)
++static void rx_drop(struct xsk_socket_info *xsk)
  {
  	unsigned int rcvd, i;
- 	u32 idx_rx = 0, idx_tx = 0;
- 	int ret;
- 
--	complete_tx_l2fwd(xsk, fds);
-+	complete_tx_l2fwd(xsk);
- 
- 	rcvd = xsk_ring_cons__peek(&xsk->rx, opt_batch_size, &idx_rx);
+ 	u32 idx_rx = 0, idx_fq = 0;
+@@ -1182,7 +1182,7 @@ static void rx_drop(struct xsk_socket_info *xsk, struct pollfd *fds)
  	if (!rcvd) {
  		if (xsk_ring_prod__needs_wakeup(&xsk->umem->fq)) {
  			xsk->app_stats.rx_empty_polls++;
@@ -134,40 +109,21 @@ index 96d0b6482ac4..bc4ef3ac9dfb 100644
  		}
  		return;
  	}
-@@ -1353,7 +1352,7 @@ static void l2fwd(struct xsk_socket_info *xsk, struct pollfd *fds)
- 	while (ret != rcvd) {
- 		if (ret < 0)
+@@ -1193,7 +1193,7 @@ static void rx_drop(struct xsk_socket_info *xsk, struct pollfd *fds)
  			exit_with_error(-ret);
--		complete_tx_l2fwd(xsk, fds);
-+		complete_tx_l2fwd(xsk);
- 		if (xsk_ring_prod__needs_wakeup(&xsk->tx)) {
- 			xsk->app_stats.tx_wakeup_sendtos++;
- 			kick_tx(xsk);
-@@ -1388,22 +1387,20 @@ static void l2fwd_all(void)
- 	struct pollfd fds[MAX_SOCKS] = {};
- 	int i, ret;
- 
--	for (i = 0; i < num_socks; i++) {
--		fds[i].fd = xsk_socket__fd(xsks[i]->xsk);
--		fds[i].events = POLLOUT | POLLIN;
--	}
--
- 	for (;;) {
- 		if (opt_poll) {
--			for (i = 0; i < num_socks; i++)
-+			for (i = 0; i < num_socks; i++) {
-+				fds[i].fd = xsk_socket__fd(xsks[i]->xsk);
-+				fds[i].events = POLLOUT | POLLIN;
- 				xsks[i]->app_stats.opt_polls++;
-+			}
- 			ret = poll(fds, num_socks, opt_timeout);
- 			if (ret <= 0)
- 				continue;
+ 		if (xsk_ring_prod__needs_wakeup(&xsk->umem->fq)) {
+ 			xsk->app_stats.fill_fail_polls++;
+-			ret = poll(fds, num_socks, opt_timeout);
++			recvfrom(xsk_socket__fd(xsk->xsk), NULL, 0, MSG_DONTWAIT, NULL, NULL);
+ 		}
+ 		ret = xsk_ring_prod__reserve(&xsk->umem->fq, rcvd, &idx_fq);
+ 	}
+@@ -1235,7 +1235,7 @@ static void rx_drop_all(void)
  		}
  
  		for (i = 0; i < num_socks; i++)
--			l2fwd(xsks[i], fds);
-+			l2fwd(xsks[i]);
+-			rx_drop(xsks[i], fds);
++			rx_drop(xsks[i]);
  
  		if (benchmark_done)
  			break;
