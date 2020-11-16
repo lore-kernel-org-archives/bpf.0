@@ -2,71 +2,148 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76BD1C6379F
-	for <bpf@archiver.kernel.org>; Mon, 16 Nov 2020 21:07:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09A0DC3E8C5
+	for <bpf@archiver.kernel.org>; Mon, 16 Nov 2020 21:17:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3DBD220855
-	for <bpf@archiver.kernel.org>; Mon, 16 Nov 2020 21:07:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 855572224F
+	for <bpf@archiver.kernel.org>; Mon, 16 Nov 2020 21:17:52 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="e0W/3HeM";
+	dkim=temperror (0-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="oLxX6gvW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728858AbgKPVGz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Nov 2020 16:06:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47516 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729667AbgKPVGz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 Nov 2020 16:06:55 -0500
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 30F5E20829;
-        Mon, 16 Nov 2020 21:06:53 +0000 (UTC)
-Date:   Mon, 16 Nov 2020 16:06:51 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     paulmck <paulmck@kernel.org>, Matt Mullins <mmullins@mmlx.us>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH] bpf: don't fail kmalloc while releasing raw_tp
-Message-ID: <20201116160651.0e2d9b63@gandalf.local.home>
-In-Reply-To: <20201116160218.3b705345@gandalf.local.home>
-References: <00000000000004500b05b31e68ce@google.com>
-        <20201115055256.65625-1-mmullins@mmlx.us>
-        <20201116121929.1a7aeb16@gandalf.local.home>
-        <1889971276.46615.1605559047845.JavaMail.zimbra@efficios.com>
-        <20201116154437.254a8b97@gandalf.local.home>
-        <20201116160218.3b705345@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1727899AbgKPVRv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Nov 2020 16:17:51 -0500
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:54381 "EHLO
+        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726944AbgKPVRt (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 16 Nov 2020 16:17:49 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 6B056D38;
+        Mon, 16 Nov 2020 16:17:48 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Mon, 16 Nov 2020 16:17:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=fm2; bh=Qu8S2T3pVw4yE
+        Yxi6pqulgrwimeoqQCtqPxsZtatJAU=; b=e0W/3HeM7MaZhZ11m2ld7VGTWtrS5
+        e7BUTcm8/qYG7CVJWLugC4658iMPvjdX2kyemwNqhTqVcUG091vc/wKBtMj2OLNN
+        EVvww6y9X+5g32kx7+O71XfipAERJCEdR9g5cSE5u0js0RuKSIRPpyv+FNtjAC3p
+        XkhZ79XzymErC+rzRYiAO/bvVJHuXy/R+ryS2JdiZCVpcrzPGB+Mnwf8pzyF/HWw
+        N+dnxMDROA1DG10Od2/FOVSx4uEmmsk1rNGWg/joBLMAbMHm+BhFlNfjsByvPcXF
+        621njcAYMVBfbdSHz9R1h5+scny86CCAjEs3K5QhiweOiBlN6BZys61ag==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :in-reply-to:message-id:mime-version:references:subject:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; bh=Qu8S2T3pVw4yEYxi6pqulgrwimeoqQCtqPxsZtatJAU=; b=oLxX6gvW
+        +O3o4bD5A3iXwATBrOI8Mqc2pzQKGtUS85piFuvizP5Pnl2GSZZOZ5a9vLvB33Mt
+        +77BVlbBxcNt0mziXresxeLmvzgevXm1IFet3JzylyfxzPbKg+QM2x5iCZ/ZDYEi
+        QOv9ny1NBZ5Ppcqh3/23zg5sLG71Og9jbK8wE2xdM4XRt9RhC8nJlm7gOpRH7fD5
+        WXwIVgw7kMyyBrDVV24KxxyyjYgkGrE+aQzFcIW9XKrAyVZQcoi7tFMOeVg3sdYt
+        yStRpIKEvD3BH8MwyH3HsukRRu8xQrIoQ6lW6LcYiPWSXmZymolI8LSuiqmuBt9f
+        lUIipcZPDOH8iQ==
+X-ME-Sender: <xms:e-yyX2ynqR7O4IyypNjMpUb3I0l3RHd_4htbSWOYF02NtTNVKkvsFg>
+    <xme:e-yyXyRtLcJO2KTlKJME1GGyNyBrycjlGtZohg4173ResXvrg7BA7ekNsaQQ5q3v0
+    q5_q8VV4pNM971mwg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedujedrudefuddgudegkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhephf
+    fvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
+    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfekudelkefhteevhf
+    eggfdvgeefjeefgfeuvddutdfhgffghfehtdeuueetfeeinecukfhppeeiledrudekuddr
+    uddthedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:e-yyX4Uo9klqerAA29mviAYuU2YTVfS2EKtSSl468tjSMtDkzshGHA>
+    <xmx:e-yyX8gqtpvNu_t-l8KLIpvygmTc2485Ks6tAttOLc3Ej3G4ssewPA>
+    <xmx:e-yyX4CroxNPFIBctcdfVajs1ZovtJX91ou0ZYe1VW0WqEO_ysP3KA>
+    <xmx:fOyyX62_vyS6OzLFTwZbkw7blUTzC1LX71IJLJ9Bfv1o2Jlo3y9Wug>
+Received: from localhost.localdomain (c-69-181-105-64.hsd1.ca.comcast.net [69.181.105.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 013A03280066;
+        Mon, 16 Nov 2020 16:17:46 -0500 (EST)
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, songliubraving@fb.com,
+        andrii.nakryiko@gmail.com, torvalds@linux-foundation.org
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, kernel-team@fb.com
+Subject: [PATCH bpf v6 1/2] lib/strncpy_from_user.c: Don't overcopy bytes after NUL terminator
+Date:   Mon, 16 Nov 2020 13:17:31 -0800
+Message-Id: <470ffc3c76414443fc359b884080a5394dcccec3.1605560917.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.29.2
+In-Reply-To: <cover.1605560917.git.dxu@dxuuu.xyz>
+References: <cover.1605560917.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 16 Nov 2020 16:02:18 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
+do_strncpy_from_user() may copy some extra bytes after the NUL
+terminator into the destination buffer. This usually does not matter for
+normal string operations. However, when BPF programs key BPF maps with
+strings, this matters a lot.
 
-> +		if (new) {
-> +			for (i = 0; old[i].func; i++)
-> +				if (old[i].func != tp_func->func
-> +				    || old[i].data != tp_func->data)
-> +					new[j++] = old[i];
+A BPF program may read strings from user memory by calling the
+bpf_probe_read_user_str() helper which eventually calls
+do_strncpy_from_user(). The program can then key a map with the
+resulting string. BPF map keys are fixed-width and string-agnostic,
+meaning that map keys are treated as a set of bytes.
 
-Oops, need to check for old[i].func != tp_stub_func here too.
+The issue is when do_strncpy_from_user() overcopies bytes after the NUL
+terminator, it can result in seemingly identical strings occupying
+multiple slots in a BPF map. This behavior is subtle and totally
+unexpected by the user.
 
--- Steve
+This commit uses the proper word-at-a-time APIs to avoid overcopying.
 
-> +			new[nr_probes - nr_del].func = NULL;
-> +		} else {
+Fixes: 6ae08ae3dea2 ("bpf: Add probe_read_{user, kernel} and probe_read_{user, kernel}_str helpers")
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+---
+Based on on-list discussion and some off-list discussion with Alexei,
+I'd like to propose the v4-style patch without the `(*out & ~mask)`
+bit.
+
+We can't really zero out the rest of the buffer due to ABI issues.
+The bpf docs state for bpf_probe_read_user_str():
+
+> In case the string length is smaller than *size*, the target is not
+> padded with further NUL bytes.
+
+ lib/strncpy_from_user.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/lib/strncpy_from_user.c b/lib/strncpy_from_user.c
+index e6d5fcc2cdf3..de084f04e50d 100644
+--- a/lib/strncpy_from_user.c
++++ b/lib/strncpy_from_user.c
+@@ -35,17 +35,21 @@ static inline long do_strncpy_from_user(char *dst, const char __user *src,
+ 		goto byte_at_a_time;
+ 
+ 	while (max >= sizeof(unsigned long)) {
+-		unsigned long c, data;
++		unsigned long c, data, mask;
+ 
+ 		/* Fall back to byte-at-a-time if we get a page fault */
+ 		unsafe_get_user(c, (unsigned long __user *)(src+res), byte_at_a_time);
+ 
+-		*(unsigned long *)(dst+res) = c;
+ 		if (has_zero(c, &data, &constants)) {
+ 			data = prep_zero_mask(c, data, &constants);
+ 			data = create_zero_mask(data);
++			mask = zero_bytemask(data);
++			*(unsigned long *)(dst+res) = c & mask;
+ 			return res + find_zero(data);
+ 		}
++
++		*(unsigned long *)(dst+res) = c;
++
+ 		res += sizeof(unsigned long);
+ 		max -= sizeof(unsigned long);
+ 	}
+-- 
+2.29.2
+
