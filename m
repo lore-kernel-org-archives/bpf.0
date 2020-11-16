@@ -2,76 +2,80 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-4.1 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7758FC2D0A3
-	for <bpf@archiver.kernel.org>; Mon, 16 Nov 2020 18:39:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 598E4C2D0A3
+	for <bpf@archiver.kernel.org>; Mon, 16 Nov 2020 18:44:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 34C7420888
-	for <bpf@archiver.kernel.org>; Mon, 16 Nov 2020 18:39:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 12DC721D7E
+	for <bpf@archiver.kernel.org>; Mon, 16 Nov 2020 18:44:03 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="NTjH9ouF"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727245AbgKPSj0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Nov 2020 13:39:26 -0500
-Received: from mx.der-flo.net ([193.160.39.236]:53404 "EHLO mx.der-flo.net"
+        id S1728009AbgKPSnm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Nov 2020 13:43:42 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46016 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726473AbgKPSjZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 Nov 2020 13:39:25 -0500
-Received: by mx.der-flo.net (Postfix, from userid 110)
-        id 75959440D6; Mon, 16 Nov 2020 19:39:07 +0100 (CET)
-Received: from localhost (unknown [IPv6:2a02:1203:ecb0:3930:1751:4157:4d75:a5e2])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727701AbgKPSnm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 16 Nov 2020 13:43:42 -0500
+Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.5])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx.der-flo.net (Postfix) with ESMTPSA id 49374413E7;
-        Mon, 16 Nov 2020 19:38:14 +0100 (CET)
-From:   Florian Lehner <dev@der-flo.net>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        john.fastabend@gmail.com, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, Florian Lehner <dev@der-flo.net>
-Subject: [FIX bpf,perf] bpf,perf: return EOPNOTSUPP for bpf handler on PERF_COUNT_SW_DUMMY
-Date:   Mon, 16 Nov 2020 19:37:52 +0100
-Message-Id: <20201116183752.2716-1-dev@der-flo.net>
-X-Mailer: git-send-email 2.28.0
+        by mail.kernel.org (Postfix) with ESMTPSA id B59A6217A0;
+        Mon, 16 Nov 2020 18:43:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605552222;
+        bh=Tswb3FD7l4bvQma3X+DSkIH6OycRFZvJEDuWyxxYhsc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NTjH9ouFuQiDS4K7wk0OzzC2ziMNI6WIga6s9ZheLrQMge6OzQT7Yp1ijql9/XqDh
+         bxux9YdtO1iqXF1C4qmw5/UuR/93OkUMOqmpT6MkAqw8iHWRIYwxkMnbbRmEvlt+5P
+         Z5QgLMGM3uzT1BbThRZkPrdhlKmeZepmbqnFncno=
+Date:   Mon, 16 Nov 2020 10:43:40 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
+        <netdev@vger.kernel.org>, Song Liu <songliubraving@fb.com>
+Subject: Re: [PATCH v2 bpf-next 3/4] bpf: Allow using bpf_sk_storage in
+ FENTRY/FEXIT/RAW_TP
+Message-ID: <20201116104340.60692716@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20201116183749.6aaknb5ptvzlp7ss@kafai-mbp.dhcp.thefacebook.com>
+References: <20201112211255.2585961-1-kafai@fb.com>
+        <20201112211313.2587383-1-kafai@fb.com>
+        <20201114171720.50ae0a51@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20201116173734.a5efp2rvg43762ut@kafai-mbp.dhcp.thefacebook.com>
+        <20201116100004.1bc5e70e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20201116183749.6aaknb5ptvzlp7ss@kafai-mbp.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-bpf handlers for perf events other than tracepoints, kprobes or uprobes
-are attached to the overflow_handler of the perf event.
+On Mon, 16 Nov 2020 10:37:49 -0800 Martin KaFai Lau wrote:
+> On Mon, Nov 16, 2020 at 10:00:04AM -0800, Jakub Kicinski wrote:
+> > Locks that can run in any context but preempt disabled or softirq
+> > disabled?  
+> Not exactly. e.g. running from irq won't work.
+> 
+> > Let me cut to the chase. Are you sure you didn't mean to check
+> > if (irq_count()) ?  
+> so, no.
+> 
+> From preempt.h:
+> 
+> /*
+>  * ...
+>  * in_interrupt() - We're in NMI,IRQ,SoftIRQ context or have BH disabled
+>  * ...
+>  */
+> #define in_interrupt()          (irq_count())
 
-Perf events of type software/dummy are placeholder events. So when
-attaching a bpf handle to an overflow_handler of such an event, the bpf
-handler will not be triggered.
+Right, as I said in my correction (in_irq() || in_nmi()).
 
-This fix returns the error EOPNOTSUPP to indicate that attaching a bpf
-handler to a perf event of type software/dummy is not supported.
-
-Signed-off-by: Florian Lehner <dev@der-flo.net>
----
- kernel/events/core.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index da467e1dd49a..4e8846b7ceda 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -9668,6 +9668,10 @@ static int perf_event_set_bpf_handler(struct perf_event *event, u32 prog_fd)
- 	if (event->prog)
- 		return -EEXIST;
- 
-+	if (event->attr.type == PERF_TYPE_SOFTWARE &&
-+	    event->attr.config == PERF_COUNT_SW_DUMMY)
-+		return -EOPNOTSUPP;
-+
- 	prog = bpf_prog_get_type(prog_fd, BPF_PROG_TYPE_PERF_EVENT);
- 	if (IS_ERR(prog))
- 		return PTR_ERR(prog);
--- 
-2.28.0
+Just to spell it out AFAIU in_serving_softirq() will return true when
+softirq is active and interrupted by a hard irq or an NMI.
 
