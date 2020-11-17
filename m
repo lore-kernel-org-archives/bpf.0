@@ -2,277 +2,112 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=no
+X-Spam-Status: No, score=-8.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 76F99C6369E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A3951C63777
 	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 03:44:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3C5DA206C0
+	by mail.kernel.org (Postfix) with ESMTP id 677C220789
 	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 03:44:49 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="erR5AR5f"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eSKEDg7f"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726342AbgKQDoK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Nov 2020 22:44:10 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:3750 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725730AbgKQDlP (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 16 Nov 2020 22:41:15 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AH3duTT004371
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 19:41:12 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=NhAS56Nr0Cg3zb5k/ZGP5s59LHTHFzDuL6w5EJ3Ow8s=;
- b=erR5AR5fSLTSfzP9VWOkWwpAWLUeFxQnQPfbp+8NsaLNXCTdTc4BLtbYVpo5jgI7+K+x
- iOwq8JDoPXlTTqK+JIXuv6gJIdshwC85Yy9ybajccCxZhl05DYpz9mRD2D5zgMxxfhat
- dFXEck8HUqVusjIZQZuIm6xwP24f5zWtypU= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 34tdmruh5j-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 19:41:12 -0800
-Received: from intmgw004.06.prn3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 16 Nov 2020 19:41:10 -0800
-Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
-        id 12283C63A56; Mon, 16 Nov 2020 19:41:10 -0800 (PST)
-From:   Roman Gushchin <guro@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
-        <andrii@kernel.org>, <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-team@fb.com>
-Subject: [PATCH bpf-next v6 00/34] bpf: switch to memcg-based memory accounting
-Date:   Mon, 16 Nov 2020 19:40:34 -0800
-Message-ID: <20201117034108.1186569-1-guro@fb.com>
-X-Mailer: git-send-email 2.24.1
+        id S1727667AbgKQDoU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Nov 2020 22:44:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbgKQDoT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 16 Nov 2020 22:44:19 -0500
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A656AC0613CF;
+        Mon, 16 Nov 2020 19:44:19 -0800 (PST)
+Received: by mail-io1-xd43.google.com with SMTP id r12so19743916iot.4;
+        Mon, 16 Nov 2020 19:44:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=57lbXEPj7jmNMETWFLeFaZrg6lk8ttcI8EA76YL2pTI=;
+        b=eSKEDg7flLp4D1xoqZ18+arU7NXV4g8oO1m1RWGJoWcR2z06I7q55NoUPBmwfyCpmY
+         +M0SWFotPWRCiX+TGv0Ttx7lTJEds1dHPK++mDc6ARujz/A21t6WD07GwzrMliseeOLs
+         2kIW+eYOKvnBiB+GL0POaDVXQXP5Rw3Qy/YywlPunIKsXoY3iWzC67AhVzbskHYCqo+C
+         zvFSrBQ6aJ+MVua6yhNS7xQK9GOnhdhEF1x/vtNMg++yM2rVIt9MoikEDr3xmyZoDI0T
+         3UyAi3N3JdADZkQLkz34egyA6lP9k1pe18zesJ13e3dyDZS5Cl7zowqhxx4jpqaExgqp
+         vO8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=57lbXEPj7jmNMETWFLeFaZrg6lk8ttcI8EA76YL2pTI=;
+        b=uK0RsIVkMG01/CZAP/dC/i0zGcROmpmgr6eaVZapZjJA7sNo4dFgmD1tVPlKOw+/m5
+         YBLD/45pHN7PdR48ZgdCbRf3yxLviO+AiePXyph3I2Jn732KwWmgXVJL8+zS6Ztdv7iT
+         Ot4HrJmjt1AHxHrS6Hx5dMSp1a6QH9Ii3HeEm+yLYltgfsj8JMyLm24giUFjHODMAdl6
+         v6JbMFpEnisPkKygLYaUtJpJ5RxN5XzDcgHcwc3AFuKEd+40Yvoz2JxlBWlLs/VWFM4D
+         T3ddJ57MMoo3F2cPaZl6lA1DexQiZNQreEq74WB/dK9kr8IKPyzmbPznZMWzL+2zxuIZ
+         qztg==
+X-Gm-Message-State: AOAM5300+1bHwR2LskTvr0LdxCJLk5n69I5mZVS9qpXmgbqOLqdi3/p+
+        lslsfO0CBelO8J5uhg6ywts8dAq1cH4=
+X-Google-Smtp-Source: ABdhPJw/yEB+ALCGdMUZTF7R+rcBxaLw/KLDk/LjnT/LhqsFVjxtGZJGtYSIsdkP62NeXytg4aZCaQ==
+X-Received: by 2002:a6b:4401:: with SMTP id r1mr10057525ioa.78.1605584659034;
+        Mon, 16 Nov 2020 19:44:19 -0800 (PST)
+Received: from Davids-MacBook-Pro.local ([2601:282:800:dc80:c472:ae53:db1e:5dd0])
+        by smtp.googlemail.com with ESMTPSA id c89sm12728838ilf.26.2020.11.16.19.44.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Nov 2020 19:44:18 -0800 (PST)
+Subject: Re: [PATCH v4 bpf-next 3/5] kbuild: build kernel module BTFs if BTF
+ is enabled and pahole supports it
+To:     Andrii Nakryiko <andrii@kernel.org>
+Cc:     kernel-team@fb.com, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, jeyu@kernel.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
+        daniel@iogearbox.net
+References: <20201110011932.3201430-1-andrii@kernel.org>
+ <20201110011932.3201430-4-andrii@kernel.org>
+From:   David Ahern <dsahern@gmail.com>
+Message-ID: <f52c83a9-c350-5ba8-e178-10a0d7d0fed6@gmail.com>
+Date:   Mon, 16 Nov 2020 20:44:15 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.4.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-17_01:2020-11-13,2020-11-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- lowpriorityscore=0 clxscore=1015 priorityscore=1501 mlxscore=0
- suspectscore=38 adultscore=0 phishscore=0 mlxlogscore=999 spamscore=0
- bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2011170027
-X-FB-Internal: deliver
+In-Reply-To: <20201110011932.3201430-4-andrii@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently bpf is using the memlock rlimit for the memory accounting.
-This approach has its downsides and over time has created a significant
-amount of problems:
+On 11/9/20 6:19 PM, Andrii Nakryiko wrote:
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index d7a7bc3b6098..1e78faaf20a5 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -274,6 +274,15 @@ config DEBUG_INFO_BTF
+>  	  Turning this on expects presence of pahole tool, which will convert
+>  	  DWARF type info into equivalent deduplicated BTF type info.
+>  
+> +config PAHOLE_HAS_SPLIT_BTF
+> +	def_bool $(success, test `$(PAHOLE) --version | sed -E 's/v([0-9]+)\.([0-9]+)/\1\2/'` -ge "119")
+> +
+> +config DEBUG_INFO_BTF_MODULES
+> +	def_bool y
+> +	depends on DEBUG_INFO_BTF && MODULES && PAHOLE_HAS_SPLIT_BTF
+> +	help
+> +	  Generate compact split BTF type information for kernel modules.
+> +
+>  config GDB_SCRIPTS
+>  	bool "Provide GDB scripts for kernel debugging"
+>  	help
 
-1) The limit is per-user, but because most bpf operations are performed
-   as root, the limit has a little value.
-
-2) It's hard to come up with a specific maximum value. Especially because
-   the counter is shared with non-bpf users (e.g. memlock() users).
-   Any specific value is either too low and creates false failures
-   or too high and useless.
-
-3) Charging is not connected to the actual memory allocation. Bpf code
-   should manually calculate the estimated cost and precharge the counter=
-,
-   and then take care of uncharging, including all fail paths.
-   It adds to the code complexity and makes it easy to leak a charge.
-
-4) There is no simple way of getting the current value of the counter.
-   We've used drgn for it, but it's far from being convenient.
-
-5) Cryptic -EPERM is returned on exceeding the limit. Libbpf even had
-   a function to "explain" this case for users.
-
-In order to overcome these problems let's switch to the memcg-based
-memory accounting of bpf objects. With the recent addition of the percpu
-memory accounting, now it's possible to provide a comprehensive accountin=
-g
-of the memory used by bpf programs and maps.
-
-This approach has the following advantages:
-1) The limit is per-cgroup and hierarchical. It's way more flexible and a=
-llows
-   a better control over memory usage by different workloads. Of course, =
-it
-   requires enabled cgroups and kernel memory accounting and properly con=
-figured
-   cgroup tree, but it's a default configuration for a modern Linux syste=
-m.
-
-2) The actual memory consumption is taken into account. It happens automa=
-tically
-   on the allocation time if __GFP_ACCOUNT flags is passed. Uncharging is=
- also
-   performed automatically on releasing the memory. So the code on the bp=
-f side
-   becomes simpler and safer.
-
-3) There is a simple way to get the current value and statistics.
-
-In general, if a process performs a bpf operation (e.g. creates or update=
-s
-a map), it's memory cgroup is charged. However map updates performed from
-an interrupt context are charged to the memory cgroup which contained
-the process, which created the map.
-
-Providing a 1:1 replacement for the rlimit-based memory accounting is
-a non-goal of this patchset. Users and memory cgroups are completely
-orthogonal, so it's not possible even in theory.
-Memcg-based memory accounting requires a properly configured cgroup tree
-to be actually useful. However, it's the way how the memory is managed
-on a modern Linux system.
-
-
-The patchset consists of the following parts:
-1) 4 mm patches, which are already in the mm tree, but are required
-   to avoid a regression (otherwise vmallocs cannot be mapped to userspac=
-e).
-2) memcg-based accounting for various bpf objects: progs and maps
-3) removal of the rlimit-based accounting
-4) removal of rlimit adjustments in userspace samples
-
-First 4 patches are not supposed to be merged via the bpf tree. I'm inclu=
-ding
-them to make sure bpf tests will pass.
-
-v6:
-  - rebased to the latest version of the remote charging API
-  - fixed signatures, added acks
-
-v5:
-  - rebased to the latest version of the remote charging API
-  - implemented kmem accounting from an interrupt context, by Shakeel
-  - rebased to latest changes in mm allowed to map vmallocs to userspace
-  - fixed a build issue in kselftests, by Alexei
-  - fixed a use-after-free bug in bpf_map_free_deferred()
-  - added bpf line info coverage, by Shakeel
-  - split bpf map charging preparations into a separate patch
-
-v4:
-  - covered allocations made from an interrupt context, by Daniel
-  - added some clarifications to the cover letter
-
-v3:
-  - droped the userspace part for further discussions/refinements,
-    by Andrii and Song
-
-v2:
-  - fixed build issue, caused by the remaining rlimit-based accounting
-    for sockhash maps
-
-
-Roman Gushchin (34):
-  mm: memcontrol: use helpers to read page's memcg data
-  mm: memcontrol/slab: use helpers to access slab page's memcg_data
-  mm: introduce page memcg flags
-  mm: convert page kmemcg type to a page memcg flag
-  bpf: memcg-based memory accounting for bpf progs
-  bpf: prepare for memcg-based memory accounting for bpf maps
-  bpf: memcg-based memory accounting for bpf maps
-  bpf: refine memcg-based memory accounting for arraymap maps
-  bpf: refine memcg-based memory accounting for cpumap maps
-  bpf: memcg-based memory accounting for cgroup storage maps
-  bpf: refine memcg-based memory accounting for devmap maps
-  bpf: refine memcg-based memory accounting for hashtab maps
-  bpf: memcg-based memory accounting for lpm_trie maps
-  bpf: memcg-based memory accounting for bpf ringbuffer
-  bpf: memcg-based memory accounting for bpf local storage maps
-  bpf: refine memcg-based memory accounting for sockmap and sockhash
-    maps
-  bpf: refine memcg-based memory accounting for xskmap maps
-  bpf: eliminate rlimit-based memory accounting for arraymap maps
-  bpf: eliminate rlimit-based memory accounting for bpf_struct_ops maps
-  bpf: eliminate rlimit-based memory accounting for cpumap maps
-  bpf: eliminate rlimit-based memory accounting for cgroup storage maps
-  bpf: eliminate rlimit-based memory accounting for devmap maps
-  bpf: eliminate rlimit-based memory accounting for hashtab maps
-  bpf: eliminate rlimit-based memory accounting for lpm_trie maps
-  bpf: eliminate rlimit-based memory accounting for queue_stack_maps
-    maps
-  bpf: eliminate rlimit-based memory accounting for reuseport_array maps
-  bpf: eliminate rlimit-based memory accounting for bpf ringbuffer
-  bpf: eliminate rlimit-based memory accounting for sockmap and sockhash
-    maps
-  bpf: eliminate rlimit-based memory accounting for stackmap maps
-  bpf: eliminate rlimit-based memory accounting for xskmap maps
-  bpf: eliminate rlimit-based memory accounting for bpf local storage
-    maps
-  bpf: eliminate rlimit-based memory accounting infra for bpf maps
-  bpf: eliminate rlimit-based memory accounting for bpf progs
-  bpf: samples: do not touch RLIMIT_MEMLOCK
-
- fs/buffer.c                                   |   2 +-
- fs/iomap/buffered-io.c                        |   2 +-
- include/linux/bpf.h                           |  27 +--
- include/linux/memcontrol.h                    | 215 +++++++++++++++++-
- include/linux/mm.h                            |  22 --
- include/linux/mm_types.h                      |   5 +-
- include/linux/page-flags.h                    |  11 +-
- include/trace/events/writeback.h              |   2 +-
- kernel/bpf/arraymap.c                         |  30 +--
- kernel/bpf/bpf_local_storage.c                |  18 +-
- kernel/bpf/bpf_struct_ops.c                   |  19 +-
- kernel/bpf/core.c                             |  22 +-
- kernel/bpf/cpumap.c                           |  20 +-
- kernel/bpf/devmap.c                           |  23 +-
- kernel/bpf/hashtab.c                          |  33 +--
- kernel/bpf/helpers.c                          |  37 ++-
- kernel/bpf/local_storage.c                    |  38 +---
- kernel/bpf/lpm_trie.c                         |  17 +-
- kernel/bpf/queue_stack_maps.c                 |  16 +-
- kernel/bpf/reuseport_array.c                  |  12 +-
- kernel/bpf/ringbuf.c                          |  33 +--
- kernel/bpf/stackmap.c                         |  16 +-
- kernel/bpf/syscall.c                          | 177 ++++----------
- kernel/fork.c                                 |   7 +-
- mm/debug.c                                    |   4 +-
- mm/huge_memory.c                              |   4 +-
- mm/memcontrol.c                               | 139 +++++------
- mm/page_alloc.c                               |   8 +-
- mm/page_io.c                                  |   6 +-
- mm/slab.h                                     |  38 +---
- mm/workingset.c                               |   2 +-
- net/core/bpf_sk_storage.c                     |   2 +-
- net/core/sock_map.c                           |  40 +---
- net/xdp/xskmap.c                              |  15 +-
- samples/bpf/map_perf_test_user.c              |   6 -
- samples/bpf/offwaketime_user.c                |   6 -
- samples/bpf/sockex2_user.c                    |   2 -
- samples/bpf/sockex3_user.c                    |   2 -
- samples/bpf/spintest_user.c                   |   6 -
- samples/bpf/syscall_tp_user.c                 |   2 -
- samples/bpf/task_fd_query_user.c              |   5 -
- samples/bpf/test_lru_dist.c                   |   3 -
- samples/bpf/test_map_in_map_user.c            |   6 -
- samples/bpf/test_overhead_user.c              |   2 -
- samples/bpf/trace_event_user.c                |   2 -
- samples/bpf/tracex2_user.c                    |   6 -
- samples/bpf/tracex3_user.c                    |   6 -
- samples/bpf/tracex4_user.c                    |   6 -
- samples/bpf/tracex5_user.c                    |   3 -
- samples/bpf/tracex6_user.c                    |   3 -
- samples/bpf/xdp1_user.c                       |   6 -
- samples/bpf/xdp_adjust_tail_user.c            |   6 -
- samples/bpf/xdp_monitor_user.c                |   5 -
- samples/bpf/xdp_redirect_cpu_user.c           |   6 -
- samples/bpf/xdp_redirect_map_user.c           |   6 -
- samples/bpf/xdp_redirect_user.c               |   6 -
- samples/bpf/xdp_router_ipv4_user.c            |   6 -
- samples/bpf/xdp_rxq_info_user.c               |   6 -
- samples/bpf/xdp_sample_pkts_user.c            |   6 -
- samples/bpf/xdp_tx_iptunnel_user.c            |   6 -
- samples/bpf/xdpsock_user.c                    |   7 -
- .../selftests/bpf/progs/bpf_iter_bpf_map.c    |   2 +-
- .../selftests/bpf/progs/map_ptr_kern.c        |   7 -
- 63 files changed, 460 insertions(+), 743 deletions(-)
-
---=20
-2.26.2
-
+Thank you for adding a config option for this feature vs bumping the
+required pahole version in scripts/link-vmlinux.sh. This is a much more
+friendly way of handling kernel features that require support from build
+tools.
