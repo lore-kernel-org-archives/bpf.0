@@ -2,130 +2,312 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05A9EC388F9
-	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 03:38:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F145AC64E7C
+	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 03:42:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B0D942469D
-	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 03:38:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD3DC20643
+	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 03:42:12 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="czQEZP3I"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ilbLqacB"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726205AbgKQDiW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Nov 2020 22:38:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726181AbgKQDiW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 Nov 2020 22:38:22 -0500
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AB9C0613CF;
-        Mon, 16 Nov 2020 19:38:20 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id n5so17326490ile.7;
-        Mon, 16 Nov 2020 19:38:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=7Yue+oGyk3PAnj2SUaXwlEbRxJd0lTE7ieGCNqEqHCo=;
-        b=czQEZP3IcAYK1tW9o9aSwo4g4YVxhiz7WhVUDPwjAgraQFDlpYFn2lAj/yBsTxgVmo
-         Qy+nthGkf9Ye7jVm6QVSPKu4U0iEcdhm79FV+TltVzcd5Owcld3wrHszNZ9aJsdY5bUg
-         YN/sADkC2sc+g83zF7zz6S0nlLcGEuOGh8XRzbMCPAK+Y4RLb/OYSkyVZoOfKFtq6QLu
-         eiDAclQHlM/7mqvkMYnW0bAUUqJZfucJbXrQTmVhkHhOp8mjDjrw1POxuf6zeMoVqqOE
-         oyNSQWl/mXLvlK4WKmahMjligNGe+a94rso/6ciObGfFXZD7l4j5Xefz/Dg4fwg6XVCz
-         9+UQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=7Yue+oGyk3PAnj2SUaXwlEbRxJd0lTE7ieGCNqEqHCo=;
-        b=Uor448qQzF6IIFu2IaYjxW+6n54Vjoz5NPKITcRpkeopQQzLDOGd61ncK4E78NswIK
-         aYdJ3Dqda12kmhICcocoZa7/+u0Q0Z40dxT3av4LhLhN5l/D3N2faYac632YZmNeo2sI
-         DIH1MkqNVhuOPpMur3G5bHvAv/WPRxi0IJYBAN2DB7LCG7hq8GGowpudMDJQm1mhps9G
-         +YLup19lRrOmNeBHSRAOgP7CPlGsSw0mng4BzyexEFUq+jn4f8Gydw+Ss7q4Oq9+zCvm
-         NiSifomAAD+Jgdg3wBUwQ3+2Gx6KTIb4i4YO87BeVIaBgWTDtkhamop6CDkb4t60Yntj
-         Ab8Q==
-X-Gm-Message-State: AOAM5334mr8o5TaS6k/xduadGeR/YwHaKBFXdcR6xlkY7RS9358n5n5X
-        4wDtSxZyNZODX0Zyu/kK8ks=
-X-Google-Smtp-Source: ABdhPJwvj2bOWz90iajFuqI/gSHYeiY6CfD8e3zInbTFS1BtXd9JPot5QdkkZ3++B9LBjzUn6xCtqQ==
-X-Received: by 2002:a92:9ad5:: with SMTP id c82mr11420044ill.225.1605584299943;
-        Mon, 16 Nov 2020 19:38:19 -0800 (PST)
-Received: from Davids-MacBook-Pro.local ([2601:282:800:dc80:c472:ae53:db1e:5dd0])
-        by smtp.googlemail.com with ESMTPSA id z82sm7688605iof.26.2020.11.16.19.38.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Nov 2020 19:38:19 -0800 (PST)
-Subject: Re: [PATCHv5 iproute2-next 0/5] iproute2: add libbpf support
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     Hangbin Liu <haliu@redhat.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Miller <davem@davemloft.net>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Jiri Benc <jbenc@redhat.com>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-References: <20201109070802.3638167-1-haliu@redhat.com>
- <20201116065305.1010651-1-haliu@redhat.com>
- <CAADnVQ+LNBYq5fdTSRUPy2ZexTdCcB6ErNH_T=r9bJ807UT=pQ@mail.gmail.com>
- <20201116155446.16fe46cf@carbon>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <62d26815-60f8-ca9f-bdbf-d75070935f1d@gmail.com>
-Date:   Mon, 16 Nov 2020 20:38:15 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.4.3
+        id S1725764AbgKQDl3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Nov 2020 22:41:29 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:30302 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727557AbgKQDl3 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 16 Nov 2020 22:41:29 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AH3f12A007663
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 19:41:28 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=9cSgxl1oXQb2FeFbutr/1U3wU15tYQZ7nIi1qnwGPjE=;
+ b=ilbLqacBaitVEa76CIImgp2KnDYysMcFjmSWbwCSnZo5fc4c4Xw2OyuYRyf5bLtzQiUC
+ 2jRfEINSWkz71i7w8UQcnomxSNgHfEYs6ShRMHmlCnAr1H6hL/W2i5MOW4DdJAyOQFNR
+ Q2mnNyeS10ocaUlYmhxYSO/AGcduxS8JXEU= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 34tykx8ty9-7
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 19:41:28 -0800
+Received: from intmgw002.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Mon, 16 Nov 2020 19:41:20 -0800
+Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
+        id A7B50C63A99; Mon, 16 Nov 2020 19:41:10 -0800 (PST)
+From:   Roman Gushchin <guro@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
+        <andrii@kernel.org>, <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-team@fb.com>
+Subject: [PATCH bpf-next v6 33/34] bpf: eliminate rlimit-based memory accounting for bpf progs
+Date:   Mon, 16 Nov 2020 19:41:07 -0800
+Message-ID: <20201117034108.1186569-34-guro@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201117034108.1186569-1-guro@fb.com>
+References: <20201117034108.1186569-1-guro@fb.com>
 MIME-Version: 1.0
-In-Reply-To: <20201116155446.16fe46cf@carbon>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-17_01:2020-11-13,2020-11-17 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ suspectscore=38 bulkscore=0 adultscore=0 clxscore=1015 phishscore=0
+ impostorscore=0 mlxscore=0 mlxlogscore=999 spamscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011170027
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 11/16/20 7:54 AM, Jesper Dangaard Brouer wrote:
-> When compiled against dynamic libbpf, then I would use 'ldd' command to
-> see what libbpf lib version is used.  When compiled/linked statically
-> against a custom libbpf version (already supported via LIBBPF_DIR) then
-> *I* think is difficult to figure out that version of libbpf I'm using.
-> Could we add the libbpf version info in 'tc -V', as then it would
-> remove one of my concerns with static linking.
+Do not use rlimit-based memory accounting for bpf progs. It has been
+replaced with memcg-based memory accounting.
 
-Adding libbpf version to 'tc -V' and 'ip -V' seems reasonable.
+Signed-off-by: Roman Gushchin <guro@fb.com>
+Acked-by: Song Liu <songliubraving@fb.com>
+---
+ include/linux/bpf.h  | 11 ------
+ kernel/bpf/core.c    | 12 ++-----
+ kernel/bpf/syscall.c | 86 ++++++--------------------------------------
+ 3 files changed, 12 insertions(+), 97 deletions(-)
 
-As for the bigger problem, trying to force user space components to
-constantly chase latest and greatest S/W versions is not the right answer.
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 6f1ef8a1e25f..73f6503d9170 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -1200,8 +1200,6 @@ void bpf_prog_sub(struct bpf_prog *prog, int i);
+ void bpf_prog_inc(struct bpf_prog *prog);
+ struct bpf_prog * __must_check bpf_prog_inc_not_zero(struct bpf_prog *pr=
+og);
+ void bpf_prog_put(struct bpf_prog *prog);
+-int __bpf_prog_charge(struct user_struct *user, u32 pages);
+-void __bpf_prog_uncharge(struct user_struct *user, u32 pages);
+ void __bpf_free_used_maps(struct bpf_prog_aux *aux,
+ 			  struct bpf_map **used_maps, u32 len);
+=20
+@@ -1482,15 +1480,6 @@ bpf_prog_inc_not_zero(struct bpf_prog *prog)
+ 	return ERR_PTR(-EOPNOTSUPP);
+ }
+=20
+-static inline int __bpf_prog_charge(struct user_struct *user, u32 pages)
+-{
+-	return 0;
+-}
+-
+-static inline void __bpf_prog_uncharge(struct user_struct *user, u32 pag=
+es)
+-{
+-}
+-
+ static inline void bpf_link_init(struct bpf_link *link, enum bpf_link_ty=
+pe type,
+ 				 const struct bpf_link_ops *ops,
+ 				 struct bpf_prog *prog)
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index fd83e5c65d15..7b983cb55df3 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -221,23 +221,15 @@ struct bpf_prog *bpf_prog_realloc(struct bpf_prog *=
+fp_old, unsigned int size,
+ {
+ 	gfp_t gfp_flags =3D GFP_KERNEL_ACCOUNT | __GFP_ZERO | gfp_extra_flags;
+ 	struct bpf_prog *fp;
+-	u32 pages, delta;
+-	int ret;
++	u32 pages;
+=20
+ 	size =3D round_up(size, PAGE_SIZE);
+ 	pages =3D size / PAGE_SIZE;
+ 	if (pages <=3D fp_old->pages)
+ 		return fp_old;
+=20
+-	delta =3D pages - fp_old->pages;
+-	ret =3D __bpf_prog_charge(fp_old->aux->user, delta);
+-	if (ret)
+-		return NULL;
+-
+ 	fp =3D __vmalloc(size, gfp_flags);
+-	if (fp =3D=3D NULL) {
+-		__bpf_prog_uncharge(fp_old->aux->user, delta);
+-	} else {
++	if (fp) {
+ 		memcpy(fp, fp_old, fp_old->pages * PAGE_SIZE);
+ 		fp->pages =3D pages;
+ 		fp->aux->prog =3D fp;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 9f41edbae3f8..2ab14fe1af14 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -342,23 +342,6 @@ void bpf_map_init_from_attr(struct bpf_map *map, uni=
+on bpf_attr *attr)
+ 	map->numa_node =3D bpf_map_attr_numa_node(attr);
+ }
+=20
+-static int bpf_charge_memlock(struct user_struct *user, u32 pages)
+-{
+-	unsigned long memlock_limit =3D rlimit(RLIMIT_MEMLOCK) >> PAGE_SHIFT;
+-
+-	if (atomic_long_add_return(pages, &user->locked_vm) > memlock_limit) {
+-		atomic_long_sub(pages, &user->locked_vm);
+-		return -EPERM;
+-	}
+-	return 0;
+-}
+-
+-static void bpf_uncharge_memlock(struct user_struct *user, u32 pages)
+-{
+-	if (user)
+-		atomic_long_sub(pages, &user->locked_vm);
+-}
+-
+ static int bpf_map_alloc_id(struct bpf_map *map)
+ {
+ 	int id;
+@@ -1594,51 +1577,6 @@ static void bpf_audit_prog(const struct bpf_prog *=
+prog, unsigned int op)
+ 	audit_log_end(ab);
+ }
+=20
+-int __bpf_prog_charge(struct user_struct *user, u32 pages)
+-{
+-	unsigned long memlock_limit =3D rlimit(RLIMIT_MEMLOCK) >> PAGE_SHIFT;
+-	unsigned long user_bufs;
+-
+-	if (user) {
+-		user_bufs =3D atomic_long_add_return(pages, &user->locked_vm);
+-		if (user_bufs > memlock_limit) {
+-			atomic_long_sub(pages, &user->locked_vm);
+-			return -EPERM;
+-		}
+-	}
+-
+-	return 0;
+-}
+-
+-void __bpf_prog_uncharge(struct user_struct *user, u32 pages)
+-{
+-	if (user)
+-		atomic_long_sub(pages, &user->locked_vm);
+-}
+-
+-static int bpf_prog_charge_memlock(struct bpf_prog *prog)
+-{
+-	struct user_struct *user =3D get_current_user();
+-	int ret;
+-
+-	ret =3D __bpf_prog_charge(user, prog->pages);
+-	if (ret) {
+-		free_uid(user);
+-		return ret;
+-	}
+-
+-	prog->aux->user =3D user;
+-	return 0;
+-}
+-
+-static void bpf_prog_uncharge_memlock(struct bpf_prog *prog)
+-{
+-	struct user_struct *user =3D prog->aux->user;
+-
+-	__bpf_prog_uncharge(user, prog->pages);
+-	free_uid(user);
+-}
+-
+ static int bpf_prog_alloc_id(struct bpf_prog *prog)
+ {
+ 	int id;
+@@ -1688,7 +1626,7 @@ static void __bpf_prog_put_rcu(struct rcu_head *rcu=
+)
+=20
+ 	kvfree(aux->func_info);
+ 	kfree(aux->func_info_aux);
+-	bpf_prog_uncharge_memlock(aux->prog);
++	free_uid(aux->user);
+ 	security_bpf_prog_free(aux);
+ 	bpf_prog_free(aux->prog);
+ }
+@@ -2126,7 +2064,7 @@ static int bpf_prog_load(union bpf_attr *attr, unio=
+n bpf_attr __user *uattr)
+ 		dst_prog =3D bpf_prog_get(attr->attach_prog_fd);
+ 		if (IS_ERR(dst_prog)) {
+ 			err =3D PTR_ERR(dst_prog);
+-			goto free_prog_nouncharge;
++			goto free_prog;
+ 		}
+ 		prog->aux->dst_prog =3D dst_prog;
+ 	}
+@@ -2136,18 +2074,15 @@ static int bpf_prog_load(union bpf_attr *attr, un=
+ion bpf_attr __user *uattr)
+=20
+ 	err =3D security_bpf_prog_alloc(prog->aux);
+ 	if (err)
+-		goto free_prog_nouncharge;
+-
+-	err =3D bpf_prog_charge_memlock(prog);
+-	if (err)
+-		goto free_prog_sec;
++		goto free_prog;
+=20
++	prog->aux->user =3D get_current_user();
+ 	prog->len =3D attr->insn_cnt;
+=20
+ 	err =3D -EFAULT;
+ 	if (copy_from_user(prog->insns, u64_to_user_ptr(attr->insns),
+ 			   bpf_prog_insn_size(prog)) !=3D 0)
+-		goto free_prog;
++		goto free_prog_sec;
+=20
+ 	prog->orig_prog =3D NULL;
+ 	prog->jited =3D 0;
+@@ -2158,19 +2093,19 @@ static int bpf_prog_load(union bpf_attr *attr, un=
+ion bpf_attr __user *uattr)
+ 	if (bpf_prog_is_dev_bound(prog->aux)) {
+ 		err =3D bpf_prog_offload_init(prog, attr);
+ 		if (err)
+-			goto free_prog;
++			goto free_prog_sec;
+ 	}
+=20
+ 	/* find program type: socket_filter vs tracing_filter */
+ 	err =3D find_prog_type(type, prog);
+ 	if (err < 0)
+-		goto free_prog;
++		goto free_prog_sec;
+=20
+ 	prog->aux->load_time =3D ktime_get_boottime_ns();
+ 	err =3D bpf_obj_name_cpy(prog->aux->name, attr->prog_name,
+ 			       sizeof(attr->prog_name));
+ 	if (err < 0)
+-		goto free_prog;
++		goto free_prog_sec;
+=20
+ 	/* run eBPF verifier */
+ 	err =3D bpf_check(&prog, attr, uattr);
+@@ -2215,11 +2150,10 @@ static int bpf_prog_load(union bpf_attr *attr, un=
+ion bpf_attr __user *uattr)
+ 	 */
+ 	__bpf_prog_put_noref(prog, prog->aux->func_cnt);
+ 	return err;
+-free_prog:
+-	bpf_prog_uncharge_memlock(prog);
+ free_prog_sec:
++	free_uid(prog->aux->user);
+ 	security_bpf_prog_free(prog->aux);
+-free_prog_nouncharge:
++free_prog:
+ 	bpf_prog_free(prog);
+ 	return err;
+ }
+--=20
+2.26.2
 
-The crux of the problem here is loading bpf object files and what will
-most likely be a never ending stream of enhancements that impact the
-proper loading of them. bpftool is much more suited to the job of
-managing bpf files versus iproute2 which is the de facto implementation
-for networking APIs. bpftool ships as part of a common linux tools
-package, so it will naturally track kernel versions for those who want /
-need latest and greatest versions. Users who are not building their own
-agents for managing bpf files (which I think is much more appropriate
-for production use cases than forking command line utilities) can use
-bpftool to load files, manage maps which are then attached to the
-programs, etc, and then invoke iproute2 to handle the networking attach
-/ detach / list with detailed information.
-
-That said, the legacy bpf code in iproute2 has created some
-expectations, and iproute2 can not simply remove existing capabilities.
-Moving iproute2 to libbpf provides an improvement over the current
-status by allowing ‘modern’ bpf object files to be loaded without
-affecting legacy users, even if it does not allow latest and greatest
-bpf capabilities at every moment in time (again, a constantly moving
-reference point).
-
-iproute2 is a networking configuration tool, not a bpf management tool.
-Hangbin’s approach gives full flexibility to those who roll their own
-and for distributions who value stability, it allows iproute2 to use
-latest and greatest libbpf for those who want to chase the pot of gold
-at the end of the rainbow, or they can choose stability with an OS
-distro’s libbpf or legacy bpf. I believe this is the right compromise at
-this point in time.
