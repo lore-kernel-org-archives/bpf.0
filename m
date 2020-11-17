@@ -8,164 +8,143 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 31DDDC64E69
-	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 03:44:04 +0000 (UTC)
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DBBE7246AB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 29B04C71156
 	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 03:44:03 +0000 (UTC)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.kernel.org (Postfix) with ESMTP id E0120246C2
+	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 03:44:02 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="RTfyMqYX"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="MGDUAjIp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726969AbgKQDlR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Nov 2020 22:41:17 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:6488 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726837AbgKQDlR (ORCPT
+        id S1726995AbgKQDnd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Nov 2020 22:43:33 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:44854 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726912AbgKQDlR (ORCPT
         <rfc822;bpf@vger.kernel.org>); Mon, 16 Nov 2020 22:41:17 -0500
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0AH3cYPU024935
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 19:41:15 -0800
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AH3etIU007531
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 19:41:17 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=Hwzm6M4F6p3wIIDsFCV/NiMC7IzEqkcaYpjxL5TApLo=;
- b=RTfyMqYX36XrPcAb/6kfrJFUCnosjoJLTV41PLpaKOMJ9rZiQmJrByOl+7ZCdvYKx+zw
- selYdVUSJ4xmCUd4fk60dbnqHiPnrb6zZkHpkMexgiSCNy8wVEZ5uVGO2ZhEJzTkLT1Z
- QhtyusHOaKHZ19iQbqyfPTJ7SvFpjG4swDg= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=i22VzsfYXFhHUbHUyBRo4SfAiYTea7Ssop+WPV0F4gA=;
+ b=MGDUAjIpFpHU5mTNvK0Qyg6DBkiIoLnMb09/Xn675fo+iHjF9IfyXIzzNJDaKWkAdgzH
+ i7PPc91bO4z94wRGUs5ZhBpskzH+Oj+U8XfhghT5nhzsv1b8d2aluAzVHeaF1IZPoWzO
+ V7d8pySiVnkbLFe1WbH3WVLxAn0GddS9uYY= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 34tbssbt8p-6
+        by mx0a-00082601.pphosted.com with ESMTP id 34tykx8txm-10
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 19:41:15 -0800
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 19:41:16 -0800
 Received: from intmgw003.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1979.3; Mon, 16 Nov 2020 19:41:13 -0800
 Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
-        id 1F55EC63A5C; Mon, 16 Nov 2020 19:41:10 -0800 (PST)
+        id 63998C63A7A; Mon, 16 Nov 2020 19:41:10 -0800 (PST)
 From:   Roman Gushchin <guro@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
         <andrii@kernel.org>, <akpm@linux-foundation.org>,
         <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <kernel-team@fb.com>
-Subject: [PATCH bpf-next v6 03/34] mm: introduce page memcg flags
-Date:   Mon, 16 Nov 2020 19:40:37 -0800
-Message-ID: <20201117034108.1186569-4-guro@fb.com>
+Subject: [PATCH bpf-next v6 18/34] bpf: eliminate rlimit-based memory accounting for arraymap maps
+Date:   Mon, 16 Nov 2020 19:40:52 -0800
+Message-ID: <20201117034108.1186569-19-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201117034108.1186569-1-guro@fb.com>
 References: <20201117034108.1186569-1-guro@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-17_01:2020-11-13,2020-11-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 suspectscore=1
- impostorscore=0 adultscore=0 priorityscore=1501 phishscore=0
- lowpriorityscore=0 spamscore=0 bulkscore=0 mlxlogscore=501 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ suspectscore=38 bulkscore=0 adultscore=0 clxscore=1015 phishscore=0
+ impostorscore=0 mlxscore=0 mlxlogscore=857 spamscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2011170027
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The lowest bit in page->memcg_data is used to distinguish between struct
-memory_cgroup pointer and a pointer to a objcgs array.  All checks and
-modifications of this bit are open-coded.
+Do not use rlimit-based memory accounting for arraymap maps.
+It has been replaced with the memcg-based memory accounting.
 
-Let's formalize it using page memcg flags, defined in enum
-page_memcg_data_flags.
-
-Additional flags might be added later.
-
-Link: https://lkml.kernel.org/r/20201027001657.3398190-4-guro@fb.com
 Signed-off-by: Roman Gushchin <guro@fb.com>
-Reviewed-by: Shakeel Butt <shakeelb@google.com>
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-Acked-by: Michal Hocko <mhocko@suse.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Acked-by: Song Liu <songliubraving@fb.com>
 ---
- include/linux/memcontrol.h | 32 ++++++++++++++++++++------------
- 1 file changed, 20 insertions(+), 12 deletions(-)
+ kernel/bpf/arraymap.c | 24 ++++--------------------
+ 1 file changed, 4 insertions(+), 20 deletions(-)
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index c7ac0a5b8989..99a4841d658b 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -343,6 +343,15 @@ struct mem_cgroup {
-=20
- extern struct mem_cgroup *root_mem_cgroup;
-=20
-+enum page_memcg_data_flags {
-+	/* page->memcg_data is a pointer to an objcgs vector */
-+	MEMCG_DATA_OBJCGS =3D (1UL << 0),
-+	/* the next bit after the last actual flag */
-+	__NR_MEMCG_DATA_FLAGS  =3D (1UL << 1),
-+};
-+
-+#define MEMCG_DATA_FLAGS_MASK (__NR_MEMCG_DATA_FLAGS - 1)
-+
- /*
-  * page_memcg - get the memory cgroup associated with a page
-  * @page: a pointer to the page struct
-@@ -404,13 +413,7 @@ static inline struct mem_cgroup *page_memcg_check(stru=
-ct page *page)
- 	 */
- 	unsigned long memcg_data =3D READ_ONCE(page->memcg_data);
-=20
--	/*
--	 * The lowest bit set means that memcg isn't a valid
--	 * memcg pointer, but a obj_cgroups pointer.
--	 * In this case the page is shared and doesn't belong
--	 * to any specific memory cgroup.
--	 */
--	if (memcg_data & 0x1UL)
-+	if (memcg_data & MEMCG_DATA_OBJCGS)
- 		return NULL;
-=20
- 	return (struct mem_cgroup *)memcg_data;
-@@ -429,7 +432,11 @@ static inline struct mem_cgroup *page_memcg_check(stru=
-ct page *page)
-  */
- static inline struct obj_cgroup **page_objcgs(struct page *page)
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 92b650123c22..20f751a1d993 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -81,11 +81,10 @@ int array_map_alloc_check(union bpf_attr *attr)
+ static struct bpf_map *array_map_alloc(union bpf_attr *attr)
  {
--	return (struct obj_cgroup **)(READ_ONCE(page->memcg_data) & ~0x1UL);
-+	unsigned long memcg_data =3D READ_ONCE(page->memcg_data);
-+
-+	VM_BUG_ON_PAGE(memcg_data && !(memcg_data & MEMCG_DATA_OBJCGS), page);
-+
-+	return (struct obj_cgroup **)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
- }
+ 	bool percpu =3D attr->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY;
+-	int ret, numa_node =3D bpf_map_attr_numa_node(attr);
++	int numa_node =3D bpf_map_attr_numa_node(attr);
+ 	u32 elem_size, index_mask, max_entries;
+ 	bool bypass_spec_v1 =3D bpf_bypass_spec_v1();
+-	u64 cost, array_size, mask64;
+-	struct bpf_map_memory mem;
++	u64 array_size, mask64;
+ 	struct bpf_array *array;
 =20
- /*
-@@ -444,10 +451,10 @@ static inline struct obj_cgroup **page_objcgs_check(s=
-truct page *page)
- {
- 	unsigned long memcg_data =3D READ_ONCE(page->memcg_data);
+ 	elem_size =3D round_up(attr->value_size, 8);
+@@ -126,44 +125,29 @@ static struct bpf_map *array_map_alloc(union bpf_at=
+tr *attr)
+ 		}
+ 	}
 =20
--	if (memcg_data && (memcg_data & 0x1UL))
--		return (struct obj_cgroup **)(memcg_data & ~0x1UL);
-+	if (!memcg_data || !(memcg_data & MEMCG_DATA_OBJCGS))
-+		return NULL;
+-	/* make sure there is no u32 overflow later in round_up() */
+-	cost =3D array_size;
+-	if (percpu)
+-		cost +=3D (u64)attr->max_entries * elem_size * num_possible_cpus();
+-
+-	ret =3D bpf_map_charge_init(&mem, cost);
+-	if (ret < 0)
+-		return ERR_PTR(ret);
+-
+ 	/* allocate all map elements and zero-initialize them */
+ 	if (attr->map_flags & BPF_F_MMAPABLE) {
+ 		void *data;
 =20
--	return NULL;
-+	return (struct obj_cgroup **)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
- }
+ 		/* kmalloc'ed memory can't be mmap'ed, use explicit vmalloc */
+ 		data =3D bpf_map_area_mmapable_alloc(array_size, numa_node);
+-		if (!data) {
+-			bpf_map_charge_finish(&mem);
++		if (!data)
+ 			return ERR_PTR(-ENOMEM);
+-		}
+ 		array =3D data + PAGE_ALIGN(sizeof(struct bpf_array))
+ 			- offsetof(struct bpf_array, value);
+ 	} else {
+ 		array =3D bpf_map_area_alloc(array_size, numa_node);
+ 	}
+-	if (!array) {
+-		bpf_map_charge_finish(&mem);
++	if (!array)
+ 		return ERR_PTR(-ENOMEM);
+-	}
+ 	array->index_mask =3D index_mask;
+ 	array->map.bypass_spec_v1 =3D bypass_spec_v1;
 =20
- /*
-@@ -460,7 +467,8 @@ static inline struct obj_cgroup **page_objcgs_check(str=
-uct page *page)
- static inline bool set_page_objcgs(struct page *page,
- 					struct obj_cgroup **objcgs)
- {
--	return !cmpxchg(&page->memcg_data, 0, (unsigned long)objcgs | 0x1UL);
-+	return !cmpxchg(&page->memcg_data, 0, (unsigned long)objcgs |
-+			MEMCG_DATA_OBJCGS);
- }
- #else
- static inline struct obj_cgroup **page_objcgs(struct page *page)
+ 	/* copy mandatory map attributes */
+ 	bpf_map_init_from_attr(&array->map, attr);
+-	bpf_map_charge_move(&array->map.memory, &mem);
+ 	array->elem_size =3D elem_size;
+=20
+ 	if (percpu && bpf_array_alloc_percpu(array)) {
+-		bpf_map_charge_finish(&array->map.memory);
+ 		bpf_map_area_free(array);
+ 		return ERR_PTR(-ENOMEM);
+ 	}
 --=20
 2.26.2
 
