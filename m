@@ -2,122 +2,170 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0917C63777
-	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 02:38:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32D22C63798
+	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 02:56:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 385A42469D
-	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 02:38:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0231C246AE
+	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 02:56:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q3jbUvXt"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Qni2Ktti"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727065AbgKQCiD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Nov 2020 21:38:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726771AbgKQCiB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 16 Nov 2020 21:38:01 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E2CC0613CF;
-        Mon, 16 Nov 2020 18:38:01 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id v21so2273781pgi.2;
-        Mon, 16 Nov 2020 18:38:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=G0DEGjjDiDmPveVipYJGdwwZdGpe8MZoy5sy/lp+AYk=;
-        b=Q3jbUvXt1o/TZioJ69dwSqSViemWYwalrjEtjq6V00Ll26CxTS6m52rM4Ud11Yo45G
-         F+nzur6SC5HVqkGE725YisV4bO6rwKNF19YrFAJRJguoFvpxL8fuQ3DmM1s6x8reJzzV
-         QJ7wCPXdTvA6gVodrnZ21cAgj4EMCKtTt5DszsHMdlEVflFaSQQV5aqjypmKiJRaiKdI
-         6AI87YfYVV/35A4ym+iSY0ZR7NZNKoYz70VCWXUVdXFP/WjTFxDkoZ8xllclbZMO0+K6
-         aC/Ayq8N9xieycNoekjKiYZ5I/QS/jD9hp+U9iG3ubk14SnmLiLOSrM20CyNjYFwqgGa
-         w7jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=G0DEGjjDiDmPveVipYJGdwwZdGpe8MZoy5sy/lp+AYk=;
-        b=asVxN81LyMw7fvns9AW8AmikSfkUamhRjiYwFy6+lUrM0rw6YwyPwN/y7iiLb9tuQf
-         0J6/P+nHKxqEqzRpkEtL9pSqFmSQDZ3c2lSh3GcVPXVTEBB/8w8d++gvzImGO3OhK+D2
-         /BZbbM7yt5g58OSIsd3PDUNO0uot9A5yIfdC1LT0OHPsgorqqG8OWweVl4v/7aa7ke2p
-         6A76MC5qQm+kQVAkhHX7OzHYl6ozkYoqd2OsSPptNfCyaHUpmD7gw4cHtVPPuuGIo4Pl
-         Q8z8SpJdDee5P5QBc4kCnq9IzJTzOzUUDc5vyIvQbCRoVGFJMsIv73RhTEmRdBc9KZpg
-         oZyw==
-X-Gm-Message-State: AOAM530XDIU/A85/vR7CDnUiaJghpT3siZtSPI+GsLp9nWjHHKM/0ofF
-        M3vubUU5ArdLXbGZ0tgOQ9w=
-X-Google-Smtp-Source: ABdhPJyIYstmthDQGzz23HPHktLu38SuvuyNa/62CpdWKhmjf0KY5VMgs5V6HGmjJYekZhriYlywcg==
-X-Received: by 2002:a63:5a62:: with SMTP id k34mr1769169pgm.391.1605580681003;
-        Mon, 16 Nov 2020 18:38:01 -0800 (PST)
-Received: from ast-mbp ([2620:10d:c090:400::5:65f6])
-        by smtp.gmail.com with ESMTPSA id 64sm8798532pfe.0.2020.11.16.18.37.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Nov 2020 18:37:59 -0800 (PST)
-Date:   Mon, 16 Nov 2020 18:37:57 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>
-Cc:     Hangbin Liu <haliu@redhat.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        David Ahern <dsahern@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Miller <davem@davemloft.net>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Jiri Benc <jbenc@redhat.com>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Subject: Re: [PATCHv5 iproute2-next 0/5] iproute2: add libbpf support
-Message-ID: <20201117023757.qypmhucuws3sajyb@ast-mbp>
-References: <20201109070802.3638167-1-haliu@redhat.com>
- <20201116065305.1010651-1-haliu@redhat.com>
- <CAADnVQ+LNBYq5fdTSRUPy2ZexTdCcB6ErNH_T=r9bJ807UT=pQ@mail.gmail.com>
- <20201116155446.16fe46cf@carbon>
+        id S1726889AbgKQCzl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Nov 2020 21:55:41 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:19002 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726821AbgKQCzj (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 16 Nov 2020 21:55:39 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AH2tT2w013020
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 18:55:39 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=Hwzm6M4F6p3wIIDsFCV/NiMC7IzEqkcaYpjxL5TApLo=;
+ b=Qni2KttiskiolsJXb+bCKKQyiC2GGXWEKjF2bqWEaWrvT3qHUrH4kFg4RatbxqZRlHjn
+ v6B+dz36jQdJkhlM70vStr8bg99y+oyiyxm8A4yis9gub/GZYQ4Dla9ZCzyc2f2zH5mO
+ wE2nvsVogLO2xKhwNF0OLzFVMtlSme1AcoU= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 34tyxqrp67-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 18:55:38 -0800
+Received: from intmgw004.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Mon, 16 Nov 2020 18:55:37 -0800
+Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
+        id B6ACEC5F7C2; Mon, 16 Nov 2020 18:55:33 -0800 (PST)
+From:   Roman Gushchin <guro@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
+        <andrii@kernel.org>, <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-team@fb.com>
+Subject: [PATCH v6 03/34] mm: introduce page memcg flags
+Date:   Mon, 16 Nov 2020 18:54:58 -0800
+Message-ID: <20201117025529.1034387-4-guro@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201117025529.1034387-1-guro@fb.com>
+References: <20201117025529.1034387-1-guro@fb.com>
+X-FB-Internal: Safe
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201116155446.16fe46cf@carbon>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-16_13:2020-11-13,2020-11-16 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
+ impostorscore=0 phishscore=0 spamscore=0 bulkscore=0 suspectscore=0
+ malwarescore=0 priorityscore=1501 adultscore=0 mlxlogscore=502
+ clxscore=1015 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2011170023
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 16, 2020 at 03:54:46PM +0100, Jesper Dangaard Brouer wrote:
-> 
-> Thus, IMHO we MUST move forward and get started with converting
-> iproute2 to libbpf, and start on the work to deprecate the build in
-> BPF-ELF-loader.  I would prefer ripping out the BPF-ELF-loader and
-> replace it with libbpf that handle the older binary elf-map layout, but
-> I do understand if you want to keep this around. (at least for the next
-> couple of releases).
+The lowest bit in page->memcg_data is used to distinguish between struct
+memory_cgroup pointer and a pointer to a objcgs array.  All checks and
+modifications of this bit are open-coded.
 
-I don't understand why legacy code has to be around.
-Having the legacy code and an option to build tc without libbpf creates
-backward compatibility risk to tc users:
-Newer tc may not load bpf progs that older tc did.
+Let's formalize it using page memcg flags, defined in enum
+page_memcg_data_flags.
 
-> I actually fear that it will be a bad user experience, when we start to
-> have multiple userspace tools that load BPF, but each is compiled and
-> statically linked with it own version of libbpf (with git submodule an
-> increasing number of tools will have more variations!).
+Additional flags might be added later.
 
-So far people either freeze bpftool that they use to load progs
-or they use libbpf directly in their applications.
-Any other way means that the application behavior will be unpredictable.
-If a company built a bpf-based product and wants to distibute such
-product as a package it needs a way to specify this dependency in pkg config.
-'tc -V' is not something that can be put in a spec.
-The main iproute2 version can be used as a dependency, but it's meaningless
-when presence of libbpf and its version is not strictly derived from
-iproute2 spec.
-The users should be able to write in their spec:
-BuildRequires: iproute-tc >= 5.10
-and be confident that tc will load the prog they've developed and tested.
+Link: https://lkml.kernel.org/r/20201027001657.3398190-4-guro@fb.com
+Signed-off-by: Roman Gushchin <guro@fb.com>
+Reviewed-by: Shakeel Butt <shakeelb@google.com>
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Acked-by: Michal Hocko <mhocko@suse.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+ include/linux/memcontrol.h | 32 ++++++++++++++++++++------------
+ 1 file changed, 20 insertions(+), 12 deletions(-)
 
-> I actually thinks it makes sense to have iproute2 require a specific
-> libbpf version, and also to move this version requirement forward, as
-> the kernel evolves features that gets added into libbpf. 
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index c7ac0a5b8989..99a4841d658b 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -343,6 +343,15 @@ struct mem_cgroup {
+=20
+ extern struct mem_cgroup *root_mem_cgroup;
+=20
++enum page_memcg_data_flags {
++	/* page->memcg_data is a pointer to an objcgs vector */
++	MEMCG_DATA_OBJCGS =3D (1UL << 0),
++	/* the next bit after the last actual flag */
++	__NR_MEMCG_DATA_FLAGS  =3D (1UL << 1),
++};
++
++#define MEMCG_DATA_FLAGS_MASK (__NR_MEMCG_DATA_FLAGS - 1)
++
+ /*
+  * page_memcg - get the memory cgroup associated with a page
+  * @page: a pointer to the page struct
+@@ -404,13 +413,7 @@ static inline struct mem_cgroup *page_memcg_check(stru=
+ct page *page)
+ 	 */
+ 	unsigned long memcg_data =3D READ_ONCE(page->memcg_data);
+=20
+-	/*
+-	 * The lowest bit set means that memcg isn't a valid
+-	 * memcg pointer, but a obj_cgroups pointer.
+-	 * In this case the page is shared and doesn't belong
+-	 * to any specific memory cgroup.
+-	 */
+-	if (memcg_data & 0x1UL)
++	if (memcg_data & MEMCG_DATA_OBJCGS)
+ 		return NULL;
+=20
+ 	return (struct mem_cgroup *)memcg_data;
+@@ -429,7 +432,11 @@ static inline struct mem_cgroup *page_memcg_check(stru=
+ct page *page)
+  */
+ static inline struct obj_cgroup **page_objcgs(struct page *page)
+ {
+-	return (struct obj_cgroup **)(READ_ONCE(page->memcg_data) & ~0x1UL);
++	unsigned long memcg_data =3D READ_ONCE(page->memcg_data);
++
++	VM_BUG_ON_PAGE(memcg_data && !(memcg_data & MEMCG_DATA_OBJCGS), page);
++
++	return (struct obj_cgroup **)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
+ }
+=20
+ /*
+@@ -444,10 +451,10 @@ static inline struct obj_cgroup **page_objcgs_check(s=
+truct page *page)
+ {
+ 	unsigned long memcg_data =3D READ_ONCE(page->memcg_data);
+=20
+-	if (memcg_data && (memcg_data & 0x1UL))
+-		return (struct obj_cgroup **)(memcg_data & ~0x1UL);
++	if (!memcg_data || !(memcg_data & MEMCG_DATA_OBJCGS))
++		return NULL;
+=20
+-	return NULL;
++	return (struct obj_cgroup **)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
+ }
+=20
+ /*
+@@ -460,7 +467,8 @@ static inline struct obj_cgroup **page_objcgs_check(str=
+uct page *page)
+ static inline bool set_page_objcgs(struct page *page,
+ 					struct obj_cgroup **objcgs)
+ {
+-	return !cmpxchg(&page->memcg_data, 0, (unsigned long)objcgs | 0x1UL);
++	return !cmpxchg(&page->memcg_data, 0, (unsigned long)objcgs |
++			MEMCG_DATA_OBJCGS);
+ }
+ #else
+ static inline struct obj_cgroup **page_objcgs(struct page *page)
+--=20
+2.26.2
 
-+1
