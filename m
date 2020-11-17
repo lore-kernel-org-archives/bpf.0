@@ -8,49 +8,49 @@ X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E44CC63777
-	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 03:43:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F2C96C64E90
+	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 03:43:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E0E9B20643
+	by mail.kernel.org (Postfix) with ESMTP id AD87620789
 	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 03:43:05 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="md5jCkif"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="q0Z1YfZv"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727881AbgKQDmn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1727885AbgKQDmn (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Mon, 16 Nov 2020 22:42:43 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:18424 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727090AbgKQDlT (ORCPT
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:14954 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727117AbgKQDlT (ORCPT
         <rfc822;bpf@vger.kernel.org>); Mon, 16 Nov 2020 22:41:19 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0AH3dSB7013761
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 19:41:18 -0800
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AH3f11o007663
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 19:41:19 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=tMQYn86M7mCJgJxwvphLPq/LNJFFW191W8A4gy995js=;
- b=md5jCkif4jEGH3RfDqWpG7jdrSZcyjrpklF1l1dC+Q0lpS25FiZtgzJ9dp8n8pk088wW
- /8FKPoSSqNt2fJLPsAuS28ak2inD+AOGNcGFIKdgi5ts3+KJbA2M9PJ1gZ9+Nr18bCV/
- u6v02dLOsISmVfeZm8kJlk1VR8QtrYqBObM= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 34tbm4usqg-7
+ bh=wD+NVx56YELtcSrWQbdTPkvWMrsvSTQmAm2aG4+C/0c=;
+ b=q0Z1YfZvskDVPa85wN5e69QGZGFObAf2YCOuoVNlAr1PaOoKpAFJaxVAvJ5ddGR3PLLU
+ 94QNsBUaCkH8pmBRkNt2nHaYGhII3aSNHXyq8MIS/9WpeDVwVmXesyKJm71yQPiPoBqI
+ bTcR2zt44raqCsBMjW//wsP/gZp2DTwfa10= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 34tykx8txv-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 19:41:18 -0800
-Received: from intmgw004.06.prn3.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 19:41:19 -0800
+Received: from intmgw003.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1979.3; Mon, 16 Nov 2020 19:41:13 -0800
 Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
-        id 3B864C63A68; Mon, 16 Nov 2020 19:41:10 -0800 (PST)
+        id 4C986C63A70; Mon, 16 Nov 2020 19:41:10 -0800 (PST)
 From:   Roman Gushchin <guro@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
         <andrii@kernel.org>, <akpm@linux-foundation.org>,
         <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <kernel-team@fb.com>
-Subject: [PATCH bpf-next v6 09/34] bpf: refine memcg-based memory accounting for cpumap maps
-Date:   Mon, 16 Nov 2020 19:40:43 -0800
-Message-ID: <20201117034108.1186569-10-guro@fb.com>
+Subject: [PATCH bpf-next v6 13/34] bpf: memcg-based memory accounting for lpm_trie maps
+Date:   Mon, 16 Nov 2020 19:40:47 -0800
+Message-ID: <20201117034108.1186569-14-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201117034108.1186569-1-guro@fb.com>
 References: <20201117034108.1186569-1-guro@fb.com>
@@ -60,46 +60,49 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-17_01:2020-11-13,2020-11-17 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0 mlxscore=0
- mlxlogscore=959 bulkscore=0 suspectscore=13 malwarescore=0 phishscore=0
- impostorscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ suspectscore=13 bulkscore=0 adultscore=0 clxscore=1015 phishscore=0
+ impostorscore=0 mlxscore=0 mlxlogscore=783 spamscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2011170027
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Include metadata and percpu data into the memcg-based memory accounting.
+Include lpm trie and lpm trie node objects into the memcg-based memory
+accounting.
 
 Signed-off-by: Roman Gushchin <guro@fb.com>
 Acked-by: Song Liu <songliubraving@fb.com>
 ---
- kernel/bpf/cpumap.c | 4 ++--
+ kernel/bpf/lpm_trie.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index c61a23b564aa..563f96cc8a9d 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -97,7 +97,7 @@ static struct bpf_map *cpu_map_alloc(union bpf_attr *at=
-tr)
- 	    attr->map_flags & ~BPF_F_NUMA_NODE)
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index 00e32f2ec3e6..c9ebfb009955 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -282,7 +282,7 @@ static struct lpm_trie_node *lpm_trie_node_alloc(cons=
+t struct lpm_trie *trie,
+ 	if (value)
+ 		size +=3D trie->map.value_size;
+=20
+-	node =3D kmalloc_node(size, GFP_ATOMIC | __GFP_NOWARN,
++	node =3D kmalloc_node(size, GFP_ATOMIC | __GFP_NOWARN | __GFP_ACCOUNT,
+ 			    trie->map.numa_node);
+ 	if (!node)
+ 		return NULL;
+@@ -557,7 +557,7 @@ static struct bpf_map *trie_alloc(union bpf_attr *att=
+r)
+ 	    attr->value_size > LPM_VAL_SIZE_MAX)
  		return ERR_PTR(-EINVAL);
 =20
--	cmap =3D kzalloc(sizeof(*cmap), GFP_USER);
-+	cmap =3D kzalloc(sizeof(*cmap), GFP_USER | __GFP_ACCOUNT);
- 	if (!cmap)
+-	trie =3D kzalloc(sizeof(*trie), GFP_USER | __GFP_NOWARN);
++	trie =3D kzalloc(sizeof(*trie), GFP_USER | __GFP_NOWARN | __GFP_ACCOUNT=
+);
+ 	if (!trie)
  		return ERR_PTR(-ENOMEM);
-=20
-@@ -415,7 +415,7 @@ static struct bpf_cpu_map_entry *
- __cpu_map_entry_alloc(struct bpf_cpumap_val *value, u32 cpu, int map_id)
- {
- 	int numa, err, i, fd =3D value->bpf_prog.fd;
--	gfp_t gfp =3D GFP_KERNEL | __GFP_NOWARN;
-+	gfp_t gfp =3D GFP_KERNEL_ACCOUNT | __GFP_NOWARN;
- 	struct bpf_cpu_map_entry *rcpu;
- 	struct xdp_bulk_queue *bq;
 =20
 --=20
 2.26.2
