@@ -2,167 +2,171 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 848A4C2D0E4
-	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 18:27:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36961C5519F
+	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 18:34:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 354F92467A
-	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 18:27:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7E5E2417E
+	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 18:33:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TAxOYJy6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FOpWOWZ0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729614AbgKQS1Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Nov 2020 13:27:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
+        id S1729614AbgKQSd7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Nov 2020 13:33:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726575AbgKQS1Z (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Nov 2020 13:27:25 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FB3C0613CF;
-        Tue, 17 Nov 2020 10:27:25 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id d3so10703176plo.4;
-        Tue, 17 Nov 2020 10:27:25 -0800 (PST)
+        with ESMTP id S1729088AbgKQSd7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 17 Nov 2020 13:33:59 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B13C0617A6
+        for <bpf@vger.kernel.org>; Tue, 17 Nov 2020 10:33:59 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id s2so10701830plr.9
+        for <bpf@vger.kernel.org>; Tue, 17 Nov 2020 10:33:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BzlahuoWyinnwS/4xXXocdXgOxSu6wIaLBe7RoB5Z1M=;
-        b=TAxOYJy6jCxXM75t9rh4DhV+WuIbd2FuD1e7lj5QQaDMmNcntG/2BBddDFHs+iX2N3
-         fFpxi3qPo4GpGmtXT/FFHqk+TNI6dsbRsVzH4Z76kZwrwmiMjSO6UchL1MMPuXrCBNDK
-         V+i7U7MnuRf9xkLimwe5czbPuzRke4/SHz/C69l/b5BWMQ1d+Jwa3RFb3N5ACuHMIOMC
-         5HHO8/JZBqwFktWn7YuRC2vTBB1zWYrjITMv3XqhU9N5BVL+IyzMndda9cAe5Drifick
-         r//GZOmkQw70qXYDebxg/4zo/whlMUhOfs1qYXE0dyly+tSmvEQFb4aw3DTxUdGlkahb
-         P4Ew==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fQkJ2Lw7TUY5jWjGmBKfeemBsnDuv9nUetOaxVaTDb4=;
+        b=FOpWOWZ05TYauQMbSdTxp0fgyN9Bein9v/GU3nUJ5GbChz7CnzuqeS4AxmICA14vVB
+         Eg1e//DorMxa8cAepNKfB05i3vkADKgfBkiZetCrhH16tZe79b4aWMVQ6rbqC+YtP+SH
+         wiS91r7s8pvIgGrM113tDg7IweEGe4s3NnTIgpgXCag5rjfthlPzHTqa91+Q4FaoaFu8
+         GQgr2x1TCknG4pdsc3NzOkdKNAFrONNCPyt+1rlSaShH1+lDJKM7rErQgFGeDaQvaeqj
+         SD+cxw1GSSr6HtDJedL+lcR+FLXwo9TxdDurB5R1As0YAPMDE64jyqqMBykdsw7iaUBO
+         0omA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BzlahuoWyinnwS/4xXXocdXgOxSu6wIaLBe7RoB5Z1M=;
-        b=ZhFoU2YRszDHwZsXr9ddO6LIiu9zB/DNv4GGz1WxXnGZDYCSqoGjKK0OuYBK5h4VHp
-         PhaPAutPf5gGh9I5ckXspVZqkGxlE7Ipf3zrbJTMsqL/8O7W1uirAZb1Yqm5NIr5ZXCQ
-         oGAzr2OyGUCHYkmCLDPdjBlrqODwPYQ8F0xhfyyNrgQ4luSv+3BoaUwd9P2CuRgTeVbb
-         ljMf0pV5uQRWfhAOgX1o1WQUbTZm4zSp47byt8tFpgRS+srb1CwN4RdD/ueBh7N7dqG/
-         8F/IqUiOmRhq28snVz1itU+BNGEfG4z065woI0Tcl0hes2M31lsmUI548+oTXbaIdbC2
-         A1uw==
-X-Gm-Message-State: AOAM532MhNkAvUW1eLh+XfAunT6OZySdDokVfSXFIbR5wnYChyFkvQlR
-        hCTZY6bpS4YsAOahaYF7slE=
-X-Google-Smtp-Source: ABdhPJyN2ufBumsfgA200wyF1uAQlafS/Q/VIpNO4mNYFAkpQf6iKzC9jrNO3uxpOQjQyDcju5ZQGQ==
-X-Received: by 2002:a17:902:8c84:b029:d9:471:f0da with SMTP id t4-20020a1709028c84b02900d90471f0damr406157plo.84.1605637644952;
-        Tue, 17 Nov 2020 10:27:24 -0800 (PST)
-Received: from ast-mbp ([2620:10d:c090:400::5:8f57])
-        by smtp.gmail.com with ESMTPSA id y5sm3758457pjr.50.2020.11.17.10.27.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Nov 2020 10:27:24 -0800 (PST)
-Date:   Tue, 17 Nov 2020 10:27:21 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Hangbin Liu <haliu@redhat.com>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        David Ahern <dsahern@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fQkJ2Lw7TUY5jWjGmBKfeemBsnDuv9nUetOaxVaTDb4=;
+        b=Oa1su5RojhZWrQ8gtrmKyTZBU0qxJdnmA3iCeNoXRALSyDaCp3fG8qTTB+U1BmiuRb
+         dtXWH9Kv5+9o9FEXYZojPhqi926Xzj8pmE3tBDfQ3kMDX6o2e95eVrQcHYjUBSw6VgvJ
+         Ef1Wt3MKnwgLixTXuWgjeh43nfsb5F9hkYdH90ekLf/OftxnFOAOmAOZC9VJcoFTbt2U
+         ZNOaxpl8Qwwcj9aihnE3fSsw+i7Y+mf9fkiJL4s4Y/pf3DsTSB/nIbAccp0pv/YuLW+s
+         Bvv0tVc7hN6eIA1t0QPqNmzHUzV4/hXRgmacyA2xaWOQ90nsPwr095izwnJt20gVUYHT
+         dohQ==
+X-Gm-Message-State: AOAM532+/xDeFdrF5o5LXsEE6KeD7fRB7ePw8/rEyVn0u+h8v8xjk79w
+        jp1eeiVTlrbX3Kz1OqGcFtvE2z7hw8ljtaWkRlk4Jw==
+X-Google-Smtp-Source: ABdhPJxNrdUEUn6Bg/zpvhCGebQOUEHrL65JPRKGEY7t8WkM5jEzW+ALEFSGPs8xKrHjziq/MVHQETJ1L5RnNaPJ1gs=
+X-Received: by 2002:a17:902:e901:b029:d8:e727:2595 with SMTP id
+ k1-20020a170902e901b02900d8e7272595mr749648pld.56.1605638038233; Tue, 17 Nov
+ 2020 10:33:58 -0800 (PST)
+MIME-Version: 1.0
+References: <20201117173828.27292-1-info@metux.net>
+In-Reply-To: <20201117173828.27292-1-info@metux.net>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 17 Nov 2020 10:33:47 -0800
+Message-ID: <CAKwvOd=OsYyPYDg=CU5cHGNxYj6UKcwUKTmrweeERJLkiVwekw@mail.gmail.com>
+Subject: Re: [PATCH] lib: compile memcat_p only when needed
+To:     "Enrico Weigelt, metux IT consult" <info@metux.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Miller <davem@davemloft.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
         Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Jiri Benc <jbenc@redhat.com>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        ecree@solarflare.com
-Subject: Re: [PATCHv5 iproute2-next 0/5] iproute2: add libbpf support
-Message-ID: <20201117182721.nmhewohx3dxwv34i@ast-mbp>
-References: <20201109070802.3638167-1-haliu@redhat.com>
- <20201116065305.1010651-1-haliu@redhat.com>
- <CAADnVQ+LNBYq5fdTSRUPy2ZexTdCcB6ErNH_T=r9bJ807UT=pQ@mail.gmail.com>
- <20201116155446.16fe46cf@carbon>
- <20201117023757.qypmhucuws3sajyb@ast-mbp>
- <20201117031933.GJ2408@dhcp-12-153.nay.redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201117031933.GJ2408@dhcp-12-153.nay.redhat.com>
+        bpf <bpf@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Nov 17, 2020 at 11:19:33AM +0800, Hangbin Liu wrote:
-> On Mon, Nov 16, 2020 at 06:37:57PM -0800, Alexei Starovoitov wrote:
-> > On Mon, Nov 16, 2020 at 03:54:46PM +0100, Jesper Dangaard Brouer wrote:
-> > > 
-> > > Thus, IMHO we MUST move forward and get started with converting
-> > > iproute2 to libbpf, and start on the work to deprecate the build in
-> > > BPF-ELF-loader.  I would prefer ripping out the BPF-ELF-loader and
-> > > replace it with libbpf that handle the older binary elf-map layout, but
-> > > I do understand if you want to keep this around. (at least for the next
-> > > couple of releases).
-> > 
-> > I don't understand why legacy code has to be around.
-> > Having the legacy code and an option to build tc without libbpf creates
-> > backward compatibility risk to tc users:
-> > Newer tc may not load bpf progs that older tc did.
-> 
-> If a distro choose to compile iproute2 with libbpf, I don't think they will
-> compile iproute2 without libbpf in new version. So yum/apt-get update from
-> official source doesn't like a problem.
-> 
-> Unless a user choose to use a self build iproute2 version. Then the self build
-> version may also don't have other supports, like libelf, libnml, libcap etc.
-> 
-> > 
-> > > I actually fear that it will be a bad user experience, when we start to
-> > > have multiple userspace tools that load BPF, but each is compiled and
-> > > statically linked with it own version of libbpf (with git submodule an
-> > > increasing number of tools will have more variations!).
-> > 
-> > So far people either freeze bpftool that they use to load progs
-> > or they use libbpf directly in their applications.
-> > Any other way means that the application behavior will be unpredictable.
-> > If a company built a bpf-based product and wants to distibute such
-> > product as a package it needs a way to specify this dependency in pkg config.
-> > 'tc -V' is not something that can be put in a spec.
-> > The main iproute2 version can be used as a dependency, but it's meaningless
-> > when presence of libbpf and its version is not strictly derived from
-> > iproute2 spec.
-> > The users should be able to write in their spec:
-> > BuildRequires: iproute-tc >= 5.10
-> > and be confident that tc will load the prog they've developed and tested.
-> 
-> The current patch does have a libbpf version check, it need at least libbpf
-> 0.1.0. So if a distro starts to build iproute2 based on libbpf, there will
-> have a dependence. The rule could be added to rpm spec file, or what else
-> the distro choose. That's the distro compiler's work.
-> 
-> Unless you want to say a company built a bpf-based product, they only
-> add iproute2 version dependence(let's say some distros has iproute2 5.12 with
-> libbpf supported), and somehow forgot add libbpf version dependence check
-> and distro check. At the same time a user run the product on a distro without
-> libbpf compiled on iproute2 5.12. That do will cause problem.
+On Tue, Nov 17, 2020 at 9:38 AM Enrico Weigelt, metux IT consult
+<info@metux.net> wrote:
+>
+> The library function memcat_p() is currently used only once.
+> (drivers/hwtracing/stm). So, often completely unused.
 
-right.
-You've answered Ed's question:
+Any harm in just moving the definition into drivers/hwtracing/stm?
+Then we don't need any Kconfig additions.  There never were many users
+of this function, and there probably never will be.
 
-> But if libbpf is dynamically linked, they can put
-> Requires: libbpf >= 0.3.0
-> Requires: iproute-tc >= 5.10
-> and get the dependency behaviour they need.  No?
+>
+> Reducing the kernel size by about 4k by compiling it
+> conditionally, only when needed.
+>
+> Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
+> ---
+>  drivers/hwtracing/stm/Kconfig | 1 +
+>  lib/Kconfig                   | 3 +++
+>  lib/Kconfig.debug             | 1 +
+>  lib/Makefile                  | 4 +++-
+>  4 files changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/hwtracing/stm/Kconfig b/drivers/hwtracing/stm/Kconfig
+> index aad594fe79cc..8ce5cfd759d1 100644
+> --- a/drivers/hwtracing/stm/Kconfig
+> +++ b/drivers/hwtracing/stm/Kconfig
+> @@ -3,6 +3,7 @@ config STM
+>         tristate "System Trace Module devices"
+>         select CONFIGFS_FS
+>         select SRCU
+> +       select GENERIC_LIB_MEMCAT_P
+>         help
+>           A System Trace Module (STM) is a device exporting data in System
+>           Trace Protocol (STP) format as defined by MIPI STP standards.
+> diff --git a/lib/Kconfig b/lib/Kconfig
+> index b46a9fd122c8..b42ed8d68937 100644
+> --- a/lib/Kconfig
+> +++ b/lib/Kconfig
+> @@ -686,6 +686,9 @@ config GENERIC_LIB_CMPDI2
+>  config GENERIC_LIB_UCMPDI2
+>         bool
+>
+> +config GENERIC_LIB_MEMCAT_P
+> +       tristate
+> +
+>  config PLDMFW
+>         bool
+>         default n
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index c789b39ed527..beb5adb2f0b7 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2334,6 +2334,7 @@ config TEST_DEBUG_VIRTUAL
+>
+>  config TEST_MEMCAT_P
+>         tristate "Test memcat_p() helper function"
+> +       select GENERIC_LIB_MEMCAT_P
+>         help
+>           Test the memcat_p() helper for correctly merging two
+>           pointer arrays together.
+> diff --git a/lib/Makefile b/lib/Makefile
+> index ce45af50983a..18fd6630be0b 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -36,7 +36,9 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
+>          flex_proportions.o ratelimit.o show_mem.o \
+>          is_single_threaded.o plist.o decompress.o kobject_uevent.o \
+>          earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
+> -        nmi_backtrace.o nodemask.o win_minmax.o memcat_p.o
+> +        nmi_backtrace.o nodemask.o win_minmax.o
+> +
+> +obj-$(CONFIG_GENERIC_LIB_MEMCAT_P) += memcat_p.o
+>
+>  lib-$(CONFIG_PRINTK) += dump_stack.o
+>  lib-$(CONFIG_SMP) += cpumask.o
+> --
+> 2.11.0
+>
+> --
+> You received this message because you are subscribed to the Google Groups "Clang Built Linux" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to clang-built-linux+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/clang-built-linux/20201117173828.27292-1-info%40metux.net.
 
-It is a problem because >= 5.10 cannot capture legacy vs libbpf.
 
-> But if I'm the user, I will think the company is not professional for bpf
-> product that they even do not know libbpf is needed...
-> 
-> So my opinion: for end user, the distro should take care of libbpf and
-> iproute2 version control. For bpf company, they should take care if libbpf
-> is used by the iproute2 and what distros they support.
 
-So you're saying that bpf community shouldn't care about their users.
-The distros suppose to step forward and provide proper bpf support
-in tools like iproute2?
-In other words iproute2 upstream doesn't care about shipping quality product.
-It's distros job now.
-Thanks, but no.
-iproute2 should stay with legacy obsolete prog loader
-and the users should switch to bpftool + iproute2 combination.
-bpftool for loading progs and iproute2 for networking configs.
+-- 
+Thanks,
+~Nick Desaulniers
