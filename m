@@ -2,118 +2,152 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SIGNED_OFF_BY,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C518C64E8A
-	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 02:59:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1220DC388F9
+	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 03:19:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EE18F24694
-	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 02:59:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8628D2469D
+	for <bpf@archiver.kernel.org>; Tue, 17 Nov 2020 03:19:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="BYazDK6V"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Uhvr6bRb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726768AbgKQC7T (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 16 Nov 2020 21:59:19 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:43684 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726741AbgKQCzi (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 16 Nov 2020 21:55:38 -0500
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AH2nTp8031204
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 18:55:37 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=lnrDosrqi+a8PqEWb1gLJQgKjxqxqhn/WbfOUeEH/TE=;
- b=BYazDK6VvSxV5DjQ4S9RHAq9OoRel1HhpW56fQ6lH97wBQW5/+8TxOq3UmOtlrXq3vYY
- jKVexY4q3RbGao/ApKDd7180+xSaFeXn8wiLV/xoBVhZIbnR81McUEu2bMxqDyA8FGw7
- 150/7BJPr211Jw5pcMXq3gTgttcin5p9vhE= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 34uwyg2pnp-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 18:55:37 -0800
-Received: from intmgw002.41.prn1.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 16 Nov 2020 18:55:36 -0800
-Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
-        id 002FDC5F7DE; Mon, 16 Nov 2020 18:55:33 -0800 (PST)
-From:   Roman Gushchin <guro@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
-        <andrii@kernel.org>, <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-team@fb.com>
-Subject: [PATCH v6 16/34] bpf: refine memcg-based memory accounting for sockmap and sockhash maps
-Date:   Mon, 16 Nov 2020 18:55:11 -0800
-Message-ID: <20201117025529.1034387-17-guro@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201117025529.1034387-1-guro@fb.com>
-References: <20201117025529.1034387-1-guro@fb.com>
+        id S1726437AbgKQDTv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 16 Nov 2020 22:19:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:37414 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726296AbgKQDTu (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 16 Nov 2020 22:19:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1605583188;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LR1RVCVDmMZYtYdb1NH5Ko2l6/L30HghQHqegBLQOWc=;
+        b=Uhvr6bRbdxSy2lp9SPFCPy9iVtsKXCMiMKtYA3ZenMO0DjnDxPR2P/yLJMpkQalbT269dH
+        L1CAT2tSLu+v7KBX0Esl0LqqEvnm9Z93n0r5bem3gcMPwGSwVDyda9BXx4ykM1IQ1+wDAC
+        0aWy/M1dxwKoNH+ShvG2mVU/Ve5IX+o=
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
+ [209.85.214.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-303-81KTL1ErM4C1BGQVxvmhMQ-1; Mon, 16 Nov 2020 22:19:47 -0500
+X-MC-Unique: 81KTL1ErM4C1BGQVxvmhMQ-1
+Received: by mail-pl1-f198.google.com with SMTP id t10so10657207ply.9
+        for <bpf@vger.kernel.org>; Mon, 16 Nov 2020 19:19:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LR1RVCVDmMZYtYdb1NH5Ko2l6/L30HghQHqegBLQOWc=;
+        b=l84rkY5yM9op8Ini3//dzP/BVWbBBfPEjHw08knSTWVem6TWIpVJIkNkEt/9OUsMAh
+         9yT2JjzBPRTGpPmfYkQLRiP8Vx8Gq4Qx2U1pvlxn0t61vekp1J4bOWi+P2dOTUnKkLfM
+         X7hcunCIxS/KgvmD2PXLmRJvu5TF4OhqlTqH2lB1XxojIDgtJxPczbUmsClCFIg4YMCH
+         2yPxzAFCuja9CsKcx8xLPxj8mNqNVNJKZyIsuCXiOojRx3BViIVHJWqF6eGKqaDJk6+x
+         UNHMBKXk34s40i2ToYz2EZZMJejteDFQPhnaNEKMLEXqNfLf6YnUK+7g/DSjB77OV/2p
+         Qmmg==
+X-Gm-Message-State: AOAM531BDm+Pa6ZxLhkPB0OYqF4qusWLkQlDACY2uuiNC1dj28eJ/tYI
+        aPRSeIGEeHh3u78lf4Fi6eTX3TJL+1P9qetaTi62rI5Vj8QEBaV4m3gccBH3aCsCnFKjPJfl049
+        ty5ZgTyP3gbg=
+X-Received: by 2002:a62:1506:0:b029:18b:44dd:6325 with SMTP id 6-20020a6215060000b029018b44dd6325mr16940667pfv.30.1605583186145;
+        Mon, 16 Nov 2020 19:19:46 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJziRqjVkGJDdX0zd1KU7xPtskheZ1Riv1/UF0Izbf15BvaLUnJ8G+ibKrTAjIh/cOQjSlop2w==
+X-Received: by 2002:a62:1506:0:b029:18b:44dd:6325 with SMTP id 6-20020a6215060000b029018b44dd6325mr16940645pfv.30.1605583185840;
+        Mon, 16 Nov 2020 19:19:45 -0800 (PST)
+Received: from dhcp-12-153.nay.redhat.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id l10sm964723pjg.3.2020.11.16.19.19.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Nov 2020 19:19:45 -0800 (PST)
+Date:   Tue, 17 Nov 2020 11:19:33 +0800
+From:   Hangbin Liu <haliu@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        David Ahern <dsahern@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        David Miller <davem@davemloft.net>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Jiri Benc <jbenc@redhat.com>,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
+Subject: Re: [PATCHv5 iproute2-next 0/5] iproute2: add libbpf support
+Message-ID: <20201117031933.GJ2408@dhcp-12-153.nay.redhat.com>
+References: <20201109070802.3638167-1-haliu@redhat.com>
+ <20201116065305.1010651-1-haliu@redhat.com>
+ <CAADnVQ+LNBYq5fdTSRUPy2ZexTdCcB6ErNH_T=r9bJ807UT=pQ@mail.gmail.com>
+ <20201116155446.16fe46cf@carbon>
+ <20201117023757.qypmhucuws3sajyb@ast-mbp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-16_13:2020-11-13,2020-11-16 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0
- mlxlogscore=988 priorityscore=1501 clxscore=1015 mlxscore=0
- impostorscore=0 malwarescore=0 adultscore=0 lowpriorityscore=0 spamscore=0
- phishscore=0 suspectscore=13 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2011170022
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201117023757.qypmhucuws3sajyb@ast-mbp>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Include internal metadata into the memcg-based memory accounting.
-Also include the memory allocated on updating an element.
+On Mon, Nov 16, 2020 at 06:37:57PM -0800, Alexei Starovoitov wrote:
+> On Mon, Nov 16, 2020 at 03:54:46PM +0100, Jesper Dangaard Brouer wrote:
+> > 
+> > Thus, IMHO we MUST move forward and get started with converting
+> > iproute2 to libbpf, and start on the work to deprecate the build in
+> > BPF-ELF-loader.  I would prefer ripping out the BPF-ELF-loader and
+> > replace it with libbpf that handle the older binary elf-map layout, but
+> > I do understand if you want to keep this around. (at least for the next
+> > couple of releases).
+> 
+> I don't understand why legacy code has to be around.
+> Having the legacy code and an option to build tc without libbpf creates
+> backward compatibility risk to tc users:
+> Newer tc may not load bpf progs that older tc did.
 
-Signed-off-by: Roman Gushchin <guro@fb.com>
-Acked-by: Song Liu <songliubraving@fb.com>
----
- net/core/sock_map.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+If a distro choose to compile iproute2 with libbpf, I don't think they will
+compile iproute2 without libbpf in new version. So yum/apt-get update from
+official source doesn't like a problem.
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index ddc899e83313..30455d1952e7 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -39,7 +39,7 @@ static struct bpf_map *sock_map_alloc(union bpf_attr *a=
-ttr)
- 	    attr->map_flags & ~SOCK_CREATE_FLAG_MASK)
- 		return ERR_PTR(-EINVAL);
-=20
--	stab =3D kzalloc(sizeof(*stab), GFP_USER);
-+	stab =3D kzalloc(sizeof(*stab), GFP_USER | __GFP_ACCOUNT);
- 	if (!stab)
- 		return ERR_PTR(-ENOMEM);
-=20
-@@ -975,7 +975,8 @@ static struct bpf_shtab_elem *sock_hash_alloc_elem(st=
-ruct bpf_shtab *htab,
- 		}
- 	}
-=20
--	new =3D kmalloc_node(htab->elem_size, GFP_ATOMIC | __GFP_NOWARN,
-+	new =3D kmalloc_node(htab->elem_size,
-+			   GFP_ATOMIC | __GFP_NOWARN | __GFP_ACCOUNT,
- 			   htab->map.numa_node);
- 	if (!new) {
- 		atomic_dec(&htab->count);
-@@ -1116,7 +1117,7 @@ static struct bpf_map *sock_hash_alloc(union bpf_at=
-tr *attr)
- 	if (attr->key_size > MAX_BPF_STACK)
- 		return ERR_PTR(-E2BIG);
-=20
--	htab =3D kzalloc(sizeof(*htab), GFP_USER);
-+	htab =3D kzalloc(sizeof(*htab), GFP_USER | __GFP_ACCOUNT);
- 	if (!htab)
- 		return ERR_PTR(-ENOMEM);
-=20
---=20
-2.26.2
+Unless a user choose to use a self build iproute2 version. Then the self build
+version may also don't have other supports, like libelf, libnml, libcap etc.
+
+> 
+> > I actually fear that it will be a bad user experience, when we start to
+> > have multiple userspace tools that load BPF, but each is compiled and
+> > statically linked with it own version of libbpf (with git submodule an
+> > increasing number of tools will have more variations!).
+> 
+> So far people either freeze bpftool that they use to load progs
+> or they use libbpf directly in their applications.
+> Any other way means that the application behavior will be unpredictable.
+> If a company built a bpf-based product and wants to distibute such
+> product as a package it needs a way to specify this dependency in pkg config.
+> 'tc -V' is not something that can be put in a spec.
+> The main iproute2 version can be used as a dependency, but it's meaningless
+> when presence of libbpf and its version is not strictly derived from
+> iproute2 spec.
+> The users should be able to write in their spec:
+> BuildRequires: iproute-tc >= 5.10
+> and be confident that tc will load the prog they've developed and tested.
+
+The current patch does have a libbpf version check, it need at least libbpf
+0.1.0. So if a distro starts to build iproute2 based on libbpf, there will
+have a dependence. The rule could be added to rpm spec file, or what else
+the distro choose. That's the distro compiler's work.
+
+Unless you want to say a company built a bpf-based product, they only
+add iproute2 version dependence(let's say some distros has iproute2 5.12 with
+libbpf supported), and somehow forgot add libbpf version dependence check
+and distro check. At the same time a user run the product on a distro without
+libbpf compiled on iproute2 5.12. That do will cause problem.
+
+But if I'm the user, I will think the company is not professional for bpf
+product that they even do not know libbpf is needed...
+
+So my opinion: for end user, the distro should take care of libbpf and
+iproute2 version control. For bpf company, they should take care if libbpf
+is used by the iproute2 and what distros they support.
+
+Please correct me if I missed something.
+
+Thanks
+Hangbin
 
