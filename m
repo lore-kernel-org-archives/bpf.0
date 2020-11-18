@@ -2,89 +2,129 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-0.6 required=3.0 tests=BAYES_40,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 73041C64E7D
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 15:40:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EB965C5519F
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 16:01:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EE38220870
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 15:40:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 82972247C7
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 16:01:48 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=liamsports.com header.i=@liamsports.com header.b="QdDXORG0"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="Qbs2RxYP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727478AbgKRPkr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Nov 2020 10:40:47 -0500
-Received: from gateway30.websitewelcome.com ([192.185.196.18]:17146 "EHLO
-        gateway30.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727473AbgKRPkr (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 18 Nov 2020 10:40:47 -0500
-X-Greylist: delayed 1720 seconds by postgrey-1.27 at vger.kernel.org; Wed, 18 Nov 2020 10:40:46 EST
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway30.websitewelcome.com (Postfix) with ESMTP id 8B3CCB9A0
-        for <bpf@vger.kernel.org>; Wed, 18 Nov 2020 08:48:20 -0600 (CST)
-Received: from zastava.websitewelcome.com ([192.185.83.71])
-        by cmsmtp with SMTP
-        id fOkukUMXUfgo0fOkukOmmg; Wed, 18 Nov 2020 08:48:20 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=liamsports.com; s=default; h=Date:Message-Id:Content-Type:MIME-Version:
-        Reply-To:From:Subject:To:Sender:Cc:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=DNctREwmdr2xzK+3LW6h9IegnQUayja9aGXYHpevsic=; b=QdDXORG0bnIkz+n537ZexyROFi
-        v8X/bctbPTMSfJMyIY3ahCSVR7ei/QEThCY/b30bSnNaQhdaed8IRZUS82WA0ZkqTB8lwipvXi9fG
-        uBtjwSRXC/4u9att+oj7mhWeJSaHYlwKk9MZvbEB8lv6/M/MAdC/f3pC+7HQmrRXGE7Z3lGdc4nWI
-        3cWFFvRPyPs+YQxf8ek34+QIz/l0ZfAzyZO3T8zP5QOHLEEybVbgjoForReBYybiQFkCoAhQLtcuW
-        vslNF6qxWrci5Q3W9YftA020VI1zzuKqXPzAAI529riwVZGQ4Zf2dqg/jhH3vQIG9LJGFRKNKkU5B
-        lpQsU+zQ==;
-Received: from liamsports by zastava.websitewelcome.com with local (Exim 4.93)
-        (envelope-from <info@liamsports.com>)
-        id 1kfOku-004Ksp-5x
-        for bpf@vger.kernel.org; Wed, 18 Nov 2020 08:48:20 -0600
-To:     bpf@vger.kernel.org
-Subject: Business Proposal
-X-PHP-Script: liamsports.com/email/index.php for 202.142.189.170
-X-PHP-Originating-Script: 5244:index.php
-From:   Isabella George <info@liamsports.com>
-Reply-To: Isabella George <info@liamsports.com>
+        id S1726553AbgKRQB1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Nov 2020 11:01:27 -0500
+Received: from mail.efficios.com ([167.114.26.124]:44436 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726496AbgKRQB1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Nov 2020 11:01:27 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id A801B2ECB82;
+        Wed, 18 Nov 2020 11:01:25 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ZwJ7XCNKGbub; Wed, 18 Nov 2020 11:01:25 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 4FBAC2ECB05;
+        Wed, 18 Nov 2020 11:01:25 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 4FBAC2ECB05
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1605715285;
+        bh=k0a1RGHOSG7fsNrb43ytVhAyD3oE/dKDtNyXyy8B/xU=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=Qbs2RxYPZHVq3437Ui3yAsk8VLrqTSOLM6tl8uIbE1D+3t4YO2Lzq3YRH8NDzfHvP
+         Y7wmgNkD2kbQTYE7CrMESIGdDzNS2OYcviVTNFj9lO8FzleB+aAwXymiLaY248KdBP
+         4l/jvyiHO91lZYWLaKOcS+k4MjSMBv4ddr2cLNCASbYr/oPZWG++KoEJByvG/RNNBr
+         qgVNXbzRuXBxGwGamciMRHLOkRpbxBDO27twHHbEdQxM2CvTifblwcTzCnNfekT4Ov
+         q2eYPl+HXVOqbn2m/5gfqWm3d0kOsctj6Jc02dcCFzmQgQawcEQFtNS5FLetkN0h9Z
+         0EM+PrO/Uq9yw==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id jkAbwSowY55M; Wed, 18 Nov 2020 11:01:25 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 398402EC75B;
+        Wed, 18 Nov 2020 11:01:25 -0500 (EST)
+Date:   Wed, 18 Nov 2020 11:01:25 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     rostedt <rostedt@goodmis.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Matt Mullins <mmullins@mmlx.us>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Message-ID: <1762005214.49230.1605715285133.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20201118090256.55656208@gandalf.local.home>
+References: <20201116175107.02db396d@gandalf.local.home> <47463878.48157.1605640510560.JavaMail.zimbra@efficios.com> <20201117142145.43194f1a@gandalf.local.home> <375636043.48251.1605642440621.JavaMail.zimbra@efficios.com> <20201117153451.3015c5c9@gandalf.local.home> <20201118132136.GJ3121378@hirez.programming.kicks-ass.net> <20201118090256.55656208@gandalf.local.home>
+Subject: Re: violating function pointer signature
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Message-Id: <E1kfOku-004Ksp-5x@zastava.websitewelcome.com>
-Date:   Wed, 18 Nov 2020 08:48:20 -0600
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - zastava.websitewelcome.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [5244 32008] / [47 12]
-X-AntiAbuse: Sender Address Domain - liamsports.com
-X-BWhitelist: no
-X-Source-IP: 
-X-Source-L: No
-X-Exim-ID: 1kfOku-004Ksp-5x
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: liamsports.com:/public_html/email
-X-Source-Sender: 
-X-Source-Auth: liamsports
-X-Email-Count: 27
-X-Source-Cap: bGlhbXNwb3J0cztwYWt3ZWlvbjt6YXN0YXZhLndlYnNpdGV3ZWxjb21lLmNvbQ==
-X-Local-Domain: yes
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3975 (ZimbraWebClient - FF82 (Linux)/8.8.15_GA_3975)
+Thread-Topic: violating function pointer signature
+Thread-Index: Obd4w6s/wcVB2Hvi8sMQ1l1Yr980kA==
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello There
-Liam Sports is The Factory of custom apparels And Team Wears. we are specialist in custom apparels including Tees, Polo Shirts, Tights,  Hoodies, Tracksuits, Softshell, Club Outerwear, Training Singlets, Reversible Training Jumpers and Singlets, Compression Wears, And Club Sports Bag etc We strive to deliver the highest quality in custom sublimation and cut & sew In All Over The worldwide.
-You can ask for samples if you want to check our quality first.
+----- On Nov 18, 2020, at 9:02 AM, rostedt rostedt@goodmis.org wrote:
 
+> On Wed, 18 Nov 2020 14:21:36 +0100
+> Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+>> I think that as long as the function is completely empty (it never
+>> touches any of the arguments) this should work in practise.
+>> 
+>> That is:
+>> 
+>>   void tp_nop_func(void) { }
+> 
+> My original version (the OP of this thread) had this:
+> 
+> +static void tp_stub_func(void)
+> +{
+> +	return;
+> +}
+> 
+>> 
+>> can be used as an argument to any function pointer that has a void
+>> return. In fact, I already do that, grep for __static_call_nop().
+>> 
+>> I'm not sure what the LLVM-CFI crud makes of it, but that's their
+>> problem.
+> 
+> If it is already done elsewhere in the kernel, then I will call this
+> precedence, and keep the original version.
 
-Regards
+It works for me. Bonus points if you can document in a comment that this
+trick depends on the cdecl calling convention.
 
-Company: Liam Sports
-Cell: +92 3127601319
-Whatsapp: +447395606980
-Website : www.liamsports.com
-Factory Address: Small Industrial Area Sialkot 51310, Punjab Pakistan 
-Instagram:  https://www.instagram.com/liamsports_official/
+Thanks,
+
+Mathieu
+
+> 
+> This way Alexei can't complain about adding a check in the fast path of
+> more than one callback attached.
+> 
+> -- Steve
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
