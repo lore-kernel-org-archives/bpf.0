@@ -2,133 +2,154 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 076A6C64E7C
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 08:25:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E52FFC5519F
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 08:33:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C795920867
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 08:25:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B7F824654
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 08:33:27 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QajlMOF1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727265AbgKRIZU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Nov 2020 03:25:20 -0500
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:40324 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726274AbgKRIZT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 18 Nov 2020 03:25:19 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R441e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0UFnFPS6_1605687912;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UFnFPS6_1605687912)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 18 Nov 2020 16:25:12 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     bjorn.topel@intel.com
-Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] xsk: change the tx writeable condition
-Date:   Wed, 18 Nov 2020 16:25:09 +0800
-Message-Id: <b7b0432d49ab05064efb85f1858b6e6f9e1274bd.1605686678.git.xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <cover.1605686678.git.xuanzhuo@linux.alibaba.com>
-References: <3306b4d8-8689-b0e7-3f6d-c3ad873b7093@intel.com>
- <cover.1605686678.git.xuanzhuo@linux.alibaba.com>
-In-Reply-To: <cover.1605686678.git.xuanzhuo@linux.alibaba.com>
-References: <cover.1605686678.git.xuanzhuo@linux.alibaba.com>
+        id S1726969AbgKRId1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Nov 2020 03:33:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726759AbgKRId0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Nov 2020 03:33:26 -0500
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58942C0613D4;
+        Wed, 18 Nov 2020 00:33:26 -0800 (PST)
+Received: by mail-lj1-x241.google.com with SMTP id b17so1366536ljf.12;
+        Wed, 18 Nov 2020 00:33:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KLJgQlu6oxV+ucveDOs7U5kEuKAa22Jo6V5uCqp1lVM=;
+        b=QajlMOF1EVFyX1k1ZrecPCY57ZVBbxb2G6JP3YlqN2YbYLVpWA6jRR6+DlR2efrqeS
+         sB0NaS8aHRBycEoeQiwRqzTKyVW/eZONRzAf+N+3HCAY8W4n+8QEUtcjPpD4ivioza2m
+         Erkuk1dmhaCStfaoY2DR43rPFr3QdtpqGvdS81HhlIkOfT2iLzjT5gjdnjKU4odaNOMP
+         fAx4wJX4YWKzEgb3EQFTrMnDKAJPMtP0WCjHRrPFqc8Qg4s60gXenKlhIzHUUVBdtyvC
+         N5pGEYr6pFT8j0v3HZEJXYzJeX5ArDjLm6bP3KD9T6jRez4XMl6fI4djN/SXr1ri1+Rh
+         USxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KLJgQlu6oxV+ucveDOs7U5kEuKAa22Jo6V5uCqp1lVM=;
+        b=CQA6pBsxsY1ECVo+ADhgVi4qYJLqem0OidCGWmv38i1pQ6RKHvc/mkke2e/Z6lcst0
+         7cwAArifZkNZQdWyT5+jDF45D3wi/m7Ua5DFPdFVQ6LabfuAszgZO7V3DhNjQYoSAWWT
+         nsM0Z8JiuwIBPjQGMFZWVXGS5QaV1lzHoLEkJ2vxADI3e47aj0QykdEjP6IEu9tgVq7G
+         1i6rEfIZA5wRBMChlH9HdYmFFbLu3Iv1Pb8MWDchIU2kczUbzCvmazJXuL3liBTezr2a
+         fSOJ4zCg3ZrjjJLYvXHizkwGqku5QIuyYenCnBA/I3rL7A1lgeB3xm4zRnCxuqVuBOqF
+         28sw==
+X-Gm-Message-State: AOAM531QOvWPrvd+DDY0Ikc08ZQa4iQAVvkHneBV2vSKjJH6bY9SHhRa
+        LI8YJcyOjcLeBX+XPsfFpzA=
+X-Google-Smtp-Source: ABdhPJxZiN3RJNbLVa0lg6JGFCRiNnpnBTMB/QPoUNxusvBJ1tW4G8zgDYaO283RT3/aAak9JgSxhQ==
+X-Received: by 2002:a05:651c:10b:: with SMTP id a11mr3614022ljb.334.1605688404830;
+        Wed, 18 Nov 2020 00:33:24 -0800 (PST)
+Received: from localhost.localdomain (host-89-229-233-64.dynamic.mm.pl. [89.229.233.64])
+        by smtp.gmail.com with ESMTPSA id r12sm3542107lfc.80.2020.11.18.00.33.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2020 00:33:23 -0800 (PST)
+From:   mariusz.dudek@gmail.com
+X-Google-Original-From: mariuszx.dudek@intel.com
+To:     andrii.nakryiko@gmail.com, magnus.karlsson@intel.com,
+        bjorn.topel@intel.com, ast@kernel.org, daniel@iogearbox.net,
+        netdev@vger.kernel.org, jonathan.lemon@gmail.com
+Cc:     bpf@vger.kernel.org, Mariusz Dudek <mariuszx.dudek@intel.com>
+Subject: [PATCH v3 bpf-next 0/2] libbpf: add support for privileged/unprivileged control separation
+Date:   Wed, 18 Nov 2020 09:32:51 +0100
+Message-Id: <20201118083253.4150-1-mariuszx.dudek@intel.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Modify the tx writeable condition from the queue is not full to the
-number of remaining tx queues is less than the half of the total number
-of queues. Because the tx queue not full is a very short time, this will
-cause a large number of EPOLLOUT events, and cause a large number of
-process wake up.
+From: Mariusz Dudek <mariuszx.dudek@intel.com>
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
----
- net/xdp/xsk.c       | 20 +++++++++++++++++---
- net/xdp/xsk_queue.h |  6 ++++++
- 2 files changed, 23 insertions(+), 3 deletions(-)
+This patch series adds support for separation of eBPF program
+load and xsk socket creation. In for example a Kubernetes
+environment you can have an AF_XDP CNI or daemonset that is 
+responsible for launching pods that execute an application 
+using AF_XDP sockets. It is desirable that the pod runs with
+as low privileges as possible, CAP_NET_RAW in this case, 
+and that all operations that require privileges are contained
+in the CNI or daemonset.
+	
+In this case, you have to be able separate ePBF program load from
+xsk socket creation.
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 7f0353e..bc3d4ece 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -211,6 +211,17 @@ static int __xsk_rcv(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len,
- 	return 0;
- }
- 
-+static bool xsk_writeable(struct xdp_sock *xs)
-+{
-+	if (!xs->tx)
-+		return false;
-+
-+	if (xskq_cons_left(xs->tx) > xs->tx->nentries / 2)
-+		return false;
-+
-+	return true;
-+}
-+
- static bool xsk_is_bound(struct xdp_sock *xs)
- {
- 	if (READ_ONCE(xs->state) == XSK_BOUND) {
-@@ -296,7 +307,8 @@ void xsk_tx_release(struct xsk_buff_pool *pool)
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(xs, &pool->xsk_tx_list, tx_list) {
- 		__xskq_cons_release(xs->tx);
--		xs->sk.sk_write_space(&xs->sk);
-+		if (xsk_writeable(xs))
-+			xs->sk.sk_write_space(&xs->sk);
- 	}
- 	rcu_read_unlock();
- }
-@@ -442,7 +454,8 @@ static int xsk_generic_xmit(struct sock *sk)
- 
- out:
- 	if (sent_frame)
--		sk->sk_write_space(sk);
-+		if (xsk_writeable(xs))
-+			sk->sk_write_space(sk);
- 
- 	mutex_unlock(&xs->mutex);
- 	return err;
-@@ -499,7 +512,8 @@ static __poll_t xsk_poll(struct file *file, struct socket *sock,
- 
- 	if (xs->rx && !xskq_prod_is_empty(xs->rx))
- 		mask |= EPOLLIN | EPOLLRDNORM;
--	if (xs->tx && !xskq_cons_is_full(xs->tx))
-+
-+	if (xsk_writeable(xs))
- 		mask |= EPOLLOUT | EPOLLWRNORM;
- 
- 	return mask;
-diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-index cdb9cf3..82a5228 100644
---- a/net/xdp/xsk_queue.h
-+++ b/net/xdp/xsk_queue.h
-@@ -264,6 +264,12 @@ static inline bool xskq_cons_is_full(struct xsk_queue *q)
- 		q->nentries;
- }
- 
-+static inline __u64 xskq_cons_left(struct xsk_queue *q)
-+{
-+	/* No barriers needed since data is not accessed */
-+	return READ_ONCE(q->ring->producer) - READ_ONCE(q->ring->consumer);
-+}
-+
- /* Functions for producers */
- 
- static inline bool xskq_prod_is_full(struct xsk_queue *q)
+Currently, this will not work with the xsk_socket__create APIs
+because you need to have CAP_NET_ADMIN privileges to load eBPF
+program and CAP_SYS_ADMIN privileges to create update xsk_bpf_maps.
+To be exact xsk_set_bpf_maps does not need those privileges but
+it takes the prog_fd and xsks_map_fd and those are known only to
+process that was loading eBPF program. The api bpf_prog_get_fd_by_id
+that looks up the fd of the prog using an prog_id and
+bpf_map_get_fd_by_id that looks for xsks_map_fd usinb map_id both
+requires CAP_SYS_ADMIN.
+
+With this patch, the pod can be run with CAP_NET_RAW capability
+only. In case your umem is larger or equal process limit for
+MEMLOCK you need either increase the limit or CAP_IPC_LOCK capability. 
+Without this patch in case of insufficient rights ENOPERM is
+returned by xsk_socket__create.
+
+To resolve this privileges issue two new APIs are introduced:
+- xsk_setup_xdp_prog - loads the built in XDP program. It can
+also return xsks_map_fd which is needed by unprivileged
+process to update xsks_map with AF_XDP socket "fd"
+- xsk_sokcet__update_xskmap - inserts an AF_XDP socket into an
+xskmap for a particular xsk_socket
+
+Usage example:
+int xsk_setup_xdp_prog(int ifindex, int *xsks_map_fd)
+
+int xsk_socket__update_xskmap(struct xsk_socket *xsk, int xsks_map_fd);
+
+Inserts AF_XDP socket "fd" into the xskmap.
+
+The first patch introduces the new APIs. The second patch provides
+a new sample applications working as control and modification to
+existing xdpsock application to work with less privileges.
+
+This patch set is based on bpf-next commit ea87ae85c9b3
+("bpf: Add tests for bpf_bprm_opts_set helper")
+
+Since v2:
+- new APIs moved itto LIBBPF_0.3.0 section
+- struct bpf_prog_cfg_opts removed 
+- loading own eBPF program via xsk_setup_xdp_prog functionality removed
+
+Since v1:
+- struct bpf_prog_cfg improved for backward/forward compatibility
+- API xsk_update_xskmap renamed to xsk_socket__update_xskmap
+- commit message formatting fixed
+
+Mariusz Dudek (2):
+  libbpf: separate XDP program load with xsk socket creation
+  samples/bpf: sample application for eBPF load and socket creation
+    split
+
+ samples/bpf/Makefile            |   4 +-
+ samples/bpf/xdpsock.h           |   8 ++
+ samples/bpf/xdpsock_ctrl_proc.c | 184 ++++++++++++++++++++++++++++++++
+ samples/bpf/xdpsock_user.c      | 146 +++++++++++++++++++++++--
+ tools/lib/bpf/libbpf.map        |   2 +
+ tools/lib/bpf/xsk.c             |  97 +++++++++++++++--
+ tools/lib/bpf/xsk.h             |   5 +
+ 7 files changed, 427 insertions(+), 19 deletions(-)
+ create mode 100644 samples/bpf/xdpsock_ctrl_proc.c
+
 -- 
-1.8.3.1
+2.20.1
 
