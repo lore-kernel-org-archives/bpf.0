@@ -2,27 +2,27 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89E5CC5519F
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 08:25:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 16249C6379D
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 08:25:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 21C1120867
+	by mail.kernel.org (Postfix) with ESMTP id D8B55241A6
 	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 08:25:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726598AbgKRIZP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Nov 2020 03:25:15 -0500
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:60025 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726200AbgKRIZP (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 18 Nov 2020 03:25:15 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R681e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04407;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0UFmyUVT_1605687910;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UFmyUVT_1605687910)
+        id S1727157AbgKRIZR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Nov 2020 03:25:17 -0500
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:54216 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726296AbgKRIZR (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 18 Nov 2020 03:25:17 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0UFn7TNs_1605687913;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UFn7TNs_1605687913)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 18 Nov 2020 16:25:10 +0800
+          Wed, 18 Nov 2020 16:25:13 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     bjorn.topel@intel.com
 Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
@@ -35,52 +35,62 @@ Cc:     Magnus Karlsson <magnus.karlsson@intel.com>,
         John Fastabend <john.fastabend@gmail.com>,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] xsk: fix for xsk_poll writeable
-Date:   Wed, 18 Nov 2020 16:25:07 +0800
-Message-Id: <cover.1605686678.git.xuanzhuo@linux.alibaba.com>
+Subject: [PATCH 3/3] xsk: set tx/rx the min entries
+Date:   Wed, 18 Nov 2020 16:25:10 +0800
+Message-Id: <ed585669ba63dbbef5ec0d5568574e5e51e23c06.1605686678.git.xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <3306b4d8-8689-b0e7-3f6d-c3ad873b7093@intel.com>
+In-Reply-To: <cover.1605686678.git.xuanzhuo@linux.alibaba.com>
 References: <3306b4d8-8689-b0e7-3f6d-c3ad873b7093@intel.com>
+ <cover.1605686678.git.xuanzhuo@linux.alibaba.com>
+In-Reply-To: <cover.1605686678.git.xuanzhuo@linux.alibaba.com>
+References: <cover.1605686678.git.xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-I tried to combine cq available and tx writeable, but I found it very difficult.
-Sometimes we pay attention to the status of "available" for both, but sometimes,
-we may only pay attention to one, such as tx writeable, because we can use the
-item of fq to write to tx. And this kind of demand may be constantly changing,
-and it may be necessary to set it every time before entering xsk_poll, so
-setsockopt is not very convenient. I feel even more that using a new event may
-be a better solution, such as EPOLLPRI, I think it can be used here, after all,
-xsk should not have OOB data ^_^.
+We expect tx entries to be greater than twice the number of packets that
+the network card can send at a time, so that when the remaining number
+of the tx queue is less than half of the queue, it can be guaranteed
+that there are recycled items in the cq that can be used.
 
-However, two other problems were discovered during the test:
+At the same time, rx will not cause packet loss because it cannot
+receive the packets uploaded by the network card at one time.
 
-* The mask returned by datagram_poll always contains EPOLLOUT
-* It is not particularly reasonable to return EPOLLOUT based on tx not full
+Of course, the 1024 here is only an estimated value, and the number of
+packets sent by each network card at a time may be different.
 
-After fixing these two problems, I found that when the process is awakened by
-EPOLLOUT, the process can always get the item from cq.
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+---
+ include/uapi/linux/if_xdp.h | 2 ++
+ net/xdp/xsk.c               | 2 ++
+ 2 files changed, 4 insertions(+)
 
-Because the number of packets that the network card can send at a time is
-actually limited, suppose this value is "nic_num". Once the number of
-consumed items in the tx queue is greater than nic_num, this means that there
-must also be new recycled items in the cq queue from nic.
-
-In this way, as long as the tx configured by the user is larger, we won't have
-the situation that tx is already in the writeable state but cannot get the item
-from cq.
-
-Xuan Zhuo (3):
-  xsk: replace datagram_poll by sock_poll_wait
-  xsk: change the tx writeable condition
-  xsk: set tx/rx the min entries
-
- include/uapi/linux/if_xdp.h |  2 ++
- net/xdp/xsk.c               | 26 ++++++++++++++++++++++----
- net/xdp/xsk_queue.h         |  6 ++++++
- 3 files changed, 30 insertions(+), 4 deletions(-)
-
---
+diff --git a/include/uapi/linux/if_xdp.h b/include/uapi/linux/if_xdp.h
+index a78a809..d55ba79 100644
+--- a/include/uapi/linux/if_xdp.h
++++ b/include/uapi/linux/if_xdp.h
+@@ -64,6 +64,8 @@ struct xdp_mmap_offsets {
+ #define XDP_STATISTICS			7
+ #define XDP_OPTIONS			8
+ 
++#define XDP_RXTX_RING_MIN_ENTRIES       1024
++
+ struct xdp_umem_reg {
+ 	__u64 addr; /* Start of packet data area */
+ 	__u64 len; /* Length of packet data area */
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index bc3d4ece..e62c795 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -831,6 +831,8 @@ static int xsk_setsockopt(struct socket *sock, int level, int optname,
+ 			return -EINVAL;
+ 		if (copy_from_sockptr(&entries, optval, sizeof(entries)))
+ 			return -EFAULT;
++		if (entries < XDP_RXTX_RING_MIN_ENTRIES)
++			return -EINVAL;
+ 
+ 		mutex_lock(&xs->mutex);
+ 		if (xs->state != XSK_READY) {
+-- 
 1.8.3.1
 
