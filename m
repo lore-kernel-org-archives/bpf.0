@@ -2,118 +2,74 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7C703C56202
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 18:03:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9BB22C6379D
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 18:22:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 26B3D22210
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 18:03:49 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aTLnDIWW"
+	by mail.kernel.org (Postfix) with ESMTP id 4CB6024695
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 18:22:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726463AbgKRSDc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Nov 2020 13:03:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43988 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725822AbgKRSDc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 Nov 2020 13:03:32 -0500
-Received: from mail-oi1-x243.google.com (mail-oi1-x243.google.com [IPv6:2607:f8b0:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB6CC0613D4;
-        Wed, 18 Nov 2020 10:03:32 -0800 (PST)
-Received: by mail-oi1-x243.google.com with SMTP id c80so3197429oib.2;
-        Wed, 18 Nov 2020 10:03:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q3m6ruzi8yrhRHKgf6niw2+ejefydMk6FVAeq//2cpU=;
-        b=aTLnDIWWm5gpNqVlc2HNkReacSRkboHtJIdRaw6TzV0g3BlT/oLQ0twbZqCndMKLAU
-         XfZ/M7/4y1MC/jm3VsHP69lzkXxUXS1+qMkrvhT11vIGLuVJINebCzAFq9dwEnencEc/
-         7llczIMBEKOZJ32KzKSzqZPnXw+KIUk4s+tAOd3V2htPUIeAkk3MPs5wmpdkonbefUx8
-         YOVcK8vM6C+j05Q81C6uEKSpBSeEd0wlRo6h4xInFYiCsaQARQ5BIji2DdhRxB7zAVD0
-         ddMhC+vnMiswFIRElF6orI+zeCyiFwma+4aOkkPeKbSkV2VBYgaWmYUGDfx56AQ0xLRE
-         ZQnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q3m6ruzi8yrhRHKgf6niw2+ejefydMk6FVAeq//2cpU=;
-        b=NY5VCzI70MKVUcBSxjQ8SIenRshHbQOcq4sXAwgLdxJ0yVcdKyJXVGRLFuRbrnmpDR
-         GQVXP3RXLyI4MWKYye+To0JoF3DBX0fWnRYxXKWwlShxa5o0ZGlsRZ/zasJm9+YsDuZh
-         xuj10oUoF9kyKbZ3g6G35p8P/bzlfZNijIEf/GU/J9mWQCPnF4z/0EhKoxVOOa3KKqSL
-         TelgXGFz8qTvL9UvFnv7rTqneBQxIfrwSJHtRBBbzI5jZxYCPZ4mEtGEZAQCKA9SuvQG
-         sa9Mu7gFJ4OtRZ06W/ZbCQRVKN4gZofBCGvtKx/L9eaKU+mVIPHgyYYdH+UMwBzr7Sz8
-         CqTA==
-X-Gm-Message-State: AOAM533G+Ahi7viRFnZBl3LrHe4gmcmIrMsezZ5dNiOyrfCfNL4ILG1+
-        QmsT1aLnIJSxvUNZa/qpUNZIqclQe02Q++Urkw==
-X-Google-Smtp-Source: ABdhPJzmBNIoXXZbyojhg5Y/QQvf3z/tuCLen5M9CZ7k0R1GGJhBqqikqGnvn3wCelMQ00kbmxhVb7ionuqu+0UppIc=
-X-Received: by 2002:aca:e007:: with SMTP id x7mr241667oig.40.1605722611397;
- Wed, 18 Nov 2020 10:03:31 -0800 (PST)
-MIME-Version: 1.0
-References: <20201117145644.1166255-1-danieltimlee@gmail.com>
- <20201117145644.1166255-4-danieltimlee@gmail.com> <20201118055832.q5zsgulnsbjawgyq@kafai-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20201118055832.q5zsgulnsbjawgyq@kafai-mbp.dhcp.thefacebook.com>
-From:   "Daniel T. Lee" <danieltimlee@gmail.com>
-Date:   Wed, 18 Nov 2020 18:03:14 +0900
-Message-ID: <CAEKGpzjXUhnOVbamcysTX7KOrmEZ_JEzZMah3f9sLM2h+OkXsQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/9] samples: bpf: refactor test_cgrp2_sock2
- program with libbpf
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        id S1726561AbgKRSVm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Nov 2020 13:21:42 -0500
+Received: from gate.crashing.org ([63.228.1.57]:39032 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726360AbgKRSVm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Nov 2020 13:21:42 -0500
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 0AIICTPb015618;
+        Wed, 18 Nov 2020 12:12:29 -0600
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 0AIICQYo015615;
+        Wed, 18 Nov 2020 12:12:26 -0600
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Wed, 18 Nov 2020 12:12:26 -0600
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Matt Mullins <mmullins@mmlx.us>,
+        Ingo Molnar <mingo@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, brakmo <brakmo@fb.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        David Ahern <dsa@cumulusnetworks.com>,
-        Yonghong Song <yhs@fb.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Ira Weiny <ira.weiny@intel.com>, Thomas Graf <tgraf@suug.ch>,
-        Jakub Kicinski <kuba@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        bpf <bpf@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        Xdp <xdp-newbies@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        KP Singh <kpsingh@chromium.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-toolchains@vger.kernel.org
+Subject: Re: violating function pointer signature
+Message-ID: <20201118181226.GK2672@gate.crashing.org>
+References: <20201116175107.02db396d@gandalf.local.home> <47463878.48157.1605640510560.JavaMail.zimbra@efficios.com> <20201117142145.43194f1a@gandalf.local.home> <375636043.48251.1605642440621.JavaMail.zimbra@efficios.com> <20201117153451.3015c5c9@gandalf.local.home> <20201118132136.GJ3121378@hirez.programming.kicks-ass.net> <CAKwvOdkptuS=75WjzwOho9ZjGVHGMirEW3k3u4Ep8ya5wCNajg@mail.gmail.com> <20201118121730.12ee645b@gandalf.local.home>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201118121730.12ee645b@gandalf.local.home>
+User-Agent: Mutt/1.4.2.3i
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Nov 18, 2020 at 2:58 PM Martin KaFai Lau <kafai@fb.com> wrote:
->
-> On Tue, Nov 17, 2020 at 02:56:38PM +0000, Daniel T. Lee wrote:
-> [ ... ]
->
-> > +     err = bpf_link__pin(link, link_pin_path);
-> > +     if (err < 0) {
-> > +             printf("err : %d\n", err);
-> > +             goto cleanup;
-> > +     }
-> > +
-> > +     ret = EXIT_SUCCESS;
-> > +
-> > +cleanup:
-> > +     if (ret != EXIT_SUCCESS)
-> > +             bpf_link__destroy(link);
-> This looks wrong.  cleanup should be done regardless.
->
+On Wed, Nov 18, 2020 at 12:17:30PM -0500, Steven Rostedt wrote:
+> I could change the stub from (void) to () if that would be better.
 
-At first, I thought destroying the link after the link__pin might unpin
-the link, but I just tested it and confirmed that it actually didn't
-and that the link kept pinned.
+Don't?  In a function definition they mean exactly the same thing (and
+the kernel uses (void) everywhere else, which many people find clearer).
 
-Thanks for pointing it out! I will stick to this method.
+In a function declaration that is not part of a definition it means no
+information about the arguments is specified, a quite different thing.
 
-> > +
-> > +     bpf_object__close(obj);
-> > +     return ret;
-> >  }
+This is an obsolescent feature, too.  Many many years from now it could
+perhaps mean the same as (void), just like in C++, but not yet.
 
 
-
--- 
-Best,
-Daniel T. Lee
+Segher
