@@ -2,154 +2,102 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
+	FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A1924C5519F
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 03:21:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 159ECC6379D
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 03:50:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2E83B2469D
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 03:21:41 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BXsi3BHw"
+	by mail.kernel.org (Postfix) with ESMTP id C8CBE2465E
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 03:50:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725808AbgKRDVk (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 17 Nov 2020 22:21:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725613AbgKRDVk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 17 Nov 2020 22:21:40 -0500
-Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C848C0613D4;
-        Tue, 17 Nov 2020 19:21:40 -0800 (PST)
-Received: by mail-oi1-x242.google.com with SMTP id w188so689583oib.1;
-        Tue, 17 Nov 2020 19:21:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5EwzV1WY7UR9Ao6IjTB0tUNCWpA/QmhX9rFcnwQF/QI=;
-        b=BXsi3BHwkSZgpqF/ruIi1iLCxuN82HUaEjNUG8i2SBzUyfp6/01OXd5kLjCdsLbDr0
-         IG7HlFCySu9+l9F+JjkuhHpInef7I/hi963bqnWJSrGp7zdvsNQVVoRwcLvx5lburgNw
-         401eBUM4Vpb3KFAnEstjkXTeKj7RCX2wiqxNSUZ6Oxvnfqk/mgUuRfqKNhkvdsjg2YAV
-         Hdih0WIRHQrOD3PaMmoMwGGb5fD3AlpJMExbVFjmY2pyInWo+FJnKB84EYMNpBcdbFrs
-         BW7LYTcuizWzzLfDY1A9ab/tHq08ORkegHqtBb7WFwIeRL+bJk8f9LhEBvrrGTGJsdW2
-         MN0Q==
+        id S1727827AbgKRDuV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 17 Nov 2020 22:50:21 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:33974 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727806AbgKRDuV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 17 Nov 2020 22:50:21 -0500
+Received: by mail-il1-f200.google.com with SMTP id l77so580146ili.1
+        for <bpf@vger.kernel.org>; Tue, 17 Nov 2020 19:50:19 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5EwzV1WY7UR9Ao6IjTB0tUNCWpA/QmhX9rFcnwQF/QI=;
-        b=GtJDAYB9W81mLmdDyJHstlcic/Yrbt8GnvbiP08tWwTTpdhmlUSup1wKoBfSt9Kgis
-         D/Pw7TecROvTfzT3fZu3986rH552PJ8oxulF619EI/3NOl5H+KkXaovqV/JhRDhGeFBz
-         fHg6SBE2QH9O2mTTRn/kf5rgaypZpgpxd0jwQQjNydc7cJwxH8dWv2xpo2zOi2AcT4wp
-         GmXcREPRaL4AGXEKO1ySfXRAvsekZEny/PG2zug8AinKoaoubqLU5+9f69SJrHJ6XLBc
-         Yjt7jCTX1IqFgSOcs2Lp7VOVAWG3/u++fwpFshf6p4TZq1KsPVx7t4eYLw5Q5Wk+edIi
-         6cxg==
-X-Gm-Message-State: AOAM533w+PYlGMRnvq5eMnZtx69Q7RxgvTmVVpqOogJzvmjHQHZ49sWJ
-        Q93t30S6o1zxIWS3+la2eaMYjgQILMyTAmoWLQ==
-X-Google-Smtp-Source: ABdhPJzn7VyOySNpFE2m+Ct+hNPNMmJ6SatQ5RcWAq+bMaBCefU5Rj2+9+rflNkEL7cVVIA3sa4yepUnFgEpDReRvPQ=
-X-Received: by 2002:aca:e007:: with SMTP id x7mr1531079oig.40.1605669699775;
- Tue, 17 Nov 2020 19:21:39 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=/DoS+YQS9VBlKN6+t7kOlnb/cNhUvvMuTsydpQN3w74=;
+        b=nzHs1K6NNuLbLO+mvvvu3W48Y36tLSISjyfVX2AixqpHK0TiXZs3G1F6kOy3k0f36x
+         6N37gBu3lNf5kFHShJOuPbSZqNgRgWhmUgeDfPHlx/kOuDxC0Nj2hho6evb1/I0s0LU1
+         evQ4HwQpBQZsbeFWJTzl4z5oKKlCwX7jybYbwP4FKgUi4dvjfc75bpoNtVzQyvhmysmj
+         KobhadMoFulydf3wgthmy4m424k/2UBO1w0kizW6fsmG9/Dzp0bXYtqAwt+DSFYQjm00
+         OXXBdir3ITXLBgMvvlL4f90l+RHMzZVztOkQn+Ifwqi6YLsKvkgRZEP5pEMvHLpTHfDy
+         cfbg==
+X-Gm-Message-State: AOAM530SW0ZMfJMQz1nhHBdcaNw2Th5jPCSBDgrg+KeH37Ob6+yP/90n
+        RBe7NiPvP0i4tEWox6L9coMGr7f2FGwJBqSZLTzbkw1nkrpS
+X-Google-Smtp-Source: ABdhPJwi4a4IGODP4KC7xAUdxzicB5OMZ/EE96H2i+xQvPC8q+DXDy0d9Ou9uQDg6ciFNbahKMxSCVG5OnPh+ycAovjeZUGX6O5A
 MIME-Version: 1.0
-References: <20201117145644.1166255-1-danieltimlee@gmail.com>
- <20201117145644.1166255-4-danieltimlee@gmail.com> <CAEf4BzbBT38n8YQNco7yfijahaKXWQWLqxiNGEq1q7Lj7N+_vA@mail.gmail.com>
-In-Reply-To: <CAEf4BzbBT38n8YQNco7yfijahaKXWQWLqxiNGEq1q7Lj7N+_vA@mail.gmail.com>
-From:   "Daniel T. Lee" <danieltimlee@gmail.com>
-Date:   Wed, 18 Nov 2020 12:21:23 +0900
-Message-ID: <CAEKGpzi8suN-ftSiERx4WT2y1vtq+=L=0aBYva8NgYmhkWbNeA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 3/9] samples: bpf: refactor test_cgrp2_sock2
- program with libbpf
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, brakmo <brakmo@fb.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        David Ahern <dsa@cumulusnetworks.com>,
-        Yonghong Song <yhs@fb.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Ira Weiny <ira.weiny@intel.com>, Thomas Graf <tgraf@suug.ch>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Xdp <xdp-newbies@vger.kernel.org>
+X-Received: by 2002:a02:70ce:: with SMTP id f197mr6796213jac.120.1605671419188;
+ Tue, 17 Nov 2020 19:50:19 -0800 (PST)
+Date:   Tue, 17 Nov 2020 19:50:19 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000911d3905b459824c@google.com>
+Subject: memory leak in bpf
+From:   syzbot <syzbot+f3694595248708227d35@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
+        kpsingh@chromium.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Nov 18, 2020 at 12:02 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Tue, Nov 17, 2020 at 6:57 AM Daniel T. Lee <danieltimlee@gmail.com> wrote:
-> >
-> > This commit refactors the existing cgroup program with libbpf bpf
-> > loader. The original test_cgrp2_sock2 has keeped the bpf program
-> > attached to the cgroup hierarchy even after the exit of user program.
-> > To implement the same functionality with libbpf, this commit uses the
-> > BPF_LINK_PINNING to pin the link attachment even after it is closed.
-> >
-> > Since this uses LINK instead of ATTACH, detach of bpf program from
-> > cgroup with 'test_cgrp2_sock' is not used anymore.
-> >
-> > The code to mount the bpf was added to the .sh file in case the bpff
-> > was not mounted on /sys/fs/bpf. Additionally, to fix the problem that
-> > shell script cannot find the binary object from the current path,
-> > relative path './' has been added in front of binary.
-> >
-> > Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
-> > ---
-> >  samples/bpf/Makefile            |  2 +-
-> >  samples/bpf/test_cgrp2_sock2.c  | 63 ++++++++++++++++++++++++---------
-> >  samples/bpf/test_cgrp2_sock2.sh | 21 ++++++++---
-> >  3 files changed, 64 insertions(+), 22 deletions(-)
-> >
->
-> [...]
->
-> >
-> > -       return EXIT_SUCCESS;
-> > +       err = bpf_link__pin(link, link_pin_path);
-> > +       if (err < 0) {
-> > +               printf("err : %d\n", err);
->
-> more meaningful error message would be helpful
->
+Hello,
 
-Thanks for pointing out, I will fix it directly!
+syzbot found the following issue on:
 
-> > +               goto cleanup;
-> > +       }
-> > +
-> > +       ret = EXIT_SUCCESS;
-> > +
-> > +cleanup:
-> > +       if (ret != EXIT_SUCCESS)
-> > +               bpf_link__destroy(link);
-> > +
-> > +       bpf_object__close(obj);
-> > +       return ret;
-> >  }
->
-> [...]
->
-> >
-> >  function attach_bpf {
-> > -       test_cgrp2_sock2 /tmp/cgroupv2/foo sock_flags_kern.o $1
-> > +       ./test_cgrp2_sock2 /tmp/cgroupv2/foo sock_flags_kern.o $1
->
-> Can you please add Fixes: tag for this?
->
+HEAD commit:    f01c30de Merge tag 'vfs-5.10-fixes-2' of git://git.kernel...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15b9b181500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f13716fa0212fd
+dashboard link: https://syzkaller.appspot.com/bug?extid=f3694595248708227d35
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14b78b81500000
 
-Will add it in the next version of patch :)
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f3694595248708227d35@syzkaller.appspotmail.com
 
-Thanks for your time and effort for the review.
+2020/11/14 15:01:05 executed programs: 33
+2020/11/14 15:01:11 executed programs: 35
+2020/11/14 15:01:17 executed programs: 37
+2020/11/14 15:01:22 executed programs: 39
+BUG: memory leak
+unreferenced object 0xffff8881161c6440 (size 64):
+  comm "syz-executor.0", pid 8961, jiffies 4295107077 (age 12.370s)
+  hex dump (first 32 bytes):
+    80 62 58 04 00 ea ff ff c0 17 37 04 00 ea ff ff  .bX.......7.....
+    80 6f 47 04 00 ea ff ff 40 64 58 04 00 ea ff ff  .oG.....@dX.....
+  backtrace:
+    [<00000000189a27fd>] kmalloc_node include/linux/slab.h:575 [inline]
+    [<00000000189a27fd>] bpf_ringbuf_area_alloc kernel/bpf/ringbuf.c:94 [inline]
+    [<00000000189a27fd>] bpf_ringbuf_alloc kernel/bpf/ringbuf.c:135 [inline]
+    [<00000000189a27fd>] ringbuf_map_alloc kernel/bpf/ringbuf.c:183 [inline]
+    [<00000000189a27fd>] ringbuf_map_alloc+0x1be/0x410 kernel/bpf/ringbuf.c:150
+    [<000000009e5cec3e>] find_and_alloc_map kernel/bpf/syscall.c:122 [inline]
+    [<000000009e5cec3e>] map_create kernel/bpf/syscall.c:825 [inline]
+    [<000000009e5cec3e>] __do_sys_bpf+0x7d0/0x30a0 kernel/bpf/syscall.c:4381
+    [<00000000c513b5d1>] do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+    [<0000000033006ec5>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
--- 
-Best,
-Daniel T. Lee
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
