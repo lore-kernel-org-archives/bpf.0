@@ -2,118 +2,102 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CCD71C5519F
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 15:30:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEF35C5519F
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 15:37:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 769BD2476A
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 15:30:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4E4C324779
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 15:37:47 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KbMQpg+P"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BFWjd9mn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726342AbgKRPaO (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Nov 2020 10:30:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47772 "EHLO
+        id S1725787AbgKRPh0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Nov 2020 10:37:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:44320 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727347AbgKRPaN (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 18 Nov 2020 10:30:13 -0500
+        by vger.kernel.org with ESMTP id S1725446AbgKRPh0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 18 Nov 2020 10:37:26 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605713412;
+        s=mimecast20190719; t=1605713845;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=iFs5YuS+UQBHxuk28XB6kdJ0sgDe9yXGAPFUS7xIqxM=;
-        b=KbMQpg+PT+LW5MdZbZxeGqigxAnXOWkHkAThEV5b3u6sIz8Bew+7DF/n2R/VXGPtyQ23EC
-        5cP/UHzWpE3pCwxpUysqpx8uNYTwC/epidTMzDaN/+VzIiDhBw0sLYm3AVc7aIc5+6M9TA
-        tGu6lyld5L322ufrZTahybW/+9tkROA=
+        bh=d8sRYGEzSwBuvAF+H53zPFqrxK3fJ+m2Pfzo+FY4+Kw=;
+        b=BFWjd9mnkqoLYhcOh1yzaKv5eEFXKnl4IU6QnmiNcKa931nI6vCnklL5uBNufWyoKp4KAS
+        hDibrKKLUY4GepPJLqgec34iB9CEXeHRkV4qWvuSFjzqh06Y9zuVgNr0ykbaMaVCCCPawb
+        OTDq68AOdxHbBDxlzfkJIVoQifQWNhI=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-268-j6bb1zLsO_SuXdO9YyM51A-1; Wed, 18 Nov 2020 10:30:07 -0500
-X-MC-Unique: j6bb1zLsO_SuXdO9YyM51A-1
+ us-mta-518-Yt0VGFVoMPSF14_iFirexw-1; Wed, 18 Nov 2020 10:37:21 -0500
+X-MC-Unique: Yt0VGFVoMPSF14_iFirexw-1
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 76F01100C60C;
-        Wed, 18 Nov 2020 15:30:05 +0000 (UTC)
-Received: from firesoul.localdomain (unknown [10.40.208.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BE0F260843;
-        Wed, 18 Nov 2020 15:30:01 +0000 (UTC)
-Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id C891232138454;
-        Wed, 18 Nov 2020 16:30:00 +0100 (CET)
-Subject: [PATCH bpf-next V6 7/7] selftests/bpf: use bpf_check_mtu in selftest
- test_cls_redirect
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F31E219251BB;
+        Wed, 18 Nov 2020 15:37:18 +0000 (UTC)
+Received: from carbon (unknown [10.36.110.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F336E60843;
+        Wed, 18 Nov 2020 15:37:11 +0000 (UTC)
+Date:   Wed, 18 Nov 2020 16:37:10 +0100
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     bpf@vger.kernel.org
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
-        Daniel Borkmann <borkmann@iogearbox.net>,
+Cc:     netdev@vger.kernel.org, Daniel Borkmann <borkmann@iogearbox.net>,
         Alexei Starovoitov <alexei.starovoitov@gmail.com>,
         maze@google.com, lmb@cloudflare.com, shaun@tigera.io,
         Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
         John Fastabend <john.fastabend@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>, eyal.birger@gmail.com,
-        colrack@gmail.com
-Date:   Wed, 18 Nov 2020 16:30:00 +0100
-Message-ID: <160571340076.2801246.2011072453912206731.stgit@firesoul>
-In-Reply-To: <160571331409.2801246.11527010115263068327.stgit@firesoul>
-References: <160571331409.2801246.11527010115263068327.stgit@firesoul>
-User-Agent: StGit/0.19
+        colrack@gmail.com, brouer@redhat.com
+Subject: Re: [PATCH bpf-next V6 0/7] Series short description
+Message-ID: <20201118163710.201853da@carbon>
+In-Reply-To: <160571329106.2801162.7380460134461487044.stgit@firesoul>
+References: <160571329106.2801162.7380460134461487044.stgit@firesoul>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This demonstrate how bpf_check_mtu() helper can easily be used together
-with bpf_skb_adjust_room() helper, prior to doing size adjustment, as
-delta argument is already setup.
 
-Hint: This specific test can be selected like this:
- ./test_progs -t cls_redirect
+Sorry, please ignore this email.
 
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
----
- .../selftests/bpf/progs/test_cls_redirect.c        |    7 +++++++
- 1 file changed, 7 insertions(+)
+(Wrong invocation of stg mail from command line)
+--Jesper
 
-diff --git a/tools/testing/selftests/bpf/progs/test_cls_redirect.c b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-index c9f8464996ea..3c1e042962e6 100644
---- a/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-+++ b/tools/testing/selftests/bpf/progs/test_cls_redirect.c
-@@ -70,6 +70,7 @@ typedef struct {
- 	uint64_t errors_total_encap_adjust_failed;
- 	uint64_t errors_total_encap_buffer_too_small;
- 	uint64_t errors_total_redirect_loop;
-+	uint64_t errors_total_encap_mtu_violate;
- } metrics_t;
- 
- typedef enum {
-@@ -407,6 +408,7 @@ static INLINING ret_t forward_with_gre(struct __sk_buff *skb, encap_headers_t *e
- 		payload_off - sizeof(struct ethhdr) - sizeof(struct iphdr);
- 	int32_t delta = sizeof(struct gre_base_hdr) - encap_overhead;
- 	uint16_t proto = ETH_P_IP;
-+	uint32_t mtu_len = 0;
- 
- 	/* Loop protection: the inner packet's TTL is decremented as a safeguard
- 	 * against any forwarding loop. As the only interesting field is the TTL
-@@ -479,6 +481,11 @@ static INLINING ret_t forward_with_gre(struct __sk_buff *skb, encap_headers_t *e
- 		}
- 	}
- 
-+	if (bpf_check_mtu(skb, skb->ifindex, &mtu_len, delta, 0)) {
-+		metrics->errors_total_encap_mtu_violate++;
-+		return TC_ACT_SHOT;
-+	}
-+
- 	if (bpf_skb_adjust_room(skb, delta, BPF_ADJ_ROOM_NET,
- 				BPF_F_ADJ_ROOM_FIXED_GSO |
- 				BPF_F_ADJ_ROOM_NO_CSUM_RESET) ||
 
+On Wed, 18 Nov 2020 16:28:21 +0100
+Jesper Dangaard Brouer <brouer@redhat.com> wrote:
+
+> The following series implements...
+> 
+> ---
+> 
+> Jesper Dangaard Brouer (7):
+>       bpf: Remove MTU check in __bpf_skb_max_len
+>       bpf: fix bpf_fib_lookup helper MTU check for SKB ctx
+>       bpf: bpf_fib_lookup return MTU value as output when looked up
+>       bpf: add BPF-helper for MTU checking
+>       bpf: drop MTU check when doing TC-BPF redirect to ingress
+>       bpf: make it possible to identify BPF redirected SKBs
+>       selftests/bpf: use bpf_check_mtu in selftest test_cls_redirect
+> 
+> 
+>  .../selftests/bpf/progs/test_cls_redirect.c        |    7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> --
+> Signature
+
+-- 
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
