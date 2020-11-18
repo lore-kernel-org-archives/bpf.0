@@ -2,90 +2,91 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 803A9C63697
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 13:49:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0CD2C5519F
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 14:03:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 25CEB24698
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 13:49:36 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="yxB/KcCT"
+	by mail.kernel.org (Postfix) with ESMTP id 4F4D820B80
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 14:03:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726332AbgKRNtf (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Nov 2020 08:49:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37356 "EHLO mail.kernel.org"
+        id S1726594AbgKRODB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Nov 2020 09:03:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43422 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726209AbgKRNtf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 Nov 2020 08:49:35 -0500
-Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726433AbgKRODA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Nov 2020 09:03:00 -0500
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D020D2065C;
-        Wed, 18 Nov 2020 13:49:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605707375;
-        bh=Uf6OeZIjyAMpkxI+7HgUeUSemvA3wxfOMZHmxJmLarU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yxB/KcCTGyW11MVhtTRAVTO0uUx0M4/3q2ukRHfgjFU/B4lwb3/6N7mrnG3nsUF+V
-         QavQj/B6Js0paJshW8sGYvWcuyBk+GdfDK9UrWV8vmcg/hcROdhMb2qZPCCTCK/FGq
-         c7+ayaXjgpkApN4u2Ew0ON7Y/CCsIlDTl4a6s6U0=
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     jbacik@fb.com, ast@kernel.org
-Cc:     bpf@vger.kernel.org, mhiramat@kernel.org,
-        linux-kernel@vger.kernel.org, luomeng12@huawei.com
-Subject: [PATCH] fail_function: remove a redundant mutex unlock
-Date:   Wed, 18 Nov 2020 22:49:31 +0900
-Message-Id: <160570737118.263807.8358435412898356284.stgit@devnote2>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201110084245.3067324-1-luomeng12@huawei.com>
-References: <20201110084245.3067324-1-luomeng12@huawei.com>
-User-Agent: StGit/0.19
+        by mail.kernel.org (Postfix) with ESMTPSA id 00E062080A;
+        Wed, 18 Nov 2020 14:02:57 +0000 (UTC)
+Date:   Wed, 18 Nov 2020 09:02:56 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Matt Mullins <mmullins@mmlx.us>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-toolchains@vger.kernel.org
+Subject: Re: violating function pointer signature
+Message-ID: <20201118090256.55656208@gandalf.local.home>
+In-Reply-To: <20201118132136.GJ3121378@hirez.programming.kicks-ass.net>
+References: <20201116175107.02db396d@gandalf.local.home>
+        <47463878.48157.1605640510560.JavaMail.zimbra@efficios.com>
+        <20201117142145.43194f1a@gandalf.local.home>
+        <375636043.48251.1605642440621.JavaMail.zimbra@efficios.com>
+        <20201117153451.3015c5c9@gandalf.local.home>
+        <20201118132136.GJ3121378@hirez.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Luo Meng <luomeng12@huawei.com>
+On Wed, 18 Nov 2020 14:21:36 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-Fix a mutex_unlock() issue where before copy_from_user() is
-not called mutex_locked.
+> I think that as long as the function is completely empty (it never
+> touches any of the arguments) this should work in practise.
+> 
+> That is:
+> 
+>   void tp_nop_func(void) { }
 
-Fixes: 4b1a29a7f542 ("error-injection: Support fault injection framework")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Luo Meng <luomeng12@huawei.com>
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- 0 files changed
+My original version (the OP of this thread) had this:
 
-diff --git a/kernel/fail_function.c b/kernel/fail_function.c
-index 63b349168da7..b0b1ad93fa95 100644
---- a/kernel/fail_function.c
-+++ b/kernel/fail_function.c
-@@ -253,7 +253,7 @@ static ssize_t fei_write(struct file *file, const char __user *buffer,
- 
- 	if (copy_from_user(buf, buffer, count)) {
- 		ret = -EFAULT;
--		goto out;
-+		goto out_free;
- 	}
- 	buf[count] = '\0';
- 	sym = strstrip(buf);
-@@ -307,8 +307,9 @@ static ssize_t fei_write(struct file *file, const char __user *buffer,
- 		ret = count;
- 	}
- out:
--	kfree(buf);
- 	mutex_unlock(&fei_lock);
-+out_free:
-+	kfree(buf);
- 	return ret;
- }
- 
++static void tp_stub_func(void)
++{
++	return;
++}
 
+> 
+> can be used as an argument to any function pointer that has a void
+> return. In fact, I already do that, grep for __static_call_nop().
+> 
+> I'm not sure what the LLVM-CFI crud makes of it, but that's their
+> problem.
+
+If it is already done elsewhere in the kernel, then I will call this
+precedence, and keep the original version.
+
+This way Alexei can't complain about adding a check in the fast path of
+more than one callback attached.
+
+-- Steve
