@@ -2,77 +2,138 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BF7EC3E8C5
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 17:44:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69A39C3E8C5
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 18:01:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F091247E7
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 17:44:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E028222210
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 18:01:11 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J1kcpLv7"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KI6tCYjY"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728074AbgKRRnv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Nov 2020 12:43:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727476AbgKRRnv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 Nov 2020 12:43:51 -0500
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0A2C0613D4;
-        Wed, 18 Nov 2020 09:43:51 -0800 (PST)
-Received: by mail-wm1-x344.google.com with SMTP id c198so1970217wmd.0;
-        Wed, 18 Nov 2020 09:43:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mVeJqHG2em0yWD8MsCr0uHPVXUTlFKiETQWelNfSKrI=;
-        b=J1kcpLv79McSIBrQFrtid7jFBA8H6I3dXaJbjBTK1pOEsvMgSTuyySUmui2kgYrA3K
-         hrhGzuSy/MAUMZZyfnDRgbpUY9X2xdBcQOdm/EjRI8z2oVNY7t49Fl8wo9B0JpJZ9swt
-         ZrD5XgUx61QXpfATypZ5g9Lej7X94agb2zdtHrw2m9a9bsGWyfUP7E6w+y7ktqIA88Xy
-         QSoLwrsesrEDPa6ItXsdOo5s0LW0jL+5uh2CqOD4iD4qWK530J+OsHc/xdHkmZH8+MDB
-         EDUok/35PMvIxZh6TXB34NJsC0DpD6hwCHwqwSxNDt9/EtqM46mtD/NmQFA0X2qzucTO
-         ZgMA==
+        id S1726288AbgKRSBL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Nov 2020 13:01:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:53721 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725794AbgKRSBL (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 18 Nov 2020 13:01:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1605722469;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4vmQKgbFa0Rpv5fosaEwaZdu0uag9ylrCYuKjnjwy+E=;
+        b=KI6tCYjYNZA20TtoE82jOzMPqpUHfMbPmbFQPPlxnIIIRt8+VI9NaNA/cMBSUJIKw0hqRL
+        X3nV4QOgosswp5YkWDbdo+UtgKX7EHceBHHuDuwkKQpr3v1NJtwGkrXE6gbw47lofhW1Wa
+        mLa8k64jRFcfMSC+qHAKfZZPEiAjEtY=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-267-goCZy7GsM6C1S0Imz9tjTw-1; Wed, 18 Nov 2020 13:01:06 -0500
+X-MC-Unique: goCZy7GsM6C1S0Imz9tjTw-1
+Received: by mail-oi1-f200.google.com with SMTP id v85so1271192oia.16
+        for <bpf@vger.kernel.org>; Wed, 18 Nov 2020 10:01:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mVeJqHG2em0yWD8MsCr0uHPVXUTlFKiETQWelNfSKrI=;
-        b=gsSgIyT/y2HCrpSawQTjoqg3NpXF0pnhZX50EMBpooFmkJKM0KUDNZndiihH2nTxCB
-         wFJcqFSe4kOHKW1b5qUEmq4g9loZAZnmebLQoZCBGgqFR6cffTbbLifEkEHv+1L6sfrv
-         xZOHDBV8s2Kid8Y3P/tHx73AL/ja1UrLHh/r/bsLTaTfJZeeonRPdITYpn8EVTk8v6+u
-         bpNt+2wMSmYFyW6M1zK2w4BFwQeMiLVSVxEX93IsSg0mooJDd6yd1SMLERY82kokyFxB
-         /VsFLHF+cRmfIFKVtQpoKLcs+t74TqSq51bhGhb4kL+Z6DnR8aOVhNm1i/KjXC7cgjXW
-         Vc9Q==
-X-Gm-Message-State: AOAM531KjvmvBhy/f17GXUpjWAgWSEmfUDfCnDG4iIOwrRvTMjB1iSQm
-        zjL3TY0NADFzseaLMTzw3cNJFKg+TD6a0ogmmLs=
-X-Google-Smtp-Source: ABdhPJyMPVwnX2jPHnJtHnaYqJDj1A0VkhVOf1AhgZKW784eyuSL8j3XC8Nd3AdMABRqC4JZ78Xs3fNXOVrIl4M8I80=
-X-Received: by 2002:a7b:c77a:: with SMTP id x26mr214035wmk.63.1605721430045;
- Wed, 18 Nov 2020 09:43:50 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=4vmQKgbFa0Rpv5fosaEwaZdu0uag9ylrCYuKjnjwy+E=;
+        b=OkeDh4mQ424zPS4QZV3mMTIdtmUtSduhzEclWgj4SAP/pNbo8ZDcvt0I9smaNmh0uL
+         TwKiWHGC8IGLtRxpLNTqC+guyayRt/B08YUYpzwWR+aa6ZhfqKINlcvet0nrF3Lh9CYw
+         O7KqQcdk4WNt2yX3yStC4076VxVDAslLHoJ9gNgnjtBodUmR9EIhNl44oIyRlmEMjOhu
+         oECjJaReRCfauFJ2XddqPzDos0UyXTEWi5ilT5n77eqwVoFwtDhKpsI0xSotW9rB4Zsm
+         ny8s+e7ygqzVbEZu5ZC8i66VwUbGBeUDRM9O9LjlOJXekhQZBznmbNsKS+i4Tya3AIY+
+         5hig==
+X-Gm-Message-State: AOAM531oHqpziH7+uOh165c0w4yXCUH/mtBgTGXhEJq43Nx4KvWrm3KD
+        bwvD4cFYPQXjc9GLh0dlmuCs5DOfacsRkn90bBsZBVcYzjdlFA32e8jfys0tNkrAoTnH4pCVlOM
+        uEzgK5U0zUQ5G
+X-Received: by 2002:a05:6808:94:: with SMTP id s20mr205791oic.35.1605722465465;
+        Wed, 18 Nov 2020 10:01:05 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwAwIMQmun9R4PB5eJWPhVnCKbfCtl41qdFPIqIvLv731I86ZKn9SW2/1uBGgcCgp+tsOa7fw==
+X-Received: by 2002:a05:6808:94:: with SMTP id s20mr205751oic.35.1605722465062;
+        Wed, 18 Nov 2020 10:01:05 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id c21sm8436225oos.30.2020.11.18.10.01.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Nov 2020 10:01:04 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 3D35E1833E0; Wed, 18 Nov 2020 19:01:01 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     daniel@iogearbox.net, ast@fb.com, andrii@kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org, brouer@redhat.com,
+        haliu@redhat.com, dsahern@gmail.com, jbenc@redhat.com
+Subject: Re: [PATCH bpf-next] libbpf: Add libbpf_version() function to get
+ library version at runtime
+In-Reply-To: <20201118174325.zjomd2gvybof6awa@ast-mbp>
+References: <20201118170738.324226-1-toke@redhat.com>
+ <20201118174325.zjomd2gvybof6awa@ast-mbp>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Wed, 18 Nov 2020 19:01:01 +0100
+Message-ID: <87zh3e1r4y.fsf@toke.dk>
 MIME-Version: 1.0
-References: <20201118071640.83773-1-bjorn.topel@gmail.com>
-In-Reply-To: <20201118071640.83773-1-bjorn.topel@gmail.com>
-From:   Luke Nelson <luke.r.nels@gmail.com>
-Date:   Wed, 18 Nov 2020 09:43:38 -0800
-Message-ID: <CAB-e3NTv1in=QTfaRsA-J8rtLNmoEso8XZ3q_mx9ZBhAUyXkxg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/3] RISC-V selftest/bpf fixes
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Xi Wang <xi.wang@gmail.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        andrii.nakryiko@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Nice, thanks for the fixes!
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-(For the whole series:)
-Acked-by: Luke Nelson <luke.r.nels@gmail.com>
+> On Wed, Nov 18, 2020 at 06:07:38PM +0100, Toke H=C3=83=C6=92=C3=82=C2=B8i=
+land-J=C3=83=C6=92=C3=82=C2=B8rgensen wrote:
+>> As a response to patches adding libbpf support to iproute2, an extensive
+>> discussion ensued about libbpf version visibility and enforcement in too=
+ls
+>> using the library[0]. In particular, two problems came to light:
+>>=20
+>> 1. If a tool is statically linked against libbpf, there is no way for a =
+user
+>>    to discover which version of libbpf the tool is using, unless the tool
+>>    takes particular care to embed the library version at build time and =
+print
+>>    it.
+>>=20
+>> 2. If a tool is dynamically linked against libbpf, but doesn't use any
+>>    symbols from the latest library version, the library version used at
+>>    runtime can be older than the one used at compile time, and the
+>>    application has no way to verify the version at runtime.
+>>=20
+>> To make progress on resolving this, let's add a libbpf_version() functio=
+n that
+>> will simply return a version string which is embedded into the library at
+>> compile time. This makes it possible for applications to unambiguously g=
+et the
+>> library version at runtime, resolving (2.) above, and as an added bonus =
+makes it
+>> easy for applications to print the library version, which should help wi=
+th (1.).
+>>=20
+>> [0] https://lore.kernel.org/bpf/20201109070802.3638167-1-haliu@redhat.co=
+m/T/#t
+>>=20
+>> Signed-off-by: Toke H=C3=83=C6=92=C3=82=C2=B8iland-J=C3=83=C6=92=C3=82=
+=C2=B8rgensen <toke@redhat.com>
+>
+> Unless iproute2 adopts scrict libbpf.so.version =3D=3D iproute2.version p=
+olicy
+> and removes legacy bpf loader no iproute2 driven changes to libbpf will b=
+e accepted.
+> Just like the kernel doesn't add features for out-of-tree modules
+> libbpf doesn't add features for projects where libbpf is optional.
+
+This is not a iproute2-specific feature, though. It came out of the
+iproute2 discussion, sure, but it's a generic helper to get the library
+version for any application that wants to use it.
+
+In particular, I am planning to use this in the xdp-tools binaries:
+
+$ ./xdpdump --version
+xdpdump version 1.0.1 using libbpf version 0.3.0
+
+-Toke
+
