@@ -2,28 +2,29 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_2
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59E45C5519F
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 14:22:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B28C1C6369E
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 14:34:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 093A1246AA
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 14:22:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6A0AD221F8
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 14:34:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726325AbgKROWe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Nov 2020 09:22:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53182 "EHLO mail.kernel.org"
+        id S1726424AbgKROeL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Nov 2020 09:34:11 -0500
+Received: from mail.kernel.org ([198.145.29.99]:55756 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726019AbgKROWe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 Nov 2020 09:22:34 -0500
+        id S1725834AbgKROeK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Nov 2020 09:34:10 -0500
 Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8D40D246AA;
-        Wed, 18 Nov 2020 14:22:30 +0000 (UTC)
-Date:   Wed, 18 Nov 2020 09:22:28 -0500
+        by mail.kernel.org (Postfix) with ESMTPSA id 13B3220A8B;
+        Wed, 18 Nov 2020 14:34:06 +0000 (UTC)
+Date:   Wed, 18 Nov 2020 09:34:05 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     Florian Weimer <fw@deneb.enyo.de>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -43,9 +44,10 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Kees Cook <keescook@chromium.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         linux-toolchains@vger.kernel.org
-Subject: Re: violating function pointer signature
-Message-ID: <20201118092228.4f6e5930@gandalf.local.home>
-In-Reply-To: <87h7pmwyta.fsf@mid.deneb.enyo.de>
+Subject: [PATCH v3] tracepoint: Do not fail unregistering a probe due to
+ memory allocation
+Message-ID: <20201118093405.7a6d2290@gandalf.local.home>
+In-Reply-To: <874klmwxxm.fsf@mid.deneb.enyo.de>
 References: <20201116175107.02db396d@gandalf.local.home>
         <47463878.48157.1605640510560.JavaMail.zimbra@efficios.com>
         <20201117142145.43194f1a@gandalf.local.home>
@@ -53,6 +55,8 @@ References: <20201116175107.02db396d@gandalf.local.home>
         <20201117153451.3015c5c9@gandalf.local.home>
         <20201118132136.GJ3121378@hirez.programming.kicks-ass.net>
         <87h7pmwyta.fsf@mid.deneb.enyo.de>
+        <20201118141226.GV3121392@hirez.programming.kicks-ass.net>
+        <874klmwxxm.fsf@mid.deneb.enyo.de>
 X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -61,56 +65,190 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 18 Nov 2020 14:59:29 +0100
-Florian Weimer <fw@deneb.enyo.de> wrote:
+From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
-> * Peter Zijlstra:
-> 
-> > I think that as long as the function is completely empty (it never
-> > touches any of the arguments) this should work in practise.
-> >
-> > That is:
-> >
-> >   void tp_nop_func(void) { }
-> >
-> > can be used as an argument to any function pointer that has a void
-> > return. In fact, I already do that, grep for __static_call_nop().  
-> 
-> You can pass it as a function parameter, but in general, you cannot
-> call the function with a different prototype.  Even trivial
-> differences such as variadic vs non-variadic prototypes matter.
+The list of tracepoint callbacks is managed by an array that is protected
+by RCU. To update this array, a new array is allocated, the updates are
+copied over to the new array, and then the list of functions for the
+tracepoint is switched over to the new array. After a completion of an RCU
+grace period, the old array is freed.
 
-In this case, I don't believe we need to worry about that, for either
-tracepoints or static calls. As both don't have any variadic functions.
+This process happens for both adding a callback as well as removing one.
+But on removing a callback, if the new array fails to be allocated, the
+callback is not removed, and may be used after it is freed by the clients
+of the tracepoint.
 
-The function prototypes are defined by macros. For tracepoints, it's
-TP_PROTO() and they require matching arguments. And to top it off, the
-functions defined, are added to an array of indirect functions and called
-separately. It would take a bit of work to even allow tracepoint callbacks
-to be variadic functions. The same is true for static calls I believe.
+There's really no reason to fail if the allocation for a new array fails
+when removing a function. Instead, the function can simply be replaced by a
+stub function that could be cleaned up on the next modification of the
+array. That is, instead of calling the function registered to the
+tracepoint, it would call a stub function in its place.
 
-Thus, all functions will be non-variadic in these cases.
+Link: https://lore.kernel.org/r/20201115055256.65625-1-mmullins@mmlx.us
+Link: https://lore.kernel.org/r/20201116175107.02db396d@gandalf.local.home
+Link: https://lore.kernel.org/r/20201117211836.54acaef2@oasis.local.home
 
-> 
-> The default Linux calling conventions are all of the cdecl family,
-> where the caller pops the argument off the stack.  You didn't quote
-> enough to context to tell whether other calling conventions matter in
-> your case.
-> 
-> > I'm not sure what the LLVM-CFI crud makes of it, but that's their
-> > problem.  
-> 
-> LTO can cause problems as well, particularly with whole-program
-> optimization.
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Cc: Yonghong Song <yhs@fb.com>
+Cc: Andrii Nakryiko <andriin@fb.com>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@chromium.org>
+Cc: netdev <netdev@vger.kernel.org>
+Cc: bpf <bpf@vger.kernel.org>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Florian Weimer <fw@deneb.enyo.de>
+Fixes: 97e1c18e8d17b ("tracing: Kernel Tracepoints")
+Reported-by: syzbot+83aa762ef23b6f0d1991@syzkaller.appspotmail.com
+Reported-by: syzbot+d29e58bb557324e55e5e@syzkaller.appspotmail.com
+Reported-by: Matt Mullins <mmullins@mmlx.us>
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+---
+Changes since v2:
+   - Went back to using a stub function and not touching
+      the fast path.
+   - Removed adding __GFP_NOFAIL from the allocation of the removal.
 
-Again, for tracepoints and static calls that will likely not be an issue.
-Because tracepoint callbacks are function parameters. So are static calls.
-What happens is, when you update these locations, you pass in a function
-you want as a callback, and it's added to an array (and this code is used
-for all tracepoints with all different kinds of prototypes, as the function
-is simply a void pointer). Then at the call sites, the function pointers are
-typecast to the type of the callback function needed, and called.
+ kernel/tracepoint.c | 80 ++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 64 insertions(+), 16 deletions(-)
 
-It basically can not be optimized even when looking at the entire kernel.
+diff --git a/kernel/tracepoint.c b/kernel/tracepoint.c
+index 3f659f855074..3e261482296c 100644
+--- a/kernel/tracepoint.c
++++ b/kernel/tracepoint.c
+@@ -53,6 +53,12 @@ struct tp_probes {
+ 	struct tracepoint_func probes[];
+ };
+ 
++/* Called in removal of a func but failed to allocate a new tp_funcs */
++static void tp_stub_func(void)
++{
++	return;
++}
++
+ static inline void *allocate_probes(int count)
+ {
+ 	struct tp_probes *p  = kmalloc(struct_size(p, probes, count),
+@@ -131,6 +137,7 @@ func_add(struct tracepoint_func **funcs, struct tracepoint_func *tp_func,
+ {
+ 	struct tracepoint_func *old, *new;
+ 	int nr_probes = 0;
++	int stub_funcs = 0;
+ 	int pos = -1;
+ 
+ 	if (WARN_ON(!tp_func->func))
+@@ -147,14 +154,34 @@ func_add(struct tracepoint_func **funcs, struct tracepoint_func *tp_func,
+ 			if (old[nr_probes].func == tp_func->func &&
+ 			    old[nr_probes].data == tp_func->data)
+ 				return ERR_PTR(-EEXIST);
++			if (old[nr_probes].func == tp_stub_func)
++				stub_funcs++;
+ 		}
+ 	}
+-	/* + 2 : one for new probe, one for NULL func */
+-	new = allocate_probes(nr_probes + 2);
++	/* + 2 : one for new probe, one for NULL func - stub functions */
++	new = allocate_probes(nr_probes + 2 - stub_funcs);
+ 	if (new == NULL)
+ 		return ERR_PTR(-ENOMEM);
+ 	if (old) {
+-		if (pos < 0) {
++		if (stub_funcs) {
++			/* Need to copy one at a time to remove stubs */
++			int probes = 0;
++
++			pos = -1;
++			for (nr_probes = 0; old[nr_probes].func; nr_probes++) {
++				if (old[nr_probes].func == tp_stub_func)
++					continue;
++				if (pos < 0 && old[nr_probes].prio < prio)
++					pos = probes++;
++				new[probes++] = old[nr_probes];
++			}
++			nr_probes = probes;
++			if (pos < 0)
++				pos = probes;
++			else
++				nr_probes--; /* Account for insertion */
++
++		} else if (pos < 0) {
+ 			pos = nr_probes;
+ 			memcpy(new, old, nr_probes * sizeof(struct tracepoint_func));
+ 		} else {
+@@ -188,8 +215,9 @@ static void *func_remove(struct tracepoint_func **funcs,
+ 	/* (N -> M), (N > 1, M >= 0) probes */
+ 	if (tp_func->func) {
+ 		for (nr_probes = 0; old[nr_probes].func; nr_probes++) {
+-			if (old[nr_probes].func == tp_func->func &&
+-			     old[nr_probes].data == tp_func->data)
++			if ((old[nr_probes].func == tp_func->func &&
++			     old[nr_probes].data == tp_func->data) ||
++			    old[nr_probes].func == tp_stub_func)
+ 				nr_del++;
+ 		}
+ 	}
+@@ -208,14 +236,32 @@ static void *func_remove(struct tracepoint_func **funcs,
+ 		/* N -> M, (N > 1, M > 0) */
+ 		/* + 1 for NULL */
+ 		new = allocate_probes(nr_probes - nr_del + 1);
+-		if (new == NULL)
+-			return ERR_PTR(-ENOMEM);
+-		for (i = 0; old[i].func; i++)
+-			if (old[i].func != tp_func->func
+-					|| old[i].data != tp_func->data)
+-				new[j++] = old[i];
+-		new[nr_probes - nr_del].func = NULL;
+-		*funcs = new;
++		if (new) {
++			for (i = 0; old[i].func; i++)
++				if ((old[i].func != tp_func->func
++				     || old[i].data != tp_func->data)
++				    && old[i].func != tp_stub_func)
++					new[j++] = old[i];
++			new[nr_probes - nr_del].func = NULL;
++			*funcs = new;
++		} else {
++			/*
++			 * Failed to allocate, replace the old function
++			 * with calls to tp_stub_func.
++			 */
++			for (i = 0; old[i].func; i++)
++				if (old[i].func == tp_func->func &&
++				    old[i].data == tp_func->data) {
++					old[i].func = tp_stub_func;
++					/* Set the prio to the next event. */
++					if (old[i + 1].func)
++						old[i].prio =
++							old[i + 1].prio;
++					else
++						old[i].prio = -1;
++				}
++			*funcs = old;
++		}
+ 	}
+ 	debug_print_probes(*funcs);
+ 	return old;
+@@ -295,10 +341,12 @@ static int tracepoint_remove_func(struct tracepoint *tp,
+ 	tp_funcs = rcu_dereference_protected(tp->funcs,
+ 			lockdep_is_held(&tracepoints_mutex));
+ 	old = func_remove(&tp_funcs, func);
+-	if (IS_ERR(old)) {
+-		WARN_ON_ONCE(PTR_ERR(old) != -ENOMEM);
++	if (WARN_ON_ONCE(IS_ERR(old)))
+ 		return PTR_ERR(old);
+-	}
++
++	if (tp_funcs == old)
++		/* Failed allocating new tp_funcs, replaced func with stub */
++		return 0;
+ 
+ 	if (!tp_funcs) {
+ 		/* Removed last function */
+-- 
+2.25.4
 
--- Steve
