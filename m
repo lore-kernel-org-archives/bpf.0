@@ -2,31 +2,33 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A0CD2C5519F
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 14:03:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B72EC63697
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 14:05:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4F4D820B80
-	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 14:03:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 40BCD2223D
+	for <bpf@archiver.kernel.org>; Wed, 18 Nov 2020 14:05:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726594AbgKRODB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 18 Nov 2020 09:03:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43422 "EHLO mail.kernel.org"
+        id S1726412AbgKROFi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 18 Nov 2020 09:05:38 -0500
+Received: from albireo.enyo.de ([37.24.231.21]:37868 "EHLO albireo.enyo.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726433AbgKRODA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 18 Nov 2020 09:03:00 -0500
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 00E062080A;
-        Wed, 18 Nov 2020 14:02:57 +0000 (UTC)
-Date:   Wed, 18 Nov 2020 09:02:56 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
+        id S1726325AbgKROFi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 18 Nov 2020 09:05:38 -0500
+X-Greylist: delayed 355 seconds by postgrey-1.27 at vger.kernel.org; Wed, 18 Nov 2020 09:05:37 EST
+Received: from [172.17.203.2] (helo=deneb.enyo.de)
+        by albireo.enyo.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1kfNzd-00007x-Om; Wed, 18 Nov 2020 13:59:29 +0000
+Received: from fw by deneb.enyo.de with local (Exim 4.92)
+        (envelope-from <fw@deneb.enyo.de>)
+        id 1kfNzd-00024M-Lt; Wed, 18 Nov 2020 14:59:29 +0100
+From:   Florian Weimer <fw@deneb.enyo.de>
 To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         linux-kernel <linux-kernel@vger.kernel.org>,
         Matt Mullins <mmullins@mmlx.us>,
         Ingo Molnar <mingo@redhat.com>,
@@ -43,50 +45,45 @@ Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         linux-toolchains@vger.kernel.org
 Subject: Re: violating function pointer signature
-Message-ID: <20201118090256.55656208@gandalf.local.home>
-In-Reply-To: <20201118132136.GJ3121378@hirez.programming.kicks-ass.net>
 References: <20201116175107.02db396d@gandalf.local.home>
         <47463878.48157.1605640510560.JavaMail.zimbra@efficios.com>
         <20201117142145.43194f1a@gandalf.local.home>
         <375636043.48251.1605642440621.JavaMail.zimbra@efficios.com>
         <20201117153451.3015c5c9@gandalf.local.home>
         <20201118132136.GJ3121378@hirez.programming.kicks-ass.net>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Date:   Wed, 18 Nov 2020 14:59:29 +0100
+In-Reply-To: <20201118132136.GJ3121378@hirez.programming.kicks-ass.net> (Peter
+        Zijlstra's message of "Wed, 18 Nov 2020 14:21:36 +0100")
+Message-ID: <87h7pmwyta.fsf@mid.deneb.enyo.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 18 Nov 2020 14:21:36 +0100
-Peter Zijlstra <peterz@infradead.org> wrote:
+* Peter Zijlstra:
 
 > I think that as long as the function is completely empty (it never
 > touches any of the arguments) this should work in practise.
-> 
+>
 > That is:
-> 
+>
 >   void tp_nop_func(void) { }
-
-My original version (the OP of this thread) had this:
-
-+static void tp_stub_func(void)
-+{
-+	return;
-+}
-
-> 
+>
 > can be used as an argument to any function pointer that has a void
 > return. In fact, I already do that, grep for __static_call_nop().
-> 
+
+You can pass it as a function parameter, but in general, you cannot
+call the function with a different prototype.  Even trivial
+differences such as variadic vs non-variadic prototypes matter.
+
+The default Linux calling conventions are all of the cdecl family,
+where the caller pops the argument off the stack.  You didn't quote
+enough to context to tell whether other calling conventions matter in
+your case.
+
 > I'm not sure what the LLVM-CFI crud makes of it, but that's their
 > problem.
 
-If it is already done elsewhere in the kernel, then I will call this
-precedence, and keep the original version.
-
-This way Alexei can't complain about adding a check in the fast path of
-more than one callback attached.
-
--- Steve
+LTO can cause problems as well, particularly with whole-program
+optimization.
