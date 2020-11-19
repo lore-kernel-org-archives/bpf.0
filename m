@@ -5,64 +5,64 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70A6FC63697
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 16:27:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2086C64E75
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 16:27:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0238E246AA
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 16:27:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7E5C322261
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 16:27:58 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fGu+7Bf2"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Ec6NYYeS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728766AbgKSQ1g (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Nov 2020 11:27:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
+        id S1728900AbgKSQ1k (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Nov 2020 11:27:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728853AbgKSQ1g (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Nov 2020 11:27:36 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02F6C061A49
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 08:27:35 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id h21so7294606wmb.2
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 08:27:35 -0800 (PST)
+        with ESMTP id S1728905AbgKSQ1i (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Nov 2020 11:27:38 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4993C061A48
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 08:27:37 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id 10so7768244wml.2
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 08:27:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Z36MlF26WgWXOikzwPdY6S4xLAQhn1npxSnvJNteclE=;
-        b=fGu+7Bf2lyWU/lgx4K/qS0Ycvfcqw+M6On5Tb5RL0jM+IkZKCmP9vLsbL4zJRFes3M
-         l+Ll2BcApNvJlfdn0KlrAn5iveQ6/KPXJhXMDSoBGy0cuMyV6srYTnOdHfpkc0KxL9Xi
-         Kje/Norox0GHxKdLiAEvU8gDOm43OPjQYjC1M=
+        bh=cupBjlguXrCl4ZT1v3zs9G+3ZU+aGNpRnTKwt9ssey4=;
+        b=Ec6NYYeS63zOmWW5s4jQ0VA0BK5/FyqPEgNIfEDWtMD11omBPX2zXZ1Qbk62bSfXej
+         1abfFXPgm2FZhpzIHEEW4lBVsB2w74f3jX/vM+mIE1mEdNxwfu82OIkbzuyUnd/EfNnI
+         G01b3pfmZhD1qdvhLrM1RDLshAbCliqKSb4nE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Z36MlF26WgWXOikzwPdY6S4xLAQhn1npxSnvJNteclE=;
-        b=P0wfVuD7kI4AiHQlCLa+skcwzVxB9QHlFS/R/j9RonM5Za6AZvOoFlrvf90P0pKve3
-         JHEt+fU819bWvImx1CVOuaDWsGed0gyZEw9LUsd3SjI8C/6VI2FN7hYWwOs5gVp2uTVv
-         TQic5ML03lkhL1OiKkjX00ubXZw3zrUZpxlY2s2KYDFHmUe3qCO2JI0scXdhNz3CUbX+
-         mGgs4Z/wA9sYxSMOZH9oMJiBf7PUC01dxcpD9OY4Xp4C9fJ5sNS1/+s3EzxEGNcZUU/h
-         IXDayvzjABdm7c66sRCE3S6bZTOn63wBPr6kuaGCkW3HSY3XaMn2mnCfyuETtufKHc7G
-         bgcw==
-X-Gm-Message-State: AOAM531ocW/O3T/zkSC1CxSN7yFJnCgV0Q5KnTuQQLv3anDFN4HfzOEy
-        jM6IItooD9z46Sslkq2JKCjap1UZ0BFJn+OY
-X-Google-Smtp-Source: ABdhPJwzpEf8BMNhQktHP9wY1hZnvZBrQH11aEU7uxGK8wfrft4HifITGFcsDcw+G1QgAaS0oSAxkA==
-X-Received: by 2002:a7b:cb82:: with SMTP id m2mr5350605wmi.75.1605803254062;
-        Thu, 19 Nov 2020 08:27:34 -0800 (PST)
+        bh=cupBjlguXrCl4ZT1v3zs9G+3ZU+aGNpRnTKwt9ssey4=;
+        b=k+ErNrGEyLZzZvmTPMTOP56+IGs4nSYLRVfkZLJ8OhItbNd9mTvC1Fv4ReO9U26IiT
+         T/iayWJXcJLkgNQsQFr8Z+ITuyPNJpQCpsMrGvsXZI29QCe+gr/NHfnWCFFZ1VKC8or3
+         0uoIxV+1G9awAoXFktUERsD4R9kWy5GhYZMK+H/yQY8uqwn460Iy+6SVDTJZzDwafMrU
+         M4ECaXdbRQMgzUuHtJKGmFokZp0p/Xvoy7dc9UZ+o/VuUV1e1BtZsR4cTYurSmNxZPeK
+         D4N9XSOlwJV/dPt8amTY+zhTWTwPdf7Xs8x9TRbhoKgxOP+3XMeO+kDtFix7qJW/eqTr
+         sRRQ==
+X-Gm-Message-State: AOAM533ah0tN9XN4En/2j0AbQ8i8RyNUXg4NLxNSR9eCMj/T1Y6vCR9A
+        R460RIlsAxkqo1Og4aDxA9bblqVDWHmBOB/4
+X-Google-Smtp-Source: ABdhPJz6+4/1nN99shYibUPJq3+bbKwakw+4YYiqeSuPjaLugrNgNfBAIEyszlLHPcfpw1DUtHwTjQ==
+X-Received: by 2002:a1c:6557:: with SMTP id z84mr5572401wmb.144.1605803256233;
+        Thu, 19 Nov 2020 08:27:36 -0800 (PST)
 Received: from revest.zrh.corp.google.com ([2a00:79e0:42:204:f693:9fff:fef4:a569])
-        by smtp.gmail.com with ESMTPSA id i5sm380061wrw.45.2020.11.19.08.27.33
+        by smtp.gmail.com with ESMTPSA id i5sm380061wrw.45.2020.11.19.08.27.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2020 08:27:33 -0800 (PST)
+        Thu, 19 Nov 2020 08:27:35 -0800 (PST)
 From:   Florent Revest <revest@chromium.org>
 To:     bpf@vger.kernel.org
 Cc:     viro@zeniv.linux.org.uk, davem@davemloft.net, kuba@kernel.org,
         ast@kernel.org, daniel@iogearbox.net, kafai@fb.com, yhs@fb.com,
         andrii@kernel.org, kpsingh@chromium.org, revest@google.com,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v2 3/5] bpf: Expose bpf_sk_storage_* to iterator programs
-Date:   Thu, 19 Nov 2020 17:26:52 +0100
-Message-Id: <20201119162654.2410685-3-revest@chromium.org>
+Subject: [PATCH v2 5/5] bpf: Add an iterator selftest for bpf_sk_storage_get
+Date:   Thu, 19 Nov 2020 17:26:54 +0100
+Message-Id: <20201119162654.2410685-5-revest@chromium.org>
 X-Mailer: git-send-email 2.29.2.299.gdc1121823c-goog
 In-Reply-To: <20201119162654.2410685-1-revest@chromium.org>
 References: <20201119162654.2410685-1-revest@chromium.org>
@@ -74,33 +74,109 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Florent Revest <revest@google.com>
 
-Iterators are currently used to expose kernel information to userspace
-over fast procfs-like files but iterators could also be used to
-manipulate local storage. For example, the task_file iterator could be
-used to initialize a socket local storage with associations between
-processes and sockets or to selectively delete local storage values.
+The eBPF program iterates over all files and tasks. For all socket
+files, it stores the tgid of the last task it encountered with a handle
+to that socket. This is a heuristic for finding the "owner" of a socket
+similar to what's done by lsof, ss, netstat or fuser. Potentially, this
+information could be used from a cgroup_skb/*gress hook to try to
+associate network traffic with processes.
 
-This exposes both socket local storage helpers to all iterators.
-Alternatively we could expose it to only certain iterators with strcmps
-on prog->aux->attach_func_name.
+The test makes sure that a socket it created is tagged with prog_tests's
+pid.
 
 Signed-off-by: Florent Revest <revest@google.com>
 ---
- net/core/bpf_sk_storage.c | 1 +
- 1 file changed, 1 insertion(+)
+ .../selftests/bpf/prog_tests/bpf_iter.c       | 35 +++++++++++++++++++
+ .../progs/bpf_iter_bpf_sk_storage_helpers.c   | 26 ++++++++++++++
+ 2 files changed, 61 insertions(+)
 
-diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
-index a32037daa933..4edd033e899c 100644
---- a/net/core/bpf_sk_storage.c
-+++ b/net/core/bpf_sk_storage.c
-@@ -394,6 +394,7 @@ static bool bpf_sk_storage_tracing_allowed(const struct bpf_prog *prog)
- 	 * use the bpf_sk_storage_(get|delete) helper.
- 	 */
- 	switch (prog->expected_attach_type) {
-+	case BPF_TRACE_ITER:
- 	case BPF_TRACE_RAW_TP:
- 		/* bpf_sk_storage has no trace point */
- 		return true;
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+index bb4a638f2e6f..4d0626003c03 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -975,6 +975,39 @@ static void test_bpf_sk_storage_delete(void)
+ 	bpf_iter_bpf_sk_storage_helpers__destroy(skel);
+ }
+ 
++/* The BPF program stores in every socket the tgid of a task owning a handle to
++ * it. The test verifies that a locally-created socket is tagged with its pid
++ */
++static void test_bpf_sk_storage_get(void)
++{
++	struct bpf_iter_bpf_sk_storage_helpers *skel;
++	int err, map_fd, val = -1;
++	int sock_fd = -1;
++
++	skel = bpf_iter_bpf_sk_storage_helpers__open_and_load();
++	if (CHECK(!skel, "bpf_iter_bpf_sk_storage_helpers__open_and_load",
++		  "skeleton open_and_load failed\n"))
++		return;
++
++	sock_fd = socket(AF_INET6, SOCK_STREAM, 0);
++	if (CHECK(sock_fd < 0, "socket", "errno: %d\n", errno))
++		goto out;
++
++	do_dummy_read(skel->progs.fill_socket_owners);
++
++	map_fd = bpf_map__fd(skel->maps.sk_stg_map);
++
++	err = bpf_map_lookup_elem(map_fd, &sock_fd, &val);
++	CHECK(err || val != getpid(), "bpf_map_lookup_elem",
++	      "map value wasn't set correctly (expected %d, got %d, err=%d)\n",
++	      getpid(), val, err);
++
++	if (sock_fd >= 0)
++		close(sock_fd);
++out:
++	bpf_iter_bpf_sk_storage_helpers__destroy(skel);
++}
++
+ static void test_bpf_sk_storage_map(void)
+ {
+ 	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
+@@ -1131,6 +1164,8 @@ void test_bpf_iter(void)
+ 		test_bpf_sk_storage_map();
+ 	if (test__start_subtest("bpf_sk_storage_delete"))
+ 		test_bpf_sk_storage_delete();
++	if (test__start_subtest("bpf_sk_storage_get"))
++		test_bpf_sk_storage_get();
+ 	if (test__start_subtest("rdonly-buf-out-of-bound"))
+ 		test_rdonly_buf_out_of_bound();
+ 	if (test__start_subtest("buf-neg-offset"))
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_helpers.c b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_helpers.c
+index 01ff3235e413..7206fd6f09ab 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_helpers.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_helpers.c
+@@ -21,3 +21,29 @@ int delete_bpf_sk_storage_map(struct bpf_iter__bpf_sk_storage_map *ctx)
+ 
+ 	return 0;
+ }
++
++SEC("iter/task_file")
++int fill_socket_owners(struct bpf_iter__task_file *ctx)
++{
++	struct task_struct *task = ctx->task;
++	struct file *file = ctx->file;
++	struct socket *sock;
++	int *sock_tgid;
++
++	if (!task || !file || task->tgid != task->pid)
++		return 0;
++
++	sock = bpf_sock_from_file(file);
++	if (!sock)
++		return 0;
++
++	sock_tgid = bpf_sk_storage_get(&sk_stg_map, sock->sk, 0,
++				       BPF_SK_STORAGE_GET_F_CREATE);
++	if (!sock_tgid)
++		return 0;
++
++	*sock_tgid = task->tgid;
++
++	return 0;
++}
++
 -- 
 2.29.2.299.gdc1121823c-goog
 
