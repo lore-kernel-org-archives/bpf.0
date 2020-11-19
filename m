@@ -2,157 +2,189 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 15E43C388F9
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 23:10:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A7CE8C63777
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 23:22:54 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A37F922202
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 23:10:22 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qca1plPb"
+	by mail.kernel.org (Postfix) with ESMTP id 5C933221FE
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 23:22:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726433AbgKSXKC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Nov 2020 18:10:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726426AbgKSXKB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Nov 2020 18:10:01 -0500
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87B3AC0613D4
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 15:10:01 -0800 (PST)
-Received: by mail-yb1-xb41.google.com with SMTP id x17so6808256ybr.8
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 15:10:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iBfd+tlooPrLaeehxHIKJ1u8OEErsouszEIy8ewVhcM=;
-        b=Qca1plPbvZtgNeORPQ2kD2DqCgTdfBGwLPpZ9uiHbBJzEWVCi3YBgiNfKjrAyAQFCv
-         vnlyre3S9Fw+ES0dPQ/Phak6rmsPe9qlrdpbpiJsRvnCQbRXSx9BIykDUQhQ1OaLTotr
-         ryiZErEr1Sw7lqWcYEzfeYe1wrx64mrRmeVc3786MKkPFGNE5b12qpF2dgOKQmjwq06L
-         efd7FS1/3nrpxyqcLgxAYGOjvd6b5bbSvtQ46TE30SIDLI6H0e642T9LNsQRisTgM8hx
-         CrhVqIe0eQ+JOeVsjO8yyIu4nxeZhtoUHd5aTDyaYr/2oTEFtodKGW499JJR3qu84eN0
-         1jGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iBfd+tlooPrLaeehxHIKJ1u8OEErsouszEIy8ewVhcM=;
-        b=OvlgsrhasMy6Ix9eSzjw8MMoxnASJ+BeQNdWKMSwhdcuroM1P27SAC2IvsLTJ/czWy
-         cM0BRygXvecxVhfOBuITezku9NV12t3pJYxTms+B72wkGmDkFNq1WKpY1DPinGhLm6s+
-         MS6nD2/grcvYHoZTr4+4Ca2xBOiXXIq2Iw3ydkMzopGW8ealSemDQYVgn2iMK0widkwV
-         deFW1UIcMTBGd5M2de+3XpLcQafJ4tGLe0KlysJDN+szhbOT0+Usm0RGHi8xLl9+KlUN
-         ewmeGeRXUGooSMEEJ10lhf9FzDTWAJIcyvBraqKZ+5/LQBib2A/e2jXb+nK0Gvcvciwm
-         hNKw==
-X-Gm-Message-State: AOAM530VsbymM+lYDkU3XswAV4cJQ+z5faHp8UFO9R2+zAOq38dq+dbm
-        HxL+T5qcLQRaC0r8jwsFq4NyCtne1tHutMjcj2HTQA==
-X-Google-Smtp-Source: ABdhPJwntx5yxZFlr+ABHZAtWno7pcNjvqssQwbKMZxMPeu/afiw8yhs6p5yIima6cX9q0Fjcs5qah3HyoAS42uPGV4=
-X-Received: by 2002:a25:ac19:: with SMTP id w25mr21816652ybi.278.1605827400532;
- Thu, 19 Nov 2020 15:10:00 -0800 (PST)
+        id S1726305AbgKSXWy convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 19 Nov 2020 18:22:54 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:22176 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725890AbgKSXWx (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 19 Nov 2020 18:22:53 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AJNKfHb027786
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 15:22:53 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 34wgckr7mm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 15:22:53 -0800
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 19 Nov 2020 15:22:51 -0800
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 148FB2EC9B9C; Thu, 19 Nov 2020 15:22:50 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 2/6] libbpf: add internal helper to load BTF data by FD
+Date:   Thu, 19 Nov 2020 15:22:40 -0800
+Message-ID: <20201119232244.2776720-3-andrii@kernel.org>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201119232244.2776720-1-andrii@kernel.org>
+References: <20201119232244.2776720-1-andrii@kernel.org>
 MIME-Version: 1.0
-References: <160582070138.66684.11785214534154816097.stgit@localhost.localdomain>
- <160582103106.66684.9841738004971200231.stgit@localhost.localdomain>
-In-Reply-To: <160582103106.66684.9841738004971200231.stgit@localhost.localdomain>
-From:   Wei Wang <weiwan@google.com>
-Date:   Thu, 19 Nov 2020 15:09:48 -0800
-Message-ID: <CAEA6p_BTAit9Y2h-9XaTTBdV6h6X4g0Ct5mOy1ZHfJiLD3y_Ww@mail.gmail.com>
-Subject: Re: [net PATCH 1/2] tcp: Allow full IP tos/IPv6 tclass to be
- reflected in L3 header
-To:     Alexander Duyck <alexander.duyck@gmail.com>
-Cc:     Linux Kernel Network Developers <netdev@vger.kernel.org>,
-        bpf@vger.kernel.org, daniel@iogearbox.net,
-        Martin KaFai Lau <kafai@fb.com>, kernel-team@fb.com,
-        Eric Dumazet <edumazet@google.com>, brakmo@fb.com,
-        alexanderduyck@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-19_14:2020-11-19,2020-11-19 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0 mlxscore=0
+ suspectscore=25 clxscore=1015 adultscore=0 spamscore=0 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011190160
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 1:23 PM Alexander Duyck
-<alexander.duyck@gmail.com> wrote:
->
-> From: Alexander Duyck <alexanderduyck@fb.com>
->
-> An issue was recently found where DCTCP SYN/ACK packets did not have the
-> ECT bit set in the L3 header. A bit of code review found that the recent
-> change referenced below had gone though and added a mask that prevented the
-> ECN bits from being populated in the L3 header.
->
-> This patch addresses that by rolling back the mask so that it is only
-> applied to the flags coming from the incoming TCP request instead of
-> applying it to the socket tos/tclass field. Doing this the ECT bits were
-> restored in the SYN/ACK packets in my testing.
->
-> One thing that is not addressed by this patch set is the fact that
-> tcp_reflect_tos appears to be incompatible with ECN based congestion
-> avoidance algorithms. At a minimum the feature should likely be documented
-> which it currently isn't.
->
-> Fixes: ac8f1710c12b ("tcp: reflect tos value received in SYN to the socket")
+Add a btf_get_from_fd() helper, which constructs struct btf from in-kernel BTF
+data by FD. This is used for loading module BTFs.
 
-Acked-by: Wei Wang <weiwan@google.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/btf.c             | 61 +++++++++++++++++++--------------
+ tools/lib/bpf/libbpf_internal.h |  1 +
+ 2 files changed, 36 insertions(+), 26 deletions(-)
 
-Thanks for catching this. I was under the wrong impression that the
-ECT bits were marked in tos after the tcp layer. Upon a closer look,
-it seems right now, it only gets marked in inet_sock(sk)->tos from
-tcp_init_congestion_control() once.
-I will submit a follow-up fix to make sure we include the lower 2 bits
-in the reflection case as well.
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 8ff46cd30ca1..541696d9aed6 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -1318,35 +1318,27 @@ const char *btf__name_by_offset(const struct btf *btf, __u32 offset)
+ 	return btf__str_by_offset(btf, offset);
+ }
+ 
+-int btf__get_from_id(__u32 id, struct btf **btf)
++struct btf *btf_get_from_fd(int btf_fd, struct btf *base_btf)
+ {
+-	struct bpf_btf_info btf_info = { 0 };
++	struct bpf_btf_info btf_info;
+ 	__u32 len = sizeof(btf_info);
+ 	__u32 last_size;
+-	int btf_fd;
++	struct btf *btf;
+ 	void *ptr;
+ 	int err;
+ 
+-	err = 0;
+-	*btf = NULL;
+-	btf_fd = bpf_btf_get_fd_by_id(id);
+-	if (btf_fd < 0)
+-		return 0;
+-
+ 	/* we won't know btf_size until we call bpf_obj_get_info_by_fd(). so
+ 	 * let's start with a sane default - 4KiB here - and resize it only if
+ 	 * bpf_obj_get_info_by_fd() needs a bigger buffer.
+ 	 */
+-	btf_info.btf_size = 4096;
+-	last_size = btf_info.btf_size;
++	last_size = 4096;
+ 	ptr = malloc(last_size);
+-	if (!ptr) {
+-		err = -ENOMEM;
+-		goto exit_free;
+-	}
++	if (!ptr)
++		return ERR_PTR(-ENOMEM);
+ 
+-	memset(ptr, 0, last_size);
++	memset(&btf_info, 0, sizeof(btf_info));
+ 	btf_info.btf = ptr_to_u64(ptr);
++	btf_info.btf_size = last_size;
+ 	err = bpf_obj_get_info_by_fd(btf_fd, &btf_info, &len);
+ 
+ 	if (!err && btf_info.btf_size > last_size) {
+@@ -1355,31 +1347,48 @@ int btf__get_from_id(__u32 id, struct btf **btf)
+ 		last_size = btf_info.btf_size;
+ 		temp_ptr = realloc(ptr, last_size);
+ 		if (!temp_ptr) {
+-			err = -ENOMEM;
++			btf = ERR_PTR(-ENOMEM);
+ 			goto exit_free;
+ 		}
+ 		ptr = temp_ptr;
+-		memset(ptr, 0, last_size);
++
++		len = sizeof(btf_info);
++		memset(&btf_info, 0, sizeof(btf_info));
+ 		btf_info.btf = ptr_to_u64(ptr);
++		btf_info.btf_size = last_size;
++
+ 		err = bpf_obj_get_info_by_fd(btf_fd, &btf_info, &len);
+ 	}
+ 
+ 	if (err || btf_info.btf_size > last_size) {
+-		err = errno;
++		btf = err ? ERR_PTR(-errno) : ERR_PTR(-E2BIG);
+ 		goto exit_free;
+ 	}
+ 
+-	*btf = btf__new((__u8 *)(long)btf_info.btf, btf_info.btf_size);
+-	if (IS_ERR(*btf)) {
+-		err = PTR_ERR(*btf);
+-		*btf = NULL;
+-	}
++	btf = btf_new(ptr, btf_info.btf_size, base_btf);
+ 
+ exit_free:
+-	close(btf_fd);
+ 	free(ptr);
++	return btf;
++}
+ 
+-	return err;
++int btf__get_from_id(__u32 id, struct btf **btf)
++{
++	struct btf *res;
++	int btf_fd;
++
++	*btf = NULL;
++	btf_fd = bpf_btf_get_fd_by_id(id);
++	if (btf_fd < 0)
++		return 0;
++
++	res = btf_get_from_fd(btf_fd, NULL);
++	close(btf_fd);
++	if (IS_ERR(res))
++		return PTR_ERR(res);
++
++	*btf = res;
++	return 0;
+ }
+ 
+ int btf__get_map_kv_tids(const struct btf *btf, const char *map_name,
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index d99bc847bf84..e569ae63808e 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -155,6 +155,7 @@ int bpf_object__section_size(const struct bpf_object *obj, const char *name,
+ 			     __u32 *size);
+ int bpf_object__variable_offset(const struct bpf_object *obj, const char *name,
+ 				__u32 *off);
++struct btf *btf_get_from_fd(int btf_fd, struct btf *base_btf);
+ 
+ struct btf_ext_info {
+ 	/*
+-- 
+2.24.1
 
-> Signed-off-by: Alexander Duyck <alexanderduyck@fb.com>
-> ---
->  net/ipv4/tcp_ipv4.c |    5 +++--
->  net/ipv6/tcp_ipv6.c |    6 +++---
->  2 files changed, 6 insertions(+), 5 deletions(-)
->
-> diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-> index c2d5132c523c..c5f8b686aa82 100644
-> --- a/net/ipv4/tcp_ipv4.c
-> +++ b/net/ipv4/tcp_ipv4.c
-> @@ -981,7 +981,8 @@ static int tcp_v4_send_synack(const struct sock *sk, struct dst_entry *dst,
->         skb = tcp_make_synack(sk, dst, req, foc, synack_type, syn_skb);
->
->         tos = sock_net(sk)->ipv4.sysctl_tcp_reflect_tos ?
-> -                       tcp_rsk(req)->syn_tos : inet_sk(sk)->tos;
-> +                       tcp_rsk(req)->syn_tos & ~INET_ECN_MASK :
-> +                       inet_sk(sk)->tos;
->
->         if (skb) {
->                 __tcp_v4_send_check(skb, ireq->ir_loc_addr, ireq->ir_rmt_addr);
-> @@ -990,7 +991,7 @@ static int tcp_v4_send_synack(const struct sock *sk, struct dst_entry *dst,
->                 err = ip_build_and_send_pkt(skb, sk, ireq->ir_loc_addr,
->                                             ireq->ir_rmt_addr,
->                                             rcu_dereference(ireq->ireq_opt),
-> -                                           tos & ~INET_ECN_MASK);
-> +                                           tos);
->                 rcu_read_unlock();
->                 err = net_xmit_eval(err);
->         }
-> diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-> index 8db59f4e5f13..3d49e8d0afee 100644
-> --- a/net/ipv6/tcp_ipv6.c
-> +++ b/net/ipv6/tcp_ipv6.c
-> @@ -530,12 +530,12 @@ static int tcp_v6_send_synack(const struct sock *sk, struct dst_entry *dst,
->                 rcu_read_lock();
->                 opt = ireq->ipv6_opt;
->                 tclass = sock_net(sk)->ipv4.sysctl_tcp_reflect_tos ?
-> -                               tcp_rsk(req)->syn_tos : np->tclass;
-> +                               tcp_rsk(req)->syn_tos & ~INET_ECN_MASK :
-> +                               np->tclass;
->                 if (!opt)
->                         opt = rcu_dereference(np->opt);
->                 err = ip6_xmit(sk, skb, fl6, sk->sk_mark, opt,
-> -                              tclass & ~INET_ECN_MASK,
-> -                              sk->sk_priority);
-> +                              tclass, sk->sk_priority);
->                 rcu_read_unlock();
->                 err = net_xmit_eval(err);
->         }
->
->
