@@ -8,304 +8,294 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E3A9C64E7C
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C5C2AC64E90
 	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 17:41:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D760B246A7
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 17:41:38 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 66E58246A7
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 17:41:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="BJjJHUbX"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Da2vxECO"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728210AbgKSRlN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Nov 2020 12:41:13 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:29506 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729354AbgKSRiF (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 19 Nov 2020 12:38:05 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AJHUR6L010042
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 09:38:03 -0800
+        id S1729327AbgKSRlT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Nov 2020 12:41:19 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:55376 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729368AbgKSRiE (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 19 Nov 2020 12:38:04 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AJHUXKb012357
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 09:38:04 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=facebook;
- bh=LrQC28K2WsL9UuG+4e/dXoM0Ws5Ciafct7wggEglOtU=;
- b=BJjJHUbXU5hN9q6YPFV2nyEXDKPtY1W8W0VQexHcErYBMKbmlIF6NWxnr3vm7HQL00/F
- mCrZ0IeC/nGVIDZMwy/k4PzZUg5o32T0H/CK1C8CKGFT1lFwaJkRHb6JbxS+0sEPGp1c
- magbFPCaPgAHxcCwhNp7UmkHYeWJ8oEDGOQ= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=6rammYqR6AoVDmQEnsPlccO6PJZd9bna7D3uQwjMBD8=;
+ b=Da2vxECOkVeUbglkg2T7+bfFC93hNrjCBJUdEpfCCFpmMEEFXQ/SMBxv+GRot2zQSYwQ
+ viQYt0VZU039bpArnL2+P3hyH8kfxIieroR8+sCV9hxcVDYPuwm99/H9qnXheICYcPXB
+ fDSvCkmPyDPk1CCHUwwtuc9PKkwA9Zu/pIA= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 34wdgvq58h-14
+        by mx0a-00082601.pphosted.com with ESMTP id 34w2mkbdcy-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 09:38:03 -0800
-Received: from intmgw001.41.prn1.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 09:38:04 -0800
+Received: from intmgw002.41.prn1.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 19 Nov 2020 09:37:59 -0800
+ 15.1.1979.3; Thu, 19 Nov 2020 09:38:01 -0800
 Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
-        id 85A29145BCDF; Thu, 19 Nov 2020 09:37:56 -0800 (PST)
+        id 19BEB145BD17; Thu, 19 Nov 2020 09:37:57 -0800 (PST)
 From:   Roman Gushchin <guro@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
         <andrii@kernel.org>, <akpm@linux-foundation.org>,
         <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <kernel-team@fb.com>
-Subject: [PATCH bpf-next v7 04/34] mm: convert page kmemcg type to a page memcg flag
-Date:   Thu, 19 Nov 2020 09:37:24 -0800
-Message-ID: <20201119173754.4125257-5-guro@fb.com>
+Subject: [PATCH bpf-next v7 32/34] bpf: eliminate rlimit-based memory accounting infra for bpf maps
+Date:   Thu, 19 Nov 2020 09:37:52 -0800
+Message-ID: <20201119173754.4125257-33-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201119173754.4125257-1-guro@fb.com>
 References: <20201119173754.4125257-1-guro@fb.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
-MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-19_09:2020-11-19,2020-11-19 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 adultscore=0
- malwarescore=0 suspectscore=3 priorityscore=1501 bulkscore=0
- impostorscore=0 spamscore=0 mlxlogscore=999 clxscore=1015
- lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2011190125
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=38
+ bulkscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=999
+ priorityscore=1501 clxscore=1015 phishscore=0 spamscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011190125
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-PageKmemcg flag is currently defined as a page type (like buddy, offline,
-table and guard).  Semantically it means that the page was accounted as a
-kernel memory by the page allocator and has to be uncharged on the
-release.
+Remove rlimit-based accounting infrastructure code, which is not used
+anymore.
 
-As a side effect of defining the flag as a page type, the accounted page
-can't be mapped to userspace (look at page_has_type() and comments above).
-In particular, this blocks the accounting of vmalloc-backed memory used
-by some bpf maps, because these maps do map the memory to userspace.
-
-One option is to fix it by complicating the access to page->mapcount,
-which provides some free bits for page->page_type.
-
-But it's way better to move this flag into page->memcg_data flags.
-Indeed, the flag makes no sense without enabled memory cgroups and memory
-cgroup pointer set in particular.
-
-This commit replaces PageKmemcg() and __SetPageKmemcg() with
-PageMemcgKmem() and an open-coded OR operation setting the memcg pointer
-with the MEMCG_DATA_KMEM bit.  __ClearPageKmemcg() can be simple deleted,
-as the whole memcg_data is zeroed at once.
-
-As a bonus, on !CONFIG_MEMCG build the PageMemcgKmem() check will be
-compiled out.
-
-Link: https://lkml.kernel.org/r/20201027001657.3398190-5-guro@fb.com
 Signed-off-by: Roman Gushchin <guro@fb.com>
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-Reviewed-by: Shakeel Butt <shakeelb@google.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Acked-by: Song Liu <songliubraving@fb.com>
 ---
- include/linux/memcontrol.h | 37 +++++++++++++++++++++++++++++++++----
- include/linux/page-flags.h | 11 ++---------
- mm/memcontrol.c            | 16 +++++-----------
- mm/page_alloc.c            |  4 ++--
- 4 files changed, 42 insertions(+), 26 deletions(-)
+ include/linux/bpf.h                           | 12 ----
+ kernel/bpf/syscall.c                          | 64 +------------------
+ .../selftests/bpf/progs/bpf_iter_bpf_map.c    |  2 +-
+ .../selftests/bpf/progs/map_ptr_kern.c        |  7 --
+ 4 files changed, 3 insertions(+), 82 deletions(-)
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 99a4841d658b..7c9d43476166 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -346,8 +346,10 @@ extern struct mem_cgroup *root_mem_cgroup;
- enum page_memcg_data_flags {
- 	/* page->memcg_data is a pointer to an objcgs vector */
- 	MEMCG_DATA_OBJCGS =3D (1UL << 0),
-+	/* page has been accounted as a non-slab kernel page */
-+	MEMCG_DATA_KMEM =3D (1UL << 1),
- 	/* the next bit after the last actual flag */
--	__NR_MEMCG_DATA_FLAGS  =3D (1UL << 1),
-+	__NR_MEMCG_DATA_FLAGS  =3D (1UL << 2),
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index b11436cb9e3d..c9322adedd50 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -137,11 +137,6 @@ struct bpf_map_ops {
+ 	const struct bpf_iter_seq_info *iter_seq_info;
  };
 =20
- #define MEMCG_DATA_FLAGS_MASK (__NR_MEMCG_DATA_FLAGS - 1)
-@@ -369,8 +371,12 @@ enum page_memcg_data_flags {
-  */
- static inline struct mem_cgroup *page_memcg(struct page *page)
- {
-+	unsigned long memcg_data =3D page->memcg_data;
-+
- 	VM_BUG_ON_PAGE(PageSlab(page), page);
--	return (struct mem_cgroup *)page->memcg_data;
-+	VM_BUG_ON_PAGE(memcg_data & MEMCG_DATA_OBJCGS, page);
-+
-+	return (struct mem_cgroup *)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
- }
-=20
- /*
-@@ -387,7 +393,8 @@ static inline struct mem_cgroup *page_memcg_rcu(struct =
-page *page)
- 	VM_BUG_ON_PAGE(PageSlab(page), page);
- 	WARN_ON_ONCE(!rcu_read_lock_held());
-=20
--	return (struct mem_cgroup *)READ_ONCE(page->memcg_data);
-+	return (struct mem_cgroup *)(READ_ONCE(page->memcg_data) &
-+				     ~MEMCG_DATA_FLAGS_MASK);
- }
-=20
- /*
-@@ -416,7 +423,21 @@ static inline struct mem_cgroup *page_memcg_check(stru=
-ct page *page)
- 	if (memcg_data & MEMCG_DATA_OBJCGS)
- 		return NULL;
-=20
--	return (struct mem_cgroup *)memcg_data;
-+	return (struct mem_cgroup *)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
-+}
-+
-+/*
-+ * PageMemcgKmem - check if the page has MemcgKmem flag set
-+ * @page: a pointer to the page struct
-+ *
-+ * Checks if the page has MemcgKmem flag set. The caller must ensure that
-+ * the page has an associated memory cgroup. It's not safe to call this fu=
-nction
-+ * against some types of pages, e.g. slab pages.
-+ */
-+static inline bool PageMemcgKmem(struct page *page)
-+{
-+	VM_BUG_ON_PAGE(page->memcg_data & MEMCG_DATA_OBJCGS, page);
-+	return page->memcg_data & MEMCG_DATA_KMEM;
- }
-=20
+-struct bpf_map_memory {
+-	u32 pages;
+-	struct user_struct *user;
+-};
+-
+ struct bpf_map {
+ 	/* The first two cachelines with read-mostly members of which some
+ 	 * are also accessed in fast-path (e.g. ops, max_entries).
+@@ -162,7 +157,6 @@ struct bpf_map {
+ 	u32 btf_key_type_id;
+ 	u32 btf_value_type_id;
+ 	struct btf *btf;
+-	struct bpf_map_memory memory;
  #ifdef CONFIG_MEMCG_KMEM
-@@ -435,6 +456,7 @@ static inline struct obj_cgroup **page_objcgs(struct pa=
-ge *page)
- 	unsigned long memcg_data =3D READ_ONCE(page->memcg_data);
-=20
- 	VM_BUG_ON_PAGE(memcg_data && !(memcg_data & MEMCG_DATA_OBJCGS), page);
-+	VM_BUG_ON_PAGE(memcg_data & MEMCG_DATA_KMEM, page);
-=20
- 	return (struct obj_cgroup **)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
+ 	struct mem_cgroup *memcg;
+ #endif
+@@ -1223,12 +1217,6 @@ void bpf_map_inc_with_uref(struct bpf_map *map);
+ struct bpf_map * __must_check bpf_map_inc_not_zero(struct bpf_map *map);
+ void bpf_map_put_with_uref(struct bpf_map *map);
+ void bpf_map_put(struct bpf_map *map);
+-int bpf_map_charge_memlock(struct bpf_map *map, u32 pages);
+-void bpf_map_uncharge_memlock(struct bpf_map *map, u32 pages);
+-int bpf_map_charge_init(struct bpf_map_memory *mem, u64 size);
+-void bpf_map_charge_finish(struct bpf_map_memory *mem);
+-void bpf_map_charge_move(struct bpf_map_memory *dst,
+-			 struct bpf_map_memory *src);
+ void *bpf_map_area_alloc(u64 size, int numa_node);
+ void *bpf_map_area_mmapable_alloc(u64 size, int numa_node);
+ void bpf_map_area_free(void *base);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 4b514bb5cd70..f065121d6ffa 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -360,60 +360,6 @@ static void bpf_uncharge_memlock(struct user_struct =
+*user, u32 pages)
+ 		atomic_long_sub(pages, &user->locked_vm);
  }
-@@ -454,6 +476,8 @@ static inline struct obj_cgroup **page_objcgs_check(str=
-uct page *page)
- 	if (!memcg_data || !(memcg_data & MEMCG_DATA_OBJCGS))
- 		return NULL;
 =20
-+	VM_BUG_ON_PAGE(memcg_data & MEMCG_DATA_KMEM, page);
-+
- 	return (struct obj_cgroup **)(memcg_data & ~MEMCG_DATA_FLAGS_MASK);
- }
-=20
-@@ -1109,6 +1133,11 @@ static inline struct mem_cgroup *page_memcg_check(st=
-ruct page *page)
- 	return NULL;
- }
-=20
-+static inline bool PageMemcgKmem(struct page *page)
-+{
-+	return false;
-+}
-+
- static inline bool mem_cgroup_is_root(struct mem_cgroup *memcg)
- {
- 	return true;
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index 4f6ba9379112..fc0e1bd48e73 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -715,9 +715,8 @@ PAGEFLAG_FALSE(DoubleMap)
- #define PAGE_MAPCOUNT_RESERVE	-128
- #define PG_buddy	0x00000080
- #define PG_offline	0x00000100
--#define PG_kmemcg	0x00000200
--#define PG_table	0x00000400
--#define PG_guard	0x00000800
-+#define PG_table	0x00000200
-+#define PG_guard	0x00000400
-=20
- #define PageType(page, flag)						\
- 	((page->page_type & (PAGE_TYPE_BASE | flag)) =3D=3D PAGE_TYPE_BASE)
-@@ -768,12 +767,6 @@ PAGE_TYPE_OPS(Buddy, buddy)
-  */
- PAGE_TYPE_OPS(Offline, offline)
-=20
--/*
-- * If kmemcg is enabled, the buddy allocator will set PageKmemcg() on
-- * pages allocated with __GFP_ACCOUNT. It gets cleared on page free.
-- */
--PAGE_TYPE_OPS(Kmemcg, kmemcg)
+-int bpf_map_charge_init(struct bpf_map_memory *mem, u64 size)
+-{
+-	u32 pages =3D round_up(size, PAGE_SIZE) >> PAGE_SHIFT;
+-	struct user_struct *user;
+-	int ret;
 -
- /*
-  * Marks pages in use as page tables.
-  */
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 0054b4846770..e0366e306221 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -3090,8 +3090,8 @@ int __memcg_kmem_charge_page(struct page *page, gfp_t=
- gfp, int order)
- 	if (memcg && !mem_cgroup_is_root(memcg)) {
- 		ret =3D __memcg_kmem_charge(memcg, gfp, 1 << order);
- 		if (!ret) {
--			page->memcg_data =3D (unsigned long)memcg;
--			__SetPageKmemcg(page);
-+			page->memcg_data =3D (unsigned long)memcg |
-+				MEMCG_DATA_KMEM;
- 			return 0;
- 		}
- 		css_put(&memcg->css);
-@@ -3116,10 +3116,6 @@ void __memcg_kmem_uncharge_page(struct page *page, i=
-nt order)
- 	__memcg_kmem_uncharge(memcg, nr_pages);
- 	page->memcg_data =3D 0;
- 	css_put(&memcg->css);
+-	if (size >=3D U32_MAX - PAGE_SIZE)
+-		return -E2BIG;
 -
--	/* slab pages do not have PageKmemcg flag set */
--	if (PageKmemcg(page))
--		__ClearPageKmemcg(page);
- }
-=20
- static bool consume_obj_stock(struct obj_cgroup *objcg, unsigned int nr_by=
-tes)
-@@ -6877,12 +6873,10 @@ static void uncharge_page(struct page *page, struct=
- uncharge_gather *ug)
- 	nr_pages =3D compound_nr(page);
- 	ug->nr_pages +=3D nr_pages;
-=20
--	if (!PageKmemcg(page)) {
--		ug->pgpgout++;
--	} else {
-+	if (PageMemcgKmem(page))
- 		ug->nr_kmem +=3D nr_pages;
--		__ClearPageKmemcg(page);
+-	user =3D get_current_user();
+-	ret =3D bpf_charge_memlock(user, pages);
+-	if (ret) {
+-		free_uid(user);
+-		return ret;
 -	}
-+	else
-+		ug->pgpgout++;
+-
+-	mem->pages =3D pages;
+-	mem->user =3D user;
+-
+-	return 0;
+-}
+-
+-void bpf_map_charge_finish(struct bpf_map_memory *mem)
+-{
+-	bpf_uncharge_memlock(mem->user, mem->pages);
+-	free_uid(mem->user);
+-}
+-
+-void bpf_map_charge_move(struct bpf_map_memory *dst,
+-			 struct bpf_map_memory *src)
+-{
+-	*dst =3D *src;
+-
+-	/* Make sure src will not be used for the redundant uncharging. */
+-	memset(src, 0, sizeof(struct bpf_map_memory));
+-}
+-
+-int bpf_map_charge_memlock(struct bpf_map *map, u32 pages)
+-{
+-	int ret;
+-
+-	ret =3D bpf_charge_memlock(map->memory.user, pages);
+-	if (ret)
+-		return ret;
+-	map->memory.pages +=3D pages;
+-	return ret;
+-}
+-
+-void bpf_map_uncharge_memlock(struct bpf_map *map, u32 pages)
+-{
+-	bpf_uncharge_memlock(map->memory.user, pages);
+-	map->memory.pages -=3D pages;
+-}
+-
+ static int bpf_map_alloc_id(struct bpf_map *map)
+ {
+ 	int id;
+@@ -533,14 +479,11 @@ static void bpf_map_release_memcg(struct bpf_map *m=
+ap)
+ static void bpf_map_free_deferred(struct work_struct *work)
+ {
+ 	struct bpf_map *map =3D container_of(work, struct bpf_map, work);
+-	struct bpf_map_memory mem;
 =20
- 	ug->dummy_page =3D page;
- 	page->memcg_data =3D 0;
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 271133b8243b..3c53018c9c61 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -1214,7 +1214,7 @@ static __always_inline bool free_pages_prepare(struct=
- page *page,
- 		 * Do not let hwpoison pages hit pcplists/buddy
- 		 * Untie memcg state and reset page's owner
- 		 */
--		if (memcg_kmem_enabled() && PageKmemcg(page))
-+		if (memcg_kmem_enabled() && PageMemcgKmem(page))
- 			__memcg_kmem_uncharge_page(page, order);
- 		reset_page_owner(page, order);
- 		return false;
-@@ -1244,7 +1244,7 @@ static __always_inline bool free_pages_prepare(struct=
- page *page,
- 	}
- 	if (PageMappingFlags(page))
- 		page->mapping =3D NULL;
--	if (memcg_kmem_enabled() && PageKmemcg(page))
-+	if (memcg_kmem_enabled() && PageMemcgKmem(page))
- 		__memcg_kmem_uncharge_page(page, order);
- 	if (check_free)
- 		bad +=3D check_free_page(page);
+-	bpf_map_charge_move(&mem, &map->memory);
+ 	security_bpf_map_free(map);
+ 	bpf_map_release_memcg(map);
+ 	/* implementation dependent freeing */
+ 	map->ops->map_free(map);
+-	bpf_map_charge_finish(&mem);
+ }
+=20
+ static void bpf_map_put_uref(struct bpf_map *map)
+@@ -619,7 +562,7 @@ static void bpf_map_show_fdinfo(struct seq_file *m, s=
+truct file *filp)
+ 		   "value_size:\t%u\n"
+ 		   "max_entries:\t%u\n"
+ 		   "map_flags:\t%#x\n"
+-		   "memlock:\t%llu\n"
++		   "memlock:\t%llu\n" /* deprecated */
+ 		   "map_id:\t%u\n"
+ 		   "frozen:\t%u\n",
+ 		   map->map_type,
+@@ -627,7 +570,7 @@ static void bpf_map_show_fdinfo(struct seq_file *m, s=
+truct file *filp)
+ 		   map->value_size,
+ 		   map->max_entries,
+ 		   map->map_flags,
+-		   map->memory.pages * 1ULL << PAGE_SHIFT,
++		   0LLU,
+ 		   map->id,
+ 		   READ_ONCE(map->frozen));
+ 	if (type) {
+@@ -870,7 +813,6 @@ static int map_check_btf(struct bpf_map *map, const s=
+truct btf *btf,
+ static int map_create(union bpf_attr *attr)
+ {
+ 	int numa_node =3D bpf_map_attr_numa_node(attr);
+-	struct bpf_map_memory mem;
+ 	struct bpf_map *map;
+ 	int f_flags;
+ 	int err;
+@@ -969,9 +911,7 @@ static int map_create(union bpf_attr *attr)
+ 	security_bpf_map_free(map);
+ free_map:
+ 	btf_put(map->btf);
+-	bpf_map_charge_move(&mem, &map->memory);
+ 	map->ops->map_free(map);
+-	bpf_map_charge_finish(&mem);
+ 	return err;
+ }
+=20
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c b/tools=
+/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
+index 08651b23edba..b83b5d2e17dc 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_map.c
+@@ -23,6 +23,6 @@ int dump_bpf_map(struct bpf_iter__bpf_map *ctx)
+=20
+ 	BPF_SEQ_PRINTF(seq, "%8u %8ld %8ld %10lu\n", map->id, map->refcnt.count=
+er,
+ 		       map->usercnt.counter,
+-		       map->memory.user->locked_vm.counter);
++		       0LLU);
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/tes=
+ting/selftests/bpf/progs/map_ptr_kern.c
+index c325405751e2..d8850bc6a9f1 100644
+--- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
++++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+@@ -26,17 +26,12 @@ __u32 g_line =3D 0;
+ 		return 0;	\
+ })
+=20
+-struct bpf_map_memory {
+-	__u32 pages;
+-} __attribute__((preserve_access_index));
+-
+ struct bpf_map {
+ 	enum bpf_map_type map_type;
+ 	__u32 key_size;
+ 	__u32 value_size;
+ 	__u32 max_entries;
+ 	__u32 id;
+-	struct bpf_map_memory memory;
+ } __attribute__((preserve_access_index));
+=20
+ static inline int check_bpf_map_fields(struct bpf_map *map, __u32 key_si=
+ze,
+@@ -47,7 +42,6 @@ static inline int check_bpf_map_fields(struct bpf_map *=
+map, __u32 key_size,
+ 	VERIFY(map->value_size =3D=3D value_size);
+ 	VERIFY(map->max_entries =3D=3D max_entries);
+ 	VERIFY(map->id > 0);
+-	VERIFY(map->memory.pages > 0);
+=20
+ 	return 1;
+ }
+@@ -60,7 +54,6 @@ static inline int check_bpf_map_ptr(struct bpf_map *ind=
+irect,
+ 	VERIFY(indirect->value_size =3D=3D direct->value_size);
+ 	VERIFY(indirect->max_entries =3D=3D direct->max_entries);
+ 	VERIFY(indirect->id =3D=3D direct->id);
+-	VERIFY(indirect->memory.pages =3D=3D direct->memory.pages);
+=20
+ 	return 1;
+ }
 --=20
 2.26.2
 
