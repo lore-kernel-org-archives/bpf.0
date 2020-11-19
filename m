@@ -2,73 +2,117 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EDB3BC388F9
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 19:10:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 93E72C6379F
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 19:36:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9274422267
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 19:10:06 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="xtXbG1Om"
+	by mail.kernel.org (Postfix) with ESMTP id 3FAA924655
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 19:36:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727520AbgKSTKG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Nov 2020 14:10:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34380 "EHLO mail.kernel.org"
+        id S1728050AbgKSTgc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Nov 2020 14:36:32 -0500
+Received: from gate.crashing.org ([63.228.1.57]:39398 "EHLO gate.crashing.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727414AbgKSTKG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Nov 2020 14:10:06 -0500
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605813005;
-        bh=VMFZb4lVrAacMR7fWWEUSQnByu4OpqbokI7aHyckUGs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=xtXbG1OmaYJG5blm4IZUB+13bPHD7CjZOec2X5i5c01Ar/6CYcZLa/LbyNQi9pWIx
-         fs7sIXSwQX+qFDqXdAWT2KQ35wwErkdESCYaVxdSW43g5/Oit3nN6lRSDWgfMQZLvI
-         i0CaFiUfYuzEakaBW0pMCLpoyQWYwdmJXq70fWBY=
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] fail_function: remove a redundant mutex unlock
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <160581300537.10604.4454902032527726160.git-patchwork-notify@kernel.org>
-Date:   Thu, 19 Nov 2020 19:10:05 +0000
-References: <160570737118.263807.8358435412898356284.stgit@devnote2>
-In-Reply-To: <160570737118.263807.8358435412898356284.stgit@devnote2>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     jbacik@fb.com, ast@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luomeng12@huawei.com
+        id S1727593AbgKSTgb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Nov 2020 14:36:31 -0500
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 0AJJRBpu004150;
+        Thu, 19 Nov 2020 13:27:11 -0600
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 0AJJR87q004149;
+        Thu, 19 Nov 2020 13:27:08 -0600
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Thu, 19 Nov 2020 13:27:08 -0600
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Florian Weimer <fw@deneb.enyo.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Matt Mullins <mmullins@mmlx.us>,
+        Ingo Molnar <mingo@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        "linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>
+Subject: Re: violating function pointer signature
+Message-ID: <20201119192708.GW2672@gate.crashing.org>
+References: <20201118121730.12ee645b@gandalf.local.home> <20201118181226.GK2672@gate.crashing.org> <87o8jutt2h.fsf@mid.deneb.enyo.de> <20201118135823.3f0d24b7@gandalf.local.home> <20201118191127.GM2672@gate.crashing.org> <20201119083648.GE3121392@hirez.programming.kicks-ass.net> <20201119143735.GU2672@gate.crashing.org> <20201119095951.30269233@gandalf.local.home> <20201119163529.GV2672@gate.crashing.org> <fac6049651cf4cef92162bec84550458@AcuMS.aculab.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fac6049651cf4cef92162bec84550458@AcuMS.aculab.com>
+User-Agent: Mutt/1.4.2.3i
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf.git (refs/heads/master):
-
-On Wed, 18 Nov 2020 22:49:31 +0900 you wrote:
-> From: Luo Meng <luomeng12@huawei.com>
+On Thu, Nov 19, 2020 at 05:42:34PM +0000, David Laight wrote:
+> From: Segher Boessenkool
+> > Sent: 19 November 2020 16:35
+> > I just meant "valid C language code as defined by the standards".  Many
+> > people want all UB to just go away, while that is *impossible* to do for
+> > many compilers: for example where different architectures or different
+> > ABIs have contradictory requirements.
 > 
-> Fix a mutex_unlock() issue where before copy_from_user() is
-> not called mutex_locked.
-> 
-> Fixes: 4b1a29a7f542 ("error-injection: Support fault injection framework")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-> Signed-off-by: Luo Meng <luomeng12@huawei.com>
-> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> 
-> [...]
+> Some of the UB in the C language are (probably) there because
+> certain (now obscure) hardware behaved that way.
 
-Here is the summary with links:
-  - fail_function: remove a redundant mutex unlock
-    https://git.kernel.org/bpf/bpf/c/891515d945a3
+Yes.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> For instance integer arithmetic may saturate on overflow
+> (or do even stranger things if the sign is a separate bit).
+
+And some still does!
+
+> I'm not quite sure it was ever possible to write a C compiler
+> for a cpu that processed numbers in ASCII (up to 10 digits),
+> binary arithmetic was almost impossible.
+
+A machine that really stores decimal numbers?  Not BCD or the like?
+Yeah wow, that will be hard.
+
+> There are also the CPU that only have 'word' addressing - so
+> that 'pointers to characters' take extra instructions.
+
+Such machines are still made, and are programmed in C as well.
+
+> ISTM that a few years ago the gcc developers started looking
+> at some of these 'UB' and decided they could make use of
+> them to make some code faster (and break other code).
+
+When UB would happen in some situation, the compiler can simply assume
+that situation does not happen.  This makes it possible to do a lot of
+optimisations (many to do with loops) that cannot be done otherwise
+(including those to do with signed overflow).  And many of those
+optimisations are worthwhile.
+
+> One of the problems with UB is that whereas you might expect
+> UB arithmetic to generate an unexpected result and/or signal
+> it is completely open-ended and could fire an ICBM at the coder.
+
+Yes, UB is undefined behaviour.  Unspecified is something else (and C
+has that as well, also implementation-defined, etc.)
+
+In some cases GCC (and any other modern compiler) can make UB be IB
+instead, with some flag for example, like -fno-strict-* does.  In other
+cases it isn't so easy at all.  In cases like you have here (where the
+validity of what you want to do depends on the ABI in effect) things are
+not easy :-/
 
 
+Segher
