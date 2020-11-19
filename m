@@ -2,308 +2,155 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFC46C64EBC
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 16:28:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5FA68C6369E
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 16:36:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C2EB20757
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 16:28:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 118D1241A6
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 16:36:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="art9hBd5"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LGJcQBr5"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728319AbgKSQ1y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Nov 2020 11:27:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728800AbgKSQ1e (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Nov 2020 11:27:34 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE631C061A04
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 08:27:33 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id c17so7026880wrc.11
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 08:27:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IioeS9Dg9AkawJC0rA82bgYAMNg3xp44Pj00qEh6sh0=;
-        b=art9hBd5P5j/+kj2P0wYHIZjL6yunREWPR+kjYldAXaIYpQDQIDE6+hbt9sz5fQl1b
-         6n5/y6CAppjkpeomOnpoztMCbW/12R5Vl5klCknADcQrLXomSUEyO4tKjWdqw6g8yxJm
-         eTyVOHOaKFslVAWrXAy7iR9M7XZzCHQ+lSLY4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IioeS9Dg9AkawJC0rA82bgYAMNg3xp44Pj00qEh6sh0=;
-        b=UYwxNCDUdUNvZTBEdUOx1iW3+BN0q9ty1ESNs3YSOS7z/neO+hFQXCGhtRnW+nML2G
-         cGx1WWjnfgYi6IAfIMogVOGWC6pLSOC465H6P83gYRtubQZvlcqRUrJACaeZ9k/fIoIn
-         3pQB4ISQPW4YyqqlzbmzfjoWfGUTy4Vr5td9KL8HUNOwRbM8GDqxm70QYHsByD41gtij
-         EravRre7rsjtTHgPLPsvrIe+Jcpsso2cVw6EAxcyXuTurERtQwPkehAkqamYghUPI6Uk
-         88sr3oVbSc7iA/NKJv+/EmD7SNLFdxLuxZ2sMsica/EqxyxLtCI+RTvLxVUmsGJW/HFI
-         S7fg==
-X-Gm-Message-State: AOAM532tXZsV5tAGnFPOmpdlT2BuIT1H5+ttuHQTLb2QH7VAwapq/pIY
-        ZLd/Ru39Z5yHOpFd2/csINtwU1kjjHoWbMLg
-X-Google-Smtp-Source: ABdhPJxK7kKv1EW1z/PdDbWzwBgQkw86caAXfKxPThm4XVwabqrtLp3LqHZNmdddOkTyzAgbPYHonA==
-X-Received: by 2002:adf:9104:: with SMTP id j4mr11959123wrj.198.1605803251881;
-        Thu, 19 Nov 2020 08:27:31 -0800 (PST)
-Received: from revest.zrh.corp.google.com ([2a00:79e0:42:204:f693:9fff:fef4:a569])
-        by smtp.gmail.com with ESMTPSA id i5sm380061wrw.45.2020.11.19.08.27.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Nov 2020 08:27:31 -0800 (PST)
-From:   Florent Revest <revest@chromium.org>
-To:     bpf@vger.kernel.org
-Cc:     viro@zeniv.linux.org.uk, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, kafai@fb.com, yhs@fb.com,
-        andrii@kernel.org, kpsingh@chromium.org, revest@google.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v2 1/5] net: Remove the err argument from sock_from_file
-Date:   Thu, 19 Nov 2020 17:26:50 +0100
-Message-Id: <20201119162654.2410685-1-revest@chromium.org>
-X-Mailer: git-send-email 2.29.2.299.gdc1121823c-goog
+        id S1727369AbgKSQf6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Nov 2020 11:35:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:55168 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728537AbgKSQfz (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 19 Nov 2020 11:35:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1605803753;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rmz4vMCo9cJbvNaKXKHUnIBAy5VUu+3pBNzGePwX/CQ=;
+        b=LGJcQBr5v4/qtQY4U20Y3P1ZzzIIcmQAvmcArL7LT3uiqZN3xX3TnZkT04DCNyZZky7vhr
+        kEpWlxATej7TV53dtKKBvKtVvGJGA9JN+nDF/KKJk3lopuV67cXZ+r73FRG9zHqxP2pThZ
+        xuNJEkf7/yp3RmIIZxp28ZhWetj7pqc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-361-5cgFMGosMYiOELAYXE56dw-1; Thu, 19 Nov 2020 11:35:48 -0500
+X-MC-Unique: 5cgFMGosMYiOELAYXE56dw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A21D91005D5F;
+        Thu, 19 Nov 2020 16:35:44 +0000 (UTC)
+Received: from carbon (unknown [10.36.110.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8BD6B60636;
+        Thu, 19 Nov 2020 16:35:36 +0000 (UTC)
+Date:   Thu, 19 Nov 2020 17:35:35 +0100
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>, Joe Perches <joe@perches.com>
+Cc:     brouer@redhat.com, Guenter Roeck <linux@roeck-us.net>,
+        Tao Ren <rentao.bupt@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, openbmc@lists.ozlabs.org, taoren@fb.com,
+        mikechoi@fb.com
+Subject: XDP maintainer match (Was  [PATCH v2 0/2] hwmon: (max127) Add Maxim
+ MAX127 hardware monitoring)
+Message-ID: <20201119173535.1474743d@carbon>
+In-Reply-To: <20201119074634.2e9cb21b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
+References: <20201118230929.18147-1-rentao.bupt@gmail.com>
+        <20201118232719.GI1853236@lunn.ch>
+        <20201118234252.GA18681@taoren-ubuntu-R90MNF91>
+        <20201119010119.GA248686@roeck-us.net>
+        <20201119012653.GA249502@roeck-us.net>
+        <20201119074634.2e9cb21b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Florent Revest <revest@google.com>
+On Thu, 19 Nov 2020 07:46:34 -0800
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-Currently, the sock_from_file prototype takes an "err" pointer that is
-either not set or set to -ENOTSOCK IFF the returned socket is NULL. This
-makes the error redundant and it is ignored by a few callers.
+> On Wed, 18 Nov 2020 17:26:53 -0800 Guenter Roeck wrote:
+> > On Wed, Nov 18, 2020 at 05:01:19PM -0800, Guenter Roeck wrote:  
+> > > On Wed, Nov 18, 2020 at 03:42:53PM -0800, Tao Ren wrote:    
+> > > > On Thu, Nov 19, 2020 at 12:27:19AM +0100, Andrew Lunn wrote:    
+> > > > > On Wed, Nov 18, 2020 at 03:09:27PM -0800, rentao.bupt@gmail.com wrote:    
+> > > > > > From: Tao Ren <rentao.bupt@gmail.com>
+> > > > > > 
+> > > > > > The patch series adds hardware monitoring driver for the Maxim MAX127
+> > > > > > chip.    
+> > > > > 
+> > > > > Hi Tao
+> > > > > 
+> > > > > Why are using sending a hwmon driver to the networking mailing list?
+> > > > > 
+> > > > >     Andrew    
+> > > > 
+> > > > Hi Andrew,
+> > > > 
+> > > > I added netdev because the mailing list is included in "get_maintainer.pl
+> > > > Documentation/hwmon/index.rst" output. Is it the right command to find
+> > > > reviewers? Could you please suggest? Thank you.    
+> > > 
+> > > I have no idea why running get_maintainer.pl on
+> > > Documentation/hwmon/index.rst returns such a large list of mailing
+> > > lists and people. For some reason it includes everyone in the XDP
+> > > maintainer list. If anyone has an idea how that happens, please
+> > > let me know - we'll want to get this fixed to avoid the same problem
+> > > in the future.  
+> > 
+> > I found it. The XDP maintainer entry has:
+> > 
+> > K:    xdp
+> > 
+> > This matches Documentation/hwmon/index.rst.
+> > 
+> > $ grep xdp Documentation/hwmon/index.rst
+> >    xdpe12284
+> > 
+> > It seems to me that a context match such as "xdp" in MAINTAINERS isn't
+> > really appropriate. "xdp" matches a total of 348 files in the kernel.
+> > The large majority of those is not XDP related. The maintainers
+> > of XDP (and all the listed mailing lists) should not be surprised
+> > to get a large number of odd review requests if they want to review
+> > every single patch on files which include the term "xdp".  
+> 
+> Agreed, we should fix this. For maintainers with high patch volume life
+> would be so much easier if people CCed the right folks to get reviews,
+> so we should try our best to fix get_maintainer.
+> 
+> XDP folks, any opposition to changing the keyword / filename to:
+> 
+> 	[^a-z0-9]xdp[^a-z0-9]
+> 
+> ?
 
-This patch simplifies the API by letting callers deduce the error based
-on whether the returned socket is NULL or not.
+I think it is a good idea to change the keyword (K:), but I'm not sure
+this catch what we want, maybe it does.  The pattern match are meant to
+catch drivers containing XDP related bits.
 
-Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Florent Revest <revest@google.com>
----
- fs/eventpoll.c               |  3 +--
- fs/io_uring.c                | 16 ++++++++--------
- include/linux/net.h          |  2 +-
- net/core/netclassid_cgroup.c |  3 +--
- net/core/netprio_cgroup.c    |  3 +--
- net/core/sock.c              |  8 +-------
- net/socket.c                 | 27 ++++++++++++++++-----------
- 7 files changed, 29 insertions(+), 33 deletions(-)
+Previously Joe Perches <joe@perches.com> suggested this pattern match,
+which I don't fully understand... could you explain Joe?
 
-diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-index 4df61129566d..c764d8d5a76a 100644
---- a/fs/eventpoll.c
-+++ b/fs/eventpoll.c
-@@ -415,12 +415,11 @@ static inline void ep_set_busy_poll_napi_id(struct epitem *epi)
- 	unsigned int napi_id;
- 	struct socket *sock;
- 	struct sock *sk;
--	int err;
- 
- 	if (!net_busy_loop_on())
- 		return;
- 
--	sock = sock_from_file(epi->ffd.file, &err);
-+	sock = sock_from_file(epi->ffd.file);
- 	if (!sock)
- 		return;
- 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 8018c7076b25..ace99b15cbd3 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -4341,9 +4341,9 @@ static int io_sendmsg(struct io_kiocb *req, bool force_nonblock,
- 	unsigned flags;
- 	int ret;
- 
--	sock = sock_from_file(req->file, &ret);
-+	sock = sock_from_file(req->file);
- 	if (unlikely(!sock))
--		return ret;
-+		return -ENOTSOCK;
- 
- 	if (req->async_data) {
- 		kmsg = req->async_data;
-@@ -4390,9 +4390,9 @@ static int io_send(struct io_kiocb *req, bool force_nonblock,
- 	unsigned flags;
- 	int ret;
- 
--	sock = sock_from_file(req->file, &ret);
-+	sock = sock_from_file(req->file);
- 	if (unlikely(!sock))
--		return ret;
-+		return -ENOTSOCK;
- 
- 	ret = import_single_range(WRITE, sr->buf, sr->len, &iov, &msg.msg_iter);
- 	if (unlikely(ret))
-@@ -4569,9 +4569,9 @@ static int io_recvmsg(struct io_kiocb *req, bool force_nonblock,
- 	unsigned flags;
- 	int ret, cflags = 0;
- 
--	sock = sock_from_file(req->file, &ret);
-+	sock = sock_from_file(req->file);
- 	if (unlikely(!sock))
--		return ret;
-+		return -ENOTSOCK;
- 
- 	if (req->async_data) {
- 		kmsg = req->async_data;
-@@ -4632,9 +4632,9 @@ static int io_recv(struct io_kiocb *req, bool force_nonblock,
- 	unsigned flags;
- 	int ret, cflags = 0;
- 
--	sock = sock_from_file(req->file, &ret);
-+	sock = sock_from_file(req->file);
- 	if (unlikely(!sock))
--		return ret;
-+		return -ENOTSOCK;
- 
- 	if (req->flags & REQ_F_BUFFER_SELECT) {
- 		kbuf = io_recv_buffer_select(req, !force_nonblock);
-diff --git a/include/linux/net.h b/include/linux/net.h
-index 0dcd51feef02..9e2324efc26a 100644
---- a/include/linux/net.h
-+++ b/include/linux/net.h
-@@ -240,7 +240,7 @@ int sock_sendmsg(struct socket *sock, struct msghdr *msg);
- int sock_recvmsg(struct socket *sock, struct msghdr *msg, int flags);
- struct file *sock_alloc_file(struct socket *sock, int flags, const char *dname);
- struct socket *sockfd_lookup(int fd, int *err);
--struct socket *sock_from_file(struct file *file, int *err);
-+struct socket *sock_from_file(struct file *file);
- #define		     sockfd_put(sock) fput(sock->file)
- int net_ratelimit(void);
- 
-diff --git a/net/core/netclassid_cgroup.c b/net/core/netclassid_cgroup.c
-index 41b24cd31562..b49c57d35a88 100644
---- a/net/core/netclassid_cgroup.c
-+++ b/net/core/netclassid_cgroup.c
-@@ -68,9 +68,8 @@ struct update_classid_context {
- 
- static int update_classid_sock(const void *v, struct file *file, unsigned n)
- {
--	int err;
- 	struct update_classid_context *ctx = (void *)v;
--	struct socket *sock = sock_from_file(file, &err);
-+	struct socket *sock = sock_from_file(file);
- 
- 	if (sock) {
- 		spin_lock(&cgroup_sk_update_lock);
-diff --git a/net/core/netprio_cgroup.c b/net/core/netprio_cgroup.c
-index 9bd4cab7d510..99a431c56f23 100644
---- a/net/core/netprio_cgroup.c
-+++ b/net/core/netprio_cgroup.c
-@@ -220,8 +220,7 @@ static ssize_t write_priomap(struct kernfs_open_file *of,
- 
- static int update_netprio(const void *v, struct file *file, unsigned n)
- {
--	int err;
--	struct socket *sock = sock_from_file(file, &err);
-+	struct socket *sock = sock_from_file(file);
- 	if (sock) {
- 		spin_lock(&cgroup_sk_update_lock);
- 		sock_cgroup_set_prioidx(&sock->sk->sk_cgrp_data,
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 727ea1cc633c..dd0598d831ef 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -2808,14 +2808,8 @@ EXPORT_SYMBOL(sock_no_mmap);
- void __receive_sock(struct file *file)
- {
- 	struct socket *sock;
--	int error;
- 
--	/*
--	 * The resulting value of "error" is ignored here since we only
--	 * need to take action when the file is a socket and testing
--	 * "sock" for NULL is sufficient.
--	 */
--	sock = sock_from_file(file, &error);
-+	sock = sock_from_file(file);
- 	if (sock) {
- 		sock_update_netprioidx(&sock->sk->sk_cgrp_data);
- 		sock_update_classid(&sock->sk->sk_cgrp_data);
-diff --git a/net/socket.c b/net/socket.c
-index 6e6cccc2104f..c799d9652a2c 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -445,17 +445,15 @@ static int sock_map_fd(struct socket *sock, int flags)
- /**
-  *	sock_from_file - Return the &socket bounded to @file.
-  *	@file: file
-- *	@err: pointer to an error code return
-  *
-- *	On failure returns %NULL and assigns -ENOTSOCK to @err.
-+ *	On failure returns %NULL.
-  */
- 
--struct socket *sock_from_file(struct file *file, int *err)
-+struct socket *sock_from_file(struct file *file)
- {
- 	if (file->f_op == &socket_file_ops)
- 		return file->private_data;	/* set in sock_map_fd */
- 
--	*err = -ENOTSOCK;
- 	return NULL;
- }
- EXPORT_SYMBOL(sock_from_file);
-@@ -484,9 +482,11 @@ struct socket *sockfd_lookup(int fd, int *err)
- 		return NULL;
- 	}
- 
--	sock = sock_from_file(file, err);
--	if (!sock)
-+	sock = sock_from_file(file);
-+	if (!sock) {
-+		*err = -ENOTSOCK;
- 		fput(file);
-+	}
- 	return sock;
- }
- EXPORT_SYMBOL(sockfd_lookup);
-@@ -498,11 +498,12 @@ static struct socket *sockfd_lookup_light(int fd, int *err, int *fput_needed)
- 
- 	*err = -EBADF;
- 	if (f.file) {
--		sock = sock_from_file(f.file, err);
-+		sock = sock_from_file(f.file);
- 		if (likely(sock)) {
- 			*fput_needed = f.flags & FDPUT_FPUT;
- 			return sock;
- 		}
-+		*err = -ENOTSOCK;
- 		fdput(f);
- 	}
- 	return NULL;
-@@ -1715,9 +1716,11 @@ int __sys_accept4_file(struct file *file, unsigned file_flags,
- 	if (SOCK_NONBLOCK != O_NONBLOCK && (flags & SOCK_NONBLOCK))
- 		flags = (flags & ~SOCK_NONBLOCK) | O_NONBLOCK;
- 
--	sock = sock_from_file(file, &err);
--	if (!sock)
-+	sock = sock_from_file(file);
-+	if (!sock) {
-+		err = -ENOTSOCK;
- 		goto out;
-+	}
- 
- 	err = -ENFILE;
- 	newsock = sock_alloc();
-@@ -1840,9 +1843,11 @@ int __sys_connect_file(struct file *file, struct sockaddr_storage *address,
- 	struct socket *sock;
- 	int err;
- 
--	sock = sock_from_file(file, &err);
--	if (!sock)
-+	sock = sock_from_file(file);
-+	if (!sock) {
-+		err = -ENOTSOCK;
- 		goto out;
-+	}
- 
- 	err =
- 	    security_socket_connect(sock, (struct sockaddr *)address, addrlen);
+  (?:\b|_)xdp(?:\b|_)
+
+For the filename (N:) regex match, I'm considering if we should remove
+it and list more files explicitly.  I think normal glob * pattern
+works, which should be sufficient.
+
 -- 
-2.29.2.299.gdc1121823c-goog
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
