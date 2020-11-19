@@ -8,143 +8,301 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E13A0C6379F
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 17:38:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96785C6369E
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 17:38:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8007F24698
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 17:38:44 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 52126246F9
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 17:38:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="OMtR9D1n"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="itRloczW"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729358AbgKSRiE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Nov 2020 12:38:04 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:13540 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729310AbgKSRiD (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 19 Nov 2020 12:38:03 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0AJHTwjt026527
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 09:38:02 -0800
+        id S1729407AbgKSRiJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Nov 2020 12:38:09 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:58206 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729388AbgKSRiI (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 19 Nov 2020 12:38:08 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AJHUdDx012525
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 09:38:07 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=i22VzsfYXFhHUbHUyBRo4SfAiYTea7Ssop+WPV0F4gA=;
- b=OMtR9D1nfip2zs9FIs9LZuZwig2AXVU9JZjBxpBWL4s5PwQg8JK6PSaPI8Fhuh4JJLJX
- GesbNtbPqfCQlvoGYU2ukYLUkklOTJrmXL1mpcbN9OzSu1fdLHUMqBi6deh++YflEQEH
- D3iOK2C8YEs8AjmRPYD5EKNTQV2R8YMfDG4= 
+ : date : message-id : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=JGw6o7TBx+ILLo4YTt2neoho4rwlX//7V56cYtCLLz8=;
+ b=itRloczWl1OE2P5Au4N01vVevn99X6pTb3GesL6QwwSCk4xpkjwfZI5O3q48VjthIR9Y
+ opznmXMCwE0AeqCv69GDxjenOwwB0fkfwc2QDYm+wr+U+HalHiSbBV4lS8TAbHXNTv1i
+ JxmvwPUfQriFZH80GVUIL4jZydDNoOkvfvc= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 34wfdq7099-9
+        by mx0a-00082601.pphosted.com with ESMTP id 34w2mkbdda-9
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 09:38:02 -0800
-Received: from intmgw002.41.prn1.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 09:38:07 -0800
+Received: from intmgw002.06.prn3.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 19 Nov 2020 09:38:01 -0800
+ 15.1.1979.3; Thu, 19 Nov 2020 09:38:03 -0800
 Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
-        id CAF14145BCFB; Thu, 19 Nov 2020 09:37:56 -0800 (PST)
+        id 7AB03145BCDB; Thu, 19 Nov 2020 09:37:56 -0800 (PST)
 From:   Roman Gushchin <guro@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
         <andrii@kernel.org>, <akpm@linux-foundation.org>,
         <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <kernel-team@fb.com>
-Subject: [PATCH bpf-next v7 18/34] bpf: eliminate rlimit-based memory accounting for arraymap maps
-Date:   Thu, 19 Nov 2020 09:37:38 -0800
-Message-ID: <20201119173754.4125257-19-guro@fb.com>
+Subject: [PATCH bpf-next v7 02/34] mm: memcontrol/slab: use helpers to access slab page's memcg_data
+Date:   Thu, 19 Nov 2020 09:37:22 -0800
+Message-ID: <20201119173754.4125257-3-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201119173754.4125257-1-guro@fb.com>
 References: <20201119173754.4125257-1-guro@fb.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-19_09:2020-11-19,2020-11-19 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 mlxscore=0
- lowpriorityscore=0 phishscore=0 impostorscore=0 clxscore=1015
- mlxlogscore=848 malwarescore=0 bulkscore=0 suspectscore=38
- priorityscore=1501 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2011190125
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=3
+ bulkscore=0 mlxscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=999
+ priorityscore=1501 clxscore=1015 phishscore=0 spamscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011190125
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Do not use rlimit-based memory accounting for arraymap maps.
-It has been replaced with the memcg-based memory accounting.
+To gather all direct accesses to struct page's memcg_data field in one
+place, let's introduce 3 new helpers to use in the slab accounting code:
 
+  struct obj_cgroup **page_objcgs(struct page *page);
+  struct obj_cgroup **page_objcgs_check(struct page *page);
+  bool set_page_objcgs(struct page *page, struct obj_cgroup **objcgs);
+
+They are similar to the corresponding API for generic pages, except that
+the setter can return false, indicating that the value has been already
+set from a different thread.
+
+Link: https://lkml.kernel.org/r/20201027001657.3398190-3-guro@fb.com
 Signed-off-by: Roman Gushchin <guro@fb.com>
-Acked-by: Song Liu <songliubraving@fb.com>
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Reviewed-by: Shakeel Butt <shakeelb@google.com>
+Cc: Michal Hocko <mhocko@suse.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 ---
- kernel/bpf/arraymap.c | 24 ++++--------------------
- 1 file changed, 4 insertions(+), 20 deletions(-)
+ include/linux/memcontrol.h | 64 ++++++++++++++++++++++++++++++++++++++
+ mm/memcontrol.c            |  6 ++--
+ mm/slab.h                  | 35 +++++----------------
+ 3 files changed, 75 insertions(+), 30 deletions(-)
 
-diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
-index 92b650123c22..20f751a1d993 100644
---- a/kernel/bpf/arraymap.c
-+++ b/kernel/bpf/arraymap.c
-@@ -81,11 +81,10 @@ int array_map_alloc_check(union bpf_attr *attr)
- static struct bpf_map *array_map_alloc(union bpf_attr *attr)
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index f95c1433461c..c7ac0a5b8989 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -416,6 +416,70 @@ static inline struct mem_cgroup *page_memcg_check(stru=
+ct page *page)
+ 	return (struct mem_cgroup *)memcg_data;
+ }
+=20
++#ifdef CONFIG_MEMCG_KMEM
++/*
++ * page_objcgs - get the object cgroups vector associated with a page
++ * @page: a pointer to the page struct
++ *
++ * Returns a pointer to the object cgroups vector associated with the page,
++ * or NULL. This function assumes that the page is known to have an
++ * associated object cgroups vector. It's not safe to call this function
++ * against pages, which might have an associated memory cgroup: e.g.
++ * kernel stack pages.
++ */
++static inline struct obj_cgroup **page_objcgs(struct page *page)
++{
++	return (struct obj_cgroup **)(READ_ONCE(page->memcg_data) & ~0x1UL);
++}
++
++/*
++ * page_objcgs_check - get the object cgroups vector associated with a page
++ * @page: a pointer to the page struct
++ *
++ * Returns a pointer to the object cgroups vector associated with the page,
++ * or NULL. This function is safe to use if the page can be directly assoc=
+iated
++ * with a memory cgroup.
++ */
++static inline struct obj_cgroup **page_objcgs_check(struct page *page)
++{
++	unsigned long memcg_data =3D READ_ONCE(page->memcg_data);
++
++	if (memcg_data && (memcg_data & 0x1UL))
++		return (struct obj_cgroup **)(memcg_data & ~0x1UL);
++
++	return NULL;
++}
++
++/*
++ * set_page_objcgs - associate a page with a object cgroups vector
++ * @page: a pointer to the page struct
++ * @objcgs: a pointer to the object cgroups vector
++ *
++ * Atomically associates a page with a vector of object cgroups.
++ */
++static inline bool set_page_objcgs(struct page *page,
++					struct obj_cgroup **objcgs)
++{
++	return !cmpxchg(&page->memcg_data, 0, (unsigned long)objcgs | 0x1UL);
++}
++#else
++static inline struct obj_cgroup **page_objcgs(struct page *page)
++{
++	return NULL;
++}
++
++static inline struct obj_cgroup **page_objcgs_check(struct page *page)
++{
++	return NULL;
++}
++
++static inline bool set_page_objcgs(struct page *page,
++					struct obj_cgroup **objcgs)
++{
++	return true;
++}
++#endif
++
+ static __always_inline bool memcg_stat_item_in_bytes(int idx)
  {
- 	bool percpu =3D attr->map_type =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY;
--	int ret, numa_node =3D bpf_map_attr_numa_node(attr);
-+	int numa_node =3D bpf_map_attr_numa_node(attr);
- 	u32 elem_size, index_mask, max_entries;
- 	bool bypass_spec_v1 =3D bpf_bypass_spec_v1();
--	u64 cost, array_size, mask64;
--	struct bpf_map_memory mem;
-+	u64 array_size, mask64;
- 	struct bpf_array *array;
+ 	if (idx =3D=3D MEMCG_PERCPU_B)
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 3968d68503cb..0054b4846770 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -2899,7 +2899,7 @@ int memcg_alloc_page_obj_cgroups(struct page *page, s=
+truct kmem_cache *s,
+ 	if (!vec)
+ 		return -ENOMEM;
 =20
- 	elem_size =3D round_up(attr->value_size, 8);
-@@ -126,44 +125,29 @@ static struct bpf_map *array_map_alloc(union bpf_at=
-tr *attr)
- 		}
- 	}
+-	if (cmpxchg(&page->memcg_data, 0, (unsigned long)vec | 0x1UL))
++	if (!set_page_objcgs(page, vec))
+ 		kfree(vec);
+ 	else
+ 		kmemleak_not_leak(vec);
+@@ -2933,12 +2933,12 @@ struct mem_cgroup *mem_cgroup_from_obj(void *p)
+ 	 * Memcg membership data for each individual object is saved in
+ 	 * the page->obj_cgroups.
+ 	 */
+-	if (page_has_obj_cgroups(page)) {
++	if (page_objcgs_check(page)) {
+ 		struct obj_cgroup *objcg;
+ 		unsigned int off;
 =20
--	/* make sure there is no u32 overflow later in round_up() */
--	cost =3D array_size;
--	if (percpu)
--		cost +=3D (u64)attr->max_entries * elem_size * num_possible_cpus();
+ 		off =3D obj_to_index(page->slab_cache, page, p);
+-		objcg =3D page_obj_cgroups(page)[off];
++		objcg =3D page_objcgs(page)[off];
+ 		if (objcg)
+ 			return obj_cgroup_memcg(objcg);
+=20
+diff --git a/mm/slab.h b/mm/slab.h
+index e2535cee0d33..9a54a0cb5cca 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -239,28 +239,12 @@ static inline bool kmem_cache_debug_flags(struct kmem=
+_cache *s, slab_flags_t fla
+ }
+=20
+ #ifdef CONFIG_MEMCG_KMEM
+-static inline struct obj_cgroup **page_obj_cgroups(struct page *page)
+-{
+-	/*
+-	 * Page's memory cgroup and obj_cgroups vector are sharing the same
+-	 * space. To distinguish between them in case we don't know for sure
+-	 * that the page is a slab page (e.g. page_cgroup_ino()), let's
+-	 * always set the lowest bit of obj_cgroups.
+-	 */
+-	return (struct obj_cgroup **)(page->memcg_data & ~0x1UL);
+-}
 -
--	ret =3D bpf_map_charge_init(&mem, cost);
--	if (ret < 0)
--		return ERR_PTR(ret);
+-static inline bool page_has_obj_cgroups(struct page *page)
+-{
+-	return page->memcg_data & 0x1UL;
+-}
 -
- 	/* allocate all map elements and zero-initialize them */
- 	if (attr->map_flags & BPF_F_MMAPABLE) {
- 		void *data;
+ int memcg_alloc_page_obj_cgroups(struct page *page, struct kmem_cache *s,
+ 				 gfp_t gfp);
 =20
- 		/* kmalloc'ed memory can't be mmap'ed, use explicit vmalloc */
- 		data =3D bpf_map_area_mmapable_alloc(array_size, numa_node);
--		if (!data) {
--			bpf_map_charge_finish(&mem);
-+		if (!data)
- 			return ERR_PTR(-ENOMEM);
--		}
- 		array =3D data + PAGE_ALIGN(sizeof(struct bpf_array))
- 			- offsetof(struct bpf_array, value);
- 	} else {
- 		array =3D bpf_map_area_alloc(array_size, numa_node);
- 	}
--	if (!array) {
--		bpf_map_charge_finish(&mem);
-+	if (!array)
- 		return ERR_PTR(-ENOMEM);
--	}
- 	array->index_mask =3D index_mask;
- 	array->map.bypass_spec_v1 =3D bypass_spec_v1;
+ static inline void memcg_free_page_obj_cgroups(struct page *page)
+ {
+-	kfree(page_obj_cgroups(page));
++	kfree(page_objcgs(page));
+ 	page->memcg_data =3D 0;
+ }
 =20
- 	/* copy mandatory map attributes */
- 	bpf_map_init_from_attr(&array->map, attr);
--	bpf_map_charge_move(&array->map.memory, &mem);
- 	array->elem_size =3D elem_size;
+@@ -322,7 +306,7 @@ static inline void memcg_slab_post_alloc_hook(struct km=
+em_cache *s,
+ 		if (likely(p[i])) {
+ 			page =3D virt_to_head_page(p[i]);
 =20
- 	if (percpu && bpf_array_alloc_percpu(array)) {
--		bpf_map_charge_finish(&array->map.memory);
- 		bpf_map_area_free(array);
- 		return ERR_PTR(-ENOMEM);
- 	}
+-			if (!page_has_obj_cgroups(page) &&
++			if (!page_objcgs(page) &&
+ 			    memcg_alloc_page_obj_cgroups(page, s, flags)) {
+ 				obj_cgroup_uncharge(objcg, obj_full_size(s));
+ 				continue;
+@@ -330,7 +314,7 @@ static inline void memcg_slab_post_alloc_hook(struct km=
+em_cache *s,
+=20
+ 			off =3D obj_to_index(s, page, p[i]);
+ 			obj_cgroup_get(objcg);
+-			page_obj_cgroups(page)[off] =3D objcg;
++			page_objcgs(page)[off] =3D objcg;
+ 			mod_objcg_state(objcg, page_pgdat(page),
+ 					cache_vmstat_idx(s), obj_full_size(s));
+ 		} else {
+@@ -344,6 +328,7 @@ static inline void memcg_slab_free_hook(struct kmem_cac=
+he *s_orig,
+ 					void **p, int objects)
+ {
+ 	struct kmem_cache *s;
++	struct obj_cgroup **objcgs;
+ 	struct obj_cgroup *objcg;
+ 	struct page *page;
+ 	unsigned int off;
+@@ -357,7 +342,8 @@ static inline void memcg_slab_free_hook(struct kmem_cac=
+he *s_orig,
+ 			continue;
+=20
+ 		page =3D virt_to_head_page(p[i]);
+-		if (!page_has_obj_cgroups(page))
++		objcgs =3D page_objcgs(page);
++		if (!objcgs)
+ 			continue;
+=20
+ 		if (!s_orig)
+@@ -366,11 +352,11 @@ static inline void memcg_slab_free_hook(struct kmem_c=
+ache *s_orig,
+ 			s =3D s_orig;
+=20
+ 		off =3D obj_to_index(s, page, p[i]);
+-		objcg =3D page_obj_cgroups(page)[off];
++		objcg =3D objcgs[off];
+ 		if (!objcg)
+ 			continue;
+=20
+-		page_obj_cgroups(page)[off] =3D NULL;
++		objcgs[off] =3D NULL;
+ 		obj_cgroup_uncharge(objcg, obj_full_size(s));
+ 		mod_objcg_state(objcg, page_pgdat(page), cache_vmstat_idx(s),
+ 				-obj_full_size(s));
+@@ -379,11 +365,6 @@ static inline void memcg_slab_free_hook(struct kmem_ca=
+che *s_orig,
+ }
+=20
+ #else /* CONFIG_MEMCG_KMEM */
+-static inline bool page_has_obj_cgroups(struct page *page)
+-{
+-	return false;
+-}
+-
+ static inline struct mem_cgroup *memcg_from_slab_obj(void *ptr)
+ {
+ 	return NULL;
 --=20
 2.26.2
 
