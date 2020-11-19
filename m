@@ -2,164 +2,120 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A83B7C6369E
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 16:37:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B509C6379D
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 16:44:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4A8B822264
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 16:37:28 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZjIHp4Xb"
+	by mail.kernel.org (Postfix) with ESMTP id 531D922242
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 16:44:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727931AbgKSQga (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Nov 2020 11:36:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55414 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727435AbgKSQga (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Nov 2020 11:36:30 -0500
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07211C0613CF;
-        Thu, 19 Nov 2020 08:36:30 -0800 (PST)
-Received: by mail-lf1-x141.google.com with SMTP id w142so9139127lff.8;
-        Thu, 19 Nov 2020 08:36:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+GL1geUz8ksyok3o+HModRJUNdxfeUOLSXkwVu2pzVw=;
-        b=ZjIHp4XbVLR3mEdwG18h+SFeiMuVhrEnm1I+o4JxYe6xHL5cGGoXTKaqksF40qh8AV
-         2a15evGdxclpi/ZpK3Ojgi1SDjsiUalaB5XrqUBfjloVKgOnM1hLIsAlAyxTrZzPWMrQ
-         p2Rpa9Q8r9pw/XLekQzHqIvCkjO+b6dNblaWQHeesD9xdO2t4KU1JbYUFndDC7ID7L1X
-         CpbGZj+Q/Up26Jch8B7PWpmY/IWjeHqKISZiCEfyZ5Clq9X6mWAsqoZm3LwIkr919haZ
-         S2B3+4g+z6fSO4nVDsNN8M3/frXb6a00DBqqUhskplPrNUbshRN9IyZhpdD/elrJmc0U
-         AS1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+GL1geUz8ksyok3o+HModRJUNdxfeUOLSXkwVu2pzVw=;
-        b=aU3qadSBa7oknL5/q5aYKb0PeVs1gt9CN3aE2NHuaiEQek22HE6/UHJQ39zFJEROgi
-         eoHRMxXS3gV9+JANG3NrslyVzQn968Nc+pROmFyBd4nPhJDEekCpxXsKoGRilX3Ns5UE
-         VxVmS88BpScPnX3594qB9DifaBZW55o2rzBSRwQNjA4IVnXyIXOGFo2KBj1yHF5bAmla
-         jdMLTlk/aA8/uf7kxpJ850NDMTIifbAbNpRmDkZosRqzRIYvQHLqLlZPKYrxnYmzY3OI
-         U9zm3AiusLqqH9S/m1WCxabGxHnvw3zpfoQdySr38JOKFVC5P6AkvGuuOK/6ugn8frrO
-         gbyg==
-X-Gm-Message-State: AOAM5304kl0yznGzfigqrVQGCRnmxzDPTlP4lIg4Mk1ZzjaSllRb5Zyb
-        ZGAXbkqVPVRtqRi7nMdYtOXZtekiDG1bpviMPSU=
-X-Google-Smtp-Source: ABdhPJxXfPjRWHEbwDGN5Oo7lGcgZBlLqA+m05kWlN7DzRDYiiWURZwOXfqHnCGxcIQDLNCmrccAvLKQJw5PMbW1Ys8=
-X-Received: by 2002:a19:48ca:: with SMTP id v193mr5856891lfa.263.1605803788474;
- Thu, 19 Nov 2020 08:36:28 -0800 (PST)
-MIME-Version: 1.0
-References: <20201118230929.18147-1-rentao.bupt@gmail.com> <20201118232719.GI1853236@lunn.ch>
- <20201118234252.GA18681@taoren-ubuntu-R90MNF91> <20201119010119.GA248686@roeck-us.net>
- <20201119012653.GA249502@roeck-us.net> <20201119074634.2e9cb21b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20201119074634.2e9cb21b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 19 Nov 2020 08:36:17 -0800
-Message-ID: <CAADnVQL86rs=bc+fg1EsHYZzYGC_WWOPtAVWWTqwmA_6SToGUA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] hwmon: (max127) Add Maxim MAX127 hardware monitoring
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Tao Ren <rentao.bupt@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
+        id S1728970AbgKSQof (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Nov 2020 11:44:35 -0500
+Received: from gate.crashing.org ([63.228.1.57]:60554 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727853AbgKSQoe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Nov 2020 11:44:34 -0500
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 0AJGZWpN025422;
+        Thu, 19 Nov 2020 10:35:32 -0600
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 0AJGZUTd025421;
+        Thu, 19 Nov 2020 10:35:30 -0600
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Thu, 19 Nov 2020 10:35:29 -0600
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Florian Weimer <fw@deneb.enyo.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Matt Mullins <mmullins@mmlx.us>,
+        Ingo Molnar <mingo@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        linux-hwmon@vger.kernel.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, openbmc@lists.ozlabs.org,
-        taoren@fb.com, mikechoi@fb.com
-Content-Type: text/plain; charset="UTF-8"
+        KP Singh <kpsingh@chromium.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-toolchains@vger.kernel.org
+Subject: Re: violating function pointer signature
+Message-ID: <20201119163529.GV2672@gate.crashing.org>
+References: <20201118132136.GJ3121378@hirez.programming.kicks-ass.net> <CAKwvOdkptuS=75WjzwOho9ZjGVHGMirEW3k3u4Ep8ya5wCNajg@mail.gmail.com> <20201118121730.12ee645b@gandalf.local.home> <20201118181226.GK2672@gate.crashing.org> <87o8jutt2h.fsf@mid.deneb.enyo.de> <20201118135823.3f0d24b7@gandalf.local.home> <20201118191127.GM2672@gate.crashing.org> <20201119083648.GE3121392@hirez.programming.kicks-ass.net> <20201119143735.GU2672@gate.crashing.org> <20201119095951.30269233@gandalf.local.home>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201119095951.30269233@gandalf.local.home>
+User-Agent: Mutt/1.4.2.3i
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 7:46 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Wed, 18 Nov 2020 17:26:53 -0800 Guenter Roeck wrote:
-> > On Wed, Nov 18, 2020 at 05:01:19PM -0800, Guenter Roeck wrote:
-> > > On Wed, Nov 18, 2020 at 03:42:53PM -0800, Tao Ren wrote:
-> > > > On Thu, Nov 19, 2020 at 12:27:19AM +0100, Andrew Lunn wrote:
-> > > > > On Wed, Nov 18, 2020 at 03:09:27PM -0800, rentao.bupt@gmail.com wrote:
-> > > > > > From: Tao Ren <rentao.bupt@gmail.com>
-> > > > > >
-> > > > > > The patch series adds hardware monitoring driver for the Maxim MAX127
-> > > > > > chip.
-> > > > >
-> > > > > Hi Tao
-> > > > >
-> > > > > Why are using sending a hwmon driver to the networking mailing list?
-> > > > >
-> > > > >     Andrew
-> > > >
-> > > > Hi Andrew,
-> > > >
-> > > > I added netdev because the mailing list is included in "get_maintainer.pl
-> > > > Documentation/hwmon/index.rst" output. Is it the right command to find
-> > > > reviewers? Could you please suggest? Thank you.
-> > >
-> > > I have no idea why running get_maintainer.pl on
-> > > Documentation/hwmon/index.rst returns such a large list of mailing
-> > > lists and people. For some reason it includes everyone in the XDP
-> > > maintainer list. If anyone has an idea how that happens, please
-> > > let me know - we'll want to get this fixed to avoid the same problem
-> > > in the future.
-> >
-> > I found it. The XDP maintainer entry has:
-> >
-> > K:    xdp
-> >
-> > This matches Documentation/hwmon/index.rst.
-> >
-> > $ grep xdp Documentation/hwmon/index.rst
-> >    xdpe12284
-> >
-> > It seems to me that a context match such as "xdp" in MAINTAINERS isn't
-> > really appropriate. "xdp" matches a total of 348 files in the kernel.
-> > The large majority of those is not XDP related. The maintainers
-> > of XDP (and all the listed mailing lists) should not be surprised
-> > to get a large number of odd review requests if they want to review
-> > every single patch on files which include the term "xdp".
->
-> Agreed, we should fix this. For maintainers with high patch volume life
-> would be so much easier if people CCed the right folks to get reviews,
-> so we should try our best to fix get_maintainer.
->
-> XDP folks, any opposition to changing the keyword / filename to:
->
->         [^a-z0-9]xdp[^a-z0-9]
+On Thu, Nov 19, 2020 at 09:59:51AM -0500, Steven Rostedt wrote:
+> On Thu, 19 Nov 2020 08:37:35 -0600
+> Segher Boessenkool <segher@kernel.crashing.org> wrote:
+> > > Note that we have a fairly extensive tradition of defining away UB with
+> > > language extentions, -fno-strict-overflow, -fno-strict-aliasing,  
+> > 
+> > These are options to make a large swath of not correct C programs
+> > compile (and often work) anyway.  This is useful because there are so
+> > many such programs, because a) people did not lint; and/or b) the
+> > problem never was obvious with some other (or older) compiler; and/or
+> > c) people do not care about writing portable C and prefer writing in
+> > their own non-C dialect.
+> 
+> Note, this is not about your average C program. This is about the Linux
+> kernel, which already does a lot of tricks in C.
 
-Reducing regex makes sense.
-git grep -l -E "xdp"|wc -l
-348
-git grep -l -E "[^a-z0-9]xdp[^a-z0-9]"|wc -l
-295
+Yes, I know.  And some of that can be supported just fine (usually
+because the compiler explicitly supports it); some of that will not
+cause problems in practice (e.g. the scope it could cause problems in
+is very limited); and some of that is just waiting to break down.  The
+question is what category your situation here is in.  The middle one I
+think.
 
-The false positive match was:
-+drivers/hwmon/pmbus/Kconfig
-+drivers/hwmon/pmbus/Makefile
-+drivers/hwmon/pmbus/xdpe12284.c
-+drivers/net/ethernet/natsemi/ns83820.c
-+drivers/net/ethernet/neterion/s2io.c
-+drivers/net/ethernet/neterion/s2io.h
-+drivers/net/ethernet/neterion/vxge/vxge-config.c
-+drivers/net/ethernet/neterion/vxge/vxge-config.h
-+drivers/net/ethernet/neterion/vxge/vxge-traffic.c
-+drivers/net/ethernet/sis/sis900.c
-+drivers/net/ethernet/sis/sis900.h
-+drivers/net/wireless/ath/ath5k/ath5k.h
-+drivers/net/wireless/ath/ath5k/base.c
-+drivers/net/wireless/ath/ath5k/debug.c
-+drivers/net/wireless/ath/ath5k/dma.c
+> There's a lot of code in
+> assembly that gets called from C (and vise versa).
 
-so it's pretty much hwmon and few drivers.
-I agree that sparing xdp from hwmon patches is a good thing :)
+That is just fine, that is what ABIs are for :-)
+
+> We modify code on the
+> fly (which tracepoints use two methods of that - with asm-goto/jump-labels
+> and static functions).
+
+And that is a lot trickier.  It can be made to work, but there are many
+dark nooks and crannies problems can hide in.
+
+> As for your point c), I'm not sure what you mean about portable C
+
+I just meant "valid C language code as defined by the standards".  Many
+people want all UB to just go away, while that is *impossible* to do for
+many compilers: for example where different architectures or different
+ABIs have contradictory requirements.
+
+> (stuck to
+> a single compiler, or stuck to a single architecture?). Linux obviously
+> supports multiple architectures (more than any other OS), but it is pretty
+> stuck to gcc as a compiler (with LLVM just starting to work too).
+> 
+> We are fine with being stuck to a compiler if it gives us what we want.
+
+Right.  Just know that a compiler can make defined behaviour for *some*
+things that are UB in standard C (possibly at a runtime performance
+cost), but most things are not feasible.
+
+Alexei's SPARC example (thanks!) shows that even "obvious" things are
+not so obviously (or at all) implemented the way you expect on all
+systems you care about.
+
+
+Segher
