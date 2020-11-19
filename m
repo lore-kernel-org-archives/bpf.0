@@ -2,118 +2,105 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C567BC6369E
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 15:46:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70A6FC63697
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 16:27:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8E575246AA
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 15:46:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0238E246AA
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 16:27:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="eJFgy/ER"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fGu+7Bf2"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728737AbgKSPqi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Nov 2020 10:46:38 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42152 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728583AbgKSPqh (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Nov 2020 10:46:37 -0500
-Received: from kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net (unknown [163.114.132.5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 813182224A;
-        Thu, 19 Nov 2020 15:46:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1605800796;
-        bh=ZvKprxlPeDR11nAv0IeB4RNZKc7/A57CYBYK8dwYGvA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eJFgy/ERDAHnV44gummxbYRBsX1kbc6TtE7RiXMtxbNIkKe7OhRg5AJfcPrxFKqjD
-         RvGoJEuoxmZSF+VACQj2A8eU2SVNDpagHniFKlgF8AkQdfRkaQSpgD5aLptwItPHad
-         ogoqmgOfEn08wfYIcOdiAOnWKZDBDMa2FN3swJpI=
-Date:   Thu, 19 Nov 2020 07:46:34 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Tao Ren <rentao.bupt@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, openbmc@lists.ozlabs.org, taoren@fb.com,
-        mikechoi@fb.com
-Subject: Re: [PATCH v2 0/2] hwmon: (max127) Add Maxim MAX127 hardware
- monitoring
-Message-ID: <20201119074634.2e9cb21b@kicinski-fedora-PC1C0HJN.hsd1.ca.comcast.net>
-In-Reply-To: <20201119012653.GA249502@roeck-us.net>
-References: <20201118230929.18147-1-rentao.bupt@gmail.com>
-        <20201118232719.GI1853236@lunn.ch>
-        <20201118234252.GA18681@taoren-ubuntu-R90MNF91>
-        <20201119010119.GA248686@roeck-us.net>
-        <20201119012653.GA249502@roeck-us.net>
+        id S1728766AbgKSQ1g (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Nov 2020 11:27:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54042 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728853AbgKSQ1g (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Nov 2020 11:27:36 -0500
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02F6C061A49
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 08:27:35 -0800 (PST)
+Received: by mail-wm1-x342.google.com with SMTP id h21so7294606wmb.2
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 08:27:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Z36MlF26WgWXOikzwPdY6S4xLAQhn1npxSnvJNteclE=;
+        b=fGu+7Bf2lyWU/lgx4K/qS0Ycvfcqw+M6On5Tb5RL0jM+IkZKCmP9vLsbL4zJRFes3M
+         l+Ll2BcApNvJlfdn0KlrAn5iveQ6/KPXJhXMDSoBGy0cuMyV6srYTnOdHfpkc0KxL9Xi
+         Kje/Norox0GHxKdLiAEvU8gDOm43OPjQYjC1M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Z36MlF26WgWXOikzwPdY6S4xLAQhn1npxSnvJNteclE=;
+        b=P0wfVuD7kI4AiHQlCLa+skcwzVxB9QHlFS/R/j9RonM5Za6AZvOoFlrvf90P0pKve3
+         JHEt+fU819bWvImx1CVOuaDWsGed0gyZEw9LUsd3SjI8C/6VI2FN7hYWwOs5gVp2uTVv
+         TQic5ML03lkhL1OiKkjX00ubXZw3zrUZpxlY2s2KYDFHmUe3qCO2JI0scXdhNz3CUbX+
+         mGgs4Z/wA9sYxSMOZH9oMJiBf7PUC01dxcpD9OY4Xp4C9fJ5sNS1/+s3EzxEGNcZUU/h
+         IXDayvzjABdm7c66sRCE3S6bZTOn63wBPr6kuaGCkW3HSY3XaMn2mnCfyuETtufKHc7G
+         bgcw==
+X-Gm-Message-State: AOAM531ocW/O3T/zkSC1CxSN7yFJnCgV0Q5KnTuQQLv3anDFN4HfzOEy
+        jM6IItooD9z46Sslkq2JKCjap1UZ0BFJn+OY
+X-Google-Smtp-Source: ABdhPJwzpEf8BMNhQktHP9wY1hZnvZBrQH11aEU7uxGK8wfrft4HifITGFcsDcw+G1QgAaS0oSAxkA==
+X-Received: by 2002:a7b:cb82:: with SMTP id m2mr5350605wmi.75.1605803254062;
+        Thu, 19 Nov 2020 08:27:34 -0800 (PST)
+Received: from revest.zrh.corp.google.com ([2a00:79e0:42:204:f693:9fff:fef4:a569])
+        by smtp.gmail.com with ESMTPSA id i5sm380061wrw.45.2020.11.19.08.27.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Nov 2020 08:27:33 -0800 (PST)
+From:   Florent Revest <revest@chromium.org>
+To:     bpf@vger.kernel.org
+Cc:     viro@zeniv.linux.org.uk, davem@davemloft.net, kuba@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, kafai@fb.com, yhs@fb.com,
+        andrii@kernel.org, kpsingh@chromium.org, revest@google.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v2 3/5] bpf: Expose bpf_sk_storage_* to iterator programs
+Date:   Thu, 19 Nov 2020 17:26:52 +0100
+Message-Id: <20201119162654.2410685-3-revest@chromium.org>
+X-Mailer: git-send-email 2.29.2.299.gdc1121823c-goog
+In-Reply-To: <20201119162654.2410685-1-revest@chromium.org>
+References: <20201119162654.2410685-1-revest@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, 18 Nov 2020 17:26:53 -0800 Guenter Roeck wrote:
-> On Wed, Nov 18, 2020 at 05:01:19PM -0800, Guenter Roeck wrote:
-> > On Wed, Nov 18, 2020 at 03:42:53PM -0800, Tao Ren wrote:  
-> > > On Thu, Nov 19, 2020 at 12:27:19AM +0100, Andrew Lunn wrote:  
-> > > > On Wed, Nov 18, 2020 at 03:09:27PM -0800, rentao.bupt@gmail.com wrote:  
-> > > > > From: Tao Ren <rentao.bupt@gmail.com>
-> > > > > 
-> > > > > The patch series adds hardware monitoring driver for the Maxim MAX127
-> > > > > chip.  
-> > > > 
-> > > > Hi Tao
-> > > > 
-> > > > Why are using sending a hwmon driver to the networking mailing list?
-> > > > 
-> > > >     Andrew  
-> > > 
-> > > Hi Andrew,
-> > > 
-> > > I added netdev because the mailing list is included in "get_maintainer.pl
-> > > Documentation/hwmon/index.rst" output. Is it the right command to find
-> > > reviewers? Could you please suggest? Thank you.  
-> > 
-> > I have no idea why running get_maintainer.pl on
-> > Documentation/hwmon/index.rst returns such a large list of mailing
-> > lists and people. For some reason it includes everyone in the XDP
-> > maintainer list. If anyone has an idea how that happens, please
-> > let me know - we'll want to get this fixed to avoid the same problem
-> > in the future.
-> 
-> I found it. The XDP maintainer entry has:
-> 
-> K:    xdp
-> 
-> This matches Documentation/hwmon/index.rst.
-> 
-> $ grep xdp Documentation/hwmon/index.rst
->    xdpe12284
-> 
-> It seems to me that a context match such as "xdp" in MAINTAINERS isn't
-> really appropriate. "xdp" matches a total of 348 files in the kernel.
-> The large majority of those is not XDP related. The maintainers
-> of XDP (and all the listed mailing lists) should not be surprised
-> to get a large number of odd review requests if they want to review
-> every single patch on files which include the term "xdp".
+From: Florent Revest <revest@google.com>
 
-Agreed, we should fix this. For maintainers with high patch volume life
-would be so much easier if people CCed the right folks to get reviews,
-so we should try our best to fix get_maintainer.
+Iterators are currently used to expose kernel information to userspace
+over fast procfs-like files but iterators could also be used to
+manipulate local storage. For example, the task_file iterator could be
+used to initialize a socket local storage with associations between
+processes and sockets or to selectively delete local storage values.
 
-XDP folks, any opposition to changing the keyword / filename to:
+This exposes both socket local storage helpers to all iterators.
+Alternatively we could expose it to only certain iterators with strcmps
+on prog->aux->attach_func_name.
 
-	[^a-z0-9]xdp[^a-z0-9]
+Signed-off-by: Florent Revest <revest@google.com>
+---
+ net/core/bpf_sk_storage.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-?
+diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+index a32037daa933..4edd033e899c 100644
+--- a/net/core/bpf_sk_storage.c
++++ b/net/core/bpf_sk_storage.c
+@@ -394,6 +394,7 @@ static bool bpf_sk_storage_tracing_allowed(const struct bpf_prog *prog)
+ 	 * use the bpf_sk_storage_(get|delete) helper.
+ 	 */
+ 	switch (prog->expected_attach_type) {
++	case BPF_TRACE_ITER:
+ 	case BPF_TRACE_RAW_TP:
+ 		/* bpf_sk_storage has no trace point */
+ 		return true;
+-- 
+2.29.2.299.gdc1121823c-goog
+
