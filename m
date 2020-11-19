@@ -2,120 +2,73 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B509C6379D
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 16:44:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C64AC63697
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 17:00:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 531D922242
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 16:44:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 127ED2469D
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 17:00:07 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="uLyc9R5A"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728970AbgKSQof (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Nov 2020 11:44:35 -0500
-Received: from gate.crashing.org ([63.228.1.57]:60554 "EHLO gate.crashing.org"
+        id S1729060AbgKSRAG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Nov 2020 12:00:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33394 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727853AbgKSQoe (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 19 Nov 2020 11:44:34 -0500
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 0AJGZWpN025422;
-        Thu, 19 Nov 2020 10:35:32 -0600
-Received: (from segher@localhost)
-        by gate.crashing.org (8.14.1/8.14.1/Submit) id 0AJGZUTd025421;
-        Thu, 19 Nov 2020 10:35:30 -0600
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date:   Thu, 19 Nov 2020 10:35:29 -0600
-From:   Segher Boessenkool <segher@kernel.crashing.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Florian Weimer <fw@deneb.enyo.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Matt Mullins <mmullins@mmlx.us>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        linux-toolchains@vger.kernel.org
-Subject: Re: violating function pointer signature
-Message-ID: <20201119163529.GV2672@gate.crashing.org>
-References: <20201118132136.GJ3121378@hirez.programming.kicks-ass.net> <CAKwvOdkptuS=75WjzwOho9ZjGVHGMirEW3k3u4Ep8ya5wCNajg@mail.gmail.com> <20201118121730.12ee645b@gandalf.local.home> <20201118181226.GK2672@gate.crashing.org> <87o8jutt2h.fsf@mid.deneb.enyo.de> <20201118135823.3f0d24b7@gandalf.local.home> <20201118191127.GM2672@gate.crashing.org> <20201119083648.GE3121392@hirez.programming.kicks-ass.net> <20201119143735.GU2672@gate.crashing.org> <20201119095951.30269233@gandalf.local.home>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201119095951.30269233@gandalf.local.home>
-User-Agent: Mutt/1.4.2.3i
+        id S1728935AbgKSRAG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 19 Nov 2020 12:00:06 -0500
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605805205;
+        bh=NFaRCoK+duTuFLA/IvS65CpltxA3sv7nJQm3qn8aAl8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=uLyc9R5Aa4RD46FF++1b7uqO4CM9jjgBad72x46ph5Xv0ZXD1Ccr2toO6XkbghUoy
+         YoEzoHJ2az+cQqGBLMVuWoJ5YR9z57+3G0/KfFvKSjewD4jdGCYgZFlPWamv/aoltw
+         usTkLGsZ7lsgRVcNF8AXx+u0yDc7iRZx3tVQqLPw=
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] libbpf: Fix VERSIONED_SYM_COUNT number parsing
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <160580520567.11649.11624136099417270376.git-patchwork-notify@kernel.org>
+Date:   Thu, 19 Nov 2020 17:00:05 +0000
+References: <20201118211350.1493421-1-jolsa@kernel.org>
+In-Reply-To: <20201118211350.1493421-1-jolsa@kernel.org>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andriin@fb.com,
+        tony.ambardar@gmail.com, cascardo@canonical.com,
+        aurelien@aurel32.net, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@chromium.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Nov 19, 2020 at 09:59:51AM -0500, Steven Rostedt wrote:
-> On Thu, 19 Nov 2020 08:37:35 -0600
-> Segher Boessenkool <segher@kernel.crashing.org> wrote:
-> > > Note that we have a fairly extensive tradition of defining away UB with
-> > > language extentions, -fno-strict-overflow, -fno-strict-aliasing,  
-> > 
-> > These are options to make a large swath of not correct C programs
-> > compile (and often work) anyway.  This is useful because there are so
-> > many such programs, because a) people did not lint; and/or b) the
-> > problem never was obvious with some other (or older) compiler; and/or
-> > c) people do not care about writing portable C and prefer writing in
-> > their own non-C dialect.
+Hello:
+
+This patch was applied to bpf/bpf.git (refs/heads/master):
+
+On Wed, 18 Nov 2020 22:13:50 +0100 you wrote:
+> We remove "other info" from "readelf -s --wide" output when
+> parsing GLOBAL_SYM_COUNT variable, which was added in [1].
+> But we don't do that for VERSIONED_SYM_COUNT and it's failing
+> the check_abi target on powerpc Fedora 33.
 > 
-> Note, this is not about your average C program. This is about the Linux
-> kernel, which already does a lot of tricks in C.
-
-Yes, I know.  And some of that can be supported just fine (usually
-because the compiler explicitly supports it); some of that will not
-cause problems in practice (e.g. the scope it could cause problems in
-is very limited); and some of that is just waiting to break down.  The
-question is what category your situation here is in.  The middle one I
-think.
-
-> There's a lot of code in
-> assembly that gets called from C (and vise versa).
-
-That is just fine, that is what ABIs are for :-)
-
-> We modify code on the
-> fly (which tracepoints use two methods of that - with asm-goto/jump-labels
-> and static functions).
-
-And that is a lot trickier.  It can be made to work, but there are many
-dark nooks and crannies problems can hide in.
-
-> As for your point c), I'm not sure what you mean about portable C
-
-I just meant "valid C language code as defined by the standards".  Many
-people want all UB to just go away, while that is *impossible* to do for
-many compilers: for example where different architectures or different
-ABIs have contradictory requirements.
-
-> (stuck to
-> a single compiler, or stuck to a single architecture?). Linux obviously
-> supports multiple architectures (more than any other OS), but it is pretty
-> stuck to gcc as a compiler (with LLVM just starting to work too).
+> The extra "other info" wasn't problem for VERSIONED_SYM_COUNT
+> parsing until commit [2] added awk in the pipe, which assumes
+> that the last column is symbol, but it can be "other info".
 > 
-> We are fine with being stuck to a compiler if it gives us what we want.
+> [...]
 
-Right.  Just know that a compiler can make defined behaviour for *some*
-things that are UB in standard C (possibly at a runtime performance
-cost), but most things are not feasible.
+Here is the summary with links:
+  - libbpf: Fix VERSIONED_SYM_COUNT number parsing
+    https://git.kernel.org/bpf/bpf/c/1fd6cee127e2
 
-Alexei's SPARC example (thanks!) shows that even "obvious" things are
-not so obviously (or at all) implemented the way you expect on all
-systems you care about.
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Segher
