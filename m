@@ -8,49 +8,49 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B72E4C64E7D
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 17:39:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26E76C64E75
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 17:39:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 51955246AD
-	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 17:39:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ADBE8246CA
+	for <bpf@archiver.kernel.org>; Thu, 19 Nov 2020 17:39:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="MvgLm7UU"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Cmhswu7S"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729522AbgKSRiR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 19 Nov 2020 12:38:17 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:1244 "EHLO
+        id S1729707AbgKSRja (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 19 Nov 2020 12:39:30 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:60116 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729509AbgKSRiQ (ORCPT
+        by vger.kernel.org with ESMTP id S1729470AbgKSRiQ (ORCPT
         <rfc822;bpf@vger.kernel.org>); Thu, 19 Nov 2020 12:38:16 -0500
 Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AJHUjCN024652
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 09:38:16 -0800
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AJHUjCL024652
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 09:38:15 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=UL9KPXzaHLZpNSorKKTuhYlkZqIX5y2leBPcmirTmTo=;
- b=MvgLm7UUpoRad31zzuslu3BTcZR5Y/2OEMUyXtHG/nCvvkl4k9/RQV4xczLi5lvVeJUR
- uLtKK7nrvvKT93YZpMFHaVxTSZcGHo9BzTCekt/vuwXYtbqSSt+kg0DSsPHy62zdNwiF
- nWoVetoGkLnp08NdPkhldUKEnV7beLPHRxY= 
+ bh=LTLQPyjn9AU74KKeleForoHMcwhDRBWJSiJ+HSA8Smc=;
+ b=Cmhswu7SdzqeUgjJUlgDdO/vAHYrjChrkNRZYmG2HHVazyYGfwYEm6VCRcLLY8TrCVhq
+ 6gWExz0Ja6EuWaQzq4ojMV7rvWesFT5a63C2QazoWwCyEwL2M8XOHU7rGhimgIkvcM0s
+ HtbxjZuAPUJN/fEXeaI7SrO+bKZ/jpZZ7Gg= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 34wgckp8ya-11
+        by mx0a-00082601.pphosted.com with ESMTP id 34wgckp8ya-9
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 09:38:16 -0800
-Received: from intmgw001.06.prn3.facebook.com (2620:10d:c085:108::8) by
+        for <bpf@vger.kernel.org>; Thu, 19 Nov 2020 09:38:15 -0800
+Received: from intmgw001.41.prn1.facebook.com (2620:10d:c085:208::11) by
  mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 19 Nov 2020 09:38:05 -0800
+ 15.1.1979.3; Thu, 19 Nov 2020 09:38:04 -0800
 Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
-        id B6AEB145BCF3; Thu, 19 Nov 2020 09:37:56 -0800 (PST)
+        id E78DF145BD07; Thu, 19 Nov 2020 09:37:56 -0800 (PST)
 From:   Roman Gushchin <guro@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
         <andrii@kernel.org>, <akpm@linux-foundation.org>,
         <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <kernel-team@fb.com>
-Subject: [PATCH bpf-next v7 14/34] bpf: memcg-based memory accounting for bpf ringbuffer
-Date:   Thu, 19 Nov 2020 09:37:34 -0800
-Message-ID: <20201119173754.4125257-15-guro@fb.com>
+Subject: [PATCH bpf-next v7 24/34] bpf: eliminate rlimit-based memory accounting for lpm_trie maps
+Date:   Thu, 19 Nov 2020 09:37:44 -0800
+Message-ID: <20201119173754.4125257-25-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201119173754.4125257-1-guro@fb.com>
 References: <20201119173754.4125257-1-guro@fb.com>
@@ -61,8 +61,8 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-19_09:2020-11-19,2020-11-19 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0 mlxscore=0
- suspectscore=13 clxscore=1015 adultscore=0 spamscore=0 impostorscore=0
- lowpriorityscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=703
+ suspectscore=38 clxscore=1015 adultscore=0 spamscore=0 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=700
  phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2011190125
 X-FB-Internal: deliver
@@ -70,52 +70,51 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Enable the memcg-based memory accounting for the memory used by
-the bpf ringbuffer.
+Do not use rlimit-based memory accounting for lpm_trie maps.
+It has been replaced with the memcg-based memory accounting.
 
 Signed-off-by: Roman Gushchin <guro@fb.com>
 Acked-by: Song Liu <songliubraving@fb.com>
 ---
- kernel/bpf/ringbuf.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ kernel/bpf/lpm_trie.c | 13 -------------
+ 1 file changed, 13 deletions(-)
 
-diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
-index 31cb04a4dd2d..ee5f55d9276e 100644
---- a/kernel/bpf/ringbuf.c
-+++ b/kernel/bpf/ringbuf.c
-@@ -60,8 +60,8 @@ struct bpf_ringbuf_hdr {
-=20
- static struct bpf_ringbuf *bpf_ringbuf_area_alloc(size_t data_sz, int nu=
-ma_node)
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index a7d1e5cb80da..65757321ddf8 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -541,8 +541,6 @@ static int trie_delete_elem(struct bpf_map *map, void=
+ *_key)
+ static struct bpf_map *trie_alloc(union bpf_attr *attr)
  {
--	const gfp_t flags =3D GFP_KERNEL | __GFP_RETRY_MAYFAIL | __GFP_NOWARN |
--			    __GFP_ZERO;
-+	const gfp_t flags =3D GFP_KERNEL_ACCOUNT | __GFP_RETRY_MAYFAIL |
-+			    __GFP_NOWARN | __GFP_ZERO;
- 	int nr_meta_pages =3D RINGBUF_PGOFF + RINGBUF_POS_PAGES;
- 	int nr_data_pages =3D data_sz >> PAGE_SHIFT;
- 	int nr_pages =3D nr_meta_pages + nr_data_pages;
-@@ -89,7 +89,8 @@ static struct bpf_ringbuf *bpf_ringbuf_area_alloc(size_=
-t data_sz, int numa_node)
- 	 */
- 	array_size =3D (nr_meta_pages + 2 * nr_data_pages) * sizeof(*pages);
- 	if (array_size > PAGE_SIZE)
--		pages =3D vmalloc_node(array_size, numa_node);
-+		pages =3D __vmalloc_node(array_size, 1, GFP_KERNEL_ACCOUNT,
-+				       numa_node, __builtin_return_address(0));
- 	else
- 		pages =3D kmalloc_node(array_size, flags, numa_node);
- 	if (!pages)
-@@ -167,7 +168,7 @@ static struct bpf_map *ringbuf_map_alloc(union bpf_at=
-tr *attr)
- 		return ERR_PTR(-E2BIG);
- #endif
+ 	struct lpm_trie *trie;
+-	u64 cost =3D sizeof(*trie), cost_per_node;
+-	int ret;
 =20
--	rb_map =3D kzalloc(sizeof(*rb_map), GFP_USER);
-+	rb_map =3D kzalloc(sizeof(*rb_map), GFP_USER | __GFP_ACCOUNT);
- 	if (!rb_map)
- 		return ERR_PTR(-ENOMEM);
+ 	if (!bpf_capable())
+ 		return ERR_PTR(-EPERM);
+@@ -568,20 +566,9 @@ static struct bpf_map *trie_alloc(union bpf_attr *at=
+tr)
+ 			  offsetof(struct bpf_lpm_trie_key, data);
+ 	trie->max_prefixlen =3D trie->data_size * 8;
 =20
+-	cost_per_node =3D sizeof(struct lpm_trie_node) +
+-			attr->value_size + trie->data_size;
+-	cost +=3D (u64) attr->max_entries * cost_per_node;
+-
+-	ret =3D bpf_map_charge_init(&trie->map.memory, cost);
+-	if (ret)
+-		goto out_err;
+-
+ 	spin_lock_init(&trie->lock);
+=20
+ 	return &trie->map;
+-out_err:
+-	kfree(trie);
+-	return ERR_PTR(ret);
+ }
+=20
+ static void trie_free(struct bpf_map *map)
 --=20
 2.26.2
 
