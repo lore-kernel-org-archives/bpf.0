@@ -2,121 +2,117 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3D9EAC5519F
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 08:53:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6620C5519F
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 10:20:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BC63722254
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 08:53:42 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PGdw6ueE"
+	by mail.kernel.org (Postfix) with ESMTP id 576542242A
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 10:20:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725809AbgKTIxW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Nov 2020 03:53:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:53616 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725805AbgKTIxV (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 20 Nov 2020 03:53:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605862400;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ya3dNIkAZY6iHGGxpdSqGojKvsyjgILmiyBq9POOMuQ=;
-        b=PGdw6ueEYNb4gRRd4LKLhySTHA4yj2Up03wSw4dlSJXMZQW/P54q5SzfhYWFCXspkOJSoW
-        vV3ZdO1E1b0zgdMnw7tEUMZXULnyHzylbeD7akNYl7Bdy2/sppb8G3fgNX6ZlhfG/IxHvk
-        VBYYFzZWxapRoQvBpV2ykhgKS4NO4KI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-223-QGyMsmvSMg-IJfh8GCbblQ-1; Fri, 20 Nov 2020 03:53:16 -0500
-X-MC-Unique: QGyMsmvSMg-IJfh8GCbblQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 56A17801B14;
-        Fri, 20 Nov 2020 08:53:14 +0000 (UTC)
-Received: from firesoul.localdomain (unknown [10.40.208.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1C6A860BE2;
-        Fri, 20 Nov 2020 08:53:11 +0000 (UTC)
-Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id D12EE3213845D;
-        Fri, 20 Nov 2020 09:53:09 +0100 (CET)
-Subject: [PATCH net-next V3] MAINTAINERS: Update XDP and AF_XDP entries
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
-        Daniel Borkmann <borkmann@iogearbox.net>,
+        id S1725942AbgKTKUJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Nov 2020 05:20:09 -0500
+Received: from mga14.intel.com ([192.55.52.115]:2583 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725789AbgKTKUJ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Nov 2020 05:20:09 -0500
+IronPort-SDR: qAd9Y4jY3p0s6fUTkdaCkBvlRsug3v4qPBa9h/Q8pAsrZxR0L1uorsqmmBM4aPNyB2Zws1EH+l
+ zqxSLhPV+R4Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9810"; a="170669444"
+X-IronPort-AV: E=Sophos;i="5.78,356,1599548400"; 
+   d="scan'208";a="170669444"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2020 02:20:09 -0800
+IronPort-SDR: wmc0JH8A7o1ERwpw4MsSCZ5YZBzwpK2CGxwjAJk6lkbSCf5qUeJJA8JSeiv2S+AasTeqLfLvwU
+ 3eW9LBYnDlhA==
+X-IronPort-AV: E=Sophos;i="5.78,356,1599548400"; 
+   d="scan'208";a="477175051"
+Received: from schuenem-mobl2.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.37.132])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2020 02:20:06 -0800
+Subject: Re: [PATCH net-next V3] MAINTAINERS: Update XDP and AF_XDP entries
+To:     Jesper Dangaard Brouer <brouer@redhat.com>, bpf@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, Daniel Borkmann <borkmann@iogearbox.net>,
         Alexei Starovoitov <alexei.starovoitov@gmail.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        =?utf-8?b?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        joe@perches.com
-Date:   Fri, 20 Nov 2020 09:53:09 +0100
-Message-ID: <160586238944.2808432.4401269290440394008.stgit@firesoul>
-User-Agent: StGit/0.19
+        Magnus Karlsson <magnus.karlsson@intel.com>, joe@perches.com
+References: <160586238944.2808432.4401269290440394008.stgit@firesoul>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Message-ID: <c40b7ae2-78e5-a507-79df-4968924a0cfb@intel.com>
+Date:   Fri, 20 Nov 2020 11:20:04 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <160586238944.2808432.4401269290440394008.stgit@firesoul>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Getting too many false positive matches with current use
-of the content regex K: and file regex N: patterns.
+On 2020-11-20 09:53, Jesper Dangaard Brouer wrote:
+> Getting too many false positive matches with current use
+> of the content regex K: and file regex N: patterns.
+> 
+> This patch drops file match N: and makes K: more restricted.
+> Some more normal F: file wildcards are added.
+> 
+> Notice that AF_XDP forgot to some F: files that is also
+> updated in this patch.
+> 
+> Suggested-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 
-This patch drops file match N: and makes K: more restricted.
-Some more normal F: file wildcards are added.
+Thanks Jesper!
 
-Notice that AF_XDP forgot to some F: files that is also
-updated in this patch.
+Acked-by: Björn Töpel <bjorn.topel@intel.com>
 
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
----
- MAINTAINERS |   12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index af9f6a3ab100..f827f504251b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19105,12 +19105,17 @@ L:	netdev@vger.kernel.org
- L:	bpf@vger.kernel.org
- S:	Supported
- F:	include/net/xdp.h
-+F:	include/net/xdp_priv.h
- F:	include/trace/events/xdp.h
- F:	kernel/bpf/cpumap.c
- F:	kernel/bpf/devmap.c
- F:	net/core/xdp.c
--N:	xdp
--K:	xdp
-+F:	samples/bpf/xdp*
-+F:	tools/testing/selftests/bpf/*xdp*
-+F:	tools/testing/selftests/bpf/*/*xdp*
-+F:	drivers/net/ethernet/*/*/*/*/*xdp*
-+F:	drivers/net/ethernet/*/*/*xdp*
-+K:	(?:\b|_)xdp(?:\b|_)
- 
- XDP SOCKETS (AF_XDP)
- M:	Björn Töpel <bjorn.topel@intel.com>
-@@ -19119,9 +19124,12 @@ R:	Jonathan Lemon <jonathan.lemon@gmail.com>
- L:	netdev@vger.kernel.org
- L:	bpf@vger.kernel.org
- S:	Maintained
-+F:	Documentation/networking/af_xdp.rst
- F:	include/net/xdp_sock*
- F:	include/net/xsk_buff_pool.h
- F:	include/uapi/linux/if_xdp.h
-+F:	include/uapi/linux/xdp_diag.h
-+F:	include/net/netns/xdp.h
- F:	net/xdp/
- F:	samples/bpf/xdpsock*
- F:	tools/lib/bpf/xsk*
-
-
+> ---
+>   MAINTAINERS |   12 ++++++++++--
+>   1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index af9f6a3ab100..f827f504251b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19105,12 +19105,17 @@ L:	netdev@vger.kernel.org
+>   L:	bpf@vger.kernel.org
+>   S:	Supported
+>   F:	include/net/xdp.h
+> +F:	include/net/xdp_priv.h
+>   F:	include/trace/events/xdp.h
+>   F:	kernel/bpf/cpumap.c
+>   F:	kernel/bpf/devmap.c
+>   F:	net/core/xdp.c
+> -N:	xdp
+> -K:	xdp
+> +F:	samples/bpf/xdp*
+> +F:	tools/testing/selftests/bpf/*xdp*
+> +F:	tools/testing/selftests/bpf/*/*xdp*
+> +F:	drivers/net/ethernet/*/*/*/*/*xdp*
+> +F:	drivers/net/ethernet/*/*/*xdp*
+> +K:	(?:\b|_)xdp(?:\b|_)
+>   
+>   XDP SOCKETS (AF_XDP)
+>   M:	Björn Töpel <bjorn.topel@intel.com>
+> @@ -19119,9 +19124,12 @@ R:	Jonathan Lemon <jonathan.lemon@gmail.com>
+>   L:	netdev@vger.kernel.org
+>   L:	bpf@vger.kernel.org
+>   S:	Maintained
+> +F:	Documentation/networking/af_xdp.rst
+>   F:	include/net/xdp_sock*
+>   F:	include/net/xsk_buff_pool.h
+>   F:	include/uapi/linux/if_xdp.h
+> +F:	include/uapi/linux/xdp_diag.h
+> +F:	include/net/netns/xdp.h
+>   F:	net/xdp/
+>   F:	samples/bpf/xdpsock*
+>   F:	tools/lib/bpf/xsk*
+> 
+> 
