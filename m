@@ -2,33 +2,33 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B5CF6C2D0E4
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:19:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5344AC56202
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:20:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 693BD2242A
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:19:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 009192242A
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:20:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728260AbgKTXTt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Nov 2020 18:19:49 -0500
-Received: from out01.mta.xmission.com ([166.70.13.231]:35754 "EHLO
-        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728124AbgKTXTs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Nov 2020 18:19:48 -0500
+        id S1728960AbgKTXT5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Nov 2020 18:19:57 -0500
+Received: from out02.mta.xmission.com ([166.70.13.232]:46934 "EHLO
+        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728864AbgKTXT4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Nov 2020 18:19:56 -0500
 Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1kgFdH-006Tmb-H0; Fri, 20 Nov 2020 16:15:59 -0700
+        id 1kgFh5-002Ral-ID; Fri, 20 Nov 2020 16:19:55 -0700
 Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.int.ebiederm.org)
         by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1kgFdG-00EG00-3B; Fri, 20 Nov 2020 16:15:59 -0700
+        id 1kgFeJ-00EG00-Oz; Fri, 20 Nov 2020 16:17:04 -0700
 From:   "Eric W. Biederman" <ebiederm@xmission.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-fsdevel@vger.kernel.org, criu@openvz.org,
@@ -54,211 +54,71 @@ Cc:     linux-fsdevel@vger.kernel.org, criu@openvz.org,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         "Eric W. Biederman" <ebiederm@xmission.com>
-Date:   Fri, 20 Nov 2020 17:14:18 -0600
-Message-Id: <20201120231441.29911-1-ebiederm@xmission.com>
+Date:   Fri, 20 Nov 2020 17:14:36 -0600
+Message-Id: <20201120231441.29911-19-ebiederm@xmission.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <87r1on1v62.fsf@x220.int.ebiederm.org>
 References: <87r1on1v62.fsf@x220.int.ebiederm.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1kgFdG-00EG00-3B;;;mid=<20201120231441.29911-1-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/Dk4BkOwsyT/FgOO6bO2TIPLXxxbBOHLc=
+X-XM-SPF: eid=1kgFeJ-00EG00-Oz;;;mid=<20201120231441.29911-19-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/07Js/AbSwO/7LHKe+DUR0IrwFWqtok48=
 X-SA-Exim-Connect-IP: 68.227.160.95
 X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: [PATCH v2 01/24] exec: Move unshare_files to fix posix file locking during exec
+Subject: [PATCH v2 19/24] file: In f_dupfd read RLIMIT_NOFILE once.
 X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
 X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Many moons ago the binfmts were doing some very questionable things
-with file descriptors and an unsharing of the file descriptor table
-was added to make things better[1][2].  The helper steal_lockss was
-added to avoid breaking the userspace programs[3][4][6].
+Simplify the code, and remove the chance of races by reading
+RLIMIT_NOFILE only once in f_dupfd.
 
-Unfortunately it turned out that steal_locks did not work for network
-file systems[5], so it was removed to see if anyone would
-complain[7][8].  It was thought at the time that NPTL would not be
-affected as the unshare_files happened after the other threads were
-killed[8].  Unfortunately because there was an unshare_files in
-binfmt_elf.c before the threads were killed this analysis was
-incorrect.
+Pass the read value of RLIMIT_NOFILE into alloc_fd which is the other
+location the rlimit was read in f_dupfd.  As f_dupfd is the only
+caller of alloc_fd this changing alloc_fd is trivially safe.
 
-This unshare_files in binfmt_elf.c resulted in the unshares_files
-happening whenever threads were present.  Which led to unshare_files
-being moved to the start of do_execve[9].
+Further this causes alloc_fd to take all of the same arguments as
+__alloc_fd except for the files_struct argument.
 
-Later the problems were rediscovered and the suggested approach was to
-readd steal_locks under a different name[10].  I happened to be
-reviewing patches and I noticed that this approach was a step
-backwards[11].
-
-I proposed simply moving unshare_files[12] and it was pointed
-out that moving unshare_files without auditing the code was
-also unsafe[13].
-
-There were then several attempts to solve this[14][15][16] and I even
-posted this set of changes[17].  Unfortunately because auditing all of
-execve is time consuming this change did not make it in at the time.
-
-Well now that I am cleaning up exec I have made the time to read
-through all of the binfmts and the only playing with file descriptors
-is either the security modules closing them in
-security_bprm_committing_creds or is in the generic code in fs/exec.c.
-None of it happens before begin_new_exec is called.
-
-So move unshare_files into begin_new_exec, after the point of no
-return.  If memory is very very very low and the application calling
-exec is sharing file descriptor tables between processes we might fail
-past the point of no return.  Which is unfortunate but no different
-than any of the other places where we allocate memory after the point
-of no return.
-
-This movement allows another process that shares the file table, or
-another thread of the same process and that closes files or changes
-their close on exec behavior and races with execve to cause some
-unexpected things to happen.  There is only one time of check to time
-of use race and it is just there so that execve fails instead of
-an interpreter failing when it tries to open the file it is supposed
-to be interpreting.   Failing later if userspace is being silly is
-not a problem.
-
-With this change it the following discription from the removal
-of steal_locks[8] finally becomes true.
-
-    Apps using NPTL are not affected, since all other threads are killed before
-    execve.
-
-    Apps using LinuxThreads are only affected if they
-
-      - have multiple threads during exec (LinuxThreads doesn't kill other
-        threads, the app may do it with pthread_kill_other_threads_np())
-      - rely on POSIX locks being inherited across exec
-
-    Both conditions are documented, but not their interaction.
-
-    Apps using clone() natively are affected if they
-
-      - use clone(CLONE_FILES)
-      - rely on POSIX locks being inherited across exec
-
-I have investigated some paths to make it possible to solve this
-without moving unshare_files but they all look more complicated[18].
-
-Reported-by: Daniel P. Berrangé <berrange@redhat.com>
-Reported-by: Jeff Layton <jlayton@redhat.com>
-History-tree: git://git.kernel.org/pub/scm/linux/kernel/git/tglx/history.git
-[1] 02cda956de0b ("[PATCH] unshare_files"
-[2] 04e9bcb4d106 ("[PATCH] use new unshare_files helper")
-[3] 088f5d7244de ("[PATCH] add steal_locks helper")
-[4] 02c541ec8ffa ("[PATCH] use new steal_locks helper")
-[5] https://lkml.kernel.org/r/E1FLIlF-0007zR-00@dorka.pomaz.szeredi.hu
-[6] https://lkml.kernel.org/r/0060321191605.GB15997@sorel.sous-sol.org
-[7] https://lkml.kernel.org/r/E1FLwjC-0000kJ-00@dorka.pomaz.szeredi.hu
-[8] c89681ed7d0e ("[PATCH] remove steal_locks()")
-[9] fd8328be874f ("[PATCH] sanitize handling of shared descriptor tables in failing execve()")
-[10] https://lkml.kernel.org/r/20180317142520.30520-1-jlayton@kernel.org
-[11] https://lkml.kernel.org/r/87r2nwqk73.fsf@xmission.com
-[12] https://lkml.kernel.org/r/87bmfgvg8w.fsf@xmission.com
-[13] https://lkml.kernel.org/r/20180322111424.GE30522@ZenIV.linux.org.uk
-[14] https://lkml.kernel.org/r/20180827174722.3723-1-jlayton@kernel.org
-[15] https://lkml.kernel.org/r/20180830172423.21964-1-jlayton@kernel.org
-[16] https://lkml.kernel.org/r/20180914105310.6454-1-jlayton@kernel.org
-[17] https://lkml.kernel.org/r/87a7ohs5ow.fsf@xmission.com
-[18] https://lkml.kernel.org/r/87pn8c1uj6.fsf_-_@x220.int.ebiederm.org
 Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
-v1: https://lkml.kernel.org/r/20200817220425.9389-1-ebiederm@xmission.com
+v1: https://lkml.kernel.org/r/20200817220425.9389-15-ebiederm@xmission.com
 Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 ---
- fs/exec.c | 29 +++++++++++++++--------------
- 1 file changed, 15 insertions(+), 14 deletions(-)
+ fs/file.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/fs/exec.c b/fs/exec.c
-index 547a2390baf5..fa788988efe9 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1238,6 +1238,7 @@ void __set_task_comm(struct task_struct *tsk, const char *buf, bool exec)
- int begin_new_exec(struct linux_binprm * bprm)
- {
- 	struct task_struct *me = current;
-+	struct files_struct *displaced;
- 	int retval;
- 
- 	/* Once we are committed compute the creds */
-@@ -1257,6 +1258,13 @@ int begin_new_exec(struct linux_binprm * bprm)
- 	if (retval)
- 		goto out;
- 
-+	/* Ensure the files table is not shared. */
-+	retval = unshare_files(&displaced);
-+	if (retval)
-+		goto out;
-+	if (displaced)
-+		put_files_struct(displaced);
-+
- 	/*
- 	 * Must be called _before_ exec_mmap() as bprm->mm is
- 	 * not visibile until then. This also enables the update
-@@ -1776,7 +1784,6 @@ static int bprm_execve(struct linux_binprm *bprm,
- 		       int fd, struct filename *filename, int flags)
- {
- 	struct file *file;
--	struct files_struct *displaced;
- 	int retval;
- 
- 	/*
-@@ -1784,13 +1791,9 @@ static int bprm_execve(struct linux_binprm *bprm,
- 	 */
- 	io_uring_task_cancel();
- 
--	retval = unshare_files(&displaced);
--	if (retval)
--		return retval;
--
- 	retval = prepare_bprm_creds(bprm);
- 	if (retval)
--		goto out_files;
-+		return retval;
- 
- 	check_unsafe_exec(bprm);
- 	current->in_execve = 1;
-@@ -1805,8 +1808,12 @@ static int bprm_execve(struct linux_binprm *bprm,
- 	bprm->file = file;
- 	/*
- 	 * Record that a name derived from an O_CLOEXEC fd will be
--	 * inaccessible after exec. Relies on having exclusive access to
--	 * current->files (due to unshare_files above).
-+	 * inaccessible after exec.  This allows the code in exec to
-+	 * choose to fail when the executable is not mmaped into the
-+	 * interpreter and an open file descriptor is not passed to
-+	 * the interpreter.  This makes for a better user experience
-+	 * than having the interpreter start and then immediately fail
-+	 * when it finds the executable is inaccessible.
- 	 */
- 	if (bprm->fdpath &&
- 	    close_on_exec(fd, rcu_dereference_raw(current->files->fdt)))
-@@ -1827,8 +1834,6 @@ static int bprm_execve(struct linux_binprm *bprm,
- 	rseq_execve(current);
- 	acct_update_integrals(current);
- 	task_numa_free(current, false);
--	if (displaced)
--		put_files_struct(displaced);
- 	return retval;
- 
- out:
-@@ -1845,10 +1850,6 @@ static int bprm_execve(struct linux_binprm *bprm,
- 	current->fs->in_exec = 0;
- 	current->in_execve = 0;
- 
--out_files:
--	if (displaced)
--		reset_files_struct(displaced);
--
- 	return retval;
+diff --git a/fs/file.c b/fs/file.c
+index 0d4ec0fa23b3..07e25f1b9dfd 100644
+--- a/fs/file.c
++++ b/fs/file.c
+@@ -538,9 +538,9 @@ int __alloc_fd(struct files_struct *files,
+ 	return error;
  }
  
+-static int alloc_fd(unsigned start, unsigned flags)
++static int alloc_fd(unsigned start, unsigned end, unsigned flags)
+ {
+-	return __alloc_fd(current->files, start, rlimit(RLIMIT_NOFILE), flags);
++	return __alloc_fd(current->files, start, end, flags);
+ }
+ 
+ int __get_unused_fd_flags(unsigned flags, unsigned long nofile)
+@@ -1175,10 +1175,11 @@ SYSCALL_DEFINE1(dup, unsigned int, fildes)
+ 
+ int f_dupfd(unsigned int from, struct file *file, unsigned flags)
+ {
++	unsigned long nofile = rlimit(RLIMIT_NOFILE);
+ 	int err;
+-	if (from >= rlimit(RLIMIT_NOFILE))
++	if (from >= nofile)
+ 		return -EINVAL;
+-	err = alloc_fd(from, flags);
++	err = alloc_fd(from, nofile, flags);
+ 	if (err >= 0) {
+ 		get_file(file);
+ 		fd_install(err, file);
 -- 
 2.25.0
 
