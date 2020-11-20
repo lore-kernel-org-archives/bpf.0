@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DEFAAC64E8A
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:17:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 462F6C2D0E4
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:19:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B282C2240C
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:17:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0625E2240C
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:19:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729282AbgKTXQh (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Nov 2020 18:16:37 -0500
-Received: from out03.mta.xmission.com ([166.70.13.233]:48302 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729271AbgKTXQf (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Nov 2020 18:16:35 -0500
+        id S1728251AbgKTXTM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Nov 2020 18:19:12 -0500
+Received: from out01.mta.xmission.com ([166.70.13.231]:35338 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728076AbgKTXTM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Nov 2020 18:19:12 -0500
 Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1kgFdp-006XdW-K3; Fri, 20 Nov 2020 16:16:33 -0700
+        id 1kgFdN-006Tng-AZ; Fri, 20 Nov 2020 16:16:05 -0700
 Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.int.ebiederm.org)
         by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1kgFdo-00EG00-57; Fri, 20 Nov 2020 16:16:33 -0700
+        id 1kgFdM-00EG00-61; Fri, 20 Nov 2020 16:16:04 -0700
 From:   "Eric W. Biederman" <ebiederm@xmission.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-fsdevel@vger.kernel.org, criu@openvz.org,
@@ -54,115 +54,134 @@ Cc:     linux-fsdevel@vger.kernel.org, criu@openvz.org,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         "Eric W. Biederman" <ebiederm@xmission.com>
-Date:   Fri, 20 Nov 2020 17:14:27 -0600
-Message-Id: <20201120231441.29911-10-ebiederm@xmission.com>
+Date:   Fri, 20 Nov 2020 17:14:19 -0600
+Message-Id: <20201120231441.29911-2-ebiederm@xmission.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <87r1on1v62.fsf@x220.int.ebiederm.org>
 References: <87r1on1v62.fsf@x220.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1kgFdo-00EG00-57;;;mid=<20201120231441.29911-10-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/+yR4JtgeSRtgRNcLI225rYxafT0I4Doo=
+X-XM-SPF: eid=1kgFdM-00EG00-61;;;mid=<20201120231441.29911-2-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX196u8wLHWhkRGE/DETQH7hBBNOxVYgWlQo=
 X-SA-Exim-Connect-IP: 68.227.160.95
 X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: [PATCH v2 10/24] file: Rename fcheck lookup_fd_rcu
+Subject: [PATCH v2 02/24] exec: Simplify unshare_files
 X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
 X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Also remove the confusing comment about checking if a fd exists.  I
-could not find one instance in the entire kernel that still matches
-the description or the reason for the name fcheck.
+Now that exec no longer needs to return the unshared files to their
+previous value there is no reason to return displaced.
 
-The need for better names became apparent in the last round of
-discussion of this set of changes[1].
+Instead when unshare_fd creates a copy of the file table, call
+put_files_struct before returning from unshare_files.
 
-[1] https://lkml.kernel.org/r/CAHk-=wj8BQbgJFLa+J0e=iT-1qpmCRTbPAJ8gd6MJQ=kbRPqyQ@mail.gmail.com
+Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+v1: https://lkml.kernel.org/r/20200817220425.9389-2-ebiederm@xmission.com
 Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 ---
- Documentation/filesystems/files.rst          | 6 +++---
- arch/powerpc/platforms/cell/spufs/coredump.c | 2 +-
- fs/notify/dnotify/dnotify.c                  | 2 +-
- include/linux/fdtable.h                      | 8 ++++----
- 4 files changed, 9 insertions(+), 9 deletions(-)
+ fs/coredump.c           |  5 +----
+ fs/exec.c               |  5 +----
+ include/linux/fdtable.h |  2 +-
+ kernel/fork.c           | 12 ++++++------
+ 4 files changed, 9 insertions(+), 15 deletions(-)
 
-diff --git a/Documentation/filesystems/files.rst b/Documentation/filesystems/files.rst
-index ea75acdb632c..bcf84459917f 100644
---- a/Documentation/filesystems/files.rst
-+++ b/Documentation/filesystems/files.rst
-@@ -62,7 +62,7 @@ the fdtable structure -
-    be held.
- 
- 4. To look up the file structure given an fd, a reader
--   must use either fcheck() or files_lookup_fd_rcu() APIs. These
-+   must use either lookup_fd_rcu() or files_lookup_fd_rcu() APIs. These
-    take care of barrier requirements due to lock-free lookup.
- 
-    An example::
-@@ -70,7 +70,7 @@ the fdtable structure -
- 	struct file *file;
- 
- 	rcu_read_lock();
--	file = fcheck(fd);
-+	file = lookup_fd_rcu(fd);
- 	if (file) {
- 		...
- 	}
-@@ -104,7 +104,7 @@ the fdtable structure -
-    lock-free, they must be installed using rcu_assign_pointer()
-    API. If they are looked up lock-free, rcu_dereference()
-    must be used. However it is advisable to use files_fdtable()
--   and fcheck()/files_lookup_fd_rcu() which take care of these issues.
-+   and lookup_fd_rcu()/files_lookup_fd_rcu() which take care of these issues.
- 
- 7. While updating, the fdtable pointer must be looked up while
-    holding files->file_lock. If ->file_lock is dropped, then
-diff --git a/arch/powerpc/platforms/cell/spufs/coredump.c b/arch/powerpc/platforms/cell/spufs/coredump.c
-index 026c181a98c5..60b5583e9eaf 100644
---- a/arch/powerpc/platforms/cell/spufs/coredump.c
-+++ b/arch/powerpc/platforms/cell/spufs/coredump.c
-@@ -74,7 +74,7 @@ static struct spu_context *coredump_next_context(int *fd)
- 	*fd = n - 1;
- 
- 	rcu_read_lock();
--	file = fcheck(*fd);
-+	file = lookup_fd_rcu(*fd);
- 	ctx = SPUFS_I(file_inode(file))->i_ctx;
- 	get_spu_context(ctx);
- 	rcu_read_unlock();
-diff --git a/fs/notify/dnotify/dnotify.c b/fs/notify/dnotify/dnotify.c
-index 5dcda8f20c04..5486aaca60b0 100644
---- a/fs/notify/dnotify/dnotify.c
-+++ b/fs/notify/dnotify/dnotify.c
-@@ -327,7 +327,7 @@ int fcntl_dirnotify(int fd, struct file *filp, unsigned long arg)
+diff --git a/fs/coredump.c b/fs/coredump.c
+index 0cd9056d79cc..abf807235262 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -585,7 +585,6 @@ void do_coredump(const kernel_siginfo_t *siginfo)
+ 	int ispipe;
+ 	size_t *argv = NULL;
+ 	int argc = 0;
+-	struct files_struct *displaced;
+ 	/* require nonrelative corefile path and be extra careful */
+ 	bool need_suid_safe = false;
+ 	bool core_dumped = false;
+@@ -791,11 +790,9 @@ void do_coredump(const kernel_siginfo_t *siginfo)
  	}
  
- 	rcu_read_lock();
--	f = fcheck(fd);
-+	f = lookup_fd_rcu(fd);
- 	rcu_read_unlock();
+ 	/* get us an unshared descriptor table; almost always a no-op */
+-	retval = unshare_files(&displaced);
++	retval = unshare_files();
+ 	if (retval)
+ 		goto close_fail;
+-	if (displaced)
+-		put_files_struct(displaced);
+ 	if (!dump_interrupted()) {
+ 		/*
+ 		 * umh disabled with CONFIG_STATIC_USERMODEHELPER_PATH="" would
+diff --git a/fs/exec.c b/fs/exec.c
+index fa788988efe9..14fae2ec1c9d 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -1238,7 +1238,6 @@ void __set_task_comm(struct task_struct *tsk, const char *buf, bool exec)
+ int begin_new_exec(struct linux_binprm * bprm)
+ {
+ 	struct task_struct *me = current;
+-	struct files_struct *displaced;
+ 	int retval;
  
- 	/* if (f != filp) means that we lost a race and another task/thread
+ 	/* Once we are committed compute the creds */
+@@ -1259,11 +1258,9 @@ int begin_new_exec(struct linux_binprm * bprm)
+ 		goto out;
+ 
+ 	/* Ensure the files table is not shared. */
+-	retval = unshare_files(&displaced);
++	retval = unshare_files();
+ 	if (retval)
+ 		goto out;
+-	if (displaced)
+-		put_files_struct(displaced);
+ 
+ 	/*
+ 	 * Must be called _before_ exec_mmap() as bprm->mm is
 diff --git a/include/linux/fdtable.h b/include/linux/fdtable.h
-index fa8c402a7790..2a4a8fed536e 100644
+index a32bf47c593e..f46a084b60b2 100644
 --- a/include/linux/fdtable.h
 +++ b/include/linux/fdtable.h
-@@ -105,10 +105,10 @@ static inline struct file *files_lookup_fd_rcu(struct files_struct *files, unsig
- 	return files_lookup_fd_raw(files, fd);
+@@ -109,7 +109,7 @@ struct task_struct;
+ struct files_struct *get_files_struct(struct task_struct *);
+ void put_files_struct(struct files_struct *fs);
+ void reset_files_struct(struct files_struct *);
+-int unshare_files(struct files_struct **);
++int unshare_files(void);
+ struct files_struct *dup_fd(struct files_struct *, unsigned, int *) __latent_entropy;
+ void do_close_on_exec(struct files_struct *);
+ int iterate_fd(struct files_struct *, unsigned,
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 32083db7a2a2..837b546528c8 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -3023,21 +3023,21 @@ SYSCALL_DEFINE1(unshare, unsigned long, unshare_flags)
+  *	the exec layer of the kernel.
+  */
+ 
+-int unshare_files(struct files_struct **displaced)
++int unshare_files(void)
+ {
+ 	struct task_struct *task = current;
+-	struct files_struct *copy = NULL;
++	struct files_struct *old, *copy = NULL;
+ 	int error;
+ 
+ 	error = unshare_fd(CLONE_FILES, NR_OPEN_MAX, &copy);
+-	if (error || !copy) {
+-		*displaced = NULL;
++	if (error || !copy)
+ 		return error;
+-	}
+-	*displaced = task->files;
++
++	old = task->files;
+ 	task_lock(task);
+ 	task->files = copy;
+ 	task_unlock(task);
++	put_files_struct(old);
+ 	return 0;
  }
- 
--/*
-- * Check whether the specified fd has an open file.
-- */
--#define fcheck(fd)	files_lookup_fd_rcu(current->files, fd)
-+static inline struct file *lookup_fd_rcu(unsigned int fd)
-+{
-+	return files_lookup_fd_rcu(current->files, fd);
-+}
- 
- struct task_struct;
  
 -- 
 2.25.0
