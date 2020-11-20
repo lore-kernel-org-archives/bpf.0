@@ -2,239 +2,133 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BADCC5519F
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:59:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FA68C2D0E4
+	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 00:01:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 33A5023A65
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:59:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0D63D22470
+	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 00:01:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728242AbgKTX7Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Nov 2020 18:59:24 -0500
-Received: from www62.your-server.de ([213.133.104.62]:59428 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728207AbgKTX7X (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Nov 2020 18:59:23 -0500
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1kgGJF-0003tP-0D; Sat, 21 Nov 2020 00:59:21 +0100
-Received: from [85.7.101.30] (helo=pc-9.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1kgGJE-000HsU-RA; Sat, 21 Nov 2020 00:59:20 +0100
-Subject: Re: [PATCH bpf-next] bpf: Refactor check_cfg to use a structured
- loop.
-To:     Wedson Almeida Filho <wedsonaf@google.com>
-References: <20201119141901.3176328-1-wedsonaf@google.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <52d832fb-e78f-cd79-8c10-005ec75b7ec6@iogearbox.net>
-Date:   Sat, 21 Nov 2020 00:59:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1728206AbgKUABV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Nov 2020 19:01:21 -0500
+Received: from out03.mta.xmission.com ([166.70.13.233]:55942 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727773AbgKUABV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Nov 2020 19:01:21 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52])
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1kgFdU-006Xbh-6t; Fri, 20 Nov 2020 16:16:12 -0700
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.int.ebiederm.org)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1kgFdT-00EG00-4X; Fri, 20 Nov 2020 16:16:11 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, criu@openvz.org,
+        bpf@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Jann Horn <jann@thejh.net>, Kees Cook <keescook@chromium.org>,
+        =?UTF-8?q?Daniel=20P=20=2E=20Berrang=C3=A9?= <berrange@redhat.com>,
+        Jeff Layton <jlayton@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Matthew Wilcox <willy@infradead.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Chris Wright <chrisw@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Date:   Fri, 20 Nov 2020 17:14:21 -0600
+Message-Id: <20201120231441.29911-4-ebiederm@xmission.com>
+X-Mailer: git-send-email 2.25.0
+In-Reply-To: <87r1on1v62.fsf@x220.int.ebiederm.org>
+References: <87r1on1v62.fsf@x220.int.ebiederm.org>
 MIME-Version: 1.0
-In-Reply-To: <20201119141901.3176328-1-wedsonaf@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/25994/Fri Nov 20 14:09:26 2020)
+Content-Transfer-Encoding: 8bit
+X-XM-SPF: eid=1kgFdT-00EG00-4X;;;mid=<20201120231441.29911-4-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1/hV0hyPS0zo8CxNcnpJ9dbcaqQXH40V9k=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+Subject: [PATCH v2 04/24] kcmp: In kcmp_epoll_target use fget_task
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 11/19/20 3:19 PM, Wedson Almeida Filho wrote:
-> The current implementation uses a number of gotos to implement a loop
-> and different paths within the loop, which makes the code less readable
-> than it would be with an explicit while-loop. This patch also replaces a
-> chain of if/if-elses keyed on the same expression with a switch
-> statement.
-> 
-> No change in behaviour is intended.
-> 
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@google.com>
-> ---
->   kernel/bpf/verifier.c | 157 +++++++++++++++++++++---------------------
->   1 file changed, 78 insertions(+), 79 deletions(-)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index fb2943ea715d..5dcdacce35e0 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -8099,16 +8099,82 @@ static int push_insn(int t, int w, int e, struct bpf_verifier_env *env,
->   	return 0;
->   }
->   
-> +/* Visits instruction at index t and returns one of the following:
-> + *  < 0 - an error occurred
-> + *    0 - the instruction was fully explored
-> + *  > 0 - there is still work to be done before it is fully explored
-> + */
-> +static int visit_insn(int t, int insn_cnt, struct bpf_verifier_env *env)
-> +{
-> +	struct bpf_insn *insns = env->prog->insnsi;
-> +	int ret;
-> +
-> +	/* All non-branch instructions have a single fall-through edge. */
-> +	if (BPF_CLASS(insns[t].code) != BPF_JMP &&
-> +	    BPF_CLASS(insns[t].code) != BPF_JMP32)
-> +		return push_insn(t, t + 1, FALLTHROUGH, env, false);
-> +
-> +	switch (BPF_OP(insns[t].code)) {
-> +	case BPF_EXIT:
-> +		return 0;
-> +
-> +	case BPF_CALL:
-> +		ret = push_insn(t, t + 1, FALLTHROUGH, env, false);
-> +		if (ret)
-> +			return ret;
-> +
-> +		if (t + 1 < insn_cnt)
-> +			init_explored_state(env, t + 1);
-> +		if (insns[t].src_reg == BPF_PSEUDO_CALL) {
-> +			init_explored_state(env, t);
-> +			ret = push_insn(t, t + insns[t].imm + 1, BRANCH,
-> +					env, false);
-> +		}
-> +		return ret;
-> +
-> +	case BPF_JA:
-> +		if (BPF_SRC(insns[t].code) != BPF_K)
-> +			return -EINVAL;
-> +
-> +		/* unconditional jump with single edge */
-> +		ret = push_insn(t, t + insns[t].off + 1, FALLTHROUGH, env,
-> +				true);
-> +		if (ret)
-> +			return ret;
-> +
-> +		/* unconditional jmp is not a good pruning point,
-> +		 * but it's marked, since backtracking needs
-> +		 * to record jmp history in is_state_visited().
-> +		 */
-> +		init_explored_state(env, t + insns[t].off + 1);
-> +		/* tell verifier to check for equivalent states
-> +		 * after every call and jump
-> +		 */
-> +		if (t + 1 < insn_cnt)
-> +			init_explored_state(env, t + 1);
-> +
-> +		return ret;
-> +
-> +	default:
-> +		/* conditional jump with two edges */
-> +		init_explored_state(env, t);
-> +		ret = push_insn(t, t + 1, FALLTHROUGH, env, true);
-> +		if (ret)
-> +			return ret;
-> +
-> +		return push_insn(t, t + insns[t].off + 1, BRANCH, env, true);
-> +	}
-> +}
-> +
-[...]
-> +		ret = visit_insn(t, insn_cnt, env);
-> +		if (ret < 0)
->   			goto err_free;
-> +
-> +		if (!ret) {
-> +			insn_state[t] = EXPLORED;
-> +			env->cfg.cur_stack--;
-> +		}
+Use the helper fget_task and simplify the code.
 
-Looks good to me, and it's a nice simplification, imho. Perhaps we could take that
-even further while at it, make the walk opcodes more descriptive, and also reject
-anything unexpected (> 1) ... uncompiled diff on top:
+As well as simplifying the code this removes one unnecessary increment of
+struct files_struct.  This unnecessary increment of files_struct.count can
+result in exec unnecessarily unsharing files_struct and breaking posix
+locks, and it can result in fget_light having to fallback to fget reducing
+performance.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5dcdacce35e0..a3c58bc42b4a 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -8047,6 +8047,9 @@ static void init_explored_state(struct bpf_verifier_env *env, int idx)
-  	env->insn_aux_data[idx].prune_point = true;
-  }
+Suggested-by: Oleg Nesterov <oleg@redhat.com>
+Reviewed-by: Cyrill Gorcunov <gorcunov@gmail.com>
+v1: https://lkml.kernel.org/r/20200817220425.9389-4-ebiederm@xmission.com
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+---
+ kernel/kcmp.c | 20 ++++----------------
+ 1 file changed, 4 insertions(+), 16 deletions(-)
 
-+#define DONE_EXPLORING	0
-+#define KEEP_EXPLORING	1
-+
-  /* t, w, e - match pseudo-code above:
-   * t - index of current instruction
-   * w - next instruction
-@@ -8059,10 +8062,9 @@ static int push_insn(int t, int w, int e, struct bpf_verifier_env *env,
-  	int *insn_state = env->cfg.insn_state;
-
-  	if (e == FALLTHROUGH && insn_state[t] >= (DISCOVERED | FALLTHROUGH))
--		return 0;
+diff --git a/kernel/kcmp.c b/kernel/kcmp.c
+index b3ff9288c6cc..87c48c0104ad 100644
+--- a/kernel/kcmp.c
++++ b/kernel/kcmp.c
+@@ -107,7 +107,6 @@ static int kcmp_epoll_target(struct task_struct *task1,
+ {
+ 	struct file *filp, *filp_epoll, *filp_tgt;
+ 	struct kcmp_epoll_slot slot;
+-	struct files_struct *files;
+ 
+ 	if (copy_from_user(&slot, uslot, sizeof(slot)))
+ 		return -EFAULT;
+@@ -116,23 +115,12 @@ static int kcmp_epoll_target(struct task_struct *task1,
+ 	if (!filp)
+ 		return -EBADF;
+ 
+-	files = get_files_struct(task2);
+-	if (!files)
++	filp_epoll = fget_task(task2, slot.efd);
++	if (!filp_epoll)
+ 		return -EBADF;
+ 
+-	spin_lock(&files->file_lock);
+-	filp_epoll = fcheck_files(files, slot.efd);
+-	if (filp_epoll)
+-		get_file(filp_epoll);
+-	else
+-		filp_tgt = ERR_PTR(-EBADF);
+-	spin_unlock(&files->file_lock);
+-	put_files_struct(files);
 -
-+		return DONE_EXPLORING;
-  	if (e == BRANCH && insn_state[t] >= (DISCOVERED | BRANCH))
--		return 0;
-+		return DONE_EXPLORING;
+-	if (filp_epoll) {
+-		filp_tgt = get_epoll_tfile_raw_ptr(filp_epoll, slot.tfd, slot.toff);
+-		fput(filp_epoll);
+-	}
++	filp_tgt = get_epoll_tfile_raw_ptr(filp_epoll, slot.tfd, slot.toff);
++	fput(filp_epoll);
+ 
+ 	if (IS_ERR(filp_tgt))
+ 		return PTR_ERR(filp_tgt);
+-- 
+2.25.0
 
-  	if (w < 0 || w >= env->prog->len) {
-  		verbose_linfo(env, t, "%d: ", t);
-@@ -8080,11 +8082,13 @@ static int push_insn(int t, int w, int e, struct bpf_verifier_env *env,
-  		insn_state[w] = DISCOVERED;
-  		if (env->cfg.cur_stack >= env->prog->len)
-  			return -E2BIG;
-+
-  		insn_stack[env->cfg.cur_stack++] = w;
--		return 1;
-+		return KEEP_EXPLORING;
-  	} else if ((insn_state[w] & 0xF0) == DISCOVERED) {
-  		if (loop_ok && env->bpf_capable)
--			return 0;
-+			return DONE_EXPLORING;
-+
-  		verbose_linfo(env, t, "%d: ", t);
-  		verbose_linfo(env, w, "%d: ", w);
-  		verbose(env, "back-edge from insn %d to %d\n", t, w);
-@@ -8096,7 +8100,8 @@ static int push_insn(int t, int w, int e, struct bpf_verifier_env *env,
-  		verbose(env, "insn state internal bug\n");
-  		return -EFAULT;
-  	}
--	return 0;
-+
-+	return DONE_EXPLORING;
-  }
-
-  /* Visits instruction at index t and returns one of the following:
-@@ -8116,7 +8121,7 @@ static int visit_insn(int t, int insn_cnt, struct bpf_verifier_env *env)
-
-  	switch (BPF_OP(insns[t].code)) {
-  	case BPF_EXIT:
--		return 0;
-+		return DONE_EXPLORING;
-
-  	case BPF_CALL:
-  		ret = push_insn(t, t + 1, FALLTHROUGH, env, false);
-@@ -8194,12 +8199,19 @@ static int check_cfg(struct bpf_verifier_env *env)
-  		int t = insn_stack[env->cfg.cur_stack - 1];
-
-  		ret = visit_insn(t, insn_cnt, env);
--		if (ret < 0)
--			goto err_free;
--
--		if (!ret) {
-+		switch (ret) {
-+		case DONE_EXPLORING:
-  			insn_state[t] = EXPLORED;
-  			env->cfg.cur_stack--;
-+			break;
-+		case KEEP_EXPLORING:
-+			break;
-+		default:
-+			if (ret > 0) {
-+				verbose(env, "insn visit internal bug\n");
-+				ret = -EFAULT;
-+			}
-+			goto err_free;
-  		}
-  	}
