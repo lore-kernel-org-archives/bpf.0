@@ -2,172 +2,139 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 23034C56202
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:12:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6055CC64EBC
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:16:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C165E2240C
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:12:54 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KeDt4hdf"
+	by mail.kernel.org (Postfix) with ESMTP id 177B42240C
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:16:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728454AbgKTXMx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Nov 2020 18:12:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728261AbgKTXMx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Nov 2020 18:12:53 -0500
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C37C0613CF;
-        Fri, 20 Nov 2020 15:12:52 -0800 (PST)
-Received: by mail-yb1-xb41.google.com with SMTP id s8so10032677yba.13;
-        Fri, 20 Nov 2020 15:12:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XwhX7mqdBZb79BJALMUFBwrzROJPtHHkHdKkiNfguEk=;
-        b=KeDt4hdfc+q/0oF73O4HS7X9TSOYKZZYWGByDrzcIRKJ3NECZTKm7ROxjqcNjnCXp3
-         rPJIy0mLxuiQ9phxJGbWPjhHJzy4nXJZ5ASlaeKJiGH1LujzZBMjWWC94qSFPKtXXLdI
-         hhevbmkhojIMEyNZNinaOI3c93nPTUxbyFGLnSp984PPMVCbPVhiUGmwo8tq5eUsHXB2
-         dQePymuawBEjAa1Fs4xxcu/eRwLS4kg+IzWTPbUpZr9vwtk+2/IbBI0enLZZjfYiRQ2z
-         Bg7sTUNx9Eas3dq9B+QGLdLtW4GG3gRTRsaF9EJSDM4KiXgMSRMYEe0LkM4a+KzYUBfU
-         Yckw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XwhX7mqdBZb79BJALMUFBwrzROJPtHHkHdKkiNfguEk=;
-        b=IgNnnzf5J7lymzhqMywWtvIOzDNgJwA0LUu7hsONAeiQPN6KGDNhmpaR42kgOr8sK5
-         Q6JPoUc4qOMiH0lFmdT6TEWAcE2tfOJn/UkHVdmxHC+LLkUB/aSRufKkpwZjJ+lEZfm1
-         CzzSMbP3hn2caDdOyU0kqzqI5FOjuD/UsjqXr8Rr9vmS+2Hxqk9NNycvJvpvRZ2pHQAF
-         XYDcQBb1oyNhrOmwfsVoYxoNHWaVLBh6z4Le/0mUv5JqLBSb+W1SrDWbkE8cgifKA/9t
-         n3HGBgV3yhLYRBkn1V8/m8Wt4klCPOuvsUU/zVQALYM2HwM0Sw1HlYGSdNJmgwMdzVq4
-         WXFw==
-X-Gm-Message-State: AOAM530+RfknFhQx5ZktNe7NOervuHmNIYb6mImJEQ+8l7hsD3cBNU51
-        8LA4S+PQmUOgSBRDfQvcJtuiAhPdV43KknNt/FM=
-X-Google-Smtp-Source: ABdhPJxGZAcp/N28eGNsF140NVGcycVpm0Pu+ec2TbPCFIweRgBoPqjugdoxcpeLth8SEHIfhsSU2e6WulLvvP2Mjy0=
-X-Received: by 2002:a25:585:: with SMTP id 127mr22124564ybf.425.1605913972228;
- Fri, 20 Nov 2020 15:12:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20201119232244.2776720-1-andrii@kernel.org> <20201119232244.2776720-5-andrii@kernel.org>
- <20201120230549.37k4zsjsrxbyjin3@kafai-mbp.dhcp.thefacebook.com>
-In-Reply-To: <20201120230549.37k4zsjsrxbyjin3@kafai-mbp.dhcp.thefacebook.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 20 Nov 2020 15:12:41 -0800
-Message-ID: <CAEf4BzYU8h6CaruMasZW8C2CF27GVhV-2mnM5wz4rpLzyNSYtg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 4/6] libbpf: add kernel module BTF support for
- CO-RE relocations
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
+        id S1729208AbgKTXQV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Nov 2020 18:16:21 -0500
+Received: from out01.mta.xmission.com ([166.70.13.231]:33568 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729180AbgKTXQU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Nov 2020 18:16:20 -0500
+Received: from in02.mta.xmission.com ([166.70.13.52])
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1kgFdb-006TpF-0e; Fri, 20 Nov 2020 16:16:19 -0700
+Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.int.ebiederm.org)
+        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1kgFdZ-00EG00-Uv; Fri, 20 Nov 2020 16:16:18 -0700
+From:   "Eric W. Biederman" <ebiederm@xmission.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, criu@openvz.org,
+        bpf@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Jann Horn <jann@thejh.net>, Kees Cook <keescook@chromium.org>,
+        =?UTF-8?q?Daniel=20P=20=2E=20Berrang=C3=A9?= <berrange@redhat.com>,
+        Jeff Layton <jlayton@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Matthew Wilcox <willy@infradead.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Chris Wright <chrisw@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Date:   Fri, 20 Nov 2020 17:14:23 -0600
+Message-Id: <20201120231441.29911-6-ebiederm@xmission.com>
+X-Mailer: git-send-email 2.25.0
+In-Reply-To: <87r1on1v62.fsf@x220.int.ebiederm.org>
+References: <87r1on1v62.fsf@x220.int.ebiederm.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-XM-SPF: eid=1kgFdZ-00EG00-Uv;;;mid=<20201120231441.29911-6-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19C41iZMJEug1eAQ9SvOh64q2n0pWvaffg=
+X-SA-Exim-Connect-IP: 68.227.160.95
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+Subject: [PATCH v2 06/24] proc/fd: In proc_fd_link use fget_task
+X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
+X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 3:06 PM Martin KaFai Lau <kafai@fb.com> wrote:
->
-> On Thu, Nov 19, 2020 at 03:22:42PM -0800, Andrii Nakryiko wrote:
-> [ ... ]
->
-> > +static int load_module_btfs(struct bpf_object *obj)
-> > +{
-> > +     struct bpf_btf_info info;
-> > +     struct module_btf *mod_btf;
-> > +     struct btf *btf;
-> > +     char name[64];
-> > +     __u32 id, len;
-> > +     int err, fd;
-> > +
-> > +     if (obj->btf_modules_loaded)
-> > +             return 0;
-> > +
-> > +     /* don't do this again, even if we find no module BTFs */
-> > +     obj->btf_modules_loaded = true;
-> > +
-> > +     /* kernel too old to support module BTFs */
-> > +     if (!kernel_supports(FEAT_MODULE_BTF))
-> > +             return 0;
-> > +
-> > +     while (true) {
-> > +             err = bpf_btf_get_next_id(id, &id);
-> > +             if (err && errno == ENOENT)
-> > +                     return 0;
-> > +             if (err) {
-> > +                     err = -errno;
-> > +                     pr_warn("failed to iterate BTF objects: %d\n", err);
-> > +                     return err;
-> > +             }
-> > +
-> > +             fd = bpf_btf_get_fd_by_id(id);
-> > +             if (fd < 0) {
-> > +                     if (errno == ENOENT)
-> > +                             continue; /* expected race: BTF was unloaded */
-> > +                     err = -errno;
-> > +                     pr_warn("failed to get BTF object #%d FD: %d\n", id, err);
-> > +                     return err;
-> > +             }
-> > +
-> > +             len = sizeof(info);
-> > +             memset(&info, 0, sizeof(info));
-> > +             info.name = ptr_to_u64(name);
-> > +             info.name_len = sizeof(name);
-> > +
-> > +             err = bpf_obj_get_info_by_fd(fd, &info, &len);
-> > +             if (err) {
-> > +                     err = -errno;
-> > +                     pr_warn("failed to get BTF object #%d info: %d\n", id, err);
->
->                         close(fd);
->
-> > +                     return err;
-> > +             }
-> > +
-> > +             /* ignore non-module BTFs */
-> > +             if (!info.kernel_btf || strcmp(name, "vmlinux") == 0) {
-> > +                     close(fd);
-> > +                     continue;
-> > +             }
-> > +
->
-> [ ... ]
->
-> > @@ -8656,9 +8815,6 @@ static inline int __find_vmlinux_btf_id(struct btf *btf, const char *name,
-> >       else
-> >               err = btf__find_by_name_kind(btf, name, BTF_KIND_FUNC);
-> >
-> > -     if (err <= 0)
-> > -             pr_warn("%s is not found in vmlinux BTF\n", name);
-> > -
-> >       return err;
-> >  }
-> >
-> > @@ -8675,6 +8831,9 @@ int libbpf_find_vmlinux_btf_id(const char *name,
-> >       }
-> >
-> >       err = __find_vmlinux_btf_id(btf, name, attach_type);
-> > +     if (err <= 0)
-> > +             pr_warn("%s is not found in vmlinux BTF\n", name);
-> > +
-> Please explain this move in the commit message.
+When discussing[1] exec and posix file locks it was realized that none
+of the callers of get_files_struct fundamentally needed to call
+get_files_struct, and that by switching them to helper functions
+instead it will both simplify their code and remove unnecessary
+increments of files_struct.count.  Those unnecessary increments can
+result in exec unnecessarily unsharing files_struct which breaking
+posix locks, and it can result in fget_light having to fallback to
+fget reducing system performance.
 
-ok, I'll add something about that. The short answer is that
-__find_vmlinux_btf_id() is now expected to not find a type in vmlinux
-BTF, so emitting error would be wrong. So I moved it up a level where
-it's not expected.
+Simplifying proc_fd_link is a little bit tricky.  It is necessary to
+know that there is a reference to fd_f	 ile while path_get is running.
+This reference can either be guaranteed to exist either by locking the
+fdtable as the code currently does or by taking a reference on the
+file in question.
 
->
-> >       btf__free(btf);
-> >       return err;
-> >  }
-> > --
-> > 2.24.1
-> >
+Use fget_task to remove the need for get_files_struct and
+to take a reference to file in question.
+
+[1] https://lkml.kernel.org/r/20180915160423.GA31461@redhat.com
+Suggested-by: Oleg Nesterov <oleg@redhat.com>
+v1: https://lkml.kernel.org/r/20200817220425.9389-8-ebiederm@xmission.com
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+---
+ fs/proc/fd.c | 13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
+
+diff --git a/fs/proc/fd.c b/fs/proc/fd.c
+index 81882a13212d..d58960f6ee52 100644
+--- a/fs/proc/fd.c
++++ b/fs/proc/fd.c
+@@ -146,29 +146,22 @@ static const struct dentry_operations tid_fd_dentry_operations = {
+ 
+ static int proc_fd_link(struct dentry *dentry, struct path *path)
+ {
+-	struct files_struct *files = NULL;
+ 	struct task_struct *task;
+ 	int ret = -ENOENT;
+ 
+ 	task = get_proc_task(d_inode(dentry));
+ 	if (task) {
+-		files = get_files_struct(task);
+-		put_task_struct(task);
+-	}
+-
+-	if (files) {
+ 		unsigned int fd = proc_fd(d_inode(dentry));
+ 		struct file *fd_file;
+ 
+-		spin_lock(&files->file_lock);
+-		fd_file = fcheck_files(files, fd);
++		fd_file = fget_task(task, fd);
+ 		if (fd_file) {
+ 			*path = fd_file->f_path;
+ 			path_get(&fd_file->f_path);
+ 			ret = 0;
++			fput(fd_file);
+ 		}
+-		spin_unlock(&files->file_lock);
+-		put_files_struct(files);
++		put_task_struct(task);
+ 	}
+ 
+ 	return ret;
+-- 
+2.25.0
+
