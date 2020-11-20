@@ -2,217 +2,72 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8961FC63777
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 13:17:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C67E3C56201
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 14:50:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 193EE22253
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 13:17:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 823DC22272
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 14:50:59 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="d64b+CWL"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="bhtfQDpZ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727721AbgKTNRP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Nov 2020 08:17:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727657AbgKTNRP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Nov 2020 08:17:15 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69532C061A48
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 05:17:13 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id 1so9779119wme.3
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 05:17:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=kcXVWXPxoLKih6EtdFRtl2N21qH/p1/6u4SC99t+On8=;
-        b=d64b+CWLC9dd2UR9cP7cGgIkvtHwVlwtPcgshP7H3YBR3mfTayvFqZj6OUBgjcR+/D
-         Bpm6Jn5NFW1pEkT0XNWlVEopRlcyIYzk8XK6AgugHYhgEnIcbhoeYI55F5PmxDY73kgQ
-         fZ9SauyaqxHBc8/ok/wpYVuMyx3rfNyq3ylyo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=kcXVWXPxoLKih6EtdFRtl2N21qH/p1/6u4SC99t+On8=;
-        b=hvAlKYfCqcBziH9mSCnbDCMlbBJScG+wJnbog+qh6vB+Xl+JioFeGz9c72mDBkjvSG
-         dFzflAeRk6w9A2YG/EZR22RIDwl22ci0YIeHJxGC0Xv7qIXBhDMRPRn57CuskPhLaV/A
-         C8wOZkcwo7VbxzSzJizb8TLwStOgfM404ZEWRD6AZse1cf4WZQ0kpELPWhukYIVuANlF
-         8FeqqUi1RYAoig6YVguemau1B+d3WOsqbFqnyedC+cH3P/QWW9y0AHut78iiGB7TEsyQ
-         H1YcuCSZUxlzGHq7TJl1AYHOFSQpskKooGaydHDZI1gaOyMNb1P63hk+uSonoh1NHP5L
-         7xYw==
-X-Gm-Message-State: AOAM531wGKDzos+PcioW0B0+VkDi51iBjlu4BJC4iwzmhII9ZdwgQE+p
-        yc6X/pwLc403UGQusoJkAHwJTA==
-X-Google-Smtp-Source: ABdhPJygynZo+wiqSSmRj0zeAT8u4UVO6uobDEBWToYjLGR4EHpLdKr7WO7f55wFrIBQAF7BeFXK9w==
-X-Received: by 2002:a1c:44f:: with SMTP id 76mr10120516wme.181.1605878232016;
-        Fri, 20 Nov 2020 05:17:12 -0800 (PST)
-Received: from kpsingh.c.googlers.com.com (203.75.199.104.bc.googleusercontent.com. [104.199.75.203])
-        by smtp.gmail.com with ESMTPSA id u203sm4260197wme.32.2020.11.20.05.17.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2020 05:17:11 -0800 (PST)
-From:   KP Singh <kpsingh@chromium.org>
-To:     James Morris <jmorris@namei.org>, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH bpf-next 2/3] bpf: Add a BPF helper for getting the IMA hash of an inode
-Date:   Fri, 20 Nov 2020 13:17:07 +0000
-Message-Id: <20201120131708.3237864-2-kpsingh@chromium.org>
-X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
-In-Reply-To: <20201120131708.3237864-1-kpsingh@chromium.org>
-References: <20201120131708.3237864-1-kpsingh@chromium.org>
+        id S1726898AbgKTOuv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Nov 2020 09:50:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42512 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726490AbgKTOuv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Nov 2020 09:50:51 -0500
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1605883851;
+        bh=I8qoVdLoV3RCtFxcMMvZbKxbI3FHQKH3QgfYqKibbFw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=bhtfQDpZjwSMO0pP0/Q/F8n0QYcvg0Y9TKLy74vyUoPUo/eh9f5HDowHVw1TMRpUT
+         oNxDnioZgDy+JEAEKBvtYs6e0JE4IpsQP59748UNOWduRl/PeQ3QjuvxTJ+0It80a9
+         gPmrd05RGfSPoNfBKVkeCpQtFdq2/GDd9E+ZwGec=
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next V3] MAINTAINERS: Update XDP and AF_XDP entries
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <160588385107.16958.5965341756003029840.git-patchwork-notify@kernel.org>
+Date:   Fri, 20 Nov 2020 14:50:51 +0000
+References: <160586238944.2808432.4401269290440394008.stgit@firesoul>
+In-Reply-To: <160586238944.2808432.4401269290440394008.stgit@firesoul>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     bpf@vger.kernel.org, kuba@kernel.org, netdev@vger.kernel.org,
+        borkmann@iogearbox.net, alexei.starovoitov@gmail.com,
+        john.fastabend@gmail.com, magnus.karlsson@intel.com,
+        bjorn.topel@intel.com, joe@perches.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: KP Singh <kpsingh@google.com>
+Hello:
 
-Provide a wrapper function to get the IMA hash of an inode. This helper
-is useful in fingerprinting files (e.g executables on execution) and
-using these fingerprints in detections like an executable unlinking
-itself.
+This patch was applied to bpf/bpf.git (refs/heads/master):
 
-Since the ima_inode_hash can sleep, it's only allowed for sleepable
-LSM hooks.
+On Fri, 20 Nov 2020 09:53:09 +0100 you wrote:
+> Getting too many false positive matches with current use
+> of the content regex K: and file regex N: patterns.
+> 
+> This patch drops file match N: and makes K: more restricted.
+> Some more normal F: file wildcards are added.
+> 
+> Notice that AF_XDP forgot to some F: files that is also
+> updated in this patch.
+> 
+> [...]
 
-Signed-off-by: KP Singh <kpsingh@google.com>
----
- include/uapi/linux/bpf.h       | 11 +++++++++++
- kernel/bpf/bpf_lsm.c           | 26 ++++++++++++++++++++++++++
- scripts/bpf_helpers_doc.py     |  1 +
- tools/include/uapi/linux/bpf.h | 11 +++++++++++
- 4 files changed, 49 insertions(+)
+Here is the summary with links:
+  - [net-next,V3] MAINTAINERS: Update XDP and AF_XDP entries
+    https://git.kernel.org/bpf/bpf/c/6200d5c38313
 
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 3ca6146f001a..dd5b8622bb89 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3807,6 +3807,16 @@ union bpf_attr {
-  * 		See: **clock_gettime**\ (**CLOCK_MONOTONIC_COARSE**)
-  * 	Return
-  * 		Current *ktime*.
-+ *
-+ * long bpf_ima_inode_hash(struct inode *inode, void *dst, u32 size)
-+ *	Description
-+ *		Returns the stored IMA hash of the *inode* (if it's avaialable).
-+ *		If the hash is larger than *size*, then only *size*
-+ *		bytes will be copied to *dst*
-+ *	Return
-+ *		The **hash_algo** of is returned on success,
-+ *		**-EOPNOTSUP** if IMA is disabled and **-EINVAL** if
-+ *		invalid arguments are passed.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3970,6 +3980,7 @@ union bpf_attr {
- 	FN(get_current_task_btf),	\
- 	FN(bprm_opts_set),		\
- 	FN(ktime_get_coarse_ns),	\
-+	FN(ima_inode_hash),		\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-index b4f27a874092..51c36f61339e 100644
---- a/kernel/bpf/bpf_lsm.c
-+++ b/kernel/bpf/bpf_lsm.c
-@@ -15,6 +15,7 @@
- #include <net/bpf_sk_storage.h>
- #include <linux/bpf_local_storage.h>
- #include <linux/btf_ids.h>
-+#include <linux/ima.h>
- 
- /* For every LSM hook that allows attachment of BPF programs, declare a nop
-  * function where a BPF program can be attached.
-@@ -75,6 +76,29 @@ const static struct bpf_func_proto bpf_bprm_opts_set_proto = {
- 	.arg2_type	= ARG_ANYTHING,
- };
- 
-+BPF_CALL_3(bpf_ima_inode_hash, struct inode *, inode, void *, dst, u32, size)
-+{
-+	return ima_inode_hash(inode, dst, size);
-+}
-+
-+static bool bpf_ima_inode_hash_allowed(const struct bpf_prog *prog)
-+{
-+	return bpf_lsm_is_sleepable_hook(prog->aux->attach_btf_id);
-+}
-+
-+BTF_ID_LIST_SINGLE(bpf_ima_inode_hash_btf_ids, struct, inode)
-+
-+const static struct bpf_func_proto bpf_ima_inode_hash_proto = {
-+	.func		= bpf_ima_inode_hash,
-+	.gpl_only	= false,
-+	.ret_type	= RET_INTEGER,
-+	.arg1_type	= ARG_PTR_TO_BTF_ID,
-+	.arg1_btf_id	= &bpf_ima_inode_hash_btf_ids[0],
-+	.arg2_type	= ARG_PTR_TO_UNINIT_MEM,
-+	.arg3_type	= ARG_CONST_SIZE_OR_ZERO,
-+	.allowed	= bpf_ima_inode_hash_allowed,
-+};
-+
- static const struct bpf_func_proto *
- bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- {
-@@ -97,6 +121,8 @@ bpf_lsm_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_task_storage_delete_proto;
- 	case BPF_FUNC_bprm_opts_set:
- 		return &bpf_bprm_opts_set_proto;
-+	case BPF_FUNC_ima_inode_hash:
-+		return &bpf_ima_inode_hash_proto;
- 	default:
- 		return tracing_prog_func_proto(func_id, prog);
- 	}
-diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
-index add7fcb32dcd..cb16687acb66 100755
---- a/scripts/bpf_helpers_doc.py
-+++ b/scripts/bpf_helpers_doc.py
-@@ -430,6 +430,7 @@ class PrinterHelpers(Printer):
-             'struct tcp_request_sock',
-             'struct udp6_sock',
-             'struct task_struct',
-+            'struct inode',
- 
-             'struct __sk_buff',
-             'struct sk_msg_md',
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 3ca6146f001a..dd5b8622bb89 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3807,6 +3807,16 @@ union bpf_attr {
-  * 		See: **clock_gettime**\ (**CLOCK_MONOTONIC_COARSE**)
-  * 	Return
-  * 		Current *ktime*.
-+ *
-+ * long bpf_ima_inode_hash(struct inode *inode, void *dst, u32 size)
-+ *	Description
-+ *		Returns the stored IMA hash of the *inode* (if it's avaialable).
-+ *		If the hash is larger than *size*, then only *size*
-+ *		bytes will be copied to *dst*
-+ *	Return
-+ *		The **hash_algo** of is returned on success,
-+ *		**-EOPNOTSUP** if IMA is disabled and **-EINVAL** if
-+ *		invalid arguments are passed.
-  */
- #define __BPF_FUNC_MAPPER(FN)		\
- 	FN(unspec),			\
-@@ -3970,6 +3980,7 @@ union bpf_attr {
- 	FN(get_current_task_btf),	\
- 	FN(bprm_opts_set),		\
- 	FN(ktime_get_coarse_ns),	\
-+	FN(ima_inode_hash),		\
- 	/* */
- 
- /* integer value in 'imm' field of BPF_CALL instruction selects which helper
--- 
-2.29.2.454.gaff20da3a2-goog
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
