@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BFE85C64E7D
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:21:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A05EC64E8A
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:21:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 89E592242A
+	by mail.kernel.org (Postfix) with ESMTP id DA5A22242A
 	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:21:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729540AbgKTXUa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Nov 2020 18:20:30 -0500
-Received: from out01.mta.xmission.com ([166.70.13.231]:35918 "EHLO
+        id S1729529AbgKTXU3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Nov 2020 18:20:29 -0500
+Received: from out01.mta.xmission.com ([166.70.13.231]:35962 "EHLO
         out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729153AbgKTXT6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Nov 2020 18:19:58 -0500
+        with ESMTP id S1729228AbgKTXT7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Nov 2020 18:19:59 -0500
 Received: from in02.mta.xmission.com ([166.70.13.52])
         by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1kgFh7-006UXu-5g; Fri, 20 Nov 2020 16:19:57 -0700
+        id 1kgFh8-006UYI-74; Fri, 20 Nov 2020 16:19:58 -0700
 Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.int.ebiederm.org)
         by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1kgFeC-00EG00-P7; Fri, 20 Nov 2020 16:16:57 -0700
+        id 1kgFea-00EG00-TR; Fri, 20 Nov 2020 16:17:21 -0700
 From:   "Eric W. Biederman" <ebiederm@xmission.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-fsdevel@vger.kernel.org, criu@openvz.org,
@@ -54,83 +54,101 @@ Cc:     linux-fsdevel@vger.kernel.org, criu@openvz.org,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         "Eric W. Biederman" <ebiederm@xmission.com>
-Date:   Fri, 20 Nov 2020 17:14:34 -0600
-Message-Id: <20201120231441.29911-17-ebiederm@xmission.com>
+Date:   Fri, 20 Nov 2020 17:14:40 -0600
+Message-Id: <20201120231441.29911-23-ebiederm@xmission.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <87r1on1v62.fsf@x220.int.ebiederm.org>
 References: <87r1on1v62.fsf@x220.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1kgFeC-00EG00-P7;;;mid=<20201120231441.29911-17-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+YX8Zsom0xDVILDApQN2Ck0BtX/4RimOo=
+X-XM-SPF: eid=1kgFea-00EG00-TR;;;mid=<20201120231441.29911-23-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX1+WPgiefUzQYgmtCM2bY9TtjITWdux5+J8=
 X-SA-Exim-Connect-IP: 68.227.160.95
 X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: [PATCH v2 17/24] proc/fd: In fdinfo seq_show don't use get_files_struct
+Subject: [PATCH v2 23/24] file: Rename __close_fd_get_file close_fd_get_file
 X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
 X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When discussing[1] exec and posix file locks it was realized that none
-of the callers of get_files_struct fundamentally needed to call
-get_files_struct, and that by switching them to helper functions
-instead it will both simplify their code and remove unnecessary
-increments of files_struct.count.  Those unnecessary increments can
-result in exec unnecessarily unsharing files_struct which breaking
-posix locks, and it can result in fget_light having to fallback to
-fget reducing system performance.
+The function close_fd_get_file is explicitly a variant of
+__close_fd[1].  Now that __close_fd has been renamed close_fd, rename
+close_fd_get_file to be consistent with close_fd.
 
-Instead hold task_lock for the duration that task->files needs to be
-stable in seq_show.  The task_lock was already taken in
-get_files_struct, and so skipping get_files_struct performs less work
-overall, and avoids the problems with the files_struct reference
-count.
+When __alloc_fd, __close_fd and __fd_install were introduced the
+double underscore indicated that the function took a struct
+files_struct parameter.  The function __close_fd_get_file never has so
+the naming has always been inconsistent.  This just cleans things up
+so there are not any lingering mentions or references __close_fd left
+in the code.
 
-[1] https://lkml.kernel.org/r/20180915160423.GA31461@redhat.com
-Suggested-by: Oleg Nesterov <oleg@redhat.com>
-Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
-v1: https://lkml.kernel.org/r/20200817220425.9389-12-ebiederm@xmission.com
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+[1] 80cd795630d6 ("binder: fix use-after-free due to ksys_close() during fdget()")
+Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
 ---
- fs/proc/fd.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/android/binder.c | 2 +-
+ fs/file.c                | 4 ++--
+ fs/io_uring.c            | 2 +-
+ include/linux/fdtable.h  | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/fs/proc/fd.c b/fs/proc/fd.c
-index 72c1525b4b3e..cb51763ed554 100644
---- a/fs/proc/fd.c
-+++ b/fs/proc/fd.c
-@@ -28,9 +28,8 @@ static int seq_show(struct seq_file *m, void *v)
- 	if (!task)
- 		return -ENOENT;
+diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+index b5117576792b..5b2e3721ac27 100644
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -2226,7 +2226,7 @@ static void binder_deferred_fd_close(int fd)
+ 	if (!twcb)
+ 		return;
+ 	init_task_work(&twcb->twork, binder_do_fd_close);
+-	__close_fd_get_file(fd, &twcb->file);
++	close_fd_get_file(fd, &twcb->file);
+ 	if (twcb->file) {
+ 		filp_close(twcb->file, current->files);
+ 		task_work_add(current, &twcb->twork, TWA_RESUME);
+diff --git a/fs/file.c b/fs/file.c
+index 987ea51630b4..947ac6d5602f 100644
+--- a/fs/file.c
++++ b/fs/file.c
+@@ -721,11 +721,11 @@ int __close_range(unsigned fd, unsigned max_fd, unsigned int flags)
+ }
  
--	files = get_files_struct(task);
--	put_task_struct(task);
--
-+	task_lock(task);
-+	files = task->files;
- 	if (files) {
- 		unsigned int fd = proc_fd(m->private);
+ /*
+- * variant of __close_fd that gets a ref on the file for later fput.
++ * variant of close_fd that gets a ref on the file for later fput.
+  * The caller must ensure that filp_close() called on the file, and then
+  * an fput().
+  */
+-int __close_fd_get_file(unsigned int fd, struct file **res)
++int close_fd_get_file(unsigned int fd, struct file **res)
+ {
+ 	struct files_struct *files = current->files;
+ 	struct file *file;
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index b42dfa0243bf..2e6e51292eff 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -4206,7 +4206,7 @@ static int io_close(struct io_kiocb *req, bool force_nonblock,
  
-@@ -47,8 +46,9 @@ static int seq_show(struct seq_file *m, void *v)
- 			ret = 0;
- 		}
- 		spin_unlock(&files->file_lock);
--		put_files_struct(files);
+ 	/* might be already done during nonblock submission */
+ 	if (!close->put_file) {
+-		ret = __close_fd_get_file(close->fd, &close->put_file);
++		ret = close_fd_get_file(close->fd, &close->put_file);
+ 		if (ret < 0)
+ 			return (ret == -ENOENT) ? -EBADF : ret;
  	}
-+	task_unlock(task);
-+	put_task_struct(task);
+diff --git a/include/linux/fdtable.h b/include/linux/fdtable.h
+index dad4a488ce60..4ed3589f9294 100644
+--- a/include/linux/fdtable.h
++++ b/include/linux/fdtable.h
+@@ -126,7 +126,7 @@ int iterate_fd(struct files_struct *, unsigned,
  
- 	if (ret)
- 		return ret;
-@@ -57,6 +57,7 @@ static int seq_show(struct seq_file *m, void *v)
- 		   (long long)file->f_pos, f_flags,
- 		   real_mount(file->f_path.mnt)->mnt_id);
+ extern int close_fd(unsigned int fd);
+ extern int __close_range(unsigned int fd, unsigned int max_fd, unsigned int flags);
+-extern int __close_fd_get_file(unsigned int fd, struct file **res);
++extern int close_fd_get_file(unsigned int fd, struct file **res);
+ extern int unshare_fd(unsigned long unshare_flags, unsigned int max_fds,
+ 		      struct files_struct **new_fdp);
  
-+	/* show_fd_locks() never deferences files so a stale value is safe */
- 	show_fd_locks(m, file, files);
- 	if (seq_has_overflowed(m))
- 		goto out;
 -- 
 2.25.0
 
