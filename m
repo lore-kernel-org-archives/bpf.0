@@ -2,37 +2,38 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A05AC2D0E4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 781BEC64E7C
 	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 20:30:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BCD672467D
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 20:30:05 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 24E2524197
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 20:30:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730986AbgKTUaC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Nov 2020 15:30:02 -0500
-Received: from mga07.intel.com ([134.134.136.100]:10342 "EHLO mga07.intel.com"
+        id S1731032AbgKTUaF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Nov 2020 15:30:05 -0500
+Received: from mga07.intel.com ([134.134.136.100]:10351 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730856AbgKTUaC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Nov 2020 15:30:02 -0500
-IronPort-SDR: yfiuLft2BH3yRBY0LYU3TRPBetlioIUZLdRIuXH8kYmF/+raMQxQlWvLaqDC3NZMonuicNhoto
- Ld6ngUsNRFDg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9811"; a="235683268"
+        id S1730856AbgKTUaE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Nov 2020 15:30:04 -0500
+IronPort-SDR: ZoWTypuqFe5meE/xGJe+L1iS6t6cyzZtCxRfH+plddRPwKrovaPxv4IZ+7bPQkQXtgqXe0hIB2
+ tMg1pk0kGWgg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9811"; a="235683289"
 X-IronPort-AV: E=Sophos;i="5.78,357,1599548400"; 
-   d="scan'208";a="235683268"
+   d="scan'208";a="235683289"
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2020 12:30:00 -0800
-IronPort-SDR: sTXiclG0+qdIk49kdKuFdIvhfYsyJ4n3iFnlThGvcFItygRQ78Q3TqB7Lf0riCkExkoWxuZ/xF
- fllhfo/4/+zg==
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2020 12:30:02 -0800
+IronPort-SDR: Nejog16WYJC4xxerTZ+ibwwHr1kTjU4E3AjULdju3ILgQzs5Mm8WYSfWQjfJf8KUA0rzVfOlbJ
+ 6FznREPW5cog==
 X-IronPort-AV: E=Sophos;i="5.78,357,1599548400"; 
-   d="scan'208";a="342163265"
+   d="scan'208";a="342163294"
 Received: from rpedgeco-mobl.amr.corp.intel.com (HELO localhost.intel.com) ([10.209.105.214])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2020 12:30:00 -0800
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2020 12:30:02 -0800
 From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
 To:     akpm@linux-foundation.org, jeyu@kernel.org, bpf@vger.kernel.org,
         ast@kernel.org, daniel@iogearbox.net, luto@kernel.org,
@@ -41,223 +42,124 @@ To:     akpm@linux-foundation.org, jeyu@kernel.org, bpf@vger.kernel.org,
         dan.j.williams@intel.com
 Cc:     elena.reshetova@intel.com, ira.weiny@intel.com,
         Rick Edgecombe <rick.p.edgecombe@intel.com>
-Subject: [PATCH RFC 00/10] New permission vmalloc interface
-Date:   Fri, 20 Nov 2020 12:24:16 -0800
-Message-Id: <20201120202426.18009-1-rick.p.edgecombe@intel.com>
+Subject: [PATCH RFC 04/10] module: Support separate writable allocation
+Date:   Fri, 20 Nov 2020 12:24:20 -0800
+Message-Id: <20201120202426.18009-5-rick.p.edgecombe@intel.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20201120202426.18009-1-rick.p.edgecombe@intel.com>
+References: <20201120202426.18009-1-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This is a proposal to address some inefficiencies in how memory permissions
-are handled on vmalloc mappings. The way the interfaces are defined across
-vmalloc and cpa make it hard to fully address problems underneath the
-existing interfaces. So this creates a new interface in vmalloc that
-encapsulates what vmalloc memory permission usages need, but with more
-details handled on the back end. This allows for optimizations and shared caches
-of resources. The genesis for this was this conversation[0] and many of the
-ideas were suggested by Andy Lutomirski. In its current state it takes module
-load's down to usually one kernel range shootdown, and BPF JIT load's down to
-usually zero on x86. It also minimizes the direct map 4k breakage when possible.
+The perm_alloc interface supports architectures to direct writes
+intended for an allocation to a separate writable staging area before a
+mapping is made live. In order to support this, change modules to write
+to the address provided by perm_writable_addr(). Currently this is the
+same address of the final allocation, so this patch should not create
+any functional change yet.
 
-For the future, x86 also has new kernel memory permission types that would
-benefit from efficiently handling the direct map permissions/unmapping, for
-example [1]. However, this patchset is just targeting improving performance
-inefficiencies with existing usages in modules and normal eBPF JITs.
+To facilitate re-direction to separate writable staging areas, create a
+helper module_adjust_writable_addr(). This function will return an
+allocation's writable address if the parameter address is from a module
+that is in the process of being loaded. If the address does not meet that
+criteria, simply return the address passed in. This helper, while a
+little heavy weight, will allow callers in upcoming patches to simply
+retrieve the writable address without context of what module is being
+loaded.
 
-The code is early and very lightly tested. I was hoping to get some feedback on
-the approach.
+Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+---
+ include/linux/module.h | 22 ++++++++++++++++++++++
+ kernel/module.c        | 14 +++++++++-----
+ 2 files changed, 31 insertions(+), 5 deletions(-)
 
-The Problem
-===========
-
-For a little background, the way executable code is loaded (modules, BPF
-JITs, etc) on x86 goes something like this:
-
-ptr = vmalloc_node_range(, PAGE_KERNEL)
-   alloc_page() - Get random pages from page allocator
-   map_kernel_range() - Map vmalloc range allocation as RW to those pages
-
-set_memory_ro(ptr)
-   set vmalloc alias to RO, break direct map aliases to 4k/RO, all-cpu shootdown
-   vm_unmap_alias() flush any lazy RW aliases to now RO pages, all-cpu shootdown
-
-set_memory_x(ptr)
-   set vmalloc alias to not-NX, all-cpu shootdown
-   vm_unmap_alias(), possible all-cpu shootdown
-
-So during this load operation, 4 shootdowns may take place and the direct map
-will be broken to 4k pages across whichever random pages got used in the
-executable region. When a split is required it can be even more. Besides the
-direct map, the other reason for this is having to change the permission of the
-vmalloc mapping several times in order to load it while it's writable, and then
-transition it to its final permission.
-
-Ideally we would unmap pages from the direct map in bulk to share a shootdown.
-For changing the vmalloc mappings permission, we should instead map it at its
-final permission from the start and use a temporary per-cpu mapping such as
-text_poke() to load the data such that it only requires a local TLB flush.
-
-For large page breakage on the direct map, if multiple JITs happen to get
-pages from the same 2MB physical region this can limit the damage to a
-smaller region. However, currently this depends on lucky physical distance of
-the pages picked inside vmalloc. Today it seems more likely to happen if
-allocations are made close together in time. Ideally we would make an effort
-to group pages used for permissioned vmallocs together physically so the
-direct map breakage would be minimized.
-
-But trying to improve this doesn't fit into the existing interfaces very well.
-
- - vmalloc_node_range() doesn't know what it's final permission will be.
-
- - There isn't any cross-arch way to describe to vmalloc what the permissions
-will be, since permissions are encoded into the name of the set_memory_foo()
-functions.
-
- - text_poke() only exists on x86, and other HW ways of temporarily writing to
-RO mappings don't necessarily have standardized semantics.
-
-Proposed solution
-=================
-
-For text or RO allocations, to oversimplify, what usages want to do is just
-say:
-
-1. Give me a kva for this particular permission and size
-2. Load this data into it
-3. Make it "live" (no writable mapping, no direct map mapping, whatever
-permissions are set on it and ready to go)
-
-So this implements a new interface to do just that. I had in mind this
-interface should try to support the following optimizations on x86 even if
-they weren't implemented right away.
-
-1. Draw from 2MB physical pages that can be unmapped from the direct map in
-contiguous chunks
-
-In memory pressure situations a shrinker callback can free unused pages
-from the cache. These can get re-mapped on the fly without any flush since the
-direct map would be transitioning NP->RW. Since we can re-map the direct map
-cheaply, it's better to unmap more than we need. This part is close to
-secretmem[2] in implementation, and should possibly share infrastructure or
-caches of unmapped pages.
-
-2. Load text/special data via per-cpu mappings
-
-The mapping can be mapped in its "final" permission, and loaded via text_poke().
-This will reduce shootdowns during loads to zero is most cases. Just local
-flushes. The new interface provides a writable buffer for usages to stage their
-changes, and trigger the copying into the RO mapping via text_poke()
-
-3. Caching of virtual mappings as well as pages
-
-Normally executable mappings need to be zapped and flushed before the pages
-return to the page allocator to prevent random other memory that uses the
-page later from having an executable alias. But we could cache these live
-mappings and delay the flush until the page is needed for an allocation of a
-larger size or different permission. The "free" operations could just zero it
-with a per-cpu mapping to prevent unwanted text from remaining mapped.
-
-4. 2MB module space mappings
-
-It would be nice if the virtual mappings of the same permission types could
-be placed next to each other so that they could share 2MB mappings. This way we
-could have modules or PKS memory have 2MB pages. Of course allocating from a
-2MB block could cause internal fragmentation and wasted memory, however it
-might be possible to break the virtual mapping later and allow the wasted
-memory to be unmapped and freed in the formerly 2MB page. Often a bunch of
-modules are loaded at boot. If we placed the long lived "core sections" of
-these modules sequentially into the 2MB blocks, there is probably a good chance
-we could get some decent utilization out of one.
-
-
-This RFC just has 1 and 2 actually implemented on x86.
-
-Module loader changes
-=====================
-
-Of the text allocation usages, kernel modules are the most complex because a
-single vmalloc allocation has many memory permissions across it (RO+X for the
-text, RO, RO after init, and RW). In addition to this preventing having module
-text mapped in 2MB pages since the text is all scattered around in different
-allocations, it would require more complexity for the new interface.
-
-However, at least for x86, it doesn't seem like there is any requirement for
-a module allocation to be virtually contiguous. Instead we could have the
-module loader treat each of its 4 permission regions as separate allocations.
-Then the new interface could be simpler and it could have the option of putting
-similar permission allocations next to each other to achieve 2MB pages or more
-opportunities to reuse existing mappings.
-
-The challenge in changing this in the module loader is that most of it is
-cross-arch code and there could be relocation rules required by various
-arch's that depend on the existing virtual address distances. To try to
-transition to this interface without disturbing anything, the default
-module.c behavior is to layout the modules as they were before in both
-location and permissions, but wrapped separately as multiple instances of the
-new type of allocation. This way it could have no functional change for other
-architectures at first, but allow any to implement similar optimizations in the
-arch module.c breakouts. So this RFC also looks at handling things as separate
-allocations, and actually allocates them separately for x86.
-
-Of course, there are several areas outside of modules that are involved in
-modifying the module text and data such as alternatives, orc unwinding, etc.
-These components are changed to be aware they may need to opearate on the
-writable staging area buffer.
-
-[0] https://lore.kernel.org/lkml/CALCETrV_tGk=B3Hw0h9viW45wMqB_W+rwWzx6LnC3-vSATOUOA@mail.gmail.com/
-[1] https://lore.kernel.org/lkml/20201009201410.3209180-1-ira.weiny@intel.com/
-[2] https://lore.kernel.org/lkml/20200924132904.1391-1-rppt@kernel.org/
-
-This RFC has been acked by Dave Hansen.
-
-Rick Edgecombe (10):
-  vmalloc: Add basic perm alloc implementation
-  bpf: Use perm_alloc() for BPF JIT filters
-  module: Use perm_alloc() for modules
-  module: Support separate writable allocation
-  x86/modules: Use real perm_allocations
-  x86/alternatives: Handle perm_allocs for modules
-  x86/unwind: Unwind orc at module writable address
-  jump_label: Handle module writable address
-  ftrace: Use module writable address
-  vmalloc: Add perm_alloc x86 implementation
-
- arch/Kconfig                      |   3 +
- arch/arm/net/bpf_jit_32.c         |   3 +-
- arch/arm64/net/bpf_jit_comp.c     |   5 +-
- arch/mips/net/bpf_jit.c           |   2 +-
- arch/mips/net/ebpf_jit.c          |   3 +-
- arch/powerpc/net/bpf_jit_comp.c   |   2 +-
- arch/powerpc/net/bpf_jit_comp64.c |  10 +-
- arch/s390/net/bpf_jit_comp.c      |   5 +-
- arch/sparc/net/bpf_jit_comp_32.c  |   2 +-
- arch/sparc/net/bpf_jit_comp_64.c  |   5 +-
- arch/x86/Kconfig                  |   1 +
- arch/x86/include/asm/set_memory.h |   2 +
- arch/x86/kernel/alternative.c     |  25 +-
- arch/x86/kernel/jump_label.c      |  18 +-
- arch/x86/kernel/module.c          |  84 ++++-
- arch/x86/kernel/unwind_orc.c      |   8 +-
- arch/x86/mm/Makefile              |   1 +
- arch/x86/mm/pat/set_memory.c      |  13 +
- arch/x86/mm/vmalloc.c             | 438 +++++++++++++++++++++++
- arch/x86/net/bpf_jit_comp.c       |  15 +-
- arch/x86/net/bpf_jit_comp32.c     |   3 +-
- include/linux/filter.h            |  30 +-
- include/linux/module.h            |  66 +++-
- include/linux/vmalloc.h           |  82 +++++
- kernel/bpf/core.c                 |  48 ++-
- kernel/jump_label.c               |   2 +-
- kernel/module.c                   | 561 ++++++++++++++++++------------
- kernel/trace/ftrace.c             |   2 +-
- mm/nommu.c                        |  66 ++++
- mm/vmalloc.c                      | 135 +++++++
- 30 files changed, 1308 insertions(+), 332 deletions(-)
- create mode 100644 arch/x86/mm/vmalloc.c
-
+diff --git a/include/linux/module.h b/include/linux/module.h
+index 9964f909d879..32dd22b2a38a 100644
+--- a/include/linux/module.h
++++ b/include/linux/module.h
+@@ -576,6 +576,23 @@ struct perm_allocation *module_get_allocation(struct module *mod, unsigned long
+ bool module_perm_alloc(struct module_layout *layout);
+ void module_perm_free(struct module_layout *layout);
+ 
++static inline void *module_adjust_writable_addr(void *addr)
++{
++	unsigned long laddr = (unsigned long)addr;
++	struct module *mod;
++
++	mutex_lock(&module_mutex);
++	mod = __module_address(laddr);
++	if (!mod) {
++		mutex_unlock(&module_mutex);
++		return addr;
++	}
++	mutex_unlock(&module_mutex);
++	/* The module shouldn't be going away if someone is trying to write to it */
++
++	return (void *)perm_writable_addr(module_get_allocation(mod, laddr), laddr);
++}
++
+ static inline bool within_module_core(unsigned long addr,
+ 				      const struct module *mod)
+ {
+@@ -853,6 +870,11 @@ void *dereference_module_function_descriptor(struct module *mod, void *ptr)
+ 	return ptr;
+ }
+ 
++static inline void *module_adjust_writable_addr(void *addr)
++{
++	return addr;
++}
++
+ #endif /* CONFIG_MODULES */
+ 
+ #ifdef CONFIG_SYSFS
+diff --git a/kernel/module.c b/kernel/module.c
+index 0b31c44798e2..d0afedd36cea 100644
+--- a/kernel/module.c
++++ b/kernel/module.c
+@@ -3457,7 +3457,7 @@ static int move_module(struct module *mod, struct load_info *info)
+ 	/* Transfer each section which specifies SHF_ALLOC */
+ 	pr_debug("final section addresses:\n");
+ 	for (i = 0; i < info->hdr->e_shnum; i++) {
+-		void *dest;
++		void *dest, *wdest;
+ 		struct perm_allocation *alloc;
+ 
+ 		Elf_Shdr *shdr = &info->sechdrs[i];
+@@ -3470,9 +3470,10 @@ static int move_module(struct module *mod, struct load_info *info)
+ 		else
+ 			alloc = get_alloc_from_layout(&mod->core_layout, shdr->sh_entsize);
+ 		dest = (void *)perm_alloc_address(alloc) + (shdr->sh_entsize & ~ALL_OFFSET_MASK);
++		wdest = (void *)perm_writable_addr(alloc, (unsigned long)dest);
+ 
+ 		if (shdr->sh_type != SHT_NOBITS)
+-			memcpy(dest, (void *)shdr->sh_addr, shdr->sh_size);
++			memcpy(wdest, (void *)shdr->sh_addr, shdr->sh_size);
+ 		/* Update sh_addr to point to copy in image. */
+ 		shdr->sh_addr = (unsigned long)dest;
+ 		pr_debug("\t0x%lx %s\n",
+@@ -3645,12 +3646,15 @@ int __weak module_finalize(const Elf_Ehdr *hdr,
+ 
+ static int post_relocation(struct module *mod, const struct load_info *info)
+ {
++	struct exception_table_entry *extable_writ = module_adjust_writable_addr(mod->extable);
++	void *pcpu = (void *)info->sechdrs[info->index.pcpu].sh_addr;
++	void *percpu_writ = module_adjust_writable_addr(pcpu);
++
+ 	/* Sort exception table now relocations are done. */
+-	sort_extable(mod->extable, mod->extable + mod->num_exentries);
++	sort_extable(extable_writ, mod->extable + mod->num_exentries);
+ 
+ 	/* Copy relocated percpu area over. */
+-	percpu_modcopy(mod, (void *)info->sechdrs[info->index.pcpu].sh_addr,
+-		       info->sechdrs[info->index.pcpu].sh_size);
++	percpu_modcopy(mod, percpu_writ, info->sechdrs[info->index.pcpu].sh_size);
+ 
+ 	/* Setup kallsyms-specific fields. */
+ 	add_kallsyms(mod, info);
 -- 
 2.20.1
 
