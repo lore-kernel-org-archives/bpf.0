@@ -7,28 +7,28 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5344AC56202
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F848C2D0E4
 	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:20:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 009192242A
+	by mail.kernel.org (Postfix) with ESMTP id B93C42240C
 	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:20:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728960AbgKTXT5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1728890AbgKTXT5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 20 Nov 2020 18:19:57 -0500
-Received: from out02.mta.xmission.com ([166.70.13.232]:46934 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728864AbgKTXT4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+Received: from out03.mta.xmission.com ([166.70.13.233]:49062 "EHLO
+        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728807AbgKTXT4 (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 20 Nov 2020 18:19:56 -0500
 Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1kgFh5-002Ral-ID; Fri, 20 Nov 2020 16:19:55 -0700
+        id 1kgFh4-006Xz9-SC; Fri, 20 Nov 2020 16:19:54 -0700
 Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.int.ebiederm.org)
         by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1kgFeJ-00EG00-Oz; Fri, 20 Nov 2020 16:17:04 -0700
+        id 1kgFeQ-00EG00-MH; Fri, 20 Nov 2020 16:17:11 -0700
 From:   "Eric W. Biederman" <ebiederm@xmission.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-fsdevel@vger.kernel.org, criu@openvz.org,
@@ -54,71 +54,136 @@ Cc:     linux-fsdevel@vger.kernel.org, criu@openvz.org,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         "Eric W. Biederman" <ebiederm@xmission.com>
-Date:   Fri, 20 Nov 2020 17:14:36 -0600
-Message-Id: <20201120231441.29911-19-ebiederm@xmission.com>
+Date:   Fri, 20 Nov 2020 17:14:38 -0600
+Message-Id: <20201120231441.29911-21-ebiederm@xmission.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <87r1on1v62.fsf@x220.int.ebiederm.org>
 References: <87r1on1v62.fsf@x220.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1kgFeJ-00EG00-Oz;;;mid=<20201120231441.29911-19-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/07Js/AbSwO/7LHKe+DUR0IrwFWqtok48=
+X-XM-SPF: eid=1kgFeQ-00EG00-MH;;;mid=<20201120231441.29911-21-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18yZsJQg7Sob1TmifEv7F2Q+rtBQX59b5c=
 X-SA-Exim-Connect-IP: 68.227.160.95
 X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: [PATCH v2 19/24] file: In f_dupfd read RLIMIT_NOFILE once.
+Subject: [PATCH v2 21/24] file: Rename __close_fd to close_fd and remove the files parameter
 X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
 X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Simplify the code, and remove the chance of races by reading
-RLIMIT_NOFILE only once in f_dupfd.
+The function __close_fd was added to support binder[1].  Now that
+binder has been fixed to no longer need __close_fd[2] all calls
+to __close_fd pass current->files.
 
-Pass the read value of RLIMIT_NOFILE into alloc_fd which is the other
-location the rlimit was read in f_dupfd.  As f_dupfd is the only
-caller of alloc_fd this changing alloc_fd is trivially safe.
+Therefore transform the files parameter into a local variable
+initialized to current->files, and rename __close_fd to close_fd to
+reflect this change, and keep it in sync with the similar changes to
+__alloc_fd, and __fd_install.
 
-Further this causes alloc_fd to take all of the same arguments as
-__alloc_fd except for the files_struct argument.
+This removes the need for callers to care about the extra care that
+needs to be take if anything except current->files is passed, by
+limiting the callers to only operation on current->files.
 
+[1] 483ce1d4b8c3 ("take descriptor-related part of close() to file.c")
+[2] 44d8047f1d87 ("binder: use standard functions to allocate fds")
 Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
-v1: https://lkml.kernel.org/r/20200817220425.9389-15-ebiederm@xmission.com
+v1: https://lkml.kernel.org/r/20200817220425.9389-17-ebiederm@xmission.com
 Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 ---
- fs/file.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ fs/file.c                | 10 ++++------
+ fs/open.c                |  2 +-
+ include/linux/fdtable.h  |  3 +--
+ include/linux/syscalls.h |  6 +++---
+ 4 files changed, 9 insertions(+), 12 deletions(-)
 
 diff --git a/fs/file.c b/fs/file.c
-index 0d4ec0fa23b3..07e25f1b9dfd 100644
+index 621563701bd9..987ea51630b4 100644
 --- a/fs/file.c
 +++ b/fs/file.c
-@@ -538,9 +538,9 @@ int __alloc_fd(struct files_struct *files,
- 	return error;
+@@ -629,11 +629,9 @@ static struct file *pick_file(struct files_struct *files, unsigned fd)
+ 	return file;
  }
  
--static int alloc_fd(unsigned start, unsigned flags)
-+static int alloc_fd(unsigned start, unsigned end, unsigned flags)
+-/*
+- * The same warnings as for __alloc_fd()/__fd_install() apply here...
+- */
+-int __close_fd(struct files_struct *files, unsigned fd)
++int close_fd(unsigned fd)
  {
--	return __alloc_fd(current->files, start, rlimit(RLIMIT_NOFILE), flags);
-+	return __alloc_fd(current->files, start, end, flags);
++	struct files_struct *files = current->files;
+ 	struct file *file;
+ 
+ 	file = pick_file(files, fd);
+@@ -642,7 +640,7 @@ int __close_fd(struct files_struct *files, unsigned fd)
+ 
+ 	return filp_close(file, files);
+ }
+-EXPORT_SYMBOL(__close_fd); /* for ksys_close() */
++EXPORT_SYMBOL(close_fd); /* for ksys_close() */
+ 
+ /**
+  * __close_range() - Close all file descriptors in a given range.
+@@ -1027,7 +1025,7 @@ int replace_fd(unsigned fd, struct file *file, unsigned flags)
+ 	struct files_struct *files = current->files;
+ 
+ 	if (!file)
+-		return __close_fd(files, fd);
++		return close_fd(fd);
+ 
+ 	if (fd >= rlimit(RLIMIT_NOFILE))
+ 		return -EBADF;
+diff --git a/fs/open.c b/fs/open.c
+index 9af548fb841b..581a674d7eee 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -1292,7 +1292,7 @@ EXPORT_SYMBOL(filp_close);
+  */
+ SYSCALL_DEFINE1(close, unsigned int, fd)
+ {
+-	int retval = __close_fd(current->files, fd);
++	int retval = close_fd(fd);
+ 
+ 	/* can't restart close syscall because file table entry was cleared */
+ 	if (unlikely(retval == -ERESTARTSYS ||
+diff --git a/include/linux/fdtable.h b/include/linux/fdtable.h
+index dc476ae92f56..dad4a488ce60 100644
+--- a/include/linux/fdtable.h
++++ b/include/linux/fdtable.h
+@@ -124,8 +124,7 @@ int iterate_fd(struct files_struct *, unsigned,
+ 		int (*)(const void *, struct file *, unsigned),
+ 		const void *);
+ 
+-extern int __close_fd(struct files_struct *files,
+-		      unsigned int fd);
++extern int close_fd(unsigned int fd);
+ extern int __close_range(unsigned int fd, unsigned int max_fd, unsigned int flags);
+ extern int __close_fd_get_file(unsigned int fd, struct file **res);
+ extern int unshare_fd(unsigned long unshare_flags, unsigned int max_fds,
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index 37bea07c12f2..9e055a0579f8 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -1295,16 +1295,16 @@ static inline long ksys_ftruncate(unsigned int fd, loff_t length)
+ 	return do_sys_ftruncate(fd, length, 1);
  }
  
- int __get_unused_fd_flags(unsigned flags, unsigned long nofile)
-@@ -1175,10 +1175,11 @@ SYSCALL_DEFINE1(dup, unsigned int, fildes)
+-extern int __close_fd(struct files_struct *files, unsigned int fd);
++extern int close_fd(unsigned int fd);
  
- int f_dupfd(unsigned int from, struct file *file, unsigned flags)
+ /*
+  * In contrast to sys_close(), this stub does not check whether the syscall
+  * should or should not be restarted, but returns the raw error codes from
+- * __close_fd().
++ * close_fd().
+  */
+ static inline int ksys_close(unsigned int fd)
  {
-+	unsigned long nofile = rlimit(RLIMIT_NOFILE);
- 	int err;
--	if (from >= rlimit(RLIMIT_NOFILE))
-+	if (from >= nofile)
- 		return -EINVAL;
--	err = alloc_fd(from, flags);
-+	err = alloc_fd(from, nofile, flags);
- 	if (err >= 0) {
- 		get_file(file);
- 		fd_install(err, file);
+-	return __close_fd(current->files, fd);
++	return close_fd(fd);
+ }
+ 
+ extern long do_sys_truncate(const char __user *pathname, loff_t length);
 -- 
 2.25.0
 
