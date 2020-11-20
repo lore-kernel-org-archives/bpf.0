@@ -7,47 +7,47 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03BC7C2D0E4
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 16:20:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6BA30C64E75
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 16:20:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E61A2415A
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 16:20:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1017A22470
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 16:20:04 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Z30mg8zO"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WqVymeb1"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729407AbgKTQSy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Nov 2020 11:18:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:55901 "EHLO
+        id S1729543AbgKTQTd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Nov 2020 11:19:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:47791 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729409AbgKTQSv (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 20 Nov 2020 11:18:51 -0500
+        by vger.kernel.org with ESMTP id S1729444AbgKTQS7 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 20 Nov 2020 11:18:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1605889130;
+        s=mimecast20190719; t=1605889138;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=+KjiaZnt5TvPhVwqun5U0/5VXraitAEOcDnJu1jwtF8=;
-        b=Z30mg8zOiyON0gF63mF0lfFMgCWD8MqWEoKtqrF28UmDIY0x3Bzt/QFUTR85sS0EPOlekX
-        aQjYgltdxzFgQR6QojEt7a6Dk7e3HkSWbhg8v6u+0nGxa33zmdKPhaRoGY8Vdi03cKDdwd
-        qNlvjbBEwTm/jAMgOI5yKUaNeuhcWWs=
+        bh=S1qFdHiDfMq5vbHWlD1wlHlQF/+7f+rS1e6Pn3Pjw+8=;
+        b=WqVymeb1qt5vSxMX5xVywGaTAELotsXjSEuNsEsj6N8jq3b94K3yNCjINlkMLX0AGvaAEW
+        +vQ8vwKj515rQERcJSRoAc/lODRjX1eCxuerD97cJ19BmjlUAmIF2a2ZS1NRnIbPSvl8Ub
+        +hSA/fqA+s/UcYEzwNnqu12ru+4SwAo=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-466-NkgWD8TkOnyJ3UGC5CjUCg-1; Fri, 20 Nov 2020 11:18:46 -0500
-X-MC-Unique: NkgWD8TkOnyJ3UGC5CjUCg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+ us-mta-472-wV_31VasMZ-CDojZ6xpl2w-1; Fri, 20 Nov 2020 11:18:54 -0500
+X-MC-Unique: wV_31VasMZ-CDojZ6xpl2w-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 74B2B18B62AA;
-        Fri, 20 Nov 2020 16:18:43 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 627D7100A641;
+        Fri, 20 Nov 2020 16:18:52 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.7])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 574A25C1D5;
-        Fri, 20 Nov 2020 16:18:38 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 720A75B4A0;
+        Fri, 20 Nov 2020 16:18:48 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 4C9743213845D;
-        Fri, 20 Nov 2020 17:18:37 +0100 (CET)
-Subject: [PATCH bpf-next V7 6/8] bpf: make it possible to identify BPF
- redirected SKBs
+        by firesoul.localdomain (Postfix) with ESMTP id 6CDAF3213845D;
+        Fri, 20 Nov 2020 17:18:47 +0100 (CET)
+Subject: [PATCH bpf-next V7 8/8] bpf/selftests: activating bpf_check_mtu
+ BPF-helper
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     bpf@vger.kernel.org
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -58,69 +58,111 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         John Fastabend <john.fastabend@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>, eyal.birger@gmail.com,
         colrack@gmail.com
-Date:   Fri, 20 Nov 2020 17:18:37 +0100
-Message-ID: <160588911725.2817268.2911873075037298445.stgit@firesoul>
+Date:   Fri, 20 Nov 2020 17:18:47 +0100
+Message-ID: <160588912738.2817268.9380466634324530673.stgit@firesoul>
 In-Reply-To: <160588903254.2817268.4861837335793475314.stgit@firesoul>
 References: <160588903254.2817268.4861837335793475314.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This change makes it possible to identify SKBs that have been redirected
-by TC-BPF (cls_act). This is needed for a number of cases.
-
-(1) For collaborating with driver ifb net_devices.
-(2) For avoiding starting generic-XDP prog on TC ingress redirect.
-
-It is most important to fix XDP case(2), because this can break userspace
-when a driver gets support for native-XDP. Imagine userspace loads XDP
-prog on eth0, which fallback to generic-XDP, and it process TC-redirected
-packets. When kernel is updated with native-XDP support for eth0, then the
-program no-longer see the TC-redirected packets. Therefore it is important
-to keep the order intact; that XDP runs before TC-BPF.
+Adding selftest for BPF-helper bpf_check_mtu(). Making sure
+it can be used from both XDP and TC.
 
 Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
- net/core/dev.c    |    2 ++
- net/sched/Kconfig |    1 +
- 2 files changed, 3 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/check_mtu.c |   37 ++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_check_mtu.c |   33 ++++++++++++++++++
+ 2 files changed, 70 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/check_mtu.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_check_mtu.c
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 6ceb6412ee97..26b40f8005ae 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -3872,6 +3872,7 @@ sch_handle_egress(struct sk_buff *skb, int *ret, struct net_device *dev)
- 		return NULL;
- 	case TC_ACT_REDIRECT:
- 		/* No need to push/pop skb's mac_header here on egress! */
-+		skb_set_redirected(skb, false);
- 		skb_do_redirect(skb);
- 		*ret = NET_XMIT_SUCCESS;
- 		return NULL;
-@@ -4963,6 +4964,7 @@ sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
- 		 * redirecting to another netdev
- 		 */
- 		__skb_push(skb, skb->mac_len);
-+		skb_set_redirected(skb, true);
- 		if (skb_do_redirect(skb) == -EAGAIN) {
- 			__skb_pull(skb, skb->mac_len);
- 			*another = true;
-diff --git a/net/sched/Kconfig b/net/sched/Kconfig
-index a3b37d88800e..a1bbaa8fd054 100644
---- a/net/sched/Kconfig
-+++ b/net/sched/Kconfig
-@@ -384,6 +384,7 @@ config NET_SCH_INGRESS
- 	depends on NET_CLS_ACT
- 	select NET_INGRESS
- 	select NET_EGRESS
-+	select NET_REDIRECT
- 	help
- 	  Say Y here if you want to use classifiers for incoming and/or outgoing
- 	  packets. This qdisc doesn't do anything else besides running classifiers,
+diff --git a/tools/testing/selftests/bpf/prog_tests/check_mtu.c b/tools/testing/selftests/bpf/prog_tests/check_mtu.c
+new file mode 100644
+index 000000000000..09b8f986a17b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/check_mtu.c
+@@ -0,0 +1,37 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Red Hat */
++#include <uapi/linux/bpf.h>
++#include <linux/if_link.h>
++#include <test_progs.h>
++
++#include "test_check_mtu.skel.h"
++#define IFINDEX_LO 1
++
++void test_check_mtu_xdp(struct test_check_mtu *skel)
++{
++	int err = 0;
++	int fd;
++
++	fd = bpf_program__fd(skel->progs.xdp_use_helper);
++	err = bpf_set_link_xdp_fd(IFINDEX_LO, fd, XDP_FLAGS_SKB_MODE);
++	if (CHECK_FAIL(err))
++		return;
++
++	bpf_set_link_xdp_fd(IFINDEX_LO, -1, 0);
++}
++
++void test_check_mtu(void)
++{
++	struct test_check_mtu *skel;
++
++	skel = test_check_mtu__open_and_load();
++	if (CHECK_FAIL(!skel)) {
++		perror("test_check_mtu__open_and_load");
++		return;
++	}
++
++	if (test__start_subtest("bpf_check_mtu XDP-attach"))
++		test_check_mtu_xdp(skel);
++
++	test_check_mtu__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_check_mtu.c b/tools/testing/selftests/bpf/progs/test_check_mtu.c
+new file mode 100644
+index 000000000000..ab97ec925a32
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_check_mtu.c
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Red Hat */
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++#include <stddef.h>
++#include <stdint.h>
++
++char _license[] SEC("license") = "GPL";
++
++SEC("xdp")
++int xdp_use_helper(struct xdp_md *ctx)
++{
++	uint32_t mtu_len = 0;
++	int delta = 20;
++
++	if (bpf_check_mtu(ctx, 0, &mtu_len, delta, 0)) {
++		return XDP_ABORTED;
++	}
++	return XDP_PASS;
++}
++
++SEC("classifier")
++int tc_use_helper(struct __sk_buff *ctx)
++{
++	uint32_t mtu_len = 0;
++	int delta = -20;
++
++	if (bpf_check_mtu(ctx, 0, &mtu_len, delta, 0)) {
++		return BPF_DROP;
++	}
++	return BPF_OK;
++}
 
 
