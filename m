@@ -2,150 +2,128 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 684D7C71156
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:21:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 591E3C56202
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:21:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 32D8D22470
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:21:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0F13A22470
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:21:39 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="Q+nKrT5M";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="MnIc+9sT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729380AbgKTXU3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Nov 2020 18:20:29 -0500
-Received: from out03.mta.xmission.com ([166.70.13.233]:49144 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728864AbgKTXT7 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Nov 2020 18:19:59 -0500
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1kgFh7-006Xzz-Kx; Fri, 20 Nov 2020 16:19:57 -0700
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.int.ebiederm.org)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1kgFe2-00EG00-1l; Fri, 20 Nov 2020 16:16:46 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, criu@openvz.org,
-        bpf@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Jann Horn <jann@thejh.net>, Kees Cook <keescook@chromium.org>,
-        =?UTF-8?q?Daniel=20P=20=2E=20Berrang=C3=A9?= <berrange@redhat.com>,
-        Jeff Layton <jlayton@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Matthew Wilcox <willy@infradead.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Chris Wright <chrisw@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Date:   Fri, 20 Nov 2020 17:14:31 -0600
-Message-Id: <20201120231441.29911-14-ebiederm@xmission.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <87r1on1v62.fsf@x220.int.ebiederm.org>
-References: <87r1on1v62.fsf@x220.int.ebiederm.org>
+        id S1728623AbgKTXVg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Nov 2020 18:21:36 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:17330 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728515AbgKTXVg (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 20 Nov 2020 18:21:36 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AKNE9Qn009681;
+        Fri, 20 Nov 2020 15:21:21 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=vAoJQofT9/61Eme/Xw+Gwz5fbyoBJw/QmzluRPZt2qY=;
+ b=Q+nKrT5MqH5mN/hUg3+YIao3ePKHHb+WUfY3iHEk2doVYo0Oz2rZbk2fXUMWsbJH+de7
+ 93LMNTyX+6S4tXa1L7S4vPDmQt3NsdUJTw+VjR1NLaEV3h5NzWfbDkJvrxbhMQDLzw9y
+ /ddPDXJ5cNclIuj0Engmri1yNCz7EWv50nY= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 34xemp37ds-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 20 Nov 2020 15:21:21 -0800
+Received: from NAM04-CO1-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 20 Nov 2020 15:21:20 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fCnsuk4/b5N3MHKCyX3QtroJH/4NknXBlwjb8m9iUiJAqN5udCyOYXxOjuDMCp7htcdACWuF/PB2wAlo5jlx6JP5r8vbnYHEFaLalTXQS+w99qBHWeqAsXACc70uxbBQGv/uj+8/fscCo3ubGsBfCHhcJ3sMgKFstqI2g+Md7XZDIDeBgwXQWRf6CgIPGy8TjzEHUN0OD7S2LObcTB9MCo3X4hpb5WXYPVUfIYAuSJBrnQ6foPM9w/a13cSqmkHee0W3ZGMWc8ycZbKyLqREwXXU0WYP12MEnsJJRxdnH4q7LXv/BJDPhrM4c/iFSU/GQ2KdsXJMzWZC1vWJWUoamg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vAoJQofT9/61Eme/Xw+Gwz5fbyoBJw/QmzluRPZt2qY=;
+ b=LuLfwqvBj890o+Cnhb+dhRfDMq0tdwaqXjN/S3zQHy1e1wmhgdPJFqNxDkcODF7cu53uDJ/Pwysw+0C11IMG9/6RbBiUGRWP4+HKYo3nBNuGPJ2eRXFVuKwVmef8UCMgtjbWOo+cs+SQd3d6dMZ78Wl89fn9rmWbe67o6gG1cWGBVKgNi8LXzPXxn9/Ii2DAwuJRWESSf4oOk0+JvhX4pU1ya26rtGO04cVuZzYyiMeiuCB6pToxXnZNm6ySq2OKfydgBx//Pa20oK59rOd+d3CmaYqooAU/Z1t7uEnY8o24zT+LffWU1ntFshi2isG5ULTNgFvS7TKARJmq4/xfmg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vAoJQofT9/61Eme/Xw+Gwz5fbyoBJw/QmzluRPZt2qY=;
+ b=MnIc+9sTPzmXkWLnuVQ2aKGxNhuCX/56Pz+xWJTvte96PPnOiM+WcTNRXpBxXODgS+8H1Vf/3mPcXNENrjVlVKulF9HXx2zHvDtLXwz8o6VCz3YZYPOFXFLMzvQl+y73ptLrRGWulqht1i8ry80vEqPjNdqNSWPkBRAzunv3LYs=
+Authentication-Results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=fb.com;
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
+ by BYAPR15MB2696.namprd15.prod.outlook.com (2603:10b6:a03:156::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20; Fri, 20 Nov
+ 2020 23:21:17 +0000
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::bc1d:484f:cb1f:78ee]) by BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::bc1d:484f:cb1f:78ee%4]) with mapi id 15.20.3564.034; Fri, 20 Nov 2020
+ 23:21:17 +0000
+Date:   Fri, 20 Nov 2020 15:21:11 -0800
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     Andrii Nakryiko <andrii@kernel.org>
+CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>, <kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next 5/6] selftests/bpf: add bpf_sidecar kernel
+ module for testing
+Message-ID: <20201120232111.urepi4sqrr5oekf3@kafai-mbp.dhcp.thefacebook.com>
+References: <20201119232244.2776720-1-andrii@kernel.org>
+ <20201119232244.2776720-6-andrii@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201119232244.2776720-6-andrii@kernel.org>
+X-Originating-IP: [2620:10d:c090:400::5:603e]
+X-ClientProxiedBy: MW4PR03CA0164.namprd03.prod.outlook.com
+ (2603:10b6:303:8d::19) To BY5PR15MB3571.namprd15.prod.outlook.com
+ (2603:10b6:a03:1f6::32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1kgFe2-00EG00-1l;;;mid=<20201120231441.29911-14-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/WaiBJd3Nq6/ZzikkysKyBD91aHVCzXs0=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: [PATCH v2 14/24] file: Implement task_lookup_next_fd_rcu
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from kafai-mbp.dhcp.thefacebook.com (2620:10d:c090:400::5:603e) by MW4PR03CA0164.namprd03.prod.outlook.com (2603:10b6:303:8d::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.21 via Frontend Transport; Fri, 20 Nov 2020 23:21:16 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5876fa68-ed7d-4f76-4f98-08d88daafb35
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2696:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR15MB2696D8444F3B1A969563A76FD5FF0@BYAPR15MB2696.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QCSrcW78XzXtX6I//0/+In6JgDiuAmv/q29FjaVi/ZGmvwdDbjNW2WQG0P97vwndjPYqtHBiCzbiNz0FgAMvSOUnk6AHR0o3Uo9funB5JyaO+0Z+fccOQLZ9x3HsIN75DImqgsfdk/QxdqmIweiJScDM09HxWDhBBUYIkMFhT2WtZF2kz+hUOxmWTXYzCFMokx9oN0hSVXfDg9rf963JZkI3CV4jNag4r4olcUTBud5j7HZwKBMVKARzGnCuZz0PLX3a1FGFiRlCui4Z0AyxR9y6Bin0IazUA1GMakwa2xWJGj5yp5BT+13S4/UPizkG
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(136003)(396003)(39860400002)(346002)(376002)(5660300002)(8676002)(55016002)(2906002)(4744005)(7696005)(52116002)(316002)(6916009)(4326008)(66946007)(66476007)(66556008)(478600001)(9686003)(1076003)(6666004)(86362001)(8936002)(16526019)(186003)(6506007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: rOJe4oBNbcp4pmmpEwp3HRzYaaFhf4JfNJiZuRVKjSzH9ZFwAWMM9YSrl+yl1G4fRNkQtPcbcY1NErymWDhH2QliHjflmilrZ/w0cUwocInZQ34VITvi4NrPUEtOFIKBDSJt5gDgCFz8tFhwKUAhkClM2c6HAYpa9kbriytcrBa9VrvdJHJYkyIAyHy8h+C1D8bt29PAABzNY5fcR0EFrh5gem7V1Rr2AVW6/Ygpp0/HpNn335GCsOtHeQlKQCa3WfixadHjm5p6rRYIkJi7LOsGUXuiVOMEUOl5FADXYxhkXod3v89Tot158HZzMCEAZJVxKf9mRFFKcMRDpVftJyOm/xY75jsb0n/6tTHLzD1wiU0g67qSVvUIp/jpdBYBQ7OiM6ChmSXPERcE4yHFdQ3na0w8zqR4KKVaTZ5Voi5B3PV0afLMWluU4riR+HrH9O30M4wFIAm66GSzZwlDZxoD16L+lQ7hgPTuzFFnOVapR6thS15EpmhNQQNOiLIkxbP5sEqs4CJAsWVYnP4Xyx1MpSORu8hqn0IweXdvVd8ttqMHyvjBrU7zhtJsQ59vPd96sTucClMkFcZtpQtqfLFW9fsbicRkW/XIdwPMaxpD1+oMYLQTv1h42C4Cf+HZucAcyzWk7+64HHctsafEmTTagOeFemV8RFjiHEw4Ot89mbcFAbWLj0U2BdhubM6LTS5Spe3GuNAZOvxNpUMIsQe1o6fNuQ+AYWSpf/TLCPaSMXWNIvYLYQtJ0NBrRt1ZyucGKzLVaCdKCJpblJIAO4Dejk9mg/4KZlidpcKsjZB/ZofkB7MxBroyLUxfkM/UX+4mq8EAP9/b6RPlcd1S9PnKatlROND3kdBB2g2LQyeyID8KyXvsaK4gxKOleqvQfAn7r3j7rjRiOnsyAeE/EEr9rSn47UlXtExGxBpAOVK8fNWIHounws4hnRPOtQnQ
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5876fa68-ed7d-4f76-4f98-08d88daafb35
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2020 23:21:17.2886
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4qTzIb0BBU8jAKGyWQzVdQDobAGbPLrd+P81Ri50DPr4+sK7rsQG9HdcAgm8dD4f
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2696
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-20_17:2020-11-20,2020-11-20 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 suspectscore=1
+ adultscore=0 impostorscore=0 clxscore=1015 mlxlogscore=788 spamscore=0
+ lowpriorityscore=0 malwarescore=0 bulkscore=0 priorityscore=1501
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011200153
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-As a companion to fget_task and task_lookup_fd_rcu implement
-task_lookup_next_fd_rcu that will return the struct file for the first
-file descriptor number that is equal or greater than the fd argument
-value, or NULL if there is no such struct file.
-
-This allows file descriptors of foreign processes to be iterated
-through safely, without needed to increment the count on files_struct.
-
-Some concern[1] has been expressed that this function takes the task_lock
-for each iteration and thus for each file descriptor.  This place
-where this function will be called in a commonly used code path is for
-listing /proc/<pid>/fd.  I did some small benchmarks and did not see
-any measurable performance differences.  For ordinary users ls is
-likely to stat each of the directory entries and tid_fd_mode called
-from tid_fd_revalidae has always taken the task lock for each file
-descriptor.  So this does not look like it will be a big change in
-practice.
-
-At some point is will probably be worth changing put_files_struct to
-free files_struct after an rcu grace period so that task_lock won't be
-needed at all.
-
-[1] https://lkml.kernel.org/r/20200817220425.9389-10-ebiederm@xmission.com
-v1: https://lkml.kernel.org/r/20200817220425.9389-9-ebiederm@xmission.com
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
----
- fs/file.c               | 21 +++++++++++++++++++++
- include/linux/fdtable.h |  1 +
- 2 files changed, 22 insertions(+)
-
-diff --git a/fs/file.c b/fs/file.c
-index 6448523ca29e..23b888a4acbe 100644
---- a/fs/file.c
-+++ b/fs/file.c
-@@ -880,6 +880,27 @@ struct file *task_lookup_fd_rcu(struct task_struct *task, unsigned int fd)
- 	return file;
- }
- 
-+struct file *task_lookup_next_fd_rcu(struct task_struct *task, unsigned int *ret_fd)
-+{
-+	/* Must be called with rcu_read_lock held */
-+	struct files_struct *files;
-+	unsigned int fd = *ret_fd;
-+	struct file *file = NULL;
-+
-+	task_lock(task);
-+	files = task->files;
-+	if (files) {
-+		for (; fd < files_fdtable(files)->max_fds; fd++) {
-+			file = files_lookup_fd_rcu(files, fd);
-+			if (file)
-+				break;
-+		}
-+	}
-+	task_unlock(task);
-+	*ret_fd = fd;
-+	return file;
-+}
-+
- /*
-  * Lightweight file lookup - no refcnt increment if fd table isn't shared.
-  *
-diff --git a/include/linux/fdtable.h b/include/linux/fdtable.h
-index a0558ae9b40c..cf6c52dae3a1 100644
---- a/include/linux/fdtable.h
-+++ b/include/linux/fdtable.h
-@@ -111,6 +111,7 @@ static inline struct file *lookup_fd_rcu(unsigned int fd)
- }
- 
- struct file *task_lookup_fd_rcu(struct task_struct *task, unsigned int fd);
-+struct file *task_lookup_next_fd_rcu(struct task_struct *task, unsigned int *fd);
- 
- struct task_struct;
- 
--- 
-2.25.0
-
+On Thu, Nov 19, 2020 at 03:22:43PM -0800, Andrii Nakryiko wrote:
+> Add bpf_sidecar module, which is conceptually out-of-tree module and provides
+> ways for selftests/bpf to test various kernel module-related functionality:
+> raw tracepoint, fentry/fexit/fmod_ret, etc. This module will be auto-loaded by
+> test_progs test runner and expected by some of selftests to be present and
+> loaded.
+Acked-by: Martin KaFai Lau <kafai@fb.com>
