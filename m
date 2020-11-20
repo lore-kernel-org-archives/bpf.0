@@ -7,29 +7,28 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 322B5C2D0E4
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0B82C6379D
 	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:17:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D5DC62240B
-	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:17:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 641A62240B
+	for <bpf@archiver.kernel.org>; Fri, 20 Nov 2020 23:17:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729135AbgKTXQR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Nov 2020 18:16:17 -0500
-Received: from out02.mta.xmission.com ([166.70.13.232]:46004 "EHLO
-        out02.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726719AbgKTXQR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Nov 2020 18:16:17 -0500
-X-Greylist: delayed 302 seconds by postgrey-1.27 at vger.kernel.org; Fri, 20 Nov 2020 18:16:16 EST
+        id S1729264AbgKTXQ2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Nov 2020 18:16:28 -0500
+Received: from out01.mta.xmission.com ([166.70.13.231]:33648 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729241AbgKTXQ1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Nov 2020 18:16:27 -0500
 Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1kgFdX-002RDz-J2; Fri, 20 Nov 2020 16:16:15 -0700
+        id 1kgFdi-006TqE-8D; Fri, 20 Nov 2020 16:16:26 -0700
 Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.int.ebiederm.org)
         by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.93)
         (envelope-from <ebiederm@xmission.com>)
-        id 1kgFdW-00EG00-K1; Fri, 20 Nov 2020 16:16:15 -0700
+        id 1kgFdg-00EG00-RF; Fri, 20 Nov 2020 16:16:25 -0700
 From:   "Eric W. Biederman" <ebiederm@xmission.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-fsdevel@vger.kernel.org, criu@openvz.org,
@@ -55,91 +54,131 @@ Cc:     linux-fsdevel@vger.kernel.org, criu@openvz.org,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         "Eric W. Biederman" <ebiederm@xmission.com>
-Date:   Fri, 20 Nov 2020 17:14:22 -0600
-Message-Id: <20201120231441.29911-5-ebiederm@xmission.com>
+Date:   Fri, 20 Nov 2020 17:14:25 -0600
+Message-Id: <20201120231441.29911-8-ebiederm@xmission.com>
 X-Mailer: git-send-email 2.25.0
 In-Reply-To: <87r1on1v62.fsf@x220.int.ebiederm.org>
 References: <87r1on1v62.fsf@x220.int.ebiederm.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1kgFdW-00EG00-K1;;;mid=<20201120231441.29911-5-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1+Xhwlps+6lJ3cvlbGlrhm0qEn5witM5cY=
+X-XM-SPF: eid=1kgFdg-00EG00-RF;;;mid=<20201120231441.29911-8-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX18edY7AsNzDid9bgwd2GH9BMu//oTEEyxM=
 X-SA-Exim-Connect-IP: 68.227.160.95
 X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: [PATCH v2 05/24] bpf: In bpf_task_fd_query use fget_task
+Subject: [PATCH v2 08/24] file: Factor files_lookup_fd_locked out of fcheck_files
 X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
 X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use the helper fget_task to simplify bpf_task_fd_query.
+To make it easy to tell where files->file_lock protection is being
+used when looking up a file create files_lookup_fd_locked.  Only allow
+this function to be called with the file_lock held.
 
-As well as simplifying the code this removes one unnecessary increment of
-struct files_struct.  This unnecessary increment of files_struct.count can
-result in exec unnecessarily unsharing files_struct and breaking posix
-locks, and it can result in fget_light having to fallback to fget reducing
-performance.
+Update the callers of fcheck and fcheck_files that are called with the
+files->file_lock held to call files_lookup_fd_locked instead.
 
-This simplification comes from the observation that none of the
-callers of get_files_struct actually need to call get_files_struct
-that was made when discussing[1] exec and posix file locks.
+Hopefully this makes it easier to quickly understand what is going on.
 
-[1] https://lkml.kernel.org/r/20180915160423.GA31461@redhat.com
-Suggested-by: Oleg Nesterov <oleg@redhat.com>
-v1: https://lkml.kernel.org/r/20200817220425.9389-5-ebiederm@xmission.com
+The need for better names became apparent in the last round of
+discussion of this set of changes[1].
+
+[1] https://lkml.kernel.org/r/CAHk-=wj8BQbgJFLa+J0e=iT-1qpmCRTbPAJ8gd6MJQ=kbRPqyQ@mail.gmail.com
 Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 ---
- kernel/bpf/syscall.c | 20 +++-----------------
- 1 file changed, 3 insertions(+), 17 deletions(-)
+ fs/file.c               |  2 +-
+ fs/locks.c              | 14 ++++++++------
+ fs/proc/fd.c            |  2 +-
+ include/linux/fdtable.h |  7 +++++++
+ 4 files changed, 17 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 8f50c9c19f1b..6d49c2e1634c 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3878,7 +3878,6 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
- 	pid_t pid = attr->task_fd_query.pid;
- 	u32 fd = attr->task_fd_query.fd;
- 	const struct perf_event *event;
--	struct files_struct *files;
- 	struct task_struct *task;
- 	struct file *file;
- 	int err;
-@@ -3896,23 +3895,11 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
- 	if (!task)
- 		return -ENOENT;
+diff --git a/fs/file.c b/fs/file.c
+index b5591efb87f5..9d0e91168be1 100644
+--- a/fs/file.c
++++ b/fs/file.c
+@@ -1098,7 +1098,7 @@ static int ksys_dup3(unsigned int oldfd, unsigned int newfd, int flags)
  
--	files = get_files_struct(task);
--	put_task_struct(task);
--	if (!files)
--		return -ENOENT;
--
- 	err = 0;
--	spin_lock(&files->file_lock);
--	file = fcheck_files(files, fd);
-+	file = fget_task(task, fd);
-+	put_task_struct(task);
- 	if (!file)
--		err = -EBADF;
--	else
--		get_file(file);
--	spin_unlock(&files->file_lock);
--	put_files_struct(files);
--
--	if (err)
--		goto out;
-+		return -EBADF;
+ 	spin_lock(&files->file_lock);
+ 	err = expand_files(files, newfd);
+-	file = fcheck(oldfd);
++	file = files_lookup_fd_locked(files, oldfd);
+ 	if (unlikely(!file))
+ 		goto Ebadf;
+ 	if (unlikely(err < 0)) {
+diff --git a/fs/locks.c b/fs/locks.c
+index 1f84a03601fe..148197c1b547 100644
+--- a/fs/locks.c
++++ b/fs/locks.c
+@@ -2539,14 +2539,15 @@ int fcntl_setlk(unsigned int fd, struct file *filp, unsigned int cmd,
+ 	 */
+ 	if (!error && file_lock->fl_type != F_UNLCK &&
+ 	    !(file_lock->fl_flags & FL_OFDLCK)) {
++		struct files_struct *files = current->files;
+ 		/*
+ 		 * We need that spin_lock here - it prevents reordering between
+ 		 * update of i_flctx->flc_posix and check for it done in
+ 		 * close(). rcu_read_lock() wouldn't do.
+ 		 */
+-		spin_lock(&current->files->file_lock);
+-		f = fcheck(fd);
+-		spin_unlock(&current->files->file_lock);
++		spin_lock(&files->file_lock);
++		f = files_lookup_fd_locked(files, fd);
++		spin_unlock(&files->file_lock);
+ 		if (f != filp) {
+ 			file_lock->fl_type = F_UNLCK;
+ 			error = do_lock_file_wait(filp, cmd, file_lock);
+@@ -2670,14 +2671,15 @@ int fcntl_setlk64(unsigned int fd, struct file *filp, unsigned int cmd,
+ 	 */
+ 	if (!error && file_lock->fl_type != F_UNLCK &&
+ 	    !(file_lock->fl_flags & FL_OFDLCK)) {
++		struct files_struct *files = current->files;
+ 		/*
+ 		 * We need that spin_lock here - it prevents reordering between
+ 		 * update of i_flctx->flc_posix and check for it done in
+ 		 * close(). rcu_read_lock() wouldn't do.
+ 		 */
+-		spin_lock(&current->files->file_lock);
+-		f = fcheck(fd);
+-		spin_unlock(&current->files->file_lock);
++		spin_lock(&files->file_lock);
++		f = files_lookup_fd_locked(files, fd);
++		spin_unlock(&files->file_lock);
+ 		if (f != filp) {
+ 			file_lock->fl_type = F_UNLCK;
+ 			error = do_lock_file_wait(filp, cmd, file_lock);
+diff --git a/fs/proc/fd.c b/fs/proc/fd.c
+index d58960f6ee52..2cca9bca3b3a 100644
+--- a/fs/proc/fd.c
++++ b/fs/proc/fd.c
+@@ -35,7 +35,7 @@ static int seq_show(struct seq_file *m, void *v)
+ 		unsigned int fd = proc_fd(m->private);
  
- 	if (file->f_op == &bpf_link_fops) {
- 		struct bpf_link *link = file->private_data;
-@@ -3952,7 +3939,6 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
- 	err = -ENOTSUPP;
- put_file:
- 	fput(file);
--out:
- 	return err;
+ 		spin_lock(&files->file_lock);
+-		file = fcheck_files(files, fd);
++		file = files_lookup_fd_locked(files, fd);
+ 		if (file) {
+ 			struct fdtable *fdt = files_fdtable(files);
+ 
+diff --git a/include/linux/fdtable.h b/include/linux/fdtable.h
+index 639933f37da9..fda4b81dd735 100644
+--- a/include/linux/fdtable.h
++++ b/include/linux/fdtable.h
+@@ -91,6 +91,13 @@ static inline struct file *files_lookup_fd_raw(struct files_struct *files, unsig
+ 	return NULL;
  }
  
++static inline struct file *files_lookup_fd_locked(struct files_struct *files, unsigned int fd)
++{
++	RCU_LOCKDEP_WARN(!lockdep_is_held(&files->file_lock),
++			   "suspicious rcu_dereference_check() usage");
++	return files_lookup_fd_raw(files, fd);
++}
++
+ static inline struct file *fcheck_files(struct files_struct *files, unsigned int fd)
+ {
+ 	RCU_LOCKDEP_WARN(!rcu_read_lock_held() &&
 -- 
 2.25.0
 
