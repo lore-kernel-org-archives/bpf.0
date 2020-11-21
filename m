@@ -5,67 +5,70 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 772ADC2D0E4
-	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 00:51:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 36B7CC5519F
+	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 00:51:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 223D023A65
-	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 00:51:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D70F223A6B
+	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 00:51:42 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HDfVcfah"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="j4P5Gesa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727149AbgKUAu6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Nov 2020 19:50:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44070 "EHLO
+        id S1728328AbgKUAvE (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Nov 2020 19:51:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726200AbgKUAu6 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Nov 2020 19:50:58 -0500
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A2CC0613CF
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 16:50:58 -0800 (PST)
-Received: by mail-wr1-x441.google.com with SMTP id p8so12698996wrx.5
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 16:50:58 -0800 (PST)
+        with ESMTP id S1726587AbgKUAvB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Nov 2020 19:51:01 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711E9C061A4C
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 16:50:59 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id a3so12144533wmb.5
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 16:50:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4EcEA95lNa5ZZ+4yTLKOmHZRpqe2owrp9tTkgwACEiM=;
-        b=HDfVcfahM3bKl9+qUQ17zfP7VPqPF47VMw+BHus3Ay4VZMn3CaP64kl4ysBf8B662Z
-         8iy2knqgDfzfRBSuxTRSuVI/mM9QU6Xl3uvF+LmivdARc+EhYceK73AoEr5+4YBtgdwx
-         H6MZ1Xw9f4RCyLGtwXbNlRLg4+6a4ugdGEerA=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=gNfZ0xa6JKwNNxWqj03/KjB0EjaVfS36YlA9F8Reu1w=;
+        b=j4P5Gesa95dGfyRNG4KWRAmUesbt1qCEz9MZcVyRRZef5a9//bkVESKcmemK1Qa5Mf
+         2EY2QipBVW6g9Ez/hC9CGBFw2H2k2caM6kxJ+wYI4lk8K1y7bvToESGzEOApAKO2P7Lz
+         Ncgxb38t4RITuRIkWHXNj+ySXUuvDplVn5niI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4EcEA95lNa5ZZ+4yTLKOmHZRpqe2owrp9tTkgwACEiM=;
-        b=XIFDxRFAGy5j7SRkLYfUvneBLygIJ0v7bxYTM7CwsaihNiImI0lwyyaG6vHp8QZMek
-         JXtIaJpyLDbwfKZLoJQBy3uF1hx1raaIEZzUWUOJJF6yARra9YiFxiAqwX3yePWp0vD2
-         2ZzvFxXul1Vc1d2GijDW/Lcs0J4cDYPmnzQZnp9/jeWaW7PWlyqsc3RNXpDgd+lUl4Rt
-         iSPwrz8sRVrxUrt+ycfTt9wAGpDUCEa5wkm0JE5f1QF9pZn6wKSOiz7zaTnaLBdP/+AV
-         y1OSle8ngaSvUoMbwozWza8gA8iGEayvIef/F1yIG8NrJu9mspWRoDYBBvsMJcvpe/LO
-         78gA==
-X-Gm-Message-State: AOAM533zCIM20I/o4q1Kk5XS44TjSykFN7W+iNl26D5mePVb7899F0bz
-        LNN5aiaBOn44JMNwPMTujrPldg==
-X-Google-Smtp-Source: ABdhPJwn2Ze2G+n7GEIgV6IFe/lQ3oFyWVfyjqDt0housibEsSKQxsoyQ5onAdYaytbYDxL5VwbWIA==
-X-Received: by 2002:adf:ead1:: with SMTP id o17mr18872821wrn.396.1605919856713;
-        Fri, 20 Nov 2020 16:50:56 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=gNfZ0xa6JKwNNxWqj03/KjB0EjaVfS36YlA9F8Reu1w=;
+        b=I3BQTYryoSRRri+r8suMRQwqEFdD8gFrNS8qbxf4FgbXs6ckPO6vqnl4+9ya7ykDjv
+         SWHy8K42t+rlDGvIA75lg1gjUE/H0s61EX1y2jcWa6Dv/vA9b8l8AkFSA3QrkJix9IGw
+         u3Z4NShhkMDg09tQsPeLExeYA7XGT64WUY8tRALGFBZlxa1YLLBWXUiPWO0mUDdK1JVv
+         nYNL6lvrB4T8rIqX/VAAEqAxy7BRMJRShJbPEof7Yuav2Q+p6GJc5s+q2+5iv6mreNQe
+         JD5Toax+TxfEJQZ9EEhon79YkPQ/uxPzXiBhHhB4U3ncagPuiGI8Bb4YHFnZ5n/Cvryo
+         RsYw==
+X-Gm-Message-State: AOAM533JgKo384XNd1poBJuM/+lvrSuvPjqgd/jA43Rv7SnqrJDMikzR
+        940Emj1URc+jSPAkJ3KQETuFYQ==
+X-Google-Smtp-Source: ABdhPJwE901Pq8K1Dg2K7dhF6+5tXg1xc7YKa4Hla328PUHTL3fxH0K1hjO6sPaGQs9wHxvOjssF5Q==
+X-Received: by 2002:a1c:f20e:: with SMTP id s14mr12139150wmc.126.1605919858004;
+        Fri, 20 Nov 2020 16:50:58 -0800 (PST)
 Received: from kpsingh.c.googlers.com.com (203.75.199.104.bc.googleusercontent.com. [104.199.75.203])
-        by smtp.gmail.com with ESMTPSA id s8sm7133607wrn.33.2020.11.20.16.50.55
+        by smtp.gmail.com with ESMTPSA id s8sm7133607wrn.33.2020.11.20.16.50.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Nov 2020 16:50:56 -0800 (PST)
+        Fri, 20 Nov 2020 16:50:57 -0800 (PST)
 From:   KP Singh <kpsingh@chromium.org>
 To:     James Morris <jmorris@namei.org>, linux-kernel@vger.kernel.org,
         bpf@vger.kernel.org, linux-security-module@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Florent Revest <revest@chromium.org>,
         Brendan Jackman <jackmanb@chromium.org>,
         Mimi Zohar <zohar@linux.ibm.com>
-Subject: [PATCH bpf-next v2 1/3] ima: Implement ima_inode_hash
-Date:   Sat, 21 Nov 2020 00:50:52 +0000
-Message-Id: <20201121005054.3467947-1-kpsingh@chromium.org>
+Subject: [PATCH bpf-next v2 3/3] bpf: Update LSM selftests for bpf_ima_inode_hash
+Date:   Sat, 21 Nov 2020 00:50:54 +0000
+Message-Id: <20201121005054.3467947-3-kpsingh@chromium.org>
 X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
+In-Reply-To: <20201121005054.3467947-1-kpsingh@chromium.org>
+References: <20201121005054.3467947-1-kpsingh@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -74,154 +77,115 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: KP Singh <kpsingh@google.com>
 
-This is in preparation to add a helper for BPF LSM programs to use
-IMA hashes when attached to LSM hooks. There are LSM hooks like
-inode_unlink which do not have a struct file * argument and cannot
-use the existing ima_file_hash API.
+- Update the IMA policy before executing the test binary (this is not an
+  override of the policy, just an append that ensures that hashes are
+  calculated on executions).
 
-An inode based API is, therefore, useful in LSM based detections like an
-executable trying to delete itself which rely on the inode_unlink LSM
-hook.
+- Call the bpf_ima_inode_hash in the bprm_committed_creds hook and check
+  if the call succeeded and a hash was calculated.
 
-Moreover, the ima_file_hash function does nothing with the struct file
-pointer apart from calling file_inode on it and converting it to an
-inode.
-
+Acked-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: KP Singh <kpsingh@google.com>
 ---
- include/linux/ima.h               |  6 +++
- security/integrity/ima/ima_main.c | 78 +++++++++++++++++++++----------
- 2 files changed, 60 insertions(+), 24 deletions(-)
+ tools/testing/selftests/bpf/config            |  3 ++
+ .../selftests/bpf/prog_tests/test_lsm.c       | 32 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/lsm.c       |  7 +++-
+ 3 files changed, 41 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/ima.h b/include/linux/ima.h
-index 8fa7bcfb2da2..7233a2751754 100644
---- a/include/linux/ima.h
-+++ b/include/linux/ima.h
-@@ -29,6 +29,7 @@ extern int ima_post_read_file(struct file *file, void *buf, loff_t size,
- 			      enum kernel_read_file_id id);
- extern void ima_post_path_mknod(struct dentry *dentry);
- extern int ima_file_hash(struct file *file, char *buf, size_t buf_size);
-+extern int ima_inode_hash(struct inode *inode, char *buf, size_t buf_size);
- extern void ima_kexec_cmdline(int kernel_fd, const void *buf, int size);
- 
- #ifdef CONFIG_IMA_KEXEC
-@@ -115,6 +116,11 @@ static inline int ima_file_hash(struct file *file, char *buf, size_t buf_size)
- 	return -EOPNOTSUPP;
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 2118e23ac07a..4b5764031368 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -39,3 +39,6 @@ CONFIG_BPF_JIT=y
+ CONFIG_BPF_LSM=y
+ CONFIG_SECURITY=y
+ CONFIG_LIRC=y
++CONFIG_IMA=y
++CONFIG_IMA_WRITE_POLICY=y
++CONFIG_IMA_READ_POLICY=y
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_lsm.c b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
+index 6ab29226c99b..bcb050a296a4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_lsm.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
+@@ -52,6 +52,28 @@ int exec_cmd(int *monitored_pid)
+ 	return -EINVAL;
  }
  
-+static inline int ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
++#define IMA_POLICY "measure func=BPRM_CHECK"
++
++/* This does not override the policy, IMA policy updates are
++ * append only, so this just ensures that "measure func=BPRM_CHECK"
++ * is in the policy. IMA does not allow us to remove this line once
++ * it is added.
++ */
++static int update_ima_policy(void)
 +{
-+	return -EOPNOTSUPP;
++	int fd, ret = 0;
++
++	fd = open("/sys/kernel/security/ima/policy", O_WRONLY);
++	if (fd < 0)
++		return -errno;
++
++	if (write(fd, IMA_POLICY, sizeof(IMA_POLICY)) == -1)
++		ret = -errno;
++
++	close(fd);
++	return ret;
 +}
 +
- static inline void ima_kexec_cmdline(int kernel_fd, const void *buf, int size) {}
- #endif /* CONFIG_IMA */
- 
-diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
-index 2d1af8899cab..cb2deaa188e7 100644
---- a/security/integrity/ima/ima_main.c
-+++ b/security/integrity/ima/ima_main.c
-@@ -501,37 +501,14 @@ int ima_file_check(struct file *file, int mask)
- }
- EXPORT_SYMBOL_GPL(ima_file_check);
- 
--/**
-- * ima_file_hash - return the stored measurement if a file has been hashed and
-- * is in the iint cache.
-- * @file: pointer to the file
-- * @buf: buffer in which to store the hash
-- * @buf_size: length of the buffer
-- *
-- * On success, return the hash algorithm (as defined in the enum hash_algo).
-- * If buf is not NULL, this function also outputs the hash into buf.
-- * If the hash is larger than buf_size, then only buf_size bytes will be copied.
-- * It generally just makes sense to pass a buffer capable of holding the largest
-- * possible hash: IMA_MAX_DIGEST_SIZE.
-- * The file hash returned is based on the entire file, including the appended
-- * signature.
-- *
-- * If IMA is disabled or if no measurement is available, return -EOPNOTSUPP.
-- * If the parameters are incorrect, return -EINVAL.
-- */
--int ima_file_hash(struct file *file, char *buf, size_t buf_size)
-+static int __ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
+ void test_test_lsm(void)
  {
--	struct inode *inode;
- 	struct integrity_iint_cache *iint;
- 	int hash_algo;
+ 	struct lsm *skel = NULL;
+@@ -66,6 +88,10 @@ void test_test_lsm(void)
+ 	if (CHECK(err, "attach", "lsm attach failed: %d\n", err))
+ 		goto close_prog;
  
--	if (!file)
--		return -EINVAL;
--
- 	if (!ima_policy_flag)
- 		return -EOPNOTSUPP;
++	err = update_ima_policy();
++	if (CHECK(err, "update_ima_policy", "err %d\n", err))
++		goto close_prog;
++
+ 	err = exec_cmd(&skel->bss->monitored_pid);
+ 	if (CHECK(err < 0, "exec_cmd", "err %d errno %d\n", err, errno))
+ 		goto close_prog;
+@@ -83,6 +109,12 @@ void test_test_lsm(void)
+ 	CHECK(skel->bss->mprotect_count != 1, "mprotect_count",
+ 	      "mprotect_count = %d\n", skel->bss->mprotect_count);
  
--	inode = file_inode(file);
- 	iint = integrity_iint_find(inode);
- 	if (!iint)
- 		return -EOPNOTSUPP;
-@@ -558,8 +535,61 @@ int ima_file_hash(struct file *file, char *buf, size_t buf_size)
++	CHECK(skel->data->ima_hash_ret < 0, "ima_hash_ret",
++	      "ima_hash_ret = %ld\n", skel->data->ima_hash_ret);
++
++	CHECK(skel->bss->ima_hash == 0, "ima_hash",
++	      "ima_hash = %lu\n", skel->bss->ima_hash);
++
+ 	syscall(__NR_setdomainname, &buf, -2L);
+ 	syscall(__NR_setdomainname, 0, -3L);
+ 	syscall(__NR_setdomainname, ~0L, -4L);
+diff --git a/tools/testing/selftests/bpf/progs/lsm.c b/tools/testing/selftests/bpf/progs/lsm.c
+index ff4d343b94b5..5adc193e414d 100644
+--- a/tools/testing/selftests/bpf/progs/lsm.c
++++ b/tools/testing/selftests/bpf/progs/lsm.c
+@@ -35,6 +35,8 @@ char _license[] SEC("license") = "GPL";
+ int monitored_pid = 0;
+ int mprotect_count = 0;
+ int bprm_count = 0;
++long ima_hash_ret = -1;
++u64 ima_hash = 0;
  
- 	return hash_algo;
- }
-+
-+/**
-+ * ima_file_hash - return the stored measurement if a file has been hashed and
-+ * is in the iint cache.
-+ * @file: pointer to the file
-+ * @buf: buffer in which to store the hash
-+ * @buf_size: length of the buffer
-+ *
-+ * On success, return the hash algorithm (as defined in the enum hash_algo).
-+ * If buf is not NULL, this function also outputs the hash into buf.
-+ * If the hash is larger than buf_size, then only buf_size bytes will be copied.
-+ * It generally just makes sense to pass a buffer capable of holding the largest
-+ * possible hash: IMA_MAX_DIGEST_SIZE.
-+ * The file hash returned is based on the entire file, including the appended
-+ * signature.
-+ *
-+ * If IMA is disabled or if no measurement is available, return -EOPNOTSUPP.
-+ * If the parameters are incorrect, return -EINVAL.
-+ */
-+int ima_file_hash(struct file *file, char *buf, size_t buf_size)
-+{
-+	if (!file)
-+		return -EINVAL;
-+
-+	return __ima_inode_hash(file_inode(file), buf, buf_size);
-+}
- EXPORT_SYMBOL_GPL(ima_file_hash);
+ SEC("lsm/file_mprotect")
+ int BPF_PROG(test_int_hook, struct vm_area_struct *vma,
+@@ -65,8 +67,11 @@ int BPF_PROG(test_void_hook, struct linux_binprm *bprm)
+ 	__u32 key = 0;
+ 	__u64 *value;
  
-+/**
-+ * ima_inode_hash - return the stored measurement if the inode has been hashed
-+ * and is in the iint cache.
-+ * @inode: pointer to the inode
-+ * @buf: buffer in which to store the hash
-+ * @buf_size: length of the buffer
-+ *
-+ * On success, return the hash algorithm (as defined in the enum hash_algo).
-+ * If buf is not NULL, this function also outputs the hash into buf.
-+ * If the hash is larger than buf_size, then only buf_size bytes will be copied.
-+ * It generally just makes sense to pass a buffer capable of holding the largest
-+ * possible hash: IMA_MAX_DIGEST_SIZE.
-+ * The hash returned is based on the entire contents, including the appended
-+ * signature.
-+ *
-+ * If IMA is disabled or if no measurement is available, return -EOPNOTSUPP.
-+ * If the parameters are incorrect, return -EINVAL.
-+ */
-+int ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
-+{
-+	if (!inode)
-+		return -EINVAL;
-+
-+	return __ima_inode_hash(inode, buf, buf_size);
-+}
-+EXPORT_SYMBOL_GPL(ima_inode_hash);
-+
- /**
-  * ima_post_create_tmpfile - mark newly created tmpfile as new
-  * @file : newly created tmpfile
+-	if (monitored_pid == pid)
++	if (monitored_pid == pid) {
+ 		bprm_count++;
++		ima_hash_ret = bpf_ima_inode_hash(bprm->file->f_inode,
++						  &ima_hash, sizeof(ima_hash));
++	}
+ 
+ 	bpf_copy_from_user(args, sizeof(args), (void *)bprm->vma->vm_mm->arg_start);
+ 	bpf_copy_from_user(args, sizeof(args), (void *)bprm->mm->arg_start);
 -- 
 2.29.2.454.gaff20da3a2-goog
 
