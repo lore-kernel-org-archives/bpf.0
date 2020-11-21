@@ -2,120 +2,121 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B8E1BC2D0E4
-	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 00:13:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 61118C56202
+	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 00:14:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5E6A424101
-	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 00:13:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 145C924124
+	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 00:14:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="VLPDB9MR"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ZXn6sV+k"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728937AbgKUANv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Nov 2020 19:13:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
+        id S1729014AbgKUAOR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Nov 2020 19:14:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728462AbgKUANv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Nov 2020 19:13:51 -0500
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA7DC0613CF
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 16:13:50 -0800 (PST)
-Received: by mail-lf1-x144.google.com with SMTP id s30so15910686lfc.4
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 16:13:50 -0800 (PST)
+        with ESMTP id S1728528AbgKUAOR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Nov 2020 19:14:17 -0500
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8DBC0613CF
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 16:14:17 -0800 (PST)
+Received: by mail-lj1-x244.google.com with SMTP id b17so11816781ljf.12
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 16:14:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Aw1h99jPDQe/6TOVAJhjAG6iMelLYm16MqfYmIDPDPI=;
-        b=VLPDB9MROoKGlTf965IdLvuhLwy9WbOxPtEyf2fG8/dob+NNDhYJ69CthAiNd+OdUf
-         341GaBNiZU7VT+POpLUxn8HDlaAj54iiak5VnRd2ErQU+tHYUwpawQmii7qM4xYhdKyG
-         27eJ/F+WI/+k5LJSDqYYhKlmCoPS0P2g9HIZc=
+        bh=OOhlCXLQ7me4aX62QOG9RwxgBAhj7Ibflx4qGQLcgl4=;
+        b=ZXn6sV+kmyx7QPspcL9OH8Ac7HBSusOAhV7jGyMTLB/Ng2bK8UvEtybGL/9quDiS5B
+         kazkzkKO7lr3zNI3Yu+yMrqkQjVBxUJzcFOWfHwMnTARFBBzXJn8b08522F4e0VARaE1
+         yiMyfJlmkJMEE5xjV0mq1dX7Vp48u0EpkChkE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Aw1h99jPDQe/6TOVAJhjAG6iMelLYm16MqfYmIDPDPI=;
-        b=HCjCbgx0FUOlYtKuLT/JEJ31QiejcFxTAHC93vN9hqLY05JVsFCl9PV62cfvDUR0Cq
-         DkiFeZVtJd31xr9Hi9WL1wFi6hMairnsslT7Pq+oBz+2+OXM8DPpLwNK74xevvD1Ltbh
-         Rcgt4ZpGKXAFXRxrjZ4j7l61FgxA63w0vht9Ll6OPCpODNqHLowbXUwXG7dWvnJ1esxg
-         Y3Pao8y6su74oXa7WICChclVM2gx7jrOetve2f7orDqsFF9lmhb3dagkyM0dt633SS1D
-         VeH6kcYKsFK3nE52tbEA91xuGPAgvGUxzGg7S6t5unGgajDVvskE73MAvL1sO8qFtRWK
-         vaIQ==
-X-Gm-Message-State: AOAM5335nnZDw/d3XbCpfENKvwvaU/m1T9rlDcMC2XZFqjdcgIVzfB8V
-        OJg6D01idmCkUUTMGDfD28ZiRzphbBm/aw==
-X-Google-Smtp-Source: ABdhPJwVsyTm2c6DJCM8vB1GSjIUFG6MX08sntnFXzG2Dw+XWdklaoGQz8ZFVyFQMtV5csmaaUjtgA==
-X-Received: by 2002:a19:c3c9:: with SMTP id t192mr9793958lff.154.1605917629088;
-        Fri, 20 Nov 2020 16:13:49 -0800 (PST)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
-        by smtp.gmail.com with ESMTPSA id y18sm510412lfg.28.2020.11.20.16.13.48
-        for <bpf@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Nov 2020 16:13:48 -0800 (PST)
-Received: by mail-lf1-f51.google.com with SMTP id d17so15863581lfq.10
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 16:13:48 -0800 (PST)
-X-Received: by 2002:a19:ae06:: with SMTP id f6mr9766930lfc.133.1605917163430;
- Fri, 20 Nov 2020 16:06:03 -0800 (PST)
+        bh=OOhlCXLQ7me4aX62QOG9RwxgBAhj7Ibflx4qGQLcgl4=;
+        b=JvoFiSowWGyXufFD/9aYCGCfoWpeDPLpwXtgmv8hPPC8ICk46wJwY1J50fRBFZzT6l
+         GOC17IJ2HfwD1X+0f1asKIi8+GEO9r1L0LgStvRa7lEt11h2g5kFlKlmx/W/c1CgVbMD
+         pH2QdraNsmzP85nATC5dWnTf9XlV4VdDCXxdbB76W/rVFr6/XeeScx8bZR2RXyBCED5t
+         ktgWdfA2G1lJPiPzodasO5goGqiRYpXxVfy2bK8ZsYZS942+fmjH22AkXc7t2TkKd+So
+         m5s9SNGJcj3HO8BxMpJLj5+csJAxTs8wlSmjfAHFexN7H8Hwsx4nxZsA42t9W19Zr2UF
+         0QUA==
+X-Gm-Message-State: AOAM531XZPKeo60PZKZTtSzkFnxslVI1olgqswNjW5Nebybfk1+Wh2jt
+        asvCgQe/Oo5UP8DW1ORx2AOQ92ql8QkFt63b4yyzJg==
+X-Google-Smtp-Source: ABdhPJyI5y9/w8jHkxQAIdO6MKmQNNfY/wh+g99sPjgo0T0PGpb9YCvSxqIeWiqNOT7ZTYQ+tHnXuk7VJNy+u/hJtz4=
+X-Received: by 2002:a2e:85c6:: with SMTP id h6mr9465290ljj.110.1605917655576;
+ Fri, 20 Nov 2020 16:14:15 -0800 (PST)
 MIME-Version: 1.0
-References: <87r1on1v62.fsf@x220.int.ebiederm.org>
-In-Reply-To: <87r1on1v62.fsf@x220.int.ebiederm.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 20 Nov 2020 16:05:47 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wge0oJ3fbmNfVek101CO7hg1UfUHnBgxLB3Jmq6-hWLug@mail.gmail.com>
-Message-ID: <CAHk-=wge0oJ3fbmNfVek101CO7hg1UfUHnBgxLB3Jmq6-hWLug@mail.gmail.com>
-Subject: Re: [PATCH v2 00/24] exec: Move unshare_files and guarantee
- files_struct.count is correct
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>, criu@openvz.org,
+References: <20201120131708.3237864-1-kpsingh@chromium.org>
+ <20201120131708.3237864-2-kpsingh@chromium.org> <a9336dd5-df17-85d9-7c63-d8ab4b74b459@fb.com>
+In-Reply-To: <a9336dd5-df17-85d9-7c63-d8ab4b74b459@fb.com>
+From:   KP Singh <kpsingh@chromium.org>
+Date:   Sat, 21 Nov 2020 01:14:04 +0100
+Message-ID: <CACYkzJ6bZBybX5tg2DvyJUkBPQ6_qP5FVKvMxdCe+CbA-OmPag@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/3] bpf: Add a BPF helper for getting the IMA
+ hash of an inode
+To:     Yonghong Song <yhs@fb.com>
+Cc:     James Morris <jmorris@namei.org>,
+        open list <linux-kernel@vger.kernel.org>,
         bpf <bpf@vger.kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Jann Horn <jann@thejh.net>, Kees Cook <keescook@chromium.org>,
-        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
-        Jeff Layton <jlayton@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Matthew Wilcox <willy@infradead.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Chris Wright <chrisw@redhat.com>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Mimi Zohar <zohar@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Nov 20, 2020 at 3:11 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+[...]
+
+> > + * long bpf_ima_inode_hash(struct inode *inode, void *dst, u32 size)
+> > + *   Description
+> > + *           Returns the stored IMA hash of the *inode* (if it's avaialable).
+> > + *           If the hash is larger than *size*, then only *size*
+> > + *           bytes will be copied to *dst*
+> > + *   Return > + *            The **hash_algo** of is returned on success,
 >
-> This set of changes cleanups of the code in exec so hopefully this code
-> will not regress again.  Then it adds helpers and fixes the users of
-> files_struct so the reference count is only incremented if COPY_FILES is
-> passed to clone (or if io_uring takes a reference).  Then it removes
-> helpers (get_files_struct, __install_fd, __alloc_fd, __close_fd) that
-> are no longer needed and if used would encourage code that increments
-> the count of files_struct somewhere besides in clone when COPY_FILES is
-> passed.
+> of => if?
 
-I'm not seeing anything that triggered me going "that looks dodgy". It
-all looks like nice cleanups.
+Just changed it to:
 
-But that's just from reading the patches (and in some cases going and
-looking at the context), so I didn't actually _test_ any of it. It all
-looks sane to me, though, and the fact that it removes a fair number
-of lines of code is always a good sign.
+"The **hash_algo** is returned on success"
 
-It would be good for people to review and test (Al? Oleg? others?),
-but my gut feel is "this is good".
+>
+> > + *           **-EOPNOTSUP** if IMA is disabled and **-EINVAL** if
+>
+> and => or
 
-             Linus
+Done. (and the same for tools/)
+
+>
+
+[...]
+
+> > +     .gpl_only       = false,
+> > +     .ret_type       = RET_INTEGER,
+> > +     .arg1_type      = ARG_PTR_TO_BTF_ID,
+> > +     .arg1_btf_id    = &bpf_ima_inode_hash_btf_ids[0],
+> > +     .arg2_type      = ARG_PTR_TO_UNINIT_MEM,
+> > +     .arg3_type      = ARG_CONST_SIZE_OR_ZERO,
+>
+> I know ARG_CONST_SIZE_OR_ZERO provides some flexibility and may
+> make verifier easier to verify programs. But beyond that did
+> you see any real use case user will pass a zero size buf to
+> get hash value?
+>
+
+I agree, in this case it makes more sense to ARG_CONST_SIZE.
+
+> > +     .allowed        = bpf_ima_inode_hash_allowed,
+> > +};
+
+[...]
