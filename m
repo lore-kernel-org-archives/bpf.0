@@ -2,353 +2,110 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14DD8C2D0E4
-	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 02:48:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A6F8CC2D0E4
+	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 02:52:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D4A1C22403
-	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 02:48:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5FE7522403
+	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 02:52:33 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oqddmQSa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727113AbgKUCsK convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 20 Nov 2020 21:48:10 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33026 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726544AbgKUCsK (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 20 Nov 2020 21:48:10 -0500
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AL2m8aB016203
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 18:48:08 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 34wthf2je5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 18:48:08 -0800
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 20 Nov 2020 18:46:29 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id D59332EC9CD8; Fri, 20 Nov 2020 18:46:26 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 3/7] libbpf: factor out low-level BPF program loading helper
-Date:   Fri, 20 Nov 2020 18:46:12 -0800
-Message-ID: <20201121024616.1588175-4-andrii@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201121024616.1588175-1-andrii@kernel.org>
-References: <20201121024616.1588175-1-andrii@kernel.org>
+        id S1727301AbgKUCwd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Nov 2020 21:52:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727197AbgKUCwc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Nov 2020 21:52:32 -0500
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF1CC0613CF;
+        Fri, 20 Nov 2020 18:52:31 -0800 (PST)
+Received: by mail-pl1-x644.google.com with SMTP id v21so4619623plo.12;
+        Fri, 20 Nov 2020 18:52:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=8mnAmGJVt0wk6lg3SP3cGYFCzdDtUly5uoisYFOO9NU=;
+        b=oqddmQSaU7WxHgpLmUVJ3J/xq9Qc7OBKmNm7a0BKlSQr3MoqAomFOFFsLIsIw6DJq3
+         /QHzlkkasHDOo3v4171XEcXqb3a4lYFisi9DNc+B3mNU/KYq+xci3EVlzL3wfKqzm2lb
+         uQEJKprdNpnnkzxfAXTalB0uBbULuaa0vMmo8/JeNss5QWEHB9ikM+QGfnDR7bIIyQNB
+         b8FnDaVuiwv/cSB3BgeqXYwOZxYd8Giwiyfv8Ddc5Jd+tmCsE5yiCaEgavHZe5rdkw1G
+         u74/rBpKLHY2jTrgzCld1FTwH4l4/9M4X5tRT0dJRyCb9/mrQQ8rybAkPGry71TWvA+s
+         dpyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=8mnAmGJVt0wk6lg3SP3cGYFCzdDtUly5uoisYFOO9NU=;
+        b=HAdT8txvSldq3vocvVMn87KPa1FDfv9dyXkJwcErOuiIshOXoqIT3965RfPgnMiVih
+         1eY2RkbBD0Y83Tmm+Tho06FH0zEde+LAPouDFWgLI/HiKIG1fV1Ng7owDeetBnRLaUgJ
+         9fy98aN/ResSJJVDWWZBY7aL2m7YQeT/YyuEFjtQdk0IM+fh43vxoptcXwg/yD1ITMbD
+         31H8L3MI9YhqCfDg32SfpMefa6jxM5KSA18O/Hnpc7jBPHkkhGzhYSnShqj3dw4o9SlF
+         woy3RrvGexH+d2HxS5tYP5e1AQjNUK99Yo0x2Uco5w9bzfsnnta9h+Pv/ezzg4P787c1
+         oJ1A==
+X-Gm-Message-State: AOAM533AyU5KNdbdBvsFn3rXw4ifqM4HmUmN/PYXv5i0HuebVuBMsPgd
+        H8UAiZt988JoxrDw2VK5Neg=
+X-Google-Smtp-Source: ABdhPJwrc478tMIxFH4OkcAptTBlTCM05uMFT4s3vs8gHDP9iAVDcZEGToVd5Fs2EDy3HYaVV9Ze9A==
+X-Received: by 2002:a17:902:8691:b029:d7:e0f9:b1b with SMTP id g17-20020a1709028691b02900d7e0f90b1bmr16912308plo.37.1605927150967;
+        Fri, 20 Nov 2020 18:52:30 -0800 (PST)
+Received: from ast-mbp ([2620:10d:c090:400::5:501])
+        by smtp.gmail.com with ESMTPSA id h7sm5203491pgi.90.2020.11.20.18.52.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Nov 2020 18:52:30 -0800 (PST)
+Date:   Fri, 20 Nov 2020 18:52:27 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Roman Gushchin <guro@fb.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        netdev@vger.kernel.org, andrii@kernel.org,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH bpf-next v7 32/34] bpf: eliminate rlimit-based memory
+ accounting infra for bpf maps
+Message-ID: <20201121025227.dypweojhaz7elwb3@ast-mbp>
+References: <20201119173754.4125257-1-guro@fb.com>
+ <20201119173754.4125257-33-guro@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-20_17:2020-11-20,2020-11-20 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- lowpriorityscore=0 bulkscore=0 phishscore=0 spamscore=0 adultscore=0
- impostorscore=0 clxscore=1034 priorityscore=1501 suspectscore=29
- mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011210020
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201119173754.4125257-33-guro@fb.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Refactor low-level API for BPF program loading to not rely on public API
-types. This allows painless extension without constant efforts to cleverly not
-break backwards compatibility.
+On Thu, Nov 19, 2020 at 09:37:52AM -0800, Roman Gushchin wrote:
+>  static void bpf_map_put_uref(struct bpf_map *map)
+> @@ -619,7 +562,7 @@ static void bpf_map_show_fdinfo(struct seq_file *m, struct file *filp)
+>  		   "value_size:\t%u\n"
+>  		   "max_entries:\t%u\n"
+>  		   "map_flags:\t%#x\n"
+> -		   "memlock:\t%llu\n"
+> +		   "memlock:\t%llu\n" /* deprecated */
+>  		   "map_id:\t%u\n"
+>  		   "frozen:\t%u\n",
+>  		   map->map_type,
+> @@ -627,7 +570,7 @@ static void bpf_map_show_fdinfo(struct seq_file *m, struct file *filp)
+>  		   map->value_size,
+>  		   map->max_entries,
+>  		   map->map_flags,
+> -		   map->memory.pages * 1ULL << PAGE_SHIFT,
+> +		   0LLU,
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/bpf.c             | 100 ++++++++++++++++++++++----------
- tools/lib/bpf/libbpf.c          |  34 +++++------
- tools/lib/bpf/libbpf_internal.h |  29 +++++++++
- 3 files changed, 113 insertions(+), 50 deletions(-)
+The set looks great to me overall, but above change is problematic.
+There are tools out there that read this value.
+Returning zero might cause oncall alarms to trigger.
+I think we can be more accurate here.
+Instead of zero the kernel can return
+round_up(max_entries * round_up(key_size + value_size, 8), PAGE_SIZE)
+It's not the same as before, but at least the numbers won't suddenly
+go to zero and comparison between maps is still relevant.
+Of course we can introduce a page size calculating callback per map type,
+but imo that would be overkill. These monitoring tools don't care about
+precise number, but rather about relative value and growth from one
+version of the application to another.
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index d27e34133973..e371ef91f5e8 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -214,59 +214,52 @@ alloc_zero_tailing_info(const void *orecord, __u32 cnt,
- 	return info;
- }
- 
--int bpf_load_program_xattr(const struct bpf_load_program_attr *load_attr,
--			   char *log_buf, size_t log_buf_sz)
-+int libbpf__bpf_prog_load(const struct bpf_prog_load_params *load_attr)
- {
- 	void *finfo = NULL, *linfo = NULL;
- 	union bpf_attr attr;
--	__u32 log_level;
- 	int fd;
- 
--	if (!load_attr || !log_buf != !log_buf_sz)
-+	if (!load_attr->log_buf != !load_attr->log_buf_sz)
- 		return -EINVAL;
- 
--	log_level = load_attr->log_level;
--	if (log_level > (4 | 2 | 1) || (log_level && !log_buf))
-+	if (load_attr->log_level > (4 | 2 | 1) || (load_attr->log_level && !load_attr->log_buf))
- 		return -EINVAL;
- 
- 	memset(&attr, 0, sizeof(attr));
- 	attr.prog_type = load_attr->prog_type;
- 	attr.expected_attach_type = load_attr->expected_attach_type;
--	if (attr.prog_type == BPF_PROG_TYPE_STRUCT_OPS ||
--	    attr.prog_type == BPF_PROG_TYPE_LSM) {
--		attr.attach_btf_id = load_attr->attach_btf_id;
--	} else if (attr.prog_type == BPF_PROG_TYPE_TRACING ||
--		   attr.prog_type == BPF_PROG_TYPE_EXT) {
--		attr.attach_btf_id = load_attr->attach_btf_id;
--		attr.attach_prog_fd = load_attr->attach_prog_fd;
--	} else {
--		attr.prog_ifindex = load_attr->prog_ifindex;
--		attr.kern_version = load_attr->kern_version;
--	}
--	attr.insn_cnt = (__u32)load_attr->insns_cnt;
-+
-+	attr.attach_btf_id = load_attr->attach_btf_id;
-+	attr.attach_prog_fd = load_attr->attach_prog_fd;
-+
-+	attr.prog_ifindex = load_attr->prog_ifindex;
-+	attr.kern_version = load_attr->kern_version;
-+
-+	attr.insn_cnt = (__u32)load_attr->insn_cnt;
- 	attr.insns = ptr_to_u64(load_attr->insns);
- 	attr.license = ptr_to_u64(load_attr->license);
- 
--	attr.log_level = log_level;
--	if (log_level) {
--		attr.log_buf = ptr_to_u64(log_buf);
--		attr.log_size = log_buf_sz;
--	} else {
--		attr.log_buf = ptr_to_u64(NULL);
--		attr.log_size = 0;
-+	attr.log_level = load_attr->log_level;
-+	if (attr.log_level) {
-+		attr.log_buf = ptr_to_u64(load_attr->log_buf);
-+		attr.log_size = load_attr->log_buf_sz;
- 	}
- 
- 	attr.prog_btf_fd = load_attr->prog_btf_fd;
-+	attr.prog_flags = load_attr->prog_flags;
-+
- 	attr.func_info_rec_size = load_attr->func_info_rec_size;
- 	attr.func_info_cnt = load_attr->func_info_cnt;
- 	attr.func_info = ptr_to_u64(load_attr->func_info);
-+
- 	attr.line_info_rec_size = load_attr->line_info_rec_size;
- 	attr.line_info_cnt = load_attr->line_info_cnt;
- 	attr.line_info = ptr_to_u64(load_attr->line_info);
-+
- 	if (load_attr->name)
- 		memcpy(attr.prog_name, load_attr->name,
--		       min(strlen(load_attr->name), BPF_OBJ_NAME_LEN - 1));
--	attr.prog_flags = load_attr->prog_flags;
-+		       min(strlen(load_attr->name), (size_t)BPF_OBJ_NAME_LEN - 1));
- 
- 	fd = sys_bpf_prog_load(&attr, sizeof(attr));
- 	if (fd >= 0)
-@@ -306,19 +299,19 @@ int bpf_load_program_xattr(const struct bpf_load_program_attr *load_attr,
- 		}
- 
- 		fd = sys_bpf_prog_load(&attr, sizeof(attr));
--
- 		if (fd >= 0)
- 			goto done;
- 	}
- 
--	if (log_level || !log_buf)
-+	if (load_attr->log_level || !load_attr->log_buf)
- 		goto done;
- 
- 	/* Try again with log */
--	attr.log_buf = ptr_to_u64(log_buf);
--	attr.log_size = log_buf_sz;
-+	attr.log_buf = ptr_to_u64(load_attr->log_buf);
-+	attr.log_size = load_attr->log_buf_sz;
- 	attr.log_level = 1;
--	log_buf[0] = 0;
-+	load_attr->log_buf[0] = 0;
-+
- 	fd = sys_bpf_prog_load(&attr, sizeof(attr));
- done:
- 	free(finfo);
-@@ -326,6 +319,49 @@ int bpf_load_program_xattr(const struct bpf_load_program_attr *load_attr,
- 	return fd;
- }
- 
-+int bpf_load_program_xattr(const struct bpf_load_program_attr *load_attr,
-+			   char *log_buf, size_t log_buf_sz)
-+{
-+	struct bpf_prog_load_params p = {};
-+
-+	if (!load_attr || !log_buf != !log_buf_sz)
-+		return -EINVAL;
-+
-+	p.prog_type = load_attr->prog_type;
-+	p.expected_attach_type = load_attr->expected_attach_type;
-+	switch (p.prog_type) {
-+	case BPF_PROG_TYPE_STRUCT_OPS:
-+	case BPF_PROG_TYPE_LSM:
-+		p.attach_btf_id = load_attr->attach_btf_id;
-+		break;
-+	case BPF_PROG_TYPE_TRACING:
-+	case BPF_PROG_TYPE_EXT:
-+		p.attach_btf_id = load_attr->attach_btf_id;
-+		p.attach_prog_fd = load_attr->attach_prog_fd;
-+		break;
-+	default:
-+		p.prog_ifindex = load_attr->prog_ifindex;
-+		p.kern_version = load_attr->kern_version;
-+	}
-+	p.insn_cnt = load_attr->insns_cnt;
-+	p.insns = load_attr->insns;
-+	p.license = load_attr->license;
-+	p.log_level = load_attr->log_level;
-+	p.log_buf = log_buf;
-+	p.log_buf_sz = log_buf_sz;
-+	p.prog_btf_fd = load_attr->prog_btf_fd;
-+	p.func_info_rec_size = load_attr->func_info_rec_size;
-+	p.func_info_cnt = load_attr->func_info_cnt;
-+	p.func_info = load_attr->func_info;
-+	p.line_info_rec_size = load_attr->line_info_rec_size;
-+	p.line_info_cnt = load_attr->line_info_cnt;
-+	p.line_info = load_attr->line_info;
-+	p.name = load_attr->name;
-+	p.prog_flags = load_attr->prog_flags;
-+
-+	return libbpf__bpf_prog_load(&p);
-+}
-+
- int bpf_load_program(enum bpf_prog_type type, const struct bpf_insn *insns,
- 		     size_t insns_cnt, const char *license,
- 		     __u32 kern_version, char *log_buf,
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index ac1ff4e7741a..3425e594132b 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -6809,7 +6809,7 @@ static int
- load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 	     char *license, __u32 kern_version, int *pfd)
- {
--	struct bpf_load_program_attr load_attr;
-+	struct bpf_prog_load_params load_attr = {};
- 	char *cp, errmsg[STRERR_BUFSIZE];
- 	size_t log_buf_size = 0;
- 	char *log_buf = NULL;
-@@ -6818,7 +6818,6 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 	if (!insns || !insns_cnt)
- 		return -EINVAL;
- 
--	memset(&load_attr, 0, sizeof(struct bpf_load_program_attr));
- 	load_attr.prog_type = prog->type;
- 	/* old kernels might not support specifying expected_attach_type */
- 	if (!kernel_supports(FEAT_EXP_ATTACH_TYPE) && prog->sec_def &&
-@@ -6829,19 +6828,14 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 	if (kernel_supports(FEAT_PROG_NAME))
- 		load_attr.name = prog->name;
- 	load_attr.insns = insns;
--	load_attr.insns_cnt = insns_cnt;
-+	load_attr.insn_cnt = insns_cnt;
- 	load_attr.license = license;
--	if (prog->type == BPF_PROG_TYPE_STRUCT_OPS ||
--	    prog->type == BPF_PROG_TYPE_LSM) {
--		load_attr.attach_btf_id = prog->attach_btf_id;
--	} else if (prog->type == BPF_PROG_TYPE_TRACING ||
--		   prog->type == BPF_PROG_TYPE_EXT) {
--		load_attr.attach_prog_fd = prog->attach_prog_fd;
--		load_attr.attach_btf_id = prog->attach_btf_id;
--	} else {
--		load_attr.kern_version = kern_version;
--		load_attr.prog_ifindex = prog->prog_ifindex;
--	}
-+	load_attr.attach_btf_id = prog->attach_btf_id;
-+	load_attr.attach_prog_fd = prog->attach_prog_fd;
-+	load_attr.attach_btf_id = prog->attach_btf_id;
-+	load_attr.kern_version = kern_version;
-+	load_attr.prog_ifindex = prog->prog_ifindex;
-+
- 	/* specify func_info/line_info only if kernel supports them */
- 	btf_fd = bpf_object__btf_fd(prog->obj);
- 	if (btf_fd >= 0 && kernel_supports(FEAT_BTF_FUNC)) {
-@@ -6865,7 +6859,9 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 		*log_buf = 0;
- 	}
- 
--	ret = bpf_load_program_xattr(&load_attr, log_buf, log_buf_size);
-+	load_attr.log_buf = log_buf;
-+	load_attr.log_buf_sz = log_buf_size;
-+	ret = libbpf__bpf_prog_load(&load_attr);
- 
- 	if (ret >= 0) {
- 		if (log_buf && load_attr.log_level)
-@@ -6906,9 +6902,9 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 		pr_warn("-- BEGIN DUMP LOG ---\n");
- 		pr_warn("\n%s\n", log_buf);
- 		pr_warn("-- END LOG --\n");
--	} else if (load_attr.insns_cnt >= BPF_MAXINSNS) {
-+	} else if (load_attr.insn_cnt >= BPF_MAXINSNS) {
- 		pr_warn("Program too large (%zu insns), at most %d insns\n",
--			load_attr.insns_cnt, BPF_MAXINSNS);
-+			load_attr.insn_cnt, BPF_MAXINSNS);
- 		ret = -LIBBPF_ERRNO__PROG2BIG;
- 	} else if (load_attr.prog_type != BPF_PROG_TYPE_KPROBE) {
- 		/* Wrong program type? */
-@@ -6916,7 +6912,9 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 
- 		load_attr.prog_type = BPF_PROG_TYPE_KPROBE;
- 		load_attr.expected_attach_type = 0;
--		fd = bpf_load_program_xattr(&load_attr, NULL, 0);
-+		load_attr.log_buf = NULL;
-+		load_attr.log_buf_sz = 0;
-+		fd = libbpf__bpf_prog_load(&load_attr);
- 		if (fd >= 0) {
- 			close(fd);
- 			ret = -LIBBPF_ERRNO__PROGTYPE;
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index e569ae63808e..681073a67ae3 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -151,6 +151,35 @@ int parse_cpu_mask_file(const char *fcpu, bool **mask, int *mask_sz);
- int libbpf__load_raw_btf(const char *raw_types, size_t types_len,
- 			 const char *str_sec, size_t str_len);
- 
-+struct bpf_prog_load_params {
-+	enum bpf_prog_type prog_type;
-+	enum bpf_attach_type expected_attach_type;
-+	const char *name;
-+	const struct bpf_insn *insns;
-+	size_t insn_cnt;
-+	const char *license;
-+	__u32 kern_version;
-+	__u32 attach_prog_fd;
-+	__u32 attach_btf_id;
-+	__u32 prog_ifindex;
-+	__u32 prog_btf_fd;
-+	__u32 prog_flags;
-+
-+	__u32 func_info_rec_size;
-+	const void *func_info;
-+	__u32 func_info_cnt;
-+
-+	__u32 line_info_rec_size;
-+	const void *line_info;
-+	__u32 line_info_cnt;
-+
-+	__u32 log_level;
-+	char *log_buf;
-+	size_t log_buf_sz;
-+};
-+
-+int libbpf__bpf_prog_load(const struct bpf_prog_load_params *load_attr);
-+
- int bpf_object__section_size(const struct bpf_object *obj, const char *name,
- 			     __u32 *size);
- int bpf_object__variable_offset(const struct bpf_object *obj, const char *name,
--- 
-2.24.1
-
+If Daniel doesn't find other issues this can be fixed in the follow up.
