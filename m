@@ -2,133 +2,167 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3FA68C2D0E4
-	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 00:01:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D362C63798
+	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 00:09:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D63D22470
-	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 00:01:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2FF4624196
+	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 00:09:09 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bbxfmC8e"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728206AbgKUABV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 20 Nov 2020 19:01:21 -0500
-Received: from out03.mta.xmission.com ([166.70.13.233]:55942 "EHLO
-        out03.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727773AbgKUABV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 20 Nov 2020 19:01:21 -0500
-Received: from in02.mta.xmission.com ([166.70.13.52])
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1kgFdU-006Xbh-6t; Fri, 20 Nov 2020 16:16:12 -0700
-Received: from ip68-227-160-95.om.om.cox.net ([68.227.160.95] helo=x220.int.ebiederm.org)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1kgFdT-00EG00-4X; Fri, 20 Nov 2020 16:16:11 -0700
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, criu@openvz.org,
-        bpf@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Jann Horn <jann@thejh.net>, Kees Cook <keescook@chromium.org>,
-        =?UTF-8?q?Daniel=20P=20=2E=20Berrang=C3=A9?= <berrange@redhat.com>,
-        Jeff Layton <jlayton@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Matthew Wilcox <willy@infradead.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Chris Wright <chrisw@redhat.com>,
+        id S1728197AbgKUAI4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 20 Nov 2020 19:08:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726426AbgKUAIz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 20 Nov 2020 19:08:55 -0500
+Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3168AC0613CF
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 16:08:53 -0800 (PST)
+Received: by mail-lf1-x144.google.com with SMTP id j205so15866642lfj.6
+        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 16:08:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PONzCKvr+vwt6Flh5wCrTZaAerJA45zVvmdcMNuJ7vs=;
+        b=bbxfmC8eTRqjVK5ZEjTEUJxgrpO0kFVf9/uaSgCzhVMht34nhcdL+ZW4ekpzcvrIMO
+         9G9gVesVNgsLfz8U1zun2zlQ6o1rW+PWPK5QLzF3yfRYlcmgfUNtISGccc6TFlKxNAtJ
+         ewPxxLZFrlhcvMfHsn86USwX6n9sMnGcjDpCk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PONzCKvr+vwt6Flh5wCrTZaAerJA45zVvmdcMNuJ7vs=;
+        b=spbj18StS5LsVOTg3CXO0giorDMGrLwOKjzUGXPhbUhXosd3oKX+f1CV3GYqQnMn4k
+         AXxKUcO/rrfYfvXbM64rn0RFHPDvbeicI53jBnrI6FfWhXHGdteKyvQQ7Hrtinc9WPVY
+         YwaGG5PGTkwED/+G5ARfHz50KfSWCFZOczX22P+IyijLg5he9ExuxXPPL/CRdZNpi9mQ
+         iM7ulrlGoJdjxIHf4S1f+EnV/cJ2rB/2dp76hG2IABYNU/X9V8unEQHtCxrtHYg+jb5Y
+         B+vBSsJSQHgU3C3bbH4BZqok2kGmhjqR1Wp15jix1p6PXfcVk1Etr+BiZMxuuIdVs7FB
+         o9Tg==
+X-Gm-Message-State: AOAM531HQNuPVkJ/yHImHtOGcwLKlAchCZ1n+U5SnogHr5Al64QngjUQ
+        /BD3QsGtZt9VchNEqfnDu63louIK817UR1jcy4QzTg==
+X-Google-Smtp-Source: ABdhPJz4f0EWNC9BPY5Uq5ljrszSEuayardlmsA6lhGiyhp+CrxylzMiqBzF8AiYbAUAJdiVhGw27qnABItZDvOG/lg=
+X-Received: by 2002:ac2:5591:: with SMTP id v17mr8636915lfg.562.1605917331662;
+ Fri, 20 Nov 2020 16:08:51 -0800 (PST)
+MIME-Version: 1.0
+References: <20201120131708.3237864-1-kpsingh@chromium.org> <deea0ee7-85f4-1f3a-9737-1dba98aa8278@fb.com>
+In-Reply-To: <deea0ee7-85f4-1f3a-9737-1dba98aa8278@fb.com>
+From:   KP Singh <kpsingh@chromium.org>
+Date:   Sat, 21 Nov 2020 01:08:40 +0100
+Message-ID: <CACYkzJ7Oi8wXf=9a-e=fFHJirRbD=u47z+3+M2cRTCy_1fwtgw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/3] ima: Implement ima_inode_hash
+To:     Yonghong Song <yhs@fb.com>
+Cc:     James Morris <jmorris@namei.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Date:   Fri, 20 Nov 2020 17:14:21 -0600
-Message-Id: <20201120231441.29911-4-ebiederm@xmission.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <87r1on1v62.fsf@x220.int.ebiederm.org>
-References: <87r1on1v62.fsf@x220.int.ebiederm.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-XM-SPF: eid=1kgFdT-00EG00-4X;;;mid=<20201120231441.29911-4-ebiederm@xmission.com>;;;hst=in02.mta.xmission.com;;;ip=68.227.160.95;;;frm=ebiederm@xmission.com;;;spf=neutral
-X-XM-AID: U2FsdGVkX1/hV0hyPS0zo8CxNcnpJ9dbcaqQXH40V9k=
-X-SA-Exim-Connect-IP: 68.227.160.95
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-Subject: [PATCH v2 04/24] kcmp: In kcmp_epoll_target use fget_task
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>,
+        Mimi Zohar <zohar@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Use the helper fget_task and simplify the code.
+[...]
 
-As well as simplifying the code this removes one unnecessary increment of
-struct files_struct.  This unnecessary increment of files_struct.count can
-result in exec unnecessarily unsharing files_struct and breaking posix
-locks, and it can result in fget_light having to fallback to fget reducing
-performance.
+> >
+> > diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
+> > index c5bc947a70ad..add7fcb32dcd 100755
+> > --- a/scripts/bpf_helpers_doc.py
+> > +++ b/scripts/bpf_helpers_doc.py
+> > @@ -478,6 +478,7 @@ class PrinterHelpers(Printer):
+> >               'struct tcp_request_sock',
+> >               'struct udp6_sock',
+> >               'struct task_struct',
+> > +            'struct inode',
+>
+> This change (bpf_helpers_doc.py) belongs to patch #2.
 
-Suggested-by: Oleg Nesterov <oleg@redhat.com>
-Reviewed-by: Cyrill Gorcunov <gorcunov@gmail.com>
-v1: https://lkml.kernel.org/r/20200817220425.9389-4-ebiederm@xmission.com
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
----
- kernel/kcmp.c | 20 ++++----------------
- 1 file changed, 4 insertions(+), 16 deletions(-)
+Indeed, I missed it during a rebase. Thanks!
 
-diff --git a/kernel/kcmp.c b/kernel/kcmp.c
-index b3ff9288c6cc..87c48c0104ad 100644
---- a/kernel/kcmp.c
-+++ b/kernel/kcmp.c
-@@ -107,7 +107,6 @@ static int kcmp_epoll_target(struct task_struct *task1,
- {
- 	struct file *filp, *filp_epoll, *filp_tgt;
- 	struct kcmp_epoll_slot slot;
--	struct files_struct *files;
- 
- 	if (copy_from_user(&slot, uslot, sizeof(slot)))
- 		return -EFAULT;
-@@ -116,23 +115,12 @@ static int kcmp_epoll_target(struct task_struct *task1,
- 	if (!filp)
- 		return -EBADF;
- 
--	files = get_files_struct(task2);
--	if (!files)
-+	filp_epoll = fget_task(task2, slot.efd);
-+	if (!filp_epoll)
- 		return -EBADF;
- 
--	spin_lock(&files->file_lock);
--	filp_epoll = fcheck_files(files, slot.efd);
--	if (filp_epoll)
--		get_file(filp_epoll);
--	else
--		filp_tgt = ERR_PTR(-EBADF);
--	spin_unlock(&files->file_lock);
--	put_files_struct(files);
--
--	if (filp_epoll) {
--		filp_tgt = get_epoll_tfile_raw_ptr(filp_epoll, slot.tfd, slot.toff);
--		fput(filp_epoll);
--	}
-+	filp_tgt = get_epoll_tfile_raw_ptr(filp_epoll, slot.tfd, slot.toff);
-+	fput(filp_epoll);
- 
- 	if (IS_ERR(filp_tgt))
- 		return PTR_ERR(filp_tgt);
--- 
-2.25.0
 
+>
+> >               'struct path',
+> >               'struct btf_ptr',
+> >       }
+> > diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> > index 2d1af8899cab..1dd2123b5b43 100644
+> > --- a/security/integrity/ima/ima_main.c
+> > +++ b/security/integrity/ima/ima_main.c
+> > @@ -501,37 +501,17 @@ int ima_file_check(struct file *file, int mask)
+> >   }
+> >   EXPORT_SYMBOL_GPL(ima_file_check);
+> >
+> > -/**
+> > - * ima_file_hash - return the stored measurement if a file has been hashed and
+> > - * is in the iint cache.
+> > - * @file: pointer to the file
+> > - * @buf: buffer in which to store the hash
+> > - * @buf_size: length of the buffer
+> > - *
+> > - * On success, return the hash algorithm (as defined in the enum hash_algo).
+> > - * If buf is not NULL, this function also outputs the hash into buf.
+> > - * If the hash is larger than buf_size, then only buf_size bytes will be copied.
+> > - * It generally just makes sense to pass a buffer capable of holding the largest
+> > - * possible hash: IMA_MAX_DIGEST_SIZE.
+> > - * The file hash returned is based on the entire file, including the appended
+> > - * signature.
+> > - *
+> > - * If IMA is disabled or if no measurement is available, return -EOPNOTSUPP.
+> > - * If the parameters are incorrect, return -EINVAL.
+> > - */
+> > -int ima_file_hash(struct file *file, char *buf, size_t buf_size)
+> > +static int __ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
+> >   {
+> > -     struct inode *inode;
+> >       struct integrity_iint_cache *iint;
+> >       int hash_algo;
+> >
+> > -     if (!file)
+> > +     if (!inode)
+> >               return -EINVAL;
+>
+> Based on original code, for ima_file_hash(), inode cannot be NULL,
+> so I prefer to remove this change here and add !inode test in
+> ima_inode_hash.
+
+Makes sense. Thanks!
+
+>
+>
+> >
+
+[...]
+
+
+> > + * If the parameters are incorrect, return -EINVAL.
+> > + */
+> > +int ima_inode_hash(struct inode *inode, char *buf, size_t buf_size)
+> > +{
+>
+> Add
+>         if (!inode)
+>                 return -EINVAL;
+
+Done.
+
+>
+>
+> > +     return __ima_inode_hash(inode, buf, buf_size);
+> > +}
+> > +EXPORT_SYMBOL_GPL(ima_inode_hash);
+> > +
+> >   /**
+> >    * ima_post_create_tmpfile - mark newly created tmpfile as new
+> >    * @file : newly created tmpfile
+> >
