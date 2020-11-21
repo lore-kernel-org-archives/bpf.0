@@ -2,132 +2,140 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BE05C388F9
-	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 07:09:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 72311C388F9
+	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 07:38:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 11F242223F
-	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 07:09:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 44E8C2224A
+	for <bpf@archiver.kernel.org>; Sat, 21 Nov 2020 07:38:07 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FdaQIrPL"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726008AbgKUHIm convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Sat, 21 Nov 2020 02:08:42 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:25166 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725934AbgKUHIm (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Sat, 21 Nov 2020 02:08:42 -0500
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0AL77jbS019454
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 23:08:41 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 34whfkye6x-6
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 20 Nov 2020 23:08:41 -0800
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 20 Nov 2020 23:08:39 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 3F1AF2EC9D02; Fri, 20 Nov 2020 23:08:37 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Bruce Allan <bruce.w.allan@intel.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>
-Subject: [PATCH RESEND bpf-next 1/2] kbuild: skip module BTF generation for out-of-tree external modules
-Date:   Fri, 20 Nov 2020 23:08:28 -0800
-Message-ID: <20201121070829.2612884-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.24.1
+        id S1727151AbgKUHiG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Sat, 21 Nov 2020 02:38:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50194 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726983AbgKUHiG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Sat, 21 Nov 2020 02:38:06 -0500
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA77C0613CF;
+        Fri, 20 Nov 2020 23:38:06 -0800 (PST)
+Received: by mail-yb1-xb44.google.com with SMTP id g15so10827741ybq.6;
+        Fri, 20 Nov 2020 23:38:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=V0uMqtuZYyit3rkstjKgdpdIgZ+hwCKX+nB+J4vIPM8=;
+        b=FdaQIrPLzHPeHnyS/kXSYoqjT0PKYicSc5gjxbQyk14akh1tVkLPf6nYY8NvyIht37
+         CfRUoE5ELPs1JpEA+ZRT3arwi3/oIfe1lFreYv09WE0cNi/062yUNXzPtQVqSSISMu26
+         0K4jz9U6UkS/iBFyzmmr/UnzrjkhtLy4IV/17RKc+8hZ6tTRqIbngn//eniYlaS81Je+
+         iIR2wh/PjDHX+JRQozK62Uq9U+PnVetgpe1TShQrGYyx6E/hbUhnYY2gEZFCgxaE/ar6
+         7phwkeAj4F2lO47Xx4bqz5xzyzlIxWLPyDsjENh9nPLf1Tg7Q8qq6AKlGVQ53hrj1EEc
+         wFdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=V0uMqtuZYyit3rkstjKgdpdIgZ+hwCKX+nB+J4vIPM8=;
+        b=euIPjoWufOf2T1J+YYaEAKVfV3ClHwzM0L3R58qn+U21cyrJdieu8fyvvm6eYFrFhM
+         USMWSnlPDW5FatfLg4vktMwKbNu3s2E7ZOiyACirSDPJaQEc+e5b0nRvievQ+fd6r2dy
+         DDfLVBPHo1nClO9ZH+r4hr0PFN3t8Z7muNAVu57JLXnB4+HDPKlU2O3hSrti4X7R5xSY
+         pFmBlP/DtWROc2pXVcBG8MAj3CNSCBSeT911aG8IKztIKOEavBvsoOlsH0YiXcdAp1iY
+         i5IC/xMjbY+/3868AXymUA2GuZVc3bzHEFayHWMDBJyYbM417tLmhrPyv9J383z6KOrn
+         duJg==
+X-Gm-Message-State: AOAM530S3VpxdOGX6DQ90PnvLCdPWQuWtFwjEN+ePBkat6ZtlelXf4WE
+        dRnWzOP/nP57LBqui6/FOn/Cd2YdPWASTwtvHuesCvaHD7TAUg==
+X-Google-Smtp-Source: ABdhPJwZ6CjIPowUxq3oip+ROMaNn/h2brOlLVZlRVexvOQ9kEIeM067fq0dbIhpztB7MrHazoYaAK2/gwVGAzBSWm4=
+X-Received: by 2002:a25:df82:: with SMTP id w124mr29190011ybg.347.1605944285647;
+ Fri, 20 Nov 2020 23:38:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-21_03:2020-11-20,2020-11-21 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
- malwarescore=0 phishscore=0 suspectscore=15 priorityscore=1501
- impostorscore=0 mlxlogscore=878 lowpriorityscore=0 spamscore=0 mlxscore=0
- bulkscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011210047
-X-FB-Internal: deliver
+References: <20201119085022.3606135-1-davidgow@google.com>
+In-Reply-To: <20201119085022.3606135-1-davidgow@google.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Fri, 20 Nov 2020 23:37:54 -0800
+Message-ID: <CAEf4BzY4i0fH34eO=-4WOzVpifgPmJ0ER5ipBJWB0_4Zdv0AQg@mail.gmail.com>
+Subject: Re: [RFC PATCH] bpf: preload: Fix build error when O= is set
+To:     David Gow <davidgow@google.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-In some modes of operation, Kbuild allows to build modules without having
-vmlinux image around. In such case, generation of module BTF is impossible.
-This patch changes the behavior to emit a warning about impossibility of
-generating kernel module BTF, instead of breaking the build. This is especially
-important for out-of-tree external module builds.
+On Thu, Nov 19, 2020 at 12:51 AM David Gow <davidgow@google.com> wrote:
+>
+> If BPF_PRELOAD is enabled, and an out-of-tree build is requested with
+> make O=<path>, compilation seems to fail with:
+>
+> tools/scripts/Makefile.include:4: *** O=.kunit does not exist.  Stop.
+> make[4]: *** [../kernel/bpf/preload/Makefile:8: kernel/bpf/preload/libbpf.a] Error 2
+> make[3]: *** [../scripts/Makefile.build:500: kernel/bpf/preload] Error 2
+> make[2]: *** [../scripts/Makefile.build:500: kernel/bpf] Error 2
+> make[2]: *** Waiting for unfinished jobs....
+> make[1]: *** [.../Makefile:1799: kernel] Error 2
+> make[1]: *** Waiting for unfinished jobs....
+> make: *** [Makefile:185: __sub-make] Error 2
+>
+> By the looks of things, this is because the (relative path) O= passed on
+> the command line is being passed to the libbpf Makefile, which then
+> can't find the directory. Given OUTPUT= is being passed anyway, we can
+> work around this by explicitly setting an empty O=, which will be
+> ignored in favour of OUTPUT= in tools/scripts/Makefile.include.
 
-In vmlinux-less mode:
+Strange, but I can't repro it. I use make O=<absolute path> all the
+time with no issues. I just tried specifically with a make O=.build,
+where .build is inside Linux repo, and it still worked fine. See also
+be40920fbf10 ("tools: Let O= makes handle a relative path with -C
+option") which was supposed to address such an issue. So I'm wondering
+what exactly is causing this problem.
 
-$ make clean
-$ make modules_prepare
-$ touch drivers/acpi/button.c
-$ make M=drivers/acpi
-...
-  CC [M]  drivers/acpi/button.o
-  MODPOST drivers/acpi/Module.symvers
-  LD [M]  drivers/acpi/button.ko
-  BTF [M] drivers/acpi/button.ko
-Skipping BTF generation for drivers/acpi/button.ko due to unavailability of vmlinux
-...
-$ readelf -S ~/linux-build/default/drivers/acpi/button.ko | grep BTF -A1
-... empty ...
-
-Now with normal build:
-
-$ make all
-...
-LD [M]  drivers/acpi/button.ko
-BTF [M] drivers/acpi/button.ko
-...
-$ readelf -S ~/linux-build/default/drivers/acpi/button.ko | grep BTF -A1
-  [60] .BTF              PROGBITS         0000000000000000  00029310
-       000000000000ab3f  0000000000000000           0     0     1
-
-Reported-by: Bruce Allan <bruce.w.allan@intel.com>
-Fixes: 5f9ae91f7c0d ("kbuild: Build kernel module BTFs if BTF is enabled and pahole supports it")
-Cc: Jessica Yu <jeyu@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- scripts/Makefile.modfinal | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 02b892421f7a..d49ec001825d 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -38,7 +38,12 @@ quiet_cmd_ld_ko_o = LD [M]  $@
- 	$(if $(ARCH_POSTLINK), $(MAKE) -f $(ARCH_POSTLINK) $@, true)
- 
- quiet_cmd_btf_ko = BTF [M] $@
--      cmd_btf_ko = LLVM_OBJCOPY=$(OBJCOPY) $(PAHOLE) -J --btf_base vmlinux $@
-+      cmd_btf_ko = 							\
-+	if [ -f vmlinux ]; then						\
-+		LLVM_OBJCOPY=$(OBJCOPY) $(PAHOLE) -J --btf_base vmlinux $@; \
-+	else								\
-+		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
-+	fi;
- 
- # Same as newer-prereqs, but allows to exclude specified extra dependencies
- newer_prereqs_except = $(filter-out $(PHONY) $(1),$?)
-@@ -49,7 +54,7 @@ if_changed_except = $(if $(call newer_prereqs_except,$(2))$(cmd-check),      \
- 	printf '%s\n' 'cmd_$@ := $(make-cmd)' > $(dot-target).cmd, @:)
- 
- # Re-generate module BTFs if either module's .ko or vmlinux changed
--$(modules): %.ko: %.o %.mod.o scripts/module.lds vmlinux FORCE
-+$(modules): %.ko: %.o %.mod.o scripts/module.lds $(if $(KBUILD_BUILTIN),vmlinux) FORCE
- 	+$(call if_changed_except,ld_ko_o,vmlinux)
- ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- 	+$(if $(newer-prereqs),$(call cmd,btf_ko))
--- 
-2.24.1
-
+>
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+>
+> Hi all,
+>
+> I'm not 100% sure this is the correct fix here -- it seems to work for
+> me, and makes some sense, but let me know if there's a better way.
+>
+> One other thing worth noting is that I've been hitting this with
+> make allyesconfig on ARCH=um, but there's a comment in the Kconfig
+> suggesting that, because BPF_PRELOAD depends on !COMPILE_TEST, that
+> maybe it shouldn't be being built at all. I figured that it was worth
+> trying to fix this anyway.
+>
+> Cheers,
+> -- David
+>
+>
+>  kernel/bpf/preload/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/preload/Makefile b/kernel/bpf/preload/Makefile
+> index 23ee310b6eb4..39848d296097 100644
+> --- a/kernel/bpf/preload/Makefile
+> +++ b/kernel/bpf/preload/Makefile
+> @@ -5,7 +5,7 @@ LIBBPF_A = $(obj)/libbpf.a
+>  LIBBPF_OUT = $(abspath $(obj))
+>
+>  $(LIBBPF_A):
+> -       $(Q)$(MAKE) -C $(LIBBPF_SRCS) OUTPUT=$(LIBBPF_OUT)/ $(LIBBPF_OUT)/libbpf.a
+> +       $(Q)$(MAKE) -C $(LIBBPF_SRCS) O= OUTPUT=$(LIBBPF_OUT)/ $(LIBBPF_OUT)/libbpf.a
+>
+>  userccflags += -I $(srctree)/tools/include/ -I $(srctree)/tools/include/uapi \
+>         -I $(srctree)/tools/lib/ -Wno-unused-result
+> --
+> 2.29.2.454.gaff20da3a2-goog
+>
