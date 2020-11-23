@@ -2,184 +2,447 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 98212C2D0E4
-	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:13:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 564C1C64E7A
+	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:14:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3BA0E20709
-	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:13:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 04ADB2075A
+	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:14:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VFN2GDfA"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NVm+mnVn"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387706AbgKWNMz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 Nov 2020 08:12:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730459AbgKWNMu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 23 Nov 2020 08:12:50 -0500
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6384C0613CF;
-        Mon, 23 Nov 2020 05:12:50 -0800 (PST)
-Received: by mail-pf1-x441.google.com with SMTP id w6so14881661pfu.1;
-        Mon, 23 Nov 2020 05:12:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8PerAbw8X9GpFmXgDgTfgJ6bCTqd2WGnMdhkkg2spdI=;
-        b=VFN2GDfAtravz2TUuDaQaNkq+Syi4uNoA4YVzpJjAp4Ps8DlWFo79XOM4jaIy1Pp2W
-         28aGmI05fEsvFSZlBFuwz5eYH2kCR0VLFY4C+HWWM/p+DQ2izlXbSNVfIU4VMQMM7Tu6
-         AYLygCd5wCyOrdVUK3ErvNChYM4mSyPikYl/pBooW3XI/XSPg75R5qFTHR6OdACqcYnm
-         vhEXfj7Uc6k105kqW9LqHdoD9XH2TT/hdVKyjaKNd1g6MIffSZCiqvt1MDUeWczYV94A
-         3sc6AX1fhk9mq2LamljvGWOSaDPGC167V2diN6oQ7BfLKmXMmeRXJANGxk87dA90lG+r
-         GIIw==
+        id S2388498AbgKWNN0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 Nov 2020 08:13:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:30216 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388493AbgKWNNZ (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 23 Nov 2020 08:13:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1606137203;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IsLM1UDMLXmRkRLkuy+KFrXPGu3beCudF+xPd0mVg1s=;
+        b=NVm+mnVnxCOmYsLpsIyplsZ9+RneojwTnOAT9gCeMQ6yp8HiOXJaysToS2Rv8bnUlCv4Vw
+        yH1cy1RNBXhIXroE+bzwsYyC9DtpGFlMlTPk2+6DuBZsQkyJK/jqCvVNknmSFB/8Ra75gX
+        jCISRu1m8brnFBwcYGdv7RYPB/HIxwo=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-282-lys2TwcsNxmmETCw6uZZsw-1; Mon, 23 Nov 2020 08:13:21 -0500
+X-MC-Unique: lys2TwcsNxmmETCw6uZZsw-1
+Received: by mail-pg1-f199.google.com with SMTP id u26so1469841pgl.15
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 05:13:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8PerAbw8X9GpFmXgDgTfgJ6bCTqd2WGnMdhkkg2spdI=;
-        b=ejkaPhSk3Xa8G5Fg+VK2tbLK0x6zg45UGRDGeoCVQ8cbNL8MO06G5OwDeHbKphYaee
-         yXv9B4gJJhD/09ORONgcj0PsOzp1Pi4LnLPErW8Z3CL6sROBuQ6ZGH0qHbo/iQvoMr9p
-         BKhbRjadcVd/RlVCzQyliA/g5bzwktTqcI+zGZXUr390ywv+D9xB+2iDTAt0jvkAjETx
-         KNLozJLlKQqn+yAyRvONPrvatcsX0RcR2BcOXhpGbegMc5nBgUFGoA0T58GEkXqhA+sf
-         yJqCX5WwpTj77KNUY0IVdY1DB/fdv3qgSJ46hBbmLm8xXvn8NSl9tsJyjkYCqV7r1KuF
-         a6+g==
-X-Gm-Message-State: AOAM533rzOHE7pF2/o74QlI1R5FgZMqZcv+AvcxWQlO0hr8Cj1NEMi+R
-        yySXQ1VbowxDt+8shiRYIw8=
-X-Google-Smtp-Source: ABdhPJzrs9gjDc/tmdXIefNQhuYO6A1P0d/VPN9mTDa4zVbHnVycm/8TglIT84L63YaZ2fIoFW5pfw==
-X-Received: by 2002:a17:90a:d246:: with SMTP id o6mr24193569pjw.236.1606137170249;
-        Mon, 23 Nov 2020 05:12:50 -0800 (PST)
-Received: from btopel-mobl.ger.intel.com ([192.55.54.40])
-        by smtp.gmail.com with ESMTPSA id t85sm10457143pgb.29.2020.11.23.05.12.45
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=IsLM1UDMLXmRkRLkuy+KFrXPGu3beCudF+xPd0mVg1s=;
+        b=Pl/qjpxRopjVHmPFL2kE5M3H5Xx8ro0IBVKamyDxhu3ZEqZSlKCSqgOa0gbjzdg1Au
+         cxREBSwoPi6inVxRZo6oobTuVtWZ5KG2lAlvAFoWHjkhaIdSGzmWRWsC4HmkcTIjLxt4
+         /rVNbyvhtTZJTqKC6REKIljD5vyDJA+USV1VqL7JjgPpEGuudRMT9nj0Wi6MkvlLFF1d
+         IrYHJjVt3xqXjlTo3ek9TULrEbHNOrudpwKg3aCmNze32Lpi9nDwAWVC5P8tNCIdSSTf
+         cRtcS2WtmVwvTQu0YGZgbbM1XNLSHzNrVEUxiR8isG/pr1yetdbw4cnFX5lxhLMzfb0u
+         wHSw==
+X-Gm-Message-State: AOAM531Gnwra/tVfZOu4xXdXbhZ7aqkNCL2XgWRdz2meduz7IudBGr2p
+        R8s+BWKO+kfxutOSMglTvw5Y3CDSXKRnfgenXNJD0CwbuHIDzD78Ytv//WQIBwoRhZ9DLIqTQC6
+        2Hl95DT8A21g=
+X-Received: by 2002:a63:ff03:: with SMTP id k3mr27087344pgi.304.1606137199649;
+        Mon, 23 Nov 2020 05:13:19 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwGUkrVhRlwnNPySOSVHrOOtkW9IHSay4gtS8Hbby0hAFRIWJnYTKS/RMZG4JY3FlemOcZa1w==
+X-Received: by 2002:a63:ff03:: with SMTP id k3mr27087319pgi.304.1606137199304;
+        Mon, 23 Nov 2020 05:13:19 -0800 (PST)
+Received: from localhost.localdomain.com ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id 84sm12075505pfu.53.2020.11.23.05.13.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2020 05:12:48 -0800 (PST)
-From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
-To:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        jonathan.lemon@gmail.com, yhs@fb.com, weqaar.janjua@gmail.com,
-        magnus.karlsson@intel.com, weqaar.a.janjua@intel.com
-Subject: [PATCH bpf] net, xsk: Avoid taking multiple skbuff references
-Date:   Mon, 23 Nov 2020 14:12:15 +0100
-Message-Id: <20201123131215.136131-1-bjorn.topel@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        Mon, 23 Nov 2020 05:13:18 -0800 (PST)
+From:   Hangbin Liu <haliu@redhat.com>
+To:     Stephen Hemminger <stephen@networkplumber.org>,
+        David Ahern <dsahern@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Jiri Benc <jbenc@redhat.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Hangbin Liu <haliu@redhat.com>
+Subject: [PATCHv6 iproute2-next 1/5] iproute2: add check_libbpf() and get_libbpf_version()
+Date:   Mon, 23 Nov 2020 21:11:57 +0800
+Message-Id: <20201123131201.4108483-2-haliu@redhat.com>
+X-Mailer: git-send-email 2.25.4
+In-Reply-To: <20201123131201.4108483-1-haliu@redhat.com>
+References: <20201116065305.1010651-1-haliu@redhat.com>
+ <20201123131201.4108483-1-haliu@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+This patch aim to add basic checking functions for later iproute2
+libbpf support.
 
-Commit 642e450b6b59 ("xsk: Do not discard packet when NETDEV_TX_BUSY")
-addressed the problem that packets were discarded from the Tx AF_XDP
-ring, when the driver returned NETDEV_TX_BUSY. Part of the fix was
-bumping the skbuff reference count, so that the buffer would not be
-freed by dev_direct_xmit(). A reference count larger than one means
-that the skbuff is "shared", which is not the case.
+First we add check_libbpf() in configure to see if we have bpf library
+support. By default the system libbpf will be used, but static linking
+against a custom libbpf version can be achieved by passing libbpf DESTDIR
+to variable LIBBPF_DIR for configure.
 
-If the "shared" skbuff is sent to the generic XDP receive path,
-netif_receive_generic_xdp(), and pskb_expand_head() is entered the
-BUG_ON(skb_shared(skb)) will trigger.
+Another variable LIBBPF_FORCE is used to control whether to build iproute2
+with libbpf. If set to on, then force to build with libbpf and exit if
+not available. If set to off, then force to not build with libbpf.
 
-This patch adds a variant to dev_direct_xmit(), __dev_direct_xmit(),
-where a user can select the skbuff free policy. This allows AF_XDP to
-avoid bumping the reference count, but still keep the NETDEV_TX_BUSY
-behavior.
+When dynamically linking against libbpf, we can't be sure that the
+version we discovered at compile time is actually the one we are
+using at runtime. This can lead to hard-to-debug errors. So we add
+a new file lib/bpf_glue.c and a helper function get_libbpf_version()
+to get correct libbpf version at runtime.
 
-Reported-by: Yonghong Song <yhs@fb.com>
-Fixes: 642e450b6b59 ("xsk: Do not discard packet when NETDEV_TX_BUSY")
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+Signed-off-by: Hangbin Liu <haliu@redhat.com>
 ---
- include/linux/netdevice.h | 1 +
- net/core/dev.c            | 9 +++++++--
- net/xdp/xsk.c             | 8 +-------
- 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 964b494b0e8d..e7402fca7752 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -2815,6 +2815,7 @@ u16 dev_pick_tx_cpu_id(struct net_device *dev, struct sk_buff *skb,
- 		       struct net_device *sb_dev);
- int dev_queue_xmit(struct sk_buff *skb);
- int dev_queue_xmit_accel(struct sk_buff *skb, struct net_device *sb_dev);
-+int __dev_direct_xmit(struct sk_buff *skb, u16 queue_id, bool free_on_busy);
- int dev_direct_xmit(struct sk_buff *skb, u16 queue_id);
- int register_netdevice(struct net_device *dev);
- void unregister_netdevice_queue(struct net_device *dev, struct list_head *head);
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 82dc6b48e45f..2af79a4253bb 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4180,7 +4180,7 @@ int dev_queue_xmit_accel(struct sk_buff *skb, struct net_device *sb_dev)
- }
- EXPORT_SYMBOL(dev_queue_xmit_accel);
- 
--int dev_direct_xmit(struct sk_buff *skb, u16 queue_id)
-+int __dev_direct_xmit(struct sk_buff *skb, u16 queue_id, bool free_on_busy)
- {
- 	struct net_device *dev = skb->dev;
- 	struct sk_buff *orig_skb = skb;
-@@ -4211,7 +4211,7 @@ int dev_direct_xmit(struct sk_buff *skb, u16 queue_id)
- 
- 	local_bh_enable();
- 
--	if (!dev_xmit_complete(ret))
-+	if (free_on_busy && !dev_xmit_complete(ret))
- 		kfree_skb(skb);
- 
- 	return ret;
-@@ -4220,6 +4220,11 @@ int dev_direct_xmit(struct sk_buff *skb, u16 queue_id)
- 	kfree_skb_list(skb);
- 	return NET_XMIT_DROP;
- }
+v6:
+1) Add a new helper get_libbpf_version() to get runtime libbpf version
+  based on Toke's xdp-tools patch. The libbpf version will be printed
+  when exec ip -V or tc -V.
+
+v5:
+1) Fix LIBBPF_DIR type and description, use libbpf DESTDIR as LIBBPF_DIR
+   dest.
+
+v4:
+1) Remove duplicate LIBBPF_CFLAGS
+2) Remove un-needed -L since using static libbpf.a
+3) Fix == not supported in dash
+4) Extend LIBBPF_FORCE to support on/off, when set to on, stop building when
+   there is no libbpf support. If set to off, discard libbpf check.
+5) Print libbpf version after checking
+
+v3:
+Check function bpf_program__section_name() separately and only use it
+on higher libbpf version.
+
+v2:
+No update
+---
+ configure          | 113 +++++++++++++++++++++++++++++++++++++++++++++
+ include/bpf_util.h |   3 ++
+ ip/ip.c            |  10 +++-
+ lib/Makefile       |   2 +-
+ lib/bpf_glue.c     |  63 +++++++++++++++++++++++++
+ tc/tc.c            |  10 +++-
+ 6 files changed, 196 insertions(+), 5 deletions(-)
+ create mode 100644 lib/bpf_glue.c
+
+diff --git a/configure b/configure
+index 307912aa..2c363d3b 100755
+--- a/configure
++++ b/configure
+@@ -2,6 +2,11 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # This is not an autoconf generated configure
+ #
++# Influential LIBBPF environment variables:
++#   LIBBPF_FORCE={on,off}   on: require link against libbpf;
++#                           off: disable libbpf probing
++#   LIBBPF_DIR              Path to libbpf DESTDIR to use
 +
-+int dev_direct_xmit(struct sk_buff *skb, u16 queue_id)
+ INCLUDE=${1:-"$PWD/include"}
+ 
+ # Output file which is input to Makefile
+@@ -240,6 +245,111 @@ check_elf()
+     fi
+ }
+ 
++have_libbpf_basic()
 +{
-+	return __dev_direct_xmit(skb, queue_id, true);
++    cat >$TMPDIR/libbpf_test.c <<EOF
++#include <bpf/libbpf.h>
++int main(int argc, char **argv) {
++    bpf_program__set_autoload(NULL, false);
++    bpf_map__ifindex(NULL);
++    bpf_map__set_pin_path(NULL, NULL);
++    bpf_object__open_file(NULL, NULL);
++    return 0;
 +}
- EXPORT_SYMBOL(dev_direct_xmit);
++EOF
++
++    $CC -o $TMPDIR/libbpf_test $TMPDIR/libbpf_test.c $LIBBPF_CFLAGS $LIBBPF_LDLIBS >/dev/null 2>&1
++    local ret=$?
++
++    rm -f $TMPDIR/libbpf_test.c $TMPDIR/libbpf_test
++    return $ret
++}
++
++have_libbpf_sec_name()
++{
++    cat >$TMPDIR/libbpf_sec_test.c <<EOF
++#include <bpf/libbpf.h>
++int main(int argc, char **argv) {
++    void *ptr;
++    bpf_program__section_name(NULL);
++    return 0;
++}
++EOF
++
++    $CC -o $TMPDIR/libbpf_sec_test $TMPDIR/libbpf_sec_test.c $LIBBPF_CFLAGS $LIBBPF_LDLIBS >/dev/null 2>&1
++    local ret=$?
++
++    rm -f $TMPDIR/libbpf_sec_test.c $TMPDIR/libbpf_sec_test
++    return $ret
++}
++
++check_force_libbpf_on()
++{
++    # if set LIBBPF_FORCE=on but no libbpf support, just exist the config
++    # process to make sure we don't build without libbpf.
++    if [ "$LIBBPF_FORCE" = on ]; then
++        echo "	LIBBPF_FORCE=on set, but couldn't find a usable libbpf"
++        exit 1
++    fi
++}
++
++check_libbpf()
++{
++    # if set LIBBPF_FORCE=off, disable libbpf entirely
++    if [ "$LIBBPF_FORCE" = off ]; then
++        echo "no"
++        return
++    fi
++
++    if ! ${PKG_CONFIG} libbpf --exists && [ -z "$LIBBPF_DIR" ] ; then
++        echo "no"
++        check_force_libbpf_on
++        return
++    fi
++
++    if [ $(uname -m) = x86_64 ]; then
++        local LIBBPF_LIBDIR="${LIBBPF_DIR}/usr/lib64"
++    else
++        local LIBBPF_LIBDIR="${LIBBPF_DIR}/usr/lib"
++    fi
++
++    if [ -n "$LIBBPF_DIR" ]; then
++        LIBBPF_CFLAGS="-I${LIBBPF_DIR}/usr/include"
++        LIBBPF_LDLIBS="${LIBBPF_LIBDIR}/libbpf.a -lz -lelf"
++        LIBBPF_VERSION=$(PKG_CONFIG_LIBDIR=${LIBBPF_LIBDIR}/pkgconfig ${PKG_CONFIG} libbpf --modversion)
++    else
++        LIBBPF_CFLAGS=$(${PKG_CONFIG} libbpf --cflags)
++        LIBBPF_LDLIBS=$(${PKG_CONFIG} libbpf --libs)
++        LIBBPF_VERSION=$(${PKG_CONFIG} libbpf --modversion)
++    fi
++
++    if ! have_libbpf_basic; then
++        echo "no"
++        echo "	libbpf version $LIBBPF_VERSION is too low, please update it to at least 0.1.0"
++        check_force_libbpf_on
++        return
++    else
++        echo "HAVE_LIBBPF:=y" >> $CONFIG
++        echo 'CFLAGS += -DHAVE_LIBBPF ' $LIBBPF_CFLAGS >> $CONFIG
++        echo "CFLAGS += -DLIBBPF_VERSION=\\\"$LIBBPF_VERSION\\\"" >> $CONFIG
++        echo 'LDLIBS += ' $LIBBPF_LDLIBS >> $CONFIG
++
++        if [ -z "$LIBBPF_DIR" ]; then
++            echo "CFLAGS += -DLIBBPF_DYNAMIC" >> $CONFIG
++        fi
++    fi
++
++    # bpf_program__title() is deprecated since libbpf 0.2.0, use
++    # bpf_program__section_name() instead if we support
++    if have_libbpf_sec_name; then
++        echo "HAVE_LIBBPF_SECTION_NAME:=y" >> $CONFIG
++        echo 'CFLAGS += -DHAVE_LIBBPF_SECTION_NAME ' >> $CONFIG
++    fi
++
++    echo "yes"
++    echo "	libbpf version $LIBBPF_VERSION"
++}
++
+ check_selinux()
+ # SELinux is a compile time option in the ss utility
+ {
+@@ -385,6 +495,9 @@ check_setns
+ echo -n "SELinux support: "
+ check_selinux
  
- /*************************************************************************
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 5a6cdf7b320d..c6ad31b374b7 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -411,11 +411,7 @@ static int xsk_generic_xmit(struct sock *sk)
- 		skb_shinfo(skb)->destructor_arg = (void *)(long)desc.addr;
- 		skb->destructor = xsk_destruct_skb;
++echo -n "libbpf support: "
++check_libbpf
++
+ echo -n "ELF support: "
+ check_elf
  
--		/* Hinder dev_direct_xmit from freeing the packet and
--		 * therefore completing it in the destructor
--		 */
--		refcount_inc(&skb->users);
--		err = dev_direct_xmit(skb, xs->queue_id);
-+		err = __dev_direct_xmit(skb, xs->queue_id, false);
- 		if  (err == NETDEV_TX_BUSY) {
- 			/* Tell user-space to retry the send */
- 			skb->destructor = sock_wfree;
-@@ -429,12 +425,10 @@ static int xsk_generic_xmit(struct sock *sk)
- 		/* Ignore NET_XMIT_CN as packet might have been sent */
- 		if (err == NET_XMIT_DROP) {
- 			/* SKB completed but not sent */
--			kfree_skb(skb);
- 			err = -EBUSY;
- 			goto out;
- 		}
+diff --git a/include/bpf_util.h b/include/bpf_util.h
+index 63db07ca..dee5bb02 100644
+--- a/include/bpf_util.h
++++ b/include/bpf_util.h
+@@ -300,4 +300,7 @@ static inline int bpf_recv_map_fds(const char *path, int *fds,
+ 	return -1;
+ }
+ #endif /* HAVE_ELF */
++
++const char *get_libbpf_version(void);
++
+ #endif /* __BPF_UTIL__ */
+diff --git a/ip/ip.c b/ip/ip.c
+index 5e31957f..466dbb52 100644
+--- a/ip/ip.c
++++ b/ip/ip.c
+@@ -24,6 +24,7 @@
+ #include "namespace.h"
+ #include "color.h"
+ #include "rt_names.h"
++#include "bpf_util.h"
  
--		consume_skb(skb);
- 		sent_frame = true;
- 	}
+ int preferred_family = AF_UNSPEC;
+ int human_readable;
+@@ -147,8 +148,9 @@ static int batch(const char *name)
  
-
-base-commit: 178648916e73e00de83150eb0c90c0d3a977a46a
+ int main(int argc, char **argv)
+ {
+-	char *basename;
++	const char *libbpf_version;
+ 	char *batch_file = NULL;
++	char *basename;
+ 	int color = 0;
+ 
+ 	/* to run vrf exec without root, capabilities might be set, drop them
+@@ -229,7 +231,11 @@ int main(int argc, char **argv)
+ 			++timestamp;
+ 			++timestamp_short;
+ 		} else if (matches(opt, "-Version") == 0) {
+-			printf("ip utility, iproute2-%s\n", version);
++			printf("ip utility, iproute2-%s", version);
++			libbpf_version = get_libbpf_version();
++			if (libbpf_version)
++				printf(", libbpf %s", libbpf_version);
++			printf("\n");
+ 			exit(0);
+ 		} else if (matches(opt, "-force") == 0) {
+ 			++force;
+diff --git a/lib/Makefile b/lib/Makefile
+index 13f4ee15..a02775a5 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -5,7 +5,7 @@ CFLAGS += -fPIC
+ 
+ UTILOBJ = utils.o rt_names.o ll_map.o ll_types.o ll_proto.o ll_addr.o \
+ 	inet_proto.o namespace.o json_writer.o json_print.o \
+-	names.o color.o bpf.o exec.o fs.o cg_map.o
++	names.o color.o bpf.o bpf_glue.o exec.o fs.o cg_map.o
+ 
+ NLOBJ=libgenl.o libnetlink.o mnl_utils.o
+ 
+diff --git a/lib/bpf_glue.c b/lib/bpf_glue.c
+new file mode 100644
+index 00000000..67c41c22
+--- /dev/null
++++ b/lib/bpf_glue.c
+@@ -0,0 +1,63 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * bpf_glue.c:	BPF code to call both legacy and libbpf code
++ * Authors:	Hangbin Liu <haliu@redhat.com>
++ *
++ */
++#include "bpf_util.h"
++
++#ifdef HAVE_LIBBPF
++static const char *_libbpf_compile_version = LIBBPF_VERSION;
++static char _libbpf_version[10] = {};
++
++const char *get_libbpf_version(void)
++{
++	/* Start by copying compile-time version into buffer so we have a
++	 * fallback value in case we are dynamically linked, or can't find a
++	 * version in /proc/self/maps below.
++	 */
++	strncpy(_libbpf_version, _libbpf_compile_version,
++		sizeof(_libbpf_version)-1);
++#ifdef LIBBPF_DYNAMIC
++	char buf[PATH_MAX], *s;
++	bool found = false;
++	FILE *fp;
++
++	/* When dynamically linking against libbpf, we can't be sure that the
++	 * version we discovered at compile time is actually the one we are
++	 * using at runtime. This can lead to hard-to-debug errors, so we try to
++	 * discover the correct version at runtime.
++	 *
++	 * The simple solution to this would be if libbpf itself exported a
++	 * version in its API. But since it doesn't, we work around this by
++	 * parsing the mappings of the binary at runtime, looking for the full
++	 * filename of libbpf.so and using that.
++	 */
++	fp = fopen("/proc/self/maps", "r");
++	if (fp == NULL)
++		goto out;
++
++	while ((s = fgets(buf, sizeof(buf), fp)) != NULL) {
++		if ((s = strstr(buf, "libbpf.so.")) != NULL) {
++			strncpy(_libbpf_version, s+10, sizeof(_libbpf_version)-1);
++			strtok(_libbpf_version, "\n");
++			found = true;
++			break;
++		}
++	}
++
++	fclose(fp);
++out:
++	if (!found)
++		fprintf(stderr, "Couldn't find runtime libbpf version - falling back to compile-time value!\n");
++#endif /* LIBBPF_DYNAMIC */
++
++	_libbpf_version[sizeof(_libbpf_version)-1] = '\0';
++	return _libbpf_version;
++}
++#else
++const char *get_libbpf_version(void)
++{
++	return NULL;
++}
++#endif /* HAVE_LIBBPF */
+diff --git a/tc/tc.c b/tc/tc.c
+index af9b21da..7557b977 100644
+--- a/tc/tc.c
++++ b/tc/tc.c
+@@ -30,6 +30,7 @@
+ #include "tc_common.h"
+ #include "namespace.h"
+ #include "rt_names.h"
++#include "bpf_util.h"
+ 
+ int show_stats;
+ int show_details;
+@@ -259,8 +260,9 @@ static int batch(const char *name)
+ 
+ int main(int argc, char **argv)
+ {
+-	int ret;
++	const char *libbpf_version;
+ 	char *batch_file = NULL;
++	int ret;
+ 
+ 	while (argc > 1) {
+ 		if (argv[1][0] != '-')
+@@ -277,7 +279,11 @@ int main(int argc, char **argv)
+ 		} else if (matches(argv[1], "-graph") == 0) {
+ 			show_graph = 1;
+ 		} else if (matches(argv[1], "-Version") == 0) {
+-			printf("tc utility, iproute2-%s\n", version);
++			printf("tc utility, iproute2-%s", version);
++			libbpf_version = get_libbpf_version();
++			if (libbpf_version)
++				printf(", libbpf %s", libbpf_version);
++			printf("\n");
+ 			return 0;
+ 		} else if (matches(argv[1], "-iec") == 0) {
+ 			++use_iec;
 -- 
-2.27.0
+2.25.4
 
