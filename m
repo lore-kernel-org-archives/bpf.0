@@ -2,170 +2,112 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99870C6379F
-	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 14:02:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A923C2D0E4
+	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 14:07:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5EC472083E
-	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 14:02:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CCA0E2075A
+	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 14:07:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i0BxWMah"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="g02va37M"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729644AbgKWOCj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 Nov 2020 09:02:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41900 "EHLO
+        id S1729571AbgKWOGU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 Nov 2020 09:06:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729370AbgKWOCj (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 23 Nov 2020 09:02:39 -0500
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F27C061A4E
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 06:02:38 -0800 (PST)
-Received: by mail-lf1-x142.google.com with SMTP id z21so23831603lfe.12
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 06:02:38 -0800 (PST)
+        with ESMTP id S1729453AbgKWOGU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 23 Nov 2020 09:06:20 -0500
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999B9C061A4D
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 06:06:19 -0800 (PST)
+Received: by mail-lj1-x244.google.com with SMTP id b17so18066928ljf.12
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 06:06:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=DYeuO9CyRYlI74SBnZHsqHkWdQ+mk7sZ3M8nh9IDpXI=;
-        b=i0BxWMahO++rC3bV9QEmtNWIGL6rlcn02HBbKIEGje0GBsmG1xjrCtPp8O8PQFjXx6
-         ghWblFt+gcW9vtakoAQrk9FnkoRXZR1ATeMwGHD+CEdrrNgNd0eGxIsW1Bvtw7XljlQr
-         T1KDU5TzShj/9pHMmbWRlh5Hich+3JfraKw/hBx2irA8SEcqaHyyY3XFN9GdYegtyILz
-         XEW3nQZ9pCxyYZKQ7Mg3HrHQuiGfYFhgNnsy2c021e5Oo0JgjXiJTrlEHbBW++O3kXnx
-         Z+thkapqjBSXOBwANQ0oQO0qeLXTxFJdC1GQmSeBfxd2aJYzYjdbvx39LaS3dwK4Oycw
-         VsmQ==
+        bh=yOJoUUi3QECcvzuYDvZQKkbQooLbVapSba7D9AdKZgE=;
+        b=g02va37MFIoFx3hvG/lPTuaAb9EGDa4OPTnhWnNErRVvR26TPzhwL/YSGl9XH06Ban
+         GLaP6rOf9Le9Hv3XUSN6kkLGJxbUBB7YpdYIJQ9kpWc0PLeYry7oa2a0EAI+izCZgYrV
+         gI8kssPprToX4CQ92C1Dnq6bNeRnBtN3HFCOg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=DYeuO9CyRYlI74SBnZHsqHkWdQ+mk7sZ3M8nh9IDpXI=;
-        b=OvqjdhHXdJFtoPcTSxpbSi6TZFDmxdZ0s/rWvgvb0xbjJQqChRQize/nZbUZOObLOJ
-         WnWZh4ryMlBkr9LKfxQaE7yZ4ojTSKJ9FR1IRnh+jeqUZivGZl4OV0jloeFqvkVGNgx6
-         ReFdLtENZ4Jjz15SGClM4sZNigmFnKyu5e/FRUdxuVgAcfCunUZyiwKiUBTEzjmhArjS
-         2HIZjc9q22xcw9UN/TxGhg2kAvFUSnDScMVmq3n75aKuVwHNaNPsh5zsr7VdBX6U7d1k
-         PRT0z3IQobOotkS+aJX6e2aLG6KcCrM1k7KTIlF2BueEGOMGu2MFbWDZo6IjuN4rAOWq
-         II8g==
-X-Gm-Message-State: AOAM533v6zIg1txqhyI5khFmYKefQOJP6Uhlfqt1TlSxJID5cKTxlsRX
-        80ha/GM5KksD5mU84zt3456VQjRT77VQR4kaxtAi6w==
-X-Google-Smtp-Source: ABdhPJzD45bDbtioK3UIuEAtyLLjXaU7Tz6Q0nrcpUO7K1SNhRtDZOExOk2ORy/uMCpMMdKopnEe1kQmAFAMF1N4T3A=
-X-Received: by 2002:ac2:528e:: with SMTP id q14mr11971554lfm.34.1606140156521;
- Mon, 23 Nov 2020 06:02:36 -0800 (PST)
+        bh=yOJoUUi3QECcvzuYDvZQKkbQooLbVapSba7D9AdKZgE=;
+        b=brzv/iUmV4txs2zHgwchQiihnwIOVhARqFj8BxkqTKSr9HjiiBml2EUCreUZTUcfdg
+         9aEwd5qt+UuktcI+EFCT5hRJzBHUGn6zKYwEeDR14lk0ZI79FuQxOnS3+mJEIOgm5zcL
+         DEZS87CFO01jKxHG8dDONYTSZMxqATiLehV72LeSIFeoe+2Xf0pj85SIF9hbLQ52Hqy2
+         u0EdZ3MhBMA3ygR14JegMtpLTrk02YfZnz27O9RmABBRki86H/gy+rGUssOjx/tkJWjD
+         TCvDMxcaLobOqgCdg9yiLi8jQMmAl8jKpY8DAA3RyFxKJj8EsGv+r4tTxysWTkmvAFhu
+         z+WQ==
+X-Gm-Message-State: AOAM532FoEpEprSS0c6o27HcPMcMr8JfwQ1OpiN4/Kkzx0PCLGScx149
+        r4q7cAj5pXQXaQ/bQSFKKy9sWF/ESiCBAE3J0Ud22w==
+X-Google-Smtp-Source: ABdhPJyIM1KLcez6Q4p3jPbCCe+oj5X9cN4ct/4A+vkNM4F2hoRVX6Cjl/82rapeZbwXjZxLFpjZllAbpV+QEQGaLHg=
+X-Received: by 2002:a2e:8908:: with SMTP id d8mr1095267lji.309.1606140376535;
+ Mon, 23 Nov 2020 06:06:16 -0800 (PST)
 MIME-Version: 1.0
-References: <CA+G9fYs9sg69JgmQNZhutQnbijb4GzcO03XF66EjkQ6CTpXXxA@mail.gmail.com>
- <CAK8P3a1Lx1MMQ3s1uWjevsi2wqFo2r=k1hhrxf1spUxEQX_Rag@mail.gmail.com>
-In-Reply-To: <CAK8P3a1Lx1MMQ3s1uWjevsi2wqFo2r=k1hhrxf1spUxEQX_Rag@mail.gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Mon, 23 Nov 2020 15:02:10 +0100
-Message-ID: <CAG48ez17CKBMO4193wxuWLRQWQ+q6EV=Qr5oTWiKivMxEi0zQw@mail.gmail.com>
-Subject: Re: [arm64] kernel BUG at kernel/seccomp.c:1309!
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Gabriel Krisman Bertazi <krisman@collabora.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+References: <20201121005054.3467947-1-kpsingh@chromium.org>
+ <20201121005054.3467947-3-kpsingh@chromium.org> <05776c185bdc61a8d210107e5937c31e2e47b936.camel@linux.ibm.com>
+In-Reply-To: <05776c185bdc61a8d210107e5937c31e2e47b936.camel@linux.ibm.com>
+From:   KP Singh <kpsingh@chromium.org>
+Date:   Mon, 23 Nov 2020 15:06:05 +0100
+Message-ID: <CACYkzJ4VkwRV5WKe8WZjXgd1C1erXr_NtZhgKJL3ckTmS1M5VA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/3] bpf: Update LSM selftests for bpf_ima_inode_hash
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     James Morris <jmorris@namei.org>,
         open list <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        bpf <bpf@vger.kernel.org>,
+        Linux Security Module list 
+        <linux-security-module@vger.kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kees Cook <keescook@chromium.org>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        YiFei Zhu <yifeifz2@illinois.edu>
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 23, 2020 at 2:45 PM Arnd Bergmann <arnd@kernel.org> wrote:
-> On Mon, Nov 23, 2020 at 12:15 PM Naresh Kamboju
-> <naresh.kamboju@linaro.org> wrote:
+On Mon, Nov 23, 2020 at 2:24 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
+>
+> On Sat, 2020-11-21 at 00:50 +0000, KP Singh wrote:
+> > From: KP Singh <kpsingh@google.com>
 > >
-> > While booting arm64 kernel the following kernel BUG noticed on several arm64
-> > devices running linux next 20201123 tag kernel.
-> >
-> >
-> > $ git log --oneline next-20201120..next-20201123 -- kernel/seccomp.c
-> > 5c5c5fa055ea Merge remote-tracking branch 'seccomp/for-next/seccomp'
-> > bce6a8cba7bf Merge branch 'linus'
-> > 7ef95e3dbcee Merge branch 'for-linus/seccomp' into for-next/seccomp
-> > fab686eb0307 seccomp: Remove bogus __user annotations
-> > 0d8315dddd28 seccomp/cache: Report cache data through /proc/pid/seccomp_cache
-> > 8e01b51a31a1 seccomp/cache: Add "emulator" to check if filter is constant allow
-> > f9d480b6ffbe seccomp/cache: Lookup syscall allowlist bitmap for fast path
-> > 23d67a54857a seccomp: Migrate to use SYSCALL_WORK flag
-> >
-> >
-> > Please find these easy steps to reproduce the kernel build and boot.
+> > - Update the IMA policy before executing the test binary (this is not an
+> >   override of the policy, just an append that ensures that hashes are
+> >   calculated on executions).
 >
-> Adding Gabriel Krisman Bertazi to Cc, as the last patch (23d67a54857a) here
-> seems suspicious: it changes
+> Assuming the builtin policy has been replaced with a custom policy and
+> CONFIG_IMA_WRITE_POLICY is enabled, then yes the rule is appended.   If
+> a custom policy has not yet been loaded, loading this rule becomes the
+> defacto custom policy.
 >
-> diff --git a/include/linux/seccomp.h b/include/linux/seccomp.h
-> index 02aef2844c38..47763f3999f7 100644
-> --- a/include/linux/seccomp.h
-> +++ b/include/linux/seccomp.h
-> @@ -42,7 +42,7 @@ struct seccomp {
->  extern int __secure_computing(const struct seccomp_data *sd);
->  static inline int secure_computing(void)
->  {
-> -       if (unlikely(test_thread_flag(TIF_SECCOMP)))
-> +       if (unlikely(test_syscall_work(SECCOMP)))
->                 return  __secure_computing(NULL);
->         return 0;
->  }
->
-> which is in the call chain directly before
->
-> int __secure_computing(const struct seccomp_data *sd)
-> {
->        int mode = current->seccomp.mode;
->
-> ...
->         switch (mode) {
->         case SECCOMP_MODE_STRICT:
->                 __secure_computing_strict(this_syscall);  /* may call do_exit */
->                 return 0;
->         case SECCOMP_MODE_FILTER:
->                 return __seccomp_filter(this_syscall, sd, false);
->         default:
->                 BUG();
->         }
-> }
->
-> Clearly, current->seccomp.mode is set to something other
-> than SECCOMP_MODE_STRICT or SECCOMP_MODE_FILTER
-> while the test_syscall_work(SECCOMP) returns true, and this
-> must have not been the case earlier.
+> Even if a custom policy has been loaded, potentially additional
+> measurements unrelated to this test would be included the measurement
+> list.  One way of limiting a rule to a specific test is by loopback
+> mounting a file system and defining a policy rule based on the loopback
+> mount unique uuid.
 
-Ah, I think the problem is actually in
-3136b93c3fb2b7c19e853e049203ff8f2b9dd2cd ("entry: Expose helpers to
-migrate TIF to SYSCALL_WORK flag"). In the !GENERIC_ENTRY case, it
-adds this code:
+Thanks Mimi!
 
-+#define set_syscall_work(fl)                                           \
-+       set_ti_thread_flag(current_thread_info(), SYSCALL_WORK_##fl)
-+#define test_syscall_work(fl) \
-+       test_ti_thread_flag(current_thread_info(), SYSCALL_WORK_##fl)
-+#define clear_syscall_work(fl) \
-+       clear_ti_thread_flag(current_thread_info(), SYSCALL_WORK_##fl)
-+
-+#define set_task_syscall_work(t, fl) \
-+       set_ti_thread_flag(task_thread_info(t), TIF_##fl)
-+#define test_task_syscall_work(t, fl) \
-+       test_ti_thread_flag(task_thread_info(t), TIF_##fl)
-+#define clear_task_syscall_work(t, fl) \
-+       clear_ti_thread_flag(task_thread_info(t), TIF_##fl)
+I wonder if we simply limit this to policy to /tmp and run an executable
+from /tmp (like test_local_storage.c does).
 
-but the SYSCALL_WORK_FLAGS are not valid on !GENERIC_ENTRY, we'll mix
-up (on arm64) SYSCALL_WORK_BIT_SECCOMP (==0) and TIF_SIGPENDING (==0).
+The only side effect would be of extra hashes being calculated on
+binaries run from /tmp which is not too bad I guess?
 
-As part of fixing this, it might be a good idea to put "enum
-syscall_work_bit" behind a "#ifdef CONFIG_GENERIC_ENTRY" to avoid
-future accidents like this?
+We could do the loop mount too, but I am guessing the most clean way
+would be to shell out to mount from the test? Are there some other examples
+of IMA we could look at?
+
+- KP
+
+>
+> Mimi
+>
