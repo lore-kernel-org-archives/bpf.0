@@ -8,63 +8,62 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC6A4C6379D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74F4DC63697
 	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 17:32:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9F72D2075A
+	by mail.kernel.org (Postfix) with ESMTP id 1BC382075A
 	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 17:32:39 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aU5zniRg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KmaQiwWp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732869AbgKWRc0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 Nov 2020 12:32:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46232 "EHLO
+        id S1732193AbgKWRcW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 Nov 2020 12:32:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732710AbgKWRc0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 23 Nov 2020 12:32:26 -0500
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 583B6C0613CF
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 09:32:26 -0800 (PST)
-Received: by mail-qk1-x749.google.com with SMTP id l7so2775118qkl.16
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 09:32:26 -0800 (PST)
+        with ESMTP id S1730667AbgKWRcW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 23 Nov 2020 12:32:22 -0500
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8F9C0613CF
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 09:32:21 -0800 (PST)
+Received: by mail-qk1-x74a.google.com with SMTP id z129so2538615qkb.13
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 09:32:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=Xl+fEOAiCuOt6S0ALRoJWOL0gi0KW015PG29XKNNzqM=;
-        b=aU5zniRgRokbjz/8yEr78avLriv/+VYRQtoh+g/GQJ7mtVj67hP8GYjZq8u4qd8dh2
-         0DWm9GRaF4qdMOaMGnqh/iZTi+9VrzXn29IIX3MUyT3/RZSQQRNNId+k8eDocY8Zb1hI
-         J0AjAyD+LPK0U3O2i0MuN+mIC/BNbPf3j0um5thXMDqHqj1hl7CTZHqcbtQ3CfbqY6yR
-         GVufAps8jHOfx04S3XsT8SPrwNjbzOOdwbnD7vyF9Brt3p0HI49Z+Z6PaS+h17MkXnG2
-         UlpEGR+sxx7L6Mlkq5bRBFGgNIGEvMRQvyj9rTmtbmJfYReHYgvCLbjvf71rHv142j2u
-         DGrw==
+        bh=S3LKp+3RvK8OZkmGe150smJLkvcUKra31qzmBdRpcwc=;
+        b=KmaQiwWpXRuF/UZAZzDRoJgxZfaG1+6duIsUQWCdYRGcqdxqdIgTWPAp1FaQE7zFWP
+         c5Lc/6/rBwcuQb26eeKik6O11jJEOE12+HKMTsAWa73R0rXQ24Y9rPpq3mMBwZxgk5hs
+         g+vOjehJkQHe7Jqc/LvFdonRuOkk+1AD9cASSIcWArn+Vs8bKKg05WtHDT0Wf3GIxDe/
+         yXsw4+/omX4Wj7Cn/w5YcLNMd5aq3SsXr58YXzlQmjvsHbGlMB8uixETh+zBsRPk09Me
+         bZgw7yR/qSC3YlmOC5Znt2t/bAH6gy2fORJ9Sh/ZwPLeU6RBTbE0nrMsHNnT5nAd8OH3
+         G9fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Xl+fEOAiCuOt6S0ALRoJWOL0gi0KW015PG29XKNNzqM=;
-        b=DzRH8AI6KgjggY7NT9H9zpTGGXdVvoHcvju83l6QyiSzxt/2LnI0opjW0bjVa4aFw0
-         qTSp2LeeAya77kDpbGJjEZm0xDMVKd//HcQwiqL6tUhkC3tKrbNoqc6vXlubYTyz8DKP
-         hkBAKIYoKu4M+l/6lB0XIlBKMB4QJfHaJZLpG4xKkndtgWmrV3jOK5YPevU8AHnJyDyV
-         sNM0xFpUSGjmEYCwMAb02MlrTR8v4is5PxCigscN6PBms+2uQuVYx+1Zv1aXAIf92kS8
-         re5wOzX7FUW7JZ+eOBtgOF70xxUo+R0GZ2yq/NPE0CQbpgVFiPKLNvgE9nMpTLnuiL+f
-         JpkQ==
-X-Gm-Message-State: AOAM532yVM1TLMclcdS9N0yHpunTrJknTZEsFHrAeG/Ee/XipslopNYA
-        Qx0jahcPk5G6s5ni31F9GsHs+2hlZEIWF0tI1k6Brtpm5YDSRAl2RqfI4daqfsP9QbfCsCGAhGX
-        i011msI0PEU4UR/LFXWk5CY88KSsV83ym0bwPnUbFmuyRlIAY8K5RlrKE+Tg/4W0=
-X-Google-Smtp-Source: ABdhPJxFB1lZT1+GF4Wf0E3sL4S7syuIVNmeGcwuCgaUwQLuMT27mMTDbIcyKAdb9MpLcoCf+pU+GZc0UlWJzQ==
+        bh=S3LKp+3RvK8OZkmGe150smJLkvcUKra31qzmBdRpcwc=;
+        b=dnCk7aQOdXVVdd2hE19VvW+M/wMyBjrCeJ+hk3+9QlbQSsYOrkkTA0BngL/I67L5gA
+         vUzyucvYHmazGOAq140SYWnTfaHTHlvuW/mLatbS8t8AzIlTS+why9Lwrx/sQb7I/9yK
+         Iab3TTwDGLjuI4IdPlwy57D1FVXqyiatRxNWNTwmhslvsNQITj+AUerStwNzgYmtCOtz
+         cXo5e9BMewHVghFcqH+6FIWqVjxfCCR8VJfmrlZKS6+/9XQg2I9sJbfUKusc7NUp3DtO
+         Nw9ZUIc+99egGVEEkp+2ZyY8JGW1fcRMfizjY51ahiz8iuupW77qhkDFhZ+c8h+Rcj25
+         iJEA==
+X-Gm-Message-State: AOAM530YHRpfJYx9tkcGlcja+Qln3Bm9H/SG+b/HUrIgJhDzOTk33mQN
+        T9C0vuE8/KorH+VsMT2SDxOlvLOqQXEnNZUappcW/HHkQgqLoLggc27b+6gZDSKmRIVMan+zqNb
+        iV8bsJLuF7Zl9A7O9rdFGRpTmYYr+kk2HDQ70QdB8+sHWjJ4vfPgRoT/DDWv/ZAs=
+X-Google-Smtp-Source: ABdhPJwmqoLq0Qk/TBRCaaMqIXFMyah7qWd3d1a3eXBMI6puLVsRKMVSF7qjkKHNHtq6EuDZh+IcyrsD8SbYRQ==
 Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
 X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
- (user=jackmanb job=sendgmr) by 2002:a05:6214:4a4:: with SMTP id
- w4mr336958qvz.61.1606152745401; Mon, 23 Nov 2020 09:32:25 -0800 (PST)
-Date:   Mon, 23 Nov 2020 17:31:59 +0000
+ (user=jackmanb job=sendgmr) by 2002:a0c:b65b:: with SMTP id
+ q27mr462967qvf.8.1606152741044; Mon, 23 Nov 2020 09:32:21 -0800 (PST)
+Date:   Mon, 23 Nov 2020 17:31:57 +0000
 In-Reply-To: <20201123173202.1335708-1-jackmanb@google.com>
-Message-Id: <20201123173202.1335708-5-jackmanb@google.com>
+Message-Id: <20201123173202.1335708-3-jackmanb@google.com>
 Mime-Version: 1.0
 References: <20201123173202.1335708-1-jackmanb@google.com>
 X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
-Subject: [PATCH 4/7] bpf: Move BPF_STX reserved field check into BPF_STX
- verifier code
+Subject: [PATCH 2/7] bpf: x86: Factor out emission of REX byte
 From:   Brendan Jackman <jackmanb@google.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
@@ -77,45 +76,92 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-I can't find a reason why this code is in resolve_pseudo_ldimm64;
-since I'll be modifying it in a subsequent commit, tidy it up.
+The JIT case for encoding atomic ops is about to get more
+complicated. In order to make the review & resulting code easier,
+let's factor out some shared helpers.
 
 Signed-off-by: Brendan Jackman <jackmanb@google.com>
 ---
- kernel/bpf/verifier.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ arch/x86/net/bpf_jit_comp.c | 39 ++++++++++++++++++++++---------------
+ 1 file changed, 23 insertions(+), 16 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 06885e2501f8..609cc5e9571f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9490,6 +9490,12 @@ static int do_check(struct bpf_verifier_env *env)
- 		} else if (class == BPF_STX) {
- 			enum bpf_reg_type *prev_dst_type, dst_reg_type;
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 94b17bd30e00..a839c1a54276 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -702,6 +702,21 @@ static void emit_modrm_dstoff(u8 **pprog, u32 r1, u32 r2, int off)
+ 	*pprog = prog;
+ }
  
-+			if (((BPF_MODE(insn->code) != BPF_MEM &&
-+			      BPF_MODE(insn->code) != BPF_ATOMIC) || insn->imm != 0)) {
-+				verbose(env, "BPF_STX uses reserved fields\n");
-+				return -EINVAL;
-+			}
++/*
++ * Emit a REX byte if it will be necessary to address these registers
++ */
++static void maybe_emit_rex(u8 **pprog, u32 reg_rm, u32 reg_reg, bool wide)
++{
++	u8 *prog = *pprog;
++	int cnt = 0;
 +
- 			if (BPF_MODE(insn->code) == BPF_ATOMIC) {
- 				err = check_atomic(env, env->insn_idx, insn);
- 				if (err)
-@@ -9899,13 +9905,6 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
- 			return -EINVAL;
- 		}
++	if (wide)
++		EMIT1(add_2mod(0x48, reg_rm, reg_reg));
++	else if (is_ereg(reg_rm) || is_ereg(reg_reg))
++		EMIT1(add_2mod(0x40, reg_rm, reg_reg));
++	*pprog = prog;
++}
++
+ /* LDX: dst_reg = *(u8*)(src_reg + off) */
+ static void emit_ldx(u8 **pprog, u32 size, u32 dst_reg, u32 src_reg, int off)
+ {
+@@ -854,10 +869,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 			case BPF_OR: b2 = 0x09; break;
+ 			case BPF_XOR: b2 = 0x31; break;
+ 			}
+-			if (BPF_CLASS(insn->code) == BPF_ALU64)
+-				EMIT1(add_2mod(0x48, dst_reg, src_reg));
+-			else if (is_ereg(dst_reg) || is_ereg(src_reg))
+-				EMIT1(add_2mod(0x40, dst_reg, src_reg));
++			maybe_emit_rex(&prog, dst_reg, src_reg,
++				       BPF_CLASS(insn->code) == BPF_ALU64);
+ 			EMIT2(b2, add_2reg(0xC0, dst_reg, src_reg));
+ 			break;
  
--		if (BPF_CLASS(insn->code) == BPF_STX &&
--		    ((BPF_MODE(insn->code) != BPF_MEM &&
--		      BPF_MODE(insn->code) != BPF_ATOMIC) || insn->imm != 0)) {
--			verbose(env, "BPF_STX uses reserved fields\n");
--			return -EINVAL;
--		}
--
- 		if (insn[0].code == (BPF_LD | BPF_IMM | BPF_DW)) {
- 			struct bpf_insn_aux_data *aux;
- 			struct bpf_map *map;
+@@ -1301,20 +1314,16 @@ xadd:			emit_modrm_dstoff(&prog, dst_reg, src_reg, insn->off);
+ 		case BPF_JMP32 | BPF_JSGE | BPF_X:
+ 		case BPF_JMP32 | BPF_JSLE | BPF_X:
+ 			/* cmp dst_reg, src_reg */
+-			if (BPF_CLASS(insn->code) == BPF_JMP)
+-				EMIT1(add_2mod(0x48, dst_reg, src_reg));
+-			else if (is_ereg(dst_reg) || is_ereg(src_reg))
+-				EMIT1(add_2mod(0x40, dst_reg, src_reg));
++			maybe_emit_rex(&prog, dst_reg, src_reg,
++				       BPF_CLASS(insn->code) == BPF_JMP);
+ 			EMIT2(0x39, add_2reg(0xC0, dst_reg, src_reg));
+ 			goto emit_cond_jmp;
+ 
+ 		case BPF_JMP | BPF_JSET | BPF_X:
+ 		case BPF_JMP32 | BPF_JSET | BPF_X:
+ 			/* test dst_reg, src_reg */
+-			if (BPF_CLASS(insn->code) == BPF_JMP)
+-				EMIT1(add_2mod(0x48, dst_reg, src_reg));
+-			else if (is_ereg(dst_reg) || is_ereg(src_reg))
+-				EMIT1(add_2mod(0x40, dst_reg, src_reg));
++			maybe_emit_rex(&prog, dst_reg, src_reg,
++				       BPF_CLASS(insn->code) == BPF_JMP);
+ 			EMIT2(0x85, add_2reg(0xC0, dst_reg, src_reg));
+ 			goto emit_cond_jmp;
+ 
+@@ -1350,10 +1359,8 @@ xadd:			emit_modrm_dstoff(&prog, dst_reg, src_reg, insn->off);
+ 		case BPF_JMP32 | BPF_JSLE | BPF_K:
+ 			/* test dst_reg, dst_reg to save one extra byte */
+ 			if (imm32 == 0) {
+-				if (BPF_CLASS(insn->code) == BPF_JMP)
+-					EMIT1(add_2mod(0x48, dst_reg, dst_reg));
+-				else if (is_ereg(dst_reg))
+-					EMIT1(add_2mod(0x40, dst_reg, dst_reg));
++				maybe_emit_rex(&prog, dst_reg, dst_reg,
++					       BPF_CLASS(insn->code) == BPF_JMP);
+ 				EMIT2(0x85, add_2reg(0xC0, dst_reg, dst_reg));
+ 				goto emit_cond_jmp;
+ 			}
 -- 
 2.29.2.454.gaff20da3a2-goog
 
