@@ -2,73 +2,138 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A03DC64E90
-	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:29:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BD2F2C388F9
+	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:31:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BD35D206E3
-	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:29:26 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="JfwcsFqC"
+	by mail.kernel.org (Postfix) with ESMTP id 7B1A8206E3
+	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:31:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730691AbgKWMaH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 Nov 2020 07:30:07 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40870 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730135AbgKWMaG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 23 Nov 2020 07:30:06 -0500
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606134605;
-        bh=bJjRrUswrcJWQTxkFUU2VnvCNU3Lgeq2TjPcplo/lMI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=JfwcsFqCCbV1tExLV7kJkqB8ORsZJ+3ogqGAoBD7qeTjSCDv2O6bbG5UcItb7vba+
-         0gB7x7HJWFnFCqrlYcs+Ar+ZgUheee2mxkXRWPNEILhSoEI6HFidesxfd4YJPeDKNm
-         4wHLnoTzeB65SfxsMPSXr5QDz9jPExF8cxVOEaQ8=
+        id S2389270AbgKWNaa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 Nov 2020 08:30:30 -0500
+Received: from www62.your-server.de ([213.133.104.62]:56794 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389068AbgKWNaa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 23 Nov 2020 08:30:30 -0500
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1khBv0-0006CV-6y; Mon, 23 Nov 2020 14:30:10 +0100
+Received: from [85.7.101.30] (helo=pc-9.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1khBuz-000NhL-VQ; Mon, 23 Nov 2020 14:30:10 +0100
+Subject: Re: [PATCH bpf-next v7 00/34] bpf: switch to memcg-based memory
+ accounting
+To:     Roman Gushchin <guro@fb.com>, bpf@vger.kernel.org
+Cc:     ast@kernel.org, netdev@vger.kernel.org, andrii@kernel.org,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+References: <20201119173754.4125257-1-guro@fb.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <9134a408-e26c-a7f2-23a7-5fc221bafdde@iogearbox.net>
+Date:   Mon, 23 Nov 2020 14:30:09 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] xsk: fix incorrect netdev reference count
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <160613460571.1977.12060126612586560661.git-patchwork-notify@kernel.org>
-Date:   Mon, 23 Nov 2020 12:30:05 +0000
-References: <20201120151443.105903-1-marekx.majtyka@intel.com>
-In-Reply-To: <20201120151443.105903-1-marekx.majtyka@intel.com>
-To:     Marek Majtyka <alardam@gmail.com>
-Cc:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org,
-        jonathan.lemon@gmail.com, marekx.majtyka@intel.com,
-        bpf@vger.kernel.org
+In-Reply-To: <20201119173754.4125257-1-guro@fb.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/25996/Sun Nov 22 14:25:48 2020)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf.git (refs/heads/master):
-
-On Fri, 20 Nov 2020 16:14:43 +0100 you wrote:
-> From: Marek Majtyka <marekx.majtyka@intel.com>
+On 11/19/20 6:37 PM, Roman Gushchin wrote:
+> Currently bpf is using the memlock rlimit for the memory accounting.
+> This approach has its downsides and over time has created a significant
+> amount of problems:
 > 
-> Fix incorrect netdev reference count in xsk_bind operation. Incorrect
-> reference count of the device appears when a user calls bind with the
-> XDP_ZEROCOPY flag on an interface which does not support zero-copy.
-> In such a case, an error is returned but the reference count is not
-> decreased. This change fixes the fault, by decreasing the reference count
-> in case of such an error.
+> 1) The limit is per-user, but because most bpf operations are performed
+>     as root, the limit has a little value.
 > 
-> [...]
+> 2) It's hard to come up with a specific maximum value. Especially because
+>     the counter is shared with non-bpf users (e.g. memlock() users).
+>     Any specific value is either too low and creates false failures
+>     or too high and useless.
+> 
+> 3) Charging is not connected to the actual memory allocation. Bpf code
+>     should manually calculate the estimated cost and precharge the counter,
+>     and then take care of uncharging, including all fail paths.
+>     It adds to the code complexity and makes it easy to leak a charge.
+> 
+> 4) There is no simple way of getting the current value of the counter.
+>     We've used drgn for it, but it's far from being convenient.
+> 
+> 5) Cryptic -EPERM is returned on exceeding the limit. Libbpf even had
+>     a function to "explain" this case for users.
+> 
+> In order to overcome these problems let's switch to the memcg-based
+> memory accounting of bpf objects. With the recent addition of the percpu
+> memory accounting, now it's possible to provide a comprehensive accounting
+> of the memory used by bpf programs and maps.
+> 
+> This approach has the following advantages:
+> 1) The limit is per-cgroup and hierarchical. It's way more flexible and allows
+>     a better control over memory usage by different workloads. Of course, it
+>     requires enabled cgroups and kernel memory accounting and properly configured
+>     cgroup tree, but it's a default configuration for a modern Linux system.
+> 
+> 2) The actual memory consumption is taken into account. It happens automatically
+>     on the allocation time if __GFP_ACCOUNT flags is passed. Uncharging is also
+>     performed automatically on releasing the memory. So the code on the bpf side
+>     becomes simpler and safer.
+> 
+> 3) There is a simple way to get the current value and statistics.
+> 
+> In general, if a process performs a bpf operation (e.g. creates or updates
+> a map), it's memory cgroup is charged. However map updates performed from
+> an interrupt context are charged to the memory cgroup which contained
+> the process, which created the map.
+> 
+> Providing a 1:1 replacement for the rlimit-based memory accounting is
+> a non-goal of this patchset. Users and memory cgroups are completely
+> orthogonal, so it's not possible even in theory.
+> Memcg-based memory accounting requires a properly configured cgroup tree
+> to be actually useful. However, it's the way how the memory is managed
+> on a modern Linux system.
 
-Here is the summary with links:
-  - [bpf] xsk: fix incorrect netdev reference count
-    https://git.kernel.org/bpf/bpf/c/178648916e73
+The cover letter here only describes the advantages of this series, but leaves
+out discussion of the disadvantages. They definitely must be part of the series
+to provide a clear description of the semantic changes to readers. Last time we
+discussed them, they were i) no mem limits in general on unprivileged users when
+memory cgroups was not configured in the kernel, and ii) no mem limits by default
+if not configured in the cgroup specifically. Did we made any progress on these
+in the meantime? How do we want to address them? What is the concrete justification
+to not address them?
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Also I wonder what are the risk of regressions here, for example, if an existing
+orchestrator has configured memory cgroup limits that are tailored to the application's
+needs.. now, with kernel upgrade BPF will start to interfere, e.g. if a BPF program
+attached to cgroups (e.g. connect/sendmsg/recvmsg or general cgroup skb egress hook)
+starts charging to the process' memcg due to map updates?
 
+   [0] https://lore.kernel.org/bpf/20200803190639.GD1020566@carbon.DHCP.thefacebook.com/
 
+> The patchset consists of the following parts:
+> 1) 4 mm patches, which are already in the mm tree, but are required
+>     to avoid a regression (otherwise vmallocs cannot be mapped to userspace).
+> 2) memcg-based accounting for various bpf objects: progs and maps
+> 3) removal of the rlimit-based accounting
+> 4) removal of rlimit adjustments in userspace samples
+> 
+> First 4 patches are not supposed to be merged via the bpf tree. I'm including
+> them to make sure bpf tests will pass.
+> 
+> v7:
+>    - introduced bpf_map_kmalloc_node() and bpf_map_alloc_percpu(), by Alexei
+>    - switched allocations made from an interrupt context to new helpers,
+>      by Daniel
+>    - rebase and minor fixes
