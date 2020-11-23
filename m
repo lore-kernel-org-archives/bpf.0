@@ -2,194 +2,211 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 79A76C6379D
-	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:14:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A1B3C6379F
+	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:16:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C8772075A
-	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:14:14 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gKcdZHjO"
+	by mail.kernel.org (Postfix) with ESMTP id 0D6092076E
+	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:16:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388592AbgKWNOB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 Nov 2020 08:14:01 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:56083 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388559AbgKWNNk (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 23 Nov 2020 08:13:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606137218;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=es+GSQz2MU3igYX62Y5g10wVw6Q1DpGz8rOsY1uqmXw=;
-        b=gKcdZHjO1TnH0QLzjU0TGg6XEr+x+n6fbczfVuzTNa4DK/GW2hSgn6/BQjR4FemsXCklgS
-        GAITmsKNBqhylV7/KBtJH4vLMjwiug1RNTv8pGcmhSMNeXqX7Wf+tmeRpXFIjxZYBayAEA
-        k5TuFlfZWocJl5iYy+mwcIyimkSHCMw=
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com
- [209.85.210.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-40-HIq93tSdOO2P065KEbX7pg-1; Mon, 23 Nov 2020 08:13:36 -0500
-X-MC-Unique: HIq93tSdOO2P065KEbX7pg-1
-Received: by mail-pf1-f199.google.com with SMTP id v2so12703908pfi.11
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 05:13:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=es+GSQz2MU3igYX62Y5g10wVw6Q1DpGz8rOsY1uqmXw=;
-        b=EFnkOe9hJzazYxrRggTabeL8bR1t3MUy/1VQJkmZZnetTc2bprxePAyGww/KwaWKUB
-         S0blRmXi3tcqnY8UFeAiKSD7Y4ncgOC7qST1pF6rPeLV3GvRl8CKCpKJN2EfOEo0fOMG
-         MB32TVe8QPSja+0hCLd1w+095HEaTqsCJY1/RYzhizdJiqOFzlkXuuI0Wdt9tuDKGFcT
-         vgfSma3ly2feaGzAcnwaWhQReRvmA+hZD3/OSQ0/aZFRiE+jRUEh9OyI6icIvmVjOR97
-         ZHXYjy42ZS7/HniHPSo1nChjgVoTXBAbdnaFSRtSdJrkduGtkNo9Jtp3xnWOneqdK4S8
-         WsmQ==
-X-Gm-Message-State: AOAM533DQOXh9C1N8ZGqF8hGCKL/dSRpup9Jh/EvEGNpBqvrJvotm9r8
-        Rj6yacgQq3+LNEE3FLPgyo3QxQ1Ecbgx2+cijK/HR8LJCiY72Us/k3MQ8MMRWPLXg4Ql0D1dief
-        A0MNVlJylU1U=
-X-Received: by 2002:a65:5588:: with SMTP id j8mr27014282pgs.245.1606137214553;
-        Mon, 23 Nov 2020 05:13:34 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwNAS1DOyVHPl2ZmtTO7x07AfiymOEs/m9uJIgk9I9nSJ7qXj5gIpYpa9FRA6tsXohvYHNqXQ==
-X-Received: by 2002:a65:5588:: with SMTP id j8mr27014271pgs.245.1606137214318;
-        Mon, 23 Nov 2020 05:13:34 -0800 (PST)
-Received: from localhost.localdomain.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id 84sm12075505pfu.53.2020.11.23.05.13.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2020 05:13:33 -0800 (PST)
-From:   Hangbin Liu <haliu@redhat.com>
-To:     Stephen Hemminger <stephen@networkplumber.org>,
-        David Ahern <dsahern@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Miller <davem@davemloft.net>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Jiri Benc <jbenc@redhat.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Hangbin Liu <haliu@redhat.com>
-Subject: [PATCHv6 iproute2-next 4/5] examples/bpf: move struct bpf_elf_map defined maps to legacy folder
-Date:   Mon, 23 Nov 2020 21:12:00 +0800
-Message-Id: <20201123131201.4108483-5-haliu@redhat.com>
-X-Mailer: git-send-email 2.25.4
-In-Reply-To: <20201123131201.4108483-1-haliu@redhat.com>
-References: <20201116065305.1010651-1-haliu@redhat.com>
- <20201123131201.4108483-1-haliu@redhat.com>
+        id S2387749AbgKWNQM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 Nov 2020 08:16:12 -0500
+Received: from mga09.intel.com ([134.134.136.24]:21645 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1733151AbgKWNQD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 23 Nov 2020 08:16:03 -0500
+IronPort-SDR: 0FkDYs1Tihi5bf+F/Pc9RBV19SM3nODPX8rWHJfiTnH/hRnZi+O1bUEsfqH0vmwvC0q8PalZFq
+ HNGPFpxK1KrA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9813"; a="171920115"
+X-IronPort-AV: E=Sophos;i="5.78,363,1599548400"; 
+   d="scan'208";a="171920115"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2020 05:15:58 -0800
+IronPort-SDR: opjIh0SfR+qcuwJ63MUK5+FFRYvTqAUr+8ek3GSZ7jA2gkh3UQztQVuTGibv0S6J2Am1OgIMdO
+ xeL/BfTjTC6g==
+X-IronPort-AV: E=Sophos;i="5.78,363,1599548400"; 
+   d="scan'208";a="546408371"
+Received: from gcavallu-mobl.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.53.119])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2020 05:15:54 -0800
+Subject: Re: [PATCH bpf-next v2 0/5] selftests/bpf: xsk selftests
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+To:     Yonghong Song <yhs@fb.com>,
+        Weqaar Janjua <weqaar.janjua@gmail.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
+        magnus.karlsson@gmail.com
+Cc:     Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
+        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+        anders.roxell@linaro.org, jonathan.lemon@gmail.com
+References: <20201120130026.19029-1-weqaar.a.janjua@intel.com>
+ <586d63b4-1828-f633-a4ff-88e4e23d164a@fb.com>
+ <8b7cccf1-9845-fd9a-6f6b-bc70b9b3f9b1@intel.com>
+Message-ID: <732c1252-1fac-20b9-0fd8-f1663b18de45@intel.com>
+Date:   Mon, 23 Nov 2020 14:15:50 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <8b7cccf1-9845-fd9a-6f6b-bc70b9b3f9b1@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Signed-off-by: Hangbin Liu <haliu@redhat.com>
----
- examples/bpf/README                        | 14 +++++++++-----
- examples/bpf/{ => legacy}/bpf_cyclic.c     |  2 +-
- examples/bpf/{ => legacy}/bpf_graft.c      |  2 +-
- examples/bpf/{ => legacy}/bpf_map_in_map.c |  2 +-
- examples/bpf/{ => legacy}/bpf_shared.c     |  2 +-
- examples/bpf/{ => legacy}/bpf_tailcall.c   |  2 +-
- 6 files changed, 14 insertions(+), 10 deletions(-)
- rename examples/bpf/{ => legacy}/bpf_cyclic.c (95%)
- rename examples/bpf/{ => legacy}/bpf_graft.c (97%)
- rename examples/bpf/{ => legacy}/bpf_map_in_map.c (96%)
- rename examples/bpf/{ => legacy}/bpf_shared.c (97%)
- rename examples/bpf/{ => legacy}/bpf_tailcall.c (98%)
+On 2020-11-23 13:20, Björn Töpel wrote:
+> On 2020-11-21 01:31, Yonghong Song wrote:
+>>
+>>
+>> On 11/20/20 5:00 AM, Weqaar Janjua wrote:
+>>> This patch set adds AF_XDP selftests based on veth to selftests/bpf.
+>>>
+>>> # Topology:
+>>> # ---------
+>>> #                 -----------
+>>> #               _ | Process | _
+>>> #              /  -----------  \
+>>> #             /        |        \
+>>> #            /         |         \
+>>> #      -----------     |     -----------
+>>> #      | Thread1 |     |     | Thread2 |
+>>> #      -----------     |     -----------
+>>> #           |          |          |
+>>> #      -----------     |     -----------
+>>> #      |  xskX   |     |     |  xskY   |
+>>> #      -----------     |     -----------
+>>> #           |          |          |
+>>> #      -----------     |     ----------
+>>> #      |  vethX  | --------- |  vethY |
+>>> #      -----------   peer    ----------
+>>> #           |          |          |
+>>> #      namespaceX      |     namespaceY
+>>>
+>>> These selftests test AF_XDP SKB and Native/DRV modes using veth Virtual
+>>> Ethernet interfaces.
+>>>
+>>> The test program contains two threads, each thread is single socket with
+>>> a unique UMEM. It validates in-order packet delivery and packet content
+>>> by sending packets to each other.
+>>>
+>>> Prerequisites setup by script test_xsk_prerequisites.sh:
+>>>
+>>>     Set up veth interfaces as per the topology shown ^^:
+>>>     * setup two veth interfaces and one namespace
+>>>     ** veth<xxxx> in root namespace
+>>>     ** veth<yyyy> in af_xdp<xxxx> namespace
+>>>     ** namespace af_xdp<xxxx>
+>>>     * create a spec file veth.spec that includes this run-time 
+>>> configuration
+>>>       that is read by test scripts - filenames prefixed with test_xsk_
+>>>     *** xxxx and yyyy are randomly generated 4 digit numbers used to 
+>>> avoid
+>>>         conflict with any existing interface
+>>>
+>>> The following tests are provided:
+>>>
+>>> 1. AF_XDP SKB mode
+>>>     Generic mode XDP is driver independent, used when the driver does
+>>>     not have support for XDP. Works on any netdevice using sockets and
+>>>     generic XDP path. XDP hook from netif_receive_skb().
+>>>     a. nopoll - soft-irq processing
+>>>     b. poll - using poll() syscall
+>>>     c. Socket Teardown
+>>>        Create a Tx and a Rx socket, Tx from one socket, Rx on another.
+>>>        Destroy both sockets, then repeat multiple times. Only nopoll 
+>>> mode
+>>>       is used
+>>>     d. Bi-directional Sockets
+>>>        Configure sockets as bi-directional tx/rx sockets, sets up fill
+>>>       and completion rings on each socket, tx/rx in both directions.
+>>>       Only nopoll mode is used
+>>>
+>>> 2. AF_XDP DRV/Native mode
+>>>     Works on any netdevice with XDP_REDIRECT support, driver dependent.
+>>>     Processes packets before SKB allocation. Provides better performance
+>>>     than SKB. Driver hook available just after DMA of buffer descriptor.
+>>>     a. nopoll
+>>>     b. poll
+>>>     c. Socket Teardown
+>>>     d. Bi-directional Sockets
+>>>     * Only copy mode is supported because veth does not currently 
+>>> support
+>>>       zero-copy mode
+>>>
+>>> Total tests: 8
+>>>
+>>> Flow:
+>>> * Single process spawns two threads: Tx and Rx
+>>> * Each of these two threads attach to a veth interface within their
+>>>    assigned namespaces
+>>> * Each thread creates one AF_XDP socket connected to a unique umem
+>>>    for each veth interface
+>>> * Tx thread transmits 10k packets from veth<xxxx> to veth<yyyy>
+>>> * Rx thread verifies if all 10k packets were received and delivered
+>>>    in-order, and have the right content
+>>>
+>>> v2 changes:
+>>> * Move selftests/xsk to selftests/bpf
+>>> * Remove Makefiles under selftests/xsk, and utilize 
+>>> selftests/bpf/Makefile
+>>>
+>>> Structure of the patch set:
+>>>
+>>> Patch 1: This patch adds XSK Selftests framework under selftests/bpf
+>>> Patch 2: Adds tests: SKB poll and nopoll mode, and mac-ip-udp debug
+>>> Patch 3: Adds tests: DRV poll and nopoll mode
+>>> Patch 4: Adds tests: SKB and DRV Socket Teardown
+>>> Patch 5: Adds tests: SKB and DRV Bi-directional Sockets
+>>
+>> I just want to report that after applying the above 5 patches
+>> on top of bpf-next commit 450d060e8f75 ("bpftool: Add {i,d}tlb_misses 
+>> support for bpftool profile"), I hit the following error with below 
+>> command sequences:
+>>
+>>   $ ./test_xsk_prerequisites.sh
+>>   $ ./test_xsk_skb_poll.sh
+>> # Interface found: ve1480
+>> # Interface found: ve9258
+>> # NS switched: af_xdp9258
+>> 1..1
+>> # Interface [ve9258] vector [Rx]
+>> # Interface [ve1480] vector [Tx]
+>> # Sending 10000 packets on interface ve1480
+>> [  331.741244] ------------[ cut here ]------------
+>> [  331.741741] kernel BUG at net/core/skbuff.c:1621!
+>> [  331.742265] invalid opcode: 0000 [#1] PREEMPT SMP PTI
+>> [  331.742837] CPU: 0 PID: 1883 Comm: xdpxceiver Not tainted 
+>> 5.10.0-rc3+ #1037
+>> [  331.743468] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), 
+>> BIOS 1.9.3
+>> -1.el7.centos 04/01/2014
+>> [  331.744300] RIP: 0010:pskb_expand_head+0x27b/0x310
+> 
+> Ugh, looks like the tests are working. :-P
+> 
+> This is a BUG_ON(skb_shared(skb)) trigger, related to the skbuff 
+> refcount changes done recently in AF_XDP.
+> 
+> I'll cook a patch! Thanks for the report!
+>
 
-diff --git a/examples/bpf/README b/examples/bpf/README
-index 1bbdda3f..732bcc83 100644
---- a/examples/bpf/README
-+++ b/examples/bpf/README
-@@ -1,8 +1,12 @@
- eBPF toy code examples (running in kernel) to familiarize yourself
- with syntax and features:
- 
-- - bpf_shared.c		-> Ingress/egress map sharing example
-- - bpf_tailcall.c	-> Using tail call chains
-- - bpf_cyclic.c		-> Simple cycle as tail calls
-- - bpf_graft.c		-> Demo on altering runtime behaviour
-- - bpf_map_in_map.c     -> Using map in map example
-+ - legacy/bpf_shared.c		-> Ingress/egress map sharing example
-+ - legacy/bpf_tailcall.c	-> Using tail call chains
-+ - legacy/bpf_cyclic.c		-> Simple cycle as tail calls
-+ - legacy/bpf_graft.c		-> Demo on altering runtime behaviour
-+ - legacy/bpf_map_in_map.c	-> Using map in map example
-+
-+Note: Users should use new BTF way to defined the maps, the examples
-+in legacy folder which is using struct bpf_elf_map defined maps is not
-+recommanded.
-diff --git a/examples/bpf/bpf_cyclic.c b/examples/bpf/legacy/bpf_cyclic.c
-similarity index 95%
-rename from examples/bpf/bpf_cyclic.c
-rename to examples/bpf/legacy/bpf_cyclic.c
-index 11d1c061..33590730 100644
---- a/examples/bpf/bpf_cyclic.c
-+++ b/examples/bpf/legacy/bpf_cyclic.c
-@@ -1,4 +1,4 @@
--#include "../../include/bpf_api.h"
-+#include "../../../include/bpf_api.h"
- 
- /* Cyclic dependency example to test the kernel's runtime upper
-  * bound on loops. Also demonstrates on how to use direct-actions,
-diff --git a/examples/bpf/bpf_graft.c b/examples/bpf/legacy/bpf_graft.c
-similarity index 97%
-rename from examples/bpf/bpf_graft.c
-rename to examples/bpf/legacy/bpf_graft.c
-index 07113d4a..f4c920cc 100644
---- a/examples/bpf/bpf_graft.c
-+++ b/examples/bpf/legacy/bpf_graft.c
-@@ -1,4 +1,4 @@
--#include "../../include/bpf_api.h"
-+#include "../../../include/bpf_api.h"
- 
- /* This example demonstrates how classifier run-time behaviour
-  * can be altered with tail calls. We start out with an empty
-diff --git a/examples/bpf/bpf_map_in_map.c b/examples/bpf/legacy/bpf_map_in_map.c
-similarity index 96%
-rename from examples/bpf/bpf_map_in_map.c
-rename to examples/bpf/legacy/bpf_map_in_map.c
-index ff0e623a..575f8812 100644
---- a/examples/bpf/bpf_map_in_map.c
-+++ b/examples/bpf/legacy/bpf_map_in_map.c
-@@ -1,4 +1,4 @@
--#include "../../include/bpf_api.h"
-+#include "../../../include/bpf_api.h"
- 
- #define MAP_INNER_ID	42
- 
-diff --git a/examples/bpf/bpf_shared.c b/examples/bpf/legacy/bpf_shared.c
-similarity index 97%
-rename from examples/bpf/bpf_shared.c
-rename to examples/bpf/legacy/bpf_shared.c
-index 21fe6f1e..05b2b9ef 100644
---- a/examples/bpf/bpf_shared.c
-+++ b/examples/bpf/legacy/bpf_shared.c
-@@ -1,4 +1,4 @@
--#include "../../include/bpf_api.h"
-+#include "../../../include/bpf_api.h"
- 
- /* Minimal, stand-alone toy map pinning example:
-  *
-diff --git a/examples/bpf/bpf_tailcall.c b/examples/bpf/legacy/bpf_tailcall.c
-similarity index 98%
-rename from examples/bpf/bpf_tailcall.c
-rename to examples/bpf/legacy/bpf_tailcall.c
-index 161eb606..8ebc554c 100644
---- a/examples/bpf/bpf_tailcall.c
-+++ b/examples/bpf/legacy/bpf_tailcall.c
-@@ -1,5 +1,5 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--#include "../../include/bpf_api.h"
-+#include "../../../include/bpf_api.h"
- 
- #define ENTRY_INIT	3
- #define ENTRY_0		0
--- 
-2.25.4
+Posted a fix [1].
 
+Please not that it's for the bpf tree, so when Weqaar pushes the v3 of
+the selftests to bpf-next, [1] needs to be pulled in.
+
+
+
+Björn
+
+[1] 
+https://lore.kernel.org/bpf/20201123131215.136131-1-bjorn.topel@gmail.com/
+
+
+> 
+> Björn
