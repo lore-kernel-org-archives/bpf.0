@@ -2,128 +2,112 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C754C63798
-	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 18:28:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C160EC71155
+	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 18:32:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 436FE206A1
-	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 18:28:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6D58D20C56
+	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 18:32:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ANbUWVwu"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="XOYSyXSC"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729472AbgKWS15 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 Nov 2020 13:27:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
+        id S1731930AbgKWScH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 Nov 2020 13:32:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729365AbgKWS14 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 23 Nov 2020 13:27:56 -0500
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F06C061A4D
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 10:27:56 -0800 (PST)
-Received: by mail-lj1-x244.google.com with SMTP id z1so739151ljn.4
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 10:27:56 -0800 (PST)
+        with ESMTP id S1729487AbgKWScG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 23 Nov 2020 13:32:06 -0500
+Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB30C0613CF
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 10:32:05 -0800 (PST)
+Received: by mail-lf1-x141.google.com with SMTP id e139so25195880lfd.1
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 10:32:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=JgU9p94kvA07oQrdAsYiX/LIRMr6ln5r4nCdzUpy7o4=;
-        b=ANbUWVwuYddoy3gY/bocFyh5hQNt+h3KoI3AHjcaYTZ0evyDqwLXLEvh5IHaIDYDPb
-         ijvo4CAg9ebzTa4ARSGN499RtHon9GqnfrJYuy06yyb/lbQFc4e1U2t0r7waRnZQb4/f
-         yAMxbAR5foJyFqxS0PsPj0FXOMJW+JBdUykTk=
+        bh=GqcYLKj/NZRsqtATYR+P+/ypK5dgCZ+R6Ix8LeOTgdM=;
+        b=XOYSyXSCBiFCeiwN5T3mq03mJVEfjBlNTRNj+97JpTIv9QNoYcq4KVTHoZKM0RHUiZ
+         aMU5eBLcUVn2oepe6LrQnnte++28IjEawjsUcGYm7bg7xVWSL0ZVXbri92VAFRnzmk1D
+         ELGEE8c/OC8+MrV/MShiQvK0KfsI5O3l0+7BU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=JgU9p94kvA07oQrdAsYiX/LIRMr6ln5r4nCdzUpy7o4=;
-        b=GHjsi3hdHIIQrW5c3T3rg04t7VCDs2VVNP+j4DLZUw0zpMNNZ1IbZzuT2FhOHz46/d
-         fOcfWiFZC2xiP1nIap3MSew7DZt188hEt8ciJE9nq0p3BGhAqk03ThNKZiSGkD/Ea5Aw
-         W5mqGNZjvDdOIC8c+WskE/Jv08ldaZfnR9TjRC5zdivcumGKzYszSMBSFM3Xp58HiEc8
-         EhVPqhMWGOI7x5o0GkUPEgObiHDIjJ8/nBdziBZf8Yx0GN+Ww3P0SqEgYI9fcGGSac19
-         cbScAtY5Mp/eOwq9tNb2r8du4v18TG8VaMNqOvOuPUQKut1Ryfr7CV2pmS3K/OMjRZjy
-         ZcoA==
-X-Gm-Message-State: AOAM530RIe3rgr3uHsSUCLeXka4KIZqtDIgH2RB1XiIISE3Z0HK02um4
-        NcrVc3qBIfBk3aifZ+z4dkQaexapC93Bh0vdPq20Dg==
-X-Google-Smtp-Source: ABdhPJwkrFSNlfqwKOFD9vRpU4Bd/UVNbWjZfjxZomwpoP6hhcrhsrMTmb08rhFJdH7XN2M+FVxvNtHTO5cjG1ItJKo=
-X-Received: by 2002:a05:651c:285:: with SMTP id b5mr303035ljo.82.1606156074562;
- Mon, 23 Nov 2020 10:27:54 -0800 (PST)
+        bh=GqcYLKj/NZRsqtATYR+P+/ypK5dgCZ+R6Ix8LeOTgdM=;
+        b=QtemszwJXifUvzZl9XMwkPihBEPv1j+kxeD7FDVX6ii9eOOooFR+pMHIVki9XefHs7
+         CytgrqsuB5Hy5xZtMlQOQEKdcDFh+QJRsiQpe6JWvQi9bGPYveKdRmUaY37xbbUmbpkP
+         +O4hqURJ3u6CwMeU8sOcnjdnpX1EuDB9azOQKCoEY0Kr1CuBjOv1doOZ41AAHqyPbo9/
+         nh4H5R4vQ0ZzeidTMPZipeLvr4Jx2pAW+MAfwpHXGStujoxCicMbRoQXJ8uQd57rLuvi
+         Rk3JLj4iM6pzONF5W1A15omMuSsEn51hP7c9SCvHbfX2BcpGpwzFGGCpLZj6HeWsDRrG
+         H5YQ==
+X-Gm-Message-State: AOAM532zcyJnH6EhEkFS1dAPvnV2VKrzeV5cYDwp1wLcPOAWfCSrTFkP
+        Ta2vC0t7ldcDoMLuyt5QJ9Oj++FBBv93qw==
+X-Google-Smtp-Source: ABdhPJyJknzA4KRDcg8AKHXPlfEVkSPi5Vr+QQkYbg+YoPnT1iVZ4WyvONiECnWDbxCU8RT8Fv0mUA==
+X-Received: by 2002:ac2:5b4a:: with SMTP id i10mr216995lfp.92.1606156323445;
+        Mon, 23 Nov 2020 10:32:03 -0800 (PST)
+Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
+        by smtp.gmail.com with ESMTPSA id p8sm1462075lfk.109.2020.11.23.10.32.03
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Nov 2020 10:32:03 -0800 (PST)
+Received: by mail-lj1-f174.google.com with SMTP id y16so19131115ljk.1
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 10:32:03 -0800 (PST)
+X-Received: by 2002:a2e:8e33:: with SMTP id r19mr281899ljk.102.1606155929844;
+ Mon, 23 Nov 2020 10:25:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20201121005054.3467947-1-kpsingh@chromium.org>
- <20201121005054.3467947-3-kpsingh@chromium.org> <05776c185bdc61a8d210107e5937c31e2e47b936.camel@linux.ibm.com>
- <CACYkzJ4VkwRV5WKe8WZjXgd1C1erXr_NtZhgKJL3ckTmS1M5VA@mail.gmail.com> <0f54c1636b390689031ac48e32b238a83777e09c.camel@linux.ibm.com>
-In-Reply-To: <0f54c1636b390689031ac48e32b238a83777e09c.camel@linux.ibm.com>
-From:   KP Singh <kpsingh@chromium.org>
-Date:   Mon, 23 Nov 2020 19:27:43 +0100
-Message-ID: <CACYkzJ6VEKBJnJZ+CBvpF6C=Kft5A2O5f=Uu4rTMtUiRKN5S-g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/3] bpf: Update LSM selftests for bpf_ima_inode_hash
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     James Morris <jmorris@namei.org>,
-        open list <linux-kernel@vger.kernel.org>,
+References: <87r1on1v62.fsf@x220.int.ebiederm.org> <20201120231441.29911-2-ebiederm@xmission.com>
+ <20201123175052.GA20279@redhat.com>
+In-Reply-To: <20201123175052.GA20279@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 23 Nov 2020 10:25:13 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj2OnjWr696z4yzDO9_mF44ND60qBHPvi1i9DBrjdLvUw@mail.gmail.com>
+Message-ID: <CAHk-=wj2OnjWr696z4yzDO9_mF44ND60qBHPvi1i9DBrjdLvUw@mail.gmail.com>
+Subject: Re: [PATCH v2 02/24] exec: Simplify unshare_files
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>, criu@openvz.org,
         bpf <bpf@vger.kernel.org>,
-        Linux Security Module list 
-        <linux-security-module@vger.kernel.org>,
-        Yonghong Song <yhs@fb.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Jann Horn <jann@thejh.net>, Kees Cook <keescook@chromium.org>,
+        =?UTF-8?Q?Daniel_P_=2E_Berrang=C3=A9?= <berrange@redhat.com>,
+        Jeff Layton <jlayton@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Matthew Wilcox <willy@infradead.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Chris Wright <chrisw@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>,
-        Petr Vorel <pvorel@suse.cz>
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-[...]
-
-> > >
-> > > Even if a custom policy has been loaded, potentially additional
-> > > measurements unrelated to this test would be included the measurement
-> > > list.  One way of limiting a rule to a specific test is by loopback
-> > > mounting a file system and defining a policy rule based on the loopback
-> > > mount unique uuid.
-> >
-> > Thanks Mimi!
-> >
-> > I wonder if we simply limit this to policy to /tmp and run an executable
-> > from /tmp (like test_local_storage.c does).
-> >
-> > The only side effect would be of extra hashes being calculated on
-> > binaries run from /tmp which is not too bad I guess?
+On Mon, Nov 23, 2020 at 9:52 AM Oleg Nesterov <oleg@redhat.com> wrote:
 >
-> The builtin measurement policy (ima_policy=tcb") explicitly defines a
-> rule to not measure /tmp files.  Measuring /tmp results in a lot of
-> measurements.
->
-> {.action = DONT_MEASURE, .fsmagic = TMPFS_MAGIC, .flags = IMA_FSMAGIC},
->
-> >
-> > We could do the loop mount too, but I am guessing the most clean way
-> > would be to shell out to mount from the test? Are there some other examples
-> > of IMA we could look at?
->
-> LTP loopback mounts a filesystem, since /tmp is not being measured with
-> the builtin "tcb" policy.  Defining new policy rules should be limited
-> to the loopback mount.  This would pave the way for defining IMA-
-> appraisal signature verification policy rules, without impacting the
-> running system.
+> Can anyone explain why does do_coredump() need unshare_files() at all?
 
-+Andrii
+Hmm. It goes back to 2012, and it's placed just before calling
+"->core_dump()", so I assume some core dumping function messed with
+the file table back when..
 
-Do you think we can split the IMA test out,
-have a little shell script that does the loopback mount, gets the
-FS UUID, updates the IMA policy and then runs a C program?
+I can't see anything like that currently.
 
-This would also allow "test_progs" to be independent of CONFIG_IMA.
+The alternative is that core-dumping just keeps the file table around
+for a long while, and thus files don't actually close in a timely
+manner. So it might not be a "correctness" issue as much as a latency
+issue.
 
-I am guessing the structure would be something similar
-to test_xdp_redirect.sh
-
-- KP
-
->
-> Mimi
->
+             Linus
