@@ -1,91 +1,102 @@
 Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-X-Spam-Level: *
-X-Spam-Status: No, score=1.9 required=3.0 tests=BAYES_40,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,PHP_SCRIPT,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EB1E9C56202
-	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 09:44:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F99EC2D0E4
+	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 10:31:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6B34820781
-	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 09:44:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B86D120731
+	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 10:31:35 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=liamsports.com header.i=@liamsports.com header.b="VTKCPySg"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S6bW3ry0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725843AbgKWJok (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 Nov 2020 04:44:40 -0500
-Received: from gateway23.websitewelcome.com ([192.185.47.80]:44361 "EHLO
-        gateway23.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725275AbgKWJoj (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 23 Nov 2020 04:44:39 -0500
-X-Greylist: delayed 1234 seconds by postgrey-1.27 at vger.kernel.org; Mon, 23 Nov 2020 04:44:39 EST
-Received: from cm14.websitewelcome.com (cm14.websitewelcome.com [100.42.49.7])
-        by gateway23.websitewelcome.com (Postfix) with ESMTP id A9DD7CA04
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 03:24:03 -0600 (CST)
-Received: from zastava.websitewelcome.com ([192.185.83.71])
-        by cmsmtp with SMTP
-        id h84nkLhrHsvw9h84nk1Ia0; Mon, 23 Nov 2020 03:24:03 -0600
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=liamsports.com; s=default; h=Date:Message-Id:Content-Type:MIME-Version:
-        Reply-To:From:Subject:To:Sender:Cc:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=DNctREwmdr2xzK+3LW6h9IegnQUayja9aGXYHpevsic=; b=VTKCPySg7LLvaoTAItO/CfGM2l
-        h/84OajdMCkoVcgSWMED5bpeHh/quQJaxZ4g/4ZMBAxJK8T6Vbe23rjWzNgkRVs3I5r1LKkOChhOE
-        lbC0rmDJUChQIfi5AjX/ff0YsJZlS76J//LvdcRx5yGahPT5HsZKJw5KgbII2V5fjMw0IXil7GyiF
-        P/iu6Alykw2UFVnCkF1uqAbKAauJlZgfGaUnIPYe5qW1/lF0btGGM2/yKTyslw0OW3q+sz5m2a2tx
-        Ka27u/EBiMVewbX+CSR6tXDOvm9IgVKcwg8RvTOtzu3bzmJAdqAJC+SlJnsPg0scZxgK1UzxIOKx7
-        QIgNuT4g==;
-Received: from liamsports by zastava.websitewelcome.com with local (Exim 4.93)
-        (envelope-from <info@liamsports.com>)
-        id 1kh84n-003La9-5t
-        for bpf@vger.kernel.org; Mon, 23 Nov 2020 03:24:01 -0600
-To:     bpf@vger.kernel.org
-Subject: Business Proposal
-X-PHP-Script: liamsports.com/email1/index.php for 39.49.96.183
-X-PHP-Originating-Script: 5244:index.php
-From:   Isabella George <info@liamsports.com>
-Reply-To: Isabella George <info@liamsports.com>
+        id S1728266AbgKWKbf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 Nov 2020 05:31:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:31409 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726819AbgKWKbf (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 23 Nov 2020 05:31:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1606127494;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UMgCW61zqAkB3c+w/CYSUdpW3LDqmoWBeyI4srFJ58c=;
+        b=S6bW3ry0mdtCohErut4KUwVMRP7UVJ9hM41muCmKdtUERNF017UtIpNYULeg33DiWSylDS
+        PPOnWI2quJgWsnBGuXK0xiQXmaO+PfSY/RP4LEtLfRfZunkMIC3iBf0Tfky6n9wN1MtFvh
+        J2NMB2Cm8TkeQFYIzf+rthNyOh+FQzg=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-368-xkTrbPtrOuK0f5yP6-eWpg-1; Mon, 23 Nov 2020 05:31:32 -0500
+X-MC-Unique: xkTrbPtrOuK0f5yP6-eWpg-1
+Received: by mail-ed1-f72.google.com with SMTP id l24so6387213edt.16
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 02:31:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=UMgCW61zqAkB3c+w/CYSUdpW3LDqmoWBeyI4srFJ58c=;
+        b=PCr5TbE6rKmKqLAM8vOjpS2TzBhWVYxXF29q+1MdUOXcQwcS2+h8lbjMaeiRt7Czc4
+         PPRfRz1GyjuY1NVrJ40v4d5OBcrVs+wYaqsQCyTbE2H49vdywhkru/W68LukwJt53WcK
+         Vc/al1UNj5crE1SGUN2loYRONwLhkRaTo7lid/Xm3J2qN2sE4xtJLeemTl1avrNNxtmd
+         wQ6hXeK4E+6sgOBOVmIF1VRNTe60lR9Tj6hURf9+vmrQU1Jxltj33ltL0vz6V+BZwZ65
+         jDWGBxA8LMHs+lvfVbZjwV45XDBAhHCZIN2Q3z9KzMIYKpi59Dho+p9gdU7ytylKdxQi
+         L1TA==
+X-Gm-Message-State: AOAM531ehi8Un7QOGlH3kF/FK5957afcjBK5KrVYRli59ymj8EOb56e3
+        5wcJuDObeMHO6MLkhjVIzYGFBZo/V4pi2Zu2n3YIJeBMZJ46VemLYq94hyiqDOEA+0beqZNglU1
+        x5r1Ttz8Jl5cT
+X-Received: by 2002:a17:906:512:: with SMTP id j18mr44485838eja.370.1606127490547;
+        Mon, 23 Nov 2020 02:31:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxQix3XASnb2R1wIlk0/OYWTa6sCSb/kGnCLCYE7l2XDHjsmpgtxsb/YepQiJp3/qHaW7kGYQ==
+X-Received: by 2002:a17:906:512:: with SMTP id j18mr44485808eja.370.1606127490005;
+        Mon, 23 Nov 2020 02:31:30 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id k2sm4683215ejp.6.2020.11.23.02.31.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Nov 2020 02:31:29 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 1B51D183064; Mon, 23 Nov 2020 11:31:27 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Jiri Pirko <jiri@mellanox.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: Is test_offload.py supposed to work?
+In-Reply-To: <20201120084846.710549e8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <87y2iwqbdg.fsf@toke.dk>
+ <20201120084846.710549e8@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Mon, 23 Nov 2020 11:31:27 +0100
+Message-ID: <873610nz40.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Message-Id: <E1kh84n-003La9-5t@zastava.websitewelcome.com>
-Date:   Mon, 23 Nov 2020 03:24:01 -0600
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - zastava.websitewelcome.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [5244 32008] / [47 12]
-X-AntiAbuse: Sender Address Domain - liamsports.com
-X-BWhitelist: no
-X-Source-IP: 
-X-Source-L: No
-X-Exim-ID: 1kh84n-003La9-5t
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: liamsports.com:/public_html/email1
-X-Source-Sender: 
-X-Source-Auth: liamsports
-X-Email-Count: 305
-X-Source-Cap: bGlhbXNwb3J0cztwYWt3ZWlvbjt6YXN0YXZhLndlYnNpdGV3ZWxjb21lLmNvbQ==
-X-Local-Domain: yes
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello There
-Liam Sports is The Factory of custom apparels And Team Wears. we are specialist in custom apparels including Tees, Polo Shirts, Tights,  Hoodies, Tracksuits, Softshell, Club Outerwear, Training Singlets, Reversible Training Jumpers and Singlets, Compression Wears, And Club Sports Bag etc We strive to deliver the highest quality in custom sublimation and cut & sew In All Over The worldwide.
-You can ask for samples if you want to check our quality first.
+Jakub Kicinski <kuba@kernel.org> writes:
 
+> On Fri, 20 Nov 2020 16:46:51 +0100 Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> Hi Jakub and Jiri
+>>=20
+>> I am investigating an error with XDP offload mode, and figured I'd run
+>> 'test_offload.py' from selftests. However, I'm unable to get it to run
+>> successfully; am I missing some config options, or has it simply
+>> bit-rotted to the point where it no longer works?
+>
+> Yeah it must have bit rotted, there are no config options to get
+> wrong there AFAIK.
+>
+> It shouldn't be too hard to fix tho, it's just a python script...
 
-Regards
+Right, I'll take a stab at fixing it, just wanted to make sure I wasn't
+missing something obvious; thanks!
 
-Company: Liam Sports
-Cell: +92 3127601319
-Whatsapp: +447395606980
-Website : www.liamsports.com
-Factory Address: Small Industrial Area Sialkot 51310, Punjab Pakistan 
-Instagram:  https://www.instagram.com/liamsports_official/
+-Toke
+
