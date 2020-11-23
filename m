@@ -2,211 +2,108 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4A1B3C6379F
-	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:16:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3AB4EC2D0E4
+	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:25:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D6092076E
-	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:16:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D510F204EC
+	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:25:42 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PEMDBFWH"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387749AbgKWNQM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 Nov 2020 08:16:12 -0500
-Received: from mga09.intel.com ([134.134.136.24]:21645 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733151AbgKWNQD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 23 Nov 2020 08:16:03 -0500
-IronPort-SDR: 0FkDYs1Tihi5bf+F/Pc9RBV19SM3nODPX8rWHJfiTnH/hRnZi+O1bUEsfqH0vmwvC0q8PalZFq
- HNGPFpxK1KrA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9813"; a="171920115"
-X-IronPort-AV: E=Sophos;i="5.78,363,1599548400"; 
-   d="scan'208";a="171920115"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2020 05:15:58 -0800
-IronPort-SDR: opjIh0SfR+qcuwJ63MUK5+FFRYvTqAUr+8ek3GSZ7jA2gkh3UQztQVuTGibv0S6J2Am1OgIMdO
- xeL/BfTjTC6g==
-X-IronPort-AV: E=Sophos;i="5.78,363,1599548400"; 
-   d="scan'208";a="546408371"
-Received: from gcavallu-mobl.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.53.119])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2020 05:15:54 -0800
-Subject: Re: [PATCH bpf-next v2 0/5] selftests/bpf: xsk selftests
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-To:     Yonghong Song <yhs@fb.com>,
-        Weqaar Janjua <weqaar.janjua@gmail.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org,
-        magnus.karlsson@gmail.com
-Cc:     Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
-        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        anders.roxell@linaro.org, jonathan.lemon@gmail.com
-References: <20201120130026.19029-1-weqaar.a.janjua@intel.com>
- <586d63b4-1828-f633-a4ff-88e4e23d164a@fb.com>
- <8b7cccf1-9845-fd9a-6f6b-bc70b9b3f9b1@intel.com>
-Message-ID: <732c1252-1fac-20b9-0fd8-f1663b18de45@intel.com>
-Date:   Mon, 23 Nov 2020 14:15:50 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.3.2
-MIME-Version: 1.0
-In-Reply-To: <8b7cccf1-9845-fd9a-6f6b-bc70b9b3f9b1@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1732316AbgKWNZH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 Nov 2020 08:25:07 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:55094 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730533AbgKWNY7 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 23 Nov 2020 08:24:59 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AND76aI034959;
+        Mon, 23 Nov 2020 08:24:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=SF2O5ZXVTST15P2rDMbKpT5pSzhsEEPZsi5upw+5tz8=;
+ b=PEMDBFWHjGZ0tz6Xx4aKRQ1C8lU+bjlLYYUUZGRhga9/OYbKePR3B202Aj6PDf5LJALO
+ vwcZBF1hbzRajhGss6LZpETscPUwE2MalYXWVv9G1tHS2/8O1xkc5k+TypmtD8Syxl1i
+ PgNHXFVrpfh5Dl634ARKM6wtrr1zoTtg0mKexj9EOBvX9727yIGHbiuguUOdtsWU22Sq
+ bRFUoX0k2wSXPjXHdZ9H96qhI/V5h4gkJUC38upK9VE/2FdFOOh3pNPiNxXM4uy4YXi6
+ gcD6z6pRUi5jBnNe3eS3thsbrnwKgZg/2vGIfiMS/fPHIiIlRfUGBynaezCAlR7zeHEt mg== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 34xyrvj5eb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Nov 2020 08:24:42 -0500
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0ANDMBlj013395;
+        Mon, 23 Nov 2020 13:24:40 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04ams.nl.ibm.com with ESMTP id 34xth8jfuf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 23 Nov 2020 13:24:40 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0ANDOcqW8061484
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 23 Nov 2020 13:24:38 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2085CA404D;
+        Mon, 23 Nov 2020 13:24:38 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 13057A4055;
+        Mon, 23 Nov 2020 13:24:36 +0000 (GMT)
+Received: from sig-9-65-241-175.ibm.com (unknown [9.65.241.175])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 23 Nov 2020 13:24:35 +0000 (GMT)
+Message-ID: <05776c185bdc61a8d210107e5937c31e2e47b936.camel@linux.ibm.com>
+Subject: Re: [PATCH bpf-next v2 3/3] bpf: Update LSM selftests for
+ bpf_ima_inode_hash
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     KP Singh <kpsingh@chromium.org>, James Morris <jmorris@namei.org>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>
+Date:   Mon, 23 Nov 2020 08:24:35 -0500
+In-Reply-To: <20201121005054.3467947-3-kpsingh@chromium.org>
+References: <20201121005054.3467947-1-kpsingh@chromium.org>
+         <20201121005054.3467947-3-kpsingh@chromium.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-23_09:2020-11-23,2020-11-23 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ phishscore=0 adultscore=0 mlxlogscore=999 clxscore=1011 bulkscore=0
+ lowpriorityscore=0 mlxscore=0 suspectscore=3 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011230086
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2020-11-23 13:20, Björn Töpel wrote:
-> On 2020-11-21 01:31, Yonghong Song wrote:
->>
->>
->> On 11/20/20 5:00 AM, Weqaar Janjua wrote:
->>> This patch set adds AF_XDP selftests based on veth to selftests/bpf.
->>>
->>> # Topology:
->>> # ---------
->>> #                 -----------
->>> #               _ | Process | _
->>> #              /  -----------  \
->>> #             /        |        \
->>> #            /         |         \
->>> #      -----------     |     -----------
->>> #      | Thread1 |     |     | Thread2 |
->>> #      -----------     |     -----------
->>> #           |          |          |
->>> #      -----------     |     -----------
->>> #      |  xskX   |     |     |  xskY   |
->>> #      -----------     |     -----------
->>> #           |          |          |
->>> #      -----------     |     ----------
->>> #      |  vethX  | --------- |  vethY |
->>> #      -----------   peer    ----------
->>> #           |          |          |
->>> #      namespaceX      |     namespaceY
->>>
->>> These selftests test AF_XDP SKB and Native/DRV modes using veth Virtual
->>> Ethernet interfaces.
->>>
->>> The test program contains two threads, each thread is single socket with
->>> a unique UMEM. It validates in-order packet delivery and packet content
->>> by sending packets to each other.
->>>
->>> Prerequisites setup by script test_xsk_prerequisites.sh:
->>>
->>>     Set up veth interfaces as per the topology shown ^^:
->>>     * setup two veth interfaces and one namespace
->>>     ** veth<xxxx> in root namespace
->>>     ** veth<yyyy> in af_xdp<xxxx> namespace
->>>     ** namespace af_xdp<xxxx>
->>>     * create a spec file veth.spec that includes this run-time 
->>> configuration
->>>       that is read by test scripts - filenames prefixed with test_xsk_
->>>     *** xxxx and yyyy are randomly generated 4 digit numbers used to 
->>> avoid
->>>         conflict with any existing interface
->>>
->>> The following tests are provided:
->>>
->>> 1. AF_XDP SKB mode
->>>     Generic mode XDP is driver independent, used when the driver does
->>>     not have support for XDP. Works on any netdevice using sockets and
->>>     generic XDP path. XDP hook from netif_receive_skb().
->>>     a. nopoll - soft-irq processing
->>>     b. poll - using poll() syscall
->>>     c. Socket Teardown
->>>        Create a Tx and a Rx socket, Tx from one socket, Rx on another.
->>>        Destroy both sockets, then repeat multiple times. Only nopoll 
->>> mode
->>>       is used
->>>     d. Bi-directional Sockets
->>>        Configure sockets as bi-directional tx/rx sockets, sets up fill
->>>       and completion rings on each socket, tx/rx in both directions.
->>>       Only nopoll mode is used
->>>
->>> 2. AF_XDP DRV/Native mode
->>>     Works on any netdevice with XDP_REDIRECT support, driver dependent.
->>>     Processes packets before SKB allocation. Provides better performance
->>>     than SKB. Driver hook available just after DMA of buffer descriptor.
->>>     a. nopoll
->>>     b. poll
->>>     c. Socket Teardown
->>>     d. Bi-directional Sockets
->>>     * Only copy mode is supported because veth does not currently 
->>> support
->>>       zero-copy mode
->>>
->>> Total tests: 8
->>>
->>> Flow:
->>> * Single process spawns two threads: Tx and Rx
->>> * Each of these two threads attach to a veth interface within their
->>>    assigned namespaces
->>> * Each thread creates one AF_XDP socket connected to a unique umem
->>>    for each veth interface
->>> * Tx thread transmits 10k packets from veth<xxxx> to veth<yyyy>
->>> * Rx thread verifies if all 10k packets were received and delivered
->>>    in-order, and have the right content
->>>
->>> v2 changes:
->>> * Move selftests/xsk to selftests/bpf
->>> * Remove Makefiles under selftests/xsk, and utilize 
->>> selftests/bpf/Makefile
->>>
->>> Structure of the patch set:
->>>
->>> Patch 1: This patch adds XSK Selftests framework under selftests/bpf
->>> Patch 2: Adds tests: SKB poll and nopoll mode, and mac-ip-udp debug
->>> Patch 3: Adds tests: DRV poll and nopoll mode
->>> Patch 4: Adds tests: SKB and DRV Socket Teardown
->>> Patch 5: Adds tests: SKB and DRV Bi-directional Sockets
->>
->> I just want to report that after applying the above 5 patches
->> on top of bpf-next commit 450d060e8f75 ("bpftool: Add {i,d}tlb_misses 
->> support for bpftool profile"), I hit the following error with below 
->> command sequences:
->>
->>   $ ./test_xsk_prerequisites.sh
->>   $ ./test_xsk_skb_poll.sh
->> # Interface found: ve1480
->> # Interface found: ve9258
->> # NS switched: af_xdp9258
->> 1..1
->> # Interface [ve9258] vector [Rx]
->> # Interface [ve1480] vector [Tx]
->> # Sending 10000 packets on interface ve1480
->> [  331.741244] ------------[ cut here ]------------
->> [  331.741741] kernel BUG at net/core/skbuff.c:1621!
->> [  331.742265] invalid opcode: 0000 [#1] PREEMPT SMP PTI
->> [  331.742837] CPU: 0 PID: 1883 Comm: xdpxceiver Not tainted 
->> 5.10.0-rc3+ #1037
->> [  331.743468] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), 
->> BIOS 1.9.3
->> -1.el7.centos 04/01/2014
->> [  331.744300] RIP: 0010:pskb_expand_head+0x27b/0x310
+On Sat, 2020-11-21 at 00:50 +0000, KP Singh wrote:
+> From: KP Singh <kpsingh@google.com>
 > 
-> Ugh, looks like the tests are working. :-P
-> 
-> This is a BUG_ON(skb_shared(skb)) trigger, related to the skbuff 
-> refcount changes done recently in AF_XDP.
-> 
-> I'll cook a patch! Thanks for the report!
->
+> - Update the IMA policy before executing the test binary (this is not an
+>   override of the policy, just an append that ensures that hashes are
+>   calculated on executions).
 
-Posted a fix [1].
+Assuming the builtin policy has been replaced with a custom policy and
+CONFIG_IMA_WRITE_POLICY is enabled, then yes the rule is appended.   If
+a custom policy has not yet been loaded, loading this rule becomes the
+defacto custom policy.
 
-Please not that it's for the bpf tree, so when Weqaar pushes the v3 of
-the selftests to bpf-next, [1] needs to be pulled in.
+Even if a custom policy has been loaded, potentially additional
+measurements unrelated to this test would be included the measurement
+list.  One way of limiting a rule to a specific test is by loopback
+mounting a file system and defining a policy rule based on the loopback
+mount unique uuid.
+ 
+Mimi
 
-
-
-Björn
-
-[1] 
-https://lore.kernel.org/bpf/20201123131215.136131-1-bjorn.topel@gmail.com/
-
-
-> 
-> Björn
