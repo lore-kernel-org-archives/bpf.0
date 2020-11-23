@@ -5,61 +5,61 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21FF0C64E90
-	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:14:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55917C71155
+	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:14:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D83862076E
-	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:14:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE02B2075A
+	for <bpf@archiver.kernel.org>; Mon, 23 Nov 2020 13:14:10 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h2/ua5nF"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e/fL5puQ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387401AbgKWNNo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 Nov 2020 08:13:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:56767 "EHLO
+        id S2388558AbgKWNNi (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 Nov 2020 08:13:38 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:27024 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731730AbgKWNNo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 23 Nov 2020 08:13:44 -0500
+        by vger.kernel.org with ESMTP id S2388522AbgKWNNg (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 23 Nov 2020 08:13:36 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606137222;
+        s=mimecast20190719; t=1606137212;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=mNpTnhqVT/lkkDzOBStmitBv9qqoRpOHiUUiZ8tRN8I=;
-        b=h2/ua5nF5dsGOZXkx1eQvZTzpL1KUtXtO3+tR4VTvI5rKutJmcMLajsUBS1ttRP6LQQ6Fb
-        5bplkaahqzQtz7SKG2KXD7+UN9FKMiDIgL6GC1tGFXs4DDVgG9bjX0BjtowElb6lZwW3cL
-        m14H2VQfA8ZjwwSzbVyM9YCBxDBi/O4=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-190-7Tml3It8OCiElPBWMxf4gQ-1; Mon, 23 Nov 2020 08:13:40 -0500
-X-MC-Unique: 7Tml3It8OCiElPBWMxf4gQ-1
-Received: by mail-pg1-f200.google.com with SMTP id a20so12434702pgb.21
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 05:13:40 -0800 (PST)
+        bh=mgDD3hZuqRpdyTLabxn5w6eqJnCMSPbJaLGE+s8ZXRg=;
+        b=e/fL5puQ/ar0k4i3qQyAh0SEJAh+rysGOcS7Ys497k7ecHtfYG/Fn843Bk36QffiOUZpB2
+        h1aCxM7xp8rhIc6gqFDOFFrjA/JwD51oy7wPzMMghDCKNN+JRG8MbCiPBk03yl9dH2EQ1f
+        4nP2O0JK9BvNlo5SpACD4XO0oQyjXa0=
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
+ [209.85.215.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-310-BYrjaEwdP2ufjP10YIvgLQ-1; Mon, 23 Nov 2020 08:13:31 -0500
+X-MC-Unique: BYrjaEwdP2ufjP10YIvgLQ-1
+Received: by mail-pg1-f197.google.com with SMTP id c4so11845125pgb.0
+        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 05:13:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=mNpTnhqVT/lkkDzOBStmitBv9qqoRpOHiUUiZ8tRN8I=;
-        b=AhyZv/rxrnG/5Bx+XqAJSDbVMFpRmKeFSWv9bI5bsqsp7xPuMb4vwQCeNmu3EmggJp
-         XWEoOYHVyvyoMmWJ6xRrheAmj/5Q/uyQ/2ldiPwjMo+1VvqXq/tOGkCpruLFWbKXL82l
-         8Tez2Sci8EzLhGmGdGpbmOpMrB+iZi0W+o+SspCVebGb8gaMkqOGWXocn1YlKrRxNVc0
-         BMr3WuK8DTnWKVdx6KCOk7myYPGCITh4uHBP5Pl+jDDOB8ZrLPeVfCPoLrhN68T38gA3
-         EBnlbY/xdRf/fwoZkFqgsPFb8gCykIk0LTRTqxfAa26i0fv3sYiPq5Ivu7+vuN+yrLQB
-         vreQ==
-X-Gm-Message-State: AOAM530u73r700ROgjsW7PQ4P5r7YhHCW3N+1KS/eN7xs+TwEll7sylX
-        kt3BPIWqQZFGjM+UasS9Syj0/sLs9KylXf4fT8u+9AMeCJiguzGM2EBfQbrpHvvHzvkpBqlNBPj
-        0TZjH02P7488=
-X-Received: by 2002:a17:90b:b15:: with SMTP id bf21mr19755400pjb.21.1606137219442;
-        Mon, 23 Nov 2020 05:13:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwBOG0l/Zu18yg12VyJ5W4oaN/nbRzZ/hwb8daUy6SRR3YTXPEHc0TkzVBcKsFuBUiomdjA+Q==
-X-Received: by 2002:a17:90b:b15:: with SMTP id bf21mr19755375pjb.21.1606137219218;
-        Mon, 23 Nov 2020 05:13:39 -0800 (PST)
+        bh=mgDD3hZuqRpdyTLabxn5w6eqJnCMSPbJaLGE+s8ZXRg=;
+        b=TOxKDr87sF6AL8FzCyfLnbaYLYAmG3j7kyrzNOEvihcFyafmRaAGeSmLL9zfokXWNW
+         0acyianttdeXMvQC09mRR++DuzBE1S3ga+kPX1EtbIR2PkFIocBtrsWuyRXxc4SfHdm6
+         Cu1zXZVRNEzHA8Wz911YP/MH44XKumecUYlQffpnb5XNvgiEsePvvf+OBaGhNasIGvpk
+         a4ZQridLrdW3TGgJ0qn9hR72rCS6bnykPmkuM/4TeYeFgZMLgIIgEfW7uRrJyXw0W2YY
+         486s/iMAtPtB4k0BD0zI9Elrz+vEv3UIxhkOvFMLhJz9EtKx8hJ4n0xVdStrEb1ne4wy
+         LUXg==
+X-Gm-Message-State: AOAM533s5cAHJSKwcMx3579npElrp80/NbtoQ5u1Tm4wWYItPKTsye5r
+        1gJlUGXVx7/b2u2kVojxeY20bz+0JEzMQtjGDY4BkbBCx495GRK+8Wu2XjIaT3m59wEFF6c3Cco
+        Ybw4mD5RDRik=
+X-Received: by 2002:a17:90a:1bcb:: with SMTP id r11mr23326099pjr.27.1606137209792;
+        Mon, 23 Nov 2020 05:13:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzkXuNP927CTEDXqn0ipJvSVQNKrMNcIiVwdIbEqq3b3tozgVLcVNugnvTQi3BfV4R5wbr0aQ==
+X-Received: by 2002:a17:90a:1bcb:: with SMTP id r11mr23326082pjr.27.1606137209500;
+        Mon, 23 Nov 2020 05:13:29 -0800 (PST)
 Received: from localhost.localdomain.com ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id 84sm12075505pfu.53.2020.11.23.05.13.34
+        by smtp.gmail.com with ESMTPSA id 84sm12075505pfu.53.2020.11.23.05.13.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2020 05:13:38 -0800 (PST)
+        Mon, 23 Nov 2020 05:13:28 -0800 (PST)
 From:   Hangbin Liu <haliu@redhat.com>
 To:     Stephen Hemminger <stephen@networkplumber.org>,
         David Ahern <dsahern@gmail.com>
@@ -72,9 +72,9 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Jesper Dangaard Brouer <brouer@redhat.com>,
         Alexei Starovoitov <alexei.starovoitov@gmail.com>,
         Hangbin Liu <haliu@redhat.com>
-Subject: [PATCHv6 iproute2-next 5/5] examples/bpf: add bpf examples with BTF defined maps
-Date:   Mon, 23 Nov 2020 21:12:01 +0800
-Message-Id: <20201123131201.4108483-6-haliu@redhat.com>
+Subject: [PATCHv6 iproute2-next 3/5] lib: add libbpf support
+Date:   Mon, 23 Nov 2020 21:11:59 +0800
+Message-Id: <20201123131201.4108483-4-haliu@redhat.com>
 X-Mailer: git-send-email 2.25.4
 In-Reply-To: <20201123131201.4108483-1-haliu@redhat.com>
 References: <20201116065305.1010651-1-haliu@redhat.com>
@@ -86,257 +86,653 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Users should try use the new BTF defined maps instead of struct
-bpf_elf_map defined maps. The tail call examples are not added yet
-as libbpf doesn't currently support declaratively populating tail call
-maps.
+This patch converts iproute2 to use libbpf for loading and attaching
+BPF programs when it is available, which is started by Toke's
+implementation[1]. With libbpf iproute2 could correctly process BTF
+information and support the new-style BTF-defined maps, while keeping
+compatibility with the old internal map definition syntax.
+
+The old iproute2 bpf code is kept and will be used if no suitable libbpf
+is available. When using libbpf, wrapper code in bpf_legacy.c ensures that
+iproute2 will still understand the old map definition format, including
+populating map-in-map and tail call maps before load.
+
+In bpf_libbpf.c, we init iproute2 ctx and elf info first to check the
+legacy bytes. When handling the legacy maps, for map-in-maps, we create
+them manually and re-use the fd as they are associated with id/inner_id.
+For pin maps, we only set the pin path and let libbp load to handle it.
+For tail calls, we find it first and update the element after prog load.
+
+Other maps/progs will be loaded by libbpf directly.
+
+[1] https://lore.kernel.org/bpf/20190820114706.18546-1-toke@redhat.com/
 
 Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
 Signed-off-by: Hangbin Liu <haliu@redhat.com>
 ---
- examples/bpf/README           |  6 ++++
- examples/bpf/bpf_graft.c      | 66 +++++++++++++++++++++++++++++++++++
- examples/bpf/bpf_map_in_map.c | 55 +++++++++++++++++++++++++++++
- examples/bpf/bpf_shared.c     | 53 ++++++++++++++++++++++++++++
- include/bpf_api.h             | 13 +++++++
- 5 files changed, 193 insertions(+)
- create mode 100644 examples/bpf/bpf_graft.c
- create mode 100644 examples/bpf/bpf_map_in_map.c
- create mode 100644 examples/bpf/bpf_shared.c
+v6: also make bpf_libbpf.c build depend on HAVE_ELF
 
-diff --git a/examples/bpf/README b/examples/bpf/README
-index 732bcc83..b7261191 100644
---- a/examples/bpf/README
-+++ b/examples/bpf/README
-@@ -1,6 +1,12 @@
- eBPF toy code examples (running in kernel) to familiarize yourself
- with syntax and features:
+v5: no update
+
+v4:
+Move ipvrf code to patch 02
+Move HAVE_LIBBPF inside HAVE_ELF definition as libbpf depends on elf.
+
+v3:
+Add a new function get_bpf_program__section_name() to choose whether
+use bpf_program__title() or not.
+
+v2:
+Remove self defined IS_ERR_OR_NULL and use libbpf_get_error() instead.
+Add ipvrf with libbpf support.
+---
+ include/bpf_util.h |  17 +++
+ lib/Makefile       |   6 +
+ lib/bpf_legacy.c   | 178 +++++++++++++++++++++++
+ lib/bpf_libbpf.c   | 348 +++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 549 insertions(+)
+ create mode 100644 lib/bpf_libbpf.c
+
+diff --git a/include/bpf_util.h b/include/bpf_util.h
+index 3235c34e..53acc410 100644
+--- a/include/bpf_util.h
++++ b/include/bpf_util.h
+@@ -291,6 +291,16 @@ int bpf_dump_prog_info(FILE *f, uint32_t id);
+ int bpf_send_map_fds(const char *path, const char *obj);
+ int bpf_recv_map_fds(const char *path, int *fds, struct bpf_map_aux *aux,
+ 		     unsigned int entries);
++#ifdef HAVE_LIBBPF
++int iproute2_bpf_elf_ctx_init(struct bpf_cfg_in *cfg);
++int iproute2_bpf_fetch_ancillary(void);
++int iproute2_get_root_path(char *root_path, size_t len);
++bool iproute2_is_pin_map(const char *libbpf_map_name, char *pathname);
++bool iproute2_is_map_in_map(const char *libbpf_map_name, struct bpf_elf_map *imap,
++			    struct bpf_elf_map *omap, char *omap_name);
++int iproute2_find_map_name_by_id(unsigned int map_id, char *name);
++int iproute2_load_libbpf(struct bpf_cfg_in *cfg);
++#endif /* HAVE_LIBBPF */
+ #else
+ static inline int bpf_send_map_fds(const char *path, const char *obj)
+ {
+@@ -303,6 +313,13 @@ static inline int bpf_recv_map_fds(const char *path, int *fds,
+ {
+ 	return -1;
+ }
++#ifdef HAVE_LIBBPF
++static inline int iproute2_load_libbpf(struct bpf_cfg_in *cfg)
++{
++	fprintf(stderr, "No ELF library support compiled in.\n");
++	return -1;
++}
++#endif /* HAVE_LIBBPF */
+ #endif /* HAVE_ELF */
  
-+- BTF defined map examples
-+ - bpf_graft.c		-> Demo on altering runtime behaviour
-+ - bpf_shared.c 	-> Ingress/egress map sharing example
-+ - bpf_map_in_map.c	-> Using map in map example
+ const char *get_libbpf_version(void);
+diff --git a/lib/Makefile b/lib/Makefile
+index 7c8a197c..e37585c6 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -7,6 +7,12 @@ UTILOBJ = utils.o rt_names.o ll_map.o ll_types.o ll_proto.o ll_addr.o \
+ 	inet_proto.o namespace.o json_writer.o json_print.o \
+ 	names.o color.o bpf_legacy.o bpf_glue.o exec.o fs.o cg_map.o
+ 
++ifeq ($(HAVE_ELF),y)
++ifeq ($(HAVE_LIBBPF),y)
++UTILOBJ += bpf_libbpf.o
++endif
++endif
 +
-+- legacy struct bpf_elf_map defined map examples
-  - legacy/bpf_shared.c		-> Ingress/egress map sharing example
-  - legacy/bpf_tailcall.c	-> Using tail call chains
-  - legacy/bpf_cyclic.c		-> Simple cycle as tail calls
-diff --git a/examples/bpf/bpf_graft.c b/examples/bpf/bpf_graft.c
-new file mode 100644
-index 00000000..8066dcce
---- /dev/null
-+++ b/examples/bpf/bpf_graft.c
-@@ -0,0 +1,66 @@
-+#include "../../include/bpf_api.h"
+ NLOBJ=libgenl.o libnetlink.o mnl_utils.o
+ 
+ all: libnetlink.a libutil.a
+diff --git a/lib/bpf_legacy.c b/lib/bpf_legacy.c
+index 4246fb76..bc869c3f 100644
+--- a/lib/bpf_legacy.c
++++ b/lib/bpf_legacy.c
+@@ -940,6 +940,9 @@ static int bpf_do_parse(struct bpf_cfg_in *cfg, const bool *opt_tbl)
+ static int bpf_do_load(struct bpf_cfg_in *cfg)
+ {
+ 	if (cfg->mode == EBPF_OBJECT) {
++#ifdef HAVE_LIBBPF
++		return iproute2_load_libbpf(cfg);
++#endif
+ 		cfg->prog_fd = bpf_obj_open(cfg->object, cfg->type,
+ 					    cfg->section, cfg->ifindex,
+ 					    cfg->verbose);
+@@ -3155,4 +3158,179 @@ int bpf_recv_map_fds(const char *path, int *fds, struct bpf_map_aux *aux,
+ 	close(fd);
+ 	return ret;
+ }
 +
-+/* This example demonstrates how classifier run-time behaviour
-+ * can be altered with tail calls. We start out with an empty
-+ * jmp_tc array, then add section aaa to the array slot 0, and
-+ * later on atomically replace it with section bbb. Note that
-+ * as shown in other examples, the tc loader can prepopulate
-+ * tail called sections, here we start out with an empty one
-+ * on purpose to show it can also be done this way.
-+ *
-+ * tc filter add dev foo parent ffff: bpf obj graft.o
-+ * tc exec bpf dbg
-+ *   [...]
-+ *   Socket Thread-20229 [001] ..s. 138993.003923: : fallthrough
-+ *   <idle>-0            [001] ..s. 138993.202265: : fallthrough
-+ *   Socket Thread-20229 [001] ..s. 138994.004149: : fallthrough
-+ *   [...]
-+ *
-+ * tc exec bpf graft m:globals/jmp_tc key 0 obj graft.o sec aaa
-+ * tc exec bpf dbg
-+ *   [...]
-+ *   Socket Thread-19818 [002] ..s. 139012.053587: : aaa
-+ *   <idle>-0            [002] ..s. 139012.172359: : aaa
-+ *   Socket Thread-19818 [001] ..s. 139012.173556: : aaa
-+ *   [...]
-+ *
-+ * tc exec bpf graft m:globals/jmp_tc key 0 obj graft.o sec bbb
-+ * tc exec bpf dbg
-+ *   [...]
-+ *   Socket Thread-19818 [002] ..s. 139022.102967: : bbb
-+ *   <idle>-0            [002] ..s. 139022.155640: : bbb
-+ *   Socket Thread-19818 [001] ..s. 139022.156730: : bbb
-+ *   [...]
++#ifdef HAVE_LIBBPF
++/* The following functions are wrapper functions for libbpf code to be
++ * compatible with the legacy format. So all the functions have prefix
++ * with iproute2_
 + */
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(key_size, sizeof(uint32_t));
-+	__uint(value_size, sizeof(uint32_t));
-+	__uint(max_entries, 1);
-+	__uint(pinning, LIBBPF_PIN_BY_NAME);
-+} jmp_tc __section(".maps");
-+
-+__section("aaa")
-+int cls_aaa(struct __sk_buff *skb)
++int iproute2_bpf_elf_ctx_init(struct bpf_cfg_in *cfg)
 +{
-+	printt("aaa\n");
-+	return TC_H_MAKE(1, 42);
++	struct bpf_elf_ctx *ctx = &__ctx;
++
++	return bpf_elf_ctx_init(ctx, cfg->object, cfg->type, cfg->ifindex, cfg->verbose);
 +}
 +
-+__section("bbb")
-+int cls_bbb(struct __sk_buff *skb)
++int iproute2_bpf_fetch_ancillary(void)
 +{
-+	printt("bbb\n");
-+	return TC_H_MAKE(1, 43);
-+}
++	struct bpf_elf_ctx *ctx = &__ctx;
++	struct bpf_elf_sec_data data;
++	int i, ret = 0;
 +
-+__section_cls_entry
-+int cls_entry(struct __sk_buff *skb)
-+{
-+	tail_call(skb, &jmp_tc, 0);
-+	printt("fallthrough\n");
-+	return BPF_H_DEFAULT;
-+}
++	for (i = 1; i < ctx->elf_hdr.e_shnum; i++) {
++		ret = bpf_fill_section_data(ctx, i, &data);
++		if (ret < 0)
++			continue;
 +
-+BPF_LICENSE("GPL");
-diff --git a/examples/bpf/bpf_map_in_map.c b/examples/bpf/bpf_map_in_map.c
-new file mode 100644
-index 00000000..39c86268
---- /dev/null
-+++ b/examples/bpf/bpf_map_in_map.c
-@@ -0,0 +1,55 @@
-+#include "../../include/bpf_api.h"
-+
-+struct inner_map {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(key_size, sizeof(uint32_t));
-+	__uint(value_size, sizeof(uint32_t));
-+	__uint(max_entries, 1);
-+} map_inner __section(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
-+	__uint(key_size, sizeof(uint32_t));
-+	__uint(value_size, sizeof(uint32_t));
-+	__uint(max_entries, 1);
-+	__uint(pinning, LIBBPF_PIN_BY_NAME);
-+	__array(values, struct inner_map);
-+} map_outer __section(".maps") = {
-+	.values = {
-+		[0] = &map_inner,
-+	},
-+};
-+
-+__section("egress")
-+int emain(struct __sk_buff *skb)
-+{
-+	struct bpf_elf_map *map_inner;
-+	int key = 0, *val;
-+
-+	map_inner = map_lookup_elem(&map_outer, &key);
-+	if (map_inner) {
-+		val = map_lookup_elem(map_inner, &key);
-+		if (val)
-+			lock_xadd(val, 1);
++		if (data.sec_hdr.sh_type == SHT_PROGBITS &&
++		    !strcmp(data.sec_name, ELF_SECTION_MAPS))
++			ret = bpf_fetch_maps_begin(ctx, i, &data);
++		else if (data.sec_hdr.sh_type == SHT_SYMTAB &&
++			 !strcmp(data.sec_name, ".symtab"))
++			ret = bpf_fetch_symtab(ctx, i, &data);
++		else if (data.sec_hdr.sh_type == SHT_STRTAB &&
++			 !strcmp(data.sec_name, ".strtab"))
++			ret = bpf_fetch_strtab(ctx, i, &data);
++		if (ret < 0) {
++			fprintf(stderr, "Error parsing section %d! Perhaps check with readelf -a?\n",
++				i);
++			return ret;
++		}
 +	}
 +
-+	return BPF_H_DEFAULT;
-+}
-+
-+__section("ingress")
-+int imain(struct __sk_buff *skb)
-+{
-+	struct bpf_elf_map *map_inner;
-+	int key = 0, *val;
-+
-+	map_inner = map_lookup_elem(&map_outer, &key);
-+	if (map_inner) {
-+		val = map_lookup_elem(map_inner, &key);
-+		if (val)
-+			printt("map val: %d\n", *val);
++	if (bpf_has_map_data(ctx)) {
++		ret = bpf_fetch_maps_end(ctx);
++		if (ret < 0) {
++			fprintf(stderr, "Error fixing up map structure, incompatible struct bpf_elf_map used?\n");
++			return ret;
++		}
 +	}
 +
-+	return BPF_H_DEFAULT;
++	return ret;
 +}
 +
-+BPF_LICENSE("GPL");
-diff --git a/examples/bpf/bpf_shared.c b/examples/bpf/bpf_shared.c
-new file mode 100644
-index 00000000..99a332f4
---- /dev/null
-+++ b/examples/bpf/bpf_shared.c
-@@ -0,0 +1,53 @@
-+#include "../../include/bpf_api.h"
++int iproute2_get_root_path(char *root_path, size_t len)
++{
++	struct bpf_elf_ctx *ctx = &__ctx;
++	int ret = 0;
 +
-+/* Minimal, stand-alone toy map pinning example:
++	snprintf(root_path, len, "%s/%s",
++		 bpf_get_work_dir(ctx->type), BPF_DIR_GLOBALS);
++
++	ret = mkdir(root_path, S_IRWXU);
++	if (ret && errno != EEXIST) {
++		fprintf(stderr, "mkdir %s failed: %s\n", root_path, strerror(errno));
++		return ret;
++	}
++
++	return 0;
++}
++
++bool iproute2_is_pin_map(const char *libbpf_map_name, char *pathname)
++{
++	struct bpf_elf_ctx *ctx = &__ctx;
++	const char *map_name, *tmp;
++	unsigned int pinning;
++	int i, ret = 0;
++
++	for (i = 0; i < ctx->map_num; i++) {
++		if (ctx->maps[i].pinning == PIN_OBJECT_NS &&
++		    ctx->noafalg) {
++			fprintf(stderr, "Missing kernel AF_ALG support for PIN_OBJECT_NS!\n");
++			return false;
++		}
++
++		map_name = bpf_map_fetch_name(ctx, i);
++		if (!map_name) {
++			return false;
++		}
++
++		if (strcmp(libbpf_map_name, map_name))
++			continue;
++
++		pinning = ctx->maps[i].pinning;
++
++		if (bpf_no_pinning(ctx, pinning) || !bpf_get_work_dir(ctx->type))
++			return false;
++
++		if (pinning == PIN_OBJECT_NS)
++			ret = bpf_make_obj_path(ctx);
++		else if ((tmp = bpf_custom_pinning(ctx, pinning)))
++			ret = bpf_make_custom_path(ctx, tmp);
++		if (ret < 0)
++			return false;
++
++		bpf_make_pathname(pathname, PATH_MAX, map_name, ctx, pinning);
++
++		return true;
++	}
++
++	return false;
++}
++
++bool iproute2_is_map_in_map(const char *libbpf_map_name, struct bpf_elf_map *imap,
++			    struct bpf_elf_map *omap, char *omap_name)
++{
++	struct bpf_elf_ctx *ctx = &__ctx;
++	const char *inner_map_name, *outer_map_name;
++	int i, j;
++
++	for (i = 0; i < ctx->map_num; i++) {
++		inner_map_name = bpf_map_fetch_name(ctx, i);
++		if (!inner_map_name) {
++			return false;
++		}
++
++		if (strcmp(libbpf_map_name, inner_map_name))
++			continue;
++
++		if (!ctx->maps[i].id ||
++		    ctx->maps[i].inner_id ||
++		    ctx->maps[i].inner_idx == -1)
++			continue;
++
++		*imap = ctx->maps[i];
++
++		for (j = 0; j < ctx->map_num; j++) {
++			if (!bpf_is_map_in_map_type(&ctx->maps[j]))
++				continue;
++			if (ctx->maps[j].inner_id != ctx->maps[i].id)
++				continue;
++
++			*omap = ctx->maps[j];
++			outer_map_name = bpf_map_fetch_name(ctx, j);
++			memcpy(omap_name, outer_map_name, strlen(outer_map_name) + 1);
++
++			return true;
++		}
++	}
++
++	return false;
++}
++
++int iproute2_find_map_name_by_id(unsigned int map_id, char *name)
++{
++	struct bpf_elf_ctx *ctx = &__ctx;
++	const char *map_name;
++	int i, idx = -1;
++
++	for (i = 0; i < ctx->map_num; i++) {
++		if (ctx->maps[i].id == map_id &&
++		    ctx->maps[i].type == BPF_MAP_TYPE_PROG_ARRAY) {
++			idx = i;
++			break;
++		}
++	}
++
++	if (idx < 0)
++		return -1;
++
++	map_name = bpf_map_fetch_name(ctx, idx);
++	if (!map_name)
++		return -1;
++
++	memcpy(name, map_name, strlen(map_name) + 1);
++	return 0;
++}
++#endif /* HAVE_LIBBPF */
+ #endif /* HAVE_ELF */
+diff --git a/lib/bpf_libbpf.c b/lib/bpf_libbpf.c
+new file mode 100644
+index 00000000..d05737a4
+--- /dev/null
++++ b/lib/bpf_libbpf.c
+@@ -0,0 +1,348 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * bpf_libbpf.c		BPF code relay on libbpf
++ * Authors:		Hangbin Liu <haliu@redhat.com>
 + *
-+ * clang -target bpf -O2 [...] -o bpf_shared.o -c bpf_shared.c
-+ * tc filter add dev foo parent 1: bpf obj bpf_shared.o sec egress
-+ * tc filter add dev foo parent ffff: bpf obj bpf_shared.o sec ingress
-+ *
-+ * Both classifier will share the very same map instance in this example,
-+ * so map content can be accessed from ingress *and* egress side!
-+ *
-+ * This example has a pinning of PIN_OBJECT_NS, so it's private and
-+ * thus shared among various program sections within the object.
-+ *
-+ * A setting of PIN_GLOBAL_NS would place it into a global namespace,
-+ * so that it can be shared among different object files. A setting
-+ * of PIN_NONE (= 0) means no sharing, so each tc invocation a new map
-+ * instance is being created.
 + */
 +
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(key_size, sizeof(uint32_t));
-+	__uint(value_size, sizeof(uint32_t));
-+	__uint(max_entries, 1);
-+	__uint(pinning, LIBBPF_PIN_BY_NAME);	/* or LIBBPF_PIN_NONE */
-+} map_sh __section(".maps");
++#include <stdio.h>
++#include <stdlib.h>
++#include <unistd.h>
++#include <string.h>
++#include <stdbool.h>
++#include <stdint.h>
++#include <errno.h>
++#include <fcntl.h>
 +
-+__section("egress")
-+int emain(struct __sk_buff *skb)
++#include <libelf.h>
++#include <gelf.h>
++
++#include <bpf/libbpf.h>
++#include <bpf/bpf.h>
++
++#include "bpf_util.h"
++
++static int verbose_print(enum libbpf_print_level level, const char *format, va_list args)
 +{
-+	int key = 0, *val;
-+
-+	val = map_lookup_elem(&map_sh, &key);
-+	if (val)
-+		lock_xadd(val, 1);
-+
-+	return BPF_H_DEFAULT;
++	return vfprintf(stderr, format, args);
 +}
 +
-+__section("ingress")
-+int imain(struct __sk_buff *skb)
++static int silent_print(enum libbpf_print_level level, const char *format, va_list args)
 +{
-+	int key = 0, *val;
++	if (level > LIBBPF_WARN)
++		return 0;
 +
-+	val = map_lookup_elem(&map_sh, &key);
-+	if (val)
-+		printt("map val: %d\n", *val);
++	/* Skip warning from bpf_object__init_user_maps() for legacy maps */
++	if (strstr(format, "has unrecognized, non-zero options"))
++		return 0;
 +
-+	return BPF_H_DEFAULT;
++	return vfprintf(stderr, format, args);
 +}
 +
-+BPF_LICENSE("GPL");
-diff --git a/include/bpf_api.h b/include/bpf_api.h
-index 89d3488d..82c47089 100644
---- a/include/bpf_api.h
-+++ b/include/bpf_api.h
-@@ -19,6 +19,19 @@
- 
- #include "bpf_elf.h"
- 
-+/** libbpf pin type. */
-+enum libbpf_pin_type {
-+	LIBBPF_PIN_NONE,
-+	/* PIN_BY_NAME: pin maps by name (in /sys/fs/bpf by default) */
-+	LIBBPF_PIN_BY_NAME,
-+};
++static const char *get_bpf_program__section_name(const struct bpf_program *prog)
++{
++#ifdef HAVE_LIBBPF_SECTION_NAME
++	return bpf_program__section_name(prog);
++#else
++	return bpf_program__title(prog, false);
++#endif
++}
 +
-+/** Type helper macros. */
++static int create_map(const char *name, struct bpf_elf_map *map,
++		      __u32 ifindex, int inner_fd)
++{
++	struct bpf_create_map_attr map_attr = {};
 +
-+#define __uint(name, val) int (*name)[val]
-+#define __type(name, val) typeof(val) *name
-+#define __array(name, val) typeof(val) *name[]
++	map_attr.name = name;
++	map_attr.map_type = map->type;
++	map_attr.map_flags = map->flags;
++	map_attr.key_size = map->size_key;
++	map_attr.value_size = map->size_value;
++	map_attr.max_entries = map->max_elem;
++	map_attr.map_ifindex = ifindex;
++	map_attr.inner_map_fd = inner_fd;
 +
- /** Misc macros. */
- 
- #ifndef __stringify
++	return bpf_create_map_xattr(&map_attr);
++}
++
++static int create_map_in_map(struct bpf_object *obj, struct bpf_map *map,
++			     struct bpf_elf_map *elf_map, int inner_fd,
++			     bool *reuse_pin_map)
++{
++	char pathname[PATH_MAX];
++	const char *map_name;
++	bool pin_map = false;
++	int map_fd, ret = 0;
++
++	map_name = bpf_map__name(map);
++
++	if (iproute2_is_pin_map(map_name, pathname)) {
++		pin_map = true;
++
++		/* Check if there already has a pinned map */
++		map_fd = bpf_obj_get(pathname);
++		if (map_fd > 0) {
++			if (reuse_pin_map)
++				*reuse_pin_map = true;
++			close(map_fd);
++			return bpf_map__set_pin_path(map, pathname);
++		}
++	}
++
++	map_fd = create_map(map_name, elf_map, bpf_map__ifindex(map), inner_fd);
++	if (map_fd < 0) {
++		fprintf(stderr, "create map %s failed\n", map_name);
++		return map_fd;
++	}
++
++	ret = bpf_map__reuse_fd(map, map_fd);
++	if (ret < 0) {
++		fprintf(stderr, "map %s reuse fd failed\n", map_name);
++		goto err_out;
++	}
++
++	if (pin_map) {
++		ret = bpf_map__set_pin_path(map, pathname);
++		if (ret < 0)
++			goto err_out;
++	}
++
++	return 0;
++err_out:
++	close(map_fd);
++	return ret;
++}
++
++static int
++handle_legacy_map_in_map(struct bpf_object *obj, struct bpf_map *inner_map,
++			 const char *inner_map_name)
++{
++	int inner_fd, outer_fd, inner_idx, ret = 0;
++	struct bpf_elf_map imap, omap;
++	struct bpf_map *outer_map;
++	/* What's the size limit of map name? */
++	char outer_map_name[128];
++	bool reuse_pin_map = false;
++
++	/* Deal with map-in-map */
++	if (iproute2_is_map_in_map(inner_map_name, &imap, &omap, outer_map_name)) {
++		ret = create_map_in_map(obj, inner_map, &imap, -1, NULL);
++		if (ret < 0)
++			return ret;
++
++		inner_fd = bpf_map__fd(inner_map);
++		outer_map = bpf_object__find_map_by_name(obj, outer_map_name);
++		ret = create_map_in_map(obj, outer_map, &omap, inner_fd, &reuse_pin_map);
++		if (ret < 0)
++			return ret;
++
++		if (!reuse_pin_map) {
++			inner_idx = imap.inner_idx;
++			outer_fd = bpf_map__fd(outer_map);
++			ret = bpf_map_update_elem(outer_fd, &inner_idx, &inner_fd, 0);
++			if (ret < 0)
++				fprintf(stderr, "Cannot update inner_idx into outer_map\n");
++		}
++	}
++
++	return ret;
++}
++
++static int find_legacy_tail_calls(struct bpf_program *prog, struct bpf_object *obj)
++{
++	unsigned int map_id, key_id;
++	const char *sec_name;
++	struct bpf_map *map;
++	char map_name[128];
++	int ret;
++
++	/* Handle iproute2 tail call */
++	sec_name = get_bpf_program__section_name(prog);
++	ret = sscanf(sec_name, "%i/%i", &map_id, &key_id);
++	if (ret != 2)
++		return -1;
++
++	ret = iproute2_find_map_name_by_id(map_id, map_name);
++	if (ret < 0) {
++		fprintf(stderr, "unable to find map id %u for tail call\n", map_id);
++		return ret;
++	}
++
++	map = bpf_object__find_map_by_name(obj, map_name);
++	if (!map)
++		return -1;
++
++	/* Save the map here for later updating */
++	bpf_program__set_priv(prog, map, NULL);
++
++	return 0;
++}
++
++static int update_legacy_tail_call_maps(struct bpf_object *obj)
++{
++	int prog_fd, map_fd, ret = 0;
++	unsigned int map_id, key_id;
++	struct bpf_program *prog;
++	const char *sec_name;
++	struct bpf_map *map;
++
++	bpf_object__for_each_program(prog, obj) {
++		map = bpf_program__priv(prog);
++		if (!map)
++			continue;
++
++		prog_fd = bpf_program__fd(prog);
++		if (prog_fd < 0)
++			continue;
++
++		sec_name = get_bpf_program__section_name(prog);
++		ret = sscanf(sec_name, "%i/%i", &map_id, &key_id);
++		if (ret != 2)
++			continue;
++
++		map_fd = bpf_map__fd(map);
++		ret = bpf_map_update_elem(map_fd, &key_id, &prog_fd, 0);
++		if (ret < 0) {
++			fprintf(stderr, "Cannot update map key for tail call!\n");
++			return ret;
++		}
++	}
++
++	return 0;
++}
++
++static int handle_legacy_maps(struct bpf_object *obj)
++{
++	char pathname[PATH_MAX];
++	struct bpf_map *map;
++	const char *map_name;
++	int map_fd, ret = 0;
++
++	bpf_object__for_each_map(map, obj) {
++		map_name = bpf_map__name(map);
++
++		ret = handle_legacy_map_in_map(obj, map, map_name);
++		if (ret)
++			return ret;
++
++		/* If it is a iproute2 legacy pin maps, just set pin path
++		 * and let bpf_object__load() to deal with the map creation.
++		 * We need to ignore map-in-maps which have pinned maps manually
++		 */
++		map_fd = bpf_map__fd(map);
++		if (map_fd < 0 && iproute2_is_pin_map(map_name, pathname)) {
++			ret = bpf_map__set_pin_path(map, pathname);
++			if (ret) {
++				fprintf(stderr, "map '%s': couldn't set pin path.\n", map_name);
++				break;
++			}
++		}
++
++	}
++
++	return ret;
++}
++
++static int load_bpf_object(struct bpf_cfg_in *cfg)
++{
++	struct bpf_program *p, *prog = NULL;
++	struct bpf_object *obj;
++	char root_path[PATH_MAX];
++	struct bpf_map *map;
++	int prog_fd, ret = 0;
++
++	ret = iproute2_get_root_path(root_path, PATH_MAX);
++	if (ret)
++		return ret;
++
++	DECLARE_LIBBPF_OPTS(bpf_object_open_opts, open_opts,
++			.relaxed_maps = true,
++			.pin_root_path = root_path,
++	);
++
++	obj = bpf_object__open_file(cfg->object, &open_opts);
++	if (libbpf_get_error(obj)) {
++		fprintf(stderr, "ERROR: opening BPF object file failed\n");
++		return -ENOENT;
++	}
++
++	bpf_object__for_each_program(p, obj) {
++		/* Only load the programs that will either be subsequently
++		 * attached or inserted into a tail call map */
++		if (find_legacy_tail_calls(p, obj) < 0 && cfg->section &&
++		    strcmp(get_bpf_program__section_name(p), cfg->section)) {
++			ret = bpf_program__set_autoload(p, false);
++			if (ret)
++				return -EINVAL;
++			continue;
++		}
++
++		bpf_program__set_type(p, cfg->type);
++		bpf_program__set_ifindex(p, cfg->ifindex);
++		if (!prog)
++			prog = p;
++	}
++
++	bpf_object__for_each_map(map, obj) {
++		if (!bpf_map__is_offload_neutral(map))
++			bpf_map__set_ifindex(map, cfg->ifindex);
++	}
++
++	if (!prog) {
++		fprintf(stderr, "object file doesn't contain sec %s\n", cfg->section);
++		return -ENOENT;
++	}
++
++	/* Handle iproute2 legacy pin maps and map-in-maps */
++	ret = handle_legacy_maps(obj);
++	if (ret)
++		goto unload_obj;
++
++	ret = bpf_object__load(obj);
++	if (ret)
++		goto unload_obj;
++
++	ret = update_legacy_tail_call_maps(obj);
++	if (ret)
++		goto unload_obj;
++
++	prog_fd = fcntl(bpf_program__fd(prog), F_DUPFD_CLOEXEC, 1);
++	if (prog_fd < 0)
++		ret = -errno;
++	else
++		cfg->prog_fd = prog_fd;
++
++unload_obj:
++	/* Close obj as we don't need it */
++	bpf_object__close(obj);
++	return ret;
++}
++
++/* Load ebpf and return prog fd */
++int iproute2_load_libbpf(struct bpf_cfg_in *cfg)
++{
++	int ret = 0;
++
++	if (cfg->verbose)
++		libbpf_set_print(verbose_print);
++	else
++		libbpf_set_print(silent_print);
++
++	ret = iproute2_bpf_elf_ctx_init(cfg);
++	if (ret < 0) {
++		fprintf(stderr, "Cannot initialize ELF context!\n");
++		return ret;
++	}
++
++	ret = iproute2_bpf_fetch_ancillary();
++	if (ret < 0) {
++		fprintf(stderr, "Error fetching ELF ancillary data!\n");
++		return ret;
++	}
++
++	ret = load_bpf_object(cfg);
++	if (ret)
++		return ret;
++
++	return cfg->prog_fd;
++}
 -- 
 2.25.4
 
