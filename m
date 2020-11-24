@@ -2,51 +2,48 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B4E58C2D0E4
-	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 00:11:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D254C2D0E4
+	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 00:14:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 64CF120731
-	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 00:11:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4462320757
+	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 00:14:45 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="dH7+jq/y"
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="URT0QiJM"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728834AbgKXALG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 23 Nov 2020 19:11:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37146 "EHLO mail.kernel.org"
+        id S1728748AbgKXAOP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 23 Nov 2020 19:14:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37578 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726901AbgKXALF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 23 Nov 2020 19:11:05 -0500
+        id S1725287AbgKXAOO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 23 Nov 2020 19:14:14 -0500
 Received: from kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com (unknown [163.114.132.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9AD8920729;
-        Tue, 24 Nov 2020 00:11:04 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 168E420757;
+        Tue, 24 Nov 2020 00:14:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606176665;
-        bh=pEYJSKGv95WDkizhr/Cu+RJdd9sJEmv+bgtYXhjlqHA=;
+        s=default; t=1606176853;
+        bh=0AIjuF8XmpLcS4INfcXXwsD/GPc/JPaV3VUW+HQOnYg=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dH7+jq/yBkHa2KIrAxdH4xgcv2wiOzz5jElmQrW6vW91PsrA3Ktp53geoHupLnzUB
-         e6Wg4sEJOH2d0rp7LxoZgCVgJzHAm1YyFBKPv5BnD4jrLH6lukQ36DNG8dtogT/bym
-         st1so8Qcab3O9jnRZufLVhnyEup1cJBumGIOplL0=
-Date:   Mon, 23 Nov 2020 16:11:03 -0800
+        b=URT0QiJM3HQnqjs/vq3DUUATPbrX/ij4pqEgfyO2RSKdGNwitEcTk8AEHCdAZpnxY
+         PU34RcCqw6xVI8nprt/p6BJ/EEWJTTxkhuXNMXFSQZj2aI/vu0TxUvGpe2FRIVXT9t
+         DfPwYT0cRBoxugDlTK9b64dK0Pk4Qgr/45X++Aec=
+Date:   Mon, 23 Nov 2020 16:14:12 -0800
 From:   Jakub Kicinski <kuba@kernel.org>
 To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        =?UTF-8?B?QmrDtnJuIFQ=?= =?UTF-8?B?w7ZwZWw=?= 
-        <bjorn.topel@intel.com>, magnus.karlsson@intel.com, ast@kernel.org,
-        daniel@iogearbox.net, maciej.fijalkowski@intel.com,
-        sridhar.samudrala@intel.com, jesse.brandeburg@intel.com,
-        qi.z.zhang@intel.com, edumazet@google.com,
-        jonathan.lemon@gmail.com, maximmi@nvidia.com
-Subject: Re: [PATCH bpf-next v3 01/10] net: introduce preferred busy-polling
-Message-ID: <20201123161103.7bb083f9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20201119083024.119566-2-bjorn.topel@gmail.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, bjorn.topel@intel.com,
+        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
+        maciej.fijalkowski@intel.com, sridhar.samudrala@intel.com,
+        jesse.brandeburg@intel.com, qi.z.zhang@intel.com,
+        edumazet@google.com, jonathan.lemon@gmail.com, maximmi@nvidia.com
+Subject: Re: [PATCH bpf-next v3 00/10] Introduce preferred busy-polling
+Message-ID: <20201123161412.363bfb30@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20201119083024.119566-1-bjorn.topel@gmail.com>
 References: <20201119083024.119566-1-bjorn.topel@gmail.com>
-        <20201119083024.119566-2-bjorn.topel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
@@ -54,15 +51,28 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 19 Nov 2020 09:30:15 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
-> @@ -105,7 +105,8 @@ static inline void sk_busy_loop(struct sock *sk, int =
-nonblock)
->  	unsigned int napi_id =3D READ_ONCE(sk->sk_napi_id);
-> =20
->  	if (napi_id >=3D MIN_NAPI_ID)
-> -		napi_busy_loop(napi_id, nonblock ? NULL : sk_busy_loop_end, sk);
-> +		napi_busy_loop(napi_id, nonblock ? NULL : sk_busy_loop_end, sk,
-> +			       READ_ONCE(sk->sk_prefer_busy_poll));
+On Thu, 19 Nov 2020 09:30:14 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
+> Performance netperf UDP_RR:
+>=20
+> Note that netperf UDP_RR is not a heavy traffic tests, and preferred
+> busy-polling is not typically something we want to use here.
+>=20
+>   $ echo 20 | sudo tee /proc/sys/net/core/busy_read
+>   $ netperf -H 192.168.1.1 -l 30 -t UDP_RR -v 2 -- \
+>       -o min_latency,mean_latency,max_latency,stddev_latency,transaction_=
+rate
+>=20
+> busy-polling blocking sockets:            12,13.33,224,0.63,74731.177
+>=20
+> I hacked netperf to use non-blocking sockets and re-ran:
+>=20
+> busy-polling non-blocking sockets:        12,13.46,218,0.72,73991.172
+> prefer busy-polling non-blocking sockets: 12,13.62,221,0.59,73138.448
+>=20
+> Using the preferred busy-polling mode does not impact performance.
+>=20
+> The above tests was done for the 'ice' driver.
 
-Perhaps a noob question, but aren't all accesses to the new sk members
-under the socket lock? Do we really need the READ_ONCE() / WRITE_ONCE()?
+Any interest in this work form ADQ folks? I recall they were using
+memcache with busy polling for their tests, it'd cool to see how much
+this helps memcache on P99+ latency!
