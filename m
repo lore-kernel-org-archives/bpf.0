@@ -2,117 +2,80 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-10.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE064C56201
-	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 08:13:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A57AEC56201
+	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 08:47:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 502FF206E0
-	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 08:13:13 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pWAicoTt"
+	by mail.kernel.org (Postfix) with ESMTP id 4EB1B2076B
+	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 08:47:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730345AbgKXIM5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 Nov 2020 03:12:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728177AbgKXIM5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 24 Nov 2020 03:12:57 -0500
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C040C0613CF;
-        Tue, 24 Nov 2020 00:12:57 -0800 (PST)
-Received: by mail-pg1-x543.google.com with SMTP id j19so16761825pgg.5;
-        Tue, 24 Nov 2020 00:12:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=S6YlKWAgNMQGNjAA/VjKNCADAW62RGdxJPGcO5zwTnQ=;
-        b=pWAicoTtEBPq4G6parGTFE9sr0a7BHS9fSt/zIZlqvicBHMpdpAWCtcXY0oHj2cMou
-         g6sxuUF7fwfufyi+CplKMJo5ZBJ78vs8HF++TVGw744iMbXCMzW7duL0xj6gFdpbWzZn
-         WZl/HaGVpYGwQKOGml70h3i1Khb2WctNlVse12WDcLHeBui86+AbY1oOXZ6eFtLHV67i
-         LGfJS+TcvsK9BI76oGWe/zr5+tA/IKikckTlloZfiiKXPf7RG/PwD5iwuibq1qOkiZfF
-         IiG1tIXYDnqezXqjvAcA/Hxrq2eB4GlX09aoRFrCS1WVkWwKiHqfwZDJHId8iHGqhcJK
-         5qQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=S6YlKWAgNMQGNjAA/VjKNCADAW62RGdxJPGcO5zwTnQ=;
-        b=LI4oYFVDV6PQ/HtYS1twJdu9K5fCf3MNAKc5vMHX/kvcMjp/kz29NG0CIlg5ayg1MD
-         RjX2LguwzSi5gW4H/LGSP5Sj5GzMT18Y9AFhFIndsBGAfD2t3wubHLJ0PyPFz4uJAJad
-         cmLPdcMu/WQY8Rr606Rw3zHl5202xRWp1biEfEpqOQFgwUq+O+1OjgajnecsydWijKn6
-         gSIU6dorPm7EEDWmTJplMUrE8lJ1T0cox0qXQGwTCP4FW4vuyhImTWbXBj8hIbuk2W5G
-         vlisM6/Bu6/I6I85iebubHBWSeXPbCdbOec8GytWlpX06V/z2qcCRKfW/Rn12LoZARxS
-         vaQg==
-X-Gm-Message-State: AOAM530wtXPAmxyStkDYcJC0KrkavezMhKiwm+G5yS5BR6CF5Rubzj14
-        YqdRyAQ8lfPBvdz1MFWSJRZS3OXGWi9O1pObohBRw3dCjfAgDCXtjDI=
-X-Google-Smtp-Source: ABdhPJy3Dt6JV2iEPDRLzcs4CkirZ2Hig5hYVL55zqBA1wNXhN1z3naERdKQvVwF5rFHYxLyD9uYFi78H22vS4a+TTk=
-X-Received: by 2002:a62:2bd0:0:b029:18a:df0f:dd61 with SMTP id
- r199-20020a622bd00000b029018adf0fdd61mr3095974pfr.19.1606205576999; Tue, 24
- Nov 2020 00:12:56 -0800 (PST)
+        id S1730492AbgKXIrb (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 Nov 2020 03:47:31 -0500
+Received: from mga09.intel.com ([134.134.136.24]:61005 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726325AbgKXIra (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 24 Nov 2020 03:47:30 -0500
+IronPort-SDR: Nv/MSdOK2aXDffM9j6G9iIQrNSc7WYMZpztGwYnkAKtoDN7itaZXbvGutl77oak7E7gbRMg8ln
+ vOY/izQB4teQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9814"; a="172069280"
+X-IronPort-AV: E=Sophos;i="5.78,365,1599548400"; 
+   d="scan'208";a="172069280"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2020 00:47:29 -0800
+IronPort-SDR: ZQvpse/G7sjNy7PmjSrWgsKv2Mhn8z+ryc31a/xXLaOGEfnW3Y54JqClXPL92JYOAzzRJlVR1W
+ hFXSczuzRAiQ==
+X-IronPort-AV: E=Sophos;i="5.78,365,1599548400"; 
+   d="scan'208";a="546752919"
+Received: from rabl-mobl2.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.49.109])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2020 00:47:22 -0800
+Subject: Re: [PATCH bpf-next v3 01/10] net: introduce preferred busy-polling
+To:     Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
+        maciej.fijalkowski@intel.com, sridhar.samudrala@intel.com,
+        jesse.brandeburg@intel.com, qi.z.zhang@intel.com,
+        edumazet@google.com, jonathan.lemon@gmail.com, maximmi@nvidia.com
+References: <20201119083024.119566-1-bjorn.topel@gmail.com>
+ <20201119083024.119566-2-bjorn.topel@gmail.com>
+ <20201123161103.7bb083f9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Message-ID: <4af4e665-ef0a-aebc-a9d6-3e3601635bc2@intel.com>
+Date:   Tue, 24 Nov 2020 09:47:17 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.3.2
 MIME-Version: 1.0
-References: <1606202474-8119-1-git-send-email-lirongqing@baidu.com>
-In-Reply-To: <1606202474-8119-1-git-send-email-lirongqing@baidu.com>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Tue, 24 Nov 2020 09:12:46 +0100
-Message-ID: <CAJ8uoz0WNm6no8NRehgUH5RiGgvjJkKeD-Yyoah8xJerpLhgdg@mail.gmail.com>
-Subject: Re: [PATCH][V2] libbpf: add support for canceling cached_cons advance
-To:     Li RongQing <lirongqing@baidu.com>
-Cc:     Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20201123161103.7bb083f9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Nov 24, 2020 at 8:33 AM Li RongQing <lirongqing@baidu.com> wrote:
->
-> Add a new function for returning descriptors the user received
-> after an xsk_ring_cons__peek call. After the application has
-> gotten a number of descriptors from a ring, it might not be able
-> to or want to process them all for various reasons. Therefore,
-> it would be useful to have an interface for returning or
-> cancelling a number of them so that they are returned to the ring.
->
-> This patch adds a new function called xsk_ring_cons__cancel that
-> performs this operation on nb descriptors counted from the end of
-> the batch of descriptors that was received through the peek call.
->
-> Signed-off-by: Li RongQing <lirongqing@baidu.com>
-> [ Magnus Karlsson: rewrote changelog ]
-> Cc: Magnus Karlsson <magnus.karlsson@intel.com>
-> ---
-> diff with v1: fix the building, and rewrote changelog
->
->  tools/lib/bpf/xsk.h | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/tools/lib/bpf/xsk.h b/tools/lib/bpf/xsk.h
-> index 1069c46364ff..1719a327e5f9 100644
-> --- a/tools/lib/bpf/xsk.h
-> +++ b/tools/lib/bpf/xsk.h
-> @@ -153,6 +153,12 @@ static inline size_t xsk_ring_cons__peek(struct xsk_ring_cons *cons,
->         return entries;
->  }
->
-> +static inline void xsk_ring_cons__cancel(struct xsk_ring_cons *cons,
-> +                                        size_t nb)
-> +{
-> +       cons->cached_cons -= nb;
-> +}
-> +
->  static inline void xsk_ring_cons__release(struct xsk_ring_cons *cons, size_t nb)
->  {
->         /* Make sure data has been read before indicating we are done
-> --
-> 2.17.3
 
-Thank you RongQing.
+On 2020-11-24 01:11, Jakub Kicinski wrote:
+> On Thu, 19 Nov 2020 09:30:15 +0100 Björn Töpel wrote:
+>> @@ -105,7 +105,8 @@ static inline void sk_busy_loop(struct sock *sk, int nonblock)
+>>   	unsigned int napi_id = READ_ONCE(sk->sk_napi_id);
+>>   
+>>   	if (napi_id >= MIN_NAPI_ID)
+>> -		napi_busy_loop(napi_id, nonblock ? NULL : sk_busy_loop_end, sk);
+>> +		napi_busy_loop(napi_id, nonblock ? NULL : sk_busy_loop_end, sk,
+>> +			       READ_ONCE(sk->sk_prefer_busy_poll));
+> 
+> Perhaps a noob question, but aren't all accesses to the new sk members
+> under the socket lock? Do we really need the READ_ONCE() / WRITE_ONCE()?
+> 
 
-Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+No, only when setting them via sock_setsockopt. Reading is done outside
+the lock.
+
+
+Björn
