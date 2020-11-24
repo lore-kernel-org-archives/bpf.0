@@ -2,105 +2,69 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8352C56201
-	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 21:58:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8514AC2D0E4
+	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 22:10:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 80B5F20715
-	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 21:58:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 19A352083E
+	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 22:10:07 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="UgVne3uw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731713AbgKXV6I (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 Nov 2020 16:58:08 -0500
-Received: from www62.your-server.de ([213.133.104.62]:37058 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731696AbgKXV6I (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 24 Nov 2020 16:58:08 -0500
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1khgK4-0007RJ-L4; Tue, 24 Nov 2020 22:58:04 +0100
-Received: from [85.7.101.30] (helo=pc-9.home)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1khgK4-000Bqf-Fk; Tue, 24 Nov 2020 22:58:04 +0100
-Subject: Re: [PATCH][V2] libbpf: add support for canceling cached_cons advance
-To:     Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Li RongQing <lirongqing@baidu.com>
-Cc:     Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>
-References: <1606202474-8119-1-git-send-email-lirongqing@baidu.com>
- <CAJ8uoz0WNm6no8NRehgUH5RiGgvjJkKeD-Yyoah8xJerpLhgdg@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <fe9eeaa5-d40a-9be4-a96b-cdd80095da47@iogearbox.net>
-Date:   Tue, 24 Nov 2020 22:58:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1731823AbgKXWKG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 Nov 2020 17:10:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48594 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728523AbgKXWKG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 24 Nov 2020 17:10:06 -0500
+Content-Type: text/plain; charset="utf-8"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1606255805;
+        bh=AgDEfULAY6T3o4Gah+IhqNkauuIiyV0q6bhCqw5kdL4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=UgVne3uwHYJzAuA2dgJ5wvv1hJklxAjNG23HeVbqFfbV5ySouoyhsl6fFN/1HyduW
+         4KReKxT4t4E+zPgKdijVpgAkgE7xxMhNhwJpgWjGViqXJPSsEfMGdk9ECLI0+6/Da+
+         3GiYP3TKKFfVvQ+RxkrOwlUAi6yfHyvJk39MKdhg=
 MIME-Version: 1.0
-In-Reply-To: <CAJ8uoz0WNm6no8NRehgUH5RiGgvjJkKeD-Yyoah8xJerpLhgdg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/25998/Tue Nov 24 14:16:50 2020)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next 1/2] selftest/bpf: fix link in readme
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <160625580579.16430.4916381760822076885.git-patchwork-notify@kernel.org>
+Date:   Tue, 24 Nov 2020 22:10:05 +0000
+References: <20201122022205.57229-1-andreimatei1@gmail.com>
+In-Reply-To: <20201122022205.57229-1-andreimatei1@gmail.com>
+To:     Andrei Matei <andreimatei1@gmail.com>
+Cc:     bpf@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 11/24/20 9:12 AM, Magnus Karlsson wrote:
-> On Tue, Nov 24, 2020 at 8:33 AM Li RongQing <lirongqing@baidu.com> wrote:
->>
->> Add a new function for returning descriptors the user received
->> after an xsk_ring_cons__peek call. After the application has
->> gotten a number of descriptors from a ring, it might not be able
->> to or want to process them all for various reasons. Therefore,
->> it would be useful to have an interface for returning or
->> cancelling a number of them so that they are returned to the ring.
->>
->> This patch adds a new function called xsk_ring_cons__cancel that
->> performs this operation on nb descriptors counted from the end of
->> the batch of descriptors that was received through the peek call.
->>
->> Signed-off-by: Li RongQing <lirongqing@baidu.com>
->> [ Magnus Karlsson: rewrote changelog ]
->> Cc: Magnus Karlsson <magnus.karlsson@intel.com>
->> ---
->> diff with v1: fix the building, and rewrote changelog
->>
->>   tools/lib/bpf/xsk.h | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/tools/lib/bpf/xsk.h b/tools/lib/bpf/xsk.h
->> index 1069c46364ff..1719a327e5f9 100644
->> --- a/tools/lib/bpf/xsk.h
->> +++ b/tools/lib/bpf/xsk.h
->> @@ -153,6 +153,12 @@ static inline size_t xsk_ring_cons__peek(struct xsk_ring_cons *cons,
->>          return entries;
->>   }
->>
->> +static inline void xsk_ring_cons__cancel(struct xsk_ring_cons *cons,
->> +                                        size_t nb)
->> +{
->> +       cons->cached_cons -= nb;
->> +}
->> +
->>   static inline void xsk_ring_cons__release(struct xsk_ring_cons *cons, size_t nb)
->>   {
->>          /* Make sure data has been read before indicating we are done
->> --
->> 2.17.3
-> 
-> Thank you RongQing.
-> 
-> Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Hello:
 
-@Magnus: shouldn't the xsk_ring_cons__cancel() nb type be '__u32 nb' instead?
+This series was applied to bpf/bpf-next.git (refs/heads/master):
 
-Thanks,
-Daniel
+On Sat, 21 Nov 2020 21:22:04 -0500 you wrote:
+> The link was bad because of invalid rst; it was pointing to itself and
+> was rendering badly.
+> 
+> Signed-off-by: Andrei Matei <andreimatei1@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/README.rst | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+
+Here is the summary with links:
+  - [bpf-next,1/2] selftest/bpf: fix link in readme
+    https://git.kernel.org/bpf/bpf-next/c/05a98d767273
+  - [bpf-next,2/2] selftest/bpf: fix rst formatting in readme
+    https://git.kernel.org/bpf/bpf-next/c/1c26ac6ab3ce
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
