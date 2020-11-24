@@ -2,102 +2,74 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5E0FBC2D0E4
-	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 06:53:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BC0CC2D0E4
+	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 07:31:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EAE79206FB
-	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 06:53:22 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MYT9WXzT"
+	by mail.kernel.org (Postfix) with ESMTP id ECF752080A
+	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 07:31:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729734AbgKXGxC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 Nov 2020 01:53:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729407AbgKXGxB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 24 Nov 2020 01:53:01 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4FDC0613CF
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 22:53:00 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id k5so3760920plt.6
-        for <bpf@vger.kernel.org>; Mon, 23 Nov 2020 22:53:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=p+l/2AKanwkBdtTXre3SxzHgL3ezUBEN38BPwN6Qxmc=;
-        b=MYT9WXzTHf927Xr6FZSWRSMP8hDOHK8IFV2JxfGhdXwsWoXTMNue4sjOl1hfanBHm+
-         R0Erl5WDdzZRrkw23oRF4k4550JJzKGryVu0Ou6zipOLpCb2RLoNAsn7xXt4Xkp9pArv
-         oqXmvp/BMOLvFXdJOIff3UVjj/C4M/xpSEs11px2tFzUGE1006zC7DAgFfyeSrCM6GUX
-         W0K9xYtGejkoWfbNTOR5wtL/A8s9kOUH7X52dipF8iTzhOEryNwyIEEjiu8iA6hSc5Kx
-         W6qWigBterrruZ+RfFNCmK3TsnCLvNAzCc/gUPBVspFphTKgS1RyZsIeKEsk5IUXqw7G
-         fmJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=p+l/2AKanwkBdtTXre3SxzHgL3ezUBEN38BPwN6Qxmc=;
-        b=dUQ2EPKILhUsPhMdTPH7/9/8KPQ18WcGm9Z0cZ2IZc/78LVLP9HGfWnPLXYQEbq01z
-         +CWR7AsBrLAeOx/IvwOuh48hnqosvct8EqUEL+6PkdjjzoQxH3oQm5ADCm1wZPH+TyOG
-         4+9lhUTj5ormm+1Oc0cKLUEgtyl1+uNGpE8RHk/kj6EBcXa35rW4m3i72+k6rAN47SwG
-         PqO7jGiSgrbdT4Ry2fZ1bvJKfM7DCqz3+5oO2EmvhAcagOwJ81wVvB1ZhIzCPffcFUkf
-         NlZfIXZY9CD6sANFvOxjWtsOeS0FISaoU7FmkBSKjFBX8xtFxZts4g+80IoXAIIQFL5u
-         UT/w==
-X-Gm-Message-State: AOAM531IKgzB1bu4OOr3PzXSdOMzT6jsldtkg3IJEIp/0Vv89JVdAp3u
-        4r3rqaL/OUE/XnjYPC/8VyY=
-X-Google-Smtp-Source: ABdhPJxCU79ZRJcSHpLgUKS+0WytGMHH3KCGNzXOuRcNWtPvAAsBya9nd3n4Kivo8LfjsnBwr7rnlA==
-X-Received: by 2002:a17:902:9689:b029:d8:e310:2fa2 with SMTP id n9-20020a1709029689b02900d8e3102fa2mr2993033plp.42.1606200779869;
-        Mon, 23 Nov 2020 22:52:59 -0800 (PST)
-Received: from ast-mbp ([2620:10d:c090:400::5:2397])
-        by smtp.gmail.com with ESMTPSA id m9sm13626703pfh.94.2020.11.23.22.52.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Nov 2020 22:52:59 -0800 (PST)
-Date:   Mon, 23 Nov 2020 22:52:57 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Brendan Jackman <jackmanb@google.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@chromium.org>,
-        Florent Revest <revest@chromium.org>
-Subject: Re: [PATCH 5/7] bpf: Add BPF_FETCH field / create atomic_fetch_add
- instruction
-Message-ID: <20201124065257.456bpoy4r5pf67xz@ast-mbp>
-References: <20201123173202.1335708-1-jackmanb@google.com>
- <20201123173202.1335708-6-jackmanb@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201123173202.1335708-6-jackmanb@google.com>
+        id S1730041AbgKXHbV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 Nov 2020 02:31:21 -0500
+Received: from mx316.baidu.com ([180.101.52.236]:31885 "EHLO
+        njjs-sys-mailin04.njjs.baidu.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729981AbgKXHbV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 24 Nov 2020 02:31:21 -0500
+X-Greylist: delayed 598 seconds by postgrey-1.27 at vger.kernel.org; Tue, 24 Nov 2020 02:31:20 EST
+Received: from bjhw-sys-rpm015653cc5.bjhw.baidu.com (unknown [10.168.61.89])
+        by njjs-sys-mailin04.njjs.baidu.com (Postfix) with ESMTP id 4DC031180005C;
+        Tue, 24 Nov 2020 15:21:14 +0800 (CST)
+From:   Li RongQing <lirongqing@baidu.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        magnus.karlsson@intel.com
+Subject: [PATCH][V2] libbpf: add support for canceling cached_cons advance
+Date:   Tue, 24 Nov 2020 15:21:14 +0800
+Message-Id: <1606202474-8119-1-git-send-email-lirongqing@baidu.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 23, 2020 at 05:32:00PM +0000, Brendan Jackman wrote:
-> @@ -3644,8 +3649,21 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
->  		return err;
->  
->  	/* check whether we can write into the same memory */
-> -	return check_mem_access(env, insn_idx, insn->dst_reg, insn->off,
-> -				BPF_SIZE(insn->code), BPF_WRITE, -1, true);
-> +	err = check_mem_access(env, insn_idx, insn->dst_reg, insn->off,
-> +			       BPF_SIZE(insn->code), BPF_WRITE, -1, true);
-> +	if (err)
-> +		return err;
-> +
-> +	if (!(insn->imm & BPF_FETCH))
-> +		return 0;
-> +
-> +	/* check and record load of old value into src reg  */
-> +	err = check_reg_arg(env, insn->src_reg, DST_OP);
-> +	if (err)
-> +		return err;
-> +	regs[insn->src_reg].type = SCALAR_VALUE;
+Add a new function for returning descriptors the user received
+after an xsk_ring_cons__peek call. After the application has
+gotten a number of descriptors from a ring, it might not be able
+to or want to process them all for various reasons. Therefore,
+it would be useful to have an interface for returning or
+cancelling a number of them so that they are returned to the ring.
 
-check_reg_arg() will call mark_reg_unknown() which will set type to SCALAR_VALUE.
-What is the point of another assignment?
+This patch adds a new function called xsk_ring_cons__cancel that
+performs this operation on nb descriptors counted from the end of
+the batch of descriptors that was received through the peek call.
+
+Signed-off-by: Li RongQing <lirongqing@baidu.com>
+[ Magnus Karlsson: rewrote changelog ]
+Cc: Magnus Karlsson <magnus.karlsson@intel.com>
+---
+diff with v1: fix the building, and rewrote changelog
+
+ tools/lib/bpf/xsk.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/tools/lib/bpf/xsk.h b/tools/lib/bpf/xsk.h
+index 1069c46364ff..1719a327e5f9 100644
+--- a/tools/lib/bpf/xsk.h
++++ b/tools/lib/bpf/xsk.h
+@@ -153,6 +153,12 @@ static inline size_t xsk_ring_cons__peek(struct xsk_ring_cons *cons,
+ 	return entries;
+ }
+ 
++static inline void xsk_ring_cons__cancel(struct xsk_ring_cons *cons,
++					 size_t nb)
++{
++	cons->cached_cons -= nb;
++}
++
+ static inline void xsk_ring_cons__release(struct xsk_ring_cons *cons, size_t nb)
+ {
+ 	/* Make sure data has been read before indicating we are done
+-- 
+2.17.3
+
