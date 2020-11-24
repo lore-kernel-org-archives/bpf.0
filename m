@@ -1,115 +1,91 @@
 Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+X-Spam-Level: **
+X-Spam-Status: No, score=2.7 required=3.0 tests=BAYES_50,DKIM_INVALID,
+	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,PHP_SCRIPT,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8E841C2D0E4
-	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 07:50:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A479DC2D0E4
+	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 07:57:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 193D220719
-	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 07:50:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2AC88206E5
+	for <bpf@archiver.kernel.org>; Tue, 24 Nov 2020 07:57:09 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n0ZrSFvE"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=liamsports.com header.i=@liamsports.com header.b="Qoo1Nne0"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729715AbgKXHuG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 Nov 2020 02:50:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727840AbgKXHuG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 24 Nov 2020 02:50:06 -0500
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD2FC0613CF;
-        Mon, 23 Nov 2020 23:50:06 -0800 (PST)
-Received: by mail-yb1-xb43.google.com with SMTP id w5so18406134ybj.11;
-        Mon, 23 Nov 2020 23:50:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MCr9yurgtDaUMxiJ7mKazCnLV7ap7nqWiu58RHAmVXo=;
-        b=n0ZrSFvEhkTdK67AHyeDFOfteccD81MLY1pAIi9xWhMfZr/qzK7RSsCgk3/64FxpPb
-         lGUSK9cbACu01OVqDTK+bixulzFDQzMESUevN8RvWpNXSvukq5KCtLL4awnB35pBRTBd
-         oekBo6Vm9wcJscdKRuTMAvjsJr7jWcd2PtuMpvck6HBuO1ZM2P5HmYeldAFYgfxZ2A51
-         rggEt0eJE6p4lywtol2/ozGFprg54MM8FQOglp7jz7NIRs0NskfJFguOzmw03gbOAbWw
-         ZFjHYJDWQAiapJg287MK6aWQM80F8AHkMnCaV12YZhD7FE+9tsXWhvGKxH1cBEjtmaos
-         RXGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MCr9yurgtDaUMxiJ7mKazCnLV7ap7nqWiu58RHAmVXo=;
-        b=IuEUaVvz5Z7BnujDZoI17jSWEtwLj1THqq77FAg0awfAxdIlrK7+EM/TfJmnfWpLGy
-         tlgImZ5HhWwKE0GVsRROd7fDQNeXbREDyGDeNVf7ss7feEuUdokPXjAvbkY7qQ27AwR1
-         j3gsMHlbsqkOwwj3jNFHQNuIHVfYy4m5ZdZ3fK7hRjmYv87U2iDKmC22Vt0uVnkZ9gqU
-         xL30vAiz6K2wk3e+nnsXBGqZrX+qXhVecSRTNjr94BDAUAjUO/LbKAt/Zu2qBrFKMi57
-         YHeS0Wsd0ihxsEWbOrdpB59jTWavcjB2kt+lC9FGPaz38V0ekN63NzIUzyZH/5N5rL/v
-         cf/Q==
-X-Gm-Message-State: AOAM531stn4q98oPhomWm2CIyI5UutCfnVrEuDRzkf0cB+Xzl5qvaEk6
-        UgHg41oC2D/m4Jd6IDyIwAOC9J6A59GBFnpicsO1wXm5TVc=
-X-Google-Smtp-Source: ABdhPJx34S4tI2/pz6jPfz2xAj+di1kmGKUBFtkiuqP/9HJ3DpPG5JxcoTyId50E88zowAm6tiwSTqNC0GpGANq5uNQ=
-X-Received: by 2002:a25:df82:: with SMTP id w124mr4702486ybg.347.1606204205135;
- Mon, 23 Nov 2020 23:50:05 -0800 (PST)
+        id S1730248AbgKXH5H (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 Nov 2020 02:57:07 -0500
+Received: from gateway21.websitewelcome.com ([192.185.45.163]:38261 "EHLO
+        gateway21.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728206AbgKXH5H (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 24 Nov 2020 02:57:07 -0500
+X-Greylist: delayed 1501 seconds by postgrey-1.27 at vger.kernel.org; Tue, 24 Nov 2020 02:57:06 EST
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway21.websitewelcome.com (Postfix) with ESMTP id 873E5400CA71C
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2020 01:11:34 -0600 (CST)
+Received: from zastava.websitewelcome.com ([192.185.83.71])
+        by cmsmtp with SMTP
+        id hSUAk95MKnPrxhSUAkc8pU; Tue, 24 Nov 2020 01:11:34 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=liamsports.com; s=default; h=Date:Message-Id:Content-Type:MIME-Version:
+        Reply-To:From:Subject:To:Sender:Cc:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=DNctREwmdr2xzK+3LW6h9IegnQUayja9aGXYHpevsic=; b=Qoo1Nne00tgd6oLmbWSttCKrAf
+        eZ0yInS14HQKPPoQHkBsLn6/Jc9GX2a9oAvAzD4h2FTQqoiqWRFxNMue5JToktYbbZsHE2In2Odpr
+        bPJI4NY4Y/dLT0ffi2rL8J3qYKTgqgqdwtti7AhnFA206UAXmyaoXOGoAf+dbiPvYvGNNjN/vePuq
+        ReVViEZkH1Do8bWEWmrcp+Iw9MnhKMDlLcjs/TpLlUdyCo4NHG6oAN3b+43HlP3dpkA2bkXpU28jJ
+        4Xe5ilqPqZd7bq2dTO3A3YsWzwCLKOpLJ7tx+2jDeiiRZuMFGRqgXgSC9OdvjhddFqNnMDZ3dQR6g
+        R5IKwi7g==;
+Received: from liamsports by zastava.websitewelcome.com with local (Exim 4.93)
+        (envelope-from <info@liamsports.com>)
+        id 1khSU9-001TRD-Vu
+        for bpf@vger.kernel.org; Tue, 24 Nov 2020 01:11:34 -0600
+To:     bpf@vger.kernel.org
+Subject: Business Proposal
+X-PHP-Script: liamsports.com/email3/index.php for 39.52.230.13
+X-PHP-Originating-Script: 5244:index.php
+From:   Isabella George <info@liamsports.com>
+Reply-To: Isabella George <info@liamsports.com>
 MIME-Version: 1.0
-References: <20201119232244.2776720-1-andrii@kernel.org> <20201119232244.2776720-2-andrii@kernel.org>
- <20201124054924.i7zq7vig4xqmddyr@ast-mbp>
-In-Reply-To: <20201124054924.i7zq7vig4xqmddyr@ast-mbp>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 23 Nov 2020 23:49:54 -0800
-Message-ID: <CAEf4BzbjgSv2u+rZs-97PkeXwtKdcvkAdTG=nrX9DNus0ufOPg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/6] bpf: fix bpf_put_raw_tracepoint()'s use of __module_address()
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Message-Id: <E1khSU9-001TRD-Vu@zastava.websitewelcome.com>
+Date:   Tue, 24 Nov 2020 01:11:33 -0600
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - zastava.websitewelcome.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [5244 32008] / [47 12]
+X-AntiAbuse: Sender Address Domain - liamsports.com
+X-BWhitelist: no
+X-Source-IP: 
+X-Source-L: No
+X-Exim-ID: 1khSU9-001TRD-Vu
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: liamsports.com:/public_html/email3
+X-Source-Sender: 
+X-Source-Auth: liamsports
+X-Email-Count: 310
+X-Source-Cap: bGlhbXNwb3J0cztwYWt3ZWlvbjt6YXN0YXZhLndlYnNpdGV3ZWxjb21lLmNvbQ==
+X-Local-Domain: yes
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Nov 23, 2020 at 9:49 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Thu, Nov 19, 2020 at 03:22:39PM -0800, Andrii Nakryiko wrote:
-> > __module_address() needs to be called with preemption disabled or with
-> > module_mutex taken. preempt_disable() is enough for read-only uses, which is
-> > what this fix does.
-> >
-> > Fixes: a38d1107f937 ("bpf: support raw tracepoints in modules")
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> > ---
-> >  kernel/trace/bpf_trace.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index d255bc9b2bfa..bb98a377050a 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -2060,7 +2060,11 @@ struct bpf_raw_event_map *bpf_get_raw_tracepoint(const char *name)
-> >
-> >  void bpf_put_raw_tracepoint(struct bpf_raw_event_map *btp)
-> >  {
-> > -     struct module *mod = __module_address((unsigned long)btp);
-> > +     struct module *mod;
-> > +
-> > +     preempt_disable();
-> > +     mod = __module_address((unsigned long)btp);
-> > +     preempt_enable();
-> >
-> >       if (mod)
-> >               module_put(mod);
->
-> I don't understand why 'mod' cannot become dangling pointer after preempt_enable().
-> Either it needs a comment explaining why it's ok or module_put() should
-> be in preempt disabled section.
+Hello There
+Liam Sports is The Factory of custom apparels And Team Wears. we are specialist in custom apparels including Tees, Polo Shirts, Tights,  Hoodies, Tracksuits, Softshell, Club Outerwear, Training Singlets, Reversible Training Jumpers and Singlets, Compression Wears, And Club Sports Bag etc We strive to deliver the highest quality in custom sublimation and cut & sew In All Over The worldwide.
+You can ask for samples if you want to check our quality first.
 
-Yeah, I think it can, assuming the kernel module can be unloaded
-despite non-zero refcnt (probably happens with force unload?). I'll
-drop the `if (mod)` part (module_put() checks that internally) and
-will move module_put(mod) inside the preempt disable/enable region.
+
+Regards
+
+Company: Liam Sports
+Cell: +92 3127601319
+Whatsapp: +447395606980
+Website : www.liamsports.com
+Factory Address: Small Industrial Area Sialkot 51310, Punjab Pakistan 
+Instagram:  https://www.instagram.com/liamsports_official/
