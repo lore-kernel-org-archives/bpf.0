@@ -2,68 +2,144 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8B9D7C64E7D
-	for <bpf@archiver.kernel.org>; Wed, 25 Nov 2020 06:49:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 58892C5519F
+	for <bpf@archiver.kernel.org>; Wed, 25 Nov 2020 06:55:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 55CA120DD4
-	for <bpf@archiver.kernel.org>; Wed, 25 Nov 2020 06:49:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BB9832145D
+	for <bpf@archiver.kernel.org>; Wed, 25 Nov 2020 06:55:47 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fzP7tn3w"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727099AbgKYGtM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 25 Nov 2020 01:49:12 -0500
-Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:49785 "EHLO
-        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727033AbgKYGtM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 25 Nov 2020 01:49:12 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R801e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0UGTnDfl_1606286938;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UGTnDfl_1606286938)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 25 Nov 2020 14:48:58 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     magnus.karlsson@gmail.com
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+        id S1726060AbgKYGzr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 25 Nov 2020 01:55:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54284 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726027AbgKYGzr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 25 Nov 2020 01:55:47 -0500
+Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EA1C0613D4;
+        Tue, 24 Nov 2020 22:55:46 -0800 (PST)
+Received: by mail-pg1-x543.google.com with SMTP id v21so1571361pgi.2;
+        Tue, 24 Nov 2020 22:55:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=G3RsF/ezkJmPkJ9qbTzt79hYrwBPit4uVs8jUybVwcY=;
+        b=fzP7tn3wA9xVnB/v3+2Ww/E5beISzOJk6MOhyfZgd3T4IXK+7c7FSCwh3IVbpWewSo
+         tNiQNozwWaFseAltnA+KriezIhwEK9dZIaEVbZ55dAtsZFmjTQhc8nT6lHHEQ/tucTjY
+         o4c7bvtEypJXC4WMGyx9Mw15ANI2+kCUIGdmEGM85zk/3LkwSfLnr5dOoG1vFLKgS57o
+         UdZs1tpiGLLedieSWHQz8/pwG2taa6UqPNB+AE2YNyLUsF+2eVWFrjjrRgRlOUKyqdsW
+         BsdVi7/9G07FgVmcI0yrt+BCl480ys32mWULTGs1yw6rcyo50umj8qly9avi5q/1OMp0
+         sszg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=G3RsF/ezkJmPkJ9qbTzt79hYrwBPit4uVs8jUybVwcY=;
+        b=CQTg7HnZZT5ibwEZ9al0seHDgLNcVAIQdqdYMnzIv881wOE7XlMy0ErDG3M1X0ul2y
+         xQK1EjPBgcIEbN7M4bcCVhoJJWGo0dVUK+LziMlpu0bfGQ8uwJoMIGYKcquKxPzClLLk
+         sbvk2hUXhm1fTG+L2E54Xn+z9UPTzxs00ZzfS+C1VQp0OgfOLOlwcNyIiLs8YMrk8Br9
+         clde3B/0m/bIz/YudPKXh0oyexbe6kX9xFFuvhtzyjjfJg7iEQUDhsoTfFmwdEuptMZh
+         Nr1513UVZ7yX+5dA/6PyB+Rxy78s6huDIK9GMvaSFsoQXZQDdSPPhoju92mN9bBnegDk
+         OhBA==
+X-Gm-Message-State: AOAM532ErpjSyp1r0TgmqTOKcnVy0uMQeebNnbPNfJ92McA6kWAaZSdy
+        Das9jqS7QL2A6l1AfI8WE5hwq9Z/nieEVLJxrHY=
+X-Google-Smtp-Source: ABdhPJzW4VGJLR86DrvFhciqr/CdbdTp/2rOTN/EInniqgQVnsS7B6Zen88VUyyHAgS6+KKANbjPNXRA308g739wOWM=
+X-Received: by 2002:a17:90a:ea05:: with SMTP id w5mr2448056pjy.204.1606287346440;
+ Tue, 24 Nov 2020 22:55:46 -0800 (PST)
+MIME-Version: 1.0
+References: <20201119083024.119566-1-bjorn.topel@gmail.com> <20201119083024.119566-4-bjorn.topel@gmail.com>
+In-Reply-To: <20201119083024.119566-4-bjorn.topel@gmail.com>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Wed, 25 Nov 2020 07:55:35 +0100
+Message-ID: <CAJ8uoz38HYgHYPHCZ2fJ_GisgaT47sr+bcvHj=7s8dZdEgUDQQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 03/10] xsk: add support for recvmsg()
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        KP Singh <kpsingh@chromium.org>,
-        netdev@vger.kernel.org (open list:XDP SOCKETS (AF_XDP)),
-        bpf@vger.kernel.org (open list:XDP SOCKETS (AF_XDP)),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH bpf v2 0/2] xsk: fix for xsk_poll writeable
-Date:   Wed, 25 Nov 2020 14:48:55 +0800
-Message-Id: <cover.1606285978.git.xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <cover.1605686678.git.xuanzhuo@linux.alibaba.com>
-References: <cover.1605686678.git.xuanzhuo@linux.alibaba.com>
+        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
+        "Samudrala, Sridhar" <sridhar.samudrala@intel.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Zhang, Qi Z" <qi.z.zhang@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Maxim Mikityanskiy <maximmi@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Thanks for magnus very much.
+On Thu, Nov 19, 2020 at 9:32 AM Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.co=
+m> wrote:
+>
+> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+>
+> Add support for non-blocking recvmsg() to XDP sockets. Previously,
+> only sendmsg() was supported by XDP socket. Now, for symmetry and the
+> upcoming busy-polling support, recvmsg() is added.
+>
+> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+> ---
+>  net/xdp/xsk.c | 22 +++++++++++++++++++++-
+>  1 file changed, 21 insertions(+), 1 deletion(-)
 
-V2:
-   #2 patch made some changes following magnus' opinions.
+Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Xuan Zhuo (2):
-  xsk: replace datagram_poll by sock_poll_wait
-  xsk: change the tx writeable condition
-
- net/xdp/xsk.c       | 20 ++++++++++++++++----
- net/xdp/xsk_queue.h |  6 ++++++
- 2 files changed, 22 insertions(+), 4 deletions(-)
-
---
-1.8.3.1
-
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index b0141973f23e..56a52ec75696 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -531,6 +531,26 @@ static int xsk_sendmsg(struct socket *sock, struct m=
+sghdr *m, size_t total_len)
+>         return __xsk_sendmsg(sk);
+>  }
+>
+> +static int xsk_recvmsg(struct socket *sock, struct msghdr *m, size_t len=
+, int flags)
+> +{
+> +       bool need_wait =3D !(flags & MSG_DONTWAIT);
+> +       struct sock *sk =3D sock->sk;
+> +       struct xdp_sock *xs =3D xdp_sk(sk);
+> +
+> +       if (unlikely(!(xs->dev->flags & IFF_UP)))
+> +               return -ENETDOWN;
+> +       if (unlikely(!xs->rx))
+> +               return -ENOBUFS;
+> +       if (unlikely(!xsk_is_bound(xs)))
+> +               return -ENXIO;
+> +       if (unlikely(need_wait))
+> +               return -EOPNOTSUPP;
+> +
+> +       if (xs->pool->cached_need_wakeup & XDP_WAKEUP_RX && xs->zc)
+> +               return xsk_wakeup(xs, XDP_WAKEUP_RX);
+> +       return 0;
+> +}
+> +
+>  static __poll_t xsk_poll(struct file *file, struct socket *sock,
+>                              struct poll_table_struct *wait)
+>  {
+> @@ -1191,7 +1211,7 @@ static const struct proto_ops xsk_proto_ops =3D {
+>         .setsockopt     =3D xsk_setsockopt,
+>         .getsockopt     =3D xsk_getsockopt,
+>         .sendmsg        =3D xsk_sendmsg,
+> -       .recvmsg        =3D sock_no_recvmsg,
+> +       .recvmsg        =3D xsk_recvmsg,
+>         .mmap           =3D xsk_mmap,
+>         .sendpage       =3D sock_no_sendpage,
+>  };
+> --
+> 2.27.0
+>
