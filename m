@@ -2,68 +2,87 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75238C5519F
-	for <bpf@archiver.kernel.org>; Wed, 25 Nov 2020 06:40:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BEE42C56201
+	for <bpf@archiver.kernel.org>; Wed, 25 Nov 2020 06:49:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F367F20B80
-	for <bpf@archiver.kernel.org>; Wed, 25 Nov 2020 06:40:06 +0000 (UTC)
-Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="xrEWqyEM"
+	by mail.kernel.org (Postfix) with ESMTP id 7E74720DD4
+	for <bpf@archiver.kernel.org>; Wed, 25 Nov 2020 06:49:24 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725848AbgKYGkG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 25 Nov 2020 01:40:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42512 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725562AbgKYGkG (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 25 Nov 2020 01:40:06 -0500
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606286405;
-        bh=6eErYdnx0gf2MUOcVHAQD0zOVWGr2xWNUI69v6XmvEg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=xrEWqyEMmvr0rkd3BRq3Udtjb0U9p4xjInn1jwmz+uA33ZF/XI8eMhOj2OCmfwJUs
-         P/mMWhAWtzdmmG0/X5u3SV58c3R7fWX1fo5kcpAurRyC60xbgXCgqVp4SsgRMtIZgW
-         K25mg/46VXtrq59rHerbo+eSZ72tjzHMjCSngu4E=
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2] bpf: Refactor check_cfg to use a structured loop.
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <160628640579.28615.11585037315162851613.git-patchwork-notify@kernel.org>
-Date:   Wed, 25 Nov 2020 06:40:05 +0000
-References: <20201121015509.3594191-1-wedsonaf@google.com>
-In-Reply-To: <20201121015509.3594191-1-wedsonaf@google.com>
-To:     Wedson Almeida Filho <wedsonaf@google.com>
-Cc:     bpf@vger.kernel.org, daniel@iogearbox.net, ast@kernel.org
+        id S1727011AbgKYGtC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 25 Nov 2020 01:49:02 -0500
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:43647 "EHLO
+        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726314AbgKYGtC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 25 Nov 2020 01:49:02 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R821e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0UGUMiM2_1606286938;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UGUMiM2_1606286938)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 25 Nov 2020 14:48:59 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     magnus.karlsson@gmail.com
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        KP Singh <kpsingh@chromium.org>,
+        netdev@vger.kernel.org (open list:XDP SOCKETS (AF_XDP)),
+        bpf@vger.kernel.org (open list:XDP SOCKETS (AF_XDP)),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH bpf v2 1/2] xsk: replace datagram_poll by sock_poll_wait
+Date:   Wed, 25 Nov 2020 14:48:56 +0800
+Message-Id: <01f59423cad1b634fe704fe238a0038fd74df3ba.1606285978.git.xuanzhuo@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <cover.1606285978.git.xuanzhuo@linux.alibaba.com>
+References: <cover.1605686678.git.xuanzhuo@linux.alibaba.com>
+ <cover.1606285978.git.xuanzhuo@linux.alibaba.com>
+In-Reply-To: <cover.1606285978.git.xuanzhuo@linux.alibaba.com>
+References: <cover.1606285978.git.xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+datagram_poll will judge the current socket status (EPOLLIN, EPOLLOUT)
+based on the traditional socket information (eg: sk_wmem_alloc), but
+this does not apply to xsk. So this patch uses sock_poll_wait instead of
+datagram_poll, and the mask is calculated by xsk_poll.
 
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+---
+ net/xdp/xsk.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-On Sat, 21 Nov 2020 01:55:09 +0000 you wrote:
-> The current implementation uses a number of gotos to implement a loop
-> and different paths within the loop, which makes the code less readable
-> than it would be with an explicit while-loop. This patch also replaces a
-> chain of if/if-elses keyed on the same expression with a switch
-> statement.
-> 
-> No change in behaviour is intended.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v2] bpf: Refactor check_cfg to use a structured loop.
-    https://git.kernel.org/bpf/bpf-next/c/59e2e27d227a
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index b014197..0df8651 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -534,11 +534,13 @@ static int xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
+ static __poll_t xsk_poll(struct file *file, struct socket *sock,
+ 			     struct poll_table_struct *wait)
+ {
+-	__poll_t mask = datagram_poll(file, sock, wait);
++	__poll_t mask = 0;
+ 	struct sock *sk = sock->sk;
+ 	struct xdp_sock *xs = xdp_sk(sk);
+ 	struct xsk_buff_pool *pool;
+ 
++	sock_poll_wait(file, sock, wait);
++
+ 	if (unlikely(!xsk_is_bound(xs)))
+ 		return mask;
+ 
+-- 
+1.8.3.1
 
