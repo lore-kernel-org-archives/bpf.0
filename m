@@ -2,55 +2,55 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D7E6BC63798
-	for <bpf@archiver.kernel.org>; Wed, 25 Nov 2020 03:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0F66C71155
+	for <bpf@archiver.kernel.org>; Wed, 25 Nov 2020 03:02:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 962A420782
-	for <bpf@archiver.kernel.org>; Wed, 25 Nov 2020 03:02:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6586920782
+	for <bpf@archiver.kernel.org>; Wed, 25 Nov 2020 03:02:51 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="JqOpge+/"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="qJK2Jpaa"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728024AbgKYDBy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 Nov 2020 22:01:54 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:9144 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727827AbgKYDBj (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 24 Nov 2020 22:01:39 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AP2tOlA015257
+        id S1727849AbgKYDBj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 Nov 2020 22:01:39 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:21968 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727818AbgKYDBi (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 24 Nov 2020 22:01:38 -0500
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AP31Ubg018043
         for <bpf@vger.kernel.org>; Tue, 24 Nov 2020 19:01:38 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=p7AL5MEv67PXm8tsjFCWY0aTmPqyKn82sJgTxCQ6mgI=;
- b=JqOpge+/nAfjxoXnbeP398O02nZ1sD6m9Au28ZDctQg89MLnIBxkza5YL7j8wsVMa7OP
- DSgeF1tT/LXbI8h1SCuZux7l0PubLRYdvkDglmMxqdsV+hs8l6mn15UvhTvDQ0oi4SXC
- vSZa1k2nkWDW3vVIkCuYzJFCC3SNQpYWEjc= 
+ bh=FTQq/5NXbfrVFGS1vrBKXa2fxufaWSoHB98RAMt+6e0=;
+ b=qJK2JpaaT1LELyMxr6aQbPw3I53hWI9Eg/GZ4YJpY1r4y8NSRgMEPvrL5kEBHqYV6j+K
+ 4QoQzFgITuMYZf/Pj7ITSHPuOLbqTMIjV9hEHzdM3FVE5xAD0FjlPPZgirniSFoY7EYv
+ B8GhBaCmU/idysuTgB3QQR0r5AxVrGB5IBw= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 34ykxgmjxx-4
+        by mx0a-00082601.pphosted.com with ESMTP id 350qy4wcy4-11
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Tue, 24 Nov 2020 19:01:38 -0800
 Received: from intmgw001.06.prn3.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1979.3; Tue, 24 Nov 2020 19:01:32 -0800
 Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
-        id 2F2F716A189F; Tue, 24 Nov 2020 19:01:22 -0800 (PST)
+        id 12E7216A1893; Tue, 24 Nov 2020 19:01:22 -0800 (PST)
 From:   Roman Gushchin <guro@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
         <andrii@kernel.org>, <akpm@linux-foundation.org>,
         <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <kernel-team@fb.com>
-Subject: [PATCH bpf-next v8 15/34] bpf: memcg-based memory accounting for bpf local storage maps
-Date:   Tue, 24 Nov 2020 19:01:00 -0800
-Message-ID: <20201125030119.2864302-16-guro@fb.com>
+Subject: [PATCH bpf-next v8 09/34] bpf: refine memcg-based memory accounting for cpumap maps
+Date:   Tue, 24 Nov 2020 19:00:54 -0800
+Message-ID: <20201125030119.2864302-10-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201125030119.2864302-1-guro@fb.com>
 References: <20201125030119.2864302-1-guro@fb.com>
@@ -60,73 +60,114 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-24_11:2020-11-24,2020-11-24 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
- lowpriorityscore=0 suspectscore=13 mlxlogscore=792 priorityscore=1501
- spamscore=0 impostorscore=0 bulkscore=0 malwarescore=0 mlxscore=0
- phishscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2011250018
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ adultscore=0 phishscore=0 bulkscore=0 impostorscore=0 suspectscore=38
+ clxscore=1015 malwarescore=0 mlxscore=0 spamscore=0 mlxlogscore=977
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011250019
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Account memory used by bpf local storage maps:
-per-socket, per-inode and per-task storages.
+Include metadata and percpu data into the memcg-based memory
+accounting. Switch allocations made from an update path to
+new bpf_map_* allocation helpers to make the accounting work
+properly from an interrupt context.
 
 Signed-off-by: Roman Gushchin <guro@fb.com>
 ---
- kernel/bpf/bpf_local_storage.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ kernel/bpf/cpumap.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storag=
-e.c
-index 5d3a7af9ba9b..abd0ea385274 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -67,7 +67,9 @@ bpf_selem_alloc(struct bpf_local_storage_map *smap, voi=
-d *owner,
- 	if (charge_mem && mem_charge(smap, owner, smap->elem_size))
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index c61a23b564aa..e6b234d5e3a8 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -97,7 +97,7 @@ static struct bpf_map *cpu_map_alloc(union bpf_attr *at=
+tr)
+ 	    attr->map_flags & ~BPF_F_NUMA_NODE)
+ 		return ERR_PTR(-EINVAL);
+=20
+-	cmap =3D kzalloc(sizeof(*cmap), GFP_USER);
++	cmap =3D kzalloc(sizeof(*cmap), GFP_USER | __GFP_ACCOUNT);
+ 	if (!cmap)
+ 		return ERR_PTR(-ENOMEM);
+=20
+@@ -412,23 +412,24 @@ static int __cpu_map_load_bpf_program(struct bpf_cp=
+u_map_entry *rcpu, int fd)
+ }
+=20
+ static struct bpf_cpu_map_entry *
+-__cpu_map_entry_alloc(struct bpf_cpumap_val *value, u32 cpu, int map_id)
++__cpu_map_entry_alloc(struct bpf_map *map, struct bpf_cpumap_val *value,
++		      u32 cpu)
+ {
+ 	int numa, err, i, fd =3D value->bpf_prog.fd;
+-	gfp_t gfp =3D GFP_KERNEL | __GFP_NOWARN;
++	gfp_t gfp =3D __GFP_ZERO | GFP_KERNEL_ACCOUNT | __GFP_NOWARN;
+ 	struct bpf_cpu_map_entry *rcpu;
+ 	struct xdp_bulk_queue *bq;
+=20
+ 	/* Have map->numa_node, but choose node of redirect target CPU */
+ 	numa =3D cpu_to_node(cpu);
+=20
+-	rcpu =3D kzalloc_node(sizeof(*rcpu), gfp, numa);
++	rcpu =3D bpf_map_kmalloc_node(map, sizeof(*rcpu), gfp, numa);
+ 	if (!rcpu)
  		return NULL;
 =20
--	selem =3D kzalloc(smap->elem_size, GFP_ATOMIC | __GFP_NOWARN);
-+	selem =3D bpf_map_kmalloc_node(&smap->map, smap->elem_size,
-+				     GFP_ATOMIC | __GFP_NOWARN | __GFP_ZERO |
-+				     __GFP_ACCOUNT, NUMA_NO_NODE);
- 	if (selem) {
- 		if (value)
- 			memcpy(SDATA(selem)->data, value, smap->map.value_size);
-@@ -264,7 +266,9 @@ int bpf_local_storage_alloc(void *owner,
- 	if (err)
- 		return err;
+ 	/* Alloc percpu bulkq */
+-	rcpu->bulkq =3D __alloc_percpu_gfp(sizeof(*rcpu->bulkq),
+-					 sizeof(void *), gfp);
++	rcpu->bulkq =3D bpf_map_alloc_percpu(map, sizeof(*rcpu->bulkq),
++					   sizeof(void *), gfp);
+ 	if (!rcpu->bulkq)
+ 		goto free_rcu;
 =20
--	storage =3D kzalloc(sizeof(*storage), GFP_ATOMIC | __GFP_NOWARN);
-+	storage =3D bpf_map_kmalloc_node(&smap->map, sizeof(*storage),
-+				       GFP_ATOMIC | __GFP_NOWARN | __GFP_ZERO |
-+				       __GFP_ACCOUNT, NUMA_NO_NODE);
- 	if (!storage) {
- 		err =3D -ENOMEM;
- 		goto uncharge;
-@@ -546,7 +550,7 @@ struct bpf_local_storage_map *bpf_local_storage_map_a=
-lloc(union bpf_attr *attr)
- 	u64 cost;
- 	int ret;
-=20
--	smap =3D kzalloc(sizeof(*smap), GFP_USER | __GFP_NOWARN);
-+	smap =3D kzalloc(sizeof(*smap), GFP_USER | __GFP_NOWARN | __GFP_ACCOUNT=
-);
- 	if (!smap)
- 		return ERR_PTR(-ENOMEM);
- 	bpf_map_init_from_attr(&smap->map, attr);
-@@ -564,7 +568,7 @@ struct bpf_local_storage_map *bpf_local_storage_map_a=
-lloc(union bpf_attr *attr)
+@@ -438,7 +439,8 @@ __cpu_map_entry_alloc(struct bpf_cpumap_val *value, u=
+32 cpu, int map_id)
  	}
 =20
- 	smap->buckets =3D kvcalloc(sizeof(*smap->buckets), nbuckets,
--				 GFP_USER | __GFP_NOWARN);
-+				 GFP_USER | __GFP_NOWARN | __GFP_ACCOUNT);
- 	if (!smap->buckets) {
- 		bpf_map_charge_finish(&smap->map.memory);
- 		kfree(smap);
+ 	/* Alloc queue */
+-	rcpu->queue =3D kzalloc_node(sizeof(*rcpu->queue), gfp, numa);
++	rcpu->queue =3D bpf_map_kmalloc_node(map, sizeof(*rcpu->queue), gfp,
++					   numa);
+ 	if (!rcpu->queue)
+ 		goto free_bulkq;
+=20
+@@ -447,7 +449,7 @@ __cpu_map_entry_alloc(struct bpf_cpumap_val *value, u=
+32 cpu, int map_id)
+ 		goto free_queue;
+=20
+ 	rcpu->cpu    =3D cpu;
+-	rcpu->map_id =3D map_id;
++	rcpu->map_id =3D map->id;
+ 	rcpu->value.qsize  =3D value->qsize;
+=20
+ 	if (fd > 0 && __cpu_map_load_bpf_program(rcpu, fd))
+@@ -455,7 +457,8 @@ __cpu_map_entry_alloc(struct bpf_cpumap_val *value, u=
+32 cpu, int map_id)
+=20
+ 	/* Setup kthread */
+ 	rcpu->kthread =3D kthread_create_on_node(cpu_map_kthread_run, rcpu, num=
+a,
+-					       "cpumap/%d/map:%d", cpu, map_id);
++					       "cpumap/%d/map:%d", cpu,
++					       map->id);
+ 	if (IS_ERR(rcpu->kthread))
+ 		goto free_prog;
+=20
+@@ -571,7 +574,7 @@ static int cpu_map_update_elem(struct bpf_map *map, v=
+oid *key, void *value,
+ 		rcpu =3D NULL; /* Same as deleting */
+ 	} else {
+ 		/* Updating qsize cause re-allocation of bpf_cpu_map_entry */
+-		rcpu =3D __cpu_map_entry_alloc(&cpumap_value, key_cpu, map->id);
++		rcpu =3D __cpu_map_entry_alloc(map, &cpumap_value, key_cpu);
+ 		if (!rcpu)
+ 			return -ENOMEM;
+ 		rcpu->cmap =3D cmap;
 --=20
 2.26.2
 
