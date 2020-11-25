@@ -2,110 +2,129 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNWANTED_LANGUAGE_BODY,URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D069AC64E7C
-	for <bpf@archiver.kernel.org>; Wed, 25 Nov 2020 03:04:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13778C64E7A
+	for <bpf@archiver.kernel.org>; Wed, 25 Nov 2020 03:36:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8092120872
-	for <bpf@archiver.kernel.org>; Wed, 25 Nov 2020 03:04:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B4F292173E
+	for <bpf@archiver.kernel.org>; Wed, 25 Nov 2020 03:36:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="kkPXcfNn"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iJBbIXRc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727364AbgKYDDz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 24 Nov 2020 22:03:55 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:3704 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727234AbgKYDB2 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 24 Nov 2020 22:01:28 -0500
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0AP2s9F0020697
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2020 19:01:27 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=RH10uTc2SABI5+AuWBz8rVMMslGuSfje99oYC4biZTk=;
- b=kkPXcfNnOh9u2ltCtGQJrhSWzLQlD2awXeYK6BoI1tO+2YDsM0d13LcksD4hRPixhrEO
- jdGx4YLqD8aJ+OjmLtkAFrnMXAU5UVV+0NKeKeD+iq23wSaeYBNBuAEoFI1MaTNeRVqf
- /s31ixMoc6Dr01+WVG/4RtSAi2QO4wbVYQk= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 34yx1t31xu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 24 Nov 2020 19:01:27 -0800
-Received: from intmgw001.41.prn1.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 24 Nov 2020 19:01:26 -0800
-Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
-        id 257C516A189B; Tue, 24 Nov 2020 19:01:22 -0800 (PST)
-From:   Roman Gushchin <guro@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
-        <andrii@kernel.org>, <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-team@fb.com>
-Subject: [PATCH bpf-next v8 13/34] bpf: memcg-based memory accounting for lpm_trie maps
-Date:   Tue, 24 Nov 2020 19:00:58 -0800
-Message-ID: <20201125030119.2864302-14-guro@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201125030119.2864302-1-guro@fb.com>
-References: <20201125030119.2864302-1-guro@fb.com>
+        id S1727365AbgKYDgg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 24 Nov 2020 22:36:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727342AbgKYDgb (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 24 Nov 2020 22:36:31 -0500
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B650C0613D6
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2020 19:36:31 -0800 (PST)
+Received: by mail-ej1-x644.google.com with SMTP id o9so1029103ejg.1
+        for <bpf@vger.kernel.org>; Tue, 24 Nov 2020 19:36:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1VK4ZeW7Nz+CFyAfbJgfsEqmJxnrRpFVEOk6d97DaLw=;
+        b=iJBbIXRcabK8sZM5rr4sYbAeByFeIxnyFkX052Ugs+GRIjpmaDd52gB1Z3rMMeYqHH
+         zV80GGTWxytr3wVkGWS1VsoXZsQUF8EkU6KxZbcCpJ1qfok1xc3TyzwNKoB9gP5II2dh
+         PMzr3yU1eVf7n90z+DIUqcbeVDd9DGYRyTFTzKAC7U5APJQKuD8Gr0ZtTSqgodZvJxdx
+         mzE41diVzfXn7vtz6APS2WIgtD2k6s9v8qGj7wW/IVPzPT3F7GbXZOC5KjBoPe4H74He
+         44Y50PrC/ZNkqpgvMT3jEdxhVoYxdiPnNwXmiGN4Lb9rjusgRH2X70BsojC/3lTRtVUu
+         eqqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1VK4ZeW7Nz+CFyAfbJgfsEqmJxnrRpFVEOk6d97DaLw=;
+        b=DuV0g2JLTRoH5yiJ52YBUNQA0712tDKVLalJWkA29NMp/L4VNd4kGV/OMWnIOjw154
+         LUsXMpx5FHgV/VePG6+qTwyMn0/X3ux+XoDrn1l0aXLVzQHaNeyy2Dg1D8hj8/LW3zBI
+         /rTXLkzGPIA0j+IAFgZ8+hhQkJ2uIDHat57EugdOdFSdvczAKazdbF8oVuFDLBef99m2
+         4JUbEKPE0/kli+easeus3hrrTvLCmN+aA/CETNm4k0/acLDpNHXZhVXb4YVEntumC9YX
+         Qom34w7R87/y1jFV8q9KeFpjFlA3cSLs+O3YFzlJeHB8ADpKbKbiIyBNOq8zF68VRoOc
+         T1BA==
+X-Gm-Message-State: AOAM533OOziyxcGY8oROp1ubTZQR+sNEQzxHCFx1TWiw2hHIIxcqWLEk
+        885PNNGkY462JOPM486d/LyKd6c2JiCjkFdDcrst/JedXCy/dA==
+X-Google-Smtp-Source: ABdhPJx9BcsySbwME/ZrVOHGwJ4qStFHHSDL3hd0flTZXDCbNHbaKGaIrrXzEVq7XzUcHZvkXUBNs7xT+YdRpJutuFI=
+X-Received: by 2002:a17:906:a195:: with SMTP id s21mr1422714ejy.146.1606275390123;
+ Tue, 24 Nov 2020 19:36:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-24_11:2020-11-24,2020-11-24 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
- lowpriorityscore=0 priorityscore=1501 malwarescore=0 mlxscore=0
- phishscore=0 adultscore=0 bulkscore=0 suspectscore=13 spamscore=0
- mlxlogscore=757 clxscore=1015 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2011250018
-X-FB-Internal: deliver
+References: <CA+G9fYs9sg69JgmQNZhutQnbijb4GzcO03XF66EjkQ6CTpXXxA@mail.gmail.com>
+ <CAK8P3a1Lx1MMQ3s1uWjevsi2wqFo2r=k1hhrxf1spUxEQX_Rag@mail.gmail.com>
+ <CAG48ez17CKBMO4193wxuWLRQWQ+q6EV=Qr5oTWiKivMxEi0zQw@mail.gmail.com>
+ <87h7pgqhdf.fsf@collabora.com> <87a6v8qd9p.fsf_-_@collabora.com> <202011241345.FAF4D7E@keescook>
+In-Reply-To: <202011241345.FAF4D7E@keescook>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 25 Nov 2020 09:06:18 +0530
+Message-ID: <CA+G9fYtRt9LA4L2tf3aw8fmPuDDZNbejnU2XGk=Q93Tx3mXYrA@mail.gmail.com>
+Subject: Re: [PATCH] entry: Fix boot for !CONFIG_GENERIC_ENTRY
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Gabriel Krisman Bertazi <krisman@collabora.com>,
+        Jann Horn <jannh@google.com>, Arnd Bergmann <arnd@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        open list <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        YiFei Zhu <yifeifz2@illinois.edu>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Include lpm trie and lpm trie node objects into the memcg-based memory
-accounting.
+On Wed, 25 Nov 2020 at 03:15, Kees Cook <keescook@chromium.org> wrote:
+>
+> On Mon, Nov 23, 2020 at 10:54:58AM -0500, Gabriel Krisman Bertazi wrote:
+> > Gabriel Krisman Bertazi <krisman@collabora.com> writes:
+> >
+> > > Jann Horn <jannh@google.com> writes:
+> > >> As part of fixing this, it might be a good idea to put "enum
+> > >> syscall_work_bit" behind a "#ifdef CONFIG_GENERIC_ENTRY" to avoid
+> > >> future accidents like this?
+> > >
+> > > Hi Jan, Arnd,
+> > >
+> > > That is correct.  This is a copy pasta mistake.  My apologies.  I didn't
+> > > have a !GENERIC_ENTRY device to test, but just the ifdef would have
+> > > caught it.
+> >
+> > I have patched it as suggested.  Tested on qemu for arm32 and on bare
+> > metal for x86-64.
+> >
+> > Once again, my apologies for the mistake.
+> >
+> > -- >8 --
+> > Subject: [PATCH] entry: Fix boot for !CONFIG_GENERIC_ENTRY
+> >
+> > A copy-pasta mistake tries to set SYSCALL_WORK flags instead of TIF
+> > flags for !CONFIG_GENERIC_ENTRY.  Also, add safeguards to catch this at
+> > compilation time.
 
-Signed-off-by: Roman Gushchin <guro@fb.com>
----
- kernel/bpf/lpm_trie.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+This patch tested on arm64, arm, x86_64 and i386
+and the reported issue got fixed.
 
-diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
-index 00e32f2ec3e6..a7d1e5cb80da 100644
---- a/kernel/bpf/lpm_trie.c
-+++ b/kernel/bpf/lpm_trie.c
-@@ -282,8 +282,9 @@ static struct lpm_trie_node *lpm_trie_node_alloc(cons=
-t struct lpm_trie *trie,
- 	if (value)
- 		size +=3D trie->map.value_size;
-=20
--	node =3D kmalloc_node(size, GFP_ATOMIC | __GFP_NOWARN,
--			    trie->map.numa_node);
-+	node =3D bpf_map_kmalloc_node(&trie->map, size,
-+				    GFP_ATOMIC | __GFP_NOWARN | __GFP_ACCOUNT,
-+				    trie->map.numa_node);
- 	if (!node)
- 		return NULL;
-=20
-@@ -557,7 +558,7 @@ static struct bpf_map *trie_alloc(union bpf_attr *att=
-r)
- 	    attr->value_size > LPM_VAL_SIZE_MAX)
- 		return ERR_PTR(-EINVAL);
-=20
--	trie =3D kzalloc(sizeof(*trie), GFP_USER | __GFP_NOWARN);
-+	trie =3D kzalloc(sizeof(*trie), GFP_USER | __GFP_NOWARN | __GFP_ACCOUNT=
-);
- 	if (!trie)
- 		return ERR_PTR(-ENOMEM);
-=20
---=20
-2.26.2
+> >
+> > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> > Suggested-by: Jann Horn <jannh@google.com>
+> > Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
+>
+> Thanks for getting this fixed!
+>
+> 3136b93c3fb2 ("entry: Expose helpers to migrate TIF to SYSCALL_WORK flags")
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 
+Tested-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+
+- Naresh
