@@ -2,158 +2,132 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8FDF7C64E7A
-	for <bpf@archiver.kernel.org>; Thu, 26 Nov 2020 10:51:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 09E17C64E7B
+	for <bpf@archiver.kernel.org>; Thu, 26 Nov 2020 13:39:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 428BD2158C
-	for <bpf@archiver.kernel.org>; Thu, 26 Nov 2020 10:51:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A9E9F221FE
+	for <bpf@archiver.kernel.org>; Thu, 26 Nov 2020 13:39:16 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CCyLs19G"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hfIUxVh9"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388500AbgKZKvg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 26 Nov 2020 05:51:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:23070 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726562AbgKZKvg (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 26 Nov 2020 05:51:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606387895;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3gjiOuLAHt7YqrFLz1eLEvNsryaX1UyRkFt2nva2s6Y=;
-        b=CCyLs19GHQhefLhvuntHUbyIa1WF2oUYzVn/p0Du3zeOvUDf6ibi8AXHAVGmmyIYGW7duq
-        zQ+Ep5wYAKfr/jMSw5X/yiOkdmM8G28ElZcfIuswZJuUpAP6rp/Gl52AY9uZPRdHOJUeMf
-        W3DBCtrs1UFiA4G6+A6/LdACAdxTQwU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-106-6unmhYAgPsSlmwKned8fRw-1; Thu, 26 Nov 2020 05:51:30 -0500
-X-MC-Unique: 6unmhYAgPsSlmwKned8fRw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 606661005D55;
-        Thu, 26 Nov 2020 10:51:29 +0000 (UTC)
-Received: from carbon (unknown [10.36.110.8])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7EE246085A;
-        Thu, 26 Nov 2020 10:51:20 +0000 (UTC)
-Date:   Thu, 26 Nov 2020 11:51:19 +0100
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Hangbin Liu <liuhangbin@gmail.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        id S2390412AbgKZNjD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 26 Nov 2020 08:39:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58204 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390406AbgKZNjC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 26 Nov 2020 08:39:02 -0500
+Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406BDC061A04
+        for <bpf@vger.kernel.org>; Thu, 26 Nov 2020 05:39:01 -0800 (PST)
+Received: by mail-wr1-x442.google.com with SMTP id t4so2154336wrr.12
+        for <bpf@vger.kernel.org>; Thu, 26 Nov 2020 05:39:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=PvDQ8jiSdggfocg7QevhSStHyCThX2E8vELTACyHnVM=;
+        b=hfIUxVh9cOOEk1+Xnm9Js0JYx8f+4mDVffWLE+RpCmxL0UzygV22nLn5ImHdR94WtJ
+         V84dJowMWFbBc/vOV5VcNtNwABoiSipolRFrT0sotRub7aAlqP7agQXikgVrvCdA2QhE
+         1XMvyzZ2DaV11usuc9FgvVwCcGCAeKOuUfuG2YhlvYZaw/Cosi3dFUAOofTHESywFkhR
+         lXBStbyPFd9fMWdFbVbWSRWZUoZaIwrvHuPNfaOuddOq/VwH+UM2FYbBPeQvNclUYX3v
+         bWqIk2ZR8IZOZymlbf8n4zvsR+avPkwgP+ylWMDUOng9/e7F1EqjwxWl5IwWm0RAijtc
+         4L4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=PvDQ8jiSdggfocg7QevhSStHyCThX2E8vELTACyHnVM=;
+        b=AnlxiXg8reUMOxnTFX7GdoFvcK+SNDuv2EhYvlhWp4rUi+U0miUhEh+4fRizGrvyCu
+         bpTwNxaPlUZ9amMMQ9rZUn+XBmd80StBPUlTrgN+6/LYWG5JWHovafPQjrqoOVzyAy6a
+         D7Kyf5nQl9Qc+2ySibPD4o+UoePDVJKW6btR/iSA+evze+z7z0r9xcvb1lvyBQqoIRYY
+         AEBraQyzc6gZBcdrcUn3UZpOxp4XPLZVEnoZMxVZqGDApw/U5lhxZ4SVDE2H8eeIU4Iy
+         o2KKbPWhLUEgQL7qmcnXtI16dAfBpDyuLLXWmrxp+zOtZZl2Z+ffPk3gXMlHzS+wznPn
+         pxVA==
+X-Gm-Message-State: AOAM533oGuN/oo9mMbASDZ3on4EM+nkZGA0ffv8QjFWiOSPRNAEyXyHO
+        zD2bVOBmevasSYBlReHev+qKNw==
+X-Google-Smtp-Source: ABdhPJxxuDr0CFihwvoh9qXdvCtCohE03uRRltH7bO3tWEys9Iub2oFH9hIvPdZDltlla0WbomeVaw==
+X-Received: by 2002:adf:ed12:: with SMTP id a18mr3939773wro.5.1606397940009;
+        Thu, 26 Nov 2020 05:39:00 -0800 (PST)
+Received: from dell.default ([91.110.221.235])
+        by smtp.gmail.com with ESMTPSA id s133sm7035825wmf.38.2020.11.26.05.38.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Nov 2020 05:38:59 -0800 (PST)
+From:   Lee Jones <lee.jones@linaro.org>
+To:     lee.jones@linaro.org
+Cc:     linux-kernel@vger.kernel.org, Wei Liu <wei.liu@kernel.org>,
+        Paul Durrant <paul@xen.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
         John Fastabend <john.fastabend@gmail.com>,
-        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>,
-        Tariq Toukan <tariqt@mellanox.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        brouer@redhat.com
-Subject: Re: [PATCHv2 bpf-next] samples/bpf: add xdp program on egress for
- xdp_redirect_map
-Message-ID: <20201126115119.20f82cba@carbon>
-In-Reply-To: <20201126084325.477470-1-liuhangbin@gmail.com>
-References: <20201110124639.1941654-1-liuhangbin@gmail.com>
-        <20201126084325.477470-1-liuhangbin@gmail.com>
+        Rusty Russell <rusty@rustcorp.com.au>,
+        xen-devel@lists.xenproject.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH 2/8] net: xen-netback: xenbus: Demote nonconformant kernel-doc headers
+Date:   Thu, 26 Nov 2020 13:38:47 +0000
+Message-Id: <20201126133853.3213268-3-lee.jones@linaro.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201126133853.3213268-1-lee.jones@linaro.org>
+References: <20201126133853.3213268-1-lee.jones@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 26 Nov 2020 16:43:25 +0800
-Hangbin Liu <liuhangbin@gmail.com> wrote:
+Fixes the following W=1 kernel build warning(s):
 
-> Current sample test xdp_redirect_map only count pkts on ingress. But we
-> can't know whether the pkts are redirected or dropped. So add a counter
-> on egress interface so we could know how many pkts are redirect in fact.
+ drivers/net/xen-netback/xenbus.c:419: warning: Function parameter or member 'dev' not described in 'frontend_changed'
+ drivers/net/xen-netback/xenbus.c:419: warning: Function parameter or member 'frontend_state' not described in 'frontend_changed'
+ drivers/net/xen-netback/xenbus.c:1001: warning: Function parameter or member 'dev' not described in 'netback_probe'
+ drivers/net/xen-netback/xenbus.c:1001: warning: Function parameter or member 'id' not described in 'netback_probe'
 
-This is not true.
+Cc: Wei Liu <wei.liu@kernel.org>
+Cc: Paul Durrant <paul@xen.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Rusty Russell <rusty@rustcorp.com.au>
+Cc: xen-devel@lists.xenproject.org
+Cc: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+---
+ drivers/net/xen-netback/xenbus.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The 2nd devmap XDP-prog will run in the same RX-context, so it doesn't
-tell us if the redirect was successful.  I looked up the code, and the
-2nd XDP-prog is even allowed to run when the egress driver doesn't
-support the NDO to xmit (dev->netdev_ops->ndo_xdp_xmit), which is very
-misleading, if you place a output counter here.
-
+diff --git a/drivers/net/xen-netback/xenbus.c b/drivers/net/xen-netback/xenbus.c
+index f1c1624cec8f5..de1b5471d929b 100644
+--- a/drivers/net/xen-netback/xenbus.c
++++ b/drivers/net/xen-netback/xenbus.c
+@@ -411,7 +411,7 @@ static void read_xenbus_frontend_xdp(struct backend_info *be,
+ 	vif->xdp_headroom = headroom;
+ }
+ 
+-/**
++/*
+  * Callback received when the frontend's state changes.
+  */
+ static void frontend_changed(struct xenbus_device *dev,
+@@ -992,7 +992,7 @@ static int netback_remove(struct xenbus_device *dev)
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * Entry point to this code when a new device is created.  Allocate the basic
+  * structures and switch to InitWait.
+  */
 -- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
-
-
-static inline int __xdp_enqueue(struct net_device *dev, struct xdp_buff *xdp,
-			       struct net_device *dev_rx)
-{
-	struct xdp_frame *xdpf;
-	int err;
-
-	if (!dev->netdev_ops->ndo_xdp_xmit)
-		return -EOPNOTSUPP;
-
-	err = xdp_ok_fwd_dev(dev, xdp->data_end - xdp->data);
-	if (unlikely(err))
-		return err;
-
-	xdpf = xdp_convert_buff_to_frame(xdp);
-	if (unlikely(!xdpf))
-		return -EOVERFLOW;
-
-	bq_enqueue(dev, xdpf, dev_rx);
-	return 0;
-}
-
-static struct xdp_buff *dev_map_run_prog(struct net_device *dev,
-					 struct xdp_buff *xdp,
-					 struct bpf_prog *xdp_prog)
-{
-	struct xdp_txq_info txq = { .dev = dev };
-	u32 act;
-
-	xdp_set_data_meta_invalid(xdp);
-	xdp->txq = &txq;
-
-	act = bpf_prog_run_xdp(xdp_prog, xdp);
-	switch (act) {
-	case XDP_PASS:
-		return xdp;
-	case XDP_DROP:
-		break;
-	default:
-		bpf_warn_invalid_xdp_action(act);
-		fallthrough;
-	case XDP_ABORTED:
-		trace_xdp_exception(dev, xdp_prog, act);
-		break;
-	}
-
-	xdp_return_buff(xdp);
-	return NULL;
-}
-
-int dev_xdp_enqueue(struct net_device *dev, struct xdp_buff *xdp,
-		    struct net_device *dev_rx)
-{
-	return __xdp_enqueue(dev, xdp, dev_rx);
-}
-
-int dev_map_enqueue(struct bpf_dtab_netdev *dst, struct xdp_buff *xdp,
-		    struct net_device *dev_rx)
-{
-	struct net_device *dev = dst->dev;
-
-	if (dst->xdp_prog) {
-		xdp = dev_map_run_prog(dev, xdp, dst->xdp_prog);
-		if (!xdp)
-			return 0;
-	}
-	return __xdp_enqueue(dev, xdp, dev_rx);
-}
+2.25.1
 
