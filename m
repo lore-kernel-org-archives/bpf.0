@@ -2,170 +2,152 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B64EFC71155
-	for <bpf@archiver.kernel.org>; Thu, 26 Nov 2020 13:39:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A0576C56202
+	for <bpf@archiver.kernel.org>; Thu, 26 Nov 2020 14:19:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 67865221FC
-	for <bpf@archiver.kernel.org>; Thu, 26 Nov 2020 13:39:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 59EDF21741
+	for <bpf@archiver.kernel.org>; Thu, 26 Nov 2020 14:19:17 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="l8uEDUWZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VJLJtHWJ"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390316AbgKZNjB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 26 Nov 2020 08:39:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
+        id S2390791AbgKZOTQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 26 Nov 2020 09:19:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390297AbgKZNjA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 26 Nov 2020 08:39:00 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86746C061A04
-        for <bpf@vger.kernel.org>; Thu, 26 Nov 2020 05:38:58 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id a3so2433577wmb.5
-        for <bpf@vger.kernel.org>; Thu, 26 Nov 2020 05:38:58 -0800 (PST)
+        with ESMTP id S2390772AbgKZOTQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 26 Nov 2020 09:19:16 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54435C0613D4;
+        Thu, 26 Nov 2020 06:19:16 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id n137so1775008pfd.3;
+        Thu, 26 Nov 2020 06:19:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eLYy9GrW221tE7bgw0J/86UTqSktvqRhGJxBlLeC3CQ=;
-        b=l8uEDUWZzvTPhQEmHkZEDzGn+Iktals9WkH8ixtmNOmOetN+vKndogKyVo59zGXYLz
-         XRXvLUk5/+I04WWy7FCL0sLq4G94vw7QdXKfevLaySsnixEVKYZjC38zOVHNwqTkRYLN
-         La8EC6Kxt6FBWP9D25iK6dlCY0QSnmFPjI0JmdW+T/tdAWhzrLYaOiJHbt1NLSwEkhEx
-         Y5DRG1yTcLpH7SVmPZVFWQDYEG3aMUf+bQ4cF2ARtkMOy6ywbUIdkC/0GkwZWXKV+ZrI
-         GJxdb71yq3kNI4ucwGOAP83wwCKHEcGCH1dgmfnG+q6ylSw4bmYBixyYObvyjE2aYJuI
-         JqmQ==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=n5lWvINJ7iHP6wHSBGrj4q3zKA3iyMiEBZRNbNungNQ=;
+        b=VJLJtHWJG3TroDkrEtoMTsCUpLsqNFvFPQVk7m2WSWNEMDzx3fjU2ccfic492frTtO
+         7wT8mOt8CxhUXK9opyHFgxhqrKE32NDh1UL7yuTbX7INXUpIZrqce2xFVw2KORyRJJgL
+         xgYkgnyyeE5CNd6DC/NkPWxd4yXIBeSvuf39YQ0A6i0ZAQsKt7lY6G7yPSw7S2No+G6s
+         hsfmJtJ2d29VAUQx6ctOuGnUEe7DEGzeuQkSGxZSaJTfEwA79u+vU8UZxUNOOZYSHlGj
+         ttuMSAjBQTP6+uTDCxVdiE8j8b31HiO+ihJyNTeqtFgA2ZKA8boV0tOh5+vx29zL0sSu
+         4rEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=eLYy9GrW221tE7bgw0J/86UTqSktvqRhGJxBlLeC3CQ=;
-        b=VfmQ+p4w87K1oYdQgLHcLFn09OiUuiN+feGOE02jlxY0PXgRJgG3SZuFb9Dr7a+kGW
-         8KnX4mmKV2TCU25MCl/1YscRuW/cw0duxFAOBUdcpeW3UhUWkDtYFkpoVIVXbfnyMk73
-         6PNAjs6wB3OaAMoM6MjEXNUhXhbnawjfbiwwG0uIMS1Y0rULJ4dOwyLs6CSypKXpslVk
-         ztRlpqR3IZTwUCW+QUFVSzfO/JrQLCwR0fDW7fTnEvq6+dcc/mO5tT3PCa2FwBe5dGHc
-         qLajBE5PlXlVWAKCuDUh3cRWttdcgD2vMNcU7R/sYQyV8pBGoYRYONBVnNmKQp3kvvq7
-         oECw==
-X-Gm-Message-State: AOAM532XvHJQSqPemDu8EFSrkLVneACfeUmBUN+m2qQLE7f41A65clbW
-        rToNQKhJxPIYeIhKVIU1ZkcYAA==
-X-Google-Smtp-Source: ABdhPJyX27kWdIdFacrNhU+B2wpKeoJmDR9OAO7qJiUZ6oA3MPy3XKvt03Krjrfl2kApfFtGjVazXw==
-X-Received: by 2002:a1c:dc82:: with SMTP id t124mr3481528wmg.94.1606397937237;
-        Thu, 26 Nov 2020 05:38:57 -0800 (PST)
-Received: from dell.default ([91.110.221.235])
-        by smtp.gmail.com with ESMTPSA id s133sm7035825wmf.38.2020.11.26.05.38.55
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=n5lWvINJ7iHP6wHSBGrj4q3zKA3iyMiEBZRNbNungNQ=;
+        b=rjaWSF8+Iu4N5uyFA1U0n6MBGEjLinMWl7z8qkayGWeMMyVz3UWakxDZHOMlTLbdYW
+         pBfhxokYOraaP+pGxf6hmSUWdrwrLi615j+XeYRUhGCh2hnA/RRS5tSk8N5yFtgKzGxy
+         zDPdqhqDcMZO2wnz/d9KB2dQpVYh4yuQ9huS97uuBqx8JmdY3mNoU8PTqhF9/w77uKjC
+         ngac/R0qAMgf3HzhlbhU3C2I5b0ndUHxDKZJf1I9FzlyKPgcvBYMOCvTqZ9iPp5hVHka
+         MM2+9nd5M110C8y86lBdOqc4cTNxSnODJeTfptaKgtfqDjVPVRF2psyzNtkdUlC1Ru3f
+         JR1w==
+X-Gm-Message-State: AOAM532CSVGHY0mQKyFH078bmHIh9b3Bzl7YeHqINOh0Rpo4+iNn4nPc
+        JiYrOvWqM1kY0hobWBEywPw=
+X-Google-Smtp-Source: ABdhPJxIVDtfIQOdCsi27gYbyYXybepN3PycojakaBqeIM3hYehfapBq/3dEjaeN6LQx9F4Tj+w/hw==
+X-Received: by 2002:a17:90a:cc06:: with SMTP id b6mr2484328pju.94.1606400355786;
+        Thu, 26 Nov 2020 06:19:15 -0800 (PST)
+Received: from localhost.localdomain ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id w2sm6304353pjq.57.2020.11.26.06.19.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2020 05:38:56 -0800 (PST)
-From:   Lee Jones <lee.jones@linaro.org>
-To:     lee.jones@linaro.org
-Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        bpf@vger.kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
-        Dany Madden <drt@linux.ibm.com>,
-        Daris A Nevil <dnevil@snmc.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Erik Stahlman <erik@vt.edu>,
-        Geoff Levand <geoff@infradead.org>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Ishizaki Kou <kou.ishizaki@toshiba.co.jp>,
-        Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jens Osterkamp <Jens.Osterkamp@de.ibm.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Allen <jallen@linux.vnet.ibm.com>,
+        Thu, 26 Nov 2020 06:19:14 -0800 (PST)
+Date:   Thu, 26 Nov 2020 22:19:04 +0800
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     Jesper Dangaard Brouer <brouer@redhat.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>,
         John Fastabend <john.fastabend@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Lijun Pan <ljp@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org,
-        Michael Ellerman <mpe@ellerman.id.au>, netdev@vger.kernel.org,
-        Nicolas Pitre <nico@fluxnic.net>, Paul Durrant <paul@xen.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Peter Cammaert <pc@denkart.be>,
-        Russell King <rmk@arm.linux.org.uk>,
-        Rusty Russell <rusty@rustcorp.com.au>,
-        Santiago Leon <santi_leon@yahoo.com>,
-        Sukadev Bhattiprolu <sukadev@linux.ibm.com>,
-        Thomas Falcon <tlfalcon@linux.vnet.ibm.com>,
-        Utz Bacher <utz.bacher@de.ibm.com>,
-        Wei Liu <wei.liu@kernel.org>, xen-devel@lists.xenproject.org
-Subject: [PATCH 0/8] Rid W=1 warnings in Net
-Date:   Thu, 26 Nov 2020 13:38:45 +0000
-Message-Id: <20201126133853.3213268-1-lee.jones@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+        Tariq Toukan <tariqt@mellanox.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: Re: [PATCHv2 bpf-next] samples/bpf: add xdp program on egress for
+ xdp_redirect_map
+Message-ID: <20201126141904.GA277949@localhost.localdomain>
+References: <20201110124639.1941654-1-liuhangbin@gmail.com>
+ <20201126084325.477470-1-liuhangbin@gmail.com>
+ <20201126115119.20f82cba@carbon>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20201126115119.20f82cba@carbon>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Resending the stragglers.
+On Thu, Nov 26, 2020 at 11:51:19AM +0100, Jesper Dangaard Brouer wrote:
+> On Thu, 26 Nov 2020 16:43:25 +0800
+> Hangbin Liu <liuhangbin@gmail.com> wrote:
+> 
+> > Current sample test xdp_redirect_map only count pkts on ingress. But we
+> > can't know whether the pkts are redirected or dropped. So add a counter
+> > on egress interface so we could know how many pkts are redirect in fact.
+> 
+> This is not true.
+> 
+> The 2nd devmap XDP-prog will run in the same RX-context, so it doesn't
+> tell us if the redirect was successful.  I looked up the code, and the
+> 2nd XDP-prog is even allowed to run when the egress driver doesn't
+> support the NDO to xmit (dev->netdev_ops->ndo_xdp_xmit), which is very
+> misleading, if you place a output counter here.
+> 
+> -- 
+> Best regards,
+>   Jesper Dangaard Brouer
+>   MSc.CS, Principal Kernel Engineer at Red Hat
+>   LinkedIn: http://www.linkedin.com/in/brouer
+> 
+> 
+> static inline int __xdp_enqueue(struct net_device *dev, struct xdp_buff *xdp,
+> 			       struct net_device *dev_rx)
+> {
+> 	struct xdp_frame *xdpf;
+> 	int err;
+> 
+> 	if (!dev->netdev_ops->ndo_xdp_xmit)
+> 		return -EOPNOTSUPP;
+> 
 
-This set is part of a larger effort attempting to clean-up W=1
-kernel builds, which are currently overwhelmingly riddled with
-niggly little warnings.
+Err... You are right. I didn't read this part carefully.
 
-Lee Jones (8):
-  net: ethernet: smsc: smc91x: Demote non-conformant kernel function
-    header
-  net: xen-netback: xenbus: Demote nonconformant kernel-doc headers
-  net: ethernet: ti: am65-cpsw-qos: Demote non-conformant function
-    header
-  net: ethernet: ti: am65-cpts: Document am65_cpts_rx_enable()'s 'en'
-    parameter
-  net: ethernet: ibm: ibmvnic: Fix some kernel-doc misdemeanours
-  net: ethernet: toshiba: ps3_gelic_net: Fix some kernel-doc
-    misdemeanours
-  net: ethernet: toshiba: spider_net: Document a whole bunch of function
-    parameters
-  net: ethernet: ibm: ibmvnic: Fix some kernel-doc issues
+Based on Toke's suggestion, maybe edit the src mac address to the egress
+iface's mac address is a better example. WDYT?
 
- drivers/net/ethernet/ibm/ibmvnic.c           | 27 ++++++++++----------
- drivers/net/ethernet/smsc/smc91x.c           |  2 +-
- drivers/net/ethernet/ti/am65-cpsw-qos.c      |  2 +-
- drivers/net/ethernet/ti/am65-cpts.c          |  2 +-
- drivers/net/ethernet/toshiba/ps3_gelic_net.c |  9 ++++---
- drivers/net/ethernet/toshiba/spider_net.c    | 18 ++++++++-----
- drivers/net/xen-netback/xenbus.c             |  4 +--
- drivers/net/xen-netfront.c                   |  6 ++---
- 8 files changed, 37 insertions(+), 33 deletions(-)
+And does it make any sense to run perf test for 2nd xdp program
+for xdp_redirect_map?
 
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc: bpf@vger.kernel.org
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Dany Madden <drt@linux.ibm.com>
-Cc: Daris A Nevil <dnevil@snmc.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Erik Stahlman <erik@vt.edu>
-Cc: Geoff Levand <geoff@infradead.org>
-Cc: Grygorii Strashko <grygorii.strashko@ti.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Ishizaki Kou <kou.ishizaki@toshiba.co.jp>
-Cc: Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Jens Osterkamp <Jens.Osterkamp@de.ibm.com>
-Cc: Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: John Allen <jallen@linux.vnet.ibm.com>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: Kurt Kanzenbach <kurt@linutronix.de>
-Cc: Lijun Pan <ljp@linux.ibm.com>
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: netdev@vger.kernel.org
-Cc: Nicolas Pitre <nico@fluxnic.net>
-Cc: Paul Durrant <paul@xen.org>
-Cc: Paul Mackerras <paulus@samba.org>
-Cc: Peter Cammaert <pc@denkart.be>
-Cc: Russell King <rmk@arm.linux.org.uk>
-Cc: Rusty Russell <rusty@rustcorp.com.au>
-Cc: Santiago Leon <santi_leon@yahoo.com>
-Cc: Sukadev Bhattiprolu <sukadev@linux.ibm.com>
-Cc: Thomas Falcon <tlfalcon@linux.vnet.ibm.com>
-Cc: Utz Bacher <utz.bacher@de.ibm.com>
-Cc: Wei Liu <wei.liu@kernel.org>
-Cc: xen-devel@lists.xenproject.org
--- 
-2.25.1
+Thanks
+Hangbin
 
+
+> 	err = xdp_ok_fwd_dev(dev, xdp->data_end - xdp->data);
+> 	if (unlikely(err))
+> 		return err;
+> 
+> 	xdpf = xdp_convert_buff_to_frame(xdp);
+> 	if (unlikely(!xdpf))
+> 		return -EOVERFLOW;
+> 
+> 	bq_enqueue(dev, xdpf, dev_rx);
+> 	return 0;
+> }
+> 
+> 
+> int dev_map_enqueue(struct bpf_dtab_netdev *dst, struct xdp_buff *xdp,
+> 		    struct net_device *dev_rx)
+> {
+> 	struct net_device *dev = dst->dev;
+> 
+> 	if (dst->xdp_prog) {
+> 		xdp = dev_map_run_prog(dev, xdp, dst->xdp_prog);
+> 		if (!xdp)
+> 			return 0;
+> 	}
+> 	return __xdp_enqueue(dev, xdp, dev_rx);
+> }
+> 
