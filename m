@@ -5,56 +5,55 @@ X-Spam-Level:
 X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4C839C8300E
-	for <bpf@archiver.kernel.org>; Thu, 26 Nov 2020 16:45:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A899C56202
+	for <bpf@archiver.kernel.org>; Thu, 26 Nov 2020 16:46:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0A59F221F1
-	for <bpf@archiver.kernel.org>; Thu, 26 Nov 2020 16:45:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5AC9420B80
+	for <bpf@archiver.kernel.org>; Thu, 26 Nov 2020 16:46:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="VeQVYnUP"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YZ/SabCw"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403957AbgKZQpz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 26 Nov 2020 11:45:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59088 "EHLO
+        id S2403883AbgKZQpm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 26 Nov 2020 11:45:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391551AbgKZQpo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 26 Nov 2020 11:45:44 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB7AC061A04
-        for <bpf@vger.kernel.org>; Thu, 26 Nov 2020 08:45:43 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id 1so3019663wme.3
-        for <bpf@vger.kernel.org>; Thu, 26 Nov 2020 08:45:43 -0800 (PST)
+        with ESMTP id S2403782AbgKZQpm (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 26 Nov 2020 11:45:42 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8675FC061A04
+        for <bpf@vger.kernel.org>; Thu, 26 Nov 2020 08:45:40 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id g14so2776352wrm.13
+        for <bpf@vger.kernel.org>; Thu, 26 Nov 2020 08:45:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=K/M4gu8JZX1RUvKKxbWMwd6sKzErX4ydvwnU8nMRHQ4=;
-        b=VeQVYnUP9KC7S8j11jYv0Ifl89CXEqxOuZgoab/dwFEBTfsJpzh0GOKRiCP4Jbhdql
-         2kJUbltoOyZkHNEByR5WnALGaHHXKXg3aLzN8IvmIlHm+5moCC6CFNCzZFoKsSsrNmUn
-         lWl1alFCkbLVAnaUVURNlfTcgBn1sVTNUmv+M=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OzwTSFRm2NQ0xmYlvkrP6vFZBi0q2EwWN/7wEw0Mm2M=;
+        b=YZ/SabCw3GMPxVQifMw1wfMaBRwSvKNZLOkWk1+4MgwdSio9a6nOJlqYwFZ+yxSi/i
+         a+vHHSNaWuIzK4AyTU3K6YX5ytvou2EDpRwGRUviaUwnfnMeunFsYUP9SeaH1BE1KdGa
+         6EeLLEq/OHFhzoDLA3k6sp2itKCu3Rr+HGmNA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=K/M4gu8JZX1RUvKKxbWMwd6sKzErX4ydvwnU8nMRHQ4=;
-        b=gRL9JVgmcTxB5Oy1FOoZBxMSYknV8GmX7IRJ0Enw4fuXuVTxRGqXhMCG9Vo32MDoI1
-         GPV5mkra7PRM1J0rOClQN7LRCU7Hk44lbo0CDwZHZpN1ncWf48obdA3PqQr1uhlDCrTe
-         swT+pGnJ80YdL5uqNg9N6jhR115pQkL5tyRFrqFMCeLoCo8QJkWqGNDLkIUuTpR7AT7M
-         0fdj2aArgISPyj9DYZgkEzvEoq5BKIyuLQK/qd0uBl9KRj3eAXJHK83SHSLzKCyNEp4P
-         CvvXRYoCJZWuDZVNPDj+eid/TIPFO+U5S8lrvml/C/w3YFqbU4vMB+i37w2xtWru95f4
-         bjWw==
-X-Gm-Message-State: AOAM532O7RgJVHdc7KsNACRbbSBQ+eeTEOrLQiFRQZenxYt3Rv184YGg
-        ylaKOpF24MxA/Knj5X85LhSoil/hBTWCv0Sc
-X-Google-Smtp-Source: ABdhPJz/hAybfvllqWHwxRB83B2Q+QlMRW0h/r1vHAe/FPh4b07hMEadXqNvy3z/U8v9P+3SVZg9Cg==
-X-Received: by 2002:a1c:28c4:: with SMTP id o187mr4399225wmo.40.1606409142137;
-        Thu, 26 Nov 2020 08:45:42 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OzwTSFRm2NQ0xmYlvkrP6vFZBi0q2EwWN/7wEw0Mm2M=;
+        b=iy/IjUPVgpyV+Ofs6ugISJzdpXjj/KwR68viYc9CmNN754y05qFuwzcSRdIPJrSw2J
+         oDJgYqbn4et72GKq17Kx59qmjeojuvJS600sPMhpJjqKoXynJFaC6UdRQOGE+kBtuAXF
+         VICXx7TLlNowK8CohfRR6VVH9Kxenrs087dUoWwhxV1ODA23Cmxkg97dBMkNVmggLOSm
+         QNmqtyKDFcyoG1tFfD9nJDATUrbmWRD5bwI3r4pyKVDdiXiK5JE+jeHxVg65vlezCS7F
+         scRuqQ63ewRFLkrHhlrFCfBEVvL3y7Z82e6zL31ROrm4xnuMA2nmbb2xnEJgslYnqQMr
+         8Tdg==
+X-Gm-Message-State: AOAM532AXYRhVbYwyP6Tv+GC04un2BBSeiswoLlESAC6tnRs0ZnllN1B
+        QmekAqZx5GpyWi1MuMQyImKMXwLkPZzPO8aG
+X-Google-Smtp-Source: ABdhPJyYejpp3WfNREOwXD1l8xon+U7PTR6cUwtqEEC3XDtPWEu/+1prYheAeaU+VwTsatLipM9E6A==
+X-Received: by 2002:adf:eeca:: with SMTP id a10mr4845073wrp.186.1606409138934;
+        Thu, 26 Nov 2020 08:45:38 -0800 (PST)
 Received: from revest.zrh.corp.google.com ([2a00:79e0:42:204:f693:9fff:fef4:a569])
-        by smtp.gmail.com with ESMTPSA id f17sm8805824wmh.10.2020.11.26.08.45.41
+        by smtp.gmail.com with ESMTPSA id f17sm8805824wmh.10.2020.11.26.08.45.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Nov 2020 08:45:41 -0800 (PST)
+        Thu, 26 Nov 2020 08:45:38 -0800 (PST)
 From:   Florent Revest <revest@chromium.org>
 X-Google-Original-From: Florent Revest <revest@google.com>
 To:     bpf@vger.kernel.org
@@ -62,148 +61,247 @@ Cc:     viro@zeniv.linux.org.uk, davem@davemloft.net, kuba@kernel.org,
         ast@kernel.org, daniel@iogearbox.net, kafai@fb.com, yhs@fb.com,
         andrii@kernel.org, kpsingh@chromium.org, revest@google.com,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH bpf-next v3 4/6] bpf: Add an iterator selftest for bpf_sk_storage_delete
-Date:   Thu, 26 Nov 2020 17:44:47 +0100
-Message-Id: <20201126164449.1745292-4-revest@google.com>
+Subject: [PATCH bpf-next v3 1/6] net: Remove the err argument from sock_from_file
+Date:   Thu, 26 Nov 2020 17:44:44 +0100
+Message-Id: <20201126164449.1745292-1-revest@google.com>
 X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
-In-Reply-To: <20201126164449.1745292-1-revest@google.com>
-References: <20201126164449.1745292-1-revest@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The eBPF program iterates over all entries (well, only one) of a socket
-local storage map and deletes them all. The test makes sure that the
-entry is indeed deleted.
+Currently, the sock_from_file prototype takes an "err" pointer that is
+either not set or set to -ENOTSOCK IFF the returned socket is NULL. This
+makes the error redundant and it is ignored by a few callers.
 
+This patch simplifies the API by letting callers deduce the error based
+on whether the returned socket is NULL or not.
+
+Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
 Signed-off-by: Florent Revest <revest@google.com>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
 ---
- .../selftests/bpf/prog_tests/bpf_iter.c       | 64 +++++++++++++++++++
- .../progs/bpf_iter_bpf_sk_storage_helpers.c   | 23 +++++++
- 2 files changed, 87 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_helpers.c
+ fs/eventpoll.c               |  3 +--
+ fs/io_uring.c                | 16 ++++++++--------
+ include/linux/net.h          |  2 +-
+ net/core/netclassid_cgroup.c |  3 +--
+ net/core/netprio_cgroup.c    |  3 +--
+ net/core/sock.c              |  8 +-------
+ net/socket.c                 | 27 ++++++++++++++++-----------
+ 7 files changed, 29 insertions(+), 33 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-index 448885b95eed..bb4a638f2e6f 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -20,6 +20,7 @@
- #include "bpf_iter_bpf_percpu_hash_map.skel.h"
- #include "bpf_iter_bpf_array_map.skel.h"
- #include "bpf_iter_bpf_percpu_array_map.skel.h"
-+#include "bpf_iter_bpf_sk_storage_helpers.skel.h"
- #include "bpf_iter_bpf_sk_storage_map.skel.h"
- #include "bpf_iter_test_kern5.skel.h"
- #include "bpf_iter_test_kern6.skel.h"
-@@ -913,6 +914,67 @@ static void test_bpf_percpu_array_map(void)
- 	bpf_iter_bpf_percpu_array_map__destroy(skel);
- }
+diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+index 4df61129566d..c764d8d5a76a 100644
+--- a/fs/eventpoll.c
++++ b/fs/eventpoll.c
+@@ -415,12 +415,11 @@ static inline void ep_set_busy_poll_napi_id(struct epitem *epi)
+ 	unsigned int napi_id;
+ 	struct socket *sock;
+ 	struct sock *sk;
+-	int err;
  
-+/* An iterator program deletes all local storage in a map. */
-+static void test_bpf_sk_storage_delete(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	struct bpf_iter_bpf_sk_storage_helpers *skel;
-+	union bpf_iter_link_info linfo;
-+	int err, len, map_fd, iter_fd;
-+	struct bpf_link *link;
-+	int sock_fd = -1;
-+	__u32 val = 42;
-+	char buf[64];
-+
-+	skel = bpf_iter_bpf_sk_storage_helpers__open_and_load();
-+	if (CHECK(!skel, "bpf_iter_bpf_sk_storage_helpers__open_and_load",
-+		  "skeleton open_and_load failed\n"))
-+		return;
-+
-+	map_fd = bpf_map__fd(skel->maps.sk_stg_map);
-+
-+	sock_fd = socket(AF_INET6, SOCK_STREAM, 0);
-+	if (CHECK(sock_fd < 0, "socket", "errno: %d\n", errno))
-+		goto out;
-+	err = bpf_map_update_elem(map_fd, &sock_fd, &val, BPF_NOEXIST);
-+	if (CHECK(err, "map_update", "map_update failed\n"))
-+		goto out;
-+
-+	memset(&linfo, 0, sizeof(linfo));
-+	linfo.map.map_fd = map_fd;
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+	link = bpf_program__attach_iter(skel->progs.delete_bpf_sk_storage_map,
-+					&opts);
-+	if (CHECK(IS_ERR(link), "attach_iter", "attach_iter failed\n"))
-+		goto out;
-+
-+	iter_fd = bpf_iter_create(bpf_link__fd(link));
-+	if (CHECK(iter_fd < 0, "create_iter", "create_iter failed\n"))
-+		goto free_link;
-+
-+	/* do some tests */
-+	while ((len = read(iter_fd, buf, sizeof(buf))) > 0)
-+		;
-+	if (CHECK(len < 0, "read", "read failed: %s\n", strerror(errno)))
-+		goto close_iter;
-+
-+	/* test results */
-+	err = bpf_map_lookup_elem(map_fd, &sock_fd, &val);
-+	if (CHECK(!err || errno != ENOENT, "bpf_map_lookup_elem",
-+		  "map value wasn't deleted (err=%d, errno=%d)\n", err, errno))
-+		goto close_iter;
-+
-+close_iter:
-+	close(iter_fd);
-+free_link:
-+	bpf_link__destroy(link);
-+out:
-+	if (sock_fd >= 0)
-+		close(sock_fd);
-+	bpf_iter_bpf_sk_storage_helpers__destroy(skel);
-+}
-+
- static void test_bpf_sk_storage_map(void)
+ 	if (!net_busy_loop_on())
+ 		return;
+ 
+-	sock = sock_from_file(epi->ffd.file, &err);
++	sock = sock_from_file(epi->ffd.file);
+ 	if (!sock)
+ 		return;
+ 
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 8018c7076b25..ace99b15cbd3 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -4341,9 +4341,9 @@ static int io_sendmsg(struct io_kiocb *req, bool force_nonblock,
+ 	unsigned flags;
+ 	int ret;
+ 
+-	sock = sock_from_file(req->file, &ret);
++	sock = sock_from_file(req->file);
+ 	if (unlikely(!sock))
+-		return ret;
++		return -ENOTSOCK;
+ 
+ 	if (req->async_data) {
+ 		kmsg = req->async_data;
+@@ -4390,9 +4390,9 @@ static int io_send(struct io_kiocb *req, bool force_nonblock,
+ 	unsigned flags;
+ 	int ret;
+ 
+-	sock = sock_from_file(req->file, &ret);
++	sock = sock_from_file(req->file);
+ 	if (unlikely(!sock))
+-		return ret;
++		return -ENOTSOCK;
+ 
+ 	ret = import_single_range(WRITE, sr->buf, sr->len, &iov, &msg.msg_iter);
+ 	if (unlikely(ret))
+@@ -4569,9 +4569,9 @@ static int io_recvmsg(struct io_kiocb *req, bool force_nonblock,
+ 	unsigned flags;
+ 	int ret, cflags = 0;
+ 
+-	sock = sock_from_file(req->file, &ret);
++	sock = sock_from_file(req->file);
+ 	if (unlikely(!sock))
+-		return ret;
++		return -ENOTSOCK;
+ 
+ 	if (req->async_data) {
+ 		kmsg = req->async_data;
+@@ -4632,9 +4632,9 @@ static int io_recv(struct io_kiocb *req, bool force_nonblock,
+ 	unsigned flags;
+ 	int ret, cflags = 0;
+ 
+-	sock = sock_from_file(req->file, &ret);
++	sock = sock_from_file(req->file);
+ 	if (unlikely(!sock))
+-		return ret;
++		return -ENOTSOCK;
+ 
+ 	if (req->flags & REQ_F_BUFFER_SELECT) {
+ 		kbuf = io_recv_buffer_select(req, !force_nonblock);
+diff --git a/include/linux/net.h b/include/linux/net.h
+index 0dcd51feef02..9e2324efc26a 100644
+--- a/include/linux/net.h
++++ b/include/linux/net.h
+@@ -240,7 +240,7 @@ int sock_sendmsg(struct socket *sock, struct msghdr *msg);
+ int sock_recvmsg(struct socket *sock, struct msghdr *msg, int flags);
+ struct file *sock_alloc_file(struct socket *sock, int flags, const char *dname);
+ struct socket *sockfd_lookup(int fd, int *err);
+-struct socket *sock_from_file(struct file *file, int *err);
++struct socket *sock_from_file(struct file *file);
+ #define		     sockfd_put(sock) fput(sock->file)
+ int net_ratelimit(void);
+ 
+diff --git a/net/core/netclassid_cgroup.c b/net/core/netclassid_cgroup.c
+index 41b24cd31562..b49c57d35a88 100644
+--- a/net/core/netclassid_cgroup.c
++++ b/net/core/netclassid_cgroup.c
+@@ -68,9 +68,8 @@ struct update_classid_context {
+ 
+ static int update_classid_sock(const void *v, struct file *file, unsigned n)
  {
- 	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-@@ -1067,6 +1129,8 @@ void test_bpf_iter(void)
- 		test_bpf_percpu_array_map();
- 	if (test__start_subtest("bpf_sk_storage_map"))
- 		test_bpf_sk_storage_map();
-+	if (test__start_subtest("bpf_sk_storage_delete"))
-+		test_bpf_sk_storage_delete();
- 	if (test__start_subtest("rdonly-buf-out-of-bound"))
- 		test_rdonly_buf_out_of_bound();
- 	if (test__start_subtest("buf-neg-offset"))
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_helpers.c b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_helpers.c
-new file mode 100644
-index 000000000000..01ff3235e413
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_helpers.c
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Google LLC. */
-+#include "bpf_iter.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, int);
-+} sk_stg_map SEC(".maps");
-+
-+SEC("iter/bpf_sk_storage_map")
-+int delete_bpf_sk_storage_map(struct bpf_iter__bpf_sk_storage_map *ctx)
-+{
-+	if (ctx->sk)
-+		bpf_sk_storage_delete(&sk_stg_map, ctx->sk);
-+
-+	return 0;
-+}
+-	int err;
+ 	struct update_classid_context *ctx = (void *)v;
+-	struct socket *sock = sock_from_file(file, &err);
++	struct socket *sock = sock_from_file(file);
+ 
+ 	if (sock) {
+ 		spin_lock(&cgroup_sk_update_lock);
+diff --git a/net/core/netprio_cgroup.c b/net/core/netprio_cgroup.c
+index 9bd4cab7d510..99a431c56f23 100644
+--- a/net/core/netprio_cgroup.c
++++ b/net/core/netprio_cgroup.c
+@@ -220,8 +220,7 @@ static ssize_t write_priomap(struct kernfs_open_file *of,
+ 
+ static int update_netprio(const void *v, struct file *file, unsigned n)
+ {
+-	int err;
+-	struct socket *sock = sock_from_file(file, &err);
++	struct socket *sock = sock_from_file(file);
+ 	if (sock) {
+ 		spin_lock(&cgroup_sk_update_lock);
+ 		sock_cgroup_set_prioidx(&sock->sk->sk_cgrp_data,
+diff --git a/net/core/sock.c b/net/core/sock.c
+index 727ea1cc633c..dd0598d831ef 100644
+--- a/net/core/sock.c
++++ b/net/core/sock.c
+@@ -2808,14 +2808,8 @@ EXPORT_SYMBOL(sock_no_mmap);
+ void __receive_sock(struct file *file)
+ {
+ 	struct socket *sock;
+-	int error;
+ 
+-	/*
+-	 * The resulting value of "error" is ignored here since we only
+-	 * need to take action when the file is a socket and testing
+-	 * "sock" for NULL is sufficient.
+-	 */
+-	sock = sock_from_file(file, &error);
++	sock = sock_from_file(file);
+ 	if (sock) {
+ 		sock_update_netprioidx(&sock->sk->sk_cgrp_data);
+ 		sock_update_classid(&sock->sk->sk_cgrp_data);
+diff --git a/net/socket.c b/net/socket.c
+index 6e6cccc2104f..c799d9652a2c 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -445,17 +445,15 @@ static int sock_map_fd(struct socket *sock, int flags)
+ /**
+  *	sock_from_file - Return the &socket bounded to @file.
+  *	@file: file
+- *	@err: pointer to an error code return
+  *
+- *	On failure returns %NULL and assigns -ENOTSOCK to @err.
++ *	On failure returns %NULL.
+  */
+ 
+-struct socket *sock_from_file(struct file *file, int *err)
++struct socket *sock_from_file(struct file *file)
+ {
+ 	if (file->f_op == &socket_file_ops)
+ 		return file->private_data;	/* set in sock_map_fd */
+ 
+-	*err = -ENOTSOCK;
+ 	return NULL;
+ }
+ EXPORT_SYMBOL(sock_from_file);
+@@ -484,9 +482,11 @@ struct socket *sockfd_lookup(int fd, int *err)
+ 		return NULL;
+ 	}
+ 
+-	sock = sock_from_file(file, err);
+-	if (!sock)
++	sock = sock_from_file(file);
++	if (!sock) {
++		*err = -ENOTSOCK;
+ 		fput(file);
++	}
+ 	return sock;
+ }
+ EXPORT_SYMBOL(sockfd_lookup);
+@@ -498,11 +498,12 @@ static struct socket *sockfd_lookup_light(int fd, int *err, int *fput_needed)
+ 
+ 	*err = -EBADF;
+ 	if (f.file) {
+-		sock = sock_from_file(f.file, err);
++		sock = sock_from_file(f.file);
+ 		if (likely(sock)) {
+ 			*fput_needed = f.flags & FDPUT_FPUT;
+ 			return sock;
+ 		}
++		*err = -ENOTSOCK;
+ 		fdput(f);
+ 	}
+ 	return NULL;
+@@ -1715,9 +1716,11 @@ int __sys_accept4_file(struct file *file, unsigned file_flags,
+ 	if (SOCK_NONBLOCK != O_NONBLOCK && (flags & SOCK_NONBLOCK))
+ 		flags = (flags & ~SOCK_NONBLOCK) | O_NONBLOCK;
+ 
+-	sock = sock_from_file(file, &err);
+-	if (!sock)
++	sock = sock_from_file(file);
++	if (!sock) {
++		err = -ENOTSOCK;
+ 		goto out;
++	}
+ 
+ 	err = -ENFILE;
+ 	newsock = sock_alloc();
+@@ -1840,9 +1843,11 @@ int __sys_connect_file(struct file *file, struct sockaddr_storage *address,
+ 	struct socket *sock;
+ 	int err;
+ 
+-	sock = sock_from_file(file, &err);
+-	if (!sock)
++	sock = sock_from_file(file);
++	if (!sock) {
++		err = -ENOTSOCK;
+ 		goto out;
++	}
+ 
+ 	err =
+ 	    security_socket_connect(sock, (struct sockaddr *)address, addrlen);
 -- 
 2.29.2.454.gaff20da3a2-goog
 
