@@ -2,262 +2,286 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D127C63777
-	for <bpf@archiver.kernel.org>; Fri, 27 Nov 2020 07:23:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 508BBC2D0E4
+	for <bpf@archiver.kernel.org>; Fri, 27 Nov 2020 07:36:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 122CC22226
-	for <bpf@archiver.kernel.org>; Fri, 27 Nov 2020 07:23:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A580C21D46
+	for <bpf@archiver.kernel.org>; Fri, 27 Nov 2020 07:36:20 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="gO4Nd16a"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="ARp3RaUV";
+	dkim=pass (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="IJqMnfaq"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389455AbgK0HXU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 27 Nov 2020 02:23:20 -0500
-Received: from de-smtp-delivery-102.mimecast.com ([51.163.158.102]:58919 "EHLO
-        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2392683AbgK0HXT (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 27 Nov 2020 02:23:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1606461796;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=8z/v5RlkO1mt/B8W7JZ6ft49P0LoBPl4qFCSoEDw1Ec=;
-        b=gO4Nd16aSXmo8hY3gcdgrJT/9qZULkC5ye9HfGIAeS0yFqRXbHNhFeY1okC+8FdV1DWL+P
-        2Py4ZmnskhsKOQF8Xx3MYQ8ahkIejVlBxTpHZFk5IjYZaAJ4H7FoIY2tLRvuiRTVc50DXk
-        WcXPP81efwEMF2+b65eJ6I45a1Ez9co=
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com
- (mail-am6eur05lp2113.outbound.protection.outlook.com [104.47.18.113])
- (Using TLS) by relay.mimecast.com with ESMTP id
- de-mta-11-2YQyJs5wMySzrv8xzCegDg-1; Fri, 27 Nov 2020 08:23:14 +0100
-X-MC-Unique: 2YQyJs5wMySzrv8xzCegDg-1
+        id S2389420AbgK0HgF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 27 Nov 2020 02:36:05 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:22174 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387909AbgK0HgE (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 27 Nov 2020 02:36:04 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0AR7YmFf010797;
+        Thu, 26 Nov 2020 23:35:47 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=mQvQ0rvbzqNsMzUa1i9/6+L8ietghDzy1lzpxz0vY0E=;
+ b=ARp3RaUVeWRPWipCWptrIQH8Z+qSlgDzqqSLNAqZHyMivZQtDsPbQ8CHpzLpE7HnJlH+
+ NvAPDSn/lfnxTbllcu43864pR4Nh0TVnVLljFov252FzEhr2Rkf9a7P4q4evs6IfK9/D
+ GF9e+XQlf8udDeiTwyJbQ9kaOZioWN3OR8U= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 352q7391ar-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 26 Nov 2020 23:35:47 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 26 Nov 2020 23:35:45 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g1dsw8nWPjWXUdxljTT7J/7VBpVzybGZLuneBl5NIbC97o7tE6As7Pwehn4hqtdSkwGyR44h6bdIes2ySfLkkN/P+5cuxdIm/JuFuRkknRYbHKmHZo+PXLQIDLE8S0uuE1MARSGkWeyJjM4QG2qTuInjQoHd+hbUNslY9mOUu/GuxmQLtP1MRLcAI9+xQQYuXO7I9trJa0F+aGHeifeNpSdles/OqV5zDFHxnWZWq5cLFT1kvhpHNRR4MbDlsDGtRuljUmwWIC/fbKxk915XonCkn9hFhaiYr1EAo72zSp5KJ3rlD/Jdgc2TB2/osPm2x77JWWVFn0WZLusui1+zvA==
+ b=S+IHc4DQWia1ezWZcphsOuiIm6CPg+u8hT7NDITKVQshX3lcxbutZeHroGya2lXyu9LA5RSErU6OJa69A0Cffm2fQGXa5H+/OfUI2om/pg9n9hnGRy+NyNlsMwicTkJg+4QM/vAjTyhoOn3xn/94ScppIVdb7glBdT3m9Y7blbP9l6SMmVn9Uc9Rx4HhBI7wo8bFUomPvc0A/2w2fK93PASbGCVnt10v3LMBPrtE5l4MFv5ZutoMTBTkIoe2pGF80xwBi+j/7AkrcA2sMgk95yMscYoIG2V0WbFUXvCb982ULQ0MvTMlH0ubLhXN2pVq41piyu1IqPQkl9U8Oee0/w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TCDbwUtbq4X6zj7BRsYRp2H5DB9pzA1eLnOh/t3ErOM=;
- b=JsVSnnRa+xAE4C8bLiT41IM5Er75fdJeWGW/09unlqXv5TztYhiIRHPqZFsnNQF5UJpOF8mEFLObG9Ua0+Q4ljwpcH7JJme8yVw5Fm+nK2wDXvm9Suc6ZTilF1d+m7up8JX4fqk1rjcF1iSgDGE7JekQsJJKg8hC3543EFKP7g/v60Ao1wVbMuiojMLFSWXtdv6nsD9MbyMY5hRPtOtm9FXytB9PB94Vt7EWsZvLZ/Qa0KuURVtO8Cl33XwP8yCGQf/IFlcTw5hQfGklUAfmcFCzfWga5h3k7kbtKpSaOFl7Ejt8Eax2omkU5A1tyg8yxEwNtWqQoelkAGSi2FXZVQ==
+ bh=mQvQ0rvbzqNsMzUa1i9/6+L8ietghDzy1lzpxz0vY0E=;
+ b=L39v98b6uDrt7KMyxu0pvx0aftqxY98wVIeYzeW2s4cbZLUWm3mbysjDU1WvRHka9nqyRgNkrpoQ8PVZlrWueiUObmi4lbLD7X03nQqid5MIl+bG4YBxfjixfI8LoGwwZ3PLZhfeUtYk5Ki1jf0SAOqMmHdywDuF8K3DiayyjFwFbm7m5ukDEFSDEfKO6XxxsouqOTnoanzQ796w0LiQm71DRwcR6gdXrWErMxIeuwwISTEeu+EkpMKjVR6vmALRCBtRALjRE4odNg7EcdxRjJdrxOHwJ39+FgvAKOt78+CfNnY87FekcViqcoWFNmpneGSOls0nwM0fBSKLv4o6kg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mQvQ0rvbzqNsMzUa1i9/6+L8ietghDzy1lzpxz0vY0E=;
+ b=IJqMnfaqxKvrx8C/KQ5SaIrKcFjJ3vjfiMH9GWRVb3zNvfJfVZDPTHeORI8uWPyLHSsM8nY2M73zI3Vmi5Zbnj0b6AlseUlH1YJBsW4Y+ibu4b7XJ3AH+Q1QeFYoGavnae4p8kKxiudnv2pngQa6f3uzmCWzp11+qYFVcioBLhI=
 Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=suse.com;
-Received: from DB3PR0402MB3641.eurprd04.prod.outlook.com (2603:10a6:8:b::12)
- by DBAPR04MB7286.eurprd04.prod.outlook.com (2603:10a6:10:1aa::6) with
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB2263.namprd15.prod.outlook.com (2603:10b6:a02:87::27) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.22; Fri, 27 Nov
- 2020 07:23:13 +0000
-Received: from DB3PR0402MB3641.eurprd04.prod.outlook.com
- ([fe80::80c9:1fa3:ae84:7313]) by DB3PR0402MB3641.eurprd04.prod.outlook.com
- ([fe80::80c9:1fa3:ae84:7313%7]) with mapi id 15.20.3589.029; Fri, 27 Nov 2020
- 07:23:13 +0000
-From:   Gary Lin <glin@suse.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        andreas.taschner@suse.com
-Subject: [PATCH] bpf, x64: add extra passes without size optimizations
-Date:   Fri, 27 Nov 2020 15:22:54 +0800
-Message-ID: <20201127072254.1061-1-glin@suse.com>
-X-Mailer: git-send-email 2.28.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-X-Originating-IP: [60.251.47.115]
-X-ClientProxiedBy: FRYP281CA0018.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10::28)
- To DB3PR0402MB3641.eurprd04.prod.outlook.com (2603:10a6:8:b::12)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.23; Fri, 27 Nov
+ 2020 07:35:45 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::9ae:1628:daf9:4b03]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::9ae:1628:daf9:4b03%7]) with mapi id 15.20.3611.025; Fri, 27 Nov 2020
+ 07:35:45 +0000
+Subject: Re: [PATCH bpf-next 1/2] bpf: Add a bpf_kallsyms_lookup helper
+To:     Florent Revest <revest@chromium.org>, <bpf@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <kpsingh@chromium.org>, <revest@google.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20201126165748.1748417-1-revest@google.com>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <50047415-cafe-abab-a6ba-e85bb6a9b651@fb.com>
+Date:   Thu, 26 Nov 2020 23:35:42 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.5.0
+In-Reply-To: <20201126165748.1748417-1-revest@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [2620:10d:c090:400::5:7e72]
+X-ClientProxiedBy: MWHPR14CA0018.namprd14.prod.outlook.com
+ (2603:10b6:300:ae::28) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from GaryWorkstation.suse.de (60.251.47.115) by FRYP281CA0018.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.6 via Frontend Transport; Fri, 27 Nov 2020 07:23:11 +0000
+Received: from [IPv6:2620:10d:c085:21cf::1008] (2620:10d:c090:400::5:7e72) by MWHPR14CA0018.namprd14.prod.outlook.com (2603:10b6:300:ae::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3611.20 via Frontend Transport; Fri, 27 Nov 2020 07:35:44 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b5a78616-233f-4ab9-604f-08d892a54cab
-X-MS-TrafficTypeDiagnostic: DBAPR04MB7286:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DBAPR04MB728689F93D24D56ED210FA73A9F80@DBAPR04MB7286.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2000;
+X-MS-Office365-Filtering-Correlation-Id: e9ee1aa1-f87c-43f1-2d44-08d892a70d1c
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2263:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB226356C52B58563EF531D149D3F80@BYAPR15MB2263.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CTqLO+X8qGjlbam2x0926tKNNAj9xz0B5gktqpl9U5IuHVfff1BWcckY3Y2Si9Pz/2/8D0pqSXWznsDgIUDUZkQSG+Xh2JL9voNzkhkaUuN03xaqJ8EPIST0QGyvgGtPGh2dri4QvcQzQgKLXqhQuTOBzrhubA+weVLVCMc5bk8wySjWLhix5AFEwsIjxMhPzH5SHlgIMXkS5K+V5kYiEgAIb0oV18nXcNpm/zdeItnNqubbW32d1EjYeKL7NPuUpDFzUzhvFIAj4FO3o0RiJBnQiX23P277dM5cDcoSOXF4zsoQYp2dU1o2DYfmMT90h2Ix8BDI9kUyqq711i9E2w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB3PR0402MB3641.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(366004)(396003)(136003)(346002)(376002)(8676002)(8936002)(16526019)(2906002)(956004)(186003)(52116002)(55236004)(2616005)(26005)(83380400001)(6506007)(6486002)(36756003)(316002)(6512007)(66556008)(66476007)(107886003)(86362001)(66946007)(4326008)(478600001)(54906003)(5660300002)(1076003)(6666004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?79Jz0pqeitdoGlJ6X1hbHiOJk4KQWX9CDk5uat9TwgWMTWkzz0ty+bdY7j05?=
- =?us-ascii?Q?cY3d8ZJODw0BKnzrI5iY3LkXIjxU489AuZYND9t8lQMRErUifTKJWckYBQqM?=
- =?us-ascii?Q?4f+4PCz1P0r/mpbus/+hhy3vpPnSjYG8atEYaqgSri1I/CM1Sl6sa6c8f1Yi?=
- =?us-ascii?Q?Z++XasNhwwhBBaxoc76m7uJ9McESS9y4WMmsCuesXC2mzmLNVjeyYUDOeL2V?=
- =?us-ascii?Q?XIJJUapXBLxoE+fXAlZ1AQprx+bE0BBMI3DYEN6V/b7V2jc1xrfqFp98W0C3?=
- =?us-ascii?Q?PY6NOFo8aujvIue+8cUoFnaud9Z+NQdr0OirXk9PURp2cOrwFSF5JsXQQbwr?=
- =?us-ascii?Q?Zp2HCMaQmBMvYz9GrhwBbNc6o+OdpyYYZ5NtBn8/dlAP2X5qqEsoCVAoQp15?=
- =?us-ascii?Q?G2QVpU3tpjocuUK+COaHElu/AoK4QYugZ+WHkimxmiBuuIZ6tdc3zzKLk2t3?=
- =?us-ascii?Q?qGvppKgcrVod6r/29OPspLbAuQdDetyRA5Pm7qIGmZoSAJygPDVkewlQYAE7?=
- =?us-ascii?Q?mWmxrcmRSr/6m/6ycp2A3EFmr9LVdiWahbEHHyLDN7lwdFqhSjZCFYjKg2LR?=
- =?us-ascii?Q?HZWUTI0ehPtUZagkGqHx90nR9X/jUxIa+oPy1HEUDy/ZY/pFf4guVxxpXKJ6?=
- =?us-ascii?Q?QD7BQXx/0esMTrbRhcC67q0WSLu6re++xPdfT5XmloyqRELin+YMxmL5DPMy?=
- =?us-ascii?Q?GqBa5SbTcXiWvvpT/NbqE3lHWDWVIKf/vBXY+xdoNHYQDl290YBmb5C0s7ea?=
- =?us-ascii?Q?1tER5gix/glKo6A8YfYxUn7QZtj4RvIVMXTMi+AcS8pLIo6ffxxdFXlCMvbR?=
- =?us-ascii?Q?5bQybo5m4axkGj7tUIpyMxikHEzLTXeqAKqajYlJT7KKTzCifUSG+kDSNKh9?=
- =?us-ascii?Q?2l46RpVO8ltC+Gf0Ca3EiYzX5vzFt8CBHbRMXMgSwqMK/d4/ueJN8aWk1V8X?=
- =?us-ascii?Q?htSdARxCg5cbY7ZRhhbsxT8lcKCXggtFF+B7OqKvTC956CbIkbtIMilTj4ab?=
- =?us-ascii?Q?2w7X?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b5a78616-233f-4ab9-604f-08d892a54cab
-X-MS-Exchange-CrossTenant-AuthSource: DB3PR0402MB3641.eurprd04.prod.outlook.com
+X-Microsoft-Antispam-Message-Info: vMJ+fwFlsb4yPejkcJ7UmWILzPoMp//iwTtJdaKaVbPRh6ajMagSx7KkXz0Q5I1bEWRiHZp/xCXBqaH/0q7mpbymm2eDezA6TZNgDRGjwFYnuYI8E2zsJxSNPhEv9MneYERrbXM6E8HRTrbzeGadlnZS70cMTOKS54Pi9BjCZz2M7KpyxYzukS2mWQo4vCONxgvXY/YP3rLAWSJQ+dsc71yvZUteiQWUgULgCzEogzOP8JMRvzuDR81CC8BMBCbGBJehE6SR5+EBrcOCn5eWj4+1dwiWg8vwW7IFuDj4QOpBmlo34cDWtbE4bJcRDfuThV6/XBVvu5ibkkyz1X/K8GiX93jd+sbGenuOLLvnZqdCqFhvcJN0G21SEvpE+tdi
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(376002)(366004)(346002)(39860400002)(136003)(396003)(316002)(16526019)(186003)(8936002)(8676002)(478600001)(31696002)(86362001)(36756003)(83380400001)(4326008)(66946007)(52116002)(53546011)(2906002)(5660300002)(31686004)(6486002)(66476007)(66556008)(2616005)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?S3JqUDU0dWwxRDRWQlZTTUptNlN1ZkZ0RmN4WU9mL0diRVNnUklxejZKWjlU?=
+ =?utf-8?B?WTRPOFZMRi9pOGYxeisxSlN1UWRqSG0va3RlMU9HbTlVdXd0UFJjVlZDemJR?=
+ =?utf-8?B?RDk4cW1Fa1hRT0pwaFltSVJvYm9BL0VaWEZlTnQ5TnpUV3lnWmpCUVNZcTNl?=
+ =?utf-8?B?cnV5SlNwVG84bDgzNVRFNHZIWURKWlNyRU5QeVJsZ2Rjb1lNVHVXdjZsb0Uz?=
+ =?utf-8?B?bTRFNkk0Vi9RaUFnNmFkb2pIb0g0WlBvWUlDRSs2Yk5vbitJSHVHcHZmOTdh?=
+ =?utf-8?B?ZkUweHNmMHhFSUMzUnFUN2luejgwdndRM0JUSmNwSTI3d21uRnIzVU1hWFNj?=
+ =?utf-8?B?K2pDUWdmUXFobW1ReEZ4bTlZU3pFNzZZbXJUOEsxZEFBaFk1K3FTbmpqc1Fn?=
+ =?utf-8?B?SFdzRkgxSTNUNU9KVGR1STducGJiT29BVmwreFVXb0lUVjAwM0UwekdiejRP?=
+ =?utf-8?B?NERnSDNvRzhDdkZYOUJORU1XUDllQ3lvNGUrcGpSUnI0a3RTaEZGZFJJbmNk?=
+ =?utf-8?B?NngvMWNsTG4zZzBoSHhDc2VycnRIMm9oUWYya0ZMaTUvazhJTjBMWlNqWk5C?=
+ =?utf-8?B?c0U1MThubVVzYXBNb3IyNnNQbGdIb1B3UDRyc3lVTzRYRkVCVnA0S2M3bXRH?=
+ =?utf-8?B?N21uMzJuQW5OZmpMNTV5SnkxQkRxdzZ0L3pFU2dZZWg5Q3JiaTZpSkF0UGh6?=
+ =?utf-8?B?MTB2SXJwNDZYWHkyNU1SSXFNZUFRSXVaM0RLZk55eXR0aUM5ZjRob2FtV212?=
+ =?utf-8?B?K1NVaDlEMXhRTkgvcnF2aVB5eUpmeXhBVExoUFI3UFBGTi80Y1JodW01TlJQ?=
+ =?utf-8?B?UGxMSjlLd0xRT3N5bUxaOWF4WEgwR2sxOTJzQUNrdlI1aEVIVEdUQXBLUWZO?=
+ =?utf-8?B?NWV6RmZZWnNrSERzRi9JTE9ISE5KS0dqNTJOaDZ0TzNIYUd1TXhZVmx6ZEtp?=
+ =?utf-8?B?R1gwR0JOSjB5b09BS2RacmtKalBtNXVLT3FBaGVtbUxIZmczeVI0THFxYWts?=
+ =?utf-8?B?OHM4am1xWGxPZ0twUHNCbEhuWFpKZEIwZU8xa0ZJNitSK3NwaXg1eEhuODRB?=
+ =?utf-8?B?MXlpQjl0Zk05TWZiVEFYVzljUVZQd2RHZWoyM1Jpd1dWb2NlNnFjQ1FaLzk4?=
+ =?utf-8?B?Y3ZuT2V3WFVaeWZKSUZvczBJS3pvQ0xzd1VBRUp3aDlaNlFwa0c0a3Q4Y2d3?=
+ =?utf-8?B?OHBDWStvVVZHVHF1dElWdk5DNkliUUtJK0ZoR2J1YzhxaEdxREs2WTVtem8v?=
+ =?utf-8?B?NEZsWW9KUjlYZTkwL3JrbXJ5R1JLU0NnL1YxelczYXhJVGNWRUxtbzR0cjRX?=
+ =?utf-8?B?MzBoZGkrSHRkSU0vZmNCeElmdm85OWE0SllIR0t0bnIxaDNiN1QvcEJ1M09N?=
+ =?utf-8?B?b0xrVkhlWHhYR0E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9ee1aa1-f87c-43f1-2d44-08d892a70d1c
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2020 07:23:12.9473
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2020 07:35:45.0998
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: JyBWLX5rCAeN9rUskWwMopUOFiGUqneZHwvNPrwCXFmL5e5T4S8aeyP4NywfHheM
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7286
+X-MS-Exchange-CrossTenant-UserPrincipalName: J9m8ad/CCA5sC3d7pmeWGbzYTZdWKugx7ei8oMqtI5H8+yvi+h2sFp3IMzBNHoUx
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2263
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-27_04:2020-11-26,2020-11-27 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0 mlxscore=0
+ impostorscore=0 priorityscore=1501 phishscore=0 bulkscore=0 suspectscore=0
+ lowpriorityscore=0 mlxlogscore=999 malwarescore=0 spamscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011270045
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The x64 bpf jit expects bpf images converge within the given passes, but
-it could fail to do so with some corner cases. For example:
 
-      l0:     ldh [4]
-      l1:     jeq #0x537d, l2, l40
-      l2:     ld [0]
-      l3:     jeq #0xfa163e0d, l4, l40
-      l4:     ldh [12]
-      l5:     ldx #0xe
-      l6:     jeq #0x86dd, l41, l7
-      l7:     jeq #0x800, l8, l41
-      l8:     ld [x+16]
-      l9:     ja 41
 
-        [... repeated ja 41 ]
+On 11/26/20 8:57 AM, Florent Revest wrote:
+> This helper exposes the kallsyms_lookup function to eBPF tracing
+> programs. This can be used to retrieve the name of the symbol at an
+> address. For example, when hooking into nf_register_net_hook, one can
+> audit the name of the registered netfilter hook and potentially also
+> the name of the module in which the symbol is located.
+> 
+> Signed-off-by: Florent Revest <revest@google.com>
+> ---
+>   include/uapi/linux/bpf.h       | 16 +++++++++++++
+>   kernel/trace/bpf_trace.c       | 41 ++++++++++++++++++++++++++++++++++
+>   tools/include/uapi/linux/bpf.h | 16 +++++++++++++
+>   3 files changed, 73 insertions(+)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index c3458ec1f30a..670998635eac 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -3817,6 +3817,21 @@ union bpf_attr {
+>    *		The **hash_algo** is returned on success,
+>    *		**-EOPNOTSUP** if IMA is disabled or **-EINVAL** if
+>    *		invalid arguments are passed.
+> + *
+> + * long bpf_kallsyms_lookup(u64 address, char *symbol, u32 symbol_size, char *module, u32 module_size)
+> + *	Description
+> + *		Uses kallsyms to write the name of the symbol at *address*
+> + *		into *symbol* of size *symbol_sz*. This is guaranteed to be
+> + *		zero terminated.
+> + *		If the symbol is in a module, up to *module_size* bytes of
+> + *		the module name is written in *module*. This is also
+> + *		guaranteed to be zero-terminated. Note: a module name
+> + *		is always shorter than 64 bytes.
+> + *	Return
+> + *		On success, the strictly positive length of the full symbol
+> + *		name, If this is greater than *symbol_size*, the written
+> + *		symbol is truncated.
+> + *		On error, a negative value.
+>    */
+>   #define __BPF_FUNC_MAPPER(FN)		\
+>   	FN(unspec),			\
+> @@ -3981,6 +3996,7 @@ union bpf_attr {
+>   	FN(bprm_opts_set),		\
+>   	FN(ktime_get_coarse_ns),	\
+>   	FN(ima_inode_hash),		\
+> +	FN(kallsyms_lookup),	\
+>   	/* */
+>   
+>   /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index d255bc9b2bfa..9d86e20c2b13 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -17,6 +17,7 @@
+>   #include <linux/error-injection.h>
+>   #include <linux/btf_ids.h>
+>   #include <linux/bpf_lsm.h>
+> +#include <linux/kallsyms.h>
+>   
+>   #include <net/bpf_sk_storage.h>
+>   
+> @@ -1260,6 +1261,44 @@ const struct bpf_func_proto bpf_snprintf_btf_proto = {
+>   	.arg5_type	= ARG_ANYTHING,
+>   };
+>   
+> +BPF_CALL_5(bpf_kallsyms_lookup, u64, address, char *, symbol, u32, symbol_size,
+> +	   char *, module, u32, module_size)
+> +{
+> +	char buffer[KSYM_SYMBOL_LEN];
+> +	unsigned long offset, size;
+> +	const char *name;
+> +	char *modname;
+> +	long ret;
+> +
+> +	name = kallsyms_lookup(address, &size, &offset, &modname, buffer);
+> +	if (!name)
+> +		return -EINVAL;
+> +
+> +	ret = strlen(name) + 1;
+> +	if (symbol_size) {
+> +		strncpy(symbol, name, symbol_size);
+> +		symbol[symbol_size - 1] = '\0';
+> +	}
+> +
+> +	if (modname && module_size) {
+> +		strncpy(module, modname, module_size);
+> +		module[module_size - 1] = '\0';
 
-      l40:    ja 41
-      l41:    ret #0
-      l42:    ld #len
-      l43:    ret a
+In this case, module name may be truncated and user did not get any
+indication from return value. In the helper description, it is mentioned
+that module name currently is most 64 bytes. But from UAPI perspective,
+it may be still good to return something to let user know the name
+is truncated.
 
-This bpf program contains 32 "ja 41" instructions which are effectively
-NOPs and designed to be replaced with valid code dynamically. Ideally,
-bpf jit should optimize those "ja 41" instructions out when translating
-translating the bpf instructions into x86_64 machine code. However,
-do_jit() can only remove one "ja 41" for offset=3D=3D0 on each pass, so it
-requires at least 32 runs to eliminate those JMPs and exceeds the
-current limit of passes (20). In the end, the program got rejected when
-BPF_JIT_ALWAYS_ON is set even though it's legit as a classic socket
-filter.
+I do not know what is the best way to do this. One suggestion is
+to break it into two helpers, one for symbol name and another
+for module name. What is the use cases people want to get both
+symbol name and module name and is it common?
 
-Instead of pursuing the fully optimized image, this commit adds 5 extra
-passes which only use imm32 JMPs and disable the NOP optimization. Since
-all imm8 JMPs (2 bytes) are replaced with imm32 JMPs, the image size is
-expected to grow, but it could reduce the size variance between passes
-and make the images more likely to converge. The NOP optimization is
-also disabled to avoid the further jump offset changes.
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +const struct bpf_func_proto bpf_kallsyms_lookup_proto = {
+> +	.func		= bpf_kallsyms_lookup,
+> +	.gpl_only	= false,
+> +	.ret_type	= RET_INTEGER,
+> +	.arg1_type	= ARG_ANYTHING,
+> +	.arg2_type	= ARG_PTR_TO_MEM,
+ARG_PTR_TO_UNINIT_MEM?
 
-Due to the fact that the images are not optimized after the extra
-passes, a warning is issued to notify the user, but at least the images
-are allocated and ready to run.
+> +	.arg3_type	= ARG_CONST_SIZE,
+ARG_CONST_SIZE_OR_ZERO? This is especially true for current format
+which tries to return both symbol name and module name and
+user may just want to do one of them.
 
-Signed-off-by: Gary Lin <glin@suse.com>
----
- arch/x86/net/bpf_jit_comp.c | 35 ++++++++++++++++++++++++++++-------
- 1 file changed, 28 insertions(+), 7 deletions(-)
+> +	.arg4_type	= ARG_PTR_TO_MEM,
+ARG_PTR_TO_UNINIT_MEM?
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 796506dcfc42..125f373d6e97 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -790,7 +790,8 @@ static void detect_reg_usage(struct bpf_insn *insn, int=
- insn_cnt,
- }
-=20
- static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
--		  int oldproglen, struct jit_context *ctx)
-+		  int oldproglen, struct jit_context *ctx, bool no_optz,
-+		  bool allow_grow)
- {
- 	bool tail_call_reachable =3D bpf_prog->aux->tail_call_reachable;
- 	struct bpf_insn *insn =3D bpf_prog->insnsi;
-@@ -1408,7 +1409,7 @@ xadd:			if (is_imm8(insn->off))
- 				return -EFAULT;
- 			}
- 			jmp_offset =3D addrs[i + insn->off] - addrs[i];
--			if (is_imm8(jmp_offset)) {
-+			if (is_imm8(jmp_offset) && !no_optz) {
- 				EMIT2(jmp_cond, jmp_offset);
- 			} else if (is_simm32(jmp_offset)) {
- 				EMIT2_off32(0x0F, jmp_cond + 0x10, jmp_offset);
-@@ -1431,11 +1432,11 @@ xadd:			if (is_imm8(insn->off))
- 			else
- 				jmp_offset =3D addrs[i + insn->off] - addrs[i];
-=20
--			if (!jmp_offset)
-+			if (!jmp_offset && !no_optz)
- 				/* Optimize out nop jumps */
- 				break;
- emit_jmp:
--			if (is_imm8(jmp_offset)) {
-+			if (is_imm8(jmp_offset) && !no_optz) {
- 				EMIT2(0xEB, jmp_offset);
- 			} else if (is_simm32(jmp_offset)) {
- 				EMIT1_off32(0xE9, jmp_offset);
-@@ -1476,7 +1477,7 @@ xadd:			if (is_imm8(insn->off))
- 		}
-=20
- 		if (image) {
--			if (unlikely(proglen + ilen > oldproglen)) {
-+			if (unlikely(proglen + ilen > oldproglen) && !allow_grow) {
- 				pr_err("bpf_jit: fatal error\n");
- 				return -EFAULT;
- 			}
-@@ -1972,6 +1973,9 @@ struct x64_jit_data {
- 	struct jit_context ctx;
- };
-=20
-+#define MAX_JIT_PASSES 25
-+#define NO_OPTZ_PASSES (MAX_JIT_PASSES - 5)
-+
- struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
- {
- 	struct bpf_binary_header *header =3D NULL;
-@@ -1981,6 +1985,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog =
-*prog)
- 	struct jit_context ctx =3D {};
- 	bool tmp_blinded =3D false;
- 	bool extra_pass =3D false;
-+	bool no_optz =3D false;
-+	bool allow_grow =3D false;
- 	u8 *image =3D NULL;
- 	int *addrs;
- 	int pass;
-@@ -2042,8 +2048,23 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog=
- *prog)
- 	 * may converge on the last pass. In such case do one more
- 	 * pass to emit the final image.
- 	 */
--	for (pass =3D 0; pass < 20 || image; pass++) {
--		proglen =3D do_jit(prog, addrs, image, oldproglen, &ctx);
-+	for (pass =3D 0; pass < MAX_JIT_PASSES || image; pass++) {
-+		/*
-+		 * On the 21th pass, if the image still doesn't converge,
-+		 * then no_optz is set afterward to make do_jit() disable
-+		 * some size optimizations to reduce the size variance.
-+		 * The side effect is that the image size may grow, so
-+		 * allow_grow is flipped to true only for this pass.
-+		 */
-+		if (pass =3D=3D NO_OPTZ_PASSES && !image) {
-+			pr_warn("bpf_jit: disable optimizations for further passes\n");
-+			no_optz =3D true;
-+			allow_grow =3D true;
-+		} else {
-+			allow_grow =3D false;
-+		}
-+
-+		proglen =3D do_jit(prog, addrs, image, oldproglen, &ctx, no_optz, allow_=
-grow);
- 		if (proglen <=3D 0) {
- out_image:
- 			image =3D NULL;
---=20
-2.28.0
+> +	.arg5_type	= ARG_CONST_SIZE,
+ARG_CONST_SIZE_OR_ZERO?
 
+> +};
+> +
+>   const struct bpf_func_proto *
+>   bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>   {
+> @@ -1356,6 +1395,8 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>   		return &bpf_per_cpu_ptr_proto;
+>   	case BPF_FUNC_bpf_this_cpu_ptr:
+>   		return &bpf_this_cpu_ptr_proto;
+> +	case BPF_FUNC_kallsyms_lookup:
+> +		return &bpf_kallsyms_lookup_proto;
+>   	default:
+>   		return NULL;
+>   	}
+[...]
