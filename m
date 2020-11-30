@@ -8,56 +8,56 @@ X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B1EC6C83011
-	for <bpf@archiver.kernel.org>; Mon, 30 Nov 2020 18:54:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DA26EC83020
+	for <bpf@archiver.kernel.org>; Mon, 30 Nov 2020 18:54:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6791E20789
-	for <bpf@archiver.kernel.org>; Mon, 30 Nov 2020 18:54:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8BB4F221FD
+	for <bpf@archiver.kernel.org>; Mon, 30 Nov 2020 18:54:18 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="uNhAZky2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mLWsM3dg"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388003AbgK3Sxu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 Nov 2020 13:53:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60746 "EHLO
+        id S2388220AbgK3SyF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 Nov 2020 13:54:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387973AbgK3Sxu (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 30 Nov 2020 13:53:50 -0500
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F314C0617A6;
-        Mon, 30 Nov 2020 10:53:03 -0800 (PST)
-Received: by mail-pf1-x442.google.com with SMTP id n137so11018652pfd.3;
-        Mon, 30 Nov 2020 10:53:03 -0800 (PST)
+        with ESMTP id S2388215AbgK3SyD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 30 Nov 2020 13:54:03 -0500
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5E2C0613D2;
+        Mon, 30 Nov 2020 10:53:22 -0800 (PST)
+Received: by mail-pj1-x1044.google.com with SMTP id r9so133595pjl.5;
+        Mon, 30 Nov 2020 10:53:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=LH7Sw3V4LJlwW+1kWBdhvDdansinX+voulSeYgx/7Lg=;
-        b=uNhAZky2zYu+v3GclfTq8LqVHaF+bdWnvmUrOKBgl2ap333LZFiqfYbxaU30Q66+iA
-         1Qum1y4rz44gyjSV5N+z5SzzGuP8zGKL3liWiPTTJZKE6eylB+itNdCiCt+0oIXeOlGm
-         dPIheOUW5D1+zL+nVC0CAJ1YGp6GIkzdaru0048d2E8h0X//Dww/8jzQVcuQjW0ZvMPv
-         C90Udk8w5kAOx8KYROSfT0TqembDYcHD8K9CWsZttIzo9aEd2qEXB5jLD/1WtL5UYlef
-         8gAEE0RVCFpW1/1fE6+qCC79TPXgSmp0sHWAEyEMe2Gsfger3xVONCp5ltmKDVWnkpnV
-         wksA==
+        bh=fmqhingHLo6a3b7AT4xKvWss37atmCmXSS2JFS2qwt8=;
+        b=mLWsM3dgojb+LvnMZdQrQaRRXrS0CPK0KYxTsh1ET1ITv5UOfwPa5v8lmvpE0zAUHO
+         Ltf6T8kfYScaqRkrf1khDQqRg8K+si3jrln5C0bP33QNNfEixeCLQNKOzF4L+E5o/r3R
+         5u+iZ9z2JRL8CsgBzMzxl1xEdRMdvD77Ejtu07MWF6mBOSVZ6T5Fzu+gv+21wE8St1nA
+         zd8GOHZZnEhPu4VcLZy0HkmgfGSWo0549V9OQjypmKlCqUTOiYXchYfQie2ctiS7hVgB
+         ZCKoKUfSRNh6jhxl2U0CdfXs3v6UHav1Ix6crkmZ5L2meoFo3DoJLEYR6gnz8yPlh0N+
+         cDJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=LH7Sw3V4LJlwW+1kWBdhvDdansinX+voulSeYgx/7Lg=;
-        b=cwRrqZCLBgWXjRsmrrWgt3K4ZmnPRBVjtXXU2ULcjn0iHPDPjhh/iYDgdW9No1mFHf
-         4rzojJKjMwNlUNxQnhrcmcEdAROc/qrG/qLzUa8atp8N4AZmBONLIMjnvhu4IvuU04Ph
-         q9Drm1ZHTCkEDaTN6l3wl+x2Ubfc7KETp8j+RYDxyjJB8WXfmrJJiXXi/6JmFw5l2rbH
-         Z2VZDzsl43tcM53GDssXJnBRT1gLPS7swCgcU3tcHgxIZlSlsQMULgfzcpSHhbt0KM8G
-         X7g8LPbPv8IQSKlByGwRlWwtFe5CL71Tomr/uIOULrgaYLx4mkVPbWfGNPDHoWni39Io
-         8m/Q==
-X-Gm-Message-State: AOAM531rdz0KvMJ8zVErzc9SMs7qyIiZsP71AftDxIP2QKrOTc51k7bu
-        3IH6UlW3kYZHmNCi+uYvELcFbJH2ALmtDwZ7
-X-Google-Smtp-Source: ABdhPJxSE+kIDXb53rslbZiaeJSanGiMwErLImrKX10TaqiWmSbuon6pUF2ujbj3wh7oB6DuzhAZHA==
-X-Received: by 2002:a63:2351:: with SMTP id u17mr2834290pgm.72.1606762382018;
-        Mon, 30 Nov 2020 10:53:02 -0800 (PST)
+        bh=fmqhingHLo6a3b7AT4xKvWss37atmCmXSS2JFS2qwt8=;
+        b=tErBh1/gezi+Q7XCl0dTK3LpqWLgMNlYic3Ln3k4/Kx0WLsfADKdA13BzG/wfwhy/Y
+         aAPkkIqjXhmwpgKsX80dwXNZTVT2yj1afOfM2goNT37eX1z0xc9S8IrncIad7wYhW2zl
+         4hc2NlpW/udgu0q/nsFmjLKNO7vo/iGe3pcINrusfVSi5n6qL8WBD9p+OlR7t5YF3k+e
+         YXluySbOiCjtRoU1zNUEuBZftoBVryJmHtxm6LkMvfCmH6YHA+DJKeOZ5TNZCmuL4Fb1
+         pirCZOHPIOUxL1+81BxO46h5bIw1PUag/NQg6iKwbppx86eew7/+Jn1FFBxOwRxxZ0r8
+         Nonw==
+X-Gm-Message-State: AOAM530cLqdWHpFcFCpSth5DY2Po7cHJrE6bJMSoorqIG2FrqbHYztQ0
+        0HG+xoZSG+lHJflkwcv0mAPpBoTNXQc8qJRn7OY=
+X-Google-Smtp-Source: ABdhPJxJp+GRWsvXDUjngQkjuJUrcfigF+espLaDp5UTTjcihuycguUANO1ZCtChnG9dLSn004YVhg==
+X-Received: by 2002:a17:90b:3658:: with SMTP id nh24mr256052pjb.80.1606762401345;
+        Mon, 30 Nov 2020 10:53:21 -0800 (PST)
 Received: from btopel-mobl.ger.intel.com ([192.55.55.41])
-        by smtp.gmail.com with ESMTPSA id i3sm12005978pgq.12.2020.11.30.10.52.55
+        by smtp.gmail.com with ESMTPSA id i3sm12005978pgq.12.2020.11.30.10.53.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Nov 2020 10:53:01 -0800 (PST)
+        Mon, 30 Nov 2020 10:53:20 -0800 (PST)
 From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org
 Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
@@ -65,9 +65,9 @@ Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
         maciej.fijalkowski@intel.com, sridhar.samudrala@intel.com,
         jesse.brandeburg@intel.com, qi.z.zhang@intel.com, kuba@kernel.org,
         edumazet@google.com, jonathan.lemon@gmail.com, maximmi@nvidia.com
-Subject: [PATCH bpf-next v4 05/10] xsk: add busy-poll support for {recv,send}msg()
-Date:   Mon, 30 Nov 2020 19:52:00 +0100
-Message-Id: <20201130185205.196029-6-bjorn.topel@gmail.com>
+Subject: [PATCH bpf-next v4 07/10] samples/bpf: use recvfrom() in xdpsock/rxdrop
+Date:   Mon, 30 Nov 2020 19:52:02 +0100
+Message-Id: <20201130185205.196029-8-bjorn.topel@gmail.com>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20201130185205.196029-1-bjorn.topel@gmail.com>
 References: <20201130185205.196029-1-bjorn.topel@gmail.com>
@@ -80,72 +80,54 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Björn Töpel <bjorn.topel@intel.com>
 
-Wire-up XDP socket busy-poll support for recvmsg() and sendmsg(). If
-the XDP socket prefers busy-polling, make sure that no wakeup/IPI is
-performed.
+Start using recvfrom() the rxdrop scenario.
 
 Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
 Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
 ---
- net/xdp/xsk.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ samples/bpf/xdpsock_user.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index c72b4dba2878..a8501a5477cf 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -23,6 +23,7 @@
- #include <linux/netdevice.h>
- #include <linux/rculist.h>
- #include <net/xdp_sock_drv.h>
-+#include <net/busy_poll.h>
- #include <net/xdp.h>
- 
- #include "xsk_queue.h"
-@@ -517,6 +518,17 @@ static int __xsk_sendmsg(struct sock *sk)
- 	return xs->zc ? xsk_zc_xmit(xs) : xsk_generic_xmit(sk);
+diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
+index 2567f0db5aca..f90111b95b2e 100644
+--- a/samples/bpf/xdpsock_user.c
++++ b/samples/bpf/xdpsock_user.c
+@@ -1170,7 +1170,7 @@ static inline void complete_tx_only(struct xsk_socket_info *xsk,
+ 	}
  }
  
-+static bool xsk_no_wakeup(struct sock *sk)
-+{
-+#ifdef CONFIG_NET_RX_BUSY_POLL
-+	/* Prefer busy-polling, skip the wakeup. */
-+	return READ_ONCE(sk->sk_prefer_busy_poll) && READ_ONCE(sk->sk_ll_usec) &&
-+		READ_ONCE(sk->sk_napi_id) >= MIN_NAPI_ID;
-+#else
-+	return false;
-+#endif
-+}
-+
- static int xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
+-static void rx_drop(struct xsk_socket_info *xsk, struct pollfd *fds)
++static void rx_drop(struct xsk_socket_info *xsk)
  {
- 	bool need_wait = !(m->msg_flags & MSG_DONTWAIT);
-@@ -529,6 +541,12 @@ static int xsk_sendmsg(struct socket *sock, struct msghdr *m, size_t total_len)
- 	if (unlikely(need_wait))
- 		return -EOPNOTSUPP;
+ 	unsigned int rcvd, i;
+ 	u32 idx_rx = 0, idx_fq = 0;
+@@ -1180,7 +1180,7 @@ static void rx_drop(struct xsk_socket_info *xsk, struct pollfd *fds)
+ 	if (!rcvd) {
+ 		if (xsk_ring_prod__needs_wakeup(&xsk->umem->fq)) {
+ 			xsk->app_stats.rx_empty_polls++;
+-			ret = poll(fds, num_socks, opt_timeout);
++			recvfrom(xsk_socket__fd(xsk->xsk), NULL, 0, MSG_DONTWAIT, NULL, NULL);
+ 		}
+ 		return;
+ 	}
+@@ -1191,7 +1191,7 @@ static void rx_drop(struct xsk_socket_info *xsk, struct pollfd *fds)
+ 			exit_with_error(-ret);
+ 		if (xsk_ring_prod__needs_wakeup(&xsk->umem->fq)) {
+ 			xsk->app_stats.fill_fail_polls++;
+-			ret = poll(fds, num_socks, opt_timeout);
++			recvfrom(xsk_socket__fd(xsk->xsk), NULL, 0, MSG_DONTWAIT, NULL, NULL);
+ 		}
+ 		ret = xsk_ring_prod__reserve(&xsk->umem->fq, rcvd, &idx_fq);
+ 	}
+@@ -1233,7 +1233,7 @@ static void rx_drop_all(void)
+ 		}
  
-+	if (sk_can_busy_loop(sk))
-+		sk_busy_loop(sk, 1); /* only support non-blocking sockets */
-+
-+	if (xsk_no_wakeup(sk))
-+		return 0;
-+
- 	pool = xs->pool;
- 	if (pool->cached_need_wakeup & XDP_WAKEUP_TX)
- 		return __xsk_sendmsg(sk);
-@@ -550,6 +568,12 @@ static int xsk_recvmsg(struct socket *sock, struct msghdr *m, size_t len, int fl
- 	if (unlikely(need_wait))
- 		return -EOPNOTSUPP;
+ 		for (i = 0; i < num_socks; i++)
+-			rx_drop(xsks[i], fds);
++			rx_drop(xsks[i]);
  
-+	if (sk_can_busy_loop(sk))
-+		sk_busy_loop(sk, 1); /* only support non-blocking sockets */
-+
-+	if (xsk_no_wakeup(sk))
-+		return 0;
-+
- 	if (xs->pool->cached_need_wakeup & XDP_WAKEUP_RX && xs->zc)
- 		return xsk_wakeup(xs, XDP_WAKEUP_RX);
- 	return 0;
+ 		if (benchmark_done)
+ 			break;
 -- 
 2.27.0
 
