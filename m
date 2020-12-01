@@ -2,100 +2,116 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1DE09C83011
-	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 00:04:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0AB9CC64E90
+	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 00:19:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B5CAE207FF
-	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 00:04:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A2FC20706
+	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 00:19:19 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="n57QBKrJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bBDiPJYS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731011AbgLAAEb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 Nov 2020 19:04:31 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:58382 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730986AbgLAAEa (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 30 Nov 2020 19:04:30 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B101o81006920
-        for <bpf@vger.kernel.org>; Mon, 30 Nov 2020 16:03:50 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=neH6M7uZ6eS3cWKZFuRjyvXlhnKfm8cM5Ms6tJv5RkI=;
- b=n57QBKrJSEWyJX1Rjkm/02e7MVfDF2LIQYl5zwI6Ddg3RX5EYSbxPto99/maHAFq9Rp6
- IM1N96LnbzWPh2HXIe6zk8mYnWPkHjTK82bFwpwsW2vihpYRzojuQUHKwgzaJKN5dTol
- eirjmGZ0WBSDosFRmW7cVmwu5GqzaAY2PPM= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 354hsyep4c-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 30 Nov 2020 16:03:48 -0800
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 30 Nov 2020 16:03:46 -0800
-Received: by devvm3178.ftw3.facebook.com (Postfix, from userid 201728)
-        id 151D34752A007; Mon, 30 Nov 2020 16:03:40 -0800 (PST)
-From:   Prankur gupta <prankgup@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     <kernel-team@fb.com>, <netdev@vger.kernel.org>
-Subject: [PATCH bpf-next 1/2] bpf: Adds support for setting window clamp
-Date:   Mon, 30 Nov 2020 16:03:38 -0800
-Message-ID: <20201201000339.3310760-2-prankgup@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201201000339.3310760-1-prankgup@fb.com>
-References: <20201201000339.3310760-1-prankgup@fb.com>
+        id S1730880AbgLAATT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 Nov 2020 19:19:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730866AbgLAATT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 30 Nov 2020 19:19:19 -0500
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC3DC0613CF;
+        Mon, 30 Nov 2020 16:18:38 -0800 (PST)
+Received: by mail-yb1-xb43.google.com with SMTP id o71so214626ybc.2;
+        Mon, 30 Nov 2020 16:18:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=TVrEVqt/8ABsHBtv0Fp/W/KXpGc70umzdJ6FtxyY6EQ=;
+        b=bBDiPJYS+JPOZ4/6wQzzaFPhVd3ywta5QKS1jDowPE/cRtLznV6HC1K/50tlOZWZs1
+         RpNd0mxZ+tGs1xabduJi2FjnFcNNhgdZh7gFzl/I2z0bbxh5RvB196Y9FmWc0TK0R2P5
+         rb6FkLA3VBY0xYviBumFiemHRtQE9dTjxyK1O7/H3Wu0Pgf5sy6OsYcdo2GISacYaQnj
+         Wx7WgUgXcp59o1URHh708TgyWX/tPm0q3EXeKzSSO2Grh68ZR4Vn1MT7C0e6A407Fhy9
+         CwYlo18F6zrDl7Up35wzSyIC6bn9uahrX7dp/MVHK7BjG4mYvLgLkLzgjZIFtDJ8LGH6
+         qQEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=TVrEVqt/8ABsHBtv0Fp/W/KXpGc70umzdJ6FtxyY6EQ=;
+        b=n9RvnqhmxLDgUzze4D+yCY8+QRKJEkQ4hKrwQCgHdPWLdbpd/QtWTw7IpXJeY5Owve
+         9R2fgmCWesEv9z3/z+fAFx2MNIiUgLgtG4uKAFJfsqs9J5MiClR9CvWD9ZimrXQtSXSH
+         eSeJtloeSlRnKg+a7+nL/qrAk5RWHGcsfwZ/RJ7aSdloM0SCJwYYgtUDaJhAI68rAx+S
+         KEiE3yWJbr8ZXjBg0eXu3QjVVHidiGapCg+ZA+3h5EEPUvNMiG+7XQhRtR06TnI7+gf+
+         nvnJSScIQ4CRBgLQoU1P9Kd6VFjevWT9ETECJIad6woNi/TLpLJn0kc5e6h79T28JyU+
+         1toA==
+X-Gm-Message-State: AOAM533E8J+Jx0i/sbdiktaRsCs0p+lhk0ehTpc4lLCVeaVKqRDJEAe8
+        fSx7+fk0I7mwf+B/D2oOlOWzA1IeBl+DY8DYkp4=
+X-Google-Smtp-Source: ABdhPJyiin5FC2vyv5AH20qeRrdSteNjE7sy9nMnEoy5XokXVvfJhpOCGWGfPX8+F4tsx2PyHffH+oKZY6D1WZq3prI=
+X-Received: by 2002:a25:3d7:: with SMTP id 206mr13028ybd.27.1606781918010;
+ Mon, 30 Nov 2020 16:18:38 -0800 (PST)
 MIME-Version: 1.0
+References: <20201130154143.292882-1-toke@redhat.com> <CAEf4BzZy0Y1hAwOpY=Azod3bSqUKfGNwycGS7s=-DQvTWd8ThA@mail.gmail.com>
+ <87pn3uwjrd.fsf@toke.dk>
+In-Reply-To: <87pn3uwjrd.fsf@toke.dk>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 30 Nov 2020 16:18:27 -0800
+Message-ID: <CAEf4BzavUADiak9FboiThRC2W_agJXXh3dGm7zKqDNJ+dUFnHA@mail.gmail.com>
+Subject: Re: [PATCH bpf] libbpf: reset errno after probing kernel features
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-11-30_12:2020-11-30,2020-11-30 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
- adultscore=0 priorityscore=1501 impostorscore=0 mlxscore=0 spamscore=0
- bulkscore=0 lowpriorityscore=0 suspectscore=13 mlxlogscore=665
- phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2011300150
-X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adds a new bpf_setsockopt for TCP sockets, TCP_BPF_WINDOW_CLAMP,
-which sets the maximum receiver window size. It will be useful for
-limiting receiver window based on RTT.
+On Mon, Nov 30, 2020 at 2:41 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
+at.com> wrote:
+>
+> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>
+> > On Mon, Nov 30, 2020 at 7:42 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@=
+redhat.com> wrote:
+> >>
+> >> The kernel feature probing results in 'errno' being set if the probing
+> >> fails (as is often the case). This can stick around and leak to the ca=
+ller,
+> >> which can lead to confusion later. So let's make sure we always reset =
+errno
+> >> after calling a probe function.
+> >
+> > What specifically is the problem and what sort of confusion we are
+> > talking about here? You are not supposed to check errno, unless the
+> > function returned -1 or other error result.
+> >
+> > In some cases, you have to reset errno manually just to avoid
+> > confusion (see how strtol() is used, as an example).
+> >
+> > I.e., I don't see the problem here, any printf() technically can set
+> > errno to <0, we don't reset errno after each printf call though,
+> > right?
+>
+> Well yeah, technically things work fine in the common case. But this
 
-Signed-off-by: Prankur gupta <prankgup@fb.com>
----
- net/core/filter.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+It works fine in all cases. Assuming "errno !=3D 0 means last
+libc/syscall failed" is just wrong.
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 2ca5eecebacf..cb006962b677 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4910,6 +4910,14 @@ static int _bpf_setsockopt(struct sock *sk, int le=
-vel, int optname,
- 				tp->notsent_lowat =3D val;
- 				sk->sk_write_space(sk);
- 				break;
-+			case TCP_WINDOW_CLAMP:
-+				if (val <=3D 0)
-+					ret =3D -EINVAL;
-+				else
-+					tp->window_clamp =3D
-+						max_t(int, val,
-+						      SOCK_MIN_RCVBUF / 2);
-+				break;
- 			default:
- 				ret =3D -EINVAL;
- 			}
---=20
-2.24.1
+> errno thing sent me on quite the wild goose chase when trying to find
+> the root cause of the pinning issue I also sent a patch for...
+>
+> So since reseting errno doesn't hurt either I figured I'd save others
+> ending up in similar trouble. If it's not to your taste feel free to
+> just drop the patch :)
 
+Yep, let's just drop it, no need to create a bad precedent.
+
+>
+> -Toke
+>
