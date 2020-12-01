@@ -8,111 +8,301 @@ X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 718DBC64E7B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 901B7C8301C
 	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 22:03:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0F5AC2085B
+	by mail.kernel.org (Postfix) with ESMTP id 478AF20709
 	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 22:03:22 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="UL66ifZQ"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="iXquDltS"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728663AbgLAWDK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Dec 2020 17:03:10 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:11682 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730226AbgLAV7w (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 1 Dec 2020 16:59:52 -0500
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0B1LrWbG006961
-        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 13:59:10 -0800
+        id S1730230AbgLAWDM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Dec 2020 17:03:12 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:14160 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730026AbgLAV7u (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 1 Dec 2020 16:59:50 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B1Lo0KO027479
+        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 13:59:09 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=VG7+IcjHBmOmdSdI4afBmj5EWUBcGxUmixNnIwTV1P4=;
- b=UL66ifZQgoC2lb0Oodt0w4ZQb4+vkROLD4XFmViP39UdRU5z51I3RqLI4brNJ73T+JUI
- cwhZBfkJeqAQrHcOAXLDjV9uxC4LgqDTIZfsy/FmDGsp0DEKwcwy/LPXmMrf5Ofw3Ce6
- vAAFqkFSwE6mtLxonzOw4jljk6vYXPDMNEw= 
+ : date : message-id : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=JGw6o7TBx+ILLo4YTt2neoho4rwlX//7V56cYtCLLz8=;
+ b=iXquDltS45MzWI4HJUPJcN2IkMpbFP8oBqgK+gwPudOdQ7ePT9Tmp6n8XF10HzJf/3aV
+ iWskgaktbqbNSYh5vVGqInm1Y2RTtVxkIAywmlYKCAXoUEVqAmCWu8zgygsSBYA96ySW
+ V1tonE0ybPT5bR6IuZp9b+E+l3YvKLZF7SQ= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0001303.ppops.net with ESMTP id 354g9unrp3-5
+        by mx0a-00082601.pphosted.com with ESMTP id 355agsq2yt-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 13:59:10 -0800
-Received: from intmgw001.06.prn3.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 13:59:09 -0800
+Received: from intmgw002.41.prn1.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 1 Dec 2020 13:59:09 -0800
+ 15.1.1979.3; Tue, 1 Dec 2020 13:59:08 -0800
 Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
-        id 5D47D19702AC; Tue,  1 Dec 2020 13:59:06 -0800 (PST)
+        id 43DDB19702A2; Tue,  1 Dec 2020 13:59:06 -0800 (PST)
 From:   Roman Gushchin <guro@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
         <andrii@kernel.org>, <akpm@linux-foundation.org>,
         <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <kernel-team@fb.com>
-Subject: [PATCH bpf-next v9 07/34] bpf: memcg-based memory accounting for bpf maps
-Date:   Tue, 1 Dec 2020 13:58:33 -0800
-Message-ID: <20201201215900.3569844-8-guro@fb.com>
+Subject: [PATCH bpf-next v9 02/34] mm: memcontrol/slab: use helpers to access slab page's memcg_data
+Date:   Tue, 1 Dec 2020 13:58:28 -0800
+Message-ID: <20201201215900.3569844-3-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201201215900.3569844-1-guro@fb.com>
 References: <20201201215900.3569844-1-guro@fb.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-12-01_11:2020-11-30,2020-12-01 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- malwarescore=0 suspectscore=13 clxscore=1015 impostorscore=0
- mlxlogscore=564 bulkscore=0 phishscore=0 spamscore=0 adultscore=0
- mlxscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2012010131
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 malwarescore=0
+ phishscore=0 impostorscore=0 mlxlogscore=999 spamscore=0 adultscore=0
+ clxscore=1015 lowpriorityscore=0 bulkscore=0 priorityscore=1501
+ suspectscore=3 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012010131
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch enables memcg-based memory accounting for memory allocated
-by __bpf_map_area_alloc(), which is used by many types of bpf maps for
-large initial memory allocations.
+To gather all direct accesses to struct page's memcg_data field in one
+place, let's introduce 3 new helpers to use in the slab accounting code:
 
-Please note, that __bpf_map_area_alloc() should not be used outside of
-map creation paths without setting the active memory cgroup to the
-map's memory cgroup.
+  struct obj_cgroup **page_objcgs(struct page *page);
+  struct obj_cgroup **page_objcgs_check(struct page *page);
+  bool set_page_objcgs(struct page *page, struct obj_cgroup **objcgs);
 
-Following patches in the series will refine the accounting for
-some of the map types.
+They are similar to the corresponding API for generic pages, except that
+the setter can return false, indicating that the value has been already
+set from a different thread.
 
+Link: https://lkml.kernel.org/r/20201027001657.3398190-3-guro@fb.com
 Signed-off-by: Roman Gushchin <guro@fb.com>
+Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+Reviewed-by: Shakeel Butt <shakeelb@google.com>
+Cc: Michal Hocko <mhocko@suse.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 ---
- kernel/bpf/syscall.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ include/linux/memcontrol.h | 64 ++++++++++++++++++++++++++++++++++++++
+ mm/memcontrol.c            |  6 ++--
+ mm/slab.h                  | 35 +++++----------------
+ 3 files changed, 75 insertions(+), 30 deletions(-)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index dedbf6d4cd84..dff3a5f62d7a 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -268,6 +268,10 @@ static int bpf_map_copy_value(struct bpf_map *map, v=
-oid *key, void *value,
- 	return err;
+diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+index f95c1433461c..c7ac0a5b8989 100644
+--- a/include/linux/memcontrol.h
++++ b/include/linux/memcontrol.h
+@@ -416,6 +416,70 @@ static inline struct mem_cgroup *page_memcg_check(stru=
+ct page *page)
+ 	return (struct mem_cgroup *)memcg_data;
  }
 =20
-+/* Please, do not use this function outside from the map creation path
-+ * (e.g. in map update path) without taking care of setting the active
-+ * memory cgroup (see at bpf_map_kmalloc_node() for example).
++#ifdef CONFIG_MEMCG_KMEM
++/*
++ * page_objcgs - get the object cgroups vector associated with a page
++ * @page: a pointer to the page struct
++ *
++ * Returns a pointer to the object cgroups vector associated with the page,
++ * or NULL. This function assumes that the page is known to have an
++ * associated object cgroups vector. It's not safe to call this function
++ * against pages, which might have an associated memory cgroup: e.g.
++ * kernel stack pages.
 + */
- static void *__bpf_map_area_alloc(u64 size, int numa_node, bool mmapable=
-)
++static inline struct obj_cgroup **page_objcgs(struct page *page)
++{
++	return (struct obj_cgroup **)(READ_ONCE(page->memcg_data) & ~0x1UL);
++}
++
++/*
++ * page_objcgs_check - get the object cgroups vector associated with a page
++ * @page: a pointer to the page struct
++ *
++ * Returns a pointer to the object cgroups vector associated with the page,
++ * or NULL. This function is safe to use if the page can be directly assoc=
+iated
++ * with a memory cgroup.
++ */
++static inline struct obj_cgroup **page_objcgs_check(struct page *page)
++{
++	unsigned long memcg_data =3D READ_ONCE(page->memcg_data);
++
++	if (memcg_data && (memcg_data & 0x1UL))
++		return (struct obj_cgroup **)(memcg_data & ~0x1UL);
++
++	return NULL;
++}
++
++/*
++ * set_page_objcgs - associate a page with a object cgroups vector
++ * @page: a pointer to the page struct
++ * @objcgs: a pointer to the object cgroups vector
++ *
++ * Atomically associates a page with a vector of object cgroups.
++ */
++static inline bool set_page_objcgs(struct page *page,
++					struct obj_cgroup **objcgs)
++{
++	return !cmpxchg(&page->memcg_data, 0, (unsigned long)objcgs | 0x1UL);
++}
++#else
++static inline struct obj_cgroup **page_objcgs(struct page *page)
++{
++	return NULL;
++}
++
++static inline struct obj_cgroup **page_objcgs_check(struct page *page)
++{
++	return NULL;
++}
++
++static inline bool set_page_objcgs(struct page *page,
++					struct obj_cgroup **objcgs)
++{
++	return true;
++}
++#endif
++
+ static __always_inline bool memcg_stat_item_in_bytes(int idx)
  {
- 	/* We really just want to fail instead of triggering OOM killer
-@@ -280,7 +284,7 @@ static void *__bpf_map_area_alloc(u64 size, int numa_=
-node, bool mmapable)
- 	 * __GFP_RETRY_MAYFAIL to avoid such situations.
- 	 */
+ 	if (idx =3D=3D MEMCG_PERCPU_B)
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 3968d68503cb..0054b4846770 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -2899,7 +2899,7 @@ int memcg_alloc_page_obj_cgroups(struct page *page, s=
+truct kmem_cache *s,
+ 	if (!vec)
+ 		return -ENOMEM;
 =20
--	const gfp_t gfp =3D __GFP_NOWARN | __GFP_ZERO;
-+	const gfp_t gfp =3D __GFP_NOWARN | __GFP_ZERO | __GFP_ACCOUNT;
- 	unsigned int flags =3D 0;
- 	unsigned long align =3D 1;
- 	void *area;
+-	if (cmpxchg(&page->memcg_data, 0, (unsigned long)vec | 0x1UL))
++	if (!set_page_objcgs(page, vec))
+ 		kfree(vec);
+ 	else
+ 		kmemleak_not_leak(vec);
+@@ -2933,12 +2933,12 @@ struct mem_cgroup *mem_cgroup_from_obj(void *p)
+ 	 * Memcg membership data for each individual object is saved in
+ 	 * the page->obj_cgroups.
+ 	 */
+-	if (page_has_obj_cgroups(page)) {
++	if (page_objcgs_check(page)) {
+ 		struct obj_cgroup *objcg;
+ 		unsigned int off;
+=20
+ 		off =3D obj_to_index(page->slab_cache, page, p);
+-		objcg =3D page_obj_cgroups(page)[off];
++		objcg =3D page_objcgs(page)[off];
+ 		if (objcg)
+ 			return obj_cgroup_memcg(objcg);
+=20
+diff --git a/mm/slab.h b/mm/slab.h
+index e2535cee0d33..9a54a0cb5cca 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -239,28 +239,12 @@ static inline bool kmem_cache_debug_flags(struct kmem=
+_cache *s, slab_flags_t fla
+ }
+=20
+ #ifdef CONFIG_MEMCG_KMEM
+-static inline struct obj_cgroup **page_obj_cgroups(struct page *page)
+-{
+-	/*
+-	 * Page's memory cgroup and obj_cgroups vector are sharing the same
+-	 * space. To distinguish between them in case we don't know for sure
+-	 * that the page is a slab page (e.g. page_cgroup_ino()), let's
+-	 * always set the lowest bit of obj_cgroups.
+-	 */
+-	return (struct obj_cgroup **)(page->memcg_data & ~0x1UL);
+-}
+-
+-static inline bool page_has_obj_cgroups(struct page *page)
+-{
+-	return page->memcg_data & 0x1UL;
+-}
+-
+ int memcg_alloc_page_obj_cgroups(struct page *page, struct kmem_cache *s,
+ 				 gfp_t gfp);
+=20
+ static inline void memcg_free_page_obj_cgroups(struct page *page)
+ {
+-	kfree(page_obj_cgroups(page));
++	kfree(page_objcgs(page));
+ 	page->memcg_data =3D 0;
+ }
+=20
+@@ -322,7 +306,7 @@ static inline void memcg_slab_post_alloc_hook(struct km=
+em_cache *s,
+ 		if (likely(p[i])) {
+ 			page =3D virt_to_head_page(p[i]);
+=20
+-			if (!page_has_obj_cgroups(page) &&
++			if (!page_objcgs(page) &&
+ 			    memcg_alloc_page_obj_cgroups(page, s, flags)) {
+ 				obj_cgroup_uncharge(objcg, obj_full_size(s));
+ 				continue;
+@@ -330,7 +314,7 @@ static inline void memcg_slab_post_alloc_hook(struct km=
+em_cache *s,
+=20
+ 			off =3D obj_to_index(s, page, p[i]);
+ 			obj_cgroup_get(objcg);
+-			page_obj_cgroups(page)[off] =3D objcg;
++			page_objcgs(page)[off] =3D objcg;
+ 			mod_objcg_state(objcg, page_pgdat(page),
+ 					cache_vmstat_idx(s), obj_full_size(s));
+ 		} else {
+@@ -344,6 +328,7 @@ static inline void memcg_slab_free_hook(struct kmem_cac=
+he *s_orig,
+ 					void **p, int objects)
+ {
+ 	struct kmem_cache *s;
++	struct obj_cgroup **objcgs;
+ 	struct obj_cgroup *objcg;
+ 	struct page *page;
+ 	unsigned int off;
+@@ -357,7 +342,8 @@ static inline void memcg_slab_free_hook(struct kmem_cac=
+he *s_orig,
+ 			continue;
+=20
+ 		page =3D virt_to_head_page(p[i]);
+-		if (!page_has_obj_cgroups(page))
++		objcgs =3D page_objcgs(page);
++		if (!objcgs)
+ 			continue;
+=20
+ 		if (!s_orig)
+@@ -366,11 +352,11 @@ static inline void memcg_slab_free_hook(struct kmem_c=
+ache *s_orig,
+ 			s =3D s_orig;
+=20
+ 		off =3D obj_to_index(s, page, p[i]);
+-		objcg =3D page_obj_cgroups(page)[off];
++		objcg =3D objcgs[off];
+ 		if (!objcg)
+ 			continue;
+=20
+-		page_obj_cgroups(page)[off] =3D NULL;
++		objcgs[off] =3D NULL;
+ 		obj_cgroup_uncharge(objcg, obj_full_size(s));
+ 		mod_objcg_state(objcg, page_pgdat(page), cache_vmstat_idx(s),
+ 				-obj_full_size(s));
+@@ -379,11 +365,6 @@ static inline void memcg_slab_free_hook(struct kmem_ca=
+che *s_orig,
+ }
+=20
+ #else /* CONFIG_MEMCG_KMEM */
+-static inline bool page_has_obj_cgroups(struct page *page)
+-{
+-	return false;
+-}
+-
+ static inline struct mem_cgroup *memcg_from_slab_obj(void *ptr)
+ {
+ 	return NULL;
 --=20
 2.26.2
 
