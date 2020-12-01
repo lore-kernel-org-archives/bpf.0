@@ -2,109 +2,104 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51C1CC64E90
-	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 16:11:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8F4B1C71156
+	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 16:44:56 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id ECBCA2225D
-	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 16:11:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F563208C3
+	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 16:44:56 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i9sdLieJ"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="o+zKoJFP"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392107AbgLAQK7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Dec 2020 11:10:59 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:46181 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388580AbgLAQK7 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 1 Dec 2020 11:10:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1606838972;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hLqVxjcStzpNiF08tbsyS3QuxJVq8CqTw3nkGbV3M3o=;
-        b=i9sdLieJQ7K1gAeWBsziycY4XsJMH9CfAzTenfykZpO0uGF2cQk1vS6WJrHQZlPvQ8ECW2
-        eehSyeKxAnLXcd/aPiQDRI6LGj7vQzW49NSUazqqv1UzriCWgjBarB8bp7AFlmcKvK08v+
-        9Rkhug0yginu284hgWcOb/1DDVK6pss=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-288-QAN0Qd75NFKdOOaNVmetYg-1; Tue, 01 Dec 2020 11:09:28 -0500
-X-MC-Unique: QAN0Qd75NFKdOOaNVmetYg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 90076AFA80;
-        Tue,  1 Dec 2020 16:09:26 +0000 (UTC)
-Received: from carbon (unknown [10.36.110.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9226A60854;
-        Tue,  1 Dec 2020 16:09:20 +0000 (UTC)
-Date:   Tue, 1 Dec 2020 17:09:19 +0100
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Leesoo Ahn <dev@ooseel.net>
-Cc:     brouer@redhat.com, lsahn@ooseel.net,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: xdp: Give compiler __always_inline hint for
- xdp_rxq_info_init()
-Message-ID: <20201201170919.08934eed@carbon>
-In-Reply-To: <20201130114825.10898-1-lsahn@ooseel.net>
-References: <20201130114825.10898-1-lsahn@ooseel.net>
+        id S1728107AbgLAQol (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Dec 2020 11:44:41 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:64790 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725885AbgLAQok (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 1 Dec 2020 11:44:40 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B1GLwot024118
+        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 08:44:00 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=+vg20QsxrHjWRyiB4huPhOw6IpTsigJrXdHgbBxUf9M=;
+ b=o+zKoJFPi2NP5qJzoNBsQs4Ne74Y1riZOzXP+zEWbNIERbBGGJDef065U3b+C/H4x9Ue
+ moRSFuE1g/YHg0XiVNVBODNHF7neucO5shb0G5oWijT+tmIVQA2iG1KXvlMUARNpOEIO
+ nE551CLAxJntKuDbkXaQXOnRYvO8fBg/Iv0= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 354hsykek4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 08:44:00 -0800
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 1 Dec 2020 08:43:58 -0800
+Received: by devvm3178.ftw3.facebook.com (Postfix, from userid 201728)
+        id 0EC914757EBAF; Tue,  1 Dec 2020 08:43:58 -0800 (PST)
+From:   Prankur gupta <prankgup@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     <kernel-team@fb.com>, <netdev@vger.kernel.org>
+Subject: [PATCH bpf-next 1/2] bpf: Adds support for setting window clamp
+Date:   Tue, 1 Dec 2020 08:43:56 -0800
+Message-ID: <20201201164357.2623610-2-prankgup@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201201164357.2623610-1-prankgup@fb.com>
+References: <20201201164357.2623610-1-prankgup@fb.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-12-01_07:2020-11-30,2020-12-01 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1015
+ adultscore=0 priorityscore=1501 impostorscore=0 mlxscore=0 spamscore=0
+ bulkscore=0 lowpriorityscore=0 suspectscore=13 mlxlogscore=654
+ phishscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2012010102
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 30 Nov 2020 20:48:25 +0900
-Leesoo Ahn <dev@ooseel.net> wrote:
+Adds a new bpf_setsockopt for TCP sockets, TCP_BPF_WINDOW_CLAMP,
+which sets the maximum receiver window size. It will be useful for
+limiting receiver window based on RTT.
 
-> The function has only a statement of calling memset() to
-> clear xdp_rxq object. Let it always be an inline function.
+Signed-off-by: Prankur gupta <prankgup@fb.com>
+---
+ net/core/filter.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-No, this is the wrong approach.
-
-The function is already "static", and the compiler have likely already
-inlined this code, but we leave it up to the compiler to choose.
-Besides this is slowpath code, why are you even trying to optimize this?
-
- 
-> Signed-off-by: Leesoo Ahn <lsahn@ooseel.net>
-> ---
->  net/core/xdp.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> index 48aba933a5a8..dab72b9a71a1 100644
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-> @@ -151,7 +151,7 @@ void xdp_rxq_info_unreg(struct xdp_rxq_info *xdp_rxq)
->  }
->  EXPORT_SYMBOL_GPL(xdp_rxq_info_unreg);
->  
-> -static void xdp_rxq_info_init(struct xdp_rxq_info *xdp_rxq)
-> +static __always_inline void xdp_rxq_info_init(struct xdp_rxq_info *xdp_rxq)
->  {
->  	memset(xdp_rxq, 0, sizeof(*xdp_rxq));
->  }
-
-
-
--- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 2ca5eecebacf..8c52ffae7b0c 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4910,6 +4910,19 @@ static int _bpf_setsockopt(struct sock *sk, int le=
+vel, int optname,
+ 				tp->notsent_lowat =3D val;
+ 				sk->sk_write_space(sk);
+ 				break;
++			case TCP_WINDOW_CLAMP:
++				if (!val) {
++					if (sk->sk_state !=3D TCP_CLOSE) {
++						ret =3D -EINVAL;
++						break;
++					}
++					tp->window_clamp =3D 0;
++				} else {
++					tp->window_clamp =3D
++						val < SOCK_MIN_RCVBUF / 2 ?
++						SOCK_MIN_RCVBUF / 2 : val;
++				}
++				break;
+ 			default:
+ 				ret =3D -EINVAL;
+ 			}
+--=20
+2.24.1
 
