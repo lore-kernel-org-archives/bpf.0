@@ -5,46 +5,45 @@ X-Spam-Level:
 X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E1D67C83017
-	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 14:46:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6D9E8C83012
+	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 14:47:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 727F22076C
-	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 14:46:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 152B2204EA
+	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 14:47:32 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.co.jp header.i=@amazon.co.jp header.b="Qt6rUKEy"
+	dkim=pass (1024-bit key) header.d=amazon.co.jp header.i=@amazon.co.jp header.b="Bebrghwc"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403943AbgLAOqm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Dec 2020 09:46:42 -0500
-Received: from smtp-fw-9101.amazon.com ([207.171.184.25]:51228 "EHLO
-        smtp-fw-9101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389033AbgLAOqm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Dec 2020 09:46:42 -0500
+        id S2403952AbgLAOrM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Dec 2020 09:47:12 -0500
+Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:64982 "EHLO
+        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389033AbgLAOrK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Dec 2020 09:47:10 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
-  s=amazon201209; t=1606834002; x=1638370002;
+  s=amazon201209; t=1606834030; x=1638370030;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=uyJ//ZGcPRgBO7Ln6GyuNrk95n/KiRMWJ9SsDfr+V+U=;
-  b=Qt6rUKEy0tbmlAkaTMJzDpcg6ErA7P8Awa4E9UGGWlfZrlp1DpqWDHUh
-   qzoEx0ILVJcili2xppDn24JwlhPFLRJbJj5o+/2DWSqqY1d+5wSMSYnwM
-   6y7KobekHNLwRDXg5SCbB43jT3tbMhtKfoA4o17IRo+4sBJzFQF4XREm8
-   U=;
+  bh=1djFn+jagjiayQ5HBXRcUZo+k3FTO2zB5G1LxznygzM=;
+  b=BebrghwcFbLcs8l7zp8gK+OwTT8RQ9OijlVHh3PeFJyEjJBo4/ypR4+0
+   MVqbr7mGN6WbhxOg7M3cRZJDqIAKURcGM6/ulm7ewrzXRT3OJBVYxufIO
+   N0fK2F/L0EzHdqHkPQ7nOarHAsglbAO1llXPO3ve7hF7aynxs7glCHVR2
+   k=;
 X-IronPort-AV: E=Sophos;i="5.78,384,1599523200"; 
-   d="scan'208";a="92542266"
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-2b-c300ac87.us-west-2.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-9101.sea19.amazon.com with ESMTP; 01 Dec 2020 14:45:58 +0000
+   d="scan'208";a="99547297"
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-2b-c7131dcf.us-west-2.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 01 Dec 2020 14:46:29 +0000
 Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-2b-c300ac87.us-west-2.amazon.com (Postfix) with ESMTPS id ECBBCA20D1;
-        Tue,  1 Dec 2020 14:45:57 +0000 (UTC)
+        by email-inbound-relay-2b-c7131dcf.us-west-2.amazon.com (Postfix) with ESMTPS id 3DF29A1BB0;
+        Tue,  1 Dec 2020 14:46:28 +0000 (UTC)
 Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
  EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Tue, 1 Dec 2020 14:45:57 +0000
+ id 15.0.1497.2; Tue, 1 Dec 2020 14:46:27 +0000
 Received: from 38f9d3582de7.ant.amazon.com (10.43.162.146) by
  EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Tue, 1 Dec 2020 14:45:52 +0000
+ id 15.0.1497.2; Tue, 1 Dec 2020 14:46:23 +0000
 From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
 To:     "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
@@ -57,9 +56,9 @@ CC:     Benjamin Herrenschmidt <benh@amazon.com>,
         Kuniyuki Iwashima <kuni1840@gmail.com>,
         <osa-contribution-log@amazon.com>, <bpf@vger.kernel.org>,
         <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 bpf-next 04/11] tcp: Migrate TFO requests causing RST during TCP_SYN_RECV.
-Date:   Tue, 1 Dec 2020 23:44:11 +0900
-Message-ID: <20201201144418.35045-5-kuniyu@amazon.co.jp>
+Subject: [PATCH v1 bpf-next 06/11] bpf: Introduce two attach types for BPF_PROG_TYPE_SK_REUSEPORT.
+Date:   Tue, 1 Dec 2020 23:44:13 +0900
+Message-ID: <20201201144418.35045-7-kuniyu@amazon.co.jp>
 X-Mailer: git-send-email 2.17.2 (Apple Git-113)
 In-Reply-To: <20201201144418.35045-1-kuniyu@amazon.co.jp>
 References: <20201201144418.35045-1-kuniyu@amazon.co.jp>
@@ -72,96 +71,70 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A TFO request socket is only freed after BOTH 3WHS has completed (or
-aborted) and the child socket has been accepted (or its listener has been
-closed). Hence, depending on the order, there can be two kinds of request
-sockets in the accept queue.
+This commit adds new bpf_attach_type for BPF_PROG_TYPE_SK_REUSEPORT to
+check if the attached eBPF program is capable of migrating sockets.
 
-  3WHS -> accept : TCP_ESTABLISHED
-  accept -> 3WHS : TCP_SYN_RECV
+When the eBPF program is attached, the kernel runs it for socket migration
+only if the expected_attach_type is BPF_SK_REUSEPORT_SELECT_OR_MIGRATE.
+The kernel will change the behaviour depending on the returned value:
 
-Unlike TCP_ESTABLISHED socket, accept() does not free the request socket
-for TCP_SYN_RECV socket. It is freed later at reqsk_fastopen_remove().
-Also, it accesses request_sock.rsk_listener. So, in order to complete TFO
-socket migration, we have to set the current listener to it at accept()
-before reqsk_fastopen_remove().
+  - SK_PASS with selected_sk, select it as a new listener
+  - SK_PASS with selected_sk NULL, fall back to the random selection
+  - SK_DROP, cancel the migration
 
-Moreover, if TFO request caused RST before 3WHS has completed, it is held
-in the listener's TFO queue to prevent DDoS attack. Thus, we also have to
-migrate the requests in TFO queue.
-
-Reviewed-by: Benjamin Herrenschmidt <benh@amazon.com>
+Link: https://lore.kernel.org/netdev/20201123003828.xjpjdtk4ygl6tg6h@kafai-mbp.dhcp.thefacebook.com/
+Suggested-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
 ---
- net/ipv4/inet_connection_sock.c | 35 ++++++++++++++++++++++++++++++++-
- 1 file changed, 34 insertions(+), 1 deletion(-)
+ include/uapi/linux/bpf.h       | 2 ++
+ kernel/bpf/syscall.c           | 8 ++++++++
+ tools/include/uapi/linux/bpf.h | 2 ++
+ 3 files changed, 12 insertions(+)
 
-diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
-index b27241ea96bd..361efe55b1ad 100644
---- a/net/ipv4/inet_connection_sock.c
-+++ b/net/ipv4/inet_connection_sock.c
-@@ -500,6 +500,16 @@ struct sock *inet_csk_accept(struct sock *sk, int flags, int *err, bool kern)
- 	    tcp_rsk(req)->tfo_listener) {
- 		spin_lock_bh(&queue->fastopenq.lock);
- 		if (tcp_rsk(req)->tfo_listener) {
-+			if (req->rsk_listener != sk) {
-+				/* TFO request was migrated to another listener so
-+				 * the new listener must be used in reqsk_fastopen_remove()
-+				 * to hold requests which cause RST.
-+				 */
-+				sock_put(req->rsk_listener);
-+				sock_hold(sk);
-+				req->rsk_listener = sk;
-+			}
-+
- 			/* We are still waiting for the final ACK from 3WHS
- 			 * so can't free req now. Instead, we set req->sk to
- 			 * NULL to signify that the child socket is taken
-@@ -954,7 +964,6 @@ static void inet_child_forget(struct sock *sk, struct request_sock *req,
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 85278deff439..cfc207ae7782 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -241,6 +241,8 @@ enum bpf_attach_type {
+ 	BPF_XDP_CPUMAP,
+ 	BPF_SK_LOOKUP,
+ 	BPF_XDP,
++	BPF_SK_REUSEPORT_SELECT,
++	BPF_SK_REUSEPORT_SELECT_OR_MIGRATE,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
  
- 	if (sk->sk_protocol == IPPROTO_TCP && tcp_rsk(req)->tfo_listener) {
- 		BUG_ON(rcu_access_pointer(tcp_sk(child)->fastopen_rsk) != req);
--		BUG_ON(sk != req->rsk_listener);
- 
- 		/* Paranoid, to prevent race condition if
- 		 * an inbound pkt destined for child is
-@@ -995,6 +1004,7 @@ EXPORT_SYMBOL(inet_csk_reqsk_queue_add);
- void inet_csk_reqsk_queue_migrate(struct sock *sk, struct sock *nsk)
- {
- 	struct request_sock_queue *old_accept_queue, *new_accept_queue;
-+	struct fastopen_queue *old_fastopenq, *new_fastopenq;
- 
- 	old_accept_queue = &inet_csk(sk)->icsk_accept_queue;
- 	new_accept_queue = &inet_csk(nsk)->icsk_accept_queue;
-@@ -1019,6 +1029,29 @@ void inet_csk_reqsk_queue_migrate(struct sock *sk, struct sock *nsk)
- 
- 	spin_unlock(&new_accept_queue->rskq_lock);
- 	spin_unlock(&old_accept_queue->rskq_lock);
-+
-+	old_fastopenq = &old_accept_queue->fastopenq;
-+	new_fastopenq = &new_accept_queue->fastopenq;
-+
-+	spin_lock_bh(&old_fastopenq->lock);
-+	spin_lock_bh(&new_fastopenq->lock);
-+
-+	new_fastopenq->qlen += old_fastopenq->qlen;
-+	old_fastopenq->qlen = 0;
-+
-+	if (old_fastopenq->rskq_rst_head) {
-+		if (new_fastopenq->rskq_rst_head)
-+			old_fastopenq->rskq_rst_tail->dl_next = new_fastopenq->rskq_rst_head;
-+		else
-+			old_fastopenq->rskq_rst_tail = new_fastopenq->rskq_rst_tail;
-+
-+		new_fastopenq->rskq_rst_head = old_fastopenq->rskq_rst_head;
-+		old_fastopenq->rskq_rst_head = NULL;
-+		old_fastopenq->rskq_rst_tail = NULL;
-+	}
-+
-+	spin_unlock_bh(&new_fastopenq->lock);
-+	spin_unlock_bh(&old_fastopenq->lock);
- }
- EXPORT_SYMBOL(inet_csk_reqsk_queue_migrate);
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index f3fe9f53f93c..a0796a8de5ea 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2036,6 +2036,14 @@ bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
+ 		if (expected_attach_type == BPF_SK_LOOKUP)
+ 			return 0;
+ 		return -EINVAL;
++	case BPF_PROG_TYPE_SK_REUSEPORT:
++		switch (expected_attach_type) {
++		case BPF_SK_REUSEPORT_SELECT:
++		case BPF_SK_REUSEPORT_SELECT_OR_MIGRATE:
++			return 0;
++		default:
++			return -EINVAL;
++		}
+ 	case BPF_PROG_TYPE_EXT:
+ 		if (expected_attach_type)
+ 			return -EINVAL;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 85278deff439..cfc207ae7782 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -241,6 +241,8 @@ enum bpf_attach_type {
+ 	BPF_XDP_CPUMAP,
+ 	BPF_SK_LOOKUP,
+ 	BPF_XDP,
++	BPF_SK_REUSEPORT_SELECT,
++	BPF_SK_REUSEPORT_SELECT_OR_MIGRATE,
+ 	__MAX_BPF_ATTACH_TYPE
+ };
  
 -- 
 2.17.2 (Apple Git-113)
