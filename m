@@ -2,90 +2,196 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60292C71155
-	for <bpf@archiver.kernel.org>; Mon, 30 Nov 2020 23:30:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 194A7C63777
+	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 00:04:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0805720725
-	for <bpf@archiver.kernel.org>; Mon, 30 Nov 2020 23:30:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C7AFB2085B
+	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 00:04:40 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=kernel.org header.i=@kernel.org header.b="zzIvINrL"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="POSOvlfT"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388686AbgK3Xau (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 30 Nov 2020 18:30:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39786 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388590AbgK3Xau (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 30 Nov 2020 18:30:50 -0500
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1606779008;
-        bh=sc9AcIKcGWtRyOxkD+akZIHNfARM1pr2D943DF9LSK0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=zzIvINrLKGuLQ6/NX6qf2UGI1VXYl6ltCTYmNo3UBUU3NvWx87Hqf1FqgShUdzWrQ
-         w+x7hAJdsvQxGAnHcyS9tR3HuBYv2YmIQM1LgOHoXKFGh9xmr8iyg+yhXzIN2/f6QR
-         Z3pfh+gIijIUwvrgB43eOC0t7vK8y84qiFO0ybvA=
+        id S1730981AbgLAAEY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 Nov 2020 19:04:24 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:5766 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730970AbgLAAEY (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 30 Nov 2020 19:04:24 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B100uVu012285
+        for <bpf@vger.kernel.org>; Mon, 30 Nov 2020 16:03:43 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=PfYV/v+uwNAdHgWlfUS6CxlpQgD2LLrJxGYYZg5n2O8=;
+ b=POSOvlfTtWFS1OcUHOVVRu+iAHmDMqAiP4XOycFH8oGePocNy2fSpCl9GBKwkpPC8VXZ
+ CeNkg9RreGeNHZSmkhCAaYqSdt/yp1Aalrw8SDibM+3FNUqKR/TayAjMKHBYWu0X2/p1
+ 9nVbVEZL0b8aSGgwbHWxpVthbASQ4kSx7xY= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 354d4g7en4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Mon, 30 Nov 2020 16:03:43 -0800
+Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Mon, 30 Nov 2020 16:03:41 -0800
+Received: by devvm3178.ftw3.facebook.com (Postfix, from userid 201728)
+        id 19FF14752A009; Mon, 30 Nov 2020 16:03:41 -0800 (PST)
+From:   Prankur gupta <prankgup@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     <kernel-team@fb.com>, <netdev@vger.kernel.org>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Add Userspace tests for TCP_WINDOW_CLAMP
+Date:   Mon, 30 Nov 2020 16:03:39 -0800
+Message-ID: <20201201000339.3310760-3-prankgup@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201201000339.3310760-1-prankgup@fb.com>
+References: <20201201000339.3310760-1-prankgup@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 00/10] Introduce preferred busy-polling
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <160677900881.6839.6641263585447290878.git-patchwork-notify@kernel.org>
-Date:   Mon, 30 Nov 2020 23:30:08 +0000
-References: <20201130185205.196029-1-bjorn.topel@gmail.com>
-In-Reply-To: <20201130185205.196029-1-bjorn.topel@gmail.com>
-To:     =?utf-8?b?QmrDtnJuIFTDtnBlbCA8Ympvcm4udG9wZWxAZ21haWwuY29tPg==?=@ci.codeaurora.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, bjorn.topel@intel.com,
-        magnus.karlsson@intel.com, ast@kernel.org, daniel@iogearbox.net,
-        maciej.fijalkowski@intel.com, sridhar.samudrala@intel.com,
-        jesse.brandeburg@intel.com, qi.z.zhang@intel.com, kuba@kernel.org,
-        edumazet@google.com, jonathan.lemon@gmail.com, maximmi@nvidia.com
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-11-30_12:2020-11-30,2020-11-30 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ malwarescore=0 mlxscore=0 bulkscore=0 adultscore=0 suspectscore=13
+ mlxlogscore=999 phishscore=0 spamscore=0 clxscore=1011 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2011300150
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+Adding selftests for new added functionality to set TCP_WINDOW_CLAMP
+from bpf setsockopt.
 
-This series was applied to bpf/bpf-next.git (refs/heads/master):
+Signed-off-by: Prankur gupta <prankgup@fb.com>
+---
+ tools/testing/selftests/bpf/bpf_tcp_helpers.h |  1 +
+ .../selftests/bpf/prog_tests/tcpbpf_user.c    |  4 +++
+ .../selftests/bpf/progs/test_tcpbpf_kern.c    | 33 +++++++++++++++++++
+ tools/testing/selftests/bpf/test_tcpbpf.h     |  2 ++
+ 4 files changed, 40 insertions(+)
 
-On Mon, 30 Nov 2020 19:51:55 +0100 you wrote:
-> This series introduces three new features:
-> 
-> 1. A new "heavy traffic" busy-polling variant that works in concert
->    with the existing napi_defer_hard_irqs and gro_flush_timeout knobs.
-> 
-> 2. A new socket option that let a user change the busy-polling NAPI
->    budget.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v4,01/10] net: introduce preferred busy-polling
-    https://git.kernel.org/bpf/bpf-next/c/7fd3253a7de6
-  - [bpf-next,v4,02/10] net: add SO_BUSY_POLL_BUDGET socket option
-    https://git.kernel.org/bpf/bpf-next/c/7c951cafc0cb
-  - [bpf-next,v4,03/10] xsk: add support for recvmsg()
-    https://git.kernel.org/bpf/bpf-next/c/45a86681844e
-  - [bpf-next,v4,04/10] xsk: check need wakeup flag in sendmsg()
-    https://git.kernel.org/bpf/bpf-next/c/e39208183728
-  - [bpf-next,v4,05/10] xsk: add busy-poll support for {recv,send}msg()
-    https://git.kernel.org/bpf/bpf-next/c/a0731952d9cd
-  - [bpf-next,v4,06/10] xsk: propagate napi_id to XDP socket Rx path
-    https://git.kernel.org/bpf/bpf-next/c/b02e5a0ebb17
-  - [bpf-next,v4,07/10] samples/bpf: use recvfrom() in xdpsock/rxdrop
-    https://git.kernel.org/bpf/bpf-next/c/f2d2728220ac
-  - [bpf-next,v4,08/10] samples/bpf: use recvfrom() in xdpsock/l2fwd
-    https://git.kernel.org/bpf/bpf-next/c/284cbc61f851
-  - [bpf-next,v4,09/10] samples/bpf: add busy-poll support to xdpsock
-    https://git.kernel.org/bpf/bpf-next/c/b35fc1482ceb
-  - [bpf-next,v4,10/10] samples/bpf: add option to set the busy-poll budget
-    https://git.kernel.org/bpf/bpf-next/c/41bf900fe2a0
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+diff --git a/tools/testing/selftests/bpf/bpf_tcp_helpers.h b/tools/testin=
+g/selftests/bpf/bpf_tcp_helpers.h
+index 2915664c335d..6a9053162cf2 100644
+--- a/tools/testing/selftests/bpf/bpf_tcp_helpers.h
++++ b/tools/testing/selftests/bpf/bpf_tcp_helpers.h
+@@ -56,6 +56,7 @@ struct tcp_sock {
+ 	__u32	rcv_nxt;
+ 	__u32	snd_nxt;
+ 	__u32	snd_una;
++	__u32	window_clamp;
+ 	__u8	ecn_flags;
+ 	__u32	delivered;
+ 	__u32	delivered_ce;
+diff --git a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c b/tools=
+/testing/selftests/bpf/prog_tests/tcpbpf_user.c
+index ab5281475f44..87923d2865b7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
++++ b/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
+@@ -42,6 +42,10 @@ static void verify_result(struct tcpbpf_globals *resul=
+t)
+=20
+ 	/* check getsockopt for SAVED_SYN */
+ 	ASSERT_EQ(result->tcp_saved_syn, 1, "tcp_saved_syn");
++
++	/* check getsockopt for window_clamp */
++	ASSERT_EQ(result->window_clamp_client, 9216, "window_clamp_client");
++	ASSERT_EQ(result->window_clamp_server, 9216, "window_clamp_server");
+ }
+=20
+ static void run_test(struct tcpbpf_globals *result)
+diff --git a/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c b/tools=
+/testing/selftests/bpf/progs/test_tcpbpf_kern.c
+index e85e49deba70..94f50f7e94d6 100644
+--- a/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
+@@ -12,17 +12,41 @@
+ #include <linux/tcp.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_endian.h>
++#include "bpf_tcp_helpers.h"
+ #include "test_tcpbpf.h"
+=20
+ struct tcpbpf_globals global =3D {};
+ int _version SEC("version") =3D 1;
+=20
++/**
++ * SOL_TCP is defined in <netinet/tcp.h> while
++ * TCP_SAVED_SYN is defined in already included <linux/tcp.h>
++ */
++#ifndef SOL_TCP
++#define SOL_TCP 6
++#endif
++
++static __always_inline int get_tp_window_clamp(struct bpf_sock_ops *skop=
+s)
++{
++	struct bpf_sock *sk;
++	struct tcp_sock *tp;
++
++	sk =3D skops->sk;
++	if (!sk)
++		return -1;
++	tp =3D bpf_skc_to_tcp_sock(sk);
++	if (!tp)
++		return -1;
++	return tp->window_clamp;
++}
++
+ SEC("sockops")
+ int bpf_testcb(struct bpf_sock_ops *skops)
+ {
+ 	char header[sizeof(struct ipv6hdr) + sizeof(struct tcphdr)];
+ 	struct bpf_sock_ops *reuse =3D skops;
+ 	struct tcphdr *thdr;
++	int window_clamp =3D 9216;
+ 	int good_call_rv =3D 0;
+ 	int bad_call_rv =3D 0;
+ 	int save_syn =3D 1;
+@@ -75,6 +99,11 @@ int bpf_testcb(struct bpf_sock_ops *skops)
+ 	global.event_map |=3D (1 << op);
+=20
+ 	switch (op) {
++	case BPF_SOCK_OPS_TCP_CONNECT_CB:
++		rv =3D bpf_setsockopt(skops, SOL_TCP, TCP_WINDOW_CLAMP,
++				    &window_clamp, sizeof(window_clamp));
++		global.window_clamp_client =3D get_tp_window_clamp(skops);
++		break;
+ 	case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
+ 		/* Test failure to set largest cb flag (assumes not defined) */
+ 		global.bad_cb_test_rv =3D bpf_sock_ops_cb_flags_set(skops, 0x80);
+@@ -100,6 +129,10 @@ int bpf_testcb(struct bpf_sock_ops *skops)
+ 				global.tcp_saved_syn =3D v;
+ 			}
+ 		}
++		rv =3D bpf_setsockopt(skops, SOL_TCP, TCP_WINDOW_CLAMP,
++				    &window_clamp, sizeof(window_clamp));
++
++		global.window_clamp_server =3D get_tp_window_clamp(skops);
+ 		break;
+ 	case BPF_SOCK_OPS_RTO_CB:
+ 		break;
+diff --git a/tools/testing/selftests/bpf/test_tcpbpf.h b/tools/testing/se=
+lftests/bpf/test_tcpbpf.h
+index 0ed33521cbbb..9dd9b5590f9d 100644
+--- a/tools/testing/selftests/bpf/test_tcpbpf.h
++++ b/tools/testing/selftests/bpf/test_tcpbpf.h
+@@ -16,5 +16,7 @@ struct tcpbpf_globals {
+ 	__u32 num_close_events;
+ 	__u32 tcp_save_syn;
+ 	__u32 tcp_saved_syn;
++	__u32 window_clamp_client;
++	__u32 window_clamp_server;
+ };
+ #endif
+--=20
+2.24.1
 
