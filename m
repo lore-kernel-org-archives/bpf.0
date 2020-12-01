@@ -5,51 +5,52 @@ X-Spam-Level:
 X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 719A0C83016
-	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 22:02:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 02326C8301A
+	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 22:02:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 19A4920709
-	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 22:02:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 953EA20709
+	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 22:02:33 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="FjD3dcqV"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="fmbTUdCt"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391809AbgLAWBq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Dec 2020 17:01:46 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:14160 "EHLO
+        id S2391929AbgLAWCI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Dec 2020 17:02:08 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:34074 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2389838AbgLAV74 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 1 Dec 2020 16:59:56 -0500
+        by vger.kernel.org with ESMTP id S2389439AbgLAV7y (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 1 Dec 2020 16:59:54 -0500
 Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0B1Lngkn006687
-        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 13:59:15 -0800
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0B1Lngkj006687
+        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 13:59:13 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=h6PXB4ExcT3GP3qFAXy2gqJvs6xVABY40pGBrkACiCE=;
- b=FjD3dcqVkmhjP4QcEjEpCKOZB9124VJ995HIXfn0j3NgqcFU3fL0NFYK4ufCvFOaOsgI
- MbZAL/DX9KKu0H2mgkVAXB2CKXB8F7eC+4GvqLiR3l096HELJyuidz0WTBIW0ebQ+NxB
- 8ntBGgbdsoWDeEjylaxmQljVglW4xdrXLE4= 
+ bh=/96f2JealKLTGGO+sRiEZCxtFZDCpNl24O7D1volLV0=;
+ b=fmbTUdCt4Dt7Y6SEHvB/8QwQ0qj54zsNRBBnxbR0hSHgg8xNGAgqfMhLO4rHLcipVMaL
+ CAgWQQ77KIodUuQ38yWuOJOIA7t4jEzPKnxqTngbil4UijC08++w+Nkkl1iGibSXiqgB
+ VMpb0RZUEhFGfOH946wd5ssF8a277Hdz4Ig= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 355pr6kf7b-11
+        by m0089730.ppops.net with ESMTP id 355pr6kf7b-7
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 13:59:15 -0800
+        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 13:59:13 -0800
 Received: from intmgw002.41.prn1.facebook.com (2620:10d:c085:208::f) by
  mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1979.3; Tue, 1 Dec 2020 13:59:10 -0800
 Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
-        id CE3FC19702DA; Tue,  1 Dec 2020 13:59:06 -0800 (PST)
+        id AF9F219702CE; Tue,  1 Dec 2020 13:59:06 -0800 (PST)
 From:   Roman Gushchin <guro@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
         <andrii@kernel.org>, <akpm@linux-foundation.org>,
         <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <kernel-team@fb.com>
-Subject: [PATCH bpf-next v9 30/34] bpf: eliminate rlimit-based memory accounting for xskmap maps
-Date:   Tue, 1 Dec 2020 13:58:56 -0800
-Message-ID: <20201201215900.3569844-31-guro@fb.com>
+Subject: [PATCH bpf-next v9 24/34] bpf: eliminate rlimit-based memory accounting for lpm_trie maps
+Date:   Tue, 1 Dec 2020 13:58:50 -0800
+Message-ID: <20201201215900.3569844-25-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201201215900.3569844-1-guro@fb.com>
 References: <20201201215900.3569844-1-guro@fb.com>
@@ -60,8 +61,8 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-12-01_11:2020-11-30,2020-12-01 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- priorityscore=1501 suspectscore=13 spamscore=0 adultscore=0 clxscore=1015
- mlxlogscore=838 lowpriorityscore=0 mlxscore=0 phishscore=0 bulkscore=0
+ priorityscore=1501 suspectscore=38 spamscore=0 adultscore=0 clxscore=1015
+ mlxlogscore=701 lowpriorityscore=0 mlxscore=0 phishscore=0 bulkscore=0
  impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2012010131
 X-FB-Internal: deliver
@@ -69,51 +70,51 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Do not use rlimit-based memory accounting for xskmap maps.
+Do not use rlimit-based memory accounting for lpm_trie maps.
 It has been replaced with the memcg-based memory accounting.
 
 Signed-off-by: Roman Gushchin <guro@fb.com>
 Acked-by: Song Liu <songliubraving@fb.com>
 ---
- net/xdp/xskmap.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+ kernel/bpf/lpm_trie.c | 13 -------------
+ 1 file changed, 13 deletions(-)
 
-diff --git a/net/xdp/xskmap.c b/net/xdp/xskmap.c
-index 9fff1e6dc9cd..113fd9017203 100644
---- a/net/xdp/xskmap.c
-+++ b/net/xdp/xskmap.c
-@@ -58,9 +58,8 @@ static void xsk_map_sock_delete(struct xdp_sock *xs,
-=20
- static struct bpf_map *xsk_map_alloc(union bpf_attr *attr)
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index 1a6981203d7f..cec792a17e5f 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -540,8 +540,6 @@ static int trie_delete_elem(struct bpf_map *map, void=
+ *_key)
+ static struct bpf_map *trie_alloc(union bpf_attr *attr)
  {
--	struct bpf_map_memory mem;
--	int err, numa_node;
- 	struct xsk_map *m;
-+	int numa_node;
- 	u64 size;
+ 	struct lpm_trie *trie;
+-	u64 cost =3D sizeof(*trie), cost_per_node;
+-	int ret;
 =20
- 	if (!capable(CAP_NET_ADMIN))
-@@ -74,18 +73,11 @@ static struct bpf_map *xsk_map_alloc(union bpf_attr *=
-attr)
- 	numa_node =3D bpf_map_attr_numa_node(attr);
- 	size =3D struct_size(m, xsk_map, attr->max_entries);
+ 	if (!bpf_capable())
+ 		return ERR_PTR(-EPERM);
+@@ -567,20 +565,9 @@ static struct bpf_map *trie_alloc(union bpf_attr *at=
+tr)
+ 			  offsetof(struct bpf_lpm_trie_key, data);
+ 	trie->max_prefixlen =3D trie->data_size * 8;
 =20
--	err =3D bpf_map_charge_init(&mem, size);
--	if (err < 0)
--		return ERR_PTR(err);
+-	cost_per_node =3D sizeof(struct lpm_trie_node) +
+-			attr->value_size + trie->data_size;
+-	cost +=3D (u64) attr->max_entries * cost_per_node;
 -
- 	m =3D bpf_map_area_alloc(size, numa_node);
--	if (!m) {
--		bpf_map_charge_finish(&mem);
-+	if (!m)
- 		return ERR_PTR(-ENOMEM);
--	}
+-	ret =3D bpf_map_charge_init(&trie->map.memory, cost);
+-	if (ret)
+-		goto out_err;
+-
+ 	spin_lock_init(&trie->lock);
 =20
- 	bpf_map_init_from_attr(&m->map, attr);
--	bpf_map_charge_move(&m->map.memory, &mem);
- 	spin_lock_init(&m->lock);
+ 	return &trie->map;
+-out_err:
+-	kfree(trie);
+-	return ERR_PTR(ret);
+ }
 =20
- 	return &m->map;
+ static void trie_free(struct bpf_map *map)
 --=20
 2.26.2
 
