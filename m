@@ -2,185 +2,152 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B182FC64E7A
-	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 14:48:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1BDC3C64E7A
+	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 15:14:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 48F4D204EA
-	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 14:48:41 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B12692076C
+	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 15:14:30 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.co.jp header.i=@amazon.co.jp header.b="vWyY2DKG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cyP4KlWp"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404044AbgLAOsM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Dec 2020 09:48:12 -0500
-Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:63105 "EHLO
-        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404026AbgLAOsL (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 1 Dec 2020 09:48:11 -0500
+        id S2391642AbgLAPOa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Dec 2020 10:14:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53196 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391675AbgLAPOa (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Dec 2020 10:14:30 -0500
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E4AC0613CF;
+        Tue,  1 Dec 2020 07:13:43 -0800 (PST)
+Received: by mail-wm1-x342.google.com with SMTP id 3so5839240wmg.4;
+        Tue, 01 Dec 2020 07:13:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
-  s=amazon201209; t=1606834092; x=1638370092;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=L3BDjC4r+KlsYF9bVtRPpv4evDg4B9zvwuwACl+vsMQ=;
-  b=vWyY2DKGcYFohSyYJaYvhI62sUUUbqHilbziB0cFZT58M2SjHUCRfnQV
-   mQxPkBkvYNjxffA9OIpsMakKDjx6wdd6M0gsoQ7uUctsMdoogQW8Sgj+S
-   8k+u0CiIBiRaIm3IrerkdZugCeNbP7AnLS55JNxNcMFM4XZFm9VOmAKFS
-   c=;
-X-IronPort-AV: E=Sophos;i="5.78,384,1599523200"; 
-   d="scan'208";a="68318988"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-2c-2225282c.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-out-6002.iad6.amazon.com with ESMTP; 01 Dec 2020 14:47:30 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-2c-2225282c.us-west-2.amazon.com (Postfix) with ESMTPS id A5B4BA1EBA;
-        Tue,  1 Dec 2020 14:47:28 +0000 (UTC)
-Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Tue, 1 Dec 2020 14:47:27 +0000
-Received: from 38f9d3582de7.ant.amazon.com (10.43.162.146) by
- EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Tue, 1 Dec 2020 14:47:23 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-To:     "David S . Miller" <davem@davemloft.net>,
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=tlhIYoIq9e3CaEPaXdMjL7drXTusDUU9rzK4hAthGZ0=;
+        b=cyP4KlWpFNGCcb0/elouH0+cdYKwDMbUoRTZRROjot83CUc0Qw6t4is1RAGHb2jO/C
+         ldT0w1qqy7nQuu4D0YRvJgUQdRcdCSim9t9+Du6EFo9SozWyGExfmCqIBeOAaxXYAhwt
+         +ykQF358mEGMfCml/NR8oYqTIVT3zk9HLFcukSLHf9qzzskuA8SvNqk2d1iDWiw57IEe
+         ETps2UWTvNQExjqHMZUNBTYAAELSuuKNtLucp0HxF11Q5lsmwZa/dIEI68+OwORLycrj
+         Up37B+3gkTzNylT20KpbJHQo/obZ/VBhU/m1kPmqNflOuHRL2l0IiFlKDOcXj9TNCch6
+         5lCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=tlhIYoIq9e3CaEPaXdMjL7drXTusDUU9rzK4hAthGZ0=;
+        b=F7psFLotJ7USXe8wzHq9yWPDud8veRTaDzgj7vkrqeHFfanFD1oS8OayXBoz/QaT1L
+         PqFWGVX8o7JHF9hDLP0x0kqyy0TLAiyxMmnNUyOzY7vZ5Qx0QDYYqPpUJ9f0iBfpXTzz
+         XqugSO7zhfu2Fa8EDZTpVsxPcgmmL1ApMUwBmyUKycgv/UTvfujZHrbZYDAB7uPAALl4
+         8Opd3rPBZXri+7MfgdSyUfvQt8HJLC6+uwi+kRvFTV+hLkcT2444ZGNhUD71W6K8fQ4N
+         gsXLLg8RDce9ZjXKWUwhom4OKpMwrueF00Jq6ZwyKw07pnUSSmVutCo8jbtmFp/XxOnS
+         yMYA==
+X-Gm-Message-State: AOAM532JC6lfSvWfbn95Fz+o4vsy8McYltfl2pa+b90UR9dNODApay0c
+        Bv86A3rxg4nJuimv00W+SetTlG/RGTM=
+X-Google-Smtp-Source: ABdhPJxVZacII63n6CKeMEZxzuIpwNpMB2NqST95mdNmS5GWshD7PxuwqBJOIAwPTEoiTtwGYRqSGQ==
+X-Received: by 2002:a7b:c8da:: with SMTP id f26mr3186808wml.50.1606835622180;
+        Tue, 01 Dec 2020 07:13:42 -0800 (PST)
+Received: from [192.168.8.116] ([37.165.175.127])
+        by smtp.gmail.com with ESMTPSA id n14sm3897039wrx.79.2020.12.01.07.13.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Dec 2020 07:13:41 -0800 (PST)
+Subject: Re: [PATCH v1 bpf-next 05/11] tcp: Migrate TCP_NEW_SYN_RECV requests.
+To:     Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+        "David S . Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
         Eric Dumazet <edumazet@google.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>
-CC:     Benjamin Herrenschmidt <benh@amazon.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>,
+Cc:     Benjamin Herrenschmidt <benh@amazon.com>,
         Kuniyuki Iwashima <kuni1840@gmail.com>,
-        <osa-contribution-log@amazon.com>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 bpf-next 10/11] bpf: Call bpf_run_sk_reuseport() for socket migration.
-Date:   Tue, 1 Dec 2020 23:44:17 +0900
-Message-ID: <20201201144418.35045-11-kuniyu@amazon.co.jp>
-X-Mailer: git-send-email 2.17.2 (Apple Git-113)
-In-Reply-To: <20201201144418.35045-1-kuniyu@amazon.co.jp>
+        osa-contribution-log@amazon.com, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20201201144418.35045-1-kuniyu@amazon.co.jp>
+ <20201201144418.35045-6-kuniyu@amazon.co.jp>
+From:   Eric Dumazet <eric.dumazet@gmail.com>
+Message-ID: <6b34c251-05af-06c0-8003-858b6ae8d1fd@gmail.com>
+Date:   Tue, 1 Dec 2020 16:13:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.43.162.146]
-X-ClientProxiedBy: EX13D36UWA004.ant.amazon.com (10.43.160.175) To
- EX13D04ANC001.ant.amazon.com (10.43.157.89)
+In-Reply-To: <20201201144418.35045-6-kuniyu@amazon.co.jp>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch supports socket migration by eBPF. If the attached type is
-BPF_SK_REUSEPORT_SELECT_OR_MIGRATE, we can select a new listener by
-BPF_FUNC_sk_select_reuseport(). Also, we can cancel migration by returning
-SK_DROP. This feature is useful when listeners have different settings at
-the socket API level or when we want to free resources as soon as possible.
 
-There are two noteworthy points. The first is that we select a listening
-socket in reuseport_detach_sock() and __reuseport_select_sock(), but we do
-not have struct skb at closing a listener or retransmitting a SYN+ACK.
-However, some helper functions do not expect skb is NULL (e.g.
-skb_header_pointer() in BPF_FUNC_skb_load_bytes(), skb_tail_pointer() in
-BPF_FUNC_skb_load_bytes_relative()). So, we allocate an empty skb
-temporarily before running the eBPF program. The second is that we do not
-have struct request_sock in unhash path, and the sk_hash of the listener is
-always zero. Thus, we pass zero as hash to bpf_run_sk_reuseport().
 
-Reviewed-by: Benjamin Herrenschmidt <benh@amazon.com>
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
----
- net/core/filter.c          | 19 +++++++++++++++++++
- net/core/sock_reuseport.c  | 19 ++++++++++---------
- net/ipv4/inet_hashtables.c |  2 +-
- 3 files changed, 30 insertions(+), 10 deletions(-)
+On 12/1/20 3:44 PM, Kuniyuki Iwashima wrote:
+> This patch renames reuseport_select_sock() to __reuseport_select_sock() and
+> adds two wrapper function of it to pass the migration type defined in the
+> previous commit.
+> 
+>   reuseport_select_sock          : BPF_SK_REUSEPORT_MIGRATE_NO
+>   reuseport_select_migrated_sock : BPF_SK_REUSEPORT_MIGRATE_REQUEST
+> 
+> As mentioned before, we have to select a new listener for TCP_NEW_SYN_RECV
+> requests at receiving the final ACK or sending a SYN+ACK. Therefore, this
+> patch also changes the code to call reuseport_select_migrated_sock() even
+> if the listening socket is TCP_CLOSE. If we can pick out a listening socket
+> from the reuseport group, we rewrite request_sock.rsk_listener and resume
+> processing the request.
+> 
+> Reviewed-by: Benjamin Herrenschmidt <benh@amazon.com>
+> Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+> ---
+>  include/net/inet_connection_sock.h | 12 +++++++++++
+>  include/net/request_sock.h         | 13 ++++++++++++
+>  include/net/sock_reuseport.h       |  8 +++----
+>  net/core/sock_reuseport.c          | 34 ++++++++++++++++++++++++------
+>  net/ipv4/inet_connection_sock.c    | 13 ++++++++++--
+>  net/ipv4/tcp_ipv4.c                |  9 ++++++--
+>  net/ipv6/tcp_ipv6.c                |  9 ++++++--
+>  7 files changed, 81 insertions(+), 17 deletions(-)
+> 
+> diff --git a/include/net/inet_connection_sock.h b/include/net/inet_connection_sock.h
+> index 2ea2d743f8fc..1e0958f5eb21 100644
+> --- a/include/net/inet_connection_sock.h
+> +++ b/include/net/inet_connection_sock.h
+> @@ -272,6 +272,18 @@ static inline void inet_csk_reqsk_queue_added(struct sock *sk)
+>  	reqsk_queue_added(&inet_csk(sk)->icsk_accept_queue);
+>  }
+>  
+> +static inline void inet_csk_reqsk_queue_migrated(struct sock *sk,
+> +						 struct sock *nsk,
+> +						 struct request_sock *req)
+> +{
+> +	reqsk_queue_migrated(&inet_csk(sk)->icsk_accept_queue,
+> +			     &inet_csk(nsk)->icsk_accept_queue,
+> +			     req);
+> +	sock_put(sk);
+> +	sock_hold(nsk);
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 1059d31847ef..2f2fb77cdb72 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -9871,10 +9871,29 @@ struct sock *bpf_run_sk_reuseport(struct sock_reuseport *reuse, struct sock *sk,
- {
- 	struct sk_reuseport_kern reuse_kern;
- 	enum sk_action action;
-+	bool allocated = false;
-+
-+	if (migration) {
-+		/* cancel migration for possibly incapable eBPF program */
-+		if (prog->expected_attach_type != BPF_SK_REUSEPORT_SELECT_OR_MIGRATE)
-+			return ERR_PTR(-ENOTSUPP);
-+
-+		if (!skb) {
-+			allocated = true;
-+			skb = alloc_skb(0, GFP_ATOMIC);
-+			if (!skb)
-+				return ERR_PTR(-ENOMEM);
-+		}
-+	} else if (!skb) {
-+		return NULL; /* fall back to select by hash */
-+	}
- 
- 	bpf_init_reuseport_kern(&reuse_kern, reuse, sk, skb, hash, migration);
- 	action = BPF_PROG_RUN(prog, &reuse_kern);
- 
-+	if (allocated)
-+		kfree_skb(skb);
-+
- 	if (action == SK_PASS)
- 		return reuse_kern.selected_sk;
- 	else
-diff --git a/net/core/sock_reuseport.c b/net/core/sock_reuseport.c
-index 96d65b4c6974..6b475897b496 100644
---- a/net/core/sock_reuseport.c
-+++ b/net/core/sock_reuseport.c
-@@ -247,8 +247,15 @@ struct sock *reuseport_detach_sock(struct sock *sk)
- 		prog = rcu_dereference(reuse->prog);
- 
- 		if (sk->sk_protocol == IPPROTO_TCP) {
--			if (reuse->num_socks && !prog)
--				nsk = i == reuse->num_socks ? reuse->socks[i - 1] : reuse->socks[i];
-+			if (reuse->num_socks) {
-+				if (prog)
-+					nsk = bpf_run_sk_reuseport(reuse, sk, prog, NULL, 0,
-+								   BPF_SK_REUSEPORT_MIGRATE_QUEUE);
-+
-+				if (!nsk)
-+					nsk = i == reuse->num_socks ?
-+						reuse->socks[i - 1] : reuse->socks[i];
-+			}
- 
- 			reuse->num_closed_socks++;
- 			reuse->socks[reuse->max_socks - reuse->num_closed_socks] = sk;
-@@ -342,15 +349,9 @@ struct sock *__reuseport_select_sock(struct sock *sk, u32 hash,
- 		if (!prog)
- 			goto select_by_hash;
- 
--		if (migration)
--			goto out;
--
--		if (!skb)
--			goto select_by_hash;
--
- 		if (prog->type == BPF_PROG_TYPE_SK_REUSEPORT)
- 			sk2 = bpf_run_sk_reuseport(reuse, sk, prog, skb, hash, migration);
--		else
-+		else if (!skb)
- 			sk2 = run_bpf_filter(reuse, socks, prog, skb, hdr_len);
- 
- select_by_hash:
-diff --git a/net/ipv4/inet_hashtables.c b/net/ipv4/inet_hashtables.c
-index 545538a6bfac..59f58740c20d 100644
---- a/net/ipv4/inet_hashtables.c
-+++ b/net/ipv4/inet_hashtables.c
-@@ -699,7 +699,7 @@ void inet_unhash(struct sock *sk)
- 
- 	if (rcu_access_pointer(sk->sk_reuseport_cb)) {
- 		nsk = reuseport_detach_sock(sk);
--		if (nsk)
-+		if (!IS_ERR_OR_NULL(nsk))
- 			inet_csk_reqsk_queue_migrate(sk, nsk);
- 	}
- 
--- 
-2.17.2 (Apple Git-113)
+This looks racy to me. nsk refcount might be zero at this point.
+
+If you think it can _not_ be zero, please add a big comment here,
+because this would mean something has been done before reaching this function,
+and this sock_hold() would be not needed in the first place.
+
+There is a good reason reqsk_alloc() is using refcount_inc_not_zero().
+
+> +	req->rsk_listener = nsk;
+> +}
+> +
+
+Honestly, this patch series looks quite complex, and finding a bug in the
+very first function I am looking at is not really a good sign...
+
+
 
