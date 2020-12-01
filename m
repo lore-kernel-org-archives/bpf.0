@@ -2,397 +2,246 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25241C64E90
-	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 03:48:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF7F8C64E7A
+	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 03:50:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C8DEF20657
-	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 03:48:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3D8EA20657
+	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 03:50:09 +0000 (UTC)
+Authentication-Results: mail.kernel.org;
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="bRERsoqP";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=fb.onmicrosoft.com header.i=@fb.onmicrosoft.com header.b="Nm2KXrnb"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387427AbgLADsS convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Mon, 30 Nov 2020 22:48:18 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:40658 "EHLO
+        id S1727930AbgLADtv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 30 Nov 2020 22:49:51 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:47812 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387399AbgLADsO (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 30 Nov 2020 22:48:14 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B13jpDM004044
-        for <bpf@vger.kernel.org>; Mon, 30 Nov 2020 19:47:32 -0800
+        by vger.kernel.org with ESMTP id S1727746AbgLADtu (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 30 Nov 2020 22:49:50 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B13kxCU015831;
+        Mon, 30 Nov 2020 19:48:52 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : from : to : cc
+ : references : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=wiD3XVqq94sNjfjdyArJ1ChfnOUBFYzK4Id2Uhy3Y3Y=;
+ b=bRERsoqP+zxlW90cIAVWoPZGIPINZNYkL++BPFiWReRIsnw9JN+iUcJiY7tKP4CcuWgQ
+ HfPaVZfmftiBRjIuIkiQ75BJkgF4iqEoyqJfspT2k71/2e/TDlPlZk4/UZDh/BlqpGBV
+ r7Yo/F10+EhI2p7IoYcKtcN5fZEgu/b+xJk= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 354hsyfkey-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 30 Nov 2020 19:47:32 -0800
-Received: from intmgw004.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
+        by mx0a-00082601.pphosted.com with ESMTP id 354d4g8bx2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 30 Nov 2020 19:48:52 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.228) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 30 Nov 2020 19:47:31 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id D216D2ECA628; Mon, 30 Nov 2020 19:47:22 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>
-Subject: [PATCH v3 bpf-next 5/7] selftests/bpf: add bpf_testmod kernel module for testing
-Date:   Mon, 30 Nov 2020 19:47:06 -0800
-Message-ID: <20201201034709.2918694-6-andrii@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201201034709.2918694-1-andrii@kernel.org>
-References: <20201201034709.2918694-1-andrii@kernel.org>
+ 15.1.1979.3; Mon, 30 Nov 2020 19:48:51 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aYRKTDmp0+odZKv6ulaxVFSL0VxOWA7Mc3FA1KAz2QnozrEkPG4LpcyswXBkcpxQP5YbbWTthYYY7kU8tk6D9leAJgwrpphdWQlaE8dbbf0zBY1lylyJodPTSt1gVQWqmCXYQT6ocXcQH/6AvkeiN231KKQEBDIQ2xLwS66f74SP0aBJfBw4y4a2M37hAYFalc734LL1kb8hiW2HjjP2QvneuJyS33Ab141jFmK3X8axUgSg2wkCKh5yC5p0YMvu+1x3gJnZJ6E/R4d+kck+tkvX8Fn/C4P1RCWwjRI26w043BlqMnIJNHSQWjmYCSMtZAG6f/9XdkCySva/0GfHWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wazCbnJD91SSxaIffDfMQw3gx1MkpB4GhoYOKxgSAKg=;
+ b=TCxwRTZIpJzczY0Mmb1VBvMp8CQZlNw/GGQkJ2gdYwIIMNWCoFQvrVGLDnCRfs2NRUZtFV49UB5U9b3rdkULt/zlNdPUdTjRecaviOLo3Roz4vAHf2tX3tRmN8rl08qkDE+k/njEBe7UpLhJboINMoAUAm+6waX2+vOlo8joS9D+L0qGjHcF1VEn9aAo2rEi3YmplAK+D4Y+yKuxJMnsGr9DVRoKbKzwndrqWcLkNevl2adV2o5mtRS7Jq1SmunbTO1xWqITwEHjuZeVTmPmVz/KB2Se2OrCb8GHNlgsVOfD/HB4u996kXgd+lc8QjwH2Y/5lRwW+CGQr1X+Nlnoug==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wazCbnJD91SSxaIffDfMQw3gx1MkpB4GhoYOKxgSAKg=;
+ b=Nm2KXrnbFInCEY90tj5U/f8EAqrOHGt74KnQ47sO2OJWzPcVSfQwVfELnCJt+P8hH3fBAaCVkgdc3URHomwRfQljYaQyGsyK3UEBBfDh4Z906MEaZrP8d2jehndbI1ohYbXiZ8xktx/KT1qYQeE1IPcf7rAiLBacDdrN9NxfEL4=
+Authentication-Results: google.com; dkim=none (message not signed)
+ header.d=none;google.com; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by SJ0PR15MB4236.namprd15.prod.outlook.com (2603:10b6:a03:2cb::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3589.20; Tue, 1 Dec
+ 2020 03:48:50 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::9ae:1628:daf9:4b03]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::9ae:1628:daf9:4b03%7]) with mapi id 15.20.3611.025; Tue, 1 Dec 2020
+ 03:48:50 +0000
+Subject: Re: [PATCH v2 bpf-next 00/13] Atomics for eBPF
+From:   Yonghong Song <yhs@fb.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC:     Brendan Jackman <jackmanb@google.com>, <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        KP Singh <kpsingh@chromium.org>,
+        Florent Revest <revest@chromium.org>,
+        <linux-kernel@vger.kernel.org>, Jann Horn <jannh@google.com>
+References: <20201127175738.1085417-1-jackmanb@google.com>
+ <829353e6-d90a-a91a-418b-3c2556061cda@fb.com>
+ <20201129014000.3z6eua5pcz3jxmtk@ast-mbp>
+ <b3903adc-59c6-816f-6512-2225c28f47f5@fb.com>
+Message-ID: <4fa9f8cf-aaf8-a63c-e0ca-7d4c83b01578@fb.com>
+Date:   Mon, 30 Nov 2020 19:48:40 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.5.0
+In-Reply-To: <b3903adc-59c6-816f-6512-2225c28f47f5@fb.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+X-Originating-IP: [2620:10d:c090:400::5:d184]
+X-ClientProxiedBy: CO2PR04CA0131.namprd04.prod.outlook.com
+ (2603:10b6:104:7::33) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:21e8::1841] (2620:10d:c090:400::5:d184) by CO2PR04CA0131.namprd04.prod.outlook.com (2603:10b6:104:7::33) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3632.17 via Frontend Transport; Tue, 1 Dec 2020 03:48:49 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 63f5862b-f207-4113-ac8e-08d895ac0381
+X-MS-TrafficTypeDiagnostic: SJ0PR15MB4236:
+X-Microsoft-Antispam-PRVS: <SJ0PR15MB423672E2581B05C4F8AF46BED3F40@SJ0PR15MB4236.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: xBSyNxXzQft5Za5KAm3Ga1OgwIP9H9EgCSe5XsTc8hd4IhqSqQWmzwSkjKh5R41nz4LOiQafwmkwEYmt+vnfdJloKRw3rU1FwByL0rLYS63CKPG76UkHBcPa5LsRto9Dqsc9WzKeNDep6FY2Ko8zJJt01L3/rYNVMFjD9/OqlPIRuKRF8pu9PpuCKHsCXcQ20s6Om/g2CoDRF9jjG/nWIdfzrjyi8WYfoorTpV8N//qcZ/Qr2KvdwtbzZ2c84SnCEMO/cdYrKm1xdmsWD99JleUn+Um3DlWHJL85NAj3gQQGfOAbpsUyLbKdd79MStZoBziEtQEi7R0Zjy74D4BHt5Af+SAffzw5C6sK+LKintGDdiJHGVa+gwsutC4cnWlE6BScYOejnki+VpJLqNN/T0E2I9j3CA+eZzkzTa3qS0LrTctOLuIhnbJV7iL09KCo6CD6pQ9BZEvU4BeMbC9bJQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(396003)(376002)(39860400002)(346002)(136003)(86362001)(53546011)(16526019)(316002)(8936002)(31686004)(8676002)(66946007)(54906003)(66476007)(66556008)(4326008)(6486002)(2906002)(6916009)(966005)(52116002)(2616005)(186003)(6666004)(36756003)(478600001)(5660300002)(31696002)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?V3Y4Q29Ka3lDYUJldWJqdVFyUWhvZVViYTU2eFlydzJsd2xoTGJ1ME5KRllo?=
+ =?utf-8?B?RmxUUTVmUUVEeFdOOThXOHovblMwazZWRHdqeXM4ak1raW8rbklOSzZBZ2Ns?=
+ =?utf-8?B?QXpZdGlkUGpPdWtHYW4wK0Z2MnhSNWRKV2tWSndtMGlzUmM4MWxENXRyUWxz?=
+ =?utf-8?B?NlpkNTB3WW9NS29uVG43L2UxbzhBd25kNDRZUVBsUmNOUWhGallKR3FUczRS?=
+ =?utf-8?B?UWxoVk55RUhETFJxc0hocDhyZnpBV1ppV1Vmc0dBR3FLNGtTOHo5Um56blFt?=
+ =?utf-8?B?eUJDbFpDYTYydjJad2xueC9oUFFTQng5c21xWnhGYnpPSWdKcHNablZheEhz?=
+ =?utf-8?B?Nkh2c3VZTUl0UzhQeENTc2kzNHRYTTBBZWlPay9pZFMwMm96U0tJdTFsdHE0?=
+ =?utf-8?B?SjBvb21UUkFxcWpzOWRNVnNHbkc1cjNMK25YaTBSTFpZMWtKMVFrNDYwM2VH?=
+ =?utf-8?B?c3J2VjhITDJjQytCb3hEN0lDWUlJQjI0WG85bHVFVFpkaUw5U3pxVkdLZ1ly?=
+ =?utf-8?B?SEFtdVNQRFdJYXNVMEZ3YTNlL3RVdFByOUYyc2k1QTB5TjFUVllYbm1mS0cy?=
+ =?utf-8?B?Z0NyREMrSTNyYVZsem55aGg5NzNEM1lFdHNwQ2huODEwODExSk5aTkp3WTI3?=
+ =?utf-8?B?NjdlUE9WSmlkWnNzUTN1Wko2dGFtTUZ4UW9PNGdTU1JFVzBjeWdKd0NVNUtk?=
+ =?utf-8?B?Z3AwVWdYQ1RYNWY4d2Zoa3lRYWxOYVFWSTdNM0pwSHN5ZU4rWWg1bXhlQVRu?=
+ =?utf-8?B?RTBBM3JSU1dvL0lrcDdtR2NhbnV3N2RPRWxpblZMeEd1SUJUNWwyK2Y5VkhJ?=
+ =?utf-8?B?ZHloL1o0U0piVitrcTVSMkZvOEtua3gyNHFWS3B3Y0Vnb2tRcDZReHBXTXpn?=
+ =?utf-8?B?WU5DNUhEZm8zTVl6TkttVDJVaXozYm1EdUIxaTVzMFZwUG9tN0tTRzdBQUpH?=
+ =?utf-8?B?WFVkd0JkRTg1c2dGYmFmMEEvblN6S1hyenEwb1RwQkVRYzR3YUNiYTB6dklj?=
+ =?utf-8?B?OTNPOUtzSVRIaFBXUVhDSzBpcU01dnhGQXRiclF0Q2lYemtTTzVDTTZzRkN2?=
+ =?utf-8?B?UXZhc3NXYjJ4MFBUTUZLVVA4Z1lla0RnRnFnOEY0QmViYmZiNUtaYVgzbEJZ?=
+ =?utf-8?B?WStNM0ZvemJtTW5UNTZLbHV6bkVJTVAyY0VwMWc3bnZ5dkwzelozYUh2bDZI?=
+ =?utf-8?B?OTI5cy9OZ0NJckZUR2gzUHhpeVZIZmxJcGIzN3RSd3BQK3laMituNWMzYjIx?=
+ =?utf-8?B?eEgweDJzR2JyYkwxdG1zSWVKZ0ZTVHJaVDZ1T2VXdHhvYmNvaW5HbVNjUG0w?=
+ =?utf-8?B?R0YxMWNOTnNWVFdUYjd6YkhJV2M4T0NDQlg1WkJWQ0V3OC9pclVEZ3JMNXBI?=
+ =?utf-8?B?dytZUXhPL1lPUVE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 63f5862b-f207-4113-ac8e-08d895ac0381
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2020 03:48:50.4835
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2jXOul2bca5s/SpE/EBebJR0SVfmryIzkd3UYE62SDvx1yufs2NCdPapz2yxeC7k
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4236
+X-OriginatorOrg: fb.com
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 1 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-11-30_12:2020-11-30,2020-11-30 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 clxscore=1034
- adultscore=0 priorityscore=1501 impostorscore=0 mlxscore=0 spamscore=0
- bulkscore=0 lowpriorityscore=0 suspectscore=9 mlxlogscore=999 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ malwarescore=0 mlxscore=0 bulkscore=0 adultscore=0 suspectscore=0
+ mlxlogscore=999 phishscore=0 spamscore=0 clxscore=1015 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2012010025
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add bpf_testmod module, which is conceptually out-of-tree module and provides
-ways for selftests/bpf to test various kernel module-related functionality:
-raw tracepoint, fentry/fexit/fmod_ret, etc. This module will be auto-loaded by
-test_progs test runner and expected by some of selftests to be present and
-loaded.
 
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/testing/selftests/bpf/.gitignore        |  1 +
- tools/testing/selftests/bpf/Makefile          | 12 +++-
- .../selftests/bpf/bpf_testmod/.gitignore      |  6 ++
- .../selftests/bpf/bpf_testmod/Makefile        | 20 +++++++
- .../bpf/bpf_testmod/bpf_testmod-events.h      | 36 +++++++++++
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 51 ++++++++++++++++
- .../selftests/bpf/bpf_testmod/bpf_testmod.h   | 14 +++++
- tools/testing/selftests/bpf/test_progs.c      | 59 +++++++++++++++++++
- tools/testing/selftests/bpf/test_progs.h      |  1 +
- 9 files changed, 197 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/bpf_testmod/.gitignore
- create mode 100644 tools/testing/selftests/bpf/bpf_testmod/Makefile
- create mode 100644 tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h
- create mode 100644 tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
- create mode 100644 tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index 395ae040ce1f..752d8edddc66 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -35,3 +35,4 @@ test_cpp
- /tools
- /runqslower
- /bench
-+*.ko
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 894192c319fb..64cbc6608966 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -80,7 +80,7 @@ TEST_PROGS_EXTENDED := with_addr.sh \
- # Compile but not part of 'make run_tests'
- TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
- 	flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
--	test_lirc_mode2_user xdping test_cpp runqslower bench
-+	test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko
- 
- TEST_CUSTOM_PROGS = urandom_read
- 
-@@ -104,6 +104,7 @@ OVERRIDE_TARGETS := 1
- override define CLEAN
- 	$(call msg,CLEAN)
- 	$(Q)$(RM) -r $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) $(EXTRA_CLEAN)
-+	$(Q)$(MAKE) -C bpf_testmod clean
- endef
- 
- include ../lib.mk
-@@ -136,6 +137,11 @@ $(OUTPUT)/urandom_read: urandom_read.c
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(LDFLAGS) -o $@ $< $(LDLIBS) -Wl,--build-id=sha1
- 
-+$(OUTPUT)/bpf_testmod.ko: $(VMLINUX_BTF) $(wildcard bpf_testmod/Makefile bpf_testmod/*.[ch])
-+	$(call msg,MOD,,$@)
-+	$(Q)$(MAKE) $(submake_extras) -C bpf_testmod
-+	$(Q)cp bpf_testmod/bpf_testmod.ko $@
-+
- $(OUTPUT)/test_stub.o: test_stub.c $(BPFOBJ)
- 	$(call msg,CC,,$@)
- 	$(Q)$(CC) -c $(CFLAGS) -o $@ $<
-@@ -388,7 +394,7 @@ TRUNNER_BPF_PROGS_DIR := progs
- TRUNNER_EXTRA_SOURCES := test_progs.c cgroup_helpers.c trace_helpers.c	\
- 			 network_helpers.c testing_helpers.c		\
- 			 btf_helpers.c	flow_dissector_load.h
--TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read				\
-+TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko	\
- 		       ima_setup.sh					\
- 		       $(wildcard progs/btf_dump_test_case_*.c)
- TRUNNER_BPF_BUILD_RULE := CLANG_BPF_BUILD_RULE
-@@ -460,4 +466,4 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o $(OUTPUT)/testing_helpers.o \
- EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR)			\
- 	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
- 	feature								\
--	$(addprefix $(OUTPUT)/,*.o *.skel.h no_alu32 bpf_gcc)
-+	$(addprefix $(OUTPUT)/,*.o *.skel.h no_alu32 bpf_gcc bpf_testmod.ko)
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/.gitignore b/tools/testing/selftests/bpf/bpf_testmod/.gitignore
-new file mode 100644
-index 000000000000..ded513777281
---- /dev/null
-+++ b/tools/testing/selftests/bpf/bpf_testmod/.gitignore
-@@ -0,0 +1,6 @@
-+*.mod
-+*.mod.c
-+*.o
-+.ko
-+/Module.symvers
-+/modules.order
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/Makefile b/tools/testing/selftests/bpf/bpf_testmod/Makefile
-new file mode 100644
-index 000000000000..15cb36c4483a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/bpf_testmod/Makefile
-@@ -0,0 +1,20 @@
-+BPF_TESTMOD_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
-+KDIR ?= $(abspath $(BPF_TESTMOD_DIR)/../../../../..)
-+
-+ifeq ($(V),1)
-+Q =
-+else
-+Q = @
-+endif
-+
-+MODULES = bpf_testmod.ko
-+
-+obj-m += bpf_testmod.o
-+CFLAGS_bpf_testmod.o = -I$(src)
-+
-+all:
-+	+$(Q)make -C $(KDIR) M=$(BPF_TESTMOD_DIR) modules
-+
-+clean:
-+	+$(Q)make -C $(KDIR) M=$(BPF_TESTMOD_DIR) clean
-+
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h
-new file mode 100644
-index 000000000000..b83ea448bc79
---- /dev/null
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h
-@@ -0,0 +1,36 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2020 Facebook */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM bpf_testmod
-+
-+#if !defined(_BPF_TESTMOD_EVENTS_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _BPF_TESTMOD_EVENTS_H
-+
-+#include <linux/tracepoint.h>
-+#include "bpf_testmod.h"
-+
-+TRACE_EVENT(bpf_testmod_test_read,
-+	TP_PROTO(struct task_struct *task, struct bpf_testmod_test_read_ctx *ctx),
-+	TP_ARGS(task, ctx),
-+	TP_STRUCT__entry(
-+		__field(pid_t, pid)
-+		__array(char, comm, TASK_COMM_LEN)
-+		__field(loff_t, off)
-+		__field(size_t, len)
-+	),
-+	TP_fast_assign(
-+		__entry->pid = task->pid;
-+		memcpy(__entry->comm, task->comm, TASK_COMM_LEN);
-+		__entry->off = ctx->off;
-+		__entry->len = ctx->len;
-+	),
-+	TP_printk("pid=%d comm=%s off=%llu len=%zu",
-+		  __entry->pid, __entry->comm, __entry->off, __entry->len)
-+);
-+
-+#endif /* _BPF_TESTMOD_EVENTS_H */
-+
-+#undef TRACE_INCLUDE_PATH
-+#define TRACE_INCLUDE_PATH .
-+#define TRACE_INCLUDE_FILE bpf_testmod-events
-+#include <trace/define_trace.h>
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-new file mode 100644
-index 000000000000..4ff0cf23607d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+#include <linux/error-injection.h>
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/sysfs.h>
-+#include <linux/tracepoint.h>
-+#include "bpf_testmod.h"
-+
-+#define CREATE_TRACE_POINTS
-+#include "bpf_testmod-events.h"
-+
-+static noinline ssize_t
-+bpf_testmod_test_read(struct file *file, struct kobject *kobj,
-+		      struct bin_attribute *bin_attr,
-+		      char *buf, loff_t off, size_t len)
-+{
-+	struct bpf_testmod_test_read_ctx ctx = {
-+		.buf = buf,
-+		.off = off,
-+		.len = len,
-+	};
-+
-+	trace_bpf_testmod_test_read(current, &ctx);
-+
-+	return -EIO; /* always fail */
-+}
-+ALLOW_ERROR_INJECTION(bpf_testmod_test_read, ERRNO);
-+
-+static struct bin_attribute bin_attr_bpf_testmod_file __ro_after_init = {
-+	.attr = { .name = "bpf_testmod", .mode = 0444, },
-+	.read = bpf_testmod_test_read,
-+};
-+
-+static int bpf_testmod_init(void)
-+{
-+	return sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
-+}
-+
-+static void bpf_testmod_exit(void)
-+{
-+	return sysfs_remove_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
-+}
-+
-+module_init(bpf_testmod_init);
-+module_exit(bpf_testmod_exit);
-+
-+MODULE_AUTHOR("Andrii Nakryiko");
-+MODULE_DESCRIPTION("BPF selftests module");
-+MODULE_LICENSE("Dual BSD/GPL");
-+
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
-new file mode 100644
-index 000000000000..b81adfedb4f6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
-@@ -0,0 +1,14 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2020 Facebook */
-+#ifndef _BPF_TESTMOD_H
-+#define _BPF_TESTMOD_H
-+
-+#include <linux/types.h>
-+
-+struct bpf_testmod_test_read_ctx {
-+	char *buf;
-+	loff_t off;
-+	size_t len;
-+};
-+
-+#endif /* _BPF_TESTMOD_H */
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 22943b58d752..17587754b7a7 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -360,6 +360,58 @@ int extract_build_id(char *build_id, size_t size)
- 	return -1;
- }
- 
-+static int finit_module(int fd, const char *param_values, int flags)
-+{
-+	return syscall(__NR_finit_module, fd, param_values, flags);
-+}
-+
-+static int delete_module(const char *name, int flags)
-+{
-+	return syscall(__NR_delete_module, name, flags);
-+}
-+
-+static void unload_bpf_testmod(void)
-+{
-+	if (delete_module("bpf_testmod", 0)) {
-+		if (errno == ENOENT) {
-+			if (env.verbosity > VERBOSE_NONE)
-+				fprintf(stdout, "bpf_testmod.ko is already unloaded.\n");
-+			return;
-+		}
-+		fprintf(env.stderr, "Failed to unload bpf_testmod.ko from kernel: %d\n", -errno);
-+		exit(1);
-+	}
-+	if (env.verbosity > VERBOSE_NONE)
-+		fprintf(stdout, "Successfully unloaded bpf_testmod.ko.\n");
-+}
-+
-+static int load_bpf_testmod(void)
-+{
-+	int fd;
-+
-+	/* ensure previous instance of the module is unloaded */
-+	unload_bpf_testmod();
-+
-+	if (env.verbosity > VERBOSE_NONE)
-+		fprintf(stdout, "Loading bpf_testmod.ko...\n");
-+
-+	fd = open("bpf_testmod.ko", O_RDONLY);
-+	if (fd < 0) {
-+		fprintf(env.stderr, "Can't find bpf_testmod.ko kernel module: %d\n", -errno);
-+		return -ENOENT;
-+	}
-+	if (finit_module(fd, "", 0)) {
-+		fprintf(env.stderr, "Failed to load bpf_testmod.ko into the kernel: %d\n", -errno);
-+		close(fd);
-+		return -EINVAL;
-+	}
-+	close(fd);
-+
-+	if (env.verbosity > VERBOSE_NONE)
-+		fprintf(stdout, "Successfully loaded bpf_testmod.ko.\n");
-+	return 0;
-+}
-+
- /* extern declarations for test funcs */
- #define DEFINE_TEST(name) extern void test_##name(void);
- #include <prog_tests/tests.h>
-@@ -678,6 +730,11 @@ int main(int argc, char **argv)
- 
- 	save_netns();
- 	stdio_hijack();
-+	env.has_testmod = true;
-+	if (load_bpf_testmod()) {
-+		fprintf(env.stderr, "WARNING! Selftests relying on bpf_testmod.ko will be skipped.\n");
-+		env.has_testmod = false;
-+	}
- 	for (i = 0; i < prog_test_cnt; i++) {
- 		struct prog_test_def *test = &prog_test_defs[i];
- 
-@@ -722,6 +779,8 @@ int main(int argc, char **argv)
- 		if (test->need_cgroup_cleanup)
- 			cleanup_cgroup_environment();
- 	}
-+	if (env.has_testmod)
-+		unload_bpf_testmod();
- 	stdio_restore();
- 
- 	if (env.get_test_cnt) {
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-index d6b14853f3bc..115953243f62 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -66,6 +66,7 @@ struct test_env {
- 	enum verbosity verbosity;
- 
- 	bool jit_enabled;
-+	bool has_testmod;
- 	bool get_test_cnt;
- 	bool list_test_names;
- 
--- 
-2.24.1
+On 11/30/20 9:22 AM, Yonghong Song wrote:
+> 
+> 
+> On 11/28/20 5:40 PM, Alexei Starovoitov wrote:
+>> On Fri, Nov 27, 2020 at 09:53:05PM -0800, Yonghong Song wrote:
+>>>
+>>>
+>>> On 11/27/20 9:57 AM, Brendan Jackman wrote:
+>>>> Status of the patches
+>>>> =====================
+>>>>
+>>>> Thanks for the reviews! Differences from v1->v2 [1]:
+>>>>
+>>>> * Fixed mistakes in the netronome driver
+>>>>
+>>>> * Addd sub, add, or, xor operations
+>>>>
+>>>> * The above led to some refactors to keep things readable. (Maybe I
+>>>>     should have just waited until I'd implemented these before starting
+>>>>     the review...)
+>>>>
+>>>> * Replaced BPF_[CMP]SET | BPF_FETCH with just BPF_[CMP]XCHG, which
+>>>>     include the BPF_FETCH flag
+>>>>
+>>>> * Added a bit of documentation. Suggestions welcome for more places
+>>>>     to dump this info...
+>>>>
+>>>> The prog_test that's added depends on Clang/LLVM features added by
+>>>> Yonghong in 
+>>>> https://reviews.llvm.org/D72184 
+>>>>
+>>>> This only includes a JIT implementation for x86_64 - I don't plan to
+>>>> implement JIT support myself for other architectures.
+>>>>
+>>>> Operations
+>>>> ==========
+>>>>
+>>>> This patchset adds atomic operations to the eBPF instruction set. The
+>>>> use-case that motivated this work was a trivial and efficient way to
+>>>> generate globally-unique cookies in BPF progs, but I think it's
+>>>> obvious that these features are pretty widely applicable.  The
+>>>> instructions that are added here can be summarised with this list of
+>>>> kernel operations:
+>>>>
+>>>> * atomic[64]_[fetch_]add
+>>>> * atomic[64]_[fetch_]sub
+>>>> * atomic[64]_[fetch_]and
+>>>> * atomic[64]_[fetch_]or
+>>>
+>>> * atomic[64]_[fetch_]xor
+>>>
+>>>> * atomic[64]_xchg
+>>>> * atomic[64]_cmpxchg
+>>>
+>>> Thanks. Overall looks good to me but I did not check carefully
+>>> on jit part as I am not an expert in x64 assembly...
+>>>
+>>> This patch also introduced atomic[64]_{sub,and,or,xor}, similar to
+>>> xadd. I am not sure whether it is necessary. For one thing,
+>>> users can just use atomic[64]_fetch_{sub,and,or,xor} to ignore
+>>> return value and they will achieve the same result, right?
+>>>  From llvm side, there is no ready-to-use gcc builtin matching
+>>> atomic[64]_{sub,and,or,xor} which does not have return values.
+>>> If we go this route, we will need to invent additional bpf
+>>> specific builtins.
+>>
+>> I think bpf specific builtins are overkill.
+>> As you said the users can use atomic_fetch_xor() and ignore
+>> return value. I think llvm backend should be smart enough to use
+>> BPF_ATOMIC | BPF_XOR insn without BPF_FETCH bit in such case.
+>> But if it's too cumbersome to do at the moment we skip this
+>> optimization for now.
+> 
+> We can initially all have BPF_FETCH bit as at that point we do not
+> have def-use chain. Later on we can add a
+> machine ssa IR phase and check whether the result of, say 
+> atomic_fetch_or(), is used or not. If not, we can change the
+> instruction to atomic_or.
 
+Just implemented what we discussed above in llvm:
+   https://reviews.llvm.org/D72184
+main change:
+   1. atomic_fetch_sub (and later atomic_sub) is gone. llvm will
+      transparently transforms it to negation followed by
+      atomic_fetch_add or atomic_add (xadd). Kernel can remove
+      atomic_fetch_sub/atomic_sub insns.
+   2. added new instructions for atomic_{and, or, xor}.
+   3. for gcc builtin e.g., __sync_fetch_and_or(), if return
+      value is used, atomic_fetch_or will be generated. Otherwise,
+      atomic_or will be generated.
