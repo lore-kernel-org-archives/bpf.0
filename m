@@ -8,49 +8,49 @@ X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0359C83013
-	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 22:00:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A130AC83016
+	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 22:00:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 51C0A20870
-	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 22:00:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4903520870
+	for <bpf@archiver.kernel.org>; Tue,  1 Dec 2020 22:00:55 +0000 (UTC)
 Authentication-Results: mail.kernel.org;
-	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="cFx7chTf"
+	dkim=pass (1024-bit key) header.d=fb.com header.i=@fb.com header.b="bzUE2q9D"
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391149AbgLAWAG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 1 Dec 2020 17:00:06 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:44304 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2390309AbgLAWAG (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 1 Dec 2020 17:00:06 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0B1Lngku006687
-        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 13:59:18 -0800
+        id S1730025AbgLAWAS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Dec 2020 17:00:18 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:12212 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2391021AbgLAWAD (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 1 Dec 2020 17:00:03 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B1LnrGu027045
+        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 13:59:22 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=M+0ILuiaD6+1fkeZ4SUYhsSshDmJ3vpGG9x3Lp/tMEM=;
- b=cFx7chTft1kuJd5b75jVW2o4mjB7PpW+RXZ9FKLKoJ8aKY7TaM9M2dLg8NpN6L5i3Zkp
- Ia70bgxrZbLtrxP7rQw239Y11VPHT2boDijc+J2RzHY3UG9FOcxHPsXTJSl0DY2X/ghX
- hMK5J35Jko9VtApHBQ82V7z/2Hwm0bd50lM= 
+ bh=hkpfF67xQ6U1ZlIknKfbnaBnXqBUdqcL6K2akhLDsUE=;
+ b=bzUE2q9DD1cdMLZugy/nJMVAX9G4Lot1NWzr6jqPDVx/fzqt80NCE/YwEDqPzYRX3OSZ
+ 0dfb7muouut41fP797LE0GvyKYdKsn1SmX5+5iPnQ4Q8NrEDlglTdjpZSLyNMGWAKGzf
+ C8g4y54m37m9/gOAXPUSZrSrN0wOr3UA3SY= 
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 355pr6kf7b-18
+        by mx0a-00082601.pphosted.com with ESMTP id 355vfk0t9t-17
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 13:59:18 -0800
-Received: from intmgw001.41.prn1.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 13:59:22 -0800
+Received: from intmgw002.06.prn3.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.1979.3; Tue, 1 Dec 2020 13:59:11 -0800
 Received: by devvm3388.prn0.facebook.com (Postfix, from userid 111017)
-        id BA65A19702D2; Tue,  1 Dec 2020 13:59:06 -0800 (PST)
+        id 8DE2A19702C0; Tue,  1 Dec 2020 13:59:06 -0800 (PST)
 From:   Roman Gushchin <guro@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
         <andrii@kernel.org>, <akpm@linux-foundation.org>,
         <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <kernel-team@fb.com>
-Subject: [PATCH bpf-next v9 26/34] bpf: eliminate rlimit-based memory accounting for reuseport_array maps
-Date:   Tue, 1 Dec 2020 13:58:52 -0800
-Message-ID: <20201201215900.3569844-27-guro@fb.com>
+Subject: [PATCH bpf-next v9 17/34] bpf: refine memcg-based memory accounting for xskmap maps
+Date:   Tue, 1 Dec 2020 13:58:43 -0800
+Message-ID: <20201201215900.3569844-18-guro@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201201215900.3569844-1-guro@fb.com>
 References: <20201201215900.3569844-1-guro@fb.com>
@@ -60,63 +60,39 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-12-01_11:2020-11-30,2020-12-01 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- priorityscore=1501 suspectscore=38 spamscore=0 adultscore=0 clxscore=1015
- mlxlogscore=744 lowpriorityscore=0 mlxscore=0 phishscore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012010131
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 adultscore=0
+ clxscore=1015 priorityscore=1501 mlxscore=0 bulkscore=0 lowpriorityscore=0
+ mlxlogscore=717 malwarescore=0 spamscore=0 suspectscore=13 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012010131
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Do not use rlimit-based memory accounting for reuseport_array maps.
-It has been replaced with the memcg-based memory accounting.
+Extend xskmap memory accounting to include the memory taken by
+the xsk_map_node structure.
 
 Signed-off-by: Roman Gushchin <guro@fb.com>
-Acked-by: Song Liu <songliubraving@fb.com>
 ---
- kernel/bpf/reuseport_array.c | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+ net/xdp/xskmap.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/reuseport_array.c b/kernel/bpf/reuseport_array.c
-index a55cd542f2ce..4838922f723d 100644
---- a/kernel/bpf/reuseport_array.c
-+++ b/kernel/bpf/reuseport_array.c
-@@ -150,9 +150,8 @@ static void reuseport_array_free(struct bpf_map *map)
-=20
- static struct bpf_map *reuseport_array_alloc(union bpf_attr *attr)
+diff --git a/net/xdp/xskmap.c b/net/xdp/xskmap.c
+index 66231ba6c348..9fff1e6dc9cd 100644
+--- a/net/xdp/xskmap.c
++++ b/net/xdp/xskmap.c
+@@ -16,7 +16,8 @@ static struct xsk_map_node *xsk_map_node_alloc(struct x=
+sk_map *map,
  {
--	int err, numa_node =3D bpf_map_attr_numa_node(attr);
-+	int numa_node =3D bpf_map_attr_numa_node(attr);
- 	struct reuseport_array *array;
--	struct bpf_map_memory mem;
- 	u64 array_size;
+ 	struct xsk_map_node *node;
 =20
- 	if (!bpf_capable())
-@@ -161,20 +160,13 @@ static struct bpf_map *reuseport_array_alloc(union =
-bpf_attr *attr)
- 	array_size =3D sizeof(*array);
- 	array_size +=3D (u64)attr->max_entries * sizeof(struct sock *);
-=20
--	err =3D bpf_map_charge_init(&mem, array_size);
--	if (err)
--		return ERR_PTR(err);
--
- 	/* allocate all map elements and zero-initialize them */
- 	array =3D bpf_map_area_alloc(array_size, numa_node);
--	if (!array) {
--		bpf_map_charge_finish(&mem);
-+	if (!array)
+-	node =3D kzalloc(sizeof(*node), GFP_ATOMIC | __GFP_NOWARN);
++	node =3D bpf_map_kzalloc(&map->map, sizeof(*node),
++			       GFP_ATOMIC | __GFP_NOWARN);
+ 	if (!node)
  		return ERR_PTR(-ENOMEM);
--	}
 =20
- 	/* copy mandatory map attributes */
- 	bpf_map_init_from_attr(&array->map, attr);
--	bpf_map_charge_move(&array->map.memory, &mem);
-=20
- 	return &array->map;
- }
 --=20
 2.26.2
 
