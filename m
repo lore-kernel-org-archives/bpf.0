@@ -2,165 +2,110 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14E1CC71156
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 06:28:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F9F5C64E8A
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 06:53:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id B501422206
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 06:28:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AC94222202
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 06:53:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728345AbgLBG2j (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Dec 2020 01:28:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725885AbgLBG2j (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Dec 2020 01:28:39 -0500
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8691C0613CF;
-        Tue,  1 Dec 2020 22:27:58 -0800 (PST)
-Received: by mail-il1-x141.google.com with SMTP id v3so557906ilo.5;
-        Tue, 01 Dec 2020 22:27:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=ZP21scfrVgE50R5j7SIVdlWyVzodOKgwNSHKNuQhmxw=;
-        b=bCYFj+rKd5vrLuz/0DegxAvsug1bKm0jNjJeos43H8ztKDCXa7etoGg5AY1w2/UBY5
-         s4Af9xmcwtetvNy8J0TUdMsfHjmWwqB8nVGclDFXP741e1wAmrc5AIW7aDUMzjqpuLD0
-         lVrZkZZLGjL9AVBB7S50NtF+YudVam065U8hPL/+mxQyczU8iOPDxxsx4EFglreIEQmK
-         LaA0HPr1mLTWqh7Uqs7TIZDd2oQYyCdpKHtWJYepHZ9UzJClGvnmRi8tR8h92tXuEMwH
-         twY2pR4ii1QnOC3MG4rxYJvreR5io4Vbe8hRXouiqpbNFCGDi0CG5ks9Rpnf0Hv/jq9c
-         MUHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=ZP21scfrVgE50R5j7SIVdlWyVzodOKgwNSHKNuQhmxw=;
-        b=Gnc+XIpQl4yoxin4IU7bPPim5wD9L8D6fz0Q9YDo2AJoXT10mG5txCSlYRqnzHw+lV
-         vz2z3RT+JzJvqNKkTDrAjk9NwejD6yqpZ5vHzcumrjDvo0qZV1i6mJdgQWkf5nkEVWg4
-         7/gmvDTUglP2dqWZyVNkhTOIArlT1KHbiS3XmmAx/Q6JDZbmXpdKt9phJi1O4wThXI1T
-         I3s0u00I+LxcBQDQo1CPs88l8HGxfH4V2WoAwmFMxVYNZO94JS7ebBipYBxZKKYdNWoB
-         3LcCEC/hTBWVppg5XAM7BIsvxyLsO4wkdW1PkYhLL3splaA8AmJqtQn5rduGEzqR6Xwf
-         fOdA==
-X-Gm-Message-State: AOAM531hIjjKwYtzCYEnTWFg1OaMy3OEzW/j1oTjCFAwJAseCqgaY0Rk
-        lll11JD0W/2VcWHXHGuEgyo=
-X-Google-Smtp-Source: ABdhPJw4S6FKPKJyRgB6CBHc+RPrlvjwV+yGzm+tq0rLGe7cei9HxR5xYVEEbbGlj75qzpqaN9Ndsw==
-X-Received: by 2002:a92:d20c:: with SMTP id y12mr1195869ily.178.1606890478239;
-        Tue, 01 Dec 2020 22:27:58 -0800 (PST)
-Received: from localhost ([184.63.162.180])
-        by smtp.gmail.com with ESMTPSA id k28sm444866ilg.40.2020.12.01.22.27.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Dec 2020 22:27:57 -0800 (PST)
-Date:   Tue, 01 Dec 2020 22:27:48 -0800
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Cc:     Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Brendan Jackman <jackmanb@google.com>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@chromium.org>,
-        Florent Revest <revest@chromium.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Jann Horn <jannh@google.com>
-Message-ID: <5fc733e42f63f_15eb720841@john-XPS-13-9370.notmuch>
-In-Reply-To: <CAEf4BzY0vHvrj4jAc+qszSMcYABd0dGFVxkM-d8S=wwHoDFD=A@mail.gmail.com>
-References: <20201127175738.1085417-1-jackmanb@google.com>
- <829353e6-d90a-a91a-418b-3c2556061cda@fb.com>
- <20201129014000.3z6eua5pcz3jxmtk@ast-mbp>
- <b3903adc-59c6-816f-6512-2225c28f47f5@fb.com>
- <4fa9f8cf-aaf8-a63c-e0ca-7d4c83b01578@fb.com>
- <CAEf4BzYc=c_2xCMFAE6RjMCHKWJj2euP2B21y-jfvsNzPVkhpQ@mail.gmail.com>
- <31a67edd-4837-cfd3-c9fe-a6942ebd87bb@fb.com>
- <5fc72beede900_15eb720850@john-XPS-13-9370.notmuch>
- <CAEf4BzY0vHvrj4jAc+qszSMcYABd0dGFVxkM-d8S=wwHoDFD=A@mail.gmail.com>
-Subject: Re: [PATCH v2 bpf-next 00/13] Atomics for eBPF
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+        id S1727108AbgLBGxc convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 2 Dec 2020 01:53:32 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:39864 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726202AbgLBGxc (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 2 Dec 2020 01:53:32 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B26jBDH026348
+        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 22:52:51 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 355qvjn9j3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 22:52:51 -0800
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 1 Dec 2020 22:52:50 -0800
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id 8D2402ECA750; Tue,  1 Dec 2020 22:52:50 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 2/3] libbpf: add base BTF accessor
+Date:   Tue, 1 Dec 2020 22:52:42 -0800
+Message-ID: <20201202065244.530571-3-andrii@kernel.org>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201202065244.530571-1-andrii@kernel.org>
+References: <20201202065244.530571-1-andrii@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-12-02_01:2020-11-30,2020-12-02 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ clxscore=1034 impostorscore=0 suspectscore=8 malwarescore=0 adultscore=0
+ spamscore=0 mlxlogscore=809 priorityscore=1501 phishscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012020040
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Andrii Nakryiko wrote:
-> On Tue, Dec 1, 2020 at 9:53 PM John Fastabend <john.fastabend@gmail.com> wrote:
-> >
-> > Yonghong Song wrote:
-> > >
-> > >
-> >
-> > [...]
-> >
-> > > > Great, this means that all existing valid uses of
-> > > > __sync_fetch_and_add() will generate BPF_XADD instructions and will
-> > > > work on old kernels, right?
-> > >
-> > > That is correct.
-> > >
-> > > >
-> > > > If that's the case, do we still need cpu=v4? The new instructions are
-> > > > *only* going to be generated if the user uses previously unsupported
-> > > > __sync_fetch_xxx() intrinsics. So, in effect, the user consciously
-> > > > opts into using new BPF instructions. cpu=v4 seems like an unnecessary
-> > > > tautology then?
-> > >
-> > > This is a very good question. Essentially this boils to when users can
-> > > use the new functionality including meaningful return value  of
-> > > __sync_fetch_and_add().
-> > >    (1). user can write a small bpf program to test the feature. If user
-> > >         gets a failed compilation (fatal error), it won't be supported.
-> > >         Otherwise, it is supported.
-> > >    (2). compiler provides some way to tell user it is safe to use, e.g.,
-> > >         -mcpu=v4, or some clang macro suggested by Brendan earlier.
-> > >
-> > > I guess since kernel already did a lot of feature discovery. Option (1)
-> > > is probably fine.
-> >
-> > For option (2) we can use BTF with kernel version check. If kernel is
-> > greater than kernel this lands in we use the the new instructions if
-> > not we use a slower locked version. That should work for all cases
-> > unless someone backports patches into an older case.
-> 
-> Two different things: Clang support detection and kernel support
-> detection. You are talking about kernel detection, I and Yonghong were
-> talking about Clang detection and explicit cpu=v4 opt-in.
-> 
+Add ability to get base BTF. It can be also used to check if BTF is split BTF.
 
-Ah right, catching up on email and reading the thread backwords I lost
-the context thanks!
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/lib/bpf/btf.c      | 5 +++++
+ tools/lib/bpf/btf.h      | 1 +
+ tools/lib/bpf/libbpf.map | 1 +
+ 3 files changed, 7 insertions(+)
 
-So, I live in a dev world where I control the build infrastructure so
-always know clang/llvm versions and features. What I don't know as
-well is where the program I just built might be run. So its a bit
-of an odd question from my perspective to ask if my clang supports
-feature X. If it doesn't support feature X and I want it we upgrade
-clang so that it does support it. I don't think we would ever
-write a program to test the assertion. Anyways thanks.
-
-> For kernel detection, if there is an enum value or type that gets
-> added along the feature, then with CO-RE built-ins it's easy to detect
-> and kernel dead code elimination will make sure that unsupported
-> instructions won't trip up the BPF verifier. Still need Clang support
-> to compile the program in the first place, though.
-
-+1
-
-> 
-> If there is no such BTF-based way to check, it is still possible to
-> try to load a trivial BPF program with __sync_fech_and_xxx() to do
-> feature detection and then use .rodata to turn off code paths relying
-> on a new instruction set.
-
-Right.
-
-> 
-> >
-> > At least thats what I'll probably end up wrapping in a helper function.
-
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 8ff46cd30ca1..1935e83d309c 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -432,6 +432,11 @@ __u32 btf__get_nr_types(const struct btf *btf)
+ 	return btf->start_id + btf->nr_types - 1;
+ }
+ 
++const struct btf *btf__base_btf(const struct btf *btf)
++{
++	return btf->base_btf;
++}
++
+ /* internal helper returning non-const pointer to a type */
+ static struct btf_type *btf_type_by_id(struct btf *btf, __u32 type_id)
+ {
+diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+index 1093f6fe6800..1237bcd1dd17 100644
+--- a/tools/lib/bpf/btf.h
++++ b/tools/lib/bpf/btf.h
+@@ -51,6 +51,7 @@ LIBBPF_API __s32 btf__find_by_name(const struct btf *btf,
+ LIBBPF_API __s32 btf__find_by_name_kind(const struct btf *btf,
+ 					const char *type_name, __u32 kind);
+ LIBBPF_API __u32 btf__get_nr_types(const struct btf *btf);
++LIBBPF_API const struct btf *btf__base_btf(const struct btf *btf);
+ LIBBPF_API const struct btf_type *btf__type_by_id(const struct btf *btf,
+ 						  __u32 id);
+ LIBBPF_API size_t btf__pointer_size(const struct btf *btf);
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 29ff4807b909..ed55498c4122 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -340,6 +340,7 @@ LIBBPF_0.2.0 {
+ 
+ LIBBPF_0.3.0 {
+ 	global:
++		btf__base_btf;
+ 		btf__parse_elf_split;
+ 		btf__parse_raw_split;
+ 		btf__parse_split;
+-- 
+2.24.1
 
