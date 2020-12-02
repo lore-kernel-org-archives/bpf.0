@@ -2,104 +2,61 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78F77C64E7C
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 19:47:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AFA06C71155
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 19:47:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 27BCB22203
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 19:47:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5614522203
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 19:47:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729145AbgLBTrx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Dec 2020 14:47:53 -0500
-Received: from mx.der-flo.net ([193.160.39.236]:38384 "EHLO mx.der-flo.net"
+        id S1729189AbgLBTrz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Dec 2020 14:47:55 -0500
+Received: from mx.der-flo.net ([193.160.39.236]:38386 "EHLO mx.der-flo.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728940AbgLBTrx (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Dec 2020 14:47:53 -0500
+        id S1728940AbgLBTry (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Dec 2020 14:47:54 -0500
 Received: by mx.der-flo.net (Postfix, from userid 110)
-        id EC8AA44560; Wed,  2 Dec 2020 20:46:53 +0100 (CET)
+        id DBBB344563; Wed,  2 Dec 2020 20:46:56 +0100 (CET)
 Received: from localhost (unknown [IPv6:2a02:1203:ecb0:3930:1751:4157:4d75:a5e2])
         (using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx.der-flo.net (Postfix) with ESMTPSA id 66C5E44553;
-        Wed,  2 Dec 2020 20:46:52 +0100 (CET)
+        by mx.der-flo.net (Postfix) with ESMTPSA id 2FCA744552;
+        Wed,  2 Dec 2020 20:46:15 +0100 (CET)
 From:   Florian Lehner <dev@der-flo.net>
 To:     bpf@vger.kernel.org
 Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
         andrii@kernel.org, john.fastabend@gmail.com,
         Florian Lehner <dev@der-flo.net>,
         Krzesimir Nowak <krzesimir@kinvolk.io>
-Subject: [PATCH 2/2] selftests/bpf: Avoid errno clobbering
-Date:   Wed,  2 Dec 2020 20:45:32 +0100
-Message-Id: <20201202194532.12879-3-dev@der-flo.net>
+Subject: [PATCH 0/2 v2] Improve error handling of verifier tests
+Date:   Wed,  2 Dec 2020 20:45:30 +0100
+Message-Id: <20201202194532.12879-1-dev@der-flo.net>
 X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20201202194532.12879-1-dev@der-flo.net>
-References: <20201202194532.12879-1-dev@der-flo.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Print a message when the returned error is about a program type being
-not supported or because of permission problems.
-These messages are expected if the program to test was actually
-executed.
+These patches improve the error handling for verifier tests. With "Test
+the 32bit narrow read" Krzesimir Nowak provided these patches first, but
+they were never merged.
+The improved error handling helps to implement and test BPF program types
+that are not supported yet.
 
-Cc: Krzesimir Nowak <krzesimir@kinvolk.io>
-Signed-off-by: Florian Lehner <dev@der-flo.net>
----
- tools/testing/selftests/bpf/test_verifier.c | 26 +++++++++++++++++----
- 1 file changed, 21 insertions(+), 5 deletions(-)
+v2:
+  - Add unpriv check in error validation
 
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index ceea9409639e..86ef28dd9919 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -875,19 +875,35 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
- 	__u8 tmp[TEST_DATA_LEN << 2];
- 	__u32 size_tmp = sizeof(tmp);
- 	uint32_t retval;
--	int err;
-+	int err, saved_errno;
+Florian Lehner (2):
+  selftests/bpf: Print reason when a tester could not run a program
+  selftests/bpf: Avoid errno clobbering
 
- 	if (unpriv)
- 		set_admin(true);
- 	err = bpf_prog_test_run(fd_prog, 1, data, size_data,
- 				tmp, &size_tmp, &retval, NULL);
-+	saved_errno = errno;
-+
- 	if (unpriv)
- 		set_admin(false);
--	if (err && errno != 524/*ENOTSUPP*/ && errno != EPERM) {
--		printf("Unexpected bpf_prog_test_run error ");
--		return err;
-+
-+	if (err) {
-+		switch (saved_errno) {
-+		case 524/*ENOTSUPP*/:
-+			printf("Did not run the program (not supported) ");
-+			return 0;
-+		case EPERM:
-+			if (unpriv) {
-+				printf("Did not run the program (no permission) ");
-+				return 0;
-+			}
-+		default:
-+			printf("FAIL: Unexpected bpf_prog_test_run error (%s) ",
-+				strerror(saved_errno));
-+			return err;
-+		}
- 	}
--	if (!err && retval != expected_val &&
-+
-+	if (retval != expected_val &&
- 	    expected_val != POINTER_VALUE) {
- 		printf("FAIL retval %d != %d ", retval, expected_val);
- 		return 1;
+ tools/testing/selftests/bpf/test_verifier.c | 30 ++++++++++++++++-----
+ 1 file changed, 24 insertions(+), 6 deletions(-)
+
 --
 2.28.0
 
