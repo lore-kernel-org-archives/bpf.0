@@ -2,131 +2,169 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF4BAC83016
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 00:25:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E2C27C64E90
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 00:27:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 685BF21D1A
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 00:25:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76EF22158C
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 00:27:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727417AbgLBAZP convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 1 Dec 2020 19:25:15 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:49820 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727476AbgLBAZO (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 1 Dec 2020 19:25:14 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B20Fl01030795
-        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 16:24:33 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 355vfk1k09-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 16:24:33 -0800
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 1 Dec 2020 16:24:30 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 0E8FF2ECA70C; Tue,  1 Dec 2020 16:24:24 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v4 bpf-next 13/14] selftests/bpf: add tp_btf CO-RE reloc test for modules
-Date:   Tue, 1 Dec 2020 16:16:15 -0800
-Message-ID: <20201202001616.3378929-14-andrii@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201202001616.3378929-1-andrii@kernel.org>
-References: <20201202001616.3378929-1-andrii@kernel.org>
+        id S1726342AbgLBA1h (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 1 Dec 2020 19:27:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726229AbgLBA1g (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 1 Dec 2020 19:27:36 -0500
+Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A999C0613CF;
+        Tue,  1 Dec 2020 16:26:56 -0800 (PST)
+Received: by mail-yb1-xb42.google.com with SMTP id o71so38538ybc.2;
+        Tue, 01 Dec 2020 16:26:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vfCF2rrgBv4Qtm98WE1uwXxGb7ee+2ZYnfEmg2VySPE=;
+        b=Lx0ntsOgTlCheqLAQiMrZXM0n1USD7f5oQf/FsL3s87zOyYRGgvULQOIU8Nr+b032u
+         joW3d9jxBpb1YzfF3mTvKJKFK4/29DIJoP1IJgGRMrMxiivqFEnaQ1p4fee/tjijFbW6
+         bW4MWlx6kCAKvls4J1tF4BFRn+XxNl6DEzHKKng0OZaaH95VbV+PJiHxFNY+TrZkbj6q
+         9vNmwsfvgiw284pEGNAcBGjdPuAL1Y1LMQKmJwppm7CuhoYN+zwyvo0778koDxyFx6vN
+         2PecywuGaQYjNNjtK4+9nGA1NljxWLwsqeYuGnVINVO8Ewlc+comMPGI+Dv0MEx61N6m
+         n+pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vfCF2rrgBv4Qtm98WE1uwXxGb7ee+2ZYnfEmg2VySPE=;
+        b=pha+CbRPgAFeKYLZ3oqPdA43EfRzSY9ZIIlweginton02lsppkCkDvHMVuZy3kD+ba
+         A/XsNeeXC7vwXtILtJGJnXeN5eTUH1cBjcDrSHxDgWBYCbJEHz6pZYu8zeRWm3E4p8B6
+         WrKa2ZVG/0Y3AoBNpLHZ/sxyyshu0GIoqikoOGPuvBYDhC4eMmmhGGQ01K+VQ/kEk5p6
+         GTuS/tIY48VL8Q3ISshzoEGaz5MdeXAMmTYKHsB/NevyA2cH/b3/ANWxoSzMhFVOChIH
+         HhVXuwh9ZJyVp6FrnrxiryqD0tHZAGehjVCYjf5bNg5z9+uouRPu/6S78dT7PTK+qzXT
+         mTcQ==
+X-Gm-Message-State: AOAM531Mk3xrWzF9D37KJvWFEtxXM6xraB8WyJCv+NMXmhG8b4Lvs+vc
+        tEJrOAeRJvMrCf74jgK01T8g+JmNTToUdA6oBJ4=
+X-Google-Smtp-Source: ABdhPJxog44/VOr67JY6HNC903NDUE8Kw2I1Wc4DYYxrc0gUlLwGgmecdPKIsoWt3kCMVpHarTWIDGsGmfHKigeMzyg=
+X-Received: by 2002:a25:3d7:: with SMTP id 206mr6691097ybd.27.1606868815940;
+ Tue, 01 Dec 2020 16:26:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-12-01_12:2020-11-30,2020-12-01 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 adultscore=0
- clxscore=1015 priorityscore=1501 mlxscore=0 bulkscore=0 lowpriorityscore=0
- mlxlogscore=937 malwarescore=0 spamscore=0 suspectscore=8 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012020000
-X-FB-Internal: deliver
+References: <20201118001742.85005-1-sdf@google.com> <20201118001742.85005-2-sdf@google.com>
+In-Reply-To: <20201118001742.85005-2-sdf@google.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 1 Dec 2020 16:26:45 -0800
+Message-ID: <CAEf4BzaQGJCAdbh3CYPK=z1XPBpqbWkXJLgHaEJc+O7R5dt9vw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/3] selftests/bpf: rewrite test_sock_addr bind
+ bpf into C
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add another CO-RE relocation test for kernel module relocations. This time for
-tp_btf with direct memory reads.
+On Tue, Nov 17, 2020 at 4:20 PM Stanislav Fomichev <sdf@google.com> wrote:
+>
+> I'm planning to extend it in the next patches. It's much easier to
+> work with C than BPF assembly.
+>
+> Signed-off-by: Stanislav Fomichev <sdf@google.com>
+> ---
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- .../selftests/bpf/prog_tests/core_reloc.c     |  3 +-
- .../bpf/progs/test_core_reloc_module.c        | 32 ++++++++++++++++++-
- 2 files changed, 33 insertions(+), 2 deletions(-)
+With nits below:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-index bb980848cd77..06eb956ff7bb 100644
---- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-@@ -514,7 +514,8 @@ static struct core_reloc_test_case test_cases[] = {
- 	},
- 
- 	/* validate we can find kernel module BTF types for relocs/attach */
--	MODULES_CASE("module", "raw_tp/bpf_testmod_test_read", "bpf_testmod_test_read"),
-+	MODULES_CASE("module_probed", "raw_tp/bpf_testmod_test_read", "bpf_testmod_test_read"),
-+	MODULES_CASE("module_direct", "tp_btf/bpf_testmod_test_read", NULL),
- 
- 	/* validate BPF program can use multiple flavors to match against
- 	 * single target BTF type
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_module.c b/tools/testing/selftests/bpf/progs/test_core_reloc_module.c
-index d1840c1a9d36..56363959f7b0 100644
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_module.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_module.c
-@@ -36,7 +36,7 @@ struct core_reloc_module_output {
- };
- 
- SEC("raw_tp/bpf_testmod_test_read")
--int BPF_PROG(test_core_module,
-+int BPF_PROG(test_core_module_probed,
- 	     struct task_struct *task,
- 	     struct bpf_testmod_test_read_ctx *read_ctx)
- {
-@@ -64,3 +64,33 @@ int BPF_PROG(test_core_module,
- 
- 	return 0;
- }
-+
-+SEC("tp_btf/bpf_testmod_test_read")
-+int BPF_PROG(test_core_module_direct,
-+	     struct task_struct *task,
-+	     struct bpf_testmod_test_read_ctx *read_ctx)
-+{
-+	struct core_reloc_module_output *out = (void *)&data.out;
-+	__u64 pid_tgid = bpf_get_current_pid_tgid();
-+	__u32 real_tgid = (__u32)(pid_tgid >> 32);
-+	__u32 real_pid = (__u32)pid_tgid;
-+
-+	if (data.my_pid_tgid != pid_tgid)
-+		return 0;
-+
-+	if (task->pid != real_pid || task->tgid != real_tgid)
-+		return 0;
-+
-+	out->len = read_ctx->len;
-+	out->off = read_ctx->off;
-+
-+	out->read_ctx_sz = bpf_core_type_size(struct bpf_testmod_test_read_ctx);
-+	out->read_ctx_exists = bpf_core_type_exists(struct bpf_testmod_test_read_ctx);
-+	out->buf_exists = bpf_core_field_exists(read_ctx->buf);
-+	out->off_exists = bpf_core_field_exists(read_ctx->off);
-+	out->len_exists = bpf_core_field_exists(read_ctx->len);
-+
-+	out->comm_len = BPF_CORE_READ_STR_INTO(&out->comm, task, comm);
-+
-+	return 0;
-+}
--- 
-2.24.1
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
 
+
+>  .../testing/selftests/bpf/progs/bind4_prog.c  |  73 +++++++
+>  .../testing/selftests/bpf/progs/bind6_prog.c  |  90 ++++++++
+>  tools/testing/selftests/bpf/test_sock_addr.c  | 196 ++----------------
+>  3 files changed, 175 insertions(+), 184 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/progs/bind4_prog.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/bind6_prog.c
+>
+> diff --git a/tools/testing/selftests/bpf/progs/bind4_prog.c b/tools/testing/selftests/bpf/progs/bind4_prog.c
+> new file mode 100644
+> index 000000000000..ff3def2ee6f9
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/bind4_prog.c
+> @@ -0,0 +1,73 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <string.h>
+> +
+> +#include <linux/stddef.h>
+> +#include <linux/bpf.h>
+> +#include <linux/in.h>
+> +#include <linux/in6.h>
+> +#include <sys/socket.h>
+> +#include <netinet/tcp.h>
+> +#include <linux/if.h>
+> +#include <errno.h>
+> +
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_endian.h>
+> +
+> +#define SERV4_IP               0xc0a801feU /* 192.168.1.254 */
+> +#define SERV4_PORT             4040
+> +#define SERV4_REWRITE_IP       0x7f000001U /* 127.0.0.1 */
+> +#define SERV4_REWRITE_PORT     4444
+> +
+> +int _version SEC("version") = 1;
+
+not needed, let's not add it to a new test prog
+
+> +
+
+[...]
+
+> diff --git a/tools/testing/selftests/bpf/progs/bind6_prog.c b/tools/testing/selftests/bpf/progs/bind6_prog.c
+> new file mode 100644
+> index 000000000000..97686baaae65
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/bind6_prog.c
+> @@ -0,0 +1,90 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <string.h>
+> +
+> +#include <linux/stddef.h>
+> +#include <linux/bpf.h>
+> +#include <linux/in.h>
+> +#include <linux/in6.h>
+> +#include <sys/socket.h>
+> +#include <netinet/tcp.h>
+> +#include <linux/if.h>
+> +#include <errno.h>
+> +
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_endian.h>
+> +
+> +#define SERV6_IP_0             0xfaceb00c /* face:b00c:1234:5678::abcd */
+> +#define SERV6_IP_1             0x12345678
+> +#define SERV6_IP_2             0x00000000
+> +#define SERV6_IP_3             0x0000abcd
+> +#define SERV6_PORT             6060
+> +#define SERV6_REWRITE_IP_0     0x00000000
+> +#define SERV6_REWRITE_IP_1     0x00000000
+> +#define SERV6_REWRITE_IP_2     0x00000000
+> +#define SERV6_REWRITE_IP_3     0x00000001
+> +#define SERV6_REWRITE_PORT     6666
+> +
+> +int _version SEC("version") = 1;
+
+same
+
+> +
+> +SEC("cgroup/bind6")
+> +int bind_v6_prog(struct bpf_sock_addr *ctx)
+> +{
+
+[...]
