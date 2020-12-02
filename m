@@ -2,90 +2,193 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80131C64E7B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E556EC83013
 	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 21:32:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2E40A221FD
+	by mail.kernel.org (Postfix) with ESMTP id B35D622206
 	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 21:32:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729366AbgLBVcg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Dec 2020 16:32:36 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:56702 "EHLO
+        id S1731193AbgLBVck (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Dec 2020 16:32:40 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:25606 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729462AbgLBVcf (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 2 Dec 2020 16:32:35 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B2LQG3E020062
-        for <bpf@vger.kernel.org>; Wed, 2 Dec 2020 13:31:55 -0800
+        by vger.kernel.org with ESMTP id S1730955AbgLBVcj (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 2 Dec 2020 16:32:39 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B2LTsUp018173
+        for <bpf@vger.kernel.org>; Wed, 2 Dec 2020 13:31:59 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=G1Y9hdvbK4qmmUhPaxvp/07XyNLgHhb2MpEGsGRireQ=;
- b=SbI4ZYF0leDFY+wFka9V9tzABq7CzVp0eIm/OZrok8Um9eonCmHWvu0lK7PSN6oVodRp
- DxAEmmU9U8m/d4AMVf+jFdHSYEEG5apBsVzyNrJwca4YFArge1lGYwl8leWjwYBABa5e
- FkkuW/cgQHln7JQqzvIGWH+zfff37+aCGsc= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=PfYV/v+uwNAdHgWlfUS6CxlpQgD2LLrJxGYYZg5n2O8=;
+ b=eosUuLl1pftEAUSothoC3+UAs91t/bb97P1i7XBtWukrHZoDQlR2moKivMFMP811EcRB
+ CbnQmubeulcn3mh2yzCD9NtMzditp1sgLNbtXDq/CpswRZKiI1Ze09FDFS7Mg+F+Bs2g
+ Ctkiv++vH97ndhC8LzJi+NdxZPMMcsgYRR8= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 355wgw7uk9-3
+        by mx0a-00082601.pphosted.com with ESMTP id 356fsf9u21-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 02 Dec 2020 13:31:55 -0800
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 02 Dec 2020 13:31:59 -0800
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 2 Dec 2020 13:31:53 -0800
+ 15.1.1979.3; Wed, 2 Dec 2020 13:31:57 -0800
 Received: by devvm3178.ftw3.facebook.com (Postfix, from userid 201728)
-        id 2485C476377B8; Wed,  2 Dec 2020 13:31:52 -0800 (PST)
+        id 2C014476377BF; Wed,  2 Dec 2020 13:31:54 -0800 (PST)
 From:   Prankur gupta <prankgup@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     <kernel-team@fb.com>, <netdev@vger.kernel.org>
-Subject: [PATCH v4 bpf-next 0/2] Add support to set window_clamp from bpf setsockops
-Date:   Wed, 2 Dec 2020 13:31:50 -0800
-Message-ID: <20201202213152.435886-1-prankgup@fb.com>
+Subject: [PATCH v4 bpf-next 2/2] selftests/bpf: Add Userspace tests for TCP_WINDOW_CLAMP
+Date:   Wed, 2 Dec 2020 13:31:52 -0800
+Message-ID: <20201202213152.435886-3-prankgup@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201202213152.435886-1-prankgup@fb.com>
+References: <20201202213152.435886-1-prankgup@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-12-02_13:2020-11-30,2020-12-02 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- clxscore=1015 impostorscore=0 mlxlogscore=999 bulkscore=0 phishscore=0
- adultscore=0 suspectscore=13 priorityscore=1501 mlxscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ bulkscore=0 adultscore=0 priorityscore=1501 mlxscore=0 malwarescore=0
+ suspectscore=13 phishscore=0 clxscore=1015 spamscore=0 impostorscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2012020130
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch contains support to set tcp window_field field from bpf setsoc=
-kops.
+Adding selftests for new added functionality to set TCP_WINDOW_CLAMP
+from bpf setsockopt.
 
-v2: Used TCP_WINDOW_CLAMP setsockopt logic for bpf_setsockopt (review com=
-ment addressed)
-
-v3: Created a common function for duplicated code (review comment address=
-ed)
-
-v4: Removing logic to pass struct sock and struct tcp_sock together (revi=
-ew comment addressed)
-
-Prankur gupta (2):
-  bpf: Adds support for setting window clamp
-  selftests/bpf: Add Userspace tests for TCP_WINDOW_CLAMP
-
- include/net/tcp.h                             |  1 +
- net/core/filter.c                             |  3 ++
- net/ipv4/tcp.c                                | 25 +++++++++-----
+Signed-off-by: Prankur gupta <prankgup@fb.com>
+---
  tools/testing/selftests/bpf/bpf_tcp_helpers.h |  1 +
  .../selftests/bpf/prog_tests/tcpbpf_user.c    |  4 +++
  .../selftests/bpf/progs/test_tcpbpf_kern.c    | 33 +++++++++++++++++++
  tools/testing/selftests/bpf/test_tcpbpf.h     |  2 ++
- 7 files changed, 60 insertions(+), 9 deletions(-)
+ 4 files changed, 40 insertions(+)
 
+diff --git a/tools/testing/selftests/bpf/bpf_tcp_helpers.h b/tools/testin=
+g/selftests/bpf/bpf_tcp_helpers.h
+index 2915664c335d..6a9053162cf2 100644
+--- a/tools/testing/selftests/bpf/bpf_tcp_helpers.h
++++ b/tools/testing/selftests/bpf/bpf_tcp_helpers.h
+@@ -56,6 +56,7 @@ struct tcp_sock {
+ 	__u32	rcv_nxt;
+ 	__u32	snd_nxt;
+ 	__u32	snd_una;
++	__u32	window_clamp;
+ 	__u8	ecn_flags;
+ 	__u32	delivered;
+ 	__u32	delivered_ce;
+diff --git a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c b/tools=
+/testing/selftests/bpf/prog_tests/tcpbpf_user.c
+index ab5281475f44..87923d2865b7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
++++ b/tools/testing/selftests/bpf/prog_tests/tcpbpf_user.c
+@@ -42,6 +42,10 @@ static void verify_result(struct tcpbpf_globals *resul=
+t)
+=20
+ 	/* check getsockopt for SAVED_SYN */
+ 	ASSERT_EQ(result->tcp_saved_syn, 1, "tcp_saved_syn");
++
++	/* check getsockopt for window_clamp */
++	ASSERT_EQ(result->window_clamp_client, 9216, "window_clamp_client");
++	ASSERT_EQ(result->window_clamp_server, 9216, "window_clamp_server");
+ }
+=20
+ static void run_test(struct tcpbpf_globals *result)
+diff --git a/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c b/tools=
+/testing/selftests/bpf/progs/test_tcpbpf_kern.c
+index e85e49deba70..94f50f7e94d6 100644
+--- a/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_tcpbpf_kern.c
+@@ -12,17 +12,41 @@
+ #include <linux/tcp.h>
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_endian.h>
++#include "bpf_tcp_helpers.h"
+ #include "test_tcpbpf.h"
+=20
+ struct tcpbpf_globals global =3D {};
+ int _version SEC("version") =3D 1;
+=20
++/**
++ * SOL_TCP is defined in <netinet/tcp.h> while
++ * TCP_SAVED_SYN is defined in already included <linux/tcp.h>
++ */
++#ifndef SOL_TCP
++#define SOL_TCP 6
++#endif
++
++static __always_inline int get_tp_window_clamp(struct bpf_sock_ops *skop=
+s)
++{
++	struct bpf_sock *sk;
++	struct tcp_sock *tp;
++
++	sk =3D skops->sk;
++	if (!sk)
++		return -1;
++	tp =3D bpf_skc_to_tcp_sock(sk);
++	if (!tp)
++		return -1;
++	return tp->window_clamp;
++}
++
+ SEC("sockops")
+ int bpf_testcb(struct bpf_sock_ops *skops)
+ {
+ 	char header[sizeof(struct ipv6hdr) + sizeof(struct tcphdr)];
+ 	struct bpf_sock_ops *reuse =3D skops;
+ 	struct tcphdr *thdr;
++	int window_clamp =3D 9216;
+ 	int good_call_rv =3D 0;
+ 	int bad_call_rv =3D 0;
+ 	int save_syn =3D 1;
+@@ -75,6 +99,11 @@ int bpf_testcb(struct bpf_sock_ops *skops)
+ 	global.event_map |=3D (1 << op);
+=20
+ 	switch (op) {
++	case BPF_SOCK_OPS_TCP_CONNECT_CB:
++		rv =3D bpf_setsockopt(skops, SOL_TCP, TCP_WINDOW_CLAMP,
++				    &window_clamp, sizeof(window_clamp));
++		global.window_clamp_client =3D get_tp_window_clamp(skops);
++		break;
+ 	case BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB:
+ 		/* Test failure to set largest cb flag (assumes not defined) */
+ 		global.bad_cb_test_rv =3D bpf_sock_ops_cb_flags_set(skops, 0x80);
+@@ -100,6 +129,10 @@ int bpf_testcb(struct bpf_sock_ops *skops)
+ 				global.tcp_saved_syn =3D v;
+ 			}
+ 		}
++		rv =3D bpf_setsockopt(skops, SOL_TCP, TCP_WINDOW_CLAMP,
++				    &window_clamp, sizeof(window_clamp));
++
++		global.window_clamp_server =3D get_tp_window_clamp(skops);
+ 		break;
+ 	case BPF_SOCK_OPS_RTO_CB:
+ 		break;
+diff --git a/tools/testing/selftests/bpf/test_tcpbpf.h b/tools/testing/se=
+lftests/bpf/test_tcpbpf.h
+index 0ed33521cbbb..9dd9b5590f9d 100644
+--- a/tools/testing/selftests/bpf/test_tcpbpf.h
++++ b/tools/testing/selftests/bpf/test_tcpbpf.h
+@@ -16,5 +16,7 @@ struct tcpbpf_globals {
+ 	__u32 num_close_events;
+ 	__u32 tcp_save_syn;
+ 	__u32 tcp_saved_syn;
++	__u32 window_clamp_client;
++	__u32 window_clamp_server;
+ };
+ #endif
 --=20
 2.24.1
 
