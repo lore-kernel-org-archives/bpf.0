@@ -6,38 +6,38 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 25C3AC64E90
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AD376C8300F
 	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 00:25:04 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BB3B0206F9
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 00:25:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6F3072158C
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 00:25:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726482AbgLBAYs convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 1 Dec 2020 19:24:48 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:16968 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726761AbgLBAYr (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 1 Dec 2020 19:24:47 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B20Fm6T030814
-        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 16:24:06 -0800
+        id S1727008AbgLBAYx convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 1 Dec 2020 19:24:53 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:2080 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726761AbgLBAYx (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 1 Dec 2020 19:24:53 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B20EauL028679
+        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 16:24:13 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 355vfk1jwh-4
+        by mx0a-00082601.pphosted.com with ESMTP id 3547psr0a4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 16:24:06 -0800
-Received: from intmgw001.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 16:24:12 -0800
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 1 Dec 2020 16:24:00 -0800
+ 15.1.1979.3; Tue, 1 Dec 2020 16:24:12 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 0AB262ECA70C; Tue,  1 Dec 2020 16:23:59 -0800 (PST)
+        id DDED22ECA70C; Tue,  1 Dec 2020 16:24:10 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v4 bpf-next 02/14] bpf: keep module's btf_data_size intact after load
-Date:   Tue, 1 Dec 2020 16:16:04 -0800
-Message-ID: <20201202001616.3378929-3-andrii@kernel.org>
+Subject: [PATCH v4 bpf-next 07/14] selftests/bpf: add support for marking sub-tests as skipped
+Date:   Tue, 1 Dec 2020 16:16:09 -0800
+Message-ID: <20201202001616.3378929-8-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201202001616.3378929-1-andrii@kernel.org>
 References: <20201202001616.3378929-1-andrii@kernel.org>
@@ -47,38 +47,47 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-12-01_12:2020-11-30,2020-12-01 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 adultscore=0
- clxscore=1015 priorityscore=1501 mlxscore=0 bulkscore=0 lowpriorityscore=0
- mlxlogscore=734 malwarescore=0 spamscore=0 suspectscore=25 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012020000
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 impostorscore=0
+ mlxscore=0 malwarescore=0 spamscore=0 priorityscore=1501 bulkscore=0
+ mlxlogscore=837 adultscore=0 suspectscore=25 lowpriorityscore=0
+ phishscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012020000
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Having real btf_data_size stored in struct module is benefitial to quickly
-determine which kernel modules have associated BTF object and which don't.
-There is no harm in keeping this info, as opposed to keeping invalid pointer.
+Previously skipped sub-tests would be counted as passing with ":OK" appened
+in the log. Change that to be accounted as ":SKIP".
 
-Fixes: 607c543f939d ("bpf: Sanitize BTF data pointer after module is loaded")
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- kernel/module.c | 1 -
- 1 file changed, 1 deletion(-)
+ tools/testing/selftests/bpf/test_progs.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/module.c b/kernel/module.c
-index 18f259d61d14..c3a9e972d3b2 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -3712,7 +3712,6 @@ static noinline int do_init_module(struct module *mod)
- #ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- 	/* .BTF is not SHF_ALLOC and will get removed, so sanitize pointer */
- 	mod->btf_data = NULL;
--	mod->btf_data_size = 0;
- #endif
- 	/*
- 	 * We want to free module_init, but be aware that kallsyms may be
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 17587754b7a7..5ef081bdae4e 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -149,15 +149,15 @@ void test__end_subtest()
+ 
+ 	if (sub_error_cnt)
+ 		env.fail_cnt++;
+-	else
++	else if (test->skip_cnt == 0)
+ 		env.sub_succ_cnt++;
+ 	skip_account();
+ 
+ 	dump_test_log(test, sub_error_cnt);
+ 
+ 	fprintf(env.stdout, "#%d/%d %s:%s\n",
+-	       test->test_num, test->subtest_num,
+-	       test->subtest_name, sub_error_cnt ? "FAIL" : "OK");
++	       test->test_num, test->subtest_num, test->subtest_name,
++	       sub_error_cnt ? "FAIL" : (test->skip_cnt ? "SKIP" : "OK"));
+ 
+ 	free(test->subtest_name);
+ 	test->subtest_name = NULL;
 -- 
 2.24.1
 
