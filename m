@@ -2,61 +2,88 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AFA06C71155
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 19:47:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0066BC64E7C
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 20:30:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5614522203
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 19:47:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9196A21D7A
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 20:30:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729189AbgLBTrz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Dec 2020 14:47:55 -0500
-Received: from mx.der-flo.net ([193.160.39.236]:38386 "EHLO mx.der-flo.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728940AbgLBTry (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Dec 2020 14:47:54 -0500
-Received: by mx.der-flo.net (Postfix, from userid 110)
-        id DBBB344563; Wed,  2 Dec 2020 20:46:56 +0100 (CET)
-Received: from localhost (unknown [IPv6:2a02:1203:ecb0:3930:1751:4157:4d75:a5e2])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx.der-flo.net (Postfix) with ESMTPSA id 2FCA744552;
-        Wed,  2 Dec 2020 20:46:15 +0100 (CET)
-From:   Florian Lehner <dev@der-flo.net>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, john.fastabend@gmail.com,
-        Florian Lehner <dev@der-flo.net>,
-        Krzesimir Nowak <krzesimir@kinvolk.io>
-Subject: [PATCH 0/2 v2] Improve error handling of verifier tests
-Date:   Wed,  2 Dec 2020 20:45:30 +0100
-Message-Id: <20201202194532.12879-1-dev@der-flo.net>
-X-Mailer: git-send-email 2.28.0
+        id S1727113AbgLBUaM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Dec 2020 15:30:12 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:26034 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726885AbgLBUaM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 2 Dec 2020 15:30:12 -0500
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0B2KRQXf013003
+        for <bpf@vger.kernel.org>; Wed, 2 Dec 2020 12:29:30 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=facebook; bh=KABH1YMs57kFvn7NXzvkZQPQ6YbnBtDQ71zNt1BBCmM=;
+ b=n3SBdZqF6F25u7giA+1CFIbEiKN/eg+cKqlMDx/5dobtrHso7XyQ+MxdsCicEPN3k7Uz
+ 6kuIFiq//FiuLCgxo8xIYJJDxS/RmXK5eEE1LKcZW/uoiWZuHo5T4ACbJe2Dh+80pFKu
+ zCtnWb3qwWiimzZf3zEkQdPu8l/b/OpnvWo= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0001303.ppops.net with ESMTP id 3562m9wpn6-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 02 Dec 2020 12:29:30 -0800
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 2 Dec 2020 12:29:29 -0800
+Received: by devvm3178.ftw3.facebook.com (Postfix, from userid 201728)
+        id 41CF24762F190; Wed,  2 Dec 2020 12:29:25 -0800 (PST)
+From:   Prankur gupta <prankgup@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     <kernel-team@fb.com>, <netdev@vger.kernel.org>
+Subject: [PATCH v3 bpf-next 0/2] Add support to set window_clamp from bpf setsockops
+Date:   Wed, 2 Dec 2020 12:29:23 -0800
+Message-ID: <20201202202925.165803-1-prankgup@fb.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-12-02_12:2020-11-30,2020-12-02 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ adultscore=0 mlxscore=0 suspectscore=13 phishscore=0 impostorscore=0
+ priorityscore=1501 spamscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012020122
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-These patches improve the error handling for verifier tests. With "Test
-the 32bit narrow read" Krzesimir Nowak provided these patches first, but
-they were never merged.
-The improved error handling helps to implement and test BPF program types
-that are not supported yet.
+This patch contains support to set tcp window_field field from bpf setsoc=
+kops.
 
-v2:
-  - Add unpriv check in error validation
+v2: Used TCP_WINDOW_CLAMP setsockopt logic for bpf_setsockopt (review com=
+ment addressed)
 
-Florian Lehner (2):
-  selftests/bpf: Print reason when a tester could not run a program
-  selftests/bpf: Avoid errno clobbering
+v3: Created a common function for duplicated code (review comment address=
+ed)
 
- tools/testing/selftests/bpf/test_verifier.c | 30 ++++++++++++++++-----
- 1 file changed, 24 insertions(+), 6 deletions(-)
 
---
-2.28.0
+Prankur gupta (2):
+  bpf: Adds support for setting window clamp
+  selftests/bpf: Add Userspace tests for TCP_WINDOW_CLAMP
+
+ include/net/tcp.h                             |  1 +
+ net/core/filter.c                             |  3 ++
+ net/ipv4/tcp.c                                | 23 ++++++++-----
+ tools/testing/selftests/bpf/bpf_tcp_helpers.h |  1 +
+ .../selftests/bpf/prog_tests/tcpbpf_user.c    |  4 +++
+ .../selftests/bpf/progs/test_tcpbpf_kern.c    | 33 +++++++++++++++++++
+ tools/testing/selftests/bpf/test_tcpbpf.h     |  2 ++
+ 7 files changed, 58 insertions(+), 9 deletions(-)
+
+--=20
+2.24.1
 
