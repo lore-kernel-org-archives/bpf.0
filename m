@@ -2,110 +2,78 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0F9F5C64E8A
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 06:53:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78402C71156
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 06:53:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AC94222202
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 06:53:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 29E1520DD4
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 06:53:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727108AbgLBGxc convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 2 Dec 2020 01:53:32 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:39864 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726202AbgLBGxc (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 2 Dec 2020 01:53:32 -0500
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B26jBDH026348
-        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 22:52:51 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 355qvjn9j3-1
+        id S1728712AbgLBGxf convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 2 Dec 2020 01:53:35 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63662 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726202AbgLBGxf (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 2 Dec 2020 01:53:35 -0500
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B26jkML007145
+        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 22:52:54 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 355t7y4514-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 22:52:51 -0800
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 22:52:54 -0800
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 1 Dec 2020 22:52:50 -0800
+ 15.1.1979.3; Tue, 1 Dec 2020 22:52:51 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 8D2402ECA750; Tue,  1 Dec 2020 22:52:50 -0800 (PST)
+        id 3CE052ECA750; Tue,  1 Dec 2020 22:52:46 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 2/3] libbpf: add base BTF accessor
-Date:   Tue, 1 Dec 2020 22:52:42 -0800
-Message-ID: <20201202065244.530571-3-andrii@kernel.org>
+Subject: [PATCH bpf-next 0/3] bpftool: improve split BTF support
+Date:   Tue, 1 Dec 2020 22:52:40 -0800
+Message-ID: <20201202065244.530571-1-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201202065244.530571-1-andrii@kernel.org>
-References: <20201202065244.530571-1-andrii@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-12-02_01:2020-11-30,2020-12-02 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- clxscore=1034 impostorscore=0 suspectscore=8 malwarescore=0 adultscore=0
- spamscore=0 mlxlogscore=809 priorityscore=1501 phishscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ adultscore=0 priorityscore=1501 bulkscore=0 mlxlogscore=473 phishscore=0
+ mlxscore=0 suspectscore=8 impostorscore=0 spamscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2012020040
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add ability to get base BTF. It can be also used to check if BTF is split BTF.
+Few follow up improvements to bpftool for split BTF support:
+  - emit "name <anon>" for non-named BTFs in `bpftool btf show` command;
+  - when dumping /sys/kernel/btf/<module> use /sys/kernel/btf/vmlinux as the
+    base BTF, unless base BTF is explicitly specified with -B flag.
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/btf.c      | 5 +++++
- tools/lib/bpf/btf.h      | 1 +
- tools/lib/bpf/libbpf.map | 1 +
- 3 files changed, 7 insertions(+)
+This patch set also adds btf__base_btf() getter to access base BTF of the
+struct btf.
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 8ff46cd30ca1..1935e83d309c 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -432,6 +432,11 @@ __u32 btf__get_nr_types(const struct btf *btf)
- 	return btf->start_id + btf->nr_types - 1;
- }
- 
-+const struct btf *btf__base_btf(const struct btf *btf)
-+{
-+	return btf->base_btf;
-+}
-+
- /* internal helper returning non-const pointer to a type */
- static struct btf_type *btf_type_by_id(struct btf *btf, __u32 type_id)
- {
-diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
-index 1093f6fe6800..1237bcd1dd17 100644
---- a/tools/lib/bpf/btf.h
-+++ b/tools/lib/bpf/btf.h
-@@ -51,6 +51,7 @@ LIBBPF_API __s32 btf__find_by_name(const struct btf *btf,
- LIBBPF_API __s32 btf__find_by_name_kind(const struct btf *btf,
- 					const char *type_name, __u32 kind);
- LIBBPF_API __u32 btf__get_nr_types(const struct btf *btf);
-+LIBBPF_API const struct btf *btf__base_btf(const struct btf *btf);
- LIBBPF_API const struct btf_type *btf__type_by_id(const struct btf *btf,
- 						  __u32 id);
- LIBBPF_API size_t btf__pointer_size(const struct btf *btf);
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 29ff4807b909..ed55498c4122 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -340,6 +340,7 @@ LIBBPF_0.2.0 {
- 
- LIBBPF_0.3.0 {
- 	global:
-+		btf__base_btf;
- 		btf__parse_elf_split;
- 		btf__parse_raw_split;
- 		btf__parse_split;
+Andrii Nakryiko (3):
+  tools/bpftool: emit name <anon> for anonymous BTFs
+  libbpf: add base BTF accessor
+  tools/bpftool: auto-detect split BTFs in common cases
+
+ tools/bpf/bpftool/btf.c  | 27 +++++++++++++++++++++++----
+ tools/lib/bpf/btf.c      |  5 +++++
+ tools/lib/bpf/btf.h      |  1 +
+ tools/lib/bpf/libbpf.map |  1 +
+ 4 files changed, 30 insertions(+), 4 deletions(-)
+
 -- 
 2.24.1
 
