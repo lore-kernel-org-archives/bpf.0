@@ -6,38 +6,38 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8051EC83019
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 00:25:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 62F70C71155
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 00:25:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2CF5421D1A
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 00:25:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 183B32158C
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 00:25:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727408AbgLBAZJ convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 1 Dec 2020 19:25:09 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:63310 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727379AbgLBAZG (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 1 Dec 2020 19:25:06 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B20Fm6f030814
-        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 16:24:25 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 355vfk1jyn-3
+        id S1727240AbgLBAZN convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 1 Dec 2020 19:25:13 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:43750 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727417AbgLBAZM (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 1 Dec 2020 19:25:12 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B20F9tt012189
+        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 16:24:31 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 355qvjkt7h-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 16:24:23 -0800
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 16:24:31 -0800
+Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 1 Dec 2020 16:24:20 -0800
+ 15.1.1979.3; Tue, 1 Dec 2020 16:24:30 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 888F62ECA70C; Tue,  1 Dec 2020 16:24:17 -0800 (PST)
+        id 395752ECA70C; Tue,  1 Dec 2020 16:24:26 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v4 bpf-next 10/14] bpf: allow to specify kernel module BTFs when attaching BPF programs
-Date:   Tue, 1 Dec 2020 16:16:12 -0800
-Message-ID: <20201202001616.3378929-11-andrii@kernel.org>
+Subject: [PATCH v4 bpf-next 14/14] selftests/bpf: add fentry/fexit/fmod_ret selftest for kernel module
+Date:   Tue, 1 Dec 2020 16:16:16 -0800
+Message-ID: <20201202001616.3378929-15-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201202001616.3378929-1-andrii@kernel.org>
 References: <20201202001616.3378929-1-andrii@kernel.org>
@@ -47,180 +47,158 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-12-01_12:2020-11-30,2020-12-01 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 adultscore=0
- clxscore=1015 priorityscore=1501 mlxscore=0 bulkscore=0 lowpriorityscore=0
- mlxlogscore=999 malwarescore=0 spamscore=0 suspectscore=8 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012020000
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ clxscore=1034 impostorscore=0 suspectscore=8 malwarescore=0 adultscore=0
+ spamscore=0 mlxlogscore=999 priorityscore=1501 phishscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012020000
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add ability for user-space programs to specify non-vmlinux BTF when attaching
-BTF-powered BPF programs: raw_tp, fentry/fexit/fmod_ret, LSM, etc. For this,
-add attach_btf_obj_id field which contains BTF object ID for either vmlinux or
-module. For backwards compatibility (and simplicity) reasons, 0 denotes
-vmlinux BTF. Only kernel BTF (vmlinux or module) can be specified.
+Add new selftest checking attachment of fentry/fexit/fmod_ret (and raw
+tracepoint ones for completeness) BPF programs to kernel module function.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/btf.h            |  2 ++
- include/uapi/linux/bpf.h       |  1 +
- kernel/bpf/btf.c               | 25 +++++++++++++++++++------
- kernel/bpf/syscall.c           | 22 +++++++++++++++++++---
- tools/include/uapi/linux/bpf.h |  1 +
- 5 files changed, 42 insertions(+), 9 deletions(-)
+ .../selftests/bpf/prog_tests/module_attach.c  | 53 +++++++++++++++
+ .../selftests/bpf/progs/test_module_attach.c  | 66 +++++++++++++++++++
+ 2 files changed, 119 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/module_attach.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_module_attach.c
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index fb608e4de076..53ce2bc6dc54 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -89,7 +89,9 @@ int btf_type_snprintf_show(const struct btf *btf, u32 type_id, void *obj,
- 			   char *buf, int len, u64 flags);
- 
- int btf_get_fd_by_id(u32 id);
-+struct btf *btf_get_by_id(int id);
- u32 btf_obj_id(const struct btf *btf);
-+bool btf_is_kernel(const struct btf *btf);
- bool btf_member_is_reg_int(const struct btf *btf, const struct btf_type *s,
- 			   const struct btf_member *m,
- 			   u32 expected_offset, u32 expected_size);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index c3458ec1f30a..60b95b51ccb8 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -558,6 +558,7 @@ union bpf_attr {
- 		__u32		line_info_cnt;	/* number of bpf_line_info records */
- 		__u32		attach_btf_id;	/* in-kernel BTF type id to attach to */
- 		__u32		attach_prog_fd; /* 0 to attach to vmlinux */
-+		__u32		attach_btf_obj_id; /* vmlinux/module BTF object ID for BTF type */
- 	};
- 
- 	struct { /* anonymous struct used by BPF_OBJ_* commands */
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 7a19bf5bfe97..12876b272c6b 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -5652,6 +5652,19 @@ struct btf *btf_get_by_fd(int fd)
- 	return btf;
- }
- 
-+struct btf *btf_get_by_id(int id)
+diff --git a/tools/testing/selftests/bpf/prog_tests/module_attach.c b/tools/testing/selftests/bpf/prog_tests/module_attach.c
+new file mode 100644
+index 000000000000..4b65e9918764
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/module_attach.c
+@@ -0,0 +1,53 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++
++#include <test_progs.h>
++#include "test_module_attach.skel.h"
++
++static int duration;
++
++static int trigger_module_test_read(int read_sz)
 +{
-+	struct btf *btf;
++	int fd, err;
 +
-+	rcu_read_lock();
-+	btf = idr_find(&btf_idr, id);
-+	if (!btf || !refcount_inc_not_zero(&btf->refcnt))
-+		btf = ERR_PTR(-ENOENT);
-+	rcu_read_unlock();
++	fd = open("/sys/kernel/bpf_testmod", O_RDONLY);
++	err = -errno;
++	if (CHECK(fd < 0, "testmod_file_open", "failed: %d\n", err))
++		return err;
 +
-+	return btf;
++	read(fd, NULL, read_sz);
++	close(fd);
++
++	return 0;
 +}
 +
- int btf_get_info_by_fd(const struct btf *btf,
- 		       const union bpf_attr *attr,
- 		       union bpf_attr __user *uattr)
-@@ -5717,12 +5730,7 @@ int btf_get_fd_by_id(u32 id)
- 	struct btf *btf;
- 	int fd;
- 
--	rcu_read_lock();
--	btf = idr_find(&btf_idr, id);
--	if (!btf || !refcount_inc_not_zero(&btf->refcnt))
--		btf = ERR_PTR(-ENOENT);
--	rcu_read_unlock();
--
-+	btf = btf_get_by_id(id);
- 	if (IS_ERR(btf))
- 		return PTR_ERR(btf);
- 
-@@ -5738,6 +5746,11 @@ u32 btf_obj_id(const struct btf *btf)
- 	return btf->id;
- }
- 
-+bool btf_is_kernel(const struct btf *btf)
++void test_module_attach(void)
 +{
-+	return btf->kernel_btf;
++	const int READ_SZ = 456;
++	struct test_module_attach* skel;
++	struct test_module_attach__bss *bss;
++	int err;
++
++	skel = test_module_attach__open_and_load();
++	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
++		return;
++
++	bss = skel->bss;
++
++	err = test_module_attach__attach(skel);
++	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
++		goto cleanup;
++
++	/* trigger tracepoint */
++	ASSERT_OK(trigger_module_test_read(READ_SZ), "trigger_read");
++
++	ASSERT_EQ(bss->raw_tp_read_sz, READ_SZ, "raw_tp");
++	ASSERT_EQ(bss->tp_btf_read_sz, READ_SZ, "tp_btf");
++	ASSERT_EQ(bss->fentry_read_sz, READ_SZ, "fentry");
++	ASSERT_EQ(bss->fexit_read_sz, READ_SZ, "fexit");
++	ASSERT_EQ(bss->fexit_ret, -EIO, "fexit_tet");
++	ASSERT_EQ(bss->fmod_ret_read_sz, READ_SZ, "fmod_ret");
++
++cleanup:
++	test_module_attach__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_module_attach.c b/tools/testing/selftests/bpf/progs/test_module_attach.c
+new file mode 100644
+index 000000000000..b563563df172
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_module_attach.c
+@@ -0,0 +1,66 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
++#include "../bpf_testmod/bpf_testmod.h"
++
++__u32 raw_tp_read_sz = 0;
++
++SEC("raw_tp/bpf_testmod_test_read")
++int BPF_PROG(handle_raw_tp,
++	     struct task_struct *task, struct bpf_testmod_test_read_ctx *read_ctx)
++{
++	raw_tp_read_sz = BPF_CORE_READ(read_ctx, len);
++	return 0;
 +}
 +
- static int btf_id_cmp_func(const void *a, const void *b)
- {
- 	const int *pa = a, *pb = b;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 5ee00611af53..3af073642664 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1968,7 +1968,7 @@ static void bpf_prog_load_fixup_attach_type(union bpf_attr *attr)
- static int
- bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
- 			   enum bpf_attach_type expected_attach_type,
--			   u32 btf_id, u32 prog_fd)
-+			   u32 btf_obj_id, u32 btf_id, u32 prog_fd)
- {
- 	if (btf_id) {
- 		if (btf_id > BTF_MAX_TYPE)
-@@ -1985,6 +1985,9 @@ bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
- 		}
- 	}
- 
-+	if (btf_obj_id && (!btf_id || prog_fd))
-+		return -EINVAL;
++__u32 tp_btf_read_sz = 0;
 +
- 	if (prog_fd && prog_type != BPF_PROG_TYPE_TRACING &&
- 	    prog_type != BPF_PROG_TYPE_EXT)
- 		return -EINVAL;
-@@ -2097,7 +2100,7 @@ static bool is_perfmon_prog_type(enum bpf_prog_type prog_type)
- }
- 
- /* last field in 'union bpf_attr' used by this command */
--#define	BPF_PROG_LOAD_LAST_FIELD attach_prog_fd
-+#define	BPF_PROG_LOAD_LAST_FIELD attach_btf_obj_id
- 
- static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- {
-@@ -2146,6 +2149,7 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- 
- 	bpf_prog_load_fixup_attach_type(attr);
- 	if (bpf_prog_load_check_attach(type, attr->expected_attach_type,
-+				       attr->attach_btf_obj_id,
- 				       attr->attach_btf_id,
- 				       attr->attach_prog_fd))
- 		return -EINVAL;
-@@ -2158,7 +2162,19 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- 	prog->expected_attach_type = attr->expected_attach_type;
- 	prog->aux->attach_btf_id = attr->attach_btf_id;
- 
--	if (attr->attach_btf_id && !attr->attach_prog_fd) {
-+	if (attr->attach_btf_obj_id) {
-+		struct btf *btf;
++SEC("tp_btf/bpf_testmod_test_read")
++int BPF_PROG(handle_tp_btf,
++	     struct task_struct *task, struct bpf_testmod_test_read_ctx *read_ctx)
++{
++	tp_btf_read_sz = read_ctx->len;
++	return 0;
++}
 +
-+		btf = btf_get_by_id(attr->attach_btf_obj_id);
-+		if (IS_ERR(btf))
-+			return PTR_ERR(btf);
-+		if (!btf_is_kernel(btf)) {
-+			btf_put(btf);
-+			return -EINVAL;
-+		}
++__u32 fentry_read_sz = 0;
 +
-+		prog->aux->attach_btf = btf;
-+	} else if (attr->attach_btf_id && !attr->attach_prog_fd) {
- 		struct btf *btf;
- 
- 		btf = bpf_get_btf_vmlinux();
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index c3458ec1f30a..60b95b51ccb8 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -558,6 +558,7 @@ union bpf_attr {
- 		__u32		line_info_cnt;	/* number of bpf_line_info records */
- 		__u32		attach_btf_id;	/* in-kernel BTF type id to attach to */
- 		__u32		attach_prog_fd; /* 0 to attach to vmlinux */
-+		__u32		attach_btf_obj_id; /* vmlinux/module BTF object ID for BTF type */
- 	};
- 
- 	struct { /* anonymous struct used by BPF_OBJ_* commands */
++SEC("fentry/bpf_testmod_test_read")
++int BPF_PROG(handle_fentry,
++	     struct file *file, struct kobject *kobj,
++	     struct bin_attribute *bin_attr, char *buf, loff_t off, size_t len)
++{
++	fentry_read_sz = len;
++	return 0;
++}
++
++__u32 fexit_read_sz = 0;
++int fexit_ret = 0;
++
++SEC("fexit/bpf_testmod_test_read")
++int BPF_PROG(handle_fexit,
++	     struct file *file, struct kobject *kobj,
++	     struct bin_attribute *bin_attr, char *buf, loff_t off, size_t len,
++	     int ret)
++{
++	fexit_read_sz = len;
++	fexit_ret = ret;
++	return 0;
++}
++
++__u32 fmod_ret_read_sz = 0;
++
++SEC("fmod_ret/bpf_testmod_test_read")
++int BPF_PROG(handle_fmod_ret,
++	     struct file *file, struct kobject *kobj,
++	     struct bin_attribute *bin_attr, char *buf, loff_t off, size_t len)
++{
++	fmod_ret_read_sz = len;
++	return 0; /* don't override the exit code */
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.24.1
 
