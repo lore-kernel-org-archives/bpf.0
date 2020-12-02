@@ -3,42 +3,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1F795C83017
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E09ABC8301C
 	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 00:25:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E459021D1A
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 00:25:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7BF5A21D1A
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 00:25:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727011AbgLBAYy convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 1 Dec 2020 19:24:54 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:42280 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726896AbgLBAYx (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 1 Dec 2020 19:24:53 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0B20G2Vw018525
-        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 16:24:10 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 355pr6m848-1
+        id S1727235AbgLBAZB convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 1 Dec 2020 19:25:01 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:32978 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727186AbgLBAZA (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 1 Dec 2020 19:25:00 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B20Flcd030804
+        for <bpf@vger.kernel.org>; Tue, 1 Dec 2020 16:24:18 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 355vfk1jy9-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 16:24:08 -0800
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Tue, 01 Dec 2020 16:24:18 -0800
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c085:208::11) by
+ mail.thefacebook.com (2620:10d:c085:11d::6) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Tue, 1 Dec 2020 16:24:07 -0800
+ 15.1.1979.3; Tue, 1 Dec 2020 16:24:15 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 5E2CC2ECA70C; Tue,  1 Dec 2020 16:24:04 -0800 (PST)
+        id 1265C2ECA70C; Tue,  1 Dec 2020 16:24:13 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Martin KaFai Lau <kafai@fb.com>
-Subject: [PATCH v4 bpf-next 04/14] libbpf: refactor CO-RE relocs to not assume a single BTF object
-Date:   Tue, 1 Dec 2020 16:16:06 -0800
-Message-ID: <20201202001616.3378929-5-andrii@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH v4 bpf-next 08/14] selftests/bpf: add CO-RE relocs selftest relying on kernel module BTF
+Date:   Tue, 1 Dec 2020 16:16:10 -0800
+Message-ID: <20201202001616.3378929-9-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201202001616.3378929-1-andrii@kernel.org>
 References: <20201202001616.3378929-1-andrii@kernel.org>
@@ -48,323 +47,291 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-12-01_12:2020-11-30,2020-12-01 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- priorityscore=1501 suspectscore=29 spamscore=0 adultscore=0 clxscore=1015
- mlxlogscore=999 lowpriorityscore=0 mlxscore=0 phishscore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012020000
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 adultscore=0
+ clxscore=1015 priorityscore=1501 mlxscore=0 bulkscore=0 lowpriorityscore=0
+ mlxlogscore=999 malwarescore=0 spamscore=0 suspectscore=8 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012020000
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Refactor CO-RE relocation candidate search to not expect a single BTF, rather
-return all candidate types with their corresponding BTF objects. This will
-allow to extend CO-RE relocations to accommodate kernel module BTFs.
+Add a self-tests validating libbpf is able to perform CO-RE relocations
+against the type defined in kernel module BTF. if bpf_testmod.o is not
+supported by the kernel (e.g., due to version mismatch), skip tests, instead
+of failing.
 
-Acked-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- tools/lib/bpf/libbpf.c | 187 ++++++++++++++++++++++++-----------------
- 1 file changed, 111 insertions(+), 76 deletions(-)
+ .../selftests/bpf/prog_tests/core_reloc.c     | 79 ++++++++++++++++---
+ .../selftests/bpf/progs/core_reloc_types.h    | 17 ++++
+ .../bpf/progs/test_core_reloc_module.c        | 66 ++++++++++++++++
+ 3 files changed, 151 insertions(+), 11 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_core_reloc_module.c
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 313034117070..c4a49e8eb7b5 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -462,11 +462,14 @@ struct bpf_object {
- 	struct list_head list;
+diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+index 30e40ff4b0d8..bb980848cd77 100644
+--- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
++++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
+ #include "progs/core_reloc_types.h"
++#include "bpf_testmod/bpf_testmod.h"
+ #include <sys/mman.h>
+ #include <sys/syscall.h>
+ #include <bpf/btf.h>
+@@ -9,6 +10,30 @@ static int duration = 0;
  
- 	struct btf *btf;
-+	struct btf_ext *btf_ext;
+ #define STRUCT_TO_CHAR_PTR(struct_name) (const char *)&(struct struct_name)
+ 
++#define MODULES_CASE(name, sec_name, tp_name) {				\
++	.case_name = name,						\
++	.bpf_obj_file = "test_core_reloc_module.o",			\
++	.btf_src_file = NULL, /* find in kernel module BTFs */		\
++	.input = "",							\
++	.input_len = 0,							\
++	.output = STRUCT_TO_CHAR_PTR(core_reloc_module_output) {	\
++		.read_ctx_sz = sizeof(struct bpf_testmod_test_read_ctx),\
++		.read_ctx_exists = true,				\
++		.buf_exists = true,					\
++		.len_exists = true,					\
++		.off_exists = true,					\
++		.len = 123,						\
++		.off = 0,						\
++		.comm = "test_progs",					\
++		.comm_len = sizeof("test_progs"),			\
++	},								\
++	.output_len = sizeof(struct core_reloc_module_output),		\
++	.prog_sec_name = sec_name,					\
++	.raw_tp_name = tp_name,						\
++	.trigger = trigger_module_test_read,				\
++	.needs_testmod = true,						\
++}
 +
- 	/* Parse and load BTF vmlinux if any of the programs in the object need
- 	 * it at load time.
- 	 */
- 	struct btf *btf_vmlinux;
--	struct btf_ext *btf_ext;
-+	/* vmlinux BTF override for CO-RE relocations */
-+	struct btf *btf_vmlinux_override;
- 
- 	void *priv;
- 	bpf_object_clear_priv_t clear_priv;
-@@ -4600,46 +4603,43 @@ static size_t bpf_core_essential_name_len(const char *name)
- 	return n;
+ #define FLAVORS_DATA(struct_name) STRUCT_TO_CHAR_PTR(struct_name) {	\
+ 	.a = 42,							\
+ 	.b = 0xc001,							\
+@@ -211,7 +236,7 @@ static int duration = 0;
+ 	.output = STRUCT_TO_CHAR_PTR(core_reloc_bitfields_output)	\
+ 		__VA_ARGS__,						\
+ 	.output_len = sizeof(struct core_reloc_bitfields_output),	\
+-	.direct_raw_tp = true,						\
++	.prog_sec_name = "tp_btf/sys_enter",				\
  }
  
--/* dynamically sized list of type IDs */
--struct ids_vec {
--	__u32 *data;
-+struct core_cand
-+{
-+	const struct btf *btf;
-+	const struct btf_type *t;
-+	const char *name;
-+	__u32 id;
-+};
-+
-+/* dynamically sized list of type IDs and its associated struct btf */
-+struct core_cand_list {
-+	struct core_cand *cands;
- 	int len;
+ 
+@@ -222,7 +247,7 @@ static int duration = 0;
+ }, {									\
+ 	BITFIELDS_CASE_COMMON("test_core_reloc_bitfields_direct.o",	\
+ 			      "direct:", name),				\
+-	.direct_raw_tp = true,						\
++	.prog_sec_name = "tp_btf/sys_enter",				\
+ 	.fails = true,							\
+ }
+ 
+@@ -309,6 +334,7 @@ static int duration = 0;
+ struct core_reloc_test_case;
+ 
+ typedef int (*setup_test_fn)(struct core_reloc_test_case *test);
++typedef int (*trigger_test_fn)(const struct core_reloc_test_case *test);
+ 
+ struct core_reloc_test_case {
+ 	const char *case_name;
+@@ -319,9 +345,12 @@ struct core_reloc_test_case {
+ 	const char *output;
+ 	int output_len;
+ 	bool fails;
++	bool needs_testmod;
+ 	bool relaxed_core_relocs;
+-	bool direct_raw_tp;
++	const char *prog_sec_name;
++	const char *raw_tp_name;
+ 	setup_test_fn setup;
++	trigger_test_fn trigger;
  };
  
--static void bpf_core_free_cands(struct ids_vec *cand_ids)
-+static void bpf_core_free_cands(struct core_cand_list *cands)
- {
--	free(cand_ids->data);
--	free(cand_ids);
-+	free(cands->cands);
-+	free(cands);
+ static int find_btf_type(const struct btf *btf, const char *name, __u32 kind)
+@@ -451,6 +480,23 @@ static int setup_type_id_case_failure(struct core_reloc_test_case *test)
+ 	return 0;
  }
  
--static struct ids_vec *bpf_core_find_cands(const struct btf *local_btf,
--					   __u32 local_type_id,
--					   const struct btf *targ_btf)
-+static int bpf_core_add_cands(struct core_cand *local_cand,
-+			      size_t local_essent_len,
-+			      const struct btf *targ_btf,
-+			      const char *targ_btf_name,
-+			      int targ_start_id,
-+			      struct core_cand_list *cands)
- {
--	size_t local_essent_len, targ_essent_len;
--	const char *local_name, *targ_name;
--	const struct btf_type *t, *local_t;
--	struct ids_vec *cand_ids;
--	__u32 *new_ids;
--	int i, err, n;
--
--	local_t = btf__type_by_id(local_btf, local_type_id);
--	if (!local_t)
--		return ERR_PTR(-EINVAL);
--
--	local_name = btf__name_by_offset(local_btf, local_t->name_off);
--	if (str_is_empty(local_name))
--		return ERR_PTR(-EINVAL);
--	local_essent_len = bpf_core_essential_name_len(local_name);
--
--	cand_ids = calloc(1, sizeof(*cand_ids));
--	if (!cand_ids)
--		return ERR_PTR(-ENOMEM);
-+	struct core_cand *new_cands, *cand;
-+	const struct btf_type *t;
-+	const char *targ_name;
-+	size_t targ_essent_len;
-+	int n, i;
- 
- 	n = btf__get_nr_types(targ_btf);
--	for (i = 1; i <= n; i++) {
-+	for (i = targ_start_id; i <= n; i++) {
- 		t = btf__type_by_id(targ_btf, i);
--		if (btf_kind(t) != btf_kind(local_t))
-+		if (btf_kind(t) != btf_kind(local_cand->t))
- 			continue;
- 
- 		targ_name = btf__name_by_offset(targ_btf, t->name_off);
-@@ -4650,25 +4650,62 @@ static struct ids_vec *bpf_core_find_cands(const struct btf *local_btf,
- 		if (targ_essent_len != local_essent_len)
- 			continue;
- 
--		if (strncmp(local_name, targ_name, local_essent_len) == 0) {
--			pr_debug("CO-RE relocating [%d] %s %s: found target candidate [%d] %s %s\n",
--				 local_type_id, btf_kind_str(local_t),
--				 local_name, i, btf_kind_str(t), targ_name);
--			new_ids = libbpf_reallocarray(cand_ids->data,
--						      cand_ids->len + 1,
--						      sizeof(*cand_ids->data));
--			if (!new_ids) {
--				err = -ENOMEM;
--				goto err_out;
--			}
--			cand_ids->data = new_ids;
--			cand_ids->data[cand_ids->len++] = i;
--		}
-+		if (strncmp(local_cand->name, targ_name, local_essent_len) != 0)
-+			continue;
++static int trigger_module_test_read(const struct core_reloc_test_case *test)
++{
++	struct core_reloc_module_output *exp = (void *)test->output;
++	int fd, err;
 +
-+		pr_debug("CO-RE relocating [%d] %s %s: found target candidate [%d] %s %s in [%s]\n",
-+			 local_cand->id, btf_kind_str(local_cand->t),
-+			 local_cand->name, i, btf_kind_str(t), targ_name,
-+			 targ_btf_name);
-+		new_cands = libbpf_reallocarray(cands->cands, cands->len + 1,
-+					      sizeof(*cands->cands));
-+		if (!new_cands)
-+			return -ENOMEM;
++	fd = open("/sys/kernel/bpf_testmod", O_RDONLY);
++	err = -errno;
++	if (CHECK(fd < 0, "testmod_file_open", "failed: %d\n", err))
++		return err;
 +
-+		cand = &new_cands[cands->len];
-+		cand->btf = targ_btf;
-+		cand->t = t;
-+		cand->name = targ_name;
-+		cand->id = i;
++	read(fd, NULL, exp->len); /* request expected number of bytes */
++	close(fd);
 +
-+		cands->cands = new_cands;
-+		cands->len++;
- 	}
--	return cand_ids;
--err_out:
--	bpf_core_free_cands(cand_ids);
--	return ERR_PTR(err);
 +	return 0;
 +}
 +
-+static struct core_cand_list *
-+bpf_core_find_cands(struct bpf_object *obj, const struct btf *local_btf, __u32 local_type_id)
-+{
-+	struct core_cand local_cand = {};
-+	struct core_cand_list *cands;
-+	size_t local_essent_len;
-+	int err;
 +
-+	local_cand.btf = local_btf;
-+	local_cand.t = btf__type_by_id(local_btf, local_type_id);
-+	if (!local_cand.t)
-+		return ERR_PTR(-EINVAL);
+ static struct core_reloc_test_case test_cases[] = {
+ 	/* validate we can find kernel image and use its BTF for relocs */
+ 	{
+@@ -467,6 +513,9 @@ static struct core_reloc_test_case test_cases[] = {
+ 		.output_len = sizeof(struct core_reloc_kernel_output),
+ 	},
+ 
++	/* validate we can find kernel module BTF types for relocs/attach */
++	MODULES_CASE("module", "raw_tp/bpf_testmod_test_read", "bpf_testmod_test_read"),
 +
-+	local_cand.name = btf__name_by_offset(local_btf, local_cand.t->name_off);
-+	if (str_is_empty(local_cand.name))
-+		return ERR_PTR(-EINVAL);
-+	local_essent_len = bpf_core_essential_name_len(local_cand.name);
-+
-+	cands = calloc(1, sizeof(*cands));
-+	if (!cands)
-+		return ERR_PTR(-ENOMEM);
-+
-+	/* Attempt to find target candidates in vmlinux BTF first */
-+	err = bpf_core_add_cands(&local_cand, local_essent_len,
-+				 obj->btf_vmlinux_override ?: obj->btf_vmlinux,
-+				 "vmlinux", 1, cands);
-+	if (err) {
-+		bpf_core_free_cands(cands);
-+		return ERR_PTR(err);
-+	}
-+
-+	return cands;
- }
- 
- /* Check two types for compatibility for the purpose of field access
-@@ -5661,7 +5698,6 @@ static int bpf_core_apply_relo(struct bpf_program *prog,
- 			       const struct bpf_core_relo *relo,
- 			       int relo_idx,
- 			       const struct btf *local_btf,
--			       const struct btf *targ_btf,
- 			       struct hashmap *cand_cache)
- {
- 	struct bpf_core_spec local_spec, cand_spec, targ_spec = {};
-@@ -5669,8 +5705,8 @@ static int bpf_core_apply_relo(struct bpf_program *prog,
- 	struct bpf_core_relo_res cand_res, targ_res;
- 	const struct btf_type *local_type;
- 	const char *local_name;
--	struct ids_vec *cand_ids;
--	__u32 local_id, cand_id;
-+	struct core_cand_list *cands = NULL;
-+	__u32 local_id;
- 	const char *spec_str;
- 	int i, j, err;
- 
-@@ -5717,24 +5753,24 @@ static int bpf_core_apply_relo(struct bpf_program *prog,
- 		return -EOPNOTSUPP;
- 	}
- 
--	if (!hashmap__find(cand_cache, type_key, (void **)&cand_ids)) {
--		cand_ids = bpf_core_find_cands(local_btf, local_id, targ_btf);
--		if (IS_ERR(cand_ids)) {
-+	if (!hashmap__find(cand_cache, type_key, (void **)&cands)) {
-+		cands = bpf_core_find_cands(prog->obj, local_btf, local_id);
-+		if (IS_ERR(cands)) {
- 			pr_warn("prog '%s': relo #%d: target candidate search failed for [%d] %s %s: %ld",
- 				prog->name, relo_idx, local_id, btf_kind_str(local_type),
--				local_name, PTR_ERR(cand_ids));
--			return PTR_ERR(cand_ids);
-+				local_name, PTR_ERR(cands));
-+			return PTR_ERR(cands);
- 		}
--		err = hashmap__set(cand_cache, type_key, cand_ids, NULL, NULL);
-+		err = hashmap__set(cand_cache, type_key, cands, NULL, NULL);
- 		if (err) {
--			bpf_core_free_cands(cand_ids);
-+			bpf_core_free_cands(cands);
- 			return err;
- 		}
- 	}
- 
--	for (i = 0, j = 0; i < cand_ids->len; i++) {
--		cand_id = cand_ids->data[i];
--		err = bpf_core_spec_match(&local_spec, targ_btf, cand_id, &cand_spec);
-+	for (i = 0, j = 0; i < cands->len; i++) {
-+		err = bpf_core_spec_match(&local_spec, cands->cands[i].btf,
-+					  cands->cands[i].id, &cand_spec);
- 		if (err < 0) {
- 			pr_warn("prog '%s': relo #%d: error matching candidate #%d ",
- 				prog->name, relo_idx, i);
-@@ -5778,7 +5814,7 @@ static int bpf_core_apply_relo(struct bpf_program *prog,
- 			return -EINVAL;
- 		}
- 
--		cand_ids->data[j++] = cand_spec.root_type_id;
-+		cands->cands[j++] = cands->cands[i];
- 	}
- 
- 	/*
-@@ -5790,7 +5826,7 @@ static int bpf_core_apply_relo(struct bpf_program *prog,
- 	 * depending on relo's kind.
+ 	/* validate BPF program can use multiple flavors to match against
+ 	 * single target BTF type
  	 */
- 	if (j > 0)
--		cand_ids->len = j;
-+		cands->len = j;
+@@ -779,6 +828,11 @@ void test_core_reloc(void)
+ 		if (!test__start_subtest(test_case->case_name))
+ 			continue;
  
- 	/*
- 	 * If no candidates were found, it might be both a programmer error,
-@@ -5834,20 +5870,19 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
- 	struct hashmap_entry *entry;
- 	struct hashmap *cand_cache = NULL;
- 	struct bpf_program *prog;
--	struct btf *targ_btf;
- 	const char *sec_name;
- 	int i, err = 0, insn_idx, sec_idx;
- 
- 	if (obj->btf_ext->core_relo_info.len == 0)
- 		return 0;
- 
--	if (targ_btf_path)
--		targ_btf = btf__parse(targ_btf_path, NULL);
--	else
--		targ_btf = obj->btf_vmlinux;
--	if (IS_ERR_OR_NULL(targ_btf)) {
--		pr_warn("failed to get target BTF: %ld\n", PTR_ERR(targ_btf));
--		return PTR_ERR(targ_btf);
-+	if (targ_btf_path) {
-+		obj->btf_vmlinux_override = btf__parse(targ_btf_path, NULL);
-+		if (IS_ERR_OR_NULL(obj->btf_vmlinux_override)) {
-+			err = PTR_ERR(obj->btf_vmlinux_override);
-+			pr_warn("failed to parse target BTF: %d\n", err);
-+			return err;
++		if (test_case->needs_testmod && !env.has_testmod) {
++			test__skip();
++			continue;
 +		}
- 	}
- 
- 	cand_cache = hashmap__new(bpf_core_hash_fn, bpf_core_equal_fn, NULL);
-@@ -5899,8 +5934,7 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
- 			if (!prog->load)
- 				continue;
- 
--			err = bpf_core_apply_relo(prog, rec, i, obj->btf,
--						  targ_btf, cand_cache);
-+			err = bpf_core_apply_relo(prog, rec, i, obj->btf, cand_cache);
- 			if (err) {
- 				pr_warn("prog '%s': relo #%d: failed to relocate: %d\n",
- 					prog->name, i, err);
-@@ -5911,8 +5945,9 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
- 
- out:
- 	/* obj->btf_vmlinux is freed at the end of object load phase */
--	if (targ_btf != obj->btf_vmlinux)
--		btf__free(targ_btf);
-+	btf__free(obj->btf_vmlinux_override);
-+	obj->btf_vmlinux_override = NULL;
 +
- 	if (!IS_ERR_OR_NULL(cand_cache)) {
- 		hashmap__for_each_entry(cand_cache, entry, i) {
- 			bpf_core_free_cands(entry->value);
+ 		if (test_case->setup) {
+ 			err = test_case->setup(test_case);
+ 			if (CHECK(err, "test_setup", "test #%d setup failed: %d\n", i, err))
+@@ -790,13 +844,11 @@ void test_core_reloc(void)
+ 			  test_case->bpf_obj_file, PTR_ERR(obj)))
+ 			continue;
+ 
+-		/* for typed raw tracepoints, NULL should be specified */
+-		if (test_case->direct_raw_tp) {
+-			probe_name = "tp_btf/sys_enter";
+-			tp_name = NULL;
+-		} else {
+-			probe_name = "raw_tracepoint/sys_enter";
+-			tp_name = "sys_enter";
++		probe_name = "raw_tracepoint/sys_enter";
++		tp_name = "sys_enter";
++		if (test_case->prog_sec_name) {
++			probe_name = test_case->prog_sec_name;
++			tp_name = test_case->raw_tp_name; /* NULL for tp_btf */
+ 		}
+ 
+ 		prog = bpf_object__find_program_by_title(obj, probe_name);
+@@ -837,7 +889,12 @@ void test_core_reloc(void)
+ 			goto cleanup;
+ 
+ 		/* trigger test run */
+-		usleep(1);
++		if (test_case->trigger) {
++			if (!ASSERT_OK(test_case->trigger(test_case), "test_trigger"))
++				goto cleanup;
++		} else {
++			usleep(1);
++		}
+ 
+ 		if (data->skip) {
+ 			test__skip();
+diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools/testing/selftests/bpf/progs/core_reloc_types.h
+index e6e616cb7bc9..9a2850850121 100644
+--- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
++++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
+@@ -15,6 +15,23 @@ struct core_reloc_kernel_output {
+ 	int comm_len;
+ };
+ 
++/*
++ * MODULE
++ */
++
++struct core_reloc_module_output {
++	long long len;
++	long long off;
++	int read_ctx_sz;
++	bool read_ctx_exists;
++	bool buf_exists;
++	bool len_exists;
++	bool off_exists;
++	/* we have test_progs[-flavor], so cut flavor part */
++	char comm[sizeof("test_progs")];
++	int comm_len;
++};
++
+ /*
+  * FLAVORS
+  */
+diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_module.c b/tools/testing/selftests/bpf/progs/test_core_reloc_module.c
+new file mode 100644
+index 000000000000..d1840c1a9d36
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_core_reloc_module.c
+@@ -0,0 +1,66 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_core_read.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") = "GPL";
++
++struct bpf_testmod_test_read_ctx {
++	/* field order is mixed up */
++	size_t len;
++	char *buf;
++	loff_t off;
++} __attribute__((preserve_access_index));
++
++struct {
++	char in[256];
++	char out[256];
++	bool skip;
++	uint64_t my_pid_tgid;
++} data = {};
++
++struct core_reloc_module_output {
++	long long len;
++	long long off;
++	int read_ctx_sz;
++	bool read_ctx_exists;
++	bool buf_exists;
++	bool len_exists;
++	bool off_exists;
++	/* we have test_progs[-flavor], so cut flavor part */
++	char comm[sizeof("test_progs")];
++	int comm_len;
++};
++
++SEC("raw_tp/bpf_testmod_test_read")
++int BPF_PROG(test_core_module,
++	     struct task_struct *task,
++	     struct bpf_testmod_test_read_ctx *read_ctx)
++{
++	struct core_reloc_module_output *out = (void *)&data.out;
++	__u64 pid_tgid = bpf_get_current_pid_tgid();
++	__u32 real_tgid = (__u32)(pid_tgid >> 32);
++	__u32 real_pid = (__u32)pid_tgid;
++
++	if (data.my_pid_tgid != pid_tgid)
++		return 0;
++
++	if (BPF_CORE_READ(task, pid) != real_pid || BPF_CORE_READ(task, tgid) != real_tgid)
++		return 0;
++
++	out->len = BPF_CORE_READ(read_ctx, len);
++	out->off = BPF_CORE_READ(read_ctx, off);
++
++	out->read_ctx_sz = bpf_core_type_size(struct bpf_testmod_test_read_ctx);
++	out->read_ctx_exists = bpf_core_type_exists(struct bpf_testmod_test_read_ctx);
++	out->buf_exists = bpf_core_field_exists(read_ctx->buf);
++	out->off_exists = bpf_core_field_exists(read_ctx->off);
++	out->len_exists = bpf_core_field_exists(read_ctx->len);
++
++	out->comm_len = BPF_CORE_READ_STR_INTO(&out->comm, task, comm);
++
++	return 0;
++}
 -- 
 2.24.1
 
