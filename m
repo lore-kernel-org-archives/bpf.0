@@ -2,151 +2,148 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 04DF9C64E7C
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 20:30:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 55190C71155
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 20:33:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 91B3721527
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 20:30:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EEEFD22202
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 20:33:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727126AbgLBUaN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Dec 2020 15:30:13 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:17030 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726885AbgLBUaM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 2 Dec 2020 15:30:12 -0500
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B2KQEDh018586
-        for <bpf@vger.kernel.org>; Wed, 2 Dec 2020 12:29:32 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=W3GQAXkNMOJjt+UqiahczCK20QLfWZ0GL0Q3KN8ePVg=;
- b=XuPUEPxsGSFjwSYEWcs/oC08SKxhR77fUFFQ5bw/eG7nr745zuRrtpXDlEuphVmchSUb
- frIYZ6TZIQX+LAGB8ETdslVrrpFnN6aBjGaMLepWfvTeXALZwHEObNb1KHXXeKinFZsG
- 36IwGAOu5eqpt6xmRIDfenG3/NzCHMt81q4= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 355wgw7e0b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 02 Dec 2020 12:29:32 -0800
-Received: from intmgw004.08.frc2.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 2 Dec 2020 12:29:31 -0800
-Received: by devvm3178.ftw3.facebook.com (Postfix, from userid 201728)
-        id 43FE94762F194; Wed,  2 Dec 2020 12:29:26 -0800 (PST)
-From:   Prankur gupta <prankgup@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     <kernel-team@fb.com>, <netdev@vger.kernel.org>
-Subject: [PATCH v3 bpf-next 1/2] bpf: Adds support for setting window clamp
-Date:   Wed, 2 Dec 2020 12:29:24 -0800
-Message-ID: <20201202202925.165803-2-prankgup@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201202202925.165803-1-prankgup@fb.com>
-References: <20201202202925.165803-1-prankgup@fb.com>
+        id S1728761AbgLBUdL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Dec 2020 15:33:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726467AbgLBUdK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Dec 2020 15:33:10 -0500
+Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2CFC0613D6
+        for <bpf@vger.kernel.org>; Wed,  2 Dec 2020 12:32:24 -0800 (PST)
+Received: by mail-wr1-x444.google.com with SMTP id 23so5451028wrc.8
+        for <bpf@vger.kernel.org>; Wed, 02 Dec 2020 12:32:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=ArIFLNBSlJoptv1NLBX8RCWaznOMpzj84NJClOoUcF8=;
+        b=G0CtFsHun/dE8SSNtH7NxfhkCWLQmuZ6mNkABiVQ5wQi6se/ypQU3NMZLz2lJlqXHn
+         vz5oDZZlAOqH5t47URdf5IrkzkyevG+F5YCBKFnlrWrSq+3YG06WDHHOKI/K7YDzfVRE
+         nfaT5cpgVL5dxqsHF/YZA/82YzAVfUKHhAGQI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=ArIFLNBSlJoptv1NLBX8RCWaznOMpzj84NJClOoUcF8=;
+        b=eiczf0AeWcb+UzkBr96wI2aurs834Z/j8v3lK/LKpLZ9BIlimgOwHvopP0uBBg84Z/
+         us5CzsabfpCcAp1SE6vmvTGFWfrzixnhlfo8dsRAdyp+GN7uFq8R4s5NsZ9oGbLV7VTV
+         QXE/YGTbCU5LInuoQJQWTiR1GQIgz0o1aZDxBPL0o67P0yv72SGgCMSyHYdqPaXIZ7R1
+         tlzBL54KDFZYzl5IkVucLZ1LfW5Hd8riqlb/SaIFOeXaNgmvxNl4XUIMOFvttophk52+
+         DZnfTYd3efj09S6G7ldk8iFxA1JMdQ9z0pWrZrXtIh4R+dulmSAqqMKkBR/u0A5HytJI
+         hIVQ==
+X-Gm-Message-State: AOAM533w8ihEyJTQmasVkRRa1isGzw/78Q/gyd8ZbM2QUh7KRubBfLrd
+        yaN3DeUmuKEP3a6WtQdSs3VYuw==
+X-Google-Smtp-Source: ABdhPJwFn0cMmM9TtBd5VsGLgIsh0lp6ft09CuQ3DjfdGheaYY6uRRYDX3R/PMhp4EvYEpYANDBH3g==
+X-Received: by 2002:adf:e6c8:: with SMTP id y8mr5622939wrm.414.1606941142955;
+        Wed, 02 Dec 2020 12:32:22 -0800 (PST)
+Received: from ?IPv6:2a04:ee41:4:1318:ea45:a00:4d43:48fc? ([2a04:ee41:4:1318:ea45:a00:4d43:48fc])
+        by smtp.gmail.com with ESMTPSA id b14sm3426327wrq.47.2020.12.02.12.32.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Dec 2020 12:32:22 -0800 (PST)
+Message-ID: <194b5a6e6e30574a035a3e3baa98d7fde7f91f1c.camel@chromium.org>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Add a bpf_kallsyms_lookup helper
+From:   Florent Revest <revest@chromium.org>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Yonghong Song <yhs@fb.com>
+Cc:     KP Singh <kpsingh@chromium.org>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Florent Revest <revest@google.com>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Wed, 02 Dec 2020 21:32:21 +0100
+In-Reply-To: <CAEf4BzYz9Yf9abPBtP+swCuqvvhL0cbbbF1x-3stg9mp=a6+-A@mail.gmail.com>
+References: <20201126165748.1748417-1-revest@google.com>
+         <50047415-cafe-abab-a6ba-e85bb6a9b651@fb.com>
+         <CACYkzJ7T4y7in1AsCvJ2izA3yiAke8vE9SRFRCyTPeqMnDHoyQ@mail.gmail.com>
+         <e8b03cbc-c120-43d5-168c-cde5b6a97af8@fb.com>
+         <CAEf4BzYz9Yf9abPBtP+swCuqvvhL0cbbbF1x-3stg9mp=a6+-A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.4-2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-12-02_12:2020-11-30,2020-12-02 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- clxscore=1015 impostorscore=0 mlxlogscore=981 bulkscore=0 phishscore=0
- adultscore=0 suspectscore=13 priorityscore=1501 mlxscore=0 spamscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012020122
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adds a new bpf_setsockopt for TCP sockets, TCP_BPF_WINDOW_CLAMP,
-which sets the maximum receiver window size. It will be useful for
-limiting receiver window based on RTT.
+On Tue, 2020-12-01 at 16:55 -0800, Andrii Nakryiko wrote:
+> On Fri, Nov 27, 2020 at 8:09 AM Yonghong Song <yhs@fb.com> wrote:
+> > 
+> > 
+> > On 11/27/20 3:20 AM, KP Singh wrote:
+> > > On Fri, Nov 27, 2020 at 8:35 AM Yonghong Song <yhs@fb.com> wrote:
+> > > > 
+> > > > In this case, module name may be truncated and user did not get
+> > > > any indication from return value. In the helper description, it
+> > > > is mentioned that module name currently is most 64 bytes. But
+> > > > from UAPI perspective, it may be still good to return something
+> > > > to let user know the name is truncated.
+> > > > 
+> > > > I do not know what is the best way to do this. One suggestion
+> > > > is to break it into two helpers, one for symbol name and
+> > > > another
+> > > 
+> > > I think it would be slightly preferable to have one helper
+> > > though. maybe something like bpf_get_symbol_info (better names
+> > > anyone? :)) with flags to get the module name or the symbol name
+> > > depending
+> > > on the flag?
+> > 
+> > This works even better. Previously I am thinking if we have two
+> > helpers,
+> > we can add flags for each of them for future extension. But we
+> > can certainly have just one helper with flags to indicate
+> > whether this is for module name or for symbol name or something
+> > else.
+> > 
+> > The buffer can be something like
+> >     union bpf_ksymbol_info {
+> >        char   module_name[];
+> >        char   symbol_name[];
+> >        ...
+> >     }
+> > and flags will indicate what information user wants.
+> 
+> one more thing that might be useful to resolve to the symbol's "base
+> address". E.g., if we have IP inside the function, this would resolve
+> to the start of the function, sort of "canonical" symbol address.
+> Type of ksym is another "characteristic" which could be returned (as
+> a single char?)
+> 
+> I wouldn't define bpf_ksymbol_info, though. Just depending on the
+> flag, specify what kind of memory layou (e.g., for strings -
+> zero-terminated string, for address - 8 byte numbers, etc). That way
+> we can also allow fetching multiple things together, they would just
+> be laid out one after another in memory.
+> 
+> E.g.:
+> 
+> char buf[256];
+> int err = bpf_ksym_resolve(<addr>, BPF_KSYM_NAME | BPF_KSYM_MODNAME |
+> BPF_KSYM_BASE_ADDR, buf, sizeof(buf));
+> 
+> if (err == -E2BIG)
+>   /* need bigger buffer, but all the data up to truncation point is
+> filled in */
+> else
+>   /* err has exact number of bytes used, including zero terminator(s)
+> */
+>   /* data is laid out as
+> "cpufreq_gov_powersave_init\0cpufreq_powersave\0\x12\x23\x45\x56\x12\
+> x23\x45\x56"
+> */
 
-Signed-off-by: Prankur gupta <prankgup@fb.com>
----
- include/net/tcp.h |  1 +
- net/core/filter.c |  3 +++
- net/ipv4/tcp.c    | 23 ++++++++++++++---------
- 3 files changed, 18 insertions(+), 9 deletions(-)
-
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 4aba0f069b05..39ced5882fe3 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -406,6 +406,7 @@ void tcp_syn_ack_timeout(const struct request_sock *r=
-eq);
- int tcp_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int non=
-block,
- 		int flags, int *addr_len);
- int tcp_set_rcvlowat(struct sock *sk, int val);
-+int tcp_set_window_clamp(struct sock *sk, struct tcp_sock *tp, int val);
- void tcp_data_ready(struct sock *sk);
- #ifdef CONFIG_MMU
- int tcp_mmap(struct file *file, struct socket *sock,
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 2ca5eecebacf..d6225842cfb1 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4910,6 +4910,9 @@ static int _bpf_setsockopt(struct sock *sk, int lev=
-el, int optname,
- 				tp->notsent_lowat =3D val;
- 				sk->sk_write_space(sk);
- 				break;
-+			case TCP_WINDOW_CLAMP:
-+				ret =3D tcp_set_window_clamp(sk, tp, val);
-+				break;
- 			default:
- 				ret =3D -EINVAL;
- 			}
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index b2bc3d7fe9e8..312feb8fcae5 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3022,6 +3022,19 @@ int tcp_sock_set_keepcnt(struct sock *sk, int val)
- }
- EXPORT_SYMBOL(tcp_sock_set_keepcnt);
-=20
-+int tcp_set_window_clamp(struct sock *sk, struct tcp_sock *tp, int val)
-+{
-+	if (!val) {
-+		if (sk->sk_state !=3D TCP_CLOSE)
-+			return -EINVAL;
-+		tp->window_clamp =3D 0;
-+	} else {
-+		tp->window_clamp =3D val < SOCK_MIN_RCVBUF / 2 ?
-+			SOCK_MIN_RCVBUF / 2 : val;
-+	}
-+	return 0;
-+}
-+
- /*
-  *	Socket option code for TCP.
-  */
-@@ -3235,15 +3248,7 @@ static int do_tcp_setsockopt(struct sock *sk, int =
-level, int optname,
- 		break;
-=20
- 	case TCP_WINDOW_CLAMP:
--		if (!val) {
--			if (sk->sk_state !=3D TCP_CLOSE) {
--				err =3D -EINVAL;
--				break;
--			}
--			tp->window_clamp =3D 0;
--		} else
--			tp->window_clamp =3D val < SOCK_MIN_RCVBUF / 2 ?
--						SOCK_MIN_RCVBUF / 2 : val;
-+		err =3D tcp_set_window_clamp(sk, tp, val);
- 		break;
-=20
- 	case TCP_QUICKACK:
---=20
-2.24.1
+Great idea! I like that, thanks for the suggestion :) 
 
