@@ -2,272 +2,101 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FSL_HELO_FAKE,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FB15C83013
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 10:40:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 213F1C83013
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 10:53:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E4D7120872
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 10:40:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B098622203
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 10:53:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729512AbgLBKkR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Dec 2020 05:40:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
+        id S1729573AbgLBKxf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Dec 2020 05:53:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725971AbgLBKkQ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Dec 2020 05:40:16 -0500
-Received: from mail-lf1-x141.google.com (mail-lf1-x141.google.com [IPv6:2a00:1450:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A06EC0617A6;
-        Wed,  2 Dec 2020 02:39:30 -0800 (PST)
-Received: by mail-lf1-x141.google.com with SMTP id j205so3772904lfj.6;
-        Wed, 02 Dec 2020 02:39:30 -0800 (PST)
+        with ESMTP id S1729571AbgLBKxe (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Dec 2020 05:53:34 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E6F1C0613CF
+        for <bpf@vger.kernel.org>; Wed,  2 Dec 2020 02:52:54 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id x22so5840911wmc.5
+        for <bpf@vger.kernel.org>; Wed, 02 Dec 2020 02:52:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pMJwK7FbHxVAeE34wtoBUkMJgvokHlZJkT0LbM9e8/A=;
-        b=LQ9KcY/MZorp11liNW9JbAdGSClzMJYkWHhZzqtnv0I8L1J4qpbBfw1JDf2srl7TJd
-         KZGWVq+v06Bx9GUhtMn+vj8yQD7lRBlI4rKy5dRpg9hCsP7LFzrwaZCmKtIs9nXJjSJj
-         qUvmnY1rFvCDNPYtQYkn4A9UYduwZ+d3Jko8DSN21MZJCEfOcDrm28Wded3Qou8BYyBa
-         e5rPu+BQoJipiaf36iKmxhbXv9PWEEzbZ5Xb9SOcGNiXr1+eXe0/dArJbNEIhoXDiYIg
-         ru3Gv0hBeKxqlYRBNTiIzNyfRn5NlD56676Ewo043h2U647iN0tRMhJLksLtDviOgBOr
-         aDOA==
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fTk5ZoMxl2Dxqumf7u4Qnd2EaEr81+Im7mQ9sIqBUJU=;
+        b=TROfNdG2KypZn9EpSOwlb9+diN74hPSLXGQFQ1K7Pe+I3/DKnL1tqa5zZmMI1p/5s5
+         zOXTs0/elveQ17G20vtsR9I/fio5JV7+AZa0fIA1owX1JLoCEvgn7PoWBE0JTeG+AU2U
+         T9CPjV+z7KGpuVj2SpTjm/4wTEswofei8ANOGlRfI4/5hVi3bKq8RnkRRVGa+PH0M36d
+         sCe6/DCjx09MOA7ro4JUDAPbOA8/SjizGBLIlJ+pqZN7NNIFFDhhkNW9R3CeitbI/Nmp
+         ZCPk7D+RBHgi09Niy5pGl+c4iVcgVNJB7xC0ERjosaBuqp72kr1nSwHyRmMcIfFmMzrX
+         IU+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pMJwK7FbHxVAeE34wtoBUkMJgvokHlZJkT0LbM9e8/A=;
-        b=WnMu4RmZbszy8WFXwG4R47nc95sTsfSmOSVGpNTkxOspUY4aIDsn5tvrbJwy8zODfC
-         Mi3lHYdJtj/jbZYvh2gzVJXWkMWpCqDRkDlcMarfabn4iFn5bE0s+e/HNldr/l8P5pHz
-         gXwwPDsfLcGdD390auqalXgkR8iPD2i5J776Gu308DhU1idLA03VW9gwxwKIjCokvM+N
-         EY/n7Pl/tf04y2QoN83SEbOMyX+SbdTJcrn4vBb1pdop9U0zDAGLckVpulwolOtVwemG
-         uNFucIKceDkGkfPe9yqnFvhcvDY51hXS1wHO0MdcgLFkBRoCuSzF5k5Vxm+BsPo5sJ1n
-         3Wng==
-X-Gm-Message-State: AOAM530fUnr9RIYGpaLDX4dXN2wungxJsHjsvEm2ymB6zaBrtVw0vazb
-        +bIxjOLfIjBoFj4ajKBGvzI=
-X-Google-Smtp-Source: ABdhPJzF/qJuRaqfxtSnNCjQkQKamFO2LnMiInBZoKNjIQHTb0iaXXDQXZf4zseZhKGVn5I4Fk+Y/A==
-X-Received: by 2002:a19:cbc6:: with SMTP id b189mr898272lfg.275.1606905568657;
-        Wed, 02 Dec 2020 02:39:28 -0800 (PST)
-Received: from localhost.localdomain (host-89-229-233-64.dynamic.mm.pl. [89.229.233.64])
-        by smtp.gmail.com with ESMTPSA id q13sm354236lfp.2.2020.12.02.02.39.27
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fTk5ZoMxl2Dxqumf7u4Qnd2EaEr81+Im7mQ9sIqBUJU=;
+        b=X2/UCvagF7gqkkppjXrPui04J+FcDPSBCsdEDm7qp3enMCMwpseSlNT5tfqlvW2BzY
+         2W8NAWEDMzpH+uvly8KWOtBDXdSWvlYwlq2eUqa2ZdxP89ttbdlb29ZaKXw3RdQIxRlK
+         /5z43d842TKNUfdgi0ONSI2yrJ5FsFTVJIXTm6VJ+Fy8UWQNK9ONYbRm8wEzPlhDQzCW
+         dqMhUpjMv5SjaZwR2gM0hYvaQSBvATlER7agJfANL6EhVYA3ic+3gP5erUEDzw328hRE
+         lptj8uCraDF6aCPRUy2pBvTWkObntppgZKiQ8qUG+daM0DiB4X5T315IzatpCQOaPJ48
+         2MHg==
+X-Gm-Message-State: AOAM532IubZAs8FqWhPSR01FuDII81XT8Jjq0Kj5EeivjyN/jnniPAH3
+        4HjdmGDSUuKouGlugaAQAQPi/Q==
+X-Google-Smtp-Source: ABdhPJzJkfVaUHDiTtxDOSxfolOceqftBjklVDdbG5b242B+yUv0o+xUhYVkVeMB+gRkOP1olpqFGA==
+X-Received: by 2002:a1c:99d3:: with SMTP id b202mr2559654wme.0.1606906372659;
+        Wed, 02 Dec 2020 02:52:52 -0800 (PST)
+Received: from google.com (203.75.199.104.bc.googleusercontent.com. [104.199.75.203])
+        by smtp.gmail.com with ESMTPSA id v64sm1605730wme.25.2020.12.02.02.52.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Dec 2020 02:39:28 -0800 (PST)
-From:   mariusz.dudek@gmail.com
-X-Google-Original-From: mariuszx.dudek@intel.com
-To:     andrii.nakryiko@gmail.com, magnus.karlsson@intel.com,
-        bjorn.topel@intel.com, ast@kernel.org, daniel@iogearbox.net,
-        netdev@vger.kernel.org, jonathan.lemon@gmail.com
-Cc:     bpf@vger.kernel.org, Mariusz Dudek <mariuszx.dudek@intel.com>
-Subject: [PATCH v6 bpf-next 1/2] libbpf: separate XDP program load with xsk socket creation
-Date:   Wed,  2 Dec 2020 11:39:22 +0100
-Message-Id: <20201202103923.12447-2-mariuszx.dudek@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201202103923.12447-1-mariuszx.dudek@intel.com>
-References: <20201202103923.12447-1-mariuszx.dudek@intel.com>
+        Wed, 02 Dec 2020 02:52:51 -0800 (PST)
+Date:   Wed, 2 Dec 2020 10:52:48 +0000
+From:   Brendan Jackman <jackmanb@google.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        KP Singh <kpsingh@chromium.org>,
+        Florent Revest <revest@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>, Jann Horn <jannh@google.com>
+Subject: Re: [PATCH v2 bpf-next 01/13] bpf: x86: Factor out emission of
+ ModR/M for *(reg + off)
+Message-ID: <20201202105248.GA9710@google.com>
+References: <20201127175738.1085417-1-jackmanb@google.com>
+ <20201127175738.1085417-2-jackmanb@google.com>
+ <20201129011552.jbepegeeo2lqv6ke@ast-mbp>
+ <20201201121437.GB2114905@google.com>
+ <CAADnVQJci_Fqq7d6GbUtivcmSgnPLbkwuH9MN30BhFomff=5rg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQJci_Fqq7d6GbUtivcmSgnPLbkwuH9MN30BhFomff=5rg@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Mariusz Dudek <mariuszx.dudek@intel.com>
+Tue, Dec 01, 2020 at 09:50:00PM -0800, Alexei Starovoitov wrote:
+> On Tue, Dec 1, 2020 at 4:14 AM Brendan Jackman <jackmanb@google.com> wrote:
+> >
+> > On Sat, Nov 28, 2020 at 05:15:52PM -0800, Alexei Starovoitov wrote:
+> > > On Fri, Nov 27, 2020 at 05:57:26PM +0000, Brendan Jackman wrote:
+> > > > +/* Emit the ModR/M byte for addressing *(r1 + off) and r2 */
+> > > > +static void emit_modrm_dstoff(u8 **pprog, u32 r1, u32 r2, int off)
+> > >
+> > > same concern as in the another patch. If you could avoid intel's puzzling names
+> > > like above it will make reviewing the patch easier.
+> >
+> > In this case there is actually a call like
+> >
+> >   emit_modrm_dstoff(&prog, src_reg, dst_reg)
+> 
+> emit_insn_prefix() ?
 
-Add support for separation of eBPF program load and xsk socket
-creation.
+Ah sorry, I thought you were talking about the _arg_ names.
 
-This is needed for use-case when you want to privide as little
-privileges as possible to the data plane application that will
-handle xsk socket creation and incoming traffic.
-
-With this patch the data entity container can be run with only
-CAP_NET_RAW capability to fulfill its purpose of creating xsk
-socket and handling packages. In case your umem is larger or
-equal process limit for MEMLOCK you need either increase the
-limit or CAP_IPC_LOCK capability.
-
-To resolve privileges issue two APIs are introduced:
-
-- xsk_setup_xdp_prog - loads the built in XDP program. It can
-also return xsks_map_fd which is needed by unprivileged process
-to update xsks_map with AF_XDP socket "fd"
-
-- xsk_socket__update_xskmap - inserts an AF_XDP socket into an xskmap
-for a particular xsk_socket
-
-Signed-off-by: Mariusz Dudek <mariuszx.dudek@intel.com>
----
- tools/lib/bpf/libbpf.map |  2 +
- tools/lib/bpf/xsk.c      | 92 ++++++++++++++++++++++++++++++++++++----
- tools/lib/bpf/xsk.h      |  5 +++
- 3 files changed, 90 insertions(+), 9 deletions(-)
-
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 29ff4807b909..d939d5ac092e 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -345,4 +345,6 @@ LIBBPF_0.3.0 {
- 		btf__parse_split;
- 		btf__new_empty_split;
- 		btf__new_split;
-+		xsk_setup_xdp_prog;
-+		xsk_socket__update_xskmap;
- } LIBBPF_0.2.0;
-diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
-index 9bc537d0b92d..4b051ec7cfbb 100644
---- a/tools/lib/bpf/xsk.c
-+++ b/tools/lib/bpf/xsk.c
-@@ -566,8 +566,35 @@ static int xsk_set_bpf_maps(struct xsk_socket *xsk)
- 				   &xsk->fd, 0);
- }
- 
--static int xsk_setup_xdp_prog(struct xsk_socket *xsk)
-+static int xsk_create_xsk_struct(int ifindex, struct xsk_socket *xsk)
- {
-+	char ifname[IFNAMSIZ];
-+	struct xsk_ctx *ctx;
-+	char *interface;
-+
-+	ctx = calloc(1, sizeof(*ctx));
-+	if (!ctx)
-+		return -ENOMEM;
-+
-+	interface = if_indextoname(ifindex, &ifname[0]);
-+	if (!interface) {
-+		free(ctx);
-+		return -errno;
-+	}
-+
-+	ctx->ifindex = ifindex;
-+	strncpy(ctx->ifname, ifname, IFNAMSIZ - 1);
-+	ctx->ifname[IFNAMSIZ - 1] = 0;
-+
-+	xsk->ctx = ctx;
-+
-+	return 0;
-+}
-+
-+static int __xsk_setup_xdp_prog(struct xsk_socket *_xdp,
-+				int *xsks_map_fd)
-+{
-+	struct xsk_socket *xsk = _xdp;
- 	struct xsk_ctx *ctx = xsk->ctx;
- 	__u32 prog_id = 0;
- 	int err;
-@@ -584,8 +611,7 @@ static int xsk_setup_xdp_prog(struct xsk_socket *xsk)
- 
- 		err = xsk_load_xdp_prog(xsk);
- 		if (err) {
--			xsk_delete_bpf_maps(xsk);
--			return err;
-+			goto err_load_xdp_prog;
- 		}
- 	} else {
- 		ctx->prog_fd = bpf_prog_get_fd_by_id(prog_id);
-@@ -598,15 +624,29 @@ static int xsk_setup_xdp_prog(struct xsk_socket *xsk)
- 		}
- 	}
- 
--	if (xsk->rx)
-+	if (xsk->rx) {
- 		err = xsk_set_bpf_maps(xsk);
--	if (err) {
--		xsk_delete_bpf_maps(xsk);
--		close(ctx->prog_fd);
--		return err;
-+		if (err) {
-+			if (!prog_id) {
-+				goto err_set_bpf_maps;
-+			} else {
-+				close(ctx->prog_fd);
-+				return err;
-+			}
-+		}
- 	}
-+	if (xsks_map_fd)
-+		*xsks_map_fd = ctx->xsks_map_fd;
- 
- 	return 0;
-+
-+err_set_bpf_maps:
-+	close(ctx->prog_fd);
-+	bpf_set_link_xdp_fd(ctx->ifindex, -1, 0);
-+err_load_xdp_prog:
-+	xsk_delete_bpf_maps(xsk);
-+
-+	return err;
- }
- 
- static struct xsk_ctx *xsk_get_ctx(struct xsk_umem *umem, int ifindex,
-@@ -689,6 +729,40 @@ static struct xsk_ctx *xsk_create_ctx(struct xsk_socket *xsk,
- 	return ctx;
- }
- 
-+static void xsk_destroy_xsk_struct(struct xsk_socket *xsk)
-+{
-+	free(xsk->ctx);
-+	free(xsk);
-+}
-+
-+int xsk_socket__update_xskmap(struct xsk_socket *xsk, int fd)
-+{
-+	xsk->ctx->xsks_map_fd = fd;
-+	return xsk_set_bpf_maps(xsk);
-+}
-+
-+int xsk_setup_xdp_prog(int ifindex, int *xsks_map_fd)
-+{
-+	struct xsk_socket *xsk;
-+	int res;
-+
-+	xsk = calloc(1, sizeof(*xsk));
-+	if (!xsk)
-+		return -ENOMEM;
-+
-+	res = xsk_create_xsk_struct(ifindex, xsk);
-+	if (res) {
-+		free(xsk);
-+		return -EINVAL;
-+	}
-+
-+	res = __xsk_setup_xdp_prog(xsk, xsks_map_fd);
-+
-+	xsk_destroy_xsk_struct(xsk);
-+
-+	return res;
-+}
-+
- int xsk_socket__create_shared(struct xsk_socket **xsk_ptr,
- 			      const char *ifname,
- 			      __u32 queue_id, struct xsk_umem *umem,
-@@ -838,7 +912,7 @@ int xsk_socket__create_shared(struct xsk_socket **xsk_ptr,
- 	ctx->prog_fd = -1;
- 
- 	if (!(xsk->config.libbpf_flags & XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD)) {
--		err = xsk_setup_xdp_prog(xsk);
-+		err = __xsk_setup_xdp_prog(xsk, NULL);
- 		if (err)
- 			goto out_mmap_tx;
- 	}
-diff --git a/tools/lib/bpf/xsk.h b/tools/lib/bpf/xsk.h
-index 5865e082ba0b..e9f121f5d129 100644
---- a/tools/lib/bpf/xsk.h
-+++ b/tools/lib/bpf/xsk.h
-@@ -204,6 +204,11 @@ struct xsk_umem_config {
- 	__u32 flags;
- };
- 
-+LIBBPF_API int xsk_setup_xdp_prog(int ifindex,
-+				  int *xsks_map_fd);
-+LIBBPF_API int xsk_socket__update_xskmap(struct xsk_socket *xsk,
-+					 int xsks_map_fd);
-+
- /* Flags for the libbpf_flags field. */
- #define XSK_LIBBPF_FLAGS__INHIBIT_PROG_LOAD (1 << 0)
- 
--- 
-2.20.1
-
+This isn't a prefix, but emit_insn_suffix sounds good.
