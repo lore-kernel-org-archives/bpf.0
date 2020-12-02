@@ -5,63 +5,65 @@ X-Spam-Level:
 X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CAF73C64E7C
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 20:57:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9C1ABC83017
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 20:57:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 76E2D22206
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 20:57:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5EC2922206
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 20:57:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727381AbgLBU5T (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Dec 2020 15:57:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
+        id S2388333AbgLBU5X (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Dec 2020 15:57:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729825AbgLBU5S (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Dec 2020 15:57:18 -0500
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F06C061A52
-        for <bpf@vger.kernel.org>; Wed,  2 Dec 2020 12:55:56 -0800 (PST)
-Received: by mail-wr1-x443.google.com with SMTP id u12so5588413wrt.0
-        for <bpf@vger.kernel.org>; Wed, 02 Dec 2020 12:55:55 -0800 (PST)
+        with ESMTP id S1730327AbgLBU5W (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Dec 2020 15:57:22 -0500
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AF97C061A48
+        for <bpf@vger.kernel.org>; Wed,  2 Dec 2020 12:55:52 -0800 (PST)
+Received: by mail-wm1-x341.google.com with SMTP id g185so19586wmf.3
+        for <bpf@vger.kernel.org>; Wed, 02 Dec 2020 12:55:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7+55Li1wljIgJq9y6JYUOqOaM7Nk4+K54jOzXcb9isA=;
-        b=Qh1X/leCANR8wn9Y1a1/jZVIZw7mZnAK4DAgx+IGy0uqEejiMoY10N2CNcTab9spsb
-         tZrKeb9KGHJCgGbGZ+QtHJ8cJ2opKR+Sa7gfaiBByoMEYliZjdYYF41WwEJM7eBQuWgn
-         HTji9fMxCyWGgBwfPfQeG/fvptde7zwC938ys=
+        bh=PBLkMiU4AZr9DwvoaSu135Em+YugoC0ZruXr4QELs2A=;
+        b=D3ytxhWURoBLOcrPs01AcRP2MBQHAj13BuK6bhz7hq0aJ1F3H8cYE/xv4dwQPLYibT
+         z65SEy/wNI7SZo81yB8WgzDrWtW6/x8v6Cm/z/dtjOViUHnNv2SbAkww1ABrdel8UNdB
+         tYr6wLp81a18046X60ZY99hcTx0DBMRgddwEU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7+55Li1wljIgJq9y6JYUOqOaM7Nk4+K54jOzXcb9isA=;
-        b=jrtvwf0M7DqBM9KkTWBXRoYktKkdHPtl9dKbjbiUBB8mylYzig+8zrE/MnZ1nrQyA8
-         gz7tQOrwwYDVxrKnBaQCZdntheHloTzGcZoMRXAVES7AoE7Exjh56IoIgFZw7+S/uxhR
-         GcywDvKMdSU7RIgvM7WMj+WCulqc8i3tnZj1Ev4CPB8wlJ3rFPGQFuM6XZu9wibIlUX+
-         PDz61R4aFkdKtAlWuTsvtWkA5C3Ur4OIk9vX2BNviMjfLVANVzrdE0DNesjzMW1lC8Ki
-         BCV515kQ7AeAiHpa7iuxoR+RUX7GJUYEzVbq09lkPxHe4B0lM1NSgJXlo1N9c5rDu9mQ
-         1rIA==
-X-Gm-Message-State: AOAM530M2AIegldY6Gxa3wAX2rXXIXV3GrVh8xxrof46EXI6XANCn7FN
-        z3bQRdwgq3tyXPI+aG/Ztlt+oYw0fbxiEA==
-X-Google-Smtp-Source: ABdhPJxjWTIoKQTMZ9rTmf1IhrFnfhZakrn0nxVXg++9o3dsSDz+HXUN09OA6xYGS71AJtPqxJnw6A==
-X-Received: by 2002:a5d:4e87:: with SMTP id e7mr5767347wru.352.1606942554339;
-        Wed, 02 Dec 2020 12:55:54 -0800 (PST)
+        bh=PBLkMiU4AZr9DwvoaSu135Em+YugoC0ZruXr4QELs2A=;
+        b=euekbWzyFeyrgJZlYtduF0XyO9Yv/s7vqXHUopM0KE9O9oSWL/IuPYzcfIYsUsKKLv
+         J2pcRiCXRJFOVchEP7YM40wif3DjAScVXCUdxDUVEFu7B6irPpnKNlnEOtK7Ral6uRDH
+         snRg0CbxszKFyurY15Q/Jl1nB9BG+kPAIrRfoGJhoG3eX1qXrWS8ZeSOvOlU7iC4QFNv
+         nZ3f074XJY/bewt4rXnr+U2fpDFXnIiwOeKUlMtX4px3h/bYgBEoXRAU7nsCvfI+KQqR
+         DYeuYqdWAygloYVGiagBQSmCEt2OM7lHdACj9bhUwvDn7KzOQMVDRBm69VIG3k/L42Bs
+         7sUg==
+X-Gm-Message-State: AOAM530YgWXtIGt/oyJOH2m9pAh08/vNWorwuHNPbhP22x6xN4usufoY
+        AjBiVLHa8J6NF4VMdTZNnA/KRH/mAwUnaQ==
+X-Google-Smtp-Source: ABdhPJydrQVZlqkWizDOX8et5w2HvknX2u6+CbnZ3VxXdXitOusfR8o4B7XRHu7merd3kioDhhcpsg==
+X-Received: by 2002:a1c:a5d4:: with SMTP id o203mr4952501wme.41.1606942550444;
+        Wed, 02 Dec 2020 12:55:50 -0800 (PST)
 Received: from revest.zrh.corp.google.com ([2a00:79e0:42:204:f693:9fff:fef4:a569])
-        by smtp.gmail.com with ESMTPSA id d2sm3438486wrn.43.2020.12.02.12.55.53
+        by smtp.gmail.com with ESMTPSA id d2sm3438486wrn.43.2020.12.02.12.55.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Dec 2020 12:55:53 -0800 (PST)
+        Wed, 02 Dec 2020 12:55:49 -0800 (PST)
 From:   Florent Revest <revest@chromium.org>
 X-Google-Original-From: Florent Revest <revest@google.com>
 To:     bpf@vger.kernel.org
 Cc:     viro@zeniv.linux.org.uk, davem@davemloft.net, kuba@kernel.org,
         ast@kernel.org, daniel@iogearbox.net, kafai@fb.com, yhs@fb.com,
         andrii@kernel.org, kpsingh@chromium.org, revest@google.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH bpf-next v4 5/6] bpf: Add an iterator selftest for bpf_sk_storage_get
-Date:   Wed,  2 Dec 2020 21:55:26 +0100
-Message-Id: <20201202205527.984965-5-revest@google.com>
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        KP Singh <kpsingh@google.com>
+Subject: [PATCH bpf-next v4 2/6] bpf: Add a bpf_sock_from_file helper
+Date:   Wed,  2 Dec 2020 21:55:23 +0100
+Message-Id: <20201202205527.984965-2-revest@google.com>
 X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
 In-Reply-To: <20201202205527.984965-1-revest@google.com>
 References: <20201202205527.984965-1-revest@google.com>
@@ -71,113 +73,138 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The eBPF program iterates over all files and tasks. For all socket
-files, it stores the tgid of the last task it encountered with a handle
-to that socket. This is a heuristic for finding the "owner" of a socket
-similar to what's done by lsof, ss, netstat or fuser. Potentially, this
-information could be used from a cgroup_skb/*gress hook to try to
-associate network traffic with processes.
+While eBPF programs can check whether a file is a socket by file->f_op
+== &socket_file_ops, they cannot convert the void private_data pointer
+to a struct socket BTF pointer. In order to do this a new helper
+wrapping sock_from_file is added.
 
-The test makes sure that a socket it created is tagged with prog_tests's
-pid.
+This is useful to tracing programs but also other program types
+inheriting this set of helpers such as iterators or LSM programs.
 
 Signed-off-by: Florent Revest <revest@google.com>
-Acked-by: Yonghong Song <yhs@fb.com>
+Acked-by: KP Singh <kpsingh@google.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
 ---
- .../selftests/bpf/prog_tests/bpf_iter.c       | 40 +++++++++++++++++++
- .../progs/bpf_iter_bpf_sk_storage_helpers.c   | 24 +++++++++++
- 2 files changed, 64 insertions(+)
+ include/uapi/linux/bpf.h       |  9 +++++++++
+ kernel/trace/bpf_trace.c       | 20 ++++++++++++++++++++
+ scripts/bpf_helpers_doc.py     |  4 ++++
+ tools/include/uapi/linux/bpf.h |  9 +++++++++
+ 4 files changed, 42 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-index bb4a638f2e6f..9336d0f18331 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -975,6 +975,44 @@ static void test_bpf_sk_storage_delete(void)
- 	bpf_iter_bpf_sk_storage_helpers__destroy(skel);
- }
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index c3458ec1f30a..a92b2b7d331b 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -3817,6 +3817,14 @@ union bpf_attr {
+  *		The **hash_algo** is returned on success,
+  *		**-EOPNOTSUP** if IMA is disabled or **-EINVAL** if
+  *		invalid arguments are passed.
++ *
++ * struct socket *bpf_sock_from_file(struct file *file)
++ *	Description
++ *		If the given file represents a socket, returns the associated
++ *		socket.
++ *	Return
++ *		A pointer to a struct socket on success or NULL if the file is
++ *		not a socket.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -3981,6 +3989,7 @@ union bpf_attr {
+ 	FN(bprm_opts_set),		\
+ 	FN(ktime_get_coarse_ns),	\
+ 	FN(ima_inode_hash),		\
++	FN(sock_from_file),		\
+ 	/* */
  
-+/* This creates a socket and its local storage. It then runs a task_iter BPF
-+ * program that replaces the existing socket local storage with the tgid of the
-+ * only task owning a file descriptor to this socket, this process, prog_tests.
-+ */
-+static void test_bpf_sk_storage_get(void)
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index d255bc9b2bfa..d0aac9eac2d8 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1260,6 +1260,24 @@ const struct bpf_func_proto bpf_snprintf_btf_proto = {
+ 	.arg5_type	= ARG_ANYTHING,
+ };
+ 
++BPF_CALL_1(bpf_sock_from_file, struct file *, file)
 +{
-+	struct bpf_iter_bpf_sk_storage_helpers *skel;
-+	int err, map_fd, val = -1;
-+	int sock_fd = -1;
-+
-+	skel = bpf_iter_bpf_sk_storage_helpers__open_and_load();
-+	if (CHECK(!skel, "bpf_iter_bpf_sk_storage_helpers__open_and_load",
-+		  "skeleton open_and_load failed\n"))
-+		return;
-+
-+	sock_fd = socket(AF_INET6, SOCK_STREAM, 0);
-+	if (CHECK(sock_fd < 0, "socket", "errno: %d\n", errno))
-+		goto out;
-+
-+	map_fd = bpf_map__fd(skel->maps.sk_stg_map);
-+
-+	err = bpf_map_update_elem(map_fd, &sock_fd, &val, BPF_NOEXIST);
-+	if (CHECK(err, "bpf_map_update_elem", "map_update_failed\n"))
-+		goto close_socket;
-+
-+	do_dummy_read(skel->progs.fill_socket_owner);
-+
-+	err = bpf_map_lookup_elem(map_fd, &sock_fd, &val);
-+	CHECK(err || val != getpid(), "bpf_map_lookup_elem",
-+	      "map value wasn't set correctly (expected %d, got %d, err=%d)\n",
-+	      getpid(), val, err);
-+
-+close_socket:
-+	close(sock_fd);
-+out:
-+	bpf_iter_bpf_sk_storage_helpers__destroy(skel);
++	return (unsigned long) sock_from_file(file);
 +}
 +
- static void test_bpf_sk_storage_map(void)
++BTF_ID_LIST(bpf_sock_from_file_btf_ids)
++BTF_ID(struct, socket)
++BTF_ID(struct, file)
++
++static const struct bpf_func_proto bpf_sock_from_file_proto = {
++	.func		= bpf_sock_from_file,
++	.gpl_only	= false,
++	.ret_type	= RET_PTR_TO_BTF_ID_OR_NULL,
++	.ret_btf_id	= &bpf_sock_from_file_btf_ids[0],
++	.arg1_type	= ARG_PTR_TO_BTF_ID,
++	.arg1_btf_id	= &bpf_sock_from_file_btf_ids[1],
++};
++
+ const struct bpf_func_proto *
+ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
  {
- 	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-@@ -1131,6 +1169,8 @@ void test_bpf_iter(void)
- 		test_bpf_sk_storage_map();
- 	if (test__start_subtest("bpf_sk_storage_delete"))
- 		test_bpf_sk_storage_delete();
-+	if (test__start_subtest("bpf_sk_storage_get"))
-+		test_bpf_sk_storage_get();
- 	if (test__start_subtest("rdonly-buf-out-of-bound"))
- 		test_rdonly_buf_out_of_bound();
- 	if (test__start_subtest("buf-neg-offset"))
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_helpers.c b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_helpers.c
-index 01ff3235e413..dde53df37de8 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_helpers.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_sk_storage_helpers.c
-@@ -21,3 +21,27 @@ int delete_bpf_sk_storage_map(struct bpf_iter__bpf_sk_storage_map *ctx)
+@@ -1356,6 +1374,8 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ 		return &bpf_per_cpu_ptr_proto;
+ 	case BPF_FUNC_bpf_this_cpu_ptr:
+ 		return &bpf_this_cpu_ptr_proto;
++	case BPF_FUNC_sock_from_file:
++		return &bpf_sock_from_file_proto;
+ 	default:
+ 		return NULL;
+ 	}
+diff --git a/scripts/bpf_helpers_doc.py b/scripts/bpf_helpers_doc.py
+index 8b829748d488..867ada23281c 100755
+--- a/scripts/bpf_helpers_doc.py
++++ b/scripts/bpf_helpers_doc.py
+@@ -437,6 +437,8 @@ class PrinterHelpers(Printer):
+             'struct path',
+             'struct btf_ptr',
+             'struct inode',
++            'struct socket',
++            'struct file',
+     ]
+     known_types = {
+             '...',
+@@ -482,6 +484,8 @@ class PrinterHelpers(Printer):
+             'struct path',
+             'struct btf_ptr',
+             'struct inode',
++            'struct socket',
++            'struct file',
+     }
+     mapped_types = {
+             'u8': '__u8',
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index c3458ec1f30a..a92b2b7d331b 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -3817,6 +3817,14 @@ union bpf_attr {
+  *		The **hash_algo** is returned on success,
+  *		**-EOPNOTSUP** if IMA is disabled or **-EINVAL** if
+  *		invalid arguments are passed.
++ *
++ * struct socket *bpf_sock_from_file(struct file *file)
++ *	Description
++ *		If the given file represents a socket, returns the associated
++ *		socket.
++ *	Return
++ *		A pointer to a struct socket on success or NULL if the file is
++ *		not a socket.
+  */
+ #define __BPF_FUNC_MAPPER(FN)		\
+ 	FN(unspec),			\
+@@ -3981,6 +3989,7 @@ union bpf_attr {
+ 	FN(bprm_opts_set),		\
+ 	FN(ktime_get_coarse_ns),	\
+ 	FN(ima_inode_hash),		\
++	FN(sock_from_file),		\
+ 	/* */
  
- 	return 0;
- }
-+
-+SEC("iter/task_file")
-+int fill_socket_owner(struct bpf_iter__task_file *ctx)
-+{
-+	struct task_struct *task = ctx->task;
-+	struct file *file = ctx->file;
-+	struct socket *sock;
-+	int *sock_tgid;
-+
-+	if (!task || !file)
-+		return 0;
-+
-+	sock = bpf_sock_from_file(file);
-+	if (!sock)
-+		return 0;
-+
-+	sock_tgid = bpf_sk_storage_get(&sk_stg_map, sock->sk, 0, 0);
-+	if (!sock_tgid)
-+		return 0;
-+
-+	*sock_tgid = task->tgid;
-+
-+	return 0;
-+}
+ /* integer value in 'imm' field of BPF_CALL instruction selects which helper
 -- 
 2.29.2.454.gaff20da3a2-goog
 
