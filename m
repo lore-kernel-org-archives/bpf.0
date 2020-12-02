@@ -2,152 +2,184 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE021C64E7C
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 21:32:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08720C6369E
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 21:45:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5C78622242
-	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 21:32:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 86814217A0
+	for <bpf@archiver.kernel.org>; Wed,  2 Dec 2020 21:45:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731113AbgLBVci (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Dec 2020 16:32:38 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:47406 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729462AbgLBVci (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 2 Dec 2020 16:32:38 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0B2LTiRP018265
-        for <bpf@vger.kernel.org>; Wed, 2 Dec 2020 13:31:57 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=facebook;
- bh=YDUvfLHR9cAJeUA6Iv/OgojwUZrXZKVoVE7c7BJ1+I4=;
- b=TqyV4XD2wV20kmixvcExdZz8BSXda7i7cicIyab3hJiiN5FmLyDHD6QxoePxxB6uSyXC
- mBZgBNw1AQqzbmwG/W81sClPkeqUOAoyZzIPphzAJUnES3r++8CkOINbZckpQNbd3Mxa
- DDM5n+IGO8LN/a4Cc+6cKFi597fWgreqk6M= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 355pr6txfq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 02 Dec 2020 13:31:57 -0800
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 2 Dec 2020 13:31:56 -0800
-Received: by devvm3178.ftw3.facebook.com (Postfix, from userid 201728)
-        id 27307476377BA; Wed,  2 Dec 2020 13:31:53 -0800 (PST)
-From:   Prankur gupta <prankgup@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     <kernel-team@fb.com>, <netdev@vger.kernel.org>
-Subject: [PATCH v4 bpf-next 1/2] bpf: Adds support for setting window clamp
-Date:   Wed, 2 Dec 2020 13:31:51 -0800
-Message-ID: <20201202213152.435886-2-prankgup@fb.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201202213152.435886-1-prankgup@fb.com>
-References: <20201202213152.435886-1-prankgup@fb.com>
+        id S1727084AbgLBVpU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Dec 2020 16:45:20 -0500
+Received: from www62.your-server.de ([213.133.104.62]:37960 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726880AbgLBVpU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Dec 2020 16:45:20 -0500
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kkZvS-0003YO-17; Wed, 02 Dec 2020 22:44:38 +0100
+Received: from [85.7.101.30] (helo=pc-9.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kkZvR-00036D-NS; Wed, 02 Dec 2020 22:44:37 +0100
+Subject: Re: [PATCH bpf-next V7 2/8] bpf: fix bpf_fib_lookup helper MTU check
+ for SKB ctx
+To:     Jesper Dangaard Brouer <brouer@redhat.com>, bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, Daniel Borkmann <borkmann@iogearbox.net>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        maze@google.com, lmb@cloudflare.com, shaun@tigera.io,
+        Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>, eyal.birger@gmail.com,
+        colrack@gmail.com
+References: <160588903254.2817268.4861837335793475314.stgit@firesoul>
+ <160588909693.2817268.17116187979657760922.stgit@firesoul>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <6f9cac4e-a231-ff8d-43a5-828995ca5ec7@iogearbox.net>
+Date:   Wed, 2 Dec 2020 22:44:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-12-02_13:2020-11-30,2020-12-02 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
- priorityscore=1501 suspectscore=13 spamscore=0 adultscore=0 clxscore=1015
- mlxlogscore=981 lowpriorityscore=0 mlxscore=0 phishscore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012020130
-X-FB-Internal: deliver
+In-Reply-To: <160588909693.2817268.17116187979657760922.stgit@firesoul>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/26006/Wed Dec  2 14:14:18 2020)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Adds a new bpf_setsockopt for TCP sockets, TCP_BPF_WINDOW_CLAMP,
-which sets the maximum receiver window size. It will be useful for
-limiting receiver window based on RTT.
+On 11/20/20 5:18 PM, Jesper Dangaard Brouer wrote:
+> BPF end-user on Cilium slack-channel (Carlo Carraro) wants to use
+> bpf_fib_lookup for doing MTU-check, but *prior* to extending packet size,
+> by adjusting fib_params 'tot_len' with the packet length plus the
+> expected encap size. (Just like the bpf_check_mtu helper supports). He
+> discovered that for SKB ctx the param->tot_len was not used, instead
+> skb->len was used (via MTU check in is_skb_forwardable()).
+> 
+> Fix this by using fib_params 'tot_len' for MTU check.  If not provided
+> (e.g. zero) then keep existing behaviour intact.
+> 
+> Fixes: 4c79579b44b1 ("bpf: Change bpf_fib_lookup to return lookup status")
+> Reported-by: Carlo Carraro <colrack@gmail.com>
+> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
+> ---
+>   net/core/filter.c |   14 ++++++++++++--
+>   1 file changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 1ee97fdeea64..84d77c425fbe 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -5565,11 +5565,21 @@ BPF_CALL_4(bpf_skb_fib_lookup, struct sk_buff *, skb,
+>   #endif
+>   	}
+>   
+> -	if (!rc) {
+> +	if (rc == BPF_FIB_LKUP_RET_SUCCESS) {
+>   		struct net_device *dev;
+> +		u32 mtu;
+>   
+>   		dev = dev_get_by_index_rcu(net, params->ifindex);
+> -		if (!is_skb_forwardable(dev, skb))
+> +		mtu = READ_ONCE(dev->mtu);
+> +
+> +		/* Using tot_len for (L3) MTU check if provided by user */
+> +		if (params->tot_len && params->tot_len > mtu)
+> +			rc = BPF_FIB_LKUP_RET_FRAG_NEEDED;
 
-Signed-off-by: Prankur gupta <prankgup@fb.com>
----
- include/net/tcp.h |  1 +
- net/core/filter.c |  3 +++
- net/ipv4/tcp.c    | 25 ++++++++++++++++---------
- 3 files changed, 20 insertions(+), 9 deletions(-)
+Is there a reason why we cannot reuse and at the same time optimize the built-in
+bpf_ipv{4,6}_fib_lookup() check_mtu as we do in XDP when params->tot_len was
+specified.. something as presented earlier [0]? My biggest concern for gso skbs
+is that the above might be subject to breakage from one kernel version to another
+if it was filled from the packet. So going back and building upon [0], to be on
+safe side we could have a new flag like below to indicate wanted behavior:
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 4aba0f069b05..347a76f176b4 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -406,6 +406,7 @@ void tcp_syn_ack_timeout(const struct request_sock *r=
-eq);
- int tcp_recvmsg(struct sock *sk, struct msghdr *msg, size_t len, int non=
-block,
- 		int flags, int *addr_len);
- int tcp_set_rcvlowat(struct sock *sk, int val);
-+int tcp_set_window_clamp(struct sock *sk, int val);
- void tcp_data_ready(struct sock *sk);
- #ifdef CONFIG_MMU
- int tcp_mmap(struct file *file, struct socket *sock,
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index c3458ec1f30a..d3cd2f47f011 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4934,8 +4934,9 @@ struct bpf_raw_tracepoint_args {
+   * OUTPUT:  Do lookup from egress perspective; default is ingress
+   */
+  enum {
+-	BPF_FIB_LOOKUP_DIRECT  = (1U << 0),
+-	BPF_FIB_LOOKUP_OUTPUT  = (1U << 1),
++	BPF_FIB_LOOKUP_DIRECT		= (1U << 0),
++	BPF_FIB_LOOKUP_OUTPUT		= (1U << 1),
++	BPF_FIB_LOOKUP_ALWAYS_MTU_CHECK	= (1U << 2),
+  };
+
+  enum {
 diff --git a/net/core/filter.c b/net/core/filter.c
-index 2ca5eecebacf..6273883dfeb2 100644
+index 2ca5eecebacf..4fb876ebd6a0 100644
 --- a/net/core/filter.c
 +++ b/net/core/filter.c
-@@ -4910,6 +4910,9 @@ static int _bpf_setsockopt(struct sock *sk, int lev=
-el, int optname,
- 				tp->notsent_lowat =3D val;
- 				sk->sk_write_space(sk);
- 				break;
-+			case TCP_WINDOW_CLAMP:
-+				ret =3D tcp_set_window_clamp(sk, val);
-+				break;
- 			default:
- 				ret =3D -EINVAL;
- 			}
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index b2bc3d7fe9e8..17379f6dd955 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3022,6 +3022,21 @@ int tcp_sock_set_keepcnt(struct sock *sk, int val)
- }
- EXPORT_SYMBOL(tcp_sock_set_keepcnt);
-=20
-+int tcp_set_window_clamp(struct sock *sk, int val)
-+{
-+	struct tcp_sock *tp =3D tcp_sk(sk);
-+
-+	if (!val) {
-+		if (sk->sk_state !=3D TCP_CLOSE)
-+			return -EINVAL;
-+		tp->window_clamp =3D 0;
-+	} else {
-+		tp->window_clamp =3D val < SOCK_MIN_RCVBUF / 2 ?
-+			SOCK_MIN_RCVBUF / 2 : val;
-+	}
-+	return 0;
-+}
-+
- /*
-  *	Socket option code for TCP.
-  */
-@@ -3235,15 +3250,7 @@ static int do_tcp_setsockopt(struct sock *sk, int =
-level, int optname,
- 		break;
-=20
- 	case TCP_WINDOW_CLAMP:
--		if (!val) {
--			if (sk->sk_state !=3D TCP_CLOSE) {
--				err =3D -EINVAL;
--				break;
--			}
--			tp->window_clamp =3D 0;
--		} else
--			tp->window_clamp =3D val < SOCK_MIN_RCVBUF / 2 ?
--						SOCK_MIN_RCVBUF / 2 : val;
-+		err =3D tcp_set_window_clamp(sk, val);
- 		break;
-=20
- 	case TCP_QUICKACK:
---=20
-2.24.1
+@@ -5547,37 +5547,27 @@ static const struct bpf_func_proto bpf_xdp_fib_lookup_proto = {
+  BPF_CALL_4(bpf_skb_fib_lookup, struct sk_buff *, skb,
+  	   struct bpf_fib_lookup *, params, int, plen, u32, flags)
+  {
+-	struct net *net = dev_net(skb->dev);
+-	int rc = -EAFNOSUPPORT;
++	bool check_mtu = !skb_is_gso(skb) ||
++			 (flags & BPF_FIB_LOOKUP_ALWAYS_MTU_CHECK);
+
+  	if (plen < sizeof(*params))
+  		return -EINVAL;
+
+-	if (flags & ~(BPF_FIB_LOOKUP_DIRECT | BPF_FIB_LOOKUP_OUTPUT))
++	if (flags & ~(BPF_FIB_LOOKUP_DIRECT | BPF_FIB_LOOKUP_OUTPUT |
++		      BPF_FIB_LOOKUP_ALWAYS_MTU_CHECK))
+  		return -EINVAL;
+
+  	switch (params->family) {
+  #if IS_ENABLED(CONFIG_INET)
+  	case AF_INET:
+-		rc = bpf_ipv4_fib_lookup(net, params, flags, false);
+-		break;
++		return bpf_ipv4_fib_lookup(net, params, flags, check_mtu);
+  #endif
+  #if IS_ENABLED(CONFIG_IPV6)
+  	case AF_INET6:
+-		rc = bpf_ipv6_fib_lookup(net, params, flags, false);
+-		break;
++		return bpf_ipv6_fib_lookup(net, params, flags, check_mtu);
+  #endif
+  	}
+-
+-	if (!rc) {
+-		struct net_device *dev;
+-
+-		dev = dev_get_by_index_rcu(net, params->ifindex);
+-		if (!is_skb_forwardable(dev, skb))
+-			rc = BPF_FIB_LKUP_RET_FRAG_NEEDED;
+-	}
+-
+-	return rc;
++	return -EAFNOSUPPORT;
+  }
+
+  static const struct bpf_func_proto bpf_skb_fib_lookup_proto = {
+
+
+   [0] https://lore.kernel.org/bpf/65d8f988-5b41-24c2-8501-7cbbddb1238e@iogearbox.net/
+
+
+> +		/* Notice at this TC cls_bpf level skb->len contains L2 size,
+> +		 * but is_skb_forwardable takes that into account
+> +		 */
+> +		if (params->tot_len == 0 && !is_skb_forwardable(dev, skb))
+>   			rc = BPF_FIB_LKUP_RET_FRAG_NEEDED;
+>   	}
+>   
+> 
+> 
 
