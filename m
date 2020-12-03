@@ -2,95 +2,155 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D6DBCC4361B
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 23:39:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 842FBC4361A
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 23:55:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8B37822482
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 23:39:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 39E4322285
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 23:55:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727877AbgLCXjY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Dec 2020 18:39:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:20869 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727495AbgLCXjY (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 3 Dec 2020 18:39:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607038677;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GOkNExEfqJGC/gxnW5k2ZBTTtsT71mTbidAaMq6A3fw=;
-        b=iN69z+rhRg4zb+aldRiOwT/taXeooD3cZRyLiT1GICWW07mqlq9aGWY0xPI547CiwDCHbk
-        Ek5B/3Zo5WAQP0MT+kbd4dZE+ArthTToh3pb5iPUyN1Ib4FVcxZxSK7UsX1OBVKh7A0KWU
-        f+1LK5z+oFeupjET5rOSUybdQqKWl7w=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-572-rhCcX1EOMeGAOtCQfXfXoQ-1; Thu, 03 Dec 2020 18:37:55 -0500
-X-MC-Unique: rhCcX1EOMeGAOtCQfXfXoQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A63EA190B2A5;
-        Thu,  3 Dec 2020 23:37:53 +0000 (UTC)
-Received: from krava (unknown [10.40.195.70])
-        by smtp.corp.redhat.com (Postfix) with SMTP id BFE2A5D9CA;
-        Thu,  3 Dec 2020 23:37:51 +0000 (UTC)
-Date:   Fri, 4 Dec 2020 00:37:50 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Hao Luo <haoluo@google.com>
-Subject: Re: [PATCH 2/3] btf_encoder: Use address size based on ELF's class
-Message-ID: <20201203233750.GG3613628@krava>
-References: <20201203220625.3704363-1-jolsa@kernel.org>
- <20201203220625.3704363-3-jolsa@kernel.org>
- <CAEf4BzbdB4DUJ2BKVsVdpcZHunNxb_6FvAWOFt_be=81Jyxmnw@mail.gmail.com>
+        id S1726525AbgLCXzf convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 3 Dec 2020 18:55:35 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:8670 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729527AbgLCXze (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 3 Dec 2020 18:55:34 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B3Ns3g4008773
+        for <bpf@vger.kernel.org>; Thu, 3 Dec 2020 15:54:52 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 356fsfk52r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Thu, 03 Dec 2020 15:54:52 -0800
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 3 Dec 2020 15:54:51 -0800
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id D4F062ECA8F6; Thu,  3 Dec 2020 15:54:50 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: fix invalid use of strncat in test_sockmap
+Date:   Thu, 3 Dec 2020 15:54:40 -0800
+Message-ID: <20201203235440.2302137-2-andrii@kernel.org>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201203235440.2302137-1-andrii@kernel.org>
+References: <20201203235440.2302137-1-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzbdB4DUJ2BKVsVdpcZHunNxb_6FvAWOFt_be=81Jyxmnw@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
+ definitions=2020-12-03_15:2020-12-03,2020-12-03 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ bulkscore=0 adultscore=0 priorityscore=1501 mlxscore=0 malwarescore=0
+ suspectscore=8 phishscore=0 clxscore=1034 spamscore=0 impostorscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012030132
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Dec 03, 2020 at 03:22:18PM -0800, Andrii Nakryiko wrote:
-> On Thu, Dec 3, 2020 at 2:08 PM Jiri Olsa <jolsa@kernel.org> wrote:
-> >
-> > We can't assume the address size is always size of unsigned
-> > long, we have to use directly the ELF's address size.
-> >
-> > Changing addrs array to __u64 and convert 32 bit address
-> > values when copying from ELF section.
-> >
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> 
-> It looks ok to me, but I didn't expect that changes would be so
-> numerous... Makes me wonder if pahole ever supported working with ELF
-> files of different bitness. I'll defer to Arnaldo to make a call on
-> whether this is necessary.
+strncat()'s third argument is how many bytes will be added *in addition* to
+already existing bytes in destination. Plus extra zero byte will be added
+after that. So existing use in test_sockmap has many opportunities to overflow
+the string and cause memory corruptions. And in this case, GCC complains for
+a good reason.
 
-so to test this I built 32bit vmlinux and used 64bit pahole
-to generate BTF data on both vmlinux and modules, which I
-thought was valid use case
+Fixes: 16962b2404ac ("bpf: sockmap, add selftests")
+Fixes: 73563aa3d977 ("selftests/bpf: test_sockmap, print additional test options")
+Fixes: 1ade9abadfca ("bpf: test_sockmap, add options for msg_pop_data() helper")
+Fixes: 463bac5f1ca7 ("bpf, selftests: Add test for ktls with skb bpf ingress policy")
+Fixes: e9dd904708c4 ("bpf: add tls support for testing in test_sockmap")
+Fixes: 753fb2ee0934 ("bpf: sockmap, add msg_peek tests to test_sockmap")
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/test_sockmap.c | 36 ++++++++++++++--------
+ 1 file changed, 23 insertions(+), 13 deletions(-)
 
-jirka
-
-> 
-> >  btf_encoder.c | 24 +++++++++++++++++-------
-> >  1 file changed, 17 insertions(+), 7 deletions(-)
-> >
-> 
-> [...]
-> 
+diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
+index 0fa1e421c3d7..427ca00a3217 100644
+--- a/tools/testing/selftests/bpf/test_sockmap.c
++++ b/tools/testing/selftests/bpf/test_sockmap.c
+@@ -1273,6 +1273,16 @@ static char *test_to_str(int test)
+ 	return "unknown";
+ }
+ 
++static void append_str(char *dst, const char *src, size_t dst_cap)
++{
++	size_t avail = dst_cap - strlen(dst);
++
++	if (avail <= 1) /* just zero byte could be written */
++		return;
++
++	strncat(dst, src, avail - 1); /* strncat() adds + 1 for zero byte */
++}
++
+ #define OPTSTRING 60
+ static void test_options(char *options)
+ {
+@@ -1281,42 +1291,42 @@ static void test_options(char *options)
+ 	memset(options, 0, OPTSTRING);
+ 
+ 	if (txmsg_pass)
+-		strncat(options, "pass,", OPTSTRING);
++		append_str(options, "pass,", OPTSTRING);
+ 	if (txmsg_redir)
+-		strncat(options, "redir,", OPTSTRING);
++		append_str(options, "redir,", OPTSTRING);
+ 	if (txmsg_drop)
+-		strncat(options, "drop,", OPTSTRING);
++		append_str(options, "drop,", OPTSTRING);
+ 	if (txmsg_apply) {
+ 		snprintf(tstr, OPTSTRING, "apply %d,", txmsg_apply);
+-		strncat(options, tstr, OPTSTRING);
++		append_str(options, tstr, OPTSTRING);
+ 	}
+ 	if (txmsg_cork) {
+ 		snprintf(tstr, OPTSTRING, "cork %d,", txmsg_cork);
+-		strncat(options, tstr, OPTSTRING);
++		append_str(options, tstr, OPTSTRING);
+ 	}
+ 	if (txmsg_start) {
+ 		snprintf(tstr, OPTSTRING, "start %d,", txmsg_start);
+-		strncat(options, tstr, OPTSTRING);
++		append_str(options, tstr, OPTSTRING);
+ 	}
+ 	if (txmsg_end) {
+ 		snprintf(tstr, OPTSTRING, "end %d,", txmsg_end);
+-		strncat(options, tstr, OPTSTRING);
++		append_str(options, tstr, OPTSTRING);
+ 	}
+ 	if (txmsg_start_pop) {
+ 		snprintf(tstr, OPTSTRING, "pop (%d,%d),",
+ 			 txmsg_start_pop, txmsg_start_pop + txmsg_pop);
+-		strncat(options, tstr, OPTSTRING);
++		append_str(options, tstr, OPTSTRING);
+ 	}
+ 	if (txmsg_ingress)
+-		strncat(options, "ingress,", OPTSTRING);
++		append_str(options, "ingress,", OPTSTRING);
+ 	if (txmsg_redir_skb)
+-		strncat(options, "redir_skb,", OPTSTRING);
++		append_str(options, "redir_skb,", OPTSTRING);
+ 	if (txmsg_ktls_skb)
+-		strncat(options, "ktls_skb,", OPTSTRING);
++		append_str(options, "ktls_skb,", OPTSTRING);
+ 	if (ktls)
+-		strncat(options, "ktls,", OPTSTRING);
++		append_str(options, "ktls,", OPTSTRING);
+ 	if (peek_flag)
+-		strncat(options, "peek,", OPTSTRING);
++		append_str(options, "peek,", OPTSTRING);
+ }
+ 
+ static int __test_exec(int cgrp, int test, struct sockmap_options *opt)
+-- 
+2.24.1
 
