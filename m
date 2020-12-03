@@ -2,127 +2,258 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1371CC433FE
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 14:50:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39526C35296
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 14:51:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E81C207B9
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 14:50:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 259C521EF2
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 14:32:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726309AbgLCOuP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Dec 2020 09:50:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
+        id S1729414AbgLCOcq (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Dec 2020 09:32:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726056AbgLCOuO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Dec 2020 09:50:14 -0500
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63621C061A4E;
-        Thu,  3 Dec 2020 06:49:34 -0800 (PST)
-Received: by mail-wr1-x441.google.com with SMTP id l1so2126667wrb.9;
-        Thu, 03 Dec 2020 06:49:34 -0800 (PST)
+        with ESMTP id S1729375AbgLCOcq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Dec 2020 09:32:46 -0500
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FE4C061A53
+        for <bpf@vger.kernel.org>; Thu,  3 Dec 2020 06:32:05 -0800 (PST)
+Received: by mail-io1-xd44.google.com with SMTP id o8so2272547ioh.0
+        for <bpf@vger.kernel.org>; Thu, 03 Dec 2020 06:32:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PbnNTRLQSbEPf4GWwSeO8ArVoDFMPjXku4O6HzyA2QY=;
-        b=d7vRuzDC0zrhgnLbtOM5oW/ycePCNVNqBo0mUEogHy1jarJL3WsNrRYYSFOx3qBodv
-         6nkhiicSsPMf8bc+wKRT4eXWYsoLEH2YLhe5lyxc4sc3tKgquOrDqfpIMbmRbpioNSfl
-         WzPYEG1cILDohfVCWr9FzvlcnldZxEWEy5knoRQu3Dr5x1GanHQIhypNmn+27zBEz8/V
-         ttVpiAa29/BdwGm5yVB5CchMSrD936Gd6pvNfR3d+Ln07v9aAvfWxubu+x26BAUylbKh
-         2LW50Wmlmhndut4sCLJBEC1DUGZonxZnCKrIsmd/k9h8pBOGoM8ZGwouIeEZHla9NOn+
-         3Evg==
+         :cc;
+        bh=agN1RaZrd0FXtXBU6s1nO4sdXrde3LkvPXyOS/toRsM=;
+        b=vwX3S8gcSMLVPhTCtankaNblMFB6rPSXILMm1NvxSzc2ROLrcAAO+0O0a/tt9KD0Ej
+         LBcqakQueKNpW3QumsbmzlrZawNFqFE/PG3nnmjBrqPbJclkha+L02A4/XeV1xks+jTE
+         2EAP3vEHsiHVXK2Vk3glD6OiqVhKfiSH+icCXqMZ7OytLu20Msbn9dLoTs0Vgbov5A3x
+         qnILrlHkvj1pOauW6JW7A4BVLftvX7fxBsUl+PPKgkr43Fj2MZcWej6DVOGUiR8f4KQT
+         v4HzWkdMxa7/DvGXCjoFfgbOLKAaMnJz/f/wSkCYqAQL2d9lyy4yxu0n8JA6OlSV0y9A
+         f1wg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PbnNTRLQSbEPf4GWwSeO8ArVoDFMPjXku4O6HzyA2QY=;
-        b=AbabQz0kZrldwK12IKLdeIGK0jrJ8PrcFVBX3jHQbf88sbcGcYFZSEUOWkASo0EEUO
-         LX/3wcpCgAt2cQT5n6lDWxUih2wMy13zfaEqZGSFBAcn4fYgbwgOQeZwVBPpgJJQ6jhE
-         2QeGSVaoWgyq7kK/lhWhYwhpuV9KxeKKAgkiWJk7mTYbCjOzVbH8TO8fZPWAvHts5Noo
-         xNKyhI3BsytiMNW1VWDzI34xWDMMck3B5yz4uDl/zSDtwNSmHIVlMBGl6Zg+zAeh79Qy
-         wz2yTRChK8FLoK2DlYwTzgEkmYnjwROxAj7aeGo5sUGWLvRoPjT5KyelmKQqDgmNJ+Ds
-         tCkQ==
-X-Gm-Message-State: AOAM533AecO3CzuT7vK4CRI3y3rO/LXI421JKM3rRN4LVCVgsrqF1lET
-        jXdCoD8TsTRAWyfmpdDHMs/UXTeuuVVkwI9ZS70=
-X-Google-Smtp-Source: ABdhPJzGj0jdvbohM1HTwru2ZWH1XPWDwTahzKos8nheL72Xyhab3Ue38Jm0SHRCyWtPdConOWrCvxpiOCLp3l+sqQk=
-X-Received: by 2002:a5d:5741:: with SMTP id q1mr4077718wrw.160.1607006973101;
- Thu, 03 Dec 2020 06:49:33 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=agN1RaZrd0FXtXBU6s1nO4sdXrde3LkvPXyOS/toRsM=;
+        b=fI2vVal+f0Uy4M7hp6/cLOH9QeXf6TYobFoc06C/0P0W5FDbO2HLAt6XbK0YE8oMUo
+         R5l5UzTe+S2nyDcdQx7MwENkZGk4gesqUsFfFDtqMlC1WkpbRY5O0fVCg1Q9K5AujB7T
+         KjrKG/kvH8S7RNQfBXFgA634pKfBM6p+oInq2Th+9Ujt3avKIykfI2z7oQwYU1M/Hvzo
+         /PjfFLZdBU2EH+WY0cWNnFPfv20/Lf0uR5PWlptgyW7e2btfkMjgAcmJgaOyPLbLb/09
+         0+8aszcDvNNFxzo6qjZ6vY9B9p1u6dI5OEh/LFiORTUYzHo+Fnf+deYTBRyXG2Qhqr2F
+         9LzQ==
+X-Gm-Message-State: AOAM532zJNyoruiUGLimpZIajiHeuN1vDu6IFyhdMfsU8o6wn9/0A7+z
+        D8gNbhsQNuNvDkZQf3Osrruj2w2secSPlWm0Xd3w1g==
+X-Google-Smtp-Source: ABdhPJxZkA81Vqm2HhBWoBIqII8fpV0dQcTHqsYoUvx8W3kbmF01AxaFlR6c4N776uQFs7LFhdZrnikHnCWr1ylxzfk=
+X-Received: by 2002:a02:95ab:: with SMTP id b40mr3571775jai.99.1607005924633;
+ Thu, 03 Dec 2020 06:32:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20201203144343.790719-1-anders.roxell@linaro.org>
-In-Reply-To: <20201203144343.790719-1-anders.roxell@linaro.org>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Thu, 3 Dec 2020 15:49:21 +0100
-Message-ID: <CAJ+HfNg97HtDciv_z8F6Gs5Yncuua2Gx27HLxCYBNmA9Bk1jxg@mail.gmail.com>
-Subject: Re: [PATCH] dpaa_eth: fix build errorr in dpaa_fq_init
-To:     Anders Roxell <anders.roxell@linaro.org>
-Cc:     madalin.bucur@nxp.com, David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
+References: <e47b903d-6e7c-a2a7-ccdf-d2c701986d4f@gmail.com> <20201203141424.52912-1-kuniyu@amazon.co.jp>
+In-Reply-To: <20201203141424.52912-1-kuniyu@amazon.co.jp>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 3 Dec 2020 15:31:53 +0100
+Message-ID: <CANn89i+MtOWryWzeDXnG-waOnqY8SxVxb_Q2Y4C=FdPGsKXivA@mail.gmail.com>
+Subject: Re: [PATCH v1 bpf-next 03/11] tcp: Migrate TCP_ESTABLISHED/TCP_SYN_RECV
+ sockets in accept queues.
+To:     Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
+        Benjamin Herrenschmidt <benh@amazon.com>,
+        bpf <bpf@vger.kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+        David Miller <davem@davemloft.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Kuniyuki Iwashima <kuni1840@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 3 Dec 2020 at 15:46, Anders Roxell <anders.roxell@linaro.org> wrote=
-:
+On Thu, Dec 3, 2020 at 3:14 PM Kuniyuki Iwashima <kuniyu@amazon.co.jp> wrote:
 >
-> When building FSL_DPAA_ETH the following build error shows up:
+> From:   Eric Dumazet <eric.dumazet@gmail.com>
+> Date:   Tue, 1 Dec 2020 16:25:51 +0100
+> > On 12/1/20 3:44 PM, Kuniyuki Iwashima wrote:
+> > > This patch lets reuseport_detach_sock() return a pointer of struct sock,
+> > > which is used only by inet_unhash(). If it is not NULL,
+> > > inet_csk_reqsk_queue_migrate() migrates TCP_ESTABLISHED/TCP_SYN_RECV
+> > > sockets from the closing listener to the selected one.
+> > >
+> > > Listening sockets hold incoming connections as a linked list of struct
+> > > request_sock in the accept queue, and each request has reference to a full
+> > > socket and its listener. In inet_csk_reqsk_queue_migrate(), we only unlink
+> > > the requests from the closing listener's queue and relink them to the head
+> > > of the new listener's queue. We do not process each request and its
+> > > reference to the listener, so the migration completes in O(1) time
+> > > complexity. However, in the case of TCP_SYN_RECV sockets, we take special
+> > > care in the next commit.
+> > >
+> > > By default, the kernel selects a new listener randomly. In order to pick
+> > > out a different socket every time, we select the last element of socks[] as
+> > > the new listener. This behaviour is based on how the kernel moves sockets
+> > > in socks[]. (See also [1])
+> > >
+> > > Basically, in order to redistribute sockets evenly, we have to use an eBPF
+> > > program called in the later commit, but as the side effect of such default
+> > > selection, the kernel can redistribute old requests evenly to new listeners
+> > > for a specific case where the application replaces listeners by
+> > > generations.
+> > >
+> > > For example, we call listen() for four sockets (A, B, C, D), and close the
+> > > first two by turns. The sockets move in socks[] like below.
+> > >
+> > >   socks[0] : A <-.      socks[0] : D          socks[0] : D
+> > >   socks[1] : B   |  =>  socks[1] : B <-.  =>  socks[1] : C
+> > >   socks[2] : C   |      socks[2] : C --'
+> > >   socks[3] : D --'
+> > >
+> > > Then, if C and D have newer settings than A and B, and each socket has a
+> > > request (a, b, c, d) in their accept queue, we can redistribute old
+> > > requests evenly to new listeners.
+> > >
+> > >   socks[0] : A (a) <-.      socks[0] : D (a + d)      socks[0] : D (a + d)
+> > >   socks[1] : B (b)   |  =>  socks[1] : B (b) <-.  =>  socks[1] : C (b + c)
+> > >   socks[2] : C (c)   |      socks[2] : C (c) --'
+> > >   socks[3] : D (d) --'
+> > >
+> > > Here, (A, D) or (B, C) can have different application settings, but they
+> > > MUST have the same settings at the socket API level; otherwise, unexpected
+> > > error may happen. For instance, if only the new listeners have
+> > > TCP_SAVE_SYN, old requests do not have SYN data, so the application will
+> > > face inconsistency and cause an error.
+> > >
+> > > Therefore, if there are different kinds of sockets, we must attach an eBPF
+> > > program described in later commits.
+> > >
+> > > Link: https://lore.kernel.org/netdev/CAEfhGiyG8Y_amDZ2C8dQoQqjZJMHjTY76b=KBkTKcBtA=dhdGQ@mail.gmail.com/
+> > > Reviewed-by: Benjamin Herrenschmidt <benh@amazon.com>
+> > > Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+> > > ---
+> > >  include/net/inet_connection_sock.h |  1 +
+> > >  include/net/sock_reuseport.h       |  2 +-
+> > >  net/core/sock_reuseport.c          | 10 +++++++++-
+> > >  net/ipv4/inet_connection_sock.c    | 30 ++++++++++++++++++++++++++++++
+> > >  net/ipv4/inet_hashtables.c         |  9 +++++++--
+> > >  5 files changed, 48 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/include/net/inet_connection_sock.h b/include/net/inet_connection_sock.h
+> > > index 7338b3865a2a..2ea2d743f8fc 100644
+> > > --- a/include/net/inet_connection_sock.h
+> > > +++ b/include/net/inet_connection_sock.h
+> > > @@ -260,6 +260,7 @@ struct dst_entry *inet_csk_route_child_sock(const struct sock *sk,
+> > >  struct sock *inet_csk_reqsk_queue_add(struct sock *sk,
+> > >                                   struct request_sock *req,
+> > >                                   struct sock *child);
+> > > +void inet_csk_reqsk_queue_migrate(struct sock *sk, struct sock *nsk);
+> > >  void inet_csk_reqsk_queue_hash_add(struct sock *sk, struct request_sock *req,
+> > >                                unsigned long timeout);
+> > >  struct sock *inet_csk_complete_hashdance(struct sock *sk, struct sock *child,
+> > > diff --git a/include/net/sock_reuseport.h b/include/net/sock_reuseport.h
+> > > index 0e558ca7afbf..09a1b1539d4c 100644
+> > > --- a/include/net/sock_reuseport.h
+> > > +++ b/include/net/sock_reuseport.h
+> > > @@ -31,7 +31,7 @@ struct sock_reuseport {
+> > >  extern int reuseport_alloc(struct sock *sk, bool bind_inany);
+> > >  extern int reuseport_add_sock(struct sock *sk, struct sock *sk2,
+> > >                           bool bind_inany);
+> > > -extern void reuseport_detach_sock(struct sock *sk);
+> > > +extern struct sock *reuseport_detach_sock(struct sock *sk);
+> > >  extern struct sock *reuseport_select_sock(struct sock *sk,
+> > >                                       u32 hash,
+> > >                                       struct sk_buff *skb,
+> > > diff --git a/net/core/sock_reuseport.c b/net/core/sock_reuseport.c
+> > > index fd133516ac0e..60d7c1f28809 100644
+> > > --- a/net/core/sock_reuseport.c
+> > > +++ b/net/core/sock_reuseport.c
+> > > @@ -216,9 +216,11 @@ int reuseport_add_sock(struct sock *sk, struct sock *sk2, bool bind_inany)
+> > >  }
+> > >  EXPORT_SYMBOL(reuseport_add_sock);
+> > >
+> > > -void reuseport_detach_sock(struct sock *sk)
+> > > +struct sock *reuseport_detach_sock(struct sock *sk)
+> > >  {
+> > >     struct sock_reuseport *reuse;
+> > > +   struct bpf_prog *prog;
+> > > +   struct sock *nsk = NULL;
+> > >     int i;
+> > >
+> > >     spin_lock_bh(&reuseport_lock);
+> > > @@ -242,8 +244,12 @@ void reuseport_detach_sock(struct sock *sk)
+> > >
+> > >             reuse->num_socks--;
+> > >             reuse->socks[i] = reuse->socks[reuse->num_socks];
+> > > +           prog = rcu_dereference(reuse->prog);
+> > >
+> > >             if (sk->sk_protocol == IPPROTO_TCP) {
+> > > +                   if (reuse->num_socks && !prog)
+> > > +                           nsk = i == reuse->num_socks ? reuse->socks[i - 1] : reuse->socks[i];
+> > > +
+> > >                     reuse->num_closed_socks++;
+> > >                     reuse->socks[reuse->max_socks - reuse->num_closed_socks] = sk;
+> > >             } else {
+> > > @@ -264,6 +270,8 @@ void reuseport_detach_sock(struct sock *sk)
+> > >             call_rcu(&reuse->rcu, reuseport_free_rcu);
+> > >  out:
+> > >     spin_unlock_bh(&reuseport_lock);
+> > > +
+> > > +   return nsk;
+> > >  }
+> > >  EXPORT_SYMBOL(reuseport_detach_sock);
+> > >
+> > > diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
+> > > index 1451aa9712b0..b27241ea96bd 100644
+> > > --- a/net/ipv4/inet_connection_sock.c
+> > > +++ b/net/ipv4/inet_connection_sock.c
+> > > @@ -992,6 +992,36 @@ struct sock *inet_csk_reqsk_queue_add(struct sock *sk,
+> > >  }
+> > >  EXPORT_SYMBOL(inet_csk_reqsk_queue_add);
+> > >
+> > > +void inet_csk_reqsk_queue_migrate(struct sock *sk, struct sock *nsk)
+> > > +{
+> > > +   struct request_sock_queue *old_accept_queue, *new_accept_queue;
+> > > +
+> > > +   old_accept_queue = &inet_csk(sk)->icsk_accept_queue;
+> > > +   new_accept_queue = &inet_csk(nsk)->icsk_accept_queue;
+> > > +
+> > > +   spin_lock(&old_accept_queue->rskq_lock);
+> > > +   spin_lock(&new_accept_queue->rskq_lock);
+> >
+> > Are you sure lockdep is happy with this ?
+> >
+> > I would guess it should complain, because :
+> >
+> > lock(A);
+> > lock(B);
+> > ...
+> > unlock(B);
+> > unlock(A);
+> >
+> > will fail when the opposite action happens eventually
+> >
+> > lock(B);
+> > lock(A);
+> > ...
+> > unlock(A);
+> > unlock(B);
 >
-> /tmp/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c: In function =E2=80=
-=98dpaa_fq_init=E2=80=99:
-> /tmp/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c:1135:9: error: too fe=
-w arguments to function =E2=80=98xdp_rxq_info_reg=E2=80=99
->  1135 |   err =3D xdp_rxq_info_reg(&dpaa_fq->xdp_rxq, dpaa_fq->net_dev,
->       |         ^~~~~~~~~~~~~~~~
+> I enabled lockdep and did not see warnings of lockdep.
 >
-> Commit b02e5a0ebb17 ("xsk: Propagate napi_id to XDP socket Rx path")
-> added an extra argument to function xdp_rxq_info_reg and commit
-> d57e57d0cd04 ("dpaa_eth: add XDP_TX support") didn't know about that
-> extra argument.
->
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> ---
->
-> I think this issue is seen since both patches went in at the same time
-> to bpf-next and net-next.
->
+> Also, the inversion deadlock does not happen in this case.
+> In reuseport_detach_sock(), sk is moved backward in socks[] and poped out
+> from the eBPF map, so the old listener will not be selected as the new
+> listener.
 
-Thanks Anders!
+Until the socket is closed, reallocated and used again. LOCKDEP has no
+idea about soreuseport logic.
 
-Indeed, when bpf-next is pulled into net-next this needs to be applied.
+If you run your tests long enough, lockdep should complain at some point.
 
-Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
-
->  drivers/net/ethernet/freescale/dpaa/dpaa_eth.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c b/drivers/net=
-/ethernet/freescale/dpaa/dpaa_eth.c
-> index 947b3d2f9c7e..6cc8c4e078de 100644
-> --- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-> +++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-> @@ -1133,7 +1133,7 @@ static int dpaa_fq_init(struct dpaa_fq *dpaa_fq, bo=
-ol td_enable)
->         if (dpaa_fq->fq_type =3D=3D FQ_TYPE_RX_DEFAULT ||
->             dpaa_fq->fq_type =3D=3D FQ_TYPE_RX_PCD) {
->                 err =3D xdp_rxq_info_reg(&dpaa_fq->xdp_rxq, dpaa_fq->net_=
-dev,
-> -                                      dpaa_fq->fqid);
-> +                                      dpaa_fq->fqid, 0);
->                 if (err) {
->                         dev_err(dev, "xdp_rxq_info_reg() =3D %d\n", err);
->                         return err;
-> --
-> 2.29.2
->
+git grep -n double_lock
