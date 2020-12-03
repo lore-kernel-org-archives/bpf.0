@@ -3,41 +3,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 35BDDC1B0D9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 245C8C1B0E3
 	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 20:49:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 05694221EC
+	by mail.kernel.org (Postfix) with ESMTP id CBAAF221EA
 	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 20:49:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729819AbgLCUtE convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 3 Dec 2020 15:49:04 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:58018 "EHLO
+        id S1731202AbgLCUtD convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 3 Dec 2020 15:49:03 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:2080 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731151AbgLCUtE (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 3 Dec 2020 15:49:04 -0500
+        by vger.kernel.org with ESMTP id S1729819AbgLCUtD (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 3 Dec 2020 15:49:03 -0500
 Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0B3KdsGT008294
-        for <bpf@vger.kernel.org>; Thu, 3 Dec 2020 12:48:22 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0089730.ppops.net with ESMTP id 3576828hgv-3
+        by m0089730.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0B3KdsgF008248
+        for <bpf@vger.kernel.org>; Thu, 3 Dec 2020 12:48:20 -0800
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net with ESMTP id 3576828hf6-18
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 03 Dec 2020 12:48:22 -0800
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 03 Dec 2020 12:48:20 -0800
+Received: from intmgw003.08.frc2.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:11d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 3 Dec 2020 12:48:21 -0800
+ 15.1.1979.3; Thu, 3 Dec 2020 12:48:13 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 3EB362ECA8BF; Thu,  3 Dec 2020 12:48:17 -0800 (PST)
+        id 820B72ECA8BF; Thu,  3 Dec 2020 12:48:08 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v6 bpf-next 10/14] bpf: allow to specify kernel module BTFs when attaching BPF programs
-Date:   Thu, 3 Dec 2020 12:46:30 -0800
-Message-ID: <20201203204634.1325171-11-andrii@kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        Martin KaFai Lau <kafai@fb.com>
+Subject: [PATCH v6 bpf-next 06/14] selftests/bpf: add bpf_testmod kernel module for testing
+Date:   Thu, 3 Dec 2020 12:46:26 -0800
+Message-ID: <20201203204634.1325171-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201203204634.1325171-1-andrii@kernel.org>
 References: <20201203204634.1325171-1-andrii@kernel.org>
@@ -49,7 +50,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-12-03_12:2020-12-03,2020-12-03 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0 spamscore=0
  bulkscore=0 malwarescore=0 priorityscore=1501 clxscore=1015 adultscore=0
- mlxlogscore=999 suspectscore=25 lowpriorityscore=0 phishscore=0
+ mlxlogscore=999 suspectscore=9 lowpriorityscore=0 phishscore=0
  impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2012030121
 X-FB-Internal: deliver
@@ -57,214 +58,345 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add ability for user-space programs to specify non-vmlinux BTF when attaching
-BTF-powered BPF programs: raw_tp, fentry/fexit/fmod_ret, LSM, etc. For this,
-attach_prog_fd (now with the alias name attach_btf_obj_fd) should specify FD
-of a module or vmlinux BTF object. For backwards compatibility reasons,
-0 denotes vmlinux BTF. Only kernel BTF (vmlinux or module) can be specified.
+Add bpf_testmod module, which is conceptually out-of-tree module and provides
+ways for selftests/bpf to test various kernel module-related functionality:
+raw tracepoint, fentry/fexit/fmod_ret, etc. This module will be auto-loaded by
+test_progs test runner and expected by some of selftests to be present and
+loaded.
 
+Pahole currently isn't able to generate BTF for static functions in kernel
+modules, so make sure traced function is global.
+
+Acked-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/btf.h            |  1 +
- include/uapi/linux/bpf.h       |  7 ++-
- kernel/bpf/btf.c               |  5 +++
- kernel/bpf/syscall.c           | 82 +++++++++++++++++++++-------------
- tools/include/uapi/linux/bpf.h |  7 ++-
- 5 files changed, 69 insertions(+), 33 deletions(-)
+ tools/testing/selftests/bpf/.gitignore        |  1 +
+ tools/testing/selftests/bpf/Makefile          | 12 +++-
+ .../selftests/bpf/bpf_testmod/.gitignore      |  6 ++
+ .../selftests/bpf/bpf_testmod/Makefile        | 20 +++++++
+ .../bpf/bpf_testmod/bpf_testmod-events.h      | 36 +++++++++++
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 52 ++++++++++++++++
+ .../selftests/bpf/bpf_testmod/bpf_testmod.h   | 14 +++++
+ tools/testing/selftests/bpf/test_progs.c      | 59 +++++++++++++++++++
+ tools/testing/selftests/bpf/test_progs.h      |  1 +
+ 9 files changed, 198 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/bpf_testmod/.gitignore
+ create mode 100644 tools/testing/selftests/bpf/bpf_testmod/Makefile
+ create mode 100644 tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h
+ create mode 100644 tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+ create mode 100644 tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index fb608e4de076..4c200f5d242b 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -90,6 +90,7 @@ int btf_type_snprintf_show(const struct btf *btf, u32 type_id, void *obj,
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index 395ae040ce1f..752d8edddc66 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -35,3 +35,4 @@ test_cpp
+ /tools
+ /runqslower
+ /bench
++*.ko
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 371b022d932c..ac25ba5d0d6c 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -80,7 +80,7 @@ TEST_PROGS_EXTENDED := with_addr.sh \
+ # Compile but not part of 'make run_tests'
+ TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
+ 	flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
+-	test_lirc_mode2_user xdping test_cpp runqslower bench
++	test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko
  
- int btf_get_fd_by_id(u32 id);
- u32 btf_obj_id(const struct btf *btf);
-+bool btf_is_kernel(const struct btf *btf);
- bool btf_member_is_reg_int(const struct btf *btf, const struct btf_type *s,
- 			   const struct btf_member *m,
- 			   u32 expected_offset, u32 expected_size);
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index c3458ec1f30a..1233f14f659f 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -557,7 +557,12 @@ union bpf_attr {
- 		__aligned_u64	line_info;	/* line info */
- 		__u32		line_info_cnt;	/* number of bpf_line_info records */
- 		__u32		attach_btf_id;	/* in-kernel BTF type id to attach to */
--		__u32		attach_prog_fd; /* 0 to attach to vmlinux */
-+		union {
-+			/* valid prog_fd to attach to bpf prog */
-+			__u32		attach_prog_fd;
-+			/* or valid module BTF object fd or 0 to attach to vmlinux */
-+			__u32		attach_btf_obj_fd;
-+		};
- 	};
+ TEST_CUSTOM_PROGS = urandom_read
  
- 	struct { /* anonymous struct used by BPF_OBJ_* commands */
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 7a19bf5bfe97..8d6bdb4f4d61 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -5738,6 +5738,11 @@ u32 btf_obj_id(const struct btf *btf)
- 	return btf->id;
- }
+@@ -104,6 +104,7 @@ OVERRIDE_TARGETS := 1
+ override define CLEAN
+ 	$(call msg,CLEAN)
+ 	$(Q)$(RM) -r $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) $(EXTRA_CLEAN)
++	$(Q)$(MAKE) -C bpf_testmod clean
+ endef
  
-+bool btf_is_kernel(const struct btf *btf)
+ include ../lib.mk
+@@ -136,6 +137,11 @@ $(OUTPUT)/urandom_read: urandom_read.c
+ 	$(call msg,BINARY,,$@)
+ 	$(Q)$(CC) $(LDFLAGS) -o $@ $< $(LDLIBS) -Wl,--build-id=sha1
+ 
++$(OUTPUT)/bpf_testmod.ko: $(VMLINUX_BTF) $(wildcard bpf_testmod/Makefile bpf_testmod/*.[ch])
++	$(call msg,MOD,,$@)
++	$(Q)$(MAKE) $(submake_extras) -C bpf_testmod
++	$(Q)cp bpf_testmod/bpf_testmod.ko $@
++
+ $(OUTPUT)/test_stub.o: test_stub.c $(BPFOBJ)
+ 	$(call msg,CC,,$@)
+ 	$(Q)$(CC) -c $(CFLAGS) -o $@ $<
+@@ -388,7 +394,7 @@ TRUNNER_BPF_PROGS_DIR := progs
+ TRUNNER_EXTRA_SOURCES := test_progs.c cgroup_helpers.c trace_helpers.c	\
+ 			 network_helpers.c testing_helpers.c		\
+ 			 btf_helpers.c	flow_dissector_load.h
+-TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read				\
++TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko	\
+ 		       ima_setup.sh					\
+ 		       $(wildcard progs/btf_dump_test_case_*.c)
+ TRUNNER_BPF_BUILD_RULE := CLANG_BPF_BUILD_RULE
+@@ -460,4 +466,4 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o $(OUTPUT)/testing_helpers.o \
+ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR)			\
+ 	prog_tests/tests.h map_tests/tests.h verifier/tests.h		\
+ 	feature								\
+-	$(addprefix $(OUTPUT)/,*.o *.skel.h no_alu32 bpf_gcc)
++	$(addprefix $(OUTPUT)/,*.o *.skel.h no_alu32 bpf_gcc bpf_testmod.ko)
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/.gitignore b/tools/testing/selftests/bpf/bpf_testmod/.gitignore
+new file mode 100644
+index 000000000000..ded513777281
+--- /dev/null
++++ b/tools/testing/selftests/bpf/bpf_testmod/.gitignore
+@@ -0,0 +1,6 @@
++*.mod
++*.mod.c
++*.o
++.ko
++/Module.symvers
++/modules.order
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/Makefile b/tools/testing/selftests/bpf/bpf_testmod/Makefile
+new file mode 100644
+index 000000000000..15cb36c4483a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/bpf_testmod/Makefile
+@@ -0,0 +1,20 @@
++BPF_TESTMOD_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
++KDIR ?= $(abspath $(BPF_TESTMOD_DIR)/../../../../..)
++
++ifeq ($(V),1)
++Q =
++else
++Q = @
++endif
++
++MODULES = bpf_testmod.ko
++
++obj-m += bpf_testmod.o
++CFLAGS_bpf_testmod.o = -I$(src)
++
++all:
++	+$(Q)make -C $(KDIR) M=$(BPF_TESTMOD_DIR) modules
++
++clean:
++	+$(Q)make -C $(KDIR) M=$(BPF_TESTMOD_DIR) clean
++
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h
+new file mode 100644
+index 000000000000..b83ea448bc79
+--- /dev/null
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h
+@@ -0,0 +1,36 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2020 Facebook */
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM bpf_testmod
++
++#if !defined(_BPF_TESTMOD_EVENTS_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _BPF_TESTMOD_EVENTS_H
++
++#include <linux/tracepoint.h>
++#include "bpf_testmod.h"
++
++TRACE_EVENT(bpf_testmod_test_read,
++	TP_PROTO(struct task_struct *task, struct bpf_testmod_test_read_ctx *ctx),
++	TP_ARGS(task, ctx),
++	TP_STRUCT__entry(
++		__field(pid_t, pid)
++		__array(char, comm, TASK_COMM_LEN)
++		__field(loff_t, off)
++		__field(size_t, len)
++	),
++	TP_fast_assign(
++		__entry->pid = task->pid;
++		memcpy(__entry->comm, task->comm, TASK_COMM_LEN);
++		__entry->off = ctx->off;
++		__entry->len = ctx->len;
++	),
++	TP_printk("pid=%d comm=%s off=%llu len=%zu",
++		  __entry->pid, __entry->comm, __entry->off, __entry->len)
++);
++
++#endif /* _BPF_TESTMOD_EVENTS_H */
++
++#undef TRACE_INCLUDE_PATH
++#define TRACE_INCLUDE_PATH .
++#define TRACE_INCLUDE_FILE bpf_testmod-events
++#include <trace/define_trace.h>
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+new file mode 100644
+index 000000000000..2df19d73ca49
+--- /dev/null
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+@@ -0,0 +1,52 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++#include <linux/error-injection.h>
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/sysfs.h>
++#include <linux/tracepoint.h>
++#include "bpf_testmod.h"
++
++#define CREATE_TRACE_POINTS
++#include "bpf_testmod-events.h"
++
++noinline ssize_t
++bpf_testmod_test_read(struct file *file, struct kobject *kobj,
++		      struct bin_attribute *bin_attr,
++		      char *buf, loff_t off, size_t len)
 +{
-+	return btf->kernel_btf;
++	struct bpf_testmod_test_read_ctx ctx = {
++		.buf = buf,
++		.off = off,
++		.len = len,
++	};
++
++	trace_bpf_testmod_test_read(current, &ctx);
++
++	return -EIO; /* always fail */
++}
++EXPORT_SYMBOL(bpf_testmod_test_read);
++ALLOW_ERROR_INJECTION(bpf_testmod_test_read, ERRNO);
++
++static struct bin_attribute bin_attr_bpf_testmod_file __ro_after_init = {
++	.attr = { .name = "bpf_testmod", .mode = 0444, },
++	.read = bpf_testmod_test_read,
++};
++
++static int bpf_testmod_init(void)
++{
++	return sysfs_create_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
 +}
 +
- static int btf_id_cmp_func(const void *a, const void *b)
- {
- 	const int *pa = a, *pb = b;
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 184204169949..0cd3cc2af9c1 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1926,12 +1926,16 @@ static void bpf_prog_load_fixup_attach_type(union bpf_attr *attr)
- static int
- bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
- 			   enum bpf_attach_type expected_attach_type,
--			   u32 btf_id, u32 prog_fd)
-+			   struct btf *attach_btf, u32 btf_id,
-+			   struct bpf_prog *dst_prog)
- {
- 	if (btf_id) {
- 		if (btf_id > BTF_MAX_TYPE)
- 			return -EINVAL;
- 
-+		if (!attach_btf && !dst_prog)
-+			return -EINVAL;
++static void bpf_testmod_exit(void)
++{
++	return sysfs_remove_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
++}
 +
- 		switch (prog_type) {
- 		case BPF_PROG_TYPE_TRACING:
- 		case BPF_PROG_TYPE_LSM:
-@@ -1943,7 +1947,10 @@ bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
- 		}
- 	}
- 
--	if (prog_fd && prog_type != BPF_PROG_TYPE_TRACING &&
-+	if (attach_btf && (!btf_id || dst_prog))
-+		return -EINVAL;
++module_init(bpf_testmod_init);
++module_exit(bpf_testmod_exit);
 +
-+	if (dst_prog && prog_type != BPF_PROG_TYPE_TRACING &&
- 	    prog_type != BPF_PROG_TYPE_EXT)
- 		return -EINVAL;
++MODULE_AUTHOR("Andrii Nakryiko");
++MODULE_DESCRIPTION("BPF selftests module");
++MODULE_LICENSE("Dual BSD/GPL");
++
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
+new file mode 100644
+index 000000000000..b81adfedb4f6
+--- /dev/null
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
+@@ -0,0 +1,14 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2020 Facebook */
++#ifndef _BPF_TESTMOD_H
++#define _BPF_TESTMOD_H
++
++#include <linux/types.h>
++
++struct bpf_testmod_test_read_ctx {
++	char *buf;
++	loff_t off;
++	size_t len;
++};
++
++#endif /* _BPF_TESTMOD_H */
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 22943b58d752..17587754b7a7 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -360,6 +360,58 @@ int extract_build_id(char *build_id, size_t size)
+ 	return -1;
+ }
  
-@@ -2060,7 +2067,8 @@ static bool is_perfmon_prog_type(enum bpf_prog_type prog_type)
- static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- {
- 	enum bpf_prog_type type = attr->prog_type;
--	struct bpf_prog *prog;
-+	struct bpf_prog *prog, *dst_prog = NULL;
-+	struct btf *attach_btf = NULL;
- 	int err;
- 	char license[128];
- 	bool is_gpl;
-@@ -2102,44 +2110,56 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
- 	if (is_perfmon_prog_type(type) && !perfmon_capable())
- 		return -EPERM;
- 
-+	/* attach_prog_fd/attach_btf_obj_fd can specify fd of either bpf_prog
-+	 * or btf, we need to check which one it is
-+	 */
-+	if (attr->attach_prog_fd) {
-+		dst_prog = bpf_prog_get(attr->attach_prog_fd);
-+		if (IS_ERR(dst_prog)) {
-+			dst_prog = NULL;
-+			attach_btf = btf_get_by_fd(attr->attach_btf_obj_fd);
-+			if (IS_ERR(attach_btf))
-+				return -EINVAL;
-+			if (!btf_is_kernel(attach_btf)) {
-+				btf_put(attach_btf);
-+				return -EINVAL;
-+			}
++static int finit_module(int fd, const char *param_values, int flags)
++{
++	return syscall(__NR_finit_module, fd, param_values, flags);
++}
++
++static int delete_module(const char *name, int flags)
++{
++	return syscall(__NR_delete_module, name, flags);
++}
++
++static void unload_bpf_testmod(void)
++{
++	if (delete_module("bpf_testmod", 0)) {
++		if (errno == ENOENT) {
++			if (env.verbosity > VERBOSE_NONE)
++				fprintf(stdout, "bpf_testmod.ko is already unloaded.\n");
++			return;
 +		}
-+	} else if (attr->attach_btf_id) {
-+		/* fall back to vmlinux BTF, if BTF type ID is specified */
-+		attach_btf = bpf_get_btf_vmlinux();
-+		if (IS_ERR(attach_btf))
-+			return PTR_ERR(attach_btf);
-+		if (!attach_btf)
-+			return -EINVAL;
-+		btf_get(attach_btf);
++		fprintf(env.stderr, "Failed to unload bpf_testmod.ko from kernel: %d\n", -errno);
++		exit(1);
 +	}
++	if (env.verbosity > VERBOSE_NONE)
++		fprintf(stdout, "Successfully unloaded bpf_testmod.ko.\n");
++}
 +
- 	bpf_prog_load_fixup_attach_type(attr);
- 	if (bpf_prog_load_check_attach(type, attr->expected_attach_type,
--				       attr->attach_btf_id,
--				       attr->attach_prog_fd))
-+				       attach_btf, attr->attach_btf_id,
-+				       dst_prog)) {
-+		if (dst_prog)
-+			bpf_prog_put(dst_prog);
-+		if (attach_btf)
-+			btf_put(attach_btf);
- 		return -EINVAL;
++static int load_bpf_testmod(void)
++{
++	int fd;
++
++	/* ensure previous instance of the module is unloaded */
++	unload_bpf_testmod();
++
++	if (env.verbosity > VERBOSE_NONE)
++		fprintf(stdout, "Loading bpf_testmod.ko...\n");
++
++	fd = open("bpf_testmod.ko", O_RDONLY);
++	if (fd < 0) {
++		fprintf(env.stderr, "Can't find bpf_testmod.ko kernel module: %d\n", -errno);
++		return -ENOENT;
 +	}
- 
- 	/* plain bpf_prog allocation */
- 	prog = bpf_prog_alloc(bpf_prog_size(attr->insn_cnt), GFP_USER);
--	if (!prog)
-+	if (!prog) {
-+		if (dst_prog)
-+			bpf_prog_put(dst_prog);
-+		if (attach_btf)
-+			btf_put(attach_btf);
- 		return -ENOMEM;
++	if (finit_module(fd, "", 0)) {
++		fprintf(env.stderr, "Failed to load bpf_testmod.ko into the kernel: %d\n", -errno);
++		close(fd);
++		return -EINVAL;
 +	}
++	close(fd);
++
++	if (env.verbosity > VERBOSE_NONE)
++		fprintf(stdout, "Successfully loaded bpf_testmod.ko.\n");
++	return 0;
++}
++
+ /* extern declarations for test funcs */
+ #define DEFINE_TEST(name) extern void test_##name(void);
+ #include <prog_tests/tests.h>
+@@ -678,6 +730,11 @@ int main(int argc, char **argv)
  
- 	prog->expected_attach_type = attr->expected_attach_type;
-+	prog->aux->attach_btf = attach_btf;
- 	prog->aux->attach_btf_id = attr->attach_btf_id;
--
--	if (attr->attach_btf_id && !attr->attach_prog_fd) {
--		struct btf *btf;
--
--		btf = bpf_get_btf_vmlinux();
--		if (IS_ERR(btf))
--			return PTR_ERR(btf);
--		if (!btf)
--			return -EINVAL;
--
--		btf_get(btf);
--		prog->aux->attach_btf = btf;
--	}
--
--	if (attr->attach_prog_fd) {
--		struct bpf_prog *dst_prog;
--
--		dst_prog = bpf_prog_get(attr->attach_prog_fd);
--		if (IS_ERR(dst_prog)) {
--			err = PTR_ERR(dst_prog);
--			goto free_prog;
--		}
--		prog->aux->dst_prog = dst_prog;
--	}
--
-+	prog->aux->dst_prog = dst_prog;
- 	prog->aux->offload_requested = !!attr->prog_ifindex;
- 	prog->aux->sleepable = attr->prog_flags & BPF_F_SLEEPABLE;
+ 	save_netns();
+ 	stdio_hijack();
++	env.has_testmod = true;
++	if (load_bpf_testmod()) {
++		fprintf(env.stderr, "WARNING! Selftests relying on bpf_testmod.ko will be skipped.\n");
++		env.has_testmod = false;
++	}
+ 	for (i = 0; i < prog_test_cnt; i++) {
+ 		struct prog_test_def *test = &prog_test_defs[i];
  
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index c3458ec1f30a..1233f14f659f 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -557,7 +557,12 @@ union bpf_attr {
- 		__aligned_u64	line_info;	/* line info */
- 		__u32		line_info_cnt;	/* number of bpf_line_info records */
- 		__u32		attach_btf_id;	/* in-kernel BTF type id to attach to */
--		__u32		attach_prog_fd; /* 0 to attach to vmlinux */
-+		union {
-+			/* valid prog_fd to attach to bpf prog */
-+			__u32		attach_prog_fd;
-+			/* or valid module BTF object fd or 0 to attach to vmlinux */
-+			__u32		attach_btf_obj_fd;
-+		};
- 	};
+@@ -722,6 +779,8 @@ int main(int argc, char **argv)
+ 		if (test->need_cgroup_cleanup)
+ 			cleanup_cgroup_environment();
+ 	}
++	if (env.has_testmod)
++		unload_bpf_testmod();
+ 	stdio_restore();
  
- 	struct { /* anonymous struct used by BPF_OBJ_* commands */
+ 	if (env.get_test_cnt) {
+diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
+index d6b14853f3bc..115953243f62 100644
+--- a/tools/testing/selftests/bpf/test_progs.h
++++ b/tools/testing/selftests/bpf/test_progs.h
+@@ -66,6 +66,7 @@ struct test_env {
+ 	enum verbosity verbosity;
+ 
+ 	bool jit_enabled;
++	bool has_testmod;
+ 	bool get_test_cnt;
+ 	bool list_test_names;
+ 
 -- 
 2.24.1
 
