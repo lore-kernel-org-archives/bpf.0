@@ -2,120 +2,111 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F0A5EC193FE
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 19:15:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7014DC4361A
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 19:18:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A3B63221EA
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 19:15:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 02E91207A1
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 19:18:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728354AbgLCTPX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Dec 2020 14:15:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
+        id S1729488AbgLCTS1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Dec 2020 14:18:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726829AbgLCTPW (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Dec 2020 14:15:22 -0500
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75681C061A51
-        for <bpf@vger.kernel.org>; Thu,  3 Dec 2020 11:14:42 -0800 (PST)
-Received: by mail-wm1-x343.google.com with SMTP id w206so3272250wma.0
-        for <bpf@vger.kernel.org>; Thu, 03 Dec 2020 11:14:42 -0800 (PST)
+        with ESMTP id S1725793AbgLCTS1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Dec 2020 14:18:27 -0500
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF6FC061A51
+        for <bpf@vger.kernel.org>; Thu,  3 Dec 2020 11:17:46 -0800 (PST)
+Received: by mail-lj1-x244.google.com with SMTP id r18so3823762ljc.2
+        for <bpf@vger.kernel.org>; Thu, 03 Dec 2020 11:17:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=v1b2sG2SIN3nDPtUc25i64mqNZeXcPSGhHhM6es0j9s=;
-        b=OLhcLPPXuwLc+Di3BkYVe5yTBmotq1VupwQ3hc2wQBMSKJ6kjTgOEnKuOcdzjF67IQ
-         MaBaXpBdWm+kctZO2eDSzC6I+d1FKm/B5KSV9UHSvBvKWa3nsHWns/+N2J2BzzJKu69O
-         RAUZd5j12JO7Rio7u2r8pymAZwOhH0pUOHxBM=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WMHwuy1Lb5y4C5DqRhRZgvIin0to9kcGFamkvkxXTQc=;
+        b=KAHRFfBWb1gQ10QzmUa4rEzNLJZCXNNYYM8l3nMBk57HaJJEfwiKJS/yesBY0spHSG
+         hSXYeS3Q+8rn0NAkVJXujH+H4Aivvx1ibPWof6wYkx9xfEZYtM91lzaa4kcChEm0xeo8
+         J8nneCrZP2n2DF6A3v1DdinTqq4llxTRtdQDM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=v1b2sG2SIN3nDPtUc25i64mqNZeXcPSGhHhM6es0j9s=;
-        b=VqgXZNG6snBAlIxfzrDNnyhF4uXCVk9JeRoQXTr6x7TW99D9wRjwuzmkH/asSdDdVK
-         eJIMjP6Eg1bI87DYH2HXUNHNCIGrQv5ix/fcgPGYaXx1EcDlKJYhejmzY+m/yOPhKKVR
-         AOq3hBnR5gO/6uBGJ8k7dS70UbuPEMweoGH4c0LMaMA2pvElpr4i1TyHKhegY1ruB2zC
-         2nl0ERm5j6oeqgxRzw58zEGN8mLwclhsEuf5xZkUzUR6WAp6ltuE5d/grMPTJBYY6uGh
-         xiDQY5FcoYlFTKAjvQkzvvaUYZPJ6hgedUL41T8hiM3yz6RS/1ix+LXpYzQ3RC7foPef
-         /Opg==
-X-Gm-Message-State: AOAM530k1JOuuh9nKuzMy50cLl7czG1bua++MK9UKUS0FQOqDbmo6wCi
-        0ON13V5yf+JFLF671AhImIMDbwdZFBpRkBv8
-X-Google-Smtp-Source: ABdhPJyg5QW5KX7IxNx0LzZJNMkY1Ki6yPOZ0nRKMsGStDuDfKam6HdLQQobakL+HqRqTzFlSPIXgQ==
-X-Received: by 2002:a1c:4d13:: with SMTP id o19mr346325wmh.58.1607022880932;
-        Thu, 03 Dec 2020 11:14:40 -0800 (PST)
-Received: from kpsingh.c.googlers.com.com (203.75.199.104.bc.googleusercontent.com. [104.199.75.203])
-        by smtp.gmail.com with ESMTPSA id q17sm516480wro.36.2020.12.03.11.14.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Dec 2020 11:14:40 -0800 (PST)
-From:   KP Singh <kpsingh@chromium.org>
-To:     bpf@vger.kernel.org
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH bpf-next v4 2/4] selftests/bpf: Ensure securityfs mount before writing ima policy
-Date:   Thu,  3 Dec 2020 19:14:35 +0000
-Message-Id: <20201203191437.666737-3-kpsingh@chromium.org>
-X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
-In-Reply-To: <20201203191437.666737-1-kpsingh@chromium.org>
-References: <20201203191437.666737-1-kpsingh@chromium.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WMHwuy1Lb5y4C5DqRhRZgvIin0to9kcGFamkvkxXTQc=;
+        b=HHefC84rYEPT8dd7rToULZTAfSlD1HitOhtZCUd7nsD7sI170m1wMHDdsoWRO3RRQi
+         h6n3gBO6sYm39BaN/R2bf2uzqjTapJi11zEMwgrTE3olfJ7gZtOm/tXvLW6ssLsyKAe2
+         rxgzQV458O+x5r2rbnxjQ/CxuNZZrGTtJDK2nU0nroYlNevbFIQR0SSvSKzEq3y+D0eu
+         e3HOQMaCYmGwLZVSTrEqe5X4OpCNPoKZ4QhkxJJZJu88uKM091w0N/iWiudrqADSGoqr
+         LYgVYtCkPCE/2adiipPT2Qj19GRvbr1HktJEK7/zoWBj3BTzfo9wWOAPde5yQ3UeE1v9
+         jgmA==
+X-Gm-Message-State: AOAM530ThLZHT0vWY4oyhgq1oDujnzh8g1wiMNwEnAxad3/uotf8KAuB
+        1S2E51OS/96EgbGDC0pBYNkCQSgL8Be9EY8g5AxVLw==
+X-Google-Smtp-Source: ABdhPJyz/gC0XZfWpPAGFVzOnsadOcUWrt//sUZC/7ZXN+k769DJXwSHXd2ppBq4Q8Wazme1YkmUU6z8tzfk6328djQ=
+X-Received: by 2002:a2e:97ce:: with SMTP id m14mr1808414ljj.49.1607023065205;
+ Thu, 03 Dec 2020 11:17:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20201203005807.486320-1-kpsingh@chromium.org> <20201203005807.486320-5-kpsingh@chromium.org>
+ <CAEf4BzZSw-338WCzhbWyJGOVnkBvOsLqoqa1yTA88aNe8JdJtA@mail.gmail.com>
+ <CACYkzJ6p9ev0dKGUTpcgmjs5cU=9VRvOMqhKYgFLOaAtSa5pXw@mail.gmail.com> <CAADnVQLR=PzGCU4-GLLgY7R5DT6xyOgf3z0QKU+bDVFW2zWChg@mail.gmail.com>
+In-Reply-To: <CAADnVQLR=PzGCU4-GLLgY7R5DT6xyOgf3z0QKU+bDVFW2zWChg@mail.gmail.com>
+From:   KP Singh <kpsingh@chromium.org>
+Date:   Thu, 3 Dec 2020 20:17:34 +0100
+Message-ID: <CACYkzJ7giwtZ=2iHTifvJAZE7K3FyNRuqrObG9X4SzVKsX+K7g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 4/4] selftests/bpf: Indent ima_setup.sh with tabs.
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: KP Singh <kpsingh@google.com>
+On Thu, Dec 3, 2020 at 8:10 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Thu, Dec 3, 2020 at 3:02 AM KP Singh <kpsingh@chromium.org> wrote:
+> >
+> > On Thu, Dec 3, 2020 at 6:46 AM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > On Wed, Dec 2, 2020 at 4:58 PM KP Singh <kpsingh@chromium.org> wrote:
+> > > >
+> > > > From: KP Singh <kpsingh@google.com>
+> > > >
+> > >
+> > > Commit message is missing completely.
+> >
+> > I thought the subject is enough in this case to explain that we are
+> > re-indenting the file.
+>
+> If there is nothing to add just copy paste the subject into commit log.
+>
+> > I can explain that this was missed because checkpatch.pl did not
+> > complain about shell
+> > scripts and that we would like to be consistent with the other shells scripts.
+>
+> checkpatch is a guidance. It's not a must have requirement.
+> It works both ways. Sometimes we ignore checkpatch complaints.
+> Sometimes we ask for things that checkpatch doesn't know about.
 
-SecurityFS may not be mounted even if it is enabled in the kernel
-config. So, check if the mount exists in /proc/mounts by parsing the
-file and, if not, mount it on /sys/kernel/security.
+Agreed, I, personally, just missed it because my editor did a weird thing
+and I was relying too much on checkpatch.
 
-Fixes: 34b82d3ac105 ("bpf: Add a selftest for bpf_ima_inode_hash")
-Reported-by: Andrii Nakryiko <andrii@kernel.org>
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: KP Singh <kpsingh@google.com>
----
- tools/testing/selftests/bpf/ima_setup.sh | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+>
+> Please respin at your earliest convenience. CI is suffering at the moment.
+> It needs to be unbroken soon.
 
-diff --git a/tools/testing/selftests/bpf/ima_setup.sh b/tools/testing/selftests/bpf/ima_setup.sh
-index 137f2d32598f..b1ee4bf06996 100755
---- a/tools/testing/selftests/bpf/ima_setup.sh
-+++ b/tools/testing/selftests/bpf/ima_setup.sh
-@@ -14,6 +14,20 @@ usage()
-         exit 1
- }
- 
-+ensure_mount_securityfs()
-+{
-+        local securityfs_dir=$(grep "securityfs" /proc/mounts | awk '{print $2}')
-+
-+        if [ -z "${securityfs_dir}" ]; then
-+                securityfs_dir=/sys/kernel/security
-+                mount -t securityfs security "${securityfs_dir}"
-+        fi
-+
-+        if [ ! -d "${securityfs_dir}" ]; then
-+                echo "${securityfs_dir}: securityfs is not mounted" && exit 1
-+        fi
-+}
-+
- setup()
- {
-         local tmp_dir="$1"
-@@ -33,6 +47,7 @@ setup()
-         cp "${TEST_BINARY}" "${mount_dir}"
-         local mount_uuid="$(blkid ${loop_device} | sed 's/.*UUID="\([^"]*\)".*/\1/')"
- 
-+        ensure_mount_securityfs
-         echo "measure func=BPRM_CHECK fsuuid=${mount_uuid}" > ${IMA_POLICY_FILE}
- }
- 
--- 
-2.29.2.576.ga3fc446d84-goog
+Done. I was aware of the CI being broken :) thus this shabby work on the cover
+letter and commit message (not really an excuse though).
 
+Also, as mentioned previously, we will script and allow users to run the tests
+in a CI equivalent environment so that it spares us of this pain. That's next
+on my TODO list.
+
+- KP
