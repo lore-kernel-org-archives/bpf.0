@@ -4,40 +4,40 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5801CC63777
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 03:53:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E8D16C71156
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 03:53:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0D3272222F
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 03:53:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 9A5BA221FB
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 03:53:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388002AbgLCDxM convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 2 Dec 2020 22:53:12 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:48542 "EHLO
+        id S2388018AbgLCDxQ convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Wed, 2 Dec 2020 22:53:16 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:41514 "EHLO
         mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388000AbgLCDxM (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 2 Dec 2020 22:53:12 -0500
+        by vger.kernel.org with ESMTP id S2387928AbgLCDxO (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 2 Dec 2020 22:53:14 -0500
 Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B33kb4J015305
-        for <bpf@vger.kernel.org>; Wed, 2 Dec 2020 19:52:30 -0800
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B33k9Aw014652
+        for <bpf@vger.kernel.org>; Wed, 2 Dec 2020 19:52:33 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 355t7ybft6-1
+        by mx0a-00082601.pphosted.com with ESMTP id 355t7ybft9-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 02 Dec 2020 19:52:30 -0800
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::f) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Wed, 02 Dec 2020 19:52:33 -0800
+Received: from intmgw004.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 2 Dec 2020 19:52:29 -0800
+ 15.1.1979.3; Wed, 2 Dec 2020 19:52:32 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id C40702ECA822; Wed,  2 Dec 2020 19:52:23 -0800 (PST)
+        id 30EE12ECA822; Wed,  2 Dec 2020 19:52:28 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v5 bpf-next 08/14] selftests/bpf: add CO-RE relocs selftest relying on kernel module BTF
-Date:   Wed, 2 Dec 2020 19:51:58 -0800
-Message-ID: <20201203035204.1411380-9-andrii@kernel.org>
+Subject: [PATCH v5 bpf-next 10/14] bpf: allow to specify kernel module BTFs when attaching BPF programs
+Date:   Wed, 2 Dec 2020 19:52:00 -0800
+Message-ID: <20201203035204.1411380-11-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201203035204.1411380-1-andrii@kernel.org>
 References: <20201203035204.1411380-1-andrii@kernel.org>
@@ -49,7 +49,7 @@ X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
  definitions=2020-12-03_01:2020-11-30,2020-12-03 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
  adultscore=0 priorityscore=1501 bulkscore=0 mlxlogscore=999 phishscore=0
- mlxscore=0 suspectscore=8 impostorscore=0 spamscore=0 lowpriorityscore=0
+ mlxscore=0 suspectscore=25 impostorscore=0 spamscore=0 lowpriorityscore=0
  clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2012030020
 X-FB-Internal: deliver
@@ -57,281 +57,214 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add a self-tests validating libbpf is able to perform CO-RE relocations
-against the type defined in kernel module BTF. if bpf_testmod.o is not
-supported by the kernel (e.g., due to version mismatch), skip tests, instead
-of failing.
+Add ability for user-space programs to specify non-vmlinux BTF when attaching
+BTF-powered BPF programs: raw_tp, fentry/fexit/fmod_ret, LSM, etc. For this,
+attach_prog_fd (now with the alias name attach_btf_obj_fd) should specify FD
+of a module or vmlinux BTF object. For backwards compatibility reasons,
+0 denotes vmlinux BTF. Only kernel BTF (vmlinux or module) can be specified.
 
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../selftests/bpf/prog_tests/core_reloc.c     | 79 ++++++++++++++++---
- .../selftests/bpf/progs/core_reloc_types.h    | 17 ++++
- .../bpf/progs/test_core_reloc_module.c        | 66 ++++++++++++++++
- 3 files changed, 151 insertions(+), 11 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_core_reloc_module.c
+ include/linux/btf.h            |  1 +
+ include/uapi/linux/bpf.h       |  7 ++-
+ kernel/bpf/btf.c               |  5 +++
+ kernel/bpf/syscall.c           | 82 +++++++++++++++++++++-------------
+ tools/include/uapi/linux/bpf.h |  7 ++-
+ 5 files changed, 69 insertions(+), 33 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc.c b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-index 30e40ff4b0d8..bb980848cd77 100644
---- a/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/core_reloc.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
- #include "progs/core_reloc_types.h"
-+#include "bpf_testmod/bpf_testmod.h"
- #include <sys/mman.h>
- #include <sys/syscall.h>
- #include <bpf/btf.h>
-@@ -9,6 +10,30 @@ static int duration = 0;
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index fb608e4de076..4c200f5d242b 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -90,6 +90,7 @@ int btf_type_snprintf_show(const struct btf *btf, u32 type_id, void *obj,
  
- #define STRUCT_TO_CHAR_PTR(struct_name) (const char *)&(struct struct_name)
+ int btf_get_fd_by_id(u32 id);
+ u32 btf_obj_id(const struct btf *btf);
++bool btf_is_kernel(const struct btf *btf);
+ bool btf_member_is_reg_int(const struct btf *btf, const struct btf_type *s,
+ 			   const struct btf_member *m,
+ 			   u32 expected_offset, u32 expected_size);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index c3458ec1f30a..1233f14f659f 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -557,7 +557,12 @@ union bpf_attr {
+ 		__aligned_u64	line_info;	/* line info */
+ 		__u32		line_info_cnt;	/* number of bpf_line_info records */
+ 		__u32		attach_btf_id;	/* in-kernel BTF type id to attach to */
+-		__u32		attach_prog_fd; /* 0 to attach to vmlinux */
++		union {
++			/* valid prog_fd to attach to bpf prog */
++			__u32		attach_prog_fd;
++			/* or valid module BTF object fd or 0 to attach to vmlinux */
++			__u32		attach_btf_obj_fd;
++		};
+ 	};
  
-+#define MODULES_CASE(name, sec_name, tp_name) {				\
-+	.case_name = name,						\
-+	.bpf_obj_file = "test_core_reloc_module.o",			\
-+	.btf_src_file = NULL, /* find in kernel module BTFs */		\
-+	.input = "",							\
-+	.input_len = 0,							\
-+	.output = STRUCT_TO_CHAR_PTR(core_reloc_module_output) {	\
-+		.read_ctx_sz = sizeof(struct bpf_testmod_test_read_ctx),\
-+		.read_ctx_exists = true,				\
-+		.buf_exists = true,					\
-+		.len_exists = true,					\
-+		.off_exists = true,					\
-+		.len = 123,						\
-+		.off = 0,						\
-+		.comm = "test_progs",					\
-+		.comm_len = sizeof("test_progs"),			\
-+	},								\
-+	.output_len = sizeof(struct core_reloc_module_output),		\
-+	.prog_sec_name = sec_name,					\
-+	.raw_tp_name = tp_name,						\
-+	.trigger = trigger_module_test_read,				\
-+	.needs_testmod = true,						\
-+}
-+
- #define FLAVORS_DATA(struct_name) STRUCT_TO_CHAR_PTR(struct_name) {	\
- 	.a = 42,							\
- 	.b = 0xc001,							\
-@@ -211,7 +236,7 @@ static int duration = 0;
- 	.output = STRUCT_TO_CHAR_PTR(core_reloc_bitfields_output)	\
- 		__VA_ARGS__,						\
- 	.output_len = sizeof(struct core_reloc_bitfields_output),	\
--	.direct_raw_tp = true,						\
-+	.prog_sec_name = "tp_btf/sys_enter",				\
+ 	struct { /* anonymous struct used by BPF_OBJ_* commands */
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 7a19bf5bfe97..8d6bdb4f4d61 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -5738,6 +5738,11 @@ u32 btf_obj_id(const struct btf *btf)
+ 	return btf->id;
  }
  
- 
-@@ -222,7 +247,7 @@ static int duration = 0;
- }, {									\
- 	BITFIELDS_CASE_COMMON("test_core_reloc_bitfields_direct.o",	\
- 			      "direct:", name),				\
--	.direct_raw_tp = true,						\
-+	.prog_sec_name = "tp_btf/sys_enter",				\
- 	.fails = true,							\
- }
- 
-@@ -309,6 +334,7 @@ static int duration = 0;
- struct core_reloc_test_case;
- 
- typedef int (*setup_test_fn)(struct core_reloc_test_case *test);
-+typedef int (*trigger_test_fn)(const struct core_reloc_test_case *test);
- 
- struct core_reloc_test_case {
- 	const char *case_name;
-@@ -319,9 +345,12 @@ struct core_reloc_test_case {
- 	const char *output;
- 	int output_len;
- 	bool fails;
-+	bool needs_testmod;
- 	bool relaxed_core_relocs;
--	bool direct_raw_tp;
-+	const char *prog_sec_name;
-+	const char *raw_tp_name;
- 	setup_test_fn setup;
-+	trigger_test_fn trigger;
- };
- 
- static int find_btf_type(const struct btf *btf, const char *name, __u32 kind)
-@@ -451,6 +480,23 @@ static int setup_type_id_case_failure(struct core_reloc_test_case *test)
- 	return 0;
- }
- 
-+static int trigger_module_test_read(const struct core_reloc_test_case *test)
++bool btf_is_kernel(const struct btf *btf)
 +{
-+	struct core_reloc_module_output *exp = (void *)test->output;
-+	int fd, err;
-+
-+	fd = open("/sys/kernel/bpf_testmod", O_RDONLY);
-+	err = -errno;
-+	if (CHECK(fd < 0, "testmod_file_open", "failed: %d\n", err))
-+		return err;
-+
-+	read(fd, NULL, exp->len); /* request expected number of bytes */
-+	close(fd);
-+
-+	return 0;
++	return btf->kernel_btf;
 +}
 +
-+
- static struct core_reloc_test_case test_cases[] = {
- 	/* validate we can find kernel image and use its BTF for relocs */
- 	{
-@@ -467,6 +513,9 @@ static struct core_reloc_test_case test_cases[] = {
- 		.output_len = sizeof(struct core_reloc_kernel_output),
- 	},
+ static int btf_id_cmp_func(const void *a, const void *b)
+ {
+ 	const int *pa = a, *pb = b;
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 4fd7d9269008..1b5a053f4343 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1924,12 +1924,16 @@ static void bpf_prog_load_fixup_attach_type(union bpf_attr *attr)
+ static int
+ bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
+ 			   enum bpf_attach_type expected_attach_type,
+-			   u32 btf_id, u32 prog_fd)
++			   struct btf *attach_btf, u32 btf_id,
++			   struct bpf_prog *dst_prog)
+ {
+ 	if (btf_id) {
+ 		if (btf_id > BTF_MAX_TYPE)
+ 			return -EINVAL;
  
-+	/* validate we can find kernel module BTF types for relocs/attach */
-+	MODULES_CASE("module", "raw_tp/bpf_testmod_test_read", "bpf_testmod_test_read"),
++		if (!attach_btf && !dst_prog)
++			return -EINVAL;
 +
- 	/* validate BPF program can use multiple flavors to match against
- 	 * single target BTF type
- 	 */
-@@ -779,6 +828,11 @@ void test_core_reloc(void)
- 		if (!test__start_subtest(test_case->case_name))
- 			continue;
- 
-+		if (test_case->needs_testmod && !env.has_testmod) {
-+			test__skip();
-+			continue;
-+		}
-+
- 		if (test_case->setup) {
- 			err = test_case->setup(test_case);
- 			if (CHECK(err, "test_setup", "test #%d setup failed: %d\n", i, err))
-@@ -790,13 +844,11 @@ void test_core_reloc(void)
- 			  test_case->bpf_obj_file, PTR_ERR(obj)))
- 			continue;
- 
--		/* for typed raw tracepoints, NULL should be specified */
--		if (test_case->direct_raw_tp) {
--			probe_name = "tp_btf/sys_enter";
--			tp_name = NULL;
--		} else {
--			probe_name = "raw_tracepoint/sys_enter";
--			tp_name = "sys_enter";
-+		probe_name = "raw_tracepoint/sys_enter";
-+		tp_name = "sys_enter";
-+		if (test_case->prog_sec_name) {
-+			probe_name = test_case->prog_sec_name;
-+			tp_name = test_case->raw_tp_name; /* NULL for tp_btf */
+ 		switch (prog_type) {
+ 		case BPF_PROG_TYPE_TRACING:
+ 		case BPF_PROG_TYPE_LSM:
+@@ -1941,7 +1945,10 @@ bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
  		}
+ 	}
  
- 		prog = bpf_object__find_program_by_title(obj, probe_name);
-@@ -837,7 +889,12 @@ void test_core_reloc(void)
- 			goto cleanup;
+-	if (prog_fd && prog_type != BPF_PROG_TYPE_TRACING &&
++	if (attach_btf && (!btf_id || dst_prog))
++		return -EINVAL;
++
++	if (dst_prog && prog_type != BPF_PROG_TYPE_TRACING &&
+ 	    prog_type != BPF_PROG_TYPE_EXT)
+ 		return -EINVAL;
  
- 		/* trigger test run */
--		usleep(1);
-+		if (test_case->trigger) {
-+			if (!ASSERT_OK(test_case->trigger(test_case), "test_trigger"))
-+				goto cleanup;
-+		} else {
-+			usleep(1);
+@@ -2058,7 +2065,8 @@ static bool is_perfmon_prog_type(enum bpf_prog_type prog_type)
+ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
+ {
+ 	enum bpf_prog_type type = attr->prog_type;
+-	struct bpf_prog *prog;
++	struct bpf_prog *prog, *dst_prog = NULL;
++	struct btf *attach_btf = NULL;
+ 	int err;
+ 	char license[128];
+ 	bool is_gpl;
+@@ -2100,44 +2108,56 @@ static int bpf_prog_load(union bpf_attr *attr, union bpf_attr __user *uattr)
+ 	if (is_perfmon_prog_type(type) && !perfmon_capable())
+ 		return -EPERM;
+ 
++	/* attach_prog_fd/attach_btf_obj_fd can specify fd of either bpf_prog
++	 * or btf, we need to check which one it is
++	 */
++	if (attr->attach_prog_fd) {
++		dst_prog = bpf_prog_get(attr->attach_prog_fd);
++		if (IS_ERR(dst_prog)) {
++			dst_prog = NULL;
++			attach_btf = btf_get_by_fd(attr->attach_btf_obj_fd);
++			if (IS_ERR(attach_btf))
++				return -EINVAL;
++			if (!btf_is_kernel(attach_btf)) {
++				btf_put(attach_btf);
++				return -EINVAL;
++			}
 +		}
++	} else if (attr->attach_btf_id) {
++		/* fall back to vmlinux BTF, if BTF type ID is specified */
++		attach_btf = bpf_get_btf_vmlinux();
++		if (IS_ERR(attach_btf))
++			return PTR_ERR(attach_btf);
++		if (!attach_btf)
++			return -EINVAL;
++		btf_get(attach_btf);
++	}
++
+ 	bpf_prog_load_fixup_attach_type(attr);
+ 	if (bpf_prog_load_check_attach(type, attr->expected_attach_type,
+-				       attr->attach_btf_id,
+-				       attr->attach_prog_fd))
++				       attach_btf, attr->attach_btf_id,
++				       dst_prog)) {
++		if (dst_prog)
++			bpf_prog_put(dst_prog);
++		if (attach_btf)
++			btf_put(attach_btf);
+ 		return -EINVAL;
++	}
  
- 		if (data->skip) {
- 			test__skip();
-diff --git a/tools/testing/selftests/bpf/progs/core_reloc_types.h b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-index e6e616cb7bc9..9a2850850121 100644
---- a/tools/testing/selftests/bpf/progs/core_reloc_types.h
-+++ b/tools/testing/selftests/bpf/progs/core_reloc_types.h
-@@ -15,6 +15,23 @@ struct core_reloc_kernel_output {
- 	int comm_len;
- };
+ 	/* plain bpf_prog allocation */
+ 	prog = bpf_prog_alloc(bpf_prog_size(attr->insn_cnt), GFP_USER);
+-	if (!prog)
++	if (!prog) {
++		if (dst_prog)
++			bpf_prog_put(dst_prog);
++		if (attach_btf)
++			btf_put(attach_btf);
+ 		return -ENOMEM;
++	}
  
-+/*
-+ * MODULE
-+ */
-+
-+struct core_reloc_module_output {
-+	long long len;
-+	long long off;
-+	int read_ctx_sz;
-+	bool read_ctx_exists;
-+	bool buf_exists;
-+	bool len_exists;
-+	bool off_exists;
-+	/* we have test_progs[-flavor], so cut flavor part */
-+	char comm[sizeof("test_progs")];
-+	int comm_len;
-+};
-+
- /*
-  * FLAVORS
-  */
-diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_module.c b/tools/testing/selftests/bpf/progs/test_core_reloc_module.c
-new file mode 100644
-index 000000000000..d1840c1a9d36
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_module.c
-@@ -0,0 +1,66 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020 Facebook */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_core_read.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct bpf_testmod_test_read_ctx {
-+	/* field order is mixed up */
-+	size_t len;
-+	char *buf;
-+	loff_t off;
-+} __attribute__((preserve_access_index));
-+
-+struct {
-+	char in[256];
-+	char out[256];
-+	bool skip;
-+	uint64_t my_pid_tgid;
-+} data = {};
-+
-+struct core_reloc_module_output {
-+	long long len;
-+	long long off;
-+	int read_ctx_sz;
-+	bool read_ctx_exists;
-+	bool buf_exists;
-+	bool len_exists;
-+	bool off_exists;
-+	/* we have test_progs[-flavor], so cut flavor part */
-+	char comm[sizeof("test_progs")];
-+	int comm_len;
-+};
-+
-+SEC("raw_tp/bpf_testmod_test_read")
-+int BPF_PROG(test_core_module,
-+	     struct task_struct *task,
-+	     struct bpf_testmod_test_read_ctx *read_ctx)
-+{
-+	struct core_reloc_module_output *out = (void *)&data.out;
-+	__u64 pid_tgid = bpf_get_current_pid_tgid();
-+	__u32 real_tgid = (__u32)(pid_tgid >> 32);
-+	__u32 real_pid = (__u32)pid_tgid;
-+
-+	if (data.my_pid_tgid != pid_tgid)
-+		return 0;
-+
-+	if (BPF_CORE_READ(task, pid) != real_pid || BPF_CORE_READ(task, tgid) != real_tgid)
-+		return 0;
-+
-+	out->len = BPF_CORE_READ(read_ctx, len);
-+	out->off = BPF_CORE_READ(read_ctx, off);
-+
-+	out->read_ctx_sz = bpf_core_type_size(struct bpf_testmod_test_read_ctx);
-+	out->read_ctx_exists = bpf_core_type_exists(struct bpf_testmod_test_read_ctx);
-+	out->buf_exists = bpf_core_field_exists(read_ctx->buf);
-+	out->off_exists = bpf_core_field_exists(read_ctx->off);
-+	out->len_exists = bpf_core_field_exists(read_ctx->len);
-+
-+	out->comm_len = BPF_CORE_READ_STR_INTO(&out->comm, task, comm);
-+
-+	return 0;
-+}
+ 	prog->expected_attach_type = attr->expected_attach_type;
++	prog->aux->attach_btf = attach_btf;
+ 	prog->aux->attach_btf_id = attr->attach_btf_id;
+-
+-	if (attr->attach_btf_id && !attr->attach_prog_fd) {
+-		struct btf *btf;
+-
+-		btf = bpf_get_btf_vmlinux();
+-		if (IS_ERR(btf))
+-			return PTR_ERR(btf);
+-		if (!btf)
+-			return -EINVAL;
+-
+-		btf_get(btf);
+-		prog->aux->attach_btf = btf;
+-	}
+-
+-	if (attr->attach_prog_fd) {
+-		struct bpf_prog *dst_prog;
+-
+-		dst_prog = bpf_prog_get(attr->attach_prog_fd);
+-		if (IS_ERR(dst_prog)) {
+-			err = PTR_ERR(dst_prog);
+-			goto free_prog;
+-		}
+-		prog->aux->dst_prog = dst_prog;
+-	}
+-
++	prog->aux->dst_prog = dst_prog;
+ 	prog->aux->offload_requested = !!attr->prog_ifindex;
+ 	prog->aux->sleepable = attr->prog_flags & BPF_F_SLEEPABLE;
+ 
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index c3458ec1f30a..1233f14f659f 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -557,7 +557,12 @@ union bpf_attr {
+ 		__aligned_u64	line_info;	/* line info */
+ 		__u32		line_info_cnt;	/* number of bpf_line_info records */
+ 		__u32		attach_btf_id;	/* in-kernel BTF type id to attach to */
+-		__u32		attach_prog_fd; /* 0 to attach to vmlinux */
++		union {
++			/* valid prog_fd to attach to bpf prog */
++			__u32		attach_prog_fd;
++			/* or valid module BTF object fd or 0 to attach to vmlinux */
++			__u32		attach_btf_obj_fd;
++		};
+ 	};
+ 
+ 	struct { /* anonymous struct used by BPF_OBJ_* commands */
 -- 
 2.24.1
 
