@@ -2,173 +2,110 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C4FEAC0018C
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 14:17:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4CC60C433C1
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 14:44:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 888C720793
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 14:17:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 244BD22D58
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 14:44:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726744AbgLCORC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Dec 2020 09:17:02 -0500
-Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:35747 "EHLO
-        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726318AbgLCORC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Dec 2020 09:17:02 -0500
+        id S1730955AbgLCOod (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Dec 2020 09:44:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726956AbgLCOoc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Dec 2020 09:44:32 -0500
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBC8C061A4E
+        for <bpf@vger.kernel.org>; Thu,  3 Dec 2020 06:43:51 -0800 (PST)
+Received: by mail-lj1-x244.google.com with SMTP id r18so2812379ljc.2
+        for <bpf@vger.kernel.org>; Thu, 03 Dec 2020 06:43:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.jp; i=@amazon.co.jp; q=dns/txt;
-  s=amazon201209; t=1607005021; x=1638541021;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=/E2kwRANGrqrnkmNo6wdZi/gTYFoC/4n/2un0PXXDAU=;
-  b=YRSbK/54Km0KvyDLkgCP1KcuWqaXz9ANtY1Ety/0XUldEiiQFjqPR6N2
-   wDkz0GqY6Kd6m+8BHkgKLI9lmVRc5u6gvjOUwMZCIBada6EE4aD/Br1Vk
-   TwYbM+ji1X0/ZVCQ9AebD6qnhuxDKSciNw5mE5OsSILSDxJLs50cj19gd
-   M=;
-X-IronPort-AV: E=Sophos;i="5.78,389,1599523200"; 
-   d="scan'208";a="68903714"
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-1d-38ae4ad2.us-east-1.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-out-6002.iad6.amazon.com with ESMTP; 03 Dec 2020 14:16:20 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-1d-38ae4ad2.us-east-1.amazon.com (Postfix) with ESMTPS id E9A22A22CB;
-        Thu,  3 Dec 2020 14:16:17 +0000 (UTC)
-Received: from EX13D04ANC001.ant.amazon.com (10.43.157.89) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Thu, 3 Dec 2020 14:16:16 +0000
-Received: from 38f9d3582de7.ant.amazon.com (10.43.160.139) by
- EX13D04ANC001.ant.amazon.com (10.43.157.89) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Thu, 3 Dec 2020 14:16:12 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-To:     <kafai@fb.com>
-CC:     <andrii.nakryiko@gmail.com>, <ast@kernel.org>, <benh@amazon.com>,
-        <bpf@vger.kernel.org>, <daniel@iogearbox.net>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <kuni1840@gmail.com>, <kuniyu@amazon.co.jp>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: Re: [PATCH v1 bpf-next 06/11] bpf: Introduce two attach types for BPF_PROG_TYPE_SK_REUSEPORT.
-Date:   Thu, 3 Dec 2020 23:16:08 +0900
-Message-ID: <20201203141608.53206-1-kuniyu@amazon.co.jp>
-X-Mailer: git-send-email 2.17.2 (Apple Git-113)
-In-Reply-To: <20201203042402.6cskdlit5f3mw4ru@kafai-mbp.dhcp.thefacebook.com>
-References: <20201203042402.6cskdlit5f3mw4ru@kafai-mbp.dhcp.thefacebook.com>
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xKonHAzWScU6PiPc/DK529aH5VgAZfj3Pj1T+1htNxI=;
+        b=Vec/zxkKCF/pLDv4KJLo2qXej9uAOcjIE2oZbVGbIcqS3/98akRIQU1HfFcOjSArc4
+         0VrDfss+2Llv6L/tyj0Pk+GmB0nBRTLVYCAlwUztRiRbgW+zXJdoJbDAqQIKKFug8t/B
+         yG8YvfUr4TNwrP+xu/pbtts2KP3Y7+o/Lz+9fPwqcj+SxglzxX42fg+Hm9quL+b1t3hL
+         n7VQFhpw10dA+5EtsAGrENOPIZc18bJBPzrTq4v06xPY5cQZm4j7kkKog872rtta9LEZ
+         HPoh5JllGy5SBW9e8IsLGyTTvH7u6cvnPxexRUOS2ImDXjlGfFA/ppFaX5bA+8OE3KC6
+         bceA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xKonHAzWScU6PiPc/DK529aH5VgAZfj3Pj1T+1htNxI=;
+        b=d54xmbDVXrcGmQwXef9gcXNP5kTufWCcg1+8Svhe5FJ6Opxjcne9Ym8PlJvo6Hjp+o
+         eWQwpJ5nO8afqf+1/lnshTSnGaqNROixpDd0f1TnYt7OwF/Vtj/WTSGeiy20A70SKriJ
+         HGH9oqUIGivU2Za0ne1UZuoDuy6h603uGqXsr4lCtMhtNexbgM7wGoaRBNh8KhkMwWmH
+         U9tvJiyyp6PLi6U3z2QQekq7YHqeTqRDHq5vHHeA5ISI10IPr3UP0dSNdOe0AvCHbvyb
+         FkMvh3jbJM2ezLGLcRNSi4YA1cl7nqEELY2JTRk9r1ZETt7Oy3ALo4Bb64f9kf8PNhj3
+         PXqA==
+X-Gm-Message-State: AOAM531OsEraLlZnqMz4SpZ/f638lo4+FP+U1Pa+Wh0oEXlo4h9FeQM3
+        DMWZiP0BYyLngNt0QmA6oWrWCA==
+X-Google-Smtp-Source: ABdhPJxO1kHlN8+cmD7BIg1253Rb6K2Ri8D79w/6n5WmNnVdf+uRYt3QNl5L+SixjQv0xifkg1um5A==
+X-Received: by 2002:a2e:920a:: with SMTP id k10mr1314492ljg.260.1607006629599;
+        Thu, 03 Dec 2020 06:43:49 -0800 (PST)
+Received: from localhost (c-9b28e555.07-21-73746f28.bbcust.telenor.se. [85.229.40.155])
+        by smtp.gmail.com with ESMTPSA id q11sm579011lfo.249.2020.12.03.06.43.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Dec 2020 06:43:49 -0800 (PST)
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     madalin.bucur@nxp.com, davem@davemloft.net, kuba@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH] dpaa_eth: fix build errorr in dpaa_fq_init
+Date:   Thu,  3 Dec 2020 15:43:43 +0100
+Message-Id: <20201203144343.790719-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.43.160.139]
-X-ClientProxiedBy: EX13D37UWA001.ant.amazon.com (10.43.160.61) To
- EX13D04ANC001.ant.amazon.com (10.43.157.89)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From:   Martin KaFai Lau <kafai@fb.com>
-Date:   Wed, 2 Dec 2020 20:24:02 -0800
-> On Wed, Dec 02, 2020 at 11:19:02AM -0800, Martin KaFai Lau wrote:
-> > On Tue, Dec 01, 2020 at 06:04:50PM -0800, Andrii Nakryiko wrote:
-> > > On Tue, Dec 1, 2020 at 6:49 AM Kuniyuki Iwashima <kuniyu@amazon.co.jp> wrote:
-> > > >
-> > > > This commit adds new bpf_attach_type for BPF_PROG_TYPE_SK_REUSEPORT to
-> > > > check if the attached eBPF program is capable of migrating sockets.
-> > > >
-> > > > When the eBPF program is attached, the kernel runs it for socket migration
-> > > > only if the expected_attach_type is BPF_SK_REUSEPORT_SELECT_OR_MIGRATE.
-> > > > The kernel will change the behaviour depending on the returned value:
-> > > >
-> > > >   - SK_PASS with selected_sk, select it as a new listener
-> > > >   - SK_PASS with selected_sk NULL, fall back to the random selection
-> > > >   - SK_DROP, cancel the migration
-> > > >
-> > > > Link: https://lore.kernel.org/netdev/20201123003828.xjpjdtk4ygl6tg6h@kafai-mbp.dhcp.thefacebook.com/
-> > > > Suggested-by: Martin KaFai Lau <kafai@fb.com>
-> > > > Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-> > > > ---
-> > > >  include/uapi/linux/bpf.h       | 2 ++
-> > > >  kernel/bpf/syscall.c           | 8 ++++++++
-> > > >  tools/include/uapi/linux/bpf.h | 2 ++
-> > > >  3 files changed, 12 insertions(+)
-> > > >
-> > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > > > index 85278deff439..cfc207ae7782 100644
-> > > > --- a/include/uapi/linux/bpf.h
-> > > > +++ b/include/uapi/linux/bpf.h
-> > > > @@ -241,6 +241,8 @@ enum bpf_attach_type {
-> > > >         BPF_XDP_CPUMAP,
-> > > >         BPF_SK_LOOKUP,
-> > > >         BPF_XDP,
-> > > > +       BPF_SK_REUSEPORT_SELECT,
-> > > > +       BPF_SK_REUSEPORT_SELECT_OR_MIGRATE,
-> > > >         __MAX_BPF_ATTACH_TYPE
-> > > >  };
-> > > >
-> > > > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> > > > index f3fe9f53f93c..a0796a8de5ea 100644
-> > > > --- a/kernel/bpf/syscall.c
-> > > > +++ b/kernel/bpf/syscall.c
-> > > > @@ -2036,6 +2036,14 @@ bpf_prog_load_check_attach(enum bpf_prog_type prog_type,
-> > > >                 if (expected_attach_type == BPF_SK_LOOKUP)
-> > > >                         return 0;
-> > > >                 return -EINVAL;
-> > > > +       case BPF_PROG_TYPE_SK_REUSEPORT:
-> > > > +               switch (expected_attach_type) {
-> > > > +               case BPF_SK_REUSEPORT_SELECT:
-> > > > +               case BPF_SK_REUSEPORT_SELECT_OR_MIGRATE:
-> > > > +                       return 0;
-> > > > +               default:
-> > > > +                       return -EINVAL;
-> > > > +               }
-> > > 
-> > > this is a kernel regression, previously expected_attach_type wasn't
-> > > enforced, so user-space could have provided any number without an
-> > > error.
-> > I also think this change alone will break things like when the usual
-> > attr->expected_attach_type == 0 case.  At least changes is needed in
-> > bpf_prog_load_fixup_attach_type() which is also handling a
-> > similar situation for BPF_PROG_TYPE_CGROUP_SOCK.
-> > 
-> > I now think there is no need to expose new bpf_attach_type to the UAPI.
-> > Since the prog->expected_attach_type is not used, it can be cleared at load time
-> > and then only set to BPF_SK_REUSEPORT_SELECT_OR_MIGRATE (probably defined
-> > internally at filter.[c|h]) in the is_valid_access() when "migration"
-> > is accessed.  When "migration" is accessed, the bpf prog can handle
-> > migration (and the original not-migration) case.
-> Scrap this internal only BPF_SK_REUSEPORT_SELECT_OR_MIGRATE idea.
-> I think there will be cases that bpf prog wants to do both
-> without accessing any field from sk_reuseport_md.
-> 
-> Lets go back to the discussion on using a similar
-> idea as BPF_PROG_TYPE_CGROUP_SOCK in bpf_prog_load_fixup_attach_type().
-> I am not aware there is loader setting a random number
-> in expected_attach_type, so the chance of breaking
-> is very low.  There was a similar discussion earlier [0].
-> 
-> [0]: https://lore.kernel.org/netdev/20200126045443.f47dzxdglazzchfm@ast-mbp/
+When building FSL_DPAA_ETH the following build error shows up:
 
-Thank you for the idea and reference.
+/tmp/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c: In function ‘dpaa_fq_init’:
+/tmp/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c:1135:9: error: too few arguments to function ‘xdp_rxq_info_reg’
+ 1135 |   err = xdp_rxq_info_reg(&dpaa_fq->xdp_rxq, dpaa_fq->net_dev,
+      |         ^~~~~~~~~~~~~~~~
 
-I will remove the change in bpf_prog_load_check_attach() and set the
-default value (BPF_SK_REUSEPORT_SELECT) in bpf_prog_load_fixup_attach_type()
-for backward compatibility if expected_attach_type is 0.
+Commit b02e5a0ebb17 ("xsk: Propagate napi_id to XDP socket Rx path")
+added an extra argument to function xdp_rxq_info_reg and commit
+d57e57d0cd04 ("dpaa_eth: add XDP_TX support") didn't know about that
+extra argument.
 
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+---
 
-> > > >         case BPF_PROG_TYPE_EXT:
-> > > >                 if (expected_attach_type)
-> > > >                         return -EINVAL;
-> > > > diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-> > > > index 85278deff439..cfc207ae7782 100644
-> > > > --- a/tools/include/uapi/linux/bpf.h
-> > > > +++ b/tools/include/uapi/linux/bpf.h
-> > > > @@ -241,6 +241,8 @@ enum bpf_attach_type {
-> > > >         BPF_XDP_CPUMAP,
-> > > >         BPF_SK_LOOKUP,
-> > > >         BPF_XDP,
-> > > > +       BPF_SK_REUSEPORT_SELECT,
-> > > > +       BPF_SK_REUSEPORT_SELECT_OR_MIGRATE,
-> > > >         __MAX_BPF_ATTACH_TYPE
-> > > >  };
-> > > >
-> > > > --
-> > > > 2.17.2 (Apple Git-113)
+I think this issue is seen since both patches went in at the same time
+to bpf-next and net-next.
+
+ drivers/net/ethernet/freescale/dpaa/dpaa_eth.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+index 947b3d2f9c7e..6cc8c4e078de 100644
+--- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
++++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
+@@ -1133,7 +1133,7 @@ static int dpaa_fq_init(struct dpaa_fq *dpaa_fq, bool td_enable)
+ 	if (dpaa_fq->fq_type == FQ_TYPE_RX_DEFAULT ||
+ 	    dpaa_fq->fq_type == FQ_TYPE_RX_PCD) {
+ 		err = xdp_rxq_info_reg(&dpaa_fq->xdp_rxq, dpaa_fq->net_dev,
+-				       dpaa_fq->fqid);
++				       dpaa_fq->fqid, 0);
+ 		if (err) {
+ 			dev_err(dev, "xdp_rxq_info_reg() = %d\n", err);
+ 			return err;
+-- 
+2.29.2
+
