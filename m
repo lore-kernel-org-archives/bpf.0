@@ -6,40 +6,40 @@ X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DDB50C4361A
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 20:01:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 65ED4C4361A
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 20:10:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6D13222203
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 20:01:02 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0EB07207B8
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 20:10:48 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728032AbgLCUAq (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Dec 2020 15:00:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35308 "EHLO mail.kernel.org"
+        id S1727125AbgLCUKr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Dec 2020 15:10:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38224 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727890AbgLCUAq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Dec 2020 15:00:46 -0500
+        id S1725885AbgLCUKr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Dec 2020 15:10:47 -0500
 Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607025606;
-        bh=u2avPBs2wcV6gNPGB4NiNw7lv0Nkjyx9BafWVAygCvs=;
+        s=k20201202; t=1607026206;
+        bh=/gNjhCXH8K25/+DEuKtjc5oFR3K29Q184rDH6sM64dw=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=jJNpU9ilhqfZlRtwQN3wA3DSj5bJbjzxbLr29aVfz9FT7g10YymZtwte12YztqDBK
-         3w7TMC4JKq4Ip7d9zPObfnsR7/9RHwlIyUvhlYIjG51+aSWhGXjOg9NIuibUQObQXm
-         YGRuKePbFRBil9eMGF82R/9tXnCSrKklOShDIl7st2RkyhLCT4E9YVdOoFe6amKh6y
-         M3FXRpue75A+du95EVzsguzePApgWyjlK4A3yKWJen+VC98FpfU50enN4dseHysPkN
-         8qEINASIFEipDUwzQGDOJZPVOpyWmRoHixFwq2/X9F5Y8ErSzCamQy2IIf3fQU4Rc8
-         z0WrlzA9iempg==
+        b=CUL+ImMjBHqUaCoy6xzXw2ZLjExgB5yNWaO8Ob44jkDX99s/m8Ii1W4MtxhOiCon6
+         xxtMBFU+GQ6mcBAic+HvzSe++4ZRiCenvxj9qKa0t5PniCy7a+AYBEoRqGhajipDV0
+         A60mDRdA+87gs4dHMaW1zZUCt0bHztD8ZLD2u47Mg9SLFm++sdaBTK//Iqmj7hdA57
+         98ZLQ1N1k9931QUp3iWlqIHLpJBos9fLSXJlpSwo/TMpx/jccei811CEouNt2pjjX4
+         xs93QA/oXC5KIsFMBoRvfxyWQ1ZJTFmCnZd1bK+IlK2sGb+xRDjqVN57I4fXJmXB0v
+         c33sdXEo2eSag==
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3] libbpf: fail early when loading programs with
- unspecified type
+Subject: Re: [PATCH bpf v3] libbpf: sanitise map names before pinning
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <160702560588.30230.4432583746640187390.git-patchwork-notify@kernel.org>
-Date:   Thu, 03 Dec 2020 20:00:05 +0000
-References: <20201203043410.59699-1-andreimatei1@gmail.com>
-In-Reply-To: <20201203043410.59699-1-andreimatei1@gmail.com>
-To:     Andrei Matei <andreimatei1@gmail.com>
-Cc:     bpf@vger.kernel.org, andrii@kernel.org
+Message-Id: <160702620653.3826.6715254971435173910.git-patchwork-notify@kernel.org>
+Date:   Thu, 03 Dec 2020 20:10:06 +0000
+References: <20201203093306.107676-1-toke@redhat.com>
+In-Reply-To: <20201203093306.107676-1-toke@redhat.com>
+To:     =?utf-8?b?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2VuIDx0b2tlQHJlZGhhdC5jb20+?=@ci.codeaurora.org
+Cc:     daniel@iogearbox.net, ast@fb.com, andrii@kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -48,19 +48,24 @@ Hello:
 
 This patch was applied to bpf/bpf-next.git (refs/heads/master):
 
-On Wed,  2 Dec 2020 23:34:10 -0500 you wrote:
-> Before this patch, a program with unspecified type
-> (BPF_PROG_TYPE_UNSPEC) would be passed to the BPF syscall, only to have
-> the kernel reject it with an opaque invalid argument error. This patch
-> makes libbpf reject such programs with a nicer error message - in
-> particular libbpf now tries to diagnose bad ELF section names at both
-> open time and load time.
+On Thu,  3 Dec 2020 10:33:06 +0100 you wrote:
+> When we added sanitising of map names before loading programs to libbpf, we
+> still allowed periods in the name. While the kernel will accept these for
+> the map names themselves, they are not allowed in file names when pinning
+> maps. This means that bpf_object__pin_maps() will fail if called on an
+> object that contains internal maps (such as sections .rodata).
+> 
+> Fix this by replacing periods with underscores when constructing map pin
+> paths. This only affects the paths generated by libbpf when
+> bpf_object__ping_maps() is called with a path argument. Any pin paths set
+> by bpf_map__set_pin_path() are unaffected, and it will still be up to the
+> caller to avoid invalid characters in those.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v3] libbpf: fail early when loading programs with unspecified type
-    https://git.kernel.org/bpf/bpf-next/c/80b2b5c3a701
+  - [bpf,v3] libbpf: sanitise map names before pinning
+    https://git.kernel.org/bpf/bpf-next/c/9cf309c56f79
 
 You are awesome, thank you!
 --
