@@ -4,42 +4,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-12.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 65ED4C4361A
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 20:10:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 404BFC4167B
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 20:10:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0EB07207B8
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 20:10:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E3B44207B8
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 20:10:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727125AbgLCUKr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1727738AbgLCUKr (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Thu, 3 Dec 2020 15:10:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38224 "EHLO mail.kernel.org"
+Received: from mail.kernel.org ([198.145.29.99]:38212 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725885AbgLCUKr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1726681AbgLCUKr (ORCPT <rfc822;bpf@vger.kernel.org>);
         Thu, 3 Dec 2020 15:10:47 -0500
 Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1607026206;
-        bh=/gNjhCXH8K25/+DEuKtjc5oFR3K29Q184rDH6sM64dw=;
+        bh=sXhMuQ0ue6a6ZDYM4zgczr7RKLhuC3DvBrirGzj1n9A=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=CUL+ImMjBHqUaCoy6xzXw2ZLjExgB5yNWaO8Ob44jkDX99s/m8Ii1W4MtxhOiCon6
-         xxtMBFU+GQ6mcBAic+HvzSe++4ZRiCenvxj9qKa0t5PniCy7a+AYBEoRqGhajipDV0
-         A60mDRdA+87gs4dHMaW1zZUCt0bHztD8ZLD2u47Mg9SLFm++sdaBTK//Iqmj7hdA57
-         98ZLQ1N1k9931QUp3iWlqIHLpJBos9fLSXJlpSwo/TMpx/jccei811CEouNt2pjjX4
-         xs93QA/oXC5KIsFMBoRvfxyWQ1ZJTFmCnZd1bK+IlK2sGb+xRDjqVN57I4fXJmXB0v
-         c33sdXEo2eSag==
+        b=mAtsXMRj6691EIwY4pFlKqcEZ9nA8DfAO6j0KBpmqs1XfiuGyMyRLd1tFUVugNei0
+         uJ3+AzKcKgsj921h0lPeiMr0phldO+A3VQgoqaDGmlFSk2TWsaSgEi95YV4fRIjnKo
+         dEWFSt9cJ/73TQA+tMWtpmAt9CQWsZv2bu56xhAy702KAPzAlw9+gKHzUsb8Zt5G2+
+         +FCRoLQF/3KLGKACM8BceoDfL5X0LFWQiN2cWn76D2bG+eJKE3u4RjVs4JeDQFvl5t
+         AY9A01Ei161Xe3vnt0gEomL788+JNBiClI5AfQ7c6z7Lp0NBhQaRWqP4igEarU1I6U
+         H6kRZ3G5JtP7w==
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v3] libbpf: sanitise map names before pinning
+Subject: Re: [PATCH bpf-next] libbpf: cap retries in sys_bpf_prog_load
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <160702620653.3826.6715254971435173910.git-patchwork-notify@kernel.org>
+Message-Id: <160702620648.3826.10588839413640919063.git-patchwork-notify@kernel.org>
 Date:   Thu, 03 Dec 2020 20:10:06 +0000
-References: <20201203093306.107676-1-toke@redhat.com>
-In-Reply-To: <20201203093306.107676-1-toke@redhat.com>
-To:     =?utf-8?b?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2VuIDx0b2tlQHJlZGhhdC5jb20+?=@ci.codeaurora.org
-Cc:     daniel@iogearbox.net, ast@fb.com, andrii@kernel.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org
+References: <20201202231332.3923644-1-sdf@google.com>
+In-Reply-To: <20201202231332.3923644-1-sdf@google.com>
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
@@ -48,24 +48,21 @@ Hello:
 
 This patch was applied to bpf/bpf-next.git (refs/heads/master):
 
-On Thu,  3 Dec 2020 10:33:06 +0100 you wrote:
-> When we added sanitising of map names before loading programs to libbpf, we
-> still allowed periods in the name. While the kernel will accept these for
-> the map names themselves, they are not allowed in file names when pinning
-> maps. This means that bpf_object__pin_maps() will fail if called on an
-> object that contains internal maps (such as sections .rodata).
+On Wed,  2 Dec 2020 15:13:32 -0800 you wrote:
+> I've seen a situation, where a process that's under pprof constantly
+> generates SIGPROF which prevents program loading indefinitely.
+> The right thing to do probably is to disable signals in the upper
+> layers while loading, but it still would be nice to get some error from
+> libbpf instead of an endless loop.
 > 
-> Fix this by replacing periods with underscores when constructing map pin
-> paths. This only affects the paths generated by libbpf when
-> bpf_object__ping_maps() is called with a path argument. Any pin paths set
-> by bpf_map__set_pin_path() are unaffected, and it will still be up to the
-> caller to avoid invalid characters in those.
+> Let's add some small retry limit to the program loading:
+> try loading the program 5 (arbitrary) times and give up.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf,v3] libbpf: sanitise map names before pinning
-    https://git.kernel.org/bpf/bpf-next/c/9cf309c56f79
+  - [bpf-next] libbpf: cap retries in sys_bpf_prog_load
+    https://git.kernel.org/bpf/bpf-next/c/d6d418bd8f92
 
 You are awesome, thank you!
 --
