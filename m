@@ -2,73 +2,121 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-22.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9CE12C4167B
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 20:21:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 378BEC433FE
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 20:35:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6F890221F4
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 20:21:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E90F9221F5
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 20:35:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728080AbgLCUUr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Dec 2020 15:20:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41776 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726765AbgLCUUr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Dec 2020 15:20:47 -0500
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607026806;
-        bh=Tkyv4YxmIkfl86eenFjdn9rHENw/f56Yi/8XLBvDLTg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=lcWLH6aTBD1VDKGAgLs+lutOcUSoAXOxXlB0PXQeE+DtzFwQZkZMmLpkzMQXPPm+z
-         4bhTdP3HTw+QgdbCtP60rPtJo9cnKl8an1OgkfZ/IHIEZdJ+qSGT8MIhCedzOJluZI
-         kYEMqWX47RqFGiLrzrhXgSPMXmh9rGF47bMJlsUUPenTpimlXR/HTcyU24OIVrDZtA
-         rPGemBqqGyOoR5Jd4mATGYqZT/k+nxC+vMkzdi0m73FMB9wIzHRTwAXKUhmLkaS3rT
-         xXe8CeBTQMoCm0kQeuDEkayeVl40zSmmI4lhyFt8AEFIw8jGt8lg9IP/wlGPLvnS8g
-         E434uqEqpnI6w==
+        id S1726430AbgLCUfw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Dec 2020 15:35:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726427AbgLCUfw (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Dec 2020 15:35:52 -0500
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01131C061A4F
+        for <bpf@vger.kernel.org>; Thu,  3 Dec 2020 12:35:12 -0800 (PST)
+Received: by mail-yb1-xb43.google.com with SMTP id x2so3249012ybt.11
+        for <bpf@vger.kernel.org>; Thu, 03 Dec 2020 12:35:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=ldc6B+v+tau+/f/rY+pmidYRNTvPkodsXO48z3rDebU=;
+        b=SoDtwp3iTQMxztUKflx6qPBXUJVyuL3b+OdRsd0gwwcfuWz0HNIHkmXncdpH6/Z5yy
+         KpTiMQTe2JcpxRyCgNUoaI39gnoXkPkncdh7B6KCh1JCmN5zeMW33l8ncUB6w7S0ho/c
+         ba6OclAxMG/rbq9Nh70+D9MRzTkgkZgWDvSdsIVGm1P4p33Zat64QNftX4DzaC4VMADK
+         a0HV5kpMwj1OeCkT+lElC71MY8FrGLAlQ/GNvIV8ffYUb5C3y7wxnkVzREjdrrOGkm2/
+         T1D/+YOINDIPTNvvCpfbGCsxCms5NW8wp+i635LqYSoV9KJU4+uVWaBaYssCx9Dq3I7d
+         wzfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ldc6B+v+tau+/f/rY+pmidYRNTvPkodsXO48z3rDebU=;
+        b=ScWc0R9c4Ac1mffidrTc7xcCxQQexMKMfBWh9Wal+eR08Pw/+2Y9KWh1cwzg7/Oy3L
+         SN0UhPIYEcVM50dJxumqSovJmw0VYqU54Y2xFXwk275PNQLX2ENt47Oz3JPFuiJVSbNm
+         QdiN+Lbs3KK1SPBIy/iO10pox6YoJTlSWfzNzVc4wSzyJYvEbyfkqDa07m961Q1dCVna
+         ebfhqggUQECBIHx4w8IOeMdYC/Pz0QtuCP3eFIuofCKxk06AsY+tYQPQB9d4KJ2J/Y5g
+         OigxL5TmpJBLHznZnbe476TVidTr5TaejVgy5fnI3XTw4COCUrA3Lrnnf6Hq00t2uazP
+         mc5g==
+X-Gm-Message-State: AOAM5305UwiYOlTafQ9ioRmek1Cva+3MT06QxAM/9JDW5WoVwiygx78Y
+        hW/MPuCD8esDdHitR5xci/Nbw73mDNO8FpKcudc=
+X-Google-Smtp-Source: ABdhPJzrcEFQkClvm+4tpiBdajVnmB9XiYcEFUYDXgI0sU5WIkpp3XxiPP8OFzuDkENw6aqtwDgn2tdxFFDODAthsuc=
+X-Received: by 2002:a25:df82:: with SMTP id w124mr1298461ybg.347.1607027711246;
+ Thu, 03 Dec 2020 12:35:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH][next] samples/bpf: Fix spelling mistake "recieving" ->
- "receiving"
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <160702680632.7769.6625196471588556263.git-patchwork-notify@kernel.org>
-Date:   Thu, 03 Dec 2020 20:20:06 +0000
-References: <20201203114452.1060017-1-colin.king@canonical.com>
-In-Reply-To: <20201203114452.1060017-1-colin.king@canonical.com>
-To:     Colin King <colin.king@canonical.com>
-Cc:     mariuszx.dudek@intel.com, andrii@kernel.org,
-        magnus.karlsson@intel.com, bjorn.topel@intel.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CAO__=G52s_=2E4wF8wDcgc3KwMU0kzmDfBQhDD3+LMZ8M3fZ8w@mail.gmail.com>
+In-Reply-To: <CAO__=G52s_=2E4wF8wDcgc3KwMU0kzmDfBQhDD3+LMZ8M3fZ8w@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 3 Dec 2020 12:35:00 -0800
+Message-ID: <CAEf4BzbKtAcO81ZvxOJwhpOKauDQ==Y+Bcvy4_QAF3FZyLbMeg@mail.gmail.com>
+Subject: Re: Problem with BPF_CORE_READ macro function
+To:     David Marcinkovic <david.marcinkovic@sartura.hr>
+Cc:     bpf <bpf@vger.kernel.org>,
+        Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>,
+        Luka Perkov <luka.perkov@sartura.hr>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+On Thu, Dec 3, 2020 at 4:20 AM David Marcinkovic
+<david.marcinkovic@sartura.hr> wrote:
+>
+> Hello everyone,
+>
+> I am trying to run a simple BPF program that hooks onto
+> `mac80211/drv_sta_state` tracepoint. When I run the program on the arm
+> 32 bit architecture,
+> the verifier rejects to load the program and outputs the following error
+> message:
+>
+> Unrecognized arg#0 type PTR
+> ; int tp__mac80211_drv_sta_state(struct trace_event_raw_drv_sta_state* ct=
+x)
+> 0: (bf) r3 =3D r1
+> 1: (85) call unknown#195896080
+> invalid func unknown#195896080
+>
+> This error does not seem to occur on the amd64 architecture. I am
+> using clang version 10 for both, compiling on amd64 and
+> cross-compiling for arm32.
+>
+>
+> I have prepared a simple program that hooks onto the
+> `mac80211/drv_sta_state` tracepoint.
+> In this example, `BPF_CORE_READ` macro function seems to cause the
+> verifier to reject to load the program.
+> I've been using this macro in various different programs and it didn't
+> cause any problems.
+> Also, I've been using packed structs and bit fields in other programs
+> and they also didn't cause any problems.
+>
+> I tried to use BPF_CORE_READ_BITFIELD as stated in this patch [0] and
+> got a similar error.
+>
+> Any input is much appreciated,
+>
 
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
+Can you provide libbpf debug output, especially the section about
+CO-RE relocations? Could it be that this tracepoint is inside the
+kernel module?
 
-On Thu,  3 Dec 2020 11:44:52 +0000 you wrote:
-> From: Colin Ian King <colin.king@canonical.com>
-> 
-> There is a spelling mistake in an error message. Fix it.
-> 
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> ---
->  samples/bpf/xdpsock_user.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Best regards,
+> David Mar=C4=8Dinkovi=C4=87
+>
+>
+> [0] https://lore.kernel.org/bpf/20201007202946.3684483-1-andrii@kernel.or=
+g/T/#ma08db511daa0b5978f16df9f98f4ef644b83fc96
+>
+>
 
-Here is the summary with links:
-  - [next] samples/bpf: Fix spelling mistake "recieving" -> "receiving"
-    https://git.kernel.org/bpf/bpf-next/c/2faa7328f53b
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+[...]
