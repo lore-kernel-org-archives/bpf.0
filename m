@@ -2,66 +2,66 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5EC17C2BB40
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 16:05:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D12E5C433FE
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 16:05:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 00EAF207AA
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 16:05:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 668EE207A9
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 16:05:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728922AbgLCQEz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 3 Dec 2020 11:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
+        id S2389303AbgLCQFM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Dec 2020 11:05:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731206AbgLCQEz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 3 Dec 2020 11:04:55 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F49C09424F
-        for <bpf@vger.kernel.org>; Thu,  3 Dec 2020 08:03:41 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id q17so1513768wmc.1
-        for <bpf@vger.kernel.org>; Thu, 03 Dec 2020 08:03:41 -0800 (PST)
+        with ESMTP id S2387680AbgLCQFM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Dec 2020 11:05:12 -0500
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65477C09424A
+        for <bpf@vger.kernel.org>; Thu,  3 Dec 2020 08:03:32 -0800 (PST)
+Received: by mail-wm1-x34a.google.com with SMTP id h68so1674434wme.5
+        for <bpf@vger.kernel.org>; Thu, 03 Dec 2020 08:03:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=+YlzII1FPWkmmWl374z00jUbytJDOFE0Tn9tWVZ2UuI=;
-        b=nAS8arlCbJXC9apqOEdMxcOrnHzUIRhHMseBzyck3v8NFqRoGx42EahAhzmxrOb5W8
-         lTki4MTFBScupBrmyXSn3nDL40CGepXn/sm33tzvg2xckuVi+D2s5LO1lwDajXxPpson
-         dlhsPbYMfX9Xj0DaPYHpWM/ztQ1RYJggR+h7J6Qvj/lZeBcQ27Bx2rSwem3vAV3CyAcV
-         LmNu+2yncq62WQCHl3joSQnC6smpETYpPLNVJzL5ypmcKmHqVfanrdu6ypVsIYopCSKe
-         58t+VHN+C+mdUA7rSOzsWniP0cc8hkfdOP5ybD/mso/9jjMmBb933vw984vXOuRs8oDm
-         uXWw==
+        bh=rQ5aZpFY6Pg/O0rx7Qe3LRIdXZHuAzMSl0kSyosK4jw=;
+        b=aolwBRKb1Ahd6dJVwT5jjunBlBiNuEzWiWEVJjvvdZKdHX1NUw1CKIp1zItHSQ4/bR
+         y5E+2Bf/0JrINRujSc7scrOuvVzLi+NOUR2TO/o6Siyuep+2/XEytq8///k+wDTlv+1q
+         PZTvTFnizoD88nIUqRSXl7Mqh0myanIiWLokarjdEJk1Jwsifpk+u8IEyORHlGKkCTgA
+         icZGeBWvT3z0GbVM/DpLZum0zKKG6rTzRB1lumPttCjS6x5K+ZOiudq0QWfKLFGctury
+         0qW+fDE110cKpRjorrkDqOUVlfeeyh08PFL/8a0jp+KHvPPeovQsjUNBuVSWx/EA7lfS
+         YRLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=+YlzII1FPWkmmWl374z00jUbytJDOFE0Tn9tWVZ2UuI=;
-        b=UhuCgLadPtK5ygTu5uI+O8uUvkgnrElJSgP/ARb2Udr3isrA85beKLttN9OxNqaMof
-         qBcVe8yQGinybYSvFyFxCJzM4s3GZhfoiDDMWJZANulMXGVXkuPIIVDZIJITPjz7ZEUG
-         yp/PRax/jQKeJS2EmN6+DikhP82uljzJ1qIaniBqoC6s4n1iRLKpckTZW7c8Yhn92zij
-         AMnieDkMmDQX0ZzCSjXXLzXGjvqNbitRvklaJKb1Egjzs7y2+JHurqzsWw6rw7gfAZIQ
-         yDf1HbLmimvz+9oHYGz8x0E1jdP7lFnyPEOQlSn5LiQ7qJMpUaL/yXdVNwoFsT9mQJbB
-         qrLQ==
-X-Gm-Message-State: AOAM530Ps523thiBXkq0oXCGGm7Tyfz7cA4Bnyz6Zth/cQoYoNjmgTfu
-        fur7Ldcu8tih/CvvKDp1+werOhv1lj9eant6H4lX2W+MJD5molzLg/2Jc2M1vxxUOIZv+KwRQZm
-        jft7mcmwY4C5VXY5ol6C/kfSxERnGYpkiGAXjEXoCLg7Mt94Z1b6NsBVMPRkwzm0=
-X-Google-Smtp-Source: ABdhPJxzhEpI2QeJTsxw8kLtoiRXpeu1K241f+EdSBCTudWQ/2Knr4KMGsS7aTWhJDWONikctEZdHOIPeux/Pg==
+        bh=rQ5aZpFY6Pg/O0rx7Qe3LRIdXZHuAzMSl0kSyosK4jw=;
+        b=EB4B5THvsA2yu6PM3iaz07ev//TDpLW9XEv07t8yU/LX7kASd0a9ZaeZu0Ik1Piw7J
+         z4Q3Pi0e6BjkLbqyEfvl3iOrkew3pGee+n+TYtQPOLSjSNQoH/hXZRsZgtzTdrOxk4XZ
+         yzL52oa04wce/88j0D1pJI2pwaWgyN1CmFaCPUhmVZ3inW46ee5EaSZb1r6iIkXr9g/y
+         h48BEcIcLQ/BYqxyYtutLnxtYkvYsb163ASr52EdO+iMPMaDMV4N5+Bx++7CIAjslPL3
+         zr2/Dkj5knUTrLYXGi3p2JvPPCOeHdJ1h5bigJf5EYAjkHL0v6A/lNoJbzw8Urjsh0F2
+         ao8Q==
+X-Gm-Message-State: AOAM531PH7/QFG7h8qWA9yFzzmCdRk81jio5eZfheeisEM5MtkzdnPWJ
+        l26OWEJPJOt4mYeq4UUcuTXpZqMP4ka9hNh8MNO6z8bYKhhOi6io6NCwEGkHXSRQB5WxNn2Z431
+        MwCbfD6kW43pm+a8gPCL5L0DcLbTFqBRamEJv/t3pcl0g2m+AhJ4nrKVkhd8ArPI=
+X-Google-Smtp-Source: ABdhPJy1qICjwyNsJnerw91e+uKX76VWe7VJLJ9bBqzMacrLONPebxz4DwbJ/gdj/kkJGkO7/phmRdWlAWoYVg==
 Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
-X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:10:28:9cb1:c0a8:11db])
- (user=jackmanb job=sendgmr) by 2002:a1c:e1c6:: with SMTP id
- y189mr3700889wmg.172.1607011420575; Thu, 03 Dec 2020 08:03:40 -0800 (PST)
-Date:   Thu,  3 Dec 2020 16:02:44 +0000
+X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
+ (user=jackmanb job=sendgmr) by 2002:adf:f08e:: with SMTP id
+ n14mr4415603wro.136.1607011410574; Thu, 03 Dec 2020 08:03:30 -0800 (PST)
+Date:   Thu,  3 Dec 2020 16:02:41 +0000
 In-Reply-To: <20201203160245.1014867-1-jackmanb@google.com>
-Message-Id: <20201203160245.1014867-14-jackmanb@google.com>
+Message-Id: <20201203160245.1014867-11-jackmanb@google.com>
 Mime-Version: 1.0
 References: <20201203160245.1014867-1-jackmanb@google.com>
 X-Mailer: git-send-email 2.29.2.454.gaff20da3a2-goog
-Subject: [PATCH bpf-next v3 13/14] bpf: Add tests for new BPF atomic operations
+Subject: [PATCH bpf-next v3 10/14] bpf: Add bitwise atomic instructions
 From:   Brendan Jackman <jackmanb@google.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
@@ -75,1012 +75,321 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This relies on the work done by Yonghong Song in
-https://reviews.llvm.org/D72184
+This adds instructions for
 
-Note the use of a define called ENABLE_ATOMICS_TESTS: this is used
-to:
+atomic[64]_[fetch_]and
+atomic[64]_[fetch_]or
+atomic[64]_[fetch_]xor
 
- - Avoid breaking the build for people on old versions of Clang
- - Avoid needing separate lists of test objects for no_alu32, where
-   atomics are not supported even if Clang has the feature.
+All these operations are isomorphic enough to implement with the same
+verifier, interpreter, and x86 JIT code, hence being a single commit.
 
-The atomics_test.o BPF object is built unconditionally both for
-test_progs and test_progs-no_alu32. For test_progs, if Clang supports
-atomics, ENABLE_ATOMICS_TESTS is defined, so it includes the proper
-test code. Otherwise, progs and global vars are defined anyway, as
-stubs; this means that the skeleton user code still builds.
+The main interesting thing here is that x86 doesn't directly support
+the fetch_ version these operations, so we need to generate a CMPXCHG
+loop in the JIT. This requires the use of two temporary registers,
+IIUC it's safe to use BPF_REG_AX and x86's AUX_REG for this purpose.
 
-The atomics_test.o userspace object is built once and used for both
-test_progs and test_progs-no_alu32. A variable called skip_tests is
-defined in the BPF object's data section, which tells the userspace
-object whether to skip the atomics test.
-
-Change-Id: Iecc12f35f0ded4a1dd805cce1be576e7b27917ef
+Change-Id: I340b10cecebea8cb8a52e3606010cde547a10ed4
 Signed-off-by: Brendan Jackman <jackmanb@google.com>
 ---
- tools/testing/selftests/bpf/Makefile          |   4 +
- .../selftests/bpf/prog_tests/atomics_test.c   | 262 ++++++++++++++++++
- .../selftests/bpf/progs/atomics_test.c        | 154 ++++++++++
- .../selftests/bpf/verifier/atomic_and.c       |  77 +++++
- .../selftests/bpf/verifier/atomic_cmpxchg.c   |  96 +++++++
- .../selftests/bpf/verifier/atomic_fetch_add.c | 106 +++++++
- .../selftests/bpf/verifier/atomic_or.c        |  77 +++++
- .../selftests/bpf/verifier/atomic_xchg.c      |  46 +++
- .../selftests/bpf/verifier/atomic_xor.c       |  77 +++++
- 9 files changed, 899 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/atomics_test.c
- create mode 100644 tools/testing/selftests/bpf/progs/atomics_test.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_and.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_fetch_add.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_or.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_xchg.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_xor.c
+ arch/x86/net/bpf_jit_comp.c  | 50 +++++++++++++++++++++++++++++-
+ include/linux/filter.h       | 60 ++++++++++++++++++++++++++++++++++++
+ kernel/bpf/core.c            |  5 ++-
+ kernel/bpf/disasm.c          | 21 ++++++++++---
+ kernel/bpf/verifier.c        |  6 ++++
+ tools/include/linux/filter.h | 60 ++++++++++++++++++++++++++++++++++++
+ 6 files changed, 196 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index f21c4841a612..448a9eb1a56c 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -431,11 +431,15 @@ TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read				\
- 		       $(wildcard progs/btf_dump_test_case_*.c)
- TRUNNER_BPF_BUILD_RULE := CLANG_BPF_BUILD_RULE
- TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS)
-+ifeq ($(feature-clang-bpf-atomics),1)
-+  TRUNNER_BPF_CFLAGS += -DENABLE_ATOMICS_TESTS
-+endif
- TRUNNER_BPF_LDFLAGS := -mattr=+alu32
- $(eval $(call DEFINE_TEST_RUNNER,test_progs))
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 7d29bc3bb4ff..4ab0f821326c 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -824,6 +824,10 @@ static int emit_atomic(u8 **pprog, u8 atomic_op,
+ 	/* emit opcode */
+ 	switch (atomic_op) {
+ 	case BPF_ADD:
++	case BPF_SUB:
++	case BPF_AND:
++	case BPF_OR:
++	case BPF_XOR:
+ 		/* lock *(u32/u64*)(dst_reg + off) <op>= src_reg */
+ 		EMIT1(simple_alu_opcodes[atomic_op]);
+ 		break;
+@@ -1306,8 +1310,52 @@ st:			if (is_imm8(insn->off))
  
- # Define test_progs-no_alu32 test runner.
- TRUNNER_BPF_BUILD_RULE := CLANG_NOALU32_BPF_BUILD_RULE
-+TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS)
- TRUNNER_BPF_LDFLAGS :=
- $(eval $(call DEFINE_TEST_RUNNER,test_progs,no_alu32))
+ 		case BPF_STX | BPF_ATOMIC | BPF_W:
+ 		case BPF_STX | BPF_ATOMIC | BPF_DW:
++			if (insn->imm == (BPF_AND | BPF_FETCH) ||
++			    insn->imm == (BPF_OR | BPF_FETCH) ||
++			    insn->imm == (BPF_XOR | BPF_FETCH)) {
++				u8 *branch_target;
++				bool is64 = BPF_SIZE(insn->code) == BPF_DW;
++
++				/*
++				 * Can't be implemented with a single x86 insn.
++				 * Need to do a CMPXCHG loop.
++				 */
++
++				/* Will need RAX as a CMPXCHG operand so save R0 */
++				emit_mov_reg(&prog, true, BPF_REG_AX, BPF_REG_0);
++				branch_target = prog;
++				/* Load old value */
++				emit_ldx(&prog, BPF_SIZE(insn->code),
++					 BPF_REG_0, dst_reg, insn->off);
++				/*
++				 * Perform the (commutative) operation locally,
++				 * put the result in the AUX_REG.
++				 */
++				emit_mov_reg(&prog, is64, AUX_REG, BPF_REG_0);
++				maybe_emit_mod(&prog, AUX_REG, src_reg, is64);
++				EMIT2(simple_alu_opcodes[BPF_OP(insn->imm)],
++				      add_2reg(0xC0, AUX_REG, src_reg));
++				/* Attempt to swap in new value */
++				err = emit_atomic(&prog, BPF_CMPXCHG,
++						  dst_reg, AUX_REG, insn->off,
++						  BPF_SIZE(insn->code));
++				if (WARN_ON(err))
++					return err;
++				/*
++				 * ZF tells us whether we won the race. If it's
++				 * cleared we need to try again.
++				 */
++				EMIT2(X86_JNE, -(prog - branch_target) - 2);
++				/* Return the pre-modification value */
++				emit_mov_reg(&prog, is64, src_reg, BPF_REG_0);
++				/* Restore R0 after clobbering RAX */
++				emit_mov_reg(&prog, true, BPF_REG_0, BPF_REG_AX);
++				break;
++
++			}
++
+ 			err = emit_atomic(&prog, insn->imm, dst_reg, src_reg,
+-					  insn->off, BPF_SIZE(insn->code));
++						  insn->off, BPF_SIZE(insn->code));
+ 			if (err)
+ 				return err;
+ 			break;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 6186280715ed..698f82897b0d 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -280,6 +280,66 @@ static inline bool insn_is_zext(const struct bpf_insn *insn)
+ 		.off   = OFF,					\
+ 		.imm   = BPF_ADD | BPF_FETCH })
  
-diff --git a/tools/testing/selftests/bpf/prog_tests/atomics_test.c b/tools/testing/selftests/bpf/prog_tests/atomics_test.c
-new file mode 100644
-index 000000000000..66f0ccf4f4ec
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/atomics_test.c
-@@ -0,0 +1,262 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+
-+
-+#include "atomics_test.skel.h"
-+
-+static struct atomics_test *setup(void)
-+{
-+	struct atomics_test *atomics_skel;
-+	__u32 duration = 0, err;
-+
-+	atomics_skel = atomics_test__open_and_load();
-+	if (CHECK(!atomics_skel, "atomics_skel_load", "atomics skeleton failed\n"))
-+		return NULL;
-+
-+	if (atomics_skel->data->skip_tests) {
-+		printf("%s:SKIP:no ENABLE_ATOMICS_TEST (missing Clang BPF atomics support)",
-+		       __func__);
-+		test__skip();
-+		goto err;
-+	}
-+
-+	err = atomics_test__attach(atomics_skel);
-+	if (CHECK(err, "atomics_attach", "atomics attach failed: %d\n", err))
-+		goto err;
-+
-+	return atomics_skel;
-+
-+err:
-+	atomics_test__destroy(atomics_skel);
-+	return NULL;
-+}
-+
-+static void test_add(void)
-+{
-+	struct atomics_test *atomics_skel;
-+	int err, prog_fd;
-+	__u32 duration = 0, retval;
-+
-+	atomics_skel = setup();
-+	if (!atomics_skel)
-+		return;
-+
-+	prog_fd = bpf_program__fd(atomics_skel->progs.add);
-+	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
-+				NULL, NULL, &retval, &duration);
-+	if (CHECK(err || retval, "test_run add",
-+		  "err %d errno %d retval %d duration %d\n",
-+		  err, errno, retval, duration))
-+		goto cleanup;
-+
-+	ASSERT_EQ(atomics_skel->data->add64_value, 3, "add64_value");
-+	ASSERT_EQ(atomics_skel->bss->add64_result, 1, "add64_result");
-+
-+	ASSERT_EQ(atomics_skel->data->add32_value, 3, "add32_value");
-+	ASSERT_EQ(atomics_skel->bss->add32_result, 1, "add32_result");
-+
-+	ASSERT_EQ(atomics_skel->bss->add_stack_value_copy, 3, "add_stack_value");
-+	ASSERT_EQ(atomics_skel->bss->add_stack_result, 1, "add_stack_result");
-+
-+	ASSERT_EQ(atomics_skel->data->add_noreturn_value, 3, "add_noreturn_value");
-+
-+cleanup:
-+	atomics_test__destroy(atomics_skel);
-+}
-+
-+static void test_sub(void)
-+{
-+	struct atomics_test *atomics_skel;
-+	int err, prog_fd;
-+	__u32 duration = 0, retval;
-+
-+	atomics_skel = setup();
-+	if (!atomics_skel)
-+		return;
-+
-+	prog_fd = bpf_program__fd(atomics_skel->progs.sub);
-+	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
-+				NULL, NULL, &retval, &duration);
-+	if (CHECK(err || retval, "test_run sub",
-+		  "err %d errno %d retval %d duration %d\n",
-+		  err, errno, retval, duration))
-+		goto cleanup;
-+
-+	ASSERT_EQ(atomics_skel->data->sub64_value, -1, "sub64_value");
-+	ASSERT_EQ(atomics_skel->bss->sub64_result, 1, "sub64_result");
-+
-+	ASSERT_EQ(atomics_skel->data->sub32_value, -1, "sub32_value");
-+	ASSERT_EQ(atomics_skel->bss->sub32_result, 1, "sub32_result");
-+
-+	ASSERT_EQ(atomics_skel->bss->sub_stack_value_copy, -1, "sub_stack_value");
-+	ASSERT_EQ(atomics_skel->bss->sub_stack_result, 1, "sub_stack_result");
-+
-+	ASSERT_EQ(atomics_skel->data->sub_noreturn_value, -1, "sub_noreturn_value");
-+
-+cleanup:
-+	atomics_test__destroy(atomics_skel);
-+}
-+
-+static void test_and(void)
-+{
-+	struct atomics_test *atomics_skel;
-+	int err, prog_fd;
-+	__u32 duration = 0, retval;
-+
-+	atomics_skel = setup();
-+	if (!atomics_skel)
-+		return;
-+
-+	prog_fd = bpf_program__fd(atomics_skel->progs.and);
-+	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
-+				NULL, NULL, &retval, &duration);
-+	if (CHECK(err || retval, "test_run and",
-+		  "err %d errno %d retval %d duration %d\n",
-+		  err, errno, retval, duration))
-+		goto cleanup;
-+
-+	ASSERT_EQ(atomics_skel->data->and64_value, 0x010ull << 32, "and64_value");
-+	ASSERT_EQ(atomics_skel->bss->and64_result, 0x110ull << 32, "and64_result");
-+
-+	ASSERT_EQ(atomics_skel->data->and32_value, 0x010, "and32_value");
-+	ASSERT_EQ(atomics_skel->bss->and32_result, 0x110, "and32_result");
-+
-+	ASSERT_EQ(atomics_skel->data->and_noreturn_value, 0x010ull << 32, "and_noreturn_value");
-+cleanup:
-+	atomics_test__destroy(atomics_skel);
-+}
-+
-+static void test_or(void)
-+{
-+	struct atomics_test *atomics_skel;
-+	int err, prog_fd;
-+	__u32 duration = 0, retval;
-+
-+	atomics_skel = setup();
-+	if (!atomics_skel)
-+		return;
-+
-+	prog_fd = bpf_program__fd(atomics_skel->progs.or);
-+	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
-+				NULL, NULL, &retval, &duration);
-+	if (CHECK(err || retval, "test_run or",
-+		  "err %d errno %d retval %d duration %d\n",
-+		  err, errno, retval, duration))
-+		goto cleanup;
-+
-+	ASSERT_EQ(atomics_skel->data->or64_value, 0x111ull << 32, "or64_value");
-+	ASSERT_EQ(atomics_skel->bss->or64_result, 0x110ull << 32, "or64_result");
-+
-+	ASSERT_EQ(atomics_skel->data->or32_value, 0x111, "or32_value");
-+	ASSERT_EQ(atomics_skel->bss->or32_result, 0x110, "or32_result");
-+
-+	ASSERT_EQ(atomics_skel->data->or_noreturn_value, 0x111ull << 32, "or_noreturn_value");
-+cleanup:
-+	atomics_test__destroy(atomics_skel);
-+}
-+
-+static void test_xor(void)
-+{
-+	struct atomics_test *atomics_skel;
-+	int err, prog_fd;
-+	__u32 duration = 0, retval;
-+
-+	atomics_skel = setup();
-+	if (!atomics_skel)
-+		return;
-+
-+	prog_fd = bpf_program__fd(atomics_skel->progs.xor);
-+	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
-+				NULL, NULL, &retval, &duration);
-+	if (CHECK(err || retval, "test_run xor",
-+		  "err %d errno %d retval %d duration %d\n",
-+		  err, errno, retval, duration))
-+		goto cleanup;
-+
-+	ASSERT_EQ(atomics_skel->data->xor64_value, 0x101ull << 32, "xor64_value");
-+	ASSERT_EQ(atomics_skel->bss->xor64_result, 0x110ull << 32, "xor64_result");
-+
-+	ASSERT_EQ(atomics_skel->data->xor32_value, 0x101, "xor32_value");
-+	ASSERT_EQ(atomics_skel->bss->xor32_result, 0x110, "xor32_result");
-+
-+	ASSERT_EQ(atomics_skel->data->xor_noreturn_value, 0x101ull << 32, "xor_nxoreturn_value");
-+cleanup:
-+	atomics_test__destroy(atomics_skel);
-+}
-+
-+static void test_cmpxchg(void)
-+{
-+	struct atomics_test *atomics_skel;
-+	int err, prog_fd;
-+	__u32 duration = 0, retval;
-+
-+	atomics_skel = setup();
-+	if (!atomics_skel)
-+		return;
-+
-+	prog_fd = bpf_program__fd(atomics_skel->progs.add);
-+	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
-+				NULL, NULL, &retval, &duration);
-+	if (CHECK(err || retval, "test_run add",
-+		  "err %d errno %d retval %d duration %d\n",
-+		  err, errno, retval, duration))
-+		goto cleanup;
-+
-+	ASSERT_EQ(atomics_skel->data->cmpxchg64_value, 2, "cmpxchg64_value");
-+	ASSERT_EQ(atomics_skel->bss->cmpxchg64_result_fail, 1, "cmpxchg_result_fail");
-+	ASSERT_EQ(atomics_skel->bss->cmpxchg64_result_succeed, 1, "cmpxchg_result_succeed");
-+
-+	ASSERT_EQ(atomics_skel->data->cmpxchg32_value, 2, "cmpxchg32_value");
-+	ASSERT_EQ(atomics_skel->bss->cmpxchg32_result_fail, 1, "cmpxchg_result_fail");
-+	ASSERT_EQ(atomics_skel->bss->cmpxchg32_result_succeed, 1, "cmpxchg_result_succeed");
-+
-+cleanup:
-+	atomics_test__destroy(atomics_skel);
-+}
-+
-+static void test_xchg(void)
-+{
-+	struct atomics_test *atomics_skel;
-+	int err, prog_fd;
-+	__u32 duration = 0, retval;
-+
-+	atomics_skel = setup();
-+	if (!atomics_skel)
-+		return;
-+
-+	prog_fd = bpf_program__fd(atomics_skel->progs.add);
-+	err = bpf_prog_test_run(prog_fd, 1, NULL, 0,
-+				NULL, NULL, &retval, &duration);
-+	if (CHECK(err || retval, "test_run add",
-+		  "err %d errno %d retval %d duration %d\n",
-+		  err, errno, retval, duration))
-+		goto cleanup;
-+
-+	ASSERT_EQ(atomics_skel->data->xchg64_value, 2, "xchg64_value");
-+	ASSERT_EQ(atomics_skel->bss->xchg64_result, 1, "xchg_result");
-+
-+	ASSERT_EQ(atomics_skel->data->xchg32_value, 2, "xchg32_value");
-+	ASSERT_EQ(atomics_skel->bss->xchg32_result, 1, "xchg_result");
-+
-+cleanup:
-+	atomics_test__destroy(atomics_skel);
-+}
-+
-+void test_atomics_test(void)
-+{
-+	if (test__start_subtest("add"))
-+		test_add();
-+	if (test__start_subtest("sub"))
-+		test_sub();
-+	if (test__start_subtest("and"))
-+		test_and();
-+	if (test__start_subtest("or"))
-+		test_or();
-+	if (test__start_subtest("xor"))
-+		test_xor();
-+	if (test__start_subtest("cmpxchg"))
-+		test_cmpxchg();
-+	if (test__start_subtest("xchg"))
-+		test_xchg();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/atomics_test.c b/tools/testing/selftests/bpf/progs/atomics_test.c
-new file mode 100644
-index 000000000000..d40c93496843
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/atomics_test.c
-@@ -0,0 +1,154 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <stdbool.h>
-+
-+#ifdef ENABLE_ATOMICS_TESTS
-+bool skip_tests __attribute((__section__(".data"))) = false;
-+#else
-+bool skip_tests = true;
-+#endif
-+
-+__u64 add64_value = 1;
-+__u64 add64_result = 0;
-+__u32 add32_value = 1;
-+__u32 add32_result = 0;
-+__u64 add_stack_value_copy = 0;
-+__u64 add_stack_result = 0;
-+__u64 add_noreturn_value = 1;
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(add, int a)
-+{
-+#ifdef ENABLE_ATOMICS_TESTS
-+	__u64 add_stack_value = 1;
-+
-+	add64_result = __sync_fetch_and_add(&add64_value, 2);
-+	add32_result = __sync_fetch_and_add(&add32_value, 2);
-+	add_stack_result = __sync_fetch_and_add(&add_stack_value, 2);
-+	add_stack_value_copy = add_stack_value;
-+	__sync_fetch_and_add(&add_noreturn_value, 2);
-+#endif
-+
-+	return 0;
-+}
-+
-+__s64 sub64_value = 1;
-+__s64 sub64_result = 0;
-+__s32 sub32_value = 1;
-+__s32 sub32_result = 0;
-+__s64 sub_stack_value_copy = 0;
-+__s64 sub_stack_result = 0;
-+__s64 sub_noreturn_value = 1;
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(sub, int a)
-+{
-+#ifdef ENABLE_ATOMICS_TESTS
-+	__u64 sub_stack_value = 1;
-+
-+	sub64_result = __sync_fetch_and_sub(&sub64_value, 2);
-+	sub32_result = __sync_fetch_and_sub(&sub32_value, 2);
-+	sub_stack_result = __sync_fetch_and_sub(&sub_stack_value, 2);
-+	sub_stack_value_copy = sub_stack_value;
-+	__sync_fetch_and_sub(&sub_noreturn_value, 2);
-+#endif
-+
-+	return 0;
-+}
-+
-+__u64 and64_value = (0x110ull << 32);
-+__u64 and64_result = 0;
-+__u32 and32_value = 0x110;
-+__u32 and32_result = 0;
-+__u64 and_noreturn_value = (0x110ull << 32);
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(and, int a)
-+{
-+#ifdef ENABLE_ATOMICS_TESTS
-+
-+	and64_result = __sync_fetch_and_and(&and64_value, 0x011ull << 32);
-+	and32_result = __sync_fetch_and_and(&and32_value, 0x011);
-+	__sync_fetch_and_and(&and_noreturn_value, 0x011ull << 32);
-+#endif
-+
-+	return 0;
-+}
-+
-+__u64 or64_value = (0x110ull << 32);
-+__u64 or64_result = 0;
-+__u32 or32_value = 0x110;
-+__u32 or32_result = 0;
-+__u64 or_noreturn_value = (0x110ull << 32);
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(or, int a)
-+{
-+#ifdef ENABLE_ATOMICS_TESTS
-+	or64_result = __sync_fetch_and_or(&or64_value, 0x011ull << 32);
-+	or32_result = __sync_fetch_and_or(&or32_value, 0x011);
-+	__sync_fetch_and_or(&or_noreturn_value, 0x011ull << 32);
-+#endif
-+
-+	return 0;
-+}
-+
-+__u64 xor64_value = (0x110ull << 32);
-+__u64 xor64_result = 0;
-+__u32 xor32_value = 0x110;
-+__u32 xor32_result = 0;
-+__u64 xor_noreturn_value = (0x110ull << 32);
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(xor, int a)
-+{
-+#ifdef ENABLE_ATOMICS_TESTS
-+	xor64_result = __sync_fetch_and_xor(&xor64_value, 0x011ull << 32);
-+	xor32_result = __sync_fetch_and_xor(&xor32_value, 0x011);
-+	__sync_fetch_and_xor(&xor_noreturn_value, 0x011ull << 32);
-+#endif
-+
-+	return 0;
-+}
-+
-+__u64 cmpxchg64_value = 1;
-+__u64 cmpxchg64_result_fail = 0;
-+__u64 cmpxchg64_result_succeed = 0;
-+__u32 cmpxchg32_value = 1;
-+__u32 cmpxchg32_result_fail = 0;
-+__u32 cmpxchg32_result_succeed = 0;
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(cmpxchg, int a)
-+{
-+#ifdef ENABLE_ATOMICS_TESTS
-+	cmpxchg64_result_fail = __sync_val_compare_and_swap(&cmpxchg64_value, 0, 3);
-+	cmpxchg64_result_succeed = __sync_val_compare_and_swap(&cmpxchg64_value, 1, 2);
-+
-+	cmpxchg32_result_fail = __sync_val_compare_and_swap(&cmpxchg32_value, 0, 3);
-+	cmpxchg32_result_succeed = __sync_val_compare_and_swap(&cmpxchg32_value, 1, 2);
-+#endif
-+
-+	return 0;
-+}
-+
-+__u64 xchg64_value = 1;
-+__u64 xchg64_result = 0;
-+__u32 xchg32_value = 1;
-+__u32 xchg32_result = 0;
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(xchg, int a)
-+{
-+#ifdef ENABLE_ATOMICS_TESTS
-+	__u64 val64 = 2;
-+	__u32 val32 = 2;
-+
-+	__atomic_exchange(&xchg64_value, &val64, &xchg64_result, __ATOMIC_RELAXED);
-+	__atomic_exchange(&xchg32_value, &val32, &xchg32_result, __ATOMIC_RELAXED);
-+#endif
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/verifier/atomic_and.c b/tools/testing/selftests/bpf/verifier/atomic_and.c
-new file mode 100644
-index 000000000000..7eea6d9dfd7d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/atomic_and.c
-@@ -0,0 +1,77 @@
-+{
-+	"BPF_ATOMIC_AND without fetch",
-+	.insns = {
-+		/* val = 0x110; */
-+		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0x110),
-+		/* atomic_and(&val, 0x011); */
-+		BPF_MOV64_IMM(BPF_REG_1, 0x011),
-+		BPF_ATOMIC_AND(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
-+		/* if (val != 0x010) exit(2); */
-+		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_10, -8),
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0x010, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 2),
-+		BPF_EXIT_INSN(),
-+		/* r1 should not be clobbered, no BPF_FETCH flag */
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0x011, 1),
-+		BPF_MOV64_IMM(BPF_REG_0, 1),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
-+{
-+	"BPF_ATOMIC_AND with fetch",
-+	.insns = {
-+		BPF_MOV64_IMM(BPF_REG_0, 123),
-+		/* val = 0x110; */
-+		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0x110),
-+		/* old = atomic_fetch_and(&val, 0x011); */
-+		BPF_MOV64_IMM(BPF_REG_1, 0x011),
-+		BPF_ATOMIC_FETCH_AND(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
-+		/* if (old != 0x110) exit(3); */
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0x110, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 3),
-+		BPF_EXIT_INSN(),
-+		/* if (val != 0x010) exit(2); */
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_10, -8),
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0x010, 2),
-+		BPF_MOV64_IMM(BPF_REG_1, 2),
-+		BPF_EXIT_INSN(),
-+		/* Check R0 wasn't clobbered (for fear of x86 JIT bug) */
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 123, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 1),
-+		BPF_EXIT_INSN(),
-+		/* exit(0); */
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
-+{
-+	"BPF_ATOMIC_AND with fetch 32bit",
-+	.insns = {
-+		/* r0 = (s64) -1 */
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_ALU64_IMM(BPF_SUB, BPF_REG_0, 1),
-+		/* val = 0x110; */
-+		BPF_ST_MEM(BPF_W, BPF_REG_10, -4, 0x110),
-+		/* old = atomic_fetch_and(&val, 0x011); */
-+		BPF_MOV32_IMM(BPF_REG_1, 0x011),
-+		BPF_ATOMIC_FETCH_AND(BPF_W, BPF_REG_10, BPF_REG_1, -4),
-+		/* if (old != 0x110) exit(3); */
-+		BPF_JMP32_IMM(BPF_JEQ, BPF_REG_1, 0x110, 2),
-+		BPF_MOV32_IMM(BPF_REG_0, 3),
-+		BPF_EXIT_INSN(),
-+		/* if (val != 0x010) exit(2); */
-+		BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_10, -4),
-+		BPF_JMP32_IMM(BPF_JEQ, BPF_REG_1, 0x010, 2),
-+		BPF_MOV32_IMM(BPF_REG_1, 2),
-+		BPF_EXIT_INSN(),
-+		/* Check R0 wasn't clobbered (for fear of x86 JIT bug)
-+		 * It should be -1 so add 1 to get exit code.
-+		 */
-+		BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
-diff --git a/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c b/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
-new file mode 100644
-index 000000000000..335e12690be7
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
-@@ -0,0 +1,96 @@
-+{
-+	"atomic compare-and-exchange smoketest - 64bit",
-+	.insns = {
-+		/* val = 3; */
-+		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 3),
-+		/* old = atomic_cmpxchg(&val, 2, 4); */
-+		BPF_MOV64_IMM(BPF_REG_1, 4),
-+		BPF_MOV64_IMM(BPF_REG_0, 2),
-+		BPF_ATOMIC_CMPXCHG(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
-+		/* if (old != 3) exit(2); */
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 3, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 2),
-+		BPF_EXIT_INSN(),
-+		/* if (val != 3) exit(3); */
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_10, -8),
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 3, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 3),
-+		BPF_EXIT_INSN(),
-+		/* old = atomic_cmpxchg(&val, 3, 4); */
-+		BPF_MOV64_IMM(BPF_REG_1, 4),
-+		BPF_MOV64_IMM(BPF_REG_0, 3),
-+		BPF_ATOMIC_CMPXCHG(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
-+		/* if (old != 3) exit(4); */
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 3, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 4),
-+		BPF_EXIT_INSN(),
-+		/* if (val != 4) exit(5); */
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_10, -8),
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 4, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 5),
-+		BPF_EXIT_INSN(),
-+		/* exit(0); */
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
-+{
-+	"atomic compare-and-exchange smoketest - 32bit",
-+	.insns = {
-+		/* val = 3; */
-+		BPF_ST_MEM(BPF_W, BPF_REG_10, -4, 3),
-+		/* old = atomic_cmpxchg(&val, 2, 4); */
-+		BPF_MOV32_IMM(BPF_REG_1, 4),
-+		BPF_MOV32_IMM(BPF_REG_0, 2),
-+		BPF_ATOMIC_CMPXCHG(BPF_W, BPF_REG_10, BPF_REG_1, -4),
-+		/* if (old != 3) exit(2); */
-+		BPF_JMP32_IMM(BPF_JEQ, BPF_REG_0, 3, 2),
-+		BPF_MOV32_IMM(BPF_REG_0, 2),
-+		BPF_EXIT_INSN(),
-+		/* if (val != 3) exit(3); */
-+		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_10, -4),
-+		BPF_JMP32_IMM(BPF_JEQ, BPF_REG_0, 3, 2),
-+		BPF_MOV32_IMM(BPF_REG_0, 3),
-+		BPF_EXIT_INSN(),
-+		/* old = atomic_cmpxchg(&val, 3, 4); */
-+		BPF_MOV32_IMM(BPF_REG_1, 4),
-+		BPF_MOV32_IMM(BPF_REG_0, 3),
-+		BPF_ATOMIC_CMPXCHG(BPF_W, BPF_REG_10, BPF_REG_1, -4),
-+		/* if (old != 3) exit(4); */
-+		BPF_JMP32_IMM(BPF_JEQ, BPF_REG_0, 3, 2),
-+		BPF_MOV32_IMM(BPF_REG_0, 4),
-+		BPF_EXIT_INSN(),
-+		/* if (val != 4) exit(5); */
-+		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_10, -4),
-+		BPF_JMP32_IMM(BPF_JEQ, BPF_REG_0, 4, 2),
-+		BPF_MOV32_IMM(BPF_REG_0, 5),
-+		BPF_EXIT_INSN(),
-+		/* exit(0); */
-+		BPF_MOV32_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
-+{
-+	"Can't use cmpxchg on uninit src reg",
-+	.insns = {
-+		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 3),
-+		BPF_MOV64_IMM(BPF_REG_0, 3),
-+		BPF_ATOMIC_CMPXCHG(BPF_DW, BPF_REG_10, BPF_REG_2, -8),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = REJECT,
-+	.errstr = "!read_ok",
-+},
-+{
-+	"Can't use cmpxchg on uninit memory",
-+	.insns = {
-+		BPF_MOV64_IMM(BPF_REG_0, 3),
-+		BPF_MOV64_IMM(BPF_REG_2, 4),
-+		BPF_ATOMIC_CMPXCHG(BPF_DW, BPF_REG_10, BPF_REG_2, -8),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = REJECT,
-+	.errstr = "invalid read from stack",
-+},
-diff --git a/tools/testing/selftests/bpf/verifier/atomic_fetch_add.c b/tools/testing/selftests/bpf/verifier/atomic_fetch_add.c
-new file mode 100644
-index 000000000000..7c87bc9a13de
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/atomic_fetch_add.c
-@@ -0,0 +1,106 @@
-+{
-+	"BPF_ATOMIC_FETCH_ADD smoketest - 64bit",
-+	.insns = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		/* Write 3 to stack */
-+		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 3),
-+		/* Put a 1 in R1, add it to the 3 on the stack, and load the value back into R1 */
-+		BPF_MOV64_IMM(BPF_REG_1, 1),
-+		BPF_ATOMIC_FETCH_ADD(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
-+		/* Check the value we loaded back was 3 */
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 3, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 1),
-+		BPF_EXIT_INSN(),
-+		/* Load value from stack */
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_10, -8),
-+		/* Check value loaded from stack was 4 */
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 4, 1),
-+		BPF_MOV64_IMM(BPF_REG_0, 2),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
-+{
-+	"BPF_ATOMIC_FETCH_ADD smoketest - 32bit",
-+	.insns = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		/* Write 3 to stack */
-+		BPF_ST_MEM(BPF_W, BPF_REG_10, -4, 3),
-+		/* Put a 1 in R1, add it to the 3 on the stack, and load the value back into R1 */
-+		BPF_MOV32_IMM(BPF_REG_1, 1),
-+		BPF_ATOMIC_FETCH_ADD(BPF_W, BPF_REG_10, BPF_REG_1, -4),
-+		/* Check the value we loaded back was 3 */
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 3, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 1),
-+		BPF_EXIT_INSN(),
-+		/* Load value from stack */
-+		BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_10, -4),
-+		/* Check value loaded from stack was 4 */
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 4, 1),
-+		BPF_MOV64_IMM(BPF_REG_0, 2),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
-+{
-+	"Can't use ATM_FETCH_ADD on frame pointer",
-+	.insns = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 3),
-+		BPF_ATOMIC_FETCH_ADD(BPF_DW, BPF_REG_10, BPF_REG_10, -8),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = REJECT,
-+	.errstr_unpriv = "R10 leaks addr into mem",
-+	.errstr = "frame pointer is read only",
-+},
-+{
-+	"Can't use ATM_FETCH_ADD on uninit src reg",
-+	.insns = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 3),
-+		BPF_ATOMIC_FETCH_ADD(BPF_DW, BPF_REG_10, BPF_REG_2, -8),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = REJECT,
-+	/* It happens that the address leak check is first, but it would also be
-+	 * complain about the fact that we're trying to modify R10.
-+	 */
-+	.errstr = "!read_ok",
-+},
-+{
-+	"Can't use ATM_FETCH_ADD on uninit dst reg",
-+	.insns = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_ATOMIC_FETCH_ADD(BPF_DW, BPF_REG_2, BPF_REG_0, -8),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = REJECT,
-+	/* It happens that the address leak check is first, but it would also be
-+	 * complain about the fact that we're trying to modify R10.
-+	 */
-+	.errstr = "!read_ok",
-+},
-+{
-+	"Can't use ATM_FETCH_ADD on kernel memory",
-+	.insns = {
-+		/* This is an fentry prog, context is array of the args of the
-+		 * kernel function being called. Load first arg into R2.
-+		 */
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_1, 0),
-+		/* First arg of bpf_fentry_test7 is a pointer to a struct.
-+		 * Attempt to modify that struct. Verifier shouldn't let us
-+		 * because it's kernel memory.
-+		 */
-+		BPF_MOV64_IMM(BPF_REG_3, 1),
-+		BPF_ATOMIC_FETCH_ADD(BPF_DW, BPF_REG_2, BPF_REG_3, 0),
-+		/* Done */
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	},
-+	.prog_type = BPF_PROG_TYPE_TRACING,
-+	.expected_attach_type = BPF_TRACE_FENTRY,
-+	.kfunc = "bpf_fentry_test7",
-+	.result = REJECT,
-+	.errstr = "only read is supported",
-+},
-diff --git a/tools/testing/selftests/bpf/verifier/atomic_or.c b/tools/testing/selftests/bpf/verifier/atomic_or.c
-new file mode 100644
-index 000000000000..1b22fb2881f0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/atomic_or.c
-@@ -0,0 +1,77 @@
-+{
-+	"BPF_ATOMIC_OR without fetch",
-+	.insns = {
-+		/* val = 0x110; */
-+		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0x110),
-+		/* atomic_or(&val, 0x011); */
-+		BPF_MOV64_IMM(BPF_REG_1, 0x011),
-+		BPF_ATOMIC_OR(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
-+		/* if (val != 0x111) exit(2); */
-+		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_10, -8),
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0x111, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 2),
-+		BPF_EXIT_INSN(),
-+		/* r1 should not be clobbered, no BPF_FETCH flag */
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0x011, 1),
-+		BPF_MOV64_IMM(BPF_REG_0, 1),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
-+{
-+	"BPF_ATOMIC_OR with fetch",
-+	.insns = {
-+		BPF_MOV64_IMM(BPF_REG_0, 123),
-+		/* val = 0x110; */
-+		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0x110),
-+		/* old = atomic_fetch_or(&val, 0x011); */
-+		BPF_MOV64_IMM(BPF_REG_1, 0x011),
-+		BPF_ATOMIC_FETCH_OR(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
-+		/* if (old != 0x110) exit(3); */
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0x110, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 3),
-+		BPF_EXIT_INSN(),
-+		/* if (val != 0x111) exit(2); */
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_10, -8),
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0x111, 2),
-+		BPF_MOV64_IMM(BPF_REG_1, 2),
-+		BPF_EXIT_INSN(),
-+		/* Check R0 wasn't clobbered (for fear of x86 JIT bug) */
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 123, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 1),
-+		BPF_EXIT_INSN(),
-+		/* exit(0); */
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
-+{
-+	"BPF_ATOMIC_OR with fetch 32bit",
-+	.insns = {
-+		/* r0 = (s64) -1 */
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_ALU64_IMM(BPF_SUB, BPF_REG_0, 1),
-+		/* val = 0x110; */
-+		BPF_ST_MEM(BPF_W, BPF_REG_10, -4, 0x110),
-+		/* old = atomic_fetch_or(&val, 0x011); */
-+		BPF_MOV32_IMM(BPF_REG_1, 0x011),
-+		BPF_ATOMIC_FETCH_OR(BPF_W, BPF_REG_10, BPF_REG_1, -4),
-+		/* if (old != 0x110) exit(3); */
-+		BPF_JMP32_IMM(BPF_JEQ, BPF_REG_1, 0x110, 2),
-+		BPF_MOV32_IMM(BPF_REG_0, 3),
-+		BPF_EXIT_INSN(),
-+		/* if (val != 0x111) exit(2); */
-+		BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_10, -4),
-+		BPF_JMP32_IMM(BPF_JEQ, BPF_REG_1, 0x111, 2),
-+		BPF_MOV32_IMM(BPF_REG_1, 2),
-+		BPF_EXIT_INSN(),
-+		/* Check R0 wasn't clobbered (for fear of x86 JIT bug)
-+		 * It should be -1 so add 1 to get exit code.
-+		 */
-+		BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
-diff --git a/tools/testing/selftests/bpf/verifier/atomic_xchg.c b/tools/testing/selftests/bpf/verifier/atomic_xchg.c
-new file mode 100644
-index 000000000000..9348ac490e24
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/atomic_xchg.c
-@@ -0,0 +1,46 @@
-+{
-+	"atomic exchange smoketest - 64bit",
-+	.insns = {
-+		/* val = 3; */
-+		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 3),
-+		/* old = atomic_xchg(&val, 4); */
-+		BPF_MOV64_IMM(BPF_REG_1, 4),
-+		BPF_ATOMIC_XCHG(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
-+		/* if (old != 3) exit(1); */
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 3, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 1),
-+		BPF_EXIT_INSN(),
-+		/* if (val != 4) exit(2); */
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_10, -8),
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 4, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 2),
-+		BPF_EXIT_INSN(),
-+		/* exit(0); */
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
-+{
-+	"atomic exchange smoketest - 32bit",
-+	.insns = {
-+		/* val = 3; */
-+		BPF_ST_MEM(BPF_W, BPF_REG_10, -4, 3),
-+		/* old = atomic_xchg(&val, 4); */
-+		BPF_MOV32_IMM(BPF_REG_1, 4),
-+		BPF_ATOMIC_XCHG(BPF_W, BPF_REG_10, BPF_REG_1, -4),
-+		/* if (old != 3) exit(1); */
-+		BPF_JMP32_IMM(BPF_JEQ, BPF_REG_1, 3, 2),
-+		BPF_MOV32_IMM(BPF_REG_0, 1),
-+		BPF_EXIT_INSN(),
-+		/* if (val != 4) exit(2); */
-+		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_10, -4),
-+		BPF_JMP32_IMM(BPF_JEQ, BPF_REG_0, 4, 2),
-+		BPF_MOV32_IMM(BPF_REG_0, 2),
-+		BPF_EXIT_INSN(),
-+		/* exit(0); */
-+		BPF_MOV32_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
-diff --git a/tools/testing/selftests/bpf/verifier/atomic_xor.c b/tools/testing/selftests/bpf/verifier/atomic_xor.c
-new file mode 100644
-index 000000000000..d1315419a3a8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verifier/atomic_xor.c
-@@ -0,0 +1,77 @@
-+{
-+	"BPF_ATOMIC_XOR without fetch",
-+	.insns = {
-+		/* val = 0x110; */
-+		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0x110),
-+		/* atomic_xor(&val, 0x011); */
-+		BPF_MOV64_IMM(BPF_REG_1, 0x011),
-+		BPF_ATOMIC_XOR(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
-+		/* if (val != 0x101) exit(2); */
-+		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_10, -8),
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0x101, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 2),
-+		BPF_EXIT_INSN(),
-+		/* r1 should not be clobbered, no BPF_FETCH flag */
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0x011, 1),
-+		BPF_MOV64_IMM(BPF_REG_0, 1),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
-+{
-+	"BPF_ATOMIC_XOR with fetch",
-+	.insns = {
-+		BPF_MOV64_IMM(BPF_REG_0, 123),
-+		/* val = 0x110; */
-+		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0x110),
-+		/* old = atomic_fetch_xor(&val, 0x011); */
-+		BPF_MOV64_IMM(BPF_REG_1, 0x011),
-+		BPF_ATOMIC_FETCH_XOR(BPF_DW, BPF_REG_10, BPF_REG_1, -8),
-+		/* if (old != 0x110) exit(3); */
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0x110, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 3),
-+		BPF_EXIT_INSN(),
-+		/* if (val != 0x101) exit(2); */
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_10, -8),
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_1, 0x101, 2),
-+		BPF_MOV64_IMM(BPF_REG_1, 2),
-+		BPF_EXIT_INSN(),
-+		/* Check R0 wasn't clobbered (fxor fear of x86 JIT bug) */
-+		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 123, 2),
-+		BPF_MOV64_IMM(BPF_REG_0, 1),
-+		BPF_EXIT_INSN(),
-+		/* exit(0); */
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
-+{
-+	"BPF_ATOMIC_XOR with fetch 32bit",
-+	.insns = {
-+		/* r0 = (s64) -1 */
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_ALU64_IMM(BPF_SUB, BPF_REG_0, 1),
-+		/* val = 0x110; */
-+		BPF_ST_MEM(BPF_W, BPF_REG_10, -4, 0x110),
-+		/* old = atomic_fetch_xor(&val, 0x011); */
-+		BPF_MOV32_IMM(BPF_REG_1, 0x011),
-+		BPF_ATOMIC_FETCH_XOR(BPF_W, BPF_REG_10, BPF_REG_1, -4),
-+		/* if (old != 0x110) exit(3); */
-+		BPF_JMP32_IMM(BPF_JEQ, BPF_REG_1, 0x110, 2),
-+		BPF_MOV32_IMM(BPF_REG_0, 3),
-+		BPF_EXIT_INSN(),
-+		/* if (val != 0x101) exit(2); */
-+		BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_10, -4),
-+		BPF_JMP32_IMM(BPF_JEQ, BPF_REG_1, 0x101, 2),
-+		BPF_MOV32_IMM(BPF_REG_1, 2),
-+		BPF_EXIT_INSN(),
-+		/* Check R0 wasn't clobbered (fxor fear of x86 JIT bug)
-+		 * It should be -1 so add 1 to get exit code.
-+		 */
-+		BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
-+		BPF_EXIT_INSN(),
-+	},
-+	.result = ACCEPT,
-+},
++/* Atomic memory and, *(uint *)(dst_reg + off16) &= src_reg */
++
++#define BPF_ATOMIC_AND(SIZE, DST, SRC, OFF)			\
++	((struct bpf_insn) {					\
++		.code  = BPF_STX | BPF_SIZE(SIZE) | BPF_ATOMIC,	\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = BPF_AND })
++
++/* Atomic memory and with fetch, src_reg = atomic_fetch_and(*(dst_reg + off), src_reg); */
++
++#define BPF_ATOMIC_FETCH_AND(SIZE, DST, SRC, OFF)		\
++	((struct bpf_insn) {					\
++		.code  = BPF_STX | BPF_SIZE(SIZE) | BPF_ATOMIC,	\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = BPF_AND | BPF_FETCH })
++
++/* Atomic memory or, *(uint *)(dst_reg + off16) |= src_reg */
++
++#define BPF_ATOMIC_OR(SIZE, DST, SRC, OFF)			\
++	((struct bpf_insn) {					\
++		.code  = BPF_STX | BPF_SIZE(SIZE) | BPF_ATOMIC,	\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = BPF_OR })
++
++/* Atomic memory or with fetch, src_reg = atomic_fetch_or(*(dst_reg + off), src_reg); */
++
++#define BPF_ATOMIC_FETCH_OR(SIZE, DST, SRC, OFF)		\
++	((struct bpf_insn) {					\
++		.code  = BPF_STX | BPF_SIZE(SIZE) | BPF_ATOMIC,	\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = BPF_OR | BPF_FETCH })
++
++/* Atomic memory xor, *(uint *)(dst_reg + off16) ^= src_reg */
++
++#define BPF_ATOMIC_XOR(SIZE, DST, SRC, OFF)			\
++	((struct bpf_insn) {					\
++		.code  = BPF_STX | BPF_SIZE(SIZE) | BPF_ATOMIC,	\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = BPF_XOR })
++
++/* Atomic memory xor with fetch, src_reg = atomic_fetch_xor(*(dst_reg + off), src_reg); */
++
++#define BPF_ATOMIC_FETCH_XOR(SIZE, DST, SRC, OFF)		\
++	((struct bpf_insn) {					\
++		.code  = BPF_STX | BPF_SIZE(SIZE) | BPF_ATOMIC,	\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = BPF_XOR | BPF_FETCH })
++
+ /* Atomic exchange, src_reg = atomic_xchg((dst_reg + off), src_reg) */
+ 
+ #define BPF_ATOMIC_XCHG(SIZE, DST, SRC, OFF)			\
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 498d3f067be7..27eac4d5724c 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1642,7 +1642,10 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
+ 	STX_ATOMIC_W:
+ 		switch (IMM) {
+ 		ATOMIC(BPF_ADD, add)
+-
++		ATOMIC(BPF_AND, and)
++		ATOMIC(BPF_OR, or)
++		ATOMIC(BPF_XOR, xor)
++#undef ATOMIC
+ 		case BPF_XCHG:
+ 			if (BPF_SIZE(insn->code) == BPF_W)
+ 				SRC = (u32) atomic_xchg(
+diff --git a/kernel/bpf/disasm.c b/kernel/bpf/disasm.c
+index 18357ea9a17d..0c7c1c31a57b 100644
+--- a/kernel/bpf/disasm.c
++++ b/kernel/bpf/disasm.c
+@@ -80,6 +80,13 @@ const char *const bpf_alu_string[16] = {
+ 	[BPF_END >> 4]  = "endian",
+ };
+ 
++static const char *const bpf_atomic_alu_string[16] = {
++	[BPF_ADD >> 4]  = "add",
++	[BPF_AND >> 4]  = "and",
++	[BPF_OR >> 4]  = "or",
++	[BPF_XOR >> 4]  = "or",
++};
++
+ static const char *const bpf_ldst_string[] = {
+ 	[BPF_W >> 3]  = "u32",
+ 	[BPF_H >> 3]  = "u16",
+@@ -154,17 +161,23 @@ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
+ 				insn->dst_reg,
+ 				insn->off, insn->src_reg);
+ 		else if (BPF_MODE(insn->code) == BPF_ATOMIC &&
+-			 insn->imm == BPF_ADD) {
+-			verbose(cbs->private_data, "(%02x) lock *(%s *)(r%d %+d) += r%d\n",
++			 (insn->imm == BPF_ADD || insn->imm == BPF_ADD ||
++			  insn->imm == BPF_OR || insn->imm == BPF_XOR)) {
++			verbose(cbs->private_data, "(%02x) lock *(%s *)(r%d %+d) %s r%d\n",
+ 				insn->code,
+ 				bpf_ldst_string[BPF_SIZE(insn->code) >> 3],
+ 				insn->dst_reg, insn->off,
++				bpf_alu_string[BPF_OP(insn->imm) >> 4],
+ 				insn->src_reg);
+ 		} else if (BPF_MODE(insn->code) == BPF_ATOMIC &&
+-			   insn->imm == (BPF_ADD | BPF_FETCH)) {
+-			verbose(cbs->private_data, "(%02x) r%d = atomic%s_fetch_add(*(%s *)(r%d %+d), r%d)\n",
++			   (insn->imm == (BPF_ADD | BPF_FETCH) ||
++			    insn->imm == (BPF_AND | BPF_FETCH) ||
++			    insn->imm == (BPF_OR | BPF_FETCH) ||
++			    insn->imm == (BPF_XOR | BPF_FETCH))) {
++			verbose(cbs->private_data, "(%02x) r%d = atomic%s_fetch_%s(*(%s *)(r%d %+d), r%d)\n",
+ 				insn->code, insn->src_reg,
+ 				BPF_SIZE(insn->code) == BPF_DW ? "64" : "",
++				bpf_atomic_alu_string[BPF_OP(insn->imm) >> 4],
+ 				bpf_ldst_string[BPF_SIZE(insn->code) >> 3],
+ 				insn->dst_reg, insn->off, insn->src_reg);
+ 		} else if (BPF_MODE(insn->code) == BPF_ATOMIC &&
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index ccf4315e54e7..dd30eb9a6c1b 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3606,6 +3606,12 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
+ 	switch (insn->imm) {
+ 	case BPF_ADD:
+ 	case BPF_ADD | BPF_FETCH:
++	case BPF_AND:
++	case BPF_AND | BPF_FETCH:
++	case BPF_OR:
++	case BPF_OR | BPF_FETCH:
++	case BPF_XOR:
++	case BPF_XOR | BPF_FETCH:
+ 	case BPF_XCHG:
+ 	case BPF_CMPXCHG:
+ 		break;
+diff --git a/tools/include/linux/filter.h b/tools/include/linux/filter.h
+index ea99bd17d003..b74febf83eb1 100644
+--- a/tools/include/linux/filter.h
++++ b/tools/include/linux/filter.h
+@@ -190,6 +190,66 @@
+ 		.off   = OFF,					\
+ 		.imm   = BPF_ADD | BPF_FETCH })
+ 
++/* Atomic memory and, *(uint *)(dst_reg + off16) -= src_reg */
++
++#define BPF_ATOMIC_AND(SIZE, DST, SRC, OFF)			\
++	((struct bpf_insn) {					\
++		.code  = BPF_STX | BPF_SIZE(SIZE) | BPF_ATOMIC,	\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = BPF_AND })
++
++/* Atomic memory and with fetch, src_reg = atomic_fetch_and(*(dst_reg + off), src_reg); */
++
++#define BPF_ATOMIC_FETCH_AND(SIZE, DST, SRC, OFF)		\
++	((struct bpf_insn) {					\
++		.code  = BPF_STX | BPF_SIZE(SIZE) | BPF_ATOMIC,	\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = BPF_AND | BPF_FETCH })
++
++/* Atomic memory or, *(uint *)(dst_reg + off16) -= src_reg */
++
++#define BPF_ATOMIC_OR(SIZE, DST, SRC, OFF)			\
++	((struct bpf_insn) {					\
++		.code  = BPF_STX | BPF_SIZE(SIZE) | BPF_ATOMIC,	\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = BPF_OR })
++
++/* Atomic memory or with fetch, src_reg = atomic_fetch_or(*(dst_reg + off), src_reg); */
++
++#define BPF_ATOMIC_FETCH_OR(SIZE, DST, SRC, OFF)		\
++	((struct bpf_insn) {					\
++		.code  = BPF_STX | BPF_SIZE(SIZE) | BPF_ATOMIC,	\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = BPF_OR | BPF_FETCH })
++
++/* Atomic memory xor, *(uint *)(dst_reg + off16) -= src_reg */
++
++#define BPF_ATOMIC_XOR(SIZE, DST, SRC, OFF)			\
++	((struct bpf_insn) {					\
++		.code  = BPF_STX | BPF_SIZE(SIZE) | BPF_ATOMIC,	\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = BPF_XOR })
++
++/* Atomic memory xor with fetch, src_reg = atomic_fetch_xor(*(dst_reg + off), src_reg); */
++
++#define BPF_ATOMIC_FETCH_XOR(SIZE, DST, SRC, OFF)		\
++	((struct bpf_insn) {					\
++		.code  = BPF_STX | BPF_SIZE(SIZE) | BPF_ATOMIC,	\
++		.dst_reg = DST,					\
++		.src_reg = SRC,					\
++		.off   = OFF,					\
++		.imm   = BPF_XOR | BPF_FETCH })
++
+ /* Atomic exchange, src_reg = atomic_xchg((dst_reg + off), src_reg) */
+ 
+ #define BPF_ATOMIC_XCHG(SIZE, DST, SRC, OFF)			\
 -- 
 2.29.2.454.gaff20da3a2-goog
 
