@@ -2,65 +2,67 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24B3BC83013
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 00:59:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D4EB0C64E8A
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 00:59:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E15782222E
+	by mail.kernel.org (Postfix) with ESMTP id 7E28D22201
 	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 00:59:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729059AbgLCA7C (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 2 Dec 2020 19:59:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55890 "EHLO
+        id S1727127AbgLCA66 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Dec 2020 19:58:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726851AbgLCA7C (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 2 Dec 2020 19:59:02 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8836C0617A6
-        for <bpf@vger.kernel.org>; Wed,  2 Dec 2020 16:58:15 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id 64so129574wra.11
-        for <bpf@vger.kernel.org>; Wed, 02 Dec 2020 16:58:15 -0800 (PST)
+        with ESMTP id S1726851AbgLCA66 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Dec 2020 19:58:58 -0500
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71DDC061A47
+        for <bpf@vger.kernel.org>; Wed,  2 Dec 2020 16:58:17 -0800 (PST)
+Received: by mail-wr1-x443.google.com with SMTP id k14so167623wrn.1
+        for <bpf@vger.kernel.org>; Wed, 02 Dec 2020 16:58:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gdZHAgZSpf4diqBdz0OIIWe3lSqDjX8SVs307R6C/N0=;
-        b=eqGd4ZhXn52gu0Jh1s9yGc2t8PW3is9XOJ5x9EjofVZKsTcEuPFXYE0nkMapCvjLAP
-         XQqkuL/3P/Qp0s0qtrCcTWgW5RTexdsscKUEmi06jd6aKV8M4kwhDquipqk6Lo9czzx6
-         Y/8pPCzTxi/vDLNOpyDtofgH2NcZ1mgsLSN9Y=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=ghTVsKbpZtfvZg6e/7iBLzacUWdh3E9D77gh2ZJibOg=;
+        b=UCcew2G12nQ35xouD2ydDuKmEOgtKkMgTK/ZJX/WvlGCFxzhchd0kPyuc2JYFxFdSx
+         3jf8Hy8wk3A75n3SUyp5tIxBmKgF5UZoAMKk32if1Uq6BfXdrIylu1rNHlS9eBi90i6/
+         XpcmHdTf3KZidnZCWd3YSiyXBMg8WBE85dgb0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gdZHAgZSpf4diqBdz0OIIWe3lSqDjX8SVs307R6C/N0=;
-        b=fKmNte1Jg9itd0gwktlpU64Ch4M//sO584+drIeu2tdeCtYvaSCZWrHb6ucf/d1nPi
-         gA0obumZ0WeGJ6pdTdDoX7RIEGqdM+FXHFGaYCdRiX1mbAYi/28fO95UUaZIeC9BUdqm
-         +SJX3qcJ5IjwKqZKfn+vzh9zt1VeucELEbKTeBrDb3NVRaC2dwd1zLggqrB+CXJB4STF
-         IXKLtbYPPOnagA1im9iRAQaQAbeSoX6tSeTNx5PZmEmza5LSNdhBPkKNzylRWrTZerMc
-         rb8NPrqo3t8fXeBrnYWEyp4FaxdxupLo4BKkmxI9lpRVavwFxcN2fQt0ggVvSW5XCz/d
-         fU2A==
-X-Gm-Message-State: AOAM533XfsTJ7sS15uvT77z+I3rjHU+yp/9jeTODfn0aoHtB4UryXNmV
-        5Y/c7Yf0zactiyd0rWwtV6/UAhQlEzH8u4Fm
-X-Google-Smtp-Source: ABdhPJxaGi584n/O0g1GfVc50tbaNiAKUUd2lbnTaZfYyZbYqpprbddjhfzGt+P9MW9ez7RFDHzb6A==
-X-Received: by 2002:adf:db8e:: with SMTP id u14mr717923wri.233.1606957094331;
-        Wed, 02 Dec 2020 16:58:14 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=ghTVsKbpZtfvZg6e/7iBLzacUWdh3E9D77gh2ZJibOg=;
+        b=hURIMiManSE9CtaL6xSE52Jb0R3HQXUfjItGg6fXb9QBZ086y2z89Z0Mf/HuqRJK73
+         DkzQlI6B4RCDAAIvPN2OF8zIXPmEwFFjlkc6OFY8F8KB72pAY12dHB9/dSIyjh6+BLMe
+         y3RQXqQgpWnZ+bWZNc0gI5ZfibMV2yG9tamiTbM83yFLPKGKnot+ZkOGzzhtM91/e38+
+         mMCyorWQDLp+hos1RBsA5FN+KmMsxcL+QC3yCj4TbOUtJRIhE6z79FG0m1LXOt1cNAQl
+         ilbiQWL3CJ7Sp+5upIWqKrxZxycOj/YzllpvlryrCzN3T4DQdtYHatlgumamZcZqtXyr
+         rjqw==
+X-Gm-Message-State: AOAM5333B9KZ5hz9DQJjftpCTrzt+Mj0/g+hHVUI9qwdki0/RZ82jKE3
+        6p+lPOCwmdJM1qWNlxO9FK3EL2314+DrkE5Y
+X-Google-Smtp-Source: ABdhPJy7tnVcrXSmK1e55LDlngGOTYYTYOL5TpVdJJyxCB9JfHxMPeW5K/IxkbTwLE/iicOj7JLEZw==
+X-Received: by 2002:adf:f347:: with SMTP id e7mr737105wrp.183.1606957096320;
+        Wed, 02 Dec 2020 16:58:16 -0800 (PST)
 Received: from kpsingh.c.googlers.com.com (203.75.199.104.bc.googleusercontent.com. [104.199.75.203])
-        by smtp.gmail.com with ESMTPSA id m4sm217960wmi.41.2020.12.02.16.58.13
+        by smtp.gmail.com with ESMTPSA id m4sm217960wmi.41.2020.12.02.16.58.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Dec 2020 16:58:13 -0800 (PST)
+        Wed, 02 Dec 2020 16:58:15 -0800 (PST)
 From:   KP Singh <kpsingh@chromium.org>
 To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Subject: [PATCH bpf-next v3 0/4] Fixes for ima selftest
-Date:   Thu,  3 Dec 2020 00:58:03 +0000
-Message-Id: <20201203005807.486320-1-kpsingh@chromium.org>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: [PATCH bpf-next v3 3/4] selftests/bpf: Add config dependency on BLK_DEV_LOOP
+Date:   Thu,  3 Dec 2020 00:58:06 +0000
+Message-Id: <20201203005807.486320-4-kpsingh@chromium.org>
 X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
+In-Reply-To: <20201203005807.486320-1-kpsingh@chromium.org>
+References: <20201203005807.486320-1-kpsingh@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -69,29 +71,26 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: KP Singh <kpsingh@google.com>
 
-# v2 -> v3
+The ima selftest restricts its scope to a test filesystem image
+mounted on a loop device and prevents permanent ima policy changes for
+the whole system.
 
-* Added missing tags.
-* Indentation fixes + some other fixes suggested by Andrii.
-* Re-indent file to tabs.
+Fixes: 34b82d3ac105 ("bpf: Add a selftest for bpf_ima_inode_hash")
+Reported-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: KP Singh <kpsingh@google.com>
+---
+ tools/testing/selftests/bpf/config | 1 +
+ 1 file changed, 1 insertion(+)
 
-# What?
-
-* Fixes to work in busybox shell (tested on the one used by BPF CI).
-* Ensure that securityfs is mounted before updating the ima policy
-* Add missing config deps.
-
-
-KP Singh (4):
-  selftests/bpf: Update ima_setup.sh for busybox
-  selftests/bpf: Ensure securityfs mount before writing ima policy
-  selftests/bpf: Add config dependency on BLK_DEV_LOOP
-  selftests/bpf: Indent ima_setup.sh with tabs.
-
- tools/testing/selftests/bpf/config       |   1 +
- tools/testing/selftests/bpf/ima_setup.sh | 107 +++++++++++++----------
- 2 files changed, 64 insertions(+), 44 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 365bf9771b07..37e1f303fc11 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -43,3 +43,4 @@ CONFIG_IMA=y
+ CONFIG_SECURITYFS=y
+ CONFIG_IMA_WRITE_POLICY=y
+ CONFIG_IMA_READ_POLICY=y
++CONFIG_BLK_DEV_LOOP=y
 -- 
 2.29.2.576.ga3fc446d84-goog
 
