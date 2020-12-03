@@ -2,362 +2,121 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A3385C71155
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 03:53:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CFC3C63777
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 04:17:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5783A221FB
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 03:53:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 03E3D21D91
+	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 04:17:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729758AbgLCDx0 convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Wed, 2 Dec 2020 22:53:26 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:22570 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729735AbgLCDx0 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 2 Dec 2020 22:53:26 -0500
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id 0B33lSe8016948
-        for <bpf@vger.kernel.org>; Wed, 2 Dec 2020 19:52:43 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 3562ma08vw-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Wed, 02 Dec 2020 19:52:43 -0800
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:82::e) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Wed, 2 Dec 2020 19:52:42 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id ABD152ECA822; Wed,  2 Dec 2020 19:52:32 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH v5 bpf-next 12/14] libbpf: support attachment of BPF tracing programs to kernel modules
-Date:   Wed, 2 Dec 2020 19:52:02 -0800
-Message-ID: <20201203035204.1411380-13-andrii@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20201203035204.1411380-1-andrii@kernel.org>
-References: <20201203035204.1411380-1-andrii@kernel.org>
+        id S1727303AbgLCERB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 2 Dec 2020 23:17:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727211AbgLCERB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 2 Dec 2020 23:17:01 -0500
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C63AC061A4E
+        for <bpf@vger.kernel.org>; Wed,  2 Dec 2020 20:16:21 -0800 (PST)
+Received: by mail-qv1-xf41.google.com with SMTP id n9so375495qvp.5
+        for <bpf@vger.kernel.org>; Wed, 02 Dec 2020 20:16:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kgW4X2iCaSYw98VUpDq6aeDlPG5HqYjAxBk44d1Z5bc=;
+        b=Gzr4ha3Z5MzFwzRKt1pXo8niNXRADuRcDdXa05/nWSz1WzqivZGUZZqcvqZ+cqgAwi
+         X+pGEJQHLFAHa1WrSdvGXLQ/whlQtc4H2FMQK/7msIAtNzVO43sEB5QqRqzW24Ovh0UM
+         V6YhV5AcJjR9/ju+8NyaNHfx2HIUo8EpCsgdIY0/Y7vGj74mHCwIHnSydunQ5uLoGb63
+         HwK/5CaDO9qe+FY7k/bsJy4WcDJDCI89LNbobe+U/izfFQ7M24atx97p2jgm7tgMkBBZ
+         Jai8e+FrMnto2WR7v5Np/VVFsQcRwgDllY4R2G53/OsQobNw5EhLeDzz8rGhtV3h9/0f
+         QTsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kgW4X2iCaSYw98VUpDq6aeDlPG5HqYjAxBk44d1Z5bc=;
+        b=Y26zxCwmt2uByaaZFChl/Ny/hVe4k3KB5sNWvwY4NlEz4X5iFHUvoDLdVGcDYMv7x+
+         ewM+iZCDtf45LMx4AUFHZsbynjLb7kbdAG/eZFy4ZAQh6y0HEDBFAs8WEfU6ixNNd7gQ
+         dIXspGwWdKq8nudl0gwy7gEXZL44fSYXgLej8cyTLJnBdc93/Lye7FrCVINzzkC3Ifw5
+         ISddBKeAOVVdLvq2kMSB5TV4jz+QSQNR0ytc5PBD8fztjhoAZz+ohifmr2akUssNvjNC
+         DjxQd54z09QBjky/B18OVFFA8FvBZo7cin+uxAZszg99FLyp7y4z3V5eCWC0dG2T3sH5
+         VbXg==
+X-Gm-Message-State: AOAM532m+GUeIU44OCcJhwE6K6tViRXtI5P9G+LK6hkNKzOfXU08mBT5
+        On6YQqgrc4Ude2FDWq4j6Ejq5u7Yta28Hg==
+X-Google-Smtp-Source: ABdhPJx8Rz22TfOiNbgjXNeJ27JEfPzacd84jTRrhDsMzBmqMJT97vlGyuE3GIHcAQLpHKDndSYo0w==
+X-Received: by 2002:a0c:b3d6:: with SMTP id b22mr1317206qvf.10.1606968979815;
+        Wed, 02 Dec 2020 20:16:19 -0800 (PST)
+Received: from localhost (pool-96-239-57-246.nycmny.fios.verizon.net. [96.239.57.246])
+        by smtp.gmail.com with ESMTPSA id n9sm1376440qti.75.2020.12.02.20.16.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Dec 2020 20:16:18 -0800 (PST)
+From:   Andrei Matei <andreimatei1@gmail.com>
+To:     bpf@vger.kernel.org
+Cc:     andrii@kernel.org, Andrei Matei <andreimatei1@gmail.com>
+Subject: [PATCH bpf-next v2] libbpf: fail early when loading programs with unspecified type
+Date:   Wed,  2 Dec 2020 23:15:58 -0500
+Message-Id: <20201203041558.52055-1-andreimatei1@gmail.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-12-03_01:2020-11-30,2020-12-03 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
- adultscore=0 mlxscore=0 suspectscore=29 phishscore=0 impostorscore=0
- priorityscore=1501 spamscore=0 malwarescore=0 mlxlogscore=999 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012030020
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Teach libbpf to search for BTF types in kernel modules for tracing BPF
-programs.  This allows attachment of raw_tp/fentry/fexit/fmod_ret/etc BPF
-program types to tracepoints and functions in kernel modules.
+Before this patch, a program with unspecified type
+(BPF_PROG_TYPE_UNSPEC) would be passed to the BPF syscall, only to have
+the kernel reject it with an opaque invalid argument error. This patch
+makes libbpf reject such programs with a nicer error message - in
+particular libbpf now tries to diagnose bad ELF section names at both
+open time and load time.
 
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Andrei Matei <andreimatei1@gmail.com>
 ---
- tools/lib/bpf/bpf.c             |   5 +-
- tools/lib/bpf/libbpf.c          | 137 +++++++++++++++++++++++++-------
- tools/lib/bpf/libbpf_internal.h |   1 +
- 3 files changed, 112 insertions(+), 31 deletions(-)
+v2: address Andrii's comments
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index e371ef91f5e8..77f409f85b38 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -230,8 +230,11 @@ int libbpf__bpf_prog_load(const struct bpf_prog_load_params *load_attr)
- 	attr.prog_type = load_attr->prog_type;
- 	attr.expected_attach_type = load_attr->expected_attach_type;
- 
-+	if (load_attr->attach_prog_fd)
-+		attr.attach_prog_fd = load_attr->attach_prog_fd;
-+	else
-+		attr.attach_btf_obj_fd = load_attr->attach_btf_obj_fd;
- 	attr.attach_btf_id = load_attr->attach_btf_id;
--	attr.attach_prog_fd = load_attr->attach_prog_fd;
- 
- 	attr.prog_ifindex = load_attr->prog_ifindex;
- 	attr.kern_version = load_attr->kern_version;
+ tools/lib/bpf/libbpf.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 0280df77cf5f..7e7b961ba131 100644
+index 313034117070..44a3fe6ef9e5 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -278,6 +278,7 @@ struct bpf_program {
- 	enum bpf_prog_type type;
- 	enum bpf_attach_type expected_attach_type;
- 	int prog_ifindex;
-+	__u32 attach_btf_obj_fd;
- 	__u32 attach_btf_id;
- 	__u32 attach_prog_fd;
- 	void *func_info;
-@@ -408,6 +409,7 @@ struct module_btf {
- 	struct btf *btf;
- 	char *name;
- 	__u32 id;
-+	int fd;
- };
+@@ -6629,6 +6629,16 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
+ 	char *log_buf = NULL;
+ 	int btf_fd, ret;
  
- struct bpf_object {
-@@ -4766,7 +4768,7 @@ static int load_module_btfs(struct bpf_object *obj)
- 		if (err) {
- 			err = -errno;
- 			pr_warn("failed to get BTF object #%d info: %d\n", id, err);
--			return err;
-+			goto err_out;
- 		}
- 
- 		/* ignore non-module BTFs */
-@@ -4776,25 +4778,33 @@ static int load_module_btfs(struct bpf_object *obj)
- 		}
- 
- 		btf = btf_get_from_fd(fd, obj->btf_vmlinux);
--		close(fd);
- 		if (IS_ERR(btf)) {
- 			pr_warn("failed to load module [%s]'s BTF object #%d: %ld\n",
- 				name, id, PTR_ERR(btf));
--			return PTR_ERR(btf);
-+			err = PTR_ERR(btf);
-+			goto err_out;
- 		}
- 
- 		err = btf_ensure_mem((void **)&obj->btf_modules, &obj->btf_module_cap,
- 				     sizeof(*obj->btf_modules), obj->btf_module_cnt + 1);
- 		if (err)
--			return err;
-+			goto err_out;
- 
- 		mod_btf = &obj->btf_modules[obj->btf_module_cnt++];
- 
- 		mod_btf->btf = btf;
- 		mod_btf->id = id;
-+		mod_btf->fd = fd;
- 		mod_btf->name = strdup(name);
--		if (!mod_btf->name)
--			return -ENOMEM;
-+		if (!mod_btf->name) {
-+			err = -ENOMEM;
-+			goto err_out;
-+		}
-+		continue;
++	if (prog->type == BPF_PROG_TYPE_UNSPEC) {
++      /*
++       * The program type must be set.  Most likely we couldn't find a proper
++       * section definition at load time, and thus we didn't infer the type.
++       */
++      pr_warn("prog '%s': missing BPF prog type, check ELF section name '%s'\n",
++					prog->name, prog->sec_name);
++		return -EINVAL;
++	}
 +
-+err_out:
-+		close(fd);
-+		return err;
- 	}
- 
- 	return 0;
-@@ -6830,7 +6840,10 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 	load_attr.insn_cnt = insns_cnt;
- 	load_attr.license = license;
- 	load_attr.attach_btf_id = prog->attach_btf_id;
--	load_attr.attach_prog_fd = prog->attach_prog_fd;
-+	if (prog->attach_prog_fd)
-+		load_attr.attach_prog_fd = prog->attach_prog_fd;
-+	else
-+		load_attr.attach_btf_obj_fd = prog->attach_btf_obj_fd;
- 	load_attr.attach_btf_id = prog->attach_btf_id;
- 	load_attr.kern_version = kern_version;
- 	load_attr.prog_ifindex = prog->prog_ifindex;
-@@ -6926,11 +6939,11 @@ load_program(struct bpf_program *prog, struct bpf_insn *insns, int insns_cnt,
- 	return ret;
- }
- 
--static int libbpf_find_attach_btf_id(struct bpf_program *prog);
-+static int libbpf_find_attach_btf_id(struct bpf_program *prog, int *btf_obj_fd, int *btf_type_id);
- 
- int bpf_program__load(struct bpf_program *prog, char *license, __u32 kern_ver)
- {
--	int err = 0, fd, i, btf_id;
-+	int err = 0, fd, i;
- 
- 	if (prog->obj->loaded) {
- 		pr_warn("prog '%s': can't load after object was loaded\n", prog->name);
-@@ -6940,10 +6953,14 @@ int bpf_program__load(struct bpf_program *prog, char *license, __u32 kern_ver)
- 	if ((prog->type == BPF_PROG_TYPE_TRACING ||
- 	     prog->type == BPF_PROG_TYPE_LSM ||
- 	     prog->type == BPF_PROG_TYPE_EXT) && !prog->attach_btf_id) {
--		btf_id = libbpf_find_attach_btf_id(prog);
--		if (btf_id <= 0)
--			return btf_id;
--		prog->attach_btf_id = btf_id;
-+		int btf_obj_fd = 0, btf_type_id = 0;
-+
-+		err = libbpf_find_attach_btf_id(prog, &btf_obj_fd, &btf_type_id);
-+		if (err)
-+			return err;
-+
-+		prog->attach_btf_obj_fd = btf_obj_fd;
-+		prog->attach_btf_id = btf_type_id;
- 	}
- 
- 	if (prog->instances.nr < 0 || !prog->instances.fds) {
-@@ -7453,6 +7470,7 @@ int bpf_object__load_xattr(struct bpf_object_load_attr *attr)
- 
- 	/* clean up module BTFs */
- 	for (i = 0; i < obj->btf_module_cnt; i++) {
-+		close(obj->btf_modules[i].fd);
- 		btf__free(obj->btf_modules[i].btf);
- 		free(obj->btf_modules[i].name);
- 	}
-@@ -8795,8 +8813,8 @@ static int find_btf_by_prefix_kind(const struct btf *btf, const char *prefix,
- 	return btf__find_by_name_kind(btf, btf_type_name, kind);
- }
- 
--static inline int __find_vmlinux_btf_id(struct btf *btf, const char *name,
--					enum bpf_attach_type attach_type)
-+static inline int find_attach_btf_id(struct btf *btf, const char *name,
-+				     enum bpf_attach_type attach_type)
- {
- 	int err;
- 
-@@ -8812,9 +8830,6 @@ static inline int __find_vmlinux_btf_id(struct btf *btf, const char *name,
- 	else
- 		err = btf__find_by_name_kind(btf, name, BTF_KIND_FUNC);
- 
--	if (err <= 0)
--		pr_warn("%s is not found in vmlinux BTF\n", name);
--
- 	return err;
- }
- 
-@@ -8830,7 +8845,10 @@ int libbpf_find_vmlinux_btf_id(const char *name,
+ 	if (!insns || !insns_cnt)
  		return -EINVAL;
- 	}
  
--	err = __find_vmlinux_btf_id(btf, name, attach_type);
-+	err = find_attach_btf_id(btf, name, attach_type);
-+	if (err <= 0)
-+		pr_warn("%s is not found in vmlinux BTF\n", name);
-+
- 	btf__free(btf);
- 	return err;
- }
-@@ -8868,11 +8886,49 @@ static int libbpf_find_prog_btf_id(const char *name, __u32 attach_prog_fd)
- 	return err;
- }
+@@ -6920,9 +6930,11 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
  
--static int libbpf_find_attach_btf_id(struct bpf_program *prog)
-+static int find_kernel_btf_id(struct bpf_object *obj, const char *attach_name,
-+			      enum bpf_attach_type attach_type,
-+			      int *btf_obj_fd, int *btf_type_id)
-+{
-+	int ret, i;
-+
-+	ret = find_attach_btf_id(obj->btf_vmlinux, attach_name, attach_type);
-+	if (ret > 0) {
-+		*btf_obj_fd = 0; /* vmlinux BTF */
-+		*btf_type_id = ret;
-+		return 0;
-+	}
-+	if (ret != -ENOENT)
-+		return ret;
-+
-+	ret = load_module_btfs(obj);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < obj->btf_module_cnt; i++) {
-+		const struct module_btf *mod = &obj->btf_modules[i];
-+
-+		ret = find_attach_btf_id(mod->btf, attach_name, attach_type);
-+		if (ret > 0) {
-+			*btf_obj_fd = mod->fd;
-+			*btf_type_id = ret;
-+			return 0;
-+		}
-+		if (ret == -ENOENT)
-+			continue;
-+
-+		return ret;
-+	}
-+
-+	return -ESRCH;
-+}
-+
-+static int libbpf_find_attach_btf_id(struct bpf_program *prog, int *btf_obj_fd, int *btf_type_id)
- {
- 	enum bpf_attach_type attach_type = prog->expected_attach_type;
- 	__u32 attach_prog_fd = prog->attach_prog_fd;
--	const char *name = prog->sec_name;
-+	const char *name = prog->sec_name, *attach_name;
-+	const struct bpf_sec_def *sec = NULL;
- 	int i, err;
- 
- 	if (!name)
-@@ -8883,17 +8939,37 @@ static int libbpf_find_attach_btf_id(struct bpf_program *prog)
+ 	bpf_object__for_each_program(prog, obj) {
+ 		prog->sec_def = find_sec_def(prog->sec_name);
+-		if (!prog->sec_def)
++		if (!prog->sec_def) {
+ 			/* couldn't guess, but user might manually specify */
++			pr_debug("prog '%s': unrecognized ELF section name '%s'\n", prog->name, prog->sec_name);
  			continue;
- 		if (strncmp(name, section_defs[i].sec, section_defs[i].len))
- 			continue;
--		if (attach_prog_fd)
--			err = libbpf_find_prog_btf_id(name + section_defs[i].len,
--						      attach_prog_fd);
--		else
--			err = __find_vmlinux_btf_id(prog->obj->btf_vmlinux,
--						    name + section_defs[i].len,
--						    attach_type);
-+
-+		sec = &section_defs[i];
-+		break;
-+	}
-+
-+	if (!sec) {
-+		pr_warn("failed to identify BTF ID based on ELF section name '%s'\n", name);
-+		return -ESRCH;
-+	}
-+	attach_name = name + sec->len;
-+
-+	/* BPF program's BTF ID */
-+	if (attach_prog_fd) {
-+		err = libbpf_find_prog_btf_id(attach_name, attach_prog_fd);
-+		if (err < 0) {
-+			pr_warn("failed to find BPF program (FD %d) BTF ID for '%s': %d\n",
-+				 attach_prog_fd, attach_name, err);
-+			return err;
-+		}
-+		*btf_obj_fd = 0;
-+		*btf_type_id = err;
-+		return 0;
-+	}
-+
-+	/* kernel/module BTF ID */
-+	err = find_kernel_btf_id(prog->obj, attach_name, attach_type, btf_obj_fd, btf_type_id);
-+	if (err) {
-+		pr_warn("failed to find kernel BTF type ID of '%s': %d\n", attach_name, err);
- 		return err;
- 	}
--	pr_warn("failed to identify btf_id based on ELF section name '%s'\n", name);
--	return -ESRCH;
-+	return 0;
- }
++    }
  
- int libbpf_attach_type_by_name(const char *name,
-@@ -10782,6 +10858,7 @@ int bpf_program__set_attach_target(struct bpf_program *prog,
- 		return btf_id;
- 
- 	prog->attach_btf_id = btf_id;
-+	prog->attach_btf_obj_fd = 0;
- 	prog->attach_prog_fd = attach_prog_fd;
- 	return 0;
- }
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 681073a67ae3..969d0ac592ba 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -160,6 +160,7 @@ struct bpf_prog_load_params {
- 	const char *license;
- 	__u32 kern_version;
- 	__u32 attach_prog_fd;
-+	__u32 attach_btf_obj_fd;
- 	__u32 attach_btf_id;
- 	__u32 prog_ifindex;
- 	__u32 prog_btf_fd;
+ 		if (prog->sec_def->is_sleepable)
+ 			prog->prog_flags |= BPF_F_SLEEPABLE;
 -- 
-2.24.1
+2.27.0
 
