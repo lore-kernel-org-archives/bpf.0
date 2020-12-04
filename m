@@ -2,81 +2,94 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 58AE3C19425
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 23:55:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 70971C4361B
+	for <bpf@archiver.kernel.org>; Fri,  4 Dec 2020 00:54:24 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 21EE522224
-	for <bpf@archiver.kernel.org>; Thu,  3 Dec 2020 23:55:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A39C206D8
+	for <bpf@archiver.kernel.org>; Fri,  4 Dec 2020 00:54:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729534AbgLCXzh convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 3 Dec 2020 18:55:37 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:21814 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731350AbgLCXzg (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 3 Dec 2020 18:55:36 -0500
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0B3NlBuu006148
-        for <bpf@vger.kernel.org>; Thu, 3 Dec 2020 15:54:56 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 356xfqw6x5-3
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 03 Dec 2020 15:54:56 -0800
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 3 Dec 2020 15:54:53 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id AE1C42ECA8F6; Thu,  3 Dec 2020 15:54:48 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next 1/2] libbpf: use memcpy instead of strncpy to please GCC
-Date:   Thu, 3 Dec 2020 15:54:39 -0800
-Message-ID: <20201203235440.2302137-1-andrii@kernel.org>
-X-Mailer: git-send-email 2.24.1
+        id S1727931AbgLDAyS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 3 Dec 2020 19:54:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727897AbgLDAyS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 3 Dec 2020 19:54:18 -0500
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0965C061A51
+        for <bpf@vger.kernel.org>; Thu,  3 Dec 2020 16:53:37 -0800 (PST)
+Received: by mail-lj1-x242.google.com with SMTP id 142so4643954ljj.10
+        for <bpf@vger.kernel.org>; Thu, 03 Dec 2020 16:53:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=dmM+CWw/NxNIbgWm/O+v7G+4NZMyDNsXwDn3Z6jGoSs=;
+        b=CtABN3e5juvtOrsey+qfp+AszQYd2vzhOKXqR8YckVPTRqWRAChsMNUv4Cz1G4/RoR
+         Y0075SpeS9dSD4SlClQjJXaUCkRzelkwIQNL1+gNFOLB4FXPgfFy5AByKiOWkg0rlZjp
+         KhiZSRg0qGWMYhczIksn9MvKLOzQRHpoxuRaU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=dmM+CWw/NxNIbgWm/O+v7G+4NZMyDNsXwDn3Z6jGoSs=;
+        b=VKK2w3TUid1YPN7CK6kqoGy1UrfKq/BQRshMgYgosYB/n243qH7wF/0eiNOesZKNwF
+         GwVZTxPsRepdyfvQseKQ+x/LPliPyrBRUdS/9VPKxkxeVjdvWGu3qgLWb5MgnyT2cp+P
+         XVJtC7F4NSW7H8X1erIQ3x0lPdVlIf5KWpyY13lvDBx3kM5blC3fBrsKTg3Ss4LgmA2c
+         Ag8tX2L2wGrZN0UZglrwIW4dQePMWAarnWQh/kT/3LKRcYKlUGLKcEaN6QTFGS3l4czi
+         T+ZJmxFazbp8Wb9uZ4+vcRRJ0daWbRPe0vULLU1udhGc/pyh1lQ82R9maduxVpKMHG2r
+         UOEw==
+X-Gm-Message-State: AOAM531S0yZXbZVn0+aTW620p97h08+bvi80FPBJt2sJ8Qb+GRU+NIU6
+        TA/EYFEraqF/ypQlSzjhRSE/At/ayvF+E+fqeX8CJg==
+X-Google-Smtp-Source: ABdhPJxxTxgm6wz2UDT5lzirxlSlrr5UxCLm74RLNtjQw1qrXhdQ8PWQ7uFCzSrDrShMSB7RMmR2E83CpYmvzTa0xG8=
+X-Received: by 2002:a2e:80c6:: with SMTP id r6mr2279546ljg.83.1607043216519;
+ Thu, 03 Dec 2020 16:53:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.312,18.0.737
- definitions=2020-12-03_15:2020-12-03,2020-12-03 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 adultscore=0
- priorityscore=1501 spamscore=0 mlxlogscore=999 mlxscore=0 clxscore=1034
- impostorscore=0 lowpriorityscore=0 malwarescore=0 phishscore=0
- suspectscore=8 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012030131
-X-FB-Internal: deliver
+References: <20201203191437.666737-1-kpsingh@chromium.org> <CAEf4BzbAg5AG=J_9ZNz5BikpP0HvbSPH0oCbaQPgXzret5HiSw@mail.gmail.com>
+In-Reply-To: <CAEf4BzbAg5AG=J_9ZNz5BikpP0HvbSPH0oCbaQPgXzret5HiSw@mail.gmail.com>
+From:   KP Singh <kpsingh@chromium.org>
+Date:   Fri, 4 Dec 2020 01:53:25 +0100
+Message-ID: <CACYkzJ5mjs9ThxU8P53KMEgfZO6AnjJwMeA0haWSz6idt95KNg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 0/4] Fixes for ima selftest
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Some versions of GCC are really nit-picky about strncpy() use. Use memcpy(),
-as they are pretty much equivalent for the case of fixed length strings.
+[...]
 
-Fixes: e459f49b4394 ("libbpf: Separate XDP program load with xsk socket creation")
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- tools/lib/bpf/xsk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> output from dd and maybe other commands:
+>
+> 10+0 records in
+> 10+0 records out
+> 10485760 bytes (10.0MB) copied, 0.037096 seconds, 269.6MB/s
+> Filesystem label=
+> OS type: Linux
+> Block size=1024 (log=0)
+> Fragment size=1024 (log=0)
+> 2560 inodes, 10240 blocks
+> 512 blocks (5%) reserved for the super user
+> First data block=1
+> Maximum filesystem blocks=262144
+> 2 block groups
+> 8192 blocks per group, 8192 fragments per group
+> 1280 inodes per group
+> Superblock backups stored on blocks:
+>         8193
+>
+> Please follow up at your earliest convenience to silence those in
+> default (non-verbose) mode.
 
-diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
-index 4b051ec7cfbb..e3e41ceeb1bc 100644
---- a/tools/lib/bpf/xsk.c
-+++ b/tools/lib/bpf/xsk.c
-@@ -583,7 +583,7 @@ static int xsk_create_xsk_struct(int ifindex, struct xsk_socket *xsk)
- 	}
- 
- 	ctx->ifindex = ifindex;
--	strncpy(ctx->ifname, ifname, IFNAMSIZ - 1);
-+	memcpy(ctx->ifname, ifname, IFNAMSIZ -1);
- 	ctx->ifname[IFNAMSIZ - 1] = 0;
- 
- 	xsk->ctx = ctx;
--- 
-2.24.1
+Thanks, fixed. I added a verbosity flag to ima_setup.sh
+and am using env.verbosity to toggle this extra output. I will send
+in my patch tomorrow.
 
+[...]
