@@ -2,92 +2,191 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C43A5C4361A
-	for <bpf@archiver.kernel.org>; Fri,  4 Dec 2020 10:19:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BB189C433FE
+	for <bpf@archiver.kernel.org>; Fri,  4 Dec 2020 10:30:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7B66C2251E
-	for <bpf@archiver.kernel.org>; Fri,  4 Dec 2020 10:19:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7807322A85
+	for <bpf@archiver.kernel.org>; Fri,  4 Dec 2020 10:30:55 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729610AbgLDKTz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Dec 2020 05:19:55 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:9014 "EHLO
-        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729514AbgLDKTy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Dec 2020 05:19:54 -0500
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4CnTFD1s3hzhk8n;
-        Fri,  4 Dec 2020 18:18:40 +0800 (CST)
-Received: from [10.174.177.230] (10.174.177.230) by
- DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
- 14.3.487.0; Fri, 4 Dec 2020 18:19:03 +0800
-Subject: Re: [PATCH net] xsk: Fix error return code in __xp_assign_dev()
-To:     Magnus Karlsson <magnus.karlsson@gmail.com>
-CC:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <1607071819-34127-1-git-send-email-zhangchangzhong@huawei.com>
- <CAJ8uoz0LCkR+zHKSto9JyTqeybRXqF1SbH_B6cBHu9n5r-UXKA@mail.gmail.com>
-From:   Zhang Changzhong <zhangchangzhong@huawei.com>
-Message-ID: <fcb6b23a-4ecc-465e-6716-0725c9610da7@huawei.com>
-Date:   Fri, 4 Dec 2020 18:18:59 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1726330AbgLDKaj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Dec 2020 05:30:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56958 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726014AbgLDKaj (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Dec 2020 05:30:39 -0500
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5E8C0613D1;
+        Fri,  4 Dec 2020 02:29:59 -0800 (PST)
+Received: by mail-lj1-x242.google.com with SMTP id s9so5985930ljo.11;
+        Fri, 04 Dec 2020 02:29:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=So8nR/+TGOHKI8YuGPoCpAuJbgXY1+7Z6aKdtfAcFRs=;
+        b=aJR/VMmcsWYVZOQD4ndCpzEUaMvKQnZGCRIe/JmGPbpOmT3hVOVYoy8Kp4NLuwG1/X
+         oYIM8zSHpYPvyRC3n9QJFIbxj74IrvZACRHpIs65+ms63Ce6UJVvgZee45AB1ybyTFFC
+         puD3GSKvXm1+UcZ+e5TL9AwmPMpJz8Cwz0/jOL3cbmeEU4choM1EEl041tJs/i2/TjJW
+         3Qcn+zTid6JC0bEz7LRa62Jt2EnlX4aekHk/ntoFLGd1hYGWAi1iks2nXJUWMxewtAmA
+         o5LDAjOYjZn2HK3IsUn4p1nYiVIAx5aNvPeVlZgClge2Z2aa0laim+B/QlXZDtJodvsS
+         Ms4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=So8nR/+TGOHKI8YuGPoCpAuJbgXY1+7Z6aKdtfAcFRs=;
+        b=rPFDboyi2121x81fpqaoulgmuIcfvDqrckuSXGTSh1h59Riezr82GgAs0CQh+mp458
+         IFmypOt+lPGnA3HEEzBVEKY7MDUVDyt+LOFn8MYKhVFJwlBc17bLcDIHichAEdf3fK9+
+         2PX/qchpjvhx8Zq5/ef9tTTLkN5QrCCMcqyB6S05NvFVGtiLtKhKyj6useyMERFQCYXW
+         zBF8LJXatPmsiVzwAv8jogKj5nyfv93PXotPEUYK6Ak0QYX6tNxvF4OwSP3PJis2ZjGO
+         S/3XUoMxTuHrgvelPFrz3pRY9izhWEzrgC3LBHEAncW4030Mf5XurDjvtYfr6gXtBVx3
+         R+4A==
+X-Gm-Message-State: AOAM5308oNbIAE3tWwvDQ0H7VWGmltT0WphmnEBCbtQ+hAxemB56v9eT
+        VimCdr2CKQht59z9T0r1TRc=
+X-Google-Smtp-Source: ABdhPJwCkpGmh1eFASP0RSM302qX2ny3ITLPlqR8xshLeF7KBQx5UWSO2wPReK01NvP9zJCD4pYJwQ==
+X-Received: by 2002:a2e:9718:: with SMTP id r24mr3253682lji.20.1607077797549;
+        Fri, 04 Dec 2020 02:29:57 -0800 (PST)
+Received: from localhost.localdomain (87-205-71-93.adsl.inetia.pl. [87.205.71.93])
+        by smtp.gmail.com with ESMTPSA id d9sm62738lfj.228.2020.12.04.02.29.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Dec 2020 02:29:56 -0800 (PST)
+From:   alardam@gmail.com
+X-Google-Original-From: marekx.majtyka@intel.com
+To:     magnus.karlsson@intel.com, bjorn.topel@intel.com,
+        andrii.nakryiko@gmail.com, kuba@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, netdev@vger.kernel.org, davem@davemloft.net,
+        john.fastabend@gmail.com, hawk@kernel.org, toke@redhat.com
+Cc:     maciej.fijalkowski@intel.com, jonathan.lemon@gmail.com,
+        bpf@vger.kernel.org, jeffrey.t.kirsher@intel.com,
+        maciejromanfijalkowski@gmail.com, intel-wired-lan@lists.osuosl.org,
+        Marek Majtyka <marekx.majtyka@intel.com>
+Subject: [PATCH v2 bpf 0/5] New netdev feature flags for XDP
+Date:   Fri,  4 Dec 2020 11:28:56 +0100
+Message-Id: <20201204102901.109709-1-marekx.majtyka@intel.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-In-Reply-To: <CAJ8uoz0LCkR+zHKSto9JyTqeybRXqF1SbH_B6cBHu9n5r-UXKA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.230]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> 
-> Good catch! My intention here by not setting err is that it should
-> fall back to copy mode, which it does. The problem is that the
-> force_zc flag is disregarded when err is not set (see exit code below)
-> and your patch fixes that. If force_zc is set, we should exit out with
-> an error, not fall back. Could you please write about this in your
-> cover letter and send a v2?
-> 
+From: Marek Majtyka <marekx.majtyka@intel.com>
 
-Thanks for the suggestion, I have sent the v2 patch, please take another look.
+Implement support for checking if a netdev has native XDP and AF_XDP zero
+copy support. Previously, there was no way to do this other than to try
+to create an AF_XDP socket on the interface or load an XDP program and
+see if it worked. This commit changes this by extending existing
+netdev_features in the following way:
+ * xdp        - full XDP support (XDP_{TX, PASS, DROP, ABORT, REDIRECT})
+ * af-xdp-zc  - AF_XDP zero copy support
+NICs supporting these features are updated by turning the corresponding
+netdev feature flags on.
 
-> BTW, what is the "Hulk Robot" that is in your Reported-by tag?
+NOTE:
+ Only the compilation check was performed for:
+  - ice, 
+  - igb,
+  - mlx5, 
+  - mlx4.
+  - bnxt, 
+  - dpaa2, 
+  - mvmeta, 
+  - mvpp2, 
+  - qede,
+  - sfc, 
+  - netsec, 
+  - cpsw, 
+  - xen, 
+  - netronome
+  - ena
+  - virtio_net.
 
-It's an auto tester, here is some information: https://lwn.net/Articles/804119/
+Libbpf library is extended in order to provide a simple API for gathering
+information about XDP supported capabilities of a netdev. This API
+utilizes netlink interface towards kernel. With this function it is
+possible to get xsk supported options for netdev beforehand.
+The new API is used in core xsk code as well as in the xdpsock sample.
 
-> 
-> Thank you: Magnus
-> 
-> err_unreg_xsk:
->         xp_disable_drv_zc(pool);
-> err_unreg_pool:
->         if (!force_zc)
->                 err = 0; /* fallback to copy mode */
->         if (err)
->                 xsk_clear_pool_at_qid(netdev, queue_id);
->         return err;
-> 
->>                 goto err_unreg_xsk;
->>         }
->>         pool->umem->zc = true;
->> --
->> 2.9.5
->>
-> .
-> 
+These new flags also solve the problem with strict recognition of zero
+copy support. The problem is that there are drivers out there that only
+support XDP partially, so it is possible to successfully load the XDP
+program in native mode, but it will still not be able to support zero-copy
+as it does not have XDP_REDIRECT support. With af-xdp-zc flag the check
+is possible and trivial.
+
+Changes since v1:
+ * Replace netdev_feature flags variable with a bitmap of XDP-specific
+   properties. New kernel and uapi interfaces are added to handle access
+   to the XDP netdev properties bitmap. [Toke]
+
+ * Set more fine grained XPD properties for netdevs when necessary. [Toke]
+
+ * Extend ethtool netlink interface in order to get access to the XDP
+   bitmap (XDP_PROPERTIES_GET). [Toke]
+
+ * Removed the libbpf patches for now.
+---
+Marek Majtyka (5):
+  net: ethtool: add xdp properties flag set
+  drivers/net: turn XDP properties on
+  xsk: add usage of xdp properties flags
+  xsk: add check for full support of XDP in bind
+  ethtool: provide xdp info with XDP_PROPERTIES_GET
+
+ .../networking/netdev-xdp-properties.rst      | 42 ++++++++
+ drivers/net/ethernet/amazon/ena/ena_netdev.c  |  2 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  1 +
+ .../net/ethernet/freescale/dpaa2/dpaa2-eth.c  |  1 +
+ drivers/net/ethernet/intel/i40e/i40e_main.c   |  3 +
+ drivers/net/ethernet/intel/ice/ice_main.c     |  4 +
+ drivers/net/ethernet/intel/igb/igb_main.c     |  2 +
+ drivers/net/ethernet/intel/ixgbe/ixgbe_main.c |  3 +
+ drivers/net/ethernet/marvell/mvneta.c         |  3 +
+ .../net/ethernet/marvell/mvpp2/mvpp2_main.c   |  3 +
+ .../net/ethernet/mellanox/mlx4/en_netdev.c    |  2 +
+ .../net/ethernet/mellanox/mlx5/core/en_main.c |  3 +
+ .../ethernet/netronome/nfp/nfp_net_common.c   |  5 +
+ drivers/net/ethernet/qlogic/qede/qede_main.c  |  2 +
+ drivers/net/ethernet/sfc/efx.c                |  2 +
+ drivers/net/ethernet/socionext/netsec.c       |  2 +
+ drivers/net/ethernet/ti/cpsw.c                |  3 +
+ drivers/net/ethernet/ti/cpsw_new.c            |  2 +
+ drivers/net/tun.c                             |  4 +
+ drivers/net/veth.c                            |  2 +
+ drivers/net/virtio_net.c                      |  2 +
+ drivers/net/xen-netfront.c                    |  2 +
+ include/linux/netdevice.h                     |  2 +
+ include/linux/xdp_properties.h                | 53 +++++++++++
+ include/net/xdp.h                             | 95 +++++++++++++++++++
+ include/net/xdp_sock_drv.h                    | 10 ++
+ include/uapi/linux/ethtool.h                  |  1 +
+ include/uapi/linux/ethtool_netlink.h          | 14 +++
+ include/uapi/linux/if_xdp.h                   |  1 +
+ include/uapi/linux/xdp_properties.h           | 32 +++++++
+ net/ethtool/Makefile                          |  2 +-
+ net/ethtool/common.c                          | 11 +++
+ net/ethtool/common.h                          |  4 +
+ net/ethtool/netlink.c                         | 38 +++++---
+ net/ethtool/netlink.h                         |  2 +
+ net/ethtool/strset.c                          |  5 +
+ net/ethtool/xdp.c                             | 76 +++++++++++++++
+ net/xdp/xsk.c                                 |  4 +-
+ net/xdp/xsk_buff_pool.c                       | 20 +++-
+ tools/include/uapi/linux/if_xdp.h             |  1 +
+ tools/lib/bpf/xsk.c                           |  3 +
+ 41 files changed, 449 insertions(+), 20 deletions(-)
+ create mode 100644 Documentation/networking/netdev-xdp-properties.rst
+ create mode 100644 include/linux/xdp_properties.h
+ create mode 100644 include/uapi/linux/xdp_properties.h
+ create mode 100644 net/ethtool/xdp.c
+
+
+base-commit: eceae70bdeaeb6b8ceb662983cf663ff352fbc96
+-- 
+2.27.0
+
