@@ -2,176 +2,129 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-20.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-20.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56DA7C4361A
-	for <bpf@archiver.kernel.org>; Fri,  4 Dec 2020 18:53:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 327B1C433FE
+	for <bpf@archiver.kernel.org>; Fri,  4 Dec 2020 18:57:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DD2E422CA0
-	for <bpf@archiver.kernel.org>; Fri,  4 Dec 2020 18:53:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E4C6422CAE
+	for <bpf@archiver.kernel.org>; Fri,  4 Dec 2020 18:57:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730402AbgLDSw0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Dec 2020 13:52:26 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:55930 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727997AbgLDSw0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Dec 2020 13:52:26 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B4Ie35p085149;
-        Fri, 4 Dec 2020 18:50:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=qKvf4lzEo5tNiBSD+ta9N0URRH+/apH1S2WO9655a9k=;
- b=mhrID1qX18m6dww1exE6wPNTGZ74zSHcGO0t/+YT+rn9U/dRLYsOsXsJhtC53PztlUk1
- YPM3WZVMFIHWGMRzLgb77YnvtF1uaViSucME3JudNON5lvgd850Kb4rReWCAdilSjm4h
- es/SygkHshlhUkGLMSgL2JAM5VA0z5U7PTBEoFfANPSVK/Op/+gqa8DQbb1hEDQucidG
- +hTNRe2QTy5Hkd31LEkrKGg+UND/cy+VHEjtkWtCPiSMUUaZK2SB3Ce9Bx0p1udD/tmY
- Jwdd7WmTiGSdqIN5eNg+eO4K9laOSEmTTrykweFq4sqQrRy70J/lNBovmuhqM1xzyk4o ug== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 353dyr4pry-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 04 Dec 2020 18:50:57 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B4IaIgY044683;
-        Fri, 4 Dec 2020 18:48:56 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 3540f3pntt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 04 Dec 2020 18:48:56 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 0B4ImtZC006809;
-        Fri, 4 Dec 2020 18:48:55 GMT
-Received: from localhost.uk.oracle.com (/10.175.205.186)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 04 Dec 2020 10:48:55 -0800
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org
-Cc:     kafai@fb.com, yhs@fb.com, songliubraving@fb.com,
-        john.fastabend@gmail.com, kpsingh@chromium.org,
-        rostedt@goodmis.org, mingo@redhat.com, haoluo@google.com,
-        jolsa@kernel.org, quentin@isovalent.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, shuah@kernel.org, lmb@cloudflare.com,
-        linux-kselftest@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v2 bpf-next 1/3] bpf: eliminate btf_module_mutex as RCU synchronization can be used
-Date:   Fri,  4 Dec 2020 18:48:34 +0000
-Message-Id: <1607107716-14135-2-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1607107716-14135-1-git-send-email-alan.maguire@oracle.com>
-References: <1607107716-14135-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9825 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 phishscore=0
- suspectscore=2 bulkscore=0 spamscore=0 adultscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
- definitions=main-2012040106
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9825 signatures=668682
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0
- clxscore=1015 mlxscore=0 spamscore=0 priorityscore=1501 mlxlogscore=999
- suspectscore=2 lowpriorityscore=0 phishscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012040106
+        id S1726179AbgLDS5L (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Dec 2020 13:57:11 -0500
+Received: from www62.your-server.de ([213.133.104.62]:55538 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726021AbgLDS5L (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Dec 2020 13:57:11 -0500
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1klGFo-00006u-Vn; Fri, 04 Dec 2020 19:56:29 +0100
+Received: from [85.7.101.30] (helo=pc-9.home)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1klGFo-00074p-Pt; Fri, 04 Dec 2020 19:56:28 +0100
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: Expose bpf_get_socket_cookie to
+ tracing programs
+To:     Florent Revest <revest@chromium.org>, bpf@vger.kernel.org
+Cc:     ast@kernel.org, andrii@kernel.org, kpsingh@chromium.org,
+        revest@google.com, linux-kernel@vger.kernel.org
+References: <20201203213330.1657666-1-revest@google.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <bdd7153b-4bf9-12dd-5950-df0ebe91659d@iogearbox.net>
+Date:   Fri, 4 Dec 2020 19:56:28 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <20201203213330.1657666-1-revest@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/26007/Thu Dec  3 14:13:31 2020)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-btf_module_mutex is used when manipulating the BTF module list.
-However we will wish to look up this list from BPF program context,
-and such contexts can include interrupt state where we cannot sleep
-due to a mutex_lock().  RCU usage here conforms quite closely
-to the example in the system call auditing example in
-Documentation/RCU/listRCU.rst ; and as such we can eliminate
-the lock and use list_del_rcu()/call_rcu() on module removal,
-and list_add_rcu() for module addition.
+On 12/3/20 10:33 PM, Florent Revest wrote:
+> This creates a new helper proto because the existing
+> bpf_get_socket_cookie_sock_proto has a ARG_PTR_TO_CTX argument and only
+> works for BPF programs where the context is a sock.
+> 
+> This helper could also be useful to other BPF program types such as LSM.
+> 
+> Signed-off-by: Florent Revest <revest@google.com>
+> ---
+>   include/uapi/linux/bpf.h       | 7 +++++++
+>   kernel/trace/bpf_trace.c       | 4 ++++
+>   net/core/filter.c              | 7 +++++++
+>   tools/include/uapi/linux/bpf.h | 7 +++++++
+>   4 files changed, 25 insertions(+)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index c3458ec1f30a..3e0e33c43998 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -1662,6 +1662,13 @@ union bpf_attr {
+>    * 	Return
+>    * 		A 8-byte long non-decreasing number.
+>    *
+> + * u64 bpf_get_socket_cookie(void *sk)
+> + * 	Description
+> + * 		Equivalent to **bpf_get_socket_cookie**\ () helper that accepts
+> + * 		*sk*, but gets socket from a BTF **struct sock**.
+> + * 	Return
+> + * 		A 8-byte long non-decreasing number.
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- kernel/bpf/btf.c | 31 +++++++++++++++++--------------
- 1 file changed, 17 insertions(+), 14 deletions(-)
+I would not mention this here since it's not fully correct and we should avoid users
+taking non-decreasing granted in their progs. The only assumption you can make is
+that it can be considered a unique number. See also [0] with reverse counter..
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 8d6bdb4..333f41c 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -5758,13 +5758,13 @@ bool btf_id_set_contains(const struct btf_id_set *set, u32 id)
- #ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- struct btf_module {
- 	struct list_head list;
-+	struct rcu_head	rcu;
- 	struct module *module;
- 	struct btf *btf;
- 	struct bin_attribute *sysfs_attr;
- };
- 
- static LIST_HEAD(btf_modules);
--static DEFINE_MUTEX(btf_module_mutex);
- 
- static ssize_t
- btf_module_read(struct file *file, struct kobject *kobj,
-@@ -5777,10 +5777,21 @@ struct btf_module {
- 	return len;
- }
- 
-+static void btf_module_free(struct rcu_head *rcu)
-+{
-+	struct btf_module *btf_mod = container_of(rcu, struct btf_module, rcu);
-+
-+	if (btf_mod->sysfs_attr)
-+		sysfs_remove_bin_file(btf_kobj, btf_mod->sysfs_attr);
-+	btf_put(btf_mod->btf);
-+	kfree(btf_mod->sysfs_attr);
-+	kfree(btf_mod);
-+}
-+
- static int btf_module_notify(struct notifier_block *nb, unsigned long op,
- 			     void *module)
- {
--	struct btf_module *btf_mod, *tmp;
-+	struct btf_module *btf_mod;
- 	struct module *mod = module;
- 	struct btf *btf;
- 	int err = 0;
-@@ -5811,11 +5822,9 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
- 			goto out;
- 		}
- 
--		mutex_lock(&btf_module_mutex);
- 		btf_mod->module = module;
- 		btf_mod->btf = btf;
--		list_add(&btf_mod->list, &btf_modules);
--		mutex_unlock(&btf_module_mutex);
-+		list_add_rcu(&btf_mod->list, &btf_modules);
- 
- 		if (IS_ENABLED(CONFIG_SYSFS)) {
- 			struct bin_attribute *attr;
-@@ -5845,20 +5854,14 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
- 
- 		break;
- 	case MODULE_STATE_GOING:
--		mutex_lock(&btf_module_mutex);
--		list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
-+		list_for_each_entry(btf_mod, &btf_modules, list) {
- 			if (btf_mod->module != module)
- 				continue;
- 
--			list_del(&btf_mod->list);
--			if (btf_mod->sysfs_attr)
--				sysfs_remove_bin_file(btf_kobj, btf_mod->sysfs_attr);
--			btf_put(btf_mod->btf);
--			kfree(btf_mod->sysfs_attr);
--			kfree(btf_mod);
-+			list_del_rcu(&btf_mod->list);
-+			call_rcu(&btf_mod->rcu, btf_module_free);
- 			break;
- 		}
--		mutex_unlock(&btf_module_mutex);
- 		break;
- 	}
- out:
--- 
-1.8.3.1
+   [0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=92acdc58ab11af66fcaef485433fde61b5e32fac
 
+> + *
+>    * u32 bpf_get_socket_uid(struct sk_buff *skb)
+>    * 	Return
+>    * 		The owner UID of the socket associated to *skb*. If the socket
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index d255bc9b2bfa..14ad96579813 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -1725,6 +1725,8 @@ raw_tp_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>   	}
+>   }
+>   
+> +extern const struct bpf_func_proto bpf_get_socket_cookie_sock_tracing_proto;
+> +
+>   const struct bpf_func_proto *
+>   tracing_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>   {
+> @@ -1748,6 +1750,8 @@ tracing_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>   		return &bpf_sk_storage_get_tracing_proto;
+>   	case BPF_FUNC_sk_storage_delete:
+>   		return &bpf_sk_storage_delete_tracing_proto;
+> +	case BPF_FUNC_get_socket_cookie:
+> +		return &bpf_get_socket_cookie_sock_tracing_proto;
+>   #endif
+>   	case BPF_FUNC_seq_printf:
+>   		return prog->expected_attach_type == BPF_TRACE_ITER ?
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 2ca5eecebacf..177c4e5e529d 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -4631,6 +4631,13 @@ static const struct bpf_func_proto bpf_get_socket_cookie_sock_proto = {
+>   	.arg1_type	= ARG_PTR_TO_CTX,
+>   };
+>   
+> +const struct bpf_func_proto bpf_get_socket_cookie_sock_tracing_proto = {
+> +	.func		= bpf_get_socket_cookie_sock,
+> +	.gpl_only	= false,
+> +	.ret_type	= RET_INTEGER,
+> +	.arg1_type      = ARG_PTR_TO_BTF_ID_SOCK_COMMON,
+> +};
+> +
