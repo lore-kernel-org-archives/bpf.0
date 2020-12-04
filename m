@@ -2,149 +2,92 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D2964C4361A
-	for <bpf@archiver.kernel.org>; Fri,  4 Dec 2020 18:01:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 86180C4361B
+	for <bpf@archiver.kernel.org>; Fri,  4 Dec 2020 18:20:08 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8C42622B43
-	for <bpf@archiver.kernel.org>; Fri,  4 Dec 2020 18:01:56 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4942A22CA0
+	for <bpf@archiver.kernel.org>; Fri,  4 Dec 2020 18:20:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726405AbgLDSB4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 4 Dec 2020 13:01:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726330AbgLDSBz (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 4 Dec 2020 13:01:55 -0500
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85978C0613D1
-        for <bpf@vger.kernel.org>; Fri,  4 Dec 2020 10:01:15 -0800 (PST)
-Received: by mail-yb1-xb41.google.com with SMTP id o71so6224867ybc.2
-        for <bpf@vger.kernel.org>; Fri, 04 Dec 2020 10:01:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=zFhPipVq+wOIS3JSqfrNb9UFkGARTubf+hBXQ19HBaM=;
-        b=gDg2ut+wtcW9KGwvsUor6+7rV++DRM2Baw9vWwZ7RurE/8BKLAASB92DiC3kzvcvMt
-         wg+OCMZjGvpa9c0Ez71MZ+l1pGZ0twORaWtbLfMviU6yoSV8fOFhSlmTz+v4zFbcvv9K
-         YNic28xTGEDjsujBzMGUD2Yeflg3wW7kFxBvQGSCLmVzg1ZlU7O3XJ9+fDMWQRdp75pb
-         xoa/LlAfzwdqV2MxrA8WfHagJMhANftZu4PuRlkZPaHkVlbH0pvGDERtSYW2H98NKtyN
-         7gK/hdtcCU3VWlD/ceSeyq1SK/09YNqoue51ClXl+WeaepwXHPW5YNDBY5iFqaSk9xgD
-         gMIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=zFhPipVq+wOIS3JSqfrNb9UFkGARTubf+hBXQ19HBaM=;
-        b=spT/ApWOuuxx1SBgWwn+c6So5OmRS3aJwWPiZRpBEirYqR03ZTBd0tiyuzmzJf+CIM
-         bskr3TDjLZj5b69zAZeXRnbh4noccEHz2xMwbfycPCQaSW2WYqGAI8sWjcuWY0mojin2
-         Rk1ddwbIuordWTzq3ZlB2AoAIlHFgdUArxzyfHttnuPKse4A0sCBSsG3HVonLf6XnYhe
-         hxkLiZ6H3vRM9ROP3njgmKZKsO32IhoXEaDJUq4qebPuToiXw1Ns2Xe+OZrhH3vUnod1
-         oeIb7vyqeFcugrNzuy6OB32Qkqgcg+zCurirsGd7nHkf9scsq43Io85bh1oXrAXyFyXU
-         ho5w==
-X-Gm-Message-State: AOAM53328GMw3jSLvXj4iW50hOM8YbuxULysPHxhjAVzLhGrdGfI6iyv
-        xguXZ4HHd6fefWKWxicXs3lvuiQkibczknJkQQbuAIiJy+vzpQ==
-X-Google-Smtp-Source: ABdhPJw+1/cQsfCvBeRiWng68zaH566dg4i81QTUC7mEND1d7+Q345oH8y5/xxdT6s5rSW/+/BpHxa1Za6256NdDYRA=
-X-Received: by 2002:a25:6a05:: with SMTP id f5mr3922245ybc.459.1607104874736;
- Fri, 04 Dec 2020 10:01:14 -0800 (PST)
+        id S1727901AbgLDSUI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 4 Dec 2020 13:20:08 -0500
+Received: from mx.der-flo.net ([193.160.39.236]:40124 "EHLO mx.der-flo.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725923AbgLDSUH (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 4 Dec 2020 13:20:07 -0500
+Received: by mx.der-flo.net (Postfix, from userid 110)
+        id 57AFF44585; Fri,  4 Dec 2020 19:19:24 +0100 (CET)
+Received: from localhost (unknown [IPv6:2a02:1205:34c2:d100:56f5:35da:21bf:c38d])
+        (using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx.der-flo.net (Postfix) with ESMTPSA id EE1CB4457F;
+        Fri,  4 Dec 2020 19:19:05 +0100 (CET)
+From:   Florian Lehner <dev@der-flo.net>
+To:     bpf@vger.kernel.org
+Cc:     netdev@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, john.fastabend@gmail.com,
+        Florian Lehner <dev@der-flo.net>,
+        Stanislav Fomichev <sdf@google.com>,
+        Krzesimir Nowak <krzesimir@kinvolk.io>
+Subject: [PATCH 1/2] selftests/bpf: Print reason when a tester could not run a program
+Date:   Fri,  4 Dec 2020 19:18:27 +0100
+Message-Id: <20201204181828.11974-2-dev@der-flo.net>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20201204181828.11974-1-dev@der-flo.net>
+References: <20201204181828.11974-1-dev@der-flo.net>
 MIME-Version: 1.0
-References: <CAO__=G52s_=2E4wF8wDcgc3KwMU0kzmDfBQhDD3+LMZ8M3fZ8w@mail.gmail.com>
- <CAEf4BzbKtAcO81ZvxOJwhpOKauDQ==Y+Bcvy4_QAF3FZyLbMeg@mail.gmail.com> <CAO__=G5ReWaSsHUmkHk53LF8nBQCU_RtVoLdi=AXMDZX1mfu4Q@mail.gmail.com>
-In-Reply-To: <CAO__=G5ReWaSsHUmkHk53LF8nBQCU_RtVoLdi=AXMDZX1mfu4Q@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 4 Dec 2020 10:01:03 -0800
-Message-ID: <CAEf4BzaUA9DUdJ5BNSsArrtOqV1UrUw+8eU90UzjpW9O10PJtw@mail.gmail.com>
-Subject: Re: Problem with BPF_CORE_READ macro function
-To:     David Marcinkovic <david.marcinkovic@sartura.hr>
-Cc:     bpf <bpf@vger.kernel.org>,
-        Juraj Vijtiuk <juraj.vijtiuk@sartura.hr>,
-        Luka Perkov <luka.perkov@sartura.hr>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Dec 4, 2020 at 6:23 AM David Marcinkovic
-<david.marcinkovic@sartura.hr> wrote:
->
-> On Thu, Dec 3, 2020 at 9:35 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Thu, Dec 3, 2020 at 4:20 AM David Marcinkovic
-> > <david.marcinkovic@sartura.hr> wrote:
-> > >
-> > > Hello everyone,
-> > >
-> > > I am trying to run a simple BPF program that hooks onto
-> > > `mac80211/drv_sta_state` tracepoint. When I run the program on the ar=
-m
-> > > 32 bit architecture,
-> > > the verifier rejects to load the program and outputs the following er=
-ror
-> > > message:
-> > >
-> > > Unrecognized arg#0 type PTR
-> > > ; int tp__mac80211_drv_sta_state(struct trace_event_raw_drv_sta_state=
-* ctx)
-> > > 0: (bf) r3 =3D r1
-> > > 1: (85) call unknown#195896080
-> > > invalid func unknown#195896080
-> > >
-> > > This error does not seem to occur on the amd64 architecture. I am
-> > > using clang version 10 for both, compiling on amd64 and
-> > > cross-compiling for arm32.
-> > >
-> > >
-> > > I have prepared a simple program that hooks onto the
-> > > `mac80211/drv_sta_state` tracepoint.
-> > > In this example, `BPF_CORE_READ` macro function seems to cause the
-> > > verifier to reject to load the program.
-> > > I've been using this macro in various different programs and it didn'=
-t
-> > > cause any problems.
-> > > Also, I've been using packed structs and bit fields in other programs
-> > > and they also didn't cause any problems.
-> > >
-> > > I tried to use BPF_CORE_READ_BITFIELD as stated in this patch [0] and
-> > > got a similar error.
-> > >
-> > > Any input is much appreciated,
-> > >
-> >
-> > Can you provide libbpf debug output, especially the section about
-> > CO-RE relocations? Could it be that this tracepoint is inside the
-> > kernel module?
->
-> You're right. The problem is that this tracepoint is inside the kernel mo=
-dule.
-> I recompiled the kernel with CONFIG_MAC80211 flag set to 'y' and the
-> program loads
-> successfully.
->
+Commit 8184d44c9a57 ("selftests/bpf: skip verifier tests for unsupported
+program types") added a check to skip unsupported program types. As
+bpf_probe_prog_type can change errno, do_single_test should save it before
+printing a reason why a supported BPF program type failed to load.
 
-Ok, just as I suspected. With [0] and [1] (and using pahole 1.19+ to
-build the kernel and modules), it should work even for modules now.
+Fixes: 8184d44c9a57 ("selftests/bpf: skip verifier tests for unsupported program types")
+Cc: Stanislav Fomichev <sdf@google.com>
+Cc: Krzesimir Nowak <krzesimir@kinvolk.io>
+Signed-off-by: Florian Lehner <dev@der-flo.net>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ tools/testing/selftests/bpf/test_verifier.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-[0] https://patchwork.kernel.org/project/netdevbpf/list/?series=3D395715&st=
-ate=3D*
-[1] https://patchwork.kernel.org/project/netdevbpf/list/?series=3D380759&st=
-ate=3D*
+diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+index 4bfe3aa2cfc4..ceea9409639e 100644
+--- a/tools/testing/selftests/bpf/test_verifier.c
++++ b/tools/testing/selftests/bpf/test_verifier.c
+@@ -936,6 +936,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 	int run_errs, run_successes;
+ 	int map_fds[MAX_NR_MAPS];
+ 	const char *expected_err;
++	int saved_errno;
+ 	int fixup_skips;
+ 	__u32 pflags;
+ 	int i, err;
+@@ -997,6 +998,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 	}
+ 
+ 	fd_prog = bpf_load_program_xattr(&attr, bpf_vlog, sizeof(bpf_vlog));
++	saved_errno = errno;
+ 
+ 	/* BPF_PROG_TYPE_TRACING requires more setup and
+ 	 * bpf_probe_prog_type won't give correct answer
+@@ -1013,7 +1015,7 @@ static void do_test_single(struct bpf_test *test, bool unpriv,
+ 	if (expected_ret == ACCEPT || expected_ret == VERBOSE_ACCEPT) {
+ 		if (fd_prog < 0) {
+ 			printf("FAIL\nFailed to load prog '%s'!\n",
+-			       strerror(errno));
++			       strerror(saved_errno));
+ 			goto fail_log;
+ 		}
+ #ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
+-- 
+2.28.0
 
-> Thank you very much for your fast reply.
->
-> >
-> > > Best regards,
-> > > David Mar=C4=8Dinkovi=C4=87
-> > >
-> > >
-> > > [0] https://lore.kernel.org/bpf/20201007202946.3684483-1-andrii@kerne=
-l.org/T/#ma08db511daa0b5978f16df9f98f4ef644b83fc96
-> > >
-> > >
-> >
-> > [...]
