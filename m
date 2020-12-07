@@ -6,18 +6,18 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6398EC4361B
-	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:34:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6E829C1B087
+	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:35:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 33CA7238E5
-	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:34:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3B6EB238E7
+	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:35:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727623AbgLGQe2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Dec 2020 11:34:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33136 "EHLO mail.kernel.org"
+        id S1727735AbgLGQef (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Dec 2020 11:34:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33960 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727017AbgLGQe1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Dec 2020 11:34:27 -0500
+        id S1727128AbgLGQee (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Dec 2020 11:34:34 -0500
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
@@ -26,9 +26,9 @@ Cc:     davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
         john.fastabend@gmail.com, dsahern@kernel.org, brouer@redhat.com,
         echaudro@redhat.com, lorenzo.bianconi@redhat.com,
         jasowang@redhat.com
-Subject: [PATCH v5 bpf-next 12/14] bpf: add multi-buff support to the bpf_xdp_adjust_tail() API
-Date:   Mon,  7 Dec 2020 17:32:41 +0100
-Message-Id: <45d9ac7cd5895fa7af1ff54472257662ba25b877.1607349924.git.lorenzo@kernel.org>
+Subject: [PATCH v5 bpf-next 14/14] bpf: update xdp_adjust_tail selftest to include multi-buffer
+Date:   Mon,  7 Dec 2020 17:32:43 +0100
+Message-Id: <6804eb7af70902fda5180b2f7494b2a671f96486.1607349924.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <cover.1607349924.git.lorenzo@kernel.org>
 References: <cover.1607349924.git.lorenzo@kernel.org>
@@ -40,110 +40,219 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Eelco Chaudron <echaudro@redhat.com>
 
-This change adds support for tail growing and shrinking for XDP multi-buff.
+This change adds test cases for the multi-buffer scenarios when shrinking
+and growing.
 
 Signed-off-by: Eelco Chaudron <echaudro@redhat.com>
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- include/net/xdp.h |  5 ++++
- net/core/filter.c | 63 +++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 68 insertions(+)
+ .../bpf/prog_tests/xdp_adjust_tail.c          | 105 ++++++++++++++++++
+ .../bpf/progs/test_xdp_adjust_tail_grow.c     |  16 +--
+ .../bpf/progs/test_xdp_adjust_tail_shrink.c   |  32 +++++-
+ 3 files changed, 142 insertions(+), 11 deletions(-)
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 76cfee6a40f7..09078ab6644c 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -137,6 +137,11 @@ static inline void xdp_set_frag_size(skb_frag_t *frag, u32 size)
- 	frag->bv_len = size;
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+index d5c98f2cb12f..b936beaba797 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_adjust_tail.c
+@@ -130,6 +130,107 @@ void test_xdp_adjust_tail_grow2(void)
+ 	bpf_object__close(obj);
  }
  
-+static inline unsigned int xdp_get_frag_tailroom(const skb_frag_t *frag)
++void test_xdp_adjust_mb_tail_shrink(void)
 +{
-+	return PAGE_SIZE - xdp_get_frag_size(frag) - xdp_get_frag_offset(frag);
++	const char *file = "./test_xdp_adjust_tail_shrink.o";
++	__u32 duration, retval, size, exp_size;
++	struct bpf_object *obj;
++	static char buf[9000];
++	int err, prog_fd;
++
++	/* For the individual test cases, the first byte in the packet
++	 * indicates which test will be run.
++	 */
++
++	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
++	if (CHECK_FAIL(err))
++		return;
++
++	/* Test case removing 10 bytes from last frag, NOT freeing it */
++	buf[0] = 0;
++	exp_size = sizeof(buf) - 10;
++	err = bpf_prog_test_run(prog_fd, 1, buf, sizeof(buf),
++				buf, &size, &retval, &duration);
++
++	CHECK(err || retval != XDP_TX || size != exp_size,
++	      "9k-10b", "err %d errno %d retval %d[%d] size %d[%u]\n",
++	      err, errno, retval, XDP_TX, size, exp_size);
++
++	/* Test case removing one of two pages, assuming 4K pages */
++	buf[0] = 1;
++	exp_size = sizeof(buf) - 4100;
++	err = bpf_prog_test_run(prog_fd, 1, buf, sizeof(buf),
++				buf, &size, &retval, &duration);
++
++	CHECK(err || retval != XDP_TX || size != exp_size,
++	      "9k-1p", "err %d errno %d retval %d[%d] size %d[%u]\n",
++	      err, errno, retval, XDP_TX, size, exp_size);
++
++	/* Test case removing two pages resulting in a non mb xdp_buff */
++	buf[0] = 2;
++	exp_size = sizeof(buf) - 8200;
++	err = bpf_prog_test_run(prog_fd, 1, buf, sizeof(buf),
++				buf, &size, &retval, &duration);
++
++	CHECK(err || retval != XDP_TX || size != exp_size,
++	      "9k-2p", "err %d errno %d retval %d[%d] size %d[%u]\n",
++	      err, errno, retval, XDP_TX, size, exp_size);
++
++	bpf_object__close(obj);
 +}
 +
- struct xdp_frame {
- 	void *data;
- 	u16 len;
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 77001a35768f..4c4882d4d92c 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3860,11 +3860,74 @@ static const struct bpf_func_proto bpf_xdp_adjust_head_proto = {
- 	.arg2_type	= ARG_ANYTHING,
- };
- 
-+static int bpf_xdp_mb_adjust_tail(struct xdp_buff *xdp, int offset)
++void test_xdp_adjust_mb_tail_grow(void)
 +{
-+	struct xdp_shared_info *xdp_sinfo = xdp_get_shared_info_from_buff(xdp);
++	const char *file = "./test_xdp_adjust_tail_grow.o";
++	__u32 duration, retval, size, exp_size;
++	static char buf[16384];
++	struct bpf_object *obj;
++	int err, i, prog_fd;
 +
-+	if (unlikely(xdp_sinfo->nr_frags == 0))
-+		return -EINVAL;
++	err = bpf_prog_load(file, BPF_PROG_TYPE_XDP, &obj, &prog_fd);
++	if (CHECK_FAIL(err))
++		return;
 +
-+	if (offset >= 0) {
-+		skb_frag_t *frag = &xdp_sinfo->frags[xdp_sinfo->nr_frags - 1];
-+		int size;
++	/* Test case add 10 bytes to last frag */
++	memset(buf, 1, sizeof(buf));
++	size = 9000;
++	exp_size = size + 10;
++	err = bpf_prog_test_run(prog_fd, 1, buf, size,
++				buf, &size, &retval, &duration);
 +
-+		if (unlikely(offset > xdp_get_frag_tailroom(frag)))
-+			return -EINVAL;
++	CHECK(err || retval != XDP_TX || size != exp_size,
++	      "9k+10b", "err %d retval %d[%d] size %d[%u]\n",
++	      err, retval, XDP_TX, size, exp_size);
 +
-+		size = xdp_get_frag_size(frag);
-+		memset(xdp_get_frag_address(frag) + size, 0, offset);
-+		xdp_set_frag_size(frag, size + offset);
-+		xdp_sinfo->data_length += offset;
-+	} else {
-+		int i, frags_to_free = 0;
++	for (i = 0; i < 9000; i++)
++		CHECK(buf[i] != 1, "9k+10b-old",
++		      "Old data not all ok, offset %i is failing [%u]!\n",
++		      i, buf[i]);
 +
-+		offset = abs(offset);
++	for (i = 9000; i < 9010; i++)
++		CHECK(buf[i] != 0, "9k+10b-new",
++		      "New data not all ok, offset %i is failing [%u]!\n",
++		      i, buf[i]);
 +
-+		if (unlikely(offset > ((int)(xdp->data_end - xdp->data) +
-+				       xdp_sinfo->data_length -
-+				       ETH_HLEN)))
-+			return -EINVAL;
++	for (i = 9010; i < sizeof(buf); i++)
++		CHECK(buf[i] != 1, "9k+10b-untouched",
++		      "Unused data not all ok, offset %i is failing [%u]!\n",
++		      i, buf[i]);
 +
-+		for (i = xdp_sinfo->nr_frags - 1; i >= 0 && offset > 0; i--) {
-+			skb_frag_t *frag = &xdp_sinfo->frags[i];
-+			int size = xdp_get_frag_size(frag);
-+			int shrink = min_t(int, offset, size);
++	/* Test a too large grow */
++	memset(buf, 1, sizeof(buf));
++	size = 9001;
++	exp_size = size;
++	err = bpf_prog_test_run(prog_fd, 1, buf, size,
++				buf, &size, &retval, &duration);
 +
-+			offset -= shrink;
-+			if (likely(size - shrink > 0)) {
-+				/* When updating the final fragment we have
-+				 * to adjust the data_length in line.
-+				 */
-+				xdp_sinfo->data_length -= shrink;
-+				xdp_set_frag_size(frag, size - shrink);
-+				break;
-+			}
++	CHECK(err || retval != XDP_DROP || size != exp_size,
++	      "9k+10b", "err %d retval %d[%d] size %d[%u]\n",
++	      err, retval, XDP_TX, size, exp_size);
 +
-+			/* When we free the fragments,
-+			 * xdp_return_frags_from_buff() will take care
-+			 * of updating the xdp share info data_length.
-+			 */
-+			frags_to_free++;
-+		}
-+
-+		if (unlikely(frags_to_free))
-+			xdp_return_num_frags_from_buff(xdp, frags_to_free);
-+
-+		if (unlikely(offset > 0))
-+			xdp->data_end -= offset;
-+	}
-+
-+	return 0;
++	bpf_object__close(obj);
 +}
 +
- BPF_CALL_2(bpf_xdp_adjust_tail, struct xdp_buff *, xdp, int, offset)
+ void test_xdp_adjust_tail(void)
  {
- 	void *data_hard_end = xdp_data_hard_end(xdp); /* use xdp->frame_sz */
- 	void *data_end = xdp->data_end + offset;
+ 	if (test__start_subtest("xdp_adjust_tail_shrink"))
+@@ -138,4 +239,8 @@ void test_xdp_adjust_tail(void)
+ 		test_xdp_adjust_tail_grow();
+ 	if (test__start_subtest("xdp_adjust_tail_grow2"))
+ 		test_xdp_adjust_tail_grow2();
++	if (test__start_subtest("xdp_adjust_mb_tail_shrink"))
++		test_xdp_adjust_mb_tail_shrink();
++	if (test__start_subtest("xdp_adjust_mb_tail_grow"))
++		test_xdp_adjust_mb_tail_grow();
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c b/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c
+index 3d66599eee2e..25ac7108a53f 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_grow.c
+@@ -7,20 +7,22 @@ int _xdp_adjust_tail_grow(struct xdp_md *xdp)
+ {
+ 	void *data_end = (void *)(long)xdp->data_end;
+ 	void *data = (void *)(long)xdp->data;
+-	unsigned int data_len;
+ 	int offset = 0;
  
-+	if (unlikely(xdp->mb))
-+		return bpf_xdp_mb_adjust_tail(xdp, offset);
+ 	/* Data length determine test case */
+-	data_len = data_end - data;
+ 
+-	if (data_len == 54) { /* sizeof(pkt_v4) */
++	if (xdp->frame_length == 54) { /* sizeof(pkt_v4) */
+ 		offset = 4096; /* test too large offset */
+-	} else if (data_len == 74) { /* sizeof(pkt_v6) */
++	} else if (xdp->frame_length == 74) { /* sizeof(pkt_v6) */
+ 		offset = 40;
+-	} else if (data_len == 64) {
++	} else if (xdp->frame_length == 64) {
+ 		offset = 128;
+-	} else if (data_len == 128) {
+-		offset = 4096 - 256 - 320 - data_len; /* Max tail grow 3520 */
++	} else if (xdp->frame_length == 128) {
++		offset = 4096 - 256 - 320 - xdp->frame_length; /* Max tail grow 3520 */
++	} else if (xdp->frame_length == 9000) {
++		offset = 10;
++	} else if (xdp->frame_length == 9001) {
++		offset = 4096;
+ 	} else {
+ 		return XDP_ABORTED; /* No matching test */
+ 	}
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_shrink.c b/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_shrink.c
+index 22065a9cfb25..689450414d29 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_shrink.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_adjust_tail_shrink.c
+@@ -14,14 +14,38 @@ int _version SEC("version") = 1;
+ SEC("xdp_adjust_tail_shrink")
+ int _xdp_adjust_tail_shrink(struct xdp_md *xdp)
+ {
+-	void *data_end = (void *)(long)xdp->data_end;
+-	void *data = (void *)(long)xdp->data;
++	__u8 *data_end = (void *)(long)xdp->data_end;
++	__u8 *data = (void *)(long)xdp->data;
+ 	int offset = 0;
+ 
+-	if (data_end - data == 54) /* sizeof(pkt_v4) */
++	switch (xdp->frame_length) {
++	case 54:
++		/* sizeof(pkt_v4) */
+ 		offset = 256; /* shrink too much */
+-	else
++		break;
++	case 9000:
++		/* Multi-buffer test cases */
++		if (data + 1 > data_end)
++			return XDP_DROP;
 +
- 	/* Notice that xdp_data_hard_end have reserved some tailroom */
- 	if (unlikely(data_end > data_hard_end))
- 		return -EINVAL;
++		switch (data[0]) {
++		case 0:
++			offset = 10;
++			break;
++		case 1:
++			offset = 4100;
++			break;
++		case 2:
++			offset = 8200;
++			break;
++		default:
++			return XDP_DROP;
++		}
++		break;
++	default:
+ 		offset = 20;
++		break;
++	}
+ 	if (bpf_xdp_adjust_tail(xdp, 0 - offset))
+ 		return XDP_DROP;
+ 	return XDP_TX;
 -- 
 2.28.0
 
