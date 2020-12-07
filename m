@@ -2,101 +2,166 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44CB1C4361B
-	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:01:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7231AC433FE
+	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:09:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 07B1E23788
-	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:01:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 340C42376F
+	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:09:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725781AbgLGQBm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Dec 2020 11:01:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
+        id S1726377AbgLGQI4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Dec 2020 11:08:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727128AbgLGQBl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Dec 2020 11:01:41 -0500
-Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B171C061793;
-        Mon,  7 Dec 2020 08:01:01 -0800 (PST)
-Received: by mail-lj1-x243.google.com with SMTP id f11so3622180ljn.2;
-        Mon, 07 Dec 2020 08:01:01 -0800 (PST)
+        with ESMTP id S1726203AbgLGQI4 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Dec 2020 11:08:56 -0500
+Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9053C0617B0
+        for <bpf@vger.kernel.org>; Mon,  7 Dec 2020 08:08:15 -0800 (PST)
+Received: by mail-qv1-xf4a.google.com with SMTP id m91so461245qva.21
+        for <bpf@vger.kernel.org>; Mon, 07 Dec 2020 08:08:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=vYbfOYPjETzFJFJB48KuY9f+Uk2jjLJu+B88mllyQ70=;
-        b=lRfQmiJ5Dq9ktExYA4P7tftcsRNiHk1wAgZyGRgJ9AfMIoOwOpIZZA070LDRxBPOWx
-         YIDh4v1c8/eOBY7kKvrk9oqza8gz/X1LKr0Q6XFTbn2pRXHIWvsFHxwrKropNyynpS57
-         B5ts5Yoka1ZQzIgP/YoISs6FFQCLRG8TFgTFZij5zF8imWVIf/xtGKa/G4nXaTmL25g0
-         iz6Vd9d0RM7d4oLiSRsTA1MLIHemI6XJWQdN3T54qArSUiX2SrPEZN48KoUWrw8Ur6SP
-         zpfN+JeHpu/B/1jff5WIWtp6x02Z/y/5B6W4usq6VCND1ftZ5DS+Ygj0tPChj6Oo1V1e
-         Kn2Q==
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=j/coOO3IKOdSaOfJ3wqiBZ3KaCdyY0hEgLU+r80vPUs=;
+        b=I36vtmcnTyxFYOmiqiPgxadSYWAsjO+op4FfMTkVic9jl/uEocEHAPIH99J28rHU+H
+         J8VyK7M/xxdMnhFpOYhDOCj3bqO276nXazmvWwgRJTZaUokleuShogPNoYRi4I35attT
+         y+ZeQqavoOLEBWNZ0hUbDw2vmx+yjygEf537iqsFwfWsvJJ+TJigkvAexKIQ7VWuXlxP
+         16L4CAeoCTXv9hiNXOgh7Nyd4JhRoS/MrJPr45MkTs8gE4L530gVs1lVWcNX5+NcMAuv
+         CEHMidrbj1J5sXNbcStcb4SYQO3pGMkXkbNJws6pmcK0ycL8nV1k8CMhNqK+vJK23uMa
+         oqiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=vYbfOYPjETzFJFJB48KuY9f+Uk2jjLJu+B88mllyQ70=;
-        b=ZhqayeDrs66w9rgy0wMUey/b5Q7EgiDlN5m9V0Mi5MifPxTVpOPyxYlOjBWPAe3Qd+
-         HrF2EsfNBGXk/LULcV96uFKP7O6BdPD4Nq4tk0ZEUZ2URlQotrOWqOAo1UxcsA73Gv3o
-         zS3NjxTw8x+pY7A+BwSNa3rmJ6oac669u7Fptveygs78I//sugLmUCGSJSjDJBhtnBHB
-         DI18UTXXuLjyH61WBI7IDBrewa3+gI4tnWIKjZHrD+zUKkN7XidCJxLd//X7tExu+YL5
-         BlDFWPyVws8HY+Wx4btG7OTNVAvLCo1Yq/C4JOHrbbUziKaLhuD5lLIO28glzkc9zjnN
-         BvhA==
-X-Gm-Message-State: AOAM5325HNJw7wRnSpY/HTPaWH+GGfaTUY7aWatKFj+yQmX0BXbe5PzY
-        zsMPIdoU165NY/FuXWI6iz95bLbP/+65rUdd/5o=
-X-Google-Smtp-Source: ABdhPJzaIY65XsJ71A+45wDE3Kbh7bzrzN9+9kAJfUHOTIZMo9zdZHClRgbC6BSumPN+c5V7ZQexiBuXeex3eSSQBdA=
-X-Received: by 2002:a2e:6c14:: with SMTP id h20mr8905600ljc.450.1607356859901;
- Mon, 07 Dec 2020 08:00:59 -0800 (PST)
-MIME-Version: 1.0
-References: <20201205030952.520743-1-andrii@kernel.org> <CAADnVQK25OLC+C7LLCvGY7kgr_F2vh5-s_4rnwCY7CqMEcfisw@mail.gmail.com>
- <87lfe9676n.fsf@toke.dk>
-In-Reply-To: <87lfe9676n.fsf@toke.dk>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 7 Dec 2020 08:00:48 -0800
-Message-ID: <CAADnVQKxePN0wf0mTHfMXPPCBV3QArOyW_6FkHQEXctKnniGmg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: return -EOPNOTSUPP when attaching to
- non-kernel BTF
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=j/coOO3IKOdSaOfJ3wqiBZ3KaCdyY0hEgLU+r80vPUs=;
+        b=sWo3bFGPEXrOQnwQnR2SPIykMQlH8SY5Ihq0IpvUwwJScYsboRKdjWWGIzfLm8nCsn
+         nDQaPZej4gdMbvHx3zfhVB7i5XqXqkAM4yCGiTY1UZHXB5OoTCkm+3tLovEwX/cYyNfv
+         MLtzUp89+Y0BnP35G83aWpcqxN2ib0BVXwnUwOV65TwHeKWWdkbHkUribOXdHGfG62X0
+         5OXIFxR2l9DIGI+COgg21f2+T20M6y6EdAQ62f+y4nTuhv8Ff1okWgc51gjZBVzKWEZL
+         +Qea3s4hfEuHad2HK+s80zzBoJklRv9aCySuXp6v9BSb+0DA96g6EfZNj65gr4jd5xPW
+         EKDA==
+X-Gm-Message-State: AOAM5316xadbeE3nTtR01+A65UO3Dz8rmSNtXTKMVIRZ2njN1f+AK+Yg
+        B09x1pGciWAyR7qaNwYQepFvS+4f7sJdVKAy8jGx74L6f1xOWjHXp13sgJqmpN8IqgY4I0+vejT
+        umbF6QjEhdFgRdbINFvMFk+iO5qwe4H00IOq5K2yZT/Acz4GwCnoNK497aKYzv5I=
+X-Google-Smtp-Source: ABdhPJzQjoDPtmDlyR8EWmHh3eOfPSgXNrm27/UV/GIsoB4gO7SktrghBFimIdbXyj6QM1d5iGb/Lyxee7H+uA==
+Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
+X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
+ (user=jackmanb job=sendgmr) by 2002:a05:6214:10c6:: with SMTP id
+ r6mr16980502qvs.44.1607357294782; Mon, 07 Dec 2020 08:08:14 -0800 (PST)
+Date:   Mon,  7 Dec 2020 16:07:24 +0000
+In-Reply-To: <20201207160734.2345502-1-jackmanb@google.com>
+Message-Id: <20201207160734.2345502-2-jackmanb@google.com>
+Mime-Version: 1.0
+References: <20201207160734.2345502-1-jackmanb@google.com>
+X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
+Subject: [PATCH bpf-next v4 01/11] bpf: x86: Factor out emission of ModR/M for
+ *(reg + off)
+From:   Brendan Jackman <jackmanb@google.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>
+        KP Singh <kpsingh@chromium.org>,
+        Florent Revest <revest@chromium.org>,
+        linux-kernel@vger.kernel.org, Jann Horn <jannh@google.com>,
+        Brendan Jackman <jackmanb@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Dec 7, 2020 at 6:07 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redha=
-t.com> wrote:
->
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
->
-> > On Fri, Dec 4, 2020 at 7:11 PM Andrii Nakryiko <andrii@kernel.org> wrot=
-e:
-> >> +                               return -EOPNOTSUPP;
-> >
-> > $ cd kernel/bpf
-> > $ git grep ENOTSUPP|wc -l
-> > 46
-> > $ git grep EOPNOTSUPP|wc -l
-> > 11
->
-> But also
->
-> $ cd kernel/include/uapi
-> $ git grep ENOTSUPP | wc -l
-> 0
-> $ git grep EOPNOTSUPP | wc -l
-> 8
->
-> (i.e., ENOTSUPP is not defined in userspace headers at all)
+The case for JITing atomics is about to get more complicated. Let's
+factor out some common code to make the review and result more
+readable.
 
-that's irrelevant. The kernel returns it already. It's a known constant
-regardless of .h
+NB the atomics code doesn't yet use the new helper - a subsequent
+patch will add its use as a side-effect of other changes.
+
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
+---
+ arch/x86/net/bpf_jit_comp.c | 42 +++++++++++++++++++++----------------
+ 1 file changed, 24 insertions(+), 18 deletions(-)
+
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 796506dcfc42..cc818ed7c2b9 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -681,6 +681,27 @@ static void emit_mov_reg(u8 **pprog, bool is64, u32 dst_reg, u32 src_reg)
+ 	*pprog = prog;
+ }
+ 
++/* Emit the suffix (ModR/M etc) for addressing *(ptr_reg + off) and val_reg */
++static void emit_insn_suffix(u8 **pprog, u32 ptr_reg, u32 val_reg, int off)
++{
++	u8 *prog = *pprog;
++	int cnt = 0;
++
++	if (is_imm8(off)) {
++		/* 1-byte signed displacement.
++		 *
++		 * If off == 0 we could skip this and save one extra byte, but
++		 * special case of x86 R13 which always needs an offset is not
++		 * worth the hassle
++		 */
++		EMIT2(add_2reg(0x40, ptr_reg, val_reg), off);
++	} else {
++		/* 4-byte signed displacement */
++		EMIT1_off32(add_2reg(0x80, ptr_reg, val_reg), off);
++	}
++	*pprog = prog;
++}
++
+ /* LDX: dst_reg = *(u8*)(src_reg + off) */
+ static void emit_ldx(u8 **pprog, u32 size, u32 dst_reg, u32 src_reg, int off)
+ {
+@@ -708,15 +729,7 @@ static void emit_ldx(u8 **pprog, u32 size, u32 dst_reg, u32 src_reg, int off)
+ 		EMIT2(add_2mod(0x48, src_reg, dst_reg), 0x8B);
+ 		break;
+ 	}
+-	/*
+-	 * If insn->off == 0 we can save one extra byte, but
+-	 * special case of x86 R13 which always needs an offset
+-	 * is not worth the hassle
+-	 */
+-	if (is_imm8(off))
+-		EMIT2(add_2reg(0x40, src_reg, dst_reg), off);
+-	else
+-		EMIT1_off32(add_2reg(0x80, src_reg, dst_reg), off);
++	emit_insn_suffix(&prog, src_reg, dst_reg, off);
+ 	*pprog = prog;
+ }
+ 
+@@ -751,10 +764,7 @@ static void emit_stx(u8 **pprog, u32 size, u32 dst_reg, u32 src_reg, int off)
+ 		EMIT2(add_2mod(0x48, dst_reg, src_reg), 0x89);
+ 		break;
+ 	}
+-	if (is_imm8(off))
+-		EMIT2(add_2reg(0x40, dst_reg, src_reg), off);
+-	else
+-		EMIT1_off32(add_2reg(0x80, dst_reg, src_reg), off);
++	emit_insn_suffix(&prog, dst_reg, src_reg, off);
+ 	*pprog = prog;
+ }
+ 
+@@ -1240,11 +1250,7 @@ st:			if (is_imm8(insn->off))
+ 			goto xadd;
+ 		case BPF_STX | BPF_XADD | BPF_DW:
+ 			EMIT3(0xF0, add_2mod(0x48, dst_reg, src_reg), 0x01);
+-xadd:			if (is_imm8(insn->off))
+-				EMIT2(add_2reg(0x40, dst_reg, src_reg), insn->off);
+-			else
+-				EMIT1_off32(add_2reg(0x80, dst_reg, src_reg),
+-					    insn->off);
++xadd:			emit_modrm_dstoff(&prog, dst_reg, src_reg, insn->off);
+ 			break;
+ 
+ 			/* call */
+-- 
+2.29.2.576.ga3fc446d84-goog
+
