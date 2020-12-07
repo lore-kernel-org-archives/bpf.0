@@ -4,20 +4,20 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3513AC1B0E3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BEDEC47434
 	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:34:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 09E6F238E7
-	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:34:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E5E9C238EA
+	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:34:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727518AbgLGQeZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Dec 2020 11:34:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33018 "EHLO mail.kernel.org"
+        id S1727495AbgLGQeV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Dec 2020 11:34:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:32886 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726718AbgLGQeZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Dec 2020 11:34:25 -0500
+        id S1726718AbgLGQeU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Dec 2020 11:34:20 -0500
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
@@ -26,9 +26,9 @@ Cc:     davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
         john.fastabend@gmail.com, dsahern@kernel.org, brouer@redhat.com,
         echaudro@redhat.com, lorenzo.bianconi@redhat.com,
         jasowang@redhat.com
-Subject: [PATCH v5 bpf-next 10/14] net: mvneta: enable jumbo frames for XDP
-Date:   Mon,  7 Dec 2020 17:32:39 +0100
-Message-Id: <1005050acd8d9990e84a397da8d7b4e85524a5ec.1607349924.git.lorenzo@kernel.org>
+Subject: [PATCH v5 bpf-next 07/14] bpf: move user_size out of bpf_test_init
+Date:   Mon,  7 Dec 2020 17:32:36 +0100
+Message-Id: <6f92d87e554a92db2cddb444004d5f9b102011ff.1607349924.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <cover.1607349924.git.lorenzo@kernel.org>
 References: <cover.1607349924.git.lorenzo@kernel.org>
@@ -38,42 +38,61 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Enable the capability to receive jumbo frames even if the interface is
-running in XDP mode
+Rely on data_size_in in bpf_test_init routine signature. This is a
+preliminary patch to introduce xdp multi-buff selftest
 
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- drivers/net/ethernet/marvell/mvneta.c | 10 ----------
- 1 file changed, 10 deletions(-)
+ net/bpf/test_run.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-index dc1f1f25fce0..853bea9fcb14 100644
---- a/drivers/net/ethernet/marvell/mvneta.c
-+++ b/drivers/net/ethernet/marvell/mvneta.c
-@@ -3766,11 +3766,6 @@ static int mvneta_change_mtu(struct net_device *dev, int mtu)
- 		mtu = ALIGN(MVNETA_RX_PKT_SIZE(mtu), 8);
- 	}
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index c1c30a9f76f3..bd291f5f539c 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -171,11 +171,10 @@ __diag_pop();
  
--	if (pp->xdp_prog && mtu > MVNETA_MAX_RX_BUF_SIZE) {
--		netdev_info(dev, "Illegal MTU value %d for XDP mode\n", mtu);
--		return -EINVAL;
--	}
--
- 	dev->mtu = mtu;
+ ALLOW_ERROR_INJECTION(bpf_modify_return_test, ERRNO);
  
- 	if (!netif_running(dev)) {
-@@ -4468,11 +4463,6 @@ static int mvneta_xdp_setup(struct net_device *dev, struct bpf_prog *prog,
- 	struct mvneta_port *pp = netdev_priv(dev);
- 	struct bpf_prog *old_prog;
+-static void *bpf_test_init(const union bpf_attr *kattr, u32 size,
+-			   u32 headroom, u32 tailroom)
++static void *bpf_test_init(const union bpf_attr *kattr, u32 user_size,
++			   u32 size, u32 headroom, u32 tailroom)
+ {
+ 	void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
+-	u32 user_size = kattr->test.data_size_in;
+ 	void *data;
  
--	if (prog && dev->mtu > MVNETA_MAX_RX_BUF_SIZE) {
--		NL_SET_ERR_MSG_MOD(extack, "Jumbo frames not supported on XDP");
--		return -EOPNOTSUPP;
--	}
--
- 	if (pp->bm_priv) {
- 		NL_SET_ERR_MSG_MOD(extack,
- 				   "Hardware Buffer Management not supported on XDP");
+ 	if (size < ETH_HLEN || size > PAGE_SIZE - headroom - tailroom)
+@@ -495,7 +494,8 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	if (kattr->test.flags || kattr->test.cpu)
+ 		return -EINVAL;
+ 
+-	data = bpf_test_init(kattr, size, NET_SKB_PAD + NET_IP_ALIGN,
++	data = bpf_test_init(kattr, kattr->test.data_size_in,
++			     size, NET_SKB_PAD + NET_IP_ALIGN,
+ 			     SKB_DATA_ALIGN(sizeof(struct skb_shared_info)));
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+@@ -632,7 +632,8 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	/* XDP have extra tailroom as (most) drivers use full page */
+ 	max_data_sz = 4096 - headroom - tailroom;
+ 
+-	data = bpf_test_init(kattr, max_data_sz, headroom, tailroom);
++	data = bpf_test_init(kattr, kattr->test.data_size_in,
++			     max_data_sz, headroom, tailroom);
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 
+@@ -698,7 +699,7 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
+ 	if (size < ETH_HLEN)
+ 		return -EINVAL;
+ 
+-	data = bpf_test_init(kattr, size, 0, 0);
++	data = bpf_test_init(kattr, kattr->test.data_size_in, size, 0, 0);
+ 	if (IS_ERR(data))
+ 		return PTR_ERR(data);
+ 
 -- 
 2.28.0
 
