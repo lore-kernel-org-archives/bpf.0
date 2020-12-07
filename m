@@ -2,213 +2,164 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F40D7C3527A
-	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:35:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E7EAEC4167B
+	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:39:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E00D4238E8
-	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:35:55 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BA3B723877
+	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:39:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727620AbgLGQe2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Dec 2020 11:34:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33134 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727571AbgLGQe2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Dec 2020 11:34:28 -0500
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, shayagr@amazon.com, sameehj@amazon.com,
-        john.fastabend@gmail.com, dsahern@kernel.org, brouer@redhat.com,
-        echaudro@redhat.com, lorenzo.bianconi@redhat.com,
-        jasowang@redhat.com
-Subject: [PATCH v5 bpf-next 11/14] bpf: cpumap: introduce xdp multi-buff support
-Date:   Mon,  7 Dec 2020 17:32:40 +0100
-Message-Id: <a12bf957bf99fa86d229f383f615f11ee7153340.1607349924.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <cover.1607349924.git.lorenzo@kernel.org>
-References: <cover.1607349924.git.lorenzo@kernel.org>
+        id S1727017AbgLGQjc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Dec 2020 11:39:32 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:50546 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726203AbgLGQjc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Dec 2020 11:39:32 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B7GZjhp156507;
+        Mon, 7 Dec 2020 16:38:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : in-reply-to : message-id : references : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=Zl7wnLsAuQMDXPBpikmS7ojclWYVd0LHdaJgI9tl6mA=;
+ b=DSNSGgi0rPon65KwqMFnVFbj+t4zv8YnhBWYIAt2A79QwhZbBa1lpanMx1fpl6SGE1LI
+ 7mVRzY8XarjGUCbbmBsIQr7Pgr8j/rYu27noiSaCKeoYSsX7xmoygkPLwOmqrT0A22ga
+ pfN7Tfsia4is5eEQUPgnoHdTqkbUmpZLnT6peySkCKtvJtDoef5GuaQSESH7q37pOJNt
+ Ls/wfKh+Bm+1DkyscXMLXKx7K88eXusViOobdFjy+UgoFYU4i9RkAfKIlQJAejRIgnQK
+ tGI0Dxp9QBX081r4LWLDK/wT9gusNoXqPwDEP7MygJud4M2ewupCqcKJYMxMkNolVwqU Zg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 35825kx9kh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 07 Dec 2020 16:38:37 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 0B7GYjd4066131;
+        Mon, 7 Dec 2020 16:38:37 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 358ksmdecv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 07 Dec 2020 16:38:37 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 0B7GcaYO011997;
+        Mon, 7 Dec 2020 16:38:36 GMT
+Received: from dhcp-10-175-205-133.vpn.oracle.com (/10.175.205.133)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 07 Dec 2020 08:38:35 -0800
+Date:   Mon, 7 Dec 2020 16:38:16 +0000 (GMT)
+From:   Alan Maguire <alan.maguire@oracle.com>
+X-X-Sender: alan@localhost
+To:     Andrii Nakryiko <andrii@kernel.org>
+cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
+        daniel@iogearbox.net, kernel-team@fb.com,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: Re: [PATCH bpf-next] libbpf: support module BTF for BPF_TYPE_ID_TARGET
+ CO-RE relocation
+In-Reply-To: <20201205025140.443115-1-andrii@kernel.org>
+Message-ID: <alpine.LRH.2.23.451.2012071623080.3652@localhost>
+References: <20201205025140.443115-1-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9827 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=10
+ bulkscore=0 malwarescore=0 phishscore=0 mlxscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012070106
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9827 signatures=668682
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=10 adultscore=0
+ bulkscore=0 phishscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
+ mlxscore=0 spamscore=0 lowpriorityscore=0 malwarescore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2009150000
+ definitions=main-2012070106
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce __xdp_build_skb_from_frame and xdp_build_skb_from_frame
-utility routines to build the skb from xdp_frame.
-Add xdp multi-buff support to cpumap
+On Fri, 4 Dec 2020, Andrii Nakryiko wrote:
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- include/net/xdp.h   |  5 ++++
- kernel/bpf/cpumap.c | 45 +---------------------------
- net/core/xdp.c      | 73 +++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 79 insertions(+), 44 deletions(-)
+> When Clang emits ldimm64 instruction for BPF_TYPE_ID_TARGET CO-RE relocation,
+> put module BTF FD, containing target type, into upper 32 bits of imm64.
+> 
+> Because this FD is internal to libbpf, it's very cumbersome to test this in
+> selftests. Manual testing was performed with debug log messages sprinkled
+> across selftests and libbpf, confirming expected values are substituted.
+> Better testing will be performed as part of the work adding module BTF types
+> support to  bpf_snprintf_btf() helpers.
+> 
+> Cc: Alan Maguire <alan.maguire@oracle.com>
+> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> ---
+>  tools/lib/bpf/libbpf.c | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 9be88a90a4aa..539956f7920a 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -4795,6 +4795,7 @@ static int load_module_btfs(struct bpf_object *obj)
+>  
+>  		mod_btf = &obj->btf_modules[obj->btf_module_cnt++];
+>  
+> +		btf__set_fd(btf, fd);
+>  		mod_btf->btf = btf;
+>  		mod_btf->id = id;
+>  		mod_btf->fd = fd;
+> @@ -5445,6 +5446,10 @@ struct bpf_core_relo_res
+>  	__u32 orig_type_id;
+>  	__u32 new_sz;
+>  	__u32 new_type_id;
+> +	/* FD of the module BTF containing the target candidate, or 0 for
+> +	 * vmlinux BTF
+> +	 */
+> +	int btf_obj_fd;
+>  };
+>  
+>  /* Calculate original and target relocation values, given local and target
+> @@ -5469,6 +5474,7 @@ static int bpf_core_calc_relo(const struct bpf_program *prog,
+>  	res->fail_memsz_adjust = false;
+>  	res->orig_sz = res->new_sz = 0;
+>  	res->orig_type_id = res->new_type_id = 0;
+> +	res->btf_obj_fd = 0;
+>  
+>  	if (core_relo_is_field_based(relo->kind)) {
+>  		err = bpf_core_calc_field_relo(prog, relo, local_spec,
+> @@ -5519,6 +5525,9 @@ static int bpf_core_calc_relo(const struct bpf_program *prog,
+>  	} else if (core_relo_is_type_based(relo->kind)) {
+>  		err = bpf_core_calc_type_relo(relo, local_spec, &res->orig_val);
+>  		err = err ?: bpf_core_calc_type_relo(relo, targ_spec, &res->new_val);
+> +		if (!err && relo->kind == BPF_TYPE_ID_TARGET &&
+> +		    targ_spec->btf != prog->obj->btf_vmlinux) 
+> +			res->btf_obj_fd = btf__fd(targ_spec->btf);
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index d0e90d729023..76cfee6a40f7 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -191,6 +191,11 @@ void xdp_warn(const char *msg, const char *func, const int line);
- #define XDP_WARN(msg) xdp_warn(msg, __func__, __LINE__)
- 
- struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp);
-+struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
-+					   struct sk_buff *skb,
-+					   struct net_device *dev);
-+struct sk_buff *xdp_build_skb_from_frame(struct xdp_frame *xdpf,
-+					 struct net_device *dev);
- 
- static inline
- void xdp_convert_frame_to_buff(struct xdp_frame *frame, struct xdp_buff *xdp)
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 747313698178..49113880b82a 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -141,49 +141,6 @@ static void cpu_map_kthread_stop(struct work_struct *work)
- 	kthread_stop(rcpu->kthread);
- }
- 
--static struct sk_buff *cpu_map_build_skb(struct xdp_frame *xdpf,
--					 struct sk_buff *skb)
--{
--	unsigned int hard_start_headroom;
--	unsigned int frame_size;
--	void *pkt_data_start;
--
--	/* Part of headroom was reserved to xdpf */
--	hard_start_headroom = sizeof(struct xdp_frame) +  xdpf->headroom;
--
--	/* Memory size backing xdp_frame data already have reserved
--	 * room for build_skb to place skb_shared_info in tailroom.
--	 */
--	frame_size = xdpf->frame_sz;
--
--	pkt_data_start = xdpf->data - hard_start_headroom;
--	skb = build_skb_around(skb, pkt_data_start, frame_size);
--	if (unlikely(!skb))
--		return NULL;
--
--	skb_reserve(skb, hard_start_headroom);
--	__skb_put(skb, xdpf->len);
--	if (xdpf->metasize)
--		skb_metadata_set(skb, xdpf->metasize);
--
--	/* Essential SKB info: protocol and skb->dev */
--	skb->protocol = eth_type_trans(skb, xdpf->dev_rx);
--
--	/* Optional SKB info, currently missing:
--	 * - HW checksum info		(skb->ip_summed)
--	 * - HW RX hash			(skb_set_hash)
--	 * - RX ring dev queue index	(skb_record_rx_queue)
--	 */
--
--	/* Until page_pool get SKB return path, release DMA here */
--	xdp_release_frame(xdpf);
--
--	/* Allow SKB to reuse area used by xdp_frame */
--	xdp_scrub_frame(xdpf);
--
--	return skb;
--}
--
- static void __cpu_map_ring_cleanup(struct ptr_ring *ring)
- {
- 	/* The tear-down procedure should have made sure that queue is
-@@ -350,7 +307,7 @@ static int cpu_map_kthread_run(void *data)
- 			struct sk_buff *skb = skbs[i];
- 			int ret;
- 
--			skb = cpu_map_build_skb(xdpf, skb);
-+			skb = __xdp_build_skb_from_frame(xdpf, skb, xdpf->dev_rx);
- 			if (!skb) {
- 				xdp_return_frame(xdpf);
- 				continue;
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 6c8e743ad03a..55f3e9c69427 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -597,3 +597,76 @@ void xdp_warn(const char *msg, const char *func, const int line)
- 	WARN(1, "XDP_WARN: %s(line:%d): %s\n", func, line, msg);
- };
- EXPORT_SYMBOL_GPL(xdp_warn);
-+
-+struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
-+					   struct sk_buff *skb,
-+					   struct net_device *dev)
-+{
-+	unsigned int headroom = sizeof(*xdpf) + xdpf->headroom;
-+	void *hard_start = xdpf->data - headroom;
-+	skb_frag_t frag_list[MAX_SKB_FRAGS];
-+	struct xdp_shared_info *xdp_sinfo;
-+	int i, num_frags = 0;
-+
-+	xdp_sinfo = xdp_get_shared_info_from_frame(xdpf);
-+	if (unlikely(xdpf->mb)) {
-+		num_frags = xdp_sinfo->nr_frags;
-+		memcpy(frag_list, xdp_sinfo->frags,
-+		       sizeof(skb_frag_t) * num_frags);
-+	}
-+
-+	skb = build_skb_around(skb, hard_start, xdpf->frame_sz);
-+	if (unlikely(!skb))
-+		return NULL;
-+
-+	skb_reserve(skb, headroom);
-+	__skb_put(skb, xdpf->len);
-+	if (xdpf->metasize)
-+		skb_metadata_set(skb, xdpf->metasize);
-+
-+	if (likely(!num_frags))
-+		goto out;
-+
-+	for (i = 0; i < num_frags; i++) {
-+		struct page *page = xdp_get_frag_page(&frag_list[i]);
-+
-+		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags,
-+				page, xdp_get_frag_offset(&frag_list[i]),
-+				xdp_get_frag_size(&frag_list[i]),
-+				xdpf->frame_sz);
-+	}
-+
-+out:
-+	/* Essential SKB info: protocol and skb->dev */
-+	skb->protocol = eth_type_trans(skb, dev);
-+
-+	/* Optional SKB info, currently missing:
-+	 * - HW checksum info		(skb->ip_summed)
-+	 * - HW RX hash			(skb_set_hash)
-+	 * - RX ring dev queue index	(skb_record_rx_queue)
-+	 */
-+
-+	/* Until page_pool get SKB return path, release DMA here */
-+	xdp_release_frame(xdpf);
-+
-+	/* Allow SKB to reuse area used by xdp_frame */
-+	xdp_scrub_frame(xdpf);
-+
-+	return skb;
-+}
-+EXPORT_SYMBOL_GPL(__xdp_build_skb_from_frame);
-+
-+struct sk_buff *xdp_build_skb_from_frame(struct xdp_frame *xdpf,
-+					 struct net_device *dev)
-+{
-+	struct sk_buff *skb;
-+
-+	skb = kmem_cache_alloc(skbuff_head_cache, GFP_ATOMIC);
-+	if (unlikely(!skb))
-+		return NULL;
-+
-+	memset(skb, 0, offsetof(struct sk_buff, tail));
-+
-+	return __xdp_build_skb_from_frame(xdpf, skb, dev);
-+}
-+EXPORT_SYMBOL_GPL(xdp_build_skb_from_frame);
--- 
-2.28.0
+Sorry about this Andrii, but I'm a bit stuck here.
 
+I'm struggling to get tests working where the obj fd is used to designate
+the module BTF. Unless I'm missing something there are a few problems:
+
+- the fd association is removed by libbpf when the BPF program has loaded; 
+the module fds are closed and the module BTF is discarded.  However even if 
+that isn't done (and as you mentioned, we could hold onto BTF that is in 
+use, and I commented out the code that does that to test) - there's 
+another problem:
+- I can't see a way to use the object fd value we set here later in BPF 
+program context; btf_get_by_fd() returns -EBADF as the fd is associated 
+with the module BTF in the test's process context, not necessarily in 
+the context that the BPF program is running.  Would it be possible in this 
+case to use object id? Or is there another way to handle the fd->module 
+BTF association that we need to make in BPF program context that I'm 
+missing?
+- A more long-term issue; if we use fds to specify module BTFs and write 
+the object fd into the program, we can pin the BPF program such that it 
+outlives fds that refer to its associated BTF.  So unless we pinned the 
+BTF too, any code that assumed the BTF fd-> module mapping was valid would 
+start to break once the user-space side went away and the pinned program 
+persisted. 
+
+Maybe there are solutions to these problems that I'm missing of course, 
+but for now I'm not sure how to get things working.
+
+Thanks again for your help with this!
+
+Alan
