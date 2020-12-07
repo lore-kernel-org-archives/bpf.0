@@ -2,194 +2,112 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 14F11C4361B
-	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:16:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0699C433FE
+	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:16:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D1AEF2376F
-	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:16:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7EA9A2376F
+	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:16:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726494AbgLGQQ1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Dec 2020 11:16:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56836 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726485AbgLGQQ1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Dec 2020 11:16:27 -0500
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4319C061749
-        for <bpf@vger.kernel.org>; Mon,  7 Dec 2020 08:15:46 -0800 (PST)
-Received: by mail-wr1-x44a.google.com with SMTP id r11so3079616wrs.23
-        for <bpf@vger.kernel.org>; Mon, 07 Dec 2020 08:15:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=zKhPLuQByBWIZw1uYTkwBeWZCWJCpLKTPppsP1+IhXE=;
-        b=ZTpFsZawTsqrTEhsVv6t+Xqhsz76zbNDKpourLTywyfZrA+bWEhWDAl0911tNvZZHw
-         l6/Arau5+HTyRJG+IqDJDhx3gqNqcQRffwrp2glc4TbVOr8lk2/uOA9FyfY81rb3mSbP
-         UQr0wmYQM95kB34h4NaJhaLyioUCzmL9a5e2Zeso0x/pObQB+eQbGMluMY/Kw5lOR9wg
-         pIewJKsuDxu4r5HpPWeLGpeH/8UCUH6Lws1tawzxZipSyvITa+0iCrHPVNBHbFx4zFtm
-         dOPc4NAoBZVuiXe/2azfkr0hHkgl4h3Vxnp4MvSjNRv2xzpszRmlLnwuiyGxzn7RFVWA
-         qomA==
+        id S1726197AbgLGQQ7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Dec 2020 11:16:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:53502 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726141AbgLGQQ7 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 7 Dec 2020 11:16:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1607357732;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XGOBTSRTM9+tAuCjeJvzx4ZaxY4e+O+c9GUP2xJoJgw=;
+        b=D4mLbskKF8OHYdIYDjrFl+uaFrAUMYnWCZksa6UOXRFuWDzrns8oDobzQaBY1VqgQ9QF4O
+        lM06qimDspc18q5n3JGjmAV5bvb8fgbzywFNRwAUECNIFiffJYsL+OuNhu++j1Zv6o7U1y
+        vXEUojKZJDMuny+H0dzyAZQdHPwHp0s=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-6-2HPbCSXjM-69ITbhC6OBSQ-1; Mon, 07 Dec 2020 11:15:30 -0500
+X-MC-Unique: 2HPbCSXjM-69ITbhC6OBSQ-1
+Received: by mail-wm1-f71.google.com with SMTP id u123so4295741wmu.5
+        for <bpf@vger.kernel.org>; Mon, 07 Dec 2020 08:15:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=zKhPLuQByBWIZw1uYTkwBeWZCWJCpLKTPppsP1+IhXE=;
-        b=RRkkRqBWjSsj1LY4jY9aQK7gxvhopv2VpvQR6Qi0sZ5iOT38D8PWFZ3iPcCS5v9uiA
-         h55C399HNEoPzqHGo3G9Q5O/2HLqrT3K7sQsXL7A7lS1fqQhej+AuYNn2Z0MSaWlIAyu
-         OS2Y4icFvMtI6R5m9ZA+cM3XwO0VE7o2xu+ni0TgZseeSskBArXVB/FKwG9Ch9b7VxTW
-         6uK93w0VtCv6V30tQMmpcau9mWjVsK43C0ZsYOYN35xCHpFWBOf/WgRUH3x1NRMUxQOk
-         hCjruDwuU++BT8ARHGRdT3rix3/hkfwNRDZ1dT4Pnomem0eBGQdqsgejarzSAY06YB4L
-         Fr1g==
-X-Gm-Message-State: AOAM532rSSjgOIgYuDs28WoDOewhHTGY5lXEX86w6pV/lgzuPaQlgZ2u
-        8Y9pR/V3Bhuos+8h0DlLprY9F/fKpsSZ/Z2n7KEYEiSgRDT7vOCIObqDeklvMSRmOu5BNPAhSCk
-        ZS7DHi1vmr6emRkTmzUZJQVQxnD72gR8+/UtxoYOP1IPTEuemOrFjioTgsyz0cVU=
-X-Google-Smtp-Source: ABdhPJzPFZTgMmWGu1YCSsxY0YVICXeUcTVncl9Zvb2JOefQlybNeEyykZOozKpIuJZkK+Oa8rGufwMtCB8FBQ==
-Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
-X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
- (user=jackmanb job=sendgmr) by 2002:a1c:e084:: with SMTP id
- x126mr19124582wmg.109.1607357309765; Mon, 07 Dec 2020 08:08:29 -0800 (PST)
-Date:   Mon,  7 Dec 2020 16:07:31 +0000
-In-Reply-To: <20201207160734.2345502-1-jackmanb@google.com>
-Message-Id: <20201207160734.2345502-9-jackmanb@google.com>
-Mime-Version: 1.0
-References: <20201207160734.2345502-1-jackmanb@google.com>
-X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
-Subject: [PATCH bpf-next v4 08/11] bpf: Pull out a macro for interpreting
- atomic ALU operations
-From:   Brendan Jackman <jackmanb@google.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        KP Singh <kpsingh@chromium.org>,
-        Florent Revest <revest@chromium.org>,
-        linux-kernel@vger.kernel.org, Jann Horn <jannh@google.com>,
-        Brendan Jackman <jackmanb@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=XGOBTSRTM9+tAuCjeJvzx4ZaxY4e+O+c9GUP2xJoJgw=;
+        b=X/ssEhnmmdf7ZIXOhJNqHV8Wob4D+WGSQdYxz9DRjCF0XchVETvZi4aCaXmc3B4EeD
+         o3iokkRLOpVh+QwbNnm9MlKxsiGr5s58TdDMiAw9hAeWDYeuXPVnhVq4+r6tOEf7j+vA
+         QleL+K795g2dPTKm6hrXRwoJOToYgQFCNj46JRly+lrmvQwyARVaZPHffyq5ABxwWM2A
+         W+kqThKYyx0T7eg2iv+/ep8bHZAWYK4/EfQUNE6+Nmiy5LofFGR97/aZ17WhrgEgn43R
+         0AbH6imgvybMYHhDiNzPNhvgC75Kej9CZf1kehDZq9UJw5L6fUVWtWqvlGapaDPcbya+
+         kQpQ==
+X-Gm-Message-State: AOAM531KmAvHhe4dNM3nTSmeCJ9wD/9f9FyTUX5l8Dv3or99HyXo7B6s
+        HO7L3+T1MHMynXDtJn+Mp0f7SUAQWcMXwu9FJmU21cn01pmq6+q6YDY6oZXM9YS1aTIzeswwB+L
+        n7m7G/iURWWPv
+X-Received: by 2002:a5d:4586:: with SMTP id p6mr21186841wrq.308.1607357729066;
+        Mon, 07 Dec 2020 08:15:29 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzfI4RZGHd6D/kw6tCcjmBDVCB5z3aDm5GYfb8Phhn8jgCzvJ4L7SXeLWXK5w2RDEsKyglQOQ==
+X-Received: by 2002:a5d:4586:: with SMTP id p6mr21186820wrq.308.1607357728860;
+        Mon, 07 Dec 2020 08:15:28 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id j13sm14774907wmi.36.2020.12.07.08.15.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Dec 2020 08:15:28 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id F38951843F5; Mon,  7 Dec 2020 17:15:26 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>
+Subject: Re: Latest libbpf fails to load programs compiled with old LLVM
+In-Reply-To: <CAADnVQ+qibC_8cDwaqOoAnL7CwXv85EjQ96Zcdtrm+86cgZq1g@mail.gmail.com>
+References: <87lfeebwpu.fsf@toke.dk>
+ <10679e62-50a2-4c01-31d2-cb79c01e4cbf@fb.com> <87r1o59aoc.fsf@toke.dk>
+ <6801fcdb-932e-c185-22db-89987099b553@fb.com>
+ <CAEf4BzZRu=sxEx7c8KGxSV1C6Aitrk01bSfabv5Bz+XUAMU6rg@mail.gmail.com>
+ <875z5d7ufl.fsf@toke.dk>
+ <CAADnVQ+qibC_8cDwaqOoAnL7CwXv85EjQ96Zcdtrm+86cgZq1g@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Mon, 07 Dec 2020 17:15:26 +0100
+Message-ID: <878sa9619d.fsf@toke.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Since the atomic operations that are added in subsequent commits are
-all isomorphic with BPF_ADD, pull out a macro to avoid the
-interpreter becoming dominated by lines of atomic-related code.
+Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
 
-Note that this sacrificies interpreter performance (combining
-STX_ATOMIC_W and STX_ATOMIC_DW into single switch case means that we
-need an extra conditional branch to differentiate them) in favour of
-compact and (relatively!) simple C code.
+> On Mon, Dec 7, 2020 at 3:03 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@red=
+hat.com> wrote:
+>>
+>> Wait, what? This is a regression that *breaks people's programs* on
+>> compiler versions that are still very much in the wild! I mean, fine if
+>> you don't want to support new features on such files, but then surely we
+>> can at least revert back to the old behaviour?
+>
+> Those folks that care about compiling with old llvm would have to stick
+> to whatever loader they have instead of using libbpf.
+> It's not a backward compatibility breakage.
 
-Acked-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Brendan Jackman <jackmanb@google.com>
----
- kernel/bpf/core.c | 80 +++++++++++++++++++++++------------------------
- 1 file changed, 39 insertions(+), 41 deletions(-)
+What? It's a change in libbpf that breaks loading of existing BPF object
+files that were working (with libbpf) before. If that's not a backward
+compatibility break then that term has lost all meaning.
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 28f960bc2e30..1d9e5dcde03a 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1618,55 +1618,53 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
- 	LDX_PROBE(DW, 8)
- #undef LDX_PROBE
- 
--	STX_ATOMIC_W:
--		switch (IMM) {
--		case BPF_ADD:
--			/* lock xadd *(u32 *)(dst_reg + off16) += src_reg */
--			atomic_add((u32) SRC, (atomic_t *)(unsigned long)
--				   (DST + insn->off));
--			break;
--		case BPF_ADD | BPF_FETCH:
--			SRC = (u32) atomic_fetch_add(
--				(u32) SRC,
--				(atomic_t *)(unsigned long) (DST + insn->off));
--			break;
--		case BPF_XCHG:
--			SRC = (u32) atomic_xchg(
--				(atomic_t *)(unsigned long) (DST + insn->off),
--				(u32) SRC);
--			break;
--		case BPF_CMPXCHG:
--			BPF_R0 = (u32) atomic_cmpxchg(
--				(atomic_t *)(unsigned long) (DST + insn->off),
--				(u32) BPF_R0, (u32) SRC);
-+#define ATOMIC_ALU_OP(BOP, KOP)						\
-+		case BOP:						\
-+			if (BPF_SIZE(insn->code) == BPF_W)		\
-+				atomic_##KOP((u32) SRC, (atomic_t *)(unsigned long) \
-+					     (DST + insn->off));	\
-+			else						\
-+				atomic64_##KOP((u64) SRC, (atomic64_t *)(unsigned long) \
-+					       (DST + insn->off));	\
-+			break;						\
-+		case BOP | BPF_FETCH:					\
-+			if (BPF_SIZE(insn->code) == BPF_W)		\
-+				SRC = (u32) atomic_fetch_##KOP(		\
-+					(u32) SRC,			\
-+					(atomic_t *)(unsigned long) (DST + insn->off)); \
-+			else						\
-+				SRC = (u64) atomic64_fetch_##KOP(	\
-+					(u64) SRC,			\
-+					(atomic64_t *)(s64) (DST + insn->off)); \
- 			break;
--		default:
--			goto default_label;
--		}
--		CONT;
- 
- 	STX_ATOMIC_DW:
-+	STX_ATOMIC_W:
- 		switch (IMM) {
--		case BPF_ADD:
--			/* lock xadd *(u64 *)(dst_reg + off16) += src_reg */
--			atomic64_add((u64) SRC, (atomic64_t *)(unsigned long)
--				     (DST + insn->off));
--			break;
--		case BPF_ADD | BPF_FETCH:
--			SRC = (u64) atomic64_fetch_add(
--				(u64) SRC,
--				(atomic64_t *)(s64) (DST + insn->off));
--			break;
-+		ATOMIC_ALU_OP(BPF_ADD, add)
-+#undef ATOMIC_ALU_OP
-+
- 		case BPF_XCHG:
--			SRC = (u64) atomic64_xchg(
--				(atomic64_t *)(u64) (DST + insn->off),
--				(u64) SRC);
-+			if (BPF_SIZE(insn->code) == BPF_W)
-+				SRC = (u32) atomic_xchg(
-+					(atomic_t *)(unsigned long) (DST + insn->off),
-+					(u32) SRC);
-+			else
-+				SRC = (u64) atomic64_xchg(
-+					(atomic64_t *)(u64) (DST + insn->off),
-+					(u64) SRC);
- 			break;
- 		case BPF_CMPXCHG:
--			BPF_R0 = (u64) atomic64_cmpxchg(
--				(atomic64_t *)(u64) (DST + insn->off),
--				(u64) BPF_R0, (u64) SRC);
-+			if (BPF_SIZE(insn->code) == BPF_W)
-+				BPF_R0 = (u32) atomic_cmpxchg(
-+					(atomic_t *)(unsigned long) (DST + insn->off),
-+					(u32) BPF_R0, (u32) SRC);
-+			else
-+				BPF_R0 = (u64) atomic64_cmpxchg(
-+					(atomic64_t *)(u64) (DST + insn->off),
-+					(u64) BPF_R0, (u64) SRC);
- 			break;
-+
- 		default:
- 			goto default_label;
- 		}
--- 
-2.29.2.576.ga3fc446d84-goog
+>> I used "prog" because that's what iproute2 looks for if you don't supply
+>
+> Please don't use iproute2 as a reason to do anything in libbpf. It won't =
+fly.
+
+Eh? Did you even read the email you're replying to? This issue has
+nothing to do with iproute2, that was an unrelated thing Andrii asked me
+to change when he was looking at my example...
+
+-Toke
 
