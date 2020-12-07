@@ -2,119 +2,128 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-20.4 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FSL_HELO_FAKE,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4D7F8C433FE
-	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 09:02:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B1A94C4167B
+	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 11:01:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 102E223341
-	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 09:02:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 799552337F
+	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 11:01:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726479AbgLGJCa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Dec 2020 04:02:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45640 "EHLO
+        id S1726610AbgLGLBB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Dec 2020 06:01:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726336AbgLGJCa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Dec 2020 04:02:30 -0500
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065F1C061A51;
-        Mon,  7 Dec 2020 01:01:53 -0800 (PST)
-Received: by mail-pj1-x1043.google.com with SMTP id o7so7055973pjj.2;
-        Mon, 07 Dec 2020 01:01:53 -0800 (PST)
+        with ESMTP id S1726468AbgLGLBA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Dec 2020 06:01:00 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1C1C0613D1
+        for <bpf@vger.kernel.org>; Mon,  7 Dec 2020 03:00:20 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id m5so2686165wrx.9
+        for <bpf@vger.kernel.org>; Mon, 07 Dec 2020 03:00:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=O6TV8n4dnhxn+ChBFoZj/FKpNfXbjWCYooSaqLgkIwQ=;
-        b=XaUYi5l5LtTJmoYdO/7wC46Irj3xh1f/qTjTir4CLZk5/KWRrGPLIQbRtOExLWdIiJ
-         6sEKSplwI2uSigUnCgZ0HpKDRkHgLt7SOsuEAraq0iMfvFiZK0nm6yetJawPkz1641Lu
-         XgC45Gutnr1EMD5KCemY/7PLHPG3RznEE/cFD3WlLNAvES+chxP03fH6YEHs75miNZ/T
-         s0C2WbDBrQzCT+p++aI4n6ywMNoLmcQGC4209kcotxSz+9ig8Q4YwLJE5G4TLgLxum3T
-         gTqc6HL48ILSxwL6AIwto5wKoVw3p7Xs/R+eqkACae8qdk00ez6kY2ZtssLAexswTtfi
-         tMmQ==
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Of1GuHMcacZDGavR17lWzfhPO8aTLH8wtw5w1WkEg9o=;
+        b=k6q6RJ7sx6u0IFHGYe2vKIzMETe6DHIaz1Kof74EDPeou+CDRGX+hbJRk3sp0JBPYF
+         dkVr80dVeWeDj7oa7wAWYCXvPntVHXrKGfSUkKB1W2lbLuzMy1blmizUyG6iM6RScldV
+         x2qjf3B5jtnRjsS/iD6dNc5voF1y/3gp198Hb1H/vzmYBwvyvf2cQTrbMVH97hmsK3K8
+         fCZ0MYw694cycyaQ3SfAtSRpSX59L58X0TazgGXZeaK4M/8DvVUjXYZhRdulwbkFTT+r
+         GBXimEUMTcyRshSZwdIXCgbGQUYyNwho7pJLjcUhs1nh/AgyziAvdVRT0goGozmvlBl1
+         VvgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=O6TV8n4dnhxn+ChBFoZj/FKpNfXbjWCYooSaqLgkIwQ=;
-        b=UmM+MvQdo+4jZ6EKvOeyB9HnorKQhHBO3LroE3AaJd/GArkb3mgZt04hawDVLMIXJ8
-         Dlb3QCyKcnO3ELALHUyEStobIaz5+wiostHKDqQZ4ZIxcERVpNHRfg1o75tNWXO80xkx
-         ybetFTLrPpfBOpa+H2rWgx5Wnczuo1ZbbxC2ldph7fQzRg2rdTcWNCUugwmQItyMPN5N
-         mtwKfE9zst9wNHyN2m6rgvS3aQULnCaRDnpA4kvCI8PAOZ2l4Jdgc7XVHN5C4jZKKrWW
-         05LqFxx+bGhvvSaqVuQzmme7vkp3AciWfEqrkaPLL4J6N5A2EPDNm6ZOMPqNMRvCDqu6
-         lBgw==
-X-Gm-Message-State: AOAM530eBrdFAKLNVj/ebDzZsQSElKW/CeqbttHvXrTnjU1v3low7oee
-        tqxInQQOPQcpQy7RHKmPSZH6OTt52x7KsqwWBCQ=
-X-Google-Smtp-Source: ABdhPJxG87O/y7oR2NId/KTWlxPZYbLiTAKw37psKvRCHoQCu6/Avp6BuOdfDWtFEC/JsEOrKmpj6V2OFWl/n6YubXM=
-X-Received: by 2002:a17:90a:fcc:: with SMTP id 70mr15268706pjz.168.1607331712537;
- Mon, 07 Dec 2020 01:01:52 -0800 (PST)
-MIME-Version: 1.0
-References: <20201207082008.132263-1-bjorn.topel@gmail.com>
-In-Reply-To: <20201207082008.132263-1-bjorn.topel@gmail.com>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Mon, 7 Dec 2020 10:01:41 +0100
-Message-ID: <CAJ8uoz1sb=RWNbdAYSduqL5ME7OwWMV3aEwgPhgN0v=4mCSjwQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] xsk: Validate socket state in xsk_recvmsg, prior
- touching socket members
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Of1GuHMcacZDGavR17lWzfhPO8aTLH8wtw5w1WkEg9o=;
+        b=OO3e4sKXIQigzrUIMwC9nL3DtnjxE7GB/99KzDRiU4drc6PT+DzJOwW+D5ykoVY2gD
+         nHq0uo3IJal5QsN6akOejvY+OZ040ykwee1cpH/qppvzrBs7n/bQ2z+lrgbH5cESi9OP
+         Q2J8HADKOdqZrjCTGhI3EHo6y/1cyRS+mfzSwiJjHT+8FcaAbLxe4AMee2UKjQJFNRZU
+         P8lTGZSD0wkANAl/1EoKP2kwJ2eEMgzHE28rT1x5z9nXChcuGb+ZwFhkXtKTSJSOWZed
+         PdBiSG1EzHSCNKtqaQPLLyt78LaA1HVDK/HBDfxrbxQmqqBnve9SESy6U70keoKwch9A
+         vqgA==
+X-Gm-Message-State: AOAM532s1edCRcgyc/oVDOPiBhRAT12F2Pz8mZFYo2vq9oEzAComv86w
+        z5WpwgubbqSmVMIdmCNfK2E2gg==
+X-Google-Smtp-Source: ABdhPJxsTcHWsd5iv0L+PhwHVUAV3jErRZXdGhZUtFqRNCMzepiyvYbIIKlS++YTtT/yLyQLnZkKWQ==
+X-Received: by 2002:adf:c986:: with SMTP id f6mr12341682wrh.361.1607338818674;
+        Mon, 07 Dec 2020 03:00:18 -0800 (PST)
+Received: from google.com (203.75.199.104.bc.googleusercontent.com. [104.199.75.203])
+        by smtp.gmail.com with ESMTPSA id z8sm13066080wmg.17.2020.12.07.03.00.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Dec 2020 03:00:17 -0800 (PST)
+Date:   Mon, 7 Dec 2020 11:00:13 +0000
+From:   Brendan Jackman <jackmanb@google.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        kernel test robot <oliver.sang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        KP Singh <kpsingh@chromium.org>,
+        Florent Revest <revest@chromium.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Jann Horn <jannh@google.com>
+Subject: Re: [PATCH bpf-next v3 12/14] bpf: Pull tools/build/feature biz into
+ selftests Makefile
+Message-ID: <X84LPVp3PqfESx9U@google.com>
+References: <20201203160245.1014867-1-jackmanb@google.com>
+ <20201203160245.1014867-13-jackmanb@google.com>
+ <CAEf4BzbEfPScq_qMVJkDxfWBh-oRhY5phFr=517pam80YcpgMg@mail.gmail.com>
+ <X8oEOPViOhR8XdH6@google.com>
+ <CAEf4BzaEystdQ3PbaZXhmpTfqbs410BVCEToHfKLgx-3wAm-KA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzaEystdQ3PbaZXhmpTfqbs410BVCEToHfKLgx-3wAm-KA@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Dec 7, 2020 at 9:22 AM Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com=
-> wrote:
->
-> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
->
-> In AF_XDP the socket state needs to be checked, prior touching the
-> members of the socket. This was not the case for the recvmsg
-> implementation. Fix that by moving the xsk_is_bound() call.
->
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Fixes: 45a86681844e ("xsk: Add support for recvmsg()")
-> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
-> ---
->  net/xdp/xsk.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On Fri, Dec 04, 2020 at 11:00:24AM -0800, Andrii Nakryiko wrote:
+> On Fri, Dec 4, 2020 at 1:41 AM Brendan Jackman <jackmanb@google.com> wrote:
+> >
+> > On Thu, Dec 03, 2020 at 01:01:27PM -0800, Andrii Nakryiko wrote:
+> > > On Thu, Dec 3, 2020 at 8:07 AM Brendan Jackman <jackmanb@google.com> wrote:
+> > > >
+> > > > This is somewhat cargo-culted from the libbpf build. It will be used
+> > > > in a subsequent patch to query for Clang BPF atomics support.
+> > > >
+> > > > Change-Id: I9318a1702170eb752acced35acbb33f45126c44c
+> > >
+> > > Haven't seen this before. What's this Change-Id business?
+> >
+> > Argh, apologies. Looks like it's time for me to adopt a less error-prone
+> > workflow for sending patches.
+> >
+> > (This is noise from Gerrit, which we sometimes use for internal reviews)
+> >
+> > > > Signed-off-by: Brendan Jackman <jackmanb@google.com>
+> > > > ---
+> > > >  tools/testing/selftests/bpf/.gitignore |  1 +
+> > > >  tools/testing/selftests/bpf/Makefile   | 38 ++++++++++++++++++++++++++
+> > > >  2 files changed, 39 insertions(+)
+> > >
+> > > All this just to detect the support for clang atomics?... Let's not
+> > > pull in the entire feature-detection framework unnecessarily,
+> > > selftests Makefile is complicated enough without that.
+> >
+> > Then the test build would break for people who haven't updated Clang.
+> > Is that acceptable?
+> >
+> > I'm aware of cases where you need to be on a pretty fresh Clang for
+> > tests to _pass_ so maybe it's fine.
+> 
+> I didn't mean to drop any detection of this new feature. I just didn't
+> want a new dependency on tools' feature probing framework. See
+> IS_LITTLE_ENDIAN and get_sys_includes, we already have various feature
+> detection-like stuff in there. So we can do this with a one-liner. I
+> just want to keep it simple. Thanks.
 
-Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Ah right gotcha. Then yeah I think we can do this:
 
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 56c46e5f57bc..e28c6825e089 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -554,12 +554,12 @@ static int xsk_recvmsg(struct socket *sock, struct =
-msghdr *m, size_t len, int fl
->         struct sock *sk =3D sock->sk;
->         struct xdp_sock *xs =3D xdp_sk(sk);
->
-> +       if (unlikely(!xsk_is_bound(xs)))
-> +               return -ENXIO;
->         if (unlikely(!(xs->dev->flags & IFF_UP)))
->                 return -ENETDOWN;
->         if (unlikely(!xs->rx))
->                 return -ENOBUFS;
-> -       if (unlikely(!xsk_is_bound(xs)))
-> -               return -ENXIO;
->         if (unlikely(need_wait))
->                 return -EOPNOTSUPP;
->
->
-> base-commit: 34da87213d3ddd26643aa83deff7ffc6463da0fc
-> --
-> 2.27.0
->
+ BPF_ATOMICS_SUPPORTED = $(shell \
+        echo "int x = 0; int foo(void) { return __sync_val_compare_and_swap(&x, 1, 2); }" \
+        | $(CLANG) -x cpp-output -S -target bpf -mcpu=v3 - -o /dev/null && echo 1 || echo 0)
