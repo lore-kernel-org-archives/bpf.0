@@ -2,63 +2,66 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.2 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85FF6C4361B
-	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:09:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 881A8C1B087
+	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:09:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4A26923731
-	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:09:12 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 678DD23750
+	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:09:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726891AbgLGQJB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Dec 2020 11:09:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
+        id S1727622AbgLGQJg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Dec 2020 11:09:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726203AbgLGQJA (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Dec 2020 11:09:00 -0500
+        with ESMTP id S1727620AbgLGQJg (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Dec 2020 11:09:36 -0500
 Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6469CC061794
-        for <bpf@vger.kernel.org>; Mon,  7 Dec 2020 08:08:14 -0800 (PST)
-Received: by mail-wm1-x34a.google.com with SMTP id g198so4267312wme.7
-        for <bpf@vger.kernel.org>; Mon, 07 Dec 2020 08:08:14 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A06C0611C5
+        for <bpf@vger.kernel.org>; Mon,  7 Dec 2020 08:08:19 -0800 (PST)
+Received: by mail-wm1-x34a.google.com with SMTP id a205so4245365wme.9
+        for <bpf@vger.kernel.org>; Mon, 07 Dec 2020 08:08:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=E0InZ8YZUfmsCX5q8vbmB+szGdatzjXmt6ix8T6lxf4=;
-        b=nVMu+fGewDY1zDQdPGGQ8jHDq6e7myODHrQfB5e36P28BmmtZROYSceh7a5jGMF9aT
-         PTE8hmaEXd4Z/cSwnfdJx9/VuCiySGKEr8YSPG8wLwqH4l/VFLq2mvVY3c39QCFrtx7R
-         xAScRFDTVKGqmNKZMoYPkYAvfZ09OkygR1H+oSTuqXFgAF0tTfVkkctRNiocgyBEzPIA
-         lVzKuu8N844HCUnB5ux+klIWQQFDa+bknl0bxeEJgovqHSN0p8X7m8D3JfHbqXDvrcBS
-         Hn+E3CbCpjhGJ1KusmEAuY/hn5rVyK1yZ9xpx9T1dBnIjcvISDy5sp6ivlIW489yjWFb
-         iV4g==
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=kgZtScldrNgFhrDY/e+Xd6nj0yddjgbqe7qwF3mWjO8=;
+        b=pyjvyLWOa1EQCy1NoYOD2h7b7N4pAa2L10D9jR+mlztus7GqiVpqFCrW2Y1d562f0O
+         kQAdf9qVjQEwI12nc6uOEiYrNJybfqpP4JrnFTYuivosOGqpYgXkxwRIm7IMX6saYNv9
+         sgoP9FRqrlCfqlwGYNu/sPw8wk5MrzvqyC63JBOfeFWX56/JrPOmUCOxiwBwUhyeQtVx
+         iG187tYfsbgIf5eYaOn1GBicp24kE2Jiv4CCX1NhwtEcN+sph2d/CnregvSoxFosce0s
+         DULvNbrfMa1mgPKMLAFOSxFXhL9Q5q+tlAme5zpKZhV/Iy2GnGND3z/AACjilSV9RcoQ
+         1ztQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=E0InZ8YZUfmsCX5q8vbmB+szGdatzjXmt6ix8T6lxf4=;
-        b=Da9jGNWiftfT6+kAC/m8WrD29f/Mkpw27z4iSwjwORfXsv9URPADKPxWyd/Y2EAuoP
-         E2DJsnEgpl4sGe9KKs/cRJqdXu3T9WH404wqVvLyshjznXSyzyA3tH7zYf27i8T2Buhb
-         rkeEfjcqt4M8ImIyY/31/6hqqM8nxpzuDSrxv8eGDHuJEN9CAMZmdd3d3WXXF1+vTvb4
-         ulGvzgyRyF8Kb2k/kWewwnlls1EEDtfKC9GsZIgQfjalSlCfoCcc3qA1l8V68SdjR9cz
-         PYuUsybcv+ejzzwlnL2SpCO0rdbI+Z87DPnOUwMOPXL0l5458vMI0Mm/irzUuJ/Z98AD
-         Qh0A==
-X-Gm-Message-State: AOAM530as/QaLorGdxfKJtgRLRgfL1eu9dKNjS4lJfbr5+3LGPyZFCLm
-        z5Bnj5zdkbhFLDa8A34rERDkG8P+QLuFVz3UmtIz3V7rlwVemlvOiPw4Yym+PYQJAV/9df8dTH2
-        A+curVb03XJCK7pKqYgCiLE1z2Gg1wWKjLEo7ZPJHKaj0qnJNr40xJoHHN8j0BKA=
-X-Google-Smtp-Source: ABdhPJxCX8A1qT/ZQ1/gDS2KbHS06qSbCWaXPHVo/0WPS09S7vvdN38mkmkY16n3pWMAhYWelSSaLmDtk37cDQ==
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=kgZtScldrNgFhrDY/e+Xd6nj0yddjgbqe7qwF3mWjO8=;
+        b=P984K6NJHZb2PH28acEEvGJN8fGPynkhnPbdCxgVXbKo5If6TOgavyPU5e+/s9dB0u
+         YRqalJDA2bmhPMvYYT5Q+h3eK7g5dPIfVnhzMwDYcs089OMPFO7dufLyhztYdGEBrrq/
+         LAvwDnZuMd/trVISYfa8zUEsvz/LcXh/Z5Xt2VRXD3WuTveKySS84NaBvLP5WWtSKO9l
+         VLqU+TnppqJgA7lmAz9hbI+HaOGhzzC+W086GCcSf2Pp04m7s8EtBvaD499PHmt8vI/j
+         EXfjgTZXg+UptovrwRkFMFWruyg2Qt4kJIljrZ40DJMATC3je4qmZcqOnyEGFOA2pBCM
+         TEDg==
+X-Gm-Message-State: AOAM533gZbZp0pwBStdLf/Fmkd5GPoZ4Sa6hT4aNTDNoKQRUJopKhaQ0
+        RN+AF+5RpZ/mGAMvJaL8SFuewLI9rj1wQ9pPpasLayl1JcOTzucPe6YVTOi3Bxomp0VTE3TVMW4
+        q62E8oKKcvUSpHQ82IiIZdjNcr7CUHRdtg+TTwzDfIz2a8vpI87BKfA9b4lOKdxc=
+X-Google-Smtp-Source: ABdhPJwb/AJgi6+k9jvdTCL+fgh9ommb1FTsfZNUsVYyPrgMHq9UoGom1hsGqPCSY1iU6sARXQe4oniJQbk+HQ==
 Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
 X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
- (user=jackmanb job=sendgmr) by 2002:adf:e490:: with SMTP id
- i16mr20247219wrm.337.1607357292756; Mon, 07 Dec 2020 08:08:12 -0800 (PST)
-Date:   Mon,  7 Dec 2020 16:07:23 +0000
-Message-Id: <20201207160734.2345502-1-jackmanb@google.com>
+ (user=jackmanb job=sendgmr) by 2002:a1c:791a:: with SMTP id
+ l26mr54795wme.1.1607357296984; Mon, 07 Dec 2020 08:08:16 -0800 (PST)
+Date:   Mon,  7 Dec 2020 16:07:25 +0000
+In-Reply-To: <20201207160734.2345502-1-jackmanb@google.com>
+Message-Id: <20201207160734.2345502-3-jackmanb@google.com>
 Mime-Version: 1.0
+References: <20201207160734.2345502-1-jackmanb@google.com>
 X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
-Subject: [PATCH bpf-next v4 00/11] Atomics for eBPF
+Subject: [PATCH bpf-next v4 02/11] bpf: x86: Factor out emission of REX byte
 From:   Brendan Jackman <jackmanb@google.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
@@ -72,216 +75,92 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Status of the patches
-=====================
+The JIT case for encoding atomic ops is about to get more
+complicated. In order to make the review & resulting code easier,
+let's factor out some shared helpers.
 
-Thanks for the reviews! Differences from v3->v4 [1]:
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
+---
+ arch/x86/net/bpf_jit_comp.c | 39 ++++++++++++++++++++++---------------
+ 1 file changed, 23 insertions(+), 16 deletions(-)
 
-* Added one Ack from Yonghong. He acked some other patches but those
-  have now changed non-trivally so I didn't add those acks.
-
-* Fixups to commit messages.
-
-* Fixed disassembly and comments: first arg to atomic_fetch_* is a
-  pointer.
-
-* Improved prog_test efficiency. BPF progs are now all loaded in a
-  single call, then the skeleton is re-used for each subtest.
-
-* Dropped use of tools/build/feature in favour of a one-liner in the
-  Makefile.
-
-* Dropped the commit that created an emit_neg helper in the x86
-  JIT. It's not used any more (it wasn't used in v3 either).
-
-* Combined all the different filter.h macros (used to be
-  BPF_ATOMIC_ADD, BPF_ATOMIC_FETCH_ADD, BPF_ATOMIC_AND, etc) into
-  just BPF_ATOMIC32 and BPF_ATOMIC64.
-
-* Removed some references to BPF_STX_XADD from tools/, samples/ and
-  lib/ that I missed before.
-
-Differences from v2->v3 [1]:
-
-* More minor fixes and naming/comment changes
-
-* Dropped atomic subtract: compilers can implement this by preceding
-  an atomic add with a NEG instruction (which is what the x86 JIT did
-  under the hood anyway).
-
-* Dropped the use of -mcpu=v4 in the Clang BPF command-line; there is
-  no longer an architecture version bump. Instead a feature test is
-  added to Kbuild - it builds a source file to check if Clang
-  supports BPF atomics.
-
-* Fixed the prog_test so it no longer breaks
-  test_progs-no_alu32. This requires some ifdef acrobatics to avoid
-  complicating the prog_tests model where the same userspace code
-  exercises both the normal and no_alu32 BPF test objects, using the
-  same skeleton header.
-
-Differences from v1->v2 [1]:
-
-* Fixed mistakes in the netronome driver
-
-* Addd sub, add, or, xor operations
-
-* The above led to some refactors to keep things readable. (Maybe I
-  should have just waited until I'd implemented these before starting
-  the review...)
-
-* Replaced BPF_[CMP]SET | BPF_FETCH with just BPF_[CMP]XCHG, which
-  include the BPF_FETCH flag
-
-* Added a bit of documentation. Suggestions welcome for more places
-  to dump this info...
-
-The prog_test that's added depends on Clang/LLVM features added by
-Yonghong in commit 286daafd6512 (was
-https://reviews.llvm.org/D72184).
-
-This only includes a JIT implementation for x86_64 - I don't plan to
-implement JIT support myself for other architectures.
-
-Operations
-==========
-
-This patchset adds atomic operations to the eBPF instruction set. The
-use-case that motivated this work was a trivial and efficient way to
-generate globally-unique cookies in BPF progs, but I think it's
-obvious that these features are pretty widely applicable.  The
-instructions that are added here can be summarised with this list of
-kernel operations:
-
-* atomic[64]_[fetch_]add
-* atomic[64]_[fetch_]and
-* atomic[64]_[fetch_]or
-* atomic[64]_xchg
-* atomic[64]_cmpxchg
-
-The following are left out of scope for this effort:
-
-* 16 and 8 bit operations
-* Explicit memory barriers
-
-Encoding
-========
-
-I originally planned to add new values for bpf_insn.opcode. This was
-rather unpleasant: the opcode space has holes in it but no entire
-instruction classes[2]. Yonghong Song had a better idea: use the
-immediate field of the existing STX XADD instruction to encode the
-operation. This works nicely, without breaking existing programs,
-because the immediate field is currently reserved-must-be-zero, and
-extra-nicely because BPF_ADD happens to be zero.
-
-Note that this of course makes immediate-source atomic operations
-impossible. It's hard to imagine a measurable speedup from such
-instructions, and if it existed it would certainly not benefit x86,
-which has no support for them.
-
-The BPF_OP opcode fields are re-used in the immediate, and an
-additional flag BPF_FETCH is used to mark instructions that should
-fetch a pre-modification value from memory.
-
-So, BPF_XADD is now called BPF_ATOMIC (the old name is kept to avoid
-breaking userspace builds), and where we previously had .imm = 0, we
-now have .imm = BPF_ADD (which is 0).
-
-Operands
-========
-
-Reg-source eBPF instructions only have two operands, while these
-atomic operations have up to four. To avoid needing to encode
-additional operands, then:
-
-- One of the input registers is re-used as an output register
-  (e.g. atomic_fetch_add both reads from and writes to the source
-  register).
-
-- Where necessary (i.e. for cmpxchg) , R0 is "hard-coded" as one of
-  the operands.
-
-This approach also allows the new eBPF instructions to map directly
-to single x86 instructions.
-
-[1] Previous iterations:
-    v1: https://lore.kernel.org/bpf/20201123173202.1335708-1-jackmanb@google.com/
-    v2: https://lore.kernel.org/bpf/20201127175738.1085417-1-jackmanb@google.com/
-    v3: https://lore.kernel.org/bpf/X8kN7NA7bJC7aLQI@google.com/
-
-[2] Visualisation of eBPF opcode space:
-    https://gist.github.com/bjackman/00fdad2d5dfff601c1918bc29b16e778
-
-Brendan Jackman (11):
-  bpf: x86: Factor out emission of ModR/M for *(reg + off)
-  bpf: x86: Factor out emission of REX byte
-  bpf: x86: Factor out a lookup table for some ALU opcodes
-  bpf: Rename BPF_XADD and prepare to encode other atomics in .imm
-  bpf: Move BPF_STX reserved field check into BPF_STX verifier code
-  bpf: Add BPF_FETCH field / create atomic_fetch_add instruction
-  bpf: Add instructions for atomic_[cmp]xchg
-  bpf: Pull out a macro for interpreting atomic ALU operations
-  bpf: Add bitwise atomic instructions
-  bpf: Add tests for new BPF atomic operations
-  bpf: Document new atomic instructions
-
- Documentation/networking/filter.rst           |  56 +++-
- arch/arm/net/bpf_jit_32.c                     |   7 +-
- arch/arm64/net/bpf_jit_comp.c                 |  16 +-
- arch/mips/net/ebpf_jit.c                      |  11 +-
- arch/powerpc/net/bpf_jit_comp64.c             |  25 +-
- arch/riscv/net/bpf_jit_comp32.c               |  20 +-
- arch/riscv/net/bpf_jit_comp64.c               |  16 +-
- arch/s390/net/bpf_jit_comp.c                  |  27 +-
- arch/sparc/net/bpf_jit_comp_64.c              |  17 +-
- arch/x86/net/bpf_jit_comp.c                   | 217 ++++++++++-----
- arch/x86/net/bpf_jit_comp32.c                 |   6 +-
- drivers/net/ethernet/netronome/nfp/bpf/jit.c  |  14 +-
- drivers/net/ethernet/netronome/nfp/bpf/main.h |   4 +-
- .../net/ethernet/netronome/nfp/bpf/verifier.c |  15 +-
- include/linux/filter.h                        | 118 ++++++++-
- include/uapi/linux/bpf.h                      |  10 +-
- kernel/bpf/core.c                             |  67 ++++-
- kernel/bpf/disasm.c                           |  43 ++-
- kernel/bpf/verifier.c                         |  75 ++++--
- lib/test_bpf.c                                |  14 +-
- samples/bpf/bpf_insn.h                        |   4 +-
- samples/bpf/cookie_uid_helper_example.c       |   6 +-
- samples/bpf/sock_example.c                    |   2 +-
- samples/bpf/test_cgrp2_attach.c               |   5 +-
- tools/include/linux/filter.h                  | 127 ++++++++-
- tools/include/uapi/linux/bpf.h                |  10 +-
- tools/testing/selftests/bpf/Makefile          |  10 +
- .../selftests/bpf/prog_tests/atomics.c        | 246 ++++++++++++++++++
- .../bpf/prog_tests/cgroup_attach_multi.c      |   4 +-
- tools/testing/selftests/bpf/progs/atomics.c   | 154 +++++++++++
- .../selftests/bpf/test_cgroup_storage.c       |   2 +-
- .../selftests/bpf/verifier/atomic_and.c       |  77 ++++++
- .../selftests/bpf/verifier/atomic_cmpxchg.c   |  96 +++++++
- .../selftests/bpf/verifier/atomic_fetch_add.c | 106 ++++++++
- .../selftests/bpf/verifier/atomic_or.c        |  77 ++++++
- .../selftests/bpf/verifier/atomic_xchg.c      |  46 ++++
- .../selftests/bpf/verifier/atomic_xor.c       |  77 ++++++
- tools/testing/selftests/bpf/verifier/ctx.c    |   7 +-
- .../bpf/verifier/direct_packet_access.c       |   4 +-
- .../testing/selftests/bpf/verifier/leak_ptr.c |  10 +-
- .../selftests/bpf/verifier/meta_access.c      |   4 +-
- tools/testing/selftests/bpf/verifier/unpriv.c |   3 +-
- .../bpf/verifier/value_illegal_alu.c          |   2 +-
- tools/testing/selftests/bpf/verifier/xadd.c   |  18 +-
- 44 files changed, 1665 insertions(+), 210 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/atomics.c
- create mode 100644 tools/testing/selftests/bpf/progs/atomics.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_and.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_fetch_add.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_or.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_xchg.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_xor.c
-
-
-base-commit: 34da87213d3ddd26643aa83deff7ffc6463da0fc
---
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index cc818ed7c2b9..7106cfd10ba6 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -702,6 +702,21 @@ static void emit_insn_suffix(u8 **pprog, u32 ptr_reg, u32 val_reg, int off)
+ 	*pprog = prog;
+ }
+ 
++/*
++ * Emit a REX byte if it will be necessary to address these registers
++ */
++static void maybe_emit_mod(u8 **pprog, u32 dst_reg, u32 src_reg, bool is64)
++{
++	u8 *prog = *pprog;
++	int cnt = 0;
++
++	if (is64)
++		EMIT1(add_2mod(0x48, dst_reg, src_reg));
++	else if (is_ereg(dst_reg) || is_ereg(src_reg))
++		EMIT1(add_2mod(0x40, dst_reg, src_reg));
++	*pprog = prog;
++}
++
+ /* LDX: dst_reg = *(u8*)(src_reg + off) */
+ static void emit_ldx(u8 **pprog, u32 size, u32 dst_reg, u32 src_reg, int off)
+ {
+@@ -854,10 +869,8 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 			case BPF_OR: b2 = 0x09; break;
+ 			case BPF_XOR: b2 = 0x31; break;
+ 			}
+-			if (BPF_CLASS(insn->code) == BPF_ALU64)
+-				EMIT1(add_2mod(0x48, dst_reg, src_reg));
+-			else if (is_ereg(dst_reg) || is_ereg(src_reg))
+-				EMIT1(add_2mod(0x40, dst_reg, src_reg));
++			maybe_emit_mod(&prog, dst_reg, src_reg,
++				       BPF_CLASS(insn->code) == BPF_ALU64);
+ 			EMIT2(b2, add_2reg(0xC0, dst_reg, src_reg));
+ 			break;
+ 
+@@ -1301,20 +1314,16 @@ xadd:			emit_modrm_dstoff(&prog, dst_reg, src_reg, insn->off);
+ 		case BPF_JMP32 | BPF_JSGE | BPF_X:
+ 		case BPF_JMP32 | BPF_JSLE | BPF_X:
+ 			/* cmp dst_reg, src_reg */
+-			if (BPF_CLASS(insn->code) == BPF_JMP)
+-				EMIT1(add_2mod(0x48, dst_reg, src_reg));
+-			else if (is_ereg(dst_reg) || is_ereg(src_reg))
+-				EMIT1(add_2mod(0x40, dst_reg, src_reg));
++			maybe_emit_mod(&prog, dst_reg, src_reg,
++				       BPF_CLASS(insn->code) == BPF_JMP);
+ 			EMIT2(0x39, add_2reg(0xC0, dst_reg, src_reg));
+ 			goto emit_cond_jmp;
+ 
+ 		case BPF_JMP | BPF_JSET | BPF_X:
+ 		case BPF_JMP32 | BPF_JSET | BPF_X:
+ 			/* test dst_reg, src_reg */
+-			if (BPF_CLASS(insn->code) == BPF_JMP)
+-				EMIT1(add_2mod(0x48, dst_reg, src_reg));
+-			else if (is_ereg(dst_reg) || is_ereg(src_reg))
+-				EMIT1(add_2mod(0x40, dst_reg, src_reg));
++			maybe_emit_mod(&prog, dst_reg, src_reg,
++				       BPF_CLASS(insn->code) == BPF_JMP);
+ 			EMIT2(0x85, add_2reg(0xC0, dst_reg, src_reg));
+ 			goto emit_cond_jmp;
+ 
+@@ -1350,10 +1359,8 @@ xadd:			emit_modrm_dstoff(&prog, dst_reg, src_reg, insn->off);
+ 		case BPF_JMP32 | BPF_JSLE | BPF_K:
+ 			/* test dst_reg, dst_reg to save one extra byte */
+ 			if (imm32 == 0) {
+-				if (BPF_CLASS(insn->code) == BPF_JMP)
+-					EMIT1(add_2mod(0x48, dst_reg, dst_reg));
+-				else if (is_ereg(dst_reg))
+-					EMIT1(add_2mod(0x40, dst_reg, dst_reg));
++				maybe_emit_mod(&prog, dst_reg, dst_reg,
++					       BPF_CLASS(insn->code) == BPF_JMP);
+ 				EMIT2(0x85, add_2reg(0xC0, dst_reg, dst_reg));
+ 				goto emit_cond_jmp;
+ 			}
+-- 
 2.29.2.576.ga3fc446d84-goog
 
