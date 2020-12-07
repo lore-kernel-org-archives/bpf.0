@@ -6,18 +6,18 @@ X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0BEDEC47434
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 774A0C2BBCA
 	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:34:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E5E9C238EA
-	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:34:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 50B01238E7
+	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:34:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727495AbgLGQeV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Dec 2020 11:34:21 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32886 "EHLO mail.kernel.org"
+        id S1726718AbgLGQe0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Dec 2020 11:34:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33016 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726718AbgLGQeU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Dec 2020 11:34:20 -0500
+        id S1727017AbgLGQeZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Dec 2020 11:34:25 -0500
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
@@ -26,9 +26,9 @@ Cc:     davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
         john.fastabend@gmail.com, dsahern@kernel.org, brouer@redhat.com,
         echaudro@redhat.com, lorenzo.bianconi@redhat.com,
         jasowang@redhat.com
-Subject: [PATCH v5 bpf-next 07/14] bpf: move user_size out of bpf_test_init
-Date:   Mon,  7 Dec 2020 17:32:36 +0100
-Message-Id: <6f92d87e554a92db2cddb444004d5f9b102011ff.1607349924.git.lorenzo@kernel.org>
+Subject: [PATCH v5 bpf-next 09/14] bpf: test_run: add xdp_shared_info pointer in bpf_test_finish signature
+Date:   Mon,  7 Dec 2020 17:32:38 +0100
+Message-Id: <f0451f61c70435237f5d7a407b40398f21c4350e.1607349924.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <cover.1607349924.git.lorenzo@kernel.org>
 References: <cover.1607349924.git.lorenzo@kernel.org>
@@ -38,61 +38,99 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Rely on data_size_in in bpf_test_init routine signature. This is a
-preliminary patch to introduce xdp multi-buff selftest
+introduce xdp_shared_info pointer in bpf_test_finish signature in order
+to copy back paged data from a xdp multi-buff frame to userspace buffer
 
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- net/bpf/test_run.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ net/bpf/test_run.c | 46 +++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 39 insertions(+), 7 deletions(-)
 
 diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index c1c30a9f76f3..bd291f5f539c 100644
+index e4b7b749184d..32cda04ac7fb 100644
 --- a/net/bpf/test_run.c
 +++ b/net/bpf/test_run.c
-@@ -171,11 +171,10 @@ __diag_pop();
+@@ -81,7 +81,8 @@ static int bpf_test_run(struct bpf_prog *prog, void *ctx, u32 repeat,
  
- ALLOW_ERROR_INJECTION(bpf_modify_return_test, ERRNO);
- 
--static void *bpf_test_init(const union bpf_attr *kattr, u32 size,
--			   u32 headroom, u32 tailroom)
-+static void *bpf_test_init(const union bpf_attr *kattr, u32 user_size,
-+			   u32 size, u32 headroom, u32 tailroom)
+ static int bpf_test_finish(const union bpf_attr *kattr,
+ 			   union bpf_attr __user *uattr, const void *data,
+-			   u32 size, u32 retval, u32 duration)
++			   struct xdp_shared_info *xdp_sinfo, u32 size,
++			   u32 retval, u32 duration)
  {
- 	void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
--	u32 user_size = kattr->test.data_size_in;
- 	void *data;
+ 	void __user *data_out = u64_to_user_ptr(kattr->test.data_out);
+ 	int err = -EFAULT;
+@@ -96,8 +97,37 @@ static int bpf_test_finish(const union bpf_attr *kattr,
+ 		err = -ENOSPC;
+ 	}
  
- 	if (size < ETH_HLEN || size > PAGE_SIZE - headroom - tailroom)
-@@ -495,7 +494,8 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	if (kattr->test.flags || kattr->test.cpu)
- 		return -EINVAL;
+-	if (data_out && copy_to_user(data_out, data, copy_size))
+-		goto out;
++	if (data_out) {
++		int len = xdp_sinfo ? copy_size - xdp_sinfo->data_length
++				    : copy_size;
++
++		if (copy_to_user(data_out, data, len))
++			goto out;
++
++		if (xdp_sinfo) {
++			int i, offset = len, data_len;
++
++			for (i = 0; i < xdp_sinfo->nr_frags; i++) {
++				skb_frag_t *frag = &xdp_sinfo->frags[i];
++
++				if (offset >= copy_size) {
++					err = -ENOSPC;
++					break;
++				}
++
++				data_len = min_t(int, copy_size - offset,
++						 xdp_get_frag_size(frag));
++
++				if (copy_to_user(data_out + offset,
++						 xdp_get_frag_address(frag),
++						 data_len))
++					goto out;
++
++				offset += data_len;
++			}
++		}
++	}
++
+ 	if (copy_to_user(&uattr->test.data_size_out, &size, sizeof(size)))
+ 		goto out;
+ 	if (copy_to_user(&uattr->test.retval, &retval, sizeof(retval)))
+@@ -598,7 +628,8 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	/* bpf program can never convert linear skb to non-linear */
+ 	if (WARN_ON_ONCE(skb_is_nonlinear(skb)))
+ 		size = skb_headlen(skb);
+-	ret = bpf_test_finish(kattr, uattr, skb->data, size, retval, duration);
++	ret = bpf_test_finish(kattr, uattr, skb->data, NULL, size, retval,
++			      duration);
+ 	if (!ret)
+ 		ret = bpf_ctx_finish(kattr, uattr, ctx,
+ 				     sizeof(struct __sk_buff));
+@@ -683,7 +714,8 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 		goto out;
  
--	data = bpf_test_init(kattr, size, NET_SKB_PAD + NET_IP_ALIGN,
-+	data = bpf_test_init(kattr, kattr->test.data_size_in,
-+			     size, NET_SKB_PAD + NET_IP_ALIGN,
- 			     SKB_DATA_ALIGN(sizeof(struct skb_shared_info)));
- 	if (IS_ERR(data))
- 		return PTR_ERR(data);
-@@ -632,7 +632,8 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	/* XDP have extra tailroom as (most) drivers use full page */
- 	max_data_sz = 4096 - headroom - tailroom;
+ 	size = xdp.data_end - xdp.data + xdp_sinfo->data_length;
+-	ret = bpf_test_finish(kattr, uattr, xdp.data, size, retval, duration);
++	ret = bpf_test_finish(kattr, uattr, xdp.data, xdp_sinfo, size, retval,
++			      duration);
  
--	data = bpf_test_init(kattr, max_data_sz, headroom, tailroom);
-+	data = bpf_test_init(kattr, kattr->test.data_size_in,
-+			     max_data_sz, headroom, tailroom);
- 	if (IS_ERR(data))
- 		return PTR_ERR(data);
+ out:
+ 	bpf_prog_change_xdp(prog, NULL);
+@@ -794,8 +826,8 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
+ 	do_div(time_spent, repeat);
+ 	duration = time_spent > U32_MAX ? U32_MAX : (u32)time_spent;
  
-@@ -698,7 +699,7 @@ int bpf_prog_test_run_flow_dissector(struct bpf_prog *prog,
- 	if (size < ETH_HLEN)
- 		return -EINVAL;
- 
--	data = bpf_test_init(kattr, size, 0, 0);
-+	data = bpf_test_init(kattr, kattr->test.data_size_in, size, 0, 0);
- 	if (IS_ERR(data))
- 		return PTR_ERR(data);
- 
+-	ret = bpf_test_finish(kattr, uattr, &flow_keys, sizeof(flow_keys),
+-			      retval, duration);
++	ret = bpf_test_finish(kattr, uattr, &flow_keys, NULL,
++			      sizeof(flow_keys), retval, duration);
+ 	if (!ret)
+ 		ret = bpf_ctx_finish(kattr, uattr, user_ctx,
+ 				     sizeof(struct bpf_flow_keys));
 -- 
 2.28.0
 
