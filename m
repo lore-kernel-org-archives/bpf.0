@@ -4,20 +4,20 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BAFB5C1B0D9
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE7A5C47435
 	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:34:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A2B8F238E7
+	by mail.kernel.org (Postfix) with ESMTP id 88D99238EA
 	for <bpf@archiver.kernel.org>; Mon,  7 Dec 2020 16:34:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727472AbgLGQeU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 7 Dec 2020 11:34:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32888 "EHLO mail.kernel.org"
+        id S1727444AbgLGQeQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 7 Dec 2020 11:34:16 -0500
+Received: from mail.kernel.org ([198.145.29.99]:32810 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726840AbgLGQeU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 7 Dec 2020 11:34:20 -0500
+        id S1726718AbgLGQeQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 7 Dec 2020 11:34:16 -0500
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
@@ -26,9 +26,9 @@ Cc:     davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
         john.fastabend@gmail.com, dsahern@kernel.org, brouer@redhat.com,
         echaudro@redhat.com, lorenzo.bianconi@redhat.com,
         jasowang@redhat.com
-Subject: [PATCH v5 bpf-next 08/14] bpf: introduce multibuff support to bpf_prog_test_run_xdp()
-Date:   Mon,  7 Dec 2020 17:32:37 +0100
-Message-Id: <309f21434ee15dbe66dc129bdcb947b203de4378.1607349924.git.lorenzo@kernel.org>
+Subject: [PATCH v5 bpf-next 05/14] xdp: add multi-buff support to xdp_return_{buff/frame}
+Date:   Mon,  7 Dec 2020 17:32:34 +0100
+Message-Id: <662d5db543dba3b933ed604c5cf7944d0df65c38.1607349924.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.28.0
 In-Reply-To: <cover.1607349924.git.lorenzo@kernel.org>
 References: <cover.1607349924.git.lorenzo@kernel.org>
@@ -38,106 +38,173 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce the capability to allocate a xdp multi-buff in
-bpf_prog_test_run_xdp routine. This is a preliminary patch to introduce
-the selftests for new xdp multi-buff ebpf helpers
+Take into account if the received xdp_buff/xdp_frame is non-linear
+recycling/returning the frame memory to the allocator or into
+xdp_frame_bulk.
+Introduce xdp_return_num_frags_from_buff to return a given number of
+fragments from a xdp multi-buff starting from the tail.
 
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- net/bpf/test_run.c | 52 +++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 44 insertions(+), 8 deletions(-)
+ include/net/xdp.h | 19 ++++++++++--
+ net/core/xdp.c    | 76 ++++++++++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 92 insertions(+), 3 deletions(-)
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index bd291f5f539c..e4b7b749184d 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -617,23 +617,22 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
+diff --git a/include/net/xdp.h b/include/net/xdp.h
+index 614f66d35ee8..d0e90d729023 100644
+--- a/include/net/xdp.h
++++ b/include/net/xdp.h
+@@ -258,6 +258,7 @@ void xdp_return_buff(struct xdp_buff *xdp);
+ void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq);
+ void xdp_return_frame_bulk(struct xdp_frame *xdpf,
+ 			   struct xdp_frame_bulk *bq);
++void xdp_return_num_frags_from_buff(struct xdp_buff *xdp, u16 num_frags);
+ 
+ /* When sending xdp_frame into the network stack, then there is no
+  * return point callback, which is needed to release e.g. DMA-mapping
+@@ -268,10 +269,24 @@ void __xdp_release_frame(void *data, struct xdp_mem_info *mem);
+ static inline void xdp_release_frame(struct xdp_frame *xdpf)
  {
- 	u32 tailroom = SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
- 	u32 headroom = XDP_PACKET_HEADROOM;
--	u32 size = kattr->test.data_size_in;
+ 	struct xdp_mem_info *mem = &xdpf->mem;
 +	struct xdp_shared_info *xdp_sinfo;
- 	u32 repeat = kattr->test.repeat;
- 	struct netdev_rx_queue *rxqueue;
- 	struct xdp_buff xdp = {};
-+	u32 max_data_sz, size;
- 	u32 retval, duration;
--	u32 max_data_sz;
-+	int i, ret;
- 	void *data;
--	int ret;
++	int i;
  
- 	if (kattr->test.ctx_in || kattr->test.ctx_out)
- 		return -EINVAL;
- 
--	/* XDP have extra tailroom as (most) drivers use full page */
- 	max_data_sz = 4096 - headroom - tailroom;
-+	size = min_t(u32, kattr->test.data_size_in, max_data_sz);
- 
--	data = bpf_test_init(kattr, kattr->test.data_size_in,
--			     max_data_sz, headroom, tailroom);
-+	data = bpf_test_init(kattr, size, max_data_sz, headroom, tailroom);
- 	if (IS_ERR(data))
- 		return PTR_ERR(data);
- 
-@@ -643,18 +642,55 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
- 	xdp.data_end = xdp.data + size;
- 	xdp.frame_sz = headroom + max_data_sz + tailroom;
- 
-+	xdp_sinfo = xdp_get_shared_info_from_buff(&xdp);
-+	if (unlikely(kattr->test.data_size_in > size)) {
-+		void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
+ 	/* Curr only page_pool needs this */
+-	if (mem->type == MEM_TYPE_PAGE_POOL)
+-		__xdp_release_frame(xdpf->data, mem);
++	if (mem->type != MEM_TYPE_PAGE_POOL)
++		return;
 +
-+		while (size < kattr->test.data_size_in) {
-+			struct page *page;
-+			skb_frag_t *frag;
-+			int data_len;
++	if (likely(!xdpf->mb))
++		goto out;
 +
-+			page = alloc_page(GFP_KERNEL);
-+			if (!page) {
-+				ret = -ENOMEM;
-+				goto out;
-+			}
++	xdp_sinfo = xdp_get_shared_info_from_frame(xdpf);
++	for (i = 0; i < xdp_sinfo->nr_frags; i++) {
++		struct page *page = xdp_get_frag_page(&xdp_sinfo->frags[i]);
 +
-+			frag = &xdp_sinfo->frags[xdp_sinfo->nr_frags++];
-+			xdp_set_frag_page(frag, page);
-+
-+			data_len = min_t(int, kattr->test.data_size_in - size,
-+					 PAGE_SIZE);
-+			xdp_set_frag_size(frag, data_len);
-+
-+			if (copy_from_user(page_address(page), data_in + size,
-+					   data_len)) {
-+				ret = -EFAULT;
-+				goto out;
-+			}
-+			xdp_sinfo->data_length += data_len;
-+			size += data_len;
-+		}
-+		xdp.mb = 1;
++		__xdp_release_frame(page_address(page), mem);
 +	}
-+
- 	rxqueue = __netif_get_rx_queue(current->nsproxy->net_ns->loopback_dev, 0);
- 	xdp.rxq = &rxqueue->xdp_rxq;
- 	bpf_prog_change_xdp(NULL, prog);
- 	ret = bpf_test_run(prog, &xdp, repeat, &retval, &duration, true);
- 	if (ret)
- 		goto out;
--	if (xdp.data != data + headroom || xdp.data_end != xdp.data + size)
--		size = xdp.data_end - xdp.data;
-+
-+	size = xdp.data_end - xdp.data + xdp_sinfo->data_length;
- 	ret = bpf_test_finish(kattr, uattr, xdp.data, size, retval, duration);
-+
- out:
- 	bpf_prog_change_xdp(prog, NULL);
-+	for (i = 0; i < xdp_sinfo->nr_frags; i++)
-+		__free_page(xdp_get_frag_page(&xdp_sinfo->frags[i]));
- 	kfree(data);
-+
- 	return ret;
++out:
++	__xdp_release_frame(xdpf->data, mem);
  }
  
+ int xdp_rxq_info_reg(struct xdp_rxq_info *xdp_rxq,
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index 79dd45234e4d..6c8e743ad03a 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -371,12 +371,38 @@ static void __xdp_return(void *data, struct xdp_mem_info *mem, bool napi_direct)
+ 
+ void xdp_return_frame(struct xdp_frame *xdpf)
+ {
++	struct xdp_shared_info *xdp_sinfo;
++	int i;
++
++	if (likely(!xdpf->mb))
++		goto out;
++
++	xdp_sinfo = xdp_get_shared_info_from_frame(xdpf);
++	for (i = 0; i < xdp_sinfo->nr_frags; i++) {
++		struct page *page = xdp_get_frag_page(&xdp_sinfo->frags[i]);
++
++		__xdp_return(page_address(page), &xdpf->mem, false);
++	}
++out:
+ 	__xdp_return(xdpf->data, &xdpf->mem, false);
+ }
+ EXPORT_SYMBOL_GPL(xdp_return_frame);
+ 
+ void xdp_return_frame_rx_napi(struct xdp_frame *xdpf)
+ {
++	struct xdp_shared_info *xdp_sinfo;
++	int i;
++
++	if (likely(!xdpf->mb))
++		goto out;
++
++	xdp_sinfo = xdp_get_shared_info_from_frame(xdpf);
++	for (i = 0; i < xdp_sinfo->nr_frags; i++) {
++		struct page *page = xdp_get_frag_page(&xdp_sinfo->frags[i]);
++
++		__xdp_return(page_address(page), &xdpf->mem, true);
++	}
++out:
+ 	__xdp_return(xdpf->data, &xdpf->mem, true);
+ }
+ EXPORT_SYMBOL_GPL(xdp_return_frame_rx_napi);
+@@ -412,7 +438,7 @@ void xdp_return_frame_bulk(struct xdp_frame *xdpf,
+ 	struct xdp_mem_allocator *xa;
+ 
+ 	if (mem->type != MEM_TYPE_PAGE_POOL) {
+-		__xdp_return(xdpf->data, &xdpf->mem, false);
++		xdp_return_frame(xdpf);
+ 		return;
+ 	}
+ 
+@@ -431,15 +457,63 @@ void xdp_return_frame_bulk(struct xdp_frame *xdpf,
+ 		bq->xa = rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params);
+ 	}
+ 
++	if (unlikely(xdpf->mb)) {
++		struct xdp_shared_info *xdp_sinfo;
++		int i;
++
++		xdp_sinfo = xdp_get_shared_info_from_frame(xdpf);
++		for (i = 0; i < xdp_sinfo->nr_frags; i++) {
++			skb_frag_t *frag = &xdp_sinfo->frags[i];
++
++			bq->q[bq->count++] = xdp_get_frag_address(frag);
++			if (bq->count == XDP_BULK_QUEUE_SIZE)
++				xdp_flush_frame_bulk(bq);
++		}
++	}
+ 	bq->q[bq->count++] = xdpf->data;
+ }
+ EXPORT_SYMBOL_GPL(xdp_return_frame_bulk);
+ 
+ void xdp_return_buff(struct xdp_buff *xdp)
+ {
++	struct xdp_shared_info *xdp_sinfo;
++	int i;
++
++	if (likely(!xdp->mb))
++		goto out;
++
++	xdp_sinfo = xdp_get_shared_info_from_buff(xdp);
++	for (i = 0; i < xdp_sinfo->nr_frags; i++) {
++		struct page *page = xdp_get_frag_page(&xdp_sinfo->frags[i]);
++
++		__xdp_return(page_address(page), &xdp->rxq->mem, true);
++	}
++out:
+ 	__xdp_return(xdp->data, &xdp->rxq->mem, true);
+ }
+ 
++void xdp_return_num_frags_from_buff(struct xdp_buff *xdp, u16 num_frags)
++{
++	struct xdp_shared_info *xdp_sinfo;
++	int i;
++
++	if (unlikely(!xdp->mb))
++		return;
++
++	xdp_sinfo = xdp_get_shared_info_from_buff(xdp);
++	num_frags = min_t(u16, num_frags, xdp_sinfo->nr_frags);
++	for (i = 1; i <= num_frags; i++) {
++		skb_frag_t *frag = &xdp_sinfo->frags[xdp_sinfo->nr_frags - i];
++		struct page *page = xdp_get_frag_page(frag);
++
++		xdp_sinfo->data_length -= xdp_get_frag_size(frag);
++		__xdp_return(page_address(page), &xdp->rxq->mem, false);
++	}
++	xdp_sinfo->nr_frags -= num_frags;
++	xdp->mb = !!xdp_sinfo->nr_frags;
++}
++EXPORT_SYMBOL_GPL(xdp_return_num_frags_from_buff);
++
+ /* Only called for MEM_TYPE_PAGE_POOL see xdp.h */
+ void __xdp_release_frame(void *data, struct xdp_mem_info *mem)
+ {
 -- 
 2.28.0
 
