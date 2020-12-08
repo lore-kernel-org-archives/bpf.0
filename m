@@ -2,145 +2,83 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6583DC19437
-	for <bpf@archiver.kernel.org>; Tue,  8 Dec 2020 20:19:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 476F8C2BBD5
+	for <bpf@archiver.kernel.org>; Tue,  8 Dec 2020 20:20:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1A88423A7B
-	for <bpf@archiver.kernel.org>; Tue,  8 Dec 2020 20:19:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 21EA02388C
+	for <bpf@archiver.kernel.org>; Tue,  8 Dec 2020 20:20:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726952AbgLHUSp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Dec 2020 15:18:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
+        id S1727391AbgLHUUH (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Dec 2020 15:20:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726921AbgLHUSV (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Dec 2020 15:18:21 -0500
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE94C06179C
-        for <bpf@vger.kernel.org>; Tue,  8 Dec 2020 12:17:22 -0800 (PST)
-Received: by mail-wr1-x444.google.com with SMTP id r3so17567092wrt.2
-        for <bpf@vger.kernel.org>; Tue, 08 Dec 2020 12:17:22 -0800 (PST)
+        with ESMTP id S1727356AbgLHUUG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Dec 2020 15:20:06 -0500
+Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C5DC061793
+        for <bpf@vger.kernel.org>; Tue,  8 Dec 2020 12:19:26 -0800 (PST)
+Received: by mail-wm1-x343.google.com with SMTP id k10so3042425wmi.3
+        for <bpf@vger.kernel.org>; Tue, 08 Dec 2020 12:19:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4DYUQu0RnUP+8Pjc8kSEgv+OIMP/f6lYTVbWVeSCUVU=;
-        b=Ju1Iv18mwNFn5/Ae0cgOxV/JdmXy9QBSzTW0Oe9JMf0CzPCTshUepaM2gQws0xaoj2
-         crwmzmb9/Y8RdPwiPxgfd1FYlPaz0VeNwQLo19pmQ0P6kPOvVHlZ5AQlTDima693lkbr
-         bEVDG/fMt1zyyk+0CEmy3WthSYSmw3XY+b77o=
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=BUN76cwequ+/VYM+TfjP/RsLBiO7tCwwH45rVFT1fYU=;
+        b=GB9bF4dH48O1e0DK+jTsZh4B37OqnHwxnW+X5RHvICetlFihb9vuCkPErxfa23tjrb
+         Pet2IVW6VLn5YeD89+e5zaijde05qQ4JWh83Pt17ENTtvzAzVkliryrrbMcqEsxJE6QH
+         B4TGkcNp24Rpfo2uezXlz/XhLgR1KdnggvwIY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4DYUQu0RnUP+8Pjc8kSEgv+OIMP/f6lYTVbWVeSCUVU=;
-        b=H6kusVshDM0zKzJCGZiOMQvkDV8Jq4E7K5pk17sZ8FAO71TiTou8xqmXJu5owvhC/0
-         ovhxdF0OhsD1ReWJFQtUcT2eGggoa4KzmOUOILGdzcnLxleaeh19r7UW1vIgvrMMSZJJ
-         o+7db2ytw5Whnzo4JzNTfHciyZSWMv9mYHnEKGYRcsoIw5qANO8w4/rxtcHcXbTKCpfD
-         9E+wlnKLieyGdribA0BeDuf9TfGMWMlp0Ryso7WqRUWolWvINJpR/6JFl9hJj3pxebms
-         Yse6uwAIhkhaSUj3h4DGsyE0ea2iKCsaPNGw2OpL+LMBRC+erS9Ya/X/fQxRcQNj3EFx
-         NcMg==
-X-Gm-Message-State: AOAM531kvb7DZm2WTxoBBbb2bIp21VzhQWwtBOHBkyzv+YEIx2hmi6ne
-        QhtM2lPgf0xH8EIEE8SrND7okodF8YT58A==
-X-Google-Smtp-Source: ABdhPJzeLxBx1FYVODACXoFswCazznolernYwOLBDZOPw1S851jsulvLFFLQBPo5tBUg7WXXopPpcw==
-X-Received: by 2002:a5d:4a44:: with SMTP id v4mr18817281wrs.106.1607458641069;
-        Tue, 08 Dec 2020 12:17:21 -0800 (PST)
-Received: from revest.zrh.corp.google.com ([2a00:79e0:42:204:f693:9fff:fef4:a569])
-        by smtp.gmail.com with ESMTPSA id v189sm5312049wmg.14.2020.12.08.12.17.20
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=BUN76cwequ+/VYM+TfjP/RsLBiO7tCwwH45rVFT1fYU=;
+        b=c+5JH0pPROEKVHeDmpMiEwQbQvKI8yr+beG9VaFk3SnnQJNsOFNPPpiewPPehHTQ/T
+         yymoYvuRljsOJ6Z1G028y5fpJ0GGJVP7SAjJrgmaSYh81BAyn2+CPQxRloFrok3/jQnP
+         k90M4bmzZDrhq+JiAvIjx6fcVAJGEl9PcN7JVoBKDutf033SM3dxt/RH56cGYm4OAld5
+         zHz+yXBeTtWVx86+69+uUI+NtxX+Or8T2hSYwU+zQn3iMja8xvB5Bo305sTXJDHxsw8I
+         LyoPpYYQcdz9mBn7DJh4eTFfw+uBu9aCPivJ5Rdq1KmLogw7sowg03yDUcVW8q6LwHmf
+         ZsDg==
+X-Gm-Message-State: AOAM533m09ypOA8YbeMbQR5i3XQVXfUEmEd2tnoTGF3656k17oT1e097
+        rOreq448oYJu92YA8APCTkW7TQ==
+X-Google-Smtp-Source: ABdhPJy9OAXN0byqbLPrYyv3q1GNjdlrT9zw1o/Vgfw3TCvskm6gQE5bhU9On/i/pWGL2X7bDHg0xw==
+X-Received: by 2002:a1c:6a0e:: with SMTP id f14mr5240281wmc.102.1607458765212;
+        Tue, 08 Dec 2020 12:19:25 -0800 (PST)
+Received: from ?IPv6:2a04:ee41:4:1318:ea45:a00:4d43:48fc? ([2a04:ee41:4:1318:ea45:a00:4d43:48fc])
+        by smtp.gmail.com with ESMTPSA id k18sm10472971wrd.45.2020.12.08.12.19.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Dec 2020 12:17:20 -0800 (PST)
+        Tue, 08 Dec 2020 12:19:24 -0800 (PST)
+Message-ID: <a057c7ee47aa82acebd0438b786cd424ad67f6d8.camel@chromium.org>
+Subject: Re: [PATCH bpf-next v3] bpf: Only provide bpf_sock_from_file with
+ CONFIG_NET
 From:   Florent Revest <revest@chromium.org>
-To:     bpf@vger.kernel.org
+To:     Randy Dunlap <rdunlap@infradead.org>, bpf@vger.kernel.org
 Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kpsingh@chromium.org, kafai@fb.com, linux-kernel@vger.kernel.org,
-        Florent Revest <revest@chromium.org>
-Subject: [PATCH bpf-next v3 1/4] bpf: Be less specific about socket cookies guarantees
-Date:   Tue,  8 Dec 2020 21:15:30 +0100
-Message-Id: <20201208201533.1312057-1-revest@chromium.org>
-X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
+        kpsingh@chromium.org, kafai@fb.com, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Date:   Tue, 08 Dec 2020 21:19:17 +0100
+In-Reply-To: <c8dd9a41-3e45-fb32-1074-e23ebe3cb2e5@infradead.org>
+References: <20201208173623.1136863-1-revest@chromium.org>
+         <c8dd9a41-3e45-fb32-1074-e23ebe3cb2e5@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.4-2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Since "92acdc58ab11 bpf, net: Rework cookie generator as per-cpu one"
-socket cookies are not guaranteed to be non-decreasing. The
-bpf_get_socket_cookie helper descriptions are currently specifying that
-cookies are non-decreasing but we don't want users to rely on that.
+On Tue, 2020-12-08 at 12:06 -0800, Randy Dunlap wrote:
+> On 12/8/20 9:36 AM, Florent Revest wrote:
+> > Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> 
+> I would say that I didn't ack this version of the patch (hey,
+> it's 3x the size of the v1/v2 patches), but I have just
+> rebuilt with v3, so the Ack is OK.  :)
 
-Reported-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Florent Revest <revest@chromium.org>
----
- include/uapi/linux/bpf.h       | 8 ++++----
- tools/include/uapi/linux/bpf.h | 8 ++++----
- 2 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 30b477a26482..ba59309f4d18 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1650,22 +1650,22 @@ union bpf_attr {
-  * 		networking traffic statistics as it provides a global socket
-  * 		identifier that can be assumed unique.
-  * 	Return
-- * 		A 8-byte long non-decreasing number on success, or 0 if the
-- * 		socket field is missing inside *skb*.
-+ * 		A 8-byte long unique number on success, or 0 if the socket
-+ * 		field is missing inside *skb*.
-  *
-  * u64 bpf_get_socket_cookie(struct bpf_sock_addr *ctx)
-  * 	Description
-  * 		Equivalent to bpf_get_socket_cookie() helper that accepts
-  * 		*skb*, but gets socket from **struct bpf_sock_addr** context.
-  * 	Return
-- * 		A 8-byte long non-decreasing number.
-+ * 		A 8-byte long unique number.
-  *
-  * u64 bpf_get_socket_cookie(struct bpf_sock_ops *ctx)
-  * 	Description
-  * 		Equivalent to **bpf_get_socket_cookie**\ () helper that accepts
-  * 		*skb*, but gets socket from **struct bpf_sock_ops** context.
-  * 	Return
-- * 		A 8-byte long non-decreasing number.
-+ * 		A 8-byte long unique number.
-  *
-  * u32 bpf_get_socket_uid(struct sk_buff *skb)
-  * 	Return
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 30b477a26482..ba59309f4d18 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1650,22 +1650,22 @@ union bpf_attr {
-  * 		networking traffic statistics as it provides a global socket
-  * 		identifier that can be assumed unique.
-  * 	Return
-- * 		A 8-byte long non-decreasing number on success, or 0 if the
-- * 		socket field is missing inside *skb*.
-+ * 		A 8-byte long unique number on success, or 0 if the socket
-+ * 		field is missing inside *skb*.
-  *
-  * u64 bpf_get_socket_cookie(struct bpf_sock_addr *ctx)
-  * 	Description
-  * 		Equivalent to bpf_get_socket_cookie() helper that accepts
-  * 		*skb*, but gets socket from **struct bpf_sock_addr** context.
-  * 	Return
-- * 		A 8-byte long non-decreasing number.
-+ * 		A 8-byte long unique number.
-  *
-  * u64 bpf_get_socket_cookie(struct bpf_sock_ops *ctx)
-  * 	Description
-  * 		Equivalent to **bpf_get_socket_cookie**\ () helper that accepts
-  * 		*skb*, but gets socket from **struct bpf_sock_ops** context.
-  * 	Return
-- * 		A 8-byte long non-decreasing number.
-+ * 		A 8-byte long unique number.
-  *
-  * u32 bpf_get_socket_uid(struct sk_buff *skb)
-  * 	Return
--- 
-2.29.2.576.ga3fc446d84-goog
+Oops! I'll be more careful in the future, thank you Randy. ;)
 
