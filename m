@@ -2,329 +2,428 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BD8DC433FE
-	for <bpf@archiver.kernel.org>; Tue,  8 Dec 2020 18:40:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1D385C19437
+	for <bpf@archiver.kernel.org>; Tue,  8 Dec 2020 20:19:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4672E206EC
-	for <bpf@archiver.kernel.org>; Tue,  8 Dec 2020 18:40:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C027A23A53
+	for <bpf@archiver.kernel.org>; Tue,  8 Dec 2020 20:19:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730493AbgLHSkg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Dec 2020 13:40:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
+        id S1726987AbgLHUSp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Dec 2020 15:18:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730490AbgLHSkg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Dec 2020 13:40:36 -0500
-Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A28BC061749
-        for <bpf@vger.kernel.org>; Tue,  8 Dec 2020 10:39:56 -0800 (PST)
-Received: by mail-yb1-xb44.google.com with SMTP id w135so11393072ybg.13
-        for <bpf@vger.kernel.org>; Tue, 08 Dec 2020 10:39:56 -0800 (PST)
+        with ESMTP id S1726893AbgLHUSS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Dec 2020 15:18:18 -0500
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94768C0611D0
+        for <bpf@vger.kernel.org>; Tue,  8 Dec 2020 12:17:24 -0800 (PST)
+Received: by mail-wr1-x441.google.com with SMTP id y17so8141603wrr.10
+        for <bpf@vger.kernel.org>; Tue, 08 Dec 2020 12:17:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=RR1N0hwEGy9XXDADWx9wdjc9QjNvbbJc8CvWdtWU6Aw=;
-        b=eJWeoNyL3iOyFshQc2tF9Y5KxZTf5PNpDJzgpy3Q7ubaPe6lYfc1wY9t3rNa+JaAnu
-         wcudX3iwW2r9yqMpuLyiv3wYfHPGIdyFYrp9Q7wtIlWhvqhIAwJfguUAp9Y+Jta8010w
-         5zZKvb2FD4xioPQFhkGuVmuX/sFqpQyLgaBKTeR0jW3dN2HJPlx6NEOaQqDS7A9jh8Rm
-         4V0TMzosPu06KmqYUn2SnUVKdB6HdK7uzX8lt/qN+z6aQvWrdUqNKbY0Asmix3HGqHmO
-         3dl+kfm6+D83eNFbRA7VsCp3vm0CBu+yoJRF8fWw25jOF5lCBI0PcYOPKzcMq4GO3FYD
-         lhEg==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=grdeJlhR/6k5KVF3YVMOPO/0j2edaqV91YqvRhhPWqg=;
+        b=QWozkahdVH2u58jiBCiVFEL6l0lmoB3dBMaEzdJGT0ZCfbjxaRUFQsj7lmMg1ZkFFd
+         TG4BRjL4INWozsy9PmAZJs2jXBHsUrAmjGRdxs4NdEvOilkRoSlRPh89mhX+XgciKuMz
+         FPaqpT0ZEykAjo3RNYHzwbSREJdVDtdALsmrw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=RR1N0hwEGy9XXDADWx9wdjc9QjNvbbJc8CvWdtWU6Aw=;
-        b=CiHuMF66mrprU9Zx8vtCWtqimEv+9QUOowvfK62WL4X/wmcZpWNtugFXecesvci+Wi
-         mcU6UpO72Mz8vEg2EPHaYa0Iiky58oQDDME6Xrf0cP1YfWOEEX89W3Z8JaC3fFpZMvWQ
-         alt/l3IKplQhWe6Xb/hL3CG+orWAUaxADXqCZIIMV9RYeE+x0/+XZdGCfk1MAoqTj91K
-         32LMlIWEX2SAzG7u3f70Teak0yFuGWPGVoMb+oqap0tTRnNpasMNzMpGzy4nwVeG/aem
-         ifTnKenTOUvHh4X392IJxGgXfty/wb2PmEUUZBwC4ZaLXUsoKjdTV/DWlYvf1GxH01Wb
-         hQdA==
-X-Gm-Message-State: AOAM530snydJwNp0srRIRPiL5QEA6KMSWj18g55lcxRyUruby1/U/Gdj
-        XGM8wMUMhM1bkTfCBfxKpwIk92TNU84xc0+1WwB623yZCLo=
-X-Google-Smtp-Source: ABdhPJwFbtop3vamh70asevQ2uUQLJlMPr2x8L0xxTAJ6FwmdmRfJN2yQQ/g3B86wqsjNJxYjiZ/5NNW/RIqHTqBTP0=
-X-Received: by 2002:a25:c089:: with SMTP id c131mr30792966ybf.510.1607452794849;
- Tue, 08 Dec 2020 10:39:54 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=grdeJlhR/6k5KVF3YVMOPO/0j2edaqV91YqvRhhPWqg=;
+        b=rtwZfBIhFwy/EwKb3UxmUkebpFooMiDm8Cv5uRNKGtFoB8aI7QvLjZmq20i/p2VbQP
+         lmWdpqfEOKeS8OYjKaYRfvdx4VBPLycjja8oUIkmlFlkab26HTzqoL2zwfbMEzLyNGGy
+         aeT4wHd08PJipC7GTyoKRXqsTx3sWKbN2tm1kSgV2OsXr0uUP/3ETMD+0A6x8NRjuOJN
+         uPO8wIAdK474Faf6TmCgkCtvpGf1Byumu/EbiKgH5HoCW2BHkFYTaWHqii9XCOzPy5ix
+         dDSlqMrdIp6FKWnU9ruZTWMpB++uxVRFKDSloBQOt0T3N1K8C4KQyUink64O+7MKa6Vg
+         PTGg==
+X-Gm-Message-State: AOAM531d3/ey0vKtY/RjwZueugWsbPFsFMbO1mSrgZiG9Bc0R8qtAj+J
+        0BNq6GbX7He2oHXPJs3u9wKcmSnrATCEZw==
+X-Google-Smtp-Source: ABdhPJyfpDGUZIQoDow+SMAApLCmg3ko/95F4/0zQw3PUF4DfSqP28CP1/ovJrep/aTLNR4wsn5xDA==
+X-Received: by 2002:a5d:508f:: with SMTP id a15mr4656987wrt.2.1607458642968;
+        Tue, 08 Dec 2020 12:17:22 -0800 (PST)
+Received: from revest.zrh.corp.google.com ([2a00:79e0:42:204:f693:9fff:fef4:a569])
+        by smtp.gmail.com with ESMTPSA id v189sm5312049wmg.14.2020.12.08.12.17.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Dec 2020 12:17:22 -0800 (PST)
+From:   Florent Revest <revest@chromium.org>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kpsingh@chromium.org, kafai@fb.com, linux-kernel@vger.kernel.org,
+        Florent Revest <revest@chromium.org>
+Subject: [PATCH bpf-next v3 3/4] selftests/bpf: Integrate the socket_cookie test to test_progs
+Date:   Tue,  8 Dec 2020 21:15:32 +0100
+Message-Id: <20201208201533.1312057-3-revest@chromium.org>
+X-Mailer: git-send-email 2.29.2.576.ga3fc446d84-goog
+In-Reply-To: <20201208201533.1312057-1-revest@chromium.org>
+References: <20201208201533.1312057-1-revest@chromium.org>
 MIME-Version: 1.0
-References: <87lfeebwpu.fsf@toke.dk> <10679e62-50a2-4c01-31d2-cb79c01e4cbf@fb.com>
- <87r1o59aoc.fsf@toke.dk> <6801fcdb-932e-c185-22db-89987099b553@fb.com>
- <CAEf4BzZRu=sxEx7c8KGxSV1C6Aitrk01bSfabv5Bz+XUAMU6rg@mail.gmail.com>
- <875z5d7ufl.fsf@toke.dk> <CAEf4Bzb=zi6ew3fgAg29ZB0tcBw8xfEX-pRuMeAyYBiXp5ewTw@mail.gmail.com>
- <87czzkifef.fsf@toke.dk>
-In-Reply-To: <87czzkifef.fsf@toke.dk>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 8 Dec 2020 10:39:44 -0800
-Message-ID: <CAEf4Bzb-b8eye6pi5JRPAL439Yx0FPcd64WwpQz57GPra7Jr_w@mail.gmail.com>
-Subject: Re: Latest libbpf fails to load programs compiled with old LLVM
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Yonghong Song <yhs@fb.com>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Dec 8, 2020 at 5:41 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redha=
-t.com> wrote:
->
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->
-> > On Mon, Dec 7, 2020 at 3:00 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@r=
-edhat.com> wrote:
-> >>
-> >> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
-> >>
-> >> > On Fri, Dec 4, 2020 at 9:55 AM Yonghong Song <yhs@fb.com> wrote:
-> >> >>
-> >> >>
-> >> >>
-> >> >> On 12/4/20 1:34 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> >> >> > Yonghong Song <yhs@fb.com> writes:
-> >> >> >
-> >> >> >> On 12/3/20 9:55 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> >> >> >>> Hi Andrii
-> >> >> >>>
-> >> >> >>> I noticed that recent libbpf versions fail to load BPF files co=
-mpiled
-> >> >> >>> with old versions of LLVM. E.g., if I compile xdp-tools with LL=
-VM 7 I
-> >> >> >>> get:
-> >> >> >>>
-> >> >> >>> $ sudo ./xdp-loader load testns ../lib/testing/xdp_drop.o -vv
-> >> >> >>> Loading 1 files on interface 'testns'.
-> >> >> >>> libbpf: loading ../lib/testing/xdp_drop.o
-> >> >> >>> libbpf: elf: section(3) prog, size 16, link 0, flags 6, type=3D=
-1
-> >> >> >>> libbpf: sec 'prog': failed to find program symbol at offset 0
-> >> >> >>> Couldn't open file '../lib/testing/xdp_drop.o': BPF object form=
-at invalid
-> >> >> >>>
-> >> >> >>> The 'failed to find program symbol' error seems to have been in=
-troduced
-> >> >> >>> with commit c112239272c6 ("libbpf: Parse multi-function section=
-s into
-> >> >> >>> multiple BPF programs").
-> >> >> >>>
-> >> >> >>> Looking at the object file in question, indeed it seems to not =
-have any
-> >> >> >>> function symbols defined:
-> >> >> >>>
-> >> >> >>> $  llvm-objdump --syms ../lib/testing/xdp_drop.o
-> >> >> >>>
-> >> >> >>> ../lib/testing/xdp_drop.o:  file format elf64-bpf
-> >> >> >>>
-> >> >> >>> SYMBOL TABLE:
-> >> >> >>> 0000000000000000 l       .debug_str 0000000000000000
-> >> >> >>> 0000000000000037 l       .debug_str 0000000000000000
-> >> >> >>> 0000000000000042 l       .debug_str 0000000000000000
-> >> >> >>> 0000000000000068 l       .debug_str 0000000000000000
-> >> >> >>> 0000000000000071 l       .debug_str 0000000000000000
-> >> >> >>> 0000000000000076 l       .debug_str 0000000000000000
-> >> >> >>> 000000000000008a l       .debug_str 0000000000000000
-> >> >> >>> 0000000000000097 l       .debug_str 0000000000000000
-> >> >> >>> 00000000000000a3 l       .debug_str 0000000000000000
-> >> >> >>> 00000000000000ac l       .debug_str 0000000000000000
-> >> >> >>> 00000000000000b5 l       .debug_str 0000000000000000
-> >> >> >>> 00000000000000bc l       .debug_str 0000000000000000
-> >> >> >>> 00000000000000c9 l       .debug_str 0000000000000000
-> >> >> >>> 00000000000000d4 l       .debug_str 0000000000000000
-> >> >> >>> 00000000000000dd l       .debug_str 0000000000000000
-> >> >> >>> 00000000000000e1 l       .debug_str 0000000000000000
-> >> >> >>> 00000000000000e5 l       .debug_str 0000000000000000
-> >> >> >>> 00000000000000ea l       .debug_str 0000000000000000
-> >> >> >>> 00000000000000f0 l       .debug_str 0000000000000000
-> >> >> >>> 00000000000000f9 l       .debug_str 0000000000000000
-> >> >> >>> 0000000000000103 l       .debug_str 0000000000000000
-> >> >> >>> 0000000000000113 l       .debug_str 0000000000000000
-> >> >> >>> 0000000000000122 l       .debug_str 0000000000000000
-> >> >> >>> 0000000000000131 l       .debug_str 0000000000000000
-> >> >> >>> 0000000000000000 l    d  prog       0000000000000000 prog
-> >> >> >>> 0000000000000000 l    d  .debug_abbrev      0000000000000000 .d=
-ebug_abbrev
-> >> >> >>> 0000000000000000 l    d  .debug_info        0000000000000000 .d=
-ebug_info
-> >> >> >>> 0000000000000000 l    d  .debug_frame       0000000000000000 .d=
-ebug_frame
-> >> >> >>> 0000000000000000 l    d  .debug_line        0000000000000000 .d=
-ebug_line
-> >> >> >>> 0000000000000000 g       license    0000000000000000 _license
-> >> >> >>> 0000000000000000 g       prog       0000000000000000 xdp_drop
-> >> >> >>>
-> >> >> >>>
-> >> >> >>> I assume this is because old LLVM versions simply don't emit th=
-at symbol
-> >> >> >>> information?
-> >> >>
-> >> >> Thanks for the below instruction and xdp_drop.c file. I can reprodu=
-ce
-> >> >> the issue now.
-> >> >>
-> >> >> I added another function 'xdp_drop1' in the same thing. Below is th=
-e
-> >> >> symbol table with llvm7 vs. llvm12.
-> >> >>
-> >> >> -bash-4.4$ llvm-readelf -symbols xdp-7.o | grep xdp_drop
-> >> >>      32: 0000000000000000     0 NOTYPE  GLOBAL DEFAULT     3 xdp_dr=
-op
-> >> >>      33: 0000000000000010     0 NOTYPE  GLOBAL DEFAULT     3 xdp_dr=
-op1
-> >> >>
-> >> >>    [ 3] prog              PROGBITS        0000000000000000 000040 0=
-00020
-> >> >> 00  AX  0   0  8
-> >> >>
-> >> >> -bash-4.4$ llvm-readelf -symbols xdp-12.o | grep xdp_drop
-> >> >>      32: 0000000000000000    16 FUNC    GLOBAL DEFAULT     3 xdp_dr=
-op
-> >> >>      33: 0000000000000010    16 FUNC    GLOBAL DEFAULT     3 xdp_dr=
-op1
-> >> >> -bash-4.4$
-> >> >>
-> >> >>    [ 3] prog              PROGBITS        0000000000000000 000040 0=
-00020
-> >> >> 00  AX  0   0  8
-> >> >>
-> >> >>
-> >> >> Yes, llvm7 does not encode type and size for FUNC's. I guess libbpf=
- can
-> >> >> change to recognize NOTYPE and use the symbol value (representing t=
-he
-> >> >> offset from the start of the section) and section size to
-> >> >> calculate the individual function size. This is more complicated th=
-an
-> >> >> elf file providing FUNC type and symbol size directly.
-> >> >
-> >> > I think we should just face the fact that LLVM7 is way too old to
-> >> > produce a sensible BPF ELF file layout. We can extend:
-> >> >
-> >> > libbpf: sec 'prog': failed to find program symbol at offset 0
-> >> > Couldn't open file '../lib/testing/xdp_drop.o': BPF object format in=
-valid
-> >> >
-> >> > with a suggestion to upgrade Clang/LLVM to something more recent, if
-> >> > that would be helpful.
-> >> >
-> >> > But I don't want to add error-prone checks and assumptions in the
-> >> > already quite complicated logic. Even the kernel itself maintains th=
-at
-> >> > Clang 10+ needs to be used for its compilation. BPF CO-RE is also no=
-t
-> >> > working with older than Clang10, so lots of people have already
-> >> > upgraded way beyond that.
-> >>
-> >> Wait, what? This is a regression that *breaks people's programs* on
-> >> compiler versions that are still very much in the wild! I mean, fine i=
-f
-> >> you don't want to support new features on such files, but then surely =
-we
-> >> can at least revert back to the old behaviour?
-> >
-> > This is clearly a bug in LLVM7, which didn't produce correct ELF
-> > symbols, do we agree on that? libbpf used to handle such invalid ELF
-> > files *by accident* until it changed its internal logic to be more
-> > strict in v0.2. It became more strict and doesn't work with such
-> > invalid ELF files anymore. Does it need to add extra quirks to support
-> > such broken ELF? I don't think so.
->
-> I don't know enough about the intricacies of the ELF format to say, but
-> I believe you when you say it's a bug. However, that doesn't change the
-> fact that from a user's PoV, something that was working before is now
-> broken, with the only change being a newer libbpf.
->
-> This is not a theoretical concern, BTW, I discovered this due to
-> feedback from a partner that we've been pushing to adopt libbpf. When
-> they finally tried it out, the first thing they noticed is that their
-> programs wouldn't load due to this issue.
->
-> Sure, I can tell them to just upgrade their toolchain (and I will), but
-> that still means we're back to "in order to use this library, you should
-> expect to keep chasing the latest version of the entire toolchain". And
+Currently, the selftest for the BPF socket_cookie helpers is built and
+run independently from test_progs. It's easy to forget and hard to
+maintain.
 
-Migrating from LLVM7 to something like LLVM10 or LLVM11 (not asking
-for not-yet-released LLVM12) hardly qualifies as "chasing the latest
-version". LLVM8 or LLVM9 might work for their simple use case either,
-I haven't checked. Just please don't use the extremely outdated
-toolchain that is (now) known to be broken. That's all I'm asking.
+This patch moves the socket cookies test into prog_tests/ and vastly
+simplifies its logic by:
+- rewriting the loading code with BPF skeletons
+- rewriting the server/client code with network helpers
+- rewriting the cgroup code with test__join_cgroup
+- rewriting the error handling code with CHECKs
 
-> this is a much harder sell than "this is a stable library and upstream
-> takes backwards compatibility very serious", which I *thought* was the
-> expectation.
+Signed-off-by: Florent Revest <revest@chromium.org>
+---
+ tools/testing/selftests/bpf/Makefile          |   3 +-
+ .../selftests/bpf/prog_tests/socket_cookie.c  |  82 +++++++
+ .../selftests/bpf/progs/socket_cookie_prog.c  |   2 -
+ .../selftests/bpf/test_socket_cookie.c        | 208 ------------------
+ 4 files changed, 83 insertions(+), 212 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/socket_cookie.c
+ delete mode 100644 tools/testing/selftests/bpf/test_socket_cookie.c
 
-That's still true and I'd rather not go over the same discussion
-again. But libbpf is also not a dumpster of work-arounds for all
-possible bugs in the kernel and compiler. Libbpf does a lot of that
-for backwards compatibility reasons, no need to deal with quirks of
-buggy and very outdated compilers (and kernels, if there are obvious
-bugs like this).
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index ac25ba5d0d6c..c21960d5f286 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -33,7 +33,7 @@ LDLIBS += -lcap -lelf -lz -lrt -lpthread
+ # Order correspond to 'make run_tests' order
+ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test_progs \
+ 	test_verifier_log test_dev_cgroup \
+-	test_sock test_sockmap get_cgroup_id_user test_socket_cookie \
++	test_sock test_sockmap get_cgroup_id_user \
+ 	test_cgroup_storage \
+ 	test_netcnt test_tcpnotify_user test_sysctl \
+ 	test_progs-no_alu32 \
+@@ -167,7 +167,6 @@ $(OUTPUT)/test_dev_cgroup: cgroup_helpers.c
+ $(OUTPUT)/test_skb_cgroup_id_user: cgroup_helpers.c
+ $(OUTPUT)/test_sock: cgroup_helpers.c
+ $(OUTPUT)/test_sock_addr: cgroup_helpers.c
+-$(OUTPUT)/test_socket_cookie: cgroup_helpers.c
+ $(OUTPUT)/test_sockmap: cgroup_helpers.c
+ $(OUTPUT)/test_tcpnotify_user: cgroup_helpers.c trace_helpers.c
+ $(OUTPUT)/get_cgroup_id_user: cgroup_helpers.c
+diff --git a/tools/testing/selftests/bpf/prog_tests/socket_cookie.c b/tools/testing/selftests/bpf/prog_tests/socket_cookie.c
+new file mode 100644
+index 000000000000..53d0c44e7907
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/socket_cookie.c
+@@ -0,0 +1,82 @@
++// SPDX-License-Identifier: GPL-2.0
++// Copyright (c) 2020 Google LLC.
++// Copyright (c) 2018 Facebook
++
++#include <test_progs.h>
++#include "socket_cookie_prog.skel.h"
++#include "network_helpers.h"
++
++static int duration;
++
++struct socket_cookie {
++	__u64 cookie_key;
++	__u32 cookie_value;
++};
++
++void test_socket_cookie(void)
++{
++	socklen_t addr_len = sizeof(struct sockaddr_in6);
++	struct bpf_link *set_link, *update_link;
++	int server_fd, client_fd, cgroup_fd;
++	struct socket_cookie_prog *skel;
++	__u32 cookie_expected_value;
++	struct sockaddr_in6 addr;
++	struct socket_cookie val;
++	int err = 0;
++
++	skel = socket_cookie_prog__open_and_load();
++	if (CHECK(!skel, "socket_cookie_prog__open_and_load",
++		  "skeleton open_and_load failed\n"))
++		return;
++
++	cgroup_fd = test__join_cgroup("/socket_cookie");
++	if (CHECK(cgroup_fd < 0, "join_cgroup", "cgroup creation failed\n"))
++		goto destroy_skel;
++
++	set_link = bpf_program__attach_cgroup(skel->progs.set_cookie,
++					      cgroup_fd);
++	if (CHECK(IS_ERR(set_link), "set-link-cg-attach", "err %ld\n",
++		  PTR_ERR(set_link)))
++		goto close_cgroup_fd;
++
++	update_link = bpf_program__attach_cgroup(skel->progs.update_cookie,
++						 cgroup_fd);
++	if (CHECK(IS_ERR(update_link), "update-link-cg-attach", "err %ld\n",
++		  PTR_ERR(update_link)))
++		goto free_set_link;
++
++	server_fd = start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
++	if (CHECK(server_fd < 0, "start_server", "errno %d\n", errno))
++		goto free_update_link;
++
++	client_fd = connect_to_fd(server_fd, 0);
++	if (CHECK(client_fd < 0, "connect_to_fd", "errno %d\n", errno))
++		goto close_server_fd;
++
++	err = bpf_map_lookup_elem(bpf_map__fd(skel->maps.socket_cookies),
++				  &client_fd, &val);
++	if (CHECK(err, "map_lookup", "err %d errno %d\n", err, errno))
++		goto close_client_fd;
++
++	err = getsockname(client_fd, (struct sockaddr *)&addr, &addr_len);
++	if (CHECK(err, "getsockname", "Can't get client local addr\n"))
++		goto close_client_fd;
++
++	cookie_expected_value = (ntohs(addr.sin6_port) << 8) | 0xFF;
++	CHECK(val.cookie_value != cookie_expected_value, "",
++	      "Unexpected value in map: %x != %x\n", val.cookie_value,
++	      cookie_expected_value);
++
++close_client_fd:
++	close(client_fd);
++close_server_fd:
++	close(server_fd);
++free_update_link:
++	bpf_link__destroy(update_link);
++free_set_link:
++	bpf_link__destroy(set_link);
++close_cgroup_fd:
++	close(cgroup_fd);
++destroy_skel:
++	socket_cookie_prog__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/socket_cookie_prog.c b/tools/testing/selftests/bpf/progs/socket_cookie_prog.c
+index 0cb5656a22b0..81e84be6f86d 100644
+--- a/tools/testing/selftests/bpf/progs/socket_cookie_prog.c
++++ b/tools/testing/selftests/bpf/progs/socket_cookie_prog.c
+@@ -65,6 +65,4 @@ int update_cookie(struct bpf_sock_ops *ctx)
+ 	return 1;
+ }
+ 
+-int _version SEC("version") = 1;
+-
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/test_socket_cookie.c b/tools/testing/selftests/bpf/test_socket_cookie.c
+deleted file mode 100644
+index ca7ca87e91aa..000000000000
+--- a/tools/testing/selftests/bpf/test_socket_cookie.c
++++ /dev/null
+@@ -1,208 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-// Copyright (c) 2018 Facebook
+-
+-#include <string.h>
+-#include <unistd.h>
+-
+-#include <arpa/inet.h>
+-#include <netinet/in.h>
+-#include <sys/types.h>
+-#include <sys/socket.h>
+-
+-#include <bpf/bpf.h>
+-#include <bpf/libbpf.h>
+-
+-#include "bpf_rlimit.h"
+-#include "cgroup_helpers.h"
+-
+-#define CG_PATH			"/foo"
+-#define SOCKET_COOKIE_PROG	"./socket_cookie_prog.o"
+-
+-struct socket_cookie {
+-	__u64 cookie_key;
+-	__u32 cookie_value;
+-};
+-
+-static int start_server(void)
+-{
+-	struct sockaddr_in6 addr;
+-	int fd;
+-
+-	fd = socket(AF_INET6, SOCK_STREAM, 0);
+-	if (fd == -1) {
+-		log_err("Failed to create server socket");
+-		goto out;
+-	}
+-
+-	memset(&addr, 0, sizeof(addr));
+-	addr.sin6_family = AF_INET6;
+-	addr.sin6_addr = in6addr_loopback;
+-	addr.sin6_port = 0;
+-
+-	if (bind(fd, (const struct sockaddr *)&addr, sizeof(addr)) == -1) {
+-		log_err("Failed to bind server socket");
+-		goto close_out;
+-	}
+-
+-	if (listen(fd, 128) == -1) {
+-		log_err("Failed to listen on server socket");
+-		goto close_out;
+-	}
+-
+-	goto out;
+-
+-close_out:
+-	close(fd);
+-	fd = -1;
+-out:
+-	return fd;
+-}
+-
+-static int connect_to_server(int server_fd)
+-{
+-	struct sockaddr_storage addr;
+-	socklen_t len = sizeof(addr);
+-	int fd;
+-
+-	fd = socket(AF_INET6, SOCK_STREAM, 0);
+-	if (fd == -1) {
+-		log_err("Failed to create client socket");
+-		goto out;
+-	}
+-
+-	if (getsockname(server_fd, (struct sockaddr *)&addr, &len)) {
+-		log_err("Failed to get server addr");
+-		goto close_out;
+-	}
+-
+-	if (connect(fd, (const struct sockaddr *)&addr, len) == -1) {
+-		log_err("Fail to connect to server");
+-		goto close_out;
+-	}
+-
+-	goto out;
+-
+-close_out:
+-	close(fd);
+-	fd = -1;
+-out:
+-	return fd;
+-}
+-
+-static int validate_map(struct bpf_map *map, int client_fd)
+-{
+-	__u32 cookie_expected_value;
+-	struct sockaddr_in6 addr;
+-	socklen_t len = sizeof(addr);
+-	struct socket_cookie val;
+-	int err = 0;
+-	int map_fd;
+-
+-	if (!map) {
+-		log_err("Map not found in BPF object");
+-		goto err;
+-	}
+-
+-	map_fd = bpf_map__fd(map);
+-
+-	err = bpf_map_lookup_elem(map_fd, &client_fd, &val);
+-
+-	err = getsockname(client_fd, (struct sockaddr *)&addr, &len);
+-	if (err) {
+-		log_err("Can't get client local addr");
+-		goto out;
+-	}
+-
+-	cookie_expected_value = (ntohs(addr.sin6_port) << 8) | 0xFF;
+-	if (val.cookie_value != cookie_expected_value) {
+-		log_err("Unexpected value in map: %x != %x", val.cookie_value,
+-			cookie_expected_value);
+-		goto err;
+-	}
+-
+-	goto out;
+-err:
+-	err = -1;
+-out:
+-	return err;
+-}
+-
+-static int run_test(int cgfd)
+-{
+-	enum bpf_attach_type attach_type;
+-	struct bpf_prog_load_attr attr;
+-	struct bpf_program *prog;
+-	struct bpf_object *pobj;
+-	const char *prog_name;
+-	int server_fd = -1;
+-	int client_fd = -1;
+-	int prog_fd = -1;
+-	int err = 0;
+-
+-	memset(&attr, 0, sizeof(attr));
+-	attr.file = SOCKET_COOKIE_PROG;
+-	attr.prog_type = BPF_PROG_TYPE_UNSPEC;
+-	attr.prog_flags = BPF_F_TEST_RND_HI32;
+-
+-	err = bpf_prog_load_xattr(&attr, &pobj, &prog_fd);
+-	if (err) {
+-		log_err("Failed to load %s", attr.file);
+-		goto out;
+-	}
+-
+-	bpf_object__for_each_program(prog, pobj) {
+-		prog_name = bpf_program__section_name(prog);
+-
+-		if (libbpf_attach_type_by_name(prog_name, &attach_type))
+-			goto err;
+-
+-		err = bpf_prog_attach(bpf_program__fd(prog), cgfd, attach_type,
+-				      BPF_F_ALLOW_OVERRIDE);
+-		if (err) {
+-			log_err("Failed to attach prog %s", prog_name);
+-			goto out;
+-		}
+-	}
+-
+-	server_fd = start_server();
+-	if (server_fd == -1)
+-		goto err;
+-
+-	client_fd = connect_to_server(server_fd);
+-	if (client_fd == -1)
+-		goto err;
+-
+-	if (validate_map(bpf_map__next(NULL, pobj), client_fd))
+-		goto err;
+-
+-	goto out;
+-err:
+-	err = -1;
+-out:
+-	close(client_fd);
+-	close(server_fd);
+-	bpf_object__close(pobj);
+-	printf("%s\n", err ? "FAILED" : "PASSED");
+-	return err;
+-}
+-
+-int main(int argc, char **argv)
+-{
+-	int cgfd = -1;
+-	int err = 0;
+-
+-	cgfd = cgroup_setup_and_join(CG_PATH);
+-	if (cgfd < 0)
+-		goto err;
+-
+-	if (run_test(cgfd))
+-		goto err;
+-
+-	goto out;
+-err:
+-	err = -1;
+-out:
+-	close(cgfd);
+-	cleanup_cgroup_environment();
+-	return err;
+-}
+-- 
+2.29.2.576.ga3fc446d84-goog
 
->
-> > Surely, users that can't upgrade LLVM7 to something less ancient, can
-> > stick to libbpf v0.1, that was lenient enough to accept such invalid
-> > ELF files. libbpf v0.2 was released more than a month ago, and so far
-> > you are the only one who noticed this "regression". So hopefully it's
-> > not super annoying to people and they would be accommodating enough to
-> > use more up to date compiler (and save themselves lots of trouble
-> > along the way).
->
-> Oh, boy, do I envy your adoption rate for new versions! In my world I
-> would expect that by one month a few people who are very early adopters
-> have started noticing and maybe thinking about testing the new version :)
-
-In practice with the new libbpf releases I've been getting reports
-about something broken within a few days. So yeah, I'm a lucky guy, I
-suppose.
-
->
-> >> > Speaking of legacy. Toke, can you please update all the samples in
-> >> > your xdp-tools repo to not use arbitrary sections names. I see
-> >> > SEC("prog"), where it should really be SEC("xdp"). It sets a bad
-> >> > example for newcomers, IMO.
-> >>
-> >> I used "prog" because that's what iproute2 looks for if you don't supp=
-ly
-> >
-> > Ok.
->
-> Fixed now, BTW:
-> https://github.com/xdp-project/xdp-tools/commit/83ab8aa1c29408aac842bebe7=
-04aa47ec5dc5bc3
-
-Thanks!
-
->
-> >> a section name, so it makes it convenient to load programs with 'ip'
-> >> without supplying the section name. However, I do realise this is not
-> >> the best of reasons, and I am not opposed to changing it. However...
-> >>
-> >> > I'm also going to emit warnings in libbpf soon for section names tha=
-t
-> >> > don't follow proper libbpf naming pattern, so it would be good if yo=
-u
-> >> > could get ahead of the curve.
-> >>
-> >> ...this sounds like just another way to annoy users by breaking things
-> >> that were working before? :/
-> >
-> > It won't break, libbpf will emit a warning about the need to use
-> > proper section name format, which will start to be enforced only with
-> > major version bump. So that will give users plenty of time to make
-> > sure their BPF programs are compatible with stricter libbpf.
->
-> Well see above re: different expectations for "plenty of time". But OK,
-> maybe this isn't as bad as I figured at first glance :)
-
-So far libbpf releases were timed to Linux releases, so roughly one
-every 2 months. libbpf 1.0 is unlikely to come sooner than 2 releases
-out. So it's not like 2 weeks notice, right? Waiting for a year or
-more seems excessive as well.
-
->
-> -Toke
->
