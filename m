@@ -4,66 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF194C433FE
-	for <bpf@archiver.kernel.org>; Tue,  8 Dec 2020 15:50:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7111C4361B
+	for <bpf@archiver.kernel.org>; Tue,  8 Dec 2020 16:21:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 70E3523AA7
-	for <bpf@archiver.kernel.org>; Tue,  8 Dec 2020 15:50:47 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A043B239E5
+	for <bpf@archiver.kernel.org>; Tue,  8 Dec 2020 16:21:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729880AbgLHPur (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 8 Dec 2020 10:50:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47168 "EHLO mail.kernel.org"
+        id S1730210AbgLHQUr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 8 Dec 2020 11:20:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58920 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729587AbgLHPuq (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 8 Dec 2020 10:50:46 -0500
+        id S1730048AbgLHQUr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 8 Dec 2020 11:20:47 -0500
 Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607442605;
-        bh=zVgYIPzY0yswoQuz0fPF3OJWza4Epai6XbK6d8ox7MU=;
+        s=k20201202; t=1607444406;
+        bh=FXMSbKlCr8Gr/JmDVh/PLJR+rc/iVDlBwFB938umaic=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=pnw9KWRqB/2W3BmtprgApxMp25Hjca6fWuWjx5/6efPE/nYiG/mF5tSURtwR9KpEA
-         pDHlEoSz2135f5KIAhA44eDA1bwFvi4sI7Qoo5gaGFwLjmKbIwwJGqB0Xik6o2Rq2A
-         Bv0puKKSSHTLdTXZcQOTZE5ZP7osBzjCm0/RYxvMw5K/2y4jRY5FwqRyWZzZX73RjT
-         zZXUsqtaxXho2AM47yKyJIblNjMgeq7Tbvb/xmNHdR1jr7gwaR0rV8nmr0xbf6QGRY
-         /h42I5s854DuS6rkBfCMDjDI3CdHSr4u5K1sxfsTaOCDaAHP4blLKDuKiKnSGJNB98
-         5ZEyTrBjb4jZQ==
+        b=MJ3N5Tbf5n6liM6ZAU4WMlcnhKYaVxhKfw+auP/Qf+B8yWJR8jz33vDbqlu6yPeKP
+         gj/4crk+cArzoxqM8qtyLdNxXuiaieBscCpBLOILUvkJ+erJNs9bT5VB0OlZx/TuLc
+         ghPPbSBYAL13T/3+keqJSItUz5TK/S0PCnQcZ/voa36VD1z/bQyefIbYXIVBFe1355
+         dag7TBNKKjcJIwOdypWjw7Vc7DC6KPxwTDtl+lc6N9OiXInSsizIRWD03LQlTk1zF1
+         87SLScdtMi8Qgk33eBu2C7j2qpNWng/5pViYMYQeCoBAm80VRJjn5+4v/As2t6wRhF
+         T+irZl4Uu153Q==
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] tools/bpftool: fix PID fetching with a lot of results
+Subject: Re: [PATCH bpf-next] xsk: Validate socket state in xsk_recvmsg,
+ prior touching socket members
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <160744260580.27281.6558242327403068096.git-patchwork-notify@kernel.org>
-Date:   Tue, 08 Dec 2020 15:50:05 +0000
-References: <20201204232002.3589803-1-andrii@kernel.org>
-In-Reply-To: <20201204232002.3589803-1-andrii@kernel.org>
-To:     Andrii Nakryiko <andrii@kernel.org>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, ast@fb.com,
-        daniel@iogearbox.net, kernel-team@fb.com
+Message-Id: <160744440641.9463.3968311616669664098.git-patchwork-notify@kernel.org>
+Date:   Tue, 08 Dec 2020 16:20:06 +0000
+References: <20201207082008.132263-1-bjorn.topel@gmail.com>
+In-Reply-To: <20201207082008.132263-1-bjorn.topel@gmail.com>
+To:     =?utf-8?b?QmrDtnJuIFTDtnBlbCA8Ympvcm4udG9wZWxAZ21haWwuY29tPg==?=@ci.codeaurora.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, bjorn.topel@intel.com,
+        magnus.karlsson@intel.com, jonathan.lemon@gmail.com,
+        oliver.sang@intel.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 Hello:
 
-This patch was applied to bpf/bpf.git (refs/heads/master):
+This patch was applied to bpf/bpf-next.git (refs/heads/master):
 
-On Fri, 4 Dec 2020 15:20:01 -0800 you wrote:
-> In case of having so many PID results that they don't fit into a singe page
-> (4096) bytes, bpftool will erroneously conclude that it got corrupted data due
-> to 4096 not being a multiple of struct pid_iter_entry, so the last entry will
-> be partially truncated. Fix this by sizing the buffer to fit exactly N entries
-> with no truncation in the middle of record.
+On Mon,  7 Dec 2020 09:20:08 +0100 you wrote:
+> From: Björn Töpel <bjorn.topel@intel.com>
 > 
-> Fixes: d53dee3fe013 ("tools/bpftool: Show info for processes holding BPF map/prog/link/btf FDs")
-> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> In AF_XDP the socket state needs to be checked, prior touching the
+> members of the socket. This was not the case for the recvmsg
+> implementation. Fix that by moving the xsk_is_bound() call.
+> 
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Fixes: 45a86681844e ("xsk: Add support for recvmsg()")
+> Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf] tools/bpftool: fix PID fetching with a lot of results
-    https://git.kernel.org/bpf/bpf/c/932c60558109
+  - [bpf-next] xsk: Validate socket state in xsk_recvmsg, prior touching socket members
+    https://git.kernel.org/bpf/bpf-next/c/3546b9b8eced
 
 You are awesome, thank you!
 --
