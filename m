@@ -2,96 +2,164 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 24654C4361B
-	for <bpf@archiver.kernel.org>; Wed,  9 Dec 2020 16:01:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F1C24C433FE
+	for <bpf@archiver.kernel.org>; Wed,  9 Dec 2020 16:36:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E2A8E23433
-	for <bpf@archiver.kernel.org>; Wed,  9 Dec 2020 16:00:59 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BB9F123A5A
+	for <bpf@archiver.kernel.org>; Wed,  9 Dec 2020 16:36:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732053AbgLIQAs (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Dec 2020 11:00:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55458 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731418AbgLIQAs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Dec 2020 11:00:48 -0500
-Content-Type: text/plain; charset="utf-8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607529607;
-        bh=nPYVPZb8lF5AdNA/ZSa58MqKVIKgV5e+WU4mYaQy1hY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=O4pqR+kgMVViT91hgn8Dhj5xDIqGJ9+wWNjcsRPwEA6FYVyMBE0VjqXJxL2eVKZtR
-         DXXIXD5/q8Nv66w7ut1Tnh9o4gz0R5RRqV43VYItyLwRjthnNqV2Z2d6fvKc4wii2w
-         DFHDua+6I6cMXi6Ql/hd8gL2K2Y0JaVYYxfcCa8Lw5WH0sQc8DkUaAkDxZfdYopJBo
-         hw4AKSSLNJ6WO5we5tC3rLmQ1Ybz38v4BxNjUMUVEL/O8gGSregRRIw2PlZf6KMaAd
-         5WEqiMsd3OhBJW6QbT2zM84lVD8an0SbyO1Pp4/Y+dzS5sKa5HuHFiJFETnfBzwRBT
-         hDEKH6TpofVXg==
+        id S1730070AbgLIQgB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Dec 2020 11:36:01 -0500
+Received: from www62.your-server.de ([213.133.104.62]:46626 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728121AbgLIQgB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 9 Dec 2020 11:36:01 -0500
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kn2Qw-000AWm-AE; Wed, 09 Dec 2020 17:35:18 +0100
+Received: from [85.7.101.30] (helo=pc-9.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kn2Qw-0001Eu-42; Wed, 09 Dec 2020 17:35:18 +0100
+Subject: Re: [PATCH bpf-next v4 2/4] bpf: Expose bpf_get_socket_cookie to
+ tracing programs
+To:     Florent Revest <revest@chromium.org>, bpf@vger.kernel.org
+Cc:     ast@kernel.org, andrii@kernel.org, kpsingh@chromium.org,
+        kafai@fb.com, linux-kernel@vger.kernel.org
+References: <20201209132636.1545761-1-revest@chromium.org>
+ <20201209132636.1545761-2-revest@chromium.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <c3f1619d-41c1-89d3-a2a2-c2de0041fa51@iogearbox.net>
+Date:   Wed, 9 Dec 2020 17:35:17 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/5] selftests/bpf: xsk selftests
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <160752960729.12976.12661383715171656742.git-patchwork-notify@kernel.org>
-Date:   Wed, 09 Dec 2020 16:00:07 +0000
-References: <20201207215333.11586-1-weqaar.a.janjua@intel.com>
-In-Reply-To: <20201207215333.11586-1-weqaar.a.janjua@intel.com>
-To:     Weqaar Janjua <weqaar.janjua@gmail.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
-        ast@kernel.org, yhs@fb.com, magnus.karlsson@gmail.com,
-        bjorn.topel@intel.com, weqaar.a.janjua@intel.com, shuah@kernel.org,
-        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        anders.roxell@linaro.org, jonathan.lemon@gmail.com
+In-Reply-To: <20201209132636.1545761-2-revest@chromium.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/26013/Wed Dec  9 15:33:37 2020)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (refs/heads/master):
-
-On Mon,  7 Dec 2020 21:53:28 +0000 you wrote:
-> This patch set adds AF_XDP selftests based on veth to selftests/bpf.
+On 12/9/20 2:26 PM, Florent Revest wrote:
+> This needs two new helpers, one that works in a sleepable context (using
+> sock_gen_cookie which disables/enables preemption) and one that does not
+> (for performance reasons). Both take a struct sock pointer and need to
+> check it for NULLness.
 > 
-> # Topology:
-> # ---------
-> #                 -----------
-> #               _ | Process | _
-> #              /  -----------  \
-> #             /        |        \
-> #            /         |         \
-> #      -----------     |     -----------
-> #      | Thread1 |     |     | Thread2 |
-> #      -----------     |     -----------
-> #           |          |          |
-> #      -----------     |     -----------
-> #      |  xskX   |     |     |  xskY   |
-> #      -----------     |     -----------
-> #           |          |          |
-> #      -----------     |     ----------
-> #      |  vethX  | --------- |  vethY |
-> #      -----------   peer    ----------
-> #           |          |          |
-> #      namespaceX      |     namespaceY
+> This helper could also be useful to other BPF program types such as LSM.
+
+Looks like this commit description is now stale and needs to be updated
+since we only really add one helper?
+
+> Signed-off-by: Florent Revest <revest@chromium.org>
+> ---
+>   include/linux/bpf.h            |  1 +
+>   include/uapi/linux/bpf.h       |  7 +++++++
+>   kernel/trace/bpf_trace.c       |  2 ++
+>   net/core/filter.c              | 12 ++++++++++++
+>   tools/include/uapi/linux/bpf.h |  7 +++++++
+>   5 files changed, 29 insertions(+)
 > 
-> [...]
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 07cb5d15e743..5a858e8c3f1a 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -1860,6 +1860,7 @@ extern const struct bpf_func_proto bpf_per_cpu_ptr_proto;
+>   extern const struct bpf_func_proto bpf_this_cpu_ptr_proto;
+>   extern const struct bpf_func_proto bpf_ktime_get_coarse_ns_proto;
+>   extern const struct bpf_func_proto bpf_sock_from_file_proto;
+> +extern const struct bpf_func_proto bpf_get_socket_ptr_cookie_proto;
+>   
+>   const struct bpf_func_proto *bpf_tracing_func_proto(
+>   	enum bpf_func_id func_id, const struct bpf_prog *prog);
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index ba59309f4d18..9ac66cf25959 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -1667,6 +1667,13 @@ union bpf_attr {
+>    * 	Return
+>    * 		A 8-byte long unique number.
+>    *
+> + * u64 bpf_get_socket_cookie(void *sk)
+> + * 	Description
+> + * 		Equivalent to **bpf_get_socket_cookie**\ () helper that accepts
+> + * 		*sk*, but gets socket from a BTF **struct sock**.
 
-Here is the summary with links:
-  - [bpf-next,v4,1/5] selftests/bpf: xsk selftests framework
-    https://git.kernel.org/bpf/bpf-next/c/a89052572ebb
-  - [bpf-next,v4,2/5] selftests/bpf: xsk selftests - SKB POLL, NOPOLL
-    https://git.kernel.org/bpf/bpf-next/c/facb7cb2e909
-  - [bpf-next,v4,3/5] selftests/bpf: xsk selftests - DRV POLL, NOPOLL
-    https://git.kernel.org/bpf/bpf-next/c/9103a8594d93
-  - [bpf-next,v4,4/5] selftests/bpf: xsk selftests - Socket Teardown - SKB, DRV
-    https://git.kernel.org/bpf/bpf-next/c/6674bf66560a
-  - [bpf-next,v4,5/5] selftests/bpf: xsk selftests - Bi-directional Sockets - SKB, DRV
-    https://git.kernel.org/bpf/bpf-next/c/7d20441eb05e
+Maybe add a small comment that this one also works for sleepable [tracing] progs?
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> + * 	Return
+> + * 		A 8-byte long unique number.
 
+... or 0 if *sk* is NULL.
+
+>    * u32 bpf_get_socket_uid(struct sk_buff *skb)
+>    * 	Return
+>    * 		The owner UID of the socket associated to *skb*. If the socket
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 52ddd217d6a1..be5e96de306d 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -1760,6 +1760,8 @@ tracing_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>   		return &bpf_sk_storage_delete_tracing_proto;
+>   	case BPF_FUNC_sock_from_file:
+>   		return &bpf_sock_from_file_proto;
+> +	case BPF_FUNC_get_socket_cookie:
+> +		return &bpf_get_socket_ptr_cookie_proto;
+>   #endif
+>   	case BPF_FUNC_seq_printf:
+>   		return prog->expected_attach_type == BPF_TRACE_ITER ?
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 255aeee72402..13ad9a64f04f 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -4631,6 +4631,18 @@ static const struct bpf_func_proto bpf_get_socket_cookie_sock_proto = {
+>   	.arg1_type	= ARG_PTR_TO_CTX,
+>   };
+>   
+> +BPF_CALL_1(bpf_get_socket_ptr_cookie, struct sock *, sk)
+> +{
+> +	return sk ? sock_gen_cookie(sk) : 0;
+> +}
+> +
+> +const struct bpf_func_proto bpf_get_socket_ptr_cookie_proto = {
+> +	.func		= bpf_get_socket_ptr_cookie,
+> +	.gpl_only	= false,
+> +	.ret_type	= RET_INTEGER,
+> +	.arg1_type	= ARG_PTR_TO_BTF_ID_SOCK_COMMON,
+> +};
+> +
+>   BPF_CALL_1(bpf_get_socket_cookie_sock_ops, struct bpf_sock_ops_kern *, ctx)
+>   {
+>   	return __sock_gen_cookie(ctx->sk);
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> index ba59309f4d18..9ac66cf25959 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -1667,6 +1667,13 @@ union bpf_attr {
+>    * 	Return
+>    * 		A 8-byte long unique number.
+>    *
+> + * u64 bpf_get_socket_cookie(void *sk)
+> + * 	Description
+> + * 		Equivalent to **bpf_get_socket_cookie**\ () helper that accepts
+> + * 		*sk*, but gets socket from a BTF **struct sock**.
+> + * 	Return
+> + * 		A 8-byte long unique number.
+> + *
+>    * u32 bpf_get_socket_uid(struct sk_buff *skb)
+>    * 	Return
+>    * 		The owner UID of the socket associated to *skb*. If the socket
+> 
 
