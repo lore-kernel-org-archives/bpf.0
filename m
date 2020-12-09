@@ -2,65 +2,66 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B684C4361B
-	for <bpf@archiver.kernel.org>; Wed,  9 Dec 2020 14:05:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4665C4361B
+	for <bpf@archiver.kernel.org>; Wed,  9 Dec 2020 14:05:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1491923B40
-	for <bpf@archiver.kernel.org>; Wed,  9 Dec 2020 14:05:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7102423B40
+	for <bpf@archiver.kernel.org>; Wed,  9 Dec 2020 14:05:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727242AbgLIOFL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Dec 2020 09:05:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:59047 "EHLO
+        id S1726278AbgLIOFc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Dec 2020 09:05:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:57860 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1732675AbgLIN7M (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 9 Dec 2020 08:59:12 -0500
+        by vger.kernel.org with ESMTP id S1732673AbgLIN7J (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 9 Dec 2020 08:59:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607522265;
+        s=mimecast20190719; t=1607522262;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=DeJICkmUhNlMDPR60YNJsvyrM89/RB2B3sOMO3Orpnc=;
-        b=eTG3ZZZ3f9rtPwCmLGkSbiXpEn72fjqfLVEfLnxswsSCbXGnQEhZHgP2ExyuYdOlMQju5V
-        IacDJE+yeSxO6rna+3OZ/2oi/00LMxfyXmZc5M+Ad794CUr3ME7JkHTYc1/LTWxmTcsLsa
-        wiw3IiN6apVkGxAYEGyw+/xF8chftUk=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-420-XIYxq7UNOEOGKDmWPdEAyQ-1; Wed, 09 Dec 2020 08:57:41 -0500
-X-MC-Unique: XIYxq7UNOEOGKDmWPdEAyQ-1
-Received: by mail-wm1-f72.google.com with SMTP id r1so587073wmn.8
-        for <bpf@vger.kernel.org>; Wed, 09 Dec 2020 05:57:39 -0800 (PST)
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=s8DLLPviF9h72fPL9/Hm3sEntx53yIBaT2WZkb5ZEsg=;
+        b=DimcBlsLCqQTA/wqmG9EGQAUmQEfCByCNBcrw5bz5gQgVtgnMAay9Nxr6PZyYayU/COF+7
+        RN7NS8qR5IHL7kxTiu5WeUHrbG2TFhUZ+AQP36f6mNJY2PudGLkUMIfObiDZpCPYdt5ENf
+        Uhfm3B8TvYRA4BXkNcpLxJaiIu/fl4k=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-233-Wo-L2p37MOO93AbsYZquDg-1; Wed, 09 Dec 2020 08:57:41 -0500
+X-MC-Unique: Wo-L2p37MOO93AbsYZquDg-1
+Received: by mail-wr1-f72.google.com with SMTP id q18so683989wrc.20
+        for <bpf@vger.kernel.org>; Wed, 09 Dec 2020 05:57:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
-         :mime-version:content-transfer-encoding;
-        bh=DeJICkmUhNlMDPR60YNJsvyrM89/RB2B3sOMO3Orpnc=;
-        b=AG6mZ78uNZ0glhrMD8bo77P96vPVrZ+I39GiFqygYHTqnwrMr8BTJ3cRNM17OagbjA
-         Nr3ULwAwhLzQ2JLtTQ+6V9oQytgIow6ExwtUXgJYNRcElhfLaLuhX4aGKqVpKekGH4jZ
-         /kz9fLHrAjvF3pX7PvWv/IG8b880JVViVUaWobdrQ4k7JrnBwOOKADyB9XFDU4WlCUHW
-         MMVH666KKLU502AvRIS6x/02Oa0karHXYy2UqHDoMjOgU2T/+uYj+vuLSQ59Pu5yYtrp
-         aWjFP3racYAar/eBWQowjLshXE6J/zpPu1FEEMou6LW3tQO8880uxe9GQt1ixURZRXAj
-         kztw==
-X-Gm-Message-State: AOAM531PdQoS51FwD01QaORQziut5aadBLeXlZvJt6RZSh8AR5/9BnQu
-        +jV6HEVTFVYn7yWY8XVau/SCJ6M9SeEk59ddXsz1d77qFbjaBBD2nXfq84izqIhDWoo5m60TE60
-        JTdZrYYG8jUG8
-X-Received: by 2002:a5d:4ece:: with SMTP id s14mr2809548wrv.427.1607522257605;
-        Wed, 09 Dec 2020 05:57:37 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyidXDr7AGB88RVIa+qRbPwe75cFxUfdyia554wfcWfHyTBhIc9MtCkfrARVIyBxhWAKdS3PQ==
-X-Received: by 2002:a5d:4ece:: with SMTP id s14mr2809518wrv.427.1607522257401;
-        Wed, 09 Dec 2020 05:57:37 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id m21sm3556677wml.13.2020.12.09.05.57.36
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=s8DLLPviF9h72fPL9/Hm3sEntx53yIBaT2WZkb5ZEsg=;
+        b=TXWJoxRZwYLG9HLqg9/Np305tuRwGaXkIar+C48GR+AFzZOJrXvnN9yyqF/FaR9NW3
+         ym548q6FkVFbq13qyI+wO848dH9Be8UyMdzEAz+MAVRk8sOYTg9UvKh7zOECb9WizjID
+         WRUYmBgPP8YCMC7yH3US/UhdkAseVqZdsx8ADntc213mJ9zKwu518o/B+x8tg2RiwVT2
+         LEAhr/hTFl7panwbmI2d/venVgs/lr+lKoexxXENzNXiE3/Ootrqk1G01HIclcNaG3l7
+         hxLV3N8grl2T7IEH1YTeFpMF3mLWpEM81wTXrwQ4lP91y9U/fNuCucEO+EWIVrpG/jHS
+         V9pA==
+X-Gm-Message-State: AOAM532Ng/ItMOiTa6NHz/6kxnW3q47qwK1fvOP5EScgPwbDeOBrZfIv
+        5EqCPDdFhZE4IsSbITNFT+FXROgYZ06fLLvJwRndIQxQDrxZMld/5Ds4+dzmV6He5AqHp/hIOKq
+        PglfAIgLZqmq0
+X-Received: by 2002:a1c:9e0e:: with SMTP id h14mr2882632wme.63.1607522260002;
+        Wed, 09 Dec 2020 05:57:40 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwO/G3tcWg1/kHoeIKINuHsxqIStR6nsk3t1JtFt454JispYcOkpfDWuj4fAFjTX94Eakgfng==
+X-Received: by 2002:a1c:9e0e:: with SMTP id h14mr2882599wme.63.1607522259585;
+        Wed, 09 Dec 2020 05:57:39 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id j2sm3756224wrt.35.2020.12.09.05.57.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Dec 2020 05:57:36 -0800 (PST)
+        Wed, 09 Dec 2020 05:57:39 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 7C78F180003; Wed,  9 Dec 2020 14:57:36 +0100 (CET)
-Subject: [PATCH bpf v4 0/7] selftests/bpf: Restore test_offload.py to working
- order
+        id 9D158180004; Wed,  9 Dec 2020 14:57:38 +0100 (CET)
+Subject: [PATCH bpf v4 2/7] selftests/bpf/test_offload.py: Remove check for
+ program load flags match
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -83,8 +84,10 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Jiri Benc <jbenc@redhat.com>, oss-drivers@netronome.com,
         linux-omap@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Wed, 09 Dec 2020 14:57:36 +0100
-Message-ID: <160752225643.110217.4104692937165406635.stgit@toke.dk>
+Date:   Wed, 09 Dec 2020 14:57:38 +0100
+Message-ID: <160752225858.110217.13036901876869496246.stgit@toke.dk>
+In-Reply-To: <160752225643.110217.4104692937165406635.stgit@toke.dk>
+References: <160752225643.110217.4104692937165406635.stgit@toke.dk>
 User-Agent: StGit/0.23
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -93,45 +96,56 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series restores the test_offload.py selftest to working order. It seems a
-number of subtle behavioural changes have crept into various subsystems which
-broke test_offload.py in a number of ways. Most of these are fairly benign
-changes where small adjustments to the test script seems to be the best fix, but
-one is an actual kernel bug that I've observed in the wild caused by a bad
-interaction between xdp_attachment_flags_ok() and the rework of XDP program
-handling in the core netdev code.
+From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-Patch 1 fixes the bug by removing xdp_attachment_flags_ok(), and the reminder of
-the patches are adjustments to test_offload.py, including a new feature for
-netdevsim to force a BPF verification fail. Please see the individual patches
-for details.
+Since we just removed the xdp_attachment_flags_ok() callback, also remove
+the check for it in test_offload.py, and replace it with a test for the new
+ambiguity-avoid check when multiple programs are loaded.
 
-Changelog:
-
-v4:
-- Accidentally truncated the Fixes: hashes in patches 3/4 to 11 chars
-
-v3:
-- Add Fixes: tags
-
-v2:
-- Replace xdp_attachment_flags_ok() with a check in dev_xdp_attach()
-- Better packing of struct nsim_dev
-
+Fixes: 7f0a838254bd ("bpf, xdp: Maintain info on attached XDP BPF programs in net_device")
+Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
+ tools/testing/selftests/bpf/test_offload.py |   22 +++++-----------------
+ 1 file changed, 5 insertions(+), 17 deletions(-)
 
-Toke Høiland-Jørgensen (7):
-      xdp: remove the xdp_attachment_flags_ok() callback
-      selftests/bpf/test_offload.py: Remove check for program load flags match
-      netdevsim: Add debugfs toggle to reject BPF programs in verifier
-      selftests/bpf/test_offload.py: only check verifier log on verification fails
-      selftests/bpf/test_offload.py: fix expected case of extack messages
-      selftests/bpf/test_offload.py: reset ethtool features after failed setting
-      selftests/bpf/test_offload.py: filter bpftool internal map when counting maps
-
-
- drivers/net/netdevsim/bpf.c                 | 12 ++++-
- drivers/net/netdevsim/netdevsim.h           |  1 +
- tools/testing/selftests/bpf/test_offload.py | 53 +++++++++++----------
- 3 files changed, 40 insertions(+), 26 deletions(-)
+diff --git a/tools/testing/selftests/bpf/test_offload.py b/tools/testing/selftests/bpf/test_offload.py
+index 43c9cda199b8..becd27b2f4ba 100755
+--- a/tools/testing/selftests/bpf/test_offload.py
++++ b/tools/testing/selftests/bpf/test_offload.py
+@@ -716,13 +716,11 @@ def test_multi_prog(simdev, sim, obj, modename, modeid):
+     fail(ret == 0, "Replaced one of programs without -force")
+     check_extack(err, "XDP program already attached.", args)
+ 
+-    if modename == "" or modename == "drv":
+-        othermode = "" if modename == "drv" else "drv"
+-        start_test("Test multi-attachment XDP - detach...")
+-        ret, _, err = sim.unset_xdp(othermode, force=True,
+-                                    fail=False, include_stderr=True)
+-        fail(ret == 0, "Removed program with a bad mode")
+-        check_extack(err, "program loaded with different flags.", args)
++    start_test("Test multi-attachment XDP - remove without mode...")
++    ret, _, err = sim.unset_xdp("", force=True,
++                                fail=False, include_stderr=True)
++    fail(ret == 0, "Removed program without a mode flag")
++    check_extack(err, "More than one program loaded, unset mode is ambiguous.", args)
+ 
+     sim.unset_xdp("offload")
+     xdp = sim.ip_link_show(xdp=True)["xdp"]
+@@ -1001,16 +999,6 @@ try:
+     check_extack(err,
+                  "native and generic XDP can't be active at the same time.",
+                  args)
+-    ret, _, err = sim.set_xdp(obj, "", force=True,
+-                              fail=False, include_stderr=True)
+-    fail(ret == 0, "Replaced XDP program with a program in different mode")
+-    check_extack(err, "program loaded with different flags.", args)
+-
+-    start_test("Test XDP prog remove with bad flags...")
+-    ret, _, err = sim.unset_xdp("", force=True,
+-                                fail=False, include_stderr=True)
+-    fail(ret == 0, "Removed program with a bad mode")
+-    check_extack(err, "program loaded with different flags.", args)
+ 
+     start_test("Test MTU restrictions...")
+     ret, _ = sim.set_mtu(9000, fail=False)
 
