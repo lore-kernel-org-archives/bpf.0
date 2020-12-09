@@ -2,66 +2,65 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CD02C19425
-	for <bpf@archiver.kernel.org>; Wed,  9 Dec 2020 14:05:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3B684C4361B
+	for <bpf@archiver.kernel.org>; Wed,  9 Dec 2020 14:05:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0AB7A23B51
-	for <bpf@archiver.kernel.org>; Wed,  9 Dec 2020 14:05:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1491923B40
+	for <bpf@archiver.kernel.org>; Wed,  9 Dec 2020 14:05:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728255AbgLIOFL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1727242AbgLIOFL (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Wed, 9 Dec 2020 09:05:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20827 "EHLO
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:59047 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728561AbgLIN7M (ORCPT
+        by vger.kernel.org with ESMTP id S1732675AbgLIN7M (ORCPT
         <rfc822;bpf@vger.kernel.org>); Wed, 9 Dec 2020 08:59:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1607522265;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kd24Xn2dhH1zXrik2YwWPbY1PxQPNHf5kApUVpBXmAY=;
-        b=IJAGsO81E4veA4+mcNed9v5VT2WIwRnzyy+S1VxgrQDtIhtX9v9BO1Pc8eZwh8oyRa/Q+D
-        A6Qyo8o+yRKHTr/DAQQE5ylp6NKM9isVTLOv2E4SBq8+NcnQit9HFeuItL37LD9GiqRH+9
-        b0MS1BgEKPfrz2POJhI+BPaINvumtoY=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-579-zfTGR8r2PWe6B9gk_eZhog-1; Wed, 09 Dec 2020 08:57:44 -0500
-X-MC-Unique: zfTGR8r2PWe6B9gk_eZhog-1
-Received: by mail-wr1-f69.google.com with SMTP id o12so684467wrq.13
-        for <bpf@vger.kernel.org>; Wed, 09 Dec 2020 05:57:43 -0800 (PST)
+         content-transfer-encoding:content-transfer-encoding;
+        bh=DeJICkmUhNlMDPR60YNJsvyrM89/RB2B3sOMO3Orpnc=;
+        b=eTG3ZZZ3f9rtPwCmLGkSbiXpEn72fjqfLVEfLnxswsSCbXGnQEhZHgP2ExyuYdOlMQju5V
+        IacDJE+yeSxO6rna+3OZ/2oi/00LMxfyXmZc5M+Ad794CUr3ME7JkHTYc1/LTWxmTcsLsa
+        wiw3IiN6apVkGxAYEGyw+/xF8chftUk=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-420-XIYxq7UNOEOGKDmWPdEAyQ-1; Wed, 09 Dec 2020 08:57:41 -0500
+X-MC-Unique: XIYxq7UNOEOGKDmWPdEAyQ-1
+Received: by mail-wm1-f72.google.com with SMTP id r1so587073wmn.8
+        for <bpf@vger.kernel.org>; Wed, 09 Dec 2020 05:57:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=kd24Xn2dhH1zXrik2YwWPbY1PxQPNHf5kApUVpBXmAY=;
-        b=Wi81J9MrAFaVDHqqwcSkygbPJZYkCKn3lpScexg9JmqPaz7hH9CCR4pooOcK38447p
-         U3Q/JoPRluL8lQBpdibqXcBmi2PJUb7ldkIHn8L+mva0QkKExuMr5J9w0UqslvSpMlqF
-         EjdhuyiLRCLx3EGKt7WwXs0mVdHmTuTPPfeRNnQAwoluZion8PQdfwlF+rj63m058gR4
-         jbLN/LDUhzlCFADhE9O9Uj8foGEU0IIVVMBDEyU8jdAmKtwx6Qfnv2C+nFbfjnyRRBuD
-         84Hsp0SbGiOsq/zSi3C9e39jKBqDFZsNRmJuXho5J51W0cuUYlbB/+teTIbkss7HPt6N
-         no1Q==
-X-Gm-Message-State: AOAM532tED87kohqeSCs1L2DtrSAILn3YdXaDeVnnIp9TOKQ/MdPSqX5
-        CrsOnPDdj9IH08uwKJDBgvhjIwAe4qccA3xH6pJd+ore92f0yUuRacKThDN6N8johBE6OU7CXtS
-        2VMdgc/WVh2hp
-X-Received: by 2002:a5d:4001:: with SMTP id n1mr2855253wrp.243.1607522262141;
-        Wed, 09 Dec 2020 05:57:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyTQ7Uk28vLGW0s2/2La7n7Jg/vXtS+Afkm0tL++DHgekx0oS3piYNKxtvPgh94aQjFeEzjEw==
-X-Received: by 2002:a5d:4001:: with SMTP id n1mr2855205wrp.243.1607522261420;
-        Wed, 09 Dec 2020 05:57:41 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id q12sm3922546wmc.45.2020.12.09.05.57.40
+        h=x-gm-message-state:subject:from:to:cc:date:message-id:user-agent
+         :mime-version:content-transfer-encoding;
+        bh=DeJICkmUhNlMDPR60YNJsvyrM89/RB2B3sOMO3Orpnc=;
+        b=AG6mZ78uNZ0glhrMD8bo77P96vPVrZ+I39GiFqygYHTqnwrMr8BTJ3cRNM17OagbjA
+         Nr3ULwAwhLzQ2JLtTQ+6V9oQytgIow6ExwtUXgJYNRcElhfLaLuhX4aGKqVpKekGH4jZ
+         /kz9fLHrAjvF3pX7PvWv/IG8b880JVViVUaWobdrQ4k7JrnBwOOKADyB9XFDU4WlCUHW
+         MMVH666KKLU502AvRIS6x/02Oa0karHXYy2UqHDoMjOgU2T/+uYj+vuLSQ59Pu5yYtrp
+         aWjFP3racYAar/eBWQowjLshXE6J/zpPu1FEEMou6LW3tQO8880uxe9GQt1ixURZRXAj
+         kztw==
+X-Gm-Message-State: AOAM531PdQoS51FwD01QaORQziut5aadBLeXlZvJt6RZSh8AR5/9BnQu
+        +jV6HEVTFVYn7yWY8XVau/SCJ6M9SeEk59ddXsz1d77qFbjaBBD2nXfq84izqIhDWoo5m60TE60
+        JTdZrYYG8jUG8
+X-Received: by 2002:a5d:4ece:: with SMTP id s14mr2809548wrv.427.1607522257605;
+        Wed, 09 Dec 2020 05:57:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyidXDr7AGB88RVIa+qRbPwe75cFxUfdyia554wfcWfHyTBhIc9MtCkfrARVIyBxhWAKdS3PQ==
+X-Received: by 2002:a5d:4ece:: with SMTP id s14mr2809518wrv.427.1607522257401;
+        Wed, 09 Dec 2020 05:57:37 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id m21sm3556677wml.13.2020.12.09.05.57.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Dec 2020 05:57:40 -0800 (PST)
+        Wed, 09 Dec 2020 05:57:36 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id A9ED5180003; Wed,  9 Dec 2020 14:57:39 +0100 (CET)
-Subject: [PATCH bpf v4 3/7] netdevsim: Add debugfs toggle to reject BPF
- programs in verifier
+        id 7C78F180003; Wed,  9 Dec 2020 14:57:36 +0100 (CET)
+Subject: [PATCH bpf v4 0/7] selftests/bpf: Restore test_offload.py to working
+ order
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -84,10 +83,8 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Jiri Benc <jbenc@redhat.com>, oss-drivers@netronome.com,
         linux-omap@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Wed, 09 Dec 2020 14:57:39 +0100
-Message-ID: <160752225964.110217.12584017165318065332.stgit@toke.dk>
-In-Reply-To: <160752225643.110217.4104692937165406635.stgit@toke.dk>
-References: <160752225643.110217.4104692937165406635.stgit@toke.dk>
+Date:   Wed, 09 Dec 2020 14:57:36 +0100
+Message-ID: <160752225643.110217.4104692937165406635.stgit@toke.dk>
 User-Agent: StGit/0.23
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
@@ -96,73 +93,45 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@redhat.com>
+This series restores the test_offload.py selftest to working order. It seems a
+number of subtle behavioural changes have crept into various subsystems which
+broke test_offload.py in a number of ways. Most of these are fairly benign
+changes where small adjustments to the test script seems to be the best fix, but
+one is an actual kernel bug that I've observed in the wild caused by a bad
+interaction between xdp_attachment_flags_ok() and the rework of XDP program
+handling in the core netdev code.
 
-This adds a new debugfs toggle ('bpf_bind_verifier_accept') that can be
-used to make netdevsim reject BPF programs from being accepted by the
-verifier. If this toggle (which defaults to true) is set to false,
-nsim_bpf_verify_insn() will return EOPNOTSUPP on the last
-instruction (after outputting the 'Hello from netdevsim' verifier message).
+Patch 1 fixes the bug by removing xdp_attachment_flags_ok(), and the reminder of
+the patches are adjustments to test_offload.py, including a new feature for
+netdevsim to force a BPF verification fail. Please see the individual patches
+for details.
 
-This makes it possible to check the verification callback in the driver
-from test_offload.py in selftests, since the verifier now clears the
-verifier log on a successful load, hiding the message from the driver.
+Changelog:
 
-Fixes: 6f8a57ccf851 ("bpf: Make verifier log more relevant by default")
-Acked-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
+v4:
+- Accidentally truncated the Fixes: hashes in patches 3/4 to 11 chars
+
+v3:
+- Add Fixes: tags
+
+v2:
+- Replace xdp_attachment_flags_ok() with a check in dev_xdp_attach()
+- Better packing of struct nsim_dev
+
 ---
- drivers/net/netdevsim/bpf.c       |   12 ++++++++++--
- drivers/net/netdevsim/netdevsim.h |    1 +
- 2 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/netdevsim/bpf.c b/drivers/net/netdevsim/bpf.c
-index 85546664bdd5..90aafb56f140 100644
---- a/drivers/net/netdevsim/bpf.c
-+++ b/drivers/net/netdevsim/bpf.c
-@@ -63,15 +63,20 @@ static int
- nsim_bpf_verify_insn(struct bpf_verifier_env *env, int insn_idx, int prev_insn)
- {
- 	struct nsim_bpf_bound_prog *state;
-+	int ret = 0;
- 
- 	state = env->prog->aux->offload->dev_priv;
- 	if (state->nsim_dev->bpf_bind_verifier_delay && !insn_idx)
- 		msleep(state->nsim_dev->bpf_bind_verifier_delay);
- 
--	if (insn_idx == env->prog->len - 1)
-+	if (insn_idx == env->prog->len - 1) {
- 		pr_vlog(env, "Hello from netdevsim!\n");
- 
--	return 0;
-+		if (!state->nsim_dev->bpf_bind_verifier_accept)
-+			ret = -EOPNOTSUPP;
-+	}
-+
-+	return ret;
- }
- 
- static int nsim_bpf_finalize(struct bpf_verifier_env *env)
-@@ -595,6 +600,9 @@ int nsim_bpf_dev_init(struct nsim_dev *nsim_dev)
- 			    &nsim_dev->bpf_bind_accept);
- 	debugfs_create_u32("bpf_bind_verifier_delay", 0600, nsim_dev->ddir,
- 			   &nsim_dev->bpf_bind_verifier_delay);
-+	nsim_dev->bpf_bind_verifier_accept = true;
-+	debugfs_create_bool("bpf_bind_verifier_accept", 0600, nsim_dev->ddir,
-+			    &nsim_dev->bpf_bind_verifier_accept);
- 	return 0;
- }
- 
-diff --git a/drivers/net/netdevsim/netdevsim.h b/drivers/net/netdevsim/netdevsim.h
-index 827fc80f50a0..c4e7ad2a1964 100644
---- a/drivers/net/netdevsim/netdevsim.h
-+++ b/drivers/net/netdevsim/netdevsim.h
-@@ -189,6 +189,7 @@ struct nsim_dev {
- 	struct dentry *take_snapshot;
- 	struct bpf_offload_dev *bpf_dev;
- 	bool bpf_bind_accept;
-+	bool bpf_bind_verifier_accept;
- 	u32 bpf_bind_verifier_delay;
- 	struct dentry *ddir_bpf_bound_progs;
- 	u32 prog_id_gen;
+Toke Høiland-Jørgensen (7):
+      xdp: remove the xdp_attachment_flags_ok() callback
+      selftests/bpf/test_offload.py: Remove check for program load flags match
+      netdevsim: Add debugfs toggle to reject BPF programs in verifier
+      selftests/bpf/test_offload.py: only check verifier log on verification fails
+      selftests/bpf/test_offload.py: fix expected case of extack messages
+      selftests/bpf/test_offload.py: reset ethtool features after failed setting
+      selftests/bpf/test_offload.py: filter bpftool internal map when counting maps
+
+
+ drivers/net/netdevsim/bpf.c                 | 12 ++++-
+ drivers/net/netdevsim/netdevsim.h           |  1 +
+ tools/testing/selftests/bpf/test_offload.py | 53 +++++++++++----------
+ 3 files changed, 40 insertions(+), 26 deletions(-)
 
