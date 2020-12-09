@@ -4,63 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A3DAC4167B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CD02C19425
 	for <bpf@archiver.kernel.org>; Wed,  9 Dec 2020 14:05:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EA63B23B42
-	for <bpf@archiver.kernel.org>; Wed,  9 Dec 2020 14:05:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0AB7A23B51
+	for <bpf@archiver.kernel.org>; Wed,  9 Dec 2020 14:05:28 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727992AbgLIOFM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Dec 2020 09:05:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:24396 "EHLO
+        id S1728255AbgLIOFL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Dec 2020 09:05:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20827 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726864AbgLIN7K (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 9 Dec 2020 08:59:10 -0500
+        by vger.kernel.org with ESMTP id S1728561AbgLIN7M (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 9 Dec 2020 08:59:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1607522262;
+        s=mimecast20190719; t=1607522265;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ICznRmJm5dVUGmr9DiortfE3N0uQK/Rp9N47GmwoLqA=;
-        b=bx4AGetHcsV4zf36m+1MFO1xtlTQ4m9aqwmAzU8uQy5DqtThyTXMAhHjX5YroXKR2zlLjc
-        oCMlepYsTcB0sVAOPRrCbuKmwU364JDEnEofS4W5YF+AiUgsjj/N0+zez6NDP1/HKyZiDe
-        Z7mxLxlGGE0+aqveiJFEX3DfCwu6Mg0=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-236-ygvIQn_oPuSPP_FjaFj4Rg-1; Wed, 09 Dec 2020 08:57:41 -0500
-X-MC-Unique: ygvIQn_oPuSPP_FjaFj4Rg-1
-Received: by mail-wr1-f71.google.com with SMTP id v1so687609wri.16
-        for <bpf@vger.kernel.org>; Wed, 09 Dec 2020 05:57:40 -0800 (PST)
+        bh=kd24Xn2dhH1zXrik2YwWPbY1PxQPNHf5kApUVpBXmAY=;
+        b=IJAGsO81E4veA4+mcNed9v5VT2WIwRnzyy+S1VxgrQDtIhtX9v9BO1Pc8eZwh8oyRa/Q+D
+        A6Qyo8o+yRKHTr/DAQQE5ylp6NKM9isVTLOv2E4SBq8+NcnQit9HFeuItL37LD9GiqRH+9
+        b0MS1BgEKPfrz2POJhI+BPaINvumtoY=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-579-zfTGR8r2PWe6B9gk_eZhog-1; Wed, 09 Dec 2020 08:57:44 -0500
+X-MC-Unique: zfTGR8r2PWe6B9gk_eZhog-1
+Received: by mail-wr1-f69.google.com with SMTP id o12so684467wrq.13
+        for <bpf@vger.kernel.org>; Wed, 09 Dec 2020 05:57:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
          :references:user-agent:mime-version:content-transfer-encoding;
-        bh=ICznRmJm5dVUGmr9DiortfE3N0uQK/Rp9N47GmwoLqA=;
-        b=rKnDE9qa2ynZxp3SY/xzGJzlp3SdQj9mZC+BCtIWTT5gg9Tdm7+8A0i4LJDfH9Xtw8
-         MQABUC+ll2B2YlmnvP/5a5oXMMruFyrPDP9MKQT4mBgZLbNqRJXT/63CkOVWkCr7uxm4
-         cITtA+RyL4DzLmWYxUjeSK/VQ3Ovn5V9n2oRfT20dAp9vtuH3zNCdjpBhOFpzUEydil2
-         7JYt9XPAKVoJQ2V8SFEBDFg5vgn2Z82P/cz3zytjfVSp1hv1S+yJIxhzrIlMazZBW4Am
-         AxwM3ViGpcAMRjy7UdfA3U9LSmlubmg2cCsJOb6mNsaYc80NWryKWV3+YahJU1BfYtue
-         Cn1Q==
-X-Gm-Message-State: AOAM530mDPhzfGejLbEGFIg72V1XXgoSGT2A7Jj7B6pHvx4km+hZEASn
-        kRPGDa+PzN/qy01+svPb6bYWOTc6MqovLjGETjRw3tWzKNjbRxkh/FSx40RoZHEAh199w3igx4A
-        pPYK2eVMmc+RK
-X-Received: by 2002:adf:cc81:: with SMTP id p1mr914535wrj.339.1607522258797;
-        Wed, 09 Dec 2020 05:57:38 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJylM2fa7bJQrvpdO5DQ3KHDZxZKDonPG+3v9tiSAQXyC69YYvlMNZYUV0ovHzCa/tJCuiMKvg==
-X-Received: by 2002:adf:cc81:: with SMTP id p1mr914513wrj.339.1607522258597;
-        Wed, 09 Dec 2020 05:57:38 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id n14sm3661867wmi.1.2020.12.09.05.57.37
+        bh=kd24Xn2dhH1zXrik2YwWPbY1PxQPNHf5kApUVpBXmAY=;
+        b=Wi81J9MrAFaVDHqqwcSkygbPJZYkCKn3lpScexg9JmqPaz7hH9CCR4pooOcK38447p
+         U3Q/JoPRluL8lQBpdibqXcBmi2PJUb7ldkIHn8L+mva0QkKExuMr5J9w0UqslvSpMlqF
+         EjdhuyiLRCLx3EGKt7WwXs0mVdHmTuTPPfeRNnQAwoluZion8PQdfwlF+rj63m058gR4
+         jbLN/LDUhzlCFADhE9O9Uj8foGEU0IIVVMBDEyU8jdAmKtwx6Qfnv2C+nFbfjnyRRBuD
+         84Hsp0SbGiOsq/zSi3C9e39jKBqDFZsNRmJuXho5J51W0cuUYlbB/+teTIbkss7HPt6N
+         no1Q==
+X-Gm-Message-State: AOAM532tED87kohqeSCs1L2DtrSAILn3YdXaDeVnnIp9TOKQ/MdPSqX5
+        CrsOnPDdj9IH08uwKJDBgvhjIwAe4qccA3xH6pJd+ore92f0yUuRacKThDN6N8johBE6OU7CXtS
+        2VMdgc/WVh2hp
+X-Received: by 2002:a5d:4001:: with SMTP id n1mr2855253wrp.243.1607522262141;
+        Wed, 09 Dec 2020 05:57:42 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyTQ7Uk28vLGW0s2/2La7n7Jg/vXtS+Afkm0tL++DHgekx0oS3piYNKxtvPgh94aQjFeEzjEw==
+X-Received: by 2002:a5d:4001:: with SMTP id n1mr2855205wrp.243.1607522261420;
+        Wed, 09 Dec 2020 05:57:41 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id q12sm3922546wmc.45.2020.12.09.05.57.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Dec 2020 05:57:37 -0800 (PST)
+        Wed, 09 Dec 2020 05:57:40 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 8E436180003; Wed,  9 Dec 2020 14:57:37 +0100 (CET)
-Subject: [PATCH bpf v4 1/7] xdp: remove the xdp_attachment_flags_ok() callback
+        id A9ED5180003; Wed,  9 Dec 2020 14:57:39 +0100 (CET)
+Subject: [PATCH bpf v4 3/7] netdevsim: Add debugfs toggle to reject BPF
+ programs in verifier
 From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -83,8 +84,8 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Jiri Benc <jbenc@redhat.com>, oss-drivers@netronome.com,
         linux-omap@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Date:   Wed, 09 Dec 2020 14:57:37 +0100
-Message-ID: <160752225751.110217.10267659521308669050.stgit@toke.dk>
+Date:   Wed, 09 Dec 2020 14:57:39 +0100
+Message-ID: <160752225964.110217.12584017165318065332.stgit@toke.dk>
 In-Reply-To: <160752225643.110217.4104692937165406635.stgit@toke.dk>
 References: <160752225643.110217.4104692937165406635.stgit@toke.dk>
 User-Agent: StGit/0.23
@@ -97,173 +98,71 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Toke Høiland-Jørgensen <toke@redhat.com>
 
-Since commit 7f0a838254bd ("bpf, xdp: Maintain info on attached XDP BPF
-programs in net_device"), the XDP program attachment info is now maintained
-in the core code. This interacts badly with the xdp_attachment_flags_ok()
-check that prevents unloading an XDP program with different load flags than
-it was loaded with. In practice, two kinds of failures are seen:
+This adds a new debugfs toggle ('bpf_bind_verifier_accept') that can be
+used to make netdevsim reject BPF programs from being accepted by the
+verifier. If this toggle (which defaults to true) is set to false,
+nsim_bpf_verify_insn() will return EOPNOTSUPP on the last
+instruction (after outputting the 'Hello from netdevsim' verifier message).
 
-- An XDP program loaded without specifying a mode (and which then ends up
-  in driver mode) cannot be unloaded if the program mode is specified on
-  unload.
+This makes it possible to check the verification callback in the driver
+from test_offload.py in selftests, since the verifier now clears the
+verifier log on a successful load, hiding the message from the driver.
 
-- The dev_xdp_uninstall() hook always calls the driver callback with the
-  mode set to the type of the program but an empty flags argument, which
-  means the flags_ok() check prevents the program from being removed,
-  leading to bpf prog reference leaks.
-
-The original reason this check was added was to avoid ambiguity when
-multiple programs were loaded. With the way the checks are done in the core
-now, this is quite simple to enforce in the core code, so let's add a check
-there and get rid of the xdp_attachment_flags_ok() callback entirely.
-
-Fixes: 7f0a838254bd ("bpf, xdp: Maintain info on attached XDP BPF programs in net_device")
+Fixes: 6f8a57ccf851 ("bpf: Make verifier log more relevant by default")
+Acked-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- .../net/ethernet/netronome/nfp/nfp_net_common.c    |    6 -----
- drivers/net/ethernet/ti/cpsw_priv.c                |    3 ---
- drivers/net/netdevsim/bpf.c                        |    3 ---
- include/net/xdp.h                                  |    2 --
- net/core/dev.c                                     |   22 ++++++++++++++++++--
- net/core/xdp.c                                     |   12 -----------
- 6 files changed, 20 insertions(+), 28 deletions(-)
+ drivers/net/netdevsim/bpf.c       |   12 ++++++++++--
+ drivers/net/netdevsim/netdevsim.h |    1 +
+ 2 files changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/netronome/nfp/nfp_net_common.c b/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-index b150da43adb2..437226866ce8 100644
---- a/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-+++ b/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-@@ -3562,9 +3562,6 @@ static int nfp_net_xdp_setup_drv(struct nfp_net *nn, struct netdev_bpf *bpf)
- 	struct nfp_net_dp *dp;
- 	int err;
- 
--	if (!xdp_attachment_flags_ok(&nn->xdp, bpf))
--		return -EBUSY;
--
- 	if (!prog == !nn->dp.xdp_prog) {
- 		WRITE_ONCE(nn->dp.xdp_prog, prog);
- 		xdp_attachment_setup(&nn->xdp, bpf);
-@@ -3593,9 +3590,6 @@ static int nfp_net_xdp_setup_hw(struct nfp_net *nn, struct netdev_bpf *bpf)
- {
- 	int err;
- 
--	if (!xdp_attachment_flags_ok(&nn->xdp_hw, bpf))
--		return -EBUSY;
--
- 	err = nfp_app_xdp_offload(nn->app, nn, bpf->prog, bpf->extack);
- 	if (err)
- 		return err;
-diff --git a/drivers/net/ethernet/ti/cpsw_priv.c b/drivers/net/ethernet/ti/cpsw_priv.c
-index 31c5e36ff706..424e644724e4 100644
---- a/drivers/net/ethernet/ti/cpsw_priv.c
-+++ b/drivers/net/ethernet/ti/cpsw_priv.c
-@@ -1265,9 +1265,6 @@ static int cpsw_xdp_prog_setup(struct cpsw_priv *priv, struct netdev_bpf *bpf)
- 	if (!priv->xdpi.prog && !prog)
- 		return 0;
- 
--	if (!xdp_attachment_flags_ok(&priv->xdpi, bpf))
--		return -EBUSY;
--
- 	WRITE_ONCE(priv->xdp_prog, prog);
- 
- 	xdp_attachment_setup(&priv->xdpi, bpf);
 diff --git a/drivers/net/netdevsim/bpf.c b/drivers/net/netdevsim/bpf.c
-index 2e90512f3bbe..85546664bdd5 100644
+index 85546664bdd5..90aafb56f140 100644
 --- a/drivers/net/netdevsim/bpf.c
 +++ b/drivers/net/netdevsim/bpf.c
-@@ -190,9 +190,6 @@ nsim_xdp_set_prog(struct netdevsim *ns, struct netdev_bpf *bpf,
+@@ -63,15 +63,20 @@ static int
+ nsim_bpf_verify_insn(struct bpf_verifier_env *env, int insn_idx, int prev_insn)
  {
- 	int err;
+ 	struct nsim_bpf_bound_prog *state;
++	int ret = 0;
  
--	if (!xdp_attachment_flags_ok(xdp, bpf))
--		return -EBUSY;
--
- 	if (bpf->command == XDP_SETUP_PROG && !ns->bpf_xdpdrv_accept) {
- 		NSIM_EA(bpf->extack, "driver XDP disabled in DebugFS");
- 		return -EOPNOTSUPP;
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 3814fb631d52..9dab2bc6f187 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -240,8 +240,6 @@ struct xdp_attachment_info {
- };
+ 	state = env->prog->aux->offload->dev_priv;
+ 	if (state->nsim_dev->bpf_bind_verifier_delay && !insn_idx)
+ 		msleep(state->nsim_dev->bpf_bind_verifier_delay);
  
- struct netdev_bpf;
--bool xdp_attachment_flags_ok(struct xdp_attachment_info *info,
--			     struct netdev_bpf *bpf);
- void xdp_attachment_setup(struct xdp_attachment_info *info,
- 			  struct netdev_bpf *bpf);
+-	if (insn_idx == env->prog->len - 1)
++	if (insn_idx == env->prog->len - 1) {
+ 		pr_vlog(env, "Hello from netdevsim!\n");
  
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 8588ade790cb..38412e70f761 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -8917,6 +8917,17 @@ static struct bpf_prog *dev_xdp_prog(struct net_device *dev,
- 	return dev->xdp_state[mode].prog;
- }
- 
-+static u8 dev_xdp_prog_count(struct net_device *dev)
-+{
-+	u8 count = 0;
-+	int i;
-+
-+	for (i = 0; i < __MAX_XDP_MODE; i++)
-+		if (dev->xdp_state[i].prog || dev->xdp_state[i].link)
-+			count++;
-+	return count;
-+}
-+
- u32 dev_xdp_prog_id(struct net_device *dev, enum bpf_xdp_mode mode)
- {
- 	struct bpf_prog *prog = dev_xdp_prog(dev, mode);
-@@ -9007,6 +9018,7 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
- 			  struct bpf_xdp_link *link, struct bpf_prog *new_prog,
- 			  struct bpf_prog *old_prog, u32 flags)
- {
-+	unsigned int num_modes = hweight32(flags & XDP_FLAGS_MODES);
- 	struct bpf_prog *cur_prog;
- 	enum bpf_xdp_mode mode;
- 	bpf_op_t bpf_op;
-@@ -9022,11 +9034,17 @@ static int dev_xdp_attach(struct net_device *dev, struct netlink_ext_ack *extack
- 		NL_SET_ERR_MSG(extack, "Invalid XDP flags for BPF link attachment");
- 		return -EINVAL;
- 	}
--	/* just one XDP mode bit should be set, zero defaults to SKB mode */
--	if (hweight32(flags & XDP_FLAGS_MODES) > 1) {
-+	/* just one XDP mode bit should be set, zero defaults to drv/skb mode */
-+	if (num_modes > 1) {
- 		NL_SET_ERR_MSG(extack, "Only one XDP mode flag can be set");
- 		return -EINVAL;
- 	}
-+	/* avoid ambiguity if offload + drv/skb mode progs are both loaded */
-+	if (!num_modes && dev_xdp_prog_count(dev) > 1) {
-+		NL_SET_ERR_MSG(extack,
-+			       "More than one program loaded, unset mode is ambiguous");
-+		return -EINVAL;
+-	return 0;
++		if (!state->nsim_dev->bpf_bind_verifier_accept)
++			ret = -EOPNOTSUPP;
 +	}
- 	/* old_prog != NULL implies XDP_FLAGS_REPLACE is set */
- 	if (old_prog && !(flags & XDP_FLAGS_REPLACE)) {
- 		NL_SET_ERR_MSG(extack, "XDP_FLAGS_REPLACE is not specified");
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 491ad569a79c..d900cebc0acd 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -403,18 +403,6 @@ void __xdp_release_frame(void *data, struct xdp_mem_info *mem)
++
++	return ret;
  }
- EXPORT_SYMBOL_GPL(__xdp_release_frame);
  
--bool xdp_attachment_flags_ok(struct xdp_attachment_info *info,
--			     struct netdev_bpf *bpf)
--{
--	if (info->prog && (bpf->flags ^ info->flags) & XDP_FLAGS_MODES) {
--		NL_SET_ERR_MSG(bpf->extack,
--			       "program loaded with different flags");
--		return false;
--	}
--	return true;
--}
--EXPORT_SYMBOL_GPL(xdp_attachment_flags_ok);
--
- void xdp_attachment_setup(struct xdp_attachment_info *info,
- 			  struct netdev_bpf *bpf)
- {
+ static int nsim_bpf_finalize(struct bpf_verifier_env *env)
+@@ -595,6 +600,9 @@ int nsim_bpf_dev_init(struct nsim_dev *nsim_dev)
+ 			    &nsim_dev->bpf_bind_accept);
+ 	debugfs_create_u32("bpf_bind_verifier_delay", 0600, nsim_dev->ddir,
+ 			   &nsim_dev->bpf_bind_verifier_delay);
++	nsim_dev->bpf_bind_verifier_accept = true;
++	debugfs_create_bool("bpf_bind_verifier_accept", 0600, nsim_dev->ddir,
++			    &nsim_dev->bpf_bind_verifier_accept);
+ 	return 0;
+ }
+ 
+diff --git a/drivers/net/netdevsim/netdevsim.h b/drivers/net/netdevsim/netdevsim.h
+index 827fc80f50a0..c4e7ad2a1964 100644
+--- a/drivers/net/netdevsim/netdevsim.h
++++ b/drivers/net/netdevsim/netdevsim.h
+@@ -189,6 +189,7 @@ struct nsim_dev {
+ 	struct dentry *take_snapshot;
+ 	struct bpf_offload_dev *bpf_dev;
+ 	bool bpf_bind_accept;
++	bool bpf_bind_verifier_accept;
+ 	u32 bpf_bind_verifier_delay;
+ 	struct dentry *ddir_bpf_bound_progs;
+ 	u32 prog_id_gen;
 
