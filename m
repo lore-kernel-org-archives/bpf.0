@@ -2,174 +2,195 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CF2FCC4361B
-	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 17:03:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 98EDAC4167B
+	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 17:20:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 83918230FC
-	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 17:03:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6316123DB4
+	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 17:20:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390899AbgLJRDJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Dec 2020 12:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56292 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732826AbgLJRC5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Dec 2020 12:02:57 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51FDC0613D6;
-        Thu, 10 Dec 2020 09:02:16 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id k78so5337267ybf.12;
-        Thu, 10 Dec 2020 09:02:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EaYcvONBqP/ZnqqdQ38xcrKnElwc1CHM/ix5ks0e3Uk=;
-        b=CsPDP5ojpwt4CVXcGL/QMurn5dKSrext3W/8iIps3bwiisECqQQYuIU9h/KvirCijH
-         aTQbIa3M+dsoZOYfvBr/8+0HbxqCDD+42tNbUEpkUCa/QU3PZWOEWqUMsDHwG8PPBkQl
-         B0jbw9mwWSfcpIwzIqm7/3HM71w1RPcHQ3aNw8kE3zPq/Ir0MyRF2UtSmqcWenjZyRVz
-         9DT6+uKUdJLGleSyvM4diU3tjLG6Z6zAZr3M14DQbJak5FKLEMcBtEsL96aQK/NZMDnv
-         vfyjOMgV7DBtoHuy85Y8O5GL66TE0BBdxJn/eodqkYRtjf6caGTJQKNkTnkSNqdM2oMi
-         WvRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EaYcvONBqP/ZnqqdQ38xcrKnElwc1CHM/ix5ks0e3Uk=;
-        b=YuPWYbM1YJ7g8u8Bulvz22KNkZcbny77BSGRZemIuiypt0YYK4w7ouaUbgU7y2UBCg
-         mMsrovxIjxQK5VU+rv6F/tMaXzESx8B8mFQ055YZYsx/c1s/9JuEpC7nOQK/F3n1ObkM
-         WbTWDhi7UMOa7ihwEmsIV22lgjxcMy4nurftNs+VH38ByiGDG6EA0j+0ziMECbxADWbz
-         +ndEMY66BmvMJiIIp42uVm4istRlvfrB6er/1RMMOevYw8gy1F7I8GOolIEsnk5ZtpcL
-         qGZr3dn7pfjVzGUXVWmsfCsKww433qBoG1M4lzv2w38gl+iaLF3a0RS9O6qdJlylst5x
-         QllQ==
-X-Gm-Message-State: AOAM531Ww+JVpaAEgpR64s/boVR8+HIsyrml5C2icB6n7DDIY0K9DYG7
-        b6tVUsoIWqcwNdPd7ZqcS3SlVvr6vu7Efvzplr8/f73KicCOdw==
-X-Google-Smtp-Source: ABdhPJyM/295uVE8r+Z9+eQ9iQbSmfOxWH34/+Bh9g885d3jPCiuEAcnMLRUf1WDZEPTFulYfocMroBphmYBoX8MofI=
-X-Received: by 2002:a25:f505:: with SMTP id a5mr11898650ybe.425.1607619735888;
- Thu, 10 Dec 2020 09:02:15 -0800 (PST)
+        id S1731837AbgLJRU4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Dec 2020 12:20:56 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:40808 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2403878AbgLJRT4 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 10 Dec 2020 12:19:56 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BAHAPfC010887;
+        Thu, 10 Dec 2020 09:19:03 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=YcBb4e47tlQlAcQnON2DrDPpPtwGFV2qECR8EAB516A=;
+ b=cHYr21i96xHGJXC9PXRHbZbZROXB5Q4uXElykFxb4Gkezha9Eoy3K3HCp0hPrR4vFgvW
+ k25KU77RbqLqfu0zj16PZPzCl9kMBgXwCxDVqF8GUY4iWEo0DPLTgVSo6LAOfjPdHFgL
+ qzOsdPjhv5BuMflVpvBr631QJSEmt6IrY4c= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 35bpp2rn0k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 10 Dec 2020 09:19:03 -0800
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Thu, 10 Dec 2020 09:19:02 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MVXOGhkn6KfUqL4+3TdplzfwSTDz+cVBPmgWZSpyceuorTPMkm1E9Z//pi3QsAwP71oVSRlvoOm6vdcbDZ2UkFlEvThaxibwXOYwQuy+G2/vQe6xbULc9wGJRIk/OTbZLcTIF0soILBlSleZESpUyNx4lP8bdWpBHLcPVe5LfvAKLnGOw24GEuX6MYrUgUCN5IBx9r5Ihils+hw6XBHcgALDytOSYBAVMqxm3i6DEbMUvsdBsTuNl35QIwi5lkgmLtWnSmxCBi7Q+dNIsR0F5DdgBdrGBq0/8nN1u5BvQ6qNiQYdvTwnt/51fFcY6gLXte5raOSPDFht6fByGAp8rw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YcBb4e47tlQlAcQnON2DrDPpPtwGFV2qECR8EAB516A=;
+ b=FWGpSmXCi7nJFQd6AST9B9ITsE0yZHGvJfYiTjopLXsA7/hOlZPT8bsD41aaCBPwbczAQBML6JezGFS8Y7V2qUvPApXjKMLEB3WieNJuPdq6TKcS3mfyO/o48/2DqwcqhUJ0CEulPl0gb4S3tk60ma6Q9bbehuO1zn07xUbe2z5/wC0kiPBkTBvM/utq74QUN57NQXc0dtwIc2F4Bh9dSS/9U6BdPNVAGz27XLvJxpqGbg8ZABellPQArJrs9+T0OKjF3XkH342DZ4Kf7cJftudcW9DDjYsD6wSQVn1yKdDMf9Gy112NL2vfL1Y1kR5HlPGYUX6dVqTn1Y7wUlTGgw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YcBb4e47tlQlAcQnON2DrDPpPtwGFV2qECR8EAB516A=;
+ b=jaEJbnJlXWHU0dY9D7S6a8yYzXTSqH2vKXm849hsupvmH2MWyVrCszgOIe9YB7j/G/Rjyms+WKJD4lOPgDam4mUCH3eLPphiQqAB/e65bTY5oQhbiYesdQsvfHRfExVBT0Zfxml0o2JwdEP7AEyd9J6lL3kIw1fB4HSSglFRkZI=
+Received: from BYAPR15MB2999.namprd15.prod.outlook.com (2603:10b6:a03:fa::12)
+ by BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.15; Thu, 10 Dec
+ 2020 17:19:01 +0000
+Received: from BYAPR15MB2999.namprd15.prod.outlook.com
+ ([fe80::f49e:bdbb:8cd7:bf6b]) by BYAPR15MB2999.namprd15.prod.outlook.com
+ ([fe80::f49e:bdbb:8cd7:bf6b%7]) with mapi id 15.20.3654.012; Thu, 10 Dec 2020
+ 17:19:01 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Yonghong Song <yhs@fb.com>
+CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: add a test for
+ ptr_to_map_value on stack for helper access
+Thread-Topic: [PATCH bpf-next v2 2/2] selftests/bpf: add a test for
+ ptr_to_map_value on stack for helper access
+Thread-Index: AQHWzpSGdh/+UA4GYkK3cNwMzjKt76nwk/AA
+Date:   Thu, 10 Dec 2020 17:19:00 +0000
+Message-ID: <430138FE-BA48-4EE2-9D83-79192FB1DAD3@fb.com>
+References: <20201210013348.943623-1-yhs@fb.com>
+ <20201210013350.943985-1-yhs@fb.com>
+In-Reply-To: <20201210013350.943985-1-yhs@fb.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3608.120.23.2.4)
+x-originating-ip: [2620:10d:c090:400::5:d023]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0fa0b52c-bff6-4c44-bb99-08d89d2fafbc
+x-ms-traffictypediagnostic: BYAPR15MB4088:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR15MB4088F9230396F69534D7A715B3CB0@BYAPR15MB4088.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Ul2UAEIwM3+Vea4bYTt5l9nI42gOOaHMPsTnpWJLjnjXcykAl+XZMJF09rCJX2EbXKzp82PP1jKrs/+oqEheDUq8XN3w6Vib8YRk6ofsWcyq1B/mPOp8mL3UbbAm+aSkJdILnFOo6069kzFkV+4PASl3xDb55eYRe6ixiOqlOO+e7fYcuAXG4jSR6Bj7vEn/9J5sQjsLHUcoNWAsDTDemXy40lqHVBA1WtchlBOsJCSckpUigxXvFAtpLTV2pYsa+ospzgg7cqLhL+iYrVHWgZw8ZIAXNWnn2i3ib2f2wY/sYnhNfsyJGPvbBqUZpw0GBrBffQIQtyHpd2OtbBP2yt6OR210DZ8P/eDnG9r9m565W/qaW+Bo1UGGXDQ6arsE
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB2999.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(376002)(136003)(366004)(8936002)(8676002)(76116006)(508600001)(6486002)(6512007)(2906002)(6862004)(53546011)(4326008)(6506007)(6636002)(54906003)(86362001)(83380400001)(71200400001)(37006003)(186003)(2616005)(66946007)(33656002)(5660300002)(36756003)(64756008)(66476007)(66446008)(66556008)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?6wY1nf2ZYLQ6M+6wryhglC2xhank49x18xVMpv1EMWOyC8pIgLZ6RugR3yVt?=
+ =?us-ascii?Q?aPkJ8/c1BWFQSeDhwd0k0PHRm4pc235mJlJjNV2tKJ3i6opd3k1zF07wF7ce?=
+ =?us-ascii?Q?i6lpGAg/HukYXT0xWtZD9D0sd3f30+2k7sY7RvWx8K24c885xdLbYGnB49ze?=
+ =?us-ascii?Q?F6V1DcaYd7r+4fmJ2jFoCy5XxdoyxLu7jJWfU9ggbDpjWUQ0m/FMvsGeWxnB?=
+ =?us-ascii?Q?9qMLM9TFOsbyYM18NnTKrNCzOKGo5jFLmeOz88Tz3RoANOrLuArqHhvHIPSe?=
+ =?us-ascii?Q?Z8VHl2FGHzgZ0YkyD+/8WR+NYzPLN7kq4qmkcrpeLU1CJStu/N3k0msVhxy3?=
+ =?us-ascii?Q?eqku+8LDfGb0BK0PykHRa57D9hXr2Xujscr3YRH7irFS4zJjqu+ZjhsEAp/a?=
+ =?us-ascii?Q?SqncIYdqJlPG4ZaCqAZPojgFVEZXQrvEezsSyms1STR48NV72AtKYaDRQPO/?=
+ =?us-ascii?Q?AJUK1U3GJwuhzVTL4D98GZXiPYkxZ8IbTNvQvzb9cKLE4etUQgsy05EUZpev?=
+ =?us-ascii?Q?AsB2bh+dAi7VtDBc8X2SMVZRA+k618vTk3qks4FIYycm2kWPUpJmDpTBqV8U?=
+ =?us-ascii?Q?qFkz0rYBaBmXVluUGpGb2V3KcDn4b5N2fxVKGl9XNhd/C4+rorpkiE2n+cfx?=
+ =?us-ascii?Q?hqDz0IgDgFxxqH0OPcrjiCarJBv98ZZXsy36RzrCidMi7hc0vOEqn9bg9DzH?=
+ =?us-ascii?Q?5y6tKwAoyHbKvv0YakAhUmTR4gWfc5AKmplrwPPyLLqgVIcut+77c6qOCSFD?=
+ =?us-ascii?Q?yOjAgAfWJmoVwvZErKAHXQLZkaD5Wok71w3OwMhT2PPN5l7Ef7q+78B9sKBe?=
+ =?us-ascii?Q?YWLWQ4N5Gk0K0EB1hnxil3ftOo+vflnrWOsVdD91iec1iBk/L3zDATEXKigF?=
+ =?us-ascii?Q?U/AaACqpThGv4hVEy4vD1/Kl4bkI9ov0JbqGaan+OzEBamVABlqCK4vCTzPu?=
+ =?us-ascii?Q?y6DO1+JoVlOiROpX2TrG7hDdpp68FXxEuF6FYIeOThbHZNSrxdJRwIUlZUQS?=
+ =?us-ascii?Q?p7jPQjz2A3pnjeBnCL0+Liu7cSAE+nJjgt3tAmRQ09Kt15o=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <07D065D527CB174D974F243B243E6054@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <CAEf4BzZWabv_hExaANQyQ71L2JHYqXaT4hFj52w-poWoVYWKqQ@mail.gmail.com>
- <20201210164315.GA184880@krava>
-In-Reply-To: <20201210164315.GA184880@krava>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 10 Dec 2020 09:02:05 -0800
-Message-ID: <CAEf4BzaBOoZsSK8yGZBhwFzAADkQKsGt1quV9RvFk_+WZr=Y=Q@mail.gmail.com>
-Subject: Re: Per-CPU variables in modules and pahole
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     bpf <bpf@vger.kernel.org>, dwarves@vger.kernel.org,
-        Jiri Olsa <jolsa@kernel.org>, Hao Luo <haoluo@google.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB2999.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0fa0b52c-bff6-4c44-bb99-08d89d2fafbc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Dec 2020 17:19:00.8731
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7NA4sTwlwkjCoLJuNJqmoU45827wqSJra0CswF9ZJ8VOTjn82BkJRi8X3/qbd1REh0K7zaMmeAT9XtVMTSi9Jg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB4088
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2020-12-10_06:2020-12-09,2020-12-10 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ priorityscore=1501 adultscore=0 malwarescore=0 impostorscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012100107
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 8:43 AM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Wed, Dec 09, 2020 at 12:53:44PM -0800, Andrii Nakryiko wrote:
-> > Hi,
-> >
-> > I'm working on supporting per-CPU symbols in BPF/libbpf, and the
-> > prerequisite for that is BTF data for .data..percpu data section and
-> > variables inside that.
-> >
-> > Turns out, pahole doesn't currently emit any BTF information for such
-> > variables in kernel modules. And the reason why is quite confusing and
-> > I can't figure it out myself, so was hoping someone else might be able
-> > to help.
-> >
-> > To repro, you can take latest bpf-next tree and add this to
-> > bpf_testmod/bpf_testmod.c inside selftests/bpf:
-> >
-> > $ git diff bpf_testmod/bpf_testmod.c
-> >       diff --git
-> > a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> > b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> > index 2df19d73ca49..b2086b798019 100644
-> > --- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> > +++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-> > @@ -3,6 +3,7 @@
-> >  #include <linux/error-injection.h>
-> >  #include <linux/init.h>
-> >  #include <linux/module.h>
-> > +#include <linux/percpu-defs.h>
-> >  #include <linux/sysfs.h>
-> >  #include <linux/tracepoint.h>
-> >  #include "bpf_testmod.h"
-> > @@ -10,6 +11,10 @@
-> >  #define CREATE_TRACE_POINTS
-> >  #include "bpf_testmod-events.h"
-> >
-> > +DEFINE_PER_CPU(int, bpf_testmod_ksym_dummy1) = -1;
-> > +DEFINE_PER_CPU(int, bpf_testmod_ksym_percpu) = 123;
-> > +DEFINE_PER_CPU(int, bpf_testmod_ksym_dummy2) = -1;
-> > +
-> >  noinline ssize_t
-> >  bpf_testmod_test_read(struct file *file, struct kobject *kobj,
-> >                       struct bin_attribute *bin_attr,
-> >
-> > 1. So the very first issue (that I'm going to ignore for now) is that
-> > if I just added bpf_testmod_ksym_percpu, it would get addr == 0 and
-> > would be ignored by the current pahole logic. So we need to fix that
-> > for modules. Adding dummy1 and dummy2 takes care of this for now,
-> > bpf_testmod_ksym_percpu has offset 4.
->
-> I removed that addr zero check in the modules changes but when
-> collecting functions, but it's still there in collect_percpu_var
-
-Hao had some reason to skip per-cpu variables with offset 0, maybe he
-can comment on that before we change it.
-
->
-> >
-> > 2. Second issue is more interesting. Somehow, when pahole iterates
-> > over DWARF variables, the address of bpf_testmod_ksym_percpu is
-> > reported as 0x10e74, not 4. Which totally confuses pahole because
-> > according to ELF symbols, bpf_testmod_ksym_percpu symbol has value 4.
-> > I tracked this down to dwarf_getlocation() returning 10e74 as number
-> > field in expr.
->
-> in which place do you see that address? when I put displayed
-> address from collect_percpu_var it shows 4
-
-yes, ELF symbol's value is 4, but when iterating DWARF variables
-(0x10e70 + 4) is returned. It does look like a special handling of
-modules. I missed that libdw does some special things for specifically
-modules. Further debugging yesterday showed that 0x10e70 roughly
-corresponds to the offset of .data..per_cpu if you count all the
-allocatable data sections that come before it. So I think you are
-right. We should probably centralize the logic of kernel module
-detection so that we can handle these module vs non-module differences
-properly.
-
->
-> not sure this is related but looks like similar issue I had to
-> solve for modules functions, as described in the changelog:
-> (not merged yet)
->
->     btf_encoder: Detect kernel module ftrace addresses
->
->     ...
->     There's one tricky point with kernel modules wrt Elf object,
->     which we get from dwfl_module_getelf function. This function
->     performs all possible relocations, including __mcount_loc
->     section.
->
->     So addrs array contains relocated values, which we need take
->     into account when we compare them to functions values which
->     are relative to their sections.
->     ...
->
-> The 0x10e74 value could be relocated 4.. but it's me guessing,
-> because not sure where you see that address exactly
 
 
-It comes up in cu__encode_btf(), var->ip.addr is not 4, as we expect it to be.
+> On Dec 9, 2020, at 5:33 PM, Yonghong Song <yhs@fb.com> wrote:
+>=20
+> Change bpf_iter_task.c such that pointer to map_value may appear
+> on the stack for bpf_seq_printf() to access. Without previous
+> verifier patch, the bpf_iter test will fail.
+>=20
+> Signed-off-by: Yonghong Song <yhs@fb.com>
 
->
-> jirka
->
+Acked-by: Song Liu <songliubraving@fb.com>
+
+> ---
+> tools/testing/selftests/bpf/progs/bpf_iter_task.c | 3 ++-
+> tools/testing/selftests/bpf/verifier/unpriv.c     | 5 +++--
+> 2 files changed, 5 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task.c b/tools/te=
+sting/selftests/bpf/progs/bpf_iter_task.c
+> index 4983087852a0..b7f32c160f4e 100644
+> --- a/tools/testing/selftests/bpf/progs/bpf_iter_task.c
+> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_task.c
+> @@ -11,9 +11,10 @@ int dump_task(struct bpf_iter__task *ctx)
+> {
+> 	struct seq_file *seq =3D ctx->meta->seq;
+> 	struct task_struct *task =3D ctx->task;
+> +	static char info[] =3D "    =3D=3D=3D END =3D=3D=3D";
+>=20
+> 	if (task =3D=3D (void *)0) {
+> -		BPF_SEQ_PRINTF(seq, "    =3D=3D=3D END =3D=3D=3D\n");
+> +		BPF_SEQ_PRINTF(seq, "%s\n", info);
+> 		return 0;
+> 	}
+>=20
+> diff --git a/tools/testing/selftests/bpf/verifier/unpriv.c b/tools/testin=
+g/selftests/bpf/verifier/unpriv.c
+> index 91bb77c24a2e..a3fe0fbaed41 100644
+> --- a/tools/testing/selftests/bpf/verifier/unpriv.c
+> +++ b/tools/testing/selftests/bpf/verifier/unpriv.c
+> @@ -108,8 +108,9 @@
+> 	BPF_EXIT_INSN(),
+> 	},
+> 	.fixup_map_hash_8b =3D { 3 },
+> -	.errstr =3D "invalid indirect read from stack off -8+0 size 8",
+> -	.result =3D REJECT,
+> +	.errstr_unpriv =3D "invalid indirect read from stack off -8+0 size 8",
+> +	.result_unpriv =3D REJECT,
+> +	.result =3D ACCEPT,
+> },
+> {
+> 	"unpriv: mangle pointer on stack 1",
+> --=20
+> 2.24.1
+>=20
+
