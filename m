@@ -2,703 +2,171 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E960C433FE
-	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 16:16:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E9863C0018C
+	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 16:18:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E60522311B
-	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 16:16:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A934F2311A
+	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 16:18:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387516AbgLJQOv (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Dec 2020 11:14:51 -0500
-Received: from mga18.intel.com ([134.134.136.126]:12726 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729864AbgLJQOr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Dec 2020 11:14:47 -0500
-IronPort-SDR: Cb0uysATxaJKYAzOz+bccX6Q+XhuF1E6N1FnyqR/0NMllIHXSOhN1ezeuIR+4o1PH3nvbgZo0Q
- qQYddpsxcXNA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="162040290"
-X-IronPort-AV: E=Sophos;i="5.78,408,1599548400"; 
-   d="scan'208";a="162040290"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2020 08:14:05 -0800
-IronPort-SDR: GWnBrMvPEulyUtaU1JBToe0TfXXU8IByYYaJOQT0U9pecojjuvtJVQTHMFhORUoEAXMs2AlHST
- Vu2s3w4f84kg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,408,1599548400"; 
-   d="scan'208";a="319660944"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Dec 2020 08:14:02 -0800
-Date:   Thu, 10 Dec 2020 17:05:07 +0100
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org, davem@davemloft.net,
-        kuba@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        brouer@redhat.com, lorenzo.bianconi@redhat.com,
-        alexander.duyck@gmail.com, saeed@kernel.org
-Subject: Re: [PATCH bpf-next] net: xdp: introduce xdp_init_buff utility
- routine
-Message-ID: <20201210160507.GC45760@ranger.igk.intel.com>
-References: <e54fb61ff17c21f022392f1bb46ec951c9b909cc.1607615094.git.lorenzo@kernel.org>
+        id S2388879AbgLJQRm (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Dec 2020 11:17:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:20487 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387589AbgLJQRd (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 10 Dec 2020 11:17:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1607616965;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tR+QcJGndhq60ixX8jaoR1LgoVq1+PJO8TnsgtbJBGk=;
+        b=WNd/FLKDeQHHPkdLvWqmePxslPfiG718Btv+edJHqObUUd8fW5gpWEe9eC1IZoUaMUsZca
+        vc/Rw2teoTesJc9TxaXh+cYmb1+NaucBLWP/JypQ2z5b9MSHlpo5gIgPzVUSwRsJ3DAEbx
+        7QUCFxh2mQxBNqFPlpekHruYS36UCsw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-288-khxxPngNPR2AJ0HtOJstQA-1; Thu, 10 Dec 2020 11:16:01 -0500
+X-MC-Unique: khxxPngNPR2AJ0HtOJstQA-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 397BC180A095;
+        Thu, 10 Dec 2020 16:15:59 +0000 (UTC)
+Received: from krava (unknown [10.40.192.193])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 1128F60862;
+        Thu, 10 Dec 2020 16:15:55 +0000 (UTC)
+Date:   Thu, 10 Dec 2020 17:15:54 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Brendan Jackman <jackmanb@google.com>,
+        KP Singh <kpsingh@google.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix selftest compilation on
+ clang 11
+Message-ID: <20201210161554.GF69683@krava>
+References: <20201209142912.99145-1-jolsa@kernel.org>
+ <CAEf4BzYBddPaEzRUs=jaWSo5kbf=LZdb7geAUVj85GxLQztuAQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e54fb61ff17c21f022392f1bb46ec951c9b909cc.1607615094.git.lorenzo@kernel.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <CAEf4BzYBddPaEzRUs=jaWSo5kbf=LZdb7geAUVj85GxLQztuAQ@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 04:50:42PM +0100, Lorenzo Bianconi wrote:
-> Introduce xdp_init_buff utility routine to initialize xdp_buff data
-> structure. Rely on xdp_init_buff in all XDP capable drivers.
+On Wed, Dec 09, 2020 at 12:24:23PM -0800, Andrii Nakryiko wrote:
+> On Wed, Dec 9, 2020 at 7:16 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > We can't compile test_core_reloc_module.c selftest with clang 11,
+> > compile fails with:
+> >
+> >   CLNG-LLC [test_maps] test_core_reloc_module.o
+> >   progs/test_core_reloc_module.c:57:21: error: use of unknown builtin \
+> >   '__builtin_preserve_type_info' [-Wimplicit-function-declaration]
+> >    out->read_ctx_sz = bpf_core_type_size(struct bpf_testmod_test_read_ctx);
+> >
+> > Skipping these tests if __builtin_preserve_type_info() is not
+> > supported by compiler.
+> >
+> > Fixes: 6bcd39d366b6 ("selftests/bpf: Add CO-RE relocs selftest relying on kernel module BTF")
+> > Fixes: bc9ed69c79ae ("selftests/bpf: Add tp_btf CO-RE reloc test for modules")
+> 
+> The test isn't really broken, so "Fixes: " tags seem wrong here.
+> 
+> Given core_relo tests have established `data.skip = true` mechanism,
+> I'm fine with this patch. But moving forward I think we should
+> minimize the amount of feature-detection and tests skipping in
+> selftests. The point of selftests is to test the functionality at the
+> intersection of 4 projects: kernel, libbpf, pahole and clang. We've
+> stated before and I think it remains true that the expectation for
+> anyone that wants to develop and run selftests is to track latests
+> versions of all 4 of those, sometimes meaning nightly builds or
+> building from sources. For clang, which is arguably the hardest of the
+> 4 to build from sources, LLVM project publishes nightly builds for
+> Ubuntu and Debian, which are very easy to use to get recent enough
+> versions for selftests. That's exactly what libbpf CI is doing, BTW.
+> 
+> It's hard and time-consuming enough to develop these features, I'd
+> rather keep selftests simpler, more manageable, and less brittle by
+> not having excessive amount of feature detection and skipped
+> selftests. I think that's the case for BPF atomics as well, btw (cc'ed
+> Yonghong and Brendan).
+> 
+> To alleviate some of the pain of setting up the environment, one way
+> would be to provide script and/or image to help bring up qemu VM for
+> easier testing. To that end, KP Singh (cc'ed) was able to re-use
+> libbpf CI's VM setup and make it easier for local development. I hope
+> he can share this soon.
 
-Hm, Jesper was suggesting two helpers, one that you implemented for things
-that are set once per NAPI and the other that is set per each buffer.
+ok, that'd be great, thanks for taking this one
 
-Not sure about the naming for a second one - xdp_prepare_buff ?
-xdp_init_buff that you have feels ok.
+jirka
 
 > 
-> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> ---
->  drivers/net/ethernet/amazon/ena/ena_netdev.c        | 3 +--
->  drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c       | 3 +--
->  drivers/net/ethernet/cavium/thunder/nicvf_main.c    | 4 ++--
->  drivers/net/ethernet/freescale/dpaa/dpaa_eth.c      | 4 ++--
->  drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c    | 8 ++++----
->  drivers/net/ethernet/intel/i40e/i40e_txrx.c         | 6 +++---
->  drivers/net/ethernet/intel/ice/ice_txrx.c           | 6 +++---
->  drivers/net/ethernet/intel/igb/igb_main.c           | 6 +++---
->  drivers/net/ethernet/intel/ixgbe/ixgbe_main.c       | 7 +++----
->  drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c   | 7 +++----
->  drivers/net/ethernet/marvell/mvneta.c               | 3 +--
->  drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c     | 8 +++++---
->  drivers/net/ethernet/mellanox/mlx4/en_rx.c          | 3 +--
->  drivers/net/ethernet/mellanox/mlx5/core/en_rx.c     | 3 +--
->  drivers/net/ethernet/netronome/nfp/nfp_net_common.c | 4 ++--
->  drivers/net/ethernet/qlogic/qede/qede_fp.c          | 3 +--
->  drivers/net/ethernet/sfc/rx.c                       | 3 +--
->  drivers/net/ethernet/socionext/netsec.c             | 3 +--
->  drivers/net/ethernet/ti/cpsw.c                      | 4 ++--
->  drivers/net/ethernet/ti/cpsw_new.c                  | 4 ++--
->  drivers/net/hyperv/netvsc_bpf.c                     | 3 +--
->  drivers/net/tun.c                                   | 7 +++----
->  drivers/net/veth.c                                  | 8 ++++----
->  drivers/net/virtio_net.c                            | 6 ++----
->  drivers/net/xen-netfront.c                          | 4 ++--
->  include/net/xdp.h                                   | 7 +++++++
->  net/bpf/test_run.c                                  | 4 ++--
->  net/core/dev.c                                      | 8 ++++----
->  28 files changed, 67 insertions(+), 72 deletions(-)
+> So given minimal additions code-wise, but also considering all the above:
 > 
-> diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-> index 0e98f45c2b22..338dce73927e 100644
-> --- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
-> +++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-> @@ -1567,8 +1567,7 @@ static int ena_clean_rx_irq(struct ena_ring *rx_ring, struct napi_struct *napi,
->  	netif_dbg(rx_ring->adapter, rx_status, rx_ring->netdev,
->  		  "%s qid %d\n", __func__, rx_ring->qid);
->  	res_budget = budget;
-> -	xdp.rxq = &rx_ring->xdp_rxq;
-> -	xdp.frame_sz = ENA_PAGE_SIZE;
-> +	xdp_init_buff(&xdp, ENA_PAGE_SIZE, &rx_ring->xdp_rxq);
->  
->  	do {
->  		xdp_verdict = XDP_PASS;
-> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-> index fcc262064766..b7942c3440c0 100644
-> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-> @@ -133,12 +133,11 @@ bool bnxt_rx_xdp(struct bnxt *bp, struct bnxt_rx_ring_info *rxr, u16 cons,
->  	dma_sync_single_for_cpu(&pdev->dev, mapping + offset, *len, bp->rx_dir);
->  
->  	txr = rxr->bnapi->tx_ring;
-> +	xdp_init_buff(&xdp, PAGE_SIZE, &rxr->xdp_rxq);
->  	xdp.data_hard_start = *data_ptr - offset;
->  	xdp.data = *data_ptr;
->  	xdp_set_data_meta_invalid(&xdp);
->  	xdp.data_end = *data_ptr + *len;
-> -	xdp.rxq = &rxr->xdp_rxq;
-> -	xdp.frame_sz = PAGE_SIZE; /* BNXT_RX_PAGE_MODE(bp) when XDP enabled */
->  	orig_data = xdp.data;
->  
->  	rcu_read_lock();
-> diff --git a/drivers/net/ethernet/cavium/thunder/nicvf_main.c b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-> index f3b7b443f964..9fc672f075f2 100644
-> --- a/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-> +++ b/drivers/net/ethernet/cavium/thunder/nicvf_main.c
-> @@ -547,12 +547,12 @@ static inline bool nicvf_xdp_rx(struct nicvf *nic, struct bpf_prog *prog,
->  	cpu_addr = (u64)phys_to_virt(cpu_addr);
->  	page = virt_to_page((void *)cpu_addr);
->  
-> +	xdp_init_buff(&xdp, RCV_FRAG_LEN + XDP_PACKET_HEADROOM,
-> +		      &rq->xdp_rxq);
->  	xdp.data_hard_start = page_address(page);
->  	xdp.data = (void *)cpu_addr;
->  	xdp_set_data_meta_invalid(&xdp);
->  	xdp.data_end = xdp.data + len;
-> -	xdp.rxq = &rq->xdp_rxq;
-> -	xdp.frame_sz = RCV_FRAG_LEN + XDP_PACKET_HEADROOM;
->  	orig_data = xdp.data;
->  
->  	rcu_read_lock();
-> diff --git a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-> index e28510c282e5..93030000e0aa 100644
-> --- a/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-> +++ b/drivers/net/ethernet/freescale/dpaa/dpaa_eth.c
-> @@ -2536,12 +2536,12 @@ static u32 dpaa_run_xdp(struct dpaa_priv *priv, struct qm_fd *fd, void *vaddr,
->  		return XDP_PASS;
->  	}
->  
-> +	xdp_init_buff(&xdp, DPAA_BP_RAW_SIZE - DPAA_TX_PRIV_DATA_SIZE,
-> +		      &dpaa_fq->xdp_rxq);
->  	xdp.data = vaddr + fd_off;
->  	xdp.data_meta = xdp.data;
->  	xdp.data_hard_start = xdp.data - XDP_PACKET_HEADROOM;
->  	xdp.data_end = xdp.data + qm_fd_get_length(fd);
-> -	xdp.frame_sz = DPAA_BP_RAW_SIZE - DPAA_TX_PRIV_DATA_SIZE;
-> -	xdp.rxq = &dpaa_fq->xdp_rxq;
->  
->  	/* We reserve a fixed headroom of 256 bytes under the erratum and we
->  	 * offer it all to XDP programs to use. If no room is left for the
-> diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-> index 91cff93dbdae..a4ade0b5adb0 100644
-> --- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-> +++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-> @@ -358,14 +358,14 @@ static u32 dpaa2_eth_run_xdp(struct dpaa2_eth_priv *priv,
->  	if (!xdp_prog)
->  		goto out;
->  
-> +	xdp_init_buff(&xdp,
-> +		      DPAA2_ETH_RX_BUF_RAW_SIZE -
-> +		      (dpaa2_fd_get_offset(fd) - XDP_PACKET_HEADROOM),
-> +		      &ch->xdp_rxq);
->  	xdp.data = vaddr + dpaa2_fd_get_offset(fd);
->  	xdp.data_end = xdp.data + dpaa2_fd_get_len(fd);
->  	xdp.data_hard_start = xdp.data - XDP_PACKET_HEADROOM;
->  	xdp_set_data_meta_invalid(&xdp);
-> -	xdp.rxq = &ch->xdp_rxq;
-> -
-> -	xdp.frame_sz = DPAA2_ETH_RX_BUF_RAW_SIZE -
-> -		(dpaa2_fd_get_offset(fd) - XDP_PACKET_HEADROOM);
->  
->  	xdp_act = bpf_prog_run_xdp(xdp_prog, &xdp);
->  
-> diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-> index 9f73cd7aee09..4dbbbd49c389 100644
-> --- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-> +++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-> @@ -2332,7 +2332,7 @@ static void i40e_inc_ntc(struct i40e_ring *rx_ring)
->   **/
->  static int i40e_clean_rx_irq(struct i40e_ring *rx_ring, int budget)
->  {
-> -	unsigned int total_rx_bytes = 0, total_rx_packets = 0;
-> +	unsigned int total_rx_bytes = 0, total_rx_packets = 0, frame_sz = 0;
->  	struct sk_buff *skb = rx_ring->skb;
->  	u16 cleaned_count = I40E_DESC_UNUSED(rx_ring);
->  	unsigned int xdp_xmit = 0;
-> @@ -2340,9 +2340,9 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_ring, int budget)
->  	struct xdp_buff xdp;
->  
->  #if (PAGE_SIZE < 8192)
-> -	xdp.frame_sz = i40e_rx_frame_truesize(rx_ring, 0);
-> +	frame_sz = i40e_rx_frame_truesize(rx_ring, 0);
->  #endif
-> -	xdp.rxq = &rx_ring->xdp_rxq;
-> +	xdp_init_buff(&xdp, frame_sz, &rx_ring->xdp_rxq);
->  
->  	while (likely(total_rx_packets < (unsigned int)budget)) {
->  		struct i40e_rx_buffer *rx_buffer;
-> diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
-> index 77d5eae6b4c2..d52d98d56367 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_txrx.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
-> @@ -1077,18 +1077,18 @@ ice_is_non_eop(struct ice_ring *rx_ring, union ice_32b_rx_flex_desc *rx_desc,
->   */
->  int ice_clean_rx_irq(struct ice_ring *rx_ring, int budget)
->  {
-> -	unsigned int total_rx_bytes = 0, total_rx_pkts = 0;
-> +	unsigned int total_rx_bytes = 0, total_rx_pkts = 0, frame_sz = 0;
->  	u16 cleaned_count = ICE_DESC_UNUSED(rx_ring);
->  	unsigned int xdp_res, xdp_xmit = 0;
->  	struct bpf_prog *xdp_prog = NULL;
->  	struct xdp_buff xdp;
->  	bool failure;
->  
-> -	xdp.rxq = &rx_ring->xdp_rxq;
->  	/* Frame size depend on rx_ring setup when PAGE_SIZE=4K */
->  #if (PAGE_SIZE < 8192)
-> -	xdp.frame_sz = ice_rx_frame_truesize(rx_ring, 0);
-> +	frame_sz = ice_rx_frame_truesize(rx_ring, 0);
->  #endif
-> +	xdp_init_buff(&xdp, frame_sz, &rx_ring->xdp_rxq);
->  
->  	/* start the loop to process Rx packets bounded by 'budget' */
->  	while (likely(total_rx_pkts < (unsigned int)budget)) {
-> diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
-> index 6a4ef4934fcf..365dfc0e3b65 100644
-> --- a/drivers/net/ethernet/intel/igb/igb_main.c
-> +++ b/drivers/net/ethernet/intel/igb/igb_main.c
-> @@ -8666,13 +8666,13 @@ static int igb_clean_rx_irq(struct igb_q_vector *q_vector, const int budget)
->  	u16 cleaned_count = igb_desc_unused(rx_ring);
->  	unsigned int xdp_xmit = 0;
->  	struct xdp_buff xdp;
-> -
-> -	xdp.rxq = &rx_ring->xdp_rxq;
-> +	u32 frame_sz = 0;
->  
->  	/* Frame size depend on rx_ring setup when PAGE_SIZE=4K */
->  #if (PAGE_SIZE < 8192)
-> -	xdp.frame_sz = igb_rx_frame_truesize(rx_ring, 0);
-> +	frame_sz = igb_rx_frame_truesize(rx_ring, 0);
->  #endif
-> +	xdp_init_buff(&xdp, frame_sz, &rx_ring->xdp_rxq);
->  
->  	while (likely(total_packets < budget)) {
->  		union e1000_adv_rx_desc *rx_desc;
-> diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> index 50e6b8b6ba7b..dcd49cfa36f7 100644
-> --- a/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> +++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-> @@ -2282,7 +2282,7 @@ static int ixgbe_clean_rx_irq(struct ixgbe_q_vector *q_vector,
->  			       struct ixgbe_ring *rx_ring,
->  			       const int budget)
->  {
-> -	unsigned int total_rx_bytes = 0, total_rx_packets = 0;
-> +	unsigned int total_rx_bytes = 0, total_rx_packets = 0, frame_sz = 0;
->  	struct ixgbe_adapter *adapter = q_vector->adapter;
->  #ifdef IXGBE_FCOE
->  	int ddp_bytes;
-> @@ -2292,12 +2292,11 @@ static int ixgbe_clean_rx_irq(struct ixgbe_q_vector *q_vector,
->  	unsigned int xdp_xmit = 0;
->  	struct xdp_buff xdp;
->  
-> -	xdp.rxq = &rx_ring->xdp_rxq;
-> -
->  	/* Frame size depend on rx_ring setup when PAGE_SIZE=4K */
->  #if (PAGE_SIZE < 8192)
-> -	xdp.frame_sz = ixgbe_rx_frame_truesize(rx_ring, 0);
-> +	frame_sz = ixgbe_rx_frame_truesize(rx_ring, 0);
->  #endif
-> +	xdp_init_buff(&xdp, frame_sz, &rx_ring->xdp_rxq);
->  
->  	while (likely(total_rx_packets < budget)) {
->  		union ixgbe_adv_rx_desc *rx_desc;
-> diff --git a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-> index 4061cd7db5dd..624efcd71569 100644
-> --- a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-> +++ b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-> @@ -1121,19 +1121,18 @@ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
->  				struct ixgbevf_ring *rx_ring,
->  				int budget)
->  {
-> -	unsigned int total_rx_bytes = 0, total_rx_packets = 0;
-> +	unsigned int total_rx_bytes = 0, total_rx_packets = 0, frame_sz = 0;
->  	struct ixgbevf_adapter *adapter = q_vector->adapter;
->  	u16 cleaned_count = ixgbevf_desc_unused(rx_ring);
->  	struct sk_buff *skb = rx_ring->skb;
->  	bool xdp_xmit = false;
->  	struct xdp_buff xdp;
->  
-> -	xdp.rxq = &rx_ring->xdp_rxq;
-> -
->  	/* Frame size depend on rx_ring setup when PAGE_SIZE=4K */
->  #if (PAGE_SIZE < 8192)
-> -	xdp.frame_sz = ixgbevf_rx_frame_truesize(rx_ring, 0);
-> +	frame_sz = ixgbevf_rx_frame_truesize(rx_ring, 0);
->  #endif
-> +	xdp_init_buff(&xdp, frame_sz, &rx_ring->xdp_rxq);
->  
->  	while (likely(total_rx_packets < budget)) {
->  		struct ixgbevf_rx_buffer *rx_buffer;
-> diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-> index 563ceac3060f..acbb9cb85ada 100644
-> --- a/drivers/net/ethernet/marvell/mvneta.c
-> +++ b/drivers/net/ethernet/marvell/mvneta.c
-> @@ -2363,9 +2363,8 @@ static int mvneta_rx_swbm(struct napi_struct *napi,
->  	u32 desc_status, frame_sz;
->  	struct xdp_buff xdp_buf;
->  
-> +	xdp_init_buff(&xdp_buf, PAGE_SIZE, &rxq->xdp_rxq);
->  	xdp_buf.data_hard_start = NULL;
-> -	xdp_buf.frame_sz = PAGE_SIZE;
-> -	xdp_buf.rxq = &rxq->xdp_rxq;
->  
->  	sinfo.nr_frags = 0;
->  
-> diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-> index afdd22827223..ca05dfc05058 100644
-> --- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-> +++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
-> @@ -3562,16 +3562,18 @@ static int mvpp2_rx(struct mvpp2_port *port, struct napi_struct *napi,
->  			frag_size = bm_pool->frag_size;
->  
->  		if (xdp_prog) {
-> +			struct xdp_rxq_info *xdp_rxq;
-> +
->  			xdp.data_hard_start = data;
->  			xdp.data = data + MVPP2_MH_SIZE + MVPP2_SKB_HEADROOM;
->  			xdp.data_end = xdp.data + rx_bytes;
-> -			xdp.frame_sz = PAGE_SIZE;
->  
->  			if (bm_pool->pkt_size == MVPP2_BM_SHORT_PKT_SIZE)
-> -				xdp.rxq = &rxq->xdp_rxq_short;
-> +				xdp_rxq = &rxq->xdp_rxq_short;
->  			else
-> -				xdp.rxq = &rxq->xdp_rxq_long;
-> +				xdp_rxq = &rxq->xdp_rxq_long;
->  
-> +			xdp_init_buff(&xdp, PAGE_SIZE, xdp_rxq);
->  			xdp_set_data_meta_invalid(&xdp);
->  
->  			ret = mvpp2_run_xdp(port, rxq, xdp_prog, &xdp, pp, &ps);
-> diff --git a/drivers/net/ethernet/mellanox/mlx4/en_rx.c b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-> index 7954c1daf2b6..815381b484ca 100644
-> --- a/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-> +++ b/drivers/net/ethernet/mellanox/mlx4/en_rx.c
-> @@ -682,8 +682,7 @@ int mlx4_en_process_rx_cq(struct net_device *dev, struct mlx4_en_cq *cq, int bud
->  	/* Protect accesses to: ring->xdp_prog, priv->mac_hash list */
->  	rcu_read_lock();
->  	xdp_prog = rcu_dereference(ring->xdp_prog);
-> -	xdp.rxq = &ring->xdp_rxq;
-> -	xdp.frame_sz = priv->frag_info[0].frag_stride;
-> +	xdp_init_buff(&xdp, priv->frag_info[0].frag_stride, &ring->xdp_rxq);
->  	doorbell_pending = false;
->  
->  	/* We assume a 1:1 mapping between CQEs and Rx descriptors, so Rx
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-> index 6628a0197b4e..c68628b1f30b 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
-> @@ -1127,12 +1127,11 @@ struct sk_buff *mlx5e_build_linear_skb(struct mlx5e_rq *rq, void *va,
->  static void mlx5e_fill_xdp_buff(struct mlx5e_rq *rq, void *va, u16 headroom,
->  				u32 len, struct xdp_buff *xdp)
->  {
-> +	xdp_init_buff(xdp, rq->buff.frame0_sz, &rq->xdp_rxq);
->  	xdp->data_hard_start = va;
->  	xdp->data = va + headroom;
->  	xdp_set_data_meta_invalid(xdp);
->  	xdp->data_end = xdp->data + len;
-> -	xdp->rxq = &rq->xdp_rxq;
-> -	xdp->frame_sz = rq->buff.frame0_sz;
->  }
->  
->  static struct sk_buff *
-> diff --git a/drivers/net/ethernet/netronome/nfp/nfp_net_common.c b/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-> index b4acf2f41e84..68e03e8257f2 100644
-> --- a/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-> +++ b/drivers/net/ethernet/netronome/nfp/nfp_net_common.c
-> @@ -1822,8 +1822,8 @@ static int nfp_net_rx(struct nfp_net_rx_ring *rx_ring, int budget)
->  	rcu_read_lock();
->  	xdp_prog = READ_ONCE(dp->xdp_prog);
->  	true_bufsz = xdp_prog ? PAGE_SIZE : dp->fl_bufsz;
-> -	xdp.frame_sz = PAGE_SIZE - NFP_NET_RX_BUF_HEADROOM;
-> -	xdp.rxq = &rx_ring->xdp_rxq;
-> +	xdp_init_buff(&xdp, PAGE_SIZE - NFP_NET_RX_BUF_HEADROOM,
-> +		      &rx_ring->xdp_rxq);
->  	tx_ring = r_vec->xdp_ring;
->  
->  	while (pkts_polled < budget) {
-> diff --git a/drivers/net/ethernet/qlogic/qede/qede_fp.c b/drivers/net/ethernet/qlogic/qede/qede_fp.c
-> index a2494bf85007..d40220043883 100644
-> --- a/drivers/net/ethernet/qlogic/qede/qede_fp.c
-> +++ b/drivers/net/ethernet/qlogic/qede/qede_fp.c
-> @@ -1090,12 +1090,11 @@ static bool qede_rx_xdp(struct qede_dev *edev,
->  	struct xdp_buff xdp;
->  	enum xdp_action act;
->  
-> +	xdp_init_buff(&xdp, rxq->rx_buf_seg_size, &rxq->xdp_rxq);
->  	xdp.data_hard_start = page_address(bd->data);
->  	xdp.data = xdp.data_hard_start + *data_offset;
->  	xdp_set_data_meta_invalid(&xdp);
->  	xdp.data_end = xdp.data + *len;
-> -	xdp.rxq = &rxq->xdp_rxq;
-> -	xdp.frame_sz = rxq->rx_buf_seg_size; /* PAGE_SIZE when XDP enabled */
->  
->  	/* Queues always have a full reset currently, so for the time
->  	 * being until there's atomic program replace just mark read
-> diff --git a/drivers/net/ethernet/sfc/rx.c b/drivers/net/ethernet/sfc/rx.c
-> index aaa112877561..eaa6650955d1 100644
-> --- a/drivers/net/ethernet/sfc/rx.c
-> +++ b/drivers/net/ethernet/sfc/rx.c
-> @@ -293,14 +293,13 @@ static bool efx_do_xdp(struct efx_nic *efx, struct efx_channel *channel,
->  	memcpy(rx_prefix, *ehp - efx->rx_prefix_size,
->  	       efx->rx_prefix_size);
->  
-> +	xdp_init_buff(&xdp, efx->rx_page_buf_step, &rx_queue->xdp_rxq_info);
->  	xdp.data = *ehp;
->  	xdp.data_hard_start = xdp.data - EFX_XDP_HEADROOM;
->  
->  	/* No support yet for XDP metadata */
->  	xdp_set_data_meta_invalid(&xdp);
->  	xdp.data_end = xdp.data + rx_buf->len;
-> -	xdp.rxq = &rx_queue->xdp_rxq_info;
-> -	xdp.frame_sz = efx->rx_page_buf_step;
->  
->  	xdp_act = bpf_prog_run_xdp(xdp_prog, &xdp);
->  	rcu_read_unlock();
-> diff --git a/drivers/net/ethernet/socionext/netsec.c b/drivers/net/ethernet/socionext/netsec.c
-> index 19d20a6d0d44..945ca9517bf9 100644
-> --- a/drivers/net/ethernet/socionext/netsec.c
-> +++ b/drivers/net/ethernet/socionext/netsec.c
-> @@ -956,8 +956,7 @@ static int netsec_process_rx(struct netsec_priv *priv, int budget)
->  	u32 xdp_act = 0;
->  	int done = 0;
->  
-> -	xdp.rxq = &dring->xdp_rxq;
-> -	xdp.frame_sz = PAGE_SIZE;
-> +	xdp_init_buff(&xdp, PAGE_SIZE, &dring->xdp_rxq);
->  
->  	rcu_read_lock();
->  	xdp_prog = READ_ONCE(priv->xdp_prog);
-> diff --git a/drivers/net/ethernet/ti/cpsw.c b/drivers/net/ethernet/ti/cpsw.c
-> index b0f00b4edd94..78a923391828 100644
-> --- a/drivers/net/ethernet/ti/cpsw.c
-> +++ b/drivers/net/ethernet/ti/cpsw.c
-> @@ -392,6 +392,8 @@ static void cpsw_rx_handler(void *token, int len, int status)
->  	}
->  
->  	if (priv->xdp_prog) {
-> +		xdp_init_buff(&xdp, PAGE_SIZE, &priv->xdp_rxq[ch]);
-> +
->  		if (status & CPDMA_RX_VLAN_ENCAP) {
->  			xdp.data = pa + CPSW_HEADROOM +
->  				   CPSW_RX_VLAN_ENCAP_HDR_SIZE;
-> @@ -405,8 +407,6 @@ static void cpsw_rx_handler(void *token, int len, int status)
->  		xdp_set_data_meta_invalid(&xdp);
->  
->  		xdp.data_hard_start = pa;
-> -		xdp.rxq = &priv->xdp_rxq[ch];
-> -		xdp.frame_sz = PAGE_SIZE;
->  
->  		port = priv->emac_port + cpsw->data.dual_emac;
->  		ret = cpsw_run_xdp(priv, ch, &xdp, page, port);
-> diff --git a/drivers/net/ethernet/ti/cpsw_new.c b/drivers/net/ethernet/ti/cpsw_new.c
-> index 2f5e0ad23ad7..1b3385ec9645 100644
-> --- a/drivers/net/ethernet/ti/cpsw_new.c
-> +++ b/drivers/net/ethernet/ti/cpsw_new.c
-> @@ -335,6 +335,8 @@ static void cpsw_rx_handler(void *token, int len, int status)
->  	}
->  
->  	if (priv->xdp_prog) {
-> +		xdp_init_buff(&xdp, PAGE_SIZE, &priv->xdp_rxq[ch]);
-> +
->  		if (status & CPDMA_RX_VLAN_ENCAP) {
->  			xdp.data = pa + CPSW_HEADROOM +
->  				   CPSW_RX_VLAN_ENCAP_HDR_SIZE;
-> @@ -348,8 +350,6 @@ static void cpsw_rx_handler(void *token, int len, int status)
->  		xdp_set_data_meta_invalid(&xdp);
->  
->  		xdp.data_hard_start = pa;
-> -		xdp.rxq = &priv->xdp_rxq[ch];
-> -		xdp.frame_sz = PAGE_SIZE;
->  
->  		ret = cpsw_run_xdp(priv, ch, &xdp, page, priv->emac_port);
->  		if (ret != CPSW_XDP_PASS)
-> diff --git a/drivers/net/hyperv/netvsc_bpf.c b/drivers/net/hyperv/netvsc_bpf.c
-> index 440486d9c999..14a7ee4c6899 100644
-> --- a/drivers/net/hyperv/netvsc_bpf.c
-> +++ b/drivers/net/hyperv/netvsc_bpf.c
-> @@ -44,12 +44,11 @@ u32 netvsc_run_xdp(struct net_device *ndev, struct netvsc_channel *nvchan,
->  		goto out;
->  	}
->  
-> +	xdp_init_buff(xdp, PAGE_SIZE, &nvchan->xdp_rxq);
->  	xdp->data_hard_start = page_address(page);
->  	xdp->data = xdp->data_hard_start + NETVSC_XDP_HDRM;
->  	xdp_set_data_meta_invalid(xdp);
->  	xdp->data_end = xdp->data + len;
-> -	xdp->rxq = &nvchan->xdp_rxq;
-> -	xdp->frame_sz = PAGE_SIZE;
->  
->  	memcpy(xdp->data, data, len);
->  
-> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> index fbed05ae7b0f..a82f7823d428 100644
-> --- a/drivers/net/tun.c
-> +++ b/drivers/net/tun.c
-> @@ -1599,12 +1599,11 @@ static struct sk_buff *tun_build_skb(struct tun_struct *tun,
->  		struct xdp_buff xdp;
->  		u32 act;
->  
-> +		xdp_init_buff(&xdp, buflen, &tfile->xdp_rxq);
->  		xdp.data_hard_start = buf;
->  		xdp.data = buf + pad;
->  		xdp_set_data_meta_invalid(&xdp);
->  		xdp.data_end = xdp.data + len;
-> -		xdp.rxq = &tfile->xdp_rxq;
-> -		xdp.frame_sz = buflen;
->  
->  		act = bpf_prog_run_xdp(xdp_prog, &xdp);
->  		if (act == XDP_REDIRECT || act == XDP_TX) {
-> @@ -2344,9 +2343,9 @@ static int tun_xdp_one(struct tun_struct *tun,
->  			skb_xdp = true;
->  			goto build;
->  		}
-> +
-> +		xdp_init_buff(xdp, buflen, &tfile->xdp_rxq);
->  		xdp_set_data_meta_invalid(xdp);
-> -		xdp->rxq = &tfile->xdp_rxq;
-> -		xdp->frame_sz = buflen;
->  
->  		act = bpf_prog_run_xdp(xdp_prog, xdp);
->  		err = tun_xdp_act(tun, xdp_prog, xdp, act);
-> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-> index 02bfcdf50a7a..25f3601fb6dd 100644
-> --- a/drivers/net/veth.c
-> +++ b/drivers/net/veth.c
-> @@ -654,7 +654,7 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
->  					struct veth_xdp_tx_bq *bq,
->  					struct veth_stats *stats)
->  {
-> -	u32 pktlen, headroom, act, metalen;
-> +	u32 pktlen, headroom, act, metalen, frame_sz;
->  	void *orig_data, *orig_data_end;
->  	struct bpf_prog *xdp_prog;
->  	int mac_len, delta, off;
-> @@ -714,11 +714,11 @@ static struct sk_buff *veth_xdp_rcv_skb(struct veth_rq *rq,
->  	xdp.data = skb_mac_header(skb);
->  	xdp.data_end = xdp.data + pktlen;
->  	xdp.data_meta = xdp.data;
-> -	xdp.rxq = &rq->xdp_rxq;
->  
->  	/* SKB "head" area always have tailroom for skb_shared_info */
-> -	xdp.frame_sz = (void *)skb_end_pointer(skb) - xdp.data_hard_start;
-> -	xdp.frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-> +	frame_sz = (void *)skb_end_pointer(skb) - xdp.data_hard_start;
-> +	frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-> +	xdp_init_buff(&xdp, frame_sz, &rq->xdp_rxq);
->  
->  	orig_data = xdp.data;
->  	orig_data_end = xdp.data_end;
-> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> index 052975ea0af4..a22ce87bcd9c 100644
-> --- a/drivers/net/virtio_net.c
-> +++ b/drivers/net/virtio_net.c
-> @@ -689,12 +689,11 @@ static struct sk_buff *receive_small(struct net_device *dev,
->  			page = xdp_page;
->  		}
->  
-> +		xdp_init_buff(&xdp, buflen, &rq->xdp_rxq);
->  		xdp.data_hard_start = buf + VIRTNET_RX_PAD + vi->hdr_len;
->  		xdp.data = xdp.data_hard_start + xdp_headroom;
->  		xdp.data_end = xdp.data + len;
->  		xdp.data_meta = xdp.data;
-> -		xdp.rxq = &rq->xdp_rxq;
-> -		xdp.frame_sz = buflen;
->  		orig_data = xdp.data;
->  		act = bpf_prog_run_xdp(xdp_prog, &xdp);
->  		stats->xdp_packets++;
-> @@ -859,12 +858,11 @@ static struct sk_buff *receive_mergeable(struct net_device *dev,
->  		 * the descriptor on if we get an XDP_TX return code.
->  		 */
->  		data = page_address(xdp_page) + offset;
-> +		xdp_init_buff(&xdp, frame_sz - vi->hdr_len, &rq->xdp_rxq);
->  		xdp.data_hard_start = data - VIRTIO_XDP_HEADROOM + vi->hdr_len;
->  		xdp.data = data + vi->hdr_len;
->  		xdp.data_end = xdp.data + (len - vi->hdr_len);
->  		xdp.data_meta = xdp.data;
-> -		xdp.rxq = &rq->xdp_rxq;
-> -		xdp.frame_sz = frame_sz - vi->hdr_len;
->  
->  		act = bpf_prog_run_xdp(xdp_prog, &xdp);
->  		stats->xdp_packets++;
-> diff --git a/drivers/net/xen-netfront.c b/drivers/net/xen-netfront.c
-> index b01848ef4649..329397c60d84 100644
-> --- a/drivers/net/xen-netfront.c
-> +++ b/drivers/net/xen-netfront.c
-> @@ -864,12 +864,12 @@ static u32 xennet_run_xdp(struct netfront_queue *queue, struct page *pdata,
->  	u32 act;
->  	int err;
->  
-> +	xdp_init_buff(xdp, XEN_PAGE_SIZE - XDP_PACKET_HEADROOM,
-> +		      &queue->xdp_rxq);
->  	xdp->data_hard_start = page_address(pdata);
->  	xdp->data = xdp->data_hard_start + XDP_PACKET_HEADROOM;
->  	xdp_set_data_meta_invalid(xdp);
->  	xdp->data_end = xdp->data + len;
-> -	xdp->rxq = &queue->xdp_rxq;
-> -	xdp->frame_sz = XEN_PAGE_SIZE - XDP_PACKET_HEADROOM;
->  
->  	act = bpf_prog_run_xdp(prog, xdp);
->  	switch (act) {
-> diff --git a/include/net/xdp.h b/include/net/xdp.h
-> index 700ad5db7f5d..3fb3a9aa1b71 100644
-> --- a/include/net/xdp.h
-> +++ b/include/net/xdp.h
-> @@ -76,6 +76,13 @@ struct xdp_buff {
->  	u32 frame_sz; /* frame size to deduce data_hard_end/reserved tailroom*/
->  };
->  
-> +static inline void
-> +xdp_init_buff(struct xdp_buff *xdp, u32 frame_sz, struct xdp_rxq_info *rxq)
-> +{
-> +	xdp->frame_sz = frame_sz;
-> +	xdp->rxq = rxq;
-> +}
-> +
->  /* Reserve memory area at end-of data area.
->   *
->   * This macro reserves tailroom in the XDP buffer by limiting the
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index c1c30a9f76f3..a8fa5a9e4137 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -640,10 +640,10 @@ int bpf_prog_test_run_xdp(struct bpf_prog *prog, const union bpf_attr *kattr,
->  	xdp.data = data + headroom;
->  	xdp.data_meta = xdp.data;
->  	xdp.data_end = xdp.data + size;
-> -	xdp.frame_sz = headroom + max_data_sz + tailroom;
->  
->  	rxqueue = __netif_get_rx_queue(current->nsproxy->net_ns->loopback_dev, 0);
-> -	xdp.rxq = &rxqueue->xdp_rxq;
-> +	xdp_init_buff(&xdp, headroom + max_data_sz + tailroom,
-> +		      &rxqueue->xdp_rxq);
->  	bpf_prog_change_xdp(NULL, prog);
->  	ret = bpf_test_run(prog, &xdp, repeat, &retval, &duration, true);
->  	if (ret)
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index ce8fea2e2788..bac56afcf6bc 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -4588,11 +4588,11 @@ static u32 netif_receive_generic_xdp(struct sk_buff *skb,
->  	struct netdev_rx_queue *rxqueue;
->  	void *orig_data, *orig_data_end;
->  	u32 metalen, act = XDP_DROP;
-> +	u32 mac_len, frame_sz;
->  	__be16 orig_eth_type;
->  	struct ethhdr *eth;
->  	bool orig_bcast;
->  	int hlen, off;
-> -	u32 mac_len;
->  
->  	/* Reinjected packets coming from act_mirred or similar should
->  	 * not get XDP generic processing.
-> @@ -4631,8 +4631,8 @@ static u32 netif_receive_generic_xdp(struct sk_buff *skb,
->  	xdp->data_hard_start = skb->data - skb_headroom(skb);
->  
->  	/* SKB "head" area always have tailroom for skb_shared_info */
-> -	xdp->frame_sz  = (void *)skb_end_pointer(skb) - xdp->data_hard_start;
-> -	xdp->frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
-> +	frame_sz = (void *)skb_end_pointer(skb) - xdp->data_hard_start;
-> +	frame_sz += SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
->  
->  	orig_data_end = xdp->data_end;
->  	orig_data = xdp->data;
-> @@ -4641,7 +4641,7 @@ static u32 netif_receive_generic_xdp(struct sk_buff *skb,
->  	orig_eth_type = eth->h_proto;
->  
->  	rxqueue = netif_get_rxqueue(skb);
-> -	xdp->rxq = &rxqueue->xdp_rxq;
-> +	xdp_init_buff(xdp, frame_sz, &rxqueue->xdp_rxq);
->  
->  	act = bpf_prog_run_xdp(xdp_prog, xdp);
->  
-> -- 
-> 2.29.2
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
 > 
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  .../testing/selftests/bpf/progs/test_core_reloc_module.c  | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_module.c b/tools/testing/selftests/bpf/progs/test_core_reloc_module.c
+> > index 56363959f7b0..f59f175c7baf 100644
+> > --- a/tools/testing/selftests/bpf/progs/test_core_reloc_module.c
+> > +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_module.c
+> > @@ -40,6 +40,7 @@ int BPF_PROG(test_core_module_probed,
+> >              struct task_struct *task,
+> >              struct bpf_testmod_test_read_ctx *read_ctx)
+> >  {
+> > +#if __has_builtin(__builtin_preserve_enum_value)
+> >         struct core_reloc_module_output *out = (void *)&data.out;
+> >         __u64 pid_tgid = bpf_get_current_pid_tgid();
+> >         __u32 real_tgid = (__u32)(pid_tgid >> 32);
+> > @@ -61,6 +62,9 @@ int BPF_PROG(test_core_module_probed,
+> >         out->len_exists = bpf_core_field_exists(read_ctx->len);
+> >
+> >         out->comm_len = BPF_CORE_READ_STR_INTO(&out->comm, task, comm);
+> > +#else
+> > +       data.skip = true;
+> > +#endif
+> >
+> >         return 0;
+> >  }
+> > @@ -70,6 +74,7 @@ int BPF_PROG(test_core_module_direct,
+> >              struct task_struct *task,
+> >              struct bpf_testmod_test_read_ctx *read_ctx)
+> >  {
+> > +#if __has_builtin(__builtin_preserve_enum_value)
+> >         struct core_reloc_module_output *out = (void *)&data.out;
+> >         __u64 pid_tgid = bpf_get_current_pid_tgid();
+> >         __u32 real_tgid = (__u32)(pid_tgid >> 32);
+> > @@ -91,6 +96,9 @@ int BPF_PROG(test_core_module_direct,
+> >         out->len_exists = bpf_core_field_exists(read_ctx->len);
+> >
+> >         out->comm_len = BPF_CORE_READ_STR_INTO(&out->comm, task, comm);
+> > +#else
+> > +       data.skip = true;
+> > +#endif
+> >
+> >         return 0;
+> >  }
+> > --
+> > 2.26.2
+> >
+> 
+
