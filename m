@@ -2,216 +2,220 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D93CC4361B
-	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 17:21:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D11CC4361B
+	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 17:33:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA8F623DB4
-	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 17:21:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1696523A02
+	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 17:33:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391070AbgLJRTj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Dec 2020 12:19:39 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:48434 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2390049AbgLJRT3 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 10 Dec 2020 12:19:29 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BAHIKFN027861;
-        Thu, 10 Dec 2020 09:18:34 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=DCoDdbPnnFq4+X/g56yIdEKiKiPG8NgpBgxisjGdL+U=;
- b=bGpTA8VGsIUnOeUJoeSirghRgrwT4tiJKoCxkVPoThkg8GlY940HUMjA6PW4lsqrDaa4
- OBFydAnn/6CHlS4EYN7ILXIerySDi6updZcwtPDOeyHDz49ZuaohnQtMPV17DM9LW1bU
- 3fB29X6TOrWprY4qHlSn2tVaxqNKnfHbmjw= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 35aj8vwwuc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 10 Dec 2020 09:18:34 -0800
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 10 Dec 2020 09:18:33 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZT56DllL6CIgiqArhBT0rb6uW/8YOPEts+Y+vm6reLUuFfUtJaWnFGHTtrcaRHQP1C7leGrp/9fVWeBJcAndUlE82CsQyVxyICx1BLEzuwcib5Sa5EVUOJR2TU3tF7yUkoQeVOrRSVtYquGcgptmWxtAMa5AqBNCinY0btH+ZusveDii4g/R++7qlpaIicbg0XBG/gUwc0Fi705tYNizQvoooQjvx7WwHO/C4FPZo4JplMqDNIdawRNA9kpA0JHU5SBel1camS0SQOwvFkAh6h9pfdwHn3x+dRCxq4FKdtq3SVPxWfZ/cx9zWJzvKlin7NvgB3hseyua4FMfM9GWJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DCoDdbPnnFq4+X/g56yIdEKiKiPG8NgpBgxisjGdL+U=;
- b=h0q6Oi9qcT/xrahQLQzdNAn4vSbDQc6csitNKVNKKqlgT7qxQG4VPL044Xp3Aqi3sw4MDb5/BxMGQaxI//uHJAGq7N7KjsSbHF2Y8PCnEuUYsQl5DAHNGEws1MRdCr9BfjzXqcriitlZ4Ym0Gcm07pF3V5xZdUknQ+QT8IFJ6BqHCJXV/11tZHyKQWzqTiEjf1+H4MqLkAFQcOTdz7+N995eLUn6SR0O2D/fqI0n0igAEGYYjMWEfIT6YbFZBDrI4cbHnUvtUgvIGHNTPjdoM0LdANZmdt/9hQzpqd3swfWihwIyqEFNYbfinze8juzZAlW9jwGIrFmPNBX7k17wsQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DCoDdbPnnFq4+X/g56yIdEKiKiPG8NgpBgxisjGdL+U=;
- b=BA/yuEF+uzL9cVo1mRaSVbVDfytEb7gxZ66ohxaTlzcew2WTus3ElRKmUSwjoc51+d0zCz7MEtiMGdRlCwcD4TNG8SDUqFaoGf0qRJAaYcwySu/21GCshplXWE80k/shaa5V4ampxLPVqTPVAii1dQAZ6DmXe9J8B8lRBf1arG8=
-Received: from BYAPR15MB2999.namprd15.prod.outlook.com (2603:10b6:a03:fa::12)
- by BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3654.15; Thu, 10 Dec
- 2020 17:18:32 +0000
-Received: from BYAPR15MB2999.namprd15.prod.outlook.com
- ([fe80::f49e:bdbb:8cd7:bf6b]) by BYAPR15MB2999.namprd15.prod.outlook.com
- ([fe80::f49e:bdbb:8cd7:bf6b%7]) with mapi id 15.20.3654.012; Thu, 10 Dec 2020
- 17:18:32 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Yonghong Song <yhs@fb.com>
-CC:     "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S2392381AbgLJRck (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Dec 2020 12:32:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20488 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2392724AbgLJRc0 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 10 Dec 2020 12:32:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1607621454;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Q5P/qDi7wA+rvW2gtSqVQu3jB6OGZe46xx+pWi2+9CM=;
+        b=Mac0T1rmuex8umUvFVTXUBl+XTvN+xPgoGC4gocArdWpfUmXmLWxlq6gETepyO3oQ3u2lx
+        lH3CfhNOkbgtVEazecw9XkTnHG81zJLhl746I/lX4N9NIILtX47jCHEZHFyCYkwJeisL3k
+        f4FsbGu6R1DazclDpaIs0KLHa90iCcg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-369-fj061OEpOeyugu0E_N0B1g-1; Thu, 10 Dec 2020 12:30:43 -0500
+X-MC-Unique: fj061OEpOeyugu0E_N0B1g-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9A5E1107ACE6;
+        Thu, 10 Dec 2020 17:30:40 +0000 (UTC)
+Received: from carbon (unknown [10.36.110.55])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 10BC71F442;
+        Thu, 10 Dec 2020 17:30:24 +0000 (UTC)
+Date:   Thu, 10 Dec 2020 18:30:23 +0100
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>
+Cc:     David Ahern <dsahern@gmail.com>,
+        Frey Alfredsson <freysteinn@freysteinn.com>,
+        Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: permits pointers on stack for helper
- calls
-Thread-Topic: [PATCH bpf-next v2 1/2] bpf: permits pointers on stack for
- helper calls
-Thread-Index: AQHWzpSF8nDXEtnHDEaDmpItepDlBqnwk84A
-Date:   Thu, 10 Dec 2020 17:18:32 +0000
-Message-ID: <B7EA6237-513F-45DC-8E38-D0765AF7E275@fb.com>
-References: <20201210013348.943623-1-yhs@fb.com>
- <20201210013349.943719-1-yhs@fb.com>
-In-Reply-To: <20201210013349.943719-1-yhs@fb.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3608.120.23.2.4)
-x-originating-ip: [2620:10d:c090:400::5:d023]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6edf6d0a-1fb2-4823-c4f2-08d89d2f9ec4
-x-ms-traffictypediagnostic: BYAPR15MB4088:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BYAPR15MB4088DBD7FF23DD786E6AA4B2B3CB0@BYAPR15MB4088.namprd15.prod.outlook.com>
-x-fb-source: Internal
-x-ms-oob-tlc-oobclassifiers: OLM:1002;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WOPUf9ZQ7Ivou4XoFHKteqE5NpRsq7/0sZ54BHFQ0nd8KzHjrVBxnsP+PWYvcSKWa7N5PVfpvntEniwlE9YU4lGmaqe5uUcC/fAo5vcRlzQs7ZaBZeREJ4ieG3x/mZn1MfzBQ6huHrK3zHJlmaE/IeP2VdI/KBxDzC0PijEbU6W+e2mxb3X2cjdTnhphqGBUmZsqneB59mdidyZELrRsKRqqyM8nvjtZ/rza1SmiXoqtDv2DwydNK9pGBd+A3UybcHUjbxCEMLEMikFIDcffzYJsdSq3+leGF5eaitqJ7YwCJNlBY6fKjPh5Dq+5pdgHPMp97Qj4FzzaUbS6a/uPb5bJN0FKoGDfdrGSVvNfrLRgttQev96givfuNB2HWVjp
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB2999.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(376002)(136003)(366004)(8936002)(8676002)(76116006)(508600001)(6486002)(6512007)(2906002)(6862004)(53546011)(4326008)(6506007)(6636002)(54906003)(86362001)(83380400001)(71200400001)(37006003)(186003)(2616005)(66946007)(33656002)(5660300002)(36756003)(64756008)(66476007)(66446008)(66556008)(45980500001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?lnDKAqrWondZMDA4tKO6koiDfJYHaAz6JgWcdhOcdaBeX20hHRoCFWu+4CVU?=
- =?us-ascii?Q?jy/OLgim+i7pTw1Ao8mWSAjGmURYLZvUF9cgYbbrkTr0LVhgrlnTpD98Dq2H?=
- =?us-ascii?Q?HgZ6EDSTjNCNoNiM+P9kIQefUO/3kzFl+0uRX0zzW8pyxEQfLIIaIKppw0rO?=
- =?us-ascii?Q?5+ShZl1JciFUP4XY5dSjZPaUQ1Uo6YXWQd+Ik2WYjLwY6ueH8EjfMh/asGWi?=
- =?us-ascii?Q?epZgxRPViw+WcR3O5CCLDiKPtohOTeyi3Ub+rcaUhfX7MdUJiII5QP7N45IZ?=
- =?us-ascii?Q?bocL9NuNaRqoSGFv4Asj9p+ObOGutWq/2hZLH610pZ6H6G1MNrXk6BFXprN2?=
- =?us-ascii?Q?4EiIniZxJ/loxPd2DnSSG2isYywJMei3x/X9hblRKsfFGDCkV6IGJlUxnqm7?=
- =?us-ascii?Q?IrDe2iFrzuFMCg2YccrzNcbV0GgoRfeCKsSXGzVhuPVbyg8bJDOaXvpcLbHi?=
- =?us-ascii?Q?jVdCIHZvV21CNFrC6hEVy9WV1hi7u+V9yoptJhOslsrTbFxk16gfinyMV+Kb?=
- =?us-ascii?Q?GEyFQTfyavp7yQ5cyxjY1R0ObfqbJF3ZukazMNpe1deEDYyJ4BH9BeStL8Tu?=
- =?us-ascii?Q?Rhzj2zV76mEPiOz6Nq5ixsVqgyuKEfAfBGMypBWK6Rt7V6HV3fZhQorpEruF?=
- =?us-ascii?Q?1OILYRFh9AH0scrxMhTeF/ABEvcyZoVhrnHmX8SQ1gKG/Oct8SlyqNwVkQbv?=
- =?us-ascii?Q?qTZqXuYqzOylZHoAd10alv5Vx0SgqHyoM5z3TcN5b5CwdOjejPhV9ARfJKon?=
- =?us-ascii?Q?loZGN7tN+SGzQA7UAs9eONVuAlWe2mFAVTKA0C2i6ZrjbrYJTKY6x2ZQOKzP?=
- =?us-ascii?Q?K6NwqfHRnX/3sNbfYrGMONDwkN1MEbDEGK49QUAQTUOKKKAPPQYGHwc7/ff3?=
- =?us-ascii?Q?ZCgxDFAR3UFfbDUD3KuSZuZda9a23oi+zX+y/cF/S+wgcx4k7hs2aSsh2JlP?=
- =?us-ascii?Q?cY9U0Kf3ODxZxVC9QmFB3IirlhwMvWsGIUYoaOF24bo8qZ5t7rrLs9oCNRjX?=
- =?us-ascii?Q?rd1vF06oFuQQ7McT7bh1k3UbGsEQosgGF9MKMOigg197bR4=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <16B79AAAC2A3AC4897AF57D4BDFAE4A2@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Network Development <netdev@vger.kernel.org>,
+        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Marek Majtyka <marekx.majtyka@intel.com>,
+        Marek Majtyka <alardam@gmail.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
+        Jakub Kicinski <kuba@kernel.org>, bpf <bpf@vger.kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Karlsson, Magnus" <magnus.karlsson@intel.com>, brouer@redhat.com
+Subject: Re: [Intel-wired-lan] Explaining XDP redirect bulk size design
+ (Was: [PATCH v2 bpf 1/5] net: ethtool: add xdp properties flag set)
+Message-ID: <20201210183023.4b299334@carbon>
+In-Reply-To: <CAJ8uoz25rtO63-4nOSV-yr8bORNbNSquiBBWiEouLs-ZUv2o=A@mail.gmail.com>
+References: <20201204102901.109709-1-marekx.majtyka@intel.com>
+        <20201204102901.109709-2-marekx.majtyka@intel.com>
+        <878sad933c.fsf@toke.dk>
+        <20201204124618.GA23696@ranger.igk.intel.com>
+        <048bd986-2e05-ee5b-2c03-cd8c473f6636@iogearbox.net>
+        <20201207135433.41172202@carbon>
+        <5fce960682c41_5a96208e4@john-XPS-13-9370.notmuch>
+        <20201207230755.GB27205@ranger.igk.intel.com>
+        <5fd068c75b92d_50ce20814@john-XPS-13-9370.notmuch>
+        <20201209095454.GA36812@ranger.igk.intel.com>
+        <20201209125223.49096d50@carbon>
+        <6913010d-2fd6-6713-94e9-8f5b8ad4b708@gmail.com>
+        <20201210143211.2490f7f4@carbon>
+        <CAJ8uoz25rtO63-4nOSV-yr8bORNbNSquiBBWiEouLs-ZUv2o=A@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB2999.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6edf6d0a-1fb2-4823-c4f2-08d89d2f9ec4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Dec 2020 17:18:32.4165
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: r1MIpmj3YBjQB/VuNeUGgmfY14L5qOZjfC9wfhkLSfYxW90GXMCLbqPByw3C1G+ic9v6aezBN6Dc3rZeDyWyDw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB4088
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2020-12-10_07:2020-12-09,2020-12-10 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0 spamscore=0
- malwarescore=0 adultscore=0 impostorscore=0 lowpriorityscore=0
- clxscore=1015 suspectscore=0 mlxscore=0 bulkscore=0 mlxlogscore=999
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012100108
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Thu, 10 Dec 2020 15:14:18 +0100
+Magnus Karlsson <magnus.karlsson@gmail.com> wrote:
+
+> On Thu, Dec 10, 2020 at 2:32 PM Jesper Dangaard Brouer
+> <brouer@redhat.com> wrote:
+> >
+> > On Wed, 9 Dec 2020 08:44:33 -0700
+> > David Ahern <dsahern@gmail.com> wrote:
+> > =20
+> > > On 12/9/20 4:52 AM, Jesper Dangaard Brouer wrote: =20
+> > > > But I have redesigned the ndo_xdp_xmit call to take a bulk of packe=
+ts
+> > > > (up-to 16) so it should not be a problem to solve this by sharing
+> > > > TX-queue and talking a lock per 16 packets.  I still recommend that,
+> > > > for fallback case,  you allocated a number a TX-queue and distribute
+> > > > this across CPUs to avoid hitting a congested lock (above measureme=
+nts
+> > > > are the optimal non-congested atomic lock operation) =20
+> > >
+> > > I have been meaning to ask you why 16 for the XDP batching? If the
+> > > netdev budget is 64, why not something higher like 32 or 64? =20
+> >
+> > Thanks you for asking as there are multiple good reasons and
+> > consideration for this 16 batch size.  Notice cpumap have batch size 8,
+> > which is also an explicit choice.  And AF_XDP went in the wrong
+> > direction IMHO and I think have 256.  I designed this to be a choice in
+> > the map code, for the level of bulking it needs/wants. =20
+>=20
+> FYI, as far as I know, there is nothing in AF_XDP that says bulking
+> should be 256. There is a 256 number in the i40e driver that states
+> the maximum number of packets to be sent within one napi_poll loop.
+> But this is just a maximum number and only for that driver. (In case
+> you wonder, that number was inherited from the original skb Tx
+> implementation in the driver.)=20
+
+Ah, that explains the issue I have on the production system that runs
+the EDT-pacer[2].  I see that i40e function i40e_clean_tx_irq() ignores
+napi_budget but uses it own budget, that defaults to 256.  Looks like I
+can adjust this via ethtool -C tx-frames-irq.   I turned this down to
+64 (32 was giving worse results, and below 16 system acted strange).
+
+Now the issue is gone, which was that if TX-DMA completion was running
+(i40e_clean_tx_irq()) on the same CPU that send packets via FQ-pacer
+qdisc, then the pacing was not accurate, and was sending too bursty.
+
+System have already tuned "net/core/dev_weight" and RX/TX-bias to
+reduce bulking, as this can influence latency and the EDT-pacing
+accuracy. (It is a middlebox bridging VLANs and BPF-EDT tiemstamping and
+FQ-pacing packets to solve bursts overflowing switch ports).
+
+  sudo sysctl net/core/dev_weight
+  net.core.dev_weight =3D 1
+  net.core.dev_weight_rx_bias =3D 32
+  net.core.dev_weight_tx_bias =3D 1
+
+This net.core.dev_weight_tx_bias=3D1 (together with dev_weight=3D1) cause
+qdisc transmit budget to become one packet, cycling through
+NET_TX_SOFTIRQ which consumes time and gives a little more pacing space
+for the packets.
 
 
-> On Dec 9, 2020, at 5:33 PM, Yonghong Song <yhs@fb.com> wrote:
+> The actual batch size is controlled by
+> the application. If it puts 1 packet in the Tx ring and calls send(),
+> the batch size will be 1. If it puts 128 packets in the Tx ring and
+> calls send(), you get a batch size of 128, and so on. It is flexible,
+> so you can trade-off latency with throughput in the way the
+> application desires. Rx batch size has also become flexible now with
+> the introduction of Bj=C3=B6rn's prefer_busy_poll patch set [1].
 >=20
-> Currently, when checking stack memory accessed by helper calls,
-> for spills, only PTR_TO_BTF_ID and SCALAR_VALUE are
-> allowed.
->=20
-> Song discovered an issue where the below bpf program
->  int dump_task(struct bpf_iter__task *ctx)
->  {
->    struct seq_file *seq =3D ctx->meta->seq;
->    static char[] info =3D "abc";
->    BPF_SEQ_PRINTF(seq, "%s\n", info);
->    return 0;
->  }
-> may cause a verifier failure.
->=20
-> The verifier output looks like:
->  ; struct seq_file *seq =3D ctx->meta->seq;
->  1: (79) r1 =3D *(u64 *)(r1 +0)
->  ; BPF_SEQ_PRINTF(seq, "%s\n", info);
->  2: (18) r2 =3D 0xffff9054400f6000
->  4: (7b) *(u64 *)(r10 -8) =3D r2
->  5: (bf) r4 =3D r10
->  ;
->  6: (07) r4 +=3D -8
->  ; BPF_SEQ_PRINTF(seq, "%s\n", info);
->  7: (18) r2 =3D 0xffff9054400fe000
->  9: (b4) w3 =3D 4
->  10: (b4) w5 =3D 8
->  11: (85) call bpf_seq_printf#126
->   R1_w=3Dptr_seq_file(id=3D0,off=3D0,imm=3D0) R2_w=3Dmap_value(id=3D0,off=
-=3D0,ks=3D4,vs=3D4,imm=3D0)
->  R3_w=3Dinv4 R4_w=3Dfp-8 R5_w=3Dinv8 R10=3Dfp0 fp-8_w=3Dmap_value
->  last_idx 11 first_idx 0
->  regs=3D8 stack=3D0 before 10: (b4) w5 =3D 8
->  regs=3D8 stack=3D0 before 9: (b4) w3 =3D 4
->  invalid indirect read from stack off -8+0 size 8
->=20
-> Basically, the verifier complains the map_value pointer at "fp-8" locatio=
-n.
-> To fix the issue, if env->allow_ptr_leaks is true, let us also permit
-> pointers on the stack to be accessible by the helper.
->=20
-> Suggested-by: Alexei Starovoitov <ast@kernel.org>
-> Reported-by: Song Liu <songliubraving@fb.com>
-> Signed-off-by: Yonghong Song <yhs@fb.com>
+> [1] https://lore.kernel.org/netdev/20201130185205.196029-1-bjorn.topel@gm=
+ail.com/
 
-Acked-by: Song Liu <songliubraving@fb.com>
+This looks like a cool trick, to get even more accurate packet scheduling.
 
-Thanks for the fix!
+I played with the tunings, and could see changed behavior with mpstat,
+but ended up tuning it off again, as I could not measure a direct
+correlation with the bpftrace tools[3].
 
-> ---
-> kernel/bpf/verifier.c | 3 ++-
-> 1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 93def76cf32b..9159c9822ede 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3769,7 +3769,8 @@ static int check_stack_boundary(struct bpf_verifier=
-_env *env, int regno,
-> 			goto mark;
->=20
-> 		if (state->stack[spi].slot_type[0] =3D=3D STACK_SPILL &&
-> -		    state->stack[spi].spilled_ptr.type =3D=3D SCALAR_VALUE) {
-> +		    (state->stack[spi].spilled_ptr.type =3D=3D SCALAR_VALUE ||
-> +		     env->allow_ptr_leaks)) {
-> 			__mark_reg_unknown(env, &state->stack[spi].spilled_ptr);
-> 			for (j =3D 0; j < BPF_REG_SIZE; j++)
-> 				state->stack[spi].slot_type[j] =3D STACK_MISC;
-> --=20
-> 2.24.1
->=20
+
+> > The low level explanation is that these 8 and 16 batch sizes are
+> > optimized towards cache sizes and Intel's Line-Fill-Buffer (prefetcher
+> > with 10 elements).  I'm betting on that memory backing these 8 or 16
+> > packets have higher chance to remain/being in cache, and I can prefetch
+> > them without evicting them from cache again.  In some cases the pointer
+> > to these packets are queued into a ptr_ring, and it is more optimal to
+> > write cacheline sizes 1 (8 pointers) or 2 (16 pointers) into the ptr_ri=
+ng.
+> >
+> > The general explanation is my goal to do bulking without adding latency.
+> > This is explicitly stated in my presentation[1] as of Feb 2016, slide 2=
+0.
+> > Sure, you/we can likely make the micro-benchmarks look better by using
+> > 64 batch size, but that will introduce added latency and likely shoot
+> > our-selves in the foot for real workloads.  With experience from
+> > bufferbloat and real networks, we know that massive TX bulking have bad
+> > effects.  Still XDP-redirect does massive bulking (NIC flush is after
+> > full 64 budget) and we don't have pushback or a queue mechanism (so I
+> > know we are already shooting ourselves in the foot) ...  Fortunately we
+> > now have a PhD student working on queuing for XDP.
+> >
+> > It is also important to understand that this is an adaptive bulking
+> > scheme, which comes from NAPI.  We don't wait for packets arriving
+> > shortly, we pickup what NIC have available, but by only taking 8 or 16
+> > packets (instead of emptying the entire RX-queue), and then spending
+> > some time to send them along, I'm hoping that NIC could have gotten
+> > some more frame.  For cpumap and veth (in-some-cases) they can start to
+> > consume packets from these batches, but NIC drivers gets XDP_XMIT_FLUSH
+> > signal at NAPI-end (xdp_do_flush). Still design allows NIC drivers to
+> > update their internal queue state (and BQL), and if it gets close to
+> > full they can choose to flush/doorbell the NIC earlier.  When doing
+> > queuing for XDP we need to expose these NIC queue states, and having 4
+> > calls with 16 packets (64 budget) also gives us more chances to get NIC
+> > queue state info which the NIC already touch.
+> >
+> >
+> > [1] https://people.netfilter.org/hawk/presentations/devconf2016/net_sta=
+ck_challenges_100G_Feb2016.pdf
+
+[2] https://github.com/netoptimizer/bpf-examples/tree/master/traffic-pacing=
+-edt/
+
+[3] https://github.com/netoptimizer/bpf-examples/tree/master/traffic-pacing=
+-edt/bpftrace
+
+
+--=20
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
