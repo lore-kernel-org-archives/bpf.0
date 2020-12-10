@@ -2,177 +2,69 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F390DC4167B
-	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 22:57:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4BEB7C2BB9A
+	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 22:57:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C6C4723DE4
-	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 22:57:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 18A7C23DB4
+	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 22:57:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393689AbgLJWzu (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Dec 2020 17:55:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41946 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392429AbgLJWzk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Dec 2020 17:55:40 -0500
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642D2C0619DB;
-        Thu, 10 Dec 2020 14:53:49 -0800 (PST)
-Received: by mail-wr1-x443.google.com with SMTP id i9so7151567wrc.4;
-        Thu, 10 Dec 2020 14:53:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FOnvm6Baf3m5bMLWZg3kDehjBG8A7+9YWYoLpgMMYBE=;
-        b=UR01bWqSSrZnOmF0qD11GNEz54al4WVSIasPXhrmHQf+k7UcyeWv4R6OkrPOv79SgE
-         k1rW8h56PkskL8REzVYqP1I5kNut/XyF8eINYH4j1yIgnd+t0J9YBMj2QsmyAXf2DTnL
-         /ZupnS0KyyqwcTj9kJF9DmzpdvXoP+ynTn6ODOJP7juL672IaqvChhBqQPYr4V+roMIt
-         vy43s40wFE1grh0IJzZqWM/wmLZl2DkbUc+2cVedFW98SoikXYh6PqHaW3fytmNq1TXx
-         TGyHHTJ6ZcDozpNFSQCJruR9rc8OxKEep1QyXskcw14M1assuJ1Xhljrx5alqdRzW0EO
-         9nDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FOnvm6Baf3m5bMLWZg3kDehjBG8A7+9YWYoLpgMMYBE=;
-        b=X/CPuZD/fVXkuN/orCrJ/emiKt0akoPzMklAojZuICU/zJHZ0WwUYgxYyvGNi76DRb
-         Ux5ExJ3UE7wKT8NeBXe7QlawAqSiQvU5yNp7XBa/rMKx0GknyCFooOEJjackn9ENn+pG
-         oXI8hPzYccJM1Boz8IqcDdpUWFYmWYz9W1gSMFKuK5l8rzK3X3kel0FoWarhXxGmQ1iZ
-         yVKa9HgYB4kSbTekO/FH8f1fKRYHoz+z5ZCMjHA+emYS12X5tuj4dzFBMSlsSeGe9K2B
-         4AhV/1xU/g48tANjNx5j1dkIK557tzH5WMLrp3GTf/zcmQGeI0ZM8L5O89VxdPNdmEW1
-         P4YQ==
-X-Gm-Message-State: AOAM533sABcm2lpU8lPrUaFGKVw2g8mSK86xjI1okKluojeOj2UXv2Y4
-        DCBZIHKnAydM/WIFxye6q59JbIpXExYhBSFqhWfTci22
-X-Google-Smtp-Source: ABdhPJyBTgsANO8Ewc4TwqyNo9GTDY6eu+IbCLiC49Dn/sqblGhomWDdVkJ5HIaRoleZLzVf6V8ycYIBIlW/mnVMFCY=
-X-Received: by 2002:a19:8b83:: with SMTP id n125mr3848216lfd.75.1607637184027;
- Thu, 10 Dec 2020 13:53:04 -0800 (PST)
-MIME-Version: 1.0
-References: <20201210153618.21226-1-magnus.karlsson@gmail.com>
-In-Reply-To: <20201210153618.21226-1-magnus.karlsson@gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 10 Dec 2020 13:52:52 -0800
-Message-ID: <CAADnVQKOjetBFuCVRWPEzephJTeZ7AYaHv+pKfJKia0F8vk=ww@mail.gmail.com>
-Subject: Re: [PATCH bpf] xsk: fix race in SKB mode transmit with shared cq
-To:     Magnus Karlsson <magnus.karlsson@gmail.com>
-Cc:     "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
-        Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1728388AbgLJWcf (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Dec 2020 17:32:35 -0500
+Received: from shards.monkeyblade.net ([23.128.96.9]:60792 "EHLO
+        mail.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394234AbgLJWcN (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Dec 2020 17:32:13 -0500
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        by mail.monkeyblade.net (Postfix) with ESMTPSA id 715094D2ED6E8;
+        Thu, 10 Dec 2020 14:31:32 -0800 (PST)
+Date:   Thu, 10 Dec 2020 14:31:32 -0800 (PST)
+Message-Id: <20201210.143132.1128894247417932156.davem@davemloft.net>
+To:     alexei.starovoitov@gmail.com
+Cc:     daniel@iogearbox.net, kuba@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, kernel-team@fb.com
+Subject: Re: pull-request: bpf 2020-12-10
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20201210222501.72430-1-alexei.starovoitov@gmail.com>
+References: <20201210222501.72430-1-alexei.starovoitov@gmail.com>
+X-Mailer: Mew version 6.8 on Emacs 27.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail.monkeyblade.net [0.0.0.0]); Thu, 10 Dec 2020 14:31:32 -0800 (PST)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 7:36 AM Magnus Karlsson
-<magnus.karlsson@gmail.com> wrote:
->
-> From: Magnus Karlsson <magnus.karlsson@intel.com>
->
-> Fix a race when multiple sockets are simultaneously calling sendto()
-> when the completion ring is shared in the SKB case. This is the case
-> when you share the same netdev and queue id through the
-> XDP_SHARED_UMEM bind flag. The problem is that multiple processes can
-> be in xsk_generic_xmit() and call the backpressure mechanism in
-> xskq_prod_reserve(xs->pool->cq). As this is a shared resource in this
-> specific scenario, a race might occur since the rings are
-> single-producer single-consumer.
->
-> Fix this by moving the tx_completion_lock from the socket to the pool
-> as the pool is shared between the sockets that share the completion
-> ring. (The pool is not shared when this is not the case.) And then
-> protect the accesses to xskq_prod_reserve() with this lock. The
-> tx_completion_lock is renamed cq_lock to better reflect that it
-> protects accesses to the potentially shared completion ring.
->
-> Fixes: 35fcde7f8deb ("xsk: support for Tx")
-> Fixes: a9744f7ca200 ("xsk: fix potential race in SKB TX completion code")
-> Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
-> Reported-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> ---
->  include/net/xdp_sock.h      | 4 ----
->  include/net/xsk_buff_pool.h | 5 +++++
->  net/xdp/xsk.c               | 9 ++++++---
->  net/xdp/xsk_buff_pool.c     | 1 +
->  4 files changed, 12 insertions(+), 7 deletions(-)
->
-> diff --git a/include/net/xdp_sock.h b/include/net/xdp_sock.h
-> index 4f4e93bf814c..cc17bc957548 100644
-> --- a/include/net/xdp_sock.h
-> +++ b/include/net/xdp_sock.h
-> @@ -58,10 +58,6 @@ struct xdp_sock {
->
->         struct xsk_queue *tx ____cacheline_aligned_in_smp;
->         struct list_head tx_list;
-> -       /* Mutual exclusion of NAPI TX thread and sendmsg error paths
-> -        * in the SKB destructor callback.
-> -        */
-> -       spinlock_t tx_completion_lock;
->         /* Protects generic receive. */
->         spinlock_t rx_lock;
->
-> diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-> index 01755b838c74..eaa8386dbc63 100644
-> --- a/include/net/xsk_buff_pool.h
-> +++ b/include/net/xsk_buff_pool.h
-> @@ -73,6 +73,11 @@ struct xsk_buff_pool {
->         bool dma_need_sync;
->         bool unaligned;
->         void *addrs;
-> +       /* Mutual exclusion of the completion ring in the SKB mode. Two cases to protect:
-> +        * NAPI TX thread and sendmsg error paths in the SKB destructor callback and when
-> +        * sockets share a single cq when the same netdev and queue id is shared.
-> +        */
-> +       spinlock_t cq_lock;
->         struct xdp_buff_xsk *free_heads[];
->  };
->
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 62504471fd20..42cb5f94d49e 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -364,9 +364,9 @@ static void xsk_destruct_skb(struct sk_buff *skb)
->         struct xdp_sock *xs = xdp_sk(skb->sk);
->         unsigned long flags;
->
-> -       spin_lock_irqsave(&xs->tx_completion_lock, flags);
-> +       spin_lock_irqsave(&xs->pool->cq_lock, flags);
->         xskq_prod_submit_addr(xs->pool->cq, addr);
-> -       spin_unlock_irqrestore(&xs->tx_completion_lock, flags);
-> +       spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
->
->         sock_wfree(skb);
->  }
-> @@ -378,6 +378,7 @@ static int xsk_generic_xmit(struct sock *sk)
->         bool sent_frame = false;
->         struct xdp_desc desc;
->         struct sk_buff *skb;
-> +       unsigned long flags;
->         int err = 0;
->
->         mutex_lock(&xs->mutex);
-> @@ -409,10 +410,13 @@ static int xsk_generic_xmit(struct sock *sk)
->                  * if there is space in it. This avoids having to implement
->                  * any buffering in the Tx path.
->                  */
-> +               spin_lock_irqsave(&xs->pool->cq_lock, flags);
->                 if (unlikely(err) || xskq_prod_reserve(xs->pool->cq)) {
-> +                       spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
->                         kfree_skb(skb);
->                         goto out;
->                 }
-> +               spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 10 Dec 2020 14:25:01 -0800
 
-Lock/unlock for every packet?
-Do you have any performance concerns?
+> Hi David, hi Jakub,
+> 
+> The following pull-request contains BPF updates for your *net* tree.
+> 
+> We've added 21 non-merge commits during the last 12 day(s) which contain
+> a total of 21 files changed, 163 insertions(+), 88 deletions(-).
+> 
+> The main changes are:
+> 
+> 1) Fix propagation of 32-bit signed bounds from 64-bit bounds, from Alexei.
+> 
+> 2) Fix ring_buffer__poll() return value, from Andrii.
+> 
+> 3) Fix race in lwt_bpf, from Cong.
+> 
+> 4) Fix test_offload, from Toke.
+> 
+> 5) Various xsk fixes.
+> 
+> Please consider pulling these changes from:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+> 
+> Thanks a lot!
+
+Pulled, thanks.
