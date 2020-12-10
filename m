@@ -2,93 +2,97 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
-	FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 456C8C433FE
-	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 06:58:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EFE4C4361B
+	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 11:55:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0FDFD22D5B
-	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 06:58:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E5A0223D5A
+	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 11:55:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727852AbgLJG6v (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Dec 2020 01:58:51 -0500
-Received: from mail-il1-f200.google.com ([209.85.166.200]:45558 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387694AbgLJG6v (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Dec 2020 01:58:51 -0500
-Received: by mail-il1-f200.google.com with SMTP id x10so3551027ilq.12
-        for <bpf@vger.kernel.org>; Wed, 09 Dec 2020 22:58:35 -0800 (PST)
+        id S1731270AbgLJLzp (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Dec 2020 06:55:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36882 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729321AbgLJLzp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Dec 2020 06:55:45 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AF3C0613CF;
+        Thu, 10 Dec 2020 03:55:04 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id a12so5172542wrv.8;
+        Thu, 10 Dec 2020 03:55:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CdxG881XmVcC+3BxAJE5RLPRTwKuGEBk/qTCPUmATks=;
+        b=BE3LGOddDLEk5ES4jCs2wfbqmVXp65l8oovj439lSBjoplOuce1Ge27ta+eNc/8zNg
+         GJXXcpqzYpj2HgDrizRnh4nBFUONs8/+NgtwuSYPFUeZTswc4aEh1kXTRxGsuTaiRjRh
+         DlXJOn9C9FtuKweaHzpxVLbNPBMzp6Pu3+DBdFYEsPpgbNnyZqGPx98ikXHdrz5a+X1j
+         U/RuBSvNNAKL4C1MdfrEBeTDKfH0AETmH0OYtTR+kDZvXH1ZWwvpF3qlxWSjJdTpR5sv
+         YgPL0AMkRRZVFoYj+h4X0w3IzWQkEnmjlXhbpyNk9pUqkDtD6zuFu4Umq2gy9FCwpudG
+         lioA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=aaJCcC8Sm2rMoASehVPhtArVK1xTKmJbN46GqeFlACc=;
-        b=WcEJUYEhr+ECLqJNfstDNlM8Y7sQsL6keZRIQu8qxrs3pvMbiOgGQmY1GgVnizy8l/
-         bEQH9J+aesR5/mb4u0VnsCfZt7iAuyWjjCas98OC6NdiHP+VbNPByAGBwt7Lhh2UoZsD
-         rImEtSyQyzIBfsoXXE5IIVx17wPzsEOyz9bU11f016NPmy+f0rL/blGRBNoEwkJ6PHF3
-         TMz6b7jnYhytN2wjd62ZkTE4/f7O6MBg2liReXXgDtAW4iZCoxal/+QcYmhWLDihCeDy
-         jtZOYTNJp6MFwtTWy7DHfbPdjl6XMh28g68+nhiZOWKCeiv8SBMZyPLTh+iJn1zRu3i9
-         tN+g==
-X-Gm-Message-State: AOAM530SD2K1pC7O7Rd1LNEBECevMKRd23uqFyZfhHlY0LHMmq921pO4
-        Sk3ulP1LiGhaMpuwwYMhkzQ+eyNFraqrxIv/5tYbd2HVee5K
-X-Google-Smtp-Source: ABdhPJyE32kAOjZX/8Ff5hJ1mHIx2zLec/RC3L+2S9Yo8qudw63GLqTcPzi8XX5qHvpZAu0ZDHsstR0eSihZyA5LziDZhlx75opp
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CdxG881XmVcC+3BxAJE5RLPRTwKuGEBk/qTCPUmATks=;
+        b=dN26PV226kh9ZRwlZflfaWaHfPSILNOZmCkLNCh3JhtBkGzdCFWTJq6BlymM+iobua
+         UJzfy300F0j8CyKqqnlsN+vF5qr6idCNkeFN4G8JJApSEWfiTcozxcw4RZrKG6Lvh8z7
+         t62fYAL3UNLHvZTiAEwce/yu0PWVwJ7FzW4QYkzUl5pE9ottER0pWi9SU8GjwbSQACTx
+         rKdXLXMpzWtt8rg+TGFoyIPMRLZhRruw90h8GAYndRYiKNJC49FsRQMnFv//0gnHGgbx
+         kTsxyiwua6KNeLXncMJkvjqQSvnpIgnlc68VTwiKQd3UY78pBp6/qeL9lAJels/g7Q5T
+         MUYw==
+X-Gm-Message-State: AOAM533EpxSRcZRZyhHqZSN1Quxqe5KhFobjGv0DR/lVRBw09yTa4FRw
+        hpht/e6Issub8b0JfLyCy9kiUKyiCV1u9LHhAlg=
+X-Google-Smtp-Source: ABdhPJwkXJT4Mw2QMaX63UxXDVd9mFEzdnXeZ0jGYjnF0YJG/MhM8piq2MFCUq+t9VMFNfnbJGDKkg==
+X-Received: by 2002:a5d:4209:: with SMTP id n9mr7689169wrq.128.1607601303015;
+        Thu, 10 Dec 2020 03:55:03 -0800 (PST)
+Received: from kernel-dev.chello.ie ([80.111.136.190])
+        by smtp.gmail.com with ESMTPSA id a14sm69033wrn.3.2020.12.10.03.55.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Dec 2020 03:55:02 -0800 (PST)
+From:   Weqaar Janjua <weqaar.janjua@gmail.com>
+X-Google-Original-From: Weqaar Janjua <weqaar.a.janjua@intel.com>
+To:     bpf@vger.kernel.org, netdev@vger.kernel.org, daniel@iogearbox.net,
+        ast@kernel.org, yhs@fb.com, magnus.karlsson@gmail.com,
+        bjorn.topel@intel.com
+Cc:     Weqaar Janjua <weqaar.a.janjua@intel.com>, shuah@kernel.org,
+        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+        anders.roxell@linaro.org, jonathan.lemon@gmail.com
+Subject: [PATCH bpf-next] selftests/bpf: xsk selftests - adding xdpxceiver to .gitignore
+Date:   Thu, 10 Dec 2020 11:54:35 +0000
+Message-Id: <20201210115435.3995-1-weqaar.a.janjua@intel.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-Received: by 2002:a6b:c3c5:: with SMTP id t188mr7341300iof.209.1607583490465;
- Wed, 09 Dec 2020 22:58:10 -0800 (PST)
-Date:   Wed, 09 Dec 2020 22:58:10 -0800
-In-Reply-To: <000000000000911d3905b459824c@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e56a2605b616b2d9@google.com>
-Subject: Re: memory leak in bpf
-From:   syzbot <syzbot+f3694595248708227d35@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, john.fastabend@gmail.com, kafai@fb.com,
-        kpsingh@chromium.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+This patch adds *xdpxceiver* to selftests/bpf/.gitignore
 
-HEAD commit:    a68a0262 mm/madvise: remove racy mm ownership check
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11facf17500000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4305fa9ea70c7a9f
-dashboard link: https://syzkaller.appspot.com/bug?extid=f3694595248708227d35
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=159a9613500000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11bf7123500000
+Reported-by: Yonghong Song <yhs@fb.com>
+Suggested-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Weqaar Janjua <weqaar.a.janjua@intel.com>
+---
+ tools/testing/selftests/bpf/.gitignore | 1 +
+ 1 file changed, 1 insertion(+)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f3694595248708227d35@syzkaller.appspotmail.com
-
-Debian GNU/Linux 9 syzkaller ttyS0
-Warning: Permanently added '10.128.0.9' (ECDSA) to the list of known hosts.
-executing program
-executing program
-executing program
-BUG: memory leak
-unreferenced object 0xffff88810efccc80 (size 64):
-  comm "syz-executor334", pid 8460, jiffies 4294945724 (age 13.850s)
-  hex dump (first 32 bytes):
-    c0 cb 14 04 00 ea ff ff c0 c2 11 04 00 ea ff ff  ................
-    c0 56 3f 04 00 ea ff ff 40 18 38 04 00 ea ff ff  .V?.....@.8.....
-  backtrace:
-    [<0000000036ae98a7>] kmalloc_node include/linux/slab.h:575 [inline]
-    [<0000000036ae98a7>] bpf_ringbuf_area_alloc kernel/bpf/ringbuf.c:94 [inline]
-    [<0000000036ae98a7>] bpf_ringbuf_alloc kernel/bpf/ringbuf.c:135 [inline]
-    [<0000000036ae98a7>] ringbuf_map_alloc kernel/bpf/ringbuf.c:183 [inline]
-    [<0000000036ae98a7>] ringbuf_map_alloc+0x1be/0x410 kernel/bpf/ringbuf.c:150
-    [<00000000d2cb93ae>] find_and_alloc_map kernel/bpf/syscall.c:122 [inline]
-    [<00000000d2cb93ae>] map_create kernel/bpf/syscall.c:825 [inline]
-    [<00000000d2cb93ae>] __do_sys_bpf+0x7d0/0x30a0 kernel/bpf/syscall.c:4381
-    [<000000008feaf393>] do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
-    [<00000000e1f53cfd>] entry_SYSCALL_64_after_hwframe+0x44/0xa9
-
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index 752d8edddc66..f5b7ef93618c 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -36,3 +36,4 @@ test_cpp
+ /runqslower
+ /bench
+ *.ko
++xdpxceiver
+-- 
+2.20.1
 
