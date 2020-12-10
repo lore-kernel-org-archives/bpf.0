@@ -2,109 +2,125 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.2 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9B13BC4361B
-	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 16:20:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 22724C4361B
+	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 16:27:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 54E8623D9C
-	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 16:20:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D2FBC23D6B
+	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 16:27:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729218AbgLJQUY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Dec 2020 11:20:24 -0500
-Received: from mga09.intel.com ([134.134.136.24]:57784 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725947AbgLJQUS (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Dec 2020 11:20:18 -0500
-IronPort-SDR: ytY2EAHtzuN/eBVkuBSENW+NXCI7K+0W226YfYh+ULV9IZirRkprV82uGRlNRpBiUIN0mP5eyn
- YH1/PjB7Wl2A==
-X-IronPort-AV: E=McAfee;i="6000,8403,9830"; a="174427006"
-X-IronPort-AV: E=Sophos;i="5.78,408,1599548400"; 
-   d="scan'208";a="174427006"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2020 08:20:02 -0800
-IronPort-SDR: bAETIilQj4d+IkpjWrQQNvyXNV0m0m5oQ1nWkE+ymPTQC06TDdzSFyq/9eI/tJT8b9IONTCXgb
- ikFrq5cQ9SKw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,408,1599548400"; 
-   d="scan'208";a="484536231"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga004.jf.intel.com with ESMTP; 10 Dec 2020 08:20:00 -0800
-Date:   Thu, 10 Dec 2020 17:11:05 +0100
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@gmail.com>
-Cc:     intel-wired-lan@lists.osuosl.org,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
-        magnus.karlsson@intel.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH net-next] ice, xsk: Move Rx alloction out of while-loop
-Message-ID: <20201210161105.GD45760@ranger.igk.intel.com>
-References: <20201210121915.14412-1-bjorn.topel@gmail.com>
+        id S2392280AbgLJQ1I (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Dec 2020 11:27:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388706AbgLJQ0v (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Dec 2020 11:26:51 -0500
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495A9C0613D6;
+        Thu, 10 Dec 2020 08:26:11 -0800 (PST)
+Received: by mail-pg1-x541.google.com with SMTP id t3so4650872pgi.11;
+        Thu, 10 Dec 2020 08:26:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=i5cob6kgCtDaTq32FhgXmLOVeR9KEkLNJhWX7rL8miU=;
+        b=RCzGN1n644wKFf8BkMY82qC8WyR4wVRbnkBZZwnKhE3yH2zLyKrtUitpHVjjB3Mkh2
+         hxhocrwOAI00Vy64lMuRATPIj+Co0742dy3vbiH9ksEEmivxkPD8T6BxT8aZL4WX7Z3Y
+         8VMCRf+4f3jNhEWZJtfp7WFNjc0C/K6VB6PCjO6DLBeXZvdPAYIjI9zWOilpVt2tyn7w
+         AJhj+nMD2w6SK7kOYBxSFSwFOQMOtRhqhdiwTier6TkAnM1oCEEU76nOCSiWwmYsYEEg
+         S6t2QMmdkKiDdgMJuBB340HOlYXqZ1H+5GBz+vlL1IZiZRaybt0tUrsJoM6idzKNmeQ1
+         fZFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=i5cob6kgCtDaTq32FhgXmLOVeR9KEkLNJhWX7rL8miU=;
+        b=hQE8t5zzqhusvjwGIqeuObOKBNVVt+8N0S7yQtd8YkshmQ8Y7AboBWbSTzIbFnD7JB
+         UWqabyZRW+p0gF0wxC+gRSjO1vc3Er8bzQxefqcE2NY0yKMtnE4LnFJ0arBBRc6TYI11
+         K4sKfcptIdqlJ1DNQMskag0dOomFdUodm+8zvb0pcmmynqxkQBhc379E3rLhOiEtcglf
+         kMhezOeV4tV6N3snNoZg2tIiv19QKbhJwU1wRQbQf3H4IGQAU0Nabv59vzlCD2vASjii
+         uxpecKThPudqDqPJnyFt7rmtO/bHa6GZ4y0SvjdZ4IEP3PpGAmbYTQ/UxnTpPQAUQ4RY
+         K/jg==
+X-Gm-Message-State: AOAM532QCmc+j4s99S7LXElnvXEK74u5lco7UAcI2RidDPA32Bac10H6
+        WqcE5hAkbYR2t9kNM7QAx5hsFkeYO5VB2JIydHI=
+X-Google-Smtp-Source: ABdhPJxEG/zDQeVb+oFliwwaIVGd9dJycsX4XSRINSav585g6EDYveqmY9mJG+ehQScGDzvk3Bo75WjYon5HplFMxO4=
+X-Received: by 2002:a17:90a:fcc:: with SMTP id 70mr8176670pjz.168.1607617570759;
+ Thu, 10 Dec 2020 08:26:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20201210121915.14412-1-bjorn.topel@gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <20201210153645.21286-1-magnus.karlsson@gmail.com> <a41f3859-e541-3fba-9b8b-874da86de92d@iogearbox.net>
+In-Reply-To: <a41f3859-e541-3fba-9b8b-874da86de92d@iogearbox.net>
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+Date:   Thu, 10 Dec 2020 17:25:59 +0100
+Message-ID: <CAJ8uoz2Pj+m5n6vNavY1JCVTY+dTTCuuQ7NurgxvAfHdmoH4KQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] samples/bpf: fix possible hang in xdpsock with
+ multiple threads
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     "Karlsson, Magnus" <magnus.karlsson@intel.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
+        Maciej Fijalkowski <maciejromanfijalkowski@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Dec 10, 2020 at 01:19:15PM +0100, Björn Töpel wrote:
-> From: Björn Töpel <bjorn.topel@intel.com>
-> 
-> Instead of trying to allocate for each packet, move it outside the
-> while loop and try to allocate once every NAPI loop.
+On Thu, Dec 10, 2020 at 5:03 PM Daniel Borkmann <daniel@iogearbox.net> wrot=
+e:
+>
+> On 12/10/20 4:36 PM, Magnus Karlsson wrote:
+> > From: Magnus Karlsson <magnus.karlsson@intel.com>
+> >
+> > Fix a possible hang in xdpsock that can occur when using multiple
+> > threads. In this case, one or more of the threads might get stuck in
+> > the while-loop in tx_only after the user has signaled the main thread
+> > to stop execution. In this case, no more Tx packets will be sent, so a
+> > thread might get stuck in the aforementioned while-loop. Fix this by
+> > introducing a test inside the while-loop to check if the benchmark has
+> > been terminated. If so, exit the loop.
+> >
+> > Fixes: cd9e72b6f210 ("samples/bpf: xdpsock: Add option to specify batch=
+ size")
+> > Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+>
+> With the patch applied, I'm getting a new warning:
+>
+>    CC  /home/darkstar/trees/bpf-next/samples/bpf/xdpsock_user.o
+> /home/darkstar/trees/bpf-next/samples/bpf/xdpsock_user.c: In function =E2=
+=80=98main=E2=80=99:
+> /home/darkstar/trees/bpf-next/samples/bpf/xdpsock_user.c:1272:6: warning:=
+ =E2=80=98idx=E2=80=99 may be used uninitialized in this function [-Wmaybe-=
+uninitialized]
+>   1272 |  u32 idx;
+>        |      ^~~
 
-To rectify above, it wasn't for each packet but per ICE_RX_BUF_WRITE
-cleaned frames (16).
+Sorry, I get it too. It was just masked with the other warnings I get
+these days when compiling the bpf samples. Regardless, it is the
+compiler trying to tell me I have done something stupid :-(. It should
+really be a return instead of a break, sigh. Will send a v2.
 
-You also have a typo in subject (alloction).
-
-Is spinning a v2 worth it?
-
-> 
-> This change boosts the xdpsock rxdrop scenario with 15% more
-> packets-per-second.
-> 
-> Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-> Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
-> ---
->  drivers/net/ethernet/intel/ice/ice_xsk.c | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-> index 797886524054..39757b4cf8f4 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-> @@ -570,12 +570,6 @@ int ice_clean_rx_irq_zc(struct ice_ring *rx_ring, int budget)
->  		u16 vlan_tag = 0;
->  		u8 rx_ptype;
->  
-> -		if (cleaned_count >= ICE_RX_BUF_WRITE) {
-> -			failure |= ice_alloc_rx_bufs_zc(rx_ring,
-> -							cleaned_count);
-> -			cleaned_count = 0;
-> -		}
-> -
->  		rx_desc = ICE_RX_DESC(rx_ring, rx_ring->next_to_clean);
->  
->  		stat_err_bits = BIT(ICE_RX_FLEX_DESC_STATUS0_DD_S);
-> @@ -642,6 +636,9 @@ int ice_clean_rx_irq_zc(struct ice_ring *rx_ring, int budget)
->  		ice_receive_skb(rx_ring, skb, vlan_tag);
->  	}
->  
-> +	if (cleaned_count >= ICE_RX_BUF_WRITE)
-> +		failure = !ice_alloc_rx_bufs_zc(rx_ring, cleaned_count);
-> +
->  	ice_finalize_xdp_rx(rx_ring, xdp_xmit);
->  	ice_update_rx_ring_stats(rx_ring, total_rx_packets, total_rx_bytes);
->  
-> 
-> base-commit: a7105e3472bf6bb3099d1293ea7d70e7783aa582
-> -- 
-> 2.27.0
-> 
+> Previously compiling w/o issues:
+>
+>   [...]
+>    CC  /home/darkstar/trees/bpf-next/samples/bpf/xdpsock_ctrl_proc.o
+>    CC  /home/darkstar/trees/bpf-next/samples/bpf/xdpsock_user.o
+>    CC  /home/darkstar/trees/bpf-next/samples/bpf/xsk_fwd.o
+>    LD  /home/darkstar/trees/bpf-next/samples/bpf/fds_example
+>   [...]
+>
+> For testing, I used:
+>
+>    gcc --version
+>    gcc (GCC) 9.0.1 20190312 (Red Hat 9.0.1-0.10)
+>
+> Ptal, thx!
