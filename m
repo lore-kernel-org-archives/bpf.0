@@ -4,89 +4,122 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5D7C4C0018C
-	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 18:07:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B1FAC4167B
+	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 18:12:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 2933623E1E
-	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 18:07:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B544923DE3
+	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 18:12:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390943AbgLJRLQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Dec 2020 12:11:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57598 "EHLO
+        id S2391482AbgLJSL4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Dec 2020 13:11:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392571AbgLJRLO (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 10 Dec 2020 12:11:14 -0500
-Received: from mail-wm1-x344.google.com (mail-wm1-x344.google.com [IPv6:2a00:1450:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F80C0617A6;
-        Thu, 10 Dec 2020 09:10:21 -0800 (PST)
-Received: by mail-wm1-x344.google.com with SMTP id v14so5294164wml.1;
-        Thu, 10 Dec 2020 09:10:21 -0800 (PST)
+        with ESMTP id S2403968AbgLJSLv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 10 Dec 2020 13:11:51 -0500
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3629C0613D6;
+        Thu, 10 Dec 2020 10:11:10 -0800 (PST)
+Received: by mail-io1-xd42.google.com with SMTP id i9so6502666ioo.2;
+        Thu, 10 Dec 2020 10:11:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=cMIbkw8ToNIRCP5ibpvh5XChPbgC3AeOsLNE8THfWBw=;
-        b=lmotrk1DLgtc1ntuVGmQPF+tU/pfVAgXRw3yPneG2vtnDYIcwj1kIG/x92rtSD2a2M
-         ixH2yjJDD/rSE6xUz1V8xyRPuR6P0zu86P2kg0My5qmL+EGnbm3sjAWWUb+lHrmJTbWi
-         lVFy5ONWJS7/cTQaJEMXFyHSPIVjOHAApfzy7+Br7yVj5fWMgIawiQ6BWXG7aLgP9kbJ
-         OPSv71Ff4LgylmLljK6LaZZX2pn0G2ohnYge41hMPShULtK2ABVPwtkTmBm5oGo8+vgP
-         X8W4CpzYOUNHgs8fxzimqtuyt2+K7wztVduWdYqIrEi16KTY2slmKFA7ZrR9llGkcS0v
-         8mXw==
+         :cc;
+        bh=wiJyrbtaj/a+/f7ClmrTZqeyRbQUwU/QHd41NceO6Ak=;
+        b=HpRads/agzQPixVMMvlKUhwA46ta/X5A9Fz0VZeATTxhXJ3EyBDBovdNHUkV74xtLf
+         LNikz/KZBB263UmPHwZR4DclSUtDqC4fcY+K1aec/RJTs6YL3n91Gatum90Wf4+16nSU
+         2+XnjqTquXSmjoAIzShQbFxgfBYLqX5KWTmZ+Ln+rlJgZ3+GPbSVyYu8/KEw65JrZXSl
+         7BMR8qgawDhN6fVaEFYhWy/kUrb5GMDbd5b78lQj/1QaVhaV4uTeZ8EK1Bl2h7SXrGGn
+         9Vzdzm9Q+ZjyNGZpqylZ1mzS3lnbRWWbI5OuNyh5N3ZAnzAYHMsk6jV5dsPIZLrE1iJB
+         1pYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=cMIbkw8ToNIRCP5ibpvh5XChPbgC3AeOsLNE8THfWBw=;
-        b=BvCTQI+TAnOImhCkFo+EK2nI6ujsHV45lwOPWRrMIczh1jzW+WGay9DugFb9IUbrWc
-         iZP0Yej/kOhgzEE23H/jH80oYtVvE3kQAX812eZl+VOz/GRc9INbchbkcNhwPsP3v0sV
-         otTHsW3MB+z21pnt8UwJSor7sEnC4B30pvYaK/MLuXjB/UJZDb40SBnOCUFas9LoZQ7H
-         OihH2yGsz14xuHgqTmrCGW+zb8QXPjIV6Sr/I4O/bX8YyQCCVZ/uIVANt8M6Y4ZyVOPl
-         rkXRG6KigqX9fr0mSOclkZICXGcRFabwQ6VQmyUs9aVpau1OxL/7bfnKAv7FImoiUpPD
-         7HuQ==
-X-Gm-Message-State: AOAM530qcIh9pRnX50ODIYnj+7gSuwBSAgy569TPlStl5Z85htNWdOyu
-        mqjrlxPMUgFa3Vl6dc9lYaaPWZG4QO1Gvh/k/dc=
-X-Google-Smtp-Source: ABdhPJxjeI41+J/a/a5jp41VltkB46BgA1Q0hs5Mz+qXXaPi74197M+NShjlBtggg+MD7LWdnkEc5vWRSJMxXriyP+s=
-X-Received: by 2002:a1c:5506:: with SMTP id j6mr9449234wmb.30.1607620220071;
- Thu, 10 Dec 2020 09:10:20 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=wiJyrbtaj/a+/f7ClmrTZqeyRbQUwU/QHd41NceO6Ak=;
+        b=t8CKOhdkEVWIXu13M5d4Bwfa74aY7Sm+iA3bUR2UbiKbolfzg+gcc3kCqYZdw8Lh6i
+         j8jcMJLz6giEDgaq4YKr+Z2jS6g/f4zaT5JcYos6Z8FWCie/mrPSC3pLupfSzH2EeKY6
+         uikXoijfERB8yTTvglW/vhaig7ok95PNb0WJktp72dcq9a+FWTXnh/IWeZW22mOEQksf
+         FQkky/s8atatl+9eW9+M/DAdAYl6xQNjhs2wWkfPTcp7iOrPBoR72c21iWg9l7SdIfMK
+         Fr+9JKvr+335St86frVMH8uJH10uZFJi1ZcQDzIlMDlmh3kBw27A8xGiYnUD36nsAxY/
+         oAzw==
+X-Gm-Message-State: AOAM5320xLbXc6qfcy8U0sWHSB7EK1Ed5H64YBCXFwM+rNaT3a0tMhFd
+        bjogIpFjAFC6JblfTVaC2H0YcE+thm62OVlFymk=
+X-Google-Smtp-Source: ABdhPJw4yxYoYUEAVmN0wbSFbKI/msBiu93FC/hr5M+7mw+1y0w8XNWcSciqUWx46G+dCgCL1s1rinCbU2QK7JYewr4=
+X-Received: by 2002:a05:6602:150b:: with SMTP id g11mr9410411iow.88.1607623870123;
+ Thu, 10 Dec 2020 10:11:10 -0800 (PST)
 MIME-Version: 1.0
-References: <20201210121915.14412-1-bjorn.topel@gmail.com> <20201210161105.GD45760@ranger.igk.intel.com>
-In-Reply-To: <20201210161105.GD45760@ranger.igk.intel.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Thu, 10 Dec 2020 18:10:08 +0100
-Message-ID: <CAJ+HfNh4LS-25LH0gE0Pun7v=q=8zChmKUaN+hQA_58gwtbZ-g@mail.gmail.com>
-Subject: Re: [PATCH net-next] ice, xsk: Move Rx alloction out of while-loop
+References: <e54fb61ff17c21f022392f1bb46ec951c9b909cc.1607615094.git.lorenzo@kernel.org>
+ <20201210160507.GC45760@ranger.igk.intel.com> <20201210163241.GA462213@lore-desk>
+ <20201210165556.GA46492@ranger.igk.intel.com>
+In-Reply-To: <20201210165556.GA46492@ranger.igk.intel.com>
+From:   Alexander Duyck <alexander.duyck@gmail.com>
+Date:   Thu, 10 Dec 2020 10:10:58 -0800
+Message-ID: <CAKgT0UcM14JSZnfjr_Nc=+Y0ZLvaT3wz9VZyDW3mjTJJuptR8A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] net: xdp: introduce xdp_init_buff utility routine
 To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     intel-wired-lan <intel-wired-lan@lists.osuosl.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Cc:     Lorenzo Bianconi <lorenzo@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        lorenzo.bianconi@redhat.com, Saeed Mahameed <saeed@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 10 Dec 2020 at 17:20, Maciej Fijalkowski
+On Thu, Dec 10, 2020 at 9:05 AM Maciej Fijalkowski
 <maciej.fijalkowski@intel.com> wrote:
 >
-> On Thu, Dec 10, 2020 at 01:19:15PM +0100, Bj=C3=B6rn T=C3=B6pel wrote:
-> > From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
+> On Thu, Dec 10, 2020 at 05:32:41PM +0100, Lorenzo Bianconi wrote:
+> > > On Thu, Dec 10, 2020 at 04:50:42PM +0100, Lorenzo Bianconi wrote:
+> > > > Introduce xdp_init_buff utility routine to initialize xdp_buff data
+> > > > structure. Rely on xdp_init_buff in all XDP capable drivers.
+> > >
+> > > Hm, Jesper was suggesting two helpers, one that you implemented for things
+> > > that are set once per NAPI and the other that is set per each buffer.
+> > >
+> > > Not sure about the naming for a second one - xdp_prepare_buff ?
+> > > xdp_init_buff that you have feels ok.
 > >
-> > Instead of trying to allocate for each packet, move it outside the
-> > while loop and try to allocate once every NAPI loop.
+> > ack, so we can have xdp_init_buff() for initialization done once per NAPI run and
+> > xdp_prepare_buff() for per-NAPI iteration initialization, e.g.
+> >
+> > static inline void
+> > xdp_prepare_buff(struct xdp_buff *xdp, unsigned char *hard_start,
+> >                int headroom, int data_len)
+> > {
+> >       xdp->data_hard_start = hard_start;
+> >       xdp->data = hard_start + headroom;
+> >       xdp->data_end = xdp->data + data_len;
+> >       xdp_set_data_meta_invalid(xdp);
+> > }
 >
-> To rectify above, it wasn't for each packet but per ICE_RX_BUF_WRITE
-> cleaned frames (16).
+> I think we should allow for setting the data_meta as well.
+> x64 calling convention states that first four args are placed onto
+> registers, so to keep it fast maybe have a third helper:
 >
-> You also have a typo in subject (alloction).
+> static inline void
+> xdp_prepare_buff_meta(struct xdp_buff *xdp, unsigned char *hard_start,
+>                       int headroom, int data_len)
+> {
+>         xdp->data_hard_start = hard_start;
+>         xdp->data = hard_start + headroom;
+>         xdp->data_end = xdp->data + data_len;
+>         xdp->data_meta = xdp->data;
+> }
 >
-> Is spinning a v2 worth it?
->
+> Thoughts?
 
-Sure! I'll rephrase, and resend!
+We only really need the 2, init and prepare. Also this is inline so I
+don't think the arguments passed really play much of a role since
+values like the headroom are likely to be constants and treated as
+such.
 
-Thanks,
-Bj=C3=B6rn
+- Alex
