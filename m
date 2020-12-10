@@ -2,117 +2,113 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AF541C4361B
-	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 01:16:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CCB9C433FE
+	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 01:34:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8483B23AC4
-	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 01:16:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 30DE123BC7
+	for <bpf@archiver.kernel.org>; Thu, 10 Dec 2020 01:34:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731830AbgLJBNi (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 9 Dec 2020 20:13:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51318 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731943AbgLJBNg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 9 Dec 2020 20:13:36 -0500
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A2AFC0613D6;
-        Wed,  9 Dec 2020 17:12:56 -0800 (PST)
-Received: by mail-lf1-x143.google.com with SMTP id w13so5815978lfd.5;
-        Wed, 09 Dec 2020 17:12:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QyjZecAJCum42+wa4R0rubhKSM2W54Cbm6oDZdsQblA=;
-        b=nQ8iSrlOU8qAkkvB2DFzVO9/y5Ugxl4jx20hH6ARVqnCs3p13pIkU3pOq/+xj4fGcL
-         ST1+AhMrIoFHopKfHzOfQDrTt6+e3SR7x4wtZbzIPTe836Wg/epumGb81psMIKUUP92R
-         Z6AgrlDAXw2DjBmHbvVZKKv/6eAp3JPx+ul5yTIevK3jZuL7p36mCgI8bfTk9S1LnGZf
-         fukbhDgDQwwMbJdUahCspou61v6PLB7Qn8/FOigcplastmym0LwpHVdVgH3xGfyIyW/c
-         hzE+DmVWl7m1TGDc+5sLdle2nkkVnUuVu1SZcAYOksjHLNn03Xsg7+ryqdo76ykJ+fsS
-         YcFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QyjZecAJCum42+wa4R0rubhKSM2W54Cbm6oDZdsQblA=;
-        b=Fm8fH58oQDrDknHnY/2XFTZJlGX1TOG5ak9kqv+epD+f63qvKRu0habaipiD9d/5/H
-         Zce41dWhnBifMqkoyIP3+C6HdBXLJOCrwXt6iwHRLRYYh37H9IvVOkhWEFm/2ZFVRRA8
-         g2snMRmeyusmYiPcp1swTSwNY9Q0ANLN8kCIMJxz//G9JmYxPo6Pm3LvcR8Z7cg+79zA
-         2LDMCIa5A21zq/F0kzxqgzsdr39mTnix+Vq1PmIeLaH+uXIE7P9SEyyQFcqnKo0jeAVF
-         j6U+k/j3ffu3DPjPPdir8ixgyulIzaOx0jephIcOC6Mi/COlYA14bFqkAhKViOkMrXMl
-         Ymbg==
-X-Gm-Message-State: AOAM531Dfu0a+fH3am3fmTNp/tlgRCLHCOjYRU4M86GmE0k6C73rCrUN
-        ecDXRVabXBHXXnbWW6k/eOgtbfGS38VvOlkRI2/TBSA2
-X-Google-Smtp-Source: ABdhPJzYwCnYNE8XNSNlGBL+LALCBUAE1nm0EdvDkAX0JEp06MibXC0+43/kKoYAfQhm85NMXolnM8Vll12GXa0tY+4=
-X-Received: by 2002:ac2:43c1:: with SMTP id u1mr879140lfl.38.1607562774513;
- Wed, 09 Dec 2020 17:12:54 -0800 (PST)
+        id S1725789AbgLJBee (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 9 Dec 2020 20:34:34 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:40594 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726263AbgLJBee (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 9 Dec 2020 20:34:34 -0500
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 0BA1UVPM013622
+        for <bpf@vger.kernel.org>; Wed, 9 Dec 2020 17:33:53 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=II26ErAQN8MabkL7QMS/zJLB9HrbLm52P8HT593lQQk=;
+ b=nmGcqhPHmIs1l3SdWwWlQ+NmkzoKu3kQqjlk5j10f5H45x1eiVgkGGL+TLpKHqY8nOd+
+ v+5fODP044nFcu+ThdhLwO4y+w+n+zy71FbNJBUeuhHA/ZMq0vxu6MdA5IUyf7qbcBee
+ gCHLg4GSMs5Ub6syHx/V7Q6GH4f48RAG4ts= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 35ac7qmmcs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Wed, 09 Dec 2020 17:33:53 -0800
+Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Wed, 9 Dec 2020 17:33:52 -0800
+Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
+        id 6E45337053FB; Wed,  9 Dec 2020 17:33:50 -0800 (PST)
+From:   Yonghong Song <yhs@fb.com>
+To:     <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: add a test for ptr_to_map_value on stack for helper access
+Date:   Wed, 9 Dec 2020 17:33:50 -0800
+Message-ID: <20201210013350.943985-1-yhs@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201210013348.943623-1-yhs@fb.com>
+References: <20201210013348.943623-1-yhs@fb.com>
 MIME-Version: 1.0
-References: <20201207081556.pwxmhgdxayzbofpi@lion.mk-sys.cz>
- <CAFxkdApgQ4RCt-J43cK4_128pXr=Xn5jw+q0kOaP-TYufk_tPA@mail.gmail.com>
- <CAADnVQK-EsdBohcVSaK+zaP9XuPZTBkGbQpkeYcrC9BzoPQUuw@mail.gmail.com>
- <20201207225351.2liywqaxxtuezzw3@lion.mk-sys.cz> <CAADnVQJARx6sKF-30YsabCd1W+MFDMmfxY+2u0Pm40RHHHQZ6Q@mail.gmail.com>
- <CAADnVQJ6tmzBXvtroBuEH6QA0H+q7yaSKxrVvVxhqr3KBZdEXg@mail.gmail.com>
- <20201209144628.GA3474@wp.pl> <20201209150826.GP7338@casper.infradead.org>
- <20201209155148.GA5552@wp.pl> <20201209180552.GA28692@infradead.org> <20201209223206.GA1935@home.goodmis.org>
-In-Reply-To: <20201209223206.GA1935@home.goodmis.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 9 Dec 2020 17:12:43 -0800
-Message-ID: <CAADnVQKiBWG9NVNEV9EqGkyd-n3Yj88cNJpH997js-63eTVAOQ@mail.gmail.com>
-Subject: Re: [PATCH] mm/filemap: add static for function __add_to_page_cache_locked
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        Justin Forbes <jmforbes@linuxtx.org>,
-        bpf <bpf@vger.kernel.org>, Alex Shi <alex.shi@linux.alibaba.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Souptick Joarder <jrdr.linux@gmail.com>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Josef Bacik <josef@toxicpanda.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2020-12-09_19:2020-12-09,2020-12-09 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0
+ clxscore=1015 bulkscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0
+ mlxscore=0 adultscore=0 mlxlogscore=872 priorityscore=1501 suspectscore=13
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012100009
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Dec 9, 2020 at 2:32 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Wed, Dec 09, 2020 at 06:05:52PM +0000, Christoph Hellwig wrote:
-> > On Wed, Dec 09, 2020 at 04:51:48PM +0100, Stanislaw Gruszka wrote:
-> > > On Wed, Dec 09, 2020 at 03:08:26PM +0000, Matthew Wilcox wrote:
-> > > > On Wed, Dec 09, 2020 at 03:46:28PM +0100, Stanislaw Gruszka wrote:
-> > > > > At this point of release cycle we should probably go with revert,
-> > > > > but I think the main problem is that BPF and ERROR_INJECTION use
-> > > > > function that is not intended to be used externally. For external users
-> > > > > add_to_page_cache_lru() and add_to_page_cache_locked() are exported
-> > > > > and I think those should be used (see the patch below).
-> > > >
-> > > > FWIW, I intend to do some consolidation/renaming in this area.  I
-> > > > trust that will not be a problem?
-> > >
-> > > If it does not break anything, it will be not a problem ;-)
-> > >
-> > > It's possible that __add_to_page_cache_locked() can be a global symbol
-> > > with add_to_page_cache_lru() + add_to_page_cache_locked() being just
-> > > static/inline wrappers around it.
-> >
-> > So what happens to BTF if we change this area entirely?  Your IDs
-> > sound like some kind of ABI to me, which is extremely scary.
->
-> Is BTF becoming the new tracepoint? That is, random additions of things like:
->
->    BTF_ID(func,__add_to_page_cache_locked)
->
-> Like was done in commit 1e6c62a882155 ("bpf: Introduce sleepable BPF
-> programs") without any notification to the maintainers of the
-> __add_to_page_cache_locked code, will suddenly become an API?
+Change bpf_iter_task.c such that pointer to map_value may appear
+on the stack for bpf_seq_printf() to access. Without previous
+verifier patch, the bpf_iter test will fail.
 
-huh? what api/abi you're talking about?
+Signed-off-by: Yonghong Song <yhs@fb.com>
+---
+ tools/testing/selftests/bpf/progs/bpf_iter_task.c | 3 ++-
+ tools/testing/selftests/bpf/verifier/unpriv.c     | 5 +++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task.c b/tools/te=
+sting/selftests/bpf/progs/bpf_iter_task.c
+index 4983087852a0..b7f32c160f4e 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_task.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_task.c
+@@ -11,9 +11,10 @@ int dump_task(struct bpf_iter__task *ctx)
+ {
+ 	struct seq_file *seq =3D ctx->meta->seq;
+ 	struct task_struct *task =3D ctx->task;
++	static char info[] =3D "    =3D=3D=3D END =3D=3D=3D";
+=20
+ 	if (task =3D=3D (void *)0) {
+-		BPF_SEQ_PRINTF(seq, "    =3D=3D=3D END =3D=3D=3D\n");
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
+ 		return 0;
+ 	}
+=20
+diff --git a/tools/testing/selftests/bpf/verifier/unpriv.c b/tools/testin=
+g/selftests/bpf/verifier/unpriv.c
+index 91bb77c24a2e..a3fe0fbaed41 100644
+--- a/tools/testing/selftests/bpf/verifier/unpriv.c
++++ b/tools/testing/selftests/bpf/verifier/unpriv.c
+@@ -108,8 +108,9 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.fixup_map_hash_8b =3D { 3 },
+-	.errstr =3D "invalid indirect read from stack off -8+0 size 8",
+-	.result =3D REJECT,
++	.errstr_unpriv =3D "invalid indirect read from stack off -8+0 size 8",
++	.result_unpriv =3D REJECT,
++	.result =3D ACCEPT,
+ },
+ {
+ 	"unpriv: mangle pointer on stack 1",
+--=20
+2.24.1
+
