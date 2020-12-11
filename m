@@ -2,129 +2,119 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FBF1C4361B
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 17:45:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8546EC4361B
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 18:12:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DFC4E22D03
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 17:45:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 58AC923106
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 18:12:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388810AbgLKQlR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Dec 2020 11:41:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388382AbgLKQkl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Dec 2020 11:40:41 -0500
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FE30C061793;
-        Fri, 11 Dec 2020 08:40:00 -0800 (PST)
-Received: by mail-wm1-x342.google.com with SMTP id 3so9171581wmg.4;
-        Fri, 11 Dec 2020 08:40:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=11vbsMQ7mLuZm/TRWwxVBUaF2+2DPCNUSTFQEQ07Mfw=;
-        b=RgzvpQ6QzXLPW6snhe8VmyU2qa7KDQiUzaWB/NQ/wXl8/uA75QVUICRZVglL3aYCQX
-         ++4R/RA5n6n+F82k2IJ8K1SNAewF/deS/raR4RWYHufgPWqWJGSCJjQA/MRwPzE7dT1J
-         fVVBOTZE7J8PNyQ66+QQOjhkOtXcB4BaeJunIE/vPHmzMXOtGQfNiJtDHPuedvOwUtyt
-         6plXC98eR/BqaRVFSa7atYhKsm6nJlMT4NzJT8Dy2Sk+0TqFALAr9d3kc1VMHTCcxkDQ
-         oK/og+DxxAqCJdMEV9ZwcO4VCVhcLEKKsL1hJHFvmD2lwSeoId9uXLhUVPIjLPI4t1ZQ
-         Yyxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=11vbsMQ7mLuZm/TRWwxVBUaF2+2DPCNUSTFQEQ07Mfw=;
-        b=EK9xjn4D8gMMglvW++x6ENB0bQs36i8Bj8IMwkbcoiFeQaPH2c22UbyV+99N90nAJR
-         tvhw8d4kin+t77HX/oYP8GDy7ePe12XmZ+d0gHbO0v6rNUuEqXaNYkEo8/aN7jW3T29K
-         IKd73aXKHFWax0FUlyH2vVspTwCKTL7hOrXQqkZ5lZOsRYiNqJHRrjQedW3iVZuD4Oq8
-         tspSCtGiz3/wj7n3Xt4fY/ihskmKK0RT4ZrT1JmulVS67muk08wc+iDO0jeHPYJIk6J4
-         QfEWTc7oj7V5da/RS93JTUz0o3jbTAvgtbW1VAOUJ0BKB5h/MFFJnjlti5P0wod8GohI
-         nfgA==
-X-Gm-Message-State: AOAM533Dt+4Eaw1HYJb4FOqkZgoT29cXbUVDdYdau9fee3/vTBPlHKXW
-        x6Xjoqaeg9rvZLSLDtjF6/4=
-X-Google-Smtp-Source: ABdhPJwQ8K+Tyzvi6gCN3r/dzr8esKC9hmz/SpNVFINOctiCuawyesI++ulYLGhRZHDmLDgCAsTOIg==
-X-Received: by 2002:a7b:c8da:: with SMTP id f26mr14835318wml.155.1607704799292;
-        Fri, 11 Dec 2020 08:39:59 -0800 (PST)
-Received: from localhost.localdomain ([77.137.145.246])
-        by smtp.gmail.com with ESMTPSA id r20sm16061016wrg.66.2020.12.11.08.39.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Dec 2020 08:39:58 -0800 (PST)
-From:   Yonatan Linik <yonatanlinik@gmail.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
-        john.fastabend@gmail.com, kpsingh@chromium.org, willemb@google.com,
-        john.ogness@linutronix.de, arnd@arndb.de, maowenan@huawei.com,
-        colin.king@canonical.com, orcohen@paloaltonetworks.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, Yonatan Linik <yonatanlinik@gmail.com>
-Subject: [PATCH 1/1] net: Fix use of proc_fs
-Date:   Fri, 11 Dec 2020 18:37:49 +0200
-Message-Id: <20201211163749.31956-2-yonatanlinik@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20201211163749.31956-1-yonatanlinik@gmail.com>
-References: <20201211163749.31956-1-yonatanlinik@gmail.com>
+        id S1733291AbgLKRAg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Dec 2020 12:00:36 -0500
+Received: from mga06.intel.com ([134.134.136.31]:8172 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732817AbgLKRAK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Dec 2020 12:00:10 -0500
+IronPort-SDR: kRvInXPzS/VAXEaDu1xUxks1rbkJ+OPpYOXxW7SpawGFEMNHYtn3Q6j62bgn7fNQj695mGE/xX
+ Q5r2NXoioQ9w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9832"; a="236055078"
+X-IronPort-AV: E=Sophos;i="5.78,411,1599548400"; 
+   d="scan'208";a="236055078"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2020 08:59:29 -0800
+IronPort-SDR: Ar5Ttzm0j9XtQ1+brWhhR6+58fGU5rVEo+HPEfffkiNnjuG0CgX7gKgz1We9fF1ExWnmivyXuH
+ BOfqdMg8zVzg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,411,1599548400"; 
+   d="scan'208";a="365497514"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by orsmga008.jf.intel.com with ESMTP; 11 Dec 2020 08:59:27 -0800
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     intel-wired-lan@lists.osuosl.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        anthony.l.nguyen@intel.com, kuba@kernel.org, bjorn.topel@intel.com,
+        magnus.karlsson@intel.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH net-next 2/8] i40e: drop misleading function comments
+Date:   Fri, 11 Dec 2020 17:49:50 +0100
+Message-Id: <20201211164956.59628-3-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20201211164956.59628-1-maciej.fijalkowski@intel.com>
+References: <20201211164956.59628-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-proc_fs was used, in af_packet, without a surrounding #ifdef,
-although there is no hard dependency on proc_fs.
-That caused the initialization of the af_packet module to fail
-when CONFIG_PROC_FS=n.
+i40e_cleanup_headers has a statement about check against skb being
+linear or not which is not relevant anymore, so let's remove it.
 
-Specifically, proc_create_net() was used in af_packet.c,
-and when it fails, packet_net_init() returns -ENOMEM.
-It will always fail when the kernel is compiled without proc_fs,
-because, proc_create_net() for example always returns NULL.
+Same case for i40e_can_reuse_rx_page, it references things that are not
+present there anymore.
 
-The calling order that starts in af_packet.c is as follows:
-packet_init()
-register_pernet_subsys()
-register_pernet_operations()
-__register_pernet_operations()
-ops_init()
-ops->init() (packet_net_ops.init=packet_net_init())
-proc_create_net()
-
-It worked in the past because register_pernet_subsys()'s return value
-wasn't checked before this Commit 36096f2f4fa0 ("packet: Fix error path in
-packet_init.").
-It always returned an error, but was not checked before, so everything
-was working even when CONFIG_PROC_FS=n.
-
-The fix here is simply to add the necessary #ifdef.
-
-Signed-off-by: Yonatan Linik <yonatanlinik@gmail.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- net/packet/af_packet.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c | 33 ++++-----------------
+ 1 file changed, 6 insertions(+), 27 deletions(-)
 
-diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index 2b33e977a905..031f2b593720 100644
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -4612,9 +4612,11 @@ static int __net_init packet_net_init(struct net *net)
- 	mutex_init(&net->packet.sklist_lock);
- 	INIT_HLIST_HEAD(&net->packet.sklist);
- 
-+#ifdef CONFIG_PROC_FS
- 	if (!proc_create_net("packet", 0, net->proc_net, &packet_seq_ops,
- 			sizeof(struct seq_net_private)))
- 		return -ENOMEM;
-+#endif /* CONFIG_PROC_FS */
- 
- 	return 0;
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+index 9f73cd7aee09..1dbb8efa50ad 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+@@ -1809,9 +1809,6 @@ void i40e_process_skb_fields(struct i40e_ring *rx_ring,
+  * @skb: pointer to current skb being fixed
+  * @rx_desc: pointer to the EOP Rx descriptor
+  *
+- * Also address the case where we are pulling data in on pages only
+- * and as such no data is present in the skb header.
+- *
+  * In addition if skb is not at least 60 bytes we need to pad it so that
+  * it is large enough to qualify as a valid Ethernet frame.
+  *
+@@ -1857,32 +1854,14 @@ static inline bool i40e_page_is_reusable(struct page *page)
  }
+ 
+ /**
+- * i40e_can_reuse_rx_page - Determine if this page can be reused by
+- * the adapter for another receive
+- *
++ * i40e_can_reuse_rx_page - Determine if page can be reused for another Rx
+  * @rx_buffer: buffer containing the page
+  *
+- * If page is reusable, rx_buffer->page_offset is adjusted to point to
+- * an unused region in the page.
+- *
+- * For small pages, @truesize will be a constant value, half the size
+- * of the memory at page.  We'll attempt to alternate between high and
+- * low halves of the page, with one half ready for use by the hardware
+- * and the other half being consumed by the stack.  We use the page
+- * ref count to determine whether the stack has finished consuming the
+- * portion of this page that was passed up with a previous packet.  If
+- * the page ref count is >1, we'll assume the "other" half page is
+- * still busy, and this page cannot be reused.
+- *
+- * For larger pages, @truesize will be the actual space used by the
+- * received packet (adjusted upward to an even multiple of the cache
+- * line size).  This will advance through the page by the amount
+- * actually consumed by the received packets while there is still
+- * space for a buffer.  Each region of larger pages will be used at
+- * most once, after which the page will not be reused.
+- *
+- * In either case, if the page is reusable its refcount is increased.
+- **/
++ * If page is reusable, we have a green light for calling i40e_reuse_rx_page,
++ * which will assign the current buffer to the buffer that next_to_alloc is
++ * pointing to; otherwise, the DMA mapping needs to be destroyed and
++ * page freed
++ */
+ static bool i40e_can_reuse_rx_page(struct i40e_rx_buffer *rx_buffer)
+ {
+ 	unsigned int pagecnt_bias = rx_buffer->pagecnt_bias;
 -- 
-2.25.1
+2.20.1
 
