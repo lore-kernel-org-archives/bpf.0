@@ -2,42 +2,43 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.2 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	UNWANTED_LANGUAGE_BODY,USER_AGENT_GIT autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 21025C2BB9A
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 04:29:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5F376C4361B
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 04:30:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E86B723ED2
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 04:29:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3264B23EF2
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 04:30:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732945AbgLKE3B convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Thu, 10 Dec 2020 23:29:01 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:51338 "EHLO
+        id S2395385AbgLKE3d convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 10 Dec 2020 23:29:33 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:55818 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2395379AbgLKE2u (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 10 Dec 2020 23:28:50 -0500
+        by vger.kernel.org with ESMTP id S2395384AbgLKE3G (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 10 Dec 2020 23:29:06 -0500
 Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 0BB4B2FD012855
-        for <bpf@vger.kernel.org>; Thu, 10 Dec 2020 20:28:09 -0800
+        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 0BB4Afiu012659
+        for <bpf@vger.kernel.org>; Thu, 10 Dec 2020 20:28:25 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 35bqd4butb-1
+        by m0089730.ppops.net with ESMTP id 35bqd4buu3-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 10 Dec 2020 20:28:09 -0800
+        for <bpf@vger.kernel.org>; Thu, 10 Dec 2020 20:28:25 -0800
 Received: from intmgw002.08.frc2.facebook.com (2620:10d:c085:208::11) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ mail.thefacebook.com (2620:10d:c085:21d::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 10 Dec 2020 20:28:08 -0800
+ 15.1.1979.3; Thu, 10 Dec 2020 20:28:23 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id CAD0C2ECB1A1; Thu, 10 Dec 2020 20:28:05 -0800 (PST)
+        id 550B82ECB1A1; Thu, 10 Dec 2020 20:28:12 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>
-Subject: [PATCH RFC bpf-next  1/4] selftests/bpf: sync RCU before unloading bpf_testmod
-Date:   Thu, 10 Dec 2020 20:27:31 -0800
-Message-ID: <20201211042734.730147-2-andrii@kernel.org>
+Subject: [PATCH RFC bpf-next  4/4] selftests/bpf: test kernel module ksym externs
+Date:   Thu, 10 Dec 2020 20:27:34 -0800
+Message-ID: <20201211042734.730147-5-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201211042734.730147-1-andrii@kernel.org>
 References: <20201211042734.730147-1-andrii@kernel.org>
@@ -48,7 +49,7 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
  definitions=2020-12-11_01:2020-12-09,2020-12-11 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
- suspectscore=9 bulkscore=0 adultscore=0 spamscore=0 impostorscore=0
+ suspectscore=8 bulkscore=0 adultscore=0 spamscore=0 impostorscore=0
  malwarescore=0 phishscore=0 clxscore=1015 lowpriorityscore=0
  priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2009150000 definitions=main-2012110023
@@ -57,130 +58,110 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-If some of the subtests use module BTFs through ksyms, they will cause
-bpf_prog to take a refcount on bpf_testmod module, which will prevent it from
-successfully unloading. Module's refcnt is decremented when bpf_prog is freed,
-which generally happens in RCU callback. So reuse kernel_sync_rcu(), so far
-utilized by map-in-map selftest, to wait a bit before attempting to unload
-bpf_testmod.
+Add per-CPU variable to bpf_testmod.ko and use those from new selftest to
+validate it works end-to-end.
 
-Fixes: 9f7fa225894c ("selftests/bpf: Add bpf_testmod kernel module for testing")
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- .../selftests/bpf/prog_tests/btf_map_in_map.c | 33 ---------------
- tools/testing/selftests/bpf/test_progs.c      | 40 +++++++++++++++++++
- tools/testing/selftests/bpf/test_progs.h      |  1 +
- 3 files changed, 41 insertions(+), 33 deletions(-)
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  3 ++
+ .../selftests/bpf/prog_tests/ksyms_module.c   | 33 +++++++++++++++++++
+ .../selftests/bpf/progs/test_ksyms_module.c   | 26 +++++++++++++++
+ 3 files changed, 62 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/ksyms_module.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_ksyms_module.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-index 76ebe4c250f1..eb90a6b8850d 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_map_in_map.c
-@@ -20,39 +20,6 @@ static __u32 bpf_map_id(struct bpf_map *map)
- 	return info.id;
- }
+diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+index 2df19d73ca49..0b991e115d1f 100644
+--- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
+@@ -3,6 +3,7 @@
+ #include <linux/error-injection.h>
+ #include <linux/init.h>
+ #include <linux/module.h>
++#include <linux/percpu-defs.h>
+ #include <linux/sysfs.h>
+ #include <linux/tracepoint.h>
+ #include "bpf_testmod.h"
+@@ -10,6 +11,8 @@
+ #define CREATE_TRACE_POINTS
+ #include "bpf_testmod-events.h"
  
--/*
-- * Trigger synchronize_rcu() in kernel.
-- *
-- * ARRAY_OF_MAPS/HASH_OF_MAPS lookup/update operations trigger synchronize_rcu()
-- * if looking up an existing non-NULL element or updating the map with a valid
-- * inner map FD. Use this fact to trigger synchronize_rcu(): create map-in-map,
-- * create a trivial ARRAY map, update map-in-map with ARRAY inner map. Then
-- * cleanup. At the end, at least one synchronize_rcu() would be called.
-- */
--static int kern_sync_rcu(void)
--{
--	int inner_map_fd, outer_map_fd, err, zero = 0;
--
--	inner_map_fd = bpf_create_map(BPF_MAP_TYPE_ARRAY, 4, 4, 1, 0);
--	if (CHECK(inner_map_fd < 0, "inner_map_create", "failed %d\n", -errno))
--		return -1;
--
--	outer_map_fd = bpf_create_map_in_map(BPF_MAP_TYPE_ARRAY_OF_MAPS, NULL,
--					     sizeof(int), inner_map_fd, 1, 0);
--	if (CHECK(outer_map_fd < 0, "outer_map_create", "failed %d\n", -errno)) {
--		close(inner_map_fd);
--		return -1;
--	}
--
--	err = bpf_map_update_elem(outer_map_fd, &zero, &inner_map_fd, 0);
--	if (err)
--		err = -errno;
--	CHECK(err, "outer_map_update", "failed %d\n", err);
--	close(inner_map_fd);
--	close(outer_map_fd);
--	return err;
--}
--
- static void test_lookup_update(void)
- {
- 	int map1_fd, map2_fd, map3_fd, map4_fd, map5_fd, map1_id, map2_id;
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 5ef081bdae4e..6e59e6bcb5d4 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -370,8 +370,48 @@ static int delete_module(const char *name, int flags)
- 	return syscall(__NR_delete_module, name, flags);
- }
- 
-+/*
-+ * Trigger synchronize_rcu() in kernel.
-+ *
-+ * ARRAY_OF_MAPS/HASH_OF_MAPS lookup/update operations trigger synchronize_rcu()
-+ * if looking up an existing non-NULL element or updating the map with a valid
-+ * inner map FD. Use this fact to trigger synchronize_rcu(): create map-in-map,
-+ * create a trivial ARRAY map, update map-in-map with ARRAY inner map. Then
-+ * cleanup. At the end, at least one synchronize_rcu() would be called.
-+ */
-+int kern_sync_rcu(void)
++DEFINE_PER_CPU(int, bpf_testmod_ksym_percpu) = 123;
++
+ noinline ssize_t
+ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+ 		      struct bin_attribute *bin_attr,
+diff --git a/tools/testing/selftests/bpf/prog_tests/ksyms_module.c b/tools/testing/selftests/bpf/prog_tests/ksyms_module.c
+new file mode 100644
+index 000000000000..af6234e46cf7
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/ksyms_module.c
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++
++#include <test_progs.h>
++#include <bpf/libbpf.h>
++#include <bpf/btf.h>
++#include "test_ksyms_module.skel.h"
++
++static int duration;
++
++void test_ksyms_module(void)
 +{
-+	int inner_map_fd, outer_map_fd, err, zero = 0;
++	struct test_ksyms_module* skel;
++	struct test_ksyms_module__bss *bss;
++	int err;
 +
-+	inner_map_fd = bpf_create_map(BPF_MAP_TYPE_ARRAY, 4, 4, 1, 0);
-+	if (inner_map_fd < 0) {
-+		fprintf(env.stderr,
-+			"sync_rcu: failed to created outer map: %d\n", -errno);
-+		return -1;
-+	}
++	skel = test_ksyms_module__open_and_load();
++	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
++		return;
++	bss = skel->bss;
 +
-+	outer_map_fd = bpf_create_map_in_map(BPF_MAP_TYPE_ARRAY_OF_MAPS, NULL,
-+					     sizeof(int), inner_map_fd, 1, 0);
-+	if (outer_map_fd < 0) {
-+		fprintf(env.stderr,
-+			"sync_rcu: failed to created outer map: %d\n", -errno);
-+		close(inner_map_fd);
-+		return -1;
-+	}
++	err = test_ksyms_module__attach(skel);
++	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
++		goto cleanup;
 +
-+	err = bpf_map_update_elem(outer_map_fd, &zero, &inner_map_fd, 0);
-+	if (err)
-+		err = -errno;
++	usleep(1);
 +
-+	close(inner_map_fd);
-+	close(outer_map_fd);
-+	return err;
++	ASSERT_EQ(bss->triggered, true, "triggered");
++	ASSERT_EQ(bss->out_mod_ksym_global, 123, "global_ksym_val");
++
++cleanup:
++	test_ksyms_module__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_ksyms_module.c b/tools/testing/selftests/bpf/progs/test_ksyms_module.c
+new file mode 100644
+index 000000000000..ede7602410e1
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_ksyms_module.c
+@@ -0,0 +1,26 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2020 Facebook */
++
++#include "vmlinux.h"
++
++#include <bpf/bpf_helpers.h>
++
++extern const int bpf_testmod_ksym_percpu __ksym;
++
++int out_mod_ksym_global = 0;
++bool triggered = false;
++
++SEC("raw_tp/sys_enter")
++int handler(const void *ctx)
++{
++	int *val;
++	__u32 cpu;
++
++	val = (int *)bpf_this_cpu_ptr(&bpf_testmod_ksym_percpu);
++	out_mod_ksym_global = *val;
++	triggered = true;
++
++	return 0;
 +}
 +
- static void unload_bpf_testmod(void)
- {
-+	if (kern_sync_rcu())
-+		fprintf(env.stderr, "Failed to trigger kernel-side RCU sync!\n");
- 	if (delete_module("bpf_testmod", 0)) {
- 		if (errno == ENOENT) {
- 			if (env.verbosity > VERBOSE_NONE)
-diff --git a/tools/testing/selftests/bpf/test_progs.h b/tools/testing/selftests/bpf/test_progs.h
-index 115953243f62..e49e2fdde942 100644
---- a/tools/testing/selftests/bpf/test_progs.h
-+++ b/tools/testing/selftests/bpf/test_progs.h
-@@ -219,6 +219,7 @@ int bpf_find_map(const char *test, struct bpf_object *obj, const char *name);
- int compare_map_keys(int map1_fd, int map2_fd);
- int compare_stack_ips(int smap_fd, int amap_fd, int stack_trace_len);
- int extract_build_id(char *build_id, size_t size);
-+int kern_sync_rcu(void);
- 
- #ifdef __x86_64__
- #define SYS_NANOSLEEP_KPROBE_NAME "__x64_sys_nanosleep"
++char LICENSE[] SEC("license") = "GPL";
 -- 
 2.24.1
 
