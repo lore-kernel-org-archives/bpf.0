@@ -2,85 +2,76 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-8.7 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 99C75C4361B
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 18:27:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 573F0C4361B
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 19:00:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0502A23DE3
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 18:27:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1AC8323E1B
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 19:00:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404044AbgLKRCd (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Dec 2020 12:02:33 -0500
-Received: from mga06.intel.com ([134.134.136.31]:8161 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733261AbgLKRAg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Dec 2020 12:00:36 -0500
-IronPort-SDR: WXZsjiEl/3ADxX3qtpM1b6DFqd12Vuhk0PSC6O9GyExawo9xg8E24C1GmwjvqJScG6M0DflVai
- HT+JblgLoVSA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9832"; a="236055102"
-X-IronPort-AV: E=Sophos;i="5.78,411,1599548400"; 
-   d="scan'208";a="236055102"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2020 08:59:37 -0800
-IronPort-SDR: +L9CgSUjCVJahTqY3s4e+5WYJmVIC2Q/gPWi37OWaI8nGhEXu9eOgd2vzLEZon0U7QaGiNPNji
- 0p7DJEj8Ipfg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,411,1599548400"; 
-   d="scan'208";a="365497560"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga008.jf.intel.com with ESMTP; 11 Dec 2020 08:59:35 -0800
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     intel-wired-lan@lists.osuosl.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        anthony.l.nguyen@intel.com, kuba@kernel.org, bjorn.topel@intel.com,
-        magnus.karlsson@intel.com,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH net-next 6/8] ice: remove redundant checks in ice_change_mtu
-Date:   Fri, 11 Dec 2020 17:49:54 +0100
-Message-Id: <20201211164956.59628-7-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201211164956.59628-1-maciej.fijalkowski@intel.com>
-References: <20201211164956.59628-1-maciej.fijalkowski@intel.com>
+        id S2389587AbgLKRMl convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 11 Dec 2020 12:12:41 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:47926 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2393497AbgLKRMY (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 11 Dec 2020 12:12:24 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BBH8bZm003807
+        for <bpf@vger.kernel.org>; Fri, 11 Dec 2020 09:11:43 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 35c9reh4yq-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 11 Dec 2020 09:11:43 -0800
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 11 Dec 2020 09:11:41 -0800
+Received: by devvm2494.atn0.facebook.com (Postfix, from userid 172786)
+        id B53045283262; Fri, 11 Dec 2020 09:11:38 -0800 (PST)
+From:   Jonathan Lemon <jonathan.lemon@gmail.com>
+To:     <netdev@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <yhs@fb.com>, <bpf@vger.kernel.org>
+CC:     <kernel-team@fb.com>
+Subject: [PATCH 0/1 v3 bpf-next] bpf: increment and use correct thread iterator
+Date:   Fri, 11 Dec 2020 09:11:37 -0800
+Message-ID: <20201211171138.63819-1-jonathan.lemon@gmail.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2020-12-11_05:2020-12-11,2020-12-11 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ priorityscore=1501 impostorscore=0 lowpriorityscore=0 spamscore=0
+ clxscore=1034 adultscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ mlxscore=0 mlxlogscore=563 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012110115
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-dev_validate_mtu checks that mtu value specified by user is not less
-than min mtu and not greater than max allowed mtu. It is being done
-before calling the ndo_change_mtu exposed by driver, so remove these
-redundant checks in ice_change_mtu.
+From: Jonathan Lemon <bsd@fb.com>
 
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
- drivers/net/ethernet/intel/ice/ice_main.c | 9 ---------
- 1 file changed, 9 deletions(-)
+Reposting with one of the many splats seen.
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
-index 2dea4d0e9415..476e20af7309 100644
---- a/drivers/net/ethernet/intel/ice/ice_main.c
-+++ b/drivers/net/ethernet/intel/ice/ice_main.c
-@@ -6126,15 +6126,6 @@ static int ice_change_mtu(struct net_device *netdev, int new_mtu)
- 		}
- 	}
- 
--	if (new_mtu < (int)netdev->min_mtu) {
--		netdev_err(netdev, "new MTU invalid. min_mtu is %d\n",
--			   netdev->min_mtu);
--		return -EINVAL;
--	} else if (new_mtu > (int)netdev->max_mtu) {
--		netdev_err(netdev, "new MTU invalid. max_mtu is %d\n",
--			   netdev->min_mtu);
--		return -EINVAL;
--	}
- 	/* if a reset is in progress, wait for some time for it to complete */
- 	do {
- 		if (ice_is_reset_in_progress(pf->state)) {
+v2->v3:
+  Add splat to commitlog descriptions
+
+v1->v2
+  Use Fixes: shas from correct tree
+
+Jonathan Lemon (1):
+  bpf: increment and use correct thread iterator
+
+ kernel/bpf/task_iter.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
 -- 
-2.20.1
+2.24.1
 
