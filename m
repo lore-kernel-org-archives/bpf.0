@@ -2,46 +2,48 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43A67C4361B
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 18:16:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D700C4361B
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 18:16:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 114E523106
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 18:16:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4728A23106
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 18:16:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731295AbgLKRAZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Dec 2020 12:00:25 -0500
-Received: from mga06.intel.com ([134.134.136.31]:8161 "EHLO mga06.intel.com"
+        id S2392739AbgLKRCd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Dec 2020 12:02:33 -0500
+Received: from mga06.intel.com ([134.134.136.31]:8172 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732259AbgLKRAF (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Dec 2020 12:00:05 -0500
-IronPort-SDR: Mb76smmAcD7/E4918a0HIQxR3AUekTHYfLL/PSv3EqXsl2PducFMuBB9/eREeuTmsxUHP3071u
- B+D3xD4jtOvg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9832"; a="236055065"
+        id S2392284AbgLKRAq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Dec 2020 12:00:46 -0500
+IronPort-SDR: 0Ma5hCUlEjNrqKOtRuQrEMwzKry4DS3wYECUZVBaYEZtT4z0drSPn17b0ijX3rgOBKSwG/NDI4
+ xN7C9emBwUug==
+X-IronPort-AV: E=McAfee;i="6000,8403,9832"; a="236055113"
 X-IronPort-AV: E=Sophos;i="5.78,411,1599548400"; 
-   d="scan'208";a="236055065"
+   d="scan'208";a="236055113"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2020 08:59:24 -0800
-IronPort-SDR: wNA6O4mTlDWoiViRkY0PmDumrX/67R3hrEp9rl08fNXjikevz9zcA0l1V9RuRgWahyZY2hCc4U
- n5Pw7KWlp9GA==
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2020 08:59:41 -0800
+IronPort-SDR: a/edh5S++05OITw7g8Nm77D0CGanfPw213IMT96GmPop+iT5nqZFzkrar91MvZpaQuEbjE7Yuz
+ bmo82Wcx/m8w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.78,411,1599548400"; 
-   d="scan'208";a="365497494"
+   d="scan'208";a="365497585"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga008.jf.intel.com with ESMTP; 11 Dec 2020 08:59:22 -0800
+  by orsmga008.jf.intel.com with ESMTP; 11 Dec 2020 08:59:40 -0800
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     intel-wired-lan@lists.osuosl.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         anthony.l.nguyen@intel.com, kuba@kernel.org, bjorn.topel@intel.com,
-        magnus.karlsson@intel.com,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH net-next 0/8] i40e/ice cleanups
-Date:   Fri, 11 Dec 2020 17:49:48 +0100
-Message-Id: <20201211164956.59628-1-maciej.fijalkowski@intel.com>
+        magnus.karlsson@intel.com
+Subject: [PATCH net-next 8/8] i40e, xsk: Simplify the do-while allocation loop
+Date:   Fri, 11 Dec 2020 17:49:56 +0100
+Message-Id: <20201211164956.59628-9-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20201211164956.59628-1-maciej.fijalkowski@intel.com>
+References: <20201211164956.59628-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -49,35 +51,30 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi,
+From: Björn Töpel <bjorn.topel@intel.com>
 
-This series is mostly about the cleanups on Rx (ZC/normal) paths both in
-ice and i40e drivers. Things that stand out are the simplifactions of
-ice_change_mtu and i40e_xdp_setup.
+Fold the count decrement into the while-statement.
 
-Thanks!
+Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+---
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Björn Töpel (1):
-  i40e, xsk: Simplify the do-while allocation loop
-
-Maciej Fijalkowski (7):
-  i40e: drop redundant check when setting xdp prog
-  i40e: drop misleading function comments
-  i40e: adjust i40e_is_non_eop
-  ice: simplify ice_run_xdp
-  ice: move skb pointer from rx_buf to rx_ring
-  ice: remove redundant checks in ice_change_mtu
-  ice: skip NULL check against XDP prog in ZC path
-
- drivers/net/ethernet/intel/i40e/i40e_main.c |  3 --
- drivers/net/ethernet/intel/i40e/i40e_txrx.c | 56 +++++----------------
- drivers/net/ethernet/intel/i40e/i40e_xsk.c  |  4 +-
- drivers/net/ethernet/intel/ice/ice_main.c   |  9 ----
- drivers/net/ethernet/intel/ice/ice_txrx.c   | 43 +++++++---------
- drivers/net/ethernet/intel/ice/ice_txrx.h   |  2 +-
- drivers/net/ethernet/intel/ice/ice_xsk.c    |  7 ++-
- 7 files changed, 34 insertions(+), 90 deletions(-)
-
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+index bfa84bfb0488..679200d94ef8 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+@@ -215,9 +215,7 @@ bool i40e_alloc_rx_buffers_zc(struct i40e_ring *rx_ring, u16 count)
+ 			bi = i40e_rx_bi(rx_ring, 0);
+ 			ntu = 0;
+ 		}
+-
+-		count--;
+-	} while (count);
++	} while (--count);
+ 
+ no_buffers:
+ 	if (rx_ring->next_to_use != ntu)
 -- 
 2.20.1
 
