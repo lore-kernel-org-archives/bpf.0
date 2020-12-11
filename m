@@ -2,108 +2,121 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0EBFC4361B
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 15:06:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB8A5C433FE
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 15:20:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 75FF722571
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 15:06:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6D97920793
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 15:20:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726015AbgLKOlp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Dec 2020 09:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
+        id S2406411AbgLKO6S (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Dec 2020 09:58:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390595AbgLKOlX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Dec 2020 09:41:23 -0500
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B193AC0613D3
-        for <bpf@vger.kernel.org>; Fri, 11 Dec 2020 06:40:42 -0800 (PST)
-Received: by mail-il1-x141.google.com with SMTP id 2so8974853ilg.9
-        for <bpf@vger.kernel.org>; Fri, 11 Dec 2020 06:40:42 -0800 (PST)
+        with ESMTP id S2406403AbgLKO6O (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Dec 2020 09:58:14 -0500
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3C7C0613D6;
+        Fri, 11 Dec 2020 06:57:34 -0800 (PST)
+Received: by mail-pf1-x443.google.com with SMTP id i3so7150428pfd.6;
+        Fri, 11 Dec 2020 06:57:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1h5XSPlxBUAGIpDD6oUcqWJAS8gNOKHKgcM+M6tRgfA=;
-        b=daMZ90XZ7NG9OuBhNiKSIaPPKcnzqc9MvC3Id1B4HJXdiIHI9KemCaJ0p3X8Qh05TG
-         FXFS0Da7TeaP8i2IrkytZR86/ZlzVPRT0yNtqmcNv6EADPQBCc/WWX+gzaRdgcj6Dice
-         Y2+dal9jJKpRBuGcmVDkwb1XNu2ZYyHFuk1VU=
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=0zHk7EvBmUvHalVg3tJqPcBK4UoTwgMaJQ6bNwcn394=;
+        b=iEjrBYlAAonFO9lBncbMDK/ImhO/uYrR1YIQh9Y3ATTXqJTN4jmBNXS/iaw/h9NqdL
+         O0TtBXV0Gsl1xCi5caEs5oX9NmdqMQWcBchNbfAdLpS7YdXyfY7bqONMQegG4fHPistl
+         s7ihmm2vJw+RgSnNXfBdgHwJyhVYu7IbY+mw3cF138gPv+eQ1hu02khftCy5SbmAJEtc
+         f/mcd4NQQ0TLl3+jNle4PQRET/DkegRRKScTXu9RtpvuPqpe+3UfHLeKnPAagYPrjbl0
+         UTUdsyAs1xuB8CK2YDPB2kEHzCZku0sVFPHuVmBZTF9jWDP8TIq02EzlNHwt7BAo6VIX
+         B2nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1h5XSPlxBUAGIpDD6oUcqWJAS8gNOKHKgcM+M6tRgfA=;
-        b=nNy6Lx5H03Eegr6xie1rTeT6iuviu+w7cR7SqqKGMCiChDtcnb9e98Y1SMiDRrh4e7
-         M+eeAew5ZAiyl4BWA9oAyVb5YwrNyFRlnEdMXQ/ypW3gCpe3XnDqKC8EGOvltUiOeihR
-         nL6cNyoCi9uioKVHZMW0KC0wVc2FsH2Sx241znwTzNnq3w33hIBaOyPLpcbcmoEk27in
-         XlFuK1D+DYZBVxLKAkuilIDbabzexfF7OynzPM6xvCm5l07fjQm4xOLAcZ9gClUri5rK
-         hU3vN1ayZCjawhXfEug9J7eJEoNCau1JQRLUbfYTGUsYu1rQb6DoGZV/53thFOlez7M9
-         0MWw==
-X-Gm-Message-State: AOAM532UWfpkf0y4ZgYu+7Y5fepob1hegpkZfPT+ZxONjEGR1E7OsWTR
-        kBLntiQwHxiBwX0LXJ/j3zoZP4auJxMxTN/9oZUUWQ==
-X-Google-Smtp-Source: ABdhPJxMxAwoDrQ6WmfAUhMT6vbLfOVSSwnGLmm7h16NDjK3Yp28r0rrGoHwWnJ2Hpc52fwYKDGABrMegdr0d2OIh9g=
-X-Received: by 2002:a92:4c3:: with SMTP id 186mr16661316ile.177.1607697642071;
- Fri, 11 Dec 2020 06:40:42 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=0zHk7EvBmUvHalVg3tJqPcBK4UoTwgMaJQ6bNwcn394=;
+        b=XFRnGR/7pKNb0oQYWahRIc8j8zu5vDwvI2g7hlKrEKMLPf/xCCWEImopHaAB+IvUMg
+         7xywk87ptym6eMLepXDk8DLWnla1ULIGmL1vs1La/5+uBP9X2qLgTWtQONSl3mF5ghsC
+         X9ZjXyBBMqnWXFy8q4NCct7A2SMJ1Z4BDNad+xrrZqkSVXP4mcqvJ8631zJwyBgDCNj1
+         MjB+m10oCLowVJ9NPaTzi9fgDBuhH03xaYZAOUlC9KCU+prP0CWFjgrA1wffNj8Pi50l
+         KvZzqwI+OwPNr90Q+kUkYdEs6UZDq3XbiUP/csu7xldDy5JqrVdJ/vkNqEst04dUmM0d
+         SueA==
+X-Gm-Message-State: AOAM530T9q56V7zxJViQMd5bB7F7CCtHxLcFB530uAL8Zn1feYbl/8aJ
+        QaBpT8nwSHXiS4kqnzj7Deg=
+X-Google-Smtp-Source: ABdhPJy+oMtVfQNttQdM8jLOQcNcy6+vYzX4kdWFd3yoHOPWfwAPklr/0SUDdMDmH+JIrVT4a7Pagg==
+X-Received: by 2002:a63:1764:: with SMTP id 36mr12095932pgx.177.1607698654288;
+        Fri, 11 Dec 2020 06:57:34 -0800 (PST)
+Received: from btopel-mobl.ger.intel.com ([192.55.54.40])
+        by smtp.gmail.com with ESMTPSA id k23sm10583085pfk.50.2020.12.11.06.57.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Dec 2020 06:57:33 -0800 (PST)
+From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
+To:     intel-wired-lan@lists.osuosl.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        magnus.karlsson@intel.com, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, maciej.fijalkowski@intel.com
+Subject: [PATCH net 2/2] i40e, xsk: clear the status bits for the next_to_use descriptor
+Date:   Fri, 11 Dec 2020 15:57:12 +0100
+Message-Id: <20201211145712.72957-3-bjorn.topel@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20201211145712.72957-1-bjorn.topel@gmail.com>
+References: <20201211145712.72957-1-bjorn.topel@gmail.com>
 MIME-Version: 1.0
-References: <20201126165748.1748417-1-revest@google.com> <50047415-cafe-abab-a6ba-e85bb6a9b651@fb.com>
- <CACYkzJ7T4y7in1AsCvJ2izA3yiAke8vE9SRFRCyTPeqMnDHoyQ@mail.gmail.com>
- <e8b03cbc-c120-43d5-168c-cde5b6a97af8@fb.com> <CAEf4BzYz9Yf9abPBtP+swCuqvvhL0cbbbF1x-3stg9mp=a6+-A@mail.gmail.com>
- <194b5a6e6e30574a035a3e3baa98d7fde7f91f1c.camel@chromium.org> <CAADnVQK6GjmL19zQykYbh=THM9ktQUzfnwF_FfhUKimCxDnnkQ@mail.gmail.com>
-In-Reply-To: <CAADnVQK6GjmL19zQykYbh=THM9ktQUzfnwF_FfhUKimCxDnnkQ@mail.gmail.com>
-From:   Florent Revest <revest@chromium.org>
-Date:   Fri, 11 Dec 2020 15:40:31 +0100
-Message-ID: <CABRcYm+zjC-WH2gxtfEX5S6mZj-5_ByAzVd5zi3aRmQv-asYqg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Add a bpf_kallsyms_lookup helper
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@chromium.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Florent Revest <revest@google.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Dec 2, 2020 at 10:18 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
-> I still think that adopting printk/vsnprintf for this instead of
-> reinventing the wheel
-> is more flexible and easier to maintain long term.
-> Almost the same layout can be done with vsnprintf
-> with exception of \0 char.
-> More meaningful names, etc.
-> See Documentation/core-api/printk-formats.rst
+From: Björn Töpel <bjorn.topel@intel.com>
 
-I agree this would be nice. I finally got a bit of time to experiment
-with this and I noticed a few things:
+On the Rx side, the next_to_use index points to the next item in the
+HW ring to be refilled/allocated, and next_to_clean points to the next
+item to potentially be processed.
 
-First of all, because helpers only have 5 arguments, if we use two for
-the output buffer and its size and two for the format string and its
-size, we are only left with one argument for a modifier. This is still
-enough for our usecase (where we'd only use "%ps" for example) but it
-does not strictly-speaking allow for the same layout that Andrii
-proposed.
+When the HW Rx ring is fully refilled, i.e. no packets has been
+processed, the next_to_use will be next_to_clean - 1. When the ring is
+fully processed next_to_clean will be equal to next_to_use. The latter
+case is where a bug is triggered.
 
-> If we force fmt to come from readonly map then bpf_trace_printk()-like
-> run-time check of fmt string can be moved into load time check
-> and performance won't suffer.
+If the next_to_use bits are not cleared, and the "fully processed"
+state is entered, a stale descriptor can be processed.
 
-Regarding this bit, I have the impression that this would not be
-possible, but maybe I'm missing something ? :)
+The skb-path correctly clear the status bit for the next_to_use
+descriptor, but the AF_XDP zero-copy path did not do that.
 
-The iteration that bpf_trace_printk does over the format string
-argument is not only used for validation. It is also used to remember
-what extra operations need to be done based on the modifier types. For
-example, it remembers whether an arg should be interpreted as 32bits or
-64bits. In the case of string printing, it also remembers whether it is
-a kernel-space or user-space pointer so that bpf_trace_copy_string can
-be called with the right arg. If we were to run the iteration over the format
-string in the verifier, how would you recommend that we
-"remember" the modifier type until the helper gets called ?
+This change adds the status bits clearing of the next_to_use
+descriptor.
+
+Fixes: 3b4f0b66c2b3 ("i40e, xsk: Migrate to new MEM_TYPE_XSK_BUFF_POOL")
+Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+---
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+index 567fd67e900e..e402c62eb313 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+@@ -219,8 +219,11 @@ bool i40e_alloc_rx_buffers_zc(struct i40e_ring *rx_ring, u16 count)
+ 	} while (count);
+ 
+ no_buffers:
+-	if (rx_ring->next_to_use != ntu)
++	if (rx_ring->next_to_use != ntu) {
++		/* clear the status bits for the next_to_use descriptor */
++		rx_desc->wb.qword1.status_error_len = 0;
+ 		i40e_release_rx_desc(rx_ring, ntu);
++	}
+ 
+ 	return ok;
+ }
+-- 
+2.27.0
+
