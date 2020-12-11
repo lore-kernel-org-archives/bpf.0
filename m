@@ -2,86 +2,74 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 64CEFC433FE
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 03:43:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5773BC4361B
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 04:13:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 286EF23ECF
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 03:43:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0A24123B85
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 04:13:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387712AbgLKDnE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Dec 2020 22:43:04 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:42924 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2405282AbgLKDmH (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 10 Dec 2020 22:42:07 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BB3SWC8017010
-        for <bpf@vger.kernel.org>; Thu, 10 Dec 2020 19:41:27 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=gnWjv4SGnB/Wf2eIvjZM1oBCGkW66TSq3gpXUs0nwpg=;
- b=AgLniz4VjUuXSqwsN6+OT4Cnkd2zxev13msMBqDY3TxQy/4xIJgeTxANlaC4HpJssuGZ
- lNUWp9CPbs9GtnQ3ZDUaE+WaQAKhzluPN9jpCp1A3TE7V1ju/QbeVZGtwmrdFkmk5a3n
- taGRRLKfBgmBgEa2rbEfFOZYmu0SWVLRiJQ= 
+        id S2395296AbgLKENA convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Thu, 10 Dec 2020 23:13:00 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:7692 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726253AbgLKEMc (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 10 Dec 2020 23:12:32 -0500
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 0BB4Avtj012744
+        for <bpf@vger.kernel.org>; Thu, 10 Dec 2020 20:11:48 -0800
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 35byu089s4-3
+        by m0089730.ppops.net with ESMTP id 35bqd4bsu5-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Thu, 10 Dec 2020 19:41:26 -0800
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Thu, 10 Dec 2020 20:11:47 -0800
+Received: from intmgw001.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 10 Dec 2020 19:41:24 -0800
-Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 4C8B637059A5; Thu, 10 Dec 2020 19:41:21 -0800 (PST)
-From:   Yonghong Song <yhs@fb.com>
-To:     <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>
-Subject: [PATCH bpf-next v3 0/2] bpf: permits pointers on stack for helper calls
-Date:   Thu, 10 Dec 2020 19:41:21 -0800
-Message-ID: <20201211034121.3452172-1-yhs@fb.com>
+ 15.1.1979.3; Thu, 10 Dec 2020 20:11:47 -0800
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id DFF582ECB19F; Thu, 10 Dec 2020 20:11:43 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <dwarves@vger.kernel.org>, <acme@kernel.org>, <bpf@vger.kernel.org>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@redhat.com>
+Subject: [PATCH dwarves 0/2] Fix pahole to emit kernel module BTF variables
+Date:   Thu, 10 Dec 2020 20:11:36 -0800
+Message-ID: <20201211041139.589692-1-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
  definitions=2020-12-11_01:2020-12-09,2020-12-11 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
- mlxlogscore=907 mlxscore=0 lowpriorityscore=0 malwarescore=0
- impostorscore=0 bulkscore=0 priorityscore=1501 spamscore=0 suspectscore=13
- clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012110019
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=708
+ suspectscore=8 bulkscore=0 adultscore=0 spamscore=0 impostorscore=0
+ malwarescore=0 phishscore=0 clxscore=1015 lowpriorityscore=0
+ priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2012110023
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch permits pointers on stack for helper calls if permission is
-granted. Patch #1 described the detailed usecase and Patch #2
-added a test.
+Two bug fixes to make pahole emit correct kernel module BTF variable
+information.
 
-Changelog:
-  v2 -> v3:
-    - do not permit spilled reg state NOT_INIT on stack. (Daniel)
-  v1 -> v2:
-    - fix a verifier test failure due to verifier change.
+Cc: Hao Luo <haoluo@google.com>
+Cc: Jiri Olsa <jolsa@redhat.com>
 
-Yonghong Song (2):
-  bpf: permits pointers on stack for helper calls
-  selftests/bpf: add a test for ptr_to_map_value on stack for helper
-    access
+Andrii Nakryiko (2):
+  btf_encoder: fix BTF variable generation for kernel modules
+  btf_encoder: fix skipping per-CPU variables at offset 0
 
- kernel/bpf/verifier.c                             | 4 +++-
- tools/testing/selftests/bpf/progs/bpf_iter_task.c | 3 ++-
- tools/testing/selftests/bpf/verifier/unpriv.c     | 5 +++--
- 3 files changed, 8 insertions(+), 4 deletions(-)
+ btf_encoder.c | 61 +++++++++++++++++++++++++++++++++------------------
+ libbtf.c      |  1 +
+ libbtf.h      |  1 +
+ 3 files changed, 42 insertions(+), 21 deletions(-)
 
---=20
+-- 
 2.24.1
 
