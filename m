@@ -2,131 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 394DEC4361B
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 22:40:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4E25DC4361B
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 22:55:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0C18E23ED2
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 22:40:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1F284206E5
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 22:55:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406007AbgLKViY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Dec 2020 16:38:24 -0500
-Received: from www62.your-server.de ([213.133.104.62]:58094 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404598AbgLKVhX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Dec 2020 16:37:23 -0500
-Received: from 30.101.7.85.dynamic.wline.res.cust.swisscom.ch ([85.7.101.30] helo=localhost)
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1knq5h-000Eo1-Ja; Fri, 11 Dec 2020 22:36:41 +0100
-From:   Daniel Borkmann <daniel@iogearbox.net>
-To:     torvalds@linux-foundation.org
-Cc:     davem@davemloft.net, kuba@kernel.org, bpf@vger.kernel.org,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Subject: [PATCH] bpf: Fix enum names for bpf_this_cpu_ptr() and bpf_per_cpu_ptr() helpers
-Date:   Fri, 11 Dec 2020 22:36:25 +0100
-Message-Id: <7c371fff2427c749f32523b9a4b834fe2dd1d58e.1607712517.git.daniel@iogearbox.net>
-X-Mailer: git-send-email 2.21.0
+        id S2404928AbgLKV7o convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 11 Dec 2020 16:59:44 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:62404 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2405130AbgLKV7T (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 11 Dec 2020 16:59:19 -0500
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 0BBLoiqn012833
+        for <bpf@vger.kernel.org>; Fri, 11 Dec 2020 13:58:37 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 35bqd4gs3d-3
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 11 Dec 2020 13:58:37 -0800
+Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 11 Dec 2020 13:58:35 -0800
+Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
+        id D4C9D2EC8ED7; Fri, 11 Dec 2020 13:58:31 -0800 (PST)
+From:   Andrii Nakryiko <andrii@kernel.org>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
+        <daniel@iogearbox.net>
+CC:     <andrii@kernel.org>, <kernel-team@fb.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: add set_attach_target() API selftest for module target
+Date:   Fri, 11 Dec 2020 13:58:25 -0800
+Message-ID: <20201211215825.3646154-3-andrii@kernel.org>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201211215825.3646154-1-andrii@kernel.org>
+References: <20201211215825.3646154-1-andrii@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/26014/Thu Dec 10 15:21:42 2020)
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2020-12-11_09:2020-12-11,2020-12-11 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=964
+ suspectscore=8 bulkscore=0 adultscore=0 spamscore=0 impostorscore=0
+ malwarescore=0 phishscore=0 clxscore=1015 lowpriorityscore=0
+ priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2012110144
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Andrii Nakryiko <andrii@kernel.org>
+Add test for bpf_program__set_attach_target() API, validating it can find
+kernel module fentry target.
 
-Remove bpf_ prefix, which causes these helpers to be reported in verifier
-dump as bpf_bpf_this_cpu_ptr() and bpf_bpf_per_cpu_ptr(), respectively. Lets
-fix it as long as it is still possible before UAPI freezes on these helpers.
-
-Fixes: eaa6bcb71ef6 ("bpf: Introduce bpf_per_cpu_ptr()")
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 ---
- [ Hi Linus, this small fix came unfortunately after we sent our last bpf
-   pull request to David's net tree, and as far as I'm aware no further pull
-   request for final 5.10 is planned at this moment from David's or Jakub's
-   side. If you could apply this last fix directly to your tree, that would
-   be very much appreciated. Thanks a lot! ]
+ .../testing/selftests/bpf/prog_tests/module_attach.c  | 11 ++++++++++-
+ .../testing/selftests/bpf/progs/test_module_attach.c  | 11 +++++++++++
+ 2 files changed, 21 insertions(+), 1 deletion(-)
 
- include/uapi/linux/bpf.h       | 4 ++--
- kernel/bpf/helpers.c           | 4 ++--
- kernel/trace/bpf_trace.c       | 4 ++--
- tools/include/uapi/linux/bpf.h | 4 ++--
- 4 files changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index e6ceac3f7d62..556216dc9703 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -3897,8 +3897,8 @@ union bpf_attr {
- 	FN(seq_printf_btf),		\
- 	FN(skb_cgroup_classid),		\
- 	FN(redirect_neigh),		\
--	FN(bpf_per_cpu_ptr),            \
--	FN(bpf_this_cpu_ptr),		\
-+	FN(per_cpu_ptr),		\
-+	FN(this_cpu_ptr),		\
- 	FN(redirect_peer),		\
- 	/* */
+diff --git a/tools/testing/selftests/bpf/prog_tests/module_attach.c b/tools/testing/selftests/bpf/prog_tests/module_attach.c
+index 4b65e9918764..50796b651f72 100644
+--- a/tools/testing/selftests/bpf/prog_tests/module_attach.c
++++ b/tools/testing/selftests/bpf/prog_tests/module_attach.c
+@@ -28,10 +28,18 @@ void test_module_attach(void)
+ 	struct test_module_attach__bss *bss;
+ 	int err;
  
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 25520f5eeaf6..deda1185237b 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -717,9 +717,9 @@ bpf_base_func_proto(enum bpf_func_id func_id)
- 		return &bpf_snprintf_btf_proto;
- 	case BPF_FUNC_jiffies64:
- 		return &bpf_jiffies64_proto;
--	case BPF_FUNC_bpf_per_cpu_ptr:
-+	case BPF_FUNC_per_cpu_ptr:
- 		return &bpf_per_cpu_ptr_proto;
--	case BPF_FUNC_bpf_this_cpu_ptr:
-+	case BPF_FUNC_this_cpu_ptr:
- 		return &bpf_this_cpu_ptr_proto;
- 	default:
- 		break;
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 048c655315f1..a125ea5e04cd 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1337,9 +1337,9 @@ bpf_tracing_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return prog->aux->sleepable ? &bpf_copy_from_user_proto : NULL;
- 	case BPF_FUNC_snprintf_btf:
- 		return &bpf_snprintf_btf_proto;
--	case BPF_FUNC_bpf_per_cpu_ptr:
-+	case BPF_FUNC_per_cpu_ptr:
- 		return &bpf_per_cpu_ptr_proto;
--	case BPF_FUNC_bpf_this_cpu_ptr:
-+	case BPF_FUNC_this_cpu_ptr:
- 		return &bpf_this_cpu_ptr_proto;
- 	default:
- 		return NULL;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index e6ceac3f7d62..556216dc9703 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -3897,8 +3897,8 @@ union bpf_attr {
- 	FN(seq_printf_btf),		\
- 	FN(skb_cgroup_classid),		\
- 	FN(redirect_neigh),		\
--	FN(bpf_per_cpu_ptr),            \
--	FN(bpf_this_cpu_ptr),		\
-+	FN(per_cpu_ptr),		\
-+	FN(this_cpu_ptr),		\
- 	FN(redirect_peer),		\
- 	/* */
+-	skel = test_module_attach__open_and_load();
++	skel = test_module_attach__open();
+ 	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
+ 		return;
+ 
++	err = bpf_program__set_attach_target(skel->progs.handle_fentry_manual,
++					     0, "bpf_testmod_test_read");
++	ASSERT_OK(err, "set_attach_target");
++
++	err = test_module_attach__load(skel);
++	if (CHECK(err, "skel_load", "failed to load skeleton\n"))
++		return;
++
+ 	bss = skel->bss;
+ 
+ 	err = test_module_attach__attach(skel);
+@@ -44,6 +52,7 @@ void test_module_attach(void)
+ 	ASSERT_EQ(bss->raw_tp_read_sz, READ_SZ, "raw_tp");
+ 	ASSERT_EQ(bss->tp_btf_read_sz, READ_SZ, "tp_btf");
+ 	ASSERT_EQ(bss->fentry_read_sz, READ_SZ, "fentry");
++	ASSERT_EQ(bss->fentry_manual_read_sz, READ_SZ, "fentry_manual");
+ 	ASSERT_EQ(bss->fexit_read_sz, READ_SZ, "fexit");
+ 	ASSERT_EQ(bss->fexit_ret, -EIO, "fexit_tet");
+ 	ASSERT_EQ(bss->fmod_ret_read_sz, READ_SZ, "fmod_ret");
+diff --git a/tools/testing/selftests/bpf/progs/test_module_attach.c b/tools/testing/selftests/bpf/progs/test_module_attach.c
+index b563563df172..efd1e287ac17 100644
+--- a/tools/testing/selftests/bpf/progs/test_module_attach.c
++++ b/tools/testing/selftests/bpf/progs/test_module_attach.c
+@@ -38,6 +38,17 @@ int BPF_PROG(handle_fentry,
+ 	return 0;
+ }
+ 
++__u32 fentry_manual_read_sz = 0;
++
++SEC("fentry/placeholder")
++int BPF_PROG(handle_fentry_manual,
++	     struct file *file, struct kobject *kobj,
++	     struct bin_attribute *bin_attr, char *buf, loff_t off, size_t len)
++{
++	fentry_manual_read_sz = len;
++	return 0;
++}
++
+ __u32 fexit_read_sz = 0;
+ int fexit_ret = 0;
  
 -- 
-2.21.0
+2.24.1
 
