@@ -2,71 +2,68 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB8A5C433FE
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 15:20:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5B2ABC433FE
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 15:23:38 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6D97920793
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 15:20:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0E70920793
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 15:23:38 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406411AbgLKO6S (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S2406388AbgLKO6S (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Fri, 11 Dec 2020 09:58:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49108 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406403AbgLKO6O (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Dec 2020 09:58:14 -0500
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3C7C0613D6;
-        Fri, 11 Dec 2020 06:57:34 -0800 (PST)
-Received: by mail-pf1-x443.google.com with SMTP id i3so7150428pfd.6;
-        Fri, 11 Dec 2020 06:57:34 -0800 (PST)
+        with ESMTP id S2406270AbgLKO6G (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 11 Dec 2020 09:58:06 -0500
+Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6BAC0613CF;
+        Fri, 11 Dec 2020 06:57:26 -0800 (PST)
+Received: by mail-pl1-x641.google.com with SMTP id t18so4720097plo.0;
+        Fri, 11 Dec 2020 06:57:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0zHk7EvBmUvHalVg3tJqPcBK4UoTwgMaJQ6bNwcn394=;
-        b=iEjrBYlAAonFO9lBncbMDK/ImhO/uYrR1YIQh9Y3ATTXqJTN4jmBNXS/iaw/h9NqdL
-         O0TtBXV0Gsl1xCi5caEs5oX9NmdqMQWcBchNbfAdLpS7YdXyfY7bqONMQegG4fHPistl
-         s7ihmm2vJw+RgSnNXfBdgHwJyhVYu7IbY+mw3cF138gPv+eQ1hu02khftCy5SbmAJEtc
-         f/mcd4NQQ0TLl3+jNle4PQRET/DkegRRKScTXu9RtpvuPqpe+3UfHLeKnPAagYPrjbl0
-         UTUdsyAs1xuB8CK2YDPB2kEHzCZku0sVFPHuVmBZTF9jWDP8TIq02EzlNHwt7BAo6VIX
-         B2nw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=em3A8Nk5NANt9qY2CmZu+QBzc0KhlKLYPaDCn5zjKkg=;
+        b=V3Lkv+YY2A3P68sn1Q5ogUsPDc2gLjspi25MWWecVaHNaeRrM839vnaY0n13na7eif
+         +lneKVV7mjKxwGvg1+WaspqvzEnuZKGz1uyG5Di1nezMbfNF5N4DCurMKtag308aGcRU
+         VRI0javscWSV2DcHwaAMspU6+0YEtN0C6t+gkSZHtfRab5K9W2QgxTG+6QIa/uXj+lbS
+         lYTlySuk/JxlPcw332mAne67vbmpf4cHinRMYgIV5uNPDFKU6Ve6QVwOLibV6E8DF/aM
+         GNWvV/38tujPdPrCVjNSrXEiIs5sULyoW7ngTfGiprRdthagDmAJWypdNMu8YeJbBH2z
+         UY4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0zHk7EvBmUvHalVg3tJqPcBK4UoTwgMaJQ6bNwcn394=;
-        b=XFRnGR/7pKNb0oQYWahRIc8j8zu5vDwvI2g7hlKrEKMLPf/xCCWEImopHaAB+IvUMg
-         7xywk87ptym6eMLepXDk8DLWnla1ULIGmL1vs1La/5+uBP9X2qLgTWtQONSl3mF5ghsC
-         X9ZjXyBBMqnWXFy8q4NCct7A2SMJ1Z4BDNad+xrrZqkSVXP4mcqvJ8631zJwyBgDCNj1
-         MjB+m10oCLowVJ9NPaTzi9fgDBuhH03xaYZAOUlC9KCU+prP0CWFjgrA1wffNj8Pi50l
-         KvZzqwI+OwPNr90Q+kUkYdEs6UZDq3XbiUP/csu7xldDy5JqrVdJ/vkNqEst04dUmM0d
-         SueA==
-X-Gm-Message-State: AOAM530T9q56V7zxJViQMd5bB7F7CCtHxLcFB530uAL8Zn1feYbl/8aJ
-        QaBpT8nwSHXiS4kqnzj7Deg=
-X-Google-Smtp-Source: ABdhPJy+oMtVfQNttQdM8jLOQcNcy6+vYzX4kdWFd3yoHOPWfwAPklr/0SUDdMDmH+JIrVT4a7Pagg==
-X-Received: by 2002:a63:1764:: with SMTP id 36mr12095932pgx.177.1607698654288;
-        Fri, 11 Dec 2020 06:57:34 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=em3A8Nk5NANt9qY2CmZu+QBzc0KhlKLYPaDCn5zjKkg=;
+        b=F5mHlqNQ0YMHUcWPLOxiWBy4UmJctoOkDeu+icAYgvF2o+yqwT2w5McwkjslL6RxPF
+         V0eXEExh0GSr7FnQxXDauR6gXwjFnSMgJiRS7lLyIZB9/ijrOwRueQw/I6xJou8Ilyl/
+         65Hn4DNOKRsccyWV+g163Am4GqaYlbFv597qjf4dG3i7qeFgjh9XYBYPPD3aX6pGqBoL
+         7GU+GCnxZ4KGpWr2KhObc2GlC0LPoiizoPZxhCXXtPHnBDG5+Jspa2gri91MScGq8ipa
+         XPKFqSzZWpQyakuYtS1VavsJQicuXBCywfugo47wzRvl39jV4pHWJcrRTB8WZEjNkEt5
+         movg==
+X-Gm-Message-State: AOAM533gp+cP4eeRWHZXUOb8fvw9oTcPJIWR7i/ClHET+LXEGw17mx83
+        Rab1e+ahQ8wAfqY5aGGAbbE=
+X-Google-Smtp-Source: ABdhPJxjg3pIx/LnT0LvpNBF2pBEJoV7ksCRTR0KJ2foHrMJcnVmNEStJfX4fTzFBvoQMop0m6ZSfg==
+X-Received: by 2002:a17:90b:388:: with SMTP id ga8mr13725684pjb.108.1607698646153;
+        Fri, 11 Dec 2020 06:57:26 -0800 (PST)
 Received: from btopel-mobl.ger.intel.com ([192.55.54.40])
-        by smtp.gmail.com with ESMTPSA id k23sm10583085pfk.50.2020.12.11.06.57.30
+        by smtp.gmail.com with ESMTPSA id k23sm10583085pfk.50.2020.12.11.06.57.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Dec 2020 06:57:33 -0800 (PST)
+        Fri, 11 Dec 2020 06:57:24 -0800 (PST)
 From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
 To:     intel-wired-lan@lists.osuosl.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>,
         magnus.karlsson@intel.com, netdev@vger.kernel.org,
         bpf@vger.kernel.org, maciej.fijalkowski@intel.com
-Subject: [PATCH net 2/2] i40e, xsk: clear the status bits for the next_to_use descriptor
-Date:   Fri, 11 Dec 2020 15:57:12 +0100
-Message-Id: <20201211145712.72957-3-bjorn.topel@gmail.com>
+Subject: [PATCH net 0/2] i40e/ice AF_XDP ZC fixes
+Date:   Fri, 11 Dec 2020 15:57:10 +0100
+Message-Id: <20201211145712.72957-1-bjorn.topel@gmail.com>
 X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20201211145712.72957-1-bjorn.topel@gmail.com>
-References: <20201211145712.72957-1-bjorn.topel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -74,49 +71,23 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+This series address two crashes in the AF_XDP zero-copy mode for ice
+and i40e. More details in each individual the commit message.
 
-On the Rx side, the next_to_use index points to the next item in the
-HW ring to be refilled/allocated, and next_to_clean points to the next
-item to potentially be processed.
 
-When the HW Rx ring is fully refilled, i.e. no packets has been
-processed, the next_to_use will be next_to_clean - 1. When the ring is
-fully processed next_to_clean will be equal to next_to_use. The latter
-case is where a bug is triggered.
+Thanks,
+Björn
 
-If the next_to_use bits are not cleared, and the "fully processed"
-state is entered, a stale descriptor can be processed.
+Björn Töpel (2):
+  ice, xsk: clear the status bits for the next_to_use descriptor
+  i40e, xsk: clear the status bits for the next_to_use descriptor
 
-The skb-path correctly clear the status bit for the next_to_use
-descriptor, but the AF_XDP zero-copy path did not do that.
-
-This change adds the status bits clearing of the next_to_use
-descriptor.
-
-Fixes: 3b4f0b66c2b3 ("i40e, xsk: Migrate to new MEM_TYPE_XSK_BUFF_POOL")
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
----
  drivers/net/ethernet/intel/i40e/i40e_xsk.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/intel/ice/ice_xsk.c   | 5 ++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-index 567fd67e900e..e402c62eb313 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-@@ -219,8 +219,11 @@ bool i40e_alloc_rx_buffers_zc(struct i40e_ring *rx_ring, u16 count)
- 	} while (count);
- 
- no_buffers:
--	if (rx_ring->next_to_use != ntu)
-+	if (rx_ring->next_to_use != ntu) {
-+		/* clear the status bits for the next_to_use descriptor */
-+		rx_desc->wb.qword1.status_error_len = 0;
- 		i40e_release_rx_desc(rx_ring, ntu);
-+	}
- 
- 	return ok;
- }
+
+base-commit: d9838b1d39283c1200c13f9076474c7624b8ec34
 -- 
 2.27.0
 
