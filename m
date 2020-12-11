@@ -7,46 +7,46 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C8076C4361B
-	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 03:43:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2BB9AC19437
+	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 03:43:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7D70923ECE
+	by mail.kernel.org (Postfix) with ESMTP id DA03023E55
 	for <bpf@archiver.kernel.org>; Fri, 11 Dec 2020 03:43:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405281AbgLKDmg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 10 Dec 2020 22:42:36 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:52546 "EHLO
+        id S2405233AbgLKDmc (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 10 Dec 2020 22:42:32 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:33248 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2405238AbgLKDmH (ORCPT
+        by vger.kernel.org with ESMTP id S2405281AbgLKDmH (ORCPT
         <rfc822;bpf@vger.kernel.org>); Thu, 10 Dec 2020 22:42:07 -0500
 Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BB3P9EC019252
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BB3P9EE019252
         for <bpf@vger.kernel.org>; Thu, 10 Dec 2020 19:41:26 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=facebook;
- bh=1ncYG1vbOeg9nT3FZ+0J4n1I+6d2KjtwiQRUO8jg/JQ=;
- b=Lxo6U2XbmY4dPgsGea9RlnibRWSmTOOFy+aM/3b7u4m28eOmJl/eodPRTokFdDM4sm0B
- k9ras45cGAFaElHgNfLt9DBx8jXaMfeVJqFrmcQZ7LS2ts/lc/nQRV13xnTCjdmDRoVc
- gqBXWFboiy41cV2Lxo7OGmS7z6136ShFH14= 
+ bh=60VBbKIIwJcZ4oLxq8srsUqv7aEvs/d+Xdi78HuEvOE=;
+ b=IGY71WTaMFqN4QpcNsmOL+BGPsS8s6pcpiYtKw5Nt8ylD4SmyZlvhw/a83GjRtoFJIvV
+ mxVcz3CNtqQGAF188ZRSBOato7csvhTStysy5fhEiNP2OosSp4vR9AHTeYbJ026c8Mdk
+ pCEFizKUV5qqSpQzZYY8rHebN5la8gaN6pw= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 35avdhd61q-2
+        by mx0a-00082601.pphosted.com with ESMTP id 35avdhd61q-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
         for <bpf@vger.kernel.org>; Thu, 10 Dec 2020 19:41:26 -0800
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+Received: from intmgw005.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
  mail.thefacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 10 Dec 2020 19:41:24 -0800
+ 15.1.1979.3; Thu, 10 Dec 2020 19:41:25 -0800
 Received: by devbig003.ftw2.facebook.com (Postfix, from userid 128203)
-        id 7E7CF3705C0A; Thu, 10 Dec 2020 19:41:21 -0800 (PST)
+        id B62783705741; Thu, 10 Dec 2020 19:41:22 -0800 (PST)
 From:   Yonghong Song <yhs@fb.com>
 To:     <bpf@vger.kernel.org>
 CC:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, <kernel-team@fb.com>,
         Song Liu <songliubraving@fb.com>
-Subject: [PATCH bpf-next v3 1/2] bpf: permits pointers on stack for helper calls
-Date:   Thu, 10 Dec 2020 19:41:21 -0800
-Message-ID: <20201211034121.3452243-1-yhs@fb.com>
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: add a test for ptr_to_map_value on stack for helper access
+Date:   Thu, 10 Dec 2020 19:41:22 -0800
+Message-ID: <20201211034122.3452472-1-yhs@fb.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20201211034121.3452172-1-yhs@fb.com>
 References: <20201211034121.3452172-1-yhs@fb.com>
@@ -57,7 +57,7 @@ Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
  definitions=2020-12-11_01:2020-12-09,2020-12-11 signatures=0
 X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- mlxlogscore=928 lowpriorityscore=0 impostorscore=0 malwarescore=0
+ mlxlogscore=869 lowpriorityscore=0 impostorscore=0 malwarescore=0
  clxscore=1015 bulkscore=0 suspectscore=13 adultscore=0 spamscore=0
  mlxscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.12.0-2009150000 definitions=main-2012110019
@@ -66,70 +66,51 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Currently, when checking stack memory accessed by helper calls,
-for spills, only PTR_TO_BTF_ID and SCALAR_VALUE are
-allowed.
+Change bpf_iter_task.c such that pointer to map_value may appear
+on the stack for bpf_seq_printf() to access. Without previous
+verifier patch, the bpf_iter test will fail.
 
-Song discovered an issue where the below bpf program
-  int dump_task(struct bpf_iter__task *ctx)
-  {
-    struct seq_file *seq =3D ctx->meta->seq;
-    static char[] info =3D "abc";
-    BPF_SEQ_PRINTF(seq, "%s\n", info);
-    return 0;
-  }
-may cause a verifier failure.
-
-The verifier output looks like:
-  ; struct seq_file *seq =3D ctx->meta->seq;
-  1: (79) r1 =3D *(u64 *)(r1 +0)
-  ; BPF_SEQ_PRINTF(seq, "%s\n", info);
-  2: (18) r2 =3D 0xffff9054400f6000
-  4: (7b) *(u64 *)(r10 -8) =3D r2
-  5: (bf) r4 =3D r10
-  ;
-  6: (07) r4 +=3D -8
-  ; BPF_SEQ_PRINTF(seq, "%s\n", info);
-  7: (18) r2 =3D 0xffff9054400fe000
-  9: (b4) w3 =3D 4
-  10: (b4) w5 =3D 8
-  11: (85) call bpf_seq_printf#126
-   R1_w=3Dptr_seq_file(id=3D0,off=3D0,imm=3D0) R2_w=3Dmap_value(id=3D0,of=
-f=3D0,ks=3D4,vs=3D4,imm=3D0)
-  R3_w=3Dinv4 R4_w=3Dfp-8 R5_w=3Dinv8 R10=3Dfp0 fp-8_w=3Dmap_value
-  last_idx 11 first_idx 0
-  regs=3D8 stack=3D0 before 10: (b4) w5 =3D 8
-  regs=3D8 stack=3D0 before 9: (b4) w3 =3D 4
-  invalid indirect read from stack off -8+0 size 8
-
-Basically, the verifier complains the map_value pointer at "fp-8" locatio=
-n.
-To fix the issue, if env->allow_ptr_leaks is true, let us also permit
-pointers on the stack to be accessible by the helper.
-
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Reported-by: Song Liu <songliubraving@fb.com>
+Acked-by: Song Liu <songliubraving@fb.com>
 Signed-off-by: Yonghong Song <yhs@fb.com>
 ---
- kernel/bpf/verifier.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/progs/bpf_iter_task.c | 3 ++-
+ tools/testing/selftests/bpf/verifier/unpriv.c     | 5 +++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 93def76cf32b..eebb2d3e16bf 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3769,7 +3769,9 @@ static int check_stack_boundary(struct bpf_verifier=
-_env *env, int regno,
- 			goto mark;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task.c b/tools/te=
+sting/selftests/bpf/progs/bpf_iter_task.c
+index 4983087852a0..b7f32c160f4e 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_task.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_task.c
+@@ -11,9 +11,10 @@ int dump_task(struct bpf_iter__task *ctx)
+ {
+ 	struct seq_file *seq =3D ctx->meta->seq;
+ 	struct task_struct *task =3D ctx->task;
++	static char info[] =3D "    =3D=3D=3D END =3D=3D=3D";
 =20
- 		if (state->stack[spi].slot_type[0] =3D=3D STACK_SPILL &&
--		    state->stack[spi].spilled_ptr.type =3D=3D SCALAR_VALUE) {
-+		    (state->stack[spi].spilled_ptr.type =3D=3D SCALAR_VALUE ||
-+		     (state->stack[spi].spilled_ptr.type !=3D NOT_INIT &&
-+		      env->allow_ptr_leaks))) {
- 			__mark_reg_unknown(env, &state->stack[spi].spilled_ptr);
- 			for (j =3D 0; j < BPF_REG_SIZE; j++)
- 				state->stack[spi].slot_type[j] =3D STACK_MISC;
+ 	if (task =3D=3D (void *)0) {
+-		BPF_SEQ_PRINTF(seq, "    =3D=3D=3D END =3D=3D=3D\n");
++		BPF_SEQ_PRINTF(seq, "%s\n", info);
+ 		return 0;
+ 	}
+=20
+diff --git a/tools/testing/selftests/bpf/verifier/unpriv.c b/tools/testin=
+g/selftests/bpf/verifier/unpriv.c
+index 91bb77c24a2e..a3fe0fbaed41 100644
+--- a/tools/testing/selftests/bpf/verifier/unpriv.c
++++ b/tools/testing/selftests/bpf/verifier/unpriv.c
+@@ -108,8 +108,9 @@
+ 	BPF_EXIT_INSN(),
+ 	},
+ 	.fixup_map_hash_8b =3D { 3 },
+-	.errstr =3D "invalid indirect read from stack off -8+0 size 8",
+-	.result =3D REJECT,
++	.errstr_unpriv =3D "invalid indirect read from stack off -8+0 size 8",
++	.result_unpriv =3D REJECT,
++	.result =3D ACCEPT,
+ },
+ {
+ 	"unpriv: mangle pointer on stack 1",
 --=20
 2.24.1
 
