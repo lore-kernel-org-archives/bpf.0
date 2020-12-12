@@ -2,107 +2,99 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D5398C433FE
-	for <bpf@archiver.kernel.org>; Sat, 12 Dec 2020 02:26:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 097DCC1B0D8
+	for <bpf@archiver.kernel.org>; Sat, 12 Dec 2020 02:50:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8BF5B23359
-	for <bpf@archiver.kernel.org>; Sat, 12 Dec 2020 02:26:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C3F552343E
+	for <bpf@archiver.kernel.org>; Sat, 12 Dec 2020 02:50:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437076AbgLLCZ4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Dec 2020 21:25:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728618AbgLLCZl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 11 Dec 2020 21:25:41 -0500
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A9FC0613CF;
-        Fri, 11 Dec 2020 18:25:00 -0800 (PST)
-Received: by mail-lf1-x142.google.com with SMTP id a8so16274755lfb.3;
-        Fri, 11 Dec 2020 18:25:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HWf4Aun5/5+fUgeacGwpoakgROwaQ/uueT5h+8RHttQ=;
-        b=X0Zpx4VrodtIOkCzMd2DOHZnnYOKKIZkGBQCml6C9e+7Y2HxVCtPBGMp2ULohXpQ8H
-         74AIRrGMkvCMYFfqhIO9RLbwcCZPcukhmfZOSJs79xkI+EoEMsqZXJ7GdtZiiMqFmKHd
-         2iqK2zwlwIeC4uJYaKg655yS/MIB1AiTzj/UkNeVsy9DO4S3/J/OADPd7i3W58ePW2aQ
-         vQqZe3cW0KqUA9rFSZsZBWUXvtqo2rm6DVEvmJTiim3bIWNGiNrLMwfOVXqLiOeRI0nf
-         pZ5z382bOvOna83BKte8ZOZW0S/in9ZeLE5WVbuA561GPKoLJbJ1RgsxLaENRFK8yrd6
-         qhlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HWf4Aun5/5+fUgeacGwpoakgROwaQ/uueT5h+8RHttQ=;
-        b=YKDDYTSj7yO04xVPZFAnBXb7vfcihlXPYqlGEj06xU5GggCluD6cntR81cEeffQc6Q
-         cyM8L6MiA0UKX2BLcM1q18vWbq7/gLfRQ6wPEj2cmqP3sU0QaHZYw4Hh6I08xIEXxEqG
-         s7cBhFWXa91hB5XU0qdlaAUB7CtT80/wWVZxH4Fxqw4DCzOPhO2H9ZkX2h5VzGOVKkft
-         u2MM8IFx1WMa1I4WnTMdKi4jmJwHypb/7CI21hQ+CE6FO4kQlfq2I1Kt69cLakNd1Tq2
-         jNKFJMzU2ajbhTyg8Vk6OT6VLocNI+lmpEfm7k4ACgsNud1ulJF4u1mqwqFXxG0hd4OJ
-         xmBQ==
-X-Gm-Message-State: AOAM531TT+xTYMVBfFgpOka2w+tyBmX2DynPBIt8nnwOHZXyxEBeUAwe
-        XMpFseNdXzbSHV/6g4iPYyQtH6oCI5BKf7XHwfnPnaLtVmU=
-X-Google-Smtp-Source: ABdhPJw6KoP2KQaGBDHCtn50YATsUCUkXzH8ugQiXdfcMlnnX+uWdJBXjb7nvdFfZ0j2r1taw1OdWprhxRUr2nNZH2E=
-X-Received: by 2002:ac2:5b1e:: with SMTP id v30mr6300853lfn.540.1607739899032;
- Fri, 11 Dec 2020 18:24:59 -0800 (PST)
+        id S2437490AbgLLCte (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Dec 2020 21:49:34 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:14884 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2437635AbgLLCtT (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 11 Dec 2020 21:49:19 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BC2iYpl017901
+        for <bpf@vger.kernel.org>; Fri, 11 Dec 2020 18:48:39 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=eyFyQCbNL4RpA1KiREB1RcdSp4FkWGSu90sG7+DXb1A=;
+ b=POk2Bkzi+2B+oMHiV09YdN2i8VZOH68IfS7+N+WgXxpsnrBakUFHFtL/MCYBqcVuKymL
+ zEC4sP3DIpwo7K3CHxKEzr7EjkkDfewui1SbDdMRSZ/7x/D/SVnDlBLkyxt0rF7XFfQh
+ KUtyJaMf5HrYRJ3pReVaxMFN1ASHT6ZAqwg= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 35bpp32b89-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <bpf@vger.kernel.org>; Fri, 11 Dec 2020 18:48:39 -0800
+Received: from intmgw002.03.ash8.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Fri, 11 Dec 2020 18:48:38 -0800
+Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
+        id 1958762E50ED; Fri, 11 Dec 2020 18:48:33 -0800 (PST)
+From:   Song Liu <songliubraving@fb.com>
+To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <john.fastabend@gmail.com>, <kpsingh@chromium.org>,
+        <kernel-team@fb.com>, Song Liu <songliubraving@fb.com>
+Subject: [PATCH bpf-next 2/4] bpf: allow bpf_d_path in sleepable bpf_iter program
+Date:   Fri, 11 Dec 2020 18:48:08 -0800
+Message-ID: <20201212024810.807616-3-songliubraving@fb.com>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201212024810.807616-1-songliubraving@fb.com>
+References: <20201212024810.807616-1-songliubraving@fb.com>
 MIME-Version: 1.0
-References: <20201211081903.17857-1-glin@suse.com> <CAEf4BzbJRf-+_GE4r2+mk0FjT96Qszx3ru9wEfieP_zr6p6dOw@mail.gmail.com>
- <a9a00c89-3716-2296-d0d9-bba944e2cd82@iogearbox.net>
-In-Reply-To: <a9a00c89-3716-2296-d0d9-bba944e2cd82@iogearbox.net>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 11 Dec 2020 18:24:47 -0800
-Message-ID: <CAADnVQKr9XYS3ijsiFiEH3sUAx-HjqkzybSZ379SLkyiXBkNhQ@mail.gmail.com>
-Subject: Re: [PATCH] bpf,x64: pad NOPs to make images converge more easily
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Gary Lin <glin@suse.com>, Networking <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Eric Dumazet <eric.dumazet@gmail.com>,
-        andreas.taschner@suse.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2020-12-11_10:2020-12-11,2020-12-11 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ priorityscore=1501 adultscore=0 malwarescore=0 impostorscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 phishscore=0 mlxlogscore=694 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012120020
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Fri, Dec 11, 2020 at 1:13 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
-> >> +                       }
-> >>   emit_jmp:
-> >>                          if (is_imm8(jmp_offset)) {
-> >> +                               if (jmp_padding)
-> >> +                                       cnt += emit_nops(&prog, INSN_SZ_DIFF - 2);
+task_file and task_vma iter programs have access to file->f_path. Enable
+bpf_d_path to print paths of these file.
 
-Could you describe all possible numbers of bytes in padding?
-Is it 0, 2, 4 ?
-Would be good to add warn_on_once to make sure the number
-of nops is expected.
+bpf_iter programs are generally called in sleepable context. However, it
+is still necessary to diffientiate sleepable and non-sleepable bpf_iter
+programs: sleepable programs have access to bpf_d_path; non-sleepable
+programs have access to bpf_spin_lock.
 
-> >>   struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
-> >>   {
-> >>          struct bpf_binary_header *header = NULL;
-> >> @@ -1981,6 +1997,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
-> >>          struct jit_context ctx = {};
-> >>          bool tmp_blinded = false;
-> >>          bool extra_pass = false;
-> >> +       bool padding = prog->padded;
-> >
-> > can this ever be true on assignment? I.e., can the program be jitted twice?
->
-> Yes, progs can be passed into the JIT twice, see also jit_subprogs(). In one of
-> the earlier patches it would still potentially change the image size a second
-> time which would break subprogs aka bpf2bpf calls.
+Signed-off-by: Song Liu <songliubraving@fb.com>
+---
+ kernel/trace/bpf_trace.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Right. I think memorized padded flag shouldn't be in sticky bits
-of the prog structure.
-It's only needed between the last pass and extra pass for bpf2bpf calls.
-I think it would be cleaner to keep it in struct x64_jit_data *jit_data.
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 52ddd217d6a19..839c654160d1b 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1191,6 +1191,11 @@ BTF_SET_END(btf_allowlist_d_path)
+=20
+ static bool bpf_d_path_allowed(const struct bpf_prog *prog)
+ {
++	if (prog->type =3D=3D BPF_PROG_TYPE_TRACING &&
++	    prog->expected_attach_type =3D=3D BPF_TRACE_ITER &&
++	    prog->aux->sleepable)
++		return true;
++
+ 	if (prog->type =3D=3D BPF_PROG_TYPE_LSM)
+ 		return bpf_lsm_is_sleepable_hook(prog->aux->attach_btf_id);
+=20
+--=20
+2.24.1
 
-As others have said the selftests are must have.
-Especially for bpf2bpf calls where one subprog is padded.
-
-Thanks!
