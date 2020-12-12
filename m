@@ -2,87 +2,95 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77B62C2BBCA
-	for <bpf@archiver.kernel.org>; Sat, 12 Dec 2020 02:50:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BE3DAC4361B
+	for <bpf@archiver.kernel.org>; Sat, 12 Dec 2020 02:51:25 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3CE0B23770
-	for <bpf@archiver.kernel.org>; Sat, 12 Dec 2020 02:50:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7AEE022DFB
+	for <bpf@archiver.kernel.org>; Sat, 12 Dec 2020 02:51:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437717AbgLLCte (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 11 Dec 2020 21:49:34 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:34012 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2437490AbgLLCtH (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 11 Dec 2020 21:49:07 -0500
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 0BC2lBs8028264
-        for <bpf@vger.kernel.org>; Fri, 11 Dec 2020 18:48:23 -0800
+        id S2437939AbgLLCuG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 11 Dec 2020 21:50:06 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:19696 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2437693AbgLLCtY (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 11 Dec 2020 21:49:24 -0500
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 0BC2jGqq005066
+        for <bpf@vger.kernel.org>; Fri, 11 Dec 2020 18:48:43 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=facebook; bh=nlY7wfws6yRYwVzKfxHUW3g9ZHtYcHyphmCk2figMJI=;
- b=pWcxuwpSvdlYYqrGpRgOjU8YoGst2WWUdyIiB2wlC5i1NClK/ZZ5YsfJ1BKrglC7way6
- NNsd0SxafBZ5nlZsP/Tm/tJ04+54NpEW9cYGCMgNczEC7Uq352dsoZRHXsjE8FyMuJcc
- 03jpkvtkikmrk+zhrYc47jLezLuLp18jfPw= 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding : content-type; s=facebook;
+ bh=fHK02DMY3e9CuY9vd0yEYe9+aiFFQzzSEnF0c5NhuB8=;
+ b=kMmPW3arSVgtPBcM85ee0LICp/ZW0dIoLTHuXREfrajYChu2Q+Ib2Bc7/AYKLupeG3kH
+ elbUuRI+45P9DmcUe9OBJ1zLNigwXiSOlGUfCeVkGlJbcsI0yeWzJSWWezSiCvCLcjle
+ AjFje6RuIdG7OTpgbEY8aWQP9RGJOt05fHY= 
 Received: from maileast.thefacebook.com ([163.114.130.16])
-        by m0001303.ppops.net with ESMTP id 35c8ssm5n4-4
+        by mx0a-00082601.pphosted.com with ESMTP id 35c9rekxxn-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 11 Dec 2020 18:48:23 -0800
-Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::6) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 11 Dec 2020 18:48:43 -0800
+Received: from intmgw004.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::c) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 11 Dec 2020 18:48:22 -0800
+ 15.1.1979.3; Fri, 11 Dec 2020 18:48:42 -0800
 Received: by devbig006.ftw2.facebook.com (Postfix, from userid 4523)
-        id 71C9762E50ED; Fri, 11 Dec 2020 18:48:20 -0800 (PST)
+        id 5133B62E50ED; Fri, 11 Dec 2020 18:48:37 -0800 (PST)
 From:   Song Liu <songliubraving@fb.com>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <john.fastabend@gmail.com>, <kpsingh@chromium.org>,
         <kernel-team@fb.com>, Song Liu <songliubraving@fb.com>
-Subject: [PATCH bpf-next 0/4] introduce bpf_iter for task_vma
-Date:   Fri, 11 Dec 2020 18:48:06 -0800
-Message-ID: <20201212024810.807616-1-songliubraving@fb.com>
+Subject: [PATCH bpf-next 3/4] libbpf: introduce section "iter.s/" for sleepable bpf_iter program
+Date:   Fri, 11 Dec 2020 18:48:09 -0800
+Message-ID: <20201212024810.807616-4-songliubraving@fb.com>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20201212024810.807616-1-songliubraving@fb.com>
+References: <20201212024810.807616-1-songliubraving@fb.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
  definitions=2020-12-11_10:2020-12-11,2020-12-11 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- lowpriorityscore=0 malwarescore=0 impostorscore=0 mlxscore=0
- suspectscore=0 spamscore=0 adultscore=0 clxscore=1015 bulkscore=0
- priorityscore=1501 mlxlogscore=538 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2012120020
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ priorityscore=1501 impostorscore=0 lowpriorityscore=0 spamscore=0
+ clxscore=1011 adultscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ mlxscore=0 mlxlogscore=802 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2012120020
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This set introduces bpf_iter for task_vma, which can be used to generate
-information similar to /proc/pid/maps or /proc/pid/smaps. Patch 4/4 adds
-an example that mimics /proc/pid/maps.
+Sleepable iterator program have access to helper functions like bpf_d_pat=
+h.
 
-Song Liu (4):
-  bpf: introduce task_vma bpf_iter
-  bpf: allow bpf_d_path in sleepable bpf_iter program
-  libbpf: introduce section "iter.s/" for sleepable bpf_iter program
-  selftests/bpf: add test for bpf_iter_task_vma
+Signed-off-by: Song Liu <songliubraving@fb.com>
+---
+ tools/lib/bpf/libbpf.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
- include/linux/bpf.h                           |   2 +-
- include/uapi/linux/bpf.h                      |   7 +
- kernel/bpf/task_iter.c                        | 193 +++++++++++++++++-
- kernel/trace/bpf_trace.c                      |   5 +
- tools/lib/bpf/libbpf.c                        |   5 +
- .../selftests/bpf/prog_tests/bpf_iter.c       | 106 +++++++++-
- tools/testing/selftests/bpf/progs/bpf_iter.h  |   9 +
- .../selftests/bpf/progs/bpf_iter_task_vma.c   |  55 +++++
- 8 files changed, 370 insertions(+), 12 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_iter_task_vma.c
-
---
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 9be88a90a4aad..9204d12d04bf8 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -8535,6 +8535,11 @@ static const struct bpf_sec_def section_defs[] =3D=
+ {
+ 		.expected_attach_type =3D BPF_TRACE_ITER,
+ 		.is_attach_btf =3D true,
+ 		.attach_fn =3D attach_iter),
++	SEC_DEF("iter.s/", TRACING,
++		.expected_attach_type =3D BPF_TRACE_ITER,
++		.is_attach_btf =3D true,
++		.is_sleepable =3D true,
++		.attach_fn =3D attach_iter),
+ 	BPF_EAPROG_SEC("xdp_devmap/",		BPF_PROG_TYPE_XDP,
+ 						BPF_XDP_DEVMAP),
+ 	BPF_EAPROG_SEC("xdp_cpumap/",		BPF_PROG_TYPE_XDP,
+--=20
 2.24.1
+
