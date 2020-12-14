@@ -6,65 +6,66 @@ X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 89EBBC2BB40
-	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 20:15:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CE1B8C2BBCF
+	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 20:16:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 54FC1207A2
-	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 20:15:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A33DC207A2
+	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 20:16:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503088AbgLNUMc (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Dec 2020 15:12:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42394 "EHLO
+        id S2387805AbgLNUQP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Dec 2020 15:16:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2503085AbgLNUMZ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Dec 2020 15:12:25 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393CDC0617A6;
-        Mon, 14 Dec 2020 12:11:35 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id y24so17031356otk.3;
-        Mon, 14 Dec 2020 12:11:35 -0800 (PST)
+        with ESMTP id S2503051AbgLNUML (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Dec 2020 15:12:11 -0500
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45872C061793;
+        Mon, 14 Dec 2020 12:11:31 -0800 (PST)
+Received: by mail-ot1-x344.google.com with SMTP id f16so17011024otl.11;
+        Mon, 14 Dec 2020 12:11:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=o9Y3t8Nk2w6YOn+aCane90NBqrXU64pdv9z0KzYNQcM=;
-        b=SKBHBLM5dDCb3JwuEfm+9iWPJnpkves4bhwMH4UENFEtBD1HsOtOFVouipB+HRHMFL
-         LJag3tkLsWADTymPPEmypNx+9gTFTz7SvhbFUQJkNJGCigI82hh0pJAAA1+cePKq+FK2
-         T/JvMiCmF52feBh+8ShF5z265q7asjFdRKt9nSOw1iuTX88nzuTtF7DU3ohKO0wZvyI6
-         UYxjiBaex32AzfXsL5WEF55/g+oV2mP/Lw3aAvJAHdlwb4VuIllHzbF31V5PRU7j4FGW
-         blKh3/tOkwq5jNC5aeXxYDqsFH8M9lq2jSEw1RhLevZLiV1cjNBmy0BeGr16FdDxYvip
-         BGqg==
+        bh=yygU5NAXWVy/uMevreNO6dRLr+BDbLez0blcakg1cFs=;
+        b=o3HtlNau90LyxaDbf4q3WrIQ5NJOxBKtTWVEsFyG6i7g5jg62EXWKNPnVURdf0vWkR
+         A8gf5eJQucjyyXCX7+1+pOAAZPjKDHiD8nq81CnC+8VI/XJb9/ehW2HltU6EoAgYDMS8
+         hcIx8q/2jHzdWIoQVUTHCL0onQklHltK3nXNVj+DeCNtL5gIjEum3BPlzfHLshsdV8Dt
+         Cjm9PUkBIKvcp0jMGDoAUBsLnezElVRZPWEg/r349wgScm+HV5Sf8sNDWHpmSga+pKdV
+         csolezKEoTihqPZ2l/wfeC+q+mCAPRZk9zyHKONHw2T4u1uwv6SFuHjQ52Z8R0qvubYH
+         p81w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=o9Y3t8Nk2w6YOn+aCane90NBqrXU64pdv9z0KzYNQcM=;
-        b=LbzzPCuVy6AxtfABml9jWTgsLFZCff1fxm/iB4AxzW9ThSBzeHXGxYr1R38EHqUTBQ
-         IswCaPetuWE2SzyXREzW/lNCWxZeeVBIj8rBJpjDhKj4B6eFVROGlOv4GUnrJ6H7fCkA
-         Lcgdqd/iPvKYq3clzjAPL6uQsyI+bFdhDNUxMr9+KsUSzERAuoE7YCEMGLnkzI+xnuje
-         3BHIXkz8Sni+qhBGm7Bjt6KjKPHso/KeXWmDOah51u+jC536eUOI9jr8AcNeWFfxy8Sw
-         OteusZ1hPNFMntG/jNqaEqKyDcgnyF29u11WnyfkGBKFa21LHYGEJpg4Myy9hCfS72JJ
-         Ehaw==
-X-Gm-Message-State: AOAM53200C2s5jY7o9QiXxVzx/MQbPSZghzS1tVF6FU0v8p6dSMbUQk7
-        BddRfrKZuNtoVyvCDqvLlTPJydelxxOrVQ==
-X-Google-Smtp-Source: ABdhPJzzF+vFqL72EuNuS3aPwTru5+b6OBGT8hh3HicI2PU72klrBS8onnVhAcKcYD1dRj8NPFEQ3g==
-X-Received: by 2002:a05:6830:118b:: with SMTP id u11mr21016023otq.130.1607976694404;
-        Mon, 14 Dec 2020 12:11:34 -0800 (PST)
+        bh=yygU5NAXWVy/uMevreNO6dRLr+BDbLez0blcakg1cFs=;
+        b=UNxiQ/HLoI+yajGWzvChW6BjnC7jTEXqRSeodw3qMm/BosKYweR31bnV66NPMMJOBV
+         t9PZnhNAX7mLEDQLR9D6PwG5Am91JYp0h+MDP0luJiPv9vFbFS6ZSen2+YY0IVOIIVAz
+         Q0rCwvVaAAA796T+NMqhkeAvRi+zaRXhtHShbR+VFYxvQdkH7O5gT3M2/u9kD2rnxbdi
+         JbZ9Ze2CkY05c9Ty/mCQitebJ+A9lchtketih6170GUkWUqeuzoqgI2UIcI8qR5FAX29
+         yaUiV/0a+8Txv4++D7GiK9ULTXxF8TAY87X5PY7skqFiyTUjEg1ZNCgxkI6cO+nkepip
+         czZw==
+X-Gm-Message-State: AOAM531A6ZcbN8Phzk/RXeDl6OziauJEGxD7qI34rfcXFRGq6VHJ+f2n
+        7wJQlSnfvWluLVmJ5knKLvLUpd5IQ1HUhw==
+X-Google-Smtp-Source: ABdhPJyQ6MvXody+z+SEzCHIYo/RXfDxe1Hcq+dCQzigpgoBmeVIieqOlljnGlaU6MImq3TlkRL6vQ==
+X-Received: by 2002:a9d:6414:: with SMTP id h20mr20677067otl.28.1607976690422;
+        Mon, 14 Dec 2020 12:11:30 -0800 (PST)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:3825:1c64:a3d3:108])
-        by smtp.gmail.com with ESMTPSA id h26sm3905850ots.9.2020.12.14.12.11.33
+        by smtp.gmail.com with ESMTPSA id h26sm3905850ots.9.2020.12.14.12.11.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Dec 2020 12:11:33 -0800 (PST)
+        Mon, 14 Dec 2020 12:11:29 -0800 (PST)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     bpf@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
+        Song Liu <songliubraving@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Dongdong Wang <wangdongdong.6@bytedance.com>
-Subject: [Patch bpf-next v2 4/5] selftests/bpf: add a test case for bpf timeout map
-Date:   Mon, 14 Dec 2020 12:11:17 -0800
-Message-Id: <20201214201118.148126-5-xiyou.wangcong@gmail.com>
+Subject: [Patch bpf-next v2 1/5] bpf: use index instead of hash for map_locked[]
+Date:   Mon, 14 Dec 2020 12:11:14 -0800
+Message-Id: <20201214201118.148126-2-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20201214201118.148126-1-xiyou.wangcong@gmail.com>
 References: <20201214201118.148126-1-xiyou.wangcong@gmail.com>
@@ -76,76 +77,237 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-Add a test case in test_maps.c for timeout map, which focuses
-on testing timeout.
+Commit 20b6cc34ea74 ("bpf: Avoid hashtab deadlock with map_locked")
+introduced a percpu counter map_locked to bail out NMI case. It uses
+the hash of each bucket for indexing, which requires callers of
+htab_lock_bucket()/htab_unlock_bucket() to pass it in. But hash value
+is not always available, especially when we traverse the whole hash
+table where we do not have keys to compute the hash. We can just
+compute the index of each bucket with its address and use index
+instead.
 
+This is a prerequisite for the following timeout map patch.
+
+Cc: Song Liu <songliubraving@fb.com>
 Cc: Alexei Starovoitov <ast@kernel.org>
 Cc: Daniel Borkmann <daniel@iogearbox.net>
 Cc: Dongdong Wang <wangdongdong.6@bytedance.com>
 Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
- tools/testing/selftests/bpf/test_maps.c | 41 +++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ kernel/bpf/hashtab.c | 57 +++++++++++++++++++++++---------------------
+ 1 file changed, 30 insertions(+), 27 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index 0ad3e6305ff0..9fc7b5424fdf 100644
---- a/tools/testing/selftests/bpf/test_maps.c
-+++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -1723,6 +1723,45 @@ static void test_reuseport_array(void)
- 	close(map_fd);
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 7e848200cd26..f0b7b54fa3a8 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -156,16 +156,17 @@ static void htab_init_buckets(struct bpf_htab *htab)
  }
  
-+static void test_timeout_map(void)
-+{
-+	int val1 = 1, val2 = 2, val3 = 3;
-+	int key1 = 1, key2 = 2, key3 = 3;
-+	int fd;
-+
-+	fd = bpf_create_map(BPF_MAP_TYPE_TIMEOUT_HASH, sizeof(int), sizeof(int),
-+			    3, map_flags);
-+	if (fd < 0) {
-+		printf("Failed to create timeout map '%s'!\n", strerror(errno));
-+		exit(1);
-+	}
-+
-+	/* Timeout after 1 secs */
-+	assert(bpf_map_update_elem(fd, &key1, &val1, (u64)1<<32) == 0);
-+	/* Timeout after 2 secs */
-+	assert(bpf_map_update_elem(fd, &key2, &val2, (u64)2<<32) == 0);
-+	/* Timeout after 10 secs */
-+	assert(bpf_map_update_elem(fd, &key3, &val3, (u64)10<<32) == 0);
-+
-+	sleep(1);
-+	assert(bpf_map_lookup_elem(fd, &key1, &val1) != 0);
-+	val2 = 0;
-+	assert(bpf_map_lookup_elem(fd, &key2, &val2) == 0 && val2 == 2);
-+
-+	sleep(1);
-+	assert(bpf_map_lookup_elem(fd, &key1, &val1) != 0);
-+	assert(bpf_map_lookup_elem(fd, &key2, &val2) != 0);
-+
-+	/* Modify timeout to expire it earlier */
-+	val3 = 0;
-+	assert(bpf_map_lookup_elem(fd, &key3, &val3) == 0 && val3 == 3);
-+	assert(bpf_map_update_elem(fd, &key3, &val3, (u64)1<<32) == 0);
-+	sleep(1);
-+	assert(bpf_map_lookup_elem(fd, &key3, &val3) != 0);
-+
-+	close(fd);
-+}
-+
- static void run_all_tests(void)
+ static inline int htab_lock_bucket(const struct bpf_htab *htab,
+-				   struct bucket *b, u32 hash,
+-				   unsigned long *pflags)
++				   struct bucket *b, unsigned long *pflags)
  {
- 	test_hashmap(0, NULL);
-@@ -1752,6 +1791,8 @@ static void run_all_tests(void)
- 	test_stackmap(0, NULL);
+ 	unsigned long flags;
++	unsigned int index;
  
- 	test_map_in_map();
-+
-+	test_timeout_map();
+-	hash = hash & HASHTAB_MAP_LOCK_MASK;
++	index = b - htab->buckets;
++	index &= HASHTAB_MAP_LOCK_MASK;
+ 
+ 	migrate_disable();
+-	if (unlikely(__this_cpu_inc_return(*(htab->map_locked[hash])) != 1)) {
+-		__this_cpu_dec(*(htab->map_locked[hash]));
++	if (unlikely(__this_cpu_inc_return(*(htab->map_locked[index])) != 1)) {
++		__this_cpu_dec(*(htab->map_locked[index]));
+ 		migrate_enable();
+ 		return -EBUSY;
+ 	}
+@@ -180,15 +181,17 @@ static inline int htab_lock_bucket(const struct bpf_htab *htab,
  }
  
- #define DEFINE_TEST(name) extern void test_##name(void);
+ static inline void htab_unlock_bucket(const struct bpf_htab *htab,
+-				      struct bucket *b, u32 hash,
+-				      unsigned long flags)
++				      struct bucket *b, unsigned long flags)
+ {
+-	hash = hash & HASHTAB_MAP_LOCK_MASK;
++	unsigned int index;
++
++	index = b - htab->buckets;
++	index &= HASHTAB_MAP_LOCK_MASK;
+ 	if (htab_use_raw_lock(htab))
+ 		raw_spin_unlock_irqrestore(&b->raw_lock, flags);
+ 	else
+ 		spin_unlock_irqrestore(&b->lock, flags);
+-	__this_cpu_dec(*(htab->map_locked[hash]));
++	__this_cpu_dec(*(htab->map_locked[index]));
+ 	migrate_enable();
+ }
+ 
+@@ -710,7 +713,7 @@ static bool htab_lru_map_delete_node(void *arg, struct bpf_lru_node *node)
+ 	b = __select_bucket(htab, tgt_l->hash);
+ 	head = &b->head;
+ 
+-	ret = htab_lock_bucket(htab, b, tgt_l->hash, &flags);
++	ret = htab_lock_bucket(htab, b, &flags);
+ 	if (ret)
+ 		return false;
+ 
+@@ -720,7 +723,7 @@ static bool htab_lru_map_delete_node(void *arg, struct bpf_lru_node *node)
+ 			break;
+ 		}
+ 
+-	htab_unlock_bucket(htab, b, tgt_l->hash, flags);
++	htab_unlock_bucket(htab, b, flags);
+ 
+ 	return l == tgt_l;
+ }
+@@ -1019,7 +1022,7 @@ static int htab_map_update_elem(struct bpf_map *map, void *key, void *value,
+ 		 */
+ 	}
+ 
+-	ret = htab_lock_bucket(htab, b, hash, &flags);
++	ret = htab_lock_bucket(htab, b, &flags);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1062,7 +1065,7 @@ static int htab_map_update_elem(struct bpf_map *map, void *key, void *value,
+ 	}
+ 	ret = 0;
+ err:
+-	htab_unlock_bucket(htab, b, hash, flags);
++	htab_unlock_bucket(htab, b, flags);
+ 	return ret;
+ }
+ 
+@@ -1100,7 +1103,7 @@ static int htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value,
+ 		return -ENOMEM;
+ 	memcpy(l_new->key + round_up(map->key_size, 8), value, map->value_size);
+ 
+-	ret = htab_lock_bucket(htab, b, hash, &flags);
++	ret = htab_lock_bucket(htab, b, &flags);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1121,7 +1124,7 @@ static int htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value,
+ 	ret = 0;
+ 
+ err:
+-	htab_unlock_bucket(htab, b, hash, flags);
++	htab_unlock_bucket(htab, b, flags);
+ 
+ 	if (ret)
+ 		bpf_lru_push_free(&htab->lru, &l_new->lru_node);
+@@ -1156,7 +1159,7 @@ static int __htab_percpu_map_update_elem(struct bpf_map *map, void *key,
+ 	b = __select_bucket(htab, hash);
+ 	head = &b->head;
+ 
+-	ret = htab_lock_bucket(htab, b, hash, &flags);
++	ret = htab_lock_bucket(htab, b, &flags);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1181,7 +1184,7 @@ static int __htab_percpu_map_update_elem(struct bpf_map *map, void *key,
+ 	}
+ 	ret = 0;
+ err:
+-	htab_unlock_bucket(htab, b, hash, flags);
++	htab_unlock_bucket(htab, b, flags);
+ 	return ret;
+ }
+ 
+@@ -1221,7 +1224,7 @@ static int __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
+ 			return -ENOMEM;
+ 	}
+ 
+-	ret = htab_lock_bucket(htab, b, hash, &flags);
++	ret = htab_lock_bucket(htab, b, &flags);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1245,7 +1248,7 @@ static int __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
+ 	}
+ 	ret = 0;
+ err:
+-	htab_unlock_bucket(htab, b, hash, flags);
++	htab_unlock_bucket(htab, b, flags);
+ 	if (l_new)
+ 		bpf_lru_push_free(&htab->lru, &l_new->lru_node);
+ 	return ret;
+@@ -1283,7 +1286,7 @@ static int htab_map_delete_elem(struct bpf_map *map, void *key)
+ 	b = __select_bucket(htab, hash);
+ 	head = &b->head;
+ 
+-	ret = htab_lock_bucket(htab, b, hash, &flags);
++	ret = htab_lock_bucket(htab, b, &flags);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1296,7 +1299,7 @@ static int htab_map_delete_elem(struct bpf_map *map, void *key)
+ 		ret = -ENOENT;
+ 	}
+ 
+-	htab_unlock_bucket(htab, b, hash, flags);
++	htab_unlock_bucket(htab, b, flags);
+ 	return ret;
+ }
+ 
+@@ -1318,7 +1321,7 @@ static int htab_lru_map_delete_elem(struct bpf_map *map, void *key)
+ 	b = __select_bucket(htab, hash);
+ 	head = &b->head;
+ 
+-	ret = htab_lock_bucket(htab, b, hash, &flags);
++	ret = htab_lock_bucket(htab, b, &flags);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1329,7 +1332,7 @@ static int htab_lru_map_delete_elem(struct bpf_map *map, void *key)
+ 	else
+ 		ret = -ENOENT;
+ 
+-	htab_unlock_bucket(htab, b, hash, flags);
++	htab_unlock_bucket(htab, b, flags);
+ 	if (l)
+ 		bpf_lru_push_free(&htab->lru, &l->lru_node);
+ 	return ret;
+@@ -1480,7 +1483,7 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 	head = &b->head;
+ 	/* do not grab the lock unless need it (bucket_cnt > 0). */
+ 	if (locked) {
+-		ret = htab_lock_bucket(htab, b, batch, &flags);
++		ret = htab_lock_bucket(htab, b, &flags);
+ 		if (ret)
+ 			goto next_batch;
+ 	}
+@@ -1500,7 +1503,7 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 		/* Note that since bucket_cnt > 0 here, it is implicit
+ 		 * that the locked was grabbed, so release it.
+ 		 */
+-		htab_unlock_bucket(htab, b, batch, flags);
++		htab_unlock_bucket(htab, b, flags);
+ 		rcu_read_unlock();
+ 		bpf_enable_instrumentation();
+ 		goto after_loop;
+@@ -1511,7 +1514,7 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 		/* Note that since bucket_cnt > 0 here, it is implicit
+ 		 * that the locked was grabbed, so release it.
+ 		 */
+-		htab_unlock_bucket(htab, b, batch, flags);
++		htab_unlock_bucket(htab, b, flags);
+ 		rcu_read_unlock();
+ 		bpf_enable_instrumentation();
+ 		kvfree(keys);
+@@ -1564,7 +1567,7 @@ __htab_map_lookup_and_delete_batch(struct bpf_map *map,
+ 		dst_val += value_size;
+ 	}
+ 
+-	htab_unlock_bucket(htab, b, batch, flags);
++	htab_unlock_bucket(htab, b, flags);
+ 	locked = false;
+ 
+ 	while (node_to_free) {
 -- 
 2.25.1
 
