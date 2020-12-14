@@ -2,78 +2,132 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 70CE4C2BB9A
-	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 15:26:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 815C3C2BB48
+	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 15:30:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3E2A122B2C
-	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 15:26:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5A2A022BE9
+	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 15:30:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394627AbgLNPXr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Dec 2020 10:23:47 -0500
-Received: from mga17.intel.com ([192.55.52.151]:28673 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727425AbgLNPXg (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Dec 2020 10:23:36 -0500
-IronPort-SDR: SjFHRfuU22Z5gveVRPC7bBdjNIFZKH/T6rXFYof77ujkpPBJ4uPKlB4+0bd2qwjvHxdtX9mrgj
- B6GItFEhEnjg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9834"; a="154531329"
-X-IronPort-AV: E=Sophos;i="5.78,420,1599548400"; 
-   d="scan'208";a="154531329"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2020 07:22:55 -0800
-IronPort-SDR: NkmcWa+ceThqdaP05/z8JXEvfS2EkFinu00PuzjCwJH8zWNTI711R/ftXO/8WlKUwWrdLNXP81
- u3+VMC1l3hpw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.78,420,1599548400"; 
-   d="scan'208";a="411285652"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga001.jf.intel.com with ESMTP; 14 Dec 2020 07:22:54 -0800
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     intel-wired-lan@lists.osuosl.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        anthony.l.nguyen@intel.com, kuba@kernel.org, bjorn.topel@intel.com,
-        magnus.karlsson@intel.com,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v2 net-next 1/8] i40e: drop redundant check when setting xdp prog
-Date:   Mon, 14 Dec 2020 16:13:01 +0100
-Message-Id: <20201214151308.15275-2-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20201214151308.15275-1-maciej.fijalkowski@intel.com>
-References: <20201214151308.15275-1-maciej.fijalkowski@intel.com>
+        id S2438006AbgLNP3L (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Dec 2020 10:29:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437287AbgLNP3D (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Dec 2020 10:29:03 -0500
+Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF7AC061794;
+        Mon, 14 Dec 2020 07:28:23 -0800 (PST)
+Received: by mail-pl1-x642.google.com with SMTP id y8so8794370plp.8;
+        Mon, 14 Dec 2020 07:28:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=FsgDhaY8pDmVAcsUZgp8PKiEoehT8Ak4C21MYcX8O14=;
+        b=C3FaFlNVAcRNVy8lPYZXYQkgxB0Gyo8LLPWb02hJcNDJtdQTXhp9UCRfz4GtOncXLN
+         x3NH1BFBssKEfN0JisGoDEKqn9phlGsRbF7eelVOR3Bwan9bO0Vm1NZLDznbgCtIHNF0
+         SiVTq/VfmwNytZ8RDLG8oh+LT4DdpSoWu9e+KqsZF858aaHq2SJ1/IHHhtR77pU70o3D
+         Z9HrDyiiH4vWAgAC7JyGAK/guCVC0c7uQ/IqvEyYvocUuD4x36ddIlbm6Zu6KU8YOTE4
+         0GFiPCNtLq33gY5EBlcVdc18KNsnnuXWiy83yuJ1xfPr23A3bOY8183326NAbgx7Hexz
+         rfmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=FsgDhaY8pDmVAcsUZgp8PKiEoehT8Ak4C21MYcX8O14=;
+        b=KHo80mLgV6Z7AUF9hXmeCkaw/4rzNEDSqLdlXPgV6xHkUctn/E3yQJwgminazcC6lJ
+         cyMPHTO+4Qxv00i/yBlM2u3YqSQyl6enlnBVrYuF2v+9aCcfhqSXZyslzmtiCOVzcNSj
+         8e8alITJAhLyfmYVyLUgz7t38kL1UduoOqbRoIy5FvLugDSSP9h2h8B488Fv7un39VzM
+         dbF6ZraojFKRFnrfWy6VjvVrpUU4TLOJZ/tjsKUL7sqVYJCptwoKiEvTOZkeDxZOpJf0
+         a8bZEMHO2yP1vX5iLydxGdSUUD8BGQLEUuVyyDQs9FdcQrHczFFrMbBVJXGpkGDmiV6J
+         UErw==
+X-Gm-Message-State: AOAM530yXi3iBoAbZsFeCrAvMGa/QZL78fYkwK8LJMtSFYLsyhtkT/Qo
+        /JLIiZ2n5DOXwpCvEc05FKM=
+X-Google-Smtp-Source: ABdhPJwfI42KSZKR37/CxrSwwH4p1PVHcM7M2A/USHj3aXA+EeMfq85HIKl/kmcgyUFL7VGioUxN3g==
+X-Received: by 2002:a17:90a:de95:: with SMTP id n21mr25526103pjv.62.1607959702828;
+        Mon, 14 Dec 2020 07:28:22 -0800 (PST)
+Received: from VM.ger.corp.intel.com ([192.55.54.42])
+        by smtp.gmail.com with ESMTPSA id 5sm20036027pgm.57.2020.12.14.07.28.19
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 14 Dec 2020 07:28:22 -0800 (PST)
+From:   Magnus Karlsson <magnus.karlsson@gmail.com>
+To:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
+        daniel@iogearbox.net, netdev@vger.kernel.org,
+        jonathan.lemon@gmail.com
+Cc:     bpf@vger.kernel.org, A.Zema@falconvsystems.com,
+        maciej.fijalkowski@intel.com, maciejromanfijalkowski@gmail.com,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Subject: [PATCH bpf 2/2] xsk: rollback reservation at NETDEV_TX_BUSY
+Date:   Mon, 14 Dec 2020 16:27:57 +0100
+Message-Id: <20201214152757.7632-3-magnus.karlsson@gmail.com>
+X-Mailer: git-send-email 2.29.0
+In-Reply-To: <20201214152757.7632-1-magnus.karlsson@gmail.com>
+References: <20201214152757.7632-1-magnus.karlsson@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Net core handles the case where netdev has no xdp prog attached and
-current prog is NULL. Therefore, remove such check within
-i40e_xdp_setup.
+From: Magnus Karlsson <magnus.karlsson@intel.com>
 
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Rollback the reservation in the completion ring when we get a
+NETDEV_TX_BUSY. When this error is received from the driver, we are
+supposed to let the user application retry the transmit again. And in
+order to do this, we need to roll back the failed send so it can be
+retried. Unfortunately, we did not cancel the reservation we had made
+in the completion ring. By not doing this, we actually make the
+completion ring one entry smaller per NETDEV_TX_BUSY error we get, and
+after enough of these errors the completion ring will be of size zero
+and transmit will stop working.
+
+Fix this by cancelling the reservation when we get a NETDEV_TX_BUSY
+error.
+
+Fixes: 642e450b6b59 ("xsk: Do not discard packet when NETDEV_TX_BUSY")
+Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
+Reported-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c | 3 ---
- 1 file changed, 3 deletions(-)
+ net/xdp/xsk.c       | 3 +++
+ net/xdp/xsk_queue.h | 5 +++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-index 1337686bd099..5d494dd66d31 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -12452,9 +12452,6 @@ static int i40e_xdp_setup(struct i40e_vsi *vsi,
- 	if (frame_size > vsi->rx_buf_len)
- 		return -EINVAL;
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 42cb5f94d49e..2587583a6be9 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -428,6 +428,9 @@ static int xsk_generic_xmit(struct sock *sk)
+ 		if  (err == NETDEV_TX_BUSY) {
+ 			/* Tell user-space to retry the send */
+ 			skb->destructor = sock_wfree;
++			spin_lock_irqsave(&xs->pool->cq_lock, flags);
++			xskq_prod_cancel(xs->pool->cq);
++			spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
+ 			/* Free skb without triggering the perf drop trace */
+ 			consume_skb(skb);
+ 			err = -EAGAIN;
+diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
+index 9e71b9f27679..ef6de0fb4e31 100644
+--- a/net/xdp/xsk_queue.h
++++ b/net/xdp/xsk_queue.h
+@@ -286,6 +286,11 @@ static inline bool xskq_prod_is_full(struct xsk_queue *q)
+ 	return !free_entries;
+ }
  
--	if (!i40e_enabled_xdp_vsi(vsi) && !prog)
--		return 0;
--
- 	/* When turning XDP on->off/off->on we reset and rebuild the rings. */
- 	need_reset = (i40e_enabled_xdp_vsi(vsi) != !!prog);
- 
++static inline void xskq_prod_cancel(struct xsk_queue *q)
++{
++	q->cached_prod--;
++}
++
+ static inline int xskq_prod_reserve(struct xsk_queue *q)
+ {
+ 	if (xskq_prod_is_full(q))
 -- 
-2.20.1
+2.29.0
 
