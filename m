@@ -7,41 +7,41 @@ X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2EFC9C4361B
-	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 15:24:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 13889C4361B
+	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 15:24:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DB9E1207AC
-	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 15:24:00 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C8ABD22B3B
+	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 15:24:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390837AbgLNPX5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Dec 2020 10:23:57 -0500
+        id S2408360AbgLNPYR (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Dec 2020 10:24:17 -0500
 Received: from mga17.intel.com ([192.55.52.151]:28677 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408091AbgLNPX4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Dec 2020 10:23:56 -0500
-IronPort-SDR: enRtKApQK9a3KEf6/RGC9yWJTwWKHuA1+pAPtYtCSI2pHrv92eB69A4kTlqf5fIZeCCxsAkRcL
- jeHuICNQngCg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9834"; a="154531347"
+        id S2408357AbgLNPYM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Dec 2020 10:24:12 -0500
+IronPort-SDR: OLPI5N2JrQamT48xkpPpXG8B66jDWPxr8luuY7mqy6/dTaBln8+ceKtv9HW3MAv/rwnv0ufwRm
+ yLBNiD0GKzKw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9834"; a="154531365"
 X-IronPort-AV: E=Sophos;i="5.78,420,1599548400"; 
-   d="scan'208";a="154531347"
+   d="scan'208";a="154531365"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2020 07:23:02 -0800
-IronPort-SDR: M6G2TaFF9s87TaSaPSevh93XG4Rn07MkCpFxSneFdo9n3Elgqvd+9ZyT+5Ax9vAgaMVgYRM5+a
- ZHlg00IxDeKA==
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2020 07:23:09 -0800
+IronPort-SDR: 2sz3LWE2BdjS1ZGPnyBMZBaeaVD9tY7CiHzCdSxNlxF9f4WJx7VvYKbHz50HaGMt+wHVXsH1A3
+ pnKX0EuNXOsA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.78,420,1599548400"; 
-   d="scan'208";a="411285711"
+   d="scan'208";a="411285753"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga001.jf.intel.com with ESMTP; 14 Dec 2020 07:23:00 -0800
+  by orsmga001.jf.intel.com with ESMTP; 14 Dec 2020 07:23:07 -0800
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     intel-wired-lan@lists.osuosl.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         anthony.l.nguyen@intel.com, kuba@kernel.org, bjorn.topel@intel.com,
         magnus.karlsson@intel.com,
         Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v2 net-next 4/8] ice: simplify ice_run_xdp
-Date:   Mon, 14 Dec 2020 16:13:04 +0100
-Message-Id: <20201214151308.15275-5-maciej.fijalkowski@intel.com>
+Subject: [PATCH v2 net-next 7/8] ice: skip NULL check against XDP prog in ZC path
+Date:   Mon, 14 Dec 2020 16:13:07 +0100
+Message-Id: <20201214151308.15275-8-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201214151308.15275-1-maciej.fijalkowski@intel.com>
 References: <20201214151308.15275-1-maciej.fijalkowski@intel.com>
@@ -51,58 +51,35 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-There's no need for 'result' variable, we can directly return the
-internal status based on action returned by xdp prog.
+Whole zero-copy variant of clean Rx irq is executed when xsk_pool is
+attached to rx_ring and it can happen only when XDP program is present
+on interface. Therefore it is safe to assume that program is always
+!NULL and there is no need for checking it in ice_run_xdp_zc.
 
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- drivers/net/ethernet/intel/ice/ice_txrx.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_xsk.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
-index 77d5eae6b4c2..8b5d23436904 100644
---- a/drivers/net/ethernet/intel/ice/ice_txrx.c
-+++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
-@@ -537,22 +537,20 @@ static int
- ice_run_xdp(struct ice_ring *rx_ring, struct xdp_buff *xdp,
- 	    struct bpf_prog *xdp_prog)
- {
--	int err, result = ICE_XDP_PASS;
- 	struct ice_ring *xdp_ring;
-+	int err;
+diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
+index 797886524054..9aea97ca4a04 100644
+--- a/drivers/net/ethernet/intel/ice/ice_xsk.c
++++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
+@@ -514,11 +514,10 @@ ice_run_xdp_zc(struct ice_ring *rx_ring, struct xdp_buff *xdp)
  	u32 act;
+ 
+ 	rcu_read_lock();
++	/* ZC patch is enabled only when XDP program is set,
++	 * so here it can not be NULL
++	 */
+ 	xdp_prog = READ_ONCE(rx_ring->xdp_prog);
+-	if (!xdp_prog) {
+-		rcu_read_unlock();
+-		return ICE_XDP_PASS;
+-	}
  
  	act = bpf_prog_run_xdp(xdp_prog, xdp);
  	switch (act) {
- 	case XDP_PASS:
--		break;
-+		return ICE_XDP_PASS;
- 	case XDP_TX:
- 		xdp_ring = rx_ring->vsi->xdp_rings[smp_processor_id()];
--		result = ice_xmit_xdp_buff(xdp, xdp_ring);
--		break;
-+		return ice_xmit_xdp_buff(xdp, xdp_ring);
- 	case XDP_REDIRECT:
- 		err = xdp_do_redirect(rx_ring->netdev, xdp, xdp_prog);
--		result = !err ? ICE_XDP_REDIR : ICE_XDP_CONSUMED;
--		break;
-+		return !err ? ICE_XDP_REDIR : ICE_XDP_CONSUMED;
- 	default:
- 		bpf_warn_invalid_xdp_action(act);
- 		fallthrough;
-@@ -560,11 +558,8 @@ ice_run_xdp(struct ice_ring *rx_ring, struct xdp_buff *xdp,
- 		trace_xdp_exception(rx_ring->netdev, xdp_prog, act);
- 		fallthrough;
- 	case XDP_DROP:
--		result = ICE_XDP_CONSUMED;
--		break;
-+		return ICE_XDP_CONSUMED;
- 	}
--
--	return result;
- }
- 
- /**
 -- 
 2.20.1
 
