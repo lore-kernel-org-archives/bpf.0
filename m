@@ -2,67 +2,73 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D586C4361B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE141C2BB40
 	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 20:12:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5606F207A0
+	by mail.kernel.org (Postfix) with ESMTP id 6BEB42168B
 	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 20:12:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502972AbgLNUMT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Dec 2020 15:12:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
+        id S2503076AbgLNUMU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Dec 2020 15:12:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2503038AbgLNUMK (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Dec 2020 15:12:10 -0500
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06901C0613D6;
-        Mon, 14 Dec 2020 12:11:30 -0800 (PST)
-Received: by mail-ot1-x32a.google.com with SMTP id j12so17027363ota.7;
-        Mon, 14 Dec 2020 12:11:29 -0800 (PST)
+        with ESMTP id S2503078AbgLNUMO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Dec 2020 15:12:14 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9AADC06179C;
+        Mon, 14 Dec 2020 12:11:33 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id j20so12559577otq.5;
+        Mon, 14 Dec 2020 12:11:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZyDzn2+LRGnv+MKKkwj6dT7+oXF09NwrSJVoJaJ6uqw=;
-        b=pUGi1FMMZYqAGrElyyecwiPhuV2Fx/WIY5NaySJsGHDD7E1fYwX6RRrmqZyRphNPdO
-         2McjbAZ/cS6MWq0/G3oYu9h5mGo1MvAlLJvdbzUQyi4HJ4V0Jfkx7zqi9Wsk3BS/EB8I
-         /9lokOGfcZHu1TFZvgIFu3+71SzswlGwuv+bILcrhb5gewMXDfZFujSSGgZyv4IwP8FD
-         OiUuMqyJ25Ek1IlhNMVRNONG4LuK8LxS+osWVb77GQe+tAFGHZbf+qqKEU9ASRw9LxaC
-         roDqgUxe7y6eDpDy3BdkhJ39V8Vt0sbS6RIJxgrmY+ONGS452+vZc1Pnw7C755Dv+FQa
-         2k/A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=GJIQSb408Ty07UVJPZWzak1MwnXpH47wjbyMmA0spq4=;
+        b=qNHkGvqK+IKHMiz8hQn6ahIFoHOp9NYvrFtggOrt68UHmpe9hN/QlXQOAmToUcZjTl
+         jo3jTSNv48icSB/8gHOygKKBbzBtl+gYWb05bx7/v6DCDUTBVNU8RL7lpx5zEr+RjuMR
+         RQqvrCWc3sxk6NR0549X56SZoVgnwyeZO7wdJHnn6+u2J3Fh7CpJQH6tynZSAK9oPilj
+         QMlu9m6jqrS27xW4heImiMNNbG8EIq6EaGtpc/sLle8uTRzOBuMuNz4bacAyhRe11Rqx
+         nO9I/zhsiwMUL0wPzwVDEtmJSl+SX80YQI1YveBehzN1gTkl30zvqAzhJBq6iAREO+wT
+         fKeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZyDzn2+LRGnv+MKKkwj6dT7+oXF09NwrSJVoJaJ6uqw=;
-        b=USfpgTGOnE5o69MvTzXsbJN8ysslggGzPAfyEWgFDmcUn04CzVwX7GpWHCagT6MjvJ
-         F2PsJVxcJ+wxQDaNUJvx4b1bSjwk9GchxCr+AzatPA6I/X+4Ia/3iDwhFUn7wrYHWPF1
-         gNjQoDOKhB8AOWiFIozv4DNT4QX/4Qmfg4kKx8Z/g0gyQ+qH2ZEJLtkPnasiEAWODBTy
-         R/5Mc10CtNTtLCQXI+enkOecDP6VI3OcuZhuP6wmNoGGeqh1HAFc1HsyAzTFElPdAi0l
-         W5ZvctL+x+HARS9YTGiybqWMk0YjuU+5Q+MKdm1XCmX+Dztxqk3c7YTjzu14rnaE28IA
-         983A==
-X-Gm-Message-State: AOAM5327KbM9kKq8gndIUhyI+LcuXGZfEU2P9grxZbpGgLTdNK/y8e4v
-        x4St3fZz8J5b7iq0OPbaz6MGr/X8gQsvgg==
-X-Google-Smtp-Source: ABdhPJwxB8k78VVWShs9FLYm8eP3wjTJzml7wt5UJsrbcuOMNLcqOrru/64iFxPmNyssYX5IlFDBGA==
-X-Received: by 2002:a05:6830:1d71:: with SMTP id l17mr21261793oti.269.1607976689065;
-        Mon, 14 Dec 2020 12:11:29 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=GJIQSb408Ty07UVJPZWzak1MwnXpH47wjbyMmA0spq4=;
+        b=B7mVcdEQmrTXCZawUdSperw5ubP/8UEKpCEU4vvnz7i/R98z1hfOBX4Le47vrbcIZ5
+         rypcDdXQ69p2x7JAfREu4p8o+ClKgO5XtWfZ6m0qxgEpWzToPSxSIrRvoNLwx6faH9nZ
+         3sI1U7Ih4Oz9+0+ADTk43kWzq4axSK/+xyA4GawYomUKPHxn368DDEpoP1nqMtFnqoI1
+         j9pfX9DbdpqaaRZjF8ZzrIw64QUBq9fBj2ucFQDfCRagPPqb01uUQM3kPIYC8HEeDdcH
+         M2I4HTHywz0bkgKXiyZdA56Hxu4KuO2E0hYYIxU/IW0/QUHHZz2nHjC78kuBY0Pu8mTl
+         WvYg==
+X-Gm-Message-State: AOAM531GPGkLdutmKu5NLOTW4zAVmCiTHBHc26h/UOssl3W15kRiEjel
+        pEGPVli/XkK/3OkPCqpMZKg6Rk7n9jkuew==
+X-Google-Smtp-Source: ABdhPJzYi5jZ+ElEupPhmr7mTv/+CDm0Gk7x9oUTD1f4+ngcii3H2+t5cOCtTtMlzPxrO4z4NEhdmQ==
+X-Received: by 2002:a9d:3d64:: with SMTP id a91mr20435167otc.144.1607976693095;
+        Mon, 14 Dec 2020 12:11:33 -0800 (PST)
 Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:3825:1c64:a3d3:108])
-        by smtp.gmail.com with ESMTPSA id h26sm3905850ots.9.2020.12.14.12.11.28
+        by smtp.gmail.com with ESMTPSA id h26sm3905850ots.9.2020.12.14.12.11.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Dec 2020 12:11:28 -0800 (PST)
+        Mon, 14 Dec 2020 12:11:32 -0800 (PST)
 From:   Cong Wang <xiyou.wangcong@gmail.com>
 To:     netdev@vger.kernel.org
-Cc:     bpf@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
-Subject: [Patch bpf-next v2 0/5] bpf: introduce timeout map
-Date:   Mon, 14 Dec 2020 12:11:13 -0800
-Message-Id: <20201214201118.148126-1-xiyou.wangcong@gmail.com>
+Cc:     bpf@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
+        Andrey Ignatov <rdna@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dongdong Wang <wangdongdong.6@bytedance.com>
+Subject: [Patch bpf-next v2 3/5] selftests/bpf: update elem_size check in map ptr test
+Date:   Mon, 14 Dec 2020 12:11:16 -0800
+Message-Id: <20201214201118.148126-4-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20201214201118.148126-1-xiyou.wangcong@gmail.com>
+References: <20201214201118.148126-1-xiyou.wangcong@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -71,34 +77,32 @@ X-Mailing-List: bpf@vger.kernel.org
 
 From: Cong Wang <cong.wang@bytedance.com>
 
-This patchset introduces a new bpf hash map which has timeout.
-Patch 1 is a preparation, patch 2 is the implementation of timeout
-map, patch 3 updates an existing hash map ptr test, patch 4 and
-patch 5 contain two test cases for timeout map.
+In map ptr test, a hard-coded 64 is used to check hash element size.
+Increase it to 72 as we increase the size of struct htab_elem. It
+seems struct htab_elem is not visible here.
 
-Please check each patch description for more details.
-
+Cc: Andrey Ignatov <rdna@fb.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Dongdong Wang <wangdongdong.6@bytedance.com>
+Signed-off-by: Cong Wang <cong.wang@bytedance.com>
 ---
-v2: fix hashmap ptr test
-    add a test case in map ptr test
-    factor out htab_timeout_map_alloc()
+ tools/testing/selftests/bpf/progs/map_ptr_kern.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cong Wang (5):
-  bpf: use index instead of hash for map_locked[]
-  bpf: introduce timeout map
-  selftests/bpf: update elem_size check in map ptr test
-  selftests/bpf: add a test case for bpf timeout map
-  selftests/bpf: add timeout map check in map_ptr tests
-
- include/linux/bpf_types.h                     |   1 +
- include/uapi/linux/bpf.h                      |   3 +-
- kernel/bpf/hashtab.c                          | 301 ++++++++++++++++--
- kernel/bpf/syscall.c                          |   3 +-
- tools/include/uapi/linux/bpf.h                |   1 +
- .../selftests/bpf/progs/map_ptr_kern.c        |  22 +-
- tools/testing/selftests/bpf/test_maps.c       |  41 +++
- 7 files changed, 340 insertions(+), 32 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/progs/map_ptr_kern.c b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+index d8850bc6a9f1..34f9880a1903 100644
+--- a/tools/testing/selftests/bpf/progs/map_ptr_kern.c
++++ b/tools/testing/selftests/bpf/progs/map_ptr_kern.c
+@@ -111,7 +111,7 @@ static inline int check_hash(void)
+ 	VERIFY(check_default_noinline(&hash->map, map));
+ 
+ 	VERIFY(hash->n_buckets == MAX_ENTRIES);
+-	VERIFY(hash->elem_size == 64);
++	VERIFY(hash->elem_size == 72);
+ 
+ 	VERIFY(hash->count.counter == 0);
+ 	for (i = 0; i < HALF_ENTRIES; ++i) {
 -- 
 2.25.1
 
