@@ -5,76 +5,82 @@ X-Spam-Level:
 X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 59514C4361B
-	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 15:24:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AA82DC4361B
+	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 15:25:27 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1D46722B2C
-	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 15:24:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 68FCE22B3B
+	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 15:25:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408053AbgLNPYQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Dec 2020 10:24:16 -0500
-Received: from mga17.intel.com ([192.55.52.151]:28673 "EHLO mga17.intel.com"
+        id S2408343AbgLNPYL (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Dec 2020 10:24:11 -0500
+Received: from mga17.intel.com ([192.55.52.151]:28670 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408356AbgLNPYM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Dec 2020 10:24:12 -0500
-IronPort-SDR: 0ZIPLNF+c/k8CKq3GSZIgg8c4P+OKZLUU2wX04xENfLKO04upCeA4j4VTIg7r9xVOVHa5VLRGe
- KR+VorUbn00Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9834"; a="154531366"
+        id S1727908AbgLNPYI (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Dec 2020 10:24:08 -0500
+IronPort-SDR: zikulLBhGY4nyepekg1Jv3vhpXvzhiI5L8Nt/e9d8M2G23PtCGMea+1w+OfOuhyaNhrP1zetNT
+ OLgaFjQHfbdg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9834"; a="154531359"
 X-IronPort-AV: E=Sophos;i="5.78,420,1599548400"; 
-   d="scan'208";a="154531366"
+   d="scan'208";a="154531359"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2020 07:23:11 -0800
-IronPort-SDR: ctp9ScIgn6YcqGCvrAdH0QTDHWYEnWb8z+6R82dHgYTMKJNdwk7MX1I1sr2oCNFG/QFVtwkE+L
- 1WnJpaF38FWw==
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2020 07:23:07 -0800
+IronPort-SDR: tMWyc6D7apkB+5WNsBfOIi7PhA1KpYYKW0XEbqrlnAFjJeU72prQ8475bbhanQagkBaYMRx4/B
+ 4GFm0E8cep7A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.78,420,1599548400"; 
-   d="scan'208";a="411285763"
+   d="scan'208";a="411285741"
 Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga001.jf.intel.com with ESMTP; 14 Dec 2020 07:23:09 -0800
+  by orsmga001.jf.intel.com with ESMTP; 14 Dec 2020 07:23:04 -0800
 From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 To:     intel-wired-lan@lists.osuosl.org
 Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         anthony.l.nguyen@intel.com, kuba@kernel.org, bjorn.topel@intel.com,
-        magnus.karlsson@intel.com
-Subject: [PATCH v2 net-next 8/8] i40e, xsk: Simplify the do-while allocation loop
-Date:   Mon, 14 Dec 2020 16:13:08 +0100
-Message-Id: <20201214151308.15275-9-maciej.fijalkowski@intel.com>
+        magnus.karlsson@intel.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH v2 net-next 6/8] ice: remove redundant checks in ice_change_mtu
+Date:   Mon, 14 Dec 2020 16:13:06 +0100
+Message-Id: <20201214151308.15275-7-maciej.fijalkowski@intel.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20201214151308.15275-1-maciej.fijalkowski@intel.com>
 References: <20201214151308.15275-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+dev_validate_mtu checks that mtu value specified by user is not less
+than min mtu and not greater than max allowed mtu. It is being done
+before calling the ndo_change_mtu exposed by driver, so remove these
+redundant checks in ice_change_mtu.
 
-Fold the count decrement into the while-statement.
-
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 ---
- drivers/net/ethernet/intel/i40e/i40e_xsk.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/net/ethernet/intel/ice/ice_main.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-index bfa84bfb0488..679200d94ef8 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-@@ -215,9 +215,7 @@ bool i40e_alloc_rx_buffers_zc(struct i40e_ring *rx_ring, u16 count)
- 			bi = i40e_rx_bi(rx_ring, 0);
- 			ntu = 0;
+diff --git a/drivers/net/ethernet/intel/ice/ice_main.c b/drivers/net/ethernet/intel/ice/ice_main.c
+index 2dea4d0e9415..476e20af7309 100644
+--- a/drivers/net/ethernet/intel/ice/ice_main.c
++++ b/drivers/net/ethernet/intel/ice/ice_main.c
+@@ -6126,15 +6126,6 @@ static int ice_change_mtu(struct net_device *netdev, int new_mtu)
  		}
--
--		count--;
--	} while (count);
-+	} while (--count);
+ 	}
  
- no_buffers:
- 	if (rx_ring->next_to_use != ntu)
+-	if (new_mtu < (int)netdev->min_mtu) {
+-		netdev_err(netdev, "new MTU invalid. min_mtu is %d\n",
+-			   netdev->min_mtu);
+-		return -EINVAL;
+-	} else if (new_mtu > (int)netdev->max_mtu) {
+-		netdev_err(netdev, "new MTU invalid. max_mtu is %d\n",
+-			   netdev->min_mtu);
+-		return -EINVAL;
+-	}
+ 	/* if a reset is in progress, wait for some time for it to complete */
+ 	do {
+ 		if (ice_is_reset_in_progress(pf->state)) {
 -- 
 2.20.1
 
