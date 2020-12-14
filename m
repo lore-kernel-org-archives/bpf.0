@@ -2,71 +2,191 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DCA55C4361B
-	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 19:19:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D132EC4361B
+	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 19:54:11 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 88E3722525
-	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 19:19:19 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 81511205CB
+	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 19:54:11 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408539AbgLNTRb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Dec 2020 14:17:31 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53780 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408575AbgLNTHn (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Dec 2020 14:07:43 -0500
-Date:   Mon, 14 Dec 2020 11:07:00 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1607972823;
-        bh=Z+m7chx7dQcUeLkkrs9mkTCnY/CP8U29plYh9el7ZdQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:From;
-        b=M90mPZ/VRL0TewEbq9x6hOtNcLXH+g/JLNbgx5lUBGY6hf4l2qMEGfFVzkC4BAbR5
-         FpLiFrYHiWC+T8MUQ/t9cfpszKSpjfYOPmNkjsSV01iVVbGBt36pa8y75pRhDrQFSx
-         zLgzPNXvNkHrQPiElIqloASbMpUO7ifs7rQhuLAjEfFjOfXdiF1tDZUY2ZR6RgsWHi
-         4ydcQgZjARym6xnzVve8XYoP7ZfCdPPa8gNeGA0z0zoEIHsuF+Hms7zHcp+r8SXXRi
-         SsQuufmgxZFp+XbEvRVVr89VRT4EAvPyCbssViuTB57eczJ6SG74/GBIA9qN8ZThgq
-         VYKTMA/XQTuJQ==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Yonatan Linik <yonatanlinik@gmail.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Willem de Bruijn <willemb@google.com>,
-        john.ogness@linutronix.de, Arnd Bergmann <arnd@arndb.de>,
-        Mao Wenan <maowenan@huawei.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        orcohen@paloaltonetworks.com, Networking <netdev@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, bpf <bpf@vger.kernel.org>
-Subject: Re: [PATCH 1/1] net: Fix use of proc_fs
-Message-ID: <20201214110700.538109b7@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <CA+s=kw3xw-_Q846CigmygetaHXfr0KFHNsmO9a=Ww9Z=G6yT7w@mail.gmail.com>
-References: <20201211163749.31956-1-yonatanlinik@gmail.com>
-        <20201211163749.31956-2-yonatanlinik@gmail.com>
-        <20201212114802.21a6b257@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <CA+s=kw3gmvk7CLu9NyiEwtBQ05eNFsTM2A679arPESVb55E2Xw@mail.gmail.com>
-        <20201212135119.0db6723e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <CA+s=kw3xw-_Q846CigmygetaHXfr0KFHNsmO9a=Ww9Z=G6yT7w@mail.gmail.com>
+        id S2502859AbgLNTyB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Dec 2020 14:54:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2502856AbgLNTx7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Dec 2020 14:53:59 -0500
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E37C0613D3
+        for <bpf@vger.kernel.org>; Mon, 14 Dec 2020 11:53:18 -0800 (PST)
+Received: by mail-ed1-x541.google.com with SMTP id dk8so18515544edb.1
+        for <bpf@vger.kernel.org>; Mon, 14 Dec 2020 11:53:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ubique-spb-ru.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=31fJCR82BsbBke40rmpflWa3sSApV5mPUqlCTPLF8jo=;
+        b=XrB5QRzVm6IDnKBHYOni3pOhJ6KFsgoMOCIkM57TkA/IphuZp/VmULohoWtTjALPj6
+         Dbzls6SnxvFqnoEyBlApfojsEVl4HNT9LD7/xNBsJE5pSxaqdjBSuVddomRKrLoj4deT
+         Ta5b9XAIPAAmGkiOVCGen85v1UqxONe3tyZqGOuYR7LuJjywtKyJyizA6uLCQ19mYDCq
+         4debtR5t4GcHNaNeFQKGGBuUkBVKCv53h+ZqRibId7v4H5twhlFtHRKeGE1vEoDhmi+5
+         0dm6Hsr+bM5uwsU9a4uGs5mf8zM4WKfcPQhwAhLkgTbIyI56/2RKwKG1tnaVeG0vJMwJ
+         IrlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=31fJCR82BsbBke40rmpflWa3sSApV5mPUqlCTPLF8jo=;
+        b=bLhdYcGpSgQ6VMRcQ8yLoUA0hJvbKwI71kzJMnE6LGYx1Mli8TiVsMFGSVN2v43dUY
+         u3uiPxSNJf2k9KPuIOpl5EpU1Tg32uHb+2qZeAL5Ot/E8t0exijvYCsT20xXy913yy7r
+         QwdWNDK6QyJGrWCFL26daSsKMPn/jwlVkgVWeV5NP6p81PsfIrU8Ore3tnEqli0pK+Pv
+         1h0aJWcV6d4tpYkkeIy9e6SkVNf4MiqnZTWiyDSRCghVlyOhl0NS+3NIkZl/B98Iq4Tz
+         IIC4USPGayqWiLpWeL84uyGA4f8ddGKVWxiR6+N9k6lrcnRTB7koVM4XKkNMMlcfJ8o6
+         cj4w==
+X-Gm-Message-State: AOAM532Dds9+vlJ64fE7wfDfU/SmXJT5z8wOUU46YOXObr6UscUUp0U4
+        3vx51vCv+3K6aBbvkz+WOyoRiE16KIg+iSMUCmw=
+X-Google-Smtp-Source: ABdhPJxI/YKISoFcvucVLx2AQXGLgI4YvixH63+FqkN2Dkx3kR6D3i+VuYVpMDcg5Z8PdlT0tsCIRQ==
+X-Received: by 2002:aa7:da01:: with SMTP id r1mr26847786eds.45.1607975596958;
+        Mon, 14 Dec 2020 11:53:16 -0800 (PST)
+Received: from localhost (bba163592.alshamil.net.ae. [217.165.22.16])
+        by smtp.gmail.com with ESMTPSA id j7sm16849273edp.52.2020.12.14.11.53.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Dec 2020 11:53:16 -0800 (PST)
+From:   Dmitrii Banshchikov <me@ubique.spb.ru>
+To:     bpf@vger.kernel.org
+Cc:     Dmitrii Banshchikov <me@ubique.spb.ru>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@chromium.org, rdna@fb.com
+Subject: [PATCH bpf-next 1/3] bpf: Factor out nullable reg type conversion
+Date:   Mon, 14 Dec 2020 23:52:48 +0400
+Message-Id: <0ff8927166f6e18e72adab8a94cb6d694c610cc0.1607973529.git.me@ubique.spb.ru>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1607973529.git.me@ubique.spb.ru>
+References: <cover.1607973529.git.me@ubique.spb.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sun, 13 Dec 2020 11:48:15 +0200 Yonatan Linik wrote:
-> > You're right, on a closer look most of the places have a larger #ifdef
-> > block (which my grep didn't catch) or are under Kconfig. Of those I
-> > checked only TLS looks wrong (good job me) - would you care to fix that
-> > one as well, or should I?  
-> 
-> I can fix that as well, you are talking about tls_proc.c, right?
+Factor out helper function for conversion nullable register type to its
+corresponding type with value.
 
-Yup, thanks!
+Signed-off-by: Dmitrii Banshchikov <me@ubique.spb.ru>
+---
+ kernel/bpf/verifier.c | 77 ++++++++++++++++++++++++-------------------
+ 1 file changed, 44 insertions(+), 33 deletions(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 93def76cf32b..dee296dbc7a1 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1073,6 +1073,43 @@ static void mark_reg_known_zero(struct bpf_verifier_env *env,
+ 	__mark_reg_known_zero(regs + regno);
+ }
+ 
++static int mark_ptr_not_null_reg(struct bpf_reg_state *reg)
++{
++	if (reg->type == PTR_TO_MAP_VALUE_OR_NULL) {
++		const struct bpf_map *map = reg->map_ptr;
++
++		if (map->inner_map_meta) {
++			reg->type = CONST_PTR_TO_MAP;
++			reg->map_ptr = map->inner_map_meta;
++		} else if (map->map_type == BPF_MAP_TYPE_XSKMAP) {
++			reg->type = PTR_TO_XDP_SOCK;
++		} else if (map->map_type == BPF_MAP_TYPE_SOCKMAP ||
++			   map->map_type == BPF_MAP_TYPE_SOCKHASH) {
++			reg->type = PTR_TO_SOCKET;
++		} else {
++			reg->type = PTR_TO_MAP_VALUE;
++		}
++	} else if (reg->type == PTR_TO_SOCKET_OR_NULL) {
++		reg->type = PTR_TO_SOCKET;
++	} else if (reg->type == PTR_TO_SOCK_COMMON_OR_NULL) {
++		reg->type = PTR_TO_SOCK_COMMON;
++	} else if (reg->type == PTR_TO_TCP_SOCK_OR_NULL) {
++		reg->type = PTR_TO_TCP_SOCK;
++	} else if (reg->type == PTR_TO_BTF_ID_OR_NULL) {
++		reg->type = PTR_TO_BTF_ID;
++	} else if (reg->type == PTR_TO_MEM_OR_NULL) {
++		reg->type = PTR_TO_MEM;
++	} else if (reg->type == PTR_TO_RDONLY_BUF_OR_NULL) {
++		reg->type = PTR_TO_RDONLY_BUF;
++	} else if (reg->type == PTR_TO_RDWR_BUF_OR_NULL) {
++		reg->type = PTR_TO_RDWR_BUF;
++	} else {
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ static bool reg_is_pkt_pointer(const struct bpf_reg_state *reg)
+ {
+ 	return type_is_pkt_pointer(reg->type);
+@@ -7323,50 +7360,24 @@ static void mark_ptr_or_null_reg(struct bpf_func_state *state,
+ 		}
+ 		if (is_null) {
+ 			reg->type = SCALAR_VALUE;
+-		} else if (reg->type == PTR_TO_MAP_VALUE_OR_NULL) {
+-			const struct bpf_map *map = reg->map_ptr;
+-
+-			if (map->inner_map_meta) {
+-				reg->type = CONST_PTR_TO_MAP;
+-				reg->map_ptr = map->inner_map_meta;
+-			} else if (map->map_type == BPF_MAP_TYPE_XSKMAP) {
+-				reg->type = PTR_TO_XDP_SOCK;
+-			} else if (map->map_type == BPF_MAP_TYPE_SOCKMAP ||
+-				   map->map_type == BPF_MAP_TYPE_SOCKHASH) {
+-				reg->type = PTR_TO_SOCKET;
+-			} else {
+-				reg->type = PTR_TO_MAP_VALUE;
+-			}
+-		} else if (reg->type == PTR_TO_SOCKET_OR_NULL) {
+-			reg->type = PTR_TO_SOCKET;
+-		} else if (reg->type == PTR_TO_SOCK_COMMON_OR_NULL) {
+-			reg->type = PTR_TO_SOCK_COMMON;
+-		} else if (reg->type == PTR_TO_TCP_SOCK_OR_NULL) {
+-			reg->type = PTR_TO_TCP_SOCK;
+-		} else if (reg->type == PTR_TO_BTF_ID_OR_NULL) {
+-			reg->type = PTR_TO_BTF_ID;
+-		} else if (reg->type == PTR_TO_MEM_OR_NULL) {
+-			reg->type = PTR_TO_MEM;
+-		} else if (reg->type == PTR_TO_RDONLY_BUF_OR_NULL) {
+-			reg->type = PTR_TO_RDONLY_BUF;
+-		} else if (reg->type == PTR_TO_RDWR_BUF_OR_NULL) {
+-			reg->type = PTR_TO_RDWR_BUF;
+-		}
+-		if (is_null) {
+ 			/* We don't need id and ref_obj_id from this point
+ 			 * onwards anymore, thus we should better reset it,
+ 			 * so that state pruning has chances to take effect.
+ 			 */
+ 			reg->id = 0;
+ 			reg->ref_obj_id = 0;
+-		} else if (!reg_may_point_to_spin_lock(reg)) {
+-			/* For not-NULL ptr, reg->ref_obj_id will be reset
++		} else {
++			mark_ptr_not_null_reg(reg);
++
++			if (!reg_may_point_to_spin_lock(reg)) {
++				/* For not-NULL ptr, reg->ref_obj_id will be reset
+ 			 * in release_reg_references().
+ 			 *
+ 			 * reg->id is still used by spin_lock ptr. Other
+ 			 * than spin_lock ptr type, reg->id can be reset.
+ 			 */
+-			reg->id = 0;
++				reg->id = 0;
++			}
+ 		}
+ 	}
+ }
+-- 
+2.25.1
+
