@@ -2,68 +2,66 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-10.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 77F21C2BB9A
-	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 19:54:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D586C4361B
+	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 20:12:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 39481205CB
-	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 19:54:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5606F207A0
+	for <bpf@archiver.kernel.org>; Mon, 14 Dec 2020 20:12:36 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502874AbgLNTyQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Dec 2020 14:54:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39506 "EHLO
+        id S2502972AbgLNUMT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Dec 2020 15:12:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2502842AbgLNTxy (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Dec 2020 14:53:54 -0500
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72F45C0613D6
-        for <bpf@vger.kernel.org>; Mon, 14 Dec 2020 11:53:13 -0800 (PST)
-Received: by mail-ed1-x541.google.com with SMTP id i24so18461984edj.8
-        for <bpf@vger.kernel.org>; Mon, 14 Dec 2020 11:53:13 -0800 (PST)
+        with ESMTP id S2503038AbgLNUMK (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Dec 2020 15:12:10 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06901C0613D6;
+        Mon, 14 Dec 2020 12:11:30 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id j12so17027363ota.7;
+        Mon, 14 Dec 2020 12:11:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ubique-spb-ru.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Pm5+Ct9q0C2jv5E5bH/3AvpnKRxf91FLFMlK2cnC5C8=;
-        b=V9wav5Likvwd1Q3u0L2i8Su9E0kwAhLUwX+JF18h+i4gB8trJ2pQcwrvImphlSDZMF
-         gz6tLHWGlvzIgEAo+dO5WMQhr0a7NsVx/0wTeGI0ZNUcTb28pDR2iJJrFhcQUxLl38QF
-         Xr+BGoREkw446f3+pw6nPVqEMocfHPkgosk99tXDXD0ZzfFu/Un4t5sI82bRcvC7wK0K
-         gPEhT5/FaGUDaT4nUQvYISFaKLNSl0w+DsDTzhHfWjyth8yYNoLSHwLfjJ8LY+FmVs++
-         7kC1hFvWtGi3KnXEDz0cnxQybUnY/CTgsdU/ys58KUNhc23VDUlJeYvDkyH0U0Yjw6P7
-         zJfg==
+        bh=ZyDzn2+LRGnv+MKKkwj6dT7+oXF09NwrSJVoJaJ6uqw=;
+        b=pUGi1FMMZYqAGrElyyecwiPhuV2Fx/WIY5NaySJsGHDD7E1fYwX6RRrmqZyRphNPdO
+         2McjbAZ/cS6MWq0/G3oYu9h5mGo1MvAlLJvdbzUQyi4HJ4V0Jfkx7zqi9Wsk3BS/EB8I
+         /9lokOGfcZHu1TFZvgIFu3+71SzswlGwuv+bILcrhb5gewMXDfZFujSSGgZyv4IwP8FD
+         OiUuMqyJ25Ek1IlhNMVRNONG4LuK8LxS+osWVb77GQe+tAFGHZbf+qqKEU9ASRw9LxaC
+         roDqgUxe7y6eDpDy3BdkhJ39V8Vt0sbS6RIJxgrmY+ONGS452+vZc1Pnw7C755Dv+FQa
+         2k/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Pm5+Ct9q0C2jv5E5bH/3AvpnKRxf91FLFMlK2cnC5C8=;
-        b=h08eleHV3xyVWJTueLkfiN3LEnVE63uxMWifZ/xa74EutrQb0aGakLCTiPLsnEoVsv
-         XyJbUHI1VkcwmhBN2HJ0gv2MRaZh92wvGXMTLjGfdbe/UlYZfwOU+4V+Z3Yop7OWMNBd
-         4o/cXPYN24Oni7td9gHAwrE003cHZeFA6IRYlffJYKoxVFmhfSM8PdjE1DxoAH32BRoD
-         zmC5VoLPZDMr2SM9m00//1mB+5sjfOmpQnegGLgoENye1uVwnAKFsdyfLUH0iRphMmPH
-         +KAwR1dtahdx7zA4kD7wn9GE3u0ezYdoPWFvawXC10txF/XUvd4eCHRmDJSv5cgZfEF/
-         dYaA==
-X-Gm-Message-State: AOAM533pXtQTj/HE5MMu7LwuDS+KSLuM1+UitXu5KtrCrvNKNiBTF9Cc
-        JSaimbrHsgpHBPEdjoADBA6GdCvRuhsoWgCju14=
-X-Google-Smtp-Source: ABdhPJwq8r+E1Y4SPT6quGvUph7cZDtotksCGTwOXIUbxuYJtVmDIiIHUJh6FMvcD14MMIR3jky+Bw==
-X-Received: by 2002:a05:6402:129a:: with SMTP id w26mr27315719edv.355.1607975592030;
-        Mon, 14 Dec 2020 11:53:12 -0800 (PST)
-Received: from localhost (bba163592.alshamil.net.ae. [217.165.22.16])
-        by smtp.gmail.com with ESMTPSA id t26sm16595882edt.69.2020.12.14.11.53.10
+        bh=ZyDzn2+LRGnv+MKKkwj6dT7+oXF09NwrSJVoJaJ6uqw=;
+        b=USfpgTGOnE5o69MvTzXsbJN8ysslggGzPAfyEWgFDmcUn04CzVwX7GpWHCagT6MjvJ
+         F2PsJVxcJ+wxQDaNUJvx4b1bSjwk9GchxCr+AzatPA6I/X+4Ia/3iDwhFUn7wrYHWPF1
+         gNjQoDOKhB8AOWiFIozv4DNT4QX/4Qmfg4kKx8Z/g0gyQ+qH2ZEJLtkPnasiEAWODBTy
+         R/5Mc10CtNTtLCQXI+enkOecDP6VI3OcuZhuP6wmNoGGeqh1HAFc1HsyAzTFElPdAi0l
+         W5ZvctL+x+HARS9YTGiybqWMk0YjuU+5Q+MKdm1XCmX+Dztxqk3c7YTjzu14rnaE28IA
+         983A==
+X-Gm-Message-State: AOAM5327KbM9kKq8gndIUhyI+LcuXGZfEU2P9grxZbpGgLTdNK/y8e4v
+        x4St3fZz8J5b7iq0OPbaz6MGr/X8gQsvgg==
+X-Google-Smtp-Source: ABdhPJwxB8k78VVWShs9FLYm8eP3wjTJzml7wt5UJsrbcuOMNLcqOrru/64iFxPmNyssYX5IlFDBGA==
+X-Received: by 2002:a05:6830:1d71:: with SMTP id l17mr21261793oti.269.1607976689065;
+        Mon, 14 Dec 2020 12:11:29 -0800 (PST)
+Received: from unknown.attlocal.net ([2600:1700:65a0:ab60:3825:1c64:a3d3:108])
+        by smtp.gmail.com with ESMTPSA id h26sm3905850ots.9.2020.12.14.12.11.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Dec 2020 11:53:11 -0800 (PST)
-From:   Dmitrii Banshchikov <me@ubique.spb.ru>
-To:     bpf@vger.kernel.org
-Cc:     Dmitrii Banshchikov <me@ubique.spb.ru>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@chromium.org, rdna@fb.com
-Subject: [PATCH bpf-next 0/3] Add support of pointer to struct in global functions
-Date:   Mon, 14 Dec 2020 23:52:47 +0400
-Message-Id: <cover.1607973529.git.me@ubique.spb.ru>
+        Mon, 14 Dec 2020 12:11:28 -0800 (PST)
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     bpf@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
+Subject: [Patch bpf-next v2 0/5] bpf: introduce timeout map
+Date:   Mon, 14 Dec 2020 12:11:13 -0800
+Message-Id: <20201214201118.148126-1-xiyou.wangcong@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -71,34 +69,35 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset adds support of a pointer to struct among global function
-arguments.
+From: Cong Wang <cong.wang@bytedance.com>
 
-The motivation is to overcome the limit on the maximum number of allowed
-arguments and avoid tricky and unoptimal ways of passing arguments.
+This patchset introduces a new bpf hash map which has timeout.
+Patch 1 is a preparation, patch 2 is the implementation of timeout
+map, patch 3 updates an existing hash map ptr test, patch 4 and
+patch 5 contain two test cases for timeout map.
 
-The limitation is that used structs may not contain any other pointers.
+Please check each patch description for more details.
 
-Dmitrii Banshchikov (3):
-  bpf: Factor out nullable reg type conversion
-  bpf: Support pointer to struct in global func args
-  selftests/bpf: Add unit tests for global functions
+---
+v2: fix hashmap ptr test
+    add a test case in map ptr test
+    factor out htab_timeout_map_alloc()
 
- include/linux/bpf_verifier.h                  |   2 +
- kernel/bpf/btf.c                              |  59 ++++++++--
- kernel/bpf/verifier.c                         | 107 ++++++++++++------
- .../bpf/prog_tests/test_global_funcs.c        |   5 +
- .../selftests/bpf/progs/test_global_func10.c  |  29 +++++
- .../selftests/bpf/progs/test_global_func11.c  |  19 ++++
- .../selftests/bpf/progs/test_global_func12.c  |  21 ++++
- .../selftests/bpf/progs/test_global_func13.c  |  24 ++++
- .../selftests/bpf/progs/test_global_func9.c   |  59 ++++++++++
- 9 files changed, 284 insertions(+), 41 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_global_func10.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_global_func11.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_global_func12.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_global_func13.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_global_func9.c
+Cong Wang (5):
+  bpf: use index instead of hash for map_locked[]
+  bpf: introduce timeout map
+  selftests/bpf: update elem_size check in map ptr test
+  selftests/bpf: add a test case for bpf timeout map
+  selftests/bpf: add timeout map check in map_ptr tests
+
+ include/linux/bpf_types.h                     |   1 +
+ include/uapi/linux/bpf.h                      |   3 +-
+ kernel/bpf/hashtab.c                          | 301 ++++++++++++++++--
+ kernel/bpf/syscall.c                          |   3 +-
+ tools/include/uapi/linux/bpf.h                |   1 +
+ .../selftests/bpf/progs/map_ptr_kern.c        |  22 +-
+ tools/testing/selftests/bpf/test_maps.c       |  41 +++
+ 7 files changed, 340 insertions(+), 32 deletions(-)
 
 -- 
 2.25.1
