@@ -2,96 +2,125 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-4.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,UNWANTED_LANGUAGE_BODY autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9D3B4C2BB48
-	for <bpf@archiver.kernel.org>; Tue, 15 Dec 2020 01:29:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 05462C4361B
+	for <bpf@archiver.kernel.org>; Tue, 15 Dec 2020 01:30:02 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 591B3224D2
-	for <bpf@archiver.kernel.org>; Tue, 15 Dec 2020 01:29:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A8DF8221FD
+	for <bpf@archiver.kernel.org>; Tue, 15 Dec 2020 01:30:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727838AbgLOB3Y (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 14 Dec 2020 20:29:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
+        id S1728551AbgLOBaB (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 14 Dec 2020 20:30:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726580AbgLOB3O (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 14 Dec 2020 20:29:14 -0500
-Received: from mail-yb1-xb42.google.com (mail-yb1-xb42.google.com [IPv6:2607:f8b0:4864:20::b42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E20C061793;
-        Mon, 14 Dec 2020 17:28:34 -0800 (PST)
-Received: by mail-yb1-xb42.google.com with SMTP id u203so17397569ybb.2;
-        Mon, 14 Dec 2020 17:28:34 -0800 (PST)
+        with ESMTP id S1728222AbgLOBaA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 14 Dec 2020 20:30:00 -0500
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D3F1C0617A7
+        for <bpf@vger.kernel.org>; Mon, 14 Dec 2020 17:29:15 -0800 (PST)
+Received: by mail-pg1-x541.google.com with SMTP id p18so2529960pgm.11
+        for <bpf@vger.kernel.org>; Mon, 14 Dec 2020 17:29:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tG4gNcU9i2iNKiEYjEdTI+569AyOvt13AV3wALhN/mo=;
-        b=j2SaQNpPHRg0iV7Fb1p+8e7aNHnDY8xe3sgUW+fg8vUcmdeuyBp9OQK/oiUSL5CyeQ
-         hiUy80lw7ffA+V9YiXClgATfgAiBJKuRSeJYa4KQ4x9Sd2+TZU1ZAb4jqTtLwLlU7qsM
-         wHC1OpoFLiZUJRZEAVjA7Pca0IEwEdpQ/sdBwmivoPJYjdl8hfOZNLk762LSp2LuC1T1
-         kLPBySL8DKjlwUJ9cnpoJ/OSd518OUo7P6pMF9sHeHf3bZ563MO7NJMbpWjJykR7y7uy
-         TuxE48E1yRGBKZnC5lvxWs0/1ietiEMn/LmaxIYW1fJLpUqv+iCKH/oAYPhgQ7eLNzvG
-         1x+A==
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GxBZCxQsCUdkzL0jmb2W+BSX0fHFGApzy9UYWSaFsfA=;
+        b=wjrGi6EXmsLALW5JV6tz8QuKrCuTGVWBMU/hzrdlhG63jR18/Vd8fRj8J7KZKAjyuv
+         mnRv+LieMrPvP4LCHvTZpHJY4VLWuw2XrgN8Q2N/02Dxdw8tM3aLb+5Qk7dFtNMt62Vo
+         TAkCngSA/CKFArV1JIisQLFUReL0gdWL9DXlc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tG4gNcU9i2iNKiEYjEdTI+569AyOvt13AV3wALhN/mo=;
-        b=lT4oymFUP1tRVwSoI6P5NTqE0ACClXs5lZhC/qVo4pDtM5611YHLjUDAwJRQi/xQjK
-         85yASOzuw+SkDP2Z0ZbN4KvlGiwUbiWb5H1/Sclb2hvLCJMlYmyBtv5kVeghxKFvMieL
-         BNOZhYVlbjhxruulPTkR6i9Qse0TwpMM3dj98MuNEhn1IanHgBtsXFK0FuaeldNG6PH2
-         ACzqqxChBBjbIfg1rmVDNGq0LxevUq9vVmyGI8R28TqKcIUTFQNFXgZoy61tbvSBEXqW
-         p3ojvIIdiXUeS/J6BIyIyKhcJuzlxPVxsMhOsIVtQxu96gH8iiYAnkwUXytwVH2UVPih
-         a+jg==
-X-Gm-Message-State: AOAM531221JHPMh00dnsOMw1Wjcv0zVyBtHAHdFW/QkIWZ/WMd8IY7jN
-        GrvM9H3IUvNqZYW7rtNSSZn1vrQgyrrLkXHEBdE=
-X-Google-Smtp-Source: ABdhPJx1EON1g23rM4g5exfClm1Q6eM4bhm5ptHpvDxWPNeOzoSTcV9a9ZY0rkb5MTgHDKPXUZVMVh85YC645kJ0qc4=
-X-Received: by 2002:a25:c7c6:: with SMTP id w189mr39879121ybe.403.1607995712900;
- Mon, 14 Dec 2020 17:28:32 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GxBZCxQsCUdkzL0jmb2W+BSX0fHFGApzy9UYWSaFsfA=;
+        b=ptUi5T6dc7L8wdBWiHZ8zISq58WqWCS9RPvK2pGPWRNIOhpYoQE+h6akzHpp4cFGuC
+         Q9eTvrO8htA5q+z/tkaZ1tPhMYH44TdKCwCAIDXLhhhbAAnWFhvFahYAgC1kXZMICFqv
+         u1gOCjjcnnxIgOqevtPLGpOEmkRHgE+sy0JyYW+tiUXAOZ7TdsWyCN+A8HqHgd8obk3/
+         nBGXkljUZNsNk7XYgkaYh1NW6FkXu2z9F5JYGqQR+GPW9ihNDkF05Fg3jWgd7slGQd0y
+         sUAmtPn1DetnPLOhjGnCaB1uqIXx9KnUwFUfLC6abUMyz2DXS8+hD9h/ZztWExgts90d
+         al4w==
+X-Gm-Message-State: AOAM533o0kcohwMkIVYASWMky6w4HGonOn1LuMVFX/u0nRStS+bieotm
+        qMu3ZMekXFCT0cZW7tpPWLE3ig==
+X-Google-Smtp-Source: ABdhPJx5mCCcBAJLDU2y8yQ8N0q0MRiR8OrRtxCB1D6VDzQCvUrT7XHyDru0fzg43laSJ3o4t8s9hA==
+X-Received: by 2002:aa7:8b15:0:b029:196:59ad:ab93 with SMTP id f21-20020aa78b150000b029019659adab93mr25916535pfd.16.1607995755061;
+        Mon, 14 Dec 2020 17:29:15 -0800 (PST)
+Received: from localhost ([2604:5500:c29c:d401:f5da:c0a7:bcba:f83c])
+        by smtp.gmail.com with ESMTPSA id a29sm21100906pfr.73.2020.12.14.17.29.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Dec 2020 17:29:13 -0800 (PST)
+From:   Ivan Babrou <ivan@cloudflare.com>
+To:     netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@cloudflare.com, Ivan Babrou <ivan@cloudflare.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: [PATCH net-next] sfc: reduce the number of requested xdp ev queues
+Date:   Mon, 14 Dec 2020 17:29:06 -0800
+Message-Id: <20201215012907.3062-1-ivan@cloudflare.com>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-References: <20201211041139.589692-1-andrii@kernel.org> <20201213202757.GA482741@krava>
- <20201214134343.GF238399@kernel.org>
-In-Reply-To: <20201214134343.GF238399@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 14 Dec 2020 17:28:22 -0800
-Message-ID: <CAEf4BzbCeeVuZaEkykNpc35+7xRcWtPCbwGpGNwET_5mBBPN7A@mail.gmail.com>
-Subject: Re: [PATCH dwarves 0/2] Fix pahole to emit kernel module BTF variables
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Andrii Nakryiko <andrii@kernel.org>,
-        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
-        Kernel Team <kernel-team@fb.com>, Hao Luo <haoluo@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Dec 14, 2020 at 5:43 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Sun, Dec 13, 2020 at 09:27:57PM +0100, Jiri Olsa escreveu:
-> > On Thu, Dec 10, 2020 at 08:11:36PM -0800, Andrii Nakryiko wrote:
-> > > Two bug fixes to make pahole emit correct kernel module BTF variable
-> > > information.
-> > >
-> > > Cc: Hao Luo <haoluo@google.com>
-> > > Cc: Jiri Olsa <jolsa@redhat.com>
-> > >
-> > > Andrii Nakryiko (2):
-> > >   btf_encoder: fix BTF variable generation for kernel modules
-> > >   btf_encoder: fix skipping per-CPU variables at offset 0
-> >
-> > Acked-by: Jiri Olsa <jolsa@redhat.com>
->
-> Thanks, applied.
->
+Without this change the driver tries to allocate too many queues,
+breaching the number of available msi-x interrupts on machines
+with many logical cpus and default adapter settings:
 
-Thanks, Arnaldo. I'm not seeing them on
-gitolite.kernel.org/pub/scm/devel/pahole/pahole.git, did you push them
-somewhere else?
+Insufficient resources for 12 XDP event queues (24 other channels, max 32)
 
-> - Arnaldo
->
+Which in turn triggers EINVAL on XDP processing:
+
+sfc 0000:86:00.0 ext0: XDP TX failed (-22)
+
+Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
+---
+ drivers/net/ethernet/sfc/efx_channels.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/sfc/efx_channels.c b/drivers/net/ethernet/sfc/efx_channels.c
+index a4a626e9cd9a..1bfeee283ea9 100644
+--- a/drivers/net/ethernet/sfc/efx_channels.c
++++ b/drivers/net/ethernet/sfc/efx_channels.c
+@@ -17,6 +17,7 @@
+ #include "rx_common.h"
+ #include "nic.h"
+ #include "sriov.h"
++#include "workarounds.h"
+ 
+ /* This is the first interrupt mode to try out of:
+  * 0 => MSI-X
+@@ -137,6 +138,7 @@ static int efx_allocate_msix_channels(struct efx_nic *efx,
+ {
+ 	unsigned int n_channels = parallelism;
+ 	int vec_count;
++	int tx_per_ev;
+ 	int n_xdp_tx;
+ 	int n_xdp_ev;
+ 
+@@ -149,9 +151,9 @@ static int efx_allocate_msix_channels(struct efx_nic *efx,
+ 	 * multiple tx queues, assuming tx and ev queues are both
+ 	 * maximum size.
+ 	 */
+-
++	tx_per_ev = EFX_MAX_EVQ_SIZE / EFX_TXQ_MAX_ENT(efx);
+ 	n_xdp_tx = num_possible_cpus();
+-	n_xdp_ev = DIV_ROUND_UP(n_xdp_tx, EFX_MAX_TXQ_PER_CHANNEL);
++	n_xdp_ev = DIV_ROUND_UP(n_xdp_tx, tx_per_ev);
+ 
+ 	vec_count = pci_msix_vec_count(efx->pci_dev);
+ 	if (vec_count < 0)
+-- 
+2.29.2
+
