@@ -2,134 +2,161 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 78984C4361B
-	for <bpf@archiver.kernel.org>; Tue, 15 Dec 2020 12:24:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AE49C4361B
+	for <bpf@archiver.kernel.org>; Tue, 15 Dec 2020 12:25:49 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 477E3224D2
-	for <bpf@archiver.kernel.org>; Tue, 15 Dec 2020 12:24:21 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6DD43224D4
+	for <bpf@archiver.kernel.org>; Tue, 15 Dec 2020 12:25:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729460AbgLOMYU (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Dec 2020 07:24:20 -0500
-Received: from mx2.suse.de ([195.135.220.15]:50546 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729435AbgLOMX5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Dec 2020 07:23:57 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1608034987; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LVHe81L5kggyWP1RUBaaKdbh2RBhNq1dLDe245ww7OI=;
-        b=JnwID1lkt4ZofyQde3z42HCbAMxFv4+ftC7ZsaAR9kh9uWdn0kL9KUZmF3ybn/gbDjmuVb
-        BGdmWTrChwZTZkkeS1yBHee+xr55Aw19wjFkTSFIn6q7daOAQyN5VX1YFuumMJvvHGFKXx
-        YOA7nV54vj1v7JMRy8JKB/G5LGqGFGc=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id C856EAE66;
-        Tue, 15 Dec 2020 12:23:07 +0000 (UTC)
-Date:   Tue, 15 Dec 2020 13:23:07 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Josef Bacik <josef@toxicpanda.com>,
-        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-nvme@vger.kernel.org" <linux-nvme@vger.kernel.org>
-Subject: Re: [LSFMMBPF 2021] A status update
-Message-ID: <20201215122307.GN32193@dhcp22.suse.cz>
-References: <fd5264ac-c84d-e1d4-01e2-62b9c05af892@toxicpanda.com>
- <20201212172957.GE2443@casper.infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201212172957.GE2443@casper.infradead.org>
+        id S1729232AbgLOMXt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Dec 2020 07:23:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729214AbgLOMTs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Dec 2020 07:19:48 -0500
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E918BC061257
+        for <bpf@vger.kernel.org>; Tue, 15 Dec 2020 04:18:32 -0800 (PST)
+Received: by mail-qt1-x84a.google.com with SMTP id h18so14194293qtr.2
+        for <bpf@vger.kernel.org>; Tue, 15 Dec 2020 04:18:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=GQwczh69LorlYAPQdPfIPWNyJ7hNz6c/R9pqWK+AyzI=;
+        b=G7RyHQSIudCFMx/xGV47eTUGHkkTKXpywxoR40oEEEoe7JZ/Qr0uhFQ0DA0OWM7ycs
+         FfMY1csZPaECxH8B/g9WZJvMQxuDln9Dg5V9kc7dOFgECu9Mi1hhxhr1QZ+4WNk90ZMD
+         myHn5EJdmkGrsMGDFkH1FnJZxAPC8rNTUWg7UMFTsl9TQ30D9s10mNNvo9wRhqz43Ln5
+         tN34dqKjeW936xpNI15r0FeFFGYfXsuwvMyyCHoZn9dCBxIrCfoYdOVMjJekjJFBzFga
+         FLndUvmtSrSEbVwY6vIkyYrDILFQG5jSDiV5oiUftsqFQsFDwnIA/FACCqpJg/genSqy
+         BjzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=GQwczh69LorlYAPQdPfIPWNyJ7hNz6c/R9pqWK+AyzI=;
+        b=RFGt7i6IhXWuk9Btmb5YHnBtKkKFq02wXqYi1JToyENer1Vw2bdfKdA4p5csc8AWCM
+         E7JWO2EkhC/KfRYZ0kL9vpvPlbAhGsJKZH8s0SfEtWMAXOOBNhr9VsvcgLowFHgxDpxQ
+         4yOKRhuub3pZGuGbGMzke5VZDa3kDKHH1gwq25bS28FERsMjUat94DZK1c8XPnNVXYnh
+         kjhoNY2E9ld3xxNfxjztjVrzsUwrgpnYWihGkfhnS6i69rcx2JYEiGViFzC1RcT1jIaX
+         ltxfBTWYc72yeXY3yKJJZvspS3IJDvGvc1Gt2gQypCUK66QxTj7iMigBbwbhmsGYtcax
+         RRFQ==
+X-Gm-Message-State: AOAM533YO1MCQ7X2o+PDLteT2E2VZVcXFRrj0XGq0ZpRnApd7+7sBJLa
+        RES2pcmPb4Yv4YQWFXiYzFE0nyBjZoyTwmQ0sQHPSIYpb46ueZaEuZUKgkcUYjtb8922dBgzhYv
+        oOm/xm1sw0KZdLEGCMtvt91/DSyWP+V7pWA7lXPt6RM6obpB7zRTnEE2UwZkSbG4=
+X-Google-Smtp-Source: ABdhPJz7hS1PnKYUpNWqPZWjT/unGfvmNwjw9v/mMRb3FvqsWkiuAWlom8nSwl531yVuEeJEczCUJ0LfCFxsAg==
+Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
+X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:10:28:9cb1:c0a8:11db])
+ (user=jackmanb job=sendgmr) by 2002:ad4:4e4d:: with SMTP id
+ eb13mr16996899qvb.6.1608034711998; Tue, 15 Dec 2020 04:18:31 -0800 (PST)
+Date:   Tue, 15 Dec 2020 12:18:08 +0000
+In-Reply-To: <20201215121816.1048557-1-jackmanb@google.com>
+Message-Id: <20201215121816.1048557-5-jackmanb@google.com>
+Mime-Version: 1.0
+References: <20201215121816.1048557-1-jackmanb@google.com>
+X-Mailer: git-send-email 2.29.2.684.gfbc64c5ab5-goog
+Subject: [PATCH bpf-next v5 03/11] bpf: x86: Factor out a lookup table for
+ some ALU opcodes
+From:   Brendan Jackman <jackmanb@google.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Florent Revest <revest@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Brendan Jackman <jackmanb@google.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat 12-12-20 17:29:57, Matthew Wilcox wrote:
-> On Fri, Dec 04, 2020 at 10:48:53AM -0500, Josef Bacik wrote:
-> > We on the program committee hope everybody has been able to stay safe and
-> > healthy during this challenging time, and look forward to being able to see
-> > all of you in person again when it is safe.
-> > 
-> > The current plans for LSFMMBPF 2021 are to schedule an in person conference
-> > in H2 (after June) of 2021.  The tentative plan is to use the same hotel
-> > that we had planned to use for 2020, as we still have contracts with them.
-> > However clearly that is not set in stone.  The Linux Foundation has done a
-> > wonderful job of working with us to formulate a plan and figure out the
-> > logistics that will work the best for everybody, I really can't thank them
-> > enough for their help.
-> 
-> Thank you all for doing your best in the face of this disruption.  I
-> really appreciate all the work you're putting in, and I can't wait to
-> see you all again in person.
-> 
-> I hosted a Zoom call yesterday on the topic of Page Folios, and uploaded
-> the video.
+A later commit will need to lookup a subset of these opcodes. To
+avoid duplicating code, pull out a table.
 
-Thanks for organizing this. I couldn't attent directly but I have
-watched the video. I think this was a useful meeting.
+The shift opcodes won't be needed by that later commit, but they're
+already duplicated, so fold them into the table anyway.
 
-> There was interest expressed in the call on doing a follow-up
-> call on the topic of GUP (get_user_pages and friends).  It would probably
-> also be good to have meetings on other topics.
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+---
+ arch/x86/net/bpf_jit_comp.c | 33 +++++++++++++++------------------
+ 1 file changed, 15 insertions(+), 18 deletions(-)
 
-I hope I will have time to join this one.
-
-> I don't want this to be seen in any way as taking away from LSFMMBPF.
-> I see Zoom calls as an interim solution to not having face-to-face
-> meetings.
-
-Agreed!
-
-> I'd like to solicit feedback from this group on:
-> 
->  - Time of day.  There is no good time that suits everyone around
->    the world.  With developers in basically every inhabited time zone, the
->    call will definitely take place in the middle of somebody's night, and
->    during somebody else's normal family time.  Publishing the recordings
->    helps ameliorate some of this, but I feel we should shift the time
->    around.  Having it at the same time of day helps people fit it into
->    their schedule of other meetings (and meals), but I think the benefits
->    of allowing more people to participate live outweighs the costs.
-
-Hard question without any good answer. You can rotate preferred timezone
-which should spread the suffering.
-
->  - Schedule.  Friday's probably a bad day to have it, as it ends up
->    being Saturday for some people.  It can move around the week too.
->    Also, probably wise to not have it over Christmas as most developers
->    have that period as family time.
-
-Yes, Friday tends to be not great. I think mid week should work better
-as the overalap 
-
->  - Topics.  I'm sure there's no shortage of things to discuss!  I'm
->    happy to organise meetings for people even on topics I have no direct
->    interest in.
-
-Thanks for organizing this. I am pretty sure poeple will land on topics
-either in the call or over email.
-
-> And most urgently, when should we have the GUP meeting? On the call,
-> I suggested Friday the 8th of January, but I'm happy to set something
-> up for next week if we'd like to talk more urgently.
-
-I am unlikely to be able to join before the end of year so if you ask
-me.
-
-Thanks again and fingers crossed we can actually have a face to face
-meeting sometimes during next year.
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index f15c93275a18..93f32e0ba0ef 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -205,6 +205,18 @@ static u8 add_2reg(u8 byte, u32 dst_reg, u32 src_reg)
+ 	return byte + reg2hex[dst_reg] + (reg2hex[src_reg] << 3);
+ }
+ 
++/* Some 1-byte opcodes for binary ALU operations */
++static u8 simple_alu_opcodes[] = {
++	[BPF_ADD] = 0x01,
++	[BPF_SUB] = 0x29,
++	[BPF_AND] = 0x21,
++	[BPF_OR] = 0x09,
++	[BPF_XOR] = 0x31,
++	[BPF_LSH] = 0xE0,
++	[BPF_RSH] = 0xE8,
++	[BPF_ARSH] = 0xF8,
++};
++
+ static void jit_fill_hole(void *area, unsigned int size)
+ {
+ 	/* Fill whole space with INT3 instructions */
+@@ -862,15 +874,9 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 		case BPF_ALU64 | BPF_AND | BPF_X:
+ 		case BPF_ALU64 | BPF_OR | BPF_X:
+ 		case BPF_ALU64 | BPF_XOR | BPF_X:
+-			switch (BPF_OP(insn->code)) {
+-			case BPF_ADD: b2 = 0x01; break;
+-			case BPF_SUB: b2 = 0x29; break;
+-			case BPF_AND: b2 = 0x21; break;
+-			case BPF_OR: b2 = 0x09; break;
+-			case BPF_XOR: b2 = 0x31; break;
+-			}
+ 			maybe_emit_mod(&prog, dst_reg, src_reg,
+ 				       BPF_CLASS(insn->code) == BPF_ALU64);
++			b2 = simple_alu_opcodes[BPF_OP(insn->code)];
+ 			EMIT2(b2, add_2reg(0xC0, dst_reg, src_reg));
+ 			break;
+ 
+@@ -1050,12 +1056,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 			else if (is_ereg(dst_reg))
+ 				EMIT1(add_1mod(0x40, dst_reg));
+ 
+-			switch (BPF_OP(insn->code)) {
+-			case BPF_LSH: b3 = 0xE0; break;
+-			case BPF_RSH: b3 = 0xE8; break;
+-			case BPF_ARSH: b3 = 0xF8; break;
+-			}
+-
++			b3 = simple_alu_opcodes[BPF_OP(insn->code)];
+ 			if (imm32 == 1)
+ 				EMIT2(0xD1, add_1reg(b3, dst_reg));
+ 			else
+@@ -1089,11 +1090,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 			else if (is_ereg(dst_reg))
+ 				EMIT1(add_1mod(0x40, dst_reg));
+ 
+-			switch (BPF_OP(insn->code)) {
+-			case BPF_LSH: b3 = 0xE0; break;
+-			case BPF_RSH: b3 = 0xE8; break;
+-			case BPF_ARSH: b3 = 0xF8; break;
+-			}
++			b3 = simple_alu_opcodes[BPF_OP(insn->code)];
+ 			EMIT2(0xD3, add_1reg(b3, dst_reg));
+ 
+ 			if (src_reg != BPF_REG_4)
 -- 
-Michal Hocko
-SUSE Labs
+2.29.2.684.gfbc64c5ab5-goog
+
