@@ -5,64 +5,64 @@ X-Spam-Level:
 X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AE49C4361B
-	for <bpf@archiver.kernel.org>; Tue, 15 Dec 2020 12:25:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C7D7C4361B
+	for <bpf@archiver.kernel.org>; Tue, 15 Dec 2020 12:26:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6DD43224D4
-	for <bpf@archiver.kernel.org>; Tue, 15 Dec 2020 12:25:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2733F224D2
+	for <bpf@archiver.kernel.org>; Tue, 15 Dec 2020 12:26:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729232AbgLOMXt (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Dec 2020 07:23:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
+        id S1729274AbgLOMZ4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Dec 2020 07:25:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729214AbgLOMTs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        with ESMTP id S1729222AbgLOMTs (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 15 Dec 2020 07:19:48 -0500
-Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E918BC061257
-        for <bpf@vger.kernel.org>; Tue, 15 Dec 2020 04:18:32 -0800 (PST)
-Received: by mail-qt1-x84a.google.com with SMTP id h18so14194293qtr.2
-        for <bpf@vger.kernel.org>; Tue, 15 Dec 2020 04:18:32 -0800 (PST)
+Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCCFC0611CC
+        for <bpf@vger.kernel.org>; Tue, 15 Dec 2020 04:18:37 -0800 (PST)
+Received: by mail-wm1-x349.google.com with SMTP id g198so4554117wme.7
+        for <bpf@vger.kernel.org>; Tue, 15 Dec 2020 04:18:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=GQwczh69LorlYAPQdPfIPWNyJ7hNz6c/R9pqWK+AyzI=;
-        b=G7RyHQSIudCFMx/xGV47eTUGHkkTKXpywxoR40oEEEoe7JZ/Qr0uhFQ0DA0OWM7ycs
-         FfMY1csZPaECxH8B/g9WZJvMQxuDln9Dg5V9kc7dOFgECu9Mi1hhxhr1QZ+4WNk90ZMD
-         myHn5EJdmkGrsMGDFkH1FnJZxAPC8rNTUWg7UMFTsl9TQ30D9s10mNNvo9wRhqz43Ln5
-         tN34dqKjeW936xpNI15r0FeFFGYfXsuwvMyyCHoZn9dCBxIrCfoYdOVMjJekjJFBzFga
-         FLndUvmtSrSEbVwY6vIkyYrDILFQG5jSDiV5oiUftsqFQsFDwnIA/FACCqpJg/genSqy
-         BjzA==
+        bh=yo/EOAEPVNdynk8L6rBhSdFRvsKoTS6jdXVz2yMuFAk=;
+        b=eFih63xH5IwSHHK/i6Ygk3nW8AJiZKDqI3iaQMhQulhhCeuIpwhw9jZ13KEQCg5LYg
+         gWmW0TTitgc6Qqw46IqQUttNvX97WJ3sTMi737ZfoQAKquOVVupDK9I+Pcwp/RWuTRl9
+         bQVIdSvh+KuJxUF8LSPsLvKQOLm7+KStMbgpbaBY2Sa3F0qMTBlBRt613YnwpzDV4T4Q
+         0gtLVA80orrK2lDwvGi3pGbCsmDGKx0+/tPhyHdGB4vcyerybxVAh8QOozJbWNemretT
+         ZTQFQjzaHUMCCN9S1IS9+xbSBq7UBdIIE1LpI3BqOwHLOXca7rteXEVZopoYJqSc1VyB
+         U76g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=GQwczh69LorlYAPQdPfIPWNyJ7hNz6c/R9pqWK+AyzI=;
-        b=RFGt7i6IhXWuk9Btmb5YHnBtKkKFq02wXqYi1JToyENer1Vw2bdfKdA4p5csc8AWCM
-         E7JWO2EkhC/KfRYZ0kL9vpvPlbAhGsJKZH8s0SfEtWMAXOOBNhr9VsvcgLowFHgxDpxQ
-         4yOKRhuub3pZGuGbGMzke5VZDa3kDKHH1gwq25bS28FERsMjUat94DZK1c8XPnNVXYnh
-         kjhoNY2E9ld3xxNfxjztjVrzsUwrgpnYWihGkfhnS6i69rcx2JYEiGViFzC1RcT1jIaX
-         ltxfBTWYc72yeXY3yKJJZvspS3IJDvGvc1Gt2gQypCUK66QxTj7iMigBbwbhmsGYtcax
-         RRFQ==
-X-Gm-Message-State: AOAM533YO1MCQ7X2o+PDLteT2E2VZVcXFRrj0XGq0ZpRnApd7+7sBJLa
-        RES2pcmPb4Yv4YQWFXiYzFE0nyBjZoyTwmQ0sQHPSIYpb46ueZaEuZUKgkcUYjtb8922dBgzhYv
-        oOm/xm1sw0KZdLEGCMtvt91/DSyWP+V7pWA7lXPt6RM6obpB7zRTnEE2UwZkSbG4=
-X-Google-Smtp-Source: ABdhPJz7hS1PnKYUpNWqPZWjT/unGfvmNwjw9v/mMRb3FvqsWkiuAWlom8nSwl531yVuEeJEczCUJ0LfCFxsAg==
+        bh=yo/EOAEPVNdynk8L6rBhSdFRvsKoTS6jdXVz2yMuFAk=;
+        b=p0KP4IfPqaG5OuY/ZYAAsJtrQHmN7q/JgGGHKx8+vGqv/HdzvckzH1YMkBIhFKBsoQ
+         p6XD505XEVOQI4VnN7QaIUby6nPIaPsUAs98ixr4+yDTz4cwbswazlCcUU4HbuNDNe+C
+         LEy/2sSgOg/Q4dmmkwzzCx00q2CqE4ohHhGBZhqAanWCHeqJIJ5lAk8jOKt/KN/CLyIZ
+         YG63PYEUc/9cK/0xxx57xkzgQuBTjAZ/G32rkH1Mtz7xlM7SoEGaqpXdelirwTChmxNE
+         84kdxWvXT5A2k76iTk4UCf5+R8UgpGS+sBjTDXxfovsvEZJ7vX+sdCXkJvweOn8GTXxi
+         gcOg==
+X-Gm-Message-State: AOAM531YaVR8DwcPCBC2WVHzpfmou1qGo7gt7IlGpkRjE609V9EoY+6v
+        /G1EQloozuRHSpOzd2hZ0jtZS37p+UMNTm59JNm12ce3diS5vUPvyfL+xfaPtDTYjuMi+g0tAxw
+        DlGcfrYHt7+PGVjy7zMWKjlTCZpFD0BgX6D27onQ35vO7NAlmO5RSUWAlNZSvlTI=
+X-Google-Smtp-Source: ABdhPJzfk3eEDbfSITgyhjnyHpWBB8HtiPw5KrqJSTRo2LULK9UuEQs6jzq3tVH0APZvJHWpmhqNSagZRHWk2w==
 Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
 X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:10:28:9cb1:c0a8:11db])
- (user=jackmanb job=sendgmr) by 2002:ad4:4e4d:: with SMTP id
- eb13mr16996899qvb.6.1608034711998; Tue, 15 Dec 2020 04:18:31 -0800 (PST)
-Date:   Tue, 15 Dec 2020 12:18:08 +0000
+ (user=jackmanb job=sendgmr) by 2002:a5d:4101:: with SMTP id
+ l1mr34493968wrp.196.1608034716075; Tue, 15 Dec 2020 04:18:36 -0800 (PST)
+Date:   Tue, 15 Dec 2020 12:18:10 +0000
 In-Reply-To: <20201215121816.1048557-1-jackmanb@google.com>
-Message-Id: <20201215121816.1048557-5-jackmanb@google.com>
+Message-Id: <20201215121816.1048557-7-jackmanb@google.com>
 Mime-Version: 1.0
 References: <20201215121816.1048557-1-jackmanb@google.com>
 X-Mailer: git-send-email 2.29.2.684.gfbc64c5ab5-goog
-Subject: [PATCH bpf-next v5 03/11] bpf: x86: Factor out a lookup table for
- some ALU opcodes
+Subject: [PATCH bpf-next v5 05/11] bpf: Move BPF_STX reserved field check into
+ BPF_STX verifier code
 From:   Brendan Jackman <jackmanb@google.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -72,91 +72,54 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Florent Revest <revest@chromium.org>,
         linux-kernel@vger.kernel.org,
         Brendan Jackman <jackmanb@google.com>,
+        Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-A later commit will need to lookup a subset of these opcodes. To
-avoid duplicating code, pull out a table.
-
-The shift opcodes won't be needed by that later commit, but they're
-already duplicated, so fold them into the table anyway.
+I can't find a reason why this code is in resolve_pseudo_ldimm64;
+since I'll be modifying it in a subsequent commit, tidy it up.
 
 Signed-off-by: Brendan Jackman <jackmanb@google.com>
+Acked-by: Yonghong Song <yhs@fb.com>
 Acked-by: John Fastabend <john.fastabend@gmail.com>
 ---
- arch/x86/net/bpf_jit_comp.c | 33 +++++++++++++++------------------
- 1 file changed, 15 insertions(+), 18 deletions(-)
+ kernel/bpf/verifier.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index f15c93275a18..93f32e0ba0ef 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -205,6 +205,18 @@ static u8 add_2reg(u8 byte, u32 dst_reg, u32 src_reg)
- 	return byte + reg2hex[dst_reg] + (reg2hex[src_reg] << 3);
- }
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d562268c1fd1..48e398667a69 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9528,6 +9528,12 @@ static int do_check(struct bpf_verifier_env *env)
+ 		} else if (class == BPF_STX) {
+ 			enum bpf_reg_type *prev_dst_type, dst_reg_type;
  
-+/* Some 1-byte opcodes for binary ALU operations */
-+static u8 simple_alu_opcodes[] = {
-+	[BPF_ADD] = 0x01,
-+	[BPF_SUB] = 0x29,
-+	[BPF_AND] = 0x21,
-+	[BPF_OR] = 0x09,
-+	[BPF_XOR] = 0x31,
-+	[BPF_LSH] = 0xE0,
-+	[BPF_RSH] = 0xE8,
-+	[BPF_ARSH] = 0xF8,
-+};
++			if (((BPF_MODE(insn->code) != BPF_MEM &&
++			      BPF_MODE(insn->code) != BPF_ATOMIC) || insn->imm != 0)) {
++				verbose(env, "BPF_STX uses reserved fields\n");
++				return -EINVAL;
++			}
 +
- static void jit_fill_hole(void *area, unsigned int size)
- {
- 	/* Fill whole space with INT3 instructions */
-@@ -862,15 +874,9 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 		case BPF_ALU64 | BPF_AND | BPF_X:
- 		case BPF_ALU64 | BPF_OR | BPF_X:
- 		case BPF_ALU64 | BPF_XOR | BPF_X:
--			switch (BPF_OP(insn->code)) {
--			case BPF_ADD: b2 = 0x01; break;
--			case BPF_SUB: b2 = 0x29; break;
--			case BPF_AND: b2 = 0x21; break;
--			case BPF_OR: b2 = 0x09; break;
--			case BPF_XOR: b2 = 0x31; break;
--			}
- 			maybe_emit_mod(&prog, dst_reg, src_reg,
- 				       BPF_CLASS(insn->code) == BPF_ALU64);
-+			b2 = simple_alu_opcodes[BPF_OP(insn->code)];
- 			EMIT2(b2, add_2reg(0xC0, dst_reg, src_reg));
- 			break;
+ 			if (BPF_MODE(insn->code) == BPF_ATOMIC) {
+ 				err = check_atomic(env, env->insn_idx, insn);
+ 				if (err)
+@@ -9940,13 +9946,6 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
+ 			return -EINVAL;
+ 		}
  
-@@ -1050,12 +1056,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 			else if (is_ereg(dst_reg))
- 				EMIT1(add_1mod(0x40, dst_reg));
- 
--			switch (BPF_OP(insn->code)) {
--			case BPF_LSH: b3 = 0xE0; break;
--			case BPF_RSH: b3 = 0xE8; break;
--			case BPF_ARSH: b3 = 0xF8; break;
--			}
+-		if (BPF_CLASS(insn->code) == BPF_STX &&
+-		    ((BPF_MODE(insn->code) != BPF_MEM &&
+-		      BPF_MODE(insn->code) != BPF_ATOMIC) || insn->imm != 0)) {
+-			verbose(env, "BPF_STX uses reserved fields\n");
+-			return -EINVAL;
+-		}
 -
-+			b3 = simple_alu_opcodes[BPF_OP(insn->code)];
- 			if (imm32 == 1)
- 				EMIT2(0xD1, add_1reg(b3, dst_reg));
- 			else
-@@ -1089,11 +1090,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 			else if (is_ereg(dst_reg))
- 				EMIT1(add_1mod(0x40, dst_reg));
- 
--			switch (BPF_OP(insn->code)) {
--			case BPF_LSH: b3 = 0xE0; break;
--			case BPF_RSH: b3 = 0xE8; break;
--			case BPF_ARSH: b3 = 0xF8; break;
--			}
-+			b3 = simple_alu_opcodes[BPF_OP(insn->code)];
- 			EMIT2(0xD3, add_1reg(b3, dst_reg));
- 
- 			if (src_reg != BPF_REG_4)
+ 		if (insn[0].code == (BPF_LD | BPF_IMM | BPF_DW)) {
+ 			struct bpf_insn_aux_data *aux;
+ 			struct bpf_map *map;
 -- 
 2.29.2.684.gfbc64c5ab5-goog
 
