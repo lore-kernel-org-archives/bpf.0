@@ -4,61 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 06A88C4361B
-	for <bpf@archiver.kernel.org>; Tue, 15 Dec 2020 12:19:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74C3AC2BB48
+	for <bpf@archiver.kernel.org>; Tue, 15 Dec 2020 12:20:17 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BBA11224B8
-	for <bpf@archiver.kernel.org>; Tue, 15 Dec 2020 12:19:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 363D2224F4
+	for <bpf@archiver.kernel.org>; Tue, 15 Dec 2020 12:20:17 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729206AbgLOMTQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 15 Dec 2020 07:19:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50252 "EHLO
+        id S1726864AbgLOMUI (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 15 Dec 2020 07:20:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728786AbgLOMTD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 15 Dec 2020 07:19:03 -0500
-Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161B1C0617A6
-        for <bpf@vger.kernel.org>; Tue, 15 Dec 2020 04:18:22 -0800 (PST)
-Received: by mail-wm1-x34a.google.com with SMTP id w204so937150wmb.1
-        for <bpf@vger.kernel.org>; Tue, 15 Dec 2020 04:18:22 -0800 (PST)
+        with ESMTP id S1729249AbgLOMUE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 15 Dec 2020 07:20:04 -0500
+Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12396C0611CF
+        for <bpf@vger.kernel.org>; Tue, 15 Dec 2020 04:18:39 -0800 (PST)
+Received: by mail-qt1-x84a.google.com with SMTP id z43so14186387qtb.0
+        for <bpf@vger.kernel.org>; Tue, 15 Dec 2020 04:18:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=xK6021UZEAnjttvAifX10RHg+blvQxhd2rtQSaIsY9Q=;
-        b=HYKWyO3NLqevvlo8R8uFbEHllhn9j4mnj+RQZGLzo6Qv4FGRyZLCuPzZ2k3jLwpW5r
-         UxIwK9y82wf70cY2AQtALPvvz/4MDRuyFEGIxHoOz9eiFLsQ3CcMtDujzOuGtB1lC+aK
-         G5JKJrR9QIb4sLj5QlZv11SgPw18VAPrFRtdD8ui/mk5jO35oW7geh/8vbcrl+nOi5aL
-         J8lvN9IBZ9Zi1uQ9LU+mcfVflizU01AgifA1FPy7I1tugKUybvmduxaLwTVPP/FHHb5z
-         KXMwDFfyZXMXJ3no+qeXNMqs9O4phS0v5qXNXSq421ZHoIb7eYvvJYnnUB9yhFazBXd2
-         AWlA==
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=JwbvZB6RCDhRszRJjrp2Er/lfJkBt9IXgQd2Q0xXqZo=;
+        b=LWR5AA/ZfFpO8wBUhYMu1Y0hwS/IOneYQRIk5TJ+FlADpbD9oBpr4JaFVh4k5anlHU
+         kPSp4HkP/aavJzr+OkijKXJXdAfBpdewYmwljPkUoCcZ7s3ojvKp2V8IT/xlv7iIa22B
+         WoAf6I/Zu132pvKbVwRaIdQKQgZyhBLZEGu6TChl8NqdpEruc55eEzZcXYtxTB0EuDi1
+         TjVICdyAHWP9sIv79oVq2N9XwpFox7cFJ8uV7fgsDXbpb71AzNGHbnM28NicNOvjSYpQ
+         4mm4b8GKM2X0p0REtn2W4apFlbGVfig4XwgqxKix+Hjg+5serscKfnTAWcpnnBr5tWOV
+         u8TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=xK6021UZEAnjttvAifX10RHg+blvQxhd2rtQSaIsY9Q=;
-        b=NipxQjVkiC9LaTfo8Z9a2QolaO1hvttzkRUnvICD/YqPbguGozKRxiAr24RkCfEDJ2
-         ntS6J7rDWKFffB2NNK1WIpU2JrgGIk+AzJaS5EetTyWvdEJhvY5DGE0oXB9eB3bSNn4c
-         EY2N7kBdX6KybgP51LWE5AhAfhxQrUdu8NWgPOcPEqsEZcDdo1i5MXM2uMJym8DmJH21
-         Y+yKzgTHDjb8uO4zdj+XJslNeN5Q7eJKOT2NE3wlsJ1QxZZiaCbUtOa4YuUzzDs1zSS+
-         ietYXmVYnJfGOaZ8i3loiYBdFX2YsBqgm3ltefKpEfpRZpA872M1M1sCVt8UA96mY9c4
-         jvBg==
-X-Gm-Message-State: AOAM531qOMiRQjREMTjuoVt6cOeQchG9kSoQwQ0I6vB3qxhQQ8iEDtEH
-        1aF4NAdSfc7/z0DWquj4UClUZWDAlPWSqZ/I5T+ygk40Cx9FYwGOev3c8XkfWOiJSDm/dt64iMo
-        IRj2rrtGWXjD+FW2yYo2S0xUM8JAbnmuqwu2oRhkriSsRS8oHKkwcEfM1l7QWHkE=
-X-Google-Smtp-Source: ABdhPJwd8tXfE6nL3l/+j+yZ7kRVOdWhV2DGZQO7YS0ixqaO/4VR5qJYvWhzqtLogg463KjUVbkhE3D4T+E+8A==
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=JwbvZB6RCDhRszRJjrp2Er/lfJkBt9IXgQd2Q0xXqZo=;
+        b=hM9029fd2yBfHXnajFBbpS08Meq4Aptl0XEhHzeV0J5DkhC5435SYMaLDKLoF4ZUm5
+         mlplFmu1hzn8rveWj09JrkKNsEvoZBwbtX+bDi2lxMRTdmx0h8mW0pIIXVyO0SqOHSis
+         C0HfWUkqCOsJ7sfmNQ7v0em8CIoStG10QDQJ++7cmN9IvOkJ1zMlT/vWTwvz34C2Be4J
+         /m6dO8t7XJQQKA3IV7HNkk9U9nWHLbsI0cEK/37UY/R9pJGN54erK2fnws7/0mxUISWF
+         9Hg5U8blW6OXnbouepG2OvEN8EGQEvygDeaknOpRHXHFWH4l5d8eZub8yWDYWGVc/Ox0
+         2mGg==
+X-Gm-Message-State: AOAM5304pA9Oo548kCTY4rnJCOKssNo4+93V8vrbxjNZMLYkQw5/+Vy5
+        nh0bsMQ0I7jD5Xr4CioNuovwP9XtQQ1I+tZqO24B6xFrnKBBwbX3RfO1thosJb3h3AXD71Yx2CS
+        Q3Z1HiOfsPAjPjArif1HLouPHmAr25eXZEJfePQmmSuTnsZVaXvqReptmnB3lZ14=
+X-Google-Smtp-Source: ABdhPJz72AVHvN38+koUkcB70d4aObtVo6C6UE2kHoFw7ZFV0xU+1O5sn77V5eU0G4DSXERM473bW+GqK5r2xQ==
 Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
-X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:10:28:9cb1:c0a8:11db])
- (user=jackmanb job=sendgmr) by 2002:a1c:f002:: with SMTP id
- a2mr32341023wmb.101.1608034700431; Tue, 15 Dec 2020 04:18:20 -0800 (PST)
-Date:   Tue, 15 Dec 2020 12:18:04 +0000
-Message-Id: <20201215121816.1048557-1-jackmanb@google.com>
+X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
+ (user=jackmanb job=sendgmr) by 2002:a0c:f54c:: with SMTP id
+ p12mr32558067qvm.35.1608034718242; Tue, 15 Dec 2020 04:18:38 -0800 (PST)
+Date:   Tue, 15 Dec 2020 12:18:11 +0000
+In-Reply-To: <20201215121816.1048557-1-jackmanb@google.com>
+Message-Id: <20201215121816.1048557-8-jackmanb@google.com>
 Mime-Version: 1.0
+References: <20201215121816.1048557-1-jackmanb@google.com>
 X-Mailer: git-send-email 2.29.2.684.gfbc64c5ab5-goog
-Subject: [PATCH bpf-next v4 00/11] Atomics for eBPF
+Subject: [PATCH bpf-next v5 06/11] bpf: Add BPF_FETCH field / create
+ atomic_fetch_add instruction
 From:   Brendan Jackman <jackmanb@google.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -66,257 +70,218 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         KP Singh <kpsingh@chromium.org>,
         Florent Revest <revest@chromium.org>,
-        linux-kernel@vger.kernel.org, Brendan Jackman <jackmanb@google.com>
+        linux-kernel@vger.kernel.org,
+        Brendan Jackman <jackmanb@google.com>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Status of the patches
-=====================
+The BPF_FETCH field can be set in bpf_insn.imm, for BPF_ATOMIC
+instructions, in order to have the previous value of the
+atomically-modified memory location loaded into the src register
+after an atomic op is carried out.
 
-Thanks for the reviews!
+Suggested-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+---
+ arch/x86/net/bpf_jit_comp.c    |  4 ++++
+ include/linux/filter.h         |  1 +
+ include/uapi/linux/bpf.h       |  3 +++
+ kernel/bpf/core.c              | 13 +++++++++++++
+ kernel/bpf/disasm.c            |  7 +++++++
+ kernel/bpf/verifier.c          | 33 ++++++++++++++++++++++++---------
+ tools/include/linux/filter.h   |  1 +
+ tools/include/uapi/linux/bpf.h |  3 +++
+ 8 files changed, 56 insertions(+), 9 deletions(-)
 
-There's one review comment from John which I haven't resolved [3].
-He pointed out that we could make the verifier a bit smarter about
-propagating register bounds. I don't have a clear picture of how
-useful it would be but IIUC it would be quite simple (see my reply to
-the linked mail with a proposed implementation).
-
-Differences from v4->v5 [1]:
-
-* Fixed bogus type casts in interpreter that led to warnings from
-  the 0day robot.
-
-* Dropped feature-detection for Clang per Andrii's suggestion in [4].
-  The selftests will now fail to build unless you have llvm-project
-  commit 286daafd6512. The ENABLE_ATOMICS_TEST macro is still needed
-  to support the no_alu32 tests.
-
-* Carried some Acks from John and Yonghong.
-
-* Dropped confusing usage of __atomic_exchange from prog_test in
-  favour of __sync_lock_test_and_set.
-
-* [Really] got rid of all the forest of instruction macros
-  (BPF_ATOMIC_FETCH_ADD and friends); now there's just BPF_ATOMIC_OP
-  to define all the instructions as we use them in the verifier
-  tests. This makes the atomic ops less special in that API, and I
-  don't think the resulting usage is actually any harder to read.
-
-Differences from v3->v4 [1]:
-
-* Added one Ack from Yonghong. He acked some other patches but those
-  have now changed non-trivally so I didn't add those acks.
-
-* Fixups to commit messages.
-
-* Fixed disassembly and comments: first arg to atomic_fetch_* is a
-  pointer.
-
-* Improved prog_test efficiency. BPF progs are now all loaded in a
-  single call, then the skeleton is re-used for each subtest.
-
-* Dropped use of tools/build/feature in favour of a one-liner in the
-  Makefile.
-
-* Dropped the commit that created an emit_neg helper in the x86
-  JIT. It's not used any more (it wasn't used in v3 either).
-
-* Combined all the different filter.h macros (used to be
-  BPF_ATOMIC_ADD, BPF_ATOMIC_FETCH_ADD, BPF_ATOMIC_AND, etc) into
-  just BPF_ATOMIC32 and BPF_ATOMIC64.
-
-* Removed some references to BPF_STX_XADD from tools/, samples/ and
-  lib/ that I missed before.
-
-Differences from v2->v3 [1]:
-
-* More minor fixes and naming/comment changes
-
-* Dropped atomic subtract: compilers can implement this by preceding
-  an atomic add with a NEG instruction (which is what the x86 JIT did
-  under the hood anyway).
-
-* Dropped the use of -mcpu=v4 in the Clang BPF command-line; there is
-  no longer an architecture version bump. Instead a feature test is
-  added to Kbuild - it builds a source file to check if Clang
-  supports BPF atomics.
-
-* Fixed the prog_test so it no longer breaks
-  test_progs-no_alu32. This requires some ifdef acrobatics to avoid
-  complicating the prog_tests model where the same userspace code
-  exercises both the normal and no_alu32 BPF test objects, using the
-  same skeleton header.
-
-Differences from v1->v2 [1]:
-
-* Fixed mistakes in the netronome driver
-
-* Addd sub, add, or, xor operations
-
-* The above led to some refactors to keep things readable. (Maybe I
-  should have just waited until I'd implemented these before starting
-  the review...)
-
-* Replaced BPF_[CMP]SET | BPF_FETCH with just BPF_[CMP]XCHG, which
-  include the BPF_FETCH flag
-
-* Added a bit of documentation. Suggestions welcome for more places
-  to dump this info...
-
-The prog_test that's added depends on Clang/LLVM features added by
-Yonghong in commit 286daafd6512 (was
-https://reviews.llvm.org/D72184).
-
-This only includes a JIT implementation for x86_64 - I don't plan to
-implement JIT support myself for other architectures.
-
-Operations
-==========
-
-This patchset adds atomic operations to the eBPF instruction set. The
-use-case that motivated this work was a trivial and efficient way to
-generate globally-unique cookies in BPF progs, but I think it's
-obvious that these features are pretty widely applicable.  The
-instructions that are added here can be summarised with this list of
-kernel operations:
-
-* atomic[64]_[fetch_]add
-* atomic[64]_[fetch_]and
-* atomic[64]_[fetch_]or
-* atomic[64]_xchg
-* atomic[64]_cmpxchg
-
-The following are left out of scope for this effort:
-
-* 16 and 8 bit operations
-* Explicit memory barriers
-
-Encoding
-========
-
-I originally planned to add new values for bpf_insn.opcode. This was
-rather unpleasant: the opcode space has holes in it but no entire
-instruction classes[2]. Yonghong Song had a better idea: use the
-immediate field of the existing STX XADD instruction to encode the
-operation. This works nicely, without breaking existing programs,
-because the immediate field is currently reserved-must-be-zero, and
-extra-nicely because BPF_ADD happens to be zero.
-
-Note that this of course makes immediate-source atomic operations
-impossible. It's hard to imagine a measurable speedup from such
-instructions, and if it existed it would certainly not benefit x86,
-which has no support for them.
-
-The BPF_OP opcode fields are re-used in the immediate, and an
-additional flag BPF_FETCH is used to mark instructions that should
-fetch a pre-modification value from memory.
-
-So, BPF_XADD is now called BPF_ATOMIC (the old name is kept to avoid
-breaking userspace builds), and where we previously had .imm = 0, we
-now have .imm = BPF_ADD (which is 0).
-
-Operands
-========
-
-Reg-source eBPF instructions only have two operands, while these
-atomic operations have up to four. To avoid needing to encode
-additional operands, then:
-
-- One of the input registers is re-used as an output register
-  (e.g. atomic_fetch_add both reads from and writes to the source
-  register).
-
-- Where necessary (i.e. for cmpxchg) , R0 is "hard-coded" as one of
-  the operands.
-
-This approach also allows the new eBPF instructions to map directly
-to single x86 instructions.
-
-[1] Previous iterations:
-    v1: https://lore.kernel.org/bpf/20201123173202.1335708-1-jackmanb@google.com/
-    v2: https://lore.kernel.org/bpf/20201127175738.1085417-1-jackmanb@google.com/
-    v3: https://lore.kernel.org/bpf/X8kN7NA7bJC7aLQI@google.com/
-    v4: https://lore.kernel.org/bpf/20201207160734.2345502-1-jackmanb@google.com/
-
-[2] Visualisation of eBPF opcode space:
-    https://gist.github.com/bjackman/00fdad2d5dfff601c1918bc29b16e778
-
-[3] Comment from John about propagating bounds in verifier:
-    https://lore.kernel.org/bpf/5fcf0fbcc8aa8_9ab320853@john-XPS-13-9370.notmuch/
-
-[4] Mail from Andrii about not supporting old Clang in selftests:
-    https://lore.kernel.org/bpf/CAEf4BzYBddPaEzRUs=jaWSo5kbf=LZdb7geAUVj85GxLQztuAQ@mail.gmail.com/
-Brendan Jackman (11):
-  bpf: x86: Factor out emission of ModR/M for *(reg + off)
-  bpf: x86: Factor out emission of REX byte
-  bpf: x86: Factor out a lookup table for some ALU opcodes
-  bpf: Rename BPF_XADD and prepare to encode other atomics in .imm
-  bpf: Move BPF_STX reserved field check into BPF_STX verifier code
-  bpf: Add BPF_FETCH field / create atomic_fetch_add instruction
-  bpf: Add instructions for atomic_[cmp]xchg
-  bpf: Pull out a macro for interpreting atomic ALU operations
-  bpf: Add bitwise atomic instructions
-  bpf: Add tests for new BPF atomic operations
-  bpf: Document new atomic instructions
-
- Documentation/networking/filter.rst           |  56 +++-
- arch/arm/net/bpf_jit_32.c                     |   7 +-
- arch/arm64/net/bpf_jit_comp.c                 |  16 +-
- arch/mips/net/ebpf_jit.c                      |  11 +-
- arch/powerpc/net/bpf_jit_comp64.c             |  25 +-
- arch/riscv/net/bpf_jit_comp32.c               |  20 +-
- arch/riscv/net/bpf_jit_comp64.c               |  16 +-
- arch/s390/net/bpf_jit_comp.c                  |  27 +-
- arch/sparc/net/bpf_jit_comp_64.c              |  17 +-
- arch/x86/net/bpf_jit_comp.c                   | 217 ++++++++++-----
- arch/x86/net/bpf_jit_comp32.c                 |   6 +-
- drivers/net/ethernet/netronome/nfp/bpf/jit.c  |  14 +-
- drivers/net/ethernet/netronome/nfp/bpf/main.h |   4 +-
- .../net/ethernet/netronome/nfp/bpf/verifier.c |  15 +-
- include/linux/filter.h                        |  25 +-
- include/uapi/linux/bpf.h                      |  10 +-
- kernel/bpf/core.c                             |  67 ++++-
- kernel/bpf/disasm.c                           |  43 ++-
- kernel/bpf/verifier.c                         |  75 ++++--
- lib/test_bpf.c                                |  14 +-
- samples/bpf/bpf_insn.h                        |   4 +-
- samples/bpf/cookie_uid_helper_example.c       |   8 +-
- samples/bpf/sock_example.c                    |   2 +-
- samples/bpf/test_cgrp2_attach.c               |   5 +-
- tools/include/linux/filter.h                  |  24 +-
- tools/include/uapi/linux/bpf.h                |  10 +-
- tools/testing/selftests/bpf/Makefile          |   2 +
- .../selftests/bpf/prog_tests/atomics.c        | 246 ++++++++++++++++++
- .../bpf/prog_tests/cgroup_attach_multi.c      |   4 +-
- tools/testing/selftests/bpf/progs/atomics.c   | 154 +++++++++++
- .../selftests/bpf/test_cgroup_storage.c       |   2 +-
- .../selftests/bpf/verifier/atomic_and.c       |  77 ++++++
- .../selftests/bpf/verifier/atomic_cmpxchg.c   |  96 +++++++
- .../selftests/bpf/verifier/atomic_fetch_add.c | 106 ++++++++
- .../selftests/bpf/verifier/atomic_or.c        |  77 ++++++
- .../selftests/bpf/verifier/atomic_xchg.c      |  46 ++++
- .../selftests/bpf/verifier/atomic_xor.c       |  77 ++++++
- tools/testing/selftests/bpf/verifier/ctx.c    |   7 +-
- .../bpf/verifier/direct_packet_access.c       |   4 +-
- .../testing/selftests/bpf/verifier/leak_ptr.c |  10 +-
- .../selftests/bpf/verifier/meta_access.c      |   4 +-
- tools/testing/selftests/bpf/verifier/unpriv.c |   3 +-
- .../bpf/verifier/value_illegal_alu.c          |   2 +-
- tools/testing/selftests/bpf/verifier/xadd.c   |  18 +-
- 44 files changed, 1461 insertions(+), 212 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/atomics.c
- create mode 100644 tools/testing/selftests/bpf/progs/atomics.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_and.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_cmpxchg.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_fetch_add.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_or.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_xchg.c
- create mode 100644 tools/testing/selftests/bpf/verifier/atomic_xor.c
-
-
-base-commit: 0e12c0271887f1b00b79b7612c1d4f0d3d34e8a8
---
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index b1829a534da1..eea7d8b0bb12 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -811,6 +811,10 @@ static int emit_atomic(u8 **pprog, u8 atomic_op,
+ 		/* lock *(u32/u64*)(dst_reg + off) <op>= src_reg */
+ 		EMIT1(simple_alu_opcodes[atomic_op]);
+ 		break;
++	case BPF_ADD | BPF_FETCH:
++		/* src_reg = atomic_fetch_add(dst_reg + off, src_reg); */
++		EMIT2(0x0F, 0xC1);
++		break;
+ 	default:
+ 		pr_err("bpf_jit: unknown atomic opcode %02x\n", atomic_op);
+ 		return -EFAULT;
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 3463ac0c0259..c3e87a63e0b8 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -264,6 +264,7 @@ static inline bool insn_is_zext(const struct bpf_insn *insn)
+  * Atomic operations:
+  *
+  *   BPF_ADD                  *(uint *) (dst_reg + off16) += src_reg
++ *   BPF_ADD | BPF_FETCH      src_reg = atomic_fetch_add(dst_reg + off16, src_reg);
+  */
+ 
+ #define BPF_ATOMIC_OP(SIZE, OP, DST, SRC, OFF)			\
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 7bd3671bff20..760ae333a5ed 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -44,6 +44,9 @@
+ #define BPF_CALL	0x80	/* function call */
+ #define BPF_EXIT	0x90	/* function return */
+ 
++/* atomic op type fields (stored in immediate) */
++#define BPF_FETCH	0x01	/* fetch previous value into src reg */
++
+ /* Register numbers */
+ enum {
+ 	BPF_REG_0 = 0,
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 3abc6b250b18..2b1d3fea03fc 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1624,16 +1624,29 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
+ 			/* lock xadd *(u32 *)(dst_reg + off16) += src_reg */
+ 			atomic_add((u32) SRC, (atomic_t *)(unsigned long)
+ 				   (DST + insn->off));
++			break;
++		case BPF_ADD | BPF_FETCH:
++			SRC = (u32) atomic_fetch_add(
++				(u32) SRC,
++				(atomic_t *)(unsigned long) (DST + insn->off));
++			break;
+ 		default:
+ 			goto default_label;
+ 		}
+ 		CONT;
++
+ 	STX_ATOMIC_DW:
+ 		switch (IMM) {
+ 		case BPF_ADD:
+ 			/* lock xadd *(u64 *)(dst_reg + off16) += src_reg */
+ 			atomic64_add((u64) SRC, (atomic64_t *)(unsigned long)
+ 				     (DST + insn->off));
++			break;
++		case BPF_ADD | BPF_FETCH:
++			SRC = (u64) atomic64_fetch_add(
++				(u64) SRC,
++				(atomic64_t *)(unsigned long) (DST + insn->off));
++			break;
+ 		default:
+ 			goto default_label;
+ 		}
+diff --git a/kernel/bpf/disasm.c b/kernel/bpf/disasm.c
+index 37c8d6e9b4cc..d2e20f6d0516 100644
+--- a/kernel/bpf/disasm.c
++++ b/kernel/bpf/disasm.c
+@@ -160,6 +160,13 @@ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
+ 				bpf_ldst_string[BPF_SIZE(insn->code) >> 3],
+ 				insn->dst_reg, insn->off,
+ 				insn->src_reg);
++		} else if (BPF_MODE(insn->code) == BPF_ATOMIC &&
++			   insn->imm == (BPF_ADD | BPF_FETCH)) {
++			verbose(cbs->private_data, "(%02x) r%d = atomic%s_fetch_add((%s *)(r%d %+d), r%d)\n",
++				insn->code, insn->src_reg,
++				BPF_SIZE(insn->code) == BPF_DW ? "64" : "",
++				bpf_ldst_string[BPF_SIZE(insn->code) >> 3],
++				insn->dst_reg, insn->off, insn->src_reg);
+ 		} else {
+ 			verbose(cbs->private_data, "BUG_%02x\n", insn->code);
+ 		}
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 48e398667a69..449b2da9b6db 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3608,7 +3608,11 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
+ {
+ 	int err;
+ 
+-	if (insn->imm != BPF_ADD) {
++	switch (insn->imm) {
++	case BPF_ADD:
++	case BPF_ADD | BPF_FETCH:
++		break;
++	default:
+ 		verbose(env, "BPF_ATOMIC uses invalid atomic opcode %02x\n", insn->imm);
+ 		return -EINVAL;
+ 	}
+@@ -3650,8 +3654,20 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
+ 		return err;
+ 
+ 	/* check whether we can write into the same memory */
+-	return check_mem_access(env, insn_idx, insn->dst_reg, insn->off,
+-				BPF_SIZE(insn->code), BPF_WRITE, -1, true);
++	err = check_mem_access(env, insn_idx, insn->dst_reg, insn->off,
++			       BPF_SIZE(insn->code), BPF_WRITE, -1, true);
++	if (err)
++		return err;
++
++	if (!(insn->imm & BPF_FETCH))
++		return 0;
++
++	/* check and record load of old value into src reg  */
++	err = check_reg_arg(env, insn->src_reg, DST_OP);
++	if (err)
++		return err;
++
++	return 0;
+ }
+ 
+ static int __check_stack_boundary(struct bpf_verifier_env *env, u32 regno,
+@@ -9528,12 +9544,6 @@ static int do_check(struct bpf_verifier_env *env)
+ 		} else if (class == BPF_STX) {
+ 			enum bpf_reg_type *prev_dst_type, dst_reg_type;
+ 
+-			if (((BPF_MODE(insn->code) != BPF_MEM &&
+-			      BPF_MODE(insn->code) != BPF_ATOMIC) || insn->imm != 0)) {
+-				verbose(env, "BPF_STX uses reserved fields\n");
+-				return -EINVAL;
+-			}
+-
+ 			if (BPF_MODE(insn->code) == BPF_ATOMIC) {
+ 				err = check_atomic(env, env->insn_idx, insn);
+ 				if (err)
+@@ -9542,6 +9552,11 @@ static int do_check(struct bpf_verifier_env *env)
+ 				continue;
+ 			}
+ 
++			if (BPF_MODE(insn->code) != BPF_MEM || insn->imm != 0) {
++				verbose(env, "BPF_STX uses reserved fields\n");
++				return -EINVAL;
++			}
++
+ 			/* check src1 operand */
+ 			err = check_reg_arg(env, insn->src_reg, SRC_OP);
+ 			if (err)
+diff --git a/tools/include/linux/filter.h b/tools/include/linux/filter.h
+index e870c9039f0d..7211ce9fba53 100644
+--- a/tools/include/linux/filter.h
++++ b/tools/include/linux/filter.h
+@@ -173,6 +173,7 @@
+  * Atomic operations:
+  *
+  *   BPF_ADD                  *(uint *) (dst_reg + off16) += src_reg
++ *   BPF_ADD | BPF_FETCH      src_reg = atomic_fetch_add(dst_reg + off16, src_reg);
+  */
+ 
+ #define BPF_ATOMIC_OP(SIZE, OP, DST, SRC, OFF)			\
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 7bd3671bff20..760ae333a5ed 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -44,6 +44,9 @@
+ #define BPF_CALL	0x80	/* function call */
+ #define BPF_EXIT	0x90	/* function return */
+ 
++/* atomic op type fields (stored in immediate) */
++#define BPF_FETCH	0x01	/* fetch previous value into src reg */
++
+ /* Register numbers */
+ enum {
+ 	BPF_REG_0 = 0,
+-- 
 2.29.2.684.gfbc64c5ab5-goog
 
