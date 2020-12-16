@@ -2,105 +2,83 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B3077C2BBCA
-	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 08:54:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CFAFC4361B
+	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 10:04:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5BD9A230FF
-	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 08:54:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 17CC82313F
+	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 10:04:03 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726090AbgLPIyX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Dec 2020 03:54:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:21085 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725855AbgLPIyW (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 16 Dec 2020 03:54:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1608108776;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WiRmIPuJvtrPY5M/BFG60cBFFkmQJmzXXzb70DKLQE4=;
-        b=USQYqKwlyPJ9ZcMIsBRLbCcTkzVXuoRLNT8g98x5i1KU4DLg9uE1b3HWRb7m0cg2Vw1knD
-        5Mz1t/MlSAG0qaRWWcWI0lCu9r8DfLJLbLDXHdrsK8njfnZFOEOYZYNukiq7ay7WdI+N/C
-        Be+5MC/fzu/6+SI5WLt9Nbmxez58kn0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-536-xA1-GzGyPKiYFNmhK65XeQ-1; Wed, 16 Dec 2020 03:52:53 -0500
-X-MC-Unique: xA1-GzGyPKiYFNmhK65XeQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 77BFC107ACE3;
-        Wed, 16 Dec 2020 08:52:51 +0000 (UTC)
-Received: from carbon (unknown [10.36.110.6])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1AFF6E70E;
-        Wed, 16 Dec 2020 08:52:41 +0000 (UTC)
-Date:   Wed, 16 Dec 2020 09:52:40 +0100
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-Cc:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, alexander.duyck@gmail.com,
-        saeed@kernel.org, brouer@redhat.com
-Subject: Re: [PATCH v3 bpf-next 2/2] net: xdp: introduce xdp_prepare_buff
- utility routine
-Message-ID: <20201216095240.43867406@carbon>
-In-Reply-To: <20201215134710.GB5477@lore-desk>
-References: <cover.1607794551.git.lorenzo@kernel.org>
-        <71d5ae9f810c2c80f1cb09e304330be0b5ce5345.1607794552.git.lorenzo@kernel.org>
-        <20201215123643.GA23785@ranger.igk.intel.com>
-        <20201215134710.GB5477@lore-desk>
+        id S1726025AbgLPKEC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Dec 2020 05:04:02 -0500
+Received: from mail-wr1-f52.google.com ([209.85.221.52]:33886 "EHLO
+        mail-wr1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725889AbgLPKEC (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Dec 2020 05:04:02 -0500
+Received: by mail-wr1-f52.google.com with SMTP id q18so15053994wrn.1;
+        Wed, 16 Dec 2020 02:03:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=g/Wzze2NIBSL2f+axZbs4XLUQ1J8xddIwrjpMIqAZg4=;
+        b=cIRHMR4dUG/P9eO9xLSPSVyn8HTLp+ZI3PNSp6iLmjMppC3QhhzrCZWmiWL8rDqbXj
+         xEvZIG0KIuTM0IzLPel7d+DAmMxojl4cFhtVhQ+zF0PGDq1lNiCDYRlsFrczY+eQSwWl
+         smBwgiQur6rf3lPjTOaVBOPaw0RIwZEg+3j+MLw1E6zfVBwpGRYgMsSTJDUkufOg5Lrs
+         /0rnepa8qMdP+yC2fUbHQLWoOIMbHYK9Z15g4kLXHcgeMR3c2HJBge9NxpNME/viBsPv
+         YUk+o2EEzlTgc74UFA7aT+qdqr/vCbAgKzrKqCt1tRTZU8vbPV6V4j8Rg5PGWOq20HGf
+         qF/w==
+X-Gm-Message-State: AOAM531OmE3nosSnBWy8v9gdKL5dcYlvIW5K7/GALkoYVE1+H+YxXeD5
+        6QK1w8Guo5R1kJ8Cvuk3v5yPBRHz5uWxcQ==
+X-Google-Smtp-Source: ABdhPJxD1ueQpGR9/wck7OlgddXafTJE+ngtoIBX1JQ9dKcH54wv9WbaRfgT0MlTBjsXepkMheXDQQ==
+X-Received: by 2002:adf:eb07:: with SMTP id s7mr37381501wrn.414.1608113000866;
+        Wed, 16 Dec 2020 02:03:20 -0800 (PST)
+Received: from rhea.home.vuxu.org ([2a01:4f8:c010:17cd:6824:5476:f6ff:db68])
+        by smtp.gmail.com with ESMTPSA id l7sm2106047wme.4.2020.12.16.02.03.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Dec 2020 02:03:19 -0800 (PST)
+Received: from localhost (rhea.home.vuxu.org [local])
+        by rhea.home.vuxu.org (OpenSMTPD) with ESMTPA id 876ad974;
+        Wed, 16 Dec 2020 10:03:17 +0000 (UTC)
+From:   Leah Neukirchen <leah@vuxu.org>
+To:     bpf@vger.kernel.org
+Cc:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-kernel@vger.kernel.org, leah@vuxu.org
+Subject: [PATCH] bpf: Remove unnecessary <argp.h> include from preload/iterators
+Date:   Wed, 16 Dec 2020 11:03:06 +0100
+Message-Id: <20201216100306.30942-1-leah@vuxu.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 15 Dec 2020 14:47:10 +0100
-Lorenzo Bianconi <lorenzo.bianconi@redhat.com> wrote:
+This program does not use argp (which is a glibcism).
+Instead include <errno.h> directly, which was pulled in by <argp.h>.
 
-> [...]
-> > >  	xdp_act = bpf_prog_run_xdp(xdp_prog, &xdp);
-> > > diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-> > > index 4dbbbd49c389..fcd1ca3343fb 100644
-> > > --- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-> > > +++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-> > > @@ -2393,12 +2393,12 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_ring, int budget)
-> > >  
-> > >  		/* retrieve a buffer from the ring */
-> > >  		if (!skb) {
-> > > -			xdp.data = page_address(rx_buffer->page) +
-> > > -				   rx_buffer->page_offset;
-> > > -			xdp.data_meta = xdp.data;
-> > > -			xdp.data_hard_start = xdp.data -
-> > > -					      i40e_rx_offset(rx_ring);
-> > > -			xdp.data_end = xdp.data + size;
-> > > +			unsigned int offset = i40e_rx_offset(rx_ring);  
-> > 
-> > I now see that we could call the i40e_rx_offset() once per napi, so can
-> > you pull this variable out and have it initialized a single time? Applies
-> > to other intel drivers as well.  
->
-> ack, fine. I will fix in v4.
+Signed-off-by: Leah Neukirchen <leah@vuxu.org>
+---
+ kernel/bpf/preload/iterators/iterators.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Be careful with the Intel drivers.  They have two modes (at compile
-time) depending on PAGE_SIZE in system.  In one of the modes (default
-one) you can place init of xdp.frame_sz outside the NAPI loop and init a
-single time.  In the other mode you cannot, and it becomes dynamic per
-packet.  Intel review this carefully, please!
-
+diff --git a/kernel/bpf/preload/iterators/iterators.c b/kernel/bpf/preload/iterators/iterators.c
+index b7ff8793917..5d872a70547 100644
+--- a/kernel/bpf/preload/iterators/iterators.c
++++ b/kernel/bpf/preload/iterators/iterators.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
+-#include <argp.h>
++#include <errno.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
 -- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
+2.29.2
 
