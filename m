@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD56BC0018C
-	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 10:08:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FBBFC2D0E4
+	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 10:09:14 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 703EF2313F
-	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 10:08:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 704712313B
+	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 10:09:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726158AbgLPKIV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Dec 2020 05:08:21 -0500
-Received: from pegase1.c-s.fr ([93.17.236.30]:42527 "EHLO pegase1.c-s.fr"
+        id S1726275AbgLPKJD (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Dec 2020 05:09:03 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:30638 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726155AbgLPKIU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Dec 2020 05:08:20 -0500
+        id S1726259AbgLPKJD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Dec 2020 05:09:03 -0500
 Received: from localhost (mailhub1-int [192.168.12.234])
-        by localhost (Postfix) with ESMTP id 4CwrQr5WgPz9tycC;
-        Wed, 16 Dec 2020 11:07:32 +0100 (CET)
+        by localhost (Postfix) with ESMTP id 4CwrQv0qTNz9v1ZG;
+        Wed, 16 Dec 2020 11:07:35 +0100 (CET)
 X-Virus-Scanned: Debian amavisd-new at c-s.fr
 Received: from pegase1.c-s.fr ([192.168.12.234])
         by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
-        with ESMTP id ahhypLKUQxfW; Wed, 16 Dec 2020 11:07:32 +0100 (CET)
+        with ESMTP id hvM-Cqhlr7xG; Wed, 16 Dec 2020 11:07:35 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4CwrQr4SrQz9tysx;
-        Wed, 16 Dec 2020 11:07:32 +0100 (CET)
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4CwrQv00BYz9v1Z7;
+        Wed, 16 Dec 2020 11:07:35 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id BF3D88B7CA;
-        Wed, 16 Dec 2020 11:07:33 +0100 (CET)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id B52848B7CC;
+        Wed, 16 Dec 2020 11:07:35 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 0-T9wf0Snr0z; Wed, 16 Dec 2020 11:07:33 +0100 (CET)
+        with ESMTP id WSKtveR0_kV4; Wed, 16 Dec 2020 11:07:35 +0100 (CET)
 Received: from localhost.localdomain (unknown [192.168.4.90])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4A49E8B7BA;
-        Wed, 16 Dec 2020 11:07:33 +0100 (CET)
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 57B3E8B7C7;
+        Wed, 16 Dec 2020 11:07:35 +0100 (CET)
 Received: by localhost.localdomain (Postfix, from userid 0)
-        id 1F7CA6681D; Wed, 16 Dec 2020 10:07:33 +0000 (UTC)
-Message-Id: <9532c3463dc2ced22615f92b19739996b2939f09.1608112797.git.christophe.leroy@csgroup.eu>
+        id 2D71A6681D; Wed, 16 Dec 2020 10:07:35 +0000 (UTC)
+Message-Id: <ceea0970692b967990cd8ac6bf01c222541b83e2.1608112797.git.christophe.leroy@csgroup.eu>
 In-Reply-To: <cover.1608112796.git.christophe.leroy@csgroup.eu>
 References: <cover.1608112796.git.christophe.leroy@csgroup.eu>
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: [RFC PATCH v1 3/7] powerpc/bpf: Move common helpers into bpf_jit.h
+Subject: [RFC PATCH v1 5/7] powerpc/bpf: Change values of SEEN_ flags
 To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         Paul Mackerras <paulus@samba.org>,
         Michael Ellerman <mpe@ellerman.id.au>, ast@kernel.org,
@@ -55,125 +55,48 @@ To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
         sandipan@linux.ibm.com
 Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org
-Date:   Wed, 16 Dec 2020 10:07:33 +0000 (UTC)
+Date:   Wed, 16 Dec 2020 10:07:35 +0000 (UTC)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Move functions bpf_flush_icache(), bpf_is_seen_register() and
-bpf_set_seen_register() in order to reuse them in future
-bpf_jit_comp32.c
+Because PPC32 will use more non volatile registers,
+move SEEN_ flags to positions 0-2 which corresponds to special
+registers.
 
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- arch/powerpc/net/bpf_jit.h        | 35 +++++++++++++++++++++++++++++++
- arch/powerpc/net/bpf_jit64.h      | 19 -----------------
- arch/powerpc/net/bpf_jit_comp64.c | 16 --------------
- 3 files changed, 35 insertions(+), 35 deletions(-)
+ arch/powerpc/net/bpf_jit.h | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
-index d0a67a1bbaf1..b8fa6908fc5e 100644
+index b34abfce15a6..fb4656986fb9 100644
 --- a/arch/powerpc/net/bpf_jit.h
 +++ b/arch/powerpc/net/bpf_jit.h
-@@ -108,6 +108,41 @@ static inline bool is_nearbranch(int offset)
+@@ -108,18 +108,18 @@ static inline bool is_nearbranch(int offset)
  #define COND_LT		(CR0_LT | COND_CMP_TRUE)
  #define COND_LE		(CR0_GT | COND_CMP_FALSE)
- 
-+#define SEEN_FUNC	0x1000 /* might call external helpers */
-+#define SEEN_STACK	0x2000 /* uses BPF stack */
-+#define SEEN_TAILCALL	0x4000 /* uses tail calls */
-+
-+struct codegen_context {
-+	/*
-+	 * This is used to track register usage as well
-+	 * as calls to external helpers.
-+	 * - register usage is tracked with corresponding
-+	 *   bits (r3-r10 and r27-r31)
-+	 * - rest of the bits can be used to track other
-+	 *   things -- for now, we use bits 16 to 23
-+	 *   encoded in SEEN_* macros above
-+	 */
-+	unsigned int seen;
-+	unsigned int idx;
-+	unsigned int stack_size;
-+};
-+
-+static inline void bpf_flush_icache(void *start, void *end)
-+{
-+	smp_wmb();	/* smp write barrier */
-+	flush_icache_range((unsigned long)start, (unsigned long)end);
-+}
-+
-+static inline bool bpf_is_seen_register(struct codegen_context *ctx, int i)
-+{
-+	return ctx->seen & (1 << (31 - i));
-+}
-+
-+static inline void bpf_set_seen_register(struct codegen_context *ctx, int i)
-+{
-+	ctx->seen |= 1 << (31 - i);
-+}
-+
- #endif
- 
- #endif
-diff --git a/arch/powerpc/net/bpf_jit64.h b/arch/powerpc/net/bpf_jit64.h
-index 2e33c6673ff9..b05f2e67bba1 100644
---- a/arch/powerpc/net/bpf_jit64.h
-+++ b/arch/powerpc/net/bpf_jit64.h
-@@ -86,25 +86,6 @@ static const int b2p[] = {
- 				} while(0)
- #define PPC_BPF_STLU(r, base, i) do { EMIT(PPC_RAW_STDU(r, base, i)); } while(0)
  
 -#define SEEN_FUNC	0x1000 /* might call external helpers */
 -#define SEEN_STACK	0x2000 /* uses BPF stack */
 -#define SEEN_TAILCALL	0x4000 /* uses tail calls */
--
--struct codegen_context {
--	/*
--	 * This is used to track register usage as well
--	 * as calls to external helpers.
--	 * - register usage is tracked with corresponding
--	 *   bits (r3-r10 and r27-r31)
--	 * - rest of the bits can be used to track other
--	 *   things -- for now, we use bits 16 to 23
--	 *   encoded in SEEN_* macros above
--	 */
--	unsigned int seen;
--	unsigned int idx;
--	unsigned int stack_size;
--};
--
- #endif /* !__ASSEMBLY__ */
++#define SEEN_FUNC	0x20000000 /* might call external helpers */
++#define SEEN_STACK	0x40000000 /* uses BPF stack */
++#define SEEN_TAILCALL	0x80000000 /* uses tail calls */
  
- #endif
-diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-index 26a836a904f5..89599e75028c 100644
---- a/arch/powerpc/net/bpf_jit_comp64.c
-+++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -23,22 +23,6 @@ static void bpf_jit_fill_ill_insns(void *area, unsigned int size)
- 	memset32(area, BREAKPOINT_INSTRUCTION, size/4);
- }
- 
--static inline void bpf_flush_icache(void *start, void *end)
--{
--	smp_wmb();
--	flush_icache_range((unsigned long)start, (unsigned long)end);
--}
--
--static inline bool bpf_is_seen_register(struct codegen_context *ctx, int i)
--{
--	return ctx->seen & (1 << (31 - i));
--}
--
--static inline void bpf_set_seen_register(struct codegen_context *ctx, int i)
--{
--	ctx->seen |= 1 << (31 - i);
--}
--
- static inline bool bpf_has_stack_frame(struct codegen_context *ctx)
- {
+ struct codegen_context {
  	/*
+ 	 * This is used to track register usage as well
+ 	 * as calls to external helpers.
+ 	 * - register usage is tracked with corresponding
+-	 *   bits (r3-r10 and r27-r31)
++	 *   bits (r3-r31)
+ 	 * - rest of the bits can be used to track other
+-	 *   things -- for now, we use bits 16 to 23
++	 *   things -- for now, we use bits 0 to 2
+ 	 *   encoded in SEEN_* macros above
+ 	 */
+ 	unsigned int seen;
 -- 
 2.25.0
 
