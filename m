@@ -2,180 +2,51 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F9C4C2BBCA
-	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 19:33:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 66F2FC2BBCD
+	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 19:33:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DAEB122D73
-	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 19:33:04 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1DE6E206CB
+	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 19:33:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388763AbgLPTdD (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Dec 2020 14:33:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57344 "EHLO mail.kernel.org"
+        id S2388781AbgLPTdG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Dec 2020 14:33:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57264 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388756AbgLPTdD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Dec 2020 14:33:03 -0500
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org
-Cc:     davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, brouer@redhat.com,
-        lorenzo.bianconi@redhat.com, toshiaki.makita1@gmail.com
-Subject: [PATCH bpf-next 1/2] net: xdp: introduce __xdp_build_skb_from_frame utility routine
-Date:   Wed, 16 Dec 2020 19:38:33 +0100
-Message-Id: <40b3a47fb35b06871bd280564a352b33dcf96c95.1608142960.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <cover.1608142960.git.lorenzo@kernel.org>
-References: <cover.1608142960.git.lorenzo@kernel.org>
+        id S2388769AbgLPTdE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Dec 2020 14:33:04 -0500
+Date:   Wed, 16 Dec 2020 10:55:14 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1608144916;
+        bh=D3YhoTgf40AlLt+GK+vtGN+dciBHeYG4J/pl0zPj0AM=;
+        h=From:To:Cc:Subject:In-Reply-To:References:From;
+        b=N08LpIyjKM7c3XZosA7JCe6ugqra2HgKjjz/JXsgHerl6m/7fwavEuRuwHG/LFqAv
+         Ej12hXAOF48HsTwbxYivm7IYLsNXvMGmdV3GKA9gOE14xQseXrO3t3zPi25J+GFIcE
+         n6vZ7Uwo9w8/gm0x6f6vae7JddFW2Flaw4hbANYuOs1wko4uzAKAXZWLfim1sZIuuC
+         8OvXZEaGPqrfxjp4T+9E01jKdaztH7cneevYibxfCRGa0nSpA18Fn0pXUEqr1SIhEL
+         833uezVgSgZToHvK2K94MlnlMRBh+E3p91ZFihNTPnG9YzoiCsOazLZDPYwrL3sbAd
+         5tIKNwJ0QJhyw==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+Cc:     intel-wired-lan@lists.osuosl.org, magnus.karlsson@intel.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        maciej.fijalkowski@intel.com
+Subject: Re: [PATCH net 0/2] i40e/ice AF_XDP ZC fixes
+Message-ID: <20201216105514.3211bc60@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20201211145712.72957-1-bjorn.topel@gmail.com>
+References: <20201211145712.72957-1-bjorn.topel@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Introduce __xdp_build_skb_from_frame utility routine to build
-the skb from xdp_frame. Rely on __xdp_build_skb_from_frame in
-cpumap code.
+On Fri, 11 Dec 2020 15:57:10 +0100 Bj=C3=B6rn T=C3=B6pel wrote:
+> This series address two crashes in the AF_XDP zero-copy mode for ice
+> and i40e. More details in each individual the commit message.
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- include/net/xdp.h   |  3 +++
- kernel/bpf/cpumap.c | 45 +--------------------------------------------
- net/core/xdp.c      | 44 ++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 48 insertions(+), 44 deletions(-)
-
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 600acb307db6..da62fa20fa8a 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -145,6 +145,9 @@ void xdp_warn(const char *msg, const char *func, const int line);
- #define XDP_WARN(msg) xdp_warn(msg, __func__, __LINE__)
- 
- struct xdp_frame *xdp_convert_zc_to_xdp_frame(struct xdp_buff *xdp);
-+struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
-+					   struct sk_buff *skb,
-+					   struct net_device *dev);
- 
- static inline
- void xdp_convert_frame_to_buff(struct xdp_frame *frame, struct xdp_buff *xdp)
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 747313698178..49113880b82a 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -141,49 +141,6 @@ static void cpu_map_kthread_stop(struct work_struct *work)
- 	kthread_stop(rcpu->kthread);
- }
- 
--static struct sk_buff *cpu_map_build_skb(struct xdp_frame *xdpf,
--					 struct sk_buff *skb)
--{
--	unsigned int hard_start_headroom;
--	unsigned int frame_size;
--	void *pkt_data_start;
--
--	/* Part of headroom was reserved to xdpf */
--	hard_start_headroom = sizeof(struct xdp_frame) +  xdpf->headroom;
--
--	/* Memory size backing xdp_frame data already have reserved
--	 * room for build_skb to place skb_shared_info in tailroom.
--	 */
--	frame_size = xdpf->frame_sz;
--
--	pkt_data_start = xdpf->data - hard_start_headroom;
--	skb = build_skb_around(skb, pkt_data_start, frame_size);
--	if (unlikely(!skb))
--		return NULL;
--
--	skb_reserve(skb, hard_start_headroom);
--	__skb_put(skb, xdpf->len);
--	if (xdpf->metasize)
--		skb_metadata_set(skb, xdpf->metasize);
--
--	/* Essential SKB info: protocol and skb->dev */
--	skb->protocol = eth_type_trans(skb, xdpf->dev_rx);
--
--	/* Optional SKB info, currently missing:
--	 * - HW checksum info		(skb->ip_summed)
--	 * - HW RX hash			(skb_set_hash)
--	 * - RX ring dev queue index	(skb_record_rx_queue)
--	 */
--
--	/* Until page_pool get SKB return path, release DMA here */
--	xdp_release_frame(xdpf);
--
--	/* Allow SKB to reuse area used by xdp_frame */
--	xdp_scrub_frame(xdpf);
--
--	return skb;
--}
--
- static void __cpu_map_ring_cleanup(struct ptr_ring *ring)
- {
- 	/* The tear-down procedure should have made sure that queue is
-@@ -350,7 +307,7 @@ static int cpu_map_kthread_run(void *data)
- 			struct sk_buff *skb = skbs[i];
- 			int ret;
- 
--			skb = cpu_map_build_skb(xdpf, skb);
-+			skb = __xdp_build_skb_from_frame(xdpf, skb, xdpf->dev_rx);
- 			if (!skb) {
- 				xdp_return_frame(xdpf);
- 				continue;
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index 3a8c9ab4ecbe..aeb09ed0704c 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -513,3 +513,47 @@ void xdp_warn(const char *msg, const char *func, const int line)
- 	WARN(1, "XDP_WARN: %s(line:%d): %s\n", func, line, msg);
- };
- EXPORT_SYMBOL_GPL(xdp_warn);
-+
-+struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
-+					   struct sk_buff *skb,
-+					   struct net_device *dev)
-+{
-+	unsigned int headroom, frame_size;
-+	void *hard_start;
-+
-+	/* Part of headroom was reserved to xdpf */
-+	headroom = sizeof(*xdpf) + xdpf->headroom;
-+
-+	/* Memory size backing xdp_frame data already have reserved
-+	 * room for build_skb to place skb_shared_info in tailroom.
-+	 */
-+	frame_size = xdpf->frame_sz;
-+
-+	hard_start = xdpf->data - headroom;
-+	skb = build_skb_around(skb, hard_start, frame_size);
-+	if (unlikely(!skb))
-+		return NULL;
-+
-+	skb_reserve(skb, headroom);
-+	__skb_put(skb, xdpf->len);
-+	if (xdpf->metasize)
-+		skb_metadata_set(skb, xdpf->metasize);
-+
-+	/* Essential SKB info: protocol and skb->dev */
-+	skb->protocol = eth_type_trans(skb, dev);
-+
-+	/* Optional SKB info, currently missing:
-+	 * - HW checksum info		(skb->ip_summed)
-+	 * - HW RX hash			(skb_set_hash)
-+	 * - RX ring dev queue index	(skb_record_rx_queue)
-+	 */
-+
-+	/* Until page_pool get SKB return path, release DMA here */
-+	xdp_release_frame(xdpf);
-+
-+	/* Allow SKB to reuse area used by xdp_frame */
-+	xdp_scrub_frame(xdpf);
-+
-+	return skb;
-+}
-+EXPORT_SYMBOL_GPL(__xdp_build_skb_from_frame);
--- 
-2.29.2
-
+Applied, queued. Thanks!
