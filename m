@@ -4,114 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D610EC4361B
-	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 19:04:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F32F2C4361B
+	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 19:33:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 937D420857
-	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 19:04:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 99FC3206CB
+	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 19:33:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733011AbgLPTE0 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Dec 2020 14:04:26 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50206 "EHLO mail.kernel.org"
+        id S2388751AbgLPTdA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Dec 2020 14:33:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57284 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733009AbgLPTE0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Dec 2020 14:04:26 -0500
-X-Gm-Message-State: AOAM533BkHviUN8defX7B9Lh6kuxUp2GIEgBB9ZJwDXpLIjAxEW3WcV6
-        2zC+i522Kkw/tL4Ljh1t45dEOyLi8RFmZ2OQyMl9Rw==
+        id S2388753AbgLPTdA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Dec 2020 14:33:00 -0500
+X-Gm-Message-State: AOAM533LL9WhNRv63JfqIzTHahn5oKtyJt6nElcvp1T2sP3EBDnVL689
+        KZeWd959mHUgGfgaw0nU8Krux8L8XSLZ/ZriL+czNg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608142553;
-        bh=SpoSy2ru3dxdVIN3z4wBnLjHSnde6Ol4c5u5A58iUnA=;
+        s=k20201202; t=1608143520;
+        bh=b0RvPlwbWXozUR5UDtOoKFM5lAWEErBuQgFnovwVI1Q=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=pX32w6A4XK95zjCGoTEGF1sfNqofZ7WjblrXJ3NkN8DzAb2eHc8tiEJtRbfiPRpy6
-         +43I8TUn+bXKfoVSQeQbHDO6bPCMP9JwSKXgOl44iCXpOYkR+QWYMPRG8BipoLNe0z
-         NqKbQGOhcky3hISdJOaWC3jtzwwsYMDfXx01SyTwiEMo1ah9RpOqAKNW/2iYI2C9Dz
-         1+Og9Y1Pq4VBeH1sQzlK1J7gP34x32HIOI/Hl2A8FtRkA/zXrR39XcW0GJ9E5CLNJO
-         eCJh+As4rwySJ4KaF88hrNua6zD9yQW88Fg7LkoCRD9SxLDnHd+uczK/Qr1Mpn6SdT
-         F3rA0hWa8QzuQ==
-X-Google-Smtp-Source: ABdhPJzvPzglAPBQ2YqX5Vzx39lxQg6y7LTkHB2g3e5epJeJ8TZOpwX7QrKgS740w1a/SROZqCpbYD1u841pV3yx8hw=
-X-Received: by 2002:a05:651c:542:: with SMTP id q2mr15537280ljp.19.1608142551416;
- Wed, 16 Dec 2020 10:15:51 -0800 (PST)
+        b=nH+sQ5zn/HBPjgyZnqp7QwoioY6sgfFAC3KY0lxH2/l0AiLjdKRQRk6NA7XEmHSzH
+         yErTdgdAByvRMI6ZPecgdhacKLy4tHNaRsSgEZtO8WqRZegz2+AEdT1psA29VCq6rD
+         TYDoZSrKAsC4UArKMN+lLBREGnUxUMrDhsnNA6jrHvCh3f8enpDliBPTA0Tqp5lvQ/
+         imNNoVS+EK9heyBO/+cleZSQoES7k61BToAA/Vlcy+09/y2c5U7VK3Yg1QTlJK2zNj
+         2Cs+wXxl2E35fclJw+3MujeJqbBFOw2oG+7xFgAtCipPP32dHxC9x738/9+X/aocV+
+         IWwCW3QeqtWYg==
+X-Google-Smtp-Source: ABdhPJxnd6m8FGyn5OPQzgKMf9XyBaGzS9III1DmpKwYngt+yrIaRKOEDlRhXQWkYL/pOsIoiGyourQAsSWXNhW2VK0=
+X-Received: by 2002:a2e:9ac1:: with SMTP id p1mr8508519ljj.389.1608143518421;
+ Wed, 16 Dec 2020 10:31:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20201215233702.3301881-1-songliubraving@fb.com> <20201215233702.3301881-3-songliubraving@fb.com>
-In-Reply-To: <20201215233702.3301881-3-songliubraving@fb.com>
+References: <20201215233702.3301881-1-songliubraving@fb.com>
+ <20201215233702.3301881-3-songliubraving@fb.com> <CANA3-0cNSkE3iFjbG6EdsA9ZsrTEApBmVwU-2LOkC+0om70zQQ@mail.gmail.com>
+In-Reply-To: <CANA3-0cNSkE3iFjbG6EdsA9ZsrTEApBmVwU-2LOkC+0om70zQQ@mail.gmail.com>
 From:   KP Singh <kpsingh@kernel.org>
-Date:   Wed, 16 Dec 2020 19:15:40 +0100
-X-Gmail-Original-Message-ID: <CANA3-0cNSkE3iFjbG6EdsA9ZsrTEApBmVwU-2LOkC+0om70zQQ@mail.gmail.com>
-Message-ID: <CANA3-0cNSkE3iFjbG6EdsA9ZsrTEApBmVwU-2LOkC+0om70zQQ@mail.gmail.com>
+Date:   Wed, 16 Dec 2020 19:31:47 +0100
+X-Gmail-Original-Message-ID: <CANA3-0d1oVEZh2_ypPWwO6DaOin38M--tipEPKZD4s5NANYfdA@mail.gmail.com>
+Message-ID: <CANA3-0d1oVEZh2_ypPWwO6DaOin38M--tipEPKZD4s5NANYfdA@mail.gmail.com>
 Subject: Re: [PATCH v2 bpf-next 2/4] bpf: allow bpf_d_path in sleepable
  bpf_iter program
-To:     Song Liu <songliubraving@fb.com>
-Cc:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>, kernel-team@fb.com
+To:     bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>
+Cc:     KP Singh <kpsingh@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Dec 16, 2020 at 1:06 AM Song Liu <songliubraving@fb.com> wrote:
+On Wed, Dec 16, 2020 at 7:15 PM KP Singh <kpsingh@kernel.org> wrote:
 >
-> task_file and task_vma iter programs have access to file->f_path. Enable
-> bpf_d_path to print paths of these file.
+> On Wed, Dec 16, 2020 at 1:06 AM Song Liu <songliubraving@fb.com> wrote:
+> >
+> > task_file and task_vma iter programs have access to file->f_path. Enable
+> > bpf_d_path to print paths of these file.
+> >
+> > bpf_iter programs are generally called in sleepable context. However, it
+> > is still necessary to diffientiate sleepable and non-sleepable bpf_iter
+> > programs: sleepable programs have access to bpf_d_path; non-sleepable
+> > programs have access to bpf_spin_lock.
+> >
+> > Signed-off-by: Song Liu <songliubraving@fb.com>
+> > ---
+> >  kernel/trace/bpf_trace.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > index 4be771df5549a..9e5f9b968355f 100644
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> > @@ -1191,6 +1191,11 @@ BTF_SET_END(btf_allowlist_d_path)
+> >
+> >  static bool bpf_d_path_allowed(const struct bpf_prog *prog)
+> >  {
+> > +       if (prog->type == BPF_PROG_TYPE_TRACING &&
+> > +           prog->expected_attach_type == BPF_TRACE_ITER &&
+> > +           prog->aux->sleepable)
+> > +               return true;
 >
-> bpf_iter programs are generally called in sleepable context. However, it
-> is still necessary to diffientiate sleepable and non-sleepable bpf_iter
-> programs: sleepable programs have access to bpf_d_path; non-sleepable
-> programs have access to bpf_spin_lock.
+
+Another try to send it on the list.
+
+> For the sleepable/non-sleepable we have been (until now) checking
+> this in bpf_tracing_func_proto (or bpf_lsm_func_proto)
 >
-> Signed-off-by: Song Liu <songliubraving@fb.com>
-> ---
->  kernel/trace/bpf_trace.c | 5 +++++
->  1 file changed, 5 insertions(+)
+> eg.
 >
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 4be771df5549a..9e5f9b968355f 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -1191,6 +1191,11 @@ BTF_SET_END(btf_allowlist_d_path)
+> case BPF_FUNC_copy_from_user:
+> return prog->aux->sleepable ? &bpf_copy_from_user_proto : NULL;
 >
->  static bool bpf_d_path_allowed(const struct bpf_prog *prog)
->  {
-> +       if (prog->type == BPF_PROG_TYPE_TRACING &&
-> +           prog->expected_attach_type == BPF_TRACE_ITER &&
-> +           prog->aux->sleepable)
-> +               return true;
-
-For the sleepable/non-sleepable we have been (until now) checking
-this in bpf_tracing_func_proto (or bpf_lsm_func_proto)
-
-eg.
-
-case BPF_FUNC_copy_from_user:
-return prog->aux->sleepable ? &bpf_copy_from_user_proto : NULL;
-
-But even beyond that, I don't think this is needed.
-
-We have originally exposed the helper to both sleepable and
-non-sleepable LSM and tracing programs with an allow list.
-
-For LSM the allow list is bpf_lsm_is_sleepable_hook) but
-that's just an initial allow list and thus causes some confusion
-w.r.t to sleep ability (maybe we should add a comment there).
-
-Based on the current logic, my understanding is that
-it's okay to use the helper in the allowed hooks in both
-"lsm.s/" and "lsm/" (and the same for
-BPF_PROG_TYPE_TRACING).
-
-We would have required sleepable only if this helper called "dput"
-(which can sleep).
-
-> +
->         if (prog->type == BPF_PROG_TYPE_LSM)
->                 return bpf_lsm_is_sleepable_hook(prog->aux->attach_btf_id);
+> But even beyond that, I don't think this is needed.
 >
-> --
-> 2.24.1
+> We have originally exposed the helper to both sleepable and
+> non-sleepable LSM and tracing programs with an allow list.
 >
+> For LSM the allow list is bpf_lsm_is_sleepable_hook) but
+> that's just an initial allow list and thus causes some confusion
+> w.r.t to sleep ability (maybe we should add a comment there).
+>
+> Based on the current logic, my understanding is that
+> it's okay to use the helper in the allowed hooks in both
+> "lsm.s/" and "lsm/" (and the same for
+> BPF_PROG_TYPE_TRACING).
+>
+> We would have required sleepable only if this helper called "dput"
+> (which can sleep).
+>
+> > +
+> >         if (prog->type == BPF_PROG_TYPE_LSM)
+> >                 return bpf_lsm_is_sleepable_hook(prog->aux->attach_btf_id);
+> >
+> > --
+> > 2.24.1
+> >
