@@ -2,83 +2,137 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CFAFC4361B
-	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 10:04:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 328CFC2BBCA
+	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 10:08:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 17CC82313F
-	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 10:04:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D5BCB2332A
+	for <bpf@archiver.kernel.org>; Wed, 16 Dec 2020 10:08:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726025AbgLPKEC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 16 Dec 2020 05:04:02 -0500
-Received: from mail-wr1-f52.google.com ([209.85.221.52]:33886 "EHLO
-        mail-wr1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725889AbgLPKEC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 16 Dec 2020 05:04:02 -0500
-Received: by mail-wr1-f52.google.com with SMTP id q18so15053994wrn.1;
-        Wed, 16 Dec 2020 02:03:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=g/Wzze2NIBSL2f+axZbs4XLUQ1J8xddIwrjpMIqAZg4=;
-        b=cIRHMR4dUG/P9eO9xLSPSVyn8HTLp+ZI3PNSp6iLmjMppC3QhhzrCZWmiWL8rDqbXj
-         xEvZIG0KIuTM0IzLPel7d+DAmMxojl4cFhtVhQ+zF0PGDq1lNiCDYRlsFrczY+eQSwWl
-         smBwgiQur6rf3lPjTOaVBOPaw0RIwZEg+3j+MLw1E6zfVBwpGRYgMsSTJDUkufOg5Lrs
-         /0rnepa8qMdP+yC2fUbHQLWoOIMbHYK9Z15g4kLXHcgeMR3c2HJBge9NxpNME/viBsPv
-         YUk+o2EEzlTgc74UFA7aT+qdqr/vCbAgKzrKqCt1tRTZU8vbPV6V4j8Rg5PGWOq20HGf
-         qF/w==
-X-Gm-Message-State: AOAM531OmE3nosSnBWy8v9gdKL5dcYlvIW5K7/GALkoYVE1+H+YxXeD5
-        6QK1w8Guo5R1kJ8Cvuk3v5yPBRHz5uWxcQ==
-X-Google-Smtp-Source: ABdhPJxD1ueQpGR9/wck7OlgddXafTJE+ngtoIBX1JQ9dKcH54wv9WbaRfgT0MlTBjsXepkMheXDQQ==
-X-Received: by 2002:adf:eb07:: with SMTP id s7mr37381501wrn.414.1608113000866;
-        Wed, 16 Dec 2020 02:03:20 -0800 (PST)
-Received: from rhea.home.vuxu.org ([2a01:4f8:c010:17cd:6824:5476:f6ff:db68])
-        by smtp.gmail.com with ESMTPSA id l7sm2106047wme.4.2020.12.16.02.03.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Dec 2020 02:03:19 -0800 (PST)
-Received: from localhost (rhea.home.vuxu.org [local])
-        by rhea.home.vuxu.org (OpenSMTPD) with ESMTPA id 876ad974;
-        Wed, 16 Dec 2020 10:03:17 +0000 (UTC)
-From:   Leah Neukirchen <leah@vuxu.org>
-To:     bpf@vger.kernel.org
-Cc:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, leah@vuxu.org
-Subject: [PATCH] bpf: Remove unnecessary <argp.h> include from preload/iterators
-Date:   Wed, 16 Dec 2020 11:03:06 +0100
-Message-Id: <20201216100306.30942-1-leah@vuxu.org>
-X-Mailer: git-send-email 2.29.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1725902AbgLPKIP (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 16 Dec 2020 05:08:15 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:57586 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725890AbgLPKIP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 16 Dec 2020 05:08:15 -0500
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4CwrQq62kSz9tysr;
+        Wed, 16 Dec 2020 11:07:31 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id Lh8OzqoqlONR; Wed, 16 Dec 2020 11:07:31 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4CwrQq4dVqz9tysx;
+        Wed, 16 Dec 2020 11:07:31 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A95FA8B7C7;
+        Wed, 16 Dec 2020 11:07:32 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id amilpHceGHHr; Wed, 16 Dec 2020 11:07:32 +0100 (CET)
+Received: from localhost.localdomain (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4A6338B7BA;
+        Wed, 16 Dec 2020 11:07:32 +0100 (CET)
+Received: by localhost.localdomain (Postfix, from userid 0)
+        id 199C46681D; Wed, 16 Dec 2020 10:07:32 +0000 (UTC)
+Message-Id: <41a29ad898128ae62f965f288c64797ee709ce8a.1608112797.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <cover.1608112796.git.christophe.leroy@csgroup.eu>
+References: <cover.1608112796.git.christophe.leroy@csgroup.eu>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Subject: [RFC PATCH v1 2/7] powerpc/bpf: Change register numbering for
+ bpf_set/is_seen_register()
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@chromium.org, naveen.n.rao@linux.ibm.com,
+        sandipan@linux.ibm.com
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Date:   Wed, 16 Dec 2020 10:07:32 +0000 (UTC)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This program does not use argp (which is a glibcism).
-Instead include <errno.h> directly, which was pulled in by <argp.h>.
+Instead of using BPF register number as input in functions
+bpf_set_seen_register() and bpf_is_seen_register(), use
+CPU register number directly.
 
-Signed-off-by: Leah Neukirchen <leah@vuxu.org>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- kernel/bpf/preload/iterators/iterators.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/powerpc/net/bpf_jit_comp64.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/bpf/preload/iterators/iterators.c b/kernel/bpf/preload/iterators/iterators.c
-index b7ff8793917..5d872a70547 100644
---- a/kernel/bpf/preload/iterators/iterators.c
-+++ b/kernel/bpf/preload/iterators/iterators.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright (c) 2020 Facebook */
--#include <argp.h>
-+#include <errno.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index 022103c6a201..26a836a904f5 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -31,12 +31,12 @@ static inline void bpf_flush_icache(void *start, void *end)
+ 
+ static inline bool bpf_is_seen_register(struct codegen_context *ctx, int i)
+ {
+-	return (ctx->seen & (1 << (31 - b2p[i])));
++	return ctx->seen & (1 << (31 - i));
+ }
+ 
+ static inline void bpf_set_seen_register(struct codegen_context *ctx, int i)
+ {
+-	ctx->seen |= (1 << (31 - b2p[i]));
++	ctx->seen |= 1 << (31 - i);
+ }
+ 
+ static inline bool bpf_has_stack_frame(struct codegen_context *ctx)
+@@ -47,7 +47,7 @@ static inline bool bpf_has_stack_frame(struct codegen_context *ctx)
+ 	 * - the bpf program uses its stack area
+ 	 * The latter condition is deduced from the usage of BPF_REG_FP
+ 	 */
+-	return ctx->seen & SEEN_FUNC || bpf_is_seen_register(ctx, BPF_REG_FP);
++	return ctx->seen & SEEN_FUNC || bpf_is_seen_register(ctx, b2p[BPF_REG_FP]);
+ }
+ 
+ /*
+@@ -124,11 +124,11 @@ static void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+ 	 * in the protected zone below the previous stack frame
+ 	 */
+ 	for (i = BPF_REG_6; i <= BPF_REG_10; i++)
+-		if (bpf_is_seen_register(ctx, i))
++		if (bpf_is_seen_register(ctx, b2p[i]))
+ 			PPC_BPF_STL(b2p[i], 1, bpf_jit_stack_offsetof(ctx, b2p[i]));
+ 
+ 	/* Setup frame pointer to point to the bpf stack area */
+-	if (bpf_is_seen_register(ctx, BPF_REG_FP))
++	if (bpf_is_seen_register(ctx, b2p[BPF_REG_FP]))
+ 		EMIT(PPC_RAW_ADDI(b2p[BPF_REG_FP], 1,
+ 				STACK_FRAME_MIN_SIZE + ctx->stack_size));
+ }
+@@ -139,7 +139,7 @@ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx
+ 
+ 	/* Restore NVRs */
+ 	for (i = BPF_REG_6; i <= BPF_REG_10; i++)
+-		if (bpf_is_seen_register(ctx, i))
++		if (bpf_is_seen_register(ctx, b2p[i]))
+ 			PPC_BPF_LL(b2p[i], 1, bpf_jit_stack_offsetof(ctx, b2p[i]));
+ 
+ 	/* Tear down our stack frame */
+@@ -330,9 +330,9 @@ static int bpf_jit_build_body(struct bpf_prog *fp, u32 *image,
+ 		 * any issues.
+ 		 */
+ 		if (dst_reg >= BPF_PPC_NVR_MIN && dst_reg < 32)
+-			bpf_set_seen_register(ctx, insn[i].dst_reg);
++			bpf_set_seen_register(ctx, dst_reg);
+ 		if (src_reg >= BPF_PPC_NVR_MIN && src_reg < 32)
+-			bpf_set_seen_register(ctx, insn[i].src_reg);
++			bpf_set_seen_register(ctx, src_reg);
+ 
+ 		switch (code) {
+ 		/*
 -- 
-2.29.2
+2.25.0
 
