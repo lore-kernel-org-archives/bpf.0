@@ -2,48 +2,50 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 57669C4361B
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AF56AC2BBCF
 	for <bpf@archiver.kernel.org>; Thu, 17 Dec 2020 17:28:12 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1BBBA238EC
+	by mail.kernel.org (Postfix) with ESMTP id 8AB22239A4
 	for <bpf@archiver.kernel.org>; Thu, 17 Dec 2020 17:28:12 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728837AbgLQR14 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Dec 2020 12:27:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:42901 "EHLO
+        id S1729677AbgLQR2C (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Dec 2020 12:28:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:35959 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727857AbgLQR14 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 17 Dec 2020 12:27:56 -0500
+        by vger.kernel.org with ESMTP id S1729111AbgLQR2C (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 17 Dec 2020 12:28:02 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1608225989;
+        s=mimecast20190719; t=1608225995;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=BM1F0PE8lpiUbd2bfhs+wn8dNdpgXKJpmrHOKmIZMTA=;
-        b=dKff9kjaowsASo7MFm4/4dBILikKvPzpJhgg/fDojQmWEln3G9VHRPFqcoGCCgt0Iq71RK
-        JNUyIStVaA+0oaxAdmT3rTqA9tYPtKRPYmL9pBmz/M6ApXqQYQoAjd+95dhzelDnjT/vZd
-        2fQ7h4ZHtFsP6k14RKxMoze0uONr8J0=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7RkBoMP87EGI+5/V3dgcPPlpmhk9OdwSH4A5eujpfic=;
+        b=ieug2ZYQ0Mcgmvy1ozIQgsdaFJYZcjfTCMEt4/oQPtNWX5gR4VR4cABGvc/Q1PWxXd3D5K
+        O0ImTJxOKzKvCzQrXd8KZ2vlFi9XvytMcV81znisJy4evmZ2Ri/A3PQgrUarN4/NeAiY4C
+        YqZKnzOrXyHMWvLUj7j4SZ3yaPHLXYY=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-517-JlmB7X3DNpO55ipV5_lqkw-1; Thu, 17 Dec 2020 12:26:25 -0500
-X-MC-Unique: JlmB7X3DNpO55ipV5_lqkw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+ us-mta-324-AcnmwB8oMfOHmN9ScNJWfA-1; Thu, 17 Dec 2020 12:26:33 -0500
+X-MC-Unique: AcnmwB8oMfOHmN9ScNJWfA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E043D107ACE4;
-        Thu, 17 Dec 2020 17:26:21 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EB3068030AD;
+        Thu, 17 Dec 2020 17:26:31 +0000 (UTC)
 Received: from firesoul.localdomain (unknown [10.40.208.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A6422C159;
-        Thu, 17 Dec 2020 17:26:16 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 87A541B18A;
+        Thu, 17 Dec 2020 17:26:26 +0000 (UTC)
 Received: from [192.168.42.3] (localhost [IPv6:::1])
-        by firesoul.localdomain (Postfix) with ESMTP id 6865A32138454;
-        Thu, 17 Dec 2020 18:26:15 +0100 (CET)
-Subject: [PATCH bpf-next V9 0/7] bpf: New approach for BPF MTU handling
+        by firesoul.localdomain (Postfix) with ESMTP id 8BD5D32138454;
+        Thu, 17 Dec 2020 18:26:25 +0100 (CET)
+Subject: [PATCH bpf-next V9 2/7] bpf: fix bpf_fib_lookup helper MTU check for
+ SKB ctx
 From:   Jesper Dangaard Brouer <brouer@redhat.com>
 To:     bpf@vger.kernel.org
 Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
@@ -54,76 +56,63 @@ Cc:     Jesper Dangaard Brouer <brouer@redhat.com>, netdev@vger.kernel.org,
         John Fastabend <john.fastabend@gmail.com>,
         Jakub Kicinski <kuba@kernel.org>, eyal.birger@gmail.com,
         colrack@gmail.com
-Date:   Thu, 17 Dec 2020 18:26:15 +0100
-Message-ID: <160822594178.3481451.1208057539613401103.stgit@firesoul>
+Date:   Thu, 17 Dec 2020 18:26:25 +0100
+Message-ID: <160822598551.3481451.14159825721005377499.stgit@firesoul>
+In-Reply-To: <160822594178.3481451.1208057539613401103.stgit@firesoul>
+References: <160822594178.3481451.1208057539613401103.stgit@firesoul>
 User-Agent: StGit/0.19
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patchset drops all the MTU checks in TC BPF-helpers that limits
-growing the packet size. This is done because these BPF-helpers doesn't
-take redirect into account, which can result in their MTU check being done
-against the wrong netdev.
+BPF end-user on Cilium slack-channel (Carlo Carraro) wants to use
+bpf_fib_lookup for doing MTU-check, but *prior* to extending packet size,
+by adjusting fib_params 'tot_len' with the packet length plus the
+expected encap size. (Just like the bpf_check_mtu helper supports). He
+discovered that for SKB ctx the param->tot_len was not used, instead
+skb->len was used (via MTU check in is_skb_forwardable()).
 
-The new approach is to give BPF-programs knowledge about the MTU on a
-netdev (via ifindex) and fib route lookup level. Meaning some BPF-helpers
-are added and extended to make it possible to do MTU checks in the
-BPF-code.
+Fix this by using fib_params 'tot_len' for MTU check.  If not provided
+(e.g. zero) then keep existing behaviour intact.
 
-If BPF-prog doesn't comply with the MTU then the packet will eventually
-get dropped as some other layer. In some cases the existing kernel MTU
-checks will drop the packet, but there are also cases where BPF can bypass
-these checks. Specifically doing TC-redirect from ingress step
-(sch_handle_ingress) into egress code path (basically calling
-dev_queue_xmit()). It is left up to driver code to handle these kind of
-MTU violations.
-
-One advantage of this approach is that it ingress-to-egress BPF-prog can
-send information via packet data. With the MTU checks removed in the
-helpers, and also not done in skb_do_redirect() call, this allows for an
-ingress BPF-prog to communicate with an egress BPF-prog via packet data,
-as long as egress BPF-prog remove this prior to transmitting packet.
-
-This patchset is primarily focused on TC-BPF, but I've made sure that the
-MTU BPF-helpers also works for XDP BPF-programs.
-
-V2: Change BPF-helper API from lookup to check.
-V3: Drop enforcement of MTU in net-core, leave it to drivers.
-V4: Keep sanity limit + netdev "up" checks + rename BPF-helper.
-V5: Fix uninit variable + name struct output member mtu_result.
-V6: Use bpf_check_mtu() in selftest
-V7: Fix logic using tot_len and add another selftest
-V8: Add better selftests for BPF-helper bpf_check_mtu
-V9: Remove patch that use skb_set_redirected
-
+Fixes: 4c79579b44b1 ("bpf: Change bpf_fib_lookup to return lookup status")
+Reported-by: Carlo Carraro <colrack@gmail.com>
+Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
 ---
+ net/core/filter.c |   14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-Jesper Dangaard Brouer (7):
-      bpf: Remove MTU check in __bpf_skb_max_len
-      bpf: fix bpf_fib_lookup helper MTU check for SKB ctx
-      bpf: bpf_fib_lookup return MTU value as output when looked up
-      bpf: add BPF-helper for MTU checking
-      bpf: drop MTU check when doing TC-BPF redirect to ingress
-      selftests/bpf: use bpf_check_mtu in selftest test_cls_redirect
-      bpf/selftests: tests using bpf_check_mtu BPF-helper
+diff --git a/net/core/filter.c b/net/core/filter.c
+index f8f198252ff2..95c6fdebd0db 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5568,11 +5568,21 @@ BPF_CALL_4(bpf_skb_fib_lookup, struct sk_buff *, skb,
+ #endif
+ 	}
+ 
+-	if (!rc) {
++	if (rc == BPF_FIB_LKUP_RET_SUCCESS) {
+ 		struct net_device *dev;
++		u32 mtu;
+ 
+ 		dev = dev_get_by_index_rcu(net, params->ifindex);
+-		if (!is_skb_forwardable(dev, skb))
++		mtu = READ_ONCE(dev->mtu);
++
++		/* Using tot_len for (L3) MTU check if provided by user */
++		if (params->tot_len && params->tot_len > mtu)
++			rc = BPF_FIB_LKUP_RET_FRAG_NEEDED;
++
++		/* Notice at this TC cls_bpf level skb->len contains L2 size,
++		 * but is_skb_forwardable takes that into account
++		 */
++		if (params->tot_len == 0 && !is_skb_forwardable(dev, skb))
+ 			rc = BPF_FIB_LKUP_RET_FRAG_NEEDED;
+ 	}
+ 
 
-
- include/linux/netdevice.h                          |   31 +++
- include/uapi/linux/bpf.h                           |   78 +++++++-
- net/core/dev.c                                     |   19 --
- net/core/filter.c                                  |  184 ++++++++++++++++--
- tools/include/uapi/linux/bpf.h                     |   78 +++++++-
- tools/testing/selftests/bpf/prog_tests/check_mtu.c |  204 ++++++++++++++++++++
- tools/testing/selftests/bpf/progs/test_check_mtu.c |  196 +++++++++++++++++++
- .../selftests/bpf/progs/test_cls_redirect.c        |    7 +
- 8 files changed, 754 insertions(+), 43 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/check_mtu.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_check_mtu.c
-
---
 
