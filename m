@@ -2,158 +2,103 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0818EC4361B
-	for <bpf@archiver.kernel.org>; Thu, 17 Dec 2020 18:23:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69DA1C2BB9A
+	for <bpf@archiver.kernel.org>; Thu, 17 Dec 2020 18:33:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D2BE22388E
-	for <bpf@archiver.kernel.org>; Thu, 17 Dec 2020 18:23:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4059123977
+	for <bpf@archiver.kernel.org>; Thu, 17 Dec 2020 18:33:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729604AbgLQSX1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Dec 2020 13:23:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
+        id S1730142AbgLQSda (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Dec 2020 13:33:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729602AbgLQSX1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Dec 2020 13:23:27 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2998C061794;
-        Thu, 17 Dec 2020 10:22:46 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id g18so20900067pgk.1;
-        Thu, 17 Dec 2020 10:22:46 -0800 (PST)
+        with ESMTP id S1728704AbgLQSda (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Dec 2020 13:33:30 -0500
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599DAC0617A7
+        for <bpf@vger.kernel.org>; Thu, 17 Dec 2020 10:32:49 -0800 (PST)
+Received: by mail-il1-x130.google.com with SMTP id x15so26759442ilq.1
+        for <bpf@vger.kernel.org>; Thu, 17 Dec 2020 10:32:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DwQVtco0a81f7jeSJ9GEUy24kqFly/p98wcE+cou4Yo=;
-        b=bLEs0x5+Req94tEveB6TqeqMi8pTgngJx/njSs9fZY2GLeswuUr9GdRa1lk8LEk/VB
-         WS8lsDQ8bdHUoRfi7nYp5s0p7WFtVX4j6zzacPJkLzUiko8yPvW/RbvBr5YT8mXfRT0C
-         nf5+5W8mvpsynwOR5wFhCGCQV880UvMeqUckqHf25i/s+VhCIWHDI+UzcGFrFmoKEDzt
-         COqi06kY6GCBmnjQ5WTuMZOlSCa+iMAz5JSNst0WXhGtfq5WT8GKlxGBsl1jqLhlRyxt
-         SCsoPI+wAwGOaLgAASKfRxbNzLzcZfi3MVgXLTYjK1HTpJZo8UaW/3b19aoUe5KbB6KN
-         Ad9Q==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=euqBXwlKpksM2O1B20N3zwYJHM+krRb1R0QlrPJovKs=;
+        b=hloE6vQ34Nt0jvI6wpY7VyipHe1zhzyr1SdISONaS2dIFdFEvi78131QKFFDzX4pKc
+         NrO6qu4ndHfPR+rXUnD3mJbBbsvfgiNoLocM+ZCbE9Ij20m3Kn2GxT755xEKCgh1fvh6
+         yU9lp7+wI8RWhYTb8mQH3oHnDFFN9h94b8WQ8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DwQVtco0a81f7jeSJ9GEUy24kqFly/p98wcE+cou4Yo=;
-        b=lROPTTqlRvTXUFpkrP++Ekvfl81CMHrbYs7OFhfPCWAR/CuT9cSnGz86hQ/HEWK8Fl
-         RA2ILypzoL7fV7qGGPaoK0+hNPxU1i4vgU7rsoaQnDHuUGVe/6GqJXN34do7vQTpSCA9
-         jSnHYNQW3ElkJOFHC+wHlzk6NkjSeJYE/RvGJl9mcYpGLEH/R65X8zgzZ3qmhsbob5Rm
-         ZS8XnLbBSY6q+Rc4sY8ZS/RGBft9yPmuBdDgIXem07D9ES/B7TQpzJlB4sfGfhmHBLKS
-         zQsF1PfQiUFpCuFhQ3+L4PhIzf5pDXKNzW2lci/3bCr1OHx2dO8acBLbmmjx+EVZEQDJ
-         OdMA==
-X-Gm-Message-State: AOAM533OFih39oULa3DbRwItaXFaVHDKK1IAOMOrT1OJgkId8rBTBrw9
-        /G9mRPz8bbDWqaVRWSJms4U=
-X-Google-Smtp-Source: ABdhPJyMBx45zVkA8K79doY/wDfrGgVNp3C7CUW0oh6dJjJ6dSt4FQw0lQ6sKbii0301c1JZ0DWbOQ==
-X-Received: by 2002:a63:6e45:: with SMTP id j66mr508676pgc.238.1608229366426;
-        Thu, 17 Dec 2020 10:22:46 -0800 (PST)
-Received: from ast-mbp ([2620:10d:c090:400::5:682])
-        by smtp.gmail.com with ESMTPSA id js9sm6062451pjb.2.2020.12.17.10.22.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Dec 2020 10:22:45 -0800 (PST)
-Date:   Thu, 17 Dec 2020 10:22:43 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=euqBXwlKpksM2O1B20N3zwYJHM+krRb1R0QlrPJovKs=;
+        b=llCXeaVXcdg+CjisqtKvyBzl6dA0NnPpawMAV9WM7H2ZVhRW3Ea2OKqKB6HpYlw7i6
+         I8TajTexD13blrycMPWopKTjB6V3e75O2xsLlT1bctAeVyBEkm5BQzZ/SLBQekegq1qo
+         VZR1ZRc5fqWC4H/cECCivN+/KCtgLQ6x603GMxLlbEZrLiz9YNtcOX9pl9mTlKBHdMNe
+         LafN9OQDvKelWILs23qaJLBJYX/gaG6xLBIejkVZL5CWziuLhIr3AuX0xfyaxtnKT+nC
+         zMG/ew1xct0JSM3cOXrP36HgbkiBX6YBiCwkS7CSucuqF+t5V3NP1DYJF8xKJvRMDVPL
+         CyqA==
+X-Gm-Message-State: AOAM531yaAwwsUZ5cyVfWdJici2WrFOyxuhuy7wbrMH489VXO525s0Xf
+        +ACY10kXiSAf836FiBgyCr+fDQ==
+X-Google-Smtp-Source: ABdhPJwKbvtaglTe9buBF6UPtZDTuxPohT7p6/IvZcZYmSMeL0UCG5btnwEfAEImPVuebSVaKl8DdQ==
+X-Received: by 2002:a92:155b:: with SMTP id v88mr124823ilk.303.1608229968746;
+        Thu, 17 Dec 2020 10:32:48 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id d18sm3662791ilo.49.2020.12.17.10.32.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Dec 2020 10:32:48 -0800 (PST)
+Subject: Re: [PATCH] selftests: Skip BPF seftests by default
+To:     Mark Brown <broonie@kernel.org>,
+        Seth Forshee <seth.forshee@canonical.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>
-Subject: Re: one prog multi fentry. Was: [PATCH bpf-next] libbpf: support
- module BTF for BPF_TYPE_ID_TARGET CO-RE relocation
-Message-ID: <20201217182243.vtpzqull76djt2qf@ast-mbp>
-References: <20201208031206.26mpjdbrvqljj7vl@ast-mbp>
- <CAEf4BzaXvFQzoYXbfutVn7A9ndQc9472SCK8Gj8R_Yj7=+rTcg@mail.gmail.com>
- <alpine.LRH.2.23.451.2012082202450.25628@localhost>
- <20201208233920.qgrluwoafckvq476@ast-mbp>
- <alpine.LRH.2.23.451.2012092308240.26400@localhost>
- <8d483a31-71a4-1d8c-6fc3-603233be545b@fb.com>
- <alpine.LRH.2.23.451.2012161457030.27611@localhost>
- <CAEf4BzZ0_iGqnzqz3qAEggdTRhXkddtdYRUgs0XxibUyA_KH3w@mail.gmail.com>
- <20201217071620.j3uehcshue3ug7fy@ast-mbp>
- <alpine.LRH.2.23.451.2012171732410.2929@localhost>
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Daniel Diaz <daniel.diaz@linaro.org>,
+        Veronika Kabatova <vkabatov@redhat.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Guillaume Tucker <guillaume.tucker@collabora.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20201210185233.28091-1-broonie@kernel.org>
+ <X9qExiKXPVmk3BJI@ubuntu-x1> <20201217130735.GA4708@sirena.org.uk>
+ <94010653-0cb3-d804-7410-a571480d6db2@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <008fb8b6-2632-e0c8-8e6a-c643d953bde5@linuxfoundation.org>
+Date:   Thu, 17 Dec 2020 11:32:47 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.LRH.2.23.451.2012171732410.2929@localhost>
+In-Reply-To: <94010653-0cb3-d804-7410-a571480d6db2@linuxfoundation.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Dec 17, 2020 at 05:46:42PM +0000, Alan Maguire wrote:
-> 
-> 
-> On Wed, 16 Dec 2020, Alexei Starovoitov wrote:
-> 
-> > > > $ ksnoop "ip_send_skb(skb->sk)"
-> > > >
-> > > > ...will trace the skb->sk value.  The user-space side of the program
-> > > > matches the function/arg name and looks up the referenced type, setting it
-> > > > in the function's map.  For field references such as skb->sk, it also
-> > > > records offset and whether that offset is a pointer (as is the case for
-> > > > skb->sk) - in such cases we need to read the offset value via bpf_probe_read()
-> > > > and use it in bpf_snprintf_btf() along with the referenced type.  Only a
-> > > > single simple reference like the above is supported currently, but
-> > > > multiple levels of reference could be made to work too.
-> > 
-> > Alan,
-> > 
-> > I'm not sure why the last example is so different form the first two.
-> > I think ksnoop tool will generate the program on the fly, right?
-> 
-> Nope, the BPF program is hard-coded; it adapts to different functions
-> through use of the map entries describing function signatures and their
-> BTF ids, and other associated tracing info.  The aim is to provide a
-> generic tracing tool which displays kernel function arguments but
-> doesn't require LLVM/clang on the target, just a kernel built with BTF 
-> and libbpf.  Sorry this wasn't clearer in my explanation; I'm working
-> on rewriting the code and will send it out ASAP.
-> 
-> > So it can generate normal LDX insn with CO-RE relocation (instead of bpf_probe_read)
-> > to access skb->sk. It can also add relo for that LDX to point to
-> > struct sk_buff's btf_id defined inside prog's BTF.
-> > The 'sk' offset inside bpf program and inside BTF can be anything: 0, 4, ...
-> > libbpf relocation logic will find the right offset in kernel's sk_buff.
-> > If ksnoop doesn't have an ability to parse vmlinux.h file or kernel's BTF
-> > it can 'cheat'.
-> > If the cmdline looks like:
-> > $ ksnoop "ip_send_skb(skb->sk)"
-> > It can generate BTF:
-> > struct sk_buff {
-> >    struct sock *sk;
-> > };
-> > 
-> > If cmdline looks like:
-> > $ ksnoop "ip_send_skb(skb->sock)"
-> > It can generate BTF:
-> > struct sk_buff {
-> >    struct sock *sock;
-> > };
-> > Obviously there is no 'sock' field inside kernel's struct sk_buff, but tool
-> > doesn't need to care. It can let libbpf do the checking and match
-> > fields properly.
-> > 
-> > > > into that a bit more if you don't mind because I think some form of
-> > > > user-space-specified BTF ids may be the easiest approach for more flexible
-> > > > generic tracing that covers more than function arguments.
-> > 
-> > I think you're trying to figure out kernel's btf_ids in ksnoop tool.
-> 
-> Yep.
-> 
-> > I suggest to leave that job to libbpf. Generate local BTFs in ksnoop
-> > with CO-RE relocs and let libbpf handle insn patching.
-> > No FDs to worry about from ksnoop side either.
-> > 
-> 
-> The current approach doesn't rely on instruction patching outside
-> of limited CORE use around struct pt_regs fields (args, IP, etc)
-> which shouldn't require LLVM/clang availability on the target system. 
+On 12/17/20 8:53 AM, Shuah Khan wrote:
+> On 12/17/20 6:07 AM, Mark Brown wrote:
+>> On Wed, Dec 16, 2020 at 04:05:58PM -0600, Seth Forshee wrote:
+>>> On Thu, Dec 10, 2020 at 06:52:33PM +0000, Mark Brown wrote:
+>>
+>>>> as part of the wider kselftest build by specifying SKIP_TARGETS,
+>>>> including setting an empty SKIP_TARGETS to build everything.  They can
+>>>> also continue to build the BPF selftests individually in cases where
+>>>> they are specifically focused on BPF.
+>>
 
-I'm not suggesting to use clang.
-Everything I proposed above is for ksnoop to do. Not for the clang.
+Applied to linuxkselftest fixes for rc2
+
+thanks,
+-- Shuah
