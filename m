@@ -2,120 +2,131 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.2 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B3EFC4361B
-	for <bpf@archiver.kernel.org>; Thu, 17 Dec 2020 18:35:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C0B9C4361B
+	for <bpf@archiver.kernel.org>; Thu, 17 Dec 2020 18:39:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3EAB02395A
-	for <bpf@archiver.kernel.org>; Thu, 17 Dec 2020 18:35:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 37B86238EC
+	for <bpf@archiver.kernel.org>; Thu, 17 Dec 2020 18:39:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728180AbgLQSfb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Dec 2020 13:35:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46158 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728143AbgLQSfb (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Dec 2020 13:35:31 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D357C061794;
-        Thu, 17 Dec 2020 10:34:50 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id b8so9627800plx.0;
-        Thu, 17 Dec 2020 10:34:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=im+tZE/kWm/ZYSPYhJ4SO9Qym9+PRjpn700kp4DBAS8=;
-        b=FQzovURv8bA6Lx3cQIIXpJewCy4TM5boS6zU16dq/LKS3boHJ4pUrZApa66UZzb/+c
-         RpT2UlDCXIaqUTTBnin9bzjgxz4HrIkSj97aiBbvJKVnHxZ0Oo3YwkJ3AxPNs7uLB3WE
-         JAREWoaAiCNffkYS9FPXb6ATVq0H8eUa/AQ1UKztU75+MN0V/O0l+JB1AgiadqzujsgL
-         tzPsT0upVO9DuFoM7lrsOoQ7jbVdb/4hzOfnymU3D3NrachozPpPW9OLL3ec/IuBIw2X
-         7eIGg20lBao9pO9kDnSL2pMaAQYyw+vwjzt3AhfD8+9+kEYz2ogPFaH+qX5N+moHaDT4
-         g5OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=im+tZE/kWm/ZYSPYhJ4SO9Qym9+PRjpn700kp4DBAS8=;
-        b=KTz9SWSvl7oJp7duowr/r2wyBK9OgmppdGaZvKUw7RADRCQdFja/ia+JTOPWdPrHrT
-         KlG6EAphjvvXNmmoIii9sV7nr0EZA3YzsuRaDJGd4tcbVM8YhOcJFg0HYjvWvt8lq4AC
-         kpOITR14fJD/ISe68O4uBj0mWn+1vXO/13jEk9FVT42KWY4Fjyx9RjuZi/UZkGzqsGvh
-         xDv9xLTRMvGPMNg1I1yblu7Gf2gMBvqJYp1ctW7QhcNDgKst+KUBtGX3DlF7E1D1G92K
-         a69MoTSesbN8TariaIYQrb8NEcMBckiE2/oITiVoDIQINydw2zyIfO1FqqrgCY/9GQdd
-         xjpw==
-X-Gm-Message-State: AOAM530hxRG7wiTWiS4JOt/zYtptC1YxFB5B/Vv1TFh18hKxxOkEQYmE
-        lTXQTYYjjntnHmcN7lc0PKYsOigLLM145f5MfXI=
-X-Google-Smtp-Source: ABdhPJwOSQIe23TJljX/SbIcNXl50XKjszrEFNraiEVK67gWjnJ97PCFnGYsDQ/8nukeG47lVxPUC1QJ2b/ituOwIjs=
-X-Received: by 2002:a17:90a:3cc6:: with SMTP id k6mr494700pjd.204.1608230090020;
- Thu, 17 Dec 2020 10:34:50 -0800 (PST)
+        id S1728183AbgLQSjT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Dec 2020 13:39:19 -0500
+Received: from mga01.intel.com ([192.55.52.88]:9829 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728160AbgLQSjT (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Dec 2020 13:39:19 -0500
+IronPort-SDR: 8fSbeASh3S0aVSod3m35UjfaT+fAO5QSMbi+4WCBuvsUNB+kJ6/o9QildlrZNJHPxGKfpMpRtb
+ frthc2Ebwcmg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9838"; a="193705823"
+X-IronPort-AV: E=Sophos;i="5.78,428,1599548400"; 
+   d="scan'208";a="193705823"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2020 10:38:38 -0800
+IronPort-SDR: ny0qku8lz4QI5uJeEqRi3PBiMkeX5GghdqAk0ms3AJeYpTZHsvOr0L/l0xERBAqgC+bvFY1ox5
+ 8Fgk0N6MBjJw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.78,428,1599548400"; 
+   d="scan'208";a="339732303"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Dec 2020 10:38:36 -0800
+Date:   Thu, 17 Dec 2020 19:28:45 +0100
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Saeed Mahameed <saeed@kernel.org>
+Cc:     Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, alexander.duyck@gmail.com
+Subject: Re: [PATCH v3 bpf-next 2/2] net: xdp: introduce xdp_prepare_buff
+ utility routine
+Message-ID: <20201217182845.GB43061@ranger.igk.intel.com>
+References: <cover.1607794551.git.lorenzo@kernel.org>
+ <71d5ae9f810c2c80f1cb09e304330be0b5ce5345.1607794552.git.lorenzo@kernel.org>
+ <20201215123643.GA23785@ranger.igk.intel.com>
+ <20201215134710.GB5477@lore-desk>
+ <20201216095240.43867406@carbon>
+ <20201216150126.GD2036@lore-desk>
+ <f6ea4b091ce6aa7fc91954ff1e988a3bf285ca52.camel@kernel.org>
 MIME-Version: 1.0
-References: <cover.1602431034.git.yifeifz2@illinois.edu> <4706b0ff81f28b498c9012fd3517fe88319e7c42.1602431034.git.yifeifz2@illinois.edu>
- <CAMuHMdVU1BhmwMiHKDYmnyRHtQfeMtwtwkFLQwinfBPto-rtOQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdVU1BhmwMiHKDYmnyRHtQfeMtwtwkFLQwinfBPto-rtOQ@mail.gmail.com>
-From:   YiFei Zhu <zhuyifei1999@gmail.com>
-Date:   Thu, 17 Dec 2020 12:34:39 -0600
-Message-ID: <CABqSeARw2tcxEPiU4peuURZybVsFo5K+OkAK0ojADUEENMoKuA@mail.gmail.com>
-Subject: Re: [PATCH v5 seccomp 5/5] seccomp/cache: Report cache data through /proc/pid/seccomp_cache
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux Containers <containers@lists.linux-foundation.org>,
-        YiFei Zhu <yifeifz2@illinois.edu>, bpf <bpf@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        David Laight <David.Laight@aculab.com>,
-        Dimitrios Skarlatos <dskarlat@cs.cmu.edu>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Hubertus Franke <frankeh@us.ibm.com>,
-        Jack Chen <jianyan2@illinois.edu>,
-        Jann Horn <jannh@google.com>,
-        Josep Torrellas <torrella@illinois.edu>,
-        Kees Cook <keescook@chromium.org>,
-        Tianyin Xu <tyxu@illinois.edu>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Valentin Rothberg <vrothber@redhat.com>,
-        Will Drewry <wad@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f6ea4b091ce6aa7fc91954ff1e988a3bf285ca52.camel@kernel.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, Dec 17, 2020 at 6:14 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> Should there be a dependency on SECCOMP_ARCH_NATIVE?
-> Should all architectures that implement seccomp have this?
->
-> E.g. mips does select HAVE_ARCH_SECCOMP_FILTER, but doesn't
-> have SECCOMP_ARCH_NATIVE?
->
-> (noticed with preliminary out-of-tree seccomp implementation for m68k,
->  which doesn't have SECCOMP_ARCH_NATIVE
+On Thu, Dec 17, 2020 at 10:16:06AM -0800, Saeed Mahameed wrote:
+> On Wed, 2020-12-16 at 16:01 +0100, Lorenzo Bianconi wrote:
+> > > On Tue, 15 Dec 2020 14:47:10 +0100
+> > > Lorenzo Bianconi <lorenzo.bianconi@redhat.com> wrote:
+> > > 
+> > > > [...]
+> > > > > >  	xdp_act = bpf_prog_run_xdp(xdp_prog, &xdp);
+> > > > > > diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+> > > > > > b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+> > > > > > index 4dbbbd49c389..fcd1ca3343fb 100644
+> > > > > > --- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+> > > > > > +++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+> > > > > > @@ -2393,12 +2393,12 @@ static int i40e_clean_rx_irq(struct
+> > > > > > i40e_ring *rx_ring, int budget)
+> > > > > >  
+> > > > > >  		/* retrieve a buffer from the ring */
+> > > > > >  		if (!skb) {
+> > > > > > -			xdp.data = page_address(rx_buffer-
+> > > > > > >page) +
+> > > > > > -				   rx_buffer->page_offset;
+> > > > > > -			xdp.data_meta = xdp.data;
+> > > > > > -			xdp.data_hard_start = xdp.data -
+> > > > > > -					      i40e_rx_offset(rx
+> > > > > > _ring);
+> > > > > > -			xdp.data_end = xdp.data + size;
+> > > > > > +			unsigned int offset =
+> > > > > > i40e_rx_offset(rx_ring);  
+> > > > > 
+> > > > > I now see that we could call the i40e_rx_offset() once per
+> > > > > napi, so can
+> > > > > you pull this variable out and have it initialized a single
+> > > > > time? Applies
+> > > > > to other intel drivers as well.  
+> > > > 
+> 
+> How is this related to this series? i suggest to keep this series clean
+> of vendor specific unrelated optimizations, this must be done in a
+> separate patchset.
 
-Hi Geert
+Well, Lorenzo explicitly is touching the thing that I referred to, so I
+just ask if he can optimize it while he's at it.
 
-You are correct. This specific patch in this series was not applied,
-and this was addressed in a follow up patch series [1]. MIPS does not
-define SECCOMP_ARCH_NATIVE because the bitmap expects syscall numbers
-to start from 0, whereas MIPS does not (defines
-CONFIG_HAVE_SPARSE_SYSCALL_NR). The follow up patch makes it so that
-any arch with HAVE_SPARSE_SYSCALL_NR (currently just MIPS) cannot have
-CONFIG_SECCOMP_CACHE_DEBUG on, by the depend on clause.
+Of course I'm fine with addressing this by myself once -next opens :)
 
-I see that you are doing an out of tree seccomp implementation for
-m68k. Assuming unchanged arch/xtensa/include/asm/syscall.h, something
-like this to arch/m68k/include/asm/seccomp.h should make it work:
-
-#define SECCOMP_ARCH_NATIVE        AUDIT_ARCH_M68K
-#define SECCOMP_ARCH_NATIVE_NR        NR_syscalls
-#define SECCOMP_ARCH_NATIVE_NAME    "m68k"
-
-If the file does not exist already, arch/xtensa/include/asm/seccomp.h
-is a good example of how the file should look like, and remember to
-remove `generic-y += seccomp.h` from arch/m68k/include/asm/Kbuild.
-
-[1] https://lore.kernel.org/lkml/cover.1605101222.git.yifeifz2@illinois.edu/T/
-
-YiFei Zhu
+> 
+> 
+> > > > ack, fine. I will fix in v4.
+> > > 
+> > > Be careful with the Intel drivers.  They have two modes (at compile
+> > > time) depending on PAGE_SIZE in system.  In one of the modes
+> > > (default
+> > > one) you can place init of xdp.frame_sz outside the NAPI loop and
+> > > init a
+> > > single time.  In the other mode you cannot, and it becomes dynamic
+> > > per
+> > > packet.  Intel review this carefully, please!
+> > 
+> > ack. Actully I kept the xdp.frame_sz configuration in the NAPI loop
+> > but
+> > an Intel review will be nice.
+> > 
+> > Regards,
+> > Lorenzo
+> > 
+> > > -- 
+> > > Best regards,
+> > >   Jesper Dangaard Brouer
+> > >   MSc.CS, Principal Kernel Engineer at Red Hat
+> > >   LinkedIn: http://www.linkedin.com/in/brouer
+> > > 
+> 
