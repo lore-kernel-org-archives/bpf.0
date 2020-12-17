@@ -2,88 +2,143 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D397DC2BB9A
-	for <bpf@archiver.kernel.org>; Thu, 17 Dec 2020 09:32:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EAF8AC2BB48
+	for <bpf@archiver.kernel.org>; Thu, 17 Dec 2020 09:55:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9E61C2388E
-	for <bpf@archiver.kernel.org>; Thu, 17 Dec 2020 09:32:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B570D23603
+	for <bpf@archiver.kernel.org>; Thu, 17 Dec 2020 09:55:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726259AbgLQJc1 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 17 Dec 2020 04:32:27 -0500
-Received: from szxga07-in.huawei.com ([45.249.212.35]:9900 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726155AbgLQJc0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 17 Dec 2020 04:32:26 -0500
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4CxRZK57hgz7Fwt;
-        Thu, 17 Dec 2020 17:31:05 +0800 (CST)
-Received: from huawei.com (10.44.142.101) by DGGEMS411-HUB.china.huawei.com
- (10.3.19.211) with Microsoft SMTP Server id 14.3.498.0; Thu, 17 Dec 2020
- 17:31:36 +0800
-From:   Zhuling <zhuling8@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
-        <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-CC:     <luanjianhai@huawei.com>, <luchunhua@huawei.com>,
-        <zhuling8@huawei.com>
-Subject: [PATCH] Modify hardcode to SECCOMP_MODE_FILTER
-Date:   Thu, 17 Dec 2020 16:46:32 +0800
-Message-ID: <20201217084632.67251-1-zhuling8@huawei.com>
-X-Mailer: git-send-email 2.9.5
+        id S1727624AbgLQJzY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 17 Dec 2020 04:55:24 -0500
+Received: from pegase1.c-s.fr ([93.17.236.30]:39808 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726890AbgLQJzY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 17 Dec 2020 04:55:24 -0500
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4CxS5X2DHlz9v0PW;
+        Thu, 17 Dec 2020 10:54:40 +0100 (CET)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id 1Zv_-zH0n3ZU; Thu, 17 Dec 2020 10:54:40 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4CxS5X19YGz9v0PP;
+        Thu, 17 Dec 2020 10:54:40 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 65DAC8B7EB;
+        Thu, 17 Dec 2020 10:54:41 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id qEOXafSG18AY; Thu, 17 Dec 2020 10:54:41 +0100 (CET)
+Received: from [192.168.4.90] (unknown [192.168.4.90])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 540E18B7CD;
+        Thu, 17 Dec 2020 10:54:40 +0100 (CET)
+Subject: Re: [RFC PATCH v1 7/7] powerpc/bpf: Implement extended BPF on PPC32
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@chromium.org, naveen.n.rao@linux.ibm.com,
+        sandipan@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+References: <cover.1608112796.git.christophe.leroy@csgroup.eu>
+ <1fed5e11ba08ee28d12f3f57986e5b143a6aa937.1608112797.git.christophe.leroy@csgroup.eu>
+ <20201217061133.lnfnhbzvikgtjb3i@ast-mbp>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <854404a0-1951-91d9-2ebb-208390a64c77@csgroup.eu>
+Date:   Thu, 17 Dec 2020 10:54:34 +0100
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.44.142.101]
-X-CFilter-Loop: Reflected
+In-Reply-To: <20201217061133.lnfnhbzvikgtjb3i@ast-mbp>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: zhuling <zhuling8@huawei.com>
 
-    bpf/seccomp: modify hardcode 2 to SECCOMP_MODE_FILTER
 
-    while the hardcode 2 has been define in seccomp_bpf.c, we should use
-the definitions(SECCOMP_MODE_FILTER) instead of hardcode 2.
+Le 17/12/2020 à 07:11, Alexei Starovoitov a écrit :
+> On Wed, Dec 16, 2020 at 10:07:37AM +0000, Christophe Leroy wrote:
+>> Implement Extended Berkeley Packet Filter on Powerpc 32
+>>
+>> Test result with test_bpf module:
+>>
+>> 	test_bpf: Summary: 378 PASSED, 0 FAILED, [354/366 JIT'ed]
+> 
+> nice!
+> 
+>> Registers mapping:
+>>
+>> 	[BPF_REG_0] = r11-r12
+>> 	/* function arguments */
+>> 	[BPF_REG_1] = r3-r4
+>> 	[BPF_REG_2] = r5-r6
+>> 	[BPF_REG_3] = r7-r8
+>> 	[BPF_REG_4] = r9-r10
+>> 	[BPF_REG_5] = r21-r22 (Args 9 and 10 come in via the stack)
+>> 	/* non volatile registers */
+>> 	[BPF_REG_6] = r23-r24
+>> 	[BPF_REG_7] = r25-r26
+>> 	[BPF_REG_8] = r27-r28
+>> 	[BPF_REG_9] = r29-r30
+>> 	/* frame pointer aka BPF_REG_10 */
+>> 	[BPF_REG_FP] = r31
+>> 	/* eBPF jit internal registers */
+>> 	[BPF_REG_AX] = r19-r20
+>> 	[TMP_REG] = r18
+>>
+>> As PPC32 doesn't have a redzone in the stack,
+>> use r17 as tail call counter.
+>>
+>> r0 is used as temporary register as much as possible. It is referenced
+>> directly in the code in order to avoid misuse of it, because some
+>> instructions interpret it as value 0 instead of register r0
+>> (ex: addi, addis, stw, lwz, ...)
+>>
+>> The following operations are not implemented:
+>>
+>> 		case BPF_ALU64 | BPF_DIV | BPF_X: /* dst /= src */
+>> 		case BPF_ALU64 | BPF_MOD | BPF_X: /* dst %= src */
+>> 		case BPF_STX | BPF_XADD | BPF_DW: /* *(u64 *)(dst + off) += src */
+>>
+>> The following operations are only implemented for power of two constants:
+>>
+>> 		case BPF_ALU64 | BPF_MOD | BPF_K: /* dst %= imm */
+>> 		case BPF_ALU64 | BPF_DIV | BPF_K: /* dst /= imm */
+> 
+> Those are sensible limitations. MOD and DIV are rare, but XADD is common.
+> Please consider doing it as a cmpxchg loop in the future.
+> 
+> Also please run test_progs. It will give a lot better coverage than test_bpf.ko
+> 
 
-Signed-off-by: zhuling <zhuling8@huawei.com>
----
- samples/bpf/tracex5_user.c | 2 +-
- samples/seccomp/dropper.c  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I'm having hard time cross building test_progs:
 
-diff --git a/samples/bpf/tracex5_user.c b/samples/bpf/tracex5_user.c
-index c17d3fb..417753f 100644
---- a/samples/bpf/tracex5_user.c
-+++ b/samples/bpf/tracex5_user.c
-@@ -28,7 +28,7 @@ static void install_accept_all_seccomp(void)
- 		.len = (unsigned short)(sizeof(filter)/sizeof(filter[0])),
- 		.filter = filter,
- 	};
--	if (prctl(PR_SET_SECCOMP, 2, &prog))
-+	if (prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog))
- 		perror("prctl");
- }
+~/linux-powerpc/tools/testing/selftests/bpf/$ make CROSS_COMPILE=ppc-linux-
+...
+   GEN 
+/home/chr/linux-powerpc/tools/testing/selftests/bpf/tools/build/bpftool/Documentation/bpf-helpers.7
+   INSTALL  eBPF_helpers-manpage
+   INSTALL  Documentation-man
+   GEN      vmlinux.h
+/bin/sh: /home/chr/linux-powerpc/tools/testing/selftests/bpf/tools/sbin/bpftool: cannot execute 
+binary file
+make: *** [/home/chr/linux-powerpc/tools/testing/selftests/bpf/tools/include/vmlinux.h] Error 126
+make: *** Deleting file `/home/chr/linux-powerpc/tools/testing/selftests/bpf/tools/include/vmlinux.h'
 
-diff --git a/samples/seccomp/dropper.c b/samples/seccomp/dropper.c
-index cc0648e..08f8e7f 100644
---- a/samples/seccomp/dropper.c
-+++ b/samples/seccomp/dropper.c
-@@ -46,7 +46,7 @@ static int install_filter(int nr, int arch, int error)
- 		perror("prctl(NO_NEW_PRIVS)");
- 		return 1;
- 	}
--	if (prctl(PR_SET_SECCOMP, 2, &prog)) {
-+	if (prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog)) {
- 		perror("prctl(PR_SET_SECCOMP)");
- 		return 1;
- 	}
---
-2.9.5
+Looks like it builds bpftool for powerpc and tries to run it on my x86.
+How should I proceed ?
 
+Thanks
+Christophe
