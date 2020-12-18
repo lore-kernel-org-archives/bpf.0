@@ -2,70 +2,70 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A579FC4361B
-	for <bpf@archiver.kernel.org>; Fri, 18 Dec 2020 15:20:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5BA94C2BBCF
+	for <bpf@archiver.kernel.org>; Fri, 18 Dec 2020 15:21:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5BB502395C
-	for <bpf@archiver.kernel.org>; Fri, 18 Dec 2020 15:20:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 1800223B1B
+	for <bpf@archiver.kernel.org>; Fri, 18 Dec 2020 15:21:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726197AbgLRPUr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 18 Dec 2020 10:20:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58056 "EHLO mail.kernel.org"
+        id S1727383AbgLRPUs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 18 Dec 2020 10:20:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58038 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725878AbgLRPUr (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1726139AbgLRPUr (ORCPT <rfc822;bpf@vger.kernel.org>);
         Fri, 18 Dec 2020 10:20:47 -0500
 Content-Type: text/plain; charset="utf-8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1608304807;
-        bh=g6D5ZnRkhaQpRS+4nSgdXFSGEN+4woAT0V40kommTBI=;
+        s=k20201202; t=1608304806;
+        bh=rGkngiNUJl4ptxqLyCL2cs5g7Qv/3qw/qDysKjxw46c=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=oqR3tUcI3jlesACqpu+izO7NiuO2OobE3vzq1AxNIIR1h/fkgkzP7PPUxF9LV8LES
-         hay31DlLfHNqyLt+Inm7AmYrrS9Vkd6ztbFUH6q1m2SQ06npSlu0PzRVdWfW/0Fbrh
-         axck9hsFBFPkTGwZEgJeL4x/DgCN9ILC+ea7z2VU6uRAeO7txk+E77/GkHJvzqlfyX
-         sh8Mn/GufFZtXMNjy8LV+cwtWgkLQAtCcIwKErPPtM+uIx1sTOdnP4Ou9rlUcSc6sX
-         XI+ngIvye+gBHbCUsfHO1l/aLCb+oiR6k6rao7KEGTYNw0uAKpLSGyy/aB7C/Wsoqo
-         efXNGyEUflhkA==
+        b=jd1aQAQ7/+lmrht4lQKkCQ7rwST5Dt87JyKs6mZnrUeYU3DsBgj3I1n7N05LaqOKw
+         RrNz8WLfBqGXBkjJeSLjR3yrTAu62wlja8OwfFwaqHs8pod/4fTqTiuhxfuaLE2MSY
+         iGLuTsdYKEyBTs/ILP7UdgvAzg68KCre1SjUXpr5X/99RRxSTOL6eBDsRN0rwb1AaL
+         sXB92+jYanWtSN8HH+KHb5BCvbXxUDUpKbcJ8DMKLovKQg2JJ72u8RnQ5cckRFR0Z6
+         o7IRHaUQk0wCdJnG39Vx/oV692YWSDTDXsjtCjt2GNYsfQWHAvPR6iDB74d6sqVDO6
+         mGIGaxbIQHHig==
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v2 0/2] xsk: fix two bugs in the SKB Tx path
+Subject: Re: [PATCH][next] selftests/bpf: fix spelling mistake "tranmission" ->
+ "transmission"
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <160830480688.29956.160488544592910110.git-patchwork-notify@kernel.org>
+Message-Id: <160830480683.29956.13434774651778716031.git-patchwork-notify@kernel.org>
 Date:   Fri, 18 Dec 2020 15:20:06 +0000
-References: <20201218134525.13119-1-magnus.karlsson@gmail.com>
-In-Reply-To: <20201218134525.13119-1-magnus.karlsson@gmail.com>
-To:     Magnus Karlsson <magnus.karlsson@gmail.com>
-Cc:     magnus.karlsson@intel.com, bjorn.topel@intel.com, ast@kernel.org,
-        daniel@iogearbox.net, netdev@vger.kernel.org,
-        jonathan.lemon@gmail.com, bpf@vger.kernel.org,
-        A.Zema@falconvsystems.com, maciej.fijalkowski@intel.com,
-        maciejromanfijalkowski@gmail.com
+References: <20201214223539.83168-1-colin.king@canonical.com>
+In-Reply-To: <20201214223539.83168-1-colin.king@canonical.com>
+To:     Colin King <colin.king@canonical.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
+        shuah@kernel.org, andrii@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf.git (refs/heads/master):
+This patch was applied to bpf/bpf.git (refs/heads/master):
 
-On Fri, 18 Dec 2020 14:45:23 +0100 you wrote:
-> This patch set contains two bug fixes to the Tx SKB path. Details can
-> be found in the individual commit messages. Special thanks to Xuan
-> Zhuo for spotting both of them.
+On Mon, 14 Dec 2020 22:35:39 +0000 you wrote:
+> From: Colin Ian King <colin.king@canonical.com>
 > 
-> v1 -> v2:
-> * Rebase
+> There are two spelling mistakes in output messages. Fix these.
 > 
-> [...]
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+>  tools/testing/selftests/bpf/xdpxceiver.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
 Here is the summary with links:
-  - [bpf,v2,1/2] xsk: fix race in SKB mode transmit with shared cq
-    https://git.kernel.org/bpf/bpf/c/f09ced4053bc
-  - [bpf,v2,2/2] xsk: rollback reservation at NETDEV_TX_BUSY
-    https://git.kernel.org/bpf/bpf/c/b1b95cb5c0a9
+  - [next] selftests/bpf: fix spelling mistake "tranmission" -> "transmission"
+    https://git.kernel.org/bpf/bpf/c/e79bb299ccad
 
 You are awesome, thank you!
 --
