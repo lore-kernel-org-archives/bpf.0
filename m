@@ -2,136 +2,117 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92601C433E0
-	for <bpf@archiver.kernel.org>; Wed, 23 Dec 2020 00:05:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A72C7C4321A
+	for <bpf@archiver.kernel.org>; Wed, 23 Dec 2020 03:10:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4E40822242
-	for <bpf@archiver.kernel.org>; Wed, 23 Dec 2020 00:05:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 854972251F
+	for <bpf@archiver.kernel.org>; Wed, 23 Dec 2020 03:10:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726412AbgLWAFY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 22 Dec 2020 19:05:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
+        id S1726558AbgLWDKS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 22 Dec 2020 22:10:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726279AbgLWAFY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 22 Dec 2020 19:05:24 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A03C0613D6;
-        Tue, 22 Dec 2020 16:04:44 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id u203so13167054ybb.2;
-        Tue, 22 Dec 2020 16:04:43 -0800 (PST)
+        with ESMTP id S1728386AbgLWDKR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 22 Dec 2020 22:10:17 -0500
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A859C0613D6
+        for <bpf@vger.kernel.org>; Tue, 22 Dec 2020 19:09:36 -0800 (PST)
+Received: by mail-pg1-x549.google.com with SMTP id z24so9760063pgu.1
+        for <bpf@vger.kernel.org>; Tue, 22 Dec 2020 19:09:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5UkDT+pBKYCLmrnGCZKgjBAkhaFuA0WMdfViISfWrsE=;
-        b=hzDtiIDsUChijguC0aRtpFcI1KtdCEz9qmCzVT2GuOHPBHZ0jbm5g6A2c0dNNu3M7b
-         FYRm1Nep4zlLZq5BxyIraSovFfXUhmD06g8rqmqtxrOwEJjsN5snWoKrz3Adch3UsUbR
-         u295B/uMTEwMMn5VaKBHGVG/k3KyxOAgumuEISZ/s/wGIV+fry3vvSHrGZAHndrUQMly
-         3YSIKO09A6b4b4krEkAVcbFYOkgeJ+kGfNd3vsTI3b7J9D/Y9H5f4U40QPwCXP+JO638
-         5HsYoTm7E+FfHiJbzE4DT+WJrwyN3JcbnG5tEoJfHXNIkwfQ1vp6MfWHzQgTPCBLukHZ
-         30Rg==
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=IQ0Qx44OK2RIPX1fqXRvuwqi8v00WWJehzRQIJJdt78=;
+        b=AQhzzeMPZiggsa1o0X5/do5St9pB5j+aXTO4iOUS/wNkLDaKFYWKzAXv8ucJ4/F9Fp
+         2b+foY+J9e5BLzbQP8Ku6b5qLx5Mitv8IqD+HQDSd7n5jgv6Rc2B7h6J/18WA44S3z6D
+         3/FjW+ApQW1VXk2Iq15qf26pMyRNDOtB6pFDph/T3aNSLYcjIAri7NlyWPHI6MchubCz
+         ZatBHZTqfbFqlIPsLCFK1jNEMnMnEdhqbXx0NsHLkOzFxUgSPIp0bGRO7SRqINolaiTl
+         vR7hWzPB4I1siF7IRtJiODh7ekcRtuIaC3TEa8mGr4gUwRpSVvr/Rt3FV9wN6JhJEP2G
+         Lfkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5UkDT+pBKYCLmrnGCZKgjBAkhaFuA0WMdfViISfWrsE=;
-        b=kmgCv0Xfd5AnIWYwXl9jHfhbHHAnPAki0yRCkvKsmzDwMnJsY82BkKqV6TpEj8pDWC
-         CM+blO1isnYPvpIBjk0+NUZnOUAbQyLGeQRkJajUC8zcCaQdsMArofZ4HZ+yV+gGEXt6
-         pqqxMh5oKqs7u9I/Yhfg0f64bVeoUh7VKSDw9Yox8tOmxIsKRlpvSTFIlSA9wFeQq0G1
-         Go5ShGBKOR70XXXby739xtv6fhzO27KnBjyZFWH/RHmvL6t3nuTSc/C0ds4tPJHY5gVN
-         phVybJDWUdogqKBj58kUlPo6bv2cKaRkRlqwzgS+P+tma/b8J/5WbnJ0oYqVHNxLNAN9
-         27Kw==
-X-Gm-Message-State: AOAM531YWgbUN3lsoAxmmbXEIvqY/8L553+m+TM2SIWWH1wFrZ3pW3UW
-        vfpTThxfESH8fkQtJ/MpwUUL2hyakbJcx/V9qu0=
-X-Google-Smtp-Source: ABdhPJyc9rPrsWvke4TV34xxv+rEGd5M0SWDm9TbU/UskXLGKXzTFsIZJKOhW4d7lbIVNYfYqGKhCulda6A+TFPJw2I=
-X-Received: by 2002:a25:aea8:: with SMTP id b40mr33731815ybj.347.1608681883179;
- Tue, 22 Dec 2020 16:04:43 -0800 (PST)
-MIME-Version: 1.0
-References: <20201222195337.2175297-1-andrii@kernel.org> <11956701-DB1D-49E9-BD47-A9AC1E26F487@fb.com>
-In-Reply-To: <11956701-DB1D-49E9-BD47-A9AC1E26F487@fb.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 22 Dec 2020 16:04:32 -0800
-Message-ID: <CAEf4BzY0CfZ6mau4fRVmJokKZadjG0Mkx7+-1+UF5dEk613a3w@mail.gmail.com>
-Subject: Re: [PATCH bpf] selftests/bpf: work-around EBUSY errors from hashmap update/delete
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=IQ0Qx44OK2RIPX1fqXRvuwqi8v00WWJehzRQIJJdt78=;
+        b=PhwUMWWW9EqW71ab95RC62m3okoeXhTkzXUvME3hJwtvDRmSaYiFrReXsfGg2tAPFg
+         TpLWG3obtpGn0sMZUr7cSB8cgqOiGen8U1KDPSZjTuDis6PdMCcgEqlmANmVZZ3CO85F
+         3dgXqZgRNJNptYEqF03+cICH0I2TpkOtA1sG9lYkpcBk/WCU2Vx0zSe43s3IrEO+3RU2
+         q2ZIrAtTbwNZdHwCV1Ar2J7+D79e2UHXqbI2/ZsU6RPPtEFeB6XrnvNCGz61f1eyZkxC
+         daQhdd3GNIYop0B6wW4+Zm19U5xvfBIa1hlghxJilAocepBXzqfuDNeo+EA3MEZf78Zk
+         BAOw==
+X-Gm-Message-State: AOAM531mPUfCqN3aP4pJQedShL2Q3lcOoHfJWN6YisgHoTx964KmiA4q
+        gmXOr/NtaZhevCOvrm3sG1JQb2g=
+X-Google-Smtp-Source: ABdhPJwVsSI0uyG3ae/9ix2056ZV+FQPFFzi0mJagMNHlT91ie5sG+gzJ7BkeGUwkl9tVtXaJMYxMXM=
+Sender: "sdf via sendgmr" <sdf@sdf2.svl.corp.google.com>
+X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:1:7220:84ff:fe09:7732])
+ (user=sdf job=sendgmr) by 2002:a17:90a:8b94:: with SMTP id
+ z20mr162522pjn.1.1608692975589; Tue, 22 Dec 2020 19:09:35 -0800 (PST)
+Date:   Tue, 22 Dec 2020 19:09:33 -0800
+In-Reply-To: <20201222191107.bbg6yafayxp4jx5i@kafai-mbp.dhcp.thefacebook.com>
+Message-Id: <X+K07Rh+2qECwxJp@google.com>
+Mime-Version: 1.0
+References: <20201217172324.2121488-1-sdf@google.com> <20201217172324.2121488-2-sdf@google.com>
+ <20201222191107.bbg6yafayxp4jx5i@kafai-mbp.dhcp.thefacebook.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: try to avoid kzalloc in cgroup/{s,g}etsockopt
+From:   sdf@google.com
+To:     Martin KaFai Lau <kafai@fb.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org,
+        daniel@iogearbox.net
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Dec 22, 2020 at 3:58 PM Song Liu <songliubraving@fb.com> wrote:
->
->
->
-> > On Dec 22, 2020, at 11:53 AM, Andrii Nakryiko <andrii@kernel.org> wrote:
+On 12/22, Martin KaFai Lau wrote:
+> On Thu, Dec 17, 2020 at 09:23:23AM -0800, Stanislav Fomichev wrote:
+> > When we attach a bpf program to cgroup/getsockopt any other getsockopt()
+> > syscall starts incurring kzalloc/kfree cost. While, in general, it's
+> > not an issue, sometimes it is, like in the case of TCP_ZEROCOPY_RECEIVE.
+> > TCP_ZEROCOPY_RECEIVE (ab)uses getsockopt system call to implement
+> > fastpath for incoming TCP, we don't want to have extra allocations in
+> > there.
 > >
-> > 20b6cc34ea74 ("bpf: Avoid hashtab deadlock with map_locked") introduced
-> > a possibility of getting EBUSY error on lock contention, which seems to happen
-> > very deterministically in test_maps when running 1024 threads on low-CPU
-> > machine. In libbpf CI case, it's a 2 CPU VM and it's hitting this 100% of the
-> > time. Work around by retrying on EBUSY (and EAGAIN, while we are at it) after
-> > a small sleep. sched_yield() is too agressive and fails even after 20 retries,
-> > so I went with usleep(1) for backoff.
+> > Let add a small buffer on the stack and use it for small (majority)
+> > {s,g}etsockopt values. I've started with 128 bytes to cover
+> > the options we care about (TCP_ZEROCOPY_RECEIVE which is 32 bytes
+> > currently, with some planned extension to 64 + some headroom
+> > for the future).
 > >
-> > Also log actual error returned to make it easier to see what's going on.
+> > It seems natural to do the same for setsockopt, but it's a bit more
+> > involved when the BPF program modifies the data (where we have to
+> > kmalloc). The assumption is that for the majority of setsockopt
+> > calls (which are doing pure BPF options or apply policy) this
+> > will bring some benefit as well.
 > >
-> > Fixes: 20b6cc34ea74 ("bpf: Avoid hashtab deadlock with map_locked")
-> > Cc: Song Liu <songliubraving@fb.com>
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
->
-> Thanks for the fix!
->
-> Acked-by: Song Liu <songliubraving@fb.com>
->
-> With one minor nitpick below
->
+> > Signed-off-by: Stanislav Fomichev <sdf@google.com>
 > > ---
-> > tools/testing/selftests/bpf/test_maps.c | 46 +++++++++++++++++++++----
-> > 1 file changed, 40 insertions(+), 6 deletions(-)
+> >  include/linux/filter.h |  3 +++
+> >  kernel/bpf/cgroup.c    | 41 +++++++++++++++++++++++++++++++++++++++--
+> >  2 files changed, 42 insertions(+), 2 deletions(-)
 > >
-> > diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-> > index 0ad3e6305ff0..809004f4995f 100644
-> > --- a/tools/testing/selftests/bpf/test_maps.c
-> > +++ b/tools/testing/selftests/bpf/test_maps.c
-> > @@ -1312,22 +1312,56 @@ static void test_map_stress(void)
-> > #define DO_UPDATE 1
-> > #define DO_DELETE 0
->
-> [...]
->
-> > +                             printf("error %d %d\n", err, errno);
-> > +                     assert(err == 0);
-> > +                     err = map_update_retriable(fd, &key, &value, BPF_EXIST, 20);
-> > +                     if (err)
-> > +                             printf("error %d %d\n", err, errno);
-> > +                     assert(err == 0);
-> >               } else {
-> > -                     assert(bpf_map_delete_elem(fd, &key) == 0);
-> > +                     err = map_delete_retriable(fd, &key, 5);
->
-> nit: Why 5 here vs. 20 above?
-
-Forgot to update here. I'll make all of them the same, thanks.
-
->
-> > +                     if (err)
-> > +                             printf("error %d %d\n", err, errno);
-> > +                     assert(err == 0);
-> >               }
-> >       }
-> > }
-> > --
-> > 2.24.1
+> > diff --git a/include/linux/filter.h b/include/linux/filter.h
+> > index 29c27656165b..362eb0d7af5d 100644
+> > --- a/include/linux/filter.h
+> > +++ b/include/linux/filter.h
+> > @@ -1281,6 +1281,8 @@ struct bpf_sysctl_kern {
+> >  	u64 tmp_reg;
+> >  };
 > >
->
+> > +#define BPF_SOCKOPT_KERN_BUF_SIZE	128
+> Since these 128 bytes (which then needs to be zero-ed) is modeled after
+> the TCP_ZEROCOPY_RECEIVE use case, it will be useful to explain
+> a use case on how the bpf prog will interact with
+> getsockopt(TCP_ZEROCOPY_RECEIVE).
+The only thing I would expect BPF program can do is to return EPERM
+to cause application to fallback to non-zerocopy path (and, mostly,
+bypass). I don't think BPF can meaningfully mangle the data in struct
+tcp_zerocopy_receive.
+
+Does it address your concern? Or do you want me to add a comment or
+something?
