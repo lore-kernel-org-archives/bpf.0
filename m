@@ -2,170 +2,145 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_2 autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-21.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,INCLUDES_PULL_REQUEST,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32950C4160E
-	for <bpf@archiver.kernel.org>; Mon, 28 Dec 2020 23:15:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B02A2C0018C
+	for <bpf@archiver.kernel.org>; Mon, 28 Dec 2020 23:15:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1C26B222F9
-	for <bpf@archiver.kernel.org>; Mon, 28 Dec 2020 23:15:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8E39A2222A
+	for <bpf@archiver.kernel.org>; Mon, 28 Dec 2020 23:15:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729626AbgL1Wzs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S1730464AbgL1Wzs (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Mon, 28 Dec 2020 17:55:48 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:30740 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729325AbgL1To4 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 28 Dec 2020 14:44:56 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 0BSJWmXV087244;
-        Mon, 28 Dec 2020 14:44:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=FFC1pIh9Jx3Vm1rVMfDgprQvk4esrJQ88xEvb228pWQ=;
- b=PKh5KhiUgozAkhHVNi5TelmKS12GtPwEaDTPwKrjGvOgHezPVk2urrt1tw3z0c2Jq1tP
- G0HeIK1bYzBsPaAM4tWTEtpEuyDRKXy963HKP3Xa09WB904J7+QxSudjGfSVKuvzqODk
- 6+ilTvqlLdoIHPipsRIxYwNWsjKCQ1/1PGKuCbcJRIrCSHmPHLdjFJPtv3B5sCmfVevY
- 5wMHiHwnvBIUVMwVfMRT9GUCVVLCP9V1UaGglnETD42dcjZ3npVUWvR1eXRopxG9KbHQ
- iBKZ1XOlVwD8hKNttAik6gIh/vmu1alIa4I3igY157wxngxG2lfsjhTybLAeaM1bSLd5 Wg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 35qmwts065-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Dec 2020 14:44:04 -0500
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 0BSJWmJj087289;
-        Mon, 28 Dec 2020 14:44:03 -0500
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 35qmwts05k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Dec 2020 14:44:03 -0500
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 0BSJfdFM019890;
-        Mon, 28 Dec 2020 19:44:02 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma04fra.de.ibm.com with ESMTP id 35nvt895fp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Dec 2020 19:44:02 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0BSJhv9X28639742
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 28 Dec 2020 19:43:57 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BA7C7A405C;
-        Mon, 28 Dec 2020 19:43:59 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A9390A405F;
-        Mon, 28 Dec 2020 19:43:56 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.72.172])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 28 Dec 2020 19:43:56 +0000 (GMT)
-Message-ID: <564953d7ffb847365236a37639b81cbb7bca2aa6.camel@linux.ibm.com>
-Subject: Re: [PATCH v23 02/23] LSM: Create and manage the lsmblob data
- structure.
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     linux-audit@redhat.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        paul@paul-moore.com, sds@tycho.nsa.gov,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Date:   Mon, 28 Dec 2020 14:43:55 -0500
-In-Reply-To: <c88bc01f-3b65-f320-b42b-5ecde3e29448@schaufler-ca.com>
-References: <20201120201507.11993-1-casey@schaufler-ca.com>
-         <20201120201507.11993-3-casey@schaufler-ca.com>
-         <903c37e9036d167958165ab700e646c1622a9c40.camel@linux.ibm.com>
-         <c88bc01f-3b65-f320-b42b-5ecde3e29448@schaufler-ca.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-12.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2020-12-28_17:2020-12-28,2020-12-28 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- adultscore=0 clxscore=1015 mlxscore=0 suspectscore=0 impostorscore=0
- spamscore=0 mlxlogscore=999 phishscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2012280115
+Received: from www62.your-server.de ([213.133.104.62]:54814 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729512AbgL1V3Q (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 28 Dec 2020 16:29:16 -0500
+Received: from 30.101.7.85.dynamic.wline.res.cust.swisscom.ch ([85.7.101.30] helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1ku047-0009jH-BM; Mon, 28 Dec 2020 22:28:31 +0100
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     davem@davemloft.net
+Cc:     kuba@kernel.org, daniel@iogearbox.net, ast@kernel.org, bsd@fb.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: pull-request: bpf 2020-12-28
+Date:   Mon, 28 Dec 2020 22:28:30 +0100
+Message-Id: <20201228212830.32406-1-daniel@iogearbox.net>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/26031/Mon Dec 28 13:43:18 2020)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, 2020-12-28 at 11:22 -0800, Casey Schaufler wrote:
-> On 12/28/2020 9:54 AM, Mimi Zohar wrote:
-> > Hi Casey,
-> >
-> > On Fri, 2020-11-20 at 12:14 -0800, Casey Schaufler wrote:
-> >> When more than one security module is exporting data to
-> >> audit and networking sub-systems a single 32 bit integer
-> >> is no longer sufficient to represent the data. Add a
-> >> structure to be used instead.
-> >>
-> >> The lsmblob structure is currently an array of
-> >> u32 "secids". There is an entry for each of the
-> >> security modules built into the system that would
-> >> use secids if active. The system assigns the module
-> >> a "slot" when it registers hooks. If modules are
-> >> compiled in but not registered there will be unused
-> >> slots.
-> >>
-> >> A new lsm_id structure, which contains the name
-> >> of the LSM and its slot number, is created. There
-> >> is an instance for each LSM, which assigns the name
-> >> and passes it to the infrastructure to set the slot.
-> >>
-> >> The audit rules data is expanded to use an array of
-> >> security module data rather than a single instance.
-> >> Because IMA uses the audit rule functions it is
-> >> affected as well.
-> > This patch is quite large, even without the audit rule change.  I would
-> > limit this patch to the new lsm_id structure changes.  The audit rule
-> > change should be broken out as a separate patch so that the audit
-> > changes aren't hidden.
-> 
-> Breaking up the patch in any meaningful way would require
-> scaffolding code that is as extensive and invasive as the
-> final change. I can do that if you really need it, but it
-> won't be any easier to read.
+Hi David, hi Jakub,
 
-Hidden in this patch is the new behavior of security_audit_rule_init(),
-security_audit_rule_free(), and security_audit_rule_match().  My
-concern is with label collision.  Details are in a subsequent post. 
-Can an LSM prevent label collision?
+The following pull-request contains BPF updates for your *net* tree.
 
-> 
-> > In addition, here are a few high level nits:
-> > - The (patch description) body of the explanation, line wrapped at 75
-> > columns, which will be copied to the permanent changelog to describe
-> > this patch. (Refer  Documentation/process/submitting-patches.rst.)
-> 
-> Will fix.
-> 
-> > - The brief kernel-doc descriptions should not have a trailing period. 
-> > Nor should kernel-doc variable definitions have a trailing period. 
-> > Example(s) inline below.  (The existing kernel-doc is mostly correct.)
-> 
-> Will fix.
-> 
-> > - For some reason existing comments that span multiple lines aren't
-> > formatted properly.   In those cases, where there is another change,
-> > please fix the comment and function description.
-> 
-> Can you give an example? There are multiple comment styles
-> used in the various components.
+There is a small merge conflict between bpf tree commit 69ca310f3416
+("bpf: Save correct stopping point in file seq iteration") and net tree
+commit 66ed594409a1 ("bpf/task_iter: In task_file_seq_get_next use
+task_lookup_next_fd_rcu"). The get_files_struct() does not exist anymore
+in net, so take the hunk in HEAD and add the `info->tid = curr_tid` to
+the error path:
 
-Never mind.  All three examples are in tomoyo.
+  [...]
+                curr_task = task_seq_get_next(ns, &curr_tid, true);
+                if (!curr_task) {
+                        info->task = NULL;
+                        info->tid = curr_tid;
+                        return NULL;
+                }
 
-> I don't see any comments on the ima code changes. I really
-> don't want to spin a new patch set that does nothing but change
-> two periods in comments only to find out two months from now
-> that the code changes are completely borked. I really don't
-> want to go through the process of breaking up the patch that has
-> been widely Acked if there's no reason to expect it would require
-> significant work otherwise.
+                /* set info->task and info->tid */
+  [...]
 
-Understood.
+We've added 10 non-merge commits during the last 9 day(s) which contain
+a total of 11 files changed, 75 insertions(+), 20 deletions(-).
 
+The main changes are:
+
+1) Various AF_XDP fixes such as fill/completion ring leak on failed bind and
+   fixing a race in skb mode's backpressure mechanism, from Magnus Karlsson.
+
+2) Fix latency spikes on lockdep enabled kernels by adding a rescheduling
+   point to BPF hashtab initialization, from Eric Dumazet.
+
+3) Fix a splat in task iterator by saving the correct stopping point in the
+   seq file iteration, from Jonathan Lemon.
+
+4) Fix BPF maps selftest by adding retries in case hashtab returns EBUSY
+   errors on update/deletes, from Andrii Nakryiko.
+
+5) Fix BPF selftest error reporting to something more user friendly if the
+   vmlinux BTF cannot be found, from Kamal Mostafa.
+
+Please consider pulling these changes from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git
+
+Thanks a lot!
+
+Also thanks to reporters, reviewers and testers of commits in this pull-request:
+
+Andrii Nakryiko, Björn Töpel, John Sperbeck, Song Liu, Xuan Zhuo
+
+----------------------------------------------------------------
+
+The following changes since commit 3db1a3fa98808aa90f95ec3e0fa2fc7abf28f5c9:
+
+  Merge tag 'staging-5.11-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging (2020-12-15 14:18:40 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git 
+
+for you to fetch changes up to a61daaf351da7c8493f2586437617d60c24350b0:
+
+  bpf: Use thread_group_leader() (2020-12-24 02:04:53 +0100)
+
+----------------------------------------------------------------
+Andrii Nakryiko (1):
+      selftests/bpf: Work-around EBUSY errors from hashmap update/delete
+
+Colin Ian King (1):
+      selftests/bpf: Fix spelling mistake "tranmission" -> "transmission"
+
+Eric Dumazet (1):
+      bpf: Add schedule point in htab_init_buckets()
+
+Jonathan Lemon (2):
+      bpf: Save correct stopping point in file seq iteration
+      bpf: Use thread_group_leader()
+
+Kamal Mostafa (1):
+      selftests/bpf: Clarify build error if no vmlinux
+
+Magnus Karlsson (3):
+      xsk: Fix memory leak for failed bind
+      xsk: Fix race in SKB mode transmit with shared cq
+      xsk: Rollback reservation at NETDEV_TX_BUSY
+
+Tian Tao (1):
+      bpf: Remove unused including <linux/version.h>
+
+ include/net/xdp_sock.h                   |  4 ---
+ include/net/xsk_buff_pool.h              |  5 ++++
+ kernel/bpf/hashtab.c                     |  1 +
+ kernel/bpf/syscall.c                     |  1 -
+ kernel/bpf/task_iter.c                   |  5 ++--
+ net/xdp/xsk.c                            | 16 +++++++++--
+ net/xdp/xsk_buff_pool.c                  |  3 +-
+ net/xdp/xsk_queue.h                      |  5 ++++
+ tools/testing/selftests/bpf/Makefile     |  3 ++
+ tools/testing/selftests/bpf/test_maps.c  | 48 ++++++++++++++++++++++++++++----
+ tools/testing/selftests/bpf/xdpxceiver.c |  4 +--
+ 11 files changed, 75 insertions(+), 20 deletions(-)
