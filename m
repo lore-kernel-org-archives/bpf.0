@@ -2,96 +2,163 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.6 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BFC4C43381
-	for <bpf@archiver.kernel.org>; Mon,  4 Jan 2021 23:26:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C4B00C433DB
+	for <bpf@archiver.kernel.org>; Mon,  4 Jan 2021 23:52:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0E665206F8
-	for <bpf@archiver.kernel.org>; Mon,  4 Jan 2021 23:26:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 981D42253D
+	for <bpf@archiver.kernel.org>; Mon,  4 Jan 2021 23:52:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727566AbhADX0j (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 4 Jan 2021 18:26:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
+        id S1727284AbhADXwj (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 4 Jan 2021 18:52:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727473AbhADX0i (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 4 Jan 2021 18:26:38 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A0DC061795
-        for <bpf@vger.kernel.org>; Mon,  4 Jan 2021 15:25:58 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id my8so554077pjb.3
-        for <bpf@vger.kernel.org>; Mon, 04 Jan 2021 15:25:58 -0800 (PST)
+        with ESMTP id S1726605AbhADXwi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 4 Jan 2021 18:52:38 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727EAC061794;
+        Mon,  4 Jan 2021 15:51:58 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id w127so27625430ybw.8;
+        Mon, 04 Jan 2021 15:51:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=ptl9lvlNeQ8rb1QFATiaT3uH/4C0oopGRoPxfvyAb2c=;
-        b=PSk2pLEREebJjCZgCidiMVgVTczCb9yXAsf7cDX6JwkPX/fXZIVH66P1pI+iCasrDz
-         U1E4qLZHl1KuMxEwVjhfvMYGl8p1K4Ausimy3aqIS1e4+JUk5c2uz1ABNpKNW0u932bJ
-         zWUwN9VfydzOvd6wwsGTh7w7Xsobn2xNioXavE91ZWbpB6VsqNl7Cq6ng8dQwRGIjvUe
-         BFR3F2i3uSO1eXb7Mmyym7D2b+d95FVBwjTGm6XQcO8HeNEpaPX/Z3TwHo+tMMlWzU2l
-         yxO+fM9ZYlHVdwKbKpwQTDYNLY1LgJXGThP3+T4Nc8hCV3PzohjqS9uVsDL+Hz5krlhu
-         sw7Q==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OUC+sjRwzZPWZn9wQSpN2ckaEnS39drtltw2kfzj/2k=;
+        b=iL7V859rzK4Ja2ZDu4+HR6dh9OdCpMHpPFNC88MrGQIy9iV/H2+j0oG/ohbggl1rGu
+         w8OZrsSHzsgFqITYmjGFmXlJgS3fo+7oKwJZwh7JCbhSXE7SpVHMQDCl4hvWBPjw6a6y
+         M/AJnNxWhhyQ90ll/8y23r0yj77EeFIplTKp7ibP0n+OE3rQzlgsHzLkRNaG55HyKQlb
+         36IBTLyrXrM4iYd2GFUIfoLSxvWv9ymf2/CGRDMW2nYrWKjbHwYViF8N5Nc2kEpSNvCK
+         VKok0Vcf0awc1+1UVCwAdR8Bbr8gRftQT36M2DER1SpMqSFhmB7gqqQ6paQz1fhzL5PA
+         MDiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=ptl9lvlNeQ8rb1QFATiaT3uH/4C0oopGRoPxfvyAb2c=;
-        b=qbk+rnznbFQfSzGvT1iSxyBAyGNOMViD4/IXM+bKbnjsDfcamyvXMXNrCNDyUHpAPM
-         tqGYLBnZnCc64WHaDvGKFQFWqOENx2XshWaGJ/i3HEPN+zcXFQvFT0NzpxcNBHh3X90e
-         cYjb8lN4oRBKUXTPbVRvVhs1qTbyt7D8VmbV+b8BZ7nLkL82LzkkuxDhjYOD8pBKcG8U
-         qlygan6Kwp4/mM+6uFLLJpkJAbtDNud8WugbVKUKY51rTJtFhSOBFMczCr1bbHg2qQ+1
-         0wks3RVK2AtUHiKU6LatvPna7WCQtxyHHcXtC8SdxKLJrSPcsY3c2NDWAms8359uTNjG
-         g0Qg==
-X-Gm-Message-State: AOAM533l4q0Np2u+pDltn0kRpN3NcW6/wqdNHI+YA03y6ii41Ho5QB71
-        mZX2pH8ad6onkZ5zg8jjX+b/9Oo=
-X-Google-Smtp-Source: ABdhPJzjaMED1n2APX00sZbDymFDwQSDI3BjsSgJNrEf5XTtzu0nfbCt88SbsYI4a4Pb7ZT91X4tN7Y=
-Sender: "sdf via sendgmr" <sdf@sdf2.svl.corp.google.com>
-X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:1:7220:84ff:fe09:7732])
- (user=sdf job=sendgmr) by 2002:a05:6214:1887:: with SMTP id
- cx7mr78894414qvb.39.1609798496582; Mon, 04 Jan 2021 14:14:56 -0800 (PST)
-Date:   Mon,  4 Jan 2021 14:14:52 -0800
-Message-Id: <20210104221454.2204239-1-sdf@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.29.2.729.g45daf8777d-goog
-Subject: [PATCH bpf-next v2 0/2] bpf: misc performance improvements for cgroup hooks
-From:   Stanislav Fomichev <sdf@google.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net,
-        Stanislav Fomichev <sdf@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OUC+sjRwzZPWZn9wQSpN2ckaEnS39drtltw2kfzj/2k=;
+        b=pDqWfkpbMXlBBQPDgkwEBHAqfMmRioLJF8NiPA00Ko+h4RyWsjnFjmQH6+eHjAuqsE
+         AK49FVG3DUozZK7lY3kFkjMP8lZUrPI0ND/rPcMhL/RBegn5nRJBShJhkjCd53kZkLvo
+         NDhB3WHnifqTMzprSEHLgrgE73YMBaeCnYz+szJZ0p4k/g+4zbW7SmqmWk+rZdYFEagv
+         52M3QfMp79wokeR1+TfM4RPtrTmiO9B1sCRmbLubXZpKazFUqD1g5+aBidna7Fy9A0/H
+         4CXch+yAgmMFwtWqBz+8D0dmAAQm0GU931/CJHaf/k1MbqRzu4mrMnp+oaDH/KSI0fyv
+         owsg==
+X-Gm-Message-State: AOAM532/tq9oL2kfknXAeDYCaeeL+s2Y6m8tGcfSGNbfD34/3gvrk2BM
+        IZoY65E7ihJzWwQdvchftWx1rCIuI4f+gNbuCnd1fHRp
+X-Google-Smtp-Source: ABdhPJwnEh0ALf4m/tKSP6OEVGqL4lmQ2ZYuSnjHl+tf2p1bYdRvrGcbu0BIxkNyjNXx6/tEHmZI4BkmKIqQC8keUXI=
+X-Received: by 2002:a25:c7c6:: with SMTP id w189mr107309965ybe.403.1609794047281;
+ Mon, 04 Jan 2021 13:00:47 -0800 (PST)
+MIME-Version: 1.0
+References: <20201228154437.GA18684@localhost>
+In-Reply-To: <20201228154437.GA18684@localhost>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 4 Jan 2021 13:00:36 -0800
+Message-ID: <CAEf4BzYGJAyu5h9UNrcY-iHDDBw-vLo18UgyKzmNHwnhKoqEBQ@mail.gmail.com>
+Subject: Re: [PATCH v11 bpf-next] bpf/selftests: fold test_current_pid_tgid_new_ns
+ into test_progs.
+To:     Carlos Neira <cneirabustos@gmail.com>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-First patch tries to remove kzalloc/kfree from getsockopt for the
-common cases.
+On Mon, Dec 28, 2020 at 7:48 AM Carlos Neira <cneirabustos@gmail.com> wrote:
+>
+> Currently tests for bpf_get_ns_current_pid_tgid() are outside test_progs.
+> This change folds test cases into test_progs.
+>
+> Changes from v10:
+>
+>  - Code style fixes.
+>  - Remove redundant code.
+>
+> Signed-off-by: Carlos Neira <cneirabustos@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/.gitignore        |   1 -
+>  tools/testing/selftests/bpf/Makefile          |   3 +-
+>  .../bpf/prog_tests/ns_current_pid_tgid.c      | 118 ++++++-------
+>  .../bpf/progs/test_ns_current_pid_tgid.c      |  28 +--
+>  .../bpf/test_current_pid_tgid_new_ns.c        | 160 ------------------
+>  5 files changed, 69 insertions(+), 241 deletions(-)
+>  delete mode 100644 tools/testing/selftests/bpf/test_current_pid_tgid_new_ns.c
+>
 
-Second patch switches cgroup_bpf_enabled to be per-attach to
-to add only overhead for the cgroup attach types used on the system.
+[...]
 
-No visible user-side changes.
+> -void test_ns_current_pid_tgid(void)
+> +static int test_current_pid_tgid(void *args)
+>  {
+> -       const char *probe_name = "raw_tracepoint/sys_enter";
+> -       const char *file = "test_ns_current_pid_tgid.o";
+> -       int err, key = 0, duration = 0;
+> -       struct bpf_link *link = NULL;
+> -       struct bpf_program *prog;
+> -       struct bpf_map *bss_map;
+> -       struct bpf_object *obj;
+> -       struct bss bss;
+> +       struct test_ns_current_pid_tgid__bss  *bss;
+> +       struct test_ns_current_pid_tgid *skel;
+> +       int err = 0, duration = 0;
+> +       pid_t tgid, pid;
+>         struct stat st;
+> -       __u64 id;
+> -
+> -       obj = bpf_object__open_file(file, NULL);
+> -       if (CHECK(IS_ERR(obj), "obj_open", "err %ld\n", PTR_ERR(obj)))
+> -               return;
+>
+> -       err = bpf_object__load(obj);
+> -       if (CHECK(err, "obj_load", "err %d errno %d\n", err, errno))
+> +       skel = test_ns_current_pid_tgid__open_and_load();
+> +       if (CHECK(!skel, "skel_open_load", "failed to load skeleton\n"))
+>                 goto cleanup;
 
-v2:
-- perf numbers for getsockopt kmalloc reduction (Song Liu)
-- (sk) in BPF_CGROUP_PRE_CONNECT_ENABLED (Song Liu)
-- 128 -> 64 buffer size, BUILD_BUG_ON (Martin KaFai Lau)
+err will be 0 here, and test failure won't be detected (if it happens
+in a child process), right? please check all the other cases. It might
+be better to assign err = -1 at the beginning and just assign err = 0
+after all tests succeeded, right before the clean up.
 
-Stanislav Fomichev (2):
-  bpf: try to avoid kzalloc in cgroup/{s,g}etsockopt
-  bpf: split cgroup_bpf_enabled per attach type
+>
+> -       bss_map = bpf_object__find_map_by_name(obj, "test_ns_.bss");
+> -       if (CHECK(!bss_map, "find_bss_map", "failed\n"))
+> -               goto cleanup;
+> +       pid = syscall(SYS_gettid);
+> +       tgid = getpid();
+>
 
- include/linux/bpf-cgroup.h | 36 +++++++++++++------------
- include/linux/filter.h     |  3 +++
- kernel/bpf/cgroup.c        | 54 +++++++++++++++++++++++++++++++-------
- net/ipv4/af_inet.c         |  9 ++++---
- net/ipv4/udp.c             |  7 +++--
- net/ipv6/af_inet6.c        |  9 ++++---
- net/ipv6/udp.c             |  7 +++--
- 7 files changed, 83 insertions(+), 42 deletions(-)
+[...]
 
--- 
-2.29.2.729.g45daf8777d-goog
+> -cleanup:
+> -       bpf_link__destroy(link);
+> -       bpf_object__close(obj);
+> +       if (CHECK(waitpid(cpid, &wstatus, 0) == -1, "waitpid", strerror(errno)))
+> +               exit(EXIT_FAILURE);
+> +
+> +       if (CHECK(WEXITSTATUS(wstatus) != 0, "newns_pidtgid", "failed"))
+> +               exit(EXIT_FAILURE);
 
+this exit will happen in the parent process, which is test_progs test
+runner itself, right? Which will prematurely stop all of the remaining
+tests to run. I.e., you can't just exit(), you need to just return and
+let test_progs keep running.
+
+> +}
+> +
+> +void test_ns_current_pid_tgid(void)
+> +{
+> +       if (test__start_subtest("ns_current_pid_tgid_root_ns"))
+> +               test_current_pid_tgid(NULL);
+> +       if (test__start_subtest("ns_current_pid_tgid_new_ns"))
+> +               test_ns_current_pid_tgid_new_ns();
+>  }
+
+[...]
