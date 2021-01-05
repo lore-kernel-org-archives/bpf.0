@@ -2,101 +2,97 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
-	DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 28881C43333
-	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 14:47:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 17937C433E0
+	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 15:23:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F2DC622BED
-	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 14:47:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D9F7222B4B
+	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 15:23:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726957AbhAEOqS (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Jan 2021 09:46:18 -0500
-Received: from gofer.mess.org ([88.97.38.141]:54255 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726694AbhAEOqR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Jan 2021 09:46:17 -0500
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 7A5CEC637E; Tue,  5 Jan 2021 14:45:34 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1609857934; bh=iJ86QbxBrhi/nSJypbCAMvYcDP4l2HigQ2w1KwuFLoQ=;
-        h=From:To:Subject:Date:From;
-        b=RKRuRNaOSqpGKmLkT3YE+xHyCRSzR4zz81sZRfyaVxK8mA2RFPOzlnFQrROGo21BW
-         pu8RJr1qccWhZAOhhjmsOxfnYeE/yGxQlLsQAQCe/DDkQXutEIT755yNGygMOy+Jsr
-         bH1UaIJR1DatoIcPI47IOOrWbpNEGXgn9IuNEdPE0IdTCkcgm2FTGF4+WZQnalWrgn
-         V8lvjotfbWfpMf5APdQYlpsHoe5IFvh8EiKq7K9MvmLJs4Av/wYlMF4m43RCZv0La5
-         KQihe77WRKfe8bjxFINZWq2NY83gEgljwPtsHl7r4ENBW7xTZvvXqXvkxYOFe1/OMa
-         46qe4HK4rP3Xg==
-From:   Sean Young <sean@mess.org>
-To:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        linux-doc@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: [PATCH v3 0/4] btf: support ints larger than 128 bits
-Date:   Tue,  5 Jan 2021 14:45:30 +0000
-Message-Id: <cover.1609855479.git.sean@mess.org>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726020AbhAEPWo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Jan 2021 10:22:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725925AbhAEPWi (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Jan 2021 10:22:38 -0500
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103D5C061793;
+        Tue,  5 Jan 2021 07:21:58 -0800 (PST)
+Received: by mail-pg1-x541.google.com with SMTP id 15so41490pgx.7;
+        Tue, 05 Jan 2021 07:21:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=XVD1XX3XannWZQkiPFGE0hM1GlNO9UtMwgSsJNHwDMg=;
+        b=QKuUUVMX/n857o6VHwgDSqWTy/n713BPYakWBWEdURp4hpDi9/0heOFJb3AOmVCJ49
+         Qd/Opsl4xmFvFChH+s82FEABDhdC8JpYNN1PnEk9iU2X+gvSwODydEwyK/hOnBT1Cfy1
+         Os4FHV4TMfnWGxI/EIIL3rSEa8eE3CzyowquQwVG/7N+RFiU5YGeEqQ4+D8l2P17bJcj
+         QSleZT7aH2ClSLL1ZrlWJhmNGnAuUexMBTC0WZRTk56ywmEXqVYYNpMzGZEn57U1XypU
+         On3HozuwuAj9uE4e/LgIauJE2AyUUJ9LN/FVpwFsuDeRoBKgtGDiEkdvGYTPWJt6LPcS
+         svRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=XVD1XX3XannWZQkiPFGE0hM1GlNO9UtMwgSsJNHwDMg=;
+        b=ILwHH1Nn7KJSjvGiO2L+X1+GO/NMpq7VHqKFDK6b8fIlm46vzmLLxJm7aCAwFYbTFC
+         WK94mRr22jN+FZEguEI1o7hJO1oBnYh2p8HWsK9pVQa+ouPEXFzesQWkReEyeosAvkjf
+         U522D6+rrUga4vj0m5cDx3LOXVo1/ZSJu80RBxEGedx0i6ZnrjcbsaM1xTIXG2v9zWCV
+         biDjPczp4oq3BpofrLPFEbDZDQlvOXzYG8UQtk0IeivQF4U0PFOWLjYTWJaq0JjgCGn5
+         hKz2BQRmfEIMEw98xsdXsH4z5Px9nHffAk3E9VuZ/5tbPI2fm0nxsH3uPujiiuct6/VW
+         sljQ==
+X-Gm-Message-State: AOAM5312zcWwHmvVNsMXLI+/L5ttqLv1T9FAfVp51jdQHTguNP96mM58
+        PZfIATAK1yv1G9zAh+KRW9bzl7rwF0o=
+X-Google-Smtp-Source: ABdhPJwYw1QXF4XI/GYprpYoDV0KwnTx7v/DjcAXf+m06a2+DS1FV4Ptn6MjXrxKHRAZf9h4+G2k9A==
+X-Received: by 2002:a62:7693:0:b029:19d:92fb:4ec1 with SMTP id r141-20020a6276930000b029019d92fb4ec1mr47108934pfc.4.1609860117655;
+        Tue, 05 Jan 2021 07:21:57 -0800 (PST)
+Received: from localhost.localdomain ([178.236.46.205])
+        by smtp.gmail.com with ESMTPSA id b18sm15560pfi.173.2021.01.05.07.21.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Jan 2021 07:21:56 -0800 (PST)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: dong.menglong@zte.com.cn
+To:     shuah@kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        jamorris@linux.microsoft.com, dong.menglong@zte.com.cn,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/bpf: remove duplicate include in test_lsm
+Date:   Tue,  5 Jan 2021 07:20:47 -0800
+Message-Id: <20210105152047.6070-1-dong.menglong@zte.com.cn>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-clang supports arbitrary length ints using the _ExtInt extension. This
-can be useful to hold very large values, e.g. 256 bit or 512 bit types.
+From: Menglong Dong <dong.menglong@zte.com.cn>
 
-Larger types (e.g. 1024 bits) are possible but I am unaware of a use
-case for these.
+'unistd.h' included in 'selftests/bpf/prog_tests/test_lsm.c' is
+duplicated.
 
-This requires the _ExtInt extension enabled in clang, which is under
-review.
+Signed-off-by: Menglong Dong <dong.menglong@zte.com.cn>
+---
+ tools/testing/selftests/bpf/prog_tests/test_lsm.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Link: https://clang.llvm.org/docs/LanguageExtensions.html#extended-integer-types
-Link: https://reviews.llvm.org/D93103
-
-Signed-off-by: Sean Young <sean@mess.org>
-
-changes since v2:
- - split patches into 4 distinct patches
-
-changes since v1:
- - added tests as suggested by Yonghong Song
- - added kernel pretty-printer
-
-
-Sean Young (4):
-  btf: add support for ints larger than 128 bits
-  libbpf: add support for ints larger than 128 bits
-  bpftool: add support for ints larger than 128 bits
-  bpf: add tests for ints larger than 128 bits
-
- Documentation/bpf/btf.rst                     |   4 +-
- include/uapi/linux/btf.h                      |   2 +-
- kernel/bpf/btf.c                              |  54 +-
- tools/bpf/bpftool/btf_dumper.c                |  40 ++
- tools/include/uapi/linux/btf.h                |   2 +-
- tools/lib/bpf/btf.c                           |   2 +-
- tools/testing/selftests/bpf/Makefile          |   3 +-
- tools/testing/selftests/bpf/prog_tests/btf.c  |   3 +-
- .../selftests/bpf/progs/test_btf_extint.c     |  50 ++
- tools/testing/selftests/bpf/test_extint.py    | 535 ++++++++++++++++++
- 10 files changed, 679 insertions(+), 16 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_btf_extint.c
- create mode 100755 tools/testing/selftests/bpf/test_extint.py
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_lsm.c b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
+index 6ab29226c99b..2755e4f81499 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_lsm.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
+@@ -10,7 +10,6 @@
+ #include <unistd.h>
+ #include <malloc.h>
+ #include <stdlib.h>
+-#include <unistd.h>
+ 
+ #include "lsm.skel.h"
+ 
 -- 
-2.29.2
+2.17.1
 
