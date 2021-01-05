@@ -2,164 +2,230 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.2 required=3.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 09E71C433DB
-	for <bpf@archiver.kernel.org>; Mon,  4 Jan 2021 23:59:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6360BC433DB
+	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 00:04:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C731422AAC
-	for <bpf@archiver.kernel.org>; Mon,  4 Jan 2021 23:59:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 2CBAB2255F
+	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 00:04:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726864AbhADX6v (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 4 Jan 2021 18:58:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726098AbhADX6v (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 4 Jan 2021 18:58:51 -0500
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB386C061794;
-        Mon,  4 Jan 2021 15:58:10 -0800 (PST)
-Received: by mail-yb1-xb2d.google.com with SMTP id f6so27605143ybq.13;
-        Mon, 04 Jan 2021 15:58:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SHHD7A8wdQkjDrmLnfifNyaav1sJb/fGB9kAgRaskXg=;
-        b=OvaT9uMWLRmWGV1j/mZZyxM8SNQ1oUQ9MIzivoKEM0WaCvgG0i0dcHjxGyOIVkqwwh
-         af+s1rIuLcR0p7GaaiyYd9bp5w5lSFUqOUbzvfUOU1vIDhcG4bcUqNdCIHHLl5I4Jy0X
-         cVNZicTXpnG8lexF6wxembCFSg8Wps/26N5PVojs75lVDshmIHkcArIr6I17+FHJaBRC
-         yZEqd3jGYBVV0J2Y37wesYXgtSeU0jmLdJemnKfek513vUxTbTK4L38s21te1NGavmkU
-         omCnIqoYZs5/QIaccMDXSDzRKqsnBxkLOO1QuV0bdB4a67MAfxddNgY6AUE5T8HJ2Pho
-         166w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SHHD7A8wdQkjDrmLnfifNyaav1sJb/fGB9kAgRaskXg=;
-        b=HpVk7aHBL4zTDGxzxnMLMQZ/MkefawHVDAtoIm9fbRBzqOZQ7KMKuSt+3p++RpTe4u
-         40p7c2GUj7xQv8ai7hY2VdPrQuRi2h64SePgkyFPa5LKniJ+DwnRAtpLovMbBN+I3WN6
-         GBkQxN+x6osGwslS2irNsU2eePKWrYgwkKQ/vzdSJ62VuAvZV2X7q6DSfDLHYPmi5lSI
-         gIMR1gBSRyu/EjERcK0hUAPKA0v3A7Rtkcjd52F9IJPjR7kYIxP7X3XHnrCAF28l8YvW
-         SLuDtnMpr6nFt+X/gObgr/Fjwq/9QtA+BtRXX4bjhk0RS/CbK365qQB2xJGEiwJKUfWg
-         D6iQ==
-X-Gm-Message-State: AOAM530HTS7/RFOduvZo9w8p2f4FidfDLI7ASySMXOWW/keFuOyhP3t0
-        nR3V7A3u/LCLu73ikuUwSraEk54przkrYiHCzjDiE5As
-X-Google-Smtp-Source: ABdhPJxLjZx2IGVa5mfQYarZ0yFS2xWmlmQ04KnJ6Keybd5QRNs7vUr6EBclhi/1nKAV89ShdUJ4jF5wKarjfs9sVGM=
-X-Received: by 2002:a25:c7c6:: with SMTP id w189mr107283250ybe.403.1609793690747;
- Mon, 04 Jan 2021 12:54:50 -0800 (PST)
+        id S1726168AbhAEAEg (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 4 Jan 2021 19:04:36 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:14894 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726163AbhAEAEg (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 4 Jan 2021 19:04:36 -0500
+Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 104No4SW030562;
+        Mon, 4 Jan 2021 16:03:38 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=facebook; bh=1ppAzx0EHMWU0ox8dBh/N5HpB1sElmxTNJ+lQVpXBLc=;
+ b=IwfVDLv2hpylCA++wyxIKzjVG+4Fbf6R0zKdJ9Z/AZlto2acYztnbl1oh9osC35Oci5p
+ pTAb4PhL7lF1cfl1PxSfICm/chzQ3RyJISzguL9d7UHefEi5vg/WC+w3HKBdVEFDNoMK
+ rUWIlTBVOxTCLeXbHX/+Csjt0Fe583hpwxM= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 35u9rupphq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 04 Jan 2021 16:03:38 -0800
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.228) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Mon, 4 Jan 2021 16:03:37 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Cscex11YYtCTy8nRmS3mB0egqDc2Qp1FudwcUVYmIAtAl5MBRiKOaSflReEsnSyQ+ojwgirBCUg5eEKlA1BbwudAYl0jWwcraTea/U+ce/XCW3wEXpyx2mE5i51b4OxvvZ6mvjP7xzoCwOCskfc6OHl6dUIO9MIQ1DxV0K8Itoq0AsLiCHmKumJ0/nbnf4AVeGQq97JuE6QFl98/qIfaVMoKh6CtZ4ufc3narIMap0SK4q0fmcMg7hOIR0z2mbMbjlWbZCI4bMfJhQ2Qm6aHgJIOTFE52RHTmmiPT4QJfHkm/Wr2bQjehb83HHvuRzMQdLPB8Y3+H4TcIiGg2Ey7IQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1ppAzx0EHMWU0ox8dBh/N5HpB1sElmxTNJ+lQVpXBLc=;
+ b=KBpJ1WOLAUvdUNlKtk8uCivbkSSZEv48PDFk5+MEuGkqfpDWrfB46iymvxS/kY4jahT/GyctqF2cI2Ply4ctnUEdOi0t3QTGoz7Jt/oKOOOH8WXFdP+cGe/MlX/pisGDF1kzX7GHbU7ZWT+dA3zg+2QHyCKkRP0VyOd0B9s71NALlG9/Gfud99pSGtk4duDR4HYYYcueoouWO9I0Raxp1nHf0ZErysVyxk/Z3oEDYUgMpusIC8KiJiB2WHiHQCGn97wCcWCXT5w/Uwrw4cdzcoNQBief4hMq5qZipCzDe6ky8QFhUzBPacuQsSEk0Z6vvErMBeRRVgGT7RiQ2B+TkA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1ppAzx0EHMWU0ox8dBh/N5HpB1sElmxTNJ+lQVpXBLc=;
+ b=ZRZpoI0vTkT14klydZQvUqehSxYsJriEAb1nOjXgwKJB7WezxH9+NojCr8NfdtK5p2Wk57JMliQEwevJdIipQuKiYy8oprZDPgKthnTsat7CQ+loJuIi/NVyU0ei8tYQobOjm0aYbJrJRolPExm8sw6ukOV5wVy2DcnahQRN7WE=
+Authentication-Results: google.com; dkim=none (message not signed)
+ header.d=none;google.com; dmarc=none action=none header.from=fb.com;
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com (2603:10b6:a03:1f6::32)
+ by BYAPR15MB2774.namprd15.prod.outlook.com (2603:10b6:a03:15d::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3721.24; Tue, 5 Jan
+ 2021 00:03:36 +0000
+Received: from BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::217e:885b:1cef:e1f7]) by BY5PR15MB3571.namprd15.prod.outlook.com
+ ([fe80::217e:885b:1cef:e1f7%7]) with mapi id 15.20.3721.024; Tue, 5 Jan 2021
+ 00:03:36 +0000
+Date:   Mon, 4 Jan 2021 16:03:29 -0800
+From:   Martin KaFai Lau <kafai@fb.com>
+To:     Stanislav Fomichev <sdf@google.com>
+CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>, <ast@kernel.org>,
+        <daniel@iogearbox.net>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: try to avoid kzalloc in
+ cgroup/{s,g}etsockopt
+Message-ID: <20210105000329.augyugyaucykt35r@kafai-mbp>
+References: <20210104221454.2204239-1-sdf@google.com>
+ <20210104221454.2204239-2-sdf@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210104221454.2204239-2-sdf@google.com>
+X-Originating-IP: [2620:10d:c090:400::5:eac]
+X-ClientProxiedBy: MW2PR2101CA0014.namprd21.prod.outlook.com
+ (2603:10b6:302:1::27) To BY5PR15MB3571.namprd15.prod.outlook.com
+ (2603:10b6:a03:1f6::32)
 MIME-Version: 1.0
-References: <20201229151352.6hzmjvu3qh6p2qgg@e107158-lin> <20201229173401.GH450923@krava>
- <20201229232835.cbyfmja3bu3lx7we@e107158-lin> <20201230090333.GA577428@krava>
- <20201230132759.GB577428@krava> <CAEf4BzYbeQqzK2n9oz6wqysVj35k+VZC7DZrXFEtjUM6eiyvOA@mail.gmail.com>
- <20210102230654.GA732432@krava>
-In-Reply-To: <20210102230654.GA732432@krava>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 4 Jan 2021 12:54:39 -0800
-Message-ID: <CAEf4BzbEoVHNw71XifTHm=dFU8ix+_+MdKBi+sT65+jj-mZQFA@mail.gmail.com>
-Subject: Re: BTFIDS: FAILED unresolved symbol udp6_sock
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Qais Yousef <qais.yousef@arm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from kafai-mbp (2620:10d:c090:400::5:eac) by MW2PR2101CA0014.namprd21.prod.outlook.com (2603:10b6:302:1::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.0 via Frontend Transport; Tue, 5 Jan 2021 00:03:36 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5852c9e2-d9b6-417c-94e9-08d8b10d59a5
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2774:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB2774CE0D633CD2EFFDC6DEECD5D10@BYAPR15MB2774.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5jwDeW4Xm5ANinSucIHpczDzAJPKyvt7ObILAF3O5sp9fmapGWq/T2hwkt+Lx3S3IJGG1aLdhCklMB+CC3P8nC0aJUGsvRueR08CKgx8jwQznj3QC1UdGAUlol1c4udYjGrPYLfZC+/F/in8fN9S+Ky/7RmpLNEdIcLI7x9xTgoizPyBe9L/UQtTniMtYeXgUpvW6MNuMrfIoFeI4rrQeQv2lcrfRzIEq2Ijpae9z9nVfhRNHUTg24bnUSMkYe4JWJ7VvC2RByE3g9pdQ8uqOxZQK0upX7k+OwUSiOGRTjVJgvmz0d/72cRQVdgxjOVEGUVjfOXppj/En0klpeKaGk373YK7TaNU4Aw07dvwvO3Xa3dS+nSc3JixGIVygccyHch4JS7YAvqP0YhkLFtWfg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR15MB3571.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(396003)(136003)(376002)(366004)(346002)(8676002)(316002)(2906002)(16526019)(186003)(66946007)(478600001)(86362001)(33716001)(66556008)(66476007)(52116002)(6496006)(8936002)(83380400001)(5660300002)(6916009)(1076003)(55016002)(4326008)(9686003)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?vKYSccwA8mCn9dgcMmdDVs5Wp66EePZW3BrpEOVlyZOWlF7/34sY+JizVECo?=
+ =?us-ascii?Q?MCScxMVvJP9xLOaTo/q9/5nXpJJlUMV+TeM+EaclOtsmEeNwU3DxyK4UxDJY?=
+ =?us-ascii?Q?sqRY+t0OCtWUA+rBGlG/dSD4KxaLOfEnRE99x6cr/VuRpOdkTN7GbV2h9vae?=
+ =?us-ascii?Q?Qn5P1JtWxAi/SPiPZHX6IPkDL5rNJL2KlOEI/F5M4jHEYd8m5aVCnaFcGmmW?=
+ =?us-ascii?Q?5Mg+3of4Axa4R2BSKYftPDDbIXzZgkfOGy803N4xTN79UVGGkaiLJ83myGTH?=
+ =?us-ascii?Q?ZMBmaDCrexWdldO0bfQDoc4jPQ18SMRcbdfF46N6lEOpr6NjEZ1uwd4Bkfsc?=
+ =?us-ascii?Q?clMX05o8MFNSii27dGVdAL88iSoLIw5SxQpHqO1V9JzPBEQ/Ro3z1U7oD5qE?=
+ =?us-ascii?Q?53o0hF74iAwnj0eakvfKEAnBS+bodQSsMM0KzTW7DP0LvPF18hNjK8X8D3P/?=
+ =?us-ascii?Q?1QHLlQz88scXg+6aomWSH4IN21I28oMnqS0KM0wOifEr3OTRRU9yqNkKbs6C?=
+ =?us-ascii?Q?StHkBgCODGwX1Rm3At/1bYWeOfQIKx1ddNYWPVRl1O42SPreSdCc5z+BhOXc?=
+ =?us-ascii?Q?Lya+jrGsiZufJ7zSjwQ4d2UXSodF7p2b2H0mO28rJNOIto51sZD8ONcLMACD?=
+ =?us-ascii?Q?dK+D8G1pNVbRMGO9O1DV1YOBr+55MZm8lczdCapBmXhmVU6BneU7x8A1f2wv?=
+ =?us-ascii?Q?lzJZqHDqO7/crmNakMgq9tOOtdedawXIaxH7imcvDVFYVRT77m3IFZK/3Ycj?=
+ =?us-ascii?Q?qOgvBJQdwS2sWNjMXufNp7gRnD3zLqCL1ac6Biw4XqdLE5aFRejk9WdfdQyx?=
+ =?us-ascii?Q?W/7MY5eF7SiHHhuAGGrW9fgtzeTd+LZdZwJkRCOA98Ce9wl1XBRPR58qbUAM?=
+ =?us-ascii?Q?+enAlvAuH2L7uFxPvkbmRNoIssYwA5JE5QEYkWYw7jtL5BAdD4QLuO/4Rl28?=
+ =?us-ascii?Q?tZceLYazYXuk8vncdNnrMkRaXYxf1PF2Qsqw7IceH5FiUNaBdn9+HF0F6Ym2?=
+ =?us-ascii?Q?N3omzDCyJ4l0KSlfs+zzaA+yag=3D=3D?=
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR15MB3571.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2021 00:03:36.8880
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5852c9e2-d9b6-417c-94e9-08d8b10d59a5
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: b8V9P0OPXBlAKUksjPdgEfNXXC7Dey4XfZRU8bD1IhCMNl6jVCfwpYEtP8FqpzkX
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2774
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-04_16:2021-01-04,2021-01-04 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 spamscore=0
+ lowpriorityscore=0 bulkscore=0 malwarescore=0 suspectscore=0 adultscore=0
+ clxscore=1015 impostorscore=0 priorityscore=1501 phishscore=0
+ mlxlogscore=999 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101040145
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Jan 2, 2021 at 3:07 PM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Sat, Jan 02, 2021 at 02:25:34PM -0800, Andrii Nakryiko wrote:
->
-> SNIP
->
-> > >
-> > > so your .config has
-> > >   CONFIG_CRYPTO_DEV_BCM_SPU=y
-> > >
-> > > and that defines 'struct device_private' which
-> > > clashes with the same struct defined in drivers/base/base.h
-> > >
-> > > so several networking structs will be doubled, like net_device:
-> > >
-> > >         $ bpftool btf dump file ../vmlinux.config | grep net_device\' | grep STRUCT
-> > >         [2731] STRUCT 'net_device' size=2240 vlen=133
-> > >         [113981] STRUCT 'net_device' size=2240 vlen=133
-> > >
-> > > each is using different 'struct device_private' when it's unwinded
-> > >
-> > > and that will confuse BTFIDS logic, becase we have multiple structs
-> > > with the same name, and we can't be sure which one to pick
-> > >
-> > > perhaps we should check on this in pahole and warn earlier with
-> > > better error message.. I'll check, but I'm not sure if pahole can
-> > > survive another hastab ;-)
-> > >
-> > > Andrii, any ideas on this? ;-)
-> >
-> > It's both unavoidable and correct from the C type system's
-> > perspective, so there is nothing for pahole to warn about. We used to
-> > have (for a long time) a similar clash with two completely different
-> > ring_buffer structs. Eventually they just got renamed to avoid
-> > duplication of related structs (task_struct and tons of other). But
-> > both BTF dedup and CO-RE relocation algorithms are designed to handle
-> > this correctly, ...
->
-> AFAIU it's all correctly dedulicated, but still all structs that
-> contain (at some point) 'struct device_private' will appear twice
-> in BTF data.. each with different 'struct device_private'
+On Mon, Jan 04, 2021 at 02:14:53PM -0800, Stanislav Fomichev wrote:
+> When we attach a bpf program to cgroup/getsockopt any other getsockopt()
+> syscall starts incurring kzalloc/kfree cost. While, in general, it's
+> not an issue, sometimes it is, like in the case of TCP_ZEROCOPY_RECEIVE.
+> TCP_ZEROCOPY_RECEIVE (ab)uses getsockopt system call to implement
+> fastpath for incoming TCP, we don't want to have extra allocations in
+> there.
+> 
+> Let add a small buffer on the stack and use it for small (majority)
+> {s,g}etsockopt values. I've started with 128 bytes to cover
+> the options we care about (TCP_ZEROCOPY_RECEIVE which is 32 bytes
+> currently, with some planned extension to 64).
+> 
+> It seems natural to do the same for setsockopt, but it's a bit more
+> involved when the BPF program modifies the data (where we have to
+> kmalloc). The assumption is that for the majority of setsockopt
+> calls (which are doing pure BPF options or apply policy) this
+> will bring some benefit as well.
+> 
+> Collected some performance numbers using (on a 65k MTU localhost in a VM):
+> $ perf record -g -- ./tcp_mmap -s -z
+> $ ./tcp_mmap -H ::1 -z
+> $ ...
+> $ perf report --symbol-filter=__cgroup_bpf_run_filter_getsockopt
+> 
+> Without this patch:
+>      4.81%     0.07%  tcp_mmap  [kernel.kallsyms]  [k] __cgroup_bpf_run_filter_>
+>             |
+>              --4.74%--__cgroup_bpf_run_filter_getsockopt
+>                        |
+>                        |--1.06%--__kmalloc
+>                        |
+>                        |--0.71%--lock_sock_nested
+>                        |
+>                        |--0.62%--__might_fault
+>                        |
+>                         --0.52%--release_sock
+> 
+> With the patch applied:
+>      3.29%     0.07%  tcp_mmap  [kernel.kallsyms]  [k] __cgroup_bpf_run_filter_getsockopt
+>             |
+>              --3.22%--__cgroup_bpf_run_filter_getsockopt
+>                        |
+>                        |--0.66%--lock_sock_nested
+>                        |
+>                        |--0.57%--__might_fault
+>                        |
+>                         --0.56%--release_sock
+> 
+> So it saves about 1% of the system call. Unfortunately, we still get
+> 2-3% of overhead due to another socket lock/unlock :-(
+That could be a future exercise to optimize the fast path sockopts. ;)
 
-it's correct from the type system perspective, right. Those two
-duplicates of struct device_private are parts of two different
-hierarchies of types. However inconvenient it is, C allows it,
-unfortunately :(
+[ ... ]
 
->
-> > ... so perhaps BTFIDS should be able to handle this as
-> > well?
->
-> hm, BTFIDS sees BTF data with two same struct names and has no
-> way to tell which one to use
->
-> unless we have some annotation data for BTF types I don't
-> see a way to handle this correctly.. but I think we can
-> detect this directly in BTFIDS and print more accurate error
-> message
->
-> as long as we dont see this on daily basis, I think that better
-> error message + following struct rename is good solution
+> --- a/kernel/bpf/cgroup.c
+> +++ b/kernel/bpf/cgroup.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/bpf-cgroup.h>
+>  #include <net/sock.h>
+>  #include <net/bpf_sk_storage.h>
+> +#include <net/tcp.h> /* sizeof(struct tcp_zerocopy_receive) */
+To be more specific, it should be <uapi/linux/tcp.h>.
 
-Perhaps warning and handling this gracefully is a bit better way to
-handle this. Renaming is definitely good, but shouldn't block the
-kernel build process. I don't remember the exact details for why
-duplicate struct would cause troubles for resolve_btfids, but maybe
-just picking the struct with minimal ID (out of 2+ duplicates) would
-be ok in practice most of the time. In any case, that's what most
-users (including libbpf) will do, when searching for the type by name.
+>  
+>  #include "../cgroup/cgroup-internal.h"
+>  
+> @@ -1298,6 +1299,7 @@ static bool __cgroup_bpf_prog_array_is_empty(struct cgroup *cgrp,
+>  	return empty;
+>  }
+>  
+> +
+Extra newline.
 
->
-> >
-> > >
-> > > easy fix is the patch below that renames the bcm's structs,
-> > > it makes the kernel to compile.. but of course the new name
-> > > is probably wrong and we should push this through that code
-> > > authors
-> >
-> > In this case, I think renaming generic device_private name is a good
-> > thing regardless.
->
-> ok, I'll send the change
->
+>  static int sockopt_alloc_buf(struct bpf_sockopt_kern *ctx, int max_optlen)
+>  {
+>  	if (unlikely(max_optlen < 0))
+> @@ -1310,6 +1312,18 @@ static int sockopt_alloc_buf(struct bpf_sockopt_kern *ctx, int max_optlen)
+>  		max_optlen = PAGE_SIZE;
+>  	}
+>  
+> +	if (max_optlen <= sizeof(ctx->buf)) {
+> +		/* When the optval fits into BPF_SOCKOPT_KERN_BUF_SIZE
+> +		 * bytes avoid the cost of kzalloc.
+> +		 */
+If it needs to respin, it will be good to have a few words here on why
+it only BUILD_BUG checks for "struct tcp_zerocopy_receive".
 
-great, thanks
-
-> jirka
->
+> +		BUILD_BUG_ON(sizeof(struct tcp_zerocopy_receive) >
+> +			     BPF_SOCKOPT_KERN_BUF_SIZE);
+> +
+> +		ctx->optval = ctx->buf;
+> +		ctx->optval_end = ctx->optval + max_optlen;
+> +		return max_optlen;
+> +	}
+> +
