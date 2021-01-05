@@ -7,29 +7,29 @@ X-Spam-Status: No, score=-16.6 required=3.0 tests=BAYES_00,DKIM_INVALID,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F2FFAC432C3
-	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 14:47:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 28881C43333
+	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 14:47:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DC0DB22B45
+	by mail.kernel.org (Postfix) with ESMTP id F2DC622BED
 	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 14:47:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726571AbhAEOqp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Jan 2021 09:46:45 -0500
-Received: from gofer.mess.org ([88.97.38.141]:34493 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726827AbhAEOqS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1726957AbhAEOqS (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 5 Jan 2021 09:46:18 -0500
+Received: from gofer.mess.org ([88.97.38.141]:54255 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726694AbhAEOqR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Jan 2021 09:46:17 -0500
 Received: by gofer.mess.org (Postfix, from userid 1000)
-        id CA9C5C639B; Tue,  5 Jan 2021 14:45:34 +0000 (GMT)
+        id 7A5CEC637E; Tue,  5 Jan 2021 14:45:34 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1609857934; bh=vNMC+XjILBx6ybTc4yZLUSBL7ZhoWqLqlWehk6Wem00=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=QNy4B2Y1H5sUO2bx8i2G2OrKcF4OQHcTYQ/hz1qhHJUfjMHnxlev1dvWPw4rCJVpX
-         ZPJN8Xxv8EqEKxXzggLeW5+PfqpZP8AiGBIwugqi/8rVU1df5el1azskZ5sRkBIuWk
-         G1lKr+1lp70HUT4jQEXVYmqt8VLwOypufaANYaTWse7gQH3NpZCsMsGAl0psRXN0xe
-         pDUq1y85AANV4++JIfzRHtoT7eOJDOpoPPTHox4LMMNp7ghkYnEgP8lrbl1BopDnrR
-         0TbZgFOYSb08SUwsVQV1Wf1cjn0ZJXw4FbPCTA4lyBRs9oEfinqwXMCEvtqT5utvYw
-         8Gkrslnd/Njxw==
+        t=1609857934; bh=iJ86QbxBrhi/nSJypbCAMvYcDP4l2HigQ2w1KwuFLoQ=;
+        h=From:To:Subject:Date:From;
+        b=RKRuRNaOSqpGKmLkT3YE+xHyCRSzR4zz81sZRfyaVxK8mA2RFPOzlnFQrROGo21BW
+         pu8RJr1qccWhZAOhhjmsOxfnYeE/yGxQlLsQAQCe/DDkQXutEIT755yNGygMOy+Jsr
+         bH1UaIJR1DatoIcPI47IOOrWbpNEGXgn9IuNEdPE0IdTCkcgm2FTGF4+WZQnalWrgn
+         V8lvjotfbWfpMf5APdQYlpsHoe5IFvh8EiKq7K9MvmLJs4Av/wYlMF4m43RCZv0La5
+         KQihe77WRKfe8bjxFINZWq2NY83gEgljwPtsHl7r4ENBW7xTZvvXqXvkxYOFe1/OMa
+         46qe4HK4rP3Xg==
 From:   Sean Young <sean@mess.org>
 To:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -45,12 +45,10 @@ To:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
         linux-doc@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         clang-built-linux@googlegroups.com
-Subject: [PATCH v3 2/4] libbpf: add support for ints larger than 128 bits
-Date:   Tue,  5 Jan 2021 14:45:32 +0000
-Message-Id: <3d3f8d4cc59b61d42e05d5f66d7b29fc7eb20cfa.1609855479.git.sean@mess.org>
+Subject: [PATCH v3 0/4] btf: support ints larger than 128 bits
+Date:   Tue,  5 Jan 2021 14:45:30 +0000
+Message-Id: <cover.1609855479.git.sean@mess.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <cover.1609855479.git.sean@mess.org>
-References: <cover.1609855479.git.sean@mess.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -60,6 +58,9 @@ X-Mailing-List: bpf@vger.kernel.org
 clang supports arbitrary length ints using the _ExtInt extension. This
 can be useful to hold very large values, e.g. 256 bit or 512 bit types.
 
+Larger types (e.g. 1024 bits) are possible but I am unaware of a use
+case for these.
+
 This requires the _ExtInt extension enabled in clang, which is under
 review.
 
@@ -67,23 +68,35 @@ Link: https://clang.llvm.org/docs/LanguageExtensions.html#extended-integer-types
 Link: https://reviews.llvm.org/D93103
 
 Signed-off-by: Sean Young <sean@mess.org>
----
- tools/lib/bpf/btf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 3c3f2bc6c652..a676373f052b 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -1722,7 +1722,7 @@ int btf__add_int(struct btf *btf, const char *name, size_t byte_sz, int encoding
- 	if (!name || !name[0])
- 		return -EINVAL;
- 	/* byte_sz must be power of 2 */
--	if (!byte_sz || (byte_sz & (byte_sz - 1)) || byte_sz > 16)
-+	if (!byte_sz || (byte_sz & (byte_sz - 1)) || byte_sz > 64)
- 		return -EINVAL;
- 	if (encoding & ~(BTF_INT_SIGNED | BTF_INT_CHAR | BTF_INT_BOOL))
- 		return -EINVAL;
+changes since v2:
+ - split patches into 4 distinct patches
+
+changes since v1:
+ - added tests as suggested by Yonghong Song
+ - added kernel pretty-printer
+
+
+Sean Young (4):
+  btf: add support for ints larger than 128 bits
+  libbpf: add support for ints larger than 128 bits
+  bpftool: add support for ints larger than 128 bits
+  bpf: add tests for ints larger than 128 bits
+
+ Documentation/bpf/btf.rst                     |   4 +-
+ include/uapi/linux/btf.h                      |   2 +-
+ kernel/bpf/btf.c                              |  54 +-
+ tools/bpf/bpftool/btf_dumper.c                |  40 ++
+ tools/include/uapi/linux/btf.h                |   2 +-
+ tools/lib/bpf/btf.c                           |   2 +-
+ tools/testing/selftests/bpf/Makefile          |   3 +-
+ tools/testing/selftests/bpf/prog_tests/btf.c  |   3 +-
+ .../selftests/bpf/progs/test_btf_extint.c     |  50 ++
+ tools/testing/selftests/bpf/test_extint.py    | 535 ++++++++++++++++++
+ 10 files changed, 679 insertions(+), 16 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_btf_extint.c
+ create mode 100755 tools/testing/selftests/bpf/test_extint.py
+
 -- 
 2.29.2
 
