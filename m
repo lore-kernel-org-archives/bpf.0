@@ -2,113 +2,104 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A66C5C433E6
-	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 12:25:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A93DC433E6
+	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 12:26:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C362229F0
-	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 12:25:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D450022AAD
+	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 12:26:05 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728002AbhAEMZJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Jan 2021 07:25:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37248 "EHLO
+        id S1728815AbhAEMZw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Jan 2021 07:25:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725831AbhAEMZJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 5 Jan 2021 07:25:09 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3051C061793
-        for <bpf@vger.kernel.org>; Tue,  5 Jan 2021 04:24:28 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id a12so35965768wrv.8
-        for <bpf@vger.kernel.org>; Tue, 05 Jan 2021 04:24:28 -0800 (PST)
+        with ESMTP id S1728747AbhAEMZv (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 5 Jan 2021 07:25:51 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B3EC0617A3
+        for <bpf@vger.kernel.org>; Tue,  5 Jan 2021 04:24:35 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id t16so35995789wra.3
+        for <bpf@vger.kernel.org>; Tue, 05 Jan 2021 04:24:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=daynix-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id;
-        bh=9oioH7fTimHXbwiOIluI6SOkD883+857JncYScStEP4=;
-        b=FbMwTrKR3cHf2zWL9klv6VK4ofspjXiOKHz6DEaLIOOalGVtItVxyCqOPP800WhLbi
-         wFi2HsKPNvZdpo8E+hNyGsuYb7ssalbqsyvaK4oPI22KlV6BRH2bG3u6FWkFlB69pIR8
-         Mzaj2gSyw79793NiaO9r8vQXW0XGCyB1lJb/cNMOIFP6X5gMbJupxKnIKYgchD6hT1RF
-         3kUDGDsAVgBLnNjdVJgpY2NMvK3HVuNu8jjjV09c7XxKRBfAdMS1iZcmfavT0ykU6hY6
-         zpqj71VsNbRoA/gW9DVTYd7a9uYGYPekodMcNhXvVlRFdX46g4pKll/xxPRoLsSoHmnh
-         c0/A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=u0kBDkZSof0LwbMWuYCOPhj4hHVMvwb36KmGU51ii7Y=;
+        b=ND819YouqBX2OWqXMdqdQeyowrfISKhBPc2XrLPMSsEl7svulPDlyyq3EkBtNbL33u
+         TDaKNAZRhQCDcM6g7W1VV86CZMsGPo/Xj6o9ovlgTu1Dkia9VLQEAhbNY9nR9vAFrfOF
+         fgoEuPBj4FgxID677UG7GgUc9XU/RXpFh/gbm7eTWT5Nri3rbP72bDPpaO6Sm9HCNgI3
+         3NSpgM2+U6guAItcMAeEWlToNz5eKPh3fU1yovidq2zYfknj0ya64YVX6h9x0A8df3W+
+         2aGD7YS/4qoFccPopziAfM1EXWE23Jv2Hdf4xMOmznant61CMaghciMWLZOQMjrSc6PP
+         LOEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=9oioH7fTimHXbwiOIluI6SOkD883+857JncYScStEP4=;
-        b=aCamFb+wRH8izRutGcS6AgE/6XZNppDCO35U0/oSAHjl7hvi97k7GrWC3vWuYqyhZE
-         HELz4RQQJn843WiOd5/edYLo0LpbNkCRMhEfnazNJsTcOaQj2H9jhrEquoBdXv3hT5OR
-         XcHw+dWCl9FIk4wt2t+tF1Avh6gG3FFM7ngj3vh/OL7bZI18JuFvj7v4ZyLa8bOxyZDg
-         TYLZO4VaboNPQX6GYKxh+45E0Jz3zKgOjIBxgrnhVnHnu4elTH6ywiZzP3cGZ5TIwrnF
-         QhxdqM+d7l5kxoiuqfwb9B/SkUaciV7mEnFGqskKLf0Ee/P2FSVSjvk+jEb0bclwgeks
-         5fHw==
-X-Gm-Message-State: AOAM533DXVMT9i6Rj7aoLyB8SWpOAEpc2gkKKIBQtEXoj0nIq5Xn+gOk
-        yHMvVQ1CqFmV7FV8Mt8VHWaXDw==
-X-Google-Smtp-Source: ABdhPJzDFqgXfrQp5xp/ZdVS3eJS4pVr3HLwm3vZVbK5A1KjbHq655u+3K3H13y3kF8I1PPCp/eltQ==
-X-Received: by 2002:a5d:6045:: with SMTP id j5mr81535395wrt.223.1609849467537;
-        Tue, 05 Jan 2021 04:24:27 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=u0kBDkZSof0LwbMWuYCOPhj4hHVMvwb36KmGU51ii7Y=;
+        b=DgjqSk04Ig9221TbEml6rp0OjTXnyn1czr19mlBONNxhLQ4FEQL49VdywxywIhJ0GT
+         vMy/rDO/4OiX00w+zp+j93sd1UcMNWnu2K05U0/C4ffZ9H9Aa6o9gQwZpxFywVV39SFE
+         BpsITLKSt+k5vhsIX2+ikoRjxzQdj7vHgOrKyxTk/mF1jTDtIEzhwbN9IYUnaygFQvYs
+         TP/kksr2zI7vvXAKggaAa5i5Qg3CPTVrIBrbC7IYmKWfQ1mSd9YbVGOn9CeevEQxbKmH
+         mPyALEMc+EDqeMgRYD2h14hdrzvC81vvA/MKTABaxH83SXx7e+SZyfOIvQ00k9BmVSLz
+         WA4g==
+X-Gm-Message-State: AOAM531ixV7EKfK3BLPMTi3Y1u11xQrMWbsVW10mh3odWgmBpnijhNqb
+        MDtlrUZdBzvw+fSY6gCOt4yizg==
+X-Google-Smtp-Source: ABdhPJyJfqvsRJHDTSpaa9QAkR2GGFTavM6RbFaNNqtKETNWn4GmNRmrqwUcSVEVi1csBmRIq/qoBg==
+X-Received: by 2002:a5d:56c3:: with SMTP id m3mr84858735wrw.419.1609849474478;
+        Tue, 05 Jan 2021 04:24:34 -0800 (PST)
 Received: from f2.redhat.com (bzq-79-183-72-147.red.bezeqint.net. [79.183.72.147])
-        by smtp.gmail.com with ESMTPSA id 138sm4242281wma.41.2021.01.05.04.24.25
+        by smtp.gmail.com with ESMTPSA id 138sm4242281wma.41.2021.01.05.04.24.32
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 05 Jan 2021 04:24:26 -0800 (PST)
+        Tue, 05 Jan 2021 04:24:33 -0800 (PST)
 From:   Yuri Benditovich <yuri.benditovich@daynix.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>
-Cc:     yan@daynix.com, netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [RFC PATCH 0/7] Support for virtio-net hash reporting
-Date:   Tue,  5 Jan 2021 14:24:09 +0200
-Message-Id: <20210105122416.16492-1-yuri.benditovich@daynix.com>
+Cc:     yan@daynix.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: [RFC PATCH 4/7] tun: free bpf_program by bpf_prog_put instead of bpf_prog_destroy
+Date:   Tue,  5 Jan 2021 14:24:13 +0200
+Message-Id: <20210105122416.16492-5-yuri.benditovich@daynix.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210105122416.16492-1-yuri.benditovich@daynix.com>
+References: <20210105122416.16492-1-yuri.benditovich@daynix.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Existing TUN module is able to use provided "steering eBPF" to
-calculate per-packet hash and derive the destination queue to
-place the packet to. The eBPF uses mapped configuration data
-containing a key for hash calculation and indirection table
-with array of queues' indices.
+The module never creates the bpf program with bpf_prog_create
+so it shouldn't free it with bpf_prog_destroy.
+The program is obtained by bpf_prog_get and should be freed
+by bpf_prog_put. For BPF_PROG_TYPE_SOCKET_FILTER both
+methods do the same but for other program types they don't.
 
-This series of patches adds support for virtio-net hash reporting
-feature as defined in virtio specification. It extends the TUN module
-and the "steering eBPF" as follows:
+Signed-off-by: Yuri Benditovich <yuri.benditovich@daynix.com>
+---
+ drivers/net/tun.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Extended steering eBPF calculates the hash value and hash type, keeps
-hash value in the skb->hash and returns index of destination virtqueue
-and the type of the hash. TUN module keeps returned hash type in
-(currently unused) field of the skb. 
-skb->__unused renamed to 'hash_report_type'.
-
-When TUN module is called later to allocate and fill the virtio-net
-header and push it to destination virtqueue it populates the hash
-and the hash type into virtio-net header.
-
-VHOST driver is made aware of respective virtio-net feature that
-extends the virtio-net header to report the hash value and hash report
-type.
-
-Yuri Benditovich (7):
-  skbuff: define field for hash report type
-  vhost: support for hash report virtio-net feature
-  tun: allow use of BPF_PROG_TYPE_SCHED_CLS program type
-  tun: free bpf_program by bpf_prog_put instead of bpf_prog_destroy
-  tun: add ioctl code TUNSETHASHPOPULATION
-  tun: populate hash in virtio-net header when needed
-  tun: report new tun feature IFF_HASH
-
- drivers/net/tun.c           | 43 +++++++++++++++++++++++++++++++------
- drivers/vhost/net.c         | 37 ++++++++++++++++++++++++-------
- include/linux/skbuff.h      |  7 +++++-
- include/uapi/linux/if_tun.h |  2 ++
- 4 files changed, 74 insertions(+), 15 deletions(-)
-
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 455f7afc1f36..18c1baf1a6c1 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -2218,7 +2218,7 @@ static void tun_prog_free(struct rcu_head *rcu)
+ {
+ 	struct tun_prog *prog = container_of(rcu, struct tun_prog, rcu);
+ 
+-	bpf_prog_destroy(prog->prog);
++	bpf_prog_put(prog->prog);
+ 	kfree(prog);
+ }
+ 
 -- 
 2.17.1
 
