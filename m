@@ -2,35 +2,52 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A962C43331
-	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 09:13:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0651CC433DB
+	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 09:34:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0953D225AC
-	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 09:13:30 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id ABB1C225AC
+	for <bpf@archiver.kernel.org>; Tue,  5 Jan 2021 09:34:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726059AbhAEJM4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 5 Jan 2021 04:12:56 -0500
-Received: from out30-43.freemail.mail.aliyun.com ([115.124.30.43]:52590 "EHLO
-        out30-43.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727225AbhAEJMa (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 5 Jan 2021 04:12:30 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0UKoYpcb_1609837905;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UKoYpcb_1609837905)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 05 Jan 2021 17:11:45 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     netdev@vger.kernel.org
+        id S1728146AbhAEJeF (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 5 Jan 2021 04:34:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:51007 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728085AbhAEJeF (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 5 Jan 2021 04:34:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1609839158;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KDRR0z0TUONmOgv9BLItAtpsqP3CgvwXGzYeT1dfz/4=;
+        b=bf1xH8KvDnGykQu0C/o3Wa+gXdSmeQFcYlcaHsy7UKFZ3wWKsW8NVIrqmfnthskML+4Pej
+        sNg6DlL6L8H9EUHFg1N580QDdsh8XSGcoNJo/j256T2L1c75hmH+DEvALfiCDZN4WZfbaK
+        sauM4zdsIybNmTvMS1doiw7j+0Sv1JM=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-411-X9SbBh3RMIqosxb8yBjmxw-1; Tue, 05 Jan 2021 04:32:34 -0500
+X-MC-Unique: X9SbBh3RMIqosxb8yBjmxw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0CD97801A9E;
+        Tue,  5 Jan 2021 09:32:31 +0000 (UTC)
+Received: from [10.72.13.192] (ovpn-13-192.pek2.redhat.com [10.72.13.192])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EFA7C60873;
+        Tue,  5 Jan 2021 09:32:20 +0000 (UTC)
+Subject: Re: [PATCH netdev 0/5] virtio-net support xdp socket zero copy xmit
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>, netdev@vger.kernel.org
 Cc:     dust.li@linux.alibaba.com, tonylu@linux.alibaba.com,
         "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
         Jonathan Lemon <jonathan.lemon@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -41,123 +58,93 @@ Cc:     dust.li@linux.alibaba.com, tonylu@linux.alibaba.com,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         KP Singh <kpsingh@kernel.org>,
-        virtualization@lists.linux-foundation.org (open list:VIRTIO CORE AND
-        NET DRIVERS), linux-kernel@vger.kernel.org (open list),
-        bpf@vger.kernel.org (open list:XDP SOCKETS (AF_XDP))
-Subject: [PATCH netdev 1/5] xsk: support get page for drv
-Date:   Tue,  5 Jan 2021 17:11:39 +0800
-Message-Id: <e60669f8a573bed3b6a33bc18878f3496be5c2f5.1609837120.git.xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <cover.1609837120.git.xuanzhuo@linux.alibaba.com>
+        "open list:VIRTIO CORE AND NET DRIVERS" 
+        <virtualization@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:XDP SOCKETS (AF_XDP)" <bpf@vger.kernel.org>
 References: <cover.1609837120.git.xuanzhuo@linux.alibaba.com>
+From:   Jason Wang <jasowang@redhat.com>
+Message-ID: <a67e00af-47fb-4d92-8342-27dc93c8aab9@redhat.com>
+Date:   Tue, 5 Jan 2021 17:32:19 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
+MIME-Version: 1.0
 In-Reply-To: <cover.1609837120.git.xuanzhuo@linux.alibaba.com>
-References: <cover.1609837120.git.xuanzhuo@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-For some drivers, such as virtio-net, we do not configure dma when
-binding xsk. We will get the page when sending.
 
-This patch participates in a field need_dma during the setup pool. If
-the device does not use dma, this value should be set to false.
+On 2021/1/5 下午5:11, Xuan Zhuo wrote:
+> The first patch made some adjustments to xsk.
 
-And a function xsk_buff_raw_get_page is added to get the page based on
-addr in drv.
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
----
- include/linux/netdevice.h   |  1 +
- include/net/xdp_sock_drv.h  | 10 ++++++++++
- include/net/xsk_buff_pool.h |  1 +
- net/xdp/xsk_buff_pool.c     | 10 +++++++++-
- 4 files changed, 21 insertions(+), 1 deletion(-)
+Thanks a lot for the work. It's rather interesting.
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 7bf1679..b8baef9 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -915,6 +915,7 @@ struct netdev_bpf {
- 		struct {
- 			struct xsk_buff_pool *pool;
- 			u16 queue_id;
-+			bool need_dma;
- 		} xsk;
- 	};
- };
-diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
-index 4e295541..e9c7e25 100644
---- a/include/net/xdp_sock_drv.h
-+++ b/include/net/xdp_sock_drv.h
-@@ -100,6 +100,11 @@ static inline void *xsk_buff_raw_get_data(struct xsk_buff_pool *pool, u64 addr)
- 	return xp_raw_get_data(pool, addr);
- }
- 
-+static inline struct page *xsk_buff_raw_get_page(struct xsk_buff_pool *pool, u64 addr)
-+{
-+	return xp_raw_get_page(pool, addr);
-+}
-+
- static inline void xsk_buff_dma_sync_for_cpu(struct xdp_buff *xdp, struct xsk_buff_pool *pool)
- {
- 	struct xdp_buff_xsk *xskb = container_of(xdp, struct xdp_buff_xsk, xdp);
-@@ -232,6 +237,11 @@ static inline void *xsk_buff_raw_get_data(struct xsk_buff_pool *pool, u64 addr)
- 	return NULL;
- }
- 
-+static inline struct page *xsk_buff_raw_get_page(struct xsk_buff_pool *pool, u64 addr)
-+{
-+	return NULL;
-+}
-+
- static inline void xsk_buff_dma_sync_for_cpu(struct xdp_buff *xdp, struct xsk_buff_pool *pool)
- {
- }
-diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-index 01755b8..54e461d 100644
---- a/include/net/xsk_buff_pool.h
-+++ b/include/net/xsk_buff_pool.h
-@@ -103,6 +103,7 @@ int xp_dma_map(struct xsk_buff_pool *pool, struct device *dev,
- bool xp_can_alloc(struct xsk_buff_pool *pool, u32 count);
- void *xp_raw_get_data(struct xsk_buff_pool *pool, u64 addr);
- dma_addr_t xp_raw_get_dma(struct xsk_buff_pool *pool, u64 addr);
-+struct page *xp_raw_get_page(struct xsk_buff_pool *pool, u64 addr);
- static inline dma_addr_t xp_get_dma(struct xdp_buff_xsk *xskb)
- {
- 	return xskb->dma;
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index 67a4494..9bb058f 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -167,12 +167,13 @@ static int __xp_assign_dev(struct xsk_buff_pool *pool,
- 	bpf.command = XDP_SETUP_XSK_POOL;
- 	bpf.xsk.pool = pool;
- 	bpf.xsk.queue_id = queue_id;
-+	bpf.xsk.need_dma = true;
- 
- 	err = netdev->netdev_ops->ndo_bpf(netdev, &bpf);
- 	if (err)
- 		goto err_unreg_pool;
- 
--	if (!pool->dma_pages) {
-+	if (bpf.xsk.need_dma && !pool->dma_pages) {
- 		WARN(1, "Driver did not DMA map zero-copy buffers");
- 		err = -EINVAL;
- 		goto err_unreg_xsk;
-@@ -536,6 +537,13 @@ void *xp_raw_get_data(struct xsk_buff_pool *pool, u64 addr)
- }
- EXPORT_SYMBOL(xp_raw_get_data);
- 
-+struct page *xp_raw_get_page(struct xsk_buff_pool *pool, u64 addr)
-+{
-+	addr = pool->unaligned ? xp_unaligned_add_offset_to_addr(addr) : addr;
-+	return pool->umem->pgs[addr >> PAGE_SHIFT];
-+}
-+EXPORT_SYMBOL(xp_raw_get_page);
-+
- dma_addr_t xp_raw_get_dma(struct xsk_buff_pool *pool, u64 addr)
- {
- 	addr = pool->unaligned ? xp_unaligned_add_offset_to_addr(addr) : addr;
--- 
-1.8.3.1
+
+>
+> The second patch itself can be used as an independent patch to solve the problem
+> that XDP may fail to load when the number of queues is insufficient.
+
+
+It would be better to send this as a separated patch. Several people 
+asked for this before.
+
+
+>
+> The third to last patch implements support for xsk in virtio-net.
+>
+> A practical problem with virtio is that tx interrupts are not very reliable.
+> There will always be some missing or delayed tx interrupts. So I specially added
+> a point timer to solve this problem. Of course, considering performance issues,
+> The timer only triggers when the ring of the network card is full.
+
+
+This is sub-optimal. We need figure out the root cause. We don't meet 
+such issue before.
+
+Several questions:
+
+- is tx interrupt enabled?
+- can you still see the issue if you disable event index?
+- what's backend did you use? qemu or vhost(user)?
+
+
+>
+> Regarding the issue of virtio-net supporting xsk's zero copy rx, I am also
+> developing it, but I found that the modification may be relatively large, so I
+> consider this patch set to be separated from the code related to xsk zero copy
+> rx.
+
+
+That's fine, but a question here.
+
+How is the multieuque being handled here. I'm asking since there's no 
+programmable filters/directors support in virtio spec now.
+
+Thanks
+
+
+>
+> Xuan Zhuo (5):
+>    xsk: support get page for drv
+>    virtio-net: support XDP_TX when not more queues
+>    virtio-net, xsk: distinguish XDP_TX and XSK XMIT ctx
+>    xsk, virtio-net: prepare for support xsk
+>    virtio-net, xsk: virtio-net support xsk zero copy tx
+>
+>   drivers/net/virtio_net.c    | 643 +++++++++++++++++++++++++++++++++++++++-----
+>   include/linux/netdevice.h   |   1 +
+>   include/net/xdp_sock_drv.h  |  10 +
+>   include/net/xsk_buff_pool.h |   1 +
+>   net/xdp/xsk_buff_pool.c     |  10 +-
+>   5 files changed, 597 insertions(+), 68 deletions(-)
+>
+> --
+> 1.8.3.1
+>
 
