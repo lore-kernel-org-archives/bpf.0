@@ -2,163 +2,181 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-18.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0D292C433DB
-	for <bpf@archiver.kernel.org>; Thu,  7 Jan 2021 02:21:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 73BA5C433E0
+	for <bpf@archiver.kernel.org>; Thu,  7 Jan 2021 02:52:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC35E230FC
-	for <bpf@archiver.kernel.org>; Thu,  7 Jan 2021 02:21:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3F73623100
+	for <bpf@archiver.kernel.org>; Thu,  7 Jan 2021 02:52:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726338AbhAGCVI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 6 Jan 2021 21:21:08 -0500
-Received: from de-smtp-delivery-102.mimecast.com ([62.140.7.102]:29681 "EHLO
-        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726260AbhAGCVH (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 6 Jan 2021 21:21:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1609986000;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7BKY15wF8aOwZdw6Jwti1+pccpFTzL/UrLD9CYYjYVo=;
-        b=YA1zhSIUiLEcgCfSLNmptx0STsC4ZIUO/wKgd+C8GDbhISsE8llib2Ka1yjgoaRDR//eOg
-        nuqDF09C4ClNENsScZ6SVa+Fgxaf+PWlbeUGDrXTTJBjqpo0QJ32mvV0cuW1AapxiFkhBj
-        IFIjhTNmVyi+uYvr8U41+LmiMA7zn0U=
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com
- (mail-vi1eur04lp2050.outbound.protection.outlook.com [104.47.14.50]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- de-mta-31-1OpirYzNNFuOBCSQ4r-nRg-1; Thu, 07 Jan 2021 03:17:28 +0100
-X-MC-Unique: 1OpirYzNNFuOBCSQ4r-nRg-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SlJkeTArAbBZap8L98aPDWolzlRSaytS7vqpF1ypSPVCCdHjm1d+Cb3Z/rrPGSQh9TaYlapYWga+2lf1gkcFc5DiOHLbPJp8DFfFE+iSBRzmr04Zxopy7n560dAxG625XF9kMBKy1PNorhUX7MeNFv7b2S7jOUQKFxvPrVv+r34zoQPLfKL4maosLHBPOxcgihLxMNazpWMlxqKSwx9iCA7RbnuyKzG+PFg1HQDA1CdUVUDopmBG2JdUtV/FrosdGrDMnxrIAbzwD/CDa2nkGwbNNYNjtIuvppO1ubM7PpwbVqDmBtsNm6+yYMfx2Oy8BSApCExpINpGEC++U+aetw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EtGbxeFGd5wrf0vUZRAXq5W++Pi5doTWbZ4QJ2ST5mA=;
- b=afp/Zb4Sx/4o2eSB+kLZEk6spOEV2qu5IOH+VUFapz2Ma8bJkDuG3MoZ1XA78RyqmvF6xU3Myy7qoCs4Pc65RYVmecdm+bBRqdGl3SBXS/2zvB8TdRsLY/eM4XEu44bgWqK6DXdU1sa2kXyH8YDLtERw3iPW91UA3nCNjkWpDeCI+b0T1DrF903TtA9mhG3shPIGQvx2VswmfPQG4KAHVDo/CalnoT8u7GcT3OmnCukp9Bz/sGcuRI/KNbqgjC/TWQVdTCAAO+xz9K8HhMk9/xyFJo/fXjK+5IkkJj235oTpoG0eyAZZs2OGCH0kV1M+ICu161c2mZx3OQ7tyJ5IGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=suse.com;
-Received: from DB3PR0402MB3641.eurprd04.prod.outlook.com (2603:10a6:8:b::12)
- by DB7PR04MB5226.eurprd04.prod.outlook.com (2603:10a6:10:21::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3721.20; Thu, 7 Jan
- 2021 02:17:27 +0000
-Received: from DB3PR0402MB3641.eurprd04.prod.outlook.com
- ([fe80::80c9:1fa3:ae84:7313]) by DB3PR0402MB3641.eurprd04.prod.outlook.com
- ([fe80::80c9:1fa3:ae84:7313%6]) with mapi id 15.20.3721.024; Thu, 7 Jan 2021
- 02:17:27 +0000
-From:   Gary Lin <glin@suse.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-CC:     Eric Dumazet <eric.dumazet@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        andreas.taschner@suse.com
-Subject: [PATCH RESEND v2 2/3] test_bpf: remove EXPECTED_FAIL flag from bpf_fill_maxinsns11
-Date:   Thu,  7 Jan 2021 10:17:00 +0800
-Message-ID: <20210107021701.1797-3-glin@suse.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210107021701.1797-1-glin@suse.com>
-References: <20210107021701.1797-1-glin@suse.com>
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-X-Originating-IP: [111.240.141.15]
-X-ClientProxiedBy: AM4P190CA0024.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:200:56::34) To DB3PR0402MB3641.eurprd04.prod.outlook.com
- (2603:10a6:8:b::12)
+        id S1726293AbhAGCwM (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 6 Jan 2021 21:52:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726260AbhAGCwM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 6 Jan 2021 21:52:12 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16867C0612EF
+        for <bpf@vger.kernel.org>; Wed,  6 Jan 2021 18:51:32 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id 23so11237248lfg.10
+        for <bpf@vger.kernel.org>; Wed, 06 Jan 2021 18:51:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0pEZWzaEG6s1Ycb+1MMWKsFEm735pZ138JlbfPo9Cx4=;
+        b=NxQl2Xj8und1rF8a0cl39BdQVsWTvUJglyj0DCpQtWJK18F7Jk/PV52B2Ut0F7rTsT
+         zc1fNwQKGpGgsKbLJ601WCbxjBnm5sAOwiOZNoioA6ad7QzYie+I/TowoPshanL+bOhS
+         Q2mZHUvJGzftpvdfEKgynUsMHEfBoDPf3PE7k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0pEZWzaEG6s1Ycb+1MMWKsFEm735pZ138JlbfPo9Cx4=;
+        b=Eixi5fq9W33MKUcnbYeJs0esCVxLwxNl0JLUPERCzPtvvE7735CpJwjJCJCCB7z7yT
+         8sR61v/Utw4BUROSw5hq1dSiGH1EWMOg+MCeyUKoj/IQ0Z9I5MM95km2xFl2DYupU8Un
+         6myRlz9rUatV3eem0vLTco2f0SP6+7IR+9Rux4o+nyNoY8/YFbZJ4TfyEYhgle+5gz8J
+         koVjEUG3htn21kCCpTcLTons3eksbU6URFlN7mCU6qRaPbhkCafPiDq8H8cTvmOH4OPv
+         D0/qARbVloD/1EAg9JsgzuK/FhxkGdR2Lc15K9QtoIIALVd62PQO2iR5dw5eEqG4fS85
+         8Yfg==
+X-Gm-Message-State: AOAM533f4y25UUozFElfYk4wJwls8CKHEYns4uJmswQTYSw2+mTWWbET
+        9COv2Z2S8ZsBQu/I4nUvPyFxtsjxEYa29fFwHYFLFg==
+X-Google-Smtp-Source: ABdhPJxYbrje1PZP0igTnaWv8UW0pVJdI3jzXCJYgA/nxSuUBa6A5j1IiSAgFC5ecJRCTjtZ/gkU69bMR8OvQkzevKQ=
+X-Received: by 2002:a19:641:: with SMTP id 62mr3017079lfg.424.1609987890584;
+ Wed, 06 Jan 2021 18:51:30 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from GaryLaptop.prv.suse.net (111.240.141.15) by AM4P190CA0024.EURP190.PROD.OUTLOOK.COM (2603:10a6:200:56::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.6 via Frontend Transport; Thu, 7 Jan 2021 02:17:25 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f87805c1-4933-41ab-b4bb-08d8b2b2610f
-X-MS-TrafficTypeDiagnostic: DB7PR04MB5226:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DB7PR04MB5226A531397183DAD2EF78CAA9AF0@DB7PR04MB5226.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:1284;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9HyJUsppbKDaL7Sc3uFK/xDdd+GB6AlquSnBTQAQO52ypqr0NCpGOYO9alCNNYOpblVlFSNg3qoRD1LnRkH47DiXNaCl49cs3XSGkIxi49F879qS/IPXR29U908sdgpup3d9d39G08iP9KxlwdSIGaw4NdKtr3Dm/3QIoBKu+lM0a2Pf7/luw3zKsg+4LT7vhtpV9SnbC+xbSrxNErk7C49ahzA/pJepqSQDIKFAKtatXM0Gws6bUfWxXBTO+P+Cb+Z3r1pf4vuyo/nXN2UxZ1bQs3Ff6AUpKmg6w8Sfu+SUFCUDb3sH9nD7xQWegHMggRtEmsEumRSAJ6W57E3q4p+I5ABzyAX+jfi/JPgGkepb/X+do+YyDWvzNQEF440mMKX1Skq42BbOkTJoSa5mCQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB3PR0402MB3641.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(376002)(366004)(136003)(39850400004)(396003)(478600001)(8676002)(5660300002)(6512007)(54906003)(86362001)(2616005)(956004)(110136005)(4326008)(8936002)(316002)(107886003)(6486002)(36756003)(1076003)(83380400001)(66946007)(66556008)(6666004)(16526019)(2906002)(52116002)(186003)(6506007)(66476007)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?uTBo8KK3zZAHIx8QCqWDtYiXd1kx7WsYXb+ziKvuFpWEYwnV1b+wn3YEzOCn?=
- =?us-ascii?Q?CkTyyQu63YiFtYatmTqA3HERAuoIx/t+aw2SHB6vRqXXBEujxEmGANNCJtV1?=
- =?us-ascii?Q?HjQ4GTnzUq4rg1yPXa00v8Wfv3qcujaQmp4VmO0CDr/BBPc0fwxNrzCK2pIW?=
- =?us-ascii?Q?ZHB/VPnJSb4kL3s3cBJ60oKVlzMvPT1y/FcP6Sc//4aDSNPcR4Nw9T1ezvYg?=
- =?us-ascii?Q?3CGJM3feeT4Y2w8mt8LvpCkNdr5xUlCtJJK5hLvaj0EQIEQnK1LjG+8hRD3N?=
- =?us-ascii?Q?2cSXMhmP5TXMplAw8tlsjj0kzA97WqxutXTLAdb3IKPbkBCIecsfbe0Rdqe+?=
- =?us-ascii?Q?YY7T2S9icSQdpOqm2uyNqBl+6a889slBmA0HqRZb4T1uWEHOrP4/FcLu4vaM?=
- =?us-ascii?Q?pbrNcURPkv6Vx0jcyyKU4pIGjXxGbzwxqTOK0ds0iE5jnMMlc4Yxe7lrE3SD?=
- =?us-ascii?Q?KfDTRSr+Fb3MwHTD1jqWFNCeRqgHXOltWgXXXsuqN0Sz95/X0PpNLlZBZVKq?=
- =?us-ascii?Q?2JdCKoW35mpPZivM3/DP7nrXGtBqYXJSiE+jJ/TX4Wkye+iB8+Vzj/dNHKgz?=
- =?us-ascii?Q?AmShyOnYvGKLhvwj9YRxY7lFujkok6Ph5rsUOnzQ/k3lyQObRMS/ZA6KJmJW?=
- =?us-ascii?Q?fzSECCtAbY0L0DYcFtjKDfOd05BaMHVRiI+E4onKp6qJR7OajmR7np28qZHL?=
- =?us-ascii?Q?Vq5bVkApfwZRsdhrZpiFRLRac5TMTs8a5zcc8ujn7t0uywXbm7iqaFMXFQtz?=
- =?us-ascii?Q?noUE1wVHyrA9O0xD17CAVZQmyWwN7xxHtDzYP9OfVTAiipiKTNuhBV39cXY3?=
- =?us-ascii?Q?oMnGmdr6D3clpu7xKsPJRphu8GxsDtmtgyisT2qeYIPwktbJItv5db7uvajz?=
- =?us-ascii?Q?IUZc6CuvLfyAr8JAqJy9IzouH3Ibo2nWym9IfUlw8seogbE7PcZ77qgaGWw/?=
- =?us-ascii?Q?PlNIAMeGsLXw3fRRvFOJRZ1Wr3RwFtC1tGFlU02dSh4ZUu8N+Ty0mrTiIYqk?=
- =?us-ascii?Q?3Nqb?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-AuthSource: DB3PR0402MB3641.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2021 02:17:27.4597
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-Network-Message-Id: f87805c1-4933-41ab-b4bb-08d8b2b2610f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GjHOb3HIC3j7Uy9N93+3yXMN6HktcivRe06fgN3BbDQrmEMf3jKPx+OfWAfB4SIG
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5226
+References: <CANaYP3HWkH91SN=wTNO9FL_2ztHfqcXKX38SSE-JJ2voh+vssw@mail.gmail.com>
+ <CANaYP3H0RfcRK=bnNbvnKWe7cvnf0XD36JGWJVTDNUjPtHk6Fg@mail.gmail.com>
+ <CAADnVQKkixx3+WWqp5uQ2kxYK_AAx9NiMG38bvwKhgTKBsKWUg@mail.gmail.com> <CACYkzJ5CjcEJH7UywROkVSeL4RVi+fcU9fPRi-a7Nqjx_HiAOg@mail.gmail.com>
+In-Reply-To: <CACYkzJ5CjcEJH7UywROkVSeL4RVi+fcU9fPRi-a7Nqjx_HiAOg@mail.gmail.com>
+From:   KP Singh <kpsingh@chromium.org>
+Date:   Thu, 7 Jan 2021 03:51:19 +0100
+Message-ID: <CACYkzJ55X8Tp2q4+EFf2hOM_Lysoim1xJY1YdA3k=T3woMW6mg@mail.gmail.com>
+Subject: Re: BPF Kernel OOPS - NULL pointer dereference
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Gilad Reti <gilad.reti@gmail.com>, KP Singh <kpsingh@google.com>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-With NOPs padding, x64 jit now can handle the jump cases like
-bpf_fill_maxinsns11().
+On Wed, Jan 6, 2021 at 10:02 PM KP Singh <kpsingh@kernel.org> wrote:
+>
+> On Wed, Jan 6, 2021 at 6:27 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Wed, Jan 6, 2021 at 2:18 AM Gilad Reti <gilad.reti@gmail.com> wrote:
+> > >
+> > > Hello all,
+> > >
+> > > Hope you had a great new year vacation.
+> > >
+> > > Sorry for bumping up the thread, but I believe that it is an important one.
+> >
+> > Thanks for bumping.
+> > KP, please take a look.
+> >
+> > > On Sun, Dec 20, 2020 at 12:16 PM Gilad Reti <gilad.reti@gmail.com> wrote:
+> > > >
+> > > > Hello there,
+> > > >
+> > > > During experimenting with the new inode local storage I have stumbled
+> > > > across an invalid pointer dereference that passed through the
+> > > > verifier.
+> > > >
+> > > > After investigating, I think that it happens in the
+> > > > bpf_inode_storage_get helper, and in particular in the following line:
+> > > > https://elixir.bootlin.com/linux/v5.10.1/source/include/linux/bpf_lsm.h#L32
+> > > >
+> > > > I have a single bpf lsm probe in the security_inode_rename probe, and
+> > > > I have called bpf_inode_storage_get on the inode of the "new_dentry"
+> > > > argument. This inode may be null in cases where renameat(2) is called
+> > > > to move a file from one path to a new path which didn't exist before.
+> > > >
+> > > > As can be seen, inode is dereferenced without first checking that it
+> > > > is not NULL.
+> > > > I don't know what should be the correct behavior, but I believe that
+> > > > either the helper should check the validity of passed pointers, or the
+> > > > verifier should treat fields of BTF pointers (PTR_TO_BTF_ID) as
+> > > > PTR_TO_BTF_ID_OR_NULL.
+>
+> Thanks for adding me, I missed responding to this over the winter holidays.
+>
+> In this case this should indeed be PTR_TO_BTF_ID_OR_NULL. I will send in a
 
-Signed-off-by: Gary Lin <glin@suse.com>
----
- lib/test_bpf.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+Okay so I dug in a little more...We don't really need this
 
-diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index ca7d635bccd9..272a9fd143ab 100644
---- a/lib/test_bpf.c
-+++ b/lib/test_bpf.c
-@@ -345,7 +345,7 @@ static int __bpf_fill_ja(struct bpf_test *self, unsigne=
-d int len,
-=20
- static int bpf_fill_maxinsns11(struct bpf_test *self)
+"PTR_TO_BTF_ID points to a kernel struct that does not need to be null
+checked by the BPF program. This does not imply the pointer is _not_
+null and in practice this can easily be a null pointer when reading
+pointer chains. The assumption is program context will handle null
+pointer dereference typically via fault handling. The verifier must
+keep this in mind and can make no assumptions about null or non-null
+when doing branch analysis.
+Further, when passed into helpers the helpers can not, without
+additional context, assume the value is non-null."
+
+So all we need to do is to check the null-ness of the pointer in the
+helper code, the helpers cannot simply assume that the pointer
+will be non NULL.
+
+This does the trick, I will send in a patch tomorrow:
+
+diff --git a/kernel/bpf/bpf_inode_storage.c b/kernel/bpf/bpf_inode_storage.c
+index 6edff97ad594..92a59b283316 100644
+--- a/kernel/bpf/bpf_inode_storage.c
++++ b/kernel/bpf/bpf_inode_storage.c
+@@ -168,6 +168,9 @@ BPF_CALL_4(bpf_inode_storage_get, struct bpf_map
+*, map, struct inode *, inode,
  {
--	/* Hits 70 passes on x86_64, so cannot get JITed there. */
-+	/* Hits 70 passes on x86_64 and triggers NOPs padding. */
- 	return __bpf_fill_ja(self, BPF_MAXINSNS, 68);
- }
-=20
-@@ -5318,15 +5318,10 @@ static struct bpf_test tests[] =3D {
- 	{
- 		"BPF_MAXINSNS: Jump, gap, jump, ...",
- 		{ },
--#if defined(CONFIG_BPF_JIT_ALWAYS_ON) && defined(CONFIG_X86)
--		CLASSIC | FLAG_NO_DATA | FLAG_EXPECTED_FAIL,
--#else
- 		CLASSIC | FLAG_NO_DATA,
--#endif
- 		{ },
- 		{ { 0, 0xababcbac } },
- 		.fill_helper =3D bpf_fill_maxinsns11,
--		.expected_errcode =3D -ENOTSUPP,
- 	},
- 	{
- 		"BPF_MAXINSNS: jump over MSH",
---=20
-2.29.2
+        struct bpf_local_storage_data *sdata;
 
++       if (!inode)
++               return (unsigned long)NULL;
++
+        if (flags & ~(BPF_LOCAL_STORAGE_GET_F_CREATE))
+                return (unsigned long)NULL;
+
+@@ -200,6 +203,9 @@ BPF_CALL_4(bpf_inode_storage_get, struct bpf_map
+*, map, struct inode *, inode,
+ BPF_CALL_2(bpf_inode_storage_delete,
+           struct bpf_map *, map, struct inode *, inode)
+ {
++       if (!inode)
++               return -EINVAL;
++
+        /* This helper must only called from where the inode is gurranteed
+         * to have a refcount and cannot be freed.
+         */
+
+- KP
+
+> fix.
+>
+> > > >
+> > > > I am attaching a minimal program example, along with the kernel demsg
+> > > > output. To reproduce, load the probe and run "mv file1 file2" where
+> > > > file2 does not exist.
+>
+> Thanks for sending the repro program as well! Really appreciate it!
+>
+> > > >
+> > > > Thanks,
+> > > > Gilad Reti
+> > > >
+> > > > inode_oops.c:
+> > > >
+> > > > // SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause)
+>
+> [...]
+>
+> > > > [Thu Dec 17 11:35:37 2020] FS:  00007fa878948740(0000)
+> > > > GS:ffff895cede00000(0000) knlGS:0000000000000000
+> > > > [Thu Dec 17 11:35:37 2020] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > [Thu Dec 17 11:35:37 2020] CR2: 0000000000000038 CR3: 0000000121f34001
+> > > > CR4: 00000000003706f0
