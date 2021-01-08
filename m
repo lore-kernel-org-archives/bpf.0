@@ -2,108 +2,86 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.0 required=3.0 tests=BAYES_00,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BD9F4C433DB
-	for <bpf@archiver.kernel.org>; Fri,  8 Jan 2021 22:10:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B0B2CC433E6
+	for <bpf@archiver.kernel.org>; Fri,  8 Jan 2021 22:10:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8AF1923A9F
-	for <bpf@archiver.kernel.org>; Fri,  8 Jan 2021 22:10:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 6FC0E23A9F
+	for <bpf@archiver.kernel.org>; Fri,  8 Jan 2021 22:10:22 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726051AbhAHWKO convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 8 Jan 2021 17:10:14 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:42744 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725844AbhAHWKO (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 8 Jan 2021 17:10:14 -0500
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 108M93MM008972
-        for <bpf@vger.kernel.org>; Fri, 8 Jan 2021 14:09:33 -0800
+        id S1726090AbhAHWKV convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 8 Jan 2021 17:10:21 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:7162 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726059AbhAHWKV (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 8 Jan 2021 17:10:21 -0500
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 108M92FU019973
+        for <bpf@vger.kernel.org>; Fri, 8 Jan 2021 14:09:39 -0800
 Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com with ESMTP id 35wt9k22av-1
+        by m0089730.ppops.net with ESMTP id 35x79rpt95-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 08 Jan 2021 14:09:33 -0800
-Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 08 Jan 2021 14:09:39 -0800
+Received: from intmgw003.03.ash8.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::5) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 8 Jan 2021 14:09:31 -0800
+ 15.1.1979.3; Fri, 8 Jan 2021 14:09:37 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 30BDE2ECD237; Fri,  8 Jan 2021 14:09:31 -0800 (PST)
+        id 8695F2ECD237; Fri,  8 Jan 2021 14:09:35 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Hao Luo <haoluo@google.com>
-Subject: [PATCH v2 bpf-next 0/7] Support kernel module ksym variables
-Date:   Fri, 8 Jan 2021 14:09:23 -0800
-Message-ID: <20210108220930.482456-1-andrii@kernel.org>
+        Hao Luo <haoluo@google.com>, kernel test robot <lkp@intel.com>
+Subject: [PATCH v2 bpf-next 2/7] bpf: avoid warning when re-casting __bpf_call_base into __bpf_call_base_args
+Date:   Fri, 8 Jan 2021 14:09:25 -0800
+Message-ID: <20210108220930.482456-3-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20210108220930.482456-1-andrii@kernel.org>
+References: <20210108220930.482456-1-andrii@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8BIT
 X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
  definitions=2021-01-08_11:2021-01-07,2021-01-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 phishscore=0
- impostorscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
- suspectscore=0 mlxlogscore=881 priorityscore=1501 malwarescore=0
- bulkscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0 mlxscore=0
+ suspectscore=0 priorityscore=1501 bulkscore=0 spamscore=0 adultscore=0
+ lowpriorityscore=0 impostorscore=0 mlxlogscore=749 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2101080113
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add support for using kernel module global variables (__ksym externs in BPF
-program). BPF verifier will now support ldimm64 with src_reg=BPF_PSEUDO_BTF_ID
-and non-zero insn[1].imm field, specifying module BTF's FD. In such case,
-module BTF object, similarly to BPF maps referenced from ldimm64 with
-src_reg=BPF_PSEUDO_MAP_FD, will be recorded in bpf_progran's auxiliary data
-and refcnt will be increased for both BTF object itself and its kernel module.
-This makes sure kernel module won't be unloaded from under active attached BPF
-program. These refcounts will be dropped when BPF program is unloaded.
+BPF interpreter uses extra input argument, so re-casts __bpf_call_base into
+__bpf_call_base_args. Avoid compiler warning about incompatible function
+prototypes by casting to void * first.
 
-New selftest validates all this is working as intended. bpf_testmod.ko is
-extended with per-CPU variable. Selftests expects the latest pahole changes
-(soon to be released as v1.20) to generate per-CPU variable BTF info for
-kernel module.
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 1ea47e01ad6e ("bpf: add support for bpf_call to interpreter")
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+---
+ include/linux/filter.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v1->v2:
-  - fixed few compiler warnings, posted as separate pre-patches;
-rfc->v1:
-  - use sys_membarrier(MEMBARRIER_CMD_GLOBAL) (Alexei).
-
-Cc: Hao Luo <haoluo@google.com>
-Andrii Nakryiko (7):
-  bpf: add bpf_patch_call_args prototype to include/linux/bpf.h
-  bpf: avoid warning when re-casting __bpf_call_base into
-    __bpf_call_base_args
-  bpf: declare __bpf_free_used_maps() unconditionally
-  selftests/bpf: sync RCU before unloading bpf_testmod
-  bpf: support BPF ksym variables in kernel modules
-  libbpf: support kernel module ksym externs
-  selftests/bpf: test kernel module ksym externs
-
- include/linux/bpf.h                           |  18 ++-
- include/linux/bpf_verifier.h                  |   3 +
- include/linux/btf.h                           |   3 +
- include/linux/filter.h                        |   2 +-
- kernel/bpf/btf.c                              |  31 +++-
- kernel/bpf/core.c                             |  23 +++
- kernel/bpf/verifier.c                         | 149 ++++++++++++++----
- tools/lib/bpf/libbpf.c                        |  47 ++++--
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   |   3 +
- .../selftests/bpf/prog_tests/btf_map_in_map.c |  33 ----
- .../selftests/bpf/prog_tests/ksyms_module.c   |  33 ++++
- .../selftests/bpf/progs/test_ksyms_module.c   |  26 +++
- tools/testing/selftests/bpf/test_progs.c      |  11 ++
- tools/testing/selftests/bpf/test_progs.h      |   1 +
- 14 files changed, 300 insertions(+), 83 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ksyms_module.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_ksyms_module.c
-
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 29c27656165b..5edf2b660881 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -886,7 +886,7 @@ void sk_filter_uncharge(struct sock *sk, struct sk_filter *fp);
+ u64 __bpf_call_base(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
+ #define __bpf_call_base_args \
+ 	((u64 (*)(u64, u64, u64, u64, u64, const struct bpf_insn *)) \
+-	 __bpf_call_base)
++	 (void *)__bpf_call_base)
+ 
+ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog);
+ void bpf_jit_compile(struct bpf_prog *prog);
 -- 
 2.24.1
 
