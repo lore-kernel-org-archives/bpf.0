@@ -3,42 +3,42 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 46FC8C433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E3E2CC433DB
 	for <bpf@archiver.kernel.org>; Fri,  8 Jan 2021 22:10:33 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0F8B523A9F
+	by mail.kernel.org (Postfix) with ESMTP id BC3C223A9F
 	for <bpf@archiver.kernel.org>; Fri,  8 Jan 2021 22:10:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726370AbhAHWKc convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Fri, 8 Jan 2021 17:10:32 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:46660 "EHLO
+        id S1726375AbhAHWKd convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Fri, 8 Jan 2021 17:10:33 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:21394 "EHLO
         mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726088AbhAHWKW (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 8 Jan 2021 17:10:22 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 108M94AU020001
-        for <bpf@vger.kernel.org>; Fri, 8 Jan 2021 14:09:40 -0800
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 35x79rpt9b-1
+        by vger.kernel.org with ESMTP id S1726133AbhAHWKc (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 8 Jan 2021 17:10:32 -0500
+Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
+        by m0001303.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 108M92gq027763
+        for <bpf@vger.kernel.org>; Fri, 8 Jan 2021 14:09:51 -0800
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0001303.ppops.net with ESMTP id 35xu1t1kmt-4
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Fri, 08 Jan 2021 14:09:40 -0800
-Received: from intmgw005.03.ash8.facebook.com (2620:10d:c085:108::8) by
- mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+        for <bpf@vger.kernel.org>; Fri, 08 Jan 2021 14:09:51 -0800
+Received: from intmgw001.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:83::7) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Fri, 8 Jan 2021 14:09:38 -0800
+ 15.1.1979.3; Fri, 8 Jan 2021 14:09:50 -0800
 Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id 566342ECD237; Fri,  8 Jan 2021 14:09:33 -0800 (PST)
+        id 4059B2ECD237; Fri,  8 Jan 2021 14:09:44 -0800 (PST)
 From:   Andrii Nakryiko <andrii@kernel.org>
 To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
         <daniel@iogearbox.net>
 CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Hao Luo <haoluo@google.com>, kernel test robot <lkp@intel.com>
-Subject: [PATCH v2 bpf-next 1/7] bpf: add bpf_patch_call_args prototype to include/linux/bpf.h
-Date:   Fri, 8 Jan 2021 14:09:24 -0800
-Message-ID: <20210108220930.482456-2-andrii@kernel.org>
+        Hao Luo <haoluo@google.com>
+Subject: [PATCH v2 bpf-next 6/7] libbpf: support kernel module ksym externs
+Date:   Fri, 8 Jan 2021 14:09:29 -0800
+Message-ID: <20210108220930.482456-7-andrii@kernel.org>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20210108220930.482456-1-andrii@kernel.org>
 References: <20210108220930.482456-1-andrii@kernel.org>
@@ -48,42 +48,127 @@ X-FB-Internal: Safe
 Content-Type: text/plain
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
  definitions=2021-01-08_11:2021-01-07,2021-01-08 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 malwarescore=0 mlxscore=0
- suspectscore=0 priorityscore=1501 bulkscore=0 spamscore=0 adultscore=0
- lowpriorityscore=0 impostorscore=0 mlxlogscore=744 phishscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 lowpriorityscore=0
+ malwarescore=0 suspectscore=0 priorityscore=1501 mlxscore=0 clxscore=1015
+ bulkscore=0 adultscore=0 spamscore=0 mlxlogscore=999 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2009150000 definitions=main-2101080113
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add bpf_patch_call_args() prototype. This function is called from BPF verifier
-and only if CONFIG_BPF_JIT_ALWAYS_ON is not defined. This fixes compiler
-warning about missing prototype in some kernel configurations.
+Add support for searching for ksym externs not just in vmlinux BTF, but across
+all module BTFs, similarly to how it's done for CO-RE relocations. Kernels
+that expose module BTFs through sysfs are assumed to support new ldimm64
+instruction extension with BTF FD provided in insn[1].imm field, so no extra
+feature detection is performed.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 1ea47e01ad6e ("bpf: add support for bpf_call to interpreter")
 Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
 ---
- include/linux/bpf.h | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/lib/bpf/libbpf.c | 47 +++++++++++++++++++++++++++---------------
+ 1 file changed, 30 insertions(+), 17 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 07cb5d15e743..ef9309604b3e 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1403,7 +1403,10 @@ static inline void bpf_long_memcpy(void *dst, const void *src, u32 size)
- /* verify correctness of eBPF program */
- int bpf_check(struct bpf_prog **fp, union bpf_attr *attr,
- 	      union bpf_attr __user *uattr);
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 6ae748f6ea11..57559a71e4de 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -395,7 +395,8 @@ struct extern_desc {
+ 			unsigned long long addr;
+ 
+ 			/* target btf_id of the corresponding kernel var. */
+-			int vmlinux_btf_id;
++			int kernel_btf_obj_fd;
++			int kernel_btf_id;
+ 
+ 			/* local btf_id of the ksym extern's type. */
+ 			__u32 type_id;
+@@ -6162,7 +6163,8 @@ bpf_object__relocate_data(struct bpf_object *obj, struct bpf_program *prog)
+ 			} else /* EXT_KSYM */ {
+ 				if (ext->ksym.type_id) { /* typed ksyms */
+ 					insn[0].src_reg = BPF_PSEUDO_BTF_ID;
+-					insn[0].imm = ext->ksym.vmlinux_btf_id;
++					insn[0].imm = ext->ksym.kernel_btf_id;
++					insn[1].imm = ext->ksym.kernel_btf_obj_fd;
+ 				} else { /* typeless ksyms */
+ 					insn[0].imm = (__u32)ext->ksym.addr;
+ 					insn[1].imm = ext->ksym.addr >> 32;
+@@ -7319,7 +7321,8 @@ static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
+ static int bpf_object__resolve_ksyms_btf_id(struct bpf_object *obj)
+ {
+ 	struct extern_desc *ext;
+-	int i, id;
++	struct btf *btf;
++	int i, j, id, btf_fd, err;
+ 
+ 	for (i = 0; i < obj->nr_extern; i++) {
+ 		const struct btf_type *targ_var, *targ_type;
+@@ -7331,8 +7334,22 @@ static int bpf_object__resolve_ksyms_btf_id(struct bpf_object *obj)
+ 		if (ext->type != EXT_KSYM || !ext->ksym.type_id)
+ 			continue;
+ 
+-		id = btf__find_by_name_kind(obj->btf_vmlinux, ext->name,
+-					    BTF_KIND_VAR);
++		btf = obj->btf_vmlinux;
++		btf_fd = 0;
++		id = btf__find_by_name_kind(btf, ext->name, BTF_KIND_VAR);
++		if (id == -ENOENT) {
++			err = load_module_btfs(obj);
++			if (err)
++				return err;
 +
-+#ifndef CONFIG_BPF_JIT_ALWAYS_ON
- void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
-+#endif
++			for (j = 0; j < obj->btf_module_cnt; j++) {
++				btf = obj->btf_modules[j].btf;
++				btf_fd = obj->btf_modules[j].fd;
++				id = btf__find_by_name_kind(btf, ext->name, BTF_KIND_VAR);
++				if (id != -ENOENT)
++					break;
++			}
++		}
+ 		if (id <= 0) {
+ 			pr_warn("extern (ksym) '%s': failed to find BTF ID in vmlinux BTF.\n",
+ 				ext->name);
+@@ -7343,24 +7360,19 @@ static int bpf_object__resolve_ksyms_btf_id(struct bpf_object *obj)
+ 		local_type_id = ext->ksym.type_id;
  
- struct btf *bpf_get_btf_vmlinux(void);
+ 		/* find target type_id */
+-		targ_var = btf__type_by_id(obj->btf_vmlinux, id);
+-		targ_var_name = btf__name_by_offset(obj->btf_vmlinux,
+-						    targ_var->name_off);
+-		targ_type = skip_mods_and_typedefs(obj->btf_vmlinux,
+-						   targ_var->type,
+-						   &targ_type_id);
++		targ_var = btf__type_by_id(btf, id);
++		targ_var_name = btf__name_by_offset(btf, targ_var->name_off);
++		targ_type = skip_mods_and_typedefs(btf, targ_var->type, &targ_type_id);
  
+ 		ret = bpf_core_types_are_compat(obj->btf, local_type_id,
+-						obj->btf_vmlinux, targ_type_id);
++						btf, targ_type_id);
+ 		if (ret <= 0) {
+ 			const struct btf_type *local_type;
+ 			const char *targ_name, *local_name;
+ 
+ 			local_type = btf__type_by_id(obj->btf, local_type_id);
+-			local_name = btf__name_by_offset(obj->btf,
+-							 local_type->name_off);
+-			targ_name = btf__name_by_offset(obj->btf_vmlinux,
+-							targ_type->name_off);
++			local_name = btf__name_by_offset(obj->btf, local_type->name_off);
++			targ_name = btf__name_by_offset(btf, targ_type->name_off);
+ 
+ 			pr_warn("extern (ksym) '%s': incompatible types, expected [%d] %s %s, but kernel has [%d] %s %s\n",
+ 				ext->name, local_type_id,
+@@ -7370,7 +7382,8 @@ static int bpf_object__resolve_ksyms_btf_id(struct bpf_object *obj)
+ 		}
+ 
+ 		ext->is_set = true;
+-		ext->ksym.vmlinux_btf_id = id;
++		ext->ksym.kernel_btf_obj_fd = btf_fd;
++		ext->ksym.kernel_btf_id = id;
+ 		pr_debug("extern (ksym) '%s': resolved to [%d] %s %s\n",
+ 			 ext->name, id, btf_kind_str(targ_var), targ_var_name);
+ 	}
 -- 
 2.24.1
 
