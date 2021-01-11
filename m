@@ -2,94 +2,94 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.8 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_2
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-20.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 44C22C4332B
-	for <bpf@archiver.kernel.org>; Mon, 11 Jan 2021 15:52:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB4B2C433E0
+	for <bpf@archiver.kernel.org>; Mon, 11 Jan 2021 15:56:44 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id EC7792251F
-	for <bpf@archiver.kernel.org>; Mon, 11 Jan 2021 15:52:34 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8EB8E206E5
+	for <bpf@archiver.kernel.org>; Mon, 11 Jan 2021 15:56:44 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388314AbhAKPwY (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Jan 2021 10:52:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60548 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731466AbhAKPwY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Jan 2021 10:52:24 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A07EF2251F;
-        Mon, 11 Jan 2021 15:51:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610380303;
-        bh=Es2k0h+26hNNjATG11DvaX8uXnVDAE5QUnH9ejSvFPI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=l71kPYjBBbCPdO3SBsxD9bpm7OE7Zi/6v3Lk3CtXQee3op9frz+YUPOXjg89qfgug
-         RlEU7Aj0H/k5S6HVwXDpRPKgWzXaCCIUjsWIg7HXsR+k6XoW/4jNYZ7QpYQ31Mtvck
-         ScGnT4FNMVsav4D+gfKmZBo26I+OftmauN+EWx4NFySxHHe0H3cQpRaJsS03wE0XgC
-         BcqEZYPFgaaUEc0FODjwMcUkudt+AvwzqtFegyVsemSXvVFWoNkc4gOXRhAAcpP1Z5
-         +QwJ5NamXBo3yT6prJZhFDP316a14MCeZBzJ5vFYZvFYNzxwS8mW4fiY2QbL/HA/sV
-         qHlTKBJr3B6uA==
-Date:   Mon, 11 Jan 2021 16:51:38 +0100
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     giladreti <gilad.reti@gmail.com>
-Cc:     bpf@vger.kernel.org, Yonghong Song <yhs@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        id S1728310AbhAKP42 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Jan 2021 10:56:28 -0500
+Received: from www62.your-server.de ([213.133.104.62]:36360 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727195AbhAKP42 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Jan 2021 10:56:28 -0500
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kyzXm-000AEm-OE; Mon, 11 Jan 2021 16:55:46 +0100
+Received: from [85.7.101.30] (helo=pc-9.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1kyzXm-0002w9-IG; Mon, 11 Jan 2021 16:55:46 +0100
 Subject: Re: [PATCH] Signed-off-by: giladreti <gilad.reti@gmail.com>
-Message-ID: <20210111165138.652a5525@kernel.org>
-In-Reply-To: <20210111153123.GA423936@ubuntu>
+To:     giladreti <gilad.reti@gmail.com>, bpf@vger.kernel.org,
+        Yonghong Song <yhs@fb.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 References: <20210111153123.GA423936@ubuntu>
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <17629073-4fab-a922-ecc3-25b019960f44@iogearbox.net>
+Date:   Mon, 11 Jan 2021 16:55:46 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20210111153123.GA423936@ubuntu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/26046/Mon Jan 11 13:34:14 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The Signed-off-by line should be last in the commit message, not first.
-First line (which becomes e-mail subject) should describe what the
-commit does (in a short one liner) and where it does it.
+Hello Gilad,
 
-So for your patch it could be something like
-  bpf: support pointer to mem register spilling in verifier
-
-The commit message should be written in present simple tense, not past
-simple, ie. not "Added support" but "Add support".
-
-Also we need your name and surname in From: header and Signed-off-by:
-tag. So instead of
-  giladreti <gilad.reti@gmail.com>
-it should be
-  Gilad Reti <gilad.reti@gmail.com>
-if that is your real time. If it is not, please provide your real name.
-
-On Mon, 11 Jan 2021 17:31:23 +0200
-giladreti <gilad.reti@gmail.com> wrote:
-
+On 1/11/21 4:31 PM, giladreti wrote:
 > Added support for pointer to mem register spilling, to allow the verifier
 > to track pointer to valid memory addresses. Such pointers are returned
 > for example by a successful call of the bpf_ringbuf_reserve helper.
 > 
 > This patch was suggested as a solution by Yonghong Song.
+
+The SoB should not be in subject line but as part of the commit message instead
+and with proper name, e.g.
+
+Signed-off-by: Gilad Reti <gilad.reti@gmail.com>
+
+For subject line, please use a short summary that fits the patch prefixed with
+the subsystem "bpf: [...]", see also [0] as an example. Thanks.
+
+It would be good if you could also add a BPF selftest for this [1].
+
+   [0] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/commit/?id=e22d7f05e445165e58feddb4e40cc9c0f94453bc
+   [1] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/tools/testing/selftests/bpf/
+       https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/tools/testing/selftests/bpf/verifier/spill_fill.c
+
 > ---
->  kernel/bpf/verifier.c | 2 ++
->  1 file changed, 2 insertions(+)
+>   kernel/bpf/verifier.c | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
 > index 17270b8404f1..36af69fac591 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
 > @@ -2217,6 +2217,8 @@ static bool is_spillable_regtype(enum bpf_reg_type type)
->  	case PTR_TO_RDWR_BUF:
->  	case PTR_TO_RDWR_BUF_OR_NULL:
->  	case PTR_TO_PERCPU_BTF_ID:
+>   	case PTR_TO_RDWR_BUF:
+>   	case PTR_TO_RDWR_BUF_OR_NULL:
+>   	case PTR_TO_PERCPU_BTF_ID:
 > +	case PTR_TO_MEM:
 > +	case PTR_TO_MEM_OR_NULL:
->  		return true;
->  	default:
->  		return false;
+>   		return true;
+>   	default:
+>   		return false;
+> 
 
