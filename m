@@ -2,97 +2,90 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 431F8C433E6
-	for <bpf@archiver.kernel.org>; Mon, 11 Jan 2021 19:48:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACE4DC433E9
+	for <bpf@archiver.kernel.org>; Mon, 11 Jan 2021 19:49:43 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E6B1722C97
-	for <bpf@archiver.kernel.org>; Mon, 11 Jan 2021 19:48:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7B0A222CAE
+	for <bpf@archiver.kernel.org>; Mon, 11 Jan 2021 19:49:43 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391127AbhAKTsb (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Jan 2021 14:48:31 -0500
-Received: from mga01.intel.com ([192.55.52.88]:44615 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389057AbhAKTsa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Jan 2021 14:48:30 -0500
-IronPort-SDR: b7LtlNKvu1BW3J0n9seyNlZE9Q81b8eLSYQkZ3o61LBYOxUH83aVJX+i+1oNcXfDfhLHN1F/SD
- eS5gP5SGnjhg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9861"; a="196536404"
-X-IronPort-AV: E=Sophos;i="5.79,339,1602572400"; 
-   d="scan'208";a="196536404"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2021 11:47:46 -0800
-IronPort-SDR: vSMvzdE1rybLWHt5j7ZLLDBShm+gQWVX9NjaOc12Dv6FOxAKmjminMevil6uL9PmjVfi1RB//a
- avVV7JpNQz8Q==
-X-IronPort-AV: E=Sophos;i="5.79,339,1602572400"; 
-   d="scan'208";a="381129269"
-Received: from amburges-mobl1.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.40.54])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2021 11:47:43 -0800
-Subject: Re: [PATCH net] i40e: fix potential NULL pointer dereferencing
-To:     Cristian Dumitrescu <cristian.dumitrescu@intel.com>,
-        intel-wired-lan@lists.osuosl.org
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com
-References: <20210111181138.49757-1-cristian.dumitrescu@intel.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-Message-ID: <ac36b7b2-bf0e-c58c-754b-d9ab4dbb9cae@intel.com>
-Date:   Mon, 11 Jan 2021 20:47:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S2391018AbhAKTtk (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Jan 2021 14:49:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388832AbhAKTtk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Jan 2021 14:49:40 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA92C0617A2
+        for <bpf@vger.kernel.org>; Mon, 11 Jan 2021 11:48:59 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id jx16so43295ejb.10
+        for <bpf@vger.kernel.org>; Mon, 11 Jan 2021 11:48:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5h4A0L7tVN4UX2Z9TEeukCL57ohmt7+pkrlPJsYpILQ=;
+        b=VDg8dCYtAFhytjYdQX3IeN8lvLiYAz0Cn/mrMOCp8xwLfm7tMImb2UMwRiwNRPglte
+         htUiDgZqfjxPpoXjARbTocD6qg70FQ3KAEkE1T1QXqgMBgAr9FxG2n28rm9vwAYVY+eN
+         KVlkv4MUgpbRrN+t5JKrQ0FN2frPiCt8GfZljxHMaeA5eLKmma8yh7sjy3ujQFJyA7Mz
+         fxeIwgzHBCp/3B6Pfk6y2AZti+ZrWBRxJyyMDGKOVlBiqI6F8dXxAsmKhtC5kp+iTOBr
+         3lmy0D1cBK8jRomDIyb4vuVioKfdzN+lJKtwQ2enxe7SPr9KMHby/AUlR6tWZIin5Ns+
+         6wIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5h4A0L7tVN4UX2Z9TEeukCL57ohmt7+pkrlPJsYpILQ=;
+        b=YLc/i0Wo7np/6Eu4OcLBCoN1+HcZgazIrIfveg1BEtqQ5QSurJL4CieYHR2oukIyui
+         PiQQBsgPBsuiPv+mu3Av7d6uCaxg4izfbMpn/ZJMl7n7JF/QIglvA8BnXE1yP/jjCh6R
+         vDEKaX3bt41H0CXhe/o4alABDHNKKCTLeJtpVF12lBRp0Y5S/suavmkuCb74iBdVAuXE
+         icmikmh+rPoSxA6c65Cn9ydKDtpoMO01h7osZF+2IM5YVWUhOeR7luSvqr/pYMIJZlUa
+         cAhmit98X6IDcVqEi01wouagaTt8pAB3FOiBiL8YiDopAQU15jiPbHyZuqJtEe3eP3sB
+         h9cg==
+X-Gm-Message-State: AOAM533C5mgFuhr9qXer62fAvtOKRg80/FKKssP6INK2FkYSMiR/nMOd
+        P0hnz2pz1/ygVP0kieyMO+S3Z0MSlfsiQYP57Rg=
+X-Google-Smtp-Source: ABdhPJz2NajkdpKj1LFdnnybXKVqQsqYY4hG4XF/gzBvHvg247f7Zrh7gm2H03E5fHmO8KhJGLR5EEm4ZwKRgcR8WLs=
+X-Received: by 2002:a17:907:4243:: with SMTP id np3mr736413ejb.212.1610394538702;
+ Mon, 11 Jan 2021 11:48:58 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20210111181138.49757-1-cristian.dumitrescu@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <CAHAzn3rz5ZH25-53+ijGXhzoV2DqiOhEtV==V2k2R72AwpGAdA@mail.gmail.com>
+ <20210111111949.18236404@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210111111949.18236404@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Konstantinos Kaffes <kkaffes@gmail.com>
+Date:   Mon, 11 Jan 2021 11:48:47 -0800
+Message-ID: <CAHAzn3o4HQQAXXnGg8My14z8dJmREkVDsBheNtxwtNHZB+xp-Q@mail.gmail.com>
+Subject: Re: [QUESTION] TCP connected socket selection
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2021-01-11 19:11, Cristian Dumitrescu wrote:
-> Currently, the function i40e_construct_skb_zc only frees the input xdp
-> buffer when the output skb is successfully built. On error, the
-> function i40e_clean_rx_irq_zc does not commit anything for the current
-> packet descriptor and simply exits the packet descriptor processing
-> loop, with the plan to restart the processing of this descriptor on
-> the next invocation. Therefore, on error the ring next-to-clean
-> pointer should not advance, the xdp i.e. *bi buffer should not be
-> freed and the current buffer info should not be invalidated by setting
-> *bi to NULL. Therefore, the *bi should only be set to NULL when the
-> function i40e_construct_skb_zc is successful, otherwise a NULL *bi
-> will be dereferenced when the work for the current descriptor is
-> eventually restarted.
-> 
-> Fixes: 3b4f0b66c2b3 ("i40e, xsk: Migrate to new MEM_TYPE_XSK_BUFF_POOL")
-> Signed-off-by: Cristian Dumitrescu <cristian.dumitrescu@intel.com>
+On Mon, 11 Jan 2021 at 11:19, Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Mon, 11 Jan 2021 10:33:49 -0800 Konstantinos Kaffes wrote:
+> > Hi everyone,
+> >
+> > It is the first time I am posting to a kernel mailing list so please
+> > let me know if this question needs to be directed elsewhere.
+> >
+> > I have been using BPF to programmatically steer UDP datagrams to
+> > sockets using the "sk_reuseport" hook.
+> >
+> > Similarly, I would like to identify request boundaries within a TCP
+> > stream/connection and programmably forward requests to different
+> > sockets *after* a connection is established. Is there a way to do that
+> > in the kernel using BPF?
+>
+> Sounds like what KCM does.
 
-Thanks for finding and fixing this, Cristian!
+Thanks! KCM would work but it is unclear to me how I can specify the
+policy used by the multiplexor to match messages to specific sockets.
 
-Acked-by: Björn Töpel <bjorn.topel@intel.com>
-
-> ---
->   drivers/net/ethernet/intel/i40e/i40e_xsk.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-> index 47eb9c584a12..492ce213208d 100644
-> --- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-> +++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-> @@ -348,12 +348,12 @@ int i40e_clean_rx_irq_zc(struct i40e_ring *rx_ring, int budget)
->   		 * SBP is *not* set in PRT_SBPVSI (default not set).
->   		 */
->   		skb = i40e_construct_skb_zc(rx_ring, *bi);
-> -		*bi = NULL;
->   		if (!skb) {
->   			rx_ring->rx_stats.alloc_buff_failed++;
->   			break;
->   		}
->   
-> +		*bi = NULL;
->   		cleaned_count++;
->   		i40e_inc_ntc(rx_ring);
->   
-> 
+The documentation has examples on how to do the delineation but
+nothing on how to specify the matching policy.
