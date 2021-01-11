@@ -2,179 +2,156 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.2 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CB699C433E0
-	for <bpf@archiver.kernel.org>; Mon, 11 Jan 2021 20:01:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C2C4CC433DB
+	for <bpf@archiver.kernel.org>; Mon, 11 Jan 2021 20:04:39 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6E8FD22B51
-	for <bpf@archiver.kernel.org>; Mon, 11 Jan 2021 20:01:23 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C9A122C7E
+	for <bpf@archiver.kernel.org>; Mon, 11 Jan 2021 20:04:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726840AbhAKUBH (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Jan 2021 15:01:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389880AbhAKUBH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Jan 2021 15:01:07 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34E8C061786;
-        Mon, 11 Jan 2021 12:00:13 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id o6so895228iob.10;
-        Mon, 11 Jan 2021 12:00:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=goT5IWT5P9ja4vCJx8N393EOK2IFNhGkcxSpp3GtoZI=;
-        b=jjRVrZszqODR6rhGYZpNgsaBV6qa5L9DyqSGjmAwyHFZkJfjAD+qor+FbnQtqVmAEG
-         dP5IGJRXjKD/k7Vik7qYUs/vU5eAiKBGMrfN8QFr1WZ2+cTfZkoJjIfsrja699rrwpMU
-         bniH3sMqps8edGFlkjrYO9/6km3U4j0IsfNUmWbWybmtF9Uhu58ltFtKomLcUuXO/oex
-         VD/UvCasLXCmXUV/n6ez9bxIUzEvPJkHvDXY2mIocgjJ6Npmh4j8UBCSSQ2+ECWuFqBq
-         B0hbLj4EhnysgIguBA1NDLRDJ+25EozXcDmO0znXDrjdhq1UsGo9EWYepA2kxRjPX1g/
-         JrTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=goT5IWT5P9ja4vCJx8N393EOK2IFNhGkcxSpp3GtoZI=;
-        b=HgNz55Ou5WNYs8fxT1edzsMnJU+NrYOyOZ+7TT13bf4NlzQidJMZEJ1iQ7zmU4TRhR
-         3X1kVU8AuC7jjBw2R5duN/bvVtXsT77XqOtGRJ+UnBNZ96DJq4h1p9KKpREm+H6X0aaq
-         cIKNfPJbT+nGTu+uGZx4BflPD1yPSvH08Z/Rq2FxszAG3OzqhntsXAbN5xHFuubwzNx/
-         X+06SEKp2UYbLZc+oPU4Ts54eVqn8tf5JR4XTHBuwuTeO7zIhHdba97cUoAXY9AjJw8C
-         giLGslN54OuyJJPMqoVhXNZo5EpT37TDIEbZzDq35sUKKMGCwlcT+JbEDyLGwecyRZpn
-         C/yA==
-X-Gm-Message-State: AOAM5324X2bAtiDOn0w/wkp5YzamOi6/N5na1VInEUSUK5xJ+7/OM89M
-        RkC/qrqa58tKxoy8be9laqA=
-X-Google-Smtp-Source: ABdhPJxNCjsZ4aVbzvK4xd1uVps8hqyqrzFNgKMzoNE9F8bSJBYz41tc6A5yF1Piv3+saee72uDHKQ==
-X-Received: by 2002:a6b:c414:: with SMTP id y20mr734574ioa.150.1610395213257;
-        Mon, 11 Jan 2021 12:00:13 -0800 (PST)
-Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
-        by smtp.gmail.com with ESMTPSA id l78sm426963ild.30.2021.01.11.12.00.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jan 2021 12:00:12 -0800 (PST)
-Date:   Mon, 11 Jan 2021 13:00:10 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>
-Subject: Re: [PATCH] bpf: Hoise pahole version checks into Kconfig
-Message-ID: <20210111200010.GA3635011@ubuntu-m3-large-x86>
-References: <20210111180609.713998-1-natechancellor@gmail.com>
- <CAK7LNAQ=38BUi-EG5v2UiuAF-BOsVe5BTd-=jVYHHHPD7ikS5A@mail.gmail.com>
- <20210111193400.GA1343746@ubuntu-m3-large-x86>
- <CAK7LNASZuWp=aPOCKo6QkdHwM5KG6MUv8305v3x-2yR7cKEX-w@mail.gmail.com>
+        id S2391473AbhAKUEX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Jan 2021 15:04:23 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:37412 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2391255AbhAKUEW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 11 Jan 2021 15:04:22 -0500
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10BJwDO0030815;
+        Mon, 11 Jan 2021 12:03:29 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=+AuMuR/w80WzGrG4trRETndnO0lV+6sBhHWC9D8aByc=;
+ b=LgN39Va6CRwo37OBJWX97kODqIqyzS4kxszu3coDfhZAtLbjH7PjRmJ65X4oaxLx2E8M
+ ByV1b82HU4Bv4gtZBGs4psCSVuFI4oTBjuZy87YWC8yuftGHF7+DJ5wNzi/rgStgGZcd
+ xbXusRyYxtPSooyPeBqeZBGZWdtqj2P+6w4= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 35yweb6pn4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 11 Jan 2021 12:03:28 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Mon, 11 Jan 2021 12:03:27 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iLZlIEqvXzuxZOa2ZlltudMHtYbeu1daf4GWOxrLgSmUIqW5w3+DexUGXxd4RZlt9oR5DDW0/4+4M1Mdbc+gELyupKl8PbaSjg4FPzZ4RiC6XD1nA4TOFmsJRvwF6elW4jVQbvLGwMBFNYS4FRoa8TXRW1maH7asSbeDd7v07hO2FLhW6gJJTKFbfUYS5yVaxutezA5DnMKZd6ESNqHz10ZFx9esGh4GUZNFmuJ9GC6lM5hjt8Prc10SbyqULCYTZ47h5vDW1cEQeWvGgZzTswyT0pmi0jMrK/CtItgFpz9hW0eelCYbSBuaSggBNAQdcLDN0648ZlFJ0Wd6awf40A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+AuMuR/w80WzGrG4trRETndnO0lV+6sBhHWC9D8aByc=;
+ b=IouRfBHh6O05IVl7exPjU9x5OkITzBzLNGkeCB/QFw7sNeKFoMp4BCzPi66XA5oHdnzsHe+0fkz4TrMXcxNj8TW2VuvVVWut90ArBDhD9OlkdcqaVL27OTTSxxLE2xqX2l/dZhwTgqzHtnUSNpSWjfejOUE3lwsXl2ESYOXeH3y8XRZOsQRBsQhdUl3NWjlRwX+pC7EICkt4ISqT0HxBFZ7Y4hRRWTo1EqMIIyBRUgaVu22+5qc3C9/in+foyklXB8nkszT4yMtXA4Z7E8NBykD3ddtxQe5469Fx9DikAhhe35/SusVnyF2x6WOfS9ZL76OZosIDlgd70NvHlyX5YA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+AuMuR/w80WzGrG4trRETndnO0lV+6sBhHWC9D8aByc=;
+ b=hc6BMiy2uZoWs3gE+1xTS4qZC59iSJZ/A31w7ajtLLz4fqngxBt6Yo0Ewlki7qpWH0UUJTUAenH4Lum6ZfPe9u/FRtyp2JprcGbYbuSOgQCJcCLnDlKW5jLQWMfdalnxV7XArWpk+l2KVr3ccM1M+9dM8W9+q6MwGoQ6lo/hlUQ=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB4085.namprd15.prod.outlook.com (2603:10b6:a02:bf::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.10; Mon, 11 Jan
+ 2021 20:03:26 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::9ae:1628:daf9:4b03]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::9ae:1628:daf9:4b03%7]) with mapi id 15.20.3742.012; Mon, 11 Jan 2021
+ 20:03:26 +0000
+Subject: Re: [PATCH bpf-next 1/2] bpf: allow to retrieve sol_socket opts from
+ sock_addr progs
+To:     Daniel Borkmann <daniel@iogearbox.net>, <ast@kernel.org>
+CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
+References: <9dbbf51e7f6868b3e9c8610a8d49b4493fb1b50f.1610381606.git.daniel@iogearbox.net>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <02b5fea5-2790-51aa-1bf1-862de6a9f271@fb.com>
+Date:   Mon, 11 Jan 2021 12:03:25 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.6.0
+In-Reply-To: <9dbbf51e7f6868b3e9c8610a8d49b4493fb1b50f.1610381606.git.daniel@iogearbox.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [2620:10d:c090:400::5:6450]
+X-ClientProxiedBy: BYAPR02CA0036.namprd02.prod.outlook.com
+ (2603:10b6:a02:ee::49) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNASZuWp=aPOCKo6QkdHwM5KG6MUv8305v3x-2yR7cKEX-w@mail.gmail.com>
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:21c1::1158] (2620:10d:c090:400::5:6450) by BYAPR02CA0036.namprd02.prod.outlook.com (2603:10b6:a02:ee::49) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.6 via Frontend Transport; Mon, 11 Jan 2021 20:03:26 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: fe12d4a7-569d-4b87-692f-08d8b66bf56a
+X-MS-TrafficTypeDiagnostic: BYAPR15MB4085:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB4085E86C452B345A799BFC62D3AB0@BYAPR15MB4085.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:3383;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: V2yuX0XeGbdJv+4LFGIA6QB6j03oZC2zVl2LGPdpHicIJgk/ZeeMsnY0ceEYDCqe5Dtqd7OY2Wqwg/57AG2suzyw3mticzz6IqLMElxZ4liZaQ73Zp+JjbfSpAUu2dLhFWXddsz91GEDTaO4xsuS+giH9sEZASS7bOGbo2w0kZEPLZSnykcZg0YYmG7nOFWqvZpUuTYRNRhakLFHY6wRgapVbLmLm4phEHF/PZYzM+ecZPzSqvbv6EBc0jXBRgK7XWH9CjmqgnqojKSUZlV0fCvDzMT8E7DvrhuQzDB/DDHleC3RgGpdZPoHUXmqAZCqNAbg1OT8iM8S2dNKUZwpgxOzhAQTTWfFM19oK9yxE9ctqOMXlBaVMIucBfM8wfl18WnVTYFdycK+sreDf+ibZunZ+5jDOvWvOW4z4wCbM7L01f7yH0e9oOKN1M7HKIiQSLFKEpAHAdzy19zsa6qwfXAU3XmgK57jw9ImkBM52nk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(136003)(346002)(396003)(376002)(39860400002)(8676002)(6486002)(31686004)(316002)(86362001)(52116002)(8936002)(2906002)(53546011)(31696002)(4744005)(478600001)(36756003)(66946007)(4326008)(5660300002)(16526019)(186003)(66556008)(66476007)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?UkNHa0NoTUROdWoyYzFOaUpMNE9XWk5Ua2duZk1VbktCVG1oZHA5R2o5UTdZ?=
+ =?utf-8?B?d0pBd3ZDRVhFMTlIYkE3R1dUNzUvWmdtQ3liV0VzWncyMnRaUWVvVVk5WHd5?=
+ =?utf-8?B?b3FRRHdTa0RPVDlxT1FBd3VzWVBrZk9BNUk1VHdLeXNkd3B1Q1hKcjVQRytJ?=
+ =?utf-8?B?OUJLRHUwQ0dURlRGMmN2Rko2dVBOK1dXZmlSSGcyWVpqdU1TSHRuUlNCQjQ3?=
+ =?utf-8?B?R2psNFByTVZ3aXdlcTdNSlVZVWJtTnVsQUs0T2w2RVJKemxXeUxhM21ENVdL?=
+ =?utf-8?B?UmRFQzc4YVpuazgzMzkxeGxYTFhZZnlhZTBra3MvWjJjSE5hUGEvWmpBQ2Qw?=
+ =?utf-8?B?b2svb0VMbHpJVjJNU2FrelFLVWxCWlA3aTdYc2xiYjltdHcwdUpPZXBSNTJi?=
+ =?utf-8?B?Vk1NUWQxUkU3SVNGT2RvVUJmWjhMYzZBWGowaFpsZ1BmUG9WclBuU0ZXVVpl?=
+ =?utf-8?B?QUZ0OGJBNkRxalN6cUxKT2Q4UnVMQ1FlNjBPb2FFcVBadU9ZbDUxSEtTK1RX?=
+ =?utf-8?B?dGpKb2FmTndGampJRUFwcXY3UnBpeXpmMnhnT0VXYkt3QTROSDNJT2cyeDA3?=
+ =?utf-8?B?SS9YSXJ4SDdzRHljd1JTT09QQnZHWGsvKzdhbjRta2dJUW1KdlBUcXFCdnFV?=
+ =?utf-8?B?OVBBbGMrMUVDUVdSMzA3MmorMjNteHVjVzZCdlVlMUJkelVOTDRGdEFzK0Vt?=
+ =?utf-8?B?ck4ySnROOFBUampLTUlSNXFHMGo3OVlncjVsU1pFT2JwWjNmRWN2Y1F2WHlC?=
+ =?utf-8?B?aTZQS2pVNy9hN3ZGUGs0eHYxQzd0bWlpNXpZVjBJLzBjcXBWWjcvK1BVOWlp?=
+ =?utf-8?B?RFdIQnhRdjNKMGVUbzRBUHNhS0wrd3kxZ0hReU5pTlVKeXR1TW9JSFZpNk1V?=
+ =?utf-8?B?Rkp5OU9SbWkrc2Y5Q1VjeW5sZnNSVGRNdTVGcXZ3eDg1MTh1YzdDS1FLcE1w?=
+ =?utf-8?B?K2VpVkZNVWlqUjUxZkNiTGU3WTZjK0hSTlVHQXhnaGgvSWdISUZ5UGVkeEdu?=
+ =?utf-8?B?L1VFMUc4TWZHU3Q5eWU1cmRHT0V4c0k4bm5DMHRrV1pmOEVya3JkUFhiRXh6?=
+ =?utf-8?B?QnhLd0pzZ0gvY1lwajl5QUxUYTdrcTNCVzNUUmIxWFJTRDhGdkdZWUw3NHJZ?=
+ =?utf-8?B?SkxyKy9WQlZUb293RTBNcmhlTk5iVmMyb21uV1hWV3JScFFOaVBTdE5Qcmd3?=
+ =?utf-8?B?SGdsdC9nSDFhNmg2bm9lazd6NHhqRXZRdis1RUR5S2tuZlJpYU1jSEtOOG0r?=
+ =?utf-8?B?QTB4QkhSTmtnNUI3OXhqZkZIeVpVRHErK0ZaNW1zNkR5QkhSNE1zdEVHQ3J6?=
+ =?utf-8?B?V3ptekpVOVJJcnFtL2FtSWswekdVNEd1djR2WmU5T2hpcGxYN0pOUTh3dXRG?=
+ =?utf-8?B?NTMxTVpJUmxXYlE9PQ==?=
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jan 2021 20:03:26.7063
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-Network-Message-Id: fe12d4a7-569d-4b87-692f-08d8b66bf56a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tv62Xqf5S6fYjcVkdCpRrexKBiu+nbjGgxHj3wND7x47j3y3L33eBmKxnmmfTi1c
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB4085
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-11_30:2021-01-11,2021-01-11 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
+ malwarescore=0 bulkscore=0 phishscore=0 spamscore=0 impostorscore=0
+ lowpriorityscore=0 priorityscore=1501 clxscore=1015 mlxscore=0
+ adultscore=0 mlxlogscore=945 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2101110112
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 04:50:50AM +0900, Masahiro Yamada wrote:
-> On Tue, Jan 12, 2021 at 4:34 AM Nathan Chancellor
-> <natechancellor@gmail.com> wrote:
-> >
-> > On Tue, Jan 12, 2021 at 04:19:01AM +0900, Masahiro Yamada wrote:
-> > > On Tue, Jan 12, 2021 at 3:06 AM Nathan Chancellor
-> > > <natechancellor@gmail.com> wrote:
-> > > >
-> > > > After commit da5fb18225b4 ("bpf: Support pre-2.25-binutils objcopy for
-> > > > vmlinux BTF"), having CONFIG_DEBUG_INFO_BTF enabled but lacking a valid
-> > > > copy of pahole results in a kernel that will fully compile but fail to
-> > > > link. The user then has to either install pahole or disable
-> > > > CONFIG_DEBUG_INFO_BTF and rebuild the kernel but only after their build
-> > > > has failed, which could have been a significant amount of time depending
-> > > > on the hardware.
-> > > >
-> > > > Avoid a poor user experience and require pahole to be installed with an
-> > > > appropriate version to select and use CONFIG_DEBUG_INFO_BTF, which is
-> > > > standard for options that require a specific tools version.
-> > > >
-> > > > Suggested-by: Sedat Dilek <sedat.dilek@gmail.com>
-> > > > Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-> > >
-> > >
-> > >
-> > > I am not sure if this is the right direction.
-> > >
-> > >
-> > > I used to believe moving any tool test to the Kconfig
-> > > was the right thing to do.
-> > >
-> > > For example, I tried to move the libelf test to Kconfig,
-> > > and make STACK_VALIDATION depend on it.
-> > >
-> > > https://patchwork.kernel.org/project/linux-kbuild/patch/1531186516-15764-1-git-send-email-yamada.masahiro@socionext.com/
-> > >
-> > > It was rejected.
-> > >
-> > >
-> > > In my understanding, it is good to test target toolchains
-> > > in Kconfig (e.g. cc-option, ld-option, etc).
-> > >
-> > > As for host tools, in contrast, it is better to _intentionally_
-> > > break the build in order to let users know that something needed is missing.
-> > > Then, they will install necessary tools or libraries.
-> > > It is just a one-time setup, in most cases,
-> > > just running 'apt install' or 'dnf install'.
-> > >
-> > >
-> > >
-> > > Recently, a similar thing happened to GCC_PLUGINS
-> > > https://patchwork.kernel.org/project/linux-kbuild/patch/20201203125700.161354-1-masahiroy@kernel.org/#23855673
-> > >
-> > >
-> > >
-> > >
-> > > Following this pattern, if a new pahole is not installed,
-> > > it might be better to break the build instead of hiding
-> > > the CONFIG option.
-> > >
-> > > In my case, it is just a matter of 'apt install pahole'.
-> > > On some distributions, the bundled pahole is not new enough,
-> > > and people may end up with building pahole from the source code.
-> >
-> > This is fair enough. However, I think that parts of this patch could
-> > still be salvaged into something that fits this by making it so that if
-> > pahole is not installed (CONFIG_PAHOLE_VERSION=0) or too old, the build
-> > errors at the beginning, rather at the end. I am not sure where the best
-> > place to put that check would be though.
-> 
-> Me neither.
-> 
-> 
-> Collecting tool checks to the beginning would be user-friendly.
-> However, scattering the related code to multiple places is not
-> nice from the developer point of view.
-> 
-> How big is it a problem if the build fails
-> at the very last stage?
-> 
-> You can install pahole, then resume "make".
-> 
-> Kbuild skips unneeded building, then you will
-> be able to come back to the last build stage shortly.
 
-There will often be times where I am testing multiple configurations in
-a row serially and the longer that a build takes to fail, the longer it
-takes for me to get a "real" result. That is my motivation behind this
-change. If people are happy with the current state of things, I will
-just stick with universally disabling CONFIG_DEBUG_INFO_BTF in my test
-framework.
 
-Cheers,
-Nathan
+On 1/11/21 8:17 AM, Daniel Borkmann wrote:
+> The _bpf_setsockopt() is able to set some of the SOL_SOCKET level options,
+> however, _bpf_getsockopt() has little support to actually retrieve them.
+> This small patch adds few misc options such as SO_MARK, SO_PRIORITY and
+> SO_BINDTOIFINDEX. For the latter getter and setter are added. The mark and
+> priority in particular allow to retrieve the options from BPF cgroup hooks
+> to then implement custom behavior / settings on the syscall hooks compared
+> to other sockets that stick to the defaults, for example.
+> 
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+
+Acked-by: Yonghong Song <yhs@fb.com>
