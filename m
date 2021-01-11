@@ -2,151 +2,96 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id EC887C433DB
-	for <bpf@archiver.kernel.org>; Mon, 11 Jan 2021 19:34:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DD989C433E0
+	for <bpf@archiver.kernel.org>; Mon, 11 Jan 2021 19:48:37 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9DAA022BE9
-	for <bpf@archiver.kernel.org>; Mon, 11 Jan 2021 19:34:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 979A022BF3
+	for <bpf@archiver.kernel.org>; Mon, 11 Jan 2021 19:48:37 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391215AbhAKTep (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 11 Jan 2021 14:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46992 "EHLO
+        id S2403884AbhAKTsV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 11 Jan 2021 14:48:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390813AbhAKTeo (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 11 Jan 2021 14:34:44 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4FAC061794;
-        Mon, 11 Jan 2021 11:34:04 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id x15so341238ilq.1;
-        Mon, 11 Jan 2021 11:34:04 -0800 (PST)
+        with ESMTP id S2403839AbhAKTsV (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 11 Jan 2021 14:48:21 -0500
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F8BC061795
+        for <bpf@vger.kernel.org>; Mon, 11 Jan 2021 11:47:41 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id w8so847784ybj.14
+        for <bpf@vger.kernel.org>; Mon, 11 Jan 2021 11:47:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5n87tlf//wbzIK0eFiapoMfQ9AN1g8d2FAoAK9a2vxY=;
-        b=Rq4NY83BuV9gdq7ymDniXgE3trbn7AuWPX5XYRuawZOf3jkN7iziyclvuU/QMCUHPU
-         rmMU25jDfrKvPW4ayQTUxpimEJ9WzdPmc245vbt2wq69TSazRKSNXyLQqNADZOWd3xX/
-         +9IKJ92XGDBm8QOYOb84gmTJh5ufYhJHY+PNmZMmdZi4u+4naJWNhVj8pQoB2k+aDf3s
-         wpiwxCk5b5dn7Mij0UywlCyVmBt/t71Dg90yxMnh32+PaYrcklD79sFo7axxUwaG08l/
-         w3X57MW4x9e5qBqVCgzbziPqgge1KEYgiMnnuYUzAlNeN/+/DyCVPfMH8pd/MYgouQja
-         4XYA==
+        d=google.com; s=20161025;
+        h=sender:date:message-id:mime-version:subject:from:to:cc;
+        bh=xUocMv2mOdcyH4QCmuhEcB0lNnr4xgx5lFffo1oDelo=;
+        b=YuBxC3Nu4KiswAN+JQXNyZ0Jfe3BBNgPWZUtSfrzr6g15hR/8Gw+3RsgZtJ5Lp54aK
+         XZFiEP7/Noi6TpQG/msX03XdlGMFjn7o9kcxBKUf3exYti5BzGfmk3GokvnzQEaHD8mZ
+         fCbN47xQDVBE+4x5ts+YTWhcahU/6s1c3/yU7zx9hQRR/zKxCs6HO5SGNcoDYLTjuNqC
+         Ggiud363URFTo7jnRTp56J2/H717MtYd0PZtYX2xG5oqpll4zhfZdiDiD1H2vk12xarN
+         5AZv+W1RvjFFOrcTX4GRq9gaFVKr7o2bTJSrpVH487ugkTN9mbtbCh9Ul3vk3biNN9qN
+         gIMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5n87tlf//wbzIK0eFiapoMfQ9AN1g8d2FAoAK9a2vxY=;
-        b=SZRKpB4Ji+xtK5M3qTyanfb8moB3Z2HmD4gHaHw3Stf1lgn10htTJ94l35hSoBhrlI
-         N/q9Usv1NA0g0nIjxWHMmU0LqlnXmMQPYDzNOWnrNMHmEcvhvKvvVUYUDefBnayIdPHe
-         PssmUwOuEOzmv0c5NKydSRQviWEcdRBkC9OOLSABuKOMksmtvB4mRKahvg0MduJa6Eec
-         03kjC0OoKzHhLNDfnmxGsXMFYu8RZLd+/2iym5phXNPhCb8QFJ8uwkqtSnQsoqZsbUAD
-         2FtoRlsCIqWH1afSsSL9M4fmhts5X93IfljJX8eS3EUHJlu63VAwt+sFEGoBbOEW4E6B
-         q7OQ==
-X-Gm-Message-State: AOAM532wQTwuF9cmXotDlXxsnVR9tj06n7XDeHK9yh+4D+exzqGeY6dz
-        669rQz/wc42Tsng8bgE11+M=
-X-Google-Smtp-Source: ABdhPJxT+GymjMQRiWHQH2hZ/KGPHBJNpw1mPTlAxAfe8CDKz5S50mJKepd4An2jXnXrmp51GhmhlQ==
-X-Received: by 2002:a92:418d:: with SMTP id o135mr649615ila.213.1610393643713;
-        Mon, 11 Jan 2021 11:34:03 -0800 (PST)
-Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
-        by smtp.gmail.com with ESMTPSA id 17sm360669ilt.15.2021.01.11.11.34.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Jan 2021 11:34:02 -0800 (PST)
-Date:   Mon, 11 Jan 2021 12:34:00 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Sedat Dilek <sedat.dilek@gmail.com>
-Subject: Re: [PATCH] bpf: Hoise pahole version checks into Kconfig
-Message-ID: <20210111193400.GA1343746@ubuntu-m3-large-x86>
-References: <20210111180609.713998-1-natechancellor@gmail.com>
- <CAK7LNAQ=38BUi-EG5v2UiuAF-BOsVe5BTd-=jVYHHHPD7ikS5A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNAQ=38BUi-EG5v2UiuAF-BOsVe5BTd-=jVYHHHPD7ikS5A@mail.gmail.com>
+        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
+         :to:cc;
+        bh=xUocMv2mOdcyH4QCmuhEcB0lNnr4xgx5lFffo1oDelo=;
+        b=qbYX636i28VIB2CChIMdmHW++7wgk9zq0s/L94UPu+FkTjnPM+w/Ruo/ffU3IzCiRR
+         +GyTWwqHfKFQhaHepBIgkj/HZ0Dvbio6Gxv/XmTqhVoZo8R+G0LVQqWceJ98taFASGVg
+         /oPM6FiCDWH7drGKC2vi5nLu63W4hNlyPPXQFGpn3ptbs7W1W8yS8r+mSgF88giwdfYS
+         ruDVp0ohmeSd6SkEDqGtV0b96IPsVV2HOTwT/kPMzi720P3p8BVRAAzqaxPVoHCZLMW8
+         q27EfigYcxEx1nkaoUuKbrmz1yOgRmAhbJpkzoZKZx4zaw0QdRE8YjE2QaMeVN6X8RxT
+         rUYQ==
+X-Gm-Message-State: AOAM533rhAORqfvzn7rXrEXe2iSb5gdgrpfCZOg09/w6lTOMdYFILKr/
+        P3FeJmorAuORdZWGV6e4Jv6LEvE=
+X-Google-Smtp-Source: ABdhPJxmTCmudGn+ZRVOZ76XkhLi3pgE7rvtDuzIW4Mm3GtN9Eo89TiuA37fB/7xKyzwJUjz/oTP3Ac=
+Sender: "sdf via sendgmr" <sdf@sdf2.svl.corp.google.com>
+X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:1:7220:84ff:fe09:7732])
+ (user=sdf job=sendgmr) by 2002:a25:1104:: with SMTP id 4mr1988439ybr.476.1610394460296;
+ Mon, 11 Jan 2021 11:47:40 -0800 (PST)
+Date:   Mon, 11 Jan 2021 11:47:38 -0800
+Message-Id: <20210111194738.132139-1-sdf@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
+Subject: [PATCH bpf] bpf: don't leak memory in bpf getsockopt when optlen == 0
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net,
+        Stanislav Fomichev <sdf@google.com>,
+        Martin KaFai Lau <kafai@fb.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 04:19:01AM +0900, Masahiro Yamada wrote:
-> On Tue, Jan 12, 2021 at 3:06 AM Nathan Chancellor
-> <natechancellor@gmail.com> wrote:
-> >
-> > After commit da5fb18225b4 ("bpf: Support pre-2.25-binutils objcopy for
-> > vmlinux BTF"), having CONFIG_DEBUG_INFO_BTF enabled but lacking a valid
-> > copy of pahole results in a kernel that will fully compile but fail to
-> > link. The user then has to either install pahole or disable
-> > CONFIG_DEBUG_INFO_BTF and rebuild the kernel but only after their build
-> > has failed, which could have been a significant amount of time depending
-> > on the hardware.
-> >
-> > Avoid a poor user experience and require pahole to be installed with an
-> > appropriate version to select and use CONFIG_DEBUG_INFO_BTF, which is
-> > standard for options that require a specific tools version.
-> >
-> > Suggested-by: Sedat Dilek <sedat.dilek@gmail.com>
-> > Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
-> 
-> 
-> 
-> I am not sure if this is the right direction.
-> 
-> 
-> I used to believe moving any tool test to the Kconfig
-> was the right thing to do.
-> 
-> For example, I tried to move the libelf test to Kconfig,
-> and make STACK_VALIDATION depend on it.
-> 
-> https://patchwork.kernel.org/project/linux-kbuild/patch/1531186516-15764-1-git-send-email-yamada.masahiro@socionext.com/
-> 
-> It was rejected.
-> 
-> 
-> In my understanding, it is good to test target toolchains
-> in Kconfig (e.g. cc-option, ld-option, etc).
-> 
-> As for host tools, in contrast, it is better to _intentionally_
-> break the build in order to let users know that something needed is missing.
-> Then, they will install necessary tools or libraries.
-> It is just a one-time setup, in most cases,
-> just running 'apt install' or 'dnf install'.
-> 
-> 
-> 
-> Recently, a similar thing happened to GCC_PLUGINS
-> https://patchwork.kernel.org/project/linux-kbuild/patch/20201203125700.161354-1-masahiroy@kernel.org/#23855673
-> 
-> 
-> 
-> 
-> Following this pattern, if a new pahole is not installed,
-> it might be better to break the build instead of hiding
-> the CONFIG option.
-> 
-> In my case, it is just a matter of 'apt install pahole'.
-> On some distributions, the bundled pahole is not new enough,
-> and people may end up with building pahole from the source code.
+optlen == 0 indicates that the kernel should ignore BPF buffer
+and use the original one from the user. We, however, forget
+to free the temporary buffer that we've allocated for BPF.
 
-This is fair enough. However, I think that parts of this patch could
-still be salvaged into something that fits this by making it so that if
-pahole is not installed (CONFIG_PAHOLE_VERSION=0) or too old, the build
-errors at the beginning, rather at the end. I am not sure where the best
-place to put that check would be though.
+Reported-by: Martin KaFai Lau <kafai@fb.com>
+Fixes: d8fe449a9c51 ("bpf: Don't return EINVAL from {get,set}sockopt when optlen > PAGE_SIZE")
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+---
+ kernel/bpf/cgroup.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cheers,
-Nathan
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 6ec088a96302..09179ab72c03 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1395,7 +1395,7 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
+ 	}
+ 
+ out:
+-	if (ret)
++	if (*kernel_optval == NULL)
+ 		sockopt_free_buf(&ctx);
+ 	return ret;
+ }
+-- 
+2.30.0.284.gd98b1dd5eaa7-goog
+
