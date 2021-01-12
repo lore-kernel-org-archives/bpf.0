@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FC94C432C3
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6447FC4321A
 	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:43:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 01DE22310E
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:43:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 479BB2310E
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:43:53 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436775AbhALTne (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jan 2021 14:43:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
+        id S2436829AbhALTnn (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jan 2021 14:43:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436746AbhALTnc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jan 2021 14:43:32 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B325C061389
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 11:42:18 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id d26so3713457wrb.12
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 11:42:18 -0800 (PST)
+        with ESMTP id S2436825AbhALTnl (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jan 2021 14:43:41 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01EF2C0617BF
+        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 11:42:12 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id a6so2970185wmc.2
+        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 11:42:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=daynix-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=vUG4KrkwS/48VCqb3gPEYEavBv7WJyPV6SrQz/KaLAM=;
-        b=xXVp4dUFwGopoDHrk5N2q6tlpNzp6UcAVfATe6wqsrEI6AsT8zMquFk3s5PrenaRNS
-         HsXPG8kYC0iqaJhsbWLQQVLvJzZ9fyG5MMwDHgKfhYHzVUADW8tULfPsAXPKdSzmExXs
-         xGkgY8UjXhz4pr/tWYY6LIg0OPuFo4/wilerVoD5vOLJ7+xE3zVBI8l4tgeDUNGcSQS2
-         w9lpFADgtL5YNaNmRW34ldPIRi8yBgvDVWpenxM8ASJiWwqp+czbRrxXsd0c45UYufcX
-         ORCyuOBerYo0JFSjBUJNikFQv/KEcc3YsnoAYO8aGPrCVo2pExXlWpwTZijTWq2Ccxf6
-         uguA==
+        bh=ZIRhmzhJTza1eg/duDC8aSWDJ8wELCNq6nzGwLtOGgE=;
+        b=d9NxmNZSQNFWQVyP7EOF6ws9upmBjMm7Uu4vcCvAagQcJvjqLbg5+r9m2RsQFFiJis
+         Phmfncl8NVLjetiCUd7//m3Bmb/XboSynU2+TTlz7fnQQrc7Jpxc4hbmaw8FZqV5TH7y
+         sRRNBzmxv6jAlGIonq5UpuL7dMdRW+ftT3cnGIa3N0L2U2c/1jaGnLRqD4+8bMh4rAPo
+         vOvc7I+Tm890KsTLrvzdfciGgT5p7v9XHa51iZ9aT1MwsRe8bYEEqZSNxG/W4qodptly
+         zpZ2A26Vz1arJqMbfke1ek2319CmQxsbEOY6yJmN8LiK+JJsd/aLYiWW1hD2hgKV/tZM
+         NhXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=vUG4KrkwS/48VCqb3gPEYEavBv7WJyPV6SrQz/KaLAM=;
-        b=MSdebTbyDGtZCwGVmTqlrghjKZkudoKxu07JqWPYy1y60Ht89bhA8F9VFAcSx0ZgIj
-         sIHrjPQZWmg4XrIzRpaAsSLmGD6Bb3/I38RdLhpxAfIwsaVd9aDyxCk8wXGPMp3t3v8V
-         JMQzsSk+n7l36jbv6lDu23NuYmTnTFjEBUA+elcZOzUBGhXRydBN1XA0993rXgbAICwx
-         TBMcVq747JYgUELrxC4P/TYa65tPVLT3qIoWmSqxSnaXAdSLtmmiio3NEry8f08Js9rz
-         jYrMmItJQkpOLcLwOGNcRHyWJFwwf5YU12qw4czMk2yQIXGan3GuP4QtN+EBN/faKwkD
-         7/5A==
-X-Gm-Message-State: AOAM532pPiTAXxt+rBxjdjiRE1oHPLb4/AGyGRKbJxbYrCiWDoPW9VOM
-        pjjexRiOoplF7mzk2BwOefHdRA==
-X-Google-Smtp-Source: ABdhPJzCa62kAiSj5dwvAhD+eWjgsemDiqG4ohfKFPsazH9lExZh5CateUK1KDaOpknKxeSQxHaBJA==
-X-Received: by 2002:a5d:69c2:: with SMTP id s2mr454259wrw.36.1610480536897;
-        Tue, 12 Jan 2021 11:42:16 -0800 (PST)
+        bh=ZIRhmzhJTza1eg/duDC8aSWDJ8wELCNq6nzGwLtOGgE=;
+        b=NSmcWJajvWdOQfVI4uqgAt6qKHTexLuD8ArHvD8wV8yibnIXXiVkfdVw7e+Lgt95A1
+         SPv1N0WhHbko71/YRFyPbUwOAylQjYdzUr1OGObU/6VIiaY2g4oq1Fvu0nsyg5E8PMwS
+         fOXIpJfggp/j0wEKNdfWACZDJeEBrvpBtEnENUjEymgJt4wfZ3oCd/H9Pjol27JNjxs/
+         BeiGs3xOYGvwSJijR9eZL9n8Fm9H/i9KPliKyZ8OzcBZyXNMRl09vkh0sfw5D6ySTJh6
+         //zNKBAM8is4sWrHRSMVGvxqFm4FZUVhOQXu3omTULBr6Pp/sAv+YvLmFpkCZYo5JYfq
+         2xOA==
+X-Gm-Message-State: AOAM530MAmU9RqqZ+d1/IDuLy87K+pQx2TaWTtiD33ab8VjWUGbhYOq6
+        FRylTL7WEyZGiTHVAaIOu2Qo9w==
+X-Google-Smtp-Source: ABdhPJxgkunWSUTHmZ71tMmXeTXU/QgKZnSQGKYYciKcgoVgRx0jy5oBLeyU4zrM4dUfJdLaLRdw1g==
+X-Received: by 2002:a7b:c45a:: with SMTP id l26mr755038wmi.91.1610480530694;
+        Tue, 12 Jan 2021 11:42:10 -0800 (PST)
 Received: from f2.redhat.com (bzq-79-183-72-147.red.bezeqint.net. [79.183.72.147])
-        by smtp.gmail.com with ESMTPSA id z63sm4885315wme.8.2021.01.12.11.42.13
+        by smtp.gmail.com with ESMTPSA id z63sm4885315wme.8.2021.01.12.11.42.07
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 12 Jan 2021 11:42:16 -0800 (PST)
+        Tue, 12 Jan 2021 11:42:09 -0800 (PST)
 From:   Yuri Benditovich <yuri.benditovich@daynix.com>
 To:     davem@davemloft.net, kuba@kernel.org, mst@redhat.com,
         jasowang@redhat.com, ast@kernel.org, daniel@iogearbox.net,
@@ -67,9 +67,9 @@ To:     davem@davemloft.net, kuba@kernel.org, mst@redhat.com,
         linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
 Cc:     yan@daynix.com
-Subject: [RFC PATCH 7/7] tun: report new tun feature IFF_HASH
-Date:   Tue, 12 Jan 2021 21:41:43 +0200
-Message-Id: <20210112194143.1494-8-yuri.benditovich@daynix.com>
+Subject: [RFC PATCH 5/7] tun: add ioctl code TUNSETHASHPOPULATION
+Date:   Tue, 12 Jan 2021 21:41:41 +0200
+Message-Id: <20210112194143.1494-6-yuri.benditovich@daynix.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210112194143.1494-1-yuri.benditovich@daynix.com>
 References: <20210112194143.1494-1-yuri.benditovich@daynix.com>
@@ -77,41 +77,74 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-IFF_HASH feature indicates that the tun supports
-TUNSETHASHPOPULATION ioctl and can propagate the hash
-data to the virtio-net packet.
+User mode program calls this ioctl before loading of
+BPF program to inform the tun that the BPF program has
+extended functionality, i.e. sets hash value and returns
+the virtqueue number in the lower 16 bits and the type
+of the hash report in the upper 16 bits.
 
 Signed-off-by: Yuri Benditovich <yuri.benditovich@daynix.com>
 ---
- drivers/net/tun.c           | 2 +-
- include/uapi/linux/if_tun.h | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/tun.c           | 12 +++++++++++-
+ include/uapi/linux/if_tun.h |  1 +
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index 214feb0b16fb..b46aa8941a9d 100644
+index 18c1baf1a6c1..45f4f04a4a3e 100644
 --- a/drivers/net/tun.c
 +++ b/drivers/net/tun.c
-@@ -88,7 +88,7 @@ static void tun_default_link_ksettings(struct net_device *dev,
- #define TUN_VNET_LE     0x80000000
- #define TUN_VNET_BE     0x40000000
+@@ -197,6 +197,7 @@ struct tun_struct {
+ 	struct sock_fprog	fprog;
+ 	/* protected by rtnl lock */
+ 	bool			filter_attached;
++	bool                    bpf_populates_hash;
+ 	u32			msg_enable;
+ 	spinlock_t lock;
+ 	struct hlist_head flows[TUN_NUM_FLOW_ENTRIES];
+@@ -2765,6 +2766,7 @@ static int tun_set_iff(struct net *net, struct file *file, struct ifreq *ifr)
  
--#define TUN_FEATURES (IFF_NO_PI | IFF_ONE_QUEUE | IFF_VNET_HDR | \
-+#define TUN_FEATURES (IFF_NO_PI | IFF_ONE_QUEUE | IFF_VNET_HDR | IFF_HASH |\
- 		      IFF_MULTI_QUEUE | IFF_NAPI | IFF_NAPI_FRAGS)
+ 		tun->align = NET_SKB_PAD;
+ 		tun->filter_attached = false;
++		tun->bpf_populates_hash = false;
+ 		tun->sndbuf = tfile->socket.sk->sk_sndbuf;
+ 		tun->rx_batched = 0;
+ 		RCU_INIT_POINTER(tun->steering_prog, NULL);
+@@ -2997,7 +2999,7 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
+ 	struct net *net = sock_net(&tfile->sk);
+ 	struct tun_struct *tun;
+ 	void __user* argp = (void __user*)arg;
+-	unsigned int ifindex, carrier;
++	unsigned int ifindex, carrier, populate_hash;
+ 	struct ifreq ifr;
+ 	kuid_t owner;
+ 	kgid_t group;
+@@ -3298,6 +3300,14 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
+ 		ret = open_related_ns(&net->ns, get_net_ns);
+ 		break;
  
- #define GOODCOPY_LEN 128
++	case TUNSETHASHPOPULATION:
++		ret = -EFAULT;
++		if (copy_from_user(&populate_hash, argp, sizeof(populate_hash)))
++			goto unlock;
++		tun->bpf_populates_hash = !!populate_hash;
++		ret = 0;
++		break;
++
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
 diff --git a/include/uapi/linux/if_tun.h b/include/uapi/linux/if_tun.h
-index 0fd43533da26..116b84ede3a0 100644
+index 454ae31b93c7..0fd43533da26 100644
 --- a/include/uapi/linux/if_tun.h
 +++ b/include/uapi/linux/if_tun.h
-@@ -73,6 +73,7 @@
- #define IFF_ONE_QUEUE	0x2000
- #define IFF_VNET_HDR	0x4000
- #define IFF_TUN_EXCL	0x8000
-+#define IFF_HASH	0x0080
- #define IFF_MULTI_QUEUE 0x0100
- #define IFF_ATTACH_QUEUE 0x0200
- #define IFF_DETACH_QUEUE 0x0400
+@@ -61,6 +61,7 @@
+ #define TUNSETFILTEREBPF _IOR('T', 225, int)
+ #define TUNSETCARRIER _IOW('T', 226, int)
+ #define TUNGETDEVNETNS _IO('T', 227)
++#define TUNSETHASHPOPULATION _IOR('T', 228, int)
+ 
+ /* TUNSETIFF ifr flags */
+ #define IFF_TUN		0x0001
 -- 
 2.17.1
 
