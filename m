@@ -4,56 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2E4D6C433E9
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:43:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FC94C432C3
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:43:53 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DF83323117
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:43:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 01DE22310E
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:43:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436625AbhALTnR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jan 2021 14:43:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
+        id S2436775AbhALTne (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jan 2021 14:43:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436612AbhALTnR (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jan 2021 14:43:17 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FD3C0617A7
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 11:42:02 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id y17so3718635wrr.10
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 11:42:02 -0800 (PST)
+        with ESMTP id S2436746AbhALTnc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jan 2021 14:43:32 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B325C061389
+        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 11:42:18 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id d26so3713457wrb.12
+        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 11:42:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=daynix-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=95fcQ7XOzwxPXY92PHMXKGjY9iDFTd+3y3erYQ9GO9s=;
-        b=1tCRinMHamPfSeGT7m65Y3aJyKfckJHdtuiPmHaE4Z5fAN3CngoISCY+eCrh3zIQAv
-         EGhkjV84NQPvJCJxVOwNd9CE0wSnFoOAftnadDX8xYXaBW7qtglM9h/6WoA8pAgW+nL6
-         4m82MlTv/1REnteWu+i3oDfcivx2yXiBbLVQWzMi+Tcckw3PucDqFLBtRMqasUzDWGmC
-         Sab3HyYsjdlZjK/iK3QQ6jEyOIcH0Klo4LqQ2m33gvyaXOOJMwsc5ulFxyUXulZD4eRp
-         /4MJfbr5A2VW61mdnl9hQIzqkj44NmcfjRN0ccLFjp1aO5yzGHEm11Np5MWflBTL9Wtv
-         SGVg==
+        bh=vUG4KrkwS/48VCqb3gPEYEavBv7WJyPV6SrQz/KaLAM=;
+        b=xXVp4dUFwGopoDHrk5N2q6tlpNzp6UcAVfATe6wqsrEI6AsT8zMquFk3s5PrenaRNS
+         HsXPG8kYC0iqaJhsbWLQQVLvJzZ9fyG5MMwDHgKfhYHzVUADW8tULfPsAXPKdSzmExXs
+         xGkgY8UjXhz4pr/tWYY6LIg0OPuFo4/wilerVoD5vOLJ7+xE3zVBI8l4tgeDUNGcSQS2
+         w9lpFADgtL5YNaNmRW34ldPIRi8yBgvDVWpenxM8ASJiWwqp+czbRrxXsd0c45UYufcX
+         ORCyuOBerYo0JFSjBUJNikFQv/KEcc3YsnoAYO8aGPrCVo2pExXlWpwTZijTWq2Ccxf6
+         uguA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=95fcQ7XOzwxPXY92PHMXKGjY9iDFTd+3y3erYQ9GO9s=;
-        b=QiXzLd/lSfInTBvH2LUnnJ28DQPtYTeDWiVc8NrilpBulV8o0FyFwY/5mguULjhXlg
-         5CiWi6mERzr+rU4FVQb9tElrOrEeKGwXdn9Z/xM17ibhEHbMmycScPVIxoc/gfk9c0cq
-         muUkeQm0HQIZY49cJGfus/C5pKPWgA5ys/+B10DfyudR7c6Ha7AMLx8yGo5luYHMU/w0
-         UxcX2EK/4vw88O9Dt7YeYIDNW0b8jpsRSAhLizT+O7+fGUq3gk7wsJAPgD0mEizuegCJ
-         QkC6rSqhPVxpfJWqXWu7G6Ymd0L1QxyE2drJo93/UeN2xPdL2MnJsZB0FAI083TBPhF6
-         fFfQ==
-X-Gm-Message-State: AOAM5303SXcnAyTx2OQo+DjU3n28GD3gELNw7F43GIcfU5zVcPDQBuSK
-        QNTW1ExFsQodJ78uDZzCIdz4vw==
-X-Google-Smtp-Source: ABdhPJwozaYVSn8b891ub9ZvGIip49TMHv9Wa+1fM6bn8ZY9QZR52VX9j+xhhl/b0ZukWBXo7jRRLw==
-X-Received: by 2002:a5d:6c66:: with SMTP id r6mr446833wrz.86.1610480521047;
-        Tue, 12 Jan 2021 11:42:01 -0800 (PST)
+        bh=vUG4KrkwS/48VCqb3gPEYEavBv7WJyPV6SrQz/KaLAM=;
+        b=MSdebTbyDGtZCwGVmTqlrghjKZkudoKxu07JqWPYy1y60Ht89bhA8F9VFAcSx0ZgIj
+         sIHrjPQZWmg4XrIzRpaAsSLmGD6Bb3/I38RdLhpxAfIwsaVd9aDyxCk8wXGPMp3t3v8V
+         JMQzsSk+n7l36jbv6lDu23NuYmTnTFjEBUA+elcZOzUBGhXRydBN1XA0993rXgbAICwx
+         TBMcVq747JYgUELrxC4P/TYa65tPVLT3qIoWmSqxSnaXAdSLtmmiio3NEry8f08Js9rz
+         jYrMmItJQkpOLcLwOGNcRHyWJFwwf5YU12qw4czMk2yQIXGan3GuP4QtN+EBN/faKwkD
+         7/5A==
+X-Gm-Message-State: AOAM532pPiTAXxt+rBxjdjiRE1oHPLb4/AGyGRKbJxbYrCiWDoPW9VOM
+        pjjexRiOoplF7mzk2BwOefHdRA==
+X-Google-Smtp-Source: ABdhPJzCa62kAiSj5dwvAhD+eWjgsemDiqG4ohfKFPsazH9lExZh5CateUK1KDaOpknKxeSQxHaBJA==
+X-Received: by 2002:a5d:69c2:: with SMTP id s2mr454259wrw.36.1610480536897;
+        Tue, 12 Jan 2021 11:42:16 -0800 (PST)
 Received: from f2.redhat.com (bzq-79-183-72-147.red.bezeqint.net. [79.183.72.147])
-        by smtp.gmail.com with ESMTPSA id z63sm4885315wme.8.2021.01.12.11.41.58
+        by smtp.gmail.com with ESMTPSA id z63sm4885315wme.8.2021.01.12.11.42.13
         (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 12 Jan 2021 11:42:00 -0800 (PST)
+        Tue, 12 Jan 2021 11:42:16 -0800 (PST)
 From:   Yuri Benditovich <yuri.benditovich@daynix.com>
 To:     davem@davemloft.net, kuba@kernel.org, mst@redhat.com,
         jasowang@redhat.com, ast@kernel.org, daniel@iogearbox.net,
@@ -67,9 +67,9 @@ To:     davem@davemloft.net, kuba@kernel.org, mst@redhat.com,
         linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
 Cc:     yan@daynix.com
-Subject: [RFC PATCH 2/7] vhost: support for hash report virtio-net feature
-Date:   Tue, 12 Jan 2021 21:41:38 +0200
-Message-Id: <20210112194143.1494-3-yuri.benditovich@daynix.com>
+Subject: [RFC PATCH 7/7] tun: report new tun feature IFF_HASH
+Date:   Tue, 12 Jan 2021 21:41:43 +0200
+Message-Id: <20210112194143.1494-8-yuri.benditovich@daynix.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210112194143.1494-1-yuri.benditovich@daynix.com>
 References: <20210112194143.1494-1-yuri.benditovich@daynix.com>
@@ -77,112 +77,41 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-According to the virtio specification if VIRTIO_NET_F_HASH_REPORT
-feature acked the virtio-net header is extended to hold the hash
-value and hash report type.
+IFF_HASH feature indicates that the tun supports
+TUNSETHASHPOPULATION ioctl and can propagate the hash
+data to the virtio-net packet.
 
 Signed-off-by: Yuri Benditovich <yuri.benditovich@daynix.com>
 ---
- drivers/vhost/net.c | 37 +++++++++++++++++++++++++++++--------
- 1 file changed, 29 insertions(+), 8 deletions(-)
+ drivers/net/tun.c           | 2 +-
+ include/uapi/linux/if_tun.h | 1 +
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-index 531a00d703cd..31a894b9a992 100644
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -73,7 +73,8 @@ enum {
- 	VHOST_NET_FEATURES = VHOST_FEATURES |
- 			 (1ULL << VHOST_NET_F_VIRTIO_NET_HDR) |
- 			 (1ULL << VIRTIO_NET_F_MRG_RXBUF) |
--			 (1ULL << VIRTIO_F_ACCESS_PLATFORM)
-+			 (1ULL << VIRTIO_F_ACCESS_PLATFORM) |
-+			 (1ULL << VIRTIO_NET_F_HASH_REPORT)
- };
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 214feb0b16fb..b46aa8941a9d 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -88,7 +88,7 @@ static void tun_default_link_ksettings(struct net_device *dev,
+ #define TUN_VNET_LE     0x80000000
+ #define TUN_VNET_BE     0x40000000
  
- enum {
-@@ -1108,14 +1109,16 @@ static void handle_rx(struct vhost_net *net)
- 		.msg_controllen = 0,
- 		.msg_flags = MSG_DONTWAIT,
- 	};
--	struct virtio_net_hdr hdr = {
--		.flags = 0,
--		.gso_type = VIRTIO_NET_HDR_GSO_NONE
-+	struct virtio_net_hdr_v1_hash hdrv1 = {
-+		{
-+			.flags = 0,
-+			.gso_type = VIRTIO_NET_HDR_GSO_NONE
-+		}
- 	};
- 	size_t total_len = 0;
- 	int err, mergeable;
- 	s16 headcount;
--	size_t vhost_hlen, sock_hlen;
-+	size_t vhost_hlen, sock_hlen, extra_hlen;
- 	size_t vhost_len, sock_len;
- 	bool busyloop_intr = false;
- 	struct socket *sock;
-@@ -1137,9 +1140,12 @@ static void handle_rx(struct vhost_net *net)
- 	vhost_hlen = nvq->vhost_hlen;
- 	sock_hlen = nvq->sock_hlen;
+-#define TUN_FEATURES (IFF_NO_PI | IFF_ONE_QUEUE | IFF_VNET_HDR | \
++#define TUN_FEATURES (IFF_NO_PI | IFF_ONE_QUEUE | IFF_VNET_HDR | IFF_HASH |\
+ 		      IFF_MULTI_QUEUE | IFF_NAPI | IFF_NAPI_FRAGS)
  
-+
- 	vq_log = unlikely(vhost_has_feature(vq, VHOST_F_LOG_ALL)) ?
- 		vq->log : NULL;
- 	mergeable = vhost_has_feature(vq, VIRTIO_NET_F_MRG_RXBUF);
-+	extra_hlen = vhost_has_feature(vq, VIRTIO_NET_F_HASH_REPORT) ?
-+		sizeof(hdrv1) - sizeof(hdrv1.hdr) : 0;
- 
- 	do {
- 		sock_len = vhost_net_rx_peek_head_len(net, sock->sk,
-@@ -1201,8 +1207,8 @@ static void handle_rx(struct vhost_net *net)
- 		}
- 		/* Supply virtio_net_hdr if VHOST_NET_F_VIRTIO_NET_HDR */
- 		if (unlikely(vhost_hlen)) {
--			if (copy_to_iter(&hdr, sizeof(hdr),
--					 &fixup) != sizeof(hdr)) {
-+			if (copy_to_iter(&hdrv1, sizeof(struct virtio_net_hdr),
-+					 &fixup) != sizeof(struct virtio_net_hdr)) {
- 				vq_err(vq, "Unable to write vnet_hdr "
- 				       "at addr %p\n", vq->iov->iov_base);
- 				goto out;
-@@ -1211,7 +1217,7 @@ static void handle_rx(struct vhost_net *net)
- 			/* Header came from socket; we'll need to patch
- 			 * ->num_buffers over if VIRTIO_NET_F_MRG_RXBUF
- 			 */
--			iov_iter_advance(&fixup, sizeof(hdr));
-+			iov_iter_advance(&fixup, sizeof(struct virtio_net_hdr));
- 		}
- 		/* TODO: Should check and handle checksum. */
- 
-@@ -1223,6 +1229,18 @@ static void handle_rx(struct vhost_net *net)
- 			vhost_discard_vq_desc(vq, headcount);
- 			goto out;
- 		}
-+		if (unlikely(extra_hlen)) {
-+			if (unlikely(vhost_hlen)) {
-+				if (copy_to_iter(&hdrv1.hash_value, extra_hlen,
-+						&fixup) != extra_hlen) {
-+					vq_err(vq, "Unable to write extra_hdr "
-+					"at addr %p\n", vq->iov->iov_base);
-+					goto out;
-+				}
-+			} else {
-+				iov_iter_advance(&fixup, extra_hlen);
-+			}
-+		}
- 		nvq->done_idx += headcount;
- 		if (nvq->done_idx > VHOST_NET_BATCH)
- 			vhost_net_signal_used(nvq);
-@@ -1624,6 +1642,9 @@ static int vhost_net_set_features(struct vhost_net *n, u64 features)
- 			       (1ULL << VIRTIO_F_VERSION_1))) ?
- 			sizeof(struct virtio_net_hdr_mrg_rxbuf) :
- 			sizeof(struct virtio_net_hdr);
-+	if (features & (1ULL << VIRTIO_NET_F_HASH_REPORT)) {
-+		hdr_len = sizeof(struct virtio_net_hdr_v1_hash);
-+	}
- 	if (features & (1 << VHOST_NET_F_VIRTIO_NET_HDR)) {
- 		/* vhost provides vnet_hdr */
- 		vhost_hlen = hdr_len;
+ #define GOODCOPY_LEN 128
+diff --git a/include/uapi/linux/if_tun.h b/include/uapi/linux/if_tun.h
+index 0fd43533da26..116b84ede3a0 100644
+--- a/include/uapi/linux/if_tun.h
++++ b/include/uapi/linux/if_tun.h
+@@ -73,6 +73,7 @@
+ #define IFF_ONE_QUEUE	0x2000
+ #define IFF_VNET_HDR	0x4000
+ #define IFF_TUN_EXCL	0x8000
++#define IFF_HASH	0x0080
+ #define IFF_MULTI_QUEUE 0x0100
+ #define IFF_ATTACH_QUEUE 0x0200
+ #define IFF_DETACH_QUEUE 0x0400
 -- 
 2.17.1
 
