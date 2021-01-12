@@ -2,147 +2,113 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3A8D6C4332D
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:44:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D943DC43381
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:47:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0BFB82310E
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:44:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84E812311F
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:47:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732196AbhALToN (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jan 2021 14:44:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
+        id S2406923AbhALTrl (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jan 2021 14:47:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406803AbhALTn4 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jan 2021 14:43:56 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14AEFC061386
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 11:42:15 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id 91so3740826wrj.7
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 11:42:15 -0800 (PST)
+        with ESMTP id S2406756AbhALTrk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jan 2021 14:47:40 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8B8C06179F;
+        Tue, 12 Jan 2021 11:46:59 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id p13so4235147ljg.2;
+        Tue, 12 Jan 2021 11:46:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=vbacyc4brsO7fCWWmN34VX2kLRLEZOENYLDCsoU/LjI=;
-        b=frDPSNM1J/dOImSb6yTvFEc5DFfgGXbEaLLgKaM0mONN1LJTeaMDvsD7N43EhUuKwM
-         OzKSpdv9zyp8xkewtP83v/WGTWyMClGmamwcnslMUaaz1lav+C2aXiTjba4BdOhqxWXs
-         YOItPqRzhgs4NU2YffFSmcJDQxMpi6pdbU7itsTGkKpcxuOJWziSQooRJUBKdpBzUYxD
-         xIoivLmBPS3zxn3DPlnmaHb6St45vGGHON4Tw0XUnv4jTlfHbt6WSZPGEcTHqdLKQA8A
-         oh9+TRaqxpOgBEf5HrtBEHkkj3ACTaqZOa/BiIncvZJTrHDMblqXE+TF/HZ3Eh4T7R9X
-         TU4w==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nLuzLYNt5T8osq7JXeaiHrLO6+i9dEnVYqGJgVkKi9Y=;
+        b=vYfNW4936VSfsfaE4FPjVdNXto4N/M6kGen+8Mc9PnTNtkt3FVhlO9Lji+rTbggdvU
+         efVCBHX+QBBFFLAFdKchQ9dGckH15dNbIkoMq40g8WcfI8bO4r8omaKScS211OynYzio
+         pwt0Af28IscLBvCfEPiZOP32LiaGnrTdwTR8t01o0T8cix8TCiWYtr2bztCZ7EK7HmeC
+         CG3gbo/QgzsMZwhBldrnwCNwPwwfDG8/cDqA3S16bIuaw2LV5L8InT8eWdbL5WxiA1iD
+         rB3byLm4YjGBcbnHqTtCMuvlbGkrDi88jaoc8oqgOVG7r/OokbENWKJ7gGq16KhulWI0
+         HrYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=vbacyc4brsO7fCWWmN34VX2kLRLEZOENYLDCsoU/LjI=;
-        b=oECAMdZWd4JM26Dyw87x4rPLrtNy9kK37Kjumb/y2nDNCPHkRNYXxPeQOHMCmeF+nF
-         jwh+Kx/FKJKce9yaWJ0krhQFPeSmyt3RE6bguYze49Dk2quUhlZyZC54VdP0fTL7ipW5
-         hiCCwp5NwIuOqlNx1NwIkZGfEwwR/WKH9HtA2R9dkRLu6SIPkJ8OUXaY2GIOBL7Dh47g
-         0d3gJRqpqW3w11h2xTYHN0diC0Yf4NsWqvR87qbakQkRCGwpD5uSDEpCRTYcbTpIdYUo
-         g2x49w8CGP7QNTUT5apzx4PKYhQcx13/PaKYawYPkVAIJyIr6KALcyVt5X52O8pWQahw
-         OP6A==
-X-Gm-Message-State: AOAM532A2oJD3IG9lDOMBU2qLXfp/Nuo5RbfMPSopdBXAAq7zMriHFDQ
-        YCchd6hp/sC0sS8VE+jac4KmAw==
-X-Google-Smtp-Source: ABdhPJzR2K4OZsCoyd0N4J9iZegxzvR23ddSEOzUWZ1flur5F4V7qRoMhDvf+/K03T/6v7gHKGCucw==
-X-Received: by 2002:adf:df08:: with SMTP id y8mr431800wrl.278.1610480533859;
-        Tue, 12 Jan 2021 11:42:13 -0800 (PST)
-Received: from f2.redhat.com (bzq-79-183-72-147.red.bezeqint.net. [79.183.72.147])
-        by smtp.gmail.com with ESMTPSA id z63sm4885315wme.8.2021.01.12.11.42.10
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 12 Jan 2021 11:42:13 -0800 (PST)
-From:   Yuri Benditovich <yuri.benditovich@daynix.com>
-To:     davem@davemloft.net, kuba@kernel.org, mst@redhat.com,
-        jasowang@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        rdunlap@infradead.org, willemb@google.com, gustavoars@kernel.org,
-        herbert@gondor.apana.org.au, steffen.klassert@secunet.com,
-        nogikh@google.com, pablo@netfilter.org, decui@microsoft.com,
-        cai@lca.pw, jakub@cloudflare.com, elver@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Cc:     yan@daynix.com
-Subject: [RFC PATCH 6/7] tun: populate hash in virtio-net header when needed
-Date:   Tue, 12 Jan 2021 21:41:42 +0200
-Message-Id: <20210112194143.1494-7-yuri.benditovich@daynix.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210112194143.1494-1-yuri.benditovich@daynix.com>
-References: <20210112194143.1494-1-yuri.benditovich@daynix.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nLuzLYNt5T8osq7JXeaiHrLO6+i9dEnVYqGJgVkKi9Y=;
+        b=fjqn4NsamChvqZhLXDepzqXB44JWpAHsk/BBFtoIA6yzEnxDY8Ydq8ILGD4XmMlBoC
+         x+FvAovBnCJJaRghpWMPQEpvd2MhIiUlWdM+CPEjAkHP9EU6Iqzm4DlXvylg35UuN9Au
+         QM4FUW6fZfoTEvzwez6/Z92S1AlF9XbsSOobxmazt3QMXP0470PpH74ogMg81woWtGTA
+         P6viVsxH9yKUoufiY4qBRxsO0QMPQhXvh9uKex62JLTCf0wh7FlL0vsK1O7WmqGW8S6V
+         HpHVNOWrtSB1nBDfpQN8UjKLcE6/7NogHv4yPpYFnQOs8JGw0vX4Pdh4yjZLSPfa6Pp1
+         G/Fw==
+X-Gm-Message-State: AOAM532lzIPpAiIwIGHetI6oKHXeLypttXmwRH39VZe2hpOpDiFHcSpW
+        i/5wVdo9optl5SFVbVaWRcDZ1RKMdSiWgpAS4w0=
+X-Google-Smtp-Source: ABdhPJwZhBCGKnrIy2pClnDTPtHGtrdA4y52ofV0ZvmD0av1lZET+wEvea6DglcSlWgjWslhNj+O3PtSrJmX0zO8gd8=
+X-Received: by 2002:a2e:878a:: with SMTP id n10mr350199lji.236.1610480818432;
+ Tue, 12 Jan 2021 11:46:58 -0800 (PST)
+MIME-Version: 1.0
+References: <20210112194143.1494-1-yuri.benditovich@daynix.com> <20210112194143.1494-4-yuri.benditovich@daynix.com>
+In-Reply-To: <20210112194143.1494-4-yuri.benditovich@daynix.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 12 Jan 2021 11:46:46 -0800
+Message-ID: <CAADnVQ++1_voT2fZ021ExcON0KfHtA8MyHc-WYe-XXJoPTD6ig@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/7] tun: allow use of BPF_PROG_TYPE_SCHED_CLS program type
+To:     Yuri Benditovich <yuri.benditovich@daynix.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Willem de Bruijn <willemb@google.com>, gustavoars@kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        nogikh@google.com, Pablo Neira Ayuso <pablo@netfilter.org>,
+        decui@microsoft.com, cai@lca.pw,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Marco Elver <elver@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        bpf <bpf@vger.kernel.org>, Yan Vugenfirer <yan@daynix.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-If the BPF program populated the hash in the skb the tun
-propagates the hash value and hash report type to the
-respective fields of virtio-net header.
+On Tue, Jan 12, 2021 at 11:42 AM Yuri Benditovich
+<yuri.benditovich@daynix.com> wrote:
+>
+> This program type can set skb hash value. It will be useful
+> when the tun will support hash reporting feature if virtio-net.
+>
+> Signed-off-by: Yuri Benditovich <yuri.benditovich@daynix.com>
+> ---
+>  drivers/net/tun.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> index 7959b5c2d11f..455f7afc1f36 100644
+> --- a/drivers/net/tun.c
+> +++ b/drivers/net/tun.c
+> @@ -2981,6 +2981,8 @@ static int tun_set_ebpf(struct tun_struct *tun, struct tun_prog __rcu **prog_p,
+>                 prog = NULL;
+>         } else {
+>                 prog = bpf_prog_get_type(fd, BPF_PROG_TYPE_SOCKET_FILTER);
+> +               if (IS_ERR(prog))
+> +                       prog = bpf_prog_get_type(fd, BPF_PROG_TYPE_SCHED_CLS);
 
-Signed-off-by: Yuri Benditovich <yuri.benditovich@daynix.com>
----
- drivers/net/tun.c | 25 ++++++++++++++++++++++---
- 1 file changed, 22 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-index 45f4f04a4a3e..214feb0b16fb 100644
---- a/drivers/net/tun.c
-+++ b/drivers/net/tun.c
-@@ -556,15 +556,20 @@ static u16 tun_ebpf_select_queue(struct tun_struct *tun, struct sk_buff *skb)
- {
- 	struct tun_prog *prog;
- 	u32 numqueues;
--	u16 ret = 0;
-+	u32 ret = 0;
- 
- 	numqueues = READ_ONCE(tun->numqueues);
- 	if (!numqueues)
- 		return 0;
- 
- 	prog = rcu_dereference(tun->steering_prog);
--	if (prog)
-+	if (prog) {
- 		ret = bpf_prog_run_clear_cb(prog->prog, skb);
-+		if (tun->bpf_populates_hash) {
-+			*skb_hash_report_type(skb) = (__u8)(ret >> 16);
-+			ret &= 0xffff;
-+		}
-+	}
- 
- 	return ret % numqueues;
- }
-@@ -2062,6 +2067,7 @@ static ssize_t tun_put_user(struct tun_struct *tun,
- 
- 	if (vnet_hdr_sz) {
- 		struct virtio_net_hdr gso;
-+		__u16 extra_copy = 0;
- 
- 		if (iov_iter_count(iter) < vnet_hdr_sz)
- 			return -EINVAL;
-@@ -2085,7 +2091,20 @@ static ssize_t tun_put_user(struct tun_struct *tun,
- 		if (copy_to_iter(&gso, sizeof(gso), iter) != sizeof(gso))
- 			return -EFAULT;
- 
--		iov_iter_advance(iter, vnet_hdr_sz - sizeof(gso));
-+		if (tun->bpf_populates_hash &&
-+		    vnet_hdr_sz >= sizeof(struct virtio_net_hdr_v1_hash)) {
-+			struct virtio_net_hdr_v1_hash hdr;
-+
-+			hdr.hdr.num_buffers = 0;
-+			hdr.hash_value = cpu_to_le32(skb_get_hash(skb));
-+			hdr.hash_report = cpu_to_le16(*skb_hash_report_type(skb));
-+			hdr.padding = 0;
-+			extra_copy = sizeof(hdr) - sizeof(gso);
-+			if (copy_to_iter(&hdr.hdr.num_buffers, extra_copy, iter) != extra_copy)
-+				return -EFAULT;
-+		}
-+
-+		iov_iter_advance(iter, vnet_hdr_sz - sizeof(gso) - extra_copy);
- 	}
- 
- 	if (vlan_hlen) {
--- 
-2.17.1
-
+You've ignored the feedback and just resend? what for?
