@@ -2,151 +2,107 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7D61C433E0
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:50:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 977FDC4321A
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:42:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6C9C1206C3
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:50:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 5533723122
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:42:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393210AbhALTuP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jan 2021 14:50:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50006 "EHLO
+        id S1727801AbhALVmU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jan 2021 16:42:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393205AbhALTuP (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jan 2021 14:50:15 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014E1C061575
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 11:49:35 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id j12so3450651ota.7
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 11:49:34 -0800 (PST)
+        with ESMTP id S2437141AbhALVhc (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jan 2021 16:37:32 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C95CC06179F;
+        Tue, 12 Jan 2021 13:36:52 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id n4so7254337iow.12;
+        Tue, 12 Jan 2021 13:36:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=O7/M6B7YqTGHi7NnZLBVw1iJEATx9VM5xn4jowTooqg=;
-        b=UmdCnOd9p7HTDUpn111xjpsZhlH9Wyagx3fH8hlscE+sSrJz429k6OC+NnvRnFQwpl
-         jqkR0s7AEDLjTJ0tq6hZBObi6DFBJPrI8K29WbKXWEX8kB539YWrgpGJqfy0ojTAcqlX
-         A/8M+eXo7DG43n0QaITT1ZzZkFVJHA1wCZsMP/csUGUiOcYrjXPxCNQbVGHYFk8eZMml
-         PQCZdfIhK5Q8tqATIShbwSMJx30AKk7x9Yiz8gp1FLSc6TkC1TzXRxLv7QIpuV8ow32m
-         QHlWmBmHegqCq8m2hkfA2+d81qT2yKRdtWfqAGHKLt6uQt4tjNbi71loXt7+hIyfFEF8
-         ILCw==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=//9wmAe5hjhXgDXmV0ehQ+2oLUsZoz/EaOcTrmY2gvU=;
+        b=pcfdxpiYPbTUd7zoF2kkzcBx/UuO9nmAF6f03LJM7mrkMpU4rIpO+BZSFevhRaCfur
+         oeVEQKQwkZCH5TOPP/VK2bjw98vzfiVhl6b4egZda+yddxCgw5wxM//Y+Oa+vlEjBaMg
+         g/1LF3KJwZ3n/gxG43MCAL5IMFFoielTMBMP3+psoC4Wpkb7ucPGhC54cjMUMsofJeht
+         NsLSApOKO+U3+DgSMvyiHyfHCslMDOWv//pPCzPMNfIAjlthAASIizwnCDGK0Em3/miP
+         SL9NizSwA7NJdJ5QgEVoPNiAidLtYpxzV0A/IWq6Vt2ma/aJVRo86qsWTS29SF+SGsOj
+         zT/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O7/M6B7YqTGHi7NnZLBVw1iJEATx9VM5xn4jowTooqg=;
-        b=rNlbqjhSAxta8d6ieuyKws9gW5MhuZ540NPb2QlmAt1oWZbWOK6F/A4h+ABLbCdLff
-         ozgzvyIy/YdwyEIMUv/lPtIzblCv7UUPy0qTZZ56yQLrDhKaG6R5lucPzapRGQSPkea2
-         B7VnmbsqOjclJuIElusMPP0U1BubAN4qgQH1W9eKj8CA3I5Hgkh7o9Y/By69g1tkKrnG
-         17jkhA1AC7dKe46i0Zpg2MYricRmQp/60X6GhdR3jyV61x1KoXU1deDbGg93521w+wJh
-         V4dxaJtVscGwDOi5hTXzrbPpL8oUJE0Dp2lYjrA5ymrnAa8pyj6i1S82nDR6Qqi/lsVd
-         7Akw==
-X-Gm-Message-State: AOAM530YdFkLrBPdgEQjSEz4tEtZNgTUlKkhpglYPHnHXT8aIsVCz7Nd
-        sgAoWEDkk3tzDe1Fp+jTTdXa3n3fGEU61rChmk7oOg==
-X-Google-Smtp-Source: ABdhPJzHurposwP0CkbMCdsJQYlpBWAqy5u0b6+ShjXQt+hgxjTlD6eu4NfdkCl4yEwTKKUdzPdbCNayYxSsoybE50Y=
-X-Received: by 2002:a9d:4715:: with SMTP id a21mr734506otf.220.1610480974332;
- Tue, 12 Jan 2021 11:49:34 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=//9wmAe5hjhXgDXmV0ehQ+2oLUsZoz/EaOcTrmY2gvU=;
+        b=Ue24EEZLzbCt4NsQZ4HPTizELvBdEWGyxm2bXQOi7G4M3MZfaVut4LNckAEal7TEXZ
+         mqbZQe9gN1sTeb4yLuU8qjyvlBwLyty/dzchJWjgXJwgJqBuPf9Vmda09ZN2adDFNczL
+         qXdA3c4UjvtwJuDQjvZgU2/E4sxInNwjSbOTIxHU3FhQGHnK6E+BEFe2Okusn9VkBlym
+         PY6JXIiosDRsbiwgbPGJN0bjzQbnQ9Xtb50QCB0El2hoKYMynyKiqbLA0p5d+477uqnA
+         XoZiZvAwt4Hd9V+uzEigMv8vRhVNs0ADSjUq3tReMhi1Jz40/ZhaOLwZKmSqtmDMUncS
+         QUMg==
+X-Gm-Message-State: AOAM530/GdZM0g7YnUCZ6u42eMTjWZVtN/Pe0aZPrkkZr30gt7WDhi7I
+        rzNH3wONNFfF8MrgyXyQRrnmN3egjEYlFAZiu44=
+X-Google-Smtp-Source: ABdhPJzDkV9k36iPJVYoKGfBufews67nedQUdLpb+tG8eMwULCsIntR/Tx0F9JMkEhe8+mO1qiNKdOxR00jukDOIYYw=
+X-Received: by 2002:a92:9e57:: with SMTP id q84mr1148874ili.112.1610487411649;
+ Tue, 12 Jan 2021 13:36:51 -0800 (PST)
 MIME-Version: 1.0
-References: <20210112194143.1494-1-yuri.benditovich@daynix.com>
-In-Reply-To: <20210112194143.1494-1-yuri.benditovich@daynix.com>
-From:   Yuri Benditovich <yuri.benditovich@daynix.com>
-Date:   Tue, 12 Jan 2021 21:49:21 +0200
-Message-ID: <CAOEp5OejaX4ZETThrj4-n8_yZoeTZs56CBPHbQqNsR2oni8dWw@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/7] Support for virtio-net hash reporting
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
+References: <CA+icZUVuk5PVY4_HoCoY2ymd27UjuDi6kcAmFb_3=dqkvOA_Qw@mail.gmail.com>
+ <fa019010-9d7c-206c-d2c6-0893381f5913@fb.com> <CA+icZUVm6ZZveqVoS83SVXe1nqkqZVRjLO+SK1_nXHKkgh4yPQ@mail.gmail.com>
+ <CAEf4BzaEA5aWeCCvHp7ASo9TdfotcBtqNGexirEynHDSo7ufgg@mail.gmail.com>
+ <CA+icZUVrF_LCVhELbNLA7=FzEZK4=jk3QLD9XT2w5bQNo=nnOA@mail.gmail.com>
+ <20210111223144.GA1250730@krava> <ed779f29-18b9-218f-a937-878328a769fe@redhat.com>
+ <20210112104622.GA1283572@krava> <20210112131012.GA1286331@krava>
+ <CA+icZUXNEFyW-fKH_hNLd+s7PB3z=o+xe=B=ud7eA5T3SW6QFg@mail.gmail.com>
+ <20210112162156.GA1291051@krava> <CA+icZUU8MFFJMqFRAN7ekRzupPrS6WS5xGChUaFcjq2hfqW_wg@mail.gmail.com>
+In-Reply-To: <CA+icZUU8MFFJMqFRAN7ekRzupPrS6WS5xGChUaFcjq2hfqW_wg@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Tue, 12 Jan 2021 22:36:40 +0100
+Message-ID: <CA+icZUV8ZASGp2pCy12fSjnYun5+DyR4D+OdNwz_+fjGU64KZg@mail.gmail.com>
+Subject: Re: Check pahole availibity and BPF support of toolchain before
+ starting a Linux kernel build
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Tom Stellard <tstellar@redhat.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yhs@fb.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Song Liu <songliubraving@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, rdunlap@infradead.org,
-        willemb@google.com, gustavoars@kernel.org,
-        herbert@gondor.apana.org.au, steffen.klassert@secunet.com,
-        nogikh@google.com, pablo@netfilter.org, decui@microsoft.com,
-        cai@lca.pw, jakub@cloudflare.com, elver@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Cc:     Yan Vugenfirer <yan@daynix.com>
+        KP Singh <kpsingh@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 9:41 PM Yuri Benditovich
-<yuri.benditovich@daynix.com> wrote:
->
-> Existing TUN module is able to use provided "steering eBPF" to
-> calculate per-packet hash and derive the destination queue to
-> place the packet to. The eBPF uses mapped configuration data
-> containing a key for hash calculation and indirection table
-> with array of queues' indices.
->
-> This series of patches adds support for virtio-net hash reporting
-> feature as defined in virtio specification. It extends the TUN module
-> and the "steering eBPF" as follows:
->
-> Extended steering eBPF calculates the hash value and hash type, keeps
-> hash value in the skb->hash and returns index of destination virtqueue
-> and the type of the hash. TUN module keeps returned hash type in
-> (currently unused) field of the skb.
-> skb->__unused renamed to 'hash_report_type'.
->
-> When TUN module is called later to allocate and fill the virtio-net
-> header and push it to destination virtqueue it populates the hash
-> and the hash type into virtio-net header.
->
-> VHOST driver is made aware of respective virtio-net feature that
-> extends the virtio-net header to report the hash value and hash report
-> type.
+On Tue, Jan 12, 2021 at 9:47 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
 
-Comment from Willem de Bruijn:
-
-Skbuff fields are in short supply. I don't think we need to add one
-just for this narrow path entirely internal to the tun device.
-
-Instead, you could just run the flow_dissector in tun_put_user if the
-feature is negotiated. Indeed, the flow dissector seems more apt to me
-than BPF here. Note that the flow dissector internally can be
-overridden by a BPF program if the admin so chooses.
-
-This also hits on a deeper point with the choice of hash values, that
-I also noticed in my RFC patchset to implement the inverse [1][2]. It
-is much more detailed than skb->hash + skb->l4_hash currently offers,
-and that can be gotten for free from most hardware. In most practical
-cases, that information suffices. I added less specific fields
-VIRTIO_NET_HASH_REPORT_L4, VIRTIO_NET_HASH_REPORT_OTHER that work
-without explicit flow dissection. I understand that the existing
-fields are part of the standard. Just curious, what is their purpose
-beyond 4-tuple based flow hashing?
-
-[1] https://patchwork.kernel.org/project/netdevbpf/list/?series=406859&state=*
-[2] https://github.com/wdebruij/linux/commit/0f77febf22cd6ffc242a575807fa8382a26e511e
+> En plus, I tried pahole with Jirka "Convulted" Olsa (JCO) fix by passing...
+>    PAHOLE=/opt/pahole/bin/pahole
+> ...to my make line.
 >
-> Yuri Benditovich (7):
->   skbuff: define field for hash report type
->   vhost: support for hash report virtio-net feature
->   tun: allow use of BPF_PROG_TYPE_SCHED_CLS program type
->   tun: free bpf_program by bpf_prog_put instead of bpf_prog_destroy
->   tun: add ioctl code TUNSETHASHPOPULATION
->   tun: populate hash in virtio-net header when needed
->   tun: report new tun feature IFF_HASH
->
->  drivers/net/tun.c           | 43 +++++++++++++++++++++++++++++++------
->  drivers/vhost/net.c         | 37 ++++++++++++++++++++++++-------
->  include/linux/skbuff.h      |  7 +++++-
->  include/uapi/linux/if_tun.h |  2 ++
->  4 files changed, 74 insertions(+), 15 deletions(-)
->
-> --
-> 2.17.1
->
+
+Grrr, my selfmade pahole misses that patch.
+
+How can I re-invoke make ... with new really fixed pahole version?
+
+Fallen into a (pa)hole,
+- Sedat -
+
+P.S.: Download Jiri's patch
+
+link="https://lore.kernel.org/bpf/20210112194724.GB1291051@krava/T/#t"
+b4 -d am $link
+
+- EOT -
