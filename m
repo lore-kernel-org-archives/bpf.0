@@ -2,121 +2,142 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A20C3C07EBE
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1A8BDC41621
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7152123123
+	by mail.kernel.org (Postfix) with ESMTP id EA82D23127
 	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438067AbhALVhV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jan 2021 16:37:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59440 "EHLO
+        id S2436723AbhALVhU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jan 2021 16:37:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436972AbhALUeC (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jan 2021 15:34:02 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1857DC061786
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 12:33:22 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id d203so3784029oia.0
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 12:33:22 -0800 (PST)
+        with ESMTP id S2436918AbhALU1s (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jan 2021 15:27:48 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBE6C061786;
+        Tue, 12 Jan 2021 12:27:07 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id b64so3369312ybg.7;
+        Tue, 12 Jan 2021 12:27:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20150623.gappssmtp.com; s=20150623;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KdKAiHHOV0gEOUCHTem1lXmPy7p7WSVRP8s4VyMJD7g=;
-        b=XzdHAZtBLN8jEbpfBFRWzK2HBZHiOO4C9a171JtLYJzvgwtm5uUvQhkGV6EQDILv7m
-         Qea0KfqrqImYYanIVbA0Zv9Afk/EzyUJss9gS9beRgEOOo7K5TeItUwEISEWfbq8xBWF
-         jKvYrpNxTSSxLeVUN+c1aOhyP4jhRc+xVA6IAJ4YBZxfDPzbuXWGDmoNwetn5Cm2CX0X
-         /fn+OQBB4+a2Jq8QWNnbkpzLJWRJo2WBhbjkR1wFfrMkM0kxwu+OP4BJAbDnLEBCtF4k
-         pZvgmkIu56Q5jQcLR36V9SsmR1S4KgCvZyThObq7/0a+u6Fz4cffzjiKnYyHoXUA7PJh
-         3YPQ==
+        bh=6oLfnMJxWX5gSzAwxFJanb7yERE7HbegYl23oJ22pcg=;
+        b=fhp1julwoTuFfaiRw67CtcID4hTSSrRtPxVsjlaSQiTNmy15V0HfzDqDx1+0h0CifV
+         +v35Ol3oqKgVT3VV+sfvvU9t8ZAnEFlASDxFitknNVVxXBlmym053dJVKgXiq3W6pg4O
+         pgyx6Ekb6qyQV91NYKPwaYDqkYNdngDOQ0EZiFxXlpSEXP7egbBd9ExXjBRTrdOTzYvi
+         xwKoTr8dnHyC/7bOp+zo4LXuYxa7Jpox3RmDXobBkKGnoJQ9xqhvTSFifD09VX5tHqBW
+         l5JmF+YohJrxcs23DVony3rKgKeTH6eIuSM3OggYrCwywBZLCBkGtdei3GCXUvdRiBq4
+         Y7wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KdKAiHHOV0gEOUCHTem1lXmPy7p7WSVRP8s4VyMJD7g=;
-        b=K/rGrt9pG5w6gDxi6l5obFS+p1qC4TJRFy8POFCBS6HbjmGQRZic64wdIOH8RSGAv1
-         xD3cGzaXRC5aQ9fBGWNpVujFXYKSnIkdNhAQQCJxDbzCxnbX5O4sHN1f0ZIuKXEX2Apq
-         eD3B00d+Qn7zT8TKxSvVYuRNwsS8DSzrf24WWuYXuzOalxqmUHytaPDaSU/sCY2tMpyV
-         cXjjSG2NKv33ZWw89jtSJ1YIeTXNovoePbN2MAaIH+NhNv0eWvjXzlW69r4inmtQtAIv
-         XqoCc1/R+kpxGKOeqzHJOG81B7QHdEyrolDEFdvZNNfpPBaZoSQ3r1yDQ14xSeMO/OXn
-         kN+g==
-X-Gm-Message-State: AOAM531QhiSg1WxaBPEliSdue0fCtR3EmU5BSlbJEMfW1yUkrFkOgDhd
-        o8bz81yzVDCcZtr5/TTS7iJO25WhUd82r0R2gR8J4Q==
-X-Google-Smtp-Source: ABdhPJxkWjYpBEyulD2m3Ij8CK3ZsGgrRo312GFNR95pqEC5fG4bVq8NKft/CBnSXWToT/VzmMXndNmfgHNU8eR/aPg=
-X-Received: by 2002:a05:6808:49a:: with SMTP id z26mr570751oid.137.1610483601498;
- Tue, 12 Jan 2021 12:33:21 -0800 (PST)
+        bh=6oLfnMJxWX5gSzAwxFJanb7yERE7HbegYl23oJ22pcg=;
+        b=qngHMwAsh2Z5Ej3v+38ttyXeZntsRFgxqY7iyWxqiEj5wuUmoxM6etNxtTLyia2RIC
+         c5W5BfpAOifTGDelkjy8gS60ACZvZh7mc3uj438Y5wXoAH0JaPEFHbr1f6r+CuUmq39A
+         stXTvAK5IUcP34rFDShYFsReUQDlYEsrrmi08bFMCLZWlSEN8XcQ2ULNWWMsKok+79hL
+         kwrT0VUPz+IVcwwuUyeljqsUchAWibcXRc7/cfMDuenCK116ZPpK0aM8642E0WrwTo/j
+         4UEkOJTOeFporxaj//6A1pb3bYDdSPOhMLObFlyUI5L3h6Bq+l3c/Ipw4GP3OCgKgyw/
+         ay8A==
+X-Gm-Message-State: AOAM532cyg+bsLL8/dLeSR1DI+5D4B5y8LSJEXQRAId9jw9I1Rp1eWYL
+        ZNHpzvKQaoKfphVL0JfkBSGd9ssPo40CAAn8P+Q=
+X-Google-Smtp-Source: ABdhPJxm+sLqb5Oh7ldp4g5377mrjX4HZayTPuOLHF4kIk1r+tRBCtDrYT+4qgi5Ow7WU0wBiFcFYWp8JSezM7t6qIw=
+X-Received: by 2002:a25:d6d0:: with SMTP id n199mr1703712ybg.27.1610483226826;
+ Tue, 12 Jan 2021 12:27:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20210112194143.1494-1-yuri.benditovich@daynix.com>
- <20210112194143.1494-4-yuri.benditovich@daynix.com> <CAADnVQ++1_voT2fZ021ExcON0KfHtA8MyHc-WYe-XXJoPTD6ig@mail.gmail.com>
-In-Reply-To: <CAADnVQ++1_voT2fZ021ExcON0KfHtA8MyHc-WYe-XXJoPTD6ig@mail.gmail.com>
-From:   Yuri Benditovich <yuri.benditovich@daynix.com>
-Date:   Tue, 12 Jan 2021 22:33:09 +0200
-Message-ID: <CAOEp5Oca3-Dvm2=nV3ZKsx3Ltgrt1Sm5gzvoG+8LD+yURtJ8bg@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/7] tun: allow use of BPF_PROG_TYPE_SCHED_CLS program type
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Willem de Bruijn <willemb@google.com>, gustavoars@kernel.org,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>, decui@microsoft.com,
-        cai@lca.pw, Jakub Sitnicki <jakub@cloudflare.com>,
-        Marco Elver <elver@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        bpf <bpf@vger.kernel.org>, Yan Vugenfirer <yan@daynix.com>
+References: <20210110070341.1380086-1-andrii@kernel.org> <20210110070341.1380086-2-andrii@kernel.org>
+ <e621981d-5c3d-6d92-871b-a98520778363@fb.com> <CAEf4BzZhFrHho-F+JyY6wQyWUZ+0cJJLkGv+=DHP4equkkm4iw@mail.gmail.com>
+ <31ebd16f-8218-1457-b4e2-3728ab147747@fb.com> <CAEf4BzY0xwwH+yD3dvjSjDG1t_w4ktAeo_gM6WQWw676TghJpQ@mail.gmail.com>
+ <717c1c8c-4194-0605-3aa3-eb33fdc17711@iogearbox.net>
+In-Reply-To: <717c1c8c-4194-0605-3aa3-eb33fdc17711@iogearbox.net>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 12 Jan 2021 12:26:56 -0800
+Message-ID: <CAEf4BzZMg9Ur=412xi4mQ7xkojLrUYszPF6xLmyJMRz4X+rbtg@mail.gmail.com>
+Subject: Re: [PATCH bpf 2/2] libbpf: allow loading empty BTFs
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andrii@kernel.org>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@fb.com>,
+        Kernel Team <kernel-team@fb.com>,
+        Christopher William Snowhill <chris@kode54.net>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 9:46 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Tue, Jan 12, 2021 at 12:17 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
 >
-> On Tue, Jan 12, 2021 at 11:42 AM Yuri Benditovich
-> <yuri.benditovich@daynix.com> wrote:
-> >
-> > This program type can set skb hash value. It will be useful
-> > when the tun will support hash reporting feature if virtio-net.
-> >
-> > Signed-off-by: Yuri Benditovich <yuri.benditovich@daynix.com>
-> > ---
-> >  drivers/net/tun.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/net/tun.c b/drivers/net/tun.c
-> > index 7959b5c2d11f..455f7afc1f36 100644
-> > --- a/drivers/net/tun.c
-> > +++ b/drivers/net/tun.c
-> > @@ -2981,6 +2981,8 @@ static int tun_set_ebpf(struct tun_struct *tun, struct tun_prog __rcu **prog_p,
-> >                 prog = NULL;
-> >         } else {
-> >                 prog = bpf_prog_get_type(fd, BPF_PROG_TYPE_SOCKET_FILTER);
-> > +               if (IS_ERR(prog))
-> > +                       prog = bpf_prog_get_type(fd, BPF_PROG_TYPE_SCHED_CLS);
+> On 1/12/21 7:41 AM, Andrii Nakryiko wrote:
+> > On Mon, Jan 11, 2021 at 5:16 PM Yonghong Song <yhs@fb.com> wrote:
+> >> On 1/11/21 12:51 PM, Andrii Nakryiko wrote:
+> >>> On Mon, Jan 11, 2021 at 10:13 AM Yonghong Song <yhs@fb.com> wrote:
+> >>>> On 1/9/21 11:03 PM, Andrii Nakryiko wrote:
+> >>>>> Empty BTFs do come up (e.g., simple kernel modules with no new types and
+> >>>>> strings, compared to the vmlinux BTF) and there is nothing technically wrong
+> >>>>> with them. So remove unnecessary check preventing loading empty BTFs.
+> >>>>>
+> >>>>> Reported-by: Christopher William Snowhill <chris@kode54.net>
+> >>>>> Fixes: ("d8123624506c libbpf: Fix BTF data layout checks and allow empty BTF")
 >
-> You've ignored the feedback and just resend? what for?
+> Fixed up Fixes tag ^^^^^ while applying. ;-)
 
-No, I do not. Some patches did not reach relevant people at all, so I
-just resent _all_ the patches to all the people.
-I will copy your earlier comment to this patch and will address it in
-the discussion.
-Sorry for misunderstanding and some redundant noise.
+Oh the irony, eh? :) Thanks, Daniel!
+
+>
+> >>>>> Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+> >>>>> ---
+> >>>>>     tools/lib/bpf/btf.c | 5 -----
+> >>>>>     1 file changed, 5 deletions(-)
+> >>>>>
+> >>>>> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> >>>>> index 3c3f2bc6c652..9970a288dda5 100644
+> >>>>> --- a/tools/lib/bpf/btf.c
+> >>>>> +++ b/tools/lib/bpf/btf.c
+> >>>>> @@ -240,11 +240,6 @@ static int btf_parse_hdr(struct btf *btf)
+> >>>>>         }
+> >>>>>
+> >>>>>         meta_left = btf->raw_size - sizeof(*hdr);
+> >>>>> -     if (!meta_left) {
+> >>>>> -             pr_debug("BTF has no data\n");
+> >>>>> -             return -EINVAL;
+> >>>>> -     }
+> >>>>
+> >>>> Previous kernel patch allows empty btf only if that btf is module (not
+> >>>> base/vmlinux) btf. Here it seems we allow any empty non-module btf to be
+> >>>> loaded into the kernel. In such cases, loading may fail? Maybe we should
+> >>>> detect such cases in libbpf and error out instead of going to kernel and
+> >>>> get error back?
+> >>>
+> >>> I did this consciously. Kernel is more strict, because there is no
+> >>> reasonable case when vmlinux BTF or BPF program's BTF can be empty (at
+> >>> least not that now we have FUNCs in BTF). But allowing libbpf to load
+> >>> empty BTF generically is helpful for bpftool, as one example, for
+> >>> inspection. If you do `bpftool btf dump` on empty BTF, it will just
+> >>> print nothing and you'll know that it's a valid (from BTF header
+> >>> perspective) BTF, just doesn't have any types (besides VOID). If we
+> >>> don't allow it, then we'll just get an error and then you'll have to
+> >>> do painful hex dumping and decoding to see what's wrong.
+> >>
+> >> It is totally okay to allow empty btf in libbpf. I just want to check
+> >> if this btf is going to be loaded into the kernel, right before it is
+> >> loading whether libbpf could check whether it is a non-module empty btf
+> >> or not, if it is, do not go to kernel.
+> >
+> > Ok, I see what you are proposing. We can do that, but it's definitely
+> > separate from these bug fixes. But, to be honest, I wouldn't bother
+> > because libbpf will return BTF verification log with a very readable
+> > "No data" message in it.
+>
+> Right, seems okay to me for this particular case given the user will be
+> able to make some sense of it from the log.
+>
+> Thanks,
+> Daniel
