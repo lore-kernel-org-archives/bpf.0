@@ -2,108 +2,119 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F1232C43142
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 74E5DC4161F
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:45 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BB06623122
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:43 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4BA5823123
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438106AbhALVhZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jan 2021 16:37:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36430 "EHLO
+        id S2436973AbhALVhV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jan 2021 16:37:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437085AbhALU6P (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jan 2021 15:58:15 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667D2C061794;
-        Tue, 12 Jan 2021 12:57:35 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id x6so73434ybr.1;
-        Tue, 12 Jan 2021 12:57:35 -0800 (PST)
+        with ESMTP id S2437019AbhALUmG (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jan 2021 15:42:06 -0500
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECF9C0617A4
+        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 12:40:56 -0800 (PST)
+Received: by mail-oo1-xc2c.google.com with SMTP id x203so908089ooa.9
+        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 12:40:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=daynix-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KB7oXI0TdG8mX7iw4ybdkJinKpzFFbGrsIyg/1o6iKg=;
-        b=NbeK7XO91vCWhSPRiAsrvyEyiZk0uSK8WqW3GaH8nmgi2u8u9u2d8WmfA2DVItQDpO
-         7tE+zG51PjDHCnhvMXMV0gd65biXIdqRx/oOgaiVRnpT8zj4gS4UuCsylJRM2MtL0UZ9
-         so6yN7yD7bluxTV2O0AZtm9WBIHapsRylX3F6le1pJCgD5a5nzG9GtVSUL9xco38uAWE
-         v4v/1KB81twly2vQzfAyOm3qCObSmscrd2sVJ62ryWGur0oExEqoFh33RrfW+rQ07+IG
-         xnQmbjQZU37YJy6YGRTqm/xfxu4AswPZWL+AV2eNK4Tpbi/Pdn2OpgpUHISV8p3QdE3y
-         xWLQ==
+        bh=GOqyNTF7gtUKPVXIMkVFT3geI3snsFvpWMRi06NItYY=;
+        b=ZhmlJV62BeU9fJsGlfyvETF+LCKlVC2NajZUVYu+YTBpcA7oEZg+f+cRZvbeGR/wRn
+         OE8OA5J2WD9Pyviogsk4vAUx0oNQmVzR8vJjuNxc6R/JAdYYrMuliwJOKaeispULA4s3
+         Paz/kpI+jzpctNP+2Igp6sNge3FY1sSX/OxQO1Mm77d4BSdi0VixLEpB9NM9zsJDNE17
+         nTGyKfNHi0f22Ba4gFcYkm4igDeQKN59JTV5QfhwG9iHkwNEih7lMpfyyre20lo295AS
+         5hblNfZ5Rfz6/jFNkOzYEb9rWjcEeyiCbtE5JTqFWgE0Ik2pVEOWGwT+0JfXpFcHqAKJ
+         wqOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KB7oXI0TdG8mX7iw4ybdkJinKpzFFbGrsIyg/1o6iKg=;
-        b=Apaf307S1OAbC1L61D6o7CPCFRzYZaDmnOig20hXhFe3OsyOaxy/ULl78OwtUU6IzJ
-         cEbMV6hy48yA89ybCXl8b9aSiDrYLp9nviFSE+DKW+7/ogunXzJaB+XM8KoFGM4a6LNM
-         mk9MuwsGaThOR56xdwT0uhEjIMClBSRpd3InEhT6kLIpf7f1a10tZ8snBQTPPiuGuLBJ
-         1+NVS4OTeh0hGWBFO1+IdOx6a0p9FB56PqBLyVmZfqWVFnV82SxinKR7k+crXnBXKQR7
-         v9QfBVjI9wr4SoIrwE3+ILdjniMKtcHCJOKmvmZuPKao4SSlVXZBSvNvqw4uDJGyIcev
-         JMyQ==
-X-Gm-Message-State: AOAM530KijmCmWm0/kEJFZeYo6daX6DTlWTKGADhJ9xiFlaotY7jtSTt
-        wjPM2ZxCPn2QCAPfVkeww+gsVjahV1SHoE+sfDc=
-X-Google-Smtp-Source: ABdhPJyDNf1y1VzAW0laGnW76nx7M6B3oMZdkGJMTzAkp3FW1bKguyedX5FI9jBiq+J6QgSpt6ye3afG75Wko61tmmY=
-X-Received: by 2002:a25:854a:: with SMTP id f10mr1855040ybn.510.1610485054756;
- Tue, 12 Jan 2021 12:57:34 -0800 (PST)
+        bh=GOqyNTF7gtUKPVXIMkVFT3geI3snsFvpWMRi06NItYY=;
+        b=AkaDSCdUMGNaFDZm6c6iDV/edNc5efwetVdfq5QIlvHxCs6dAiNG1AyxjwTdPHqkVJ
+         N6o7++6BUYvWGjpSkkOGH2elIVlZn4+szxp+t4OzZlwSUKJ4M1eR9wQXe9Co1C65YHH8
+         YJKsdvqfNf63D53oztlig5XRc/40RdyNTB+lmyVIvOYPGkBlbzMUVQ2bHmkKgQC0OU7L
+         H/Rm/lt5PUtYpIclINI6rV1ygbzCDzmP1Lq9zeuObhWLjLJ4JATFKuLgch91go0vsRWL
+         3/V9zwrGO/nZuSRjunTxhJJN/2inL9UCocXqTlhFdfXgMNDPVzHthtzAVEuH9aEaHOlb
+         DByg==
+X-Gm-Message-State: AOAM531W+2iEF6Fp8DHVSBCK9Vgqw8bwqGk9bVSfr5sdYgCRMtLVAl2E
+        Yl1Oxmq0SCI1n91xiflhamiJkduYGaW2hCvMqmzTsQ==
+X-Google-Smtp-Source: ABdhPJz/+VG3D8S0Su6wBVIT9oU9vLMwvxqzB/oumqqIsu0lWVXQRoNiE9y/Wv8b1dAsLKpTLLAHvt9lQNMSp/UwXic=
+X-Received: by 2002:a4a:d396:: with SMTP id i22mr552498oos.55.1610484054385;
+ Tue, 12 Jan 2021 12:40:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20210112135959.649075-1-jean-philippe@linaro.org> <20210112135959.649075-5-jean-philippe@linaro.org>
-In-Reply-To: <20210112135959.649075-5-jean-philippe@linaro.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 12 Jan 2021 12:57:24 -0800
-Message-ID: <CAEf4BzYX_6oL=v4wqe2LHAOq0dZJyq5=vDv-Cc3YVJKFOWHvJg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 4/5] selftests/bpf: Fix installation of urandom_read
-To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     bpf <bpf@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+References: <20210112194143.1494-1-yuri.benditovich@daynix.com> <20210112194143.1494-4-yuri.benditovich@daynix.com>
+In-Reply-To: <20210112194143.1494-4-yuri.benditovich@daynix.com>
+From:   Yuri Benditovich <yuri.benditovich@daynix.com>
+Date:   Tue, 12 Jan 2021 22:40:42 +0200
+Message-ID: <CAOEp5Ocz-xGq5=e=WY0aipEYHEhN-wxekNaAiqAS+HsOF8TcDQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/7] tun: allow use of BPF_PROG_TYPE_SCHED_CLS program type
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, rdunlap@infradead.org,
+        willemb@google.com, gustavoars@kernel.org,
+        herbert@gondor.apana.org.au, steffen.klassert@secunet.com,
+        pablo@netfilter.org, decui@microsoft.com, cai@lca.pw,
+        jakub@cloudflare.com, elver@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        bpf@vger.kernel.org
+Cc:     Yan Vugenfirer <yan@daynix.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 6:01 AM Jean-Philippe Brucker
-<jean-philippe@linaro.org> wrote:
+On Tue, Jan 12, 2021 at 9:42 PM Yuri Benditovich
+<yuri.benditovich@daynix.com> wrote:
 >
-> For out-of-tree builds, $(TEST_CUSTOM_PROGS) require the $(OUTPUT)
-> prefix, otherwise the kselftest lib doesn't know how to install them:
+> This program type can set skb hash value. It will be useful
+> when the tun will support hash reporting feature if virtio-net.
 >
-> rsync: [sender] link_stat "tools/testing/selftests/bpf/urandom_read" failed: No such file or directory (2)
->
-> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> Signed-off-by: Yuri Benditovich <yuri.benditovich@daynix.com>
 > ---
-
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-
-
->  tools/testing/selftests/bpf/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/net/tun.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 046848c508d1..bffb4ad59a3d 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -82,7 +82,7 @@ TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
->         test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko \
->         xdpxceiver
->
-> -TEST_CUSTOM_PROGS = urandom_read
-> +TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read
->
->  # Emit succinct information message describing current building step
->  # $1 - generic step name (e.g., CC, LINK, etc);
+> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> index 7959b5c2d11f..455f7afc1f36 100644
+> --- a/drivers/net/tun.c
+> +++ b/drivers/net/tun.c
+> @@ -2981,6 +2981,8 @@ static int tun_set_ebpf(struct tun_struct *tun, struct tun_prog __rcu **prog_p,
+>                 prog = NULL;
+>         } else {
+>                 prog = bpf_prog_get_type(fd, BPF_PROG_TYPE_SOCKET_FILTER);
+> +               if (IS_ERR(prog))
+> +                       prog = bpf_prog_get_type(fd, BPF_PROG_TYPE_SCHED_CLS);
+>                 if (IS_ERR(prog))
+>                         return PTR_ERR(prog);
+>         }
+
+Comment from Alexei Starovoitov:
+Patches 1 and 2 are missing for me, so I couldn't review properly,
+but this diff looks odd.
+It allows sched_cls prog type to attach to tun.
+That means everything that sched_cls progs can do will be done from tun hook?
+sched_cls assumes l2 and can modify the packet.
+I think crashes are inevitable.
+
 > --
-> 2.30.0
+> 2.17.1
 >
