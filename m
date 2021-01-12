@@ -8,61 +8,61 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BBA31C4332B
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 15:44:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 26363C43331
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 15:44:55 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7F78123131
+	by mail.kernel.org (Postfix) with ESMTP id CEFDB23131
 	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 15:44:54 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404719AbhALPoE (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jan 2021 10:44:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
+        id S2403868AbhALPoC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jan 2021 10:44:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404644AbhALPoD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jan 2021 10:44:03 -0500
+        with ESMTP id S1729397AbhALPoB (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jan 2021 10:44:01 -0500
 Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EA2C0617A9
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 07:42:51 -0800 (PST)
-Received: by mail-wm1-x34a.google.com with SMTP id w204so640155wmb.1
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 07:42:51 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15D7C0617A4
+        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 07:42:46 -0800 (PST)
+Received: by mail-wm1-x34a.google.com with SMTP id w204so640091wmb.1
+        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 07:42:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=k9pbdDmCq+Kt2qJMctj6Pr05hMu+91sEgpkcVDGx9/A=;
-        b=RjUMTBVUN4Fgn/2wl75pan+QYPDIsOGv5ef2bH0pTtXNXm5egoOUGlXOcNoKyx+3kT
-         ybZWT/pCmNJZXKb5Aw6N0dN1E2uEKGnn4Ur0PBnzYQFXNmHirs08ZYX2LDQmlvkAaSgb
-         6zH+ZGDheL3UTPVFiqYML1fKOIRYETReDi7FfSSjP0PxeUbvKB7K5Q3qnA5nmmVE3BhY
-         D4CBzuXRtwnqBtzIojgAeuB6WZZTGdK/o+hAbiFF0lS3L2prMBUCsvgogNV/CedUxVzj
-         Dq7HAUBSGPR5lJGFeYr/pEOPxPpakOi+WlDDNfmOCmBSmTpYtqDRjgokFClGIabgBqe9
-         uD+w==
+        bh=ZTGQEWpWAiK+AJl9ZPeXz4p19Gfj2HCZL+15XnqwBus=;
+        b=qK+5Htm26MeU6+gJ3X7VhdVrGERTVcewU4/bvrNs3gnN7qHBnnpNIr5SWl7979mEu3
+         YgQL252A06kXXddF3PXFbB1XGuNBQk0eYNzUOhxqglEkhuWwaDFCBnko/vwbbJTW4EIQ
+         2J9I+BjQABZ+gJ75bG2pJR5HQIHqmnbwNR7W5cHPvO4YNnA6jlRKSPLpX/js/CbdDwn+
+         RRmooIqOvwszs2NOzfb/zUCn9fUX+waqwGCRNzDqawXaizDxLECSd67Us+nQF/jN0+Vd
+         tf9+Tav6a4UjBTtoIRHmBPY/1o2/BVOp9hQcaKixulXG7ZUREoMUesL1HjviEBMb+VBq
+         XXJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=k9pbdDmCq+Kt2qJMctj6Pr05hMu+91sEgpkcVDGx9/A=;
-        b=a1YZYcNjRKDHbOVMm/OWvFPc6BngC+40sSb/wAaeNaKQOU3pjCLMYfFp5oZh7RMN3r
-         MAPSKw6BK/yMqYuSGp6kngmAJhxBZltEMkwiIyJM9SmnY6AaKxKGG5SNSCbmqW5EnyMw
-         lIzIWFdMMq+CMsb1qMAcL1VgMxx4oJq8WHNiqbXz22CqlS4G1LdUEwQngbPgzRyGK1Uf
-         lEZSc/54kN1isCji7oYKBsHNuDSsQcG3+lxEGfuhaUe8yREEvai9n8X/YDsaY3nr0JW4
-         SCYUC6Ht15rn8PI7cVXkKKKaz5gSlzmCkd5EXVbvI7lw04DVlkSvXwNR5q1X6SG9baE3
-         NH1w==
-X-Gm-Message-State: AOAM532kPAnfx2RBzMdDFAKnwBnHdgMIS9aBECRdbsFzDE47T7PomJHE
-        q+CiIddiqLMDMBB+BlfKlm69XOV5omDKlJe81EJD60+lr+Dd1qZKZ/hcD1pKrE6a76TbpMhsnYa
-        Sy5XNtWBrzVO1REGc4DuqiZh+oX87PUlLY0cxMxd+AzzAPmcbrf4oPP5b8A4tVD0=
-X-Google-Smtp-Source: ABdhPJzexS3m2Vgf6iamTgmdZIBlljh8LFBWcCgn3fXVpKmwkX4Nit9qmXowlxE2Sncfiih0XL6ZgsQqr8T9vw==
+        bh=ZTGQEWpWAiK+AJl9ZPeXz4p19Gfj2HCZL+15XnqwBus=;
+        b=VdW0lYRgNsIlLu92H/6sX7VgqvOHr3oFcxFBDbXOQZu2Q2lQ/rZ7xKmngZl+NjCRfo
+         V6/9ii/GF1OJfkj8UMSxcra8+PEKRWCoInHf39Nd59mgliKphjX0+IL+TKNNH3rcY1yR
+         cRphDXWLznyybtozHDkUOwGTH2Jnw3b/BxsAh1iT2VxPmcDhgGLf0nWlTCTF61TV08kB
+         zgaCV3F/6KCUy3psIndfqPMFKckh3pIPSv6puJcrFYDlZPr6z4odSsHVDjWUhZLM/RjZ
+         xJlhAZXd67wu+qQ3XvU2NXCoiAvjo9fyPpJkIfAfGqIsvVJieNjY+EkpzBz510FlwhvO
+         f1cA==
+X-Gm-Message-State: AOAM530r3DwOcMaVJf9JQQhb8U3OU8hC0ZqiKuyOGYZL1yHdk7wYVaEB
+        wL4NKSHPnC+KBpTr8wdN5TABp93rkN+LYmn//GGp94Xy94Sp8zFMERNuzDqQi+/5QyKtypI5wQ2
+        IIJoBY9QbG1hKbGTDZdd+aZHczjCQpbFs5wb7XUwvrMWFZsJp+PohspDns0H9wiQ=
+X-Google-Smtp-Source: ABdhPJyW6XQ55d6NBrHqiCTtElubyhVpadacjAlnkBOxd1utVgSsfx15a4mip98cGUVXfCDOihGuVvYpYn8ZvA==
 Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
 X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
- (user=jackmanb job=sendgmr) by 2002:a1c:bd43:: with SMTP id
- n64mr4179187wmf.169.1610466169857; Tue, 12 Jan 2021 07:42:49 -0800 (PST)
-Date:   Tue, 12 Jan 2021 15:42:29 +0000
+ (user=jackmanb job=sendgmr) by 2002:a1c:4489:: with SMTP id
+ r131mr4256433wma.24.1610466165562; Tue, 12 Jan 2021 07:42:45 -0800 (PST)
+Date:   Tue, 12 Jan 2021 15:42:27 +0000
 In-Reply-To: <20210112154235.2192781-1-jackmanb@google.com>
-Message-Id: <20210112154235.2192781-6-jackmanb@google.com>
+Message-Id: <20210112154235.2192781-4-jackmanb@google.com>
 Mime-Version: 1.0
 References: <20210112154235.2192781-1-jackmanb@google.com>
 X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
-Subject: [PATCH bpf-next v6 05/11] bpf: Move BPF_STX reserved field check into
- BPF_STX verifier code
+Subject: [PATCH bpf-next v6 03/11] bpf: x86: Factor out a lookup table for
+ some ALU opcodes
 From:   Brendan Jackman <jackmanb@google.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -80,47 +80,85 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-I can't find a reason why this code is in resolve_pseudo_ldimm64;
-since I'll be modifying it in a subsequent commit, tidy it up.
+A later commit will need to lookup a subset of these opcodes. To
+avoid duplicating code, pull out a table.
+
+The shift opcodes won't be needed by that later commit, but they're
+already duplicated, so fold them into the table anyway.
 
 Signed-off-by: Brendan Jackman <jackmanb@google.com>
-Acked-by: Yonghong Song <yhs@fb.com>
 Acked-by: John Fastabend <john.fastabend@gmail.com>
 ---
- kernel/bpf/verifier.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ arch/x86/net/bpf_jit_comp.c | 33 +++++++++++++++------------------
+ 1 file changed, 15 insertions(+), 18 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d562268c1fd1..48e398667a69 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -9528,6 +9528,12 @@ static int do_check(struct bpf_verifier_env *env)
- 		} else if (class == BPF_STX) {
- 			enum bpf_reg_type *prev_dst_type, dst_reg_type;
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index f15c93275a18..93f32e0ba0ef 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -205,6 +205,18 @@ static u8 add_2reg(u8 byte, u32 dst_reg, u32 src_reg)
+ 	return byte + reg2hex[dst_reg] + (reg2hex[src_reg] << 3);
+ }
  
-+			if (((BPF_MODE(insn->code) != BPF_MEM &&
-+			      BPF_MODE(insn->code) != BPF_ATOMIC) || insn->imm != 0)) {
-+				verbose(env, "BPF_STX uses reserved fields\n");
-+				return -EINVAL;
-+			}
++/* Some 1-byte opcodes for binary ALU operations */
++static u8 simple_alu_opcodes[] = {
++	[BPF_ADD] = 0x01,
++	[BPF_SUB] = 0x29,
++	[BPF_AND] = 0x21,
++	[BPF_OR] = 0x09,
++	[BPF_XOR] = 0x31,
++	[BPF_LSH] = 0xE0,
++	[BPF_RSH] = 0xE8,
++	[BPF_ARSH] = 0xF8,
++};
 +
- 			if (BPF_MODE(insn->code) == BPF_ATOMIC) {
- 				err = check_atomic(env, env->insn_idx, insn);
- 				if (err)
-@@ -9940,13 +9946,6 @@ static int resolve_pseudo_ldimm64(struct bpf_verifier_env *env)
- 			return -EINVAL;
- 		}
+ static void jit_fill_hole(void *area, unsigned int size)
+ {
+ 	/* Fill whole space with INT3 instructions */
+@@ -862,15 +874,9 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 		case BPF_ALU64 | BPF_AND | BPF_X:
+ 		case BPF_ALU64 | BPF_OR | BPF_X:
+ 		case BPF_ALU64 | BPF_XOR | BPF_X:
+-			switch (BPF_OP(insn->code)) {
+-			case BPF_ADD: b2 = 0x01; break;
+-			case BPF_SUB: b2 = 0x29; break;
+-			case BPF_AND: b2 = 0x21; break;
+-			case BPF_OR: b2 = 0x09; break;
+-			case BPF_XOR: b2 = 0x31; break;
+-			}
+ 			maybe_emit_mod(&prog, dst_reg, src_reg,
+ 				       BPF_CLASS(insn->code) == BPF_ALU64);
++			b2 = simple_alu_opcodes[BPF_OP(insn->code)];
+ 			EMIT2(b2, add_2reg(0xC0, dst_reg, src_reg));
+ 			break;
  
--		if (BPF_CLASS(insn->code) == BPF_STX &&
--		    ((BPF_MODE(insn->code) != BPF_MEM &&
--		      BPF_MODE(insn->code) != BPF_ATOMIC) || insn->imm != 0)) {
--			verbose(env, "BPF_STX uses reserved fields\n");
--			return -EINVAL;
--		}
+@@ -1050,12 +1056,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 			else if (is_ereg(dst_reg))
+ 				EMIT1(add_1mod(0x40, dst_reg));
+ 
+-			switch (BPF_OP(insn->code)) {
+-			case BPF_LSH: b3 = 0xE0; break;
+-			case BPF_RSH: b3 = 0xE8; break;
+-			case BPF_ARSH: b3 = 0xF8; break;
+-			}
 -
- 		if (insn[0].code == (BPF_LD | BPF_IMM | BPF_DW)) {
- 			struct bpf_insn_aux_data *aux;
- 			struct bpf_map *map;
++			b3 = simple_alu_opcodes[BPF_OP(insn->code)];
+ 			if (imm32 == 1)
+ 				EMIT2(0xD1, add_1reg(b3, dst_reg));
+ 			else
+@@ -1089,11 +1090,7 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
+ 			else if (is_ereg(dst_reg))
+ 				EMIT1(add_1mod(0x40, dst_reg));
+ 
+-			switch (BPF_OP(insn->code)) {
+-			case BPF_LSH: b3 = 0xE0; break;
+-			case BPF_RSH: b3 = 0xE8; break;
+-			case BPF_ARSH: b3 = 0xF8; break;
+-			}
++			b3 = simple_alu_opcodes[BPF_OP(insn->code)];
+ 			EMIT2(0xD3, add_1reg(b3, dst_reg));
+ 
+ 			if (src_reg != BPF_REG_4)
 -- 
 2.30.0.284.gd98b1dd5eaa7-goog
 
