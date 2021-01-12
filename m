@@ -2,201 +2,292 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0909C4332E
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 32F93C10DCE
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:48 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A016323122
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0305123127
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:47 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436750AbhALVhU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        id S2438054AbhALVhU (ORCPT <rfc822;bpf@archiver.kernel.org>);
         Tue, 12 Jan 2021 16:37:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436937AbhALU3o (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jan 2021 15:29:44 -0500
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECAAC061795
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 12:29:04 -0800 (PST)
-Received: by mail-oo1-xc2c.google.com with SMTP id x23so908112oop.1
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 12:29:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cDLeYHAdyJXom8UBMPXNbz8kfcw4k2SFK/gIDfQI2Mo=;
-        b=hACMNd12CHzJhQb2y9E5HlKzNxg6kPOhqWOGaDaCfMGGatsDYO2+ROrP/n8p3QmJ9R
-         Rdk4qIA2XPaiz7rMV5Yq7TnzBkrzdOIQP1J2uw7qw1u3vGKh9hXCod3/pmGfQS5Dt25f
-         vyp+wLnZz0lEHxrRYpMvHh71rkMyg958RZXm82SuqMjX7KL89fd+7xnyiec+GZPC4IP8
-         NmtDu4tDAYXgMLiQuZfRLWMTkj14XB0Exu+9c1n1+6y3gFfPJfUqsHl9vA2/8XBRiwcn
-         4C5XOa52DmPlwbBDM9vGa0KGC8WeuCX+prNE1b2aRmnLs7513D4v4q+8CiQXK2/rQcBS
-         hMoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cDLeYHAdyJXom8UBMPXNbz8kfcw4k2SFK/gIDfQI2Mo=;
-        b=o7/kyHiyiJRHHvX6W7COKj/J9GZY305lATAcU1+hP3QRqEkiEyavQvFUaA7h2m78pA
-         zt/2+VD0y0Iciv4f/C5+BdgSN2jTniIoudsJuTN6n+oE0t9vgRLrLSVnSJN1RHfE8q+t
-         /QpkYceeSPM9QLtOFd/qtIpYbv5nQ4/Eojs0hkpB/s34Ne6rjMKcN7INfvD6V8EOk1oQ
-         as+jUWcZm5qUi+qHoNo0vPCv4Ok++Q+bTvDhzLBTfDGvp8tQ8Icgpsc/9Xz66dV89CZm
-         1DkUQ45KG82VIICyzjQdfDlVZGjxQ3UUsQuVj1spsykCltCWFRoGB+XZtOn65yYPDxUv
-         QI1g==
-X-Gm-Message-State: AOAM531MXd/iVNR3h/9Ty+BIoI/LRT86nqh5FkH4vQsfgoD+5RczFRRg
-        TKT61Rf1bTOU0nOajMKNsYUG9+koO3rnYZ/IT0hugw==
-X-Google-Smtp-Source: ABdhPJzOPojmT2VBrMxKI3W3V3rQzq5X9DqoVBkUPwMTcVKp+Oj5xQbG7tR8lCWwkKUUfJvuGIFEfrk2Et/qTYvlNvU=
-X-Received: by 2002:a4a:98e7:: with SMTP id b36mr550175ooj.3.1610483343593;
- Tue, 12 Jan 2021 12:29:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20210112194143.1494-1-yuri.benditovich@daynix.com> <CAOEp5OejaX4ZETThrj4-n8_yZoeTZs56CBPHbQqNsR2oni8dWw@mail.gmail.com>
-In-Reply-To: <CAOEp5OejaX4ZETThrj4-n8_yZoeTZs56CBPHbQqNsR2oni8dWw@mail.gmail.com>
-From:   Yuri Benditovich <yuri.benditovich@daynix.com>
-Date:   Tue, 12 Jan 2021 22:28:50 +0200
-Message-ID: <CAOEp5Oc5qif_krU8oC6qhq6X0xRW-9GpWrBzWgPw0WevyhT8Mg@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/7] Support for virtio-net hash reporting
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:65468 "EHLO
+        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2436898AbhALUVU (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 12 Jan 2021 15:21:20 -0500
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10CKJiY2000737;
+        Tue, 12 Jan 2021 12:19:54 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=5ELiHnupXJ+JmYCzZx70ukRL6PdPBP5mwIQmaz1cAHE=;
+ b=bV/yGiIouxMJT4cblvk+NHFhI8z6M2hChca1fGug0kgxgNnIojJ7+jVSmDsACFu89qdo
+ lSQ3zwrTJs2Yf5GzrOzwVlwHHgddvJ5JFME6dN46asWMYZSZKIEDXcufE4ztpQ+Rl19d
+ gZSAqvLia+6ZnvWS/amctZhvfYGnVos7cDA= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 361fpb99bj-4
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 12 Jan 2021 12:19:53 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 12 Jan 2021 12:19:53 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SfYF4LjOvxFeqkpQS6HhdXGkfHAjJlm+QDHWY71bGu+OrpyxqQDx/FnaiGzq8TnvPRpAxar9wjnx5A9g3q/5k5MrSDp9V5tGUBO9gDsyBlm4r5vJu35DjIpV1EsxV0HaEoRJYiZdFHlXJWAG0Jaex9nTrRaGRwL0RiEHI7I5qVkuP1e1dn7gogHpE41mcFc+SJzUs7JFrXTdIUiQ8v0xEy6nMqnR8PsCI3M4TuT7xq971nIPAAFgLqwiJUtuJQWUa/mBvaAs2RVXtsLBv+J4758yIpXSm3NOHMokDOSiOO/QnPtTKGkKKEJI2QqeVfEgmCkc3WaVP3sugXhvYqFXWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5ELiHnupXJ+JmYCzZx70ukRL6PdPBP5mwIQmaz1cAHE=;
+ b=ZRcKQdErWYSHB9szAOduMYzxgbwFLjHfILx59O/I/QZSD4u5kAvSmRPaj63/0egGXI9CXLJY4pfPprzoUa66hiaTHhyIeoL0bCAD78aVBguuB5IU7Z+1qJeSzanDJB2ZDM1wvC2olEL5TFnz0gzSL/LvhODG+1sOiELBPQHTvYyjMEfQZ0OX8MlVNcPMhSZNkz1ep8ngdGzxJ6uPYv6q0gewb83A8jMsluKKIQEV4CKV2TL+aU7sQ1YcTlWwN2ve6AahAFiQny8Y31vDGSZ3adYcvpYjY4LllS3Gc0OB7oF4NT+ZeTxta9MHHp1WN4yGliet9f6YP2LiCrHBkWYktg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5ELiHnupXJ+JmYCzZx70ukRL6PdPBP5mwIQmaz1cAHE=;
+ b=atCKiOmWbgw3X71y9tkWM4k0t60ipTWT7I5+NkHdOz7SxCnMj5QiylYrMGfGmBMpP4nkeV1IVGhxvABapyrT/GoaxFftXEUCoiVdXH7Tj3nkT466AVslYmv1a+Royp5DL7AsEXhJzjM/y6f5NqSjYUFDe/ZXX1PHPNJ8yWApn0g=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB4085.namprd15.prod.outlook.com (2603:10b6:a02:bf::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.10; Tue, 12 Jan
+ 2021 20:19:52 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::9ae:1628:daf9:4b03]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::9ae:1628:daf9:4b03%7]) with mapi id 15.20.3742.012; Tue, 12 Jan 2021
+ 20:19:52 +0000
+Subject: Re: [PATCH bpf-next 1/2] trace: bpf: Allow bpf to attach to bare
+ tracepoints
+To:     Qais Yousef <qais.yousef@arm.com>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, rdunlap@infradead.org,
-        willemb@google.com, gustavoars@kernel.org,
-        herbert@gondor.apana.org.au, steffen.klassert@secunet.com,
-        pablo@netfilter.org, decui@microsoft.com, cai@lca.pw,
-        jakub@cloudflare.com, elver@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        bpf@vger.kernel.org
-Cc:     Yan Vugenfirer <yan@daynix.com>
-Content-Type: text/plain; charset="UTF-8"
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20210111182027.1448538-1-qais.yousef@arm.com>
+ <20210111182027.1448538-2-qais.yousef@arm.com>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <8ef6c8e8-c462-a780-b1ab-b7f2e4fa9836@fb.com>
+Date:   Tue, 12 Jan 2021 12:19:49 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.6.0
+In-Reply-To: <20210111182027.1448538-2-qais.yousef@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [2620:10d:c090:400::5:3e3]
+X-ClientProxiedBy: MW4PR04CA0087.namprd04.prod.outlook.com
+ (2603:10b6:303:6b::32) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:21e1::190b] (2620:10d:c090:400::5:3e3) by MW4PR04CA0087.namprd04.prod.outlook.com (2603:10b6:303:6b::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.9 via Frontend Transport; Tue, 12 Jan 2021 20:19:51 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: efb067e1-c43f-4e9a-0804-08d8b7376b21
+X-MS-TrafficTypeDiagnostic: BYAPR15MB4085:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB4085BCD751DBC12105881FDCD3AA0@BYAPR15MB4085.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PbzQpo+cB2+PqPvNigr2A2ha5sRP0RPb24XtP7HLiywM4hD8/rlnl+ILlowLSksZfF30jl2Ttv8G1y/qnkLBQUbsgTY6/hjQROR566UMAYGF2DmFT+VNq48PSbRXzZq4CsRpgc6lLph65w6tpyx4VKP4NBwkNzN90fz2UM9IwhXhIbcgrfXoO9Vqw96c7FGVG1koBep/5Oc5P7NTHqonOzD4a6xslfB9PvZjF80WU43CwaKkz0jYIv2mLczjnGetLNQaGJxyPl/hJSFu/pX74SdPm8fMwPq+sj6T+WPQWLywSXdcUV3BpUj5sssXpH66VWrrtvg/dTOVv7s6GiKEGmgVA9jAd+F51dgGM/ku+aAr2blvXyjxQSjRuakUSJ9f4msaZc++RB2q3aTirGGp6oM6nx9pCeBAEXqrPZ/gJrigbYbxQ13KmkmqgTBG6yU4eWBObYq68w8vrxH2w8A9PxwnxJ+z4+y9KKsM5FyB1j8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(346002)(376002)(366004)(39860400002)(136003)(16526019)(4326008)(5660300002)(66946007)(36756003)(8936002)(66476007)(186003)(66556008)(478600001)(31686004)(8676002)(6486002)(86362001)(316002)(53546011)(31696002)(2906002)(52116002)(2616005)(54906003)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?dkMzSlJXbVhCbzhmQit2MW11b2JxNXVhUjVSM0RHeEp4QzVpTW1lVXY0QzA4?=
+ =?utf-8?B?c3hiY3ZrSDlxYk42eTF0ZWhrRG1HVHBEeXZ2QjdJYTY5K0JrU2NrLzIyeVNM?=
+ =?utf-8?B?NnVRMjJOd1psNDhPYWtwNjZTUllOMjdKR3ZadWhxUmN4ZlBwMmRiZkhPdTQr?=
+ =?utf-8?B?b1ZSTUZGQmJtQzlJM00zaEZYU3RpeTZwNlNBejgzQTNzdUNQdFpNejNmeFdD?=
+ =?utf-8?B?bUlKamFsNC9xbmY0L01SdzVBRUdPRUxpSnlETkN6bmFLNlB3WGJ0OHpqejJM?=
+ =?utf-8?B?ZkN3TnQ2VXIwOVVKTksyaW5DOUpHWkNkVGNCQ2xhZnVieFJZWEp4ckJlRFlR?=
+ =?utf-8?B?L0VPYXdWMjRCSXNXbTlQS25UNFFOcmFOZFAwOU9sSC9RMXU0VVZqblVLdUVl?=
+ =?utf-8?B?OHVBTldZV2FsejlxMWRScnhHQnlWYytPR2IwR2dxY1lSQjZIV1pHZVlXWDFZ?=
+ =?utf-8?B?bC9URmFEWkdxWnNUOFNKZ1U0VUpzcVBsd2VjckxoNHZlRmM0aWNvVGN3T2J4?=
+ =?utf-8?B?NC9BcnQ2dU1Lc0owUXJWQUIvMG9HbytlSWJHNjZXYWFQK2Q5eExCSHJyZXNy?=
+ =?utf-8?B?SzZjWXRmaVFuOUQvNjErNUtxU25KejM3T01OeG9KckNhY1Z6VjUvbU9xdExT?=
+ =?utf-8?B?UHdOdHB2OHV1Rmk3V3FWQ2Y3bDV3THEvYTg5MUlIbWc4bnp2L1Z6eGVOWXlM?=
+ =?utf-8?B?NDZaSnVncWRFR1UycmNsUFFKUlQzQldob0NkRmtjVkdRNkJkRnhPVHk5MlBk?=
+ =?utf-8?B?ZG1qelZPMnlJSU0zc0VDOU9qUURNcHNvdTNoSmZyaEpUM3J3cWdsQWJEUXY3?=
+ =?utf-8?B?cGg2bDlEeG9vekNIOEpJSFh2c0xNU2o4cnNtM2Z5MUlvNjM4MkRsZC9UNENq?=
+ =?utf-8?B?WGRsVFV6NzVFZ2JLQThlcGNLWXNpdWdWcDBkeGdHWmR2Q21aRVFpTnN1UExt?=
+ =?utf-8?B?QXJsUkExSDBDeGN2b2c4dlEzNFkzZ1RBRWlOVXc2R0RmVzNFYWUwNHQyVHZH?=
+ =?utf-8?B?anpvZHNvNENJMmVNUmlwK1lDU01lQXorNCtiK1lYVnMzcHRZaUNWbldBOXdN?=
+ =?utf-8?B?UE9IOS9Vd2doNE5FbWFpb1JCMkpHT1hlYzE4SzRqRVMyMnpidWpFODdSNGlM?=
+ =?utf-8?B?dkZHQm5YcjFoZ1BncnpPWi9oWWlPS012R3RIQTFEUnJ3eEw4YzFwOUtub29x?=
+ =?utf-8?B?Ny8wYmV6OGRMbkZLeUM2c2ZvbHRjSlIrMlZ2NmdOdmJjUUFqWVpucHZSNUJ1?=
+ =?utf-8?B?OUM4anRZVFA3aHQ0UHF3bi9MdGhZNnpsdEFLTmZHSFhoMTZLTHJBTW5qaVcw?=
+ =?utf-8?B?bWN3QVExUkxleXpwaEx2QUpYWkFRam02czRBV0x5SU9LRndiU3cwWTMxc0Fn?=
+ =?utf-8?B?NUM3TVhEaDZrNWc9PQ==?=
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Jan 2021 20:19:52.0206
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-Network-Message-Id: efb067e1-c43f-4e9a-0804-08d8b7376b21
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5m6lCbhSmtQSGFwWAh3JKEw/3C22uoz4AgQH7l1OgUC1A7Lqat1BDj//0KL9ZOe9
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB4085
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-12_16:2021-01-12,2021-01-12 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 adultscore=0
+ lowpriorityscore=0 impostorscore=0 suspectscore=0 bulkscore=0
+ priorityscore=1501 phishscore=0 malwarescore=0 mlxscore=0 spamscore=0
+ mlxlogscore=999 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2009150000 definitions=main-2101120120
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 9:49 PM Yuri Benditovich
-<yuri.benditovich@daynix.com> wrote:
->
-> On Tue, Jan 12, 2021 at 9:41 PM Yuri Benditovich
-> <yuri.benditovich@daynix.com> wrote:
-> >
-> > Existing TUN module is able to use provided "steering eBPF" to
-> > calculate per-packet hash and derive the destination queue to
-> > place the packet to. The eBPF uses mapped configuration data
-> > containing a key for hash calculation and indirection table
-> > with array of queues' indices.
-> >
-> > This series of patches adds support for virtio-net hash reporting
-> > feature as defined in virtio specification. It extends the TUN module
-> > and the "steering eBPF" as follows:
-> >
-> > Extended steering eBPF calculates the hash value and hash type, keeps
-> > hash value in the skb->hash and returns index of destination virtqueue
-> > and the type of the hash. TUN module keeps returned hash type in
-> > (currently unused) field of the skb.
-> > skb->__unused renamed to 'hash_report_type'.
-> >
-> > When TUN module is called later to allocate and fill the virtio-net
-> > header and push it to destination virtqueue it populates the hash
-> > and the hash type into virtio-net header.
-> >
-> > VHOST driver is made aware of respective virtio-net feature that
-> > extends the virtio-net header to report the hash value and hash report
-> > type.
->
-> Comment from Willem de Bruijn:
->
-> Skbuff fields are in short supply. I don't think we need to add one
-> just for this narrow path entirely internal to the tun device.
->
-
-We understand that and try to minimize the impact by using an already
-existing unused field of skb.
 
 
-> Instead, you could just run the flow_dissector in tun_put_user if the
-> feature is negotiated. Indeed, the flow dissector seems more apt to me
-> than BPF here. Note that the flow dissector internally can be
-> overridden by a BPF program if the admin so chooses.
->
-When this set of patches is related to hash delivery in the virtio-net
-packet in general,
-it was prepared in context of RSS feature implementation as defined in
-virtio spec [1]
-In case of RSS it is not enough to run the flow_dissector in tun_put_user:
-in tun_ebpf_select_queue the TUN calls eBPF to calculate the hash,
-hash type and queue index
-according to the (mapped) parameters (key, hash types, indirection
-table) received from the guest.
-Our intention is to keep the hash and hash type in the skb to populate them
-into a virtio-net header later in tun_put_user.
-Note that in this case the type of calculated hash is selected not
-only from flow dissections
-but also from limitations provided by the guest.
-This is already implemented in qemu (for case of vhost=off), see [2]
-(virtio_net_process_rss)
-For case of vhost=on there are WIP for qemu to load eBPF and attach it to TUN.
+On 1/11/21 10:20 AM, Qais Yousef wrote:
+> Some subsystems only have bare tracepoints (a tracepoint with no
+> associated trace event) to avoid the problem of trace events being an
+> ABI that can't be changed.
+> 
+>  From bpf presepective, bare tracepoints are what it calls
+> RAW_TRACEPOINT().
+> 
+> Since bpf assumed there's 1:1 mapping, it relied on hooking to
+> DEFINE_EVENT() macro to create bpf mapping of the tracepoints. Since
+> bare tracepoints use DECLARE_TRACE() to create the tracepoint, bpf had
+> no knowledge about their existence.
+> 
+> By teaching bpf_probe.h to parse DECLARE_TRACE() in a similar fashion to
+> DEFINE_EVENT(), bpf can find and attach to the new raw tracepoints.
+> 
+> Enabling that comes with the contract that changes to raw tracepoints
+> don't constitute a regression if they break existing bpf programs.
+> We need the ability to continue to morph and modify these raw
+> tracepoints without worrying about any ABI.
+> 
+> Update Documentation/bpf/bpf_design_QA.rst to document this contract.
+> 
+> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+> ---
+>   Documentation/bpf/bpf_design_QA.rst |  6 ++++++
+>   include/trace/bpf_probe.h           | 12 ++++++++++--
+>   2 files changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/bpf/bpf_design_QA.rst b/Documentation/bpf/bpf_design_QA.rst
+> index 2df7b067ab93..0e15f9b05c9d 100644
+> --- a/Documentation/bpf/bpf_design_QA.rst
+> +++ b/Documentation/bpf/bpf_design_QA.rst
+> @@ -208,6 +208,12 @@ data structures and compile with kernel internal headers. Both of these
+>   kernel internals are subject to change and can break with newer kernels
+>   such that the program needs to be adapted accordingly.
+>   
+> +Q: Are tracepoints part of the stable ABI?
+> +------------------------------------------
+> +A: NO. Tracepoints are tied to internal implementation details hence they are
+> +subject to change and can break with newer kernels. BPF programs need to change
+> +accordingly when this happens.
+> +
+>   Q: How much stack space a BPF program uses?
+>   -------------------------------------------
+>   A: Currently all program types are limited to 512 bytes of stack
+> diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
+> index cd74bffed5c6..cf1496b162b1 100644
+> --- a/include/trace/bpf_probe.h
+> +++ b/include/trace/bpf_probe.h
+> @@ -55,8 +55,7 @@
+>   /* tracepoints with more than 12 arguments will hit build error */
+>   #define CAST_TO_U64(...) CONCATENATE(__CAST, COUNT_ARGS(__VA_ARGS__))(__VA_ARGS__)
+>   
+> -#undef DECLARE_EVENT_CLASS
+> -#define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
+> +#define __BPF_DECLARE_TRACE(call, proto, args)				\
+>   static notrace void							\
+>   __bpf_trace_##call(void *__data, proto)					\
+>   {									\
+> @@ -64,6 +63,10 @@ __bpf_trace_##call(void *__data, proto)					\
+>   	CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(prog, CAST_TO_U64(args));	\
+>   }
+>   
+> +#undef DECLARE_EVENT_CLASS
+> +#define DECLARE_EVENT_CLASS(call, proto, args, tstruct, assign, print)	\
+> +	__BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args))
+> +
+>   /*
+>    * This part is compiled out, it is only here as a build time check
+>    * to make sure that if the tracepoint handling changes, the
+> @@ -111,6 +114,11 @@ __DEFINE_EVENT(template, call, PARAMS(proto), PARAMS(args), size)
+>   #define DEFINE_EVENT_PRINT(template, name, proto, args, print)	\
+>   	DEFINE_EVENT(template, name, PARAMS(proto), PARAMS(args))
+>   
+> +#undef DECLARE_TRACE
+> +#define DECLARE_TRACE(call, proto, args)				\
+> +	(__BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args))		\
+> +	 __DEFINE_EVENT(call, call, PARAMS(proto), PARAMS(args), 0))
 
-Note that exact way of selecting rx virtqueue depends on the guest,
-it could be automatic steering (typical for Linux VM), RSS (typical
-for Windows VM) or
-any other steering mechanism implemented in loadable TUN steering BPF with
-or without hash calculation.
+I applied the patch to my local bpf-next repo, and got the following
+compilation error:
 
-[1] https://github.com/oasis-tcs/virtio-spec/blob/master/content.tex#L3740
-[2] https://github.com/qemu/qemu/blob/master/hw/net/virtio-net.c#L1591
+In file included from 
+/data/users/yhs/work/net-next/include/trace/define_trace.h:104, 
 
-> This also hits on a deeper point with the choice of hash values, that
-> I also noticed in my RFC patchset to implement the inverse [1][2]. It
-> is much more detailed than skb->hash + skb->l4_hash currently offers,
-> and that can be gotten for free from most hardware.
+                  from 
+/data/users/yhs/work/net-next/include/trace/events/sched.h:740, 
 
-Unfortunately in the case of RSS we can't get this hash from the hardware as
-this requires configuration of the NIC's hardware with key and hash types for
-Toeplitz hash calculation.
+                  from 
+/data/users/yhs/work/net-next/kernel/sched/core.c:10: 
 
-> In most practical
-> cases, that information suffices. I added less specific fields
-> VIRTIO_NET_HASH_REPORT_L4, VIRTIO_NET_HASH_REPORT_OTHER that work
-> without explicit flow dissection. I understand that the existing
-> fields are part of the standard. Just curious, what is their purpose
-> beyond 4-tuple based flow hashing?
+/data/users/yhs/work/net-next/include/trace/bpf_probe.h:59:1: error: 
+expected identifier or ‘(’ before ‘static’
+  static notrace void       \ 
 
-The hash is used in combination with the indirection table to select
-destination rx virtqueue.
-The hash and hash type are to be reported in virtio-net header, if requested.
-For Windows VM - in case the device does not report the hash (even if
-it calculated it to
-schedule the packet to a proper queue), the driver must do that for each packet
-(this is a certification requirement).
+  ^~~~~~ 
 
->
-> [1] https://patchwork.kernel.org/project/netdevbpf/list/?series=406859&state=*
-> [2] https://github.com/wdebruij/linux/commit/0f77febf22cd6ffc242a575807fa8382a26e511e
-> >
-> > Yuri Benditovich (7):
-> >   skbuff: define field for hash report type
-> >   vhost: support for hash report virtio-net feature
-> >   tun: allow use of BPF_PROG_TYPE_SCHED_CLS program type
-> >   tun: free bpf_program by bpf_prog_put instead of bpf_prog_destroy
-> >   tun: add ioctl code TUNSETHASHPOPULATION
-> >   tun: populate hash in virtio-net header when needed
-> >   tun: report new tun feature IFF_HASH
-> >
-> >  drivers/net/tun.c           | 43 +++++++++++++++++++++++++++++++------
-> >  drivers/vhost/net.c         | 37 ++++++++++++++++++++++++-------
-> >  include/linux/skbuff.h      |  7 +++++-
-> >  include/uapi/linux/if_tun.h |  2 ++
-> >  4 files changed, 74 insertions(+), 15 deletions(-)
-> >
-> > --
-> > 2.17.1
-> >
+/data/users/yhs/work/net-next/include/trace/bpf_probe.h:119:3: note: in 
+expansion of macro ‘__BPF_DECLARE_TRACE’
+   (__BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args))  \ 
+
+    ^~~~~~~~~~~~~~~~~~~ 
+
+/data/users/yhs/work/net-next/include/trace/events/sched.h:693:1: note: 
+in expansion of macro ‘DECLARE_TRACE’
+  DECLARE_TRACE(pelt_cfs_tp, 
+
+  ^~~~~~~~~~~~~ 
+
+/data/users/yhs/work/net-next/include/trace/bpf_probe.h:59:1: error: 
+expected identifier or ‘(’ before ‘static’
+  static notrace void       \ 
+
+  ^~~~~~ 
+
+/data/users/yhs/work/net-next/include/trace/bpf_probe.h:119:3: note: in 
+expansion of macro ‘__BPF_DECLARE_TRACE’
+   (__BPF_DECLARE_TRACE(call, PARAMS(proto), PARAMS(args))  \ 
+
+    ^~~~~~~~~~~~~~~~~~~ 
+
+/data/users/yhs/work/net-next/include/trace/events/sched.h:697:1: note: 
+in expansion of macro ‘DECLARE_TRACE’
+  DECLARE_TRACE(pelt_rt_tp, 
+
+  ^~~~~~~~~~~~~
+/data/users/yhs/work/net-next/include/trace/bpf_probe.h:59:1: error: 
+expected identifier or ‘(’ before ‘static’
+  static notrace void       \
+
+I dumped preprecessor result but after macro expansion, the code
+becomes really complex and I have not figured out why it failed.
+Do you know what is the possible reason?
+
+> +
+>   #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
+>   
+>   #undef DEFINE_EVENT_WRITABLE
+> 
