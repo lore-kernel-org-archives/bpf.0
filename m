@@ -2,164 +2,201 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3918DC41620
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E0909C4332E
 	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E82AB23123
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:45 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A016323122
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436757AbhALVhV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jan 2021 16:37:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60532 "EHLO
+        id S2436750AbhALVhU (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jan 2021 16:37:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436992AbhALUjH (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jan 2021 15:39:07 -0500
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D36DC061786;
-        Tue, 12 Jan 2021 12:38:27 -0800 (PST)
-Received: by mail-yb1-xb36.google.com with SMTP id y4so15697ybn.3;
-        Tue, 12 Jan 2021 12:38:27 -0800 (PST)
+        with ESMTP id S2436937AbhALU3o (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jan 2021 15:29:44 -0500
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECAAC061795
+        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 12:29:04 -0800 (PST)
+Received: by mail-oo1-xc2c.google.com with SMTP id x23so908112oop.1
+        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 12:29:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=daynix-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=FGkjr+ZPHg8gkKHMJ5dVZ/qAAwMPTiEQsQ9NPkLnGsw=;
-        b=jULcu12WaU9v0odTNjin4I1OYOe8T02A7taISfBFOi26DQrCPqobzVqchIkxAhlvL8
-         R5wgzYG3UO3qRqNyzpGRfAa/wkdrkQ995zf8XPgSqEQPkl0zL6m8ZsfxI1TBBnsaiDmh
-         RyCM1s7r1IZyJNy/MlUQcxVESKvnZvn4gI3DUbn7RjNcJ6fZ6Cl2oHnAO7MWDaCNUobs
-         mwhmdeewrmcv3u68Xp0MfBboWFcerxbJ07HIl4ejXomMhxo2jAqc7WUSAUO157iidCdB
-         MwVgWvV2yslpnrPhAzj3L8S+iGfJuZZmiRKIpWcGSeR4gGn73bzD2tA/qoWjKKMFEBMh
-         pfhQ==
+        bh=cDLeYHAdyJXom8UBMPXNbz8kfcw4k2SFK/gIDfQI2Mo=;
+        b=hACMNd12CHzJhQb2y9E5HlKzNxg6kPOhqWOGaDaCfMGGatsDYO2+ROrP/n8p3QmJ9R
+         Rdk4qIA2XPaiz7rMV5Yq7TnzBkrzdOIQP1J2uw7qw1u3vGKh9hXCod3/pmGfQS5Dt25f
+         vyp+wLnZz0lEHxrRYpMvHh71rkMyg958RZXm82SuqMjX7KL89fd+7xnyiec+GZPC4IP8
+         NmtDu4tDAYXgMLiQuZfRLWMTkj14XB0Exu+9c1n1+6y3gFfPJfUqsHl9vA2/8XBRiwcn
+         4C5XOa52DmPlwbBDM9vGa0KGC8WeuCX+prNE1b2aRmnLs7513D4v4q+8CiQXK2/rQcBS
+         hMoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=FGkjr+ZPHg8gkKHMJ5dVZ/qAAwMPTiEQsQ9NPkLnGsw=;
-        b=pwL3dr+y+kOGOmkMirT+yduWzeHIGYNxIOZLQLxiYd1LAAikJsrLLwR7YdUdepjLrS
-         S+vls6ZBj/dcMlr1AwI79vkuzTEbdh9sgOwKM6BxiovKPtSfJMiBr0ZFd6OfFb2fbpcB
-         geUviroqlxUD8vUQMhK+/M31ZFN2Ad5GcfNq94aghs2J5wMhrWF5OQoDp8v18O9NGXO9
-         EbBZCGPaPHLHQz2p9Zn39uvXNt9dCh2hUxEyUKmLekS9hpkEbEjc+fPKJ8LXtBFSKTCa
-         Ny3lqV3Lc1Y4BOmBBcYLXdmepCw1zL+QmykC9248G0DZZDy25yK4OsxsvqwWtq7bt6a9
-         lMmA==
-X-Gm-Message-State: AOAM533T/KSIXtCiSJvz0oCTmDTrjlc9d+3cg8Ww/A87kj4hODIEjb4A
-        gaBzcheHNiWUW1z621gKT+N9zfP4TUVkqf8BYxw=
-X-Google-Smtp-Source: ABdhPJzOss52FqTn1amUQk7+g9gwMXium7+WRElgGVdglKBYIVt9zkPRYqG4/TB6JpZhEugXBz2Iwo/uxk8TARw3kQA=
-X-Received: by 2002:a25:9882:: with SMTP id l2mr1665224ybo.425.1610483906401;
- Tue, 12 Jan 2021 12:38:26 -0800 (PST)
+        bh=cDLeYHAdyJXom8UBMPXNbz8kfcw4k2SFK/gIDfQI2Mo=;
+        b=o7/kyHiyiJRHHvX6W7COKj/J9GZY305lATAcU1+hP3QRqEkiEyavQvFUaA7h2m78pA
+         zt/2+VD0y0Iciv4f/C5+BdgSN2jTniIoudsJuTN6n+oE0t9vgRLrLSVnSJN1RHfE8q+t
+         /QpkYceeSPM9QLtOFd/qtIpYbv5nQ4/Eojs0hkpB/s34Ne6rjMKcN7INfvD6V8EOk1oQ
+         as+jUWcZm5qUi+qHoNo0vPCv4Ok++Q+bTvDhzLBTfDGvp8tQ8Icgpsc/9Xz66dV89CZm
+         1DkUQ45KG82VIICyzjQdfDlVZGjxQ3UUsQuVj1spsykCltCWFRoGB+XZtOn65yYPDxUv
+         QI1g==
+X-Gm-Message-State: AOAM531MXd/iVNR3h/9Ty+BIoI/LRT86nqh5FkH4vQsfgoD+5RczFRRg
+        TKT61Rf1bTOU0nOajMKNsYUG9+koO3rnYZ/IT0hugw==
+X-Google-Smtp-Source: ABdhPJzOPojmT2VBrMxKI3W3V3rQzq5X9DqoVBkUPwMTcVKp+Oj5xQbG7tR8lCWwkKUUfJvuGIFEfrk2Et/qTYvlNvU=
+X-Received: by 2002:a4a:98e7:: with SMTP id b36mr550175ooj.3.1610483343593;
+ Tue, 12 Jan 2021 12:29:03 -0800 (PST)
 MIME-Version: 1.0
-References: <20210112075520.4103414-1-andrii@kernel.org> <20210112075520.4103414-6-andrii@kernel.org>
- <4155ef59-9e5e-f596-f22b-ecd4bde73e85@iogearbox.net>
-In-Reply-To: <4155ef59-9e5e-f596-f22b-ecd4bde73e85@iogearbox.net>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 12 Jan 2021 12:38:15 -0800
-Message-ID: <CAEf4BzbjuWO68DKNH28wYYN9Bcu8HjWN3_sGnRhoZozvfanJkQ@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 5/7] bpf: support BPF ksym variables in kernel modules
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Kernel Team <kernel-team@fb.com>, Hao Luo <haoluo@google.com>,
-        Yonghong Song <yhs@fb.com>
+References: <20210112194143.1494-1-yuri.benditovich@daynix.com> <CAOEp5OejaX4ZETThrj4-n8_yZoeTZs56CBPHbQqNsR2oni8dWw@mail.gmail.com>
+In-Reply-To: <CAOEp5OejaX4ZETThrj4-n8_yZoeTZs56CBPHbQqNsR2oni8dWw@mail.gmail.com>
+From:   Yuri Benditovich <yuri.benditovich@daynix.com>
+Date:   Tue, 12 Jan 2021 22:28:50 +0200
+Message-ID: <CAOEp5Oc5qif_krU8oC6qhq6X0xRW-9GpWrBzWgPw0WevyhT8Mg@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/7] Support for virtio-net hash reporting
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, rdunlap@infradead.org,
+        willemb@google.com, gustavoars@kernel.org,
+        herbert@gondor.apana.org.au, steffen.klassert@secunet.com,
+        pablo@netfilter.org, decui@microsoft.com, cai@lca.pw,
+        jakub@cloudflare.com, elver@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        bpf@vger.kernel.org
+Cc:     Yan Vugenfirer <yan@daynix.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 8:27 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
+On Tue, Jan 12, 2021 at 9:49 PM Yuri Benditovich
+<yuri.benditovich@daynix.com> wrote:
 >
-> On 1/12/21 8:55 AM, Andrii Nakryiko wrote:
-> > Add support for directly accessing kernel module variables from BPF programs
-> > using special ldimm64 instructions. This functionality builds upon vmlinux
-> > ksym support, but extends ldimm64 with src_reg=BPF_PSEUDO_BTF_ID to allow
-> > specifying kernel module BTF's FD in insn[1].imm field.
+> On Tue, Jan 12, 2021 at 9:41 PM Yuri Benditovich
+> <yuri.benditovich@daynix.com> wrote:
 > >
-> > During BPF program load time, verifier will resolve FD to BTF object and will
-> > take reference on BTF object itself and, for module BTFs, corresponding module
-> > as well, to make sure it won't be unloaded from under running BPF program. The
-> > mechanism used is similar to how bpf_prog keeps track of used bpf_maps.
+> > Existing TUN module is able to use provided "steering eBPF" to
+> > calculate per-packet hash and derive the destination queue to
+> > place the packet to. The eBPF uses mapped configuration data
+> > containing a key for hash calculation and indirection table
+> > with array of queues' indices.
 > >
-> > One interesting change is also in how per-CPU variable is determined. The
-> > logic is to find .data..percpu data section in provided BTF, but both vmlinux
-> > and module each have their own .data..percpu entries in BTF. So for module's
-> > case, the search for DATASEC record needs to look at only module's added BTF
-> > types. This is implemented with custom search function.
+> > This series of patches adds support for virtio-net hash reporting
+> > feature as defined in virtio specification. It extends the TUN module
+> > and the "steering eBPF" as follows:
 > >
-> > Acked-by: Yonghong Song <yhs@fb.com>
-> > Acked-by: Hao Luo <haoluo@google.com>
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> [...]
-> > +
-> > +struct module *btf_try_get_module(const struct btf *btf)
-> > +{
-> > +     struct module *res = NULL;
-> > +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> > +     struct btf_module *btf_mod, *tmp;
-> > +
-> > +     mutex_lock(&btf_module_mutex);
-> > +     list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
-> > +             if (btf_mod->btf != btf)
-> > +                     continue;
-> > +
-> > +             if (try_module_get(btf_mod->module))
-> > +                     res = btf_mod->module;
+> > Extended steering eBPF calculates the hash value and hash type, keeps
+> > hash value in the skb->hash and returns index of destination virtqueue
+> > and the type of the hash. TUN module keeps returned hash type in
+> > (currently unused) field of the skb.
+> > skb->__unused renamed to 'hash_report_type'.
+> >
+> > When TUN module is called later to allocate and fill the virtio-net
+> > header and push it to destination virtqueue it populates the hash
+> > and the hash type into virtio-net header.
+> >
+> > VHOST driver is made aware of respective virtio-net feature that
+> > extends the virtio-net header to report the hash value and hash report
+> > type.
 >
-> One more thought (follow-up would be okay I'd think) ... when a module references
-> a symbol from another module, it similarly needs to bump the refcount of the module
-> that is owning it and thus disallowing to unload for that other module's lifetime.
-> That usage dependency is visible via /proc/modules however, so if unload doesn't work
-> then lsmod allows a way to introspect that to the user. This seems to be achieved via
-> resolve_symbol() where it records its dependency/usage. Would be great if we could at
-> some point also include the BPF prog name into that list so that this is more obvious.
-> Wdyt?
+> Comment from Willem de Bruijn:
+>
+> Skbuff fields are in short supply. I don't think we need to add one
+> just for this narrow path entirely internal to the tun device.
 >
 
-Yeah, it's definitely nice to see dependent bpf progs. There is struct
-module_use, which is used to record these dependencies, but the
-assumption there is that dependencies could be only other modules. So
-one way is to somehow extend that or add another set of bpf_prog
-dependencies. First is a bit intrusive, while the seconds sucks even
-more, IMO.
+We understand that and try to minimize the impact by using an already
+existing unused field of skb.
 
-Alternatively, we can rely on bpf_link info to emit module info, if
-the BPF program is attached to BTF type from the module. Then with
-bpftool it would be easy to see this, but it's not as
-readily-available info as /proc/modules, of course.
 
-Any preferences?
+> Instead, you could just run the flow_dissector in tun_put_user if the
+> feature is negotiated. Indeed, the flow dissector seems more apt to me
+> than BPF here. Note that the flow dissector internally can be
+> overridden by a BPF program if the admin so chooses.
+>
+When this set of patches is related to hash delivery in the virtio-net
+packet in general,
+it was prepared in context of RSS feature implementation as defined in
+virtio spec [1]
+In case of RSS it is not enough to run the flow_dissector in tun_put_user:
+in tun_ebpf_select_queue the TUN calls eBPF to calculate the hash,
+hash type and queue index
+according to the (mapped) parameters (key, hash types, indirection
+table) received from the guest.
+Our intention is to keep the hash and hash type in the skb to populate them
+into a virtio-net header later in tun_put_user.
+Note that in this case the type of calculated hash is selected not
+only from flow dissections
+but also from limitations provided by the guest.
+This is already implemented in qemu (for case of vhost=off), see [2]
+(virtio_net_process_rss)
+For case of vhost=on there are WIP for qemu to load eBPF and attach it to TUN.
 
-> > +             break;
-> > +     }
-> > +     mutex_unlock(&btf_module_mutex);
-> > +#endif
-> > +
-> > +     return res;
-> > +}
-> > diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> > index 261f8692d0d2..69c3c308de5e 100644
-> > --- a/kernel/bpf/core.c
-> > +++ b/kernel/bpf/core.c
-> > @@ -2119,6 +2119,28 @@ static void bpf_free_used_maps(struct bpf_prog_aux *aux)
-> >       kfree(aux->used_maps);
-> >   }
+Note that exact way of selecting rx virtqueue depends on the guest,
+it could be automatic steering (typical for Linux VM), RSS (typical
+for Windows VM) or
+any other steering mechanism implemented in loadable TUN steering BPF with
+or without hash calculation.
+
+[1] https://github.com/oasis-tcs/virtio-spec/blob/master/content.tex#L3740
+[2] https://github.com/qemu/qemu/blob/master/hw/net/virtio-net.c#L1591
+
+> This also hits on a deeper point with the choice of hash values, that
+> I also noticed in my RFC patchset to implement the inverse [1][2]. It
+> is much more detailed than skb->hash + skb->l4_hash currently offers,
+> and that can be gotten for free from most hardware.
+
+Unfortunately in the case of RSS we can't get this hash from the hardware as
+this requires configuration of the NIC's hardware with key and hash types for
+Toeplitz hash calculation.
+
+> In most practical
+> cases, that information suffices. I added less specific fields
+> VIRTIO_NET_HASH_REPORT_L4, VIRTIO_NET_HASH_REPORT_OTHER that work
+> without explicit flow dissection. I understand that the existing
+> fields are part of the standard. Just curious, what is their purpose
+> beyond 4-tuple based flow hashing?
+
+The hash is used in combination with the indirection table to select
+destination rx virtqueue.
+The hash and hash type are to be reported in virtio-net header, if requested.
+For Windows VM - in case the device does not report the hash (even if
+it calculated it to
+schedule the packet to a proper queue), the driver must do that for each packet
+(this is a certification requirement).
+
+>
+> [1] https://patchwork.kernel.org/project/netdevbpf/list/?series=406859&state=*
+> [2] https://github.com/wdebruij/linux/commit/0f77febf22cd6ffc242a575807fa8382a26e511e
 > >
-> > +void __bpf_free_used_btfs(struct bpf_prog_aux *aux,
-> > +                       struct btf_mod_pair *used_btfs, u32 len)
-> > +{
-> > +#ifdef CONFIG_BPF_SYSCALL
-> > +     struct btf_mod_pair *btf_mod;
-> > +     u32 i;
-> > +
-> > +     for (i = 0; i < len; i++) {
-> > +             btf_mod = &used_btfs[i];
-> > +             if (btf_mod->module)
-> > +                     module_put(btf_mod->module);
-> > +             btf_put(btf_mod->btf);
-> > +     }
-> > +#endif
-> > +}
+> > Yuri Benditovich (7):
+> >   skbuff: define field for hash report type
+> >   vhost: support for hash report virtio-net feature
+> >   tun: allow use of BPF_PROG_TYPE_SCHED_CLS program type
+> >   tun: free bpf_program by bpf_prog_put instead of bpf_prog_destroy
+> >   tun: add ioctl code TUNSETHASHPOPULATION
+> >   tun: populate hash in virtio-net header when needed
+> >   tun: report new tun feature IFF_HASH
+> >
+> >  drivers/net/tun.c           | 43 +++++++++++++++++++++++++++++++------
+> >  drivers/vhost/net.c         | 37 ++++++++++++++++++++++++-------
+> >  include/linux/skbuff.h      |  7 +++++-
+> >  include/uapi/linux/if_tun.h |  2 ++
+> >  4 files changed, 74 insertions(+), 15 deletions(-)
+> >
+> > --
+> > 2.17.1
+> >
