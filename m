@@ -2,90 +2,80 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-17.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0723AC433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 48D85C433E0
 	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 07:56:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9DA1222E01
+	by mail.kernel.org (Postfix) with ESMTP id F0D8722EBD
 	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 07:56:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387571AbhALH4J convert rfc822-to-8bit (ORCPT
-        <rfc822;bpf@archiver.kernel.org>); Tue, 12 Jan 2021 02:56:09 -0500
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:65240 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730800AbhALH4I (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 12 Jan 2021 02:56:08 -0500
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10C7sIPZ012186
-        for <bpf@vger.kernel.org>; Mon, 11 Jan 2021 23:55:28 -0800
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 35yweb9agq-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <bpf@vger.kernel.org>; Mon, 11 Jan 2021 23:55:28 -0800
-Received: from intmgw002.08.frc2.facebook.com (2620:10d:c0a8:1b::d) by
- mail.thefacebook.com (2620:10d:c0a8:83::5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 11 Jan 2021 23:55:26 -0800
-Received: by devbig012.ftw2.facebook.com (Postfix, from userid 137359)
-        id AF9152ECD646; Mon, 11 Jan 2021 23:55:25 -0800 (PST)
-From:   Andrii Nakryiko <andrii@kernel.org>
-To:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>, <ast@fb.com>,
-        <daniel@iogearbox.net>
-CC:     <andrii@kernel.org>, <kernel-team@fb.com>,
-        Hao Luo <haoluo@google.com>, kernel test robot <lkp@intel.com>,
-        Yonghong Song <yhs@fb.com>
-Subject: [PATCH v3 bpf-next 1/7] bpf: add bpf_patch_call_args prototype to include/linux/bpf.h
-Date:   Mon, 11 Jan 2021 23:55:14 -0800
-Message-ID: <20210112075520.4103414-2-andrii@kernel.org>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20210112075520.4103414-1-andrii@kernel.org>
-References: <20210112075520.4103414-1-andrii@kernel.org>
+        id S2392149AbhALH4O (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jan 2021 02:56:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43448 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731058AbhALH4N (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jan 2021 02:56:13 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B8F3A22E01;
+        Tue, 12 Jan 2021 07:55:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610438132;
+        bh=LZYvjbPsUpI8ywXQfEviexBoHvtcOk359LQbsn7GNoc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=vFLLgHottAmVuovMoLa/rT6ODDGxqCkItUFlcCGXly3E5TnlxWZXxE470DsePE0+8
+         dY5dDIXz7xGXwdRb9I2gzN7wE5IOck5m86iJg5aeue3q9Uy+2kv4gql3aoy7oLMGZL
+         KLoilQpZeT0af2DVomJmZAKB1BALjA/WlnEIwSsmtCIowatIorGUFbBjOjx8TsYrFP
+         sy91XGioACZJe+YEFTjmnNxgfSYHZhMk/AKxv1TJcVt7/KHvvWhm0ozqW0K7bTpWNV
+         3mjBGpeLNmg5FgXBMcueI4tkIe7qUYPKkUmMES601p+3JAEMvAhdxh+qce0PaiGggf
+         x1wNX9fISQikw==
+From:   KP Singh <kpsingh@kernel.org>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>
+Subject: [PATCH bpf v3 0/3] Fix local storage helper OOPs
+Date:   Tue, 12 Jan 2021 07:55:22 +0000
+Message-Id: <20210112075525.256820-1-kpsingh@kernel.org>
+X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
- definitions=2021-01-12_03:2021-01-11,2021-01-12 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0
- malwarescore=0 bulkscore=0 phishscore=0 spamscore=0 impostorscore=0
- lowpriorityscore=0 priorityscore=1501 clxscore=1034 mlxscore=0
- adultscore=0 mlxlogscore=761 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2009150000 definitions=main-2101120042
-X-FB-Internal: deliver
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Add bpf_patch_call_args() prototype. This function is called from BPF verifier
-and only if CONFIG_BPF_JIT_ALWAYS_ON is not defined. This fixes compiler
-warning about missing prototype in some kernel configurations.
+# v2 -> v3
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 1ea47e01ad6e ("bpf: add support for bpf_call to interpreter")
-Acked-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
----
- include/linux/bpf.h | 3 +++
- 1 file changed, 3 insertions(+)
+* Checking the return value of mkdtemp intead of errno
+* Added Yonghong's Acks
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 07cb5d15e743..ef9309604b3e 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1403,7 +1403,10 @@ static inline void bpf_long_memcpy(void *dst, const void *src, u32 size)
- /* verify correctness of eBPF program */
- int bpf_check(struct bpf_prog **fp, union bpf_attr *attr,
- 	      union bpf_attr __user *uattr);
-+
-+#ifndef CONFIG_BPF_JIT_ALWAYS_ON
- void bpf_patch_call_args(struct bpf_insn *insn, u32 stack_depth);
-+#endif
- 
- struct btf *bpf_get_btf_vmlinux(void);
- 
+It was noted in
+https://lore.kernel.org/bpf/CACYkzJ55X8Tp2q4+EFf2hOM_Lysoim1xJY1YdA3k=T3woMW6mg@mail.gmail.com/T/#t
+that the local storage helpers do not handle null owner pointers
+correctly. This patch fixes the task and inode storage helpers with a
+null check. In order to keep the check explicit, it's kept in the body
+of the helpers similar to sk_storage and also fixes a minor typo in
+bpf_inode_storage.c [I did not add a fixes and reported tag to the
+patch that fixes the typo since it's a non-functional change].
+
+The series also incorporates the example posted by Gilad into the
+selftest. The selftest, without the fix reproduces the oops and the
+subsequent patch fixes it.
+
+KP Singh (3):
+  bpf: update local storage test to check handling of null ptrs
+  bpf: local storage helpers should check nullness of owner ptr passed
+  bpf: Fix typo in bpf_inode_storage.c
+
+ kernel/bpf/bpf_inode_storage.c                |  9 +-
+ kernel/bpf/bpf_task_storage.c                 |  5 +-
+ .../bpf/prog_tests/test_local_storage.c       | 96 +++++--------------
+ .../selftests/bpf/progs/local_storage.c       | 62 ++++++------
+ 4 files changed, 71 insertions(+), 101 deletions(-)
+
 -- 
-2.24.1
+2.30.0.284.gd98b1dd5eaa7-goog
 
