@@ -7,54 +7,54 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
 	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9AC61C433DB
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 14:02:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 33184C43381
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 14:02:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 47A1323122
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 14:02:48 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D879B2311B
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 14:02:49 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727779AbhALOCr (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jan 2021 09:02:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59330 "EHLO
+        id S1728021AbhALOCt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jan 2021 09:02:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727331AbhALOCr (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jan 2021 09:02:47 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 450BEC0617A2
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 06:01:29 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id ga15so3677271ejb.4
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 06:01:29 -0800 (PST)
+        with ESMTP id S1728327AbhALOCt (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jan 2021 09:02:49 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D255DC0617A9
+        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 06:01:32 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id d17so3638686ejy.9
+        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 06:01:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=hpCVH5a6hvC4+S6dhiP+hhLVa4IrOyo2QyAihLIZoi8=;
-        b=ZmOPNrpiH+mVTmTRz5FUC9VHUzKtgI31M0T9yLPHWEPJdDbLm9SvxRbXYVtn6t5zII
-         jpxQU/YaeO2kNXl/wOGTxhTQraBdVFBl4boy+F+TtKZ/pcFzY0Ku4u9b3fCbL4NAcLzQ
-         WKI0zb4eq0QH4+6LfXcx3ohR73VyEWu/cZnyOO1GMIU9d7IM1wm1vTcbCiQrHKSL44zE
-         BGiov228ESMdD93HKT1Gwt+Pm2YOHK4luUDyDNxgie4VwCxz3IqxyZLIZLRR85RsWNll
-         SzdDiYVDZz0F8TUQfUEFA/npi/OMY3EK8hM1mCnBmvfMwJCQDAVc+oA/UKWS1uj5SAeM
-         M0WA==
+        bh=zvv6LYFe9mpH/hRqRunavAEnNPwum4yHEeubUaepqPU=;
+        b=fn2ddKJCzrB+l+1z5m6+nd4SmL9wKXkYV+xVkkUqLTNa4Gz0Bd7PZagGEkM0+Q7TeY
+         t5XSjayvP+lEzr3klD/WCkA+RDf0RXTd+/MLvozm/DsrzqOZeWQVz870uCBMwCTeM8kQ
+         S3RoufZj7egVsb1Bhu8vN25HMOJ4GFFb0IvssDiwCQ/1siQs5bg265M8zhwwRzszMvZ1
+         ysS6R3KpZeaq8yrZROExzfBJKUToRGL+Ylm7U+s53fIfLwspoTw0NmrSQv4o4ddH2eaC
+         JjGRAxMGu/MZNHleKPa+mP/bvCrKRXtFbw6PxiqVp72wgpHE7LFnyCsf6pmmL9Vb1vXW
+         hvNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=hpCVH5a6hvC4+S6dhiP+hhLVa4IrOyo2QyAihLIZoi8=;
-        b=aDw7ZcmyOwYYu+lXAHcIESP4uwVdWB06nu08hZPe5TCxcfx7deZ5V9dYs7GIU43+DH
-         EKavbvXRlX4Pm5Qw1qO4p67oTf3W5asQthA80N0uAhdpEzQOsbgd4ZEI8c/cAJU57gGl
-         S8iKBqVx4uhQp4n0MnQqvOtw2o6UnvNYN2wER1We5frNMk/eg/Mnm4DVHUodMK4jkXQV
-         Kf11Tmv92IGF+NH05T1agA1YaRhQLDpeUxFjlJTz/g+EvmTxg+WixxwkRw8EZZ3Xwxhs
-         8vCDRdG2CbK8dNYNd767m6euLhJ4OruE1+12EMQTMtCZ+S5jzjG5vYlnUon4YAu1FEG3
-         ysSg==
-X-Gm-Message-State: AOAM533btYG8FZbXc3yYE+IHK+RfzmX6oxIxSuRCDAOyIqMI6tXmnmv8
-        FVkI0qRFCEmQ7FCiAO5HyKIgSNptXn4ZKg==
-X-Google-Smtp-Source: ABdhPJxW01iw/VTh34sniz3jK20lfnTtc5wn7b/DerGex1x+RtQO/4s8z0Sly2bg7lsvfKIC0m/RMA==
-X-Received: by 2002:a17:906:440e:: with SMTP id x14mr3310201ejo.77.1610460087614;
-        Tue, 12 Jan 2021 06:01:27 -0800 (PST)
+        bh=zvv6LYFe9mpH/hRqRunavAEnNPwum4yHEeubUaepqPU=;
+        b=iX84cyEdQxOW+A6Kl53tf+HfREnp8nuWNbBHAXLq4EuOhG/SE+21Nxfh9oTZFoXFeu
+         BFwOS+BcZWBpfRLNoNFNFbZ8L8G10OFLI4i3GWjXVzZQIPIVK87aftfQ8LeiGd1zNsV5
+         qd2wXexCF/zOP9lwYTdpce+du4qAx/VvQv616jOWC9OfaQFtyVvdy/HqIc7DoMN9U9mi
+         61j92B9ziy869zo4vhjCMxBNxLzL6/H8iU2NHJvqUYV69JfAXuGdRGX5uIuA9BvKKLQk
+         dMFU3S+NqRm+roGXnc0JvHJu/lyvjTEA2b+clJ9efx9kp4pEo0L4/gbaIctYybundBBk
+         +Hwg==
+X-Gm-Message-State: AOAM531adPOY88QGIGLQ6HozjNZHGPL38BBjZY/Pc2z3eZUO23ibrokg
+        wNniN0/K/Z1b0qa6ttKJ8B8dj33rZotjbw==
+X-Google-Smtp-Source: ABdhPJwHhtArJNQO66nuPMhZ8rDohJ7fWuQZz4+N1PD7Jl5K4O463zt25M/pYaw97ww/zijrHaDCvQ==
+X-Received: by 2002:a17:906:d209:: with SMTP id w9mr3259794ejz.211.1610460091282;
+        Tue, 12 Jan 2021 06:01:31 -0800 (PST)
 Received: from localhost.localdomain ([2001:1715:4e26:a7e0:116c:c27a:3e7f:5eaf])
-        by smtp.gmail.com with ESMTPSA id t19sm1227846ejc.62.2021.01.12.06.01.26
+        by smtp.gmail.com with ESMTPSA id t19sm1227846ejc.62.2021.01.12.06.01.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jan 2021 06:01:27 -0800 (PST)
+        Tue, 12 Jan 2021 06:01:30 -0800 (PST)
 From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
 To:     bpf@vger.kernel.org
 Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
@@ -62,9 +62,9 @@ Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
         john.fastabend@gmail.com, kpsingh@kernel.org,
         linux-kselftest@vger.kernel.org,
         Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: [PATCH bpf-next 2/5] selftests/bpf: Fix out-of-tree build
-Date:   Tue, 12 Jan 2021 14:59:57 +0100
-Message-Id: <20210112135959.649075-3-jean-philippe@linaro.org>
+Subject: [PATCH bpf-next 5/5] selftests/bpf: Install btf_dump test cases
+Date:   Tue, 12 Jan 2021 15:00:00 +0100
+Message-Id: <20210112135959.649075-6-jean-philippe@linaro.org>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20210112135959.649075-1-jean-philippe@linaro.org>
 References: <20210112135959.649075-1-jean-philippe@linaro.org>
@@ -74,28 +74,39 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When building out-of-tree, the .skel.h files are generated into the
-$(OUTPUT) directory, rather than $(CURDIR). Add $(OUTPUT) to the include
-paths.
+The btf_dump test cannot access the original source files for comparison
+when running the selftests out of tree, causing several failures:
+
+awk: btf_dump_test_case_syntax.c: No such file or directory
+...
+
+Add those files to $(TEST_FILES) to have "make install" pick them up.
 
 Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 ---
- tools/testing/selftests/bpf/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/Makefile | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 1d85565883ea..3ff7e79cc497 100644
+index bffb4ad59a3d..fb8cddc410c0 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -25,7 +25,7 @@ BPF_GCC		?= $(shell command -v bpf-gcc;)
- SAN_CFLAGS	?=
- CFLAGS += -g -rdynamic -Wall -O2 $(GENFLAGS) $(SAN_CFLAGS)		\
- 	  -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)		\
--	  -I$(TOOLSINCDIR) -I$(APIDIR)					\
-+	  -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)			\
- 	  -Dbpf_prog_load=bpf_prog_test_load				\
- 	  -Dbpf_load_program=bpf_test_load_program
- LDLIBS += -lcap -lelf -lz -lrt -lpthread
+@@ -46,7 +46,14 @@ endif
+ 
+ TEST_GEN_FILES = test_lwt_ip_encap.o \
+ 	test_tc_edt.o
+-TEST_FILES = xsk_prereqs.sh
++TEST_FILES = xsk_prereqs.sh \
++	progs/btf_dump_test_case_syntax.c \
++	progs/btf_dump_test_case_ordering.c \
++	progs/btf_dump_test_case_padding.c \
++	progs/btf_dump_test_case_packing.c \
++	progs/btf_dump_test_case_bitfields.c \
++	progs/btf_dump_test_case_multidim.c \
++	progs/btf_dump_test_case_namespacing.c
+ 
+ # Order correspond to 'make run_tests' order
+ TEST_PROGS := test_kmod.sh \
 -- 
 2.30.0
 
