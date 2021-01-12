@@ -2,100 +2,185 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BA2F9C433E9
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 13:16:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6379C43381
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 13:17:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8022D22CAF
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 13:16:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A7D7A22571
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 13:17:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726387AbhALNQC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jan 2021 08:16:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36292 "EHLO mail.kernel.org"
+        id S1726411AbhALNQx (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jan 2021 08:16:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53818 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730094AbhALNP1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jan 2021 08:15:27 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D775C22571
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 13:14:46 +0000 (UTC)
+        id S2390252AbhALM5a (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jan 2021 07:57:30 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 115952311D;
+        Tue, 12 Jan 2021 12:56:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610457287;
-        bh=It8hwsp3kwp1MvkNdVmaMkspUPQDFXCoPYoDzNp0vNM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=o4GysrNUvsz6jY7oQOolIbtbyYa48PoscnI2HyAHnhrUQYJT5vZuOsMQWMC/wKIJT
-         e3I2japtQOKmAckkhR5xWb+gmVB3i2ENbhesUp4y4ako8odS8ySND1cRorSaIF2mZT
-         C2C8M100rRnZj8w7As/XK0Sg10+OEyMdmUqt7QYz7b2RaaUuHUonAl9uMSnr6jT0gb
-         vyF2sh4kc+9FYiWNFGJWrhqcX06swnRiJTySHcIWXRkdJbXR/86w6ipzzuxSUf0CvT
-         +Wn6abfsgjIYYXbHZ9IBKrYJHIFyseY1QMGuoTRyPsofWCbD1id2x663Y2/cAMR0ar
-         ZXDwmqhGsmxcQ==
-Received: by mail-lf1-f42.google.com with SMTP id b26so3273410lff.9
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 05:14:46 -0800 (PST)
-X-Gm-Message-State: AOAM531LXLp1fVUTa8GXTxWYx8P/71E5pADM0Lxw3vRqQfRfBOvNxz4P
-        IjN6OCV2NqGD7h9g4zEumku2sR4ivbhv1AEJSnkN3Q==
-X-Google-Smtp-Source: ABdhPJzTTOcnEMQSjDUK8UaKaos3oSZEHBUgqUvMzQpvWIx8CjosYAowjfGBlIlg19oKaPy/y5ODjBk6R+kSNN1Nops=
-X-Received: by 2002:a19:810:: with SMTP id 16mr2237205lfi.233.1610457285057;
- Tue, 12 Jan 2021 05:14:45 -0800 (PST)
+        s=k20201202; t=1610456184;
+        bh=95LXqHmt/884FgYQTDIjCFnE0wpPj8HcF/6tCVxGgkI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ElMI112PpGZh0r1Z2RyLcxRzxNBx5cnNG0qPae7QL2COk8cuRM7f8Qr/Jg021d4Sb
+         V1eMTAuXY7EA+ggXO8RGge8LDuJL7KKNqjxoNUlP0Mv+qjZ95JUHR4Oj7zTAQc3fsb
+         lkTVBRz7LYZWpoj5agjLNd7WIYJhoQxjA736E6FffXIUZ+yJOIBav36mIpRDu84HN7
+         dXpqwFeX8e/xtA2Vs+rlbyYaiUyNLsfMXOo9QVFibLBOB5/wpaRyy9XL4CncuvBJVb
+         TQ4rQ2nYq/FdPuoXhjYPm6wPxmn8wobOVZe4P9iSjrfdU6ajvC1LPBnGDNUTYPtgMO
+         Tp2vnMGi2JrFw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Po-Hsu Lin <po-hsu.lin@canonical.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 37/51] selftests: fix the return value for UDP GRO test
+Date:   Tue, 12 Jan 2021 07:55:19 -0500
+Message-Id: <20210112125534.70280-37-sashal@kernel.org>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210112125534.70280-1-sashal@kernel.org>
+References: <20210112125534.70280-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20210112123913.2016804-1-jackmanb@google.com>
-In-Reply-To: <20210112123913.2016804-1-jackmanb@google.com>
-From:   KP Singh <kpsingh@kernel.org>
-Date:   Tue, 12 Jan 2021 14:14:33 +0100
-X-Gmail-Original-Message-ID: <CACYkzJ5v6ANJnB0qk7hdEFf+44RH02G22+JFi0OUoJiFLe-RMA@mail.gmail.com>
-Message-ID: <CACYkzJ5v6ANJnB0qk7hdEFf+44RH02G22+JFi0OUoJiFLe-RMA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Fix a verifier message for alloc size
- helper arg
-To:     Brendan Jackman <jackmanb@google.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Florent Revest <revest@chromium.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 1:39 PM Brendan Jackman <jackmanb@google.com> wrote:
->
-> The error message here is misleading, the argument will be rejected
-> unless it is a known constant.
->
-> Signed-off-by: Brendan Jackman <jackmanb@google.com>
-> ---
->  kernel/bpf/verifier.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 17270b8404f1..5534e667bdb1 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -4319,7 +4319,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
->                         err = mark_chain_precision(env, regno);
->         } else if (arg_type_is_alloc_size(arg_type)) {
->                 if (!tnum_is_const(reg->var_off)) {
-> -                       verbose(env, "R%d unbounded size, use 'var &= const' or 'if (var < const)'\n",
+From: Po-Hsu Lin <po-hsu.lin@canonical.com>
 
-Can you check if:
+[ Upstream commit 3503ee6c0bec5f173d606359e6384a5ef85492fb ]
 
-int var = 1000;
-var += 1;
+The udpgro.sh will always return 0 (unless the bpf selftest was not
+build first) even if there are some failed sub test-cases.
 
-if (var < 2000)
-   // call helper
+Therefore the kselftest framework will report this case is OK.
 
-and then using var in the argument works? If so, the existing error
-message would be correct.
+Check and return the exit status of each test to make it easier to
+spot real failures.
 
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/net/udpgro.sh | 34 +++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-> +                       verbose(env, "R%d is not a known constant'\n",
->                                 regno);
->                         return -EACCES;
->                 }
->
-> base-commit: e22d7f05e445165e58feddb4e40cc9c0f94453bc
-> --
-> 2.30.0.284.gd98b1dd5eaa7-goog
->
+diff --git a/tools/testing/selftests/net/udpgro.sh b/tools/testing/selftests/net/udpgro.sh
+index ac2a30be9b325..f8a19f548ae9d 100755
+--- a/tools/testing/selftests/net/udpgro.sh
++++ b/tools/testing/selftests/net/udpgro.sh
+@@ -5,6 +5,14 @@
+ 
+ readonly PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
+ 
++# set global exit status, but never reset nonzero one.
++check_err()
++{
++	if [ $ret -eq 0 ]; then
++		ret=$1
++	fi
++}
++
+ cleanup() {
+ 	local -r jobs="$(jobs -p)"
+ 	local -r ns="$(ip netns list|grep $PEER_NS)"
+@@ -44,7 +52,9 @@ run_one() {
+ 	# Hack: let bg programs complete the startup
+ 	sleep 0.1
+ 	./udpgso_bench_tx ${tx_args}
++	ret=$?
+ 	wait $(jobs -p)
++	return $ret
+ }
+ 
+ run_test() {
+@@ -87,8 +97,10 @@ run_one_nat() {
+ 
+ 	sleep 0.1
+ 	./udpgso_bench_tx ${tx_args}
++	ret=$?
+ 	kill -INT $pid
+ 	wait $(jobs -p)
++	return $ret
+ }
+ 
+ run_one_2sock() {
+@@ -110,7 +122,9 @@ run_one_2sock() {
+ 	sleep 0.1
+ 	# first UDP GSO socket should be closed at this point
+ 	./udpgso_bench_tx ${tx_args}
++	ret=$?
+ 	wait $(jobs -p)
++	return $ret
+ }
+ 
+ run_nat_test() {
+@@ -131,36 +145,54 @@ run_all() {
+ 	local -r core_args="-l 4"
+ 	local -r ipv4_args="${core_args} -4 -D 192.168.1.1"
+ 	local -r ipv6_args="${core_args} -6 -D 2001:db8::1"
++	ret=0
+ 
+ 	echo "ipv4"
+ 	run_test "no GRO" "${ipv4_args} -M 10 -s 1400" "-4 -n 10 -l 1400"
++	check_err $?
+ 
+ 	# explicitly check we are not receiving UDP_SEGMENT cmsg (-S -1)
+ 	# when GRO does not take place
+ 	run_test "no GRO chk cmsg" "${ipv4_args} -M 10 -s 1400" "-4 -n 10 -l 1400 -S -1"
++	check_err $?
+ 
+ 	# the GSO packets are aggregated because:
+ 	# * veth schedule napi after each xmit
+ 	# * segmentation happens in BH context, veth napi poll is delayed after
+ 	#   the transmission of the last segment
+ 	run_test "GRO" "${ipv4_args} -M 1 -s 14720 -S 0 " "-4 -n 1 -l 14720"
++	check_err $?
+ 	run_test "GRO chk cmsg" "${ipv4_args} -M 1 -s 14720 -S 0 " "-4 -n 1 -l 14720 -S 1472"
++	check_err $?
+ 	run_test "GRO with custom segment size" "${ipv4_args} -M 1 -s 14720 -S 500 " "-4 -n 1 -l 14720"
++	check_err $?
+ 	run_test "GRO with custom segment size cmsg" "${ipv4_args} -M 1 -s 14720 -S 500 " "-4 -n 1 -l 14720 -S 500"
++	check_err $?
+ 
+ 	run_nat_test "bad GRO lookup" "${ipv4_args} -M 1 -s 14720 -S 0" "-n 10 -l 1472"
++	check_err $?
+ 	run_2sock_test "multiple GRO socks" "${ipv4_args} -M 1 -s 14720 -S 0 " "-4 -n 1 -l 14720 -S 1472"
++	check_err $?
+ 
+ 	echo "ipv6"
+ 	run_test "no GRO" "${ipv6_args} -M 10 -s 1400" "-n 10 -l 1400"
++	check_err $?
+ 	run_test "no GRO chk cmsg" "${ipv6_args} -M 10 -s 1400" "-n 10 -l 1400 -S -1"
++	check_err $?
+ 	run_test "GRO" "${ipv6_args} -M 1 -s 14520 -S 0" "-n 1 -l 14520"
++	check_err $?
+ 	run_test "GRO chk cmsg" "${ipv6_args} -M 1 -s 14520 -S 0" "-n 1 -l 14520 -S 1452"
++	check_err $?
+ 	run_test "GRO with custom segment size" "${ipv6_args} -M 1 -s 14520 -S 500" "-n 1 -l 14520"
++	check_err $?
+ 	run_test "GRO with custom segment size cmsg" "${ipv6_args} -M 1 -s 14520 -S 500" "-n 1 -l 14520 -S 500"
++	check_err $?
+ 
+ 	run_nat_test "bad GRO lookup" "${ipv6_args} -M 1 -s 14520 -S 0" "-n 10 -l 1452"
++	check_err $?
+ 	run_2sock_test "multiple GRO socks" "${ipv6_args} -M 1 -s 14520 -S 0 " "-n 1 -l 14520 -S 1452"
++	check_err $?
++	return $ret
+ }
+ 
+ if [ ! -f ../bpf/xdp_dummy.o ]; then
+@@ -180,3 +212,5 @@ elif [[ $1 == "__subprocess_2sock" ]]; then
+ 	shift
+ 	run_one_2sock $@
+ fi
++
++exit $?
+-- 
+2.27.0
+
