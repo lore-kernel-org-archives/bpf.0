@@ -2,75 +2,107 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 30AC6C43381
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4F167C4332B
 	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id DEBB323123
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:40 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 13E4523125
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 21:43:41 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436947AbhALVhX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jan 2021 16:37:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38182 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437043AbhALUus (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jan 2021 15:50:48 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id D4BB52311F;
-        Tue, 12 Jan 2021 20:50:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610484607;
-        bh=0YEmzDOMnvTqrqLfgLY4y0hKwNvcY5DzN9rDYiXnhmg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=tCBs8jVbnPeNZ5P73ToDiO+R425PUBJootf90ftRosrjXt2IK6JK39y83SlU6Qhkn
-         IWA1sNzXqh42nGrEdlv+a7bOI3TEAgzRw2awG0pg4F3kOkVgSDsBdb2CBEUwhxfz5v
-         fi4U0jFxJ0WFw2KI2RLrIlHSUSnnZvXIGhM2MMhgoP9fTPETLU4xa9USfEnxtnmh2a
-         XOK0KMKLZ7CF0bfTLmbvr5N5yyDt9F2N8y96wH8sC8EVmOrIzXGDMvxvskd7Pvc0CL
-         psKQD8rLuB1NpCv/3nrGZEKFWBjFFZ5IpURfE1AqDFrDLb7jL5mwZVWwn2sapcdrwP
-         L/HZJC2DvAZ6Q==
-Content-Type: text/plain; charset="utf-8"
+        id S2438099AbhALVhY (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jan 2021 16:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36414 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437084AbhALU6L (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jan 2021 15:58:11 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF81C061786;
+        Tue, 12 Jan 2021 12:57:30 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id j17so30432ybt.9;
+        Tue, 12 Jan 2021 12:57:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Q9logYdf98bjtsW9lQM4O5mQ6GbxNVRI4NvrhakrEmY=;
+        b=ETo1OViX+SoZpMJbg3lBnX7nVUxUZmzova4dURKKaX90uQHsOOKIQIgjUhQ1G7CTSN
+         JtzTWAyzWjIADrUTJ0o97r0VAhLdQxSWPx2LTODB/9yeaInbj7spebYiI8Em+CDmt8gc
+         o6B+gjXnR6mlhMNhm05GxhWI7NbtYE7Siy/IaGWpHBenk+jPMXyePjzfA9iei98+UKTE
+         WamHKBzeubixqC5GF9IC0HvQ6Eq2D97DTTVXlM91Fb6ufA24H7WQWdnPROcmKEvp0uHG
+         79j4qv3jQwEkZ7zscIs9EaimbwYeWrgpgI38fXbwZs/vStHVNAeVov+VNv5y2pJuYKyr
+         JiaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Q9logYdf98bjtsW9lQM4O5mQ6GbxNVRI4NvrhakrEmY=;
+        b=F1G5Augl9sSLzLG0TNmJYOZ4jPNXWSDbLGWYRj0sAn7kf/ZO9aaSdJEgCRUDzvqO8O
+         tgTjSmdNSNn5CTuDYPqKExA9hmnIMalCbL/Hb9XjqoRDJONQokMa9uUgtpglw3tc1yIR
+         y/rV08TIiUnjing1fclfAI6qlimd7FGsFpZR+Kj0irbli6+EMiPsW2W45JGQLDlKkTCY
+         +vVPzZx3AKK2riXH9WlQDrn1qiVs6PnQZ7ihyjfgWU0lW08IVnMRRB8r0xwocYWmfA/L
+         x7iSoF4/gfjGncKbjhBHlQKfcU/NfQN8nYwkWr+EPbZZejVLfkD9a3/mEMPVTcMmgioS
+         Gy2A==
+X-Gm-Message-State: AOAM533pLOS4D0dwrqVopZXMFt0ZmG1gvQQ54EUkyuCoZ2JvnsNRn9ft
+        500exk3qelavQq0BnzFds00mtvTmmkAUqBYBe+Y=
+X-Google-Smtp-Source: ABdhPJwaXEgY+gC/606R3VYHq6L02XOKyxG6y+y8a+csk6cdBdqzJY98+u/F9Jzqs9tKiSHfhzRyKXX5RLrwBQ9C8pU=
+X-Received: by 2002:a25:9882:: with SMTP id l2mr1755488ybo.425.1610485050045;
+ Tue, 12 Jan 2021 12:57:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next] bpf: Fix a verifier message for alloc size helper
- arg
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161048460782.12742.11835000205533148789.git-patchwork-notify@kernel.org>
-Date:   Tue, 12 Jan 2021 20:50:07 +0000
-References: <20210112123913.2016804-1-jackmanb@google.com>
-In-Reply-To: <20210112123913.2016804-1-jackmanb@google.com>
-To:     Brendan Jackman <jackmanb@google.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii.nakryiko@gmail.com, kpsingh@chromium.org,
-        revest@chromium.org, linux-kernel@vger.kernel.org
+References: <20210112135959.649075-1-jean-philippe@linaro.org> <20210112135959.649075-3-jean-philippe@linaro.org>
+In-Reply-To: <20210112135959.649075-3-jean-philippe@linaro.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 12 Jan 2021 12:57:19 -0800
+Message-ID: <CAEf4BzbFy_8+JLRaM1cg=MbO+NsQWE__TSs7xmiaX8AkAV16CQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/5] selftests/bpf: Fix out-of-tree build
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>
+Cc:     bpf <bpf@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (refs/heads/master):
-
-On Tue, 12 Jan 2021 12:39:13 +0000 you wrote:
-> The error message here is misleading, the argument will be rejected
-> unless it is a known constant.
-> 
-> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+On Tue, Jan 12, 2021 at 6:01 AM Jean-Philippe Brucker
+<jean-philippe@linaro.org> wrote:
+>
+> When building out-of-tree, the .skel.h files are generated into the
+> $(OUTPUT) directory, rather than $(CURDIR). Add $(OUTPUT) to the include
+> paths.
+>
+> Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
 > ---
->  kernel/bpf/verifier.c | 2 +-
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+
+>  tools/testing/selftests/bpf/Makefile | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next] bpf: Fix a verifier message for alloc size helper arg
-    https://git.kernel.org/bpf/bpf-next/c/28a8add64181
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+>
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 1d85565883ea..3ff7e79cc497 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -25,7 +25,7 @@ BPF_GCC               ?= $(shell command -v bpf-gcc;)
+>  SAN_CFLAGS     ?=
+>  CFLAGS += -g -rdynamic -Wall -O2 $(GENFLAGS) $(SAN_CFLAGS)             \
+>           -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)          \
+> -         -I$(TOOLSINCDIR) -I$(APIDIR)                                  \
+> +         -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)                      \
+>           -Dbpf_prog_load=bpf_prog_test_load                            \
+>           -Dbpf_load_program=bpf_test_load_program
+>  LDLIBS += -lcap -lelf -lz -lrt -lpthread
+> --
+> 2.30.0
+>
