@@ -2,113 +2,138 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41079C4332D
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:47:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6B307C4332B
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:49:30 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 1F26523136
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:47:51 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 485272311D
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 19:49:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406773AbhALTre (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jan 2021 14:47:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406756AbhALTre (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jan 2021 14:47:34 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1E62C061795;
-        Tue, 12 Jan 2021 11:46:53 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id o144so3301635ybc.0;
-        Tue, 12 Jan 2021 11:46:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=45DA4vH/D9c7gYWc+sPX522gNKfwVRgZeQ5tT9hcRQo=;
-        b=iSfEpB6nullBDGHMzkUIL4Mg1xbmNjQ+3ukI2cEAZgRJjEWC2U1lmlzzctiayjmS5I
-         FvSdX/eWz+XH/1k4vE7/wm6LOX08RRxWgLhiyZ3ZdMvvyTjnJAol3p4bYvgWvr3bodaQ
-         5wFEoMgjHQzdLrgbrTp8BFxMxqnXrdxYRW3K+TbjWKaB8JIk0ca3JiueznIU3kJCJ3GU
-         fwHwXrth5BDAT3Rnbpv8g43efKESLp91jk6BuEd9kWbye/XgsI+2hNTmd4RGzOovquOh
-         HmzFHEfFdewWeSFzz+C8oK6OPjMdLL2940ve6EgZ6F3w8NWMhgMcKYXREJ+cY6q/JT+N
-         xaXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=45DA4vH/D9c7gYWc+sPX522gNKfwVRgZeQ5tT9hcRQo=;
-        b=fH4kcu1TSQKcfsEhzUTMMS5bPTZdag4Xr+MZisuLfprp7Eh8Ig/inR/FfO78sOAwRZ
-         MDRiqK/LWl4WtC6tiEjdYw2WoCsWpG95nJPglnsK09h7M4P0xdK7ymAPg7ZR5V0YEnYw
-         QVvahDBCP4vqjiO6ln2O3tyxAA8ktB5L5CHZ4NwRvLmhnArwJ3OH4vByyJNNjdaDEhMU
-         WIDNb9KAPCxxspdz0qN7CX9VHAu0CfbKaj0+m/QdDhhskbhwzE18bsf7mYsJfC3vW8ZK
-         k5oUVMefjU/g9ZPEr90mu6hvwE9DDM75ZLDOHRZDTqvYEIVMBg3cTX/oYToDudIr63IT
-         LZnA==
-X-Gm-Message-State: AOAM531utvPWG5cG32FqgtMypeT+usC0b2FJGEGEiRrzhAopifojtViO
-        TEb2pohlqfe1HrZAikzqCw1VlV1ktKaX/wAYU48=
-X-Google-Smtp-Source: ABdhPJyg6ovhqg+xDQhRKNU5YXSFgATRKfoACZupNoxS39SiRB6XL+BC/HaI5L5kshdU8ViPPfX5WV4EE+WX7PDFawU=
-X-Received: by 2002:a25:9882:: with SMTP id l2mr1400221ybo.425.1610480812991;
- Tue, 12 Jan 2021 11:46:52 -0800 (PST)
+        id S2393150AbhALTtC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jan 2021 14:49:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:50088 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2393160AbhALTtC (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 12 Jan 2021 14:49:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1610480855;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TS7hPVbCDF9VxQYBBhd7spkgecLYeTiCw/jD7UaMlQk=;
+        b=h2cMn+azXUsJLZjmZfanjCurw+flqZYaL2od3HEKQGigBXHIkTp7OMSlqyaNp4KpjibIFO
+        mLd0OtnO22JCXjNZSKcasddn6v3U/EnR/V9PXgIaiGy/nAkTOBcQd4WHkOqxGeKXG2JpuH
+        NUIvNDEN16N+mQOAOFDzwVu9Ef7NmF0=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-582-jRxm4bjfPki1XkhP-Kf4cw-1; Tue, 12 Jan 2021 14:47:29 -0500
+X-MC-Unique: jRxm4bjfPki1XkhP-Kf4cw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 497801006C8D;
+        Tue, 12 Jan 2021 19:47:28 +0000 (UTC)
+Received: from krava (unknown [10.40.194.156])
+        by smtp.corp.redhat.com (Postfix) with SMTP id C0C90101E810;
+        Tue, 12 Jan 2021 19:47:25 +0000 (UTC)
+Date:   Tue, 12 Jan 2021 20:47:24 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        dwarves@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>,
+        Tom Stellard <tstellar@redhat.com>
+Subject: Re: [PATCH] btf_encoder: Add extra checks for symbol names
+Message-ID: <20210112194724.GB1291051@krava>
+References: <20210112184004.1302879-1-jolsa@kernel.org>
+ <CAEf4BzZc0-csgmOP=eAvSP5uVYkKiYROAWtp8hwJcYA1awhVJw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210112091403.10458-1-gilad.reti@gmail.com>
-In-Reply-To: <20210112091403.10458-1-gilad.reti@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 12 Jan 2021 11:46:42 -0800
-Message-ID: <CAEf4BzY2ezxxeUbhMy-kw-zRv974JG2NAQ+2g5_rtVSn8EmNcw@mail.gmail.com>
-Subject: Re: [PATCH bpf 1/2] bpf: support PTR_TO_MEM{,_OR_NULL} register spilling
-To:     Gilad Reti <gilad.reti@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZc0-csgmOP=eAvSP5uVYkKiYROAWtp8hwJcYA1awhVJw@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 1:14 AM Gilad Reti <gilad.reti@gmail.com> wrote:
->
-> Add support for pointer to mem register spilling, to allow the verifier
-> to track pointer to valid memory addresses. Such pointers are returned
-> for example by a successful call of the bpf_ringbuf_reserve helper.
->
-> This patch was suggested as a solution by Yonghong Song.
->
-> The patch was partially contibuted by CyberArk Software, Inc.
->
-> Fixes: 457f44363a88 ("bpf: Implement BPF ring buffer and verifier
-> support for it")
+On Tue, Jan 12, 2021 at 11:20:44AM -0800, Andrii Nakryiko wrote:
+> On Tue, Jan 12, 2021 at 10:43 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > When processing kernel image build by clang we can
+> > find some functions without the name, which causes
+> > pahole to segfault.
+> >
+> > Adding extra checks to make sure we always have
+> > function's name defined before using it.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  btf_encoder.c | 8 ++++++--
+> >  1 file changed, 6 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/btf_encoder.c b/btf_encoder.c
+> > index 333973054b61..17f7a14f2ef0 100644
+> > --- a/btf_encoder.c
+> > +++ b/btf_encoder.c
+> > @@ -72,6 +72,8 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
+> >
+> >         if (elf_sym__type(sym) != STT_FUNC)
+> >                 return 0;
+> > +       if (!elf_sym__name(sym, btfe->symtab))
+> > +               return 0;
+> 
+> elf_sym__name() is called below again, so might be better to just use
+> local variable to store result?
 
-Surprised no one mentioned this yet. Fixes tag should always be on a
-single unwrapped line, however long it is, please fix.
+right, will add
 
+> 
+> >
+> >         if (functions_cnt == functions_alloc) {
+> >                 functions_alloc = max(1000, functions_alloc * 3 / 2);
+> > @@ -730,9 +732,11 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
+> >                 if (!has_arg_names(cu, &fn->proto))
+> >                         continue;
+> >                 if (functions_cnt) {
+> > -                       struct elf_function *func;
+> > +                       const char *name = function__name(fn, cu);
+> > +                       struct elf_function *func = NULL;
+> >
+> > -                       func = find_function(btfe, function__name(fn, cu));
+> > +                       if (name)
+> > +                               func = find_function(btfe, name);
+> 
+> isn't this a more convoluted way of writing:
+> 
+> name = function__name(fn, cu);
+> if (!name)
+>     continue;
+> 
+> func = find_function(btfe, name);
+> if (!func || func->generated)
+>     continue
+> 
+> ?
 
-> Signed-off-by: Gilad Reti <gilad.reti@gmail.com>
-> ---
->  kernel/bpf/verifier.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 17270b8404f1..36af69fac591 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -2217,6 +2217,8 @@ static bool is_spillable_regtype(enum bpf_reg_type type)
->         case PTR_TO_RDWR_BUF:
->         case PTR_TO_RDWR_BUF_OR_NULL:
->         case PTR_TO_PERCPU_BTF_ID:
-> +       case PTR_TO_MEM:
-> +       case PTR_TO_MEM_OR_NULL:
->                 return true;
->         default:
->                 return false;
-> --
-> 2.27.0
->
+convoluted is my middle name ;-) I'll change it
+
+thanks,
+jirka
+
+> 
+> >                         if (!func || func->generated)
+> >                                 continue;
+> >                         func->generated = true;
+> > --
+> > 2.26.2
+> >
+> 
+
