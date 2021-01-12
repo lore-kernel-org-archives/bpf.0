@@ -2,127 +2,101 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.0 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-6.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2DBC0C433DB
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 16:10:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CECC1C433DB
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 16:18:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E1C91221FD
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 16:10:22 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A146D23117
+	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 16:18:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731029AbhALQKR (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jan 2021 11:10:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:45126 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731283AbhALQKR (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 12 Jan 2021 11:10:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1610467730;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y6sZ4cxUNRk4fPFiMnVEXrm1dvmSU2hAiRoio1vVYTU=;
-        b=TC88twoxlp32sNXcVHz0/coJF5r8iezmcM4RvI/Ho9LR6rNjwZwdpADY9yL7VACT6dO/1q
-        zupIre+JYbl96PfuUdfqRbLD6p3zazr/ri59q8odH+2MEqNOsj9PKj5EelFqzb0Fi+gqyS
-        Rcr6NpQySZFXmu/xPU6n9p9YzMdrJik=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-524-a80QEb5NO2eKemQamCNaGQ-1; Tue, 12 Jan 2021 11:08:48 -0500
-X-MC-Unique: a80QEb5NO2eKemQamCNaGQ-1
-Received: by mail-wm1-f72.google.com with SMTP id g198so550083wme.7
-        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 08:08:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Y6sZ4cxUNRk4fPFiMnVEXrm1dvmSU2hAiRoio1vVYTU=;
-        b=kuA6EE29OkOaQx1urchTxMb/zswpKpGtHdUeaJFwT4JKgPf9CjEJaP+TInlR6eA/se
-         4AV+HE2Ri5h3m33WOz//8/336gcfv01FuPwALPyb4Rh/TmkORoWGbqN92iC8b9VpyICf
-         CEurNSXxMLplwhxrg77w3Zuj5sN/+Ze5ZJIgNwuUM0LZvhtUz6ZL11L+RQzTfmIrZUGW
-         OzhytjqASEp3/vxGxOJMAHBgYyPZu+jGOVWoB53kjelkPIcU9b7vNrEfU+YfbuJ86lmc
-         CmO+fkRW+mSfCpoyuUtItmJLC+f76swnm1a+ZGY4YZBdDbk8nnpjGQOia0ysn4Sou+uP
-         FCKQ==
-X-Gm-Message-State: AOAM531YqGumvMnLCfZEjKp657JqIJnb9E6WIT0MWP+Xh5QijBjmXDUH
-        SCibBBF6NAuTEUSgrPeRXDINarFMTGy39sEGgdUIUnHgYv4pXMrt3+lCMXnbMXA/q+T18tsL0mF
-        PvP7yAmkZ9/JYRYOWHG3QH/UQdg2m4TwACTbGQjgTD9U2MZxpRoAqVeYkFOh3lkEg5jNuMsKzO+
-        U=
-X-Received: by 2002:a1c:1c1:: with SMTP id 184mr22660wmb.112.1610467727267;
-        Tue, 12 Jan 2021 08:08:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwQnuo/64cyXR+hn5hkSXeHj8seVug91ac3zN5RDfXCqjV5E/EmalC6WVzTcXKV6L0CaoizHw==
-X-Received: by 2002:a1c:1c1:: with SMTP id 184mr22642wmb.112.1610467727086;
-        Tue, 12 Jan 2021 08:08:47 -0800 (PST)
-Received: from localhost ([151.66.42.92])
-        by smtp.gmail.com with ESMTPSA id s133sm4625715wmf.38.2021.01.12.08.08.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Jan 2021 08:08:45 -0800 (PST)
-Date:   Tue, 12 Jan 2021 17:08:42 +0100
-From:   Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
-To:     bpf@vger.kernel.org
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, brouer@redhat.com,
-        toshiaki.makita1@gmail.com
-Subject: Re: [PATCH bpf-next 0/2] add xdp_build_skb_from_frame utility routine
-Message-ID: <20210112160842.GC2555@lore-desk>
-References: <cover.1608142960.git.lorenzo@kernel.org>
+        id S2406519AbhALQSV (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jan 2021 11:18:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53588 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2406507AbhALQSU (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jan 2021 11:18:20 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C34722227
+        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 16:17:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1610468259;
+        bh=CoI1g52qNIryGpFWepCTL4prXOBxmbo4WiGrzxRBQlA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=riDcjlmtFxpw6dJpiTauWla3e5tmE5ZLPy/uhFHHdmwRyDD4GouIhGi0lazufyY5F
+         vcG67Shk0sM/P7Kk8KMh3lWRyI44rkBumbDwSMjtpj2fG8acx8X0v7p0I+zrHdj2so
+         aeKSgrA6N5nKYOxPK3Gl2kTJbH11GynfntH0a1uk+dHVjjhtfRC9M27HXZ9OwgGyE1
+         XeftltBadOmDxsnw4jX3m4gObDGU7WC0IwRz5QCrQUsI5CmSRS9QP1bcPjqc2bvYD3
+         QnJES8TMtyjb5lenNU9r8dVCfjDE/4xSHcEL+9nw1lWmbdcUSLfsT9n9ibfYm+lXf+
+         ZyJhjBk/VzynA==
+Received: by mail-lf1-f41.google.com with SMTP id b26so4191051lff.9
+        for <bpf@vger.kernel.org>; Tue, 12 Jan 2021 08:17:39 -0800 (PST)
+X-Gm-Message-State: AOAM533GKuFD+tz05c2TckiPZj9/VQ3Ysff+9zMQSnglGZGtu0f/fbiP
+        2blvbGm6WtMvtKFnSBDGAJHRB7w0TqasuLx7lR0pkA==
+X-Google-Smtp-Source: ABdhPJyphcIptdvuiusWElNIOsd2UVvUfETzlw5D23qNpR/REKCWs64wDJXdXhm1+cIiNbm+DcFAY8IGibS/or6YFBQ=
+X-Received: by 2002:a19:cbd8:: with SMTP id b207mr2542971lfg.550.1610468257650;
+ Tue, 12 Jan 2021 08:17:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="FsscpQKzF/jJk6ya"
-Content-Disposition: inline
-In-Reply-To: <cover.1608142960.git.lorenzo@kernel.org>
+References: <20210112091545.10535-1-gilad.reti@gmail.com> <CACYkzJ69serkHRymzDEAcQ-_KAdHA+RxP4qpAwzGmppWUxYeQQ@mail.gmail.com>
+ <CANaYP3G_39cWx_L5Xs3tf1k4Vj9JSHcsr+qzNQN-dcY3qvT8Yg@mail.gmail.com> <60034a79-573f-125c-76b0-17e04941a155@iogearbox.net>
+In-Reply-To: <60034a79-573f-125c-76b0-17e04941a155@iogearbox.net>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Tue, 12 Jan 2021 17:17:26 +0100
+X-Gmail-Original-Message-ID: <CACYkzJ7dK62zbn_z0S=-Xps1=DCEcd1FPYFon-BUeha=N5KnJQ@mail.gmail.com>
+Message-ID: <CACYkzJ7dK62zbn_z0S=-Xps1=DCEcd1FPYFon-BUeha=N5KnJQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftests/bpf: add verifier test for PTR_TO_MEM spill
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Gilad Reti <gilad.reti@gmail.com>, bpf <bpf@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        linux-kselftest@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+On Tue, Jan 12, 2021 at 4:43 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
+>
+> On 1/12/21 4:35 PM, Gilad Reti wrote:
+> > On Tue, Jan 12, 2021 at 4:56 PM KP Singh <kpsingh@kernel.org> wrote:
+> >> On Tue, Jan 12, 2021 at 10:16 AM Gilad Reti <gilad.reti@gmail.com> wrote:
+> >>>
+> >>> Add test to check that the verifier is able to recognize spilling of
+> >>> PTR_TO_MEM registers.
+> >>
+> >> It would be nice to have some explanation of what the test does to
+> >> recognize the spilling of the PTR_TO_MEM registers in the commit
+> >> log as well.
+> >>
+> >> Would it be possible to augment an existing test_progs
+> >> program like tools/testing/selftests/bpf/progs/test_ringbuf.c to test
+> >> this functionality?
+>
+> How would you guarantee that LLVM generates the spill/fill, via inline asm?
 
---FsscpQKzF/jJk6ya
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yeah, I guess there is no sure-shot way to do it and, adding inline asm would
+just be doing the same thing as this verifier test. You can ignore me
+on this one :)
 
-> Introduce __xdp_build_skb_from_frame and xdp_build_skb_from_frame routine=
-s to
-> build the skb from a xdp_frame. Respect to __xdp_build_skb_from_frame,
-> xdp_build_skb_from_frame will allocate the skb object.
-> Rely on __xdp_build_skb_from_frame/xdp_build_skb_from_frame in cpumap and=
- veth
-> code.
+It would, however, be nice to have a better description about what the test is
+actually doing./
 
-Hi Daniel/Alexei,
 
-since this series is marked as "archived" in patchwork, do I need to resubm=
-it it?
-
-Regards,
-Lorenzo
-
->=20
-> Lorenzo Bianconi (2):
->   net: xdp: introduce __xdp_build_skb_from_frame utility routine
->   net: xdp: introduce xdp_build_skb_from_frame utility routine
->=20
->  drivers/net/veth.c  | 18 +++-----------
->  include/net/xdp.h   |  5 ++++
->  kernel/bpf/cpumap.c | 45 +---------------------------------
->  net/core/xdp.c      | 59 +++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 68 insertions(+), 59 deletions(-)
->=20
-> --=20
-> 2.29.2
->=20
-
---FsscpQKzF/jJk6ya
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCX/3JhwAKCRA6cBh0uS2t
-rGYXAP0faiWViGGo03bFcPMrUOd1hFZOykCmszMKT38fk8LKLAEAlLJAtXZWuBOp
-KRC4srGKp1SYGG9h13GGTGSEjFQkzAE=
-=MTN8
------END PGP SIGNATURE-----
-
---FsscpQKzF/jJk6ya--
-
+>
+> > It may be possible, but from what I understood from Daniel's comment here
+> >
+> > https://lore.kernel.org/bpf/17629073-4fab-a922-ecc3-25b019960f44@iogearbox.net/
+> >
+> > the test should be a part of the verifier tests (which is reasonable
+> > to me since it is
+> > a verifier bugfix)
+>
+> Yeah, the test_verifier case as you have is definitely the most straight
+> forward way to add coverage in this case.
