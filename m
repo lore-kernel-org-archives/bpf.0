@@ -2,26 +2,25 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB997C4332E
-	for <bpf@archiver.kernel.org>; Wed, 13 Jan 2021 10:58:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 20788C433E0
+	for <bpf@archiver.kernel.org>; Wed, 13 Jan 2021 10:59:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A801B23136
-	for <bpf@archiver.kernel.org>; Wed, 13 Jan 2021 10:58:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E36A423159
+	for <bpf@archiver.kernel.org>; Wed, 13 Jan 2021 10:58:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727180AbhAMK6g (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Jan 2021 05:58:36 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:54198 "EHLO loongson.cn"
+        id S1727102AbhAMK6d (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Jan 2021 05:58:33 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:54188 "EHLO loongson.cn"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727116AbhAMK6f (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Jan 2021 05:58:35 -0500
+        id S1726463AbhAMK6c (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Jan 2021 05:58:32 -0500
 Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr78d0v5fhLMDAA--.6498S4;
-        Wed, 13 Jan 2021 18:57:37 +0800 (CST)
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr78d0v5fhLMDAA--.6498S2;
+        Wed, 13 Jan 2021 18:57:34 +0800 (CST)
 From:   Tiezhu Yang <yangtiezhu@loongson.cn>
 To:     Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -37,79 +36,45 @@ Cc:     linux-sparse@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, clang-built-linux@googlegroups.com,
         linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
         Xuefeng Li <lixuefeng@loongson.cn>
-Subject: [PATCH 2/2] compiler.h: Include asm/rwonce.h under ARM64 and ALPHA to fix build errors
-Date:   Wed, 13 Jan 2021 18:57:33 +0800
-Message-Id: <1610535453-2352-3-git-send-email-yangtiezhu@loongson.cn>
+Subject: [PATCH 0/2] Fix build errors and warnings when make M=samples/bpf
+Date:   Wed, 13 Jan 2021 18:57:31 +0800
+Message-Id: <1610535453-2352-1-git-send-email-yangtiezhu@loongson.cn>
 X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1610535453-2352-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1610535453-2352-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9Dxr78d0v5fhLMDAA--.6498S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kw1UZFyrZr1rXr4kAw4kCrg_yoW8XrW3pF
-        1DZr18KFW5ur1UGr98Aw12y347Zw4rGF17AFyDu348ZFyaq393X390gryYkF97Za9FqFWx
-        Kr9rWrW3Cr1UZ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPK14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
-        kIwI1lc2xSY4AK67AK6r4DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4U
-        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
-        AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
-        cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4
-        A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU
-        0xZFpf9x0JUCzuAUUUUU=
+X-CM-TRANSID: AQAAf9Dxr78d0v5fhLMDAA--.6498S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY67AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2js
+        IEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE
+        5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26F4j6r4UJwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
+        M4IIrI8v6xkF7I0E8cxan2IY04v7MxkIecxEwVAFwVW8twCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IY
+        s7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
+        W8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU14rW7UUUUU==
 X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-When make M=samples/bpf on the Loongson 3A3000 platform which
-belongs to MIPS arch, there exists many similar build errors
-about 'asm/rwonce.h' file not found, so include it only under
-CONFIG_ARM64 and CONFIG_ALPHA due to it exists only in arm64
-and alpha arch.
+There exists many build errors and warnings when make M=samples/bpf,
+this patch series fix some of them, I will submit some other patches
+related with MIPS later.
 
-  CLANG-bpf  samples/bpf/xdpsock_kern.o
-In file included from samples/bpf/xdpsock_kern.c:2:
-In file included from ./include/linux/bpf.h:9:
-In file included from ./include/linux/workqueue.h:9:
-In file included from ./include/linux/timer.h:5:
-In file included from ./include/linux/list.h:9:
-In file included from ./include/linux/kernel.h:10:
-./include/linux/compiler.h:246:10: fatal error: 'asm/rwonce.h' file not found
-         ^~~~~~~~~~~~~~
-1 error generated.
+Tiezhu Yang (2):
+  samples/bpf: Set flag __SANE_USERSPACE_TYPES__ for MIPS to fix build
+    warnings
+  compiler.h: Include asm/rwonce.h under ARM64 and ALPHA to fix build
+    errors
 
-$ find . -name rwonce.h
-./include/asm-generic/rwonce.h
-./arch/arm64/include/asm/rwonce.h
-./arch/alpha/include/asm/rwonce.h
+ include/linux/compiler.h    | 6 ++++++
+ samples/bpf/Makefile        | 4 ++++
+ tools/include/linux/types.h | 3 +++
+ 3 files changed, 13 insertions(+)
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- include/linux/compiler.h | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/include/linux/compiler.h b/include/linux/compiler.h
-index b8fe0c2..bdbe759 100644
---- a/include/linux/compiler.h
-+++ b/include/linux/compiler.h
-@@ -243,6 +243,12 @@ static inline void *offset_to_ptr(const int *off)
-  */
- #define prevent_tail_call_optimization()	mb()
- 
-+#ifdef CONFIG_ARM64
- #include <asm/rwonce.h>
-+#endif
-+
-+#ifdef CONFIG_ALPHA
-+#include <asm/rwonce.h>
-+#endif
- 
- #endif /* __LINUX_COMPILER_H */
 -- 
 2.1.0
 
