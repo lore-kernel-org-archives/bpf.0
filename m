@@ -2,152 +2,114 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6743EC433E0
-	for <bpf@archiver.kernel.org>; Wed, 13 Jan 2021 10:28:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DB997C4332E
+	for <bpf@archiver.kernel.org>; Wed, 13 Jan 2021 10:58:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 21857233A2
-	for <bpf@archiver.kernel.org>; Wed, 13 Jan 2021 10:28:26 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A801B23136
+	for <bpf@archiver.kernel.org>; Wed, 13 Jan 2021 10:58:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727229AbhAMK2J (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Jan 2021 05:28:09 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:36295 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726742AbhAMK2J (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Jan 2021 05:28:09 -0500
-Received: by mail-io1-f69.google.com with SMTP id x4so939921ioh.3
-        for <bpf@vger.kernel.org>; Wed, 13 Jan 2021 02:27:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Jp5VjL+jpjBW595+oPVu2b30QzQh/C/HNqg9KiGkCc4=;
-        b=f9McimabcHYzFCKgsd+CJXd+OcztYyW8aqKnPDhE1vpZjA1j1fjzen1rk0BoICdpNJ
-         y0RP14U+cleFHcLuDy0iVkEvEBfvCnoh5r7+VaSEHPY6MGluAFrlNOudTocHhvCDAEmP
-         V5cMGTEHP6uyZkrDcDyNDcAxLvqh+j37DsNZnGWTivEB0Mj5lb93HPBcbyF1K+Vc5vIX
-         6+r/1Y8Chjdp7EM+lqQT8XFz2kwubXgRKqMC/q1g24SX5vMkmpxCYtv3Im56H/ayPtwe
-         UwVO7de0tYsuRV1DsFmviqKqdkJE8OJS16s0eCTqYNWkcw3GtbqhK461JLxSiu1ntIvy
-         JX4w==
-X-Gm-Message-State: AOAM531CV9brquD692anAfukKOwiaOfc8EdaCkEyvZPaHvgucuWvdJxL
-        acxPWEdIcN/Z4ZMdsLdj9QoQ3Abe/2cN2BMfz8YR11aELEJG
-X-Google-Smtp-Source: ABdhPJy7G1VvD9b/lF62lCN9U89knU5g8Cw2lnZokW1Z44DCZM4u/XY579mw0ushu1ahm53ZcxbWDjG0Goj5mAtd9tE0KNfeeOWm
-MIME-Version: 1.0
-X-Received: by 2002:a02:d45:: with SMTP id 66mr1848412jax.120.1610533647748;
- Wed, 13 Jan 2021 02:27:27 -0800 (PST)
-Date:   Wed, 13 Jan 2021 02:27:27 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f9191905b8c59562@google.com>
-Subject: kernel BUG at net/core/dev.c:NUM!
-From:   syzbot <syzbot+2393580080a2da190f04@syzkaller.appspotmail.com>
-To:     andrii@kernel.org, andriin@fb.com, ast@kernel.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        edumazet@google.com, f.fainelli@gmail.com, hawk@kernel.org,
-        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, roopa@cumulusnetworks.com,
-        songliubraving@fb.com, syzkaller-bugs@googlegroups.com, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
+        id S1727180AbhAMK6g (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Jan 2021 05:58:36 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:54198 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727116AbhAMK6f (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Jan 2021 05:58:35 -0500
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxr78d0v5fhLMDAA--.6498S4;
+        Wed, 13 Jan 2021 18:57:37 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-sparse@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, clang-built-linux@googlegroups.com,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>
+Subject: [PATCH 2/2] compiler.h: Include asm/rwonce.h under ARM64 and ALPHA to fix build errors
+Date:   Wed, 13 Jan 2021 18:57:33 +0800
+Message-Id: <1610535453-2352-3-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+In-Reply-To: <1610535453-2352-1-git-send-email-yangtiezhu@loongson.cn>
+References: <1610535453-2352-1-git-send-email-yangtiezhu@loongson.cn>
+X-CM-TRANSID: AQAAf9Dxr78d0v5fhLMDAA--.6498S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kw1UZFyrZr1rXr4kAw4kCrg_yoW8XrW3pF
+        1DZr18KFW5ur1UGr98Aw12y347Zw4rGF17AFyDu348ZFyaq393X390gryYkF97Za9FqFWx
+        Kr9rWrW3Cr1UZ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUPK14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
+        x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
+        8EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS
+        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
+        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
+        kIwI1lc2xSY4AK67AK6r4DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4U
+        MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67
+        AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0
+        cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4
+        A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU
+        0xZFpf9x0JUCzuAUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello,
+When make M=samples/bpf on the Loongson 3A3000 platform which
+belongs to MIPS arch, there exists many similar build errors
+about 'asm/rwonce.h' file not found, so include it only under
+CONFIG_ARM64 and CONFIG_ALPHA due to it exists only in arm64
+and alpha arch.
 
-syzbot found the following issue on:
+  CLANG-bpf  samples/bpf/xdpsock_kern.o
+In file included from samples/bpf/xdpsock_kern.c:2:
+In file included from ./include/linux/bpf.h:9:
+In file included from ./include/linux/workqueue.h:9:
+In file included from ./include/linux/timer.h:5:
+In file included from ./include/linux/list.h:9:
+In file included from ./include/linux/kernel.h:10:
+./include/linux/compiler.h:246:10: fatal error: 'asm/rwonce.h' file not found
+         ^~~~~~~~~~~~~~
+1 error generated.
 
-HEAD commit:    c49243e8 Merge branch 'net-fix-issues-around-register_netd..
-git tree:       net
-console output: https://syzkaller.appspot.com/x/log.txt?x=11da7ba8d00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bacfc914704718d3
-dashboard link: https://syzkaller.appspot.com/bug?extid=2393580080a2da190f04
-compiler:       gcc (GCC) 10.1.0-syz 20200507
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13704c3f500000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=160cc357500000
+$ find . -name rwonce.h
+./include/asm-generic/rwonce.h
+./arch/arm64/include/asm/rwonce.h
+./arch/alpha/include/asm/rwonce.h
 
-The issue was bisected to:
-
-commit c269a24ce057abfc31130960e96ab197ef6ab196
-Author: Jakub Kicinski <kuba@kernel.org>
-Date:   Wed Jan 6 18:40:06 2021 +0000
-
-    net: make free_netdev() more lenient with unregistering devices
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13901b50d00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=10501b50d00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=17901b50d00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2393580080a2da190f04@syzkaller.appspotmail.com
-Fixes: c269a24ce057 ("net: make free_netdev() more lenient with unregistering devices")
-
-------------[ cut here ]------------
-kernel BUG at net/core/dev.c:10661!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 8459 Comm: syz-executor375 Not tainted 5.11.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:free_netdev+0x4b3/0x5e0 net/core/dev.c:10661
-Code: c0 01 38 d0 7c 08 84 d2 0f 85 1a 01 00 00 0f b7 83 32 02 00 00 48 29 c3 48 89 df e8 d7 77 ac fa e9 47 ff ff ff e8 3d 1e 80 fa <0f> 0b e8 36 1e 80 fa 0f b6 2d 39 e1 e8 05 31 ff 89 ee e8 a6 24 80
-RSP: 0018:ffffc9000163f1a0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff88802814a000 RCX: 0000000000000000
-RDX: ffff888021678000 RSI: ffffffff86f25763 RDI: 0000000000000003
-RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000001
-R10: ffffffff86f25683 R11: 0000000000000003 R12: ffff888028149ef8
-R13: ffff88802814a058 R14: dffffc0000000000 R15: ffff888028149ef8
-FS:  00000000010bf880(0000) GS:ffff8880b9f00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055ade220a6d8 CR3: 0000000012719000 CR4: 00000000001506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- __rtnl_newlink+0x1484/0x16e0 net/core/rtnetlink.c:3447
- rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3491
- rtnetlink_rcv_msg+0x44e/0xad0 net/core/rtnetlink.c:5553
- netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2494
- netlink_unicast_kernel net/netlink/af_netlink.c:1304 [inline]
- netlink_unicast+0x533/0x7d0 net/netlink/af_netlink.c:1330
- netlink_sendmsg+0x856/0xd90 net/netlink/af_netlink.c:1919
- sock_sendmsg_nosec net/socket.c:652 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:672
- ____sys_sendmsg+0x6e8/0x810 net/socket.c:2345
- ___sys_sendmsg+0xf3/0x170 net/socket.c:2399
- __sys_sendmsg+0xe5/0x1b0 net/socket.c:2432
- do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x4404b9
-Code: 18 89 d0 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 7b 13 fc ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007fff3e934f98 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00000000004002c8 RCX: 00000000004404b9
-RDX: 0000000000000000 RSI: 00000000200000c0 RDI: 0000000000000003
-RBP: 00000000006ca018 R08: 0000000000000014 R09: 00000000004002c8
-R10: 0000000000000001 R11: 0000000000000246 R12: 0000000000401cc0
-R13: 0000000000401d50 R14: 0000000000000000 R15: 0000000000000000
-Modules linked in:
----[ end trace ec4d68ff94a95202 ]---
-RIP: 0010:free_netdev+0x4b3/0x5e0 net/core/dev.c:10661
-Code: c0 01 38 d0 7c 08 84 d2 0f 85 1a 01 00 00 0f b7 83 32 02 00 00 48 29 c3 48 89 df e8 d7 77 ac fa e9 47 ff ff ff e8 3d 1e 80 fa <0f> 0b e8 36 1e 80 fa 0f b6 2d 39 e1 e8 05 31 ff 89 ee e8 a6 24 80
-RSP: 0018:ffffc9000163f1a0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff88802814a000 RCX: 0000000000000000
-RDX: ffff888021678000 RSI: ffffffff86f25763 RDI: 0000000000000003
-RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000001
-R10: ffffffff86f25683 R11: 0000000000000003 R12: ffff888028149ef8
-R13: ffff88802814a058 R14: dffffc0000000000 R15: ffff888028149ef8
-FS:  00000000010bf880(0000) GS:ffff8880b9e00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd33803e118 CR3: 0000000012719000 CR4: 00000000001506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
+Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ include/linux/compiler.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/include/linux/compiler.h b/include/linux/compiler.h
+index b8fe0c2..bdbe759 100644
+--- a/include/linux/compiler.h
++++ b/include/linux/compiler.h
+@@ -243,6 +243,12 @@ static inline void *offset_to_ptr(const int *off)
+  */
+ #define prevent_tail_call_optimization()	mb()
+ 
++#ifdef CONFIG_ARM64
+ #include <asm/rwonce.h>
++#endif
++
++#ifdef CONFIG_ALPHA
++#include <asm/rwonce.h>
++#endif
+ 
+ #endif /* __LINUX_COMPILER_H */
+-- 
+2.1.0
+
