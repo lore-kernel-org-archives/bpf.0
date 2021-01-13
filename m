@@ -2,321 +2,249 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D3E0FC43381
-	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 02:11:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2FCE6C433E9
+	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 02:14:22 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A1337235F8
-	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 02:11:35 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id DC5852242A
+	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 02:14:21 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730108AbhANCKe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Jan 2021 21:10:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53634 "EHLO
+        id S1726534AbhANCN7 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Jan 2021 21:13:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729294AbhAMWS2 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Jan 2021 17:18:28 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7C7C061786
-        for <bpf@vger.kernel.org>; Wed, 13 Jan 2021 14:17:04 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id dj23so1031423edb.13
-        for <bpf@vger.kernel.org>; Wed, 13 Jan 2021 14:17:04 -0800 (PST)
+        with ESMTP id S1729160AbhAMVfQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Jan 2021 16:35:16 -0500
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29414C0617A3
+        for <bpf@vger.kernel.org>; Wed, 13 Jan 2021 13:33:28 -0800 (PST)
+Received: by mail-qv1-xf49.google.com with SMTP id u8so2689521qvm.5
+        for <bpf@vger.kernel.org>; Wed, 13 Jan 2021 13:33:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=araalinetworks-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PcPABvWfPUA80XK0sRCGNkVMyYBXqoCbvlU5XSgzCoU=;
-        b=eBHYyC9VTM71x1PvZ3I6vA4B95YczHUkZLx6ZTXvipBAdFwB0PcwIb/njyWtkJqVHh
-         Zll2Ail82TUnzl2Mnx3rOYo+BYZ5No+Rgo++FCOGzSRrmQOmLBkIvxedMhNd4BHYooHu
-         7LC7pJ7LXKbASPbxKgq3q+scRLnySW64OhU+xM/gJW8i98pyrnGKCEF1JmiFFbBtcypM
-         ggmXF2Mbbh9/42ysn0ogmJi+dEtT9wOmcrqC15EJnldCG5qHkKpjF7lrnJ3Uf14aex3G
-         gG8RFzWeln2ZiNkvxleNK0puIZ0wU0axCZcyeOGUgJdAJP0O+HMf5fJiZWXkdv8Siln+
-         MeLw==
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=eVYXXRCuyKFusFzDUDSL6GRAD9v9jG1oOwxOSa05otY=;
+        b=tuv5zjtU+6iaPolZxTZVMr8uzUzirJkKX2qpjZkCQdxVCx/L2gm1Wyd+F1RwKDkoD9
+         c64O6M7HAffBiGvzlkyk0INbhoFCPY4CrQkw9SOpJpUJ9RZtVxA6D+flRepuFsjJ28uy
+         Ve2y1pSYDfOqJwAjrGjz8a6E1biO07Dd9yQ9EU5SV+1BImmo0oGiHo9JIjeuyZnxDB/J
+         FqjA7Agc0qRLy1Uz2w1sKm/CcflDLVyHAOl8FDubQAujdWccI1xBQ94IwKRFnKdDdqdn
+         VTCqVnly7Rf9OCs3uj38lZc69eMKpyXbIuwwEcKsVg8NNSFanKBoULPIOAxMEnmpvxOy
+         uHJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PcPABvWfPUA80XK0sRCGNkVMyYBXqoCbvlU5XSgzCoU=;
-        b=iXpD3u/oCScNKlRrWoiV0rLMmWQuto70XqMHbxbAXn9wsNhqb/qgwyBpYJmaf55U6r
-         T2Gdg7Jx/jQcc1G3x3QgvhlSTGSn9lRZ3/UyOIqwNjAki2p+Iobg4hI4hBmDcc87nc1/
-         oleYWL/1AJS/Lpz+1N+MDA23bmH9a9sXVWE+aqRVCZkFP8nCt3gaptrdEdI3Asfzd6Ix
-         NY2zy3vstrKbJK7zJ5GMg3Gg8Q0I++oL8APeO5uTPq7Z321hcQgQSqK8TtHIwLbiAgi5
-         OBKQbDEmUoSjrc14VzS87KOBQsUMKlVZROIqtuNRPZLwp6MwWAWgKeyL4qRy+okAxI1u
-         wNsQ==
-X-Gm-Message-State: AOAM532v67lIzlXViMtc7GW5aOXNsRRJtb099me9u66sNwC9uZGU7Chm
-        tlzuJJdibfNlMCxVsGExAr2hUNtJtJ1+T2Be0cluXRzHxzaYIQ==
-X-Google-Smtp-Source: ABdhPJzqd2S02027cy0vS6VrBpWzG6s12xNH4UU0ucU4zs4cMgxTGGGc+0wqUrsnGNlBkKrZDL1j+o3z2DX/IOL9Ev0=
-X-Received: by 2002:aa7:d9c1:: with SMTP id v1mr3502131eds.115.1610576222621;
- Wed, 13 Jan 2021 14:17:02 -0800 (PST)
-MIME-Version: 1.0
-References: <B8801F77-37E8-4EF8-8994-D366D48169A3@araalinetworks.com>
- <CAEf4Bzbgw49w2PtowsrzKQNcxD4fZRE6AKByX-5-dMo-+oWHHA@mail.gmail.com> <CADmGQ+3_h22VmJPddhf4Vy2J4PwwkhJAj+N3qSV7vERb+PZw8Q@mail.gmail.com>
-In-Reply-To: <CADmGQ+3_h22VmJPddhf4Vy2J4PwwkhJAj+N3qSV7vERb+PZw8Q@mail.gmail.com>
-From:   Vamsi Kodavanty <vamsi@araalinetworks.com>
-Date:   Wed, 13 Jan 2021 14:16:51 -0800
-Message-ID: <CADmGQ+0JMBm8QANoEg5V7pDF6SadSN=u0y1w8BTrYOg5OOWa0g@mail.gmail.com>
-Subject: Re: [PATCH bpf v1] Add `core_btf_path` to `bpf_object_open_opts` to
- pass BTF path from skeleton program
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=eVYXXRCuyKFusFzDUDSL6GRAD9v9jG1oOwxOSa05otY=;
+        b=Vfr/D6jhaUqFqTEcN6LzjAzpVdEKWmZ51Ddi/Wvv95/vVF1BQ8HKi1n64gXkrir3RK
+         df2RFqQThs1jQbvaarfKKj7J5Lj7C96jlIMUD+DAod/86fg5FQxVli5+fSFxbcH3RYaF
+         UPl8Z8mqdr73YdyMcVUjH5fxvX7D7+rUYo4IJ61OfXNDVWrRSKLYDaGp5ZHAWXvmalsg
+         lQB4wKiD10dtDbLj2PMU1k64zww/BsN9LQsCdDh4Hkb5dOJ8nKcmVS85svURInK3FqlY
+         z1roNlMOzU5ohPPuwopoEKqlHzDO1nhsZ9+LZFMcuwvfRkWuHpqDB8Tfx2wqVHBrIUyj
+         cyDg==
+X-Gm-Message-State: AOAM533QZrmzsLvxmk5Cf6ejrQw3OtbonRH4TMp6XYh1SQ1tgqksjGRq
+        5jKIiPs1ViUQio0vkkzXDKPOk7Q=
+X-Google-Smtp-Source: ABdhPJxR/W0EyWMMw5RwPbb8gyNATDZKmo+3V0LUQ1bDMIZmqfSSmXzluxSx+wHjxEK3GJ2cXtSYCYM=
+Sender: "sdf via sendgmr" <sdf@sdf2.svl.corp.google.com>
+X-Received: from sdf2.svl.corp.google.com ([2620:15c:2c4:1:7220:84ff:fe09:7732])
+ (user=sdf job=sendgmr) by 2002:a05:6214:14ae:: with SMTP id
+ bo14mr4163889qvb.16.1610573607347; Wed, 13 Jan 2021 13:33:27 -0800 (PST)
+Date:   Wed, 13 Jan 2021 13:33:20 -0800
+In-Reply-To: <20210113213321.2832906-1-sdf@google.com>
+Message-Id: <20210113213321.2832906-3-sdf@google.com>
+Mime-Version: 1.0
+References: <20210113213321.2832906-1-sdf@google.com>
+X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
+Subject: [PATCH bpf-next v8 2/3] bpf: try to avoid kzalloc in cgroup/{s,g}etsockopt
+From:   Stanislav Fomichev <sdf@google.com>
+To:     netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net,
+        Stanislav Fomichev <sdf@google.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jan 11, 2021 at 7:33 PM Vamsi Kodavanty
-<vamsi@araalinetworks.com> wrote:
->
-> Andrii,
->    Thank you for the detailed review. I will address them as well as
-> the self tests. And will send out a new patch addressing them and
-> conforming to style/expectations.
->
-> Cheers
-> Vamsi.
->
-Andrii,
-      I understand the `bpf` repository being a mirror of the
-`bpf-next` tools/lib/bpf. Do the patches
-to `bpf` go back into `bpf-next`. I see there is a script for
-`bpf-next` to `bpf`syncs.
-      I ask because the `btf_vmlinux_override` changes only exist in
-the `bpf` repo. So, I make my
-changes in `bpf`?. In that case what happens to the `selftests` which
-are in `bpf-next`. And they
-won't have any idea of the new open option 'core_btf_path` that is
-being introduced.
+When we attach a bpf program to cgroup/getsockopt any other getsockopt()
+syscall starts incurring kzalloc/kfree cost.
 
-Thanks again. Hopefully this is my last question before I come back to
-you with a proper patch.
+Let add a small buffer on the stack and use it for small (majority)
+{s,g}etsockopt values. The buffer is small enough to fit into
+the cache line and cover the majority of simple options (most
+of them are 4 byte ints).
 
-Cheers
-Vamsi.
+It seems natural to do the same for setsockopt, but it's a bit more
+involved when the BPF program modifies the data (where we have to
+kmalloc). The assumption is that for the majority of setsockopt
+calls (which are doing pure BPF options or apply policy) this
+will bring some benefit as well.
 
-> On Mon, Jan 11, 2021 at 2:02 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Fri, Jan 8, 2021 at 6:36 PM Vamsi Kodavanty <vamsi@araalinetworks.com> wrote:
-> > >
-> > > Andrii,
-> > >      I have made the following changes as discussed to add an option to the `open_opts`
-> > > to take in the BTF.
-> > >      Please do take a look. Also, I am not sure what the procedure is for submitting patches/reviews.
-> > > If anyone has any pointers to a webpage where this is described I can go through it. But, below are
-> > > the proposed changes.
-> > >
-> >
-> > Daniel already gave you pointers. Also make sure you add [PATCH
-> > bpf-next] prefix to email subject to identify the patch is for
-> > bpf-next kernel tree.
-> > And with all changes like this we should also add selftests,
-> > exercising new features. Please take a look at
-> > tools/testing/selftests/bpf. I think updating
-> > test_progs/test_core_reloc.c in there to use this instead of
-> > bpf_object__load_xattr() might be enough of the testing.
-> >
-> > > Best Regards,
-> > > Vamsi.
-> > >
-> > > ---
-> > >  src/libbpf.c | 56 +++++++++++++++++++++++++++++++++++++---------------
-> > >  src/libbpf.h |  4 +++-
-> > >  2 files changed, 43 insertions(+), 17 deletions(-)
-> > >
-> > > diff --git a/src/libbpf.c b/src/libbpf.c
-> > > index 6ae748f..35d7254 100644
-> > > --- a/src/libbpf.c
-> > > +++ b/src/libbpf.c
-> > > @@ -2538,9 +2538,12 @@ static bool obj_needs_vmlinux_btf(const struct bpf_object *obj)
-> > >         struct bpf_program *prog;
-> > >         int i;
-> > >
-> > > -       /* CO-RE relocations need kernel BTF */
-> > > +       /* CO-RE relocations need kernel BTF or an override BTF.
-> > > +        * If override BTF present CO-RE can use it.
-> >
-> > nit: "CO-RE relocations need kernel BTF, unless custom BTF override is
-> > specified"
-> >
-> > > +        */
-> > >         if (obj->btf_ext && obj->btf_ext->core_relo_info.len)
-> > > -               return true;
-> > > +               if (!obj->btf_vmlinux_override)
-> >
-> > please combine this into a single if
-> >
-> > > +                       return true;
-> > >
-> > >         /* Support for typed ksyms needs kernel BTF */
-> > >         for (i = 0; i < obj->nr_extern; i++) {
-> > > @@ -2561,6 +2564,27 @@ static bool obj_needs_vmlinux_btf(const struct bpf_object *obj)
-> > >         return false;
-> > >  }
-> > >
-> > > +static int bpf_object__load_override_btf(struct bpf_object *obj,
-> > > +                                                                                const char *targ_btf_path)
-> >
-> > formatting is off? scripts/checkpatch.pl -f <path to file> will report
-> > issues like this
-> >
-> > > +{
-> > > +       /* Could have been be set via `bpf_object_open_opts` */
-> > > +       if (obj->btf_vmlinux_override)
-> > > +               return 0;
-> >
-> > see below, let's make sure we load btf_vmlinux_override in one place
-> > (and cleanup somewhere close)
-> >
-> > > +
-> > > +       if (!targ_btf_path)
-> > > +               return 0;
-> > > +
-> > > +       obj->btf_vmlinux_override = btf__parse(targ_btf_path, NULL);
-> > > +       if (IS_ERR_OR_NULL(obj->btf_vmlinux_override)) {
-> > > +               int err = PTR_ERR(obj->btf_vmlinux_override);
-> > > +               obj->btf_vmlinux_override = NULL;
-> > > +               pr_warn("failed to parse target BTF: %d\n", err);
-> > > +               return err;
-> > > +       }
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +
-> > >  static int bpf_object__load_vmlinux_btf(struct bpf_object *obj, bool force)
-> > >  {
-> > >         int err;
-> > > @@ -6031,7 +6055,7 @@ patch_insn:
-> > >  }
-> > >
-> > >  static int
-> > > -bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
-> > > +bpf_object__relocate_core(struct bpf_object *obj)
-> > >  {
-> > >         const struct btf_ext_info_sec *sec;
-> > >         const struct bpf_core_relo *rec;
-> > > @@ -6045,15 +6069,6 @@ bpf_object__relocate_core(struct bpf_object *obj, const char *targ_btf_path)
-> > >         if (obj->btf_ext->core_relo_info.len == 0)
-> > >                 return 0;
-> > >
-> > > -       if (targ_btf_path) {
-> > > -               obj->btf_vmlinux_override = btf__parse(targ_btf_path, NULL);
-> > > -               if (IS_ERR_OR_NULL(obj->btf_vmlinux_override)) {
-> > > -                       err = PTR_ERR(obj->btf_vmlinux_override);
-> > > -                       pr_warn("failed to parse target BTF: %d\n", err);
-> > > -                       return err;
-> > > -               }
-> > > -       }
-> > > -
-> >
-> > given we are moving out btf_vmlinux_override loading from
-> > bpf_object__relocate_core, we need to move out its destruction and
-> > cleanup to the same function that does BTF parsing. That will keep the
-> > logic simpler.
-> >
-> > >         cand_cache = hashmap__new(bpf_core_hash_fn, bpf_core_equal_fn, NULL);
-> > >         if (IS_ERR(cand_cache)) {
-> > >                 err = PTR_ERR(cand_cache);
-> > > @@ -6556,14 +6571,14 @@ bpf_object__relocate_calls(struct bpf_object *obj, struct bpf_program *prog)
-> > >  }
-> > >
-> > >  static int
-> > > -bpf_object__relocate(struct bpf_object *obj, const char *targ_btf_path)
-> > > +bpf_object__relocate(struct bpf_object *obj)
-> > >  {
-> > >         struct bpf_program *prog;
-> > >         size_t i;
-> > >         int err;
-> > >
-> > >         if (obj->btf_ext) {
-> > > -               err = bpf_object__relocate_core(obj, targ_btf_path);
-> > > +               err = bpf_object__relocate_core(obj);
-> > >                 if (err) {
-> > >                         pr_warn("failed to perform CO-RE relocations: %d\n",
-> > >                                 err);
-> > > @@ -7088,7 +7103,7 @@ static struct bpf_object *
-> > >  __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
-> > >                    const struct bpf_object_open_opts *opts)
-> > >  {
-> > > -       const char *obj_name, *kconfig;
-> > > +       const char *obj_name, *kconfig, *core_btf_path;
-> > >         struct bpf_program *prog;
-> > >         struct bpf_object *obj;
-> > >         char tmp_name[64];
-> > > @@ -7126,6 +7141,14 @@ __bpf_object__open(const char *path, const void *obj_buf, size_t obj_buf_sz,
-> > >                         return ERR_PTR(-ENOMEM);
-> > >         }
-> > >
-> > > +       core_btf_path = OPTS_GET(opts, core_btf_path, NULL);
-> > > +       if (core_btf_path) {
-> > > +               pr_debug("parse btf '%s' for CO-RE relocations\n", core_btf_path);
-> >
-> > Move this right after btf__parse(), so you can report success or
-> > failure in one log statement; see how libbpf_find_kernel_btf() does
-> > it. Please use similar wording (just "target BTF" instead of "kernel
-> > BTF" to distinguish them).
-> >
-> > > +               obj->btf_vmlinux_override = btf__parse(core_btf_path, NULL);
-> >
-> > This BTF is not needed until the load phase, so let's not attempt to
-> > load it on open() unnecessarily. Just remember the path and defer till
-> > bpf_object__load() time.
-> >
-> > > +               if (IS_ERR_OR_NULL(obj->btf_vmlinux_override))
-> > > +                       pr_warn("can't parse btf at '%s'\n", core_btf_path);
-> >
-> > if BTF can't be loaded, load should fail
-> >
-> > > +       }
-> > > +
-> > >         err = bpf_object__elf_init(obj);
-> > >         err = err ? : bpf_object__check_endianness(obj);
-> > >         err = err ? : bpf_object__elf_collect(obj);
-> > > @@ -7481,13 +7504,14 @@ int bpf_object__load_xattr(struct bpf_object_load_attr *attr)
-> > >         }
-> > >
-> > >         err = bpf_object__probe_loading(obj);
-> > > +       err = err ? : bpf_object__load_override_btf(obj, attr->target_btf_path);
-> > >         err = err ? : bpf_object__load_vmlinux_btf(obj, false);
-> > >         err = err ? : bpf_object__resolve_externs(obj, obj->kconfig);
-> > >         err = err ? : bpf_object__sanitize_and_load_btf(obj);
-> > >         err = err ? : bpf_object__sanitize_maps(obj);
-> > >         err = err ? : bpf_object__init_kern_struct_ops_maps(obj);
-> > >         err = err ? : bpf_object__create_maps(obj);
-> > > -       err = err ? : bpf_object__relocate(obj, attr->target_btf_path);
-> >
-> > For backwards compatibility, we need to still respect
-> > attr->target_btf_path. I'd say let attr->target_btf_path override
-> > opts->core_btf_path, if specified. Later on we'll probably just
-> > deprecate bpf_object__load_xattr() and target_btf_path will go away.
-> >
-> > > +       err = err ? : bpf_object__relocate(obj);
-> > >         err = err ? : bpf_object__load_progs(obj, attr->log_level);
-> > >
-> > >         /* clean up module BTFs */
-> > > diff --git a/src/libbpf.h b/src/libbpf.h
-> > > index 3c35eb4..40c4ee9 100644
-> > > --- a/src/libbpf.h
-> > > +++ b/src/libbpf.h
-> > > @@ -93,8 +93,10 @@ struct bpf_object_open_opts {
-> > >          * system Kconfig for CONFIG_xxx externs.
-> > >          */
-> > >         const char *kconfig;
-> > > +       /* Path to ELF file with BTF section to be used for relocations. */
-> >
-> > Given you use btf__parse() when opening this BTF, it handles both ELF
-> > and raw BTF data. So let's reword this comment to mention BTF in
-> > general.
-> >
-> > > +       const char *core_btf_path;
-> > >  };
-> > > -#define bpf_object_open_opts__last_field kconfig
-> > > +#define bpf_object_open_opts__last_field core_btf_path
-> > >
-> > >  LIBBPF_API struct bpf_object *bpf_object__open(const char *path);
-> > >  LIBBPF_API struct bpf_object *
-> > > --
-> > > 2.23.3
-> > >
+Without this patch (we remove about 1% __kmalloc):
+     3.38%     0.07%  tcp_mmap  [kernel.kallsyms]  [k] __cgroup_bpf_run_filter_getsockopt
+            |
+             --3.30%--__cgroup_bpf_run_filter_getsockopt
+                       |
+                        --0.81%--__kmalloc
+
+Signed-off-by: Stanislav Fomichev <sdf@google.com>
+Cc: Martin KaFai Lau <kafai@fb.com>
+Cc: Song Liu <songliubraving@fb.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
+---
+ include/linux/filter.h |  5 ++++
+ kernel/bpf/cgroup.c    | 52 ++++++++++++++++++++++++++++++++++++------
+ 2 files changed, 50 insertions(+), 7 deletions(-)
+
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 5edf2b660881..6dbe85973cfb 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -1281,6 +1281,11 @@ struct bpf_sysctl_kern {
+ 	u64 tmp_reg;
+ };
+ 
++#define BPF_SOCKOPT_KERN_BUF_SIZE	32
++struct bpf_sockopt_buf {
++	u8		data[BPF_SOCKOPT_KERN_BUF_SIZE];
++};
++
+ struct bpf_sockopt_kern {
+ 	struct sock	*sk;
+ 	u8		*optval;
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 416e7738981b..ba8a1199d0ba 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1298,7 +1298,8 @@ static bool __cgroup_bpf_prog_array_is_empty(struct cgroup *cgrp,
+ 	return empty;
+ }
+ 
+-static int sockopt_alloc_buf(struct bpf_sockopt_kern *ctx, int max_optlen)
++static int sockopt_alloc_buf(struct bpf_sockopt_kern *ctx, int max_optlen,
++			     struct bpf_sockopt_buf *buf)
+ {
+ 	if (unlikely(max_optlen < 0))
+ 		return -EINVAL;
+@@ -1310,6 +1311,15 @@ static int sockopt_alloc_buf(struct bpf_sockopt_kern *ctx, int max_optlen)
+ 		max_optlen = PAGE_SIZE;
+ 	}
+ 
++	if (max_optlen <= sizeof(buf->data)) {
++		/* When the optval fits into BPF_SOCKOPT_KERN_BUF_SIZE
++		 * bytes avoid the cost of kzalloc.
++		 */
++		ctx->optval = buf->data;
++		ctx->optval_end = ctx->optval + max_optlen;
++		return max_optlen;
++	}
++
+ 	ctx->optval = kzalloc(max_optlen, GFP_USER);
+ 	if (!ctx->optval)
+ 		return -ENOMEM;
+@@ -1319,16 +1329,26 @@ static int sockopt_alloc_buf(struct bpf_sockopt_kern *ctx, int max_optlen)
+ 	return max_optlen;
+ }
+ 
+-static void sockopt_free_buf(struct bpf_sockopt_kern *ctx)
++static void sockopt_free_buf(struct bpf_sockopt_kern *ctx,
++			     struct bpf_sockopt_buf *buf)
+ {
++	if (ctx->optval == buf->data)
++		return;
+ 	kfree(ctx->optval);
+ }
+ 
++static bool sockopt_buf_allocated(struct bpf_sockopt_kern *ctx,
++				  struct bpf_sockopt_buf *buf)
++{
++	return ctx->optval != buf->data;
++}
++
+ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
+ 				       int *optname, char __user *optval,
+ 				       int *optlen, char **kernel_optval)
+ {
+ 	struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
++	struct bpf_sockopt_buf buf = {};
+ 	struct bpf_sockopt_kern ctx = {
+ 		.sk = sk,
+ 		.level = *level,
+@@ -1350,7 +1370,7 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
+ 	 */
+ 	max_optlen = max_t(int, 16, *optlen);
+ 
+-	max_optlen = sockopt_alloc_buf(&ctx, max_optlen);
++	max_optlen = sockopt_alloc_buf(&ctx, max_optlen, &buf);
+ 	if (max_optlen < 0)
+ 		return max_optlen;
+ 
+@@ -1390,14 +1410,31 @@ int __cgroup_bpf_run_filter_setsockopt(struct sock *sk, int *level,
+ 		 */
+ 		if (ctx.optlen != 0) {
+ 			*optlen = ctx.optlen;
+-			*kernel_optval = ctx.optval;
++			/* We've used bpf_sockopt_kern->buf as an intermediary
++			 * storage, but the BPF program indicates that we need
++			 * to pass this data to the kernel setsockopt handler.
++			 * No way to export on-stack buf, have to allocate a
++			 * new buffer.
++			 */
++			if (!sockopt_buf_allocated(&ctx, &buf)) {
++				void *p = kmalloc(ctx.optlen, GFP_USER);
++
++				if (!p) {
++					ret = -ENOMEM;
++					goto out;
++				}
++				memcpy(p, ctx.optval, ctx.optlen);
++				*kernel_optval = p;
++			} else {
++				*kernel_optval = ctx.optval;
++			}
+ 			/* export and don't free sockopt buf */
+ 			return 0;
+ 		}
+ 	}
+ 
+ out:
+-	sockopt_free_buf(&ctx);
++	sockopt_free_buf(&ctx, &buf);
+ 	return ret;
+ }
+ 
+@@ -1407,6 +1444,7 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+ 				       int retval)
+ {
+ 	struct cgroup *cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
++	struct bpf_sockopt_buf buf = {};
+ 	struct bpf_sockopt_kern ctx = {
+ 		.sk = sk,
+ 		.level = level,
+@@ -1425,7 +1463,7 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+ 
+ 	ctx.optlen = max_optlen;
+ 
+-	max_optlen = sockopt_alloc_buf(&ctx, max_optlen);
++	max_optlen = sockopt_alloc_buf(&ctx, max_optlen, &buf);
+ 	if (max_optlen < 0)
+ 		return max_optlen;
+ 
+@@ -1483,7 +1521,7 @@ int __cgroup_bpf_run_filter_getsockopt(struct sock *sk, int level,
+ 	ret = ctx.retval;
+ 
+ out:
+-	sockopt_free_buf(&ctx);
++	sockopt_free_buf(&ctx, &buf);
+ 	return ret;
+ }
+ 
+-- 
+2.30.0.284.gd98b1dd5eaa7-goog
+
