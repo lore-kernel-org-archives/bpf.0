@@ -2,129 +2,94 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-17.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ECB98C433E6
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 23:20:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 623A5C433DB
+	for <bpf@archiver.kernel.org>; Wed, 13 Jan 2021 00:45:51 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BF6D22312F
-	for <bpf@archiver.kernel.org>; Tue, 12 Jan 2021 23:20:10 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 23C8D23123
+	for <bpf@archiver.kernel.org>; Wed, 13 Jan 2021 00:45:51 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388398AbhALXTx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 12 Jan 2021 18:19:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39128 "EHLO
+        id S1728485AbhAMAn3 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 12 Jan 2021 19:43:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388390AbhALXTw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 12 Jan 2021 18:19:52 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36444C061575;
-        Tue, 12 Jan 2021 15:19:12 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id o17so5926177lfg.4;
-        Tue, 12 Jan 2021 15:19:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V2Ayl33U2+jwFSkBY0C2/B0oa+AK3RI49yKP+WjxVhg=;
-        b=LbRWSzUcLdepsLvb8kTLdaLBag4uohB7z/fJT2cFD6Ki5GzDIbtG2UFVLF229snzwV
-         lkLyyGPWwHGgPlB9G+U759uOn7O589qOQ6I1jcn4I75YrN2ry9lKOjoaljOF6Ig9lzVb
-         4Fx2ufDuzu89uKCnRTLV9gLLE2m3wJQNUPeGW9NPiYL8s0E92wYna5rTpcPF5dsm6Wob
-         qXPQk4Wy2IfGMeEONZ/VoWswjrTQvKdq0ZQJI3hsx8kNnb8kqajoih+HRfmClPT52Aqr
-         +UpNl8cwNfYnp0XbyBs4TYrhXO3brpLxEhV0ZUgloIjzXN0pUsSMrGFZ2QiL1ibqoLp7
-         4y6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V2Ayl33U2+jwFSkBY0C2/B0oa+AK3RI49yKP+WjxVhg=;
-        b=UvPbPzjzKpxP6NOBQ4qw1DNNONl3EyFuzAxGnTx39cVwinNdgrxDUA8FLz05eEd3nT
-         40wYSUE2W9N2vn80QuIDxeqxeGsuB34AGOcyimLt7B7enEV36pyd1wL4scI1rLqCxHj6
-         6OspUQv8VZk6/m2zHzMuCAkn8Y/k8yHEF1L1zvUtMFr/NUYHQRpExj2ZhjRl8uLyp1gS
-         ORvOuYlU+g/31AmGSHsUEN/bvtK9H8kxcTDKAP5B+ZEwg5atlBr4Qld3vebCalpVh6QY
-         V6G31pCDf38SwcNNzqrqS4Gt7evT1U6RKesvyjDsIE4plsPDPx1Vqnp+bl9O6DiQ2Zpr
-         3Ffg==
-X-Gm-Message-State: AOAM532l4vFmGm5fCDH0rHhMnsdmFSmjOCWBYM+FlmDqhz5JbOojFnr8
-        i2jT2W7JThyFgtzdWql7e67Wdd4SbBnyK2EZtRC60w+1zgM=
-X-Google-Smtp-Source: ABdhPJxPHixFYs6g/zX3DOUEMOuUb3z06V+hSOSkCimhR9xOiiFqXkeYg79q1wA2oWYnG/qPMpVqVRWkrD1oZkAYNRU=
-X-Received: by 2002:a19:8b83:: with SMTP id n125mr565827lfd.75.1610493550708;
- Tue, 12 Jan 2021 15:19:10 -0800 (PST)
+        with ESMTP id S2438311AbhAMAnR (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 12 Jan 2021 19:43:17 -0500
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BE0C061575;
+        Tue, 12 Jan 2021 16:42:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=bPgoEtYh/+xKSzjfuhxemtKThbUaZv3b+Daj8zLM6WU=; b=aEMWkap2gnIVjTFHxeq2mLAE84
+        YuszMuWs1jbfcoN2/QDnB9Q4q++gVWTV8QwOqadNAKb9/IChFVchJbNOEb/f5wRjgWE+CyfSD9MFl
+        9DTl3IUL9huo848e/i2k65+iOXzZpkC/qL+WrqBIyrdL6x6z4dX8YLbuDhJCYPkcFIdrHwCvug7qs
+        WsOjWnZF/EjO8+HjL+Nqoiqja4hWL/fFwId650wcSRggQdXxW9oQNmneAZNtLO9ZihTzBzFdBOdgO
+        uGa0SDV+nznKKaJcktB4ORQPmdm8UnUftutN23Tdq2DjoaPgxxAJu1vR0Ra+6nJLrj1s3LP3PEE1Z
+        haX90mxw==;
+Received: from [2601:1c0:6280:3f0::9abc]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1kzUF5-0000oi-E5; Wed, 13 Jan 2021 00:42:31 +0000
+Subject: Re: [PATCH] kernel: trace: uprobe: Fix word to the correct spelling
+To:     Bhaskar Chowdhury <unixbhaskar@gmail.com>, rostedt@goodmis.org,
+        mingo@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+References: <20210112045008.29834-1-unixbhaskar@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <f6e08753-b268-bd14-5775-571545f486e5@infradead.org>
+Date:   Tue, 12 Jan 2021 16:42:24 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.4.0
 MIME-Version: 1.0
-References: <20210112075520.4103414-1-andrii@kernel.org> <20210112075520.4103414-6-andrii@kernel.org>
- <4155ef59-9e5e-f596-f22b-ecd4bde73e85@iogearbox.net>
-In-Reply-To: <4155ef59-9e5e-f596-f22b-ecd4bde73e85@iogearbox.net>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 12 Jan 2021 15:18:59 -0800
-Message-ID: <CAADnVQLjv3iLT3yWyR8tK7kAU8sM1giW_cbMcHHQpDCMigivgQ@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf-next 5/7] bpf: support BPF ksym variables in kernel modules
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@fb.com>,
-        Kernel Team <kernel-team@fb.com>, Hao Luo <haoluo@google.com>,
-        Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210112045008.29834-1-unixbhaskar@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 12, 2021 at 8:30 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
->
-> On 1/12/21 8:55 AM, Andrii Nakryiko wrote:
-> > Add support for directly accessing kernel module variables from BPF programs
-> > using special ldimm64 instructions. This functionality builds upon vmlinux
-> > ksym support, but extends ldimm64 with src_reg=BPF_PSEUDO_BTF_ID to allow
-> > specifying kernel module BTF's FD in insn[1].imm field.
-> >
-> > During BPF program load time, verifier will resolve FD to BTF object and will
-> > take reference on BTF object itself and, for module BTFs, corresponding module
-> > as well, to make sure it won't be unloaded from under running BPF program. The
-> > mechanism used is similar to how bpf_prog keeps track of used bpf_maps.
-> >
-> > One interesting change is also in how per-CPU variable is determined. The
-> > logic is to find .data..percpu data section in provided BTF, but both vmlinux
-> > and module each have their own .data..percpu entries in BTF. So for module's
-> > case, the search for DATASEC record needs to look at only module's added BTF
-> > types. This is implemented with custom search function.
-> >
-> > Acked-by: Yonghong Song <yhs@fb.com>
-> > Acked-by: Hao Luo <haoluo@google.com>
-> > Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-> [...]
-> > +
-> > +struct module *btf_try_get_module(const struct btf *btf)
-> > +{
-> > +     struct module *res = NULL;
-> > +#ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> > +     struct btf_module *btf_mod, *tmp;
-> > +
-> > +     mutex_lock(&btf_module_mutex);
-> > +     list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
-> > +             if (btf_mod->btf != btf)
-> > +                     continue;
-> > +
-> > +             if (try_module_get(btf_mod->module))
-> > +                     res = btf_mod->module;
->
-> One more thought (follow-up would be okay I'd think) ... when a module references
-> a symbol from another module, it similarly needs to bump the refcount of the module
-> that is owning it and thus disallowing to unload for that other module's lifetime.
-> That usage dependency is visible via /proc/modules however, so if unload doesn't work
-> then lsmod allows a way to introspect that to the user. This seems to be achieved via
-> resolve_symbol() where it records its dependency/usage. Would be great if we could at
-> some point also include the BPF prog name into that list so that this is more obvious.
-> Wdyt?
+On 1/11/21 8:50 PM, Bhaskar Chowdhury wrote:
+> s/controling/controlling/p
+> 
+> Signed-off-by: Bhaskar Chowdhury <unixbhaskar@gmail.com>
 
-I thought about it as well, but plenty of kernel things just grab the ref of ko
-and don't add any way to introspect what piece of kernel is holding ko.
-So this case won't be the first.
-Also if we add it for bpf progs it could be confusing in lsmod.
-Since it currently only shows other ko-s in there.
-Long ago I had an awk script to parse that output to rmmod dependent modules
-before rmmoding the main one. If somebody doing something like this
-bpf prog names in the same place may break things.
-So I think there are more cons than pros.
-That is certainly a follow up if we agree on the direction.
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
+> ---
+>  kernel/trace/trace_uprobe.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
+> index 3cf7128e1ad3..55c6afd8cb27 100644
+> --- a/kernel/trace/trace_uprobe.c
+> +++ b/kernel/trace/trace_uprobe.c
+> @@ -1635,7 +1635,7 @@ void destroy_local_trace_uprobe(struct trace_event_call *event_call)
+>  }
+>  #endif /* CONFIG_PERF_EVENTS */
+> 
+> -/* Make a trace interface for controling probe points */
+> +/* Make a trace interface for controlling probe points */
+>  static __init int init_uprobe_trace(void)
+>  {
+>  	int ret;
+> --
+> 2.26.2
+> 
+
+
+-- 
+~Randy
+You can't do anything without having to do something else first.
+-- Belefant's Law
