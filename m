@@ -2,62 +2,66 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 675EBC4332B
-	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 02:03:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CA16AC433DB
+	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 02:03:50 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 36BFC23442
-	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 02:03:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 76BC323442
+	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 02:03:50 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729811AbhANCCG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Jan 2021 21:02:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
+        id S1729304AbhAMXHr (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Jan 2021 18:07:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729389AbhAMXWY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 13 Jan 2021 18:22:24 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F58C0617A9;
-        Wed, 13 Jan 2021 15:07:42 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id y12so2038743pji.1;
-        Wed, 13 Jan 2021 15:07:42 -0800 (PST)
+        with ESMTP id S1729372AbhAMWj5 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Jan 2021 17:39:57 -0500
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05789C061786;
+        Wed, 13 Jan 2021 14:38:39 -0800 (PST)
+Received: by mail-qk1-x729.google.com with SMTP id v126so4473480qkd.11;
+        Wed, 13 Jan 2021 14:38:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=m4PIDzYT3CXhoACwt4A5q0aBFravQnGjz5z9j8ZUsEY=;
-        b=kSQ5AATGqJZ1OZcYKgwWY5EamTo6erdhBn8bkSwXMwNhcF7BCVo9sbg80BYZt14h/X
-         WRETpPnEcpfjBwMcAfT6nVWS7rl/zjTc9uqDfmVBydaJkiH80gHIpSxxTchw7nacf0Za
-         gh6XJyD2mZnCktbfjPnCPtUk3wBxDscxfYH+Ryrx1jozwqwLS+f8wSKLkE6kHDFFhjJS
-         ly7S4GM7zj3gxUKPbS9xxituOC9XKYq4TouBRaDT0BfiNP9YFap3ZtsIfWH9gY2H/XRQ
-         XUuOCy9Y1L1RkUbq8pLQhTxUo/UG03EVThoUtbWoL8uLja4Xh6ARab+sw1wtdeCWR+xL
-         73ew==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GFmuZbwYLEmY3pcAyxIqKW63OwSHxC/C2Nsx5FErA3M=;
+        b=hIir710Y6kxpAHZTvbj+ffs1bXRvZ3R6UMphoJudDGq1vFfwGjoNYxfrfrunyTUfWA
+         MncASkBXMdmio6tzJs6zzIiAubWBxk6byNvp9n+USJrqh+Q1ARYS+fxdA6Qb6scDx9RH
+         2F6zqYZjxUyUKD95BqzmZ+eWx9xBl0015/HBT8gfhizvmAt0WPduQBNK0A0qgZXNeZc/
+         eL0ztWXHKWY6Lwv6x9b/1TTDI4NHANFotVgPzMfpoi0A0O4GS/BTl2BmTs5NbKCYs7Nc
+         7RX8eqt9R59x+EFNf4RC/vE1qr/QG+O5VFSQk8Ejo7Aa+HoCv6xwY/rfZP7jRT29oPMR
+         ErRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=m4PIDzYT3CXhoACwt4A5q0aBFravQnGjz5z9j8ZUsEY=;
-        b=d/CuTKqHDrAXaXxDmvUY2cnYkOV4uYeC35p4/83X04DMESNMn6pGX/oR+vkT3YDSOx
-         Mmycbuy/4M5gpu51GncIxQqaoMiKD94KjE+7NTQQJbv/b9dPKa7lMKfVj70cPCyTIMWu
-         XfXvePhUrHPJNcCo4F76gQpsyn9fyL7w1LRfHzRNmw5H8bqctUtZPnKVF1GSC8ruJnZG
-         KB0MYcXsliijIJf0NfJxxKZoUoNZd6CjrO48ehc3pP9KwchvonRgIEs/HRJl6nDt5e8i
-         /61ID96si6kHVciCFmWWfsOdZen2HpFVQ7C7tUfv4wcmy2PktB805bpiR85KEwvf3ngP
-         EfLw==
-X-Gm-Message-State: AOAM531zzS5GiCPv+au5QzZjzKmJDMQUmBPyAUy6dd3wK+9wJWJBZ1Dg
-        NdYRLtFxEehminafAtVJ3ao=
-X-Google-Smtp-Source: ABdhPJxQjXFrORq7aRfjX5AzuzrkieozDdbOI+BgMpe3PbPu7LmqaHSUfdR9PjmJQind1uC0ObZucQ==
-X-Received: by 2002:a17:90a:fd08:: with SMTP id cv8mr1652767pjb.29.1610579261988;
-        Wed, 13 Jan 2021 15:07:41 -0800 (PST)
-Received: from Ryzen-9-3900X.localdomain (ip68-104-204-241.ph.ph.cox.net. [68.104.204.241])
-        by smtp.gmail.com with ESMTPSA id t1sm3515705pfq.154.2021.01.13.15.07.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Jan 2021 15:07:41 -0800 (PST)
-Date:   Wed, 13 Jan 2021 16:07:39 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GFmuZbwYLEmY3pcAyxIqKW63OwSHxC/C2Nsx5FErA3M=;
+        b=FZv4WZjiNx1DZ2/utr6sdlkRcUI+pOsmxukt00TkLcBFTDnEocdvGkBBfk9kPXxPF6
+         IsOyqglVROivJmk4auzjGFWCrk31wnfflF6BvYEcMXrwEve4DtiBCD0fsGD9wq8Q236s
+         6x5UhFtBe8sDtCLSzcst6tlbkElLvscbUOmeUh19pagY/Cq4zQHOjt5dtKdsvGkJfnJ4
+         Oj14ZCMB/WiSrmvGXyYIQlqxb2XBtN2CYIJnZqSdHlUbuwnYABsC42VJATRII+nu+HtV
+         2694/1h4CixewVpqHYYFnY4MnEe0y7XErkHuWrlWosacqNthPGm9KeXGKhr5GuZ8ymxL
+         ALCw==
+X-Gm-Message-State: AOAM532BaPCMoEmQ/cj49CBc165ZhuPoKl3K+iLlcEiv1a361juteM0Z
+        UqVCX6SPxLiK1vWt4pBcWgj9YaoVlJG9pOYBPTzVX6EMCscdIQ==
+X-Google-Smtp-Source: ABdhPJzzpwWInqnLViASKl37booGT/1A7M5OcmFRDXKtg+RpYX/VBPCb/A28aLKe7hwx7Rg6ieepYUskBNCWKaZHnpI=
+X-Received: by 2002:a25:4107:: with SMTP id o7mr6281815yba.459.1610577518196;
+ Wed, 13 Jan 2021 14:38:38 -0800 (PST)
+MIME-Version: 1.0
+References: <20210111180609.713998-1-natechancellor@gmail.com>
+ <CAK7LNAQ=38BUi-EG5v2UiuAF-BOsVe5BTd-=jVYHHHPD7ikS5A@mail.gmail.com>
+ <20210111193400.GA1343746@ubuntu-m3-large-x86> <CAK7LNASZuWp=aPOCKo6QkdHwM5KG6MUv8305v3x-2yR7cKEX-w@mail.gmail.com>
+ <20210111200010.GA3635011@ubuntu-m3-large-x86> <CAEf4BzaL18a2+j3EYaD7jcnbJzqwG2MuBxXR2iRZ3KV9Jwrj6w@mail.gmail.com>
+In-Reply-To: <CAEf4BzaL18a2+j3EYaD7jcnbJzqwG2MuBxXR2iRZ3KV9Jwrj6w@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 13 Jan 2021 14:38:27 -0800
+Message-ID: <CAEf4Bzbv6nrJNxbZAvFx4Djvf1zbWnrV_i90vPGHtV-W7Tz=bQ@mail.gmail.com>
+Subject: Re: [PATCH] bpf: Hoise pahole version checks into Kconfig
+To:     Nathan Chancellor <natechancellor@gmail.com>
 Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Michal Marek <michal.lkml@markovi.net>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -71,35 +75,144 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
         Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
         Sedat Dilek <sedat.dilek@gmail.com>
-Subject: Re: [PATCH] bpf: Hoise pahole version checks into Kconfig
-Message-ID: <20210113230739.GA22747@Ryzen-9-3900X.localdomain>
-References: <20210111180609.713998-1-natechancellor@gmail.com>
- <CAK7LNAQ=38BUi-EG5v2UiuAF-BOsVe5BTd-=jVYHHHPD7ikS5A@mail.gmail.com>
- <20210111193400.GA1343746@ubuntu-m3-large-x86>
- <CAK7LNASZuWp=aPOCKo6QkdHwM5KG6MUv8305v3x-2yR7cKEX-w@mail.gmail.com>
- <20210111200010.GA3635011@ubuntu-m3-large-x86>
- <CAEf4BzaL18a2+j3EYaD7jcnbJzqwG2MuBxXR2iRZ3KV9Jwrj6w@mail.gmail.com>
- <CAEf4Bzbv6nrJNxbZAvFx4Djvf1zbWnrV_i90vPGHtV-W7Tz=bQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4Bzbv6nrJNxbZAvFx4Djvf1zbWnrV_i90vPGHtV-W7Tz=bQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jan 13, 2021 at 02:38:27PM -0800, Andrii Nakryiko wrote:
-> Hm.. Just saw Linus proposing using $(error-if) in Kconfig for an
-> unrelated issue ([0]). If we can make this work, then it would catch
-> such issue early on, yet won't have any downsides of hiding
-> CONFIG_DEBUG_INFO_BTF if pahole is too old. WDYT?
-> 
->   [0] https://lore.kernel.org/lkml/CAHk-=wh-+TMHPTFo1qs-MYyK7tZh-OQovA=pP3=e06aCVp6_kA@mail.gmail.com/
+On Mon, Jan 11, 2021 at 1:24 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Mon, Jan 11, 2021 at 12:00 PM Nathan Chancellor
+> <natechancellor@gmail.com> wrote:
+> >
+> > On Tue, Jan 12, 2021 at 04:50:50AM +0900, Masahiro Yamada wrote:
+> > > On Tue, Jan 12, 2021 at 4:34 AM Nathan Chancellor
+> > > <natechancellor@gmail.com> wrote:
+> > > >
+> > > > On Tue, Jan 12, 2021 at 04:19:01AM +0900, Masahiro Yamada wrote:
+> > > > > On Tue, Jan 12, 2021 at 3:06 AM Nathan Chancellor
+> > > > > <natechancellor@gmail.com> wrote:
+> > > > > >
+> > > > > > After commit da5fb18225b4 ("bpf: Support pre-2.25-binutils objcopy for
+> > > > > > vmlinux BTF"), having CONFIG_DEBUG_INFO_BTF enabled but lacking a valid
+> > > > > > copy of pahole results in a kernel that will fully compile but fail to
+> > > > > > link. The user then has to either install pahole or disable
+> > > > > > CONFIG_DEBUG_INFO_BTF and rebuild the kernel but only after their build
+> > > > > > has failed, which could have been a significant amount of time depending
+> > > > > > on the hardware.
+> > > > > >
+> > > > > > Avoid a poor user experience and require pahole to be installed with an
+> > > > > > appropriate version to select and use CONFIG_DEBUG_INFO_BTF, which is
+> > > > > > standard for options that require a specific tools version.
+> > > > > >
+> > > > > > Suggested-by: Sedat Dilek <sedat.dilek@gmail.com>
+> > > > > > Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
+> > > > >
+> > > > >
+> > > > >
+> > > > > I am not sure if this is the right direction.
+> > > > >
+> > > > >
+> > > > > I used to believe moving any tool test to the Kconfig
+> > > > > was the right thing to do.
+> > > > >
+> > > > > For example, I tried to move the libelf test to Kconfig,
+> > > > > and make STACK_VALIDATION depend on it.
+> > > > >
+> > > > > https://patchwork.kernel.org/project/linux-kbuild/patch/1531186516-15764-1-git-send-email-yamada.masahiro@socionext.com/
+> > > > >
+> > > > > It was rejected.
+> > > > >
+> > > > >
+> > > > > In my understanding, it is good to test target toolchains
+> > > > > in Kconfig (e.g. cc-option, ld-option, etc).
+> > > > >
+> > > > > As for host tools, in contrast, it is better to _intentionally_
+> > > > > break the build in order to let users know that something needed is missing.
+> > > > > Then, they will install necessary tools or libraries.
+> > > > > It is just a one-time setup, in most cases,
+> > > > > just running 'apt install' or 'dnf install'.
+> > > > >
+> > > > >
+> > > > >
+> > > > > Recently, a similar thing happened to GCC_PLUGINS
+> > > > > https://patchwork.kernel.org/project/linux-kbuild/patch/20201203125700.161354-1-masahiroy@kernel.org/#23855673
+> > > > >
+> > > > >
+> > > > >
+> > > > >
+> > > > > Following this pattern, if a new pahole is not installed,
+> > > > > it might be better to break the build instead of hiding
+> > > > > the CONFIG option.
+> > > > >
+> > > > > In my case, it is just a matter of 'apt install pahole'.
+> > > > > On some distributions, the bundled pahole is not new enough,
+> > > > > and people may end up with building pahole from the source code.
+> > > >
+> > > > This is fair enough. However, I think that parts of this patch could
+> > > > still be salvaged into something that fits this by making it so that if
+> > > > pahole is not installed (CONFIG_PAHOLE_VERSION=0) or too old, the build
+> > > > errors at the beginning, rather at the end. I am not sure where the best
+> > > > place to put that check would be though.
+> > >
+> > > Me neither.
+> > >
+> > >
+> > > Collecting tool checks to the beginning would be user-friendly.
+> > > However, scattering the related code to multiple places is not
+> > > nice from the developer point of view.
+> > >
+> > > How big is it a problem if the build fails
+> > > at the very last stage?
+> > >
+> > > You can install pahole, then resume "make".
+> > >
+> > > Kbuild skips unneeded building, then you will
+> > > be able to come back to the last build stage shortly.
+> >
+> > There will often be times where I am testing multiple configurations in
+> > a row serially and the longer that a build takes to fail, the longer it
+> > takes for me to get a "real" result. That is my motivation behind this
+> > change. If people are happy with the current state of things, I will
+> > just stick with universally disabling CONFIG_DEBUG_INFO_BTF in my test
+> > framework.
+> >
+>
+> I see where Masahiro is coming from. Not seeing CONFIG_DEBUG_INFO_BTF
+> option because pahole is not installed (or is not new enough) is, I
+> believe, for the majority of users, a much bigger confusion. Currently
+> they will get a specific and helpful message at the link time, which
+> is much more actionable, IMO. Once you fix pahole dependency, running
+> make again would skip all the already compiled code and would start
+> linking almost immediately, so if you are doing build locally there is
+> a very little downside.
 
-Yes, I think that would be exactly what we want because DEBUG_INFO_BTF
-could cause the build to error if PAHOLE_VERSION is not >= 116. I will
-try to keep an eye on that thread to see how it goes then respin this
-based on anything that comes from it.
+Hm.. Just saw Linus proposing using $(error-if) in Kconfig for an
+unrelated issue ([0]). If we can make this work, then it would catch
+such issue early on, yet won't have any downsides of hiding
+CONFIG_DEBUG_INFO_BTF if pahole is too old. WDYT?
 
-Cheers,
-Nathan
+  [0] https://lore.kernel.org/lkml/CAHk-=wh-+TMHPTFo1qs-MYyK7tZh-OQovA=pP3=e06aCVp6_kA@mail.gmail.com/
+
+>
+> I understand your situation is a bit different in that you are
+> building from scratch every single time (probably some sort of CI
+> setup, right?). But it's a rarer and more power-user use case. And
+> fixing pahole dependency is a one-time fix, so it's frustrating, but
+> fixable on your side.
+>
+> As for disabling CONFIG_DEBUG_INFO_BTF. It's up to you and depends on
+> what you are after, but major distros now enable it by default, so if
+> you want to resemble common kernel configs, it's probably better to
+> stick with it.
+>
+> Ideally, I'd love for Kconfig to have a way to express tool
+> dependencies in such a way that it's still possible to choose desired
+> options and if the build environment is lacking dependencies then it
+> would be communicated early on. I have no idea if that's doable and
+> how much effort it'd take, though.
+>
+>
+> > Cheers,
+> > Nathan
