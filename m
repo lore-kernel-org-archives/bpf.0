@@ -8,61 +8,60 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	URIBL_BLOCKED,USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7E6CBC4332B
-	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 18:19:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 68EE0C43331
+	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 18:20:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5929C23B5D
-	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 18:19:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3896323B6C
+	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 18:20:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729677AbhANSTn (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Jan 2021 13:19:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
+        id S1726288AbhANSTs (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Jan 2021 13:19:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729673AbhANSTm (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Jan 2021 13:19:42 -0500
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0BEC06179E
-        for <bpf@vger.kernel.org>; Thu, 14 Jan 2021 10:18:25 -0800 (PST)
-Received: by mail-wr1-x44a.google.com with SMTP id g17so2954568wrr.11
-        for <bpf@vger.kernel.org>; Thu, 14 Jan 2021 10:18:25 -0800 (PST)
+        with ESMTP id S1729704AbhANSTp (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Jan 2021 13:19:45 -0500
+Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504AAC0617A4
+        for <bpf@vger.kernel.org>; Thu, 14 Jan 2021 10:18:32 -0800 (PST)
+Received: by mail-wr1-x449.google.com with SMTP id u14so2963116wrr.15
+        for <bpf@vger.kernel.org>; Thu, 14 Jan 2021 10:18:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=GnGYLZQpXXpyrj8V8AXVE35GZ42ZV37BIth5wG6TAKc=;
-        b=oEFvraAACDuc/sC3rYp4Qpya1srkmm9MPd3Jw/1QVatQwpM6kmtAqVDzDkZPsp9NbI
-         zKE4eBInIo41m/6VCI8A9q2QKj19A9+oh5WWhi24SbKfgG9xO/1rtnjIQR8evUz82HGO
-         LxjGYy/adXmfmehKX9CUBKKhn57pftDgB2OF03qSFHL06KkAyhEmw1mbXnz53sAT4kBv
-         RG+4Nf5IMggCwBkZaUgrfN8FDEKNFU080Wo9sBPQxLyFuh2O9czBfdvkOH+bFaMvQvmn
-         /TROFTg4oo1piDjHQwjkFpcEmNSQftLSskmd7nKRZV3VNR8NKKBMWMFb4ZOIEiGtGUJd
-         YkDA==
+        bh=oW3at7tYerofWpFJJa0IT/4f63HRcTZEokqKQUOM8Tc=;
+        b=ejJx5SL1fxsjwfzzDNBu77jDzM3gbctXjuLEXIC3R0xMOGwoQYZOxS2JvSgYX0pkXg
+         BXiXTH+qpyB2ubLuXMn8VO3P+2XHRd9MeE137iyXchQPCm847DnT3AJKSiy4uwQZ1UI8
+         /Oc42tfCquYcp6sSW1If1t/HCdJA7h3Gflnw6EUDdo7t143KiehHYxwe9nJFVVMHJXIh
+         V+h2JlzkAPAv+oDLUuRfL8H5N0x6CITgrNe7LQHEkdrh2qnu3ClCFI1R9cWo03OVfRPi
+         muOfMn91THVE3jIZYdDlfpEEhfp5VUSXNRxf71aaJC0BGfUQP/EREaKjqRXlydjOrFBP
+         mGUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=GnGYLZQpXXpyrj8V8AXVE35GZ42ZV37BIth5wG6TAKc=;
-        b=i1ae4eq7dTiv8WOWZZF+Xp5uq0zD9G0XOO/wUXQne6o1yXqjieKFSDcfOkqzDfI+Lp
-         HzYo0c4VBsmh1pJla13Mqj+nvcfCyG8+N+Ka7jSxWSi6+N0lSCKLcnesYH64TRWvJ7SD
-         3rSc25p0uWAIRQ2l8oPISleUtzflA6LJUmoSF1lMtyKoYYJl2B3SWStcQ79yHC8UT5+6
-         6U6yDwKY23148MxrykjM+KfZPoD6W+rgQiPdVfMTYdUv01BnvkFjfOFk6v8iKnQTOxvC
-         NsNFj6oCCIgJQ61JluFWBYpOABo5WDxnVlvrsXvHx6zDzLQ87GQAWzBwG58YptJUGu1e
-         3Ijw==
-X-Gm-Message-State: AOAM532OhTpezxKnBYmK5zxgZGzhMb2V/U7e3Rsn0X0nq16jMGc01Ert
-        MYvkrOtuo1U9Mjkxs6gwYJ4CvYmR0h724IoyTKQpzqxt4GI851vCZR96tkvcnGiqBDXMHuHFWJr
-        cA7ucTFynDNsi+TTNw6R9iGVqA8gkHkIysCoeAn9H7QWSbqjZokqlmAkEmTFUNro=
-X-Google-Smtp-Source: ABdhPJxqVj/QSoJLjdEgCfWVad9Ku075T8z89lrvlTHoNoZcrsPrKr+wc+tdqTKloVBcyUPiO7+SPtFGYHG1bg==
+        bh=oW3at7tYerofWpFJJa0IT/4f63HRcTZEokqKQUOM8Tc=;
+        b=VEI/rEo6/2GsPygy9Fo7Jw9IZNi+NNkgmuxPPyDgAtVezhxdoBict6Cv+kuhfgtTP1
+         NbtJqfGCf75MB+xY3jSHhp7eJ05KZ/k8mza5HqCpauzgFCd2RiiQarE7A3j/ZJ4ah07m
+         7WOITHVlSC2S7G72u1ubqKuDw74Lv+x/sc8RgEUkEKHEe4UzztHowlbiD8QBaV/8xxic
+         GJ+1QGg5qMB8IjO6SsGSpn4/eUlocOek7zwPkLfdHbpsJdye1dMNCpoi9fWK9oVgz5uK
+         7NBltKFvbVEBBQVHO4bAYE5a4RkoaITvx42szAW0c83V+JRVbkvYMzUegzu64hbGjeqs
+         BQzg==
+X-Gm-Message-State: AOAM533lD6h2S7lIFOACmJEan0J/K1ybAn8xi9rabKPlGZdbVjHP782a
+        2VPgHUaqlnURl46mwDAMKrsfRzwUbFMLhmx7d4vU6y+dCgL4rQ2ikTXXdxoM9u3Ik8eZ25yjMYP
+        nxRLnoqMVc4QE5A9H2Rq4a0+RhwBaZXWTjJFfxx8f67wLiJ+pBU7EL5ZoDKABN08=
+X-Google-Smtp-Source: ABdhPJwIi3mz/1SY+6oE7+tGQR4TG4Ys8wjpCeHeJPoKZHE0TxLj8pwGF4emyEHgJecZi38QdAkxaELMDCwY1w==
 Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
 X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:10:28:9cb1:c0a8:11db])
- (user=jackmanb job=sendgmr) by 2002:a1c:2c89:: with SMTP id
- s131mr557023wms.0.1610648303757; Thu, 14 Jan 2021 10:18:23 -0800 (PST)
-Date:   Thu, 14 Jan 2021 18:17:48 +0000
+ (user=jackmanb job=sendgmr) by 2002:adf:decd:: with SMTP id
+ i13mr4665456wrn.144.1610648310534; Thu, 14 Jan 2021 10:18:30 -0800 (PST)
+Date:   Thu, 14 Jan 2021 18:17:51 +0000
 In-Reply-To: <20210114181751.768687-1-jackmanb@google.com>
-Message-Id: <20210114181751.768687-9-jackmanb@google.com>
+Message-Id: <20210114181751.768687-12-jackmanb@google.com>
 Mime-Version: 1.0
 References: <20210114181751.768687-1-jackmanb@google.com>
 X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
-Subject: [PATCH bpf-next v7 08/11] bpf: Pull out a macro for interpreting
- atomic ALU operations
+Subject: [PATCH bpf-next v7 11/11] bpf: Document new atomic instructions
 From:   Brendan Jackman <jackmanb@google.com>
 To:     bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -80,120 +79,58 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Since the atomic operations that are added in subsequent commits are
-all isomorphic with BPF_ADD, pull out a macro to avoid the
-interpreter becoming dominated by lines of atomic-related code.
-
-Note that this sacrificies interpreter performance (combining
-STX_ATOMIC_W and STX_ATOMIC_DW into single switch case means that we
-need an extra conditional branch to differentiate them) in favour of
-compact and (relatively!) simple C code.
+Document new atomic instructions.
 
 Acked-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Brendan Jackman <jackmanb@google.com>
 ---
- kernel/bpf/core.c | 80 +++++++++++++++++++++++------------------------
- 1 file changed, 39 insertions(+), 41 deletions(-)
+ Documentation/networking/filter.rst | 31 +++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 4df6daba43ef..8669e685825f 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1618,55 +1618,53 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
- 	LDX_PROBE(DW, 8)
- #undef LDX_PROBE
+diff --git a/Documentation/networking/filter.rst b/Documentation/networking/filter.rst
+index 1583d59d806d..f6d8f90e9a56 100644
+--- a/Documentation/networking/filter.rst
++++ b/Documentation/networking/filter.rst
+@@ -1053,8 +1053,39 @@ encoding.
+    .imm = BPF_ADD, .code = BPF_ATOMIC | BPF_W  | BPF_STX: lock xadd *(u32 *)(dst_reg + off16) += src_reg
+    .imm = BPF_ADD, .code = BPF_ATOMIC | BPF_DW | BPF_STX: lock xadd *(u64 *)(dst_reg + off16) += src_reg
  
--	STX_ATOMIC_W:
--		switch (IMM) {
--		case BPF_ADD:
--			/* lock xadd *(u32 *)(dst_reg + off16) += src_reg */
--			atomic_add((u32) SRC, (atomic_t *)(unsigned long)
--				   (DST + insn->off));
--			break;
--		case BPF_ADD | BPF_FETCH:
--			SRC = (u32) atomic_fetch_add(
--				(u32) SRC,
--				(atomic_t *)(unsigned long) (DST + insn->off));
--			break;
--		case BPF_XCHG:
--			SRC = (u32) atomic_xchg(
--				(atomic_t *)(unsigned long) (DST + insn->off),
--				(u32) SRC);
--			break;
--		case BPF_CMPXCHG:
--			BPF_R0 = (u32) atomic_cmpxchg(
--				(atomic_t *)(unsigned long) (DST + insn->off),
--				(u32) BPF_R0, (u32) SRC);
-+#define ATOMIC_ALU_OP(BOP, KOP)						\
-+		case BOP:						\
-+			if (BPF_SIZE(insn->code) == BPF_W)		\
-+				atomic_##KOP((u32) SRC, (atomic_t *)(unsigned long) \
-+					     (DST + insn->off));	\
-+			else						\
-+				atomic64_##KOP((u64) SRC, (atomic64_t *)(unsigned long) \
-+					       (DST + insn->off));	\
-+			break;						\
-+		case BOP | BPF_FETCH:					\
-+			if (BPF_SIZE(insn->code) == BPF_W)		\
-+				SRC = (u32) atomic_fetch_##KOP(		\
-+					(u32) SRC,			\
-+					(atomic_t *)(unsigned long) (DST + insn->off)); \
-+			else						\
-+				SRC = (u64) atomic64_fetch_##KOP(	\
-+					(u64) SRC,			\
-+					(atomic64_t *)(unsigned long) (DST + insn->off)); \
- 			break;
--		default:
--			goto default_label;
--		}
--		CONT;
++The basic atomic operations supported are:
++
++    BPF_ADD
++    BPF_AND
++    BPF_OR
++    BPF_XOR
++
++Each having equivalent semantics with the ``BPF_ADD`` example, that is: the
++memory location addresed by ``dst_reg + off`` is atomically modified, with
++``src_reg`` as the other operand. If the ``BPF_FETCH`` flag is set in the
++immediate, then these operations also overwrite ``src_reg`` with the
++value that was in memory before it was modified.
++
++The more special operations are:
++
++    BPF_XCHG
++
++This atomically exchanges ``src_reg`` with the value addressed by ``dst_reg +
++off``.
++
++    BPF_CMPXCHG
++
++This atomically compares the value addressed by ``dst_reg + off`` with
++``R0``. If they match it is replaced with ``src_reg``, The value that was there
++before is loaded back to ``R0``.
++
+ Note that 1 and 2 byte atomic operations are not supported.
  
- 	STX_ATOMIC_DW:
-+	STX_ATOMIC_W:
- 		switch (IMM) {
--		case BPF_ADD:
--			/* lock xadd *(u64 *)(dst_reg + off16) += src_reg */
--			atomic64_add((u64) SRC, (atomic64_t *)(unsigned long)
--				     (DST + insn->off));
--			break;
--		case BPF_ADD | BPF_FETCH:
--			SRC = (u64) atomic64_fetch_add(
--				(u64) SRC,
--				(atomic64_t *)(unsigned long) (DST + insn->off));
--			break;
-+		ATOMIC_ALU_OP(BPF_ADD, add)
-+#undef ATOMIC_ALU_OP
++Except ``BPF_ADD`` _without_ ``BPF_FETCH`` (for legacy reasons), all 4 byte
++atomic operations require alu32 mode. Clang enables this mode by default in
++architecture v3 (``-mcpu=v3``). For older versions it can be enabled with
++``-Xclang -target-feature -Xclang +alu32``.
 +
- 		case BPF_XCHG:
--			SRC = (u64) atomic64_xchg(
--				(atomic64_t *)(unsigned long) (DST + insn->off),
--				(u64) SRC);
-+			if (BPF_SIZE(insn->code) == BPF_W)
-+				SRC = (u32) atomic_xchg(
-+					(atomic_t *)(unsigned long) (DST + insn->off),
-+					(u32) SRC);
-+			else
-+				SRC = (u64) atomic64_xchg(
-+					(atomic64_t *)(unsigned long) (DST + insn->off),
-+					(u64) SRC);
- 			break;
- 		case BPF_CMPXCHG:
--			BPF_R0 = (u64) atomic64_cmpxchg(
--				(atomic64_t *)(unsigned long) (DST + insn->off),
--				(u64) BPF_R0, (u64) SRC);
-+			if (BPF_SIZE(insn->code) == BPF_W)
-+				BPF_R0 = (u32) atomic_cmpxchg(
-+					(atomic_t *)(unsigned long) (DST + insn->off),
-+					(u32) BPF_R0, (u32) SRC);
-+			else
-+				BPF_R0 = (u64) atomic64_cmpxchg(
-+					(atomic64_t *)(unsigned long) (DST + insn->off),
-+					(u64) BPF_R0, (u64) SRC);
- 			break;
-+
- 		default:
- 			goto default_label;
- 		}
+ You may encounter BPF_XADD - this is a legacy name for BPF_ATOMIC, referring to
+ the exclusive-add operation encoded when the immediate field is zero.
+ 
 -- 
 2.30.0.284.gd98b1dd5eaa7-goog
 
