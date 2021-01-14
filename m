@@ -2,287 +2,152 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-13.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=no
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8D2EDC43332
-	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 18:20:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 99555C433E0
+	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 18:53:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 677E223B6E
-	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 18:20:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 49E8D23B28
+	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 18:53:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727351AbhANSUJ (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Jan 2021 13:20:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
+        id S1726869AbhANSx6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Jan 2021 13:53:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727882AbhANSTa (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 14 Jan 2021 13:19:30 -0500
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E75C06179A
-        for <bpf@vger.kernel.org>; Thu, 14 Jan 2021 10:18:20 -0800 (PST)
-Received: by mail-ed1-x54a.google.com with SMTP id m16so2691452edd.21
-        for <bpf@vger.kernel.org>; Thu, 14 Jan 2021 10:18:20 -0800 (PST)
+        with ESMTP id S1725854AbhANSx6 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 14 Jan 2021 13:53:58 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500A9C0613C1
+        for <bpf@vger.kernel.org>; Thu, 14 Jan 2021 10:53:18 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id h10so3888097pfo.9
+        for <bpf@vger.kernel.org>; Thu, 14 Jan 2021 10:53:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=VV3S8AW6l6AGxAR3mpfPR5GupJViAhcniDGLDr1bJf0=;
-        b=MVLjjfUPTJnLWX468GxDF8PXdfPg1T4jN9ycgPOyxtZWCvcHoYQS9QSWQuYrGHepaT
-         bpTaCOqT1HbpAcUUODjjSwSQVXe3ToFUgknDZxJA2RAUo1rGe9WtJnZUhGXbDCxG7F9J
-         KC5eUZgYhmwm8wvIuxDMhrnuEr89N+s/tk9J8K0maGJrQcfYPgB7DRF0zIAoIf3IWHsZ
-         3c8MxaXn8Hcd5ZgW2jGAQz7PQIE9Mgf4Xx/qCVpRDc8T+YqU6OuhmNPD7TrtyV2h8TXQ
-         gATAxF3tQ3eszzqUwVUoEF7FBSU5/DKOgTU7Xkc9oTXJqMTCi3HdsWc62e6As21Fy2K3
-         Osbg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=etEJQyE4wI0xqWJz8agLY3zHi4W3c5fEnAfHXnXZRx4=;
+        b=PkfoBY28Z0KZd+sJWOsFzHre7U+J5Q9Ahv42tts9JioNQsOe3PcXmNv+9C2ByJiSVS
+         22nAALAvEsCbETcdwhMQ3PVxhWR7R6/uD09fr/xz9+q5TdQfuDnUfpubORpm9VpkijpV
+         gUVNVOxe1lb2kq8KQxokHVknP/g+oFDtdH4r3+LSJuxXybZBATZMh2NBmnQ22fcbzBKf
+         YtwBSRAo3ULo2U8g1prwHLkaWKkW8qIs8IZGBxTOHA1hJwyCDzz8A/pztfAsRJXhBOsp
+         QKaehCoC4s+sFVSyQhGcui5QhqVAtnQ8DdCQlxWAEKAo/1D3j/cbEeL/pSNlZLT3rBPQ
+         IfXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=VV3S8AW6l6AGxAR3mpfPR5GupJViAhcniDGLDr1bJf0=;
-        b=TJoavDAFd0vJJAPCagrCrYauRxXkqQFOdw8tDyQzQ7FZjX/y+nyUVI1wsDqB8t/6qB
-         NpNaIQCXwCQdRkqm3eMWuukWYApnJyrVKD8ueKb/3h2E2TaXakMOSUbkExpiir6T7fwg
-         bciLz2yj5yq1KI481n0YNRJrCl9t19igai0WtUKEZOZHO0G43kDqT7PgjDZXcaOkZXzd
-         QmDJINT8gGAnYuiXOJhTGY0tP2U+rbPQDhK/GMtkf5+VacOXGdntyAEuKH5IHUaYgr+C
-         EMl1fwoHq4LzeskYJ/HKBF0vryn8La1UOwnvJ1EhnkuSbfxYruxsxqLJX2JmgjA4G17h
-         OaRQ==
-X-Gm-Message-State: AOAM530+2XxiRRKJM5BUjZA1atnDTDFM56WhlBoHO/BvEWRRYaW5u0dZ
-        9bzFLs4i36WAjh4HnazM3CEZYuduO0F2zd9dTw3s5JN0cxbAjTnz4e28GF4WqYsQ11Q4da1MKy3
-        IhIKGYMZ7HE84baU53cZvHM4G3bYuUA2ijWSAVYNcwJlQYMnhe4SQ3Wtw6rPBQb0=
-X-Google-Smtp-Source: ABdhPJxt5UqCiw2pt/lvGjEPB9en8L5G7xJHrv15SzIubJhRgpSAoDsRwbsUrekF3sC+v5gQZVUNn4PbQgVXNQ==
-Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
-X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
- (user=jackmanb job=sendgmr) by 2002:a05:6402:128d:: with SMTP id
- w13mr6561797edv.56.1610648298847; Thu, 14 Jan 2021 10:18:18 -0800 (PST)
-Date:   Thu, 14 Jan 2021 18:17:46 +0000
-In-Reply-To: <20210114181751.768687-1-jackmanb@google.com>
-Message-Id: <20210114181751.768687-7-jackmanb@google.com>
-Mime-Version: 1.0
-References: <20210114181751.768687-1-jackmanb@google.com>
-X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
-Subject: [PATCH bpf-next v7 06/11] bpf: Add BPF_FETCH field / create
- atomic_fetch_add instruction
-From:   Brendan Jackman <jackmanb@google.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Florent Revest <revest@chromium.org>,
-        linux-kernel@vger.kernel.org,
-        "=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?=" <bjorn.topel@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Yonghong Song <yhs@fb.com>,
-        Brendan Jackman <jackmanb@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=etEJQyE4wI0xqWJz8agLY3zHi4W3c5fEnAfHXnXZRx4=;
+        b=ZKi5nGKZQ78LAXagNPqCjhXVQ6AgKI5ou0rAmjC8GwCkHN4xLND4u0N+q5gcfZQq75
+         CF7qtMafOEKsT/vJzTcII2dHGMAiS5WlqzS8q5AXRGu0hAxtyWouKIEVJd4DieaiJDJY
+         oafElVKFYRf4l+gw3aD6OmWZRGBZ6St+eQQdoFHCfI32fW7teILDiENoveq3KCDv5poY
+         UhpoHrTQpaF8UPjigSkApWIfQII2jedKvA/HKKf/L/6yDcrRVxnhJZvXUx/IkHa0mGka
+         GcdP6WvN52ST06172Mm2w8IM0tsBdaCQALcOWDIiBcaCEdHZ7K7Izya0TVVF5BvBqbMD
+         sDtg==
+X-Gm-Message-State: AOAM531CCeGx7vsyPCl7fwYtFJaXRSpTaQgUPqjjL8WW02vtj9uHTjf8
+        y6A46tqschU719w3mJeDHMR1ULDPpINzL75P3tCxwg==
+X-Google-Smtp-Source: ABdhPJw38RHREm7Yzl2+YeiPnoudzHETWhrvYLvHmrWnfe86WnAr71gkSEfCUUdTGK65f4KE1GJr4g9I5gXheZcJEQw=
+X-Received: by 2002:a62:7c4a:0:b029:19d:b7bc:2c51 with SMTP id
+ x71-20020a627c4a0000b029019db7bc2c51mr8801353pfc.30.1610650397614; Thu, 14
+ Jan 2021 10:53:17 -0800 (PST)
+MIME-Version: 1.0
+References: <20201204011129.2493105-1-ndesaulniers@google.com>
+ <20201204011129.2493105-3-ndesaulniers@google.com> <CA+icZUVa5rNpXxS7pRsmj-Ys4YpwCxiPKfjc0Cqtg=1GDYR8-w@mail.gmail.com>
+ <CA+icZUW6h4EkOYtEtYy=kUGnyA4RxKKMuX-20p96r9RsFV4LdQ@mail.gmail.com>
+ <CABtf2+RdH0dh3NyARWSOzig8euHK33h+0jL1zsey9V1HjjzB9w@mail.gmail.com> <CA+icZUUtAVBvpU8M0PONnNSiOATgeL9Ym24nYUcRPoWhsQj8Ug@mail.gmail.com>
+In-Reply-To: <CA+icZUUtAVBvpU8M0PONnNSiOATgeL9Ym24nYUcRPoWhsQj8Ug@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 14 Jan 2021 10:53:06 -0800
+Message-ID: <CAKwvOd=+g88AEDO9JRrV-gwggsqx5p-Ckiqon3=XLcx8L-XaKg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] Kbuild: DWARF v5 support
+To:     Sedat Dilek <sedat.dilek@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Caroline Tice <cmtice@google.com>,
+        Arvind Sankar <nivedita@alum.mit.edu>,
+        Jakub Jelinek <jakub@redhat.com>,
+        Fangrui Song <maskray@google.com>,
+        Clang-Built-Linux ML <clang-built-linux@googlegroups.com>,
+        Nick Clifton <nickc@redhat.com>, bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-The BPF_FETCH field can be set in bpf_insn.imm, for BPF_ATOMIC
-instructions, in order to have the previous value of the
-atomically-modified memory location loaded into the src register
-after an atomic op is carried out.
+On Wed, Jan 13, 2021 at 10:18 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+>
+> On Wed, Jan 13, 2021 at 11:25 PM Caroline Tice <cmtice@google.com> wrote:
+> >
+> > On Tue, Jan 12, 2021 at 3:17 PM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> >>
+> >> Unfortunately, I see with CONFIG_DEBUG_INFO_DWARF5=y and
+> >> CONFIG_DEBUG_INFO_BTF=y:
+> >>
+> >> die__process_inline_expansion: DW_TAG_INVALID (0x48) @ <0x3f0dd5a> not handled!
+> >> die__process_function: DW_TAG_INVALID (0x48) @ <0x3f0dd69> not handled!
 
-Suggested-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Brendan Jackman <jackmanb@google.com>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
----
- arch/x86/net/bpf_jit_comp.c    |  4 ++++
- include/linux/filter.h         |  1 +
- include/uapi/linux/bpf.h       |  3 +++
- kernel/bpf/core.c              | 13 +++++++++++++
- kernel/bpf/disasm.c            |  7 +++++++
- kernel/bpf/verifier.c          | 33 ++++++++++++++++++++++++---------
- tools/include/linux/filter.h   |  1 +
- tools/include/uapi/linux/bpf.h |  3 +++
- 8 files changed, 56 insertions(+), 9 deletions(-)
+I can confirm that I see a stream of these warnings when building with
+this patch series applied, and those two configs enabled.
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index b1829a534da1..eea7d8b0bb12 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -811,6 +811,10 @@ static int emit_atomic(u8 **pprog, u8 atomic_op,
- 		/* lock *(u32/u64*)(dst_reg + off) <op>= src_reg */
- 		EMIT1(simple_alu_opcodes[atomic_op]);
- 		break;
-+	case BPF_ADD | BPF_FETCH:
-+		/* src_reg = atomic_fetch_add(dst_reg + off, src_reg); */
-+		EMIT2(0x0F, 0xC1);
-+		break;
- 	default:
- 		pr_err("bpf_jit: unknown atomic opcode %02x\n", atomic_op);
- 		return -EFAULT;
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 392e94b79668..23fca41b8540 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -264,6 +264,7 @@ static inline bool insn_is_zext(const struct bpf_insn *insn)
-  * Atomic operations:
-  *
-  *   BPF_ADD                  *(uint *) (dst_reg + off16) += src_reg
-+ *   BPF_ADD | BPF_FETCH      src_reg = atomic_fetch_add(dst_reg + off16, src_reg);
-  */
- 
- #define BPF_ATOMIC_OP(SIZE, OP, DST, SRC, OFF)			\
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 6b3996343e63..ea262b009049 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -44,6 +44,9 @@
- #define BPF_CALL	0x80	/* function call */
- #define BPF_EXIT	0x90	/* function return */
- 
-+/* atomic op type fields (stored in immediate) */
-+#define BPF_FETCH	0x01	/* fetch previous value into src reg */
-+
- /* Register numbers */
- enum {
- 	BPF_REG_0 = 0,
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 4836ebf459cf..28d6000463e4 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1624,16 +1624,29 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
- 			/* lock xadd *(u32 *)(dst_reg + off16) += src_reg */
- 			atomic_add((u32) SRC, (atomic_t *)(unsigned long)
- 				   (DST + insn->off));
-+			break;
-+		case BPF_ADD | BPF_FETCH:
-+			SRC = (u32) atomic_fetch_add(
-+				(u32) SRC,
-+				(atomic_t *)(unsigned long) (DST + insn->off));
-+			break;
- 		default:
- 			goto default_label;
- 		}
- 		CONT;
-+
- 	STX_ATOMIC_DW:
- 		switch (IMM) {
- 		case BPF_ADD:
- 			/* lock xadd *(u64 *)(dst_reg + off16) += src_reg */
- 			atomic64_add((u64) SRC, (atomic64_t *)(unsigned long)
- 				     (DST + insn->off));
-+			break;
-+		case BPF_ADD | BPF_FETCH:
-+			SRC = (u64) atomic64_fetch_add(
-+				(u64) SRC,
-+				(atomic64_t *)(unsigned long) (DST + insn->off));
-+			break;
- 		default:
- 			goto default_label;
- 		}
-diff --git a/kernel/bpf/disasm.c b/kernel/bpf/disasm.c
-index 37c8d6e9b4cc..d2e20f6d0516 100644
---- a/kernel/bpf/disasm.c
-+++ b/kernel/bpf/disasm.c
-@@ -160,6 +160,13 @@ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
- 				bpf_ldst_string[BPF_SIZE(insn->code) >> 3],
- 				insn->dst_reg, insn->off,
- 				insn->src_reg);
-+		} else if (BPF_MODE(insn->code) == BPF_ATOMIC &&
-+			   insn->imm == (BPF_ADD | BPF_FETCH)) {
-+			verbose(cbs->private_data, "(%02x) r%d = atomic%s_fetch_add((%s *)(r%d %+d), r%d)\n",
-+				insn->code, insn->src_reg,
-+				BPF_SIZE(insn->code) == BPF_DW ? "64" : "",
-+				bpf_ldst_string[BPF_SIZE(insn->code) >> 3],
-+				insn->dst_reg, insn->off, insn->src_reg);
- 		} else {
- 			verbose(cbs->private_data, "BUG_%02x\n", insn->code);
- 		}
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d8a85f4e5b95..6aa1fc919761 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3608,7 +3608,11 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
- {
- 	int err;
- 
--	if (insn->imm != BPF_ADD) {
-+	switch (insn->imm) {
-+	case BPF_ADD:
-+	case BPF_ADD | BPF_FETCH:
-+		break;
-+	default:
- 		verbose(env, "BPF_ATOMIC uses invalid atomic opcode %02x\n", insn->imm);
- 		return -EINVAL;
- 	}
-@@ -3650,8 +3654,20 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
- 		return err;
- 
- 	/* check whether we can write into the same memory */
--	return check_mem_access(env, insn_idx, insn->dst_reg, insn->off,
--				BPF_SIZE(insn->code), BPF_WRITE, -1, true);
-+	err = check_mem_access(env, insn_idx, insn->dst_reg, insn->off,
-+			       BPF_SIZE(insn->code), BPF_WRITE, -1, true);
-+	if (err)
-+		return err;
-+
-+	if (!(insn->imm & BPF_FETCH))
-+		return 0;
-+
-+	/* check and record load of old value into src reg  */
-+	err = check_reg_arg(env, insn->src_reg, DST_OP);
-+	if (err)
-+		return err;
-+
-+	return 0;
- }
- 
- static int __check_stack_boundary(struct bpf_verifier_env *env, u32 regno,
-@@ -9528,12 +9544,6 @@ static int do_check(struct bpf_verifier_env *env)
- 		} else if (class == BPF_STX) {
- 			enum bpf_reg_type *prev_dst_type, dst_reg_type;
- 
--			if (((BPF_MODE(insn->code) != BPF_MEM &&
--			      BPF_MODE(insn->code) != BPF_ATOMIC) || insn->imm != 0)) {
--				verbose(env, "BPF_STX uses reserved fields\n");
--				return -EINVAL;
--			}
--
- 			if (BPF_MODE(insn->code) == BPF_ATOMIC) {
- 				err = check_atomic(env, env->insn_idx, insn);
- 				if (err)
-@@ -9542,6 +9552,11 @@ static int do_check(struct bpf_verifier_env *env)
- 				continue;
- 			}
- 
-+			if (BPF_MODE(insn->code) != BPF_MEM || insn->imm != 0) {
-+				verbose(env, "BPF_STX uses reserved fields\n");
-+				return -EINVAL;
-+			}
-+
- 			/* check src1 operand */
- 			err = check_reg_arg(env, insn->src_reg, SRC_OP);
- 			if (err)
-diff --git a/tools/include/linux/filter.h b/tools/include/linux/filter.h
-index e870c9039f0d..7211ce9fba53 100644
---- a/tools/include/linux/filter.h
-+++ b/tools/include/linux/filter.h
-@@ -173,6 +173,7 @@
-  * Atomic operations:
-  *
-  *   BPF_ADD                  *(uint *) (dst_reg + off16) += src_reg
-+ *   BPF_ADD | BPF_FETCH      src_reg = atomic_fetch_add(dst_reg + off16, src_reg);
-  */
- 
- #define BPF_ATOMIC_OP(SIZE, OP, DST, SRC, OFF)			\
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 6b3996343e63..ea262b009049 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -44,6 +44,9 @@
- #define BPF_CALL	0x80	/* function call */
- #define BPF_EXIT	0x90	/* function return */
- 
-+/* atomic op type fields (stored in immediate) */
-+#define BPF_FETCH	0x01	/* fetch previous value into src reg */
-+
- /* Register numbers */
- enum {
- 	BPF_REG_0 = 0,
+rebuilding with `make ... V=1`, it looks like the call to:
+
++ pahole -J .tmp_vmlinux.btf
+
+is triggering these.
+
+Shall I send a v4 that adds a Kconfig dependency on !DEBUG_INFO_BTF?
+Does pahole have a bug tracker?
+
+> >>
+> >> In /usr/include/dwarf.h I found:
+> >>
+> >> 498:    DW_OP_lit24 = 0x48,                /* Literal 24.  *
+> >
+> >
+> > There are multiple dwarf objects with the value 0x48, depending on which section of the dwarf.h file you search:
+> >
+> > DW_TAG_call_site = 0x48
+> > DW_AT_static_link = 0x48
+> > DW_OP_lit24 = 0x48.
+> >
+> > In this case, since the error message was about a DW_TAG, it would be complaining about DW_TAG_call_site, which is new to DWARF v5.
+> >
+> Example for "DW_TAG_INVALID (0x48)" from my build-log:
+>
+> die__process_inline_expansion: DW_TAG_INVALID (0x48) @ <0x1f671e7> not handled!
+>
+> $ llvm-dwarfdump-11 --debug-info=0x1f671e7 vmlinux
+> vmlinux:        file format elf64-x86-64
+>
+> .debug_info contents:
+>
+> 0x01f671e7: DW_TAG_call_site
+>              DW_AT_call_return_pc      (0xffffffff811b16f2)
+>              DW_AT_call_origin (0x01f67f1d)
+>
+> Looking for "DW_AT_call_origin (0x01f67f1d)":
+>
+> $ llvm-dwarfdump-11 --debug-info=0x01f67f1d vmlinux
+> vmlinux:        file format elf64-x86-64
+>
+> .debug_info contents:
+>
+> 0x01f67f1d: DW_TAG_subprogram
+>              DW_AT_external    (true)
+>              DW_AT_declaration (true)
+>              DW_AT_linkage_name        ("fput")
+>              DW_AT_name        ("fput")
+>              DW_AT_decl_file
+> ("/home/dileks/src/linux-kernel/git/./include/linux/file.h")
+>              DW_AT_decl_line   (16)
+>              DW_AT_decl_column (0x0d)
+
+That's a neat trick (using --debug-info=offset to print one element
+from the stream).
 -- 
-2.30.0.284.gd98b1dd5eaa7-goog
-
+Thanks,
+~Nick Desaulniers
