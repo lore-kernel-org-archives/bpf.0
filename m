@@ -2,230 +2,148 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-7.5 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id D04C5C433E9
-	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 03:41:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AC15EC433DB
+	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 03:42:42 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 998EE23719
-	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 03:41:39 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7BB4D23770
+	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 03:42:42 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727794AbhANDlG (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 13 Jan 2021 22:41:06 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:44809 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727775AbhANDlD (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 13 Jan 2021 22:41:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1610595576;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qtF1idSqCy5ua8Az2XtZ/1G+SswhJSq5w0eZMMNKzU8=;
-        b=jWecqsOadZPzEyOtTJA7pjDYatlvo1kIZCJUd771oQ6mMbGkpg421V0SfPNe1k31zCtXwR
-        ipRfUVXpubPQNpfGpuHCQDSNRI1loJXTInkQlxh2ozV6+rr4N4AZVR9mc8Su9Dwl3wTe50
-        hrhcacw/VX1/E4uCW+5+8czppvO+foM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-542--aJiRCZ_NrCYrBKuyUt_sg-1; Wed, 13 Jan 2021 22:39:34 -0500
-X-MC-Unique: -aJiRCZ_NrCYrBKuyUt_sg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 638DB15720;
-        Thu, 14 Jan 2021 03:39:30 +0000 (UTC)
-Received: from [10.72.12.100] (ovpn-12-100.pek2.redhat.com [10.72.12.100])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1C48760C0F;
-        Thu, 14 Jan 2021 03:39:04 +0000 (UTC)
-Subject: Re: [RFC PATCH 0/7] Support for virtio-net hash reporting
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     Yuri Benditovich <yuri.benditovich@daynix.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
+        id S1726640AbhANDml (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 13 Jan 2021 22:42:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726599AbhANDmk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 13 Jan 2021 22:42:40 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C09C061794;
+        Wed, 13 Jan 2021 19:41:54 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id 23so6026911lfg.10;
+        Wed, 13 Jan 2021 19:41:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QS8VXFs7x3ra/481hC4Sih94E6bZRvUnSXpvEKmNHbo=;
+        b=eID+qmHMVTeQyADuqgulk25EF1tIoUmyOQGCPvY/lbzzcJdTRTosfWB0bU53Bfl6ra
+         8U+51f8h9Q9gACGyrdDGGom/owSLh7aOw7Rfw6eAuVt8wEiWBjml/hwy4iuKK8YQIivB
+         kAUSBaet0rQqWRu3ST/BfBpvZwHf7c+pQKA3D7z/HppSCdQBAwK4XDRR7IUvHRL+2JYr
+         7RXsYiLj1apCOb+nLGDnNdO3W9IMzHk5tPk/uS2dHWIE5WcRaWvDhCD7XlLY3WceLSFT
+         xjOwBWy2UJS69k6zVaXGyKPkuL5EbChsHUWnNUfL7UdxM3aC0eMeRcnLHl6sQNk+ZVMZ
+         yq7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QS8VXFs7x3ra/481hC4Sih94E6bZRvUnSXpvEKmNHbo=;
+        b=nbvVMd4hzRks+VVzmmCm2lRSvrcT6ryWRoNsTmso4H03XW3H8xXyprAF3hLSvXVFvq
+         LQ92xLiTel+zOFo2ItsoeD60I6kc8kmkdBXVTYpY4/uYAjpmDoISQmnWXrvRIxi3Avjc
+         loWIgnJGdMEzbeGRcagIoTTGI1DzUNG7CK/JVpnmcgEJOn0S31+1nE/e8bvZ6eYsP7VV
+         WVsAX8C+vf5GG1xJSCgmVPZg4HIslJ806h/+WR8BOCD0V61UL8B52edOwgiC2BUYZDNn
+         UlWvNdyrxgUFgO15fQnRRhzi1qK0oye+GhS5Gc/0rKv+YqfgVFq1GxAcpQ3R3Br+wGJO
+         Gklw==
+X-Gm-Message-State: AOAM533xU+ECw345ICak3r59/8vgKsciKbviPUCe5D7q1lucOuv0qus0
+        8a2DFTj1jX5d8wRO7dPLBlh5flnUge/pH0/uL9U=
+X-Google-Smtp-Source: ABdhPJyWuPE8DhzRAipubVuzxv1DGesJa040QbCsbjGTgoqPO1sUV3JYTEtaRND0Uah7Kct+An+jUvKz2Gckd8Hp66Q=
+X-Received: by 2002:ac2:43c1:: with SMTP id u1mr2447985lfl.38.1610595713006;
+ Wed, 13 Jan 2021 19:41:53 -0800 (PST)
+MIME-Version: 1.0
+References: <20210112234254.1906829-1-songliubraving@fb.com>
+ <b8b16115-4fba-265f-b0a5-33af02a75bbb@fb.com> <2DAED411-C65F-4BFD-A627-1EED4823168B@fb.com>
+ <1d116261-5ef2-eef6-369f-e8e12eaebc6e@fb.com>
+In-Reply-To: <1d116261-5ef2-eef6-369f-e8e12eaebc6e@fb.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 13 Jan 2021 19:41:41 -0800
+Message-ID: <CAADnVQJFSLitAYK_yR-5YV6YoeXjiuqA03t7KEanPwi2hwWf5w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: reject too big ctx_size_in for raw_tp test run
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Song Liu <songliubraving@fb.com>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, rdunlap@infradead.org,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>, decui@microsoft.com,
-        cai@lca.pw, Jakub Sitnicki <jakub@cloudflare.com>,
-        Marco Elver <elver@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        bpf <bpf@vger.kernel.org>, Yan Vugenfirer <yan@daynix.com>
-References: <20210112194143.1494-1-yuri.benditovich@daynix.com>
- <CAOEp5OejaX4ZETThrj4-n8_yZoeTZs56CBPHbQqNsR2oni8dWw@mail.gmail.com>
- <CAOEp5Oc5qif_krU8oC6qhq6X0xRW-9GpWrBzWgPw0WevyhT8Mg@mail.gmail.com>
- <CA+FuTSfhBZfEf8+LKNUJQpSxt8c5h1wMpARupekqFKuei6YBsA@mail.gmail.com>
- <78bbc518-4b73-4629-68fb-2713250f8967@redhat.com>
- <CA+FuTSfJJhEYr6gXmjpjjXzg6Xm5wWa-dL1SEV-Zt7RcPXGztg@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Message-ID: <8ea218a8-a068-1ed9-929d-67ad30111c3c@redhat.com>
-Date:   Thu, 14 Jan 2021 11:38:48 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <CA+FuTSfJJhEYr6gXmjpjjXzg6Xm5wWa-dL1SEV-Zt7RcPXGztg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+        KP Singh <kpsingh@chromium.org>,
+        Kernel Team <Kernel-team@fb.com>,
+        "syzbot+4f98876664c7337a4ae6@syzkaller.appspotmail.com" 
+        <syzbot+4f98876664c7337a4ae6@syzkaller.appspotmail.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-
-On 2021/1/13 下午10:33, Willem de Bruijn wrote:
-> On Tue, Jan 12, 2021 at 11:11 PM Jason Wang <jasowang@redhat.com> wrote:
->>
->> On 2021/1/13 上午7:47, Willem de Bruijn wrote:
->>> On Tue, Jan 12, 2021 at 3:29 PM Yuri Benditovich
->>> <yuri.benditovich@daynix.com> wrote:
->>>> On Tue, Jan 12, 2021 at 9:49 PM Yuri Benditovich
->>>> <yuri.benditovich@daynix.com> wrote:
->>>>> On Tue, Jan 12, 2021 at 9:41 PM Yuri Benditovich
->>>>> <yuri.benditovich@daynix.com> wrote:
->>>>>> Existing TUN module is able to use provided "steering eBPF" to
->>>>>> calculate per-packet hash and derive the destination queue to
->>>>>> place the packet to. The eBPF uses mapped configuration data
->>>>>> containing a key for hash calculation and indirection table
->>>>>> with array of queues' indices.
->>>>>>
->>>>>> This series of patches adds support for virtio-net hash reporting
->>>>>> feature as defined in virtio specification. It extends the TUN module
->>>>>> and the "steering eBPF" as follows:
->>>>>>
->>>>>> Extended steering eBPF calculates the hash value and hash type, keeps
->>>>>> hash value in the skb->hash and returns index of destination virtqueue
->>>>>> and the type of the hash. TUN module keeps returned hash type in
->>>>>> (currently unused) field of the skb.
->>>>>> skb->__unused renamed to 'hash_report_type'.
->>>>>>
->>>>>> When TUN module is called later to allocate and fill the virtio-net
->>>>>> header and push it to destination virtqueue it populates the hash
->>>>>> and the hash type into virtio-net header.
->>>>>>
->>>>>> VHOST driver is made aware of respective virtio-net feature that
->>>>>> extends the virtio-net header to report the hash value and hash report
->>>>>> type.
->>>>> Comment from Willem de Bruijn:
->>>>>
->>>>> Skbuff fields are in short supply. I don't think we need to add one
->>>>> just for this narrow path entirely internal to the tun device.
->>>>>
->>>> We understand that and try to minimize the impact by using an already
->>>> existing unused field of skb.
->>> Not anymore. It was repurposed as a flags field very recently.
->>>
->>> This use case is also very narrow in scope. And a very short path from
->>> data producer to consumer. So I don't think it needs to claim scarce
->>> bits in the skb.
->>>
->>> tun_ebpf_select_queue stores the field, tun_put_user reads it and
->>> converts it to the virtio_net_hdr in the descriptor.
->>>
->>> tun_ebpf_select_queue is called from .ndo_select_queue.  Storing the
->>> field in skb->cb is fragile, as in theory some code could overwrite
->>> that between field between ndo_select_queue and
->>> ndo_start_xmit/tun_net_xmit, from which point it is fully under tun
->>> control again. But in practice, I don't believe anything does.
->>>
->>> Alternatively an existing skb field that is used only on disjoint
->>> datapaths, such as ingress-only, could be viable.
->>
->> A question here. We had metadata support in XDP for cooperation between
->> eBPF programs. Do we have something similar in the skb?
->>
->> E.g in the RSS, if we want to pass some metadata information between
->> eBPF program and the logic that generates the vnet header (either hard
->> logic in the kernel or another eBPF program). Is there any way that can
->> avoid the possible conflicts of qdiscs?
-> Not that I am aware of. The closest thing is cb[].
+On Wed, Jan 13, 2021 at 3:28 PM Yonghong Song <yhs@fb.com> wrote:
 >
-> It'll have to aliase a field like that, that is known unused for the given path.
-
-
-Right, we need to make sure cb is not used by other ones. I'm not sure 
-how hard to achieve that consider Qemu installs the eBPF program but it 
-doesn't deal with networking configurations.
-
-
 >
-> One other approach that has been used within linear call stacks is out
-> of band. Like percpu variables softnet_data.xmit.more and
-> mirred_rec_level. But that is perhaps a bit overwrought for this use
-> case.
-
-
-Yes, and if we go that way then eBPF turns out to be a burden since we 
-need to invent helpers to access those auxiliary data structure. It 
-would be better then to hard-coded the RSS in the kernel.
-
-
 >
->>>>> Instead, you could just run the flow_dissector in tun_put_user if the
->>>>> feature is negotiated. Indeed, the flow dissector seems more apt to me
->>>>> than BPF here. Note that the flow dissector internally can be
->>>>> overridden by a BPF program if the admin so chooses.
->>>>>
->>>> When this set of patches is related to hash delivery in the virtio-net
->>>> packet in general,
->>>> it was prepared in context of RSS feature implementation as defined in
->>>> virtio spec [1]
->>>> In case of RSS it is not enough to run the flow_dissector in tun_put_user:
->>>> in tun_ebpf_select_queue the TUN calls eBPF to calculate the hash,
->>>> hash type and queue index
->>>> according to the (mapped) parameters (key, hash types, indirection
->>>> table) received from the guest.
->>> TUNSETSTEERINGEBPF was added to support more diverse queue selection
->>> than the default in case of multiqueue tun. Not sure what the exact
->>> use cases are.
->>>
->>> But RSS is exactly the purpose of the flow dissector. It is used for
->>> that purpose in the software variant RPS. The flow dissector
->>> implements a superset of the RSS spec, and certainly computes a
->>> four-tuple for TCP/IPv6. In the case of RPS, it is skipped if the NIC
->>> has already computed a 4-tuple hash.
->>>
->>> What it does not give is a type indication, such as
->>> VIRTIO_NET_HASH_TYPE_TCPv6. I don't understand how this would be used.
->>> In datapaths where the NIC has already computed the four-tuple hash
->>> and stored it in skb->hash --the common case for servers--, That type
->>> field is the only reason to have to compute again.
->>
->> The problem is there's no guarantee that the packet comes from the NIC,
->> it could be a simple VM2VM or host2VM packet.
->>
->> And even if the packet is coming from the NIC that calculates the hash
->> there's no guarantee that it's the has that guest want (guest may use
->> different RSS keys).
-> Ah yes, of course.
+> On 1/13/21 1:48 PM, Song Liu wrote:
+> >
+> >
+> >> On Jan 12, 2021, at 9:17 PM, Yonghong Song <yhs@fb.com> wrote:
+> >>
+> >>
+> >>
+> >> On 1/12/21 3:42 PM, Song Liu wrote:
+> >>> syzbot reported a WARNING for allocating too big memory:
+> >>> WARNING: CPU: 1 PID: 8484 at mm/page_alloc.c:4976 __alloc_pages_nodemask+0x5f8/0x730 mm/page_alloc.c:5011
+> >>> Modules linked in:
+> >>> CPU: 1 PID: 8484 Comm: syz-executor862 Not tainted 5.11.0-rc2-syzkaller #0
+> >>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> >>> RIP: 0010:__alloc_pages_nodemask+0x5f8/0x730 mm/page_alloc.c:4976
+> >>> Code: 00 00 0c 00 0f 85 a7 00 00 00 8b 3c 24 4c 89 f2 44 89 e6 c6 44 24 70 00 48 89 6c 24 58 e8 d0 d7 ff ff 49 89 c5 e9 ea fc ff ff <0f> 0b e9 b5 fd ff ff 89 74 24 14 4c 89 4c 24 08 4c 89 74 24 18 e8
+> >>> RSP: 0018:ffffc900012efb10 EFLAGS: 00010246
+> >>> RAX: 0000000000000000 RBX: 1ffff9200025df66 RCX: 0000000000000000
+> >>> RDX: 0000000000000000 RSI: dffffc0000000000 RDI: 0000000000140dc0
+> >>> RBP: 0000000000140dc0 R08: 0000000000000000 R09: 0000000000000000
+> >>> R10: ffffffff81b1f7e1 R11: 0000000000000000 R12: 0000000000000014
+> >>> R13: 0000000000000014 R14: 0000000000000000 R15: 0000000000000000
+> >>> FS:  000000000190c880(0000) GS:ffff8880b9e00000(0000) knlGS:0000000000000000
+> >>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >>> CR2: 00007f08b7f316c0 CR3: 0000000012073000 CR4: 00000000001506f0
+> >>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> >>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> >>> Call Trace:
+> >>> alloc_pages_current+0x18c/0x2a0 mm/mempolicy.c:2267
+> >>> alloc_pages include/linux/gfp.h:547 [inline]
+> >>> kmalloc_order+0x2e/0xb0 mm/slab_common.c:837
+> >>> kmalloc_order_trace+0x14/0x120 mm/slab_common.c:853
+> >>> kmalloc include/linux/slab.h:557 [inline]
+> >>> kzalloc include/linux/slab.h:682 [inline]
+> >>> bpf_prog_test_run_raw_tp+0x4b5/0x670 net/bpf/test_run.c:282
+> >>> bpf_prog_test_run kernel/bpf/syscall.c:3120 [inline]
+> >>> __do_sys_bpf+0x1ea9/0x4f10 kernel/bpf/syscall.c:4398
+> >>> do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+> >>> entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> >>> RIP: 0033:0x440499
+> >>> Code: 18 89 d0 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 7b 13 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+> >>> RSP: 002b:00007ffe1f3bfb18 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+> >>> RAX: ffffffffffffffda RBX: 00000000004002c8 RCX: 0000000000440499
+> >>> RDX: 0000000000000048 RSI: 0000000020000600 RDI: 000000000000000a
+> >>> RBP: 00000000006ca018 R08: 0000000000000000 R09: 00000000004002c8
+> >>> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000401ca0
+> >>> R13: 0000000000401d30 R14: 0000000000000000 R15: 0000000000000000
+> >>> This is because we didn't filter out too big ctx_size_in. Fix it by
+> >>> rejecting ctx_size_in that are bigger than MAX_BPF_FUNC_ARGS (12) u64
+> >>> numbers.
+> >>> Reported-by: syzbot+4f98876664c7337a4ae6@syzkaller.appspotmail.com
+> >>> Fixes: 1b4d60ec162f ("bpf: Enable BPF_PROG_TEST_RUN for raw_tracepoint")
+> >>> Cc: stable@vger.kernel.org # v5.10+
+> >>> Signed-off-by: Song Liu <songliubraving@fb.com>
+> >>
+> >> Maybe this should target to bpf tree?
+> >
+> > IIRC, we direct fixes to current release under rc (5.11) to bpf tree. This
+> > one is for 5.10 and 5.11, so should go bpf-next, no?
 >
-> I would still revisit the need to store a detailed hash_type along with
-> the hash, as as far I can tell that conveys no actionable information
-> to the guest.
+> I don't know where it should go first. Maintainers know better. But it
+> should go to 5.10, 5.11 (currently rc4) and bpf-next.
 
-
-Yes, need to figure out its usage. According to [1], it only mention 
-that storing has type is a charge of driver. Maybe Yuri can answer this.
-
-Thanks
-
-[1] 
-https://docs.microsoft.com/en-us/windows-hardware/drivers/network/indicating-rss-receive-data
-
-
->
-
+Not sure what is the disagreement here.
+It's clearly a fix. Hence it was applied to bpf tree.
+Song, please mark subj as [PATCH bpf] not to confuse CI,
+since it's using this tag to test patches against appropriate tree.
