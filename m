@@ -2,44 +2,45 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE470C433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F352DC433E9
 	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 09:56:00 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7022923A22
+	by mail.kernel.org (Postfix) with ESMTP id ACBC523A21
 	for <bpf@archiver.kernel.org>; Thu, 14 Jan 2021 09:56:00 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727967AbhANJzo (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 14 Jan 2021 04:55:44 -0500
-Received: from de-smtp-delivery-102.mimecast.com ([194.104.109.102]:44499 "EHLO
+        id S1727274AbhANJzu (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 14 Jan 2021 04:55:50 -0500
+Received: from de-smtp-delivery-102.mimecast.com ([194.104.109.102]:22394 "EHLO
         de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726551AbhANJzl (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 14 Jan 2021 04:55:41 -0500
+        by vger.kernel.org with ESMTP id S1728038AbhANJzr (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 14 Jan 2021 04:55:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1610618073;
+        t=1610618080;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=RuPJbH1sZwzeQewHzyao0Amsy6ly2VgaaIfW4h2+Y60=;
-        b=CPknqe6iEz+fIFw/qzIAQzXpt1MYKM1IjisBOsOsR3Dz92BJO8EHK5vcSxlLtd7Xx+tywz
-        9L1m2mPB6FpYnOCrIugOWN5KsxziqtRZ6CukqWLVvo7iDbqfsCO8/EZwUH0pTD90gKiynP
-        BoHbJN4WWH0eq5gDnxttmmzGGcYZEi4=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7BKY15wF8aOwZdw6Jwti1+pccpFTzL/UrLD9CYYjYVo=;
+        b=WWB53pLiBWVwi9Eg4BZThiNa6mpi69PtNcP/ZrIjYC8kP/8Z7kX8A7eIbC8g/7vgWYAiDI
+        Cfgtqq7Mt8cmS5beSLC2rvdcC9PiFs2XILdx2AFwbfk6MYq+2tHUjFTSG30Yg3VfEkZgK2
+        2kUXTDHI6X1YYZOk7mA/lxCO3BCZmn0=
 Received: from EUR03-VE1-obe.outbound.protection.outlook.com
- (mail-ve1eur03lp2051.outbound.protection.outlook.com [104.47.9.51]) (Using
+ (mail-ve1eur03lp2058.outbound.protection.outlook.com [104.47.9.58]) (Using
  TLS) by relay.mimecast.com with ESMTP id
- de-mta-29-171LxoBbNiCUipOVIH_uTQ-1; Thu, 14 Jan 2021 10:54:31 +0100
-X-MC-Unique: 171LxoBbNiCUipOVIH_uTQ-1
+ de-mta-35-Ghh6-pguNtWOlCPwo3LU2Q-2; Thu, 14 Jan 2021 10:54:39 +0100
+X-MC-Unique: Ghh6-pguNtWOlCPwo3LU2Q-2
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gKpPmwvaz5WsTReNlbhaOwIdPtmTDX+hHvsWbgwDMM52y3gf+Ud+EzPkTDDFnRp27X1VqYpkZFeyPaqW0Lx/pP2ijQ/uOdncY8AvH2Ar0HHEnnKXep1z70EGA3ybMIiQGWuJ//iJkCBxX+jrd83Aax0Es1IXFboW6RtGdUNn3kaMK7BjTm2c6wTgDoPLnYBdnubBdQDfzle3SZtGIyA9rsJO0PKdbXOXB7UuUXkU4gZMz8S9tsngPtrzbwvC34EicoKsqu22FXPhAdo44ELO3wo4ms9gWU6uEPBl2J67jCiXCslwkK7AnPaLJKJoUYN/c0CtH0I3RFZ+kJIO5ufIiw==
+ b=gJC+fXa/KPOMiI9PlwESLbL7thjF3oW1EW7eUj+tfl6X32yLMR0cBMlD4kGKQh4AONNv5i7P7aZp81F0uX2SwjMtSBqRPlaOOlcO9jtDSunrSw8Iz49MbqfMlY3Ev2oVaX//iL1tzFnzLLNjfNzcPCL7GPVeLrDny2LjYgK9iXTPuN0dFcs8VnhgeWQ5RU/Z7qMmR9yw9HfCsRVI+3oZye7OqUp2C8XnDyxjdkdaCJ+x5vg4oG1J3VXqjPggJYnctqfSC+J5g5clZd2EK5ns2H2iNn6aR8JFKotQhIUUD1h5NnwaXr5wAd1uiz47RELJN3oFvuJtbteT4bDxPayMSg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Rh4xHFFakCx+dtShLesr0lX3WCDWSfkdgawanIHvwlI=;
- b=cwLQUdxaryxwOyIAle+JHJP9Y7ORbTmv8q2YPJi6ev01vFeW3M2nbTbP89YZA0xBcBT9Tpd3L+yFCZhiHeVAAg19xZ3YxT6UkGxl6TzatJv9QSHw93D8hCIsiaIDEEYtNHEePvELR5LBjp8VtauxOS0vv9CUVlnogOeItfk03SARPEXYGU1XmKE3+TlCJZ9REGrSeeqYYQaM8zi02ACF1XnkB/a+oEvOIItBqozKQG0nMcpCwuxxCV2nqZZ65cxQjRXlNbOCOdCxXu3XyDUfk0tud2/6vhqr6D6VcgnVuMq6SC1loxoRBRDflxZgT56sGhPJzsl2d909ZOiHuIAEfA==
+ bh=EtGbxeFGd5wrf0vUZRAXq5W++Pi5doTWbZ4QJ2ST5mA=;
+ b=dyZ5F8FaE00oMmrinYwmN/DDaWTQ/GXjNTAjXG4N0sKaasZRVit2W9wOg1tORwTRcJsI11miQ5+CkeXmzhGK/uDIKbVBXvjGqxgNU7XGrlGFPk9k0o8vU2gle/FufoyO7Az46kP6Pw+IQTGZ6A4PxdaYzTfdlqrsygG6zd2DIjQdkrHOmp7wASKFfCUyXH88i4UNw6BLeV9KJXbSVmiIy/klOgKQN109JKfcEydAgCrQWVHpuRK4TqMI+qL3wxTj9Tg0e5GAiQkgoqQe9SWjjXgHUod7kinGXcWBXfbET+SnaS0mUze29OFRhThD+zMHvlqYgUdXmmxwcpdwxfSN3Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
  dkim=pass header.d=suse.com; arc=none
@@ -49,11 +50,11 @@ Received: from DB3PR0402MB3641.eurprd04.prod.outlook.com (2603:10a6:8:b::12)
  by DBBPR04MB6153.eurprd04.prod.outlook.com (2603:10a6:10:d2::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3742.12; Thu, 14 Jan
- 2021 09:54:30 +0000
+ 2021 09:54:35 +0000
 Received: from DB3PR0402MB3641.eurprd04.prod.outlook.com
  ([fe80::80c9:1fa3:ae84:7313]) by DB3PR0402MB3641.eurprd04.prod.outlook.com
  ([fe80::80c9:1fa3:ae84:7313%6]) with mapi id 15.20.3763.011; Thu, 14 Jan 2021
- 09:54:30 +0000
+ 09:54:35 +0000
 From:   Gary Lin <glin@suse.com>
 To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         Alexei Starovoitov <ast@kernel.org>,
@@ -61,10 +62,12 @@ To:     netdev@vger.kernel.org, bpf@vger.kernel.org,
 CC:     Eric Dumazet <eric.dumazet@gmail.com>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         andreas.taschner@suse.com
-Subject: [PATCH v3 0/3] bpf,x64: implement jump padding in jit
-Date:   Thu, 14 Jan 2021 17:54:08 +0800
-Message-ID: <20210114095411.20903-1-glin@suse.com>
+Subject: [PATCH v3 2/3] test_bpf: remove EXPECTED_FAIL flag from bpf_fill_maxinsns11
+Date:   Thu, 14 Jan 2021 17:54:10 +0800
+Message-ID: <20210114095411.20903-3-glin@suse.com>
 X-Mailer: git-send-email 2.26.2
+In-Reply-To: <20210114095411.20903-1-glin@suse.com>
+References: <20210114095411.20903-1-glin@suse.com>
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain
 X-Originating-IP: [111.240.145.171]
@@ -73,97 +76,88 @@ X-ClientProxiedBy: AM0PR10CA0111.EURPRD10.PROD.OUTLOOK.COM
  (2603:10a6:8:b::12)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from GaryLaptop.prv.suse.net (111.240.145.171) by AM0PR10CA0111.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:e6::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.9 via Frontend Transport; Thu, 14 Jan 2021 09:54:27 +0000
+Received: from GaryLaptop.prv.suse.net (111.240.145.171) by AM0PR10CA0111.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:e6::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.9 via Frontend Transport; Thu, 14 Jan 2021 09:54:33 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 05ba7326-f51a-4ab8-8274-08d8b872633d
+X-MS-Office365-Filtering-Correlation-Id: 7c57fced-c0f3-4ddb-ccc5-08d8b8726681
 X-MS-TrafficTypeDiagnostic: DBBPR04MB6153:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DBBPR04MB615335B962ACC671AD3FBF39A9A80@DBBPR04MB6153.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-Microsoft-Antispam-PRVS: <DBBPR04MB6153FE48AE5D1E5D75571CE7A9A80@DBBPR04MB6153.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1284;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bMCrJJTl8MZvteiiMibphTWjWO6VK+EGY4fg593BL0dMJuIT3wti05j665lmdwoCbKFEzD2gsXMKv8qqtGUmo4GsEjlephJUDMVBHBQwkxDgB4+cpOPK9oXa2YWA3J7OlhEyxXZ/F+kamid2jh828OEydyWbU9nqIJL2ZZymLkZM1KPS1Je/DU68nafaPOrD6LZfi9YbX4WMDf+WSlZktcdsH0lygApX4S4jYwS06g1QpXg0Ji3s/dQ+Ucr0doZxQE9ulZtVTpNAAcgbvsmiBEyrIHbqdvS1wX+JoS53GI0X9l14bWthrOpNy9OaEERKAggGfH1YS13jpXOuIOq55ITUMNVtHHVGo8v5NE1utPVuzJB313UfDRs3/Ae/eWf8
+X-Microsoft-Antispam-Message-Info: oYtwp3Oiun8806eBPcyX3Es2oPmt3TK93vw77TRxNRVHcDrI8StdbJpfyPfhuZCaSFxG1BhzFTqBLmNXD/eJgac+SlCiuMYCHNvI5Qh+1HWJNQ3e6Bjs7j9AvVI2hzO4oNQ1izXh30JHbI5g9CdwnUT0+b85zanYXLyDe6hx+g8PYAYtJFS/fEBm+/ZBNhcC0qWN3uaHf0jhNqVbgN3ReYDEpX0F7AJ3pdBkcEEJG8mR2iYcgOsVVGdoUYImOV5NlpEaXgq9FSnG1Ja0y6fIfEAY16HiXGcospUFc2OfQl621R0xn7B5Ffj8mWsGXPwW1N8SkjwGCTiHv/FsqI7BnddcktsQ66Pty8Ftm8Pa2JasLqrTWNg3S/rw7mcqLisJzhx9TjbOfcJWO15YGF5LgQ==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB3PR0402MB3641.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(376002)(346002)(396003)(39860400002)(366004)(316002)(83380400001)(1076003)(6486002)(2906002)(478600001)(52116002)(8676002)(5660300002)(186003)(110136005)(4326008)(107886003)(36756003)(6666004)(8936002)(16526019)(6506007)(66946007)(6512007)(956004)(26005)(2616005)(66476007)(54906003)(86362001)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?Bby21dtMAz/eTW0K4L1rvvqO6osLXWEG/T4ujhDj5rUmqKh/2hQrU9KR8eUL?=
- =?us-ascii?Q?pY6c7Gu5bsXuja3WE/kSadapLmqGb+yc7H1hcH6l3IqJa5HtjdxsN2MGDK/w?=
- =?us-ascii?Q?v9p0/7LOQ7448/2md6VvEmnB9qFO/0SO58xA7/FVVAGObdg3D0XwOXq0GcJH?=
- =?us-ascii?Q?T0fjiLaDa/7eP16RgYUgXV48BxsmpDtwdEtAOUWMmLreuPODlZKJNeSk7K/E?=
- =?us-ascii?Q?qo48GAmj10H/soHwfldgfd+bQBkfi/Z5EimHH+TD8CuT5lyezcsT9p4Y4CgT?=
- =?us-ascii?Q?L5dXB6J5qrxvkOeQNDYaQwWlVs9/hFS3WurtcXzmRJpUHTk4SoiiS6yW/H5k?=
- =?us-ascii?Q?PL1QpNdeCiNGmOVk5NRu+XIvqu2GqYe/zBwgiOOqpg7wbi7V3pEnaCX0FkfQ?=
- =?us-ascii?Q?9BEzCRih/qjYf8PvbP3pO1aGNSKo+FeBexop+EWsB6JMzjGiFTvFoJlnCdGr?=
- =?us-ascii?Q?VYaI2uQSCiNf5gsPKrskd5e0I0tXrJgsHAay9FEWpJYqiwAfO3BHWvBbf8gC?=
- =?us-ascii?Q?6Y76TBtqPJBkbE+joAO7/+7gjvVjllv8z2LEyu8UPUI5saj4JK8sa9fucyWg?=
- =?us-ascii?Q?hr7YsgEvUA9DGBpbRRTYNXc5bZP1UYAK7FAWrG03H/AYH65Inb47+Qr02C1m?=
- =?us-ascii?Q?kz9L8GdIp+DrbxQs90//jInVeEoHxNu2HtYl5dszbT9pzscYpM+ISg9/pyOl?=
- =?us-ascii?Q?u7ExONgADjDM5Q3iAN9mMUOeiy0kh5zSc48bMK3/8HZvby86IlzfYQ4jXOSa?=
- =?us-ascii?Q?BONONtkciGBVPSWOzownDeBmdsr2Y19Y978ATV0FtnMtURn6EeugYof+fqd6?=
- =?us-ascii?Q?J9HkeA/K6uFa7vmfKDPpn2Ks5EYBJXwlczBk5Tzggvhs20aDLOaLGn1qwwxX?=
- =?us-ascii?Q?mSKh9R/YiTEYeVlKBk5NNQsehjZ1BFYm0dEFsXrx80C+GbzlzDJ9YBx2a6CC?=
- =?us-ascii?Q?oO6zx25jDX6Xwna5klhXHx+pOH6SgJ7P25+z5JgUSCXalSjbIxxLtQzEeLwU?=
- =?us-ascii?Q?oB/s?=
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?vQAu3ZZ4xImlRhUAuE/rJO7tJq3Xy4kiAUUkRGTeStRa/4arrvQ07zxIlmF1?=
+ =?us-ascii?Q?Vh+e8VLs//6fb41CjEZP30VB2tBBfr5OuTsPUZo/CVLmx5llS37a2tUwHgwL?=
+ =?us-ascii?Q?xWHI6tvg945r9zUDkMn8N9BqWlW3xSgfkDCMvOHwAuTPM218P5sZTz0YaYTx?=
+ =?us-ascii?Q?YRuVZ2mYfmpqyFqQOoExTWQM1ATrpxS21Sp85LTRrunouww2gImBppr/EVCN?=
+ =?us-ascii?Q?qwnKvVfRJ8j6mSKFhQISDcitROcHDADUuAjMfNjzqwCkVj5Lg4n3jAPAhy5s?=
+ =?us-ascii?Q?0hesZDDEhdjZHtzh0yTRVRHhwNwhCdJsIc/W296eZkpdEY8JokyevxueZ4h4?=
+ =?us-ascii?Q?oB57p46UcyipO6rOUdeO38wxEVtKsxjAdtDjxlyB2mrRk84vrbNSyQa0AplV?=
+ =?us-ascii?Q?x7c3yC+EP6d3lggDMyXBlEeiQtzzJV2DmGWaVfjyc1hJ63lV5hAV3/aOaETN?=
+ =?us-ascii?Q?21rdCiQ/0e03JtjDw4F84tgPsTdHQU1I0R6cfyE5Z3VvKTtLQScl11num3yx?=
+ =?us-ascii?Q?oZy0ntF638owUQD5n/EEVsaIFvkVY5i/HnTFZSK/ojhPejf4SJKOvx66dFsl?=
+ =?us-ascii?Q?J9ueq5DZm3JdrmlRSFGyAAcZ12qGQHOIoAk1qwyZKkFb8zl8t0c3qDGdR7zO?=
+ =?us-ascii?Q?pm2fRPw4KwtGaqMegDF0uJmnVbYG9ocwGgGpIenebEghT4eolQF8kA5HqH/R?=
+ =?us-ascii?Q?OAmCDIzWZs7lVGaigCsATdvZzbxGcmDyNh3AF5VCg6zHHO3Z2OGOMfvNXhpa?=
+ =?us-ascii?Q?97Cg8j1FWDZP4KgsMOiXamxCkYNCOdYv6kI0ppYvCGEKXaRl86X6oFnPLgR+?=
+ =?us-ascii?Q?r91RjOEHJDFfhyd3Hprcu4OUNtyrss23mJMM05tS40CTRJqEqqB/RuWyItvw?=
+ =?us-ascii?Q?pjlaWAN3Y3z8S46ZwY2WifYkNRuU36of3coEO4myHq8CC7W8fVc0+ysbVV6G?=
+ =?us-ascii?Q?jufThdr/YhvycPKM+jASe9bnG+vVpRuWJmpyIVYn4BC1hVrbhjm7M+5DRvZj?=
+ =?us-ascii?Q?6LIw?=
 X-OriginatorOrg: suse.com
 X-MS-Exchange-CrossTenant-AuthSource: DB3PR0402MB3641.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2021 09:54:30.1784
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2021 09:54:35.7281
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05ba7326-f51a-4ab8-8274-08d8b872633d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c57fced-c0f3-4ddb-ccc5-08d8b8726681
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DHWwbdYsiSoeimqdy+g69sMVAe919kUjMQCDEaevMtpSVBbJ/xN/XPmdZs3KX504
+X-MS-Exchange-CrossTenant-UserPrincipalName: oWL6dcT6qRUIaqziicw2+CGECE9hKjbGa+uupnK0z4uI6Bm+9varsAAwlUCEgH56
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB6153
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This patch series implements jump padding to x64 jit to cover some
-corner cases that used to consume more than 20 jit passes and caused
-failure.
+With NOPs padding, x64 jit now can handle the jump cases like
+bpf_fill_maxinsns11().
 
-v3:
-  - Copy the instructions of prologue separately or the size calculation
-    of the first BPF instruction would include the prologue.
-  - Replace WARN_ONCE() with pr_err() and EFAULT
-  - Use MAX_PASSES in the for loop condition check
-  - Remove the "padded" flag from x64_jit_data. For the extra pass of
-    subprogs, padding is always enabled since it won't hurt the images
-    that converge without padding.
-v2:
-  - Simplify the sample code in the commit description and provide the
-    jit code
-  - Check the expected padding bytes with WARN_ONCE
-  - Move the 'padded' flag to 'struct x64_jit_data'
-  - Remove the EXPECTED_FAIL flag from bpf_fill_maxinsns11() in test_bpf
-  - Add 2 verifier tests
+Signed-off-by: Gary Lin <glin@suse.com>
+---
+ lib/test_bpf.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-Gary Lin (3):
-  bpf,x64: pad NOPs to make images converge more easily
-  test_bpf: remove EXPECTED_FAIL flag from bpf_fill_maxinsns11
-  selftests/bpf: Add verifier test for x64 jit jump padding
-
- arch/x86/net/bpf_jit_comp.c                 | 86 +++++++++++++++------
- lib/test_bpf.c                              |  7 +-
- tools/testing/selftests/bpf/test_verifier.c | 43 +++++++++++
- tools/testing/selftests/bpf/verifier/jit.c  | 16 ++++
- 4 files changed, 122 insertions(+), 30 deletions(-)
-
---=20
-2.29.2
-
-
-
-Gary Lin (3):
-  bpf,x64: pad NOPs to make images converge more easily
-  test_bpf: remove EXPECTED_FAIL flag from bpf_fill_maxinsns11
-  selftests/bpf: Add verifier test for x64 jit jump padding
-
- arch/x86/net/bpf_jit_comp.c                 | 103 ++++++++++++++------
- lib/test_bpf.c                              |   7 +-
- tools/testing/selftests/bpf/test_verifier.c |  43 ++++++++
- tools/testing/selftests/bpf/verifier/jit.c  |  16 +++
- 4 files changed, 135 insertions(+), 34 deletions(-)
-
+diff --git a/lib/test_bpf.c b/lib/test_bpf.c
+index ca7d635bccd9..272a9fd143ab 100644
+--- a/lib/test_bpf.c
++++ b/lib/test_bpf.c
+@@ -345,7 +345,7 @@ static int __bpf_fill_ja(struct bpf_test *self, unsigne=
+d int len,
+=20
+ static int bpf_fill_maxinsns11(struct bpf_test *self)
+ {
+-	/* Hits 70 passes on x86_64, so cannot get JITed there. */
++	/* Hits 70 passes on x86_64 and triggers NOPs padding. */
+ 	return __bpf_fill_ja(self, BPF_MAXINSNS, 68);
+ }
+=20
+@@ -5318,15 +5318,10 @@ static struct bpf_test tests[] =3D {
+ 	{
+ 		"BPF_MAXINSNS: Jump, gap, jump, ...",
+ 		{ },
+-#if defined(CONFIG_BPF_JIT_ALWAYS_ON) && defined(CONFIG_X86)
+-		CLASSIC | FLAG_NO_DATA | FLAG_EXPECTED_FAIL,
+-#else
+ 		CLASSIC | FLAG_NO_DATA,
+-#endif
+ 		{ },
+ 		{ { 0, 0xababcbac } },
+ 		.fill_helper =3D bpf_fill_maxinsns11,
+-		.expected_errcode =3D -ENOTSUPP,
+ 	},
+ 	{
+ 		"BPF_MAXINSNS: jump over MSH",
 --=20
 2.29.2
 
