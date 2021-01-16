@@ -2,68 +2,74 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-6.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0CF5CC433E6
-	for <bpf@archiver.kernel.org>; Sat, 16 Jan 2021 04:04:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1E239C4332B
+	for <bpf@archiver.kernel.org>; Sat, 16 Jan 2021 04:21:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C3F5C23A58
-	for <bpf@archiver.kernel.org>; Sat, 16 Jan 2021 04:04:17 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D7E7523A75
+	for <bpf@archiver.kernel.org>; Sat, 16 Jan 2021 04:21:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725833AbhAPEEB (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Jan 2021 23:04:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49044 "EHLO mail.kernel.org"
+        id S1729392AbhAPEUt (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Jan 2021 23:20:49 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51502 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725781AbhAPEEB (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Fri, 15 Jan 2021 23:04:01 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BF3AB23A55;
-        Sat, 16 Jan 2021 04:03:20 +0000 (UTC)
+        id S1728608AbhAPEUs (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Fri, 15 Jan 2021 23:20:48 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPS id 54C2E23A75;
+        Sat, 16 Jan 2021 04:20:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1610769801;
-        bh=3qEKJFDieK9U97V8E0sEFodhkBp6TTFYbchmJ44fps4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GJ5uweFaELyls+6NgQy8Bv9kGFq0KxvkYwAauvyaFCQ9iXatRMke1VtCjA34HhQGi
-         qW7NQlx4YPlvk6mZMLfXeOlh6jdVKdGc7KRkdOki/U1b9bjbok+4xxdtgBCLAKV4K4
-         S4MJFLtBRYLsez201GMNuiUVCOYl/QZjjIX8ZB4w+v/BpWuY5IdU+2+a/lL5vSfabD
-         /z3dBQKNDvvmFiBDEuh/n8jiqCNQXBYb49CJl0+C8x+CB1wkeBX0r3bJaCjLq4pHGX
-         LaookNRb4nGYZdXey5Xl4HbprYM7SQks+cljyAWEeYYpNT0J6GtTaHKfpeg/HJJS89
-         9/7EbexAy4B5A==
-Date:   Fri, 15 Jan 2021 20:03:19 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     davem@davemloft.net, ast@kernel.org, andrii.nakryiko@gmail.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: pull-request: bpf-next 2021-01-16
-Message-ID: <20210115200319.2ea4bc16@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20210116012922.17823-1-daniel@iogearbox.net>
-References: <20210116012922.17823-1-daniel@iogearbox.net>
+        s=k20201202; t=1610770808;
+        bh=4Hjf+SYTiUwRYEi7Ch8ciAf1Kf+uxPk3UycOlwbAOP4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=T5s1fLVtK6DmptrPCct/ycA0dCoxDMBFndq3EcEhOMCrSwM907xKlMD4gG/xQqVVO
+         HU3eNt1ayzLMlvWV/5dlGr3hwbwyCbe1Qhe/Cxwr/lwRlqbJncV21w5bcQGu+8lGHX
+         TGMKZrEua1/eILeesm8h2Byb0ETjaBUJ0Yd5CoMD/hsw7P2CtWXKYautH1H9qZza8e
+         rOO3FJ4bvbzzWUJE29zA8gzNmKaVawizGTcqYWa3uXzrMED1J+5/2LhmBE19dPxI0V
+         ekCAGrTRH/JQDFdt7SSOsuRPKvYNaLIGR8RbZehJ8K+Im29LvQNUt+oALxTgvpmpnE
+         grerCx3D0VCbg==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 net-next] net: tap: check vlan with eth_type_vlan() method
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161077080829.25355.1708567039756626049.git-patchwork-notify@kernel.org>
+Date:   Sat, 16 Jan 2021 04:20:08 +0000
+References: <20210115023238.4681-1-dong.menglong@zte.com.cn>
+In-Reply-To: <20210115023238.4681-1-dong.menglong@zte.com.cn>
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, ast@kernel.org,
+        daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, dong.menglong@zte.com.cn
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, 16 Jan 2021 02:29:22 +0100 Daniel Borkmann wrote:
-> 1) Extend atomic operations to the BPF instruction set along with x86-64 JIT support,
->    that is, atomic{,64}_{xchg,cmpxchg,fetch_{add,and,or,xor}}, from Brendan Jackman.
-> 
-> 2) Add support for using kernel module global variables (__ksym externs in BPF
->    programs) retrieved via module's BTF, from Andrii Nakryiko.
-> 
-> 3) Generalize BPF stackmap's buildid retrieval and add support to have buildid
->    stored in mmap2 event for perf, from Jiri Olsa.
-> 
-> 4) Various fixes for cross-building BPF sefltests out-of-tree which then will
->    unblock wider automated testing on ARM hardware, from Jean-Philippe Brucker.
-> 
-> 5) Allow to retrieve SOL_SOCKET opts from sock_addr progs, from Daniel Borkmann.
-> 
-> 6) Clean up driver's XDP buffer init and split into two helpers to init per-
->    descriptor and non-changing fields during processing, from Lorenzo Bianconi.
-> 
-> 7) Minor misc improvements to libbpf & bpftool, from Ian Rogers.
+Hello:
 
-Pulled, thanks!
+This patch was applied to netdev/net-next.git (refs/heads/master):
+
+On Thu, 14 Jan 2021 18:32:38 -0800 you wrote:
+> From: Menglong Dong <dong.menglong@zte.com.cn>
+> 
+> Replace some checks for ETH_P_8021Q and ETH_P_8021AD in
+> drivers/net/tap.c with eth_type_vlan.
+> 
+> Signed-off-by: Menglong Dong <dong.menglong@zte.com.cn>
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2,net-next] net: tap: check vlan with eth_type_vlan() method
+    https://git.kernel.org/netdev/net-next/c/b69df2608281
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
