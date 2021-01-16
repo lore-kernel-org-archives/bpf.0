@@ -7,22 +7,22 @@ X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 129F1C4332D
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4417BC4332E
 	for <bpf@archiver.kernel.org>; Sat, 16 Jan 2021 03:00:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D0283238D7
-	for <bpf@archiver.kernel.org>; Sat, 16 Jan 2021 03:00:31 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 14B34238E7
+	for <bpf@archiver.kernel.org>; Sat, 16 Jan 2021 03:00:32 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729347AbhAPDAV (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Fri, 15 Jan 2021 22:00:21 -0500
-Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:44214 "EHLO
-        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728706AbhAPDAU (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Fri, 15 Jan 2021 22:00:20 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R271e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0ULr4Cw8_1610765969;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0ULr4Cw8_1610765969)
+        id S1729224AbhAPDAS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Fri, 15 Jan 2021 22:00:18 -0500
+Received: from out30-54.freemail.mail.aliyun.com ([115.124.30.54]:50380 "EHLO
+        out30-54.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729184AbhAPDAS (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Fri, 15 Jan 2021 22:00:18 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04423;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0ULr6UGu_1610765970;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0ULr6UGu_1610765970)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Sat, 16 Jan 2021 10:59:29 +0800
+          Sat, 16 Jan 2021 10:59:30 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -41,9 +41,9 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         KP Singh <kpsingh@kernel.org>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH net-next v2 3/7] xsk, virtio-net: prepare for support xsk zerocopy xmit
-Date:   Sat, 16 Jan 2021 10:59:24 +0800
-Message-Id: <d472e42ca2fa44f5c1cd9d9ebd674ff5ba19a2e9.1610765285.git.xuanzhuo@linux.alibaba.com>
+Subject: [PATCH net-next v2 6/7] virtio-net, xsk: implement xsk wakeup callback
+Date:   Sat, 16 Jan 2021 10:59:27 +0800
+Message-Id: <2abdfb0b319d4075b68d50d2be9f441b75735e64.1610765285.git.xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <cover.1610765285.git.xuanzhuo@linux.alibaba.com>
 References: <cover.1609837120.git.xuanzhuo@linux.alibaba.com>
@@ -54,171 +54,87 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Split function free_old_xmit_skbs, add sub-function __free_old_xmit_ptr,
-which is convenient to call with other statistical information, and
-supports the parameter 'xsk_wakeup' required for processing xsk.
+Since I did not find an interface to directly notify virtio to generate
+a tx interrupt, I sent some data to trigger a new tx interrupt.
 
-Use netif stop check as a function virtnet_sq_stop_check, which will be
-used when adding xsk support.
+Another advantage of this is that the transmission delay will be
+relatively small, and there is no need to wait for the tx interrupt to
+start softirq.
 
 Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 ---
- drivers/net/virtio_net.c | 95 ++++++++++++++++++++++++++----------------------
- 1 file changed, 52 insertions(+), 43 deletions(-)
+ drivers/net/virtio_net.c | 51 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
 diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index e707c31..9013328 100644
+index 42aa9ad..e552c2d 100644
 --- a/drivers/net/virtio_net.c
 +++ b/drivers/net/virtio_net.c
-@@ -262,6 +262,11 @@ struct padded_vnet_hdr {
- 	char padding[4];
- };
- 
-+static void __free_old_xmit_ptr(struct send_queue *sq, bool in_napi,
-+				bool xsk_wakeup,
-+				unsigned int *_packets, unsigned int *_bytes);
-+static void free_old_xmit_skbs(struct send_queue *sq, bool in_napi);
-+
- static bool is_xdp_frame(void *ptr)
- {
- 	return (unsigned long)ptr & VIRTIO_XDP_FLAG;
-@@ -375,6 +380,37 @@ static void skb_xmit_done(struct virtqueue *vq)
- 		netif_wake_subqueue(vi->dev, vq2txq(vq));
+@@ -2841,6 +2841,56 @@ static int virtnet_xsk_run(struct send_queue *sq,
+ 	return ret;
  }
  
-+static void virtnet_sq_stop_check(struct send_queue *sq, bool in_napi)
++static int virtnet_xsk_wakeup(struct net_device *dev, u32 qid, u32 flag)
 +{
-+	struct virtnet_info *vi = sq->vq->vdev->priv;
-+	struct net_device *dev = vi->dev;
-+	int qnum = sq - vi->sq;
++	struct virtnet_info *vi = netdev_priv(dev);
++	struct send_queue *sq;
++	struct xsk_buff_pool *pool;
++	struct netdev_queue *txq;
 +
-+	/* If running out of space, stop queue to avoid getting packets that we
-+	 * are then unable to transmit.
-+	 * An alternative would be to force queuing layer to requeue the skb by
-+	 * returning NETDEV_TX_BUSY. However, NETDEV_TX_BUSY should not be
-+	 * returned in a normal path of operation: it means that driver is not
-+	 * maintaining the TX queue stop/start state properly, and causes
-+	 * the stack to do a non-trivial amount of useless work.
-+	 * Since most packets only take 1 or 2 ring slots, stopping the queue
-+	 * early means 16 slots are typically wasted.
++	if (!netif_running(dev))
++		return -ENETDOWN;
++
++	if (qid >= vi->curr_queue_pairs)
++		return -EINVAL;
++
++	sq = &vi->sq[qid];
++
++	rcu_read_lock();
++
++	pool = rcu_dereference(sq->xsk.pool);
++	if (!pool)
++		goto end;
++
++	if (test_and_set_bit(VIRTNET_STATE_XSK_WAKEUP, &sq->xsk.state))
++		goto end;
++
++	txq = netdev_get_tx_queue(dev, qid);
++
++	local_bh_disable();
++	__netif_tx_lock(txq, raw_smp_processor_id());
++
++	/* Send part of the package directly to reduce the delay in sending the
++	 * package, and this can actively trigger the tx interrupts.
++	 *
++	 * If the package is not processed, then continue processing in the
++	 * subsequent tx interrupt(virtnet_poll_tx).
++	 *
++	 * If no packet is sent out, the ring of the device is full. In this
++	 * case, we will still get a tx interrupt response. Then we will deal
++	 * with the subsequent packet sending work.
 +	 */
 +
-+	if (sq->vq->num_free < 2 + MAX_SKB_FRAGS) {
-+		netif_stop_subqueue(dev, qnum);
-+		if (!sq->napi.weight &&
-+		    unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
-+			/* More just got used, free them then recheck. */
-+			free_old_xmit_skbs(sq, in_napi);
-+			if (sq->vq->num_free >= 2 + MAX_SKB_FRAGS) {
-+				netif_start_subqueue(dev, qnum);
-+				virtqueue_disable_cb(sq->vq);
-+			}
-+		}
-+	}
++	virtnet_xsk_run(sq, pool, xsk_budget);
++
++	__netif_tx_unlock(txq);
++	local_bh_enable();
++
++end:
++	rcu_read_unlock();
++	return 0;
 +}
 +
- #define MRG_CTX_HEADER_SHIFT 22
- static void *mergeable_len_to_ctx(unsigned int truesize,
- 				  unsigned int headroom)
-@@ -522,13 +558,11 @@ static int virtnet_xdp_xmit(struct net_device *dev,
- 	struct receive_queue *rq = vi->rq;
- 	struct bpf_prog *xdp_prog;
- 	struct send_queue *sq;
--	unsigned int len;
- 	int packets = 0;
- 	int bytes = 0;
- 	int drops = 0;
- 	int kicks = 0;
- 	int ret, err;
--	void *ptr;
- 	int i;
- 
- 	/* Only allow ndo_xdp_xmit if XDP is loaded on dev, as this
-@@ -546,24 +580,7 @@ static int virtnet_xdp_xmit(struct net_device *dev,
- 		goto out;
- 	}
- 
--	/* Free up any pending old buffers before queueing new ones. */
--	while ((ptr = virtqueue_get_buf(sq->vq, &len)) != NULL) {
--		if (likely(is_xdp_frame(ptr))) {
--			struct virtnet_xdp_type *xtype;
--			struct xdp_frame *frame;
--
--			xtype = ptr_to_xtype(ptr);
--			frame = xtype_get_ptr(xtype);
--			bytes += frame->len;
--			xdp_return_frame(frame);
--		} else {
--			struct sk_buff *skb = ptr;
--
--			bytes += skb->len;
--			napi_consume_skb(skb, false);
--		}
--		packets++;
--	}
-+	__free_old_xmit_ptr(sq, false, true, &packets, &bytes);
- 
- 	for (i = 0; i < n; i++) {
- 		struct xdp_frame *xdpf = frames[i];
-@@ -1400,7 +1417,9 @@ static int virtnet_receive(struct receive_queue *rq, int budget,
- 	return stats.packets;
- }
- 
--static void free_old_xmit_skbs(struct send_queue *sq, bool in_napi)
-+static void __free_old_xmit_ptr(struct send_queue *sq, bool in_napi,
-+				bool xsk_wakeup,
-+				unsigned int *_packets, unsigned int *_bytes)
+ static int virtnet_get_phys_port_name(struct net_device *dev, char *buf,
+ 				      size_t len)
  {
- 	unsigned int packets = 0;
- 	unsigned int bytes = 0;
-@@ -1434,6 +1453,17 @@ static void free_old_xmit_skbs(struct send_queue *sq, bool in_napi)
- 		packets++;
- 	}
- 
-+	*_packets = packets;
-+	*_bytes = bytes;
-+}
-+
-+static void free_old_xmit_skbs(struct send_queue *sq, bool in_napi)
-+{
-+	unsigned int packets = 0;
-+	unsigned int bytes = 0;
-+
-+	__free_old_xmit_ptr(sq, in_napi, true, &packets, &bytes);
-+
- 	/* Avoid overhead when no packets have been processed
- 	 * happens when called speculatively from start_xmit.
- 	 */
-@@ -1649,28 +1679,7 @@ static netdev_tx_t start_xmit(struct sk_buff *skb, struct net_device *dev)
- 		nf_reset_ct(skb);
- 	}
- 
--	/* If running out of space, stop queue to avoid getting packets that we
--	 * are then unable to transmit.
--	 * An alternative would be to force queuing layer to requeue the skb by
--	 * returning NETDEV_TX_BUSY. However, NETDEV_TX_BUSY should not be
--	 * returned in a normal path of operation: it means that driver is not
--	 * maintaining the TX queue stop/start state properly, and causes
--	 * the stack to do a non-trivial amount of useless work.
--	 * Since most packets only take 1 or 2 ring slots, stopping the queue
--	 * early means 16 slots are typically wasted.
--	 */
--	if (sq->vq->num_free < 2+MAX_SKB_FRAGS) {
--		netif_stop_subqueue(dev, qnum);
--		if (!use_napi &&
--		    unlikely(!virtqueue_enable_cb_delayed(sq->vq))) {
--			/* More just got used, free them then recheck. */
--			free_old_xmit_skbs(sq, false);
--			if (sq->vq->num_free >= 2+MAX_SKB_FRAGS) {
--				netif_start_subqueue(dev, qnum);
--				virtqueue_disable_cb(sq->vq);
--			}
--		}
--	}
-+	virtnet_sq_stop_check(sq, false);
- 
- 	if (kick || netif_xmit_stopped(txq)) {
- 		if (virtqueue_kick_prepare(sq->vq) && virtqueue_notify(sq->vq)) {
+@@ -2895,6 +2945,7 @@ static int virtnet_set_features(struct net_device *dev,
+ 	.ndo_vlan_rx_kill_vid = virtnet_vlan_rx_kill_vid,
+ 	.ndo_bpf		= virtnet_xdp,
+ 	.ndo_xdp_xmit		= virtnet_xdp_xmit,
++	.ndo_xsk_wakeup		= virtnet_xsk_wakeup,
+ 	.ndo_features_check	= passthru_features_check,
+ 	.ndo_get_phys_port_name	= virtnet_get_phys_port_name,
+ 	.ndo_set_features	= virtnet_set_features,
 -- 
 1.8.3.1
 
