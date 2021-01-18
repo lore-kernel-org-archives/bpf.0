@@ -2,214 +2,183 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E0831C433DB
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 15:28:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 242B6C43331
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 15:31:36 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A7949206B2
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 15:28:29 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0340A22CA0
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 15:31:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405851AbhARP21 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jan 2021 10:28:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38360 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405840AbhARP2O (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Jan 2021 10:28:14 -0500
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1442C061573
-        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 07:27:33 -0800 (PST)
-Received: by mail-qk1-x729.google.com with SMTP id h4so18965496qkk.4
-        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 07:27:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=F6KA9w3XTyDzR9a/eJiRfa89v7fUgs4kNlqtUAh2eRs=;
-        b=LIhPXBoQ0lqZVjwUYNyS926s6D2uM+E4QTstoVoyx4n/7hogHhwpwSIBj+IPlC8YRN
-         h3oF2QH8WoW7n66iWRccB6P28cnjAoaZFh9Ihuo4M2y2hnwgm269UEf0c7HlVrmhnE+9
-         KJYq1eh3iCo2cSAphPIo6nJjawFJTfFVbF/c7O13aAsmJxFnegxLSNNkU62oqpaWFTiB
-         V89AL0U1zhHAjVLfhYgFjt5j4ESe5y8dRSW3qJC3WKQ7QQ4pcRzH5pRi6LJUi78Ft/Ka
-         uIHf3k+LMjIxLol3HyKVPi8GWfs3cxxk1fX9BduFukj4m0ZBJOyjaKxOf48FB7EvZ4B5
-         EK+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=F6KA9w3XTyDzR9a/eJiRfa89v7fUgs4kNlqtUAh2eRs=;
-        b=YR3B3dAdxiiICAi0oyqrZ+LR/KGJ/kFXm2P9NpVVpawN4tb82J6s+Dy+WgUn1WNx9W
-         poXEvzDS9XzeD/WE7Gs5+RM/NAtWz91Y9fNnxMajTQYh8hraRBtwiIIC7bOUs3elcfsD
-         CNkV6dSX8lgBUm02EbYmWrA6zMbyK4gsep9KCiFFAaMjDLr1Qb1L12aqjq0V/DF8OqJh
-         oGIfdjFyotdhP6HcyaXJFriEIr+i2I6b/gLWYkXTBmYNoomjwg3BIDATTDLGzySmcSQv
-         fX2KXkv70WiDiLOHVGYBTKuseOp0dRTFIif7BqAUydOHmRI4ZVYYqfnrbHZwqLhfTFCy
-         2NjQ==
-X-Gm-Message-State: AOAM532mi+PMFl3uNIFNbID2t8mIlSbi2tE1k7HSLMNXbu9PJZW8zJEz
-        VRhIwhpm6zY9ck6fju+KwSc/ZTrYXbg=
-X-Google-Smtp-Source: ABdhPJwCcq9PBR2wD3L8P9HCTtMKs4O2zF0hbFYQg4iOXrckn2pjU+PFQUCIaqPJ2/MyjPUZUyDTmA==
-X-Received: by 2002:a37:a495:: with SMTP id n143mr129411qke.362.1610983652838;
-        Mon, 18 Jan 2021 07:27:32 -0800 (PST)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id t68sm10971847qkd.35.2021.01.18.07.27.32
-        for <bpf@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Jan 2021 07:27:32 -0800 (PST)
-Received: by mail-yb1-f178.google.com with SMTP id p185so1816891ybg.8
-        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 07:27:32 -0800 (PST)
-X-Received: by 2002:ab0:7386:: with SMTP id l6mr17924882uap.141.1610983234282;
- Mon, 18 Jan 2021 07:20:34 -0800 (PST)
+        id S2405761AbhARP0z (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jan 2021 10:26:55 -0500
+Received: from mga02.intel.com ([134.134.136.20]:63476 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2393474AbhARPZF (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Jan 2021 10:25:05 -0500
+IronPort-SDR: uozTAuH+MAVRus1csKjKDp+NHHW3YXe4wK+rJlQf3Aq3YYtSbBSaMf7lvAXjyCLXoBV/BfxMFC
+ Xv2vbVdN2kBw==
+X-IronPort-AV: E=McAfee;i="6000,8403,9867"; a="165905540"
+X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
+   d="scan'208";a="165905540"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2021 07:23:14 -0800
+IronPort-SDR: TIxmgZTywD02ZZMNx/aDE3SSIvjMj3PwzGhNOmUVIm7MB/kCf8gUokCu082xX0t7w4ZK0gAZt7
+ azX6q3IRzCBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
+   d="scan'208";a="500676387"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by orsmga004.jf.intel.com with ESMTP; 18 Jan 2021 07:23:12 -0800
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     intel-wired-lan@lists.osuosl.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        anthony.l.nguyen@intel.com, kuba@kernel.org, bjorn.topel@intel.com,
+        magnus.karlsson@intel.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH v3 net-next 09/11] i40e: store the result of i40e_rx_offset() onto i40e_ring
+Date:   Mon, 18 Jan 2021 16:13:16 +0100
+Message-Id: <20210118151318.12324-10-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210118151318.12324-1-maciej.fijalkowski@intel.com>
+References: <20210118151318.12324-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
-References: <20210112194143.1494-1-yuri.benditovich@daynix.com>
- <CAOEp5OejaX4ZETThrj4-n8_yZoeTZs56CBPHbQqNsR2oni8dWw@mail.gmail.com>
- <CAOEp5Oc5qif_krU8oC6qhq6X0xRW-9GpWrBzWgPw0WevyhT8Mg@mail.gmail.com>
- <CA+FuTSfhBZfEf8+LKNUJQpSxt8c5h1wMpARupekqFKuei6YBsA@mail.gmail.com>
- <78bbc518-4b73-4629-68fb-2713250f8967@redhat.com> <CA+FuTSfJJhEYr6gXmjpjjXzg6Xm5wWa-dL1SEV-Zt7RcPXGztg@mail.gmail.com>
- <8ea218a8-a068-1ed9-929d-67ad30111c3c@redhat.com> <CAOEp5OfyHz2rXHmOeojNNE2wvrHMn_z1egr5aGQborEq829TLw@mail.gmail.com>
- <65fe1a40-abc0-77ed-56df-3f0a70615016@redhat.com> <CAOEp5Oe4TcOukJa+OGj-ynfMMrZC=_YQDpzSC9_9p+UXSH7hmg@mail.gmail.com>
-In-Reply-To: <CAOEp5Oe4TcOukJa+OGj-ynfMMrZC=_YQDpzSC9_9p+UXSH7hmg@mail.gmail.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Mon, 18 Jan 2021 10:19:57 -0500
-X-Gmail-Original-Message-ID: <CA+FuTSfsFC0DTFhHDwT7dbtWXTmGOWjc=ozt8CgH_qDDn9gejg@mail.gmail.com>
-Message-ID: <CA+FuTSfsFC0DTFhHDwT7dbtWXTmGOWjc=ozt8CgH_qDDn9gejg@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/7] Support for virtio-net hash reporting
-To:     Yuri Benditovich <yuri.benditovich@daynix.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>, decui@microsoft.com,
-        cai@lca.pw, Jakub Sitnicki <jakub@cloudflare.com>,
-        Marco Elver <elver@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Network Development <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        bpf <bpf@vger.kernel.org>, Yan Vugenfirer <yan@daynix.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> > >>>>> What it does not give is a type indication, such as
-> > >>>>> VIRTIO_NET_HASH_TYPE_TCPv6. I don't understand how this would be used.
-> > >>>>> In datapaths where the NIC has already computed the four-tuple hash
-> > >>>>> and stored it in skb->hash --the common case for servers--, That type
-> > >>>>> field is the only reason to have to compute again.
-> > >>>> The problem is there's no guarantee that the packet comes from the NIC,
-> > >>>> it could be a simple VM2VM or host2VM packet.
-> > >>>>
-> > >>>> And even if the packet is coming from the NIC that calculates the hash
-> > >>>> there's no guarantee that it's the has that guest want (guest may use
-> > >>>> different RSS keys).
-> > >>> Ah yes, of course.
-> > >>>
-> > >>> I would still revisit the need to store a detailed hash_type along with
-> > >>> the hash, as as far I can tell that conveys no actionable information
-> > >>> to the guest.
-> > >>
-> > >> Yes, need to figure out its usage. According to [1], it only mention
-> > >> that storing has type is a charge of driver. Maybe Yuri can answer this.
-> > >>
-> > > For the case of Windows VM we can't know how exactly the network stack
-> > > uses provided hash data (including hash type). But: different releases
-> > > of Windows
-> > > enable different hash types (for example UDP hash is enabled only on
-> > > Server 2016 and up).
-> > >
-> > > Indeed the Windows requires a little more from the network adapter/driver
-> > > than Linux does.
-> > >
-> > > The addition of RSS support to virtio specification takes in account
-> > > the widest set of
-> > > requirements (i.e. Windows one), our initial impression is that this
-> > > should be enough also for Linux.
-> > >
-> > > The NDIS specification in part of RSS is _mandatory_ and there are
-> > > certification tests
-> > > that check that the driver provides the hash data as expected. All the
-> > > high-performance
-> > > network adapters have such RSS functionality in the hardware.
+Output of i40e_rx_offset() is based on ethtool's priv flag setting,
+which when changed, causes PF reset (disables napi, frees irqs, loads
+different Rx mem model, etc.). This means that within napi its result is
+constant and there is no reason to call it per each processed frame.
 
-Thanks for the context.
+Add new 'rx_offset' field to i40e_ring that is meant to hold the
+i40e_rx_offset() result and use it within i40e_clean_rx_irq().
+Furthermore, use it within i40e_alloc_mapped_page().
 
-If Windows requires the driver to pass the hash-type along with the
-hash data, then indeed this will be needed.
+Last but not least, un-inline the function of interest so that compiler
+makes the decision about inlining as it lives in .c file.
 
-If it only requires the device to support a subset of of the possible
-types, chosen at init, that would be different and it would be cheaper
-for the driver to pass this config to the device one time.
+Reviewed-by: Björn Töpel <bjorn.topel@intel.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c | 35 +++++++++++----------
+ drivers/net/ethernet/intel/i40e/i40e_txrx.h |  1 +
+ 2 files changed, 19 insertions(+), 17 deletions(-)
 
-> > > With pre-RSS QEMU (i.e. where the virtio-net device does not indicate
-> > > the RSS support)
-> > > the virtio-net driver for Windows does all the job related to RSS:
-> > > - hash calculation
-> > > - hash/hash_type delivery
-> > > - reporting each packet on the correct CPU according to RSS settings
-> > >
-> > > With RSS support in QEMU all the packets always come on a proper CPU and
-> > > the driver never needs to reschedule them. The driver still need to
-> > > calculate the
-> > > hash and report it to Windows. In this case we do the same job twice: the device
-> > > (QEMU or eBPF) does calculate the hash and get proper queue/CPU to deliver
-> > > the packet. But the hash is not delivered by the device, so the driver needs to
-> > > recalculate it and report to the Windows.
-> > >
-> > > If we add HASH_REPORT support (current set of patches) and the device
-> > > indicates this
-> > > feature we can avoid hash recalculation in the driver assuming we
-> > > receive the correct hash
-> > > value and hash type. Otherwise the driver can't know which exactly
-> > > hash the device has calculated.
-> > >
-> > > Please let me know if I did not answer the question.
-> >
-> >
-> > I think I get you. The hash type is also a kind of classification (e.g
-> > TCP or UDP). Any possibility that it can be deduced from the driver? (Or
-> > it could be too expensive to do that).
-> >
-> The driver does it today (when the device does not offer any features)
-> and of course can continue doing it.
-> IMO if the device can't report the data according to the spec it
-> should not indicate support for the respective feature (or fallback to
-> vhost=off).
-> Again, IMO if Linux does not need the exact hash_type we can use (for
-> Linux) the way that Willem de Brujin suggested in his patchset:
-> - just add VIRTIO_NET_HASH_REPORT_L4 to the spec
-> - Linux can use MQ + hash delivery (and use VIRTIO_NET_HASH_REPORT_L4)
-> - Linux can use (if makes sense) RSS with VIRTIO_NET_HASH_REPORT_L4 and eBPF
-> - Windows gets what it needs + eBPF
-> So, everyone has what they need at the respective cost.
->
-> Regarding use of skb->cb for hash type:
-> Currently, if I'm not mistaken, there are 2 bytes at the end of skb->cb:
-> skb->cb is 48 bytes array
-> There is skb_gso_cb (14 bytes) at offset SKB_GSO_CB_OFFSET(32)
-> Is it possible to use one of these 2 bytes for hash_type?
-> If yes, shall we extend the skb_gso_cb and place the 1-bytes hash_type
-> in it or just emit compilation error if the skb_gso_cb grows beyond 15
-> bytes?
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+index 7e008dbbef97..3a6be7fa9817 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
+@@ -1415,6 +1415,17 @@ void i40e_free_rx_resources(struct i40e_ring *rx_ring)
+ 	}
+ }
+ 
++/**
++ * i40e_rx_offset - Return expected offset into page to access data
++ * @rx_ring: Ring we are requesting offset of
++ *
++ * Returns the offset value for ring into the data buffer.
++ */
++static unsigned int i40e_rx_offset(struct i40e_ring *rx_ring)
++{
++	return ring_uses_build_skb(rx_ring) ? I40E_SKB_PAD : 0;
++}
++
+ /**
+  * i40e_setup_rx_descriptors - Allocate Rx descriptors
+  * @rx_ring: Rx descriptor ring (for a specific queue) to setup
+@@ -1443,6 +1454,7 @@ int i40e_setup_rx_descriptors(struct i40e_ring *rx_ring)
+ 	rx_ring->next_to_alloc = 0;
+ 	rx_ring->next_to_clean = 0;
+ 	rx_ring->next_to_use = 0;
++	rx_ring->rx_offset = i40e_rx_offset(rx_ring);
+ 
+ 	/* XDP RX-queue info only needed for RX rings exposed to XDP */
+ 	if (rx_ring->vsi->type == I40E_VSI_MAIN) {
+@@ -1478,17 +1490,6 @@ void i40e_release_rx_desc(struct i40e_ring *rx_ring, u32 val)
+ 	writel(val, rx_ring->tail);
+ }
+ 
+-/**
+- * i40e_rx_offset - Return expected offset into page to access data
+- * @rx_ring: Ring we are requesting offset of
+- *
+- * Returns the offset value for ring into the data buffer.
+- */
+-static inline unsigned int i40e_rx_offset(struct i40e_ring *rx_ring)
+-{
+-	return ring_uses_build_skb(rx_ring) ? I40E_SKB_PAD : 0;
+-}
+-
+ static unsigned int i40e_rx_frame_truesize(struct i40e_ring *rx_ring,
+ 					   unsigned int size)
+ {
+@@ -1497,8 +1498,8 @@ static unsigned int i40e_rx_frame_truesize(struct i40e_ring *rx_ring,
+ #if (PAGE_SIZE < 8192)
+ 	truesize = i40e_rx_pg_size(rx_ring) / 2; /* Must be power-of-2 */
+ #else
+-	truesize = i40e_rx_offset(rx_ring) ?
+-		SKB_DATA_ALIGN(size + i40e_rx_offset(rx_ring)) +
++	truesize = rx_ring->rx_offset ?
++		SKB_DATA_ALIGN(size + rx_ring->rx_offset) +
+ 		SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) :
+ 		SKB_DATA_ALIGN(size);
+ #endif
+@@ -1549,7 +1550,7 @@ static bool i40e_alloc_mapped_page(struct i40e_ring *rx_ring,
+ 
+ 	bi->dma = dma;
+ 	bi->page = page;
+-	bi->page_offset = i40e_rx_offset(rx_ring);
++	bi->page_offset = rx_ring->rx_offset;
+ 	page_ref_add(page, USHRT_MAX - 1);
+ 	bi->pagecnt_bias = USHRT_MAX;
+ 
+@@ -1916,7 +1917,7 @@ static void i40e_add_rx_frag(struct i40e_ring *rx_ring,
+ #if (PAGE_SIZE < 8192)
+ 	unsigned int truesize = i40e_rx_pg_size(rx_ring) / 2;
+ #else
+-	unsigned int truesize = SKB_DATA_ALIGN(size + i40e_rx_offset(rx_ring));
++	unsigned int truesize = SKB_DATA_ALIGN(size + rx_ring->rx_offset);
+ #endif
+ 
+ 	skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, rx_buffer->page,
+@@ -2312,8 +2313,9 @@ static void i40e_inc_ntc(struct i40e_ring *rx_ring)
+ static int i40e_clean_rx_irq(struct i40e_ring *rx_ring, int budget)
+ {
+ 	unsigned int total_rx_bytes = 0, total_rx_packets = 0, frame_sz = 0;
+-	struct sk_buff *skb = rx_ring->skb;
+ 	u16 cleaned_count = I40E_DESC_UNUSED(rx_ring);
++	unsigned int offset = rx_ring->rx_offset;
++	struct sk_buff *skb = rx_ring->skb;
+ 	unsigned int xdp_xmit = 0;
+ 	bool failure = false;
+ 	struct xdp_buff xdp;
+@@ -2373,7 +2375,6 @@ static int i40e_clean_rx_irq(struct i40e_ring *rx_ring, int budget)
+ 
+ 		/* retrieve a buffer from the ring */
+ 		if (!skb) {
+-			unsigned int offset = i40e_rx_offset(rx_ring);
+ 			unsigned char *hard_start;
+ 
+ 			hard_start = page_address(rx_buffer->page) +
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.h b/drivers/net/ethernet/intel/i40e/i40e_txrx.h
+index 5f531b195959..86fed05b4f19 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_txrx.h
++++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.h
+@@ -387,6 +387,7 @@ struct i40e_ring {
+ 					 */
+ 
+ 	struct i40e_channel *ch;
++	u16 rx_offset;
+ 	struct xdp_rxq_info xdp_rxq;
+ 	struct xsk_buff_pool *xsk_pool;
+ 	struct xdp_desc *xsk_descs;      /* For storing descriptors in the AF_XDP ZC path */
+-- 
+2.20.1
 
-Good catch on segmentation taking place between .ndo_select_queue and
-.ndo_start_xmit.
-
-That also means that whatever field in the skb is used, has to be
-copied to all segments in skb_segment. Which happens for cb. But this
-feature is completely unrelated to the skb_gso_cb type. Perhaps
-another field with a real type is more clear. For instance, an
-extension to the union with napi_id and sender_cpu, as neither is used
-in this egress path with .ndo_select_queue?
