@@ -8,89 +8,149 @@ X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 9A225C433DB
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 16:12:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id ACB1FC433E9
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 16:15:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 65CE522C9C
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 16:12:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 84A4722B49
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 16:15:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406228AbhARQMm (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jan 2021 11:12:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45790 "EHLO
+        id S2406477AbhARQPG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jan 2021 11:15:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406076AbhARQCd (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Jan 2021 11:02:33 -0500
-Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53B8C0613C1
-        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 08:01:51 -0800 (PST)
-Received: by mail-ej1-x64a.google.com with SMTP id h18so1965087ejx.17
-        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 08:01:51 -0800 (PST)
+        with ESMTP id S2406012AbhARP7u (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Jan 2021 10:59:50 -0500
+Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9198BC0613CF
+        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 07:59:09 -0800 (PST)
+Received: by mail-wm1-x349.google.com with SMTP id k67so4712526wmk.5
+        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 07:59:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=sender:date:in-reply-to:message-id:mime-version:references:subject
          :from:to:cc;
-        bh=cw3dvRGpX/nSIs+bFZRctQhooB6vy9IbCBqwEdoTFOc=;
-        b=cFOm+rUnyAKi8JkpTd+HdgTPNG7OBrrUy9ionHXZamrgDP7xbIEWfp9EUbzohDY9y6
-         8qNpc4Vzo/seVzuMT0dsBell02MySEo1pPEUdKXad3LF9pnA1+DTFHDS9m6D1LssnzpH
-         4YmHa2u6fG0zS5rfw3rmIXNn/KkQWm5lsvDgm6aduXPuRo9RFfnZJ9TrbeFSVcT0mSkj
-         i4Go/JwqFw6K/rVIAvgBUjnoYt0bcRS1ozHeRtl0rrDWbw21d+HMNHKL8Wbr3qt+PUzY
-         QpGrw2t2FBEQNW/2jz73AjECpQVnOorM+I0m2JONBasQq4zXEaZo5yXqcIqUP09k5QNT
-         U0mA==
+        bh=D4HKQ9ve+LXBAweMKIFSbFpamqqEnWzLMG5X0/dA8Fo=;
+        b=rtcYL5vlKu3VhOsCxnmJoAWjp4gHrbNQpG6XbXP8oSa+m26o9g0iVBh2l5yfw8yjmr
+         sQ3qsZ9dz73Y1AGXK87kqF/gKEpMu7H6dEO6bVgRhZBeS9Ly7MyMmZHCmM4kfVe8gUSS
+         pjHyD4/s9TcrJ8SA0nUswc9515PQkOPCbMP1w071cHiVq+bWb1lTLsYDA380KQtcSveG
+         p7Sk4PkNk3GZ2gOQujsD8nWsyeMyFeFhrKzZVCPpCADHfZb1nMQK6NZImrw/o+bsba/K
+         0xWAo24qdWWGzmkJOgIpZOZjvp7ENsGqFuSTUt1LbOqpnoK+hFgFu+MAH17WUoOkaK8M
+         dluQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=cw3dvRGpX/nSIs+bFZRctQhooB6vy9IbCBqwEdoTFOc=;
-        b=SPmAM36T7bi8ApsOqsUJxQOxcVfFW93mDVCwoKcerfhBbHtqjIKZ11PBTapbEvrjyu
-         yZYO8KFWQCxR7rorDOaYqu2KuJnklD0932B3Byc+sHbOvBm8AjO8QDWcvSvf568EhkyN
-         2diazciKjSgkMeadG5qtglQUFIR+5E5xaQqahpMfUpo2SuHrKSkhNkBIDpJVG+YbYdPK
-         rU/eaiD6Y6SmHEyyw6dH+H9GtaPqKw7qh9BeC6EVRrhqQ7Q3fCWlztDx6t4ZJyC3qwqN
-         /kHGb3Qsq4rgIQ5P5P2qXu5RUSFlkjCDDrPszo6MQUFP3mBg8j1+apg0U37Quy3IBs9Q
-         oXSA==
-X-Gm-Message-State: AOAM5306Rrx/BANHdbnNVF3RkfmS+s0kiVCP5ZOw9BbNU5xNL7PLHNtW
-        7DECJiAnMq2xq8VxfUemvJhkZp2Gn4k5Zw==
-X-Google-Smtp-Source: ABdhPJw+SvlnDKL5tE8q7bmDcvaaf08OQSqdIUpo3tCtpAC6m5QMFbp1u2chxyy6bFqmUFfKLlt+Tpu886Tm3Q==
-Sender: "gprocida via sendgmr" <gprocida@tef.lon.corp.google.com>
-X-Received: from tef.lon.corp.google.com ([2a00:79e0:d:110:a6ae:11ff:fe11:4f04])
- (user=gprocida job=sendgmr) by 2002:a17:906:15ca:: with SMTP id
- l10mr242893ejd.402.1610985710175; Mon, 18 Jan 2021 08:01:50 -0800 (PST)
-Date:   Mon, 18 Jan 2021 16:01:37 +0000
-In-Reply-To: <20210118160139.1971039-1-gprocida@google.com>
-Message-Id: <20210118160139.1971039-2-gprocida@google.com>
+        bh=D4HKQ9ve+LXBAweMKIFSbFpamqqEnWzLMG5X0/dA8Fo=;
+        b=U0GjPIgCJoYdmZvkGh4omYxmrUYEXkXOj4iwgNMaJ+YinrDILuvWYmnUKBbvLyppB8
+         MtLzbWKToM7q52jQqWHlTcWDku0MNBMfu6kdWMECMlPRFlpgN1a0Xpbe/eFXTlmSk1ey
+         hFtqZlXOyd3WoFlz4U2SakI8kIE32D91eXcgPxE6Bj83DC4iTZVXxgCQyZh6nY98tlGV
+         rub4ymiEp+8Yb690gKWhQOzEsesqcctF4nDXvEPDOxVFIRvhrozdWJw2qOuQ2Am00O4Z
+         vnEExHn1Lo0U6aPOB8uepKKrcOnkF1zfeJmNwKR9lbYRTjcihFAY3cS9g5UoCTvQV8n/
+         VY+A==
+X-Gm-Message-State: AOAM532QDh2oojG0PNqNdJ3tnlf9NpVa8+M3U8vhD35up6V4JqoDrnyP
+        Snve1axGerPJ9PFkcs6zNfkZwuqT+atgj/2imbDmNXkqSX0V2hs4ic/CuEUAr6+7QCjzCnqU/nB
+        oDuXEfOV9HA3C3NIy4vHoK3Lv6cGfPTTpTPGxTg47CIfA0T90sKfrRwtX2IHy32E=
+X-Google-Smtp-Source: ABdhPJzZa+eg/F4Yo6Vl/+ZRJLWtT7QkClHZxtgI+ifkMymW08QjfUb11pGeC9KQCX91kGOJCkmJJA1ySMQ0Wg==
+Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
+X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
+ (user=jackmanb job=sendgmr) by 2002:a05:6000:1811:: with SMTP id
+ m17mr142493wrh.67.1610985548197; Mon, 18 Jan 2021 07:59:08 -0800 (PST)
+Date:   Mon, 18 Jan 2021 15:57:34 +0000
+In-Reply-To: <20210118155735.532663-1-jackmanb@google.com>
+Message-Id: <20210118155735.532663-2-jackmanb@google.com>
 Mime-Version: 1.0
-References: <20210118160139.1971039-1-gprocida@google.com>
+References: <20210118155735.532663-1-jackmanb@google.com>
 X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
-Subject: [PATCH 1/3] btf_encoder: Fix handling of restrict qualifier
-From:   Giuliano Procida <gprocida@google.com>
-To:     dwarves@vger.kernel.org
-Cc:     kernel-team@android.com, maennich@google.com, ast@kernel.org,
-        andrii@kernel.org, bpf@vger.kernel.org, kernel-team@fb.com,
-        Giuliano Procida <gprocida@google.com>
+Subject: [PATCH bpf-next v2 1/2] docs: bpf: Fixup atomics markup
+From:   Brendan Jackman <jackmanb@google.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Florent Revest <revest@chromium.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Brendan Jackman <jackmanb@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Fixes: 48efa92933e8 ("btf_encoder: Use libbpf APIs to encode BTF type info")
+This fixues up the markup to fix a warning, be more consistent with
+use of monospace, and use the correct .rst syntax for <em> (* instead
+of _).
 
-Signed-off-by: Giuliano Procida <gprocida@google.com>
+NB this conflicts with Lukas' patch at [1], which just fixes the
+warning. The scope of this one is a little broader.
+
+[1] https://lore.kernel.org/bpf/CA+i-1C3cEXqxcXfD4sibQfx+dtmmzvOzruhk8J5pAw3g5v=KgA@mail.gmail.com/T/#t
+
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
 ---
- libbtf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/networking/filter.rst | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/libbtf.c b/libbtf.c
-index 16e1d45..3709087 100644
---- a/libbtf.c
-+++ b/libbtf.c
-@@ -417,7 +417,7 @@ int32_t btf_elf__add_ref_type(struct btf_elf *btfe, uint16_t kind, uint32_t type
- 		id = btf__add_const(btf, type);
- 		break;
- 	case BTF_KIND_RESTRICT:
--		id = btf__add_const(btf, type);
-+		id = btf__add_restrict(btf, type);
- 		break;
- 	case BTF_KIND_TYPEDEF:
- 		id = btf__add_typedef(btf, name, type);
+diff --git a/Documentation/networking/filter.rst b/Documentation/networking/filter.rst
+index f6d8f90e9a56..4c2bb4c6364d 100644
+--- a/Documentation/networking/filter.rst
++++ b/Documentation/networking/filter.rst
+@@ -1048,12 +1048,12 @@ Unlike classic BPF instruction set, eBPF has generic load/store operations::
+ Where size is one of: BPF_B or BPF_H or BPF_W or BPF_DW.
+ 
+ It also includes atomic operations, which use the immediate field for extra
+-encoding.
++encoding::
+ 
+    .imm = BPF_ADD, .code = BPF_ATOMIC | BPF_W  | BPF_STX: lock xadd *(u32 *)(dst_reg + off16) += src_reg
+    .imm = BPF_ADD, .code = BPF_ATOMIC | BPF_DW | BPF_STX: lock xadd *(u64 *)(dst_reg + off16) += src_reg
+ 
+-The basic atomic operations supported are:
++The basic atomic operations supported are::
+ 
+     BPF_ADD
+     BPF_AND
+@@ -1066,12 +1066,12 @@ memory location addresed by ``dst_reg + off`` is atomically modified, with
+ immediate, then these operations also overwrite ``src_reg`` with the
+ value that was in memory before it was modified.
+ 
+-The more special operations are:
++The more special operations are::
+ 
+     BPF_XCHG
+ 
+ This atomically exchanges ``src_reg`` with the value addressed by ``dst_reg +
+-off``.
++off``. ::
+ 
+     BPF_CMPXCHG
+ 
+@@ -1081,18 +1081,19 @@ before is loaded back to ``R0``.
+ 
+ Note that 1 and 2 byte atomic operations are not supported.
+ 
+-Except ``BPF_ADD`` _without_ ``BPF_FETCH`` (for legacy reasons), all 4 byte
++Except ``BPF_ADD`` *without* ``BPF_FETCH`` (for legacy reasons), all 4 byte
+ atomic operations require alu32 mode. Clang enables this mode by default in
+ architecture v3 (``-mcpu=v3``). For older versions it can be enabled with
+ ``-Xclang -target-feature -Xclang +alu32``.
+ 
+-You may encounter BPF_XADD - this is a legacy name for BPF_ATOMIC, referring to
+-the exclusive-add operation encoded when the immediate field is zero.
++You may encounter ``BPF_XADD`` - this is a legacy name for ``BPF_ATOMIC``,
++referring to the exclusive-add operation encoded when the immediate field is
++zero.
+ 
+-eBPF has one 16-byte instruction: BPF_LD | BPF_DW | BPF_IMM which consists
++eBPF has one 16-byte instruction: ``BPF_LD | BPF_DW | BPF_IMM`` which consists
+ of two consecutive ``struct bpf_insn`` 8-byte blocks and interpreted as single
+ instruction that loads 64-bit immediate value into a dst_reg.
+-Classic BPF has similar instruction: BPF_LD | BPF_W | BPF_IMM which loads
++Classic BPF has similar instruction: ``BPF_LD | BPF_W | BPF_IMM`` which loads
+ 32-bit immediate value into a register.
+ 
+ eBPF verifier
 -- 
 2.30.0.284.gd98b1dd5eaa7-goog
 
