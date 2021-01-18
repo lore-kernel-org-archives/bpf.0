@@ -2,164 +2,124 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 08B25C433E6
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 11:07:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7A921C433E0
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 11:12:59 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C70A5222B3
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 11:07:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 3C1A2223E8
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 11:12:59 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389185AbhARLGw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jan 2021 06:06:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:25161 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388586AbhARLGp (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 18 Jan 2021 06:06:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1610967914;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A41TTu6Um6DV/d7sLWeoM78YuWc5giE2Zxuf8cbA1Go=;
-        b=RVbrZyzZcoj5tzXymicf2wx/PrBBdbhj5OP9R3eeMWELP0ChAoDhDDF1fe97ssAzzg5nln
-        vXK1O/QULr+s6IqtH9QJ6/39X/2tbOGnwGpCb2X+eC3VebFn8Oz34rXa3tn8ahUZQ9eeoW
-        aKUkVffumnWnrq3NSzD+n4Ld1hMo5o0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-236-hQQv2VQKMqiMWKt6WgyLYA-1; Mon, 18 Jan 2021 06:05:09 -0500
-X-MC-Unique: hQQv2VQKMqiMWKt6WgyLYA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 49FD8107ACE3;
-        Mon, 18 Jan 2021 11:05:07 +0000 (UTC)
-Received: from carbon (unknown [10.36.110.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C4F687046D;
-        Mon, 18 Jan 2021 11:05:00 +0000 (UTC)
-Date:   Mon, 18 Jan 2021 12:04:59 +0100
-From:   Jesper Dangaard Brouer <brouer@redhat.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        maze@google.com, lmb@cloudflare.com, shaun@tigera.io,
-        Lorenzo Bianconi <lorenzo@kernel.org>, marek@cloudflare.com,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>, eyal.birger@gmail.com,
-        colrack@gmail.com, brouer@redhat.com
-Subject: Re: [PATCH bpf-next V11 4/7] bpf: add BPF-helper for MTU checking
-Message-ID: <20210118120459.4a7ac2e1@carbon>
-In-Reply-To: <776c5832-da48-cc6b-730f-e70aebe73de8@iogearbox.net>
-References: <161047346644.4003084.2653117664787086168.stgit@firesoul>
-        <161047352084.4003084.16468571234023057969.stgit@firesoul>
-        <a14a7490-88c6-9d14-0886-547113242c45@iogearbox.net>
-        <20210114153607.6eea9b37@carbon>
-        <776c5832-da48-cc6b-730f-e70aebe73de8@iogearbox.net>
+        id S2389563AbhARLMw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jan 2021 06:12:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389053AbhARKrZ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Jan 2021 05:47:25 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD77C0613ED
+        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 02:46:42 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id x21so13677347iog.10
+        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 02:46:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SlpVFG70d1haAhgfDosF+AGq4k9Rce7hROvWA+Bpu+o=;
+        b=hyntPPIMGuqz6MhhQHoy89/WERg7VMJS9GpxnFwqrnQqmJSjwI/FL1NoEs7p6RdLa8
+         /zAfa8lcN+DOqWaG0yXTNsYiFQQPoklAIcsBi1N0/WxUEWsmZilPPhPcdY8OfHWCbaV0
+         CmVDttL80BxG1idnxWXuNA29VzJIGbhWehA6z05p3BXSpN+t/tj444WlB1DCzvKRj315
+         2MM3cTivgnFW/Dyk5wW8Y3JY95QWtzMwpxxbTJ+pyLL3HrANPMc51u6XsJWw6R1C5BT/
+         nRagJvkqkqrZWTQdMkFvbwusT88ggx8TW7jZ7wdLa5Q/Zu9VgCva94eHT7YnSD2RFOJr
+         WkOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SlpVFG70d1haAhgfDosF+AGq4k9Rce7hROvWA+Bpu+o=;
+        b=ek5woAkfMFAHVOt0e5p74ku/DQwjzipQwOIhZml7yZMcPRrc+yzHeqhCmIVpGMJvvi
+         LQacPl0ZsOY/kRnVQ/4QSrsDb9/r46fKQBHwh1anhQerXOis066kYHJta3u89/ncC0ug
+         glq+oYkZw7v/2rmMariqWBpZO0Pa4OPmWl6NlGKSGFKyzFqNBW5lq06Z7ug5bMSfQvug
+         0eYrrXlH105aK67eXqZqtfTCxOusuidzo8dAz2+/1k0nVmuLBiiCFv5OF8O5OLZS6nyk
+         RVzXRmJwdJaeQfgd0oEEgUTJg7KGXgJInrPtKvg9jBNJUhzcN7SRAnboQMyltjLNvK9f
+         CDcg==
+X-Gm-Message-State: AOAM532JbOTutKxEjb55NoZC286hl5f3yZS5VQGpUlHvbeX8DIbGTRp+
+        lvniOrFTJl05asharRVYeWl5xfO0+eljwJUvAfhCdg==
+X-Google-Smtp-Source: ABdhPJwfSq1SQ7TLblWt7iM5zpWAuhnB5VJegpIITRV7IPSuwAx+odOBL7l3eFDnoUItHdT2zO82/C2n9A7nCVHfT90=
+X-Received: by 2002:a05:6e02:194a:: with SMTP id x10mr20340034ilu.165.1610966801671;
+ Mon, 18 Jan 2021 02:46:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+References: <20210118080004.6367-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20210118080004.6367-1-lukas.bulwahn@gmail.com>
+From:   Brendan Jackman <jackmanb@google.com>
+Date:   Mon, 18 Jan 2021 11:46:30 +0100
+Message-ID: <CA+i-1C3cEXqxcXfD4sibQfx+dtmmzvOzruhk8J5pAw3g5v=KgA@mail.gmail.com>
+Subject: Re: [PATCH for bpf-next] docs: bpf: add minimal markup to address doc warning
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        netdev@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-doc@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Thu, 14 Jan 2021 23:28:57 +0100
-Daniel Borkmann <daniel@iogearbox.net> wrote:
+Thanks Lukas. Sorry I didn't get around to fixing it so far.
 
-> On 1/14/21 3:36 PM, Jesper Dangaard Brouer wrote:
-> [...]
-> >>> +BPF_CALL_5(bpf_skb_check_mtu, struct sk_buff *, skb,
-> >>> +	   u32, ifindex, u32 *, mtu_len, s32, len_diff, u64, flags)
-> >>> +{
-> >>> +	int ret = BPF_MTU_CHK_RET_FRAG_NEEDED;
-> >>> +	struct net_device *dev = skb->dev;
-> >>> +	int skb_len, dev_len;
-> >>> +	int mtu;
-> >>> +
-> >>> +	if (unlikely(flags & ~(BPF_MTU_CHK_SEGS)))
-> >>> +		return -EINVAL;
-> >>> +
-> >>> +	dev = __dev_via_ifindex(dev, ifindex);
-> >>> +	if (unlikely(!dev))
-> >>> +		return -ENODEV;
-> >>> +
-> >>> +	mtu = READ_ONCE(dev->mtu);
-> >>> +
-> >>> +	dev_len = mtu + dev->hard_header_len;
-> >>> +	skb_len = skb->len + len_diff; /* minus result pass check */
-> >>> +	if (skb_len <= dev_len) {
-> >>> +		ret = BPF_MTU_CHK_RET_SUCCESS;
-> >>> +		goto out;
-> >>> +	}
-> >>> +	/* At this point, skb->len exceed MTU, but as it include length of all
-> >>> +	 * segments, it can still be below MTU.  The SKB can possibly get
-> >>> +	 * re-segmented in transmit path (see validate_xmit_skb).  Thus, user
-> >>> +	 * must choose if segs are to be MTU checked.  Last SKB "headlen" is
-> >>> +	 * checked against MTU.
-> >>> +	 */
-> >>> +	if (skb_is_gso(skb)) {
-> >>> +		ret = BPF_MTU_CHK_RET_SUCCESS;
-> >>> +
-> >>> +		if (!(flags & BPF_MTU_CHK_SEGS))
-> >>> +			goto out;
-> >>> +
-> >>> +		if (!skb_gso_validate_network_len(skb, mtu)) {
-> >>> +			ret = BPF_MTU_CHK_RET_SEGS_TOOBIG;
-> >>> +			goto out;
-> >>> +		}
-> >>> +
-> >>> +		skb_len = skb_headlen(skb) + len_diff;
-> >>> +		if (skb_len > dev_len) {  
-> [...]
-> >> Do you have a particular use case for the BPF_MTU_CHK_SEGS?  
-> > 
-> > The complaint from Maze (and others) were that when skb_is_gso then all
-> > the MTU checks are bypassed.  This flag enables checking the GSO part
-> > via skb_gso_validate_network_len().  We cannot enable it per default,
-> > as you say, it is universally correct in all cases.  
-> 
-> If there is a desire to have access to the skb_gso_validate_network_len(), I'd
-> keep that behind the flag then, but would drop the skb_headlen(skb) + len_diff
-> case given the mentioned case on rx where it would yield misleading results to
-> users that might be unintuitive & hard to debug.
+On Mon, 18 Jan 2021 at 09:00, Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+>
+> Commit 91c960b00566 ("bpf: Rename BPF_XADD and prepare to encode other
+> atomics in .imm") modified the BPF documentation, but missed some ReST
+> markup.
+>
+> Hence, make htmldocs warns on Documentation/networking/filter.rst:1053:
+>
+>   WARNING: Inline emphasis start-string without end-string.
+>
+> Add some minimal markup to address this warning.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-Okay, I will update the patch, and drop those lines.
+Acked-By: Brendan Jackman <jackmanb@google.com>
 
-> >> I also don't see the flag being used anywhere in your selftests, so I presume
-> >> not as otherwise you would have added an example there?  
-> > 
-> > I'm using the flag in the bpf-examples code[1], this is how I've tested
-> > the code path.
-> > 
-> > I've not found a way to generate GSO packet via the selftests
-> > infrastructure via bpf_prog_test_run_xattr().  I'm
-> > 
-> > [1] https://github.com/xdp-project/bpf-examples/blob/master/MTU-tests/tc_mtu_enforce.c  
-> 
-> Haven't checked but likely something as prog_tests/skb_ctx.c might not be sufficient
-> to pass it into the helper. For real case you might need a netns + veth setup like
-> some of the other tests are doing and then generating TCP stream from one end to the
-> other.
-
-I have looked at prog_tests/skb_ctx.c and (as you say yourself) this is
-not sufficient.  I can look into creating a netns+veth setup, but I
-will appreciate if we can merge this patchset to make forward progress,
-as I'm sure the netns+veth setup will require its own round of nitpicking.
-
-I have created netns+veth test scripts before (see test_xdp_vlan.sh),
-but my experience is that people/maintainers forget/don't to run these
-separate shell scripts.  Thus, if I create a netns+veth test, then I
-will prefer if I can integrate this into the "test_progs", as I know
-that will be run by people/maintainers.
-
--- 
-Best regards,
-  Jesper Dangaard Brouer
-  MSc.CS, Principal Kernel Engineer at Red Hat
-  LinkedIn: http://www.linkedin.com/in/brouer
-
+>
+> ---
+> applies cleanly on next-20210118
+>
+> Brendan, please ack.
+>
+> Alexei, please pick this minor cleanup patch on your bpf-next.
+>
+>  Documentation/networking/filter.rst | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/networking/filter.rst b/Documentation/networking/filter.rst
+> index f6d8f90e9a56..45f6fde1776c 100644
+> --- a/Documentation/networking/filter.rst
+> +++ b/Documentation/networking/filter.rst
+> @@ -1048,12 +1048,12 @@ Unlike classic BPF instruction set, eBPF has generic load/store operations::
+>  Where size is one of: BPF_B or BPF_H or BPF_W or BPF_DW.
+>
+>  It also includes atomic operations, which use the immediate field for extra
+> -encoding.
+> +encoding::
+>
+>     .imm = BPF_ADD, .code = BPF_ATOMIC | BPF_W  | BPF_STX: lock xadd *(u32 *)(dst_reg + off16) += src_reg
+>     .imm = BPF_ADD, .code = BPF_ATOMIC | BPF_DW | BPF_STX: lock xadd *(u64 *)(dst_reg + off16) += src_reg
+>
+> -The basic atomic operations supported are:
+> +The basic atomic operations supported are::
+>
+>      BPF_ADD
+>      BPF_AND
+> --
+> 2.17.1
+>
