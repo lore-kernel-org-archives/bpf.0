@@ -2,126 +2,109 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AD815C433DB
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 15:45:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2133AC4332B
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 15:56:47 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8072D21D42
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 15:45:49 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F1FDE22CA0
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 15:56:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728289AbhARPp2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jan 2021 10:45:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393519AbhARPo1 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Jan 2021 10:44:27 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F213C061757
-        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 07:43:42 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id q2so31901834iow.13
-        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 07:43:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9u33B5kpdx78LRxtPzxqjXDA4O8vMwb9b3mNJEnT53c=;
-        b=K463mC5DkZYkZN1sdYteF8BEn4+WZfjSGyZ5gih+OpCjTeiv7CfmbB92JnSmLU9FFs
-         WvsumAb4sJiygLufQG4CyDBYL1MqkSNOXFBRfJdPw15GypkdbOLgeOBazewURA4xZbgc
-         OlJwCaHx/0dVf6DsYMA07M590tjagAx/wCi6EvhSvYpGCxglYXVTsLpx5erGjXpuTVuP
-         tTzD9CHdzHAL97EYo+9r/C08m99Jknp15513YhRK3BjPfZ5baUlqbOO9xHjUPdJhrkx3
-         wTxc4o0U0caSFtlx4gvKViteDNPHMVexybJXsQrw4574nERjcdFr8nahuQaSBk7vSzXa
-         JJHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9u33B5kpdx78LRxtPzxqjXDA4O8vMwb9b3mNJEnT53c=;
-        b=Dg9zjMZJt46dYckRgL3lW9M8BZRESDsaqLDF+Jxa1TvfrhNHD8FyBFbGl37ea6la1o
-         pUrQD/DKEVQGWC23p83mM74glF1QEusJxp4qFtnsv7sNz824oHGTqz+sY2HcR1B6ll2r
-         Wkf/uA0wLYeXRsSKYmB9HcIe6P3BE3DT8f28LGyPtGWQ1zXbUJrErN5gu3If/eHB6d5A
-         KLsne22Hlg1iyc3fsaaZ7th4GXlGJ95X5fM2GtT39vgJ60V5SGysUPyll2ugh+pL3cuN
-         Q7p6HMxLO46hL9dfwEoUpXqaVdL99NPdPqvGcj7DNRJtTiSWndLlNq5mtq8aMUqTerbZ
-         KlfA==
-X-Gm-Message-State: AOAM532Lsc09Inh7ibxNTHNODqICFWI3oNa5chZDw4aTXbDj3fJU6nGX
-        nK2aXkT23ySUP501gKge8WWlo8r1EDJ7DKPd+ESvFsD26yn+Y6WJ
-X-Google-Smtp-Source: ABdhPJxDyXaADFQRXUGcJ2y43BFgKdVm500B4s+VL7OQwM+f1n0E1PgN7J+UoNfmHAQ0FMFrJjr1R4ZLZ2P8kE6YdBQ=
-X-Received: by 2002:a02:1dca:: with SMTP id 193mr119411jaj.39.1610984621544;
- Mon, 18 Jan 2021 07:43:41 -0800 (PST)
+        id S2393435AbhARPYZ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jan 2021 10:24:25 -0500
+Received: from mga02.intel.com ([134.134.136.20]:63476 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2393431AbhARPYW (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Jan 2021 10:24:22 -0500
+IronPort-SDR: wCVvfzh0KDuFoouLFXJwC/WHDg9K3otqW2cNrP2LE3yn1vyg7pZQKnN0vPM+1cJcK7XTFL2ZTx
+ tiXV5PyXXV9w==
+X-IronPort-AV: E=McAfee;i="6000,8403,9867"; a="165905514"
+X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
+   d="scan'208";a="165905514"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2021 07:23:03 -0800
+IronPort-SDR: Svm4C2oTnqmgVefwqsvjsAaIAgHNe86gHgU9NshqdyQ8B9QKOBFMAeDZaqmVCTYKL9SNw0uauF
+ ddNBa7QeSp1A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
+   d="scan'208";a="500676335"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by orsmga004.jf.intel.com with ESMTP; 18 Jan 2021 07:23:01 -0800
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     intel-wired-lan@lists.osuosl.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        anthony.l.nguyen@intel.com, kuba@kernel.org, bjorn.topel@intel.com,
+        magnus.karlsson@intel.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH v3 net-next 04/11] ice: simplify ice_run_xdp
+Date:   Mon, 18 Jan 2021 16:13:11 +0100
+Message-Id: <20210118151318.12324-5-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210118151318.12324-1-maciej.fijalkowski@intel.com>
+References: <20210118151318.12324-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
-References: <20210118113643.232579-1-jackmanb@google.com> <20210118083306.4c16153d@lwn.net>
-In-Reply-To: <20210118083306.4c16153d@lwn.net>
-From:   Brendan Jackman <jackmanb@google.com>
-Date:   Mon, 18 Jan 2021 16:43:30 +0100
-Message-ID: <CA+i-1C1LVKjfQLBYk6siiqhxfy0jCR7UBcAmJ4jCED0A9aWsxA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] docs: bpf: Fixup atomics documentation
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Florent Revest <revest@chromium.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Thanks for the review :)
+There's no need for 'result' variable, we can directly return the
+internal status based on action returned by xdp prog.
 
-On Mon, 18 Jan 2021 at 16:33, Jonathan Corbet <corbet@lwn.net> wrote:
->
-> On Mon, 18 Jan 2021 11:36:43 +0000
-> Brendan Jackman <jackmanb@google.com> wrote:
->
-> > This fixues up the markup to fix a warning, be more consistent with
-> > use of monospace, and use the correct .rst syntax for <em> (* instead
-> > of _). It also clarifies the explanation of Clang's -mcpu
-> > requirements for this feature, Alexei pointed out that use of the
-> > word "version" was confusing here.
->
-> This starts to sound like material for more than one patch...?
+Reviewed-by: Björn Töpel <bjorn.topel@intel.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+ drivers/net/ethernet/intel/ice/ice_txrx.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-Good point, I'll split the markup fixups and actual content change
-into separate patches.
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
+index 422f53997c02..dc1ad45eac8d 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
+@@ -537,22 +537,20 @@ static int
+ ice_run_xdp(struct ice_ring *rx_ring, struct xdp_buff *xdp,
+ 	    struct bpf_prog *xdp_prog)
+ {
+-	int err, result = ICE_XDP_PASS;
+ 	struct ice_ring *xdp_ring;
++	int err;
+ 	u32 act;
+ 
+ 	act = bpf_prog_run_xdp(xdp_prog, xdp);
+ 	switch (act) {
+ 	case XDP_PASS:
+-		break;
++		return ICE_XDP_PASS;
+ 	case XDP_TX:
+ 		xdp_ring = rx_ring->vsi->xdp_rings[smp_processor_id()];
+-		result = ice_xmit_xdp_buff(xdp, xdp_ring);
+-		break;
++		return ice_xmit_xdp_buff(xdp, xdp_ring);
+ 	case XDP_REDIRECT:
+ 		err = xdp_do_redirect(rx_ring->netdev, xdp, xdp_prog);
+-		result = !err ? ICE_XDP_REDIR : ICE_XDP_CONSUMED;
+-		break;
++		return !err ? ICE_XDP_REDIR : ICE_XDP_CONSUMED;
+ 	default:
+ 		bpf_warn_invalid_xdp_action(act);
+ 		fallthrough;
+@@ -560,11 +558,8 @@ ice_run_xdp(struct ice_ring *rx_ring, struct xdp_buff *xdp,
+ 		trace_xdp_exception(rx_ring->netdev, xdp_prog, act);
+ 		fallthrough;
+ 	case XDP_DROP:
+-		result = ICE_XDP_CONSUMED;
+-		break;
++		return ICE_XDP_CONSUMED;
+ 	}
+-
+-	return result;
+ }
+ 
+ /**
+-- 
+2.20.1
 
-> > NB this conflicts with Lukas' patch at [1], here where I've added
-> > `::` to fix the warning, I also kept the original ':' which appears
-> > in the output text.
->
-> And why did you do that?
-
-Hmm, indeed looks like that isn't necessary as long as there are no
-spaces between the previous character and the '::'.
-
-v2 incoming...
-
-> > [1] https://lore.kernel.org/bpf/CA+i-1C3cEXqxcXfD4sibQfx+dtmmzvOzruhk8J5pAw3g5v=KgA@mail.gmail.com/T/#t
-> >
-> > Signed-off-by: Brendan Jackman <jackmanb@google.com>
-> > ---
-> >  Documentation/networking/filter.rst | 30 +++++++++++++++--------------
-> >  1 file changed, 16 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/Documentation/networking/filter.rst b/Documentation/networking/filter.rst
-> > index f6d8f90e9a56..ba03e90a9163 100644
-> > --- a/Documentation/networking/filter.rst
-> > +++ b/Documentation/networking/filter.rst
-> > @@ -1048,12 +1048,12 @@ Unlike classic BPF instruction set, eBPF has generic load/store operations::
-> >  Where size is one of: BPF_B or BPF_H or BPF_W or BPF_DW.
-> >
-> >  It also includes atomic operations, which use the immediate field for extra
-> > -encoding.
-> > +encoding: ::
->
-> Things like this read really strangely.  Just say "encoding::" and be done
-> with it, please.
->
-> Thanks,
->
-> jon
