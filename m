@@ -2,150 +2,153 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-22.6 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 269CBC4332E
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 17:54:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9FDA0C433DB
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 18:04:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0EC9622227
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 17:54:54 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 73E8822BEA
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 18:04:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407088AbhARRhe (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jan 2021 12:37:34 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:11214 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2436605AbhARRhX (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Mon, 18 Jan 2021 12:37:23 -0500
-Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
-        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 10IHYup4005887;
-        Mon, 18 Jan 2021 09:36:23 -0800
+        id S2406376AbhARSDW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jan 2021 13:03:22 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:40222 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2436760AbhARSDK (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 18 Jan 2021 13:03:10 -0500
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 10IHvfBs022123;
+        Mon, 18 Jan 2021 10:02:00 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
  references : from : message-id : date : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=facebook;
- bh=CjtVkCPiWjULQ5dYgeBSF7lTZHH8LxjK4w5/53+9qh0=;
- b=WLi5x1bRh6tGA/O+89Cz1LwKABLU02H8QmZzWH7ltOHzQ9m+gdBA+mIoArkeD5huyZaD
- xQASW1OXA90I5ta/WhLtzzwoTSQ6/gnWSzR54juUwKHsz5g8oF0ZdgkwgRGQs+5Fyf8K
- dtLqT17EiZgVlU4dDE6/MwbwWSGkbVd9Muo= 
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by m0089730.ppops.net with ESMTP id 363vh583r9-1
+ bh=FEq52HPel9BpG23lRnmwJcB5YIHi9rL2XzlTIoPSDzI=;
+ b=alp4JoMfhVvQ7ezVBT1T9KE+M0xvYeMlbo9mzTHs1wXzZBnyIphe7ZGWJnsFBLIXQySX
+ gn9Cev1/9iRtVd3wx+zv+jWNt/k9QWb8yW0/uIHPf/8+o4hvNP3I3M8yRNtx9xAW1YtS
+ KB2USRGTUl+5wCrRRaFWeezXdWf1RVmU8N8= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com with ESMTP id 364h2cddnf-3
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 18 Jan 2021 09:36:22 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.98.9) by
- o365-in.thefacebook.com (100.104.94.196) with Microsoft SMTP Server
+        Mon, 18 Jan 2021 10:01:59 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.173) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Mon, 18 Jan 2021 09:36:21 -0800
+ 15.1.1979.3; Mon, 18 Jan 2021 10:01:57 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bYdnRcNR5JczfTpQBX6gieHAGGKlvr0eX6Qx5OlYDtv1tdAi8V8lBVn/a6KBSnopC6gpvf34VdEZRnjV8XUIVRMGETXY02GWDxl2Eu03jZX/YEZ+ADkSxvcjgDvJCw5sdrWblViXTtQXW0HxsWRmGECYqtr16v/uGKbuQEwGK1UTxoCJYrwsoZhMBCzAnsUh8yutz6t+9+L8hZjacj+CP69tBx1xKZzoJte8CKn0J6IcDOgGNk4NLNXgCwfE5IQTRePVPw+7XC9qXzq7Kip5mSNkpdK5+eACdJgQmyZqAYAdATQi+ZSUNCDc/hnAcBp+pa7zEd4ymqJFREQCphq7MQ==
+ b=YICxPLQ47gel6+sMvfJcQP/It7W/+CQZ9IProREJu+Q32Gw6E0fLtqZkqelH+1krGVEOhc5vWW1+YGSuYEGg5+VgxI4xtc4NzF421aO8W3+w7WUnpLkKTZn2Hqvy9lG4P4cn4vTvwwUUFFZoalDU6nflwYDKAShDOujlReBmwDrWl1+3FyuEr//+C6RDAPvqezsSf1GVfNrR/aOxIhR8F0jvWhLlWwBlFfeKcR2ZyKtME0xAOAtoObFa/RiP8ApBqscU7qjm5m8FgNms4fQy7s3c/BQHxah3OC00Z1d3WUmujA4BZ8X5wcF9dc5H/0yKxVHqDHPbmnmrjPY9v0wuyw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CjtVkCPiWjULQ5dYgeBSF7lTZHH8LxjK4w5/53+9qh0=;
- b=IuDMyj5aqGVVB2t/Nybjsk1hYVXQ396gupE1v/UfvibtO2EkOjVjo8V/ZTTy6Wpk9FxjZr9nv3GTOT1AbtdqJ8NE8HX5C/1oKMICrD3c8E1f45GFeGM5pjM2Agz5Y/V482CO2SF1T0JND/NdkePlhrhYqWeWjND+CcCB0GRbsKxwnDnW0niwepPYAhl/wGlePPMkyFgYaI4GaIV1qVAXnyDIpLhLnfU56ecT60Wnj4MnFzpxHc30D7JlIPV524qUbPT0WDmuH1uZPkfpWbRsfXl4ttlhUp4VF+k6Ni3qI1ZJT841dVxW7F77QJBRs0T8tI0umyGoPTOIf2qU7R/CjA==
+ bh=Izi1qP2HcB0EsMidqMSyL3/H41mibuQLPJKJXt+LKh0=;
+ b=NLaadRBjFL1h9OP1SqqqfQA/tPXiw8UdwoCgnfq6b0b0XoFs0FieD4x6x9RN5itH8egUFWEwbU9aNPi3xnwly8VVErTBJDJQmk58GOJK8LtJv0qkgBjWKpohcV9Gm4C7NpGGMUJkC8jg4kuf2NPx4hSibazUcjqS1xB8CSh52TrlK+2N3QBPAg+fAxM4fHUUZtW63kQ8OX/1FmdobQkD5iPHYoCBhj/g79/ykx4nunnOw1YZeUc9BvFbPULJ1CR4OU890On8mYftDepwUNLTi85PjB8eTSAMSWDr5oMrtSZ/XrI2pm+C0Y9j+Xv7mf9pvt40zzYFMyTfUeX8Mm6L+Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
  header.d=fb.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
  s=selector2-fb-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CjtVkCPiWjULQ5dYgeBSF7lTZHH8LxjK4w5/53+9qh0=;
- b=eXEYWsDQtfSZgTc1xmq0D+PB1rcsKbSUHCdXD+kMVMt/zUSaxzHwCqVaL3vxCxQ4QePqm6kZ1WvaWF+ZWoyfRLaSQmWgprwPmvaf1WjIjeUCLXGyiVvNSBxRuFRd3kSaW5y3rUnFJr76mU15xUgWEHl7EfzSuxeixjRufTjWW2E=
-Authentication-Results: lwn.net; dkim=none (message not signed)
- header.d=none;lwn.net; dmarc=none action=none header.from=fb.com;
+ bh=Izi1qP2HcB0EsMidqMSyL3/H41mibuQLPJKJXt+LKh0=;
+ b=C9SpWDYLhudCwfBs6ghvyTXcTws5qdK3l6ZCYVGljJH+msPJlguWmti353SQIeBzmrOA9e7lP9GxTo9gcd7ferg89N2dNsrkg5a4EaE77xsZETBe8931TT+xiEQvXfiV7dpt7r7Gb9b2+QP4vAAWNH6f7lIeD3lSfObBmZsAEVM=
+Authentication-Results: loongson.cn; dkim=none (message not signed)
+ header.d=none;loongson.cn; dmarc=none action=none header.from=fb.com;
 Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
- by SJ0PR15MB4236.namprd15.prod.outlook.com (2603:10b6:a03:2cb::23) with
+ by BYAPR15MB2887.namprd15.prod.outlook.com (2603:10b6:a03:f9::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.10; Mon, 18 Jan
- 2021 17:36:20 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.14; Mon, 18 Jan
+ 2021 18:01:56 +0000
 Received: from BYAPR15MB4088.namprd15.prod.outlook.com
  ([fe80::9ae:1628:daf9:4b03]) by BYAPR15MB4088.namprd15.prod.outlook.com
  ([fe80::9ae:1628:daf9:4b03%7]) with mapi id 15.20.3763.014; Mon, 18 Jan 2021
- 17:36:20 +0000
-Subject: Re: [PATCH bpf-next v2 2/2] docs: bpf: Clarify -mcpu=v3 requirement
- for atomic ops
-To:     Brendan Jackman <jackmanb@google.com>, <bpf@vger.kernel.org>
-CC:     Alexei Starovoitov <ast@kernel.org>,
+ 18:01:56 +0000
+Subject: Re: [PATCH bpf] samples/bpf: Update README.rst for manually compiling
+ LLVM and clang
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Florent Revest <revest@chromium.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-References: <20210118155735.532663-1-jackmanb@google.com>
- <20210118155735.532663-3-jackmanb@google.com>
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nathan Chancellor <natechancellor@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+CC:     <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <clang-built-linux@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>, Xuefeng Li <lixuefeng@loongson.cn>
+References: <1610959982-6420-1-git-send-email-yangtiezhu@loongson.cn>
 From:   Yonghong Song <yhs@fb.com>
-Message-ID: <4cbd024b-b57e-e7ae-276a-a285c898bb30@fb.com>
-Date:   Mon, 18 Jan 2021 09:36:17 -0800
+Message-ID: <6bd33baa-ba8c-b38d-7375-12b3775c630e@fb.com>
+Date:   Mon, 18 Jan 2021 10:01:53 -0800
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
  Gecko/20100101 Thunderbird/78.6.1
-In-Reply-To: <20210118155735.532663-3-jackmanb@google.com>
+In-Reply-To: <1610959982-6420-1-git-send-email-yangtiezhu@loongson.cn>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 X-Originating-IP: [2620:10d:c090:400::5:4199]
-X-ClientProxiedBy: MW4PR03CA0340.namprd03.prod.outlook.com
- (2603:10b6:303:dc::15) To BYAPR15MB4088.namprd15.prod.outlook.com
- (2603:10b6:a02:c3::18)
+X-ClientProxiedBy: CO2PR04CA0144.namprd04.prod.outlook.com (2603:10b6:104::22)
+ To BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [IPv6:2620:10d:c085:21d6::10cf] (2620:10d:c090:400::5:4199) by MW4PR03CA0340.namprd03.prod.outlook.com (2603:10b6:303:dc::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.9 via Frontend Transport; Mon, 18 Jan 2021 17:36:19 +0000
+Received: from [IPv6:2620:10d:c085:21d6::10cf] (2620:10d:c090:400::5:4199) by CO2PR04CA0144.namprd04.prod.outlook.com (2603:10b6:104::22) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.9 via Frontend Transport; Mon, 18 Jan 2021 18:01:55 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f210539c-bdce-43e6-24be-08d8bbd79134
-X-MS-TrafficTypeDiagnostic: SJ0PR15MB4236:
-X-Microsoft-Antispam-PRVS: <SJ0PR15MB4236B99D40E3C39EABAA29E0D3A40@SJ0PR15MB4236.namprd15.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 2e06b2f9-bcc8-40b0-21f5-08d8bbdb24ef
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2887:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR15MB2887679886D9F9B7363A90AAD3A40@BYAPR15MB2887.namprd15.prod.outlook.com>
 X-FB-Source: Internal
-X-MS-Oob-TLC-OOBClassifiers: OLM:1824;
+X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: H/jIm0B6x2i/HUBgiXb5JvLewRjjD/2Ei5QRIvn3BnzjJcIwkYGESyLuz2ZUaajpEIHVtSP6D+A+DW+lk0Jl0TI8VbVN3Z8SL0i18ulOJjfC3tW9f1qd6OWk3OFqzeBJB3b3ehC8Z6jp8QOlv4G9/gFZvrSrOus2TPL58eXX2RQ2pnvHucLoUearQkQGSL6RQ0Gz8EUFEyadUS4evnTsPPHuz/JcK0RCffQFJV6veD7pDJe6F22aNXIl53dnU9zVDKGsG6VkRvJE75cH1VPY6DKqxZREHxXIgo56t9MYHpWBXaW7sud06h4ej35hTgGciAljZiIRX4SAfUugIWWM4LjjtJLCpF9iLc7aXxxWhMdQP6iLlncGFetngaZZysthytU4QcoXVh8bbfiebJJ0Bh/yIJQLuIIp+PjqOOs6VUb1RA34abCfk9mV7lFgsxS/fdRBq6aIUhHvceNuuV+PBpXPL7n48fjRwv2UTdSNdLI9oyhW1J4XQg7e1m/GMLA9x+0On5Td5WMmaMEtM+aXTxUFkygDLvutIA3hFFB8Y0oA2aU+21LHp2oIS8g6NgYw
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(396003)(346002)(136003)(366004)(376002)(4326008)(2616005)(478600001)(66476007)(66556008)(2906002)(66946007)(4744005)(186003)(31696002)(16526019)(5660300002)(36756003)(7416002)(6486002)(316002)(53546011)(54906003)(86362001)(8676002)(52116002)(966005)(31686004)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?ODdWRW9rRXFtZ3VOOG9HdG5PT1RMMXA3Z3BJaUR5RUN1VVA4NjhFemZxMzNG?=
- =?utf-8?B?cytPK1dKdFliNlVOcDEwV3pEVXExWWYvemxZOGNFZmJMVVN1UFdaZFBNQ2dq?=
- =?utf-8?B?Z0pZZnZrOU5DUnB0aXhXR0VWdkwxN3pEOGxNTFhoZXJKQmEyV0Jia2NjajNl?=
- =?utf-8?B?RFFNekJVY1JoT3RReHpmcFZpM3ZoSFB1ck5vekY2UlE0ZlRXbnBSNmNDNU41?=
- =?utf-8?B?bDBpdVgyenZ4cGNwS1ZBc2xuY1NrcUZ2T2wzQXlUcStTVE9LQzVuaktGZXU2?=
- =?utf-8?B?VmtFa3R5ZFE5YzlDYXZTUW9Memw4eHdUZGdlSVRsVzIvQm1ENXY5VjlvYVIx?=
- =?utf-8?B?bjBXN2ttV3pMNXBtbm0zaG9nM2Q1OGRjOVdUSlFZYVUydk5YVGsvVmUxTFRm?=
- =?utf-8?B?dWJwU3FYZ1V6UFNRaHF5Rlc1ZUdQQnRrUWpqV2lBZGo5eTdMR2k3aEFudmZw?=
- =?utf-8?B?b1B6Wk5RR3BSYldib2FKaklPK0prNWw0di9uQUhWcks2MDY3TGVjUW9aVUFL?=
- =?utf-8?B?bHBaL0ZhYk1KM24xVnZ4THpMRkpkYkFSMnYzUGMwNFNLbmZXL1Z1RG5qRmV2?=
- =?utf-8?B?cklqMG00ZkROTHJucUIxME9FVFRwOTd2Z3RGSnpHK2JGVzJLZHQ0T0N1NSta?=
- =?utf-8?B?dEY0bFNUcnZBcmlGT0ZXYUZOMDhyZW8yeFl4MExtVy9DSmRLcVAvRTd0QXZx?=
- =?utf-8?B?VHJsMlIwTDJ0dVo3T3dSeTdwNDBqS1daNWgrWVdYdy9YaTlnd3NPWURTWkN5?=
- =?utf-8?B?cDFpL1MxYjFNdVBNTXNVTHpERG81a1hldFhrYzJmRGlvVHQ2bWR2NTZjZ1pm?=
- =?utf-8?B?M2pWNTZObHJ4dlRrN1gwTUlBU25GS0VnbTM4L0NzR0ZiUXk5eWdOck1TUmZ3?=
- =?utf-8?B?aXpCZVFzTEhIRE8zVHNUcEhNam1Cb1VHQXBuRmxrMVRaZ0I0Vy9RTTVjZmdS?=
- =?utf-8?B?MlFpMTlCVng1Mjh3U3ZQdk9YV2NjN3ovMkFTZkVFNmVpV294QkM1V3psRkt0?=
- =?utf-8?B?RW8rajhpQmlIMjIzTkViaGE1dFVJSzZrQ0lzNGZUTTh0eTYvM29RTkVJZWxh?=
- =?utf-8?B?b2QrUGtReTdyN3lBY2lKNVMrSWJ3TUNsa3dFZjVCYXdvREFxMmthbERUNC9y?=
- =?utf-8?B?T0xwdEFWUHdzczI5cFlZK0Nscnp6M0kzU2J4KzBubktkWnhiT3pYYmJ2eFJ1?=
- =?utf-8?B?WXBmVmdFeC84T1E5UDNkdnJNcmFrUmFleTh2MXRzMzcyaDJud3A4ZWMrcVhV?=
- =?utf-8?B?UVU5OFdETlY3b3FBOGJwaFhPN2hOc2ZaaFFPMFhVdUV6a1dsMlJSbGY5YTZE?=
- =?utf-8?B?R1FpU1YxMzhQeFU5OHRMaUE4V1BvdHFiUFFqbXMrcWI4NlU0TUJ4V2pRZ2k2?=
- =?utf-8?B?UUJJRWNtbldtRGc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f210539c-bdce-43e6-24be-08d8bbd79134
+X-Microsoft-Antispam-Message-Info: avkYuOR9WgN4zsr/f5NKJ53V7nbF+wYnmAeZdnlbcLNkOSvn1Dm3izuZKAleWwW43GvglitT7uwyrv9LPgoy0qO4wyE/BLFtT2PcX3DkyGUplIQ1Q/GSdVLbPK2WB8iOJN5ymosxd5YjrnoQHAAJZkrjg16sicRRsi8OTj+vN0u4sRv74D76xR7nY66NRzQVQrL6RNpJnJjJ5fU5mQs1Ie01vbHBK139d+/OR2gcmht4rCtSccZY+ufkDeDeKRpdkUJqNIOuWISnl56aT8juFjLp7o37IjjGD6bjP7fuFuM4G037i6weMHj5F86O703Ve64fQYoyaqN8Fm9GckfjLTlED7b0FdrUki1SBCaKNqCLyMT6Hz4syEViLIC15UkXutrAMAlSHsMNd7k7H0B2QXN4Sigl2t7Xb2n+J3r7g/EoQTVMifqnZGZ74m+4SvWH7lat/0NvZGz+GvdbH23M7BN6WOgh/xLirKE2UT67lzZRyUXLOCYsZJZdIqBPvKqPVMkjL2yvcWq3oA1aqps1yZzfTc0x9f4Ym3j5FjLY37lWn3sIwqEj3hpWmW/0sfW3ruQRyu/FgGGf1a4wclMC+A==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(346002)(376002)(136003)(366004)(39860400002)(396003)(316002)(53546011)(186003)(5660300002)(83380400001)(36756003)(31696002)(2906002)(66556008)(4326008)(66946007)(966005)(66476007)(16526019)(478600001)(31686004)(52116002)(110136005)(921005)(8676002)(7416002)(86362001)(6486002)(15650500001)(8936002)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?eWZRUytWQ3UxNzNZckZRZ2IyQ0VYREtMaUhINis2OW9teE4wanVwNm5wVjNh?=
+ =?utf-8?B?OTArbTFKWWE1dmRtcTNCOGpnZEJSWTFFYUhOamQwMVFQMDRFcGNkbU9IUFBS?=
+ =?utf-8?B?V1AwN0wwelcwZkQxSjlsUkp0bm1XMDVNVWE1eUhiam5JeElmWVdGcnNiRlBv?=
+ =?utf-8?B?ZXNuaG9EZTN0TVluZkxCczFyUHMvWkNMUTFIY0RkRFVpcld5UEtFWUJQWVhI?=
+ =?utf-8?B?K3d0djRzZnp0TVBnR1dwM0lGS0c0TysvMnNFRzJ1eU1NdDNhZXU4VTgxV2hy?=
+ =?utf-8?B?VWlKdFRFN1o0VWdzbGNqUGlNcFlOdk5DdUl0cittVGxLSUxEMXlmK0M3TDAx?=
+ =?utf-8?B?c05aL24zdEFhd0N2TTYrOTBRdmRLaUdXeDJxVWVwdHFpVFNVS090M3MxWVd2?=
+ =?utf-8?B?dzAzbmxOVCswUU1aMmx5VDF5YXBkejZHTTZGUUZ2Rlk4T3RCM3BNeEJPejBx?=
+ =?utf-8?B?eGVnQTFNK1oweFcyWVh6V0l4dUFaZnNUNFdWTUN6Vk93ZkM0aVcyZFN1WkRr?=
+ =?utf-8?B?S2hKUGNtYmlaNGF2bHNoOVRQeGdtcUEvWm5CMGIwc0U5cDlMaVB5THRZR2Yx?=
+ =?utf-8?B?em0wMGYxQ1VnNS9Ia1dPb0E4enpQTUs1dGhzd1N3RGJXMW5PcXV3NUZOSDBP?=
+ =?utf-8?B?NXA0enNETDNzdkY4NjlKVGpyWWZvN3ZCN29PcGdOZWdqVDduL25tQ2RYVFdx?=
+ =?utf-8?B?Nm9zd21TRHZQQlphMC9hY2JOeWdWVVEwZklOWHU5alNSbmRCN2FpdWNJU2Rr?=
+ =?utf-8?B?REVPdUcyVjNSOHEvZS9KSjRJaU5zVEdoRXNZVXZ1Q3J3MER4NHJJakRIUkpH?=
+ =?utf-8?B?b09obW14Q1pvNE11ZllxdENiYnhJeGZ6L2VVTnRlSWlzUnl6djRONFcyZitT?=
+ =?utf-8?B?R2Erd0p3ZlgyRUtSS1VUL0lva3R2dTdHZXlTUFNFcUNJRnI1VGcwenprOFpV?=
+ =?utf-8?B?SmdHMWRPcURKOGZJL1ROZU9ZcjZSTHZiRS9XMDloMHQ0TWNpdGpvU3lwaXpE?=
+ =?utf-8?B?RVVRdFRLYWlSaCtYdGtEa2UxNnYxS212dmRaSFZwWGI5YUFBRnZ0dS83Mllk?=
+ =?utf-8?B?WFNwbm1DMmZiZ1VkYW5EUlhZcWRkTTlJUFppcGZpMGpiQld5VStaMzVKazBO?=
+ =?utf-8?B?L1BlYzFMSjlsck5raDlJTXJJQTFVM29PLzdrcFFVZCtHQmp4Q1pzR2pzb2U4?=
+ =?utf-8?B?SEZseWpvZjRBQ3RacU5ZVjNCRCsvUmt0TktUMVRQSWs1MDZXc2RDU1kxMUV5?=
+ =?utf-8?B?ZjR0K1BYOXZkUmozZzBtaEVMejlCRG9nK0w0ZW9sTmwvTHZWUHoxSkJzV1JW?=
+ =?utf-8?B?bVZhY0JkSkl5VlpzMkxIVXF5QzF4Lzk3M1FXM0tjc1R2Q1dCMmZJU0ZHb01D?=
+ =?utf-8?B?cHJweXFZYWg5Rmc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e06b2f9-bcc8-40b0-21f5-08d8bbdb24ef
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2021 17:36:20.7308
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2021 18:01:56.6187
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sl7LLcASS2eAnt0qE3eAAciVBZsouExexUK66S86M6cJcduWnlyj7cz7alYJIelr
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4236
+X-MS-Exchange-CrossTenant-UserPrincipalName: f44901l8YwrTbcy2nHqwMFRRGNoISv1eyQ6ZWwQkHllSn9yYgv/q2QmOL9Jqeahf
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2887
 X-OriginatorOrg: fb.com
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+X-Proofpoint-UnRewURL: 7 URL's were un-rewritten
 MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
  definitions=2021-01-18_13:2021-01-18,2021-01-18 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=927
- lowpriorityscore=0 malwarescore=0 spamscore=0 suspectscore=0 clxscore=1011
- adultscore=0 bulkscore=0 mlxscore=0 phishscore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2009150000 definitions=main-2101180106
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=999
+ lowpriorityscore=0 spamscore=0 phishscore=0 bulkscore=0 mlxscore=0
+ impostorscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
+ clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101180109
 X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
@@ -153,14 +156,61 @@ X-Mailing-List: bpf@vger.kernel.org
 
 
 
-On 1/18/21 7:57 AM, Brendan Jackman wrote:
-> Alexei pointed out [1] that this wording is pretty confusing. Here's
-> an attempt to be more explicit and clear.
+On 1/18/21 12:53 AM, Tiezhu Yang wrote:
+> In the current samples/bpf/README.rst, the url of llvm and clang git
+> may be out of date, they are unable to access:
 > 
-> [1] https://lore.kernel.org/bpf/CAADnVQJVvwoZsE1K+6qRxzF7+6CvZNzygnoBW9tZNWJELk5c=Q@mail.gmail.com/T/#m07264fc18fdc43af02fc1320968afefcc73d96f4
+> $ git clone http://llvm.org/git/llvm.git
+> Cloning into 'llvm'...
+> fatal: unable to access 'http://llvm.org/git/llvm.git/ ': Maximum (20) redirects followed
+> $ git clone --depth 1 http://llvm.org/git/clang.git
+> Cloning into 'clang'...
+> fatal: unable to access 'http://llvm.org/git/clang.git/ ': Maximum (20) redirects followed
 > 
-> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+> The Clang Getting Started page [1] might have more accurate information,
+> I verified the procedure and it is proved to be feasible, so we should
+> update it to reflect the reality.
+> 
+> [1] https://clang.llvm.org/get_started.html
+> 
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>   samples/bpf/README.rst | 8 +++-----
+>   1 file changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/samples/bpf/README.rst b/samples/bpf/README.rst
+> index dd34b2d..f606c08 100644
+> --- a/samples/bpf/README.rst
+> +++ b/samples/bpf/README.rst
+> @@ -65,11 +65,9 @@ To generate a smaller llc binary one can use::
+>   Quick sniplet for manually compiling LLVM and clang
+>   (build dependencies are cmake and gcc-c++)::
+>   
+> - $ git clone http://llvm.org/git/llvm.git
+> - $ cd llvm/tools
+> - $ git clone --depth 1 http://llvm.org/git/clang.git
+> - $ cd ..; mkdir build; cd build
+> - $ cmake .. -DLLVM_TARGETS_TO_BUILD="BPF;X86"
+> + $ git clone https://github.com/llvm/llvm-project.git
+> + $ cd llvm-project; mkdir build; cd build
+> + $ cmake -DLLVM_ENABLE_PROJECTS=clang -DLLVM_TARGETS_TO_BUILD="BPF;X86" -G "Unix Makefiles" ../llvm
+>    $ make -j $(getconf _NPROCESSORS_ONLN)
 
-Thanks for better description!
+Thanks for the patch. Indeed llvm.org/git/llvm has been deprecated. We 
+have recommended to use llvm-project at 
+kernel/Documentation/bpf/bpf_devel_QA.rst.
+ 
+https://github.com/torvalds/linux/blob/master/Documentation/bpf/bpf_devel_QA.rst#q-got-it-so-how-do-i-build-llvm-manually-anyway
 
-Acked-by: Yonghong Song <yhs@fb.com>
+Could you use the same scripts in the above link here?
+There are different ways to build llvm/clang, I just want to be
+consistent between bpf_devel_QA.rst and there.
+
+I am also thinking whether we should just provide a link here to
+bpf_devel_QA.rst. Looking at samples/bpf/README.rst, it all contains
+direct commands for people to build/test, so copy-pasting the llvm
+build scripts here should be fine.
+
+>   
+>   It is also possible to point make to the newly compiled 'llc' or
+> 
