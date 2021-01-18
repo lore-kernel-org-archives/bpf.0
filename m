@@ -2,86 +2,111 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 32703C433DB
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 15:58:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 4AAF8C433DB
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 16:01:52 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 0782322B4E
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 15:58:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 15FC022B49
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 16:01:52 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405770AbhARPcC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jan 2021 10:32:02 -0500
-Received: from mga02.intel.com ([134.134.136.20]:63476 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2393446AbhARPYk (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Jan 2021 10:24:40 -0500
-IronPort-SDR: lpoVsIsfUiXb1fQlvyqoE4pOc7xx1xMBa/yaxLdXbGlfRROcbFokb0Jnwl2iFoj4hOGIB3fkK8
- +fCPEAUh2EeA==
-X-IronPort-AV: E=McAfee;i="6000,8403,9867"; a="165905532"
-X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
-   d="scan'208";a="165905532"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2021 07:23:09 -0800
-IronPort-SDR: Ia6Ihj9or7sidCKiG6tg7M2o7yrzuvbc58f8Xtvfp+12CwWNYl4xCIO+eqT8TacTkQHrsPbyWS
- FIejOUD/Gueg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
-   d="scan'208";a="500676363"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga004.jf.intel.com with ESMTP; 18 Jan 2021 07:23:07 -0800
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     intel-wired-lan@lists.osuosl.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        anthony.l.nguyen@intel.com, kuba@kernel.org, bjorn.topel@intel.com,
-        magnus.karlsson@intel.com,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Subject: [PATCH v3 net-next 07/11] ice: skip NULL check against XDP prog in ZC path
-Date:   Mon, 18 Jan 2021 16:13:14 +0100
-Message-Id: <20210118151318.12324-8-maciej.fijalkowski@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20210118151318.12324-1-maciej.fijalkowski@intel.com>
-References: <20210118151318.12324-1-maciej.fijalkowski@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        id S2404676AbhARQAo (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jan 2021 11:00:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45366 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390669AbhARQAk (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Jan 2021 11:00:40 -0500
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0EFC061786
+        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 07:59:11 -0800 (PST)
+Received: by mail-wm1-x34a.google.com with SMTP id r1so4702953wmn.8
+        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 07:59:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=6OdTPYEA2p5+e67drhVq+n88z8c6ioQj4MZmywIDAFM=;
+        b=eMBuLjmixjlbs4KF0qZwuBWsre4MhQNj8gm7XxkbXIPimS+tmeY3wm5Tke/4fDyObv
+         J7FhRpPLOUyZ0NkB7PA9Whh3FFh/p4zRylDnczG+AOHircxNJd35i3cmWageo/SngS6F
+         +pW8+PP117T9sFvwjbYfoOL06tsyW6srmnXTBEbbhcpDTG7Hvn0dpBpV39Jx35cmxWr2
+         /qLfWcOFJHeCP6JN6sMRxyEmS4zkokORJhKHdr/XW8BoHiv8rm7yiZ0+2V6ABjqFxyNz
+         r9Z6s0Lbx39CdrnhmIkAPnCj/h3bH+OuVy3XNiwSKHvJtIqR/06iUUW9y7ilPymgagbD
+         8g2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=6OdTPYEA2p5+e67drhVq+n88z8c6ioQj4MZmywIDAFM=;
+        b=ZjPPqtwKC2A8zYpwtjtiKKqN9LX1DaGG3kADoSbRO8PYiNUW+7v2kyX88ND18bbfwU
+         MFOt7tr8wY2lcITG2qLzZK7aD7X7USAN651OyBAQYp5Bf+Z+nM0O5qDd/MOLouipPM/V
+         Cq9ua2BOzeusxdO9LZaSxXUSulQ+Qxyl/lHPnghocRlZSF/M/BUaezXNc4XX3iyrQDz6
+         rN2OCFu/sZJMctl3l2jejvHAa9MhNeiaHmqIv2EdOOqQOxNLduPGi4cWb83vwz39bg5W
+         qqQJnHJZ99jKglBqTiFlLK+jWxAc7IJfaSwiLhfBPig65tydaF+sZloFr3l/R+TZnlcv
+         /VnA==
+X-Gm-Message-State: AOAM5331cPjE0sDp06BZP5YbUO0PD0Tij9pX8i1qtwIvfj8GNPt58DDu
+        emTzhTOneLJw8axtQgW7O/jZvt2olXFRWTZCwMR3TaUiwGgF6Gm2bO6ZAn28gShFJxzushrQTCZ
+        DlpjdPZlqMS50MTPWDVU4IdVR/9onbgZgdEw77VVCtMDTBewVY2OKAERSwz850N8=
+X-Google-Smtp-Source: ABdhPJx33zg0bqJm2Kmy1Jtk2wZJhRlq1DTndo3IekH3vxXdp0oYMj9T3RZMul5MMDMPA5R/Y/vw0BsdArAwKg==
+Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
+X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
+ (user=jackmanb job=sendgmr) by 2002:a1c:6208:: with SMTP id
+ w8mr82357wmb.24.1610985550410; Mon, 18 Jan 2021 07:59:10 -0800 (PST)
+Date:   Mon, 18 Jan 2021 15:57:35 +0000
+In-Reply-To: <20210118155735.532663-1-jackmanb@google.com>
+Message-Id: <20210118155735.532663-3-jackmanb@google.com>
+Mime-Version: 1.0
+References: <20210118155735.532663-1-jackmanb@google.com>
+X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
+Subject: [PATCH bpf-next v2 2/2] docs: bpf: Clarify -mcpu=v3 requirement for
+ atomic ops
+From:   Brendan Jackman <jackmanb@google.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Florent Revest <revest@chromium.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Brendan Jackman <jackmanb@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Whole zero-copy variant of clean Rx irq is executed when xsk_pool is
-attached to rx_ring and it can happen only when XDP program is present
-on interface. Therefore it is safe to assume that program is always
-!NULL and there is no need for checking it in ice_run_xdp_zc.
+Alexei pointed out [1] that this wording is pretty confusing. Here's
+an attempt to be more explicit and clear.
 
-Reviewed-by: Björn Töpel <bjorn.topel@intel.com>
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+[1] https://lore.kernel.org/bpf/CAADnVQJVvwoZsE1K+6qRxzF7+6CvZNzygnoBW9tZNWJELk5c=Q@mail.gmail.com/T/#m07264fc18fdc43af02fc1320968afefcc73d96f4
+
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
 ---
- drivers/net/ethernet/intel/ice/ice_xsk.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ Documentation/networking/filter.rst | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index 1782146db644..b926ca9c4f4f 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -517,11 +517,10 @@ ice_run_xdp_zc(struct ice_ring *rx_ring, struct xdp_buff *xdp)
- 	u32 act;
+diff --git a/Documentation/networking/filter.rst b/Documentation/networking/filter.rst
+index 4c2bb4c6364d..b3f457802836 100644
+--- a/Documentation/networking/filter.rst
++++ b/Documentation/networking/filter.rst
+@@ -1081,9 +1081,10 @@ before is loaded back to ``R0``.
  
- 	rcu_read_lock();
-+	/* ZC patch is enabled only when XDP program is set,
-+	 * so here it can not be NULL
-+	 */
- 	xdp_prog = READ_ONCE(rx_ring->xdp_prog);
--	if (!xdp_prog) {
--		rcu_read_unlock();
--		return ICE_XDP_PASS;
--	}
+ Note that 1 and 2 byte atomic operations are not supported.
  
- 	act = bpf_prog_run_xdp(xdp_prog, xdp);
- 	switch (act) {
+-Except ``BPF_ADD`` *without* ``BPF_FETCH`` (for legacy reasons), all 4 byte
+-atomic operations require alu32 mode. Clang enables this mode by default in
+-architecture v3 (``-mcpu=v3``). For older versions it can be enabled with
++Clang can generate atomic instructions by default when ``-mcpu=v3`` is
++enabled. If a lower version for ``-mcpu`` is set, the only atomic instruction
++Clang can generate is ``BPF_ADD`` *without* ``BPF_FETCH``. If you need to enable
++the atomics features, while keeping a lower ``-mcpu`` version, you can use
+ ``-Xclang -target-feature -Xclang +alu32``.
+ 
+ You may encounter ``BPF_XADD`` - this is a legacy name for ``BPF_ATOMIC``,
 -- 
-2.20.1
+2.30.0.284.gd98b1dd5eaa7-goog
 
