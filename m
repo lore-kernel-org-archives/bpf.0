@@ -2,148 +2,84 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-23.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-10.4 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,
+	NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 27C51C433DB
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 10:59:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3CC32C433DB
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 11:01:40 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C889222242
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 10:59:16 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E42DC229C6
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 11:01:39 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389520AbhARK65 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jan 2021 05:58:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36896 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389685AbhARK6w (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Jan 2021 05:58:52 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A2FC061574
-        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 02:58:12 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id n2so14778615iom.7
-        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 02:58:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=N0XJonBpSyKApClVc8rxeObW+thdWbkeBXzIT5gyi4Y=;
-        b=uJEJBtOg7muoVHlHZdfnotlFA28g1omo+d9pcxHfeH/+kjkkzvPoIUoPnIthuXA62d
-         WVKnFssY1I4ANlSASkBTGyWUwanQkIXc1D9razDzY7YD9tAHkqdIbH5thtuDn27RAkWa
-         7RRts3PMw+nOIPI6vPRZh6MDc6hhHi1g9XcLJYSLlb3WywC9hlNcRlX7boJTUS5kMfAs
-         EG2xriyIvhFREXgljKtxYGBv6jf9tz7nt/bR5IXq5lQl3rB7reupiPM+ygtkhPraUVly
-         m2+K54ISg9Y+l2QfltmXXfKUVweT9y9jinTMIQy0ohx8ioW7WLdUr1yqr/ywakZ6DDIa
-         Pt+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=N0XJonBpSyKApClVc8rxeObW+thdWbkeBXzIT5gyi4Y=;
-        b=D37ge6rT9k4l0AgCWYGRRWXylHFS8LOQRbuADnPeAOW60yugsHXJuo0EUMWvSL5fXz
-         dO6KujjMRFMc6acwyaJI+TJmd78j2dSiZQAdGlnUKod3/VLNTLdqUF7g6yr2dWjmGcdk
-         wUMwP2zBBstVy0TiqOUsNOt8UBGAnmZF9PMkinMG7Om9wTFHdM+DiIU7v7IkGBi5zBAz
-         7gfVnCjl3zi4wE9V2Yuz3TGa7SopPKr3gJOtPrkwHj/2sXqPIt2kItjog8rgWe/tHnz/
-         Sri8QYZfFoZmDu5ncZPjHL5cbhczULwF9bwT34a3Qb22RZw6se+nbYI0IwNJB7KtnJrG
-         LVXw==
-X-Gm-Message-State: AOAM532jpXmYwExw6xt+kUVxNwLEEQc69XrbQ80l763JDuIChkPofT2Q
-        jsu0cc9Y/GwQs93r3gqeGZwFaI7NSe5vOgXXG4m/Yg==
-X-Google-Smtp-Source: ABdhPJym0NYTNBaKPq7roem+KfAKnoL7dJJJH20c9N5Z5QxImNW6J0z00eX3PWCrspM1ObNnQmk2OGkGdN2fkNFGENY=
-X-Received: by 2002:a05:6e02:194a:: with SMTP id x10mr20363981ilu.165.1610967491105;
- Mon, 18 Jan 2021 02:58:11 -0800 (PST)
-MIME-Version: 1.0
-References: <20210118091753.107572-1-bjorn.topel@gmail.com>
-In-Reply-To: <20210118091753.107572-1-bjorn.topel@gmail.com>
-From:   Brendan Jackman <jackmanb@google.com>
-Date:   Mon, 18 Jan 2021 11:57:59 +0100
-Message-ID: <CA+i-1C1A6wdv3vh4=qLsc6GoOSiD=Wc_oe=PhWKE6tHZ_NQnsg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] samples/bpf: add BPF_ATOMIC_OP macro for BPF samples
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
+        id S2389787AbhARLBd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jan 2021 06:01:33 -0500
+Received: from mga04.intel.com ([192.55.52.120]:16159 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389878AbhARLBE (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Jan 2021 06:01:04 -0500
+IronPort-SDR: B0piDeVjz2hTctdGASIau79cll5GJL7RisBxBnmdUF6HzH2glQgv91hfjbjmFUv4Qo1LHwtW6W
+ c3iQNRFZrXWg==
+X-IronPort-AV: E=McAfee;i="6000,8403,9867"; a="176216315"
+X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
+   d="scan'208";a="176216315"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2021 03:00:21 -0800
+IronPort-SDR: SI6gr806GXxCKMq/rUxDic/nHEU2ShXDQOzPfk/q5XaQITz0ThlumdIW7FGz+yJyaL4DcUYuTx
+ UpVvwoynYRkQ==
+X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
+   d="scan'208";a="355148105"
+Received: from fbackhou-mobl.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.249.41.244])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2021 03:00:19 -0800
+Subject: Re: [PATCH bpf-next] samples/bpf: add BPF_ATOMIC_OP macro for BPF
+ samples
+To:     Brendan Jackman <jackmanb@google.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-        bpf <bpf@vger.kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        magnus.karlsson@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        bpf <bpf@vger.kernel.org>, magnus.karlsson@intel.com
+References: <20210118091753.107572-1-bjorn.topel@gmail.com>
+ <CA+i-1C1A6wdv3vh4=qLsc6GoOSiD=Wc_oe=PhWKE6tHZ_NQnsg@mail.gmail.com>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Message-ID: <0d7d272f-5b7f-0e0b-8429-bb368ce57d1e@intel.com>
+Date:   Mon, 18 Jan 2021 12:00:13 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
+MIME-Version: 1.0
+In-Reply-To: <CA+i-1C1A6wdv3vh4=qLsc6GoOSiD=Wc_oe=PhWKE6tHZ_NQnsg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-I actually deliberately skipped this file, thinking that people were
-unlikely to want to add assembly-based atomics code under samples/
+On 2021-01-18 11:57, Brendan Jackman wrote:
+> I actually deliberately skipped this file, thinking that people were
+> unlikely to want to add assembly-based atomics code under samples/
+> 
+> I guess it's nice for people to be able to e.g. move/copy code from
+> the selftests.
+>
 
-I guess it's nice for people to be able to e.g. move/copy code from
-the selftests.
+Yes, that, and the fact that one sample broke w/o the BPF_ATOMIC_OP.
 
-On Mon, 18 Jan 2021 at 10:18, Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com>=
- wrote:
->
-> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
->
-> Brendan Jackman added extend atomic operations to the BPF instruction
-> set in commit 7064a7341a0d ("Merge branch 'Atomics for eBPF'"), which
-> introduces the BPF_ATOMIC_OP macro. However, that macro was missing
-> for the BPF samples. Fix that by adding it into bpf_insn.h.
->
-> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
 
-Reviewed-by: Brendan Jackman <jackmanb@google.com>
+> On Mon, 18 Jan 2021 at 10:18, Björn Töpel <bjorn.topel@gmail.com> wrote:
+>>
+>> From: Björn Töpel <bjorn.topel@intel.com>
+>>
+>> Brendan Jackman added extend atomic operations to the BPF instruction
+>> set in commit 7064a7341a0d ("Merge branch 'Atomics for eBPF'"), which
+>> introduces the BPF_ATOMIC_OP macro. However, that macro was missing
+>> for the BPF samples. Fix that by adding it into bpf_insn.h.
+>>
+>> Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+> 
+> Reviewed-by: Brendan Jackman <jackmanb@google.com>
+>
 
-> ---
->  samples/bpf/bpf_insn.h | 24 ++++++++++++++++++++----
->  1 file changed, 20 insertions(+), 4 deletions(-)
->
-> diff --git a/samples/bpf/bpf_insn.h b/samples/bpf/bpf_insn.h
-> index db67a2847395..aee04534483a 100644
-> --- a/samples/bpf/bpf_insn.h
-> +++ b/samples/bpf/bpf_insn.h
-> @@ -134,15 +134,31 @@ struct bpf_insn;
->                 .off   =3D OFF,                                   \
->                 .imm   =3D 0 })
->
-> -/* Atomic memory add, *(uint *)(dst_reg + off16) +=3D src_reg */
-> -
-> -#define BPF_STX_XADD(SIZE, DST, SRC, OFF)                      \
-> +/*
-> + * Atomic operations:
-> + *
-> + *   BPF_ADD                  *(uint *) (dst_reg + off16) +=3D src_reg
-> + *   BPF_AND                  *(uint *) (dst_reg + off16) &=3D src_reg
-> + *   BPF_OR                   *(uint *) (dst_reg + off16) |=3D src_reg
-> + *   BPF_XOR                  *(uint *) (dst_reg + off16) ^=3D src_reg
-> + *   BPF_ADD | BPF_FETCH      src_reg =3D atomic_fetch_add(dst_reg + off=
-16, src_reg);
-> + *   BPF_AND | BPF_FETCH      src_reg =3D atomic_fetch_and(dst_reg + off=
-16, src_reg);
-> + *   BPF_OR | BPF_FETCH       src_reg =3D atomic_fetch_or(dst_reg + off1=
-6, src_reg);
-> + *   BPF_XOR | BPF_FETCH      src_reg =3D atomic_fetch_xor(dst_reg + off=
-16, src_reg);
-> + *   BPF_XCHG                 src_reg =3D atomic_xchg(dst_reg + off16, s=
-rc_reg)
-> + *   BPF_CMPXCHG              r0 =3D atomic_cmpxchg(dst_reg + off16, r0,=
- src_reg)
-> + */
-> +
-> +#define BPF_ATOMIC_OP(SIZE, OP, DST, SRC, OFF)                 \
->         ((struct bpf_insn) {                                    \
->                 .code  =3D BPF_STX | BPF_SIZE(SIZE) | BPF_ATOMIC, \
->                 .dst_reg =3D DST,                                 \
->                 .src_reg =3D SRC,                                 \
->                 .off   =3D OFF,                                   \
-> -               .imm   =3D BPF_ADD })
-> +               .imm   =3D OP })
-> +
-> +/* Legacy alias */
-> +#define BPF_STX_XADD(SIZE, DST, SRC, OFF) BPF_ATOMIC_OP(SIZE, BPF_ADD, D=
-ST, SRC, OFF)
->
->  /* Memory store, *(uint *) (dst_reg + off16) =3D imm32 */
->
->
-> base-commit: 232164e041e925a920bfd28e63d5233cfad90b73
-> --
-> 2.27.0
->
+Thanks!
+Björn
+
