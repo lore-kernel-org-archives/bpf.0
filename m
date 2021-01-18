@@ -2,423 +2,222 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A81ADC433DB
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 16:40:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A4983C433E0
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 16:41:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6A90322C7E
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 16:40:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 7753822C9C
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 16:41:20 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405846AbhARQjy (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jan 2021 11:39:54 -0500
-Received: from mail2.protonmail.ch ([185.70.40.22]:33400 "EHLO
-        mail2.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405917AbhARQjt (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Jan 2021 11:39:49 -0500
-Date:   Mon, 18 Jan 2021 16:38:31 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1610987915; bh=2MCt0pQ+rLxV5Y2LqOVu5B2auNoDbQUpH/AK3M3vQjI=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=HZI80ZpLzCjI1Y9R+agx6ZXt9nNZyKpE9VCvk1GpR2tdtBrYMABhvdxPwRKCUvp60
-         +DWqyAnekSf7pNDXKBva2kPcqWLiko018vHPUck+y7kNtyRco2lWIs8zoe02R/YOd1
-         IAR6tcglSe+oxhAVq/TQmTW0whXYiUvzl0PKknL6odY+dByhyXS/NZnRdBFutUPWZV
-         jUCZsDei0oucXaXGOGYvIxeC9OhuEgmSEDHE52HT4z2PPhJJ6b4CsgeHmEy0P8RmEW
-         VtrmgSh6KCbTLhpiUaJEM49OOty80Ppcg86TJ8hUNkYgGmJlnoPKbfqWiapB3PVGf3
-         r2vWYyOmJjXpg==
-To:     Magnus Karlsson <magnus.karlsson@gmail.com>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        Yunsheng Lin <linyunsheng@huawei.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, bjorn.topel@intel.com,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Antoine Tenart <atenart@kernel.org>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Meir Lichtinger <meirl@mellanox.com>,
-        virtualization@lists.linux-foundation.org,
-        bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH bpf-next] xsk: build skb by page
-Message-ID: <20210118163742.10364-1-alobakin@pm.me>
-In-Reply-To: <CAJ8uoz0tZNrB+g0Mw_K4n=VhQ36b6AHyZWM3TkkLBCxo_N1iRg@mail.gmail.com>
-References: <579fa463bba42ac71591540a1811dca41d725350.1610764948.git.xuanzhuo@linux.alibaba.com> <4a4b475b-0e79-6cf6-44f5-44d45b5d85b5@huawei.com> <20210118125937.4088-1-alobakin@pm.me> <20210118143948.8706-1-alobakin@pm.me> <CAJ8uoz0tZNrB+g0Mw_K4n=VhQ36b6AHyZWM3TkkLBCxo_N1iRg@mail.gmail.com>
+        id S2405845AbhARP4i (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jan 2021 10:56:38 -0500
+Received: from mga02.intel.com ([134.134.136.20]:63478 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2393439AbhARPY1 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Mon, 18 Jan 2021 10:24:27 -0500
+IronPort-SDR: hjpcMJYM5GBmdA1NH2+694PKHe83Rz+tzxKbUV/wjUJh57i1XL5O8jsuK2dw97dYMuch5I6YGn
+ dlhteGPmFh4Q==
+X-IronPort-AV: E=McAfee;i="6000,8403,9867"; a="165905517"
+X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
+   d="scan'208";a="165905517"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2021 07:23:05 -0800
+IronPort-SDR: /AAtrNXx2qDpe/AQNzQfGXAB9gFIbrprRcUCIWb1eaBgCn3YBIaIkJHqcn0J3vWTaN5E46YxaL
+ 3Ymlu6PnsBMQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,356,1602572400"; 
+   d="scan'208";a="500676342"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by orsmga004.jf.intel.com with ESMTP; 18 Jan 2021 07:23:03 -0800
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     intel-wired-lan@lists.osuosl.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        anthony.l.nguyen@intel.com, kuba@kernel.org, bjorn.topel@intel.com,
+        magnus.karlsson@intel.com,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Subject: [PATCH v3 net-next 05/11] ice: move skb pointer from rx_buf to rx_ring
+Date:   Mon, 18 Jan 2021 16:13:12 +0100
+Message-Id: <20210118151318.12324-6-maciej.fijalkowski@intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20210118151318.12324-1-maciej.fijalkowski@intel.com>
+References: <20210118151318.12324-1-maciej.fijalkowski@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-> From: Magnus Karlsson <magnus.karlsson@gmail.com>
-> Date: Mon, 18 Jan 2021 16:10:40 +0100
->=20
-> On Mon, Jan 18, 2021 at 3:47 PM Alexander Lobakin <alobakin@pm.me> wrote:
-> >
-> > From: Alexander Lobakin <alobakin@pm.me>
-> > Date: Mon, 18 Jan 2021 13:00:17 +0000
-> >
-> > > From: Yunsheng Lin <linyunsheng@huawei.com>
-> > > Date: Mon, 18 Jan 2021 20:40:52 +0800
-> > >
-> > >> On 2021/1/16 10:44, Xuan Zhuo wrote:
-> > >>> This patch is used to construct skb based on page to save memory co=
-py
-> > >>> overhead.
-> > >>>
-> > >>> This has one problem:
-> > >>>
-> > >>> We construct the skb by fill the data page as a frag into the skb. =
-In
-> > >>> this way, the linear space is empty, and the header information is =
-also
-> > >>> in the frag, not in the linear space, which is not allowed for some
-> > >>> network cards. For example, Mellanox Technologies MT27710 Family
-> > >>> [ConnectX-4 Lx] will get the following error message:
-> > >>>
-> > >>>     mlx5_core 0000:3b:00.1 eth1: Error cqe on cqn 0x817, ci 0x8, qn=
- 0x1dbb, opcode 0xd, syndrome 0x1, vendor syndrome 0x68
-> > >>>     00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > >>>     00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > >>>     00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > >>>     00000030: 00 00 00 00 60 10 68 01 0a 00 1d bb 00 0f 9f d2
-> > >>>     WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0xf, len: 64
-> > >>>     00000000: 00 00 0f 0a 00 1d bb 03 00 00 00 08 00 00 00 00
-> > >>>     00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > >>>     00000020: 00 00 00 2b 00 08 00 00 00 00 00 05 9e e3 08 00
-> > >>>     00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > >>>     mlx5_core 0000:3b:00.1 eth1: ERR CQE on SQ: 0x1dbb
-> > >>>
-> > >>> I also tried to use build_skb to construct skb, but because of the
-> > >>> existence of skb_shinfo, it must be behind the linear space, so thi=
-s
-> > >>> method is not working. We can't put skb_shinfo on desc->addr, it wi=
-ll be
-> > >>> exposed to users, this is not safe.
-> > >>>
-> > >>> Finally, I added a feature NETIF_F_SKB_NO_LINEAR to identify whethe=
-r the
-> > >>
-> > >> Does it make sense to use ETHTOOL_TX_COPYBREAK tunable in ethtool to
-> > >> configure if the data is copied or not?
-> > >
-> > > As far as I can grep, only mlx4 supports this, and it has a different
-> > > meaning in that driver.
-> > > So I guess a new netdev_feature would be a better solution.
-> > >
-> > >>> network card supports the header information of the packet in the f=
-rag
-> > >>> and not in the linear space.
-> > >>>
-> > >>> ---------------- Performance Testing ------------
-> > >>>
-> > >>> The test environment is Aliyun ECS server.
-> > >>> Test cmd:
-> > >>> ```
-> > >>> xdpsock -i eth0 -t  -S -s <msg size>
-> > >>> ```
-> > >>>
-> > >>> Test result data:
-> > >>>
-> > >>> size    64      512     1024    1500
-> > >>> copy    1916747 1775988 1600203 1440054
-> > >>> page    1974058 1953655 1945463 1904478
-> > >>> percent 3.0%    10.0%   21.58%  32.3%
-> > >>>
-> > >>> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> > >>> Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
-> > >>> ---
-> > >>>  drivers/net/virtio_net.c        |   2 +-
-> > >>>  include/linux/netdev_features.h |   5 +-
-> > >>>  net/ethtool/common.c            |   1 +
-> > >>>  net/xdp/xsk.c                   | 108 ++++++++++++++++++++++++++++=
-+++++-------
-> > >>>  4 files changed, 97 insertions(+), 19 deletions(-)
-> > >>>
-> > >>> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-> > >>> index 4ecccb8..841a331 100644
-> > >>> --- a/drivers/net/virtio_net.c
-> > >>> +++ b/drivers/net/virtio_net.c
-> > >>> @@ -2985,7 +2985,7 @@ static int virtnet_probe(struct virtio_device=
- *vdev)
-> > >>>     /* Set up network device as normal. */
-> > >>>     dev->priv_flags |=3D IFF_UNICAST_FLT | IFF_LIVE_ADDR_CHANGE;
-> > >>>     dev->netdev_ops =3D &virtnet_netdev;
-> > >>> -   dev->features =3D NETIF_F_HIGHDMA;
-> > >>> +   dev->features =3D NETIF_F_HIGHDMA | NETIF_F_SKB_NO_LINEAR;
-> > >>>
-> > >>>     dev->ethtool_ops =3D &virtnet_ethtool_ops;
-> > >>>     SET_NETDEV_DEV(dev, &vdev->dev);
-> > >>> diff --git a/include/linux/netdev_features.h b/include/linux/netdev=
-_features.h
-> > >>> index 934de56..8dd28e2 100644
-> > >>> --- a/include/linux/netdev_features.h
-> > >>> +++ b/include/linux/netdev_features.h
-> > >>> @@ -85,9 +85,11 @@ enum {
-> > >>>
-> > >>>     NETIF_F_HW_MACSEC_BIT,          /* Offload MACsec operations */
-> > >>>
-> > >>> +   NETIF_F_SKB_NO_LINEAR_BIT,      /* Allow skb linear is empty */
-> > >>> +
-> > >>>     /*
-> > >>>      * Add your fresh new feature above and remember to update
-> > >>> -    * netdev_features_strings[] in net/core/ethtool.c and maybe
-> > >>> +    * netdev_features_strings[] in net/ethtool/common.c and maybe
-> > >>>      * some feature mask #defines below. Please also describe it
-> > >>>      * in Documentation/networking/netdev-features.rst.
-> > >>>      */
-> > >>> @@ -157,6 +159,7 @@ enum {
-> > >>>  #define NETIF_F_GRO_FRAGLIST       __NETIF_F(GRO_FRAGLIST)
-> > >>>  #define NETIF_F_GSO_FRAGLIST       __NETIF_F(GSO_FRAGLIST)
-> > >>>  #define NETIF_F_HW_MACSEC  __NETIF_F(HW_MACSEC)
-> > >>> +#define NETIF_F_SKB_NO_LINEAR      __NETIF_F(SKB_NO_LINEAR)
-> > >>>
-> > >>>  /* Finds the next feature with the highest number of the range of =
-start till 0.
-> > >>>   */
-> > >>> diff --git a/net/ethtool/common.c b/net/ethtool/common.c
-> > >>> index 24036e3..2f3d309 100644
-> > >>> --- a/net/ethtool/common.c
-> > >>> +++ b/net/ethtool/common.c
-> > >>> @@ -68,6 +68,7 @@
-> > >>>     [NETIF_F_HW_TLS_RX_BIT] =3D        "tls-hw-rx-offload",
-> > >>>     [NETIF_F_GRO_FRAGLIST_BIT] =3D     "rx-gro-list",
-> > >>>     [NETIF_F_HW_MACSEC_BIT] =3D        "macsec-hw-offload",
-> > >>> +   [NETIF_F_SKB_NO_LINEAR_BIT] =3D    "skb-no-linear",
-> > >
-> > > I completely forgot to add that you'd better to mention in both
-> > > enumeration/feature and its Ethtool string that the feature applies
-> > > to Tx path.
-> > > Smth like:
-> > >
-> > > NETIF_F_SKB_TX_NO_LINEAR{,_BIT}, "skb-tx-no-linear"
-> > > or
-> > > NETIF_F_TX_SKB_NO_LINEAR{,_BIT}, "tx-skb-no-linear"
-> > >
-> > > Otherwise, it may be confusing for users and developers.
->=20
-> I prefer one of these names for the property as they clearly describe
-> a feature that the driver supports.
->=20
-> > OR, I think we may tight the feature with the new approach to build
-> > skbs by page as it makes no sense for anything else.
-> > So, if we define something like:
-> >
-> > NETIF_F_XSK_TX_GENERIC_ZC{,_BIT}, "xsk-tx-generic-zerocopy",
->=20
-> This one I misunderstood first. I thought: "this is not zerocopy", but
-> you are right it is. It is zero-copy implemented with skb:s. But in my
-> mind, the NO_LINEAR version that you suggested are clearer.
->=20
-> > then user can toggle your new XSK Tx path on/off via Ethtool for
-> > drivers that will support it (don't forget to add it to hw_features
-> > for virtio_net then).
+Similar thing has been done in i40e, as there is no real need for having
+the sk_buff pointer in each rx_buf. Non-eop frames can be simply handled
+on that pointer moved upwards to rx_ring.
 
-User don't need to enable manually this, drivers usually enable most
-of their features on netdevice creation. This way we just could have
-an option to turn it off.
+Reviewed-by: Björn Töpel <bjorn.topel@intel.com>
+Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+ drivers/net/ethernet/intel/ice/ice_txrx.c | 30 ++++++++++-------------
+ drivers/net/ethernet/intel/ice/ice_txrx.h |  2 +-
+ 2 files changed, 14 insertions(+), 18 deletions(-)
 
-If the feature is not about to be exposed to user at all, only to
-indicate if a particular driver supports skbs with skb_headlen =3D=3D 0
-on its .ndo_start_xmit() path, then it might be better to introduce
-a private flag (netdev_priv_flags) instead of netdev_feature. Private
-flags are kernel-only and can't be toggled on/off after netdev is
-registered.
-E.g.
-
-IFF_TX_SKB_NO_LINEAR
-
-and test it like
-
-if (dev->priv_flags & IFF_TX_SKB_NO_LINEAR) {
-=09/* new generic zerocopy path */
-} else {
-=09/* current code */
-}
-
-> > >>>  };
-> > >>>
-> > >>>  const char
-> > >>> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > >>> index 8037b04..94d17dc 100644
-> > >>> --- a/net/xdp/xsk.c
-> > >>> +++ b/net/xdp/xsk.c
-> > >>> @@ -430,6 +430,95 @@ static void xsk_destruct_skb(struct sk_buff *s=
-kb)
-> > >>>     sock_wfree(skb);
-> > >>>  }
-> > >>>
-> > >>> +static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
-> > >>> +                                         struct xdp_desc *desc)
-> > >>> +{
-> > >>> +   u32 len, offset, copy, copied;
-> > >>> +   struct sk_buff *skb;
-> > >>> +   struct page *page;
-> > >>> +   char *buffer;
-> > >>> +   int err, i;
-> > >>> +   u64 addr;
-> > >>> +
-> > >>> +   skb =3D sock_alloc_send_skb(&xs->sk, 0, 1, &err);
-> > >>> +   if (unlikely(!skb))
-> > >>> +           return NULL;
-> > >>> +
-> > >>> +   addr =3D desc->addr;
-> > >>> +   len =3D desc->len;
-> > >>> +
-> > >>> +   buffer =3D xsk_buff_raw_get_data(xs->pool, addr);
-> > >>> +   offset =3D offset_in_page(buffer);
-> > >>> +   addr =3D buffer - (char *)xs->pool->addrs;
-> > >>> +
-> > >>> +   for (copied =3D 0, i =3D 0; copied < len; ++i) {
-> > >>> +           page =3D xs->pool->umem->pgs[addr >> PAGE_SHIFT];
-> > >>> +
-> > >>> +           get_page(page);
-> > >>> +
-> > >>> +           copy =3D min((u32)(PAGE_SIZE - offset), len - copied);
-> > >>> +
-> > >>> +           skb_fill_page_desc(skb, i, page, offset, copy);
-> > >>> +
-> > >>> +           copied +=3D copy;
-> > >>> +           addr +=3D copy;
-> > >>> +           offset =3D 0;
-> > >>> +   }
-> > >>> +
-> > >>> +   skb->len +=3D len;
-> > >>> +   skb->data_len +=3D len;
-> > >>> +   skb->truesize +=3D len;
-> > >>> +
-> > >>> +   refcount_add(len, &xs->sk.sk_wmem_alloc);
-> > >>> +
-> > >>> +   return skb;
-> > >>> +}
-> > >>> +
-> > >>> +static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
-> > >>> +                                struct xdp_desc *desc, int *err)
-> > >>> +{
-> > >>> +   struct sk_buff *skb;
-> > >>> +
-> > >>> +   if (xs->dev->features & NETIF_F_SKB_NO_LINEAR) {
-> > >>> +           skb =3D xsk_build_skb_zerocopy(xs, desc);
-> > >>> +           if (unlikely(!skb)) {
-> > >>> +                   *err =3D -ENOMEM;
-> > >>> +                   return NULL;
-> > >>> +           }
-> > >>> +   } else {
-> > >>> +           char *buffer;
-> > >>> +           u64 addr;
-> > >>> +           u32 len;
-> > >>> +           int err;
-> > >>> +
-> > >>> +           len =3D desc->len;
-> > >>> +           skb =3D sock_alloc_send_skb(&xs->sk, len, 1, &err);
-> > >>> +           if (unlikely(!skb)) {
-> > >>> +                   *err =3D -ENOMEM;
-> > >>> +                   return NULL;
-> > >>> +           }
-> > >>> +
-> > >>> +           skb_put(skb, len);
-> > >>> +           addr =3D desc->addr;
-> > >>> +           buffer =3D xsk_buff_raw_get_data(xs->pool, desc->addr);
-> > >>> +           err =3D skb_store_bits(skb, 0, buffer, len);
-> > >>> +
-> > >>> +           if (unlikely(err)) {
-> > >>> +                   kfree_skb(skb);
-> > >>> +                   *err =3D -EINVAL;
-> > >>> +                   return NULL;
-> > >>> +           }
-> > >>> +   }
-> > >>> +
-> > >>> +   skb->dev =3D xs->dev;
-> > >>> +   skb->priority =3D xs->sk.sk_priority;
-> > >>> +   skb->mark =3D xs->sk.sk_mark;
-> > >>> +   skb_shinfo(skb)->destructor_arg =3D (void *)(long)desc->addr;
-> > >>> +   skb->destructor =3D xsk_destruct_skb;
-> > >>> +
-> > >>> +   return skb;
-> > >>> +}
-> > >>> +
-> > >>>  static int xsk_generic_xmit(struct sock *sk)
-> > >>>  {
-> > >>>     struct xdp_sock *xs =3D xdp_sk(sk);
-> > >>> @@ -446,43 +535,28 @@ static int xsk_generic_xmit(struct sock *sk)
-> > >>>             goto out;
-> > >>>
-> > >>>     while (xskq_cons_peek_desc(xs->tx, &desc, xs->pool)) {
-> > >>> -           char *buffer;
-> > >>> -           u64 addr;
-> > >>> -           u32 len;
-> > >>> -
-> > >>>             if (max_batch-- =3D=3D 0) {
-> > >>>                     err =3D -EAGAIN;
-> > >>>                     goto out;
-> > >>>             }
-> > >>>
-> > >>> -           len =3D desc.len;
-> > >>> -           skb =3D sock_alloc_send_skb(sk, len, 1, &err);
-> > >>> +           skb =3D xsk_build_skb(xs, &desc, &err);
-> > >>>             if (unlikely(!skb))
-> > >>>                     goto out;
-> > >>>
-> > >>> -           skb_put(skb, len);
-> > >>> -           addr =3D desc.addr;
-> > >>> -           buffer =3D xsk_buff_raw_get_data(xs->pool, addr);
-> > >>> -           err =3D skb_store_bits(skb, 0, buffer, len);
-> > >>>             /* This is the backpressure mechanism for the Tx path.
-> > >>>              * Reserve space in the completion queue and only proce=
-ed
-> > >>>              * if there is space in it. This avoids having to imple=
-ment
-> > >>>              * any buffering in the Tx path.
-> > >>>              */
-> > >>>             spin_lock_irqsave(&xs->pool->cq_lock, flags);
-> > >>> -           if (unlikely(err) || xskq_prod_reserve(xs->pool->cq)) {
-> > >>> +           if (xskq_prod_reserve(xs->pool->cq)) {
-> > >>>                     spin_unlock_irqrestore(&xs->pool->cq_lock, flag=
-s);
-> > >>>                     kfree_skb(skb);
-> > >>>                     goto out;
-> > >>>             }
-> > >>>             spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
-> > >>>
-> > >>> -           skb->dev =3D xs->dev;
-> > >>> -           skb->priority =3D sk->sk_priority;
-> > >>> -           skb->mark =3D sk->sk_mark;
-> > >>> -           skb_shinfo(skb)->destructor_arg =3D (void *)(long)desc.=
-addr;
-> > >>> -           skb->destructor =3D xsk_destruct_skb;
-> > >>> -
-> > >>>             err =3D __dev_direct_xmit(skb, xs->queue_id);
-> > >>>             if  (err =3D=3D NETDEV_TX_BUSY) {
-> > >>>                     /* Tell user-space to retry the send */
-> > >>>
-> > >
-> > > Al
-> >
-> > Al
->
-
-Al
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.c b/drivers/net/ethernet/intel/ice/ice_txrx.c
+index dc1ad45eac8d..50fbb77bab70 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.c
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.c
+@@ -375,6 +375,11 @@ void ice_clean_rx_ring(struct ice_ring *rx_ring)
+ 	if (!rx_ring->rx_buf)
+ 		return;
+ 
++	if (rx_ring->skb) {
++		dev_kfree_skb(rx_ring->skb);
++		rx_ring->skb = NULL;
++	}
++
+ 	if (rx_ring->xsk_pool) {
+ 		ice_xsk_clean_rx_ring(rx_ring);
+ 		goto rx_skip_free;
+@@ -384,10 +389,6 @@ void ice_clean_rx_ring(struct ice_ring *rx_ring)
+ 	for (i = 0; i < rx_ring->count; i++) {
+ 		struct ice_rx_buf *rx_buf = &rx_ring->rx_buf[i];
+ 
+-		if (rx_buf->skb) {
+-			dev_kfree_skb(rx_buf->skb);
+-			rx_buf->skb = NULL;
+-		}
+ 		if (!rx_buf->page)
+ 			continue;
+ 
+@@ -859,7 +860,6 @@ ice_reuse_rx_page(struct ice_ring *rx_ring, struct ice_rx_buf *old_buf)
+ /**
+  * ice_get_rx_buf - Fetch Rx buffer and synchronize data for use
+  * @rx_ring: Rx descriptor ring to transact packets on
+- * @skb: skb to be used
+  * @size: size of buffer to add to skb
+  * @rx_buf_pgcnt: rx_buf page refcount
+  *
+@@ -867,8 +867,8 @@ ice_reuse_rx_page(struct ice_ring *rx_ring, struct ice_rx_buf *old_buf)
+  * for use by the CPU.
+  */
+ static struct ice_rx_buf *
+-ice_get_rx_buf(struct ice_ring *rx_ring, struct sk_buff **skb,
+-	       const unsigned int size, int *rx_buf_pgcnt)
++ice_get_rx_buf(struct ice_ring *rx_ring, const unsigned int size,
++	       int *rx_buf_pgcnt)
+ {
+ 	struct ice_rx_buf *rx_buf;
+ 
+@@ -880,7 +880,6 @@ ice_get_rx_buf(struct ice_ring *rx_ring, struct sk_buff **skb,
+ 		0;
+ #endif
+ 	prefetchw(rx_buf->page);
+-	*skb = rx_buf->skb;
+ 
+ 	if (!size)
+ 		return rx_buf;
+@@ -1042,29 +1041,24 @@ ice_put_rx_buf(struct ice_ring *rx_ring, struct ice_rx_buf *rx_buf,
+ 
+ 	/* clear contents of buffer_info */
+ 	rx_buf->page = NULL;
+-	rx_buf->skb = NULL;
+ }
+ 
+ /**
+  * ice_is_non_eop - process handling of non-EOP buffers
+  * @rx_ring: Rx ring being processed
+  * @rx_desc: Rx descriptor for current buffer
+- * @skb: Current socket buffer containing buffer in progress
+  *
+  * If the buffer is an EOP buffer, this function exits returning false,
+  * otherwise return true indicating that this is in fact a non-EOP buffer.
+  */
+ static bool
+-ice_is_non_eop(struct ice_ring *rx_ring, union ice_32b_rx_flex_desc *rx_desc,
+-	       struct sk_buff *skb)
++ice_is_non_eop(struct ice_ring *rx_ring, union ice_32b_rx_flex_desc *rx_desc)
+ {
+ 	/* if we are the last buffer then there is nothing else to do */
+ #define ICE_RXD_EOF BIT(ICE_RX_FLEX_DESC_STATUS0_EOF_S)
+ 	if (likely(ice_test_staterr(rx_desc, ICE_RXD_EOF)))
+ 		return false;
+ 
+-	/* place skb in next buffer to be received */
+-	rx_ring->rx_buf[rx_ring->next_to_clean].skb = skb;
+ 	rx_ring->rx_stats.non_eop_descs++;
+ 
+ 	return true;
+@@ -1087,6 +1081,7 @@ int ice_clean_rx_irq(struct ice_ring *rx_ring, int budget)
+ 	unsigned int total_rx_bytes = 0, total_rx_pkts = 0, frame_sz = 0;
+ 	u16 cleaned_count = ICE_DESC_UNUSED(rx_ring);
+ 	unsigned int xdp_res, xdp_xmit = 0;
++	struct sk_buff *skb = rx_ring->skb;
+ 	struct bpf_prog *xdp_prog = NULL;
+ 	struct xdp_buff xdp;
+ 	bool failure;
+@@ -1103,7 +1098,6 @@ int ice_clean_rx_irq(struct ice_ring *rx_ring, int budget)
+ 		union ice_32b_rx_flex_desc *rx_desc;
+ 		struct ice_rx_buf *rx_buf;
+ 		unsigned char *hard_start;
+-		struct sk_buff *skb;
+ 		unsigned int size;
+ 		u16 stat_err_bits;
+ 		int rx_buf_pgcnt;
+@@ -1138,7 +1132,7 @@ int ice_clean_rx_irq(struct ice_ring *rx_ring, int budget)
+ 			ICE_RX_FLX_DESC_PKT_LEN_M;
+ 
+ 		/* retrieve a buffer from the ring */
+-		rx_buf = ice_get_rx_buf(rx_ring, &skb, size, &rx_buf_pgcnt);
++		rx_buf = ice_get_rx_buf(rx_ring, size, &rx_buf_pgcnt);
+ 
+ 		if (!size) {
+ 			xdp.data = NULL;
+@@ -1200,7 +1194,7 @@ int ice_clean_rx_irq(struct ice_ring *rx_ring, int budget)
+ 		cleaned_count++;
+ 
+ 		/* skip if it is NOP desc */
+-		if (ice_is_non_eop(rx_ring, rx_desc, skb))
++		if (ice_is_non_eop(rx_ring, rx_desc))
+ 			continue;
+ 
+ 		stat_err_bits = BIT(ICE_RX_FLEX_DESC_STATUS0_RXE_S);
+@@ -1230,6 +1224,7 @@ int ice_clean_rx_irq(struct ice_ring *rx_ring, int budget)
+ 
+ 		/* send completed skb up the stack */
+ 		ice_receive_skb(rx_ring, skb, vlan_tag);
++		skb = NULL;
+ 
+ 		/* update budget accounting */
+ 		total_rx_pkts++;
+@@ -1240,6 +1235,7 @@ int ice_clean_rx_irq(struct ice_ring *rx_ring, int budget)
+ 
+ 	if (xdp_prog)
+ 		ice_finalize_xdp_rx(rx_ring, xdp_xmit);
++	rx_ring->skb = skb;
+ 
+ 	ice_update_rx_ring_stats(rx_ring, total_rx_pkts, total_rx_bytes);
+ 
+diff --git a/drivers/net/ethernet/intel/ice/ice_txrx.h b/drivers/net/ethernet/intel/ice/ice_txrx.h
+index ff1a1cbd078e..c77dbbb760cd 100644
+--- a/drivers/net/ethernet/intel/ice/ice_txrx.h
++++ b/drivers/net/ethernet/intel/ice/ice_txrx.h
+@@ -165,7 +165,6 @@ struct ice_tx_offload_params {
+ struct ice_rx_buf {
+ 	union {
+ 		struct {
+-			struct sk_buff *skb;
+ 			dma_addr_t dma;
+ 			struct page *page;
+ 			unsigned int page_offset;
+@@ -298,6 +297,7 @@ struct ice_ring {
+ 	struct xsk_buff_pool *xsk_pool;
+ 	/* CL3 - 3rd cacheline starts here */
+ 	struct xdp_rxq_info xdp_rxq;
++	struct sk_buff *skb;
+ 	/* CLX - the below items are only accessed infrequently and should be
+ 	 * in their own cache line if possible
+ 	 */
+-- 
+2.20.1
 
