@@ -2,97 +2,150 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-21.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-5.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,
-	USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CB78C433E0
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 16:17:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 00EEBC433E9
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 16:38:05 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id E372520715
-	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 16:17:32 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CB5FA206F7
+	for <bpf@archiver.kernel.org>; Mon, 18 Jan 2021 16:38:04 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406012AbhARQPI (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Mon, 18 Jan 2021 11:15:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406169AbhARP7u (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Mon, 18 Jan 2021 10:59:50 -0500
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BE4C061757
-        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 07:59:07 -0800 (PST)
-Received: by mail-wr1-x44a.google.com with SMTP id u29so8545042wru.6
-        for <bpf@vger.kernel.org>; Mon, 18 Jan 2021 07:59:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:message-id:mime-version:subject:from:to:cc;
-        bh=tg+3NwgpjPXKCAU0OOKW/4MEsOw9C1yX+SHheX6GzNo=;
-        b=OeEk33HaH6Hbiu6I+b1Q7FWYeeSPLEzZbksFKDPfTxJvMz2iziNXp8justgb+/qOO2
-         BmCttwyKayBP3uDNYOUfVlj70h4U62BnyWDdecRhbaiNKeULfiq0So6sBAE6CsF/IOtW
-         Yy6TW52Hv4v0RnU27FQzOf6ha3Ey7GE/vNnDFqJaPi1WSwUEzdaiRL3OPPHrEqYbLCDN
-         VK8ebVEgHFqFH7Evop0hPWI/SmRGX0JcRkqwiX6zWXcPQXSI+/ZvW6zcdlux8HW2w5KZ
-         TSdj/4ofx+XLW6B5MF+TKyrhDGKP5C47CVeyVsDxLS9F2b7KXXgQ9l+V6MIxdYtetGu+
-         kzZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:message-id:mime-version:subject:from
-         :to:cc;
-        bh=tg+3NwgpjPXKCAU0OOKW/4MEsOw9C1yX+SHheX6GzNo=;
-        b=HZgmeI7J1bF6jTiE29F9YlSVcQXDNtCZC+GgpFLMUz4OLSdHICCvLGecfa71UmcTCt
-         b/naOokYizSh34fjezKqIP9UqGq0vuHHZaw6r48kWmCp3bh1wTQij33CXcgPuyBs369U
-         2/87Wkv/gk0MW1EJ1xhMn/aK7EJhmPJXujb0NJFgoRi8JtT5zkGUuBbaXsguulNm2ild
-         no+RlIB4Kal98tG9lyd0Nv0lfd9GEhpK37H/hL/EiIWGMDYPS0f/zHJ4I04LRhmpSaBf
-         NxZuGlcOvMD0JwaKXY9BFfghmUmJIQYhFcP63a7zAdDpH8fNnIC7zFAWFro8k+blTske
-         RD6w==
-X-Gm-Message-State: AOAM533YqjMKMUr1NEOg674DbOjf9wIGFiWaRXnGwClAeHvQfrpMVDoJ
-        ietRSbBMvuCnd9Gk7wmjTqKbEJPUdLkTILHeQWk5P/Da450fnm1P63Bhc4jysrEotg9M6n8emiC
-        wbnUZfN+gZeiiJdIpsaJ7CKwxJ4oI4S6ZRpe+9BqHLzP/a4pkBLckaymxkwqEwck=
-X-Google-Smtp-Source: ABdhPJzdYAbwQUMFF8aREpbLcgNopt2loRgSAlU+AdqVByyRoMPeOOxoouLImEHuyt7wAIwdpW2ivErXPiz1Gg==
-Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
-X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
- (user=jackmanb job=sendgmr) by 2002:a1c:2c89:: with SMTP id
- s131mr54945wms.0.1610985545503; Mon, 18 Jan 2021 07:59:05 -0800 (PST)
-Date:   Mon, 18 Jan 2021 15:57:33 +0000
-Message-Id: <20210118155735.532663-1-jackmanb@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
-Subject: [PATCH bpf-next v2 0/2] BPF docs fixups
-From:   Brendan Jackman <jackmanb@google.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Florent Revest <revest@chromium.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Brendan Jackman <jackmanb@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S2392837AbhARQhS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Mon, 18 Jan 2021 11:37:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56519 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2393171AbhARQey (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Mon, 18 Jan 2021 11:34:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1610987607;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=hEgtib86MHmA2mWh9rUrmxTWGEu7W8uAnYFAy5HaaRw=;
+        b=Ui1KojccLbALse1J7uCIABabundfwopIYOyi1epTsknGYccSLx9Bxr7NdMDoe3hp/186PJ
+        Yl1apQlrJWetndUyiM9LfuAg7o2t5wnsuvPcjG7fxJVCzjNWW3XfxNYuXgNZM1dXJ30p4S
+        jtxQQHA9qFY1CKLV+qR6/03U3emaq1E=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-115-Sj1TU5y0M1y12pET7Np9CA-1; Mon, 18 Jan 2021 11:33:25 -0500
+X-MC-Unique: Sj1TU5y0M1y12pET7Np9CA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 436CD1005504;
+        Mon, 18 Jan 2021 16:33:24 +0000 (UTC)
+Received: from carbon (unknown [10.36.110.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1CD9B5D9CD;
+        Mon, 18 Jan 2021 16:33:15 +0000 (UTC)
+Date:   Mon, 18 Jan 2021 17:33:14 +0100
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Brendan Jackman <jackmanb@google.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        BPF-dev-list <bpf@vger.kernel.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Daniel Borkmann <borkmann@iogearbox.net>,
+        Veronika Kabatova <vkabatov@redhat.com>,
+        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
+        Stanislav Kozina <skozina@redhat.com>, brouer@redhat.com
+Subject: Re: Issues compiling selftests XADD - "Invalid usage of the XADD
+ return value"
+Message-ID: <20210118173314.063ab3af@carbon>
+In-Reply-To: <CA+i-1C1f2UUc=iuhQzus9iVrftHWonyPRB8pZhz2HKfKg6uKuw@mail.gmail.com>
+References: <20210118144101.01a5d410@carbon>
+        <CA+i-1C1Te+c876s3JYSE6o7fw+TaTbC7TnMmyw8kx5Tg1jUxNw@mail.gmail.com>
+        <20210118153745.21b9727e@carbon>
+        <CA+i-1C1f2UUc=iuhQzus9iVrftHWonyPRB8pZhz2HKfKg6uKuw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Difference from v1->v2 [1]:
+On Mon, 18 Jan 2021 16:24:10 +0100
+Brendan Jackman <jackmanb@google.com> wrote:
 
- * Split into 2 patches
+> On Mon, 18 Jan 2021 at 15:38, Jesper Dangaard Brouer <brouer@redhat.com> =
+wrote:
+> > I'm compiling from LLVM 'main' branch (commit e6d758de82b6) but it
+> > unfortunately fails to compile (see error below).
+> >
+> > Any recommended LLVM commit id that works? =20
+>=20
+> :(
+>=20
+> I'm on 6f4ee6f87060 and things are working.
 
- * Avoided unnecessary ': ::' in .rst source
+I got compiling to work on this commit.  But the error below, were
+likely caused by my compile machine simply ran out of memory (it "only"
+have 16GB RAM).
 
- * Tweaked wording of the -mcpu=v3 bit a little more
+I reduced the number of parallel jobs (ninja -j6) and have now
+successfully compiled devel branch of LLVM.
 
-[1] https://lore.kernel.org/bpf/CA+i-1C1LVKjfQLBYk6siiqhxfy0jCR7UBcAmJ4jCED0A9aWsxA@mail.gmail.com/T/#t
-
-Brendan Jackman (2):
-  docs: bpf: Fixup atomics markup
-  docs: bpf: Clarify -mcpu=v3 requirement for atomic ops
-
- Documentation/networking/filter.rst | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
+Now the compile of BPF-selftests is possible again.
 
 
-base-commit: 232164e041e925a920bfd28e63d5233cfad90b73
---
-2.30.0.284.gd98b1dd5eaa7-goog
+> >
+> > [...]
+> > ../include/llvm/ExecutionEngine/Orc/Shared/RPCUtils.h:1513:27: note: re=
+move =E2=80=98std::move=E2=80=99 call
+> > ../include/llvm/ExecutionEngine/Orc/Shared/RPCUtils.h:1519:27: warning:=
+ moving a local object in a return statement prevents copy elision [-Wpessi=
+mizing-move]
+> >  1519 |       return std::move(Err);
+> >       |                           ^
+> > ../include/llvm/ExecutionEngine/Orc/Shared/RPCUtils.h:1519:27: note: re=
+move =E2=80=98std::move=E2=80=99 call
+> > ../include/llvm/ExecutionEngine/Orc/Shared/RPCUtils.h:1526:29: warning:=
+ moving a local object in a return statement prevents copy elision [-Wpessi=
+mizing-move]
+> >  1526 |         return std::move(Err);
+> >       |                             ^
+> > ../include/llvm/ExecutionEngine/Orc/Shared/RPCUtils.h:1526:29: note: re=
+move =E2=80=98std::move=E2=80=99 call
+> > [2237/3183] Building CXX object tools/clang/lib/ASTMatchers/Dynamic/CMa=
+keFiles/obj.clangDynamicASTMatchers.dir/Registry.cpp.o
+> > FAILED: tools/clang/lib/ASTMatchers/Dynamic/CMakeFiles/obj.clangDynamic=
+ASTMatchers.dir/Registry.cpp.o
+> > /usr/lib64/ccache/c++  -DGTEST_HAS_RTTI=3D0 -D_GNU_SOURCE -D__STDC_CONS=
+TANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -Itools/clang/lib/=
+ASTMatchers/Dynamic -I/home/jbrouer/git/llvm-project/clang/lib/ASTMatchers/=
+Dynamic -I/home/jbrouer/git/llvm-project/clang/include -Itools/clang/includ=
+e -Iinclude -I/home/jbrouer/git/llvm-project/llvm/include -fPIC -fvisibilit=
+y-inlines-hidden -Werror=3Ddate-time -Wall -Wextra -Wno-unused-parameter -W=
+write-strings -Wcast-qual -Wno-missing-field-initializers -pedantic -Wno-lo=
+ng-long -Wimplicit-fallthrough -Wno-maybe-uninitialized -Wno-class-memacces=
+s -Wno-redundant-move -Wno-noexcept-type -Wdelete-non-virtual-dtor -Wsugges=
+t-override -Wno-comment -fdiagnostics-color -ffunction-sections -fdata-sect=
+ions -fno-common -Woverloaded-virtual -fno-strict-aliasing -O2 -DNDEBUG    =
+-fno-exceptions -fno-rtti -std=3Dc++14 -MD -MT tools/clang/lib/ASTMatchers/=
+Dynamic/CMakeFiles/obj.clangDynamicASTMatchers.dir/Registry.cpp.o -MF tools=
+/clang/lib/ASTMatchers/Dynamic/CMakeFiles/obj.clangDynamicASTMatchers.dir/R=
+egistry.cpp.o.d -o tools/clang/lib/ASTMatchers/Dynamic/CMakeFiles/obj.clang=
+DynamicASTMatchers.dir/Registry.cpp.o -c /home/jbrouer/git/llvm-project/cla=
+ng/lib/ASTMatchers/Dynamic/Registry.cpp
+> > c++: fatal error: Killed signal terminated program cc1plus
+> > compilation terminated.
+> >
+> > [2255/3183] Building CXX object tools/clang/lib/ASTMatchers/CMakeFiles/=
+obj.clangASTMatchers.dir/ASTMatchFinder.cpp.o
+> >
+> > [2262/3183] Building CXX object tools/clang/lib/Sema/CMakeFiles/obj.cla=
+ngSema.dir/SemaExpr.cpp.o
+> > ninja: build stopped: subcommand failed. =20
+>=20
+
+
+
+--=20
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
