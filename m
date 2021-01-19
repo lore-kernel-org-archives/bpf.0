@@ -2,76 +2,115 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-14.0 required=3.0 tests=BAYES_00,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB2D3C433E0
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 22:01:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EA7B4C433E0
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 22:13:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 88FB522E01
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 22:01:50 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B64A922E01
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 22:13:46 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728414AbhASWBK (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Jan 2021 17:01:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48222 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728980AbhASWAs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Jan 2021 17:00:48 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPS id 03224230FE;
-        Tue, 19 Jan 2021 22:00:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611093608;
-        bh=vwzqmV+/JrI+lZ0C0St5fU/gOE1dmzOlc9Y/V0+Q0Q8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=IYRPZ+riiTpisTvAuU5S0j2reSlPiRcmNWY/n8+7OuOzsa/Gzflc/UhydOkfTBv94
-         QkXIoJ/J+9iGP/wG8aEfLuWiCP3Y43QP5ILs9/hN63iwecr6MxFoKh38qDs49pZq61
-         mmtkVJCR/tXQe4cf6ub8VgP6rZ3K/LMiWV5j4lFGw+kGu04/pGc2HOFtuMWLgcFWjL
-         xrfHI9njG5WR9rI9pNtYqiEqn1x8/1G+ztDUWgIna1W4FgSPm6s2qGowjivwXLcnDo
-         gKB1SJAe5wg87r8YuKtCmpnIXEUk82V7k2XWhVVozOOn28uJLVBRlNOtCZC1aNVjiq
-         9vI6GW/inYOtA==
-Content-Type: text/plain; charset="utf-8"
+        id S1729576AbhASWNn convert rfc822-to-8bit (ORCPT
+        <rfc822;bpf@archiver.kernel.org>); Tue, 19 Jan 2021 17:13:43 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:48464 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387688AbhASWNk (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 19 Jan 2021 17:13:40 -0500
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-273-VsBlFKNbPEOzckn92dA08Q-1; Tue, 19 Jan 2021 17:12:43 -0500
+X-MC-Unique: VsBlFKNbPEOzckn92dA08Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 32E5A107ACE6;
+        Tue, 19 Jan 2021 22:12:41 +0000 (UTC)
+Received: from krava.redhat.com (unknown [10.40.195.212])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 075DA9CA0;
+        Tue, 19 Jan 2021 22:12:37 +0000 (UTC)
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andriin@fb.com>
+Cc:     dwarves@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, Yonghong Song <yhs@fb.com>,
+        Hao Luo <haoluo@google.com>, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Mark Wielaard <mjw@redhat.com>
+Subject: [PATCH bpf-next 3/3] libbpf: Use string table index from index table if needed
+Date:   Tue, 19 Jan 2021 23:12:20 +0100
+Message-Id: <20210119221220.1745061-4-jolsa@kernel.org>
+In-Reply-To: <20210119221220.1745061-1-jolsa@kernel.org>
+References: <20210119221220.1745061-1-jolsa@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] xsk: Clear pool even for inactive queues
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <161109360789.28449.15236558642649089733.git-patchwork-notify@kernel.org>
-Date:   Tue, 19 Jan 2021 22:00:07 +0000
-References: <20210118160333.333439-1-maximmi@mellanox.com>
-In-Reply-To: <20210118160333.333439-1-maximmi@mellanox.com>
-To:     Maxim Mikityanskiy <maximmi@mellanox.com>
-Cc:     magnus.karlsson@intel.com, bjorn.topel@intel.com,
-        jonathan.lemon@gmail.com, ast@kernel.org, daniel@iogearbox.net,
-        davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
-        john.fastabend@gmail.com, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=jolsa@kernel.org
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hello:
+For very large ELF objects (with many sections), we could
+get special value SHN_XINDEX (65535) for elf object's string
+table index - e_shstrndx.
 
-This patch was applied to bpf/bpf.git (refs/heads/master):
+In such case we need to call elf_getshdrstrndx to get the
+proper string table index.
 
-On Mon, 18 Jan 2021 18:03:33 +0200 you wrote:
-> The number of queues can change by other means, rather than ethtool. For
-> example, attaching an mqprio qdisc with num_tc > 1 leads to creating
-> multiple sets of TX queues, which may be then destroyed when mqprio is
-> deleted. If an AF_XDP socket is created while mqprio is active,
-> dev->_tx[queue_id].pool will be filled, but then real_num_tx_queues may
-> decrease with deletion of mqprio, which will mean that the pool won't be
-> NULLed, and a further increase of the number of TX queues may expose a
-> dangling pointer.
-> 
-> [...]
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ tools/lib/bpf/btf.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-Here is the summary with links:
-  - [bpf] xsk: Clear pool even for inactive queues
-    https://git.kernel.org/bpf/bpf/c/b425e24a934e
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 3c3f2bc6c652..4fe987846bc0 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -863,6 +863,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+ 	Elf_Scn *scn = NULL;
+ 	Elf *elf = NULL;
+ 	GElf_Ehdr ehdr;
++	size_t shstrndx;
+ 
+ 	if (elf_version(EV_CURRENT) == EV_NONE) {
+ 		pr_warn("failed to init libelf for %s\n", path);
+@@ -887,7 +888,16 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+ 		pr_warn("failed to get EHDR from %s\n", path);
+ 		goto done;
+ 	}
+-	if (!elf_rawdata(elf_getscn(elf, ehdr.e_shstrndx), NULL)) {
++
++	/*
++	 * Get string table index from extended section index
++	 * table if needed.
++	 */
++	shstrndx = ehdr.e_shstrndx;
++	if (shstrndx == SHN_XINDEX && elf_getshdrstrndx(elf, &shstrndx))
++		goto done;
++
++	if (!elf_rawdata(elf_getscn(elf, shstrndx), NULL)) {
+ 		pr_warn("failed to get e_shstrndx from %s\n", path);
+ 		goto done;
+ 	}
+@@ -902,7 +912,7 @@ static struct btf *btf_parse_elf(const char *path, struct btf *base_btf,
+ 				idx, path);
+ 			goto done;
+ 		}
+-		name = elf_strptr(elf, ehdr.e_shstrndx, sh.sh_name);
++		name = elf_strptr(elf, shstrndx, sh.sh_name);
+ 		if (!name) {
+ 			pr_warn("failed to get section(%d) name from %s\n",
+ 				idx, path);
+-- 
+2.27.0
 
