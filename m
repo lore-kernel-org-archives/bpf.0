@@ -3,212 +3,275 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=3.4.0
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6C03FC433E6
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 16:10:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B645C10F0E
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 18:27:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 20ADD22AAA
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 16:10:06 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id CF9802310B
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 18:27:14 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391561AbhASQKC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Jan 2021 11:10:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42132 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391305AbhASPvs (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Jan 2021 10:51:48 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13645C0613ED;
-        Tue, 19 Jan 2021 07:50:34 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id u11so22401359ljo.13;
-        Tue, 19 Jan 2021 07:50:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rXtdonoT6z2Mk/wuvXU5Af4iSxQJt1+pwiGmRinI7sw=;
-        b=bdICjUBBA4dVZbd0hhiKShUfTjFCf0E6iFRssb7bZOJWDYmHTyYPZbplVF1nfCapL7
-         z/F+SE2yXMGkJbAvHt8zm2Rq7xdv9dzjT2noTJsg2uG2C4I62HLzOOZHq/kyaB3GhhXS
-         Gjbhq+/0LGDKdf8VGn/puy7D7nRjvFJ1UWbNkq8K7VF1pvm9uUQ8ABpA551H72gRKyIT
-         rlLONxmHCl4FdrDytlEE/oWO22XIVwKJR5tmiJEASIKPqZLFruWAs56Yx4QTGOFMRl64
-         jw6E+YgzyEi7+7xmHFS+BgUpPNB887KnACm/JM7iaGU5dpymV3H5oIpNK/6ND2PfpTDp
-         Si6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rXtdonoT6z2Mk/wuvXU5Af4iSxQJt1+pwiGmRinI7sw=;
-        b=U5Ld/+5XXBN1d/ZtrjIex3nWPROvcBaUtcSmf7k0Q2aOwooVRo6JQcPP/nucPgap8j
-         wdynfv3fUnV2gujwpJv5SMQDCGihPpgCGxTUEkEUwnRApdnMFKxp7Bo+VwsVWfStRF7p
-         9EuiWnTbXL0k2IGKEoG72yYnE0U3jC5maTqu+DW0V1zodvNLAYgSMsLWE0m4G5mUilCJ
-         O1bylCsIXDaFyZvjwd25XHx9XX5IRK7XfW+JfOC+zjHJxVnrjIK82+61t38FRZ88pQa6
-         KLFpp7OO8JPMnZQibliSbf2NXHCIMfXR7mz9XojxY7+XWX3vApuIYMFS1IXiYQJ6HBok
-         gMog==
-X-Gm-Message-State: AOAM530zIablpxSEzMp3zDd+BZZLf1H27cJGkCJt5L98lWWsxPEv27aS
-        or44j4ZTDk+zpVjbTY9QIs4=
-X-Google-Smtp-Source: ABdhPJwP28Hgjquhg9jSWYGkjhjoW+HsaBf0D4OFGJJmwnY+Jg4RlvLAPfR4yftSSam7Euk0YOuINg==
-X-Received: by 2002:a2e:9d85:: with SMTP id c5mr2279760ljj.80.1611071432635;
-        Tue, 19 Jan 2021 07:50:32 -0800 (PST)
-Received: from btopel-mobl.ger.intel.com (c213-102-90-208.bredband.comhem.se. [213.102.90.208])
-        by smtp.gmail.com with ESMTPSA id h20sm2309249lfc.239.2021.01.19.07.50.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 07:50:31 -0800 (PST)
-From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
-To:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
-        kuba@kernel.org, jonathan.lemon@gmail.com, maximmi@nvidia.com,
-        davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
-        ciara.loftus@intel.com, weqaar.a.janjua@intel.com
-Subject: [PATCH bpf-next v2 6/8] libbpf, xsk: select bpf_redirect_xsk(), if supported
-Date:   Tue, 19 Jan 2021 16:50:11 +0100
-Message-Id: <20210119155013.154808-7-bjorn.topel@gmail.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20210119155013.154808-1-bjorn.topel@gmail.com>
-References: <20210119155013.154808-1-bjorn.topel@gmail.com>
+        id S1732147AbhASPED (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Jan 2021 10:04:03 -0500
+Received: from mail-40134.protonmail.ch ([185.70.40.134]:56469 "EHLO
+        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389227AbhASOoY (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Jan 2021 09:44:24 -0500
+Date:   Tue, 19 Jan 2021 14:43:27 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+        t=1611067412; bh=hJU3t7jpshkUt0/KD2VNuTu6lnWUQ57cTz2pVJlktr8=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=mmLUNun8OGpBm2R1gKPlGEENYpsNtND6YHumIdxf8Pf+X7Yjvv8PWzUXE9pS0Uu88
+         3kUJ9m1SK64g8zYQarxsP1j5mUswWl2qH8/RoBcpjaw7gb71I3G0d0FbLIyjanseiZ
+         TmA4ky5lrUeLEdP8DBm4BlPZLn4Ul87F8ETSFdtZlEbSM+EyHk0Unj3oRRWcXNpWAR
+         mWhztHtIX9KnuLx+VPMVMjt90ro0egINtFD1xV4LK9ovzISPQcgYa+fdahu2niG5Q1
+         Ngfskb1u+uVDM2PXxi9Ymh4RHrWTMBgHpkDocgac6NRc5rH53/YFjRklSZpVCRwECy
+         q0x2iENCQQfSw==
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, bjorn.topel@intel.com,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: Re: [PATCH bpf-next v2 3/3] xsk: build skb by page
+Message-ID: <20210119144253.5321-1-alobakin@pm.me>
+In-Reply-To: <017fdff4e061a7e0e779b7bc96ed3b45e07aa006.1611048724.git.xuanzhuo@linux.alibaba.com>
+References: <cover.1611048724.git.xuanzhuo@linux.alibaba.com> <017fdff4e061a7e0e779b7bc96ed3b45e07aa006.1611048724.git.xuanzhuo@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Björn Töpel <bjorn.topel@intel.com>
+From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Date: Tue, 19 Jan 2021 17:45:12 +0800
 
-Select bpf_redirect_xsk() as the default AF_XDP BPF program, if
-supported.
+> This patch is used to construct skb based on page to save memory copy
+> overhead.
+>=20
+> This function is implemented based on IFF_TX_SKB_NO_LINEAR. Only the
+> network card priv_flags supports IFF_TX_SKB_NO_LINEAR will use page to
+> directly construct skb. If this feature is not supported, it is still
+> necessary to copy data to construct skb.
+>=20
+> ---------------- Performance Testing ------------
+>=20
+> The test environment is Aliyun ECS server.
+> Test cmd:
+> ```
+> xdpsock -i eth0 -t  -S -s <msg size>
+> ```
+>=20
+> Test result data:
+>=20
+> size    64      512     1024    1500
+> copy    1916747 1775988 1600203 1440054
+> page    1974058 1953655 1945463 1904478
+> percent 3.0%    10.0%   21.58%  32.3%
+>=20
+> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
+> ---
+>  net/xdp/xsk.c | 112 ++++++++++++++++++++++++++++++++++++++++++++++++----=
+------
+>  1 file changed, 94 insertions(+), 18 deletions(-)
+>=20
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 8037b04..8c291f8 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -430,6 +430,95 @@ static void xsk_destruct_skb(struct sk_buff *skb)
+>  =09sock_wfree(skb);
+>  }
+> =20
+> +static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
+> +=09=09=09=09=09      struct xdp_desc *desc)
+> +{
+> +=09u32 len, offset, copy, copied;
+> +=09struct sk_buff *skb;
+> +=09struct page *page;
+> +=09char *buffer;
+> +=09int err =3D 0, i;
+> +=09u64 addr;
+> +
+> +=09skb =3D sock_alloc_send_skb(&xs->sk, 0, 1, &err);
+> +=09if (unlikely(!skb))
+> +=09=09return NULL;
 
-The bpf_redirect_xsk() helper does not require an XSKMAP, so make sure
-that no map is created/updated when using it.
+You can propagate err from here to the outer function:
 
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
----
- tools/lib/bpf/xsk.c | 46 +++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 42 insertions(+), 4 deletions(-)
+=09if (unlikely(!skb))
+=09=09return ERR_PTR(err);
 
-diff --git a/tools/lib/bpf/xsk.c b/tools/lib/bpf/xsk.c
-index c8642c6cb5d6..27e36d6d92a6 100644
---- a/tools/lib/bpf/xsk.c
-+++ b/tools/lib/bpf/xsk.c
-@@ -47,9 +47,12 @@
-  #define PF_XDP AF_XDP
- #endif
- 
-+#define XSKMAP_NOT_NEEDED -1
-+
- enum xsk_prog {
- 	XSK_PROG_FALLBACK,
- 	XSK_PROG_REDIRECT_FLAGS,
-+	XSK_PROG_REDIRECT_XSK,
- };
- 
- struct xsk_umem {
-@@ -361,7 +364,11 @@ static enum xsk_prog get_xsk_prog(void)
- {
- 	__u32 kver = get_kernel_version();
- 
--	return kver < KERNEL_VERSION(5, 3, 0) ? XSK_PROG_FALLBACK : XSK_PROG_REDIRECT_FLAGS;
-+	if (kver < KERNEL_VERSION(5, 3, 0))
-+		return XSK_PROG_FALLBACK;
-+	if (kver < KERNEL_VERSION(5, 12, 0))
-+		return XSK_PROG_REDIRECT_FLAGS;
-+	return XSK_PROG_REDIRECT_XSK;
- }
- 
- static int xsk_load_xdp_prog(struct xsk_socket *xsk)
-@@ -445,10 +452,25 @@ static int xsk_load_xdp_prog(struct xsk_socket *xsk)
- 		BPF_EMIT_CALL(BPF_FUNC_redirect_map),
- 		BPF_EXIT_INSN(),
- 	};
-+
-+	/* This is the post-5.12 kernel C-program:
-+	 * SEC("xdp_sock") int xdp_sock_prog(struct xdp_md *ctx)
-+	 * {
-+	 *     return bpf_redirect_xsk(ctx, XDP_PASS);
-+	 * }
-+	 */
-+	struct bpf_insn prog_redirect_xsk[] = {
-+		/* r2 = XDP_PASS */
-+		BPF_MOV64_IMM(BPF_REG_2, 2),
-+		/* call bpf_redirect_xsk */
-+		BPF_EMIT_CALL(BPF_FUNC_redirect_xsk),
-+		BPF_EXIT_INSN(),
-+	};
- 	size_t insns_cnt[] = {sizeof(prog) / sizeof(struct bpf_insn),
- 			      sizeof(prog_redirect_flags) / sizeof(struct bpf_insn),
-+			      sizeof(prog_redirect_xsk) / sizeof(struct bpf_insn),
- 	};
--	struct bpf_insn *progs[] = {prog, prog_redirect_flags};
-+	struct bpf_insn *progs[] = {prog, prog_redirect_flags, prog_redirect_xsk};
- 	enum xsk_prog option = get_xsk_prog();
- 
- 	prog_fd = bpf_load_program(BPF_PROG_TYPE_XDP, progs[option], insns_cnt[option],
-@@ -508,12 +530,22 @@ static int xsk_get_max_queues(struct xsk_socket *xsk)
- 	return ret;
- }
- 
-+static bool xskmap_required(void)
-+{
-+	return get_xsk_prog() != XSK_PROG_REDIRECT_XSK;
-+}
-+
- static int xsk_create_bpf_maps(struct xsk_socket *xsk)
- {
- 	struct xsk_ctx *ctx = xsk->ctx;
- 	int max_queues;
- 	int fd;
- 
-+	if (!xskmap_required()) {
-+		ctx->xsks_map_fd = XSKMAP_NOT_NEEDED;
-+		return 0;
-+	}
-+
- 	max_queues = xsk_get_max_queues(xsk);
- 	if (max_queues < 0)
- 		return max_queues;
-@@ -532,6 +564,9 @@ static void xsk_delete_bpf_maps(struct xsk_socket *xsk)
- {
- 	struct xsk_ctx *ctx = xsk->ctx;
- 
-+	if (ctx->xsks_map_fd == XSKMAP_NOT_NEEDED)
-+		return;
-+
- 	bpf_map_delete_elem(ctx->xsks_map_fd, &ctx->queue_id);
- 	close(ctx->xsks_map_fd);
- }
-@@ -563,7 +598,7 @@ static int xsk_lookup_bpf_maps(struct xsk_socket *xsk)
- 	if (err)
- 		goto out_map_ids;
- 
--	ctx->xsks_map_fd = -1;
-+	ctx->xsks_map_fd = XSKMAP_NOT_NEEDED;
- 
- 	for (i = 0; i < prog_info.nr_map_ids; i++) {
- 		fd = bpf_map_get_fd_by_id(map_ids[i]);
-@@ -585,7 +620,7 @@ static int xsk_lookup_bpf_maps(struct xsk_socket *xsk)
- 	}
- 
- 	err = 0;
--	if (ctx->xsks_map_fd == -1)
-+	if (ctx->xsks_map_fd == XSKMAP_NOT_NEEDED && xskmap_required())
- 		err = -ENOENT;
- 
- out_map_ids:
-@@ -597,6 +632,9 @@ static int xsk_set_bpf_maps(struct xsk_socket *xsk)
- {
- 	struct xsk_ctx *ctx = xsk->ctx;
- 
-+	if (ctx->xsks_map_fd == XSKMAP_NOT_NEEDED)
-+		return 0;
-+
- 	return bpf_map_update_elem(ctx->xsks_map_fd, &ctx->queue_id,
- 				   &xsk->fd, 0);
- }
--- 
-2.27.0
+> +=09addr =3D desc->addr;
+> +=09len =3D desc->len;
+> +
+> +=09buffer =3D xsk_buff_raw_get_data(xs->pool, addr);
+> +=09offset =3D offset_in_page(buffer);
+> +=09addr =3D buffer - (char *)xs->pool->addrs;
+> +
+> +=09for (copied =3D 0, i =3D 0; copied < len; ++i) {
+
+i++ would be less confusing here. You build skb frags from frag 0
+anyway.
+
+> +=09=09page =3D xs->pool->umem->pgs[addr >> PAGE_SHIFT];
+> +
+> +=09=09get_page(page);
+> +
+> +=09=09copy =3D min((u32)(PAGE_SIZE - offset), len - copied);
+
+It's better to use min_t(u32, ...) instead of manual casting.
+
+> +
+> +=09=09skb_fill_page_desc(skb, i, page, offset, copy);
+> +
+> +=09=09copied +=3D copy;
+> +=09=09addr +=3D copy;
+> +=09=09offset =3D 0;
+> +=09}
+> +
+> +=09skb->len +=3D len;
+> +=09skb->data_len +=3D len;
+> +=09skb->truesize +=3D len;
+> +
+> +=09refcount_add(len, &xs->sk.sk_wmem_alloc);
+> +
+> +=09return skb;
+> +}
+> +
+> +static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
+> +=09=09=09=09     struct xdp_desc *desc)
+> +{
+> +=09struct sk_buff *skb =3D NULL;
+> +=09int err =3D -ENOMEM;
+> +
+> +=09if (xs->dev->priv_flags & IFF_TX_SKB_NO_LINEAR) {
+> +=09=09skb =3D xsk_build_skb_zerocopy(xs, desc);
+> +=09=09if (unlikely(!skb))
+> +=09=09=09goto err;
+
+1. You should'n use goto err here, as skb =3D=3D NULL, so kfree_skb(skb)
+   is redundant.
+2. If you would use ERR_PTR() in xsk_build_skb_zerocopy(),
+   the condition should look like:
+
+=09=09if (IS_ERR(skb))
+=09=09=09return PTR_ERR(skb);
+
+> +=09} else {
+> +=09=09char *buffer;
+> +=09=09u64 addr;
+> +=09=09u32 len;
+> +=09=09int err;
+> +
+> +=09=09len =3D desc->len;
+> +=09=09skb =3D sock_alloc_send_skb(&xs->sk, len, 1, &err);
+> +=09=09if (unlikely(!skb))
+> +=09=09=09goto err;
+
+Same here, if skb =3D=3D NULL, just return without calling kfree_skb().
+
+> +=09=09skb_put(skb, len);
+> +=09=09addr =3D desc->addr;
+> +=09=09buffer =3D xsk_buff_raw_get_data(xs->pool, desc->addr);
+> +=09=09err =3D skb_store_bits(skb, 0, buffer, len);
+> +
+> +=09=09if (unlikely(err)) {
+> +=09=09=09err =3D -EINVAL;
+
+You already have errno in err, no need to override it.
+
+> +=09=09=09goto err;
+> +=09=09}
+> +=09}
+> +
+> +=09skb->dev =3D xs->dev;
+> +=09skb->priority =3D xs->sk.sk_priority;
+> +=09skb->mark =3D xs->sk.sk_mark;
+> +=09skb_shinfo(skb)->destructor_arg =3D (void *)(long)desc->addr;
+> +=09skb->destructor =3D xsk_destruct_skb;
+> +
+> +=09return skb;
+> +
+> +err:
+> +=09kfree_skb(skb);
+> +=09return ERR_PTR(err);
+> +}
+> +
+>  static int xsk_generic_xmit(struct sock *sk)
+>  {
+>  =09struct xdp_sock *xs =3D xdp_sk(sk);
+> @@ -446,43 +535,30 @@ static int xsk_generic_xmit(struct sock *sk)
+>  =09=09goto out;
+> =20
+>  =09while (xskq_cons_peek_desc(xs->tx, &desc, xs->pool)) {
+> -=09=09char *buffer;
+> -=09=09u64 addr;
+> -=09=09u32 len;
+> -
+>  =09=09if (max_batch-- =3D=3D 0) {
+>  =09=09=09err =3D -EAGAIN;
+>  =09=09=09goto out;
+>  =09=09}
+> =20
+> -=09=09len =3D desc.len;
+> -=09=09skb =3D sock_alloc_send_skb(sk, len, 1, &err);
+> -=09=09if (unlikely(!skb))
+> +=09=09skb =3D xsk_build_skb(xs, &desc);
+> +=09=09if (IS_ERR(skb)) {
+> +=09=09=09err =3D PTR_ERR(skb);
+>  =09=09=09goto out;
+> +=09=09}
+> =20
+> -=09=09skb_put(skb, len);
+> -=09=09addr =3D desc.addr;
+> -=09=09buffer =3D xsk_buff_raw_get_data(xs->pool, addr);
+> -=09=09err =3D skb_store_bits(skb, 0, buffer, len);
+>  =09=09/* This is the backpressure mechanism for the Tx path.
+>  =09=09 * Reserve space in the completion queue and only proceed
+>  =09=09 * if there is space in it. This avoids having to implement
+>  =09=09 * any buffering in the Tx path.
+>  =09=09 */
+>  =09=09spin_lock_irqsave(&xs->pool->cq_lock, flags);
+> -=09=09if (unlikely(err) || xskq_prod_reserve(xs->pool->cq)) {
+> +=09=09if (xskq_prod_reserve(xs->pool->cq)) {
+>  =09=09=09spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
+>  =09=09=09kfree_skb(skb);
+>  =09=09=09goto out;
+>  =09=09}
+>  =09=09spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
+> =20
+> -=09=09skb->dev =3D xs->dev;
+> -=09=09skb->priority =3D sk->sk_priority;
+> -=09=09skb->mark =3D sk->sk_mark;
+> -=09=09skb_shinfo(skb)->destructor_arg =3D (void *)(long)desc.addr;
+> -=09=09skb->destructor =3D xsk_destruct_skb;
+> -
+>  =09=09err =3D __dev_direct_xmit(skb, xs->queue_id);
+>  =09=09if  (err =3D=3D NETDEV_TX_BUSY) {
+>  =09=09=09/* Tell user-space to retry the send */
+
+So please recheck the code and then retest it, especially error
+paths (you can inject errors manually here to ensure they work).
+
+Thanks,
+Al
 
