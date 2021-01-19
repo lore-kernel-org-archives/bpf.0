@@ -2,101 +2,235 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 846F6C433E6
+	by smtp.lore.kernel.org (Postfix) with ESMTP id AE78EC43381
 	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:46:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 4C2C923134
+	by mail.kernel.org (Postfix) with ESMTP id 6B33621D1B
 	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:46:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390022AbhASOlC (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Jan 2021 09:41:02 -0500
-Received: from foss.arm.com ([217.140.110.172]:47980 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389227AbhASJ7A (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Jan 2021 04:59:00 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A97F41FB;
-        Tue, 19 Jan 2021 01:57:30 -0800 (PST)
-Received: from e107158-lin (e107158-lin.cambridge.arm.com [10.1.194.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 70A163F66E;
-        Tue, 19 Jan 2021 01:57:29 -0800 (PST)
-Date:   Tue, 19 Jan 2021 09:57:26 +0000
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     Yonghong Song <yhs@fb.com>
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        id S2388123AbhASOkz (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Jan 2021 09:40:55 -0500
+Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:59981 "EHLO
+        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388095AbhASJqo (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 19 Jan 2021 04:46:44 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R661e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0UMEPg5K_1611049513;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UMEPg5K_1611049513)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 19 Jan 2021 17:45:14 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     netdev@vger.kernel.org
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 bpf-next 2/2] selftests: bpf: Add a new test for bare
- tracepoints
-Message-ID: <20210119095726.obfhqanp6wmauzqs@e107158-lin>
-References: <20210116182133.2286884-1-qais.yousef@arm.com>
- <20210116182133.2286884-3-qais.yousef@arm.com>
- <e9d4b132-288d-594f-308c-132e89fcf63f@fb.com>
- <20210118121818.muifeogh4hvakfeb@e107158-lin>
- <fdda7117-e823-e240-4735-617a3df8a0cc@fb.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <fdda7117-e823-e240-4735-617a3df8a0cc@fb.com>
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
+Subject: [PATCH bpf-next v2 3/3] xsk: build skb by page
+Date:   Tue, 19 Jan 2021 17:45:12 +0800
+Message-Id: <017fdff4e061a7e0e779b7bc96ed3b45e07aa006.1611048724.git.xuanzhuo@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <cover.1611048724.git.xuanzhuo@linux.alibaba.com>
+References: <cover.1611048724.git.xuanzhuo@linux.alibaba.com>
+In-Reply-To: <cover.1611048724.git.xuanzhuo@linux.alibaba.com>
+References: <cover.1611048724.git.xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Hi Yonghong
+This patch is used to construct skb based on page to save memory copy
+overhead.
 
-On 01/18/21 09:48, Yonghong Song wrote:
-> The original patch code:
-> 
-> +static int trigger_module_test_write(int write_sz)
-> +{
-> +	int fd, err;
-> +	char *buf = malloc(write_sz);
-> +
-> +	if (!buf)
-> +		return -ENOMEM;
-> +
-> +	memset(buf, 'a', write_sz);
-> +	buf[write_sz-1] = '\0';
-> +
-> +	fd = open("/sys/kernel/bpf_testmod", O_WRONLY);
-> +	err = -errno;
-> +	if (CHECK(fd < 0, "testmod_file_open", "failed: %d\n", err))
-> +		goto out;
-> +
-> +	write(fd, buf, write_sz);
-> +	close(fd);
-> +out:
-> +	free(buf);
-> +
-> +	return 0;
-> +}
-> 
-> Even for "fd < 0" case, it "goto out" and "return 0". We should return
-> error code here instead of 0.
-> 
-> Second, "err = -errno" is set before checking fd < 0. If fd >= 0, err might
-> inherit an postive errno from previous failure.
-> In trigger_module_test_write(), it is okay since the err is only used
-> when fd < 0:
->         err = -errno;
->         if (CHECK(fd < 0, "testmod_file_open", "failed: %d\n", err))
->                 return err;
-> 
-> My above rewrite intends to use "err" during final "return" statement,
-> so I put assignment of "err = -errno" inside the CHECK branch.
-> But there are different ways to implement this properly.
+This function is implemented based on IFF_TX_SKB_NO_LINEAR. Only the
+network card priv_flags supports IFF_TX_SKB_NO_LINEAR will use page to
+directly construct skb. If this feature is not supported, it is still
+necessary to copy data to construct skb.
 
-Okay I see now. Sorry I missed your point initially. I will fix and send v3.
+---------------- Performance Testing ------------
 
-Thanks
+The test environment is Aliyun ECS server.
+Test cmd:
+```
+xdpsock -i eth0 -t  -S -s <msg size>
+```
 
---
-Qais Yousef
+Test result data:
+
+size    64      512     1024    1500
+copy    1916747 1775988 1600203 1440054
+page    1974058 1953655 1945463 1904478
+percent 3.0%    10.0%   21.58%  32.3%
+
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
+---
+ net/xdp/xsk.c | 112 ++++++++++++++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 94 insertions(+), 18 deletions(-)
+
+diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+index 8037b04..8c291f8 100644
+--- a/net/xdp/xsk.c
++++ b/net/xdp/xsk.c
+@@ -430,6 +430,95 @@ static void xsk_destruct_skb(struct sk_buff *skb)
+ 	sock_wfree(skb);
+ }
+ 
++static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
++					      struct xdp_desc *desc)
++{
++	u32 len, offset, copy, copied;
++	struct sk_buff *skb;
++	struct page *page;
++	char *buffer;
++	int err = 0, i;
++	u64 addr;
++
++	skb = sock_alloc_send_skb(&xs->sk, 0, 1, &err);
++	if (unlikely(!skb))
++		return NULL;
++
++	addr = desc->addr;
++	len = desc->len;
++
++	buffer = xsk_buff_raw_get_data(xs->pool, addr);
++	offset = offset_in_page(buffer);
++	addr = buffer - (char *)xs->pool->addrs;
++
++	for (copied = 0, i = 0; copied < len; ++i) {
++		page = xs->pool->umem->pgs[addr >> PAGE_SHIFT];
++
++		get_page(page);
++
++		copy = min((u32)(PAGE_SIZE - offset), len - copied);
++
++		skb_fill_page_desc(skb, i, page, offset, copy);
++
++		copied += copy;
++		addr += copy;
++		offset = 0;
++	}
++
++	skb->len += len;
++	skb->data_len += len;
++	skb->truesize += len;
++
++	refcount_add(len, &xs->sk.sk_wmem_alloc);
++
++	return skb;
++}
++
++static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
++				     struct xdp_desc *desc)
++{
++	struct sk_buff *skb = NULL;
++	int err = -ENOMEM;
++
++	if (xs->dev->priv_flags & IFF_TX_SKB_NO_LINEAR) {
++		skb = xsk_build_skb_zerocopy(xs, desc);
++		if (unlikely(!skb))
++			goto err;
++	} else {
++		char *buffer;
++		u64 addr;
++		u32 len;
++		int err;
++
++		len = desc->len;
++		skb = sock_alloc_send_skb(&xs->sk, len, 1, &err);
++		if (unlikely(!skb))
++			goto err;
++
++		skb_put(skb, len);
++		addr = desc->addr;
++		buffer = xsk_buff_raw_get_data(xs->pool, desc->addr);
++		err = skb_store_bits(skb, 0, buffer, len);
++
++		if (unlikely(err)) {
++			err = -EINVAL;
++			goto err;
++		}
++	}
++
++	skb->dev = xs->dev;
++	skb->priority = xs->sk.sk_priority;
++	skb->mark = xs->sk.sk_mark;
++	skb_shinfo(skb)->destructor_arg = (void *)(long)desc->addr;
++	skb->destructor = xsk_destruct_skb;
++
++	return skb;
++
++err:
++	kfree_skb(skb);
++	return ERR_PTR(err);
++}
++
+ static int xsk_generic_xmit(struct sock *sk)
+ {
+ 	struct xdp_sock *xs = xdp_sk(sk);
+@@ -446,43 +535,30 @@ static int xsk_generic_xmit(struct sock *sk)
+ 		goto out;
+ 
+ 	while (xskq_cons_peek_desc(xs->tx, &desc, xs->pool)) {
+-		char *buffer;
+-		u64 addr;
+-		u32 len;
+-
+ 		if (max_batch-- == 0) {
+ 			err = -EAGAIN;
+ 			goto out;
+ 		}
+ 
+-		len = desc.len;
+-		skb = sock_alloc_send_skb(sk, len, 1, &err);
+-		if (unlikely(!skb))
++		skb = xsk_build_skb(xs, &desc);
++		if (IS_ERR(skb)) {
++			err = PTR_ERR(skb);
+ 			goto out;
++		}
+ 
+-		skb_put(skb, len);
+-		addr = desc.addr;
+-		buffer = xsk_buff_raw_get_data(xs->pool, addr);
+-		err = skb_store_bits(skb, 0, buffer, len);
+ 		/* This is the backpressure mechanism for the Tx path.
+ 		 * Reserve space in the completion queue and only proceed
+ 		 * if there is space in it. This avoids having to implement
+ 		 * any buffering in the Tx path.
+ 		 */
+ 		spin_lock_irqsave(&xs->pool->cq_lock, flags);
+-		if (unlikely(err) || xskq_prod_reserve(xs->pool->cq)) {
++		if (xskq_prod_reserve(xs->pool->cq)) {
+ 			spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
+ 			kfree_skb(skb);
+ 			goto out;
+ 		}
+ 		spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
+ 
+-		skb->dev = xs->dev;
+-		skb->priority = sk->sk_priority;
+-		skb->mark = sk->sk_mark;
+-		skb_shinfo(skb)->destructor_arg = (void *)(long)desc.addr;
+-		skb->destructor = xsk_destruct_skb;
+-
+ 		err = __dev_direct_xmit(skb, xs->queue_id);
+ 		if  (err == NETDEV_TX_BUSY) {
+ 			/* Tell user-space to retry the send */
+-- 
+1.8.3.1
+
