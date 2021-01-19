@@ -2,276 +2,158 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-12.3 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MSGID_FROM_MTA_HEADER,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0B645C10F0E
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 18:27:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 57C99C169C2
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 18:27:18 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CF9802310B
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 18:27:14 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 292F122CAD
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 18:27:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732147AbhASPED (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Jan 2021 10:04:03 -0500
-Received: from mail-40134.protonmail.ch ([185.70.40.134]:56469 "EHLO
-        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389227AbhASOoY (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Jan 2021 09:44:24 -0500
-Date:   Tue, 19 Jan 2021 14:43:27 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1611067412; bh=hJU3t7jpshkUt0/KD2VNuTu6lnWUQ57cTz2pVJlktr8=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=mmLUNun8OGpBm2R1gKPlGEENYpsNtND6YHumIdxf8Pf+X7Yjvv8PWzUXE9pS0Uu88
-         3kUJ9m1SK64g8zYQarxsP1j5mUswWl2qH8/RoBcpjaw7gb71I3G0d0FbLIyjanseiZ
-         TmA4ky5lrUeLEdP8DBm4BlPZLn4Ul87F8ETSFdtZlEbSM+EyHk0Unj3oRRWcXNpWAR
-         mWhztHtIX9KnuLx+VPMVMjt90ro0egINtFD1xV4LK9ovzISPQcgYa+fdahu2niG5Q1
-         Ngfskb1u+uVDM2PXxi9Ymh4RHrWTMBgHpkDocgac6NRc5rH53/YFjRklSZpVCRwECy
-         q0x2iENCQQfSw==
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, bjorn.topel@intel.com,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
+        id S2389908AbhASPvh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Jan 2021 10:51:37 -0500
+Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:6468 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2391650AbhASPnW (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 19 Jan 2021 10:43:22 -0500
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.16.0.43/8.16.0.43) with SMTP id 10JFZ2a0012317;
+        Tue, 19 Jan 2021 07:41:48 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=subject : to : cc :
+ references : from : message-id : date : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=facebook;
+ bh=NCc4AQpUeN2v+JWXNMTS6cjdIhZZxJSuxApWoR5Bwdc=;
+ b=TFam8rB6jMF5cvQQELhfDCKFtrtooBaeR//eVOGP0a4BYYFD6+kGWp8VM2DYXVVd5SPA
+ XXiN6hWibjb8JtH2aVzB1sqfKlm971x68h10oH8C6wkDeWv4QJDqEQpPKvnUdUCqjdX4
+ /J0VywtPAbh7fgq5p8jVvNz2lPsihjp8u+8= 
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by m0089730.ppops.net with ESMTP id 363vh5ce0r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 19 Jan 2021 07:41:48 -0800
+Received: from NAM02-CY1-obe.outbound.protection.outlook.com (100.104.31.183)
+ by o365-in.thefacebook.com (100.104.35.173) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1979.3; Tue, 19 Jan 2021 07:41:47 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=epRuFVpty/QaiuounCeMJfpxFGB4STIcrOHS62BvwxGWrtwxOPMmnMZdhb2nIur0Y7+Aa5ZfnYmKjnmo4Z4y+shekR/+j07ffELlZgZtqewryPo5XKUYPabMTZBj7sOlFnE6kLw2xmL5D1gq8VfHAT0RKFgUZ3yarTITIOcxq/7ZXMt27chv4KTPaavlrEFSq1y784QJkIpIPK1Ujig4EUmM7ZLoZE3s20smnn31BsWqYFu69cX1kRMUXxZT5AAUEVvOOj0+plPmKJrdIJRjtO0WlJ4b7FlWwCdLusNez8CxgjSRUgTLsUpPWC4pfX6IFVNGdLFUKzDzml7dPK9hTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NCc4AQpUeN2v+JWXNMTS6cjdIhZZxJSuxApWoR5Bwdc=;
+ b=CthboVwu441duZgAcsrGJt3VrFnsd7e5qcPyFT+b3Q5KqWsxlnNslbyj7DJXkPy8tJDVgwLz1vN6hUveOi4TIlZLfRsEPSjYNeq7vRT+9lAkCdJwUuMzfM3vU0Ub9CdZB8AzTZqcpzTZb8DpeWqK+Ux0NIk+VOHwxrVdUX1iDLI7/NLDWNHkTPUmoBZMG3rHyd5G7n7s/lOgVMn6RS+/bV3iTRKuujGIDyblGr/JiG+Ihdmgrjz3YmuAaKwwIgwceEvoFyCtQmWRD7wDfxSm2v2xWdv7Oi2wsKeCnHXP9XrKK40hMI4d0cVmPkPVenyFOX4v6J0zWN6TkpqtOtvUKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NCc4AQpUeN2v+JWXNMTS6cjdIhZZxJSuxApWoR5Bwdc=;
+ b=fiu+jyVRVpwp8QK+7NUvHt5BOME6nVmrCqTat7xy84g/I9brWU71yg3TspYQysQ3IGR4t/NRwr8fp1vSA3j1bJhYyPyVSxREAJSB9f5UHQcfUy1hRsUHJnoVVnbK/MdWq8T1N9AaQZOKTwxdFWrp30dNFphNIc+tB9ZUxF4i7Z8=
+Authentication-Results: vger.kernel.org; dkim=none (message not signed)
+ header.d=none;vger.kernel.org; dmarc=none action=none header.from=fb.com;
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com (2603:10b6:a02:c3::18)
+ by BYAPR15MB2696.namprd15.prod.outlook.com (2603:10b6:a03:156::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3763.9; Tue, 19 Jan
+ 2021 15:41:45 +0000
+Received: from BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::9ae:1628:daf9:4b03]) by BYAPR15MB4088.namprd15.prod.outlook.com
+ ([fe80::9ae:1628:daf9:4b03%7]) with mapi id 15.20.3763.014; Tue, 19 Jan 2021
+ 15:41:45 +0000
+Subject: Re: [PATCH v3 bpf-next 2/2] selftests: bpf: Add a new test for bare
+ tracepoints
+To:     Qais Yousef <qais.yousef@arm.com>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH bpf-next v2 3/3] xsk: build skb by page
-Message-ID: <20210119144253.5321-1-alobakin@pm.me>
-In-Reply-To: <017fdff4e061a7e0e779b7bc96ed3b45e07aa006.1611048724.git.xuanzhuo@linux.alibaba.com>
-References: <cover.1611048724.git.xuanzhuo@linux.alibaba.com> <017fdff4e061a7e0e779b7bc96ed3b45e07aa006.1611048724.git.xuanzhuo@linux.alibaba.com>
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20210119122237.2426878-1-qais.yousef@arm.com>
+ <20210119122237.2426878-3-qais.yousef@arm.com>
+From:   Yonghong Song <yhs@fb.com>
+Message-ID: <7be38aec-882a-eecb-3c20-c5f6b4d0bcd3@fb.com>
+Date:   Tue, 19 Jan 2021 07:41:41 -0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.6.1
+In-Reply-To: <20210119122237.2426878-3-qais.yousef@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [2620:10d:c090:400::5:5f35]
+X-ClientProxiedBy: MWHPR04CA0030.namprd04.prod.outlook.com
+ (2603:10b6:300:ee::16) To BYAPR15MB4088.namprd15.prod.outlook.com
+ (2603:10b6:a02:c3::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from [IPv6:2620:10d:c085:21cf::126d] (2620:10d:c090:400::5:5f35) by MWHPR04CA0030.namprd04.prod.outlook.com (2603:10b6:300:ee::16) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.3784.11 via Frontend Transport; Tue, 19 Jan 2021 15:41:44 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 81152a9e-1055-45cd-b518-08d8bc90b992
+X-MS-TrafficTypeDiagnostic: BYAPR15MB2696:
+X-Microsoft-Antispam-PRVS: <BYAPR15MB2696F1AB2F4C0D779ED3E0BBD3A30@BYAPR15MB2696.namprd15.prod.outlook.com>
+X-FB-Source: Internal
+X-MS-Oob-TLC-OOBClassifiers: OLM:416;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5hlfQ2FQmgYVDDF09gUMqNkFC9n3NhhEDq1DLKpMb5tyJqtgjgW7mk7FjAjFC+HXnlYInY5SMw3AMiT1iBuSpG+Q4QV1xmuteD3j21RsBRREJb/MZMUYuq9b1JlTtvYaWtoK7PlK8AIoyOnP13ahslN1gzJBefQCmaGXz0slkWLEeeSNUaPQs9WsPsRqssGyo7hmE5d/JfQGRvgqpUzfvfujCKlh2RwRlSbjq0rp4n8TfFZJXYLoO2gD3+zOQuwL2VFKbetXSxFS/hpHLfOueOjH+vJpgktF29sYi3y0CPiAxMzymMV+H7qScJTp6UGVJXARjVFyNWt/G72mcEVf2/UKVu2+hMjoGxVibIE8lct1ABYDM4nty+ZAwqZYvD6bCigOYFlSPO/DYJR4qg1R9mhpjKD+XPrScW89rDga2XZApiomUioQipwQdURljjUPjdqYBWI4uJt7KkBCYqUFepMu1+wsYxsQOHo+025gTLc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB4088.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(39860400002)(136003)(396003)(376002)(366004)(346002)(558084003)(31696002)(2906002)(66946007)(8676002)(316002)(6666004)(2616005)(54906003)(5660300002)(186003)(86362001)(6486002)(53546011)(31686004)(52116002)(16526019)(36756003)(478600001)(66476007)(4326008)(66556008)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData: =?utf-8?B?ZC9jTlhYQWNIK0pYRmpQV2RaWlA0ZmFRTkdMRTJOSVlvRWVacVpZamRjNktF?=
+ =?utf-8?B?eVp6cEFoSlRUbGt3N09uc0JzWFhjdFYxRndGSWgvOFVhOUZFNGI4SUs0azRn?=
+ =?utf-8?B?d1NtMWwzNisrbjdJSDFXc2VqUFE4YnR2dzVmdVBHRm5SaVhuMGUxbjRXcDRU?=
+ =?utf-8?B?djVVWXRyZ1JudHJmbzRCZTczd3A1dE5ZMnZOZWJRaUpIMFZYTHlmVDBYR0Qx?=
+ =?utf-8?B?a1d5QVJ2UTd6bGhhUkRDREJEbm5rL3RXU2RSRzFaV3NsTVhza21oZkZ5VWMx?=
+ =?utf-8?B?R3kybkZOdTFIV1YrSHMvL1FMVUlYVGN4a0ErS1J5cE9CaE1aL3E2SGZvRita?=
+ =?utf-8?B?aXhhdTFwT3hGanNQSldzQnpGMHoyMm9wN0Fxa1crekhLUTk5MVMrRnJOVzZx?=
+ =?utf-8?B?cFhMRTVoWmdMVW5Jb3IvU3pybTNXUjVjSFRWMldTMVUzNVNFSWFpOGxhaGEy?=
+ =?utf-8?B?UTZrdjZTNlVmUTNLWVFMa2NzUGViVWdlT0s3eXJZVGJMcVVlRlRoMkVXRllm?=
+ =?utf-8?B?K3J5b2FPS0p2U3BXcG04TVhFODhaV25DVDB2TFRiWXRoVTliTjRXUTRkR1Na?=
+ =?utf-8?B?SHFOc3IybkZFTldWOWd4RHg0aTFzZWIrdWFaNHZFQ0JuOVV5bHc0MUZqYk5W?=
+ =?utf-8?B?VEJQbWxjaERTbXFFeWV3NjlGaFRwMVZRTnlWTUkrMjBVQ29VdDMrSjNSRVM2?=
+ =?utf-8?B?UWlKTVlzWEk3NXRwbG1ZKzNsdXZUbG9DRUVtUkJYUzEzM3VOYk41c3Q1TkJK?=
+ =?utf-8?B?VUJST0taM0NpK2l2aWZzaittSjNTM29WMURVOXNOMWV5cHB4cGVndlAwZmpj?=
+ =?utf-8?B?RGtwVGVwSVZ1MVEwWnJ3ek9KalFUVkJUaFJUS0FlbnpmODFNRzREVU9LNHhk?=
+ =?utf-8?B?Rlg0aHNoODhTbHFTMzJ2bVB4eWJVdHczdWdSaDJXTGdjN2Y3QUUzeUsvR1dl?=
+ =?utf-8?B?cDUxcDNaOExZM2R4U2owQ3BIWFlPZjJ0UjFwanVLZ2h1WWxURno4cm9icVZQ?=
+ =?utf-8?B?SXpNcE5aV1JPNU5XSG8zUEk1SnYwZC94bWViMjZrMkZMSHpwcHQ1Wk5ZMUpK?=
+ =?utf-8?B?cXR5bkpMekNteFZVR1FGVjR0dXhWMHFFclJPT052SysySHdyQ2dKL1N1dWZn?=
+ =?utf-8?B?OUJWVDFRYWRKZUh2SzM0SS9WWFBIcnh4TFFUUzlPcHlRRVJJQ3ZjQm9YNTcx?=
+ =?utf-8?B?b3lNVTB0NXB3RWRrbHZjQ3ZBNDM0WURxeUQraUhlelFtb0xwVUhUemhPVzFi?=
+ =?utf-8?B?RmxJZE03aDBhRGU3OHM5aWJQajl4UndYdERBT2lER3dMb3NJa2dzRlFXcngx?=
+ =?utf-8?B?UklaQ0U2cjhsVWc2VVN0TlBBdjN5bndhNVdSMDFxQ3FwV3NpK0lOeWk0eUF4?=
+ =?utf-8?B?c3JBZndnRGJFeUE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 81152a9e-1055-45cd-b518-08d8bc90b992
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB4088.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2021 15:41:44.9895
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gJZTNaUiy34zdrZ8jA0x/6iArspT2gBbxP9qSlHEI+fTEhIQxM5g+j52CNkphjta
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2696
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.343,18.0.737
+ definitions=2021-01-19_05:2021-01-18,2021-01-19 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=887
+ lowpriorityscore=0 malwarescore=0 spamscore=0 suspectscore=0 clxscore=1015
+ adultscore=0 bulkscore=0 mlxscore=0 phishscore=0 priorityscore=1501
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2009150000 definitions=main-2101190094
+X-FB-Internal: deliver
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Date: Tue, 19 Jan 2021 17:45:12 +0800
 
-> This patch is used to construct skb based on page to save memory copy
-> overhead.
->=20
-> This function is implemented based on IFF_TX_SKB_NO_LINEAR. Only the
-> network card priv_flags supports IFF_TX_SKB_NO_LINEAR will use page to
-> directly construct skb. If this feature is not supported, it is still
-> necessary to copy data to construct skb.
->=20
-> ---------------- Performance Testing ------------
->=20
-> The test environment is Aliyun ECS server.
-> Test cmd:
-> ```
-> xdpsock -i eth0 -t  -S -s <msg size>
-> ```
->=20
-> Test result data:
->=20
-> size    64      512     1024    1500
-> copy    1916747 1775988 1600203 1440054
-> page    1974058 1953655 1945463 1904478
-> percent 3.0%    10.0%   21.58%  32.3%
->=20
-> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
-> ---
->  net/xdp/xsk.c | 112 ++++++++++++++++++++++++++++++++++++++++++++++++----=
-------
->  1 file changed, 94 insertions(+), 18 deletions(-)
->=20
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 8037b04..8c291f8 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -430,6 +430,95 @@ static void xsk_destruct_skb(struct sk_buff *skb)
->  =09sock_wfree(skb);
->  }
-> =20
-> +static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
-> +=09=09=09=09=09      struct xdp_desc *desc)
-> +{
-> +=09u32 len, offset, copy, copied;
-> +=09struct sk_buff *skb;
-> +=09struct page *page;
-> +=09char *buffer;
-> +=09int err =3D 0, i;
-> +=09u64 addr;
-> +
-> +=09skb =3D sock_alloc_send_skb(&xs->sk, 0, 1, &err);
-> +=09if (unlikely(!skb))
-> +=09=09return NULL;
 
-You can propagate err from here to the outer function:
+On 1/19/21 4:22 AM, Qais Yousef wrote:
+> Reuse module_attach infrastructure to add a new bare tracepoint to check
+> we can attach to it as a raw tracepoint.
+> 
+> Signed-off-by: Qais Yousef <qais.yousef@arm.com>
 
-=09if (unlikely(!skb))
-=09=09return ERR_PTR(err);
-
-> +=09addr =3D desc->addr;
-> +=09len =3D desc->len;
-> +
-> +=09buffer =3D xsk_buff_raw_get_data(xs->pool, addr);
-> +=09offset =3D offset_in_page(buffer);
-> +=09addr =3D buffer - (char *)xs->pool->addrs;
-> +
-> +=09for (copied =3D 0, i =3D 0; copied < len; ++i) {
-
-i++ would be less confusing here. You build skb frags from frag 0
-anyway.
-
-> +=09=09page =3D xs->pool->umem->pgs[addr >> PAGE_SHIFT];
-> +
-> +=09=09get_page(page);
-> +
-> +=09=09copy =3D min((u32)(PAGE_SIZE - offset), len - copied);
-
-It's better to use min_t(u32, ...) instead of manual casting.
-
-> +
-> +=09=09skb_fill_page_desc(skb, i, page, offset, copy);
-> +
-> +=09=09copied +=3D copy;
-> +=09=09addr +=3D copy;
-> +=09=09offset =3D 0;
-> +=09}
-> +
-> +=09skb->len +=3D len;
-> +=09skb->data_len +=3D len;
-> +=09skb->truesize +=3D len;
-> +
-> +=09refcount_add(len, &xs->sk.sk_wmem_alloc);
-> +
-> +=09return skb;
-> +}
-> +
-> +static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
-> +=09=09=09=09     struct xdp_desc *desc)
-> +{
-> +=09struct sk_buff *skb =3D NULL;
-> +=09int err =3D -ENOMEM;
-> +
-> +=09if (xs->dev->priv_flags & IFF_TX_SKB_NO_LINEAR) {
-> +=09=09skb =3D xsk_build_skb_zerocopy(xs, desc);
-> +=09=09if (unlikely(!skb))
-> +=09=09=09goto err;
-
-1. You should'n use goto err here, as skb =3D=3D NULL, so kfree_skb(skb)
-   is redundant.
-2. If you would use ERR_PTR() in xsk_build_skb_zerocopy(),
-   the condition should look like:
-
-=09=09if (IS_ERR(skb))
-=09=09=09return PTR_ERR(skb);
-
-> +=09} else {
-> +=09=09char *buffer;
-> +=09=09u64 addr;
-> +=09=09u32 len;
-> +=09=09int err;
-> +
-> +=09=09len =3D desc->len;
-> +=09=09skb =3D sock_alloc_send_skb(&xs->sk, len, 1, &err);
-> +=09=09if (unlikely(!skb))
-> +=09=09=09goto err;
-
-Same here, if skb =3D=3D NULL, just return without calling kfree_skb().
-
-> +=09=09skb_put(skb, len);
-> +=09=09addr =3D desc->addr;
-> +=09=09buffer =3D xsk_buff_raw_get_data(xs->pool, desc->addr);
-> +=09=09err =3D skb_store_bits(skb, 0, buffer, len);
-> +
-> +=09=09if (unlikely(err)) {
-> +=09=09=09err =3D -EINVAL;
-
-You already have errno in err, no need to override it.
-
-> +=09=09=09goto err;
-> +=09=09}
-> +=09}
-> +
-> +=09skb->dev =3D xs->dev;
-> +=09skb->priority =3D xs->sk.sk_priority;
-> +=09skb->mark =3D xs->sk.sk_mark;
-> +=09skb_shinfo(skb)->destructor_arg =3D (void *)(long)desc->addr;
-> +=09skb->destructor =3D xsk_destruct_skb;
-> +
-> +=09return skb;
-> +
-> +err:
-> +=09kfree_skb(skb);
-> +=09return ERR_PTR(err);
-> +}
-> +
->  static int xsk_generic_xmit(struct sock *sk)
->  {
->  =09struct xdp_sock *xs =3D xdp_sk(sk);
-> @@ -446,43 +535,30 @@ static int xsk_generic_xmit(struct sock *sk)
->  =09=09goto out;
-> =20
->  =09while (xskq_cons_peek_desc(xs->tx, &desc, xs->pool)) {
-> -=09=09char *buffer;
-> -=09=09u64 addr;
-> -=09=09u32 len;
-> -
->  =09=09if (max_batch-- =3D=3D 0) {
->  =09=09=09err =3D -EAGAIN;
->  =09=09=09goto out;
->  =09=09}
-> =20
-> -=09=09len =3D desc.len;
-> -=09=09skb =3D sock_alloc_send_skb(sk, len, 1, &err);
-> -=09=09if (unlikely(!skb))
-> +=09=09skb =3D xsk_build_skb(xs, &desc);
-> +=09=09if (IS_ERR(skb)) {
-> +=09=09=09err =3D PTR_ERR(skb);
->  =09=09=09goto out;
-> +=09=09}
-> =20
-> -=09=09skb_put(skb, len);
-> -=09=09addr =3D desc.addr;
-> -=09=09buffer =3D xsk_buff_raw_get_data(xs->pool, addr);
-> -=09=09err =3D skb_store_bits(skb, 0, buffer, len);
->  =09=09/* This is the backpressure mechanism for the Tx path.
->  =09=09 * Reserve space in the completion queue and only proceed
->  =09=09 * if there is space in it. This avoids having to implement
->  =09=09 * any buffering in the Tx path.
->  =09=09 */
->  =09=09spin_lock_irqsave(&xs->pool->cq_lock, flags);
-> -=09=09if (unlikely(err) || xskq_prod_reserve(xs->pool->cq)) {
-> +=09=09if (xskq_prod_reserve(xs->pool->cq)) {
->  =09=09=09spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
->  =09=09=09kfree_skb(skb);
->  =09=09=09goto out;
->  =09=09}
->  =09=09spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
-> =20
-> -=09=09skb->dev =3D xs->dev;
-> -=09=09skb->priority =3D sk->sk_priority;
-> -=09=09skb->mark =3D sk->sk_mark;
-> -=09=09skb_shinfo(skb)->destructor_arg =3D (void *)(long)desc.addr;
-> -=09=09skb->destructor =3D xsk_destruct_skb;
-> -
->  =09=09err =3D __dev_direct_xmit(skb, xs->queue_id);
->  =09=09if  (err =3D=3D NETDEV_TX_BUSY) {
->  =09=09=09/* Tell user-space to retry the send */
-
-So please recheck the code and then retest it, especially error
-paths (you can inject errors manually here to ensure they work).
-
-Thanks,
-Al
-
+Acked-by: Yonghong Song <yhs@fb.com>
