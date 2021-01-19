@@ -2,199 +2,177 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-10.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B36E5C43381
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E11C7C4332E
 	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:45:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9098920DD4
+	by mail.kernel.org (Postfix) with ESMTP id C44852313A
 	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:45:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404228AbhASOlx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Jan 2021 09:41:53 -0500
-Received: from foss.arm.com ([217.140.110.172]:54712 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390864AbhASMX5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Jan 2021 07:23:57 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EF6B611D4;
-        Tue, 19 Jan 2021 04:22:50 -0800 (PST)
-Received: from e107158-lin.cambridge.arm.com (unknown [10.1.194.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A074C3F719;
-        Tue, 19 Jan 2021 04:22:49 -0800 (PST)
-From:   Qais Yousef <qais.yousef@arm.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
+        id S2404090AbhASOlW (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Jan 2021 09:41:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20177 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2405144AbhASLEI (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 19 Jan 2021 06:04:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1611054156;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kiLt994IXzu+B0F7u6tIkfDBkyxqYHQz7CiZ5/RLVUY=;
+        b=i1Z2Qt0iHD3SdVLvWMAPrAQNaqpjSIxHwfkN6nMSBWadiJuYPFqs8W/ixmPgWpJW8hckD/
+        EEu7MF/vKDsLeGYTGysoND3dZiVj+pX/dV2Bs0IcY9I5K1DEQ7M+xNfNh6npj/2lSlwcoY
+        mV6C4uAnnVe+4NTmVQAIdn0BY6usoBE=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-149-8_Nt_AkZOpyeGFXUgPSkVA-1; Tue, 19 Jan 2021 06:02:34 -0500
+X-MC-Unique: 8_Nt_AkZOpyeGFXUgPSkVA-1
+Received: by mail-wr1-f70.google.com with SMTP id d7so559529wri.23
+        for <bpf@vger.kernel.org>; Tue, 19 Jan 2021 03:02:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kiLt994IXzu+B0F7u6tIkfDBkyxqYHQz7CiZ5/RLVUY=;
+        b=Tc/PIjJgZ/uSE6zrbtoQW7ax2q/kZ0R3cDTSxrjzyaCpwbfVK7CWWoTip2eJthv2dc
+         1kFsmf18uXXfFhTLE8ebuWDZq0+/xRoU1+nQ6OyXkR1XJPa6+guwraPy6ag+7xjuS0Co
+         jhV53wiCZ4zMGAimrAU9H5ZqkGiz4ci9T6uzFhHIhOacFP5Vv+YH938aZfIdicpxEV+H
+         d6JoBztvW9rhEoIjGT+FibjnoItgQdN39n4G85dGYPI9cZ84LTSzuhvuUlpHVIXwpfik
+         DhD9BvSuuWFwHVhtBwFTA/lBFogchcbghSUlelSkOJZRMa0UCxTsE++7gX1sL8LcUlUm
+         anmQ==
+X-Gm-Message-State: AOAM530iHtVPL8l6lmhPZ3pCtfDOvetN2OO8pcuscipiJ774FS8C9vGg
+        FUcHoHw8VLbWgelxSvVymyKYVPt73Nu2MXlrhzoEqWNIG70cIAmCos/PwIpy/Diqhyxwo3IPLc1
+        b+bMAFh7V+ZSh
+X-Received: by 2002:a5d:4d8b:: with SMTP id b11mr3766986wru.215.1611054153339;
+        Tue, 19 Jan 2021 03:02:33 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxsn0QhhwxM0iUt4w960LJvOY9PG5C4qB5nxwYI6dFa+qrhGOvysE4HQc58/mKABJu2FbKe7Q==
+X-Received: by 2002:a5d:4d8b:: with SMTP id b11mr3766950wru.215.1611054153065;
+        Tue, 19 Jan 2021 03:02:33 -0800 (PST)
+Received: from redhat.com (bzq-79-177-39-148.red.bezeqint.net. [79.177.39.148])
+        by smtp.gmail.com with ESMTPSA id p12sm4133067wmi.3.2021.01.19.03.02.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jan 2021 03:02:32 -0800 (PST)
+Date:   Tue, 19 Jan 2021 06:02:29 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc:     netdev@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Qais Yousef <qais.yousef@arm.com>
-Subject: [PATCH v3 bpf-next 2/2] selftests: bpf: Add a new test for bare tracepoints
-Date:   Tue, 19 Jan 2021 12:22:37 +0000
-Message-Id: <20210119122237.2426878-3-qais.yousef@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210119122237.2426878-1-qais.yousef@arm.com>
-References: <20210119122237.2426878-1-qais.yousef@arm.com>
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 0/3] xsk: build skb by page
+Message-ID: <20210119060140-mutt-send-email-mst@kernel.org>
+References: <20210119045004-mutt-send-email-mst@kernel.org>
+ <1611053609.502882-1-xuanzhuo@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1611053609.502882-1-xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Reuse module_attach infrastructure to add a new bare tracepoint to check
-we can attach to it as a raw tracepoint.
+On Tue, Jan 19, 2021 at 06:53:29PM +0800, Xuan Zhuo wrote:
+> On Tue, 19 Jan 2021 04:50:30 -0500, Michael S. Tsirkin <mst@redhat.com> wrote:
+> > On Tue, Jan 19, 2021 at 05:45:09PM +0800, Xuan Zhuo wrote:
+> > > v2:
+> > >     1. add priv_flags IFF_TX_SKB_NO_LINEAR instead of netdev_feature
+> > >     2. split the patch to three:
+> > >         a. add priv_flags IFF_TX_SKB_NO_LINEAR
+> > >         b. virtio net add priv_flags IFF_TX_SKB_NO_LINEAR
+> > >         c. When there is support this flag, construct skb without linear space
+> > >     3. use ERR_PTR() and PTR_ERR() to handle the err
+> > >
+> > >
+> > > v1 message log:
+> > > ---------------
+> > >
+> > > This patch is used to construct skb based on page to save memory copy
+> > > overhead.
+> > >
+> > > This has one problem:
+> > >
+> > > We construct the skb by fill the data page as a frag into the skb. In
+> > > this way, the linear space is empty, and the header information is also
+> > > in the frag, not in the linear space, which is not allowed for some
+> > > network cards. For example, Mellanox Technologies MT27710 Family
+> > > [ConnectX-4 Lx] will get the following error message:
+> > >
+> > >     mlx5_core 0000:3b:00.1 eth1: Error cqe on cqn 0x817, ci 0x8, qn 0x1dbb, opcode 0xd, syndrome 0x1, vendor syndrome 0x68
+> > >     00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > >     00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > >     00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > >     00000030: 00 00 00 00 60 10 68 01 0a 00 1d bb 00 0f 9f d2
+> > >     WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0xf, len: 64
+> > >     00000000: 00 00 0f 0a 00 1d bb 03 00 00 00 08 00 00 00 00
+> > >     00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > >     00000020: 00 00 00 2b 00 08 00 00 00 00 00 05 9e e3 08 00
+> > >     00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> > >     mlx5_core 0000:3b:00.1 eth1: ERR CQE on SQ: 0x1dbb
+> > >
+> > > I also tried to use build_skb to construct skb, but because of the
+> > > existence of skb_shinfo, it must be behind the linear space, so this
+> > > method is not working. We can't put skb_shinfo on desc->addr, it will be
+> > > exposed to users, this is not safe.
+> > >
+> > > Finally, I added a feature NETIF_F_SKB_NO_LINEAR to identify whether the
+> > > network card supports the header information of the packet in the frag
+> > > and not in the linear space.
+> > >
+> > > ---------------- Performance Testing ------------
+> > >
+> > > The test environment is Aliyun ECS server.
+> > > Test cmd:
+> > > ```
+> > > xdpsock -i eth0 -t  -S -s <msg size>
+> > > ```
+> > >
+> > > Test result data:
+> > >
+> > > size    64      512     1024    1500
+> > > copy    1916747 1775988 1600203 1440054
+> > > page    1974058 1953655 1945463 1904478
+> > > percent 3.0%    10.0%   21.58%  32.3%
+> >
+> > Just making sure, are these test results with v2?
+> 
+> The data was tested at v1,
+> but v2 did not modify the performance-related code.
+> 
+> Thanks.
 
-Signed-off-by: Qais Yousef <qais.yousef@arm.com>
----
- .../bpf/bpf_testmod/bpf_testmod-events.h      |  6 +++++
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 21 ++++++++++++++-
- .../selftests/bpf/bpf_testmod/bpf_testmod.h   |  6 +++++
- .../selftests/bpf/prog_tests/module_attach.c  | 27 +++++++++++++++++++
- .../selftests/bpf/progs/test_module_attach.c  | 10 +++++++
- 5 files changed, 69 insertions(+), 1 deletion(-)
+Looks like v1 wouldn't even build, or did I miss anything?
+It would be nicer if you retested it ...
 
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h
-index b83ea448bc79..89c6d58e5dd6 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod-events.h
-@@ -28,6 +28,12 @@ TRACE_EVENT(bpf_testmod_test_read,
- 		  __entry->pid, __entry->comm, __entry->off, __entry->len)
- );
- 
-+/* A bare tracepoint with no event associated with it */
-+DECLARE_TRACE(bpf_testmod_test_write_bare,
-+	TP_PROTO(struct task_struct *task, struct bpf_testmod_test_write_ctx *ctx),
-+	TP_ARGS(task, ctx)
-+);
-+
- #endif /* _BPF_TESTMOD_EVENTS_H */
- 
- #undef TRACE_INCLUDE_PATH
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-index 2df19d73ca49..e900adad2276 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -28,9 +28,28 @@ bpf_testmod_test_read(struct file *file, struct kobject *kobj,
- EXPORT_SYMBOL(bpf_testmod_test_read);
- ALLOW_ERROR_INJECTION(bpf_testmod_test_read, ERRNO);
- 
-+noinline ssize_t
-+bpf_testmod_test_write(struct file *file, struct kobject *kobj,
-+		      struct bin_attribute *bin_attr,
-+		      char *buf, loff_t off, size_t len)
-+{
-+	struct bpf_testmod_test_write_ctx ctx = {
-+		.buf = buf,
-+		.off = off,
-+		.len = len,
-+	};
-+
-+	trace_bpf_testmod_test_write_bare(current, &ctx);
-+
-+	return -EIO; /* always fail */
-+}
-+EXPORT_SYMBOL(bpf_testmod_test_write);
-+ALLOW_ERROR_INJECTION(bpf_testmod_test_write, ERRNO);
-+
- static struct bin_attribute bin_attr_bpf_testmod_file __ro_after_init = {
--	.attr = { .name = "bpf_testmod", .mode = 0444, },
-+	.attr = { .name = "bpf_testmod", .mode = 0666, },
- 	.read = bpf_testmod_test_read,
-+	.write = bpf_testmod_test_write,
- };
- 
- static int bpf_testmod_init(void)
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
-index b81adfedb4f6..b3892dc40111 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.h
-@@ -11,4 +11,10 @@ struct bpf_testmod_test_read_ctx {
- 	size_t len;
- };
- 
-+struct bpf_testmod_test_write_ctx {
-+	char *buf;
-+	loff_t off;
-+	size_t len;
-+};
-+
- #endif /* _BPF_TESTMOD_H */
-diff --git a/tools/testing/selftests/bpf/prog_tests/module_attach.c b/tools/testing/selftests/bpf/prog_tests/module_attach.c
-index 50796b651f72..5bc53d53d86e 100644
---- a/tools/testing/selftests/bpf/prog_tests/module_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/module_attach.c
-@@ -21,9 +21,34 @@ static int trigger_module_test_read(int read_sz)
- 	return 0;
- }
- 
-+static int trigger_module_test_write(int write_sz)
-+{
-+	int fd, err;
-+	char *buf = malloc(write_sz);
-+
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	memset(buf, 'a', write_sz);
-+	buf[write_sz-1] = '\0';
-+
-+	fd = open("/sys/kernel/bpf_testmod", O_WRONLY);
-+	err = -errno;
-+	if (CHECK(fd < 0, "testmod_file_open", "failed: %d\n", err)) {
-+		free(buf);
-+		return err;
-+	}
-+
-+	write(fd, buf, write_sz);
-+	close(fd);
-+	free(buf);
-+	return 0;
-+}
-+
- void test_module_attach(void)
- {
- 	const int READ_SZ = 456;
-+	const int WRITE_SZ = 457;
- 	struct test_module_attach* skel;
- 	struct test_module_attach__bss *bss;
- 	int err;
-@@ -48,8 +73,10 @@ void test_module_attach(void)
- 
- 	/* trigger tracepoint */
- 	ASSERT_OK(trigger_module_test_read(READ_SZ), "trigger_read");
-+	ASSERT_OK(trigger_module_test_write(WRITE_SZ), "trigger_write");
- 
- 	ASSERT_EQ(bss->raw_tp_read_sz, READ_SZ, "raw_tp");
-+	ASSERT_EQ(bss->raw_tp_bare_write_sz, WRITE_SZ, "raw_tp_bare");
- 	ASSERT_EQ(bss->tp_btf_read_sz, READ_SZ, "tp_btf");
- 	ASSERT_EQ(bss->fentry_read_sz, READ_SZ, "fentry");
- 	ASSERT_EQ(bss->fentry_manual_read_sz, READ_SZ, "fentry_manual");
-diff --git a/tools/testing/selftests/bpf/progs/test_module_attach.c b/tools/testing/selftests/bpf/progs/test_module_attach.c
-index efd1e287ac17..bd37ceec5587 100644
---- a/tools/testing/selftests/bpf/progs/test_module_attach.c
-+++ b/tools/testing/selftests/bpf/progs/test_module_attach.c
-@@ -17,6 +17,16 @@ int BPF_PROG(handle_raw_tp,
- 	return 0;
- }
- 
-+__u32 raw_tp_bare_write_sz = 0;
-+
-+SEC("raw_tp/bpf_testmod_test_write_bare")
-+int BPF_PROG(handle_raw_tp_bare,
-+	     struct task_struct *task, struct bpf_testmod_test_write_ctx *write_ctx)
-+{
-+	raw_tp_bare_write_sz = BPF_CORE_READ(write_ctx, len);
-+	return 0;
-+}
-+
- __u32 tp_btf_read_sz = 0;
- 
- SEC("tp_btf/bpf_testmod_test_read")
--- 
-2.25.1
+> 
+> >
+> > >
+> > > Xuan Zhuo (3):
+> > >   net: add priv_flags for allow tx skb without linear
+> > >   virtio-net: support IFF_TX_SKB_NO_LINEAR
+> > >   xsk: build skb by page
+> > >
+> > >  drivers/net/virtio_net.c  |   3 +-
+> > >  include/linux/netdevice.h |   3 ++
+> > >  net/xdp/xsk.c             | 112 ++++++++++++++++++++++++++++++++++++++--------
+> > >  3 files changed, 99 insertions(+), 19 deletions(-)
+> > >
+> > > --
+> > > 1.8.3.1
+> >
 
