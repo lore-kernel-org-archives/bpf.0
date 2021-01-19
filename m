@@ -7,30 +7,30 @@ X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E5F72C433DB
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 20:24:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 259FDC433DB
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 20:37:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 7F3452313F
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 20:24:46 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BDFED23108
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 20:37:09 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389698AbhASUYL (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Jan 2021 15:24:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56202 "EHLO mail.kernel.org"
+        id S1729703AbhASUhG (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Jan 2021 15:37:06 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56204 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729336AbhASUWQ (ORCPT <rfc822;bpf@vger.kernel.org>);
+        id S1729933AbhASUWQ (ORCPT <rfc822;bpf@vger.kernel.org>);
         Tue, 19 Jan 2021 15:22:16 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 531252312D;
-        Tue, 19 Jan 2021 20:20:52 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9E4DD23137;
+        Tue, 19 Jan 2021 20:20:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611087655;
-        bh=DNabHv0vbOmpYQ+NoLBQkgO3fFAh+v/6/BvP+O4xu7E=;
+        s=k20201202; t=1611087659;
+        bh=qxAMkTcvy7a03HNUrSCHfTmOJmHHhmfl7L9icGtloug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QvKO34Ef0iy2dI2QjK0rRtq2pXSFpAX0eP+HwdTPgqsu21Qw77KIiOFRgaJR8Yec5
-         vzTqKOwvMzfbx2DCTHsd/TfaF8K6Ory+rhU6xe7a1z0BP3eSjrWJiN6swP6f3EdvZb
-         Oa6UdSnHjzMxuuCgLivR4+xxW9S8rpJCUNkf46lOO1GGG1rmjQHduHZJfehapFKZ+g
-         9AzgAAgfcXAJhVJnT75ANlDhSOtbQjE5v7Y7TLqYPflfaS2a8UlJVa7icAln9FVHIY
-         NVaWd4mSP/2/lxBCvlJY95kOr8fh1z+4HyA9beZIyS5eRrPoqc50OevXROn3RmwbEA
-         TqAGSdcSlgAEw==
+        b=Z5letdSC5mgmBS65iL+A0bmd8CrgN5P5NZp3pS01KNnsJUBqCi914T6aOrYnKAO8B
+         jibj99qd31oZQQanPdMz9kcLhQzGn9/ZArxA3fmLCDkXS2AGqbMRF789P3glCJERVK
+         oROPxRAUQ+ILZo+JRzy7SCktxiT9DRynxvo7fb88JHU4jO1pfxGLuthHoE6t956yca
+         Qp0xN3NPdFb7xiK4KWHUyT7t4nMO6HLPIKGnwlmBjanQtsfe/oRMLKm9jKmVNdClf2
+         3Z4jzi+dUYrEjdtK7di/iRQmjl7lirghP/590FPhMbkm6T2xr2+P1HrkA9G16ochhn
+         nigNg2CkHcTVg==
 From:   Lorenzo Bianconi <lorenzo@kernel.org>
 To:     bpf@vger.kernel.org, netdev@vger.kernel.org
 Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
@@ -39,9 +39,9 @@ Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
         echaudro@redhat.com, jasowang@redhat.com,
         alexander.duyck@gmail.com, saeed@kernel.org,
         maciej.fijalkowski@intel.com, sameehj@amazon.com
-Subject: [PATCH v6 bpf-next 6/8] net: mvneta: enable jumbo frames for XDP
-Date:   Tue, 19 Jan 2021 21:20:12 +0100
-Message-Id: <6e8d1cc2fb0af6e1b54e97980501ebf6a3e50833.1611086134.git.lorenzo@kernel.org>
+Subject: [PATCH v6 bpf-next 7/8] net: xdp: add multi-buff support to xdp_build_skb_from_fram
+Date:   Tue, 19 Jan 2021 21:20:13 +0100
+Message-Id: <ad7adf43a8f90fa4176497215be7ee2b2ebe60af.1611086134.git.lorenzo@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <cover.1611086134.git.lorenzo@kernel.org>
 References: <cover.1611086134.git.lorenzo@kernel.org>
@@ -51,42 +51,62 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Enable the capability to receive jumbo frames even if the interface is
-running in XDP mode
+Introduce xdp multi-buff support to
+__xdp_build_skb_from_frame/xdp_build_skb_from_fram utility
+routines.
 
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- drivers/net/ethernet/marvell/mvneta.c | 10 ----------
- 1 file changed, 10 deletions(-)
+ net/core/xdp.c | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-index c273e674e3de..45a3a8cb12fa 100644
---- a/drivers/net/ethernet/marvell/mvneta.c
-+++ b/drivers/net/ethernet/marvell/mvneta.c
-@@ -3763,11 +3763,6 @@ static int mvneta_change_mtu(struct net_device *dev, int mtu)
- 		mtu = ALIGN(MVNETA_RX_PKT_SIZE(mtu), 8);
- 	}
+diff --git a/net/core/xdp.c b/net/core/xdp.c
+index af9b9c1194fc..a7cd1ffbab6b 100644
+--- a/net/core/xdp.c
++++ b/net/core/xdp.c
+@@ -592,9 +592,21 @@ struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
+ 					   struct sk_buff *skb,
+ 					   struct net_device *dev)
+ {
++	skb_frag_t frag_list[MAX_SKB_FRAGS];
+ 	unsigned int headroom, frame_size;
++	int i, num_frags = 0;
+ 	void *hard_start;
  
--	if (pp->xdp_prog && mtu > MVNETA_MAX_RX_BUF_SIZE) {
--		netdev_info(dev, "Illegal MTU value %d for XDP mode\n", mtu);
--		return -EINVAL;
--	}
--
- 	dev->mtu = mtu;
++	/* XDP multi-buff frame */
++	if (unlikely(xdpf->mb)) {
++		struct xdp_shared_info *xdp_sinfo;
++
++		xdp_sinfo = xdp_get_shared_info_from_frame(xdpf);
++		num_frags = xdp_sinfo->nr_frags;
++		memcpy(frag_list, xdp_sinfo->frags,
++		       sizeof(skb_frag_t) * num_frags);
++	}
++
+ 	/* Part of headroom was reserved to xdpf */
+ 	headroom = sizeof(*xdpf) + xdpf->headroom;
  
- 	if (!netif_running(dev)) {
-@@ -4465,11 +4460,6 @@ static int mvneta_xdp_setup(struct net_device *dev, struct bpf_prog *prog,
- 	struct mvneta_port *pp = netdev_priv(dev);
- 	struct bpf_prog *old_prog;
+@@ -613,6 +625,20 @@ struct sk_buff *__xdp_build_skb_from_frame(struct xdp_frame *xdpf,
+ 	if (xdpf->metasize)
+ 		skb_metadata_set(skb, xdpf->metasize);
  
--	if (prog && dev->mtu > MVNETA_MAX_RX_BUF_SIZE) {
--		NL_SET_ERR_MSG_MOD(extack, "MTU too large for XDP");
--		return -EOPNOTSUPP;
--	}
--
- 	if (pp->bm_priv) {
- 		NL_SET_ERR_MSG_MOD(extack,
- 				   "Hardware Buffer Management not supported on XDP");
++	/* Single-buff XDP frame */
++	if (likely(!num_frags))
++		goto out;
++
++	for (i = 0; i < num_frags; i++) {
++		struct page *page = xdp_get_frag_page(&frag_list[i]);
++
++		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags,
++				page, xdp_get_frag_offset(&frag_list[i]),
++				xdp_get_frag_size(&frag_list[i]),
++				xdpf->frame_sz);
++	}
++
++out:
+ 	/* Essential SKB info: protocol and skb->dev */
+ 	skb->protocol = eth_type_trans(skb, dev);
+ 
 -- 
 2.29.2
 
