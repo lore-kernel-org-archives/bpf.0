@@ -2,27 +2,27 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id AE78EC43381
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:46:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id F18F9C43381
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:46:15 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 6B33621D1B
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:46:13 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BE46523138
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:46:15 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388123AbhASOkz (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Jan 2021 09:40:55 -0500
-Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:59981 "EHLO
-        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388095AbhASJqo (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 19 Jan 2021 04:46:44 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R661e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0UMEPg5K_1611049513;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UMEPg5K_1611049513)
+        id S2388135AbhASOkX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Jan 2021 09:40:23 -0500
+Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:46361 "EHLO
+        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388109AbhASJqE (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 19 Jan 2021 04:46:04 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0UMEN45h_1611049512;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UMEN45h_1611049512)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 19 Jan 2021 17:45:14 +0800
+          Tue, 19 Jan 2021 17:45:12 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -41,25 +41,57 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         KP Singh <kpsingh@kernel.org>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 3/3] xsk: build skb by page
-Date:   Tue, 19 Jan 2021 17:45:12 +0800
-Message-Id: <017fdff4e061a7e0e779b7bc96ed3b45e07aa006.1611048724.git.xuanzhuo@linux.alibaba.com>
+Subject: [PATCH bpf-next v2 0/3] xsk: build skb by page
+Date:   Tue, 19 Jan 2021 17:45:09 +0800
+Message-Id: <cover.1611048724.git.xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <cover.1611048724.git.xuanzhuo@linux.alibaba.com>
-References: <cover.1611048724.git.xuanzhuo@linux.alibaba.com>
-In-Reply-To: <cover.1611048724.git.xuanzhuo@linux.alibaba.com>
-References: <cover.1611048724.git.xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
+v2:
+    1. add priv_flags IFF_TX_SKB_NO_LINEAR instead of netdev_feature
+    2. split the patch to three:
+        a. add priv_flags IFF_TX_SKB_NO_LINEAR
+        b. virtio net add priv_flags IFF_TX_SKB_NO_LINEAR
+        c. When there is support this flag, construct skb without linear space
+    3. use ERR_PTR() and PTR_ERR() to handle the err
+
+
+v1 message log:
+---------------
+
 This patch is used to construct skb based on page to save memory copy
 overhead.
 
-This function is implemented based on IFF_TX_SKB_NO_LINEAR. Only the
-network card priv_flags supports IFF_TX_SKB_NO_LINEAR will use page to
-directly construct skb. If this feature is not supported, it is still
-necessary to copy data to construct skb.
+This has one problem:
+
+We construct the skb by fill the data page as a frag into the skb. In
+this way, the linear space is empty, and the header information is also
+in the frag, not in the linear space, which is not allowed for some
+network cards. For example, Mellanox Technologies MT27710 Family
+[ConnectX-4 Lx] will get the following error message:
+
+    mlx5_core 0000:3b:00.1 eth1: Error cqe on cqn 0x817, ci 0x8, qn 0x1dbb, opcode 0xd, syndrome 0x1, vendor syndrome 0x68
+    00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00000030: 00 00 00 00 60 10 68 01 0a 00 1d bb 00 0f 9f d2
+    WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0xf, len: 64
+    00000000: 00 00 0f 0a 00 1d bb 03 00 00 00 08 00 00 00 00
+    00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00000020: 00 00 00 2b 00 08 00 00 00 00 00 05 9e e3 08 00
+    00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    mlx5_core 0000:3b:00.1 eth1: ERR CQE on SQ: 0x1dbb
+
+I also tried to use build_skb to construct skb, but because of the
+existence of skb_shinfo, it must be behind the linear space, so this
+method is not working. We can't put skb_shinfo on desc->addr, it will be
+exposed to users, this is not safe.
+
+Finally, I added a feature NETIF_F_SKB_NO_LINEAR to identify whether the
+network card supports the header information of the packet in the frag
+and not in the linear space.
 
 ---------------- Performance Testing ------------
 
@@ -76,161 +108,17 @@ copy    1916747 1775988 1600203 1440054
 page    1974058 1953655 1945463 1904478
 percent 3.0%    10.0%   21.58%  32.3%
 
-Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
----
- net/xdp/xsk.c | 112 ++++++++++++++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 94 insertions(+), 18 deletions(-)
 
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 8037b04..8c291f8 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -430,6 +430,95 @@ static void xsk_destruct_skb(struct sk_buff *skb)
- 	sock_wfree(skb);
- }
- 
-+static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
-+					      struct xdp_desc *desc)
-+{
-+	u32 len, offset, copy, copied;
-+	struct sk_buff *skb;
-+	struct page *page;
-+	char *buffer;
-+	int err = 0, i;
-+	u64 addr;
-+
-+	skb = sock_alloc_send_skb(&xs->sk, 0, 1, &err);
-+	if (unlikely(!skb))
-+		return NULL;
-+
-+	addr = desc->addr;
-+	len = desc->len;
-+
-+	buffer = xsk_buff_raw_get_data(xs->pool, addr);
-+	offset = offset_in_page(buffer);
-+	addr = buffer - (char *)xs->pool->addrs;
-+
-+	for (copied = 0, i = 0; copied < len; ++i) {
-+		page = xs->pool->umem->pgs[addr >> PAGE_SHIFT];
-+
-+		get_page(page);
-+
-+		copy = min((u32)(PAGE_SIZE - offset), len - copied);
-+
-+		skb_fill_page_desc(skb, i, page, offset, copy);
-+
-+		copied += copy;
-+		addr += copy;
-+		offset = 0;
-+	}
-+
-+	skb->len += len;
-+	skb->data_len += len;
-+	skb->truesize += len;
-+
-+	refcount_add(len, &xs->sk.sk_wmem_alloc);
-+
-+	return skb;
-+}
-+
-+static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
-+				     struct xdp_desc *desc)
-+{
-+	struct sk_buff *skb = NULL;
-+	int err = -ENOMEM;
-+
-+	if (xs->dev->priv_flags & IFF_TX_SKB_NO_LINEAR) {
-+		skb = xsk_build_skb_zerocopy(xs, desc);
-+		if (unlikely(!skb))
-+			goto err;
-+	} else {
-+		char *buffer;
-+		u64 addr;
-+		u32 len;
-+		int err;
-+
-+		len = desc->len;
-+		skb = sock_alloc_send_skb(&xs->sk, len, 1, &err);
-+		if (unlikely(!skb))
-+			goto err;
-+
-+		skb_put(skb, len);
-+		addr = desc->addr;
-+		buffer = xsk_buff_raw_get_data(xs->pool, desc->addr);
-+		err = skb_store_bits(skb, 0, buffer, len);
-+
-+		if (unlikely(err)) {
-+			err = -EINVAL;
-+			goto err;
-+		}
-+	}
-+
-+	skb->dev = xs->dev;
-+	skb->priority = xs->sk.sk_priority;
-+	skb->mark = xs->sk.sk_mark;
-+	skb_shinfo(skb)->destructor_arg = (void *)(long)desc->addr;
-+	skb->destructor = xsk_destruct_skb;
-+
-+	return skb;
-+
-+err:
-+	kfree_skb(skb);
-+	return ERR_PTR(err);
-+}
-+
- static int xsk_generic_xmit(struct sock *sk)
- {
- 	struct xdp_sock *xs = xdp_sk(sk);
-@@ -446,43 +535,30 @@ static int xsk_generic_xmit(struct sock *sk)
- 		goto out;
- 
- 	while (xskq_cons_peek_desc(xs->tx, &desc, xs->pool)) {
--		char *buffer;
--		u64 addr;
--		u32 len;
--
- 		if (max_batch-- == 0) {
- 			err = -EAGAIN;
- 			goto out;
- 		}
- 
--		len = desc.len;
--		skb = sock_alloc_send_skb(sk, len, 1, &err);
--		if (unlikely(!skb))
-+		skb = xsk_build_skb(xs, &desc);
-+		if (IS_ERR(skb)) {
-+			err = PTR_ERR(skb);
- 			goto out;
-+		}
- 
--		skb_put(skb, len);
--		addr = desc.addr;
--		buffer = xsk_buff_raw_get_data(xs->pool, addr);
--		err = skb_store_bits(skb, 0, buffer, len);
- 		/* This is the backpressure mechanism for the Tx path.
- 		 * Reserve space in the completion queue and only proceed
- 		 * if there is space in it. This avoids having to implement
- 		 * any buffering in the Tx path.
- 		 */
- 		spin_lock_irqsave(&xs->pool->cq_lock, flags);
--		if (unlikely(err) || xskq_prod_reserve(xs->pool->cq)) {
-+		if (xskq_prod_reserve(xs->pool->cq)) {
- 			spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
- 			kfree_skb(skb);
- 			goto out;
- 		}
- 		spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
- 
--		skb->dev = xs->dev;
--		skb->priority = sk->sk_priority;
--		skb->mark = sk->sk_mark;
--		skb_shinfo(skb)->destructor_arg = (void *)(long)desc.addr;
--		skb->destructor = xsk_destruct_skb;
--
- 		err = __dev_direct_xmit(skb, xs->queue_id);
- 		if  (err == NETDEV_TX_BUSY) {
- 			/* Tell user-space to retry the send */
--- 
+Xuan Zhuo (3):
+  net: add priv_flags for allow tx skb without linear
+  virtio-net: support IFF_TX_SKB_NO_LINEAR
+  xsk: build skb by page
+
+ drivers/net/virtio_net.c  |   3 +-
+ include/linux/netdevice.h |   3 ++
+ net/xdp/xsk.c             | 112 ++++++++++++++++++++++++++++++++++++++--------
+ 3 files changed, 99 insertions(+), 19 deletions(-)
+
+--
 1.8.3.1
 
