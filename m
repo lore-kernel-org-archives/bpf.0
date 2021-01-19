@@ -2,27 +2,27 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F18F9C43381
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:46:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2CF3FC4332E
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:46:16 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BE46523138
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:46:15 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 0ECDC23135
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:46:16 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388135AbhASOkX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Jan 2021 09:40:23 -0500
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:46361 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388109AbhASJqE (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 19 Jan 2021 04:46:04 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0UMEN45h_1611049512;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UMEN45h_1611049512)
+        id S1727646AbhASOkS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Jan 2021 09:40:18 -0500
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:58799 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388135AbhASJqD (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Tue, 19 Jan 2021 04:46:03 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R391e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0UMEBiQU_1611049513;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UMEBiQU_1611049513)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 19 Jan 2021 17:45:12 +0800
+          Tue, 19 Jan 2021 17:45:13 +0800
 From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
 To:     netdev@vger.kernel.org
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
@@ -41,84 +41,40 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         KP Singh <kpsingh@kernel.org>,
         virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 0/3] xsk: build skb by page
-Date:   Tue, 19 Jan 2021 17:45:09 +0800
-Message-Id: <cover.1611048724.git.xuanzhuo@linux.alibaba.com>
+Subject: [PATCH bpf-next v2 2/3] virtio-net: support IFF_TX_SKB_NO_LINEAR
+Date:   Tue, 19 Jan 2021 17:45:11 +0800
+Message-Id: <21d2f709140470eb143e3c6c69e2a5dbd20bf2e7.1611048724.git.xuanzhuo@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <cover.1611048724.git.xuanzhuo@linux.alibaba.com>
+References: <cover.1611048724.git.xuanzhuo@linux.alibaba.com>
+In-Reply-To: <cover.1611048724.git.xuanzhuo@linux.alibaba.com>
+References: <cover.1611048724.git.xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-v2:
-    1. add priv_flags IFF_TX_SKB_NO_LINEAR instead of netdev_feature
-    2. split the patch to three:
-        a. add priv_flags IFF_TX_SKB_NO_LINEAR
-        b. virtio net add priv_flags IFF_TX_SKB_NO_LINEAR
-        c. When there is support this flag, construct skb without linear space
-    3. use ERR_PTR() and PTR_ERR() to handle the err
+Virtio net supports the case where the skb linear space is empty, so add
+priv_flags.
 
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+---
+ drivers/net/virtio_net.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-v1 message log:
----------------
-
-This patch is used to construct skb based on page to save memory copy
-overhead.
-
-This has one problem:
-
-We construct the skb by fill the data page as a frag into the skb. In
-this way, the linear space is empty, and the header information is also
-in the frag, not in the linear space, which is not allowed for some
-network cards. For example, Mellanox Technologies MT27710 Family
-[ConnectX-4 Lx] will get the following error message:
-
-    mlx5_core 0000:3b:00.1 eth1: Error cqe on cqn 0x817, ci 0x8, qn 0x1dbb, opcode 0xd, syndrome 0x1, vendor syndrome 0x68
-    00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    00000030: 00 00 00 00 60 10 68 01 0a 00 1d bb 00 0f 9f d2
-    WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0xf, len: 64
-    00000000: 00 00 0f 0a 00 1d bb 03 00 00 00 08 00 00 00 00
-    00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    00000020: 00 00 00 2b 00 08 00 00 00 00 00 05 9e e3 08 00
-    00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    mlx5_core 0000:3b:00.1 eth1: ERR CQE on SQ: 0x1dbb
-
-I also tried to use build_skb to construct skb, but because of the
-existence of skb_shinfo, it must be behind the linear space, so this
-method is not working. We can't put skb_shinfo on desc->addr, it will be
-exposed to users, this is not safe.
-
-Finally, I added a feature NETIF_F_SKB_NO_LINEAR to identify whether the
-network card supports the header information of the packet in the frag
-and not in the linear space.
-
----------------- Performance Testing ------------
-
-The test environment is Aliyun ECS server.
-Test cmd:
-```
-xdpsock -i eth0 -t  -S -s <msg size>
-```
-
-Test result data:
-
-size    64      512     1024    1500
-copy    1916747 1775988 1600203 1440054
-page    1974058 1953655 1945463 1904478
-percent 3.0%    10.0%   21.58%  32.3%
-
-
-Xuan Zhuo (3):
-  net: add priv_flags for allow tx skb without linear
-  virtio-net: support IFF_TX_SKB_NO_LINEAR
-  xsk: build skb by page
-
- drivers/net/virtio_net.c  |   3 +-
- include/linux/netdevice.h |   3 ++
- net/xdp/xsk.c             | 112 ++++++++++++++++++++++++++++++++++++++--------
- 3 files changed, 99 insertions(+), 19 deletions(-)
-
---
+diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+index ba8e637..80d637f 100644
+--- a/drivers/net/virtio_net.c
++++ b/drivers/net/virtio_net.c
+@@ -2972,7 +2972,8 @@ static int virtnet_probe(struct virtio_device *vdev)
+ 		return -ENOMEM;
+ 
+ 	/* Set up network device as normal. */
+-	dev->priv_flags |= IFF_UNICAST_FLT | IFF_LIVE_ADDR_CHANGE;
++	dev->priv_flags |= IFF_UNICAST_FLT | IFF_LIVE_ADDR_CHANGE |
++		IFF_TX_SKB_NO_LINEAR;
+ 	dev->netdev_ops = &virtnet_netdev;
+ 	dev->features = NETIF_F_HIGHDMA;
+ 
+-- 
 1.8.3.1
 
