@@ -2,158 +2,84 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-19.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 41286C433E6
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 20:43:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A832C433DB
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 20:59:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F30152310C
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 20:43:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id AC3CE22DD3
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 20:59:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730475AbhASUij (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Jan 2021 15:38:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55828 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730059AbhASUVJ (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Jan 2021 15:21:09 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B80DE23107;
-        Tue, 19 Jan 2021 20:20:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611087629;
-        bh=m9+rIC2OGptHDRFb/JBt1YzzuS/e/I6IPQSPwwRyoRc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZXPqRo4/uxlOI9RVHBQgj4X7XYRrZfAB2hUeTzKJR1k29DAEo2sgaPMhBJro2RWQG
-         X2PO8ZFd/gVPhk/tmoVNCjOrqnMqw1qRm25GoNuib0KcLV++9iVe7luo6l6fhnZBVu
-         yx7fIarY8R9gjVY2G6hdiQGXmTeDvAm1ZtyOo73WZ0ZpuGZqz3fINhS+/UE6fyWV6g
-         6ex1oX1tlG+DF3tSXix7eTj5JRQWlbQkVQC3dUEw8IKZEn7zHLo7hs75PvlzKDABw+
-         J963dleRM0vzwEue7pIRf7xaSeS/1bYLi1J1t+d76J8YF0yKOdL2KMyzehHu7uAWap
-         2I3k2wmgtRPog==
-From:   Lorenzo Bianconi <lorenzo@kernel.org>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org
-Cc:     lorenzo.bianconi@redhat.com, davem@davemloft.net, kuba@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, shayagr@amazon.com,
-        john.fastabend@gmail.com, dsahern@kernel.org, brouer@redhat.com,
-        echaudro@redhat.com, jasowang@redhat.com,
-        alexander.duyck@gmail.com, saeed@kernel.org,
-        maciej.fijalkowski@intel.com, sameehj@amazon.com
-Subject: [PATCH v6 bpf-next 0/8] mvneta: introduce XDP multi-buffer support
-Date:   Tue, 19 Jan 2021 21:20:06 +0100
-Message-Id: <cover.1611086134.git.lorenzo@kernel.org>
-X-Mailer: git-send-email 2.29.2
+        id S1729358AbhASU7R (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Jan 2021 15:59:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727780AbhASUy7 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Jan 2021 15:54:59 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A46DC061575;
+        Tue, 19 Jan 2021 12:54:19 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id v24so24420144lfr.7;
+        Tue, 19 Jan 2021 12:54:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tq6XGOe+hkhz7vgQz8TvtHNk9IhOBKLE3tUZ5x4o9Xs=;
+        b=LRGbJtSB9JWJKJSjAP+Yw9gAqIxTHG3RYmrD+RZaB2Zuq8Ujh00kZZvrtpyLG2srCC
+         YqTywARBIcanCATZz9fd2+UytoHP3nkQ4OP5GZpjXxKCsuzFJyJiqdTYZQJZovsUm9Xk
+         +PxvQN1FZxb0IpdG22DQ9jBbEdb+q6M4ujGXsFb6c3KmQQeOdCdPvNc42ysreWvuSS9a
+         ASU0BK9SqlNrD+c92MsLvVNeFy7uEcrZH9HhheiCWbvXnF4cAYVzm3Cq8uZj2EIfBrVw
+         FCvQi/CXWQRVksVvg9klEv0MvlcwpYt1qqaQc3W1lgyGsHnuGvN+Ne7qsM8tbXW8Y18Q
+         rN9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tq6XGOe+hkhz7vgQz8TvtHNk9IhOBKLE3tUZ5x4o9Xs=;
+        b=qSDb86YrBhPOPhktecnAF4T85PsmSDwGpx+Tit+DXbHVKIYHkjGNTIhFAuAlOnHAJN
+         rh3QR9KVGh2u+jur15B5IgZKJGqTJSdf2+A9t6LUTk7SwdYTX91geWJ00xlrmCcv0Hkj
+         NSQBzSDN6vr3FuEskhDx7uZtOwhv2/Z8vOZRkykmLIblHjXYA68Spt+kgK7pOilPz4P3
+         WkJj7aOVQx1Z9ohWz/FOu7LAxb5TaNM24IS3VEq6eP/RYno/WOpX58RqkINE3UWg2R/f
+         BadX/48/aXvn5Fw0qp8a3b1oGJVBzuuXyPCdE73eaftN8SlFe0xhl1Dn6P6fFYLr8h9M
+         wSwA==
+X-Gm-Message-State: AOAM532eLXx/WTvrzVno8sVopEdfTPqpxeOfTh1qOkC6bVFPU6cAj9gK
+        kYC14hWQh0J4dhXZT3ec23g6O6ypiuq2V0v1XQA=
+X-Google-Smtp-Source: ABdhPJxS/Z+apTdE0WQ6bPYGw6++qlGcLnKdz7x21L/EzsLZbWrHnjX3I5xtwTqUPWm4nP5ujlndUqAZNv9u8jVBwXo=
+X-Received: by 2002:ac2:43c1:: with SMTP id u1mr2721801lfl.38.1611089657945;
+ Tue, 19 Jan 2021 12:54:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=y
-Content-Transfer-Encoding: 8bit
+References: <20210119102501.511-1-glin@suse.com>
+In-Reply-To: <20210119102501.511-1-glin@suse.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 19 Jan 2021 12:54:06 -0800
+Message-ID: <CAADnVQLx3cEBNYPHtjE1Hpz393U8R_2xkgzF4Fsm8iNd7GguUw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] bpf,x64: implement jump padding in jit
+To:     Gary Lin <glin@suse.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Eric Dumazet <eric.dumazet@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        andreas.taschner@suse.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-This series introduce XDP multi-buffer support. The mvneta driver is
-the first to support these new "non-linear" xdp_{buff,frame}. Reviewers
-please focus on how these new types of xdp_{buff,frame} packets
-traverse the different layers and the layout design. It is on purpose
-that BPF-helpers are kept simple, as we don't want to expose the
-internal layout to allow later changes.
+On Tue, Jan 19, 2021 at 2:25 AM Gary Lin <glin@suse.com> wrote:
+>
+> This patch series implements jump padding to x64 jit to cover some
+> corner cases that used to consume more than 20 jit passes and caused
+> failure.
+>
+> v4:
+>   - Add the detailed comments about the possible padding bytes
+>   - Add the second test case which triggers jmp_cond padding and imm32 nop
+>     jmp padding.
+>   - Add the new test case as another subprog
 
-For now, to keep the design simple and to maintain performance, the XDP
-BPF-prog (still) only have access to the first-buffer. It is left for
-later (another patchset) to add payload access across multiple buffers.
-This patchset should still allow for these future extensions. The goal
-is to lift the XDP MTU restriction that comes with XDP, but maintain
-same performance as before.
-
-The main idea for the new multi-buffer layout is to reuse the same
-layout used for non-linear SKB. We introduced a "xdp_shared_info" data
-structure at the end of the first buffer to link together subsequent buffers.
-xdp_shared_info will alias skb_shared_info allowing to keep most of the frags
-in the same cache-line (while with skb_shared_info only the first fragment will
-be placed in the first "shared_info" cache-line). Moreover we introduced some
-xdp_shared_info helpers aligned to skb_frag* ones.
-Converting xdp_frame to SKB and deliver it to the network stack is shown in
-cpumap code (patch 7/8). Building the SKB, the xdp_shared_info structure
-will be converted in a skb_shared_info one.
-
-A multi-buffer bit (mb) has been introduced in xdp_{buff,frame} structure
-to notify the bpf/network layer if this is a xdp multi-buffer frame (mb = 1)
-or not (mb = 0).
-The mb bit will be set by a xdp multi-buffer capable driver only for
-non-linear frames maintaining the capability to receive linear frames
-without any extra cost since the xdp_shared_info structure at the end
-of the first buffer will be initialized only if mb is set.
-
-Typical use cases for this series are:
-- Jumbo-frames
-- Packet header split (please see Google’s use-case @ NetDevConf 0x14, [0])
-- TSO
-
-bpf_xdp_adjust_tail helper has been modified to take info account xdp
-multi-buff frames.
-
-More info about the main idea behind this approach can be found here [1][2].
-
-Changes since v5:
-- rebase on top of bpf-next
-- initialize mb bit in xdp_init_buff() and drop per-driver initialization
-- drop xdp->mb initialization in xdp_convert_zc_to_xdp_frame()
-- postpone introduction of frame_length field in XDP ctx to another series
-- minor changes
-
-Changes since v4:
-- rebase ontop of bpf-next
-- introduce xdp_shared_info to build xdp multi-buff instead of using the
-  skb_shared_info struct
-- introduce frame_length in xdp ctx
-- drop previous bpf helpers
-- fix bpf_xdp_adjust_tail for xdp multi-buff
-- introduce xdp multi-buff self-tests for bpf_xdp_adjust_tail
-- fix xdp_return_frame_bulk for xdp multi-buff
-
-Changes since v3:
-- rebase ontop of bpf-next
-- add patch 10/13 to copy back paged data from a xdp multi-buff frame to
-  userspace buffer for xdp multi-buff selftests
-
-Changes since v2:
-- add throughput measurements
-- drop bpf_xdp_adjust_mb_header bpf helper
-- introduce selftest for xdp multibuffer
-- addressed comments on bpf_xdp_get_frags_count
-- introduce xdp multi-buff support to cpumaps
-
-Changes since v1:
-- Fix use-after-free in xdp_return_{buff/frame}
-- Introduce bpf helpers
-- Introduce xdp_mb sample program
-- access skb_shared_info->nr_frags only on the last fragment
-
-Changes since RFC:
-- squash multi-buffer bit initialization in a single patch
-- add mvneta non-linear XDP buff support for tx side
-
-[0] https://netdevconf.info/0x14/session.html?talk-the-path-to-tcp-4k-mtu-and-rx-zerocopy
-[1] https://github.com/xdp-project/xdp-project/blob/master/areas/core/xdp-multi-buffer01-design.org
-[2] https://netdevconf.info/0x14/session.html?tutorial-add-XDP-support-to-a-NIC-driver (XDPmulti-buffers section)
-
-Eelco Chaudron (1):
-  bpf: add multi-buff support to the bpf_xdp_adjust_tail() API
-
-Lorenzo Bianconi (7):
-  xdp: introduce mb in xdp_buff/xdp_frame
-  xdp: add xdp_shared_info data structure
-  net: mvneta: update mb bit before passing the xdp buffer to eBPF layer
-  xdp: add multi-buff support to xdp_return_{buff/frame}
-  net: mvneta: add multi buffer support to XDP_TX
-  net: mvneta: enable jumbo frames for XDP
-  net: xdp: add multi-buff support to xdp_build_skb_from_fram
-
- drivers/net/ethernet/marvell/mvneta.c | 182 +++++++++++++++-----------
- include/net/xdp.h                     |  88 +++++++++++--
- net/core/filter.c                     |  63 +++++++++
- net/core/xdp.c                        | 102 ++++++++++++++-
- 4 files changed, 349 insertions(+), 86 deletions(-)
-
--- 
-2.29.2
-
+Applied. Thanks a ton for all the hard work you put into it.
