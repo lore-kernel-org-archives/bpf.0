@@ -2,92 +2,129 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.0
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 179AEC433DB
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 15:41:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id BFD71C433DB
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 15:42:06 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id CC67123135
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 15:41:37 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 8C28D2313F
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 15:42:06 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389869AbhASPlX (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Jan 2021 10:41:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39816 "EHLO
+        id S2389623AbhASPlQ (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Jan 2021 10:41:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391650AbhASPlD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Jan 2021 10:41:03 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C09C061574;
-        Tue, 19 Jan 2021 07:40:21 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id s24so1807502wmj.0;
-        Tue, 19 Jan 2021 07:40:21 -0800 (PST)
+        with ESMTP id S2390471AbhASPhd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Jan 2021 10:37:33 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB95C0613C1;
+        Tue, 19 Jan 2021 07:37:14 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id n11so22411441lji.5;
+        Tue, 19 Jan 2021 07:37:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=bboU+fHH/ysuT6EbuYfARXUyNXDaTGB+7EjKzd2M5n0=;
-        b=kxzYmlH/85DeW8jWnMBtK3+mbJ/TAw3R0yZyjUkk7hoPJqRC/u3MzMph4Zwh0c85sE
-         HALeN7nm2GkL9uRT2+jxZ4c5OvDD1qVfF5y9C6N1x8WcDFhQuvjwoZOgv53fUaZL/ST5
-         eaPyIKHrso/vj59dJ3MNggFTBqHFNYEMk+/dmPsteHnC+Im/q82jDyM4rJqVhaJt1K+o
-         TafbLAVOa6dgk2W1BrZdbwQyohrvkF1pQ690pduAH3cGK23I//+Bv2yKUUPRxbHFrjgd
-         q0S3jtyKBcRkRF5jChz+NXc+DOJGtWyp3giD6RL0qlIredJ0y7K85D4dmzq4Uamf0sCY
-         Z/9A==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=DIoaswv7B1iicUnLwGWig+2UbyTxVZWzlqhoeUIxenk=;
+        b=mdkg7Xf/mF9/3YZkHh4VJhw3javsqFsQGshRJwz6KU9dL2RzX3QV37YVZ3LRm9C7m6
+         uu23PZJjIy781LCgs+i2Syb16xJ3pnhNcrmkXFqFocnfVnAWEOEgasOJFGOurv13Zsyg
+         KNQyGQJb3G7Z719Nd1rLNKgNg/zciqRR0wR2AlgsKuhBqdRRAW5HOiNk1iaFYDBwiXTo
+         pjjwztAmSOUw91dPELL+jd3AHdXCdTe2t2405YWbg/7FvIsqt0jjmL6easZKpNjt+NTO
+         wkwKuOTHiDRdQ06fzv3ody8QcXUyEpbLcJ+F9NY23D2qCXl6eaNqb8e03czvavyneAhm
+         H1jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bboU+fHH/ysuT6EbuYfARXUyNXDaTGB+7EjKzd2M5n0=;
-        b=Uht7prQUjPt72H0KIIxKGIZF3XoH0W1/L1xQFbt2Dqki5MdpNEPp6AKdlP9zU3n7ov
-         rliwYwlWco5OWHtd0f6h4GyYMj7H06VaomFPj0TofV0+Z16aH79vSmMxSebOwMBJfUWc
-         /+klc+Q7Hoevg10qeGpwbARJBAxAfjSEP2d3rNn9gIhWK9i8K67roy0kcT6T6+E9Mo4/
-         H04Tdnlqlb3GTjGfRTwGELFHdPpeWDEDCtKT/jzVIl8Nfv1v+XGkzIRTqRvLoyOwSm0W
-         f7sRBoAKJpn+mLSdkBtItWXBVHh2QtAk3AMyeZEeO2hmfYY8s/9FokRIu4X22/PxRsI8
-         7Jvw==
-X-Gm-Message-State: AOAM533UtbxurWPGOJRIQGhjs9NpXoH1FD47r9K0lRkfl1UlOMI4Ub4N
-        iDNWlsLpA49jNHZf3E/5Jg9OXpQ2rgSwwdngrfQ=
-X-Google-Smtp-Source: ABdhPJzjVw5Aw4AI+bdyJ7XcyB/jrfakqsFveTfBn7m7FpLK5vyvBfmXxlHn+rVzAK9sSTu5eg5tGkPy/RBtghl7cZc=
-X-Received: by 2002:a7b:c20b:: with SMTP id x11mr192503wmi.107.1611070820181;
- Tue, 19 Jan 2021 07:40:20 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=DIoaswv7B1iicUnLwGWig+2UbyTxVZWzlqhoeUIxenk=;
+        b=JvTf6Nt6Bt8Rn0gMVUqA1O2oDKAGmLJENFLzarm9Mqrumq23A08CzDuZxBs/FyS+Qp
+         X3WUZ6jm78NTiUFDMpH120ZYZz4HSl5yk53mWXvBbArHiDNOLbrjl0rM7ay76E/mT0Rx
+         xl9vzaJLdYvon99XaLewnCjNNXgNx45xsNrWkzc/r3AQ9e9KgzWsLLIz7ypA55tE+U3d
+         qSjXOH9EUwknX4wNqmTn01k2tvk/97i/k6jSgcI4W6pSlcgRzY844AGYQJOIK3Acf5y3
+         RlDYsCOwhHHJU04ZOFxReDnjmkRgQ/Vck61gEOYy6Up0Aff+Fv++RQEtgIgnbhFOyWtq
+         Ed+Q==
+X-Gm-Message-State: AOAM531sEIaMqj1YNXyhFB13/I+tKJ/YxRaX4qJO5UCjmwdbDT55BToZ
+        O0XcBbSg7e6LP+fcepJxx98=
+X-Google-Smtp-Source: ABdhPJyJ/Ai9nwKCt3NL3n+W2vMm+C9wFVtVTHo+KMgTmDmjPggqJlHXeeL8SCwaDtgo0/WqInjHDg==
+X-Received: by 2002:a2e:80d4:: with SMTP id r20mr2096957ljg.495.1611070631694;
+        Tue, 19 Jan 2021 07:37:11 -0800 (PST)
+Received: from btopel-mobl.ger.intel.com (c213-102-90-208.bredband.comhem.se. [213.102.90.208])
+        by smtp.gmail.com with ESMTPSA id z2sm2309075lfd.142.2021.01.19.07.37.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Jan 2021 07:37:11 -0800 (PST)
+From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
+        kuba@kernel.org, jonathan.lemon@gmail.com, maximmi@nvidia.com,
+        davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
+        ciara.loftus@intel.com, weqaar.a.janjua@intel.com
+Subject: [PATCH bpf-next 3/8] xsk: fold xp_assign_dev and __xp_assign_dev
+Date:   Tue, 19 Jan 2021 16:36:50 +0100
+Message-Id: <20210119153655.153999-4-bjorn.topel@gmail.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20210119153655.153999-1-bjorn.topel@gmail.com>
+References: <20210119153655.153999-1-bjorn.topel@gmail.com>
 MIME-Version: 1.0
-References: <20210119153655.153999-1-bjorn.topel@gmail.com> <20210119153655.153999-8-bjorn.topel@gmail.com>
-In-Reply-To: <20210119153655.153999-8-bjorn.topel@gmail.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Tue, 19 Jan 2021 16:40:08 +0100
-Message-ID: <CAJ+HfNgQGSJErZ19nOobW80bnSaf64yWJpH3h-1TmQSQ7cB73Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 7/8] selftest/bpf: add XDP socket tests for
- bpf_redirect_{xsk, map}()
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>, maximmi@nvidia.com,
-        David Miller <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Ciara Loftus <ciara.loftus@intel.com>,
-        Weqaar Janjua <weqaar.a.janjua@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, 19 Jan 2021 at 16:37, Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com>=
- wrote:
->
-> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
->
-> Add support for externally loaded XDP programs to
-> xdpxceiver/test_xsk.sh, so that bpf_redirect_xsk() and
-> bpf_redirect_map() can be exercised.
->
+From: Björn Töpel <bjorn.topel@intel.com>
 
-Ah, crap. Forgot two files. Will resend.
+Fold xp_assign_dev and __xp_assign_dev. The former directly calls the
+latter.
 
-Bj=C3=B6rn
+Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Signed-off-by: Björn Töpel <bjorn.topel@intel.com>
+---
+ net/xdp/xsk_buff_pool.c | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
+
+diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
+index 20598eea658c..8de01aaac4a0 100644
+--- a/net/xdp/xsk_buff_pool.c
++++ b/net/xdp/xsk_buff_pool.c
+@@ -119,8 +119,8 @@ static void xp_disable_drv_zc(struct xsk_buff_pool *pool)
+ 	}
+ }
+ 
+-static int __xp_assign_dev(struct xsk_buff_pool *pool,
+-			   struct net_device *netdev, u16 queue_id, u16 flags)
++int xp_assign_dev(struct xsk_buff_pool *pool,
++		  struct net_device *netdev, u16 queue_id, u16 flags)
+ {
+ 	bool force_zc, force_copy;
+ 	struct netdev_bpf bpf;
+@@ -191,12 +191,6 @@ static int __xp_assign_dev(struct xsk_buff_pool *pool,
+ 	return err;
+ }
+ 
+-int xp_assign_dev(struct xsk_buff_pool *pool, struct net_device *dev,
+-		  u16 queue_id, u16 flags)
+-{
+-	return __xp_assign_dev(pool, dev, queue_id, flags);
+-}
+-
+ int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_umem *umem,
+ 			 struct net_device *dev, u16 queue_id)
+ {
+@@ -210,7 +204,7 @@ int xp_assign_dev_shared(struct xsk_buff_pool *pool, struct xdp_umem *umem,
+ 	if (pool->uses_need_wakeup)
+ 		flags |= XDP_USE_NEED_WAKEUP;
+ 
+-	return __xp_assign_dev(pool, dev, queue_id, flags);
++	return xp_assign_dev(pool, dev, queue_id, flags);
+ }
+ 
+ void xp_clear_dev(struct xsk_buff_pool *pool)
+-- 
+2.27.0
+
