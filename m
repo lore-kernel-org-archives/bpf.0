@@ -2,68 +2,40 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-10.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
 	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E11C7C4332E
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87BC1C433E0
 	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:45:57 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C44852313A
+	by mail.kernel.org (Postfix) with ESMTP id 5B02C23135
 	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:45:57 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404090AbhASOlW (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Jan 2021 09:41:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:20177 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2405144AbhASLEI (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Tue, 19 Jan 2021 06:04:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611054156;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kiLt994IXzu+B0F7u6tIkfDBkyxqYHQz7CiZ5/RLVUY=;
-        b=i1Z2Qt0iHD3SdVLvWMAPrAQNaqpjSIxHwfkN6nMSBWadiJuYPFqs8W/ixmPgWpJW8hckD/
-        EEu7MF/vKDsLeGYTGysoND3dZiVj+pX/dV2Bs0IcY9I5K1DEQ7M+xNfNh6npj/2lSlwcoY
-        mV6C4uAnnVe+4NTmVQAIdn0BY6usoBE=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-149-8_Nt_AkZOpyeGFXUgPSkVA-1; Tue, 19 Jan 2021 06:02:34 -0500
-X-MC-Unique: 8_Nt_AkZOpyeGFXUgPSkVA-1
-Received: by mail-wr1-f70.google.com with SMTP id d7so559529wri.23
-        for <bpf@vger.kernel.org>; Tue, 19 Jan 2021 03:02:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kiLt994IXzu+B0F7u6tIkfDBkyxqYHQz7CiZ5/RLVUY=;
-        b=Tc/PIjJgZ/uSE6zrbtoQW7ax2q/kZ0R3cDTSxrjzyaCpwbfVK7CWWoTip2eJthv2dc
-         1kFsmf18uXXfFhTLE8ebuWDZq0+/xRoU1+nQ6OyXkR1XJPa6+guwraPy6ag+7xjuS0Co
-         jhV53wiCZ4zMGAimrAU9H5ZqkGiz4ci9T6uzFhHIhOacFP5Vv+YH938aZfIdicpxEV+H
-         d6JoBztvW9rhEoIjGT+FibjnoItgQdN39n4G85dGYPI9cZ84LTSzuhvuUlpHVIXwpfik
-         DhD9BvSuuWFwHVhtBwFTA/lBFogchcbghSUlelSkOJZRMa0UCxTsE++7gX1sL8LcUlUm
-         anmQ==
-X-Gm-Message-State: AOAM530iHtVPL8l6lmhPZ3pCtfDOvetN2OO8pcuscipiJ774FS8C9vGg
-        FUcHoHw8VLbWgelxSvVymyKYVPt73Nu2MXlrhzoEqWNIG70cIAmCos/PwIpy/Diqhyxwo3IPLc1
-        b+bMAFh7V+ZSh
-X-Received: by 2002:a5d:4d8b:: with SMTP id b11mr3766986wru.215.1611054153339;
-        Tue, 19 Jan 2021 03:02:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxsn0QhhwxM0iUt4w960LJvOY9PG5C4qB5nxwYI6dFa+qrhGOvysE4HQc58/mKABJu2FbKe7Q==
-X-Received: by 2002:a5d:4d8b:: with SMTP id b11mr3766950wru.215.1611054153065;
-        Tue, 19 Jan 2021 03:02:33 -0800 (PST)
-Received: from redhat.com (bzq-79-177-39-148.red.bezeqint.net. [79.177.39.148])
-        by smtp.gmail.com with ESMTPSA id p12sm4133067wmi.3.2021.01.19.03.02.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Jan 2021 03:02:32 -0800 (PST)
-Date:   Tue, 19 Jan 2021 06:02:29 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
+        id S2404261AbhASOl4 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Jan 2021 09:41:56 -0500
+Received: from mail-03.mail-europe.com ([91.134.188.129]:46652 "EHLO
+        mail-03.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390647AbhASMsd (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Jan 2021 07:48:33 -0500
+Date:   Tue, 19 Jan 2021 12:44:57 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
+        t=1611060302; bh=8i/A0q9OU25J4k8HUwD1TaII3Vs+nnWI9Lml+XDwKug=;
+        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
+        b=Q+Tt2M51rfYOVO8zl4aB+MTAHUiMcXgCQPEXBySPoWIDSXwsVcOwwjTVNLrE7kPsB
+         QgW3vyoWa2O8oKRH7dvbTp7JOdyQYH4+EQ7gMt+53PalH3nLbq+8t6FHGqD4P5nSXh
+         tWsJyJPki20NVyJavck6trqTvT1OA4fBCXDB6sFMcF4nGP3RmlKJtMGDVVF9uelzOk
+         gi0bhzyqxmgnuDBg2rhZwiEps3VfVFtazEIHlUsTbJSDGnbblzU0EZv/g7LD35KRJi
+         H7JUtkcav7AoTiO/8i2dAYxD1z2pvR68l9N+KeRO7E/u68BmsFZA4x6oisV4nqE0p2
+         E7FJJSqH1OMKQ==
 To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc:     netdev@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
+From:   Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>, bjorn.topel@intel.com,
         Magnus Karlsson <magnus.karlsson@intel.com>,
         Jonathan Lemon <jonathan.lemon@gmail.com>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -74,105 +46,301 @@ Cc:     netdev@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         KP Singh <kpsingh@kernel.org>,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 0/3] xsk: build skb by page
-Message-ID: <20210119060140-mutt-send-email-mst@kernel.org>
-References: <20210119045004-mutt-send-email-mst@kernel.org>
- <1611053609.502882-1-xuanzhuo@linux.alibaba.com>
+        Willem de Bruijn <willemb@google.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Antoine Tenart <atenart@kernel.org>,
+        Michal Kubecek <mkubecek@suse.cz>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Meir Lichtinger <meirl@mellanox.com>,
+        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Reply-To: Alexander Lobakin <alobakin@pm.me>
+Subject: Re: [PATCH bpf-next] xsk: build skb by page
+Message-ID: <20210119124406.2895-1-alobakin@pm.me>
+In-Reply-To: <579fa463bba42ac71591540a1811dca41d725350.1610764948.git.xuanzhuo@linux.alibaba.com>
+References: <579fa463bba42ac71591540a1811dca41d725350.1610764948.git.xuanzhuo@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1611053609.502882-1-xuanzhuo@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 19, 2021 at 06:53:29PM +0800, Xuan Zhuo wrote:
-> On Tue, 19 Jan 2021 04:50:30 -0500, Michael S. Tsirkin <mst@redhat.com> wrote:
-> > On Tue, Jan 19, 2021 at 05:45:09PM +0800, Xuan Zhuo wrote:
-> > > v2:
-> > >     1. add priv_flags IFF_TX_SKB_NO_LINEAR instead of netdev_feature
-> > >     2. split the patch to three:
-> > >         a. add priv_flags IFF_TX_SKB_NO_LINEAR
-> > >         b. virtio net add priv_flags IFF_TX_SKB_NO_LINEAR
-> > >         c. When there is support this flag, construct skb without linear space
-> > >     3. use ERR_PTR() and PTR_ERR() to handle the err
-> > >
-> > >
-> > > v1 message log:
-> > > ---------------
-> > >
-> > > This patch is used to construct skb based on page to save memory copy
-> > > overhead.
-> > >
-> > > This has one problem:
-> > >
-> > > We construct the skb by fill the data page as a frag into the skb. In
-> > > this way, the linear space is empty, and the header information is also
-> > > in the frag, not in the linear space, which is not allowed for some
-> > > network cards. For example, Mellanox Technologies MT27710 Family
-> > > [ConnectX-4 Lx] will get the following error message:
-> > >
-> > >     mlx5_core 0000:3b:00.1 eth1: Error cqe on cqn 0x817, ci 0x8, qn 0x1dbb, opcode 0xd, syndrome 0x1, vendor syndrome 0x68
-> > >     00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > >     00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > >     00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > >     00000030: 00 00 00 00 60 10 68 01 0a 00 1d bb 00 0f 9f d2
-> > >     WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0xf, len: 64
-> > >     00000000: 00 00 0f 0a 00 1d bb 03 00 00 00 08 00 00 00 00
-> > >     00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > >     00000020: 00 00 00 2b 00 08 00 00 00 00 00 05 9e e3 08 00
-> > >     00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > >     mlx5_core 0000:3b:00.1 eth1: ERR CQE on SQ: 0x1dbb
-> > >
-> > > I also tried to use build_skb to construct skb, but because of the
-> > > existence of skb_shinfo, it must be behind the linear space, so this
-> > > method is not working. We can't put skb_shinfo on desc->addr, it will be
-> > > exposed to users, this is not safe.
-> > >
-> > > Finally, I added a feature NETIF_F_SKB_NO_LINEAR to identify whether the
-> > > network card supports the header information of the packet in the frag
-> > > and not in the linear space.
-> > >
-> > > ---------------- Performance Testing ------------
-> > >
-> > > The test environment is Aliyun ECS server.
-> > > Test cmd:
-> > > ```
-> > > xdpsock -i eth0 -t  -S -s <msg size>
-> > > ```
-> > >
-> > > Test result data:
-> > >
-> > > size    64      512     1024    1500
-> > > copy    1916747 1775988 1600203 1440054
-> > > page    1974058 1953655 1945463 1904478
-> > > percent 3.0%    10.0%   21.58%  32.3%
-> >
-> > Just making sure, are these test results with v2?
-> 
-> The data was tested at v1,
-> but v2 did not modify the performance-related code.
-> 
-> Thanks.
+From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Date: Sat, 16 Jan 2021 10:44:53 +0800
 
-Looks like v1 wouldn't even build, or did I miss anything?
-It would be nicer if you retested it ...
+> This patch is used to construct skb based on page to save memory copy
+> overhead.
+>=20
+> This has one problem:
+>=20
+> We construct the skb by fill the data page as a frag into the skb. In
+> this way, the linear space is empty, and the header information is also
+> in the frag, not in the linear space, which is not allowed for some
+> network cards. For example, Mellanox Technologies MT27710 Family
+> [ConnectX-4 Lx] will get the following error message:
+>=20
+>     mlx5_core 0000:3b:00.1 eth1: Error cqe on cqn 0x817, ci 0x8, qn 0x1db=
+b, opcode 0xd, syndrome 0x1, vendor syndrome 0x68
+>     00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>     00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>     00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>     00000030: 00 00 00 00 60 10 68 01 0a 00 1d bb 00 0f 9f d2
+>     WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0xf, len: 64
+>     00000000: 00 00 0f 0a 00 1d bb 03 00 00 00 08 00 00 00 00
+>     00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>     00000020: 00 00 00 2b 00 08 00 00 00 00 00 05 9e e3 08 00
+>     00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>     mlx5_core 0000:3b:00.1 eth1: ERR CQE on SQ: 0x1dbb
+>=20
+> I also tried to use build_skb to construct skb, but because of the
+> existence of skb_shinfo, it must be behind the linear space, so this
+> method is not working. We can't put skb_shinfo on desc->addr, it will be
+> exposed to users, this is not safe.
+>=20
+> Finally, I added a feature NETIF_F_SKB_NO_LINEAR to identify whether the
+> network card supports the header information of the packet in the frag
+> and not in the linear space.
+>=20
+> ---------------- Performance Testing ------------
+>=20
+> The test environment is Aliyun ECS server.
+> Test cmd:
+> ```
+> xdpsock -i eth0 -t  -S -s <msg size>
+> ```
+>=20
+> Test result data:
+>=20
+> size    64      512     1024    1500
+> copy    1916747 1775988 1600203 1440054
+> page    1974058 1953655 1945463 1904478
+> percent 3.0%    10.0%   21.58%  32.3%
+>=20
+> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+> Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
+> ---
+>  drivers/net/virtio_net.c        |   2 +-
+>  include/linux/netdev_features.h |   5 +-
+>  net/ethtool/common.c            |   1 +
+>  net/xdp/xsk.c                   | 108 +++++++++++++++++++++++++++++++++-=
+------
+>  4 files changed, 97 insertions(+), 19 deletions(-)
+>=20
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index 4ecccb8..841a331 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -2985,7 +2985,7 @@ static int virtnet_probe(struct virtio_device *vdev=
+)
+>  =09/* Set up network device as normal. */
+>  =09dev->priv_flags |=3D IFF_UNICAST_FLT | IFF_LIVE_ADDR_CHANGE;
+>  =09dev->netdev_ops =3D &virtnet_netdev;
+> -=09dev->features =3D NETIF_F_HIGHDMA;
+> +=09dev->features =3D NETIF_F_HIGHDMA | NETIF_F_SKB_NO_LINEAR;
+> =20
+>  =09dev->ethtool_ops =3D &virtnet_ethtool_ops;
+>  =09SET_NETDEV_DEV(dev, &vdev->dev);
+> diff --git a/include/linux/netdev_features.h b/include/linux/netdev_featu=
+res.h
+> index 934de56..8dd28e2 100644
+> --- a/include/linux/netdev_features.h
+> +++ b/include/linux/netdev_features.h
+> @@ -85,9 +85,11 @@ enum {
+> =20
+>  =09NETIF_F_HW_MACSEC_BIT,=09=09/* Offload MACsec operations */
+> =20
+> +=09NETIF_F_SKB_NO_LINEAR_BIT,=09/* Allow skb linear is empty */
+> +
+>  =09/*
+>  =09 * Add your fresh new feature above and remember to update
+> -=09 * netdev_features_strings[] in net/core/ethtool.c and maybe
+> +=09 * netdev_features_strings[] in net/ethtool/common.c and maybe
+>  =09 * some feature mask #defines below. Please also describe it
+>  =09 * in Documentation/networking/netdev-features.rst.
+>  =09 */
+> @@ -157,6 +159,7 @@ enum {
+>  #define NETIF_F_GRO_FRAGLIST=09__NETIF_F(GRO_FRAGLIST)
+>  #define NETIF_F_GSO_FRAGLIST=09__NETIF_F(GSO_FRAGLIST)
+>  #define NETIF_F_HW_MACSEC=09__NETIF_F(HW_MACSEC)
+> +#define NETIF_F_SKB_NO_LINEAR=09__NETIF_F(SKB_NO_LINEAR)
+> =20
+>  /* Finds the next feature with the highest number of the range of start =
+till 0.
+>   */
+> diff --git a/net/ethtool/common.c b/net/ethtool/common.c
+> index 24036e3..2f3d309 100644
+> --- a/net/ethtool/common.c
+> +++ b/net/ethtool/common.c
+> @@ -68,6 +68,7 @@
+>  =09[NETIF_F_HW_TLS_RX_BIT] =3D=09 "tls-hw-rx-offload",
+>  =09[NETIF_F_GRO_FRAGLIST_BIT] =3D=09 "rx-gro-list",
+>  =09[NETIF_F_HW_MACSEC_BIT] =3D=09 "macsec-hw-offload",
+> +=09[NETIF_F_SKB_NO_LINEAR_BIT] =3D=09 "skb-no-linear",
+>  };
+> =20
+>  const char
+> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
+> index 8037b04..94d17dc 100644
+> --- a/net/xdp/xsk.c
+> +++ b/net/xdp/xsk.c
+> @@ -430,6 +430,95 @@ static void xsk_destruct_skb(struct sk_buff *skb)
+>  =09sock_wfree(skb);
+>  }
+> =20
+> +static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
+> +=09=09=09=09=09      struct xdp_desc *desc)
+> +{
+> +=09u32 len, offset, copy, copied;
+> +=09struct sk_buff *skb;
+> +=09struct page *page;
+> +=09char *buffer;
+> +=09int err, i;
+> +=09u64 addr;
+> +
+> +=09skb =3D sock_alloc_send_skb(&xs->sk, 0, 1, &err);
+> +=09if (unlikely(!skb))
+> +=09=09return NULL;
+> +
+> +=09addr =3D desc->addr;
+> +=09len =3D desc->len;
+> +
+> +=09buffer =3D xsk_buff_raw_get_data(xs->pool, addr);
+> +=09offset =3D offset_in_page(buffer);
+> +=09addr =3D buffer - (char *)xs->pool->addrs;
+> +
+> +=09for (copied =3D 0, i =3D 0; copied < len; ++i) {
 
-> 
-> >
-> > >
-> > > Xuan Zhuo (3):
-> > >   net: add priv_flags for allow tx skb without linear
-> > >   virtio-net: support IFF_TX_SKB_NO_LINEAR
-> > >   xsk: build skb by page
-> > >
-> > >  drivers/net/virtio_net.c  |   3 +-
-> > >  include/linux/netdevice.h |   3 ++
-> > >  net/xdp/xsk.c             | 112 ++++++++++++++++++++++++++++++++++++++--------
-> > >  3 files changed, 99 insertions(+), 19 deletions(-)
-> > >
-> > > --
-> > > 1.8.3.1
-> >
+Just noticed. i++ would be less confusing here. You start to fill
+skb frags from frag 0 anyway.
+
+> +=09=09page =3D xs->pool->umem->pgs[addr >> PAGE_SHIFT];
+> +
+> +=09=09get_page(page);
+> +
+> +=09=09copy =3D min((u32)(PAGE_SIZE - offset), len - copied);
+
+Also. It's better to use min_t() in this case:
+
+copy =3D min_t(u32, PAGE_SIZE - offset, len - copied);
+
+instead of manual casting.
+
+> +=09=09skb_fill_page_desc(skb, i, page, offset, copy);
+> +
+> +=09=09copied +=3D copy;
+> +=09=09addr +=3D copy;
+> +=09=09offset =3D 0;
+> +=09}
+> +
+> +=09skb->len +=3D len;
+> +=09skb->data_len +=3D len;
+> +=09skb->truesize +=3D len;
+> +
+> +=09refcount_add(len, &xs->sk.sk_wmem_alloc);
+> +
+> +=09return skb;
+> +}
+> +
+> +static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
+> +=09=09=09=09     struct xdp_desc *desc, int *err)
+> +{
+> +=09struct sk_buff *skb;
+> +
+> +=09if (xs->dev->features & NETIF_F_SKB_NO_LINEAR) {
+> +=09=09skb =3D xsk_build_skb_zerocopy(xs, desc);
+> +=09=09if (unlikely(!skb)) {
+> +=09=09=09*err =3D -ENOMEM;
+> +=09=09=09return NULL;
+> +=09=09}
+> +=09} else {
+> +=09=09char *buffer;
+> +=09=09u64 addr;
+> +=09=09u32 len;
+> +=09=09int err;
+> +
+> +=09=09len =3D desc->len;
+> +=09=09skb =3D sock_alloc_send_skb(&xs->sk, len, 1, &err);
+> +=09=09if (unlikely(!skb)) {
+> +=09=09=09*err =3D -ENOMEM;
+> +=09=09=09return NULL;
+> +=09=09}
+> +
+> +=09=09skb_put(skb, len);
+> +=09=09addr =3D desc->addr;
+> +=09=09buffer =3D xsk_buff_raw_get_data(xs->pool, desc->addr);
+> +=09=09err =3D skb_store_bits(skb, 0, buffer, len);
+> +
+> +=09=09if (unlikely(err)) {
+> +=09=09=09kfree_skb(skb);
+> +=09=09=09*err =3D -EINVAL;
+> +=09=09=09return NULL;
+> +=09=09}
+> +=09}
+> +
+> +=09skb->dev =3D xs->dev;
+> +=09skb->priority =3D xs->sk.sk_priority;
+> +=09skb->mark =3D xs->sk.sk_mark;
+> +=09skb_shinfo(skb)->destructor_arg =3D (void *)(long)desc->addr;
+> +=09skb->destructor =3D xsk_destruct_skb;
+> +
+> +=09return skb;
+> +}
+> +
+>  static int xsk_generic_xmit(struct sock *sk)
+>  {
+>  =09struct xdp_sock *xs =3D xdp_sk(sk);
+> @@ -446,43 +535,28 @@ static int xsk_generic_xmit(struct sock *sk)
+>  =09=09goto out;
+> =20
+>  =09while (xskq_cons_peek_desc(xs->tx, &desc, xs->pool)) {
+> -=09=09char *buffer;
+> -=09=09u64 addr;
+> -=09=09u32 len;
+> -
+>  =09=09if (max_batch-- =3D=3D 0) {
+>  =09=09=09err =3D -EAGAIN;
+>  =09=09=09goto out;
+>  =09=09}
+> =20
+> -=09=09len =3D desc.len;
+> -=09=09skb =3D sock_alloc_send_skb(sk, len, 1, &err);
+> +=09=09skb =3D xsk_build_skb(xs, &desc, &err);
+>  =09=09if (unlikely(!skb))
+>  =09=09=09goto out;
+> =20
+> -=09=09skb_put(skb, len);
+> -=09=09addr =3D desc.addr;
+> -=09=09buffer =3D xsk_buff_raw_get_data(xs->pool, addr);
+> -=09=09err =3D skb_store_bits(skb, 0, buffer, len);
+>  =09=09/* This is the backpressure mechanism for the Tx path.
+>  =09=09 * Reserve space in the completion queue and only proceed
+>  =09=09 * if there is space in it. This avoids having to implement
+>  =09=09 * any buffering in the Tx path.
+>  =09=09 */
+>  =09=09spin_lock_irqsave(&xs->pool->cq_lock, flags);
+> -=09=09if (unlikely(err) || xskq_prod_reserve(xs->pool->cq)) {
+> +=09=09if (xskq_prod_reserve(xs->pool->cq)) {
+>  =09=09=09spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
+>  =09=09=09kfree_skb(skb);
+>  =09=09=09goto out;
+>  =09=09}
+>  =09=09spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
+> =20
+> -=09=09skb->dev =3D xs->dev;
+> -=09=09skb->priority =3D sk->sk_priority;
+> -=09=09skb->mark =3D sk->sk_mark;
+> -=09=09skb_shinfo(skb)->destructor_arg =3D (void *)(long)desc.addr;
+> -=09=09skb->destructor =3D xsk_destruct_skb;
+> -
+>  =09=09err =3D __dev_direct_xmit(skb, xs->queue_id);
+>  =09=09if  (err =3D=3D NETDEV_TX_BUSY) {
+>  =09=09=09/* Tell user-space to retry the send */
+> --=20
+> 1.8.3.1
+
+Al
 
