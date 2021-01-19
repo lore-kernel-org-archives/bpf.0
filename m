@@ -2,78 +2,101 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.8 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CD86BC4332D
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:45:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 846F6C433E6
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:46:13 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id AA43921D7F
-	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:45:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 4C2C923134
+	for <bpf@archiver.kernel.org>; Tue, 19 Jan 2021 14:46:13 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404191AbhASOlw (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Tue, 19 Jan 2021 09:41:52 -0500
-Received: from foss.arm.com ([217.140.110.172]:54686 "EHLO foss.arm.com"
+        id S2390022AbhASOlC (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Tue, 19 Jan 2021 09:41:02 -0500
+Received: from foss.arm.com ([217.140.110.172]:47980 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390818AbhASMX5 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Tue, 19 Jan 2021 07:23:57 -0500
+        id S2389227AbhASJ7A (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Tue, 19 Jan 2021 04:59:00 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0FD7E113E;
-        Tue, 19 Jan 2021 04:22:46 -0800 (PST)
-Received: from e107158-lin.cambridge.arm.com (unknown [10.1.194.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B3C3C3F719;
-        Tue, 19 Jan 2021 04:22:44 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A97F41FB;
+        Tue, 19 Jan 2021 01:57:30 -0800 (PST)
+Received: from e107158-lin (e107158-lin.cambridge.arm.com [10.1.194.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 70A163F66E;
+        Tue, 19 Jan 2021 01:57:29 -0800 (PST)
+Date:   Tue, 19 Jan 2021 09:57:26 +0000
 From:   Qais Yousef <qais.yousef@arm.com>
-To:     netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+To:     Yonghong Song <yhs@fb.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
         Andrii Nakryiko <andrii@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Yonghong Song <yhs@fb.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Qais Yousef <qais.yousef@arm.com>
-Subject: [PATCH v3 bpf-next 0/2] Allow attaching to bare tracepoints
-Date:   Tue, 19 Jan 2021 12:22:35 +0000
-Message-Id: <20210119122237.2426878-1-qais.yousef@arm.com>
-X-Mailer: git-send-email 2.25.1
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 bpf-next 2/2] selftests: bpf: Add a new test for bare
+ tracepoints
+Message-ID: <20210119095726.obfhqanp6wmauzqs@e107158-lin>
+References: <20210116182133.2286884-1-qais.yousef@arm.com>
+ <20210116182133.2286884-3-qais.yousef@arm.com>
+ <e9d4b132-288d-594f-308c-132e89fcf63f@fb.com>
+ <20210118121818.muifeogh4hvakfeb@e107158-lin>
+ <fdda7117-e823-e240-4735-617a3df8a0cc@fb.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <fdda7117-e823-e240-4735-617a3df8a0cc@fb.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Changes in v3:
-	* Fix not returning error value correctly in
-	  trigger_module_test_write() (Yonghong)
-	* Add Yonghong acked-by to patch 1.
+Hi Yonghong
 
-Changes in v2:
-	* Fix compilation error. (Andrii)
-	* Make the new test use write() instead of read() (Andrii)
+On 01/18/21 09:48, Yonghong Song wrote:
+> The original patch code:
+> 
+> +static int trigger_module_test_write(int write_sz)
+> +{
+> +	int fd, err;
+> +	char *buf = malloc(write_sz);
+> +
+> +	if (!buf)
+> +		return -ENOMEM;
+> +
+> +	memset(buf, 'a', write_sz);
+> +	buf[write_sz-1] = '\0';
+> +
+> +	fd = open("/sys/kernel/bpf_testmod", O_WRONLY);
+> +	err = -errno;
+> +	if (CHECK(fd < 0, "testmod_file_open", "failed: %d\n", err))
+> +		goto out;
+> +
+> +	write(fd, buf, write_sz);
+> +	close(fd);
+> +out:
+> +	free(buf);
+> +
+> +	return 0;
+> +}
+> 
+> Even for "fd < 0" case, it "goto out" and "return 0". We should return
+> error code here instead of 0.
+> 
+> Second, "err = -errno" is set before checking fd < 0. If fd >= 0, err might
+> inherit an postive errno from previous failure.
+> In trigger_module_test_write(), it is okay since the err is only used
+> when fd < 0:
+>         err = -errno;
+>         if (CHECK(fd < 0, "testmod_file_open", "failed: %d\n", err))
+>                 return err;
+> 
+> My above rewrite intends to use "err" during final "return" statement,
+> so I put assignment of "err = -errno" inside the CHECK branch.
+> But there are different ways to implement this properly.
 
-Add some missing glue logic to teach bpf about bare tracepoints - tracepoints
-without any trace event associated with them.
+Okay I see now. Sorry I missed your point initially. I will fix and send v3.
 
-Bare tracepoints are declare with DECLARE_TRACE(). Full tracepoints are declare
-with TRACE_EVENT().
+Thanks
 
-BPF can attach to these tracepoints as RAW_TRACEPOINT() only as there're no
-events in tracefs created with them.
-
-Qais Yousef (2):
-  trace: bpf: Allow bpf to attach to bare tracepoints
-  selftests: bpf: Add a new test for bare tracepoints
-
- Documentation/bpf/bpf_design_QA.rst           |  6 +++++
- include/trace/bpf_probe.h                     | 12 +++++++--
- .../bpf/bpf_testmod/bpf_testmod-events.h      |  6 +++++
- .../selftests/bpf/bpf_testmod/bpf_testmod.c   | 21 ++++++++++++++-
- .../selftests/bpf/bpf_testmod/bpf_testmod.h   |  6 +++++
- .../selftests/bpf/prog_tests/module_attach.c  | 27 +++++++++++++++++++
- .../selftests/bpf/progs/test_module_attach.c  | 10 +++++++
- 7 files changed, 85 insertions(+), 3 deletions(-)
-
--- 
-2.25.1
-
+--
+Qais Yousef
