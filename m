@@ -2,177 +2,174 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-10.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 17996C433E6
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 15:39:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 43759C433E6
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 15:59:21 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D63F623382
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 15:39:36 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EFC102336D
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 15:59:18 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732183AbhATPjT (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Jan 2021 10:39:19 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:24855 "EHLO
+        id S2388904AbhATP67 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Jan 2021 10:58:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:55609 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2388531AbhATOy0 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 20 Jan 2021 09:54:26 -0500
+        by vger.kernel.org with ESMTP id S2388400AbhATP6z (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 20 Jan 2021 10:58:55 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611154379;
+        s=mimecast20190719; t=1611158243;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=X3ef/yWKjHQXxstlBAjxJ4gnAy5LKmoZd+GY3iLVlxo=;
-        b=SY5fdVI4FM7LNGfFqGwuly++QcotL6jrj8o0MCYrKYXZ/QfV/ORAodVs7CTa4pDXIduS65
-        SF62NwtwWoILehpeJlySZGWbC3/+wEz9fa1lcAIisLWk1pskxbQMrMCH48xsw96+SHdSAU
-        WyC5vc8U3CVjLIp4o4fcWYHATXFn6SY=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-60-OygoyQiKOZ-iF_v2OiktTg-1; Wed, 20 Jan 2021 09:52:57 -0500
-X-MC-Unique: OygoyQiKOZ-iF_v2OiktTg-1
-Received: by mail-ej1-f70.google.com with SMTP id k3so7551657ejr.16
-        for <bpf@vger.kernel.org>; Wed, 20 Jan 2021 06:52:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=X3ef/yWKjHQXxstlBAjxJ4gnAy5LKmoZd+GY3iLVlxo=;
-        b=pxNAolXD5AOcTV8M8CP2M6fGZNQhATi6XyJlM6ozwYHAttYXiaxsTJEWiB7W5skTG3
-         79wjRl1tOIcca1rd5tJRysnnaq9VFXbS/k4fbG/qRTixeeCaneuIoqqoIxXQXNXWe3Cv
-         u95SkZKFH6A1MTGK6yw/GA2G0vYM5GG7fXrosVZXrDwlSSVihyHqOJzqD7iv2LAyPT+5
-         IjAwcYHTvJkwwBVsZJuiOjpIdOJFWbmv6PDIS9mGKimom9zaO6WL6D5seihYcRzY2X3R
-         SqkhY4RhYf7DEUjdnpgM11g81su0FHCAB/jSPzbQRNwqDycHHcNM7UDkp3tNTaSeAuxd
-         j9jQ==
-X-Gm-Message-State: AOAM533xuh8vWE5bshEgGa7e8Mpnm/28kW8ziUrKJxGNpIoYh3AE3k/o
-        oo75l7qhsZGGopxcYaqvR4qDrjDknedXVd1Dgg842LNs4eUb/iA2acQb1lQhi5Vvj02cT+iMzkT
-        uPuvjTm8iP4q0
-X-Received: by 2002:a50:d80c:: with SMTP id o12mr7284901edj.338.1611154376376;
-        Wed, 20 Jan 2021 06:52:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxG2iPdBowp0p+m+2+XBgbeuH1LGwsO5EHdrCogkKJ6IYhKcRmN6vnlYe9fs7MdUSBC/ngZ6w==
-X-Received: by 2002:a50:d80c:: with SMTP id o12mr7284883edj.338.1611154375961;
-        Wed, 20 Jan 2021 06:52:55 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id z22sm1210969edb.88.2021.01.20.06.52.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 06:52:55 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 10D77180331; Wed, 20 Jan 2021 15:52:55 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
-        kuba@kernel.org, jonathan.lemon@gmail.com, maximmi@nvidia.com,
-        davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
-        ciara.loftus@intel.com, weqaar.a.janjua@intel.com
-Subject: Re: [PATCH bpf-next v2 1/8] xdp: restructure redirect actions
-In-Reply-To: <996f1ff7-5891-fd4a-ee3e-fefd7e93879d@intel.com>
+        bh=oUUOyV362+OhSybPskP69Na+MM+YsUEXsb1euz9ofeY=;
+        b=FyXUnahsgz5/sTqeuPhiM21grKi+WspWYgQaVxYlqvqXEUCPJ+bV/JQ4QjTz2TOcxdaRKn
+        GpwIuDbxQORgUH7GwFq+4e5JMkJeYPWWlGj6V26cRpASFyMtw2RzPzBFZOAN4hFRphPR3X
+        SzhUtsUw+kclLMVWjstS+cbayNu9iCI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-370-nl600YWCOFaFTKJEi_-O1g-1; Wed, 20 Jan 2021 10:57:19 -0500
+X-MC-Unique: nl600YWCOFaFTKJEi_-O1g-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CDF6C8066EA;
+        Wed, 20 Jan 2021 15:57:16 +0000 (UTC)
+Received: from carbon (unknown [10.36.110.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B60882C01B;
+        Wed, 20 Jan 2021 15:57:09 +0000 (UTC)
+Date:   Wed, 20 Jan 2021 16:57:08 +0100
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Maxim Mikityanskiy <maximmi@nvidia.com>
+Cc:     brouer@redhat.com,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        <ast@kernel.org>, <daniel@iogearbox.net>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <bjorn.topel@intel.com>,
+        <magnus.karlsson@intel.com>, <maciej.fijalkowski@intel.com>,
+        <kuba@kernel.org>, <jonathan.lemon@gmail.com>,
+        <davem@davemloft.net>, <john.fastabend@gmail.com>,
+        <ciara.loftus@intel.com>, <weqaar.a.janjua@intel.com>
+Subject: Re: [PATCH bpf-next v2 0/8] Introduce bpf_redirect_xsk() helper
+Message-ID: <20210120165708.243f83cb@carbon>
+In-Reply-To: <7dcee85b-b3ef-947f-f433-03ad7066c5dd@nvidia.com>
 References: <20210119155013.154808-1-bjorn.topel@gmail.com>
- <20210119155013.154808-2-bjorn.topel@gmail.com> <87bldjeq1j.fsf@toke.dk>
- <996f1ff7-5891-fd4a-ee3e-fefd7e93879d@intel.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Wed, 20 Jan 2021 15:52:55 +0100
-Message-ID: <87mtx34q48.fsf@toke.dk>
+        <7dcee85b-b3ef-947f-f433-03ad7066c5dd@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com> writes:
+On Wed, 20 Jan 2021 15:15:22 +0200
+Maxim Mikityanskiy <maximmi@nvidia.com> wrote:
 
-> On 2021-01-20 13:44, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
->> Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> writes:
->>=20
->>> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
->>>
->>> The XDP_REDIRECT implementations for maps and non-maps are fairly
->>> similar, but obviously need to take different code paths depending on
->>> if the target is using a map or not. Today, the redirect targets for
->>> XDP either uses a map, or is based on ifindex.
->>>
->>> Future commits will introduce yet another redirect target via the a
->>> new helper, bpf_redirect_xsk(). To pave the way for that, we introduce
->>> an explicit redirect type to bpf_redirect_info. This makes the code
->>> easier to follow, and makes it easier to add new redirect targets.
->>>
->>> Further, using an explicit type in bpf_redirect_info has a slight
->>> positive performance impact by avoiding a pointer indirection for the
->>> map type lookup, and instead use the hot cacheline for
->>> bpf_redirect_info.
->>>
->>> The bpf_redirect_info flags member is not used by XDP, and not
->>> read/written any more. The map member is only written to when
->>> required/used, and not unconditionally.
->>=20
->> I like the simplification. However, the handling of map clearing becomes
->> a bit murky with this change:
->>=20
->> You're not changing anything in bpf_clear_redirect_map(), and you're
->> removing most of the reads and writes of ri->map. Instead,
->> bpf_xdp_redirect_map() will store the bpf_dtab_netdev pointer in
->> ri->tgt_value, which xdp_do_redirect() will just read and use without
->> checking. But if the map element (or the entire map) has been freed in
->> the meantime that will be a dangling pointer. I *think* the RCU callback
->> in dev_map_delete_elem() and the rcu_barrier() in dev_map_free()
->> protects against this, but that is by no means obvious. So confirming
->> this, and explaining it in a comment would be good.
->>
->
-> Yes, *most* of the READ_ONCE(ri->map) are removed, it's pretty much only=
+> On 2021-01-19 17:50, Bj=C3=B6rn T=C3=B6pel wrote:
+> > This series extends bind() for XDP sockets, so that the bound socket
+> > is added to the netdev_rx_queue _rx array in the netdevice. We call
+> > this to register the socket. To redirect packets to the registered
+> > socket, a new BPF helper is used: bpf_redirect_xsk().
+> >=20
+> > For shared XDP sockets, only the first bound socket is
+> > registered. Users that need more complex setup has to use XSKMAP and
+> > bpf_redirect_map().
+> >=20
+> > Now, why would one use bpf_redirect_xsk() over the regular
+> > bpf_redirect_map() helper?
+> >=20
+> > * Better performance!
+> > * Convenience; Most user use one socket per queue. This scenario is
+> >    what registered sockets support. There is no need to create an
+> >    XSKMAP. This can also reduce complexity from containerized setups,
+> >    where users might what to use XDP sockets without CAP_SYS_ADMIN
+> >    capabilities.
+
+I'm buying into the convenience and reduce complexity, and XDP sockets
+without CAP_SYS_ADMIN into containers.
+
+People might be surprised that I'm actually NOT buying into the better
+performance argument here.  At these speeds we are basically comparing
+how close we are to zero (and have to use nanosec time scale for our
+comparisons), more below.
+
 =20
-> the bpf_redirect_map(), and as you write, the tracepoints.
->
-> The content/element of the map is RCU protected, and actually even the
-> map will be around until the XDP processing is complete. Note the
-> synchronize_rcu() followed after all bpf_clear_redirect_map() calls.
->
-> I'll try to make it clearer in the commit message! Thanks for pointing=20
-> that out!
->
->> Also, as far as I can tell after this, ri->map is only used for the
->> tracepoint. So how about just storing the map ID and getting rid of the
->> READ/WRITE_ONCE() entirely?
->>
->
-> ...and the bpf_redirect_map() helper. Don't you think the current
-> READ_ONCE(ri->map) scheme is more obvious/clear?
+> > The first patch restructures xdp_do_redirect() a bit, to make it
+> > easier to add the new helper. This restructure also give us a slight
+> > performance benefit. The following three patches extends bind() and
+> > adds the new helper. After that, two libbpf patches that selects XDP
+> > program based on what kernel is running. Finally, selftests for the new
+> > functionality is added.
+> >=20
+> > Note that the libbpf "auto-selection" is based on kernel version, so
+> > it is hard coded to the "-next" version (5.12). If you would like to
+> > try this is out, you will need to change the libbpf patch locally!
+> >=20
+> > Thanks to Maciej and Magnus for the internal review/comments!
+> >=20
+> > Performance (rxdrop, zero-copy)
+> >=20
+> > Baseline
+> > Two cores:                   21.3 Mpps
+> > One core:                    24.5 Mpps =20
+>=20
+> Two cores is slower? It used to be faster all the time, didn't it?
+>=20
+> > Patched
+> > Two cores, bpf_redirect_map: 21.7 Mpps + 2%
+> > One core, bpf_redirect_map:  24.9 Mpps + 2%
+> >=20
+> > Two cores, bpf_redirect_xsk: 24.0 Mpps +13% =20
+>=20
+> Nice, impressive improvement!
 
-Yeah, after your patch we WRITE_ONCE() the pointer in
-bpf_redirect_map(), but the only place it is actually *read* is in the
-tracepoint. So the only purpose of bpf_clear_redirect_map() is to ensure
-that an invalid pointer is not read in the tracepoint function. Which
-seems a bit excessive when we could just store the map ID for direct use
-in the tracepoint and get rid of bpf_clear_redirect_map() entirely, no?
+I do appreciate you work and performance optimizations at this level,
+because when we are using this few CPU cycles per packet, then it is
+really hard to find new ways to reduce cycles further.
 
-Besides, from a UX point of view, having the tracepoint display the map
-ID even if that map ID is no longer valid seems to me like it makes more
-sense than just displaying a map ID of 0 and leaving it up to the user
-to figure out that this is because the map was cleared. I mean, at the
-time the redirect was made, that *was* the map ID that was used...
+Thank for you saying +13% instead of saying +2.7 Mpps.
+It *is* impressive to basically reduce cycles with 13%.
 
-Oh, and as you say due to the synchronize_rcu() call in dev_map_free() I
-think this whole discussion is superfluous anyway, since it can't
-actually happen that the map gets freed between the setting and reading
-of ri->map, no?
+ 21.3 Mpps =3D 46.94 nanosec per packet
+ 24.0 Mpps =3D 41.66 nanosec per packet
 
->> (Oh, and related to this I think this patch set will conflict with
->> Hangbin's multi-redirect series, so maybe you two ought to coordinate? :=
-))
->>
->
-> Yeah, good idea! I would guess Hangbin's would go in before this, so I
-> would need to adapt.
->
->
-> Thanks for taking of look at the series, Toke! Much appreciated!
+ 21.3 Mpps -> 24.0 Mpps =3D 5.28 nanosec saved
 
-You're welcome :)
+On my 3.60GHz testlab machine that gives me 19 cycles.
 
--Toke
+=20
+> > One core, bpf_redirect_xsk:  25.5 Mpps + 4%
+> >
+
+ 24.5 Mpps -> 25.5 Mpps =3D 1.6 nanosec saved
+
+At this point with saving 1.6 ns this is around the cost of a function call=
+ 1.3 ns.
+
+
+We still need these optimization in the kernel, but end-users in
+userspace are very quickly going to waste the 19 cycles we found.
+I still support/believe that the OS need to have a little overhead as
+possible, but for me 42 nanosec overhead is close to zero overhead. For
+comparison, I just ran a udp_sink[3] test, and it "cost" 625 ns for
+delivery of UDP packets into socket (almost 15 times slower).
+
+I guess my point is that with XDP we have already achieved and exceeded
+(my original) performance goals, making it even faster is just showing off =
+;-P
+--=20
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
+
+[1] https://github.com/netoptimizer/prototype-kernel/blob/master/kernel/lib=
+/time_bench_sample.c
+[2] https://github.com/netoptimizer/prototype-kernel/blob/master/kernel/lib=
+/time_bench_memset.c
+[3] https://github.com/netoptimizer/network-testing/blob/master/src/udp_sin=
+k.c
 
