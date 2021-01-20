@@ -2,193 +2,191 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-10.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6911C433E0
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:15:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D82EDC433E6
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:37:23 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 942F823443
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:15:01 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 99794235FF
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:37:23 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388142AbhATUO6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Jan 2021 15:14:58 -0500
-Received: from www62.your-server.de ([213.133.104.62]:33104 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388141AbhATOCD (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Jan 2021 09:02:03 -0500
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1l2E2q-0000aV-TP; Wed, 20 Jan 2021 15:01:12 +0100
-Received: from [85.7.101.30] (helo=pc-9.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1l2E2q-000JKx-M2; Wed, 20 Jan 2021 15:01:12 +0100
-Subject: Re: [PATCH bpf-next] bpf: Helper script for running BPF presubmit
- tests
-To:     KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>
-References: <20210118141955.2033747-1-kpsingh@kernel.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <0d577037-769a-35fc-b07f-bba2cf2bd3d2@iogearbox.net>
-Date:   Wed, 20 Jan 2021 15:01:12 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S2391182AbhATUgX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Jan 2021 15:36:23 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:53922 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1732169AbhATU2m (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Wed, 20 Jan 2021 15:28:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1611174416;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JU1eLhW0j33QPCa8V2Glay0rWrYplRUA4Gz2IU/7jhs=;
+        b=MtG6sjurfKHOqvkI8qKH0mOl7EYZwrznYDu+E6TIwfk3oNEKQZ5t/+KgurEYBRGkyLqJs7
+        Yqg+dvWfV/R0tgpze5qzUjVVYffWnbplO9eE50sP1jouNVQjTpobKL/tZp2EcPhIYXgcjD
+        0VnTRuoLV1vHj39uCV172Mp5pcT5dbs=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-108-lNgIxnI9O2e-HE-eMp5X4g-1; Wed, 20 Jan 2021 15:26:54 -0500
+X-MC-Unique: lNgIxnI9O2e-HE-eMp5X4g-1
+Received: by mail-ej1-f69.google.com with SMTP id rl8so7665846ejb.8
+        for <bpf@vger.kernel.org>; Wed, 20 Jan 2021 12:26:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=JU1eLhW0j33QPCa8V2Glay0rWrYplRUA4Gz2IU/7jhs=;
+        b=bPWJFcEh13f6XvgzSLorkJDr1aoG+XlWNl5oPCdCE5Dm8estJRX68LIVIv8Px7xjE/
+         MirczMw3VzXeYafegnCvbK/IIbhz7an53A0RnZiGDUnV4mOGU/vI+duPjST/IGMNkRpI
+         RpHnSwLgcsptcXoDQXr/9/5xwhs6yoMDgpmH97laUd4qZ15IsVWE4ZSuVBTtVmKS68fq
+         nN/4sXgFTYaQOPvui+DYGM6OeAE4ZlqmXym4uW54z6hzTVYN46jeKtNl2z3GVNqw0h05
+         RtoxGWVjFBovTPrbj7wAzv3/MTe7PBG8Ywow1tsDahFTJlYtdZOYidmR7AGL1axxm8xK
+         M1Yw==
+X-Gm-Message-State: AOAM531FYP2taz80TAodIrjNPTzgNkYfQn32h36fc6jYvLMgRewJusz4
+        /bMoo/4oXLlQmWn9oY6N3c8XltL7mTg0XHDxgAvjMzZJuzsQU3P2sb/4Lqhz0HbIUSEFA6/Tzq3
+        hj4ud8eQ2nrVV
+X-Received: by 2002:aa7:dcc9:: with SMTP id w9mr8386368edu.22.1611174412739;
+        Wed, 20 Jan 2021 12:26:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwWTV977qLeayzq21XIgUQyFsvOTpc3ncWXO2Yj25LmA4Y5thCtUF2ihh5Y52GVlkE9pB0spA==
+X-Received: by 2002:aa7:dcc9:: with SMTP id w9mr8386347edu.22.1611174412544;
+        Wed, 20 Jan 2021 12:26:52 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id i13sm1708131edu.22.2021.01.20.12.26.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Jan 2021 12:26:52 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 762FF180331; Wed, 20 Jan 2021 21:26:51 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
+        kuba@kernel.org, jonathan.lemon@gmail.com, maximmi@nvidia.com,
+        davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
+        ciara.loftus@intel.com, weqaar.a.janjua@intel.com
+Subject: Re: [PATCH bpf-next v2 4/8] xsk: register XDP sockets at bind(),
+ and add new AF_XDP BPF helper
+In-Reply-To: <ca8cbe21-f020-e5c0-5f09-19260e95839f@intel.com>
+References: <20210119155013.154808-1-bjorn.topel@gmail.com>
+ <20210119155013.154808-5-bjorn.topel@gmail.com> <878s8neprj.fsf@toke.dk>
+ <46162f5f-5b3c-903b-8b8d-7c1afc74cb05@intel.com> <87k0s74q1a.fsf@toke.dk>
+ <3c6feb0d-6a64-2251-3cac-c79cff29d85c@intel.com> <8735yv4iv1.fsf@toke.dk>
+ <ca8cbe21-f020-e5c0-5f09-19260e95839f@intel.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Wed, 20 Jan 2021 21:26:51 +0100
+Message-ID: <87pn1z2w38.fsf@toke.dk>
 MIME-Version: 1.0
-In-Reply-To: <20210118141955.2033747-1-kpsingh@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.4/26055/Wed Jan 20 13:29:54 2021)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 1/18/21 3:19 PM, KP Singh wrote:
-> The script runs the BPF selftests locally on the same kernel image
-> as they would run post submit in the BPF continuous integration
-> framework. The goal of the script is to run selftests locally in the
-> same environment to check if their changes would end up breaking the
-> BPF CI and reduce the back-and-forth between the maintainers and the
-> developers.
-> 
-> Signed-off-by: KP Singh <kpsingh@kernel.org>
+Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com> writes:
 
-Looks really nice! I gave it a run, some minor feedback:
+> On 2021-01-20 18:29, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>> Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com> writes:
+>>=20
+>>> On 2021-01-20 15:54, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>>>> Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com> writes:
+>>>>
+>>>>> On 2021-01-20 13:50, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+>>>>>> Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> writes:
+>>>>>>
+>>>>>>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+>>>>>>> index c001766adcbc..bbc7d9a57262 100644
+>>>>>>> --- a/include/uapi/linux/bpf.h
+>>>>>>> +++ b/include/uapi/linux/bpf.h
+>>>>>>> @@ -3836,6 +3836,12 @@ union bpf_attr {
+>>>>>>>      *	Return
+>>>>>>>      *		A pointer to a struct socket on success or NULL if the file=
+ is
+>>>>>>>      *		not a socket.
+>>>>>>> + *
+>>>>>>> + * long bpf_redirect_xsk(struct xdp_buff *xdp_md, u64 action)
+>>>>>>> + *	Description
+>>>>>>> + *		Redirect to the registered AF_XDP socket.
+>>>>>>> + *	Return
+>>>>>>> + *		**XDP_REDIRECT** on success, otherwise the action parameter is=
+ returned.
+>>>>>>>      */
+>>>>>>
+>>>>>> I think it would be better to make the second argument a 'flags'
+>>>>>> argument and make values > XDP_TX invalid (like we do in
+>>>>>> bpf_xdp_redirect_map() now). By allowing any value as return you lose
+>>>>>> the ability to turn it into a flags argument later...
+>>>>>>
+>>>>>
+>>>>> Yes, but that adds a run-time check. I prefer this non-checked versio=
+n,
+>>>>> even though it is a bit less futureproof.
+>>>>
+>>>> That...seems a bit short-sighted? :)
+>>>> Can you actually see a difference in your performance numbers?
+>>>>
+>>>
+>>> I would rather add an additional helper *if* we see the need for flags,
+>>> instead of paying for that upfront. For me, BPF is about being able to
+>>> specialize, and not having one call with tons of checks.
+>>=20
+>> I get that, I'm just pushing back because omitting a 'flags' argument is
+>> literally among the most frequent reasons for having to replace a
+>> syscall (see e.g., [0]) instead of extending it. And yeah, I do realise
+>> that the performance implications are different for XDP than for
+>> syscalls, but maintainability of the API is also important; it's all a
+>> tradeoff. This will be the third redirect helper variant for XDP and I'd
+>> hate for the fourth one to have to be bpf_redirect_xsk_flags() because
+>> it did turn out to be needed...
+>>=20
+>> (One potential concrete reason for this: I believe Magnus was talking
+>> about an API that would allow a BPF program to redirect a packet into
+>> more than one socket (cloning it in the process), or to redirect to a
+>> socket+another target. How would you do that with this new helper?)
+>>=20
+>> [0] https://lwn.net/Articles/585415/
+>>
+>
+> I have a bit of different view. One of the really nice parts about BPF
+> is exactly specialization. A user can tailor the kernel do a specific
+> thing. I *don't* see an issue with yet another helper, if that is needed
+> in the future. I think that is better than bloated helpers trying to
+> cope for all scenarios. I don't mean we should just add helpers all over
+> the place, but I do see more lightly on adding helpers, than adding
+> syscalls.
+>
+> Elaborating a bit on this: many device drivers try to handle all the
+> things in the fast-path. I see BPF as one way forward to moving away
+> from that. Setup what you need, and only run what you currently need,
+> instead of the current "Is bleh on, then baz? Is this on, then that."
+>
+> So, I would like to avoid "future proofing" the helpers, if that makes
+> sense. Use what you need. That's why BPF is so good (one of the
+> things)!
 
-> ---
->   tools/testing/selftests/bpf/run_in_vm.sh | 346 +++++++++++++++++++++++
->   1 file changed, 346 insertions(+)
->   create mode 100755 tools/testing/selftests/bpf/run_in_vm.sh
-> 
-> diff --git a/tools/testing/selftests/bpf/run_in_vm.sh b/tools/testing/selftests/bpf/run_in_vm.sh
-> new file mode 100755
-> index 000000000000..a4f28f5cdd52
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/run_in_vm.sh
-> @@ -0,0 +1,346 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +set -u
-> +set -e
-> +
-> +QEMU_BINARY="${QEMU_BINARY:="qemu-system-x86_64"}"
-> +X86_BZIMAGE="arch/x86/boot/bzImage"
-> +DEFAULT_COMMAND="./test_progs"
-> +MOUNT_DIR="mnt"
-> +ROOTFS_IMAGE="root.img"
-> +OUTPUT_DIR="$HOME/.bpf_selftests"
-> +KCONFIG_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/latest.config"
-> +INDEX_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/INDEX"
-> +
-> +usage()
-> +{
-> +	cat <<EOF
-> +Usage: $0 [-k] [-i] [-d <output_dir>] -- [<command>]
-> +
-> +<command> is the command you would normally run when you are in
-> +tools/testing/selftests/bpf. e.g:
-> +
-> +	$0 -- ./test_progs -t test_lsm
-> +
-> +If no command is specified, "${DEFAULT_COMMAND}" will be run by
-> +default.
-> +
-> +If you build your kernel using KBUILD_OUTPUT= or O= options, these
-> +can be passed as environment variables to the script:
-> +
-> +  O=<path_relative_to_cwd> $0 -- ./test_progs -t test_lsm
-> +
-> +or
-> +
-> +  KBUILD_OUTPUT=<path_relative_to_cwd> $0 -- ./test_progs -t test_lsm
-> +
-> +Options:
-> +
-> +	-k)		Recompile the kernel with the config for selftests.
-> +	-i)		Update the rootfs image with a newer version.
-> +	-d)		Update the output directory (default: ${OUTPUT_DIR})
+Well, it's a tradeoff. We're still defining an API that should not be
+(too) confusing...
 
-Probably best to have a small howto in tools/testing/selftests/bpf/README.rst for
-people to have a 'getting started' point. Initially I forgot the -k, so VM paniced
-on boot, but after that it was working great modulo a small change below.
+> As for bpf_redirect_xsk() it's a leaner version of bpf_redirect_map().
+> You want flags/shared sockets/...? Well go use bpf_redirect_map() and
+> XSKMAP. bpf_redirect_xsk() is not for you.
 
-[...]
-> +main()
-> +{
-> +	local script_dir="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
-> +	local kernel_checkout=$(realpath "${script_dir}"/../../../../)
-> +	local log_file="$(date +"bpf_selftests.%Y-%m-%d_%H-%M-%S.log")"
-> +	# By default the script searches for the kernel in the checkout directory but
-> +	# it also obeys environment variables O= and KBUILD_OUTPUT=
-> +	local kernel_bzimage="${kernel_checkout}/${X86_BZIMAGE}"
-> +	local command="${DEFAULT_COMMAND}"
-> +	local kernel_recompile="no"
-> +	local update_image="no"
-> +
-> +	while getopts 'hkid:' opt; do
-> +		case ${opt} in
-> +		k)
-> +			kernel_recompile="yes"
-> +			;;
-> +		i)
-> +			update_image="yes"
-> +			;;
-> +		d)
-> +			OUTPUT_DIR="$OPTARG"
-> +			;;
-> +		h)
-> +			usage
-> +			exit 0
-> +			;;
-> +		\? )
-> +			echo "Invalid Option: -$OPTARG"
-> +			usage
-> +			exit 1
-> +			;;
-> +      		: )
-> +        		echo "Invalid Option: -$OPTARG requires an argument"
-> +			usage
-> +			exit 1
-> +			;;
-> +		esac
-> +	done
-> +	shift $((OPTIND -1))
-> +
-> +	if [[ $# -eq 0 ]]; then
-> +		echo "No command specified, will run ${DEFAULT_COMMAND} in the vm"
-> +	else
-> +		command="$@"
-> +	fi
-> +
-> +	local kconfig_file="${OUTPUT_DIR}/latest.config"
-> +	local make_command="make -j KCONFIG_CONFIG=${kconfig_file}"
+This argument, however, I buy: bpf_redirect() is the single-purpose
+helper for redirecting to an ifindex, bpf_redirect_xsk() is the
+single-purpose helper for redirecting to an XSK, and bpf_redirect_map()
+is the generic one that does both of those and more. Fair enough,
+consider me convinced :)
 
-I had to fix/limit this locally to -j <num-cpus> as otherwise this was OOM killing
-my box. make man page says 'if the -j option is given without an argument, make will
-not limit the number of jobs that can run simultaneously.'
+> A lot of back-and-forth for *one* if-statement, but it's kind of a
+> design thing for me. ;-)
 
-> +
-> +	# Figure out where the kernel is being built.
-> +	# O takes precedence over KBUILD_OUTPUT.
-> +	if [[ "${O:=""}" != "" ]]; then
-> +		if is_rel_path "${O}"; then
-> +			O="$(realpath "${PWD}/${O}")"
-> +		fi
+Surely you don't mean to imply that you have *better* things to do with
+your time than have a 10-emails-long argument over a single if
+statement? ;)
 
-For future follow-up, would be amazing to auto-grab nightly build of llvm + pahole
-as well. And even further out maybe also to allow cross-compilation + testing on
-other archs. :)
+-Toke
 
-Thanks,
-Daniel
