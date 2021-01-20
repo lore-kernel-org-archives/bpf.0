@@ -2,249 +2,137 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 43AFEC433E9
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:38:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 211C1C433E0
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 21:36:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id F096F2368A
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:38:25 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D7BF423443
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 21:36:33 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730509AbhATU0z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Jan 2021 15:26:55 -0500
-Received: from mail1.protonmail.ch ([185.70.40.18]:36005 "EHLO
-        mail1.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732463AbhATN5C (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Jan 2021 08:57:02 -0500
-X-Greylist: delayed 90664 seconds by postgrey-1.27 at vger.kernel.org; Wed, 20 Jan 2021 08:56:58 EST
-Date:   Wed, 20 Jan 2021 13:56:09 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1611150972; bh=PE7V/3plIiCk7iENEPTfzL5HtZUy5vQDfr/MINvH93w=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=chX6h0ouLTif5ozoqriI8OPrSRoACMRWaUNReTEQbz95JBSG6iEQAxZw8vjtp26gS
-         nCvRMeMEF2E0nS0Y7ghATC10fTWd17OJx6Gqd3M07u2NSdCxskIHJ3o81VeREfujMS
-         KJYJoiDaTYM6h8Vxh4KgHjwXW9BjZMBJVrMLv5tGTDRmbK1suhXqZf/THAeZUenSa+
-         GExvKrbxgcA8y2tNXCbrskrLYokE/ONVKwUvlRPm/HSzJhH9SpkK9pcJhXRJzdFHNW
-         MkgI16LVqsni7rYlJLUs3U2vI8Lit0A/Uq/p69iEyp+UrgpSSxmjzEMaa9dKYlLV2U
-         RTo47e/j9yOCQ==
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, bjorn.topel@intel.com,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S1729821AbhATV14 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Jan 2021 16:27:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728287AbhATNlP (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Jan 2021 08:41:15 -0500
+Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B14DC061793
+        for <bpf@vger.kernel.org>; Wed, 20 Jan 2021 05:39:55 -0800 (PST)
+Received: by mail-qv1-xf4a.google.com with SMTP id h13so3227520qvo.18
+        for <bpf@vger.kernel.org>; Wed, 20 Jan 2021 05:39:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=sender:date:in-reply-to:message-id:mime-version:references:subject
+         :from:to:cc;
+        bh=27UXw1bxwiKbAXZ3HLN6FYGS/3ntG8PaBF+icLAaO9c=;
+        b=PnTByR6q94FxjkLS9Uu/r/DisoDcVMH+NWg7D10B2aZq/AH6hIPXNegm9Ds0S+SAOh
+         KLRelGJdq8kSbzSYRDu993erSUrPgKVSBB0c24i65pmANw8t7O20tTQIinhJwpGDWJNy
+         5GW9VTetU8Wzv2MuyA8SSHsOGQQxWxJ2qAF+9QWo1gV+pThNvzjdRm/nHuJs5ZaqngYE
+         0M6FxvAABS4MfaTPqIViNi4ii1bVFuFaWYJLlzJrelKKQoLsDLQay4C6VHDR38EPgxse
+         zfkwQJbP8TaGVNJOcUxP8rwXpnJgtxa/Iw2tYTFKc2ub0hhxwptMtRdtub6cI27jkkLS
+         6p9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=27UXw1bxwiKbAXZ3HLN6FYGS/3ntG8PaBF+icLAaO9c=;
+        b=YuhyeS6KKhVbFde66Mb2M748HsQ3So8hX3wcMY8enFHWLFlmgDK3+j72KhhCnvZ0TA
+         9hodaP90EQe4yKxLtI2xc8hrYk2FObYzIg0Wjp6DZwdy++Qsvb3+ZnkUQXIwr3W8a1K2
+         1vumRmvue6PUG3h+NiqL/LvU+eWCwtW9QhR1ZZrccu6hL0UyWCvo957LnIPAYbtCI0Cw
+         1RiHnR/jwiwOtl2dfe5dzvFhxSu2Af0aUlA/7mmAmJr5JpJBrAgSWWIg45dixteA1o5z
+         +i3IbO3dwqy9R1ESEP2M4shmAO8Co2eIksVTBxSywDw0ny3WDSOPugs0sP/z+1cWGbyd
+         /hZw==
+X-Gm-Message-State: AOAM530DQ+mkPeNi9ZM6zxoBWBNPlbnxODHEpn8NGumKvndxhO49Yk+E
+        I27GgTHZY8iELjkRqHs4Vthyi4FMOmMplTDjhRbZL6F2WBCvIMe6mjIuSoqXjKkGR3zX37IKJ4e
+        cj3Cb1/xKYntQio51Zz9BimdUh302+lvzNEFkzuyD8HwN1s3T5iNyvJVG2C31J/Y=
+X-Google-Smtp-Source: ABdhPJykVpRhwtQiPMvkHREiKUg5Ra0CWUbH9E6q3jL2Sl8EtPPlEUrX0GiJX+oikJztnUALHWt0KJ023APJLA==
+Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
+X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
+ (user=jackmanb job=sendgmr) by 2002:a0c:b526:: with SMTP id
+ d38mr9192365qve.7.1611149994304; Wed, 20 Jan 2021 05:39:54 -0800 (PST)
+Date:   Wed, 20 Jan 2021 13:39:45 +0000
+In-Reply-To: <20210120133946.2107897-1-jackmanb@google.com>
+Message-Id: <20210120133946.2107897-2-jackmanb@google.com>
+Mime-Version: 1.0
+References: <20210120133946.2107897-1-jackmanb@google.com>
+X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
+Subject: [PATCH bpf-next v3 1/2] docs: bpf: Fixup atomics markup
+From:   Brendan Jackman <jackmanb@google.com>
+To:     bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH net-next v2 3/3] xsk: build skb by page
-Message-ID: <20210120135537.5184-1-alobakin@pm.me>
-In-Reply-To: <0461512be1925bece9bcda1b4924b09eaa4edd87.1611131344.git.xuanzhuo@linux.alibaba.com>
-References: <0461512be1925bece9bcda1b4924b09eaa4edd87.1611131344.git.xuanzhuo@linux.alibaba.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Florent Revest <revest@chromium.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Brendan Jackman <jackmanb@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Date: Wed, 20 Jan 2021 16:30:56 +0800
+This fixes up the markup to fix a warning, be more consistent with
+use of monospace, and use the correct .rst syntax for <em> (* instead
+of _).
 
-> This patch is used to construct skb based on page to save memory copy
-> overhead.
->=20
-> This function is implemented based on IFF_TX_SKB_NO_LINEAR. Only the
-> network card priv_flags supports IFF_TX_SKB_NO_LINEAR will use page to
-> directly construct skb. If this feature is not supported, it is still
-> necessary to copy data to construct skb.
->=20
-> ---------------- Performance Testing ------------
->=20
-> The test environment is Aliyun ECS server.
-> Test cmd:
-> ```
-> xdpsock -i eth0 -t  -S -s <msg size>
-> ```
->=20
-> Test result data:
->=20
-> size    64      512     1024    1500
-> copy    1916747 1775988 1600203 1440054
-> page    1974058 1953655 1945463 1904478
-> percent 3.0%    10.0%   21.58%  32.3%
->=20
-> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
-> ---
->  net/xdp/xsk.c | 104 ++++++++++++++++++++++++++++++++++++++++++++++++----=
-------
->  1 file changed, 86 insertions(+), 18 deletions(-)
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
+Reviewed-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-Now I like the result, thanks!
+---
+ Documentation/networking/filter.rst | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-But Patchwork still display your series incorrectly (messages 0 and 1
-are missing). I'm concerning maintainers may not take this in such
-form. Try to pass the folder's name, not folder/*.patch to
-git send-email when sending, and don't use --in-reply-to when sending
-a new iteration.
+diff --git a/Documentation/networking/filter.rst b/Documentation/networking/filter.rst
+index 45f6fde1776c..4c2bb4c6364d 100644
+--- a/Documentation/networking/filter.rst
++++ b/Documentation/networking/filter.rst
+@@ -1066,12 +1066,12 @@ memory location addresed by ``dst_reg + off`` is atomically modified, with
+ immediate, then these operations also overwrite ``src_reg`` with the
+ value that was in memory before it was modified.
 
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 8037b04..40bac11 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -430,6 +430,87 @@ static void xsk_destruct_skb(struct sk_buff *skb)
->  =09sock_wfree(skb);
->  }
->=20
-> +static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
-> +=09=09=09=09=09      struct xdp_desc *desc)
-> +{
-> +=09u32 len, offset, copy, copied;
-> +=09struct sk_buff *skb;
-> +=09struct page *page;
-> +=09void *buffer;
-> +=09int err, i;
-> +=09u64 addr;
-> +
-> +=09skb =3D sock_alloc_send_skb(&xs->sk, 0, 1, &err);
-> +=09if (unlikely(!skb))
-> +=09=09return ERR_PTR(err);
-> +
-> +=09addr =3D desc->addr;
-> +=09len =3D desc->len;
-> +
-> +=09buffer =3D xsk_buff_raw_get_data(xs->pool, addr);
-> +=09offset =3D offset_in_page(buffer);
-> +=09addr =3D buffer - xs->pool->addrs;
-> +
-> +=09for (copied =3D 0, i =3D 0; copied < len; i++) {
-> +=09=09page =3D xs->pool->umem->pgs[addr >> PAGE_SHIFT];
-> +
-> +=09=09get_page(page);
-> +
-> +=09=09copy =3D min_t(u32, PAGE_SIZE - offset, len - copied);
-> +
-> +=09=09skb_fill_page_desc(skb, i, page, offset, copy);
-> +
-> +=09=09copied +=3D copy;
-> +=09=09addr +=3D copy;
-> +=09=09offset =3D 0;
-> +=09}
-> +
-> +=09skb->len +=3D len;
-> +=09skb->data_len +=3D len;
-> +=09skb->truesize +=3D len;
-> +
-> +=09refcount_add(len, &xs->sk.sk_wmem_alloc);
-> +
-> +=09return skb;
-> +}
-> +
-> +static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
-> +=09=09=09=09     struct xdp_desc *desc)
-> +{
-> +=09struct sk_buff *skb =3D NULL;
-> +
-> +=09if (xs->dev->priv_flags & IFF_TX_SKB_NO_LINEAR) {
-> +=09=09skb =3D xsk_build_skb_zerocopy(xs, desc);
-> +=09=09if (IS_ERR(skb))
-> +=09=09=09return skb;
-> +=09} else {
-> +=09=09void *buffer;
-> +=09=09u32 len;
-> +=09=09int err;
-> +
-> +=09=09len =3D desc->len;
-> +=09=09skb =3D sock_alloc_send_skb(&xs->sk, len, 1, &err);
-> +=09=09if (unlikely(!skb))
-> +=09=09=09return ERR_PTR(err);
-> +
-> +=09=09skb_put(skb, len);
-> +=09=09buffer =3D xsk_buff_raw_get_data(xs->pool, desc->addr);
-> +=09=09err =3D skb_store_bits(skb, 0, buffer, len);
-> +=09=09if (unlikely(err)) {
-> +=09=09=09kfree_skb(skb);
-> +=09=09=09return ERR_PTR(err);
-> +=09=09}
-> +=09}
-> +
-> +=09skb->dev =3D xs->dev;
-> +=09skb->priority =3D xs->sk.sk_priority;
-> +=09skb->mark =3D xs->sk.sk_mark;
-> +=09skb_shinfo(skb)->destructor_arg =3D (void *)(long)desc->addr;
-> +=09skb->destructor =3D xsk_destruct_skb;
-> +
-> +=09return skb;
-> +}
-> +
->  static int xsk_generic_xmit(struct sock *sk)
->  {
->  =09struct xdp_sock *xs =3D xdp_sk(sk);
-> @@ -446,43 +527,30 @@ static int xsk_generic_xmit(struct sock *sk)
->  =09=09goto out;
->=20
->  =09while (xskq_cons_peek_desc(xs->tx, &desc, xs->pool)) {
-> -=09=09char *buffer;
-> -=09=09u64 addr;
-> -=09=09u32 len;
-> -
->  =09=09if (max_batch-- =3D=3D 0) {
->  =09=09=09err =3D -EAGAIN;
->  =09=09=09goto out;
->  =09=09}
->=20
-> -=09=09len =3D desc.len;
-> -=09=09skb =3D sock_alloc_send_skb(sk, len, 1, &err);
-> -=09=09if (unlikely(!skb))
-> +=09=09skb =3D xsk_build_skb(xs, &desc);
-> +=09=09if (IS_ERR(skb)) {
-> +=09=09=09err =3D PTR_ERR(skb);
->  =09=09=09goto out;
-> +=09=09}
->=20
-> -=09=09skb_put(skb, len);
-> -=09=09addr =3D desc.addr;
-> -=09=09buffer =3D xsk_buff_raw_get_data(xs->pool, addr);
-> -=09=09err =3D skb_store_bits(skb, 0, buffer, len);
->  =09=09/* This is the backpressure mechanism for the Tx path.
->  =09=09 * Reserve space in the completion queue and only proceed
->  =09=09 * if there is space in it. This avoids having to implement
->  =09=09 * any buffering in the Tx path.
->  =09=09 */
->  =09=09spin_lock_irqsave(&xs->pool->cq_lock, flags);
-> -=09=09if (unlikely(err) || xskq_prod_reserve(xs->pool->cq)) {
-> +=09=09if (xskq_prod_reserve(xs->pool->cq)) {
->  =09=09=09spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
->  =09=09=09kfree_skb(skb);
->  =09=09=09goto out;
->  =09=09}
->  =09=09spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
->=20
-> -=09=09skb->dev =3D xs->dev;
-> -=09=09skb->priority =3D sk->sk_priority;
-> -=09=09skb->mark =3D sk->sk_mark;
-> -=09=09skb_shinfo(skb)->destructor_arg =3D (void *)(long)desc.addr;
-> -=09=09skb->destructor =3D xsk_destruct_skb;
-> -
->  =09=09err =3D __dev_direct_xmit(skb, xs->queue_id);
->  =09=09if  (err =3D=3D NETDEV_TX_BUSY) {
->  =09=09=09/* Tell user-space to retry the send */
-> --
-> 1.8.3.1
+-The more special operations are:
++The more special operations are::
 
-Al
+     BPF_XCHG
+
+ This atomically exchanges ``src_reg`` with the value addressed by ``dst_reg +
+-off``.
++off``. ::
+
+     BPF_CMPXCHG
+
+@@ -1081,18 +1081,19 @@ before is loaded back to ``R0``.
+
+ Note that 1 and 2 byte atomic operations are not supported.
+
+-Except ``BPF_ADD`` _without_ ``BPF_FETCH`` (for legacy reasons), all 4 byte
++Except ``BPF_ADD`` *without* ``BPF_FETCH`` (for legacy reasons), all 4 byte
+ atomic operations require alu32 mode. Clang enables this mode by default in
+ architecture v3 (``-mcpu=v3``). For older versions it can be enabled with
+ ``-Xclang -target-feature -Xclang +alu32``.
+
+-You may encounter BPF_XADD - this is a legacy name for BPF_ATOMIC, referring to
+-the exclusive-add operation encoded when the immediate field is zero.
++You may encounter ``BPF_XADD`` - this is a legacy name for ``BPF_ATOMIC``,
++referring to the exclusive-add operation encoded when the immediate field is
++zero.
+
+-eBPF has one 16-byte instruction: BPF_LD | BPF_DW | BPF_IMM which consists
++eBPF has one 16-byte instruction: ``BPF_LD | BPF_DW | BPF_IMM`` which consists
+ of two consecutive ``struct bpf_insn`` 8-byte blocks and interpreted as single
+ instruction that loads 64-bit immediate value into a dst_reg.
+-Classic BPF has similar instruction: BPF_LD | BPF_W | BPF_IMM which loads
++Classic BPF has similar instruction: ``BPF_LD | BPF_W | BPF_IMM`` which loads
+ 32-bit immediate value into a register.
+
+ eBPF verifier
+--
+2.30.0.284.gd98b1dd5eaa7-goog
 
