@@ -2,403 +2,88 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-2.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8BCF7C433DB
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B6A41C433E6
 	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 00:01:34 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 5F00623718
+	by mail.kernel.org (Postfix) with ESMTP id 77D5423730
 	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 00:01:34 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731098AbhAUABM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Jan 2021 19:01:12 -0500
-Received: from mga18.intel.com ([134.134.136.126]:26979 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390712AbhATWwv (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Jan 2021 17:52:51 -0500
-IronPort-SDR: at+eF0PjGuFu1z4lhjUXEqmgHM4w4WVwWOVR9rISUmHaSXeZEvCtopgSC5PDFqBpDVppn0oAqU
- FVPcN/pcdTAg==
-X-IronPort-AV: E=McAfee;i="6000,8403,9870"; a="166850855"
-X-IronPort-AV: E=Sophos;i="5.79,362,1602572400"; 
-   d="scan'208";a="166850855"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 14:52:09 -0800
-IronPort-SDR: F3MiKiYZD0Um/NsCGtzziKJ65tcRZe+76Vim3bFtoNF9gTlEZCNL447qW5PFsgH5bX3MaksAVg
- GWLGN0Lne1yA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.79,362,1602572400"; 
-   d="scan'208";a="427068285"
-Received: from ranger.igk.intel.com ([10.102.21.164])
-  by orsmga001.jf.intel.com with ESMTP; 20 Jan 2021 14:52:05 -0800
-Date:   Wed, 20 Jan 2021 23:42:38 +0100
-From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-To:     Hangbin Liu <liuhangbin@gmail.com>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        Jiri Benc <jbenc@redhat.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>, ast@kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-        David Ahern <dsahern@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        John Fastabend <john.fastabend@gmail.com>
-Subject: Re: [PATCHv15 bpf-next 1/6] bpf: run devmap xdp_prog on flush
- instead of bulk enqueue
-Message-ID: <20210120224238.GA33532@ranger.igk.intel.com>
-References: <20210114142321.2594697-1-liuhangbin@gmail.com>
- <20210120022514.2862872-1-liuhangbin@gmail.com>
- <20210120022514.2862872-2-liuhangbin@gmail.com>
+        id S1726806AbhAUAAw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Jan 2021 19:00:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44416 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728149AbhATWeS (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Jan 2021 17:34:18 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9F5C061757;
+        Wed, 20 Jan 2021 14:33:12 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id f11so292585ljm.8;
+        Wed, 20 Jan 2021 14:33:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=jCbfwcVyUoQ0JouA43kMZ4FNgMXXeNgl+mh24fuv/4I=;
+        b=Wol5X43xwRtW1q3R9Gd0ykc2smF/Q9+4zknLG2pdR4qbKJFebCJj1eipefSdaON8up
+         lcufxzBIjgonhZMkCaOJHkpQGjxxfxh1UMpHeIONOWDR/cXvJzbN1ZvGxlkGlffBQrEo
+         sEQDPyNYKAAawU6+VhsKeboFZCkkkbaz9dNd7f8UcjEN08k+2NBNbFQwOdN6f20VDvMY
+         b/OdKJdCIIRxsIGKYZ4DUmYfrye/xoODDvBoIszD6R3aK/EK2h/llymgJiuZrwWjxZHB
+         mLk0hlbn2yD1g/d9kRB//kmtmj6ncaXt6czUbWeNJebVhCyZ5QIhNYmNPfWO1mgiscX4
+         CO8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=jCbfwcVyUoQ0JouA43kMZ4FNgMXXeNgl+mh24fuv/4I=;
+        b=SX5Ud9axTQfJpvg8JNZRoY6W3FEB2vF7H2Oy2vJ4MPBAeTo5hkrGRSwhr6d/WVK/nH
+         XZ1YaEY5beQKoeyj8M/nODyCU1XcGCj0fXZBazEdCzrDK6cdH5gvkh5+6gp63+6bVKHl
+         5Tlxfq51nGvp3NypzWY3Cb/PKJZgXo2i57EQhRDruuWFu7lm0pPE1680Juqtk8T58z5i
+         ClY9fpR/n2an85kSaqzBDeHA1pZUZ+5DOaNogTU/X03mtkDufSOWigH1U8NhT8RFh22a
+         GFcIUYA+syUZyGmZXRpkikp0UWpAguGjZO2MGgQc/UpfDnQMpxddx9OiwDphUbNH4V4y
+         H2Zw==
+X-Gm-Message-State: AOAM531tZLaErEBP8w7Yt7IokOqGKAmMBApvUsnOsQ8DMHz6fOcmYbsC
+        QlgRkAqTtXxFLQo8zOCARp4OPiNej1a13pQf0OukiC7w
+X-Google-Smtp-Source: ABdhPJzbMnC0+jKXktfQLHr83bXGwqIG9AgKvwz4EQvqqRyTCcrX9NwMTZ/f8NYw/LavJe/d4SX16NeKj6dsaVoWGYw=
+X-Received: by 2002:a2e:878a:: with SMTP id n10mr5393789lji.236.1611181990782;
+ Wed, 20 Jan 2021 14:33:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210120022514.2862872-2-liuhangbin@gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <20210115163501.805133-1-sdf@google.com>
+In-Reply-To: <20210115163501.805133-1-sdf@google.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 20 Jan 2021 14:32:59 -0800
+Message-ID: <CAADnVQK0b6n_f4PM5eOT9oZxE6RmtaQneCZAHOJe5uosxO9S_Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v9 0/3] bpf: misc performance improvements for
+ cgroup hooks
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 10:25:09AM +0800, Hangbin Liu wrote:
-> From: Jesper Dangaard Brouer <brouer@redhat.com>
-> 
-> This changes the devmap XDP program support to run the program when the
-> bulk queue is flushed instead of before the frame is enqueued. This has
-> a couple of benefits:
-> 
-> - It "sorts" the packets by destination devmap entry, and then runs the
->   same BPF program on all the packets in sequence. This ensures that we
->   keep the XDP program and destination device properties hot in I-cache.
-> 
-> - It makes the multicast implementation simpler because it can just
->   enqueue packets using bq_enqueue() without having to deal with the
->   devmap program at all.
-> 
-> The drawback is that if the devmap program drops the packet, the enqueue
-> step is redundant. However, arguably this is mostly visible in a
-> micro-benchmark, and with more mixed traffic the I-cache benefit should
-> win out. The performance impact of just this patch is as follows:
-> 
-> Using xdp_redirect_map(with a 2nd xdp_prog patch[1]) in sample/bpf and send
-> pkts via pktgen cmd:
-> ./pktgen_sample03_burst_single_flow.sh -i eno1 -d $dst_ip -m $dst_mac -t 10 -s 64
-> 
-> There are about +/- 0.1M deviation for native testing, the performance
-> improved for the base-case, but some drop back with xdp devmap prog attached.
-> 
-> Version          | Test                           | Generic | Native | Native + 2nd xdp_prog
-> 5.10 rc6         | xdp_redirect_map   i40e->i40e  |    2.0M |   9.1M |  8.0M
-> 5.10 rc6         | xdp_redirect_map   i40e->veth  |    1.7M |  11.0M |  9.7M
-> 5.10 rc6 + patch | xdp_redirect_map   i40e->i40e  |    2.0M |   9.5M |  7.5M
-> 5.10 rc6 + patch | xdp_redirect_map   i40e->veth  |    1.7M |  11.6M |  9.1M
-> 
-> [1] https://patchwork.ozlabs.org/project/netdev/patch/20201208120159.2278277-1-liuhangbin@gmail.com/
+On Fri, Jan 15, 2021 at 8:35 AM Stanislav Fomichev <sdf@google.com> wrote:
+>
+> First patch adds custom getsockopt for TCP_ZEROCOPY_RECEIVE
+> to remove kmalloc and lock_sock overhead from the dat path.
+>
+> Second patch removes kzalloc/kfree from getsockopt for the common cases.
+>
+> Third patch switches cgroup_bpf_enabled to be per-attach to
+> to add only overhead for the cgroup attach types used on the system.
+>
+> No visible user-side changes.
+>
+> v9:
+> - include linux/tcp.h instead of netinet/tcp.h in sockopt_sk.c
+> - note that v9 depends on the commit 4be34f3d0731 ("bpf: Don't leak
+>   memory in bpf getsockopt when optlen == 0") from bpf tree
 
-nit: probably would be good to update the link to patch, I see it's v8
-already whereas link refers to v4.
-
-> 
-> Signed-off-by: Jesper Dangaard Brouer <brouer@redhat.com>
-> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-> 
-> ---
-> v15:
-> a) do not use unlikely when checking bq->xdp_prog
-> b) return sent frames for dev_map_bpf_prog_run()
-> 
-> v14: no update, only rebase the code
-> v13: pass in xdp_prog through __xdp_enqueue()
-> v2-v12: no this patch
-> ---
->  kernel/bpf/devmap.c | 116 +++++++++++++++++++++++++++-----------------
->  1 file changed, 71 insertions(+), 45 deletions(-)
-> 
-> diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-> index f6e9c68afdd4..13ed68c24aad 100644
-> --- a/kernel/bpf/devmap.c
-> +++ b/kernel/bpf/devmap.c
-> @@ -57,6 +57,7 @@ struct xdp_dev_bulk_queue {
->  	struct list_head flush_node;
->  	struct net_device *dev;
->  	struct net_device *dev_rx;
-> +	struct bpf_prog *xdp_prog;
->  	unsigned int count;
->  };
->  
-> @@ -327,44 +328,93 @@ bool dev_map_can_have_prog(struct bpf_map *map)
->  	return false;
->  }
->  
-> +static int dev_map_bpf_prog_run(struct bpf_prog *xdp_prog,
-> +				struct xdp_frame **frames, int n,
-> +				struct net_device *dev)
-> +{
-> +	struct xdp_txq_info txq = { .dev = dev };
-> +	struct xdp_buff xdp;
-> +	int i, nframes = 0;
-> +
-> +	for (i = 0; i < n; i++) {
-> +		struct xdp_frame *xdpf = frames[i];
-> +		u32 act;
-> +		int err;
-> +
-> +		xdp_convert_frame_to_buff(xdpf, &xdp);
-> +		xdp.txq = &txq;
-> +
-> +		act = bpf_prog_run_xdp(xdp_prog, &xdp);
-> +		switch (act) {
-> +		case XDP_PASS:
-> +			err = xdp_update_frame_from_buff(&xdp, xdpf);
-
-Bump on John's question.
-
-> +			if (unlikely(err < 0))
-> +				xdp_return_frame_rx_napi(xdpf);
-> +			else
-> +				frames[nframes++] = xdpf;
-> +			break;
-> +		default:
-> +			bpf_warn_invalid_xdp_action(act);
-> +			fallthrough;
-> +		case XDP_ABORTED:
-> +			trace_xdp_exception(dev, xdp_prog, act);
-> +			fallthrough;
-> +		case XDP_DROP:
-> +			xdp_return_frame_rx_napi(xdpf);
-> +			break;
-> +		}
-> +	}
-> +	return nframes; /* sent frames count */
-> +}
-> +
->  static void bq_xmit_all(struct xdp_dev_bulk_queue *bq, u32 flags)
->  {
->  	struct net_device *dev = bq->dev;
->  	int sent = 0, drops = 0, err = 0;
-
-if sent is inited below, the assignment above is useless.
-Couldn't we do sent = cnt at the declaration over here?
-
-> +	unsigned int cnt = bq->count;
->  	int i;
->  
-> -	if (unlikely(!bq->count))
-> +	if (unlikely(!cnt))
->  		return;
->  
-> -	for (i = 0; i < bq->count; i++) {
-> +	for (i = 0; i < cnt; i++) {
->  		struct xdp_frame *xdpf = bq->q[i];
->  
->  		prefetch(xdpf);
->  	}
->  
-> -	sent = dev->netdev_ops->ndo_xdp_xmit(dev, bq->count, bq->q, flags);
-> +	/* Init sent to cnt in case there is no xdp_prog */
-> +	sent = cnt;
-> +	if (bq->xdp_prog) {
-> +		sent = dev_map_bpf_prog_run(bq->xdp_prog, bq->q, cnt, dev);
-> +		if (!sent)
-> +			goto out;
-
-Sorry, but 'sent' is a bit confusing to me, actual sending happens below
-via ndo_xdp_xmit, right? This hook will not actually send frames.
-Can we do a subtle change to have it in separate variable 'to_send' ?
-
-> +	}
-> +
-> +	/* Backup drops value before xmit as we may need it in error label */
-> +	drops = cnt - sent;
-> +	sent = dev->netdev_ops->ndo_xdp_xmit(dev, sent, bq->q, flags);
->  	if (sent < 0) {
->  		err = sent;
->  		sent = 0;
->  		goto error;
->  	}
-> -	drops = bq->count - sent;
->  out:
-> +	drops = cnt - sent;
->  	bq->count = 0;
->  
->  	trace_xdp_devmap_xmit(bq->dev_rx, dev, sent, drops, err);
->  	bq->dev_rx = NULL;
-> +	bq->xdp_prog = NULL;
->  	__list_del_clearprev(&bq->flush_node);
->  	return;
->  error:
->  	/* If ndo_xdp_xmit fails with an errno, no frames have been
->  	 * xmit'ed and it's our responsibility to them free all.
->  	 */
-> -	for (i = 0; i < bq->count; i++) {
-> +	for (i = 0; i < cnt - drops; i++) {
->  		struct xdp_frame *xdpf = bq->q[i];
-> -
->  		xdp_return_frame_rx_napi(xdpf);
-> -		drops++;
->  	}
->  	goto out;
-
-Although I'm a huge goto advocate, I feel like this particular usage could
-be simplified. Not sure why we had that in first place.
-
-I gave a shot at rewriting/refactoring whole bq_xmit_all and I feel like
-it's more readable. I introduced 'to_send' variable and got rid of 'error'
-label.
-
-Thoughts?
-
-I might have missed something, though.
-
-static void bq_xmit_all(struct xdp_dev_bulk_queue *bq, u32 flags)
-{
-	struct net_device *dev = bq->dev;
-	unsigned int cnt = bq->count;
-	int drops = 0, err = 0;
-	int to_send = 0;
-	int sent = cnt;
-	int i;
-
-	if (unlikely(!cnt))
-		return;
-
-	for (i = 0; i < cnt; i++) {
-		struct xdp_frame *xdpf = bq->q[i];
-
-		prefetch(xdpf);
-	}
-
-	if (bq->xdp_prog) {
-		to_send = dev_map_bpf_prog_run(bq->xdp_prog, bq->q, cnt, dev);
-		if (!to_send) {
-			sent = 0;
-			goto out;
-		}
-	}
-
-	drops = cnt - to_send;
-	sent = dev->netdev_ops->ndo_xdp_xmit(dev, to_send, bq->q, flags);
-	if (sent < 0) {
-		err = sent;
-		sent = 0;
-
-		/* If ndo_xdp_xmit fails with an errno, no frames have been
-		 * xmit'ed and it's our responsibility to them free all.
-		 */
-		for (i = 0; i < cnt - drops; i++) {
-			struct xdp_frame *xdpf = bq->q[i];
-
-			xdp_return_frame_rx_napi(xdpf);
-		}
-	}
-out:
-	drops = cnt - sent;
-	bq->count = 0;
-
-	trace_xdp_devmap_xmit(bq->dev_rx, dev, sent, drops, err);
-	bq->dev_rx = NULL;
-	bq->xdp_prog = NULL;
-	__list_del_clearprev(&bq->flush_node);
-
-	return;
-}
-
->  }
-> @@ -408,7 +458,7 @@ struct bpf_dtab_netdev *__dev_map_lookup_elem(struct bpf_map *map, u32 key)
->   * Thus, safe percpu variable access.
->   */
->  static void bq_enqueue(struct net_device *dev, struct xdp_frame *xdpf,
-> -		       struct net_device *dev_rx)
-> +		       struct net_device *dev_rx, struct bpf_prog *xdp_prog)
->  {
->  	struct list_head *flush_list = this_cpu_ptr(&dev_flush_list);
->  	struct xdp_dev_bulk_queue *bq = this_cpu_ptr(dev->xdp_bulkq);
-> @@ -423,6 +473,14 @@ static void bq_enqueue(struct net_device *dev, struct xdp_frame *xdpf,
->  	if (!bq->dev_rx)
->  		bq->dev_rx = dev_rx;
->  
-> +	/* Store (potential) xdp_prog that run before egress to dev as
-> +	 * part of bulk_queue.  This will be same xdp_prog for all
-> +	 * xdp_frame's in bulk_queue, because this per-CPU store must
-> +	 * be flushed from net_device drivers NAPI func end.
-> +	 */
-> +	if (!bq->xdp_prog)
-> +		bq->xdp_prog = xdp_prog;
-> +
->  	bq->q[bq->count++] = xdpf;
->  
->  	if (!bq->flush_node.prev)
-> @@ -430,7 +488,8 @@ static void bq_enqueue(struct net_device *dev, struct xdp_frame *xdpf,
->  }
->  
->  static inline int __xdp_enqueue(struct net_device *dev, struct xdp_buff *xdp,
-> -			       struct net_device *dev_rx)
-> +				struct net_device *dev_rx,
-> +				struct bpf_prog *xdp_prog)
->  {
->  	struct xdp_frame *xdpf;
->  	int err;
-> @@ -446,42 +505,14 @@ static inline int __xdp_enqueue(struct net_device *dev, struct xdp_buff *xdp,
->  	if (unlikely(!xdpf))
->  		return -EOVERFLOW;
->  
-> -	bq_enqueue(dev, xdpf, dev_rx);
-> +	bq_enqueue(dev, xdpf, dev_rx, xdp_prog);
->  	return 0;
->  }
->  
-> -static struct xdp_buff *dev_map_run_prog(struct net_device *dev,
-> -					 struct xdp_buff *xdp,
-> -					 struct bpf_prog *xdp_prog)
-> -{
-> -	struct xdp_txq_info txq = { .dev = dev };
-> -	u32 act;
-> -
-> -	xdp_set_data_meta_invalid(xdp);
-> -	xdp->txq = &txq;
-> -
-> -	act = bpf_prog_run_xdp(xdp_prog, xdp);
-> -	switch (act) {
-> -	case XDP_PASS:
-> -		return xdp;
-> -	case XDP_DROP:
-> -		break;
-> -	default:
-> -		bpf_warn_invalid_xdp_action(act);
-> -		fallthrough;
-> -	case XDP_ABORTED:
-> -		trace_xdp_exception(dev, xdp_prog, act);
-> -		break;
-> -	}
-> -
-> -	xdp_return_buff(xdp);
-> -	return NULL;
-> -}
-> -
->  int dev_xdp_enqueue(struct net_device *dev, struct xdp_buff *xdp,
->  		    struct net_device *dev_rx)
->  {
-> -	return __xdp_enqueue(dev, xdp, dev_rx);
-> +	return __xdp_enqueue(dev, xdp, dev_rx, NULL);
->  }
->  
->  int dev_map_enqueue(struct bpf_dtab_netdev *dst, struct xdp_buff *xdp,
-> @@ -489,12 +520,7 @@ int dev_map_enqueue(struct bpf_dtab_netdev *dst, struct xdp_buff *xdp,
->  {
->  	struct net_device *dev = dst->dev;
->  
-> -	if (dst->xdp_prog) {
-> -		xdp = dev_map_run_prog(dev, xdp, dst->xdp_prog);
-> -		if (!xdp)
-> -			return 0;
-> -	}
-> -	return __xdp_enqueue(dev, xdp, dev_rx);
-> +	return __xdp_enqueue(dev, xdp, dev_rx, dst->xdp_prog);
->  }
->  
->  int dev_map_generic_redirect(struct bpf_dtab_netdev *dst, struct sk_buff *skb,
-> -- 
-> 2.26.2
-> 
+I've rebased bpf-next to include that fix from bpf and applied this set.
+Thanks!
