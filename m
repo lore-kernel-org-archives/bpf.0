@@ -2,129 +2,197 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3100C433DB
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:12:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1815FC433E0
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:14:09 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A55ED23441
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:12:07 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BD27A233FC
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:14:08 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728166AbhATODj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Jan 2021 09:03:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:38532 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729327AbhATMqY (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 20 Jan 2021 07:46:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611146669;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sUAqRM/yS0M5hIXrhzb/rZQVUUoVZTMsafAH4hmcgY0=;
-        b=Jsg0TlqqyEUFFh3ZGydaQc6ufNj1qOsTSt5Au7Qqt3iVBwBua1ZiYOlgKQuwrZUrQTysX0
-        NadlSBGjNlUWvGqGcIcoXv+kQYnVonWuJDUFe62rSItJWC5AUX2oFWYHfezO+1pH2rYhSi
-        oGZRaKX5HG7ajB/T/MKIIc5HoJLC6VY=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-576-BfBndRqCNoqV5zYUFF3QBg-1; Wed, 20 Jan 2021 07:44:27 -0500
-X-MC-Unique: BfBndRqCNoqV5zYUFF3QBg-1
-Received: by mail-ed1-f72.google.com with SMTP id ck25so7131703edb.16
-        for <bpf@vger.kernel.org>; Wed, 20 Jan 2021 04:44:27 -0800 (PST)
+        id S1732189AbhATUNa (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Jan 2021 15:13:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728635AbhATUN0 (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Jan 2021 15:13:26 -0500
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB119C061575;
+        Wed, 20 Jan 2021 12:12:46 -0800 (PST)
+Received: by mail-pl1-x632.google.com with SMTP id u11so8838324plg.13;
+        Wed, 20 Jan 2021 12:12:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=foCHEt7FF+EjVn9rkpAiAjBdZYjzS1bV8BzUmJzcbPo=;
+        b=Q9XdDX0MAlt5hi2UrISiWdD7xCVePjhFsVXJnccCCtHFjnbiaBb8EzicUF9OxrtCzI
+         2WRg7sPPfH+y4CNj+jB2/BTJq2iVbOevqICybIAa33UM+KnGbHaE7EiAHIvwfdoFvVU8
+         bTpnwz0XdbIfymXkdiWXMYPAACwx0ze6iBbDNEf0QjiSo1lLMOJM9PNdlvdE+Zgh46Qr
+         OVl8/R7kbmEJjoJD4leoSEsgqvE/R0VmlIProKI5vyyENFbYeRyXlcwzZqBAk+VZdvxy
+         nW3c2tR9gdukSkz8GJYpz6XhTRNF62710b5b3M0HBUXOdvzWWapqADGcKxAsjcoNIycY
+         eIcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=sUAqRM/yS0M5hIXrhzb/rZQVUUoVZTMsafAH4hmcgY0=;
-        b=AuXwdyqZKjQUVy+SLo9+/A+t1ubTuKUP3PMxAEoT44Iyj5pbkm+UKciVvUV/D0+DQn
-         GmSdz+ZS80XkJXDgAZj8ITzwlEfnCvfjNXB4pBrpGyXZm/ssJNQOJeqVesUVKno0RDWn
-         Tm+MUG+iRJGfyybxc7URn7ZgYAO2utkoi6XqKZ4O0Os/vSPWH6RpbS5JwCYXwzEZ1ZLS
-         WH93Ptc9i/FK6P60f+1TyS1CY/0slcDxJIMvUPsuOtciWMcGBlTjUZLv2UWBcqcga7gI
-         6h8fgSum2/gAKScGhE6ERF4nULd+jAEU46lUK+I2uCUvLk0tFPsiYhRIHgzKeaLz9qtF
-         apKg==
-X-Gm-Message-State: AOAM530BA3rmJZpGbUghmIVbfsB37NXiX8jFaoKGtPjf5PcbKGUQwSQH
-        3dT20g9wuc2UkakC0Kgd/IBW4O5k9UTWw1H58D9YZzXru2aTwrAyFnQy3TlYEp1xUhlOZTihMfZ
-        sRDM6T92Ts0SS
-X-Received: by 2002:a17:906:853:: with SMTP id f19mr5788736ejd.259.1611146666085;
-        Wed, 20 Jan 2021 04:44:26 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx5dm2HB0RZ5ZugSPvLT4yyM9ikHbHT6/9rABxR/0diF0XKB6XZRuRPdjbACzDcjhZAMtrsaA==
-X-Received: by 2002:a17:906:853:: with SMTP id f19mr5788731ejd.259.1611146665894;
-        Wed, 20 Jan 2021 04:44:25 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id t21sm1083028edv.82.2021.01.20.04.44.24
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=foCHEt7FF+EjVn9rkpAiAjBdZYjzS1bV8BzUmJzcbPo=;
+        b=uVTls6k6scFQ+l9csR+cWiQfN5srF/6YfqK9i8fkelpvVWB/L+VAMvisyRpbWWZMdk
+         BZyayydEsiMAxp1DdbRHG22zzzq3KZ04MvyofA01rts/NqeBSx8LD1zTY/HdBhCiz3S5
+         G4MZbug2hSPA8IgdJebTNVmyLd4lO4QIjI4UZM3Gj47n/X9NC6oDnC5rDS7K0G3jhj/H
+         nXJd6LDKCK1X/OxjPcu74m/CZfGcT8TtYuSAEszobV7IyFlCGZyEIkjKpbOgB63D8VSZ
+         uBOdNXFYl68tAyts/c+pfU80mBxzOXhtAucPjAht0abbqOs+dGX0xWYXK7hfKADYa1et
+         qn9w==
+X-Gm-Message-State: AOAM533yV85j7HwnJALxcB6xLcXIPPu21vPaL5BM8uh+1LSM2apX9H6n
+        tc17oByK+1ol4iIwDTFvmg3y2hytNbk=
+X-Google-Smtp-Source: ABdhPJxKt0KR2r/H1xrow2AhFhVvm9PkmwfZy4ZVoqnSA1JdlbNcpZr71L3A4LKR+0MirY6fItSETg==
+X-Received: by 2002:a17:90a:d145:: with SMTP id t5mr7548907pjw.104.1611173565876;
+        Wed, 20 Jan 2021 12:12:45 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:bed2])
+        by smtp.gmail.com with ESMTPSA id 186sm3015756pfx.100.2021.01.20.12.12.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 04:44:25 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 8EE95180331; Wed, 20 Jan 2021 13:44:24 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
-        kuba@kernel.org, jonathan.lemon@gmail.com, maximmi@nvidia.com,
-        davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
-        ciara.loftus@intel.com, weqaar.a.janjua@intel.com
-Subject: Re: [PATCH bpf-next v2 1/8] xdp: restructure redirect actions
-In-Reply-To: <20210119155013.154808-2-bjorn.topel@gmail.com>
-References: <20210119155013.154808-1-bjorn.topel@gmail.com>
- <20210119155013.154808-2-bjorn.topel@gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Wed, 20 Jan 2021 13:44:24 +0100
-Message-ID: <87bldjeq1j.fsf@toke.dk>
+        Wed, 20 Jan 2021 12:12:45 -0800 (PST)
+Date:   Wed, 20 Jan 2021 12:12:42 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Brendan Jackman <jackmanb@google.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Florent Revest <revest@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH bpf-next] bpf: Propagate memory bounds to registers in
+ atomics w/ BPF_FETCH
+Message-ID: <20210120201242.nm35li5yxvo7ir35@ast-mbp.dhcp.thefacebook.com>
+References: <20210118160613.541020-1-jackmanb@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210118160613.541020-1-jackmanb@google.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Bj=C3=B6rn T=C3=B6pel <bjorn.topel@gmail.com> writes:
+On Mon, Jan 18, 2021 at 04:06:13PM +0000, Brendan Jackman wrote:
+> When BPF_FETCH is set, atomic instructions load a value from memory
+> into a register. The current verifier code first checks via
+> check_mem_access whether we can access the memory, and then checks
+> via check_reg_arg whether we can write into the register.
+> 
+> For loads, check_reg_arg has the side-effect of marking the
+> register's value as unkonwn, and check_mem_access has the side effect
+> of propagating bounds from memory to the register.
+> 
+> Therefore with the current order, bounds information is thrown away,
+> but by simply reversing the order of check_reg_arg
+> vs. check_mem_access, we can instead propagate bounds smartly.
 
-> From: Bj=C3=B6rn T=C3=B6pel <bjorn.topel@intel.com>
->
-> The XDP_REDIRECT implementations for maps and non-maps are fairly
-> similar, but obviously need to take different code paths depending on
-> if the target is using a map or not. Today, the redirect targets for
-> XDP either uses a map, or is based on ifindex.
->
-> Future commits will introduce yet another redirect target via the a
-> new helper, bpf_redirect_xsk(). To pave the way for that, we introduce
-> an explicit redirect type to bpf_redirect_info. This makes the code
-> easier to follow, and makes it easier to add new redirect targets.
->
-> Further, using an explicit type in bpf_redirect_info has a slight
-> positive performance impact by avoiding a pointer indirection for the
-> map type lookup, and instead use the hot cacheline for
-> bpf_redirect_info.
->
-> The bpf_redirect_info flags member is not used by XDP, and not
-> read/written any more. The map member is only written to when
-> required/used, and not unconditionally.
+I think such improvement makes sense, but please tweak commit log
+to mention that check_mem_access() is doing it only for stack pointers.
+Since "propagating from memory" is too generic. Most memory
+won't have such propagation.
 
-I like the simplification. However, the handling of map clearing becomes
-a bit murky with this change:
+> A simple test is added with an infinite loop that can only be proved
+> unreachable if this propagation is present.
+> 
+> Note that in the test, the memory value has to be written with two
+> instructions:
+> 
+> 		BPF_MOV64_IMM(BPF_REG_0, 0),
+> 		BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
+> 
+> instead of one:
+> 
+> 		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
+> 
+> Because BPF_ST_MEM doesn't seem to set the stack slot type to 0 when
+> storing an immediate.
 
-You're not changing anything in bpf_clear_redirect_map(), and you're
-removing most of the reads and writes of ri->map. Instead,
-bpf_xdp_redirect_map() will store the bpf_dtab_netdev pointer in
-ri->tgt_value, which xdp_do_redirect() will just read and use without
-checking. But if the map element (or the entire map) has been freed in
-the meantime that will be a dangling pointer. I *think* the RCU callback
-in dev_map_delete_elem() and the rcu_barrier() in dev_map_free()
-protects against this, but that is by no means obvious. So confirming
-this, and explaining it in a comment would be good.
+This bit is confusing in the commit log. Pls move it into test itself.
 
-Also, as far as I can tell after this, ri->map is only used for the
-tracepoint. So how about just storing the map ID and getting rid of the
-READ/WRITE_ONCE() entirely?
+> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+> ---
+>  kernel/bpf/verifier.c                         | 32 +++++++++++--------
+>  .../selftests/bpf/verifier/atomic_bounds.c    | 18 +++++++++++
+>  2 files changed, 36 insertions(+), 14 deletions(-)
+>  create mode 100644 tools/testing/selftests/bpf/verifier/atomic_bounds.c
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 0f82d5d46e2c..0512695c70f4 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -3663,9 +3663,26 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
+>  		return -EACCES;
+>  	}
+>  
+> +	if (insn->imm & BPF_FETCH) {
+> +		if (insn->imm == BPF_CMPXCHG)
+> +			load_reg = BPF_REG_0;
+> +		else
+> +			load_reg = insn->src_reg;
+> +
+> +		/* check and record load of old value */
+> +		err = check_reg_arg(env, load_reg, DST_OP);
+> +		if (err)
+> +			return err;
+> +	} else {
+> +		/* This instruction accesses a memory location but doesn't
+> +		 * actually load it into a register.
+> +		 */
+> +		load_reg = -1;
+> +	}
+> +
+>  	/* check whether we can read the memory */
+>  	err = check_mem_access(env, insn_idx, insn->dst_reg, insn->off,
+> -			       BPF_SIZE(insn->code), BPF_READ, -1, true);
+> +			       BPF_SIZE(insn->code), BPF_READ, load_reg, true);
+>  	if (err)
+>  		return err;
+>  
+> @@ -3675,19 +3692,6 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
+>  	if (err)
+>  		return err;
+>  
+> -	if (!(insn->imm & BPF_FETCH))
+> -		return 0;
+> -
+> -	if (insn->imm == BPF_CMPXCHG)
+> -		load_reg = BPF_REG_0;
+> -	else
+> -		load_reg = insn->src_reg;
+> -
+> -	/* check and record load of old value */
+> -	err = check_reg_arg(env, load_reg, DST_OP);
+> -	if (err)
+> -		return err;
+> -
+>  	return 0;
+>  }
+>  
+> diff --git a/tools/testing/selftests/bpf/verifier/atomic_bounds.c b/tools/testing/selftests/bpf/verifier/atomic_bounds.c
+> new file mode 100644
+> index 000000000000..45030165ed63
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/verifier/atomic_bounds.c
+> @@ -0,0 +1,18 @@
+> +{
+> +	"BPF_ATOMIC bounds propagation, mem->reg",
+> +	.insns = {
+> +		/* a = 0; */
+> +		BPF_MOV64_IMM(BPF_REG_0, 0),
+> +		BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
+> +		/* b = atomic_fetch_add(&a, 1); */
+> +		BPF_MOV64_IMM(BPF_REG_1, 1),
+> +		BPF_ATOMIC_OP(BPF_DW, BPF_ADD | BPF_FETCH, BPF_REG_10, BPF_REG_1, -8),
+> +		/* Verifier should be able to tell that this infinite loop isn't reachable. */
+> +		/* if (b) while (true) continue; */
+> +		BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, -1),
+> +		BPF_EXIT_INSN(),
 
-(Oh, and related to this I think this patch set will conflict with
-Hangbin's multi-redirect series, so maybe you two ought to coordinate? :))
-
--Toke
-
+I think it's a bit unrealistic to use atomic_add to increment induction variable,
+but I don't mind, since the verifier side is simple.
+Could you add a C based test as well?
