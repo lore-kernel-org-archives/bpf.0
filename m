@@ -5,101 +5,153 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DB2E1C4332D
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 19:24:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1CBA5C433E0
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 19:26:31 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A509823403
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 19:24:52 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id C87E92342C
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 19:26:30 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729119AbhATTYg (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Jan 2021 14:24:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60088 "EHLO
+        id S2387861AbhATTXw (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Jan 2021 14:23:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392088AbhATTYU (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Jan 2021 14:24:20 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCFFC061757;
-        Wed, 20 Jan 2021 11:23:40 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id h205so35618256lfd.5;
-        Wed, 20 Jan 2021 11:23:40 -0800 (PST)
+        with ESMTP id S2389903AbhATSpz (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Jan 2021 13:45:55 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A44C061575;
+        Wed, 20 Jan 2021 10:45:11 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id o17so35520168lfg.4;
+        Wed, 20 Jan 2021 10:45:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=FB9rCEvUKKLUEE3zDbbNHWd1Ms8+O71NKBDL0wI3PRE=;
-        b=ps5alcIMVpBMxN05bXhD0FFEmNIACfekcJyE8TgUCjMhUrOzsr32oHcHFZjqqjVBzU
-         T59rlG+opjxX3+JnutUYZmv7mz5NYgPDYG3oZtdR+VD5F2p1CbzlatTg2XAVxJ39baoz
-         /BzTaX0MUwog4ymAGp4Ak97lbRFHbetd/xAmj4HWhTxXzrPrgZ6ReHE6OW+UuGXzm6DV
-         ci7GpkMoEa5QIJMs8e2/fHRiKS3xwvRp3zaCTenaxKWDqOt2VnjlSoJxDaJqqzz35mDY
-         55QrwejvWxwThNrkHbCLv6ZP2tHv3PeLX3kRB4dAcVLppuiHIjC1KkZdvN8gSxlcNsNC
-         iUmA==
+        bh=zrMNRZvlEESWdG6jggtCoB+4numwazy+fXWH/nTPU9U=;
+        b=GbiCYI2AOS9Mde7ZZGAB8iKTEaPVyUk3NJn7BsJ4aNMPDW3bfjjQOlDjJVeyI01LfK
+         yGrcSPsCfKcKMod8xBD3FRFhA2PKjb0+UA9u+c+PLBc6ucvOs4H76CCyWbj5qRgGzSxL
+         YYeBDYP7YKSgdZ2tcOGzhxRWs+uk1fru9f/FsIBpFq4b3uFMzw/dOgkhsRnbJz85JTGD
+         OFp28kiITVDeZNpIvktOImEsP9FYI+HUZ15TQ4xgjNS0A45AjvFeCkc/hiGkbKW6oV51
+         UkYN9KTEvNSswvk+NvyWRYiqpqIG5SqjCPISQdicL2egTc1jJYF1v01KBc8Pl6R7uTGn
+         P/AA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=FB9rCEvUKKLUEE3zDbbNHWd1Ms8+O71NKBDL0wI3PRE=;
-        b=ox6B8QLtTcsM8dAPSYghMoCTjFFTioabs9zzIGLJFL9Xuhjq8jRe3bLxMF66WtlzIO
-         oNe4QHvZL6E+uvwC3cSkVbCIMiCQZa0+541c5lZ4zKRH3SDGb7cLXNV5UWoOk3fH9b2+
-         VWunIJKfgto4y+LXVAKAfyfuA9CF5nX1MbAJKBmwBbpTeJs4uLMI2/bVSQ5UpSZsVTus
-         A2W5Bye+oPNTeEFrswNa74rlzaw6yyK6eIhxv0/4HqGZDI0IUHXi+S4BCRufCmMd2tEH
-         VwyQNniQS/4ShOU5Vqx8e+itHWXW1ciYB4TCFbO9mOcLNtk3kf2sVfKFyFt4Dm7X9hpf
-         BY+g==
-X-Gm-Message-State: AOAM5312N6RUtg9JGhBexPmiXJ3Y/SbKAS0vBDrT4EtsXfUbGPf2bPM/
-        VrOZcG2x10E2de3o9WEXf0mQSBu4qjc+76mbS+Q=
-X-Google-Smtp-Source: ABdhPJwhrYUxdKjAh1i9WyZDqPgsq/8sEaSggDumv1OtuzGfyXnhLwa61GVUp6rmLs04sbMCDL4mQsNFqz3d8uIb1D8=
-X-Received: by 2002:a19:8983:: with SMTP id l125mr4672224lfd.182.1611170618663;
- Wed, 20 Jan 2021 11:23:38 -0800 (PST)
+        bh=zrMNRZvlEESWdG6jggtCoB+4numwazy+fXWH/nTPU9U=;
+        b=BQqb9xHzS3Q3cW/HfiF08HssFRa7X4tkKto4CQaRFNYQQzYdTk832/+3VIv6E8x+EK
+         EaMwg/9gLe9eEeJwrdYBqFN8Xblu8mO7MPFMSuSv5lNCL+jizh/6khQd/7X5Ki3y4Rbc
+         YsAN91msjEOo9Nytsqb2qp32kRvO1w2WLdMG/y0/eeAwijR+K2H1cPJKBtGzUcxOJdC+
+         Zp0d22MRKB4wqwGV3XbaNhxQQNwGJX9QyGu3rM/BDJ1zCXLauh6PBsmxyQlTTeGoS6yR
+         nIqJlkvgxC3hrlecfsCho6C5SDv4b8u8fnj5rwOChyrc03c1hYFCI5TwH/N+DJnKRHEF
+         8NQQ==
+X-Gm-Message-State: AOAM532QOqGUBY9ruwM2TTcc8NDIkXf+Lq/IztatkLw4Meff+hL4RCDV
+        IUCK24Vi5NiTJRjtUHFWiZOIeBAwz0CJB2CFVuE=
+X-Google-Smtp-Source: ABdhPJysfNizrzDQUVINGOhhgWus7azEpICiAnwV+p4EXlvDkyaX1pVlGFfbUwglU72IpLHWW5TDXiNALg3A++evFDI=
+X-Received: by 2002:a05:6512:34c5:: with SMTP id w5mr4908698lfr.214.1611168309505;
+ Wed, 20 Jan 2021 10:45:09 -0800 (PST)
 MIME-Version: 1.0
-References: <20210119114624.60400-1-bianpan2016@163.com>
-In-Reply-To: <20210119114624.60400-1-bianpan2016@163.com>
+References: <20210112194143.1494-1-yuri.benditovich@daynix.com>
+ <20210112194143.1494-4-yuri.benditovich@daynix.com> <CAOEp5Ocz-xGq5=e=WY0aipEYHEhN-wxekNaAiqAS+HsOF8TcDQ@mail.gmail.com>
+ <CAOEp5OevYR5FWVMfQ_esmWTKtz9_ddTupbe7FtBFQ=sv2kEt2w@mail.gmail.com>
+In-Reply-To: <CAOEp5OevYR5FWVMfQ_esmWTKtz9_ddTupbe7FtBFQ=sv2kEt2w@mail.gmail.com>
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 20 Jan 2021 11:23:27 -0800
-Message-ID: <CAADnVQJr0idctwt53eD3dFmbZ_upLT6_7jc4raD825aPi640sA@mail.gmail.com>
-Subject: Re: [PATCH] bpf: put file handler if no storage found
-To:     Pan Bian <bianpan2016@163.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+Date:   Wed, 20 Jan 2021 10:44:58 -0800
+Message-ID: <CAADnVQJLN0sFyKdAmc6Pikv8Ww9OocnK_VXMG=ZLSMONHkqe4Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/7] tun: allow use of BPF_PROG_TYPE_SCHED_CLS program type
+To:     Yuri Benditovich <yuri.benditovich@daynix.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         John Fastabend <john.fastabend@gmail.com>,
         KP Singh <kpsingh@kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Willem de Bruijn <willemb@google.com>, gustavoars@kernel.org,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>, decui@microsoft.com,
+        cai@lca.pw, Jakub Sitnicki <jakub@cloudflare.com>,
+        Marco Elver <elver@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        bpf <bpf@vger.kernel.org>, Yan Vugenfirer <yan@daynix.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Tue, Jan 19, 2021 at 4:03 AM Pan Bian <bianpan2016@163.com> wrote:
+On Tue, Jan 12, 2021 at 12:55 PM Yuri Benditovich
+<yuri.benditovich@daynix.com> wrote:
 >
-> Put file f if inode_storage_ptr() returns NULL.
+> On Tue, Jan 12, 2021 at 10:40 PM Yuri Benditovich
+> <yuri.benditovich@daynix.com> wrote:
+> >
+> > On Tue, Jan 12, 2021 at 9:42 PM Yuri Benditovich
+> > <yuri.benditovich@daynix.com> wrote:
+> > >
+> > > This program type can set skb hash value. It will be useful
+> > > when the tun will support hash reporting feature if virtio-net.
+> > >
+> > > Signed-off-by: Yuri Benditovich <yuri.benditovich@daynix.com>
+> > > ---
+> > >  drivers/net/tun.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > >
+> > > diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+> > > index 7959b5c2d11f..455f7afc1f36 100644
+> > > --- a/drivers/net/tun.c
+> > > +++ b/drivers/net/tun.c
+> > > @@ -2981,6 +2981,8 @@ static int tun_set_ebpf(struct tun_struct *tun, struct tun_prog __rcu **prog_p,
+> > >                 prog = NULL;
+> > >         } else {
+> > >                 prog = bpf_prog_get_type(fd, BPF_PROG_TYPE_SOCKET_FILTER);
+> > > +               if (IS_ERR(prog))
+> > > +                       prog = bpf_prog_get_type(fd, BPF_PROG_TYPE_SCHED_CLS);
+> > >                 if (IS_ERR(prog))
+> > >                         return PTR_ERR(prog);
+> > >         }
+> >
+> > Comment from Alexei Starovoitov:
+> > Patches 1 and 2 are missing for me, so I couldn't review properly,
+> > but this diff looks odd.
+> > It allows sched_cls prog type to attach to tun.
+> > That means everything that sched_cls progs can do will be done from tun hook?
 >
-> Signed-off-by: Pan Bian <bianpan2016@163.com>
-> ---
->  kernel/bpf/bpf_inode_storage.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/bpf_inode_storage.c b/kernel/bpf/bpf_inode_storage.c
-> index 6edff97ad594..089d5071d4fc 100644
-> --- a/kernel/bpf/bpf_inode_storage.c
-> +++ b/kernel/bpf/bpf_inode_storage.c
-> @@ -125,8 +125,12 @@ static int bpf_fd_inode_storage_update_elem(struct bpf_map *map, void *key,
->
->         fd = *(int *)key;
->         f = fget_raw(fd);
-> -       if (!f || !inode_storage_ptr(f->f_inode))
-> +       if (!f)
-> +               return -EBADF;
-> +       if (!inode_storage_ptr(f->f_inode)) {
-> +               fput(f);
->                 return -EBADF;
-> +       }
+> We do not have an intention to modify the packet in this steering eBPF.
 
-Good catch.
-Somehow the patch is not in patchwork.
-Could you please resubmit with Fixes tag and reduce cc list?
-I guess it's hitting some spam filters in vger.
+The intent is irrelevant. Using SCHED_CLS here will let users modify the packet
+and some users will do so. Hence the tun code has to support it.
+
+> There is just one function that unavailable for BPF_PROG_TYPE_SOCKET_FILTER
+> that the eBPF needs to make possible to deliver the hash to the guest
+> VM - it is 'bpf_set_hash'
+>
+> Does it mean that we need to define a new eBPF type for socket filter
+> operations + set_hash?
+>
+> Our problem is that the eBPF calculates 32-bit hash, 16-bit queue
+> index and 8-bit of hash type.
+> But it is able to return only 32-bit integer, so in this set of
+> patches the eBPF returns
+> queue index and hash type and saves the hash in skb->hash using bpf_set_hash().
+
+bpf prog can only return a 32-bit integer. That's true.
+But the prog can use helpers to set any number of bits and variables.
+bpf_set_hash_v2() with hash, queue and index arguments could fit this purpose,
+but if you allow it for SCHED_CLS type,
+tc side of the code should be ready to deal with that too and this extended
+helper should be meaningful for both tc and tun.
+
+In general if the purpose of the prog is to compute three values they better be
+grouped together. Returned two of them via ORed 32-bit integer and
+returning 32-bit via bpf_set_hash is an awkward api.
