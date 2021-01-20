@@ -2,111 +2,147 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-26.3 required=3.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT,USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-7.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
 	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 60402C43603
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 8EB8AC4360C
 	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 23:42:35 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 30CE223603
+	by mail.kernel.org (Postfix) with ESMTP id 71CDF23603
 	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 23:42:35 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727253AbhATV2M (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Jan 2021 16:28:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
+        id S1729013AbhATV3J (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Jan 2021 16:29:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729083AbhATNlX (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Jan 2021 08:41:23 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAAF4C061796
-        for <bpf@vger.kernel.org>; Wed, 20 Jan 2021 05:39:57 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id z188so1571121wme.1
-        for <bpf@vger.kernel.org>; Wed, 20 Jan 2021 05:39:57 -0800 (PST)
+        with ESMTP id S1729280AbhATVHO (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Jan 2021 16:07:14 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A43C061575;
+        Wed, 20 Jan 2021 13:06:33 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id o19so36066392lfo.1;
+        Wed, 20 Jan 2021 13:06:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=sender:date:in-reply-to:message-id:mime-version:references:subject
-         :from:to:cc;
-        bh=6OdTPYEA2p5+e67drhVq+n88z8c6ioQj4MZmywIDAFM=;
-        b=ANN34zi07ugZKnGspUDX8SGtW0gJFAepbGvNv79YXL+On+puhP5NhSPFqMbN8791sA
-         +OpVHWkYimFLQYs5KnQaYv7MjAWS2Ul3AO2PWWUcbpB3s0mDPKyc6jmOhvURhuy9BCME
-         7kpqPpCOThFEQ5cUpS3oqyuDFVemFeDY5MopINLGdsmLvFRTquXUbYcHZqti718nZEHP
-         VRFHQ/vZK/p00SHoUyQydfK8pTOND8ZEXE7zo4WTonNz09z3ICvSOQgDbHijvLOxpsDi
-         r8cyrdeg6PviDgfUSKMZ1IrM0RZq83vxWevQNC5kHDZbU9VsdVIKMqJHihF82i8vSfQi
-         agXg==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=bD0Y2/R9ILpESAFdsBEs4WGwWlwfFTXpzZ+PoX1/gaA=;
+        b=s7hwLd/8t0d+W5hiqnmCy3pBNiytoBhaptMNf0qmjq3rTfoTkjbJ3t+dIrHji26XSV
+         IetAugs+aV5iIwODDEC/p9tZBWXj0a239Lqi/Yp1F3X/isXfXsKZLP2DeHlYNJyhpKqj
+         4PvLhrtmU7Jp/nuy5agwmRTg0D13gXE3XN1LljyZVLXjIf1qzk/AeVOq6qd6tzmSCDXP
+         jrzzy8rfwI0Q1Ieq8+4tOVQOnq63VPj7ohG+ua+CIFp3ak/ERFk8lkplK7V/h7p47J7J
+         lO9rtka3QBd2ty80ZFcll7bwGV2PO+1A0SnswBvkRauwsnWghziwTxReP3059nRRvUSu
+         RP1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=6OdTPYEA2p5+e67drhVq+n88z8c6ioQj4MZmywIDAFM=;
-        b=GziwAbuwXMygQrHMdAIsZQ3hR9jp+xUwqcbtNMceoA6SQ0BCLjj96t5mTmJ5juNoyw
-         U1/JbgrqtkBazdxTO5b1sq+T63HU6T3yPug1+qIUjZ+YmGeDrgshEFVlM3OCL5hnL/Wf
-         ac8da0TcRtpsA5TkJTokngv+V+sZ8YhemIogBChjZdE+A6RJTh5IoGCfpEQVDFPluzHY
-         CbB9kLTaVXdBgeHnXjA6mokEraapmozDm4UzKF/4ONeEDj9aKss3evAqLJIZ7yRxfnuA
-         ZHjdzytcRkKriJXujMnWtnWA0w29f5qa5IyPruYw82tNebBxDH/m3WR94vtB8XI+guRv
-         PrOQ==
-X-Gm-Message-State: AOAM532thhlp/sM6ibof40nEckcu3UeDS9RT/Y1nyMX89ALddZLze5EB
-        5uR65W/v6JYUy+RAshvc7azoLmkeY6V7Rn33clOus7ZgxJO6zaDNexetUgOoMNomU1hrf/gwmCg
-        3nOhjiU8IYClY8h9Oz7yuKXhEwatmFGvKsLg0ifcisBJVIoup4xQaaTTnyftoAIM=
-X-Google-Smtp-Source: ABdhPJz+1pw/frS7iuoskUPl/0VZ5TsAWO9NiEYk8b+eCEfPZfzFbTli1vpPu9KhtHzz75ExuN5A1dfpBffEUg==
-Sender: "jackmanb via sendgmr" <jackmanb@beeg.c.googlers.com>
-X-Received: from beeg.c.googlers.com ([fda3:e722:ac3:cc00:28:9cb1:c0a8:11db])
- (user=jackmanb job=sendgmr) by 2002:a1c:81cc:: with SMTP id
- c195mr4398201wmd.70.1611149996346; Wed, 20 Jan 2021 05:39:56 -0800 (PST)
-Date:   Wed, 20 Jan 2021 13:39:46 +0000
-In-Reply-To: <20210120133946.2107897-1-jackmanb@google.com>
-Message-Id: <20210120133946.2107897-3-jackmanb@google.com>
-Mime-Version: 1.0
-References: <20210120133946.2107897-1-jackmanb@google.com>
-X-Mailer: git-send-email 2.30.0.284.gd98b1dd5eaa7-goog
-Subject: [PATCH bpf-next v3 2/2] docs: bpf: Clarify -mcpu=v3 requirement for
- atomic ops
-From:   Brendan Jackman <jackmanb@google.com>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Florent Revest <revest@chromium.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Brendan Jackman <jackmanb@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=bD0Y2/R9ILpESAFdsBEs4WGwWlwfFTXpzZ+PoX1/gaA=;
+        b=k4n1GzyIDeYl84IWCGl7pbAB2NSAS2N8KQE47E0082upgR3vj9gQ8+iiuoexdiWC2a
+         pfap92KbGkB8hV4vhSmT9mjl/VLvLMSt3Xe34ONsCmLYf0Y4DNlAGyP/UIFbXqWqSCs0
+         hI6XO9avcdyEVylwBymrVV3Q9P4difmi/B6MOhTVyKVZaU/GDUVQUt86Ur5wmvxesty8
+         97XNxf6/VwPNZChA+qpCLh4rR+lOwoinXio2farDKvHbfJIyhgWKYR7fkyDztazmesj/
+         ao4E/AfWPFYnOMrM05oDp9SnP270iePSRRgXt5LPkPl0ngUnhwup+/T17pa1j2iQtVqD
+         B7Lg==
+X-Gm-Message-State: AOAM531PC8OUbYGMY5CBTwqfgqTnn1H89+X3RLGjv5eE0dLT8bM2AapO
+        KChaqQhJihw6lXaIl8XTfu9dOlZ+ZwwhpngyCCxdDYZP
+X-Google-Smtp-Source: ABdhPJyjAKnCebQ1r+HQXfjxSLhMk7pLVtTkwnbB1FyFFj9ExhPUPzWIenr6O/zz7eo299M7bOGbNStpIuAVgoYnzPA=
+X-Received: by 2002:a19:8447:: with SMTP id g68mr3228482lfd.539.1611176792193;
+ Wed, 20 Jan 2021 13:06:32 -0800 (PST)
+MIME-Version: 1.0
+References: <afb4e544-d081-eee8-e792-a480364a6572@mildred.fr>
+In-Reply-To: <afb4e544-d081-eee8-e792-a480364a6572@mildred.fr>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 20 Jan 2021 13:06:21 -0800
+Message-ID: <CAADnVQJnX-+9u--px_VnhrMTPB=O9Y0LH9T7RJbqzfLchbUFvg@mail.gmail.com>
+Subject: Re: More flexible BPF socket inet_lookup hooking after listening
+ sockets are dispatched
+To:     =?UTF-8?Q?Shanti_Lombard_n=C3=A9e_Bouchez=2DMongard=C3=A9?= 
+        <shanti20210120@mildred.fr>
+Cc:     bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Martin KaFai Lau <kafai@fb.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Alexei pointed out [1] that this wording is pretty confusing. Here's
-an attempt to be more explicit and clear.
+cc-ing the right folks
 
-[1] https://lore.kernel.org/bpf/CAADnVQJVvwoZsE1K+6qRxzF7+6CvZNzygnoBW9tZNWJELk5c=Q@mail.gmail.com/T/#m07264fc18fdc43af02fc1320968afefcc73d96f4
-
-Signed-off-by: Brendan Jackman <jackmanb@google.com>
----
- Documentation/networking/filter.rst | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/networking/filter.rst b/Documentation/networking/filter.rst
-index 4c2bb4c6364d..b3f457802836 100644
---- a/Documentation/networking/filter.rst
-+++ b/Documentation/networking/filter.rst
-@@ -1081,9 +1081,10 @@ before is loaded back to ``R0``.
- 
- Note that 1 and 2 byte atomic operations are not supported.
- 
--Except ``BPF_ADD`` *without* ``BPF_FETCH`` (for legacy reasons), all 4 byte
--atomic operations require alu32 mode. Clang enables this mode by default in
--architecture v3 (``-mcpu=v3``). For older versions it can be enabled with
-+Clang can generate atomic instructions by default when ``-mcpu=v3`` is
-+enabled. If a lower version for ``-mcpu`` is set, the only atomic instruction
-+Clang can generate is ``BPF_ADD`` *without* ``BPF_FETCH``. If you need to enable
-+the atomics features, while keeping a lower ``-mcpu`` version, you can use
- ``-Xclang -target-feature -Xclang +alu32``.
- 
- You may encounter ``BPF_XADD`` - this is a legacy name for ``BPF_ATOMIC``,
--- 
-2.30.0.284.gd98b1dd5eaa7-goog
-
+On Wed, Jan 20, 2021 at 12:30 PM Shanti Lombard n=C3=A9e Bouchez-Mongard=C3=
+=A9
+<shanti20210120@mildred.fr> wrote:
+>
+> Hello,
+>
+> I believe this is my first time here, so please excuse me for mistakes.
+> Also, please Cc me on answers.
+>
+> Background : I am currently investigating putting network services on a
+> machine without using network namespace but still keep them isolated. To
+> do that, I allocated a separate IP address (127.0.0.0/8 for IPv4 and ULA
+> prefix below fd00::/8 for IPv6) and those services are forced to listen
+> to this IP address only. For some, I use seccomp with a small utility I
+> wrote at <https://github.com/mildred/force-bind-seccomp>. Now, I still
+> want a few selected services (reverse proxies) to listed for public
+> address but they can't necessarily listen with INADDR_ANY because some
+> other services might listen on the same port on their private IP. It
+> seems SO_REUSEADDR can be used to circumvent this on BSD but not on
+> Linux. After much research, I found Cloudflare recent contribution
+> (explained here <https://blog.cloudflare.com/its-crowded-in-here/>)
+> about inet_lookup BPF programs that could replace INADDR_ANY listening.
+>
+> The inet_lookup BPF programs are hooking up in socket selection code for
+> incoming packets after connected packets are dispatched to their
+> respective sockets but before any new connection is dispatched to a
+> listening socket. This is well explained in the blog post.
+>
+> However, I believe that being able to hook up later in the process could
+> have great use cases. With its current position, the BPF program can
+> override any listening socket too easily. It can also be surprising for
+> administrators used to the socket API not understanding why their
+> listening socket does not receives any packet.
+>
+> Socket selection process (in net/ipv4/inet_hashtables.c function
+> __inet_lookup_listener):
+>
+> - A: look for already connected sockets (before __inet_lookup_listener)
+> - B: look for inet_lookup BPF programs
+> - C: look for listening sockets specifying address and port
+> - D: here, provide another inet_lookup BPF hook
+> - E: look for sockets listening using INADDR_ANY
+> - F: here, provide another inet_lookup BPF hook
+>
+> In position D, a BPF program could implement socket listening like
+> INADDR_ANY listening would do but without the limitation that the port
+> must not be listened on by another IP address
+>
+> In position F, a BPF program could redirect new connection attempts to a
+> socket of its choice, allowing any connection attempt to be intercepted
+> if not catched before by an already listening socket.
+>
+> The suggestion above would work for my use case, but there is another
+> possibility to make the same use cases possible : implement in BPF (or
+> allow BPF to call) the C and E steps above so the BPF program can
+> supplant the kernel behavior. I find this solution less elegant and it
+> might not work well in case there are multiple inet_lookup BPF programs
+> installed.
+>
+> With this e-mail I wanted to spawn a discussion around that and possibly
+> take on the implementation. I never did any kernel development before
+> but you must start by something, and I believe this is a rather simple
+> improvement (duplicate already existing hooking, just a little bit lower
+> in the function). I might not be able to deliver this very quickly
+> either because I have limited time for this and I need to learn kernel
+> development but I'm ready to take on this task.
+>
+> Thank you for your time
+>
+> Shanti
+>
+>
