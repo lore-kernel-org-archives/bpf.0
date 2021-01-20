@@ -2,153 +2,116 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.9 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-3.7 required=3.0 tests=BAYES_00,FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CE5E3C433DB
-	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 00:02:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id EAF98C433DB
+	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 00:02:29 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 9CA9B23716
-	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 00:02:03 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id B11C423716
+	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 00:02:29 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731218AbhAUAB2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Jan 2021 19:01:28 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([63.128.21.124]:34283 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2390746AbhATWye (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Wed, 20 Jan 2021 17:54:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1611183187;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LP0iiQuizg9LomNFlz79SVokUpxYY8lm5HUjpUc5rfc=;
-        b=MG8tT2WdJ4OTMTVBc3knZE91TSWT984EozJjN9wCjK77V+IVZtf+dxF4uZat1fYkMicOHZ
-        fQzwtt5ml90JtmwdzMBMDqE+6Nw+5XIRuFz4YEqZpB+4pkEfgNRJLVEEXalOrYtZ1YPshQ
-        Jfke08VmFZWgh/Ij+TyvWX1GWouSe0E=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-111-Ox147a_8MbCpG6Q2Jqcg1w-1; Wed, 20 Jan 2021 17:36:04 -0500
-X-MC-Unique: Ox147a_8MbCpG6Q2Jqcg1w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A9C51AFAA1;
-        Wed, 20 Jan 2021 22:35:58 +0000 (UTC)
-Received: from krava (unknown [10.40.194.35])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 351176A8E6;
-        Wed, 20 Jan 2021 22:35:47 +0000 (UTC)
-Date:   Wed, 20 Jan 2021 23:35:46 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Sedat Dilek <sedat.dilek@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
-        Yulia Kartseva <hex@fb.com>, Andrey Ignatov <rdna@fb.com>,
-        Thomas Hebb <tommyhebb@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        "Frank Ch. Eigler" <fche@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Davide Caratti <dcaratti@redhat.com>,
-        Briana Oursler <briana.oursler@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH RFC] tools: Factor Clang, LLC and LLVM utils definitions
-Message-ID: <20210120223546.GF1798087@krava>
-References: <20210116095413.72820-1-sedat.dilek@gmail.com>
+        id S1727395AbhAUABd (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Jan 2021 19:01:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403800AbhATXTM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Jan 2021 18:19:12 -0500
+Received: from mail-io1-xd45.google.com (mail-io1-xd45.google.com [IPv6:2607:f8b0:4864:20::d45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CCCC061343
+        for <bpf@vger.kernel.org>; Wed, 20 Jan 2021 15:09:24 -0800 (PST)
+Received: by mail-io1-xd45.google.com with SMTP id x189so358050iof.8
+        for <bpf@vger.kernel.org>; Wed, 20 Jan 2021 15:09:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=R7f0wyeTmA8SuzS7SzFRcl7d6pcYrpva5Er826cs0mk=;
+        b=BHNWcyKQCJ0PGY8RTK4gdKDzEGAtZoOiyrVRE+Vm6eiGeRM3rrhdXbllkmeBKJ67/R
+         QSqrlpr30Kv3QkuetMs/xzQ0omkAey48xmNeBw8YnVKLPAFn0fERL/0HJHAWNJBV60Es
+         6vmWox4SaHvRk/ONmMEW1l+61J/94SDYdd6GvTLUjtasvNjWF0JA3xnmeKrqETi4NHRH
+         jHN11soanu3Gu0q2sL1rBPeq9wdBuPx74ZLSw5oSWJ461r2RJ7ttRgo92GfIaB0QxaSH
+         KVideHm8+y1cHxGMf9r/39T1SeZLgKjyU0vpK0MbRGv0SM39eGdoyYMotKPDqiLNW9qM
+         0Q0A==
+X-Gm-Message-State: AOAM533RDb+J8Nc4iQMo0a6YgtJjlO5E4hcX6swubiJE6xUx55k4VoRw
+        kS7mAciAE5PV1YUM3nt8ONYjumM1b/pee9nMe8mgA1MWPC4S
+X-Google-Smtp-Source: ABdhPJxx2Xjf/dKON/ViEpmZc8PUt27XQ8dLVFZm99Cd4bahkiaTQz/OYrK11/5lcTf3YlyNrJDROGRVOWMdRKnpf8k2rzjcSkae
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210116095413.72820-1-sedat.dilek@gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Received: by 2002:a92:c986:: with SMTP id y6mr10047061iln.125.1611184164069;
+ Wed, 20 Jan 2021 15:09:24 -0800 (PST)
+Date:   Wed, 20 Jan 2021 15:09:24 -0800
+In-Reply-To: <000000000000c8dd4a05b828d04c@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c464f805b95d0bb2@google.com>
+Subject: Re: KASAN: vmalloc-out-of-bounds Read in bpf_trace_run7
+From:   syzbot <syzbot+fad5d91c7158ce568634@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org, mingo@redhat.com,
+        netdev@vger.kernel.org, rostedt@goodmis.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Sat, Jan 16, 2021 at 10:54:04AM +0100, Sedat Dilek wrote:
-> When dealing with BPF/BTF/pahole and DWARF v5 I wanted to build bpftool.
-> 
-> While looking into the source code I found duplicate assignments
-> in misc tools for the LLVM eco system, e.g. clang and llvm-objcopy.
-> 
-> Move the Clang, LLC and/or LLVM utils definitions to
-> tools/scripts/Makefile.include file and add missing
-> includes where needed.
-> Honestly, I was inspired by commit c8a950d0d3b9
-> ("tools: Factor HOSTCC, HOSTLD, HOSTAR definitions").
-> 
-> I tested with bpftool and perf on Debian/testing AMD64 and
-> LLVM/Clang v11.1.0-rc1.
-> 
-> Build instructions:
-> 
-> [ make and make-options ]
-> MAKE="make V=1"
-> MAKE_OPTS="HOSTCC=clang HOSTCXX=clang++ HOSTLD=ld.lld CC=clang LD=ld.lld LLVM=1 LLVM_IAS=1"
-> MAKE_OPTS="$MAKE_OPTS PAHOLE=/opt/pahole/bin/pahole"
-> 
-> [ clean-up ]
-> $MAKE $MAKE_OPTS -C tools/ clean
-> 
-> [ bpftool ]
-> $MAKE $MAKE_OPTS -C tools/bpf/bpftool/
-> 
-> [ perf ]
-> PYTHON=python3 $MAKE $MAKE_OPTS -C tools/perf/
-> 
-> I was careful with respecting the user's wish to override custom compiler,
-> linker, GNU/binutils and/or LLVM utils settings.
-> 
-> Some personal notes:
-> 1. I have NOT tested with cross-toolchain for other archs (cross compiler/linker etc.).
-> 2. This patch is on top of Linux v5.11-rc3.
-> 
-> I hope to get some feedback from especially Linux-bpf folks.
-> 
-> Signed-off-by: Sedat Dilek <sedat.dilek@gmail.com>
-> ---
->  tools/bpf/bpftool/Makefile                  | 2 --
->  tools/bpf/runqslower/Makefile               | 3 ---
->  tools/build/feature/Makefile                | 4 ++--
->  tools/perf/Makefile.perf                    | 1 -
+syzbot has found a reproducer for the following issue on:
 
-for tools/build and tools/perf
+HEAD commit:    7d68e382 bpf: Permit size-0 datasec
+git tree:       bpf-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1418c3c7500000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e0c7843b8af99dff
+dashboard link: https://syzkaller.appspot.com/bug?extid=fad5d91c7158ce568634
+compiler:       gcc (GCC) 10.1.0-syz 20200507
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1224daa4d00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13dfabd0d00000
 
-Acked-by: Jiri Olsa <jolsa@redhat.com>
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fad5d91c7158ce568634@syzkaller.appspotmail.com
 
-jirka
+==================================================================
+BUG: KASAN: vmalloc-out-of-bounds in __bpf_trace_run kernel/trace/bpf_trace.c:2088 [inline]
+BUG: KASAN: vmalloc-out-of-bounds in bpf_trace_run7+0x411/0x420 kernel/trace/bpf_trace.c:2130
+Read of size 8 at addr ffffc90000e5c030 by task syz-executor460/8508
 
->  tools/scripts/Makefile.include              | 7 +++++++
->  tools/testing/selftests/bpf/Makefile        | 3 +--
->  tools/testing/selftests/tc-testing/Makefile | 3 +--
->  7 files changed, 11 insertions(+), 12 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-> index f897cb5fb12d..71c14efa6e91 100644
-> --- a/tools/bpf/bpftool/Makefile
-> +++ b/tools/bpf/bpftool/Makefile
+CPU: 1 PID: 8508 Comm: syz-executor460 Not tainted 5.11.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:79 [inline]
+ dump_stack+0x107/0x163 lib/dump_stack.c:120
+ print_address_description.constprop.0.cold+0x5/0x2f8 mm/kasan/report.c:230
+ __kasan_report mm/kasan/report.c:396 [inline]
+ kasan_report.cold+0x79/0xd5 mm/kasan/report.c:413
+ __bpf_trace_run kernel/trace/bpf_trace.c:2088 [inline]
+ bpf_trace_run7+0x411/0x420 kernel/trace/bpf_trace.c:2130
+ __bpf_trace_percpu_alloc_percpu+0x1dc/0x220 include/trace/events/percpu.h:10
+ __traceiter_percpu_alloc_percpu+0x97/0xf0 include/trace/events/percpu.h:10
+ trace_percpu_alloc_percpu include/trace/events/percpu.h:10 [inline]
+ pcpu_alloc+0xba6/0x16f0 mm/percpu.c:1844
+ bpf_prog_alloc+0x78/0x250 kernel/bpf/core.c:117
+ bpf_prog_load+0x656/0x1f40 kernel/bpf/syscall.c:2152
+ __do_sys_bpf+0x1251/0x4f00 kernel/bpf/syscall.c:4380
+ do_syscall_64+0x2d/0x70 arch/x86/entry/common.c:46
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x441659
+Code: e8 ac e8 ff ff 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 8b 09 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007ffebad746f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 0000000000441659
+RDX: 0000000000000078 RSI: 0000000020000200 RDI: 0000000000000005
+RBP: 000000000001191b R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000402470
+R13: 0000000000402500 R14: 0000000000000000 R15: 0000000000000000
 
-SNIP
+
+Memory state around the buggy address:
+ ffffc90000e5bf00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc90000e5bf80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>ffffc90000e5c000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+                                     ^
+ ffffc90000e5c080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc90000e5c100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+==================================================================
 
