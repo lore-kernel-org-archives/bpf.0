@@ -2,197 +2,193 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+X-Spam-Status: No, score=-15.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+	MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1815FC433E0
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:14:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id E6911C433E0
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:15:01 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id BD27A233FC
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:14:08 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 942F823443
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:15:01 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732189AbhATUNa (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Jan 2021 15:13:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728635AbhATUN0 (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Jan 2021 15:13:26 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB119C061575;
-        Wed, 20 Jan 2021 12:12:46 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id u11so8838324plg.13;
-        Wed, 20 Jan 2021 12:12:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=foCHEt7FF+EjVn9rkpAiAjBdZYjzS1bV8BzUmJzcbPo=;
-        b=Q9XdDX0MAlt5hi2UrISiWdD7xCVePjhFsVXJnccCCtHFjnbiaBb8EzicUF9OxrtCzI
-         2WRg7sPPfH+y4CNj+jB2/BTJq2iVbOevqICybIAa33UM+KnGbHaE7EiAHIvwfdoFvVU8
-         bTpnwz0XdbIfymXkdiWXMYPAACwx0ze6iBbDNEf0QjiSo1lLMOJM9PNdlvdE+Zgh46Qr
-         OVl8/R7kbmEJjoJD4leoSEsgqvE/R0VmlIProKI5vyyENFbYeRyXlcwzZqBAk+VZdvxy
-         nW3c2tR9gdukSkz8GJYpz6XhTRNF62710b5b3M0HBUXOdvzWWapqADGcKxAsjcoNIycY
-         eIcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=foCHEt7FF+EjVn9rkpAiAjBdZYjzS1bV8BzUmJzcbPo=;
-        b=uVTls6k6scFQ+l9csR+cWiQfN5srF/6YfqK9i8fkelpvVWB/L+VAMvisyRpbWWZMdk
-         BZyayydEsiMAxp1DdbRHG22zzzq3KZ04MvyofA01rts/NqeBSx8LD1zTY/HdBhCiz3S5
-         G4MZbug2hSPA8IgdJebTNVmyLd4lO4QIjI4UZM3Gj47n/X9NC6oDnC5rDS7K0G3jhj/H
-         nXJd6LDKCK1X/OxjPcu74m/CZfGcT8TtYuSAEszobV7IyFlCGZyEIkjKpbOgB63D8VSZ
-         uBOdNXFYl68tAyts/c+pfU80mBxzOXhtAucPjAht0abbqOs+dGX0xWYXK7hfKADYa1et
-         qn9w==
-X-Gm-Message-State: AOAM533yV85j7HwnJALxcB6xLcXIPPu21vPaL5BM8uh+1LSM2apX9H6n
-        tc17oByK+1ol4iIwDTFvmg3y2hytNbk=
-X-Google-Smtp-Source: ABdhPJxKt0KR2r/H1xrow2AhFhVvm9PkmwfZy4ZVoqnSA1JdlbNcpZr71L3A4LKR+0MirY6fItSETg==
-X-Received: by 2002:a17:90a:d145:: with SMTP id t5mr7548907pjw.104.1611173565876;
-        Wed, 20 Jan 2021 12:12:45 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:400::5:bed2])
-        by smtp.gmail.com with ESMTPSA id 186sm3015756pfx.100.2021.01.20.12.12.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Jan 2021 12:12:45 -0800 (PST)
-Date:   Wed, 20 Jan 2021 12:12:42 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Brendan Jackman <jackmanb@google.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
+        id S2388142AbhATUO6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Jan 2021 15:14:58 -0500
+Received: from www62.your-server.de ([213.133.104.62]:33104 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388141AbhATOCD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Jan 2021 09:02:03 -0500
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1l2E2q-0000aV-TP; Wed, 20 Jan 2021 15:01:12 +0100
+Received: from [85.7.101.30] (helo=pc-9.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1l2E2q-000JKx-M2; Wed, 20 Jan 2021 15:01:12 +0100
+Subject: Re: [PATCH bpf-next] bpf: Helper script for running BPF presubmit
+ tests
+To:     KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Florent Revest <revest@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH bpf-next] bpf: Propagate memory bounds to registers in
- atomics w/ BPF_FETCH
-Message-ID: <20210120201242.nm35li5yxvo7ir35@ast-mbp.dhcp.thefacebook.com>
-References: <20210118160613.541020-1-jackmanb@google.com>
+        Brendan Jackman <jackmanb@chromium.org>
+References: <20210118141955.2033747-1-kpsingh@kernel.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <0d577037-769a-35fc-b07f-bba2cf2bd3d2@iogearbox.net>
+Date:   Wed, 20 Jan 2021 15:01:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210118160613.541020-1-jackmanb@google.com>
+In-Reply-To: <20210118141955.2033747-1-kpsingh@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.4/26055/Wed Jan 20 13:29:54 2021)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Mon, Jan 18, 2021 at 04:06:13PM +0000, Brendan Jackman wrote:
-> When BPF_FETCH is set, atomic instructions load a value from memory
-> into a register. The current verifier code first checks via
-> check_mem_access whether we can access the memory, and then checks
-> via check_reg_arg whether we can write into the register.
+On 1/18/21 3:19 PM, KP Singh wrote:
+> The script runs the BPF selftests locally on the same kernel image
+> as they would run post submit in the BPF continuous integration
+> framework. The goal of the script is to run selftests locally in the
+> same environment to check if their changes would end up breaking the
+> BPF CI and reduce the back-and-forth between the maintainers and the
+> developers.
 > 
-> For loads, check_reg_arg has the side-effect of marking the
-> register's value as unkonwn, and check_mem_access has the side effect
-> of propagating bounds from memory to the register.
-> 
-> Therefore with the current order, bounds information is thrown away,
-> but by simply reversing the order of check_reg_arg
-> vs. check_mem_access, we can instead propagate bounds smartly.
+> Signed-off-by: KP Singh <kpsingh@kernel.org>
 
-I think such improvement makes sense, but please tweak commit log
-to mention that check_mem_access() is doing it only for stack pointers.
-Since "propagating from memory" is too generic. Most memory
-won't have such propagation.
+Looks really nice! I gave it a run, some minor feedback:
 
-> A simple test is added with an infinite loop that can only be proved
-> unreachable if this propagation is present.
-> 
-> Note that in the test, the memory value has to be written with two
-> instructions:
-> 
-> 		BPF_MOV64_IMM(BPF_REG_0, 0),
-> 		BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
-> 
-> instead of one:
-> 
-> 		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0),
-> 
-> Because BPF_ST_MEM doesn't seem to set the stack slot type to 0 when
-> storing an immediate.
-
-This bit is confusing in the commit log. Pls move it into test itself.
-
-> Signed-off-by: Brendan Jackman <jackmanb@google.com>
 > ---
->  kernel/bpf/verifier.c                         | 32 +++++++++++--------
->  .../selftests/bpf/verifier/atomic_bounds.c    | 18 +++++++++++
->  2 files changed, 36 insertions(+), 14 deletions(-)
->  create mode 100644 tools/testing/selftests/bpf/verifier/atomic_bounds.c
+>   tools/testing/selftests/bpf/run_in_vm.sh | 346 +++++++++++++++++++++++
+>   1 file changed, 346 insertions(+)
+>   create mode 100755 tools/testing/selftests/bpf/run_in_vm.sh
 > 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 0f82d5d46e2c..0512695c70f4 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3663,9 +3663,26 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
->  		return -EACCES;
->  	}
->  
-> +	if (insn->imm & BPF_FETCH) {
-> +		if (insn->imm == BPF_CMPXCHG)
-> +			load_reg = BPF_REG_0;
-> +		else
-> +			load_reg = insn->src_reg;
-> +
-> +		/* check and record load of old value */
-> +		err = check_reg_arg(env, load_reg, DST_OP);
-> +		if (err)
-> +			return err;
-> +	} else {
-> +		/* This instruction accesses a memory location but doesn't
-> +		 * actually load it into a register.
-> +		 */
-> +		load_reg = -1;
-> +	}
-> +
->  	/* check whether we can read the memory */
->  	err = check_mem_access(env, insn_idx, insn->dst_reg, insn->off,
-> -			       BPF_SIZE(insn->code), BPF_READ, -1, true);
-> +			       BPF_SIZE(insn->code), BPF_READ, load_reg, true);
->  	if (err)
->  		return err;
->  
-> @@ -3675,19 +3692,6 @@ static int check_atomic(struct bpf_verifier_env *env, int insn_idx, struct bpf_i
->  	if (err)
->  		return err;
->  
-> -	if (!(insn->imm & BPF_FETCH))
-> -		return 0;
-> -
-> -	if (insn->imm == BPF_CMPXCHG)
-> -		load_reg = BPF_REG_0;
-> -	else
-> -		load_reg = insn->src_reg;
-> -
-> -	/* check and record load of old value */
-> -	err = check_reg_arg(env, load_reg, DST_OP);
-> -	if (err)
-> -		return err;
-> -
->  	return 0;
->  }
->  
-> diff --git a/tools/testing/selftests/bpf/verifier/atomic_bounds.c b/tools/testing/selftests/bpf/verifier/atomic_bounds.c
-> new file mode 100644
-> index 000000000000..45030165ed63
+> diff --git a/tools/testing/selftests/bpf/run_in_vm.sh b/tools/testing/selftests/bpf/run_in_vm.sh
+> new file mode 100755
+> index 000000000000..a4f28f5cdd52
 > --- /dev/null
-> +++ b/tools/testing/selftests/bpf/verifier/atomic_bounds.c
-> @@ -0,0 +1,18 @@
+> +++ b/tools/testing/selftests/bpf/run_in_vm.sh
+> @@ -0,0 +1,346 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +set -u
+> +set -e
+> +
+> +QEMU_BINARY="${QEMU_BINARY:="qemu-system-x86_64"}"
+> +X86_BZIMAGE="arch/x86/boot/bzImage"
+> +DEFAULT_COMMAND="./test_progs"
+> +MOUNT_DIR="mnt"
+> +ROOTFS_IMAGE="root.img"
+> +OUTPUT_DIR="$HOME/.bpf_selftests"
+> +KCONFIG_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/latest.config"
+> +INDEX_URL="https://raw.githubusercontent.com/libbpf/libbpf/master/travis-ci/vmtest/configs/INDEX"
+> +
+> +usage()
 > +{
-> +	"BPF_ATOMIC bounds propagation, mem->reg",
-> +	.insns = {
-> +		/* a = 0; */
-> +		BPF_MOV64_IMM(BPF_REG_0, 0),
-> +		BPF_STX_MEM(BPF_DW, BPF_REG_10, BPF_REG_0, -8),
-> +		/* b = atomic_fetch_add(&a, 1); */
-> +		BPF_MOV64_IMM(BPF_REG_1, 1),
-> +		BPF_ATOMIC_OP(BPF_DW, BPF_ADD | BPF_FETCH, BPF_REG_10, BPF_REG_1, -8),
-> +		/* Verifier should be able to tell that this infinite loop isn't reachable. */
-> +		/* if (b) while (true) continue; */
-> +		BPF_JMP_IMM(BPF_JNE, BPF_REG_1, 0, -1),
-> +		BPF_EXIT_INSN(),
+> +	cat <<EOF
+> +Usage: $0 [-k] [-i] [-d <output_dir>] -- [<command>]
+> +
+> +<command> is the command you would normally run when you are in
+> +tools/testing/selftests/bpf. e.g:
+> +
+> +	$0 -- ./test_progs -t test_lsm
+> +
+> +If no command is specified, "${DEFAULT_COMMAND}" will be run by
+> +default.
+> +
+> +If you build your kernel using KBUILD_OUTPUT= or O= options, these
+> +can be passed as environment variables to the script:
+> +
+> +  O=<path_relative_to_cwd> $0 -- ./test_progs -t test_lsm
+> +
+> +or
+> +
+> +  KBUILD_OUTPUT=<path_relative_to_cwd> $0 -- ./test_progs -t test_lsm
+> +
+> +Options:
+> +
+> +	-k)		Recompile the kernel with the config for selftests.
+> +	-i)		Update the rootfs image with a newer version.
+> +	-d)		Update the output directory (default: ${OUTPUT_DIR})
 
-I think it's a bit unrealistic to use atomic_add to increment induction variable,
-but I don't mind, since the verifier side is simple.
-Could you add a C based test as well?
+Probably best to have a small howto in tools/testing/selftests/bpf/README.rst for
+people to have a 'getting started' point. Initially I forgot the -k, so VM paniced
+on boot, but after that it was working great modulo a small change below.
+
+[...]
+> +main()
+> +{
+> +	local script_dir="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+> +	local kernel_checkout=$(realpath "${script_dir}"/../../../../)
+> +	local log_file="$(date +"bpf_selftests.%Y-%m-%d_%H-%M-%S.log")"
+> +	# By default the script searches for the kernel in the checkout directory but
+> +	# it also obeys environment variables O= and KBUILD_OUTPUT=
+> +	local kernel_bzimage="${kernel_checkout}/${X86_BZIMAGE}"
+> +	local command="${DEFAULT_COMMAND}"
+> +	local kernel_recompile="no"
+> +	local update_image="no"
+> +
+> +	while getopts 'hkid:' opt; do
+> +		case ${opt} in
+> +		k)
+> +			kernel_recompile="yes"
+> +			;;
+> +		i)
+> +			update_image="yes"
+> +			;;
+> +		d)
+> +			OUTPUT_DIR="$OPTARG"
+> +			;;
+> +		h)
+> +			usage
+> +			exit 0
+> +			;;
+> +		\? )
+> +			echo "Invalid Option: -$OPTARG"
+> +			usage
+> +			exit 1
+> +			;;
+> +      		: )
+> +        		echo "Invalid Option: -$OPTARG requires an argument"
+> +			usage
+> +			exit 1
+> +			;;
+> +		esac
+> +	done
+> +	shift $((OPTIND -1))
+> +
+> +	if [[ $# -eq 0 ]]; then
+> +		echo "No command specified, will run ${DEFAULT_COMMAND} in the vm"
+> +	else
+> +		command="$@"
+> +	fi
+> +
+> +	local kconfig_file="${OUTPUT_DIR}/latest.config"
+> +	local make_command="make -j KCONFIG_CONFIG=${kconfig_file}"
+
+I had to fix/limit this locally to -j <num-cpus> as otherwise this was OOM killing
+my box. make man page says 'if the -j option is given without an argument, make will
+not limit the number of jobs that can run simultaneously.'
+
+> +
+> +	# Figure out where the kernel is being built.
+> +	# O takes precedence over KBUILD_OUTPUT.
+> +	if [[ "${O:=""}" != "" ]]; then
+> +		if is_rel_path "${O}"; then
+> +			O="$(realpath "${PWD}/${O}")"
+> +		fi
+
+For future follow-up, would be amazing to auto-grab nightly build of llvm + pahole
+as well. And even further out maybe also to allow cross-compilation + testing on
+other archs. :)
+
+Thanks,
+Daniel
