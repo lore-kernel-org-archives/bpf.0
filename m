@@ -2,109 +2,205 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id F3512C433E0
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 18:34:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 53E2AC433DB
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 19:05:03 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C90F4233FC
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 18:34:24 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id E80EA233F6
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 19:05:02 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404417AbhATSd6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Jan 2021 13:33:58 -0500
-Received: from mga06.intel.com ([134.134.136.31]:19371 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404610AbhATSbM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Jan 2021 13:31:12 -0500
-IronPort-SDR: jYERuX7VYTBSpjRp7G0rXFc8mlcULJ26afa4vf5nfs6J0aj96SAQjp5PjtPALcZqzOpRyHQJ+9
- Vy0CAnwGPW1w==
-X-IronPort-AV: E=McAfee;i="6000,8403,9870"; a="240697048"
-X-IronPort-AV: E=Sophos;i="5.79,361,1602572400"; 
-   d="scan'208";a="240697048"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 10:30:23 -0800
-IronPort-SDR: xquYD5VDyQRiT5Qr5GXXTRCCPRt48zoJz91ZmNb3/88G9m+jiWj83NIW77d55bh/yrBb4tEeK7
- JfAsp64yFMMA==
-X-IronPort-AV: E=Sophos;i="5.79,361,1602572400"; 
-   d="scan'208";a="384963935"
-Received: from myegin-mobl1.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.249.42.133])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 10:30:16 -0800
-Subject: Re: [PATCH bpf-next v2 5/8] libbpf, xsk: select AF_XDP BPF program
- based on kernel version
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
+        id S2392528AbhATTE5 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Jan 2021 14:04:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390158AbhATTEo (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Jan 2021 14:04:44 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479A3C061757;
+        Wed, 20 Jan 2021 11:04:04 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id q8so3982657lfm.10;
+        Wed, 20 Jan 2021 11:04:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fm0Hune4dNh4DOhGPxu2dYoVCrCb/uIZAh+4vIDWr2I=;
+        b=kVr0nUi6g0Bm5Cg8a06zoKCBxjsWFjviGBrGKpnbU/P+zXo0vucIbqa26agJ7qIWAG
+         gB7VG8ZXr8MzYOPHzFIMSnYEtXR6e8/PTE3IYRcUwHpCmQ8qlr3/mBUoW6SvKMev3hnC
+         R9AeVTXIhEFLFjwjh3Ldon+H3OTITvGBUZjnB3PmLsj6PNz1XzYYMoUrp93qN8tS3fzj
+         dd8Q6+pEIjZEhXk4AoeZEVVgp1fmLbL5yb6HMGX4RHYmLEA5ouCe3e0utz7yf8URouxh
+         NF1qQtzfLSHWCg9Rx3viBvLmnoBgXg76h3TcyQ6xvDiOFac+vkB3/uhrpByNb2LJQoBW
+         JgWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fm0Hune4dNh4DOhGPxu2dYoVCrCb/uIZAh+4vIDWr2I=;
+        b=EAzy2HoRrDNlnGPGL/i8xsDwcNaF6xdMwTP8uDnsClOtUxSzd6OsCecq04REZfE7yE
+         iVBLhcjj2IjFwjVlSg5ph0E9xeCtXj0KS8IcD0cBSfMl/Lia28ULyxgbFBMHHN68d0UL
+         QRYKVteQYjbNOwDOjDeQXYFh7dc3rCfkFYJIVaz7Qq0QHI27e8wncMYKZ9h9J4J6ey22
+         MRDzTfkuEvj+ugy0Z3bb4LsyV8bKo4+q3qssjpy3lZsF1ZFvZCbrGhCBFyZapYU32d2M
+         Ld1UuEvdyPdoK5k5nqomdKeASxeNAbwsGIHWFvRCbFhvQs9UYe3IgBqq4/yuwAzdFc7+
+         7oeg==
+X-Gm-Message-State: AOAM533FFFvads0WmpDVUdgScHFmYAq4GD+OqPChKGlsHFe69qH9ss3Z
+        5TCY4vNrmjuiVrhx7zGFO9reSKmQXQ+uVCRjf3c=
+X-Google-Smtp-Source: ABdhPJwauJhTvStLKvK4f+JIHYvgdtTIGz+ocEjGBQlFWFov/l9TwvzW2/CEFoTWCyjsWKSr2bi5buNmKOhMa4aPjms=
+X-Received: by 2002:ac2:5b1e:: with SMTP id v30mr5218306lfn.540.1611169442795;
+ Wed, 20 Jan 2021 11:04:02 -0800 (PST)
+MIME-Version: 1.0
+References: <20210119155953.803818-1-revest@chromium.org> <20210119155953.803818-4-revest@chromium.org>
+ <CACYkzJ6fNvYCO4cnU2XispQkF-_3yToDGgB=aRRd9m+qy0gpWA@mail.gmail.com>
+In-Reply-To: <CACYkzJ6fNvYCO4cnU2XispQkF-_3yToDGgB=aRRd9m+qy0gpWA@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 20 Jan 2021 11:03:51 -0800
+Message-ID: <CAADnVQJqVEvwF3GJyuiazxUUknBUaZ_k7gtt-m18hbBdoVeTGg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/4] selftests/bpf: Add a selftest for the
+ tracing bpf_get_socket_cookie
+To:     KP Singh <kpsingh@kernel.org>
+Cc:     Florent Revest <revest@chromium.org>, bpf <bpf@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>, maximmi@nvidia.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Ciara Loftus <ciara.loftus@intel.com>,
-        weqaar.a.janjua@intel.com, Marek Majtyka <alardam@gmail.com>
-References: <20210119155013.154808-1-bjorn.topel@gmail.com>
- <20210119155013.154808-6-bjorn.topel@gmail.com> <875z3repng.fsf@toke.dk>
- <6c7da700-700d-c7f6-fe0a-c42e55e81c8a@intel.com>
- <6cda7383-663e-ed92-45dd-bbf87ca45eef@intel.com> <87eeif4p96.fsf@toke.dk>
- <2751bcd9-b3af-0366-32ee-a52d5919246c@intel.com>
- <CAADnVQK1vL307SmmUZyuEAmy9S_A2fJwyHryCHBavQ-QDNyxww@mail.gmail.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-Message-ID: <9a624fee-6b49-9f00-3c21-d8ec3026a5a5@intel.com>
-Date:   Wed, 20 Jan 2021 19:30:12 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
-MIME-Version: 1.0
-In-Reply-To: <CAADnVQK1vL307SmmUZyuEAmy9S_A2fJwyHryCHBavQ-QDNyxww@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        Andrii Nakryiko <andrii@kernel.org>,
+        Florent Revest <revest@google.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2021-01-20 19:25, Alexei Starovoitov wrote:
-> On Wed, Jan 20, 2021 at 7:27 AM Björn Töpel <bjorn.topel@intel.com> wrote:
->>
->>>> Would it make sense with some kind of BPF-specific "supported
->>>> features" mechanism? Something else with a bigger scope (whole
->>>> kernel)?
->>>
->>> Heh, in my opinion, yeah. Seems like we'll finally get it for XDP, but
->>> for BPF in general the approach has always been probing AFAICT.
->>>
->>> For the particular case of arguments to helpers, I suppose the verifier
->>> could technically validate value ranges for flags arguments, say. That
->>> would be nice as an early reject anyway, but I'm not sure if it is
->>> possible to add after-the-fact without breaking existing programs
->>> because the verifier can't prove the argument is within the valid range.
->>> And of course it doesn't help you with compatibility with
->>> already-released kernels.
->>>
->>
->> Hmm, think I have a way forward. I'll use BPF_PROG_TEST_RUN.
->>
->> If the load fail for the new helper, fallback to bpf_redirect_map(). Use
->> BPF_PROG_TEST_RUN to make sure that "action via flags" passes.
-> 
-> +1 to Toke's point. No version checks please.
-> One way to detect is to try prog_load. Search for FEAT_* in libbpf.
-> Another approach is to scan vmlinux BTF for necessary helpers.
-> Currently libbpf is relying on the former.
-> I think going forward would be good to detect features via BTF.
-> It's going to be much faster and won't create noise for audit that
-> could be looking at prog_load calls.
-> 
+On Wed, Jan 20, 2021 at 9:08 AM KP Singh <kpsingh@kernel.org> wrote:
+>
+> On Tue, Jan 19, 2021 at 5:00 PM Florent Revest <revest@chromium.org> wrote:
+> >
+> > This builds up on the existing socket cookie test which checks whether
+> > the bpf_get_socket_cookie helpers provide the same value in
+> > cgroup/connect6 and sockops programs for a socket created by the
+> > userspace part of the test.
+> >
+> > Adding a tracing program to the existing objects requires a different
+> > attachment strategy and different headers.
+> >
+> > Signed-off-by: Florent Revest <revest@chromium.org>
+>
+> Acked-by: KP Singh <kpsingh@kernel.org>
+>
+> (one minor note, doesn't really need fixing as a part of this though)
+>
+> > ---
+> >  .../selftests/bpf/prog_tests/socket_cookie.c  | 24 +++++++----
+> >  .../selftests/bpf/progs/socket_cookie_prog.c  | 41 ++++++++++++++++---
+> >  2 files changed, 52 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/socket_cookie.c b/tools/testing/selftests/bpf/prog_tests/socket_cookie.c
+> > index 53d0c44e7907..e5c5e2ea1deb 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/socket_cookie.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/socket_cookie.c
+> > @@ -15,8 +15,8 @@ struct socket_cookie {
+> >
+> >  void test_socket_cookie(void)
+> >  {
+> > +       struct bpf_link *set_link, *update_sockops_link, *update_tracing_link;
+> >         socklen_t addr_len = sizeof(struct sockaddr_in6);
+> > -       struct bpf_link *set_link, *update_link;
+> >         int server_fd, client_fd, cgroup_fd;
+> >         struct socket_cookie_prog *skel;
+> >         __u32 cookie_expected_value;
+> > @@ -39,15 +39,21 @@ void test_socket_cookie(void)
+> >                   PTR_ERR(set_link)))
+> >                 goto close_cgroup_fd;
+> >
+> > -       update_link = bpf_program__attach_cgroup(skel->progs.update_cookie,
+> > -                                                cgroup_fd);
+> > -       if (CHECK(IS_ERR(update_link), "update-link-cg-attach", "err %ld\n",
+> > -                 PTR_ERR(update_link)))
+> > +       update_sockops_link = bpf_program__attach_cgroup(
+> > +               skel->progs.update_cookie_sockops, cgroup_fd);
+> > +       if (CHECK(IS_ERR(update_sockops_link), "update-sockops-link-cg-attach",
+> > +                 "err %ld\n", PTR_ERR(update_sockops_link)))
+> >                 goto free_set_link;
+> >
+> > +       update_tracing_link = bpf_program__attach(
+> > +               skel->progs.update_cookie_tracing);
+> > +       if (CHECK(IS_ERR(update_tracing_link), "update-tracing-link-attach",
+> > +                 "err %ld\n", PTR_ERR(update_tracing_link)))
+> > +               goto free_update_sockops_link;
+> > +
+> >         server_fd = start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
+> >         if (CHECK(server_fd < 0, "start_server", "errno %d\n", errno))
+> > -               goto free_update_link;
+> > +               goto free_update_tracing_link;
+> >
+> >         client_fd = connect_to_fd(server_fd, 0);
+> >         if (CHECK(client_fd < 0, "connect_to_fd", "errno %d\n", errno))
+> > @@ -71,8 +77,10 @@ void test_socket_cookie(void)
+> >         close(client_fd);
+> >  close_server_fd:
+> >         close(server_fd);
+> > -free_update_link:
+> > -       bpf_link__destroy(update_link);
+> > +free_update_tracing_link:
+> > +       bpf_link__destroy(update_tracing_link);
+>
+> I don't think this need to block submission unless there are other
+> issues but the
+> bpf_link__destroy can just be called in a single cleanup label because
+> it handles null or
+> erroneous inputs:
+>
+> int bpf_link__destroy(struct bpf_link *link)
+> {
+>     int err = 0;
+>
+>     if (IS_ERR_OR_NULL(link))
+>          return 0;
+> [...]
 
-Thanks Alexei. I'll explore both options for the next spin!
++1 to KP's point.
 
+Also Florent, how did you test it?
+This test fails in CI and in my manual run:
+./test_progs -t cook
+libbpf: load bpf program failed: Permission denied
+libbpf: -- BEGIN DUMP LOG ---
+libbpf:
+; int update_cookie_sockops(struct bpf_sock_ops *ctx)
+0: (bf) r6 = r1
+; if (ctx->family != AF_INET6)
+1: (61) r1 = *(u32 *)(r6 +20)
+; if (ctx->family != AF_INET6)
+2: (56) if w1 != 0xa goto pc+21
+ R1_w=inv10 R6_w=ctx(id=0,off=0,imm=0) R10=fp0
+; if (ctx->op != BPF_SOCK_OPS_TCP_CONNECT_CB)
+3: (61) r1 = *(u32 *)(r6 +0)
+; if (ctx->op != BPF_SOCK_OPS_TCP_CONNECT_CB)
+4: (56) if w1 != 0x3 goto pc+19
+ R1_w=inv3 R6_w=ctx(id=0,off=0,imm=0) R10=fp0
+; if (!ctx->sk)
+5: (79) r1 = *(u64 *)(r6 +184)
+; if (!ctx->sk)
+6: (15) if r1 == 0x0 goto pc+17
+ R1_w=sock(id=0,ref_obj_id=0,off=0,imm=0) R6_w=ctx(id=0,off=0,imm=0) R10=fp0
+; p = bpf_sk_storage_get(&socket_cookies, ctx->sk, 0, 0);
+7: (79) r2 = *(u64 *)(r6 +184)
+; p = bpf_sk_storage_get(&socket_cookies, ctx->sk, 0, 0);
+8: (18) r1 = 0xffff888106e41400
+10: (b7) r3 = 0
+11: (b7) r4 = 0
+12: (85) call bpf_sk_storage_get#107
+R2 type=sock_or_null expected=sock_common, sock, tcp_sock, xdp_sock, ptr_
+processed 12 insns (limit 1000000) max_states_per_insn 0 total_states
+0 peak_states 0 mark_read 0
 
-Björn
+libbpf: -- END LOG --
+libbpf: failed to load program 'update_cookie_sockops'
+libbpf: failed to load object 'socket_cookie_prog'
+libbpf: failed to load BPF skeleton 'socket_cookie_prog': -4007
+test_socket_cookie:FAIL:socket_cookie_prog__open_and_load skeleton
+open_and_load failed
+#95 socket_cookie:FAIL
+Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
