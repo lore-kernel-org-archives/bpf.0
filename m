@@ -4,51 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 X-Spam-Level: 
 X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
+	SPF_PASS,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 8C3E5C433DB
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:10:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC2C7C43381
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:10:58 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 36EFB23441
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:10:57 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 843D3235E4
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:10:58 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731984AbhATOFp (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Jan 2021 09:05:45 -0500
-Received: from mga07.intel.com ([134.134.136.100]:28887 "EHLO mga07.intel.com"
+        id S2389725AbhATOFX (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Jan 2021 09:05:23 -0500
+Received: from mga17.intel.com ([192.55.52.151]:24322 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389747AbhATN2t (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Jan 2021 08:28:49 -0500
-IronPort-SDR: AQ9R1KDJBDBRGNt29msXMURvD1lpft/pQkQZODcZwo3R4qMLfpaBeiaGKWW8LXj4xafR7HxlKt
- 30Azub2RQCxQ==
-X-IronPort-AV: E=McAfee;i="6000,8403,9869"; a="243173267"
+        id S2389668AbhATN0H (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Jan 2021 08:26:07 -0500
+IronPort-SDR: WimJPuLfOA9A9wPfQSoQxwiRlxK/ww+tZ2kvu7kgNSnBHuqXWby1XYeZ69QCGzkSFYRtFea0R9
+ pVzMzSA7VJOA==
+X-IronPort-AV: E=McAfee;i="6000,8403,9869"; a="158877893"
 X-IronPort-AV: E=Sophos;i="5.79,361,1602572400"; 
-   d="scan'208";a="243173267"
+   d="scan'208";a="158877893"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 05:28:05 -0800
-IronPort-SDR: EQJKsnWu5S8VyOtGQnfXye3iZuwRWDWOA69LQJOBOUY7FdvIsNdnTMi1DmJwZllNDfNY2Jnu7I
- h/VpvIlfqP0g==
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 05:25:25 -0800
+IronPort-SDR: HPzL6eB+vkLX+mVGosC2OWzaKNhF1iuzyuiiihb3ormJH/Vllh/ZMj3dTLlJL6EDFpkpmea90P
+ 0Qtvn6ayMFMg==
 X-IronPort-AV: E=Sophos;i="5.79,361,1602572400"; 
-   d="scan'208";a="384834944"
+   d="scan'208";a="384834261"
 Received: from myegin-mobl1.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.249.42.133])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 05:28:00 -0800
-Subject: Re: [PATCH bpf-next v2 0/8] Introduce bpf_redirect_xsk() helper
-To:     Maxim Mikityanskiy <maximmi@nvidia.com>,
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 05:25:19 -0800
+Subject: Re: [PATCH bpf-next v2 5/8] libbpf, xsk: select AF_XDP BPF program
+ based on kernel version
+To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
         =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
         ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
         bpf@vger.kernel.org
 Cc:     magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
-        kuba@kernel.org, jonathan.lemon@gmail.com, davem@davemloft.net,
-        hawk@kernel.org, john.fastabend@gmail.com, ciara.loftus@intel.com,
-        weqaar.a.janjua@intel.com
+        kuba@kernel.org, jonathan.lemon@gmail.com, maximmi@nvidia.com,
+        davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
+        ciara.loftus@intel.com, weqaar.a.janjua@intel.com,
+        Marek Majtyka <alardam@gmail.com>
 References: <20210119155013.154808-1-bjorn.topel@gmail.com>
- <7dcee85b-b3ef-947f-f433-03ad7066c5dd@nvidia.com>
+ <20210119155013.154808-6-bjorn.topel@gmail.com> <875z3repng.fsf@toke.dk>
 From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-Message-ID: <9fd68fd5-6a9f-3c36-1b83-4ba587387f5d@intel.com>
-Date:   Wed, 20 Jan 2021 14:27:58 +0100
+Message-ID: <6c7da700-700d-c7f6-fe0a-c42e55e81c8a@intel.com>
+Date:   Wed, 20 Jan 2021 14:25:15 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.6.1
 MIME-Version: 1.0
-In-Reply-To: <7dcee85b-b3ef-947f-f433-03ad7066c5dd@nvidia.com>
+In-Reply-To: <875z3repng.fsf@toke.dk>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -56,62 +59,26 @@ Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2021-01-20 14:15, Maxim Mikityanskiy wrote:
-> On 2021-01-19 17:50, Björn Töpel wrote:
->> This series extends bind() for XDP sockets, so that the bound socket
->> is added to the netdev_rx_queue _rx array in the netdevice. We call
->> this to register the socket. To redirect packets to the registered
->> socket, a new BPF helper is used: bpf_redirect_xsk().
->>
->> For shared XDP sockets, only the first bound socket is
->> registered. Users that need more complex setup has to use XSKMAP and
->> bpf_redirect_map().
->>
->> Now, why would one use bpf_redirect_xsk() over the regular
->> bpf_redirect_map() helper?
->>
->> * Better performance!
->> * Convenience; Most user use one socket per queue. This scenario is
->>    what registered sockets support. There is no need to create an
->>    XSKMAP. This can also reduce complexity from containerized setups,
->>    where users might what to use XDP sockets without CAP_SYS_ADMIN
->>    capabilities.
->>
->> The first patch restructures xdp_do_redirect() a bit, to make it
->> easier to add the new helper. This restructure also give us a slight
->> performance benefit. The following three patches extends bind() and
->> adds the new helper. After that, two libbpf patches that selects XDP
->> program based on what kernel is running. Finally, selftests for the new
->> functionality is added.
->>
->> Note that the libbpf "auto-selection" is based on kernel version, so
->> it is hard coded to the "-next" version (5.12). If you would like to
->> try this is out, you will need to change the libbpf patch locally!
->>
->> Thanks to Maciej and Magnus for the internal review/comments!
->>
->> Performance (rxdrop, zero-copy)
->>
->> Baseline
->> Two cores:                   21.3 Mpps
->> One core:                    24.5 Mpps
+On 2021-01-20 13:52, Toke Høiland-Jørgensen wrote:
+> Björn Töpel <bjorn.topel@gmail.com> writes:
 > 
-> Two cores is slower? It used to be faster all the time, didn't it?
+>> From: Björn Töpel <bjorn.topel@intel.com>
+>>
+>> Add detection for kernel version, and adapt the BPF program based on
+>> kernel support. This way, users will get the best possible performance
+>> from the BPF program.
+> 
+> Please do explicit feature detection instead of relying on the kernel
+> version number; some distro kernels are known to have a creative notion
+> of their own version, which is not really related to the features they
+> actually support (I'm sure you know which one I'm referring to ;)).
 >
 
-Up until busy-polling. Note that I'm using a busy-poll napi budget of 512.
+Right. For a *new* helper, like bpf_redirect_xsk, we rely on rejection
+from the verifier to detect support. What about "bpf_redirect_map() now
+supports passing return value as flags"? Any ideas how to do that in a
+robust, non-version number-based scheme?
 
 
->> Patched
->> Two cores, bpf_redirect_map: 21.7 Mpps + 2%
->> One core, bpf_redirect_map:  24.9 Mpps + 2%
->>
->> Two cores, bpf_redirect_xsk: 24.0 Mpps +13%
-> 
-> Nice, impressive improvement!
->
-
-Thanks! Getting rid of the queue/netdev checks really payed off!
-
-
+Thanks,
 Björn
