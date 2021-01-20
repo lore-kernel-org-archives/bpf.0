@@ -2,154 +2,143 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_NONE,URIBL_BLOCKED,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0FE35C433E0
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 17:02:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 52737C433E0
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 17:10:28 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id D03EC22CE3
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 17:02:42 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 019E322CE3
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 17:10:27 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391616AbhATRBx (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Jan 2021 12:01:53 -0500
-Received: from mga04.intel.com ([192.55.52.120]:47811 "EHLO mga04.intel.com"
+        id S2391804AbhATRKA (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Jan 2021 12:10:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59304 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391051AbhATPuI (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Jan 2021 10:50:08 -0500
-IronPort-SDR: rXXFTGtll4N2OzRjaFzg5qeD4nQGy4rehd8mNPodbwK56GynuS0lnJpVuVfzLnxVZwAJ6gq5JQ
- o+b4wslYT6Ig==
-X-IronPort-AV: E=McAfee;i="6000,8403,9870"; a="176555131"
-X-IronPort-AV: E=Sophos;i="5.79,361,1602572400"; 
-   d="scan'208";a="176555131"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 07:49:34 -0800
-IronPort-SDR: Cy4wyteDgb3xDy5nZdIBsMBAWem7rtiTfA7MlBvkEKezagzqnUbcYbWYuk8/IFID1JTrYFcUOr
- p8T18IWqvhXw==
-X-IronPort-AV: E=Sophos;i="5.79,361,1602572400"; 
-   d="scan'208";a="384884012"
-Received: from myegin-mobl1.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.249.42.133])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2021 07:49:28 -0800
-Subject: Re: [PATCH bpf-next v2 1/8] xdp: restructure redirect actions
-To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        ast@kernel.org, daniel@iogearbox.net, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Cc:     magnus.karlsson@intel.com, maciej.fijalkowski@intel.com,
-        kuba@kernel.org, jonathan.lemon@gmail.com, maximmi@nvidia.com,
-        davem@davemloft.net, hawk@kernel.org, john.fastabend@gmail.com,
-        ciara.loftus@intel.com, weqaar.a.janjua@intel.com
-References: <20210119155013.154808-1-bjorn.topel@gmail.com>
- <20210119155013.154808-2-bjorn.topel@gmail.com> <87bldjeq1j.fsf@toke.dk>
- <996f1ff7-5891-fd4a-ee3e-fefd7e93879d@intel.com> <87mtx34q48.fsf@toke.dk>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-Message-ID: <0a7d1a0b-de2e-b973-a807-b9377bb89737@intel.com>
-Date:   Wed, 20 Jan 2021 16:49:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        id S2391043AbhATRIq (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Jan 2021 12:08:46 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AF2962242A
+        for <bpf@vger.kernel.org>; Wed, 20 Jan 2021 17:08:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611162486;
+        bh=6Am6P3ap6VUQy1vl3nzntFQfX3lYi9qaI7SwEtBxFD0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cnTIneAyfJ09wKIolqvaVE6JK5UQ6gwHqz+zHqnLjp72E+ayq6lBBwx47xgMkTUDw
+         JWryQDkWP+DKhjBZtLjbijXb3Cz+5oFdWM0A3a15tb8dq59MG+vS7tHMJUyWSG36g9
+         ucK3DLa+nUyk9bUJM+yC9vgsty8yhZkmlqj6moVkfIG/m9umX0ufRHSyxGjxf1kPZL
+         X70okYsrxamrQING36d9co5KRW7iLClpLtlXtU0xnFYRdV1T/Squrj4m4arvL71l2U
+         qpEk0rLDAgIRJWgpMEoMes2BCAuhhVORHRz8z0Qjx/yPaqztaKy/gUKal6dfXurMh3
+         h8o5YT4Ce+bBw==
+Received: by mail-ej1-f54.google.com with SMTP id gx5so15295656ejb.7
+        for <bpf@vger.kernel.org>; Wed, 20 Jan 2021 09:08:05 -0800 (PST)
+X-Gm-Message-State: AOAM530Pa6Vj9ChQ5y/UaVELkiuXj8h5TU8Fx3jyqNDQ3LnF8ij2pN+F
+        hMNGetSi1c3mX28TyeAPATW7iLq3H/v9+hlnpLfyPA==
+X-Google-Smtp-Source: ABdhPJyLYTTjQmBgXSRzAlaWqoG5zvh2eUjL0fMqRA6Fi0YUQxXH1mQi21xAk/KgG5faNdlS2r9wRurffjvaiPpTs1k=
+X-Received: by 2002:a17:906:4302:: with SMTP id j2mr6747215ejm.217.1611162484245;
+ Wed, 20 Jan 2021 09:08:04 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <87mtx34q48.fsf@toke.dk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210119155953.803818-1-revest@chromium.org> <20210119155953.803818-4-revest@chromium.org>
+In-Reply-To: <20210119155953.803818-4-revest@chromium.org>
+From:   KP Singh <kpsingh@kernel.org>
+Date:   Wed, 20 Jan 2021 18:07:52 +0100
+X-Gmail-Original-Message-ID: <CACYkzJ6fNvYCO4cnU2XispQkF-_3yToDGgB=aRRd9m+qy0gpWA@mail.gmail.com>
+Message-ID: <CACYkzJ6fNvYCO4cnU2XispQkF-_3yToDGgB=aRRd9m+qy0gpWA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/4] selftests/bpf: Add a selftest for the
+ tracing bpf_get_socket_cookie
+To:     Florent Revest <revest@chromium.org>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Florent Revest <revest@google.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On 2021-01-20 15:52, Toke Høiland-Jørgensen wrote:
-> Björn Töpel <bjorn.topel@intel.com> writes:
-> 
->> On 2021-01-20 13:44, Toke Høiland-Jørgensen wrote:
->>> Björn Töpel <bjorn.topel@gmail.com> writes:
->>>
->>>> From: Björn Töpel <bjorn.topel@intel.com>
->>>>
->>>> The XDP_REDIRECT implementations for maps and non-maps are fairly
->>>> similar, but obviously need to take different code paths depending on
->>>> if the target is using a map or not. Today, the redirect targets for
->>>> XDP either uses a map, or is based on ifindex.
->>>>
->>>> Future commits will introduce yet another redirect target via the a
->>>> new helper, bpf_redirect_xsk(). To pave the way for that, we introduce
->>>> an explicit redirect type to bpf_redirect_info. This makes the code
->>>> easier to follow, and makes it easier to add new redirect targets.
->>>>
->>>> Further, using an explicit type in bpf_redirect_info has a slight
->>>> positive performance impact by avoiding a pointer indirection for the
->>>> map type lookup, and instead use the hot cacheline for
->>>> bpf_redirect_info.
->>>>
->>>> The bpf_redirect_info flags member is not used by XDP, and not
->>>> read/written any more. The map member is only written to when
->>>> required/used, and not unconditionally.
->>>
->>> I like the simplification. However, the handling of map clearing becomes
->>> a bit murky with this change:
->>>
->>> You're not changing anything in bpf_clear_redirect_map(), and you're
->>> removing most of the reads and writes of ri->map. Instead,
->>> bpf_xdp_redirect_map() will store the bpf_dtab_netdev pointer in
->>> ri->tgt_value, which xdp_do_redirect() will just read and use without
->>> checking. But if the map element (or the entire map) has been freed in
->>> the meantime that will be a dangling pointer. I *think* the RCU callback
->>> in dev_map_delete_elem() and the rcu_barrier() in dev_map_free()
->>> protects against this, but that is by no means obvious. So confirming
->>> this, and explaining it in a comment would be good.
->>>
->>
->> Yes, *most* of the READ_ONCE(ri->map) are removed, it's pretty much only
->> the bpf_redirect_map(), and as you write, the tracepoints.
->>
->> The content/element of the map is RCU protected, and actually even the
->> map will be around until the XDP processing is complete. Note the
->> synchronize_rcu() followed after all bpf_clear_redirect_map() calls.
->>
->> I'll try to make it clearer in the commit message! Thanks for pointing
->> that out!
->>
->>> Also, as far as I can tell after this, ri->map is only used for the
->>> tracepoint. So how about just storing the map ID and getting rid of the
->>> READ/WRITE_ONCE() entirely?
->>>
->>
->> ...and the bpf_redirect_map() helper. Don't you think the current
->> READ_ONCE(ri->map) scheme is more obvious/clear?
-> 
-> Yeah, after your patch we WRITE_ONCE() the pointer in
-> bpf_redirect_map(), but the only place it is actually *read* is in the
-> tracepoint. So the only purpose of bpf_clear_redirect_map() is to ensure
-> that an invalid pointer is not read in the tracepoint function. Which
-> seems a bit excessive when we could just store the map ID for direct use
-> in the tracepoint and get rid of bpf_clear_redirect_map() entirely, no?
-> 
-> Besides, from a UX point of view, having the tracepoint display the map
-> ID even if that map ID is no longer valid seems to me like it makes more
-> sense than just displaying a map ID of 0 and leaving it up to the user
-> to figure out that this is because the map was cleared. I mean, at the
-> time the redirect was made, that *was* the map ID that was used...
+On Tue, Jan 19, 2021 at 5:00 PM Florent Revest <revest@chromium.org> wrote:
 >
-
-Convinced! Getting rid of bpf_clear_redirect_map() would be good! I'll
-take a stab at this for v3!
-
-
-> Oh, and as you say due to the synchronize_rcu() call in dev_map_free() I
-> think this whole discussion is superfluous anyway, since it can't
-> actually happen that the map gets freed between the setting and reading
-> of ri->map, no?
+> This builds up on the existing socket cookie test which checks whether
+> the bpf_get_socket_cookie helpers provide the same value in
+> cgroup/connect6 and sockops programs for a socket created by the
+> userspace part of the test.
 >
+> Adding a tracing program to the existing objects requires a different
+> attachment strategy and different headers.
+>
+> Signed-off-by: Florent Revest <revest@chromium.org>
 
-It can't be free'd but, ri->map can be cleared via
-bpf_clear_redirect_map(). So, between the helper (setting) and the
-tracepoint in xdp_do_redirect() it can be cleared (say if the XDP
-program is swapped out, prior running xdp_do_redirect()).
+Acked-by: KP Singh <kpsingh@kernel.org>
 
-Moving to the scheme you suggested, does make the discussion
-superfluous. :-)
+(one minor note, doesn't really need fixing as a part of this though)
 
+> ---
+>  .../selftests/bpf/prog_tests/socket_cookie.c  | 24 +++++++----
+>  .../selftests/bpf/progs/socket_cookie_prog.c  | 41 ++++++++++++++++---
+>  2 files changed, 52 insertions(+), 13 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/socket_cookie.c b/tools/testing/selftests/bpf/prog_tests/socket_cookie.c
+> index 53d0c44e7907..e5c5e2ea1deb 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/socket_cookie.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/socket_cookie.c
+> @@ -15,8 +15,8 @@ struct socket_cookie {
+>
+>  void test_socket_cookie(void)
+>  {
+> +       struct bpf_link *set_link, *update_sockops_link, *update_tracing_link;
+>         socklen_t addr_len = sizeof(struct sockaddr_in6);
+> -       struct bpf_link *set_link, *update_link;
+>         int server_fd, client_fd, cgroup_fd;
+>         struct socket_cookie_prog *skel;
+>         __u32 cookie_expected_value;
+> @@ -39,15 +39,21 @@ void test_socket_cookie(void)
+>                   PTR_ERR(set_link)))
+>                 goto close_cgroup_fd;
+>
+> -       update_link = bpf_program__attach_cgroup(skel->progs.update_cookie,
+> -                                                cgroup_fd);
+> -       if (CHECK(IS_ERR(update_link), "update-link-cg-attach", "err %ld\n",
+> -                 PTR_ERR(update_link)))
+> +       update_sockops_link = bpf_program__attach_cgroup(
+> +               skel->progs.update_cookie_sockops, cgroup_fd);
+> +       if (CHECK(IS_ERR(update_sockops_link), "update-sockops-link-cg-attach",
+> +                 "err %ld\n", PTR_ERR(update_sockops_link)))
+>                 goto free_set_link;
+>
+> +       update_tracing_link = bpf_program__attach(
+> +               skel->progs.update_cookie_tracing);
+> +       if (CHECK(IS_ERR(update_tracing_link), "update-tracing-link-attach",
+> +                 "err %ld\n", PTR_ERR(update_tracing_link)))
+> +               goto free_update_sockops_link;
+> +
+>         server_fd = start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
+>         if (CHECK(server_fd < 0, "start_server", "errno %d\n", errno))
+> -               goto free_update_link;
+> +               goto free_update_tracing_link;
+>
+>         client_fd = connect_to_fd(server_fd, 0);
+>         if (CHECK(client_fd < 0, "connect_to_fd", "errno %d\n", errno))
+> @@ -71,8 +77,10 @@ void test_socket_cookie(void)
+>         close(client_fd);
+>  close_server_fd:
+>         close(server_fd);
+> -free_update_link:
+> -       bpf_link__destroy(update_link);
+> +free_update_tracing_link:
+> +       bpf_link__destroy(update_tracing_link);
 
-Thanks for the input!
-Björn
+I don't think this need to block submission unless there are other
+issues but the
+bpf_link__destroy can just be called in a single cleanup label because
+it handles null or
+erroneous inputs:
 
+int bpf_link__destroy(struct bpf_link *link)
+{
+    int err = 0;
+
+    if (IS_ERR_OR_NULL(link))
+         return 0;
+[...]
