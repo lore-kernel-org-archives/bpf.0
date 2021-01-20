@@ -5,113 +5,119 @@ X-Spam-Level:
 X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DFD83C433E0
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 19:28:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1FC82C433DB
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:06:41 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id A6C9A233FE
-	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 19:28:27 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D52E1221F0
+	for <bpf@archiver.kernel.org>; Wed, 20 Jan 2021 20:06:40 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388020AbhATT0Z (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Wed, 20 Jan 2021 14:26:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60402 "EHLO
+        id S1727717AbhATUGT (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Wed, 20 Jan 2021 15:06:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2436467AbhATTZw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Wed, 20 Jan 2021 14:25:52 -0500
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D83CC061757;
-        Wed, 20 Jan 2021 11:25:09 -0800 (PST)
-Received: by mail-lj1-x232.google.com with SMTP id j3so7705900ljb.9;
-        Wed, 20 Jan 2021 11:25:09 -0800 (PST)
+        with ESMTP id S1732178AbhATT6S (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Wed, 20 Jan 2021 14:58:18 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CE2C061757;
+        Wed, 20 Jan 2021 11:57:37 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id y19so49305183iov.2;
+        Wed, 20 Jan 2021 11:57:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=puPe6u5eGjzcnpW6TMCNyyzNjrLc2snw2qd9AmS3wOs=;
-        b=SzZzHfAXPXi9k0Xc82ayuWcOl+5o9MCFSQ4b6b2hLQ0M3w6RGfSWN/dwCKd+2weeWj
-         tP1eAb3Fsn6/0N7TQNyl7CKMZ8NJAsQrJeLBXVkXj41XO4w+NV4PRGb2htkNOP3QH98o
-         9OnvbGjgu/QkW9hZrrizR8LuC4F6199aHwSJeglg4LSjJlnbNoybBIv5XWM4ynnqC4Y+
-         F2lND5oHtYmU0qpu5cdaZdr9eaG6RZYSsSERG2pPcSRFFRTSbYzvY8XB7aihrUduGuid
-         1zTkKpuyL8sRCxObqwqXcbQGGqCkc9Q9NcKRhg+Fkk5BKq2lkzOSgb3hwvknM6V22r7J
-         RIZw==
+        bh=tFAzucvwTgKhltZQcovBVjnsARW7ZpX0kzW41n4VbCA=;
+        b=LLLxc5ua6JWaH0ovVLfPkZT5o4iQ+TYpBigrCwUQGCwHbVpCEBbQ4OaHwMjsE4fJlx
+         APHpFT1R8s4BbSRyGNnziHhXW7ZoBslo3mFokxG5zpaxInDmGTJR8rJYg8enzASu9Pv1
+         uSMPt7K8wc53s1bROHiOz/01NrdXGu6/QNqsxDiPBFtUzJZ7ZZLQmTQzShna4ZL2UESY
+         vLSJyUzWh4efUmmwfvt3PMTctTiGRwvdQ0BMFaPVKzYXSKlSXgnhv1fNG9LEXx3uZUTS
+         nnCfV36BsTSJsshKbA1CiHN0twFRT91JjmmbeGszC99A3dsrAiV8RRniXCEhFHmHbu7q
+         Oy/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=puPe6u5eGjzcnpW6TMCNyyzNjrLc2snw2qd9AmS3wOs=;
-        b=V61W8023ZR554XfvuVid4er9soCagjnsNDrwevbTBPLKDsebxuYI5Ymuk3noX+l5XX
-         us5tzzsYDGPMBt7raMuxQvCabopg8SW5YlVt/htXYsnkeljbUlGNVtxS0D8b610X5Hgi
-         iFsv5dj+whVQN1RaCZPE/1qWhe74qC85VrSAh8J7n4M+F1BdP4GZ6W9LlF8fMhiWJtKs
-         7by3Wx939KL5wNCFSar3sqDw1Ay7ZK/ItcLZWvg4QFPhwORWw1QKmOecqqQtRk9Kuidm
-         rpy1Mq/XCb1tD03hXoMmsexAXBMfqWJEgMmd/0pMTYDF3ghdZlF0dc9zGpEvnBQSa/8/
-         oB6A==
-X-Gm-Message-State: AOAM530b85ICuSn+yUmd7D3hLrIPNXGisZjYosx9TAtaoK9/xewX6nvt
-        nVLdmT93u3v6Hce+NKIaLCuBDA11wwwy8UgQP3WzjgWR
-X-Google-Smtp-Source: ABdhPJzT1oUxuE5392bHQf83WMKzKnsEbmAiuaOs1PYZRsjtysNd0GsvPlvmPhJchyQ4EiR8Lu0VIBhKjsysdaptuI8=
-X-Received: by 2002:a2e:9dc1:: with SMTP id x1mr4838130ljj.32.1611170707741;
- Wed, 20 Jan 2021 11:25:07 -0800 (PST)
+        bh=tFAzucvwTgKhltZQcovBVjnsARW7ZpX0kzW41n4VbCA=;
+        b=UmEiEs2TTIp2JH8AzaT7y8xqOD0Ds2FmxaM5ubDMXrLCcRFcuYuWzdfidcDELKxDOn
+         CpLhrY46Y0mNThGd7lh6/rzsdbq4KTOWTYL2TiMlRR35fElDmnlROk+AA8/1UEBTGrS7
+         ofngUcWioTzBVB+g4Y6KtF1+iRU1MIB6aDj8m8MHfKBuJCH6EhQCTeS1HKVzKC1Z+bDy
+         jaSxnUcWM/HNKXzw5b2xrwDGpnzx/k+F7el6AtFEvP70fqv4UvrT3p/QUWo2GaTr8LwL
+         BpW0EjZLP0kKNiuI8XouzMT4+4sSgt3rDiUmhy+2bRhvz+/KLMLeXIaGiOT2K5E1Tkk9
+         xL1w==
+X-Gm-Message-State: AOAM5317H3XGGcMPpjPQ4KzZTgPhaoLewie9sFmjabLbOuungQSAIuxV
+        hYpFzJFABOUgZVIz7kPsPDPc2NSgc6jtSQaV2yI=
+X-Google-Smtp-Source: ABdhPJzkrs5gKJjCgGvS4n4G9ht49JRTpAbNNmjyY5M7srxT8Kg/bD5ZxXNomZJvU4LKP2s2zOsVsiIjg8TZcdcN4FU=
+X-Received: by 2002:a92:cd8c:: with SMTP id r12mr9091476ilb.221.1611172657270;
+ Wed, 20 Jan 2021 11:57:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20210120140350.883-1-angkery@163.com>
-In-Reply-To: <20210120140350.883-1-angkery@163.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 20 Jan 2021 11:24:56 -0800
-Message-ID: <CAADnVQK0RiGYRnzdLRvSQRwTdyCOr1nBqZaNz7YR9gvyXu82fg@mail.gmail.com>
-Subject: Re: [PATCH] selftest/bpf: fix typo
-To:     angkery <angkery@163.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+References: <20210120133946.2107897-1-jackmanb@google.com> <20210120133946.2107897-3-jackmanb@google.com>
+In-Reply-To: <20210120133946.2107897-3-jackmanb@google.com>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Wed, 20 Jan 2021 20:57:28 +0100
+Message-ID: <CAKXUXMxw4JP4q-iGTMsnS2j4KYfU7WDRTLbAdWu4DrvCa=R+NQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/2] docs: bpf: Clarify -mcpu=v3 requirement
+ for atomic ops
+To:     Brendan Jackman <jackmanb@google.com>
+Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Junlin Yang <yangjunlin@yulong.com>
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Florent Revest <revest@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 6:22 AM angkery <angkery@163.com> wrote:
+On Wed, Jan 20, 2021 at 2:39 PM Brendan Jackman <jackmanb@google.com> wrote:
 >
-> From: Junlin Yang <yangjunlin@yulong.com>
+> Alexei pointed out [1] that this wording is pretty confusing. Here's
+> an attempt to be more explicit and clear.
 >
-> Change 'exeeds' to 'exceeds'.
+> [1] https://lore.kernel.org/bpf/CAADnVQJVvwoZsE1K+6qRxzF7+6CvZNzygnoBW9tZNWJELk5c=Q@mail.gmail.com/T/#m07264fc18fdc43af02fc1320968afefcc73d96f4
 >
-> Signed-off-by: Junlin Yang <yangjunlin@yulong.com>
 
-The patch didn't reach patchwork.
-Please reduce cc list and resubmit to bpf@vger only.
-Also pls mention [PATCH bpf-next] in the subject.
+It is common practice to use "Link: URL" to refer to other mail
+threads; and to use the "permalink":
 
+https://lore.kernel.org/bpf/CAADnVQJVvwoZsE1K+6qRxzF7+6CvZNzygnoBW9tZNWJELk5c=Q@mail.gmail.com/
+
+which is a bit shorter than the link you provided.
+
+If you follow that convention with "Link: URL", checkpatch.pl will not
+complain about this long line :)
+
+
+Lukas
+
+> Signed-off-by: Brendan Jackman <jackmanb@google.com>
 > ---
->  tools/testing/selftests/bpf/prog_tests/btf.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  Documentation/networking/filter.rst | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-> index 8ae97e2..ea008d0 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-> @@ -914,7 +914,7 @@ struct btf_raw_test {
->         .err_str = "Member exceeds struct_size",
->  },
+> diff --git a/Documentation/networking/filter.rst b/Documentation/networking/filter.rst
+> index 4c2bb4c6364d..b3f457802836 100644
+> --- a/Documentation/networking/filter.rst
+> +++ b/Documentation/networking/filter.rst
+> @@ -1081,9 +1081,10 @@ before is loaded back to ``R0``.
 >
-> -/* Test member exeeds the size of struct
-> +/* Test member exceeds the size of struct
->   *
->   * struct A {
->   *     int m;
-> @@ -948,7 +948,7 @@ struct btf_raw_test {
->         .err_str = "Member exceeds struct_size",
->  },
+>  Note that 1 and 2 byte atomic operations are not supported.
 >
-> -/* Test member exeeds the size of struct
-> +/* Test member exceeds the size of struct
->   *
->   * struct A {
->   *     int m;
+> -Except ``BPF_ADD`` *without* ``BPF_FETCH`` (for legacy reasons), all 4 byte
+> -atomic operations require alu32 mode. Clang enables this mode by default in
+> -architecture v3 (``-mcpu=v3``). For older versions it can be enabled with
+> +Clang can generate atomic instructions by default when ``-mcpu=v3`` is
+> +enabled. If a lower version for ``-mcpu`` is set, the only atomic instruction
+> +Clang can generate is ``BPF_ADD`` *without* ``BPF_FETCH``. If you need to enable
+> +the atomics features, while keeping a lower ``-mcpu`` version, you can use
+>  ``-Xclang -target-feature -Xclang +alu32``.
+>
+>  You may encounter ``BPF_XADD`` - this is a legacy name for ``BPF_ATOMIC``,
 > --
-> 1.9.1
->
+> 2.30.0.284.gd98b1dd5eaa7-goog
 >
