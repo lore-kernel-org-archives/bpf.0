@@ -2,132 +2,104 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 48EC4C433DB
-	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 15:19:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 01187C433E6
+	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 15:25:32 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 08507239FC
-	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 15:19:58 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id BEFCD23A04
+	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 15:25:31 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732418AbhAUPSj (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Jan 2021 10:18:39 -0500
-Received: from mail-40134.protonmail.ch ([185.70.40.134]:22016 "EHLO
-        mail-40134.protonmail.ch" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732494AbhAUPOc (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Jan 2021 10:14:32 -0500
-Date:   Thu, 21 Jan 2021 15:13:39 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me; s=protonmail;
-        t=1611242020; bh=O9TLtHmt2zh8yMakyKLVS/teU5JXK2tqPjP6ofPakhM=;
-        h=Date:To:From:Cc:Reply-To:Subject:In-Reply-To:References:From;
-        b=eQ8lCveduUB8ZCLvch3E2Gn7spJr/z2r7aLu5lYla4sMTdqVW54xiHH7tb0qXWML7
-         5lBAC6tbvoEraRw6HJyJtfehD0pMsgiqSoUyGmEo6gnWks+PydKzRyDYKXHAcXRI4N
-         nyc5GO481bJeDGrR1fXz+2LJks+J/MfbG0hi6C7Wbvd0yIPVOLA1HZ8envfEEVrXWs
-         VtQwmap3nF437RrO4mtEK/GnHipnNNQ/hlVkfEd6aa0loFrY3sMitnhdAe1EWXbnsn
-         /ziYpr9/tR0UCdnqMnZwM7mZNMtAYjIc5df93+cYTeH67zT6Y1vSCsWJELRrC71i0p
-         0+VhXOPQyCFRw==
-To:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexander Lobakin <alobakin@pm.me>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        =?utf-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        virtualization@lists.linux-foundation.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: Re: [PATCH bpf-next v3 1/3] net: add priv_flags for allow tx skb without linear
-Message-ID: <20210121151320.3018-1-alobakin@pm.me>
-In-Reply-To: <d44e0c054675e816b1ece745be795bd2a8b88350.1611236588.git.xuanzhuo@linux.alibaba.com>
-References: <cover.1611236588.git.xuanzhuo@linux.alibaba.com> <d44e0c054675e816b1ece745be795bd2a8b88350.1611236588.git.xuanzhuo@linux.alibaba.com>
+        id S1732608AbhAUPYv (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Jan 2021 10:24:51 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40508 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731887AbhAUNYx (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Jan 2021 08:24:53 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DA44D206A3;
+        Thu, 21 Jan 2021 13:24:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611235453;
+        bh=JqP2Oo4Z9DKZhCgctkjTNeYNZJSQEIKDv2pP1IWf0zE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VIZSZUvHtcoqJlB/V7JgohFFpEJyjK4uTzSTyizBLQiVxJ5XGovq84oYLyUlIIaX8
+         F3EIw2VXNSHr6AstmAgmwx78xqhpHOq80k2Mvi8RTQflGCXNRSrYIrvDl3U44VEqzt
+         ZKNWVrKWkpTYQCxMeYAwxt5Eg+tdQBklu1UDB1p88df8kvyDoLAmld7Rybv/btQUUO
+         qy56gZsJnEJQkSiKx/6MIOpsTuMbRa7G65YTQzlf4pIBRtZ5DJBEaSOOn+T6o+Gzxo
+         i5GPMzB5JylIcNNVxoiFhdjD16aNwYa/eQK4orimopkbMUQGeeqDchPpcfxIsdmpsn
+         HhibZk1L3gg8A==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id CF3DF40513; Thu, 21 Jan 2021 10:24:10 -0300 (-03)
+Date:   Thu, 21 Jan 2021 10:24:10 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Giuliano Procida <gprocida@google.com>
+Cc:     dwarves@vger.kernel.org, kernel-team@android.com,
+        maennich@google.com, ast@kernel.org, andrii@kernel.org,
+        bpf@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH dwarves v2 2/3] btf_encoder: Improve error-handling
+ around objcopy
+Message-ID: <20210121132410.GZ12699@kernel.org>
+References: <20210118160139.1971039-1-gprocida@google.com>
+ <20210121113520.3603097-1-gprocida@google.com>
+ <20210121113520.3603097-3-gprocida@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210121113520.3603097-3-gprocida@google.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Date: Thu, 21 Jan 2021 21:47:07 +0800
+Em Thu, Jan 21, 2021 at 11:35:19AM +0000, Giuliano Procida escreveu:
+> * Report the correct filename when objcopy fails.
+> * Unlink the temporary file on error.
 
-> In some cases, we hope to construct skb directly based on the existing
-> memory without copying data. In this case, the page will be placed
-> directly in the skb, and the linear space of skb is empty. But
-> unfortunately, many the network card does not support this operation.
-> For example Mellanox Technologies MT27710 Family [ConnectX-4 Lx] will
-> get the following error message:
->=20
->     mlx5_core 0000:3b:00.1 eth1: Error cqe on cqn 0x817, ci 0x8, qn 0x1db=
-b, opcode 0xd, syndrome 0x1, vendor syndrome 0x68
->     00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->     00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->     00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->     00000030: 00 00 00 00 60 10 68 01 0a 00 1d bb 00 0f 9f d2
->     WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0xf, len: 64
->     00000000: 00 00 0f 0a 00 1d bb 03 00 00 00 08 00 00 00 00
->     00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->     00000020: 00 00 00 2b 00 08 00 00 00 00 00 05 9e e3 08 00
->     00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->     mlx5_core 0000:3b:00.1 eth1: ERR CQE on SQ: 0x1dbb
->=20
-> So a priv_flag is added here to indicate whether the network card
-> supports this feature.
->=20
-> Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> Suggested-by: Alexander Lobakin <alobakin@pm.me>
+Thanks, applied.
 
-Acked-by: Alexander Lobakin <alobakin@pm.me>
+- Arnaldo
 
+ 
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Giuliano Procida <gprocida@google.com>
 > ---
->  include/linux/netdevice.h | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> index ef51725..135db8f 100644
-> --- a/include/linux/netdevice.h
-> +++ b/include/linux/netdevice.h
-> @@ -1525,6 +1525,7 @@ struct net_device_ops {
->   * @IFF_FAILOVER_SLAVE: device is lower dev of a failover master device
->   * @IFF_L3MDEV_RX_HANDLER: only invoke the rx handler of L3 master devic=
-e
->   * @IFF_LIVE_RENAME_OK: rename is allowed while device is up and running
-> + * @IFF_TX_SKB_NO_LINEAR: allow tx skb linear is empty
->   */
->  enum netdev_priv_flags {
->  =09IFF_802_1Q_VLAN=09=09=09=3D 1<<0,
-> @@ -1558,6 +1559,7 @@ enum netdev_priv_flags {
->  =09IFF_FAILOVER_SLAVE=09=09=3D 1<<28,
->  =09IFF_L3MDEV_RX_HANDLER=09=09=3D 1<<29,
->  =09IFF_LIVE_RENAME_OK=09=09=3D 1<<30,
-> +=09IFF_TX_SKB_NO_LINEAR=09=09=3D 1<<31,
->  };
-> =20
->  #define IFF_802_1Q_VLAN=09=09=09IFF_802_1Q_VLAN
-> @@ -1590,6 +1592,7 @@ enum netdev_priv_flags {
->  #define IFF_FAILOVER_SLAVE=09=09IFF_FAILOVER_SLAVE
->  #define IFF_L3MDEV_RX_HANDLER=09=09IFF_L3MDEV_RX_HANDLER
->  #define IFF_LIVE_RENAME_OK=09=09IFF_LIVE_RENAME_OK
-> +#define IFF_TX_SKB_NO_LINEAR=09=09IFF_TX_SKB_NO_LINEAR
-> =20
->  /**
->   *=09struct net_device - The DEVICE structure.
-> --=20
-> 1.8.3.1
+>  libbtf.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/libbtf.c b/libbtf.c
+> index 3709087..7552d8e 100644
+> --- a/libbtf.c
+> +++ b/libbtf.c
+> @@ -786,18 +786,19 @@ static int btf_elf__write(const char *filename, struct btf *btf)
+>  		if (write(fd, raw_btf_data, raw_btf_size) != raw_btf_size) {
+>  			fprintf(stderr, "%s: write of %d bytes to '%s' failed: %d!\n",
+>  				__func__, raw_btf_size, tmp_fn, errno);
+> -			goto out;
+> +			goto unlink;
+>  		}
+>  
+>  		snprintf(cmd, sizeof(cmd), "%s --add-section .BTF=%s %s",
+>  			 llvm_objcopy, tmp_fn, filename);
+>  		if (system(cmd)) {
+>  			fprintf(stderr, "%s: failed to add .BTF section to '%s': %d!\n",
+> -				__func__, tmp_fn, errno);
+> -			goto out;
+> +				__func__, filename, errno);
+> +			goto unlink;
+>  		}
+>  
+>  		err = 0;
+> +	unlink:
+>  		unlink(tmp_fn);
+>  	}
+>  
+> -- 
+> 2.30.0.296.g2bfb1c46d8-goog
+> 
 
-Thanks,
-Al
+-- 
 
+- Arnaldo
