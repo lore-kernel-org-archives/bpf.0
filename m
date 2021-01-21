@@ -2,116 +2,218 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-	version=3.4.0
+X-Spam-Status: No, score=-17.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 69BC5C432C3
-	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 13:58:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 10F9AC433E0
+	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 14:27:26 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 3914E239A4
-	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 13:58:20 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id D242F239EB
+	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 14:27:25 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726365AbhAUNkF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Jan 2021 08:40:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43478 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730597AbhAUNjM (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Jan 2021 08:39:12 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C4ED9239EB;
-        Thu, 21 Jan 2021 13:38:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611236310;
-        bh=ZBJzqWqHWOBxIgOlok6VImUdP65BcvCHCmaZY8P6Pow=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I2IdEpQsYE5SYLMTIadMkT/FDJ4AswfAx9zDUQWr7As8SKFCtON3STZ83NqoGjrYG
-         U6+NeIlkl1aAeLej3cff+62o5fx8Bte1firgMOTO+wP3kSBlVi35yNlvV5gVFbQITn
-         NB/p+Q6wZP3jBD4HE1OsstluuriuQX0gpCoqXoJSFkIA6fcfKZJJOgwjBIBjnXk3kY
-         gOqBLDLHBTDMjYdU6IsMVN1yJrBd7Vw2xmLqtX5gsE8I3u0BcMlEs8vSXcYK8S0RsE
-         vQCqZQldRCU69nJK2nDlrPbFGuGLlVoEtRSeWHDndYtnEzYn5gxnPmmu6f6Ku9fChj
-         WX6klC6B+tV9w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id CBA7640513; Thu, 21 Jan 2021 10:38:25 -0300 (-03)
-Date:   Thu, 21 Jan 2021 10:38:25 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Tom Stellard <tstellar@redhat.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, dwarves@vger.kernel.org,
-        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andriin@fb.com>, Yonghong Song <yhs@fb.com>,
-        Hao Luo <haoluo@google.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>
-Subject: Re: [PATCH] btf_encoder: Add extra checks for symbol names
-Message-ID: <20210121133825.GB12699@kernel.org>
-References: <20210112184004.1302879-1-jolsa@kernel.org>
- <f3790a7d-73bc-d634-5994-d049c7a73eae@redhat.com>
+        id S1729259AbhAUOYS (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Jan 2021 09:24:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728609AbhAUOYD (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Jan 2021 09:24:03 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBB9C0613C1;
+        Thu, 21 Jan 2021 06:23:06 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id j26so1584209qtq.8;
+        Thu, 21 Jan 2021 06:23:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=w3fw0nXMRMWboT6HRhuDOZbyDuSIlRWZhktoQjQ5hhQ=;
+        b=jC4IVgUHCLnG4+nLw2LB1EReIoMReml/OSrPyUvvh6uljN6y3Js7zYxB9w7YG9wPPS
+         uMyQi1GnliTA6a3OvK6aivxBav+5ajgTZ5LGDJ+4obwlbTxq828an8B/JGN4HQei2LAl
+         QAs527jZbmYf0D4N3VW3fBtmRAxoGIyeoHIWkZdJwbp6u9SdjElj+Dl06l8mOByN8r/2
+         6GemXdV9wAo3HuyVPhDN/0N+3rQwABVvsaRo3iWo+1lgPTurAR0DFB0nBx9+IbIWRU5U
+         RBztgsMyVDmMV8S10VcHMsnf+olTqW+O6qWhmOWff0cdYFpOAHvbH6Xvaseb42YTevhO
+         mGFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=w3fw0nXMRMWboT6HRhuDOZbyDuSIlRWZhktoQjQ5hhQ=;
+        b=E21HQm7JiDFUAb9xbYm7pVxJvoivPwy9Nn8FxnrnPeGt3iEMIugUJlng/t7FczDKYZ
+         KeqS8Dr0owv8Wbhla4xyFqWDE6D+ZJaCePzpoRKV9nkafAqz4/2MteGCdKRXpwtPOxDq
+         cFbd+HYFMSSQAG9hS9re7LPCVBgAZscGNytoew1azxbf6QtF2hCXj/sVqppCW22wZR+j
+         Sne9pXMD/BOrhsmRqro13UXdX9UGjJfcRgexsQlSzQH6VV+1VmrvWefhmtOuDD359Cdi
+         n1sl9L9Z7JSm4SQdMCn2IzzCCAhVRYOK0fRawluyjE8hOHbqiMnqOldEbxy7PCan6QZC
+         N2Kw==
+X-Gm-Message-State: AOAM532hLFAKAokHPc/rwl9sJKTrLqCs+n76Oom9s0YfG6Lqpntf5Y98
+        l3W9kPOoqJjcTH+PrNIZkX4=
+X-Google-Smtp-Source: ABdhPJyOR8dIagWMAd48F7/lqO9zZIb3cZeL6GOT3FOT3gSGzynhyofPoZSmmB/nQdRsVxxNMxVL5Q==
+X-Received: by 2002:ac8:57ca:: with SMTP id w10mr13739504qta.12.1611238985422;
+        Thu, 21 Jan 2021 06:23:05 -0800 (PST)
+Received: from ubuntu-m3-large-x86 ([2604:1380:45f1:1d00::1])
+        by smtp.gmail.com with ESMTPSA id 38sm3528072qtb.67.2021.01.21.06.23.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Jan 2021 06:23:04 -0800 (PST)
+Date:   Thu, 21 Jan 2021 07:23:03 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        clang-built-linux <clang-built-linux@googlegroups.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Fangrui Song <maskray@google.com>
+Subject: Re: [PATCH bpf-next v3] samples/bpf: Update build procedure for
+ manually compiling LLVM and Clang
+Message-ID: <20210121142303.GA3346833@ubuntu-m3-large-x86>
+References: <1611206855-22555-1-git-send-email-yangtiezhu@loongson.cn>
+ <20210121053627.GA1680146@ubuntu-m3-large-x86>
+ <CAEf4BzbZxuy8LRmngRzLZ3VTnrDw=Rf70Ghkbu1a5+fNpQud5Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f3790a7d-73bc-d634-5994-d049c7a73eae@redhat.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <CAEf4BzbZxuy8LRmngRzLZ3VTnrDw=Rf70Ghkbu1a5+fNpQud5Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Tue, Jan 12, 2021 at 04:27:59PM -0800, Tom Stellard escreveu:
-> On 1/12/21 10:40 AM, Jiri Olsa wrote:
-> > When processing kernel image build by clang we can
-> > find some functions without the name, which causes
-> > pahole to segfault.
-> > 
-> > Adding extra checks to make sure we always have
-> > function's name defined before using it.
-> > 
+On Thu, Jan 21, 2021 at 12:08:31AM -0800, Andrii Nakryiko wrote:
+> On Wed, Jan 20, 2021 at 9:36 PM Nathan Chancellor
+> <natechancellor@gmail.com> wrote:
+> >
+> > On Thu, Jan 21, 2021 at 01:27:35PM +0800, Tiezhu Yang wrote:
+> > > The current LLVM and Clang build procedure in samples/bpf/README.rst is
+> > > out of date. See below that the links are not accessible any more.
+> > >
+> > > $ git clone http://llvm.org/git/llvm.git
+> > > Cloning into 'llvm'...
+> > > fatal: unable to access 'http://llvm.org/git/llvm.git/': Maximum (20) redirects followed
+> > > $ git clone --depth 1 http://llvm.org/git/clang.git
+> > > Cloning into 'clang'...
+> > > fatal: unable to access 'http://llvm.org/git/clang.git/': Maximum (20) redirects followed
+> > >
+> > > The LLVM community has adopted new ways to build the compiler. There are
+> > > different ways to build LLVM and Clang, the Clang Getting Started page [1]
+> > > has one way. As Yonghong said, it is better to copy the build procedure
+> > > in Documentation/bpf/bpf_devel_QA.rst to keep consistent.
+> > >
+> > > I verified the procedure and it is proved to be feasible, so we should
+> > > update README.rst to reflect the reality. At the same time, update the
+> > > related comment in Makefile.
+> > >
+> > > Additionally, as Fangrui said, the dir llvm-project/llvm/build/install is
+> > > not used, BUILD_SHARED_LIBS=OFF is the default option [2], so also change
+> > > Documentation/bpf/bpf_devel_QA.rst together.
+> > >
+> > > [1] https://clang.llvm.org/get_started.html
+> > > [2] https://www.llvm.org/docs/CMake.html
+> > >
+> > > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> > > Acked-by: Yonghong Song <yhs@fb.com>
+> >
+> > Reviewed-by: Nathan Chancellor <natechancellor@gmail.com>
+> >
+> > Small comment below.
+> >
+> > > ---
+> > >
+> > > v2: Update the commit message suggested by Yonghong,
+> > >     thank you very much.
+> > >
+> > > v3: Remove the default option BUILD_SHARED_LIBS=OFF
+> > >     and just mkdir llvm-project/llvm/build suggested
+> > >     by Fangrui.
+> > >
+> > >  Documentation/bpf/bpf_devel_QA.rst |  3 +--
+> > >  samples/bpf/Makefile               |  2 +-
+> > >  samples/bpf/README.rst             | 16 +++++++++-------
+> > >  3 files changed, 11 insertions(+), 10 deletions(-)
+> > >
+> > > diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
+> > > index 5b613d2..18788bb 100644
+> > > --- a/Documentation/bpf/bpf_devel_QA.rst
+> > > +++ b/Documentation/bpf/bpf_devel_QA.rst
+> > > @@ -506,11 +506,10 @@ that set up, proceed with building the latest LLVM and clang version
+> > >  from the git repositories::
+> > >
+> > >       $ git clone https://github.com/llvm/llvm-project.git
+> > > -     $ mkdir -p llvm-project/llvm/build/install
+> > > +     $ mkdir -p llvm-project/llvm/build
+> > >       $ cd llvm-project/llvm/build
+> > >       $ cmake .. -G "Ninja" -DLLVM_TARGETS_TO_BUILD="BPF;X86" \
+> > >                  -DLLVM_ENABLE_PROJECTS="clang"    \
+> > > -                -DBUILD_SHARED_LIBS=OFF           \
+> > >                  -DCMAKE_BUILD_TYPE=Release        \
+> > >                  -DLLVM_BUILD_RUNTIME=OFF
+> > >       $ ninja
+> > > diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+> > > index 26fc96c..d061446 100644
+> > > --- a/samples/bpf/Makefile
+> > > +++ b/samples/bpf/Makefile
+> > > @@ -208,7 +208,7 @@ TPROGLDLIBS_xdpsock               += -pthread -lcap
+> > >  TPROGLDLIBS_xsk_fwd          += -pthread
+> > >
+> > >  # Allows pointing LLC/CLANG to a LLVM backend with bpf support, redefine on cmdline:
+> > > -#  make M=samples/bpf/ LLC=~/git/llvm/build/bin/llc CLANG=~/git/llvm/build/bin/clang
+> > > +# make M=samples/bpf LLC=~/git/llvm-project/llvm/build/bin/llc CLANG=~/git/llvm-project/llvm/build/bin/clang
+> > >  LLC ?= llc
+> > >  CLANG ?= clang
+> > >  OPT ?= opt
+> > > diff --git a/samples/bpf/README.rst b/samples/bpf/README.rst
+> > > index dd34b2d..23006cb 100644
+> > > --- a/samples/bpf/README.rst
+> > > +++ b/samples/bpf/README.rst
+> > > @@ -65,17 +65,19 @@ To generate a smaller llc binary one can use::
+> > >  Quick sniplet for manually compiling LLVM and clang
+> > >  (build dependencies are cmake and gcc-c++)::
+> >
+> > Technically, ninja is now a build dependency as well, it might be worth
+> > mentioning that here (usually the package is ninja or ninja-build).
 > 
-> I backported this patch to pahole 1.19, and I can confirm it fixes the
-> segfault for me.
+> it's possible to generate Makefile by passing `-g "Unix Makefiles"`,
+> which would avoid dependency on ninja, no?
 
-I'm applying v2 for this patch and based on your above statement I'm
-adding a:
+Yes, although I am fairly certain that building with ninja is quicker so
+I would recommend keeping it. One small extra dependency never killed
+anyone plus ninja is becoming more common nowadays :)
 
-Tested-by: Tom Stellard <tstellar@redhat.com>
-
-Ok?
-
-Who originally reported this?
-
-- Arnaldo
- 
-> -Tom
-> 
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >   btf_encoder.c | 8 ++++++--
-> >   1 file changed, 6 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/btf_encoder.c b/btf_encoder.c
-> > index 333973054b61..17f7a14f2ef0 100644
-> > --- a/btf_encoder.c
-> > +++ b/btf_encoder.c
-> > @@ -72,6 +72,8 @@ static int collect_function(struct btf_elf *btfe, GElf_Sym *sym)
-> >   	if (elf_sym__type(sym) != STT_FUNC)
-> >   		return 0;
-> > +	if (!elf_sym__name(sym, btfe->symtab))
-> > +		return 0;
-> >   	if (functions_cnt == functions_alloc) {
-> >   		functions_alloc = max(1000, functions_alloc * 3 / 2);
-> > @@ -730,9 +732,11 @@ int cu__encode_btf(struct cu *cu, int verbose, bool force,
-> >   		if (!has_arg_names(cu, &fn->proto))
-> >   			continue;
-> >   		if (functions_cnt) {
-> > -			struct elf_function *func;
-> > +			const char *name = function__name(fn, cu);
-> > +			struct elf_function *func = NULL;
-> > -			func = find_function(btfe, function__name(fn, cu));
-> > +			if (name)
-> > +				func = find_function(btfe, name);
-> >   			if (!func || func->generated)
-> >   				continue;
-> >   			func->generated = true;
-> > 
-> 
-
--- 
-
-- Arnaldo
+> > Regardless of whether that is addressed or not (because it is small),
+> > feel free to carry forward my tag in any future revisions unless they
+> > drastically change.
+> >
+> > > - $ git clone http://llvm.org/git/llvm.git
+> > > - $ cd llvm/tools
+> > > - $ git clone --depth 1 http://llvm.org/git/clang.git
+> > > - $ cd ..; mkdir build; cd build
+> > > - $ cmake .. -DLLVM_TARGETS_TO_BUILD="BPF;X86"
+> > > - $ make -j $(getconf _NPROCESSORS_ONLN)
+> > > + $ git clone https://github.com/llvm/llvm-project.git
+> > > + $ mkdir -p llvm-project/llvm/build
+> > > + $ cd llvm-project/llvm/build
+> > > + $ cmake .. -G "Ninja" -DLLVM_TARGETS_TO_BUILD="BPF;X86" \
+> > > +            -DLLVM_ENABLE_PROJECTS="clang"    \
+> > > +            -DCMAKE_BUILD_TYPE=Release        \
+> > > +            -DLLVM_BUILD_RUNTIME=OFF
+> > > + $ ninja
+> > >
+> > >  It is also possible to point make to the newly compiled 'llc' or
+> > >  'clang' command via redefining LLC or CLANG on the make command line::
+> > >
+> > > - make M=samples/bpf LLC=~/git/llvm/build/bin/llc CLANG=~/git/llvm/build/bin/clang
+> > > + make M=samples/bpf LLC=~/git/llvm-project/llvm/build/bin/llc CLANG=~/git/llvm-project/llvm/build/bin/clang
+> > >
+> > >  Cross compiling samples
+> > >  -----------------------
+> > > --
+> > > 2.1.0
+> > >
