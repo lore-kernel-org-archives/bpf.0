@@ -2,124 +2,208 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-11.8 required=3.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,UNPARSEABLE_RELAY,USER_AGENT_GIT autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-5.3 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=no autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85950C43381
-	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 13:52:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 21FABC43333
+	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 13:58:20 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 45A06233F8
-	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 13:52:09 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id EE5D9239A4
+	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 13:58:19 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727354AbhAUNsF (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Jan 2021 08:48:05 -0500
-Received: from out30-45.freemail.mail.aliyun.com ([115.124.30.45]:34882 "EHLO
-        out30-45.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727463AbhAUNr6 (ORCPT
-        <rfc822;bpf@vger.kernel.org>); Thu, 21 Jan 2021 08:47:58 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0UMQySoM_1611236829;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UMQySoM_1611236829)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 21 Jan 2021 21:47:09 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     bpf@vger.kernel.org
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S1729271AbhAUN6B (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Jan 2021 08:58:01 -0500
+Received: from mga01.intel.com ([192.55.52.88]:14150 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725933AbhAUNqM (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Jan 2021 08:46:12 -0500
+IronPort-SDR: WJpd9lMuNW8Uyv8t3KCunDYlvXYQIEoGfm4sDjQeG3pvet+YN1VliaipPXBxoRN0YASHkRxxPb
+ 09xR1zGbU+nQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9870"; a="198006144"
+X-IronPort-AV: E=Sophos;i="5.79,364,1602572400"; 
+   d="scan'208";a="198006144"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jan 2021 05:45:13 -0800
+IronPort-SDR: XRAujAvTTM7ZXgiv33dUPK0lz+XqJ9dlDDZVQkyRGWoDUuqjZkQTbxIGoQaIxSqcwmf2iuS/WR
+ qLNQ8kVeClkw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.79,364,1602572400"; 
+   d="scan'208";a="385313196"
+Received: from ranger.igk.intel.com ([10.102.21.164])
+  by orsmga008.jf.intel.com with ESMTP; 21 Jan 2021 05:45:09 -0800
+Date:   Thu, 21 Jan 2021 14:35:38 +0100
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Hangbin Liu <liuhangbin@gmail.com>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>,
+        Jiri Benc <jbenc@redhat.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>, ast@kernel.org,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Subject: [PATCH bpf-next v3 0/3] xsk: build skb by page
-Date:   Thu, 21 Jan 2021 21:47:06 +0800
-Message-Id: <cover.1611236588.git.xuanzhuo@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+        David Ahern <dsahern@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Subject: Re: [PATCHv15 bpf-next 1/6] bpf: run devmap xdp_prog on flush
+ instead of bulk enqueue
+Message-ID: <20210121133538.GA41935@ranger.igk.intel.com>
+References: <20210114142321.2594697-1-liuhangbin@gmail.com>
+ <20210120022514.2862872-1-liuhangbin@gmail.com>
+ <20210120022514.2862872-2-liuhangbin@gmail.com>
+ <20210120224238.GA33532@ranger.igk.intel.com>
+ <20210121035424.GK1421720@Leo-laptop-t470s>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210121035424.GK1421720@Leo-laptop-t470s>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-v3:
-    Optimized code
+On Thu, Jan 21, 2021 at 11:54:24AM +0800, Hangbin Liu wrote:
+> Hi Maciej,
+> On Wed, Jan 20, 2021 at 11:42:38PM +0100, Maciej Fijalkowski wrote:
+> > > +static int dev_map_bpf_prog_run(struct bpf_prog *xdp_prog,
+> > > +				struct xdp_frame **frames, int n,
+> > > +				struct net_device *dev)
+> > > +{
+> > > +	struct xdp_txq_info txq = { .dev = dev };
+> > > +	struct xdp_buff xdp;
+> > > +	int i, nframes = 0;
+> > > +
+> > > +	for (i = 0; i < n; i++) {
+> > > +		struct xdp_frame *xdpf = frames[i];
+> > > +		u32 act;
+> > > +		int err;
+> > > +
+> > > +		xdp_convert_frame_to_buff(xdpf, &xdp);
+> > > +		xdp.txq = &txq;
+> > > +
+> > > +		act = bpf_prog_run_xdp(xdp_prog, &xdp);
+> > > +		switch (act) {
+> > > +		case XDP_PASS:
+> > > +			err = xdp_update_frame_from_buff(&xdp, xdpf);
+> > 
+> > Bump on John's question.
+> 
+> Hi Jesper, would you please help answer John's question?
+> > >  
+> > > -	sent = dev->netdev_ops->ndo_xdp_xmit(dev, bq->count, bq->q, flags);
+> > > +	/* Init sent to cnt in case there is no xdp_prog */
+> > > +	sent = cnt;
+> > > +	if (bq->xdp_prog) {
+> > > +		sent = dev_map_bpf_prog_run(bq->xdp_prog, bq->q, cnt, dev);
+> > > +		if (!sent)
+> > > +			goto out;
+> > 
+> > Sorry, but 'sent' is a bit confusing to me, actual sending happens below
+> > via ndo_xdp_xmit, right? This hook will not actually send frames.
+> > Can we do a subtle change to have it in separate variable 'to_send' ?
+> 
+> Makes sense to me.
+> > 
+> > Although I'm a huge goto advocate, I feel like this particular usage could
+> > be simplified. Not sure why we had that in first place.
+> > 
+> > I gave a shot at rewriting/refactoring whole bq_xmit_all and I feel like
+> > it's more readable. I introduced 'to_send' variable and got rid of 'error'
+> > label.
+> > 
+> > Thoughts?
+> > 
+> > I might have missed something, though.
+> > 
+> > static void bq_xmit_all(struct xdp_dev_bulk_queue *bq, u32 flags)
+> > {
+> > 	struct net_device *dev = bq->dev;
+> > 	unsigned int cnt = bq->count;
+> > 	int drops = 0, err = 0;
+> > 	int to_send = 0;
+> 
+> The to_send also need to init to cnt.
 
-v2:
-    1. add priv_flags IFF_TX_SKB_NO_LINEAR instead of netdev_feature
-    2. split the patch to three:
-        a. add priv_flags IFF_TX_SKB_NO_LINEAR
-        b. virtio net add priv_flags IFF_TX_SKB_NO_LINEAR
-        c. When there is support this flag, construct skb without linear space
-    3. use ERR_PTR() and PTR_ERR() to handle the err
+So I missed something indeed :P you're correct
 
-v1 message log:
----------------
+> 
+> > 	int sent = cnt;
+> > 	int i;
+> > 
+> > 	if (unlikely(!cnt))
+> > 		return;
+> > 
+> > 	for (i = 0; i < cnt; i++) {
+> > 		struct xdp_frame *xdpf = bq->q[i];
+> > 
+> > 		prefetch(xdpf);
+> > 	}
+> > 
+> > 	if (bq->xdp_prog) {
+> > 		to_send = dev_map_bpf_prog_run(bq->xdp_prog, bq->q, cnt, dev);
+> > 		if (!to_send) {
+> > 			sent = 0;
+> > 			goto out;
+> > 		}
+> > 	}
+> > 
+> > 	drops = cnt - to_send;
+> 
+> This line could move in to the xdp_prog brackets to save time when no xdp_prog.
 
-This patch is used to construct skb based on page to save memory copy
-overhead.
+Hmm, looks like we can do it.
+For scenario where there was no bq->xdp_prog and failure of ndo_xdp_xmit,
+we didn't alter the count of frames to be sent, so we would basically free
+all of the frames (as drops is 0, cnt = bq->count). After that we
+recalculate drops and correct value will be reported in tracepoint.
 
-This has one problem:
+(needed to explain it to myself)
 
-We construct the skb by fill the data page as a frag into the skb. In
-this way, the linear space is empty, and the header information is also
-in the frag, not in the linear space, which is not allowed for some
-network cards. For example, Mellanox Technologies MT27710 Family
-[ConnectX-4 Lx] will get the following error message:
+> 
+> 	if (bq->xdp_prog) {
+> 		to_send = ...
+> 		if (!to_send) {
+> 			...
+> 		}
+> 		drops = cnt - to_send;
+> 	}
+> 
+> > 	sent = dev->netdev_ops->ndo_xdp_xmit(dev, to_send, bq->q, flags);
+> 
+> If we don't have xdp_prog, the to_send should be cnt.
 
-    mlx5_core 0000:3b:00.1 eth1: Error cqe on cqn 0x817, ci 0x8, qn 0x1dbb, opcode 0xd, syndrome 0x1, vendor syndrome 0x68
-    00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    00000030: 00 00 00 00 60 10 68 01 0a 00 1d bb 00 0f 9f d2
-    WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0xf, len: 64
-    00000000: 00 00 0f 0a 00 1d bb 03 00 00 00 08 00 00 00 00
-    00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    00000020: 00 00 00 2b 00 08 00 00 00 00 00 05 9e e3 08 00
-    00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-    mlx5_core 0000:3b:00.1 eth1: ERR CQE on SQ: 0x1dbb
+Yes, we should init to_send to cnt as you're suggesting above.
 
-I also tried to use build_skb to construct skb, but because of the
-existence of skb_shinfo, it must be behind the linear space, so this
-method is not working. We can't put skb_shinfo on desc->addr, it will be
-exposed to users, this is not safe.
+> 
+> > 	if (sent < 0) {
+> > 		err = sent;
+> > 		sent = 0;
+> > 
+> > 		/* If ndo_xdp_xmit fails with an errno, no frames have been
+> > 		 * xmit'ed and it's our responsibility to them free all.
+> > 		 */
+> > 		for (i = 0; i < cnt - drops; i++) {
+> > 			struct xdp_frame *xdpf = bq->q[i];
+> > 
+> > 			xdp_return_frame_rx_napi(xdpf);
+> > 		}
+> > 	}
+> > out:
+> > 	drops = cnt - sent;
+> > 	bq->count = 0;
+> > 
+> > 	trace_xdp_devmap_xmit(bq->dev_rx, dev, sent, drops, err);
+> > 	bq->dev_rx = NULL;
+> > 	bq->xdp_prog = NULL;
+> > 	__list_del_clearprev(&bq->flush_node);
+> > 
+> > 	return;
+> > }
+> 
+> Thanks for your code, looks much clear now.
 
-Finally, I added a feature NETIF_F_SKB_NO_LINEAR to identify whether the
-network card supports the header information of the packet in the frag
-and not in the linear space.
+Good to hear! I agree on your points as well.
 
----------------- Performance Testing ------------
-
-The test environment is Aliyun ECS server.
-Test cmd:
-```
-xdpsock -i eth0 -t  -S -s <msg size>
-```
-
-Test result data:
-
-size    64      512     1024    1500
-copy    1916747 1775988 1600203 1440054
-page    1974058 1953655 1945463 1904478
-percent 3.0%    10.0%   21.58%  32.3%
-
-Xuan Zhuo (3):
-  net: add priv_flags for allow tx skb without linear
-  virtio-net: support IFF_TX_SKB_NO_LINEAR
-  xsk: build skb by page
-
- drivers/net/virtio_net.c  |   3 +-
- include/linux/netdevice.h |   3 ++
- net/xdp/xsk.c             | 104 ++++++++++++++++++++++++++++++++++++++--------
- 3 files changed, 91 insertions(+), 19 deletions(-)
-
---
-1.8.3.1
-
+> 
+> Hangbin
