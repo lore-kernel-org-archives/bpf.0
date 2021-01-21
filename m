@@ -2,88 +2,93 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-15.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2A0D9C433E6
-	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 13:16:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D3C30C433E9
+	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 13:27:07 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id C8D4723A01
-	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 13:16:28 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id A1A32206DC
+	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 13:27:07 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731573AbhAUNQM (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Jan 2021 08:16:12 -0500
-Received: from m12-16.163.com ([220.181.12.16]:46562 "EHLO m12-16.163.com"
+        id S1731699AbhAUNZ2 (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Jan 2021 08:25:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:39800 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731713AbhAUNPN (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Jan 2021 08:15:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=lkb1q
-        Vmo7U5P0SiEDkgTa5XtLyFBC6cAE0sJIZKORts=; b=e9bop/+4punTXPQSZbyPD
-        pi4bqmkwouovsCujztsJRD1tD0nakKaK/oit0R8Eg4SIkudTgTdL4j0NBoSha8mg
-        sSEAqgXN5ArifuPGlX3iaVfZga+rPd3nye/ImFsvlUGeqY1DFmLB4MjFwEnOJh9l
-        o0akEbz/i/UyBXUX2h0RCs=
-Received: from yangjunlin.ccdomain.com (unknown [119.137.55.77])
-        by smtp12 (Coremail) with SMTP id EMCowADX74+icglg1sTIYA--.35003S2;
-        Thu, 21 Jan 2021 20:25:08 +0800 (CST)
-From:   angkery <angkery@163.com>
-To:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org
-Cc:     bpf@vger.kernel.org, Junlin Yang <yangjunlin@yulong.com>
-Subject: [PATCH bpf-next] selftest/bpf: fix typo
-Date:   Thu, 21 Jan 2021 20:23:09 +0800
-Message-Id: <20210121122309.1501-1-angkery@163.com>
-X-Mailer: git-send-email 2.24.0.windows.2
+        id S1729332AbhAUNXA (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Jan 2021 08:23:00 -0500
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 42E49206A3;
+        Thu, 21 Jan 2021 13:22:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1611235320;
+        bh=UjXbo6X5Wtuz9N/wlwTIdxCm913bAZDJsk9ttKjD7DY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I/Gc4jkU86RKBW/mcu8fc4KF5TznoPhkL8ic2OqFGZ0iawZirU4wO4iLJudHYqLYM
+         nRgz46v0lLqoQrppMpy7ZDFX3UdWFVj0a4arIsskYJgCDwQtyveeAbWZN3NHJqOTiV
+         9InfindVCIHaODwe8DAxftDEuz04TvGj+kkK/Gc7YVKrEIQd4YK0OBixxwSdnLfZCv
+         +fvFnm405j+UXNMmElXFgoAaMRF0WhiqS3Z/cdDAWQgRXW9yOqBO/P1boGGk6et0hv
+         1CSqwSpnzDZTdmAXOLWgBmUUZYtNo9vCcbggPyXOFOPSlPxZunGYfiRhLoGUf9nXtr
+         Pi7TuKpsWjSWg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 311CF40513; Thu, 21 Jan 2021 10:21:58 -0300 (-03)
+Date:   Thu, 21 Jan 2021 10:21:58 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Giuliano Procida <gprocida@google.com>
+Cc:     dwarves@vger.kernel.org, kernel-team@android.com,
+        maennich@google.com, ast@kernel.org, andrii@kernel.org,
+        bpf@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [PATCH dwarves v2 1/3] btf_encoder: Fix handling of restrict
+ qualifier
+Message-ID: <20210121132158.GX12699@kernel.org>
+References: <20210118160139.1971039-1-gprocida@google.com>
+ <20210121113520.3603097-1-gprocida@google.com>
+ <20210121113520.3603097-2-gprocida@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EMCowADX74+icglg1sTIYA--.35003S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZF1DJw4fKw43Ww1kJF43Jrb_yoWfuwbEva
-        1xtr1vvFWkAFs5tr1UC3Z8WFW8GayUWrZrArnrtry3XryjqF4DJF4v9r1fZayrW3yftaya
-        gF4kt393tw43KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUeA-BtUUUUU==
-X-Originating-IP: [119.137.55.77]
-X-CM-SenderInfo: 5dqjyvlu16il2tof0z/xtbCBhQhI13I0eWg3gAAsP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210121113520.3603097-2-gprocida@google.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-From: Junlin Yang <yangjunlin@yulong.com>
+Em Thu, Jan 21, 2021 at 11:35:18AM +0000, Giuliano Procida escreveu:
+> This corrects a typo that resulted in 'restrict' being treated as 'const'.
+> 
+> Fixes: 48efa92933e8 ("btf_encoder: Use libbpf APIs to encode BTF type info")
 
-Change 'exeeds' to 'exceeds'.
+Thanks for providing the Fixes: tag!
 
-Signed-off-by: Junlin Yang <yangjunlin@yulong.com>
----
-v1: resend this patch with Cc
+Applied,
 
- tools/testing/selftests/bpf/prog_tests/btf.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+- Arnaldo
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-index 8ae97e2..ea008d0 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-@@ -914,7 +914,7 @@ struct btf_raw_test {
- 	.err_str = "Member exceeds struct_size",
- },
  
--/* Test member exeeds the size of struct
-+/* Test member exceeds the size of struct
-  *
-  * struct A {
-  *     int m;
-@@ -948,7 +948,7 @@ struct btf_raw_test {
- 	.err_str = "Member exceeds struct_size",
- },
- 
--/* Test member exeeds the size of struct
-+/* Test member exceeds the size of struct
-  *
-  * struct A {
-  *     int m;
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Giuliano Procida <gprocida@google.com>
+> ---
+>  libbtf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/libbtf.c b/libbtf.c
+> index 16e1d45..3709087 100644
+> --- a/libbtf.c
+> +++ b/libbtf.c
+> @@ -417,7 +417,7 @@ int32_t btf_elf__add_ref_type(struct btf_elf *btfe, uint16_t kind, uint32_t type
+>  		id = btf__add_const(btf, type);
+>  		break;
+>  	case BTF_KIND_RESTRICT:
+> -		id = btf__add_const(btf, type);
+> +		id = btf__add_restrict(btf, type);
+>  		break;
+>  	case BTF_KIND_TYPEDEF:
+>  		id = btf__add_typedef(btf, name, type);
+> -- 
+> 2.30.0.296.g2bfb1c46d8-goog
+> 
+
 -- 
-1.9.1
 
-
+- Arnaldo
