@@ -2,98 +2,113 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-16.2 required=3.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.0
+X-Spam-Status: No, score=-16.7 required=3.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 520ACC433DB
-	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 13:27:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 63D41C433E0
+	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 13:49:10 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 15844206F7
-	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 13:27:11 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id 20AD2238EC
+	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 13:49:10 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728162AbhAUNZ6 (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Jan 2021 08:25:58 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40384 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731763AbhAUNYl (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Jan 2021 08:24:41 -0500
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9D1BF22CBE;
-        Thu, 21 Jan 2021 13:24:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1611235440;
-        bh=rwJXzhJMIhY1EDpt7GD6ssfobGNKXEQh5N/OFbzgjSI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HPrWRvjx+J8N4N4cImgTruqxZjR3uxg3/GcdWUDhiMYjyndzJEqmvmVwufbSOCzGn
-         yLCbIDvwt2ptEMdKcGFq1R+teXGOuVuHyjN8DOjZMeFqiD/tlRXTOAagHyBMhgP+eH
-         JOphNWq7kMaW/y+E/tzx12XTJb7MKnmi6gO7eDJYmSizEX0aVbR09gq79iuDvJoGT6
-         Ap90DiQ9TqXuB41a471MI2q8Ilt76U+8WHwMHCdVYmV1vSLc/RfyZ4pV8m8EXiFYbz
-         9j7gVqhCt0f7Db0trloxTjpVcE9QV1UcyqOo5Why0X8cr9ecUG378YhNSoFqTshhnP
-         Rw5JgbhjnPPCQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 7365440513; Thu, 21 Jan 2021 10:23:58 -0300 (-03)
-Date:   Thu, 21 Jan 2021 10:23:58 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Giuliano Procida <gprocida@google.com>
-Cc:     dwarves@vger.kernel.org, kernel-team@android.com,
-        maennich@google.com, ast@kernel.org, andrii@kernel.org,
-        bpf@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH dwarves v2 3/3] btf_encoder: Set .BTF section alignment
- to 16
-Message-ID: <20210121132358.GY12699@kernel.org>
-References: <20210118160139.1971039-1-gprocida@google.com>
- <20210121113520.3603097-1-gprocida@google.com>
- <20210121113520.3603097-4-gprocida@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210121113520.3603097-4-gprocida@google.com>
-X-Url:  http://acmel.wordpress.com
+        id S1727463AbhAUNsh (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Jan 2021 08:48:37 -0500
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:37467 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728896AbhAUNr5 (ORCPT
+        <rfc822;bpf@vger.kernel.org>); Thu, 21 Jan 2021 08:47:57 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0UMRA33O_1611236829;
+Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0UMRA33O_1611236829)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 21 Jan 2021 21:47:09 +0800
+From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+To:     bpf@vger.kernel.org
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
+Subject: [PATCH bpf-next v3 1/3] net: add priv_flags for allow tx skb without linear
+Date:   Thu, 21 Jan 2021 21:47:07 +0800
+Message-Id: <d44e0c054675e816b1ece745be795bd2a8b88350.1611236588.git.xuanzhuo@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <cover.1611236588.git.xuanzhuo@linux.alibaba.com>
+References: <cover.1611236588.git.xuanzhuo@linux.alibaba.com>
+In-Reply-To: <cover.1611236588.git.xuanzhuo@linux.alibaba.com>
+References: <cover.1611236588.git.xuanzhuo@linux.alibaba.com>
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-Em Thu, Jan 21, 2021 at 11:35:20AM +0000, Giuliano Procida escreveu:
-> NOTE: Do not apply. I will try to eliminate the dependency on objcopy
-> instead and achieve what's needed directly using libelf.
+In some cases, we hope to construct skb directly based on the existing
+memory without copying data. In this case, the page will be placed
+directly in the skb, and the linear space of skb is empty. But
+unfortunately, many the network card does not support this operation.
+For example Mellanox Technologies MT27710 Family [ConnectX-4 Lx] will
+get the following error message:
 
-Ok, so I'll wait for the right fix.
+    mlx5_core 0000:3b:00.1 eth1: Error cqe on cqn 0x817, ci 0x8, qn 0x1dbb, opcode 0xd, syndrome 0x1, vendor syndrome 0x68
+    00000000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00000020: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00000030: 00 00 00 00 60 10 68 01 0a 00 1d bb 00 0f 9f d2
+    WQE DUMP: WQ size 1024 WQ cur size 0, WQE index 0xf, len: 64
+    00000000: 00 00 0f 0a 00 1d bb 03 00 00 00 08 00 00 00 00
+    00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    00000020: 00 00 00 2b 00 08 00 00 00 00 00 05 9e e3 08 00
+    00000030: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+    mlx5_core 0000:3b:00.1 eth1: ERR CQE on SQ: 0x1dbb
 
-Thanks for working on this!
+So a priv_flag is added here to indicate whether the network card
+supports this feature.
 
-- Arnaldo
+Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Suggested-by: Alexander Lobakin <alobakin@pm.me>
+---
+ include/linux/netdevice.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index ef51725..135db8f 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -1525,6 +1525,7 @@ struct net_device_ops {
+  * @IFF_FAILOVER_SLAVE: device is lower dev of a failover master device
+  * @IFF_L3MDEV_RX_HANDLER: only invoke the rx handler of L3 master device
+  * @IFF_LIVE_RENAME_OK: rename is allowed while device is up and running
++ * @IFF_TX_SKB_NO_LINEAR: allow tx skb linear is empty
+  */
+ enum netdev_priv_flags {
+ 	IFF_802_1Q_VLAN			= 1<<0,
+@@ -1558,6 +1559,7 @@ enum netdev_priv_flags {
+ 	IFF_FAILOVER_SLAVE		= 1<<28,
+ 	IFF_L3MDEV_RX_HANDLER		= 1<<29,
+ 	IFF_LIVE_RENAME_OK		= 1<<30,
++	IFF_TX_SKB_NO_LINEAR		= 1<<31,
+ };
  
-> This is to avoid misaligned access when memory-mapping ELF sections.
-> 
-> Signed-off-by: Giuliano Procida <gprocida@google.com>
-> ---
->  libbtf.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/libbtf.c b/libbtf.c
-> index 7552d8e..2f12d53 100644
-> --- a/libbtf.c
-> +++ b/libbtf.c
-> @@ -797,6 +797,14 @@ static int btf_elf__write(const char *filename, struct btf *btf)
->  			goto unlink;
->  		}
->  
-> +		snprintf(cmd, sizeof(cmd), "%s --set-section-alignment .BTF=16 %s",
-> +			 llvm_objcopy, filename);
-> +		if (system(cmd)) {
-> +			/* non-fatal, this is a nice-to-have and it's only supported from LLVM 10 */
-> +			fprintf(stderr, "%s: warning: failed to align .BTF section in '%s': %d!\n",
-> +				__func__, filename, errno);
-> +		}
-> +
->  		err = 0;
->  	unlink:
->  		unlink(tmp_fn);
-> -- 
-> 2.30.0.296.g2bfb1c46d8-goog
-> 
-
+ #define IFF_802_1Q_VLAN			IFF_802_1Q_VLAN
+@@ -1590,6 +1592,7 @@ enum netdev_priv_flags {
+ #define IFF_FAILOVER_SLAVE		IFF_FAILOVER_SLAVE
+ #define IFF_L3MDEV_RX_HANDLER		IFF_L3MDEV_RX_HANDLER
+ #define IFF_LIVE_RENAME_OK		IFF_LIVE_RENAME_OK
++#define IFF_TX_SKB_NO_LINEAR		IFF_TX_SKB_NO_LINEAR
+ 
+ /**
+  *	struct net_device - The DEVICE structure.
 -- 
+1.8.3.1
 
-- Arnaldo
