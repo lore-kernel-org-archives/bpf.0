@@ -2,282 +2,131 @@ Return-Path: <bpf-owner@kernel.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-12.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-5.7 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no
 	autolearn_force=no version=3.4.0
 Received: from mail.kernel.org (mail.kernel.org [198.145.29.99])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id CC9CCC433E0
-	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 20:38:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 47AF5C433E0
+	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 20:48:46 +0000 (UTC)
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.kernel.org (Postfix) with ESMTP id 8C0E9239D1
-	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 20:38:33 +0000 (UTC)
+	by mail.kernel.org (Postfix) with ESMTP id F1B8823A5A
+	for <bpf@archiver.kernel.org>; Thu, 21 Jan 2021 20:48:45 +0000 (UTC)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727366AbhAUUiP (ORCPT <rfc822;bpf@archiver.kernel.org>);
-        Thu, 21 Jan 2021 15:38:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S1727264AbhAUUso (ORCPT <rfc822;bpf@archiver.kernel.org>);
+        Thu, 21 Jan 2021 15:48:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727855AbhAUHtw (ORCPT <rfc822;bpf@vger.kernel.org>);
-        Thu, 21 Jan 2021 02:49:52 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98344C061575;
-        Wed, 20 Jan 2021 23:41:28 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id kx7so1093670pjb.2;
-        Wed, 20 Jan 2021 23:41:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+WSQWbxfP2pXq6KG7rxKw6Frm1tiAUnTy+aL8NH7tLg=;
-        b=U+oUAi+6oPz7NK/UpWAYd2rzwp662I5l05vsAZctRN13kGBNBWB+wdHiMdJf4vrd2Z
-         PAR/V91v5bSPqb8FQ0Q3KO3jHi6Sruea2oqzQr+drUyRarFTz8w6lRM+wJ78aSWWaaYt
-         WJfWsT23QYzAIBpdgK/9BEPnIC8hL7KJAU2LF6o/zwV46NlWLn/ZVm6243cwjFV159RU
-         m/TEkIHmEWgXyyN1DYpVdfMxPKzBCp7N2Pj4r85aO/Klg0qfgjN7B46bVXEGWjbqhXq5
-         tASO7vbl3rW+80m/KOOEPPn0ObUtVpnCDhTqs2eVHfMTpRct1GXQdMJ/tckQ9SyedLu6
-         b9Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+WSQWbxfP2pXq6KG7rxKw6Frm1tiAUnTy+aL8NH7tLg=;
-        b=tbohkIP6XbS/OzIs9XX4fHIQMkT/3ZSYBsUQXy3zR4BOTYVFxsVqtbmcm8PxevIe0t
-         9smtH+zSNxjf2xZhJJOevKHysWMnBakB+h1oZBK6NEdoqIy2Ycj0pGHDC40eFRFI6qgt
-         k+5z26zQpSdG3ds/xE665fgCeW5iU/zB0LV1+2728aG/ExDoU2nKr3G1M5MXUULdRyln
-         3xmYpQ+5/E6Hd//bEv3IcJTkn4hEiUEXyqT9gAyFf59GbokZLEdwO+PXT3heP9EaWweD
-         5SqDS8YfHsczNYX1tL25Av57i6LNNM0XO6FdZbvcOhj53+Ek8fOvi7+YDcKIwv9VJMf0
-         a7mg==
-X-Gm-Message-State: AOAM531/0d2wNl3Ucw5fCxTT3QUZrV9ZYpiFCqPtQQEOuCGEY6GgR1nl
-        v5hzQHpLbF66MlsbBi5fVzeP+zfLo5Z4aKitGgw=
-X-Google-Smtp-Source: ABdhPJwdys27ZARkcsj3JlP6jJ7vhfnyOXsgy7FqDh/DOuIWf5jJV+IaXEog/pbBxb3lxbAWI82s0GLKrmGAdclf+HQ=
-X-Received: by 2002:a17:902:7c04:b029:dc:99f2:eea4 with SMTP id
- x4-20020a1709027c04b02900dc99f2eea4mr13569991pll.43.1611214888029; Wed, 20
- Jan 2021 23:41:28 -0800 (PST)
+        with ESMTP id S1727248AbhAUUso (ORCPT <rfc822;bpf@vger.kernel.org>);
+        Thu, 21 Jan 2021 15:48:44 -0500
+X-Greylist: delayed 405 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Jan 2021 12:48:03 PST
+Received: from ellomb.netlib.re (unknown [IPv6:2001:912:1480:10::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02848C061756;
+        Thu, 21 Jan 2021 12:48:02 -0800 (PST)
+Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
+        by ellomb.netlib.re (Postfix) with ESMTPA id 0CDC94AC27C9;
+        Thu, 21 Jan 2021 20:40:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mildred.fr; s=dkim;
+        t=1611261621;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y06bW3Z3IKJotzTvjRUlU+gfqobtqICfSf2t1S+NAoY=;
+        b=Kr+w7c1SNktsPjpd4t5UpDtPXGZwzilVK8xQwO1Jy95Ce0KoByz+dYu94YTeawg3LiPd3k
+        0StO31fcMF/h0NVTG0EtLy4aStY3WphimeGnD27Wd+zvqHYwEhiUxJGx7fSwNT1JdQb0gn
+        r7vPkDnlKXRg1TtOOHbhPjw1JW5T6pI=
 MIME-Version: 1.0
-References: <0461512be1925bece9bcda1b4924b09eaa4edd87.1611131344.git.xuanzhuo@linux.alibaba.com>
- <20210120135537.5184-1-alobakin@pm.me>
-In-Reply-To: <20210120135537.5184-1-alobakin@pm.me>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Thu, 21 Jan 2021 08:41:17 +0100
-Message-ID: <CAJ8uoz0=7UmJpqKGeb9BQp9qv_c6ioyxhtU4+B+j-Z01pc-BhQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 3/3] xsk: build skb by page
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        virtualization@lists.linux-foundation.org,
+Date:   Thu, 21 Jan 2021 21:40:19 +0100
+From:   Shanti Lombard <shanti@mildred.fr>
+To:     Jakub Sitnicki <jakub@cloudflare.com>
+Cc:     =?UTF-8?Q?Shanti_Lombard_n=C3=A9e_Bouchez-Mongard=C3=A9?= 
+        <shanti20210120@mildred.fr>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
         bpf <bpf@vger.kernel.org>,
         Network Development <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Martin KaFai Lau <kafai@fb.com>
+Subject: Re: More flexible BPF socket inet_lookup hooking after listening
+ sockets are dispatched
+In-Reply-To: <87r1me4k4l.fsf@cloudflare.com>
+References: <afb4e544-d081-eee8-e792-a480364a6572@mildred.fr>
+ <CAADnVQJnX-+9u--px_VnhrMTPB=O9Y0LH9T7RJbqzfLchbUFvg@mail.gmail.com>
+ <87r1me4k4l.fsf@cloudflare.com>
+Message-ID: <e1fc896faf4ad913e0372bc30461b849@mildred.fr>
+X-Sender: shanti@mildred.fr
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=mildred.fr;
+        s=dkim; t=1611261621;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y06bW3Z3IKJotzTvjRUlU+gfqobtqICfSf2t1S+NAoY=;
+        b=FdwPr/m5rtd7l8nJ/G+0HqzOn0UiMdB7VcoqiXkY4uim18WYvqthQMpeyAT5Tl3r6p1iol
+        qj9JPP7ybn0xp0QzS234VrOCRADk82KKI7sL6WxXzPIHiwJRUZIzk4vVGAvnWPGgfd0QzJ
+        lGFdqrgTAbPTgshR561F3Y4ms2lYk8c=
+ARC-Seal: i=1; s=dkim; d=mildred.fr; t=1611261622; a=rsa-sha256; cv=none;
+        b=lOi2zHzJ2Mw8cEAWmqzn10gTCO8SL4mRrvJw3pgzWh7G8u4e1Hy2Z/pOfJL/uRKz0o6iUn
+        SCJ65m9bn2fszv+7oiW7Ys8mf5kHEariixtui2+ikUoBVpgvdXz+3lTYSxDLQ8i/U1A/4i
+        QFt2Bn1XvWwDuk0yx+72B0xnbL4VYxk=
+ARC-Authentication-Results: i=1;
+        ellomb.netlib.re;
+        auth=pass smtp.auth=mildred@mildred.fr smtp.mailfrom=shanti@mildred.fr
+Authentication-Results: ellomb.netlib.re;
+        auth=pass smtp.auth=mildred@mildred.fr smtp.mailfrom=shanti@mildred.fr
+X-Spamd-Bar: /
 Precedence: bulk
 List-ID: <bpf.vger.kernel.org>
 X-Mailing-List: bpf@vger.kernel.org
 
-On Wed, Jan 20, 2021 at 9:29 PM Alexander Lobakin <alobakin@pm.me> wrote:
->
-> From: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> Date: Wed, 20 Jan 2021 16:30:56 +0800
->
-> > This patch is used to construct skb based on page to save memory copy
-> > overhead.
-> >
-> > This function is implemented based on IFF_TX_SKB_NO_LINEAR. Only the
-> > network card priv_flags supports IFF_TX_SKB_NO_LINEAR will use page to
-> > directly construct skb. If this feature is not supported, it is still
-> > necessary to copy data to construct skb.
-> >
-> > ---------------- Performance Testing ------------
-> >
-> > The test environment is Aliyun ECS server.
-> > Test cmd:
-> > ```
-> > xdpsock -i eth0 -t  -S -s <msg size>
-> > ```
-> >
-> > Test result data:
-> >
-> > size    64      512     1024    1500
-> > copy    1916747 1775988 1600203 1440054
-> > page    1974058 1953655 1945463 1904478
-> > percent 3.0%    10.0%   21.58%  32.3%
-> >
-> > Signed-off-by: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-> > Reviewed-by: Dust Li <dust.li@linux.alibaba.com>
-> > ---
-> >  net/xdp/xsk.c | 104 ++++++++++++++++++++++++++++++++++++++++++++++++----------
-> >  1 file changed, 86 insertions(+), 18 deletions(-)
->
-> Now I like the result, thanks!
->
-> But Patchwork still display your series incorrectly (messages 0 and 1
-> are missing). I'm concerning maintainers may not take this in such
-> form. Try to pass the folder's name, not folder/*.patch to
-> git send-email when sending, and don't use --in-reply-to when sending
-> a new iteration.
+Le 2021-01-21 12:14, Jakub Sitnicki a écrit :
+> On Wed, Jan 20, 2021 at 10:06 PM CET, Alexei Starovoitov wrote:
+> 
+> There is also documentation in the kernel:
+> 
+> https://www.kernel.org/doc/html/latest/bpf/prog_sk_lookup.html
+> 
 
-Xuan,
+Thank you, I saw it, it's well written and very much explains it all.
 
-Please make the new submission of the patch set a v3 even though you
-did not change the code. Just so we can clearly see it is the new
-submission.
+> 
+> Existing hook is placed before regular listening/unconnected socket
+> lookup to prevent port hijacking on the unprivileged range.
+> 
 
-> > diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> > index 8037b04..40bac11 100644
-> > --- a/net/xdp/xsk.c
-> > +++ b/net/xdp/xsk.c
-> > @@ -430,6 +430,87 @@ static void xsk_destruct_skb(struct sk_buff *skb)
-> >       sock_wfree(skb);
-> >  }
-> >
-> > +static struct sk_buff *xsk_build_skb_zerocopy(struct xdp_sock *xs,
-> > +                                           struct xdp_desc *desc)
-> > +{
-> > +     u32 len, offset, copy, copied;
-> > +     struct sk_buff *skb;
-> > +     struct page *page;
-> > +     void *buffer;
-> > +     int err, i;
-> > +     u64 addr;
-> > +
-> > +     skb = sock_alloc_send_skb(&xs->sk, 0, 1, &err);
-> > +     if (unlikely(!skb))
-> > +             return ERR_PTR(err);
-> > +
-> > +     addr = desc->addr;
-> > +     len = desc->len;
-> > +
-> > +     buffer = xsk_buff_raw_get_data(xs->pool, addr);
-> > +     offset = offset_in_page(buffer);
-> > +     addr = buffer - xs->pool->addrs;
-> > +
-> > +     for (copied = 0, i = 0; copied < len; i++) {
-> > +             page = xs->pool->umem->pgs[addr >> PAGE_SHIFT];
-> > +
-> > +             get_page(page);
-> > +
-> > +             copy = min_t(u32, PAGE_SIZE - offset, len - copied);
-> > +
-> > +             skb_fill_page_desc(skb, i, page, offset, copy);
-> > +
-> > +             copied += copy;
-> > +             addr += copy;
-> > +             offset = 0;
-> > +     }
-> > +
-> > +     skb->len += len;
-> > +     skb->data_len += len;
-> > +     skb->truesize += len;
-> > +
-> > +     refcount_add(len, &xs->sk.sk_wmem_alloc);
-> > +
-> > +     return skb;
-> > +}
-> > +
-> > +static struct sk_buff *xsk_build_skb(struct xdp_sock *xs,
-> > +                                  struct xdp_desc *desc)
-> > +{
-> > +     struct sk_buff *skb = NULL;
-> > +
-> > +     if (xs->dev->priv_flags & IFF_TX_SKB_NO_LINEAR) {
-> > +             skb = xsk_build_skb_zerocopy(xs, desc);
-> > +             if (IS_ERR(skb))
-> > +                     return skb;
-> > +     } else {
-> > +             void *buffer;
-> > +             u32 len;
-> > +             int err;
-> > +
-> > +             len = desc->len;
-> > +             skb = sock_alloc_send_skb(&xs->sk, len, 1, &err);
-> > +             if (unlikely(!skb))
-> > +                     return ERR_PTR(err);
-> > +
-> > +             skb_put(skb, len);
-> > +             buffer = xsk_buff_raw_get_data(xs->pool, desc->addr);
-> > +             err = skb_store_bits(skb, 0, buffer, len);
-> > +             if (unlikely(err)) {
-> > +                     kfree_skb(skb);
-> > +                     return ERR_PTR(err);
-> > +             }
-> > +     }
-> > +
-> > +     skb->dev = xs->dev;
-> > +     skb->priority = xs->sk.sk_priority;
-> > +     skb->mark = xs->sk.sk_mark;
-> > +     skb_shinfo(skb)->destructor_arg = (void *)(long)desc->addr;
-> > +     skb->destructor = xsk_destruct_skb;
-> > +
-> > +     return skb;
-> > +}
-> > +
-> >  static int xsk_generic_xmit(struct sock *sk)
-> >  {
-> >       struct xdp_sock *xs = xdp_sk(sk);
-> > @@ -446,43 +527,30 @@ static int xsk_generic_xmit(struct sock *sk)
-> >               goto out;
-> >
-> >       while (xskq_cons_peek_desc(xs->tx, &desc, xs->pool)) {
-> > -             char *buffer;
-> > -             u64 addr;
-> > -             u32 len;
-> > -
-> >               if (max_batch-- == 0) {
-> >                       err = -EAGAIN;
-> >                       goto out;
-> >               }
-> >
-> > -             len = desc.len;
-> > -             skb = sock_alloc_send_skb(sk, len, 1, &err);
-> > -             if (unlikely(!skb))
-> > +             skb = xsk_build_skb(xs, &desc);
-> > +             if (IS_ERR(skb)) {
-> > +                     err = PTR_ERR(skb);
-> >                       goto out;
-> > +             }
-> >
-> > -             skb_put(skb, len);
-> > -             addr = desc.addr;
-> > -             buffer = xsk_buff_raw_get_data(xs->pool, addr);
-> > -             err = skb_store_bits(skb, 0, buffer, len);
-> >               /* This is the backpressure mechanism for the Tx path.
-> >                * Reserve space in the completion queue and only proceed
-> >                * if there is space in it. This avoids having to implement
-> >                * any buffering in the Tx path.
-> >                */
-> >               spin_lock_irqsave(&xs->pool->cq_lock, flags);
-> > -             if (unlikely(err) || xskq_prod_reserve(xs->pool->cq)) {
-> > +             if (xskq_prod_reserve(xs->pool->cq)) {
-> >                       spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
-> >                       kfree_skb(skb);
-> >                       goto out;
-> >               }
-> >               spin_unlock_irqrestore(&xs->pool->cq_lock, flags);
-> >
-> > -             skb->dev = xs->dev;
-> > -             skb->priority = sk->sk_priority;
-> > -             skb->mark = sk->sk_mark;
-> > -             skb_shinfo(skb)->destructor_arg = (void *)(long)desc.addr;
-> > -             skb->destructor = xsk_destruct_skb;
-> > -
-> >               err = __dev_direct_xmit(skb, xs->queue_id);
-> >               if  (err == NETDEV_TX_BUSY) {
-> >                       /* Tell user-space to retry the send */
-> > --
-> > 1.8.3.1
->
-> Al
->
+Yes, from the point of view of the BPF program. However from the point 
+of view of a legitimate service listening on a port that might be 
+blocked by the BPF program, BPF is actually hijacking a port bind.
+
+That being said, if you install the BPF filter, you should know what you 
+are doing.
+
+>>> The suggestion above would work for my use case, but there is another
+>>> possibility to make the same use cases possible : implement in BPF 
+>>> (or
+>>> allow BPF to call) the C and E steps above so the BPF program can
+>>> supplant the kernel behavior. I find this solution less elegant and 
+>>> it
+>>> might not work well in case there are multiple inet_lookup BPF 
+>>> programs
+>>> installed.
+> 
+> Having a BPF helper available to BPF sk_lookup programs that looks up a
+> socket by packet 4-tuple and netns ID in tcp/udp hashtables sounds
+> reasonable to me. You gain the flexibility that you describe without
+> adding code on the hot path.
+
+True, if you consider that hot path should not be slowed down. It makes 
+sense. However, for me, it seems the implementation would be more 
+difficult.
+
+Looking at existing BPF helpers 
+<https://man7.org/linux/man-pages/man7/bpf-helpers.7.html> I found 
+bpf_sk_lookup_tcp and bpf_sk_lookup_ucp that should yield a socket from 
+a matching tuple and netns. If that's true and usable from within BPF 
+sk_lookup then it's just a matter of implementing it and the kernel is 
+already ready for such use cases.
+
+Shanti
